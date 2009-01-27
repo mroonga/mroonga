@@ -1,14 +1,14 @@
-#ifndef _ha_yase_h
-#define _ha_yase_h
+#ifndef _ha_groonga_h
+#define _ha_groonga_h
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-class ha_yase: public handler
+class ha_groonga: public handler
 {
 public:
-  ha_yase(handlerton *hton, TABLE_SHARE *share);
-  ~ha_yase();
+  ha_groonga(handlerton *hton, TABLE_SHARE *share);
+  ~ha_groonga();
 
   const char *table_type() const;                                  // required
   const char **bas_ext() const;                                    // required
