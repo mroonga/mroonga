@@ -96,7 +96,7 @@ THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
 				    THR_LOCK_DATA **to,
 				    enum thr_lock_type lock_type)
 {
-  DBUG_ENTER("ha_groonga::store_locko");
+  DBUG_ENTER("ha_groonga::store_lock");
   DBUG_RETURN(to);
 }
 
