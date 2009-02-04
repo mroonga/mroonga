@@ -1,8 +1,7 @@
 #ifndef _ha_groonga_h
 #define _ha_groonga_h
-#ifdef __cplusplus
-extern "C" {
-#endif
+
+extern grn_ctx grn_gctx;
 
 class ha_groonga: public handler
 {
@@ -30,7 +29,15 @@ public:
   void position(const uchar *record);                              // required
 };
 
-#ifdef __cplusplus
-}
-#endif
+#define MROONGA_DEBUG
+#ifdef MROONGA_DEBUG
+#define MRN_ENTER        do {GRN_LOG(grn_log_debug, "enter"); } while(0)
+#define MRN_RETURN_VOID  do {GRN_LOG(grn_log_debug, "return void"); return; } while(0)
+#define MRN_RETURN(x)  do {GRN_LOG(grn_log_debug, "return %d", x); return x; } while(0)
+#define MRN_RETURN_P(x)  do {GRN_LOG(grn_log_debug, "return %p", x); return x; } while(0)
+#define MRN_RETURN_S(x)  do {GRN_LOG(grn_log_debug, "return %s", x); return x; } while(0)
+#define MRN_RETURN_F(x)  do {GRN_LOG(grn_log_debug, "return %f", x); return x; } while(0)
+#define MRN_DEBUG(...)   GRN_LOG(grn_log_debug,__VA_ARGS__)
+#endif /* MROONGA_DEBUG */
+
 #endif
