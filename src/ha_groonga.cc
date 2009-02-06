@@ -3,7 +3,28 @@
 #include <groonga.h>
 #include "ha_groonga.h"
 
-grn_ctx mrn_ctx_sys;
+grn_ctx *mrn_ctx_sys;
+const char *mrn_log_name="groonga.log";
+static FILE *mrn_log_file = NULL;
+
+void mrn_logger_func(int level, const char *time, const char *title,
+		     const char *msg, const char *location, void *func_arg)
+{
+  const char slev[] = " EACewnid-";
+  if (mrn_log_file) {
+    fprintf(mrn_log_file, "%s|%c|%u|%s %s\n", time,
+	    *(slev + level), (uint)pthread_self(), location, msg);
+    fflush(mrn_log_file);
+  }
+}
+
+grn_logger_info mrn_logger_info = {
+  GRN_LOG_DUMP,
+  GRN_LOG_TIME|GRN_LOG_MESSAGE|GRN_LOG_LOCATION,
+  mrn_logger_func,
+  NULL
+};
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,13 +39,13 @@ static handler *mrn_handler_create(handlerton *hton,
 struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
 
-mysql_declare_plugin(mroonga)
+mysql_declare_plugin(groonga)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
-  "mroonga",
+  "Groonga",
   "Tetsuro IKEDA",
-  "groonga storage engine",
+  "An Embeddable Fulltext Search Engine",
   PLUGIN_LICENSE_GPL,
   mrn_init,
   mrn_fin,
@@ -51,7 +72,7 @@ ha_groonga::~ha_groonga()
 const char *ha_groonga::table_type() const
 {
   MRN_ENTER;
-  MRN_RETURN_S("MROONGA");
+  MRN_RETURN_S("Groonga");
 }
 
 static const char*ha_groonga_exts[] = {
@@ -131,6 +152,17 @@ void ha_groonga::position(const uchar *record)
   MRN_RETURN_VOID;
 }
 
+bool mrn_flush_logs(handlerton *hton)
+{
+  MRN_ENTER;
+  MRN_LOG(GRN_LOG_NOTICE, "logfile closed by FLUSH LOGS");
+  fflush(mrn_log_file);
+  fclose(mrn_log_file);
+  mrn_log_file = fopen(mrn_log_name, "a");
+  MRN_LOG(GRN_LOG_NOTICE, "logfile re-opened by FLUSH LOGS");
+  MRN_RETURN(true);
+}
+
 static int mrn_init(void *p)
 {
   MRN_ENTER;
@@ -138,16 +170,27 @@ static int mrn_init(void *p)
   hton = (handlerton *)p;
   hton->state = SHOW_OPTION_YES;
   hton->create = mrn_handler_create;
+  hton->flush_logs = mrn_flush_logs;
   hton->flags = 0;
   grn_init();
+  mrn_ctx_sys = (grn_ctx *) malloc(sizeof (grn_ctx));
+  grn_ctx_init(mrn_ctx_sys, GRN_CTX_USE_DB, GRN_ENC_UTF8);
+  if (!(mrn_log_file = fopen(mrn_log_name, "a"))) {
+    MRN_RETURN(-1);
+  }
+  grn_logger_info_set(mrn_ctx_sys, &mrn_logger_info);
+  MRN_LOG(GRN_LOG_NOTICE, "gronnga engine started");
   MRN_RETURN(0);
 }
 
 static int mrn_fin(void *p)
 {
   MRN_ENTER;
-  MRN_RETURN(0);
+  MRN_LOG(GRN_LOG_NOTICE, "stopping groonga engine");
+  fflush(mrn_log_file);
+  fclose(mrn_log_file);
   grn_fin();
+  MRN_RETURN(0);
 }
 
 static handler *mrn_handler_create(handlerton *hton,
@@ -161,3 +204,4 @@ static handler *mrn_handler_create(handlerton *hton,
 #ifdef __cplusplus
 }
 #endif
+

@@ -1,7 +1,7 @@
 #ifndef _ha_groonga_h
 #define _ha_groonga_h
 
-extern grn_ctx mrn_ctx_sys;
+extern grn_ctx *mrn_ctx_sys;
 
 class ha_groonga: public handler
 {
@@ -32,19 +32,19 @@ public:
 #define MROONGA_DEBUG
 #ifdef MROONGA_DEBUG
 #define MRN_ENTER \
-  do {GRN_LOG(&mrn_ctx_sys, GRN_LOG_DEBUG, "enter"); } while(0)
+  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "enter"); } while(0)
 #define MRN_RETURN_VOID \
-  do {GRN_LOG(&mrn_ctx_sys, GRN_LOG_DEBUG, "return void"); return; } while(0)
-#define MRN_RETURN(x) \
-  do {GRN_LOG(&mrn_ctx_sys, GRN_LOG_DEBUG, "return %d", x); return x; } while(0)
-#define MRN_RETURN_P(x) \
-  do {GRN_LOG(&mrn_ctx_sys, GRN_LOG_DEBUG, "return %p", x); return x; } while(0)
-#define MRN_RETURN_S(x) \
-  do {GRN_LOG(&mrn_ctx_sys, GRN_LOG_DEBUG, "return %s", x); return x; } while(0)
-#define MRN_RETURN_F(x) \
-  do {GRN_LOG(&mrn_ctx_sys, GRN_LOG_DEBUG, "return %f", x); return x; } while(0)
-#define MRN_DEBUG(...) \
-  GRN_LOG(&mrn_ctx_sys, GRN_LOG_DEBUG,__VA_ARGS__)
+  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return void"); return; } while(0)
+#define MRN_RETURN(res) \
+  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %d", res); return res; } while(0)
+#define MRN_RETURN_P(res) \
+  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %p", res); return res; } while(0)
+#define MRN_RETURN_S(res) \
+  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %s", res); return res; } while(0)
+#define MRN_RETURN_F(res) \
+  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %f", res); return res; } while(0)
+#define MRN_LOG(level, ...) \
+  GRN_LOG(mrn_ctx_sys, level, __VA_ARGS__)
 #endif /* MROONGA_DEBUG */
 
 #endif
