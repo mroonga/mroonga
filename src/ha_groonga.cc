@@ -2,7 +2,9 @@
 #include <mysql/plugin.h>
 #include <groonga.h>
 #include "ha_groonga.h"
+#include <pthread.h>
 
+pthread_mutex_t mrn_mutex_sys;
 grn_ctx *mrn_ctx_sys;
 const char *mrn_log_name="groonga.log";
 static FILE *mrn_log_file = NULL;
@@ -155,11 +157,13 @@ void ha_groonga::position(const uchar *record)
 bool mrn_flush_logs(handlerton *hton)
 {
   MRN_ENTER;
+  pthread_mutex_lock(&mrn_mutex_sys);
   MRN_LOG(GRN_LOG_NOTICE, "logfile closed by FLUSH LOGS");
   fflush(mrn_log_file);
   fclose(mrn_log_file);
   mrn_log_file = fopen(mrn_log_name, "a");
   MRN_LOG(GRN_LOG_NOTICE, "logfile re-opened by FLUSH LOGS");
+  pthread_mutex_unlock(&mrn_mutex_sys);
   MRN_RETURN(true);
 }
 
@@ -172,13 +176,18 @@ static int mrn_init(void *p)
   hton->create = mrn_handler_create;
   hton->flush_logs = mrn_flush_logs;
   hton->flags = 0;
+
+  pthread_mutex_init(&mrn_mutex_sys, MY_MUTEX_INIT_FAST);
+
   grn_init();
   mrn_ctx_sys = (grn_ctx *) malloc(sizeof (grn_ctx));
   grn_ctx_init(mrn_ctx_sys, GRN_CTX_USE_DB, GRN_ENC_UTF8);
+
   if (!(mrn_log_file = fopen(mrn_log_name, "a"))) {
     MRN_RETURN(-1);
   }
   grn_logger_info_set(mrn_ctx_sys, &mrn_logger_info);
+
   MRN_LOG(GRN_LOG_NOTICE, "gronnga engine started");
   MRN_RETURN(0);
 }
