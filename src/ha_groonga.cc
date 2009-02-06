@@ -1,7 +1,9 @@
 #include <mysql_priv.h>
 #include <mysql/plugin.h>
-#include <groonga/groonga.h>
+#include <groonga.h>
 #include "ha_groonga.h"
+
+grn_ctx mrn_ctx_sys;
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,4 +1,4 @@
-AC_INIT([mroonga], [0.1], [ikdttr@gmail.com])
+AC_INIT([mroonga], [0.0.1], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
@@ -24,31 +24,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   )
 ])
 
-AC_DEFUN([CONFIG_OPTION_DEBUG],[
-  AC_ARG_WITH(debug,
-    [  --with-debug            Add debug code
-  --with-debug=full       Add debug code (adds memory checker, very slow)],
-    [with_debug=$withval],
-    [with_debug=no])
-
-  if test "$with_debug" = "yes"; then
-    # Medium debug.
-    AC_DEFINE([DBUG_ON], [1], [Use libdbug])
-    CFLAGS="$DEBUG_CFLAGS $DEBUG_OPTIMIZE_CC -DSAFE_MUTEX $CFLAGS"
-    CXXFLAGS="$DEBUG_CXXFLAGS $DEBUG_OPTIMIZE_CXX -DSAFE_MUTEX $CXXFLAGS"
-  elif test "$with_debug" = "full"; then
-    # Full debug. Very slow in some cases
-    AC_DEFINE([DBUG_ON], [1], [Use libdbug])
-    CFLAGS="$DEBUG_CFLAGS -DSAFE_MUTEX -DSAFEMALLOC $CFLAGS"
-    CXXFLAGS="$DEBUG_CXXFLAGS -DSAFE_MUTEX -DSAFEMALLOC $CXXFLAGS"
-  else
-    # Optimized version. No debug
-    AC_DEFINE([DBUG_OFF], [1], [Don't use libdbug])
-    CFLAGS="$OPTIMIZE_CFLAGS $CFLAGS"
-    CXXFLAGS="$OPTIMIZE_CXXFLAGS $CXXFLAGS"
-  fi
-])
-
 AC_DEFUN([CONFIG_OPTION_MECAB],[
   MECAB_INCLUDES=
   MECAB_LIBS=
@@ -69,7 +44,7 @@ AC_DEFUN([CONFIG_OPTION_MECAB],[
     fi
     MECAB_INCLUDES="`\"$MECAB_CONFIG\" --cflags`"
     MECAB_LIBS="`\"$MECAB_CONFIG\" --libs`"
-  elif test -x $with_mecab; then
+  elif test -d $with_mecab; then
     MECAB_CONFIG="$with_mecab/bin/mecab-config"
     MECAB_INCLUDES="`\"$MECAB_CONFIG\" --cflags`"
     MECAB_LIBS="`\"$MECAB_CONFIG\" --libs`"
@@ -109,19 +84,12 @@ AC_DEFUN([CONFIG_OPTION_GROONGA],[
   if test "$with_groonga" = "no";then
     AC_MSG_ERROR([groonga must not be disabled]);
   elif test "$with_groonga" = "yes"; then
-    if test -x /usr/bin/pkg-config; then
-      PKG_CONFIG='/usr/bin/pkg-config'
-    elif test -x /usr/local/bin/senna-cfg; then
-      PKG_CONFIG='/usr/local/bin/pkg-config'
-    else
-      AC_MSG_ERROR([pkg-config not found!!])
-    fi
-    GROONGA_INCLUDES="`\"$PKG_CONFIG\" --cflags groonga`"
-    GROONGA_LIBS="`\"$PKG_CONFIG\" --libs groonga`"
-  elif test -x $with_mecab; then
-    PKG_CONFIG="pkg-config"
-    GROONGA_INCLUDES="`\"$PKG_CONFIG\" --cflags groonga`"
-    GROONGA_LIBS="`\"$PKG_CONFIG\" --libs groonga`"
+    GROONGA_INCLUDES="`pkg-config --cflags groonga`"
+    GROONGA_LIBS="`pkg-config --libs groonga`"
+  elif test -d $with_groonga; then
+    PKG_CONFIG_PATH="$with_groonga/lib/pkgconfig"
+    GROONGA_INCLUDES="`PKG_CONFIG_PATH=$PKG_CONFIG_PATH pkg-config --cflags groonga`"
+    GROONGA_LIBS="`PKG_CONFIG_PATH=$PKG_CONFIG_PATH pkg-config --libs groonga`"
   else
    AC_MSG_ERROR([argument doesn't exists: --with-groonga=$with_groonga])
   fi
@@ -145,7 +113,6 @@ AC_DEFUN([CONFIG_OPTION_GROONGA],[
 ])
 
 CONFIG_OPTION_MYSQL
-CONFIG_OPTION_DEBUG
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
