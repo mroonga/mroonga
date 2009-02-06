@@ -1,10 +1,14 @@
 *.la
 *.lo
 *.o
+*.i
+*.ii
+*.s
 .deps
 .libs
 Makefile
 Makefile.in
+cscope.out
 /aclocal.m4
 /autom4te.cache
 /config.guess
