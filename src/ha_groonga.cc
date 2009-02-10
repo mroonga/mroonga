@@ -187,7 +187,8 @@ static int mrn_init(void *p)
   grn_ctx_init(mrn_ctx_sys, GRN_CTX_USE_DB, GRN_ENC_UTF8);
 
   /* hash init */
-  
+  mrn_hash_sys = grn_hash_create(mrn_ctx_sys,NULL,MRN_MAX_IDENTIFIER_LEN,sizeof(size_t),
+				 GRN_OBJ_KEY_VAR_SIZE, GRN_ENC_UTF8);
 
   /* log init */
   if (!(mrn_log_file = fopen(mrn_log_name, "a"))) {
