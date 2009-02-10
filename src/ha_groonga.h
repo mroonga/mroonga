@@ -2,6 +2,8 @@
 #define _ha_groonga_h
 
 extern grn_ctx *mrn_ctx_sys;
+extern grn_hash *mrn_hash_sys;
+extern pthread_mutex_t *mrn_mutex_sys;
 
 class ha_groonga: public handler
 {
@@ -47,4 +49,4 @@ public:
   GRN_LOG(mrn_ctx_sys, level, __VA_ARGS__)
 #endif /* MROONGA_DEBUG */
 
-#endif
+#endif /* _ha_groonga_h */
