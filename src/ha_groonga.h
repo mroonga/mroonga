@@ -1,6 +1,9 @@
 #ifndef _ha_groonga_h
 #define _ha_groonga_h
 
+/* max length for grn_hash key e.g. db,table name */
+#define MRN_MAX_IDENTIFIER_LEN 64
+
 extern grn_ctx *mrn_ctx_sys;
 extern grn_hash *mrn_hash_sys;
 extern pthread_mutex_t *mrn_mutex_sys;
