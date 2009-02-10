@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 static int mrn_init(void *p);
-static int mrn_fin(void *p);
+static int mrn_deinit(void *p);
 static handler *mrn_handler_create(handlerton *hton,
 				   TABLE_SHARE *share,
 				   MEM_ROOT *root);
@@ -52,7 +52,7 @@ mysql_declare_plugin(groonga)
   "An Embeddable Fulltext Search Engine",
   PLUGIN_LICENSE_GPL,
   mrn_init,
-  mrn_fin,
+  mrn_deinit,
   0x0001,
   NULL,
   NULL,
@@ -204,7 +204,7 @@ static int mrn_init(void *p)
   MRN_RETURN(0);
 }
 
-static int mrn_fin(void *p)
+static int mrn_deinit(void *p)
 {
   MRN_ENTER;
 
@@ -218,6 +218,7 @@ static int mrn_fin(void *p)
   fclose(mrn_log_file);
 
   /* hash deinit */
+  grn_hash_close(mrn_ctx_sys, mrn_hash_sys);
 
   /* ctx deinit */
   grn_ctx_fin(mrn_ctx_sys);
