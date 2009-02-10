@@ -10,7 +10,6 @@ typedef struct _mrn_charset_map {
   grn_encoding csname_groonga;
 } MRN_CHARSET_MAP;
 
-
 /* handler class */
 class ha_groonga: public handler
 {
@@ -18,8 +17,10 @@ public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);
   ~ha_groonga();
 
-  const char *table_type() const;                                  // required
+  const char *table_type() const;           // required
+  const char *index_type(uint inx);
   const char **bas_ext() const;                                    // required
+
   ulonglong table_flags() const;                                   // required
   ulong index_flags(uint idx, uint part, bool all_parts) const;    // required
 
@@ -43,8 +44,13 @@ public:
 #define MRN_MALLOC(size) malloc(size)
 #define MRN_FREE(ptr) free(ptr)
 
+#define MRN_LOG(level, ...) \
+  GRN_LOG(mrn_ctx_sys, level, __VA_ARGS__)
+
 #define MRN_ENTER \
   do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "enter"); } while(0)
+
+#ifdef MRN_EXTRA_DEBUG
 #define MRN_RETURN_VOID \
   do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return void"); return; } while(0)
 #define MRN_RETURN(res) \
@@ -55,8 +61,12 @@ public:
   do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %s", res); return res; } while(0)
 #define MRN_RETURN_F(res) \
   do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %f", res); return res; } while(0)
-#define MRN_LOG(level, ...) \
-  GRN_LOG(mrn_ctx_sys, level, __VA_ARGS__)
-
+#else
+#define MRN_RETURN_VOID return
+#define MRN_RETURN(res) return res
+#define MRN_RETURN_P MRN_RETURN
+#define MRN_RETURN_S MRN_RETURN
+#define MRN_RETURN_F MRN_RETURN
+#endif
 
 #endif /* _ha_groonga_h */
