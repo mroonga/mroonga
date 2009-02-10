@@ -1,44 +1,53 @@
 #include <mysql_priv.h>
 #include <mysql/plugin.h>
 #include <groonga.h>
-#include "ha_groonga.h"
 #include <pthread.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-grn_ctx *mrn_ctx_sys;
-grn_hash *mrn_hash_sys;
-pthread_mutex_t *mrn_mutex_sys;
-const char *mrn_log_name="groonga.log";
+#include "ha_groonga.h"
+
+/* function definition */
+static int mrn_init(void *p);
+static int mrn_deinit(void *p);
+static handler *mrn_handler_create(handlerton *hton,
+				   TABLE_SHARE *share,
+				   MEM_ROOT *root);
+
+static void mrn_logger_func(int level, const char *time, const char *title,
+		     const char *msg, const char *location, void *func_arg);
+static bool mrn_flush_logs(handlerton *hton);
+
+static grn_encoding mrn_charset_mysql_groonga(const char *csname);
+static const char *mrn_charset_groonga_mysql(grn_encoding encoding);
+
+/* variables */
+static grn_ctx *mrn_ctx_sys;
+static grn_hash *mrn_hash_sys;
+static pthread_mutex_t *mrn_mutex_sys;
+static const char *mrn_log_name="groonga.log";
 static FILE *mrn_log_file = NULL;
 
-void mrn_logger_func(int level, const char *time, const char *title,
-		     const char *msg, const char *location, void *func_arg)
-{
-  const char slev[] = " EACewnid-";
-  if (mrn_log_file) {
-    fprintf(mrn_log_file, "%s|%c|%u|%s %s\n", time,
-	    *(slev + level), (uint)pthread_self(), location, msg);
-    fflush(mrn_log_file);
-  }
-}
-
-grn_logger_info mrn_logger_info = {
+static grn_logger_info mrn_logger_info = {
   GRN_LOG_DUMP,
   GRN_LOG_TIME|GRN_LOG_MESSAGE|GRN_LOG_LOCATION,
   mrn_logger_func,
   NULL
 };
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-static int mrn_init(void *p);
-static int mrn_deinit(void *p);
-static handler *mrn_handler_create(handlerton *hton,
-				   TABLE_SHARE *share,
-				   MEM_ROOT *root);
+static MRN_CHARSET_MAP mrn_charset_map[] = {
+  {"utf8", GRN_ENC_UTF8},
+  {"cp932", GRN_ENC_SJIS},
+  {"sjis", GRN_ENC_SJIS},
+  {"eucjpms", GRN_ENC_EUC_JP},
+  {"ujis", GRN_ENC_EUC_JP},
+  {"latin1", GRN_ENC_LATIN1},
+  {"koi8r", GRN_ENC_KOI8R},
+  {0x0, GRN_ENC_DEFAULT},
+  {0x0, GRN_ENC_NONE}
+};
 
 struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
@@ -60,6 +69,7 @@ mysql_declare_plugin(groonga)
 }
 mysql_declare_plugin_end;
 
+/* handler implementation */
 ha_groonga::ha_groonga(handlerton *hton, TABLE_SHARE *share)
   :handler(hton, share)
 {
@@ -103,6 +113,7 @@ ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
 int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 {
   MRN_ENTER;
+  
   MRN_RETURN(0);
 }
 
@@ -156,7 +167,8 @@ void ha_groonga::position(const uchar *record)
   MRN_RETURN_VOID;
 }
 
-bool mrn_flush_logs(handlerton *hton)
+/* additional functions */
+static bool mrn_flush_logs(handlerton *hton)
 {
   MRN_ENTER;
   pthread_mutex_lock(mrn_mutex_sys);
@@ -183,7 +195,7 @@ static int mrn_init(void *p)
   grn_init();
 
   /* ctx init */
-  mrn_ctx_sys = (grn_ctx*) malloc(sizeof(grn_ctx));
+  mrn_ctx_sys = (grn_ctx*) MRN_MALLOC(sizeof(grn_ctx));
   grn_ctx_init(mrn_ctx_sys, GRN_CTX_USE_DB, GRN_ENC_UTF8);
 
   /* hash init */
@@ -198,7 +210,7 @@ static int mrn_init(void *p)
   MRN_LOG(GRN_LOG_NOTICE, "gronnga engine started");
 
   /* mutex init */
-  mrn_mutex_sys = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+  mrn_mutex_sys = (pthread_mutex_t*) MRN_MALLOC(sizeof(pthread_mutex_t));
   pthread_mutex_init(mrn_mutex_sys, MY_MUTEX_INIT_FAST);
 
   MRN_RETURN(0);
@@ -210,7 +222,7 @@ static int mrn_deinit(void *p)
 
   /* mutex deinit*/
   pthread_mutex_destroy(mrn_mutex_sys);
-  free(mrn_mutex_sys);
+  MRN_FREE(mrn_mutex_sys);
 
   /* log deinit */
   MRN_LOG(GRN_LOG_NOTICE, "stopping groonga engine");
@@ -222,7 +234,7 @@ static int mrn_deinit(void *p)
 
   /* ctx deinit */
   grn_ctx_fin(mrn_ctx_sys);
-  free(mrn_ctx_sys);
+  MRN_FREE(mrn_ctx_sys);
 
   /* libgroonga deinit */
   grn_fin();
@@ -236,6 +248,41 @@ static handler *mrn_handler_create(handlerton *hton,
 {
   MRN_ENTER;
   MRN_RETURN_P(new (root) ha_groonga(hton, share));
+}
+
+
+static void mrn_logger_func(int level, const char *time, const char *title,
+		     const char *msg, const char *location, void *func_arg)
+{
+  const char slev[] = " EACewnid-";
+  if (mrn_log_file) {
+    fprintf(mrn_log_file, "%s|%c|%u|%s %s\n", time,
+	    *(slev + level), (uint)pthread_self(), location, msg);
+    fflush(mrn_log_file);
+  }
+}
+
+
+static grn_encoding mrn_charset_mysql_groonga(const char *csname)
+{
+  if (!csname) return GRN_ENC_NONE;
+  int i;
+  for (i = 0; mrn_charset_map[i].csname_mysql; i++) {
+    if (!(my_strcasecmp(system_charset_info, csname,
+			mrn_charset_map[i].csname_mysql)))
+      return mrn_charset_map[i].csname_groonga;
+  }
+  return GRN_ENC_NONE;
+}
+
+static const char *mrn_charset_groonga_mysql(grn_encoding encoding)
+{
+  int i;
+  for (i = 0; (mrn_charset_map[i].csname_groonga != GRN_ENC_DEFAULT); i++) {
+    if (mrn_charset_map[i].csname_groonga == encoding)
+      return mrn_charset_map[i].csname_mysql;
+  }
+  return NULL;
 }
 
 #ifdef __cplusplus

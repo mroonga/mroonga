@@ -4,10 +4,14 @@
 /* max 64 chars at utf8 */
 #define MRN_MAX_IDENTIFIER_LEN 192
 
-extern grn_ctx *mrn_ctx_sys;
-extern grn_hash *mrn_hash_sys;
-extern pthread_mutex_t *mrn_mutex_sys;
+/* type definition */
+typedef struct _mrn_charset_map {
+  const char* csname_mysql;
+  grn_encoding csname_groonga;
+} MRN_CHARSET_MAP;
 
+
+/* handler class */
 class ha_groonga: public handler
 {
 public:
@@ -34,8 +38,11 @@ public:
   void position(const uchar *record);                              // required
 };
 
-#define MROONGA_DEBUG
-#ifdef MROONGA_DEBUG
+
+/* macro */
+#define MRN_MALLOC(size) malloc(size)
+#define MRN_FREE(ptr) free(ptr)
+
 #define MRN_ENTER \
   do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "enter"); } while(0)
 #define MRN_RETURN_VOID \
@@ -50,6 +57,6 @@ public:
   do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %f", res); return res; } while(0)
 #define MRN_LOG(level, ...) \
   GRN_LOG(mrn_ctx_sys, level, __VA_ARGS__)
-#endif /* MROONGA_DEBUG */
+
 
 #endif /* _ha_groonga_h */
