@@ -25,6 +25,7 @@ static const char *mrn_charset_groonga_mysql(grn_encoding encoding);
 
 /* variables */
 static grn_ctx *mrn_ctx_sys;
+static grn_ctx *mrn_ctx_log;
 static grn_hash *mrn_hash_sys;
 static pthread_mutex_t *mrn_mutex_sys;
 static const char *mrn_logfile_name="groonga.log";
@@ -32,7 +33,7 @@ static FILE *mrn_logfile = NULL;
 
 static grn_logger_info mrn_logger_info = {
   GRN_LOG_DUMP,
-  GRN_LOG_TIME|GRN_LOG_MESSAGE|GRN_LOG_LOCATION,
+  GRN_LOG_TIME|GRN_LOG_MESSAGE,
   mrn_logger_func,
   NULL
 };
@@ -74,26 +75,20 @@ mysql_declare_plugin_end;
 ha_groonga::ha_groonga(handlerton *hton, TABLE_SHARE *share)
   :handler(hton, share)
 {
-  MRN_ENTER;
-  MRN_RETURN_VOID;
 }
 
 ha_groonga::~ha_groonga()
 {
-  MRN_ENTER;
-  MRN_RETURN_VOID;
 }
 
 const char *ha_groonga::table_type() const
 {
-  MRN_ENTER;
-  MRN_RETURN_S("Groonga");
+  return "Groonga";
 }
 
 const char *ha_groonga::index_type(uint inx)
 {
-  MRN_ENTER;
-  MRN_RETURN_S("NONE");
+  return "NONE";
 }
 
 static const char*ha_groonga_exts[] = {
@@ -101,25 +96,22 @@ static const char*ha_groonga_exts[] = {
 };
 const char **ha_groonga::bas_ext() const
 {
-  MRN_ENTER;
-  MRN_RETURN_P(ha_groonga_exts);
+  return ha_groonga_exts;
 }
 
 ulonglong ha_groonga::table_flags() const
 {
-  MRN_ENTER;
-  MRN_RETURN(0);
+  return 0;
 }
 
 ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
 {
-  MRN_ENTER;
-  MRN_RETURN(0);
+  return 0;
 }
 
 int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 {
-  MRN_ENTER;
+  MRN_TRACE;
   char path[1024];
   char *dbname = form->s->db.str;
   char *tblname = form->s->table_name.str;
@@ -130,63 +122,62 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   grn_obj *tbl = grn_table_create(mrn_ctx_sys,tblname,strlen(tblname),path,
 				  GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
 				  key_type,1000,GRN_ENC_UTF8);
-  MRN_RETURN(0);
+  return 0;
 }
 
 int ha_groonga::open(const char *name, int mode, uint test_if_locked)
 {
-  MRN_ENTER;
-  MRN_RETURN(0);
+  MRN_TRACE;
+  return 0;
 }
 
 int ha_groonga::close()
 {
-  MRN_ENTER;
-  MRN_RETURN(0);
+  MRN_TRACE;
+  return 0;
 }
 
 int ha_groonga::info(uint flag)
 {
-  MRN_ENTER;
-  MRN_RETURN(0);
+  MRN_TRACE;
+  return 0;
 }
 
 THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
 				    THR_LOCK_DATA **to,
 				    enum thr_lock_type lock_type)
 {
-  MRN_ENTER;
-  MRN_RETURN(to);
+  MRN_TRACE;
+  return to;
 }
 
 int ha_groonga::rnd_init(bool scan)
 {
-  MRN_ENTER;
-  MRN_RETURN(0);
+  MRN_TRACE;
+  return 0;
 }
 
 int ha_groonga::rnd_next(uchar *buf)
 {
-  MRN_ENTER;
-  MRN_RETURN(HA_ERR_END_OF_FILE);
+  MRN_TRACE;
+  return HA_ERR_END_OF_FILE;
 }
 
 int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
 {
-  MRN_ENTER;
-  MRN_RETURN(HA_ERR_WRONG_COMMAND);
+  MRN_TRACE;
+  return HA_ERR_WRONG_COMMAND;
 }
 
 void ha_groonga::position(const uchar *record)
 {
-  MRN_ENTER;
-  MRN_RETURN_VOID;
+  MRN_TRACE;
 }
 
 /* additional functions */
 static bool mrn_flush_logs(handlerton *hton)
 {
-  MRN_ENTER;
+  MRN_TRACE;
   pthread_mutex_lock(mrn_mutex_sys);
   MRN_LOG(GRN_LOG_NOTICE, "logfile closed by FLUSH LOGS");
   fflush(mrn_logfile);
@@ -194,12 +185,12 @@ static bool mrn_flush_logs(handlerton *hton)
   mrn_logfile = fopen(mrn_logfile_name, "a");
   MRN_LOG(GRN_LOG_NOTICE, "logfile re-opened by FLUSH LOGS");
   pthread_mutex_unlock(mrn_mutex_sys);
-  MRN_RETURN(true);
+  return true;
 }
 
 static int mrn_init(void *p)
 {
-  MRN_ENTER;
+  MRN_TRACE;
   handlerton *hton;
   hton = (handlerton *)p;
   hton->state = SHOW_OPTION_YES;
@@ -220,7 +211,7 @@ static int mrn_init(void *p)
 
   /* log init */
   if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
-    MRN_RETURN(-1);
+    return -1;
   }
   grn_logger_info_set(mrn_ctx_sys, &mrn_logger_info);
   MRN_LOG(GRN_LOG_NOTICE, "gronnga engine started");
@@ -229,12 +220,12 @@ static int mrn_init(void *p)
   mrn_mutex_sys = (pthread_mutex_t*) MRN_MALLOC(sizeof(pthread_mutex_t));
   pthread_mutex_init(mrn_mutex_sys, MY_MUTEX_INIT_FAST);
 
-  MRN_RETURN(0);
+  return 0;
 }
 
 static int mrn_deinit(void *p)
 {
-  MRN_ENTER;
+  MRN_TRACE;
 
   /* mutex deinit*/
   pthread_mutex_destroy(mrn_mutex_sys);
@@ -254,15 +245,14 @@ static int mrn_deinit(void *p)
   /* libgroonga deinit */
   grn_fin();
 
-  MRN_RETURN(0);
+  return 0;
 }
 
 static handler *mrn_handler_create(handlerton *hton,
 				    TABLE_SHARE *share,
 				    MEM_ROOT *root)
 {
-  MRN_ENTER;
-  MRN_RETURN_P(new (root) ha_groonga(hton, share));
+  return (new (root) ha_groonga(hton, share));
 }
 
 
@@ -271,8 +261,8 @@ static void mrn_logger_func(int level, const char *time, const char *title,
 {
   const char slev[] = " EACewnid-";
   if ((mrn_logfile)) {
-    fprintf(mrn_logfile, "%s|%c|%u|%s %s\n", time,
-	    *(slev + level), (uint)pthread_self(), location, msg);
+    fprintf(mrn_logfile, "%s|%c|%u|%s\n", time,
+	    *(slev + level), (uint)pthread_self(), msg);
     fflush(mrn_logfile);
   }
 }

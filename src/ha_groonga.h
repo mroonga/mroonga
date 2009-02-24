@@ -1,14 +1,7 @@
 #ifndef _ha_groonga_h
 #define _ha_groonga_h
 
-/* max 64 chars at utf8 */
-#define MRN_MAX_IDENTIFIER_LEN 192
-
-/* type definition */
-typedef struct _mrn_charset_map {
-  const char* csname_mysql;
-  grn_encoding csname_groonga;
-} MRN_CHARSET_MAP;
+#include "mroonga.h"
 
 /* handler class */
 class ha_groonga: public handler
@@ -38,35 +31,5 @@ public:
   int rnd_pos(uchar *buf, uchar *pos);                             // required
   void position(const uchar *record);                              // required
 };
-
-
-/* macro */
-#define MRN_MALLOC(size) malloc(size)
-#define MRN_FREE(ptr) free(ptr)
-
-#define MRN_LOG(level, ...) \
-  GRN_LOG(mrn_ctx_sys, level, __VA_ARGS__)
-
-#define MRN_ENTER \
-  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "enter"); } while(0)
-
-#ifdef MRN_EXTRA_DEBUG
-#define MRN_RETURN_VOID \
-  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return void"); return; } while(0)
-#define MRN_RETURN(res) \
-  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %d", res); return res; } while(0)
-#define MRN_RETURN_P(res) \
-  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %p", res); return res; } while(0)
-#define MRN_RETURN_S(res) \
-  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %s", res); return res; } while(0)
-#define MRN_RETURN_F(res) \
-  do {GRN_LOG(mrn_ctx_sys, GRN_LOG_DEBUG, "return %f", res); return res; } while(0)
-#else
-#define MRN_RETURN_VOID return
-#define MRN_RETURN(res) return res
-#define MRN_RETURN_P MRN_RETURN
-#define MRN_RETURN_S MRN_RETURN
-#define MRN_RETURN_F MRN_RETURN
-#endif
 
 #endif /* _ha_groonga_h */
