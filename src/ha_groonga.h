@@ -3,9 +3,20 @@
 
 #include "mroonga.h"
 
+typedef struct _mrn_share {
+  const char *name;
+  uint name_len;
+  uint use_count;
+  grn_obj *obj;
+  THR_LOCK lock;
+} mrn_share;
+
 /* handler class */
 class ha_groonga: public handler
 {
+  mrn_share *share;
+  THR_LOCK_DATA lock;
+
 public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);
   ~ha_groonga();
@@ -30,6 +41,8 @@ public:
   int rnd_next(uchar *buf);                                        // required
   int rnd_pos(uchar *buf, uchar *pos);                             // required
   void position(const uchar *record);                              // required
+
+  int delete_table(const char *name);
 };
 
 #endif /* _ha_groonga_h */

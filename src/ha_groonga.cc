@@ -2,6 +2,9 @@
 #include <mysql/plugin.h>
 #include <groonga.h>
 #include <pthread.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,26 +12,29 @@ extern "C" {
 
 #include "ha_groonga.h"
 
-/* function definition */
+/* static function definition */
 static int mrn_init(void *p);
 static int mrn_deinit(void *p);
 static handler *mrn_handler_create(handlerton *hton,
 				   TABLE_SHARE *share,
 				   MEM_ROOT *root);
-
 static void mrn_logger_func(int level, const char *time, const char *title,
-		     const char *msg, const char *location, void *func_arg);
+			    const char *msg, const char *location, void *func_arg);
 static bool mrn_flush_logs(handlerton *hton);
-
 static grn_encoding mrn_charset_mysql_groonga(const char *csname);
 static const char *mrn_charset_groonga_mysql(grn_encoding encoding);
+static void mrn_ctx_init();
+static grn_obj *mrn_db_open_or_create();
+static mrn_share *mrn_share_get(const char *name);
+static void mrn_share_put(mrn_share *share);
+static void mrn_share_remove(mrn_share *share);
 
-/* variables */
-static grn_ctx *mrn_ctx_sys;
-static grn_ctx *mrn_ctx_log;
+
+/* static variables */
 static grn_hash *mrn_hash_sys;
+static grn_obj *mrn_db_sys;
 static pthread_mutex_t *mrn_mutex_sys;
-static const char *mrn_logfile_name="groonga.log";
+  static const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 static FILE *mrn_logfile = NULL;
 
 static grn_logger_info mrn_logger_info = {
@@ -50,18 +56,21 @@ static MRN_CHARSET_MAP mrn_charset_map[] = {
   {0x0, GRN_ENC_NONE}
 };
 
+/* TLS variables */
+__thread grn_ctx *mrn_ctx_tls;
+
 /* handler declaration */
 struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
 
-mysql_declare_plugin(groonga)
+mysql_declare_plugin(mroonga)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
-  "Groonga",
+  "Mroonga",
   "Tetsuro IKEDA",
-  "An Embeddable Fulltext Search Engine",
-  PLUGIN_LICENSE_GPL,
+  "MySQL binding for Groonga",
+  PLUGIN_LICENSE_BSD,
   mrn_init,
   mrn_deinit,
   0x0001,
@@ -83,7 +92,7 @@ ha_groonga::~ha_groonga()
 
 const char *ha_groonga::table_type() const
 {
-  return "Groonga";
+  return "Mroonga";
 }
 
 const char *ha_groonga::index_type(uint inx)
@@ -109,36 +118,67 @@ ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
   return 0;
 }
 
+/*
+  create a table, mrn_table and push it to db hash.
+  currently only using in-memory table in groonga.
+*/
 int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 {
+  mrn_ctx_init();
   MRN_TRACE;
-  char path[1024];
-  char *dbname = form->s->db.str;
-  char *tblname = form->s->table_name.str;
-  sprintf(path, "%s/grn.db",dbname);
-  grn_obj *db = grn_db_create(mrn_ctx_sys, path, NULL);
-  sprintf(path, "%s/%s.grn",dbname,tblname);
-  grn_obj *key_type = grn_ctx_get(mrn_ctx_sys, GRN_DB_SHORTTEXT);
-  grn_obj *tbl = grn_table_create(mrn_ctx_sys,tblname,strlen(tblname),path,
+
+  const char *obj_name = MRN_OBJ_NAME(name);
+  char path[MRN_MAX_KEY_LEN];
+  MRN_OBJ_PATH(path, obj_name);
+
+  grn_obj *key_type = grn_ctx_get(mrn_ctx_tls, GRN_DB_SHORTTEXT);
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_create: name='%s', path='%s'",obj_name, path);
+  grn_obj *obj = grn_table_create(mrn_ctx_tls, obj_name, strlen(obj_name), path,
 				  GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
 				  key_type,1000,GRN_ENC_UTF8);
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: obj=%p", obj);
+  grn_obj_close(mrn_ctx_tls, obj);
   return 0;
 }
 
 int ha_groonga::open(const char *name, int mode, uint test_if_locked)
 {
+  mrn_ctx_init();
   MRN_TRACE;
+
+  mrn_share *share;
+
+  if ((share = mrn_share_get(name))) {
+    this->share = share;
+  } else {
+    share = (mrn_share*) MRN_MALLOC(sizeof(mrn_share));
+    share->name = MRN_OBJ_NAME(name);
+    char path[MRN_MAX_KEY_LEN];
+    MRN_OBJ_PATH(path, share->name);
+    MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_open: name='%s', path='%s'", share->name, path);
+    grn_obj *obj = grn_table_open(mrn_ctx_tls, share->name, strlen(share->name), path);
+    share->obj = obj;
+    mrn_share_put(share);
+    this->share = share;
+  }
   return 0;
 }
 
 int ha_groonga::close()
 {
+  mrn_ctx_init();
   MRN_TRACE;
+  /*
+  mrn_share *share = this->share;
+  mrn_share_remove(share);
+  grn_obj_close(mrn_ctx_tls, share->obj);
+  */
   return 0;
 }
 
 int ha_groonga::info(uint flag)
 {
+  mrn_ctx_init();
   MRN_TRACE;
   return 0;
 }
@@ -147,6 +187,7 @@ THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
 				    THR_LOCK_DATA **to,
 				    enum thr_lock_type lock_type)
 {
+  mrn_ctx_init();
   MRN_TRACE;
   return to;
 }
@@ -174,6 +215,22 @@ void ha_groonga::position(const uchar *record)
   MRN_TRACE;
 }
 
+int ha_groonga::delete_table(const char *name)
+{
+  mrn_ctx_init();
+  MRN_TRACE;
+
+  const char *obj_name = MRN_OBJ_NAME(name);
+  char path[MRN_MAX_KEY_LEN];
+  MRN_OBJ_PATH(path, obj_name);
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_open: name='%s', path='%s'", obj_name, path);
+  grn_obj *obj = grn_table_open(mrn_ctx_tls, obj_name, strlen(obj_name), path);
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_remove: obj=%p", obj);
+  grn_obj_remove(mrn_ctx_tls, obj);
+
+  return 0;
+}
+
 /* additional functions */
 static bool mrn_flush_logs(handlerton *hton)
 {
@@ -183,6 +240,7 @@ static bool mrn_flush_logs(handlerton *hton)
   fflush(mrn_logfile);
   fclose(mrn_logfile); /* reopen logfile for rotation */
   mrn_logfile = fopen(mrn_logfile_name, "a");
+  MRN_LOG(GRN_LOG_NOTICE, "-------------------------------");
   MRN_LOG(GRN_LOG_NOTICE, "logfile re-opened by FLUSH LOGS");
   pthread_mutex_unlock(mrn_mutex_sys);
   return true;
@@ -190,7 +248,6 @@ static bool mrn_flush_logs(handlerton *hton)
 
 static int mrn_init(void *p)
 {
-  MRN_TRACE;
   handlerton *hton;
   hton = (handlerton *)p;
   hton->state = SHOW_OPTION_YES;
@@ -200,21 +257,21 @@ static int mrn_init(void *p)
 
   /* libgroonga init */
   grn_init();
-
-  /* ctx init */
-  mrn_ctx_sys = (grn_ctx*) MRN_MALLOC(sizeof(grn_ctx));
-  grn_ctx_init(mrn_ctx_sys, GRN_CTX_USE_DB, GRN_ENC_UTF8);
-
-  /* hash init */
-  mrn_hash_sys = grn_hash_create(mrn_ctx_sys,NULL,MRN_MAX_IDENTIFIER_LEN,sizeof(size_t),
-				 GRN_OBJ_KEY_VAR_SIZE, GRN_ENC_UTF8);
+  mrn_ctx_init();
 
   /* log init */
   if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
     return -1;
   }
-  grn_logger_info_set(mrn_ctx_sys, &mrn_logger_info);
-  MRN_LOG(GRN_LOG_NOTICE, "gronnga engine started");
+  grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
+  MRN_LOG(GRN_LOG_NOTICE, "++++++ starting mroonga ++++++");
+  MRN_TRACE;
+
+  /* init meta-data repository */
+  mrn_hash_sys = grn_hash_create(mrn_ctx_tls,NULL,
+				 MRN_MAX_KEY_LEN,sizeof(size_t),
+				 GRN_OBJ_KEY_VAR_SIZE, GRN_ENC_UTF8);
+  mrn_db_sys = mrn_db_open_or_create();
 
   /* mutex init */
   mrn_mutex_sys = (pthread_mutex_t*) MRN_MALLOC(sizeof(pthread_mutex_t));
@@ -223,8 +280,12 @@ static int mrn_init(void *p)
   return 0;
 }
 
+/*
+  TODO: release all grn_obj in global hash
+*/
 static int mrn_deinit(void *p)
 {
+  mrn_ctx_init();
   MRN_TRACE;
 
   /* mutex deinit*/
@@ -232,15 +293,12 @@ static int mrn_deinit(void *p)
   MRN_FREE(mrn_mutex_sys);
 
   /* log deinit */
-  MRN_LOG(GRN_LOG_NOTICE, "stopping groonga engine");
+  MRN_LOG(GRN_LOG_NOTICE, "------ stopping mroonga ------");
   fclose(mrn_logfile);
+  mrn_logfile = NULL;
 
   /* hash deinit */
-  grn_hash_close(mrn_ctx_sys, mrn_hash_sys);
-
-  /* ctx deinit */
-  grn_ctx_fin(mrn_ctx_sys);
-  MRN_FREE(mrn_ctx_sys);
+  grn_hash_close(mrn_ctx_tls, mrn_hash_sys);
 
   /* libgroonga deinit */
   grn_fin();
@@ -290,6 +348,68 @@ static const char *mrn_charset_groonga_mysql(grn_encoding encoding)
   return NULL;
 }
 
+static void mrn_ctx_init()
+{
+  if (mrn_ctx_tls == NULL) {
+    mrn_ctx_tls = (grn_ctx*) MRN_MALLOC(sizeof(grn_ctx));
+    grn_ctx_init(mrn_ctx_tls, 0, GRN_ENC_UTF8);
+    if ((mrn_db_sys))
+      grn_ctx_use(mrn_ctx_tls, mrn_db_sys);
+  }
+}
+
+static grn_obj *mrn_db_open_or_create()
+{
+  grn_obj *obj;
+  struct stat dummy;
+  if ((stat(MRN_DB_FILE_PATH, &dummy))) { // check if file not exists
+    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_create: %s", MRN_DB_FILE_PATH);
+    obj = grn_db_create(mrn_ctx_tls, MRN_DB_FILE_PATH, NULL);
+  } else {
+    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_open: %s", MRN_DB_FILE_PATH);
+    obj = grn_db_open(mrn_ctx_tls, MRN_DB_FILE_PATH);
+  }
+  return obj;
+}
+
+static void mrn_share_put(mrn_share *share)
+{
+  void *value;
+  grn_search_flags flags = GRN_TABLE_ADD;
+  /* TODO: check duplication */
+  MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(put): name='%s'", share->name);
+  grn_hash_lookup(mrn_ctx_tls, mrn_hash_sys, share->name,
+		  strlen(share->name), &value, &flags);
+  memcpy(value, share, sizeof(share));
+}
+
+/* returns NULL if specified obj_name is not found in grn_hash */
+static mrn_share *mrn_share_get(const char *obj_name)
+{
+  void *value;
+  grn_search_flags flags = 0;
+  MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(get): obj_name='%s'", obj_name);
+  grn_id rid = grn_hash_lookup(mrn_ctx_tls, mrn_hash_sys, obj_name,
+			       strlen(obj_name), &value, &flags);
+  if (rid == 0) {
+    return NULL;
+  } else {
+    return (mrn_share*) value;
+  }
+}
+
+static void mrn_share_remove(mrn_share *share)
+{
+  /* TODO: check return value */
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_hash_delete: obj_name='%s'", share->name);
+  grn_hash_delete(mrn_ctx_tls, mrn_hash_sys, share->name,
+		  strlen(share->name), NULL);
+}
+
+static void mrn_share_remove_all()
+{
+  /* TODO: implement this function by using GRN_HASH_EACH */
+}
 
 #ifdef __cplusplus
 }
