@@ -110,13 +110,15 @@ const char **ha_groonga::bas_ext() const
 
 ulonglong ha_groonga::table_flags() const
 {
-  return 0;
+  return HA_NO_TRANSACTIONS;
 }
 
 ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
 {
   return 0;
 }
+
+
 
 /*
   create a table, mrn_table and push it to db hash.
@@ -136,9 +138,35 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   grn_obj *obj = grn_table_create(mrn_ctx_tls, obj_name, strlen(obj_name), path,
 				  GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
 				  key_type,1000,GRN_ENC_UTF8);
+  int i;
+  grn_obj *type;
+  char buf[MRN_MAX_KEY_LEN];
+  for (i=0; i < form->s->fields; i++) {
+    Field *field = form->s->field[i];
+    switch(field->type()) {
+    case MYSQL_TYPE_LONG:
+      snprintf(buf, MRN_MAX_KEY_LEN-1, "%s/%s-%s.grn",
+	       form->s->db.str, form->s->table_name.str, field->field_name);
+      type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_create: name='%s', path='%s', type=GRN_DB_INT", 
+	      buf, field->field_name);
+      grn_column_create(mrn_ctx_tls, obj, field->field_name, strlen(field->field_name),
+			buf, GRN_OBJ_PERSISTENT|GRN_OBJ_COLUMN_SCALAR, type);
+      break;
+    default:
+      goto err;
+    }
+  }
+
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: obj=%p", obj);
   grn_obj_close(mrn_ctx_tls, obj);
   return 0;
+
+ err:
+  MRN_LOG(GRN_LOG_ERROR, "got error while CREATE TABLE '%s'", obj_name);
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_remove: obj=%p", obj);
+  grn_obj_remove(mrn_ctx_tls, obj);
+  return HA_WRONG_CREATE_OPTION;
 }
 
 int ha_groonga::open(const char *name, int mode, uint test_if_locked)
@@ -148,7 +176,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
 
   mrn_share *share;
 
-  if ((share = mrn_share_get(name))) {
+  if ((share = mrn_share_get(MRN_OBJ_NAME(name)))) {
     this->share = share;
   } else {
     share = (mrn_share*) MRN_MALLOC(sizeof(mrn_share));
@@ -168,11 +196,12 @@ int ha_groonga::close()
 {
   mrn_ctx_init();
   MRN_TRACE;
-  /*
+  
   mrn_share *share = this->share;
   mrn_share_remove(share);
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: '%s'", share->name);
   grn_obj_close(mrn_ctx_tls, share->obj);
-  */
+  
   return 0;
 }
 
@@ -288,6 +317,9 @@ static int mrn_deinit(void *p)
   mrn_ctx_init();
   MRN_TRACE;
 
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: '%s'", MRN_DB_FILE_PATH);
+  grn_obj_close(mrn_ctx_tls, mrn_db_sys);
+
   /* mutex deinit*/
   pthread_mutex_destroy(mrn_mutex_sys);
   MRN_FREE(mrn_mutex_sys);
@@ -363,10 +395,10 @@ static grn_obj *mrn_db_open_or_create()
   grn_obj *obj;
   struct stat dummy;
   if ((stat(MRN_DB_FILE_PATH, &dummy))) { // check if file not exists
-    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_create: %s", MRN_DB_FILE_PATH);
+    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_create: '%s'", MRN_DB_FILE_PATH);
     obj = grn_db_create(mrn_ctx_tls, MRN_DB_FILE_PATH, NULL);
   } else {
-    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_open: %s", MRN_DB_FILE_PATH);
+    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_open: '%s'", MRN_DB_FILE_PATH);
     obj = grn_db_open(mrn_ctx_tls, MRN_DB_FILE_PATH);
   }
   return obj;
@@ -384,13 +416,13 @@ static void mrn_share_put(mrn_share *share)
 }
 
 /* returns NULL if specified obj_name is not found in grn_hash */
-static mrn_share *mrn_share_get(const char *obj_name)
+static mrn_share *mrn_share_get(const char *name)
 {
   void *value;
   grn_search_flags flags = 0;
-  MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(get): obj_name='%s'", obj_name);
-  grn_id rid = grn_hash_lookup(mrn_ctx_tls, mrn_hash_sys, obj_name,
-			       strlen(obj_name), &value, &flags);
+  MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(get): name='%s'", name);
+  grn_id rid = grn_hash_lookup(mrn_ctx_tls, mrn_hash_sys, name,
+			       strlen(name), &value, &flags);
   if (rid == 0) {
     return NULL;
   } else {
@@ -401,7 +433,7 @@ static mrn_share *mrn_share_get(const char *obj_name)
 static void mrn_share_remove(mrn_share *share)
 {
   /* TODO: check return value */
-  MRN_LOG(GRN_LOG_DEBUG, "-> grn_hash_delete: obj_name='%s'", share->name);
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_hash_delete: name='%s'", share->name);
   grn_hash_delete(mrn_ctx_tls, mrn_hash_sys, share->name,
 		  strlen(share->name), NULL);
 }
@@ -409,6 +441,68 @@ static void mrn_share_remove(mrn_share *share)
 static void mrn_share_remove_all()
 {
   /* TODO: implement this function by using GRN_HASH_EACH */
+}
+
+#define LOG_FIELD(x) MRN_LOG(GRN_LOG_DEBUG, "-> %s %s", field->field_name, x); break;
+
+static void mrn_print_field_type(Field *field)
+{
+  switch (field->type()) {
+  case MYSQL_TYPE_DECIMAL:
+    LOG_FIELD("MYSQL_TYPE_DECIMAL");
+  case MYSQL_TYPE_TINY:
+    LOG_FIELD("MYSQL_TYPE_TINY");
+  case MYSQL_TYPE_SHORT:
+    LOG_FIELD("MYSQL_TYPE_SHORT");
+  case MYSQL_TYPE_LONG:
+    LOG_FIELD("MYSQL_TYPE_LONG");
+  case MYSQL_TYPE_FLOAT:
+    LOG_FIELD("MYSQL_TYPE_FLOAT");
+  case MYSQL_TYPE_DOUBLE:
+    LOG_FIELD("MYSQL_TYPE_DOUBLE");
+  case MYSQL_TYPE_NULL:
+    LOG_FIELD("MYSQL_TYPE_NULL");
+  case MYSQL_TYPE_TIMESTAMP:
+    LOG_FIELD("MYSQL_TYPE_TIMESTAMP");
+  case MYSQL_TYPE_LONGLONG:
+    LOG_FIELD("MYSQL_TYPE_LONGLONG");
+  case MYSQL_TYPE_INT24:
+    LOG_FIELD("MYSQL_TYPE_INT24");
+  case MYSQL_TYPE_DATE:
+    LOG_FIELD("MYSQL_TYPE_DATE");
+  case MYSQL_TYPE_TIME:
+    LOG_FIELD("MYSQL_TYPE_TIME");
+  case MYSQL_TYPE_DATETIME:
+    LOG_FIELD("MYSQL_TYPE_DATETIME");
+  case MYSQL_TYPE_YEAR:
+    LOG_FIELD("MYSQL_TYPE_YEAR");
+  case MYSQL_TYPE_NEWDATE:
+    LOG_FIELD("MYSQL_TYPE_NEWDATE");
+  case MYSQL_TYPE_VARCHAR:
+    LOG_FIELD("MYSQL_TYPE_VARCHAR");
+  case MYSQL_TYPE_BIT:
+    LOG_FIELD("MYSQL_TYPE_BIT");
+  case MYSQL_TYPE_NEWDECIMAL:
+    LOG_FIELD("MYSQL_TYPE_NEWDECIMAL");
+  case MYSQL_TYPE_ENUM:
+    LOG_FIELD("MYSQL_TYPE_ENUM");
+  case MYSQL_TYPE_SET:
+    LOG_FIELD("MYSQL_TYPE_SET");
+  case MYSQL_TYPE_TINY_BLOB:
+    LOG_FIELD("MYSQL_TYPE_TINY_BLOB");
+  case MYSQL_TYPE_MEDIUM_BLOB:
+    LOG_FIELD("MYSQL_TYPE_MEDIUM_BLOB");
+  case MYSQL_TYPE_LONG_BLOB:
+    LOG_FIELD("MYSQL_TYPE_LONG_BLOB");
+  case MYSQL_TYPE_BLOB:
+    LOG_FIELD("MYSQL_TYPE_BLOB");
+  case MYSQL_TYPE_VAR_STRING:
+    LOG_FIELD("MYSQL_TYPE_VAR_STRING");
+  case MYSQL_TYPE_STRING:
+    LOG_FIELD("MYSQL_TYPE_STRING");
+  case MYSQL_TYPE_GEOMETRY:
+    LOG_FIELD("MYSQL_TYPE_GEOMETRY");
+  }
 }
 
 #ifdef __cplusplus

@@ -9,6 +9,7 @@ typedef struct _mrn_share {
   uint use_count;
   grn_obj *obj;
   THR_LOCK lock;
+  grn_id gid;
 } mrn_share;
 
 /* handler class */
