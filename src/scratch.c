@@ -148,44 +148,32 @@ void sample_string()
   const char *rt = obj_name - 2;
   printf("name=%s, obj_name=%s, rt=%s\n",name,obj_name,rt);
 }
-/*
+
 void sample_dump()
 {
-  const char *db_path = "hoge.grn";
-  const char *tbl_path = "fuga.grn";
-  const char *tbl_name = "hoge/fuga";
-
-  unlink(db_path);
-  unlink(tbl_path);
-
   grn_init();
-  grn_ctx ctx = GRN_CTX_INITIALIZER;
+  const char *db_path = "/usr/local/mysql/data/mroonga.grn";
+  grn_ctx ctx;
+  grn_ctx_init(&ctx,0,GRN_ENC_UTF8);
 
-  grn_obj *db = grn_db_create(&ctx, db_path, NULL);
-  //grn_obj *db = grn_db_open(&ctx, db_path);
+  grn_obj *db = grn_db_open(&ctx, db_path);
   grn_ctx_use(&ctx, db);
 
-  grn_obj *key_type = grn_ctx_get(&ctx, GRN_DB_SHORTTEXT);
-  grn_obj *obj = grn_table_create(&ctx, tbl_name, strlen(tbl_name), tbl_path,
-				    GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
-				    key_type,1000,GRN_ENC_UTF8);
-
-  grn_id i;
-  for (i=0; i < 20; i++) {
-    grn_obj *obj = grn_ctx_get(&ctx, i);
+  grn_obj *obj=NULL;
+  grn_id i=0;
+  do {
+    obj = grn_ctx_get(&ctx, ++i);
     printf("grn_id=%d, obj=%p",i, obj);
-    if (obj) {
-      char name[1024];
-      int len;
-      memset(name,0,1024);
-      len = grn_obj_name(&ctx, obj, name, 1024);
-      printf(" ,name=%s, len=%d, ret_len=%d",name, strlen(name),len);
-    }
+    char name[1024];
+    int len;
+    memset(name,0,1024);
+    len = grn_obj_name(&ctx, obj, name, 1024);
+    printf(" ,name=%s, ret_len=%d",name ,len);
     printf("\n");
-  }
+  } while (obj != NULL);
   grn_fin();
 }
-*/
+
 
 int
 sample_open_or_create(int argc, char **argv)
@@ -253,6 +241,7 @@ sample_open_or_create(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-  sample_open_or_create(argc, argv);
+  sample_dump();
+  //sample_open_or_create(argc, argv);
   return 0;
 }

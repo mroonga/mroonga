@@ -6,7 +6,7 @@
 
 #define MRN_MAX_KEY_LEN 1024
 #define MRN_DB_FILE_PATH "mroonga.grn"
-#define MRN_TABLE_FILE_EXT ".grn"
+#define MRN_FILE_EXT ".grn"
 #define MRN_LOG_FILE_NAME "mroonga.log"
 
 /* type definition */
@@ -28,8 +28,10 @@ typedef struct _mrn_charset_map {
   } while(0)
 
 /* name, obj_name, path */
-#define MRN_NAME(obj_name) (obj_name - 2)
-#define MRN_OBJ_NAME(name) (name + 2)
-#define MRN_OBJ_PATH(buf,name) snprintf(buf,MRN_MAX_KEY_LEN-1,"%s%s",name, MRN_TABLE_FILE_EXT)
+#define MRN_HANDLER_NAME(obj_name) (obj_name - 2)
+#define MRN_TABLE_NAME(name) (name + 2)
+#define MRN_TABLE_PATH(buf,name) snprintf(buf,MRN_MAX_KEY_LEN-1,"%s%s",name, MRN_FILE_EXT)
+#define MRN_COLUMN_PATH(buf,db,table,column) \
+  snprintf(buf,MRN_MAX_KEY_LEN-1, "%s/%s.%s%s", db, table, column, MRN_FILE_EXT)
 
 #endif /* _mroonga_h */
