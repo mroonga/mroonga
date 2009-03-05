@@ -3,6 +3,15 @@
 
 #include "mroonga.h"
 
+typedef struct _mrn_share_field {
+  const char *name;
+  const char *path;
+  uint name_len;
+  uint path_len;
+  grn_obj *obj;
+  grn_id gid;
+} mrn_field;
+
 typedef struct _mrn_share {
   const char *name;
   uint name_len;
@@ -10,6 +19,8 @@ typedef struct _mrn_share {
   grn_obj *obj;
   THR_LOCK lock;
   grn_id gid;
+  mrn_field **field;
+  uint fields;
 } mrn_share;
 
 /* handler class */

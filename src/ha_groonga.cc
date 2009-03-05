@@ -148,9 +148,9 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
     case MYSQL_TYPE_LONG:
       MRN_COLUMN_PATH(buf, form->s->db.str, form->s->table_name.str, field->field_name);
       type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
-      MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_create: name='%s', path='%s', type=GRN_DB_INT", 
-	      field->field_name, buf);
       /* NOTE: currently using NULL as path but this should be replaced by buf */
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_create: name='%s', path='%s', type=GRN_DB_INT", 
+	      field->field_name, NULL);
       column_obj = grn_column_create(mrn_ctx_tls, table_obj,
 				     field->field_name, strlen(field->field_name),
 				     NULL, GRN_OBJ_PERSISTENT|GRN_OBJ_COLUMN_SCALAR, type);
@@ -185,14 +185,40 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
   } else {
     share = (mrn_share*) MRN_MALLOC(sizeof(mrn_share));
     share->name = MRN_TABLE_NAME(name);
+    share->name_len = strlen(share->name);
     char path[MRN_MAX_KEY_LEN];
     MRN_TABLE_PATH(path, share->name);
     MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_open: name='%s', path='%s'", share->name, path);
     grn_obj *obj = grn_table_open(mrn_ctx_tls, share->name, strlen(share->name), path);
     share->obj = obj;
+
+    share->fields = this->table_share->fields;
+    share->field = (mrn_field**) MRN_MALLOC(sizeof(mrn_field*) * (share->fields + 1));
+    int i;
+    char buf[MRN_MAX_KEY_LEN];
+    for (i=0; i < share->fields; i++) {
+      Field *mysql_field = this->table_share->field[i];
+      mrn_field *field = (mrn_field*) MRN_MALLOC(sizeof(mrn_field));
+      field->name = mysql_field->field_name;
+      field->name_len = strlen(field->name);
+      /* NOTE: currently using NULL as path but this should be replaced */
+      field->path = NULL;
+      /* NOTE: currently only support INT */
+      grn_obj *type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_open: name='%s', path='%s'",
+	      field->name, field->path);
+      field->obj = grn_column_open(mrn_ctx_tls, share->obj,
+				   field->name, field->name_len,
+				   field->path, type);
+
+      share->field[i] = field;
+    }
+    share->field[i] = NULL;
+
     mrn_share_put(share);
     this->share = share;
   }
+  share->use_count++;
   return 0;
 }
 
