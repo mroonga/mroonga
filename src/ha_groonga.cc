@@ -231,7 +231,14 @@ int ha_groonga::close()
   mrn_share_remove(share);
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: '%s'", share->name);
   grn_obj_close(mrn_ctx_tls, share->obj);
-  
+
+  mrn_field **field;
+  for (field = share->field; *field; field++) {
+    MRN_FREE(*field);
+  }
+  MRN_FREE(share->field);
+  MRN_FREE(share);
+
   return 0;
 }
 
