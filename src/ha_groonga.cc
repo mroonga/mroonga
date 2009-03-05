@@ -182,6 +182,9 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
   mrn_ctx_init();
   MRN_TRACE;
 
+  thr_lock_init(&thr_lock);
+  thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
+
   mrn_share *share;
 
   if ((share = mrn_share_get(MRN_TABLE_NAME(name)))) {
@@ -219,12 +222,9 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
     }
     share->field[i] = NULL;
 
-    thr_lock_init(&share->lock);
-
     mrn_share_put(share);
     this->share = share;
   }
-  thr_lock_data_init(&share->lock, &lock, NULL);
   share->use_count++;
   return 0;
 }
@@ -233,13 +233,13 @@ int ha_groonga::close()
 {
   mrn_ctx_init();
   MRN_TRACE;
-  
+
+  thr_lock_delete(&thr_lock);
+
   mrn_share *share = this->share;
   mrn_share_remove(share);
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: '%s'", share->name);
   grn_obj_close(mrn_ctx_tls, share->obj);
-
-  thr_lock_delete(&share->lock);
 
   mrn_field **field;
   for (field = share->field; *field; field++) {
@@ -259,14 +259,14 @@ int ha_groonga::info(uint flag)
 }
 
 THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
-				    THR_LOCK_DATA **to,
-				    enum thr_lock_type lock_type)
+				       THR_LOCK_DATA **to,
+				       enum thr_lock_type lock_type)
 {
   mrn_ctx_init();
   MRN_TRACE;
-  if (lock_type != TL_IGNORE && lock.type == TL_UNLOCK)
-    lock.type = lock_type;
-  *to++= &lock;
+  if (lock_type != TL_IGNORE && thr_lock_data.type == TL_UNLOCK)
+    thr_lock_data.type = lock_type;
+  *to++ = &thr_lock_data;
   return to;
 }
 

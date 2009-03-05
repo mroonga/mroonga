@@ -21,7 +21,6 @@ typedef struct _mrn_share {
   uint name_len;
   uint use_count;
   grn_obj *obj;
-  THR_LOCK lock;
   grn_id gid;
   mrn_field **field;
   uint fields;
@@ -31,7 +30,8 @@ typedef struct _mrn_share {
 class ha_groonga: public handler
 {
   mrn_share *share;
-  THR_LOCK_DATA lock;
+  THR_LOCK thr_lock;
+  THR_LOCK_DATA thr_lock_data;
 
 public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);
