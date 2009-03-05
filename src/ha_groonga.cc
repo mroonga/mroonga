@@ -152,12 +152,11 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
     case MYSQL_TYPE_LONG:
       MRN_COLUMN_PATH(buf, form->s->db.str, form->s->table_name.str, field->field_name);
       type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
-      /* NOTE: currently using NULL as path but this should be replaced by buf */
       MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_create: name='%s', path='%s', type=GRN_DB_INT", 
-	      field->field_name, NULL);
+	      field->field_name, buf);
       column_obj = grn_column_create(mrn_ctx_tls, table_obj,
 				     field->field_name, strlen(field->field_name),
-				     NULL, GRN_OBJ_PERSISTENT|GRN_OBJ_COLUMN_SCALAR, type);
+				     buf, GRN_OBJ_PERSISTENT|GRN_OBJ_COLUMN_SCALAR, type);
       grn_obj_close(mrn_ctx_tls, column_obj);
       break;
     default:
@@ -208,16 +207,15 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
       mrn_field *field = (mrn_field*) MRN_MALLOC(sizeof(mrn_field));
       field->name = mysql_field->field_name;
       field->name_len = strlen(field->name);
-      /* NOTE: currently using NULL as path but this should be replaced */
-      field->path = NULL;
+      snprintf(buf,1023,"%s.%s.grn", share->name, field->name);
       /* NOTE: currently only support INT */
       grn_obj *type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
       MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_open: name='%s', path='%s'",
-	      field->name, field->path);
+	      field->name, buf);
       field->obj = grn_column_open(mrn_ctx_tls, share->obj,
 				   field->name, field->name_len,
-				   field->path, type);
-
+				   buf, type);
+      MRN_LOG(GRN_LOG_DEBUG, "-> field->obj=%p", field->obj);
       share->field[i] = field;
     }
     share->field[i] = NULL;

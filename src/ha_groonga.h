@@ -9,9 +9,7 @@
 
 typedef struct _mrn_share_field {
   const char *name;
-  const char *path;
   uint name_len;
-  uint path_len;
   grn_obj *obj;
   grn_id gid;
 } mrn_field;
