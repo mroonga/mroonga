@@ -1,3 +1,7 @@
+#ifdef USE_PRAGMA_IMPLEMENTATION
+#pragma implementation
+#endif
+
 #include <mysql_priv.h>
 #include <mysql/plugin.h>
 #include <groonga.h>

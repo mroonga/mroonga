@@ -1,6 +1,10 @@
 #ifndef _ha_groonga_h
 #define _ha_groonga_h
 
+#ifdef USE_PRAGMA_INTERFACE
+#pragma interface
+#endif
+
 #include "mroonga.h"
 
 typedef struct _mrn_share_field {
