@@ -239,9 +239,82 @@ sample_open_or_create(int argc, char **argv)
   return 0;
 }
 
+void sample_write_row()
+{
+  const char *dbname="sample_db";
+  const char *tblname="sample_tbl";
+  const char *colname="sample_col";
+
+
+  grn_init();
+
+  grn_ctx ctx;
+  grn_ctx_init(&ctx,0,0);
+
+  grn_obj *db = grn_db_create(&ctx,dbname,NULL);
+  grn_ctx_use(&ctx,db);
+  grn_obj_flags flags = GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_PAT_KEY;
+  grn_obj *grn_int = grn_ctx_get(&ctx, GRN_DB_INT);
+  uint val_size = sizeof(int);
+  grn_obj *tbl = grn_table_create(&ctx, tblname, strlen(tblname),
+				  tblname, flags, grn_int, val_size, GRN_ENC_UTF8);
+  grn_obj *col = grn_column_create(&ctx, tbl, colname, strlen(colname), colname,
+		    GRN_OBJ_PERSISTENT, grn_int);
+
+  int key1=10;
+  int key2=20;
+  int key3=30;
+  int val1=100;
+  int val2=200;
+  int val3=300;
+  grn_search_flags sflags = GRN_TABLE_ADD;
+  grn_id gid;
+  grn_rc rc;
+  grn_obj new;
+
+
+  gid = grn_table_lookup(&ctx,tbl,&key1,sizeof(key1), &sflags);
+  GRN_OBJ_INIT(&new, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY);
+  GRN_BULK_SET(&ctx, &new, (char*) &val1, sizeof(val1));
+  rc = grn_obj_set_value(&ctx,tbl,gid,&new,GRN_OBJ_SET);
+  printf("gid=%d, rc=%d, val=%d\n",gid,rc,val1);
+
+  gid = grn_table_lookup(&ctx,tbl,&key2,sizeof(key2), &sflags);
+  GRN_OBJ_INIT(&new, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY);
+  GRN_BULK_SET(&ctx, &new, (char*) &val2, sizeof(val2));
+  rc = grn_obj_set_value(&ctx,tbl,gid,&new,GRN_OBJ_SET);
+  printf("gid=%d, rc=%d, val=%d\n",gid,rc,val2);
+
+  gid = grn_table_lookup(&ctx,tbl,&key3,sizeof(key3), &sflags);
+  GRN_OBJ_INIT(&new, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY);
+  GRN_BULK_SET(&ctx, &new, (char*) &val3, sizeof(val3));
+  rc = grn_obj_set_value(&ctx,tbl,gid,&new,GRN_OBJ_SET);
+  printf("gid=%d, rc=%d, val=%d\n",gid,rc,val2);
+
+  grn_table_cursor *cursor = grn_table_cursor_open(&ctx,tbl,NULL,0,NULL,0,0);
+
+  grn_obj buf;
+  GRN_OBJ_INIT(&buf, GRN_BULK, 0);
+  while((gid = grn_table_cursor_next(&ctx,cursor)) != GRN_ID_NIL) {
+    int *key;
+    GRN_BULK_REWIND(&buf);
+    int key_len = grn_table_cursor_get_key(&ctx, cursor, (void**) &key);
+    int *r;
+    int val_len = grn_table_cursor_get_value(&ctx, cursor, (void**) &r);
+    grn_obj_get_value(&ctx, tbl, gid, &buf);
+
+    int *p = (int*) GRN_BULK_HEAD(&buf);
+
+    printf("cursor gid=%d, *key=%d,key_len=%d, r=%d, p=%d\n",
+	   gid,*key,key_len, *r,*p);
+  }
+
+  grn_fin();
+}
+
 int main(int argc, char **argv)
 {
-  sample_dump();
   //sample_open_or_create(argc, argv);
+  sample_write_row();
   return 0;
 }

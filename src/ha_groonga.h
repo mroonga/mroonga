@@ -27,9 +27,11 @@ typedef struct _mrn_share {
 /* handler class */
 class ha_groonga: public handler
 {
-  mrn_share *share;
   THR_LOCK thr_lock;
   THR_LOCK_DATA thr_lock_data;
+
+  mrn_share *share;
+  grn_table_cursor *cursor;
 
 public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);
@@ -57,6 +59,8 @@ public:
   void position(const uchar *record);                              // required
 
   int delete_table(const char *name);
+  int write_row(uchar *buf);
+  uint max_supported_keys() const { return MAX_KEY; }
 };
 
 #endif /* _ha_groonga_h */

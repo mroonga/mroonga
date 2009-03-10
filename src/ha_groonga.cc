@@ -140,7 +140,7 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   grn_obj *key_type = grn_ctx_get(mrn_ctx_tls, GRN_DB_SHORTTEXT);
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_create: name='%s', path='%s'",obj_name, path);
   grn_obj *table_obj = grn_table_create(mrn_ctx_tls, obj_name, strlen(obj_name), path,
-				  GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
+				  GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_PAT_KEY,
 				  key_type,1000,GRN_ENC_UTF8);
   int i;
   grn_obj *type;
@@ -271,13 +271,42 @@ THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
 int ha_groonga::rnd_init(bool scan)
 {
   MRN_TRACE;
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_cursor_open: share->obj=%p", share->obj);
+  this->cursor = grn_table_cursor_open(mrn_ctx_tls, share->obj,
+				       NULL, 0, NULL, 0, 0);
   return 0;
 }
 
 int ha_groonga::rnd_next(uchar *buf)
 {
   MRN_TRACE;
-  return HA_ERR_END_OF_FILE;
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_cursor_next: this->cursor=%p", this->cursor);
+  grn_id gid = grn_table_cursor_next(mrn_ctx_tls, this->cursor);
+  if (gid != GRN_ID_NIL) {
+    grn_obj obj;
+    int *val;
+    GRN_OBJ_INIT(&obj, GRN_BULK, 0);
+
+    Field **mysql_field;
+    mrn_field **grn_field;
+    int num;
+    for (mysql_field = table->field, grn_field = share->field, num=0;
+	 *mysql_field;
+	 mysql_field++, grn_field++, num++) {
+      GRN_BULK_REWIND(&obj);
+      grn_obj_get_value(mrn_ctx_tls, (*grn_field)->obj, gid, &obj);
+      val = (int*) GRN_BULK_HEAD(&obj);
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p, val=%d",
+	      gid, (*grn_field)->obj, *val);
+      (*mysql_field)->set_notnull();
+      (*mysql_field)->store(*val);
+    }
+    return 0;
+  } else {
+    MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_cursor_close: this->cursor=%p", this->cursor);
+    grn_table_cursor_close(mrn_ctx_tls, this->cursor);
+    return HA_ERR_END_OF_FILE;
+  }
 }
 
 int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
@@ -304,6 +333,45 @@ int ha_groonga::delete_table(const char *name)
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_remove: obj=%p", obj);
   grn_obj_remove(mrn_ctx_tls, obj);
 
+  return 0;
+}
+
+int ha_groonga::write_row(uchar *buf)
+{
+  MRN_TRACE;
+
+  /*
+  int primary_key_no = table->s->primary_key;
+  KEY pkey = table->s->key_info[primary_key_no];
+  */
+
+  /* NOTE: currently we use 1st column value as primary key value */
+  grn_search_flags flags = GRN_TABLE_ADD;
+  grn_id gid;
+  grn_obj wrapper;
+  Field **mysql_field;
+  mrn_field **grn_field;
+  int num;
+  GRN_OBJ_INIT(&wrapper, GRN_BULK, 0);
+  for (mysql_field = table->field, grn_field = share->field, num=0;
+       *mysql_field;
+       mysql_field++, grn_field++, num++) {
+    if ((*mysql_field)->type() == MYSQL_TYPE_LONG) {
+      int val = (*mysql_field)->val_int();
+      if (num==0) {
+	gid = grn_table_lookup(mrn_ctx_tls, share->obj, (const void*) &val, sizeof(val), &flags);
+	MRN_LOG(GRN_LOG_DEBUG, "-> added record: key=%d, gid=%d",val,gid);
+      }
+      GRN_BULK_REWIND(&wrapper);
+      GRN_BULK_SET(mrn_ctx_tls, &wrapper, (char*)&val, sizeof(val));
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_set_value: gid=%d, obj=%p, val=%d",
+	      gid, (*grn_field)->obj, val);
+      grn_obj_set_value(mrn_ctx_tls, (*grn_field)->obj, gid, &wrapper, GRN_OBJ_SET);
+    } else {
+      MRN_LOG(GRN_LOG_DEBUG, "unsupported data type specified");
+      return HA_ERR_UNSUPPORTED;
+    }
+  }
   return 0;
 }
 
