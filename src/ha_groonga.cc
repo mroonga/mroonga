@@ -105,6 +105,7 @@ const char *ha_groonga::index_type(uint inx)
 }
 
 static const char*ha_groonga_exts[] = {
+  ".grn",
   NullS
 };
 const char **ha_groonga::bas_ext() const
