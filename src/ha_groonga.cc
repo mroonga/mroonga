@@ -115,7 +115,7 @@ const char **ha_groonga::bas_ext() const
 
 ulonglong ha_groonga::table_flags() const
 {
-  return HA_NO_TRANSACTIONS|HA_REQUIRE_PRIMARY_KEY;
+  return HA_NO_TRANSACTIONS|HA_REQUIRE_PRIMARY_KEY|HA_REC_NOT_IN_SEQ;
 }
 
 ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
@@ -328,6 +328,7 @@ int ha_groonga::rnd_next(uchar *buf)
       (*mysql_field)->set_notnull();
       (*mysql_field)->store(*val);
     }
+    this->record_id = gid;
     return 0;
   } else {
     MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_cursor_close: this->cursor=%p", this->cursor);
@@ -339,12 +340,41 @@ int ha_groonga::rnd_next(uchar *buf)
 int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
 {
   MRN_TRACE;
-  return HA_ERR_WRONG_COMMAND;
+  grn_id gid = *((grn_id*) pos);
+  MRN_LOG(GRN_LOG_DEBUG,"-> gid=%d", gid);
+
+  grn_obj obj;
+  int pkey_val;
+  int *val;
+  GRN_OBJ_INIT(&obj, GRN_BULK, 0);
+
+  Field **mysql_field;
+  mrn_field **grn_field;
+  int num;
+  for (mysql_field = table->field, grn_field = share->field, num=0;
+       *mysql_field;
+       mysql_field++, grn_field++, num++) {
+    if (num == share->pkey_field) {
+      int ret_val = grn_table_get_key(mrn_ctx_tls, share->obj, gid, (void*) &pkey_val, sizeof(int));
+      (*mysql_field)->set_notnull();
+      (*mysql_field)->store(pkey_val);
+    } else {
+      GRN_BULK_REWIND(&obj);
+      grn_obj_get_value(mrn_ctx_tls, (*grn_field)->obj, gid, &obj);
+      val = (int*) GRN_BULK_HEAD(&obj);
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p, val=%d",
+	      gid, (*grn_field)->obj, *val);
+      (*mysql_field)->set_notnull();
+      (*mysql_field)->store(*val);
+    }
+  }
+  return 0;
 }
 
 void ha_groonga::position(const uchar *record)
 {
   MRN_TRACE;
+  memcpy(this->ref, &this->record_id, sizeof(grn_id));
 }
 
 int ha_groonga::delete_table(const char *name)
