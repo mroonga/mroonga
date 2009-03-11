@@ -115,7 +115,7 @@ const char **ha_groonga::bas_ext() const
 
 ulonglong ha_groonga::table_flags() const
 {
-  return HA_NO_TRANSACTIONS;
+  return HA_NO_TRANSACTIONS|HA_REQUIRE_PRIMARY_KEY;
 }
 
 ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
@@ -149,6 +149,11 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   char buf[MRN_MAX_KEY_LEN];
   for (i=0; i < form->s->fields; i++) {
     Field *field = form->s->field[i];
+    if (field->flags & PRI_KEY_FLAG) {
+      /* we embed pkey column in table so skip here */
+      MRN_LOG(GRN_LOG_DEBUG, "-> column '%s' is pkey", field->field_name);
+      continue;
+    }
     switch(field->type()) {
     case MYSQL_TYPE_LONG:
       MRN_COLUMN_PATH(buf, form->s->db.str, form->s->table_name.str, field->field_name);
@@ -199,6 +204,11 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
     grn_obj *obj = grn_table_open(mrn_ctx_tls, share->name, strlen(share->name), path);
     share->obj = obj;
 
+    if (this->table_share->primary_key == MAX_KEY) {
+      MRN_LOG(GRN_LOG_DEBUG, "-> table doesn't have pkey");
+      share->pkey_field = -1;
+    }
+
     share->fields = this->table_share->fields;
     share->field = (mrn_field**) MRN_MALLOC(sizeof(mrn_field*) * (share->fields + 1));
     int i;
@@ -208,15 +218,20 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
       mrn_field *field = (mrn_field*) MRN_MALLOC(sizeof(mrn_field));
       field->name = mysql_field->field_name;
       field->name_len = strlen(field->name);
-      snprintf(buf,1023,"%s.%s.grn", share->name, field->name);
-      /* NOTE: currently only support INT */
-      grn_obj *type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
-      MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_open: name='%s', path='%s'",
-	      field->name, buf);
-      field->obj = grn_column_open(mrn_ctx_tls, share->obj,
-				   field->name, field->name_len,
-				   buf, type);
-      MRN_LOG(GRN_LOG_DEBUG, "-> field->obj=%p", field->obj);
+      field->field_no = i;
+      if (mysql_field->flags & PRI_KEY_FLAG) {
+	share->pkey_field = i;
+      } else {
+	snprintf(buf,1023,"%s.%s.grn", share->name, field->name);
+	/* NOTE: currently only support INT */
+	grn_obj *type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
+	MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_open: name='%s', path='%s'",
+		field->name, buf);
+	field->obj = grn_column_open(mrn_ctx_tls, share->obj,
+				     field->name, field->name_len,
+				     buf, type);
+	MRN_LOG(GRN_LOG_DEBUG, "-> field->obj=%p", field->obj);
+      }
       share->field[i] = field;
     }
     share->field[i] = NULL;
@@ -294,11 +309,15 @@ int ha_groonga::rnd_next(uchar *buf)
     for (mysql_field = table->field, grn_field = share->field, num=0;
 	 *mysql_field;
 	 mysql_field++, grn_field++, num++) {
-      GRN_BULK_REWIND(&obj);
-      grn_obj_get_value(mrn_ctx_tls, (*grn_field)->obj, gid, &obj);
-      val = (int*) GRN_BULK_HEAD(&obj);
-      MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p, val=%d",
-	      gid, (*grn_field)->obj, *val);
+      if (num == share->pkey_field) {
+	grn_table_cursor_get_key(mrn_ctx_tls, this->cursor, (void**) &val);
+      } else {
+	GRN_BULK_REWIND(&obj);
+	grn_obj_get_value(mrn_ctx_tls, (*grn_field)->obj, gid, &obj);
+	val = (int*) GRN_BULK_HEAD(&obj);
+	MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p, val=%d",
+		gid, (*grn_field)->obj, *val);
+      }
       (*mysql_field)->set_notnull();
       (*mysql_field)->store(*val);
     }
@@ -353,16 +372,22 @@ int ha_groonga::write_row(uchar *buf)
   Field **mysql_field;
   mrn_field **grn_field;
   int num;
+
+  Field *pkey_field = table->field[share->pkey_field];
+  int pkey_value = pkey_field->val_int();
+  gid = grn_table_lookup(mrn_ctx_tls, share->obj,
+			 (const void*) &pkey_value, sizeof(pkey_value), &flags);
+  MRN_LOG(GRN_LOG_DEBUG, "-> added record: pkey_value=%d, gid=%d",pkey_value,gid);
+
   GRN_OBJ_INIT(&wrapper, GRN_BULK, 0);
   for (mysql_field = table->field, grn_field = share->field, num=0;
        *mysql_field;
        mysql_field++, grn_field++, num++) {
+    if (num == share->pkey_field) {
+      continue;
+    }
     if ((*mysql_field)->type() == MYSQL_TYPE_LONG) {
       int val = (*mysql_field)->val_int();
-      if (num==0) {
-	gid = grn_table_lookup(mrn_ctx_tls, share->obj, (const void*) &val, sizeof(val), &flags);
-	MRN_LOG(GRN_LOG_DEBUG, "-> added record: key=%d, gid=%d",val,gid);
-      }
       GRN_BULK_REWIND(&wrapper);
       GRN_BULK_SET(mrn_ctx_tls, &wrapper, (char*)&val, sizeof(val));
       MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_set_value: gid=%d, obj=%p, val=%d",

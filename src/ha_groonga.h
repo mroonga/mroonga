@@ -12,6 +12,7 @@ typedef struct _mrn_share_field {
   uint name_len;
   grn_obj *obj;
   grn_id gid;
+  uint field_no;
 } mrn_field;
 
 typedef struct _mrn_share {
@@ -22,6 +23,7 @@ typedef struct _mrn_share {
   grn_id gid;
   mrn_field **field;
   uint fields;
+  uint pkey_field;
 } mrn_share;
 
 /* handler class */
