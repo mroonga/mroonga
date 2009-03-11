@@ -134,6 +134,13 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   mrn_ctx_init();
   MRN_TRACE;
 
+  /* key_parts validation */
+  int pkey_parts = form->key_info[form->s->primary_key].key_parts;
+  if (pkey_parts > 1) {
+    MRN_LOG(GRN_LOG_ERROR, "primary key must be single column");
+    return HA_WRONG_CREATE_OPTION;
+  }
+
   const char *obj_name = MRN_TABLE_NAME(name);
   char path[MRN_MAX_KEY_LEN];
   MRN_TABLE_PATH(path, obj_name);
