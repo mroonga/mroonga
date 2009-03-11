@@ -276,6 +276,11 @@ int ha_groonga::info(uint flag)
 {
   mrn_ctx_init();
   MRN_TRACE;
+
+  if (flag & HA_STATUS_VARIABLE) {
+    stats.records = (ha_rows) grn_table_size(mrn_ctx_tls, share->obj);
+  }
+
   return 0;
 }
 
