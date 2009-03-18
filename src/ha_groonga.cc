@@ -154,6 +154,10 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
     value_size = GRN_TABLE_MAX_KEY_SIZE;
     key_type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
   } else {
+    if (form->s->keys > 0) {
+      MRN_LOG(GRN_LOG_ERROR, "cannot create index other than primary key");
+      return HA_WRONG_CREATE_OPTION;
+    }
     table_flags |= GRN_OBJ_TABLE_NO_KEY;
     value_size = 0;
     key_type = NULL;
