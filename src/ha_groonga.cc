@@ -38,7 +38,7 @@ static void mrn_share_remove(mrn_share *share);
 static grn_hash *mrn_hash_sys;
 static grn_obj *mrn_db_sys;
 static pthread_mutex_t *mrn_mutex_sys;
-  static const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
+static const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 static FILE *mrn_logfile = NULL;
 
 static grn_logger_info mrn_logger_info = {
@@ -115,7 +115,7 @@ const char **ha_groonga::bas_ext() const
 
 ulonglong ha_groonga::table_flags() const
 {
-  return HA_NO_TRANSACTIONS|HA_REQUIRE_PRIMARY_KEY|HA_REC_NOT_IN_SEQ;
+  return HA_NO_TRANSACTIONS|HA_REC_NOT_IN_SEQ;
 }
 
 ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
