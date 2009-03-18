@@ -134,22 +134,35 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   mrn_ctx_init();
   MRN_TRACE;
 
-  /* key_parts validation */
-  int pkey_parts = form->key_info[form->s->primary_key].key_parts;
-  if (pkey_parts > 1) {
-    MRN_LOG(GRN_LOG_ERROR, "primary key must be single column");
-    return HA_WRONG_CREATE_OPTION;
-  }
-
   const char *obj_name = MRN_TABLE_NAME(name);
   char path[MRN_MAX_KEY_LEN];
   MRN_TABLE_PATH(path, obj_name);
 
-  grn_obj *key_type = grn_ctx_get(mrn_ctx_tls, GRN_DB_SHORTTEXT);
+  grn_obj_flags table_flags = GRN_OBJ_PERSISTENT;
+  grn_obj *key_type;
+  uint value_size;
+  grn_encoding encoding = GRN_ENC_UTF8;
+
+  /* check if pkey is exists */
+  if (form->s->primary_key != MAX_KEY) {
+    int pkey_parts = form->key_info[form->s->primary_key].key_parts;
+    if (pkey_parts > 1) {
+      MRN_LOG(GRN_LOG_ERROR, "primary key must be single column");
+      return HA_WRONG_CREATE_OPTION;
+    }
+    table_flags |= GRN_OBJ_TABLE_PAT_KEY;
+    value_size = GRN_TABLE_MAX_KEY_SIZE;
+    key_type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
+  } else {
+    table_flags |= GRN_OBJ_TABLE_NO_KEY;
+    value_size = 0;
+    key_type = NULL;
+  }
+
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_create: name='%s', path='%s'",obj_name, path);
   grn_obj *table_obj = grn_table_create(mrn_ctx_tls, obj_name, strlen(obj_name), path,
-				  GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_PAT_KEY,
-				  key_type,1000,GRN_ENC_UTF8);
+					table_flags, key_type, value_size, encoding);
+
   int i;
   grn_obj *type;
   grn_obj *column_obj;
@@ -415,11 +428,16 @@ int ha_groonga::write_row(uchar *buf)
   mrn_field **grn_field;
   int num;
 
-  Field *pkey_field = table->field[share->pkey_field];
-  int pkey_value = pkey_field->val_int();
-  gid = grn_table_lookup(mrn_ctx_tls, share->obj,
-			 (const void*) &pkey_value, sizeof(pkey_value), &flags);
-  MRN_LOG(GRN_LOG_DEBUG, "-> added record: pkey_value=%d, gid=%d",pkey_value,gid);
+  if (share->pkey_field != -1) {
+    Field *pkey_field = table->field[share->pkey_field];
+    int pkey_value = pkey_field->val_int();
+    gid = grn_table_lookup(mrn_ctx_tls, share->obj,
+			   (const void*) &pkey_value, sizeof(pkey_value), &flags);
+    MRN_LOG(GRN_LOG_DEBUG, "-> added record: pkey_value=%d, gid=%d",pkey_value,gid);
+  } else {
+    gid = grn_table_add(mrn_ctx_tls, share->obj);
+    MRN_LOG(GRN_LOG_DEBUG, "-> added record w/o pkey, gid=%d",gid);
+  }
 
   GRN_OBJ_INIT(&wrapper, GRN_BULK, 0);
   for (mysql_field = table->field, grn_field = share->field, num=0;

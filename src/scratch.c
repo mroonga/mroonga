@@ -312,9 +312,78 @@ void sample_write_row()
   grn_fin();
 }
 
+void sample_no_key()
+{
+  grn_init();
+  grn_ctx *ctx = (grn_ctx*) malloc(sizeof(grn_ctx));
+
+  grn_obj *db = grn_db_create(ctx,"sample_db",NULL);
+
+  grn_obj *grn_int = grn_ctx_get(ctx, GRN_DB_INT);
+
+  /*
+  {
+    grn_obj *tbl = grn_table_create(ctx, "sample_tbl1", 11, "sample_tbl1",
+				    GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_PAT_KEY,
+				    grn_int, 4, GRN_ENC_UTF8);
+    printf("tbl is %p\n",tbl);
+    grn_obj *col = grn_column_create(ctx, tbl, "sample_col1", 11, "sample_col1",
+				     GRN_OBJ_PERSISTENT, grn_int);
+
+    int key1=100;
+    int key2=200;
+    grn_search_flags col_flags = GRN_TABLE_ADD;
+    grn_id id;
+    id = grn_table_lookup(ctx, tbl, (void*) &key1, sizeof(int), &col_flags);
+    printf("id=%d\n",id);
+    id = grn_table_lookup(ctx, tbl, (void*) &key2, sizeof(int), &col_flags);
+    printf("id=%d\n",id);
+
+  }
+  {
+    grn_obj *tbl = grn_table_create(ctx, "sample_tbl2", 11, "sample_tbl2",
+				    GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
+				    grn_int, 4, GRN_ENC_UTF8);
+    printf("tbl is %p\n",tbl);
+    grn_obj *col = grn_column_create(ctx, tbl, "sample_col2", 11, "sample_col2",
+				     GRN_OBJ_PERSISTENT, grn_int);
+
+
+    int key1=100;
+    int key2=200;
+    grn_search_flags col_flags = GRN_TABLE_ADD;
+    grn_id id;
+    id = grn_table_lookup(ctx, tbl, (void*) &key1, sizeof(int), &col_flags);
+    printf("id=%d\n",id);
+    id = grn_table_lookup(ctx, tbl, (void*) &key2, sizeof(int), &col_flags);
+    printf("id=%d\n",id);
+  }
+  */
+  {
+    grn_obj *tbl = grn_table_create(ctx, "sample_tbl3", 11, "sample_tbl3",
+				    GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_NO_KEY,
+				    grn_int, 4, GRN_ENC_UTF8);
+    printf("tbl is %p\n",tbl);
+    grn_obj *col = grn_column_create(ctx, tbl, "sample_col3", 11, "sample_col3",
+				     GRN_OBJ_PERSISTENT, grn_int);
+
+    grn_id id;
+    id = grn_table_add(ctx, tbl);
+    printf("id=%d\n",id);
+    id = grn_table_add(ctx, tbl);
+    printf("id=%d\n",id);
+
+    grn_obj_close(ctx, tbl);
+
+    tbl = grn_table_open(ctx, "sample_tbl3", 11, "sample_tbl3");
+    printf("reopen =%p\n", tbl);
+  }
+  grn_fin();
+  free(ctx);
+}
+
 int main(int argc, char **argv)
 {
-  //sample_open_or_create(argc, argv);
-  sample_write_row();
+  sample_no_key();
   return 0;
 }
