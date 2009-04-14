@@ -63,7 +63,15 @@ public:
 
   int delete_table(const char *name);
   int write_row(uchar *buf);
-  uint max_supported_keys() const { return MAX_KEY; }
+
+  uint max_supported_record_length() const { return HA_MAX_REC_LENGTH; }
+  uint max_supported_keys()          const { return 1; }
+  uint max_supported_key_parts()     const { return 1; }
+  uint max_supported_key_length()    const { return MAX_KEY_LENGTH; }
+
+  int index_read(uchar *buf, const uchar *key, uint key_len,
+		  enum ha_rkey_function find_flag);
+  int index_next(uchar *buf);
 };
 
 #endif /* _ha_groonga_h */

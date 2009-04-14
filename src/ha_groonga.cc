@@ -294,9 +294,7 @@ int ha_groonga::info(uint flag)
   mrn_ctx_init();
   MRN_TRACE;
 
-  if (flag & HA_STATUS_VARIABLE) {
-    stats.records = (ha_rows) grn_table_size(mrn_ctx_tls, share->obj);
-  }
+  stats.records = (ha_rows) grn_table_size(mrn_ctx_tls, share->obj);
 
   return 0;
 }
@@ -463,6 +461,26 @@ int ha_groonga::write_row(uchar *buf)
     }
   }
   return 0;
+}
+
+int ha_groonga::index_read(uchar *buf, const uchar *key,
+			   uint key_len, enum ha_rkey_function find_flag)
+{
+  MRN_TRACE;
+  Field *key_field= table->key_info[active_index].key_part->field;
+  uint rc= 0;
+  if (key_field->field_index == table->s->primary_key)
+  {
+    key_field->set_key_image(key, key_len);
+    key_field->set_notnull();
+  }
+  return rc;
+}
+
+int ha_groonga::index_next(uchar *buf)
+{
+  MRN_TRACE;
+  return HA_ERR_END_OF_FILE;
 }
 
 /* additional functions */
