@@ -28,11 +28,11 @@ void sample_hash()
 
   /* ctx init */
   mrn_ctx_sys = (grn_ctx*) MRN_MALLOC(sizeof(grn_ctx));
-  grn_ctx_init(mrn_ctx_sys, 0, GRN_ENC_UTF8);
+  grn_ctx_init(mrn_ctx_sys, 0);
 
   /* hash init */
   mrn_hash_sys = grn_hash_create(mrn_ctx_sys,NULL,MRN_MAX_KEY_LEN,sizeof(size_t),
-				 GRN_OBJ_KEY_VAR_SIZE, GRN_ENC_UTF8);
+				 GRN_OBJ_KEY_VAR_SIZE);
 
   grn_search_flags flags = GRN_TABLE_ADD;
   mrn_db *mdb1,*mdb2;
@@ -60,7 +60,7 @@ void sample_hash()
   mdb1->name = "db1";
   mdb1->obj = &db1;
   mdb1->hash = grn_hash_create(mrn_ctx_sys,NULL,MRN_MAX_KEY_LEN,sizeof(size_t),
-			     GRN_OBJ_KEY_VAR_SIZE,GRN_ENC_UTF8);
+			     GRN_OBJ_KEY_VAR_SIZE);
   /* put mdb1  */
   void *val1;
   grn_hash_lookup(mrn_ctx_sys,mrn_hash_sys,mdb1->name,strlen(mdb1->name),&val1,&flags);
@@ -70,7 +70,7 @@ void sample_hash()
   mdb2->name = "db2";
   mdb2->obj = &db2;
   mdb2->hash = grn_hash_create(mrn_ctx_sys,NULL,MRN_MAX_KEY_LEN,sizeof(size_t),
-			     GRN_OBJ_KEY_VAR_SIZE,GRN_ENC_UTF8);
+			     GRN_OBJ_KEY_VAR_SIZE);
 
   /* put mdb2 */
   void *val2;
@@ -105,7 +105,7 @@ void sample_table_create_drop()
 
   /* ctx init */
   mrn_ctx_sys = (grn_ctx*) MRN_MALLOC(sizeof(grn_ctx));
-  grn_ctx_init(mrn_ctx_sys, 0, GRN_ENC_UTF8);
+  grn_ctx_init(mrn_ctx_sys, 0);
   
   grn_obj *gdb = grn_db_create(mrn_ctx_sys, NULL, NULL);
   grn_ctx_use(mrn_ctx_sys,gdb);
@@ -113,7 +113,7 @@ void sample_table_create_drop()
   grn_obj *key_type = grn_ctx_get(mrn_ctx_sys,GRN_DB_SHORTTEXT);
   grn_obj *gtbl = grn_table_create(mrn_ctx_sys, t1, 3,
 				   t1, GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
-				   key_type,1000,GRN_ENC_UTF8);
+				   key_type,1000);
 
 
   const char *rpath = grn_obj_path(mrn_ctx_sys, gtbl);
@@ -123,7 +123,7 @@ void sample_table_create_drop()
   grn_obj *key_type2 = grn_ctx_get(mrn_ctx_sys,GRN_DB_SHORTTEXT);
   grn_obj *gtbl2 = grn_table_create(mrn_ctx_sys, t1, 3,
 				   t2, GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
-				   key_type2,1000,GRN_ENC_UTF8);
+				   key_type2,1000);
 
 }
 /*
@@ -154,7 +154,7 @@ void sample_dump()
   grn_init();
   const char *db_path = "/usr/local/mysql/data/mroonga.grn";
   grn_ctx ctx;
-  grn_ctx_init(&ctx,0,GRN_ENC_UTF8);
+  grn_ctx_init(&ctx,0);
 
   grn_obj *db = grn_db_open(&ctx, db_path);
   grn_ctx_use(&ctx, db);
@@ -196,7 +196,7 @@ sample_open_or_create(int argc, char **argv)
   struct stat dummy;
 
  foo:
-  grn_ctx_init(&ctx, 0, 0);
+  grn_ctx_init(&ctx, 0);
 
   if ((stat(db_path, &dummy))) { // check if file not exists
     printf("creating objects...\n");
@@ -206,7 +206,7 @@ sample_open_or_create(int argc, char **argv)
     grn_obj *key_type = grn_ctx_get(&ctx, GRN_DB_SHORTTEXT);
     obj = grn_table_create(&ctx, tbl_name, strlen(tbl_name), tbl_path,
 				  GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
-				  key_type,1000,GRN_ENC_UTF8);
+				  key_type,1000);
   } else {
     printf("opening objects...\n");
     db = grn_db_open(&ctx, db_path);
@@ -249,7 +249,7 @@ void sample_write_row()
   grn_init();
 
   grn_ctx ctx;
-  grn_ctx_init(&ctx,0,0);
+  grn_ctx_init(&ctx,0);
 
   grn_obj *db = grn_db_create(&ctx,dbname,NULL);
   grn_ctx_use(&ctx,db);
@@ -257,7 +257,7 @@ void sample_write_row()
   grn_obj *grn_int = grn_ctx_get(&ctx, GRN_DB_INT);
   uint val_size = sizeof(int);
   grn_obj *tbl = grn_table_create(&ctx, tblname, strlen(tblname),
-				  tblname, flags, grn_int, val_size, GRN_ENC_UTF8);
+				  tblname, flags, grn_int, val_size);
   grn_obj *col = grn_column_create(&ctx, tbl, colname, strlen(colname), colname,
 		    GRN_OBJ_PERSISTENT, grn_int);
 
@@ -321,48 +321,10 @@ void sample_no_key()
 
   grn_obj *grn_int = grn_ctx_get(ctx, GRN_DB_INT);
 
-  /*
-  {
-    grn_obj *tbl = grn_table_create(ctx, "sample_tbl1", 11, "sample_tbl1",
-				    GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_PAT_KEY,
-				    grn_int, 4, GRN_ENC_UTF8);
-    printf("tbl is %p\n",tbl);
-    grn_obj *col = grn_column_create(ctx, tbl, "sample_col1", 11, "sample_col1",
-				     GRN_OBJ_PERSISTENT, grn_int);
-
-    int key1=100;
-    int key2=200;
-    grn_search_flags col_flags = GRN_TABLE_ADD;
-    grn_id id;
-    id = grn_table_lookup(ctx, tbl, (void*) &key1, sizeof(int), &col_flags);
-    printf("id=%d\n",id);
-    id = grn_table_lookup(ctx, tbl, (void*) &key2, sizeof(int), &col_flags);
-    printf("id=%d\n",id);
-
-  }
-  {
-    grn_obj *tbl = grn_table_create(ctx, "sample_tbl2", 11, "sample_tbl2",
-				    GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_HASH_KEY,
-				    grn_int, 4, GRN_ENC_UTF8);
-    printf("tbl is %p\n",tbl);
-    grn_obj *col = grn_column_create(ctx, tbl, "sample_col2", 11, "sample_col2",
-				     GRN_OBJ_PERSISTENT, grn_int);
-
-
-    int key1=100;
-    int key2=200;
-    grn_search_flags col_flags = GRN_TABLE_ADD;
-    grn_id id;
-    id = grn_table_lookup(ctx, tbl, (void*) &key1, sizeof(int), &col_flags);
-    printf("id=%d\n",id);
-    id = grn_table_lookup(ctx, tbl, (void*) &key2, sizeof(int), &col_flags);
-    printf("id=%d\n",id);
-  }
-  */
   {
     grn_obj *tbl = grn_table_create(ctx, "sample_tbl3", 11, "sample_tbl3",
 				    GRN_OBJ_PERSISTENT|GRN_OBJ_TABLE_NO_KEY,
-				    grn_int, 4, GRN_ENC_UTF8);
+				    grn_int, 4);
     printf("tbl is %p\n",tbl);
     grn_obj *col = grn_column_create(ctx, tbl, "sample_col3", 11, "sample_col3",
 				     GRN_OBJ_PERSISTENT, grn_int);

@@ -141,7 +141,6 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   grn_obj_flags table_flags = GRN_OBJ_PERSISTENT;
   grn_obj *key_type;
   uint value_size;
-  grn_encoding encoding = GRN_ENC_UTF8;
 
   /* check if pkey is exists */
   if (form->s->primary_key != MAX_KEY) {
@@ -165,7 +164,7 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_create: name='%s', path='%s'",obj_name, path);
   grn_obj *table_obj = grn_table_create(mrn_ctx_tls, obj_name, strlen(obj_name), path,
-					table_flags, key_type, value_size, encoding);
+					table_flags, key_type, value_size);
 
   int i;
   grn_obj *type;
@@ -522,7 +521,7 @@ static int mrn_init(void *p)
   /* init meta-data repository */
   mrn_hash_sys = grn_hash_create(mrn_ctx_tls,NULL,
 				 MRN_MAX_KEY_LEN,sizeof(size_t),
-				 GRN_OBJ_KEY_VAR_SIZE, GRN_ENC_UTF8);
+				 GRN_OBJ_KEY_VAR_SIZE);
   mrn_db_sys = mrn_db_open_or_create();
 
   /* mutex init */
@@ -607,7 +606,7 @@ static void mrn_ctx_init()
 {
   if (mrn_ctx_tls == NULL) {
     mrn_ctx_tls = (grn_ctx*) MRN_MALLOC(sizeof(grn_ctx));
-    grn_ctx_init(mrn_ctx_tls, 0, GRN_ENC_UTF8);
+    grn_ctx_init(mrn_ctx_tls, 0);
     if ((mrn_db_sys))
       grn_ctx_use(mrn_ctx_tls, mrn_db_sys);
   }
