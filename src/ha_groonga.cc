@@ -459,6 +459,7 @@ int ha_groonga::write_row(uchar *buf)
       return HA_ERR_UNSUPPORTED;
     }
   }
+  grn_obj_close(mrn_ctx_tls, &wrapper);
   return 0;
 }
 
@@ -468,6 +469,36 @@ int ha_groonga::index_read(uchar *buf, const uchar *key,
   MRN_TRACE;
   Field *key_field= table->key_info[active_index].key_part->field;
   uint rc= 0;
+  grn_id gid;
+  grn_obj wrapper;
+  Field **mysql_field;
+  mrn_field **grn_field;
+  int num;
+  grn_search_flags flags = 0;
+
+  int k;
+  memcpy(&k,key,sizeof(int));
+  gid = grn_table_lookup(mrn_ctx_tls, share->obj,
+			 (const void*) key, sizeof(key), &flags);
+  MRN_LOG(GRN_LOG_DEBUG, "-> found record: key=%d, gid=%d",k,gid);
+
+  GRN_OBJ_INIT(&wrapper, GRN_BULK, 0);
+  for (mysql_field = table->field, grn_field = share->field, num=0;
+       *mysql_field;
+       mysql_field++, grn_field++, num++) {
+    if (num == share->pkey_field) {
+      continue;
+    }
+    GRN_BULK_REWIND(&wrapper);
+    MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p",
+	    gid, (*grn_field)->obj);
+    grn_obj_get_value(mrn_ctx_tls, (*grn_field)->obj, gid, &wrapper);
+    int *res;
+    res = (int*) GRN_BULK_HEAD(&wrapper);
+    (*mysql_field)->store(*res);
+  }
+  grn_obj_close(mrn_ctx_tls, &wrapper);
+
   if (key_field->field_index == table->s->primary_key)
   {
     key_field->set_key_image(key, key_len);
