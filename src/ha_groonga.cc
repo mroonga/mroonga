@@ -327,7 +327,7 @@ int ha_groonga::rnd_next(uchar *buf)
   if (gid != GRN_ID_NIL) {
     grn_obj obj;
     int *val;
-    GRN_OBJ_INIT(&obj, GRN_BULK, 0);
+    GRN_BULK_INIT(&obj);
 
     Field **mysql_field;
     mrn_field **grn_field;
@@ -365,7 +365,7 @@ int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
   grn_obj obj;
   int pkey_val;
   int *val;
-  GRN_OBJ_INIT(&obj, GRN_BULK, 0);
+  GRN_BULK_INIT(&obj);
 
   Field **mysql_field;
   mrn_field **grn_field;
@@ -440,7 +440,7 @@ int ha_groonga::write_row(uchar *buf)
     MRN_LOG(GRN_LOG_DEBUG, "-> added record w/o pkey, gid=%d",gid);
   }
 
-  GRN_OBJ_INIT(&wrapper, GRN_BULK, 0);
+  GRN_BULK_INIT(&wrapper);
   for (mysql_field = table->field, grn_field = share->field, num=0;
        *mysql_field;
        mysql_field++, grn_field++, num++) {
@@ -482,7 +482,7 @@ int ha_groonga::index_read(uchar *buf, const uchar *key,
 			 (const void*) key, sizeof(key), &flags);
   MRN_LOG(GRN_LOG_DEBUG, "-> found record: key=%d, gid=%d",k,gid);
 
-  GRN_OBJ_INIT(&wrapper, GRN_BULK, 0);
+  GRN_BULK_INIT(&wrapper);
   for (mysql_field = table->field, grn_field = share->field, num=0;
        *mysql_field;
        mysql_field++, grn_field++, num++) {
