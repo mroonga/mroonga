@@ -195,7 +195,8 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: table_obj=%p", table_obj);
   grn_obj_close(mrn_ctx_tls, table_obj);
-
+  grn_obj_close(mrn_ctx_tls, key_type);
+  grn_obj_close(mrn_ctx_tls, type);
   return 0;
 
  err:
@@ -348,6 +349,7 @@ int ha_groonga::rnd_next(uchar *buf)
       (*mysql_field)->store(*val);
     }
     this->record_id = gid;
+    grn_obj_close(mrn_ctx_tls, &obj);
     return 0;
   } else {
     MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_cursor_close: this->cursor=%p", this->cursor);
