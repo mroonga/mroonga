@@ -151,7 +151,7 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
     }
     table_flags |= GRN_OBJ_TABLE_PAT_KEY;
     value_size = GRN_TABLE_MAX_KEY_SIZE;
-    key_type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
+    key_type = grn_ctx_at(mrn_ctx_tls, GRN_DB_INT32);
   } else {
     if (form->s->keys > 0) {
       MRN_LOG(GRN_LOG_ERROR, "cannot create index other than primary key");
@@ -180,8 +180,8 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
     switch(field->type()) {
     case MYSQL_TYPE_LONG:
       MRN_COLUMN_PATH(buf, form->s->db.str, form->s->table_name.str, field->field_name);
-      type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
-      MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_create: name='%s', path='%s', type=GRN_DB_INT", 
+      type = grn_ctx_at(mrn_ctx_tls, GRN_DB_INT32);
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_create: name='%s', path='%s', type=GRN_DB_INT32", 
 	      field->field_name, buf);
       column_obj = grn_column_create(mrn_ctx_tls, table_obj,
 				     field->field_name, strlen(field->field_name),
@@ -248,7 +248,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
       } else {
 	snprintf(buf,1023,"%s.%s.grn", share->name, field->name);
 	/* NOTE: currently only support INT */
-	grn_obj *type = grn_ctx_get(mrn_ctx_tls, GRN_DB_INT);
+	grn_obj *type = grn_ctx_at(mrn_ctx_tls, GRN_DB_INT32);
 	MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_open: name='%s', path='%s'",
 		field->name, buf);
 	field->obj = grn_column_open(mrn_ctx_tls, share->obj,
@@ -328,7 +328,7 @@ int ha_groonga::rnd_next(uchar *buf)
   if (gid != GRN_ID_NIL) {
     grn_obj obj;
     int *val;
-    GRN_BULK_INIT(&obj);
+    GRN_TEXT_INIT(&obj,0);
 
     Field **mysql_field;
     mrn_field **grn_field;
@@ -367,7 +367,7 @@ int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
   grn_obj obj;
   int pkey_val;
   int *val;
-  GRN_BULK_INIT(&obj);
+  GRN_TEXT_INIT(&obj,0);
 
   Field **mysql_field;
   mrn_field **grn_field;
@@ -438,11 +438,12 @@ int ha_groonga::write_row(uchar *buf)
 			   (const void*) &pkey_value, sizeof(pkey_value), &flags);
     MRN_LOG(GRN_LOG_DEBUG, "-> added record: pkey_value=%d, gid=%d",pkey_value,gid);
   } else {
-    gid = grn_table_add(mrn_ctx_tls, share->obj);
+    int emu_key = 0;
+    gid = grn_table_add(mrn_ctx_tls, share->obj, (const void*) &emu_key, 4, NULL);
     MRN_LOG(GRN_LOG_DEBUG, "-> added record w/o pkey, gid=%d",gid);
   }
 
-  GRN_BULK_INIT(&wrapper);
+  GRN_TEXT_INIT(&wrapper,0);
   for (mysql_field = table->field, grn_field = share->field, num=0;
        *mysql_field;
        mysql_field++, grn_field++, num++) {
@@ -452,7 +453,7 @@ int ha_groonga::write_row(uchar *buf)
     if ((*mysql_field)->type() == MYSQL_TYPE_LONG) {
       int val = (*mysql_field)->val_int();
       GRN_BULK_REWIND(&wrapper);
-      GRN_BULK_SET(mrn_ctx_tls, &wrapper, (char*)&val, sizeof(val));
+      GRN_TEXT_SET(mrn_ctx_tls, &wrapper, (char*)&val, sizeof(val));
       MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_set_value: gid=%d, obj=%p, val=%d",
 	      gid, (*grn_field)->obj, val);
       grn_obj_set_value(mrn_ctx_tls, (*grn_field)->obj, gid, &wrapper, GRN_OBJ_SET);
@@ -484,7 +485,7 @@ int ha_groonga::index_read(uchar *buf, const uchar *key,
 			 (const void*) key, sizeof(key), &flags);
   MRN_LOG(GRN_LOG_DEBUG, "-> found record: key=%d, gid=%d",k,gid);
 
-  GRN_BULK_INIT(&wrapper);
+  GRN_TEXT_INIT(&wrapper,0);
   for (mysql_field = table->field, grn_field = share->field, num=0;
        *mysql_field;
        mysql_field++, grn_field++, num++) {
