@@ -1,0 +1,6 @@
+MYSQL_STORAGE_ENGINE(mroonga,,[Mroonga Storage Engine],
+[MySQL binding for Groonga],
+[max,max-no-ndb])
+MYSQL_PLUGIN_DIRECTORY(mroonga, [storage/mroonga])
+MYSQL_PLUGIN_STATIC(mroonga,  [libmroonga.a])
+MYSQL_PLUGIN_DYNAMIC(mroonga, [ha_mroonga.la])
