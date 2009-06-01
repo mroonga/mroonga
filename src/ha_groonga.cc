@@ -341,6 +341,7 @@ int ha_groonga::rnd_next(uchar *buf)
       } else {
 	GRN_BULK_REWIND(&obj);
 	grn_obj_get_value(mrn_ctx_tls, (*grn_field)->obj, gid, &obj);
+	/* TODO: refactoring. following can be share with index_read */
 	int *tmp_int;
 	char *tmp_char;
 	switch((*mysql_field)->type()) {
@@ -514,9 +515,24 @@ int ha_groonga::index_read(uchar *buf, const uchar *key,
     MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p",
 	    gid, (*grn_field)->obj);
     grn_obj_get_value(mrn_ctx_tls, (*grn_field)->obj, gid, &wrapper);
-    int *res;
-    res = (int*) GRN_BULK_HEAD(&wrapper);
-    (*mysql_field)->store(*res);
+    int *tmp_int;
+    char *tmp_char;
+    switch((*mysql_field)->type()) {
+    case (MYSQL_TYPE_LONG) :
+      tmp_int = (int*) GRN_BULK_HEAD(&wrapper);
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p, val=%d",
+	      gid, (*grn_field)->obj, *tmp_int);
+      (*mysql_field)->set_notnull();
+      (*mysql_field)->store(*tmp_int);
+      break;
+    case (MYSQL_TYPE_VARCHAR) :
+      tmp_char = (char*) GRN_BULK_HEAD(&wrapper);
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p, val=%s",
+	      gid, (*grn_field)->obj, tmp_char);
+      (*mysql_field)->set_notnull();
+      (*mysql_field)->store(tmp_char,strlen(tmp_char), system_charset_info);
+      break;
+    }
   }
   grn_obj_close(mrn_ctx_tls, &wrapper);
 
