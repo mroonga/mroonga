@@ -32,7 +32,7 @@ static grn_obj *mrn_db_open_or_create();
 static mrn_share *mrn_share_get(const char *name);
 static void mrn_share_put(mrn_share *share);
 static void mrn_share_remove(mrn_share *share);
-
+static grn_obj *mrn_get_type(enum_field_types type);
 
 /* static variables */
 static grn_hash *mrn_hash_sys;
@@ -177,18 +177,16 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
       MRN_LOG(GRN_LOG_DEBUG, "-> column '%s' is pkey", field->field_name);
       continue;
     }
-    switch(field->type()) {
-    case MYSQL_TYPE_LONG:
-      MRN_COLUMN_PATH(buf, form->s->db.str, form->s->table_name.str, field->field_name);
-      type = grn_ctx_at(mrn_ctx_tls, GRN_DB_INT32);
-      MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_create: name='%s', path='%s', type=GRN_DB_INT32", 
-	      field->field_name, buf);
+    MRN_COLUMN_PATH(buf, form->s->db.str, form->s->table_name.str, field->field_name);
+    type = mrn_get_type(field->type());
+    if (type != NULL) {
+      MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_create: name='%s', path='%s', mtype=%d", 
+	      field->field_name, buf,field->type());
       column_obj = grn_column_create(mrn_ctx_tls, table_obj,
 				     field->field_name, strlen(field->field_name),
 				     buf, GRN_OBJ_PERSISTENT|GRN_OBJ_COLUMN_SCALAR, type);
-      grn_obj_close(mrn_ctx_tls, column_obj);
-      break;
-    default:
+      grn_obj_close(mrn_ctx_tls, column_obj); 
+    } else {
       goto err;
     }
   }
@@ -327,7 +325,6 @@ int ha_groonga::rnd_next(uchar *buf)
   grn_id gid = grn_table_cursor_next(mrn_ctx_tls, this->cursor);
   if (gid != GRN_ID_NIL) {
     grn_obj obj;
-    int *val;
     GRN_TEXT_INIT(&obj,0);
 
     Field **mysql_field;
@@ -337,16 +334,32 @@ int ha_groonga::rnd_next(uchar *buf)
 	 *mysql_field;
 	 mysql_field++, grn_field++, num++) {
       if (num == share->pkey_field) {
+	int *val;
 	grn_table_cursor_get_key(mrn_ctx_tls, this->cursor, (void**) &val);
+	(*mysql_field)->set_notnull();
+	(*mysql_field)->store(*val);
       } else {
 	GRN_BULK_REWIND(&obj);
 	grn_obj_get_value(mrn_ctx_tls, (*grn_field)->obj, gid, &obj);
-	val = (int*) GRN_BULK_HEAD(&obj);
-	MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p, val=%d",
-		gid, (*grn_field)->obj, *val);
+	int *tmp_int;
+	char *tmp_char;
+	switch((*mysql_field)->type()) {
+	case (MYSQL_TYPE_LONG) :
+	  tmp_int = (int*) GRN_BULK_HEAD(&obj);
+	  MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p, val=%d",
+		  gid, (*grn_field)->obj, *tmp_int);
+	  (*mysql_field)->set_notnull();
+	  (*mysql_field)->store(*tmp_int);
+	  break;
+	case (MYSQL_TYPE_VARCHAR) :
+	  tmp_char = (char*) GRN_BULK_HEAD(&obj);
+	  MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_get_value: gid=%d, obj=%p, val=%s",
+		  gid, (*grn_field)->obj, tmp_char);
+	  (*mysql_field)->set_notnull();
+	  (*mysql_field)->store(tmp_char,strlen(tmp_char), system_charset_info);
+	  break;
+	}
       }
-      (*mysql_field)->set_notnull();
-      (*mysql_field)->store(*val);
     }
     this->record_id = gid;
     grn_obj_close(mrn_ctx_tls, &obj);
@@ -450,17 +463,22 @@ int ha_groonga::write_row(uchar *buf)
     if (num == share->pkey_field) {
       continue;
     }
+    GRN_BULK_REWIND(&wrapper);
+    /* TODO: replace if-else into swtich-case */
     if ((*mysql_field)->type() == MYSQL_TYPE_LONG) {
       int val = (*mysql_field)->val_int();
-      GRN_BULK_REWIND(&wrapper);
       GRN_TEXT_SET(mrn_ctx_tls, &wrapper, (char*)&val, sizeof(val));
-      MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_set_value: gid=%d, obj=%p, val=%d",
-	      gid, (*grn_field)->obj, val);
-      grn_obj_set_value(mrn_ctx_tls, (*grn_field)->obj, gid, &wrapper, GRN_OBJ_SET);
+    } else if ((*mysql_field)->type() == MYSQL_TYPE_VARCHAR) {
+      String tmp;
+      const char *val = (*mysql_field)->val_str(&tmp)->ptr();
+      GRN_TEXT_SET(mrn_ctx_tls, &wrapper, val, strlen(val));
     } else {
       MRN_LOG(GRN_LOG_DEBUG, "unsupported data type specified");
       return HA_ERR_UNSUPPORTED;
     }
+    MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_set_value: gid=%d, obj=%p",
+	    gid, (*grn_field)->obj);
+    grn_obj_set_value(mrn_ctx_tls, (*grn_field)->obj, gid, &wrapper, GRN_OBJ_SET);
   }
   grn_obj_close(mrn_ctx_tls, &wrapper);
   return 0;
@@ -697,6 +715,26 @@ static void mrn_share_remove(mrn_share *share)
 static void mrn_share_remove_all()
 {
   /* TODO: implement this function by using GRN_HASH_EACH */
+}
+
+static grn_obj *mrn_get_type(enum_field_types type)
+{
+  grn_builtin_type gtype;
+  switch (type) {
+  case MYSQL_TYPE_LONG:
+    gtype = GRN_DB_INT32;
+    break;
+  case MYSQL_TYPE_VARCHAR:
+    gtype = GRN_DB_TEXT;
+    break;
+  default:
+    gtype = GRN_DB_VOID;
+  }
+  if (gtype != GRN_DB_VOID) {
+    return grn_ctx_at(mrn_ctx_tls, gtype);
+  } else {
+    return NULL;
+  }
 }
 
 #define LOG_FIELD(x) MRN_LOG(GRN_LOG_DEBUG, "-> %s %s", field->field_name, x); break;
