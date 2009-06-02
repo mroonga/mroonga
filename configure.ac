@@ -45,7 +45,7 @@ AC_DEFUN([CONFIG_OPTION_MECAB],[
 
   AC_MSG_CHECKING([mecab])
   AC_ARG_WITH([mecab],[AS_HELP_STRING([--with-mecab=PATH],[mecab prefix PATH])],
-    [with_mecab=$withval],[with_mecab=yes])
+    [with_mecab=$withval],[with_mecab=no])
 
   if test "$with_mecab" = "no"; then
     AC_MSG_RESULT([no])
