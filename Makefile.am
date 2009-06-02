@@ -1,9 +1,35 @@
-lib_LTLIBRARIES = libmroonga.la
-
-AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_INCLUDES) $(MECAB_INCLUDES) -save-temps
+AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_INCLUDES) $(MECAB_INCLUDES) 
 AM_INCLUDES = -l. -l..
 
-libmroonga_la_SOURCES = ha_groonga.cc
-libmroonga_la_LDFLAGS = -module  $(GROONGA_LIBS) $(MECAB_LIBS)
-libmroonga_la_CXXFLAGS = -DMYSQL_DYNAMIC_PLUGIN
+MYSQLDATAdir  = $(localstatedir)
+MYSQLSHAREdir = $(pkgdatadir)
+MYSQLBASEdir  = $(prefix)
+MYSQLLIBdir   = $(pkglibdir)
+pkgplugindir  = $(pkglibdir)/plugin
+
+WRAPLIBS      =
+
+LDADD         =
+
+DEFS          = @DEFS@
+
 noinst_HEADERS = mroonga.h ha_groonga.h
+
+lib_LTLIBRARIES      = libmroonga.la
+#pkgplugin_LTLIBRARIES  = @plugin_mroonga_shared_target@
+libmroonga_la_LDFLAGS  = -module -rpath $(pkgplugindir) $(GROONGA_LIBS) $(MECAB_LIBS)
+libmroonga_la_CXXFLAGS = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
+libmroonga_la_CFLAGS   = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
+libmroonga_la_SOURCES  = ha_groonga.cc ha_groonga.h mroonga.h
+
+lib_LIBRARIES          = libmroonga.a
+#EXTRA_LIBRARIES        = libmroonga.a
+#noinst_LIBRARIES       = @plugin_mroonga_static_target@
+libmroonga_a_LDFLANGS  = $(GROONGA_LIBS) $(MECAB_LIBS)
+libmroonga_a_CXXFLAGS  = $(AM_CFLAGS)
+libmroonga_a_CFLAGS    = $(AM_CFLAGS)
+libmroonga_a_SOURCES   = ha_groonga.cc
+
+EXTRA_DIST = plug.in
+# Don't update the files from bitkeeper
+%::SCCS/s.%

@@ -127,9 +127,13 @@ AC_DEFUN([CONFIG_OPTION_GROONGA],[
   AC_SUBST([GROONGA_LIBS])
 ])
 
+
 CONFIG_OPTION_PLUGINS
 if test "$standalone_build" = "yes";then
   CONFIG_OPTION_MYSQL
+else
+  MYSQL_INC="-I../../sql -I../../include -I../../regex -I../.."
+  AC_SUBST(MYSQL_INC)
 fi
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
