@@ -7,6 +7,21 @@ AC_PROG_CXX
 AC_PROG_CPP
 AC_PROG_LIBTOOL
 
+standalone_build=
+
+AC_DEFUN([CONFIG_OPTION_PLUGINS],
+  AC_MSG_CHECKING([standalone build])
+  AC_ARG_WITH([plugins],,
+    [
+      standalone_build="no"
+      AC_MSG_RESULT([no])
+    ],
+    [
+      standalone_build="yes"
+      AC_MSG_RESULT([yes])
+    ])
+)
+
 AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_MSG_CHECKING([mysql source])
   AC_ARG_WITH([mysql],
@@ -20,7 +35,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
         AC_MSG_ERROR([invalid mysql source directory])
       fi
      ],
-    [AC_MSG_ERROR([--with-mysql=PATH is required])]
+    [AC_MSG_ERROR([--with-mysql=PATH is required for standalone build])]
   )
 ])
 
@@ -112,7 +127,10 @@ AC_DEFUN([CONFIG_OPTION_GROONGA],[
   AC_SUBST([GROONGA_LIBS])
 ])
 
-CONFIG_OPTION_MYSQL
+CONFIG_OPTION_PLUGINS
+if test "$standalone_build" = "yes";then
+  CONFIG_OPTION_MYSQL
+fi
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
