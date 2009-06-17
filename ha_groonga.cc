@@ -4,7 +4,6 @@
 
 #include <mysql_priv.h>
 #include <mysql/plugin.h>
-#include <groonga.h>
 #include <pthread.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -16,54 +15,33 @@ extern "C" {
 
 #include "ha_groonga.h"
 
-/* static function definition */
-static int mrn_init(void *p);
-static int mrn_deinit(void *p);
-static handler *mrn_handler_create(handlerton *hton,
-				   TABLE_SHARE *share,
-				   MEM_ROOT *root);
-static void mrn_logger_func(int level, const char *time, const char *title,
-			    const char *msg, const char *location, void *func_arg);
-static bool mrn_flush_logs(handlerton *hton);
-static grn_encoding mrn_charset_mysql_groonga(const char *csname);
-static const char *mrn_charset_groonga_mysql(grn_encoding encoding);
-static void mrn_ctx_init();
-static grn_obj *mrn_db_open_or_create();
-static mrn_share *mrn_share_get(const char *name);
-static void mrn_share_put(mrn_share *share);
-static void mrn_share_remove(mrn_share *share);
-static grn_obj *mrn_get_type(enum_field_types type);
-
-/* static variables */
-static grn_hash *mrn_hash_sys;
-static grn_obj *mrn_db_sys;
-static pthread_mutex_t *mrn_mutex_sys;
-static const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
-static FILE *mrn_logfile = NULL;
-
-static grn_logger_info mrn_logger_info = {
-  GRN_LOG_DUMP,
-  GRN_LOG_TIME|GRN_LOG_MESSAGE,
-  mrn_logger_func,
-  NULL
-};
-
-static MRN_CHARSET_MAP mrn_charset_map[] = {
-  {"utf8", GRN_ENC_UTF8},
-  {"cp932", GRN_ENC_SJIS},
-  {"sjis", GRN_ENC_SJIS},
-  {"eucjpms", GRN_ENC_EUC_JP},
-  {"ujis", GRN_ENC_EUC_JP},
-  {"latin1", GRN_ENC_LATIN1},
-  {"koi8r", GRN_ENC_KOI8R},
-  {0x0, GRN_ENC_DEFAULT},
-  {0x0, GRN_ENC_NONE}
-};
-
-/* TLS variables */
-__thread grn_ctx *mrn_ctx_tls;
-
 /* handler declaration */
+
+
+handler *mrn_handler_create(handlerton *hton,
+			    TABLE_SHARE *share,
+			    MEM_ROOT *root)
+{
+  return (new (root) ha_groonga(hton, share));
+}
+
+bool mrn_plugin_flush_logs(handlerton *hton)
+{
+  return (bool) mrn_flush_logs();
+}
+
+int mrn_plugin_init(void *p)
+{
+  handlerton *hton;
+  hton = (handlerton *)p;
+  hton->state = SHOW_OPTION_YES;
+  hton->create = mrn_handler_create;
+  hton->flush_logs = mrn_plugin_flush_logs;
+  hton->flags = 0;
+  mrn_init(NULL);
+}
+
+
 struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
 
@@ -75,7 +53,7 @@ mysql_declare_plugin(mroonga)
   "Tetsuro IKEDA",
   "MySQL binding for Groonga",
   PLUGIN_LICENSE_BSD,
-  mrn_init,
+  mrn_plugin_init,
   mrn_deinit,
   0x0001,
   NULL,
@@ -84,10 +62,13 @@ mysql_declare_plugin(mroonga)
 }
 mysql_declare_plugin_end;
 
+
+
 /* handler implementation */
 ha_groonga::ha_groonga(handlerton *hton, TABLE_SHARE *share)
   :handler(hton, share)
 {
+  mrn_counter=0;
 }
 
 ha_groonga::~ha_groonga()
@@ -115,7 +96,7 @@ const char **ha_groonga::bas_ext() const
 
 ulonglong ha_groonga::table_flags() const
 {
-  return HA_NO_TRANSACTIONS|HA_REC_NOT_IN_SEQ;
+  return HA_NO_TRANSACTIONS|HA_REC_NOT_IN_SEQ|HA_NULL_IN_KEY|HA_CAN_FULLTEXT;
 }
 
 ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
@@ -168,7 +149,7 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 
   int i;
   grn_obj *type;
-  grn_obj *column_obj;
+  grn_obj *column_obj, *ft_obj;
   char buf[MRN_MAX_KEY_LEN];
   for (i=0; i < form->s->fields; i++) {
     Field *field = form->s->field[i];
@@ -185,7 +166,20 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
       column_obj = grn_column_create(mrn_ctx_tls, table_obj,
 				     field->field_name, strlen(field->field_name),
 				     buf, GRN_OBJ_PERSISTENT|GRN_OBJ_COLUMN_SCALAR, type);
-      grn_obj_close(mrn_ctx_tls, column_obj); 
+      /* auto fulltex index */
+      if (field->type() == MYSQL_TYPE_VARCHAR) {
+	ft_obj = grn_column_create(mrn_ctx_tls, mrn_lexicon_sys,
+				   field->field_name, strlen(field->field_name),
+				   NULL, GRN_OBJ_COLUMN_INDEX|GRN_OBJ_PERSISTENT, table_obj);
+	grn_id id = grn_obj_id(mrn_ctx_tls, column_obj);
+	grn_obj buff;
+	GRN_TEXT_INIT(&buff,0);
+	GRN_TEXT_SET(mrn_ctx_tls, &buff, (char*) &id, sizeof(grn_id));
+	grn_obj_set_info(mrn_ctx_tls, ft_obj, GRN_INFO_SOURCE, &buff);
+	grn_obj_close(mrn_ctx_tls, ft_obj);
+      }
+
+      grn_obj_close(mrn_ctx_tls, column_obj);
     } else {
       goto err;
     }
@@ -246,13 +240,18 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
       } else {
 	snprintf(buf,1023,"%s.%s.grn", share->name, field->name);
 	/* NOTE: currently only support INT */
-	grn_obj *type = grn_ctx_at(mrn_ctx_tls, GRN_DB_INT32);
+	grn_obj *type = mrn_get_type(mysql_field->type());
 	MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_open: name='%s', path='%s'",
 		field->name, buf);
 	field->obj = grn_column_open(mrn_ctx_tls, share->obj,
 				     field->name, field->name_len,
 				     buf, type);
 	MRN_LOG(GRN_LOG_DEBUG, "-> field->obj=%p", field->obj);
+	if (mysql_field->type() == MYSQL_TYPE_VARCHAR) {
+	  field->index = grn_column_open(mrn_ctx_tls, mrn_lexicon_sys,
+					 field->name, field->name_len, NULL, share->obj);
+	  MRN_LOG(GRN_LOG_DEBUG,"-> grn_column_open: name(ft)=%s, obj=%p", field->name, field->index);
+	}
       }
       share->field[i] = field;
     }
@@ -550,269 +549,70 @@ int ha_groonga::index_next(uchar *buf)
   return HA_ERR_END_OF_FILE;
 }
 
-/* additional functions */
-static bool mrn_flush_logs(handlerton *hton)
-{
+
+int ha_groonga::ft_init() {
   MRN_TRACE;
-  pthread_mutex_lock(mrn_mutex_sys);
-  MRN_LOG(GRN_LOG_NOTICE, "logfile closed by FLUSH LOGS");
-  fflush(mrn_logfile);
-  fclose(mrn_logfile); /* reopen logfile for rotation */
-  mrn_logfile = fopen(mrn_logfile_name, "a");
-  MRN_LOG(GRN_LOG_NOTICE, "-------------------------------");
-  MRN_LOG(GRN_LOG_NOTICE, "logfile re-opened by FLUSH LOGS");
-  pthread_mutex_unlock(mrn_mutex_sys);
-  return true;
-}
-
-static int mrn_init(void *p)
-{
-  handlerton *hton;
-  hton = (handlerton *)p;
-  hton->state = SHOW_OPTION_YES;
-  hton->create = mrn_handler_create;
-  hton->flush_logs = mrn_flush_logs;
-  hton->flags = 0;
-
-  /* libgroonga init */
-  grn_init();
-  mrn_ctx_init();
-
-  /* log init */
-  if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
-    return -1;
-  }
-  grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
-  MRN_LOG(GRN_LOG_NOTICE, "++++++ starting mroonga ++++++");
-  MRN_TRACE;
-
-  /* init meta-data repository */
-  mrn_hash_sys = grn_hash_create(mrn_ctx_tls,NULL,
-				 MRN_MAX_KEY_LEN,sizeof(size_t),
-				 GRN_OBJ_KEY_VAR_SIZE);
-  mrn_db_sys = mrn_db_open_or_create();
-
-  /* mutex init */
-  mrn_mutex_sys = (pthread_mutex_t*) MRN_MALLOC(sizeof(pthread_mutex_t));
-  pthread_mutex_init(mrn_mutex_sys, MY_MUTEX_INIT_FAST);
-
   return 0;
 }
 
-/*
-  TODO: release all grn_obj in global hash
-*/
-static int mrn_deinit(void *p)
+FT_INFO *ha_groonga::ft_init_ext(uint flags, uint inx,String *key)
 {
-  mrn_ctx_init();
+  const char *match_param;
   MRN_TRACE;
-
-  MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: '%s'", MRN_DB_FILE_PATH);
-  grn_obj_close(mrn_ctx_tls, mrn_db_sys);
-
-  /* mutex deinit*/
-  pthread_mutex_destroy(mrn_mutex_sys);
-  MRN_FREE(mrn_mutex_sys);
-
-  /* log deinit */
-  MRN_LOG(GRN_LOG_NOTICE, "------ stopping mroonga ------");
-  fclose(mrn_logfile);
-  mrn_logfile = NULL;
-
-  /* hash deinit */
-  grn_hash_close(mrn_ctx_tls, mrn_hash_sys);
-
-  /* libgroonga deinit */
-  grn_fin();
-
-  return 0;
-}
-
-static handler *mrn_handler_create(handlerton *hton,
-				    TABLE_SHARE *share,
-				    MEM_ROOT *root)
-{
-  return (new (root) ha_groonga(hton, share));
-}
-
-
-static void mrn_logger_func(int level, const char *time, const char *title,
-		     const char *msg, const char *location, void *func_arg)
-{
-  const char slev[] = " EACewnid-";
-  if ((mrn_logfile)) {
-    fprintf(mrn_logfile, "%s|%c|%u|%s\n", time,
-	    *(slev + level), (uint)pthread_self(), msg);
-    fflush(mrn_logfile);
+  MRN_LOG(GRN_LOG_DEBUG, "-> flags=%d, inx=%d, key='%s'", flags, inx, key->ptr());
+  match_param = key->ptr();
+  if (flags & FT_BOOL) {
+    /* boolean search */
+    grn_query *query;
+    this->res = grn_table_create(mrn_ctx_tls, NULL, 0, NULL, GRN_TABLE_HASH_KEY, share->obj, 0);
+    query = grn_query_open(mrn_ctx_tls, match_param, strlen(match_param), GRN_SEL_OR, 32);
+    grn_obj_search(mrn_ctx_tls, share->field[1]->index, (grn_obj*) query, this->res, GRN_SEL_OR, NULL);
+    this->cursor = grn_table_cursor_open(mrn_ctx_tls, res, NULL, 0, NULL, 0, 0);
+    //grn_query_close(mrn_ctx_tls, query);
+  } else {
+    /* nlq search */
+    grn_obj buff;
+    this->res = grn_table_create(mrn_ctx_tls, NULL, 0, NULL, GRN_TABLE_HASH_KEY, share->obj, 0);
+    GRN_TEXT_INIT(&buff, 0);
+    GRN_TEXT_SET(mrn_ctx_tls, &buff, match_param, strlen(match_param));
+    grn_obj_search(mrn_ctx_tls, share->field[1]->index, &buff, this->res, GRN_SEL_OR, NULL);
+    this->cursor = grn_table_cursor_open(mrn_ctx_tls, res, NULL, 0, NULL, 0, 0);
+    //grn_obj_close(mrn_ctx_tls, &buff);
   }
-}
-
-
-static grn_encoding mrn_charset_mysql_groonga(const char *csname)
-{
-  if (!csname) return GRN_ENC_NONE;
-  int i;
-  for (i = 0; mrn_charset_map[i].csname_mysql; i++) {
-    if (!(my_strcasecmp(system_charset_info, csname,
-			mrn_charset_map[i].csname_mysql)))
-      return mrn_charset_map[i].csname_groonga;
-  }
-  return GRN_ENC_NONE;
-}
-
-static const char *mrn_charset_groonga_mysql(grn_encoding encoding)
-{
-  int i;
-  for (i = 0; (mrn_charset_map[i].csname_groonga != GRN_ENC_DEFAULT); i++) {
-    if (mrn_charset_map[i].csname_groonga == encoding)
-      return mrn_charset_map[i].csname_mysql;
-  }
+  int nrec = grn_table_size(mrn_ctx_tls, res);
+  MRN_LOG(GRN_LOG_DEBUG, "-> hits=%d", nrec);
   return NULL;
 }
 
-static void mrn_ctx_init()
+int ha_groonga::ft_read(uchar *buf)
 {
-  if (mrn_ctx_tls == NULL) {
-    mrn_ctx_tls = (grn_ctx*) MRN_MALLOC(sizeof(grn_ctx));
-    grn_ctx_init(mrn_ctx_tls, 0);
-    if ((mrn_db_sys))
-      grn_ctx_use(mrn_ctx_tls, mrn_db_sys);
-  }
-}
-
-static grn_obj *mrn_db_open_or_create()
-{
-  grn_obj *obj;
-  struct stat dummy;
-  if ((stat(MRN_DB_FILE_PATH, &dummy))) { // check if file not exists
-    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_create: '%s'", MRN_DB_FILE_PATH);
-    obj = grn_db_create(mrn_ctx_tls, MRN_DB_FILE_PATH, NULL);
+  /*
+  if (mrn_counter == 0) {
+    table->field[0]->set_notnull();
+    table->field[0]->store(10);
+    table->field[1]->set_notnull();
+    table->field[1]->store("test", 4, system_charset_info);
+    mrn_counter++;
+    return 0;
   } else {
-    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_open: '%s'", MRN_DB_FILE_PATH);
-    obj = grn_db_open(mrn_ctx_tls, MRN_DB_FILE_PATH);
+    mrn_counter=0;
+    return HA_ERR_END_OF_FILE;
+    }*/
+  grn_id id, docid;
+  grn_obj buff;
+  GRN_TEXT_INIT(&buff,0);
+  if  ((id = grn_table_cursor_next(mrn_ctx_tls, this->cursor))) {
+    GRN_BULK_REWIND(&buff);
+    grn_table_get_key(mrn_ctx_tls, this->res, id, &docid, sizeof(grn_id));
+    grn_obj_get_value(mrn_ctx_tls, share->field[1]->obj, docid, &buff);
+    table->field[0]->set_notnull();
+    table->field[0]->store(docid);
+    table->field[1]->set_notnull();
+    table->field[1]->store((char*) GRN_BULK_HEAD(&buff), GRN_TEXT_LEN(&buff), system_charset_info);
+    return 0;
   }
-  return obj;
-}
-
-static void mrn_share_put(mrn_share *share)
-{
-  void *value;
-  grn_search_flags flags = GRN_TABLE_ADD;
-  /* TODO: check duplication */
-  MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(put): name='%s'", share->name);
-  grn_hash_lookup(mrn_ctx_tls, mrn_hash_sys, share->name,
-		  strlen(share->name), &value, &flags);
-  memcpy(value, share, sizeof(share));
-}
-
-/* returns NULL if specified obj_name is not found in grn_hash */
-static mrn_share *mrn_share_get(const char *name)
-{
-  void *value;
-  grn_search_flags flags = 0;
-  MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(get): name='%s'", name);
-  grn_id rid = grn_hash_lookup(mrn_ctx_tls, mrn_hash_sys, name,
-			       strlen(name), &value, &flags);
-  if (rid == 0) {
-    return NULL;
-  } else {
-    return (mrn_share*) value;
-  }
-}
-
-static void mrn_share_remove(mrn_share *share)
-{
-  /* TODO: check return value */
-  MRN_LOG(GRN_LOG_DEBUG, "-> grn_hash_delete: name='%s'", share->name);
-  grn_hash_delete(mrn_ctx_tls, mrn_hash_sys, share->name,
-		  strlen(share->name), NULL);
-}
-
-static void mrn_share_remove_all()
-{
-  /* TODO: implement this function by using GRN_HASH_EACH */
-}
-
-static grn_obj *mrn_get_type(enum_field_types type)
-{
-  grn_builtin_type gtype;
-  switch (type) {
-  case MYSQL_TYPE_LONG:
-    gtype = GRN_DB_INT32;
-    break;
-  case MYSQL_TYPE_VARCHAR:
-    gtype = GRN_DB_TEXT;
-    break;
-  default:
-    gtype = GRN_DB_VOID;
-  }
-  if (gtype != GRN_DB_VOID) {
-    return grn_ctx_at(mrn_ctx_tls, gtype);
-  } else {
-    return NULL;
-  }
-}
-
-#define LOG_FIELD(x) MRN_LOG(GRN_LOG_DEBUG, "-> %s %s", field->field_name, x); break;
-
-static void mrn_print_field_type(Field *field)
-{
-  switch (field->type()) {
-  case MYSQL_TYPE_DECIMAL:
-    LOG_FIELD("MYSQL_TYPE_DECIMAL");
-  case MYSQL_TYPE_TINY:
-    LOG_FIELD("MYSQL_TYPE_TINY");
-  case MYSQL_TYPE_SHORT:
-    LOG_FIELD("MYSQL_TYPE_SHORT");
-  case MYSQL_TYPE_LONG:
-    LOG_FIELD("MYSQL_TYPE_LONG");
-  case MYSQL_TYPE_FLOAT:
-    LOG_FIELD("MYSQL_TYPE_FLOAT");
-  case MYSQL_TYPE_DOUBLE:
-    LOG_FIELD("MYSQL_TYPE_DOUBLE");
-  case MYSQL_TYPE_NULL:
-    LOG_FIELD("MYSQL_TYPE_NULL");
-  case MYSQL_TYPE_TIMESTAMP:
-    LOG_FIELD("MYSQL_TYPE_TIMESTAMP");
-  case MYSQL_TYPE_LONGLONG:
-    LOG_FIELD("MYSQL_TYPE_LONGLONG");
-  case MYSQL_TYPE_INT24:
-    LOG_FIELD("MYSQL_TYPE_INT24");
-  case MYSQL_TYPE_DATE:
-    LOG_FIELD("MYSQL_TYPE_DATE");
-  case MYSQL_TYPE_TIME:
-    LOG_FIELD("MYSQL_TYPE_TIME");
-  case MYSQL_TYPE_DATETIME:
-    LOG_FIELD("MYSQL_TYPE_DATETIME");
-  case MYSQL_TYPE_YEAR:
-    LOG_FIELD("MYSQL_TYPE_YEAR");
-  case MYSQL_TYPE_NEWDATE:
-    LOG_FIELD("MYSQL_TYPE_NEWDATE");
-  case MYSQL_TYPE_VARCHAR:
-    LOG_FIELD("MYSQL_TYPE_VARCHAR");
-  case MYSQL_TYPE_BIT:
-    LOG_FIELD("MYSQL_TYPE_BIT");
-  case MYSQL_TYPE_NEWDECIMAL:
-    LOG_FIELD("MYSQL_TYPE_NEWDECIMAL");
-  case MYSQL_TYPE_ENUM:
-    LOG_FIELD("MYSQL_TYPE_ENUM");
-  case MYSQL_TYPE_SET:
-    LOG_FIELD("MYSQL_TYPE_SET");
-  case MYSQL_TYPE_TINY_BLOB:
-    LOG_FIELD("MYSQL_TYPE_TINY_BLOB");
-  case MYSQL_TYPE_MEDIUM_BLOB:
-    LOG_FIELD("MYSQL_TYPE_MEDIUM_BLOB");
-  case MYSQL_TYPE_LONG_BLOB:
-    LOG_FIELD("MYSQL_TYPE_LONG_BLOB");
-  case MYSQL_TYPE_BLOB:
-    LOG_FIELD("MYSQL_TYPE_BLOB");
-  case MYSQL_TYPE_VAR_STRING:
-    LOG_FIELD("MYSQL_TYPE_VAR_STRING");
-  case MYSQL_TYPE_STRING:
-    LOG_FIELD("MYSQL_TYPE_STRING");
-  case MYSQL_TYPE_GEOMETRY:
-    LOG_FIELD("MYSQL_TYPE_GEOMETRY");
-  }
+  table->status = HA_ERR_END_OF_FILE;
+  return HA_ERR_END_OF_FILE;
 }
 
 #ifdef __cplusplus

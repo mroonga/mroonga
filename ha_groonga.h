@@ -7,25 +7,6 @@
 
 #include "mroonga.h"
 
-typedef struct _mrn_share_field {
-  const char *name;
-  uint name_len;
-  grn_obj *obj;
-  grn_id gid;
-  uint field_no;
-} mrn_field;
-
-typedef struct _mrn_share {
-  const char *name;
-  uint name_len;
-  uint use_count;
-  grn_obj *obj;
-  grn_id gid;
-  mrn_field **field;
-  uint fields;
-  uint pkey_field;
-} mrn_share;
-
 /* handler class */
 class ha_groonga: public handler
 {
@@ -35,6 +16,8 @@ class ha_groonga: public handler
   mrn_share *share;
   grn_table_cursor *cursor;
   grn_id record_id;
+  grn_obj *res;
+  int mrn_counter;
 
 public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);
@@ -65,13 +48,17 @@ public:
   int write_row(uchar *buf);
 
   uint max_supported_record_length() const { return HA_MAX_REC_LENGTH; }
-  uint max_supported_keys()          const { return 1; }
+  uint max_supported_keys()          const { return 2; }
   uint max_supported_key_parts()     const { return 1; }
   uint max_supported_key_length()    const { return MAX_KEY_LENGTH; }
 
   int index_read(uchar *buf, const uchar *key, uint key_len,
 		  enum ha_rkey_function find_flag);
   int index_next(uchar *buf);
+
+  int ft_init();
+  FT_INFO *ft_init_ext(uint flags, uint inx,String *key);
+  int ft_read(uchar *buf);
 };
 
 #endif /* _ha_groonga_h */
