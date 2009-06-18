@@ -88,4 +88,6 @@ extern FILE *mrn_logfile;
 
 extern grn_logger_info mrn_logger_info;
 
+extern uint mrn_ctx_counter;
+
 #endif /* _mroonga_h */

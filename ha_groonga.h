@@ -17,7 +17,8 @@ class ha_groonga: public handler
   grn_table_cursor *cursor;
   grn_id record_id;
   grn_obj *res;
-  int mrn_counter;
+
+  grn_ctx *ctx;
 
 public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);

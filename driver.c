@@ -18,6 +18,7 @@ grn_obj *mrn_db_sys, *mrn_lexicon_sys;
 pthread_mutex_t *mrn_mutex_sys;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
+uint mrn_ctx_counter = 0;
 
 grn_logger_info mrn_logger_info = {
   GRN_LOG_DUMP,
