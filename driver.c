@@ -50,27 +50,27 @@ int mrn_init()
   if (grn_init() != GRN_SUCCESS) {
     return -1;
   }
-  grn_ctx_init(ctx,0);
+  grn_ctx_init(&ctx,0);
 
   /* log init */
   if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
     return -1;
   }
   grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
-  GRN_LOG(ctx, GRN_LOG_NOTICE, "++++++ starting mroonga ++++++");
+  GRN_LOG(&ctx, GRN_LOG_NOTICE, "++++++ starting mroonga ++++++");
 
   /* init meta-data repository */
-  mrn_hash_sys = grn_hash_create(mrn_ctx_tls,NULL,
+  mrn_hash_sys = grn_hash_create(&ctx,NULL,
 				 MRN_MAX_KEY_LEN,sizeof(size_t),
 				 GRN_OBJ_KEY_VAR_SIZE);
-  mrn_db_sys = mrn_db_open_or_create();
+  mrn_db_sys = mrn_db_open_or_create(&ctx);
 
   /* mutex init */
   mrn_mutex_sys = (pthread_mutex_t*) MRN_MALLOC(sizeof(pthread_mutex_t));
   // TODO: FIX THIS 
   //pthread_mutex_init(mrn_mutex_sys, PTHREAD_MUTEX_INITIALIZER);
 
-  grn_ctx_fin(ctx);
+  grn_ctx_fin(&ctx);
   return 0;
 }
 
@@ -125,24 +125,26 @@ void mrn_ctx_init()
   }
 }
 
-grn_obj *mrn_db_open_or_create()
+grn_obj *mrn_db_open_or_create(grn_ctx *ctx)
 {
   grn_obj *obj;
   struct stat dummy;
   if ((stat(MRN_DB_FILE_PATH, &dummy))) { // check if file not exists
-    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_create: '%s'", MRN_DB_FILE_PATH);
-    obj = grn_db_create(mrn_ctx_tls, MRN_DB_FILE_PATH, NULL);
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "-> grn_db_create: '%s'", MRN_DB_FILE_PATH);
+    obj = grn_db_create(ctx, MRN_DB_FILE_PATH, NULL);
     /* create global lexicon table */
-    mrn_lexicon_sys = grn_table_create(mrn_ctx_tls, "lexicon", 7, MRN_LEXICON_FILE_PATH,
+    mrn_lexicon_sys = grn_table_create(ctx, "lexicon", 7, MRN_LEXICON_FILE_PATH,
 				       GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT, 
 				       grn_ctx_at(mrn_ctx_tls,GRN_DB_SHORTTEXT), 0);
-    grn_obj_set_info(mrn_ctx_tls, mrn_lexicon_sys, GRN_INFO_DEFAULT_TOKENIZER,
+    grn_obj_set_info(ctx, mrn_lexicon_sys, GRN_INFO_DEFAULT_TOKENIZER,
 		     grn_ctx_at(mrn_ctx_tls, GRN_DB_BIGRAM));
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "created lexicon table = %p", mrn_lexicon_sys);
   } else {
     MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_open: '%s'", MRN_DB_FILE_PATH);
-    obj = grn_db_open(mrn_ctx_tls, MRN_DB_FILE_PATH);
+    obj = grn_db_open(ctx, MRN_DB_FILE_PATH);
     /* open global lexicon table */
-    mrn_lexicon_sys = grn_table_open(mrn_ctx_tls, "lexicon", 7, MRN_LEXICON_FILE_PATH);
+    mrn_lexicon_sys = grn_table_open(ctx, "lexicon", 7, MRN_LEXICON_FILE_PATH);
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "opened lexicon table = %p", mrn_lexicon_sys);
   }
   return obj;
 }
