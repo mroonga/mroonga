@@ -21,26 +21,25 @@ typedef struct _mrn_charset_map {
   grn_encoding csname_groonga;
 } MRN_CHARSET_MAP;
 
-typedef struct _mrn_share_field {
+typedef struct _mrn_field {
   const char *name;
   uint name_len;
   grn_obj *obj;
   grn_obj *index;
-  grn_id gid;
+  //grn_id gid;
   uint field_no;
 } mrn_field;
 
-typedef struct _mrn_share {
+typedef struct _mrn_table {
   const char *name;
   uint name_len;
   uint use_count;
   grn_obj *obj;
-  grn_id gid;
+  //grn_id gid;
   mrn_field **field;
   uint fields;
   uint pkey_field;
-} mrn_share;
-
+} mrn_table;
 
 /* macro */
 #define MRN_MALLOC(size) malloc(size)
@@ -68,10 +67,9 @@ grn_encoding mrn_charset_mysql_groonga(const char *csname);
 const char *mrn_charset_groonga_mysql(grn_encoding encoding);
 void mrn_ctx_init();
 grn_obj *mrn_db_open_or_create();
-mrn_share *mrn_share_get(const char *name);
-void mrn_share_put(mrn_share *share);
-void mrn_share_remove(mrn_share *share);
-grn_obj *mrn_get_type(int type);
+mrn_table *mrn_share_get(const char *name);
+void mrn_share_put(mrn_table *share);
+void mrn_share_remove(mrn_table *share);
 
 
 /* static variables */

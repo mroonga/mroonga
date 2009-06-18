@@ -148,7 +148,7 @@ grn_obj *mrn_db_open_or_create(grn_ctx *ctx)
   return obj;
 }
 
-void mrn_share_put(mrn_share *share)
+void mrn_share_put(mrn_table *share)
 {
   void *value;
   grn_search_flags flags = GRN_TABLE_ADD;
@@ -160,7 +160,7 @@ void mrn_share_put(mrn_share *share)
 }
 
 /* returns NULL if specified obj_name is not found in grn_hash */
-mrn_share *mrn_share_get(const char *name)
+mrn_table *mrn_share_get(const char *name)
 {
   void *value;
   grn_search_flags flags = 0;
@@ -170,11 +170,11 @@ mrn_share *mrn_share_get(const char *name)
   if (rid == 0) {
     return NULL;
   } else {
-    return (mrn_share*) value;
+    return (mrn_table*) value;
   }
 }
 
-void mrn_share_remove(mrn_share *share)
+void mrn_share_remove(mrn_table *share)
 {
   /* TODO: check return value */
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_hash_delete: name='%s'", share->name);
@@ -187,66 +187,8 @@ void mrn_share_remove_all()
   /* TODO: implement this function by using GRN_HASH_EACH */
 }
 
-/*
-#define LOG_FIELD(x) MRN_LOG(GRN_LOG_DEBUG, "-> %s %s", field->field_name, x); break;
-
-void mrn_print_field_type(Field *field)
+int mrn_create(mrn_table *share)
 {
-  switch (field->type()) {
-  case MYSQL_TYPE_DECIMAL:
-    LOG_FIELD("MYSQL_TYPE_DECIMAL");
-  case MYSQL_TYPE_TINY:
-    LOG_FIELD("MYSQL_TYPE_TINY");
-  case MYSQL_TYPE_SHORT:
-    LOG_FIELD("MYSQL_TYPE_SHORT");
-  case MYSQL_TYPE_LONG:
-    LOG_FIELD("MYSQL_TYPE_LONG");
-  case MYSQL_TYPE_FLOAT:
-    LOG_FIELD("MYSQL_TYPE_FLOAT");
-  case MYSQL_TYPE_DOUBLE:
-    LOG_FIELD("MYSQL_TYPE_DOUBLE");
-  case MYSQL_TYPE_NULL:
-    LOG_FIELD("MYSQL_TYPE_NULL");
-  case MYSQL_TYPE_TIMESTAMP:
-    LOG_FIELD("MYSQL_TYPE_TIMESTAMP");
-  case MYSQL_TYPE_LONGLONG:
-    LOG_FIELD("MYSQL_TYPE_LONGLONG");
-  case MYSQL_TYPE_INT24:
-    LOG_FIELD("MYSQL_TYPE_INT24");
-  case MYSQL_TYPE_DATE:
-    LOG_FIELD("MYSQL_TYPE_DATE");
-  case MYSQL_TYPE_TIME:
-    LOG_FIELD("MYSQL_TYPE_TIME");
-  case MYSQL_TYPE_DATETIME:
-    LOG_FIELD("MYSQL_TYPE_DATETIME");
-  case MYSQL_TYPE_YEAR:
-    LOG_FIELD("MYSQL_TYPE_YEAR");
-  case MYSQL_TYPE_NEWDATE:
-    LOG_FIELD("MYSQL_TYPE_NEWDATE");
-  case MYSQL_TYPE_VARCHAR:
-    LOG_FIELD("MYSQL_TYPE_VARCHAR");
-  case MYSQL_TYPE_BIT:
-    LOG_FIELD("MYSQL_TYPE_BIT");
-  case MYSQL_TYPE_NEWDECIMAL:
-    LOG_FIELD("MYSQL_TYPE_NEWDECIMAL");
-  case MYSQL_TYPE_ENUM:
-    LOG_FIELD("MYSQL_TYPE_ENUM");
-  case MYSQL_TYPE_SET:
-    LOG_FIELD("MYSQL_TYPE_SET");
-  case MYSQL_TYPE_TINY_BLOB:
-    LOG_FIELD("MYSQL_TYPE_TINY_BLOB");
-  case MYSQL_TYPE_MEDIUM_BLOB:
-    LOG_FIELD("MYSQL_TYPE_MEDIUM_BLOB");
-  case MYSQL_TYPE_LONG_BLOB:
-    LOG_FIELD("MYSQL_TYPE_LONG_BLOB");
-  case MYSQL_TYPE_BLOB:
-    LOG_FIELD("MYSQL_TYPE_BLOB");
-  case MYSQL_TYPE_VAR_STRING:
-    LOG_FIELD("MYSQL_TYPE_VAR_STRING");
-  case MYSQL_TYPE_STRING:
-    LOG_FIELD("MYSQL_TYPE_STRING");
-  case MYSQL_TYPE_GEOMETRY:
-    LOG_FIELD("MYSQL_TYPE_GEOMETRY");
-  }
+  return 0;
 }
-*/
+

@@ -260,12 +260,12 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
   thr_lock_init(&thr_lock);
   thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
 
-  mrn_share *share;
+  mrn_table *share;
 
   if ((share = mrn_share_get(MRN_TABLE_NAME(name)))) {
     this->share = share;
   } else {
-    share = (mrn_share*) MRN_MALLOC(sizeof(mrn_share));
+    share = (mrn_table*) MRN_MALLOC(sizeof(mrn_table));
     share->name = MRN_TABLE_NAME(name);
     share->name_len = strlen(share->name);
     MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_open: name='%s', path='%s'", share->name, NULL);
@@ -321,7 +321,7 @@ int ha_groonga::close()
 
   thr_lock_delete(&thr_lock);
 
-  mrn_share *share = this->share;
+  mrn_table *share = this->share;
   mrn_share_remove(share);
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: '%s'", share->name);
   grn_obj_close(mrn_ctx_tls, share->obj);
