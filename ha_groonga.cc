@@ -145,7 +145,6 @@ const char *ha_groonga::index_type(uint inx)
 }
 
 static const char*ha_groonga_exts[] = {
-  ".grn",
   NullS
 };
 const char **ha_groonga::bas_ext() const
@@ -175,8 +174,6 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   MRN_TRACE;
 
   const char *obj_name = MRN_TABLE_NAME(name);
-  char path[MRN_MAX_KEY_LEN];
-  MRN_TABLE_PATH(path, obj_name);
 
   grn_obj_flags table_flags = GRN_OBJ_PERSISTENT;
   grn_obj *key_type;
@@ -202,14 +199,13 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
     key_type = NULL;
   }
 
-  MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_create: name='%s', path='%s'",obj_name, path);
-  grn_obj *table_obj = grn_table_create(mrn_ctx_tls, obj_name, strlen(obj_name), path,
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_create: name='%s', path='%s'",obj_name, NULL);
+  grn_obj *table_obj = grn_table_create(mrn_ctx_tls, obj_name, strlen(obj_name), NULL,
 					table_flags, key_type, value_size);
 
   int i;
   grn_obj *type;
   grn_obj *column_obj, *ft_obj;
-  char buf[MRN_MAX_KEY_LEN];
   for (i=0; i < form->s->fields; i++) {
     Field *field = form->s->field[i];
     if (field->flags & PRI_KEY_FLAG) {
@@ -217,14 +213,13 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
       MRN_LOG(GRN_LOG_DEBUG, "-> column '%s' is pkey", field->field_name);
       continue;
     }
-    MRN_COLUMN_PATH(buf, form->s->db.str, form->s->table_name.str, field->field_name);
     type = mrn_get_type(field->type());
     if (type != NULL) {
       MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_create: name='%s', path='%s', mtype=%d", 
-	      field->field_name, buf,field->type());
+	      field->field_name, NULL,field->type());
       column_obj = grn_column_create(mrn_ctx_tls, table_obj,
 				     field->field_name, strlen(field->field_name),
-				     buf, GRN_OBJ_PERSISTENT|GRN_OBJ_COLUMN_SCALAR, type);
+				     NULL, GRN_OBJ_PERSISTENT|GRN_OBJ_COLUMN_SCALAR, type);
       /* auto fulltex index */
       if (field->type() == MYSQL_TYPE_VARCHAR) {
 	ft_obj = grn_column_create(mrn_ctx_tls, mrn_lexicon_sys,
@@ -273,10 +268,8 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
     share = (mrn_share*) MRN_MALLOC(sizeof(mrn_share));
     share->name = MRN_TABLE_NAME(name);
     share->name_len = strlen(share->name);
-    char path[MRN_MAX_KEY_LEN];
-    MRN_TABLE_PATH(path, share->name);
-    MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_open: name='%s', path='%s'", share->name, path);
-    grn_obj *obj = grn_table_open(mrn_ctx_tls, share->name, strlen(share->name), path);
+    MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_open: name='%s', path='%s'", share->name, NULL);
+    grn_obj *obj = grn_table_open(mrn_ctx_tls, share->name, strlen(share->name), NULL);
     share->obj = obj;
 
     if (this->table_share->primary_key == MAX_KEY) {
@@ -287,7 +280,6 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
     share->fields = this->table_share->fields;
     share->field = (mrn_field**) MRN_MALLOC(sizeof(mrn_field*) * (share->fields + 1));
     int i;
-    char buf[MRN_MAX_KEY_LEN];
     for (i=0; i < share->fields; i++) {
       Field *mysql_field = this->table_share->field[i];
       mrn_field *field = (mrn_field*) MRN_MALLOC(sizeof(mrn_field));
@@ -297,14 +289,13 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
       if (mysql_field->flags & PRI_KEY_FLAG) {
 	share->pkey_field = i;
       } else {
-	snprintf(buf,1023,"%s.%s.grn", share->name, field->name);
 	/* NOTE: currently only support INT */
 	grn_obj *type = mrn_get_type(mysql_field->type());
 	MRN_LOG(GRN_LOG_DEBUG, "-> grn_column_open: name='%s', path='%s'",
-		field->name, buf);
+		field->name, NULL);
 	field->obj = grn_column_open(mrn_ctx_tls, share->obj,
 				     field->name, field->name_len,
-				     buf, type);
+				     NULL, type);
 	MRN_LOG(GRN_LOG_DEBUG, "-> field->obj=%p", field->obj);
 	if (mysql_field->type() == MYSQL_TYPE_VARCHAR) {
 	  field->index = grn_column_open(mrn_ctx_tls, mrn_lexicon_sys,
@@ -476,10 +467,8 @@ int ha_groonga::delete_table(const char *name)
   MRN_TRACE;
 
   const char *obj_name = MRN_TABLE_NAME(name);
-  char path[MRN_MAX_KEY_LEN];
-  MRN_TABLE_PATH(path, obj_name);
-  MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_open: name='%s', path='%s'", obj_name, path);
-  grn_obj *obj = grn_table_open(mrn_ctx_tls, obj_name, strlen(obj_name), path);
+  MRN_LOG(GRN_LOG_DEBUG, "-> grn_table_open: name='%s', path='%s'", obj_name, NULL);
+  grn_obj *obj = grn_table_open(mrn_ctx_tls, obj_name, strlen(obj_name), NULL);
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_remove: obj=%p", obj);
   grn_obj_remove(mrn_ctx_tls, obj);
 

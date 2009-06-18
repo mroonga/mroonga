@@ -1,5 +1,5 @@
-#ifndef _mroonga_h
-#define _mroonga_h
+#ifndef _driver_h
+#define _driver_h
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,7 +7,6 @@
 
 #define MRN_MAX_KEY_LEN 1024
 #define MRN_DB_FILE_PATH "groonga.db"
-#define MRN_FILE_EXT ".grn"
 #define MRN_LOG_FILE_NAME "groonga.log"
 
 
@@ -58,9 +57,6 @@ typedef struct _mrn_share {
 /* name, obj_name, path */
 #define MRN_HANDLER_NAME(obj_name) (obj_name - 2)
 #define MRN_TABLE_NAME(name) (name + 2)
-#define MRN_TABLE_PATH(buf,name) snprintf(buf,MRN_MAX_KEY_LEN-1,"%s%s",name, MRN_FILE_EXT)
-#define MRN_COLUMN_PATH(buf,db,table,column) \
-  snprintf(buf,MRN_MAX_KEY_LEN-1, "%s/%s.%s%s", db, table, column, MRN_FILE_EXT)
 
 /* functions */
 int mrn_init();
@@ -87,4 +83,4 @@ extern FILE *mrn_logfile;
 
 extern grn_logger_info mrn_logger_info;
 
-#endif /* _mroonga_h */
+#endif /* _driver_h */
