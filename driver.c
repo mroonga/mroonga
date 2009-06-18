@@ -18,7 +18,6 @@ grn_obj *mrn_db_sys, *mrn_lexicon_sys;
 pthread_mutex_t *mrn_mutex_sys;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
-uint mrn_ctx_counter = 0;
 
 grn_logger_info mrn_logger_info = {
   GRN_LOG_DUMP,
@@ -79,25 +78,25 @@ int mrn_init()
 */
 int mrn_deinit()
 {
-  mrn_ctx_init();
-  MRN_TRACE;
-
-  MRN_LOG(GRN_LOG_DEBUG, "-> grn_obj_close: '%s'", MRN_DB_FILE_PATH);
-  grn_obj_close(mrn_ctx_tls, mrn_db_sys);
+  grn_ctx ctx;
+  grn_ctx_init(&ctx,0);
+  grn_obj_close(&ctx, mrn_lexicon_sys);
+  grn_obj_close(&ctx, mrn_db_sys);
 
   /* mutex deinit*/
   pthread_mutex_destroy(mrn_mutex_sys);
   MRN_FREE(mrn_mutex_sys);
 
   /* log deinit */
-  MRN_LOG(GRN_LOG_NOTICE, "------ stopping mroonga ------");
+  GRN_LOG(&ctx, GRN_LOG_NOTICE, "------ stopping mroonga ------");
   fclose(mrn_logfile);
   mrn_logfile = NULL;
 
   /* hash deinit */
-  grn_hash_close(mrn_ctx_tls, mrn_hash_sys);
+  grn_hash_close(&ctx, mrn_hash_sys);
 
   /* libgroonga deinit */
+  grn_ctx_fin(&ctx);
   grn_fin();
 
   return 0;

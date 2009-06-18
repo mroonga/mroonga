@@ -126,14 +126,12 @@ ha_groonga::ha_groonga(handlerton *hton, TABLE_SHARE *share)
 {
   ctx = (grn_ctx*) malloc(sizeof(grn_ctx));
   grn_ctx_init(ctx,0);
-  mrn_ctx_counter++;
 }
 
 ha_groonga::~ha_groonga()
 {
   grn_ctx_fin(ctx);
   free(ctx);
-  mrn_ctx_counter--;
 }
 
 const char *ha_groonga::table_type() const
