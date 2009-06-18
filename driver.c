@@ -41,7 +41,7 @@ int mrn_flush_logs()
   return 0;
 }
 
-int mrn_init(void *p)
+int mrn_init()
 {
   /* libgroonga init */
   grn_init();
@@ -72,7 +72,7 @@ int mrn_init(void *p)
 /*
   TODO: release all grn_obj in global hash
 */
-int mrn_deinit(void *p)
+int mrn_deinit()
 {
   mrn_ctx_init();
   MRN_TRACE;

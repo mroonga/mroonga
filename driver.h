@@ -64,8 +64,8 @@ typedef struct _mrn_share {
   snprintf(buf,MRN_MAX_KEY_LEN-1, "%s/%s.%s%s", db, table, column, MRN_FILE_EXT)
 
 /* functions */
-int mrn_init(void *p);
-int mrn_deinit(void *p);
+int mrn_init();
+int mrn_deinit();
 void mrn_logger_func(int level, const char *time, const char *title,
 		     const char *msg, const char *location, void *func_arg);
 int mrn_flush_logs();

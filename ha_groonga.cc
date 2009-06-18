@@ -91,7 +91,12 @@ int mrn_plugin_init(void *p)
   hton->create = mrn_handler_create;
   hton->flush_logs = mrn_plugin_flush_logs;
   hton->flags = 0;
-  mrn_init(NULL);
+  return mrn_init();
+}
+
+int mrn_plugin_deinit(void *p)
+{
+  return mrn_deinit();
 }
 
 
@@ -107,7 +112,7 @@ mysql_declare_plugin(mroonga)
   "MySQL binding for Groonga",
   PLUGIN_LICENSE_BSD,
   mrn_plugin_init,
-  mrn_deinit,
+  mrn_plugin_deinit,
   0x0001,
   NULL,
   NULL,
