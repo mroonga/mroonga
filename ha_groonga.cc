@@ -120,8 +120,6 @@ mysql_declare_plugin(mroonga)
 }
 mysql_declare_plugin_end;
 
-
-
 /* handler implementation */
 ha_groonga::ha_groonga(handlerton *hton, TABLE_SHARE *share)
   :handler(hton, share)

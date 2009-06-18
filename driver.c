@@ -44,17 +44,20 @@ int mrn_flush_logs()
 
 int mrn_init()
 {
+  grn_ctx ctx;
+
   /* libgroonga init */
-  grn_init();
-  mrn_ctx_init();
+  if (grn_init() != GRN_SUCCESS) {
+    return -1;
+  }
+  grn_ctx_init(ctx,0);
 
   /* log init */
   if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
     return -1;
   }
   grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
-  MRN_LOG(GRN_LOG_NOTICE, "++++++ starting mroonga ++++++");
-  MRN_TRACE;
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "++++++ starting mroonga ++++++");
 
   /* init meta-data repository */
   mrn_hash_sys = grn_hash_create(mrn_ctx_tls,NULL,
@@ -67,6 +70,7 @@ int mrn_init()
   // TODO: FIX THIS 
   //pthread_mutex_init(mrn_mutex_sys, PTHREAD_MUTEX_INITIALIZER);
 
+  grn_ctx_fin(ctx);
   return 0;
 }
 
