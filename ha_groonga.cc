@@ -15,7 +15,60 @@ extern "C" {
 
 #include "ha_groonga.h"
 
-/* handler declaration */
+MRN_CHARSET_MAP mrn_charset_map[] = {
+  {"utf8", GRN_ENC_UTF8},
+  {"cp932", GRN_ENC_SJIS},
+  {"sjis", GRN_ENC_SJIS},
+  {"eucjpms", GRN_ENC_EUC_JP},
+  {"ujis", GRN_ENC_EUC_JP},
+  {"latin1", GRN_ENC_LATIN1},
+  {"koi8r", GRN_ENC_KOI8R},
+  {0x0, GRN_ENC_DEFAULT},
+  {0x0, GRN_ENC_NONE}
+};
+
+
+grn_encoding mrn_charset_mysql_groonga(const char *csname)
+{
+  if (!csname) return GRN_ENC_NONE;
+  int i;
+  for (i = 0; mrn_charset_map[i].csname_mysql; i++) {
+    if (!(strcasecmp(csname, mrn_charset_map[i].csname_mysql)))
+      return mrn_charset_map[i].csname_groonga;
+  }
+  return GRN_ENC_NONE;
+}
+
+const char *mrn_charset_groonga_mysql(grn_encoding encoding)
+{
+  int i;
+  for (i = 0; (mrn_charset_map[i].csname_groonga != GRN_ENC_DEFAULT); i++) {
+    if (mrn_charset_map[i].csname_groonga == encoding)
+      return mrn_charset_map[i].csname_mysql;
+  }
+  return NULL;
+}
+
+
+grn_obj *mrn_get_type(int type)
+{
+  grn_builtin_type gtype;
+  switch (type) {
+  case MYSQL_TYPE_LONG:
+    gtype = GRN_DB_INT32;
+    break;
+  case MYSQL_TYPE_VARCHAR:
+    gtype = GRN_DB_TEXT;
+    break;
+  default:
+    gtype = GRN_DB_VOID;
+  }
+  if (gtype != GRN_DB_VOID) {
+    return grn_ctx_at(mrn_ctx_tls, gtype);
+  } else {
+    return NULL;
+  }
+}
 
 
 handler *mrn_handler_create(handlerton *hton,

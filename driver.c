@@ -26,46 +26,6 @@ grn_logger_info mrn_logger_info = {
   NULL
 };
 
-
-
-/* temporaory... */
-enum enum_field_types { MYSQL_TYPE_DECIMAL, MYSQL_TYPE_TINY,
-                        MYSQL_TYPE_SHORT,  MYSQL_TYPE_LONG,
-                        MYSQL_TYPE_FLOAT,  MYSQL_TYPE_DOUBLE,
-                        MYSQL_TYPE_NULL,   MYSQL_TYPE_TIMESTAMP,
-                        MYSQL_TYPE_LONGLONG,MYSQL_TYPE_INT24,
-                        MYSQL_TYPE_DATE,   MYSQL_TYPE_TIME,
-                        MYSQL_TYPE_DATETIME, MYSQL_TYPE_YEAR,
-                        MYSQL_TYPE_NEWDATE, MYSQL_TYPE_VARCHAR,
-                        MYSQL_TYPE_BIT,
-                        MYSQL_TYPE_NEWDECIMAL=246,
-                        MYSQL_TYPE_ENUM=247,
-                        MYSQL_TYPE_SET=248,
-                        MYSQL_TYPE_TINY_BLOB=249,
-                        MYSQL_TYPE_MEDIUM_BLOB=250,
-                        MYSQL_TYPE_LONG_BLOB=251,
-                        MYSQL_TYPE_BLOB=252,
-                        MYSQL_TYPE_VAR_STRING=253,
-                        MYSQL_TYPE_STRING=254,
-                        MYSQL_TYPE_GEOMETRY=255
-
-};
-
-
-MRN_CHARSET_MAP mrn_charset_map[] = {
-  {"utf8", GRN_ENC_UTF8},
-  {"cp932", GRN_ENC_SJIS},
-  {"sjis", GRN_ENC_SJIS},
-  {"eucjpms", GRN_ENC_EUC_JP},
-  {"ujis", GRN_ENC_EUC_JP},
-  {"latin1", GRN_ENC_LATIN1},
-  {"koi8r", GRN_ENC_KOI8R},
-  {0x0, GRN_ENC_DEFAULT},
-  {0x0, GRN_ENC_NONE}
-};
-
-
-
 /* additional functions */
 int mrn_flush_logs()
 {
@@ -150,27 +110,6 @@ void mrn_logger_func(int level, const char *time, const char *title,
 }
 
 
-grn_encoding mrn_charset_mysql_groonga(const char *csname)
-{
-  if (!csname) return GRN_ENC_NONE;
-  int i;
-  for (i = 0; mrn_charset_map[i].csname_mysql; i++) {
-    if (!(strcasecmp(csname, mrn_charset_map[i].csname_mysql)))
-      return mrn_charset_map[i].csname_groonga;
-  }
-  return GRN_ENC_NONE;
-}
-
-const char *mrn_charset_groonga_mysql(grn_encoding encoding)
-{
-  int i;
-  for (i = 0; (mrn_charset_map[i].csname_groonga != GRN_ENC_DEFAULT); i++) {
-    if (mrn_charset_map[i].csname_groonga == encoding)
-      return mrn_charset_map[i].csname_mysql;
-  }
-  return NULL;
-}
-
 void mrn_ctx_init()
 {
   if (mrn_ctx_tls == NULL) {
@@ -242,25 +181,6 @@ void mrn_share_remove_all()
   /* TODO: implement this function by using GRN_HASH_EACH */
 }
 
-grn_obj *mrn_get_type(int type)
-{
-  grn_builtin_type gtype;
-  switch (type) {
-  case MYSQL_TYPE_LONG:
-    gtype = GRN_DB_INT32;
-    break;
-  case MYSQL_TYPE_VARCHAR:
-    gtype = GRN_DB_TEXT;
-    break;
-  default:
-    gtype = GRN_DB_VOID;
-  }
-  if (gtype != GRN_DB_VOID) {
-    return grn_ctx_at(mrn_ctx_tls, gtype);
-  } else {
-    return NULL;
-  }
-}
 /*
 #define LOG_FIELD(x) MRN_LOG(GRN_LOG_DEBUG, "-> %s %s", field->field_name, x); break;
 
