@@ -133,7 +133,7 @@ grn_obj *mrn_db_open_or_create(grn_ctx *ctx)
     GRN_LOG(ctx, GRN_LOG_DEBUG, "-> grn_db_create: '%s'", MRN_DB_FILE_PATH);
     obj = grn_db_create(ctx, MRN_DB_FILE_PATH, NULL);
     /* create global lexicon table */
-    mrn_lexicon_sys = grn_table_create(ctx, "lexicon", 7, MRN_LEXICON_FILE_PATH,
+    mrn_lexicon_sys = grn_table_create(ctx, "lexicon", 7, NULL,
 				       GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT, 
 				       grn_ctx_at(mrn_ctx_tls,GRN_DB_SHORTTEXT), 0);
     grn_obj_set_info(ctx, mrn_lexicon_sys, GRN_INFO_DEFAULT_TOKENIZER,
@@ -143,7 +143,7 @@ grn_obj *mrn_db_open_or_create(grn_ctx *ctx)
     MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_open: '%s'", MRN_DB_FILE_PATH);
     obj = grn_db_open(ctx, MRN_DB_FILE_PATH);
     /* open global lexicon table */
-    mrn_lexicon_sys = grn_table_open(ctx, "lexicon", 7, MRN_LEXICON_FILE_PATH);
+    mrn_lexicon_sys = grn_table_open(ctx, "lexicon", 7, NULL);
     GRN_LOG(ctx, GRN_LOG_DEBUG, "opened lexicon table = %p", mrn_lexicon_sys);
   }
   return obj;

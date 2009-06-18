@@ -7,7 +7,6 @@
 
 #define MRN_MAX_KEY_LEN 1024
 #define MRN_DB_FILE_PATH "groonga.db"
-#define MRN_LEXICON_FILE_PATH "lexicon.grn"
 #define MRN_FILE_EXT ".grn"
 #define MRN_LOG_FILE_NAME "groonga.log"
 
