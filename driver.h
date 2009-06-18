@@ -63,14 +63,11 @@ int mrn_deinit();
 void mrn_logger_func(int level, const char *time, const char *title,
 		     const char *msg, const char *location, void *func_arg);
 int mrn_flush_logs();
-grn_encoding mrn_charset_mysql_groonga(const char *csname);
-const char *mrn_charset_groonga_mysql(grn_encoding encoding);
 void mrn_ctx_init();
 grn_obj *mrn_db_open_or_create();
 mrn_table *mrn_share_get(const char *name);
 void mrn_share_put(mrn_table *share);
 void mrn_share_remove(mrn_table *share);
-
 
 /* static variables */
 extern grn_hash *mrn_hash_sys;

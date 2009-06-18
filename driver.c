@@ -187,8 +187,4 @@ void mrn_share_remove_all()
   /* TODO: implement this function by using GRN_HASH_EACH */
 }
 
-int mrn_create(mrn_table *share)
-{
-  return 0;
-}
 
