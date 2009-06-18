@@ -13,14 +13,14 @@ LDADD         =
 
 DEFS          = @DEFS@
 
-noinst_HEADERS = mroonga.h ha_groonga.h
+noinst_HEADERS = driver.h ha_groonga.h
 
 lib_LTLIBRARIES      = libmroonga.la
 #pkgplugin_LTLIBRARIES  = @plugin_mroonga_shared_target@
 libmroonga_la_LDFLAGS  = -module -rpath $(pkgplugindir) $(GROONGA_LIBS) $(MECAB_LIBS)
 libmroonga_la_CXXFLAGS = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 libmroonga_la_CFLAGS   = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
-libmroonga_la_SOURCES  = ha_groonga.cc ha_groonga.h mroonga.c mroonga.h
+libmroonga_la_SOURCES  = ha_groonga.cc ha_groonga.h driver.c driver.h
 
 lib_LIBRARIES          = libmroonga.a
 #EXTRA_LIBRARIES        = libmroonga.a
@@ -28,7 +28,7 @@ lib_LIBRARIES          = libmroonga.a
 libmroonga_a_LDFLANGS  = $(GROONGA_LIBS) $(MECAB_LIBS)
 libmroonga_a_CXXFLAGS  = $(AM_CFLAGS)
 libmroonga_a_CFLAGS    = $(AM_CFLAGS)
-libmroonga_a_SOURCES   = ha_groonga.cc mroonga.c
+libmroonga_a_SOURCES   = ha_groonga.cc driver.c
 
 EXTRA_DIST = plug.in
 # Don't update the files from bitkeeper

@@ -5,7 +5,7 @@
 #pragma interface
 #endif
 
-#include "mroonga.h"
+#include "driver.h"
 
 /* handler class */
 class ha_groonga: public handler
