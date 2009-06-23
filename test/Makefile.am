@@ -1,6 +1,6 @@
 SUBDIRS = unit
 
-TESTS = unit-test.sh
+TESTS = run-unit-test.sh
 TESTS_ENVIRONMENT = CUTTER="$(CUTTER)"
 
 echo-cutter:
