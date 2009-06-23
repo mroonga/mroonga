@@ -8,10 +8,6 @@ MYSQLBASEdir  = $(prefix)
 MYSQLLIBdir   = $(pkglibdir)
 pkgplugindir  = $(pkglibdir)/plugin
 
-WRAPLIBS      =
-
-LDADD         =
-
 DEFS          = @DEFS@
 
 noinst_HEADERS = driver.h ha_groonga.h
