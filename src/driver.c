@@ -139,7 +139,7 @@ grn_obj *mrn_db_open_or_create(grn_ctx *ctx)
 		     grn_ctx_at(mrn_ctx_tls, GRN_DB_BIGRAM));
     GRN_LOG(ctx, GRN_LOG_DEBUG, "created lexicon table = %p", mrn_lexicon);
   } else {
-    MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_open: '%s'", MRN_DB_FILE_PATH);
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "-> grn_db_open: '%s'", MRN_DB_FILE_PATH);
     obj = grn_db_open(ctx, MRN_DB_FILE_PATH);
     /* open global lexicon table */
     mrn_lexicon = grn_table_open(ctx, "lexicon", 7, NULL);

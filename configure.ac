@@ -1,5 +1,5 @@
 AC_INIT([mroonga], [0.1], [ikdttr@gmail.com])
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([src/config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 AC_PROG_CC
@@ -132,7 +132,7 @@ CONFIG_OPTION_PLUGINS
 if test "$standalone_build" = "yes";then
   CONFIG_OPTION_MYSQL
 else
-  MYSQL_INC="-I../../sql -I../../include -I../../regex -I../.."
+  MYSQL_INC="-I../../../sql -I../../../include -I../../../regex -I../../.."
   AC_SUBST(MYSQL_INC)
 fi
 CONFIG_OPTION_MECAB
@@ -144,5 +144,7 @@ AC_CHECK_CUTTER
 
 AC_CONFIG_FILES([
   Makefile
+  src/Makefile
+  test/Makefile
 ])
 AC_OUTPUT
