@@ -13,9 +13,9 @@ __thread grn_ctx *mrn_ctx_tls;
 
 
 /* static variables */
-grn_hash *mrn_hash_sys;
-grn_obj *mrn_db_sys, *mrn_lexicon_sys;
-pthread_mutex_t *mrn_mutex_sys;
+grn_hash *mrn_hash;
+grn_obj *mrn_db, *mrn_lexicon;
+pthread_mutex_t *mrn_mutext;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
 
@@ -30,14 +30,14 @@ grn_logger_info mrn_logger_info = {
 int mrn_flush_logs()
 {
   MRN_TRACE;
-  pthread_mutex_lock(mrn_mutex_sys);
+  pthread_mutex_lock(mrn_mutext);
   MRN_LOG(GRN_LOG_NOTICE, "logfile closed by FLUSH LOGS");
   fflush(mrn_logfile);
   fclose(mrn_logfile); /* reopen logfile for rotation */
   mrn_logfile = fopen(mrn_logfile_name, "a");
   MRN_LOG(GRN_LOG_NOTICE, "-------------------------------");
   MRN_LOG(GRN_LOG_NOTICE, "logfile re-opened by FLUSH LOGS");
-  pthread_mutex_unlock(mrn_mutex_sys);
+  pthread_mutex_unlock(mrn_mutext);
   return 0;
 }
 
@@ -59,15 +59,15 @@ int mrn_init()
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "++++++ starting mroonga ++++++");
 
   /* init meta-data repository */
-  mrn_hash_sys = grn_hash_create(&ctx,NULL,
+  mrn_hash = grn_hash_create(&ctx,NULL,
 				 MRN_MAX_KEY_LEN,sizeof(size_t),
 				 GRN_OBJ_KEY_VAR_SIZE);
-  mrn_db_sys = mrn_db_open_or_create(&ctx);
+  mrn_db = mrn_db_open_or_create(&ctx);
 
   /* mutex init */
-  mrn_mutex_sys = (pthread_mutex_t*) MRN_MALLOC(sizeof(pthread_mutex_t));
+  mrn_mutext = (pthread_mutex_t*) MRN_MALLOC(sizeof(pthread_mutex_t));
   // TODO: FIX THIS 
-  //pthread_mutex_init(mrn_mutex_sys, PTHREAD_MUTEX_INITIALIZER);
+  //pthread_mutex_init(mrn_mutext, PTHREAD_MUTEX_INITIALIZER);
 
   grn_ctx_fin(&ctx);
   return 0;
@@ -80,12 +80,12 @@ int mrn_deinit()
 {
   grn_ctx ctx;
   grn_ctx_init(&ctx,0);
-  grn_obj_close(&ctx, mrn_lexicon_sys);
-  grn_obj_close(&ctx, mrn_db_sys);
+  grn_obj_close(&ctx, mrn_lexicon);
+  grn_obj_close(&ctx, mrn_db);
 
   /* mutex deinit*/
-  pthread_mutex_destroy(mrn_mutex_sys);
-  MRN_FREE(mrn_mutex_sys);
+  pthread_mutex_destroy(mrn_mutext);
+  MRN_FREE(mrn_mutext);
 
   /* log deinit */
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "------ stopping mroonga ------");
@@ -93,7 +93,7 @@ int mrn_deinit()
   mrn_logfile = NULL;
 
   /* hash deinit */
-  grn_hash_close(&ctx, mrn_hash_sys);
+  grn_hash_close(&ctx, mrn_hash);
 
   /* libgroonga deinit */
   grn_ctx_fin(&ctx);
@@ -119,8 +119,8 @@ void mrn_ctx_init()
   if (mrn_ctx_tls == NULL) {
     mrn_ctx_tls = (grn_ctx*) MRN_MALLOC(sizeof(grn_ctx));
     grn_ctx_init(mrn_ctx_tls, 0);
-    if ((mrn_db_sys))
-      grn_ctx_use(mrn_ctx_tls, mrn_db_sys);
+    if ((mrn_db))
+      grn_ctx_use(mrn_ctx_tls, mrn_db);
   }
 }
 
@@ -132,18 +132,18 @@ grn_obj *mrn_db_open_or_create(grn_ctx *ctx)
     GRN_LOG(ctx, GRN_LOG_DEBUG, "-> grn_db_create: '%s'", MRN_DB_FILE_PATH);
     obj = grn_db_create(ctx, MRN_DB_FILE_PATH, NULL);
     /* create global lexicon table */
-    mrn_lexicon_sys = grn_table_create(ctx, "lexicon", 7, NULL,
+    mrn_lexicon = grn_table_create(ctx, "lexicon", 7, NULL,
 				       GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT, 
 				       grn_ctx_at(mrn_ctx_tls,GRN_DB_SHORTTEXT), 0);
-    grn_obj_set_info(ctx, mrn_lexicon_sys, GRN_INFO_DEFAULT_TOKENIZER,
+    grn_obj_set_info(ctx, mrn_lexicon, GRN_INFO_DEFAULT_TOKENIZER,
 		     grn_ctx_at(mrn_ctx_tls, GRN_DB_BIGRAM));
-    GRN_LOG(ctx, GRN_LOG_DEBUG, "created lexicon table = %p", mrn_lexicon_sys);
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "created lexicon table = %p", mrn_lexicon);
   } else {
     MRN_LOG(GRN_LOG_DEBUG, "-> grn_db_open: '%s'", MRN_DB_FILE_PATH);
     obj = grn_db_open(ctx, MRN_DB_FILE_PATH);
     /* open global lexicon table */
-    mrn_lexicon_sys = grn_table_open(ctx, "lexicon", 7, NULL);
-    GRN_LOG(ctx, GRN_LOG_DEBUG, "opened lexicon table = %p", mrn_lexicon_sys);
+    mrn_lexicon = grn_table_open(ctx, "lexicon", 7, NULL);
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "opened lexicon table = %p", mrn_lexicon);
   }
   return obj;
 }
@@ -154,7 +154,7 @@ void mrn_share_put(mrn_table *share)
   grn_search_flags flags = GRN_TABLE_ADD;
   /* TODO: check duplication */
   MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(put): name='%s'", share->name);
-  grn_hash_lookup(mrn_ctx_tls, mrn_hash_sys, share->name,
+  grn_hash_lookup(mrn_ctx_tls, mrn_hash, share->name,
 		  strlen(share->name), &value, &flags);
   memcpy(value, share, sizeof(share));
 }
@@ -165,7 +165,7 @@ mrn_table *mrn_share_get(const char *name)
   void *value;
   grn_search_flags flags = 0;
   MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(get): name='%s'", name);
-  grn_id rid = grn_hash_lookup(mrn_ctx_tls, mrn_hash_sys, name,
+  grn_id rid = grn_hash_lookup(mrn_ctx_tls, mrn_hash, name,
 			       strlen(name), &value, &flags);
   if (rid == 0) {
     return NULL;
@@ -178,7 +178,7 @@ void mrn_share_remove(mrn_table *share)
 {
   /* TODO: check return value */
   MRN_LOG(GRN_LOG_DEBUG, "-> grn_hash_delete: name='%s'", share->name);
-  grn_hash_delete(mrn_ctx_tls, mrn_hash_sys, share->name,
+  grn_hash_delete(mrn_ctx_tls, mrn_hash, share->name,
 		  strlen(share->name), NULL);
 }
 

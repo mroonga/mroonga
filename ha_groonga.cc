@@ -222,7 +222,7 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 				     NULL, GRN_OBJ_PERSISTENT|GRN_OBJ_COLUMN_SCALAR, type);
       /* auto fulltex index */
       if (field->type() == MYSQL_TYPE_VARCHAR) {
-	ft_obj = grn_column_create(mrn_ctx_tls, mrn_lexicon_sys,
+	ft_obj = grn_column_create(mrn_ctx_tls, mrn_lexicon,
 				   field->field_name, strlen(field->field_name),
 				   NULL, GRN_OBJ_COLUMN_INDEX|GRN_OBJ_PERSISTENT, table_obj);
 	grn_id id = grn_obj_id(mrn_ctx_tls, column_obj);
@@ -298,7 +298,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
 				     NULL, type);
 	MRN_LOG(GRN_LOG_DEBUG, "-> field->obj=%p", field->obj);
 	if (mysql_field->type() == MYSQL_TYPE_VARCHAR) {
-	  field->index = grn_column_open(mrn_ctx_tls, mrn_lexicon_sys,
+	  field->index = grn_column_open(mrn_ctx_tls, mrn_lexicon,
 					 field->name, field->name_len, NULL, share->obj);
 	  MRN_LOG(GRN_LOG_DEBUG,"-> grn_column_open: name(ft)=%s, obj=%p", field->name, field->index);
 	}
