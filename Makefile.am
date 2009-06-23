@@ -1,5 +1,6 @@
-AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_INCLUDES) $(MECAB_INCLUDES) 
+AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_INCLUDES) $(MECAB_INCLUDES) $(CUTTER_CFLAGS)
 AM_INCLUDES = -l. -l..
+ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
 MYSQLDATAdir  = $(localstatedir)
 MYSQLSHAREdir = $(pkgdatadir)
@@ -29,6 +30,12 @@ libmroonga_a_LDFLANGS  = $(GROONGA_LIBS) $(MECAB_LIBS)
 libmroonga_a_CXXFLAGS  = $(AM_CFLAGS)
 libmroonga_a_CFLAGS    = $(AM_CFLAGS)
 libmroonga_a_SOURCES   = ha_groonga.cc driver.c
+
+noinst_LTLIBRARIES = test_driver.la
+LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
+test_driver_la_SOURCES = test-driver.c
+LIBS = $(CUTTER_LIBS)
+
 
 EXTRA_DIST = plug.in
 # Don't update the files from bitkeeper

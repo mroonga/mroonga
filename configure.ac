@@ -140,6 +140,8 @@ CONFIG_OPTION_GROONGA
 
 CXXFLAGS="$CXXFLAGS -fno-implicit-templates -fno-exceptions -fno-rtti"
 
+AC_CHECK_CUTTER
+
 AC_CONFIG_FILES([
   Makefile
 ])
