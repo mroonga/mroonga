@@ -1,4 +1,4 @@
-noinst_LTLIBRARIES = test_driver.la
+noinst_LTLIBRARIES = test_start_stop.la test_driver.la
 
 AM_CPPFLAGS = $(GROONGA_INCLUDES) $(MECAB_INCLUDES) $(CUTTER_CFLAGS) $(GCUTTER_CFLAGS)
 AM_INCLUDES = -l. -l..
@@ -10,4 +10,7 @@ LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
 
 LIBS = $(CUTTER_LIBS) $(GROONGA_LIBS) $(MECAB_LIBS)
 
-test_driver_la_SOURCES = ../../src/driver.c test-driver.c
+DRIVER_SRC = ../../src/driver.c
+
+test_start_stop_la_SOURCES = $(DRIVER_SRC) test-start-stop.c
+test_driver_la_SOURCES = $(DRIVER_SRC) test-driver.c

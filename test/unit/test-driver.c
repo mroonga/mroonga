@@ -13,56 +13,29 @@ void cut_startup()
   cut_remove_path(tmp_directory, NULL);
   g_mkdir_with_parents(tmp_directory, 0700);
   g_chdir(tmp_directory);
+  ctx = (grn_ctx*) g_malloc(sizeof(grn_ctx));
 }
 
 void cut_shutdown()
 {
   g_chdir(base_directory);
   g_free(tmp_directory);
+  g_free(ctx);
 }
 
-void test_mrn_init()
+void cut_setup()
 {
-  // test for create
-  mrn_db = NULL;
-  mrn_hash = NULL;
-  mrn_lexicon = NULL;
+  mrn_init();
+  grn_ctx_init(ctx,0);
+}
 
-  cut_assert_equal_int(0, mrn_init());
-  cut_assert_not_null(mrn_logfile);
-  cut_assert_not_null(mrn_db);
-  cut_assert_not_null(mrn_hash);
-  cut_assert_not_null(mrn_lexicon);
-  cut_assert_not_null(mrn_lock);
-  cut_assert_equal_int(0, pthread_mutex_lock(mrn_lock));
-  cut_assert_equal_int(0, pthread_mutex_unlock(mrn_lock));
-
-  mrn_deinit();
-
-  // test for open
-  mrn_db = NULL;
-  mrn_hash = NULL;
-  mrn_lexicon = NULL;
-
-  cut_assert_equal_int(0, mrn_init());
-  cut_assert_not_null(mrn_logfile);
-  cut_assert_not_null(mrn_db);
-  cut_assert_not_null(mrn_hash);
-  cut_assert_not_null(mrn_lexicon);
-  cut_assert_not_null(mrn_lock);
-  cut_assert_equal_int(0, pthread_mutex_lock(mrn_lock));
-  cut_assert_equal_int(0, pthread_mutex_unlock(mrn_lock));
-
+void cut_teardown()
+{
+  grn_ctx_fin(ctx);
   mrn_deinit();
 }
 
-void test_mrn_deinit()
+void test_foo()
 {
-  cut_assert_equal_int(0, mrn_init());
-  cut_assert_equal_int(0, mrn_deinit());
-  cut_assert_null(mrn_logfile);
-  cut_assert_null(mrn_db);
-  cut_assert_null(mrn_hash);
-  cut_assert_null(mrn_lexicon);
-  cut_assert_null(mrn_lock);
+  cut_assert_null(NULL);
 }
