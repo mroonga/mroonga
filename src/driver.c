@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "driver.h"
+#include "config.h"
 
 /* TLS variables */
 __thread grn_ctx *mrn_ctx_tls;
@@ -15,7 +16,7 @@ __thread grn_ctx *mrn_ctx_tls;
 /* static variables */
 grn_hash *mrn_hash;
 grn_obj *mrn_db, *mrn_lexicon;
-pthread_mutex_t *mrn_mutext;
+pthread_mutex_t mrn_lock;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
 
@@ -30,14 +31,14 @@ grn_logger_info mrn_logger_info = {
 int mrn_flush_logs()
 {
   MRN_TRACE;
-  pthread_mutex_lock(mrn_mutext);
+  pthread_mutex_lock(&mrn_lock);
   MRN_LOG(GRN_LOG_NOTICE, "logfile closed by FLUSH LOGS");
   fflush(mrn_logfile);
   fclose(mrn_logfile); /* reopen logfile for rotation */
   mrn_logfile = fopen(mrn_logfile_name, "a");
   MRN_LOG(GRN_LOG_NOTICE, "-------------------------------");
   MRN_LOG(GRN_LOG_NOTICE, "logfile re-opened by FLUSH LOGS");
-  pthread_mutex_unlock(mrn_mutext);
+  pthread_mutex_unlock(&mrn_lock);
   return 0;
 }
 
@@ -45,29 +46,60 @@ int mrn_init()
 {
   grn_ctx ctx;
 
-  /* libgroonga init */
-  if (grn_init() != GRN_SUCCESS) {
+  // init groonga
+  if (grn_init() != GRN_SUCCESS)
     return -1;
-  }
+
   grn_ctx_init(&ctx,0);
 
-  /* log init */
-  if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
+  // init log, and then we can do logging
+  if (!(mrn_logfile = fopen(mrn_logfile_name, "a")))
+    return -1;
+
+  grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
+  GRN_LOG(&ctx, GRN_LOG_NOTICE, "%s start", PACKAGE_STRING);
+
+  // init hash
+  if (!(mrn_hash = grn_hash_create(&ctx,NULL,
+                                   MRN_MAX_KEY_LEN,sizeof(size_t),
+                                   GRN_OBJ_KEY_VAR_SIZE)))
+  {
+    GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
     return -1;
   }
-  grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
-  GRN_LOG(&ctx, GRN_LOG_NOTICE, "++++++ starting mroonga ++++++");
 
-  /* init meta-data repository */
-  mrn_hash = grn_hash_create(&ctx,NULL,
-				 MRN_MAX_KEY_LEN,sizeof(size_t),
-				 GRN_OBJ_KEY_VAR_SIZE);
-  mrn_db = mrn_db_open_or_create(&ctx);
+  // init database
+  if (!(mrn_db = grn_db_open(&ctx, MRN_DB_FILE_PATH)))
+  {
+    GRN_LOG(&ctx, GRN_LOG_NOTICE, "database not exists");
+    if ((mrn_db = grn_db_create(&ctx, MRN_DB_FILE_PATH, NULL)))
+      GRN_LOG(&ctx, GRN_LOG_NOTICE, "database created");
+    else
+    {
+      GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot create database, exiting");
+      return -1;
+    }
+  }
 
-  /* mutex init */
-  mrn_mutext = (pthread_mutex_t*) MRN_MALLOC(sizeof(pthread_mutex_t));
-  // TODO: FIX THIS 
-  //pthread_mutex_init(mrn_mutext, PTHREAD_MUTEX_INITIALIZER);
+  // init lexicon table
+  if (!(mrn_lexicon = grn_table_open(&ctx, MRN_LEXICON_TABLE_NAME,
+                                     strlen(MRN_LEXICON_TABLE_NAME), NULL)))
+  {
+    GRN_LOG(&ctx, GRN_LOG_NOTICE, "lexicon table not exists");
+    if ((mrn_lexicon = grn_table_create(&ctx, MRN_LEXICON_TABLE_NAME,
+                                        strlen(MRN_LEXICON_TABLE_NAME), NULL,
+                                        GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
+                                        grn_ctx_at(&ctx,GRN_DB_SHORTTEXT), 0)))
+      GRN_LOG(&ctx, GRN_LOG_NOTICE, "database created");
+    else
+    {
+      GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot create lexicon table, exiting");
+      return -1;
+    }
+  }
+
+  // init lock
+  pthread_mutex_init(&mrn_lock, NULL);
 
   grn_ctx_fin(&ctx);
   return 0;
@@ -84,8 +116,7 @@ int mrn_deinit()
   grn_obj_close(&ctx, mrn_db);
 
   /* mutex deinit*/
-  pthread_mutex_destroy(mrn_mutext);
-  MRN_FREE(mrn_mutext);
+  pthread_mutex_destroy(&mrn_lock);
 
   /* log deinit */
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "------ stopping mroonga ------");
@@ -126,26 +157,7 @@ void mrn_ctx_init()
 
 grn_obj *mrn_db_open_or_create(grn_ctx *ctx)
 {
-  grn_obj *obj;
-  struct stat dummy;
-  if ((stat(MRN_DB_FILE_PATH, &dummy))) { // check if file not exists
-    GRN_LOG(ctx, GRN_LOG_DEBUG, "-> grn_db_create: '%s'", MRN_DB_FILE_PATH);
-    obj = grn_db_create(ctx, MRN_DB_FILE_PATH, NULL);
-    /* create global lexicon table */
-    mrn_lexicon = grn_table_create(ctx, "lexicon", 7, NULL,
-				       GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT, 
-				       grn_ctx_at(mrn_ctx_tls,GRN_DB_SHORTTEXT), 0);
-    grn_obj_set_info(ctx, mrn_lexicon, GRN_INFO_DEFAULT_TOKENIZER,
-		     grn_ctx_at(mrn_ctx_tls, GRN_DB_BIGRAM));
-    GRN_LOG(ctx, GRN_LOG_DEBUG, "created lexicon table = %p", mrn_lexicon);
-  } else {
-    GRN_LOG(ctx, GRN_LOG_DEBUG, "-> grn_db_open: '%s'", MRN_DB_FILE_PATH);
-    obj = grn_db_open(ctx, MRN_DB_FILE_PATH);
-    /* open global lexicon table */
-    mrn_lexicon = grn_table_open(ctx, "lexicon", 7, NULL);
-    GRN_LOG(ctx, GRN_LOG_DEBUG, "opened lexicon table = %p", mrn_lexicon);
-  }
-  return obj;
+
 }
 
 void mrn_share_put(mrn_table *share)

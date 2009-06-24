@@ -8,7 +8,7 @@
 #define MRN_MAX_KEY_LEN 1024
 #define MRN_DB_FILE_PATH "groonga.db"
 #define MRN_LOG_FILE_NAME "groonga.log"
-
+#define MRN_LEXICON_TABLE_NAME "lexicon"
 
 /* TLS variables */
 extern __thread grn_ctx *mrn_ctx_tls;
@@ -72,7 +72,7 @@ void mrn_share_remove(mrn_table *share);
 /* static variables */
 extern grn_hash *mrn_hash;
 extern grn_obj *mrn_db, *mrn_lexicon;
-extern pthread_mutex_t *mrn_mutex;
+extern pthread_mutex_t mrn_lock;
 extern const char *mrn_logfile_name;
 extern FILE *mrn_logfile;
 
