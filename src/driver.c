@@ -47,13 +47,17 @@ int mrn_init()
 
   // init groonga
   if (grn_init() != GRN_SUCCESS)
+  {
     goto err;
+  }
 
   grn_ctx_init(&ctx,0);
 
   // init log, and then we can do logging
   if (!(mrn_logfile = fopen(mrn_logfile_name, "a")))
+  {
     goto err;
+  }
 
   grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "%s start", PACKAGE_STRING);
@@ -64,7 +68,9 @@ int mrn_init()
   {
     GRN_LOG(&ctx, GRN_LOG_NOTICE, "database not exists");
     if ((mrn_db = grn_db_create(&ctx, MRN_DB_FILE_PATH, NULL)))
+    {
       GRN_LOG(&ctx, GRN_LOG_NOTICE, "database created");
+    }
     else
     {
       GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot create database, exiting");
@@ -72,7 +78,9 @@ int mrn_init()
     }
   }
   else
+  {
     mrn_db = grn_db_open(&ctx, MRN_DB_FILE_PATH);
+  }
 
   // init lexicon table
   if (!(mrn_lexicon = grn_ctx_get(&ctx,"lexicon",7)))
@@ -82,7 +90,9 @@ int mrn_init()
                                         strlen(MRN_LEXICON_TABLE_NAME), NULL,
                                         GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
                                         grn_ctx_at(&ctx,GRN_DB_SHORTTEXT), 0)))
+    {
       GRN_LOG(&ctx, GRN_LOG_NOTICE, "database created");
+    }
     else
     {
       GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot create lexicon table, exiting");
@@ -102,7 +112,9 @@ int mrn_init()
   // init lock
   mrn_lock = malloc(sizeof(pthread_mutex_t));
   if ((mrn_lock == NULL) || (pthread_mutex_init(mrn_lock, NULL) != 0))
+  {
     goto err;
+  }
 
   grn_ctx_fin(&ctx);
   return 0;

@@ -23,6 +23,23 @@ void cut_shutdown()
 
 void test_mrn_init()
 {
+  // test for create
+  mrn_db = NULL;
+  mrn_hash = NULL;
+  mrn_lexicon = NULL;
+
+  cut_assert_equal_int(0, mrn_init());
+  cut_assert_not_null(mrn_logfile);
+  cut_assert_not_null(mrn_db);
+  cut_assert_not_null(mrn_hash);
+  cut_assert_not_null(mrn_lexicon);
+  cut_assert_not_null(mrn_lock);
+  cut_assert_equal_int(0, pthread_mutex_lock(mrn_lock));
+  cut_assert_equal_int(0, pthread_mutex_unlock(mrn_lock));
+
+  mrn_deinit();
+
+  // test for open
   mrn_db = NULL;
   mrn_hash = NULL;
   mrn_lexicon = NULL;
