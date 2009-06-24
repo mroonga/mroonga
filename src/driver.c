@@ -48,13 +48,13 @@ int mrn_init()
 
   // init groonga
   if (grn_init() != GRN_SUCCESS)
-    return -1;
+    goto err;
 
   grn_ctx_init(&ctx,0);
 
   // init log, and then we can do logging
   if (!(mrn_logfile = fopen(mrn_logfile_name, "a")))
-    return -1;
+    goto err;
 
   grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "%s start", PACKAGE_STRING);
@@ -65,11 +65,12 @@ int mrn_init()
                                    GRN_OBJ_KEY_VAR_SIZE)))
   {
     GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
-    return -1;
+    goto err;
   }
 
   // init database
-  if (!(mrn_db = grn_db_open(&ctx, MRN_DB_FILE_PATH)))
+  struct stat dummy;
+  if ((stat(MRN_DB_FILE_PATH, &dummy)))
   {
     GRN_LOG(&ctx, GRN_LOG_NOTICE, "database not exists");
     if ((mrn_db = grn_db_create(&ctx, MRN_DB_FILE_PATH, NULL)))
@@ -77,13 +78,13 @@ int mrn_init()
     else
     {
       GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot create database, exiting");
-      return -1;
+      goto err;
     }
   }
+  else
+    mrn_db = grn_db_open(&ctx, MRN_DB_FILE_PATH);
 
-  // init lexicon table
-  if (!(mrn_lexicon = grn_table_open(&ctx, MRN_LEXICON_TABLE_NAME,
-                                     strlen(MRN_LEXICON_TABLE_NAME), NULL)))
+  if (!(mrn_lexicon = grn_ctx_get(&ctx,"lexicon",7)))
   {
     GRN_LOG(&ctx, GRN_LOG_NOTICE, "lexicon table not exists");
     if ((mrn_lexicon = grn_table_create(&ctx, MRN_LEXICON_TABLE_NAME,
@@ -94,7 +95,7 @@ int mrn_init()
     else
     {
       GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot create lexicon table, exiting");
-      return -1;
+      goto err;
     }
   }
 
@@ -103,6 +104,10 @@ int mrn_init()
 
   grn_ctx_fin(&ctx);
   return 0;
+
+err:
+  // TODO: report more detail error to mysql
+  return -1;
 }
 
 /*
