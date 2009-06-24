@@ -35,7 +35,7 @@ void cut_teardown()
   mrn_deinit();
 }
 
-void test_foo()
+void test_mrn_flush_logs()
 {
-  cut_assert_null(NULL);
+  cut_assert_equal_int(0, mrn_flush_logs(ctx));
 }

@@ -174,7 +174,6 @@ ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
 */
 int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 {
-  mrn_ctx_init();
   MRN_TRACE;
 
   const char *obj_name = MRN_TABLE_NAME(name);
@@ -258,7 +257,6 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 
 int ha_groonga::open(const char *name, int mode, uint test_if_locked)
 {
-  mrn_ctx_init();
   MRN_TRACE;
 
   thr_lock_init(&thr_lock);
@@ -320,7 +318,6 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
 
 int ha_groonga::close()
 {
-  mrn_ctx_init();
   MRN_TRACE;
 
   thr_lock_delete(&thr_lock);
@@ -342,7 +339,6 @@ int ha_groonga::close()
 
 int ha_groonga::info(uint flag)
 {
-  mrn_ctx_init();
   MRN_TRACE;
 
   stats.records = (ha_rows) grn_table_size(mrn_ctx_tls, share->obj);
@@ -354,7 +350,6 @@ THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
 				       THR_LOCK_DATA **to,
 				       enum thr_lock_type lock_type)
 {
-  mrn_ctx_init();
   MRN_TRACE;
   if (lock_type != TL_IGNORE && thr_lock_data.type == TL_UNLOCK)
     thr_lock_data.type = lock_type;
@@ -467,7 +462,6 @@ void ha_groonga::position(const uchar *record)
 
 int ha_groonga::delete_table(const char *name)
 {
-  mrn_ctx_init();
   MRN_TRACE;
 
   const char *obj_name = MRN_TABLE_NAME(name);

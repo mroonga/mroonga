@@ -9,10 +9,8 @@
 #include "driver.h"
 #include "config.h"
 
-/* TLS variables */
 __thread grn_ctx *mrn_ctx_tls;
 
-/* static variables */
 grn_hash *mrn_hash;
 grn_obj *mrn_db, *mrn_lexicon;
 pthread_mutex_t *mrn_lock;
@@ -26,7 +24,17 @@ grn_logger_info mrn_logger_info = {
   NULL
 };
 
-/* additional functions */
+void mrn_logger_func(int level, const char *time, const char *title,
+		     const char *msg, const char *location, void *func_arg)
+{
+  const char slev[] = " EACewnid-";
+  if ((mrn_logfile)) {
+    fprintf(mrn_logfile, "%s|%c|%u|%s\n", time,
+	    *(slev + level), (uint)pthread_self(), msg);
+    fflush(mrn_logfile);
+  }
+}
+
 int mrn_flush_logs(grn_ctx *ctx)
 {
   pthread_mutex_lock(mrn_lock);
@@ -151,33 +159,6 @@ int mrn_deinit()
   grn_fin();
 
   return 0;
-}
-
-void mrn_logger_func(int level, const char *time, const char *title,
-		     const char *msg, const char *location, void *func_arg)
-{
-  const char slev[] = " EACewnid-";
-  if ((mrn_logfile)) {
-    fprintf(mrn_logfile, "%s|%c|%u|%s\n", time,
-	    *(slev + level), (uint)pthread_self(), msg);
-    fflush(mrn_logfile);
-  }
-}
-
-
-void mrn_ctx_init()
-{
-  if (mrn_ctx_tls == NULL) {
-    mrn_ctx_tls = (grn_ctx*) MRN_MALLOC(sizeof(grn_ctx));
-    grn_ctx_init(mrn_ctx_tls, 0);
-    if ((mrn_db))
-      grn_ctx_use(mrn_ctx_tls, mrn_db);
-  }
-}
-
-grn_obj *mrn_db_open_or_create(grn_ctx *ctx)
-{
-
 }
 
 void mrn_share_put(mrn_table *share)
