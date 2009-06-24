@@ -12,11 +12,10 @@
 /* TLS variables */
 __thread grn_ctx *mrn_ctx_tls;
 
-
 /* static variables */
 grn_hash *mrn_hash;
 grn_obj *mrn_db, *mrn_lexicon;
-pthread_mutex_t mrn_lock;
+pthread_mutex_t *mrn_lock;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
 
@@ -31,14 +30,14 @@ grn_logger_info mrn_logger_info = {
 int mrn_flush_logs()
 {
   MRN_TRACE;
-  pthread_mutex_lock(&mrn_lock);
+  pthread_mutex_lock(mrn_lock);
   MRN_LOG(GRN_LOG_NOTICE, "logfile closed by FLUSH LOGS");
   fflush(mrn_logfile);
   fclose(mrn_logfile); /* reopen logfile for rotation */
   mrn_logfile = fopen(mrn_logfile_name, "a");
   MRN_LOG(GRN_LOG_NOTICE, "-------------------------------");
   MRN_LOG(GRN_LOG_NOTICE, "logfile re-opened by FLUSH LOGS");
-  pthread_mutex_unlock(&mrn_lock);
+  pthread_mutex_unlock(mrn_lock);
   return 0;
 }
 
@@ -59,15 +58,6 @@ int mrn_init()
   grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "%s start", PACKAGE_STRING);
 
-  // init hash
-  if (!(mrn_hash = grn_hash_create(&ctx,NULL,
-                                   MRN_MAX_KEY_LEN,sizeof(size_t),
-                                   GRN_OBJ_KEY_VAR_SIZE)))
-  {
-    GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
-    goto err;
-  }
-
   // init database
   struct stat dummy;
   if ((stat(MRN_DB_FILE_PATH, &dummy)))
@@ -84,6 +74,7 @@ int mrn_init()
   else
     mrn_db = grn_db_open(&ctx, MRN_DB_FILE_PATH);
 
+  // init lexicon table
   if (!(mrn_lexicon = grn_ctx_get(&ctx,"lexicon",7)))
   {
     GRN_LOG(&ctx, GRN_LOG_NOTICE, "lexicon table not exists");
@@ -99,39 +90,51 @@ int mrn_init()
     }
   }
 
+  // init hash
+  if (!(mrn_hash = grn_hash_create(&ctx,NULL,
+                                   MRN_MAX_KEY_LEN,sizeof(size_t),
+                                   GRN_OBJ_KEY_VAR_SIZE)))
+  {
+    GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
+    goto err;
+  }
+
   // init lock
-  pthread_mutex_init(&mrn_lock, NULL);
+  mrn_lock = malloc(sizeof(pthread_mutex_t));
+  if ((mrn_lock == NULL) || (pthread_mutex_init(mrn_lock, NULL) != 0))
+    goto err;
 
   grn_ctx_fin(&ctx);
   return 0;
 
 err:
   // TODO: report more detail error to mysql
+  grn_ctx_fin(&ctx);
   return -1;
 }
 
-/*
-  TODO: release all grn_obj in global hash
-*/
 int mrn_deinit()
 {
   grn_ctx ctx;
   grn_ctx_init(&ctx,0);
+  GRN_LOG(&ctx, GRN_LOG_NOTICE, "shutdown");
+
+  pthread_mutex_destroy(mrn_lock);
+  free(mrn_lock);
+  mrn_lock = NULL;
+
+  grn_hash_close(&ctx, mrn_hash);
+  mrn_hash = NULL;
+
   grn_obj_close(&ctx, mrn_lexicon);
+  mrn_lexicon = NULL;
+
   grn_obj_close(&ctx, mrn_db);
+  mrn_db = NULL;
 
-  /* mutex deinit*/
-  pthread_mutex_destroy(&mrn_lock);
-
-  /* log deinit */
-  GRN_LOG(&ctx, GRN_LOG_NOTICE, "------ stopping mroonga ------");
   fclose(mrn_logfile);
   mrn_logfile = NULL;
 
-  /* hash deinit */
-  grn_hash_close(&ctx, mrn_hash);
-
-  /* libgroonga deinit */
   grn_ctx_fin(&ctx);
   grn_fin();
 

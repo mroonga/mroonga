@@ -10,4 +10,4 @@ if test -z "$CUTTER"; then
     CUTTER="`make -s -C $BASE_DIR echo-cutter`"
 fi
 
-$CUTTER -s $BASE_DIR "$@" $BASE_DIR
+$CUTTER --keep-opening-modules -s $BASE_DIR "$@" $BASE_DIR

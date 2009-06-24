@@ -72,7 +72,7 @@ void mrn_share_remove(mrn_table *share);
 /* static variables */
 extern grn_hash *mrn_hash;
 extern grn_obj *mrn_db, *mrn_lexicon;
-extern pthread_mutex_t mrn_lock;
+extern pthread_mutex_t *mrn_lock;
 extern const char *mrn_logfile_name;
 extern FILE *mrn_logfile;
 
