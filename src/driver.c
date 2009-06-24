@@ -27,16 +27,16 @@ grn_logger_info mrn_logger_info = {
 };
 
 /* additional functions */
-int mrn_flush_logs()
+int mrn_flush_logs(grn_ctx *ctx)
 {
-  MRN_TRACE;
   pthread_mutex_lock(mrn_lock);
-  MRN_LOG(GRN_LOG_NOTICE, "logfile closed by FLUSH LOGS");
-  fflush(mrn_logfile);
-  fclose(mrn_logfile); /* reopen logfile for rotation */
-  mrn_logfile = fopen(mrn_logfile_name, "a");
-  MRN_LOG(GRN_LOG_NOTICE, "-------------------------------");
-  MRN_LOG(GRN_LOG_NOTICE, "logfile re-opened by FLUSH LOGS");
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "flush logfile");
+  if (fflush(mrn_logfile) || fclose(mrn_logfile)
+      || (mrn_logfile = fopen(mrn_logfile_name, "a")) == NULL)
+  {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot flush logfile");
+    return -1;
+  }
   pthread_mutex_unlock(mrn_lock);
   return 0;
 }

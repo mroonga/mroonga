@@ -62,7 +62,7 @@ int mrn_init();
 int mrn_deinit();
 void mrn_logger_func(int level, const char *time, const char *title,
 		     const char *msg, const char *location, void *func_arg);
-int mrn_flush_logs();
+int mrn_flush_logs(grn_ctx *ctx);
 void mrn_ctx_init();
 grn_obj *mrn_db_open_or_create();
 mrn_table *mrn_share_get(const char *name);

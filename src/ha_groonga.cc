@@ -80,7 +80,11 @@ handler *mrn_handler_create(handlerton *hton,
 
 bool mrn_plugin_flush_logs(handlerton *hton)
 {
-  return (bool) mrn_flush_logs();
+  grn_ctx ctx;
+  grn_ctx_init(&ctx,0);
+  mrn_flush_logs(&ctx);
+  grn_ctx_fin(&ctx);
+  return 0;
 }
 
 int mrn_plugin_init(void *p)
