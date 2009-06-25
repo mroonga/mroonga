@@ -9,8 +9,6 @@
 #include "driver.h"
 #include "config.h"
 
-__thread grn_ctx *mrn_ctx_tls;
-
 grn_hash *mrn_hash;
 grn_obj *mrn_db, *mrn_lexicon;
 pthread_mutex_t *mrn_lock;
@@ -67,7 +65,7 @@ int mrn_init()
     goto err;
   }
 
-  grn_logger_info_set(mrn_ctx_tls, &mrn_logger_info);
+  grn_logger_info_set(&ctx, &mrn_logger_info);
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "%s start", PACKAGE_STRING);
 
   // init database
@@ -89,6 +87,8 @@ int mrn_init()
   {
     mrn_db = grn_db_open(&ctx, MRN_DB_FILE_PATH);
   }
+  grn_ctx_use(&ctx, mrn_db);
+
 
   // init lexicon table
   if (!(mrn_lexicon = grn_ctx_get(&ctx,"lexicon",7)))
@@ -137,6 +137,7 @@ int mrn_deinit()
 {
   grn_ctx ctx;
   grn_ctx_init(&ctx,0);
+  grn_ctx_use(&ctx, mrn_db);
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "shutdown");
 
   pthread_mutex_destroy(mrn_lock);
@@ -161,24 +162,46 @@ int mrn_deinit()
   return 0;
 }
 
-void mrn_share_put(mrn_table *share)
+/**
+ * Draft...
+ * return value:
+ * -1 error
+ *  0 insert
+ *  1 replace or delete
+ */
+int mrn_hash_put(grn_ctx *ctx, const char *key, void **value)
+{
+  return 0;
+}
+
+/**
+ * Draft...
+ * return value:
+ * -1 error
+ *  0 found
+ *  1 not found
+ */
+int mrn_hash_get(grn_ctx *ctx, const char *key, void **value)
+{
+  return 0;
+}
+
+void mrn_share_put(grn_ctx *ctx, mrn_table *share)
 {
   void *value;
   grn_search_flags flags = GRN_TABLE_ADD;
   /* TODO: check duplication */
-  MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(put): name='%s'", share->name);
-  grn_hash_lookup(mrn_ctx_tls, mrn_hash, share->name,
+  grn_hash_lookup(ctx, mrn_hash, share->name,
 		  strlen(share->name), &value, &flags);
   memcpy(value, share, sizeof(share));
 }
 
 /* returns NULL if specified obj_name is not found in grn_hash */
-mrn_table *mrn_share_get(const char *name)
+mrn_table *mrn_share_get(grn_ctx *ctx, const char *name)
 {
   void *value;
   grn_search_flags flags = 0;
-  MRN_LOG(GRN_LOG_DEBUG,"-> grn_hash_lookup(get): name='%s'", name);
-  grn_id rid = grn_hash_lookup(mrn_ctx_tls, mrn_hash, name,
+  grn_id rid = grn_hash_lookup(ctx, mrn_hash, name,
 			       strlen(name), &value, &flags);
   if (rid == 0) {
     return NULL;
@@ -187,11 +210,10 @@ mrn_table *mrn_share_get(const char *name)
   }
 }
 
-void mrn_share_remove(mrn_table *share)
+void mrn_share_remove(grn_ctx *ctx, mrn_table *share)
 {
   /* TODO: check return value */
-  MRN_LOG(GRN_LOG_DEBUG, "-> grn_hash_delete: name='%s'", share->name);
-  grn_hash_delete(mrn_ctx_tls, mrn_hash, share->name,
+  grn_hash_delete(ctx, mrn_hash, share->name,
 		  strlen(share->name), NULL);
 }
 
