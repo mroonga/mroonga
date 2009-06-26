@@ -216,11 +216,10 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
 {
   int res = 0;
   grn_rc rc;
-  void *value;
   grn_id id;
   grn_search_flags flags = 0;
   pthread_mutex_lock(mrn_lock);
-  id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), &value, &flags);
+  id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), NULL, &flags);
   if (id == GRN_ID_NIL)
   {
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash remove not found (key=%s)", key);
