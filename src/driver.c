@@ -15,6 +15,8 @@ pthread_mutex_t *mrn_lock;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
 
+uint mrn_hash_counter=0;
+
 grn_logger_info mrn_logger_info = {
   GRN_LOG_DUMP,
   GRN_LOG_TIME|GRN_LOG_MESSAGE,
@@ -150,7 +152,7 @@ int mrn_deinit()
   grn_obj_close(&ctx, mrn_lexicon);
   mrn_lexicon = NULL;
 
-  grn_obj_close(&ctx, mrn_db);
+  grn_db_close(&ctx, mrn_db);
   mrn_db = NULL;
 
   fclose(mrn_logfile);
@@ -163,40 +165,88 @@ int mrn_deinit()
 }
 
 /**
- * Draft...
- * return value:
- * -1 error
- *  0 insert
- *  1 replace or delete
+ *   0 success
+ *  -1 duplicated
  */
-int mrn_hash_put(grn_ctx *ctx, const char *key, void **value)
+int mrn_hash_put(grn_ctx *ctx, const char *key, void *value)
 {
-  return 0;
+  int added, res=0;
+  void *buf;
+  pthread_mutex_lock(mrn_lock);
+  grn_hash_add(ctx, mrn_hash, (const char*) key, strlen(key), &buf, &added);
+  // duplicate check
+  if (added == 0)
+  {
+    GRN_LOG(ctx, GRN_LOG_WARNING, "hash put duplicated (key=%s)", key);
+    res = -1;
+  } else {
+    memcpy(buf, value, sizeof(value));
+    mrn_hash_counter++;
+  }
+  pthread_mutex_unlock(mrn_lock);
+  return res;
 }
 
 /**
- * Draft...
- * return value:
- * -1 error
- *  0 found
- *  1 not found
+ *   0 success
+ *  -1 not found
  */
 int mrn_hash_get(grn_ctx *ctx, const char *key, void **value)
 {
-  return 0;
+  int res = 0;
+  grn_id id;
+  grn_search_flags flags = 0;
+  pthread_mutex_lock(mrn_lock);
+  id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), value, &flags);
+  // key not found
+  if (id == GRN_ID_NIL)
+  {
+    GRN_LOG(ctx, GRN_LOG_WARNING, "hash get not found (key=%s)", key);
+    res = -1;
+  }
+  pthread_mutex_unlock(mrn_lock);
+  return res;
+}
+
+/**
+ *   0 success
+ *  -1 error
+ */
+int mrn_hash_remove(grn_ctx *ctx, const char *key)
+{
+  int res = 0;
+  grn_rc rc;
+  void *value;
+  grn_id id;
+  grn_search_flags flags = 0;
+  pthread_mutex_lock(mrn_lock);
+  id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), &value, &flags);
+  if (id == GRN_ID_NIL)
+  {
+    GRN_LOG(ctx, GRN_LOG_WARNING, "hash remove not found (key=%s)", key);
+    res = -1;
+  } else {
+    rc = grn_hash_delete_by_id(ctx, mrn_hash, id, NULL);
+    if (rc != GRN_SUCCESS) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "hash remove error (key=%s)", key);
+      res = -1;
+    } else {
+      mrn_hash_counter--;
+    }
+  }
+  pthread_mutex_unlock(mrn_lock);
+  return res;
 }
 
 void mrn_share_put(grn_ctx *ctx, mrn_table *share)
 {
   void *value;
   grn_search_flags flags = GRN_TABLE_ADD;
-  /* TODO: check duplication */
   grn_hash_lookup(ctx, mrn_hash, share->name,
 		  strlen(share->name), &value, &flags);
   memcpy(value, share, sizeof(share));
 }
 
-/* returns NULL if specified obj_name is not found in grn_hash */
 mrn_table *mrn_share_get(grn_ctx *ctx, const char *name)
 {
   void *value;
@@ -212,14 +262,12 @@ mrn_table *mrn_share_get(grn_ctx *ctx, const char *name)
 
 void mrn_share_remove(grn_ctx *ctx, mrn_table *share)
 {
-  /* TODO: check return value */
   grn_hash_delete(ctx, mrn_hash, share->name,
 		  strlen(share->name), NULL);
 }
 
 void mrn_share_remove_all()
 {
-  /* TODO: implement this function by using GRN_HASH_EACH */
 }
 
 
