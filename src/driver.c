@@ -241,37 +241,3 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
   pthread_mutex_unlock(mrn_lock);
   return res;
 }
-
-void mrn_share_put(grn_ctx *ctx, mrn_table *share)
-{
-  void *value;
-  grn_search_flags flags = GRN_TABLE_ADD;
-  grn_hash_lookup(ctx, mrn_hash, share->name,
-		  strlen(share->name), &value, &flags);
-  memcpy(value, share, sizeof(share));
-}
-
-mrn_table *mrn_share_get(grn_ctx *ctx, const char *name)
-{
-  void *value;
-  grn_search_flags flags = 0;
-  grn_id rid = grn_hash_lookup(ctx, mrn_hash, name,
-			       strlen(name), &value, &flags);
-  if (rid == 0) {
-    return NULL;
-  } else {
-    return (mrn_table*) value;
-  }
-}
-
-void mrn_share_remove(grn_ctx *ctx, mrn_table *share)
-{
-  grn_hash_delete(ctx, mrn_hash, share->name,
-		  strlen(share->name), NULL);
-}
-
-void mrn_share_remove_all()
-{
-}
-
-

@@ -48,9 +48,6 @@ int mrn_deinit();
 void mrn_logger_func(int level, const char *time, const char *title,
 		     const char *msg, const char *location, void *func_arg);
 int mrn_flush_logs(grn_ctx *ctx);
-mrn_table *mrn_share_get(grn_ctx *ctx, const char *name);
-void mrn_share_put(grn_ctx *ctx, mrn_table *share);
-void mrn_share_remove(grn_ctx *ctx, mrn_table *share);
 
 int mrn_hash_put(grn_ctx *ctx, const char *key, void *value);
 int mrn_hash_get(grn_ctx *ctx, const char *key, void **value);

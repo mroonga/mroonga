@@ -251,8 +251,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
   thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
 
   mrn_table *share;
-
-  if ((share = mrn_share_get(ctx, MRN_TABLE_NAME(name)))) {
+  if (!(mrn_hash_get(ctx, MRN_TABLE_NAME(name), (void**) &share))) {
     this->share = share;
   } else {
     share = (mrn_table*) MRN_MALLOC(sizeof(mrn_table));
@@ -291,7 +290,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
     }
     share->field[i] = NULL;
 
-    mrn_share_put(ctx, share);
+    mrn_hash_put(ctx, share->name, (void*) share);
     this->share = share;
   }
   share->use_count++;
@@ -303,7 +302,7 @@ int ha_groonga::close()
   thr_lock_delete(&thr_lock);
 
   mrn_table *share = this->share;
-  mrn_share_remove(ctx, share);
+  mrn_hash_remove(ctx, share->name);
   grn_obj_close(ctx, share->obj);
 
   mrn_field **field;
