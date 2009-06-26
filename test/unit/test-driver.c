@@ -46,13 +46,16 @@ void test_mrn_hash_put()
   const char *key1 = "aa";
   const char *key2 = "bbb";
   const char *key3 = "cccc";
-  char *value1 = "11";
-  char *value2 = "222";
-  char *value3 = "3333";
+  const char *key4 = "primitive";
+  char *value1 = "11ddbb";
+  char *value2 = "22fefe2";
+  char *value3 = "3333r";
+  int value4 = 777;
 
   cut_assert_equal_int(0,mrn_hash_put(ctx, key1, (void*) value1));
   cut_assert_equal_int(0,mrn_hash_put(ctx, key2, (void*) value2));
   cut_assert_equal_int(0,mrn_hash_put(ctx, key3, (void*) value3));
+  cut_assert_equal_int(0,mrn_hash_put(ctx, key4, (void*) &value4));
   cut_assert_equal_int(-1,mrn_hash_put(ctx, key1, (void*) value2));
   cut_assert_equal_int(-1,mrn_hash_put(ctx, key2, (void*) value3));
   cut_assert_equal_int(-1,mrn_hash_put(ctx, key3, (void*) value1));
@@ -64,24 +67,30 @@ void test_mrn_hash_get()
   const char *key2 = "bbb";
   const char *key3 = "cccc";
   const char *key4 = "not found";
-  char *value1 = "11";
-  char *value2 = "222";
-  char *value3 = "3333";
-  void *res;
+  const char *key5 = "primitive";
+  char *value1 = "abcdefg";
+  char *value2 = "hijklmnopq";
+  char *value3 = "rxyz012";
+  int value5 = 777;
+  char *res;
+  int *res_int;
 
   mrn_hash_put(ctx, key1, (void*) value1);
   mrn_hash_put(ctx, key2, (void*) value2);
   mrn_hash_put(ctx, key3, (void*) value3);
+  mrn_hash_put(ctx, key5, (void*) &value5);
 
-  cut_assert_equal_int(0, mrn_hash_get(ctx, key1, &res));
-  cut_assert_equal_string(value1, (char*) res);
-  cut_assert_equal_int(0, mrn_hash_get(ctx, key2, &res));
-  cut_assert_equal_string(value2, (char*) res);
-  cut_assert_equal_int(0, mrn_hash_get(ctx, key3, &res));
-  cut_assert_equal_string(value3, (char*) res);
-  cut_assert_equal_int(-1, mrn_hash_get(ctx, key4, &res));
+  cut_assert_equal_int(0, mrn_hash_get(ctx, key1, (void**) &res));
+  cut_assert_equal_string(value1, res);
+  cut_assert_equal_int(0, mrn_hash_get(ctx, key2, (void**) &res));
+  cut_assert_equal_string(value2, res);
+  cut_assert_equal_int(0, mrn_hash_get(ctx, key3, (void**) &res));
+  cut_assert_equal_string(value3, res);
 
-  mrn_hash_remove(ctx,key2);
+  cut_assert_equal_int(-1, mrn_hash_get(ctx, key4, (void**) &res));
+
+  cut_assert_equal_int(0, mrn_hash_get(ctx, key5, (void**) &res_int));
+  cut_assert_equal_int(value5, *res_int);
 }
 
 void test_mrn_hash_remove()
@@ -90,19 +99,25 @@ void test_mrn_hash_remove()
   const char *key2 = "bbb";
   const char *key3 = "cccc";
   const char *key4 = "not found";
-  char *value1 = "11";
-  char *value2 = "222";
-  char *value3 = "3333";
+  const char *key5 = "primitive";
+  char *value1 = "112233";
+  char *value2 = "2221115";
+  char *value3 = "333344";
+  int value5 = 777;
 
   mrn_hash_put(ctx, key1, (void*) value1);
   mrn_hash_put(ctx, key2, (void*) value2);
   mrn_hash_put(ctx, key3, (void*) value3);
+  mrn_hash_put(ctx, key5, (void*) &value5);
 
   cut_assert_equal_int(-1, mrn_hash_remove(ctx, key4));
   cut_assert_equal_int(0, mrn_hash_remove(ctx, key1));
   cut_assert_equal_int(0, mrn_hash_remove(ctx, key2));
   cut_assert_equal_int(0, mrn_hash_remove(ctx, key3));
+  cut_assert_equal_int(0, mrn_hash_remove(ctx, key5));
+
   cut_assert_equal_int(-1, mrn_hash_remove(ctx, key1));
   cut_assert_equal_int(-1, mrn_hash_remove(ctx, key2));
   cut_assert_equal_int(-1, mrn_hash_remove(ctx, key3));
+  cut_assert_equal_int(-1, mrn_hash_remove(ctx, key5));
 }

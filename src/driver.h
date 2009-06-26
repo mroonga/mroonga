@@ -52,6 +52,11 @@ mrn_table *mrn_share_get(grn_ctx *ctx, const char *name);
 void mrn_share_put(grn_ctx *ctx, mrn_table *share);
 void mrn_share_remove(grn_ctx *ctx, mrn_table *share);
 
+int mrn_hash_put(grn_ctx *ctx, const char *key, void *value);
+int mrn_hash_get(grn_ctx *ctx, const char *key, void **value);
+int mrn_hash_remove(grn_ctx *ctx, const char *key);
+
+
 /* static variables */
 extern grn_hash *mrn_hash;
 extern grn_obj *mrn_db, *mrn_lexicon;

@@ -180,7 +180,8 @@ int mrn_hash_put(grn_ctx *ctx, const char *key, void *value)
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash put duplicated (key=%s)", key);
     res = -1;
   } else {
-    memcpy(buf, value, sizeof(value));
+    // store address of value
+    memcpy(buf, &value, sizeof(buf));
     mrn_hash_counter++;
   }
   pthread_mutex_unlock(mrn_lock);
@@ -196,13 +197,17 @@ int mrn_hash_get(grn_ctx *ctx, const char *key, void **value)
   int res = 0;
   grn_id id;
   grn_search_flags flags = 0;
+  void *buf;
   pthread_mutex_lock(mrn_lock);
-  id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), value, &flags);
+  id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), &buf, &flags);
   // key not found
   if (id == GRN_ID_NIL)
   {
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash get not found (key=%s)", key);
     res = -1;
+  } else {
+    // restore address of value
+    memcpy(value, buf, sizeof(buf));
   }
   pthread_mutex_unlock(mrn_lock);
   return res;
