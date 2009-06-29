@@ -241,3 +241,52 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
   pthread_mutex_unlock(mrn_lock);
   return res;
 }
+
+mrn_create_info *mrn_init_create_info(grn_ctx *ctx, uint n_columns)
+{
+  int i, alloc_size = 0;
+  void *ptr;
+  mrn_create_info *info;
+  alloc_size = sizeof(mrn_create_info) + sizeof(mrn_column_info) * n_columns;
+  ptr = malloc(alloc_size);
+  if (ptr == NULL)
+  {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error mrn_init_create_info size=%d",alloc_size);
+    return NULL;
+  }
+  info = (mrn_create_info*) ptr;
+
+  info->table.name = NULL;
+  info->table.name_size = 0;
+  info->table.path = NULL;
+  info->table.flags = GRN_OBJ_PERSISTENT;
+  info->table.key_type = NULL;
+  info->table.value_size = GRN_TABLE_MAX_KEY_SIZE;
+
+  ptr += sizeof(mrn_create_info);
+  info->columns = (mrn_column_info*) ptr;
+
+  for (i = 0; i < n_columns; i++)
+  {
+    info->columns[i].name = NULL;
+    info->columns[i].name_size = 0;
+    info->columns[i].path = NULL;
+    info->columns[i].flags = GRN_OBJ_PERSISTENT;
+    info->columns[i].type = NULL;
+  }
+
+  info->n_columns = n_columns;
+  return info;
+}
+
+int mrn_deinit_create_info(grn_ctx *ctx, mrn_create_info *info)
+{
+  free(info);
+  return 0;
+}
+
+int mrn_create(grn_ctx *ctx, mrn_create_info *info)
+{
+  grn_obj *table_obj, *column_obj;
+  return 0;
+}
