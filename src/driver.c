@@ -11,7 +11,7 @@
 
 grn_hash *mrn_hash;
 grn_obj *mrn_db, *mrn_lexicon;
-pthread_mutex_t *mrn_lock;
+pthread_mutex_t *mrn_lock, *mrn_lock_hash;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
 
@@ -125,6 +125,11 @@ int mrn_init()
   {
     goto err;
   }
+  mrn_lock_hash = malloc(sizeof(pthread_mutex_t));
+  if ((mrn_lock_hash == NULL) || (pthread_mutex_init(mrn_lock_hash, NULL) != 0))
+  {
+    goto err;
+  }
 
   grn_ctx_fin(&ctx);
   return 0;
@@ -142,9 +147,13 @@ int mrn_deinit()
   grn_ctx_use(&ctx, mrn_db);
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "shutdown");
 
+
   pthread_mutex_destroy(mrn_lock);
   free(mrn_lock);
   mrn_lock = NULL;
+  pthread_mutex_destroy(mrn_lock_hash);
+  free(mrn_lock_hash);
+  mrn_lock_hash = NULL;
 
   grn_hash_close(&ctx, mrn_hash);
   mrn_hash = NULL;
@@ -172,19 +181,21 @@ int mrn_hash_put(grn_ctx *ctx, const char *key, void *value)
 {
   int added, res=0;
   void *buf;
-  pthread_mutex_lock(mrn_lock);
+  pthread_mutex_lock(mrn_lock_hash);
   grn_hash_add(ctx, mrn_hash, (const char*) key, strlen(key), &buf, &added);
   // duplicate check
   if (added == 0)
   {
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash put duplicated (key=%s)", key);
     res = -1;
-  } else {
+  }
+  else
+  {
     // store address of value
     memcpy(buf, &value, sizeof(buf));
     mrn_hash_counter++;
   }
-  pthread_mutex_unlock(mrn_lock);
+  pthread_mutex_unlock(mrn_lock_hash);
   return res;
 }
 
@@ -198,18 +209,20 @@ int mrn_hash_get(grn_ctx *ctx, const char *key, void **value)
   grn_id id;
   grn_search_flags flags = 0;
   void *buf;
-  pthread_mutex_lock(mrn_lock);
+  pthread_mutex_lock(mrn_lock_hash);
   id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), &buf, &flags);
   // key not found
   if (id == GRN_ID_NIL)
   {
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash get not found (key=%s)", key);
     res = -1;
-  } else {
+  }
+  else
+  {
     // restore address of value
     memcpy(value, buf, sizeof(buf));
   }
-  pthread_mutex_unlock(mrn_lock);
+  pthread_mutex_unlock(mrn_lock_hash);
   return res;
 }
 
@@ -223,31 +236,35 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
   grn_rc rc;
   grn_id id;
   grn_search_flags flags = 0;
-  pthread_mutex_lock(mrn_lock);
+  pthread_mutex_lock(mrn_lock_hash);
   id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), NULL, &flags);
   if (id == GRN_ID_NIL)
   {
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash remove not found (key=%s)", key);
     res = -1;
-  } else {
+  }
+  else
+  {
     rc = grn_hash_delete_by_id(ctx, mrn_hash, id, NULL);
     if (rc != GRN_SUCCESS) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "hash remove error (key=%s)", key);
       res = -1;
-    } else {
+    }
+    else
+    {
       mrn_hash_counter--;
     }
   }
-  pthread_mutex_unlock(mrn_lock);
+  pthread_mutex_unlock(mrn_lock_hash);
   return res;
 }
 
-mrn_obj_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
+mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
 {
   int i, alloc_size = 0;
   void *ptr;
-  mrn_obj_info *info;
-  alloc_size = sizeof(mrn_obj_info) + sizeof(mrn_table_info) +
+  mrn_info *info;
+  alloc_size = sizeof(mrn_info) + sizeof(mrn_table_info) +
     (sizeof(void*) + sizeof(mrn_column_info)) * n_columns;
   ptr = malloc(alloc_size);
   if (ptr == NULL)
@@ -255,8 +272,8 @@ mrn_obj_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
     GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error mrn_init_create_info size=%d",alloc_size);
     return NULL;
   }
-  info = (mrn_obj_info*) ptr;
-  ptr += sizeof(mrn_obj_info);
+  info = (mrn_info*) ptr;
+  ptr += sizeof(mrn_info);
 
   info->table = ptr;
   info->table->name = NULL;
@@ -283,16 +300,17 @@ mrn_obj_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
   }
 
   info->n_columns = n_columns;
+  info->ref_count = 0;
   return info;
 }
 
-int mrn_deinit_obj_info(grn_ctx *ctx, mrn_obj_info *info)
+int mrn_deinit_obj_info(grn_ctx *ctx, mrn_info *info)
 {
   free(info);
   return 0;
 }
 
-int mrn_create(grn_ctx *ctx, mrn_obj_info *info)
+int mrn_create(grn_ctx *ctx, mrn_info *info)
 {
   int i;
   mrn_table_info *table;
@@ -323,7 +341,9 @@ int mrn_create(grn_ctx *ctx, mrn_obj_info *info)
               column->name_size, column->path,
               column->flags, column->type);
       goto auto_drop;
-    } else {
+    }
+    else
+    {
       grn_obj_close(ctx, column->obj);
       column->obj = NULL;
     }
@@ -344,7 +364,7 @@ auto_drop:
   return -1;
 }
 
-int mrn_open(grn_ctx *ctx, mrn_obj_info *info)
+int mrn_open(grn_ctx *ctx, mrn_info *info)
 {
   int i;
   mrn_table_info *table;
@@ -383,7 +403,7 @@ auto_close:
   return -1;
 }
 
-int mrn_close(grn_ctx *ctx, mrn_obj_info *info)
+int mrn_close(grn_ctx *ctx, mrn_info *info)
 {
   int i;
   for (i=0; i < info->n_columns; i++)

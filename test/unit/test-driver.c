@@ -134,7 +134,7 @@ void test_mrn_init_obj_info()
 {
   TEST_ENTER;
   uint n_columns = 8, i;
-  mrn_obj_info *info;
+  mrn_info *info;
   info = mrn_init_obj_info(ctx, n_columns);
   cut_assert_not_null(info);
   info->table->name = "hoge";
@@ -156,7 +156,7 @@ void test_mrn_init_obj_info()
 void test_mrn_deinit_obj_info()
 {
   TEST_ENTER;
-  mrn_obj_info *info = mrn_init_obj_info(ctx, 8);
+  mrn_info *info = mrn_init_obj_info(ctx, 8);
   cut_assert_not_null(info);
   cut_assert_equal_int(0, mrn_deinit_obj_info(ctx, info));
 }
@@ -165,7 +165,7 @@ void test_mrn_create()
 {
   TEST_ENTER;
   grn_obj *obj, *obj2;
-  mrn_obj_info *info = mrn_init_obj_info(ctx, 2);
+  mrn_info *info = mrn_init_obj_info(ctx, 2);
 
   info->table->name = "test/t1";
   info->table->name_size = strlen("test/t1");
@@ -199,7 +199,7 @@ void test_mrn_open()
   TEST_ENTER;
   grn_obj *obj,*obj2;
 
-  mrn_obj_info *info = mrn_init_obj_info(ctx, 2);
+  mrn_info *info = mrn_init_obj_info(ctx, 2);
 
   info->table->name = "test/t1";
   info->table->name_size = strlen("test/t1");
@@ -235,7 +235,7 @@ void test_mrn_close()
   TEST_ENTER;
   grn_obj *obj,*obj2;
 
-  mrn_obj_info *info = mrn_init_obj_info(ctx, 2);
+  mrn_info *info = mrn_init_obj_info(ctx, 2);
 
   info->table->name = "test/t1";
   info->table->name_size = strlen("test/t1");
