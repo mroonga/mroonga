@@ -3,6 +3,9 @@
 #include <glib/gstdio.h>
 #include "driver.h"
 
+#define TEST_ENTER do { GRN_LOG(ctx, GRN_LOG_DEBUG,             \
+                                "%s", __FUNCTION__);} while(0)
+
 static gchar *base_directory;
 static gchar *tmp_directory;
 static grn_ctx *ctx;
@@ -39,11 +42,13 @@ void cut_teardown()
 
 void test_mrn_flush_logs()
 {
+  TEST_ENTER;
   cut_assert_equal_int(0, mrn_flush_logs(ctx));
 }
 
 void test_mrn_hash_put()
 {
+  TEST_ENTER;
   const char *key1 = "aa";
   const char *key2 = "bbb";
   const char *key3 = "cccc";
@@ -64,6 +69,7 @@ void test_mrn_hash_put()
 
 void test_mrn_hash_get()
 {
+  TEST_ENTER;
   const char *key1 = "aa";
   const char *key2 = "bbb";
   const char *key3 = "cccc";
@@ -96,6 +102,7 @@ void test_mrn_hash_get()
 
 void test_mrn_hash_remove()
 {
+  TEST_ENTER;
   const char *key1 = "aa";
   const char *key2 = "bbb";
   const char *key3 = "cccc";
@@ -125,6 +132,7 @@ void test_mrn_hash_remove()
 
 void test_mrn_init_create_info()
 {
+  TEST_ENTER;
   uint n_columns = 8, i;
   mrn_create_info *info;
   info = mrn_init_create_info(ctx, n_columns);
@@ -145,6 +153,7 @@ void test_mrn_init_create_info()
 
 void test_mrn_deinit_create_info()
 {
+  TEST_ENTER;
   mrn_create_info *info = mrn_init_create_info(ctx, 8);
   cut_assert_not_null(info);
   cut_assert_equal_int(0, mrn_deinit_create_info(ctx, info));
@@ -152,6 +161,7 @@ void test_mrn_deinit_create_info()
 
 void test_mrn_create()
 {
+  TEST_ENTER;
   grn_obj *obj,*obj2;
 
   mrn_create_info *info = mrn_init_create_info(ctx, 2);
