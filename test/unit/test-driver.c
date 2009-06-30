@@ -137,18 +137,18 @@ void test_mrn_init_obj_info()
   mrn_obj_info *info;
   info = mrn_init_obj_info(ctx, n_columns);
   cut_assert_not_null(info);
-  info->table.name = "hoge";
-  info->table.name_size = 4;
-  cut_assert_true(info->table.flags == GRN_OBJ_PERSISTENT);
-  cut_assert_true(info->table.value_size == GRN_TABLE_MAX_KEY_SIZE);
-  cut_assert_null(info->table.obj);
+  info->table->name = "hoge";
+  info->table->name_size = 4;
+  cut_assert_true(info->table->flags == GRN_OBJ_PERSISTENT);
+  cut_assert_true(info->table->value_size == GRN_TABLE_MAX_KEY_SIZE);
+  cut_assert_null(info->table->obj);
   cut_assert_equal_int(n_columns, info->n_columns);
   for (i=0; i < n_columns; i++)
   {
-    info->columns[i].name = "fuga";
-    info->columns[i].name_size = 4;
-    cut_assert_true(info->columns[i].flags == GRN_OBJ_PERSISTENT);
-    cut_assert_null(info->columns[i].obj);
+    info->columns[i]->name = "fuga";
+    info->columns[i]->name_size = 4;
+    cut_assert_true(info->columns[i]->flags == GRN_OBJ_PERSISTENT);
+    cut_assert_null(info->columns[i]->obj);
   }
   mrn_deinit_obj_info(ctx, info);
 }
@@ -168,19 +168,19 @@ void test_mrn_create()
 
   mrn_obj_info *info = mrn_init_obj_info(ctx, 2);
 
-  info->table.name = "test/t1";
-  info->table.name_size = strlen("test/t1");
-  info->table.flags |= GRN_OBJ_TABLE_NO_KEY;
+  info->table->name = "test/t1";
+  info->table->name_size = strlen("test/t1");
+  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
 
-  info->columns[0].name = "c1";
-  info->columns[0].name_size = strlen("c1");
-  info->columns[0].flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0].type = grn_ctx_at(ctx, GRN_DB_INT32);
+  info->columns[0]->name = "c1";
+  info->columns[0]->name_size = strlen("c1");
+  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
 
-  info->columns[1].name = "c2";
-  info->columns[1].name_size = strlen("c2");
-  info->columns[1].flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1].type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  info->columns[1]->name = "c2";
+  info->columns[1]->name_size = strlen("c2");
+  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
 

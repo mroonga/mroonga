@@ -56,8 +56,8 @@ typedef struct _mrn_table_info {
 } mrn_table_info;
 
 typedef struct _mrn_obj_info {
-  mrn_table_info table;
-  mrn_column_info *columns;
+  mrn_table_info *table;
+  mrn_column_info **columns;
   uint n_columns;
 } mrn_obj_info;
 

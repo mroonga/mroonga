@@ -247,7 +247,8 @@ mrn_obj_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
   int i, alloc_size = 0;
   void *ptr;
   mrn_obj_info *info;
-  alloc_size = sizeof(mrn_obj_info) + sizeof(mrn_column_info) * n_columns;
+  alloc_size = sizeof(mrn_obj_info) + sizeof(mrn_table_info) +
+    (sizeof(void*) + sizeof(mrn_column_info)) * n_columns;
   ptr = malloc(alloc_size);
   if (ptr == NULL)
   {
@@ -255,26 +256,30 @@ mrn_obj_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
     return NULL;
   }
   info = (mrn_obj_info*) ptr;
-
-  info->table.name = NULL;
-  info->table.name_size = 0;
-  info->table.path = NULL;
-  info->table.flags = GRN_OBJ_PERSISTENT;
-  info->table.key_type = NULL;
-  info->table.value_size = GRN_TABLE_MAX_KEY_SIZE;
-  info->table.obj = NULL;
-
   ptr += sizeof(mrn_obj_info);
-  info->columns = (mrn_column_info*) ptr;
 
+  info->table = ptr;
+  info->table->name = NULL;
+  info->table->name_size = 0;
+  info->table->path = NULL;
+  info->table->flags = GRN_OBJ_PERSISTENT;
+  info->table->key_type = NULL;
+  info->table->value_size = GRN_TABLE_MAX_KEY_SIZE;
+  info->table->obj = NULL;
+
+  ptr += sizeof(mrn_table_info);
+  info->columns = (mrn_column_info**) ptr;
+
+  ptr += sizeof(void*) * n_columns;
   for (i = 0; i < n_columns; i++)
   {
-    info->columns[i].name = NULL;
-    info->columns[i].name_size = 0;
-    info->columns[i].path = NULL;
-    info->columns[i].flags = GRN_OBJ_PERSISTENT;
-    info->columns[i].type = NULL;
-    info->columns[i].obj = NULL;
+    info->columns[i] = ptr + sizeof(mrn_column_info) * i;
+    info->columns[i]->name = NULL;
+    info->columns[i]->name_size = 0;
+    info->columns[i]->path = NULL;
+    info->columns[i]->flags = GRN_OBJ_PERSISTENT;
+    info->columns[i]->type = NULL;
+    info->columns[i]->obj = NULL;
   }
 
   info->n_columns = n_columns;
@@ -290,66 +295,75 @@ int mrn_deinit_obj_info(grn_ctx *ctx, mrn_obj_info *info)
 int mrn_create(grn_ctx *ctx, mrn_obj_info *info)
 {
   int i;
+  mrn_table_info *table;
+  mrn_column_info *column;
 
-  info->table.obj = grn_table_create(ctx, info->table.name, info->table.name_size,
-                                     info->table.path, info->table.flags,
-                                     info->table.key_type, info->table.value_size);
-  if (info->table.obj == NULL)
+  table = info->table;
+
+  table->obj = grn_table_create(ctx, table->name, table->name_size,
+                                table->path, table->flags,
+                                table->key_type, table->value_size);
+  if (table->obj == NULL)
   {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, name_size=%d, path=%s, "
-            "flags=%d, key_type=%p, value_size=%d", info->table.name, info->table.name_size,
-            info->table.path, info->table.flags, info->table.key_type, info->table.value_size);
+            "flags=%d, key_type=%p, value_size=%d", table->name, table->name_size,
+            table->path, table->flags, table->key_type, table->value_size);
     return -1;
   }
   for (i=0; i < info->n_columns; i++)
   {
-    info->columns[i].obj = grn_column_create(ctx, info->table.obj, info->columns[i].name,
-                                             info->columns[i].name_size, info->columns[i].path,
-                                             info->columns[i].flags, info->columns[i].type);
-    if (info->columns[i].obj == NULL)
+    column = info->columns[i];
+    column->obj = grn_column_create(ctx, table->obj, column->name,
+                                    column->name_size, column->path,
+                                    column->flags, column->type);
+    if (column->obj == NULL)
     {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create column: table=%p, name=%s, name_size=%d, "
-              "path=%s, flags=%d, type=%p", info->table.obj, info->columns[i].name,
-              info->columns[i].name_size, info->columns[i].path,
-              info->columns[i].flags, info->columns[i].type);
+              "path=%s, flags=%d, type=%p", table->obj, column->name,
+              column->name_size, column->path,
+              column->flags, column->type);
       goto auto_drop;
     } else {
-      grn_obj_close(ctx, info->columns[i].obj);
+      grn_obj_close(ctx, column->obj);
     }
   }
-  grn_obj_close(ctx, info->table.obj);
+  grn_obj_close(ctx, table->obj);
   return 0;
 
 auto_drop:
   GRN_LOG(ctx, GRN_LOG_ERROR, "auto-drop table/columns");
-  for (; i >= 0; --i)
+  for (; i > 0; --i)
   {
-    grn_obj_remove(ctx, info->columns[i].obj);
-    info->columns[i].obj = NULL;
+    grn_obj_remove(ctx, info->columns[i]->obj);
+    info->columns[i]->obj = NULL;
   }
-  grn_obj_remove(ctx, info->table.obj);
-  info->table.obj = NULL;
-
+  grn_obj_remove(ctx, info->table->obj);
+  info->table->obj = NULL;
+  return -1;
 }
 
 int mrn_open(grn_ctx *ctx, mrn_obj_info *info)
 {
   int i;
+  mrn_table_info *table;
+  mrn_column_info *column;
 
-  info->table.obj = grn_ctx_get(ctx, info->table.name, info->table.name_size);
-  if (info->table.obj == NULL)
+  table = info->table;
+
+  table->obj = grn_ctx_get(ctx, table->name, table->name_size);
+  if (table->obj == NULL)
   {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table: name=%s", info->table.name);
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table: name=%s", table->name);
     return -1;
   }
   for (i=0; i < info->n_columns; i++)
   {
-    info->columns[i].obj = grn_obj_column(ctx, info->table.obj, info->columns[i].name,
-                                          info->columns[i].name_size);
-    if (info->columns[i].obj == NULL)
+    column = info->columns[i];
+    column->obj = grn_obj_column(ctx, table->obj, column->name, column->name_size);
+    if (column->obj == NULL)
     {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open column: table=%s, column=%s",
-              info->table.name, info->columns[i].name);
+              table->name, column->name);
       goto auto_close;
     }
   }
@@ -357,12 +371,12 @@ int mrn_open(grn_ctx *ctx, mrn_obj_info *info)
 
 auto_close:
   GRN_LOG(ctx, GRN_LOG_ERROR, "auto-closing table/columns");
-  for (; i >= 0; --i)
+  for (; i > 0; --i)
   {
-    grn_obj_close(ctx, info->columns[i].obj);
-    info->columns[i].obj = NULL;
+    grn_obj_close(ctx, info->columns[i]->obj);
+    info->columns[i]->obj = NULL;
   }
-  grn_obj_close(ctx, info->table.obj);
-  info->table.obj = NULL;
+  grn_obj_close(ctx, info->table->obj);
+  info->table->obj = NULL;
   return -1;
 }
