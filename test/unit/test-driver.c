@@ -182,15 +182,12 @@ void test_mrn_create()
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
 
-  cut_assert_not_null((obj = grn_table_open(ctx, "test/t1", strlen("test/t1"), NULL)));
-  cut_assert_not_null((obj2 = grn_column_open(ctx, obj, "c1", strlen("c1"),
-                                              NULL, grn_ctx_at(ctx, GRN_DB_INT32))));
+  cut_assert_not_null((obj = grn_ctx_get(ctx, "test/t1", strlen("test/t1"))));
+  cut_assert_not_null((obj2 = grn_obj_column(ctx, obj, "c1", strlen("c1"))));
   grn_obj_close(ctx, obj2);
-  cut_assert_not_null((obj2 = grn_column_open(ctx, obj, "c2", strlen("c2"),
-                                              NULL, grn_ctx_at(ctx, GRN_DB_TEXT))));
+  cut_assert_not_null((obj2 = grn_obj_column(ctx, obj, "c2", strlen("c2"))));
   grn_obj_close(ctx, obj2);
-  cut_assert_null((obj2 = grn_column_open(ctx, obj, "c3", strlen("c3"),
-                                          NULL, grn_ctx_at(ctx, GRN_DB_TEXT))));
+  cut_assert_null((obj2 = grn_obj_column(ctx, obj, "c3", strlen("c3"))));
   grn_obj_close(ctx, obj);
 
   mrn_deinit_create_info(ctx, info);
