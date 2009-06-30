@@ -83,6 +83,8 @@ mrn_info*  mrn_init_obj_info(grn_ctx *ctx, uint n_columns);
 int mrn_deinit_obj_info(grn_ctx *ctx, mrn_info *info);
 int mrn_create(grn_ctx *ctx, mrn_info *info);
 int mrn_open(grn_ctx *ctx, mrn_info *info);
+int mrn_close(grn_ctx *ctx, mrn_info *info);
+int mrn_drop(grn_ctx *ctx, mrn_info *info);
 
 /* static variables */
 extern grn_hash *mrn_hash;

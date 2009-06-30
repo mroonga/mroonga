@@ -415,3 +415,21 @@ int mrn_close(grn_ctx *ctx, mrn_info *info)
   info->table->obj = NULL;
   return 0;
 }
+
+int mrn_drop(grn_ctx *ctx, mrn_info *info)
+{
+  if (mrn_open(ctx, info) == 0)
+  {
+    int i;
+    for (i=0; i < info->n_columns; i++)
+    {
+      grn_obj_remove(ctx, info->columns[i]->obj);
+      info->columns[i]->obj = NULL;
+    }
+    grn_obj_remove(ctx, info->table->obj);
+    info->table->obj = NULL;
+    return 0;
+  }
+  GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table=%s duaring drop process", info->table->name);
+  return -1;
+}
