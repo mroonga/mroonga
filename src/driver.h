@@ -78,6 +78,7 @@ int mrn_hash_get(grn_ctx *ctx, const char *key, void **value);
 int mrn_hash_remove(grn_ctx *ctx, const char *key);
 mrn_create_info*  mrn_init_create_info(grn_ctx *ctx, uint n_columns);
 int mrn_deinit_create_info(grn_ctx *ctx, mrn_create_info *info);
+int mrn_create(grn_ctx *ctx, mrn_create_info *info);
 
 /* static variables */
 extern grn_hash *mrn_hash;

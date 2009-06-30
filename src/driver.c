@@ -288,5 +288,39 @@ int mrn_deinit_create_info(grn_ctx *ctx, mrn_create_info *info)
 int mrn_create(grn_ctx *ctx, mrn_create_info *info)
 {
   grn_obj *table_obj, *column_obj;
+  mrn_table_info table;
+  mrn_column_info column;
+  int i;
+
+  table = info->table;
+  table_obj = grn_table_create(ctx, table.name, table.name_size, table.path,
+                               table.flags, table.key_type, table.value_size);
+  if (table_obj == NULL)
+  {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, name_size=%d, path=%s, "
+            "flags=%d, key_type=%p, value_size=%d", table.name, table.name_size,
+            table.path, table.flags, table.key_type, table.value_size);
+    return -1;
+  }
+  for (i=0; i < info->n_columns; i++)
+  {
+    column = info->columns[i];
+    column_obj = grn_column_create(ctx, table_obj, column.name, column.name_size,
+                                   column.path, column.flags, column.type);
+    if (column_obj == NULL)
+    {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create column: table=%p, name=%s, name_size=%d, "
+              "path=%s, flags=%d, type=%p", table_obj, column.name, column.name_size,
+              column.path, column.flags, column.type);
+      if (grn_obj_remove(ctx, table_obj) != GRN_SUCCESS)
+      {
+        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot drop table=%p", table_obj);
+      }
+      return -1;
+    } else {
+      grn_obj_close(ctx, column_obj);
+    }
+  }
+  grn_obj_close(ctx, table_obj);
   return 0;
 }
