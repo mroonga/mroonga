@@ -325,9 +325,11 @@ int mrn_create(grn_ctx *ctx, mrn_obj_info *info)
       goto auto_drop;
     } else {
       grn_obj_close(ctx, column->obj);
+      column->obj = NULL;
     }
   }
   grn_obj_close(ctx, table->obj);
+  table->obj = NULL;
   return 0;
 
 auto_drop:

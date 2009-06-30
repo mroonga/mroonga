@@ -4,7 +4,7 @@
 #include "driver.h"
 
 #define TEST_ENTER do { GRN_LOG(ctx, GRN_LOG_DEBUG,             \
-                                "%s", __FUNCTION__);} while(0)
+                                "<%s>", __FUNCTION__);} while(0)
 
 static gchar *base_directory;
 static gchar *tmp_directory;
@@ -164,8 +164,7 @@ void test_mrn_deinit_obj_info()
 void test_mrn_create()
 {
   TEST_ENTER;
-  grn_obj *obj,*obj2;
-
+  grn_obj *obj, *obj2;
   mrn_obj_info *info = mrn_init_obj_info(ctx, 2);
 
   info->table->name = "test/t1";
@@ -186,11 +185,47 @@ void test_mrn_create()
 
   cut_assert_not_null((obj = grn_ctx_get(ctx, "test/t1", strlen("test/t1"))));
   cut_assert_not_null((obj2 = grn_obj_column(ctx, obj, "c1", strlen("c1"))));
-  grn_obj_close(ctx, obj2);
+  grn_obj_remove(ctx, obj2);
   cut_assert_not_null((obj2 = grn_obj_column(ctx, obj, "c2", strlen("c2"))));
-  grn_obj_close(ctx, obj2);
+  grn_obj_remove(ctx, obj2);
   cut_assert_null((obj2 = grn_obj_column(ctx, obj, "c3", strlen("c3"))));
-  grn_obj_close(ctx, obj);
+  grn_obj_remove(ctx, obj);
 
+  mrn_deinit_obj_info(ctx, info);
+}
+
+void test_mrn_open()
+{
+  TEST_ENTER;
+  grn_obj *obj,*obj2;
+
+  mrn_obj_info *info = mrn_init_obj_info(ctx, 2);
+
+  info->table->name = "test/t1";
+  info->table->name_size = strlen("test/t1");
+  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
+
+  info->columns[0]->name = "c1";
+  info->columns[0]->name_size = strlen("c1");
+  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+
+  info->columns[1]->name = "c2";
+  info->columns[1]->name_size = strlen("c2");
+  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+
+  cut_assert_equal_int(0, mrn_create(ctx, info));
+  cut_assert_null(info->table->obj);
+  cut_assert_null(info->columns[0]->obj);
+  cut_assert_null(info->columns[1]->obj);
+  cut_assert_equal_int(0, mrn_open(ctx, info));
+  cut_assert_not_null(info->table->obj);
+  cut_assert_not_null(info->columns[0]->obj);
+  cut_assert_not_null(info->columns[1]->obj);
+
+  grn_obj_remove(ctx, info->columns[1]->obj);
+  grn_obj_remove(ctx, info->columns[0]->obj);
+  grn_obj_remove(ctx, info->table->obj);
   mrn_deinit_obj_info(ctx, info);
 }
