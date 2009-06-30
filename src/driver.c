@@ -101,7 +101,7 @@ int mrn_init()
                                         GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
                                         grn_ctx_at(&ctx,GRN_DB_SHORTTEXT), 0)))
     {
-      GRN_LOG(&ctx, GRN_LOG_NOTICE, "database created");
+      GRN_LOG(&ctx, GRN_LOG_NOTICE, "lexicon table created");
     }
     else
     {
