@@ -382,3 +382,16 @@ auto_close:
   info->table->obj = NULL;
   return -1;
 }
+
+int mrn_close(grn_ctx *ctx, mrn_obj_info *info)
+{
+  int i;
+  for (i=0; i < info->n_columns; i++)
+  {
+    grn_obj_close(ctx, info->columns[i]->obj);
+    info->columns[i]->obj = NULL;
+  }
+  grn_obj_close(ctx, info->table->obj);
+  info->table->obj = NULL;
+  return 0;
+}
