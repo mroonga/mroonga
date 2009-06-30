@@ -130,33 +130,35 @@ void test_mrn_hash_remove()
   cut_assert_equal_int(-1, mrn_hash_remove(ctx, key5));
 }
 
-void test_mrn_init_create_info()
+void test_mrn_init_obj_info()
 {
   TEST_ENTER;
   uint n_columns = 8, i;
-  mrn_create_info *info;
-  info = mrn_init_create_info(ctx, n_columns);
+  mrn_obj_info *info;
+  info = mrn_init_obj_info(ctx, n_columns);
   cut_assert_not_null(info);
   info->table.name = "hoge";
   info->table.name_size = 4;
   cut_assert_true(info->table.flags == GRN_OBJ_PERSISTENT);
   cut_assert_true(info->table.value_size == GRN_TABLE_MAX_KEY_SIZE);
+  cut_assert_null(info->table.obj);
   cut_assert_equal_int(n_columns, info->n_columns);
   for (i=0; i < n_columns; i++)
   {
     info->columns[i].name = "fuga";
     info->columns[i].name_size = 4;
     cut_assert_true(info->columns[i].flags == GRN_OBJ_PERSISTENT);
+    cut_assert_null(info->columns[i].obj);
   }
-  mrn_deinit_create_info(ctx, info);
+  mrn_deinit_obj_info(ctx, info);
 }
 
-void test_mrn_deinit_create_info()
+void test_mrn_deinit_obj_info()
 {
   TEST_ENTER;
-  mrn_create_info *info = mrn_init_create_info(ctx, 8);
+  mrn_obj_info *info = mrn_init_obj_info(ctx, 8);
   cut_assert_not_null(info);
-  cut_assert_equal_int(0, mrn_deinit_create_info(ctx, info));
+  cut_assert_equal_int(0, mrn_deinit_obj_info(ctx, info));
 }
 
 void test_mrn_create()
@@ -164,7 +166,7 @@ void test_mrn_create()
   TEST_ENTER;
   grn_obj *obj,*obj2;
 
-  mrn_create_info *info = mrn_init_create_info(ctx, 2);
+  mrn_obj_info *info = mrn_init_obj_info(ctx, 2);
 
   info->table.name = "test/t1";
   info->table.name_size = strlen("test/t1");
@@ -190,5 +192,5 @@ void test_mrn_create()
   cut_assert_null((obj2 = grn_obj_column(ctx, obj, "c3", strlen("c3"))));
   grn_obj_close(ctx, obj);
 
-  mrn_deinit_create_info(ctx, info);
+  mrn_deinit_obj_info(ctx, info);
 }

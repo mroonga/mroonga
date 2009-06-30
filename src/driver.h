@@ -42,6 +42,7 @@ typedef struct _mrn_column_info {
   char *path;
   grn_obj_flags flags;
   grn_obj *type;
+  grn_obj *obj;
 } mrn_column_info;
 
 typedef struct _mrn_table_info {
@@ -51,13 +52,14 @@ typedef struct _mrn_table_info {
   grn_obj_flags flags;
   grn_obj *key_type;
   uint value_size;
+  grn_obj *obj;
 } mrn_table_info;
 
-typedef struct _mrn_create_info {
+typedef struct _mrn_obj_info {
   mrn_table_info table;
   mrn_column_info *columns;
   uint n_columns;
-} mrn_create_info;
+} mrn_obj_info;
 
 /* macro */
 #define MRN_MALLOC(size) malloc(size)
@@ -76,9 +78,9 @@ int mrn_flush_logs(grn_ctx *ctx);
 int mrn_hash_put(grn_ctx *ctx, const char *key, void *value);
 int mrn_hash_get(grn_ctx *ctx, const char *key, void **value);
 int mrn_hash_remove(grn_ctx *ctx, const char *key);
-mrn_create_info*  mrn_init_create_info(grn_ctx *ctx, uint n_columns);
-int mrn_deinit_create_info(grn_ctx *ctx, mrn_create_info *info);
-int mrn_create(grn_ctx *ctx, mrn_create_info *info);
+mrn_obj_info*  mrn_init_obj_info(grn_ctx *ctx, uint n_columns);
+int mrn_deinit_obj_info(grn_ctx *ctx, mrn_obj_info *info);
+int mrn_create(grn_ctx *ctx, mrn_obj_info *info);
 
 /* static variables */
 extern grn_hash *mrn_hash;

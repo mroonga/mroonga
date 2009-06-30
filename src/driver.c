@@ -242,19 +242,19 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
   return res;
 }
 
-mrn_create_info *mrn_init_create_info(grn_ctx *ctx, uint n_columns)
+mrn_obj_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
 {
   int i, alloc_size = 0;
   void *ptr;
-  mrn_create_info *info;
-  alloc_size = sizeof(mrn_create_info) + sizeof(mrn_column_info) * n_columns;
+  mrn_obj_info *info;
+  alloc_size = sizeof(mrn_obj_info) + sizeof(mrn_column_info) * n_columns;
   ptr = malloc(alloc_size);
   if (ptr == NULL)
   {
     GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error mrn_init_create_info size=%d",alloc_size);
     return NULL;
   }
-  info = (mrn_create_info*) ptr;
+  info = (mrn_obj_info*) ptr;
 
   info->table.name = NULL;
   info->table.name_size = 0;
@@ -262,8 +262,9 @@ mrn_create_info *mrn_init_create_info(grn_ctx *ctx, uint n_columns)
   info->table.flags = GRN_OBJ_PERSISTENT;
   info->table.key_type = NULL;
   info->table.value_size = GRN_TABLE_MAX_KEY_SIZE;
+  info->table.obj = NULL;
 
-  ptr += sizeof(mrn_create_info);
+  ptr += sizeof(mrn_obj_info);
   info->columns = (mrn_column_info*) ptr;
 
   for (i = 0; i < n_columns; i++)
@@ -273,29 +274,29 @@ mrn_create_info *mrn_init_create_info(grn_ctx *ctx, uint n_columns)
     info->columns[i].path = NULL;
     info->columns[i].flags = GRN_OBJ_PERSISTENT;
     info->columns[i].type = NULL;
+    info->columns[i].obj = NULL;
   }
 
   info->n_columns = n_columns;
   return info;
 }
 
-int mrn_deinit_create_info(grn_ctx *ctx, mrn_create_info *info)
+int mrn_deinit_obj_info(grn_ctx *ctx, mrn_obj_info *info)
 {
   free(info);
   return 0;
 }
 
-int mrn_create(grn_ctx *ctx, mrn_create_info *info)
+int mrn_create(grn_ctx *ctx, mrn_obj_info *info)
 {
-  grn_obj *table_obj, *column_obj;
   mrn_table_info table;
   mrn_column_info column;
   int i;
 
   table = info->table;
-  table_obj = grn_table_create(ctx, table.name, table.name_size, table.path,
+  table.obj = grn_table_create(ctx, table.name, table.name_size, table.path,
                                table.flags, table.key_type, table.value_size);
-  if (table_obj == NULL)
+  if (table.obj == NULL)
   {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, name_size=%d, path=%s, "
             "flags=%d, key_type=%p, value_size=%d", table.name, table.name_size,
@@ -305,22 +306,24 @@ int mrn_create(grn_ctx *ctx, mrn_create_info *info)
   for (i=0; i < info->n_columns; i++)
   {
     column = info->columns[i];
-    column_obj = grn_column_create(ctx, table_obj, column.name, column.name_size,
+    column.obj = grn_column_create(ctx, table.obj, column.name, column.name_size,
                                    column.path, column.flags, column.type);
-    if (column_obj == NULL)
+    if (column.obj == NULL)
     {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create column: table=%p, name=%s, name_size=%d, "
-              "path=%s, flags=%d, type=%p", table_obj, column.name, column.name_size,
+              "path=%s, flags=%d, type=%p", table.obj, column.name, column.name_size,
               column.path, column.flags, column.type);
-      if (grn_obj_remove(ctx, table_obj) != GRN_SUCCESS)
+      if (grn_obj_remove(ctx, table.obj) != GRN_SUCCESS)
       {
-        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot drop table=%p", table_obj);
+        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot drop table=%p", table.obj);
       }
       return -1;
     } else {
-      grn_obj_close(ctx, column_obj);
+      grn_obj_close(ctx, column.obj);
+      column.obj = NULL;
     }
   }
-  grn_obj_close(ctx, table_obj);
+  grn_obj_close(ctx, table.obj);
+  table.obj = NULL;
   return 0;
 }
