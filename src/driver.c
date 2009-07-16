@@ -99,7 +99,7 @@ int mrn_init()
     if ((mrn_lexicon = grn_table_create(&ctx, MRN_LEXICON_TABLE_NAME,
                                         strlen(MRN_LEXICON_TABLE_NAME), NULL,
                                         GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
-                                        grn_ctx_at(&ctx,GRN_DB_SHORTTEXT), 0)))
+                                        grn_ctx_at(&ctx,GRN_DB_SHORT_TEXT), 0)))
     {
       GRN_LOG(&ctx, GRN_LOG_NOTICE, "lexicon table created");
     }

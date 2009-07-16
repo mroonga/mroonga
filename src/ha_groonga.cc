@@ -550,8 +550,8 @@ FT_INFO *ha_groonga::ft_init_ext(uint flags, uint inx,String *key)
     /* boolean search */
     grn_query *query;
     this->res = grn_table_create(ctx, NULL, 0, NULL, GRN_TABLE_HASH_KEY, share->obj, 0);
-    query = grn_query_open(ctx, match_param, strlen(match_param), GRN_SEL_OR, 32);
-    grn_obj_search(ctx, share->field[1]->index, (grn_obj*) query, this->res, GRN_SEL_OR, NULL);
+    query = grn_query_open(ctx, match_param, strlen(match_param), GRN_OP_OR, 32);
+    grn_obj_search(ctx, share->field[1]->index, (grn_obj*) query, this->res, GRN_OP_OR, NULL);
     this->cursor = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0);
     //grn_query_close(ctx, query);
   } else {
@@ -560,7 +560,7 @@ FT_INFO *ha_groonga::ft_init_ext(uint flags, uint inx,String *key)
     this->res = grn_table_create(ctx, NULL, 0, NULL, GRN_TABLE_HASH_KEY, share->obj, 0);
     GRN_TEXT_INIT(&buff, 0);
     GRN_TEXT_SET(ctx, &buff, match_param, strlen(match_param));
-    grn_obj_search(ctx, share->field[1]->index, &buff, this->res, GRN_SEL_OR, NULL);
+    grn_obj_search(ctx, share->field[1]->index, &buff, this->res, GRN_OP_OR, NULL);
     this->cursor = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0);
     //grn_obj_close(ctx, &buff);
   }
