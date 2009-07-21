@@ -138,10 +138,11 @@ fi
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
-CXXFLAGS="$CXXFLAGS -fno-implicit-templates -fno-exceptions -fno-rtti"
-
 AC_CHECK_CUTTER
 AC_CHECK_GCUTTER
+
+CFLAGS="$CFLAGS -Werror"
+CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti"
 
 AC_CONFIG_FILES([
   Makefile

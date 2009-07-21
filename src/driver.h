@@ -37,7 +37,7 @@ typedef struct _mrn_table {
 
 
 typedef struct _mrn_column_info {
-  char *name;
+  const char *name;
   uint name_size;
   char *path;
   grn_obj_flags flags;
@@ -46,7 +46,7 @@ typedef struct _mrn_column_info {
 } mrn_column_info;
 
 typedef struct _mrn_table_info {
-  char *name;
+  const char *name;
   uint name_size;
   char *path;
   grn_obj_flags flags;
@@ -60,7 +60,17 @@ typedef struct _mrn_info {
   mrn_column_info **columns;
   uint n_columns;
   uint ref_count;
+  grn_table_cursor *cursor;
 } mrn_info;
+
+typedef struct _mrn_record {
+  mrn_info *info;
+  const void *key;
+  uint key_size;
+  grn_obj **value;
+  uint n_columns;
+  grn_id id;
+} mrn_record;
 
 /* macro */
 #define MRN_MALLOC(size) malloc(size)
@@ -79,12 +89,19 @@ int mrn_flush_logs(grn_ctx *ctx);
 int mrn_hash_put(grn_ctx *ctx, const char *key, void *value);
 int mrn_hash_get(grn_ctx *ctx, const char *key, void **value);
 int mrn_hash_remove(grn_ctx *ctx, const char *key);
-mrn_info*  mrn_init_obj_info(grn_ctx *ctx, uint n_columns);
+
+mrn_info* mrn_init_obj_info(grn_ctx *ctx, uint n_columns);
 int mrn_deinit_obj_info(grn_ctx *ctx, mrn_info *info);
 int mrn_create(grn_ctx *ctx, mrn_info *info);
 int mrn_open(grn_ctx *ctx, mrn_info *info);
 int mrn_close(grn_ctx *ctx, mrn_info *info);
-int mrn_drop(grn_ctx *ctx, mrn_info *info);
+int mrn_drop(grn_ctx *ctx, const char *table_name);
+int mrn_write_row(grn_ctx *ctx, mrn_record *record);
+mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info);
+int mrn_deinit_record(grn_ctx *ctx, mrn_record *record);
+int mrn_rewind_record(grn_ctx *ctx, mrn_record *record);
+int mrn_rnd_init(grn_ctx *ctx, mrn_info *info);
+int mrn_rnd_next(grn_ctx *ctx, mrn_record *record);
 
 /* static variables */
 extern grn_hash *mrn_hash;

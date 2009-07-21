@@ -167,12 +167,11 @@ ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
   return 0;
 }
 
-
-
 /*
   create a table, mrn_table and push it to db hash.
   currently only using in-memory table in groonga.
 */
+#ifdef PROTOTYPE
 int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 {
   const char *obj_name = MRN_TABLE_NAME(name);
@@ -244,7 +243,19 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   grn_obj_remove(ctx, table_obj);
   return HA_WRONG_CREATE_OPTION;
 }
+#else
+int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
+{
+  int res;
+  mrn_info *minfo;
+  convert_info(this->table_share, &minfo);
+  res = mrn_create(ctx, minfo);
+  mrn_deinit_obj_info(ctx, minfo);
+  return res;
+}
+#endif
 
+#ifdef PROTOTYPE
 int ha_groonga::open(const char *name, int mode, uint test_if_locked)
 {
   thr_lock_init(&thr_lock);
@@ -296,7 +307,47 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
   share->use_count++;
   return 0;
 }
+#else
+int ha_groonga::open(const char *name, int mode, uint test_if_locked)
+{
+  thr_lock_init(&thr_lock);
+  thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
 
+  mrn_info *minfo;
+  int res;
+
+  pthread_mutex_lock(mrn_lock);
+
+  if (mrn_hash_get(ctx, MRN_TABLE_NAME(name), (void**) &minfo) == 0)
+  {
+    minfo->ref_count++;
+    pthread_mutex_unlock(mrn_lock);
+    return 0;
+  }
+  else
+  {
+    mrn_info *minfo;
+    convert_info(this->table_share, &minfo);
+    if (mrn_open(ctx, minfo) == 0)
+    {
+      mrn_hash_put(ctx, minfo->table->name, minfo);
+      minfo->ref_count++;
+      pthread_mutex_unlock(mrn_lock);
+      this->minfo = minfo;
+      return 0;
+    }
+    else
+    {
+      pthread_mutex_unlock(mrn_lock);
+      mrn_deinit_obj_info(ctx, minfo);
+      this->minfo = NULL;
+      return -1;
+    }
+  }
+}
+#endif
+
+#ifdef PROTOTYPE
 int ha_groonga::close()
 {
   thr_lock_delete(&thr_lock);
@@ -314,6 +365,45 @@ int ha_groonga::close()
 
   return 0;
 }
+#else
+int ha_groonga::close()
+{
+  thr_lock_delete(&thr_lock);
+
+  mrn_info *minfo = this->minfo;
+
+  pthread_mutex_lock(mrn_lock);
+
+  minfo->ref_count--;
+  if (minfo->ref_count <= 0)
+  {
+    mrn_hash_remove(ctx, minfo->table->name);
+    mrn_close(ctx, minfo);
+    mrn_deinit_obj_info(ctx, minfo);
+    this->minfo = NULL;
+  }
+
+  pthread_mutex_unlock(mrn_lock);
+  return 0;
+}
+#endif
+
+#ifdef PROTOTYPE
+int ha_groonga::delete_table(const char *name)
+{
+
+  const char *obj_name = MRN_TABLE_NAME(name);
+  grn_obj *obj = grn_table_open(ctx, obj_name, strlen(obj_name), NULL);
+  grn_obj_remove(ctx, obj);
+
+  return 0;
+}
+#else
+int ha_groonga::delete_table(const char *name)
+{
+  return mrn_drop(ctx, MRN_TABLE_NAME(name));
+}
+#endif
 
 int ha_groonga::info(uint flag)
 {
@@ -332,13 +422,21 @@ THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
   return to;
 }
 
+#ifdef PROTOTYPE
 int ha_groonga::rnd_init(bool scan)
 {
   this->cursor = grn_table_cursor_open(ctx, share->obj,
 				       NULL, 0, NULL, 0, 0);
   return 0;
 }
+#else
+int ha_groonga::rnd_init(bool scan)
+{
+  return mrn_rnd_init(ctx, minfo);
+}
+#endif
 
+#ifdef PROTOTYPE
 int ha_groonga::rnd_next(uchar *buf)
 {
   grn_id gid = grn_table_cursor_next(ctx, this->cursor);
@@ -385,6 +483,47 @@ int ha_groonga::rnd_next(uchar *buf)
     return HA_ERR_END_OF_FILE;
   }
 }
+#else
+int ha_groonga::rnd_next(uchar *buf)
+{
+  mrn_record *record;
+  mrn_info *info = this->minfo;
+  record = mrn_init_record(ctx, info);
+  int rc = mrn_rnd_next(ctx, record);
+  if (rc == 0)
+  {
+    Field **field;
+    int i;
+    for (i=0, field = table->field; *field; i++, field++)
+    {
+      int *vint;
+      char *vchar;
+      switch ((*field)->type())
+      {
+      case (MYSQL_TYPE_LONG) :
+        vint = (int*) GRN_BULK_HEAD(record->value[i]);
+        (*field)->set_notnull();
+        (*field)->store(*vint);
+        break;
+      case (MYSQL_TYPE_VARCHAR) :
+        vchar = (char*) GRN_BULK_HEAD(record->value[i]);
+        (*field)->set_notnull();
+        (*field)->store(vchar, GRN_BULK_WSIZE(record->value[i]), system_charset_info);
+        break;
+      }
+    }
+    return 0;
+  }
+  else if (rc == 1)
+  {
+    return HA_ERR_END_OF_FILE;
+  }
+  else
+  {
+    return -1;
+  }
+}
+#endif
 
 int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
 {
@@ -421,16 +560,7 @@ void ha_groonga::position(const uchar *record)
   memcpy(this->ref, &this->record_id, sizeof(grn_id));
 }
 
-int ha_groonga::delete_table(const char *name)
-{
-
-  const char *obj_name = MRN_TABLE_NAME(name);
-  grn_obj *obj = grn_table_open(ctx, obj_name, strlen(obj_name), NULL);
-  grn_obj_remove(ctx, obj);
-
-  return 0;
-}
-
+#ifdef PROTOTYPE
 int ha_groonga::write_row(uchar *buf)
 {
   /*
@@ -480,6 +610,35 @@ int ha_groonga::write_row(uchar *buf)
   grn_obj_close(ctx, &wrapper);
   return 0;
 }
+#else
+int ha_groonga::write_row(uchar *buf)
+{
+  mrn_info *minfo = this->minfo;
+  mrn_record *record = mrn_init_record(ctx, minfo);
+  Field **field;
+  int i;
+  for (i=0, field = table->field; *field; i++, field++)
+  {
+    /* TODO: replace if-else into swtich-case */
+    if ((*field)->type() == MYSQL_TYPE_LONG) {
+      int val = (*field)->val_int();
+      GRN_TEXT_SET(ctx, record->value[i], (char*)&val, sizeof(val));
+    } else if ((*field)->type() == MYSQL_TYPE_VARCHAR) {
+      String tmp;
+      const char *val = (*field)->val_str(&tmp)->ptr();
+      GRN_TEXT_SET(ctx, record->value[i], val, strlen(val));
+    } else {
+      return HA_ERR_UNSUPPORTED;
+    }
+  }
+  if (mrn_write_row(ctx, record) != 0)
+  {
+    return -1;
+  }
+  mrn_deinit_record(ctx, record);
+  return 0;
+}
+#endif
 
 int ha_groonga::index_read(uchar *buf, const uchar *key,
 			   uint key_len, enum ha_rkey_function find_flag)
@@ -597,6 +756,28 @@ int ha_groonga::ft_read(uchar *buf)
   }
   table->status = HA_ERR_END_OF_FILE;
   return HA_ERR_END_OF_FILE;
+}
+
+int ha_groonga::convert_info(TABLE_SHARE *share, mrn_info **_minfo)
+{
+  uint n_columns = share->fields, i;
+  mrn_info *minfo = mrn_init_obj_info(ctx, n_columns);
+  minfo->table->name = share->table_name.str;
+  minfo->table->name_size = share->table_name.length;
+  minfo->table->flags |= GRN_OBJ_TABLE_NO_KEY;
+
+  for (i=0; i < n_columns; i++)
+  {
+    Field *field = share->field[i];
+    minfo->columns[i]->name = field->field_name;
+    minfo->columns[i]->name_size = strlen(minfo->columns[i]->name);
+    minfo->columns[i]->flags |= GRN_OBJ_COLUMN_SCALAR;
+    minfo->columns[i]->type = mrn_get_type(ctx, field->type());
+  }
+
+  minfo->n_columns = n_columns;
+  *_minfo = minfo;
+  return 0;
 }
 
 #ifdef __cplusplus

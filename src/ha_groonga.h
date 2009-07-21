@@ -20,6 +20,8 @@ class ha_groonga: public handler
 
   grn_ctx *ctx;
 
+  mrn_info *minfo;
+
 public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);
   ~ha_groonga();
@@ -60,6 +62,9 @@ public:
   int ft_init();
   FT_INFO *ft_init_ext(uint flags, uint inx,String *key);
   int ft_read(uchar *buf);
+
+  // additional functions
+  int convert_info(TABLE_SHARE *share, mrn_info **minfo);
 };
 
 #endif /* _ha_groonga_h */

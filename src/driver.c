@@ -161,7 +161,7 @@ int mrn_deinit()
   grn_obj_close(&ctx, mrn_lexicon);
   mrn_lexicon = NULL;
 
-  grn_db_close(&ctx, mrn_db);
+  grn_obj_close(&ctx, mrn_db);
   mrn_db = NULL;
 
   fclose(mrn_logfile);
@@ -416,20 +416,130 @@ int mrn_close(grn_ctx *ctx, mrn_info *info)
   return 0;
 }
 
-int mrn_drop(grn_ctx *ctx, mrn_info *info)
+int mrn_drop(grn_ctx *ctx, const char *table_name)
 {
-  if (mrn_open(ctx, info) == 0)
+  grn_obj *table;
+  table = grn_ctx_get(ctx, table_name, strlen(table_name));
+  grn_obj_remove(ctx, table);
+  return 0;
+}
+
+int mrn_write_row(grn_ctx *ctx, mrn_record *record)
+{
+  grn_obj *table, *column;
+  grn_id gid;
+  int added, i;
+  table = record->info->table->obj;
+  gid = grn_table_add(ctx, table, record->key, record->key_size, &added);
+  if (added == 0)
   {
-    int i;
-    for (i=0; i < info->n_columns; i++)
-    {
-      grn_obj_remove(ctx, info->columns[i]->obj);
-      info->columns[i]->obj = NULL;
-    }
-    grn_obj_remove(ctx, info->table->obj);
-    info->table->obj = NULL;
-    return 0;
+    goto duplicated_key_err;
   }
-  GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table=%s duaring drop process", info->table->name);
+  for (i=0; i < record->info->n_columns; i++)
+  {
+    column = record->info->columns[i]->obj;
+    if (record->value[i] == NULL)
+    {
+      continue;
+    }
+    if (grn_obj_set_value(ctx, column, gid, record->value[i], GRN_OBJ_SET)
+        != GRN_SUCCESS)
+    {
+      goto obj_set_err;
+    }
+  }
+  return 0;
+
+duplicated_key_err:
+  GRN_LOG(ctx, GRN_LOG_INFO, "duplicated key error for table=%s",
+          record->info->table->name);
+  return -2;
+obj_set_err:
+  return -1;
+}
+
+mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info)
+{
+  mrn_record *record;
+  int i, size, offset;
+  void *p;
+  size = sizeof(mrn_record) + (sizeof(grn_obj*) + sizeof(grn_obj)) * info->n_columns;
+  p = malloc(size);
+  record = (mrn_record*) p;
+  p += sizeof(mrn_record);
+  record->info = info;
+  record->value = (grn_obj**) p;
+  p += sizeof(grn_obj*) * info->n_columns;
+  for (i=0,offset=0; i < info->n_columns; i++)
+  {
+    record->value[i] = (grn_obj*) (p + offset);
+    GRN_TEXT_INIT(record->value[i], 0);
+    offset += sizeof(grn_obj);
+  }
+  record->n_columns = info->n_columns;
+  return record;
+}
+
+
+int mrn_deinit_record(grn_ctx *ctx, mrn_record *record)
+{
+  int i;
+  for (i=0; i < record->n_columns; i++)
+  {
+    grn_obj_close(ctx, record->value[i]);
+  }
+  free(record);
+  record = NULL;
+  return 0;
+}
+
+int mrn_rewind_record(grn_ctx *ctx, mrn_record *record)
+{
+  int i;
+  for (i=0; i < record->n_columns; i++)
+  {
+    GRN_BULK_REWIND(record->value[i]);
+  }
+  return 0;
+}
+
+int mrn_rnd_init(grn_ctx *ctx, mrn_info *info)
+{
+  info->cursor = grn_table_cursor_open(ctx, info->table->obj, NULL, 0, NULL, 0, 0);
+  if (info->cursor == NULL)
+  {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open cursor: %s", info->table->name);
+    return -1;
+  }
+  return 0;
+}
+
+int mrn_rnd_next(grn_ctx *ctx, mrn_record *record)
+{
+  int i;
+  grn_table_cursor *cursor = record->info->cursor;
+  record->id = grn_table_cursor_next(ctx, cursor);
+  if (record->id == GRN_ID_NIL)
+  {
+    grn_table_cursor_close(ctx, cursor);
+    record->info->cursor = NULL;
+    return 1; // EOF
+  }
+  else
+  {
+    for (i=0; i < record->n_columns; i++)
+    {
+      if (grn_obj_get_value(ctx, record->info->columns[i]->obj,
+                            record->id, record->value[i]) == NULL)
+      {
+        GRN_LOG(ctx, GRN_LOG_ERROR, "error while fetching cursor:[%s,%d,%d]",
+                record->info->table->name, i, record->id);
+        goto err;
+      }
+    }
+  }
+  return 0;
+
+err:
   return -1;
 }
