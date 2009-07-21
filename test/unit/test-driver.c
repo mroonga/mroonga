@@ -325,6 +325,7 @@ void test_mrn_drop_from_other_ctx()
   cut_assert_equal_int(0, mrn_drop(&ctx2, "test/t1"));
   cut_assert_equal_int(-1, mrn_open(&ctx2, info));
   mrn_deinit_obj_info(ctx, info);
+  grn_ctx_fin(&ctx2);
 }
 
 void test_mrn_write_row()

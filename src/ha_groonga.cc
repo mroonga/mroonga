@@ -534,6 +534,7 @@ int ha_groonga::rnd_next(uchar *buf)
 }
 #endif
 
+#ifdef PROTOTYPE
 int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
 {
   grn_id gid = *((grn_id*) pos);
@@ -563,11 +564,23 @@ int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
   }
   return 0;
 }
+#else
+int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
+{
+  return 0;
+}
+#endif
 
+#ifdef PROTOTYPE
 void ha_groonga::position(const uchar *record)
 {
   memcpy(this->ref, &this->record_id, sizeof(grn_id));
 }
+#else
+void ha_groonga::position(const uchar *record)
+{
+}
+#endif
 
 #ifdef PROTOTYPE
 int ha_groonga::write_row(uchar *buf)
@@ -700,6 +713,12 @@ int ha_groonga::index_read(uchar *buf, const uchar *key,
   }
   return rc;
 }
+#else
+int ha_groonga::index_read(uchar *buf, const uchar *key,
+			   uint key_len, enum ha_rkey_function find_flag)
+{
+  return 0;
+}
 #endif
 
 #ifdef PROTOTYPE
@@ -707,9 +726,18 @@ int ha_groonga::index_next(uchar *buf)
 {
   return HA_ERR_END_OF_FILE;
 }
+#else
+int ha_groonga::index_next(uchar *buf)
+{
+  return HA_ERR_END_OF_FILE;
+}
 #endif
 
 #ifdef PROTOTYPE
+int ha_groonga::ft_init() {
+  return 0;
+}
+#else
 int ha_groonga::ft_init() {
   return 0;
 }
@@ -739,6 +767,11 @@ FT_INFO *ha_groonga::ft_init_ext(uint flags, uint inx,String *key)
     //grn_obj_close(ctx, &buff);
   }
   int nrec = grn_table_size(ctx, res);
+  return NULL;
+}
+#else
+FT_INFO *ha_groonga::ft_init_ext(uint flags, uint inx,String *key)
+{
   return NULL;
 }
 #endif
@@ -772,6 +805,11 @@ int ha_groonga::ft_read(uchar *buf)
     return 0;
   }
   table->status = HA_ERR_END_OF_FILE;
+  return HA_ERR_END_OF_FILE;
+}
+#else
+int ha_groonga::ft_read(uchar *buf)
+{
   return HA_ERR_END_OF_FILE;
 }
 #endif
