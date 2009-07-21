@@ -297,6 +297,37 @@ void test_mrn_drop()
   mrn_deinit_obj_info(ctx, info);
 }
 
+void test_mrn_drop_from_other_ctx()
+{
+  TEST_ENTER;
+  grn_obj *obj, *obj2;
+  mrn_info *info = mrn_init_obj_info(ctx, 2);
+  grn_ctx ctx2;
+  grn_ctx_init(&ctx2,0);
+  grn_ctx_use(&ctx2, mrn_db);
+
+  info->table->name = "test/t1";
+  info->table->name_size = strlen("test/t1");
+  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
+
+  info->columns[0]->name = "c1";
+  info->columns[0]->name_size = strlen("c1");
+  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+
+  info->columns[1]->name = "c2";
+  info->columns[1]->name_size = strlen("c2");
+  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+
+  cut_assert_equal_int(0, mrn_create(ctx, info));
+  cut_assert_equal_int(0, mrn_open(ctx, info));
+  cut_assert_equal_int(0, mrn_close(ctx, info));
+  cut_assert_equal_int(0, mrn_drop(&ctx2, "test/t1"));
+  cut_assert_equal_int(-1, mrn_open(&ctx2, info));
+  mrn_deinit_obj_info(ctx, info);
+}
+
 void test_mrn_write_row()
 {
   TEST_ENTER;
