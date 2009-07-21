@@ -64,7 +64,7 @@ public:
   int ft_read(uchar *buf);
 
   // additional functions
-  int convert_info(TABLE_SHARE *share, mrn_info **minfo);
+  int convert_info(const char *name, TABLE_SHARE *share, mrn_info **minfo);
 };
 
 #endif /* _ha_groonga_h */

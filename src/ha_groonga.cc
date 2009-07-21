@@ -248,7 +248,7 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 {
   int res;
   mrn_info *minfo;
-  convert_info(this->table_share, &minfo);
+  convert_info(name, this->table_share, &minfo);
   res = mrn_create(ctx, minfo);
   mrn_deinit_obj_info(ctx, minfo);
   return res;
@@ -327,7 +327,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
   else
   {
     mrn_info *minfo;
-    convert_info(this->table_share, &minfo);
+    convert_info(name, this->table_share, &minfo);
     if (mrn_open(ctx, minfo) == 0)
     {
       mrn_hash_put(ctx, minfo->table->name, minfo);
@@ -818,12 +818,12 @@ int ha_groonga::ft_read(uchar *buf)
 }
 #endif
 
-int ha_groonga::convert_info(TABLE_SHARE *share, mrn_info **_minfo)
+int ha_groonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_minfo)
 {
   uint n_columns = share->fields, i;
   mrn_info *minfo = mrn_init_obj_info(ctx, n_columns);
-  minfo->table->name = share->table_name.str;
-  minfo->table->name_size = share->table_name.length;
+  minfo->table->name = MRN_TABLE_NAME(name);
+  minfo->table->name_size = strlen(MRN_TABLE_NAME(name));
   minfo->table->flags |= GRN_OBJ_TABLE_NO_KEY;
 
   for (i=0; i < n_columns; i++)
