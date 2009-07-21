@@ -420,8 +420,17 @@ int mrn_drop(grn_ctx *ctx, const char *table_name)
 {
   grn_obj *table;
   table = grn_ctx_get(ctx, table_name, strlen(table_name));
+  if (table == NULL)
+  {
+    goto err;
+  }
   grn_obj_remove(ctx, table);
   return 0;
+
+err:
+  GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get in mrn_drop failed:[%s,%d,%p,%p]",
+          table_name, strlen(table_name), ctx, grn_ctx_db(ctx));
+  return -1;
 }
 
 int mrn_write_row(grn_ctx *ctx, mrn_record *record)
@@ -542,4 +551,9 @@ int mrn_rnd_next(grn_ctx *ctx, mrn_record *record)
 
 err:
   return -1;
+}
+
+uint mrn_table_size(grn_ctx *ctx, mrn_info *info)
+{
+  return grn_table_size(ctx, info->table->obj);
 }

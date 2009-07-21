@@ -102,6 +102,7 @@ int mrn_deinit_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rewind_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rnd_init(grn_ctx *ctx, mrn_info *info);
 int mrn_rnd_next(grn_ctx *ctx, mrn_record *record);
+uint mrn_table_size(grn_ctx *ctx, mrn_info *info);
 
 /* static variables */
 extern grn_hash *mrn_hash;

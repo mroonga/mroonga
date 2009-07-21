@@ -541,3 +541,48 @@ void test_mrn_rnd_next()
   cut_assert_equal_int(0, mrn_close(ctx, info));
   cut_assert_equal_int(0, mrn_drop(ctx, "test/t1"));
 }
+
+void test_mrn_table_size()
+{
+  TEST_ENTER;
+  grn_obj *obj, *obj2;
+  mrn_info *info = mrn_init_obj_info(ctx, 2);
+  mrn_record *record;
+
+  info->table->name = "test/t1";
+  info->table->name_size = strlen("test/t1");
+  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
+
+  info->columns[0]->name = "c1";
+  info->columns[0]->name_size = strlen("c1");
+  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+
+  info->columns[1]->name = "c2";
+  info->columns[1]->name_size = strlen("c2");
+  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+
+  cut_assert_equal_int(0, mrn_create(ctx, info));
+  cut_assert_equal_int(0, mrn_open(ctx, info));
+
+  record = mrn_init_record(ctx, info);
+  cut_assert_not_null(record);
+  int val1=100;
+  char *val2 = "record value";
+  GRN_TEXT_SET(ctx, record->value[0], (char*) &val1, sizeof(val1));
+  cut_assert_equal_int(12, strlen(val2));
+  GRN_TEXT_SET(ctx, record->value[1], val2, strlen(val2));
+  cut_assert_equal_int(0, mrn_write_row(ctx, record));
+  cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
+
+  cut_assert_equal_int(0, mrn_rnd_init(ctx, info));
+  cut_assert_not_null(info->cursor);
+
+  {
+    cut_assert_equal_int(1, mrn_table_size(ctx, info));
+  }
+
+  cut_assert_equal_int(0, mrn_close(ctx, info));
+  cut_assert_equal_int(0, mrn_drop(ctx, "test/t1"));
+}

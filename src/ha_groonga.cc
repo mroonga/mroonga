@@ -405,12 +405,21 @@ int ha_groonga::delete_table(const char *name)
 }
 #endif
 
+#ifdef PROTOTYPE
 int ha_groonga::info(uint flag)
 {
   stats.records = (ha_rows) grn_table_size(ctx, share->obj);
 
   return 0;
 }
+#else
+int ha_groonga::info(uint flag)
+{
+  stats.records = (ha_rows) mrn_table_size(ctx, this->minfo);
+
+  return 0;
+}
+#endif
 
 THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
 				       THR_LOCK_DATA **to,
