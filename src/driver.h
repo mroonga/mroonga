@@ -51,7 +51,6 @@ typedef struct _mrn_table_info {
   char *path;
   grn_obj_flags flags;
   grn_obj *key_type;
-  uint value_size;
   grn_obj *obj;
 } mrn_table_info;
 

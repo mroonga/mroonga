@@ -140,7 +140,6 @@ void test_mrn_init_obj_info()
   info->table->name = "hoge";
   info->table->name_size = 4;
   cut_assert_true(info->table->flags == GRN_OBJ_PERSISTENT);
-  cut_assert_true(info->table->value_size == GRN_TABLE_MAX_KEY_SIZE);
   cut_assert_null(info->table->obj);
   cut_assert_equal_int(n_columns, info->n_columns);
   for (i=0; i < n_columns; i++)

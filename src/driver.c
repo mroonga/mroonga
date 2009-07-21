@@ -207,10 +207,9 @@ int mrn_hash_get(grn_ctx *ctx, const char *key, void **value)
 {
   int res = 0;
   grn_id id;
-  grn_search_flags flags = 0;
   void *buf;
   pthread_mutex_lock(mrn_lock_hash);
-  id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), &buf, &flags);
+  id = grn_hash_get(ctx, mrn_hash, (const char*) key, strlen(key), &buf);
   // key not found
   if (id == GRN_ID_NIL)
   {
@@ -235,9 +234,8 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
   int res = 0;
   grn_rc rc;
   grn_id id;
-  grn_search_flags flags = 0;
   pthread_mutex_lock(mrn_lock_hash);
-  id = grn_hash_lookup(ctx, mrn_hash, (const char*) key, strlen(key), NULL, &flags);
+  id = grn_hash_get(ctx, mrn_hash, (const char*) key, strlen(key), NULL);
   if (id == GRN_ID_NIL)
   {
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash remove not found (key=%s)", key);
@@ -281,7 +279,6 @@ mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
   info->table->path = NULL;
   info->table->flags = GRN_OBJ_PERSISTENT;
   info->table->key_type = NULL;
-  info->table->value_size = GRN_TABLE_MAX_KEY_SIZE;
   info->table->obj = NULL;
 
   ptr += sizeof(mrn_table_info);
@@ -320,12 +317,12 @@ int mrn_create(grn_ctx *ctx, mrn_info *info)
 
   table->obj = grn_table_create(ctx, table->name, table->name_size,
                                 table->path, table->flags,
-                                table->key_type, table->value_size);
+                                table->key_type, NULL);
   if (table->obj == NULL)
   {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, name_size=%d, path=%s, "
             "flags=%d, key_type=%p, value_size=%d", table->name, table->name_size,
-            table->path, table->flags, table->key_type, table->value_size);
+            table->path, table->flags, table->key_type, NULL);
     return -1;
   }
   for (i=0; i < info->n_columns; i++)
