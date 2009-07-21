@@ -377,7 +377,11 @@ int ha_groonga::close()
   minfo->ref_count--;
   if (minfo->ref_count <= 0)
   {
-    mrn_hash_remove(ctx, minfo->table->name);
+    if (mrn_hash_remove(ctx, minfo->table->name) != 0)
+    {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "error in mrn_hash_remove:[%p,%s]",
+              ctx, minfo->table->name);
+    }
     mrn_close(ctx, minfo);
     mrn_deinit_obj_info(ctx, minfo);
     this->minfo = NULL;
