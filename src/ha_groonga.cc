@@ -27,7 +27,6 @@ MRN_CHARSET_MAP mrn_charset_map[] = {
   {0x0, GRN_ENC_NONE}
 };
 
-
 grn_encoding mrn_charset_mysql_groonga(const char *csname)
 {
   if (!csname) return GRN_ENC_NONE;
@@ -836,6 +835,7 @@ int ha_groonga::ft_read(uchar *buf)
 const COND *ha_groonga::cond_push(const COND *cond)
 {
   MRN_HTRACE;
+  convert_cond((Item*) cond);
   if (cond)
   {
     mrn_cond *tmp = (mrn_cond*) malloc(sizeof(mrn_cond));
@@ -849,7 +849,6 @@ const COND *ha_groonga::cond_push(const COND *cond)
   }
   DBUG_RETURN(NULL);
 
-  return cond;
 err_oom:
   my_errno = HA_ERR_OUT_OF_MEM;
   GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error in cond_push");
@@ -888,6 +887,92 @@ int ha_groonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
   *_minfo = minfo;
   return 0;
 }
+
+
+const char *mrn_item_type_string[] = {
+  "FIELD_ITEM", "FUNC_ITEM", "SUM_FUNC_ITEM", "STRING_ITEM",
+  "INT_ITEM", "REAL_ITEM", "NULL_ITEM", "VARBIN_ITEM",
+  "COPY_STR_ITEM", "FIELD_AVG_ITEM", "DEFAULT_VALUE_ITEM",
+  "PROC_ITEM", "COND_ITEM", "REF_ITEM", "FIELD_STD_ITEM",
+  "FIELD_VARIANCE_ITEM", "INSERT_VALUE_ITEM",
+  "SUBSELECT_ITEM", "ROW_ITEM", "CACHE_ITEM", "TYPE_HOLDER",
+  "PARAM_ITEM", "TRIGGER_FIELD_ITEM", "DECIMAL_ITEM",
+  "XPATH_NODESET", "XPATH_NODESET_CMP",
+  "VIEW_FIXER_ITEM"};
+
+const char *mrn_functype_string[] = {
+  "UNKNOWN_FUNC","EQ_FUNC","EQUAL_FUNC","NE_FUNC","LT_FUNC","LE_FUNC",
+  "GE_FUNC","GT_FUNC","FT_FUNC",
+  "LIKE_FUNC","ISNULL_FUNC","ISNOTNULL_FUNC",
+  "COND_AND_FUNC", "COND_OR_FUNC", "COND_XOR_FUNC",
+  "BETWEEN", "IN_FUNC", "MULT_EQUAL_FUNC",
+  "INTERVAL_FUNC", "ISNOTNULLTEST_FUNC",
+  "SP_EQUALS_FUNC", "SP_DISJOINT_FUNC","SP_INTERSECTS_FUNC",
+  "SP_TOUCHES_FUNC","SP_CROSSES_FUNC","SP_WITHIN_FUNC",
+  "SP_CONTAINS_FUNC","SP_OVERLAPS_FUNC",
+  "SP_STARTPOINT","SP_ENDPOINT","SP_EXTERIORRING",
+  "SP_POINTN","SP_GEOMETRYN","SP_INTERIORRINGN",
+  "NOT_FUNC", "NOT_ALL_FUNC",
+  "NOW_FUNC", "TRIG_COND_FUNC",
+  "SUSERVAR_FUNC", "GUSERVAR_FUNC", "COLLATE_FUNC",
+  "EXTRACT_FUNC", "CHAR_TYPECAST_FUNC", "FUNC_SP", "UDF_FUNC",
+  "NEG_FUNC", "GSYSVAR_FUNC"};
+
+extern int string2my_decimal(uint mask, const String *str, my_decimal *d);
+#include "item_func.h"
+#include "my_decimal.h"
+
+/*
+int ha_groonga::convert_cond(Item *cond)
+{
+  char buff[256];
+  String str(buff,(uint32) sizeof(buff), system_charset_info);
+  str.length(0);
+  cond->print(&str, QT_ORDINARY);
+  str.append("\0");
+  printf("COND* name=%s, type()=%s", cond->name, mrn_item_type_string[cond->type()]);
+  if (cond->type() == Item::FUNC_ITEM) {
+    Item_func *item = (Item_func*) cond;
+    printf(", functype=%s", mrn_functype_string[item->functype()]);
+  } else if (cond->type() == Item::INT_ITEM) {
+    Item_int *item = (Item_int*) cond;
+    printf(", value=%d", item->value);
+  } else if (cond->type() == Item::FIELD_ITEM) {
+  }
+  printf(", str=%s",str.ptr());
+  printf("\n");
+  if (cond->next != NULL)
+  {
+    convert_cond(cond->next);
+  }
+  else
+  {
+    printf("-----\n");
+  }
+  return 0;
+}
+*/
+int ha_groonga::convert_cond(Item *cond)
+{
+  Item *tmp = cond;
+  while (tmp)
+  {
+    //printf(" %s", mrn_item_type_string[(int) tmp->type()]);
+    if (tmp->type() == Item::FUNC_ITEM)
+    {
+      Item_func *func = (Item_func*) tmp;
+      printf("(%s)", mrn_functype_string[(int) func->functype()]);
+    }
+    else
+    {
+      printf("(%s)", tmp->name);
+    }
+    tmp = tmp->next;
+  }
+  printf("\n");
+  return 0;
+}
+
 
 #ifdef __cplusplus
 }

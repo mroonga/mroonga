@@ -86,6 +86,7 @@ public:
 
   // additional functions
   int convert_info(const char *name, TABLE_SHARE *share, mrn_info **minfo);
+  int convert_cond(Item *cond);
 };
 
 #endif /* _ha_groonga_h */
