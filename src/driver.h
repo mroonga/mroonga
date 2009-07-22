@@ -10,12 +10,14 @@
 #define MRN_LOG_FILE_NAME "groonga.log"
 #define MRN_LEXICON_TABLE_NAME "lexicon"
 
-typedef struct _mrn_charset_map {
+typedef struct _mrn_charset_map
+{
   const char *csname_mysql;
   grn_encoding csname_groonga;
 } MRN_CHARSET_MAP;
 
-typedef struct _mrn_field {
+typedef struct _mrn_field
+{
   const char *name;
   uint name_len;
   grn_obj *obj;
@@ -24,7 +26,8 @@ typedef struct _mrn_field {
   uint field_no;
 } mrn_field;
 
-typedef struct _mrn_table {
+typedef struct _mrn_table
+{
   const char *name;
   uint name_len;
   uint use_count;
@@ -36,7 +39,8 @@ typedef struct _mrn_table {
 } mrn_table;
 
 
-typedef struct _mrn_column_info {
+typedef struct _mrn_column_info
+{
   const char *name;
   uint name_size;
   char *path;
@@ -45,7 +49,8 @@ typedef struct _mrn_column_info {
   grn_obj *obj;
 } mrn_column_info;
 
-typedef struct _mrn_table_info {
+typedef struct _mrn_table_info
+{
   const char *name;
   uint name_size;
   char *path;
@@ -54,7 +59,8 @@ typedef struct _mrn_table_info {
   grn_obj *obj;
 } mrn_table_info;
 
-typedef struct _mrn_info {
+typedef struct _mrn_info
+{
   mrn_table_info *table;
   mrn_column_info **columns;
   uint n_columns;
@@ -62,7 +68,8 @@ typedef struct _mrn_info {
   grn_table_cursor *cursor;
 } mrn_info;
 
-typedef struct _mrn_record {
+typedef struct _mrn_record
+{
   mrn_info *info;
   const void *key;
   uint key_size;

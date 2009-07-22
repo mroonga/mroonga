@@ -7,6 +7,23 @@
 
 #include "driver.h"
 
+#ifdef MRN_HTRACE
+#undef MRN_HTRACE
+#define MRN_HTRACE {\
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "[handler=%p, ctx=%p, minfo=%p] ha_groonga::%s (%s)", \
+            this,ctx,minfo, __FUNCTION__,                               \
+            (minfo) ? ((minfo->table) ? (minfo->table->name) : NULL) : NULL); \
+  } while(0)
+#else
+#define MRN_HTRACE
+#endif
+
+typedef struct _mrn_cond
+{
+  COND *cond;
+  _mrn_cond *next;
+} mrn_cond;
+
 /* handler class */
 class ha_groonga: public handler
 {
@@ -21,6 +38,7 @@ class ha_groonga: public handler
   grn_ctx *ctx;
 
   mrn_info *minfo;
+  mrn_cond *mcond;
 
 public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);
@@ -62,6 +80,9 @@ public:
   int ft_init();
   FT_INFO *ft_init_ext(uint flags, uint inx,String *key);
   int ft_read(uchar *buf);
+
+  const COND *cond_push(const COND *cond);
+  void cond_pop();
 
   // additional functions
   int convert_info(const char *name, TABLE_SHARE *share, mrn_info **minfo);
