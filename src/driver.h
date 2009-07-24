@@ -114,7 +114,7 @@ mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info);
 int mrn_deinit_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rewind_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rnd_init(grn_ctx *ctx, mrn_info *info);
-int mrn_rnd_next(grn_ctx *ctx, mrn_record *record);
+int mrn_rnd_next(grn_ctx *ctx, mrn_record *record, mrn_column_list *list);
 uint mrn_table_size(grn_ctx *ctx, mrn_info *info);
 mrn_column_list* mrn_init_column_list(grn_ctx *ctx, mrn_info *info, int *src, int size);
 int mrn_deinit_column_list(grn_ctx *ctx, mrn_column_list *list);

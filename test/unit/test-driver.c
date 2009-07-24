@@ -529,7 +529,7 @@ void test_mrn_rnd_next()
     int *res1;
     char *res2;
     record = mrn_init_record(ctx, info);
-    cut_assert_equal_int(0, mrn_rnd_next(ctx, record));
+    cut_assert_equal_int(0, mrn_rnd_next(ctx, record, NULL));
     res1 = (int*) GRN_BULK_HEAD(record->value[0]);
     res2 = (char*) GRN_BULK_HEAD(record->value[1]);
     cut_assert_equal_int(100, *res1);
@@ -537,7 +537,7 @@ void test_mrn_rnd_next()
     cut_assert_equal_int(0, strncmp(val2, res2, 12));
 
     cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
-    cut_assert_equal_int(1, mrn_rnd_next(ctx, record));
+    cut_assert_equal_int(1, mrn_rnd_next(ctx, record, NULL));
     cut_assert_null(record->info->cursor);
     cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
   }

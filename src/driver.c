@@ -520,7 +520,7 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info)
   return 0;
 }
 
-int mrn_rnd_next(grn_ctx *ctx, mrn_record *record)
+int mrn_rnd_next(grn_ctx *ctx, mrn_record *record, mrn_column_list *list)
 {
   int i;
   grn_table_cursor *cursor = record->info->cursor;
@@ -535,6 +535,12 @@ int mrn_rnd_next(grn_ctx *ctx, mrn_record *record)
   {
     for (i=0; i < record->n_columns; i++)
     {
+      if ((list) && !(list->columns[i]))
+      {
+        // column pruning
+        record->value[i] = NULL;
+        continue;
+      }
       if (grn_obj_get_value(ctx, record->info->columns[i]->obj,
                             record->id, record->value[i]) == NULL)
       {

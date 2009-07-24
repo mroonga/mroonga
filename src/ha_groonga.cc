@@ -505,36 +505,52 @@ int ha_groonga::rnd_next(uchar *buf)
 int ha_groonga::rnd_next(uchar *buf)
 {
   MRN_HTRACE;
+  int rc;
   mrn_record *record;
   mrn_info *info = this->minfo;
   record = mrn_init_record(ctx, info);
-  int rc = mrn_rnd_next(ctx, record);
+  if (mcond == NULL)
+  {
+    rc = mrn_rnd_next(ctx, record, NULL);
+  }
+  else
+  {
+    rc = mrn_rnd_next(ctx, record, mcond->list);
+  }
   if (rc == 0)
   {
     Field **field;
     int i;
     for (i=0, field = table->field; *field; i++, field++)
     {
-      int *vint;
-      char *vchar;
-      switch ((*field)->type())
+      if (record->value[i] == NULL)
       {
-      case (MYSQL_TYPE_LONG) :
-        vint = (int*) GRN_BULK_HEAD(record->value[i]);
-        (*field)->set_notnull();
-        (*field)->store(*vint);
-        break;
-      case (MYSQL_TYPE_VARCHAR) :
-        vchar = (char*) GRN_BULK_HEAD(record->value[i]);
-        (*field)->set_notnull();
-        (*field)->store(vchar, GRN_BULK_WSIZE(record->value[i]), system_charset_info);
-        break;
+        (*field)->set_null();
+      }
+      else
+      {
+        int *vint;
+        char *vchar;
+        switch ((*field)->type())
+        {
+        case (MYSQL_TYPE_LONG) :
+          vint = (int*) GRN_BULK_HEAD(record->value[i]);
+          (*field)->set_notnull();
+          (*field)->store(*vint);
+          break;
+        case (MYSQL_TYPE_VARCHAR) :
+          vchar = (char*) GRN_BULK_HEAD(record->value[i]);
+          (*field)->set_notnull();
+          (*field)->store(vchar, GRN_BULK_WSIZE(record->value[i]), system_charset_info);
+          break;
+        }
       }
     }
     return 0;
   }
   else if (rc == 1)
   {
+    mcond = NULL;
     return HA_ERR_END_OF_FILE;
   }
   else
