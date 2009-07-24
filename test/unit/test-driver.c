@@ -632,11 +632,13 @@ void test_mrn_init_column_list()
     cut_assert_not_null(list);
     cut_assert_equal_int(0, memcmp(info, list->info, sizeof(info)));
     cut_assert_not_null(list->columns);
-    cut_assert_equal_int(2, list->n_columns);
-    cut_assert_not_null(list->columns[0]);
-    cut_assert_equal_string("c2", list->columns[0]->name);
+    cut_assert_equal_int(2, list->actual_size);
+    cut_assert_null(list->columns[0]);
     cut_assert_not_null(list->columns[1]);
-    cut_assert_equal_string("c4", list->columns[1]->name);
+    cut_assert_equal_string("c2", list->columns[1]->name);
+    cut_assert_null(list->columns[2]);
+    cut_assert_not_null(list->columns[3]);
+    cut_assert_equal_string("c4", list->columns[3]->name);
     mrn_deinit_column_list(ctx, list);
   }
 

@@ -559,7 +559,7 @@ mrn_column_list* mrn_init_column_list(grn_ctx *ctx, mrn_info *info, int *src, in
 {
   char *spot;
   mrn_column_list *list;
-  int i, j, list_size=0 , n_columns=info->n_columns;
+  int i, actual_size=0 , n_columns=info->n_columns;
   spot = (char*) malloc(n_columns);
   if (spot == NULL)
   {
@@ -574,24 +574,27 @@ mrn_column_list* mrn_init_column_list(grn_ctx *ctx, mrn_info *info, int *src, in
   {
     if (spot[i] != 0)
     {
-      list_size++;
+      actual_size++;
     }
   }
   list = (mrn_column_list*) malloc(sizeof(mrn_column_list) +
-                                   sizeof(mrn_column_list*) * list_size);
+                                   sizeof(mrn_column_list*) * n_columns);
   if (list == NULL)
   {
     goto err_oom;
   }
   list->info = info;
   list->columns = (mrn_column_info**) (list + sizeof(mrn_column_list));
-  list->n_columns = list_size;
-  for (i=0,j=0; i < n_columns; i++)
+  list->actual_size = actual_size;
+  for (i=0; i < n_columns; i++)
   {
-    if (spot[i] != 0)
+    if (spot[i] == 0)
     {
-      list->columns[j] = info->columns[i];
-      j++;
+      list->columns[i] = NULL;
+    }
+    else
+    {
+      list->columns[i] = info->columns[i];
     }
   }
   free(spot);

@@ -82,7 +82,7 @@ typedef struct _mrn_column_list
 {
   mrn_info *info;
   mrn_column_info **columns;
-  uint n_columns;
+  uint actual_size;
 } mrn_column_list;
 
 /* macro */
