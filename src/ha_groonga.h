@@ -22,6 +22,7 @@ typedef struct _mrn_cond
 {
   COND *cond;
   _mrn_cond *next;
+  mrn_column_list *list;
 } mrn_cond;
 
 /* handler class */
@@ -87,6 +88,7 @@ public:
   // additional functions
   int convert_info(const char *name, TABLE_SHARE *share, mrn_info **minfo);
   int convert_cond(Item *cond);
+  int is_own_field(Item_field *item);
 };
 
 #endif /* _ha_groonga_h */

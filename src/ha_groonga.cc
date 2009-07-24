@@ -835,7 +835,6 @@ int ha_groonga::ft_read(uchar *buf)
 const COND *ha_groonga::cond_push(const COND *cond)
 {
   MRN_HTRACE;
-  convert_cond((Item*) cond);
   if (cond)
   {
     mrn_cond *tmp = (mrn_cond*) malloc(sizeof(mrn_cond));
@@ -846,6 +845,7 @@ const COND *ha_groonga::cond_push(const COND *cond)
     tmp->cond = (COND *) cond;
     tmp->next = this->mcond;
     mcond = tmp;
+    convert_cond((Item*) cond);
   }
   DBUG_RETURN(NULL);
 
@@ -952,9 +952,11 @@ int ha_groonga::convert_cond(Item *cond)
   return 0;
 }
 */
+/*
 int ha_groonga::convert_cond(Item *cond)
 {
   Item *tmp = cond;
+  printf("%s: ", this->minfo->table->name);
   while (tmp)
   {
     //printf(" %s", mrn_item_type_string[(int) tmp->type()]);
@@ -972,9 +974,56 @@ int ha_groonga::convert_cond(Item *cond)
   printf("\n");
   return 0;
 }
+*/
 
+int ha_groonga::convert_cond(Item *cond)
+{
+  int idx, max_size=256;
+  int src[max_size];
+  Item *item = cond;
+  memset(src, 0, sizeof(int)*max_size);
+  // currently only pruning columns access
+  for (idx=0; item;)
+  {
+    if (item->type() == Item::FIELD_ITEM)
+    {
+      int i=0;
+      if (is_own_field((Item_field*) item))
+      {
+        Field *field = ((Item_field*) item)->field;
+        src[idx] = field->field_index;
+        if (idx++ >= max_size)
+        {
+          GRN_LOG(ctx, GRN_LOG_ERROR, "index overflow on convert_cond");
+          return -1;
+        }
+      }
+    }
+    item = item->next;
+  }
+  mcond->list = mrn_init_column_list(ctx, minfo, src, idx);
+  return 0;
+}
+
+int ha_groonga::is_own_field(Item_field *item)
+{
+  Field *field = item->field;
+  if ((field != NULL) &&
+      (strncmp(table_share->table_name.str,
+               field->table->s->table_name.str,
+               table_share->table_name.length) == 0) &&
+      (strncmp(table_share->db.str,
+               field->table->s->db.str,
+               table_share->db.length) == 0))
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
 
 #ifdef __cplusplus
 }
 #endif
-

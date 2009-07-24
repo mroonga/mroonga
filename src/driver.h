@@ -78,6 +78,13 @@ typedef struct _mrn_record
   grn_id id;
 } mrn_record;
 
+typedef struct _mrn_column_list
+{
+  mrn_info *info;
+  mrn_column_info **columns;
+  uint n_columns;
+} mrn_column_list;
+
 /* macro */
 #define MRN_MALLOC(size) malloc(size)
 #define MRN_FREE(ptr) free(ptr)
@@ -109,6 +116,8 @@ int mrn_rewind_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rnd_init(grn_ctx *ctx, mrn_info *info);
 int mrn_rnd_next(grn_ctx *ctx, mrn_record *record);
 uint mrn_table_size(grn_ctx *ctx, mrn_info *info);
+mrn_column_list* mrn_init_column_list(grn_ctx *ctx, mrn_info *info, int *src, int size);
+int mrn_deinit_column_list(grn_ctx *ctx, mrn_column_list *list);
 
 /* static variables */
 extern grn_hash *mrn_hash;

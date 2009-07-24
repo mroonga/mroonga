@@ -554,3 +554,61 @@ uint mrn_table_size(grn_ctx *ctx, mrn_info *info)
 {
   return grn_table_size(ctx, info->table->obj);
 }
+
+mrn_column_list* mrn_init_column_list(grn_ctx *ctx, mrn_info *info, int *src, int size)
+{
+  char *spot;
+  mrn_column_list *list;
+  int i, j, list_size=0 , n_columns=info->n_columns;
+  spot = (char*) malloc(n_columns);
+  if (spot == NULL)
+  {
+    goto err_oom;
+  }
+  memset(spot, 0, n_columns);
+  for (i=0; i < size; i++)
+  {
+    spot[src[i]] = 1;
+  }
+  for (i=0; i < n_columns; i++)
+  {
+    if (spot[i] != 0)
+    {
+      list_size++;
+    }
+  }
+  list = (mrn_column_list*) malloc(sizeof(mrn_column_list) +
+                                   sizeof(mrn_column_list*) * list_size);
+  if (list == NULL)
+  {
+    goto err_oom;
+  }
+  list->info = info;
+  list->columns = (mrn_column_info**) (list + sizeof(mrn_column_list));
+  list->n_columns = list_size;
+  for (i=0,j=0; i < n_columns; i++)
+  {
+    if (spot[i] != 0)
+    {
+      list->columns[j] = info->columns[i];
+      j++;
+    }
+  }
+  free(spot);
+  return list;
+
+err_oom:
+  GRN_LOG(ctx, GRN_LOG_ERROR, "oom error in mrn_init_column_list:[%s,%d]",
+          info->table->name, size);
+  if (spot)
+  {
+    free(spot);
+  }
+  return NULL;
+}
+
+int mrn_deinit_column_list(grn_ctx *ctx, mrn_column_list *list)
+{
+  free(list);
+  return 0;
+}
