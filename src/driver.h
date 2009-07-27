@@ -46,6 +46,7 @@ typedef struct _mrn_column_info
   char *path;
   grn_obj_flags flags;
   grn_obj *type;
+  grn_builtin_type gtype;
   grn_obj *obj;
 } mrn_column_info;
 

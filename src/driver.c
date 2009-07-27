@@ -479,7 +479,18 @@ mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info)
   for (i=0,offset=0; i < info->n_columns; i++)
   {
     record->value[i] = (grn_obj*) (p + offset);
-    GRN_TEXT_INIT(record->value[i], 0);
+    grn_builtin_type gtype = info->columns[i]->gtype;
+    switch (gtype)
+    {
+    case GRN_DB_INT32:
+      GRN_INT32_INIT(record->value[i], 0);
+      break;
+    case GRN_DB_TEXT:
+      GRN_TEXT_INIT(record->value[i], 0);
+      break;
+    default:
+      GRN_TEXT_INIT(record->value[i], 0);
+    }
     offset += sizeof(grn_obj);
   }
   record->n_columns = info->n_columns;

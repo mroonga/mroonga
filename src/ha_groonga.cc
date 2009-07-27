@@ -49,10 +49,11 @@ const char *mrn_charset_groonga_mysql(grn_encoding encoding)
 }
 
 
-grn_obj *mrn_get_type(grn_ctx *ctx, int type)
+grn_builtin_type mrn_get_type(grn_ctx *ctx, int type)
 {
   grn_builtin_type gtype;
-  switch (type) {
+  switch (type)
+  {
   case MYSQL_TYPE_LONG:
     gtype = GRN_DB_INT32;
     break;
@@ -62,11 +63,7 @@ grn_obj *mrn_get_type(grn_ctx *ctx, int type)
   default:
     gtype = GRN_DB_VOID;
   }
-  if (gtype != GRN_DB_VOID) {
-    return grn_ctx_at(ctx, gtype);
-  } else {
-    return NULL;
-  }
+  return gtype;
 }
 
 
@@ -546,15 +543,18 @@ int ha_groonga::rnd_next(uchar *buf)
         }
       }
     }
+    mrn_deinit_record(ctx, record);
     return 0;
   }
   else if (rc == 1)
   {
     mcond = NULL;
+    mrn_deinit_record(ctx, record);
     return HA_ERR_END_OF_FILE;
   }
   else
   {
+    mrn_deinit_record(ctx, record);
     return -1;
   }
 }
@@ -896,7 +896,16 @@ int ha_groonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
     minfo->columns[i]->name = field->field_name;
     minfo->columns[i]->name_size = strlen(minfo->columns[i]->name);
     minfo->columns[i]->flags |= GRN_OBJ_COLUMN_SCALAR;
-    minfo->columns[i]->type = mrn_get_type(ctx, field->type());
+    grn_builtin_type gtype = mrn_get_type(ctx, field->type());
+    minfo->columns[i]->gtype = gtype;
+    if (gtype != GRN_DB_VOID)
+    {
+      minfo->columns[i]->type = grn_ctx_at(ctx, gtype);
+    }
+    else
+    {
+      return -1;
+    }
   }
 
   minfo->n_columns = n_columns;
