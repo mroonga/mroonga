@@ -10,7 +10,7 @@ LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
 
 LIBS = $(CUTTER_LIBS) $(GROONGA_LIBS) $(MECAB_LIBS)
 
-DRIVER_SRC = ../../src/driver.c
+DRIVER_SRC = ../../driver.c
 
 test_start_stop_la_SOURCES = $(DRIVER_SRC) test-start-stop.c
 test_driver_la_SOURCES = $(DRIVER_SRC) test-driver.c
