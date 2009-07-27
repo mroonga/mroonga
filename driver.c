@@ -515,7 +515,10 @@ int mrn_rewind_record(grn_ctx *ctx, mrn_record *record)
   int i;
   for (i=0; i < record->n_columns; i++)
   {
-    GRN_BULK_REWIND(record->value[i]);
+    if (record->value[i])
+    {
+      GRN_BULK_REWIND(record->value[i]);
+    }
   }
   return 0;
 }
