@@ -40,6 +40,7 @@ class ha_groonga: public handler
 
   mrn_info *minfo;
   mrn_cond *mcond;
+  mrn_record *cur;
 
 public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);

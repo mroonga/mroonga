@@ -131,6 +131,7 @@ ha_groonga::ha_groonga(handlerton *hton, TABLE_SHARE *share)
   grn_ctx_use(ctx, mrn_db);
   minfo = NULL;
   mcond = NULL;
+  cur = NULL;
 }
 
 ha_groonga::~ha_groonga()
@@ -449,6 +450,7 @@ int ha_groonga::rnd_init(bool scan)
 int ha_groonga::rnd_init(bool scan)
 {
   MRN_HTRACE;
+  this->cur = mrn_init_record(ctx, minfo);
   return mrn_rnd_init(ctx, minfo);
 }
 #endif
@@ -507,7 +509,7 @@ int ha_groonga::rnd_next(uchar *buf)
   int rc;
   mrn_record *record;
   mrn_info *info = this->minfo;
-  record = mrn_init_record(ctx, info);
+  record = this->cur;
   if (mcond == NULL)
   {
     rc = mrn_rnd_next(ctx, record, NULL);
@@ -528,35 +530,38 @@ int ha_groonga::rnd_next(uchar *buf)
       }
       else
       {
-        int *vint;
+        int vint;
         char *vchar;
         switch ((*field)->type())
         {
         case (MYSQL_TYPE_LONG) :
-          vint = (int*) GRN_BULK_HEAD(record->value[i]);
+          vint = GRN_INT32_VALUE(record->value[i]);
           (*field)->set_notnull();
-          (*field)->store(*vint);
+          (*field)->store(vint);
           break;
         case (MYSQL_TYPE_VARCHAR) :
-          vchar = (char*) GRN_BULK_HEAD(record->value[i]);
+          vchar = GRN_TEXT_VALUE(record->value[i]);
           (*field)->set_notnull();
           (*field)->store(vchar, GRN_BULK_WSIZE(record->value[i]), system_charset_info);
           break;
         }
       }
     }
-    mrn_deinit_record(ctx, record);
+    mrn_rewind_record(ctx, record);
     return 0;
   }
   else if (rc == 1)
   {
     mcond = NULL;
     mrn_deinit_record(ctx, record);
+    cur = NULL;
     return HA_ERR_END_OF_FILE;
   }
   else
   {
+    mcond = NULL;
     mrn_deinit_record(ctx, record);
+    cur = NULL;
     return -1;
   }
 }
