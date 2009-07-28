@@ -503,11 +503,13 @@ void test_mrn_rnd_next()
   info->columns[0]->name = "c1";
   info->columns[0]->name_size = strlen("c1");
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[0]->gtype = GRN_DB_INT32;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[1]->gtype = GRN_DB_TEXT;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
