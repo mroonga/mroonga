@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+#define MYSQL_SERVER 1
+
 #include <mysql_priv.h>
 #include <mysql/plugin.h>
 #include <pthread.h>
@@ -942,10 +944,6 @@ const char *mrn_functype_string[] = {
   "SUSERVAR_FUNC", "GUSERVAR_FUNC", "COLLATE_FUNC",
   "EXTRACT_FUNC", "CHAR_TYPECAST_FUNC", "FUNC_SP", "UDF_FUNC",
   "NEG_FUNC", "GSYSVAR_FUNC"};
-
-extern int string2my_decimal(uint mask, const String *str, my_decimal *d);
-#include "item_func.h"
-#include "my_decimal.h"
 
 /*
 int ha_groonga::convert_cond(Item *cond)
