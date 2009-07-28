@@ -541,12 +541,9 @@ int mrn_deinit_record(grn_ctx *ctx, mrn_record *record)
 int mrn_rewind_record(grn_ctx *ctx, mrn_record *record)
 {
   int i;
-  for (i=0; i < record->n_columns; i++)
+  for (i=0; i < record->actual_size; i++)
   {
-    if (record->value[i])
-    {
-      GRN_BULK_REWIND(record->value[i]);
-    }
+    GRN_BULK_REWIND(record->value[i]);
   }
   return 0;
 }
@@ -564,7 +561,7 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info)
 
 int mrn_rnd_next(grn_ctx *ctx, mrn_record *record, mrn_column_list *list)
 {
-  int i;
+  int i,j;
   grn_table_cursor *cursor = record->info->cursor;
   record->id = grn_table_cursor_next(ctx, cursor);
   if (record->id == GRN_ID_NIL)
@@ -575,20 +572,27 @@ int mrn_rnd_next(grn_ctx *ctx, mrn_record *record, mrn_column_list *list)
   }
   else
   {
-    for (i=0; i < record->n_columns; i++)
+    for (i=0,j=0; i < record->n_columns; i++)
     {
-      if ((list) && !(list->columns[i]))
+      grn_obj *res;
+      if ((list) && (list->columns[i] == NULL))
       {
         // column pruning
-        record->value[i] = NULL;
         continue;
       }
-      if (grn_obj_get_value(ctx, record->info->columns[i]->obj,
-                            record->id, record->value[i]) == NULL)
+      else
       {
-        GRN_LOG(ctx, GRN_LOG_ERROR, "error while fetching cursor:[%s,%d,%d]",
-                record->info->table->name, i, record->id);
-        goto err;
+        if (grn_obj_get_value(ctx, record->info->columns[i]->obj,
+                              record->id, record->value[j]) != NULL)
+        {
+          j++;
+        }
+        else
+        {
+          GRN_LOG(ctx, GRN_LOG_ERROR, "error while fetching cursor:[%s,%d,%d]",
+                  record->info->table->name, i, record->id);
+          goto err;
+        }
       }
     }
   }
