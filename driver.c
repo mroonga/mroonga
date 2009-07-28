@@ -464,35 +464,54 @@ obj_set_err:
   return -1;
 }
 
-mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info)
+mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, mrn_column_list *list)
 {
   mrn_record *record;
-  int i, size, offset;
+  int i, j, size, offset, actual_size;
   void *p;
-  size = sizeof(mrn_record) + (sizeof(grn_obj*) + sizeof(grn_obj)) * info->n_columns;
+  if (list)
+  {
+    actual_size = list->actual_size;
+  }
+  else
+  {
+    actual_size = info->n_columns;
+  }
+  size = sizeof(mrn_record) + (sizeof(grn_obj*) + sizeof(grn_obj)) * actual_size;
   p = malloc(size);
   record = (mrn_record*) p;
   p += sizeof(mrn_record);
   record->info = info;
+  record->list = list;
   record->value = (grn_obj**) p;
-  p += sizeof(grn_obj*) * info->n_columns;
-  for (i=0,offset=0; i < info->n_columns; i++)
+  p += sizeof(grn_obj*) * actual_size;
+  for (i=0,j=0,offset=0; i < info->n_columns; i++)
   {
-    record->value[i] = (grn_obj*) (p + offset);
-    grn_builtin_type gtype = info->columns[i]->gtype;
-    switch (gtype)
+    if ((list) && (list->columns[i] == NULL))
     {
-    case GRN_DB_INT32:
-      GRN_INT32_INIT(record->value[i], 0);
-      break;
-    case GRN_DB_TEXT:
-      GRN_TEXT_INIT(record->value[i], 0);
-      break;
-    default:
-      GRN_TEXT_INIT(record->value[i], 0);
+      // column pruning
+      continue;
     }
-    offset += sizeof(grn_obj);
+    else
+    {
+      record->value[j] = (grn_obj*) (p + offset);
+      grn_builtin_type gtype = info->columns[i]->gtype;
+      switch (gtype)
+      {
+      case GRN_DB_INT32:
+        GRN_INT32_INIT(record->value[j], 0);
+        break;
+      case GRN_DB_TEXT:
+        GRN_TEXT_INIT(record->value[j], 0);
+        break;
+      default:
+        GRN_TEXT_INIT(record->value[j], 0);
+      }
+      offset += sizeof(grn_obj);
+      j++;
+    }
   }
+  record->actual_size = actual_size;
   record->n_columns = info->n_columns;
   return record;
 }
@@ -501,12 +520,21 @@ mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info)
 int mrn_deinit_record(grn_ctx *ctx, mrn_record *record)
 {
   int i;
-  for (i=0; i < record->n_columns; i++)
+  if (record->list)
   {
-    grn_obj_close(ctx, record->value[i]);
+    for (i=0; i < record->list->actual_size; i++)
+    {
+      grn_obj_close(ctx, record->value[i]);
+    }
+  }
+  else
+  {
+    for (i=0; i < record->n_columns; i++)
+    {
+      grn_obj_close(ctx, record->value[i]);
+    }
   }
   free(record);
-  record = NULL;
   return 0;
 }
 
@@ -577,34 +605,35 @@ uint mrn_table_size(grn_ctx *ctx, mrn_info *info)
 
 mrn_column_list* mrn_init_column_list(grn_ctx *ctx, mrn_info *info, int *src, int size)
 {
-  char *spot;
+  int *spot;
   mrn_column_list *list;
   int i, actual_size=0 , n_columns=info->n_columns;
-  spot = (char*) malloc(n_columns);
+  void *p;
+  spot = (int*) malloc(sizeof(int) * n_columns);
   if (spot == NULL)
   {
     goto err_oom;
   }
-  memset(spot, 0, n_columns);
+  memset(spot, 0, sizeof(int) * n_columns);
   for (i=0; i < size; i++)
   {
     spot[src[i]] = 1;
   }
   for (i=0; i < n_columns; i++)
   {
-    if (spot[i] != 0)
+    if (spot[i] == 1)
     {
       actual_size++;
     }
   }
-  list = (mrn_column_list*) malloc(sizeof(mrn_column_list) +
-                                   sizeof(mrn_column_list*) * n_columns);
-  if (list == NULL)
+  p = malloc(sizeof(mrn_column_list) + sizeof(mrn_column_list*) * n_columns);
+  if (p == NULL)
   {
     goto err_oom;
   }
+  list = (mrn_column_list*) p;
   list->info = info;
-  list->columns = (mrn_column_info**) (list + sizeof(mrn_column_list));
+  list->columns = (mrn_column_info**) (p + sizeof(mrn_column_list));
   list->actual_size = actual_size;
   for (i=0; i < n_columns; i++)
   {

@@ -450,7 +450,8 @@ int ha_groonga::rnd_init(bool scan)
 int ha_groonga::rnd_init(bool scan)
 {
   MRN_HTRACE;
-  this->cur = mrn_init_record(ctx, minfo);
+  this->cur = mrn_init_record(ctx, minfo,
+                              mcond ? mcond->list : NULL);
   return mrn_rnd_init(ctx, minfo);
 }
 #endif
@@ -672,7 +673,7 @@ int ha_groonga::write_row(uchar *buf)
 {
   MRN_HTRACE;
   mrn_info *minfo = this->minfo;
-  mrn_record *record = mrn_init_record(ctx, minfo);
+  mrn_record *record = mrn_init_record(ctx, minfo, NULL);
   Field **field;
   int i;
   for (i=0, field = table->field; *field; i++, field++)

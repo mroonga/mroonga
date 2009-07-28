@@ -69,22 +69,24 @@ typedef struct _mrn_info
   grn_table_cursor *cursor;
 } mrn_info;
 
-typedef struct _mrn_record
-{
-  mrn_info *info;
-  const void *key;
-  uint key_size;
-  grn_obj **value;
-  uint n_columns;
-  grn_id id;
-} mrn_record;
-
 typedef struct _mrn_column_list
 {
   mrn_info *info;
   mrn_column_info **columns;
   uint actual_size;
 } mrn_column_list;
+
+typedef struct _mrn_record
+{
+  mrn_info *info;
+  mrn_column_list *list;
+  const void *key;
+  uint key_size;
+  grn_obj **value;
+  uint n_columns;
+  uint actual_size;
+  grn_id id;
+} mrn_record;
 
 /* macro */
 #define MRN_MALLOC(size) malloc(size)
@@ -111,7 +113,7 @@ int mrn_open(grn_ctx *ctx, mrn_info *info);
 int mrn_close(grn_ctx *ctx, mrn_info *info);
 int mrn_drop(grn_ctx *ctx, const char *table_name);
 int mrn_write_row(grn_ctx *ctx, mrn_record *record);
-mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info);
+mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, mrn_column_list *list);
 int mrn_deinit_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rewind_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rnd_init(grn_ctx *ctx, mrn_info *info);
