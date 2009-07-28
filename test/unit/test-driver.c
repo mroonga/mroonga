@@ -459,11 +459,13 @@ void test_mrn_rnd_init()
   info->columns[0]->name = "c1";
   info->columns[0]->name_size = strlen("c1");
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[0]->gtype = GRN_DB_INT32;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[1]->gtype = GRN_DB_TEXT;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
@@ -565,11 +567,13 @@ void test_mrn_table_size()
   info->columns[0]->name = "c1";
   info->columns[0]->name_size = strlen("c1");
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[0]->gtype = GRN_DB_INT32;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[1]->gtype = GRN_DB_TEXT;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
@@ -610,21 +614,25 @@ void test_mrn_init_column_list()
   info->columns[0]->name = "c1";
   info->columns[0]->name_size = strlen("c1");
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[0]->gtype = GRN_DB_INT32;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[1]->gtype = GRN_DB_TEXT;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
 
   info->columns[2]->name = "c3";
   info->columns[2]->name_size = strlen("c3");
   info->columns[2]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[2]->gtype = GRN_DB_INT32;
   info->columns[2]->type = grn_ctx_at(ctx, GRN_DB_INT32);
 
   info->columns[3]->name = "c4";
   info->columns[3]->name_size = strlen("c4");
   info->columns[3]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[3]->gtype = GRN_DB_TEXT;
   info->columns[3]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
