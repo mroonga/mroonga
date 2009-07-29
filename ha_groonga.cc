@@ -544,7 +544,7 @@ int ha_groonga::rnd_next(uchar *buf)
         case (MYSQL_TYPE_VARCHAR) :
           vchar = GRN_TEXT_VALUE(record->value[j]);
           (*field)->set_notnull();
-          (*field)->store(vchar, GRN_BULK_WSIZE(record->value[j]), system_charset_info);
+          (*field)->store(vchar, GRN_BULK_WSIZE(record->value[j]), (*field)->charset());
           break;
         }
         j++;
