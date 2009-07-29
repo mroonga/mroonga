@@ -522,32 +522,31 @@ int ha_groonga::rnd_next(uchar *buf)
   }
   if (rc == 0)
   {
-    Field **field;
-    int i,j;
-    for (i=0,j=0, field = table->field; *field; i++, field++)
+    Field **field = table->field;
+    mrn_column_info **column = cond->list->columns;
+    grn_obj *value;
+    int i;
+    for (i=0; *field; field++, column++)
     {
-      if ((cond) && (cond->list->columns[i] == NULL))
+      if ((cond) && (*column == NULL))
       {
         (*field)->set_null();
       }
       else
       {
-        int vint;
-        char *vchar;
+        value = record->value[i];
         switch ((*field)->type())
         {
         case (MYSQL_TYPE_LONG) :
-          vint = GRN_INT32_VALUE(record->value[j]);
           (*field)->set_notnull();
-          (*field)->store(vint);
+          (*field)->store(GRN_INT32_VALUE(value));
           break;
         case (MYSQL_TYPE_VARCHAR) :
-          vchar = GRN_TEXT_VALUE(record->value[j]);
           (*field)->set_notnull();
-          (*field)->store(vchar, GRN_BULK_WSIZE(record->value[j]), (*field)->charset());
+          (*field)->store(GRN_TEXT_VALUE(value), GRN_BULK_WSIZE(value), (*field)->charset());
           break;
         }
-        j++;
+        i++;
       }
     }
     mrn_rewind_record(ctx, record);
