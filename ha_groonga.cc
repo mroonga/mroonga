@@ -324,6 +324,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
   if (mrn_hash_get(ctx, MRN_TABLE_NAME(name), (void**) &minfo) == 0)
   {
     minfo->ref_count++;
+    this->minfo = minfo;
     pthread_mutex_unlock(mrn_lock);
     return 0;
   }

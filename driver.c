@@ -213,7 +213,7 @@ int mrn_hash_get(grn_ctx *ctx, const char *key, void **value)
   // key not found
   if (id == GRN_ID_NIL)
   {
-    GRN_LOG(ctx, GRN_LOG_WARNING, "hash get not found (key=%s)", key);
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "hash get not found (key=%s)", key);
     res = -1;
   }
   else
