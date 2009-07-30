@@ -423,7 +423,14 @@ int ha_groonga::info(uint flag)
 int ha_groonga::info(uint flag)
 {
   MRN_HTRACE;
-  stats.records = (ha_rows) mrn_table_size(ctx, this->minfo);
+  if (this->minfo)
+  {
+    stats.records = (ha_rows) mrn_table_size(ctx, this->minfo);
+  }
+  else
+  {
+    stats.records = 2;
+  }
   return 0;
 }
 #endif
@@ -523,7 +530,8 @@ int ha_groonga::rnd_next(uchar *buf)
   if (rc == 0)
   {
     Field **field = table->field;
-    mrn_column_info **column = cond->list->columns;
+    mrn_column_info **column =
+      cond ? cond->list->columns : info->columns;
     grn_obj *value;
     int i;
     for (i=0; *field; field++, column++)
@@ -681,12 +689,11 @@ int ha_groonga::write_row(uchar *buf)
   {
     /* TODO: replace if-else into swtich-case */
     if ((*field)->type() == MYSQL_TYPE_LONG) {
-      int val = (*field)->val_int();
-      GRN_TEXT_SET(ctx, record->value[i], (char*)&val, sizeof(val));
+      GRN_INT32_SET(ctx, record->value[i], (*field)->val_int());
     } else if ((*field)->type() == MYSQL_TYPE_VARCHAR) {
       String tmp;
       const char *val = (*field)->val_str(&tmp)->ptr();
-      GRN_TEXT_SET(ctx, record->value[i], val, strlen(val));
+      GRN_TEXT_SET(ctx, record->value[i], val, (*field)->data_length());
     } else {
       return HA_ERR_UNSUPPORTED;
     }
