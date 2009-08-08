@@ -99,7 +99,7 @@ int mrn_init()
     if ((mrn_lexicon = grn_table_create(&ctx, MRN_LEXICON_TABLE_NAME,
                                         strlen(MRN_LEXICON_TABLE_NAME), NULL,
                                         GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
-                                        grn_ctx_at(&ctx,GRN_DB_SHORT_TEXT), 0)))
+                                        grn_ctx_at(&ctx,GRN_DB_SHORTTEXT), 0)))
     {
       GRN_LOG(&ctx, GRN_LOG_NOTICE, "lexicon table created");
     }
@@ -317,7 +317,7 @@ int mrn_create(grn_ctx *ctx, mrn_info *info)
 
   table->obj = grn_table_create(ctx, table->name, table->name_size,
                                 table->path, table->flags,
-                                table->key_type, NULL);
+                                table->key_type, 0);
   if (table->obj == NULL)
   {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, name_size=%d, path=%s, "

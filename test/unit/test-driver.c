@@ -542,7 +542,7 @@ void test_mrn_rnd_next()
     res1 = GRN_INT32_VALUE(record->value[0]);
     res2 = GRN_TEXT_VALUE(record->value[1]);
     cut_assert_equal_int(100, res1);
-    cut_assert_equal_int(12, GRN_BULK_WSIZE(record->value[1]));
+    cut_assert_equal_int(12, GRN_TEXT_LEN(record->value[1]));
     cut_assert_equal_int(0, strncmp(val2, res2, 12));
 
     cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
