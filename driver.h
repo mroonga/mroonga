@@ -95,6 +95,15 @@ typedef struct _mrn_record
 #define MRN_HANDLER_NAME(obj_name) (obj_name - 2)
 #define MRN_TABLE_NAME(name) (name + 2)
 
+typedef unsigned char uchar;
+
+#define MRN_IS_BIT(map,idx) \
+  (uint) (((uchar*)map)[(idx)/8] & (1 << ((idx)&7)))
+#define MRN_SET_BIT(map,idx) \
+  (((uchar*)map)[(idx)/8] |= (1 << ((idx)&7)))
+#define MRN_CLEAR_BIT(map,idx) \
+  (((uchar*)map)[(idx)/8] &= ~(1 << ((idx)&7)))
+
 /* functions */
 int mrn_init();
 int mrn_deinit();

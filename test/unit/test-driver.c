@@ -798,3 +798,20 @@ void test_mrn_rnd_next_cond()
   cut_assert_equal_int(0, mrn_drop(ctx, "test/mrn_rnd_next_cond"));
   mrn_deinit_obj_info(ctx, info);
 }
+
+void test_mrn_bitmap_macro()
+{
+  uchar *a;
+  a = g_malloc(128);
+  memset(a,0,128);
+  int i;
+  for (i=0; i < 128*8; i++)
+  {
+    cut_assert_false(MRN_IS_BIT(a,i),"precheck: idx=%d",i);
+    MRN_SET_BIT(a,i);
+    cut_assert_true(MRN_IS_BIT(a,i),"after set: idx=%d",i);
+    MRN_CLEAR_BIT(a,i);
+    cut_assert_false(MRN_IS_BIT(a,i),"after clear: idx=%d",i);
+  }
+  g_free(a);
+}
