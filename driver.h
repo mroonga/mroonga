@@ -10,6 +10,8 @@
 #define MRN_LOG_FILE_NAME "groonga.log"
 #define MRN_LEXICON_TABLE_NAME "lexicon"
 
+typedef unsigned char uchar;
+
 typedef struct _mrn_charset_map
 {
   const char *csname_mysql;
@@ -69,22 +71,15 @@ typedef struct _mrn_info
   grn_table_cursor *cursor;
 } mrn_info;
 
-typedef struct _mrn_column_list
-{
-  mrn_info *info;
-  mrn_column_info **columns;
-  uint actual_size;
-} mrn_column_list;
-
 typedef struct _mrn_record
 {
   mrn_info *info;
-  mrn_column_list *list;
   const void *key;
   uint key_size;
   grn_obj **value;
   uint n_columns;
   uint actual_size;
+  uchar *bitmap;
   grn_id id;
 } mrn_record;
 
@@ -94,8 +89,6 @@ typedef struct _mrn_record
 
 #define MRN_HANDLER_NAME(obj_name) (obj_name - 2)
 #define MRN_TABLE_NAME(name) (name + 2)
-
-typedef unsigned char uchar;
 
 #define MRN_IS_BIT(map,idx) \
   (uint) (((uchar*)map)[(idx)/8] & (1 << ((idx)&7)))
@@ -122,14 +115,12 @@ int mrn_open(grn_ctx *ctx, mrn_info *info);
 int mrn_close(grn_ctx *ctx, mrn_info *info);
 int mrn_drop(grn_ctx *ctx, const char *table_name);
 int mrn_write_row(grn_ctx *ctx, mrn_record *record);
-mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, mrn_column_list *list);
+mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, uchar *bitmap, int size);
 int mrn_deinit_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rewind_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rnd_init(grn_ctx *ctx, mrn_info *info);
-int mrn_rnd_next(grn_ctx *ctx, mrn_record *record, mrn_column_list *list);
+int mrn_rnd_next(grn_ctx *ctx, mrn_record *record);
 uint mrn_table_size(grn_ctx *ctx, mrn_info *info);
-mrn_column_list* mrn_init_column_list(grn_ctx *ctx, mrn_info *info, int *src, int size);
-int mrn_deinit_column_list(grn_ctx *ctx, mrn_column_list *list);
 
 /* static variables */
 extern grn_hash *mrn_hash;

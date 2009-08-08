@@ -22,7 +22,6 @@ typedef struct _mrn_cond
 {
   COND *cond;
   _mrn_cond *next;
-  mrn_column_list *list;
 } mrn_cond;
 
 /* handler class */
@@ -41,6 +40,7 @@ class ha_groonga: public handler
   mrn_info *minfo;
   mrn_cond *mcond;
   mrn_record *cur;
+  uchar *column_map;
 
 public:
   ha_groonga(handlerton *hton, TABLE_SHARE *share);
@@ -88,8 +88,7 @@ public:
 
   // additional functions
   int convert_info(const char *name, TABLE_SHARE *share, mrn_info **minfo);
-  int convert_cond(Item *cond);
-  int is_own_field(Item_field *item);
+  int set_bitmap(uchar **bitmap);
 };
 
 #endif /* _ha_groonga_h */

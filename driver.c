@@ -434,24 +434,24 @@ int mrn_write_row(grn_ctx *ctx, mrn_record *record)
 {
   grn_obj *table, *column;
   grn_id gid;
-  int added, i;
+  int added, i, j;
   table = record->info->table->obj;
   gid = grn_table_add(ctx, table, record->key, record->key_size, &added);
   if (added == 0)
   {
     goto duplicated_key_err;
   }
-  for (i=0; i < record->info->n_columns; i++)
+  for (i=0, j=0; i < record->info->n_columns; i++)
   {
     column = record->info->columns[i]->obj;
-    if (record->value[i] == NULL)
+    if (MRN_IS_BIT(record->bitmap, i))
     {
-      continue;
-    }
-    if (grn_obj_set_value(ctx, column, gid, record->value[i], GRN_OBJ_SET)
-        != GRN_SUCCESS)
-    {
-      goto obj_set_err;
+      if (grn_obj_set_value(ctx, column, gid, record->value[j], GRN_OBJ_SET)
+          != GRN_SUCCESS)
+      {
+        goto obj_set_err;
+      }
+      j++;
     }
   }
   return 0;
@@ -464,35 +464,23 @@ obj_set_err:
   return -1;
 }
 
-mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, mrn_column_list *list)
+mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, uchar *bitmap, int size)
 {
   mrn_record *record;
-  int i, j, size, offset, actual_size;
+  int i, j, alloc_size, offset;
   void *p;
-  if (list)
-  {
-    actual_size = list->actual_size;
-  }
-  else
-  {
-    actual_size = info->n_columns;
-  }
-  size = sizeof(mrn_record) + (sizeof(grn_obj*) + sizeof(grn_obj)) * actual_size;
-  p = malloc(size);
+  alloc_size = sizeof(mrn_record) + (sizeof(grn_obj*) + sizeof(grn_obj)) * size;
+  p = malloc(alloc_size);
   record = (mrn_record*) p;
   p += sizeof(mrn_record);
   record->info = info;
-  record->list = list;
+  record->bitmap = bitmap;
   record->value = (grn_obj**) p;
-  p += sizeof(grn_obj*) * actual_size;
+  p += sizeof(grn_obj*) * size;
   for (i=0,j=0,offset=0; i < info->n_columns; i++)
   {
-    if ((list) && (list->columns[i] == NULL))
-    {
-      // column pruning
-      continue;
-    }
-    else
+    // column pruning
+    if (MRN_IS_BIT(bitmap, i))
     {
       record->value[j] = (grn_obj*) (p + offset);
       grn_builtin_type gtype = info->columns[i]->gtype;
@@ -511,7 +499,7 @@ mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, mrn_column_list *list)
       j++;
     }
   }
-  record->actual_size = actual_size;
+  record->actual_size = size;
   record->n_columns = info->n_columns;
   return record;
 }
@@ -520,19 +508,9 @@ mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, mrn_column_list *list)
 int mrn_deinit_record(grn_ctx *ctx, mrn_record *record)
 {
   int i;
-  if (record->list)
+  for (i=0; i < record->actual_size; i++)
   {
-    for (i=0; i < record->list->actual_size; i++)
-    {
-      grn_obj_close(ctx, record->value[i]);
-    }
-  }
-  else
-  {
-    for (i=0; i < record->n_columns; i++)
-    {
-      grn_obj_close(ctx, record->value[i]);
-    }
+    grn_obj_close(ctx, record->value[i]);
   }
   free(record);
   return 0;
@@ -559,7 +537,7 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info)
   return 0;
 }
 
-int mrn_rnd_next(grn_ctx *ctx, mrn_record *record, mrn_column_list *list)
+int mrn_rnd_next(grn_ctx *ctx, mrn_record *record)
 {
   int i,j;
   grn_table_cursor *cursor = record->info->cursor;
@@ -575,12 +553,8 @@ int mrn_rnd_next(grn_ctx *ctx, mrn_record *record, mrn_column_list *list)
     for (i=0,j=0; i < record->n_columns; i++)
     {
       grn_obj *res;
-      if ((list) && (list->columns[i] == NULL))
-      {
-        // column pruning
-        continue;
-      }
-      else
+      // column pruning
+      if (MRN_IS_BIT(record->bitmap, i))
       {
         if (grn_obj_get_value(ctx, record->info->columns[i]->obj,
                               record->id, record->value[j]) != NULL)
@@ -605,66 +579,4 @@ err:
 uint mrn_table_size(grn_ctx *ctx, mrn_info *info)
 {
   return grn_table_size(ctx, info->table->obj);
-}
-
-mrn_column_list* mrn_init_column_list(grn_ctx *ctx, mrn_info *info, int *src, int size)
-{
-  int *spot;
-  mrn_column_list *list;
-  int i, actual_size=0 , n_columns=info->n_columns;
-  void *p;
-  spot = (int*) malloc(sizeof(int) * n_columns);
-  if (spot == NULL)
-  {
-    goto err_oom;
-  }
-  memset(spot, 0, sizeof(int) * n_columns);
-  for (i=0; i < size; i++)
-  {
-    spot[src[i]] = 1;
-  }
-  for (i=0; i < n_columns; i++)
-  {
-    if (spot[i] == 1)
-    {
-      actual_size++;
-    }
-  }
-  p = malloc(sizeof(mrn_column_list) + sizeof(mrn_column_list*) * n_columns);
-  if (p == NULL)
-  {
-    goto err_oom;
-  }
-  list = (mrn_column_list*) p;
-  list->info = info;
-  list->columns = (mrn_column_info**) (p + sizeof(mrn_column_list));
-  list->actual_size = actual_size;
-  for (i=0; i < n_columns; i++)
-  {
-    if (spot[i] == 0)
-    {
-      list->columns[i] = NULL;
-    }
-    else
-    {
-      list->columns[i] = info->columns[i];
-    }
-  }
-  free(spot);
-  return list;
-
-err_oom:
-  GRN_LOG(ctx, GRN_LOG_ERROR, "oom error in mrn_init_column_list:[%s,%d]",
-          info->table->name, size);
-  if (spot)
-  {
-    free(spot);
-  }
-  return NULL;
-}
-
-int mrn_deinit_column_list(grn_ctx *ctx, mrn_column_list *list)
-{
-  free(list);
-  return 0;
 }

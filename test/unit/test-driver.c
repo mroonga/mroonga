@@ -336,6 +336,7 @@ void test_mrn_write_row()
   grn_obj *obj, *obj2;
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
+  uchar bitmap[1];
 
   info->table->name = "test/mrn_write_row";
   info->table->name_size = strlen("test/mrn_write_row");
@@ -345,16 +346,18 @@ void test_mrn_write_row()
   info->columns[0]->name_size = strlen("c1");
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+  MRN_SET_BIT(bitmap,0);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  MRN_SET_BIT(bitmap,1);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
   cut_assert_equal_int(0, mrn_open(ctx, info));
 
-  record = mrn_init_record(ctx, info, NULL);
+  record = mrn_init_record(ctx, info, bitmap, 2);
   cut_assert_not_null(record);
   {
     int val1=100;
@@ -377,6 +380,7 @@ void test_mrn_init_record()
   grn_obj *obj, *obj2;
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
+  uchar bitmap[1];
 
   info->table->name = "test/mrn_init_record";
   info->table->name_size = strlen("test/mrn_init_record");
@@ -387,18 +391,20 @@ void test_mrn_init_record()
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[0]->gtype = GRN_DB_INT32;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+  MRN_SET_BIT(bitmap,0);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[1]->gtype = GRN_DB_TEXT;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  MRN_SET_BIT(bitmap,1);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
   cut_assert_equal_int(0, mrn_open(ctx, info));
 
   {
-    record = mrn_init_record(ctx, info, NULL);
+    record = mrn_init_record(ctx, info, bitmap, 2);
     cut_assert_not_null(record);
     cut_assert_not_null(record->info);
     cut_assert_not_null(record->value);
@@ -419,6 +425,7 @@ void test_mrn_deinit_record()
   grn_obj *obj, *obj2;
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
+  uchar bitmap[1];
 
   info->table->name = "test/mrn_deinit_record";
   info->table->name_size = strlen("test/mrn_deinit_record");
@@ -428,16 +435,18 @@ void test_mrn_deinit_record()
   info->columns[0]->name_size = strlen("c1");
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+  MRN_SET_BIT(bitmap,0);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  MRN_SET_BIT(bitmap,1);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
   cut_assert_equal_int(0, mrn_open(ctx, info));
 
-  record = mrn_init_record(ctx, info, NULL);
+  record = mrn_init_record(ctx, info, bitmap, 2);
 
   {
     cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
@@ -454,6 +463,7 @@ void test_mrn_rnd_init()
   grn_obj *obj, *obj2;
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
+  uchar bitmap[1];
 
   info->table->name = "test/mrn_rnd_init";
   info->table->name_size = strlen("test/mrn_rnd_init");
@@ -464,17 +474,19 @@ void test_mrn_rnd_init()
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[0]->gtype = GRN_DB_INT32;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+  MRN_SET_BIT(bitmap,0);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[1]->gtype = GRN_DB_TEXT;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  MRN_SET_BIT(bitmap,1);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
   cut_assert_equal_int(0, mrn_open(ctx, info));
 
-  record = mrn_init_record(ctx, info, NULL);
+  record = mrn_init_record(ctx, info, bitmap, 2);
   cut_assert_not_null(record);
   int val1=100;
   char *val2 = "record value";
@@ -500,6 +512,7 @@ void test_mrn_rnd_next()
   grn_obj *obj, *obj2;
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
+  uchar bitmap[1];
 
   info->table->name = "test/mrn_rnd_next";
   info->table->name_size = strlen("test/mrn_rnd_next");
@@ -510,17 +523,19 @@ void test_mrn_rnd_next()
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[0]->gtype = GRN_DB_INT32;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+  MRN_SET_BIT(bitmap,0);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[1]->gtype = GRN_DB_TEXT;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  MRN_SET_BIT(bitmap,1);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
   cut_assert_equal_int(0, mrn_open(ctx, info));
 
-  record = mrn_init_record(ctx, info, NULL);
+  record = mrn_init_record(ctx, info, bitmap, 2);
   cut_assert_not_null(record);
   int val1=100;
   char *val2 = "record value";
@@ -537,8 +552,8 @@ void test_mrn_rnd_next()
     mrn_record *record;
     int res1;
     char *res2;
-    record = mrn_init_record(ctx, info, NULL);
-    cut_assert_equal_int(0, mrn_rnd_next(ctx, record, NULL));
+    record = mrn_init_record(ctx, info, bitmap, 2);
+    cut_assert_equal_int(0, mrn_rnd_next(ctx, record));
     res1 = GRN_INT32_VALUE(record->value[0]);
     res2 = GRN_TEXT_VALUE(record->value[1]);
     cut_assert_equal_int(100, res1);
@@ -546,7 +561,7 @@ void test_mrn_rnd_next()
     cut_assert_equal_int(0, strncmp(val2, res2, 12));
 
     cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
-    cut_assert_equal_int(1, mrn_rnd_next(ctx, record, NULL));
+    cut_assert_equal_int(1, mrn_rnd_next(ctx, record));
     cut_assert_null(record->info->cursor);
     cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
   }
@@ -562,6 +577,7 @@ void test_mrn_table_size()
   grn_obj *obj, *obj2;
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
+  uchar bitmap[1];
 
   info->table->name = "test/mrn_table_size";
   info->table->name_size = strlen("test/mrn_table_size");
@@ -572,17 +588,19 @@ void test_mrn_table_size()
   info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[0]->gtype = GRN_DB_INT32;
   info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+  MRN_SET_BIT(bitmap,0);
 
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
   info->columns[1]->gtype = GRN_DB_TEXT;
   info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  MRN_SET_BIT(bitmap,1);
 
   cut_assert_equal_int(0, mrn_create(ctx, info));
   cut_assert_equal_int(0, mrn_open(ctx, info));
 
-  record = mrn_init_record(ctx, info, NULL);
+  record = mrn_init_record(ctx, info, bitmap, 2);
   cut_assert_not_null(record);
   int val1=100;
   char *val2 = "record value";
@@ -604,121 +622,14 @@ void test_mrn_table_size()
   mrn_deinit_obj_info(ctx, info);
 }
 
-void test_mrn_init_column_list()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 4);
-
-  info->table->name = "test/mrn_init_column_list";
-  info->table->name_size = strlen("test/mrn_init_column_list");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->gtype = GRN_DB_INT32;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->gtype = GRN_DB_TEXT;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-
-  info->columns[2]->name = "c3";
-  info->columns[2]->name_size = strlen("c3");
-  info->columns[2]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[2]->gtype = GRN_DB_INT32;
-  info->columns[2]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[3]->name = "c4";
-  info->columns[3]->name_size = strlen("c4");
-  info->columns[3]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[3]->gtype = GRN_DB_TEXT;
-  info->columns[3]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-
-  {
-    int src[] = {1,3,1,3};
-    mrn_column_list *list = mrn_init_column_list(ctx, info, src, 4);
-    cut_assert_not_null(list);
-    cut_assert_equal_int(0, memcmp(info, list->info, sizeof(info)));
-    cut_assert_not_null(list->columns);
-    cut_assert_equal_int(2, list->actual_size);
-    cut_assert_null(list->columns[0]);
-    cut_assert_not_null(list->columns[1]);
-    cut_assert_equal_string("c2", list->columns[1]->name);
-    cut_assert_null(list->columns[2]);
-    cut_assert_not_null(list->columns[3]);
-    cut_assert_equal_string("c4", list->columns[3]->name);
-    mrn_deinit_column_list(ctx, list);
-
-  }
-
-  mrn_deinit_obj_info(ctx, info);
-}
-
-void test_mrn_init_record_cond()
+void test_mrn_rnd_next_pruning()
 {
   TEST_ENTER;
   grn_obj *obj, *obj2;
   mrn_info *info = mrn_init_obj_info(ctx, 4);
   mrn_record *record;
-
-  info->table->name = "test/mrn_init_record_cond";
-  info->table->name_size = strlen("test/mrn_init_record_cond");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->gtype = GRN_DB_INT32;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->gtype = GRN_DB_INT32;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[2]->name = "c3";
-  info->columns[2]->name_size = strlen("c3");
-  info->columns[2]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[2]->gtype = GRN_DB_INT32;
-  info->columns[2]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[3]->name = "c4";
-  info->columns[3]->name_size = strlen("c4");
-  info->columns[3]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[3]->gtype = GRN_DB_INT32;
-  info->columns[3]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  int src[] = {1,3,3,1,3};
-  mrn_column_list *list = mrn_init_column_list(ctx, info, src, 5);
-
-  {
-    cut_assert_equal_int(2, list->actual_size);
-    record = mrn_init_record(ctx, info, list);
-    cut_assert_not_null(record);
-    cut_assert_not_null(record->info);
-    cut_assert_equal_int(2, record->actual_size);
-    cut_assert_equal_int(4, record->n_columns);
-    cut_assert_not_null(record->value);
-    cut_assert_not_null(record->value[0]);
-    cut_assert_not_null(record->value[1]);
-    mrn_deinit_record(ctx, record);
-  }
-
-  mrn_deinit_column_list(ctx, list);
-  mrn_deinit_obj_info(ctx, info);
-}
-
-void test_mrn_rnd_next_cond()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 4);
-  mrn_record *record;
+  uchar bitmap[1];
+  bitmap[0] = 0;
 
   info->table->name = "test/mrn_rnd_next_cond";
   info->table->name_size = strlen("test/mrn_rnd_next_cond");
@@ -751,7 +662,11 @@ void test_mrn_rnd_next_cond()
   cut_assert_equal_int(0, mrn_create(ctx, info));
   cut_assert_equal_int(0, mrn_open(ctx, info));
 
-  record = mrn_init_record(ctx, info, NULL);
+  MRN_SET_BIT(bitmap,0);
+  MRN_SET_BIT(bitmap,1);
+  MRN_SET_BIT(bitmap,2);
+  MRN_SET_BIT(bitmap,3);
+  record = mrn_init_record(ctx, info, bitmap, 4);
   cut_assert_not_null(record);
   GRN_INT32_SET(ctx, record->value[0], 100);
   GRN_INT32_SET(ctx, record->value[1], 101);
@@ -759,8 +674,11 @@ void test_mrn_rnd_next_cond()
   GRN_INT32_SET(ctx, record->value[3], 103);
   cut_assert_equal_int(0, mrn_write_row(ctx, record));
 
+  MRN_SET_BIT(bitmap,0);
+  MRN_SET_BIT(bitmap,1);
+  MRN_SET_BIT(bitmap,2);
+  MRN_SET_BIT(bitmap,3);
   cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
-
   GRN_INT32_SET(ctx, record->value[0], 200);
   GRN_INT32_SET(ctx, record->value[1], 201);
   GRN_INT32_SET(ctx, record->value[2], 202);
@@ -769,27 +687,28 @@ void test_mrn_rnd_next_cond()
 
   mrn_deinit_record(ctx, record);
 
-
-  int src[] = {1,3,3,1,3};
-  mrn_column_list *list = mrn_init_column_list(ctx, info, src, 5);
-
   cut_assert_equal_int(0, mrn_rnd_init(ctx, info));
   cut_assert_not_null(info->cursor);
 
   {
     mrn_record *record;
-    record = mrn_init_record(ctx, info, list);
-    cut_assert_equal_int(0, mrn_rnd_next(ctx, record, list));
+    MRN_CLEAR_BIT(bitmap,0);
+    MRN_SET_BIT(bitmap,1);
+    MRN_CLEAR_BIT(bitmap,2);
+    MRN_SET_BIT(bitmap,3);
+
+    record = mrn_init_record(ctx, info, bitmap, 2);
+    cut_assert_equal_int(0, mrn_rnd_next(ctx, record));
     cut_assert_equal_int(101, GRN_INT32_VALUE(record->value[0]));
     cut_assert_equal_int(103, GRN_INT32_VALUE(record->value[1]));
 
     cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
-    cut_assert_equal_int(0, mrn_rnd_next(ctx, record, list));
+    cut_assert_equal_int(0, mrn_rnd_next(ctx, record));
     cut_assert_equal_int(201, GRN_INT32_VALUE(record->value[0]));
     cut_assert_equal_int(203, GRN_INT32_VALUE(record->value[1]));
 
     cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
-    cut_assert_equal_int(1, mrn_rnd_next(ctx, record, list));
+    cut_assert_equal_int(1, mrn_rnd_next(ctx, record));
     cut_assert_null(record->info->cursor);
     cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
   }
@@ -798,6 +717,7 @@ void test_mrn_rnd_next_cond()
   cut_assert_equal_int(0, mrn_drop(ctx, "test/mrn_rnd_next_cond"));
   mrn_deinit_obj_info(ctx, info);
 }
+
 
 void test_mrn_bitmap_macro()
 {

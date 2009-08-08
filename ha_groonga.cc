@@ -458,8 +458,21 @@ int ha_groonga::rnd_init(bool scan)
 int ha_groonga::rnd_init(bool scan)
 {
   MRN_HTRACE;
-  this->cur = mrn_init_record(ctx, minfo,
-                              mcond ? mcond->list : NULL);
+  int i, used=0, n_columns, alloc_size;
+  n_columns = minfo->n_columns;
+  alloc_size = n_columns / 8 + 1;
+  uchar* column_map = (uchar*) malloc(alloc_size);
+  memset(column_map,0,alloc_size);
+  for (i=0; i < n_columns; i++)
+  {
+    if (bitmap_is_set(table->read_set, i) ||
+        bitmap_is_set(table->write_set, i))
+    {
+      MRN_SET_BIT(column_map, i);
+      used++;
+    }
+  }
+  this->cur = mrn_init_record(ctx, minfo, column_map, used);
   return mrn_rnd_init(ctx, minfo);
 }
 #endif
@@ -520,30 +533,19 @@ int ha_groonga::rnd_next(uchar *buf)
   mrn_info *info = this->minfo;
   mrn_cond *cond = this->mcond;
   record = this->cur;
-  if (mcond == NULL)
-  {
-    rc = mrn_rnd_next(ctx, record, NULL);
-  }
-  else
-  {
-    rc = mrn_rnd_next(ctx, record, mcond->list);
-  }
+  rc = mrn_rnd_next(ctx, record);
   if (rc == 0)
   {
     Field **field = table->field;
-    mrn_column_info **column =
-      cond ? cond->list->columns : info->columns;
+    mrn_column_info **column = info->columns;
     grn_obj *value;
-    int i;
-    for (i=0; *field; field++, column++)
+    int i, j;
+    for (i=0, j=0; *field; field++, column++, i++)
     {
-      if ((cond) && (*column == NULL))
+      // column pruning
+      if (MRN_IS_BIT(record->bitmap, i))
       {
-        (*field)->set_null();
-      }
-      else
-      {
-        value = record->value[i];
+        value = record->value[j];
         switch ((*field)->type())
         {
         case (MYSQL_TYPE_LONG) :
@@ -555,24 +557,24 @@ int ha_groonga::rnd_next(uchar *buf)
           (*field)->store(GRN_TEXT_VALUE(value), GRN_BULK_WSIZE(value), (*field)->charset());
           break;
         }
-        i++;
+        j++;
       }
     }
     mrn_rewind_record(ctx, record);
     return 0;
   }
-  else if (rc == 1)
+
+  mcond = NULL;
+  free(record->bitmap);
+  mrn_deinit_record(ctx, record);
+  cur = NULL;
+
+  if (rc == 1)
   {
-    mcond = NULL;
-    mrn_deinit_record(ctx, record);
-    cur = NULL;
     return HA_ERR_END_OF_FILE;
   }
   else
   {
-    mcond = NULL;
-    mrn_deinit_record(ctx, record);
-    cur = NULL;
     return -1;
   }
 }
@@ -683,26 +685,33 @@ int ha_groonga::write_row(uchar *buf)
 {
   MRN_HTRACE;
   mrn_info *minfo = this->minfo;
-  mrn_record *record = mrn_init_record(ctx, minfo, NULL);
+  uchar *bitmap;
+  int size = set_bitmap(&bitmap);
+  mrn_record *record = mrn_init_record(ctx, minfo, bitmap, size);
   Field **field;
-  int i;
-  for (i=0, field = table->field; *field; i++, field++)
+  int i, j;
+  for (i=0, j=0, field = table->field; *field; i++, field++)
   {
-    /* TODO: replace if-else into swtich-case */
-    if ((*field)->type() == MYSQL_TYPE_LONG) {
-      GRN_INT32_SET(ctx, record->value[i], (*field)->val_int());
-    } else if ((*field)->type() == MYSQL_TYPE_VARCHAR) {
-      String tmp;
-      const char *val = (*field)->val_str(&tmp)->ptr();
-      GRN_TEXT_SET(ctx, record->value[i], val, (*field)->data_length());
-    } else {
-      return HA_ERR_UNSUPPORTED;
+    if (MRN_IS_BIT(record->bitmap, i))
+    {
+      /* TODO: replace if-else into swtich-case */
+      if ((*field)->type() == MYSQL_TYPE_LONG) {
+        GRN_INT32_SET(ctx, record->value[j], (*field)->val_int());
+      } else if ((*field)->type() == MYSQL_TYPE_VARCHAR) {
+        String tmp;
+        const char *val = (*field)->val_str(&tmp)->ptr();
+        GRN_TEXT_SET(ctx, record->value[j], val, (*field)->data_length());
+      } else {
+        return HA_ERR_UNSUPPORTED;
+      }
+      j++;
     }
   }
   if (mrn_write_row(ctx, record) != 0)
   {
     return -1;
   }
+  free(record->bitmap);
   mrn_deinit_record(ctx, record);
   return 0;
 }
@@ -878,7 +887,6 @@ const COND *ha_groonga::cond_push(const COND *cond)
     tmp->cond = (COND *) cond;
     tmp->next = this->mcond;
     mcond = tmp;
-    convert_cond((Item*) cond);
   }
   DBUG_RETURN(NULL);
 
@@ -930,6 +938,34 @@ int ha_groonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
   return 0;
 }
 
+int ha_groonga::set_bitmap(uchar **bitmap)
+{
+  int i, used=0, n_columns, alloc_size;
+  n_columns = minfo->n_columns;
+  alloc_size = n_columns / 8 + 1;
+  uchar* column_map = (uchar*) malloc(alloc_size);
+  if (!column_map)
+  {
+    goto err_oom;
+  }
+  memset(column_map,0,alloc_size);
+  for (i=0; i < n_columns; i++)
+  {
+    if (bitmap_is_set(table->read_set, i) ||
+        bitmap_is_set(table->write_set, i))
+    {
+      MRN_SET_BIT(column_map, i);
+      used++;
+    }
+  }
+  *bitmap = column_map;
+  return used;
+
+err_oom:
+  my_errno = HA_ERR_OUT_OF_MEM;
+  GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error in set_bitmap (%d bytes)", alloc_size);
+  return -1;
+}
 
 const char *mrn_item_type_string[] = {
   "FIELD_ITEM", "FUNC_ITEM", "SUM_FUNC_ITEM", "STRING_ITEM",
@@ -990,77 +1026,6 @@ int ha_groonga::convert_cond(Item *cond)
   return 0;
 }
 */
-/*
-int ha_groonga::convert_cond(Item *cond)
-{
-  Item *tmp = cond;
-  printf("%s: ", this->minfo->table->name);
-  while (tmp)
-  {
-    //printf(" %s", mrn_item_type_string[(int) tmp->type()]);
-    if (tmp->type() == Item::FUNC_ITEM)
-    {
-      Item_func *func = (Item_func*) tmp;
-      printf("(%s)", mrn_functype_string[(int) func->functype()]);
-    }
-    else
-    {
-      printf("(%s)", tmp->name);
-    }
-    tmp = tmp->next;
-  }
-  printf("\n");
-  return 0;
-}
-*/
-
-int ha_groonga::convert_cond(Item *cond)
-{
-  int idx, max_size=256;
-  int src[max_size];
-  Item *item = cond;
-  memset(src, 0, sizeof(int)*max_size);
-  // currently only pruning columns access
-  for (idx=0; item;)
-  {
-    if (item->type() == Item::FIELD_ITEM)
-    {
-      int i=0;
-      if (is_own_field((Item_field*) item))
-      {
-        Field *field = ((Item_field*) item)->field;
-        src[idx] = field->field_index;
-        if (idx++ >= max_size)
-        {
-          GRN_LOG(ctx, GRN_LOG_ERROR, "index overflow on convert_cond");
-          return -1;
-        }
-      }
-    }
-    item = item->next;
-  }
-  mcond->list = mrn_init_column_list(ctx, minfo, src, idx);
-  return 0;
-}
-
-int ha_groonga::is_own_field(Item_field *item)
-{
-  Field *field = item->field;
-  if ((field != NULL) &&
-      (strncmp(table_share->table_name.str,
-               field->table->s->table_name.str,
-               table_share->table_name.length) == 0) &&
-      (strncmp(table_share->db.str,
-               field->table->s->db.str,
-               table_share->db.length) == 0))
-  {
-    return 1;
-  }
-  else
-  {
-    return 0;
-  }
-}
 
 #ifdef __cplusplus
 }
