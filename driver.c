@@ -99,7 +99,7 @@ int mrn_init()
     if ((mrn_lexicon = grn_table_create(&ctx, MRN_LEXICON_TABLE_NAME,
                                         strlen(MRN_LEXICON_TABLE_NAME), NULL,
                                         GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
-                                        grn_ctx_at(&ctx,GRN_DB_SHORTTEXT), 0)))
+                                        grn_ctx_at(&ctx,GRN_DB_SHORT_TEXT), 0)))
     {
       GRN_LOG(&ctx, GRN_LOG_NOTICE, "lexicon table created");
     }
@@ -528,7 +528,7 @@ int mrn_rewind_record(grn_ctx *ctx, mrn_record *record)
 
 int mrn_rnd_init(grn_ctx *ctx, mrn_info *info)
 {
-  info->cursor = grn_table_cursor_open(ctx, info->table->obj, NULL, 0, NULL, 0, 0);
+  info->cursor = grn_table_cursor_open(ctx, info->table->obj, NULL, 0, NULL, 0, 0, 0, 0);
   if (info->cursor == NULL)
   {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open cursor: %s", info->table->name);
