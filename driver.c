@@ -523,7 +523,7 @@ int mrn_rewind_record(grn_ctx *ctx, mrn_record *record)
   return 0;
 }
 
-int mrn_rnd_init(grn_ctx *ctx, mrn_info *info)
+int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
 {
   info->cursor = grn_table_cursor_open(ctx, info->table->obj, NULL, 0, NULL, 0, 0, 0, 0);
   if (info->cursor == NULL)

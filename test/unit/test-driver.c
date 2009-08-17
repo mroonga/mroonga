@@ -496,7 +496,7 @@ void test_mrn_rnd_init()
   cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
 
   {
-    cut_assert_equal_int(0, mrn_rnd_init(ctx, info));
+    cut_assert_equal_int(0, mrn_rnd_init(ctx, info, NULL));
     cut_assert_not_null(info->cursor);
     grn_table_cursor_close(ctx, info->cursor);
   }
@@ -545,7 +545,7 @@ void test_mrn_rnd_next()
   cut_assert_equal_int(0, mrn_write_row(ctx, record));
   cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
 
-  cut_assert_equal_int(0, mrn_rnd_init(ctx, info));
+  cut_assert_equal_int(0, mrn_rnd_init(ctx, info, NULL));
   cut_assert_not_null(info->cursor);
 
   {
@@ -610,7 +610,7 @@ void test_mrn_table_size()
   cut_assert_equal_int(0, mrn_write_row(ctx, record));
   cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
 
-  cut_assert_equal_int(0, mrn_rnd_init(ctx, info));
+  cut_assert_equal_int(0, mrn_rnd_init(ctx, info, NULL));
   cut_assert_not_null(info->cursor);
 
   {
@@ -687,7 +687,7 @@ void test_mrn_rnd_next_pruning()
 
   mrn_deinit_record(ctx, record);
 
-  cut_assert_equal_int(0, mrn_rnd_init(ctx, info));
+  cut_assert_equal_int(0, mrn_rnd_init(ctx, info, NULL));
   cut_assert_not_null(info->cursor);
 
   {

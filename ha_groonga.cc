@@ -323,7 +323,21 @@ int ha_groonga::rnd_init(bool scan)
     }
   }
   this->cur = mrn_init_record(ctx, minfo, column_map, used);
-  return mrn_rnd_init(ctx, minfo);
+
+  if (mcond)
+  {
+    const COND *cond = mcond->cond;
+    mcond->expr = (mrn_expr*) malloc(sizeof(mrn_expr));
+    mrn_expr *expr = mcond->expr;
+    make_expr((Item*) cond, &expr);
+    check_other_conditions(mcond, this->table->in_use);
+    //dump_expr(mcond->expr);
+    //dump_condition(cond);
+    //dump_tree((Item*) cond, 0);
+    //dump_condition2(mcond);
+  }
+  return mrn_rnd_init(ctx, minfo,
+                      mcond ? mcond->expr : NULL);
 }
 
 int ha_groonga::rnd_next(uchar *buf)
@@ -365,7 +379,11 @@ int ha_groonga::rnd_next(uchar *buf)
     return 0;
   }
 
-  mcond = NULL;
+  if (mcond)
+  {
+    free_expr(mcond->expr);
+    mcond = NULL;
+  }
   free(record->bitmap);
   mrn_deinit_record(ctx, record);
   cur = NULL;
@@ -625,14 +643,6 @@ const COND *ha_groonga::cond_push(const COND *cond)
     tmp->limit = 0;
     tmp->offset = 0;
     mcond = tmp;
-    mcond->expr = (mrn_expr*) malloc(sizeof(mrn_expr));
-    mrn_expr *expr = mcond->expr;
-    make_expr((Item*) cond, &expr);
-    check_other_conditions(mcond, this->table->in_use);
-    //dump_expr(mcond->expr);
-    //dump_condition(cond);
-    //dump_tree((Item*) cond, 0);
-    //dump_condition2(mcond);
   }
   DBUG_RETURN(NULL);
 
