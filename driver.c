@@ -525,11 +525,85 @@ int mrn_rewind_record(grn_ctx *ctx, mrn_record *record)
 
 int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
 {
-  info->cursor = grn_table_cursor_open(ctx, info->table->obj, NULL, 0, NULL, 0, 0, 0, 0);
-  if (info->cursor == NULL)
+  if (expr)
   {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open cursor: %s", info->table->name);
-    return -1;
+    grn_obj *v, intbuf, textbuf;
+    GRN_INT32_INT(&intbuf, 0);
+    GRN_TEXT_INIT(&textbuf, 0);
+    grn_obj *gexpr = grn_expr_create(ctx, NULL, 0);
+    v = grn_expr_add_var(ctx, gexpr, NULL, 0);
+    GRN_RECORD_INIT(v, 0, grn_obj_id(ctx, info->table->obj));
+
+    mrn_expr *cur = expr;
+    while (cur)
+    {
+      switch (cur->type)
+      {
+      case MRN_EXPR_UNKNOWN:
+        break;
+      case MRN_EXPR_COLUMN:
+        grn_expr_append_obj(ctx, gexpr, v);
+        GRN_BULK_REWIND(&textbuf);
+        GRN_TEXT_SETS(ctx, &textbuf, cur->val_string);
+        grn_expr_append_const(ctx, gexpr, &textbuf);
+        grn_expr_append_op(ctx, gexpr, GRN_OP_OBJ_GET_VALUE, 2);
+        break;
+      case MRN_EXPR_AND:
+        grn_expr_append_op(ctx, gexpr, GRN_OP_AND, 2);
+        break;
+      case MRN_EXPR_OR:
+        grn_expr_append_op(ctx, gexpr, GRN_OP_OR, 2);
+        break;
+      case MRN_EXPR_EQ:
+        grn_expr_append_op(ctx, gexpr, GRN_OP_EQUAL, 2);
+        break;
+      case MRN_EXPR_NOT_EQ:
+        grn_expr_append_op(ctx, gexpr, GRN_OP_NOT_EQUAL, 2);
+        break;
+      case MRN_EXPR_GT:
+        grn_expr_append_op(ctx, gexpr, GRN_OP_GREATER, 2);
+        break;
+      case MRN_EXPR_GT_EQ:
+        grn_expr_append_op(ctx, gexpr, GRN_OP_GREATER_EQUAL, 2);
+        break;
+      case MRN_EXPR_LESS:
+        grn_expr_append_op(ctx, gexpr, GRN_OP_LESS, 2);
+        break;
+      case MRN_EXPR_LESS_EQ:
+        grn_expr_append_op(ctx, gexpr, GRN_OP_LESS_EQUAL, 2);
+        break;
+      case MRN_EXPR_INT:
+        GRN_BULK_REWIND(&intbuf);
+        GRN_INT32_SET(ctx, &intbuf, cur->val_int);
+        grn_expr_append_const(ctx, gexpr, &intbuf);
+        break;
+      case MRN_EXPR_TEXT:
+        GRN_BULK_REWIND(&textbuf);
+        GRN_TEXT_SETS(ctx, &textbuf, cur->val_string);
+        grn_expr_append_const(ctx, gexpr, &textbuf);
+        break;
+      }
+      cur = cur->next;
+    }
+
+    info->res = grn_table_create(ctx, NULL, 0, NULL,
+                                 GRN_TABLE_HASH_KEY|GRN_OBJ_WITH_SUBREC,
+                                 info->table->obj, NULL);
+    grn_rc rc = grn_table_select(ctx, info->table->obj, gexpr, info->res,
+                                 GRN_OP_OR);
+    info->cursor = grn_table_cursor_open(ctx, info->res, NULL, 0, NULL,
+                                         0, 0, 0, 0);
+    grn_obj_close(ctx, &intbuf);
+    grn_obj_close(ctx, &textbuf);
+  }
+  else
+  {
+    info->cursor = grn_table_cursor_open(ctx, info->table->obj, NULL, 0, NULL, 0, 0, 0, 0);
+    if (info->cursor == NULL)
+    {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open cursor: %s", info->table->name);
+      return -1;
+    }
   }
   return 0;
 }

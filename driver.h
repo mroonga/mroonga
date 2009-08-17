@@ -69,6 +69,7 @@ typedef struct _mrn_info
   uint n_columns;
   uint ref_count;
   grn_table_cursor *cursor;
+  grn_obj *res;
 } mrn_info;
 
 typedef struct _mrn_record
