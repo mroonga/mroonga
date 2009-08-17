@@ -22,6 +22,11 @@ typedef struct _mrn_cond
 {
   COND *cond;
   _mrn_cond *next;
+  mrn_expr *expr;
+  ulonglong limit;
+  ulonglong offset;
+  int table_list_size;
+  int order_list_size;
 } mrn_cond;
 
 /* handler class */
@@ -89,35 +94,13 @@ public:
   // additional functions
   int convert_info(const char *name, TABLE_SHARE *share, mrn_info **minfo);
   int set_bitmap(uchar **bitmap);
+  int make_expr(Item *item, mrn_expr *expr);
+  void free_expr(mrn_expr *expr);
+  int check_other_conditions(mrn_cond *cond, THD *thd);
+
+  // for debug
+  void dump_condition(const COND *cond);
+  void dump_tree(Item *item, int offset);
 };
-
-const char *mrn_item_type_string[] = {
-  "FIELD_ITEM", "FUNC_ITEM", "SUM_FUNC_ITEM", "STRING_ITEM",
-  "INT_ITEM", "REAL_ITEM", "NULL_ITEM", "VARBIN_ITEM",
-  "COPY_STR_ITEM", "FIELD_AVG_ITEM", "DEFAULT_VALUE_ITEM",
-  "PROC_ITEM", "COND_ITEM", "REF_ITEM", "FIELD_STD_ITEM",
-  "FIELD_VARIANCE_ITEM", "INSERT_VALUE_ITEM",
-  "SUBSELECT_ITEM", "ROW_ITEM", "CACHE_ITEM", "TYPE_HOLDER",
-  "PARAM_ITEM", "TRIGGER_FIELD_ITEM", "DECIMAL_ITEM",
-  "XPATH_NODESET", "XPATH_NODESET_CMP",
-  "VIEW_FIXER_ITEM"};
-
-const char *mrn_functype_string[] = {
-  "UNKNOWN_FUNC","EQ_FUNC","EQUAL_FUNC","NE_FUNC","LT_FUNC","LE_FUNC",
-  "GE_FUNC","GT_FUNC","FT_FUNC",
-  "LIKE_FUNC","ISNULL_FUNC","ISNOTNULL_FUNC",
-  "COND_AND_FUNC", "COND_OR_FUNC", "COND_XOR_FUNC",
-  "BETWEEN", "IN_FUNC", "MULT_EQUAL_FUNC",
-  "INTERVAL_FUNC", "ISNOTNULLTEST_FUNC",
-  "SP_EQUALS_FUNC", "SP_DISJOINT_FUNC","SP_INTERSECTS_FUNC",
-  "SP_TOUCHES_FUNC","SP_CROSSES_FUNC","SP_WITHIN_FUNC",
-  "SP_CONTAINS_FUNC","SP_OVERLAPS_FUNC",
-  "SP_STARTPOINT","SP_ENDPOINT","SP_EXTERIORRING",
-  "SP_POINTN","SP_GEOMETRYN","SP_INTERIORRINGN",
-  "NOT_FUNC", "NOT_ALL_FUNC",
-  "NOW_FUNC", "TRIG_COND_FUNC",
-  "SUSERVAR_FUNC", "GUSERVAR_FUNC", "COLLATE_FUNC",
-  "EXTRACT_FUNC", "CHAR_TYPECAST_FUNC", "FUNC_SP", "UDF_FUNC",
-  "NEG_FUNC", "GSYSVAR_FUNC"};
 
 #endif /* _ha_groonga_h */

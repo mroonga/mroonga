@@ -83,6 +83,27 @@ typedef struct _mrn_record
   grn_id id;
 } mrn_record;
 
+typedef enum {
+  MRN_EXPR_COND=0,
+  MRN_EXPR_COLUMN,
+  MRN_EXPR_INT,
+  MRN_EXPR_TEXT,
+  MRN_EXPR_EQ,
+  MRN_EXPR_NOT_EQ,
+  MRN_EXPR_GT,
+  MRN_EXPR_GT_EQ,
+  MRN_EXPR_LESS,
+  MRN_EXPR_LESS_EQ
+} mrn_expr_type;
+
+typedef struct _mrn_expr
+{
+  mrn_expr_type type;
+  char *val_string;
+  int val_int;
+  struct _mrn_expr *next;
+} mrn_expr;
+
 /* macro */
 #define MRN_MALLOC(size) malloc(size)
 #define MRN_FREE(ptr) free(ptr)

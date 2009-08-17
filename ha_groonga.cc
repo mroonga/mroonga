@@ -29,6 +29,35 @@ MRN_CHARSET_MAP mrn_charset_map[] = {
   {0x0, GRN_ENC_NONE}
 };
 
+const char *mrn_item_type_string[] = {
+  "FIELD_ITEM", "FUNC_ITEM", "SUM_FUNC_ITEM", "STRING_ITEM",
+  "INT_ITEM", "REAL_ITEM", "NULL_ITEM", "VARBIN_ITEM",
+  "COPY_STR_ITEM", "FIELD_AVG_ITEM", "DEFAULT_VALUE_ITEM",
+  "PROC_ITEM", "COND_ITEM", "REF_ITEM", "FIELD_STD_ITEM",
+  "FIELD_VARIANCE_ITEM", "INSERT_VALUE_ITEM",
+  "SUBSELECT_ITEM", "ROW_ITEM", "CACHE_ITEM", "TYPE_HOLDER",
+  "PARAM_ITEM", "TRIGGER_FIELD_ITEM", "DECIMAL_ITEM",
+  "XPATH_NODESET", "XPATH_NODESET_CMP",
+  "VIEW_FIXER_ITEM"};
+
+const char *mrn_functype_string[] = {
+  "UNKNOWN_FUNC","EQ_FUNC","EQUAL_FUNC","NE_FUNC","LT_FUNC","LE_FUNC",
+  "GE_FUNC","GT_FUNC","FT_FUNC",
+  "LIKE_FUNC","ISNULL_FUNC","ISNOTNULL_FUNC",
+  "COND_AND_FUNC", "COND_OR_FUNC", "COND_XOR_FUNC",
+  "BETWEEN", "IN_FUNC", "MULT_EQUAL_FUNC",
+  "INTERVAL_FUNC", "ISNOTNULLTEST_FUNC",
+  "SP_EQUALS_FUNC", "SP_DISJOINT_FUNC","SP_INTERSECTS_FUNC",
+  "SP_TOUCHES_FUNC","SP_CROSSES_FUNC","SP_WITHIN_FUNC",
+  "SP_CONTAINS_FUNC","SP_OVERLAPS_FUNC",
+  "SP_STARTPOINT","SP_ENDPOINT","SP_EXTERIORRING",
+  "SP_POINTN","SP_GEOMETRYN","SP_INTERIORRINGN",
+  "NOT_FUNC", "NOT_ALL_FUNC",
+  "NOW_FUNC", "TRIG_COND_FUNC",
+  "SUSERVAR_FUNC", "GUSERVAR_FUNC", "COLLATE_FUNC",
+  "EXTRACT_FUNC", "CHAR_TYPECAST_FUNC", "FUNC_SP", "UDF_FUNC",
+  "NEG_FUNC", "GSYSVAR_FUNC"};
+
 grn_encoding mrn_charset_mysql_groonga(const char *csname)
 {
   if (!csname) return GRN_ENC_NONE;
@@ -585,6 +614,8 @@ const COND *ha_groonga::cond_push(const COND *cond)
   MRN_HTRACE;
   if (cond)
   {
+    //dump_condition(cond);
+    //dump_tree((Item*) cond, 0);
     mrn_cond *tmp = (mrn_cond*) malloc(sizeof(mrn_cond));
     if (tmp == NULL)
     {
@@ -592,7 +623,11 @@ const COND *ha_groonga::cond_push(const COND *cond)
     }
     tmp->cond = (COND *) cond;
     tmp->next = this->mcond;
+    tmp->expr = NULL;
+    tmp->limit = 0;
+    tmp->offset = 0;
     mcond = tmp;
+    //check_other_conditions(mcond, this->table->in_use);
   }
   DBUG_RETURN(NULL);
 
@@ -671,6 +706,202 @@ err_oom:
   my_errno = HA_ERR_OUT_OF_MEM;
   GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error in set_bitmap (%d bytes)", alloc_size);
   return -1;
+}
+
+const char *indent = "....................";
+
+void ha_groonga::dump_tree(Item *item, int offset)
+{
+  char *str;
+  if (item->type() == Item::FUNC_ITEM)
+  {
+    Item_func *func = (Item_func*) item;
+    switch (func->functype())
+    {
+    case Item_func::EQ_FUNC:
+    case Item_func::EQUAL_FUNC:
+      str = (char*) "=";
+      break;
+    case Item_func::LE_FUNC:
+      str = (char*) "<=";
+      break;
+    case Item_func::LT_FUNC:
+      str = (char*) "<";
+        break;
+    case Item_func::GE_FUNC:
+      str = (char*) ">=";
+      break;
+    case Item_func::GT_FUNC:
+      str = (char*) ">";
+        break;
+    default:
+      str = (char*) "(FUNC_ITEM)";
+    }
+    printf("%s%s\n", (indent+(20-offset)), str);
+    int i;
+    for (i=0; i < func->arg_count; i++)
+    {
+      dump_tree((func->arguments())[i],(offset+1));
+    }
+  }
+  else if (item->type() == Item::FIELD_ITEM)
+  {
+    str =  ((Item_field*) item)->name;
+    printf("%s%s\n", (indent+(20-offset)), str);
+  }
+  else if (item->type() == Item::COND_ITEM)
+  {
+    Item_cond *cond = (Item_cond*) item;
+    switch(cond->functype())
+    {
+    case Item_func::COND_AND_FUNC:
+      str = (char*) "AND";
+      break;
+    case Item_func::COND_OR_FUNC:
+      str = (char*) "OR";
+      break;
+    default:
+      str = (char*) "(COND_ITEM)";
+    }
+    printf("%s%s\n", (indent+(20-offset)), str);
+    List_iterator_fast<Item> lif(*(cond->argument_list()));
+    Item *child;
+    while ((child = lif++))
+    {
+      dump_tree(child, (offset+1));
+    }
+  }
+  else if (item->type() == Item::INT_ITEM)
+  {
+    printf("%s%lld\n", (indent+(20-offset)),((Item_int*) item)->val_int());
+  }
+  else
+  {
+    printf("%s%s\n", (indent+(20-offset)), mrn_item_type_string[item->type()]);
+  }
+}
+
+void ha_groonga::dump_condition(const COND *cond)
+{
+  Item *item = (Item*) cond;
+  while (item)
+  {
+    if (item->type() == Item::FUNC_ITEM)
+    {
+      Item_func *func = (Item_func*) item;
+      switch (func->functype())
+      {
+      case Item_func::EQ_FUNC:
+      case Item_func::EQUAL_FUNC:
+        printf("(=)");
+        break;
+      case Item_func::LE_FUNC:
+        printf("(<=)");
+        break;
+      case Item_func::LT_FUNC:
+        printf("(<)");
+        break;
+      case Item_func::GE_FUNC:
+        printf("(<=)");
+        break;
+      case Item_func::GT_FUNC:
+        printf("(<)");
+        break;
+      default:
+        printf("(F)");
+      }
+    }
+    else if (item->type() == Item::FIELD_ITEM)
+    {
+      printf("<%s>", ((Item_field*) item)->name);
+    }
+    else if (item->type() == Item::COND_ITEM)
+    {
+      Item_cond *cond = (Item_cond*) item;
+      switch(cond->functype())
+      {
+      case Item_func::COND_AND_FUNC:
+        printf("(AND)");
+        break;
+      case Item_func::COND_OR_FUNC:
+        printf("(OR)");
+        break;
+      default:
+        printf("(C)");
+      }
+    }
+    else if (item->type() == Item::INT_ITEM)
+    {
+      printf("(%lld)", ((Item_int*) item)->val_int());
+    }
+    else
+    {
+      printf("(%s)", mrn_item_type_string[item->type()]);
+    }
+    item = item->next;
+  }
+  printf("\n\n");
+}
+
+int ha_groonga::make_expr(Item *item, mrn_expr *expr)
+{
+  mrn_expr *current_expr = expr;
+  Item *child;
+
+  switch (item->type())
+  {
+  case Item::COND_ITEM:
+  {
+    expr->type = MRN_EXPR_COND;
+    Item_cond *cond = (Item_cond*) item;
+    List_iterator_fast<Item> lif(*(cond->argument_list()));
+    while ((child = lif++))
+    {
+      current_expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+      make_expr(child, current_expr->next);
+      current_expr = current_expr->next;
+    }
+  }
+  case Item::FUNC_ITEM:
+  {
+  }
+  case Item::FIELD_ITEM:
+  {
+  }
+  default:
+  {
+  }
+  }
+}
+
+void ha_groonga::free_expr(mrn_expr *expr)
+{
+  if (expr)
+  {
+    if (expr->next)
+    {
+      free_expr(expr->next);
+    }
+    free(expr);
+  }
+}
+
+int ha_groonga::check_other_conditions(mrn_cond *cond, THD *thd)
+{
+  SELECT_LEX lex = thd->lex->select_lex;
+  if (lex.explicit_limit == true)
+  {
+    cond->limit = lex.select_limit ? lex.select_limit->val_int() : 0;
+    cond->offset = lex.offset_limit ? lex.offset_limit->val_int() : 0;
+  }
+  else
+  {
+    cond->limit = 0;
+    cond->offset = 0;
+  }
+  cond->table_list_size = thd->lex->select_lex.table_list.elements;
+  cond->order_list_size = thd->lex->select_lex.order_list.elements;
+  return 0;
 }
 
 #ifdef __cplusplus

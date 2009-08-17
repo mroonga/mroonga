@@ -718,7 +718,6 @@ void test_mrn_rnd_next_pruning()
   mrn_deinit_obj_info(ctx, info);
 }
 
-
 void test_mrn_bitmap_macro()
 {
   uchar *a;
