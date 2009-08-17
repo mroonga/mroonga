@@ -94,13 +94,15 @@ public:
   // additional functions
   int convert_info(const char *name, TABLE_SHARE *share, mrn_info **minfo);
   int set_bitmap(uchar **bitmap);
-  int make_expr(Item *item, mrn_expr *expr);
+  int make_expr(Item *item, mrn_expr **expr);
   void free_expr(mrn_expr *expr);
   int check_other_conditions(mrn_cond *cond, THD *thd);
 
   // for debug
   void dump_condition(const COND *cond);
   void dump_tree(Item *item, int offset);
+  void dump_expr(mrn_expr *expr);
+  void dump_condition2(mrn_cond *cond);
 };
 
 #endif /* _ha_groonga_h */

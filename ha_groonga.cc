@@ -614,8 +614,6 @@ const COND *ha_groonga::cond_push(const COND *cond)
   MRN_HTRACE;
   if (cond)
   {
-    //dump_condition(cond);
-    //dump_tree((Item*) cond, 0);
     mrn_cond *tmp = (mrn_cond*) malloc(sizeof(mrn_cond));
     if (tmp == NULL)
     {
@@ -627,7 +625,14 @@ const COND *ha_groonga::cond_push(const COND *cond)
     tmp->limit = 0;
     tmp->offset = 0;
     mcond = tmp;
-    //check_other_conditions(mcond, this->table->in_use);
+    mcond->expr = (mrn_expr*) malloc(sizeof(mrn_expr));
+    mrn_expr *expr = mcond->expr;
+    make_expr((Item*) cond, &expr);
+    check_other_conditions(mcond, this->table->in_use);
+    //dump_expr(mcond->expr);
+    //dump_condition(cond);
+    //dump_tree((Item*) cond, 0);
+    //dump_condition2(mcond);
   }
   DBUG_RETURN(NULL);
 
@@ -843,35 +848,100 @@ void ha_groonga::dump_condition(const COND *cond)
   printf("\n\n");
 }
 
-int ha_groonga::make_expr(Item *item, mrn_expr *expr)
+int ha_groonga::make_expr(Item *item, mrn_expr **expr)
 {
-  mrn_expr *current_expr = expr;
-  Item *child;
+  mrn_expr *cur = *expr;
 
-  switch (item->type())
+  switch(item->type())
   {
-  case Item::COND_ITEM:
-  {
-    expr->type = MRN_EXPR_COND;
-    Item_cond *cond = (Item_cond*) item;
-    List_iterator_fast<Item> lif(*(cond->argument_list()));
-    while ((child = lif++))
-    {
-      current_expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-      make_expr(child, current_expr->next);
-      current_expr = current_expr->next;
-    }
-  }
   case Item::FUNC_ITEM:
   {
+    int i;
+    Item_func *func = (Item_func*) item;
+    for (i=0; i < func->arg_count; i++)
+    {
+      make_expr((func->arguments())[i], &cur);
+      cur->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+      cur = cur->next;
+    }
+    cur->n_args = func->arg_count;
+    cur->next = NULL;
+    switch (func->functype())
+    {
+    case Item_func::EQ_FUNC:
+    case Item_func::EQUAL_FUNC:
+      cur->type = MRN_EXPR_EQ;
+      break;
+    case Item_func::LE_FUNC:
+      cur->type = MRN_EXPR_LESS_EQ;
+      break;
+    case Item_func::LT_FUNC:
+      cur->type = MRN_EXPR_LESS;
+      break;
+    case Item_func::GE_FUNC:
+      cur->type = MRN_EXPR_GT_EQ;
+      break;
+    case Item_func::GT_FUNC:
+      cur->type = MRN_EXPR_GT;
+      break;
+    default:
+      cur->type = MRN_EXPR_UNKNOWN;
+    }
+    break;
   }
   case Item::FIELD_ITEM:
   {
+    cur->type = MRN_EXPR_COLUMN;
+    cur->val_string =  ((Item_field*) item)->name;
+    cur->next = NULL;
+    break;
+  }
+  case Item::COND_ITEM:
+  {
+    Item_cond *cond = (Item_cond*) item;
+    List_iterator_fast<Item> lif(*(cond->argument_list()));
+    Item *child;
+    int i=0;
+    while ((child = lif++))
+    {
+      make_expr(child, &cur);
+      cur->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+      cur = cur->next;
+      i++;
+    }
+    cur->n_args = i;
+    cur->next = NULL;
+    switch(cond->functype())
+    {
+    case Item_func::COND_AND_FUNC:
+      cur->type = MRN_EXPR_AND;
+      break;
+    case Item_func::COND_OR_FUNC:
+      cur->type = MRN_EXPR_OR;
+      break;
+    default:
+      cur->type = MRN_EXPR_UNKNOWN;
+    }
+    break;
+  }
+  case Item::INT_ITEM:
+  {
+    cur->type = MRN_EXPR_INT;
+    cur->val_int = ((Item_int*) item)->val_int();
+    break;
+  }
+  case Item::STRING_ITEM:
+  {
+    cur->type = MRN_EXPR_TEXT;
+    cur->val_string = ((Item_string*) item)->val_str(NULL)->ptr();
+    break;
   }
   default:
   {
+    cur->type = MRN_EXPR_UNKNOWN;
   }
   }
+  *expr = cur;
 }
 
 void ha_groonga::free_expr(mrn_expr *expr)
@@ -902,6 +972,58 @@ int ha_groonga::check_other_conditions(mrn_cond *cond, THD *thd)
   cond->table_list_size = thd->lex->select_lex.table_list.elements;
   cond->order_list_size = thd->lex->select_lex.order_list.elements;
   return 0;
+}
+
+void ha_groonga::dump_condition2(mrn_cond *cond)
+{
+  mrn_expr *cur = cond->expr;
+  printf("where (");
+  while (cur)
+  {
+    switch (cur->type)
+    {
+    case MRN_EXPR_UNKNOWN:
+      printf("unknown ");
+      break;
+    case MRN_EXPR_COLUMN:
+      printf("%s ", cur->val_string);
+      break;
+    case MRN_EXPR_AND:
+      printf("and ");
+      break;
+    case MRN_EXPR_OR:
+      printf("or ");
+      break;
+    case MRN_EXPR_EQ:
+      printf("= ");
+      break;
+    case MRN_EXPR_NOT_EQ:
+      printf("!= ");
+      break;
+    case MRN_EXPR_GT:
+      printf("> ");
+      break;
+    case MRN_EXPR_GT_EQ:
+      printf(">= ");
+      break;
+    case MRN_EXPR_LESS:
+      printf("< ");
+      break;
+    case MRN_EXPR_LESS_EQ:
+      printf("<= ");
+      break;
+    case MRN_EXPR_INT:
+      printf("%d ", cur->val_int);
+      break;
+    case MRN_EXPR_TEXT:
+      printf("'%s' ", cur->val_string);
+      break;
+    }
+    cur = cur->next;
+  }
+  printf(") join=%d order=%d limit=%lld offset=%lld\n",
+         cond->table_list_size, cond->order_list_size,
+         cond->limit, cond->offset);
 }
 
 #ifdef __cplusplus
