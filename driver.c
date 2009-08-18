@@ -268,6 +268,9 @@ mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
     return NULL;
   }
   info = (mrn_info*) ptr;
+  info->res = NULL;
+  info->cursor = NULL;
+
   ptr += sizeof(mrn_info);
 
   info->table = ptr;
@@ -533,7 +536,7 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
   if (expr)
   {
     grn_obj *v, intbuf, textbuf;
-    GRN_INT32_INT(&intbuf, 0);
+    GRN_INT32_INIT(&intbuf, 0);
     GRN_TEXT_INIT(&textbuf, 0);
     grn_obj *gexpr = grn_expr_create(ctx, NULL, 0);
     v = grn_expr_add_var(ctx, gexpr, NULL, 0);
@@ -655,4 +658,62 @@ err:
 uint mrn_table_size(grn_ctx *ctx, mrn_info *info)
 {
   return grn_table_size(ctx, info->table->obj);
+}
+
+void mrn_free_expr(mrn_expr *expr)
+{
+  if (expr && expr->next)
+  {
+    free_expr(expr->next);
+  }
+  free(expr);
+}
+
+void mrn_dump_expr(mrn_expr *expr)
+{
+  mrn_expr *cur = expr;
+  printf("where (");
+  while (cur)
+  {
+    switch (cur->type)
+    {
+    case MRN_EXPR_UNKNOWN:
+      printf("unknown ");
+      break;
+    case MRN_EXPR_COLUMN:
+      printf("%s ", cur->val_string);
+      break;
+    case MRN_EXPR_AND:
+      printf("and ");
+      break;
+    case MRN_EXPR_OR:
+      printf("or ");
+      break;
+    case MRN_EXPR_EQ:
+      printf("= ");
+      break;
+    case MRN_EXPR_NOT_EQ:
+      printf("!= ");
+      break;
+    case MRN_EXPR_GT:
+      printf("> ");
+      break;
+    case MRN_EXPR_GT_EQ:
+      printf(">= ");
+      break;
+    case MRN_EXPR_LESS:
+      printf("< ");
+      break;
+    case MRN_EXPR_LESS_EQ:
+      printf("<= ");
+      break;
+    case MRN_EXPR_INT:
+      printf("%d ", cur->val_int);
+      break;
+    case MRN_EXPR_TEXT:
+      printf("'%s' ", cur->val_string);
+      break;
+    }
+    cur = cur->next;
+  }
 }

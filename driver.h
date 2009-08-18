@@ -146,6 +146,8 @@ int mrn_rewind_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr);
 int mrn_rnd_next(grn_ctx *ctx, mrn_record *record);
 uint mrn_table_size(grn_ctx *ctx, mrn_info *info);
+void mrn_free_expr(mrn_expr *expr);
+void mrn_dump_expr(mrn_expr *expr);
 
 /* static variables */
 extern grn_hash *mrn_hash;

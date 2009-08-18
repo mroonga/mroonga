@@ -95,7 +95,6 @@ public:
   int convert_info(const char *name, TABLE_SHARE *share, mrn_info **minfo);
   int set_bitmap(uchar **bitmap);
   int make_expr(Item *item, mrn_expr **expr);
-  void free_expr(mrn_expr *expr);
   int check_other_conditions(mrn_cond *cond, THD *thd);
 
   // for debug

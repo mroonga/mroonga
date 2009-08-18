@@ -954,15 +954,6 @@ int ha_groonga::make_expr(Item *item, mrn_expr **expr)
   *expr = cur;
 }
 
-void ha_groonga::free_expr(mrn_expr *expr)
-{
-  if (expr && expr->next)
-  {
-    free_expr(expr->next);
-  }
-  free(expr);
-}
-
 int ha_groonga::check_other_conditions(mrn_cond *cond, THD *thd)
 {
   SELECT_LEX lex = thd->lex->select_lex;
@@ -983,51 +974,7 @@ int ha_groonga::check_other_conditions(mrn_cond *cond, THD *thd)
 
 void ha_groonga::dump_condition2(mrn_cond *cond)
 {
-  mrn_expr *cur = cond->expr;
-  printf("where (");
-  while (cur)
-  {
-    switch (cur->type)
-    {
-    case MRN_EXPR_UNKNOWN:
-      printf("unknown ");
-      break;
-    case MRN_EXPR_COLUMN:
-      printf("%s ", cur->val_string);
-      break;
-    case MRN_EXPR_AND:
-      printf("and ");
-      break;
-    case MRN_EXPR_OR:
-      printf("or ");
-      break;
-    case MRN_EXPR_EQ:
-      printf("= ");
-      break;
-    case MRN_EXPR_NOT_EQ:
-      printf("!= ");
-      break;
-    case MRN_EXPR_GT:
-      printf("> ");
-      break;
-    case MRN_EXPR_GT_EQ:
-      printf(">= ");
-      break;
-    case MRN_EXPR_LESS:
-      printf("< ");
-      break;
-    case MRN_EXPR_LESS_EQ:
-      printf("<= ");
-      break;
-    case MRN_EXPR_INT:
-      printf("%d ", cur->val_int);
-      break;
-    case MRN_EXPR_TEXT:
-      printf("'%s' ", cur->val_string);
-      break;
-    }
-    cur = cur->next;
-  }
+  mrn_dump_expr(cond->expr);
   printf(") join=%d order=%d limit=%lld offset=%lld\n",
          cond->table_list_size, cond->order_list_size,
          cond->limit, cond->offset);
