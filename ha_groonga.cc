@@ -956,14 +956,11 @@ int ha_groonga::make_expr(Item *item, mrn_expr **expr)
 
 void ha_groonga::free_expr(mrn_expr *expr)
 {
-  if (expr)
+  if (expr && expr->next)
   {
-    if (expr->next)
-    {
-      free_expr(expr->next);
-    }
-    free(expr);
+    free_expr(expr->next);
   }
+  free(expr);
 }
 
 int ha_groonga::check_other_conditions(mrn_cond *cond, THD *thd)
