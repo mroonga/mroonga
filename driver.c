@@ -348,11 +348,16 @@ int mrn_create(grn_ctx *ctx, mrn_info *info)
 
 auto_drop:
   GRN_LOG(ctx, GRN_LOG_ERROR, "auto-drop table/columns");
-  for (; i > 0; --i)
+  while (--i >= 0)
   {
-    grn_obj_remove(ctx, info->columns[i]->obj);
+    grn_obj *col = grn_column_open(ctx, table->obj,
+                                   info->columns[i]->name,
+                                   info->columns[i]->name_size,
+                                   NULL, info->columns[i]->type);
+    grn_obj_remove(ctx, col);
     info->columns[i]->obj = NULL;
   }
+  grn_ctx_get(ctx, info->table->name, info->table->name_size);
   grn_obj_remove(ctx, info->table->obj);
   info->table->obj = NULL;
   return -1;
