@@ -664,7 +664,7 @@ void mrn_free_expr(mrn_expr *expr)
 {
   if (expr && expr->next)
   {
-    free_expr(expr->next);
+    mrn_free_expr(expr->next);
   }
   free(expr);
 }
@@ -672,7 +672,7 @@ void mrn_free_expr(mrn_expr *expr)
 void mrn_dump_expr(mrn_expr *expr)
 {
   mrn_expr *cur = expr;
-  printf("where (");
+  printf("\nmrn_expr (");
   while (cur)
   {
     switch (cur->type)
@@ -716,4 +716,5 @@ void mrn_dump_expr(mrn_expr *expr)
     }
     cur = cur->next;
   }
+  printf(")\n");
 }

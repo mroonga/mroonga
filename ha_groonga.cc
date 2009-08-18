@@ -975,7 +975,7 @@ int ha_groonga::check_other_conditions(mrn_cond *cond, THD *thd)
 void ha_groonga::dump_condition2(mrn_cond *cond)
 {
   mrn_dump_expr(cond->expr);
-  printf(") join=%d order=%d limit=%lld offset=%lld\n",
+  printf(" join=%d order=%d limit=%lld offset=%lld\n",
          cond->table_list_size, cond->order_list_size,
          cond->limit, cond->offset);
 }

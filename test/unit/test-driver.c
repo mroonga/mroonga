@@ -40,6 +40,72 @@ void cut_teardown()
   mrn_deinit();
 }
 
+mrn_info *generate_t1()
+{
+  int i, row_size = 10;
+  mrn_info *info = mrn_init_obj_info(ctx, 3);
+  mrn_record *record;
+  uchar bitmap[1];
+
+  info->table->name = "test/t1";
+  info->table->name_size = 2;
+  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
+
+  info->columns[0]->name = "c1";
+  info->columns[0]->name_size = 2;
+  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+  info->columns[0]->gtype = GRN_DB_INT32;
+  MRN_SET_BIT(bitmap,0);
+
+  info->columns[1]->name = "c2";
+  info->columns[1]->name_size = 2;
+  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_INT32);
+  info->columns[1]->gtype = GRN_DB_INT32;
+  MRN_SET_BIT(bitmap,1);
+
+  info->columns[2]->name = "c3";
+  info->columns[2]->name_size = 2;
+  info->columns[2]->flags |= GRN_OBJ_COLUMN_SCALAR;
+  info->columns[2]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  info->columns[2]->gtype = GRN_DB_TEXT;
+  MRN_SET_BIT(bitmap,2);
+
+  mrn_create(ctx, info);
+  mrn_open(ctx, info);
+
+  char buff[32];
+
+  record = mrn_init_record(ctx, info, bitmap, 3);
+  for (i = 0; i < row_size; i++)
+  {
+    mrn_rewind_record(ctx, record);
+    snprintf(buff,32,"text#%d",i);
+    GRN_INT32_SET(ctx, record->value[0], i);
+    GRN_INT32_SET(ctx, record->value[1], i*100);
+    GRN_TEXT_SETS(ctx, record->value[2], buff);
+    mrn_write_row(ctx, record);
+  }
+  mrn_deinit_record(ctx, record);
+
+  if (grn_table_size(ctx, info->table->obj) == row_size)
+  {
+    return info;
+  }
+  else
+  {
+    return NULL;
+  }
+}
+
+void destroy_t1(mrn_info *info)
+{
+  mrn_close(ctx, info);
+  mrn_drop(ctx, "test/t1");
+  mrn_deinit_obj_info(ctx, info);  
+}
+
 void test_mrn_flush_logs()
 {
   TEST_ENTER;
@@ -720,6 +786,7 @@ void test_mrn_rnd_next_pruning()
 
 void test_mrn_bitmap_macro()
 {
+  TEST_ENTER;
   uchar *a;
   a = g_malloc(128);
   memset(a,0,128);
@@ -733,4 +800,97 @@ void test_mrn_bitmap_macro()
     cut_assert_false(MRN_IS_BIT(a,i),"after clear: idx=%d",i);
   }
   g_free(a);
+}
+
+void test_mrn_expr_search()
+{
+  TEST_ENTER;
+  mrn_info *info = generate_t1();
+  cut_assert_not_null(info);
+
+  // SQL where ((c1 < 10 and c2 < 500) or (c1 >= 95)) 
+  // grn expression (c1 10 < c2 500 < and c1 95 >= or)
+  mrn_expr *first = (mrn_expr*) malloc(sizeof(mrn_expr));
+  mrn_expr *expr = first;
+
+  expr->type = MRN_EXPR_COLUMN;
+  expr->val_string = "c1";
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_INT;
+  expr->val_int = 5;
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_LESS;
+  expr->n_args = 2;
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_COLUMN;
+  expr->val_string = "c2";
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_INT;
+  expr->val_int = 200;
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_LESS;
+  expr->n_args = 2;
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_AND;
+  expr->n_args = 2;
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_COLUMN;
+  expr->val_string = "c1";
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_INT;
+  expr->val_int = 2;
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_LESS;
+  expr->n_args = 2;
+  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+  expr = expr->next;
+
+  expr->type = MRN_EXPR_AND;
+  expr->n_args = 2;
+
+  expr->next = NULL;
+  expr = first;
+
+  //mrn_dump_expr(expr);
+
+  cut_assert_null(info->res);
+  cut_assert_null(info->cursor);
+  
+  cut_assert_equal_int(0, mrn_rnd_init(ctx, info, expr));
+  cut_assert_not_null(info->res);
+  cut_assert_not_null(info->cursor);
+
+  char bitmap[1];
+  MRN_SET_BIT(bitmap,0);
+  MRN_SET_BIT(bitmap,1);
+  MRN_SET_BIT(bitmap,2);
+  mrn_record *record = mrn_init_record(ctx, info, bitmap, 3);
+  int rc, found_rows=0;
+  while ((rc = mrn_rnd_next(ctx, record)) == 0)
+  {
+    mrn_rewind_record(ctx, record);
+    found_rows++;
+  }
+  cut_assert_equal_int(1, rc);
+  cut_assert_equal_int(2, grn_table_size(ctx, info->res));
+  mrn_free_expr(expr);
+  destroy_t1(info);
 }
