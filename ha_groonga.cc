@@ -381,7 +381,7 @@ int ha_groonga::rnd_next(uchar *buf)
 
   if (mcond)
   {
-    free_expr(mcond->expr);
+    mrn_free_expr(mcond->expr);
     mcond = NULL;
   }
   free(record->bitmap);
