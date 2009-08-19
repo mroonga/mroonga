@@ -76,6 +76,26 @@ const char *mrn_functype_string[] = {
   "EXTRACT_FUNC", "CHAR_TYPECAST_FUNC", "FUNC_SP", "UDF_FUNC",
   "NEG_FUNC", "GSYSVAR_FUNC"};
 
+struct st_mysql_storage_engine storage_engine_structure =
+{ MYSQL_HANDLERTON_INTERFACE_VERSION };
+
+longlong mrn_status_column_target = 0;
+longlong mrn_status_column_used = 0;
+
+struct st_mysql_show_var mrn_status_variables[] =
+{
+  {"Mroonga_column_target", (char*) &mrn_status_column_target, SHOW_LONGLONG},
+  {"Mroonga_column_used", (char*) &mrn_status_column_used, SHOW_LONGLONG},
+  NULL
+};
+
+struct st_mysql_sys_var  *mrn_system_variables[] =
+{
+  MYSQL_SYSVAR(column_pruning),
+  MYSQL_SYSVAR(expression),
+  NULL
+};
+
 grn_encoding mrn_charset_mysql_groonga(const char *csname)
 {
   if (!csname) return GRN_ENC_NONE;
@@ -97,7 +117,6 @@ const char *mrn_charset_groonga_mysql(grn_encoding encoding)
   return NULL;
 }
 
-
 grn_builtin_type mrn_get_type(grn_ctx *ctx, int type)
 {
   grn_builtin_type gtype;
@@ -114,7 +133,6 @@ grn_builtin_type mrn_get_type(grn_ctx *ctx, int type)
   }
   return gtype;
 }
-
 
 handler *mrn_handler_create(handlerton *hton,
 			    TABLE_SHARE *share,
@@ -148,17 +166,6 @@ int mrn_plugin_deinit(void *p)
   return mrn_deinit();
 }
 
-
-struct st_mysql_storage_engine storage_engine_structure =
-{ MYSQL_HANDLERTON_INTERFACE_VERSION };
-
-struct st_mysql_sys_var  *mrn_system_variables[] =
-{
-  MYSQL_SYSVAR(column_pruning),
-  MYSQL_SYSVAR(expression),
-  NULL
-};
-
 mysql_declare_plugin(mroonga)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
@@ -170,7 +177,7 @@ mysql_declare_plugin(mroonga)
   mrn_plugin_init,
   mrn_plugin_deinit,
   0x0001,
-  NULL,
+  mrn_status_variables,
   mrn_system_variables,
   NULL
 }
@@ -334,19 +341,23 @@ int ha_groonga::rnd_init(bool scan)
 {
   MRN_HTRACE;
   int i, used=0, n_columns, alloc_size;
+  char column_pruning = THDVAR(table->in_use, column_pruning);
   n_columns = minfo->n_columns;
   alloc_size = n_columns / 8 + 1;
   uchar* column_map = (uchar*) malloc(alloc_size);
   memset(column_map,0,alloc_size);
   for (i=0; i < n_columns; i++)
   {
-    if (bitmap_is_set(table->read_set, i) ||
+    if (column_pruning == 0 ||
+        bitmap_is_set(table->read_set, i) ||
         bitmap_is_set(table->write_set, i))
     {
       MRN_SET_BIT(column_map, i);
       used++;
     }
   }
+  mrn_status_column_target += n_columns;
+  mrn_status_column_used += used;
   this->cur = mrn_init_record(ctx, minfo, column_map, used);
 
   if (mcond)
