@@ -18,18 +18,18 @@ extern "C" {
 #include "ha_groonga.h"
 
 static MYSQL_THDVAR_BOOL(
-                         column_pruning,
+                         use_column_pruning,
                          PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
-                         "enable column pruning.",
+                         "use column pruning.",
                          NULL,
                          NULL,
                          TRUE
                          );
   
 static MYSQL_THDVAR_BOOL(
-                         expression,
+                         use_cond_push,
                          PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
-                         "enable expression.",
+                         "use cond_push and groonga expression.",
                          NULL,
                          NULL,
                          TRUE
@@ -91,8 +91,8 @@ struct st_mysql_show_var mrn_status_variables[] =
 
 struct st_mysql_sys_var  *mrn_system_variables[] =
 {
-  MYSQL_SYSVAR(column_pruning),
-  MYSQL_SYSVAR(expression),
+  MYSQL_SYSVAR(use_column_pruning),
+  MYSQL_SYSVAR(use_cond_push),
   NULL
 };
 
@@ -341,14 +341,14 @@ int ha_groonga::rnd_init(bool scan)
 {
   MRN_HTRACE;
   int i, used=0, n_columns, alloc_size;
-  char column_pruning = THDVAR(table->in_use, column_pruning);
+  char use_column_pruning = THDVAR(table->in_use, use_column_pruning);
   n_columns = minfo->n_columns;
   alloc_size = n_columns / 8 + 1;
   uchar* column_map = (uchar*) malloc(alloc_size);
   memset(column_map,0,alloc_size);
   for (i=0; i < n_columns; i++)
   {
-    if (column_pruning == 0 ||
+    if (use_column_pruning == 0 ||
         bitmap_is_set(table->read_set, i) ||
         bitmap_is_set(table->write_set, i))
     {
