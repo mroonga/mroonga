@@ -17,6 +17,24 @@ extern "C" {
 
 #include "ha_groonga.h"
 
+static MYSQL_THDVAR_BOOL(
+                         column_pruning,
+                         PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
+                         "enable column pruning.",
+                         NULL,
+                         NULL,
+                         TRUE
+                         );
+  
+static MYSQL_THDVAR_BOOL(
+                         expression,
+                         PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
+                         "enable expression.",
+                         NULL,
+                         NULL,
+                         TRUE
+                         );
+
 MRN_CHARSET_MAP mrn_charset_map[] = {
   {"utf8", GRN_ENC_UTF8},
   {"cp932", GRN_ENC_SJIS},
@@ -134,6 +152,13 @@ int mrn_plugin_deinit(void *p)
 struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
 
+struct st_mysql_sys_var  *mrn_system_variables[] =
+{
+  MYSQL_SYSVAR(column_pruning),
+  MYSQL_SYSVAR(expression),
+  NULL
+};
+
 mysql_declare_plugin(mroonga)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
@@ -146,7 +171,7 @@ mysql_declare_plugin(mroonga)
   mrn_plugin_deinit,
   0x0001,
   NULL,
-  NULL,
+  mrn_system_variables,
   NULL
 }
 mysql_declare_plugin_end;

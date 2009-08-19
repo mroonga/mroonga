@@ -29,6 +29,7 @@ typedef struct _mrn_cond
   int order_list_size;
 } mrn_cond;
 
+
 /* handler class */
 class ha_groonga: public handler
 {
