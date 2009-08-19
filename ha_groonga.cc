@@ -81,11 +81,13 @@ struct st_mysql_storage_engine storage_engine_structure =
 
 longlong mrn_status_column_target = 0;
 longlong mrn_status_column_used = 0;
+longlong mrn_status_cond_push_used = 0;
 
 struct st_mysql_show_var mrn_status_variables[] =
 {
   {"Mroonga_column_target", (char*) &mrn_status_column_target, SHOW_LONGLONG},
   {"Mroonga_column_used", (char*) &mrn_status_column_used, SHOW_LONGLONG},
+  {"Mroonga_cond_push_used", (char*) &mrn_status_cond_push_used, SHOW_LONGLONG},
   NULL
 };
 
@@ -342,6 +344,7 @@ int ha_groonga::rnd_init(bool scan)
   MRN_HTRACE;
   int i, used=0, n_columns, alloc_size;
   char use_column_pruning = THDVAR(table->in_use, use_column_pruning);
+  char use_cond_push = THDVAR(table->in_use, use_cond_push);
   n_columns = minfo->n_columns;
   alloc_size = n_columns / 8 + 1;
   uchar* column_map = (uchar*) malloc(alloc_size);
@@ -360,8 +363,9 @@ int ha_groonga::rnd_init(bool scan)
   mrn_status_column_used += used;
   this->cur = mrn_init_record(ctx, minfo, column_map, used);
 
-  if (mcond)
+  if (use_cond_push && mcond)
   {
+    mrn_status_cond_push_used++;
     const COND *cond = mcond->cond;
     mcond->expr = (mrn_expr*) malloc(sizeof(mrn_expr));
     mrn_expr *expr = mcond->expr;
