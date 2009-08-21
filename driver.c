@@ -430,9 +430,10 @@ int mrn_drop(grn_ctx *ctx, const char *table_name)
   return 0;
 
 err:
-  GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get in mrn_drop failed:[%s,%d,%p,%p]",
+  GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get return null:[%s,%d,%p,%p]",
           table_name, strlen(table_name), ctx, grn_ctx_db(ctx));
-  return -1;
+  // force drop table
+  return 0;
 }
 
 int mrn_write_row(grn_ctx *ctx, mrn_record *record)
