@@ -85,25 +85,25 @@ void test_sample_expression()
 
   {
     {
-      grn_expr_append_obj(ctx, expr, v);
+      grn_expr_append_obj(ctx, expr, v, GRN_OP_PUSH, 1);
       GRN_BULK_REWIND(&textbuf);
       GRN_TEXT_SETS(ctx, &textbuf, "col_int");
-      grn_expr_append_const(ctx, expr, &textbuf);
-      grn_expr_append_op(ctx, expr, GRN_OP_OBJ_GET_VALUE, 2);
+      grn_expr_append_const(ctx, expr, &textbuf, GRN_OP_PUSH, 1);
+      grn_expr_append_op(ctx, expr, GRN_OP_GET_VALUE, 2);
       GRN_BULK_REWIND(&intbuf);
       GRN_INT32_SET(ctx, &intbuf, 4);
-      grn_expr_append_const(ctx, expr, &intbuf);
+      grn_expr_append_const(ctx, expr, &intbuf, GRN_OP_PUSH, 1);
       grn_expr_append_op(ctx, expr, GRN_OP_GREATER, 2);
     }
     {
-      grn_expr_append_obj(ctx, expr, v);
+      grn_expr_append_obj(ctx, expr, v, GRN_OP_PUSH, 1);
       GRN_BULK_REWIND(&textbuf);
       GRN_TEXT_SETS(ctx, &textbuf, "col_int");
-      grn_expr_append_const(ctx, expr, &textbuf);
-      grn_expr_append_op(ctx, expr, GRN_OP_OBJ_GET_VALUE, 2);
+      grn_expr_append_const(ctx, expr, &textbuf, GRN_OP_PUSH, 1);
+      grn_expr_append_op(ctx, expr, GRN_OP_GET_VALUE, 2);
       GRN_BULK_REWIND(&intbuf);
       GRN_INT32_SET(ctx, &intbuf, 8);
-      grn_expr_append_const(ctx, expr, &intbuf);
+      grn_expr_append_const(ctx, expr, &intbuf, GRN_OP_PUSH, 1);
       grn_expr_append_op(ctx, expr, GRN_OP_LESS, 2);
     }
     grn_expr_append_op(ctx, expr, GRN_OP_AND, 2);
@@ -112,8 +112,8 @@ void test_sample_expression()
   res = grn_table_create(ctx, NULL, 0, NULL,
                          GRN_TABLE_HASH_KEY|GRN_OBJ_WITH_SUBREC, table, NULL);
 
-  grn_rc rc = grn_table_select(ctx, table, expr, res, GRN_OP_OR);
-  cut_assert_equal_int(0, rc);
+  grn_obj *res2 = grn_table_select(ctx, table, expr, res, GRN_OP_OR);
+  cut_assert_not_null(res);
   cut_assert_equal_int(3, grn_table_size(ctx, res));
 
   tc = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, 0, 0);
@@ -135,4 +135,5 @@ void test_sample_expression()
   }
   grn_expr_close(ctx, expr);
   grn_table_cursor_close(ctx, tc);
+  grn_obj_close(ctx, res2);
 }

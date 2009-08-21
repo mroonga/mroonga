@@ -891,6 +891,7 @@ void test_mrn_expr_search()
   }
   cut_assert_equal_int(1, rc);
   cut_assert_equal_int(2, grn_table_size(ctx, info->res));
+  cut_assert_equal_int(2, found_rows);
   mrn_free_expr(expr);
   destroy_t1(info);
 }
