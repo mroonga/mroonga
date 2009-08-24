@@ -148,6 +148,7 @@ int mrn_rnd_next(grn_ctx *ctx, mrn_record *record);
 uint mrn_table_size(grn_ctx *ctx, mrn_info *info);
 void mrn_free_expr(mrn_expr *expr);
 void mrn_dump_expr(mrn_expr *expr);
+void mrn_dump_buffer(uchar *buf, int size);
 
 /* static variables */
 extern grn_hash *mrn_hash;

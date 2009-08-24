@@ -718,3 +718,17 @@ void mrn_dump_expr(mrn_expr *expr)
   }
   printf(")\n");
 }
+
+void mrn_dump_buffer(uchar *buf, int size)
+{
+  int i;
+  const char c[] = "0123456789ABCDEF";
+  for (i=0; i < size; i++)
+  {
+    uchar cur = buf[i];
+    uchar low_bit = cur & 0xF;
+    uchar high_bit = cur >> 4;
+    printf("%c%c ",c[high_bit],c[low_bit]);
+  }
+  printf("\n");
+}

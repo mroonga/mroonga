@@ -128,6 +128,7 @@ grn_builtin_type mrn_get_type(grn_ctx *ctx, int type)
     gtype = GRN_DB_INT32;
     break;
   case MYSQL_TYPE_VARCHAR:
+  case MYSQL_TYPE_BLOB:
     gtype = GRN_DB_TEXT;
     break;
   default:
@@ -405,6 +406,7 @@ int ha_groonga::rnd_next(uchar *buf)
           (*field)->store(GRN_INT32_VALUE(value));
           break;
         case (MYSQL_TYPE_VARCHAR) :
+        case (MYSQL_TYPE_BLOB) :
           (*field)->set_notnull();
           (*field)->store(GRN_TEXT_VALUE(value), GRN_BULK_WSIZE(value), (*field)->charset());
           break;
@@ -498,14 +500,29 @@ int ha_groonga::write_row(uchar *buf)
   {
     if (MRN_IS_BIT(record->bitmap, i))
     {
-      /* TODO: replace if-else into swtich-case */
-      if ((*field)->type() == MYSQL_TYPE_LONG) {
+      switch ((*field)->type())
+      {
+      case MYSQL_TYPE_LONG:
+      {
         GRN_INT32_SET(ctx, record->value[j], (*field)->val_int());
-      } else if ((*field)->type() == MYSQL_TYPE_VARCHAR) {
+        break;
+      }
+      case MYSQL_TYPE_VARCHAR:
+      {
         String tmp;
         const char *val = (*field)->val_str(&tmp)->ptr();
         GRN_TEXT_SET(ctx, record->value[j], val, (*field)->data_length());
-      } else {
+        break;
+      }
+      case MYSQL_TYPE_BLOB:
+      {
+        String tmp;
+        Field_blob *blob = (Field_blob*) *field;
+        const char *val = blob->val_str(0,&tmp)->ptr();
+        GRN_TEXT_SET(ctx, record->value[j], val, blob->get_length());
+        break;
+      }
+      default:
         return HA_ERR_UNSUPPORTED;
       }
       j++;
@@ -722,6 +739,8 @@ int ha_groonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
     }
     else
     {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot use column type=%d for %s.%s",
+              field->type(), minfo->table->name, field->field_name);
       return -1;
     }
   }

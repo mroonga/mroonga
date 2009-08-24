@@ -895,3 +895,28 @@ void test_mrn_expr_search()
   mrn_free_expr(expr);
   destroy_t1(info);
 }
+
+void test_get_data_type()
+{
+  cut_assert_null(grn_ctx_at(ctx, GRN_DB_VOID));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_OBJECT));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_BOOL));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_INT8));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_UINT8));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_INT16));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_UINT16));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_INT32));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_UINT32));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_INT64));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_UINT64));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_FLOAT));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_TIME));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_SHORT_TEXT));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_TEXT));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_LONG_TEXT));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_DELIMIT));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_UNIGRAM));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_BIGRAM));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_TRIGRAM));
+  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_MECAB));
+}

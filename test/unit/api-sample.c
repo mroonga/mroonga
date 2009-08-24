@@ -67,7 +67,6 @@ void cut_teardown()
   grn_obj_remove(ctx, table);
 }
 
-
 void test_sample_expression()
 {
   grn_obj *expr, intbuf, textbuf, *res;
