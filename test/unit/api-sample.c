@@ -31,7 +31,7 @@ void cut_shutdown()
   g_free(tmp_directory);
 }
 
-void cut_setup()
+void create_table()
 {
   table = grn_table_create(ctx, "test/t1", 7, NULL,
                            GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_NO_KEY,
@@ -42,17 +42,21 @@ void cut_setup()
   col_text = grn_column_create(ctx, table, "col_text", 8, NULL,
                                GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR,
                                grn_ctx_at(ctx, GRN_DB_TEXT));
+}
+
+void insert_data()
+{
   int i,added;
   grn_obj obj_int, obj_text;
   GRN_INT32_INIT(&obj_int,0);
   GRN_TEXT_INIT(&obj_text,0);
-  for (i=1; i <= 10; i++)
+  for (i=1; i <= 100; i++)
   {
     char buf[32];
     grn_id id = grn_table_add(ctx, table, NULL, 0, &added);
     GRN_BULK_REWIND(&obj_int);
     GRN_BULK_REWIND(&obj_text);
-    GRN_INT32_SET(ctx, &obj_int, i);
+    GRN_INT32_SET(ctx, &obj_int, i*10);
     grn_obj_set_value(ctx, col_int, id, &obj_int, GRN_OBJ_SET);
     snprintf(buf, 32, "text:%d", i);
     GRN_TEXT_SETS(ctx, &obj_text, buf);
@@ -62,8 +66,10 @@ void cut_setup()
   grn_obj_close(ctx, &obj_text);
 }
 
-void cut_teardown()
+void drop_table()
 {
+  grn_obj_remove(ctx, col_int);
+  grn_obj_remove(ctx, col_text);
   grn_obj_remove(ctx, table);
 }
 
@@ -73,6 +79,9 @@ void test_sample_expression()
   grn_obj *v, *r;
   grn_table_cursor *tc;
   grn_id res_id, *rec_id;
+
+  create_table();
+  insert_data();
 
   GRN_INT32_INIT(&intbuf,0);
   GRN_TEXT_INIT(&textbuf,0);
@@ -90,7 +99,7 @@ void test_sample_expression()
       grn_expr_append_const(ctx, expr, &textbuf, GRN_OP_PUSH, 1);
       grn_expr_append_op(ctx, expr, GRN_OP_GET_VALUE, 2);
       GRN_BULK_REWIND(&intbuf);
-      GRN_INT32_SET(ctx, &intbuf, 4);
+      GRN_INT32_SET(ctx, &intbuf, 40);
       grn_expr_append_const(ctx, expr, &intbuf, GRN_OP_PUSH, 1);
       grn_expr_append_op(ctx, expr, GRN_OP_GREATER, 2);
     }
@@ -101,7 +110,7 @@ void test_sample_expression()
       grn_expr_append_const(ctx, expr, &textbuf, GRN_OP_PUSH, 1);
       grn_expr_append_op(ctx, expr, GRN_OP_GET_VALUE, 2);
       GRN_BULK_REWIND(&intbuf);
-      GRN_INT32_SET(ctx, &intbuf, 8);
+      GRN_INT32_SET(ctx, &intbuf, 80);
       grn_expr_append_const(ctx, expr, &intbuf, GRN_OP_PUSH, 1);
       grn_expr_append_op(ctx, expr, GRN_OP_LESS, 2);
     }
@@ -127,7 +136,7 @@ void test_sample_expression()
     GRN_BULK_REWIND(&textbuf);
     cut_assert_equal_int(i, *rec_id);
     cut_assert_not_null(grn_obj_get_value(ctx, col_int, *rec_id, &intbuf));
-    cut_assert_equal_int(i, GRN_INT32_VALUE(&intbuf));
+    cut_assert_equal_int(i*10, GRN_INT32_VALUE(&intbuf));
     cut_assert_not_null(grn_obj_get_value(ctx, col_text, *rec_id, &textbuf));
     snprintf(buf, 32, "text:%d", i);
     cut_assert_true(memcmp(buf, GRN_TEXT_VALUE(&textbuf), sizeof(buf)));
@@ -135,4 +144,158 @@ void test_sample_expression()
   grn_expr_close(ctx, expr);
   grn_table_cursor_close(ctx, tc);
   grn_obj_close(ctx, res2);
+  drop_table();
+}
+
+void test_secondary_index_pat_int()
+{
+  grn_obj *index_table, *index_col, buf, buf2, *res;
+  grn_table_cursor *tc;
+  grn_id id, docid;
+
+  create_table();
+
+  GRN_INT32_INIT(&buf,0);
+  GRN_TEXT_INIT(&buf2,0);
+
+  index_table = grn_table_create(ctx, "pat",  3, NULL,
+                               GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
+                               grn_ctx_at(ctx, GRN_DB_INT32), 0);
+  index_col = grn_column_create(ctx, index_table, "col", 3, NULL,
+                                GRN_OBJ_COLUMN_INDEX|GRN_OBJ_PERSISTENT,
+                                grn_ctx_at(ctx, GRN_DB_INT32));
+
+
+  GRN_INT32_SET(ctx, &buf, grn_obj_id(ctx, col_int));
+  grn_obj_set_info(ctx, index_col, GRN_INFO_SOURCE, &buf);
+
+  insert_data();
+
+  res = grn_table_create(ctx, NULL, 0, NULL,
+                         GRN_TABLE_HASH_KEY|GRN_OBJ_WITH_SUBREC, table, 0);
+
+  GRN_BULK_REWIND(&buf);
+  GRN_INT32_SET(ctx, &buf, 500);
+  grn_obj_search(ctx, index_col, &buf, res, GRN_OP_OR, NULL);
+  cut_assert_equal_int(1, grn_table_size(ctx, res));
+
+  tc = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, 0, 0);
+  while ((id = grn_table_cursor_next(ctx, tc)))
+  {
+    GRN_BULK_REWIND(&buf);
+    GRN_BULK_REWIND(&buf2);
+    grn_table_get_key(ctx, res, id, &docid, sizeof(docid));
+    cut_assert_equal_int(50, docid);
+    cut_assert_not_null(grn_obj_get_value(ctx, col_int, docid, &buf));
+    cut_assert_not_null(grn_obj_get_value(ctx, col_text, docid, &buf2));
+    cut_assert_equal_int(50*10, GRN_INT32_VALUE(&buf));
+    cut_assert_equal_int(7, GRN_TEXT_LEN(&buf2));
+    cut_assert_equal_substring("text:50", GRN_TEXT_VALUE(&buf2),
+                               GRN_TEXT_LEN(&buf2));
+  }
+
+  grn_obj_remove(ctx, index_table);
+  drop_table();
+}
+
+void test_secondary_index_hash_int()
+{
+  grn_obj *index_table, *index_col, buf, buf2, *res;
+  grn_table_cursor *tc;
+  grn_id id, docid;
+
+  create_table();
+
+  GRN_INT32_INIT(&buf,0);
+  GRN_TEXT_INIT(&buf2,0);
+
+  index_table = grn_table_create(ctx, "hash",  4, NULL,
+                               GRN_OBJ_TABLE_HASH_KEY|GRN_OBJ_PERSISTENT,
+                               grn_ctx_at(ctx, GRN_DB_INT32), 0);
+  index_col = grn_column_create(ctx, index_table, "col", 3, NULL,
+                                GRN_OBJ_COLUMN_INDEX|GRN_OBJ_PERSISTENT,
+                                grn_ctx_at(ctx, GRN_DB_INT32));
+
+
+  GRN_INT32_SET(ctx, &buf, grn_obj_id(ctx, col_int));
+  grn_obj_set_info(ctx, index_col, GRN_INFO_SOURCE, &buf);
+
+  insert_data();
+
+  res = grn_table_create(ctx, NULL, 0, NULL,
+                         GRN_TABLE_HASH_KEY|GRN_OBJ_WITH_SUBREC, table, 0);
+
+  GRN_BULK_REWIND(&buf);
+  GRN_INT32_SET(ctx, &buf, 500);
+  grn_obj_search(ctx, index_col, &buf, res, GRN_OP_OR, NULL);
+  cut_assert_equal_int(1, grn_table_size(ctx, res));
+
+  tc = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, 0, 0);
+  while ((id = grn_table_cursor_next(ctx, tc)))
+  {
+    GRN_BULK_REWIND(&buf);
+    GRN_BULK_REWIND(&buf2);
+    grn_table_get_key(ctx, res, id, &docid, sizeof(docid));
+    cut_assert_equal_int(50, docid);
+    cut_assert_not_null(grn_obj_get_value(ctx, col_int, docid, &buf));
+    cut_assert_not_null(grn_obj_get_value(ctx, col_text, docid, &buf2));
+    cut_assert_equal_int(50*10, GRN_INT32_VALUE(&buf));
+    cut_assert_equal_int(7, GRN_TEXT_LEN(&buf2));
+    cut_assert_equal_substring("text:50", GRN_TEXT_VALUE(&buf2),
+                               GRN_TEXT_LEN(&buf2));
+  }
+
+  grn_obj_remove(ctx, index_table);
+  drop_table();
+}
+
+void test_secondary_index_pat_text()
+{
+  grn_obj *index_table, *index_col, buf, buf2, *res;
+  grn_table_cursor *tc;
+  grn_id id, docid;
+
+  create_table();
+
+  GRN_INT32_INIT(&buf,0);
+  GRN_TEXT_INIT(&buf2,0);
+
+  index_table = grn_table_create(ctx, "pat",  3, NULL,
+                               GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
+                               grn_ctx_at(ctx, GRN_DB_INT32), 0);
+  index_col = grn_column_create(ctx, index_table, "col", 3, NULL,
+                                GRN_OBJ_COLUMN_INDEX|GRN_OBJ_PERSISTENT,
+                                grn_ctx_at(ctx, GRN_DB_INT32));
+
+
+  GRN_INT32_SET(ctx, &buf, grn_obj_id(ctx, col_text));
+  grn_obj_set_info(ctx, index_col, GRN_INFO_SOURCE, &buf);
+
+  insert_data();
+
+  res = grn_table_create(ctx, NULL, 0, NULL,
+                         GRN_TABLE_HASH_KEY|GRN_OBJ_WITH_SUBREC, table, 0);
+
+  GRN_BULK_REWIND(&buf2);
+  GRN_TEXT_SETS(ctx, &buf2, "text:20");
+  grn_obj_search(ctx, index_col, &buf2, res, GRN_OP_OR, NULL);
+  cut_assert_equal_int(1, grn_table_size(ctx, res));
+
+  tc = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, 0, 0);
+  while ((id = grn_table_cursor_next(ctx, tc)))
+  {
+    GRN_BULK_REWIND(&buf);
+    GRN_BULK_REWIND(&buf2);
+    grn_table_get_key(ctx, res, id, &docid, sizeof(docid));
+    cut_assert_equal_int(20, docid);
+    cut_assert_not_null(grn_obj_get_value(ctx, col_int, docid, &buf));
+    cut_assert_not_null(grn_obj_get_value(ctx, col_text, docid, &buf2));
+    cut_assert_equal_int(20*10, GRN_INT32_VALUE(&buf));
+    cut_assert_equal_int(7, GRN_TEXT_LEN(&buf2));
+    cut_assert_equal_substring("text:20", GRN_TEXT_VALUE(&buf2),
+                               GRN_TEXT_LEN(&buf2));
+  }
+
+  grn_obj_remove(ctx, index_table);
+  drop_table();
 }
