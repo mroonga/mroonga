@@ -370,8 +370,11 @@ int ha_groonga::rnd_init(bool scan)
     const COND *cond = mcond->cond;
     mcond->expr = (mrn_expr*) malloc(sizeof(mrn_expr));
     mrn_expr *expr = mcond->expr;
+    expr->prev = NULL;
     make_expr((Item*) cond, &expr);
     check_other_conditions(mcond, this->table->in_use);
+    dump_condition(cond);
+    dump_tree((Item*)cond,0);
     dump_condition2(mcond);
   }
   return mrn_rnd_init(ctx, minfo,
@@ -805,8 +808,11 @@ void ha_groonga::dump_tree(Item *item, int offset)
     case Item_func::GT_FUNC:
       str = (char*) ">";
         break;
+    case Item_func::NEG_FUNC:
+      str = (char*) "-";
+      break;
     default:
-      str = (char*) "(FUNC_ITEM)";
+      str = (char*) mrn_functype_string[func->functype()];
     }
     printf("%s%s\n", (indent+(20-offset)), str);
     int i;
@@ -917,7 +923,6 @@ void ha_groonga::dump_condition(const COND *cond)
 int ha_groonga::make_expr(Item *item, mrn_expr **expr)
 {
   mrn_expr *cur = *expr;
-
   switch(item->type())
   {
   case Item::FUNC_ITEM:
@@ -928,6 +933,7 @@ int ha_groonga::make_expr(Item *item, mrn_expr **expr)
     {
       make_expr((func->arguments())[i], &cur);
       cur->next = (mrn_expr*) malloc(sizeof(mrn_expr));
+      cur->next->prev = cur;
       cur = cur->next;
     }
     cur->n_args = func->arg_count;
@@ -949,6 +955,10 @@ int ha_groonga::make_expr(Item *item, mrn_expr **expr)
       break;
     case Item_func::GT_FUNC:
       cur->type = MRN_EXPR_GT;
+      break;
+    case Item_func::NEG_FUNC:
+      cur->type = MRN_EXPR_NEGATIVE;
+      cur->prev->val_int = cur->prev->val_int * -1;
       break;
     default:
       cur->type = MRN_EXPR_UNKNOWN;

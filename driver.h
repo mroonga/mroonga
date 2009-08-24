@@ -86,17 +86,18 @@ typedef struct _mrn_record
 
 typedef enum {
   MRN_EXPR_UNKNOWN=0,
-  MRN_EXPR_COLUMN=1,
-  MRN_EXPR_AND=2,
-  MRN_EXPR_OR=3,
-  MRN_EXPR_EQ=4,
-  MRN_EXPR_NOT_EQ=5,
-  MRN_EXPR_GT=6,
-  MRN_EXPR_GT_EQ=7,
-  MRN_EXPR_LESS=8,
-  MRN_EXPR_LESS_EQ=9,
-  MRN_EXPR_INT=10,
-  MRN_EXPR_TEXT=11
+  MRN_EXPR_COLUMN,
+  MRN_EXPR_AND,
+  MRN_EXPR_OR,
+  MRN_EXPR_EQ,
+  MRN_EXPR_NOT_EQ,
+  MRN_EXPR_GT,
+  MRN_EXPR_GT_EQ,
+  MRN_EXPR_LESS,
+  MRN_EXPR_LESS_EQ,
+  MRN_EXPR_INT,
+  MRN_EXPR_TEXT,
+  MRN_EXPR_NEGATIVE
 } mrn_expr_type;
 
 typedef struct _mrn_expr
@@ -105,6 +106,7 @@ typedef struct _mrn_expr
   const char *val_string;
   int val_int;
   int n_args;
+  struct _mrn_expr *prev;
   struct _mrn_expr *next;
 } mrn_expr;
 

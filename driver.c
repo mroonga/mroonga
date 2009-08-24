@@ -591,6 +591,8 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
         GRN_TEXT_SETS(ctx, &textbuf, cur->val_string);
         grn_expr_append_const(ctx, gexpr, &textbuf, GRN_OP_PUSH, 1);
         break;
+      case MRN_EXPR_NEGATIVE:
+        break;
       }
       cur = cur->next;
     }
@@ -713,6 +715,10 @@ void mrn_dump_expr(mrn_expr *expr)
     case MRN_EXPR_TEXT:
       printf("'%s' ", cur->val_string);
       break;
+    case MRN_EXPR_NEGATIVE:
+      break;
+    default:
+      printf("?? ");
     }
     cur = cur->next;
   }
