@@ -373,6 +373,7 @@ int mrn_create(grn_ctx *ctx, mrn_info *info)
             table->path, table->flags, table->key_type, NULL);
     return -1;
   }
+
   for (i=0; i < info->n_columns; i++)
   {
     column = info->columns[i];
@@ -387,11 +388,12 @@ int mrn_create(grn_ctx *ctx, mrn_info *info)
               column->flags, column->type);
       goto auto_drop;
     }
-    else
-    {
-      grn_obj_close(ctx, column->obj);
-      column->obj = NULL;
-    }
+  }
+
+  for (i=0; i < info->n_columns; i++)
+  {
+    grn_obj_close(ctx, info->columns[i]->obj);
+    info->columns[i]->obj = NULL;
   }
   grn_obj_close(ctx, table->obj);
   table->obj = NULL;
@@ -401,11 +403,7 @@ auto_drop:
   GRN_LOG(ctx, GRN_LOG_ERROR, "auto-drop table/columns");
   while (--i >= 0)
   {
-    grn_obj *col = grn_column_open(ctx, table->obj,
-                                   info->columns[i]->name,
-                                   info->columns[i]->name_size,
-                                   NULL, info->columns[i]->type);
-    grn_obj_remove(ctx, col);
+    grn_obj_remove(ctx, info->columns[i]->obj);
     info->columns[i]->obj = NULL;
   }
   grn_ctx_get(ctx, info->table->name, info->table->name_size);

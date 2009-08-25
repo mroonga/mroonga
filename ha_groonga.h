@@ -35,8 +35,9 @@ class ha_groonga: public handler
 {
   THR_LOCK thr_lock;
   THR_LOCK_DATA thr_lock_data;
-
+#ifdef PROTOTYPE
   mrn_table *share;
+#endif
   grn_table_cursor *cursor;
   grn_id record_id;
   grn_obj *res;

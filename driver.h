@@ -20,13 +20,13 @@ typedef struct _mrn_charset_map
   grn_encoding csname_groonga;
 } MRN_CHARSET_MAP;
 
+#ifdef PROTOTYPE
 typedef struct _mrn_field
 {
   const char *name;
   uint name_len;
   grn_obj *obj;
   grn_obj *index;
-  //grn_id gid;
   uint field_no;
 } mrn_field;
 
@@ -36,11 +36,11 @@ typedef struct _mrn_table
   uint name_len;
   uint use_count;
   grn_obj *obj;
-  //grn_id gid;
   mrn_field **field;
   uint fields;
   uint pkey_field;
 } mrn_table;
+#endif
 
 typedef struct _mrn_column_info
 {
