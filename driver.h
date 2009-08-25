@@ -8,7 +8,9 @@
 #define MRN_MAX_KEY_LEN 1024
 #define MRN_DB_FILE_PATH "groonga.db"
 #define MRN_LOG_FILE_NAME "groonga.log"
-#define MRN_LEXICON_TABLE_NAME "lexicon"
+#define MRN_INDEX_LEXICON_NAME "index_lexicon"
+#define MRN_INDEX_HASH_NAME "index_hash"
+#define MRN_INDEX_PAT_NAME "index_pat"
 
 typedef unsigned char uchar;
 
@@ -153,7 +155,10 @@ void mrn_dump_buffer(uchar *buf, int size);
 
 /* static variables */
 extern grn_hash *mrn_system_hash;
-extern grn_obj *mrn_db, *mrn_lexicon;
+extern grn_obj *mrn_db;
+extern grn_obj *mrn_index_lexicon;
+extern grn_obj *mrn_index_hash;
+extern grn_obj *mrn_index_pat;
 extern pthread_mutex_t *mrn_lock, *mrn_lock_hash;
 extern const char *mrn_logfile_name;
 extern FILE *mrn_logfile;

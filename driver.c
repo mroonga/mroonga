@@ -7,7 +7,10 @@
 #include "config.h"
 
 grn_hash *mrn_system_hash;
-grn_obj *mrn_db, *mrn_lexicon;
+grn_obj *mrn_db;
+grn_obj *mrn_index_lexicon;
+grn_obj *mrn_index_hash;
+grn_obj *mrn_index_pat;
 pthread_mutex_t *mrn_lock, *mrn_lock_hash;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
@@ -88,21 +91,62 @@ int mrn_init()
   }
   grn_ctx_use(&ctx, mrn_db);
 
-
-  // init lexicon table
-  if (!(mrn_lexicon = grn_ctx_get(&ctx,"lexicon",7)))
+  // init index_lexicon
+  if (!(mrn_index_lexicon = grn_ctx_get(&ctx, MRN_INDEX_LEXICON_NAME,
+                                        strlen(MRN_INDEX_LEXICON_NAME))))
   {
-    GRN_LOG(&ctx, GRN_LOG_NOTICE, "lexicon table not exists");
-    if ((mrn_lexicon = grn_table_create(&ctx, MRN_LEXICON_TABLE_NAME,
-                                        strlen(MRN_LEXICON_TABLE_NAME), NULL,
-                                        GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
-                                        grn_ctx_at(&ctx,GRN_DB_SHORT_TEXT), 0)))
+    if ((mrn_index_lexicon =
+         grn_table_create(&ctx, MRN_INDEX_LEXICON_NAME,
+                          strlen(MRN_INDEX_LEXICON_NAME), NULL,
+                          GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
+                          grn_ctx_at(&ctx,GRN_DB_SHORT_TEXT), 0)))
     {
-      GRN_LOG(&ctx, GRN_LOG_NOTICE, "lexicon table created");
+      GRN_LOG(&ctx, GRN_LOG_NOTICE, "global index lexicon created");
     }
     else
     {
-      GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot create lexicon table, exiting");
+      GRN_LOG(&ctx, GRN_LOG_ERROR,
+              "cannot create global index lexicon, exiting");
+      goto err;
+    }
+  }
+
+  // init index_hash
+  if (!(mrn_index_hash = grn_ctx_get(&ctx, MRN_INDEX_HASH_NAME,
+                                     strlen(MRN_INDEX_HASH_NAME))))
+  {
+    if ((mrn_index_hash =
+         grn_table_create(&ctx, MRN_INDEX_HASH_NAME,
+                          strlen(MRN_INDEX_HASH_NAME), NULL,
+                          GRN_OBJ_TABLE_HASH_KEY|GRN_OBJ_PERSISTENT,
+                          grn_ctx_at(&ctx,GRN_DB_SHORT_TEXT), 0)))
+    {
+      GRN_LOG(&ctx, GRN_LOG_NOTICE, "global index hash created");
+    }
+    else
+    {
+      GRN_LOG(&ctx, GRN_LOG_ERROR,
+              "cannot create global index hash, exiting");
+      goto err;
+    }
+  }
+
+  // init index_pat
+  if (!(mrn_index_pat = grn_ctx_get(&ctx, MRN_INDEX_PAT_NAME,
+                                    strlen(MRN_INDEX_PAT_NAME))))
+  {
+    if ((mrn_index_pat =
+         grn_table_create(&ctx, MRN_INDEX_PAT_NAME,
+                          strlen(MRN_INDEX_PAT_NAME), NULL,
+                          GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
+                          grn_ctx_at(&ctx,GRN_DB_SHORT_TEXT), 0)))
+    {
+      GRN_LOG(&ctx, GRN_LOG_NOTICE, "global index pat created");
+    }
+    else
+    {
+      GRN_LOG(&ctx, GRN_LOG_ERROR,
+              "cannot create global index pat, exiting");
       goto err;
     }
   }
@@ -155,8 +199,12 @@ int mrn_deinit()
   grn_hash_close(&ctx, mrn_system_hash);
   mrn_system_hash = NULL;
 
-  grn_obj_close(&ctx, mrn_lexicon);
-  mrn_lexicon = NULL;
+  grn_obj_close(&ctx, mrn_index_lexicon);
+  mrn_index_lexicon = NULL;
+  grn_obj_close(&ctx, mrn_index_hash);
+  mrn_index_hash = NULL;
+  grn_obj_close(&ctx, mrn_index_pat);
+  mrn_index_pat = NULL;
 
   grn_obj_close(&ctx, mrn_db);
   mrn_db = NULL;
