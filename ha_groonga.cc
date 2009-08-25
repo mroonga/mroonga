@@ -35,6 +35,15 @@ static MYSQL_THDVAR_BOOL(
                          TRUE
                          );
 
+static MYSQL_THDVAR_BOOL(
+                         index_repository_per_table,
+                         PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
+                         "use index repository per table.",
+                         NULL,
+                         NULL,
+                         FALSE
+                         );
+
 MRN_CHARSET_MAP mrn_charset_map[] = {
   {"utf8", GRN_ENC_UTF8},
   {"cp932", GRN_ENC_SJIS},
@@ -95,6 +104,7 @@ struct st_mysql_sys_var  *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(use_column_pruning),
   MYSQL_SYSVAR(use_cond_push),
+  MYSQL_SYSVAR(index_repository_per_table),
   NULL
 };
 

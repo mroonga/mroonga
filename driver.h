@@ -40,7 +40,6 @@ typedef struct _mrn_table
   uint pkey_field;
 } mrn_table;
 
-
 typedef struct _mrn_column_info
 {
   const char *name;
