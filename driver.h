@@ -42,6 +42,30 @@ typedef struct _mrn_table
 } mrn_table;
 #endif
 
+typedef struct _mrn_index_info
+{
+  const char *name;
+  uint name_size;
+  char *path;
+  grn_obj_flags flags;
+  grn_obj *type;
+  grn_builtin_type gtype;
+  grn_obj *obj;
+  uint columnno;
+} mrn_index_info;
+
+typedef struct _mrn_key_info
+{
+  uint per_table;
+  const char *name;
+  uint name_size;
+  char *path;
+  grn_obj_flags flags;
+  grn_obj *type;
+  grn_builtin_type gtype;
+  grn_obj *obj;
+} mrn_key_info;
+
 typedef struct _mrn_column_info
 {
   const char *name;
@@ -51,6 +75,7 @@ typedef struct _mrn_column_info
   grn_obj *type;
   grn_builtin_type gtype;
   grn_obj *obj;
+  uint indexno;
 } mrn_column_info;
 
 typedef struct _mrn_table_info
@@ -66,8 +91,11 @@ typedef struct _mrn_table_info
 typedef struct _mrn_info
 {
   mrn_table_info *table;
+  mrn_key_info *key;
   mrn_column_info **columns;
+  mrn_index_info **indexes;
   uint n_columns;
+  uint n_indexes;
   uint ref_count;
   grn_table_cursor *cursor;
   grn_obj *res;
