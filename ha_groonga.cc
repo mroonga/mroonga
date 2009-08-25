@@ -373,9 +373,9 @@ int ha_groonga::rnd_init(bool scan)
     expr->prev = NULL;
     make_expr((Item*) cond, &expr);
     check_other_conditions(mcond, this->table->in_use);
-    dump_condition(cond);
-    dump_tree((Item*)cond,0);
-    dump_condition2(mcond);
+    //dump_condition(cond);
+    //dump_tree((Item*)cond,0);
+    //dump_condition2(mcond);
   }
   return mrn_rnd_init(ctx, minfo,
                       mcond ? mcond->expr : NULL);

@@ -248,7 +248,7 @@ void test_secondary_index_hash_int()
   grn_obj_remove(ctx, index_table);
   drop_table();
 }
-
+ 
 void test_secondary_index_pat_text()
 {
   grn_obj *index_table, *index_col, buf, buf2, *res;
@@ -280,6 +280,57 @@ void test_secondary_index_pat_text()
   GRN_TEXT_SETS(ctx, &buf2, "text:20");
   grn_obj_search(ctx, index_col, &buf2, res, GRN_OP_OR, NULL);
   cut_assert_equal_int(1, grn_table_size(ctx, res));
+
+  tc = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, 0, 0);
+  while ((id = grn_table_cursor_next(ctx, tc)))
+  {
+    GRN_BULK_REWIND(&buf);
+    GRN_BULK_REWIND(&buf2);
+    grn_table_get_key(ctx, res, id, &docid, sizeof(docid));
+    cut_assert_equal_int(20, docid);
+    cut_assert_not_null(grn_obj_get_value(ctx, col_int, docid, &buf));
+    cut_assert_not_null(grn_obj_get_value(ctx, col_text, docid, &buf2));
+    cut_assert_equal_int(20*10, GRN_INT32_VALUE(&buf));
+    cut_assert_equal_int(7, GRN_TEXT_LEN(&buf2));
+    cut_assert_equal_substring("text:20", GRN_TEXT_VALUE(&buf2),
+                               GRN_TEXT_LEN(&buf2));
+  }
+
+  grn_obj_remove(ctx, index_table);
+  drop_table();
+}
+
+void test_secondary_index_hash_text()
+{
+  grn_obj *index_table, *index_col, buf, buf2, *res;
+  grn_table_cursor *tc;
+  grn_id id, docid;
+
+  create_table();
+
+  GRN_INT32_INIT(&buf,0);
+  GRN_TEXT_INIT(&buf2,0);
+
+  index_table = grn_table_create(ctx, "hash",  4, NULL,
+                               GRN_OBJ_TABLE_HASH_KEY|GRN_OBJ_PERSISTENT,
+                               grn_ctx_at(ctx, GRN_DB_INT32), 0);
+  index_col = grn_column_create(ctx, index_table, "col", 3, NULL,
+                                GRN_OBJ_COLUMN_INDEX|GRN_OBJ_PERSISTENT,
+                                grn_ctx_at(ctx, GRN_DB_INT32));
+
+
+  GRN_INT32_SET(ctx, &buf, grn_obj_id(ctx, col_text));
+  grn_obj_set_info(ctx, index_col, GRN_INFO_SOURCE, &buf);
+
+  insert_data();
+
+  res = grn_table_create(ctx, NULL, 0, NULL,
+                         GRN_TABLE_HASH_KEY|GRN_OBJ_WITH_SUBREC, table, 0);
+
+  GRN_BULK_REWIND(&buf2);
+  GRN_TEXT_SETS(ctx, &buf2, "text:20");
+  grn_obj_search(ctx, index_col, &buf2, res, GRN_OP_OR, NULL);
+  //cut_assert_equal_int(1, grn_table_size(ctx, res));
 
   tc = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, 0, 0);
   while ((id = grn_table_cursor_next(ctx, tc)))
