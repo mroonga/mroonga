@@ -6,7 +6,7 @@
 #include "driver.h"
 #include "config.h"
 
-grn_hash *mrn_hash;
+grn_hash *mrn_system_hash;
 grn_obj *mrn_db, *mrn_lexicon;
 pthread_mutex_t *mrn_lock, *mrn_lock_hash;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
@@ -108,7 +108,7 @@ int mrn_init()
   }
 
   // init hash
-  if (!(mrn_hash = grn_hash_create(&ctx,NULL,
+  if (!(mrn_system_hash = grn_hash_create(&ctx,NULL,
                                    MRN_MAX_KEY_LEN,sizeof(size_t),
                                    GRN_OBJ_KEY_VAR_SIZE)))
   {
@@ -152,8 +152,8 @@ int mrn_deinit()
   free(mrn_lock_hash);
   mrn_lock_hash = NULL;
 
-  grn_hash_close(&ctx, mrn_hash);
-  mrn_hash = NULL;
+  grn_hash_close(&ctx, mrn_system_hash);
+  mrn_system_hash = NULL;
 
   grn_obj_close(&ctx, mrn_lexicon);
   mrn_lexicon = NULL;
@@ -179,7 +179,7 @@ int mrn_hash_put(grn_ctx *ctx, const char *key, void *value)
   int added, res=0;
   void *buf;
   pthread_mutex_lock(mrn_lock_hash);
-  grn_hash_add(ctx, mrn_hash, (const char*) key, strlen(key), &buf, &added);
+  grn_hash_add(ctx, mrn_system_hash, (const char*) key, strlen(key), &buf, &added);
   // duplicate check
   if (added == 0)
   {
@@ -206,7 +206,7 @@ int mrn_hash_get(grn_ctx *ctx, const char *key, void **value)
   grn_id id;
   void *buf;
   pthread_mutex_lock(mrn_lock_hash);
-  id = grn_hash_get(ctx, mrn_hash, (const char*) key, strlen(key), &buf);
+  id = grn_hash_get(ctx, mrn_system_hash, (const char*) key, strlen(key), &buf);
   // key not found
   if (id == GRN_ID_NIL)
   {
@@ -232,7 +232,7 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
   grn_rc rc;
   grn_id id;
   pthread_mutex_lock(mrn_lock_hash);
-  id = grn_hash_get(ctx, mrn_hash, (const char*) key, strlen(key), NULL);
+  id = grn_hash_get(ctx, mrn_system_hash, (const char*) key, strlen(key), NULL);
   if (id == GRN_ID_NIL)
   {
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash remove not found (key=%s)", key);
@@ -240,7 +240,7 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
   }
   else
   {
-    rc = grn_hash_delete_by_id(ctx, mrn_hash, id, NULL);
+    rc = grn_hash_delete_by_id(ctx, mrn_system_hash, id, NULL);
     if (rc != GRN_SUCCESS) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "hash remove error (key=%s)", key);
       res = -1;

@@ -152,7 +152,7 @@ void mrn_dump_expr(mrn_expr *expr);
 void mrn_dump_buffer(uchar *buf, int size);
 
 /* static variables */
-extern grn_hash *mrn_hash;
+extern grn_hash *mrn_system_hash;
 extern grn_obj *mrn_db, *mrn_lexicon;
 extern pthread_mutex_t *mrn_lock, *mrn_lock_hash;
 extern const char *mrn_logfile_name;
