@@ -597,11 +597,9 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
       case MRN_EXPR_UNKNOWN:
         break;
       case MRN_EXPR_COLUMN:
-        grn_expr_append_obj(ctx, gexpr, v, GRN_OP_PUSH, 1);
         GRN_BULK_REWIND(&textbuf);
         GRN_TEXT_SETS(ctx, &textbuf, cur->val_string);
-        grn_expr_append_const(ctx, gexpr, &textbuf, GRN_OP_PUSH, 1);
-        grn_expr_append_op(ctx, gexpr, GRN_OP_GET_VALUE, 2);
+        grn_expr_append_const(ctx, gexpr, &textbuf, GRN_OP_GET_VALUE, 1);
         break;
       case MRN_EXPR_AND:
         grn_expr_append_op(ctx, gexpr, GRN_OP_AND, 2);
