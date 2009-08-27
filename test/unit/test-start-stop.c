@@ -30,7 +30,7 @@ void test_mrn_init()
   mrn_index_hash = NULL;
   mrn_index_pat = NULL;
 
-  cut_assert_equal_int(0, mrn_init());
+  cut_assert_equal_int(0, mrn_init(0));
   cut_assert_not_null(mrn_logfile);
   cut_assert_not_null(mrn_db);
   cut_assert_not_null(mrn_system_hash);
@@ -50,7 +50,7 @@ void test_mrn_init()
   mrn_index_hash = NULL;
   mrn_index_pat = NULL;
 
-  cut_assert_equal_int(0, mrn_init());
+  cut_assert_equal_int(0, mrn_init(0));
   cut_assert_not_null(mrn_logfile);
   cut_assert_not_null(mrn_db);
   cut_assert_not_null(mrn_system_hash);
@@ -66,7 +66,7 @@ void test_mrn_init()
 
 void test_mrn_deinit()
 {
-  cut_assert_equal_int(0, mrn_init());
+  cut_assert_equal_int(0, mrn_init(0));
   cut_assert_equal_int(0, mrn_deinit());
   cut_assert_null(mrn_logfile);
   cut_assert_null(mrn_db);

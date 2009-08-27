@@ -24,8 +24,29 @@ grn_logger_info mrn_logger_info = {
   NULL
 };
 
+const char *mrn_log_level_str[] =
+{ 
+  "EMERG",
+  "ARERT",
+  "CRIT",
+  "ERROR",
+  "WARNING",
+  "NOTICE",
+  "INFO",
+  "DEBUG",
+  "DUMP"
+};
+
+void mrn_logger_mysql(int level, const char *time, const char *title,
+                      const char *msg, const char *location, void *func_arg)
+{ 
+  fprintf(stderr, "%s mroonga [%s] %s\n",
+          time, *(mrn_log_level_str + level), msg);
+}
+
+
 void mrn_logger_func(int level, const char *time, const char *title,
-		     const char *msg, const char *location, void *func_arg)
+                     const char *msg, const char *location, void *func_arg)
 {
   const char slev[] = " EACewnid-";
   if ((mrn_logfile)) {
@@ -35,21 +56,7 @@ void mrn_logger_func(int level, const char *time, const char *title,
   }
 }
 
-int mrn_flush_logs(grn_ctx *ctx)
-{
-  pthread_mutex_lock(mrn_lock);
-  GRN_LOG(ctx, GRN_LOG_NOTICE, "flush logfile");
-  if (fflush(mrn_logfile) || fclose(mrn_logfile)
-      || (mrn_logfile = fopen(mrn_logfile_name, "a")) == NULL)
-  {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot flush logfile");
-    return -1;
-  }
-  pthread_mutex_unlock(mrn_lock);
-  return 0;
-}
-
-int mrn_init()
+int mrn_init(int in_mysql)
 {
   grn_ctx ctx;
 
@@ -61,13 +68,19 @@ int mrn_init()
 
   grn_ctx_init(&ctx,0);
 
-  // init log, and then we can do logging
-  if (!(mrn_logfile = fopen(mrn_logfile_name, "a")))
-  {
-    goto err;
-  }
-
   grn_logger_info_set(&ctx, &mrn_logger_info);
+  if (in_mysql)
+  {
+    mrn_logger_info.max_level = GRN_LOG_DEBUG;
+    mrn_logger_info.func = mrn_logger_mysql;
+  }
+  else
+  {
+    if (!(mrn_logfile = fopen(mrn_logfile_name, "a")))
+    {
+      goto err;
+    }
+  }
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "%s start", PACKAGE_STRING);
 
   // init database
@@ -209,7 +222,10 @@ int mrn_deinit()
   grn_obj_close(&ctx, mrn_db);
   mrn_db = NULL;
 
-  fclose(mrn_logfile);
+  if (mrn_logfile)
+  {
+    fclose(mrn_logfile);
+  }
   mrn_logfile = NULL;
 
   grn_ctx_fin(&ctx);

@@ -154,11 +154,12 @@ typedef struct _mrn_expr
   (((uchar*)map)[(idx)/8] &= ~(1 << ((idx)&7)))
 
 /* functions */
-int mrn_init();
+int mrn_init(int in_mysql);
 int mrn_deinit();
 void mrn_logger_func(int level, const char *time, const char *title,
-		     const char *msg, const char *location, void *func_arg);
-int mrn_flush_logs(grn_ctx *ctx);
+                     const char *msg, const char *location, void *func_arg);
+void mrn_logger_mysql(int level, const char *time, const char *title,
+                      const char *msg, const char *location, void *func_arg);
 
 int mrn_hash_put(grn_ctx *ctx, const char *key, void *value);
 int mrn_hash_get(grn_ctx *ctx, const char *key, void **value);

@@ -29,7 +29,7 @@ void cut_shutdown()
 
 void cut_setup()
 {
-  mrn_init();
+  mrn_init(0);
   grn_ctx_init(ctx,0);
   grn_ctx_use(ctx, mrn_db);
 }
@@ -104,12 +104,6 @@ void destroy_t1(mrn_info *info)
   mrn_close(ctx, info);
   mrn_drop(ctx, "test/t1");
   mrn_deinit_obj_info(ctx, info);  
-}
-
-void test_mrn_flush_logs()
-{
-  TEST_ENTER;
-  cut_assert_equal_int(0, mrn_flush_logs(ctx));
 }
 
 void test_mrn_hash_put()
