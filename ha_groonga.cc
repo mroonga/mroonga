@@ -17,6 +17,15 @@ extern "C" {
 
 #include "ha_groonga.h"
 
+static MYSQL_THDVAR_BOOL (
+                          debug,
+                          PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
+                          "use debug print.",
+                          NULL,
+                          NULL,
+                          FALSE
+                          );
+
 static MYSQL_THDVAR_BOOL(
                          use_column_pruning,
                          PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
@@ -102,6 +111,7 @@ struct st_mysql_show_var mrn_status_variables[] =
 
 struct st_mysql_sys_var  *mrn_system_variables[] =
 {
+  MYSQL_SYSVAR(debug),
   MYSQL_SYSVAR(use_column_pruning),
   MYSQL_SYSVAR(use_cond_push),
   MYSQL_SYSVAR(index_repository_per_table),
@@ -383,9 +393,12 @@ int ha_groonga::rnd_init(bool scan)
     expr->prev = NULL;
     make_expr((Item*) cond, &expr);
     check_other_conditions(mcond, this->table->in_use);
-    //dump_condition(cond);
-    //dump_tree((Item*)cond,0);
-    //dump_condition2(mcond);
+    if (THDVAR(table->in_use, debug))
+    {
+      dump_condition(cond);
+      dump_tree((Item*)cond,0);
+      dump_condition2(mcond);
+    }
   }
   return mrn_rnd_init(ctx, minfo,
                       mcond ? mcond->expr : NULL);
