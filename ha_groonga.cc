@@ -79,7 +79,7 @@ static MYSQL_THDVAR_BOOL(
                          );
 
 static MYSQL_THDVAR_BOOL(
-                         index_repository_per_table,
+                         idx_repos_per_table,
                          PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
                          "use index repository per table.",
                          NULL,
@@ -149,7 +149,7 @@ struct st_mysql_sys_var  *mrn_system_variables[] =
   MYSQL_SYSVAR(debug),
   MYSQL_SYSVAR(use_column_pruning),
   MYSQL_SYSVAR(use_cond_push),
-  MYSQL_SYSVAR(index_repository_per_table),
+  MYSQL_SYSVAR(idx_repos_per_table),
   NULL
 };
 
