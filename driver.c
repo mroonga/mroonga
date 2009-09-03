@@ -28,7 +28,7 @@ const char *mrn_log_level_str[] =
 { 
   "NONE",
   "EMERG",
-  "ARERT",
+  "ALERT",
   "CRIT",
   "ERROR",
   "WARNING",

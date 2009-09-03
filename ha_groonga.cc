@@ -17,14 +17,48 @@ extern "C" {
 
 #include "ha_groonga.h"
 
-static MYSQL_THDVAR_BOOL (
-                          debug,
-                          PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
-                          "use debug print.",
-                          NULL,
-                          NULL,
-                          FALSE
-                          );
+unsigned long mrn_log_level;
+
+const char* mrn_log_level_names_lib[] =
+{
+  "NONE",
+  "EMERG",
+  "ALERT",
+  "CRIT",
+  "ERROR",
+  "WARNING",
+  "NOTICE",
+  "INFO",
+  "DEBUG",
+  "DUMP",
+  NullS
+};
+
+TYPELIB mrn_log_level_typelib =
+{
+  array_elements(mrn_log_level_names_lib)-1, "",
+  mrn_log_level_names_lib, NULL
+};
+
+static MYSQL_SYSVAR_ENUM(
+                         log_level,
+                         mrn_log_level,
+                         PLUGIN_VAR_OPCMDARG,
+                         "max logging level.",
+                         NULL,
+                         NULL,
+                         4,
+                         &mrn_log_level_typelib
+                         );
+
+static MYSQL_THDVAR_BOOL(
+                         debug,
+                         PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
+                         "use debug print.",
+                         NULL,
+                         NULL,
+                         FALSE
+                         );
 
 static MYSQL_THDVAR_BOOL(
                          use_column_pruning,
@@ -111,6 +145,7 @@ struct st_mysql_show_var mrn_status_variables[] =
 
 struct st_mysql_sys_var  *mrn_system_variables[] =
 {
+  MYSQL_SYSVAR(log_level),
   MYSQL_SYSVAR(debug),
   MYSQL_SYSVAR(use_column_pruning),
   MYSQL_SYSVAR(use_cond_push),
