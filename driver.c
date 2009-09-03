@@ -26,6 +26,7 @@ grn_logger_info mrn_logger_info = {
 
 const char *mrn_log_level_str[] =
 { 
+  "NONE",
   "EMERG",
   "ARERT",
   "CRIT",

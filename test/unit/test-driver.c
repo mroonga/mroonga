@@ -912,5 +912,5 @@ void test_get_data_type()
   cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_UNIGRAM));
   cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_BIGRAM));
   cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_TRIGRAM));
-  cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_MECAB));
+  // cut_assert_not_null(grn_ctx_at(ctx, GRN_DB_MECAB));
 }

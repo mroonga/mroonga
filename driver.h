@@ -193,5 +193,6 @@ extern const char *mrn_logfile_name;
 extern FILE *mrn_logfile;
 
 extern grn_logger_info mrn_logger_info;
+extern const char *mrn_log_level_str[];
 
 #endif /* _driver_h */
