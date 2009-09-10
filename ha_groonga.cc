@@ -40,14 +40,24 @@ TYPELIB mrn_log_level_typelib =
   mrn_log_level_names_lib, NULL
 };
 
+static void mrn_log_level_update_func
+(MYSQL_THD thd, struct st_mysql_sys_var *var, void *var_ptr, const void *save)
+{
+  if (save)
+  {
+    mrn_log_level = *((ulong*) save);
+    mrn_logger_info.max_level = (grn_log_level) mrn_log_level;    
+  }
+}
+
 static MYSQL_SYSVAR_ENUM(
                          log_level,
                          mrn_log_level,
-                         PLUGIN_VAR_OPCMDARG,
+                         PLUGIN_VAR_RQCMDARG,
                          "max logging level.",
                          NULL,
-                         NULL,
-                         4,
+                         mrn_log_level_update_func,
+                         3,
                          &mrn_log_level_typelib
                          );
 
