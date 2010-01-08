@@ -15,7 +15,11 @@ export CUTTER
 CUTTER_ARGS=
 CUTTER_WRAPPER=
 if test x"$CUTTER_DEBUG" = x"yes"; then
-    CUTTER_WRAPPER="$top_dir/libtool --mode=execute gdb --args"
+    if test x"$TUI_DEBUG" = x"yes"; then
+        CUTTER_WRAPPER="$top_dir/libtool --mode=execute gdb --tui --args"
+    else
+        CUTTER_WRAPPER="$top_dir/libtool --mode=execute gdb --args"
+    fi
     CUTTER_ARGS="--keep-opening-modules"
 elif test x"$CUTTER_CHECK_LEAK" = x"yes"; then
     CUTTER_WRAPPER="$top_dir/libtool --mode=execute valgrind "
