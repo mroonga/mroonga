@@ -787,11 +787,11 @@ void test_mrn_bitmap_macro()
   int i;
   for (i=0; i < 128*8; i++)
   {
-    cut_assert_false(MRN_IS_BIT(a,i),"precheck: idx=%d",i);
+    cut_assert_false(MRN_IS_BIT(a,i));
     MRN_SET_BIT(a,i);
-    cut_assert_true(MRN_IS_BIT(a,i),"after set: idx=%d",i);
+    cut_assert_true(MRN_IS_BIT(a,i));
     MRN_CLEAR_BIT(a,i);
-    cut_assert_false(MRN_IS_BIT(a,i),"after clear: idx=%d",i);
+    cut_assert_false(MRN_IS_BIT(a,i));
   }
   g_free(a);
 }
