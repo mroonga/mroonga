@@ -12,6 +12,6 @@ LIBS = $(CUTTER_LIBS) $(GROONGA_LIBS) $(MECAB_LIBS)
 
 DRIVER_SRC = ../../driver.c
 
-test_start_stop_la_SOURCES = $(DRIVER_SRC) test-start-stop.c
-test_driver_la_SOURCES = $(DRIVER_SRC) test-driver.c
-test_api_sample_la_SOURCES = api-sample.c
+test_start_stop_la_SOURCES = $(DRIVER_SRC) test_start_stop.c
+test_driver_la_SOURCES = $(DRIVER_SRC) test_driver.c
+test_api_sample_la_SOURCES = api_sample.c
