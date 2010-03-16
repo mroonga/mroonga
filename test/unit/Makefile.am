@@ -1,4 +1,5 @@
-noinst_LTLIBRARIES = test_start_stop.la test_driver.la test_api_sample.la
+#noinst_LTLIBRARIES = test_start_stop.la test_driver.la test_api_sample.la
+noinst_LTLIBRARIES = test_start_stop.la test_driver.la
 
 AM_CPPFLAGS = $(GROONGA_INCLUDES) $(MECAB_INCLUDES) $(CUTTER_CFLAGS) $(GCUTTER_CFLAGS)
 AM_INCLUDES = -l. -l..
@@ -14,4 +15,4 @@ DRIVER_SRC = ../../driver.c
 
 test_start_stop_la_SOURCES = $(DRIVER_SRC) test_start_stop.c
 test_driver_la_SOURCES = $(DRIVER_SRC) test_driver.c
-test_api_sample_la_SOURCES = api_sample.c
+#test_api_sample_la_SOURCES = api_sample.c
