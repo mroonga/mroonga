@@ -35,26 +35,26 @@ void cut_shutdown()
 
 void create_table()
 {
-  table = grn_table_create(ctx, "test/t1", 7, NULL,
+  table = grn_table_create(ctx, "t1", strlen("t1"), NULL,
                            GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_NO_KEY,
                            NULL, 0);
-  col_int = grn_column_create(ctx, table, "col_int", 7, NULL,
+  col_int = grn_column_create(ctx, table, "col_int", strlen("col_int"), NULL,
                               GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR,
                               grn_ctx_at(ctx, GRN_DB_INT32));
-  col_text = grn_column_create(ctx, table, "col_text", 8, NULL,
+  col_text = grn_column_create(ctx, table, "col_text", strlen("col_text"), NULL,
                                GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR,
                                grn_ctx_at(ctx, GRN_DB_TEXT));
 }
 
 void create_table2()
 {
-  table2 = grn_table_create(ctx, "test/t2", 7, NULL,
+  table2 = grn_table_create(ctx, "t2", strlen("t2"), NULL,
                             GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_NO_KEY,
                             NULL, 0);
-  col_int2 = grn_column_create(ctx, table2, "col_int2", 8, NULL,
+  col_int2 = grn_column_create(ctx, table2, "col_int2", strlen("col_int2"), NULL,
                                GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR,
                                grn_ctx_at(ctx, GRN_DB_INT32));
-  col_text2 = grn_column_create(ctx, table2, "col_text2", 9, NULL,
+  col_text2 = grn_column_create(ctx, table2, "col_text2", strlen("col_text2"), NULL,
                                GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR,
                                 grn_ctx_at(ctx, GRN_DB_TEXT));
 }
@@ -202,10 +202,10 @@ void test_secondary_index_pat_int()
   GRN_INT32_INIT(&buf,0);
   GRN_TEXT_INIT(&buf2,0);
 
-  index_table = grn_table_create(ctx, "pat",  3, NULL,
+  index_table = grn_table_create(ctx, "pat",  strlen("pat"), NULL,
                                GRN_OBJ_TABLE_PAT_KEY|GRN_OBJ_PERSISTENT,
                                grn_ctx_at(ctx, GRN_DB_INT32), 0);
-  index_col = grn_column_create(ctx, index_table, "col", 3, NULL,
+  index_col = grn_column_create(ctx, index_table, "col", strlen("col"), NULL,
                                 GRN_OBJ_COLUMN_INDEX|GRN_OBJ_PERSISTENT,
                                 grn_ctx_at(ctx, GRN_DB_INT32));
 
@@ -238,7 +238,7 @@ void test_secondary_index_pat_int()
                                GRN_TEXT_LEN(&buf2));
   }
 
-  grn_obj_remove(ctx, index_table);
+  //grn_obj_remove(ctx, index_table);
   drop_table();
 }
 
@@ -289,7 +289,7 @@ void test_secondary_index_hash_int()
                                GRN_TEXT_LEN(&buf2));
   }
 
-  grn_obj_remove(ctx, index_table);
+  //grn_obj_remove(ctx, index_table);
   drop_table();
 }
  
@@ -340,7 +340,7 @@ void test_secondary_index_pat_text()
                                GRN_TEXT_LEN(&buf2));
   }
 
-  grn_obj_remove(ctx, index_table);
+  //grn_obj_remove(ctx, index_table);
   drop_table();
 }
 
@@ -391,7 +391,7 @@ void test_secondary_index_hash_text()
                                GRN_TEXT_LEN(&buf2));
   }
 
-  grn_obj_remove(ctx, index_table);
+  //grn_obj_remove(ctx, index_table);
   drop_table();
 }
 

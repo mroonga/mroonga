@@ -12,7 +12,7 @@ if test -z "$CUTTER"; then
 fi
 export CUTTER
 
-CUTTER_ARGS=
+CUTTER_ARGS="-v v --fatal-failures"
 CUTTER_WRAPPER=
 if test x"$CUTTER_DEBUG" = x"yes"; then
     if test x"$TUI_DEBUG" = x"yes"; then
