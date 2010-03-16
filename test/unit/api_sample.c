@@ -168,7 +168,7 @@ void test_sample_expression()
   cut_assert_not_null(res);
   cut_assert_equal_int(3, grn_table_size(ctx, res));
 
-  tc = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, 0, 0);
+  tc = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, -1, 0);
   int i;
   for (i=5; i<=7; i++)
   {
