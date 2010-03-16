@@ -657,19 +657,19 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
       }
       cur = cur->next;
     }
-
+    grn_expr_compile(ctx, gexpr);
     info->res = grn_table_create(ctx, NULL, 0, NULL,
                                  GRN_TABLE_HASH_KEY|GRN_OBJ_WITH_SUBREC,
                                  info->table->obj, NULL);
     grn_table_select(ctx, info->table->obj, gexpr, info->res, GRN_OP_OR);
     info->cursor = grn_table_cursor_open(ctx, info->res, NULL, 0, NULL,
-                                         0, 0, 0, 0);
+                                         0, 0, -1, 0);
     grn_obj_close(ctx, &intbuf);
     grn_obj_close(ctx, &textbuf);
   }
   else
   {
-    info->cursor = grn_table_cursor_open(ctx, info->table->obj, NULL, 0, NULL, 0, 0, 0, 0);
+    info->cursor = grn_table_cursor_open(ctx, info->table->obj, NULL, 0, NULL, 0, 0, -1, 0);
     if (info->cursor == NULL)
     {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open cursor: %s", info->table->name);
