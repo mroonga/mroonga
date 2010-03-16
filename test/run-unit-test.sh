@@ -14,6 +14,12 @@ export CUTTER
 
 CUTTER_ARGS=
 CUTTER_WRAPPER=
+if test x"$STOP" = x"yes"; then
+    CUTTER_ARGS="-v v --fatal-failures"
+else
+    CUTTER_ARGS="-v v"
+fi
+
 if test x"$CUTTER_DEBUG" = x"yes"; then
     if test x"$TUI_DEBUG" = x"yes"; then
         CUTTER_WRAPPER="$top_dir/libtool --mode=execute gdb --tui --args"
@@ -25,12 +31,6 @@ elif test x"$CUTTER_CHECK_LEAK" = x"yes"; then
     CUTTER_WRAPPER="$top_dir/libtool --mode=execute valgrind "
     CUTTER_WRAPPER="$CUTTER_WRAPPER --leak-check=full --show-reachable=yes -v"
     CUTTER_ARGS="--keep-opening-modules"
-fi
-
-if test x"$STOP_ERROR" = x"yes"; then
-    CUTTER_ARGS="-v v --fatal-failures"
-else
-    CUTTER_ARGS="-v v"
 fi
 
 CUTTER_ARGS="$CUTTER_ARGS -s $BASE_DIR"

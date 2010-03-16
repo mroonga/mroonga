@@ -9,6 +9,26 @@ static grn_ctx *ctx;
 static grn_obj *db;
 static grn_obj *table, *col_int, *col_text;
 static grn_obj *table2, *col_int2, *col_text2;
+FILE *sample_logfile = NULL;
+
+void sample_logger_func(int level, const char *time, const char *title,
+			const char *msg, const char *location, void *func_arg)
+{
+  const char slev[] = " EACewnid-";
+  if ((sample_logfile)) {
+    fprintf(sample_logfile, "%s|%c|%u|%s\n", time,
+            *(slev + level), (uint)pthread_self(), msg);
+    fflush(sample_logfile);
+  }
+}
+
+grn_logger_info sample_logger_info = {
+  GRN_LOG_DUMP,
+  GRN_LOG_TIME|GRN_LOG_MESSAGE,
+  sample_logger_func,
+  NULL
+};
+
 
 void cut_startup()
 {
@@ -20,6 +40,8 @@ void cut_startup()
   grn_init();
   ctx = (grn_ctx*) malloc(sizeof(grn_ctx));
   grn_ctx_init(ctx,0);
+  sample_logfile = fopen("sample.log", "a");
+  grn_logger_info_set(ctx, &sample_logger_info);
   db = grn_db_create(ctx,"groonga.db", NULL);
   grn_ctx_use(ctx, db);
 }
@@ -29,6 +51,7 @@ void cut_shutdown()
   grn_obj_remove(ctx, db);
   free(ctx);
   grn_fin();
+  fclose(sample_logfile);
   g_chdir(base_directory);
   g_free(tmp_directory);
 }
@@ -237,8 +260,7 @@ void test_secondary_index_pat_int()
     cut_assert_equal_substring("text:50", GRN_TEXT_VALUE(&buf2),
                                GRN_TEXT_LEN(&buf2));
   }
-
-  //grn_obj_remove(ctx, index_table);
+  grn_obj_remove(ctx, index_table);
   drop_table();
 }
 
@@ -289,7 +311,7 @@ void test_secondary_index_hash_int()
                                GRN_TEXT_LEN(&buf2));
   }
 
-  //grn_obj_remove(ctx, index_table);
+  grn_obj_remove(ctx, index_table);
   drop_table();
 }
  
@@ -340,7 +362,7 @@ void test_secondary_index_pat_text()
                                GRN_TEXT_LEN(&buf2));
   }
 
-  //grn_obj_remove(ctx, index_table);
+  grn_obj_remove(ctx, index_table);
   drop_table();
 }
 
@@ -374,7 +396,7 @@ void test_secondary_index_hash_text()
   GRN_BULK_REWIND(&buf2);
   GRN_TEXT_SETS(ctx, &buf2, "text:20");
   grn_obj_search(ctx, index_col, &buf2, res, GRN_OP_OR, NULL);
-  //cut_assert_equal_int(1, grn_table_size(ctx, res));
+  cut_assert_equal_int(1, grn_table_size(ctx, res));
 
   tc = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, 0, 0);
   while ((id = grn_table_cursor_next(ctx, tc)))
@@ -391,7 +413,7 @@ void test_secondary_index_hash_text()
                                GRN_TEXT_LEN(&buf2));
   }
 
-  //grn_obj_remove(ctx, index_table);
+  grn_obj_remove(ctx, index_table);
   drop_table();
 }
 
