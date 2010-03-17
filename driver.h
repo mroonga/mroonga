@@ -6,7 +6,7 @@
 #include <groonga.h>
 
 #define MRN_MAX_KEY_LEN 1024
-#define MRN_DB_FILE_PATH "mroonga.db"
+#define MRN_DB_FILE_NAME "/mroonga.db"
 #define MRN_LOG_FILE_NAME "mroonga.log"
 #define MRN_INDEX_LEXICON_NAME "index_lexicon"
 #define MRN_INDEX_HASH_NAME "index_hash"
@@ -88,8 +88,17 @@ typedef struct _mrn_table_info
   grn_obj *obj;
 } mrn_table_info;
 
+typedef struct _mrn_db_info
+{
+  const char *name;
+  uint name_size;
+  char *path;
+  grn_obj *obj;
+} mrn_db_info;
+
 typedef struct _mrn_info
 {
+  mrn_db_info *db;
   mrn_table_info *table;
   mrn_key_info *key;
   mrn_column_info **columns;
@@ -185,7 +194,7 @@ void mrn_dump_buffer(uchar *buf, int size);
 
 /* static variables */
 extern grn_hash *mrn_system_hash;
-extern grn_obj *mrn_db;
+extern grn_obj *mrn_system_db;
 extern grn_obj *mrn_index_lexicon;
 extern grn_obj *mrn_index_hash;
 extern grn_obj *mrn_index_pat;

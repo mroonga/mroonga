@@ -31,7 +31,7 @@ void cut_setup()
 {
   mrn_init(0);
   grn_ctx_init(ctx,0);
-  grn_ctx_use(ctx, mrn_db);
+  grn_ctx_use(ctx, mrn_system_db);
 }
 
 void cut_teardown()
@@ -46,6 +46,10 @@ mrn_info *generate_t1()
   mrn_info *info = mrn_init_obj_info(ctx, 3);
   mrn_record *record;
   uchar bitmap[1];
+
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
 
   info->table->name = "t1";
   info->table->name_size = strlen("t1");
@@ -226,6 +230,10 @@ void test_mrn_create()
   grn_obj *obj, *obj2;
   mrn_info *info = mrn_init_obj_info(ctx, 2);
 
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
+
   info->table->name = "mrn_create";
   info->table->name_size = strlen("mrn_create");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -259,6 +267,10 @@ void test_mrn_open()
   grn_obj *obj,*obj2;
 
   mrn_info *info = mrn_init_obj_info(ctx, 2);
+
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
 
   info->table->name = "mrn_open";
   info->table->name_size = strlen("mrn_open");
@@ -295,6 +307,10 @@ void test_mrn_close()
   grn_obj *obj,*obj2;
 
   mrn_info *info = mrn_init_obj_info(ctx, 2);
+
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
 
   info->table->name = "mrn_close";
   info->table->name_size = strlen("mrn_close");
@@ -334,6 +350,10 @@ void test_mrn_drop()
   grn_obj *obj, *obj2;
   mrn_info *info = mrn_init_obj_info(ctx, 2);
 
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
+
   info->table->name = "mrn_drop";
   info->table->name_size = strlen("mrn_drop");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -363,7 +383,10 @@ void test_mrn_drop_from_other_ctx()
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   grn_ctx ctx2;
   grn_ctx_init(&ctx2,0);
-  grn_ctx_use(&ctx2, mrn_db);
+
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
 
   info->table->name = "mrn_drop_from_other_ctx";
   info->table->name_size = strlen("mrn_drop_from_other_ctx");
@@ -384,6 +407,8 @@ void test_mrn_drop_from_other_ctx()
   cut_assert_equal_int(0, mrn_create(ctx, info));
   cut_assert_equal_int(0, mrn_open(ctx, info));
   cut_assert_equal_int(0, mrn_close(ctx, info));
+
+  grn_ctx_use(&ctx2, info->db->obj);
   cut_assert_equal_int(0, mrn_drop(&ctx2, "mrn_drop_from_other_ctx"));
   cut_assert_equal_int(-1, mrn_open(&ctx2, info));
   mrn_deinit_obj_info(ctx, info);
@@ -397,6 +422,10 @@ void test_mrn_write_row()
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
   uchar bitmap[1];
+
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
 
   info->table->name = "mrn_write_row";
   info->table->name_size = strlen("mrn_write_row");
@@ -441,6 +470,10 @@ void test_mrn_init_record()
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
   uchar bitmap[1];
+
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
 
   info->table->name = "mrn_init_record";
   info->table->name_size = strlen("mrn_init_record");
@@ -487,6 +520,10 @@ void test_mrn_deinit_record()
   mrn_record *record;
   uchar bitmap[1];
 
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
+
   info->table->name = "mrn_deinit_record";
   info->table->name_size = strlen("mrn_deinit_record");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -524,6 +561,10 @@ void test_mrn_rnd_init()
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
   uchar bitmap[1];
+
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
 
   info->table->name = "mrn_rnd_init";
   info->table->name_size = strlen("mrn_rnd_init");
@@ -573,6 +614,10 @@ void test_mrn_rnd_next()
   mrn_info *info = mrn_init_obj_info(ctx, 2);
   mrn_record *record;
   uchar bitmap[1];
+
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
 
   info->table->name = "mrn_rnd_next";
   info->table->name_size = strlen("mrn_rnd_next");
@@ -639,6 +684,10 @@ void test_mrn_table_size()
   mrn_record *record;
   uchar bitmap[1];
 
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
+
   info->table->name = "mrn_table_size";
   info->table->name_size = strlen("mrn_table_size");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -690,6 +739,10 @@ void test_mrn_rnd_next_pruning()
   mrn_record *record;
   uchar bitmap[1];
   bitmap[0] = 0;
+
+  info->db->name = "mroonga";
+  info->db->name_size = strlen("mroonga");
+  info->db->path = "mroonga.db";  
 
   info->table->name = "mrn_rnd_next_cond";
   info->table->name_size = strlen("mrn_rnd_next_cond");

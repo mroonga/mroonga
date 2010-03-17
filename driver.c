@@ -7,7 +7,7 @@
 #include "config.h"
 
 grn_hash *mrn_system_hash;
-grn_obj *mrn_db;
+grn_obj *mrn_system_db;
 grn_obj *mrn_index_lexicon;
 grn_obj *mrn_index_hash;
 grn_obj *mrn_index_pat;
@@ -84,27 +84,14 @@ int mrn_init(int in_mysql)
   }
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "%s start", PACKAGE_STRING);
 
-  // init database
-  struct stat dummy;
-  if ((stat(MRN_DB_FILE_PATH, &dummy)))
+  // init meta-info database
+  if (!(mrn_system_db = grn_db_create(&ctx, NULL, NULL)))
   {
-    GRN_LOG(&ctx, GRN_LOG_NOTICE, "database not exists");
-    if ((mrn_db = grn_db_create(&ctx, MRN_DB_FILE_PATH, NULL)))
-    {
-      GRN_LOG(&ctx, GRN_LOG_NOTICE, "database created");
-    }
-    else
-    {
-      GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot create database, exiting");
-      goto err;
-    }
+    GRN_LOG(&ctx, GRN_LOG_ERROR, "cannot create system database, exiting");
+    goto err;
   }
-  else
-  {
-    mrn_db = grn_db_open(&ctx, MRN_DB_FILE_PATH);
-  }
-  grn_ctx_use(&ctx, mrn_db);
-
+  grn_ctx_use(&ctx, mrn_system_db);
+/*
   // init index_lexicon
   if (!(mrn_index_lexicon = grn_ctx_get(&ctx, MRN_INDEX_LEXICON_NAME,
                                         strlen(MRN_INDEX_LEXICON_NAME))))
@@ -164,7 +151,7 @@ int mrn_init(int in_mysql)
       goto err;
     }
   }
-
+*/
   // init hash
   if (!(mrn_system_hash = grn_hash_create(&ctx,NULL,
                                    MRN_MAX_KEY_LEN,sizeof(size_t),
@@ -199,7 +186,7 @@ int mrn_deinit()
 {
   grn_ctx ctx;
   grn_ctx_init(&ctx,0);
-  grn_ctx_use(&ctx, mrn_db);
+  grn_ctx_use(&ctx, mrn_system_db);
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "shutdown");
 
 
@@ -220,8 +207,8 @@ int mrn_deinit()
   grn_obj_close(&ctx, mrn_index_pat);
   mrn_index_pat = NULL;
 
-  grn_obj_close(&ctx, mrn_db);
-  mrn_db = NULL;
+  grn_obj_close(&ctx, mrn_system_db);
+  mrn_system_db = NULL;
 
   if (mrn_logfile)
   {
@@ -256,6 +243,7 @@ int mrn_hash_put(grn_ctx *ctx, const char *key, void *value)
     // store address of value
     memcpy(buf, &value, sizeof(buf));
     mrn_hash_counter++;
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "hash put (key=%s)", key);
   }
   pthread_mutex_unlock(mrn_lock_hash);
   return res;
@@ -321,15 +309,16 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
 
 mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
 {
-  int i, alloc_size = 0;
+  int i, alloc_size = 0, path_buff_size = 32;
   void *ptr;
   mrn_info *info;
-  alloc_size = sizeof(mrn_info) + sizeof(mrn_table_info) +
+  alloc_size = sizeof(mrn_info) + sizeof(mrn_db_info) +
+    path_buff_size + sizeof(mrn_table_info) +
     (sizeof(void*) + sizeof(mrn_column_info)) * n_columns;
   ptr = malloc(alloc_size);
   if (ptr == NULL)
   {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error mrn_init_create_info size=%d",alloc_size);
+    GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error mrn_init_obj_info size=%d",alloc_size);
     return NULL;
   }
   info = (mrn_info*) ptr;
@@ -337,7 +326,14 @@ mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
   info->cursor = NULL;
 
   ptr += sizeof(mrn_info);
+  info->db = ptr;
+  info->db->name = NULL;
+  info->db->name_size = 0;
+  info->db->obj = NULL;
+  ptr += sizeof(mrn_db_info);
+  info->db->path = ptr;
 
+  ptr += path_buff_size;
   info->table = ptr;
   info->table->name = NULL;
   info->table->name_size = 0;
@@ -375,11 +371,22 @@ int mrn_deinit_obj_info(grn_ctx *ctx, mrn_info *info)
 int mrn_create(grn_ctx *ctx, mrn_info *info)
 {
   int i;
+  mrn_db_info *db;
   mrn_table_info *table;
   mrn_column_info *column;
 
-  table = info->table;
+  db = info->db;
+  if (mrn_hash_get(ctx, db->name, (void**) &(db->obj)) != 0)
+  {
+    if ((db->obj = grn_db_open(ctx, db->path)) == NULL)
+    {
+      db->obj = grn_db_create(ctx, db->path, NULL);
+    }
+    mrn_hash_put(ctx, db->name, db->obj);
+  }
+  grn_ctx_use(ctx, db->obj);
 
+  table = info->table;
   table->obj = grn_table_create(ctx, table->name, table->name_size,
                                 table->path, table->flags,
                                 table->key_type, 0);
@@ -432,11 +439,23 @@ auto_drop:
 int mrn_open(grn_ctx *ctx, mrn_info *info)
 {
   int i;
+  mrn_db_info *db;
   mrn_table_info *table;
   mrn_column_info *column;
 
-  table = info->table;
+  db = info->db;
+  if (mrn_hash_get(ctx, db->name, (void**) &(db->obj)) != 0)
+  {
+    if ((db->obj = grn_db_open(ctx, db->path)) == NULL)
+    {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database: name=%s", db->name);
+      return -1;
+    }
+    mrn_hash_put(ctx, db->name, db->obj);
+  }
+  grn_ctx_use(ctx, db->obj);
 
+  table = info->table;
   table->obj = grn_ctx_get(ctx, table->name, table->name_size);
   if (table->obj == NULL)
   {

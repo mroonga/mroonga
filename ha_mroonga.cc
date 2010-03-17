@@ -247,7 +247,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
 {
   ctx = (grn_ctx*) malloc(sizeof(grn_ctx));
   grn_ctx_init(ctx,0);
-  grn_ctx_use(ctx, mrn_db);
+  grn_ctx_use(ctx, mrn_system_db);
   minfo = NULL;
   mcond = NULL;
   cur = NULL;
@@ -294,7 +294,9 @@ int ha_mroonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   MRN_HTRACE;
   convert_info(name, this->table_share, &minfo);
   res = mrn_create(ctx, minfo);
-  mrn_deinit_obj_info(ctx, minfo);
+  pthread_mutex_lock(mrn_lock);
+  mrn_hash_put(ctx, name, minfo);
+  pthread_mutex_unlock(mrn_lock);
   return res;
 }
 
@@ -344,7 +346,6 @@ int ha_mroonga::close()
   thr_lock_delete(&thr_lock);
 
   mrn_info *minfo = this->minfo;
-
   pthread_mutex_lock(mrn_lock);
 
   minfo->ref_count--;
@@ -792,11 +793,21 @@ void ha_mroonga::cond_pop()
 int ha_mroonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_minfo)
 {
   uint n_columns = share->fields, i;
+  mrn_db_info *db;
+  mrn_table_info *table;
   mrn_info *minfo = mrn_init_obj_info(ctx, n_columns);
   minfo->name = name;
-  minfo->table->name = share->table_name.str;
-  minfo->table->name_size = share->table_name.length;
-  minfo->table->flags |= GRN_OBJ_TABLE_NO_KEY;
+
+  db = minfo->db;
+  db->name = share->db.str;
+  db->name_size = share->db.length;
+  memcpy(db->path, db->name, db->name_size);
+  strncat(db->path, MRN_DB_FILE_NAME, 32);
+
+  table = minfo->table;
+  table->name = share->table_name.str;
+  table->name_size = share->table_name.length;
+  table->flags |= GRN_OBJ_TABLE_NO_KEY;
 
   for (i=0; i < n_columns; i++)
   {
