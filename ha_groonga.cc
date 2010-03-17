@@ -309,7 +309,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
 
   pthread_mutex_lock(mrn_lock);
 
-  if (mrn_hash_get(ctx, MRN_TABLE_NAME(name), (void**) &minfo) == 0)
+  if (mrn_hash_get(ctx, name, (void**) &minfo) == 0)
   {
     minfo->ref_count++;
     this->minfo = minfo;
@@ -322,7 +322,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
     convert_info(name, this->table_share, &minfo);
     if (mrn_open(ctx, minfo) == 0)
     {
-      mrn_hash_put(ctx, minfo->table->name, minfo);
+      mrn_hash_put(ctx, name, minfo);
       minfo->ref_count++;
       pthread_mutex_unlock(mrn_lock);
       this->minfo = minfo;
@@ -350,10 +350,10 @@ int ha_groonga::close()
   minfo->ref_count--;
   if (minfo->ref_count <= 0)
   {
-    if (mrn_hash_remove(ctx, minfo->table->name) != 0)
+    if (mrn_hash_remove(ctx, minfo->name) != 0)
     {
       GRN_LOG(ctx, GRN_LOG_ERROR, "error in mrn_hash_remove:[%p,%s]",
-              ctx, minfo->table->name);
+              ctx, minfo->name);
     }
     mrn_close(ctx, minfo);
     mrn_deinit_obj_info(ctx, minfo);
@@ -367,7 +367,18 @@ int ha_groonga::close()
 int ha_groonga::delete_table(const char *name)
 {
   MRN_HTRACE;
-  return mrn_drop(ctx, MRN_TABLE_NAME(name));
+  int i;
+  char buf[32];
+  int name_len = strlen(name);
+  for (i=name_len; i >= 0; --i)
+  {
+    if (name[i] == '/')
+    {
+      memcpy(buf, name+i+1, name_len-i);
+      break;
+    }
+  }
+  return mrn_drop(ctx, buf);
 }
 
 int ha_groonga::info(uint flag)
@@ -782,8 +793,9 @@ int ha_groonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
 {
   uint n_columns = share->fields, i;
   mrn_info *minfo = mrn_init_obj_info(ctx, n_columns);
-  minfo->table->name = MRN_TABLE_NAME(name);
-  minfo->table->name_size = strlen(MRN_TABLE_NAME(name));
+  minfo->name = name;
+  minfo->table->name = share->table_name.str;
+  minfo->table->name_size = share->table_name.length;
   minfo->table->flags |= GRN_OBJ_TABLE_NO_KEY;
 
   for (i=0; i < n_columns; i++)

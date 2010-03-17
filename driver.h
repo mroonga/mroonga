@@ -99,6 +99,7 @@ typedef struct _mrn_info
   uint ref_count;
   grn_table_cursor *cursor;
   grn_obj *res;
+  const char *name;
 } mrn_info;
 
 typedef struct _mrn_record
