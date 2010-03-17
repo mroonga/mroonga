@@ -216,7 +216,7 @@ int mrn_plugin_init(void *p)
   hton->state = SHOW_OPTION_YES;
   hton->create = mrn_handler_create;
   hton->flags = 0;
-  return mrn_init(1);
+  return mrn_init(0);
 }
 
 int mrn_plugin_deinit(void *p)
