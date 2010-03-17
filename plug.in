@@ -1,4 +1,4 @@
-MYSQL_STORAGE_ENGINE(mroonga,,[Mroonga Storage Engine],
+MYSQL_STORAGE_ENGINE(mroonga,,[mroonga storage engine],
 [MySQL binding for Groonga],
 [max,max-no-ndb])
 MYSQL_PLUGIN_DIRECTORY(mroonga, [storage/mroonga])

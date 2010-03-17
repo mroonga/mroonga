@@ -147,9 +147,9 @@ longlong mrn_status_cond_push_used = 0;
 
 struct st_mysql_show_var mrn_status_variables[] =
 {
-  {"Mroonga_column_target", (char*) &mrn_status_column_target, SHOW_LONGLONG},
-  {"Mroonga_column_used", (char*) &mrn_status_column_used, SHOW_LONGLONG},
-  {"Mroonga_cond_push_used", (char*) &mrn_status_cond_push_used, SHOW_LONGLONG},
+  {"mroonga_column_target", (char*) &mrn_status_column_target, SHOW_LONGLONG},
+  {"mroonga_column_used", (char*) &mrn_status_column_used, SHOW_LONGLONG},
+  {"mroonga_cond_push_used", (char*) &mrn_status_cond_push_used, SHOW_LONGLONG},
   NULL
 };
 
@@ -228,7 +228,7 @@ mysql_declare_plugin(mroonga)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
-  "Mroonga",
+  "mroonga",
   "Tetsuro IKEDA",
   "MySQL binding for Groonga",
   PLUGIN_LICENSE_BSD,
@@ -261,7 +261,7 @@ ha_mroonga::~ha_mroonga()
 
 const char *ha_mroonga::table_type() const
 {
-  return "Mroonga";
+  return "mroonga";
 }
 
 const char *ha_mroonga::index_type(uint inx)
