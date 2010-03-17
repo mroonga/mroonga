@@ -1,7 +1,10 @@
 SUBDIRS = unit
 
-TESTS = run-unit-test.sh run-sql-test.sh
+TESTS = run-unit-test.sh
 TESTS_ENVIRONMENT = CUTTER="$(CUTTER)"
 
 echo-cutter:
 	echo $(CUTTER)
+
+installcheck-local:
+	./run-sql-test.sh
