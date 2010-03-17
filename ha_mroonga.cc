@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-#include "ha_groonga.h"
+#include "ha_mroonga.h"
 
 unsigned long mrn_log_level;
 
@@ -206,7 +206,7 @@ handler *mrn_handler_create(handlerton *hton,
 			    TABLE_SHARE *share,
 			    MEM_ROOT *root)
 {
-  return (new (root) ha_groonga(hton, share));
+  return (new (root) ha_mroonga(hton, share));
 }
 
 int mrn_plugin_init(void *p)
@@ -242,7 +242,7 @@ mysql_declare_plugin(mroonga)
 mysql_declare_plugin_end;
 
 /* handler implementation */
-ha_groonga::ha_groonga(handlerton *hton, TABLE_SHARE *share)
+ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   :handler(hton, share)
 {
   ctx = (grn_ctx*) malloc(sizeof(grn_ctx));
@@ -253,41 +253,41 @@ ha_groonga::ha_groonga(handlerton *hton, TABLE_SHARE *share)
   cur = NULL;
 }
 
-ha_groonga::~ha_groonga()
+ha_mroonga::~ha_mroonga()
 {
   grn_ctx_fin(ctx);
   free(ctx);
 }
 
-const char *ha_groonga::table_type() const
+const char *ha_mroonga::table_type() const
 {
   return "Mroonga";
 }
 
-const char *ha_groonga::index_type(uint inx)
+const char *ha_mroonga::index_type(uint inx)
 {
   return "NONE";
 }
 
-static const char*ha_groonga_exts[] = {
+static const char*ha_mroonga_exts[] = {
   NullS
 };
-const char **ha_groonga::bas_ext() const
+const char **ha_mroonga::bas_ext() const
 {
-  return ha_groonga_exts;
+  return ha_mroonga_exts;
 }
 
-ulonglong ha_groonga::table_flags() const
+ulonglong ha_mroonga::table_flags() const
 {
   return HA_NO_TRANSACTIONS|HA_REC_NOT_IN_SEQ|HA_NULL_IN_KEY|HA_CAN_FULLTEXT;
 }
 
-ulong ha_groonga::index_flags(uint idx, uint part, bool all_parts) const
+ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
 {
   return 0;
 }
 
-int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
+int ha_mroonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
 {
   int res;
   mrn_info *minfo;
@@ -298,7 +298,7 @@ int ha_groonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   return res;
 }
 
-int ha_groonga::open(const char *name, int mode, uint test_if_locked)
+int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 {
   MRN_HTRACE;
   thr_lock_init(&thr_lock);
@@ -338,7 +338,7 @@ int ha_groonga::open(const char *name, int mode, uint test_if_locked)
   }
 }
 
-int ha_groonga::close()
+int ha_mroonga::close()
 {
   MRN_HTRACE;
   thr_lock_delete(&thr_lock);
@@ -364,7 +364,7 @@ int ha_groonga::close()
   return 0;
 }
 
-int ha_groonga::delete_table(const char *name)
+int ha_mroonga::delete_table(const char *name)
 {
   MRN_HTRACE;
   int i;
@@ -381,7 +381,7 @@ int ha_groonga::delete_table(const char *name)
   return mrn_drop(ctx, buf);
 }
 
-int ha_groonga::info(uint flag)
+int ha_mroonga::info(uint flag)
 {
   MRN_HTRACE;
   if (this->minfo)
@@ -395,7 +395,7 @@ int ha_groonga::info(uint flag)
   return 0;
 }
 
-THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
+THR_LOCK_DATA **ha_mroonga::store_lock(THD *thd,
 				       THR_LOCK_DATA **to,
 				       enum thr_lock_type lock_type)
 {
@@ -406,7 +406,7 @@ THR_LOCK_DATA **ha_groonga::store_lock(THD *thd,
   return to;
 }
 
-int ha_groonga::rnd_init(bool scan)
+int ha_mroonga::rnd_init(bool scan)
 {
   MRN_HTRACE;
   int i, used=0, n_columns, alloc_size;
@@ -450,7 +450,7 @@ int ha_groonga::rnd_init(bool scan)
                       mcond ? mcond->expr : NULL);
 }
 
-int ha_groonga::rnd_next(uchar *buf)
+int ha_mroonga::rnd_next(uchar *buf)
 {
   MRN_HTRACE;
   int rc;
@@ -510,7 +510,7 @@ int ha_groonga::rnd_next(uchar *buf)
 }
 
 #ifdef PROTOTYPE
-int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
+int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
 {
   grn_id gid = *((grn_id*) pos);
 
@@ -540,7 +540,7 @@ int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
   return 0;
 }
 #else
-int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
+int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
 {
   MRN_HTRACE;
   return 0;
@@ -548,18 +548,18 @@ int ha_groonga::rnd_pos(uchar *buf, uchar *pos)
 #endif
 
 #ifdef PROTOTYPE
-void ha_groonga::position(const uchar *record)
+void ha_mroonga::position(const uchar *record)
 {
   memcpy(this->ref, &this->record_id, sizeof(grn_id));
 }
 #else
-void ha_groonga::position(const uchar *record)
+void ha_mroonga::position(const uchar *record)
 {
   MRN_HTRACE;
 }
 #endif
 
-int ha_groonga::write_row(uchar *buf)
+int ha_mroonga::write_row(uchar *buf)
 {
   MRN_HTRACE;
   mrn_info *minfo = this->minfo;
@@ -610,7 +610,7 @@ int ha_groonga::write_row(uchar *buf)
 }
 
 #ifdef PROTOTYPE
-int ha_groonga::index_read(uchar *buf, const uchar *key,
+int ha_mroonga::index_read(uchar *buf, const uchar *key,
 			   uint key_len, enum ha_rkey_function find_flag)
 {
   Field *key_field= table->key_info[active_index].key_part->field;
@@ -661,7 +661,7 @@ int ha_groonga::index_read(uchar *buf, const uchar *key,
   return rc;
 }
 #else
-int ha_groonga::index_read(uchar *buf, const uchar *key,
+int ha_mroonga::index_read(uchar *buf, const uchar *key,
 			   uint key_len, enum ha_rkey_function find_flag)
 {
   MRN_HTRACE;
@@ -669,19 +669,19 @@ int ha_groonga::index_read(uchar *buf, const uchar *key,
 }
 #endif
 
-int ha_groonga::index_next(uchar *buf)
+int ha_mroonga::index_next(uchar *buf)
 {
   MRN_HTRACE;
   return HA_ERR_END_OF_FILE;
 }
 
-int ha_groonga::ft_init() {
+int ha_mroonga::ft_init() {
   MRN_HTRACE;
   return 0;
 }
 
 #ifdef PROTOTYPE
-FT_INFO *ha_groonga::ft_init_ext(uint flags, uint inx,String *key)
+FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint inx,String *key)
 {
   const char *match_param;
   match_param = key->ptr();
@@ -707,7 +707,7 @@ FT_INFO *ha_groonga::ft_init_ext(uint flags, uint inx,String *key)
   return NULL;
 }
 #else
-FT_INFO *ha_groonga::ft_init_ext(uint flags, uint inx,String *key)
+FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint inx,String *key)
 {
   MRN_HTRACE;
   return NULL;
@@ -715,7 +715,7 @@ FT_INFO *ha_groonga::ft_init_ext(uint flags, uint inx,String *key)
 #endif
 
 #ifdef PROTOTYPE
-int ha_groonga::ft_read(uchar *buf)
+int ha_mroonga::ft_read(uchar *buf)
 {
   /*
   if (mrn_counter == 0) {
@@ -746,14 +746,14 @@ int ha_groonga::ft_read(uchar *buf)
   return HA_ERR_END_OF_FILE;
 }
 #else
-int ha_groonga::ft_read(uchar *buf)
+int ha_mroonga::ft_read(uchar *buf)
 {
   MRN_HTRACE;
   return HA_ERR_END_OF_FILE;
 }
 #endif
 
-const COND *ha_groonga::cond_push(const COND *cond)
+const COND *ha_mroonga::cond_push(const COND *cond)
 {
   MRN_HTRACE;
   if (cond)
@@ -778,7 +778,7 @@ err_oom:
   return NULL;
 }
 
-void ha_groonga::cond_pop()
+void ha_mroonga::cond_pop()
 {
   MRN_HTRACE;
   if (mcond)
@@ -789,7 +789,7 @@ void ha_groonga::cond_pop()
   }
 }
 
-int ha_groonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_minfo)
+int ha_mroonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_minfo)
 {
   uint n_columns = share->fields, i;
   mrn_info *minfo = mrn_init_obj_info(ctx, n_columns);
@@ -823,7 +823,7 @@ int ha_groonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
   return 0;
 }
 
-int ha_groonga::set_bitmap(uchar **bitmap)
+int ha_mroonga::set_bitmap(uchar **bitmap)
 {
   int i, used=0, n_columns, alloc_size;
   n_columns = minfo->n_columns;
@@ -854,7 +854,7 @@ err_oom:
 
 const char *indent = "....................";
 
-void ha_groonga::dump_tree(Item *item, int offset)
+void ha_mroonga::dump_tree(Item *item, int offset)
 {
   char *str;
   if (item->type() == Item::FUNC_ITEM)
@@ -928,7 +928,7 @@ void ha_groonga::dump_tree(Item *item, int offset)
   }
 }
 
-void ha_groonga::dump_condition(const COND *cond)
+void ha_mroonga::dump_condition(const COND *cond)
 {
   Item *item = (Item*) cond;
   while (item)
@@ -990,7 +990,7 @@ void ha_groonga::dump_condition(const COND *cond)
   printf("\n\n");
 }
 
-int ha_groonga::make_expr(Item *item, mrn_expr **expr)
+int ha_mroonga::make_expr(Item *item, mrn_expr **expr)
 {
   mrn_expr *cur = *expr;
   switch(item->type())
@@ -1090,7 +1090,7 @@ int ha_groonga::make_expr(Item *item, mrn_expr **expr)
   *expr = cur;
 }
 
-int ha_groonga::check_other_conditions(mrn_cond *cond, THD *thd)
+int ha_mroonga::check_other_conditions(mrn_cond *cond, THD *thd)
 {
   SELECT_LEX lex = thd->lex->select_lex;
   if (lex.explicit_limit == true)
@@ -1108,7 +1108,7 @@ int ha_groonga::check_other_conditions(mrn_cond *cond, THD *thd)
   return 0;
 }
 
-void ha_groonga::dump_condition2(mrn_cond *cond)
+void ha_mroonga::dump_condition2(mrn_cond *cond)
 {
   mrn_dump_expr(cond->expr);
   printf(" join=%d order=%d limit=%lld offset=%lld\n",

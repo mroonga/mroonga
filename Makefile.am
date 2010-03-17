@@ -10,20 +10,20 @@ pkgplugindir  = $(pkglibdir)/plugin
 
 DEFS          = @DEFS@
 
-noinst_HEADERS = driver.h ha_groonga.h
+noinst_HEADERS = driver.h ha_mroonga.h
 
 lib_LTLIBRARIES      = libmroonga.la
 #pkgplugin_LTLIBRARIES  = @plugin_mroonga_shared_target@
 libmroonga_la_LDFLAGS  = -module -rpath $(pkgplugindir) $(GROONGA_LIBS) $(MECAB_LIBS)
 libmroonga_la_CXXFLAGS = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 libmroonga_la_CFLAGS   = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
-libmroonga_la_SOURCES  = ha_groonga.cc ha_groonga.h driver.c driver.h
+libmroonga_la_SOURCES  = ha_mroonga.cc ha_mroonga.h driver.c driver.h
 
 lib_LIBRARIES          = libmroonga.a
 libmroonga_a_LDFLANGS  = $(GROONGA_LIBS) $(MECAB_LIBS)
 libmroonga_a_CXXFLAGS  = $(AM_CFLAGS)
 libmroonga_a_CFLAGS    = $(AM_CFLAGS)
-libmroonga_a_SOURCES   = ha_groonga.cc driver.c
+libmroonga_a_SOURCES   = ha_mroonga.cc driver.c
 
 SUBDIRS = test
 

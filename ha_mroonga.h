@@ -1,5 +1,5 @@
-#ifndef _ha_groonga_h
-#define _ha_groonga_h
+#ifndef _ha_mroonga_h
+#define _ha_mroonga_h
 
 #ifdef USE_PRAGMA_INTERFACE
 #pragma interface
@@ -10,7 +10,7 @@
 #ifdef MRN_HTRACE
 #undef MRN_HTRACE
 #define MRN_HTRACE {\
-    GRN_LOG(ctx, GRN_LOG_DEBUG, "[handler=%p, ctx=%p, minfo=%p] ha_groonga::%s (%s)", \
+    GRN_LOG(ctx, GRN_LOG_DEBUG, "[handler=%p, ctx=%p, minfo=%p] ha_mroonga::%s (%s)", \
             this,ctx,minfo, __FUNCTION__,                               \
             (minfo) ? ((minfo->table) ? (minfo->table->name) : NULL) : NULL); \
   } while(0)
@@ -31,7 +31,7 @@ typedef struct _mrn_cond
 
 
 /* handler class */
-class ha_groonga: public handler
+class ha_mroonga: public handler
 {
   THR_LOCK thr_lock;
   THR_LOCK_DATA thr_lock_data;
@@ -50,8 +50,8 @@ class ha_groonga: public handler
   uchar *column_map;
 
 public:
-  ha_groonga(handlerton *hton, TABLE_SHARE *share);
-  ~ha_groonga();
+  ha_mroonga(handlerton *hton, TABLE_SHARE *share);
+  ~ha_mroonga();
 
   const char *table_type() const;           // required
   const char *index_type(uint inx);
@@ -106,4 +106,4 @@ public:
   void dump_condition2(mrn_cond *cond);
 };
 
-#endif /* _ha_groonga_h */
+#endif /* _ha_mroonga_h */
