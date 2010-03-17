@@ -195,9 +195,6 @@ void mrn_dump_buffer(uchar *buf, int size);
 /* static variables */
 extern grn_hash *mrn_system_hash;
 extern grn_obj *mrn_system_db;
-extern grn_obj *mrn_index_lexicon;
-extern grn_obj *mrn_index_hash;
-extern grn_obj *mrn_index_pat;
 extern pthread_mutex_t *mrn_lock, *mrn_lock_hash;
 extern const char *mrn_logfile_name;
 extern FILE *mrn_logfile;
