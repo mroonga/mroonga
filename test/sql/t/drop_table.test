@@ -1,0 +1,16 @@
+--disable_warnings
+install plugin mroonga soname 'libmroonga.so';
+drop table if exists t1, t2, t3;
+--enable_warnings
+
+create table t1 (c1 int primary key, c2 int, c3 int) engine = mroonga;
+create table t2 (c1 int primary key, c2 int, c3 int) engine = mroonga;
+create table t3 (c1 int primary key, c2 int, c3 int) engine = mroonga;
+
+drop table t1;
+drop table t2;
+drop table t3;
+
+--disable_warnings
+uninstall plugin mroonga;
+--enable_warnings
