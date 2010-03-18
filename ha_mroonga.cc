@@ -801,7 +801,7 @@ int ha_mroonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
   db = minfo->db;
   db->name = share->db.str;
   db->name_size = share->db.length;
-  memcpy(db->path, db->name, db->name_size);
+  memcpy(db->path, db->name, db->name_size+1);
   strncat(db->path, MRN_DB_FILE_NAME, 32);
 
   table = minfo->table;

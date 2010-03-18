@@ -310,6 +310,7 @@ int mrn_create(grn_ctx *ctx, mrn_info *info)
   {
     if ((db->obj = grn_db_open(ctx, db->path)) == NULL)
     {
+      GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db->path);
       db->obj = grn_db_create(ctx, db->path, NULL);
     }
     mrn_hash_put(ctx, db->name, db->obj);
