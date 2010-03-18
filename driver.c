@@ -230,6 +230,7 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
     }
     else
     {
+      GRN_LOG(ctx, GRN_LOG_DEBUG, "hash remove (key=%s)", key);
       mrn_hash_counter--;
     }
   }
