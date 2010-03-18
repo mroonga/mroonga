@@ -49,8 +49,9 @@ mrn_info *generate_t1()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/t1";
   info->table->name = "t1";
   info->table->name_size = strlen("t1");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -107,7 +108,7 @@ void destroy_t1(mrn_info *info)
 {
   mrn_close(ctx, info);
   mrn_drop(ctx, "t1");
-  mrn_deinit_obj_info(ctx, info);  
+  mrn_deinit_obj_info(ctx, info);
 }
 
 void test_mrn_hash_put()
@@ -232,8 +233,9 @@ void test_mrn_create()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_create";
   info->table->name = "mrn_create";
   info->table->name_size = strlen("mrn_create");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -270,8 +272,9 @@ void test_mrn_open()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_open";
   info->table->name = "mrn_open";
   info->table->name_size = strlen("mrn_open");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -310,8 +313,9 @@ void test_mrn_close()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_close";
   info->table->name = "mrn_close";
   info->table->name_size = strlen("mrn_close");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -352,8 +356,9 @@ void test_mrn_drop()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_drop";
   info->table->name = "mrn_drop";
   info->table->name_size = strlen("mrn_drop");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -386,8 +391,9 @@ void test_mrn_drop_from_other_ctx()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_drop_from_other_ctx";
   info->table->name = "mrn_drop_from_other_ctx";
   info->table->name_size = strlen("mrn_drop_from_other_ctx");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -425,8 +431,9 @@ void test_mrn_write_row()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_write_row";
   info->table->name = "mrn_write_row";
   info->table->name_size = strlen("mrn_write_row");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -473,8 +480,9 @@ void test_mrn_init_record()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_init_record";
   info->table->name = "mrn_init_record";
   info->table->name_size = strlen("mrn_init_record");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -522,8 +530,9 @@ void test_mrn_deinit_record()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_deinit_record";
   info->table->name = "mrn_deinit_record";
   info->table->name_size = strlen("mrn_deinit_record");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -564,8 +573,9 @@ void test_mrn_rnd_init()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_rnd_init";
   info->table->name = "mrn_rnd_init";
   info->table->name_size = strlen("mrn_rnd_init");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -617,8 +627,9 @@ void test_mrn_rnd_next()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_rnd_next";
   info->table->name = "mrn_rnd_next";
   info->table->name_size = strlen("mrn_rnd_next");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -686,8 +697,9 @@ void test_mrn_table_size()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_table_size";
   info->table->name = "mrn_table_size";
   info->table->name_size = strlen("mrn_table_size");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -742,8 +754,9 @@ void test_mrn_rnd_next_pruning()
 
   info->db->name = "mroonga";
   info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.db";  
+  info->db->path = "mroonga.mrn";
 
+  info->name = "./mroonga/mrn_rnd_next_cond";
   info->table->name = "mrn_rnd_next_cond";
   info->table->name_size = strlen("mrn_rnd_next_cond");
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -855,7 +868,7 @@ void test_mrn_expr_search()
   mrn_info *info = generate_t1();
   cut_assert_not_null(info);
 
-  // SQL where ((c1 < 10 and c2 < 500) or (c1 >= 95)) 
+  // SQL where ((c1 < 10 and c2 < 500) or (c1 >= 95))
   // grn expression (c1 10 < c2 500 < and c1 95 >= or)
   mrn_expr *first = (mrn_expr*) malloc(sizeof(mrn_expr));
   mrn_expr *expr = first;
@@ -920,7 +933,7 @@ void test_mrn_expr_search()
 
   cut_assert_null(info->res);
   cut_assert_null(info->cursor);
-  
+
   cut_assert_equal_int(0, mrn_rnd_init(ctx, info, expr));
   cut_assert_not_null(info->res);
   cut_assert_not_null(info->cursor);
