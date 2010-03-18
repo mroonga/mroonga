@@ -22,7 +22,7 @@ grn_logger_info mrn_logger_info = {
 };
 
 const char *mrn_log_level_str[] =
-{ 
+{
   "NONE",
   "EMERG",
   "ALERT",
@@ -37,7 +37,7 @@ const char *mrn_log_level_str[] =
 
 void mrn_logger_mysql(int level, const char *time, const char *title,
                       const char *msg, const char *location, void *func_arg)
-{ 
+{
   fprintf(stderr, "%s mroonga [%s] %s\n",
           time, *(mrn_log_level_str + level), msg);
 }
@@ -239,11 +239,11 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
 
 mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
 {
-  int i, alloc_size = 0, path_buff_size = 32;
+  int i, alloc_size = 0;
   void *ptr;
   mrn_info *info;
   alloc_size = sizeof(mrn_info) + sizeof(mrn_db_info) +
-    path_buff_size + sizeof(mrn_table_info) +
+    MRN_MAX_PATH_SIZE + sizeof(mrn_table_info) +
     (sizeof(void*) + sizeof(mrn_column_info)) * n_columns;
   ptr = malloc(alloc_size);
   if (ptr == NULL)
@@ -263,7 +263,7 @@ mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
   ptr += sizeof(mrn_db_info);
   info->db->path = ptr;
 
-  ptr += path_buff_size;
+  ptr += MRN_MAX_PATH_SIZE;
   info->table = ptr;
   info->table->name = NULL;
   info->table->name_size = 0;
@@ -308,10 +308,25 @@ int mrn_create(grn_ctx *ctx, mrn_info *info)
   db = info->db;
   if (mrn_hash_get(ctx, db->name, (void**) &(db->obj)) != 0)
   {
-    if ((db->obj = grn_db_open(ctx, db->path)) == NULL)
+    struct stat dummy;
+    if (stat(db->path, &dummy))
     {
       GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db->path);
       db->obj = grn_db_create(ctx, db->path, NULL);
+      if (db->obj == NULL)
+      {
+        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create database (%s)", db->path);
+        return -1;
+      }
+    }
+    else
+    {
+      db->obj = grn_db_open(ctx, db->path);
+      if (db->obj == NULL)
+      {
+        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db->path);
+        return -1;
+      }
     }
     mrn_hash_put(ctx, db->name, db->obj);
   }

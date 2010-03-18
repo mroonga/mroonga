@@ -6,7 +6,8 @@
 #include <groonga.h>
 
 #define MRN_MAX_KEY_LEN 1024
-#define MRN_DB_FILE_NAME "/mroonga.db"
+#define MRN_MAX_PATH_SIZE 64
+#define MRN_DB_FILE_SUFFIX ".mrn"
 #define MRN_LOG_FILE_NAME "mroonga.log"
 #define MRN_INDEX_LEXICON_NAME "index_lexicon"
 #define MRN_INDEX_HASH_NAME "index_hash"

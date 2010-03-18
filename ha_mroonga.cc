@@ -46,7 +46,7 @@ static void mrn_log_level_update_func
   if (save)
   {
     mrn_log_level = *((ulong*) save);
-    mrn_logger_info.max_level = (grn_log_level) mrn_log_level;    
+    mrn_logger_info.max_level = (grn_log_level) mrn_log_level;
   }
 }
 
@@ -78,7 +78,7 @@ static MYSQL_THDVAR_BOOL(
                          NULL,
                          TRUE
                          );
-  
+
 static MYSQL_THDVAR_BOOL(
                          use_cond_push,
                          PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
@@ -802,7 +802,9 @@ int ha_mroonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
   db->name = share->db.str;
   db->name_size = share->db.length;
   memcpy(db->path, db->name, db->name_size+1);
-  strncat(db->path, MRN_DB_FILE_NAME, 32);
+  strncat(db->path, "/", MRN_MAX_PATH_SIZE);
+  strncat(db->path, db->name, MRN_MAX_PATH_SIZE);
+  strncat(db->path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
 
   table = minfo->table;
   table->name = share->table_name.str;
