@@ -137,7 +137,7 @@ int mrn_deinit()
   grn_hash_close(&ctx, mrn_system_hash);
   mrn_system_hash = NULL;
 
-  grn_obj_close(&ctx, mrn_system_db);
+  grn_obj_unlink(&ctx, mrn_system_db);
   mrn_system_db = NULL;
 
   if (mrn_logfile)
@@ -260,7 +260,6 @@ mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
   info->db = ptr;
   info->db->name = NULL;
   info->db->name_size = 0;
-  info->db->obj = NULL;
   ptr += sizeof(mrn_db_info);
   info->db->path = ptr;
 
@@ -268,10 +267,8 @@ mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
   info->table = ptr;
   info->table->name = NULL;
   info->table->name_size = 0;
-  info->table->path = NULL;
   info->table->flags = GRN_OBJ_PERSISTENT;
   info->table->key_type = NULL;
-  info->table->obj = NULL;
 
   ptr += sizeof(mrn_table_info);
   info->columns = (mrn_column_info**) ptr;
@@ -282,14 +279,11 @@ mrn_info *mrn_init_obj_info(grn_ctx *ctx, uint n_columns)
     info->columns[i] = ptr + sizeof(mrn_column_info) * i;
     info->columns[i]->name = NULL;
     info->columns[i]->name_size = 0;
-    info->columns[i]->path = NULL;
     info->columns[i]->flags = GRN_OBJ_PERSISTENT;
     info->columns[i]->type = NULL;
-    info->columns[i]->obj = NULL;
   }
 
   info->n_columns = n_columns;
-  info->ref_count = 0;
   return info;
 }
 
@@ -299,121 +293,71 @@ int mrn_deinit_obj_info(grn_ctx *ctx, mrn_info *info)
   return 0;
 }
 
-int mrn_create(grn_ctx *ctx, mrn_info *info)
+int mrn_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
 {
   int i;
-  mrn_db_info *db;
   mrn_table_info *table;
   mrn_column_info *column;
 
-  db = info->db;
-  if (mrn_hash_get(ctx, db->name, (void**) &(db->obj)) != 0)
-  {
-    struct stat dummy;
-    if (stat(db->path, &dummy))
-    {
-      GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db->path);
-      db->obj = grn_db_create(ctx, db->path, NULL);
-      if (db->obj == NULL)
-      {
-        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create database (%s)", db->path);
-        return -1;
-      }
-    }
-    else
-    {
-      db->obj = grn_db_open(ctx, db->path);
-      if (db->obj == NULL)
-      {
-        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db->path);
-        return -1;
-      }
-    }
-    mrn_hash_put(ctx, db->name, db->obj);
-  }
-  grn_ctx_use(ctx, db->obj);
-
   table = info->table;
-  table->obj = grn_table_create(ctx, table->name, table->name_size,
-                                table->path, table->flags,
+  obj->table = grn_table_create(ctx, table->name, table->name_size,
+                                NULL, table->flags,
                                 table->key_type, 0);
-  if (table->obj == NULL)
+  if (obj->table == NULL)
   {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, name_size=%d, path=%s, "
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, name_size=%d, "
             "flags=%d, key_type=%p, value_size=%d", table->name, table->name_size,
-            table->path, table->flags, table->key_type, NULL);
+            table->flags, table->key_type, NULL);
     return -1;
   }
 
+  obj->columns = malloc(sizeof(grn_obj*) * info->n_columns);
   for (i=0; i < info->n_columns; i++)
   {
     column = info->columns[i];
-    column->obj = grn_column_create(ctx, table->obj, column->name,
-                                    column->name_size, column->path,
-                                    column->flags, column->type);
-    if (column->obj == NULL)
+    obj->columns[i] = grn_column_create(ctx, obj->table, column->name,
+                                        column->name_size, NULL,
+                                        column->flags, column->type);
+    if (obj->columns[i] == NULL)
     {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create column: table=%p, name=%s, name_size=%d, "
-              "path=%s, flags=%d, type=%p", table->obj, column->name,
-              column->name_size, column->path,
-              column->flags, column->type);
+              "flags=%d, type=%p", obj->table, column->name,
+              column->name_size, column->flags, column->type);
       goto auto_drop;
     }
   }
-
-  for (i=0; i < info->n_columns; i++)
-  {
-    grn_obj_close(ctx, info->columns[i]->obj);
-    info->columns[i]->obj = NULL;
-  }
-  grn_obj_close(ctx, table->obj);
-  table->obj = NULL;
   return 0;
 
 auto_drop:
   GRN_LOG(ctx, GRN_LOG_ERROR, "auto-drop table/columns");
-  while (--i >= 0)
+  grn_obj_remove(ctx, obj->table);
+  obj->table = NULL;
+  for (i=0; i < info->n_columns; i++)
   {
-    grn_obj_remove(ctx, info->columns[i]->obj);
-    info->columns[i]->obj = NULL;
+    obj->columns[i] = NULL;
   }
-  grn_ctx_get(ctx, info->table->name, info->table->name_size);
-  grn_obj_remove(ctx, info->table->obj);
-  info->table->obj = NULL;
   return -1;
 }
 
-int mrn_open(grn_ctx *ctx, mrn_info *info)
+int mrn_open(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
 {
   int i;
-  mrn_db_info *db;
   mrn_table_info *table;
   mrn_column_info *column;
 
-  db = info->db;
-  if (mrn_hash_get(ctx, db->name, (void**) &(db->obj)) != 0)
-  {
-    if ((db->obj = grn_db_open(ctx, db->path)) == NULL)
-    {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database: name=%s", db->name);
-      return -1;
-    }
-    mrn_hash_put(ctx, db->name, db->obj);
-  }
-  grn_ctx_use(ctx, db->obj);
-
   table = info->table;
-  table->obj = grn_ctx_get(ctx, table->name, table->name_size);
-  if (table->obj == NULL)
+  obj->table = grn_ctx_get(ctx, table->name, table->name_size);
+  if (obj->table == NULL)
   {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table: name=%s", table->name);
     return -1;
   }
+  obj->columns = malloc(sizeof(grn_obj*) * info->n_columns);
   for (i=0; i < info->n_columns; i++)
   {
     column = info->columns[i];
-    column->obj = grn_obj_column(ctx, table->obj, column->name, column->name_size);
-    if (column->obj == NULL)
+    obj->columns[i] = grn_obj_column(ctx, obj->table, column->name, column->name_size);
+    if (obj->columns[i] == NULL)
     {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open column: table=%s, column=%s",
               table->name, column->name);
@@ -424,53 +368,55 @@ int mrn_open(grn_ctx *ctx, mrn_info *info)
 
 auto_close:
   GRN_LOG(ctx, GRN_LOG_ERROR, "auto-closing table/columns");
-  for (; i > 0; --i)
+  grn_obj_unlink(ctx, obj->table);
+  obj->table = NULL;
+  for (i=0; i < info->n_columns; i++)
   {
-    grn_obj_close(ctx, info->columns[i]->obj);
-    info->columns[i]->obj = NULL;
+    obj->columns[i] = NULL;
   }
-  grn_obj_close(ctx, info->table->obj);
-  info->table->obj = NULL;
   return -1;
 }
 
-int mrn_close(grn_ctx *ctx, mrn_info *info)
+int mrn_close(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
 {
   int i;
+  grn_obj_unlink(ctx, obj->table);
   for (i=0; i < info->n_columns; i++)
   {
-    grn_obj_close(ctx, info->columns[i]->obj);
-    info->columns[i]->obj = NULL;
+    obj->columns[i] = NULL;
   }
-  grn_obj_close(ctx, info->table->obj);
-  info->table->obj = NULL;
+  free(obj->columns);
+  obj->table = NULL;
   return 0;
 }
 
-int mrn_drop(grn_ctx *ctx, const char *table_name)
+int mrn_drop(grn_ctx *ctx, char *db_path, char *table_name)
 {
-  grn_obj *table;
+  grn_obj *db, *table;
+  db = grn_db_open(ctx, db_path);
+  if (db == NULL)
+  {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_db_open failed while mrn_drop (%s)",
+            db_path);
+    return -1;
+  }
+  grn_ctx_use(ctx, db);
   table = grn_ctx_get(ctx, table_name, strlen(table_name));
   if (table == NULL)
   {
-    goto err;
+    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get failed while mrn_drop (%s)",
+            table_name);
+    return -1;
   }
-  grn_obj_remove(ctx, table);
-  return 0;
-
-err:
-  GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get return null:[%s,%d,%p,%p]",
-          table_name, strlen(table_name), ctx, grn_ctx_db(ctx));
-  // force drop table
-  return 0;
+  return grn_obj_remove(ctx, table);
 }
 
-int mrn_write_row(grn_ctx *ctx, mrn_record *record)
+int mrn_write_row(grn_ctx *ctx, mrn_record *record, mrn_object *obj)
 {
   grn_obj *table, *column;
   grn_id gid;
   int added, i, j;
-  table = record->info->table->obj;
+  table = obj->table;
   gid = grn_table_add(ctx, table, record->key, record->key_size, &added);
   if (added == 0)
   {
@@ -478,7 +424,7 @@ int mrn_write_row(grn_ctx *ctx, mrn_record *record)
   }
   for (i=0, j=0; i < record->info->n_columns; i++)
   {
-    column = record->info->columns[i]->obj;
+    column = obj->columns[i];
     if (MRN_IS_BIT(record->bitmap, i))
     {
       if (grn_obj_set_value(ctx, column, gid, record->value[j], GRN_OBJ_SET)
@@ -545,7 +491,7 @@ int mrn_deinit_record(grn_ctx *ctx, mrn_record *record)
   int i;
   for (i=0; i < record->actual_size; i++)
   {
-    grn_obj_close(ctx, record->value[i]);
+    grn_obj_unlink(ctx, record->value[i]);
   }
   free(record);
   return 0;
@@ -561,7 +507,7 @@ int mrn_rewind_record(grn_ctx *ctx, mrn_record *record)
   return 0;
 }
 
-int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
+int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr, mrn_object *obj)
 {
   if (expr)
   {
@@ -570,7 +516,7 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
     GRN_TEXT_INIT(&textbuf, 0);
     grn_obj *gexpr = grn_expr_create(ctx, NULL, 0);
     v = grn_expr_add_var(ctx, gexpr, NULL, 0);
-    GRN_RECORD_INIT(v, 0, grn_obj_id(ctx, info->table->obj));
+    GRN_RECORD_INIT(v, 0, grn_obj_id(ctx, obj->table));
 
     mrn_expr *cur = expr;
     while (cur)
@@ -626,16 +572,16 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
     grn_expr_compile(ctx, gexpr);
     info->res = grn_table_create(ctx, NULL, 0, NULL,
                                  GRN_TABLE_HASH_KEY|GRN_OBJ_WITH_SUBREC,
-                                 info->table->obj, NULL);
-    grn_table_select(ctx, info->table->obj, gexpr, info->res, GRN_OP_OR);
+                                 obj->table, NULL);
+    grn_table_select(ctx, obj->table, gexpr, info->res, GRN_OP_OR);
     info->cursor = grn_table_cursor_open(ctx, info->res, NULL, 0, NULL,
                                          0, 0, -1, 0);
-    grn_obj_close(ctx, &intbuf);
-    grn_obj_close(ctx, &textbuf);
+    grn_obj_unlink(ctx, &intbuf);
+    grn_obj_unlink(ctx, &textbuf);
   }
   else
   {
-    info->cursor = grn_table_cursor_open(ctx, info->table->obj, NULL, 0, NULL, 0, 0, -1, 0);
+    info->cursor = grn_table_cursor_open(ctx, obj->table, NULL, 0, NULL, 0, 0, -1, 0);
     if (info->cursor == NULL)
     {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open cursor: %s", info->table->name);
@@ -645,7 +591,7 @@ int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr)
   return 0;
 }
 
-int mrn_rnd_next(grn_ctx *ctx, mrn_record *record)
+int mrn_rnd_next(grn_ctx *ctx, mrn_record *record, mrn_object *obj)
 {
   int i,j;
   grn_table_cursor *cursor = record->info->cursor;
@@ -664,7 +610,7 @@ int mrn_rnd_next(grn_ctx *ctx, mrn_record *record)
       // column pruning
       if (MRN_IS_BIT(record->bitmap, i))
       {
-        if (grn_obj_get_value(ctx, record->info->columns[i]->obj,
+        if (grn_obj_get_value(ctx, obj->columns[i],
                               record->id, record->value[j]) != NULL)
         {
           j++;
@@ -684,9 +630,9 @@ err:
   return -1;
 }
 
-uint mrn_table_size(grn_ctx *ctx, mrn_info *info)
+uint mrn_table_size(grn_ctx *ctx, mrn_object *obj)
 {
-  return grn_table_size(ctx, info->table->obj);
+  return grn_table_size(ctx, obj->table);
 }
 
 void mrn_free_expr(mrn_expr *expr)
@@ -764,4 +710,34 @@ void mrn_dump_buffer(uchar *buf, int size)
     printf("%c%c ",c[high_bit],c[low_bit]);
   }
   printf("\n");
+}
+
+int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
+{
+  mrn_db_info *db = info->db;
+  if (mrn_hash_get(ctx, db->name, (void**) &(obj->db)) != 0)
+  {
+    struct stat dummy;
+    if (stat(db->path, &dummy))
+    {
+      GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db->path);
+      obj->db = grn_db_create(ctx, db->path, NULL);
+      if (obj->db == NULL)
+      {
+        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create database (%s)", db->path);
+        return -1;
+      }
+    }
+    else
+    {
+      obj->db = grn_db_open(ctx, db->path);
+      if (obj->db == NULL)
+      {
+        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db->path);
+        return -1;
+      }
+    }
+    mrn_hash_put(ctx, db->name, obj->db);
+  }
+  return 0;
 }

@@ -49,6 +49,8 @@ class ha_mroonga: public handler
   mrn_record *cur;
   uchar *column_map;
 
+  mrn_object *obj;
+
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);
   ~ha_mroonga();

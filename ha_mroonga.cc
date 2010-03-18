@@ -251,12 +251,14 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   minfo = NULL;
   mcond = NULL;
   cur = NULL;
+  obj = (mrn_object *) malloc(sizeof(mrn_object));
 }
 
 ha_mroonga::~ha_mroonga()
 {
   grn_ctx_fin(ctx);
   free(ctx);
+  free(obj);
 }
 
 const char *ha_mroonga::table_type() const
@@ -292,10 +294,14 @@ int ha_mroonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   int res;
   mrn_info *minfo;
   MRN_HTRACE;
-  convert_info(name, this->table_share, &minfo);
-  res = mrn_create(ctx, minfo);
   pthread_mutex_lock(mrn_lock);
-  mrn_hash_put(ctx, name, minfo);
+  convert_info(name, this->table_share, &minfo);
+  if (res = mrn_db_open_or_create(ctx, minfo, obj) == 0)
+  {
+    grn_ctx_use(ctx, obj->db);
+    res = mrn_create(ctx, minfo, obj);
+    mrn_hash_put(ctx, name, minfo);
+  }
   pthread_mutex_unlock(mrn_lock);
   return res;
 }
@@ -307,37 +313,24 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
 
   mrn_info *minfo;
-  int res;
+  int res = 0;
 
   pthread_mutex_lock(mrn_lock);
 
-  if (mrn_hash_get(ctx, name, (void**) &minfo) == 0)
+  if (mrn_hash_get(ctx, name, (void**) &minfo) != 0)
   {
-    minfo->ref_count++;
-    this->minfo = minfo;
-    pthread_mutex_unlock(mrn_lock);
-    return 0;
-  }
-  else
-  {
-    mrn_info *minfo;
     convert_info(name, this->table_share, &minfo);
-    if (mrn_open(ctx, minfo) == 0)
-    {
-      mrn_hash_put(ctx, name, minfo);
-      minfo->ref_count++;
-      pthread_mutex_unlock(mrn_lock);
-      this->minfo = minfo;
-      return 0;
-    }
-    else
-    {
-      pthread_mutex_unlock(mrn_lock);
-      mrn_deinit_obj_info(ctx, minfo);
-      this->minfo = NULL;
-      return -1;
-    }
+    mrn_hash_put(ctx, name, minfo);
   }
+  this->minfo = minfo;
+
+  if (res = mrn_db_open_or_create(ctx, minfo, obj) == 0)
+  {
+    grn_ctx_use(ctx, obj->db);
+    res = mrn_open(ctx, minfo, obj);
+  }
+  pthread_mutex_unlock(mrn_lock);
+  return res;
 }
 
 int ha_mroonga::close()
@@ -347,20 +340,9 @@ int ha_mroonga::close()
 
   mrn_info *minfo = this->minfo;
   pthread_mutex_lock(mrn_lock);
-
-  minfo->ref_count--;
-  if (minfo->ref_count <= 0)
-  {
-    if (mrn_hash_remove(ctx, minfo->name) != 0)
-    {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "error in mrn_hash_remove:[%p,%s]",
-              ctx, minfo->name);
-    }
-    mrn_close(ctx, minfo);
-    mrn_deinit_obj_info(ctx, minfo);
-    this->minfo = NULL;
-  }
-
+  mrn_close(ctx, minfo, obj);
+  mrn_deinit_obj_info(ctx, minfo);
+  this->minfo = NULL;
   pthread_mutex_unlock(mrn_lock);
   return 0;
 }
@@ -368,18 +350,43 @@ int ha_mroonga::close()
 int ha_mroonga::delete_table(const char *name)
 {
   MRN_HTRACE;
-  int i;
-  char buf[32];
-  int name_len = strlen(name);
-  for (i=name_len; i >= 0; --i)
+  int res, i, j;
+  char db_name[32], table_name[32];
+  mrn_info *minfo;
+  pthread_mutex_lock(mrn_lock);
+  if (mrn_hash_get(ctx, name, (void**) &minfo) == 0)
   {
-    if (name[i] == '/')
+    mrn_hash_remove(ctx, name);
+  }
+  int name_len = strlen(name);
+  for (i=2; i < name_len; i++)
+  {
+    if (name[i] != '/')
     {
-      memcpy(buf, name+i+1, name_len-i);
+      db_name[i-2] = name[i];
+    }
+    else
+    {
+      db_name[i-2] = '\0';
       break;
     }
   }
-  return mrn_drop(ctx, buf);
+  i++;
+  for (j=0; i < name_len; j++, i++)
+  {
+    table_name[j] = name[i];
+  }
+  table_name[j] = '\0';
+
+  char db_path[MRN_MAX_PATH_SIZE];
+  strncpy(db_path, db_name, MRN_MAX_PATH_SIZE);
+  strncat(db_path, "/", MRN_MAX_PATH_SIZE);
+  strncat(db_path, db_name, MRN_MAX_PATH_SIZE);
+  strncat(db_path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
+
+  res = mrn_drop(ctx, db_path, table_name);
+  pthread_mutex_unlock(mrn_lock);
+  return res;
 }
 
 int ha_mroonga::info(uint flag)
@@ -387,7 +394,7 @@ int ha_mroonga::info(uint flag)
   MRN_HTRACE;
   if (this->minfo)
   {
-    stats.records = (ha_rows) mrn_table_size(ctx, this->minfo);
+    stats.records = (ha_rows) mrn_table_size(ctx, obj);
   }
   else
   {
@@ -448,7 +455,7 @@ int ha_mroonga::rnd_init(bool scan)
     }
   }
   return mrn_rnd_init(ctx, minfo,
-                      mcond ? mcond->expr : NULL);
+                      mcond ? mcond->expr : NULL, obj);
 }
 
 int ha_mroonga::rnd_next(uchar *buf)
@@ -459,7 +466,7 @@ int ha_mroonga::rnd_next(uchar *buf)
   mrn_info *info = this->minfo;
   mrn_cond *cond = this->mcond;
   record = this->cur;
-  rc = mrn_rnd_next(ctx, record);
+  rc = mrn_rnd_next(ctx, record, obj);
   if (rc == 0)
   {
     Field **field = table->field;
@@ -601,7 +608,7 @@ int ha_mroonga::write_row(uchar *buf)
       j++;
     }
   }
-  if (mrn_write_row(ctx, record) != 0)
+  if (mrn_write_row(ctx, record, obj) != 0)
   {
     return -1;
   }
@@ -652,7 +659,7 @@ int ha_mroonga::index_read(uchar *buf, const uchar *key,
       break;
     }
   }
-  grn_obj_close(ctx, &wrapper);
+  grn_obj_unlink(ctx, &wrapper);
 
   if (key_field->field_index == table->s->primary_key)
   {
@@ -801,7 +808,7 @@ int ha_mroonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
   db = minfo->db;
   db->name = share->db.str;
   db->name_size = share->db.length;
-  memcpy(db->path, db->name, db->name_size+1);
+  strncpy(db->path, db->name, MRN_MAX_PATH_SIZE);
   strncat(db->path, "/", MRN_MAX_PATH_SIZE);
   strncat(db->path, db->name, MRN_MAX_PATH_SIZE);
   strncat(db->path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);

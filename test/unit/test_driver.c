@@ -9,6 +9,7 @@
 static gchar *base_directory;
 static gchar *tmp_directory;
 static grn_ctx *ctx;
+static mrn_object *obj;
 
 void cut_startup()
 {
@@ -18,6 +19,7 @@ void cut_startup()
   g_mkdir_with_parents(tmp_directory, 0700);
   g_chdir(tmp_directory);
   ctx = (grn_ctx*) g_malloc(sizeof(grn_ctx));
+  obj = (mrn_object *) g_malloc(sizeof(mrn_object));
 }
 
 void cut_shutdown()
@@ -166,14 +168,12 @@ void test_mrn_init_obj_info()
   info->table->name = "mrn_init_obj_info";
   info->table->name_size = strlen(info->table->name);
   cut_assert_true(info->table->flags == GRN_OBJ_PERSISTENT);
-  cut_assert_null(info->table->obj);
   cut_assert_equal_int(n_columns, info->n_columns);
   for (i=0; i < n_columns; i++)
   {
     info->columns[i]->name = "fuga";
     info->columns[i]->name_size = strlen("fuga");
     cut_assert_true(info->columns[i]->flags == GRN_OBJ_PERSISTENT);
-    cut_assert_null(info->columns[i]->obj);
   }
   mrn_deinit_obj_info(ctx, info);
 }
@@ -192,17 +192,17 @@ void test_mrn_create()
   mrn_info *info =
     gen_mrn_info(ctx, "./mroonga/mrn_create", "mroonga", "mrn_create");
 
-  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info));
+  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info, obj));
 
-  cut_assert_null(info->table->obj);
-  cut_assert_null(info->columns[0]->obj);
-  cut_assert_null(info->columns[1]->obj);
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_not_null(info->table->obj);
-  cut_assert_not_null(info->columns[0]->obj);
-  cut_assert_not_null(info->columns[1]->obj);
+  obj->table = NULL;
+  obj->columns = NULL;
 
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_create"));
+  cut_assert_equal_int(0, mrn_create(ctx, info, obj));
+  cut_assert_not_null(obj->table);
+  cut_assert_not_null(obj->columns[0]);
+  cut_assert_not_null(obj->columns[1]);
+
+  cut_assert_equal_int(0, mrn_drop(ctx, "mroonga", "mrn_create"));
   mrn_deinit_obj_info(ctx, info);
 }
 
@@ -212,19 +212,17 @@ void test_mrn_open()
   mrn_info *info =
     gen_mrn_info(ctx, "./mroonga/mrn_open", "mroonga", "mrn_open");
 
-  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info));
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_close(ctx, info));
+  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info, obj));
+  cut_assert_equal_int(0, mrn_create(ctx, info, obj));
+  cut_assert_equal_int(0, mrn_close(ctx, info, obj));
 
-  cut_assert_null(info->table->obj);
-  cut_assert_null(info->columns[0]->obj);
-  cut_assert_null(info->columns[1]->obj);
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-  cut_assert_not_null(info->table->obj);
-  cut_assert_not_null(info->columns[0]->obj);
-  cut_assert_not_null(info->columns[1]->obj);
+  cut_assert_null(obj->table);
+  cut_assert_equal_int(0, mrn_open(ctx, info, obj));
+  cut_assert_not_null(obj->table);
+  cut_assert_not_null(obj->columns[0]);
+  cut_assert_not_null(obj->columns[1]);
 
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_open"));
+  cut_assert_equal_int(0, mrn_drop(ctx, "mroonga", "mrn_open"));
   mrn_deinit_obj_info(ctx, info);
 }
 
@@ -234,18 +232,16 @@ void test_mrn_close()
   mrn_info *info =
     gen_mrn_info(ctx, "./mroonga/mrn_close", "mroonga", "mrn_close");
 
-  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info));
-  cut_assert_equal_int(0, mrn_create(ctx, info));
+  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info, obj));
+  cut_assert_equal_int(0, mrn_create(ctx, info, obj));
 
-  cut_assert_not_null(info->table->obj);
-  cut_assert_not_null(info->columns[0]->obj);
-  cut_assert_not_null(info->columns[1]->obj);
-  cut_assert_equal_int(0, mrn_close(ctx, info));
-  cut_assert_null(info->table->obj);
-  cut_assert_null(info->columns[0]->obj);
-  cut_assert_null(info->columns[1]->obj);
+  cut_assert_not_null(obj->table);
+  cut_assert_not_null(obj->columns[0]);
+  cut_assert_not_null(obj->columns[1]);
+  cut_assert_equal_int(0, mrn_close(ctx, info, obj));
+  cut_assert_null(obj->table);
 
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_close"));
+  cut_assert_equal_int(0, mrn_drop(ctx, "mroonga", "mrn_close"));
   mrn_deinit_obj_info(ctx, info);
 }
 
@@ -255,10 +251,10 @@ void test_mrn_drop()
   mrn_info *info =
     gen_mrn_info(ctx, "./mroonga/mrn_drop", "mroonga", "mrn_drop");
 
-  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info));
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_drop"));
-  cut_assert_equal_int(-1, mrn_open(ctx, info));
+  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info, obj));
+  cut_assert_equal_int(0, mrn_create(ctx, info, obj));
+  cut_assert_equal_int(0, mrn_drop(ctx, "mroonga", "mrn_drop"));
+  cut_assert_equal_int(-1, mrn_open(ctx, info, obj));
   mrn_deinit_obj_info(ctx, info);
 }
 

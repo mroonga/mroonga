@@ -47,7 +47,6 @@ typedef struct _mrn_index_info
 {
   const char *name;
   uint name_size;
-  char *path;
   grn_obj_flags flags;
   grn_obj *type;
   grn_builtin_type gtype;
@@ -60,7 +59,6 @@ typedef struct _mrn_key_info
   uint per_table;
   const char *name;
   uint name_size;
-  char *path;
   grn_obj_flags flags;
   grn_obj *type;
   grn_builtin_type gtype;
@@ -71,11 +69,9 @@ typedef struct _mrn_column_info
 {
   const char *name;
   uint name_size;
-  char *path;
   grn_obj_flags flags;
   grn_obj *type;
   grn_builtin_type gtype;
-  grn_obj *obj;
   uint indexno;
 } mrn_column_info;
 
@@ -83,10 +79,8 @@ typedef struct _mrn_table_info
 {
   const char *name;
   uint name_size;
-  char *path;
   grn_obj_flags flags;
   grn_obj *key_type;
-  grn_obj *obj;
 } mrn_table_info;
 
 typedef struct _mrn_db_info
@@ -94,8 +88,14 @@ typedef struct _mrn_db_info
   const char *name;
   uint name_size;
   char *path;
-  grn_obj *obj;
 } mrn_db_info;
+
+typedef struct _mrn_object
+{
+  grn_obj *db;
+  grn_obj *table;
+  grn_obj **columns;
+} mrn_object;
 
 typedef struct _mrn_info
 {
@@ -106,7 +106,6 @@ typedef struct _mrn_info
   mrn_index_info **indexes;
   uint n_columns;
   uint n_indexes;
-  uint ref_count;
   grn_table_cursor *cursor;
   grn_obj *res;
   const char *name;
@@ -178,20 +177,21 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key);
 
 mrn_info* mrn_init_obj_info(grn_ctx *ctx, uint n_columns);
 int mrn_deinit_obj_info(grn_ctx *ctx, mrn_info *info);
-int mrn_create(grn_ctx *ctx, mrn_info *info);
-int mrn_open(grn_ctx *ctx, mrn_info *info);
-int mrn_close(grn_ctx *ctx, mrn_info *info);
-int mrn_drop(grn_ctx *ctx, const char *table_name);
-int mrn_write_row(grn_ctx *ctx, mrn_record *record);
+int mrn_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj);
+int mrn_open(grn_ctx *ctx, mrn_info *info, mrn_object *obj);
+int mrn_close(grn_ctx *ctx, mrn_info *info, mrn_object *obj);
+int mrn_drop(grn_ctx *ctx, char *db_path, char *table_name);
+int mrn_write_row(grn_ctx *ctx, mrn_record *record, mrn_object *obj);
 mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, uchar *bitmap, int size);
 int mrn_deinit_record(grn_ctx *ctx, mrn_record *record);
 int mrn_rewind_record(grn_ctx *ctx, mrn_record *record);
-int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr);
-int mrn_rnd_next(grn_ctx *ctx, mrn_record *record);
-uint mrn_table_size(grn_ctx *ctx, mrn_info *info);
+int mrn_rnd_init(grn_ctx *ctx, mrn_info *info, mrn_expr *expr, mrn_object *obj);
+int mrn_rnd_next(grn_ctx *ctx, mrn_record *record, mrn_object *obj);
+uint mrn_table_size(grn_ctx *ctx, mrn_object *obj);
 void mrn_free_expr(mrn_expr *expr);
 void mrn_dump_expr(mrn_expr *expr);
 void mrn_dump_buffer(uchar *buf, int size);
+int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj);
 
 /* static variables */
 extern grn_hash *mrn_system_hash;
