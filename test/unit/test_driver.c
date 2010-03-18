@@ -40,20 +40,19 @@ void cut_teardown()
   mrn_deinit();
 }
 
-mrn_info *generate_t1()
+mrn_info *gen_mrn_info(grn_ctx *ctx, const char *keyname, const char *dbname, const char *tblname)
 {
-  int i, row_size = 10;
-  mrn_info *info = mrn_init_obj_info(ctx, 3);
-  mrn_record *record;
+  mrn_info *info = mrn_init_obj_info(ctx, 2);
   uchar bitmap[1];
 
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
+  info->name = keyname;
 
-  info->name = "./mroonga/t1";
-  info->table->name = "t1";
-  info->table->name_size = strlen("t1");
+  info->db->name = dbname;
+  info->db->name_size = strlen(dbname);
+  info->db->path = (char*) dbname;
+
+  info->table->name = tblname;
+  info->table->name_size = strlen(tblname);
   info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
 
   info->columns[0]->name = "c1";
@@ -66,49 +65,11 @@ mrn_info *generate_t1()
   info->columns[1]->name = "c2";
   info->columns[1]->name_size = strlen("c2");
   info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-  info->columns[1]->gtype = GRN_DB_INT32;
+  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  info->columns[1]->gtype = GRN_DB_TEXT;
   MRN_SET_BIT(bitmap,1);
 
-  info->columns[2]->name = "c3";
-  info->columns[2]->name_size = strlen("c3");
-  info->columns[2]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[2]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-  info->columns[2]->gtype = GRN_DB_TEXT;
-  MRN_SET_BIT(bitmap,2);
-
-  mrn_create(ctx, info);
-  mrn_open(ctx, info);
-
-  char buff[32];
-
-  record = mrn_init_record(ctx, info, bitmap, 3);
-  for (i = 0; i < row_size; i++)
-  {
-    mrn_rewind_record(ctx, record);
-    snprintf(buff,32,"text#%d",i);
-    GRN_INT32_SET(ctx, record->value[0], i);
-    GRN_INT32_SET(ctx, record->value[1], i*100);
-    GRN_TEXT_SETS(ctx, record->value[2], buff);
-    mrn_write_row(ctx, record);
-  }
-  mrn_deinit_record(ctx, record);
-
-  if (grn_table_size(ctx, info->table->obj) == row_size)
-  {
-    return info;
-  }
-  else
-  {
-    return NULL;
-  }
-}
-
-void destroy_t1(mrn_info *info)
-{
-  mrn_close(ctx, info);
-  mrn_drop(ctx, "t1");
-  mrn_deinit_obj_info(ctx, info);
+  return info;
 }
 
 void test_mrn_hash_put()
@@ -228,68 +189,33 @@ void test_mrn_deinit_obj_info()
 void test_mrn_create()
 {
   TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
+  mrn_info *info =
+    gen_mrn_info(ctx, "./mroonga/mrn_create", "mroonga", "mrn_create");
 
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
+  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info));
 
-  info->name = "./mroonga/mrn_create";
-  info->table->name = "mrn_create";
-  info->table->name_size = strlen("mrn_create");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-
+  cut_assert_null(info->table->obj);
+  cut_assert_null(info->columns[0]->obj);
+  cut_assert_null(info->columns[1]->obj);
   cut_assert_equal_int(0, mrn_create(ctx, info));
+  cut_assert_not_null(info->table->obj);
+  cut_assert_not_null(info->columns[0]->obj);
+  cut_assert_not_null(info->columns[1]->obj);
 
-  cut_assert_not_null((obj = grn_ctx_get(ctx, "mrn_create", strlen("mrn_create"))));
-  cut_assert_not_null((obj2 = grn_obj_column(ctx, obj, "c1", strlen("c1"))));
-  grn_obj_remove(ctx, obj2);
-  cut_assert_not_null((obj2 = grn_obj_column(ctx, obj, "c2", strlen("c2"))));
-  grn_obj_remove(ctx, obj2);
-  cut_assert_null((obj2 = grn_obj_column(ctx, obj, "c3", strlen("c3"))));
-  grn_obj_remove(ctx, obj);
-
+  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_create"));
   mrn_deinit_obj_info(ctx, info);
 }
 
 void test_mrn_open()
 {
   TEST_ENTER;
-  grn_obj *obj,*obj2;
+  mrn_info *info =
+    gen_mrn_info(ctx, "./mroonga/mrn_open", "mroonga", "mrn_open");
 
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_open";
-  info->table->name = "mrn_open";
-  info->table->name_size = strlen("mrn_open");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-
+  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info));
   cut_assert_equal_int(0, mrn_create(ctx, info));
+  cut_assert_equal_int(0, mrn_close(ctx, info));
+
   cut_assert_null(info->table->obj);
   cut_assert_null(info->columns[0]->obj);
   cut_assert_null(info->columns[1]->obj);
@@ -298,549 +224,41 @@ void test_mrn_open()
   cut_assert_not_null(info->columns[0]->obj);
   cut_assert_not_null(info->columns[1]->obj);
 
-  grn_obj_remove(ctx, info->columns[1]->obj);
-  grn_obj_remove(ctx, info->columns[0]->obj);
-  grn_obj_remove(ctx, info->table->obj);
+  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_open"));
   mrn_deinit_obj_info(ctx, info);
 }
 
 void test_mrn_close()
 {
   TEST_ENTER;
-  grn_obj *obj,*obj2;
+  mrn_info *info =
+    gen_mrn_info(ctx, "./mroonga/mrn_close", "mroonga", "mrn_close");
 
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_close";
-  info->table->name = "mrn_close";
-  info->table->name_size = strlen("mrn_close");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-
+  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info));
   cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
+
   cut_assert_not_null(info->table->obj);
   cut_assert_not_null(info->columns[0]->obj);
   cut_assert_not_null(info->columns[1]->obj);
-
   cut_assert_equal_int(0, mrn_close(ctx, info));
   cut_assert_null(info->table->obj);
   cut_assert_null(info->columns[0]->obj);
   cut_assert_null(info->columns[1]->obj);
 
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-  grn_obj_remove(ctx, info->columns[1]->obj);
-  grn_obj_remove(ctx, info->columns[0]->obj);
-  grn_obj_remove(ctx, info->table->obj);
+  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_close"));
   mrn_deinit_obj_info(ctx, info);
 }
 
 void test_mrn_drop()
 {
   TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
+  mrn_info *info =
+    gen_mrn_info(ctx, "./mroonga/mrn_drop", "mroonga", "mrn_drop");
 
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_drop";
-  info->table->name = "mrn_drop";
-  info->table->name_size = strlen("mrn_drop");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-
+  cut_assert_equal_int(0, mrn_db_open_or_create(ctx, info));
   cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-  cut_assert_equal_int(0, mrn_close(ctx, info));
   cut_assert_equal_int(0, mrn_drop(ctx, "mrn_drop"));
   cut_assert_equal_int(-1, mrn_open(ctx, info));
-  mrn_deinit_obj_info(ctx, info);
-}
-
-void test_mrn_drop_from_other_ctx()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
-  grn_ctx ctx2;
-  grn_ctx_init(&ctx2,0);
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_drop_from_other_ctx";
-  info->table->name = "mrn_drop_from_other_ctx";
-  info->table->name_size = strlen("mrn_drop_from_other_ctx");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->gtype = GRN_DB_INT32;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->gtype = GRN_DB_TEXT;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-  cut_assert_equal_int(0, mrn_close(ctx, info));
-
-  grn_ctx_use(&ctx2, info->db->obj);
-  cut_assert_equal_int(0, mrn_drop(&ctx2, "mrn_drop_from_other_ctx"));
-  cut_assert_equal_int(-1, mrn_open(&ctx2, info));
-  mrn_deinit_obj_info(ctx, info);
-  grn_ctx_fin(&ctx2);
-}
-
-void test_mrn_write_row()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
-  mrn_record *record;
-  uchar bitmap[1];
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_write_row";
-  info->table->name = "mrn_write_row";
-  info->table->name_size = strlen("mrn_write_row");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-  MRN_SET_BIT(bitmap,0);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-  MRN_SET_BIT(bitmap,1);
-
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-
-  record = mrn_init_record(ctx, info, bitmap, 2);
-  cut_assert_not_null(record);
-  {
-    int val1=100;
-    char *val2 = "record value";
-
-    GRN_TEXT_SET(ctx, record->value[0], (char*) &val1, sizeof(val1));
-    GRN_TEXT_SET(ctx, record->value[1], val2, strlen(val2));
-    cut_assert_equal_int(0, mrn_write_row(ctx, record));
-  }
-  cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
-
-  cut_assert_equal_int(0, mrn_close(ctx, info));
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_write_row"));
-  mrn_deinit_obj_info(ctx, info);
-}
-
-void test_mrn_init_record()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
-  mrn_record *record;
-  uchar bitmap[1];
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_init_record";
-  info->table->name = "mrn_init_record";
-  info->table->name_size = strlen("mrn_init_record");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->gtype = GRN_DB_INT32;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-  MRN_SET_BIT(bitmap,0);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->gtype = GRN_DB_TEXT;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-  MRN_SET_BIT(bitmap,1);
-
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-
-  {
-    record = mrn_init_record(ctx, info, bitmap, 2);
-    cut_assert_not_null(record);
-    cut_assert_not_null(record->info);
-    cut_assert_not_null(record->value);
-    cut_assert_not_null(record->value[0]);
-    cut_assert_not_null(record->value[1]);
-    cut_assert_equal_int(2, record->n_columns);
-    mrn_deinit_record(ctx, record);
-  }
-
-  cut_assert_equal_int(0, mrn_close(ctx, info));
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_init_record"));
-  mrn_deinit_obj_info(ctx, info);
-}
-
-void test_mrn_deinit_record()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
-  mrn_record *record;
-  uchar bitmap[1];
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_deinit_record";
-  info->table->name = "mrn_deinit_record";
-  info->table->name_size = strlen("mrn_deinit_record");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-  MRN_SET_BIT(bitmap,0);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-  MRN_SET_BIT(bitmap,1);
-
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-
-  record = mrn_init_record(ctx, info, bitmap, 2);
-
-  {
-    cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
-  }
-
-  cut_assert_equal_int(0, mrn_close(ctx, info));
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_deinit_record"));
-  mrn_deinit_obj_info(ctx, info);
-}
-
-void test_mrn_rnd_init()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
-  mrn_record *record;
-  uchar bitmap[1];
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_rnd_init";
-  info->table->name = "mrn_rnd_init";
-  info->table->name_size = strlen("mrn_rnd_init");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->gtype = GRN_DB_INT32;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-  MRN_SET_BIT(bitmap,0);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->gtype = GRN_DB_TEXT;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-  MRN_SET_BIT(bitmap,1);
-
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-
-  record = mrn_init_record(ctx, info, bitmap, 2);
-  cut_assert_not_null(record);
-  int val1=100;
-  char *val2 = "record value";
-  GRN_TEXT_SET(ctx, record->value[0], (char*) &val1, sizeof(val1));
-  GRN_TEXT_SET(ctx, record->value[1], val2, strlen(val2));
-  cut_assert_equal_int(0, mrn_write_row(ctx, record));
-  cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
-
-  {
-    cut_assert_equal_int(0, mrn_rnd_init(ctx, info, NULL));
-    cut_assert_not_null(info->cursor);
-    grn_table_cursor_close(ctx, info->cursor);
-  }
-
-  cut_assert_equal_int(0, mrn_close(ctx, info));
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_rnd_init"));
-  mrn_deinit_obj_info(ctx, info);
-}
-
-void test_mrn_rnd_next()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
-  mrn_record *record;
-  uchar bitmap[1];
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_rnd_next";
-  info->table->name = "mrn_rnd_next";
-  info->table->name_size = strlen("mrn_rnd_next");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->gtype = GRN_DB_INT32;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-  MRN_SET_BIT(bitmap,0);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->gtype = GRN_DB_TEXT;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-  MRN_SET_BIT(bitmap,1);
-
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-
-  record = mrn_init_record(ctx, info, bitmap, 2);
-  cut_assert_not_null(record);
-  int val1=100;
-  char *val2 = "record value";
-  GRN_INT32_SET(ctx, record->value[0], val1);
-  cut_assert_equal_int(12, strlen(val2));
-  GRN_TEXT_SET(ctx, record->value[1], val2, strlen(val2));
-  cut_assert_equal_int(0, mrn_write_row(ctx, record));
-  cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
-
-  cut_assert_equal_int(0, mrn_rnd_init(ctx, info, NULL));
-  cut_assert_not_null(info->cursor);
-
-  {
-    mrn_record *record;
-    int res1;
-    char *res2;
-    record = mrn_init_record(ctx, info, bitmap, 2);
-    cut_assert_equal_int(0, mrn_rnd_next(ctx, record));
-    res1 = GRN_INT32_VALUE(record->value[0]);
-    res2 = GRN_TEXT_VALUE(record->value[1]);
-    cut_assert_equal_int(100, res1);
-    cut_assert_equal_int(12, GRN_TEXT_LEN(record->value[1]));
-    cut_assert_equal_int(0, strncmp(val2, res2, 12));
-
-    cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
-    cut_assert_equal_int(1, mrn_rnd_next(ctx, record));
-    cut_assert_null(record->info->cursor);
-    cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
-  }
-
-  cut_assert_equal_int(0, mrn_close(ctx, info));
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_rnd_next"));
-  mrn_deinit_obj_info(ctx, info);
-}
-
-void test_mrn_table_size()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 2);
-  mrn_record *record;
-  uchar bitmap[1];
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_table_size";
-  info->table->name = "mrn_table_size";
-  info->table->name_size = strlen("mrn_table_size");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->gtype = GRN_DB_INT32;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-  MRN_SET_BIT(bitmap,0);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->gtype = GRN_DB_TEXT;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_TEXT);
-  MRN_SET_BIT(bitmap,1);
-
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-
-  record = mrn_init_record(ctx, info, bitmap, 2);
-  cut_assert_not_null(record);
-  int val1=100;
-  char *val2 = "record value";
-  GRN_TEXT_SET(ctx, record->value[0], (char*) &val1, sizeof(val1));
-  cut_assert_equal_int(12, strlen(val2));
-  GRN_TEXT_SET(ctx, record->value[1], val2, strlen(val2));
-  cut_assert_equal_int(0, mrn_write_row(ctx, record));
-  cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
-
-  cut_assert_equal_int(0, mrn_rnd_init(ctx, info, NULL));
-  cut_assert_not_null(info->cursor);
-
-  {
-    cut_assert_equal_int(1, mrn_table_size(ctx, info));
-  }
-
-  cut_assert_equal_int(0, mrn_close(ctx, info));
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_table_size"));
-  mrn_deinit_obj_info(ctx, info);
-}
-
-void test_mrn_rnd_next_pruning()
-{
-  TEST_ENTER;
-  grn_obj *obj, *obj2;
-  mrn_info *info = mrn_init_obj_info(ctx, 4);
-  mrn_record *record;
-  uchar bitmap[1];
-  bitmap[0] = 0;
-
-  info->db->name = "mroonga";
-  info->db->name_size = strlen("mroonga");
-  info->db->path = "mroonga.mrn";
-
-  info->name = "./mroonga/mrn_rnd_next_cond";
-  info->table->name = "mrn_rnd_next_cond";
-  info->table->name_size = strlen("mrn_rnd_next_cond");
-  info->table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  info->columns[0]->name = "c1";
-  info->columns[0]->name_size = strlen("c1");
-  info->columns[0]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[0]->gtype = GRN_DB_INT32;
-  info->columns[0]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[1]->name = "c2";
-  info->columns[1]->name_size = strlen("c2");
-  info->columns[1]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[1]->gtype = GRN_DB_INT32;
-  info->columns[1]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[2]->name = "c3";
-  info->columns[2]->name_size = strlen("c3");
-  info->columns[2]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[2]->gtype = GRN_DB_INT32;
-  info->columns[2]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  info->columns[3]->name = "c4";
-  info->columns[3]->name_size = strlen("c4");
-  info->columns[3]->flags |= GRN_OBJ_COLUMN_SCALAR;
-  info->columns[3]->gtype = GRN_DB_INT32;
-  info->columns[3]->type = grn_ctx_at(ctx, GRN_DB_INT32);
-
-  cut_assert_equal_int(0, mrn_create(ctx, info));
-  cut_assert_equal_int(0, mrn_open(ctx, info));
-
-  MRN_SET_BIT(bitmap,0);
-  MRN_SET_BIT(bitmap,1);
-  MRN_SET_BIT(bitmap,2);
-  MRN_SET_BIT(bitmap,3);
-  record = mrn_init_record(ctx, info, bitmap, 4);
-  cut_assert_not_null(record);
-  GRN_INT32_SET(ctx, record->value[0], 100);
-  GRN_INT32_SET(ctx, record->value[1], 101);
-  GRN_INT32_SET(ctx, record->value[2], 102);
-  GRN_INT32_SET(ctx, record->value[3], 103);
-  cut_assert_equal_int(0, mrn_write_row(ctx, record));
-
-  MRN_SET_BIT(bitmap,0);
-  MRN_SET_BIT(bitmap,1);
-  MRN_SET_BIT(bitmap,2);
-  MRN_SET_BIT(bitmap,3);
-  cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
-  GRN_INT32_SET(ctx, record->value[0], 200);
-  GRN_INT32_SET(ctx, record->value[1], 201);
-  GRN_INT32_SET(ctx, record->value[2], 202);
-  GRN_INT32_SET(ctx, record->value[3], 203);
-  cut_assert_equal_int(0, mrn_write_row(ctx, record));
-
-  mrn_deinit_record(ctx, record);
-
-  cut_assert_equal_int(0, mrn_rnd_init(ctx, info, NULL));
-  cut_assert_not_null(info->cursor);
-
-  {
-    mrn_record *record;
-    MRN_CLEAR_BIT(bitmap,0);
-    MRN_SET_BIT(bitmap,1);
-    MRN_CLEAR_BIT(bitmap,2);
-    MRN_SET_BIT(bitmap,3);
-
-    record = mrn_init_record(ctx, info, bitmap, 2);
-    cut_assert_equal_int(0, mrn_rnd_next(ctx, record));
-    cut_assert_equal_int(101, GRN_INT32_VALUE(record->value[0]));
-    cut_assert_equal_int(103, GRN_INT32_VALUE(record->value[1]));
-
-    cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
-    cut_assert_equal_int(0, mrn_rnd_next(ctx, record));
-    cut_assert_equal_int(201, GRN_INT32_VALUE(record->value[0]));
-    cut_assert_equal_int(203, GRN_INT32_VALUE(record->value[1]));
-
-    cut_assert_equal_int(0, mrn_rewind_record(ctx, record));
-    cut_assert_equal_int(1, mrn_rnd_next(ctx, record));
-    cut_assert_null(record->info->cursor);
-    cut_assert_equal_int(0, mrn_deinit_record(ctx, record));
-  }
-
-  cut_assert_equal_int(0, mrn_close(ctx, info));
-  cut_assert_equal_int(0, mrn_drop(ctx, "mrn_rnd_next_cond"));
   mrn_deinit_obj_info(ctx, info);
 }
 
@@ -860,100 +278,6 @@ void test_mrn_bitmap_macro()
     cut_assert_false(MRN_IS_BIT(a,i));
   }
   g_free(a);
-}
-
-void test_mrn_expr_search()
-{
-  TEST_ENTER;
-  mrn_info *info = generate_t1();
-  cut_assert_not_null(info);
-
-  // SQL where ((c1 < 10 and c2 < 500) or (c1 >= 95))
-  // grn expression (c1 10 < c2 500 < and c1 95 >= or)
-  mrn_expr *first = (mrn_expr*) malloc(sizeof(mrn_expr));
-  mrn_expr *expr = first;
-
-  expr->type = MRN_EXPR_COLUMN;
-  expr->val_string = "c1";
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_INT;
-  expr->val_int = 5;
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_LESS;
-  expr->n_args = 2;
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_COLUMN;
-  expr->val_string = "c2";
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_INT;
-  expr->val_int = 200;
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_LESS;
-  expr->n_args = 2;
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_AND;
-  expr->n_args = 2;
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_COLUMN;
-  expr->val_string = "c1";
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_INT;
-  expr->val_int = 2;
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_LESS;
-  expr->n_args = 2;
-  expr->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-  expr = expr->next;
-
-  expr->type = MRN_EXPR_AND;
-  expr->n_args = 2;
-
-  expr->next = NULL;
-  expr = first;
-
-  //mrn_dump_expr(expr);
-
-  cut_assert_null(info->res);
-  cut_assert_null(info->cursor);
-
-  cut_assert_equal_int(0, mrn_rnd_init(ctx, info, expr));
-  cut_assert_not_null(info->res);
-  cut_assert_not_null(info->cursor);
-
-  char bitmap[1];
-  MRN_SET_BIT(bitmap,0);
-  MRN_SET_BIT(bitmap,1);
-  MRN_SET_BIT(bitmap,2);
-  mrn_record *record = mrn_init_record(ctx, info, bitmap, 3);
-  int rc, found_rows=0;
-  while ((rc = mrn_rnd_next(ctx, record)) == 0)
-  {
-    mrn_rewind_record(ctx, record);
-    found_rows++;
-  }
-  cut_assert_equal_int(1, rc);
-  cut_assert_equal_int(2, grn_table_size(ctx, info->res));
-  cut_assert_equal_int(2, found_rows);
-  mrn_free_expr(expr);
-  destroy_t1(info);
 }
 
 void test_get_data_type()
