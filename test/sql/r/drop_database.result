@@ -1,0 +1,16 @@
+install plugin mroonga soname 'libmroonga.so';
+drop database if exists mroonga;
+create database mroonga;
+drop database mroonga;
+create database mroonga;
+use mroonga;
+create table t1 (c1 int primary key, c2 varchar(255)) default charset utf8 engine = mroonga;
+create table t2 (c1 int primary key, c2 varchar(255)) default charset utf8 engine = mroonga;
+drop database mroonga;
+create database mroonga;
+use mroonga;
+create table t1 (c1 int primary key, c2 varchar(255)) default charset utf8 engine = mroonga;
+create table t2 (c1 int primary key, c2 varchar(255)) default charset utf8 engine = mroonga;
+drop table t1, t2;
+drop database mroonga;
+uninstall plugin mroonga;
