@@ -192,6 +192,7 @@ void mrn_free_expr(mrn_expr *expr);
 void mrn_dump_expr(mrn_expr *expr);
 void mrn_dump_buffer(uchar *buf, int size);
 int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj);
+int mrn_db_drop(grn_ctx *ctx, char *path);
 
 /* static variables */
 extern grn_hash *mrn_system_hash;

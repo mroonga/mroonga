@@ -741,3 +741,25 @@ int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
   }
   return 0;
 }
+
+int mrn_db_drop(grn_ctx *ctx, char *path)
+{
+  grn_obj *db = grn_db_open(ctx, path);
+  if (db == NULL)
+  {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot drop database (%s)", path);
+    return -1;
+  }
+  if (grn_obj_remove(ctx, db))
+  {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot drop database (%s)", path);
+    return -1;
+  }
+  /* workaround code (from) */
+  char f[32];
+  strncpy(f, path, 32);
+  strncat(f, ".0000000", 32);
+  unlink(f);
+  /* workaround code (to) */
+  return 0;
+}

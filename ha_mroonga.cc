@@ -209,6 +209,29 @@ handler *mrn_handler_create(handlerton *hton,
   return (new (root) ha_mroonga(hton, share));
 }
 
+void mrn_handler_drop_db(handlerton *hton, char *path)
+{
+  char db_path[MRN_MAX_PATH_SIZE];
+  char db_name[MRN_MAX_PATH_SIZE];
+  int i;
+  int len = strlen(path);
+  struct stat dummy;
+  grn_ctx ctx;
+  grn_ctx_init(&ctx, 0);
+  strncpy(db_path, path+2, len-3);
+  db_path[len-3] = '\0';
+  strncpy(db_name, db_path, MRN_MAX_PATH_SIZE);
+  strncat(db_path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
+  pthread_mutex_lock(mrn_lock);
+  if (stat(db_path, &dummy) == 0)
+  {
+    mrn_db_drop(&ctx, db_path);
+    mrn_hash_remove(&ctx, db_name);
+  }
+  pthread_mutex_unlock(mrn_lock);
+  grn_ctx_fin(&ctx);
+}
+
 int mrn_plugin_init(void *p)
 {
   handlerton *hton;
@@ -216,6 +239,7 @@ int mrn_plugin_init(void *p)
   hton->state = SHOW_OPTION_YES;
   hton->create = mrn_handler_create;
   hton->flags = 0;
+  hton->drop_database = mrn_handler_drop_db;
   return mrn_init(0);
 }
 
@@ -380,8 +404,6 @@ int ha_mroonga::delete_table(const char *name)
 
   char db_path[MRN_MAX_PATH_SIZE];
   strncpy(db_path, db_name, MRN_MAX_PATH_SIZE);
-  strncat(db_path, "/", MRN_MAX_PATH_SIZE);
-  strncat(db_path, db_name, MRN_MAX_PATH_SIZE);
   strncat(db_path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
 
   res = mrn_drop(ctx, db_path, table_name);
@@ -809,8 +831,6 @@ int ha_mroonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
   db->name = share->db.str;
   db->name_size = share->db.length;
   strncpy(db->path, db->name, MRN_MAX_PATH_SIZE);
-  strncat(db->path, "/", MRN_MAX_PATH_SIZE);
-  strncat(db->path, db->name, MRN_MAX_PATH_SIZE);
   strncat(db->path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
 
   table = minfo->table;
