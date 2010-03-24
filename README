@@ -1,9 +1,9 @@
-groonga-mysql : MySQL Storage Engine for Groonga
+mroonga : MySQL Storage Engine for Groonga
 
 This program is a MySQL pluggable storage engine and
 designed for embedding groonga into MySQL.
 
-To build groonga-mysql within MySQL source code, please proceed following steps.
+To build mroonga within MySQL source code, please proceed following steps.
 
 1. copy entire directory to $MYSQL_SRC/storage/
 
@@ -14,7 +14,7 @@ To build groonga-mysql within MySQL source code, please proceed following steps.
 
 3. make and make install
 
-To build groonga-mysql by standalone, please proceed following steps.
+To build mroonga by standalone, please proceed following steps.
 
 1. configure mroonga with following options:
 
@@ -27,20 +27,20 @@ wherever you want to install.
 
 2. make and make install
 
-
 Standalone build example
 
-If you have MySQL source at /usr/local/src/mysql-5.1.30 and
+If you have MySQL source at /usr/local/src/mysql-5.1.45 and
 if you have MySQL binary at /usr/local/mysql, configure
+
 options should be ..
 
 ./configure \
-  --with-mysql=/usr/local/src/mysql-5.1.30 \
+  --with-mysql=/usr/local/src/mysql-5.1.45 \
   --libdir=/usr/local/mysql/lib/mysql/plugin
 
-After "make install", you can install groonga-mysql by SQL command
+After "make install", you can install mroonga by SQL command
 
-mysql> INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
+mysql> INSTALL PLUGIN mroonga SONAME 'libmroonga.so';
 
 --
 Tetsuro IKEDA <te.ikeda@jpta.scs.co.jp>
