@@ -186,7 +186,7 @@ int mrn_db_drop(grn_ctx *ctx, char *path);
 /* static variables */
 extern grn_hash *mrn_system_hash;
 extern grn_obj *mrn_system_db;
-extern pthread_mutex_t *mrn_lock, *mrn_lock_hash;
+extern pthread_mutex_t *mrn_lock_db;
 extern const char *mrn_logfile_name;
 extern FILE *mrn_logfile;
 

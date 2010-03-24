@@ -8,7 +8,7 @@
 
 grn_hash *mrn_system_hash;
 grn_obj *mrn_system_db;
-pthread_mutex_t *mrn_lock, *mrn_lock_hash;
+pthread_mutex_t *mrn_lock_db;
 const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
 
@@ -92,12 +92,8 @@ int mrn_init(int in_mysql)
   }
 
   // init lock
-  mrn_lock = malloc(sizeof(pthread_mutex_t));
-  if ((mrn_lock == NULL) || (pthread_mutex_init(mrn_lock, NULL) != 0)) {
-    goto err;
-  }
-  mrn_lock_hash = malloc(sizeof(pthread_mutex_t));
-  if ((mrn_lock_hash == NULL) || (pthread_mutex_init(mrn_lock_hash, NULL) != 0)) {
+  mrn_lock_db = malloc(sizeof(pthread_mutex_t));
+  if ((mrn_lock_db == NULL) || (pthread_mutex_init(mrn_lock_db, NULL) != 0)) {
     goto err;
   }
 
@@ -118,12 +114,9 @@ int mrn_deinit()
   GRN_LOG(&ctx, GRN_LOG_NOTICE, "shutdown");
 
 
-  pthread_mutex_destroy(mrn_lock);
-  free(mrn_lock);
-  mrn_lock = NULL;
-  pthread_mutex_destroy(mrn_lock_hash);
-  free(mrn_lock_hash);
-  mrn_lock_hash = NULL;
+  pthread_mutex_destroy(mrn_lock_db);
+  free(mrn_lock_db);
+  mrn_lock_db = NULL;
 
   grn_hash_close(&ctx, mrn_system_hash);
   mrn_system_hash = NULL;
@@ -150,7 +143,6 @@ int mrn_hash_put(grn_ctx *ctx, const char *key, void *value)
 {
   int added, res=0;
   void *buf;
-  pthread_mutex_lock(mrn_lock_hash);
   grn_hash_add(ctx, mrn_system_hash, (const char*) key, strlen(key), &buf, &added);
   // duplicate check
   if (added == 0) {
@@ -162,7 +154,6 @@ int mrn_hash_put(grn_ctx *ctx, const char *key, void *value)
     mrn_hash_counter++;
     GRN_LOG(ctx, GRN_LOG_DEBUG, "hash put (key=%s)", key);
   }
-  pthread_mutex_unlock(mrn_lock_hash);
   return res;
 }
 
@@ -175,7 +166,6 @@ int mrn_hash_get(grn_ctx *ctx, const char *key, void **value)
   int res = 0;
   grn_id id;
   void *buf;
-  pthread_mutex_lock(mrn_lock_hash);
   id = grn_hash_get(ctx, mrn_system_hash, (const char*) key, strlen(key), &buf);
   // key not found
   if (id == GRN_ID_NIL) {
@@ -185,7 +175,6 @@ int mrn_hash_get(grn_ctx *ctx, const char *key, void **value)
     // restore address of value
     memcpy(value, buf, sizeof(buf));
   }
-  pthread_mutex_unlock(mrn_lock_hash);
   return res;
 }
 
@@ -198,7 +187,6 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
   int res = 0;
   grn_rc rc;
   grn_id id;
-  pthread_mutex_lock(mrn_lock_hash);
   id = grn_hash_get(ctx, mrn_system_hash, (const char*) key, strlen(key), NULL);
   if (id == GRN_ID_NIL) {
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash remove not found (key=%s)", key);
@@ -213,7 +201,6 @@ int mrn_hash_remove(grn_ctx *ctx, const char *key)
       mrn_hash_counter--;
     }
   }
-  pthread_mutex_unlock(mrn_lock_hash);
   return res;
 }
 
@@ -654,7 +641,7 @@ void mrn_dump_buffer(uchar *buf, int size)
 int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
 {
   mrn_db_info *db = info->db;
-  pthread_mutex_lock(mrn_lock);
+  pthread_mutex_lock(mrn_lock_db);
   if (mrn_hash_get(ctx, db->name, (void**) &(obj->db)) != 0) {
     struct stat dummy;
     if (stat(db->path, &dummy)) {
@@ -673,7 +660,7 @@ int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
     }
     mrn_hash_put(ctx, db->name, obj->db);
   }
-  pthread_mutex_unlock(mrn_lock);
+  pthread_mutex_unlock(mrn_lock_db);
   return 0;
 }
 

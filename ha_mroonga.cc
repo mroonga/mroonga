@@ -223,12 +223,10 @@ void mrn_handler_drop_db(handlerton *hton, char *path)
   db_path[len-3] = '\0';
   strncpy(db_name, db_path, MRN_MAX_PATH_SIZE);
   strncat(db_path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
-  pthread_mutex_lock(mrn_lock);
   if (stat(db_path, &dummy) == 0) {
     mrn_db_drop(&ctx, db_path);
     mrn_hash_remove(&ctx, db_name);
   }
-  pthread_mutex_unlock(mrn_lock);
   grn_ctx_fin(&ctx);
 }
 
@@ -318,13 +316,11 @@ int ha_mroonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   int res;
   mrn_info *minfo;
   MRN_HTRACE;
-  pthread_mutex_lock(mrn_lock);
   convert_info(name, this->table_share, &minfo);
   if (res = mrn_db_open_or_create(ctx, minfo, obj) == 0) {
     grn_ctx_use(ctx, obj->db);
     res = mrn_create(ctx, minfo, obj);
   }
-  pthread_mutex_unlock(mrn_lock);
   return res;
 }
 
@@ -352,11 +348,9 @@ int ha_mroonga::close()
   thr_lock_delete(&thr_lock);
 
   mrn_info *minfo = this->minfo;
-  pthread_mutex_lock(mrn_lock);
   mrn_close(ctx, minfo, obj);
   mrn_deinit_obj_info(ctx, minfo);
   this->minfo = NULL;
-  pthread_mutex_unlock(mrn_lock);
   return 0;
 }
 

@@ -30,9 +30,9 @@ void test_mrn_init()
   cut_assert_not_null(mrn_logfile);
   cut_assert_not_null(mrn_system_db);
   cut_assert_not_null(mrn_system_hash);
-  cut_assert_not_null(mrn_lock);
-  cut_assert_equal_int(0, pthread_mutex_lock(mrn_lock));
-  cut_assert_equal_int(0, pthread_mutex_unlock(mrn_lock));
+  cut_assert_not_null(mrn_lock_db);
+  cut_assert_equal_int(0, pthread_mutex_lock(mrn_lock_db));
+  cut_assert_equal_int(0, pthread_mutex_unlock(mrn_lock_db));
 
   mrn_deinit();
 }
@@ -44,5 +44,5 @@ void test_mrn_deinit()
   cut_assert_null(mrn_logfile);
   cut_assert_null(mrn_system_db);
   cut_assert_null(mrn_system_hash);
-  cut_assert_null(mrn_lock);
+  cut_assert_null(mrn_lock_db);
 }
