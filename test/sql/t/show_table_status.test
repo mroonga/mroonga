@@ -1,0 +1,20 @@
+--disable_warnings
+install plugin mroonga soname 'libmroonga.so';
+set storage_engine=mroonga;
+drop database if exists db1;
+create database db1;
+use db1;
+--enable_warnings
+
+create table t1 (c1 int);
+show table status;
+
+create table t2 (c1 int, c2 int);
+show table status;
+
+show table status like 't2';
+
+--disable_warnings
+drop database db1;
+uninstall plugin mroonga;
+--enable_warnings
