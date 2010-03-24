@@ -654,6 +654,7 @@ void mrn_dump_buffer(uchar *buf, int size)
 int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
 {
   mrn_db_info *db = info->db;
+  pthread_mutex_lock(mrn_lock);
   if (mrn_hash_get(ctx, db->name, (void**) &(obj->db)) != 0) {
     struct stat dummy;
     if (stat(db->path, &dummy)) {
@@ -672,6 +673,7 @@ int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
     }
     mrn_hash_put(ctx, db->name, obj->db);
   }
+  pthread_mutex_unlock(mrn_lock);
   return 0;
 }
 

@@ -323,7 +323,6 @@ int ha_mroonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   if (res = mrn_db_open_or_create(ctx, minfo, obj) == 0) {
     grn_ctx_use(ctx, obj->db);
     res = mrn_create(ctx, minfo, obj);
-    mrn_hash_put(ctx, name, minfo);
   }
   pthread_mutex_unlock(mrn_lock);
   return res;
@@ -338,19 +337,12 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   mrn_info *minfo;
   int res = 0;
 
-  pthread_mutex_lock(mrn_lock);
-
-  if (mrn_hash_get(ctx, name, (void**) &minfo) != 0) {
-    convert_info(name, this->table_share, &minfo);
-    mrn_hash_put(ctx, name, minfo);
-  }
+  convert_info(name, this->table_share, &minfo);
   this->minfo = minfo;
-
   if (res = mrn_db_open_or_create(ctx, minfo, obj) == 0) {
     grn_ctx_use(ctx, obj->db);
     res = mrn_open(ctx, minfo, obj);
   }
-  pthread_mutex_unlock(mrn_lock);
   return res;
 }
 
@@ -374,10 +366,6 @@ int ha_mroonga::delete_table(const char *name)
   int res, i, j;
   char db_name[32], table_name[32];
   mrn_info *minfo;
-  pthread_mutex_lock(mrn_lock);
-  if (mrn_hash_get(ctx, name, (void**) &minfo) == 0) {
-    mrn_hash_remove(ctx, name);
-  }
   int name_len = strlen(name);
   for (i=2; i < name_len; i++) {
     if (name[i] != '/') {
@@ -392,13 +380,10 @@ int ha_mroonga::delete_table(const char *name)
     table_name[j] = name[i];
   }
   table_name[j] = '\0';
-
   char db_path[MRN_MAX_PATH_SIZE];
   strncpy(db_path, db_name, MRN_MAX_PATH_SIZE);
   strncat(db_path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
-
   res = mrn_drop(ctx, db_path, table_name);
-  pthread_mutex_unlock(mrn_lock);
   return res;
 }
 
