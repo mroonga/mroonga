@@ -190,11 +190,21 @@ grn_builtin_type mrn_get_type(grn_ctx *ctx, int type)
 {
   grn_builtin_type gtype;
   switch (type) {
-  case MYSQL_TYPE_LONG:
+  case MYSQL_TYPE_TINY:     // tinyint
+    gtype = GRN_DB_INT8;
+    break;
+  case MYSQL_TYPE_SHORT:    // smallint
+    gtype = GRN_DB_INT16;
+    break;
+  case MYSQL_TYPE_INT24:    // mediumint
+  case MYSQL_TYPE_LONG:     // int
     gtype = GRN_DB_INT32;
     break;
-  case MYSQL_TYPE_VARCHAR:
-  case MYSQL_TYPE_BLOB:
+  case MYSQL_TYPE_LONGLONG: // bigint
+    gtype = GRN_DB_INT64;
+    break;
+  case MYSQL_TYPE_VARCHAR:  // varchar
+  case MYSQL_TYPE_BLOB:     // blob,text
     gtype = GRN_DB_TEXT;
     break;
   default:

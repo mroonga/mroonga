@@ -4,15 +4,31 @@ set storage_engine=mroonga;
 drop table if exists t1, t2, t3;
 --enable_warnings
 
+# simple test
 create table t1 (c1 int);
 create table t2 (c1 int);
 create table t3 (c1 int);
 drop table t1,t2,t3;
-
 create table t1 (c1 int, c2 int, c3 int);
 create table t2 (c1 int primary key, c2 int, c3 int);
 drop table t1,t2;
 
+# numeric data type support
+create table t1 (c1 tinyint);
+desc t1;
+drop table t1;
+create table t1 (c1 smallint);
+desc t1;
+drop table t1;
+create table t1 (c1 mediumint);
+desc t1;
+drop table t1;
+create table t1 (c1 int);
+desc t1;
+drop table t1;
+create table t1 (c1 bigint);
+desc t1;
+drop table t1;
 
 --disable_warnings
 uninstall plugin mroonga;

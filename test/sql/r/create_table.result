@@ -8,4 +8,29 @@ drop table t1,t2,t3;
 create table t1 (c1 int, c2 int, c3 int);
 create table t2 (c1 int primary key, c2 int, c3 int);
 drop table t1,t2;
+create table t1 (c1 tinyint);
+desc t1;
+Field	Type	Null	Key	Default	Extra
+c1	tinyint(4)	YES		NULL	
+drop table t1;
+create table t1 (c1 smallint);
+desc t1;
+Field	Type	Null	Key	Default	Extra
+c1	smallint(6)	YES		NULL	
+drop table t1;
+create table t1 (c1 mediumint);
+desc t1;
+Field	Type	Null	Key	Default	Extra
+c1	mediumint(9)	YES		NULL	
+drop table t1;
+create table t1 (c1 int);
+desc t1;
+Field	Type	Null	Key	Default	Extra
+c1	int(11)	YES		NULL	
+drop table t1;
+create table t1 (c1 bigint);
+desc t1;
+Field	Type	Null	Key	Default	Extra
+c1	bigint(20)	YES		NULL	
+drop table t1;
 uninstall plugin mroonga;
