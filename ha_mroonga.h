@@ -18,8 +18,7 @@
 #define MRN_HTRACE
 #endif
 
-typedef struct _mrn_cond
-{
+typedef struct _mrn_cond {
   COND *cond;
   _mrn_cond *next;
   mrn_expr *expr;

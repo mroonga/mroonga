@@ -169,8 +169,7 @@ void test_mrn_init_obj_info()
   info->table->name_size = strlen(info->table->name);
   cut_assert_true(info->table->flags == GRN_OBJ_PERSISTENT);
   cut_assert_equal_int(n_columns, info->n_columns);
-  for (i=0; i < n_columns; i++)
-  {
+  for (i=0; i < n_columns; i++) {
     info->columns[i]->name = "fuga";
     info->columns[i]->name_size = strlen("fuga");
     cut_assert_true(info->columns[i]->flags == GRN_OBJ_PERSISTENT);
@@ -265,8 +264,7 @@ void test_mrn_bitmap_macro()
   a = g_malloc(128);
   memset(a,0,128);
   int i;
-  for (i=0; i < 128*8; i++)
-  {
+  for (i=0; i < 128*8; i++) {
     cut_assert_false(MRN_IS_BIT(a,i));
     MRN_SET_BIT(a,i);
     cut_assert_true(MRN_IS_BIT(a,i));

@@ -15,15 +15,13 @@
 
 typedef unsigned char uchar;
 
-typedef struct _mrn_charset_map
-{
+typedef struct _mrn_charset_map {
   const char *csname_mysql;
   grn_encoding csname_groonga;
 } MRN_CHARSET_MAP;
 
 #ifdef PROTOTYPE
-typedef struct _mrn_field
-{
+typedef struct _mrn_field {
   const char *name;
   uint name_len;
   grn_obj *obj;
@@ -31,8 +29,7 @@ typedef struct _mrn_field
   uint field_no;
 } mrn_field;
 
-typedef struct _mrn_table
-{
+typedef struct _mrn_table {
   const char *name;
   uint name_len;
   uint use_count;
@@ -43,8 +40,7 @@ typedef struct _mrn_table
 } mrn_table;
 #endif
 
-typedef struct _mrn_index_info
-{
+typedef struct _mrn_index_info {
   const char *name;
   uint name_size;
   grn_obj_flags flags;
@@ -54,8 +50,7 @@ typedef struct _mrn_index_info
   uint columnno;
 } mrn_index_info;
 
-typedef struct _mrn_key_info
-{
+typedef struct _mrn_key_info {
   uint per_table;
   const char *name;
   uint name_size;
@@ -65,8 +60,7 @@ typedef struct _mrn_key_info
   grn_obj *obj;
 } mrn_key_info;
 
-typedef struct _mrn_column_info
-{
+typedef struct _mrn_column_info {
   const char *name;
   uint name_size;
   grn_obj_flags flags;
@@ -83,22 +77,19 @@ typedef struct _mrn_table_info
   grn_obj *key_type;
 } mrn_table_info;
 
-typedef struct _mrn_db_info
-{
+typedef struct _mrn_db_info {
   const char *name;
   uint name_size;
   char *path;
 } mrn_db_info;
 
-typedef struct _mrn_object
-{
+typedef struct _mrn_object {
   grn_obj *db;
   grn_obj *table;
   grn_obj **columns;
 } mrn_object;
 
-typedef struct _mrn_info
-{
+typedef struct _mrn_info {
   mrn_db_info *db;
   mrn_table_info *table;
   mrn_key_info *key;
@@ -111,8 +102,7 @@ typedef struct _mrn_info
   const char *name;
 } mrn_info;
 
-typedef struct _mrn_record
-{
+typedef struct _mrn_record {
   mrn_info *info;
   const void *key;
   uint key_size;
@@ -139,8 +129,7 @@ typedef enum {
   MRN_EXPR_NEGATIVE
 } mrn_expr_type;
 
-typedef struct _mrn_expr
-{
+typedef struct _mrn_expr {
   mrn_expr_type type;
   const char *val_string;
   int val_int;
