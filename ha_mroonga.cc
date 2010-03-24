@@ -252,7 +252,7 @@ mysql_declare_plugin(mroonga)
   &storage_engine_structure,
   "mroonga",
   "Tetsuro IKEDA",
-  "MySQL binding for Groonga",
+  "MySQL binding for groonga",
   PLUGIN_LICENSE_BSD,
   mrn_plugin_init,
   mrn_plugin_deinit,
