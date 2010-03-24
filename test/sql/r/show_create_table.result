@@ -1,0 +1,31 @@
+install plugin mroonga soname 'libmroonga.so';
+set storage_engine=mroonga;
+drop database if exists db1;
+create database db1;
+use db1;
+create table t1 (c1 int);
+show create table t1;
+Table	Create Table
+t1	CREATE TABLE `t1` (
+  `c1` int(11) DEFAULT NULL
+) ENGINE=mroonga DEFAULT CHARSET=latin1
+drop table t1;
+create table t1 (c1 int, c2 int);
+show create table t1;
+Table	Create Table
+t1	CREATE TABLE `t1` (
+  `c1` int(11) DEFAULT NULL,
+  `c2` int(11) DEFAULT NULL
+) ENGINE=mroonga DEFAULT CHARSET=latin1
+drop table t1;
+create table t1 (c1 int primary key, c2 varchar(100));
+show create table t1;
+Table	Create Table
+t1	CREATE TABLE `t1` (
+  `c1` int(11) NOT NULL,
+  `c2` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`c1`)
+) ENGINE=mroonga DEFAULT CHARSET=latin1
+drop table t1;
+drop database db1;
+uninstall plugin mroonga;
