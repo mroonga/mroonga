@@ -188,29 +188,29 @@ const char *mrn_charset_groonga_mysql(grn_encoding encoding)
 
 grn_builtin_type mrn_get_type(grn_ctx *ctx, int type)
 {
-  grn_builtin_type gtype;
   switch (type) {
+  case MYSQL_TYPE_BIT:      // bit
+  case MYSQL_TYPE_ENUM:     // enum
+  case MYSQL_TYPE_SET:      // set
   case MYSQL_TYPE_TINY:     // tinyint
-    gtype = GRN_DB_INT8;
-    break;
+    return GRN_DB_INT8;
   case MYSQL_TYPE_SHORT:    // smallint
-    gtype = GRN_DB_INT16;
-    break;
+    return GRN_DB_INT16;
   case MYSQL_TYPE_INT24:    // mediumint
   case MYSQL_TYPE_LONG:     // int
-    gtype = GRN_DB_INT32;
-    break;
+    return GRN_DB_INT32;
   case MYSQL_TYPE_LONGLONG: // bigint
-    gtype = GRN_DB_INT64;
-    break;
-  case MYSQL_TYPE_VARCHAR:  // varchar
-  case MYSQL_TYPE_BLOB:     // blob,text
-    gtype = GRN_DB_TEXT;
-    break;
-  default:
-    gtype = GRN_DB_VOID;
+    return GRN_DB_INT64;
+  case MYSQL_TYPE_FLOAT:    // float
+  case MYSQL_TYPE_DOUBLE:   // double
+    return GRN_DB_FLOAT;
+  case MYSQL_TYPE_DATE:     // date
+  case MYSQL_TYPE_TIME:     // time
+  case MYSQL_TYPE_YEAR:     // year
+  case MYSQL_TYPE_DATETIME: // datetime
+    return GRN_DB_TIME;
   }
-  return gtype;
+  return GRN_DB_TEXT;       // others
 }
 
 handler *mrn_handler_create(handlerton *hton,
@@ -326,7 +326,9 @@ int ha_mroonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
   int res;
   mrn_info *minfo;
   MRN_HTRACE;
-  convert_info(name, this->table_share, &minfo);
+  if (convert_info(name, this->table_share, &minfo) != 0) {
+    return -1;
+  }
   if (res = mrn_db_open_or_create(ctx, minfo, obj) == 0) {
     grn_ctx_use(ctx, obj->db);
     res = mrn_create(ctx, minfo, obj);
@@ -803,13 +805,7 @@ int ha_mroonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_m
     minfo->columns[i]->flags |= GRN_OBJ_COLUMN_SCALAR;
     grn_builtin_type gtype = mrn_get_type(ctx, field->type());
     minfo->columns[i]->gtype = gtype;
-    if (gtype != GRN_DB_VOID) {
-      minfo->columns[i]->type = grn_ctx_at(ctx, gtype);
-    } else {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot use column type=%d for %s.%s",
-              field->type(), minfo->table->name, field->field_name);
-      return -1;
-    }
+    minfo->columns[i]->type = grn_ctx_at(ctx, gtype);
   }
 
   minfo->n_columns = n_columns;
