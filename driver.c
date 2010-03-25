@@ -675,11 +675,5 @@ int mrn_db_drop(grn_ctx *ctx, char *path)
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot drop database (%s)", path);
     return -1;
   }
-  /* workaround code (from) */
-  char f[32];
-  strncpy(f, path, 32);
-  strncat(f, ".0000000", 32);
-  unlink(f);
-  /* workaround code (to) */
   return 0;
 }
