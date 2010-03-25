@@ -648,6 +648,7 @@ int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
       GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db->path);
       obj->db = grn_db_create(ctx, db->path, NULL);
       if (obj->db == NULL) {
+        pthread_mutex_unlock(mrn_lock_db);
         GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create database (%s)", db->path);
         return -1;
       }
@@ -655,6 +656,7 @@ int mrn_db_open_or_create(grn_ctx *ctx, mrn_info *info, mrn_object *obj)
       obj->db = grn_db_open(ctx, db->path);
       if (obj->db == NULL) {
         GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db->path);
+        pthread_mutex_unlock(mrn_lock_db);
         return -1;
       }
     }
