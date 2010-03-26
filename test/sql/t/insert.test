@@ -1,0 +1,50 @@
+--disable_warnings
+install plugin mroonga soname 'libmroonga.so';
+set storage_engine=mroonga;
+drop table if exists t1;
+--enable_warnings
+
+# data types
+create table t1 (c1 int);
+insert into t1 values(1);
+select * from t1;
+drop table t1;
+
+create table t1 (c1 bigint);
+insert into t1 values(1);
+select * from t1;
+drop table t1;
+
+create table t1 (c1 float);
+insert into t1 values(0.5);
+select * from t1;
+drop table t1;
+
+create table t1 (c1 double);
+insert into t1 values(0.5);
+select * from t1;
+drop table t1;
+
+create table t1 (c1 date);
+insert into t1 values("2010/03/26");
+select * from t1;
+drop table t1;
+
+create table t1 (c1 time);
+insert into t1 values("11:22:33");
+select * from t1;
+drop table t1;
+
+create table t1 (c1 year);
+insert into t1 values("2010");
+select * from t1;
+drop table t1;
+
+create table t1 (c1 datetime);
+insert into t1 values("2010/03/26 11:22:33");
+select * from t1;
+drop table t1;
+
+--disable_warnings
+uninstall plugin mroonga;
+--enable_warnings
