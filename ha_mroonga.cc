@@ -195,21 +195,26 @@ grn_builtin_type mrn_get_type(grn_ctx *ctx, int type)
   case MYSQL_TYPE_TINY:     // tinyint
     return GRN_DB_INT8;
   case MYSQL_TYPE_SHORT:    // smallint
-    return GRN_DB_INT16;
+    return GRN_DB_INT16; // 2bytes
   case MYSQL_TYPE_INT24:    // mediumint
   case MYSQL_TYPE_LONG:     // int
-    return GRN_DB_INT32;
+    return GRN_DB_INT32; // 4bytes
   case MYSQL_TYPE_LONGLONG: // bigint
-    return GRN_DB_INT64;
+    return GRN_DB_INT64; // 8bytes
   case MYSQL_TYPE_FLOAT:    // float
   case MYSQL_TYPE_DOUBLE:   // double
-    return GRN_DB_FLOAT;
+    return GRN_DB_FLOAT; // 8bytes
   case MYSQL_TYPE_DATE:     // date
   case MYSQL_TYPE_TIME:     // time
   case MYSQL_TYPE_YEAR:     // year
   case MYSQL_TYPE_DATETIME: // datetime
-    return GRN_DB_TIME;
+    return GRN_DB_TIME; // micro sec from epoc time by int64
   }
+  // tinytext=256, text=64K, mediumtext=16M, longtext=4G
+  // tinyblob...
+  // GRN_DB_SHORTTEXT 4096bytes
+  // GRN_DB_TEXT      ???bytes
+  // GRN_DB_LONGTEXT  ???bytes
   return GRN_DB_TEXT;       // others
 }
 
@@ -475,12 +480,33 @@ int ha_mroonga::rnd_next(uchar *buf)
       if (MRN_IS_BIT(record->bitmap, i)) {
         value = record->value[j];
         switch ((*field)->type()) {
+        case (MYSQL_TYPE_BIT) :
+        case (MYSQL_TYPE_ENUM) :
+        case (MYSQL_TYPE_SET) :
+        case (MYSQL_TYPE_TINY) :
+        case (MYSQL_TYPE_SHORT) :
+        case (MYSQL_TYPE_INT24) :
         case (MYSQL_TYPE_LONG) :
           (*field)->set_notnull();
           (*field)->store(GRN_INT32_VALUE(value));
           break;
-        case (MYSQL_TYPE_VARCHAR) :
-        case (MYSQL_TYPE_BLOB) :
+        case (MYSQL_TYPE_LONGLONG) :
+          (*field)->set_notnull();
+          (*field)->store(GRN_INT64_VALUE(value));
+          break;
+        case (MYSQL_TYPE_FLOAT) :
+        case (MYSQL_TYPE_DOUBLE) :
+          (*field)->set_notnull();
+          (*field)->store(GRN_FLOAT_VALUE(value));
+          break;
+        case (MYSQL_TYPE_DATE) :
+        case (MYSQL_TYPE_TIME) :
+        case (MYSQL_TYPE_YEAR) :
+        case (MYSQL_TYPE_DATETIME) :
+          (*field)->set_notnull();
+          (*field)->store(GRN_TIME_VALUE(value));
+          break;
+        default:
           (*field)->set_notnull();
           (*field)->store(GRN_TEXT_VALUE(value), GRN_BULK_WSIZE(value), (*field)->charset());
           break;
@@ -569,11 +595,37 @@ int ha_mroonga::write_row(uchar *buf)
   for (i=0, j=0, field = table->field; *field; i++, field++) {
     if (MRN_IS_BIT(record->bitmap, i)) {
       switch ((*field)->type()) {
+      case MYSQL_TYPE_BIT:
+      case MYSQL_TYPE_ENUM:
+      case MYSQL_TYPE_SET:
+      case MYSQL_TYPE_TINY:
+      case MYSQL_TYPE_SHORT:
+      case MYSQL_TYPE_INT24:
       case MYSQL_TYPE_LONG:
         {
           GRN_INT32_SET(ctx, record->value[j], (*field)->val_int());
           break;
         }
+      case MYSQL_TYPE_LONGLONG:
+        {
+          GRN_INT64_SET(ctx, record->value[j], (*field)->val_int());
+          break;
+        }
+      case MYSQL_TYPE_FLOAT:
+      case MYSQL_TYPE_DOUBLE:
+        {
+          GRN_FLOAT_SET(ctx, record->value[j], (*field)->val_real());
+          break;
+        }
+      case MYSQL_TYPE_DATE:
+      case MYSQL_TYPE_TIME:
+      case MYSQL_TYPE_YEAR:
+      case MYSQL_TYPE_DATETIME:
+        {
+          GRN_TIME_SET(ctx, record->value[j], (*field)->val_int());
+          break;
+        }
+      case MYSQL_TYPE_STRING:
       case MYSQL_TYPE_VARCHAR:
         {
           String tmp;

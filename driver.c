@@ -413,8 +413,23 @@ mrn_record* mrn_init_record(grn_ctx *ctx, mrn_info *info, uchar *bitmap, int siz
       record->value[j] = (grn_obj*) (p + offset);
       grn_builtin_type gtype = info->columns[i]->gtype;
       switch (gtype) {
+      case GRN_DB_INT8:
+        GRN_INT8_INIT(record->value[j], 0);
+        break;
+      case GRN_DB_INT16:
+        GRN_INT16_INIT(record->value[j], 0);
+        break;
       case GRN_DB_INT32:
         GRN_INT32_INIT(record->value[j], 0);
+        break;
+      case GRN_DB_INT64:
+        GRN_INT64_INIT(record->value[j], 0);
+        break;
+      case GRN_DB_FLOAT:
+        GRN_FLOAT_INIT(record->value[j], 0);
+        break;
+      case GRN_DB_TIME:
+        GRN_TIME_INIT(record->value[j], 0);
         break;
       case GRN_DB_TEXT:
         GRN_TEXT_INIT(record->value[j], 0);
