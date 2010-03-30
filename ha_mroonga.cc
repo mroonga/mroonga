@@ -479,35 +479,35 @@ int ha_mroonga::rnd_next(uchar *buf)
       // column pruning
       if (MRN_IS_BIT(record->bitmap, i)) {
         value = record->value[j];
+        (*field)->set_notnull();
         switch ((*field)->type()) {
         case (MYSQL_TYPE_BIT) :
         case (MYSQL_TYPE_ENUM) :
         case (MYSQL_TYPE_SET) :
         case (MYSQL_TYPE_TINY) :
+          (*field)->store(GRN_INT8_VALUE(value));
+          break;
         case (MYSQL_TYPE_SHORT) :
+          (*field)->store(GRN_INT16_VALUE(value));
+          break;
         case (MYSQL_TYPE_INT24) :
         case (MYSQL_TYPE_LONG) :
-          (*field)->set_notnull();
           (*field)->store(GRN_INT32_VALUE(value));
           break;
         case (MYSQL_TYPE_LONGLONG) :
-          (*field)->set_notnull();
           (*field)->store(GRN_INT64_VALUE(value));
           break;
         case (MYSQL_TYPE_FLOAT) :
         case (MYSQL_TYPE_DOUBLE) :
-          (*field)->set_notnull();
           (*field)->store(GRN_FLOAT_VALUE(value));
           break;
         case (MYSQL_TYPE_DATE) :
         case (MYSQL_TYPE_TIME) :
         case (MYSQL_TYPE_YEAR) :
         case (MYSQL_TYPE_DATETIME) :
-          (*field)->set_notnull();
           (*field)->store(GRN_TIME_VALUE(value));
           break;
         default:
-          (*field)->set_notnull();
           (*field)->store(GRN_TEXT_VALUE(value), GRN_BULK_WSIZE(value), (*field)->charset());
           break;
         }
@@ -599,7 +599,15 @@ int ha_mroonga::write_row(uchar *buf)
       case MYSQL_TYPE_ENUM:
       case MYSQL_TYPE_SET:
       case MYSQL_TYPE_TINY:
+        {
+          GRN_INT8_SET(ctx, record->value[j], (*field)->val_int());
+          break;
+        }
       case MYSQL_TYPE_SHORT:
+        { 
+          GRN_INT16_SET(ctx, record->value[j], (*field)->val_int());
+          break;
+        }
       case MYSQL_TYPE_INT24:
       case MYSQL_TYPE_LONG:
         {

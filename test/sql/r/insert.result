@@ -1,6 +1,24 @@
 install plugin mroonga soname 'libmroonga.so';
 set storage_engine=mroonga;
 drop table if exists t1;
+create table t1 (c1 tinyint);
+insert into t1 values(1);
+select * from t1;
+c1
+1
+drop table t1;
+create table t1 (c1 smallint);
+insert into t1 values(1);
+select * from t1;
+c1
+1
+drop table t1;
+create table t1 (c1 mediumint);
+insert into t1 values(1);
+select * from t1;
+c1
+1
+drop table t1;
 create table t1 (c1 int);
 insert into t1 values(1);
 select * from t1;
