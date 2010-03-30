@@ -501,8 +501,21 @@ int ha_mroonga::rnd_next(uchar *buf)
         case (MYSQL_TYPE_DOUBLE) :
           (*field)->store(GRN_FLOAT_VALUE(value));
           break;
-        case (MYSQL_TYPE_DATE) :
         case (MYSQL_TYPE_TIME) :
+          {
+            long long int hh, mm, ss, hhmmss, gval;
+            gval = GRN_TIME_VALUE(value);
+            gval /= (1000000);
+            ss = gval % 60;
+            gval /= 60;
+            mm = gval % 60;
+            gval /= 60;
+            hh = gval;
+            hhmmss = hh * 10000 + mm * 100 + ss;
+            (*field)->store((int) hhmmss);
+            break;
+          }
+        case (MYSQL_TYPE_DATE) :
         case (MYSQL_TYPE_YEAR) :
         case (MYSQL_TYPE_DATETIME) :
           (*field)->store(GRN_TIME_VALUE(value));
@@ -625,9 +638,23 @@ int ha_mroonga::write_row(uchar *buf)
           GRN_FLOAT_SET(ctx, record->value[j], (*field)->val_real());
           break;
         }
-      case MYSQL_TYPE_DATE:
       case MYSQL_TYPE_TIME:
+        {
+          long long int hh, mm, ss, mval, gval;
+          mval = (*field)->val_int();
+          ss = mval % 100;
+          mm = mval / 100 % 100;
+          hh = mval / 10000;
+          gval = (hh * 60 * 60 + mm * 60 + ss) * 1000000;
+          GRN_TIME_SET(ctx, record->value[j], gval);
+          break;
+        }
       case MYSQL_TYPE_YEAR:
+        {
+          long long int yyyy, mval, gval;
+          yyyy = (*field)->val_int();
+        }
+      case MYSQL_TYPE_DATE:
       case MYSQL_TYPE_DATETIME:
         {
           GRN_TIME_SET(ctx, record->value[j], (*field)->val_int());
