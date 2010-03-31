@@ -1,4 +1,5 @@
 install plugin mroonga soname 'libmroonga.so';
+set storage_engine=mroonga;
 drop table if exists t1, t2, t3;
 create table t1 (c1 int primary key, c2 int, c3 int) engine = mroonga;
 create table t2 (c1 int primary key, c2 int, c3 int) engine = mroonga;

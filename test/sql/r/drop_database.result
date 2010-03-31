@@ -1,4 +1,5 @@
 install plugin mroonga soname 'libmroonga.so';
+set storage_engine=mroonga;
 drop database if exists mroonga;
 create database mroonga;
 drop database mroonga;

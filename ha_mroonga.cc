@@ -520,9 +520,13 @@ int ha_mroonga::rnd_next(uchar *buf)
         case (MYSQL_TYPE_DATETIME) :
           (*field)->store(GRN_TIME_VALUE(value));
           break;
-        default:
-          (*field)->store(GRN_TEXT_VALUE(value), GRN_BULK_WSIZE(value), (*field)->charset());
-          break;
+        default: //strings etc..
+          {
+            char *val = GRN_TEXT_VALUE(value);
+            int len = GRN_TEXT_LEN(value);
+            (*field)->store(val, len, (*field)->charset());
+            break;
+          }
         }
         j++;
       }
@@ -665,7 +669,8 @@ int ha_mroonga::write_row(uchar *buf)
         {
           String tmp;
           const char *val = (*field)->val_str(&tmp)->ptr();
-          GRN_TEXT_SET(ctx, record->value[j], val, (*field)->data_length());
+          int len = (*field)->data_length();
+          GRN_TEXT_SET(ctx, record->value[j], val, len);
           break;
         }
       case MYSQL_TYPE_BLOB:
@@ -673,7 +678,8 @@ int ha_mroonga::write_row(uchar *buf)
           String tmp;
           Field_blob *blob = (Field_blob*) *field;
           const char *val = blob->val_str(0,&tmp)->ptr();
-          GRN_TEXT_SET(ctx, record->value[j], val, blob->get_length());
+          int len = blob->get_length();
+          GRN_TEXT_SET(ctx, record->value[j], val, len);
           break;
         }
       default:

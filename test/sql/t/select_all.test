@@ -28,16 +28,32 @@ select * from t1 order by c3, c1;
 
 drop table t1;
 
-create table t1 (c1 int, c2 text);
+
+create table t1 (c1 int, c2 varchar(100));
 insert into t1 values(1, "hoge");
-insert into t1 values(4, "hoge");
-insert into t1 values(2, "hoge");
-insert into t1 values(5, "hoge");
-insert into t1 values(3, "hoge");
+insert into t1 values(4, "hogefuga");
+insert into t1 values(2, "fuga");
+insert into t1 values(5, "moge");
+insert into t1 values(3, "mo");
 
 select * from t1;
 select * from t1 order by c1;
 select * from t1 order by c1 desc;
+select * from t1 order by c2;
+
+drop table t1;
+
+create table t1 (c1 int, c2 text);
+insert into t1 values(1, "hoge");
+insert into t1 values(4, "hogefuga");
+insert into t1 values(2, "fuga");
+insert into t1 values(5, "moge");
+insert into t1 values(3, "mo");
+
+select * from t1;
+select * from t1 order by c1;
+select * from t1 order by c1 desc;
+select * from t1 order by c2;
 
 drop table t1;
 
