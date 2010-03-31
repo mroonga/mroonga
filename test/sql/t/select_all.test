@@ -1,0 +1,46 @@
+--disable_warnings
+install plugin mroonga soname 'libmroonga.so';
+set storage_engine=mroonga;
+drop table if exists t1, t2, t3;
+--enable_warnings
+
+create table t1(c1 int, c2 int, c3 int);
+insert into t1 values (1, 10, 100);
+insert into t1 values (2, 30, 500);
+insert into t1 values (5, 20, 200);
+insert into t1 values (3, 60, 300);
+insert into t1 values (4, 50, 600);
+insert into t1 values (6, 40, 400);
+
+select * from t1;
+select c1 from t1;
+select c2 from t1;
+select c3 from t1;
+
+select * from t1 where c1 <= 3;
+select * from t1 where c2 > 40;
+select * from t1 where c3 = 300;
+
+
+select * from t1 order by c1;
+select * from t1 order by c2 desc;
+select * from t1 order by c3, c1;
+
+drop table t1;
+
+create table t1 (c1 int, c2 text);
+insert into t1 values(1, "hoge");
+insert into t1 values(4, "hoge");
+insert into t1 values(2, "hoge");
+insert into t1 values(5, "hoge");
+insert into t1 values(3, "hoge");
+
+select * from t1;
+select * from t1 order by c1;
+select * from t1 order by c1 desc;
+
+drop table t1;
+
+--disable_warnings
+uninstall plugin mroonga;
+--enable_warnings

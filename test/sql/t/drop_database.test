@@ -1,5 +1,6 @@
 --disable_warnings
 install plugin mroonga soname 'libmroonga.so';
+set storage_engine=mroonga;
 drop database if exists mroonga;
 --enable_warnings
 
