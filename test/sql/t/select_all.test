@@ -51,9 +51,6 @@ insert into t1 values(5, "moge");
 insert into t1 values(3, "mo");
 
 select * from t1;
-select * from t1 order by c1;
-select * from t1 order by c1 desc;
-select * from t1 order by c2;
 
 drop table t1;
 

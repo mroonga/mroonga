@@ -121,26 +121,5 @@ c1	c2
 2	fuga
 5	moge
 3	mo
-select * from t1 order by c1;
-c1	c2
-NULL	NULL
-NULL	NULL
-NULL	NULL
-NULL	NULL
-NULL	NULL
-select * from t1 order by c1 desc;
-c1	c2
-NULL	NULL
-NULL	NULL
-NULL	NULL
-NULL	NULL
-NULL	NULL
-select * from t1 order by c2;
-c1	c2
-NULL	NULL
-NULL	NULL
-NULL	NULL
-NULL	NULL
-NULL	NULL
 drop table t1;
 uninstall plugin mroonga;
