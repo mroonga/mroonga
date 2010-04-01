@@ -10,16 +10,41 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "ha_mroonga.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "ha_mroonga.h"
+/* global variables */
+grn_obj *mrn_db;
+grn_hash *mrn_hash;
+pthread_mutex_t db_mutex;
 
-unsigned long mrn_log_level;
+/* logging */
+const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
+FILE *mrn_logfile = NULL;
+int mrn_logfile_opened = 0;
 
-const char* mrn_log_level_names_lib[] =
+void mrn_logger_func(int level, const char *time, const char *title,
+                     const char *msg, const char *location, void *func_arg)
+{
+  const char slev[] = " EACewnid-";
+  if (mrn_logfile_opened) {
+    fprintf(mrn_logfile, "%s|%c|%u|%s\n", time,
+            *(slev + level), (uint)pthread_self(), msg);
+    fflush(mrn_logfile);
+  }
+}
+
+grn_logger_info mrn_logger_info = {
+  GRN_LOG_DUMP,
+  GRN_LOG_TIME|GRN_LOG_MESSAGE,
+  mrn_logger_func,
+  NULL
+};
+
+const char *mrn_log_level_str[] =
 {
   "NONE",
   "EMERG",
@@ -30,165 +55,143 @@ const char* mrn_log_level_names_lib[] =
   "NOTICE",
   "INFO",
   "DEBUG",
-  "DUMP",
-  NullS
+  "DUMP"
 };
 
-TYPELIB mrn_log_level_typelib =
-{
-  array_elements(mrn_log_level_names_lib)-1, "",
-  mrn_log_level_names_lib, NULL
-};
-
-static void mrn_log_level_update_func
-(MYSQL_THD thd, struct st_mysql_sys_var *var, void *var_ptr, const void *save)
-{
-  if (save) {
-    mrn_log_level = *((ulong*) save);
-    mrn_logger_info.max_level = (grn_log_level) mrn_log_level;
-  }
-}
-
-static MYSQL_SYSVAR_ENUM(
-                         log_level,
-                         mrn_log_level,
-                         PLUGIN_VAR_RQCMDARG,
-                         "max logging level.",
-                         NULL,
-                         mrn_log_level_update_func,
-                         3,
-                         &mrn_log_level_typelib
-                         );
-
-static MYSQL_THDVAR_BOOL(
-                         debug,
-                         PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
-                         "use debug print.",
-                         NULL,
-                         NULL,
-                         FALSE
-                         );
-
-static MYSQL_THDVAR_BOOL(
-                         use_column_pruning,
-                         PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
-                         "use column pruning.",
-                         NULL,
-                         NULL,
-                         TRUE
-                         );
-
-static MYSQL_THDVAR_BOOL(
-                         use_cond_push,
-                         PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
-                         "use cond_push and groonga expression.",
-                         NULL,
-                         NULL,
-                         TRUE
-                         );
-
-static MYSQL_THDVAR_BOOL(
-                         idx_repos_per_table,
-                         PLUGIN_VAR_OPCMDARG | PLUGIN_VAR_THDLOCAL,
-                         "use index repository per table.",
-                         NULL,
-                         NULL,
-                         FALSE
-                         );
-
-MRN_CHARSET_MAP mrn_charset_map[] = {
-  {"utf8", GRN_ENC_UTF8},
-  {"cp932", GRN_ENC_SJIS},
-  {"sjis", GRN_ENC_SJIS},
-  {"eucjpms", GRN_ENC_EUC_JP},
-  {"ujis", GRN_ENC_EUC_JP},
-  {"latin1", GRN_ENC_LATIN1},
-  {"koi8r", GRN_ENC_KOI8R},
-  {0x0, GRN_ENC_DEFAULT},
-  {0x0, GRN_ENC_NONE}
-};
-
-const char *mrn_item_type_string[] = {
-  "FIELD_ITEM", "FUNC_ITEM", "SUM_FUNC_ITEM", "STRING_ITEM",
-  "INT_ITEM", "REAL_ITEM", "NULL_ITEM", "VARBIN_ITEM",
-  "COPY_STR_ITEM", "FIELD_AVG_ITEM", "DEFAULT_VALUE_ITEM",
-  "PROC_ITEM", "COND_ITEM", "REF_ITEM", "FIELD_STD_ITEM",
-  "FIELD_VARIANCE_ITEM", "INSERT_VALUE_ITEM",
-  "SUBSELECT_ITEM", "ROW_ITEM", "CACHE_ITEM", "TYPE_HOLDER",
-  "PARAM_ITEM", "TRIGGER_FIELD_ITEM", "DECIMAL_ITEM",
-  "XPATH_NODESET", "XPATH_NODESET_CMP",
-  "VIEW_FIXER_ITEM"};
-
-const char *mrn_functype_string[] = {
-  "UNKNOWN_FUNC","EQ_FUNC","EQUAL_FUNC","NE_FUNC","LT_FUNC","LE_FUNC",
-  "GE_FUNC","GT_FUNC","FT_FUNC",
-  "LIKE_FUNC","ISNULL_FUNC","ISNOTNULL_FUNC",
-  "COND_AND_FUNC", "COND_OR_FUNC", "COND_XOR_FUNC",
-  "BETWEEN", "IN_FUNC", "MULT_EQUAL_FUNC",
-  "INTERVAL_FUNC", "ISNOTNULLTEST_FUNC",
-  "SP_EQUALS_FUNC", "SP_DISJOINT_FUNC","SP_INTERSECTS_FUNC",
-  "SP_TOUCHES_FUNC","SP_CROSSES_FUNC","SP_WITHIN_FUNC",
-  "SP_CONTAINS_FUNC","SP_OVERLAPS_FUNC",
-  "SP_STARTPOINT","SP_ENDPOINT","SP_EXTERIORRING",
-  "SP_POINTN","SP_GEOMETRYN","SP_INTERIORRINGN",
-  "NOT_FUNC", "NOT_ALL_FUNC",
-  "NOW_FUNC", "TRIG_COND_FUNC",
-  "SUSERVAR_FUNC", "GUSERVAR_FUNC", "COLLATE_FUNC",
-  "EXTRACT_FUNC", "CHAR_TYPECAST_FUNC", "FUNC_SP", "UDF_FUNC",
-  "NEG_FUNC", "GSYSVAR_FUNC"};
+/* system functions */
 
 struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
 
-longlong mrn_status_column_target = 0;
-longlong mrn_status_column_used = 0;
-longlong mrn_status_cond_push_used = 0;
-
 struct st_mysql_show_var mrn_status_variables[] =
 {
-  {"mroonga_column_target", (char*) &mrn_status_column_target, SHOW_LONGLONG},
-  {"mroonga_column_used", (char*) &mrn_status_column_used, SHOW_LONGLONG},
-  {"mroonga_cond_push_used", (char*) &mrn_status_cond_push_used, SHOW_LONGLONG},
+  {NULL}
+};
+
+struct st_mysql_sys_var *mrn_system_variables[] =
+{
   NULL
 };
 
-struct st_mysql_sys_var  *mrn_system_variables[] =
+mysql_declare_plugin(mroonga)
 {
-  MYSQL_SYSVAR(log_level),
-  MYSQL_SYSVAR(debug),
-  MYSQL_SYSVAR(use_column_pruning),
-  MYSQL_SYSVAR(use_cond_push),
-  MYSQL_SYSVAR(idx_repos_per_table),
+  MYSQL_STORAGE_ENGINE_PLUGIN,
+  &storage_engine_structure,
+  "mroonga",
+  "Tetsuro IKEDA",
+  "MySQL binding for groonga",
+  PLUGIN_LICENSE_BSD,
+  mrn_init,
+  mrn_deinit,
+  0x0001,
+  mrn_status_variables,
+  mrn_system_variables,
   NULL
-};
+}
+mysql_declare_plugin_end;
 
-grn_encoding mrn_charset_mysql_groonga(const char *csname)
+int mrn_init(void *p)
 {
-  if (!csname) {
-    return GRN_ENC_NONE;
+  grn_ctx *ctx;
+
+  // init handlerton
+  handlerton *hton;
+  hton = (handlerton *)p;
+  hton->state = SHOW_OPTION_YES;
+  hton->create = mrn_handler_create;
+  hton->flags = 0;
+  hton->drop_database = mrn_drop_db;
+
+  // init groonga
+  if (grn_init() != GRN_SUCCESS) {
+    goto err;
   }
-  int i;
-  for (i = 0; mrn_charset_map[i].csname_mysql; i++) {
-    if (!(strcasecmp(csname, mrn_charset_map[i].csname_mysql))) {
-      return mrn_charset_map[i].csname_groonga;
+
+  ctx = grn_ctx_open(0);
+
+  grn_logger_info_set(ctx, &mrn_logger_info);
+  if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
+    goto err;
+  }
+  mrn_logfile_opened = 1;
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s init", MRN_PACKAGE_STRING);
+
+  // init meta-info database
+  if (!(mrn_db = grn_db_create(ctx, NULL, NULL))) {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create system database, exiting");
+    goto err;
+  }
+  grn_ctx_use(ctx, mrn_db);
+
+  // init hash
+  if (!(mrn_hash = grn_hash_create(ctx,NULL,
+                                   MRN_MAX_KEY_SIZE,sizeof(size_t),
+                                   GRN_OBJ_KEY_VAR_SIZE))) {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
+    goto err;
+  }
+  // init lock
+  if ((pthread_mutex_init(&db_mutex, NULL) != 0)) {
+    goto err;
+  }
+  grn_ctx_fin(ctx);
+  return 0;
+
+err:
+  grn_ctx_fin(ctx);
+  grn_fin();
+  return -1;
+}
+
+int mrn_deinit(void *p)
+{
+  grn_ctx *ctx;
+  ctx = grn_ctx_open(0);
+
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
+
+  pthread_mutex_destroy(&db_mutex);
+  grn_hash_close(ctx, mrn_hash);
+  grn_obj_unlink(ctx, mrn_db);
+
+  if (mrn_logfile_opened) {
+    fclose(mrn_logfile);
+    mrn_logfile_opened = 0;
+  }
+
+  grn_ctx_fin(ctx);
+  grn_fin();
+
+  return 0;
+}
+
+handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROOT *root)
+{
+  return (new (root) ha_mroonga(hton, share));
+}
+
+void mrn_drop_db(handlerton *hton, char *path)
+{
+  char db_path[MRN_MAX_PATH_SIZE];
+  char db_name[MRN_MAX_PATH_SIZE];
+  mrn_db_path(path, db_path);
+  mrn_db_name(path, db_name);
+  grn_ctx *ctx;
+  ctx = grn_ctx_open(0);
+  struct stat dummy;
+  if (stat(db_path, &dummy) == 0) {
+    grn_obj *db = grn_db_open(ctx, db_path);
+    if (grn_obj_remove(ctx, db)) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot drop database (%s)", db_path);
     }
   }
-  return GRN_ENC_NONE;
+  mrn_hash_remove(ctx, mrn_hash, db_name);
+  grn_ctx_fin(ctx);
 }
 
-const char *mrn_charset_groonga_mysql(grn_encoding encoding)
+grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
 {
-  int i;
-  for (i = 0; (mrn_charset_map[i].csname_groonga != GRN_ENC_DEFAULT); i++) {
-    if (mrn_charset_map[i].csname_groonga == encoding)
-      return mrn_charset_map[i].csname_mysql;
-  }
-  return NULL;
-}
-
-grn_builtin_type mrn_get_type(grn_ctx *ctx, int type)
-{
-  switch (type) {
+  switch (mysql_field_type) {
   case MYSQL_TYPE_BIT:      // bit
   case MYSQL_TYPE_ENUM:     // enum
   case MYSQL_TYPE_SET:      // set
@@ -218,84 +221,177 @@ grn_builtin_type mrn_get_type(grn_ctx *ctx, int type)
   return GRN_DB_TEXT;       // others
 }
 
-handler *mrn_handler_create(handlerton *hton,
-			    TABLE_SHARE *share,
-			    MEM_ROOT *root)
+int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
 {
-  return (new (root) ha_mroonga(hton, share));
-}
-
-void mrn_handler_drop_db(handlerton *hton, char *path)
-{
-  char db_path[MRN_MAX_PATH_SIZE];
-  char db_name[MRN_MAX_PATH_SIZE];
-  int i;
-  int len = strlen(path);
-  struct stat dummy;
-  grn_ctx ctx;
-  grn_ctx_init(&ctx, 0);
-  strncpy(db_path, path+2, len-3);
-  db_path[len-3] = '\0';
-  strncpy(db_name, db_path, MRN_MAX_PATH_SIZE);
-  strncat(db_path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
-  if (stat(db_path, &dummy) == 0) {
-    mrn_db_drop(&ctx, db_path);
-    mrn_hash_remove(&ctx, db_name);
+  switch (field->type()) {
+  case MYSQL_TYPE_BIT:
+  case MYSQL_TYPE_ENUM:
+  case MYSQL_TYPE_SET:
+  case MYSQL_TYPE_TINY:
+    {
+      int val = field->val_int();
+      GRN_INT8_INIT(buf, 0);
+      GRN_INT8_SET(ctx, buf, val);
+      *size = 1; 
+      break;
+    }
+  case MYSQL_TYPE_SHORT:
+    { 
+      int val = field->val_int();
+      GRN_INT16_INIT(buf, 0);
+      GRN_INT16_SET(ctx, buf, val);
+      *size = 2;
+      break;
+    }
+  case MYSQL_TYPE_INT24:
+  case MYSQL_TYPE_LONG:
+    {
+      int val = field->val_int();
+      GRN_INT32_INIT(buf, 0);
+      GRN_INT32_SET(ctx, buf, val);
+      *size = 4;
+      break;
+    }
+  case MYSQL_TYPE_LONGLONG:
+    {
+      long long int val = field->val_int();
+      GRN_INT64_INIT(buf, 0);
+      GRN_INT64_SET(ctx, buf, val);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_FLOAT:
+  case MYSQL_TYPE_DOUBLE:
+    {
+      double val = field->val_real();
+      GRN_FLOAT_INIT(buf, 0);
+      GRN_FLOAT_SET(ctx, buf, val);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_TIME:
+  case MYSQL_TYPE_YEAR:
+  case MYSQL_TYPE_DATE:
+  case MYSQL_TYPE_DATETIME:
+    {
+      long long int val = field->val_int();
+      GRN_TIME_INIT(buf, 0);
+      GRN_TIME_SET(ctx, buf, val);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_STRING:
+  case MYSQL_TYPE_VARCHAR:
+    {
+      String tmp;
+      const char *val = field->val_str(&tmp)->ptr();
+      int len = field->data_length();
+      GRN_TEXT_INIT(buf, 0);
+      GRN_TEXT_SET(ctx, buf, val, len);
+      *size = len;
+      break;
+    }
+  case MYSQL_TYPE_BLOB:
+    {
+      String tmp;
+      Field_blob *blob = (Field_blob*) field;
+      const char *val = blob->val_str(0,&tmp)->ptr();
+      int len = blob->get_length();
+      GRN_TEXT_INIT(buf, 0);
+      GRN_TEXT_SET(ctx, buf, val, len);
+      *size = len;
+      break;
+    }
+  default:
+    return HA_ERR_UNSUPPORTED;
   }
-  grn_ctx_fin(&ctx);
+  return 0;
 }
 
-int mrn_plugin_init(void *p)
+void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
 {
-  handlerton *hton;
-  hton = (handlerton *)p;
-  hton->state = SHOW_OPTION_YES;
-  hton->create = mrn_handler_create;
-  hton->flags = 0;
-  hton->drop_database = mrn_handler_drop_db;
-  return mrn_init(0);
+  grn_obj buf;
+  field->set_notnull();
+  switch (field->type()) {
+  case (MYSQL_TYPE_BIT) :
+  case (MYSQL_TYPE_ENUM) :
+  case (MYSQL_TYPE_SET) :
+  case (MYSQL_TYPE_TINY) :
+    {
+      GRN_INT8_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      int val = GRN_INT8_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case (MYSQL_TYPE_SHORT) :
+    {
+      GRN_INT16_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      int val = GRN_INT16_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case (MYSQL_TYPE_INT24) :
+  case (MYSQL_TYPE_LONG) :
+    {
+      GRN_INT32_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      int val = GRN_INT32_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case (MYSQL_TYPE_LONGLONG) :
+    {
+      GRN_INT64_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      long long int val = GRN_INT64_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case (MYSQL_TYPE_FLOAT) :
+  case (MYSQL_TYPE_DOUBLE) :
+    {
+      GRN_FLOAT_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      double val = GRN_FLOAT_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case (MYSQL_TYPE_TIME) :
+  case (MYSQL_TYPE_DATE) :
+  case (MYSQL_TYPE_YEAR) :
+  case (MYSQL_TYPE_DATETIME) :
+    {
+      GRN_TIME_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      long long int val = GRN_TIME_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  default: //strings etc..
+    {
+      GRN_TEXT_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      char *val = GRN_TEXT_VALUE(&buf);
+      int len = GRN_TEXT_LEN(&buf);
+      field->store(val, len, field->charset());
+      break;
+    }
+  }
 }
-
-int mrn_plugin_deinit(void *p)
-{
-  return mrn_deinit();
-}
-
-mysql_declare_plugin(mroonga)
-{
-  MYSQL_STORAGE_ENGINE_PLUGIN,
-  &storage_engine_structure,
-  "mroonga",
-  "Tetsuro IKEDA",
-  "MySQL binding for groonga",
-  PLUGIN_LICENSE_BSD,
-  mrn_plugin_init,
-  mrn_plugin_deinit,
-  0x0001,
-  mrn_status_variables,
-  mrn_system_variables,
-  NULL
-}
-mysql_declare_plugin_end;
 
 /* handler implementation */
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   :handler(hton, share)
 {
-  ctx = (grn_ctx*) malloc(sizeof(grn_ctx));
-  grn_ctx_init(ctx,0);
-  grn_ctx_use(ctx, mrn_system_db);
-  minfo = NULL;
-  mcond = NULL;
-  cur = NULL;
-  obj = (mrn_object *) malloc(sizeof(mrn_object));
+  ctx = grn_ctx_open(0);
+  grn_ctx_use(ctx, mrn_db);
 }
 
 ha_mroonga::~ha_mroonga()
 {
   grn_ctx_fin(ctx);
-  free(ctx);
-  free(obj);
 }
 
 const char *ha_mroonga::table_type() const
@@ -326,94 +422,224 @@ ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
   return 0;
 }
 
-int ha_mroonga::create(const char *name, TABLE *form, HA_CREATE_INFO *info)
+int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 {
-  int res;
-  mrn_info *minfo;
-  MRN_HTRACE;
-  if (convert_info(name, this->table_share, &minfo) != 0) {
+  /* First, we must check if database is alreadly opened, created */
+  grn_obj *db_obj;
+  char db_name[MRN_MAX_PATH_SIZE];
+  char db_path[MRN_MAX_PATH_SIZE];
+  struct stat dummy;
+  mrn_db_name(name, db_name);
+  mrn_db_path(name, db_path);
+
+  pthread_mutex_lock(&db_mutex);
+  if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db_obj)) != 0) {
+    if (stat(db_path, &dummy)) {
+      // creating new database
+      GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db_path);
+      db_obj = grn_db_create(ctx, db_path, NULL);
+      if (db_obj == NULL) {
+        pthread_mutex_unlock(&db_mutex);
+        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create database (%s)", db_path);
+        return -1;
+      }
+    } else {
+      // opening existing database
+      db_obj = grn_db_open(ctx, db_path);
+      if (db_obj == NULL) {
+        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db_path);
+        pthread_mutex_unlock(&db_mutex);
+        return -1;
+      }
+    }
+    mrn_hash_put(ctx, mrn_hash, db_name, db_obj);
+  }
+  pthread_mutex_unlock(&db_mutex);
+  grn_ctx_use(ctx, db_obj);
+
+  grn_obj_flags tbl_flags = GRN_OBJ_PERSISTENT;
+
+  /* primary key must be handled before creating table */
+  grn_obj *pkey_type;
+  uint pkeynr = table->s->primary_key;
+  if (pkeynr != MAX_INDEXES) {
+    KEY key_info = table->s->key_info[pkeynr];
+
+    // surpose simgle column key
+    int key_parts = key_info.key_parts;
+    if (key_parts != 1) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported (%s)", db_path);
+      return -1;
+    }
+    Field *pkey_field = key_info.key_part[0].field;
+
+    int mysql_field_type = pkey_field->type();
+    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
+    pkey_type = grn_ctx_at(ctx, gtype);
+
+    // default algorithm is BTREE ==> PAT
+    if (key_info.algorithm == HA_KEY_ALG_HASH) {
+      tbl_flags |= GRN_OBJ_TABLE_HASH_KEY;
+    } else {
+      tbl_flags |= GRN_OBJ_TABLE_PAT_KEY;
+    }
+
+  } else {
+    // primary key doesn't exists
+    tbl_flags |= GRN_OBJ_TABLE_NO_KEY;
+    pkey_type = NULL;
+  }
+
+  /* create table */
+  grn_obj *tbl_obj;
+  char tbl_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name(name, tbl_name);
+  int tbl_name_len = strlen(tbl_name);
+  char *tbl_path = NULL;           // we don't specify path
+  grn_obj *pkey_value_type = NULL; // we don't use this   
+
+  tbl_obj = grn_table_create(ctx, tbl_name, tbl_name_len, tbl_path,
+                         tbl_flags, pkey_type, pkey_value_type);
+
+  if (tbl_obj == NULL) {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s", tbl_name);
     return -1;
   }
-  if (res = mrn_db_open_or_create(ctx, minfo, obj) == 0) {
-    grn_ctx_use(ctx, obj->db);
-    res = mrn_create(ctx, minfo, obj);
+
+  /* create columns */
+  int i;
+  uint n_columns = table->s->fields;
+  for (i=0; i < n_columns; i++) {
+    grn_obj *col_obj, *col_type;
+    Field *field = table->s->field[i];
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+    grn_obj_flags col_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR;
+    int mysql_field_type = field->type();
+    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
+    col_type = grn_ctx_at(ctx, gtype);
+    char *col_path = NULL; // we don't specify path
+
+    col_obj = grn_column_create(ctx, tbl_obj, col_name, col_name_size,
+                                col_path, col_flags, col_type);
+    if (col_obj == NULL) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, col=%s",
+              tbl_name, col_name);
+      grn_obj_remove(ctx, tbl_obj);
+      return -1;
+    }
   }
-  return res;
+
+  /* create indexes */
+  //TODO: implement here
+
+  /* clean up */
+  grn_obj_unlink(ctx, tbl_obj);
+
+  return 0;
 }
 
 int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 {
-  MRN_HTRACE;
   thr_lock_init(&thr_lock);
   thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
 
-  mrn_info *minfo;
-  int res = 0;
+  /* First, we must check if database is alreadly opened */
+  char db_name[MRN_MAX_PATH_SIZE];
+  char db_path[MRN_MAX_PATH_SIZE];
+  struct stat dummy;
+  mrn_db_name(name, db_name);
+  mrn_db_path(name, db_path);
 
-  convert_info(name, this->table_share, &minfo);
-  this->minfo = minfo;
-  if (res = mrn_db_open_or_create(ctx, minfo, obj) == 0) {
-    grn_ctx_use(ctx, obj->db);
-    res = mrn_open(ctx, minfo, obj);
+  pthread_mutex_lock(&db_mutex);
+  // we should not call grn_db_open() very often. so we use cache.
+  if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db)) != 0) {
+    db = grn_db_open(ctx, db_path);
+    if (db == NULL) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db_path);
+      pthread_mutex_unlock(&db_mutex);
+      return -1;
+    }
+    mrn_hash_put(ctx, mrn_hash, db_name, db);
   }
-  return res;
+  pthread_mutex_unlock(&db_mutex);
+  grn_ctx_use(ctx, db);
+
+  /* open table */
+  char tbl_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name(name, tbl_name);
+  tbl = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
+  if (tbl == NULL) {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table (%s)", tbl_name);
+    return -1;
+  }
+
+  /* open columns */
+  int n_columns = table->s->fields;
+  col = (grn_obj**) malloc(sizeof(grn_obj*) * n_columns);
+
+  int i;
+  for (i=0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+    col[i] = grn_obj_column(ctx, tbl, col_name, col_name_size);
+    if (col[i] == NULL) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table(col) %s(%s)",
+              tbl_name, col_name);
+      grn_obj_unlink(ctx, tbl);
+      return -1;
+    }
+  }
+
+  /* open indexes */
+  //TODO: implement here
+
+  return 0;
 }
 
 int ha_mroonga::close()
 {
-  MRN_HTRACE;
   thr_lock_delete(&thr_lock);
-
-  mrn_info *minfo = this->minfo;
-  mrn_close(ctx, minfo, obj);
-  mrn_deinit_obj_info(ctx, minfo);
-  this->minfo = NULL;
+  grn_obj_unlink(ctx, tbl);
+  free(col);
   return 0;
 }
 
 int ha_mroonga::delete_table(const char *name)
 {
-  MRN_HTRACE;
-  int res, i, j;
-  char db_name[32], table_name[32];
-  mrn_info *minfo;
-  int name_len = strlen(name);
-  for (i=2; i < name_len; i++) {
-    if (name[i] != '/') {
-      db_name[i-2] = name[i];
-    } else {
-      db_name[i-2] = '\0';
-      break;
-    }
-  }
-  i++;
-  for (j=0; i < name_len; j++, i++) {
-    table_name[j] = name[i];
-  }
-  table_name[j] = '\0';
   char db_path[MRN_MAX_PATH_SIZE];
-  strncpy(db_path, db_name, MRN_MAX_PATH_SIZE);
-  strncat(db_path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
-  res = mrn_drop(ctx, db_path, table_name);
-  return res;
+  char tbl_name[MRN_MAX_PATH_SIZE];
+  mrn_db_path(name, db_path);
+  mrn_table_name(name, tbl_name);
+
+  grn_obj *db_obj, *tbl_obj;
+  db_obj = grn_db_open(ctx, db_path);
+  if (db_obj == NULL) {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_db_open failed while delete_table (%s)",
+            db_path);
+    return -1;
+  }
+  grn_ctx_use(ctx, db_obj);
+  tbl_obj = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
+  if (tbl_obj == NULL) {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get failed while mrn_drop (%s)",
+            tbl_name);
+    return -1;
+  }
+  return grn_obj_remove(ctx, tbl_obj);
 }
 
 int ha_mroonga::info(uint flag)
 {
-  MRN_HTRACE;
-  if (this->minfo) {
-    stats.records = (ha_rows) mrn_table_size(ctx, obj);
-  } else {
-    stats.records = 2;
-  }
+  ha_rows rows = grn_table_size(ctx, tbl);
+  stats.records = rows;
   return 0;
 }
 
-THR_LOCK_DATA **ha_mroonga::store_lock(THD *thd,
-				       THR_LOCK_DATA **to,
-				       enum thr_lock_type lock_type)
+THR_LOCK_DATA **ha_mroonga::store_lock(THD *thd, THR_LOCK_DATA **to,
+                                       enum thr_lock_type lock_type)
 {
-  MRN_HTRACE;
   if (lock_type != TL_IGNORE && thr_lock_data.type == TL_UNLOCK) {
     thr_lock_data.type = lock_type;
   }
@@ -423,744 +649,109 @@ THR_LOCK_DATA **ha_mroonga::store_lock(THD *thd,
 
 int ha_mroonga::rnd_init(bool scan)
 {
-  MRN_HTRACE;
-  int i, used=0, n_columns, alloc_size;
-  char use_column_pruning = THDVAR(table->in_use, use_column_pruning);
-  char use_cond_push = THDVAR(table->in_use, use_cond_push);
-  n_columns = minfo->n_columns;
-  alloc_size = n_columns / 8 + 1;
-  uchar* column_map = (uchar*) malloc(alloc_size);
-  memset(column_map,0,alloc_size);
-  for (i=0; i < n_columns; i++) {
-    if (use_column_pruning == 0 ||
-        bitmap_is_set(table->read_set, i) ||
-        bitmap_is_set(table->write_set, i)) {
-      MRN_SET_BIT(column_map, i);
-      used++;
-    }
+  cur = grn_table_cursor_open(ctx, tbl, NULL, 0, NULL, 0, 0, -1, 0);
+  if (cur == NULL) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open cursor");
+      return -1;
   }
-  mrn_status_column_target += n_columns;
-  mrn_status_column_used += used;
-  this->cur = mrn_init_record(ctx, minfo, column_map, used);
-
-  if (use_cond_push && mcond) {
-    mrn_status_cond_push_used++;
-    const COND *cond = mcond->cond;
-    mcond->expr = (mrn_expr*) malloc(sizeof(mrn_expr));
-    mrn_expr *expr = mcond->expr;
-    expr->prev = NULL;
-    make_expr((Item*) cond, &expr);
-    check_other_conditions(mcond, this->table->in_use);
-    if (THDVAR(table->in_use, debug)) {
-      dump_condition(cond);
-      dump_tree((Item*)cond,0);
-      dump_condition2(mcond);
-    }
-  }
-  return mrn_rnd_init(ctx, minfo,
-                      mcond ? mcond->expr : NULL, obj);
+  return 0;
 }
 
 int ha_mroonga::rnd_next(uchar *buf)
 {
-  MRN_HTRACE;
-  int rc;
-  mrn_record *record;
-  mrn_info *info = this->minfo;
-  mrn_cond *cond = this->mcond;
-  record = this->cur;
-  rc = mrn_rnd_next(ctx, record, obj);
-  if (rc == 0) {
-    Field **field = table->field;
-    mrn_column_info **column = info->columns;
-    grn_obj *value;
-    int i, j;
-    for (i=0, j=0; *field; field++, column++, i++) {
-      // column pruning
-      if (MRN_IS_BIT(record->bitmap, i)) {
-        value = record->value[j];
-        (*field)->set_notnull();
-        switch ((*field)->type()) {
-        case (MYSQL_TYPE_BIT) :
-        case (MYSQL_TYPE_ENUM) :
-        case (MYSQL_TYPE_SET) :
-        case (MYSQL_TYPE_TINY) :
-          (*field)->store(GRN_INT8_VALUE(value));
-          break;
-        case (MYSQL_TYPE_SHORT) :
-          (*field)->store(GRN_INT16_VALUE(value));
-          break;
-        case (MYSQL_TYPE_INT24) :
-        case (MYSQL_TYPE_LONG) :
-          (*field)->store(GRN_INT32_VALUE(value));
-          break;
-        case (MYSQL_TYPE_LONGLONG) :
-          (*field)->store(GRN_INT64_VALUE(value));
-          break;
-        case (MYSQL_TYPE_FLOAT) :
-        case (MYSQL_TYPE_DOUBLE) :
-          (*field)->store(GRN_FLOAT_VALUE(value));
-          break;
-        case (MYSQL_TYPE_TIME) :
-          {
-            long long int hh, mm, ss, hhmmss, gval;
-            gval = GRN_TIME_VALUE(value);
-            gval /= (1000000);
-            ss = gval % 60;
-            gval /= 60;
-            mm = gval % 60;
-            gval /= 60;
-            hh = gval;
-            hhmmss = hh * 10000 + mm * 100 + ss;
-            (*field)->store((int) hhmmss);
-            break;
-          }
-        case (MYSQL_TYPE_DATE) :
-        case (MYSQL_TYPE_YEAR) :
-        case (MYSQL_TYPE_DATETIME) :
-          (*field)->store(GRN_TIME_VALUE(value));
-          break;
-        default: //strings etc..
-          {
-            char *val = GRN_TEXT_VALUE(value);
-            int len = GRN_TEXT_LEN(value);
-            (*field)->store(val, len, (*field)->charset());
-            break;
-          }
-        }
-        j++;
-      }
-    }
-    mrn_rewind_record(ctx, record);
-    return 0;
-  }
-
-  if (mcond) {
-    mrn_free_expr(mcond->expr);
-    mcond = NULL;
-  }
-  free(record->bitmap);
-  mrn_deinit_record(ctx, record);
-  cur = NULL;
-
-  if (rc == 1) {
+  grn_id gid = grn_table_cursor_next(ctx, cur);
+  if (gid == GRN_ID_NIL) {
+    grn_table_cursor_close(ctx, cur);
     return HA_ERR_END_OF_FILE;
-  } else {
-    return -1;
   }
-}
-
-#ifdef PROTOTYPE
-int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
-{
-  grn_id gid = *((grn_id*) pos);
-
-  grn_obj obj;
-  int pkey_val;
-  int *val;
-  GRN_TEXT_INIT(&obj,0);
-
-  Field **mysql_field;
-  mrn_field **grn_field;
-  int num;
-  for (mysql_field = table->field, grn_field = share->field, num=0;
-       *mysql_field;
-       mysql_field++, grn_field++, num++) {
-    if (num == share->pkey_field) {
-      int ret_val = grn_table_get_key(ctx, share->obj, gid, (void*) &pkey_val, sizeof(int));
-      (*mysql_field)->set_notnull();
-      (*mysql_field)->store(pkey_val);
-    } else {
-      GRN_BULK_REWIND(&obj);
-      grn_obj_get_value(ctx, (*grn_field)->obj, gid, &obj);
-      val = (int*) GRN_BULK_HEAD(&obj);
-      (*mysql_field)->set_notnull();
-      (*mysql_field)->store(*val);
-    }
+  int i;
+  int n_columns = table->s->fields;
+  for (i=0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    mrn_store_field(ctx, field, col[i], gid);
   }
   return 0;
 }
-#else
+
 int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
 {
-  MRN_HTRACE;
   return 0;
 }
-#endif
 
-#ifdef PROTOTYPE
 void ha_mroonga::position(const uchar *record)
 {
-  memcpy(this->ref, &this->record_id, sizeof(grn_id));
 }
-#else
-void ha_mroonga::position(const uchar *record)
-{
-  MRN_HTRACE;
-}
-#endif
 
 int ha_mroonga::write_row(uchar *buf)
 {
-  MRN_HTRACE;
-  mrn_info *minfo = this->minfo;
-  uchar *bitmap;
-  int size = set_bitmap(&bitmap);
-  mrn_record *record = mrn_init_record(ctx, minfo, bitmap, size);
-  Field **field;
-  int i, j;
-  for (i=0, j=0, field = table->field; *field; i++, field++) {
-    if (MRN_IS_BIT(record->bitmap, i)) {
-      switch ((*field)->type()) {
-      case MYSQL_TYPE_BIT:
-      case MYSQL_TYPE_ENUM:
-      case MYSQL_TYPE_SET:
-      case MYSQL_TYPE_TINY:
-        {
-          GRN_INT8_SET(ctx, record->value[j], (*field)->val_int());
-          break;
-        }
-      case MYSQL_TYPE_SHORT:
-        { 
-          GRN_INT16_SET(ctx, record->value[j], (*field)->val_int());
-          break;
-        }
-      case MYSQL_TYPE_INT24:
-      case MYSQL_TYPE_LONG:
-        {
-          GRN_INT32_SET(ctx, record->value[j], (*field)->val_int());
-          break;
-        }
-      case MYSQL_TYPE_LONGLONG:
-        {
-          GRN_INT64_SET(ctx, record->value[j], (*field)->val_int());
-          break;
-        }
-      case MYSQL_TYPE_FLOAT:
-      case MYSQL_TYPE_DOUBLE:
-        {
-          GRN_FLOAT_SET(ctx, record->value[j], (*field)->val_real());
-          break;
-        }
-      case MYSQL_TYPE_TIME:
-        {
-          long long int hh, mm, ss, mval, gval;
-          mval = (*field)->val_int();
-          ss = mval % 100;
-          mm = mval / 100 % 100;
-          hh = mval / 10000;
-          gval = (hh * 60 * 60 + mm * 60 + ss) * 1000000;
-          GRN_TIME_SET(ctx, record->value[j], gval);
-          break;
-        }
-      case MYSQL_TYPE_YEAR:
-        {
-          long long int yyyy, mval, gval;
-          yyyy = (*field)->val_int();
-        }
-      case MYSQL_TYPE_DATE:
-      case MYSQL_TYPE_DATETIME:
-        {
-          GRN_TIME_SET(ctx, record->value[j], (*field)->val_int());
-          break;
-        }
-      case MYSQL_TYPE_STRING:
-      case MYSQL_TYPE_VARCHAR:
-        {
-          String tmp;
-          const char *val = (*field)->val_str(&tmp)->ptr();
-          int len = (*field)->data_length();
-          GRN_TEXT_SET(ctx, record->value[j], val, len);
-          break;
-        }
-      case MYSQL_TYPE_BLOB:
-        {
-          String tmp;
-          Field_blob *blob = (Field_blob*) *field;
-          const char *val = blob->val_str(0,&tmp)->ptr();
-          int len = blob->get_length();
-          GRN_TEXT_SET(ctx, record->value[j], val, len);
-          break;
-        }
-      default:
-        return HA_ERR_UNSUPPORTED;
-      }
-      j++;
-    }
+  void *pkey;
+  grn_obj wrapper;
+  int pkey_size = 0;
+  uint pkeynr = table->s->primary_key;
+  if (pkeynr != MAX_INDEXES) {
+    KEY key_info = table->s->key_info[pkeynr];
+    // surpose simgle column key
+    int field_no = key_info.key_part[0].field->field_index;
+    Field *pkey_field = table->field[field_no];
+    mrn_set_buf(ctx, pkey_field, &wrapper, &pkey_size);
+    pkey = GRN_TEXT_VALUE(&wrapper);
   }
-  if (mrn_write_row(ctx, record, obj) != 0) {
+
+  grn_id gid;
+  int added;
+  gid = grn_table_add(ctx, tbl, pkey, pkey_size, &added);
+  if (added == 0) {
+    // duplicated error
     return -1;
   }
-  free(record->bitmap);
-  mrn_deinit_record(ctx, record);
+
+  grn_obj colbuf;
+  int i, col_size;
+  int n_columns = table->s->fields;
+  for (i=0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    mrn_set_buf(ctx, field, &colbuf, &col_size);
+    if (grn_obj_set_value(ctx, col[i], gid, &colbuf, GRN_OBJ_SET)
+        != GRN_SUCCESS) {
+      return -1;
+    }
+  }
+
   return 0;
 }
 
-#ifdef PROTOTYPE
 int ha_mroonga::index_read(uchar *buf, const uchar *key,
-			   uint key_len, enum ha_rkey_function find_flag)
+                           uint key_len, enum ha_rkey_function find_flag)
 {
-  Field *key_field= table->key_info[active_index].key_part->field;
-  uint rc= 0;
-  grn_id gid;
-  grn_obj wrapper;
-  Field **mysql_field;
-  mrn_field **grn_field;
-  int num;
-  grn_search_flags flags = 0;
-
-  int k;
-  memcpy(&k,key,sizeof(int));
-  gid = grn_table_lookup(ctx, share->obj,
-			 (const void*) key, sizeof(key), &flags);
-
-  GRN_TEXT_INIT(&wrapper,0);
-  for (mysql_field = table->field, grn_field = share->field, num=0;
-       *mysql_field;
-       mysql_field++, grn_field++, num++) {
-    if (num == share->pkey_field) {
-      continue;
-    }
-    GRN_BULK_REWIND(&wrapper);
-    grn_obj_get_value(ctx, (*grn_field)->obj, gid, &wrapper);
-    int *tmp_int;
-    char *tmp_char;
-    switch((*mysql_field)->type()) {
-    case (MYSQL_TYPE_LONG) :
-      tmp_int = (int*) GRN_BULK_HEAD(&wrapper);
-      (*mysql_field)->set_notnull();
-      (*mysql_field)->store(*tmp_int);
-      break;
-    case (MYSQL_TYPE_VARCHAR) :
-      tmp_char = (char*) GRN_BULK_HEAD(&wrapper);
-      (*mysql_field)->set_notnull();
-      (*mysql_field)->store(tmp_char,strlen(tmp_char), system_charset_info);
-      break;
-    }
-  }
-  grn_obj_unlink(ctx, &wrapper);
-
-  if (key_field->field_index == table->s->primary_key) {
-    key_field->set_key_image(key, key_len);
-    key_field->set_notnull();
-  }
-  return rc;
-}
-#else
-int ha_mroonga::index_read(uchar *buf, const uchar *key,
-			   uint key_len, enum ha_rkey_function find_flag)
-{
-  MRN_HTRACE;
   return 0;
 }
-#endif
 
 int ha_mroonga::index_next(uchar *buf)
 {
-  MRN_HTRACE;
   return HA_ERR_END_OF_FILE;
 }
 
 int ha_mroonga::ft_init() {
-  MRN_HTRACE;
   return 0;
 }
 
-#ifdef PROTOTYPE
 FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint inx,String *key)
 {
-  const char *match_param;
-  match_param = key->ptr();
-  if (flags & FT_BOOL) {
-    /* boolean search */
-    grn_query *query;
-    this->res = grn_table_create(ctx, NULL, 0, NULL, GRN_TABLE_HASH_KEY, share->obj, 0);
-    query = grn_query_open(ctx, match_param, strlen(match_param), GRN_OP_OR, 32);
-    grn_obj_search(ctx, share->field[1]->index, (grn_obj*) query, this->res, GRN_OP_OR, NULL);
-    this->cursor = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0);
-    //grn_query_close(ctx, query);
-  } else {
-    /* nlq search */
-    grn_obj buff;
-    this->res = grn_table_create(ctx, NULL, 0, NULL, GRN_TABLE_HASH_KEY, share->obj, 0);
-    GRN_TEXT_INIT(&buff, 0);
-    GRN_TEXT_SET(ctx, &buff, match_param, strlen(match_param));
-    grn_obj_search(ctx, share->field[1]->index, &buff, this->res, GRN_OP_OR, NULL);
-    this->cursor = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0);
-    //grn_obj_close(ctx, &buff);
-  }
-  int nrec = grn_table_size(ctx, res);
   return NULL;
 }
-#else
-FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint inx,String *key)
-{
-  MRN_HTRACE;
-  return NULL;
-}
-#endif
 
-#ifdef PROTOTYPE
 int ha_mroonga::ft_read(uchar *buf)
 {
-  /*
-  if (mrn_counter == 0) {
-    table->field[0]->set_notnull();
-    table->field[0]->store(10);
-    table->field[1]->set_notnull();
-    table->field[1]->store("test", 4, system_charset_info);
-    mrn_counter++;
-    return 0;
-  } else {
-    mrn_counter=0;
-    return HA_ERR_END_OF_FILE;
-    }*/
-  grn_id id, docid;
-  grn_obj buff;
-  GRN_TEXT_INIT(&buff,0);
-  if  ((id = grn_table_cursor_next(ctx, this->cursor))) {
-    GRN_BULK_REWIND(&buff);
-    grn_table_get_key(ctx, this->res, id, &docid, sizeof(grn_id));
-    grn_obj_get_value(ctx, share->field[1]->obj, docid, &buff);
-    table->field[0]->set_notnull();
-    table->field[0]->store(docid);
-    table->field[1]->set_notnull();
-    table->field[1]->store((char*) GRN_BULK_HEAD(&buff), GRN_TEXT_LEN(&buff), system_charset_info);
-    return 0;
-  }
-  table->status = HA_ERR_END_OF_FILE;
   return HA_ERR_END_OF_FILE;
 }
-#else
-int ha_mroonga::ft_read(uchar *buf)
-{
-  MRN_HTRACE;
-  return HA_ERR_END_OF_FILE;
-}
-#endif
 
 const COND *ha_mroonga::cond_push(const COND *cond)
 {
-  MRN_HTRACE;
-  if (cond) {
-    mrn_cond *tmp = (mrn_cond*) malloc(sizeof(mrn_cond));
-    if (tmp == NULL) {
-      goto err_oom;
-    }
-    tmp->cond = (COND *) cond;
-    tmp->next = this->mcond;
-    tmp->expr = NULL;
-    tmp->limit = 0;
-    tmp->offset = 0;
-    mcond = tmp;
-  }
-  DBUG_RETURN(NULL);
-
-err_oom:
-  my_errno = HA_ERR_OUT_OF_MEM;
-  GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error in cond_push");
   return NULL;
 }
 
 void ha_mroonga::cond_pop()
 {
-  MRN_HTRACE;
-  if (mcond) {
-    mrn_cond *tmp = mcond->next;
-    free(mcond);
-    mcond = tmp;
-  }
-}
-
-int ha_mroonga::convert_info(const char *name, TABLE_SHARE *share, mrn_info **_minfo)
-{
-  uint n_columns = share->fields, i;
-  mrn_db_info *db;
-  mrn_table_info *table;
-  mrn_info *minfo = mrn_init_obj_info(ctx, n_columns);
-  minfo->name = name;
-
-  db = minfo->db;
-  db->name = share->db.str;
-  db->name_size = share->db.length;
-  strncpy(db->path, db->name, MRN_MAX_PATH_SIZE);
-  strncat(db->path, MRN_DB_FILE_SUFFIX, MRN_MAX_PATH_SIZE);
-
-  table = minfo->table;
-  table->name = share->table_name.str;
-  table->name_size = share->table_name.length;
-  table->flags |= GRN_OBJ_TABLE_NO_KEY;
-
-  for (i=0; i < n_columns; i++) {
-    Field *field = share->field[i];
-    minfo->columns[i]->name = field->field_name;
-    minfo->columns[i]->name_size = strlen(minfo->columns[i]->name);
-    minfo->columns[i]->flags |= GRN_OBJ_COLUMN_SCALAR;
-    grn_builtin_type gtype = mrn_get_type(ctx, field->type());
-    minfo->columns[i]->gtype = gtype;
-    minfo->columns[i]->type = grn_ctx_at(ctx, gtype);
-  }
-
-  minfo->n_columns = n_columns;
-  *_minfo = minfo;
-  return 0;
-}
-
-int ha_mroonga::set_bitmap(uchar **bitmap)
-{
-  int i, used=0, n_columns, alloc_size;
-  n_columns = minfo->n_columns;
-  alloc_size = n_columns / 8 + 1;
-  uchar* column_map = (uchar*) malloc(alloc_size);
-  if (!column_map) {
-    goto err_oom;
-  }
-  memset(column_map,0,alloc_size);
-  for (i=0; i < n_columns; i++) {
-    if (bitmap_is_set(table->read_set, i) ||
-        bitmap_is_set(table->write_set, i)) {
-      MRN_SET_BIT(column_map, i);
-      used++;
-    }
-  }
-  *bitmap = column_map;
-  return used;
-
-err_oom:
-  my_errno = HA_ERR_OUT_OF_MEM;
-  GRN_LOG(ctx, GRN_LOG_ERROR, "malloc error in set_bitmap (%d bytes)", alloc_size);
-  return -1;
-}
-
-const char *indent = "....................";
-
-void ha_mroonga::dump_tree(Item *item, int offset)
-{
-  char *str;
-  if (item->type() == Item::FUNC_ITEM) {
-    Item_func *func = (Item_func*) item;
-    switch (func->functype()) {
-    case Item_func::EQ_FUNC:
-    case Item_func::EQUAL_FUNC:
-      str = (char*) "=";
-      break;
-    case Item_func::LE_FUNC:
-      str = (char*) "<=";
-      break;
-    case Item_func::LT_FUNC:
-      str = (char*) "<";
-      break;
-    case Item_func::GE_FUNC:
-      str = (char*) ">=";
-      break;
-    case Item_func::GT_FUNC:
-      str = (char*) ">";
-      break;
-    case Item_func::NEG_FUNC:
-      str = (char*) "-";
-      break;
-    default:
-      str = (char*) mrn_functype_string[func->functype()];
-    }
-    printf("%s%s\n", (indent+(20-offset)), str);
-    int i;
-    for (i=0; i < func->arg_count; i++) {
-      dump_tree((func->arguments())[i],(offset+1));
-    }
-  } else if (item->type() == Item::FIELD_ITEM) {
-    str =  ((Item_field*) item)->name;
-    printf("%s%s\n", (indent+(20-offset)), str);
-  } else if (item->type() == Item::COND_ITEM) {
-    Item_cond *cond = (Item_cond*) item;
-    switch(cond->functype()) {
-    case Item_func::COND_AND_FUNC:
-      str = (char*) "AND";
-      break;
-    case Item_func::COND_OR_FUNC:
-      str = (char*) "OR";
-      break;
-    default:
-      str = (char*) "(COND_ITEM)";
-    }
-    printf("%s%s\n", (indent+(20-offset)), str);
-    List_iterator_fast<Item> lif(*(cond->argument_list()));
-    Item *child;
-    while ((child = lif++)) {
-      dump_tree(child, (offset+1));
-    }
-  } else if (item->type() == Item::INT_ITEM) {
-    printf("%s%lld\n", (indent+(20-offset)),((Item_int*) item)->val_int());
-  } else {
-    printf("%s%s\n", (indent+(20-offset)), mrn_item_type_string[item->type()]);
-  }
-}
-
-void ha_mroonga::dump_condition(const COND *cond)
-{
-  Item *item = (Item*) cond;
-  while (item) {
-    if (item->type() == Item::FUNC_ITEM) {
-      Item_func *func = (Item_func*) item;
-      switch (func->functype()) {
-      case Item_func::EQ_FUNC:
-      case Item_func::EQUAL_FUNC:
-        printf("(=)");
-        break;
-      case Item_func::LE_FUNC:
-        printf("(<=)");
-        break;
-      case Item_func::LT_FUNC:
-        printf("(<)");
-        break;
-      case Item_func::GE_FUNC:
-        printf("(<=)");
-        break;
-      case Item_func::GT_FUNC:
-        printf("(<)");
-        break;
-      default:
-        printf("(F)");
-      }
-    } else if (item->type() == Item::FIELD_ITEM) {
-      printf("<%s>", ((Item_field*) item)->name);
-    } else if (item->type() == Item::COND_ITEM) {
-      Item_cond *cond = (Item_cond*) item;
-      switch(cond->functype()) {
-      case Item_func::COND_AND_FUNC:
-        printf("(AND)");
-        break;
-      case Item_func::COND_OR_FUNC:
-        printf("(OR)");
-        break;
-      default:
-        printf("(C)");
-      }
-    } else if (item->type() == Item::INT_ITEM) {
-      printf("(%lld)", ((Item_int*) item)->val_int());
-    } else {
-      printf("(%s)", mrn_item_type_string[item->type()]);
-    }
-    item = item->next;
-  }
-  printf("\n\n");
-}
-
-int ha_mroonga::make_expr(Item *item, mrn_expr **expr)
-{
-  mrn_expr *cur = *expr;
-  switch(item->type()) {
-  case Item::FUNC_ITEM:
-    {
-      int i;
-      Item_func *func = (Item_func*) item;
-      for (i=0; i < func->arg_count; i++) {
-        make_expr((func->arguments())[i], &cur);
-        cur->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-        cur->next->prev = cur;
-        cur = cur->next;
-      }
-      cur->n_args = func->arg_count;
-      cur->next = NULL;
-      switch (func->functype()) {
-      case Item_func::EQ_FUNC:
-      case Item_func::EQUAL_FUNC:
-        cur->type = MRN_EXPR_EQ;
-        break;
-      case Item_func::LE_FUNC:
-        cur->type = MRN_EXPR_LESS_EQ;
-        break;
-      case Item_func::LT_FUNC:
-        cur->type = MRN_EXPR_LESS;
-        break;
-      case Item_func::GE_FUNC:
-        cur->type = MRN_EXPR_GT_EQ;
-        break;
-      case Item_func::GT_FUNC:
-        cur->type = MRN_EXPR_GT;
-        break;
-      case Item_func::NEG_FUNC:
-        cur->type = MRN_EXPR_NEGATIVE;
-        cur->prev->val_int = cur->prev->val_int * -1;
-        break;
-      default:
-        cur->type = MRN_EXPR_UNKNOWN;
-      }
-      break;
-    }
-  case Item::FIELD_ITEM:
-    {
-      cur->type = MRN_EXPR_COLUMN;
-      cur->val_string =  ((Item_field*) item)->name;
-      cur->next = NULL;
-      break;
-    }
-  case Item::COND_ITEM:
-    {
-      Item_cond *cond = (Item_cond*) item;
-      List_iterator_fast<Item> lif(*(cond->argument_list()));
-      Item *child;
-      int i=0;
-      while ((child = lif++)) {
-        make_expr(child, &cur);
-        cur->next = (mrn_expr*) malloc(sizeof(mrn_expr));
-        cur = cur->next;
-        i++;
-      }
-      cur->n_args = i;
-      cur->next = NULL;
-      switch(cond->functype()) {
-      case Item_func::COND_AND_FUNC:
-        cur->type = MRN_EXPR_AND;
-        break;
-      case Item_func::COND_OR_FUNC:
-        cur->type = MRN_EXPR_OR;
-        break;
-      default:
-        cur->type = MRN_EXPR_UNKNOWN;
-      }
-      break;
-    }
-  case Item::INT_ITEM:
-    {
-      cur->type = MRN_EXPR_INT;
-      cur->val_int = ((Item_int*) item)->val_int();
-      break;
-    }
-  case Item::STRING_ITEM:
-    {
-      cur->type = MRN_EXPR_TEXT;
-      cur->val_string = ((Item_string*) item)->val_str(NULL)->ptr();
-      break;
-    }
-  default:
-    {
-      cur->type = MRN_EXPR_UNKNOWN;
-    }
-  }
-  *expr = cur;
-}
-
-int ha_mroonga::check_other_conditions(mrn_cond *cond, THD *thd)
-{
-  SELECT_LEX lex = thd->lex->select_lex;
-  if (lex.explicit_limit == true) {
-    cond->limit = lex.select_limit ? lex.select_limit->val_int() : 0;
-    cond->offset = lex.offset_limit ? lex.offset_limit->val_int() : 0;
-  } else {
-    cond->limit = 0;
-    cond->offset = 0;
-  }
-  cond->table_list_size = thd->lex->select_lex.table_list.elements;
-  cond->order_list_size = thd->lex->select_lex.order_list.elements;
-  return 0;
-}
-
-void ha_mroonga::dump_condition2(mrn_cond *cond)
-{
-  mrn_dump_expr(cond->expr);
-  printf(" join=%d order=%d limit=%lld offset=%lld\n",
-         cond->table_list_size, cond->order_list_size,
-         cond->limit, cond->offset);
 }
 
 #ifdef __cplusplus

@@ -44,10 +44,14 @@ select * from t1 where c1 <= 3;
 c1	c2	c3
 1	10	100
 2	30	500
+3	60	300
 select * from t1 where c2 > 40;
 c1	c2	c3
+3	60	300
+4	50	600
 select * from t1 where c3 = 300;
 c1	c2	c3
+3	60	300
 select * from t1 order by c1;
 c1	c2	c3
 1	10	100
