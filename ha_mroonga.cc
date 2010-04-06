@@ -174,8 +174,8 @@ void mrn_drop_db(handlerton *hton, char *path)
 {
   char db_path[MRN_MAX_PATH_SIZE];
   char db_name[MRN_MAX_PATH_SIZE];
-  mrn_db_path(path, db_path);
-  mrn_db_name(path, db_name);
+  mrn_db_path_gen(path, db_path);
+  mrn_db_name_gen(path, db_name);
   grn_ctx *ctx;
   ctx = grn_ctx_open(0);
   struct stat dummy;
@@ -429,8 +429,8 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   char db_name[MRN_MAX_PATH_SIZE];
   char db_path[MRN_MAX_PATH_SIZE];
   struct stat dummy;
-  mrn_db_name(name, db_name);
-  mrn_db_path(name, db_path);
+  mrn_db_name_gen(name, db_name);
+  mrn_db_path_gen(name, db_path);
 
   pthread_mutex_lock(&db_mutex);
   if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db_obj)) != 0) {
@@ -493,8 +493,14 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   /* create table */
   grn_obj *tbl_obj;
   char tbl_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name(name, tbl_name);
+  mrn_table_name_gen(name, tbl_name);
   int tbl_name_len = strlen(tbl_name);
+
+  if (mrn_check_table_name(tbl_name)) {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "invalid table name: name=%s", tbl_name);
+    return -1;    
+  }
+
   char *tbl_path = NULL;           // we don't specify path
   grn_obj *pkey_value_type = NULL; // we don't use this   
 
@@ -531,7 +537,89 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   }
 
   /* create indexes */
-  //TODO: implement here
+  uint n_keys = table->s->keys;
+  char name_buff[MRN_MAX_PATH_SIZE];
+  grn_obj *lex_obj, *hash_obj, *pat_obj;
+  int need_lex=0, need_hash=0, need_pat=0;
+
+  for (i=0; i < n_keys; i++) {
+    if (i == pkeynr) {
+      continue; // pkey is already handled
+    }
+    KEY key_info = table->s->key_info[i];
+    int key_alg = key_info.algorithm;
+    if (key_alg == HA_KEY_ALG_FULLTEXT) {
+      need_lex = 1;
+    } else if (key_alg == HA_KEY_ALG_HASH) {
+      need_hash = 1;
+    } else {
+      need_pat = 1;
+    }
+  }
+
+  if (need_lex) {
+    mrn_lex_name_gen(name, name_buff);
+    grn_obj_flags lex_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT;
+    grn_obj *lex_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+    lex_obj = grn_table_create(ctx, name_buff, strlen(name_buff), NULL,
+                               lex_flags, lex_type, 0);
+    if (lex_obj == NULL) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create lex for table: name=%s", tbl_name);
+      grn_obj_remove(ctx, tbl_obj);
+      return -1;
+    }
+    grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+    grn_obj *index_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
+    grn_obj_set_info(ctx, lex_obj, info_type, index_type);
+  }
+
+  if (need_hash) {
+    mrn_hash_name_gen(name, name_buff);
+    //TODO: implements here
+  }
+
+  if (need_pat) {
+    mrn_pat_name_gen(name, name_buff);
+    //TODO: implements here
+  }
+
+  for (i=0; i < n_keys; i++) {
+    if (i == pkeynr) {
+      continue; // pkey is already handled
+    }
+    grn_obj *col_obj, buf;
+    KEY key_info = table->s->key_info[i];
+    // must be single column key
+    int key_parts = key_info.key_parts;
+    if (key_parts != 1) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported (%s)", db_path);
+      return -1;
+    }
+    int key_alg = key_info.algorithm;
+    Field *field = key_info.key_part[0].field;
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+    int mysql_field_type = field->type();
+    grn_obj_flags index_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
+    if (key_alg == HA_KEY_ALG_FULLTEXT) {    // fulltext
+      col_obj = grn_column_create(ctx, lex_obj, col_name, col_name_size, NULL,
+                                  index_flags, tbl_obj);
+      if (col_obj == NULL) {
+        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s, col=%s",
+                tbl_name, col_name);
+        grn_obj_remove(ctx, tbl_obj);
+        return -1;
+      }
+      grn_id gid = grn_obj_id(ctx, col_obj);
+      GRN_INT32_INIT(&buf, 0);
+      GRN_INT32_SET(ctx, &buf, gid);
+      grn_obj_set_info(ctx, lex_obj, GRN_INFO_SOURCE, &buf);
+    } else if (key_alg == HA_KEY_ALG_HASH) { // hash
+      //TODO: implements here
+    } else {                                 // btree
+      //TODO: implements here
+    }
+  }
 
   /* clean up */
   grn_obj_unlink(ctx, tbl_obj);
@@ -548,8 +636,8 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   char db_name[MRN_MAX_PATH_SIZE];
   char db_path[MRN_MAX_PATH_SIZE];
   struct stat dummy;
-  mrn_db_name(name, db_name);
-  mrn_db_path(name, db_path);
+  mrn_db_name_gen(name, db_name);
+  mrn_db_path_gen(name, db_path);
 
   pthread_mutex_lock(&db_mutex);
   // we should not call grn_db_open() very often. so we use cache.
@@ -567,7 +655,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 
   /* open table */
   char tbl_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name(name, tbl_name);
+  mrn_table_name_gen(name, tbl_name);
   tbl = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
   if (tbl == NULL) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table (%s)", tbl_name);
@@ -608,23 +696,39 @@ int ha_mroonga::close()
 
 int ha_mroonga::delete_table(const char *name)
 {
-  char db_path[MRN_MAX_PATH_SIZE];
-  char tbl_name[MRN_MAX_PATH_SIZE];
-  mrn_db_path(name, db_path);
-  mrn_table_name(name, tbl_name);
+  char buf[MRN_MAX_PATH_SIZE];
 
-  grn_obj *db_obj, *tbl_obj;
-  db_obj = grn_db_open(ctx, db_path);
+  grn_obj *db_obj, *tbl_obj, *lex_obj, *hash_obj, *pat_obj;
+  mrn_db_path_gen(name, buf);
+  db_obj = grn_db_open(ctx, buf);
   if (db_obj == NULL) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_db_open failed while delete_table (%s)",
-            db_path);
+    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_db_open failed while delete_table (%s)", buf);
     return -1;
   }
   grn_ctx_use(ctx, db_obj);
-  tbl_obj = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
+
+  mrn_lex_name_gen(name, buf);
+  lex_obj = grn_ctx_get(ctx, buf, strlen(buf));
+  if (lex_obj != NULL) {
+    grn_obj_remove(ctx, lex_obj);
+  }
+
+  mrn_hash_name_gen(name, buf);
+  hash_obj = grn_ctx_get(ctx, buf, strlen(buf));
+  if (hash_obj != NULL) {
+    grn_obj_remove(ctx, hash_obj);
+  }
+
+  mrn_pat_name_gen(name, buf);
+  pat_obj = grn_ctx_get(ctx, buf, strlen(buf));
+  if (pat_obj != NULL) {
+    grn_obj_remove(ctx, pat_obj);
+  }
+
+  mrn_table_name_gen(name, buf);
+  tbl_obj = grn_ctx_get(ctx, buf, strlen(buf));
   if (tbl_obj == NULL) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get failed while mrn_drop (%s)",
-            tbl_name);
+    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get failed while mrn_drop (%s)", buf);
     return -1;
   }
   return grn_obj_remove(ctx, tbl_obj);

@@ -125,49 +125,93 @@ void test_mrn_hash_remove()
   grn_hash_close(ctx, hash);
 }
 
-void test_mrn_db_path()
+void test_mrn_db_path_gen()
 {
   char buf[64];
   const char *arg1 = "./hoge/fuga";
   const char *arg2 = "./foobar/mysql";
   const char *arg3 = "./d/b";
-  cut_assert_equal_string("hoge.mrn", mrn_db_path(arg1, buf));
-  cut_assert_equal_string("foobar.mrn", mrn_db_path(arg2, buf));
-  cut_assert_equal_string("d.mrn", mrn_db_path(arg3, buf));
+  cut_assert_equal_string("hoge.mrn", mrn_db_path_gen(arg1, buf));
+  cut_assert_equal_string("foobar.mrn", mrn_db_path_gen(arg2, buf));
+  cut_assert_equal_string("d.mrn", mrn_db_path_gen(arg3, buf));
 
   const char *arg4 = "./hoge/";
   const char *arg5 = "./foobar/";
   const char *arg6 = "./d/";
-  cut_assert_equal_string("hoge.mrn", mrn_db_path(arg4, buf));
-  cut_assert_equal_string("foobar.mrn", mrn_db_path(arg5, buf));
-  cut_assert_equal_string("d.mrn", mrn_db_path(arg6, buf));
+  cut_assert_equal_string("hoge.mrn", mrn_db_path_gen(arg4, buf));
+  cut_assert_equal_string("foobar.mrn", mrn_db_path_gen(arg5, buf));
+  cut_assert_equal_string("d.mrn", mrn_db_path_gen(arg6, buf));
 }
 
-void test_mrn_db_name()
+void test_mrn_db_name_gen()
 {
   char buf[64];
   const char *arg1 = "./hoge/fuga";
   const char *arg2 = "./foobar/mysql";
   const char *arg3 = "./d/b";
-  cut_assert_equal_string("hoge", mrn_db_name(arg1, buf));
-  cut_assert_equal_string("foobar", mrn_db_name(arg2, buf));
-  cut_assert_equal_string("d", mrn_db_name(arg3, buf));
+  cut_assert_equal_string("hoge", mrn_db_name_gen(arg1, buf));
+  cut_assert_equal_string("foobar", mrn_db_name_gen(arg2, buf));
+  cut_assert_equal_string("d", mrn_db_name_gen(arg3, buf));
 
   const char *arg4 = "./hoge/";
   const char *arg5 = "./foobar/";
   const char *arg6 = "./d/";
-  cut_assert_equal_string("hoge", mrn_db_name(arg4, buf));
-  cut_assert_equal_string("foobar", mrn_db_name(arg5, buf));
-  cut_assert_equal_string("d", mrn_db_name(arg6, buf));
+  cut_assert_equal_string("hoge", mrn_db_name_gen(arg4, buf));
+  cut_assert_equal_string("foobar", mrn_db_name_gen(arg5, buf));
+  cut_assert_equal_string("d", mrn_db_name_gen(arg6, buf));
 }
 
-void test_mrn_table_name()
+void test_mrn_table_name_gen()
 {
   char buf[64];
   const char *arg1 = "./hoge/fuga";
   const char *arg2 = "./foobar/mysql";
   const char *arg3 = "./d/b";
-  cut_assert_equal_string("fuga", mrn_table_name(arg1, buf));
-  cut_assert_equal_string("mysql", mrn_table_name(arg2, buf));
-  cut_assert_equal_string("b", mrn_table_name(arg3, buf));
+  cut_assert_equal_string("fuga", mrn_table_name_gen(arg1, buf));
+  cut_assert_equal_string("mysql", mrn_table_name_gen(arg2, buf));
+  cut_assert_equal_string("b", mrn_table_name_gen(arg3, buf));
+}
+
+void test_mrn_lex_name_gen()
+{
+  char buf[64];
+  const char *arg1 = "./hoge/fuga";
+  const char *arg2 = "./foobar/mysql";
+  const char *arg3 = "./d/b";
+  cut_assert_equal_string("fuga_lex", mrn_lex_name_gen(arg1, buf));
+  cut_assert_equal_string("mysql_lex", mrn_lex_name_gen(arg2, buf));
+  cut_assert_equal_string("b_lex", mrn_lex_name_gen(arg3, buf));
+}
+
+void test_mrn_hash_name_gen()
+{
+  char buf[64];
+  const char *arg1 = "./hoge/fuga";
+  const char *arg2 = "./foobar/mysql";
+  const char *arg3 = "./d/b";
+  cut_assert_equal_string("fuga_hash", mrn_hash_name_gen(arg1, buf));
+  cut_assert_equal_string("mysql_hash", mrn_hash_name_gen(arg2, buf));
+  cut_assert_equal_string("b_hash", mrn_hash_name_gen(arg3, buf));
+}
+
+void test_mrn_pat_name_gen()
+{
+  char buf[64];
+  const char *arg1 = "./hoge/fuga";
+  const char *arg2 = "./foobar/mysql";
+  const char *arg3 = "./d/b";
+  cut_assert_equal_string("fuga_pat", mrn_pat_name_gen(arg1, buf));
+  cut_assert_equal_string("mysql_pat", mrn_pat_name_gen(arg2, buf));
+  cut_assert_equal_string("b_pat", mrn_pat_name_gen(arg3, buf));
+}
+
+void test_mrn_check_table_name()
+{
+  cut_assert_equal_int(-1, mrn_check_table_name("hoge_lex"));
+  cut_assert_equal_int(-1, mrn_check_table_name("hoge_hash"));
+  cut_assert_equal_int(-1, mrn_check_table_name("hoge_pat"));
+  cut_assert_equal_int(0, mrn_check_table_name("fuga"));
+  cut_assert_equal_int(0, mrn_check_table_name("fuga_lex_fuga"));
+  cut_assert_equal_int(0, mrn_check_table_name("fuga_hash_fuga"));
+  cut_assert_equal_int(0, mrn_check_table_name("fuga_pat_fuga"));
 }

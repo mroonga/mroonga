@@ -25,9 +25,16 @@ class ha_mroonga: public handler
   THR_LOCK_DATA thr_lock_data;
 
   grn_ctx *ctx;
+
   grn_obj *db;
   grn_obj *tbl;
   grn_obj **col;
+
+  grn_obj *lex;
+  grn_obj *hash;
+  grn_obj *pat;
+  grn_obj **index;
+
   grn_table_cursor *cur;
 
 public:
