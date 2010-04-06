@@ -575,12 +575,28 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 
   if (need_hash) {
     mrn_hash_name_gen(name, name_buff);
-    //TODO: implements here
+    grn_obj_flags hash_flags = GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_PERSISTENT;
+    grn_obj *hash_type = grn_ctx_at(ctx, GRN_DB_INT32); //TODO: check if this is ok
+    hash_obj = grn_table_create(ctx, name_buff, strlen(name_buff), NULL,
+                                hash_flags, hash_type, 0);
+    if (hash_obj == NULL) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create hash for table: name=%s", tbl_name);
+      grn_obj_remove(ctx, tbl_obj);
+      return -1;
+    }
   }
 
   if (need_pat) {
     mrn_pat_name_gen(name, name_buff);
-    //TODO: implements here
+    grn_obj_flags pat_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT;
+    grn_obj *pat_type = grn_ctx_at(ctx, GRN_DB_INT32); //TODO: check if this is ok
+    pat_obj = grn_table_create(ctx, name_buff, strlen(name_buff), NULL,
+                               pat_flags, pat_type, 0);
+    if (pat_obj == NULL) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create pat for table: name=%s", tbl_name);
+      grn_obj_remove(ctx, tbl_obj);
+      return -1;
+    }
   }
 
   for (i=0; i < n_keys; i++) {
@@ -602,24 +618,28 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     col_obj = grn_obj_column(ctx, tbl_obj, col_name, col_name_size);
 
     grn_obj_flags index_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
-    if (key_alg == HA_KEY_ALG_FULLTEXT) {    // fulltext
+    if (key_alg == HA_KEY_ALG_FULLTEXT) {
       index_obj = grn_column_create(ctx, lex_obj, col_name, col_name_size, NULL,
                                     index_flags, tbl_obj);
-      if (index_obj == NULL) {
-        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s, col=%s",
-                tbl_name, col_name);
-        grn_obj_remove(ctx, tbl_obj);
-        return -1;
-      }
-      grn_id gid = grn_obj_id(ctx, col_obj);
-      GRN_TEXT_INIT(&buf, 0);
-      GRN_TEXT_SET(ctx, &buf, (char*) &gid, sizeof(grn_id));
-      grn_obj_set_info(ctx, index_obj, GRN_INFO_SOURCE, &buf);
-    } else if (key_alg == HA_KEY_ALG_HASH) { // hash
-      //TODO: implements here
-    } else {                                 // btree
-      //TODO: implements here
+    } else if (key_alg == HA_KEY_ALG_HASH) {
+      index_obj = grn_column_create(ctx, hash_obj, col_name, col_name_size, NULL,
+                                    index_flags, tbl_obj);
+    } else {
+      index_obj = grn_column_create(ctx, pat_obj, col_name, col_name_size, NULL,
+                                    index_flags, tbl_obj);
     }
+
+    if (index_obj == NULL) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s, col=%s",
+              tbl_name, col_name);
+      grn_obj_remove(ctx, tbl_obj);
+      return -1;
+    }
+
+    grn_id gid = grn_obj_id(ctx, col_obj);
+    GRN_TEXT_INIT(&buf, 0);
+    GRN_TEXT_SET(ctx, &buf, (char*) &gid, sizeof(grn_id));
+    grn_obj_set_info(ctx, index_obj, GRN_INFO_SOURCE, &buf);
   }
 
   /* clean up */
