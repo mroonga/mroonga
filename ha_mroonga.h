@@ -35,6 +35,7 @@ class ha_mroonga: public handler
   grn_obj *pat;
   grn_obj **index;
 
+  grn_obj *res;
   grn_table_cursor *cur;
 
 public:

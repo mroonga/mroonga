@@ -539,7 +539,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   /* create indexes */
   uint n_keys = table->s->keys;
   char name_buff[MRN_MAX_PATH_SIZE];
-  grn_obj *lex_obj, *hash_obj, *pat_obj;
+  grn_obj *lex_obj=NULL, *hash_obj=NULL, *pat_obj=NULL;
   int need_lex=0, need_hash=0, need_pat=0;
 
   for (i=0; i < n_keys; i++) {
@@ -587,7 +587,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     if (i == pkeynr) {
       continue; // pkey is already handled
     }
-    grn_obj *col_obj, buf;
+    grn_obj *index_obj, *col_obj, buf;
     KEY key_info = table->s->key_info[i];
     // must be single column key
     int key_parts = key_info.key_parts;
@@ -599,21 +599,22 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     Field *field = key_info.key_part[0].field;
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
-    int mysql_field_type = field->type();
+    col_obj = grn_obj_column(ctx, tbl_obj, col_name, col_name_size);
+
     grn_obj_flags index_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
     if (key_alg == HA_KEY_ALG_FULLTEXT) {    // fulltext
-      col_obj = grn_column_create(ctx, lex_obj, col_name, col_name_size, NULL,
-                                  index_flags, tbl_obj);
-      if (col_obj == NULL) {
+      index_obj = grn_column_create(ctx, lex_obj, col_name, col_name_size, NULL,
+                                    index_flags, tbl_obj);
+      if (index_obj == NULL) {
         GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s, col=%s",
                 tbl_name, col_name);
         grn_obj_remove(ctx, tbl_obj);
         return -1;
       }
       grn_id gid = grn_obj_id(ctx, col_obj);
-      GRN_INT32_INIT(&buf, 0);
-      GRN_INT32_SET(ctx, &buf, gid);
-      grn_obj_set_info(ctx, lex_obj, GRN_INFO_SOURCE, &buf);
+      GRN_TEXT_INIT(&buf, 0);
+      GRN_TEXT_SET(ctx, &buf, (char*) &gid, sizeof(grn_id));
+      grn_obj_set_info(ctx, index_obj, GRN_INFO_SOURCE, &buf);
     } else if (key_alg == HA_KEY_ALG_HASH) { // hash
       //TODO: implements here
     } else {                                 // btree
@@ -622,6 +623,15 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   }
 
   /* clean up */
+  if (lex_obj != NULL) {
+    grn_obj_unlink(ctx, lex_obj);
+  }
+  if (hash_obj != NULL) {
+    grn_obj_unlink(ctx, hash_obj);
+  }
+  if (pat_obj != NULL) {
+    grn_obj_unlink(ctx, pat_obj);
+  }
   grn_obj_unlink(ctx, tbl_obj);
 
   return 0;
@@ -697,6 +707,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   }
   for (i=0; i < n_keys; i++) {
     if (i == pkeynr) {
+      index[i] = NULL;
       continue;
     }
     KEY key_info = table->s->key_info[i];
@@ -889,14 +900,52 @@ int ha_mroonga::ft_init() {
   return 0;
 }
 
-FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint inx,String *key)
+FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
 {
+  grn_obj *ft = index[keynr];
+  const char *keyword = key->ptr();
+  int keyword_size = strlen(keyword);
+
+  res = grn_table_create(ctx, NULL, 0, NULL, GRN_TABLE_HASH_KEY, tbl, 0);
+  
+  if (flags & FT_BOOL) {
+    // boolean search
+    grn_query *query = grn_query_open(ctx, keyword, keyword_size,
+                                      GRN_OP_OR, MRN_MAX_EXPRS);
+    grn_obj_search(ctx, ft, (grn_obj*) query, res, GRN_OP_OR, NULL);
+  } else {
+    // nlq search
+    grn_obj buf;
+    GRN_TEXT_INIT(&buf, 0);
+    GRN_TEXT_SET(ctx, &buf, keyword, keyword_size);
+    grn_obj_search(ctx, ft, &buf, res, GRN_OP_OR, NULL);
+  }
+  int n_rec = grn_table_size(ctx, res);
+  cur = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, -1, 0);
   return NULL;
 }
 
 int ha_mroonga::ft_read(uchar *buf)
 {
-  return HA_ERR_END_OF_FILE;
+  grn_id rid, gid;
+  
+  rid = grn_table_cursor_next(ctx, cur);
+
+  if (rid == GRN_ID_NIL) {
+    grn_table_cursor_close(ctx, cur);
+    grn_obj_unlink(ctx, res);
+    return HA_ERR_END_OF_FILE;
+  }
+
+  grn_table_get_key(ctx, res, rid, &gid, sizeof(grn_id));
+
+  int i;
+  int n_columns = table->s->fields;
+  for (i=0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    mrn_store_field(ctx, field, col[i], gid);
+  }
+  return 0;
 }
 
 const COND *ha_mroonga::cond_push(const COND *cond)
