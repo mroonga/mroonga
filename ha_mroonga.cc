@@ -654,11 +654,11 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   grn_ctx_use(ctx, db);
 
   /* open table */
-  char tbl_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, tbl_name);
-  tbl = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
+  char buf[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, buf);
+  tbl = grn_ctx_get(ctx, buf, strlen(buf));
   if (tbl == NULL) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table (%s)", tbl_name);
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table (%s)", buf);
     return -1;
   }
 
@@ -674,14 +674,51 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     col[i] = grn_obj_column(ctx, tbl, col_name, col_name_size);
     if (col[i] == NULL) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table(col) %s(%s)",
-              tbl_name, col_name);
+              buf, col_name);
       grn_obj_unlink(ctx, tbl);
       return -1;
     }
   }
 
   /* open indexes */
-  //TODO: implement here
+  mrn_lex_name_gen(name, buf);
+  lex = grn_ctx_get(ctx, buf, strlen(buf));
+  mrn_hash_name_gen(name, buf);
+  hash = grn_ctx_get(ctx, buf, strlen(buf));
+  mrn_pat_name_gen(name, buf);
+  pat = grn_ctx_get(ctx, buf, strlen(buf));
+
+  uint n_keys = table->s->keys;
+  uint pkeynr = table->s->primary_key;
+  if (n_keys > 0) {
+    index = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
+  } else {
+    index = NULL;
+  }
+  for (i=0; i < n_keys; i++) {
+    if (i == pkeynr) {
+      continue;
+    }
+    KEY key_info = table->s->key_info[i];
+    // surpose simgle column key
+    int key_parts = key_info.key_parts;
+    if (key_parts != 1) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported (%s)", db_path);
+      return -1;
+    }
+    Field *field = key_info.key_part[0].field;
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+    int key_alg = key_info.algorithm;
+
+    if (key_alg == HA_KEY_ALG_FULLTEXT) {    // fulltext
+      index[i] = grn_obj_column(ctx, lex, col_name, col_name_size);
+    } else if (key_alg == HA_KEY_ALG_HASH) { // hash
+      index[i] = grn_obj_column(ctx, hash, col_name, col_name_size);
+    } else {                                 // btree
+      index[i] = grn_obj_column(ctx, pat, col_name, col_name_size);
+    }
+  }
 
   return 0;
 }
@@ -689,7 +726,20 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 int ha_mroonga::close()
 {
   thr_lock_delete(&thr_lock);
+  if (lex != NULL) {
+    grn_obj_unlink(ctx, lex);
+  }
+  if (hash != NULL) {
+    grn_obj_unlink(ctx, hash);
+  }
+  if (pat != NULL) {
+    grn_obj_unlink(ctx, pat);
+  }
   grn_obj_unlink(ctx, tbl);
+
+  if (index != NULL) {
+    free(index);
+  }
   free(col);
   return 0;
 }
