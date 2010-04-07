@@ -950,6 +950,9 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
 
 int ha_mroonga::delete_row(const uchar *buf)
 {
+  if (grn_table_delete_by_id(ctx, tbl, row_id) != GRN_SUCCESS) {
+    return -1;
+  }
   return 0;
 }
 
