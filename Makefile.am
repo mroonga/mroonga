@@ -28,5 +28,6 @@ libmroonga_a_SOURCES   = ha_mroonga.cc mrnsys.c
 SUBDIRS = test
 
 EXTRA_DIST = plug.in
-# Don't update the files from bitkeeper
-%::SCCS/s.%
+
+installcheck-local: install
+	test/run-sql-test.sh
