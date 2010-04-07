@@ -37,6 +37,7 @@ class ha_mroonga: public handler
 
   grn_obj *res;
   grn_table_cursor *cur;
+  grn_id row_id;
 
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);

@@ -844,8 +844,8 @@ int ha_mroonga::rnd_init(bool scan)
 
 int ha_mroonga::rnd_next(uchar *buf)
 {
-  grn_id gid = grn_table_cursor_next(ctx, cur);
-  if (gid == GRN_ID_NIL) {
+  row_id = grn_table_cursor_next(ctx, cur);
+  if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     return HA_ERR_END_OF_FILE;
   }
@@ -853,7 +853,7 @@ int ha_mroonga::rnd_next(uchar *buf)
   int n_columns = table->s->fields;
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
-    mrn_store_field(ctx, field, col[i], gid);
+    mrn_store_field(ctx, field, col[i], row_id);
   }
   return 0;
 }
@@ -865,6 +865,7 @@ int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
 
 void ha_mroonga::position(const uchar *record)
 {
+  memcpy(ref, &row_id, sizeof(grn_id));
 }
 
 int ha_mroonga::write_row(uchar *buf)
@@ -882,9 +883,8 @@ int ha_mroonga::write_row(uchar *buf)
     pkey = GRN_TEXT_VALUE(&wrapper);
   }
 
-  grn_id gid;
   int added;
-  gid = grn_table_add(ctx, tbl, pkey, pkey_size, &added);
+  row_id = grn_table_add(ctx, tbl, pkey, pkey_size, &added);
   if (added == 0) {
     // duplicated error
     return -1;
@@ -896,7 +896,7 @@ int ha_mroonga::write_row(uchar *buf)
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
     mrn_set_buf(ctx, field, &colbuf, &col_size);
-    if (grn_obj_set_value(ctx, col[i], gid, &colbuf, GRN_OBJ_SET)
+    if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
         != GRN_SUCCESS) {
       return -1;
     }
@@ -947,7 +947,7 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
 
 int ha_mroonga::ft_read(uchar *buf)
 {
-  grn_id rid, gid;
+  grn_id rid;
   
   rid = grn_table_cursor_next(ctx, cur);
 
@@ -957,13 +957,13 @@ int ha_mroonga::ft_read(uchar *buf)
     return HA_ERR_END_OF_FILE;
   }
 
-  grn_table_get_key(ctx, res, rid, &gid, sizeof(grn_id));
+  grn_table_get_key(ctx, res, rid, &row_id, sizeof(grn_id));
 
   int i;
   int n_columns = table->s->fields;
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
-    mrn_store_field(ctx, field, col[i], gid);
+    mrn_store_field(ctx, field, col[i], row_id);
   }
   return 0;
 }
