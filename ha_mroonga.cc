@@ -399,9 +399,16 @@ const char *ha_mroonga::table_type() const
   return "mroonga";
 }
 
-const char *ha_mroonga::index_type(uint inx)
+const char *ha_mroonga::index_type(uint keynr)
 {
-  return "NONE";
+  KEY key_info = table->s->key_info[keynr];
+  if (key_info.algorithm == HA_KEY_ALG_FULLTEXT) {
+    return "FULLTEXT";
+  } else if (key_info.algorithm == HA_KEY_ALG_HASH) {
+    return "HASH";
+  } else {
+    return "BTREE";
+  }
 }
 
 static const char*ha_mroonga_exts[] = {
@@ -412,9 +419,22 @@ const char **ha_mroonga::bas_ext() const
   return ha_mroonga_exts;
 }
 
+ulonglong ha_mroonga_table_flags =
+    HA_NO_TRANSACTIONS |
+    HA_PARTIAL_COLUMN_READ |
+    HA_REC_NOT_IN_SEQ |
+    HA_NULL_IN_KEY |
+    HA_CAN_INDEX_BLOBS |
+    //HA_STATS_RECORDS_IS_EXACT |
+    HA_NO_PREFIX_CHAR_KEYS |
+    HA_CAN_FULLTEXT |
+    HA_NO_AUTO_INCREMENT |
+    HA_CAN_BIT_FIELD;
+    //HA_HAS_RECORDS;
+
 ulonglong ha_mroonga::table_flags() const
 {
-  return HA_NO_TRANSACTIONS|HA_REC_NOT_IN_SEQ|HA_NULL_IN_KEY|HA_CAN_FULLTEXT;
+  return ha_mroonga_table_flags;
 }
 
 ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
@@ -910,6 +930,37 @@ int ha_mroonga::write_row(uchar *buf)
   }
 
   return 0;
+}
+
+int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
+{
+  grn_obj colbuf;
+  int i, col_size;
+  int n_columns = table->s->fields;
+  for (i=0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    mrn_set_buf(ctx, field, &colbuf, &col_size);
+    if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
+        != GRN_SUCCESS) {
+      return -1;
+    }
+  }
+  return 0;
+}
+
+int ha_mroonga::delete_row(const uchar *buf)
+{
+  return 0;
+}
+
+ha_rows ha_mroonga::records_in_range(uint inx, key_range *min_key, key_range *max_key)
+{
+  uint pkeynr = table->s->primary_key;
+  if (inx == pkeynr) {
+    return 1;
+  } else {
+    return 2;
+  }
 }
 
 int ha_mroonga::index_read(uchar *buf, const uchar *key,

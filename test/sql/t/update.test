@@ -1,0 +1,30 @@
+--disable_warnings
+install plugin mroonga soname 'libmroonga.so';
+set storage_engine=mroonga;
+drop table if exists t1, t2, t3;
+--enable_warnings
+
+create table t1 (c1 int, c2 int);
+show create table t1;
+insert into t1 values (1, 100);
+insert into t1 values (2, 101);
+insert into t1 values (3, 102);
+select * from t1;
+
+update t1 set c2=c2+100 where c1=1;
+select * from t1;
+update t1 set c2=c2+100 where c1=2;
+select * from t1;
+update t1 set c2=c2+100 where c1=3;
+select * from t1;
+
+flush tables;
+
+update t1 set c1=5, c2=50;
+select * from t1;
+
+drop table t1;
+
+--disable_warnings
+uninstall plugin mroonga;
+--enable_warnings

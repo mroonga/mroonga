@@ -65,14 +65,17 @@ public:
 
   int delete_table(const char *name);
   int write_row(uchar *buf);
+  int update_row(const uchar *old_data, uchar *new_data);
+  int delete_row(const uchar *buf);
 
   uint max_supported_record_length() const { return HA_MAX_REC_LENGTH; }
   uint max_supported_keys()          const { return 2; }
   uint max_supported_key_parts()     const { return 1; }
   uint max_supported_key_length()    const { return MAX_KEY_LENGTH; }
 
-  int index_read(uchar *buf, const uchar *key, uint key_len,
-		  enum ha_rkey_function find_flag);
+  ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
+
+  int index_read(uchar *buf, const uchar *key, uint key_len, enum ha_rkey_function find_flag);
   int index_next(uchar *buf);
 
   int ft_init();
