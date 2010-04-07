@@ -860,6 +860,13 @@ int ha_mroonga::rnd_next(uchar *buf)
 
 int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
 {
+  row_id = *((grn_id*) pos);
+  int i;
+  int n_columns = table->s->fields;
+  for (i=0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    mrn_store_field(ctx, field, col[i], row_id);
+  }
   return 0;
 }
 

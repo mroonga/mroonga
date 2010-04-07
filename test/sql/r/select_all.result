@@ -126,4 +126,53 @@ c1	c2
 5	moge
 3	mo
 drop table t1;
+create table t1 (c1 int, c2 int, c3 text);
+insert into t1 values(1, 20, "hoge");
+insert into t1 values(4, 60, "hogefuga");
+insert into t1 values(2, 50, "fuga");
+insert into t1 values(5, 30, "moge");
+insert into t1 values(3, 40, "mo");
+select * from t1 order by c1 asc;
+c1	c2	c3
+1	20	hoge
+2	50	fuga
+3	40	mo
+4	60	hogefuga
+5	30	moge
+select * from t1 order by c1 desc;
+c1	c2	c3
+5	30	moge
+4	60	hogefuga
+3	40	mo
+2	50	fuga
+1	20	hoge
+select * from t1 order by c2 asc;
+c1	c2	c3
+1	20	hoge
+5	30	moge
+3	40	mo
+2	50	fuga
+4	60	hogefuga
+select * from t1 order by c2 desc;
+c1	c2	c3
+4	60	hogefuga
+2	50	fuga
+3	40	mo
+5	30	moge
+1	20	hoge
+select * from t1 order by c3 asc;
+c1	c2	c3
+2	50	fuga
+1	20	hoge
+4	60	hogefuga
+3	40	mo
+5	30	moge
+select * from t1 order by c3 desc;
+c1	c2	c3
+5	30	moge
+3	40	mo
+4	60	hogefuga
+1	20	hoge
+2	50	fuga
+drop table t1;
 uninstall plugin mroonga;

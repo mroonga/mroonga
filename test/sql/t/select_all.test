@@ -54,6 +54,22 @@ select * from t1;
 
 drop table t1;
 
+# ORDER BY with position
+create table t1 (c1 int, c2 int, c3 text);
+insert into t1 values(1, 20, "hoge");
+insert into t1 values(4, 60, "hogefuga");
+insert into t1 values(2, 50, "fuga");
+insert into t1 values(5, 30, "moge");
+insert into t1 values(3, 40, "mo");
+select * from t1 order by c1 asc;
+select * from t1 order by c1 desc;
+select * from t1 order by c2 asc;
+select * from t1 order by c2 desc;
+select * from t1 order by c3 asc;
+select * from t1 order by c3 desc;
+drop table t1;
+
+
 --disable_warnings
 uninstall plugin mroonga;
 --enable_warnings
