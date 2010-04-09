@@ -30,10 +30,8 @@ class ha_mroonga: public handler
   grn_obj *tbl;
   grn_obj **col;
 
-  grn_obj *lex;
-  grn_obj *hash;
-  grn_obj *pat;
-  grn_obj **index;
+  grn_obj **idx_tbl;
+  grn_obj **idx_col;
 
   grn_obj *res;
   grn_table_cursor *cur;

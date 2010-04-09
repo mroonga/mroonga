@@ -172,46 +172,13 @@ void test_mrn_table_name_gen()
   cut_assert_equal_string("b", mrn_table_name_gen(arg3, buf));
 }
 
-void test_mrn_lex_name_gen()
+void test_mrn_index_name_gen()
 {
-  char buf[64];
-  const char *arg1 = "./hoge/fuga";
-  const char *arg2 = "./foobar/mysql";
-  const char *arg3 = "./d/b";
-  cut_assert_equal_string("fuga_lex", mrn_lex_name_gen(arg1, buf));
-  cut_assert_equal_string("mysql_lex", mrn_lex_name_gen(arg2, buf));
-  cut_assert_equal_string("b_lex", mrn_lex_name_gen(arg3, buf));
-}
-
-void test_mrn_hash_name_gen()
-{
-  char buf[64];
-  const char *arg1 = "./hoge/fuga";
-  const char *arg2 = "./foobar/mysql";
-  const char *arg3 = "./d/b";
-  cut_assert_equal_string("fuga_hash", mrn_hash_name_gen(arg1, buf));
-  cut_assert_equal_string("mysql_hash", mrn_hash_name_gen(arg2, buf));
-  cut_assert_equal_string("b_hash", mrn_hash_name_gen(arg3, buf));
-}
-
-void test_mrn_pat_name_gen()
-{
-  char buf[64];
-  const char *arg1 = "./hoge/fuga";
-  const char *arg2 = "./foobar/mysql";
-  const char *arg3 = "./d/b";
-  cut_assert_equal_string("fuga_pat", mrn_pat_name_gen(arg1, buf));
-  cut_assert_equal_string("mysql_pat", mrn_pat_name_gen(arg2, buf));
-  cut_assert_equal_string("b_pat", mrn_pat_name_gen(arg3, buf));
-}
-
-void test_mrn_check_table_name()
-{
-  cut_assert_equal_int(-1, mrn_check_table_name("hoge_lex"));
-  cut_assert_equal_int(-1, mrn_check_table_name("hoge_hash"));
-  cut_assert_equal_int(-1, mrn_check_table_name("hoge_pat"));
-  cut_assert_equal_int(0, mrn_check_table_name("fuga"));
-  cut_assert_equal_int(0, mrn_check_table_name("fuga_lex_fuga"));
-  cut_assert_equal_int(0, mrn_check_table_name("fuga_hash_fuga"));
-  cut_assert_equal_int(0, mrn_check_table_name("fuga_pat_fuga"));
+  char buf[64], buf2[64];
+  const char *arg = "./hoge/fuga";
+  mrn_table_name_gen(arg, buf);
+  cut_assert_equal_string("fuga_0000", mrn_index_name_gen(buf, 0, buf2));
+  cut_assert_equal_string("fuga_0001", mrn_index_name_gen(buf, 1, buf2));
+  cut_assert_equal_string("fuga_0020", mrn_index_name_gen(buf, 20, buf2));
+  cut_assert_equal_string("fuga_0300", mrn_index_name_gen(buf, 300, buf2));
 }

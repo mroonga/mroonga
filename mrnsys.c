@@ -104,73 +104,14 @@ char *mrn_table_name_gen(const char *arg, char *dest)
 }
 
 /**
- * "./${db}/${tbl}" ==> "${tbl}_lex"
+ * "${tbl}" ==> "${tbl}_0000"
+ * "${tbl}" ==> "${tbl}_0001"
+ * "${tbl}" ==> "${tbl}_0002"
+ * "${tbl}" ==> "${tbl}_0003"
+ * ...
  */
-char *mrn_lex_name_gen(const char *arg, char *dest)
+char *mrn_index_name_gen(const char *table_name, int idx, char *dest)
 {
-  int len = strlen(arg);
-  int i=len, j=0;
-  for (; arg[--i] != '/' ;) {}
-  for (; i <= len ;) {
-    dest[j++] = arg[++i];
-  }
-  dest[j] = '\0';
-  strcat(dest, MRN_LEX_SUFFIX);
+  snprintf(dest, MRN_MAX_PATH_SIZE, "%s_%04d", table_name, idx);
   return dest;
-}
-
-/**
- * "./${db}/${tbl}" ==> "${tbl}_hash"
- */
-char *mrn_hash_name_gen(const char *arg, char *dest)
-{
-  int len = strlen(arg);
-  int i=len, j=0;
-  for (; arg[--i] != '/' ;) {}
-  for (; i <= len ;) {
-    dest[j++] = arg[++i];
-  }
-  dest[j] = '\0';
-  strcat(dest, MRN_HASH_SUFFIX);
-  return dest;
-}
-
-/**
- * "./${db}/${tbl}" ==> "${tbl}_pat"
- */
-char *mrn_pat_name_gen(const char *arg, char *dest)
-{
-  int len = strlen(arg);
-  int i=len, j=0;
-  for (; arg[--i] != '/' ;) {}
-  for (; i <= len ;) {
-    dest[j++] = arg[++i];
-  }
-  dest[j] = '\0';
-  strcat(dest, MRN_PAT_SUFFIX);
-  return dest;
-}
-
-/**
- *  "XXX_lex"  ==> NG
- *  "XXX_hash" ==> NG
- *  "XXX_pat"  ==> NG
- */
-int mrn_check_table_name(const char *table_name)
-{
-  char *p;
-  int len = strlen(table_name);
-  if ((p = strstr(table_name, MRN_LEX_SUFFIX)) != NULL &&
-      p == (table_name + len - strlen(MRN_LEX_SUFFIX))) {
-    return -1;
-  }
-  if ((p = strstr(table_name, MRN_HASH_SUFFIX)) != NULL &&
-      p == (table_name + len - strlen(MRN_HASH_SUFFIX))) {
-    return -1;
-  }
-  if ((p = strstr(table_name, MRN_PAT_SUFFIX)) != NULL &&
-      p == (table_name + len - strlen(MRN_PAT_SUFFIX))) {
-    return -1;
-  }
-  return 0;
 }

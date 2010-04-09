@@ -22,10 +22,6 @@ int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key);
 char *mrn_db_path_gen(const char *arg, char *dest);
 char *mrn_db_name_gen(const char *arg, char *dest);
 char *mrn_table_name_gen(const char *arg, char *dest);
-char *mrn_lex_name_gen(const char *arg, char *dest);
-char *mrn_hash_name_gen(const char *arg, char *dest);
-char *mrn_pat_name_gen(const char *arg, char *dest);
-
-int mrn_check_table_name(const char *table_name);
+char *mrn_index_name_gen(const char *arg, int idx, char *dest);
 
 #endif /* _mrn_util_h */

@@ -517,11 +517,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   mrn_table_name_gen(name, tbl_name);
   int tbl_name_len = strlen(tbl_name);
 
-  if (mrn_check_table_name(tbl_name)) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "invalid table name: name=%s", tbl_name);
-    return -1;    
-  }
-
   char *tbl_path = NULL;           // we don't specify path
   grn_obj *pkey_value_type = NULL; // we don't use this   
 
@@ -557,27 +552,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     }
   }
 
-  /* create indexes */
-  uint n_keys = table->s->keys;
-  char name_buff[MRN_MAX_PATH_SIZE];
-  grn_obj *lex_obj=NULL, *hash_obj=NULL, *pat_obj=NULL;
-  int need_lex=0, need_hash=0, need_pat=0;
-
-  for (i=0; i < n_keys; i++) {
-    if (i == pkeynr) {
-      continue; // pkey is already handled
-    }
-    KEY key_info = table->s->key_info[i];
-    int key_alg = key_info.algorithm;
-    if (key_alg == HA_KEY_ALG_FULLTEXT) {
-      need_lex = 1;
-    } else if (key_alg == HA_KEY_ALG_HASH) {
-      need_hash = 1;
-    } else {
-      need_pat = 1;
-    }
-  }
-
+/*
   if (need_lex) {
     mrn_lex_name_gen(name, name_buff);
     grn_obj_flags lex_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT;
@@ -619,40 +594,68 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
       return -1;
     }
   }
+*/
+  /* create indexes */
+  uint n_keys = table->s->keys;
+  char idx_name[MRN_MAX_PATH_SIZE];
 
   for (i=0; i < n_keys; i++) {
     if (i == pkeynr) {
       continue; // pkey is already handled
     }
-    grn_obj *index_obj, *col_obj, buf;
+
+    grn_obj *idx_tbl_obj, *idx_col_obj, *col_obj, *col_type, buf;
     KEY key_info = table->s->key_info[i];
+
     // must be single column key
     int key_parts = key_info.key_parts;
     if (key_parts != 1) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported (%s)", db_path);
       return -1;
     }
-    int key_alg = key_info.algorithm;
+
+    mrn_index_name_gen(tbl_name, i, idx_name);
+
     Field *field = key_info.key_part[0].field;
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
     col_obj = grn_obj_column(ctx, tbl_obj, col_name, col_name_size);
+    int mysql_field_type = field->type();
+    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
+    col_type = grn_ctx_at(ctx, gtype);
+    grn_obj_flags idx_col_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
 
-    grn_obj_flags index_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
+    int key_alg = key_info.algorithm;
+    grn_obj_flags idx_tbl_flags;
     if (key_alg == HA_KEY_ALG_FULLTEXT) {
-      index_obj = grn_column_create(ctx, lex_obj, col_name, col_name_size, NULL,
-                                    index_flags, tbl_obj);
+      idx_tbl_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT;
     } else if (key_alg == HA_KEY_ALG_HASH) {
-      index_obj = grn_column_create(ctx, hash_obj, col_name, col_name_size, NULL,
-                                    index_flags, tbl_obj);
+      idx_tbl_flags = GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_PERSISTENT;
     } else {
-      index_obj = grn_column_create(ctx, pat_obj, col_name, col_name_size, NULL,
-                                    index_flags, tbl_obj);
+      idx_tbl_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT;
     }
 
-    if (index_obj == NULL) {
+    idx_tbl_obj = grn_table_create(ctx, idx_name, strlen(idx_name), NULL,
+                                   idx_tbl_flags, col_type, 0);
+    if (idx_tbl_obj == NULL) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s", idx_name);
+      grn_obj_remove(ctx, tbl_obj);
+      return -1;
+    }
+
+    if (key_alg == HA_KEY_ALG_FULLTEXT) {
+      grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+      grn_obj *token_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
+      grn_obj_set_info(ctx, idx_tbl_obj, info_type, token_type);
+    }
+
+    idx_col_obj = grn_column_create(ctx, idx_tbl_obj, col_name, col_name_size, NULL,
+                                    idx_col_flags, tbl_obj);
+
+    if (idx_col_obj == NULL) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s, col=%s",
-              tbl_name, col_name);
+              idx_name, col_name);
+      grn_obj_remove(ctx, idx_tbl_obj);
       grn_obj_remove(ctx, tbl_obj);
       return -1;
     }
@@ -660,19 +663,11 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     grn_id gid = grn_obj_id(ctx, col_obj);
     GRN_TEXT_INIT(&buf, 0);
     GRN_TEXT_SET(ctx, &buf, (char*) &gid, sizeof(grn_id));
-    grn_obj_set_info(ctx, index_obj, GRN_INFO_SOURCE, &buf);
+    grn_obj_set_info(ctx, idx_col_obj, GRN_INFO_SOURCE, &buf);
+    grn_obj_unlink(ctx, &buf);
   }
 
   /* clean up */
-  if (lex_obj != NULL) {
-    grn_obj_unlink(ctx, lex_obj);
-  }
-  if (hash_obj != NULL) {
-    grn_obj_unlink(ctx, hash_obj);
-  }
-  if (pat_obj != NULL) {
-    grn_obj_unlink(ctx, pat_obj);
-  }
   grn_obj_unlink(ctx, tbl_obj);
 
   return 0;
@@ -705,11 +700,11 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   grn_ctx_use(ctx, db);
 
   /* open table */
-  char buf[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, buf);
-  tbl = grn_ctx_get(ctx, buf, strlen(buf));
+  char tbl_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, tbl_name);
+  tbl = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
   if (tbl == NULL) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table (%s)", buf);
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table (%s)", tbl_name);
     return -1;
   }
 
@@ -725,112 +720,94 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     col[i] = grn_obj_column(ctx, tbl, col_name, col_name_size);
     if (col[i] == NULL) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table(col) %s(%s)",
-              buf, col_name);
+              tbl_name, col_name);
       grn_obj_unlink(ctx, tbl);
       return -1;
     }
   }
 
   /* open indexes */
-  mrn_lex_name_gen(name, buf);
-  lex = grn_ctx_get(ctx, buf, strlen(buf));
-  mrn_hash_name_gen(name, buf);
-  hash = grn_ctx_get(ctx, buf, strlen(buf));
-  mrn_pat_name_gen(name, buf);
-  pat = grn_ctx_get(ctx, buf, strlen(buf));
-
+  char idx_name[MRN_MAX_PATH_SIZE];
   uint n_keys = table->s->keys;
   uint pkeynr = table->s->primary_key;
   if (n_keys > 0) {
-    index = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
+    idx_tbl = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
+    idx_col = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
   } else {
-    index = NULL;
+    idx_tbl = idx_col = NULL;
   }
+
   for (i=0; i < n_keys; i++) {
     if (i == pkeynr) {
-      index[i] = NULL;
+      idx_tbl[i] = idx_col[i] = NULL;
       continue;
     }
+
+    mrn_index_name_gen(tbl_name, i, idx_name);
+    idx_tbl[i] = grn_ctx_get(ctx, idx_name, strlen(idx_name));
+
     KEY key_info = table->s->key_info[i];
-    // surpose simgle column key
-    int key_parts = key_info.key_parts;
-    if (key_parts != 1) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported (%s)", db_path);
-      return -1;
-    }
     Field *field = key_info.key_part[0].field;
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
-    int key_alg = key_info.algorithm;
-
-    if (key_alg == HA_KEY_ALG_FULLTEXT) {    // fulltext
-      index[i] = grn_obj_column(ctx, lex, col_name, col_name_size);
-    } else if (key_alg == HA_KEY_ALG_HASH) { // hash
-      index[i] = grn_obj_column(ctx, hash, col_name, col_name_size);
-    } else {                                 // btree
-      index[i] = grn_obj_column(ctx, pat, col_name, col_name_size);
-    }
+    idx_col[i] = grn_obj_column(ctx, idx_tbl[i], col_name, col_name_size);
   }
-
   return 0;
 }
 
 int ha_mroonga::close()
 {
   thr_lock_delete(&thr_lock);
-  if (lex != NULL) {
-    grn_obj_unlink(ctx, lex);
-  }
-  if (hash != NULL) {
-    grn_obj_unlink(ctx, hash);
-  }
-  if (pat != NULL) {
-    grn_obj_unlink(ctx, pat);
+
+  int i;
+  uint n_keys = table->s->keys;
+  uint pkeynr = table->s->primary_key;
+  for (i=0; i < n_keys; i++) {
+    if (i == pkeynr) {
+      continue;
+    }
+    grn_obj_unlink(ctx, idx_tbl[i]);
   }
   grn_obj_unlink(ctx, tbl);
 
-  if (index != NULL) {
-    free(index);
+  if (idx_tbl != NULL) {
+    free(idx_tbl);
+    free(idx_col);
   }
+
   free(col);
   return 0;
 }
 
 int ha_mroonga::delete_table(const char *name)
 {
-  char buf[MRN_MAX_PATH_SIZE];
+  char db_path[MRN_MAX_PATH_SIZE];
+  char tbl_name[MRN_MAX_PATH_SIZE];
+  char idx_name[MRN_MAX_PATH_SIZE];
 
   grn_obj *db_obj, *tbl_obj, *lex_obj, *hash_obj, *pat_obj;
-  mrn_db_path_gen(name, buf);
-  db_obj = grn_db_open(ctx, buf);
+  mrn_db_path_gen(name, db_path);
+  db_obj = grn_db_open(ctx, db_path);
   if (db_obj == NULL) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_db_open failed while delete_table (%s)", buf);
+    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_db_open failed while delete_table (%s)", db_path);
     return -1;
   }
   grn_ctx_use(ctx, db_obj);
 
-  mrn_lex_name_gen(name, buf);
-  lex_obj = grn_ctx_get(ctx, buf, strlen(buf));
-  if (lex_obj != NULL) {
-    grn_obj_remove(ctx, lex_obj);
+  mrn_table_name_gen(name, tbl_name);
+
+  int i;
+  for (i=0; i < 100; i++) { // 100 is enough
+    mrn_index_name_gen(tbl_name, i, idx_name);
+    grn_obj *idx_tbl_obj = grn_ctx_get(ctx, idx_name, strlen(idx_name));
+    if (idx_tbl_obj != NULL) {
+      grn_obj_remove(ctx, idx_tbl_obj);
+    }
   }
 
-  mrn_hash_name_gen(name, buf);
-  hash_obj = grn_ctx_get(ctx, buf, strlen(buf));
-  if (hash_obj != NULL) {
-    grn_obj_remove(ctx, hash_obj);
-  }
-
-  mrn_pat_name_gen(name, buf);
-  pat_obj = grn_ctx_get(ctx, buf, strlen(buf));
-  if (pat_obj != NULL) {
-    grn_obj_remove(ctx, pat_obj);
-  }
-
-  mrn_table_name_gen(name, buf);
-  tbl_obj = grn_ctx_get(ctx, buf, strlen(buf));
+  tbl_obj = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
   if (tbl_obj == NULL) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get failed while mrn_drop (%s)", buf);
+    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get failed while mrn_drop (%s)", tbl_name);
     return -1;
   }
   return grn_obj_remove(ctx, tbl_obj);
@@ -991,7 +968,7 @@ int ha_mroonga::ft_init() {
 
 FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
 {
-  grn_obj *ft = index[keynr];
+  grn_obj *ft = idx_col[keynr];
   const char *keyword = key->ptr();
   int keyword_size = strlen(keyword);
 
