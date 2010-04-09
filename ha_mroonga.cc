@@ -230,7 +230,7 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   case MYSQL_TYPE_TINY:
     {
       int val = field->val_int();
-      GRN_INT8_INIT(buf, 0);
+      grn_obj_reinit(ctx, buf, GRN_DB_INT8, 0);
       GRN_INT8_SET(ctx, buf, val);
       *size = 1; 
       break;
@@ -238,7 +238,7 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   case MYSQL_TYPE_SHORT:
     { 
       int val = field->val_int();
-      GRN_INT16_INIT(buf, 0);
+      grn_obj_reinit(ctx, buf, GRN_DB_INT16, 0);
       GRN_INT16_SET(ctx, buf, val);
       *size = 2;
       break;
@@ -247,7 +247,7 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   case MYSQL_TYPE_LONG:
     {
       int val = field->val_int();
-      GRN_INT32_INIT(buf, 0);
+      grn_obj_reinit(ctx, buf, GRN_DB_INT32, 0);
       GRN_INT32_SET(ctx, buf, val);
       *size = 4;
       break;
@@ -255,7 +255,7 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   case MYSQL_TYPE_LONGLONG:
     {
       long long int val = field->val_int();
-      GRN_INT64_INIT(buf, 0);
+      grn_obj_reinit(ctx, buf, GRN_DB_INT64, 0);
       GRN_INT64_SET(ctx, buf, val);
       *size = 8;
       break;
@@ -264,7 +264,7 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   case MYSQL_TYPE_DOUBLE:
     {
       double val = field->val_real();
-      GRN_FLOAT_INIT(buf, 0);
+      grn_obj_reinit(ctx, buf, GRN_DB_FLOAT, 0);
       GRN_FLOAT_SET(ctx, buf, val);
       *size = 8;
       break;
@@ -275,7 +275,7 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   case MYSQL_TYPE_DATETIME:
     {
       long long int val = field->val_int();
-      GRN_TIME_INIT(buf, 0);
+      grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
       GRN_TIME_SET(ctx, buf, val);
       *size = 8;
       break;
@@ -286,7 +286,7 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
       String tmp;
       const char *val = field->val_str(&tmp)->ptr();
       int len = field->data_length();
-      GRN_TEXT_INIT(buf, 0);
+      grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
       GRN_TEXT_SET(ctx, buf, val, len);
       *size = len;
       break;
@@ -297,7 +297,7 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
       Field_blob *blob = (Field_blob*) field;
       const char *val = blob->val_str(0,&tmp)->ptr();
       int len = blob->get_length();
-      GRN_TEXT_INIT(buf, 0);
+      grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
       GRN_TEXT_SET(ctx, buf, val, len);
       *size = len;
       break;
@@ -379,6 +379,7 @@ void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       break;
     }
   }
+  grn_obj_unlink(ctx, &buf);
 }
 
 /* handler implementation */
@@ -897,10 +898,11 @@ void ha_mroonga::position(const uchar *record)
 
 int ha_mroonga::write_row(uchar *buf)
 {
-  void *pkey;
   grn_obj wrapper;
+  void *pkey = NULL;
   int pkey_size = 0;
   uint pkeynr = table->s->primary_key;
+  GRN_VOID_INIT(&wrapper);
   if (pkeynr != MAX_INDEXES) {
     KEY key_info = table->s->key_info[pkeynr];
     // surpose simgle column key
@@ -912,6 +914,7 @@ int ha_mroonga::write_row(uchar *buf)
 
   int added;
   row_id = grn_table_add(ctx, tbl, pkey, pkey_size, &added);
+  grn_obj_unlink(ctx, &wrapper);
   if (added == 0) {
     // duplicated error
     return -1;
@@ -920,15 +923,17 @@ int ha_mroonga::write_row(uchar *buf)
   grn_obj colbuf;
   int i, col_size;
   int n_columns = table->s->fields;
+  GRN_VOID_INIT(&colbuf);
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
     mrn_set_buf(ctx, field, &colbuf, &col_size);
     if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
         != GRN_SUCCESS) {
+      grn_obj_unlink(ctx, &colbuf);
       return -1;
     }
   }
-
+  grn_obj_unlink(ctx, &colbuf);
   return 0;
 }
 
@@ -937,14 +942,17 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
   grn_obj colbuf;
   int i, col_size;
   int n_columns = table->s->fields;
+  GRN_VOID_INIT(&colbuf);
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
     mrn_set_buf(ctx, field, &colbuf, &col_size);
     if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
         != GRN_SUCCESS) {
+      grn_obj_unlink(ctx, &colbuf);
       return -1;
     }
   }
+  grn_obj_unlink(ctx, &colbuf);
   return 0;
 }
 
