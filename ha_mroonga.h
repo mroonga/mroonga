@@ -67,7 +67,7 @@ public:
   int delete_row(const uchar *buf);
 
   uint max_supported_record_length() const { return HA_MAX_REC_LENGTH; }
-  uint max_supported_keys()          const { return 2; }
+  uint max_supported_keys()          const { return 100; }
   uint max_supported_key_parts()     const { return 1; }
   uint max_supported_key_length()    const { return MAX_KEY_LENGTH; }
 
