@@ -31,7 +31,7 @@ void mrn_logger_func(int level, const char *time, const char *title,
 {
   const char slev[] = " EACewnid-";
   if (mrn_logfile_opened) {
-    fprintf(mrn_logfile, "%s|%c|%u|%s\n", time,
+    fprintf(mrn_logfile, "%s|%c|%08x|%s\n", time,
             *(slev + level), (uint)pthread_self(), msg);
     fflush(mrn_logfile);
   }
