@@ -552,49 +552,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     }
   }
 
-/*
-  if (need_lex) {
-    mrn_lex_name_gen(name, name_buff);
-    grn_obj_flags lex_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT;
-    grn_obj *lex_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
-    lex_obj = grn_table_create(ctx, name_buff, strlen(name_buff), NULL,
-                               lex_flags, lex_type, 0);
-    if (lex_obj == NULL) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create lex for table: name=%s", tbl_name);
-      grn_obj_remove(ctx, tbl_obj);
-      return -1;
-    }
-    grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-    grn_obj *index_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
-    grn_obj_set_info(ctx, lex_obj, info_type, index_type);
-  }
-
-  if (need_hash) {
-    mrn_hash_name_gen(name, name_buff);
-    grn_obj_flags hash_flags = GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_PERSISTENT;
-    grn_obj *hash_type = grn_ctx_at(ctx, GRN_DB_INT32); //TODO: check if this is ok
-    hash_obj = grn_table_create(ctx, name_buff, strlen(name_buff), NULL,
-                                hash_flags, hash_type, 0);
-    if (hash_obj == NULL) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create hash for table: name=%s", tbl_name);
-      grn_obj_remove(ctx, tbl_obj);
-      return -1;
-    }
-  }
-
-  if (need_pat) {
-    mrn_pat_name_gen(name, name_buff);
-    grn_obj_flags pat_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT;
-    grn_obj *pat_type = grn_ctx_at(ctx, GRN_DB_INT32); //TODO: check if this is ok
-    pat_obj = grn_table_create(ctx, name_buff, strlen(name_buff), NULL,
-                               pat_flags, pat_type, 0);
-    if (pat_obj == NULL) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create pat for table: name=%s", tbl_name);
-      grn_obj_remove(ctx, tbl_obj);
-      return -1;
-    }
-  }
-*/
   /* create indexes */
   uint n_keys = table->s->keys;
   char idx_name[MRN_MAX_PATH_SIZE];
