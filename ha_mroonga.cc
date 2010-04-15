@@ -386,29 +386,35 @@ void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   :handler(hton, share)
 {
+  DBUG_ENTER("ha_mroonga::ha_mroonga");
   ctx = grn_ctx_open(0);
   grn_ctx_use(ctx, mrn_db);
+  DBUG_VOID_RETURN;
 }
 
 ha_mroonga::~ha_mroonga()
 {
+  DBUG_ENTER("ha_mroonga::~ha_mroonga");
   grn_ctx_fin(ctx);
+  DBUG_VOID_RETURN;
 }
 
 const char *ha_mroonga::table_type() const
 {
-  return "mroonga";
+  DBUG_ENTER("ha_mroonga::table_type");
+  DBUG_RETURN("mroonga");
 }
 
 const char *ha_mroonga::index_type(uint keynr)
 {
+  DBUG_ENTER("ha_mroonga::index_type");
   KEY key_info = table->s->key_info[keynr];
   if (key_info.algorithm == HA_KEY_ALG_FULLTEXT) {
-    return "FULLTEXT";
+    DBUG_RETURN("FULLTEXT");
   } else if (key_info.algorithm == HA_KEY_ALG_HASH) {
-    return "HASH";
+    DBUG_RETURN("HASH");
   } else {
-    return "BTREE";
+    DBUG_RETURN("BTREE");
   }
 }
 
@@ -417,7 +423,8 @@ static const char*ha_mroonga_exts[] = {
 };
 const char **ha_mroonga::bas_ext() const
 {
-  return ha_mroonga_exts;
+  DBUG_ENTER("ha_mroonga::bas_ext");
+  DBUG_RETURN(ha_mroonga_exts);
 }
 
 ulonglong ha_mroonga_table_flags =
@@ -435,16 +442,19 @@ ulonglong ha_mroonga_table_flags =
 
 ulonglong ha_mroonga::table_flags() const
 {
-  return ha_mroonga_table_flags;
+  DBUG_ENTER("ha_mroonga::table_flags");
+  DBUG_RETURN(ha_mroonga_table_flags);
 }
 
 ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
 {
-  return 0;
+  DBUG_ENTER("ha_mroonga::index_flags");
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 {
+  DBUG_ENTER("ha_mroonga::create");
   /* First, we must check if database is alreadly opened, created */
   grn_obj *db_obj;
   char db_name[MRN_MAX_PATH_SIZE];
@@ -462,7 +472,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
       if (db_obj == NULL) {
         pthread_mutex_unlock(&db_mutex);
         GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create database (%s)", db_path);
-        return -1;
+        DBUG_RETURN(-1);
       }
     } else {
       // opening existing database
@@ -470,7 +480,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
       if (db_obj == NULL) {
         GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db_path);
         pthread_mutex_unlock(&db_mutex);
-        return -1;
+        DBUG_RETURN(-1);
       }
     }
     mrn_hash_put(ctx, mrn_hash, db_name, db_obj);
@@ -490,7 +500,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     int key_parts = key_info.key_parts;
     if (key_parts != 1) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported (%s)", db_path);
-      return -1;
+      DBUG_RETURN(-1);
     }
     Field *pkey_field = key_info.key_part[0].field;
 
@@ -525,7 +535,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 
   if (tbl_obj == NULL) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s", tbl_name);
-    return -1;
+    DBUG_RETURN(-1);
   }
 
   /* create columns */
@@ -548,7 +558,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, col=%s",
               tbl_name, col_name);
       grn_obj_remove(ctx, tbl_obj);
-      return -1;
+      DBUG_RETURN(-1);
     }
   }
 
@@ -597,7 +607,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     if (idx_tbl_obj == NULL) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s", idx_name);
       grn_obj_remove(ctx, tbl_obj);
-      return -1;
+      DBUG_RETURN(-1);
     }
 
     if (key_alg == HA_KEY_ALG_FULLTEXT) {
@@ -614,7 +624,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
               idx_name, col_name);
       grn_obj_remove(ctx, idx_tbl_obj);
       grn_obj_remove(ctx, tbl_obj);
-      return -1;
+      DBUG_RETURN(-1);
     }
 
     grn_id gid = grn_obj_id(ctx, col_obj);
@@ -627,11 +637,12 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   /* clean up */
   grn_obj_unlink(ctx, tbl_obj);
 
-  return 0;
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 {
+  DBUG_ENTER("ha_mroonga::open");
   thr_lock_init(&thr_lock);
   thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
 
@@ -649,7 +660,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     if (db == NULL) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db_path);
       pthread_mutex_unlock(&db_mutex);
-      return -1;
+      DBUG_RETURN(-1);
     }
     mrn_hash_put(ctx, mrn_hash, db_name, db);
   }
@@ -662,7 +673,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   tbl = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
   if (tbl == NULL) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table (%s)", tbl_name);
-    return -1;
+    DBUG_RETURN(-1);
   }
 
   /* open columns */
@@ -679,7 +690,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table(col) %s(%s)",
               tbl_name, col_name);
       grn_obj_unlink(ctx, tbl);
-      return -1;
+      DBUG_RETURN(-1);
     }
   }
 
@@ -709,11 +720,12 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     int col_name_size = strlen(col_name);
     idx_col[i] = grn_obj_column(ctx, idx_tbl[i], col_name, col_name_size);
   }
-  return 0;
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::close()
 {
+  DBUG_ENTER("ha_mroonga::close");
   thr_lock_delete(&thr_lock);
 
   int i;
@@ -733,11 +745,12 @@ int ha_mroonga::close()
   }
 
   free(col);
-  return 0;
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::delete_table(const char *name)
 {
+  DBUG_ENTER("ha_mroonga::delete_table");
   char db_path[MRN_MAX_PATH_SIZE];
   char tbl_name[MRN_MAX_PATH_SIZE];
   char idx_name[MRN_MAX_PATH_SIZE];
@@ -747,7 +760,7 @@ int ha_mroonga::delete_table(const char *name)
   db_obj = grn_db_open(ctx, db_path);
   if (db_obj == NULL) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "grn_db_open failed while delete_table (%s)", db_path);
-    return -1;
+    DBUG_RETURN(-1);
   }
   grn_ctx_use(ctx, db_obj);
 
@@ -765,44 +778,48 @@ int ha_mroonga::delete_table(const char *name)
   tbl_obj = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
   if (tbl_obj == NULL) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get failed while mrn_drop (%s)", tbl_name);
-    return -1;
+    DBUG_RETURN(-1);
   }
-  return grn_obj_remove(ctx, tbl_obj);
+  DBUG_RETURN(grn_obj_remove(ctx, tbl_obj));
 }
 
 int ha_mroonga::info(uint flag)
 {
+  DBUG_ENTER("ha_mroonga::info");
   ha_rows rows = grn_table_size(ctx, tbl);
   stats.records = rows;
-  return 0;
+  DBUG_RETURN(0);
 }
 
 THR_LOCK_DATA **ha_mroonga::store_lock(THD *thd, THR_LOCK_DATA **to,
                                        enum thr_lock_type lock_type)
 {
+  DBUG_ENTER("ha_mroonga::store_lock");
   if (lock_type != TL_IGNORE && thr_lock_data.type == TL_UNLOCK) {
     thr_lock_data.type = lock_type;
   }
   *to++ = &thr_lock_data;
-  return to;
+  DBUG_RETURN(to);
 }
 
 int ha_mroonga::rnd_init(bool scan)
 {
+  DBUG_ENTER("ha_mroonga::rnd_init");
   cur = grn_table_cursor_open(ctx, tbl, NULL, 0, NULL, 0, 0, -1, 0);
   if (cur == NULL) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open cursor");
-      return -1;
+      DBUG_RETURN(-1);
   }
-  return 0;
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::rnd_next(uchar *buf)
 {
+  DBUG_ENTER("ha_mroonga::rnd_next");
   row_id = grn_table_cursor_next(ctx, cur);
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
-    return HA_ERR_END_OF_FILE;
+    DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
   int i;
   int n_columns = table->s->fields;
@@ -811,11 +828,12 @@ int ha_mroonga::rnd_next(uchar *buf)
     bitmap_set_bit(table->write_set, field->field_index);
     mrn_store_field(ctx, field, col[i], row_id);
   }
-  return 0;
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
 {
+  DBUG_ENTER("ha_mroonga::rnd_pos");
   row_id = *((grn_id*) pos);
   int i;
   int n_columns = table->s->fields;
@@ -824,16 +842,19 @@ int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
     bitmap_set_bit(table->write_set, field->field_index);
     mrn_store_field(ctx, field, col[i], row_id);
   }
-  return 0;
+  DBUG_RETURN(0);
 }
 
 void ha_mroonga::position(const uchar *record)
 {
+  DBUG_ENTER("ha_mroonga::position");
   memcpy(ref, &row_id, sizeof(grn_id));
+  DBUG_VOID_RETURN;
 }
 
 int ha_mroonga::write_row(uchar *buf)
 {
+  DBUG_ENTER("ha_mroonga::write_row");
   grn_obj wrapper;
   void *pkey = NULL;
   int pkey_size = 0;
@@ -854,7 +875,7 @@ int ha_mroonga::write_row(uchar *buf)
   grn_obj_unlink(ctx, &wrapper);
   if (added == 0) {
     // duplicated error
-    return -1;
+    DBUG_RETURN(-1);
   }
 
   grn_obj colbuf;
@@ -868,15 +889,16 @@ int ha_mroonga::write_row(uchar *buf)
     if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
         != GRN_SUCCESS) {
       grn_obj_unlink(ctx, &colbuf);
-      return -1;
+      DBUG_RETURN(-1);
     }
   }
   grn_obj_unlink(ctx, &colbuf);
-  return 0;
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
 {
+  DBUG_ENTER("ha_mroonga::update_row");
   grn_obj colbuf;
   int i, col_size;
   int n_columns = table->s->fields;
@@ -888,48 +910,54 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
     if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
         != GRN_SUCCESS) {
       grn_obj_unlink(ctx, &colbuf);
-      return -1;
+      DBUG_RETURN(-1);
     }
   }
   grn_obj_unlink(ctx, &colbuf);
-  return 0;
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::delete_row(const uchar *buf)
 {
+  DBUG_ENTER("ha_mroonga::delete_row");
   if (grn_table_delete_by_id(ctx, tbl, row_id) != GRN_SUCCESS) {
-    return -1;
+    DBUG_RETURN(-1);
   }
-  return 0;
+  DBUG_RETURN(0);
 }
 
 ha_rows ha_mroonga::records_in_range(uint inx, key_range *min_key, key_range *max_key)
 {
+  DBUG_ENTER("ha_mroonga::records_in_range");
   uint pkeynr = table->s->primary_key;
   if (inx == pkeynr) {
-    return 1;
+    DBUG_RETURN(1);
   } else {
-    return 2;
+    DBUG_RETURN(2);
   }
 }
 
 int ha_mroonga::index_read(uchar *buf, const uchar *key,
                            uint key_len, enum ha_rkey_function find_flag)
 {
-  return 0;
+  DBUG_ENTER("ha_mroonga::index_read");
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::index_next(uchar *buf)
 {
-  return HA_ERR_END_OF_FILE;
+  DBUG_ENTER("ha_mroonga::index_next");
+  DBUG_RETURN(HA_ERR_END_OF_FILE);
 }
 
 int ha_mroonga::ft_init() {
-  return 0;
+  DBUG_ENTER("ha_mroonga::ft_init");
+  DBUG_RETURN(0);
 }
 
 FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
 {
+  DBUG_ENTER("ha_mroonga::ft_init_ext");
   grn_obj *ft = idx_col[keynr];
   const char *keyword = key->ptr();
   int keyword_size = strlen(keyword);
@@ -950,11 +978,12 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
   }
   int n_rec = grn_table_size(ctx, res);
   cur = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, -1, 0);
-  return NULL;
+  DBUG_RETURN(NULL);
 }
 
 int ha_mroonga::ft_read(uchar *buf)
 {
+  DBUG_ENTER("ha_mroonga::ft_read");
   grn_id rid;
   
   rid = grn_table_cursor_next(ctx, cur);
@@ -962,7 +991,7 @@ int ha_mroonga::ft_read(uchar *buf)
   if (rid == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     grn_obj_unlink(ctx, res);
-    return HA_ERR_END_OF_FILE;
+    DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
 
   grn_table_get_key(ctx, res, rid, &row_id, sizeof(grn_id));
@@ -974,16 +1003,19 @@ int ha_mroonga::ft_read(uchar *buf)
     bitmap_set_bit(table->write_set, field->field_index);
     mrn_store_field(ctx, field, col[i], row_id);
   }
-  return 0;
+  DBUG_RETURN(0);
 }
 
 const COND *ha_mroonga::cond_push(const COND *cond)
 {
-  return NULL;
+  DBUG_ENTER("ha_mroonga::cond_push");
+  DBUG_RETURN(NULL);
 }
 
 void ha_mroonga::cond_pop()
 {
+  DBUG_ENTER("ha_mroonga::cond_pop");
+  DBUG_VOID_RETURN;
 }
 
 #ifdef __cplusplus
