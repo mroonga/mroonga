@@ -127,6 +127,29 @@ AC_DEFUN([CONFIG_OPTION_GROONGA],[
   AC_SUBST([GROONGA_LIBS])
 ])
 
+AC_ARG_WITH(debug,
+    [  --with-debug            Add debug code
+  --with-debug=full       Add debug code (adds memory checker, very slow)],
+    [with_debug=$withval],
+    [with_debug=no])
+if test "$with_debug" = "yes"
+then
+  # Medium debug.
+  AC_DEFINE([DBUG_ON], [1], [Use libdbug])
+  CFLAGS="$DEBUG_CFLAGS $DEBUG_OPTIMIZE_CC -DSAFE_MUTEX $CFLAGS"
+  CXXFLAGS="$DEBUG_CXXFLAGS $DEBUG_OPTIMIZE_CXX -DSAFE_MUTEX $CXXFLAGS"
+elif test "$with_debug" = "full"
+then
+  # Full debug. Very slow in some cases
+  AC_DEFINE([DBUG_ON], [1], [Use libdbug])
+  CFLAGS="$DEBUG_CFLAGS -DSAFE_MUTEX -DSAFEMALLOC $CFLAGS"
+  CXXFLAGS="$DEBUG_CXXFLAGS -DSAFE_MUTEX -DSAFEMALLOC $CXXFLAGS"
+else
+  # Optimized version. No debug
+  AC_DEFINE([DBUG_OFF], [1], [Don't use libdbug])
+  CFLAGS="$OPTIMIZE_CFLAGS $CFLAGS"
+  CXXFLAGS="$OPTIMIZE_CXXFLAGS $CXXFLAGS"
+fi
 
 CONFIG_OPTION_PLUGINS
 if test "$standalone_build" = "yes";then
@@ -142,7 +165,7 @@ AC_CHECK_CUTTER
 AC_CHECK_GCUTTER
 
 CFLAGS="$CFLAGS -Werror"
-CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti"
+CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
 
 AC_CONFIG_FILES([
   Makefile
