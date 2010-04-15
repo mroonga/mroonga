@@ -449,7 +449,12 @@ ulonglong ha_mroonga::table_flags() const
 ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
 {
   DBUG_ENTER("ha_mroonga::index_flags");
-  DBUG_RETURN(0);
+  KEY key = table_share->key_info[idx];
+  if (key.algorithm == HA_KEY_ALG_BTREE | key.algorithm == HA_KEY_ALG_UNDEF) {
+    DBUG_RETURN(HA_READ_NEXT | HA_READ_PREV | HA_READ_ORDER | HA_READ_RANGE);
+  } else {
+    DBUG_RETURN(HA_ONLY_WHOLE_INDEX | HA_KEY_SCAN_NOT_ROR);
+  }
 }
 
 int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
