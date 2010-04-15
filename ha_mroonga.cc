@@ -808,6 +808,7 @@ int ha_mroonga::rnd_next(uchar *buf)
   int n_columns = table->s->fields;
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
+    bitmap_set_bit(table->write_set, field->field_index);
     mrn_store_field(ctx, field, col[i], row_id);
   }
   return 0;
@@ -820,6 +821,7 @@ int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
   int n_columns = table->s->fields;
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
+    bitmap_set_bit(table->write_set, field->field_index);
     mrn_store_field(ctx, field, col[i], row_id);
   }
   return 0;
@@ -842,6 +844,7 @@ int ha_mroonga::write_row(uchar *buf)
     // surpose simgle column key
     int field_no = key_info.key_part[0].field->field_index;
     Field *pkey_field = table->field[field_no];
+    bitmap_set_bit(table->read_set, pkey_field->field_index);
     mrn_set_buf(ctx, pkey_field, &wrapper, &pkey_size);
     pkey = GRN_TEXT_VALUE(&wrapper);
   }
@@ -860,6 +863,7 @@ int ha_mroonga::write_row(uchar *buf)
   GRN_VOID_INIT(&colbuf);
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
+    bitmap_set_bit(table->read_set, field->field_index);
     mrn_set_buf(ctx, field, &colbuf, &col_size);
     if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
         != GRN_SUCCESS) {
@@ -879,6 +883,7 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
   GRN_VOID_INIT(&colbuf);
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
+    bitmap_set_bit(table->read_set, field->field_index);
     mrn_set_buf(ctx, field, &colbuf, &col_size);
     if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
         != GRN_SUCCESS) {
@@ -966,6 +971,7 @@ int ha_mroonga::ft_read(uchar *buf)
   int n_columns = table->s->fields;
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
+    bitmap_set_bit(table->write_set, field->field_index);
     mrn_store_field(ctx, field, col[i], row_id);
   }
   return 0;
