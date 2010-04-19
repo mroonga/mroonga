@@ -73,9 +73,17 @@ public:
 
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
 
-  int index_read(uchar *buf, const uchar *key, uint key_len, enum ha_rkey_function find_flag);
-  int index_next(uchar *buf);
-
+  int index_read_map(uchar * buf, const uchar * key, key_part_map keypart_map,
+                     enum ha_rkey_function find_flag);
+  int index_read_last_map(uchar *buf, const uchar *key, key_part_map keypart_map);
+  int index_read_idx_map(uchar * buf, uint index, const uchar * key,
+                         key_part_map keypart_map,
+                         enum ha_rkey_function find_flag);
+  int index_next(uchar * buf);
+  int index_prev(uchar * buf);
+  int index_first(uchar * buf);
+  int index_last(uchar * buf);
+  
   int ft_init();
   FT_INFO *ft_init_ext(uint flags, uint inx,String *key);
   int ft_read(uchar *buf);

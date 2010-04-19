@@ -942,16 +942,48 @@ ha_rows ha_mroonga::records_in_range(uint inx, key_range *min_key, key_range *ma
   }
 }
 
-int ha_mroonga::index_read(uchar *buf, const uchar *key,
-                           uint key_len, enum ha_rkey_function find_flag)
+int ha_mroonga::index_read_map(uchar * buf, const uchar * key, key_part_map keypart_map,
+                               enum ha_rkey_function find_flag)
 {
-  DBUG_ENTER("ha_mroonga::index_read");
+  DBUG_ENTER("ha_mroonga::index_read_map");
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::index_read_last_map(uchar *buf, const uchar *key, key_part_map keypart_map)
+{
+  DBUG_ENTER("ha_mroonga::index_read_last_map");
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::index_read_idx_map(uchar * buf, uint index, const uchar * key,
+                                   key_part_map keypart_map,
+                                   enum ha_rkey_function find_flag)
+{
+  DBUG_ENTER("ha_mroonga::index_read_idx_map");
   DBUG_RETURN(0);
 }
 
 int ha_mroonga::index_next(uchar *buf)
 {
   DBUG_ENTER("ha_mroonga::index_next");
+  DBUG_RETURN(HA_ERR_END_OF_FILE);
+}
+
+int ha_mroonga::index_prev(uchar *buf)
+{
+  DBUG_ENTER("ha_mroonga::index_prev");
+  DBUG_RETURN(HA_ERR_END_OF_FILE);
+}
+
+int ha_mroonga::index_first(uchar *buf)
+{
+  DBUG_ENTER("ha_mroonga::index_first");
+  DBUG_RETURN(HA_ERR_END_OF_FILE);
+}
+
+int ha_mroonga::index_last(uchar *buf)
+{
+  DBUG_ENTER("ha_mroonga::index_last");
   DBUG_RETURN(HA_ERR_END_OF_FILE);
 }
 
