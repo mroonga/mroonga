@@ -308,6 +308,103 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   return 0;
 }
 
+int mrn_set_key_buf(grn_ctx *ctx, Field *field, const uchar *key, char *buf, uint *size)
+{
+  char *ptr = (char*) key;
+
+  if (field->null_bit != 0x0) {
+    ptr += 1;
+  }
+
+  switch (field->type()) {
+  case MYSQL_TYPE_BIT:
+  case MYSQL_TYPE_ENUM:
+  case MYSQL_TYPE_SET:
+  case MYSQL_TYPE_TINY:
+    {
+      char val = *ptr;
+      buf[0] = val;
+      *size = 1; 
+      break;
+    }
+  case MYSQL_TYPE_SHORT:
+    { 
+      memcpy(buf, ptr, 2);
+      *size = 2;
+      break;
+    }
+  case MYSQL_TYPE_INT24:
+    {
+      memcpy(buf, ptr, 3);
+      buf[3] = 0;
+      *size = 4;
+      break;
+    }
+  case MYSQL_TYPE_LONG:
+    {
+      memcpy(buf, ptr, 4);
+      *size = 4;
+      break;
+    }
+  case MYSQL_TYPE_LONGLONG:
+    {
+      memcpy(buf, ptr, 8);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_FLOAT:
+    {
+      double val;
+      float4get(val, ptr);
+      memcpy(buf, &val, 8);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_DOUBLE:
+    {
+      double val;
+      float8get(val, ptr);
+      memcpy(buf, &val, 8);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_TIME:
+  case MYSQL_TYPE_YEAR:
+  case MYSQL_TYPE_DATE:
+  case MYSQL_TYPE_DATETIME:
+    {
+      long long int val = (long long int) sint8korr(ptr);
+      memcpy(buf, &val, 8);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_STRING:
+  case MYSQL_TYPE_VARCHAR:
+    {
+      ptr += 2;
+      String tmp;
+      const char *val = ptr;
+      int len = strlen(val);
+      memcpy(buf, val, len);
+      *size = len;
+      break;
+    }
+  case MYSQL_TYPE_BLOB:
+    {
+      ptr += 2;
+      String tmp;
+      const char *val = ptr;
+      int len = strlen(val);
+      memcpy(buf, val, len);
+      *size = len;
+      break;
+    }
+  default:
+    return -1;
+  }
+  return 0;
+}
+
 void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
 {
   grn_obj buf;
@@ -706,11 +803,17 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   if (n_keys > 0) {
     idx_tbl = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
     idx_col = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
+    key_min = (char**) malloc(sizeof(char*) * n_keys);
+    key_max = (char**) malloc(sizeof(char*) * n_keys);
   } else {
     idx_tbl = idx_col = NULL;
+    key_min = key_max = NULL;
   }
 
   for (i=0; i < n_keys; i++) {
+    key_min[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
+    key_max[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
+
     if (i == pkeynr) {
       idx_tbl[i] = idx_col[i] = NULL;
       continue;
@@ -737,6 +840,8 @@ int ha_mroonga::close()
   uint n_keys = table->s->keys;
   uint pkeynr = table->s->primary_key;
   for (i=0; i < n_keys; i++) {
+    free(key_min[i]);
+    free(key_max[i]);
     if (i == pkeynr) {
       continue;
     }
@@ -747,6 +852,8 @@ int ha_mroonga::close()
   if (idx_tbl != NULL) {
     free(idx_tbl);
     free(idx_col);
+    free(key_min);
+    free(key_max);
   }
 
   free(col);
@@ -931,42 +1038,95 @@ int ha_mroonga::delete_row(const uchar *buf)
   DBUG_RETURN(0);
 }
 
-ha_rows ha_mroonga::records_in_range(uint inx, key_range *min_key, key_range *max_key)
+ha_rows ha_mroonga::records_in_range(uint keynr, key_range *range_min, key_range *range_max)
 {
   DBUG_ENTER("ha_mroonga::records_in_range");
-  uint pkeynr = table->s->primary_key;
-  if (inx == pkeynr) {
-    DBUG_RETURN(1);
-  } else {
-    DBUG_RETURN(2);
+  int flags = 0;
+  uint size_min = 0, size_max = 0;
+  ha_rows row_count = 0;
+  void *val_min = NULL, *val_max = NULL;
+  KEY key_info = table->s->key_info[keynr];
+  KEY_PART_INFO key_part = key_info.key_part[0];
+  Field *field = key_part.field;
+  if (range_min != NULL) {
+    mrn_set_key_buf(ctx, field, range_min->key, key_min[keynr], &size_min);
+    val_min = key_min[keynr];
+    if (range_min->flag & HA_READ_AFTER_KEY) {
+      flags |= GRN_CURSOR_GT;
+    }
   }
+  if (range_max != NULL) {
+    mrn_set_key_buf(ctx, field, range_max->key, key_max[keynr], &size_max);
+    val_max = key_max[keynr];
+    if (range_max->flag & HA_READ_BEFORE_KEY) {
+      flags |= GRN_CURSOR_LT;
+    }
+  }
+  uint pkeynr = table->s->primary_key;
+
+  if (keynr == pkeynr) { // primary index
+    grn_table_cursor *cur_t =
+      grn_table_cursor_open(ctx, tbl, val_min, size_min, val_max, size_max, 0, -1, flags);
+    grn_id gid;
+    while ((gid = grn_table_cursor_next(ctx, cur_t)) != GRN_ID_NIL) {
+      row_count++;
+    }
+    grn_table_cursor_close(ctx, cur_t);
+  } else { // normal index
+    uint table_size = grn_table_size(ctx, tbl);
+    uint cardinality = grn_table_size(ctx, idx_tbl[keynr]);
+    grn_table_cursor *cur_t =
+      grn_table_cursor_open(ctx, idx_tbl[keynr], val_min, size_min, val_max, size_max, 0, -1, flags);
+    grn_id gid;
+    while ((gid = grn_table_cursor_next(ctx, cur_t)) != GRN_ID_NIL) {
+      row_count++;
+    }
+    grn_table_cursor_close(ctx, cur_t);
+    row_count = (int) ((double) table_size * ((double) row_count / (double) cardinality));
+  }
+  DBUG_RETURN(row_count);
 }
 
-int ha_mroonga::index_read_map(uchar * buf, const uchar * key, key_part_map keypart_map,
-                               enum ha_rkey_function find_flag)
+int ha_mroonga::index_read(uchar * record_buffer, const uchar * key, uint key_len,
+                           enum ha_rkey_function find_flag)
 {
-  DBUG_ENTER("ha_mroonga::index_read_map");
+  DBUG_ENTER("ha_mroonga::index_read");
+  uint keynr = active_index;
+  KEY key_info = table->key_info[keynr];
+  KEY_PART_INFO key_part = key_info.key_part[0];
+  Field *field = key_part.field;
   DBUG_RETURN(0);
 }
 
-int ha_mroonga::index_read_last_map(uchar *buf, const uchar *key, key_part_map keypart_map)
+int ha_mroonga::index_read_idx(uchar * buf, uint index, const uchar * key,
+                               uint key_len, enum ha_rkey_function find_flag)
 {
-  DBUG_ENTER("ha_mroonga::index_read_last_map");
+  DBUG_ENTER("ha_mroonga::index_read_idx");
   DBUG_RETURN(0);
 }
 
-int ha_mroonga::index_read_idx_map(uchar * buf, uint index, const uchar * key,
-                                   key_part_map keypart_map,
-                                   enum ha_rkey_function find_flag)
+int ha_mroonga::index_read_last(uchar *buf, const uchar *key, uint key_len)
 {
-  DBUG_ENTER("ha_mroonga::index_read_idx_map");
+  DBUG_ENTER("ha_mroonga::index_read_last");
   DBUG_RETURN(0);
 }
 
 int ha_mroonga::index_next(uchar *buf)
 {
   DBUG_ENTER("ha_mroonga::index_next");
-  DBUG_RETURN(HA_ERR_END_OF_FILE);
+  row_id = grn_table_cursor_next(ctx, cur);
+  if (row_id == GRN_ID_NIL) {
+    grn_table_cursor_close(ctx, cur);
+    DBUG_RETURN(HA_ERR_END_OF_FILE);
+  }
+  int i;
+  int n_columns = table->s->fields;
+  for (i=0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    bitmap_set_bit(table->write_set, field->field_index);
+    mrn_store_field(ctx, field, col[i], row_id);
+  }
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::index_prev(uchar *buf)

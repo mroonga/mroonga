@@ -37,6 +37,11 @@ class ha_mroonga: public handler
   grn_table_cursor *cur;
   grn_id row_id;
 
+  char **key_min;
+  char **key_max;
+  int *key_min_len;
+  int *key_max_len;
+
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);
   ~ha_mroonga();
@@ -72,13 +77,11 @@ public:
   uint max_supported_key_length()    const { return MAX_KEY_LENGTH; }
 
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
-
-  int index_read_map(uchar * buf, const uchar * key, key_part_map keypart_map,
-                     enum ha_rkey_function find_flag);
-  int index_read_last_map(uchar *buf, const uchar *key, key_part_map keypart_map);
-  int index_read_idx_map(uchar * buf, uint index, const uchar * key,
-                         key_part_map keypart_map,
-                         enum ha_rkey_function find_flag);
+  int index_read(uchar * buf, const uchar * key,
+                 uint key_len, enum ha_rkey_function find_flag);
+  int index_read_idx(uchar * buf, uint index, const uchar * key,
+                     uint key_len, enum ha_rkey_function find_flag);
+  int index_read_last(uchar * buf, const uchar * key, uint key_len);
   int index_next(uchar * buf);
   int index_prev(uchar * buf);
   int index_first(uchar * buf);
