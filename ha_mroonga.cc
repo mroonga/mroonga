@@ -673,13 +673,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
       continue; // pkey is already handled
     }
 
-    // disable secondary key
-    if (i != pkeynr) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "secondary key is not supported (%s)", db_path);
-      grn_obj_remove(ctx, tbl_obj);
-      DBUG_RETURN(-1);
-    }
-
     grn_obj *idx_tbl_obj, *idx_col_obj, *col_obj, *col_type, buf;
     KEY key_info = table->s->key_info[i];
 
