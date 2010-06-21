@@ -1198,8 +1198,10 @@ int ha_mroonga::ft_read(uchar *buf)
   int n_columns = table->s->fields;
   for (i=0; i < n_columns; i++) {
     Field *field = table->field[i];
-    bitmap_set_bit(table->write_set, field->field_index);
-    mrn_store_field(ctx, field, col[i], row_id);
+    if (bitmap_is_set(table->read_set, field->field_index)) {
+      bitmap_set_bit(table->write_set, field->field_index);
+      mrn_store_field(ctx, field, col[i], row_id);
+    }
   }
   DBUG_RETURN(0);
 }
