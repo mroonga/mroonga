@@ -692,7 +692,8 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     int mysql_field_type = field->type();
     grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
     col_type = grn_ctx_at(ctx, gtype);
-    grn_obj_flags idx_col_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
+    grn_obj_flags idx_col_flags =
+      GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
 
     int key_alg = key_info.algorithm;
     grn_obj_flags idx_tbl_flags;
