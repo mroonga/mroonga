@@ -6,6 +6,7 @@
 
 #include <mysql_priv.h>
 #include <mysql/plugin.h>
+#include <sql_select.h>
 #include <pthread.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -1190,6 +1191,10 @@ int ha_mroonga::ft_read(uchar *buf)
     grn_table_cursor_close(ctx, cur);
     grn_obj_unlink(ctx, res);
     DBUG_RETURN(HA_ERR_END_OF_FILE);
+  }
+
+  if (table->in_use->lex->select_lex.join->tmp_table_param.sum_func_count > 0) {
+    DBUG_RETURN(0);
   }
 
   grn_table_get_key(ctx, res, rid, &row_id, sizeof(grn_id));
