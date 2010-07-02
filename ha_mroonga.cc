@@ -1094,9 +1094,21 @@ int ha_mroonga::index_read(uchar * record_buffer, const uchar * key, uint key_le
 {
   DBUG_ENTER("ha_mroonga::index_read");
   uint keynr = active_index;
+  uint pkeynr = table->s->primary_key;
   KEY key_info = table->key_info[keynr];
   KEY_PART_INFO key_part = key_info.key_part[0];
-  Field *field = key_part.field;
+  if (keynr == pkeynr) {
+    row_id = grn_table_get(ctx, tbl, key, key_len);
+    int i;
+    int n_columns = table->s->fields;
+    for (i=0; i < n_columns; i++) {
+      Field *field = table->field[i];
+      if (bitmap_is_set(table->read_set, field->field_index)) {
+        bitmap_set_bit(table->write_set, field->field_index);
+        mrn_store_field(ctx, field, col[i], row_id);
+      }
+    }
+  }
   DBUG_RETURN(0);
 }
 
