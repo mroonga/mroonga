@@ -233,11 +233,11 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
       int val = field->val_int();
       grn_obj_reinit(ctx, buf, GRN_DB_INT8, 0);
       GRN_INT8_SET(ctx, buf, val);
-      *size = 1; 
+      *size = 1;
       break;
     }
   case MYSQL_TYPE_SHORT:
-    { 
+    {
       int val = field->val_int();
       grn_obj_reinit(ctx, buf, GRN_DB_INT16, 0);
       GRN_INT16_SET(ctx, buf, val);
@@ -325,11 +325,11 @@ int mrn_set_key_buf(grn_ctx *ctx, Field *field, const uchar *key, char *buf, uin
     {
       char val = *ptr;
       buf[0] = val;
-      *size = 1; 
+      *size = 1;
       break;
     }
   case MYSQL_TYPE_SHORT:
-    { 
+    {
       memcpy(buf, ptr, 2);
       *size = 2;
       break;
@@ -631,7 +631,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   int tbl_name_len = strlen(tbl_name);
 
   char *tbl_path = NULL;           // we don't specify path
-  grn_obj *pkey_value_type = NULL; // we don't use this   
+  grn_obj *pkey_value_type = NULL; // we don't use this
 
   tbl_obj = grn_table_create(ctx, tbl_name, tbl_name_len, tbl_path,
                          tbl_flags, pkey_type, pkey_value_type);
@@ -1174,7 +1174,7 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
   int keyword_size = strlen(keyword);
 
   res = grn_table_create(ctx, NULL, 0, NULL, GRN_TABLE_HASH_KEY, tbl, 0);
-  
+
   if (flags & FT_BOOL) {
     // boolean search
     grn_query *query = grn_query_open(ctx, keyword, keyword_size,
@@ -1196,7 +1196,7 @@ int ha_mroonga::ft_read(uchar *buf)
 {
   DBUG_ENTER("ha_mroonga::ft_read");
   grn_id rid;
-  
+
   rid = grn_table_cursor_next(ctx, cur);
 
   if (rid == GRN_ID_NIL) {
