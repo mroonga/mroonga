@@ -23,7 +23,7 @@ grn_hash *mrn_hash;
 pthread_mutex_t db_mutex;
 
 /* logging */
-const char *mrn_logfile_name=MRN_LOG_FILE_NAME;
+const char *mrn_logfile_name = MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
 int mrn_logfile_opened = 0;
 
@@ -43,20 +43,6 @@ grn_logger_info mrn_logger_info = {
   GRN_LOG_TIME|GRN_LOG_MESSAGE,
   mrn_logger_func,
   NULL
-};
-
-const char *mrn_log_level_str[] =
-{
-  "NONE",
-  "EMERG",
-  "ALERT",
-  "CRIT",
-  "ERROR",
-  "WARNING",
-  "NOTICE",
-  "INFO",
-  "DEBUG",
-  "DUMP"
 };
 
 /* system functions */
