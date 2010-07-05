@@ -630,7 +630,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   /* create columns */
   int i;
   uint n_columns = table->s->fields;
-  for (i=0; i < n_columns; i++) {
+  for (i = 0; i < n_columns; i++) {
     grn_obj *col_obj, *col_type;
     Field *field = table->s->field[i];
     const char *col_name = field->field_name;
@@ -655,7 +655,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   uint n_keys = table->s->keys;
   char idx_name[MRN_MAX_PATH_SIZE];
 
-  for (i=0; i < n_keys; i++) {
+  for (i = 0; i < n_keys; i++) {
     if (i == pkeynr) {
       continue; // pkey is already handled
     }
@@ -771,7 +771,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   col = (grn_obj**) malloc(sizeof(grn_obj*) * n_columns);
 
   int i;
-  for (i=0; i < n_columns; i++) {
+  for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
@@ -798,7 +798,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     key_min = key_max = NULL;
   }
 
-  for (i=0; i < n_keys; i++) {
+  for (i = 0; i < n_keys; i++) {
     key_min[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
     key_max[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
 
@@ -827,7 +827,7 @@ int ha_mroonga::close()
   int i;
   uint n_keys = table->s->keys;
   uint pkeynr = table->s->primary_key;
-  for (i=0; i < n_keys; i++) {
+  for (i = 0; i < n_keys; i++) {
     free(key_min[i]);
     free(key_max[i]);
     if (i == pkeynr) {
@@ -866,8 +866,9 @@ int ha_mroonga::delete_table(const char *name)
 
   mrn_table_name_gen(name, tbl_name);
 
+  /* FIXME: remove const 100 */
   int i;
-  for (i=0; i < 100; i++) { // 100 is enough
+  for (i = 0; i < 100; i++) { // 100 is enough
     mrn_index_name_gen(tbl_name, i, idx_name);
     grn_obj *idx_tbl_obj = grn_ctx_get(ctx, idx_name, strlen(idx_name));
     if (idx_tbl_obj != NULL) {
@@ -923,7 +924,7 @@ int ha_mroonga::rnd_next(uchar *buf)
   }
   int i;
   int n_columns = table->s->fields;
-  for (i=0; i < n_columns; i++) {
+  for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     bitmap_set_bit(table->write_set, field->field_index);
     mrn_store_field(ctx, field, col[i], row_id);
@@ -937,7 +938,7 @@ int ha_mroonga::rnd_pos(uchar *buf, uchar *pos)
   row_id = *((grn_id*) pos);
   int i;
   int n_columns = table->s->fields;
-  for (i=0; i < n_columns; i++) {
+  for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     bitmap_set_bit(table->write_set, field->field_index);
     mrn_store_field(ctx, field, col[i], row_id);
@@ -982,7 +983,7 @@ int ha_mroonga::write_row(uchar *buf)
   int i, col_size;
   int n_columns = table->s->fields;
   GRN_VOID_INIT(&colbuf);
-  for (i=0; i < n_columns; i++) {
+  for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     bitmap_set_bit(table->read_set, field->field_index);
     mrn_set_buf(ctx, field, &colbuf, &col_size);
@@ -1003,7 +1004,7 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
   int i, col_size;
   int n_columns = table->s->fields;
   GRN_VOID_INIT(&colbuf);
-  for (i=0; i < n_columns; i++) {
+  for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     bitmap_set_bit(table->read_set, field->field_index);
     mrn_set_buf(ctx, field, &colbuf, &col_size);
@@ -1087,7 +1088,7 @@ int ha_mroonga::index_read(uchar * record_buffer, const uchar * key, uint key_le
     row_id = grn_table_get(ctx, tbl, key, key_len);
     int i;
     int n_columns = table->s->fields;
-    for (i=0; i < n_columns; i++) {
+    for (i = 0; i < n_columns; i++) {
       Field *field = table->field[i];
       if (bitmap_is_set(table->read_set, field->field_index)) {
         bitmap_set_bit(table->write_set, field->field_index);
@@ -1121,7 +1122,7 @@ int ha_mroonga::index_next(uchar *buf)
   }
   int i;
   int n_columns = table->s->fields;
-  for (i=0; i < n_columns; i++) {
+  for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     bitmap_set_bit(table->write_set, field->field_index);
     mrn_store_field(ctx, field, col[i], row_id);
@@ -1199,7 +1200,7 @@ int ha_mroonga::ft_read(uchar *buf)
 
   int i;
   int n_columns = table->s->fields;
-  for (i=0; i < n_columns; i++) {
+  for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     if (bitmap_is_set(table->read_set, field->field_index)) {
       bitmap_set_bit(table->write_set, field->field_index);
