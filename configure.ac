@@ -1,4 +1,4 @@
-AC_INIT([mroonga], [0.1], [ikdttr@gmail.com])
+AC_INIT([groonga-storage-engine], [0.1], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
@@ -161,15 +161,13 @@ fi
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
-AC_CHECK_CUTTER
-AC_CHECK_GCUTTER
+#AC_CHECK_CUTTER
+#AC_CHECK_GCUTTER
 
 CFLAGS="$CFLAGS -Werror"
 CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
 
 AC_CONFIG_FILES([
   Makefile
-  test/Makefile
-  test/unit/Makefile
 ])
 AC_OUTPUT

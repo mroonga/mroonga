@@ -1,6 +1,6 @@
-MYSQL_STORAGE_ENGINE(mroonga,,[mroonga storage engine],
-[MySQL binding for Groonga],
+MYSQL_STORAGE_ENGINE(groonga,,[groonga storage engine],
+[Fulltext search, column base],
 [max,max-no-ndb])
-MYSQL_PLUGIN_DIRECTORY(mroonga, [storage/mroonga])
-MYSQL_PLUGIN_STATIC(mroonga,  [libmroonga.a])
-MYSQL_PLUGIN_DYNAMIC(mroonga, [libmroonga.la])
+MYSQL_PLUGIN_DIRECTORY(groonga, [storage/groonga-storage-engine])
+MYSQL_PLUGIN_STATIC(groonga,  [libmroonga.a])
+MYSQL_PLUGIN_DYNAMIC(groonga, [libmroonga.la])

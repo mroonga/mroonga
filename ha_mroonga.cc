@@ -64,9 +64,9 @@ mysql_declare_plugin(mroonga)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
-  "mroonga",
+  "groonga",
   "Tetsuro IKEDA",
-  "MySQL binding for groonga",
+  "Fulltext search, column base",
   PLUGIN_LICENSE_BSD,
   mrn_init,
   mrn_deinit,

@@ -1,6 +1,6 @@
 --disable_warnings
-install plugin mroonga soname 'libmroonga.so';
-set storage_engine=mroonga;
+install plugin groonga soname 'libgroonga_storage_engine.so';
+set storage_engine=groonga;
 drop table if exists t1;
 --enable_warnings
 
@@ -61,5 +61,5 @@ select * from t1;
 drop table t1;
 
 --disable_warnings
-uninstall plugin mroonga;
+uninstall plugin groonga;
 --enable_warnings

@@ -1,5 +1,5 @@
-install plugin mroonga soname 'libmroonga.so';
-set storage_engine=mroonga;
+install plugin groonga soname 'libgroonga_storage_engine.so';
+set storage_engine=groonga;
 drop table if exists t1;
 create table t1 (c1 tinyint);
 insert into t1 values(1);
@@ -67,4 +67,4 @@ select * from t1;
 c1
 2010-03-26 11:22:33
 drop table t1;
-uninstall plugin mroonga;
+uninstall plugin groonga;
