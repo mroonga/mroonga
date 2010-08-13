@@ -161,15 +161,13 @@ fi
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
-AC_CHECK_CUTTER
-AC_CHECK_GCUTTER
+#AC_CHECK_CUTTER
+#AC_CHECK_GCUTTER
 
 CFLAGS="$CFLAGS -Werror"
 CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
 
 AC_CONFIG_FILES([
   Makefile
-  test/Makefile
-  test/unit/Makefile
 ])
 AC_OUTPUT
