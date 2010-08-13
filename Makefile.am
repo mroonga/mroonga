@@ -12,18 +12,18 @@ DEFS          = @DEFS@
 
 noinst_HEADERS = mrnsys.h ha_mroonga.h
 
-lib_LTLIBRARIES      = libmroonga.la
+lib_LTLIBRARIES      = libgroonga_storage_engine.la
 #pkgplugin_LTLIBRARIES  = @plugin_mroonga_shared_target@
-libmroonga_la_LDFLAGS  = -module -rpath $(pkgplugindir) $(GROONGA_LIBS) $(MECAB_LIBS)
-libmroonga_la_CXXFLAGS = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
-libmroonga_la_CFLAGS   = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
-libmroonga_la_SOURCES  = ha_mroonga.cc ha_mroonga.h mrnsys.c mrnsys.h
+libgroonga_storage_engine_la_LDFLAGS  = -module -rpath $(pkgplugindir) $(GROONGA_LIBS) $(MECAB_LIBS)
+libgroonga_storage_engine_la_CXXFLAGS = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
+libgroonga_storage_engine_la_CFLAGS   = $(AM_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
+libgroonga_storage_engine_la_SOURCES  = ha_mroonga.cc ha_mroonga.h mrnsys.c mrnsys.h
 
-lib_LIBRARIES          = libmroonga.a
-libmroonga_a_LDFLANGS  = $(GROONGA_LIBS) $(MECAB_LIBS)
-libmroonga_a_CXXFLAGS  = $(AM_CFLAGS)
-libmroonga_a_CFLAGS    = $(AM_CFLAGS)
-libmroonga_a_SOURCES   = ha_mroonga.cc mrnsys.c
+lib_LIBRARIES          = libgroonga_storage_engine.a
+libgroonga_storage_engine_a_LDFLANGS  = $(GROONGA_LIBS) $(MECAB_LIBS)
+libgroonga_storage_engine_a_CXXFLAGS  = $(AM_CFLAGS)
+libgroonga_storage_engine_a_CFLAGS    = $(AM_CFLAGS)
+libgroonga_storage_engine_a_SOURCES   = ha_mroonga.cc mrnsys.c
 
 SUBDIRS = test
 

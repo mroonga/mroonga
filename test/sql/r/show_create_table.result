@@ -1,5 +1,5 @@
-install plugin mroonga soname 'libmroonga.so';
-set storage_engine=mroonga;
+install plugin groonga soname 'libgroonga_storage_engine.so';
+set storage_engine=groonga;
 drop database if exists db1;
 create database db1;
 use db1;
@@ -28,4 +28,4 @@ t1	CREATE TABLE `t1` (
 ) ENGINE=mroonga DEFAULT CHARSET=latin1
 drop table t1;
 drop database db1;
-uninstall plugin mroonga;
+uninstall plugin groonga;

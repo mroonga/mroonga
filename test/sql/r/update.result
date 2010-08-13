@@ -1,5 +1,5 @@
-install plugin mroonga soname 'libmroonga.so';
-set storage_engine=mroonga;
+install plugin groonga soname 'libgroonga_storage_engine.so';
+set storage_engine=groonga;
 drop table if exists t1, t2, t3;
 create table t1 (c1 int, c2 int);
 show create table t1;
@@ -63,4 +63,4 @@ c1	c2
 select * from t1 where match(c2) against("ki");
 c1	c2
 drop table t1;
-uninstall plugin mroonga;
+uninstall plugin groonga;

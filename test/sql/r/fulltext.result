@@ -1,5 +1,5 @@
-install plugin mroonga soname 'libmroonga.so';
-set storage_engine=mroonga;
+install plugin groonga soname 'libgroonga_storage_engine.so';
+set storage_engine=groonga;
 drop table if exists t1, t2, t3;
 create table t1 (c1 int primary key, c2 text, fulltext index ft (c2));
 show create table t1;
@@ -70,4 +70,4 @@ select * from t1 where match(c3) against("富士山");
 c1	c2	c3
 2	いいいいい	明日の富士山の天気は分かりません
 drop table t1;
-uninstall plugin mroonga;
+uninstall plugin groonga;

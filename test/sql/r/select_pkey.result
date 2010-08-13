@@ -1,5 +1,5 @@
-install plugin mroonga soname 'libmroonga.so';
-set storage_engine=mroonga;
+install plugin groonga soname 'libgroonga_storage_engine.so';
+set storage_engine=groonga;
 drop table if exists t1, t2, t3;
 create table t1(c1 int primary key, c2 int, c3 int);
 insert into t1 values (1, 10, 100);
@@ -27,4 +27,4 @@ select * from t1 where c1=6;
 c1	c2	c3
 6	40	400
 drop table t1;
-uninstall plugin mroonga;
+uninstall plugin groonga;
