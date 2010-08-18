@@ -102,7 +102,7 @@ AC_DEFUN([CONFIG_OPTION_GROONGA],[
     GROONGA_INCLUDES="`pkg-config --cflags groonga`"
     GROONGA_LIBS="`pkg-config --libs groonga`"
   elif test -d $with_groonga; then
-    PKG_CONFIG_PATH="$with_groonga/lib/pkgconfig"
+    PKG_CONFIG_PATH="$with_groonga/lib/pkgconfig:$PKG_CONFIG_PATH"
     GROONGA_INCLUDES="`PKG_CONFIG_PATH=$PKG_CONFIG_PATH pkg-config --cflags groonga`"
     GROONGA_LIBS="`PKG_CONFIG_PATH=$PKG_CONFIG_PATH pkg-config --libs groonga`"
   else
