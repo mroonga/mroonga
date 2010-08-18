@@ -161,13 +161,20 @@ fi
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
-#AC_CHECK_CUTTER
-#AC_CHECK_GCUTTER
+# check Cutter with GLib support if available
+REQUIRED_MINIMUM_CUTTER_VERSION=1.1.3
+m4_ifdef([AC_CHECK_GCUTTER], [
+AC_CHECK_GCUTTER(>= $REQUIRED_MINIMUM_CUTTER_VERSION)
+],
+[ac_cv_use_cutter="no"])
+AM_CONDITIONAL([WITH_CUTTER], [test "$ac_cv_use_cutter" != "no"])
 
 CFLAGS="$CFLAGS -Werror"
 CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
 
 AC_CONFIG_FILES([
   Makefile
+  test/Makefile
+  test/unit/Makefile
 ])
 AC_OUTPUT
