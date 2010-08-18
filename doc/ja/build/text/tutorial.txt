@@ -54,8 +54,8 @@ http://groonga.org/docs/
 groongaストレージエンジンのビルド
 --------------------
 
-以下のように"with-mysql"でMySQLソースコードディレクトリ、"libdir"でMySQLバイナリのプラグイン用ディレクトリ
-、"with-groonga"でgroongaのインストール先を指定してconfigureを実行します。
+以下のように"with-mysql"でMySQLソースコードディレクトリ、"libdir"でMySQL
+バイナリのプラグイン用ディレクトリ、"with-groonga"でgroongaのインストール先を指定してconfigureを実行します。
 
    ./configure \
      --with-mysql=/usr/local/src/mysql-5.1.45 \
