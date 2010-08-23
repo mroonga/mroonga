@@ -25,3 +25,4 @@ cscope.out
 /missing
 /stamp-h1
 /src/scratch
+/libgroonga_storage_engine.a
