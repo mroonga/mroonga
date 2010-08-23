@@ -19,6 +19,9 @@ run()
     fi
 }
 
+grep '^deb ' /etc/apt/sources.list | \
+    sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
+
 if [ ! -x /usr/bin/aptitude ]; then
     run apt-get install -y aptitude
 fi
