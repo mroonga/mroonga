@@ -176,5 +176,6 @@ AC_CONFIG_FILES([
   Makefile
   test/Makefile
   test/unit/Makefile
+  apt/Makefile
 ])
 AC_OUTPUT

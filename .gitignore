@@ -10,6 +10,8 @@ Makefile
 Makefile.in
 cscope.out
 /aclocal.m4
+/apt/debian/
+/apt/ubuntu/
 /autom4te.cache
 /config.guess
 /config.h

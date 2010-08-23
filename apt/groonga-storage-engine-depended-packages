@@ -1,0 +1,5 @@
+debhelper
+cdbs
+autotools-dev
+quilt
+libgroonga-dev
