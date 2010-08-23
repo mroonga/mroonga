@@ -22,6 +22,8 @@ run()
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
 
+apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
+
 if [ ! -x /usr/bin/aptitude ]; then
     run apt-get install -y aptitude
 fi
@@ -42,15 +44,15 @@ cat <<EOF > $BUILD_SCRIPT
 rm -rf build
 mkdir -p build
 
-cp /tmp/${PACKAGE}-${VERSION}.tar.gz build/${PACKAGE}_${VERSION}.orig.tar.gz
-cd build
-
 rm -rf mysql-package
 mkdir -p mysql-package
 cd mysql-package
 apt-get source -b ${mysql_server_package}
 cd ..
-ln -fs \$(find mysql-package -maxdepth 1 -type 1) mysql
+ln -fs \$(find mysql-package -maxdepth 1 -type d | tail -1) mysql
+
+cp /tmp/${PACKAGE}-${VERSION}.tar.gz build/${PACKAGE}_${VERSION}.orig.tar.gz
+cd build
 
 tar xfz ${PACKAGE}_${VERSION}.orig.tar.gz
 cd ${PACKAGE}-${VERSION}/
