@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/rules/patchsys-quilt.mk
+include /usr/share/cdbs/1/class/autotools.mk
+
+DEB_INSTALL_DIRS_mysql-server-groonga =		\
+	/usr/lib/mysql/plugin
+
+DEB_CONFIGURE_EXTRA_FLAGS =			\
+	--libdir=/usr/lib/mysql/plugin/		\
+	--with-mysql=../mysql
+
+CFLAGS=-g -O3
+CXXFLAGS=-g -O3
+CPPFLAGS = -I../mysql/builddir/include

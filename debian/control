@@ -1,0 +1,21 @@
+Source: groonga-storage-engine
+Priority: optional
+Maintainer: Kouhei Sutou <kou@clear-code.com>
+Build-Depends:
+	debhelper (>= 5),
+	cdbs,
+	autotools-dev,
+	quilt,
+	libgroonga-dev
+Standards-Version: 3.7.3
+Homepage: http://mroonga.github.com/
+
+Package: mysql-server-groonga
+Section: database
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}, libgroonga, mysql-server
+Description: A MySQL storage enigne built on groonga.
+ The groonga storage engine is a MySQL storage engine built on groonga,
+ a fulltext search engine and column store.
+ .
+ This package provides a MySQL storage engine as a shared library.
