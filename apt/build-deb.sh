@@ -44,15 +44,16 @@ cat <<EOF > $BUILD_SCRIPT
 rm -rf build
 mkdir -p build
 
+cp /tmp/${PACKAGE}-${VERSION}.tar.gz build/${PACKAGE}_${VERSION}.orig.tar.gz
+
 rm -rf mysql-package
 mkdir -p mysql-package
 cd mysql-package
 apt-get source -b ${mysql_server_package}
 cd ..
-ln -fs \$(find mysql-package -maxdepth 1 -type d | tail -1) mysql
 
-cp /tmp/${PACKAGE}-${VERSION}.tar.gz build/${PACKAGE}_${VERSION}.orig.tar.gz
 cd build
+ln -fs \$(find ../mysql-package -maxdepth 1 -type d | tail -1) mysql
 
 tar xfz ${PACKAGE}_${VERSION}.orig.tar.gz
 cd ${PACKAGE}-${VERSION}/
