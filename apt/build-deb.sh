@@ -8,7 +8,7 @@ VERSION=$(cat /tmp/build-version)
 DEPENDED_PACKAGES=$(cat /tmp/depended-packages)
 BUILD_SCRIPT=/tmp/build-deb-in-chroot.sh
 
-mysql_server_package=mysql-server-5.1
+mysql_server_package=mysql-server
 
 run()
 {
@@ -49,8 +49,12 @@ cp /tmp/${PACKAGE}-${VERSION}.tar.gz build/${PACKAGE}_${VERSION}.orig.tar.gz
 rm -rf mysql-package
 mkdir -p mysql-package
 cd mysql-package
-apt-get source -b ${mysql_server_package}
-cd ..
+apt-get source ${mysql_server_package}
+cd */debian/..
+debuild -us -uc -Tconfigure
+make -C builddir/include
+make -C builddir/scripts
+cd ../..
 
 cd build
 ln -fs \$(find ../mysql-package -maxdepth 1 -type d | tail -1) mysql
