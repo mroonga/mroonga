@@ -169,6 +169,14 @@ AC_CHECK_GCUTTER(>= $REQUIRED_MINIMUM_CUTTER_VERSION)
 [ac_cv_use_cutter="no"])
 AM_CONDITIONAL([WITH_CUTTER], [test "$ac_cv_use_cutter" != "no"])
 
+# For Debian package release
+AC_ARG_WITH(rsync-path,
+            [AS_HELP_STRING([--with-rsync-path=PATH],
+            [specify rsync path to upload groonga Debian packages.])],
+            [RSYNC_PATH="$withval"],
+            [RSYNC_PATH=""])
+AC_SUBST(RSYNC_PATH)
+
 CFLAGS="$CFLAGS -Werror"
 CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
 
