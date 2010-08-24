@@ -172,7 +172,7 @@ AM_CONDITIONAL([WITH_CUTTER], [test "$ac_cv_use_cutter" != "no"])
 # For Debian package release
 AC_ARG_WITH(rsync-path,
             [AS_HELP_STRING([--with-rsync-path=PATH],
-            [specify rsync path to upload groonga Debian packages.])],
+            [specify rsync path to upload groonga storage engine Debian packages.])],
             [RSYNC_PATH="$withval"],
             [RSYNC_PATH=""])
 AC_SUBST(RSYNC_PATH)
