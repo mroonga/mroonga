@@ -118,5 +118,5 @@ EOF
 for architecture in $ARCHITECTURES; do
     for code_name in $CODES; do
 	build $architecture $code_name
-    done;
+    done
 done
