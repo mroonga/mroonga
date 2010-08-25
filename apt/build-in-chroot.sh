@@ -102,8 +102,8 @@ build()
     run cp ${script_base_dir}/build-deb.sh \
 	${CHROOT_BASE}/$target/tmp/
     run cat <<EOF > /tmp/groonga.list
-deb http://packages.clear-code.com/${distribution}/ ${code_name} ${component}
-deb-src http://packages.clear-code.com/${distribution}/ ${code_name} ${component}
+deb http://packages.groonga.org/${distribution}/ ${code_name} ${component}
+deb-src http://packages.groonga.org/${distribution}/ ${code_name} ${component}
 EOF
     run_sudo cp /tmp/groonga.list \
 	${CHROOT_BASE}/${target}/etc/apt/sources.list.d/
