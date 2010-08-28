@@ -486,7 +486,7 @@ ha_mroonga::~ha_mroonga()
 const char *ha_mroonga::table_type() const
 {
   DBUG_ENTER("ha_mroonga::table_type");
-  DBUG_RETURN("mroonga");
+  DBUG_RETURN("groonga");
 }
 
 const char *ha_mroonga::index_type(uint keynr)
