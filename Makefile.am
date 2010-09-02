@@ -8,8 +8,6 @@ MYSQLBASEdir  = $(prefix)
 MYSQLLIBdir   = $(pkglibdir)
 pkgplugindir  = $(pkglibdir)/plugin
 
-DEFS          = @DEFS@
-
 noinst_HEADERS = mrnsys.h ha_mroonga.h
 
 lib_LTLIBRARIES      = libgroonga_storage_engine.la
