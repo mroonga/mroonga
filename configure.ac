@@ -49,7 +49,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     plugindir="$($ac_mysql_config --plugindir)"
   else
     AC_MSG_CHECKING([mysql build directory])
-    AC_ARG_WITH([mysql-build-dir],
+    AC_ARG_WITH([mysql-build],
       [AS_HELP_STRING([--with-mysql-build=PATH],
                       [MySQL build directory PATH])],
       [
