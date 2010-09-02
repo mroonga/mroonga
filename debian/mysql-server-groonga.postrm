@@ -1,0 +1,8 @@
+#! /bin/sh
+
+set -e
+
+echo "UNINSTALL PLUGIN groonga;" |
+    mysql --defaults-file=/etc/mysql/debian.cnf
+
+#DEBHELPER#

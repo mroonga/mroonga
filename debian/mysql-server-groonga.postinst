@@ -1,0 +1,25 @@
+#! /bin/sh
+
+set -e
+
+prevver="$2"
+
+install_plugin() {
+    echo "INSTALL PLUGIN groonga SONAME 'ha_groonga.so';" |
+    	 mysql --defaults-file=/etc/mysql/debian.cnf
+}
+
+case "$1" in
+    configure)
+        install_plugin
+        ;;
+    abort-upgrade|abort-deconfigure|abort-remove)
+        :
+        ;;
+    *)
+        echo "Called with unknown argument $1, bailing out."
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
