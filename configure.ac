@@ -24,19 +24,49 @@ AC_DEFUN([CONFIG_OPTION_PLUGINS],
 
 AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_MSG_CHECKING([mysql source])
+
+  ac_mysql_source_dir=
   AC_ARG_WITH([mysql],
-    [AS_HELP_STRING([--with-mysql=PATH],[mysql source directory PATH])],
+    [AS_HELP_STRING([--with-mysql=PATH], [MySQL source directory PATH])],
     [
-      if test -f $withval/sql/handler.h ; then
-        MYSQL_INC="-I$withval/sql -I$withval/include -I$withval/regex -I$withval"
+      ac_mysql_source_dir="$withval"
+      if test -f "$ac_mysql_source_dir/sql/handler.h" ; then
+        MYSQL_INC="-I$ac_mysql_source_dir/sql"
+        MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir/include"
+        MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir/regex"
+        MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir"
         AC_SUBST(MYSQL_INC)
         AC_MSG_RESULT([yes])
       else
-        AC_MSG_ERROR([invalid mysql source directory])
+        AC_MSG_ERROR([invalid MySQL source directory])
       fi
-     ],
+    ],
     [AC_MSG_ERROR([--with-mysql=PATH is required for standalone build])]
   )
+
+  ac_mysql_config="$ac_mysql_source_dir/scripts/mysql_config"
+  if test -x "$ac_mysql_config"; then
+    plugindir="$($ac_mysql_config --plugindir)"
+  else
+    AC_MSG_CHECKING([mysql build directory])
+    AC_ARG_WITH([mysql-build-dir],
+      [AS_HELP_STRING([--with-mysql-build=PATH],
+                      [MySQL build directory PATH])],
+      [
+	ac_mysql_build_dir="$withval"
+        ac_mysql_config="$ac_mysql_build_dir/scripts/mysql_config"
+	if test -x "$ac_mysql_config"; then
+          plugindir="$($ac_mysql_config --plugindir)"
+	  MYSQL_INC="$MYSQL_INC -I$ac_mysql_build_dir/include"
+	  AC_MSG_RESULT([yes])
+	else
+	  AC_MSG_ERROR([invalid MySQL build directory])
+	fi
+      ],
+      [AC_MSG_ERROR([--with-mysql-build=PATH is required for standalone build with different MySQL build direcotry])]
+    )
+  fi
+  AC_SUBST(plugindir)
 ])
 
 AC_DEFUN([CONFIG_OPTION_MECAB],[
@@ -156,7 +186,9 @@ if test "$standalone_build" = "yes";then
   CONFIG_OPTION_MYSQL
 else
   MYSQL_INC="-I../../sql -I../../include -I../../regex -I../.."
+  plugindir="\$(pkglibdir)/plugin"
   AC_SUBST(MYSQL_INC)
+  AC_SUBST(plugindir)
 fi
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
