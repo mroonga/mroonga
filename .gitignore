@@ -28,3 +28,6 @@ cscope.out
 /stamp-h1
 /src/scratch
 /libgroonga_storage_engine.a
+/rpm/*/*.spec
+/yum/fedora/
+/yum/centos/

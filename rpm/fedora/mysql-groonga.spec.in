@@ -1,3 +1,5 @@
+%define mysql_version 5.1.45
+
 Name:		mysql-groonga
 Version:	@VERSION@
 Release:	1%{?dist}
@@ -9,23 +11,26 @@ URL:		http://mroonga.github.com/
 Source0:	http://github.com/downloads/mroonga/mroonga/groonga-storage-engine-@VERSION@.tar.gz
 
 BuildRequires:	groonga-devel
-# to avoid binary-or-shlib-defines-rpath, we need to regenerate
-# configure and libtool scripts
-BuildRequires:	autoconf, automake, libtool
+Requires:	groonga-libs
 Requires:	mysql-server
 
 %description
 Groonga storage engine is a MySQL storage plugin.
 
 %prep
-%setup -q
-
+%setup -q -n groonga-storage-engine-@VERSION@
+srpm=mysql-%{mysql_version}-2.fc13.src.rpm
+if [ ! -f ../../SOURCES/$srpm ]; then
+    curl --output ../../SOURCES/$srpm \
+	http://ftp.iij.ad.jp/pub/linux/fedora/releases/13/Everything/source/SRPMS/$srpm
+    rpm -Uvh ../../SOURCES/$srpm
+fi
 
 %build
-# to avoid binary-or-shlib-defines-rpath, we need to regenerate
-# configure and libtool scripts
-autoreconf -f -i
-%configure --with-mysql=../mysql
+if [ ! -d ../mysql-%{mysql_version} ]; then
+    rpmbuild -bc --define 'runselftest 0' ../../SPECS/mysql.spec
+fi
+%configure --with-mysql=../mysql-%{mysql_version}
 make %{?_smp_mflags}
 
 

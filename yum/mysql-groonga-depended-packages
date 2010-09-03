@@ -1,0 +1,9 @@
+intltool
+libtool
+gcc
+make
+groonga-devel
+gperf
+readline-devel
+openssl-devel
+time
