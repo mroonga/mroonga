@@ -108,7 +108,7 @@ build()
 	${CHROOT_BASE}/$target/tmp/depended-packages
     run cp ${script_base_dir}/build-rpm.sh \
 	${CHROOT_BASE}/$target/tmp/
-    run_sudo rm -rf $rpm_dir $srpm_dir
+    # run_sudo rm -rf $rpm_dir $srpm_dir
     run_sudo su -c "chroot ${CHROOT_BASE}/$target /tmp/build-rpm.sh"
     run mkdir -p $binary_pool_dir
     run mkdir -p $source_pool_dir

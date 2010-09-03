@@ -31,53 +31,6 @@ if ! rpm -q groonga-repository > /dev/null 2>&1; then
 fi
 
 run yum update -y
-if [ "$distribution" = "centos" ] && ! rpm -q mysql-server > /dev/null 2>&1; then
-    run yum install -y wget libtool gcc make
-
-    cat <<EOF > $BUILD_SCRIPT
-#!/bin/sh
-
-base=http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.1
-srpm=\$1
-
-if [ ! -f ~/.rpmmacros ]; then
-    cat <<EOM > ~/.rpmmacros
-%_topdir \$HOME/rpm
-EOM
-fi
-
-rm -rf rpm
-
-mkdir -p rpm/BUILD
-mkdir -p rpm/RPMS
-mkdir -p rpm/SRPMS
-mkdir -p rpm/SOURCES
-mkdir -p rpm/SPECS
-
-mkdir -p dependencies/RPMS
-mkdir -p dependencies/SRPMS
-
-mkdir -p tmp
-cd tmp
-wget \$base/\$srpm
-rpm2cpio \$srpm | cpio -id
-rm \$srpm
-mv *.spec ~/rpm/SPECS/
-mv * ~/rpm/SOURCES/
-cd ..
-rm -rf tmp
-rpmbuild -ba rpm/SPECS/*.spec
-
-cp -p rpm/RPMS/*/*.rpm dependencies/RPMS/
-cp -p rpm/SRPMS/*.rpm dependencies/SRPMS/
-EOF
-
-    run chmod +x $BUILD_SCRIPT
-    for rpm in MySQL-community-5.1.50-1.rhel5.src.rpm; do
-	run su - $USER_NAME $BUILD_SCRIPT $rpm
-	run rpm -Uvh /home/$USER_NAME/rpm/RPMS/*/*.rpm
-    done
-fi
 run yum install -y rpm-build tar ${DEPENDED_PACKAGES}
 run yum clean packages
 
@@ -94,7 +47,7 @@ if [ ! -f ~/.rpmmacros ]; then
 EOM
 fi
 
-rm -rf rpm
+# rm -rf rpm
 mkdir -p rpm/SOURCES
 mkdir -p rpm/SPECS
 mkdir -p rpm/BUILD

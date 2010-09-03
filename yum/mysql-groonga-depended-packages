@@ -7,3 +7,5 @@ gperf
 readline-devel
 openssl-devel
 time
+wget
+ncurses-devel

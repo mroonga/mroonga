@@ -1,2 +1,3 @@
 SUBDIRS =	\
+	centos	\
 	fedora
