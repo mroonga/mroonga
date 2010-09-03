@@ -29,7 +29,8 @@ fi
 
 %build
 if [ ! -d ../mysql-%{mysql_version} ]; then
-    rpmbuild -bc --define 'runselftest 0' ../../SPECS/mysql.spec
+    rpmbuild -bc --define 'runselftest 0' --define 'optflags -O0' \
+        ../../SPECS/mysql.spec
 fi
 %configure --with-mysql=../mysql-%{mysql_version}
 make %{?_smp_mflags}
