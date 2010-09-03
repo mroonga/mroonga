@@ -217,5 +217,9 @@ AC_CONFIG_FILES([
   test/Makefile
   test/unit/Makefile
   apt/Makefile
+  rpm/Makefile
+  rpm/fedora/Makefile
 ])
-AC_OUTPUT
+AC_OUTPUT([
+  rpm/fedora/mysql-groonga.spec
+])

@@ -16,7 +16,7 @@ libgroonga_storage_engine_a_CXXFLAGS  = $(AM_CFLAGS)
 libgroonga_storage_engine_a_CFLAGS    = $(AM_CFLAGS)
 libgroonga_storage_engine_a_SOURCES   = ha_mroonga.cc mrnsys.c
 
-SUBDIRS = test apt
+SUBDIRS = test apt rpm yum
 
 EXTRA_DIST = plug.in
 

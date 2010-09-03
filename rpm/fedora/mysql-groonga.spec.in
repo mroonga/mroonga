@@ -1,0 +1,55 @@
+Name:		mysql-groonga
+Version:	@VERSION@
+Release:	1%{?dist}
+Summary:	A MySQL storage engine powered by groonga.
+
+Group:		Applications/Databases
+License:	BSD
+URL:		http://mroonga.github.com/
+Source0:	http://github.com/downloads/mroonga/mroonga/groonga-storage-engine-@VERSION@.tar.gz
+
+BuildRequires:	groonga-devel
+# to avoid binary-or-shlib-defines-rpath, we need to regenerate
+# configure and libtool scripts
+BuildRequires:	autoconf, automake, libtool
+Requires:	mysql-server
+
+%description
+Groonga storage engine is a MySQL storage plugin.
+
+%prep
+%setup -q
+
+
+%build
+# to avoid binary-or-shlib-defines-rpath, we need to regenerate
+# configure and libtool scripts
+autoreconf -f -i
+%configure --with-mysql=../mysql
+make %{?_smp_mflags}
+
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT
+rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
+rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_groonga.a
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post
+echo "INSTALL PLUGIN groonga SONAME 'ha_groonga.so';" |
+    mysql --defaults-file=/etc/mysql/debian.cnf
+
+%postun
+echo "INSTALL PLUGIN groonga SONAME 'ha_groonga.so';" |
+    mysql --defaults-file=/etc/mysql/debian.cnf
+
+%files
+%defattr(-,root,root,-)
+%{_libdir}/mysql/plugin/
+
+%changelog
+* Fri Sep 03 2010 Kouhei Sutou <kou@clear-code.com> - 0.0.1-1
+- initial packaging for Fedora
