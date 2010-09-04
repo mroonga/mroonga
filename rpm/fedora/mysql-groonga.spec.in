@@ -47,9 +47,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 echo "INSTALL PLUGIN groonga SONAME 'ha_groonga.so';" | mysql -u root mysql
+:
 
 %postun
 echo "INSTALL PLUGIN groonga SONAME 'ha_groonga.so';" | mysql -u root mysql
+:
 
 %files
 %defattr(-,root,root,-)
