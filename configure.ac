@@ -216,6 +216,9 @@ AC_CONFIG_FILES([
   Makefile
   test/Makefile
   test/unit/Makefile
+  test/sql/Makefile
+  test/sql/r/Makefile
+  test/sql/t/Makefile
   apt/Makefile
   rpm/Makefile
   rpm/centos/Makefile
