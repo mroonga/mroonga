@@ -18,7 +18,7 @@
 #ifndef _mrn_util_h
 #define _mrn_util_h
 
-#include <groonga/groonga.h>
+#include <groonga.h>
 
 /* constants */
 #define MRN_PACKAGE_STRING "mroonga 0.1"
