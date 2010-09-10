@@ -6,7 +6,9 @@ Build-Depends:
 	cdbs,
 	autotools-dev,
 	quilt,
-	libgroonga-dev
+	libgroonga-dev,
+	libmysqlclient-dev,
+	libssl-dev
 Standards-Version: 3.7.3
 Homepage: http://mroonga.github.com/
 

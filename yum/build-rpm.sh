@@ -30,6 +30,14 @@ if ! rpm -q groonga-repository > /dev/null 2>&1; then
     run rpm -Uvh http://packages.groonga.org/${distribution}/groonga-repository-1.0.0-0.noarch.rpm
 fi
 
+case $distribution in
+    fedora)
+	DEPENDED_PACKAGES="$DEPENDED_PACKAGES mysql-devel"
+	;;
+    centos)
+	;;
+esac
+
 run yum update -y
 run yum install -y rpm-build tar ${DEPENDED_PACKAGES}
 run yum clean packages

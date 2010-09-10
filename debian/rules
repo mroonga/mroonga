@@ -8,8 +8,7 @@ DEB_INSTALL_DIRS_mysql-server-groonga =		\
 	/usr/lib/mysql/plugin
 
 DEB_CONFIGURE_EXTRA_FLAGS =			\
-	--with-mysql=../mysql			\
-	--with-mysql-build=../mysql/builddir
+	--with-mysql-source=../mysql
 
 CFLAGS=-g -O3
 CXXFLAGS=-g -O3

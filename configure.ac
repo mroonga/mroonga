@@ -26,8 +26,8 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_MSG_CHECKING([mysql source])
 
   ac_mysql_source_dir=
-  AC_ARG_WITH([mysql],
-    [AS_HELP_STRING([--with-mysql=PATH], [MySQL source directory PATH])],
+  AC_ARG_WITH([mysql-source],
+    [AS_HELP_STRING([--with-mysql-source=PATH], [MySQL source directory PATH])],
     [
       ac_mysql_source_dir="$withval"
       if test -f "$ac_mysql_source_dir/sql/handler.h" ; then
@@ -41,31 +41,27 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
         AC_MSG_ERROR([invalid MySQL source directory])
       fi
     ],
-    [AC_MSG_ERROR([--with-mysql=PATH is required for standalone build])]
+    [AC_MSG_ERROR([--with-mysql-source=PATH is required for standalone build])]
   )
 
-  ac_mysql_config="$ac_mysql_source_dir/scripts/mysql_config"
-  if test -x "$ac_mysql_config"; then
-    plugindir="$($ac_mysql_config --plugindir)"
-  else
-    AC_MSG_CHECKING([mysql build directory])
-    AC_ARG_WITH([mysql-build],
-      [AS_HELP_STRING([--with-mysql-build=PATH],
-                      [MySQL build directory PATH])],
-      [
-	ac_mysql_build_dir="$withval"
-        ac_mysql_config="$ac_mysql_build_dir/scripts/mysql_config"
-	if test -x "$ac_mysql_config"; then
-          plugindir="$($ac_mysql_config --plugindir)"
-	  MYSQL_INC="$MYSQL_INC -I$ac_mysql_build_dir/include"
-	  AC_MSG_RESULT([yes])
-	else
-	  AC_MSG_ERROR([invalid MySQL build directory])
-	fi
-      ],
-      [AC_MSG_ERROR([--with-mysql-build=PATH is required for standalone build with different MySQL build direcotry])]
-    )
+  AC_MSG_CHECKING([mysql_config])
+  AC_ARG_WITH([mysql-config],
+    [AS_HELP_STRING([--with-mysql-config=PATH],
+                    [mysql_config PATH])],
+    [ac_mysql_config="$withval"],
+    [ac_mysql_config=])
+  if test -z "$ac_mysql_config"; then
+    AC_PATH_PROG(ac_mysql_config, mysql_config, mysql-config-not-found)
   fi
+  if test "$ac_mysql_config" = "mysql-config-not-found"; then
+    AC_MSG_ERROR([can't detect mysql_config. Please specify mysql_config path by --with-mysql-config=PATH.])
+  fi
+  AC_MSG_RESULT([$ac_mysql_config])
+  plugindir="$($ac_mysql_config --plugindir)"
+  if test $? -ne 0; then
+    AC_MSG_ERROR([failed to run "$ac_mysql_config": $plugindir])
+  fi
+  MYSQL_INC="$MYSQL_INC $($ac_mysql_config --include)"
   AC_SUBST(plugindir)
 ])
 

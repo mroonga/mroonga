@@ -10,3 +10,4 @@ openssl-devel
 time
 wget
 ncurses-devel
+sudo

@@ -3,7 +3,7 @@
 
 Name:		mysql-groonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A MySQL storage engine powered by groonga.
 
 Group:		Applications/Databases
@@ -12,6 +12,7 @@ URL:		http://mroonga.github.com/
 Source0:	http://github.com/downloads/mroonga/mroonga/groonga-storage-engine-@VERSION@.tar.gz
 
 BuildRequires:	groonga-devel
+BuildRequires:	mysql-devel
 Requires:	groonga-libs
 Requires:	mysql-server
 
@@ -29,10 +30,10 @@ fi
 
 %build
 if [ ! -d ../mysql-%{mysql_version} ]; then
-    rpmbuild -bc --define 'runselftest 0' --define 'optflags -O0' \
+    rpmbuild -bp --define 'runselftest 0' --define 'optflags -O0' \
         ../../SPECS/mysql.spec
 fi
-%configure --with-mysql=../mysql-%{mysql_version}
+%configure --with-mysql-source=../mysql-%{mysql_version}
 make %{?_smp_mflags}
 
 
@@ -64,5 +65,8 @@ eval $command || \
 %{_libdir}/mysql/plugin/
 
 %changelog
+* Fri Sep 10 2010 Kouhei Sutou <kou@clear-code.com> - 0.1-2
+- follow configure option changes.
+
 * Fri Sep 03 2010 Kouhei Sutou <kou@clear-code.com> - 0.1-1
-- initial packaging for Fedora
+- initial packaging for Fedora.
