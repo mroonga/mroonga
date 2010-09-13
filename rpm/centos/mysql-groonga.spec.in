@@ -8,7 +8,7 @@ Release:	2%{?dist}
 Summary:	A MySQL storage engine powered by groonga.
 
 Group:		Applications/Databases
-License:	BSD
+License:	LGPLv2.1
 URL:		http://mroonga.github.com/
 Source0:	http://github.com/downloads/mroonga/mroonga/groonga-storage-engine-@VERSION@.tar.gz
 

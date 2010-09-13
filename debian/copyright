@@ -19,9 +19,9 @@ Copyright:
 
 License:
 
-    BSD
+    LGPLv2.1
 
-    See `/usr/share/common-licenses/BSD'.
+    See `/usr/share/common-licenses/LGPL-2.1'.
 
 The Debian packaging is done by Kouhei Sutou <kou@clear-code.com> in 2010,
 and put into public domain, anyone can use it for any purpose.
