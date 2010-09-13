@@ -1,4 +1,4 @@
-/* Copyright(C) 2010 Tetsuro IKEDA
+/* Copyright(C) 2010 Tetsuro IKEDA & Kentoku SHIBA
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -77,6 +77,95 @@ struct st_mysql_sys_var *mrn_system_variables[] =
   NULL
 };
 
+
+/* Groonga information schema */
+int GROONGA_VERSION_SHORT = 0x0001;
+static const char plugin_author[] = "Yoshinori Matsunobu";
+static struct st_mysql_information_schema	i_s_info =
+{
+	MYSQL_INFORMATION_SCHEMA_INTERFACE_VERSION
+};
+
+static ST_FIELD_INFO	i_s_groonga_stats_fields_info[] =
+{
+  {
+    "VERSION",
+    40,
+    MYSQL_TYPE_STRING,
+    0,
+    0,
+    "",
+    SKIP_OPEN_TABLE
+  },
+  {
+    "rows_written",
+    MY_INT32_NUM_DECIMAL_DIGITS,
+    MYSQL_TYPE_LONG,
+    0,
+    0,
+    "Rows written to groonga",
+    SKIP_OPEN_TABLE
+  },
+  {
+    "rows_read",
+    MY_INT32_NUM_DECIMAL_DIGITS,
+    MYSQL_TYPE_LONG,
+    0,
+    0,
+    "Rows read from groonga",
+    SKIP_OPEN_TABLE
+  }
+};
+
+static int i_s_groonga_stats_deinit(void* p)
+{
+  DBUG_ENTER("i_s_common_deinit");
+  DBUG_RETURN(0);
+}
+
+static int i_s_groonga_stats_fill(
+  THD* thd, TABLE_LIST* tables, COND* cond)
+{
+  TABLE*	table	= (TABLE *) tables->table;
+  int	status	= 0;
+  DBUG_ENTER("i_s_groonga_fill_low");
+  table->field[0]->store(grn_get_version(), strlen(grn_get_version()),
+     system_charset_info);
+  table->field[0]->set_notnull();
+  table->field[1]->store(1); /* TODO */
+  table->field[2]->store(2); /* TODO */
+  if (schema_table_store_record(thd, table)) {
+    status = 1;
+  }
+  DBUG_RETURN(status);
+}
+
+static int i_s_groonga_stats_init(void* p)
+{
+  DBUG_ENTER("i_s_groonga_stats_init");
+  ST_SCHEMA_TABLE* schema = (ST_SCHEMA_TABLE*) p;
+  schema->fields_info = i_s_groonga_stats_fields_info;
+  schema->fill_table = i_s_groonga_stats_fill;
+  DBUG_RETURN(0);
+}
+
+struct st_mysql_plugin i_s_groonga_stats =
+{
+  MYSQL_INFORMATION_SCHEMA_PLUGIN,
+  &i_s_info,
+  "GROONGA_STATS",
+  plugin_author,
+  "Statistics for Groonga",
+  PLUGIN_LICENSE_GPL,
+  i_s_groonga_stats_init,
+  i_s_groonga_stats_deinit,
+  GROONGA_VERSION_SHORT,
+  NULL,
+  NULL,
+  NULL,
+};
+/* End of groonga information schema implementations */
+
 mysql_declare_plugin(mroonga)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
@@ -91,7 +180,7 @@ mysql_declare_plugin(mroonga)
   mrn_status_variables,
   mrn_system_variables,
   NULL
-}
+},i_s_groonga_stats
 mysql_declare_plugin_end;
 
 int mrn_init(void *p)
@@ -538,6 +627,8 @@ ulonglong ha_mroonga_table_flags =
     HA_NO_PREFIX_CHAR_KEYS |
     HA_CAN_FULLTEXT |
     HA_NO_AUTO_INCREMENT |
+    HA_CAN_INSERT_DELAYED |
+    HA_BINLOG_FLAGS |
     HA_CAN_BIT_FIELD;
     //HA_HAS_RECORDS;
 
