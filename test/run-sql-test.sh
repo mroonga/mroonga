@@ -15,7 +15,8 @@ test_suites_dir="${mysql_test_dir}/suite"
 groonga_mysql_test_suite_dir="${test_suites_dir}/${test_suite_name}"
 
 if ! test -e "${groonga_mysql_test_suite_dir}"; then
-    ln -s "${groonga_mysql_test_suite_dir}" "${groonga_mysql_test_suite_dir}"
+    ln -s "${local_groonga_mysql_test_suite_dir}" \
+	"${groonga_mysql_test_suite_dir}"
 fi
 (cd "$mysql_test_dir" && \
     ./mysql-test-run.pl --suite="${test_suite_name}" --force)
