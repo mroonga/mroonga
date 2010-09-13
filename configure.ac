@@ -44,6 +44,15 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     [AC_MSG_ERROR([--with-mysql-source=PATH is required for standalone build])]
   )
 
+  ac_mysql_build_dir=
+  AC_ARG_WITH([mysql-build],
+    [AS_HELP_STRING([--with-mysql-build=PATH], [MySQL build directory PATH])],
+    [ac_mysql_build_dir="$withval"],
+    [ac_mysql_build_dir="$ac_mysql_source_dir"]
+  )
+  MYSQL_BUILD="$ac_mysql_build_dir"
+  AC_SUBST(MYSQL_BUILD)
+
   AC_MSG_CHECKING([mysql_config])
   AC_ARG_WITH([mysql-config],
     [AS_HELP_STRING([--with-mysql-config=PATH],

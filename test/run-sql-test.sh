@@ -1,13 +1,21 @@
 #!/bin/sh
 
-if test -n "$MYSQL_HOME"; then
-    SQL_TESTS="$MYSQL_HOME/mysql-test/suite/groonga"
-    if test -d "$SQL_TESTS"; then
-	cd $MYSQL_HOME/mysql-test
-	./mysql-test-run.pl --suite=groonga --force
-    else
-	echo "$SQL_TESTS does not exists. Aborting SQL test."
-    fi
-else
-    echo '$MYSQL_HOME is not defined. Aborting SQL test.'
+export BASE_DIR="$(cd $(dirname $0); pwd)"
+top_dir="$BASE_DIR/.."
+
+if test -z "$MYSQL_BUILD"; then
+    MYSQL_BUILD="$(make -s -C $BASE_DIR echo-mysql-build)"
 fi
+export MYSQL_BUILD
+
+test_suite_name="groonga"
+local_groonga_mysql_test_suite_dir="${BASE_DIR}/sql"
+mysql_test_dir="${MYSQL_BUILD}/mysql-test"
+test_suites_dir="${mysql_test_dir}/suite"
+groonga_mysql_test_suite_dir="${test_suites_dir}/${test_suite_name}"
+
+if ! test -e "${groonga_mysql_test_suite_dir}"; then
+    ln -s "${groonga_mysql_test_suite_dir}" "${groonga_mysql_test_suite_dir}"
+fi
+(cd "$mysql_test_dir" && \
+    ./mysql-test-run.pl --suite="${test_suite_name}" --force)
