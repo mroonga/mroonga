@@ -84,7 +84,7 @@ mysql_declare_plugin(mroonga)
   "groonga",
   "Tetsuro IKEDA",
   "Fulltext search, column base",
-  PLUGIN_LICENSE_BSD,
+  0,
   mrn_init,
   mrn_deinit,
   0x0001,
