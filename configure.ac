@@ -124,42 +124,7 @@ AC_DEFUN([CONFIG_OPTION_MECAB],[
 ])
 
 AC_DEFUN([CONFIG_OPTION_GROONGA],[
-  GROONGA_INCLUDES=
-  GROONGA_LIBS=
-  AC_MSG_CHECKING([groonga])
-  AC_ARG_WITH([groonga],
-    [AS_HELP_STRING([--with-groonga=PATH],[groonga prefix PATH])],
-    [with_groonga=$withval],[with_groonga=yes])
-
-  if test "$with_groonga" = "no";then
-    AC_MSG_ERROR([groonga must not be disabled]);
-  elif test "$with_groonga" = "yes"; then
-    GROONGA_INCLUDES="`pkg-config --cflags groonga`"
-    GROONGA_LIBS="`pkg-config --libs groonga`"
-  elif test -d $with_groonga; then
-    PKG_CONFIG_PATH="$with_groonga/lib/pkgconfig:$PKG_CONFIG_PATH"
-    GROONGA_INCLUDES="`PKG_CONFIG_PATH=$PKG_CONFIG_PATH pkg-config --cflags groonga`"
-    GROONGA_LIBS="`PKG_CONFIG_PATH=$PKG_CONFIG_PATH pkg-config --libs groonga`"
-  else
-   AC_MSG_ERROR([argument doesn't exists: --with-groonga=$with_groonga])
-  fi
-  AC_MSG_RESULT([yes])
-
-  _CPPFLAGS="${CPPFLAGS}"
-  _LIBS="${LIBS}"
-  CPPFLAGS="${CPPFLAGS} ${GROONGA_INCLUDES}"
-  LIBS="${LIBS} ${GROONGA_LIBS}"
-
-  AC_CHECK_FUNC(grn_init, [AC_DEFINE([ENABLE_GROONGA], [1],
-    [Define to 1 if Groonga is enabled])],
-    [AC_MSG_ERROR([Could not find libgroonga. Check your Groonga installation.])
-    ])
-
-  CPPFLAGS="${_CPPFLAGS}"
-  LIBS="${_LIBS}"
-
-  AC_SUBST([GROONGA_INCLUDES])
-  AC_SUBST([GROONGA_LIBS])
+  PKG_CHECK_MODULES(GROONGA, groonga)
 ])
 
 AC_ARG_WITH(debug,

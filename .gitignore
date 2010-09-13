@@ -4,6 +4,7 @@
 *.i
 *.ii
 *.s
+*~
 .deps
 .libs
 Makefile
