@@ -1,5 +1,5 @@
 --disable_warnings
-install plugin groonga soname 'libgroonga_storage_engine.so';
+install plugin groonga soname 'ha_groonga.so';
 set storage_engine=groonga;
 drop database if exists groonga;
 --enable_warnings
