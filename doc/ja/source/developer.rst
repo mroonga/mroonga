@@ -142,6 +142,6 @@ groongaストレージエンジンではドキュメント作成にsphinxを使�
 
 ドキュメントの公開場所は http://mroonga.github.com です。
 
-githubのサイト機能を使用しているため、http://github.com/mroonga/mroonga.github.com レポジトリに最新のHTML出力ファイルをpushすることで更新が行われます。
+githubのサイト機能を使用しているため http://github.com/mroonga/mroonga.github.com レポジトリに最新のHTML出力ファイルをpushすることで更新が行われます。
 
 sphinxの出力するディレクトリ名がgithubで使用できない問題を回避するため、"doc/ja/source"ディレクトリにてsphinx2github.shスクリプトを用意しています。このスクリプトを実行した上でcommitおよびpushして下さい。
