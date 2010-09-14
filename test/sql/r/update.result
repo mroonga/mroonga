@@ -1,4 +1,4 @@
-install plugin groonga soname 'libgroonga_storage_engine.so';
+install plugin groonga soname 'ha_groonga.so';
 set storage_engine=groonga;
 drop table if exists t1, t2, t3;
 create table t1 (c1 int, c2 int);
