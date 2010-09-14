@@ -131,6 +131,16 @@ C/C++単体テスト
 
 ソースコードレポジトリへのpushを行う前に必ず回帰テストを実行し、デグレードが発生していないことを確認して下さい。
 
+上記の回帰テストは"make check"で双方とも呼び出されます。
+
+SQLテストはMySQLの回帰テストである"mysql-test"に対する"sub test suite"として実装しています。テストケースの追加や想定結果ファイルの改変方法などの詳細情報は以下のMySQLのドキュメントを参照して下さい。
+
+http://dev.mysql.com/doc/mysqltest/2.0/en/index.html
+
+C/C++単体テストの書き方についてはcutterのドキュメントを参照して下さい。
+
+http://cutter.sourceforge.net/index.html.ja
+
 ドキュメントの追加と変更について
 --------------------------------
 groongaストレージエンジンではドキュメント作成にsphinxを使用しています。
