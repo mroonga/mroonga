@@ -79,7 +79,7 @@ http://github.com/mroonga/mroonga
 * glibc 2.5
 * MySQL 5.1
 * groonga 1.0
-* cutter 1.0 (C/C++単体テスト用)
+* cutter 1.1 (C/C++単体テスト用)
 * sphinx 1.0 (ドキュメント用)
 
 glibc 2.5はRed Hat Enterprise Linux 5に相当します。
