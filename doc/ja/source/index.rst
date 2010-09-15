@@ -13,7 +13,7 @@ Contents:
    :numbered:
    
    characteristic
-   tutorial
+   install
    reference
    developer
 
