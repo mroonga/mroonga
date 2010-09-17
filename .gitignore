@@ -32,3 +32,4 @@ cscope.out
 /rpm/*/*.spec
 /yum/fedora/
 /yum/centos/
+/doc/ja/build/
