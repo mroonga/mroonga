@@ -1,23 +1,9 @@
 .. highlightlang:: none
 
 インストール
-===============================
+============
 
 それぞれの環境毎にインストール方法を説明します。
-
-Debian GNU/Linux lenny
-----------------------
-
-/etc/apt/sources.list.d/groonga.list::
-
-  deb http://packages.groonga.org/debian/ lenny main
-  deb-src http://packages.groonga.org/debian/ lenny main
-
-インストール::
-
-  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
-  % sudo aptitude update
-  % sudo aptitude -V -D -y install groonga libgroonga-dev MySQL-client-community mysql-groonga
 
 Debian GNU/Linux squeeze
 ------------------------
@@ -31,7 +17,7 @@ Debian GNU/Linux squeeze
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install groonga libgroonga-dev MySQL-client-community mysql-groonga
+  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
 
 Debian GNU/Linux sid
 --------------------
@@ -45,7 +31,7 @@ Debian GNU/Linux sid
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install groonga libgroonga-dev MySQL-client-community mysql-groonga
+  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
 
 Ubuntu 8.04 LTS Hardy Heron
 ---------------------------
@@ -61,7 +47,7 @@ Ubuntu 8.04 LTS Hardy Heron
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install groonga libgroonga-dev MySQL-client-community mysql-groonga
+  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
 
 Ubuntu 10.04 Lucid Lynx
 -----------------------
@@ -70,14 +56,14 @@ Ubuntu 10.04 Lucid Lynx
 
 /etc/apt/sources.list.d/groonga.list::
 
-  deb http://packages.groonga.org/ubuntu/ karmic universe
-  deb-src http://packages.groonga.org/ubuntu/ karmic universe
+  deb http://packages.groonga.org/ubuntu/ lucid universe
+  deb-src http://packages.groonga.org/ubuntu/ lucid universe
 
 インストール::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install groonga libgroonga-dev MySQL-client-community mysql-groonga
+  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
 
 CentOS 5
 --------
@@ -86,7 +72,7 @@ CentOS 5
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
-  % sudo yum install -y groonga groonga-tokenizer-mecab groonga-devel
+  % sudo yum install -y mysql-groonga groonga-tokenizer-mecab
 
 Fedora 13
 ---------
@@ -95,17 +81,20 @@ Fedora 13
 
   % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
-  % sudo yum install -y groonga groonga-tokenizer-mecab groonga-devel MySQL-client-community mysql-groonga
+  % sudo yum install -y mysql-groonga groonga-tokenizer-mecab
+
+ソースコードからのインストール
+------------------------------
+
+ソースコードからインストールする方法を説明します。パッケージ
+がない環境ではソースコードからインストールすることになります。
 
 形態素解析(mecab)について
--------------------------
++++++++++++++++++++++++++
 
 形態素単位でトークナイズした全文検索索引を使用したい場合は、
 groongaのインストール前にMeCab
 (http://mecab.sourceforge.net/)をインストールしてください。
-
-ソースコードからのインストール
-------------------------------
 
 ダウンロード
 ++++++++++++
@@ -128,9 +117,9 @@ MySQL 5.1最新版のソースコードをダウンロードし、ビルド＆�
 
 http://dev.mysql.com/doc/refman/5.1/ja/index.html
 
-mysql-5.1.45を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
+mysql-5.1.50を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
 
- /usr/local/src/mysql-5.1.45
+ /usr/local/src/mysql-5.1.50
 
 MySQLのバイナリが以下にインストールされているものと仮定します。 ::
 
@@ -138,7 +127,6 @@ MySQLのバイナリが以下にインストールされているものと仮定
 
 groongaのインストール
 +++++++++++++++++++++
-
 
 groongaの最新版をビルド＆インストールして下さい。
 
@@ -149,12 +137,11 @@ http://groonga.org/docs/
 groongaストレージエンジンのビルド
 +++++++++++++++++++++++++++++++++
 
-以下のように"with-mysql"でMySQLソースコードディレクトリ、"libdir"でMySQLバイナリのプラグイン用ディレクトリ、"with-groonga"でgroongaのインストール先を指定してconfigureを実行します。 ::
+以下のように"with-mysql-source"でMySQLソースコードディレクトリ、"with-mysql-config"でmysql_configコマンドのパスを指定してconfigureを実行します。 ::
 
  ./configure \
-   --with-mysql=/usr/local/src/mysql-5.1.45 \
-   --libdir=/usr/local/mysql/lib/mysql/plugin \
-   --with-groonga=/usr
+   --with-mysql-source=/usr/local/src/mysql-5.1.50 \
+   --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 その後、"make"を実行します。 ::
 
@@ -163,13 +150,13 @@ groongaストレージエンジンのビルド
 groongaストレージエンジンのインストール
 +++++++++++++++++++++++++++++++++++++++
 
-"make install"を実行するとMySQLのプラグイン用ディレクトリにlibgroonga_storage_engineが配置されます。 ::
+"make install"を実行するとMySQLのプラグイン用ディレクトリにha_groonga.soが配置されます。 ::
 
  make install
 
 その後、mysqldを起動し、mysqlクライアントで接続して"INSTALL PLUGIN"コマンドでインストールします。 ::
 
- mysql> INSTALL PLUGIN groonga SONAME 'libgroonga_storage_engine.so';
+ mysql> INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
 
 以下のように"SHOW ENGINES"コマンドで"groonga"が表示されればインストール完了です。 ::
 
