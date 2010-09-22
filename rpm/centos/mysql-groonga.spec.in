@@ -17,6 +17,7 @@ BuildRequires:	groonga-devel
 BuildRequires:	wget
 Requires:	groonga-libs
 Requires:	MySQL-server-community
+Requires:	MySQL-client-community
 
 %description
 Groonga storage engine is a MySQL storage plugin.
@@ -82,6 +83,9 @@ eval $command || \
 %{_libdir}/mysql/plugin/
 
 %changelog
+* Wed Sep 12 2010 Kouhei Sutou <kou@clear-code.com> - 0.1-3
+- require MySQL-client-community.
+
 * Fri Sep 10 2010 Kouhei Sutou <kou@clear-code.com> - 0.1-2
 - use MySQL-devel-community.
 
