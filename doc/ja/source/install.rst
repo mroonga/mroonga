@@ -177,7 +177,7 @@ githubからのインストール
 ------------------------
 レポジトリから一式ダウンロードします。 ::
 
- git clone git@github.com:mroonga/mroonga.git
+ git clone git://github.com/mroonga/mroonga.git
 
 configureやMakefile.inなどを生成します。GNU Autotoolsが必要です。  ::
 
