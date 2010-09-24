@@ -4,9 +4,9 @@
    contain the root `toctree` directive.
 
 groongaストレージエンジン
-==================================================
+=========================
 
-最新ニュースはこちら http://mroonga.github.com/news.html
+リリース情報はこちら: :ref:`news`
 
 .. toctree::
    :maxdepth: 2

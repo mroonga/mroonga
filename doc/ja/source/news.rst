@@ -1,5 +1,7 @@
 .. highlightlang:: none
 
+.. _news:
+
 最新ニュース
 ============
 
