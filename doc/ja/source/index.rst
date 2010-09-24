@@ -6,12 +6,12 @@
 groongaストレージエンジン
 ==================================================
 
-Contents:
+最新ニュースはこちら http://mroonga.github.com/news.html
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :numbered:
-   
+
    characteristic
    install
    reference
