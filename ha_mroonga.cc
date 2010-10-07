@@ -676,10 +676,11 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     } else {
       // opening existing database
       db_obj = grn_db_open(ctx, db_path);
-      if (db_obj == NULL) {
+      if (ctx->rc) {
         GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db_path);
+        my_message(ER_CANT_OPEN_FILE, "cannot open database file", MYF(0));
         pthread_mutex_unlock(&db_mutex);
-        DBUG_RETURN(-1);
+        DBUG_RETURN(ER_CANT_OPEN_FILE);
       }
     }
     mrn_hash_put(ctx, mrn_hash, db_name, db_obj);
@@ -860,10 +861,10 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   // we should not call grn_db_open() very often. so we use cache.
   if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db)) != 0) {
     db = grn_db_open(ctx, db_path);
-    if (db == NULL) {
+    if (ctx->rc) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db_path);
       pthread_mutex_unlock(&db_mutex);
-      DBUG_RETURN(-1);
+      DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
     mrn_hash_put(ctx, mrn_hash, db_name, db);
   }
@@ -874,9 +875,9 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   char tbl_name[MRN_MAX_PATH_SIZE];
   mrn_table_name_gen(name, tbl_name);
   tbl = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
-  if (tbl == NULL) {
+  if (ctx->rc) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table (%s)", tbl_name);
-    DBUG_RETURN(-1);
+    DBUG_RETURN(ER_CANT_OPEN_FILE);
   }
 
   /* open columns */
@@ -889,11 +890,11 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
     col[i] = grn_obj_column(ctx, tbl, col_name, col_name_size);
-    if (col[i] == NULL) {
+    if (ctx->rc) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table(col) %s(%s)",
               tbl_name, col_name);
       grn_obj_unlink(ctx, tbl);
-      DBUG_RETURN(-1);
+      DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
   }
 
@@ -922,12 +923,25 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 
     mrn_index_name_gen(tbl_name, i, idx_name);
     idx_tbl[i] = grn_ctx_get(ctx, idx_name, strlen(idx_name));
+    if (ctx->rc) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table(index) %s(%s)",
+              tbl_name, idx_name);
+      grn_obj_unlink(ctx, tbl);
+      DBUG_RETURN(ER_CANT_OPEN_FILE);
+    }
 
     KEY key_info = table->s->key_info[i];
     Field *field = key_info.key_part[0].field;
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
     idx_col[i] = grn_obj_column(ctx, idx_tbl[i], col_name, col_name_size);
+    if (ctx->rc) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open index(col) %s(%s)",
+              idx_name, col_name);
+      grn_obj_unlink(ctx, idx_tbl[i]);
+      grn_obj_unlink(ctx, tbl);
+      DBUG_RETURN(ER_CANT_OPEN_FILE);
+    }
   }
   DBUG_RETURN(0);
 }
