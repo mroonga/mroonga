@@ -731,10 +731,10 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 
   tbl_obj = grn_table_create(ctx, tbl_name, tbl_name_len, tbl_path,
                          tbl_flags, pkey_type, pkey_value_type);
-
-  if (tbl_obj == NULL) {
+  if (ctx->rc) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s", tbl_name);
-    DBUG_RETURN(-1);
+    my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_CANT_CREATE_TABLE);
   }
 
   /* create columns */
@@ -753,11 +753,12 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 
     col_obj = grn_column_create(ctx, tbl_obj, col_name, col_name_size,
                                 col_path, col_flags, col_type);
-    if (col_obj == NULL) {
+    if (ctx->rc) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, col=%s",
               tbl_name, col_name);
       grn_obj_remove(ctx, tbl_obj);
-      DBUG_RETURN(-1);
+      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+      DBUG_RETURN(ER_CANT_CREATE_TABLE);
     }
   }
 
@@ -804,10 +805,11 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 
     idx_tbl_obj = grn_table_create(ctx, idx_name, strlen(idx_name), NULL,
                                    idx_tbl_flags, col_type, 0);
-    if (idx_tbl_obj == NULL) {
+    if (ctx->rc) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s", idx_name);
       grn_obj_remove(ctx, tbl_obj);
-      DBUG_RETURN(-1);
+      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+      DBUG_RETURN(ER_CANT_CREATE_TABLE);
     }
 
     if (key_alg == HA_KEY_ALG_FULLTEXT) {
@@ -824,7 +826,8 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
               idx_name, col_name);
       grn_obj_remove(ctx, idx_tbl_obj);
       grn_obj_remove(ctx, tbl_obj);
-      DBUG_RETURN(-1);
+      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+      DBUG_RETURN(ER_CANT_CREATE_TABLE);
     }
 
     grn_id gid = grn_obj_id(ctx, col_obj);
