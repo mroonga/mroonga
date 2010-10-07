@@ -112,6 +112,8 @@ public:
 
   const COND *cond_push(const COND *cond);
   void cond_pop();
+
+  bool get_error_message(int error, String *buf);
 };
 
 #ifdef __cplusplus

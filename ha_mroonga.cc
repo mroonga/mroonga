@@ -1332,6 +1332,14 @@ void ha_mroonga::cond_pop()
   DBUG_VOID_RETURN;
 }
 
+bool ha_mroonga::get_error_message(int error, String *buf)
+{
+  DBUG_ENTER("ha_mroonga::get_error_message");
+  // latest error message
+  buf->copy(ctx->errbuf, (uint) strlen(ctx->errbuf), system_charset_info);
+  DBUG_RETURN(FALSE);
+}
+
 #ifdef __cplusplus
 }
 #endif
