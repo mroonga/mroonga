@@ -4,7 +4,7 @@
 
 Name:		mysql-groonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A MySQL storage engine powered by groonga.
 
 Group:		Applications/Databases
@@ -16,8 +16,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	groonga-devel
 BuildRequires:	wget
 Requires:	groonga-libs
-Requires:	MySQL-server-community
-Requires:	MySQL-client-community
+Requires:	MySQL-server-community = %{mysql_version}-%{mysql_release}
+Requires:	MySQL-client-community = %{mysql_version}-%{mysql_release}
 
 %description
 Groonga storage engine is a MySQL storage plugin.
@@ -83,6 +83,9 @@ eval $command || \
 %{_libdir}/mysql/plugin/
 
 %changelog
+* Fri Oct 08 2010 Kouhei Sutou <kou@clear-code.com> - 0.2-2
+- specify target MySQL version.
+
 * Wed Sep 29 2010 Kouhei Sutou <kou@clear-code.com> - 0.2-1
 - new upstream release.
 
