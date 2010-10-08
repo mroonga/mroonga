@@ -10,7 +10,7 @@ Summary:	A MySQL storage engine powered by groonga.
 Group:		Applications/Databases
 License:	LGPLv2.1
 URL:		http://mroonga.github.com/
-Source0:	http://github.com/downloads/mroonga/mroonga/groonga-storage-engine-@VERSION@.tar.gz
+Source0:	http://github.com/downloads/mroonga/mroonga/groonga-storage-engine-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	groonga-devel
@@ -23,7 +23,7 @@ Requires:	MySQL-client-community = %{mysql_version}-%{mysql_release}
 Groonga storage engine is a MySQL storage plugin.
 
 %prep
-%setup -q -n groonga-storage-engine-@VERSION@
+%setup -q -n groonga-storage-engine-%{version}
 mysql_full_version=%{mysql_version}-%{mysql_release}.%{mysql_dist}
 srpm=MySQL-community-${mysql_full_version}.src.rpm
 if [ ! -f ../../SRPMS/$srpm ]; then
@@ -85,6 +85,7 @@ eval $command || \
 %changelog
 * Fri Oct 08 2010 Kouhei Sutou <kou@clear-code.com> - 0.2-2
 - specify target MySQL version.
+- use %{version}.
 
 * Wed Sep 29 2010 Kouhei Sutou <kou@clear-code.com> - 0.2-1
 - new upstream release.
