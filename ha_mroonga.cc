@@ -1213,10 +1213,12 @@ ha_rows ha_mroonga::records_in_range(uint keynr, key_range *range_min, key_range
   DBUG_RETURN(row_count);
 }
 
-int ha_mroonga::index_read(uchar * record_buffer, const uchar * key, uint key_len,
-                           enum ha_rkey_function find_flag)
+int ha_mroonga::index_read_map(uchar * record_buffer, const uchar * key,
+                               key_part_map keypart_map,
+                               enum ha_rkey_function find_flag)
 {
-  DBUG_ENTER("ha_mroonga::index_read");
+  DBUG_ENTER("ha_mroonga::index_read_map");
+  uint key_len = calculate_key_len(table, active_index, key, keypart_map);
   uint keynr = active_index;
   uint pkeynr = table->s->primary_key;
   KEY key_info = table->key_info[keynr];
@@ -1229,16 +1231,10 @@ int ha_mroonga::index_read(uchar * record_buffer, const uchar * key, uint key_le
   DBUG_RETURN(0);
 }
 
-int ha_mroonga::index_read_idx(uchar * buf, uint index, const uchar * key,
-                               uint key_len, enum ha_rkey_function find_flag)
+int ha_mroonga::index_read_last_map(uchar *buf, const uchar *key,
+                                    key_part_map keypart_map)
 {
-  DBUG_ENTER("ha_mroonga::index_read_idx");
-  DBUG_RETURN(0);
-}
-
-int ha_mroonga::index_read_last(uchar *buf, const uchar *key, uint key_len)
-{
-  DBUG_ENTER("ha_mroonga::index_read_last");
+  DBUG_ENTER("ha_mroonga::index_read_last_map");
   DBUG_RETURN(0);
 }
 

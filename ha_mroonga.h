@@ -96,11 +96,11 @@ public:
   uint max_supported_key_length()    const { return MAX_KEY_LENGTH; }
 
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
-  int index_read(uchar * buf, const uchar * key,
-                 uint key_len, enum ha_rkey_function find_flag);
-  int index_read_idx(uchar * buf, uint index, const uchar * key,
-                     uint key_len, enum ha_rkey_function find_flag);
-  int index_read_last(uchar * buf, const uchar * key, uint key_len);
+  int index_read_map(uchar * record_buffer, const uchar * key,
+                     key_part_map keypart_map,
+                     enum ha_rkey_function find_flag);
+  int index_read_last_map(uchar *buf, const uchar *key,
+                          key_part_map keypart_map);
   int index_next(uchar * buf);
   int index_prev(uchar * buf);
   int index_first(uchar * buf);
