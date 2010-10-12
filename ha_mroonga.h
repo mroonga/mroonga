@@ -31,6 +31,12 @@ extern "C" {
 #include <groonga.h>
 #include "mrnsys.h"
 
+/* structs */
+struct st_mrn_statuses
+{
+  long count_skip;
+};
+
 /* functions */
 int mrn_init(void *hton);
 int mrn_deinit(void *hton);
@@ -61,6 +67,8 @@ class ha_mroonga: public handler
   int *key_min_len;
   int *key_max_len;
 
+  bool count_skip;
+
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);
   ~ha_mroonga();
@@ -81,6 +89,7 @@ public:
 			     enum thr_lock_type lock_type);
 
   int rnd_init(bool scan);                                         // required
+  int rnd_end();
   int rnd_next(uchar *buf);                                        // required
   int rnd_pos(uchar *buf, uchar *pos);                             // required
   void position(const uchar *record);                              // required
@@ -96,6 +105,8 @@ public:
   uint max_supported_key_length()    const { return MAX_KEY_LENGTH; }
 
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
+  int index_init(uint idx, bool sorted);
+  int index_end();
   int index_read_map(uchar * record_buffer, const uchar * key,
                      key_part_map keypart_map,
                      enum ha_rkey_function find_flag);
@@ -105,7 +116,13 @@ public:
   int index_prev(uchar * buf);
   int index_first(uchar * buf);
   int index_last(uchar * buf);
-  
+  int index_next_same(uchar *buf, const uchar *key, uint keylen);
+
+  int read_range_first(const key_range *start_key,
+                       const key_range *end_key,
+                       bool eq_range, bool sorted);
+  int read_range_next();
+
   int ft_init();
   FT_INFO *ft_init_ext(uint flags, uint inx,String *key);
   int ft_read(uchar *buf);
@@ -116,6 +133,8 @@ public:
   bool get_error_message(int error, String *buf);
 
 private:
+  void check_count_skip(key_part_map start_key_part_map,
+                        key_part_map end_key_part_map, bool fulltext);
   void store_fields_from_primary_table(grn_id rid);
 };
 
