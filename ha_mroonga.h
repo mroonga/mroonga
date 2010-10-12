@@ -114,6 +114,9 @@ public:
   void cond_pop();
 
   bool get_error_message(int error, String *buf);
+
+private:
+  void store_fields_from_primary_table(grn_id rid);
 };
 
 #ifdef __cplusplus
