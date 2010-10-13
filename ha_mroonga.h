@@ -107,7 +107,7 @@ public:
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
   int index_init(uint idx, bool sorted);
   int index_end();
-  int index_read_map(uchar * record_buffer, const uchar * key,
+  int index_read_map(uchar * buf, const uchar * key,
                      key_part_map keypart_map,
                      enum ha_rkey_function find_flag);
   int index_read_last_map(uchar *buf, const uchar *key,
@@ -135,7 +135,7 @@ public:
 private:
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
-  void store_fields_from_primary_table(grn_id rid);
+  void store_fields_from_primary_table(uchar *buf, grn_id rid);
 };
 
 #ifdef __cplusplus
