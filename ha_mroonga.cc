@@ -97,7 +97,7 @@ struct st_mysql_storage_engine storage_engine_structure =
 
 struct st_mysql_show_var mrn_status_variables[] =
 {
-  {"grn", (char *) &mrn_show_status, SHOW_FUNC},
+  {"groonga", (char *) &mrn_show_status, SHOW_FUNC},
   {NullS, NullS, SHOW_LONG}
 };
 
