@@ -90,5 +90,19 @@ count(*)
 show status like 'grn_count_skip';
 Variable_name	Value
 grn_count_skip	4
+select * from t1 force index(idx1) where c2 between 20 and 40;
+c1	c2	c3
+2	20	ka ki ku ke ko
+3	30	sa si su se so
+4	40	ta ti tu te to
+show status like 'grn_count_skip';
+Variable_name	Value
+grn_count_skip	4
+select count(*) from t1 force index(idx1) where c2 between 20 and 40;
+count(*)
+3
+show status like 'grn_count_skip';
+Variable_name	Value
+grn_count_skip	5
 drop table t1;
 uninstall plugin groonga;
