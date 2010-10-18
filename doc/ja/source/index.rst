@@ -14,6 +14,7 @@ groongaストレージエンジン
 
    characteristic
    install
+   userguide
    reference
    developer
 
