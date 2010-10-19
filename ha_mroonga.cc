@@ -825,11 +825,11 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     int key_alg = key_info.algorithm;
     grn_obj_flags idx_tbl_flags;
     if (key_alg == HA_KEY_ALG_FULLTEXT) {
-      idx_tbl_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT;
+      idx_tbl_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT | GRN_OBJ_KEY_NORMALIZE;
     } else if (key_alg == HA_KEY_ALG_HASH) {
-      idx_tbl_flags = GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_PERSISTENT;
+      idx_tbl_flags = GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_PERSISTENT | GRN_OBJ_KEY_NORMALIZE;
     } else {
-      idx_tbl_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT;
+      idx_tbl_flags = GRN_OBJ_TABLE_PAT_KEY | GRN_OBJ_PERSISTENT | GRN_OBJ_KEY_NORMALIZE;
     }
 
     idx_tbl_obj = grn_table_create(ctx, idx_name, strlen(idx_name), NULL,
