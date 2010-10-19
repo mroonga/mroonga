@@ -139,7 +139,7 @@ http://groonga.org/docs/
 groongaストレージエンジンのビルド
 +++++++++++++++++++++++++++++++++
 
-以下のように"with-mysql-source"でMySQLソースコードディレクトリ、"with-mysql-config"でmysql_configコマンドのパスを指定してconfigureを実行します。 ::
+以下のように ``--with-mysql-source`` でMySQLソースコードディレクトリ、 ``--with-mysql-config`` でmysql_configコマンドのパスを指定してconfigureを実行します。 ::
 
  ./configure \
    --with-mysql-source=/usr/local/src/mysql-5.1.50 \
