@@ -1,6 +1,6 @@
 .. highlightlang:: none
 
-.. _characteristic.rst:
+.. _characteristic:
 
 groongaストレージエンジンの特徴
 ===============================
