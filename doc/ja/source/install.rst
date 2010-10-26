@@ -5,6 +5,18 @@
 インストールガイド
 ==================
 
+バイナリパッケージを使用したインストールではgroonga関連パッケージと共にMySQL関連のパッケージもインストールされます。
+
+インストール環境に既にディストリビューション由来のMySQLパッケージ(ver5.0以下)がインストール済みの場合には事前に削除しておいて下さい。
+
+aptitudeの場合 ::
+
+ sudo aptitude remove mysql*
+
+yumの場合 ::
+
+ sudo yum remove mysql*
+
 それぞれの環境毎にインストール方法を説明します。
 
 Debian GNU/Linux squeeze
