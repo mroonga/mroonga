@@ -19,6 +19,25 @@ yumの場合 ::
 
 それぞれの環境毎にインストール方法を説明します。
 
+Debian GNU/Linux lenny
+----------------------
+
+/etc/apt/sources.list.d/backports.list::
+
+  deb http://backports.debian.org/debian-backports lenny-backports main
+  deb-src http://backports.debian.org/debian-backports lenny-backports main
+
+/etc/apt/sources.list.d/groonga.list::
+
+  deb http://packages.groonga.org/debian/ lenny main
+  deb-src http://packages.groonga.org/debian/ lenny main
+
+インストール::
+
+  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
+  % sudo aptitude update
+  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
+
 Debian GNU/Linux squeeze
 ------------------------
 
@@ -47,24 +66,8 @@ Debian GNU/Linux sid
   % sudo aptitude update
   % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
 
-Ubuntu 8.04 LTS Hardy Heron
+Ubuntu 10.04 LTS Lucid Lynx
 ---------------------------
-
-注: Ubuntu本家のuniverseセクションもインストール対象としておくこと
-
-/etc/apt/sources.list.d/groonga.list::
-
-  deb http://packages.groonga.org/ubuntu/ hardy universe
-  deb-src http://packages.groonga.org/ubuntu/ hardy universe
-
-インストール::
-
-  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
-  % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
-
-Ubuntu 10.04 Lucid Lynx
------------------------
 
 注: Ubuntu本家のuniverseセクションもインストール対象としておくこと
 
@@ -72,6 +75,22 @@ Ubuntu 10.04 Lucid Lynx
 
   deb http://packages.groonga.org/ubuntu/ lucid universe
   deb-src http://packages.groonga.org/ubuntu/ lucid universe
+
+インストール::
+
+  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
+  % sudo aptitude update
+  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
+
+Ubuntu 10.04 LTS Maverick Meerkat
+---------------------------------
+
+注: Ubuntu本家のuniverseセクションもインストール対象としておくこと
+
+/etc/apt/sources.list.d/groonga.list::
+
+  deb http://packages.groonga.org/ubuntu/ maverick universe
+  deb-src http://packages.groonga.org/ubuntu/ maverick universe
 
 インストール::
 
@@ -131,9 +150,9 @@ MySQL 5.1最新版のソースコードをダウンロードし、ビルド＆�
 
 http://dev.mysql.com/doc/refman/5.1/ja/index.html
 
-mysql-5.1.50を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
+mysql-5.1.51を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
 
- /usr/local/src/mysql-5.1.50
+ /usr/local/src/mysql-5.1.51
 
 MySQLのバイナリが以下にインストールされているものと仮定します。 ::
 
@@ -154,7 +173,7 @@ groongaストレージエンジンのビルド
 以下のように ``--with-mysql-source`` でMySQLソースコードディレクトリ、 ``--with-mysql-config`` でmysql_configコマンドのパスを指定してconfigureを実行します。 ::
 
  ./configure \
-   --with-mysql-source=/usr/local/src/mysql-5.1.50 \
+   --with-mysql-source=/usr/local/src/mysql-5.1.51 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 その後、"make"を実行します。 ::
