@@ -1,4 +1,4 @@
-%define mysql_version 5.1.50
+%define mysql_version 5.1.51
 %define mysql_release 1
 %define mysql_dist    rhel5
 
