@@ -25,6 +25,7 @@ grep '^deb ' /etc/apt/sources.list | \
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
 
 if [ ! -x /usr/bin/aptitude ]; then
+    run apt-get update
     run apt-get install -y aptitude
 fi
 run aptitude update -V -D
