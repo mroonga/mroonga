@@ -107,6 +107,15 @@ deb-src http://packages.groonga.org/${distribution}/ ${code_name} ${component}
 EOF
     run_sudo cp /tmp/groonga.list \
 	${CHROOT_BASE}/${target}/etc/apt/sources.list.d/
+    if [ "${code_name}" = "lenny" ]; then
+	backports_list=/tmp/backports.list
+	run cat <<EOF > ${backports_list}
+deb http://backports.debian.org/debian-backports lenny-backports main
+deb-src http://backports.debian.org/debian-backports lenny-backports main
+EOF
+	run_sudo cp ${backports_list} \
+	    ${CHROOT_BASE}/${target}/etc/apt/sources.list.d/
+    fi
     run_sudo rm -rf $build_dir
     run_sudo su -c "/usr/sbin/chroot ${CHROOT_BASE}/$target /tmp/build-deb.sh"
     run mkdir -p $pool_dir

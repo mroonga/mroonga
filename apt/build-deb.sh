@@ -22,16 +22,6 @@ run()
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
 
-if grep '^5\.0' /etc/debian_version > /dev/null; then
-    backports_list=/etc/apt/sources.list.d/backports.list
-    if [ ! -f $backports_list ]; then
-	cat <<EOF > $backports_list
-deb http://backports.debian.org/debian-backports lenny-backports main
-deb-src http://backports.debian.org/debian-backports lenny-backports main
-EOF
-    fi
-fi
-
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
 
 if [ ! -x /usr/bin/aptitude ]; then
