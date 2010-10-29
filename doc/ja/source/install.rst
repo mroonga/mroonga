@@ -82,8 +82,8 @@ Ubuntu 10.04 LTS Lucid Lynx
   % sudo aptitude update
   % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
 
-Ubuntu 10.04 LTS Maverick Meerkat
----------------------------------
+Ubuntu 10.10 Maverick Meerkat
+-----------------------------
 
 注: Ubuntu本家のuniverseセクションもインストール対象としておくこと
 
