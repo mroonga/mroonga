@@ -33,3 +33,5 @@ cscope.out
 /yum/fedora/
 /yum/centos/
 /doc/ja/build/
+/doc/ja/doctrees/
+/doc/ja/html/

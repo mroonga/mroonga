@@ -179,6 +179,59 @@ AC_ARG_WITH(rsync-path,
             [RSYNC_PATH=""])
 AC_SUBST(RSYNC_PATH)
 
+# check sphinx-build for documentation
+ac_sphinx_available="no"
+sphinx_required_version="1.0.1"
+sphinx_required_version_major=$(echo $sphinx_required_version | cut -d. -f1)
+sphinx_required_version_minor=$(echo $sphinx_required_version | cut -d. -f2)
+sphinx_required_version_micro=$(echo $sphinx_required_version | cut -d. -f3)
+AC_ARG_WITH([sphinx_build],
+            AS_HELP_STRING([--with-sphinx-build=PATH],
+                           [sphinx-build path (default: auto-detect)]),
+            [SPHINX_BUILD="$withval"])
+
+if test "$SPHINX_BUILD" = "no"; then
+  : # ignore
+elif test "$SPHINX_BUILD" = ""; then
+  AC_PATH_PROG(SPHINX_BUILD, sphinx-build, none)
+  if test "$SPHINX_BUILD" != "none"; then
+    ac_sphinx_available="yes"
+  fi
+else
+  AC_CHECK_FILE([$SPHINX_BUILD],
+                [ac_sphinx_available="yes"],
+                [AC_MSG_WARN([$SPHINX_BUILD is not found. Disable document gerataion.])])
+fi
+if test "$ac_sphinx_available" = "yes"; then
+  sphinx_build_version=$($SPHINX_BUILD 2>&1 | head -1 | $SED -e 's/^Sphinx v//')
+  sphinx_build_version_major=$(echo $sphinx_build_version | cut -d. -f1)
+  sphinx_build_version_minor=$(echo $sphinx_build_version | cut -d. -f2)
+  sphinx_build_version_micro=$(echo $sphinx_build_version | cut -d. -f3)
+  if test \
+       \( "$sphinx_build_version_major" -gt \
+             "$sphinx_required_version_major" \) -o \
+       \( "$sphinx_build_version_major" -eq \
+             "$sphinx_required_version_major" -a \
+          "$sphinx_build_version_minor" -gt \
+             "$sphinx_required_version_minor" \) -o \
+       \( "$sphinx_build_version_major" -eq \
+             "$sphinx_required_version_major" -a \
+          "$sphinx_build_version_minor" -eq \
+             "$sphinx_required_version_minor" -a \
+          "$sphinx_build_version_micro" -ge \
+             "$sphinx_required_version_micro" \); then
+    :
+  else
+    ac_sphinx_available="no"
+  fi
+fi
+AC_SUBST(SPHINX_BUILD)
+AM_CONDITIONAL([ENABLE_DOCUMENT],
+               [test "$ac_sphinx_available" = "yes" -o \
+                     -f "$srcdir/doc/ja/html-build-stamp"])
+AC_MSG_CHECKING([for sphinx availablity])
+AC_MSG_RESULT($ac_sphinx_available (sphinx-build=$SPHINX_BUILD version=$sphinx_build_version required=$sphinx_required_version))
+
 CFLAGS="$CFLAGS -Werror"
 CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
 
@@ -194,6 +247,8 @@ AC_CONFIG_FILES([
   rpm/centos/Makefile
   rpm/fedora/Makefile
   yum/Makefile
+  doc/Makefile
+  doc/ja/Makefile
 ])
 AC_OUTPUT([
   rpm/centos/mysql-groonga.spec

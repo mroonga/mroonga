@@ -1,3 +1,5 @@
+AUTOMAKE_OPTIONS = 1.9.7
+
 AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) $(MECAB_INCLUDES)
 AM_INCLUDES = -l. -l..
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
@@ -16,7 +18,7 @@ libgroonga_storage_engine_a_CXXFLAGS  = $(AM_CFLAGS)
 libgroonga_storage_engine_a_CFLAGS    = $(AM_CFLAGS)
 libgroonga_storage_engine_a_SOURCES   = ha_mroonga.cc mrnsys.c
 
-SUBDIRS = test apt rpm yum
+SUBDIRS = test apt rpm yum doc
 
 EXTRA_DIST = plug.in
 
