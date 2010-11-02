@@ -23,8 +23,16 @@
 
 #define MYSQL_SERVER 1
 
+#ifdef MYSQL51
 #include <mysql_priv.h>
 #include <mysql/plugin.h>
+#else /* MYSQL51 */
+#include <sql_priv.h>
+#include <sql_class.h>
+#include <probes_mysql.h>
+#include <sql_plugin.h>
+#include <sql_show.h>
+#endif
 #include <sql_select.h>
 #include <pthread.h>
 #include <sys/types.h>
