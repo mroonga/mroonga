@@ -21,7 +21,7 @@ set storage_engine=groonga;
 drop table if exists t1;
 --enable_warnings
 
-show plugins;
+select count(*) from information_schema.plugins where plugin_name = "groonga";
 
 --disable_warnings
 uninstall plugin groonga_stats;

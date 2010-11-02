@@ -2,16 +2,8 @@ install plugin groonga soname 'ha_groonga.so';
 install plugin groonga_stats soname 'ha_groonga.so';
 set storage_engine=groonga;
 drop table if exists t1;
-show plugins;
-Name	Status	Type	Library	License
-binlog	ACTIVE	STORAGE ENGINE	NULL	GPL
-partition	ACTIVE	STORAGE ENGINE	NULL	GPL
-CSV	ACTIVE	STORAGE ENGINE	NULL	GPL
-MEMORY	ACTIVE	STORAGE ENGINE	NULL	GPL
-InnoDB	DISABLED	STORAGE ENGINE	NULL	GPL
-MyISAM	ACTIVE	STORAGE ENGINE	NULL	GPL
-MRG_MYISAM	ACTIVE	STORAGE ENGINE	NULL	GPL
-groonga	ACTIVE	STORAGE ENGINE	ha_groonga.so	PROPRIETARY
-groonga_stats	ACTIVE	INFORMATION SCHEMA	ha_groonga.so	PROPRIETARY
+select count(*) from information_schema.plugins where plugin_name = "groonga";
+count(*)
+1
 uninstall plugin groonga_stats;
 uninstall plugin groonga;
