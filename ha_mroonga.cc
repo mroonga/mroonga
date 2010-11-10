@@ -704,18 +704,17 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
       // creating new database
       GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db_path);
       db_obj = grn_db_create(ctx, db_path, NULL);
-      if (db_obj == NULL) {
+      if (ctx->rc) {
         pthread_mutex_unlock(&db_mutex);
-        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create database (%s)", db_path);
-        DBUG_RETURN(-1);
+        my_message(ER_CANT_CREATE_FILE, ctx->errbuf, MYF(0));
+        DBUG_RETURN(ER_CANT_CREATE_FILE);
       }
     } else {
       // opening existing database
       db_obj = grn_db_open(ctx, db_path);
       if (ctx->rc) {
-        GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db_path);
-        my_message(ER_CANT_OPEN_FILE, "cannot open database file", MYF(0));
         pthread_mutex_unlock(&db_mutex);
+        my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
         DBUG_RETURN(ER_CANT_OPEN_FILE);
       }
     }
@@ -735,8 +734,9 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     // surpose simgle column key
     int key_parts = key_info.key_parts;
     if (key_parts != 1) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported (%s)", db_path);
-      DBUG_RETURN(-1);
+      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
+      my_message(ER_NOT_SUPPORTED_YET, "complex key is not supported yet", MYF(0));
+      DBUG_RETURN(ER_NOT_SUPPORTED_YET);
     }
     Field *pkey_field = key_info.key_part[0].field;
 
@@ -769,7 +769,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   tbl_obj = grn_table_create(ctx, tbl_name, tbl_name_len, tbl_path,
                          tbl_flags, pkey_type, pkey_value_type);
   if (ctx->rc) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s", tbl_name);
     my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_CANT_CREATE_TABLE);
   }
@@ -791,8 +790,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     col_obj = grn_column_create(ctx, tbl_obj, col_name, col_name_size,
                                 col_path, col_flags, col_type);
     if (ctx->rc) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create table: name=%s, col=%s",
-              tbl_name, col_name);
       grn_obj_remove(ctx, tbl_obj);
       my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_CREATE_TABLE);
@@ -814,8 +811,9 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     // must be single column key
     int key_parts = key_info.key_parts;
     if (key_parts != 1) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported (%s)", db_path);
-      DBUG_RETURN(-1);
+      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
+      my_message(ER_NOT_SUPPORTED_YET, "complex key is not supported yet.", MYF(0));
+      DBUG_RETURN(ER_NOT_SUPPORTED_YET);
     }
 
     mrn_index_name_gen(tbl_name, i, idx_name);
@@ -843,7 +841,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     idx_tbl_obj = grn_table_create(ctx, idx_name, strlen(idx_name), NULL,
                                    idx_tbl_flags, col_type, 0);
     if (ctx->rc) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s", idx_name);
       grn_obj_remove(ctx, tbl_obj);
       my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_CREATE_TABLE);
@@ -858,9 +855,7 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     idx_col_obj = grn_column_create(ctx, idx_tbl_obj, col_name, col_name_size, NULL,
                                     idx_col_flags, tbl_obj);
 
-    if (idx_col_obj == NULL) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create index: name=%s, col=%s",
-              idx_name, col_name);
+    if (ctx->rc) {
       grn_obj_remove(ctx, idx_tbl_obj);
       grn_obj_remove(ctx, tbl_obj);
       my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
@@ -898,8 +893,8 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db)) != 0) {
     db = grn_db_open(ctx, db_path);
     if (ctx->rc) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open database (%s)", db_path);
       pthread_mutex_unlock(&db_mutex);
+      my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
     mrn_hash_put(ctx, mrn_hash, db_name, db);
@@ -912,7 +907,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   mrn_table_name_gen(name, tbl_name);
   tbl = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
   if (ctx->rc) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table (%s)", tbl_name);
+    my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_CANT_OPEN_FILE);
   }
 
@@ -927,9 +922,8 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     int col_name_size = strlen(col_name);
     col[i] = grn_obj_column(ctx, tbl, col_name, col_name_size);
     if (ctx->rc) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table(col) %s(%s)",
-              tbl_name, col_name);
       grn_obj_unlink(ctx, tbl);
+      my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
   }
@@ -960,9 +954,8 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     mrn_index_name_gen(tbl_name, i, idx_name);
     idx_tbl[i] = grn_ctx_get(ctx, idx_name, strlen(idx_name));
     if (ctx->rc) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open table(index) %s(%s)",
-              tbl_name, idx_name);
       grn_obj_unlink(ctx, tbl);
+      my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
 
@@ -972,10 +965,9 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     int col_name_size = strlen(col_name);
     idx_col[i] = grn_obj_column(ctx, idx_tbl[i], col_name, col_name_size);
     if (ctx->rc) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open index(col) %s(%s)",
-              idx_name, col_name);
       grn_obj_unlink(ctx, idx_tbl[i]);
       grn_obj_unlink(ctx, tbl);
+      my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
   }
@@ -1021,9 +1013,9 @@ int ha_mroonga::delete_table(const char *name)
   grn_obj *db_obj, *tbl_obj, *lex_obj, *hash_obj, *pat_obj;
   mrn_db_path_gen(name, db_path);
   db_obj = grn_db_open(ctx, db_path);
-  if (db_obj == NULL) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_db_open failed while delete_table (%s)", db_path);
-    DBUG_RETURN(-1);
+  if (ctx->rc) {
+    my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_CANT_OPEN_FILE);
   }
   grn_ctx_use(ctx, db_obj);
 
@@ -1040,9 +1032,9 @@ int ha_mroonga::delete_table(const char *name)
   }
 
   tbl_obj = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
-  if (tbl_obj == NULL) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "grn_ctx_get failed while mrn_drop (%s)", tbl_name);
-    DBUG_RETURN(-1);
+  if (ctx->rc) {
+    my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_CANT_OPEN_FILE);
   }
   DBUG_RETURN(grn_obj_remove(ctx, tbl_obj));
 }
@@ -1071,9 +1063,9 @@ int ha_mroonga::rnd_init(bool scan)
   DBUG_ENTER("ha_mroonga::rnd_init");
   count_skip = FALSE;
   cur = grn_table_cursor_open(ctx, tbl, NULL, 0, NULL, 0, 0, -1, 0);
-  if (cur == NULL) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot open cursor");
-      DBUG_RETURN(-1);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_READ);
   }
   DBUG_RETURN(0);
 }
@@ -1092,6 +1084,12 @@ int ha_mroonga::rnd_next(uchar *buf)
 {
   DBUG_ENTER("ha_mroonga::rnd_next");
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
@@ -1140,13 +1138,19 @@ int ha_mroonga::write_row(uchar *buf)
 
   int added;
   row_id = grn_table_add(ctx, tbl, pkey, pkey_size, &added);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_WRITE);
+  }
   grn_obj_unlink(ctx, &wrapper);
   if (added == 0) {
     // duplicated error
 #ifndef DBUG_OFF
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
-    DBUG_RETURN(-1);
+    GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
+    my_message(ER_DUP_UNIQUE, "duplicated _id on insert", MYF(0));
+    DBUG_RETURN(ER_DUP_UNIQUE);
   }
 
   grn_obj colbuf;
@@ -1156,13 +1160,14 @@ int ha_mroonga::write_row(uchar *buf)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     mrn_set_buf(ctx, field, &colbuf, &col_size);
-    if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
-        != GRN_SUCCESS) {
+    grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET);
+    if (ctx->rc) {
 #ifndef DBUG_OFF
       dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
       grn_obj_unlink(ctx, &colbuf);
-      DBUG_RETURN(-1);
+      my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+      DBUG_RETURN(ER_ERROR_ON_WRITE);
     }
   }
 #ifndef DBUG_OFF
@@ -1188,13 +1193,14 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
 #endif
       DBUG_PRINT("info",("mroonga update column %d(%d)",i,field->field_index));
       mrn_set_buf(ctx, field, &colbuf, &col_size);
-      if (grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET)
-          != GRN_SUCCESS) {
+      grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET);
+      if (ctx->rc) {
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
         grn_obj_unlink(ctx, &colbuf);
-        DBUG_RETURN(-1);
+        my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+        DBUG_RETURN(ER_ERROR_ON_WRITE);
       }
 #ifndef DBUG_OFF
       dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -1208,8 +1214,10 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
 int ha_mroonga::delete_row(const uchar *buf)
 {
   DBUG_ENTER("ha_mroonga::delete_row");
-  if (grn_table_delete_by_id(ctx, tbl, row_id) != GRN_SUCCESS) {
-    DBUG_RETURN(-1);
+  grn_table_delete_by_id(ctx, tbl, row_id);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_WRITE);
   }
   DBUG_RETURN(0);
 }
@@ -1336,7 +1344,17 @@ int ha_mroonga::index_read_map(uchar * buf, const uchar * key,
       grn_table_cursor_open(ctx, idx_tbl[keynr], val_min, size_min,
                             val_max, size_max, 0, -1, flags);
   }
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
@@ -1384,7 +1402,17 @@ int ha_mroonga::index_read_last_map(uchar *buf, const uchar *key,
       grn_table_cursor_open(ctx, idx_tbl[keynr], val_min, size_min,
                             val_max, size_max, 0, -1, flags);
   }
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
@@ -1400,6 +1428,12 @@ int ha_mroonga::index_next(uchar *buf)
 {
   DBUG_ENTER("ha_mroonga::index_next");
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
@@ -1415,6 +1449,12 @@ int ha_mroonga::index_prev(uchar *buf)
 {
   DBUG_ENTER("ha_mroonga::index_prev");
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
@@ -1445,7 +1485,17 @@ int ha_mroonga::index_first(uchar *buf)
       grn_table_cursor_open(ctx, idx_tbl[active_index], NULL, 0,
                             NULL, 0, 0, -1, 0);
   }
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
@@ -1477,7 +1527,17 @@ int ha_mroonga::index_last(uchar *buf)
       grn_table_cursor_open(ctx, idx_tbl[active_index], NULL, 0,
                             NULL, 0, 0, -1, flags);
   }
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
@@ -1493,6 +1553,12 @@ int ha_mroonga::index_next_same(uchar *buf, const uchar *key, uint keylen)
 {
   DBUG_ENTER("ha_mroonga::index_next_same");
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
@@ -1553,7 +1619,17 @@ int ha_mroonga::read_range_first(const key_range *start_key,
       grn_table_cursor_open(ctx, idx_tbl[active_index], val_min, size_min,
                             val_max, size_max, 0, -1, flags);
   }
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
@@ -1568,6 +1644,12 @@ int ha_mroonga::read_range_first(const key_range *start_key,
 int ha_mroonga::read_range_next() {
   DBUG_ENTER("ha_mroonga::read_range_next");
   row_id = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
 
   if (row_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
@@ -1611,6 +1693,7 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
     GRN_TEXT_SET(ctx, &buf, keyword, keyword_size);
     grn_obj_search(ctx, ft, &buf, res, GRN_OP_OR, NULL);
   }
+
   int n_rec = grn_table_size(ctx, res);
   cur = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, -1, 0);
   DBUG_RETURN(NULL);
@@ -1622,6 +1705,12 @@ int ha_mroonga::ft_read(uchar *buf)
   grn_id rid;
 
   rid = grn_table_cursor_next(ctx, cur);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
 
   if (rid == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
