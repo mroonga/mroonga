@@ -690,7 +690,41 @@ ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
 int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 {
   DBUG_ENTER("ha_mroonga::create");
-  /* First, we must check if database is alreadly opened, created */
+  /* checking data type of virtual columns */
+  int i;
+  uint n_columns = table->s->fields;
+  for (i = 0; i < n_columns; i++) {
+    Field *field = table->s->field[i];
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      switch (field->type()) {
+      case (MYSQL_TYPE_TINY) :
+      case (MYSQL_TYPE_SHORT) :
+      case (MYSQL_TYPE_INT24) :
+      case (MYSQL_TYPE_LONG) :
+      case (MYSQL_TYPE_LONGLONG) :
+        break;
+      default:
+        GRN_LOG(ctx, GRN_LOG_ERROR, "_id must be numeric data type");
+        my_message(ER_CANT_CREATE_TABLE, "_id must be numeric data type", MYF(0));
+        DBUG_RETURN(ER_CANT_CREATE_TABLE);
+      }        
+    }
+    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      switch (field->type()) {
+      case (MYSQL_TYPE_FLOAT) :
+      case (MYSQL_TYPE_DOUBLE) :
+        break;
+      default:
+        GRN_LOG(ctx, GRN_LOG_ERROR, "_score must be float or double");
+        my_message(ER_CANT_CREATE_TABLE, "_score must be float or double", MYF(0));
+        DBUG_RETURN(ER_CANT_CREATE_TABLE);
+      }        
+    }
+  }
+
+  /* before creating table, we must check if database is alreadly opened, created */
   grn_obj *db_obj;
   char db_name[MRN_MAX_PATH_SIZE];
   char db_path[MRN_MAX_PATH_SIZE];
@@ -774,8 +808,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   }
 
   /* create columns */
-  int i;
-  uint n_columns = table->s->fields;
   for (i = 0; i < n_columns; i++) {
     grn_obj *col_obj, *col_type;
     Field *field = table->s->field[i];

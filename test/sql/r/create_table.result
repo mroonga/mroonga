@@ -150,4 +150,8 @@ c1	set('A','B','AB','O')	YES		NULL
 drop table t1;
 create table `_aaa` (c1 int) engine = groonga;
 ERROR HY000: name can't start with '_' and 0-9, and contains only 0-9, A-Z, a-z, or _
+create table t1 (c1 int, `_id` text) engine = groonga;
+ERROR HY000: _id must be numeric data type
+create table t1 (c1 int, `_score` int) engine = groonga;
+ERROR HY000: _score must be float or double
 uninstall plugin groonga;
