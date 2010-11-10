@@ -724,6 +724,32 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     }
   }
 
+  /* checking if index is used for virtual columns  */
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    KEY key_info = table->s->key_info[i];
+    // must be single column key
+    int key_parts = key_info.key_parts;
+    if (key_parts != 1) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
+      my_message(ER_NOT_SUPPORTED_YET, "complex key is not supported yet.", MYF(0));
+      DBUG_RETURN(ER_NOT_SUPPORTED_YET);
+    }
+    Field *field = key_info.key_part[0].field;
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "_id cannot be used for index");
+      my_message(ER_CANT_CREATE_TABLE, "_id cannot be used for index", MYF(0));
+      DBUG_RETURN(ER_CANT_CREATE_TABLE);
+    }
+    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "_score cannot be used for index");
+      my_message(ER_CANT_CREATE_TABLE, "_score cannot be used for index", MYF(0));
+      DBUG_RETURN(ER_CANT_CREATE_TABLE);  
+    }
+  }
+
   /* before creating table, we must check if database is alreadly opened, created */
   grn_obj *db_obj;
   char db_name[MRN_MAX_PATH_SIZE];
@@ -829,7 +855,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   }
 
   /* create indexes */
-  uint n_keys = table->s->keys;
   char idx_name[MRN_MAX_PATH_SIZE];
 
   for (i = 0; i < n_keys; i++) {

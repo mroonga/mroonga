@@ -119,11 +119,15 @@ drop table t1;
 --error 1005
 create table `_aaa` (c1 int) engine = groonga;
 
+# checking for virtual columns
 --error 1005
 create table t1 (c1 int, `_id` text) engine = groonga;
-
 --error 1005
 create table t1 (c1 int, `_score` int) engine = groonga;
+--error 1005
+create table t1 (c1 int, `_id` int, index(`_id`)) engine = groonga;
+--error 1005
+create table t1 (c1 int, `_score` double, index(`_score`)) engine = groonga;
 
 --disable_warnings
 uninstall plugin groonga;
