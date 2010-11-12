@@ -839,6 +839,10 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     Field *field = table->s->field[i];
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
+
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) continue;
+    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) continue;
+
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR;
     int mysql_field_type = field->type();
     grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);

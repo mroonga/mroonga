@@ -148,6 +148,18 @@ desc t1;
 Field	Type	Null	Key	Default	Extra
 c1	set('A','B','AB','O')	YES		NULL	
 drop table t1;
+create table t1 (c1 int, `_id` int) engine = groonga;
+desc t1;
+Field	Type	Null	Key	Default	Extra
+c1	int(11)	YES		NULL	
+_id	int(11)	YES		NULL	
+drop table t1;
+create table t1 (c1 int, `_score` float) engine = groonga;
+desc t1;
+Field	Type	Null	Key	Default	Extra
+c1	int(11)	YES		NULL	
+_score	float	YES		NULL	
+drop table t1;
 create table `_aaa` (c1 int) engine = groonga;
 ERROR HY000: name can't start with '_' and 0-9, and contains only 0-9, A-Z, a-z, or _
 create table t1 (c1 int, `_id` text) engine = groonga;

@@ -115,6 +115,14 @@ create table t1 (c1 set("A","B","AB","O"));
 desc t1;
 drop table t1;
 
+# virtual columns
+create table t1 (c1 int, `_id` int) engine = groonga;
+desc t1;
+drop table t1;
+create table t1 (c1 int, `_score` float) engine = groonga;
+desc t1;
+drop table t1;
+
 # error
 --error 1005
 create table `_aaa` (c1 int) engine = groonga;
