@@ -61,6 +61,7 @@ class ha_mroonga: public handler
   grn_obj *res;
   grn_table_cursor *cur;
   grn_id row_id;
+  grn_obj *_score;
 
   char **key_min;
   char **key_max;
@@ -131,6 +132,8 @@ public:
   void cond_pop();
 
   bool get_error_message(int error, String *buf);
+
+  int reset();
 
 private:
   void check_count_skip(key_part_map start_key_part_map,

@@ -617,6 +617,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   ctx = grn_ctx_open(0);
   grn_ctx_use(ctx, mrn_db);
   cur = NULL;
+  res = NULL;
   DBUG_VOID_RETURN;
 }
 
@@ -1220,6 +1221,12 @@ int ha_mroonga::write_row(uchar *buf)
   GRN_VOID_INIT(&colbuf);
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) continue;
+    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) continue;
+
     mrn_set_buf(ctx, field, &colbuf, &col_size);
     grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET);
     if (ctx->rc) {
@@ -1740,7 +1747,8 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
   check_count_skip(0, 0, TRUE);
   row_id = GRN_ID_NIL;
 
-  res = grn_table_create(ctx, NULL, 0, NULL, GRN_TABLE_HASH_KEY, tbl, 0);
+  res = grn_table_create(ctx, NULL, 0, NULL,
+                         GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC, tbl, 0);
 
   if (flags & FT_BOOL) {
     // boolean search
@@ -1754,7 +1762,7 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
     GRN_TEXT_SET(ctx, &buf, keyword, keyword_size);
     grn_obj_search(ctx, ft, &buf, res, GRN_OP_OR, NULL);
   }
-
+  _score = grn_obj_column(ctx, res, MRN_SCORE_COL_NAME, strlen(MRN_SCORE_COL_NAME));
   int n_rec = grn_table_size(ctx, res);
   cur = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, -1, 0);
   DBUG_RETURN(NULL);
@@ -1773,10 +1781,9 @@ int ha_mroonga::ft_read(uchar *buf)
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
 
-  if (rid == GRN_ID_NIL) {
+  if (rid == GRN_ID_NIL) { // res will be closed by reset()
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
-    grn_obj_unlink(ctx, res);
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
@@ -1909,6 +1916,9 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
   int n_columns = table->s->fields;
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+
     if (bitmap_is_set(table->read_set, field->field_index) ||
         bitmap_is_set(table->write_set, field->field_index)) {
 #ifndef DBUG_OFF
@@ -1917,7 +1927,30 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
 #endif
       DBUG_PRINT("info",("mroonga store column %d(%d)",i,field->field_index));
       field->move_field_offset(ptr_diff);
-      mrn_store_field(ctx, field, col[i], rid);
+      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+        // for _id column
+        field->set_notnull();
+        field->store((int) rid);
+      } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+        // for _score column
+        if (res && res->header.flags & GRN_OBJ_WITH_SUBREC) {
+          float score;
+          grn_obj buf;
+          GRN_INT32_INIT(&buf,0);
+          grn_id res_id = grn_table_get(ctx, res, &rid, sizeof(rid));
+          grn_obj_get_value(ctx, _score, res_id, &buf);
+          score = GRN_INT32_VALUE(&buf);
+          grn_obj_unlink(ctx, &buf);
+          field->set_notnull();
+          field->store((float) score);
+        } else {
+          field->set_notnull();
+          field->store(0.0);
+        }
+      } else {
+        // actual column
+        mrn_store_field(ctx, field, col[i], rid);
+      }
       field->move_field_offset(-ptr_diff);
 #ifndef DBUG_OFF
       dbug_tmp_restore_column_map(table->write_set, tmp_map);
@@ -1925,6 +1958,17 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
     }
   }
   DBUG_VOID_RETURN;
+}
+
+int ha_mroonga::reset()
+{
+  DBUG_ENTER("ha_mroonga::reset()");
+  if (res != NULL) {
+    grn_obj_unlink(ctx, res);
+    _score = NULL;
+    res = NULL;
+  }
+  DBUG_RETURN(0);
 }
 
 #ifdef __cplusplus
