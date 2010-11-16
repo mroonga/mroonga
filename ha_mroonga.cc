@@ -982,6 +982,16 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     Field *field = table->field[i];
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
+
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      col[i] = NULL;
+      continue;
+    }
+    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      col[i] = NULL;
+      continue;
+    }
+
     col[i] = grn_obj_column(ctx, tbl, col_name, col_name_size);
     if (ctx->rc) {
       grn_obj_unlink(ctx, tbl);
@@ -1185,10 +1195,38 @@ int ha_mroonga::write_row(uchar *buf)
   void *pkey = NULL;
   int pkey_size = 0;
   uint pkeynr = table->s->primary_key;
-  GRN_VOID_INIT(&wrapper);
+  THD *thd = ha_thd();
+  int i, col_size;
+  int n_columns = table->s->fields;
 #ifndef DBUG_OFF
   my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
+  if (thd->abort_on_warning) {
+    for (i = 0; i < n_columns; i++) {
+      Field *field = table->field[i];
+      const char *col_name = field->field_name;
+      int col_name_size = strlen(col_name);
+
+      if (field->is_null()) continue;
+
+      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+#ifndef DBUG_OFF
+        dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+        my_message(ER_DATA_TOO_LONG, "cannot insert value to _id column", MYF(0));
+        DBUG_RETURN(ER_DATA_TOO_LONG);
+      } 
+      if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+#ifndef DBUG_OFF
+        dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+        my_message(ER_DATA_TOO_LONG, "cannot insert value to _score column", MYF(0));
+        DBUG_RETURN(ER_DATA_TOO_LONG);
+      } 
+    }
+  }
+
+  GRN_VOID_INIT(&wrapper);
   if (pkeynr != MAX_INDEXES) {
     KEY key_info = table->s->key_info[pkeynr];
     // surpose simgle column key
@@ -1216,16 +1254,25 @@ int ha_mroonga::write_row(uchar *buf)
   }
 
   grn_obj colbuf;
-  int i, col_size;
-  int n_columns = table->s->fields;
   GRN_VOID_INIT(&colbuf);
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
 
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) continue;
-    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) continue;
+    if (field->is_null()) continue;
+
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+                   "data truncated for  _id column");
+      continue;
+    }
+
+    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+                   "data truncated for  _score column");
+      continue;
+    }
 
     mrn_set_buf(ctx, field, &colbuf, &col_size);
     grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET);
@@ -1251,15 +1298,58 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
   grn_obj colbuf;
   int i, col_size;
   int n_columns = table->s->fields;
+  THD *thd = ha_thd();
+
+  if (thd->abort_on_warning) {
+    for (i = 0; i < n_columns; i++) {
+      Field *field = table->field[i];
+      const char *col_name = field->field_name;
+      int col_name_size = strlen(col_name);
+
+      if (field->is_null()) continue;
+
+      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+        my_message(ER_DATA_TOO_LONG, "cannot update value to _id column", MYF(0));
+        DBUG_RETURN(ER_DATA_TOO_LONG);
+      } 
+      if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+        my_message(ER_DATA_TOO_LONG, "cannot update value to _score column", MYF(0));
+        DBUG_RETURN(ER_DATA_TOO_LONG);
+      } 
+    }
+  }
+
   GRN_VOID_INIT(&colbuf);
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
     if (bitmap_is_set(table->write_set, field->field_index)) {
 #ifndef DBUG_OFF
-      my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table,
-        table->read_set);
+      my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
       DBUG_PRINT("info",("mroonga update column %d(%d)",i,field->field_index));
+
+      if (field->is_null()) continue;
+
+      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+        push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+                     "data truncated for  _id column");
+#ifndef DBUG_OFF
+        dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+        continue;
+      }
+
+      if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+        push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+                     "data truncated for  _score column");
+#ifndef DBUG_OFF
+        dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+        continue;
+      }
+
       mrn_set_buf(ctx, field, &colbuf, &col_size);
       grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET);
       if (ctx->rc) {
