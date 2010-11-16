@@ -42,7 +42,11 @@ SHOW ENGINESコマンドでgroongaストレージエンジンがインストー�
 
 インストールが確認できたら、テーブルを1つ作成してみましょう。 ::
 
- mysql> CREATE TABLE t1 (c1 INT PRIMARY KEY, c2 VARCHAR(255), FULLTEXT INDEX (c2)) ENGINE = groonga DEFAULT CHARSET utf8;
+ mysql> CREATE TABLE t1 (
+      >   c1 INT PRIMARY KEY,
+      >   c2 VARCHAR(255), 
+      >   FULLTEXT INDEX (c2)
+      > ) ENGINE = groonga DEFAULT CHARSET utf8;
  Query OK, 0 rows affected (0.22 sec)
 
 INSERTでデータを投入してみましょう。 ::
@@ -65,6 +69,47 @@ INSERTでデータを投入してみましょう。 ::
 
 おぉぉー。検索できましたね。
 
+
+検索スコアの取得方法
+----------------------------
+
+全文検索を行う際、指定したキーワードにより内容が一致するレコードを上位に表示したいというような場合があります。そうしたケースでは検索スコアを利用します。
+
+検索スコアを取得するためには、テーブル定義時に ``_score`` という名前のカラムを作成しておく必要があります。 ::
+
+
+ mysql> CREATE TABLE t1 (
+      >   c1 INT PRIMARY KEY,
+      >   c2 TEXT,
+      >   _score FLOAT,
+      >   FULLTEXT INDEX (c2)
+      > ) ENGINE = groonga DEFAULT CHARSET utf8;
+ Query OK, 0 rows affected (0.22 sec)
+
+_scoreカラムのデータ型はFLOATまたはDOUBLEである必要があります。
+
+
+INSERTでデータを投入してみましょう。_scoreカラムは仮想カラムとして実装されており、更新は行えません。更新対象から外すか、値に ``null`` を使用する必要があります。 ::
+
+ mysql> insert into t1 values(1, "aa ii uu ee oo", null);
+ Query OK, 1 row affected (0.00 sec)
+ 
+ mysql> insert into t1 values(2, "aa ii ii ii oo", null);
+ Query OK, 1 row affected (0.00 sec)
+ 
+ mysql> insert into t1 values(3, "dummy", null);
+ Query OK, 1 row affected (0.00 sec)
+
+全文検索(MATCH...AGAINSTによる検索)を実行した場合、_scoreカラムを通じて検索スコアを取得できます。_scoreカラムをORDER BYに指定することで結果のソートも行うことができます。 ::
+
+ mysql> select * from t1 where match(c2) against("ii") order by _score desc;
+ +----+----------------+--------+
+ | c1 | c2             | _score |
+ +----+----------------+--------+
+ |  2 | aa ii ii ii oo |      3 |
+ |  1 | aa ii uu ee oo |      1 |
+ +----+----------------+--------+
+ 2 rows in set (0.00 sec)
 
 ログ出力
 ----------------------------
