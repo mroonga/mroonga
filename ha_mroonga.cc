@@ -244,7 +244,7 @@ int mrn_init(void *p)
     goto err;
   }
   mrn_logfile_opened = 1;
-  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s init", MRN_PACKAGE_STRING);
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s started.", MRN_PACKAGE_STRING);
 
   // init meta-info database
   if (!(mrn_db = grn_db_create(ctx, NULL, NULL))) {
