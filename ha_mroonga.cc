@@ -34,6 +34,7 @@
 #include <sql_show.h>
 #endif
 #include <sql_select.h>
+#include <ft_global.h>
 #include <pthread.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -48,6 +49,15 @@ extern "C" {
 grn_obj *mrn_db;
 grn_hash *mrn_hash;
 pthread_mutex_t db_mutex;
+_ft_vft mrn_ft_vft = {
+  NULL,
+  mrn_ft_find_relevance,
+  mrn_ft_close_search,
+  mrn_ft_get_relevance,
+  NULL
+//  mrn_ft_read_next, mrn_ft_find_relevance, mrn_ft_close_search,
+//  mrn_ft_get_relevance, mrn_ft_reinit_search
+};
 
 /* status */
 st_mrn_statuses mrn_status_vals;
@@ -260,10 +270,12 @@ int mrn_init(void *p)
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
     goto err;
   }
+
   // init lock
   if ((pthread_mutex_init(&db_mutex, NULL) != 0)) {
     goto err;
   }
+
   grn_ctx_fin(ctx);
   return 0;
 
@@ -607,6 +619,38 @@ void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
     }
   }
   grn_obj_unlink(ctx, &buf);
+}
+
+float mrn_ft_find_relevance(FT_INFO *handler, uchar *record, uint length)
+{
+  st_mrn_ft_info *info = (st_mrn_ft_info*) handler;
+  if (info->rid != GRN_ID_NIL) {
+    grn_ctx *ctx = info->ctx;
+    grn_obj *res = info->res;
+    grn_id rid = info->rid;
+
+    if (res && res->header.flags & GRN_OBJ_WITH_SUBREC) {
+      float score;
+      grn_obj buf;
+      GRN_INT32_INIT(&buf,0);
+      grn_id res_id = grn_table_get(ctx, res, &rid, sizeof(rid));
+      if (res_id != GRN_ID_NIL) {
+        return (float) -1.0;
+      } else {
+        return (float) 0.0;
+      }
+    }
+  }
+  return (float) -1.0;
+}
+
+float mrn_ft_get_relevance(FT_INFO *handler)
+{
+  return (float) -1.0;
+}
+
+void mrn_ft_close_search(FT_INFO *handler)
+{
 }
 
 /* handler implementation */
@@ -1170,6 +1214,11 @@ int ha_mroonga::rnd_next(uchar *buf)
   }
   store_fields_from_primary_table(buf, row_id);
   table->status = 0;
+
+  { // for "not match..against"
+    mrn_ft_info.rid = row_id;
+  }
+
   DBUG_RETURN(0);
 }
 
@@ -1855,7 +1904,14 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
   _score = grn_obj_column(ctx, res, MRN_SCORE_COL_NAME, strlen(MRN_SCORE_COL_NAME));
   int n_rec = grn_table_size(ctx, res);
   cur = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, -1, 0);
-  DBUG_RETURN(NULL);
+
+  { // for "not match"
+    mrn_ft_info.please = &mrn_ft_vft;
+    mrn_ft_info.ctx = ctx;
+    mrn_ft_info.res = res;
+  }
+
+  DBUG_RETURN((FT_INFO*) &mrn_ft_info);
 }
 
 int ha_mroonga::ft_read(uchar *buf)
@@ -2057,6 +2113,11 @@ int ha_mroonga::reset()
     grn_obj_unlink(ctx, res);
     _score = NULL;
     res = NULL;
+  }
+  {
+    mrn_ft_info.ctx = NULL;
+    mrn_ft_info.res = NULL;
+    mrn_ft_info.rid = GRN_ID_NIL;
   }
   DBUG_RETURN(0);
 }

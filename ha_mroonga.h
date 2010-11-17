@@ -37,11 +37,22 @@ struct st_mrn_statuses
   long count_skip;
 };
 
+struct st_mrn_ft_info
+{
+  struct _ft_vft *please;
+  grn_ctx *ctx;
+  grn_obj *res;
+  grn_id rid;
+};
+
 /* functions */
 int mrn_init(void *hton);
 int mrn_deinit(void *hton);
 handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROOT *root);
 void mrn_drop_db(handlerton *hton, char *path);
+float mrn_ft_find_relevance(FT_INFO *handler, uchar *record, uint length);
+float mrn_ft_get_relevance(FT_INFO *handler);
+void mrn_ft_close_search(FT_INFO *handler);
 
 /* handler class */
 class ha_mroonga: public handler
@@ -62,6 +73,8 @@ class ha_mroonga: public handler
   grn_table_cursor *cur;
   grn_id row_id;
   grn_obj *_score;
+
+  st_mrn_ft_info mrn_ft_info;
 
   char **key_min;
   char **key_max;
