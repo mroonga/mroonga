@@ -50,13 +50,11 @@ grn_obj *mrn_db;
 grn_hash *mrn_hash;
 pthread_mutex_t db_mutex;
 _ft_vft mrn_ft_vft = {
-  NULL,
+  NULL, // mrn_ft_read_next
   mrn_ft_find_relevance,
   mrn_ft_close_search,
   mrn_ft_get_relevance,
-  NULL
-//  mrn_ft_read_next, mrn_ft_find_relevance, mrn_ft_close_search,
-//  mrn_ft_get_relevance, mrn_ft_reinit_search
+  NULL // mrn_ft_reinit_search
 };
 
 /* status */
@@ -631,8 +629,6 @@ float mrn_ft_find_relevance(FT_INFO *handler, uchar *record, uint length)
 
     if (res && res->header.flags & GRN_OBJ_WITH_SUBREC) {
       float score;
-      grn_obj buf;
-      GRN_INT32_INIT(&buf,0);
       grn_id res_id = grn_table_get(ctx, res, &rid, sizeof(rid));
       if (res_id != GRN_ID_NIL) {
         return (float) -1.0;
