@@ -137,6 +137,20 @@ create table t1 (c1 int, `_id` int, index(`_id`)) engine = groonga;
 --error 1005
 create table t1 (c1 int, `_score` double, index(`_score`)) engine = groonga;
 
+# index for _id
+--error 1005
+create table t1 (_id int, c1 int, primary key (_id));
+create table t1 (_id int, c1 int, primary key (_id) using hash);
+drop table t1;
+--error 1005
+create table t1 (_id int, c1 int, unique key (_id));
+create table t1 (_id int, c1 int, unique key (_id) using hash);
+drop table t1;
+--error 1005
+create table t1 (_id int, c1 int, key (_id));
+create table t1 (_id int, c1 int, key (_id) using hash);
+drop table t1;
+
 --disable_warnings
 uninstall plugin groonga;
 --enable_warnings

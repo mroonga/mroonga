@@ -167,7 +167,19 @@ ERROR HY000: _id must be numeric data type
 create table t1 (c1 int, `_score` int) engine = groonga;
 ERROR HY000: _score must be float or double
 create table t1 (c1 int, `_id` int, index(`_id`)) engine = groonga;
-ERROR HY000: _id cannot be used for index
+ERROR HY000: only hash index can be defined for _id
 create table t1 (c1 int, `_score` double, index(`_score`)) engine = groonga;
 ERROR HY000: _score cannot be used for index
+create table t1 (_id int, c1 int, primary key (_id));
+ERROR HY000: only hash index can be defined for _id
+create table t1 (_id int, c1 int, primary key (_id) using hash);
+drop table t1;
+create table t1 (_id int, c1 int, unique key (_id));
+ERROR HY000: only hash index can be defined for _id
+create table t1 (_id int, c1 int, unique key (_id) using hash);
+drop table t1;
+create table t1 (_id int, c1 int, key (_id));
+ERROR HY000: only hash index can be defined for _id
+create table t1 (_id int, c1 int, key (_id) using hash);
+drop table t1;
 uninstall plugin groonga;

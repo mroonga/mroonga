@@ -784,8 +784,11 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
     if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "_id cannot be used for index");
-      my_message(ER_CANT_CREATE_TABLE, "_id cannot be used for index", MYF(0));
+      if (key_info.algorithm == HA_KEY_ALG_HASH) {
+        continue; // hash index is ok
+      }
+      GRN_LOG(ctx, GRN_LOG_ERROR, "only hash index can be defined for _id");
+      my_message(ER_CANT_CREATE_TABLE, "only hash index can be defined for _id", MYF(0));
       DBUG_RETURN(ER_CANT_CREATE_TABLE);
     }
     if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
@@ -844,16 +847,23 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
       DBUG_RETURN(ER_NOT_SUPPORTED_YET);
     }
     Field *pkey_field = key_info.key_part[0].field;
+    const char *col_name = pkey_field->field_name;
+    int col_name_size = strlen(col_name);
+    bool is_id = (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0);
 
     int mysql_field_type = pkey_field->type();
     grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
     pkey_type = grn_ctx_at(ctx, gtype);
 
     // default algorithm is BTREE ==> PAT
-    if (key_info.algorithm == HA_KEY_ALG_HASH) {
+    if (!is_id && key_info.algorithm == HA_KEY_ALG_HASH) {
       tbl_flags |= GRN_OBJ_TABLE_HASH_KEY;
-    } else {
+    } else if (!is_id) {
       tbl_flags |= GRN_OBJ_TABLE_PAT_KEY;
+    } else {
+      // for _id 
+      tbl_flags |= GRN_OBJ_TABLE_NO_KEY;
+      pkey_type = NULL;
     }
 
   } else {
@@ -927,6 +937,12 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     Field *field = key_info.key_part[0].field;
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
+
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      // skipping _id virtual column
+      continue;
+    }
+
     col_obj = grn_obj_column(ctx, tbl_obj, col_name, col_name_size);
     int mysql_field_type = field->type();
     grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
