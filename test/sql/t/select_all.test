@@ -85,6 +85,17 @@ select * from t1 order by c3 asc;
 select * from t1 order by c3 desc;
 drop table t1;
 
+# _id
+create table t1 (_id int, c1 int);
+insert into t1 values (null,100);
+insert into t1 values (null,100);
+insert into t1 values (null,100);
+insert into t1 values (null,100);
+insert into t1 values (null,100);
+select * from t1;
+select * from t1 where _id < 3;
+select * from t1 where _id >= 3;
+drop table t1;
 
 --disable_warnings
 uninstall plugin groonga;
