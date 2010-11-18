@@ -647,6 +647,10 @@ float mrn_ft_get_relevance(FT_INFO *handler)
 
 void mrn_ft_close_search(FT_INFO *handler)
 {
+  st_mrn_ft_info *info = (st_mrn_ft_info*) handler;
+  info->ctx = NULL;
+  info->res = NULL;
+  info->rid = GRN_ID_NIL;
 }
 
 /* handler implementation */
@@ -1210,10 +1214,6 @@ int ha_mroonga::rnd_next(uchar *buf)
   }
   store_fields_from_primary_table(buf, row_id);
   table->status = 0;
-
-  { // for "not match..against"
-    mrn_ft_info.rid = row_id;
-  }
 
   DBUG_RETURN(0);
 }
@@ -1878,7 +1878,7 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
   DBUG_ENTER("ha_mroonga::ft_init_ext");
   grn_obj *ft = idx_col[keynr];
   const char *keyword = key->ptr();
-  int keyword_size = strlen(keyword);
+  int keyword_size = key->length();
   check_count_skip(0, 0, TRUE);
   row_id = GRN_ID_NIL;
 
@@ -1905,6 +1905,7 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
     mrn_ft_info.please = &mrn_ft_vft;
     mrn_ft_info.ctx = ctx;
     mrn_ft_info.res = res;
+    mrn_ft_info.rid = GRN_ID_NIL;
   }
 
   DBUG_RETURN((FT_INFO*) &mrn_ft_info);
@@ -2099,6 +2100,9 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
 #endif
     }
   }
+  // for "not match against"
+  mrn_ft_info.rid = rid;
+
   DBUG_VOID_RETURN;
 }
 
@@ -2109,11 +2113,6 @@ int ha_mroonga::reset()
     grn_obj_unlink(ctx, res);
     _score = NULL;
     res = NULL;
-  }
-  {
-    mrn_ft_info.ctx = NULL;
-    mrn_ft_info.res = NULL;
-    mrn_ft_info.rid = GRN_ID_NIL;
   }
   DBUG_RETURN(0);
 }

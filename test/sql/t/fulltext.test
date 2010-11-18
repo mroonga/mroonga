@@ -75,6 +75,29 @@ select c1,c2,match(c2) against("ii") from t1 where match(c2) against("ii");
 select c1,c2,match(c2) against("ii") from t1 where match(c2) against("ii");
 drop table t1,t2;
 
+# for "not match against"
+create table t1 (c1 int primary key, c2 int, c3 text, _score float, fulltext index ft(c3));
+insert into t1 values(1,10,"aa ii uu ee oo",null);
+insert into t1 values(2,10,"ka ki ku ke ko",null);
+insert into t1 values(3,10,"aa ii uu ee oo",null);
+insert into t1 values(4,10,"ka ki ku ke ko",null);
+insert into t1 values(5,20,"aa ii uu ee oo",null);
+insert into t1 values(6,20,"ka ki ku ke ko",null);
+insert into t1 values(7,20,"aa ii uu ee oo",null);
+insert into t1 values(8,20,"ka ki ku ke ko",null);
+select * from t1;
+select * from t1 where match(c3) against("uu");
+select * from t1 where not match(c3) against("uu");
+select * from t1 where match(c3) against("dummy");
+select * from t1 where not match(c3) against("dummy");
+select * from t1 where c1 = 4 and not match(c3) against("uu");
+select * from t1 where c1 <= 4 and not match(c3) against("uu");
+select * from t1 where c1 > 4 and not match(c3) against("uu");
+select * from t1 where c2 = 10 and not match(c3) against("uu");
+select * from t1 where c2 >= 15 and not match(c3) against("uu");
+select * from t1 where c2 < 15 and not match(c3) against("uu");
+drop table t1;
+
 --disable_warnings
 uninstall plugin groonga;
 --enable_warnings
