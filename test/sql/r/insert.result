@@ -71,14 +71,14 @@ create table t1 (c1 int, _id int, _score float);
 set sql_mode="";
 insert into t1 (c1,_id) values (1,1);
 Warnings:
-Warning	1265	data truncated for  _id column
+Warning	1265	data truncated for _id column
 insert into t1 (c1,_score) values (2,2);
 Warnings:
-Warning	1265	data truncated for  _score column
+Warning	1265	data truncated for _score column
 insert into t1 (c1,_id,_score) values (3,1,2);
 Warnings:
-Warning	1265	data truncated for  _id column
-Warning	1265	data truncated for  _score column
+Warning	1265	data truncated for _id column
+Warning	1265	data truncated for _score column
 set sql_mode="strict_all_tables";
 insert into t1 (c1,_id) values (4,1);
 ERROR 22001: cannot insert value to _id column

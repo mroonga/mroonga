@@ -1325,13 +1325,13 @@ int ha_mroonga::write_row(uchar *buf)
 
     if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
       push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
-                   "data truncated for  _id column");
+                   "data truncated for _id column");
       continue;
     }
 
     if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
       push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
-                   "data truncated for  _score column");
+                   "data truncated for _score column");
       continue;
     }
 
@@ -1451,6 +1451,13 @@ ha_rows ha_mroonga::records_in_range(uint keynr, key_range *range_min, key_range
   KEY key_info = table->s->key_info[keynr];
   KEY_PART_INFO key_part = key_info.key_part[0];
   Field *field = key_part.field;
+  const char *col_name = field->field_name;
+  int col_name_size = strlen(col_name);
+
+  if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+    DBUG_RETURN((ha_rows) 1) ;
+  }
+
   if (range_min != NULL) {
     mrn_set_key_buf(ctx, field, range_min->key, key_min[keynr], &size_min);
     val_min = key_min[keynr];
@@ -1522,6 +1529,8 @@ int ha_mroonga::index_read_map(uchar * buf, const uchar * key,
   uint size_min = 0, size_max = 0;
   void *val_min = NULL, *val_max = NULL;
   Field *field = key_part.field;
+  const char *col_name = field->field_name;
+  int col_name_size = strlen(col_name);
 
   if (cur) {
     grn_table_cursor_close(ctx, cur);
@@ -1533,6 +1542,22 @@ int ha_mroonga::index_read_map(uchar * buf, const uchar * key,
     val_min = key_min[keynr];
     val_max = key_min[keynr];
     size_max = size_min;
+
+    // for _id
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      grn_id rid = *(grn_id*) key_min[keynr];
+      if (grn_table_at(ctx, tbl, rid) != GRN_ID_NIL) { // found
+        store_fields_from_primary_table(buf, rid);
+        table->status = 0;
+        cur = NULL;
+        DBUG_RETURN(0);
+      } else {
+        table->status = STATUS_NOT_FOUND;
+        cur = NULL;
+        DBUG_RETURN(HA_ERR_END_OF_FILE);
+      }
+    }
+
   } else if (
     find_flag == HA_READ_BEFORE_KEY ||
     find_flag == HA_READ_PREFIX_LAST_OR_PREV
@@ -1771,6 +1796,10 @@ int ha_mroonga::index_last(uchar *buf)
 int ha_mroonga::index_next_same(uchar *buf, const uchar *key, uint keylen)
 {
   DBUG_ENTER("ha_mroonga::index_next_same");
+  if (cur == NULL) { // for _id
+    table->status = STATUS_NOT_FOUND;
+    DBUG_RETURN(HA_ERR_END_OF_FILE);
+  }
   row_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));

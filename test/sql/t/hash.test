@@ -30,6 +30,40 @@ flush tables;
 select * from t1;
 drop table t1;
 
+# _id with hash index
+create table t1 (_id int, a int, primary key (_id) using hash);
+--error 1048
+insert into t1 values(null, 100);
+insert into t1 values(1,100);
+insert into t1 values(1,100);
+insert into t1 values(1,100);
+insert into t1 values(1,100);
+select * from t1;
+select * from t1 where _id = 2;
+select * from t1 where _id = 20;
+drop table t1;
+
+create table t1 (_id int, a int, unique key (_id) using hash);
+insert into t1 values(null, 100);
+insert into t1 values(null, 100);
+insert into t1 values(null, 100);
+insert into t1 values(null, 100);
+select * from t1;
+select * from t1 where _id = 2;
+select * from t1 where _id = 20;
+drop table t1;
+
+
+create table t1 (_id int, a int, key (_id) using hash);
+insert into t1 values(null, 100);
+insert into t1 values(null, 100);
+insert into t1 values(null, 100);
+insert into t1 values(null, 100);
+select * from t1;
+select * from t1 where _id = 2;
+select * from t1 where _id = 20;
+drop table t1;
+
 --disable_warnings
 uninstall plugin groonga;
 --enable_warnings
