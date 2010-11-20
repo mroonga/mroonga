@@ -14,9 +14,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+--source suite/groonga/include/groonga.inc
+
 --disable_warnings
-install plugin groonga soname 'ha_groonga.so';
-set storage_engine=groonga;
 drop database if exists groonga;
 --enable_warnings
 
@@ -35,8 +35,3 @@ create table t1 (c1 int primary key, c2 varchar(255)) default charset utf8;
 create table t2 (c1 int primary key, c2 varchar(255)) default charset utf8;
 drop table t1, t2;
 drop database groonga;
-
-
---disable_warnings
-uninstall plugin groonga;
---enable_warnings

@@ -14,38 +14,11 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-source include/have_log_bin.inc;
-source suite/groonga/include/groonga.inc;
-
---disable_warnings
-drop table if exists t1;
---enable_warnings
-
-show variables like 'log_bin';
-
-set binlog_format="STATEMENT";
-
-create table t1 (c1 int primary key, c2 int) engine = groonga;
-insert into t1 values(1,100);
-insert into t1 values(2,100);
-commit;
-select * from t1;
-drop table t1;
-
-set binlog_format="ROW";
-
-create table t1 (c1 int primary key, c2 int) engine = groonga;
-insert into t1 values(1,100);
-insert into t1 values(2,100);
-commit;
-select * from t1;
-drop table t1;
-
-set binlog_format="MIXED";
-
-create table t1 (c1 int primary key, c2 int) engine = groonga;
-insert into t1 values(1,100);
-insert into t1 values(2,100);
-commit;
-select * from t1;
-drop table t1;
+disable_query_log;
+if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name="groonga"`)
+{
+  INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
+  INSTALL PLUGIN groonga_stats SONAME 'ha_groonga.so';
+}
+set storage_engine=groonga;
+enable_query_log;

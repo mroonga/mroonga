@@ -14,12 +14,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+--source suite/groonga/include/groonga.inc
+
 --disable_warnings
-install plugin groonga soname 'ha_groonga.so';
-set storage_engine=groonga;
-drop database if exists db1;
-create database db1;
-use db1;
+drop table if exists t1, t2, t3;
 --enable_warnings
 
 create table t1 (c1 int);
@@ -33,8 +31,3 @@ drop table t1;
 create table t1 (c1 int primary key, c2 varchar(100));
 show create table t1;
 drop table t1;
-
---disable_warnings
-drop database db1;
-uninstall plugin groonga;
---enable_warnings

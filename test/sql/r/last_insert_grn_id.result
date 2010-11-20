@@ -1,6 +1,5 @@
-install plugin groonga soname 'ha_groonga.so';
-set storage_engine=groonga;
-drop table if exists t1;
+drop table if exists t1, t2, t3;
+drop function if exists last_insert_grn_id;
 create function last_insert_grn_id returns integer soname 'ha_groonga.so';
 create table t1 (_id int, c1 int);
 select last_insert_grn_id();
@@ -30,4 +29,3 @@ select last_insert_grn_id(1);
 ERROR HY000: Can't initialize function 'last_insert_grn_id'; last_insert_grn_id must not have arguments
 drop table t1;
 drop function last_insert_grn_id;
-uninstall plugin groonga;

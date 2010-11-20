@@ -1,8 +1,4 @@
-install plugin groonga soname 'ha_groonga.so';
-set storage_engine=groonga;
-drop database if exists db1;
-create database db1;
-use db1;
+drop table if exists t1, t2, t3;
 create table t1 (c1 int);
 show table status;
 Name	Engine	Version	Row_format	Rows	Avg_row_length	Data_length	Max_data_length	Index_length	Data_free	Auto_increment	Create_time	Update_time	Check_time	Collation	Checksum	Create_options	Comment
@@ -15,5 +11,4 @@ t2	groonga	10	Fixed	0	0	0	0	0	0	NULL	NULL	NULL	NULL	latin1_swedish_ci	NULL
 show table status like 't2';
 Name	Engine	Version	Row_format	Rows	Avg_row_length	Data_length	Max_data_length	Index_length	Data_free	Auto_increment	Create_time	Update_time	Check_time	Collation	Checksum	Create_options	Comment
 t2	groonga	10	Fixed	0	0	0	0	0	0	NULL	NULL	NULL	NULL	latin1_swedish_ci	NULL		
-drop database db1;
-uninstall plugin groonga;
+drop table t1,t2;

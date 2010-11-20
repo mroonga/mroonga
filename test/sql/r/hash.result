@@ -1,5 +1,3 @@
-install plugin groonga soname 'ha_groonga.so';
-set storage_engine=groonga;
 drop table if exists t1, t2, t3;
 create table t1 (c1 int primary key, c2 int, index using hash (c2));
 show create table t1;
@@ -86,4 +84,3 @@ _id	a
 select * from t1 where _id = 20;
 _id	a
 drop table t1;
-uninstall plugin groonga;

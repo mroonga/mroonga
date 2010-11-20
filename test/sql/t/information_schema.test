@@ -14,16 +14,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---disable_warnings
-install plugin groonga soname 'ha_groonga.so';
-install plugin groonga_stats soname 'ha_groonga.so';
-set storage_engine=groonga;
-drop table if exists t1;
---enable_warnings
+--source suite/groonga/include/groonga.inc
 
 select count(*) from information_schema.plugins where plugin_name = "groonga";
-
---disable_warnings
-uninstall plugin groonga_stats;
-uninstall plugin groonga;
---enable_warnings

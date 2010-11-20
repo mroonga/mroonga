@@ -1,9 +1,3 @@
-install plugin groonga soname 'ha_groonga.so';
-install plugin groonga_stats soname 'ha_groonga.so';
-set storage_engine=groonga;
-drop table if exists t1;
 select count(*) from information_schema.plugins where plugin_name = "groonga";
 count(*)
 1
-uninstall plugin groonga_stats;
-uninstall plugin groonga;

@@ -14,9 +14,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+--source suite/groonga/include/groonga.inc
+
 --disable_warnings
-install plugin groonga soname 'ha_groonga.so';
-set storage_engine=groonga;
 drop table if exists t1, t2, t3;
 --enable_warnings
 
@@ -53,8 +53,3 @@ select * from t1;
 select * from t1 where match(c2) against("ki");
 
 drop table t1;
-
-
---disable_warnings
-uninstall plugin groonga;
---enable_warnings

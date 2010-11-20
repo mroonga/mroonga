@@ -1,8 +1,4 @@
-install plugin groonga soname 'ha_groonga.so';
-set storage_engine=groonga;
-drop database if exists db1;
-create database db1;
-use db1;
+drop table if exists t1, t2, t3;
 create table t1 (c1 int);
 show create table t1;
 Table	Create Table
@@ -27,5 +23,3 @@ t1	CREATE TABLE `t1` (
   PRIMARY KEY (`c1`)
 ) ENGINE=groonga DEFAULT CHARSET=latin1
 drop table t1;
-drop database db1;
-uninstall plugin groonga;

@@ -1,5 +1,3 @@
-install plugin groonga soname 'ha_groonga.so';
-set storage_engine=groonga;
 drop database if exists groonga;
 create database groonga;
 drop database groonga;
@@ -14,4 +12,3 @@ create table t1 (c1 int primary key, c2 varchar(255)) default charset utf8;
 create table t2 (c1 int primary key, c2 varchar(255)) default charset utf8;
 drop table t1, t2;
 drop database groonga;
-uninstall plugin groonga;
