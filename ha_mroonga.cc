@@ -35,6 +35,7 @@
 #endif
 #include <sql_select.h>
 #include <ft_global.h>
+#include <mysql.h>
 #include <pthread.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -56,6 +57,7 @@ _ft_vft mrn_ft_vft = {
   mrn_ft_get_relevance,
   NULL // mrn_ft_reinit_search
 };
+handlerton *mrn_hton_ptr;
 
 /* status */
 st_mrn_statuses mrn_status_vals;
@@ -122,6 +124,31 @@ struct st_mysql_sys_var *mrn_system_variables[] =
   NULL
 };
 
+/* UDF - last_insert_grn_id() */
+my_bool last_insert_grn_id_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
+{
+  if (args->arg_count != 0) {
+    strcpy(message, "last_insert_grn_id must not have arguments");
+    return 1;
+  }
+  initid->maybe_null = 0;
+  return 0;
+}
+
+int last_insert_grn_id(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error)
+{
+  THD *thd = current_thd;
+  st_mrn_slot_data *slot_data = (st_mrn_slot_data*) thd_get_ha_data(thd, mrn_hton_ptr);
+  if (slot_data == NULL) {
+    return 0;
+  }
+  int last_insert_rid = (int) slot_data->last_insert_rid;
+  return last_insert_rid;
+}
+
+void last_insert_grn_id_deinit(UDF_INIT *initid)
+{
+}
 
 /* Groonga information schema */
 int GROONGA_VERSION_SHORT = 0x0001;
@@ -239,6 +266,8 @@ int mrn_init(void *p)
   hton->create = mrn_handler_create;
   hton->flags = 0;
   hton->drop_database = mrn_drop_db;
+  hton->close_connection = mrn_close_connection;
+  mrn_hton_ptr = hton;
 
   // init groonga
   if (grn_init() != GRN_SUCCESS) {
@@ -328,6 +357,14 @@ void mrn_drop_db(handlerton *hton, char *path)
   mrn_hash_remove(ctx, mrn_hash, db_name);
   grn_ctx_fin(ctx);
 }
+
+int mrn_close_connection(handlerton *hton, THD *thd)
+{
+  void *p = thd_get_ha_data(thd, mrn_hton_ptr);
+  if (p) free(p);
+  thd_set_ha_data(thd, hton, NULL);
+  return 0;
+} 
 
 grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
 {
@@ -1350,6 +1387,15 @@ int ha_mroonga::write_row(uchar *buf)
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
   grn_obj_unlink(ctx, &colbuf);
+
+  // for UDF last_insert_grn_id()
+  st_mrn_slot_data *slot_data = (st_mrn_slot_data*) thd_get_ha_data(thd, mrn_hton_ptr);
+  if (slot_data == NULL) {
+    slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data)); 
+  }
+  slot_data->last_insert_rid = row_id;
+  thd_set_ha_data(thd, mrn_hton_ptr, slot_data);
+
   DBUG_RETURN(0);
 }
 
