@@ -191,7 +191,7 @@ groongaストレージエンジンのインストール
 
  mysql> INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
 
-以下のように"SHOW ENGINES"コマンドで"groonga"が表示されればインストール完了です。 ::
+以下のように"SHOW ENGINES"コマンドで"groonga"が表示されればgroongaストレージエンジンのインストールは完了です。 ::
 
  mysql> SHOW ENGINES;
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
@@ -205,6 +205,14 @@ groongaストレージエンジンのインストール
  | MEMORY     | YES     | Hash based, stored in memory, useful for temporary tables  | NO           | NO   | NO         |
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
  6 rows in set (0.00 sec)
+
+続いてUDF(ユーザ定義関数)をインストールします。
+
+INSERTを行った際にgroongaにより割当てられるレコードIDを取得するためのLAST_INSERT_GRN_ID関数をインストールします。
+
+以下のようにCREATE FUNCTIONを実行します。 ::
+
+ mysql> CREATE FUNCTION LAST_INSERT_GRN_ID RETURNS INTEGER soname 'ha_groonga.so';
 
 githubからのインストール
 ------------------------
