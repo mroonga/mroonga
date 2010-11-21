@@ -1413,16 +1413,17 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
       const char *col_name = field->field_name;
       int col_name_size = strlen(col_name);
 
-      if (field->is_null()) continue;
-
-      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-        my_message(ER_DATA_TOO_LONG, "cannot update value to _id column", MYF(0));
-        DBUG_RETURN(ER_DATA_TOO_LONG);
-      } 
-      if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
-        my_message(ER_DATA_TOO_LONG, "cannot update value to _score column", MYF(0));
-        DBUG_RETURN(ER_DATA_TOO_LONG);
-      } 
+      if (bitmap_is_set(table->write_set, field->field_index)) {
+        if (field->is_null()) continue;
+        if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+          my_message(ER_DATA_TOO_LONG, "cannot update value to _id column", MYF(0));
+          DBUG_RETURN(ER_DATA_TOO_LONG);
+        } 
+        if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+          my_message(ER_DATA_TOO_LONG, "cannot update value to _score column", MYF(0));
+          DBUG_RETURN(ER_DATA_TOO_LONG);
+        }
+      }
     }
   }
 
@@ -1596,6 +1597,7 @@ int ha_mroonga::index_read_map(uchar * buf, const uchar * key,
         store_fields_from_primary_table(buf, rid);
         table->status = 0;
         cur = NULL;
+        row_id = rid;
         DBUG_RETURN(0);
       } else {
         table->status = STATUS_NOT_FOUND;
@@ -1878,6 +1880,8 @@ int ha_mroonga::read_range_first(const key_range *start_key,
   KEY key_info = table->s->key_info[active_index];
   KEY_PART_INFO key_part = key_info.key_part[0];
   Field *field = key_part.field;
+  const char *col_name = field->field_name;
+  int col_name_size = strlen(col_name);
 
   if (cur) {
     grn_table_cursor_close(ctx, cur);
@@ -1890,6 +1894,24 @@ int ha_mroonga::read_range_first(const key_range *start_key,
     val_min = key_min[active_index];
     if (start_key->flag == HA_READ_AFTER_KEY) {
       flags |= GRN_CURSOR_GT;
+    } else if (start_key->flag == HA_READ_KEY_EXACT) {
+      // for _id
+      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+        grn_id rid = *(grn_id*) key_min[active_index];
+        if (grn_table_at(ctx, tbl, rid) != GRN_ID_NIL) { // found
+          store_fields_from_primary_table(table->record[0], rid);
+          table->status = 0;
+          cur = NULL;
+          row_id = rid;
+          DBUG_RETURN(0);
+        } else {
+          table->status = STATUS_NOT_FOUND;
+          cur = NULL;
+          row_id = GRN_ID_NIL;
+          DBUG_RETURN(HA_ERR_END_OF_FILE);
+        }
+      }
+
     }
   }
   if (end_key != NULL) {
@@ -1937,6 +1959,11 @@ int ha_mroonga::read_range_first(const key_range *start_key,
 
 int ha_mroonga::read_range_next() {
   DBUG_ENTER("ha_mroonga::read_range_next");
+
+  if (cur == NULL) {
+    DBUG_RETURN(HA_ERR_END_OF_FILE);
+  }
+
   row_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
