@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd build/html
+cd html
 
 if [ -d _static ]; then
     rm -rf static
