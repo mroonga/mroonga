@@ -5,8 +5,10 @@ set -e
 prevver="$2"
 
 install_plugin() {
-    echo "INSTALL PLUGIN groonga SONAME 'ha_groonga.so';" |
-    	 mysql --defaults-file=/etc/mysql/debian.cnf
+    cat <<EOS | mysql --defaults-file=/etc/mysql/debian.cnf
+INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
+CREATE FUNCTION LAST_INSERT_GRN_ID RETURNS INTEGER soname 'ha_groonga.so';
+EOS
 }
 
 case "$1" in
