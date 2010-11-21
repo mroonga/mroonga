@@ -2,7 +2,9 @@
 
 set -e
 
-echo "UNINSTALL PLUGIN groonga;" |
-    mysql --defaults-file=/etc/mysql/debian.cnf
+cat <<EOS | mysql --defaults-file=/etc/mysql/debian.cnf
+DROP FUNCTION LAST_INSERT_GRN_ID;
+UNINSTALL PLUGIN groonga;
+EOS
 
 #DEBHELPER#

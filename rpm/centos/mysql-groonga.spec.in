@@ -4,7 +4,7 @@
 
 Name:		mysql-groonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A MySQL storage engine powered by groonga.
 
 Group:		Applications/Databases
@@ -65,14 +65,22 @@ rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_groonga.a
 rm -rf $RPM_BUILD_ROOT
 
 %post
-command="/usr/bin/mysql -u root -e \"INSTALL PLUGIN groonga SONAME 'ha_groonga.so'\""
+sql=<<EOS
+INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
+CREATE FUNCTION LAST_INSERT_GRN_ID RETURNS INTEGER soname 'ha_groonga.so';
+EOS
+command="/usr/bin/mysql -u root -e \"$sql\""
 echo $command
 eval $command || \
     (echo "run the following command to register groonga storage engine:"; \
      echo "  $command")
 
 %postun
-command="/usr/bin/mysql -u root -e \"UNINSTALL PLUGIN groonga\""
+sql=<<EOS
+DROP FUNCTION LAST_INSERT_GRN_ID;
+UNINSTALL PLUGIN groonga;
+EOS
+command="/usr/bin/mysql -u root -e \"$sql\""
 echo $command
 eval $command || \
     (echo "run the following command to unregister groonga storage engine:"; \
@@ -83,6 +91,9 @@ eval $command || \
 %{_libdir}/mysql/plugin/
 
 %changelog
+* Sun Nov 21 2010 Kouhei Sutou <kou@clear-code.com> - 0.3-2
+- install user define function.
+
 * Fri Oct 29 2010 Kouhei Sutou <kou@clear-code.com> - 0.3-1
 - new upstream release.
 
