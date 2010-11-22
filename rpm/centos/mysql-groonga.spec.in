@@ -67,7 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 sql=<<EOS
 INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
-CREATE FUNCTION LAST_INSERT_GRN_ID RETURNS INTEGER soname 'ha_groonga.so';
+CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
 EOS
 command="/usr/bin/mysql -u root -e \"$sql\""
 echo $command
@@ -77,7 +77,7 @@ eval $command || \
 
 %postun
 sql=<<EOS
-DROP FUNCTION LAST_INSERT_GRN_ID;
+DROP FUNCTION last_insert_grn_id;
 UNINSTALL PLUGIN groonga;
 EOS
 command="/usr/bin/mysql -u root -e \"$sql\""

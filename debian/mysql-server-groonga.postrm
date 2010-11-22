@@ -3,7 +3,7 @@
 set -e
 
 cat <<EOS | mysql --defaults-file=/etc/mysql/debian.cnf
-DROP FUNCTION LAST_INSERT_GRN_ID;
+DROP FUNCTION last_insert_grn_id;
 UNINSTALL PLUGIN groonga;
 EOS
 
