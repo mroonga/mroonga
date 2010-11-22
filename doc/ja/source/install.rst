@@ -208,11 +208,11 @@ groongaストレージエンジンのインストール
 
 続いてUDF(ユーザ定義関数)をインストールします。
 
-INSERTを行った際にgroongaにより割当てられるレコードIDを取得するためのLAST_INSERT_GRN_ID関数をインストールします。
+INSERTを行った際にgroongaにより割当てられるレコードIDを取得するためのlast_insert_grn_id関数をインストールします。
 
 以下のようにCREATE FUNCTIONを実行します。 ::
 
- mysql> CREATE FUNCTION LAST_INSERT_GRN_ID RETURNS INTEGER soname 'ha_groonga.so';
+ mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
 
 githubからのインストール
 ------------------------
