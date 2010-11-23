@@ -68,6 +68,8 @@ long mrn_count_skip = 0;
 const char *mrn_logfile_name = MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
 int mrn_logfile_opened = 0;
+grn_log_level mrn_log_level_default = GRN_LOG_DUMP;
+ulong mrn_log_level = (ulong) mrn_log_level_default;
 
 void mrn_logger_func(int level, const char *time, const char *title,
                      const char *msg, const char *location, void *func_arg)
@@ -83,7 +85,7 @@ void mrn_logger_func(int level, const char *time, const char *title,
 }
 
 grn_logger_info mrn_logger_info = {
-  GRN_LOG_DUMP,
+  mrn_log_level_default,
   GRN_LOG_TIME|GRN_LOG_MESSAGE,
   mrn_logger_func,
   NULL
@@ -122,8 +124,45 @@ struct st_mysql_show_var mrn_status_variables[] =
   {NullS, NullS, SHOW_LONG}
 };
 
+const char *mrn_log_level_type_names[] = { "NONE", "EMERG", "ALERT",
+                                           "CRIT", "ERROR", "WARNING",
+                                           "NOTICE", "INFO", "DEBUG",
+                                           "DUMP", NullS };
+TYPELIB mrn_log_level_typelib=
+{
+  array_elements(mrn_log_level_type_names)-1,
+  "mrn_log_level_typelib",
+  mrn_log_level_type_names,
+  NULL
+};
+
+static void mrn_log_level_update(THD *thd, struct st_mysql_sys_var *var,
+                                      void *var_ptr, const void *save)
+{
+  DBUG_ENTER("mrn_log_level_update");
+  ulong new_value = *(ulong*) save;
+  ulong old_value = mrn_log_level;
+  mrn_log_level = new_value;
+  mrn_logger_info.max_level = (grn_log_level) mrn_log_level;
+  grn_ctx *ctx = grn_ctx_open(0);
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "log level changed from '%s' to '%s'", 
+          mrn_log_level_type_names[old_value],
+          mrn_log_level_type_names[new_value]);
+  grn_ctx_fin(ctx);
+  DBUG_VOID_RETURN;
+}
+
+static MYSQL_SYSVAR_ENUM(log_level, mrn_log_level,
+                         PLUGIN_VAR_RQCMDARG,
+                         "logging level",
+                         NULL,
+                         mrn_log_level_update,
+                         (ulong) mrn_log_level,
+                         &mrn_log_level_typelib);
+
 struct st_mysql_sys_var *mrn_system_variables[] =
 {
+  MYSQL_SYSVAR(log_level),
   NULL
 };
 
@@ -289,6 +328,8 @@ int mrn_init(void *p)
   }
   mrn_logfile_opened = 1;
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s started.", MRN_PACKAGE_STRING);
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "log level is '%s'",
+          mrn_log_level_type_names[mrn_log_level]);
 
   // init meta-info database
   if (!(mrn_db = grn_db_create(ctx, NULL, NULL))) {
