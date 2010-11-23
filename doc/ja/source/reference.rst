@@ -14,12 +14,12 @@ groongaストレージエンジンのソースコードの以下のディレク�
 
 ファイル一覧 ::
 
- binlog.test             drop_table.test          select_pkey.test
- btree.test              fulltext.test            select_secondary_key.test
- count_performance.test  hash.test                show_create_table.test
- create_table.test       information_schema.test  show_table_status.test
- delete.test             insert.test              update.test
- drop_database.test      select_all.test
+ binlog.test             drop_table.test               select_all.test
+ btree.test              fulltext.test                 select_pkey.test
+ count_performance.test  hash.test                     select_secondary_key.test
+ create_table.test       information_schema.test       show_create_table.test
+ delete.test             insert.test                   show_table_status.test
+ drop_database.test      order_limit_performance.test  update.test
 
 ここに記述されているSQL文が現在利用可能なSQL文となります。
 
@@ -39,3 +39,8 @@ groonga_count_skip
 ++++++++++++++++++++++++++++
 
 行カウント高速化機能が動作する度にカウントアップされます。スキーマ/SQLチューニングを行って行カウント高速化機能を利用できるようにした際の動作確認に利用できます。
+
+groonga_fast_order_limit
+++++++++++++++++++++++++++++
+
+ORDER BY LIMIT 高速化機能が動作する度にカウントアップされます。スキーマ/SQLチューニングを行って ORDER BY LIMIT 高速化機能を利用できるようにした際の動作確認に利用できます。
