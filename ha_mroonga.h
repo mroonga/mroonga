@@ -80,6 +80,7 @@ class ha_mroonga: public handler
   grn_obj *res;
   grn_obj *res0;
   grn_table_cursor *cur;
+  grn_table_cursor *cur0;
   grn_id row_id;
   grn_obj *_score;
 

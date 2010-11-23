@@ -762,6 +762,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   ctx = grn_ctx_open(0);
   grn_ctx_use(ctx, mrn_db);
   cur = NULL;
+  cur0 = NULL;
   res = NULL;
   res0 = NULL;
   sort_keys = NULL;
@@ -1312,6 +1313,10 @@ int ha_mroonga::rnd_end()
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
   }
+  if (cur0) {
+    grn_table_cursor_close(ctx, cur0);
+    cur0 = NULL;
+  }
   DBUG_RETURN(0);
 }
 
@@ -1598,13 +1603,16 @@ ha_rows ha_mroonga::records_in_range(uint keynr, key_range *range_min, key_range
   } else { // normal index
     uint table_size = grn_table_size(ctx, tbl);
     uint cardinality = grn_table_size(ctx, idx_tbl[keynr]);
-    grn_table_cursor *cur_t =
+    grn_table_cursor *cur_t0 =
       grn_table_cursor_open(ctx, idx_tbl[keynr], val_min, size_min, val_max, size_max, 0, -1, flags);
+    grn_table_cursor *cur_t =
+      grn_index_cursor_open(ctx, cur_t0, idx_col[keynr], 0, GRN_ID_MAX, 0);
     grn_id gid;
     while ((gid = grn_table_cursor_next(ctx, cur_t)) != GRN_ID_NIL) {
       row_count++;
     }
     grn_table_cursor_close(ctx, cur_t);
+    grn_table_cursor_close(ctx, cur_t0);
     row_count = (int) ((double) table_size * ((double) row_count / (double) cardinality));
   }
   DBUG_RETURN(row_count);
@@ -1624,6 +1632,10 @@ int ha_mroonga::index_end()
   if (cur) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
+  }
+  if (cur0) {
+    grn_table_cursor_close(ctx, cur0);
+    cur0 = NULL;
   }
   DBUG_RETURN(0);
 }
@@ -1648,6 +1660,10 @@ int ha_mroonga::index_read_map(uchar * buf, const uchar * key,
   if (cur) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
+  }
+  if (cur0) {
+    grn_table_cursor_close(ctx, cur0);
+    cur0 = NULL;
   }
 
   if (find_flag == HA_READ_KEY_EXACT) {
@@ -1698,9 +1714,11 @@ int ha_mroonga::index_read_map(uchar * buf, const uchar * key,
                             0, -1, flags);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", keynr));
-    cur =
+    cur0 =
       grn_table_cursor_open(ctx, idx_tbl[keynr], val_min, size_min,
                             val_max, size_max, 0, -1, flags);
+    cur =
+      grn_index_cursor_open(ctx, cur0, idx_col[keynr], 0, GRN_ID_MAX, 0);
   }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -1741,6 +1759,10 @@ int ha_mroonga::index_read_last_map(uchar *buf, const uchar *key,
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
   }
+  if (cur0) {
+    grn_table_cursor_close(ctx, cur0);
+    cur0 = NULL;
+  }
 
   mrn_set_key_buf(ctx, field, key, key_min[keynr], &size_min);
   val_min = key_min[keynr];
@@ -1756,9 +1778,11 @@ int ha_mroonga::index_read_last_map(uchar *buf, const uchar *key,
                             0, -1, flags);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", keynr));
-    cur =
+    cur0 =
       grn_table_cursor_open(ctx, idx_tbl[keynr], val_min, size_min,
                             val_max, size_max, 0, -1, flags);
+    cur =
+      grn_index_cursor_open(ctx, cur0, idx_col[keynr], 0, GRN_ID_MAX, 0);
   }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -1831,6 +1855,10 @@ int ha_mroonga::index_first(uchar *buf)
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
   }
+  if (cur0) {
+    grn_table_cursor_close(ctx, cur0);
+    cur0 = NULL;
+  }
   uint pkeynr = table->s->primary_key;
   if (active_index == pkeynr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
@@ -1839,9 +1867,11 @@ int ha_mroonga::index_first(uchar *buf)
                             0, -1, 0);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", active_index));
-    cur =
+    cur0 =
       grn_table_cursor_open(ctx, idx_tbl[active_index], NULL, 0,
                             NULL, 0, 0, -1, 0);
+    cur =
+      grn_index_cursor_open(ctx, cur0, idx_col[active_index], 0, GRN_ID_MAX, 0);
   }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -1872,6 +1902,10 @@ int ha_mroonga::index_last(uchar *buf)
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
   }
+  if (cur0) {
+    grn_table_cursor_close(ctx, cur0);
+    cur0 = NULL;
+  }
   int flags = GRN_CURSOR_DESCENDING;
   uint pkeynr = table->s->primary_key;
   if (active_index == pkeynr) { // primary index
@@ -1881,9 +1915,11 @@ int ha_mroonga::index_last(uchar *buf)
                             0, -1, flags);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", active_index));
-    cur =
+    cur0 =
       grn_table_cursor_open(ctx, idx_tbl[active_index], NULL, 0,
                             NULL, 0, 0, -1, flags);
+    cur =
+      grn_index_cursor_open(ctx, cur0, idx_col[active_index], 0, GRN_ID_MAX, 0);
   }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -1953,6 +1989,10 @@ int ha_mroonga::read_range_first(const key_range *start_key,
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
   }
+  if (cur0) {
+    grn_table_cursor_close(ctx, cur0);
+    cur0 = NULL;
+  }
 
   if (start_key != NULL) {
     mrn_set_key_buf(ctx, field, start_key->key, key_min[active_index],
@@ -1997,9 +2037,11 @@ int ha_mroonga::read_range_first(const key_range *start_key,
                             0, -1, flags);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", active_index));
-    cur =
+    cur0 =
       grn_table_cursor_open(ctx, idx_tbl[active_index], val_min, size_min,
                             val_max, size_max, 0, -1, flags);
+    cur =
+      grn_index_cursor_open(ctx, cur0, idx_col[active_index], 0, GRN_ID_MAX, 0);
   }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
