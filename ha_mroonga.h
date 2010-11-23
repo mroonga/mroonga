@@ -35,6 +35,7 @@ extern "C" {
 struct st_mrn_statuses
 {
   long count_skip;
+  long fast_order_limit;
 };
 
 struct st_mrn_ft_info
@@ -77,6 +78,7 @@ class ha_mroonga: public handler
   grn_obj **idx_col;
 
   grn_obj *res;
+  grn_obj *res0;
   grn_table_cursor *cur;
   grn_id row_id;
   grn_obj *_score;
@@ -88,7 +90,13 @@ class ha_mroonga: public handler
   int *key_min_len;
   int *key_max_len;
 
+  longlong limit;
+  grn_table_sort_key *sort_keys;
+  int n_sort_keys;
+
   bool count_skip;
+  bool fast_order_limit;
+  bool fast_order_limit_with_index;
 
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);
@@ -158,6 +166,7 @@ public:
 private:
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
+  void check_fast_order_limit();
   void store_fields_from_primary_table(uchar *buf, grn_id rid);
 };
 

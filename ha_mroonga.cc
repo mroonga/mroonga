@@ -63,6 +63,7 @@ handlerton *mrn_hton_ptr;
 /* status */
 st_mrn_statuses mrn_status_vals;
 long mrn_count_skip = 0;
+long mrn_fast_order_limit = 0;
 
 /* logging */
 const char *mrn_logfile_name = MRN_LOG_FILE_NAME;
@@ -97,12 +98,14 @@ static void mrn_create_status()
 {
   DBUG_ENTER("mrn_create_status");
   mrn_status_vals.count_skip = mrn_count_skip;
+  mrn_status_vals.fast_order_limit = mrn_fast_order_limit;
   DBUG_VOID_RETURN;
 }
 
 struct st_mysql_show_var mrn_statuses[] =
 {
   {"count_skip", (char *) &mrn_status_vals.count_skip, SHOW_LONG},
+  {"fast_order_limit", (char *) &mrn_status_vals.fast_order_limit, SHOW_LONG},
   {NullS, NullS, SHOW_LONG}
 };
 
@@ -195,12 +198,12 @@ void last_insert_grn_id_deinit(UDF_INIT *initid)
 /* Groonga information schema */
 int GROONGA_VERSION_SHORT = 0x0001;
 static const char plugin_author[] = "Yoshinori Matsunobu";
-static struct st_mysql_information_schema	i_s_info =
+static struct st_mysql_information_schema i_s_info =
 {
-	MYSQL_INFORMATION_SCHEMA_INTERFACE_VERSION
+  MYSQL_INFORMATION_SCHEMA_INTERFACE_VERSION
 };
 
-static ST_FIELD_INFO	i_s_groonga_stats_fields_info[] =
+static ST_FIELD_INFO i_s_groonga_stats_fields_info[] =
 {
   {
     "VERSION",
@@ -240,8 +243,8 @@ static int i_s_groonga_stats_deinit(void* p)
 static int i_s_groonga_stats_fill(
   THD* thd, TABLE_LIST* tables, COND* cond)
 {
-  TABLE*	table	= (TABLE *) tables->table;
-  int	status	= 0;
+  TABLE* table = (TABLE *) tables->table;
+  int status = 0;
   DBUG_ENTER("i_s_groonga_fill_low");
   table->field[0]->store(grn_get_version(), strlen(grn_get_version()),
      system_charset_info);
@@ -760,6 +763,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   grn_ctx_use(ctx, mrn_db);
   cur = NULL;
   res = NULL;
+  res0 = NULL;
+  sort_keys = NULL;
   DBUG_VOID_RETURN;
 }
 
@@ -2059,6 +2064,21 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
   const char *keyword = key->ptr();
   int keyword_size = key->length();
   check_count_skip(0, 0, TRUE);
+  if (sort_keys != NULL) {
+    free(sort_keys);
+    sort_keys = NULL;
+  }
+  check_fast_order_limit();
+  if (res0 != NULL) {
+    grn_obj_unlink(ctx, res0);
+    res0 = NULL;
+  }
+  if (res != NULL) {
+    grn_obj_unlink(ctx, res);
+    _score = NULL;
+    res = NULL;
+  }
+
   row_id = GRN_ID_NIL;
 
   res = grn_table_create(ctx, NULL, 0, NULL,
@@ -2078,7 +2098,20 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
   }
   _score = grn_obj_column(ctx, res, MRN_SCORE_COL_NAME, strlen(MRN_SCORE_COL_NAME));
   int n_rec = grn_table_size(ctx, res);
-  cur = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, -1, 0);
+  if (!fast_order_limit) {
+    cur = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, -1, 0);
+  } else {
+    st_select_lex *select_lex = table->pos_in_table_list->select_lex;
+    res0 = grn_table_create(ctx, NULL, 0, NULL,
+                            GRN_OBJ_TABLE_NO_KEY, NULL, res);
+    for (int i = 0; i < n_sort_keys; i++) {
+      if (!sort_keys[i].key) {
+        sort_keys[i].key = _score;
+      }
+    }
+    grn_table_sort(ctx, res, 0, limit, res0, sort_keys, n_sort_keys);
+    cur = grn_table_cursor_open(ctx, res0, NULL, 0, NULL, 0, 0, -1, 0);
+  }
 
   { // for "not match"
     mrn_ft_info.please = &mrn_ft_vft;
@@ -2115,7 +2148,15 @@ int ha_mroonga::ft_read(uchar *buf)
     DBUG_RETURN(0);
   }
 
-  grn_table_get_key(ctx, res, rid, &row_id, sizeof(grn_id));
+  if (!fast_order_limit) {
+    grn_table_get_key(ctx, res, rid, &row_id, sizeof(grn_id));
+  } else if (fast_order_limit_with_index) {
+    grn_table_get_key(ctx, res0, rid, &row_id, sizeof(grn_id));
+  } else {
+    grn_id rid2;
+    grn_table_get_key(ctx, res0, rid, &rid2, sizeof(grn_id));
+    grn_table_get_key(ctx, res, rid2, &row_id, sizeof(grn_id));
+  }
   store_fields_from_primary_table(buf, row_id);
   DBUG_RETURN(0);
 }
@@ -2144,7 +2185,7 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
                                   key_part_map end_key_part_map, bool fulltext)
 {
   DBUG_ENTER("ha_mroonga::check_count_skip");
-  st_select_lex	*select_lex = table->pos_in_table_list->select_lex;
+  st_select_lex *select_lex = table->pos_in_table_list->select_lex;
 
   if (
     thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
@@ -2230,6 +2271,107 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
   DBUG_VOID_RETURN;
 }
 
+void ha_mroonga::check_fast_order_limit()
+{
+  DBUG_ENTER("ha_mroonga::check_fast_order_limit");
+  st_select_lex *select_lex = table->pos_in_table_list->select_lex;
+
+  if (
+    thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
+    !select_lex->n_sum_items &&
+    !select_lex->group_list.elements &&
+    !select_lex->having &&
+    select_lex->table_list.elements == 1 &&
+    select_lex->order_list.elements &&
+    select_lex->explicit_limit &&
+    select_lex->select_limit &&
+    select_lex->select_limit->val_int() > 0
+  ) {
+    limit = (select_lex->offset_limit ?
+            select_lex->offset_limit->val_int() : 0) +
+            select_lex->select_limit->val_int();
+    if (limit > (longlong) INT_MAX) {
+      DBUG_PRINT("info",("mroonga fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    Item *info = (Item *) select_lex->item_list.first_node()->info;
+    Item *where;
+    where = select_lex->where;
+    if (!where ||
+        where->type() != Item::FUNC_ITEM ||
+        ((Item_func *)where)->functype() != Item_func::FT_FUNC) {
+      DBUG_PRINT("info",("mroonga fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    where = where->next;
+    if (!where ||
+        where->type() != Item::STRING_ITEM) {
+      DBUG_PRINT("info",("mroonga fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    for (where = where->next; where; where = where->next) {
+      if (where->type() != Item::FIELD_ITEM || where == info)
+        break;
+    }
+    if (where && where != info) {
+      DBUG_PRINT("info",("mroonga fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    n_sort_keys = select_lex->order_list.elements;
+    sort_keys = (grn_table_sort_key *) malloc(sizeof(grn_table_sort_key) *
+                                              n_sort_keys);
+    ORDER *order;
+    int i, col_field_index = -1;
+    for (order = (ORDER *) select_lex->order_list.first, i = 0; order;
+         order = order->next, i++) {
+      if ((*order->item)->type() != Item::FIELD_ITEM)
+      {
+        DBUG_PRINT("info",("mroonga fast_order_limit = FALSE"));
+        fast_order_limit = FALSE;
+        DBUG_VOID_RETURN;
+      }
+      Field *field = ((Item_field *) (*order->item))->field;
+      const char *col_name = field->field_name;
+      int col_name_size = strlen(col_name);
+
+      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+        sort_keys[i].key = grn_obj_column(ctx, tbl, col_name, col_name_size);
+      } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+        sort_keys[i].key = NULL;
+      } else {
+        sort_keys[i].key = col[field->field_index];
+        col_field_index = field->field_index;
+      }
+      sort_keys[i].offset = 0;
+      if (order->asc)
+        sort_keys[i].flags = GRN_TABLE_SORT_ASC;
+      else
+        sort_keys[i].flags = GRN_TABLE_SORT_DESC;
+    }
+    grn_obj *index;
+    if (i == 1 && col_field_index >= 0 &&
+        grn_column_index(ctx, col[col_field_index], GRN_OP_LESS,
+                         &index, 1, NULL)) {
+      DBUG_PRINT("info",("mroonga fast_order_limit_with_index = TRUE"));
+      fast_order_limit_with_index = TRUE;
+    } else {
+      DBUG_PRINT("info",("mroonga fast_order_limit_with_index = FALSE"));
+      fast_order_limit_with_index = FALSE;
+    }
+    DBUG_PRINT("info",("mroonga fast_order_limit = TRUE"));
+    fast_order_limit = TRUE;
+    mrn_fast_order_limit++;
+    DBUG_VOID_RETURN;
+  }
+  DBUG_PRINT("info",("mroonga fast_order_limit = FALSE"));
+  fast_order_limit = FALSE;
+  DBUG_VOID_RETURN;
+}
+
 void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
 {
   DBUG_ENTER("ha_mroonga::store_fields_from_primary_table");
@@ -2288,6 +2430,14 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
 int ha_mroonga::reset()
 {
   DBUG_ENTER("ha_mroonga::reset()");
+  if (sort_keys != NULL) {
+    free(sort_keys);
+    sort_keys = NULL;
+  }
+  if (res0 != NULL) {
+    grn_obj_unlink(ctx, res0);
+    res0 = NULL;
+  }
   if (res != NULL) {
     grn_obj_unlink(ctx, res);
     _score = NULL;
