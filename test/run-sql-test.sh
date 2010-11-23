@@ -23,4 +23,4 @@ fi
 make -C ${top_dir} install-pluginLTLIBRARIES plugindir=${plugins_dir}
 
 (cd "$mysql_test_dir" && \
-    ./mysql-test-run.pl --suite="${test_suite_name}" --force)
+    ./mysql-test-run.pl --no-check-testcases --suite="${test_suite_name}" --force)
