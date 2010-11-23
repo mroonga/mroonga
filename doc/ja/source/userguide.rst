@@ -191,9 +191,46 @@ groongaストレージエンジンではデフォルトでログの出力を行�
  2010-10-07 17:32:44.934048|d|46953940|hash get not found (key=test)
  2010-10-07 17:32:44.936113|d|46953940|hash put (key=test)
 
-現在のgroongaストレージエンジンは開発バージョンということもあり、ログの出力レベルは最大(=DUMP)となっております。
+現在のgroongaストレージエンジンは開発バージョンということもあり、ログのデフォルトの出力レベルは最大(=DUMP)となっております。
 
-ログの出力レベルの変更や"flush logs"への対応はまだ行われておりませんが、将来のバージョンで対応される予定となっています。
+ログの出力レベルは ``groonga_log_level`` というシステム変数で確認することができます（グローバル変数）。またSET文で動的に出力レベルを変更することもできます。 ::
+
+ mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+ +-------------------+-------+
+ | Variable_name     | Value |
+ +-------------------+-------+
+ | groonga_log_level | DUMP  |
+ +-------------------+-------+
+ 1 row in set (0.00 sec)
+ 
+ mysql> SET GLOBAL groonga_log_level=NOTICE;
+ Query OK, 0 rows affected (0.05 sec)
+ 
+ mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+ +-------------------+--------+
+ | Variable_name     | Value  |
+ +-------------------+--------+
+ | groonga_log_level | NOTICE |
+ +-------------------+--------+
+ 1 row in set (0.00 sec)
+
+設定可能なログレベルは以下の通りです。
+
+* NONE
+* EMERG
+* ALERT
+* CRIT
+* ERROR
+* WARNING
+* NOTICE
+* INFO
+* DEBUG
+* DUMP
+
+またFLUSH LOGSでログの再オープンを行うことができます。MySQLサーバを停止せずにログのローテートを行いたいような場合には、以下の手順で実行すると良いでしょう。
+
+1. ``groonga.log`` ファイルの名前を変更（OSコマンドのmvなどで）
+2. MySQLサーバに対して"FLUSH LOGS"を実行（mysqlコマンドあるいはmysqladminコマンドにて）
 
 カラムの刈り込み
 ----------------------------
