@@ -50,6 +50,7 @@ extern "C" {
 grn_obj *mrn_db;
 grn_hash *mrn_hash;
 pthread_mutex_t db_mutex;
+pthread_mutex_t mrn_log_mutex;
 _ft_vft mrn_ft_vft = {
   NULL, // mrn_ft_read_next
   mrn_ft_find_relevance,
@@ -73,9 +74,11 @@ void mrn_logger_func(int level, const char *time, const char *title,
 {
   const char slev[] = " EACewnid-";
   if (mrn_logfile_opened) {
+    pthread_mutex_lock(&mrn_log_mutex);
     fprintf(mrn_logfile, "%s|%c|%08x|%s\n", time,
             *(slev + level), (uint)pthread_self(), msg);
     fflush(mrn_logfile);
+    pthread_mutex_unlock(&mrn_log_mutex);
   }
 }
 
@@ -267,6 +270,7 @@ int mrn_init(void *p)
   hton->flags = 0;
   hton->drop_database = mrn_drop_db;
   hton->close_connection = mrn_close_connection;
+  hton->flush_logs = mrn_flush_logs;
   mrn_hton_ptr = hton;
 
   // init groonga
@@ -276,6 +280,9 @@ int mrn_init(void *p)
 
   ctx = grn_ctx_open(0);
 
+  if (pthread_mutex_init(&mrn_log_mutex, NULL) != 0) {
+    goto err;
+  }
   grn_logger_info_set(ctx, &mrn_logger_info);
   if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
     goto err;
@@ -319,6 +326,7 @@ int mrn_deinit(void *p)
 
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
 
+  pthread_mutex_destroy(&mrn_log_mutex);
   pthread_mutex_destroy(&db_mutex);
   grn_hash_close(ctx, mrn_hash);
   grn_obj_unlink(ctx, mrn_db);
@@ -365,6 +373,18 @@ int mrn_close_connection(handlerton *hton, THD *thd)
   thd_set_ha_data(thd, hton, NULL);
   return 0;
 } 
+
+bool mrn_flush_logs(handlerton *hton)
+{
+  bool result = 0;
+  if (mrn_logfile_opened) {
+    pthread_mutex_lock(&mrn_log_mutex);
+    fclose(mrn_logfile);
+    mrn_logfile = fopen(mrn_logfile_name, "a");
+    pthread_mutex_unlock(&mrn_log_mutex);
+  }
+  return result;
+}
 
 grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
 {

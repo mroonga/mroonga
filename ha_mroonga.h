@@ -56,6 +56,7 @@ int mrn_deinit(void *hton);
 handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROOT *root);
 void mrn_drop_db(handlerton *hton, char *path);
 int mrn_close_connection(handlerton *hton, THD *thd);
+bool mrn_flush_logs(handlerton *hton); 
 float mrn_ft_find_relevance(FT_INFO *handler, uchar *record, uint length);
 float mrn_ft_get_relevance(FT_INFO *handler);
 void mrn_ft_close_search(FT_INFO *handler);
