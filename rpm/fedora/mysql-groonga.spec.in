@@ -43,6 +43,8 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
 rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_groonga.a
+mv $RPM_BUILD_ROOT%{_datadir}/groonga-storage-engine/ \
+    $RPM_BUILD_ROOT%{_datadir}/mysql-groonga/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -72,6 +74,7 @@ eval $command || \
 %files
 %defattr(-,root,root,-)
 %{_libdir}/mysql/plugin/
+%doc %{_datadir}/mysql-groonga/doc/
 
 %changelog
 * Mon Nov 29 2010 Kouhei Sutou <kou@clear-code.com> - 0.4-1
