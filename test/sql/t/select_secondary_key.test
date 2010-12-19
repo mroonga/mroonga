@@ -47,3 +47,5 @@ select * from t1 force index(idx1) where c2 < 'e';
 select * from t1 force index(idx1) where c2 > 'e';
 select * from t1 force index(idx1) where c2 between 'c' and 'h';
 drop table t1;
+
+--source suite/groonga/include/groonga_deinit.inc

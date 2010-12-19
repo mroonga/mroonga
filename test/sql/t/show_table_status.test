@@ -29,3 +29,5 @@ show table status;
 show table status like 't2';
 
 drop table t1,t2;
+
+--source suite/groonga/include/groonga_deinit.inc

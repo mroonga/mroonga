@@ -17,3 +17,5 @@
 --source suite/groonga/include/groonga.inc
 
 select count(*) from information_schema.plugins where plugin_name = "groonga";
+
+--source suite/groonga/include/groonga_deinit.inc

@@ -56,3 +56,5 @@ show status like 'groonga_count_skip';
 select count(*) from t1 force index(idx1) where c2 between 20 and 40;
 show status like 'groonga_count_skip';
 drop table t1;
+
+--source suite/groonga/include/groonga_deinit.inc

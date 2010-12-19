@@ -18,3 +18,4 @@
 
 flush logs;
 
+--source suite/groonga/include/groonga_deinit.inc

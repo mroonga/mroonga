@@ -49,3 +49,5 @@ insert into t1 values(2,100);
 commit;
 select * from t1;
 drop table t1;
+
+source suite/groonga/include/groonga_deinit.inc;

@@ -63,3 +63,5 @@ select * from t1;
 select * from t1 where _id = 2;
 select * from t1 where _id = 20;
 drop table t1;
+
+--source suite/groonga/include/groonga_deinit.inc

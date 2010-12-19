@@ -97,3 +97,5 @@ select * from t1 where c2 = 10 and not match(c3) against("uu");
 select * from t1 where c2 >= 15 and not match(c3) against("uu");
 select * from t1 where c2 < 15 and not match(c3) against("uu");
 drop table t1;
+
+--source suite/groonga/include/groonga_deinit.inc

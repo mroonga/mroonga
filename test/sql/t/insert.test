@@ -95,3 +95,5 @@ insert into t1 (c1,_score) values (5,2);
 insert into t1 (c1,_id,_score) values (6,1,2);
 select * from t1;
 drop table t1;
+
+--source suite/groonga/include/groonga_deinit.inc

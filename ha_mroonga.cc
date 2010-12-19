@@ -92,6 +92,19 @@ grn_logger_info mrn_logger_info = {
   NULL
 };
 
+/* global hashes and mutexes */
+HASH mrn_allocated_thds;
+pthread_mutex_t mrn_allocated_thds_mutex;
+uchar *mrn_allocated_thds_get_key(
+  THD *thd,
+  size_t *length,
+  my_bool not_used __attribute__ ((unused))
+) {
+  DBUG_ENTER("mrn_allocated_thds_get_key");
+  *length = sizeof(THD *);
+  DBUG_RETURN((uchar*) thd);
+}
+
 /* system functions */
 
 static void mrn_create_status()
@@ -183,7 +196,7 @@ my_bool last_insert_grn_id_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
 int last_insert_grn_id(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error)
 {
   THD *thd = current_thd;
-  st_mrn_slot_data *slot_data = (st_mrn_slot_data*) thd_get_ha_data(thd, mrn_hton_ptr);
+  st_mrn_slot_data *slot_data = (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
   if (slot_data == NULL) {
     return 0;
   }
@@ -323,7 +336,7 @@ int mrn_init(void *p)
   ctx = grn_ctx_open(0);
 
   if (pthread_mutex_init(&mrn_log_mutex, NULL) != 0) {
-    goto err;
+    goto err_log_mutex_init;
   }
   grn_logger_info_set(ctx, &mrn_logger_info);
   if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
@@ -351,13 +364,29 @@ int mrn_init(void *p)
 
   // init lock
   if ((pthread_mutex_init(&db_mutex, NULL) != 0)) {
-    goto err;
+    goto err_db_mutex_init;
+  }
+  if ((pthread_mutex_init(&mrn_allocated_thds_mutex, NULL) != 0)) {
+    goto err_allocated_thds_mutex_init;
+  }
+  if(
+    hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
+                   (hash_get_key) mrn_allocated_thds_get_key, 0, 0)
+  ) {
+    goto error_allocated_thds_hash_init;
   }
 
   grn_ctx_fin(ctx);
   return 0;
 
+error_allocated_thds_hash_init:
+  pthread_mutex_destroy(&mrn_allocated_thds_mutex);
+err_allocated_thds_mutex_init:
+  pthread_mutex_destroy(&db_mutex);
+err_db_mutex_init:
 err:
+  pthread_mutex_destroy(&mrn_log_mutex);
+err_log_mutex_init:
   grn_ctx_fin(ctx);
   grn_fin();
   return -1;
@@ -365,11 +394,26 @@ err:
 
 int mrn_deinit(void *p)
 {
+  THD *thd = current_thd, *tmp_thd;
   grn_ctx *ctx;
   ctx = grn_ctx_open(0);
 
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
 
+  if (thd && thd_sql_command(thd) == SQLCOM_UNINSTALL_PLUGIN) {
+    pthread_mutex_lock(&mrn_allocated_thds_mutex);
+    while ((tmp_thd = (THD *) hash_element(&mrn_allocated_thds, 0)))
+    {
+      void *slot_ptr = *thd_ha_data(tmp_thd, mrn_hton_ptr);
+      if (slot_ptr) free(slot_ptr);
+      *thd_ha_data(tmp_thd, mrn_hton_ptr) = (void *) NULL;
+      hash_delete(&mrn_allocated_thds, (uchar *) tmp_thd);
+    }
+    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
+  }
+
+  hash_free(&mrn_allocated_thds);
+  pthread_mutex_destroy(&mrn_allocated_thds_mutex);
   pthread_mutex_destroy(&mrn_log_mutex);
   pthread_mutex_destroy(&db_mutex);
   grn_hash_close(ctx, mrn_hash);
@@ -412,11 +456,16 @@ void mrn_drop_db(handlerton *hton, char *path)
 
 int mrn_close_connection(handlerton *hton, THD *thd)
 {
-  void *p = thd_get_ha_data(thd, mrn_hton_ptr);
-  if (p) free(p);
-  thd_set_ha_data(thd, hton, NULL);
+  void *p = *thd_ha_data(thd, mrn_hton_ptr);
+  if (p) {
+    free(p);
+    *thd_ha_data(thd, mrn_hton_ptr) = (void *) NULL;
+    pthread_mutex_lock(&mrn_allocated_thds_mutex);
+    hash_delete(&mrn_allocated_thds, (uchar*) thd);
+    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
+  }
   return 0;
-} 
+}
 
 bool mrn_flush_logs(handlerton *hton)
 {
@@ -1460,12 +1509,18 @@ int ha_mroonga::write_row(uchar *buf)
   grn_obj_unlink(ctx, &colbuf);
 
   // for UDF last_insert_grn_id()
-  st_mrn_slot_data *slot_data = (st_mrn_slot_data*) thd_get_ha_data(thd, mrn_hton_ptr);
+  st_mrn_slot_data *slot_data = (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
   if (slot_data == NULL) {
     slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data)); 
+    *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
+    pthread_mutex_lock(&mrn_allocated_thds_mutex);
+    if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
+    {
+      DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+    }
+    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
   }
   slot_data->last_insert_rid = row_id;
-  thd_set_ha_data(thd, mrn_hton_ptr, slot_data);
 
   DBUG_RETURN(0);
 }

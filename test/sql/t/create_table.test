@@ -150,3 +150,5 @@ drop table t1;
 create table t1 (_id int, c1 int, key (_id));
 create table t1 (_id int, c1 int, key (_id) using hash);
 drop table t1;
+
+--source suite/groonga/include/groonga_deinit.inc

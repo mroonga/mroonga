@@ -36,3 +36,5 @@ select * from t1 where c1=5;
 select * from t1 where c1=6;
 
 drop table t1;
+
+--source suite/groonga/include/groonga_deinit.inc

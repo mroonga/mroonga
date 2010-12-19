@@ -1,4 +1,4 @@
-# Copyright(C) 2010 Tetsuro IKEDA
+# Copyright(C) 2010 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,18 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source suite/groonga/include/groonga.inc
-
---disable_warnings
-drop table if exists t1, t2, t3;
---enable_warnings
-
-create table t1 (c1 int primary key, c2 int, c3 int);
-create table t2 (c1 int primary key, c2 int, c3 int);
-create table t3 (c1 int primary key, c2 int, c3 int);
-
-drop table t1;
-drop table t2;
-drop table t3;
-
---source suite/groonga/include/groonga_deinit.inc
+disable_query_log;
+set storage_engine=MyISAM;
+UNINSTALL PLUGIN groonga_stats;
+UNINSTALL PLUGIN groonga;
+enable_query_log;

@@ -54,3 +54,4 @@ set global groonga_log_level=dummy;
 --error 1229
 set session groonga_log_level=NOTICE;
 
+--source suite/groonga/include/groonga_deinit.inc

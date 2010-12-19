@@ -44,3 +44,5 @@ select last_insert_grn_id(1);
 drop table t1;
 
 drop function last_insert_grn_id;
+
+--source suite/groonga/include/groonga_deinit.inc
