@@ -68,10 +68,10 @@ mv $RPM_BUILD_ROOT%{_datadir}/groonga-storage-engine/ \
 rm -rf $RPM_BUILD_ROOT
 
 %post
-sql=<<EOS
+sql="
 INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
 CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
-EOS
+"
 command="/usr/bin/mysql -u root -e \"$sql\""
 echo $command
 eval $command || \
@@ -79,10 +79,10 @@ eval $command || \
      echo "  $command")
 
 %postun
-sql=<<EOS
+sql="
 DROP FUNCTION last_insert_grn_id;
 UNINSTALL PLUGIN groonga;
-EOS
+"
 command="/usr/bin/mysql -u root -e \"$sql\""
 echo $command
 eval $command || \
@@ -97,6 +97,7 @@ eval $command || \
 %changelog
 * Thu Dec 30 2010 Kouhei Sutou <kou@clear-code.com> - 0.4-2
 - use MySQL 5.5.8-1.
+- fix SQL literal notation.
 
 * Mon Nov 29 2010 Kouhei Sutou <kou@clear-code.com> - 0.4-1
 - use the latest MySQL.
