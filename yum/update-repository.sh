@@ -23,7 +23,4 @@ for distribution in ${DISTRIBUTIONS}; do
     for dir in $script_base_dir/${distribution}/*/*; do
 	run createrepo $dir
     done;
-
-    run $script_base_dir/gpg-public-key.sh > \
-	$script_base_dir/${distribution}/RPM-GPG-KEY-groonga;
 done
