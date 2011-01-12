@@ -68,26 +68,30 @@ mv $RPM_BUILD_ROOT%{_datadir}/groonga-storage-engine/ \
 rm -rf $RPM_BUILD_ROOT
 
 %post
-sql="
+if [ $1 -eq 1 ]; then
+    sql="
 INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
 CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
 "
-command="/usr/bin/mysql -u root -e \"$sql\""
-echo $command
-eval $command || \
-    (echo "run the following command to register groonga storage engine:"; \
-     echo "  $command")
+    command="/usr/bin/mysql -u root -e \"$sql\""
+    echo $command
+    eval $command || \
+	(echo "run the following command to register groonga storage engine:"; \
+	 echo "  $command")
+fi
 
 %postun
-sql="
+if [ $1 -eq 0 ]; then
+  sql="
 DROP FUNCTION last_insert_grn_id;
 UNINSTALL PLUGIN groonga;
 "
-command="/usr/bin/mysql -u root -e \"$sql\""
-echo $command
-eval $command || \
-    (echo "run the following command to unregister groonga storage engine:"; \
-     echo "  $command")
+  command="/usr/bin/mysql -u root -e \"$sql\""
+  echo $command
+  eval $command || \
+      (echo "run the following command to unregister groonga storage engine:"; \
+       echo "  $command")
+fi
 
 %files
 %defattr(-,root,root,-)
@@ -95,6 +99,9 @@ eval $command || \
 %doc %{_datadir}/mysql-groonga/doc/
 
 %changelog
+* Sat Jan 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.5-1
+- do not remove plugin on upgrade.
+
 * Wed Jan 12 2011 Kouhei Sutou <kou@clear-code.com> - 0.4-3
 - rebuild without debug symbol.
 
