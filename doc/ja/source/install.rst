@@ -107,7 +107,7 @@ CentOS 5
   % sudo yum update
   % sudo yum install -y mysql-groonga groonga-tokenizer-mecab
 
-Fedora 13
+Fedora 14
 ---------
 
 インストール::
