@@ -4,7 +4,7 @@
 
 Name:		mysql-groonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	A MySQL storage engine powered by groonga.
 
 Group:		Applications/Databases
@@ -95,6 +95,9 @@ eval $command || \
 %doc %{_datadir}/mysql-groonga/doc/
 
 %changelog
+* Wed Jan 12 2011 Kouhei Sutou <kou@clear-code.com> - 0.4-3
+- rebuild without debug symbol.
+
 * Thu Dec 30 2010 Kouhei Sutou <kou@clear-code.com> - 0.4-2
 - use MySQL 5.5.8-1.
 - fix SQL literal notation.
