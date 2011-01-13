@@ -381,10 +381,8 @@ int mrn_init(void *p)
   if ((pthread_mutex_init(&mrn_allocated_thds_mutex, NULL) != 0)) {
     goto err_allocated_thds_mutex_init;
   }
-  if(
-    hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
-                   (hash_get_key) mrn_allocated_thds_get_key, 0, 0)
-  ) {
+  if (my_hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
+                   (my_hash_get_key) mrn_allocated_thds_get_key, 0, 0)) {
     goto error_allocated_thds_hash_init;
   }
 
@@ -414,17 +412,17 @@ int mrn_deinit(void *p)
 
   if (thd && thd_sql_command(thd) == SQLCOM_UNINSTALL_PLUGIN) {
     pthread_mutex_lock(&mrn_allocated_thds_mutex);
-    while ((tmp_thd = (THD *) hash_element(&mrn_allocated_thds, 0)))
+    while ((tmp_thd = (THD *) my_hash_element(&mrn_allocated_thds, 0)))
     {
       void *slot_ptr = *thd_ha_data(tmp_thd, mrn_hton_ptr);
       if (slot_ptr) free(slot_ptr);
       *thd_ha_data(tmp_thd, mrn_hton_ptr) = (void *) NULL;
-      hash_delete(&mrn_allocated_thds, (uchar *) tmp_thd);
+      my_hash_delete(&mrn_allocated_thds, (uchar *) tmp_thd);
     }
     pthread_mutex_unlock(&mrn_allocated_thds_mutex);
   }
 
-  hash_free(&mrn_allocated_thds);
+  my_hash_free(&mrn_allocated_thds);
   pthread_mutex_destroy(&mrn_allocated_thds_mutex);
   pthread_mutex_destroy(&mrn_log_mutex);
   pthread_mutex_destroy(&db_mutex);
@@ -473,7 +471,7 @@ int mrn_close_connection(handlerton *hton, THD *thd)
     free(p);
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) NULL;
     pthread_mutex_lock(&mrn_allocated_thds_mutex);
-    hash_delete(&mrn_allocated_thds, (uchar*) thd);
+    my_hash_delete(&mrn_allocated_thds, (uchar*) thd);
     pthread_mutex_unlock(&mrn_allocated_thds_mutex);
   }
   return 0;
