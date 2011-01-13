@@ -96,4 +96,14 @@ insert into t1 (c1,_id,_score) values (6,1,2);
 select * from t1;
 drop table t1;
 
+
+# duplicated key error
+create table t1 (c1 int primary key, c2 int);
+insert into t1 values(1,100);
+select * from t1;
+--error 1062
+insert into t1 values(1,200);
+select * from t1;
+drop table t1;
+
 --source suite/groonga/include/groonga_deinit.inc

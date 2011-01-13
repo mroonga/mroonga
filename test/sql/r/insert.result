@@ -90,3 +90,14 @@ c1	_id	_score
 2	2	0
 3	3	0
 drop table t1;
+create table t1 (c1 int primary key, c2 int);
+insert into t1 values(1,100);
+select * from t1;
+c1	c2
+1	100
+insert into t1 values(1,200);
+ERROR 23000: Duplicate entry '1' for key 'PRIMARY'
+select * from t1;
+c1	c2
+1	100
+drop table t1;

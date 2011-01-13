@@ -875,7 +875,8 @@ ulonglong ha_mroonga_table_flags =
     HA_NO_AUTO_INCREMENT |
     HA_CAN_INSERT_DELAYED |
     HA_BINLOG_FLAGS |
-    HA_CAN_BIT_FIELD;
+    HA_CAN_BIT_FIELD |
+    HA_DUPLICATE_POS;
     //HA_HAS_RECORDS;
 
 ulonglong ha_mroonga::table_flags() const
@@ -1339,6 +1340,11 @@ int ha_mroonga::info(uint flag)
   DBUG_ENTER("ha_mroonga::info");
   ha_rows rows = grn_table_size(ctx, tbl);
   stats.records = rows;
+
+  if (flag & (HA_STATUS_ERRKEY | HA_STATUS_NO_LOCK)) {
+    errkey = dup_key;
+  }
+
   DBUG_RETURN(0);
 }
 
@@ -1476,9 +1482,10 @@ int ha_mroonga::write_row(uchar *buf)
 #ifndef DBUG_OFF
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
+    memcpy(dup_ref, &row_id, sizeof(grn_id));
+    dup_key = pkeynr;
     GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
-    my_message(ER_DUP_UNIQUE, "duplicated _id on insert", MYF(0));
-    DBUG_RETURN(ER_DUP_UNIQUE);
+    DBUG_RETURN(HA_ERR_FOUND_DUPP_KEY);
   }
 
   grn_obj colbuf;
@@ -2536,7 +2543,7 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
 
 int ha_mroonga::reset()
 {
-  DBUG_ENTER("ha_mroonga::reset()");
+  DBUG_ENTER("ha_mroonga::reset");
   if (sort_keys != NULL) {
     free(sort_keys);
     sort_keys = NULL;

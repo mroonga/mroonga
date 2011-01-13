@@ -90,6 +90,7 @@ class ha_mroonga: public handler
   char **key_max;
   int *key_min_len;
   int *key_max_len;
+  uint dup_key;
 
   longlong limit;
   grn_table_sort_key *sort_keys;
