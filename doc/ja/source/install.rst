@@ -9,34 +9,11 @@
 
 インストール環境に既にディストリビューション由来のMySQLパッケージ(ver5.0以下)がインストール済みの場合には事前に削除しておいて下さい。
 
-aptitudeの場合 ::
-
- sudo aptitude remove mysql*
-
 yumの場合 ::
 
  sudo yum remove mysql*
 
 それぞれの環境毎にインストール方法を説明します。
-
-Debian GNU/Linux lenny
-----------------------
-
-/etc/apt/sources.list.d/backports.list::
-
-  deb http://backports.debian.org/debian-backports lenny-backports main
-  deb-src http://backports.debian.org/debian-backports lenny-backports main
-
-/etc/apt/sources.list.d/groonga.list::
-
-  deb http://packages.groonga.org/debian/ lenny main
-  deb-src http://packages.groonga.org/debian/ lenny main
-
-インストール::
-
-  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
-  % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
 
 Debian GNU/Linux squeeze
 ------------------------
@@ -50,7 +27,21 @@ Debian GNU/Linux squeeze
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
+  % sudo aptitude -V -D -y install mysql-server-groonga
+
+Debian GNU/Linux wheezy
+-----------------------
+
+/etc/apt/sources.list.d/groonga.list::
+
+  deb http://packages.groonga.org/debian/ wheezy main
+  deb-src http://packages.groonga.org/debian/ wheezy main
+
+インストール::
+
+  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
+  % sudo aptitude update
+  % sudo aptitude -V -D -y install mysql-server-groonga
 
 Debian GNU/Linux sid
 --------------------
@@ -64,7 +55,7 @@ Debian GNU/Linux sid
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
+  % sudo aptitude -V -D -y install mysql-server-groonga
 
 Ubuntu 10.04 LTS Lucid Lynx
 ---------------------------
@@ -80,7 +71,7 @@ Ubuntu 10.04 LTS Lucid Lynx
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
+  % sudo aptitude -V -D -y install mysql-server-groonga
 
 Ubuntu 10.10 Maverick Meerkat
 -----------------------------
@@ -96,7 +87,7 @@ Ubuntu 10.10 Maverick Meerkat
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga libgroonga-tokenizer-mecab
+  % sudo aptitude -V -D -y install mysql-server-groonga
 
 CentOS 5
 --------
