@@ -96,7 +96,7 @@ CentOS 5
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
-  % sudo yum install -y mysql-groonga groonga-tokenizer-mecab
+  % sudo yum install -y mysql-groonga
 
 Fedora 14
 ---------
@@ -105,7 +105,7 @@ Fedora 14
 
   % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
-  % sudo yum install -y mysql-groonga groonga-tokenizer-mecab
+  % sudo yum install -y mysql-groonga
 
 ソースコードからのインストール
 ------------------------------
