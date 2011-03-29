@@ -22,7 +22,10 @@ run()
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
 
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
+groonga_apt_key=1C837F31
+if ! apt-key list | grep -q ${groonga_apt_key}; then
+    apt-key adv --recv-keys --keyserver keyserver.ubuntu.com ${groonga_apt_key}
+fi
 
 if [ ! -x /usr/bin/aptitude ]; then
     run apt-get update
