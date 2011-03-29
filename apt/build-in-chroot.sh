@@ -16,6 +16,12 @@ PATH=/usr/local/sbin:/usr/sbin:$PATH
 
 script_base_dir=`dirname $0`
 
+if test "$PARALLEL" = "yes"; then
+    parallel="yes"
+else
+    parallel="no"
+fi
+
 run()
 {
     "$@"
@@ -72,7 +78,7 @@ build()
     fi
 
     case ${code_name} in
-	lenny|squeeze|unstable)
+	lenny|squeeze|wheezy|unstable)
 	    distribution=debian
 	    component=main
 	    ;;
@@ -101,20 +107,16 @@ build()
 	${CHROOT_BASE}/$target/tmp/depended-packages
     run cp ${script_base_dir}/build-deb.sh \
 	${CHROOT_BASE}/$target/tmp/
-    run cat <<EOF > /tmp/groonga.list
+    sources_list_d=${CHROOT_BASE}/${target}/etc/apt/sources.list.d
+    run cat <<EOF | run_sudo tee ${sources_list_d}/groonga.list
 deb http://packages.groonga.org/${distribution}/ ${code_name} ${component}
 deb-src http://packages.groonga.org/${distribution}/ ${code_name} ${component}
 EOF
-    run_sudo cp /tmp/groonga.list \
-	${CHROOT_BASE}/${target}/etc/apt/sources.list.d/
     if [ "${code_name}" = "lenny" ]; then
-	backports_list=/tmp/backports.list
-	run cat <<EOF > ${backports_list}
+	run cat <<EOF | run_sudo tee ${sources_list_d}/backports.list
 deb http://backports.debian.org/debian-backports lenny-backports main
 deb-src http://backports.debian.org/debian-backports lenny-backports main
 EOF
-	run_sudo cp ${backports_list} \
-	    ${CHROOT_BASE}/${target}/etc/apt/sources.list.d/
     fi
     run_sudo rm -rf $build_dir
     run_sudo su -c "/usr/sbin/chroot ${CHROOT_BASE}/$target /tmp/build-deb.sh"
@@ -126,6 +128,14 @@ EOF
 
 for architecture in $ARCHITECTURES; do
     for code_name in $CODES; do
-	build $architecture $code_name
+	if test "$parallel" = "yes"; then
+	    build $architecture $code_name &
+	else
+	    build $architecture $code_name
+	fi;
     done
 done
+
+if test "$parallel" = "yes"; then
+    wait
+fi
