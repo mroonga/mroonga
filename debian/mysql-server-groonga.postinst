@@ -28,8 +28,8 @@ mysql_apparmor_profile_name=usr.sbin.mysqld
 mysql_apparmor_profile=/etc/apparmor.d/${mysql_apparmor_profile_name}
 mysql_local_apparmor_profile=/etc/apparmor.d/local/${mysql_apparmor_profile_name}
 if test -f "${mysql_local_apparmor_profile}"; then
-    apparmor_profile_name=usr.lib.mysql.plugin.ha_groonga
-    include_ha_groonga="#include <${apparmor_profile_name}>"
+    apparmor_profile_name=mysql-server-groonga
+    include_ha_groonga="#include <abstractions/${apparmor_profile_name}>"
     if ! grep -q "${include_ha_groonga}" "${mysql_local_apparmor_profile}"; then
 	echo >> "${mysql_local_apparmor_profile}"
 	echo "${include_ha_groonga}" >> "${mysql_local_apparmor_profile}"
