@@ -1,3 +1,9 @@
+groonga-storage-engine (0.5-4) unstable; urgency=low
+
+  * fix a typo.
+
+ -- Kouhei Sutou <kou@clear-code.com>  Tue, 30 Mar 2011 01:05:00 +0900
+
 groonga-storage-engine (0.5-3) unstable; urgency=low
 
   * fix AppArmor files.
