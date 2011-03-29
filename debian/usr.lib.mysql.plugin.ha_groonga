@@ -1,0 +1,3 @@
+/usr/lib/groonga/plugins/ r,
+/usr/lib/groonga/plugins/** r,
+#include <local/usr.lib.mysql.plugin.ha_groonga>

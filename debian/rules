@@ -14,3 +14,11 @@ override_dh_auto_configure:
 
 # disable 'make check'.
 override_dh_auto_test:
+
+# override_dh_install:
+# 	dh_install
+# 	if test -x /usr/bin/dh_apparmor; then			\
+# 	  dh_apparmor						\
+# 	    -pmysql-server-groonga				\
+# 	    --profile-name=usr.lib.mysql.plugin.ha_groonga;	\
+# 	fi

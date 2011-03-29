@@ -24,4 +24,27 @@ case "$1" in
         ;;
 esac
 
+mysql_apparmor_profile_name=usr.sbin.mysqld
+mysql_apparmor_profile=/etc/apparmor.d/${mysql_apparmor_profile_name}
+mysql_local_apparmor_profile=/etc/apparmor.d/local/${mysql_apparmor_profile_name}
+if test -f "${mysql_local_apparmor_profile}"; then
+    apparmor_profile_name=usr.lib.mysql.plugin.ha_groonga
+    include_ha_groonga="#include <${apparmor_profile_name}>"
+    if ! grep -q "${include_ha_groonga}" "${mysql_local_apparmor_profile}"; then
+	echo >> "${mysql_local_apparmor_profile}"
+	echo "${include_ha_groonga}" >> "${mysql_local_apparmor_profile}"
+    fi
+    local_apparmor_profile=/etc/apparmor.d/local/${apparmor_profile_name}
+    if ! test -e "$local_apparmor_profile"; then
+	mkdir -p $(dirname "$local_apparmor_profile")
+	cat <<EOF
+# Site-specific additions and overrides for ${apparmor_profile_name}.
+# For more details, please see /etc/apparmor.d/local/README.
+EOF
+    fi
+    if aa-status --enabled 2>/dev/null; then
+        apparmor_parser -r -T -W "${mysql_apparmor_profile}" || true
+    fi
+fi
+
 #DEBHELPER#

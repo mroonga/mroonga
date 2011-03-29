@@ -7,4 +7,21 @@ DROP FUNCTION last_insert_grn_id;
 UNINSTALL PLUGIN groonga;
 EOS
 
+if [ "$1" = "purge" ]; then
+    mysql_local_apparmor_profile=/etc/apparmor.d/local/usr.sbin.mysqld
+    apparmor_profile_name=usr.lib.mysql.plugin.ha_groonga
+    if test -f "${mysql_local_apparmor_profile}"; then
+	include_ha_groonga="#include <${apparmor_profile_name}>"
+	if grep -q "${include_ha_groonga}" "${mysql_local_apparmor_profile}"; then
+	    sed -i'' -e "s/${include_ha_groonga}//" \
+		"${mysql_local_apparmor_profile}"
+	fi
+    fi
+
+    rm -f "/etc/apparmor.d/disable/${apparmor_profile_name}" || true
+    rm -f "/etc/apparmor.d/force-complain/${apparmor_profile_name}" || true
+    rm -f "/etc/apparmor.d/local/${apparmor_profile_name}" || true
+    rmdir /etc/apparmor.d/local 2>/dev/null || true
+fi
+
 #DEBHELPER#
