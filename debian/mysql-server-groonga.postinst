@@ -37,7 +37,7 @@ if test -f "${mysql_local_apparmor_profile}"; then
     local_apparmor_profile=/etc/apparmor.d/local/${apparmor_profile_name}
     if ! test -e "$local_apparmor_profile"; then
 	mkdir -p $(dirname "$local_apparmor_profile")
-	cat <<EOF
+	cat <<EOF > "$local_apparmor_profile"
 # Site-specific additions and overrides for ${apparmor_profile_name}.
 # For more details, please see /etc/apparmor.d/local/README.
 EOF
