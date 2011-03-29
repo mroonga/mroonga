@@ -3,7 +3,7 @@
 
 Name:		mysql-groonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A MySQL storage engine powered by groonga.
 
 Group:		Applications/Databases
@@ -81,7 +81,10 @@ fi
 %doc %{_datadir}/mysql-groonga/doc/
 
 %changelog
-* Sat Jan 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.5-1
+* Thu Mar 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.5-1
+- new upstream release.
+
+* Sat Jan 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.4-3
 - do not remove plugin on upgrade.
 
 * Thu Dec 30 2010 Kouhei Sutou <kou@clear-code.com> - 0.4-2
