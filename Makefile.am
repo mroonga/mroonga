@@ -24,6 +24,10 @@ EXTRA_DIST = plug.in
 installcheck-local: install
 	test/run-sql-test.sh
 
+tag:
+	cd $(top_srcdir) && \
+	  git tag v$(VERSION) -a -m 'groonga storage engine $(VERSION)!!!'
+
 update-latest-release:
 	@if test -z "$(OLD_RELEASE)"; then	\
 	  echo "\$$(OLD_RELEASE) is missing";	\
