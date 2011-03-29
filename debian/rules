@@ -1,14 +1,16 @@
 #!/usr/bin/make -f
+# -*- makefile-gmake -*-
+#
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/rules/patchsys-quilt.mk
-include /usr/share/cdbs/1/class/autotools.mk
+%:
+	dh $@
 
-DEB_INSTALL_DIRS_mysql-server-groonga =		\
-	/usr/lib/mysql/plugin
+override_dh_auto_configure:
+	dh_auto_configure -- --with-mysql-source=../mysql
 
-DEB_CONFIGURE_EXTRA_FLAGS =			\
-	--with-mysql-source=../mysql
-
-CFLAGS=-g -O3
-CXXFLAGS=-g -O3
+# disable 'make check'.
+override_dh_auto_test:
