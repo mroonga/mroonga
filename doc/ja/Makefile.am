@@ -15,6 +15,8 @@ PAPEROPT_letter = -D latex_paper_size=letter
 # ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(SPHINXOPTS) source
 
+RUN_SPHINX_BUILD = env VERSION=$(VERSION) $(SPHINX_BUILD)
+
 .PHONY: help clean html dirhtml pickle json htmlhelp qthelp latex changes linkcheck doctest
 
 help:
@@ -45,33 +47,33 @@ clean-local:
 	-rm -rf $(BUILDDIR)/pdf
 
 html-local:
-	$(SPHINX_BUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	$(RUN_SPHINX_BUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
 dirhtml:
-	$(SPHINX_BUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
+	$(RUN_SPHINX_BUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/dirhtml."
 
 pickle:
-	$(SPHINX_BUILD) -b pickle $(ALLSPHINXOPTS) $(BUILDDIR)/pickle
+	$(RUN_SPHINX_BUILD) -b pickle $(ALLSPHINXOPTS) $(BUILDDIR)/pickle
 	@echo
 	@echo "Build finished; now you can process the pickle files."
 
 json:
-	$(SPHINX_BUILD) -b json $(ALLSPHINXOPTS) $(BUILDDIR)/json
+	$(RUN_SPHINX_BUILD) -b json $(ALLSPHINXOPTS) $(BUILDDIR)/json
 	@echo
 	@echo "Build finished; now you can process the JSON files."
 
 htmlhelp:
-	$(SPHINX_BUILD) -b htmlhelp $(ALLSPHINXOPTS) $(BUILDDIR)/htmlhelp
+	$(RUN_SPHINX_BUILD) -b htmlhelp $(ALLSPHINXOPTS) $(BUILDDIR)/htmlhelp
 	@echo
 	@echo "Build finished; now you can run HTML Help Workshop with the" \
 	      ".hhp project file in $(BUILDDIR)/htmlhelp."
 
 qthelp:
-	$(SPHINX_BUILD) -b qthelp $(ALLSPHINXOPTS) $(BUILDDIR)/qthelp
+	$(RUN_SPHINX_BUILD) -b qthelp $(ALLSPHINXOPTS) $(BUILDDIR)/qthelp
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
@@ -80,30 +82,30 @@ qthelp:
 	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/groonga.qhc"
 
 latex:
-	$(SPHINX_BUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
+	$(RUN_SPHINX_BUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
 	@echo
 	@echo "Build finished; the LaTeX files are in $(BUILDDIR)/latex."
 	@echo "Run \`make all-pdf' or \`make all-ps' in that directory to" \
 	      "run these through (pdf)latex."
 
 changes:
-	$(SPHINX_BUILD) -b changes $(ALLSPHINXOPTS) $(BUILDDIR)/changes
+	$(RUN_SPHINX_BUILD) -b changes $(ALLSPHINXOPTS) $(BUILDDIR)/changes
 	@echo
 	@echo "The overview file is in $(BUILDDIR)/changes."
 
 linkcheck:
-	$(SPHINX_BUILD) -b linkcheck $(ALLSPHINXOPTS) $(BUILDDIR)/linkcheck
+	$(RUN_SPHINX_BUILD) -b linkcheck $(ALLSPHINXOPTS) $(BUILDDIR)/linkcheck
 	@echo
 	@echo "Link check complete; look for any errors in the above output " \
 	      "or in $(BUILDDIR)/linkcheck/output.txt."
 
 doctest:
-	$(SPHINX_BUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
+	$(RUN_SPHINX_BUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
 
 pdf-local:
-	$(SPHINX_BUILD) -b pdf $(ALLSPHINXOPTS) $(BUILDDIR)/pdf
+	$(RUN_SPHINX_BUILD) -b pdf $(ALLSPHINXOPTS) $(BUILDDIR)/pdf
 	@echo
 	@echo "Build finished. The PDF files are in $(BUILDDIR)/pdf."
 
