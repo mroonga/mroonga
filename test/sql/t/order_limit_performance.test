@@ -59,6 +59,10 @@ select c3, _id from t1 where match(c3) against("ii") order by _id;
 show status like 'groonga_fast_order_limit';
 select c3, _id from t1 where match(c3) against("ii") order by _id limit 1;
 show status like 'groonga_fast_order_limit';
+select count(*) from t1 where match(c3) against("ii");
+show status like 'groonga_fast_order_limit';
+select * from t1 where match(c3) against("ii") order by c1 desc limit 1;
+show status like 'groonga_fast_order_limit';
 drop table t1;
 
 --source suite/groonga/include/groonga_deinit.inc

@@ -120,4 +120,16 @@ aa ii uu ee oo	1
 show status like 'groonga_fast_order_limit';
 Variable_name	Value
 groonga_fast_order_limit	8
+select count(*) from t1 where match(c3) against("ii");
+count(*)
+3
+show status like 'groonga_fast_order_limit';
+Variable_name	Value
+groonga_fast_order_limit	8
+select * from t1 where match(c3) against("ii") order by c1 desc limit 1;
+c1	c2	c3	_id	_score
+5	50	aa ii uu ii oo	5	2
+show status like 'groonga_fast_order_limit';
+Variable_name	Value
+groonga_fast_order_limit	9
 drop table t1;

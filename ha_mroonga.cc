@@ -2392,7 +2392,7 @@ void ha_mroonga::check_fast_order_limit()
 
   if (
     thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
-    !select_lex->n_sum_items &&
+    !select_lex->with_sum_func &&
     !select_lex->group_list.elements &&
     !select_lex->having &&
     select_lex->table_list.elements == 1 &&
