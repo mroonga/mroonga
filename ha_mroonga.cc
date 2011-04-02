@@ -872,7 +872,6 @@ ulonglong ha_mroonga_table_flags =
     HA_STATS_RECORDS_IS_EXACT |
     HA_NO_PREFIX_CHAR_KEYS |
     HA_CAN_FULLTEXT |
-    HA_NO_AUTO_INCREMENT |
     HA_CAN_INSERT_DELAYED |
     HA_BINLOG_FLAGS |
     HA_CAN_BIT_FIELD |
@@ -1432,6 +1431,14 @@ int ha_mroonga::write_row(uchar *buf)
   THD *thd = ha_thd();
   int i, col_size;
   int n_columns = table->s->fields;
+  int error;
+
+  if (table->next_number_field && buf == table->record[0])
+  {
+    if ((error = update_auto_increment()))
+      DBUG_RETURN(error);
+  }
+
 #ifndef DBUG_OFF
   my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
