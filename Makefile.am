@@ -51,3 +51,15 @@ update-latest-release:
 	  rpm/fedora/mysql-groonga.spec.in			\
 	  rpm/centos/mysql-groonga.spec.in			\
 	  debian/changelog
+
+echo-mysql-source:
+	echo $(MYSQL_SOURCE)
+
+echo-mysql-build:
+	echo $(MYSQL_BUILD)
+
+echo-mysql-version:
+	echo $(MYSQL_VERSION)
+
+echo-cutter:
+	echo $(CUTTER)
