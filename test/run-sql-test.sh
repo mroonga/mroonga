@@ -45,7 +45,7 @@ if ! test -e "${groonga_mysql_test_suite_dir}"; then
 	"${groonga_mysql_test_suite_dir}"
 fi
 
-make -C ${top_dir} install-pluginLTLIBRARIES plugindir=${plugins_dir}
+make -C ${top_dir} install-pluginLTLIBRARIES plugindir=${plugins_dir} > /dev/null
 
 (cd "$build_mysql_test_dir" && \
     ./mysql-test-run.pl --no-check-testcases \
