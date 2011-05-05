@@ -18,6 +18,8 @@ yumの場合 ::
 Debian GNU/Linux squeeze
 ------------------------
 
+注: amd64版のみ提供でi386版は未提供。
+
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/debian/ squeeze main
@@ -31,6 +33,8 @@ Debian GNU/Linux squeeze
 
 Debian GNU/Linux wheezy
 -----------------------
+
+注: amd64版のみ提供でi386版は未提供。
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -46,6 +50,8 @@ Debian GNU/Linux wheezy
 Debian GNU/Linux sid
 --------------------
 
+注: amd64版のみ提供でi386版は未提供。
+
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/debian/ unstable main
@@ -59,6 +65,8 @@ Debian GNU/Linux sid
 
 Ubuntu 10.04 LTS Lucid Lynx
 ---------------------------
+
+注: amd64版のみ提供でi386版は未提供。
 
 注: Ubuntu本家のuniverseセクションもインストール対象としておくこと
 
@@ -76,6 +84,8 @@ Ubuntu 10.04 LTS Lucid Lynx
 Ubuntu 10.10 Maverick Meerkat
 -----------------------------
 
+注: amd64版のみ提供でi386版は未提供。
+
 注: Ubuntu本家のuniverseセクションもインストール対象としておくこと
 
 /etc/apt/sources.list.d/groonga.list::
@@ -92,6 +102,8 @@ Ubuntu 10.10 Maverick Meerkat
 CentOS 5
 --------
 
+注: amd64版のみ提供でi386版は未提供。
+
 インストール::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
@@ -100,6 +112,8 @@ CentOS 5
 
 Fedora 14
 ---------
+
+注: amd64版のみ提供でi386版は未提供。
 
 インストール::
 
