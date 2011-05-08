@@ -1482,6 +1482,9 @@ int ha_mroonga::write_row(uchar *buf)
   int added;
   row_id = grn_table_add(ctx, tbl, pkey, pkey_size, &added);
   if (ctx->rc) {
+#ifndef DBUG_OFF
+    dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_WRITE);
   }
@@ -1553,6 +1556,9 @@ int ha_mroonga::write_row(uchar *buf)
     pthread_mutex_lock(&mrn_allocated_thds_mutex);
     if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
     {
+#ifndef DBUG_OFF
+      dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
       DBUG_RETURN(HA_ERR_OUT_OF_MEM);
     }
     pthread_mutex_unlock(&mrn_allocated_thds_mutex);
