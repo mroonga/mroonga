@@ -163,7 +163,7 @@ else
 fi
 
 CONFIG_OPTION_PLUGINS
-if test "$standalone_build" = "yes";then
+if test "$standalone_build" = "yes"; then
   CONFIG_OPTION_MYSQL
 else
   MYSQL_INC="-I../../sql -I../../include -I../../regex -I../.."
