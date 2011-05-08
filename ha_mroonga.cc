@@ -1,6 +1,8 @@
+/* -*- c-basic-offset: 2 -*- */
 /* 
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010 Kentoku SHIBA
+  Copyright(C) 2011 Kouhei Sutou
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1431,7 +1433,7 @@ int ha_mroonga::write_row(uchar *buf)
   THD *thd = ha_thd();
   int i, col_size;
   int n_columns = table->s->fields;
-  int error;
+  int error = 0;
 
   if (table->next_number_field && buf == table->record[0])
   {
@@ -1485,14 +1487,25 @@ int ha_mroonga::write_row(uchar *buf)
   }
   grn_obj_unlink(ctx, &wrapper);
   if (added == 0) {
-    // duplicated error
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
+    error = HA_ERR_FOUND_DUPP_KEY;
     memcpy(dup_ref, &row_id, sizeof(grn_id));
     dup_key = pkeynr;
-    GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
-    DBUG_RETURN(HA_ERR_FOUND_DUPP_KEY);
+    switch (thd_sql_command(thd)) {
+    case SQLCOM_REPLACE:
+    case SQLCOM_REPLACE_SELECT:
+      break;
+    case SQLCOM_INSERT_SELECT:
+    case SQLCOM_LOAD:
+      // not supported yet
+    default:
+      // duplicated error
+#ifndef DBUG_OFF
+      dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+      GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
+      DBUG_RETURN(error);
+      break;
+    }
   }
 
   grn_obj colbuf;
@@ -1546,7 +1559,7 @@ int ha_mroonga::write_row(uchar *buf)
   }
   slot_data->last_insert_rid = row_id;
 
-  DBUG_RETURN(0);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
