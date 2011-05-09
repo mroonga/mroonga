@@ -1,6 +1,7 @@
 /* 
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010 Kentoku SHIBA
+  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -100,6 +101,8 @@ class ha_mroonga: public handler
   bool fast_order_limit;
   bool fast_order_limit_with_index;
 
+  bool ignoring_duplicated_key;
+
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);
   ~ha_mroonga();
@@ -124,6 +127,7 @@ public:
   int rnd_next(uchar *buf);                                        // required
   int rnd_pos(uchar *buf, uchar *pos);                             // required
   void position(const uchar *record);                              // required
+  int extra(enum ha_extra_function operation);
 
   int delete_table(const char *name);
   int write_row(uchar *buf);

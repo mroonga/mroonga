@@ -2,7 +2,7 @@
 /* 
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010 Kentoku SHIBA
-  Copyright(C) 2011 Kouhei Sutou
+  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -817,7 +817,8 @@ void mrn_ft_close_search(FT_INFO *handler)
 
 /* handler implementation */
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
-  :handler(hton, share)
+  :handler(hton, share),
+   ignoring_duplicated_key(false)
 {
   DBUG_ENTER("ha_mroonga::ha_mroonga");
   ctx = grn_ctx_open(0);
@@ -1423,6 +1424,22 @@ void ha_mroonga::position(const uchar *record)
   DBUG_VOID_RETURN;
 }
 
+int ha_mroonga::extra(enum ha_extra_function operation)
+{
+  DBUG_ENTER("ha_mroonga::extra");
+  switch (operation) {
+  case HA_EXTRA_IGNORE_DUP_KEY:
+    ignoring_duplicated_key = true;
+    break;
+  case HA_EXTRA_NO_IGNORE_DUP_KEY:
+    ignoring_duplicated_key = false;
+    break;
+  default:
+    break;
+  }
+  DBUG_RETURN(0);
+}
+
 int ha_mroonga::write_row(uchar *buf)
 {
   DBUG_ENTER("ha_mroonga::write_row");
@@ -1490,25 +1507,17 @@ int ha_mroonga::write_row(uchar *buf)
   }
   grn_obj_unlink(ctx, &wrapper);
   if (added == 0) {
+    // duplicated error
+#ifndef DBUG_OFF
+    dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
     error = HA_ERR_FOUND_DUPP_KEY;
     memcpy(dup_ref, &row_id, sizeof(grn_id));
     dup_key = pkeynr;
-    switch (thd_sql_command(thd)) {
-    case SQLCOM_REPLACE:
-    case SQLCOM_REPLACE_SELECT:
-      break;
-    case SQLCOM_INSERT_SELECT:
-    case SQLCOM_LOAD:
-      // not supported yet
-    default:
-      // duplicated error
-#ifndef DBUG_OFF
-      dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
+    if (!ignoring_duplicated_key) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
-      DBUG_RETURN(error);
-      break;
     }
+    DBUG_RETURN(error);
   }
 
   grn_obj colbuf;
@@ -2583,6 +2592,7 @@ int ha_mroonga::reset()
     _score = NULL;
     res = NULL;
   }
+  ignoring_duplicated_key = false;
   DBUG_RETURN(0);
 }
 
