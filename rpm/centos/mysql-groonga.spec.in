@@ -1,10 +1,10 @@
-%define mysql_version 5.5.10
+%define mysql_version 5.5.12
 %define mysql_release 1
 %define mysql_dist    rhel5
 
 Name:		mysql-groonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A MySQL storage engine powered by groonga.
 
 Group:		Applications/Databases
@@ -99,6 +99,9 @@ fi
 %doc %{_datadir}/mysql-groonga/doc/
 
 %changelog
+* Thu May 17 2011 Kouhei Sutou <kou@clear-code.com> - 0.5-2
+- use MySQL 5.5.12.
+
 * Thu Mar 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.5-1
 - new upstream release.
 
