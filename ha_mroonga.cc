@@ -2596,6 +2596,155 @@ int ha_mroonga::reset()
   DBUG_RETURN(0);
 }
 
+handler *ha_mroonga::clone(MEM_ROOT *mem_root)
+{
+  DBUG_ENTER("ha_mroonga::clone");
+  DBUG_RETURN(handler::clone(mem_root));
+}
+
+uint8 ha_mroonga::table_cache_type()
+{
+  DBUG_ENTER("ha_mroonga::table_cache_type");
+  DBUG_RETURN(handler::table_cache_type());
+}
+
+int ha_mroonga::read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
+                                       KEY_MULTI_RANGE *ranges,
+                                       uint range_count,
+                                       bool sorted,
+                                       HANDLER_BUFFER *buffer)
+{
+  DBUG_ENTER("ha_mroonga::read_multi_range_first");
+  DBUG_RETURN(handler::read_multi_range_first(found_range_p, ranges,
+                                              range_count, sorted, buffer));
+}
+
+int ha_mroonga::read_multi_range_next(KEY_MULTI_RANGE **found_range_p)
+{
+  DBUG_ENTER("ha_mroonga::read_multi_range_next");
+  DBUG_RETURN(handler::read_multi_range_next(found_range_p));
+}
+
+void ha_mroonga::start_bulk_insert(ha_rows rows)
+{
+  DBUG_ENTER("ha_mroonga::start_bulk_insert");
+  DBUG_VOID_RETURN;
+}
+
+int ha_mroonga::end_bulk_insert()
+{
+  DBUG_ENTER("ha_mroonga::end_bulk_insert");
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::delete_all_rows()
+{
+  DBUG_ENTER("ha_mroonga::delete_all_rows");
+  DBUG_RETURN((my_errno = HA_ERR_WRONG_COMMAND));
+}
+
+int ha_mroonga::truncate()
+{
+  DBUG_ENTER("ha_mroonga::truncate");
+  DBUG_RETURN(HA_ERR_WRONG_COMMAND);
+}
+
+double ha_mroonga::scan_time()
+{
+  DBUG_ENTER("ha_mroonga::scan_time");
+  DBUG_RETURN(handler::scan_time());
+}
+
+double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
+{
+  DBUG_ENTER("ha_mroonga::read_time");
+  DBUG_RETURN(handler::read_time(index, ranges, rows));
+}
+
+const key_map *ha_mroonga::keys_to_use_for_scanning()
+{
+  DBUG_ENTER("ha_mroonga::keys_to_use_for_scanning");
+  DBUG_RETURN(handler::keys_to_use_for_scanning());
+}
+
+ha_rows ha_mroonga::estimate_rows_upper_bound()
+{
+  DBUG_ENTER("ha_mroonga::estimate_rows_upper_bound");
+  DBUG_RETURN(handler::estimate_rows_upper_bound());
+}
+
+void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
+{
+  DBUG_ENTER("ha_mroonga::update_create_info");
+  DBUG_RETURN(handler::update_create_info(create_info));
+}
+
+int ha_mroonga::rename_table(const char *from, const char *to)
+{
+  DBUG_ENTER("ha_mroonga::rename_table");
+  DBUG_RETURN(handler::rename_table(from, to));
+}
+
+bool ha_mroonga::is_crashed() const
+{
+  DBUG_ENTER("ha_mroonga::is_crashed");
+  DBUG_RETURN(handler::is_crashed());
+}
+
+bool ha_mroonga::auto_repair() const
+{
+  DBUG_ENTER("ha_mroonga::auto_repair");
+  DBUG_RETURN(handler::auto_repair());
+}
+
+int ha_mroonga::disable_indexes(uint mode)
+{
+  DBUG_ENTER("ha_mroonga::disable_indexes");
+  DBUG_RETURN(HA_ERR_WRONG_COMMAND);
+}
+
+int ha_mroonga::enable_indexes(uint mode)
+{
+  DBUG_ENTER("ha_mroonga::enable_indexes");
+  DBUG_RETURN(HA_ERR_WRONG_COMMAND);
+}
+
+int ha_mroonga::check(THD* thd, HA_CHECK_OPT* check_opt)
+{
+  DBUG_ENTER("ha_mroonga::check");
+  DBUG_RETURN(HA_ADMIN_NOT_IMPLEMENTED);
+}
+
+int ha_mroonga::repair(THD* thd, HA_CHECK_OPT* check_opt)
+{
+  DBUG_ENTER("ha_mroonga::repair");
+  DBUG_RETURN(HA_ADMIN_NOT_IMPLEMENTED);
+}
+
+bool ha_mroonga::check_and_repair(THD *thd)
+{
+  DBUG_ENTER("ha_mroonga::check_and_repair");
+  DBUG_RETURN(TRUE);
+}
+
+int ha_mroonga::analyze(THD* thd, HA_CHECK_OPT* check_opt)
+{
+  DBUG_ENTER("ha_mroonga::analyze");
+  DBUG_RETURN(HA_ADMIN_NOT_IMPLEMENTED);
+}
+
+int ha_mroonga::optimize(THD* thd, HA_CHECK_OPT* check_opt)
+{
+  DBUG_ENTER("ha_mroonga::optimize");
+  DBUG_RETURN(HA_ADMIN_NOT_IMPLEMENTED);
+}
+
+bool ha_mroonga::is_fatal_error(int error_num, uint flags)
+{
+  DBUG_ENTER("ha_mroonga::is_fatal_error");
+  DBUG_RETURN(handler::is_fatal_error(error_num, flags));
+}
+
 #ifdef __cplusplus
 }
 #endif

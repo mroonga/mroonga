@@ -169,6 +169,35 @@ public:
 
   int reset();
 
+  handler *clone(MEM_ROOT *mem_root);
+  uint8 table_cache_type();
+  int read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
+                             KEY_MULTI_RANGE *ranges,
+                             uint range_count,
+                             bool sorted,
+                             HANDLER_BUFFER *buffer);
+  int read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
+  void start_bulk_insert(ha_rows rows);
+  int end_bulk_insert();
+  int delete_all_rows();
+  int truncate();
+  double scan_time();
+  double read_time(uint index, uint ranges, ha_rows rows);
+  const key_map *keys_to_use_for_scanning();
+  ha_rows estimate_rows_upper_bound();
+  void update_create_info(HA_CREATE_INFO* create_info);
+  int rename_table(const char *from, const char *to);
+  bool is_crashed() const;
+  bool auto_repair() const;
+  int disable_indexes(uint mode);
+  int enable_indexes(uint mode);
+  int check(THD* thd, HA_CHECK_OPT* check_opt);
+  int repair(THD* thd, HA_CHECK_OPT* check_opt);
+  bool check_and_repair(THD *thd);
+  int analyze(THD* thd, HA_CHECK_OPT* check_opt);
+  int optimize(THD* thd, HA_CHECK_OPT* check_opt);
+  bool is_fatal_error(int error_num, uint flags);
+
 private:
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
