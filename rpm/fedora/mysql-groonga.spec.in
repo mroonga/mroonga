@@ -34,7 +34,8 @@ if [ ! -d ../mysql-%{mysql_version} ]; then
     rpmbuild -bp --define 'runselftest 0' --define 'optflags -O0' \
         ../../SPECS/mysql.spec
 fi
-%configure --with-mysql-source=../mysql-%{mysql_version}
+%configure CPPFLAGS="-DDISABLE_DTRACE" \
+    --with-mysql-source=../mysql-%{mysql_version}
 make %{?_smp_mflags}
 
 
