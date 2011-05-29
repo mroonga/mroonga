@@ -19,7 +19,7 @@ Depends:
 	${shlibs:Depends},
 	libgroonga0,
 	mysql-server
-Description: A MySQL storage enigne built on groonga.
+Description: MySQL storage enigne built on groonga.
  The groonga storage engine is a MySQL storage engine built on groonga,
  a fulltext search engine and column store.
  .
