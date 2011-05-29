@@ -74,6 +74,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   fi
   MYSQL_INC="$MYSQL_INC $($ac_mysql_config --include)"
   ac_mysql_major_version="`$ac_mysql_config --version | cut -b 1,3`"
+  MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
   if test $ac_mysql_major_version -lt 55; then
     MYSQL_VERSION_CFLAGS="-DMYSQL51"
     AC_SUBST(MYSQL_VERSION_CFLAGS)
@@ -168,9 +169,10 @@ if test "$standalone_build" = "yes"; then
 else
   MYSQL_INC="-I../../sql -I../../include -I../../regex -I../.."
   plugindir="\$(pkglibdir)/plugin"
-  AC_SUBST(MYSQL_INC)
-  AC_SUBST(plugindir)
 fi
+AC_SUBST(MYSQL_INC)
+AC_SUBST(MYSQL_CFLAGS)
+AC_SUBST(plugindir)
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
