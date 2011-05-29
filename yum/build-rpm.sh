@@ -33,6 +33,7 @@ fi
 case $distribution in
     fedora)
 	DEPENDED_PACKAGES="$DEPENDED_PACKAGES mysql-devel"
+	DEPENDED_PACKAGES="$DEPENDED_PACKAGES cmake libaio-devel systemtap-sdt-devel"
 	;;
     centos)
 	;;
