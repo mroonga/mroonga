@@ -1,7 +1,5 @@
 .. highlightlang:: none
 
-.. _install:
-
 インストールガイド
 ==================
 

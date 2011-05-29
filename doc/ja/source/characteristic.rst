@@ -1,7 +1,5 @@
 .. highlightlang:: none
 
-.. _characteristic:
-
 groongaストレージエンジンの特徴
 ===============================
 
