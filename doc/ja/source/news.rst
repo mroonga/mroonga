@@ -16,6 +16,10 @@
   抑制。 #910（←は未修正）
 * CentOSで利用しているMySQLのバージョンを5.5.10から5.5.12へ
   アップデート。
+* Ubuntu 11.04 Natty Narwhalサポートの追加。
+* Ubuntu 10.10 Maverick Meerkatサポートの削除。
+* Fedora 15サポートの追加。
+* Fedora 14サポートの削除。
 
 修正
 ++++
