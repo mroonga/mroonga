@@ -110,7 +110,7 @@ CentOS 5
   % sudo yum update
   % sudo yum install -y mysql-groonga
 
-Fedora 14
+Fedora 15
 ---------
 
 注: amd64版のみ提供でi386版は未提供。
