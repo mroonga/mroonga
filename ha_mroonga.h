@@ -203,6 +203,13 @@ private:
                         key_part_map end_key_part_map, bool fulltext);
   void check_fast_order_limit();
   void store_fields_from_primary_table(uchar *buf, grn_id rid);
+  int wrapper_create(const char *name, TABLE *table,
+                     HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
+  int default_create(const char *name, TABLE *table,
+                     HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
+  int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share);
+  int default_delete_table(const char *name, MRN_SHARE *tmp_share,
+                           const char *tbl_name);
 };
 
 #ifdef __cplusplus

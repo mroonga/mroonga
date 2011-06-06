@@ -36,6 +36,7 @@
 #endif
 
 #define MYSQL_SERVER 1
+#include "mysql_version.h"
 
 #ifdef MYSQL51
 #include <mysql_priv.h>
@@ -46,6 +47,7 @@
 #include <probes_mysql.h>
 #include <sql_plugin.h>
 #include <sql_show.h>
+#include "sql_partition.h"
 #endif
 #include <sql_select.h>
 #include <ft_global.h>
@@ -54,10 +56,18 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "mrn_err.h"
+#include "mrn_table.h"
 #include "ha_mroonga.h"
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#if MYSQL_VERSION_ID >= 50500
+extern mysql_mutex_t LOCK_open;
+#else
+extern pthread_mutex_t LOCK_open;
 #endif
 
 /* global variables */
@@ -73,6 +83,17 @@ _ft_vft mrn_ft_vft = {
   NULL // mrn_ft_reinit_search
 };
 handlerton *mrn_hton_ptr;
+HASH mrn_open_tables;
+pthread_mutex_t mrn_open_tables_mutex;
+uchar *grn_open_tables_get_key(
+  MRN_SHARE *share,
+  size_t *length,
+  my_bool not_used __attribute__ ((unused))
+) {
+  DBUG_ENTER("grn_open_tables_get_key");
+  *length = share->table_name_length;
+  DBUG_RETURN((uchar*) share->table_name);
+}
 
 /* status */
 st_mrn_statuses mrn_status_vals;
@@ -387,10 +408,21 @@ int mrn_init(void *p)
                    (my_hash_get_key) mrn_allocated_thds_get_key, 0, 0)) {
     goto error_allocated_thds_hash_init;
   }
+  if ((pthread_mutex_init(&mrn_open_tables_mutex, NULL) != 0)) {
+    goto err_allocated_open_tables_mutex_init;
+  }
+  if (my_hash_init(&mrn_open_tables, system_charset_info, 32, 0, 0,
+                   (my_hash_get_key) grn_open_tables_get_key, 0, 0)) {
+    goto error_allocated_open_tables_hash_init;
+  }
 
   grn_ctx_fin(ctx);
   return 0;
 
+error_allocated_open_tables_hash_init:
+  pthread_mutex_destroy(&mrn_open_tables_mutex);
+err_allocated_open_tables_mutex_init:
+  my_hash_free(&mrn_allocated_thds);
 error_allocated_thds_hash_init:
   pthread_mutex_destroy(&mrn_allocated_thds_mutex);
 err_allocated_thds_mutex_init:
@@ -424,6 +456,8 @@ int mrn_deinit(void *p)
     pthread_mutex_unlock(&mrn_allocated_thds_mutex);
   }
 
+  my_hash_free(&mrn_open_tables);
+  pthread_mutex_destroy(&mrn_open_tables_mutex);
   my_hash_free(&mrn_allocated_thds);
   pthread_mutex_destroy(&mrn_allocated_thds_mutex);
   pthread_mutex_destroy(&mrn_log_mutex);
@@ -898,11 +932,28 @@ ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
   }
 }
 
-int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
+int ha_mroonga::wrapper_create(const char *name, TABLE *table,
+                               HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
 {
-  DBUG_ENTER("ha_mroonga::create");
-  /* checking data type of virtual columns */
-  int i;
+  int error;
+  handler *hnd;
+  DBUG_ENTER("ha_mroonga::wrapper_create");
+  /* TODO: create groonga index */
+
+  if (!(hnd =
+      tmp_share->hton->create(tmp_share->hton, table->s,
+        current_thd->mem_root)))
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  error = hnd->ha_create(name, table, info);
+  delete hnd;
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::default_create(const char *name, TABLE *table,
+                               HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
+{
+  int error, i;
+  DBUG_ENTER("ha_mroonga::default_create");
   uint n_columns = table->s->fields;
   for (i = 0; i < n_columns; i++) {
     Field *field = table->s->field[i];
@@ -918,9 +969,10 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
         break;
       default:
         GRN_LOG(ctx, GRN_LOG_ERROR, "_id must be numeric data type");
-        my_message(ER_CANT_CREATE_TABLE, "_id must be numeric data type", MYF(0));
-        DBUG_RETURN(ER_CANT_CREATE_TABLE);
-      }        
+        error = ER_CANT_CREATE_TABLE;
+        my_message(error, "_id must be numeric data type", MYF(0));
+        DBUG_RETURN(error);
+     }
     }
     if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
       switch (field->type()) {
@@ -929,9 +981,10 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
         break;
       default:
         GRN_LOG(ctx, GRN_LOG_ERROR, "_score must be float or double");
-        my_message(ER_CANT_CREATE_TABLE, "_score must be float or double", MYF(0));
-        DBUG_RETURN(ER_CANT_CREATE_TABLE);
-      }        
+        error = ER_CANT_CREATE_TABLE;
+        my_message(error, "_score must be float or double", MYF(0));
+        DBUG_RETURN(error);
+      }
     }
   }
 
@@ -943,8 +996,9 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     int key_parts = key_info.key_parts;
     if (key_parts != 1) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
-      my_message(ER_NOT_SUPPORTED_YET, "complex key is not supported yet.", MYF(0));
-      DBUG_RETURN(ER_NOT_SUPPORTED_YET);
+      error = ER_NOT_SUPPORTED_YET;
+      my_message(error, "complex key is not supported yet.", MYF(0));
+      DBUG_RETURN(error);
     }
     Field *field = key_info.key_part[0].field;
     const char *col_name = field->field_name;
@@ -954,13 +1008,15 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
         continue; // hash index is ok
       }
       GRN_LOG(ctx, GRN_LOG_ERROR, "only hash index can be defined for _id");
-      my_message(ER_CANT_CREATE_TABLE, "only hash index can be defined for _id", MYF(0));
-      DBUG_RETURN(ER_CANT_CREATE_TABLE);
+      error = ER_CANT_CREATE_TABLE;
+      my_message(error, "only hash index can be defined for _id", MYF(0));
+      DBUG_RETURN(error);
     }
     if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "_score cannot be used for index");
-      my_message(ER_CANT_CREATE_TABLE, "_score cannot be used for index", MYF(0));
-      DBUG_RETURN(ER_CANT_CREATE_TABLE);  
+      error = ER_CANT_CREATE_TABLE;
+      my_message(error, "_score cannot be used for index", MYF(0));
+      DBUG_RETURN(error);
     }
   }
 
@@ -980,16 +1036,18 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
       db_obj = grn_db_create(ctx, db_path, NULL);
       if (ctx->rc) {
         pthread_mutex_unlock(&db_mutex);
-        my_message(ER_CANT_CREATE_FILE, ctx->errbuf, MYF(0));
-        DBUG_RETURN(ER_CANT_CREATE_FILE);
+        error = ER_CANT_CREATE_TABLE;
+        my_message(error, ctx->errbuf, MYF(0));
+        DBUG_RETURN(error);
       }
     } else {
       // opening existing database
       db_obj = grn_db_open(ctx, db_path);
       if (ctx->rc) {
         pthread_mutex_unlock(&db_mutex);
-        my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
-        DBUG_RETURN(ER_CANT_OPEN_FILE);
+        error = ER_CANT_OPEN_FILE;
+        my_message(error, ctx->errbuf, MYF(0));
+        DBUG_RETURN(error);
       }
     }
     mrn_hash_put(ctx, mrn_hash, db_name, db_obj);
@@ -1009,8 +1067,9 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     int key_parts = key_info.key_parts;
     if (key_parts != 1) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
-      my_message(ER_NOT_SUPPORTED_YET, "complex key is not supported yet", MYF(0));
-      DBUG_RETURN(ER_NOT_SUPPORTED_YET);
+      error = ER_NOT_SUPPORTED_YET;
+      my_message(error, "complex key is not supported yet", MYF(0));
+      DBUG_RETURN(error);
     }
     Field *pkey_field = key_info.key_part[0].field;
     const char *col_name = pkey_field->field_name;
@@ -1050,8 +1109,9 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   tbl_obj = grn_table_create(ctx, tbl_name, tbl_name_len, tbl_path,
                          tbl_flags, pkey_type, pkey_value_type);
   if (ctx->rc) {
-    my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-    DBUG_RETURN(ER_CANT_CREATE_TABLE);
+    error = ER_CANT_CREATE_TABLE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
   }
 
   /* create columns */
@@ -1074,8 +1134,9 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
                                 col_path, col_flags, col_type);
     if (ctx->rc) {
       grn_obj_remove(ctx, tbl_obj);
-      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(ER_CANT_CREATE_TABLE);
+      error = ER_CANT_CREATE_TABLE;
+      my_message(error, ctx->errbuf, MYF(0));
+      DBUG_RETURN(error);
     }
   }
 
@@ -1094,8 +1155,9 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     int key_parts = key_info.key_parts;
     if (key_parts != 1) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
-      my_message(ER_NOT_SUPPORTED_YET, "complex key is not supported yet.", MYF(0));
-      DBUG_RETURN(ER_NOT_SUPPORTED_YET);
+      error = ER_NOT_SUPPORTED_YET;
+      my_message(error, "complex key is not supported yet.", MYF(0));
+      DBUG_RETURN(error);
     }
 
     mrn_index_name_gen(tbl_name, i, idx_name);
@@ -1130,8 +1192,9 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
                                    idx_tbl_flags, col_type, 0);
     if (ctx->rc) {
       grn_obj_remove(ctx, tbl_obj);
+      error = ER_CANT_CREATE_TABLE;
       my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(ER_CANT_CREATE_TABLE);
+      DBUG_RETURN(error);
     }
 
     if (key_alg == HA_KEY_ALG_FULLTEXT) {
@@ -1146,8 +1209,9 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
     if (ctx->rc) {
       grn_obj_remove(ctx, idx_tbl_obj);
       grn_obj_remove(ctx, tbl_obj);
-      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(ER_CANT_CREATE_TABLE);
+      error = ER_CANT_CREATE_TABLE;
+      my_message(error, ctx->errbuf, MYF(0));
+      DBUG_RETURN(error);
     }
 
     grn_id gid = grn_obj_id(ctx, col_obj);
@@ -1159,8 +1223,29 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 
   /* clean up */
   grn_obj_unlink(ctx, tbl_obj);
-
   DBUG_RETURN(0);
+}
+
+int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
+{
+  int i, error = 0;
+  MRN_SHARE *tmp_share;
+  DBUG_ENTER("ha_mroonga::create");
+  /* checking data type of virtual columns */
+
+  if (!(tmp_share = mrn_get_share(name, table, &error)))
+    DBUG_RETURN(error);
+
+  if (tmp_share->wrapper_mode)
+  {
+    /* create wrapped table */
+    error = wrapper_create(name, table, info, tmp_share);
+  } else {
+    error = default_create(name, table, info, tmp_share);
+  }
+
+  mrn_free_share(tmp_share);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
@@ -1301,27 +1386,49 @@ int ha_mroonga::close()
   DBUG_RETURN(0);
 }
 
-int ha_mroonga::delete_table(const char *name)
+int ha_mroonga::wrapper_delete_table(const char *name, MRN_SHARE *tmp_share)
 {
-  DBUG_ENTER("ha_mroonga::delete_table");
+  int error;
+  handler *hnd;
+  DBUG_ENTER("ha_mroonga::wrapper_delete_table");
+  if (!(hnd =
+      tmp_share->hton->create(tmp_share->hton, table->s,
+      current_thd->mem_root)))
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+
+  if ((error = hnd->ha_delete_table(name)))
+  {
+    delete hnd;
+    DBUG_RETURN(error);
+  }
+
+  /* TODO: create groonga index */
+
+  delete hnd;
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::default_delete_table(const char *name, MRN_SHARE *tmp_share,
+                                     const char *tbl_name)
+{
+  int error;
+  TABLE_SHARE *tmp_table_share = tmp_share->table_share;
+  DBUG_ENTER("ha_mroonga::default_delete_table");
   char db_path[MRN_MAX_PATH_SIZE];
-  char tbl_name[MRN_MAX_PATH_SIZE];
   char idx_name[MRN_MAX_PATH_SIZE];
 
   grn_obj *db_obj, *tbl_obj, *lex_obj, *hash_obj, *pat_obj;
   mrn_db_path_gen(name, db_path);
   db_obj = grn_db_open(ctx, db_path);
   if (ctx->rc) {
-    my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
-    DBUG_RETURN(ER_CANT_OPEN_FILE);
+    error = ER_CANT_OPEN_FILE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
   }
   grn_ctx_use(ctx, db_obj);
 
-  mrn_table_name_gen(name, tbl_name);
-
-  /* FIXME: remove const 100 */
   int i;
-  for (i = 0; i < 100; i++) { // 100 is enough
+  for (i = 0; i < tmp_table_share->keys; i++) {
     mrn_index_name_gen(tbl_name, i, idx_name);
     grn_obj *idx_tbl_obj = grn_ctx_get(ctx, idx_name, strlen(idx_name));
     if (idx_tbl_obj != NULL) {
@@ -1331,10 +1438,76 @@ int ha_mroonga::delete_table(const char *name)
 
   tbl_obj = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
   if (ctx->rc) {
-    my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
-    DBUG_RETURN(ER_CANT_OPEN_FILE);
+    error = ER_CANT_OPEN_FILE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
   }
-  DBUG_RETURN(grn_obj_remove(ctx, tbl_obj));
+  error = grn_obj_remove(ctx, tbl_obj);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::delete_table(const char *name)
+{
+  int error = 0;
+  char db_name[MRN_MAX_PATH_SIZE];
+  char tbl_name[MRN_MAX_PATH_SIZE];
+  TABLE_LIST table_list;
+  TABLE_SHARE *tmp_table_share;
+  TABLE tmp_table;
+  MRN_SHARE *tmp_share;
+  DBUG_ENTER("ha_mroonga::delete_table");
+  mrn_db_name_gen(name, db_name);
+  mrn_table_name_gen(name, tbl_name);
+#if MYSQL_VERSION_ID >= 50500
+  table_list.init_one_table(db_name, strlen(db_name),
+                            tbl_name, strlen(tbl_name), tbl_name, TL_WRITE);
+  mysql_mutex_lock(&LOCK_open);
+#else
+  table_list.init_one_table(db_name, tbl_name, TL_WRITE);
+  pthread_mutex_lock(&LOCK_open);
+#endif
+  if (!(tmp_table_share = mrn_get_table_share(&table_list, &error)))
+  {
+#if MYSQL_VERSION_ID >= 50500
+    mysql_mutex_unlock(&LOCK_open);
+#else
+    pthread_mutex_unlock(&LOCK_open);
+#endif
+    DBUG_RETURN(error);
+  }
+#if MYSQL_VERSION_ID >= 50500
+  mysql_mutex_unlock(&LOCK_open);
+#else
+  pthread_mutex_unlock(&LOCK_open);
+#endif
+  tmp_table.s = tmp_table_share;
+  tmp_table.part_info = NULL;
+  if (!(tmp_share = mrn_get_share(name, &tmp_table, &error)))
+  {
+    mrn_free_table_share(tmp_table_share);
+    DBUG_RETURN(error);
+  }
+
+  if (tmp_share->wrapper_mode)
+  {
+    error = wrapper_delete_table(name, tmp_share);
+  } else {
+    error = default_delete_table(name, tmp_share, tbl_name);
+  }
+
+  mrn_free_share(tmp_share);
+#if MYSQL_VERSION_ID >= 50500
+  mysql_mutex_lock(&LOCK_open);
+#else
+  pthread_mutex_lock(&LOCK_open);
+#endif
+  mrn_free_table_share(tmp_table_share);
+#if MYSQL_VERSION_ID >= 50500
+  mysql_mutex_unlock(&LOCK_open);
+#else
+  pthread_mutex_unlock(&LOCK_open);
+#endif
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::info(uint flag)
