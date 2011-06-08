@@ -35,8 +35,31 @@ typedef struct st_mroonga_share
   int                engine_length;
   plugin_ref         plugin;
   handlerton         *hton;
+  uint               *wrap_keynr;
+  uint               wrap_keys;
+  uint               base_keys;
+  KEY                *wrap_key_info;
+  KEY                *base_key_info;
+  uint               wrap_primary_key;
+  uint               base_primary_key;
   bool               wrapper_mode;
 } MRN_SHARE;
+
+#define MRN_SET_WRAP_SHARE_KEY(share, table_share) \
+  table_share->keys = share->wrap_keys; \
+  table_share->key_info = share->wrap_key_info; \
+  table_share->primary_key = share->wrap_primary_key;
+
+#define MRN_SET_BASE_SHARE_KEY(share, table_share) \
+  table_share->keys = share->base_keys; \
+  table_share->key_info = share->base_key_info; \
+  table_share->primary_key = share->base_primary_key;
+
+#define MRN_SET_WRAP_TABLE_KEY(file, table) \
+  table->key_info = file->wrap_key_info;
+
+#define MRN_SET_BASE_TABLE_KEY(file, table) \
+  table->key_info = file->base_key_info;
 
 char *mrn_create_string(const char *str, uint length);
 char *mrn_get_string_between_quote(char *ptr, bool alloc);
@@ -50,5 +73,6 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error);
 int mrn_free_share(MRN_SHARE *share);
 TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error);
 void mrn_free_table_share(TABLE_SHARE *share);
+KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
 
 #endif /* _mrn_table_h */

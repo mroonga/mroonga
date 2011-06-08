@@ -69,6 +69,10 @@ class ha_mroonga: public handler
   THR_LOCK thr_lock;
   THR_LOCK_DATA thr_lock_data;
 
+  MRN_SHARE *share;
+  KEY       *wrap_key_info;
+  KEY       *base_key_info;
+
   grn_ctx *ctx;
 
   grn_obj *db;

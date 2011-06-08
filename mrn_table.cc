@@ -440,7 +440,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
   MRN_SHARE *share;
   char *tmp_name;
-  uint length;
+  uint length, *wrap_keynr, i, j;
+  KEY *wrap_key_info;
   DBUG_ENTER("mrn_get_share");
   length = (uint) strlen(table_name);
   pthread_mutex_lock(&mrn_open_tables_mutex);
@@ -451,6 +452,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &share, sizeof(*share),
         &tmp_name, length + 1,
+        &wrap_keynr, sizeof(*wrap_keynr) * table->s->keys,
+        &wrap_key_info, sizeof(*wrap_key_info) * table->s->keys,
         NullS))
     ) {
       *error = HA_ERR_OUT_OF_MEM;
@@ -464,6 +467,41 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 
     if ((*error = mrn_parse_table_param(share, table)))
       goto error_parse_table_param;
+
+    if (share->wrapper_mode)
+    {
+      j = 0;
+      for (i = 0; i < table->s->keys; i++)
+      {
+        if (table->s->key_info[i].algorithm != HA_KEY_ALG_FULLTEXT)
+        {
+          wrap_keynr[i] = j;
+          memcpy(&wrap_key_info[j], &table->s->key_info[i],
+                 sizeof(*wrap_key_info));
+          j++;
+        } else {
+          wrap_keynr[i] = MAX_KEY;
+        }
+      }
+      share->wrap_keys = j;
+      share->base_keys = table->s->keys;
+      share->base_key_info = table->s->key_info;
+      share->base_primary_key = table->s->primary_key;
+      if (i)
+      {
+        share->wrap_keynr = wrap_keynr;
+        share->wrap_key_info = wrap_key_info;
+        if (table->s->primary_key == MAX_KEY)
+          share->wrap_primary_key = MAX_KEY;
+        else
+          share->wrap_primary_key = wrap_keynr[table->s->primary_key];
+      } else {
+        share->wrap_keynr = NULL;
+        share->wrap_key_info = NULL;
+        share->wrap_primary_key = MAX_KEY;
+      }
+    }
+
     if (pthread_mutex_init(&share->mutex, MY_MUTEX_INIT_FAST))
     {
       *error = HA_ERR_OUT_OF_MEM;
@@ -539,4 +577,34 @@ void mrn_free_table_share(TABLE_SHARE *share)
   release_table_share(share, RELEASE_NORMAL);
 #endif
   DBUG_VOID_RETURN;
+}
+
+KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
+{
+  uint *wrap_keynr = share->wrap_keynr, i, j;
+  KEY *wrap_key_info;
+  DBUG_ENTER("mrn_create_key_info_for_table");
+  if (share->wrap_keys)
+  {
+    if (!(wrap_key_info = (KEY *)
+      my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+        &wrap_key_info, sizeof(*wrap_key_info) * share->wrap_keys,
+        NullS))
+    ) {
+      *error = HA_ERR_OUT_OF_MEM;
+      DBUG_RETURN(NULL);
+    }
+    for (i = 0; i < table->s->keys; i++)
+    {
+      j = wrap_keynr[i];
+      if (j < MAX_KEY)
+      {
+        memcpy(&wrap_key_info[j], &table->key_info[i],
+               sizeof(*wrap_key_info));
+      }
+    }
+  } else
+    wrap_key_info = NULL;
+  *error = 0;
+  DBUG_RETURN(wrap_key_info);
 }

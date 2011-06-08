@@ -942,12 +942,38 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   DBUG_ENTER("ha_mroonga::wrapper_create");
   /* TODO: create groonga index */
 
+  wrap_key_info = mrn_create_key_info_for_table(tmp_share, table, &error);
+  if (error)
+    DBUG_RETURN(error);
+  base_key_info = table->key_info;
+
+  MRN_SET_WRAP_SHARE_KEY(tmp_share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
   if (!(hnd =
       tmp_share->hton->create(tmp_share->hton, table->s,
         current_thd->mem_root)))
+  {
+    MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+    if (wrap_key_info)
+    {
+      my_free(wrap_key_info, MYF(0));
+      wrap_key_info = NULL;
+    }
+    base_key_info = NULL;
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  }
   error = hnd->ha_create(name, table, info);
+  MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
   delete hnd;
+
+  if (wrap_key_info)
+  {
+    my_free(wrap_key_info, MYF(0));
+    wrap_key_info = NULL;
+  }
+  base_key_info = NULL;
   DBUG_RETURN(error);
 }
 
@@ -1393,10 +1419,15 @@ int ha_mroonga::wrapper_delete_table(const char *name, MRN_SHARE *tmp_share)
   int error;
   handler *hnd;
   DBUG_ENTER("ha_mroonga::wrapper_delete_table");
+  MRN_SET_WRAP_SHARE_KEY(tmp_share, tmp_share->table_share);
   if (!(hnd =
-      tmp_share->hton->create(tmp_share->hton, table->s,
+      tmp_share->hton->create(tmp_share->hton, tmp_share->table_share,
       current_thd->mem_root)))
+  {
+    MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  }
+  MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
 
   if ((error = hnd->ha_delete_table(name)))
   {
@@ -1473,6 +1504,8 @@ int ha_mroonga::delete_table(const char *name)
     DBUG_RETURN(error);
   }
   mysql_mutex_unlock(&LOCK_open);
+  /* This is previous version */
+  tmp_table_share->version--;
   tmp_table.s = tmp_table_share;
   tmp_table.part_info = NULL;
   if (!(tmp_share = mrn_get_share(name, &tmp_table, &error)))
