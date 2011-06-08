@@ -60,14 +60,14 @@
 #include "mrn_table.h"
 #include "ha_mroonga.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #if MYSQL_VERSION_ID >= 50500
 extern mysql_mutex_t LOCK_open;
 #else
 extern pthread_mutex_t LOCK_open;
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 /* global variables */
