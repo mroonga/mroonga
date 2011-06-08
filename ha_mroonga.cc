@@ -64,6 +64,8 @@
 extern mysql_mutex_t LOCK_open;
 #else
 extern pthread_mutex_t LOCK_open;
+#  define mysql_mutex_lock(mutex) pthread_mutex_lock(mutex)
+#  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
 #endif
 
 #ifdef __cplusplus
@@ -1461,25 +1463,16 @@ int ha_mroonga::delete_table(const char *name)
 #if MYSQL_VERSION_ID >= 50500
   table_list.init_one_table(db_name, strlen(db_name),
                             tbl_name, strlen(tbl_name), tbl_name, TL_WRITE);
-  mysql_mutex_lock(&LOCK_open);
 #else
   table_list.init_one_table(db_name, tbl_name, TL_WRITE);
-  pthread_mutex_lock(&LOCK_open);
 #endif
+  mysql_mutex_lock(&LOCK_open);
   if (!(tmp_table_share = mrn_get_table_share(&table_list, &error)))
   {
-#if MYSQL_VERSION_ID >= 50500
     mysql_mutex_unlock(&LOCK_open);
-#else
-    pthread_mutex_unlock(&LOCK_open);
-#endif
     DBUG_RETURN(error);
   }
-#if MYSQL_VERSION_ID >= 50500
   mysql_mutex_unlock(&LOCK_open);
-#else
-  pthread_mutex_unlock(&LOCK_open);
-#endif
   tmp_table.s = tmp_table_share;
   tmp_table.part_info = NULL;
   if (!(tmp_share = mrn_get_share(name, &tmp_table, &error)))
@@ -1496,17 +1489,9 @@ int ha_mroonga::delete_table(const char *name)
   }
 
   mrn_free_share(tmp_share);
-#if MYSQL_VERSION_ID >= 50500
   mysql_mutex_lock(&LOCK_open);
-#else
-  pthread_mutex_lock(&LOCK_open);
-#endif
   mrn_free_table_share(tmp_table_share);
-#if MYSQL_VERSION_ID >= 50500
   mysql_mutex_unlock(&LOCK_open);
-#else
-  pthread_mutex_unlock(&LOCK_open);
-#endif
   DBUG_RETURN(error);
 }
 
