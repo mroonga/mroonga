@@ -1754,7 +1754,7 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
         if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
           my_message(ER_DATA_TOO_LONG, "cannot update value to _id column", MYF(0));
           DBUG_RETURN(ER_DATA_TOO_LONG);
-        } 
+        }
         if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
           my_message(ER_DATA_TOO_LONG, "cannot update value to _score column", MYF(0));
           DBUG_RETURN(ER_DATA_TOO_LONG);
