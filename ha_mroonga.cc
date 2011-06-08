@@ -106,7 +106,7 @@ long mrn_fast_order_limit = 0;
 const char *mrn_logfile_name = MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
 int mrn_logfile_opened = 0;
-grn_log_level mrn_log_level_default = GRN_LOG_DUMP;
+grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
 
 void mrn_logger_func(int level, const char *time, const char *title,
