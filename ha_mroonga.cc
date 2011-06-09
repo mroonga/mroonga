@@ -1029,37 +1029,9 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   if (error != 0)
     DBUG_RETURN(error);
 
-  /* checking if index is used for virtual columns  */
-  uint n_keys = table->s->keys;
-  for (i = 0; i < n_keys; i++) {
-    KEY key_info = table->s->key_info[i];
-    // must be single column key
-    int key_parts = key_info.key_parts;
-    if (key_parts != 1) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
-      error = ER_NOT_SUPPORTED_YET;
-      my_message(error, "complex key is not supported yet.", MYF(0));
-      DBUG_RETURN(error);
-    }
-    Field *field = key_info.key_part[0].field;
-    const char *col_name = field->field_name;
-    int col_name_size = strlen(col_name);
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-      if (key_info.algorithm == HA_KEY_ALG_HASH) {
-        continue; // hash index is ok
-      }
-      GRN_LOG(ctx, GRN_LOG_ERROR, "only hash index can be defined for _id");
-      error = ER_CANT_CREATE_TABLE;
-      my_message(error, "only hash index can be defined for _id", MYF(0));
-      DBUG_RETURN(error);
-    }
-    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "_score cannot be used for index");
-      error = ER_CANT_CREATE_TABLE;
-      my_message(error, "_score cannot be used for index", MYF(0));
-      DBUG_RETURN(error);
-    }
-  }
+  error = default_create_validate_index(table);
+  if (error != 0)
+    DBUG_RETURN(error);
 
   /* before creating table, we must check if database is alreadly opened, created */
   grn_obj *db_obj;
@@ -1185,6 +1157,7 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   /* create indexes */
   char idx_name[MRN_MAX_PATH_SIZE];
 
+  uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
     if (i == pkeynr) {
       continue; // pkey is already handled
@@ -1266,6 +1239,47 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   /* clean up */
   grn_obj_unlink(ctx, tbl_obj);
   DBUG_RETURN(0);
+}
+
+int ha_mroonga::default_create_validate_index(TABLE *table)
+{
+  int error = 0;
+  uint i;
+
+  DBUG_ENTER("ha_mroonga::default_create_validate_index");
+  /* checking if index is used for virtual columns  */
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    KEY key_info = table->s->key_info[i];
+    // must be single column key
+    int key_parts = key_info.key_parts;
+    if (key_parts != 1) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
+      error = ER_NOT_SUPPORTED_YET;
+      my_message(error, "complex key is not supported yet.", MYF(0));
+      DBUG_RETURN(error);
+    }
+    Field *field = key_info.key_part[0].field;
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      if (key_info.algorithm == HA_KEY_ALG_HASH) {
+        continue; // hash index is ok
+      }
+      GRN_LOG(ctx, GRN_LOG_ERROR, "only hash index can be defined for _id");
+      error = ER_CANT_CREATE_TABLE;
+      my_message(error, "only hash index can be defined for _id", MYF(0));
+      DBUG_RETURN(error);
+    }
+    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "_score cannot be used for index");
+      error = ER_CANT_CREATE_TABLE;
+      my_message(error, "_score cannot be used for index", MYF(0));
+      DBUG_RETURN(error);
+    }
+  }
+
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)

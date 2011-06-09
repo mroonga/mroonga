@@ -216,6 +216,7 @@ private:
   int default_create(const char *name, TABLE *table,
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
   int default_create_validate_pseudo_column(TABLE *table);
+  int default_create_validate_index(TABLE *table);
   int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share);
   int default_delete_table(const char *name, MRN_SHARE *tmp_share,
                            const char *tbl_name);
