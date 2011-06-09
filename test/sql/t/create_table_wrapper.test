@@ -116,26 +116,26 @@ desc t1;
 drop table t1;
 
 # virtual columns
-create table t1 (c1 int, `_id` int) engine = groonga;
+create table t1 (c1 int, `_id` int) COMMENT = 'engine "innodb"';
 desc t1;
 drop table t1;
-create table t1 (c1 int, `_score` float) engine = groonga;
+create table t1 (c1 int, `_score` float) COMMENT = 'engine "innodb"';
 desc t1;
 drop table t1;
 
 # error
 --error 1005
-create table `_aaa` (c1 int) engine = groonga;
+create table `_aaa` (c1 int) COMMENT = 'engine "innodb"';
 
 # checking for virtual columns
 --error 1005
-create table t1 (c1 int, `_id` text) engine = groonga;
+create table t1 (c1 int, `_id` text) COMMENT = 'engine "innodb"';
 --error 1005
-create table t1 (c1 int, `_score` int) engine = groonga;
+create table t1 (c1 int, `_score` int) COMMENT = 'engine "innodb"';
 --error 1005
-create table t1 (c1 int, `_id` int, index(`_id`)) engine = groonga;
+create table t1 (c1 int, `_id` int, index(`_id`)) COMMENT = 'engine "innodb"';
 --error 1005
-create table t1 (c1 int, `_score` double, index(`_score`)) engine = groonga;
+create table t1 (c1 int, `_score` double, index(`_score`)) COMMENT = 'engine "innodb"';
 
 # index for _id
 --error 1005
