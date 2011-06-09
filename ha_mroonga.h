@@ -173,7 +173,11 @@ public:
 
   int reset();
 
+#if MYSQL_VERSION_ID >= 50513
+  handler *clone(const char *name, MEM_ROOT *mem_root);
+#else
   handler *clone(MEM_ROOT *mem_root);
+#endif
   uint8 table_cache_type();
   int read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
                              KEY_MULTI_RANGE *ranges,

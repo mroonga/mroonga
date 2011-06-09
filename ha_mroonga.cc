@@ -2787,11 +2787,19 @@ int ha_mroonga::reset()
   DBUG_RETURN(0);
 }
 
+#if MYSQL_VERSION_ID >= 50513
+handler *ha_mroonga::clone(const char *name, MEM_ROOT *mem_root)
+{
+  DBUG_ENTER("ha_mroonga::clone");
+  DBUG_RETURN(handler::clone(name, mem_root));
+}
+#else
 handler *ha_mroonga::clone(MEM_ROOT *mem_root)
 {
   DBUG_ENTER("ha_mroonga::clone");
   DBUG_RETURN(handler::clone(mem_root));
 }
+#endif
 
 uint8 ha_mroonga::table_cache_type()
 {
