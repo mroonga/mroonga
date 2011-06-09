@@ -75,7 +75,7 @@ extern "C" {
 /* global variables */
 grn_obj *mrn_db;
 grn_hash *mrn_hash;
-pthread_mutex_t db_mutex;
+pthread_mutex_t mrn_db_mutex;
 pthread_mutex_t mrn_log_mutex;
 _ft_vft mrn_ft_vft = {
   NULL, // mrn_ft_read_next
@@ -400,7 +400,7 @@ int mrn_init(void *p)
   }
 
   // init lock
-  if ((pthread_mutex_init(&db_mutex, NULL) != 0)) {
+  if ((pthread_mutex_init(&mrn_db_mutex, NULL) != 0)) {
     goto err_db_mutex_init;
   }
   if ((pthread_mutex_init(&mrn_allocated_thds_mutex, NULL) != 0)) {
@@ -428,7 +428,7 @@ err_allocated_open_tables_mutex_init:
 error_allocated_thds_hash_init:
   pthread_mutex_destroy(&mrn_allocated_thds_mutex);
 err_allocated_thds_mutex_init:
-  pthread_mutex_destroy(&db_mutex);
+  pthread_mutex_destroy(&mrn_db_mutex);
 err_db_mutex_init:
 err:
   pthread_mutex_destroy(&mrn_log_mutex);
@@ -463,7 +463,7 @@ int mrn_deinit(void *p)
   my_hash_free(&mrn_allocated_thds);
   pthread_mutex_destroy(&mrn_allocated_thds_mutex);
   pthread_mutex_destroy(&mrn_log_mutex);
-  pthread_mutex_destroy(&db_mutex);
+  pthread_mutex_destroy(&mrn_db_mutex);
   grn_hash_close(ctx, mrn_hash);
   grn_obj_unlink(ctx, mrn_db);
 
@@ -1056,14 +1056,14 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   mrn_db_name_gen(name, db_name);
   mrn_db_path_gen(name, db_path);
 
-  pthread_mutex_lock(&db_mutex);
+  pthread_mutex_lock(&mrn_db_mutex);
   if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db_obj)) != 0) {
     if (stat(db_path, &dummy)) {
       // creating new database
       GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db_path);
       db_obj = grn_db_create(ctx, db_path, NULL);
       if (ctx->rc) {
-        pthread_mutex_unlock(&db_mutex);
+        pthread_mutex_unlock(&mrn_db_mutex);
         error = ER_CANT_CREATE_TABLE;
         my_message(error, ctx->errbuf, MYF(0));
         DBUG_RETURN(error);
@@ -1072,7 +1072,7 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
       // opening existing database
       db_obj = grn_db_open(ctx, db_path);
       if (ctx->rc) {
-        pthread_mutex_unlock(&db_mutex);
+        pthread_mutex_unlock(&mrn_db_mutex);
         error = ER_CANT_OPEN_FILE;
         my_message(error, ctx->errbuf, MYF(0));
         DBUG_RETURN(error);
@@ -1080,7 +1080,7 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
     }
     mrn_hash_put(ctx, mrn_hash, db_name, db_obj);
   }
-  pthread_mutex_unlock(&db_mutex);
+  pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db_obj);
 
   grn_obj_flags tbl_flags = GRN_OBJ_PERSISTENT;
@@ -1289,18 +1289,18 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   mrn_db_name_gen(name, db_name);
   mrn_db_path_gen(name, db_path);
 
-  pthread_mutex_lock(&db_mutex);
+  pthread_mutex_lock(&mrn_db_mutex);
   // we should not call grn_db_open() very often. so we use cache.
   if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db)) != 0) {
     db = grn_db_open(ctx, db_path);
     if (ctx->rc) {
-      pthread_mutex_unlock(&db_mutex);
+      pthread_mutex_unlock(&mrn_db_mutex);
       my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
     mrn_hash_put(ctx, mrn_hash, db_name, db);
   }
-  pthread_mutex_unlock(&db_mutex);
+  pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db);
 
   /* open table */
