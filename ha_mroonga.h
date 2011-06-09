@@ -61,6 +61,7 @@ class ha_mroonga: public handler
   MRN_SHARE *share;
   KEY       *wrap_key_info;
   KEY       *base_key_info;
+  handler   *wrap_handler;
 
   grn_ctx *ctx;
 
@@ -210,6 +211,10 @@ private:
   int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share);
   int default_delete_table(const char *name, MRN_SHARE *tmp_share,
                            const char *tbl_name);
+  int wrapper_open(const char *name, int mode, uint test_if_locked);
+  int default_open(const char *name, int mode, uint test_if_locked);
+  int wrapper_close();
+  int default_close();
 };
 
 #ifdef __cplusplus

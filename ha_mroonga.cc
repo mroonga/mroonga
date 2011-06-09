@@ -1333,12 +1333,52 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
+int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  wrap_key_info = mrn_create_key_info_for_table(share, table, &error);
+  if (error)
+    DBUG_RETURN(error);
+  base_key_info = table->key_info;
+
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (!(wrap_handler =
+      share->hton->create(share->hton, table->s,
+        current_thd->mem_root)))
+  {
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+    if (wrap_key_info)
+    {
+      my_free(wrap_key_info, MYF(0));
+      wrap_key_info = NULL;
+    }
+    base_key_info = NULL;
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  }
+  error = wrap_handler->ha_open(table, name, mode, test_if_locked);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+
+  if (error)
+  {
+    delete wrap_handler;
+    wrap_handler = NULL;
+    if (wrap_key_info)
+    {
+      my_free(wrap_key_info, MYF(0));
+      wrap_key_info = NULL;
+    }
+    base_key_info = NULL;
+  }
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
 {
   MRN_DBUG_ENTER_METHOD();
-  thr_lock_init(&thr_lock);
-  thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
-
   /* First, we must check if database is alreadly opened */
   char db_name[MRN_MAX_PATH_SIZE];
   char db_path[MRN_MAX_PATH_SIZE];
@@ -1442,11 +1482,54 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
   DBUG_RETURN(0);
 }
 
-int ha_mroonga::close()
+int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  thr_lock_init(&thr_lock);
+  thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
+
+  if (!(share = mrn_get_share(name, table, &error)))
+    DBUG_RETURN(error);
+
+  if (share->wrapper_mode)
+  {
+    error = wrapper_open(name, mode, test_if_locked);
+  } else {
+    error = default_open(name, mode, test_if_locked);
+  }
+
+  if (error)
+  {
+    mrn_free_share(share);
+    share = NULL;
+  }
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::wrapper_close()
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  error = wrap_handler->close();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  delete wrap_handler;
+  wrap_handler = NULL;
+  if (wrap_key_info)
+  {
+    my_free(wrap_key_info, MYF(0));
+    wrap_key_info = NULL;
+  }
+  base_key_info = NULL;
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::default_close()
 {
   MRN_DBUG_ENTER_METHOD();
-  thr_lock_delete(&thr_lock);
-
   int i;
   uint n_keys = table->s->keys;
   uint pkeynr = table->s->primary_key;
@@ -1468,6 +1551,23 @@ int ha_mroonga::close()
   }
 
   free(col);
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::close()
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    error = wrapper_close();
+  } else {
+    error = default_close();
+  }
+
+  mrn_free_share(share);
+  share = NULL;
+  thr_lock_delete(&thr_lock);
   DBUG_RETURN(0);
 }
 
