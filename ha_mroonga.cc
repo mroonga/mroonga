@@ -90,13 +90,6 @@ grn_obj *mrn_db;
 grn_hash *mrn_hash;
 pthread_mutex_t mrn_db_mutex;
 pthread_mutex_t mrn_log_mutex;
-_ft_vft mrn_ft_vft = {
-  NULL, // mrn_ft_read_next
-  mrn_ft_find_relevance,
-  mrn_ft_close_search,
-  mrn_ft_get_relevance,
-  NULL // mrn_ft_reinit_search
-};
 handlerton *mrn_hton_ptr;
 HASH mrn_open_tables;
 pthread_mutex_t mrn_open_tables_mutex;
@@ -121,8 +114,9 @@ int mrn_logfile_opened = 0;
 grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
 
-void mrn_logger_func(int level, const char *time, const char *title,
-                     const char *msg, const char *location, void *func_arg)
+static void mrn_logger_func(int level, const char *time, const char *title,
+                            const char *msg, const char *location,
+                            void *func_arg)
 {
   const char slev[] = " EACewnid-";
   if (mrn_logfile_opened) {
@@ -144,11 +138,10 @@ grn_logger_info mrn_logger_info = {
 /* global hashes and mutexes */
 HASH mrn_allocated_thds;
 pthread_mutex_t mrn_allocated_thds_mutex;
-uchar *mrn_allocated_thds_get_key(
-  THD *thd,
-  size_t *length,
-  my_bool not_used __attribute__ ((unused))
-) {
+static uchar *mrn_allocated_thds_get_key(THD *thd,
+                                         size_t *length,
+                                         my_bool not_used __attribute__ ((unused)))
+{
   MRN_DBUG_ENTER_FUNCTION();
   *length = sizeof(THD *);
   DBUG_RETURN((uchar*) thd);
@@ -345,157 +338,12 @@ struct st_mysql_plugin i_s_groonga_stats =
 };
 /* End of groonga information schema implementations */
 
-mysql_declare_plugin(mroonga)
-{
-  MYSQL_STORAGE_ENGINE_PLUGIN,
-  &storage_engine_structure,
-  "groonga",
-  "Tetsuro IKEDA",
-  "Fulltext search, column base",
-  0,
-  mrn_init,
-  mrn_deinit,
-  0x0001,
-  mrn_status_variables,
-  mrn_system_variables,
-  NULL
-},i_s_groonga_stats
-mysql_declare_plugin_end;
-
-int mrn_init(void *p)
-{
-  grn_ctx *ctx;
-
-  // init handlerton
-  handlerton *hton;
-  hton = (handlerton *)p;
-  hton->state = SHOW_OPTION_YES;
-  hton->create = mrn_handler_create;
-  hton->flags = 0;
-  hton->drop_database = mrn_drop_db;
-  hton->close_connection = mrn_close_connection;
-  hton->flush_logs = mrn_flush_logs;
-  mrn_hton_ptr = hton;
-
-  // init groonga
-  if (grn_init() != GRN_SUCCESS) {
-    goto err;
-  }
-
-  ctx = grn_ctx_open(0);
-
-  if (pthread_mutex_init(&mrn_log_mutex, NULL) != 0) {
-    goto err_log_mutex_init;
-  }
-  grn_logger_info_set(ctx, &mrn_logger_info);
-  if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
-    goto err;
-  }
-  mrn_logfile_opened = 1;
-  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s started.", MRN_PACKAGE_STRING);
-  GRN_LOG(ctx, GRN_LOG_NOTICE, "log level is '%s'",
-          mrn_log_level_type_names[mrn_log_level]);
-
-  // init meta-info database
-  if (!(mrn_db = grn_db_create(ctx, NULL, NULL))) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create system database, exiting");
-    goto err;
-  }
-  grn_ctx_use(ctx, mrn_db);
-
-  // init hash
-  if (!(mrn_hash = grn_hash_create(ctx,NULL,
-                                   MRN_MAX_KEY_SIZE,sizeof(size_t),
-                                   GRN_OBJ_KEY_VAR_SIZE))) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
-    goto err;
-  }
-
-  // init lock
-  if ((pthread_mutex_init(&mrn_db_mutex, NULL) != 0)) {
-    goto err_db_mutex_init;
-  }
-  if ((pthread_mutex_init(&mrn_allocated_thds_mutex, NULL) != 0)) {
-    goto err_allocated_thds_mutex_init;
-  }
-  if (my_hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
-                   (my_hash_get_key) mrn_allocated_thds_get_key, 0, 0)) {
-    goto error_allocated_thds_hash_init;
-  }
-  if ((pthread_mutex_init(&mrn_open_tables_mutex, NULL) != 0)) {
-    goto err_allocated_open_tables_mutex_init;
-  }
-  if (my_hash_init(&mrn_open_tables, system_charset_info, 32, 0, 0,
-                   (my_hash_get_key) mrn_open_tables_get_key, 0, 0)) {
-    goto error_allocated_open_tables_hash_init;
-  }
-
-  grn_ctx_fin(ctx);
-  return 0;
-
-error_allocated_open_tables_hash_init:
-  pthread_mutex_destroy(&mrn_open_tables_mutex);
-err_allocated_open_tables_mutex_init:
-  my_hash_free(&mrn_allocated_thds);
-error_allocated_thds_hash_init:
-  pthread_mutex_destroy(&mrn_allocated_thds_mutex);
-err_allocated_thds_mutex_init:
-  pthread_mutex_destroy(&mrn_db_mutex);
-err_db_mutex_init:
-err:
-  pthread_mutex_destroy(&mrn_log_mutex);
-err_log_mutex_init:
-  grn_ctx_fin(ctx);
-  grn_fin();
-  return -1;
-}
-
-int mrn_deinit(void *p)
-{
-  THD *thd = current_thd, *tmp_thd;
-  grn_ctx *ctx;
-  ctx = grn_ctx_open(0);
-
-  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
-
-  if (thd && thd_sql_command(thd) == SQLCOM_UNINSTALL_PLUGIN) {
-    pthread_mutex_lock(&mrn_allocated_thds_mutex);
-    while ((tmp_thd = (THD *) my_hash_element(&mrn_allocated_thds, 0)))
-    {
-      void *slot_ptr = *thd_ha_data(tmp_thd, mrn_hton_ptr);
-      if (slot_ptr) free(slot_ptr);
-      *thd_ha_data(tmp_thd, mrn_hton_ptr) = (void *) NULL;
-      my_hash_delete(&mrn_allocated_thds, (uchar *) tmp_thd);
-    }
-    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
-  }
-
-  my_hash_free(&mrn_open_tables);
-  pthread_mutex_destroy(&mrn_open_tables_mutex);
-  my_hash_free(&mrn_allocated_thds);
-  pthread_mutex_destroy(&mrn_allocated_thds_mutex);
-  pthread_mutex_destroy(&mrn_log_mutex);
-  pthread_mutex_destroy(&mrn_db_mutex);
-  grn_hash_close(ctx, mrn_hash);
-  grn_obj_unlink(ctx, mrn_db);
-
-  if (mrn_logfile_opened) {
-    fclose(mrn_logfile);
-    mrn_logfile_opened = 0;
-  }
-
-  grn_ctx_fin(ctx);
-  grn_fin();
-
-  return 0;
-}
-
-handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROOT *root)
+static handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROOT *root)
 {
   return (new (root) ha_mroonga(hton, share));
 }
 
-void mrn_drop_db(handlerton *hton, char *path)
+static void mrn_drop_db(handlerton *hton, char *path)
 {
   char db_path[MRN_MAX_PATH_SIZE];
   char db_name[MRN_MAX_PATH_SIZE];
@@ -514,7 +362,7 @@ void mrn_drop_db(handlerton *hton, char *path)
   grn_ctx_fin(ctx);
 }
 
-int mrn_close_connection(handlerton *hton, THD *thd)
+static int mrn_close_connection(handlerton *hton, THD *thd)
 {
   void *p = *thd_ha_data(thd, mrn_hton_ptr);
   if (p) {
@@ -527,7 +375,7 @@ int mrn_close_connection(handlerton *hton, THD *thd)
   return 0;
 }
 
-bool mrn_flush_logs(handlerton *hton)
+static bool mrn_flush_logs(handlerton *hton)
 {
   bool result = 0;
   if (mrn_logfile_opened) {
@@ -539,7 +387,7 @@ bool mrn_flush_logs(handlerton *hton)
   return result;
 }
 
-grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
+static grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
 {
   switch (mysql_field_type) {
   case MYSQL_TYPE_BIT:      // bit
@@ -571,7 +419,7 @@ grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
   return GRN_DB_TEXT;       // others
 }
 
-int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
+static int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
 {
   switch (field->type()) {
   case MYSQL_TYPE_BIT:
@@ -658,7 +506,8 @@ int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   return 0;
 }
 
-int mrn_set_key_buf(grn_ctx *ctx, Field *field, const uchar *key, char *buf, uint *size)
+static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
+                           const uchar *key, char *buf, uint *size)
 {
   char *ptr = (char*) key;
 
@@ -755,7 +604,7 @@ int mrn_set_key_buf(grn_ctx *ctx, Field *field, const uchar *key, char *buf, uin
   return 0;
 }
 
-void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
+static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
 {
   grn_obj buf;
   field->set_notnull();
@@ -829,7 +678,153 @@ void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
   grn_obj_unlink(ctx, &buf);
 }
 
-float mrn_ft_find_relevance(FT_INFO *handler, uchar *record, uint length)
+static int mrn_init(void *p)
+{
+  grn_ctx *ctx;
+
+  // init handlerton
+  handlerton *hton;
+  hton = (handlerton *)p;
+  hton->state = SHOW_OPTION_YES;
+  hton->create = mrn_handler_create;
+  hton->flags = 0;
+  hton->drop_database = mrn_drop_db;
+  hton->close_connection = mrn_close_connection;
+  hton->flush_logs = mrn_flush_logs;
+  mrn_hton_ptr = hton;
+
+  // init groonga
+  if (grn_init() != GRN_SUCCESS) {
+    goto err;
+  }
+
+  ctx = grn_ctx_open(0);
+
+  if (pthread_mutex_init(&mrn_log_mutex, NULL) != 0) {
+    goto err_log_mutex_init;
+  }
+  grn_logger_info_set(ctx, &mrn_logger_info);
+  if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
+    goto err;
+  }
+  mrn_logfile_opened = 1;
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s started.", MRN_PACKAGE_STRING);
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "log level is '%s'",
+          mrn_log_level_type_names[mrn_log_level]);
+
+  // init meta-info database
+  if (!(mrn_db = grn_db_create(ctx, NULL, NULL))) {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create system database, exiting");
+    goto err;
+  }
+  grn_ctx_use(ctx, mrn_db);
+
+  // init hash
+  if (!(mrn_hash = grn_hash_create(ctx,NULL,
+                                   MRN_MAX_KEY_SIZE,sizeof(size_t),
+                                   GRN_OBJ_KEY_VAR_SIZE))) {
+    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
+    goto err;
+  }
+
+  // init lock
+  if ((pthread_mutex_init(&mrn_db_mutex, NULL) != 0)) {
+    goto err_db_mutex_init;
+  }
+  if ((pthread_mutex_init(&mrn_allocated_thds_mutex, NULL) != 0)) {
+    goto err_allocated_thds_mutex_init;
+  }
+  if (my_hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
+                   (my_hash_get_key) mrn_allocated_thds_get_key, 0, 0)) {
+    goto error_allocated_thds_hash_init;
+  }
+  if ((pthread_mutex_init(&mrn_open_tables_mutex, NULL) != 0)) {
+    goto err_allocated_open_tables_mutex_init;
+  }
+  if (my_hash_init(&mrn_open_tables, system_charset_info, 32, 0, 0,
+                   (my_hash_get_key) mrn_open_tables_get_key, 0, 0)) {
+    goto error_allocated_open_tables_hash_init;
+  }
+
+  grn_ctx_fin(ctx);
+  return 0;
+
+error_allocated_open_tables_hash_init:
+  pthread_mutex_destroy(&mrn_open_tables_mutex);
+err_allocated_open_tables_mutex_init:
+  my_hash_free(&mrn_allocated_thds);
+error_allocated_thds_hash_init:
+  pthread_mutex_destroy(&mrn_allocated_thds_mutex);
+err_allocated_thds_mutex_init:
+  pthread_mutex_destroy(&mrn_db_mutex);
+err_db_mutex_init:
+err:
+  pthread_mutex_destroy(&mrn_log_mutex);
+err_log_mutex_init:
+  grn_ctx_fin(ctx);
+  grn_fin();
+  return -1;
+}
+
+static int mrn_deinit(void *p)
+{
+  THD *thd = current_thd, *tmp_thd;
+  grn_ctx *ctx;
+  ctx = grn_ctx_open(0);
+
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
+
+  if (thd && thd_sql_command(thd) == SQLCOM_UNINSTALL_PLUGIN) {
+    pthread_mutex_lock(&mrn_allocated_thds_mutex);
+    while ((tmp_thd = (THD *) my_hash_element(&mrn_allocated_thds, 0)))
+    {
+      void *slot_ptr = *thd_ha_data(tmp_thd, mrn_hton_ptr);
+      if (slot_ptr) free(slot_ptr);
+      *thd_ha_data(tmp_thd, mrn_hton_ptr) = (void *) NULL;
+      my_hash_delete(&mrn_allocated_thds, (uchar *) tmp_thd);
+    }
+    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
+  }
+
+  my_hash_free(&mrn_open_tables);
+  pthread_mutex_destroy(&mrn_open_tables_mutex);
+  my_hash_free(&mrn_allocated_thds);
+  pthread_mutex_destroy(&mrn_allocated_thds_mutex);
+  pthread_mutex_destroy(&mrn_log_mutex);
+  pthread_mutex_destroy(&mrn_db_mutex);
+  grn_hash_close(ctx, mrn_hash);
+  grn_obj_unlink(ctx, mrn_db);
+
+  if (mrn_logfile_opened) {
+    fclose(mrn_logfile);
+    mrn_logfile_opened = 0;
+  }
+
+  grn_ctx_fin(ctx);
+  grn_fin();
+
+  return 0;
+}
+
+mysql_declare_plugin(mroonga)
+{
+  MYSQL_STORAGE_ENGINE_PLUGIN,
+  &storage_engine_structure,
+  "groonga",
+  "Tetsuro IKEDA",
+  "Fulltext search, column base",
+  0,
+  mrn_init,
+  mrn_deinit,
+  0x0001,
+  mrn_status_variables,
+  mrn_system_variables,
+  NULL
+},i_s_groonga_stats
+mysql_declare_plugin_end;
+
+
+static float mrn_ft_find_relevance(FT_INFO *handler, uchar *record, uint length)
 {
   st_mrn_ft_info *info = (st_mrn_ft_info*) handler;
   if (info->rid != GRN_ID_NIL) {
@@ -850,18 +845,27 @@ float mrn_ft_find_relevance(FT_INFO *handler, uchar *record, uint length)
   return (float) -1.0;
 }
 
-float mrn_ft_get_relevance(FT_INFO *handler)
+static float mrn_ft_get_relevance(FT_INFO *handler)
 {
   return (float) -1.0;
 }
 
-void mrn_ft_close_search(FT_INFO *handler)
+static void mrn_ft_close_search(FT_INFO *handler)
 {
   st_mrn_ft_info *info = (st_mrn_ft_info*) handler;
   info->ctx = NULL;
   info->res = NULL;
   info->rid = GRN_ID_NIL;
 }
+
+static _ft_vft mrn_ft_vft = {
+  NULL, // mrn_ft_read_next
+  mrn_ft_find_relevance,
+  mrn_ft_close_search,
+  mrn_ft_get_relevance,
+  NULL // mrn_ft_reinit_search
+};
+
 
 /* handler implementation */
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
