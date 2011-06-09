@@ -30,7 +30,7 @@ extern "C" {
 #endif
 
 #include <groonga.h>
-#include "mrnsys.h"
+#include "mrn_sys.h"
 
 /* structs */
 struct st_mrn_statuses

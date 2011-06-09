@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "mrnsys.h"
+#include "mrn_sys.h"
 #include "config.h"
 
 int mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, void *value)

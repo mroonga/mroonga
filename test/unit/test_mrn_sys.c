@@ -18,7 +18,7 @@
 #include <string.h>
 #include <gcutter.h>
 #include <glib/gstdio.h>
-#include "mrnsys.h"
+#include "mrn_sys.h"
 
 grn_ctx *ctx;
 grn_obj *db;

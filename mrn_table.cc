@@ -29,7 +29,7 @@
 #include "sql_base.h"
 #endif
 #include "mrn_err.h"
-#include "mrnsys.h"
+#include "mrn_sys.h"
 #include "mrn_table.h"
 
 #define MRN_DEFAULT_STR "DEFAULT"
