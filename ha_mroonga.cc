@@ -991,40 +991,9 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   if (error != 0)
     DBUG_RETURN(error);
 
-  /* before creating table, we must check if database is alreadly opened, created */
-  grn_obj *db_obj;
-  char db_name[MRN_MAX_PATH_SIZE];
-  char db_path[MRN_MAX_PATH_SIZE];
-  struct stat dummy;
-  mrn_db_name_gen(name, db_name);
-  mrn_db_path_gen(name, db_path);
-
-  pthread_mutex_lock(&mrn_db_mutex);
-  if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db_obj)) != 0) {
-    if (stat(db_path, &dummy)) {
-      // creating new database
-      GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db_path);
-      db_obj = grn_db_create(ctx, db_path, NULL);
-      if (ctx->rc) {
-        pthread_mutex_unlock(&mrn_db_mutex);
-        error = ER_CANT_CREATE_TABLE;
-        my_message(error, ctx->errbuf, MYF(0));
-        DBUG_RETURN(error);
-      }
-    } else {
-      // opening existing database
-      db_obj = grn_db_open(ctx, db_path);
-      if (ctx->rc) {
-        pthread_mutex_unlock(&mrn_db_mutex);
-        error = ER_CANT_OPEN_FILE;
-        my_message(error, ctx->errbuf, MYF(0));
-        DBUG_RETURN(error);
-      }
-    }
-    mrn_hash_put(ctx, mrn_hash, db_name, db_obj);
-  }
-  pthread_mutex_unlock(&mrn_db_mutex);
-  grn_ctx_use(ctx, db_obj);
+  error = default_create_ensure_database_open(name);
+  if (error != 0)
+    DBUG_RETURN(error);
 
   grn_obj_flags tbl_flags = GRN_OBJ_PERSISTENT;
 
@@ -1281,6 +1250,50 @@ int ha_mroonga::default_create_validate_index(TABLE *table)
 
   DBUG_RETURN(error);
 }
+
+int ha_mroonga::default_create_ensure_database_open(const char *name)
+{
+  int error = 0;
+
+  DBUG_ENTER("ha_mroonga::default_create_ensure_database_open");
+  /* before creating table, we must check if database is alreadly opened, created */
+  grn_obj *db_obj;
+  char db_name[MRN_MAX_PATH_SIZE];
+  char db_path[MRN_MAX_PATH_SIZE];
+  struct stat dummy;
+  mrn_db_name_gen(name, db_name);
+  mrn_db_path_gen(name, db_path);
+
+  pthread_mutex_lock(&mrn_db_mutex);
+  if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db_obj)) != 0) {
+    if (stat(db_path, &dummy)) {
+      // creating new database
+      GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db_path);
+      db_obj = grn_db_create(ctx, db_path, NULL);
+      if (ctx->rc) {
+        pthread_mutex_unlock(&mrn_db_mutex);
+        error = ER_CANT_CREATE_TABLE;
+        my_message(error, ctx->errbuf, MYF(0));
+        DBUG_RETURN(error);
+      }
+    } else {
+      // opening existing database
+      db_obj = grn_db_open(ctx, db_path);
+      if (ctx->rc) {
+        pthread_mutex_unlock(&mrn_db_mutex);
+        error = ER_CANT_OPEN_FILE;
+        my_message(error, ctx->errbuf, MYF(0));
+        DBUG_RETURN(error);
+      }
+    }
+    mrn_hash_put(ctx, mrn_hash, db_name, db_obj);
+  }
+  pthread_mutex_unlock(&mrn_db_mutex);
+  grn_ctx_use(ctx, db_obj);
+
+  DBUG_RETURN(error);
+}
+
 
 int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 {
