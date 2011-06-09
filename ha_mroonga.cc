@@ -100,11 +100,10 @@ _ft_vft mrn_ft_vft = {
 handlerton *mrn_hton_ptr;
 HASH mrn_open_tables;
 pthread_mutex_t mrn_open_tables_mutex;
-uchar *grn_open_tables_get_key(
-  MRN_SHARE *share,
-  size_t *length,
-  my_bool not_used __attribute__ ((unused))
-) {
+static uchar *mrn_open_tables_get_key(MRN_SHARE *share,
+                                      size_t *length,
+                                      my_bool not_used __attribute__ ((unused)))
+{
   MRN_DBUG_ENTER_FUNCTION();
   *length = share->table_name_length;
   DBUG_RETURN((uchar*) share->table_name);
@@ -427,7 +426,7 @@ int mrn_init(void *p)
     goto err_allocated_open_tables_mutex_init;
   }
   if (my_hash_init(&mrn_open_tables, system_charset_info, 32, 0, 0,
-                   (my_hash_get_key) grn_open_tables_get_key, 0, 0)) {
+                   (my_hash_get_key) mrn_open_tables_get_key, 0, 0)) {
     goto error_allocated_open_tables_hash_init;
   }
 
