@@ -977,12 +977,13 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::default_create(const char *name, TABLE *table,
-                               HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
+int ha_mroonga::default_create_validate_pseudo_column(TABLE *table)
 {
-  int error, i;
-  DBUG_ENTER("ha_mroonga::default_create");
-  uint n_columns = table->s->fields;
+  int error = 0;
+  uint i, n_columns;
+
+  DBUG_ENTER("ha_mroonga::default_create_validate_pseudo_column");
+  n_columns = table->s->fields;
   for (i = 0; i < n_columns; i++) {
     Field *field = table->s->field[i];
     const char *col_name = field->field_name;
@@ -1000,9 +1001,8 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
         error = ER_CANT_CREATE_TABLE;
         my_message(error, "_id must be numeric data type", MYF(0));
         DBUG_RETURN(error);
-     }
-    }
-    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      }
+    } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
       switch (field->type()) {
       case (MYSQL_TYPE_FLOAT) :
       case (MYSQL_TYPE_DOUBLE) :
@@ -1015,6 +1015,19 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
       }
     }
   }
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::default_create(const char *name, TABLE *table,
+                               HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
+{
+  int error, i;
+  DBUG_ENTER("ha_mroonga::default_create");
+
+  error = default_create_validate_pseudo_column(table);
+  if (error != 0)
+    DBUG_RETURN(error);
 
   /* checking if index is used for virtual columns  */
   uint n_keys = table->s->keys;
@@ -1143,6 +1156,7 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   }
 
   /* create columns */
+  uint n_columns = table->s->fields;
   for (i = 0; i < n_columns; i++) {
     grn_obj *col_obj, *col_type;
     Field *field = table->s->field[i];
