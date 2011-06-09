@@ -1,6 +1,6 @@
 show global variables like 'groonga_log_level';
 Variable_name	Value
-groonga_log_level	DUMP
+groonga_log_level	NOTICE
 set global groonga_log_level=NONE;
 show global variables like 'groonga_log_level';
 Variable_name	Value
