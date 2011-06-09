@@ -1260,13 +1260,13 @@ int ha_mroonga::default_create_ensure_database_open(const char *name)
   grn_obj *db_obj;
   char db_name[MRN_MAX_PATH_SIZE];
   char db_path[MRN_MAX_PATH_SIZE];
-  struct stat dummy;
+  struct stat db_stat;
   mrn_db_name_gen(name, db_name);
   mrn_db_path_gen(name, db_path);
 
   pthread_mutex_lock(&mrn_db_mutex);
   if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db_obj)) != 0) {
-    if (stat(db_path, &dummy)) {
+    if (stat(db_path, &db_stat)) {
       // creating new database
       GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db_path);
       db_obj = grn_db_create(ctx, db_path, NULL);
