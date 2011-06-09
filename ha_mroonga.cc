@@ -977,48 +977,6 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::default_create_validate_pseudo_column(TABLE *table)
-{
-  int error = 0;
-  uint i, n_columns;
-
-  DBUG_ENTER("ha_mroonga::default_create_validate_pseudo_column");
-  n_columns = table->s->fields;
-  for (i = 0; i < n_columns; i++) {
-    Field *field = table->s->field[i];
-    const char *col_name = field->field_name;
-    int col_name_size = strlen(col_name);
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-      switch (field->type()) {
-      case (MYSQL_TYPE_TINY) :
-      case (MYSQL_TYPE_SHORT) :
-      case (MYSQL_TYPE_INT24) :
-      case (MYSQL_TYPE_LONG) :
-      case (MYSQL_TYPE_LONGLONG) :
-        break;
-      default:
-        GRN_LOG(ctx, GRN_LOG_ERROR, "_id must be numeric data type");
-        error = ER_CANT_CREATE_TABLE;
-        my_message(error, "_id must be numeric data type", MYF(0));
-        DBUG_RETURN(error);
-      }
-    } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
-      switch (field->type()) {
-      case (MYSQL_TYPE_FLOAT) :
-      case (MYSQL_TYPE_DOUBLE) :
-        break;
-      default:
-        GRN_LOG(ctx, GRN_LOG_ERROR, "_score must be float or double");
-        error = ER_CANT_CREATE_TABLE;
-        my_message(error, "_score must be float or double", MYF(0));
-        DBUG_RETURN(error);
-      }
-    }
-  }
-
-  DBUG_RETURN(error);
-}
-
 int ha_mroonga::default_create(const char *name, TABLE *table,
                                HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
 {
@@ -1239,6 +1197,48 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   /* clean up */
   grn_obj_unlink(ctx, tbl_obj);
   DBUG_RETURN(0);
+}
+
+int ha_mroonga::default_create_validate_pseudo_column(TABLE *table)
+{
+  int error = 0;
+  uint i, n_columns;
+
+  DBUG_ENTER("ha_mroonga::default_create_validate_pseudo_column");
+  n_columns = table->s->fields;
+  for (i = 0; i < n_columns; i++) {
+    Field *field = table->s->field[i];
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      switch (field->type()) {
+      case (MYSQL_TYPE_TINY) :
+      case (MYSQL_TYPE_SHORT) :
+      case (MYSQL_TYPE_INT24) :
+      case (MYSQL_TYPE_LONG) :
+      case (MYSQL_TYPE_LONGLONG) :
+        break;
+      default:
+        GRN_LOG(ctx, GRN_LOG_ERROR, "_id must be numeric data type");
+        error = ER_CANT_CREATE_TABLE;
+        my_message(error, "_id must be numeric data type", MYF(0));
+        DBUG_RETURN(error);
+      }
+    } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      switch (field->type()) {
+      case (MYSQL_TYPE_FLOAT) :
+      case (MYSQL_TYPE_DOUBLE) :
+        break;
+      default:
+        GRN_LOG(ctx, GRN_LOG_ERROR, "_score must be float or double");
+        error = ER_CANT_CREATE_TABLE;
+        my_message(error, "_score must be float or double", MYF(0));
+        DBUG_RETURN(error);
+      }
+    }
+  }
+
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::default_create_validate_index(TABLE *table)
