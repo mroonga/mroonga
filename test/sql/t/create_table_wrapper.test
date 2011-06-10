@@ -1,4 +1,5 @@
 # Copyright(C) 2010 Tetsuro IKEDA
+# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -113,42 +114,6 @@ desc t1;
 drop table t1;
 create table t1 (c1 set("A","B","AB","O")) COMMENT = 'engine "innodb"';
 desc t1;
-drop table t1;
-
-# virtual columns
-create table t1 (c1 int, `_id` int) COMMENT = 'engine "innodb"';
-desc t1;
-drop table t1;
-create table t1 (c1 int, `_score` float) COMMENT = 'engine "innodb"';
-desc t1;
-drop table t1;
-
-# error
---error 1005
-create table `_aaa` (c1 int) COMMENT = 'engine "innodb"';
-
-# checking for virtual columns
---error 1005
-create table t1 (c1 int, `_id` text) COMMENT = 'engine "innodb"';
---error 1005
-create table t1 (c1 int, `_score` int) COMMENT = 'engine "innodb"';
---error 1005
-create table t1 (c1 int, `_id` int, index(`_id`)) COMMENT = 'engine "innodb"';
---error 1005
-create table t1 (c1 int, `_score` double, index(`_score`)) COMMENT = 'engine "innodb"';
-
-# index for _id
---error 1005
-create table t1 (_id int, c1 int, primary key (_id)) COMMENT = 'engine "innodb"';
-create table t1 (_id int, c1 int, primary key (_id) using hash) COMMENT = 'engine "innodb"';
-drop table t1;
---error 1005
-create table t1 (_id int, c1 int, unique key (_id)) COMMENT = 'engine "innodb"';
-create table t1 (_id int, c1 int, unique key (_id) using hash) COMMENT = 'engine "innodb"';
-drop table t1;
---error 1005
-create table t1 (_id int, c1 int, key (_id)) COMMENT = 'engine "innodb"';
-create table t1 (_id int, c1 int, key (_id) using hash) COMMENT = 'engine "innodb"';
 drop table t1;
 
 --source suite/groonga/include/groonga_deinit.inc

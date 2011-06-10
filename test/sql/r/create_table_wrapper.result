@@ -146,37 +146,3 @@ desc t1;
 Field	Type	Null	Key	Default	Extra
 c1	set('A','B','AB','O')	YES		NULL	
 drop table t1;
-create table t1 (c1 int, `_id` int) COMMENT = 'engine "innodb"';
-desc t1;
-Field	Type	Null	Key	Default	Extra
-c1	int(11)	YES		NULL	
-_id	int(11)	YES		NULL	
-drop table t1;
-create table t1 (c1 int, `_score` float) COMMENT = 'engine "innodb"';
-desc t1;
-Field	Type	Null	Key	Default	Extra
-c1	int(11)	YES		NULL	
-_score	float	YES		NULL	
-drop table t1;
-create table `_aaa` (c1 int) COMMENT = 'engine "innodb"';
-ERROR HY000: [table][create]: name can't start with '_' and 0-9, and contains only 0-9, A-Z, a-z, or _: <_aaa>
-create table t1 (c1 int, `_id` text) COMMENT = 'engine "innodb"';
-ERROR HY000: _id must be numeric data type
-create table t1 (c1 int, `_score` int) COMMENT = 'engine "innodb"';
-ERROR HY000: _score must be float or double
-create table t1 (c1 int, `_id` int, index(`_id`)) COMMENT = 'engine "innodb"';
-ERROR HY000: only hash index can be defined for _id
-create table t1 (c1 int, `_score` double, index(`_score`)) COMMENT = 'engine "innodb"';
-ERROR HY000: _score cannot be used for index
-create table t1 (_id int, c1 int, primary key (_id)) COMMENT = 'engine "innodb"';
-ERROR HY000: only hash index can be defined for _id
-create table t1 (_id int, c1 int, primary key (_id) using hash) COMMENT = 'engine "innodb"';
-drop table t1;
-create table t1 (_id int, c1 int, unique key (_id)) COMMENT = 'engine "innodb"';
-ERROR HY000: only hash index can be defined for _id
-create table t1 (_id int, c1 int, unique key (_id) using hash) COMMENT = 'engine "innodb"';
-drop table t1;
-create table t1 (_id int, c1 int, key (_id)) COMMENT = 'engine "innodb"';
-ERROR HY000: only hash index can be defined for _id
-create table t1 (_id int, c1 int, key (_id) using hash) COMMENT = 'engine "innodb"';
-drop table t1;
