@@ -880,6 +880,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   res = NULL;
   res0 = NULL;
   sort_keys = NULL;
+  share = NULL;
   DBUG_VOID_RETURN;
 }
 
@@ -1698,6 +1699,32 @@ int ha_mroonga::info(uint flag)
   DBUG_RETURN(0);
 }
 
+uint ha_mroonga::wrapper_lock_count()
+{
+  uint lock_count;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  lock_count = wrap_handler->lock_count();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(lock_count + 1);
+}
+
+uint ha_mroonga::default_lock_count()
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(1);
+}
+
+uint ha_mroonga::lock_count()
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+    DBUG_RETURN(wrapper_lock_count());
+  DBUG_RETURN(default_lock_count());
+}
+
 THR_LOCK_DATA **ha_mroonga::store_lock(THD *thd, THR_LOCK_DATA **to,
                                        enum thr_lock_type lock_type)
 {
@@ -1772,7 +1799,7 @@ void ha_mroonga::position(const uchar *record)
   DBUG_VOID_RETURN;
 }
 
-int ha_mroonga::extra(enum ha_extra_function operation)
+int ha_mroonga::mrn_extra(enum ha_extra_function operation)
 {
   MRN_DBUG_ENTER_METHOD();
   switch (operation) {
@@ -1786,6 +1813,74 @@ int ha_mroonga::extra(enum ha_extra_function operation)
     break;
   }
   DBUG_RETURN(0);
+}
+
+int ha_mroonga::wrapper_extra(enum ha_extra_function operation)
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  error = wrap_handler->extra(operation);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::default_extra(enum ha_extra_function operation)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::extra(enum ha_extra_function operation)
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    if ((error = wrapper_extra(operation)))
+      DBUG_RETURN(error);
+  } else {
+    if ((error = default_extra(operation)))
+      DBUG_RETURN(error);
+  }
+  DBUG_RETURN(mrn_extra(operation));
+}
+
+int ha_mroonga::wrapper_extra_opt(enum ha_extra_function operation,
+                                  ulong cache_size)
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  error = wrap_handler->extra_opt(operation, cache_size);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::default_extra_opt(enum ha_extra_function operation,
+                                  ulong cache_size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::extra_opt(enum ha_extra_function operation, ulong cache_size)
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    if ((error = wrapper_extra_opt(operation, cache_size)))
+      DBUG_RETURN(error);
+  } else {
+    if ((error = default_extra_opt(operation, cache_size)))
+      DBUG_RETURN(error);
+  }
+  DBUG_RETURN(mrn_extra(operation));
 }
 
 int ha_mroonga::write_row(uchar *buf)
@@ -2924,7 +3019,19 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
   DBUG_VOID_RETURN;
 }
 
-int ha_mroonga::reset()
+int ha_mroonga::wrapper_reset()
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  error = wrap_handler->ha_reset();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::default_reset()
 {
   MRN_DBUG_ENTER_METHOD();
   if (sort_keys != NULL) {
@@ -2940,8 +3047,19 @@ int ha_mroonga::reset()
     _score = NULL;
     res = NULL;
   }
-  ignoring_duplicated_key = false;
   DBUG_RETURN(0);
+}
+
+int ha_mroonga::reset()
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+    error = wrapper_reset();
+  else
+    error = default_reset();
+  ignoring_duplicated_key = false;
+  DBUG_RETURN(error);
 }
 
 #if MYSQL_VERSION_ID >= 50513

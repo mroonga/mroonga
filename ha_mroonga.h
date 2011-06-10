@@ -112,6 +112,7 @@ public:
   int close();                                                     // required
   int info(uint flag);                                             // required
 
+  uint lock_count();
   THR_LOCK_DATA **store_lock(THD *thd,                             // required
 			     THR_LOCK_DATA **to,
 			     enum thr_lock_type lock_type);
@@ -122,6 +123,7 @@ public:
   int rnd_pos(uchar *buf, uchar *pos);                             // required
   void position(const uchar *record);                              // required
   int extra(enum ha_extra_function operation);
+  int extra_opt(enum ha_extra_function operation, ulong cache_size);
 
   int delete_table(const char *name);
   int write_row(uchar *buf);
@@ -215,6 +217,15 @@ private:
   int default_open(const char *name, int mode, uint test_if_locked);
   int wrapper_close();
   int default_close();
+  int mrn_extra(enum ha_extra_function operation);
+  int wrapper_extra(enum ha_extra_function operation);
+  int default_extra(enum ha_extra_function operation);
+  int wrapper_extra_opt(enum ha_extra_function operation, ulong cache_size);
+  int default_extra_opt(enum ha_extra_function operation, ulong cache_size);
+  int wrapper_reset();
+  int default_reset();
+  uint wrapper_lock_count();
+  uint default_lock_count();
 };
 
 #ifdef __cplusplus
