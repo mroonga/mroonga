@@ -14,7 +14,7 @@ fi
 export MYSQL_BUILD
 
 if test -z "$MYSQL_VERSION"; then
-    MYSQL_VERSEION="$(make -s -C $top_dir echo-mysql-version)"
+    MYSQL_VERSION="$(make -s -C $top_dir echo-mysql-version)"
 fi
 export MYSQL_VERSION
 
