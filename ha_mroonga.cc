@@ -1665,7 +1665,9 @@ int ha_mroonga::delete_table(const char *name)
   /* This is previous version */
   tmp_table_share->version--;
   tmp_table.s = tmp_table_share;
+#if MYSQL_VERSION_ID >= 50500
   tmp_table.part_info = NULL;
+#endif
   if (!(tmp_share = mrn_get_share(name, &tmp_table, &error)))
   {
     mrn_free_table_share(tmp_table_share);
