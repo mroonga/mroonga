@@ -1655,13 +1655,19 @@ int ha_mroonga::delete_table(const char *name)
 #else
   table_list.init_one_table(db_name, tbl_name, TL_WRITE);
 #endif
+#if MYSQL_VERSION_ID >= 50500
   mysql_mutex_lock(&LOCK_open);
+#endif
   if (!(tmp_table_share = mrn_get_table_share(&table_list, &error)))
   {
+#if MYSQL_VERSION_ID >= 50500
     mysql_mutex_unlock(&LOCK_open);
+#endif
     DBUG_RETURN(error);
   }
+#if MYSQL_VERSION_ID >= 50500
   mysql_mutex_unlock(&LOCK_open);
+#endif
   /* This is previous version */
   tmp_table_share->version--;
   tmp_table.s = tmp_table_share;
@@ -1682,9 +1688,13 @@ int ha_mroonga::delete_table(const char *name)
   }
 
   mrn_free_share(tmp_share);
+#if MYSQL_VERSION_ID >= 50500
   mysql_mutex_lock(&LOCK_open);
+#endif
   mrn_free_table_share(tmp_table_share);
+#if MYSQL_VERSION_ID >= 50500
   mysql_mutex_unlock(&LOCK_open);
+#endif
   DBUG_RETURN(error);
 }
 
