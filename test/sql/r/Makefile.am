@@ -15,6 +15,7 @@ EXTRA_DIST = \
 	hash.result \
 	information_schema.result \
 	insert.result \
+	insert_wrapper.result \
 	last_insert_grn_id.result \
 	log_level.result \
 	order_limit_performance.result \

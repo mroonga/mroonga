@@ -15,6 +15,7 @@ EXTRA_DIST = \
 	hash.test \
 	information_schema.test \
 	insert.test \
+	insert_wrapper.test \
 	last_insert_grn_id.test \
 	log_level.test \
 	order_limit_performance.test \
