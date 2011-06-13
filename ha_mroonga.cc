@@ -1003,7 +1003,10 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   int error;
   handler *hnd;
   MRN_DBUG_ENTER_METHOD();
-  /* TODO: create groonga index */
+
+  error = wrapper_create_index(name, table, info, tmp_share);
+  if (error)
+    DBUG_RETURN(error);
 
   wrap_key_info = mrn_create_key_info_for_table(tmp_share, table, &error);
   if (error)
@@ -1040,6 +1043,101 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
+                                     HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error;
+  error = ensure_database_open(name);
+  if (error)
+    DBUG_RETURN(error);
+
+  grn_obj *grn_table;
+  char grn_table_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, grn_table_name);
+  char *grn_table_path = NULL;     // we don't specify path
+  grn_obj *pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+  grn_obj *pkey_value_type = NULL; // we don't use this
+  grn_obj_flags grn_table_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_HASH_KEY;
+
+  grn_table = grn_table_create(ctx, grn_table_name, strlen(grn_table_name),
+                               grn_table_path, grn_table_flags,
+                               pkey_type, pkey_value_type);
+  if (ctx->rc) {
+    error = ER_CANT_CREATE_TABLE;
+    my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+
+  uint i;
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    KEY key_info = table->s->key_info[i];
+
+    if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+      continue;
+    }
+
+    // must be single column key
+    int key_parts = key_info.key_parts;
+    if (key_parts != 1) {
+      GRN_LOG(ctx, GRN_LOG_ERROR,
+              "complex key is not supported yet: n-keys=<%d>", key_parts);
+      error = ER_NOT_SUPPORTED_YET;
+      my_message(error, "complex key is not supported yet.", MYF(0));
+      DBUG_RETURN(error);
+    }
+
+    char index_name[MRN_MAX_PATH_SIZE];
+    mrn_index_name_gen(grn_table_name, i, index_name);
+
+    grn_obj_flags index_table_flags =
+      GRN_OBJ_TABLE_PAT_KEY |
+      GRN_OBJ_PERSISTENT |
+      GRN_OBJ_KEY_NORMALIZE;
+    grn_obj *index_table;
+
+    Field *field = key_info.key_part[0].field;
+
+    int mysql_field_type = field->type();
+    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
+    grn_obj *column_type = grn_ctx_at(ctx, gtype);
+    grn_obj_flags index_column_flags =
+      GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
+
+    index_table = grn_table_create(ctx, index_name, strlen(index_name), NULL,
+                                   index_table_flags, column_type, 0);
+    if (ctx->rc) {
+      grn_obj_remove(ctx, grn_table);
+      error = ER_CANT_CREATE_TABLE;
+      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+      DBUG_RETURN(error);
+    }
+
+    grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+    grn_obj *token_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
+    grn_obj_set_info(ctx, index_table, info_type, token_type);
+    grn_obj_unlink(ctx, token_type);
+
+    const char *column_name = field->field_name;
+    grn_obj *index_column = grn_column_create(ctx, index_table,
+                                              column_name, strlen(column_name),
+                                              NULL,
+                                              index_column_flags,
+                                              grn_table);
+    if (ctx->rc) {
+      grn_obj_remove(ctx, index_table);
+      grn_obj_remove(ctx, grn_table);
+      error = ER_CANT_CREATE_TABLE;
+      my_message(error, ctx->errbuf, MYF(0));
+      DBUG_RETURN(error);
+    }
+  }
+
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::default_create(const char *name, TABLE *table,
                                HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
 {
@@ -1054,7 +1152,7 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   if (error)
     DBUG_RETURN(error);
 
-  error = default_create_ensure_database_open(name);
+  error = ensure_database_open(name);
   if (error)
     DBUG_RETURN(error);
 
@@ -1314,7 +1412,7 @@ int ha_mroonga::default_create_validate_index(TABLE *table)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::default_create_ensure_database_open(const char *name)
+int ha_mroonga::ensure_database_open(const char *name)
 {
   int error = 0;
 
