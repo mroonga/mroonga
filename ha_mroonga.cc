@@ -2331,14 +2331,14 @@ int ha_mroonga::default_write_row(uchar *buf)
 #endif
         my_message(ER_DATA_TOO_LONG, "cannot insert value to _id column", MYF(0));
         DBUG_RETURN(ER_DATA_TOO_LONG);
-      } 
+      }
       if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
         my_message(ER_DATA_TOO_LONG, "cannot insert value to _score column", MYF(0));
         DBUG_RETURN(ER_DATA_TOO_LONG);
-      } 
+      }
     }
   }
 
