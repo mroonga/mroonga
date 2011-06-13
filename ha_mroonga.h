@@ -220,7 +220,10 @@ private:
   int default_create_validate_index(TABLE *table);
   int ensure_database_create(const char *name);
   int ensure_database_open(const char *name);
-  int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share);
+  int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,
+                           const char *table_name);
+  int wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
+                           const char *table_name);
   int default_delete_table(const char *name, MRN_SHARE *tmp_share,
                            const char *tbl_name);
   int wrapper_open(const char *name, int mode, uint test_if_locked);

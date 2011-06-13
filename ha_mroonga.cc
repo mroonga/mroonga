@@ -1756,7 +1756,8 @@ int ha_mroonga::close()
   DBUG_RETURN(0);
 }
 
-int ha_mroonga::wrapper_delete_table(const char *name, MRN_SHARE *tmp_share)
+int ha_mroonga::wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,
+                                     const char *table_name)
 {
   int error;
   handler *hnd;
@@ -1777,10 +1778,42 @@ int ha_mroonga::wrapper_delete_table(const char *name, MRN_SHARE *tmp_share)
     DBUG_RETURN(error);
   }
 
-  /* TODO: create groonga index */
+  error = wrapper_delete_index(name, tmp_share, table_name);
 
   delete hnd;
-  DBUG_RETURN(0);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
+                                     const char *table_name)
+{
+  int error;
+  MRN_DBUG_ENTER_METHOD();
+
+  error = ensure_database_open(name);
+  if (error)
+    DBUG_RETURN(error);
+
+  TABLE_SHARE *tmp_table_share = tmp_share->table_share;
+
+  int i;
+  for (i = 0; i < tmp_table_share->keys; i++) {
+    char index_name[MRN_MAX_PATH_SIZE];
+    mrn_index_name_gen(table_name, i, index_name);
+    grn_obj *index_table = grn_ctx_get(ctx, index_name, strlen(index_name));
+    if (index_table != NULL) {
+      grn_obj_remove(ctx, index_table);
+    }
+  }
+
+  grn_obj *table = grn_ctx_get(ctx, table_name, strlen(table_name));
+  if (ctx->rc) {
+    error = ER_CANT_OPEN_FILE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+  error = grn_obj_remove(ctx, table);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::default_delete_table(const char *name, MRN_SHARE *tmp_share,
@@ -1859,7 +1892,7 @@ int ha_mroonga::delete_table(const char *name)
 
   if (tmp_share->wrapper_mode)
   {
-    error = wrapper_delete_table(name, tmp_share);
+    error = wrapper_delete_table(name, tmp_share, tbl_name);
   } else {
     error = default_delete_table(name, tmp_share, tbl_name);
   }
