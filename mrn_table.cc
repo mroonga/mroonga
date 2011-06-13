@@ -1,4 +1,6 @@
-/* Copyright(C) 2011 Kentoku SHIBA
+/*
+  Copyright(C) 2011 Kentoku SHIBA
+  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -440,7 +442,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
   MRN_SHARE *share;
   char *tmp_name;
-  uint length, *wrap_keynr, i, j;
+  uint length, *wrap_key_nr, i, j;
   KEY *wrap_key_info;
   DBUG_ENTER("mrn_get_share");
   length = (uint) strlen(table_name);
@@ -452,7 +454,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &share, sizeof(*share),
         &tmp_name, length + 1,
-        &wrap_keynr, sizeof(*wrap_keynr) * table->s->keys,
+        &wrap_key_nr, sizeof(*wrap_key_nr) * table->s->keys,
         &wrap_key_info, sizeof(*wrap_key_info) * table->s->keys,
         NullS))
     ) {
@@ -475,12 +477,12 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       {
         if (table->s->key_info[i].algorithm != HA_KEY_ALG_FULLTEXT)
         {
-          wrap_keynr[i] = j;
+          wrap_key_nr[i] = j;
           memcpy(&wrap_key_info[j], &table->s->key_info[i],
                  sizeof(*wrap_key_info));
           j++;
         } else {
-          wrap_keynr[i] = MAX_KEY;
+          wrap_key_nr[i] = MAX_KEY;
         }
       }
       share->wrap_keys = j;
@@ -489,14 +491,14 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       share->base_primary_key = table->s->primary_key;
       if (i)
       {
-        share->wrap_keynr = wrap_keynr;
+        share->wrap_key_nr = wrap_key_nr;
         share->wrap_key_info = wrap_key_info;
         if (table->s->primary_key == MAX_KEY)
           share->wrap_primary_key = MAX_KEY;
         else
-          share->wrap_primary_key = wrap_keynr[table->s->primary_key];
+          share->wrap_primary_key = wrap_key_nr[table->s->primary_key];
       } else {
-        share->wrap_keynr = NULL;
+        share->wrap_key_nr = NULL;
         share->wrap_key_info = NULL;
         share->wrap_primary_key = MAX_KEY;
       }
@@ -581,7 +583,7 @@ void mrn_free_table_share(TABLE_SHARE *share)
 
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
 {
-  uint *wrap_keynr = share->wrap_keynr, i, j;
+  uint *wrap_key_nr = share->wrap_key_nr, i, j;
   KEY *wrap_key_info;
   DBUG_ENTER("mrn_create_key_info_for_table");
   if (share->wrap_keys)
@@ -596,7 +598,7 @@ KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
     }
     for (i = 0; i < table->s->keys; i++)
     {
-      j = wrap_keynr[i];
+      j = wrap_key_nr[i];
       if (j < MAX_KEY)
       {
         memcpy(&wrap_key_info[j], &table->key_info[i],

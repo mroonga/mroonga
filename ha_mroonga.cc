@@ -1,5 +1,5 @@
 /* -*- c-basic-offset: 2 -*- */
-/* 
+/*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010 Kentoku SHIBA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
@@ -899,10 +899,10 @@ const char *ha_mroonga::table_type() const
   DBUG_RETURN("groonga");
 }
 
-const char *ha_mroonga::index_type(uint keynr)
+const char *ha_mroonga::index_type(uint key_nr)
 {
   MRN_DBUG_ENTER_METHOD();
-  KEY key_info = table->s->key_info[keynr];
+  KEY key_info = table->s->key_info[key_nr];
   if (key_info.algorithm == HA_KEY_ALG_FULLTEXT) {
     DBUG_RETURN("FULLTEXT");
   } else if (key_info.algorithm == HA_KEY_ALG_HASH) {
@@ -1062,9 +1062,9 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
 
   /* primary key must be handled before creating table */
   grn_obj *pkey_type;
-  uint pkeynr = table->s->primary_key;
-  if (pkeynr != MAX_INDEXES) {
-    KEY key_info = table->s->key_info[pkeynr];
+  uint pkey_nr = table->s->primary_key;
+  if (pkey_nr != MAX_INDEXES) {
+    KEY key_info = table->s->key_info[pkey_nr];
 
     // surpose simgle column key
     int key_parts = key_info.key_parts;
@@ -1149,7 +1149,7 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
 
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
-    if (i == pkeynr) {
+    if (i == pkey_nr) {
       continue; // pkey is already handled
     }
 
@@ -1510,7 +1510,7 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
   /* open indexes */
   char idx_name[MRN_MAX_PATH_SIZE];
   uint n_keys = table->s->keys;
-  uint pkeynr = table->s->primary_key;
+  uint pkey_nr = table->s->primary_key;
   if (n_keys > 0) {
     idx_tbl = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
     idx_col = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
@@ -1525,7 +1525,7 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
     key_min[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
     key_max[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
 
-    if (i == pkeynr) {
+    if (i == pkey_nr) {
       idx_tbl[i] = idx_col[i] = NULL;
       continue;
     }
@@ -1605,11 +1605,11 @@ int ha_mroonga::default_close()
   MRN_DBUG_ENTER_METHOD();
   int i;
   uint n_keys = table->s->keys;
-  uint pkeynr = table->s->primary_key;
+  uint pkey_nr = table->s->primary_key;
   for (i = 0; i < n_keys; i++) {
     free(key_min[i]);
     free(key_max[i]);
-    if (i == pkeynr) {
+    if (i == pkey_nr) {
       continue;
     }
     grn_obj_unlink(ctx, idx_tbl[i]);
@@ -2165,7 +2165,7 @@ int ha_mroonga::default_write_row(uchar *buf)
   grn_obj wrapper;
   void *pkey = NULL;
   int pkey_size = 0;
-  uint pkeynr = table->s->primary_key;
+  uint pkey_nr = table->s->primary_key;
   THD *thd = ha_thd();
   int i, col_size;
   int n_columns = table->s->fields;
@@ -2206,8 +2206,8 @@ int ha_mroonga::default_write_row(uchar *buf)
   }
 
   GRN_VOID_INIT(&wrapper);
-  if (pkeynr != MAX_INDEXES) {
-    KEY key_info = table->s->key_info[pkeynr];
+  if (pkey_nr != MAX_INDEXES) {
+    KEY key_info = table->s->key_info[pkey_nr];
     // surpose simgle column key
     int field_no = key_info.key_part[0].field->field_index;
     Field *pkey_field = table->field[field_no];
@@ -2232,7 +2232,7 @@ int ha_mroonga::default_write_row(uchar *buf)
 #endif
     error = HA_ERR_FOUND_DUPP_KEY;
     memcpy(dup_ref, &row_id, sizeof(grn_id));
-    dup_key = pkeynr;
+    dup_key = pkey_nr;
     if (!ignoring_duplicated_key) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
     }
@@ -2439,20 +2439,20 @@ int ha_mroonga::delete_row(const uchar *buf)
   DBUG_RETURN(default_delete_row(buf));
 }
 
-ha_rows ha_mroonga::wrapper_records_in_range(uint keynr, key_range *range_min,
+ha_rows ha_mroonga::wrapper_records_in_range(uint key_nr, key_range *range_min,
                                              key_range *range_max)
 {
   ha_rows row_count;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  row_count = wrap_handler->records_in_range(keynr, range_min, range_max);
+  row_count = wrap_handler->records_in_range(key_nr, range_min, range_max);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(row_count);
 }
 
-ha_rows ha_mroonga::default_records_in_range(uint keynr, key_range *range_min,
+ha_rows ha_mroonga::default_records_in_range(uint key_nr, key_range *range_min,
                                              key_range *range_max)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -2460,7 +2460,7 @@ ha_rows ha_mroonga::default_records_in_range(uint keynr, key_range *range_min,
   uint size_min = 0, size_max = 0;
   ha_rows row_count = 0;
   void *val_min = NULL, *val_max = NULL;
-  KEY key_info = table->s->key_info[keynr];
+  KEY key_info = table->s->key_info[key_nr];
   KEY_PART_INFO key_part = key_info.key_part[0];
   Field *field = key_part.field;
   const char *col_name = field->field_name;
@@ -2471,22 +2471,22 @@ ha_rows ha_mroonga::default_records_in_range(uint keynr, key_range *range_min,
   }
 
   if (range_min != NULL) {
-    mrn_set_key_buf(ctx, field, range_min->key, key_min[keynr], &size_min);
-    val_min = key_min[keynr];
+    mrn_set_key_buf(ctx, field, range_min->key, key_min[key_nr], &size_min);
+    val_min = key_min[key_nr];
     if (range_min->flag == HA_READ_AFTER_KEY) {
       flags |= GRN_CURSOR_GT;
     }
   }
   if (range_max != NULL) {
-    mrn_set_key_buf(ctx, field, range_max->key, key_max[keynr], &size_max);
-    val_max = key_max[keynr];
+    mrn_set_key_buf(ctx, field, range_max->key, key_max[key_nr], &size_max);
+    val_max = key_max[key_nr];
     if (range_max->flag == HA_READ_BEFORE_KEY) {
       flags |= GRN_CURSOR_LT;
     }
   }
-  uint pkeynr = table->s->primary_key;
+  uint pkey_nr = table->s->primary_key;
 
-  if (keynr == pkeynr) { // primary index
+  if (key_nr == pkey_nr) { // primary index
     grn_table_cursor *cur_t =
       grn_table_cursor_open(ctx, tbl, val_min, size_min, val_max, size_max, 0, -1, flags);
     grn_id gid;
@@ -2496,11 +2496,11 @@ ha_rows ha_mroonga::default_records_in_range(uint keynr, key_range *range_min,
     grn_table_cursor_close(ctx, cur_t);
   } else { // normal index
     uint table_size = grn_table_size(ctx, tbl);
-    uint cardinality = grn_table_size(ctx, idx_tbl[keynr]);
+    uint cardinality = grn_table_size(ctx, idx_tbl[key_nr]);
     grn_table_cursor *cur_t0 =
-      grn_table_cursor_open(ctx, idx_tbl[keynr], val_min, size_min, val_max, size_max, 0, -1, flags);
+      grn_table_cursor_open(ctx, idx_tbl[key_nr], val_min, size_min, val_max, size_max, 0, -1, flags);
     grn_table_cursor *cur_t =
-      grn_index_cursor_open(ctx, cur_t0, idx_col[keynr], 0, GRN_ID_MAX, 0);
+      grn_index_cursor_open(ctx, cur_t0, idx_col[key_nr], 0, GRN_ID_MAX, 0);
     grn_id gid;
     while ((gid = grn_table_cursor_next(ctx, cur_t)) != GRN_ID_NIL) {
       row_count++;
@@ -2512,12 +2512,12 @@ ha_rows ha_mroonga::default_records_in_range(uint keynr, key_range *range_min,
   DBUG_RETURN(row_count);
 }
 
-ha_rows ha_mroonga::records_in_range(uint keynr, key_range *range_min, key_range *range_max)
+ha_rows ha_mroonga::records_in_range(uint key_nr, key_range *range_min, key_range *range_max)
 {
   MRN_DBUG_ENTER_METHOD();
   if (share->wrapper_mode)
-    DBUG_RETURN(wrapper_records_in_range(keynr, range_min, range_max));
-  DBUG_RETURN(default_records_in_range(keynr, range_min, range_max));
+    DBUG_RETURN(wrapper_records_in_range(key_nr, range_min, range_max));
+  DBUG_RETURN(default_records_in_range(key_nr, range_min, range_max));
 }
 
 int ha_mroonga::wrapper_index_init(uint idx, bool sorted)
@@ -2526,7 +2526,7 @@ int ha_mroonga::wrapper_index_init(uint idx, bool sorted)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_index_init(share->wrap_keynr[idx], sorted);
+  error = wrap_handler->ha_index_init(share->wrap_key_nr[idx], sorted);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -2601,8 +2601,8 @@ int ha_mroonga::default_index_read_map(uchar * buf, const uchar * key,
                                        enum ha_rkey_function find_flag)
 {
   MRN_DBUG_ENTER_METHOD();
-  uint keynr = active_index;
-  KEY key_info = table->key_info[keynr];
+  uint key_nr = active_index;
+  KEY key_info = table->key_info[key_nr];
   KEY_PART_INFO key_part = key_info.key_part[0];
   check_count_skip(keypart_map, 0, FALSE);
 
@@ -2623,14 +2623,14 @@ int ha_mroonga::default_index_read_map(uchar * buf, const uchar * key,
   }
 
   if (find_flag == HA_READ_KEY_EXACT) {
-    mrn_set_key_buf(ctx, field, key, key_min[keynr], &size_min);
-    val_min = key_min[keynr];
-    val_max = key_min[keynr];
+    mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+    val_min = key_min[key_nr];
+    val_max = key_min[key_nr];
     size_max = size_min;
 
     // for _id
     if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-      grn_id rid = *(grn_id*) key_min[keynr];
+      grn_id rid = *(grn_id*) key_min[key_nr];
       if (grn_table_at(ctx, tbl, rid) != GRN_ID_NIL) { // found
         store_fields_from_primary_table(buf, rid);
         table->status = 0;
@@ -2648,33 +2648,33 @@ int ha_mroonga::default_index_read_map(uchar * buf, const uchar * key,
     find_flag == HA_READ_BEFORE_KEY ||
     find_flag == HA_READ_PREFIX_LAST_OR_PREV
   ) {
-    mrn_set_key_buf(ctx, field, key, key_max[keynr], &size_max);
-    val_max = key_max[keynr];
+    mrn_set_key_buf(ctx, field, key, key_max[key_nr], &size_max);
+    val_max = key_max[key_nr];
     if (find_flag == HA_READ_BEFORE_KEY) {
       flags |= GRN_CURSOR_LT;
     }
   } else {
-    mrn_set_key_buf(ctx, field, key, key_min[keynr], &size_min);
-    val_min = key_min[keynr];
+    mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+    val_min = key_min[key_nr];
     if (find_flag == HA_READ_AFTER_KEY) {
       flags |= GRN_CURSOR_GT;
     }
   }
 
-  uint pkeynr = table->s->primary_key;
+  uint pkey_nr = table->s->primary_key;
 
-  if (keynr == pkeynr) { // primary index
+  if (key_nr == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
       grn_table_cursor_open(ctx, tbl, val_min, size_min, val_max, size_max,
                             0, -1, flags);
   } else { // normal index
-    DBUG_PRINT("info",("mroonga use key%u", keynr));
+    DBUG_PRINT("info",("mroonga use key%u", key_nr));
     cur0 =
-      grn_table_cursor_open(ctx, idx_tbl[keynr], val_min, size_min,
+      grn_table_cursor_open(ctx, idx_tbl[key_nr], val_min, size_min,
                             val_max, size_max, 0, -1, flags);
     cur =
-      grn_index_cursor_open(ctx, cur0, idx_col[keynr], 0, GRN_ID_MAX, 0);
+      grn_index_cursor_open(ctx, cur0, idx_col[key_nr], 0, GRN_ID_MAX, 0);
   }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -2725,8 +2725,8 @@ int ha_mroonga::default_index_read_last_map(uchar *buf, const uchar *key,
                                             key_part_map keypart_map)
 {
   MRN_DBUG_ENTER_METHOD();
-  uint keynr = active_index;
-  KEY key_info = table->key_info[keynr];
+  uint key_nr = active_index;
+  KEY key_info = table->key_info[key_nr];
   KEY_PART_INFO key_part = key_info.key_part[0];
 
   int flags = GRN_CURSOR_DESCENDING;
@@ -2743,25 +2743,25 @@ int ha_mroonga::default_index_read_last_map(uchar *buf, const uchar *key,
     cur0 = NULL;
   }
 
-  mrn_set_key_buf(ctx, field, key, key_min[keynr], &size_min);
-  val_min = key_min[keynr];
-  val_max = key_min[keynr];
+  mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+  val_min = key_min[key_nr];
+  val_max = key_min[key_nr];
   size_max = size_min;
 
-  uint pkeynr = table->s->primary_key;
+  uint pkey_nr = table->s->primary_key;
 
-  if (keynr == pkeynr) { // primary index
+  if (key_nr == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
       grn_table_cursor_open(ctx, tbl, val_min, size_min, val_max, size_max,
                             0, -1, flags);
   } else { // normal index
-    DBUG_PRINT("info",("mroonga use key%u", keynr));
+    DBUG_PRINT("info",("mroonga use key%u", key_nr));
     cur0 =
-      grn_table_cursor_open(ctx, idx_tbl[keynr], val_min, size_min,
+      grn_table_cursor_open(ctx, idx_tbl[key_nr], val_min, size_min,
                             val_max, size_max, 0, -1, flags);
     cur =
-      grn_index_cursor_open(ctx, cur0, idx_col[keynr], 0, GRN_ID_MAX, 0);
+      grn_index_cursor_open(ctx, cur0, idx_col[key_nr], 0, GRN_ID_MAX, 0);
   }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -2899,8 +2899,8 @@ int ha_mroonga::default_index_first(uchar *buf)
     grn_table_cursor_close(ctx, cur0);
     cur0 = NULL;
   }
-  uint pkeynr = table->s->primary_key;
-  if (active_index == pkeynr) { // primary index
+  uint pkey_nr = table->s->primary_key;
+  if (active_index == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
       grn_table_cursor_open(ctx, tbl, NULL, 0, NULL, 0,
@@ -2967,8 +2967,8 @@ int ha_mroonga::default_index_last(uchar *buf)
     cur0 = NULL;
   }
   int flags = GRN_CURSOR_DESCENDING;
-  uint pkeynr = table->s->primary_key;
-  if (active_index == pkeynr) { // primary index
+  uint pkey_nr = table->s->primary_key;
+  if (active_index == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
       grn_table_cursor_open(ctx, tbl, NULL, 0, NULL, 0,
@@ -3133,9 +3133,9 @@ int ha_mroonga::default_read_range_first(const key_range *start_key,
       flags |= GRN_CURSOR_LT;
     }
   }
-  uint pkeynr = table->s->primary_key;
+  uint pkey_nr = table->s->primary_key;
 
-  if (active_index == pkeynr) { // primary index
+  if (active_index == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
       grn_table_cursor_open(ctx, tbl, val_min, size_min, val_max, size_max,
@@ -3216,7 +3216,7 @@ int ha_mroonga::default_read_range_next()
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
 
-  uint pkeynr = table->s->primary_key;
+  uint pkey_nr = table->s->primary_key;
   if (!count_skip)
     store_fields_from_primary_table(table->record[0], row_id);
   table->status = 0;
@@ -3251,16 +3251,16 @@ int ha_mroonga::ft_init()
   DBUG_RETURN(default_ft_init());
 }
 
-FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint keynr, String *key)
+FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_RETURN(0);
 }
 
-FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint keynr, String *key)
+FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_obj *ft = idx_col[keynr];
+  grn_obj *ft = idx_col[key_nr];
   const char *keyword = key->ptr();
   int keyword_size = key->length();
   check_count_skip(0, 0, TRUE);
@@ -3323,12 +3323,12 @@ FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint keynr, String *key)
   DBUG_RETURN((FT_INFO*) &mrn_ft_info);
 }
 
-FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint keynr, String *key)
+FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
   if (share->wrapper_mode)
-    DBUG_RETURN(wrapper_ft_init_ext(flags, keynr, key));
-  DBUG_RETURN(default_ft_init_ext(flags, keynr, key));
+    DBUG_RETURN(wrapper_ft_init_ext(flags, key_nr, key));
+  DBUG_RETURN(default_ft_init_ext(flags, key_nr, key));
 }
 
 int ha_mroonga::wrapper_ft_read(uchar *buf)
@@ -3518,8 +3518,8 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
       mrn_count_skip++;
       DBUG_VOID_RETURN;
     } else {
-      uint keynr = active_index;
-      KEY key_info = table->key_info[keynr];
+      uint key_nr = active_index;
+      KEY key_info = table->key_info[key_nr];
       KEY_PART_INFO *key_part = key_info.key_part;
       for (where = select_lex->where; where; where = where->next) {
         if (where->type() == Item::FIELD_ITEM)
@@ -4053,7 +4053,7 @@ double ha_mroonga::wrapper_read_time(uint index, uint ranges, ha_rows rows)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->read_time(share->wrap_keynr[index], ranges, rows);
+  res = wrap_handler->read_time(share->wrap_key_nr[index], ranges, rows);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(res);

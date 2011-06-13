@@ -265,9 +265,9 @@ private:
   int default_rnd_pos(uchar *buf, uchar *pos);
   void wrapper_position(const uchar *record);
   void default_position(const uchar *record);
-  ha_rows wrapper_records_in_range(uint keynr, key_range *range_min,
+  ha_rows wrapper_records_in_range(uint key_nr, key_range *range_min,
                                    key_range *range_max);
-  ha_rows default_records_in_range(uint keynr, key_range *range_min,
+  ha_rows default_records_in_range(uint key_nr, key_range *range_min,
                                    key_range *range_max);
   int wrapper_index_init(uint idx, bool sorted);
   int default_index_init(uint idx, bool sorted);
@@ -303,8 +303,8 @@ private:
   int default_read_range_next();
   int wrapper_ft_init();
   int default_ft_init();
-  FT_INFO *wrapper_ft_init_ext(uint flags, uint keynr, String *key);
-  FT_INFO *default_ft_init_ext(uint flags, uint keynr, String *key);
+  FT_INFO *wrapper_ft_init_ext(uint flags, uint key_nr, String *key);
+  FT_INFO *default_ft_init_ext(uint flags, uint key_nr, String *key);
   int wrapper_ft_read(uchar *buf);
   int default_ft_read(uchar *buf);
   const COND *wrapper_cond_push(const COND *cond);
