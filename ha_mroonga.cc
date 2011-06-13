@@ -2147,7 +2147,7 @@ int ha_mroonga::extra_opt(enum ha_extra_function operation, ulong cache_size)
 int ha_mroonga::wrapper_write_row(uchar *buf)
 {
   int error;
-  THD *thd= ha_thd();
+  THD *thd = ha_thd();
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
