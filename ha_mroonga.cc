@@ -1049,7 +1049,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   MRN_DBUG_ENTER_METHOD();
 
   int error;
-  error = ensure_database_open(name);
+  error = ensure_database_create(name);
   if (error)
     DBUG_RETURN(error);
 
@@ -1152,7 +1152,7 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   if (error)
     DBUG_RETURN(error);
 
-  error = ensure_database_open(name);
+  error = ensure_database_create(name);
   if (error)
     DBUG_RETURN(error);
 
@@ -1412,7 +1412,7 @@ int ha_mroonga::default_create_validate_index(TABLE *table)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::ensure_database_open(const char *name)
+int ha_mroonga::ensure_database_create(const char *name)
 {
   int error = 0;
 
@@ -1426,7 +1426,7 @@ int ha_mroonga::ensure_database_open(const char *name)
   mrn_db_path_gen(name, db_path);
 
   pthread_mutex_lock(&mrn_db_mutex);
-  if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db_obj)) != 0) {
+  if (mrn_hash_get(ctx, mrn_hash, db_name, (void **) &(db_obj)) != 0) {
     if (stat(db_path, &db_stat)) {
       // creating new database
       GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db_path);
@@ -1446,6 +1446,36 @@ int ha_mroonga::ensure_database_open(const char *name)
         my_message(error, ctx->errbuf, MYF(0));
         DBUG_RETURN(error);
       }
+    }
+    mrn_hash_put(ctx, mrn_hash, db_name, db_obj);
+  }
+  pthread_mutex_unlock(&mrn_db_mutex);
+  grn_ctx_use(ctx, db_obj);
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::ensure_database_open(const char *name)
+{
+  int error = 0;
+
+  MRN_DBUG_ENTER_METHOD();
+  /* before creating table, we must check if database is alreadly opened, created */
+  grn_obj *db_obj;
+  char db_name[MRN_MAX_PATH_SIZE];
+  char db_path[MRN_MAX_PATH_SIZE];
+  struct stat db_stat;
+  mrn_db_name_gen(name, db_name);
+  mrn_db_path_gen(name, db_path);
+
+  pthread_mutex_lock(&mrn_db_mutex);
+  if (mrn_hash_get(ctx, mrn_hash, db_name, (void **)&(db_obj)) != 0) {
+    db_obj = grn_db_open(ctx, db_path);
+    if (ctx->rc) {
+      pthread_mutex_unlock(&mrn_db_mutex);
+      error = ER_CANT_OPEN_FILE;
+      my_message(error, ctx->errbuf, MYF(0));
+      DBUG_RETURN(error);
     }
     mrn_hash_put(ctx, mrn_hash, db_name, db_obj);
   }
@@ -1776,18 +1806,11 @@ int ha_mroonga::default_delete_table(const char *name, MRN_SHARE *tmp_share,
   int error;
   TABLE_SHARE *tmp_table_share = tmp_share->table_share;
   MRN_DBUG_ENTER_METHOD();
-  char db_path[MRN_MAX_PATH_SIZE];
   char idx_name[MRN_MAX_PATH_SIZE];
 
-  grn_obj *db_obj, *tbl_obj, *lex_obj, *hash_obj, *pat_obj;
-  mrn_db_path_gen(name, db_path);
-  db_obj = grn_db_open(ctx, db_path);
-  if (ctx->rc) {
-    error = ER_CANT_OPEN_FILE;
-    my_message(error, ctx->errbuf, MYF(0));
+  error = ensure_database_open(name);
+  if (error)
     DBUG_RETURN(error);
-  }
-  grn_ctx_use(ctx, db_obj);
 
   int i;
   for (i = 0; i < tmp_table_share->keys; i++) {
@@ -1798,7 +1821,7 @@ int ha_mroonga::default_delete_table(const char *name, MRN_SHARE *tmp_share,
     }
   }
 
-  tbl_obj = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
+  grn_obj *tbl_obj = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
   if (ctx->rc) {
     error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
