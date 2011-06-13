@@ -1460,11 +1460,9 @@ int ha_mroonga::ensure_database_open(const char *name)
   int error = 0;
 
   MRN_DBUG_ENTER_METHOD();
-  /* before creating table, we must check if database is alreadly opened, created */
   grn_obj *db_obj;
   char db_name[MRN_MAX_PATH_SIZE];
   char db_path[MRN_MAX_PATH_SIZE];
-  struct stat db_stat;
   mrn_db_name_gen(name, db_name);
   mrn_db_path_gen(name, db_path);
 
@@ -1577,27 +1575,12 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
 
 int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
 {
+  int error;
   MRN_DBUG_ENTER_METHOD();
-  /* First, we must check if database is alreadly opened */
-  char db_name[MRN_MAX_PATH_SIZE];
-  char db_path[MRN_MAX_PATH_SIZE];
-  struct stat dummy;
-  mrn_db_name_gen(name, db_name);
-  mrn_db_path_gen(name, db_path);
 
-  pthread_mutex_lock(&mrn_db_mutex);
-  // we should not call grn_db_open() very often. so we use cache.
-  if (mrn_hash_get(ctx, mrn_hash, db_name, (void**) &(db)) != 0) {
-    db = grn_db_open(ctx, db_path);
-    if (ctx->rc) {
-      pthread_mutex_unlock(&mrn_db_mutex);
-      my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(ER_CANT_OPEN_FILE);
-    }
-    mrn_hash_put(ctx, mrn_hash, db_name, db);
-  }
-  pthread_mutex_unlock(&mrn_db_mutex);
-  grn_ctx_use(ctx, db);
+  error = ensure_database_open(name);
+  if (error)
+    DBUG_RETURN(error);
 
   /* open table */
   char tbl_name[MRN_MAX_PATH_SIZE];
