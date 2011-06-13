@@ -1047,15 +1047,15 @@ int ha_mroonga::default_create(const char *name, TABLE *table,
   MRN_DBUG_ENTER_METHOD();
 
   error = default_create_validate_pseudo_column(table);
-  if (error != 0)
+  if (error)
     DBUG_RETURN(error);
 
   error = default_create_validate_index(table);
-  if (error != 0)
+  if (error)
     DBUG_RETURN(error);
 
   error = default_create_ensure_database_open(name);
-  if (error != 0)
+  if (error)
     DBUG_RETURN(error);
 
   grn_obj_flags tbl_flags = GRN_OBJ_PERSISTENT;
