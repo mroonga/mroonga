@@ -72,7 +72,7 @@ private:
   grn_ctx *ctx;
 
   grn_obj *db;
-  grn_obj *tbl;
+  grn_obj *grn_table;
   grn_obj **col;
 
   grn_obj **idx_tbl;

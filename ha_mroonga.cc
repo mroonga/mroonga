@@ -1585,7 +1585,7 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
   /* open table */
   char tbl_name[MRN_MAX_PATH_SIZE];
   mrn_table_name_gen(name, tbl_name);
-  tbl = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
+  grn_table = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
   if (ctx->rc) {
     my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_CANT_OPEN_FILE);
@@ -1610,9 +1610,9 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
       continue;
     }
 
-    col[i] = grn_obj_column(ctx, tbl, col_name, col_name_size);
+    col[i] = grn_obj_column(ctx, grn_table, col_name, col_name_size);
     if (ctx->rc) {
-      grn_obj_unlink(ctx, tbl);
+      grn_obj_unlink(ctx, grn_table);
       my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
@@ -1644,7 +1644,7 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
     mrn_index_name_gen(tbl_name, i, idx_name);
     idx_tbl[i] = grn_ctx_get(ctx, idx_name, strlen(idx_name));
     if (ctx->rc) {
-      grn_obj_unlink(ctx, tbl);
+      grn_obj_unlink(ctx, grn_table);
       my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
@@ -1656,7 +1656,7 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
     idx_col[i] = grn_obj_column(ctx, idx_tbl[i], col_name, col_name_size);
     if (ctx->rc) {
       grn_obj_unlink(ctx, idx_tbl[i]);
-      grn_obj_unlink(ctx, tbl);
+      grn_obj_unlink(ctx, grn_table);
       my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
       DBUG_RETURN(ER_CANT_OPEN_FILE);
     }
@@ -1725,7 +1725,7 @@ int ha_mroonga::default_close()
     }
     grn_obj_unlink(ctx, idx_tbl[i]);
   }
-  grn_obj_unlink(ctx, tbl);
+  grn_obj_unlink(ctx, grn_table);
 
   if (idx_tbl != NULL) {
     free(idx_tbl);
@@ -1926,7 +1926,7 @@ int ha_mroonga::wrapper_info(uint flag)
 int ha_mroonga::default_info(uint flag)
 {
   MRN_DBUG_ENTER_METHOD();
-  ha_rows rows = grn_table_size(ctx, tbl);
+  ha_rows rows = grn_table_size(ctx, grn_table);
   stats.records = rows;
 
   if (flag & (HA_STATUS_ERRKEY | HA_STATUS_NO_LOCK)) {
@@ -2045,7 +2045,7 @@ int ha_mroonga::wrapper_rnd_init(bool scan)
 int ha_mroonga::default_rnd_init(bool scan)
 {
   MRN_DBUG_ENTER_METHOD();
-  cur = grn_table_cursor_open(ctx, tbl, NULL, 0, NULL, 0, 0, -1, 0);
+  cur = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0, 0, -1, 0);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
@@ -2353,7 +2353,7 @@ int ha_mroonga::default_write_row(uchar *buf)
   }
 
   int added;
-  row_id = grn_table_add(ctx, tbl, pkey, pkey_size, &added);
+  row_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
   if (ctx->rc) {
 #ifndef DBUG_OFF
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -2560,7 +2560,7 @@ int ha_mroonga::wrapper_delete_row(const uchar *buf)
 int ha_mroonga::default_delete_row(const uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_table_delete_by_id(ctx, tbl, row_id);
+  grn_table_delete_by_id(ctx, grn_table, row_id);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_WRITE);
@@ -2625,14 +2625,14 @@ ha_rows ha_mroonga::default_records_in_range(uint key_nr, key_range *range_min,
 
   if (key_nr == pkey_nr) { // primary index
     grn_table_cursor *cur_t =
-      grn_table_cursor_open(ctx, tbl, val_min, size_min, val_max, size_max, 0, -1, flags);
+      grn_table_cursor_open(ctx, grn_table, val_min, size_min, val_max, size_max, 0, -1, flags);
     grn_id gid;
     while ((gid = grn_table_cursor_next(ctx, cur_t)) != GRN_ID_NIL) {
       row_count++;
     }
     grn_table_cursor_close(ctx, cur_t);
   } else { // normal index
-    uint table_size = grn_table_size(ctx, tbl);
+    uint table_size = grn_table_size(ctx, grn_table);
     uint cardinality = grn_table_size(ctx, idx_tbl[key_nr]);
     grn_table_cursor *cur_t0 =
       grn_table_cursor_open(ctx, idx_tbl[key_nr], val_min, size_min, val_max, size_max, 0, -1, flags);
@@ -2768,7 +2768,7 @@ int ha_mroonga::default_index_read_map(uchar * buf, const uchar * key,
     // for _id
     if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
       grn_id rid = *(grn_id*) key_min[key_nr];
-      if (grn_table_at(ctx, tbl, rid) != GRN_ID_NIL) { // found
+      if (grn_table_at(ctx, grn_table, rid) != GRN_ID_NIL) { // found
         store_fields_from_primary_table(buf, rid);
         table->status = 0;
         cur = NULL;
@@ -2803,7 +2803,7 @@ int ha_mroonga::default_index_read_map(uchar * buf, const uchar * key,
   if (key_nr == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
-      grn_table_cursor_open(ctx, tbl, val_min, size_min, val_max, size_max,
+      grn_table_cursor_open(ctx, grn_table, val_min, size_min, val_max, size_max,
                             0, -1, flags);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", key_nr));
@@ -2890,7 +2890,7 @@ int ha_mroonga::default_index_read_last_map(uchar *buf, const uchar *key,
   if (key_nr == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
-      grn_table_cursor_open(ctx, tbl, val_min, size_min, val_max, size_max,
+      grn_table_cursor_open(ctx, grn_table, val_min, size_min, val_max, size_max,
                             0, -1, flags);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", key_nr));
@@ -3040,7 +3040,7 @@ int ha_mroonga::default_index_first(uchar *buf)
   if (active_index == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
-      grn_table_cursor_open(ctx, tbl, NULL, 0, NULL, 0,
+      grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
                             0, -1, 0);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", active_index));
@@ -3108,7 +3108,7 @@ int ha_mroonga::default_index_last(uchar *buf)
   if (active_index == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
-      grn_table_cursor_open(ctx, tbl, NULL, 0, NULL, 0,
+      grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
                             0, -1, flags);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", active_index));
@@ -3246,7 +3246,7 @@ int ha_mroonga::default_read_range_first(const key_range *start_key,
       // for _id
       if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
         grn_id rid = *(grn_id*) key_min[active_index];
-        if (grn_table_at(ctx, tbl, rid) != GRN_ID_NIL) { // found
+        if (grn_table_at(ctx, grn_table, rid) != GRN_ID_NIL) { // found
           store_fields_from_primary_table(table->record[0], rid);
           table->status = 0;
           cur = NULL;
@@ -3275,7 +3275,7 @@ int ha_mroonga::default_read_range_first(const key_range *start_key,
   if (active_index == pkey_nr) { // primary index
     DBUG_PRINT("info",("mroonga use primary key"));
     cur =
-      grn_table_cursor_open(ctx, tbl, val_min, size_min, val_max, size_max,
+      grn_table_cursor_open(ctx, grn_table, val_min, size_min, val_max, size_max,
                             0, -1, flags);
   } else { // normal index
     DBUG_PRINT("info",("mroonga use key%u", active_index));
@@ -3419,7 +3419,7 @@ FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint key_nr, String *key)
   row_id = GRN_ID_NIL;
 
   res = grn_table_create(ctx, NULL, 0, NULL,
-                         GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC, tbl, 0);
+                         GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC, grn_table, 0);
 
   if (flags & FT_BOOL) {
     // boolean search
@@ -3759,7 +3759,7 @@ void ha_mroonga::check_fast_order_limit()
       int col_name_size = strlen(col_name);
 
       if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-        sort_keys[i].key = grn_obj_column(ctx, tbl, col_name, col_name_size);
+        sort_keys[i].key = grn_obj_column(ctx, grn_table, col_name, col_name_size);
       } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
         sort_keys[i].key = NULL;
       } else {
