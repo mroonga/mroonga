@@ -1586,31 +1586,10 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
   if (error)
     DBUG_RETURN(error);
 
-  /* open columns */
-  int n_columns = table->s->fields;
-  grn_columns = (grn_obj**) malloc(sizeof(grn_obj*) * n_columns);
-
-  int i;
-  for (i = 0; i < n_columns; i++) {
-    Field *field = table->field[i];
-    const char *col_name = field->field_name;
-    int col_name_size = strlen(col_name);
-
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-      grn_columns[i] = NULL;
-      continue;
-    }
-    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
-      grn_columns[i] = NULL;
-      continue;
-    }
-
-    grn_columns[i] = grn_obj_column(ctx, grn_table, col_name, col_name_size);
-    if (ctx->rc) {
-      grn_obj_unlink(ctx, grn_table);
-      my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(ER_CANT_OPEN_FILE);
-    }
+  error = default_open_columns();
+  if (error) {
+    grn_obj_unlink(ctx, grn_table);
+    DBUG_RETURN(error);
   }
 
   /* open indexes */
@@ -1629,6 +1608,7 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
 
   char table_name[MRN_MAX_PATH_SIZE];
   mrn_table_name_gen(name, table_name);
+  int i;
   for (i = 0; i < n_keys; i++) {
     key_min[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
     key_max[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
@@ -1674,6 +1654,40 @@ int ha_mroonga::open_table(const char *name)
     int error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
+  }
+
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::default_open_columns(void)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int n_columns = table->s->fields;
+  grn_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
+
+  int i;
+  for (i = 0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    const char *column_name = field->field_name;
+    int column_name_size = strlen(column_name);
+
+    if (strncmp(MRN_ID_COL_NAME, column_name, column_name_size) == 0) {
+      grn_columns[i] = NULL;
+      continue;
+    }
+    if (strncmp(MRN_SCORE_COL_NAME, column_name, column_name_size) == 0) {
+      grn_columns[i] = NULL;
+      continue;
+    }
+
+    grn_columns[i] = grn_obj_column(ctx, grn_table,
+                                    column_name, column_name_size);
+    if (ctx->rc) {
+      int error = ER_CANT_OPEN_FILE;
+      my_message(error, ctx->errbuf, MYF(0));
+      DBUG_RETURN(error);
+    }
   }
 
   DBUG_RETURN(0);
