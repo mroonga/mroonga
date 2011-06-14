@@ -162,7 +162,7 @@ public:
   int read_range_next();
 
   int ft_init();
-  FT_INFO *ft_init_ext(uint flags, uint inx,String *key);
+  FT_INFO *ft_init_ext(uint flags, uint inx, String *key);
   int ft_read(uchar *buf);
 
   const COND *cond_push(const COND *cond);
