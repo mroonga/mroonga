@@ -1589,56 +1589,18 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
   error = default_open_columns();
   if (error) {
     grn_obj_unlink(ctx, grn_table);
+    grn_table = NULL;
     DBUG_RETURN(error);
   }
 
-  /* open indexes */
-  char idx_name[MRN_MAX_PATH_SIZE];
-  uint n_keys = table->s->keys;
-  uint pkey_nr = table->s->primary_key;
-  if (n_keys > 0) {
-    grn_index_tables = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
-    grn_index_columns = (grn_obj**) malloc(sizeof(grn_obj*) * n_keys);
-    key_min = (char**) malloc(sizeof(char*) * n_keys);
-    key_max = (char**) malloc(sizeof(char*) * n_keys);
-  } else {
-    grn_index_tables = grn_index_columns = NULL;
-    key_min = key_max = NULL;
+  error = default_open_indexes(name);
+  if (error) {
+    // TODO: free grn_columns and set NULL;
+    grn_obj_unlink(ctx, grn_table);
+    grn_table = NULL;
+    DBUG_RETURN(error);
   }
 
-  char table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, table_name);
-  int i;
-  for (i = 0; i < n_keys; i++) {
-    key_min[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
-    key_max[i] = (char*) malloc(MRN_MAX_KEY_SIZE);
-
-    if (i == pkey_nr) {
-      grn_index_tables[i] = grn_index_columns[i] = NULL;
-      continue;
-    }
-
-    mrn_index_name_gen(table_name, i, idx_name);
-    grn_index_tables[i] = grn_ctx_get(ctx, idx_name, strlen(idx_name));
-    if (ctx->rc) {
-      grn_obj_unlink(ctx, grn_table);
-      my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(ER_CANT_OPEN_FILE);
-    }
-
-    KEY key_info = table->s->key_info[i];
-    Field *field = key_info.key_part[0].field;
-    const char *col_name = field->field_name;
-    int col_name_size = strlen(col_name);
-    grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
-                                          col_name, col_name_size);
-    if (ctx->rc) {
-      grn_obj_unlink(ctx, grn_index_tables[i]);
-      grn_obj_unlink(ctx, grn_table);
-      my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(ER_CANT_OPEN_FILE);
-    }
-  }
   ref_length = sizeof(my_off_t);
   DBUG_RETURN(0);
 }
@@ -1684,6 +1646,7 @@ int ha_mroonga::default_open_columns(void)
     grn_columns[i] = grn_obj_column(ctx, grn_table,
                                     column_name, column_name_size);
     if (ctx->rc) {
+      // TODO: free grn_columns and set NULL;
       int error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       DBUG_RETURN(error);
@@ -1691,6 +1654,89 @@ int ha_mroonga::default_open_columns(void)
   }
 
   DBUG_RETURN(0);
+}
+
+int ha_mroonga::default_open_indexes(const char *name)
+{
+  int error = 0;
+
+  MRN_DBUG_ENTER_METHOD();
+
+  char index_name[MRN_MAX_PATH_SIZE];
+  uint n_keys = table->s->keys;
+  uint pkey_nr = table->s->primary_key;
+  if (n_keys > 0) {
+    grn_index_tables = (grn_obj **)malloc(sizeof(grn_obj *) * n_keys);
+    grn_index_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_keys);
+    key_min = (char **)malloc(sizeof(char *) * n_keys);
+    key_max = (char **)malloc(sizeof(char *) * n_keys);
+  } else {
+    grn_index_tables = grn_index_columns = NULL;
+    key_min = key_max = NULL;
+  }
+
+  char table_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, table_name);
+  int i = 0;
+  for (i = 0; i < n_keys; i++) {
+    key_min[i] = (char *)malloc(MRN_MAX_KEY_SIZE);
+    key_max[i] = (char *)malloc(MRN_MAX_KEY_SIZE);
+
+    if (i == pkey_nr) {
+      grn_index_tables[i] = grn_index_columns[i] = NULL;
+      continue;
+    }
+
+    mrn_index_name_gen(table_name, i, index_name);
+    grn_index_tables[i] = grn_ctx_get(ctx, index_name, strlen(index_name));
+    if (ctx->rc) {
+      error = ER_CANT_OPEN_FILE;
+      my_message(error, ctx->errbuf, MYF(0));
+      goto error;
+    }
+
+    KEY key_info = table->s->key_info[i];
+    Field *field = key_info.key_part[0].field;
+    const char *column_name = field->field_name;
+    int column_name_size = strlen(column_name);
+    grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
+                                          column_name, column_name_size);
+    if (ctx->rc) {
+      error = ER_CANT_OPEN_FILE;
+      my_message(error, ctx->errbuf, MYF(0));
+      goto error;
+    }
+  }
+
+error:
+  if (error) {
+    for (; i >= 0; i--) {
+      if (key_min[i]) {
+        free(key_min[i]);
+      }
+      if (key_max[i]) {
+        free(key_max[i]);
+      }
+      grn_obj *index_column = grn_index_columns[i];
+      if (index_column) {
+        grn_obj_unlink(ctx, index_column);
+      }
+      grn_obj *index_table = grn_index_tables[i];
+      if (index_table) {
+        grn_obj_unlink(ctx, index_table);
+      }
+    }
+    free(key_min);
+    free(key_max);
+    free(grn_index_columns);
+    free(grn_index_tables);
+    key_min = NULL;
+    key_max = NULL;
+    grn_index_columns = NULL;
+    grn_index_tables = NULL;
+  }
+
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::open(const char *name, int mode, uint test_if_locked)

@@ -229,6 +229,7 @@ private:
   int default_open(const char *name, int mode, uint test_if_locked);
   int open_table(const char *name);
   int default_open_columns(void);
+  int default_open_indexes(const char *name);
   int wrapper_close();
   int default_close();
   int mrn_extra(enum ha_extra_function operation);
