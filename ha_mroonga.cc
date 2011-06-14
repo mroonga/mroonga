@@ -1593,7 +1593,7 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
 
   /* open columns */
   int n_columns = table->s->fields;
-  col = (grn_obj**) malloc(sizeof(grn_obj*) * n_columns);
+  grn_columns = (grn_obj**) malloc(sizeof(grn_obj*) * n_columns);
 
   int i;
   for (i = 0; i < n_columns; i++) {
@@ -1602,15 +1602,15 @@ int ha_mroonga::default_open(const char *name, int mode, uint test_if_locked)
     int col_name_size = strlen(col_name);
 
     if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-      col[i] = NULL;
+      grn_columns[i] = NULL;
       continue;
     }
     if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
-      col[i] = NULL;
+      grn_columns[i] = NULL;
       continue;
     }
 
-    col[i] = grn_obj_column(ctx, grn_table, col_name, col_name_size);
+    grn_columns[i] = grn_obj_column(ctx, grn_table, col_name, col_name_size);
     if (ctx->rc) {
       grn_obj_unlink(ctx, grn_table);
       my_message(ER_CANT_OPEN_FILE, ctx->errbuf, MYF(0));
@@ -1735,7 +1735,7 @@ int ha_mroonga::default_close()
     free(key_max);
   }
 
-  free(col);
+  free(grn_columns);
   DBUG_RETURN(0);
 }
 
@@ -2399,7 +2399,7 @@ int ha_mroonga::default_write_row(uchar *buf)
     }
 
     mrn_set_buf(ctx, field, &colbuf, &col_size);
-    grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET);
+    grn_obj_set_value(ctx, grn_columns[i], row_id, &colbuf, GRN_OBJ_SET);
     if (ctx->rc) {
 #ifndef DBUG_OFF
       dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -2517,7 +2517,7 @@ int ha_mroonga::default_update_row(const uchar *old_data, uchar *new_data)
       }
 
       mrn_set_buf(ctx, field, &colbuf, &col_size);
-      grn_obj_set_value(ctx, col[i], row_id, &colbuf, GRN_OBJ_SET);
+      grn_obj_set_value(ctx, grn_columns[i], row_id, &colbuf, GRN_OBJ_SET);
       if (ctx->rc) {
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -3773,7 +3773,7 @@ void ha_mroonga::check_fast_order_limit()
       } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
         sort_keys[i].key = NULL;
       } else {
-        sort_keys[i].key = col[field->field_index];
+        sort_keys[i].key = grn_columns[field->field_index];
         col_field_index = field->field_index;
       }
       sort_keys[i].offset = 0;
@@ -3784,7 +3784,7 @@ void ha_mroonga::check_fast_order_limit()
     }
     grn_obj *index;
     if (i == 1 && col_field_index >= 0 &&
-        grn_column_index(ctx, col[col_field_index], GRN_OP_LESS,
+        grn_column_index(ctx, grn_columns[col_field_index], GRN_OP_LESS,
                          &index, 1, NULL)) {
       DBUG_PRINT("info",("mroonga fast_order_limit_with_index = TRUE"));
       fast_order_limit_with_index = TRUE;
@@ -3843,7 +3843,7 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
         }
       } else {
         // actual column
-        mrn_store_field(ctx, field, col[i], rid);
+        mrn_store_field(ctx, field, grn_columns[i], rid);
       }
       field->move_field_offset(-ptr_diff);
 #ifndef DBUG_OFF

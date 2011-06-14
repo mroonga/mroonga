@@ -73,7 +73,7 @@ private:
 
   grn_obj *db;
   grn_obj *grn_table;
-  grn_obj **col;
+  grn_obj **grn_columns;
 
   grn_obj **grn_index_tables;
   grn_obj **grn_index_columns;
