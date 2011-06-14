@@ -75,7 +75,7 @@ private:
   grn_obj *grn_table;
   grn_obj **col;
 
-  grn_obj **idx_tbl;
+  grn_obj **grn_index_tables;
   grn_obj **idx_col;
 
   grn_obj *res;
