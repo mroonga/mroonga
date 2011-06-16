@@ -1496,7 +1496,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 
   if (tmp_share->wrapper_mode)
   {
-    /* create wrapped table */
     error = wrapper_create(name, table, info, tmp_share);
   } else {
     error = default_create(name, table, info, tmp_share);
