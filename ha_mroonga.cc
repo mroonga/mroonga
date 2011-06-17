@@ -825,7 +825,8 @@ mysql_declare_plugin(mroonga)
 mysql_declare_plugin_end;
 
 
-static float mrn_ft_find_relevance(FT_INFO *handler, uchar *record, uint length)
+static float mrn_default_ft_find_relevance(FT_INFO *handler, uchar *record,
+                                           uint length)
 {
   st_mrn_ft_info *info = (st_mrn_ft_info*) handler;
   if (info->rid != GRN_ID_NIL) {
@@ -846,12 +847,12 @@ static float mrn_ft_find_relevance(FT_INFO *handler, uchar *record, uint length)
   return (float) -1.0;
 }
 
-static float mrn_ft_get_relevance(FT_INFO *handler)
+static float mrn_default_ft_get_relevance(FT_INFO *handler)
 {
   return (float) -1.0;
 }
 
-static void mrn_ft_close_search(FT_INFO *handler)
+static void mrn_default_ft_close_search(FT_INFO *handler)
 {
   st_mrn_ft_info *info = (st_mrn_ft_info*) handler;
   info->ctx = NULL;
@@ -859,12 +860,12 @@ static void mrn_ft_close_search(FT_INFO *handler)
   info->rid = GRN_ID_NIL;
 }
 
-static _ft_vft mrn_ft_vft = {
-  NULL, // mrn_ft_read_next
-  mrn_ft_find_relevance,
-  mrn_ft_close_search,
-  mrn_ft_get_relevance,
-  NULL // mrn_ft_reinit_search
+static _ft_vft mrn_default_ft_vft = {
+  NULL, // mrn_default_ft_read_next
+  mrn_default_ft_find_relevance,
+  mrn_default_ft_close_search,
+  mrn_default_ft_get_relevance,
+  NULL // mrn_default_ft_reinit_search
 };
 
 
@@ -3696,7 +3697,7 @@ FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint key_nr, String *key)
   }
 
   { // for "not match"
-    mrn_ft_info.please = &mrn_ft_vft;
+    mrn_ft_info.please = &mrn_default_ft_vft;
     mrn_ft_info.ctx = ctx;
     mrn_ft_info.res = res;
     mrn_ft_info.rid = GRN_ID_NIL;
