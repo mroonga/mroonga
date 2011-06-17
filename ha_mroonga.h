@@ -226,6 +226,7 @@ private:
   int default_delete_table(const char *name, MRN_SHARE *tmp_share,
                            const char *tbl_name);
   int wrapper_open(const char *name, int mode, uint test_if_locked);
+  int wrapper_open_indexes(const char *name);
   int default_open(const char *name, int mode, uint test_if_locked);
   int open_table(const char *name);
   int default_open_columns(void);
