@@ -51,6 +51,7 @@
 #endif
 #include <sql_select.h>
 #include <ft_global.h>
+#include <key.h>
 #include <mysql.h>
 #include <pthread.h>
 #include <sys/types.h>
@@ -2477,8 +2478,57 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
   tmp_disable_binlog(thd);
   error = wrap_handler->ha_write_row(buf);
   reenable_binlog(thd);
+
+  if (!error) {
+    // TODO: extract as a method.
+    grn_id row_id;
+
+    grn_obj key;
+    GRN_TEXT_INIT(&key, 0);
+
+    grn_bulk_space(ctx, &key, table->key_info->key_length);
+    key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
+             table->record[0],
+             &(table->key_info[table_share->primary_key]),
+             table->key_info[table_share->primary_key].key_length);
+
+    int added;
+    row_id = grn_table_add(ctx, grn_table,
+                           GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key),
+                           &added);
+    grn_obj_unlink(ctx, &key);
+
+    grn_obj value;
+    GRN_VOID_INIT(&value);
+
+    uint i;
+    uint n_keys = table->s->keys;
+    for (i = 0; i < n_keys; i++) {
+      grn_rc rc;
+      KEY key_info = table->s->key_info[i];
+
+      if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+        continue;
+      }
+
+      Field *field = table->field[i];
+      const char *column_name = field->field_name;
+
+      if (field->is_null())
+        continue;
+
+      int column_size;
+      mrn_set_buf(ctx, field, &value, &column_size);
+      rc = grn_column_index_update(ctx, grn_index_columns[i], row_id, 1,
+                                   NULL, &value);
+      // TODO: check rc;
+    }
+    grn_obj_unlink(ctx, &value);
+  }
+
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
+
   DBUG_RETURN(error);
 }
 
