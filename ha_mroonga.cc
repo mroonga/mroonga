@@ -932,6 +932,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   share = NULL;
   is_clone = FALSE;
   wrap_handler = NULL;
+  fulltext_searching = FALSE;
   DBUG_VOID_RETURN;
 }
 
@@ -1623,6 +1624,9 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
   MRN_SET_BASE_TABLE_KEY(this, table);
   init();
 
+  pk_keypart_map = make_prev_keypart_map(
+    table->key_info[table_share->primary_key].key_parts);
+
   if (error)
   {
     grn_obj_unlink(ctx, grn_table);
@@ -2271,7 +2275,10 @@ int ha_mroonga::wrapper_rnd_init(bool scan)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_rnd_init(scan);
+  if (fulltext_searching)
+    error = wrap_handler->ha_index_init(table_share->primary_key, FALSE);
+  else
+    error = wrap_handler->ha_rnd_init(scan);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -2303,7 +2310,10 @@ int ha_mroonga::wrapper_rnd_end()
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_rnd_end();
+  if (fulltext_searching)
+    error = wrap_handler->ha_index_end();
+  else
+    error = wrap_handler->ha_rnd_end();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -2337,7 +2347,11 @@ int ha_mroonga::wrapper_rnd_next(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->rnd_next(buf);
+  if (fulltext_searching)
+    error = wrap_handler->index_read_map(buf, /* TODO: give me a PK */,
+      pk_keypart_map, HA_READ_KEY_EXACT);
+  else
+    error = wrap_handler->rnd_next(buf);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -2951,7 +2965,10 @@ int ha_mroonga::wrapper_index_init(uint idx, bool sorted)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_index_init(share->wrap_key_nr[idx], sorted);
+  if (fulltext_searching)
+    error = wrap_handler->ha_index_init(table_share->primary_key, FALSE);
+  else
+    error = wrap_handler->ha_index_init(share->wrap_key_nr[idx], sorted);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -3666,8 +3683,14 @@ int ha_mroonga::read_range_next()
 
 int ha_mroonga::wrapper_ft_init()
 {
+  int error;
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(0);
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  error = wrap_handler->ha_index_init(table_share->primary_key, FALSE);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::default_ft_init()
@@ -3682,6 +3705,33 @@ int ha_mroonga::ft_init()
   if (share->wrapper_mode)
     DBUG_RETURN(wrapper_ft_init());
   DBUG_RETURN(default_ft_init());
+}
+
+void ha_mroonga::wrapper_ft_end()
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->ha_index_end();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::default_ft_end()
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::ft_end()
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+    wrapper_ft_end();
+  else
+    default_ft_end();
+  DBUG_VOID_RETURN;
 }
 
 FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
@@ -3768,6 +3818,7 @@ FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint key_nr, String *key)
 FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
+  fulltext_searching = TRUE;
   if (share->wrapper_mode)
     DBUG_RETURN(wrapper_ft_init_ext(flags, key_nr, key));
   DBUG_RETURN(default_ft_init_ext(flags, key_nr, key));
@@ -4192,7 +4243,8 @@ int ha_mroonga::reset()
     error = wrapper_reset();
   else
     error = default_reset();
-  ignoring_duplicated_key = false;
+  ignoring_duplicated_key = FALSE;
+  fulltext_searching = FALSE;
   DBUG_RETURN(error);
 }
 

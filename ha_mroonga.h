@@ -61,6 +61,7 @@ class ha_mroonga: public handler
   MRN_SHARE *share;
   KEY       *wrap_key_info;
   KEY       *base_key_info;
+  key_part_map pk_keypart_map
   MEM_ROOT  mem_root;
 public:
   handler   *wrap_handler;
@@ -101,6 +102,7 @@ private:
   bool fast_order_limit_with_index;
 
   bool ignoring_duplicated_key;
+  bool fulltext_searching;
 
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);
@@ -161,6 +163,7 @@ public:
   int read_range_next();
 
   int ft_init();
+  void ft_end()
   FT_INFO *ft_init_ext(uint flags, uint inx, String *key);
   int ft_read(uchar *buf);
 
@@ -312,6 +315,8 @@ private:
   int default_read_range_next();
   int wrapper_ft_init();
   int default_ft_init();
+  void wrapper_ft_end();
+  void default_ft_end();
   FT_INFO *wrapper_ft_init_ext(uint flags, uint key_nr, String *key);
   FT_INFO *default_ft_init_ext(uint flags, uint key_nr, String *key);
   int wrapper_ft_read(uchar *buf);
