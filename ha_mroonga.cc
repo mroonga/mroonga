@@ -2275,10 +2275,16 @@ int ha_mroonga::wrapper_rnd_init(bool scan)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (fulltext_searching)
+  if (fulltext_searching) {
+    st_mrn_ft_info *info = (st_mrn_ft_info *)wrapper_ft_info;
+    info->cursor = grn_table_cursor_open(info->ctx, info->result,
+                                         NULL, 0, NULL, 0,
+                                         0, -1, 0);
+    // TODO: error check.
     error = wrap_handler->ha_index_init(table_share->primary_key, FALSE);
-  else
+  } else {
     error = wrap_handler->ha_rnd_init(scan);
+  }
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -2347,11 +2353,29 @@ int ha_mroonga::wrapper_rnd_next(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (fulltext_searching)
-    error = wrap_handler->index_read_map(buf, /* TODO: give me a PK */,
-      pk_keypart_map, HA_READ_KEY_EXACT);
-  else
+  if (fulltext_searching) {
+    st_mrn_ft_info *info = (st_mrn_ft_info *)wrapper_ft_info;
+    info->record_id = grn_table_cursor_next(info->ctx, info->cursor);
+    // TODO: error check.
+    if (info->record_id == GRN_ID_NIL) {
+      error = HA_ERR_END_OF_FILE;
+    } else {
+      grn_id relation_record_id;
+      uchar *key;
+      grn_table_get_key(ctx, info->result, info->record_id,
+                        &relation_record_id, sizeof(grn_id));
+      key = (uchar *)malloc(table->key_info->key_length);
+      grn_table_get_key(ctx, grn_table, relation_record_id,
+                        key, table->key_info->key_length);
+      error = wrap_handler->index_read_map(buf,
+                                           key,
+                                           pk_keypart_map,
+                                           HA_READ_KEY_EXACT);
+      free(key);
+    }
+  } else {
     error = wrap_handler->rnd_next(buf);
+  }
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -3750,6 +3774,15 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
                                   GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                   grn_table, 0);
   info->record_id = GRN_ID_NIL;
+
+  grn_obj *index_column = grn_index_columns[key_nr];
+  grn_obj query;
+  GRN_TEXT_INIT(&query, GRN_OBJ_DO_SHALLOW_COPY);
+  GRN_TEXT_SET_REF(&query, key->ptr(), key->length());
+  grn_obj_search(info->ctx, index_column, &query, info->result, GRN_OP_OR, NULL);
+
+  wrapper_ft_info = info; // FIXME: support multi init_ext call.
+
   DBUG_RETURN((FT_INFO *)info);
 }
 

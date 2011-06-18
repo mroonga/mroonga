@@ -32,6 +32,8 @@ extern "C" {
 #include <groonga.h>
 #include "mrn_sys.h"
 
+class ha_mroonga;
+
 /* structs */
 struct st_mrn_statuses
 {
@@ -44,6 +46,7 @@ struct st_mrn_ft_info
   struct _ft_vft *please;
   grn_ctx *ctx;
   grn_obj *result;
+  grn_table_cursor *cursor;
   grn_id record_id;
 };
 
@@ -61,7 +64,7 @@ class ha_mroonga: public handler
   MRN_SHARE *share;
   KEY       *wrap_key_info;
   KEY       *base_key_info;
-  key_part_map pk_keypart_map
+  key_part_map pk_keypart_map;
   MEM_ROOT  mem_root;
 public:
   handler   *wrap_handler;
@@ -86,6 +89,7 @@ private:
   grn_obj *_score;
 
   st_mrn_ft_info mrn_ft_info;
+  st_mrn_ft_info *wrapper_ft_info;
 
   char **key_min;
   char **key_max;
@@ -163,7 +167,7 @@ public:
   int read_range_next();
 
   int ft_init();
-  void ft_end()
+  void ft_end();
   FT_INFO *ft_init_ext(uint flags, uint inx, String *key);
   int ft_read(uchar *buf);
 
