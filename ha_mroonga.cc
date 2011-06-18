@@ -2452,8 +2452,8 @@ void ha_mroonga::wrapper_position(const uchar *record)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->ref = ref;
   wrap_handler->position(record);
-  ref = wrap_handler->ref;
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_VOID_RETURN;
