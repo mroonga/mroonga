@@ -847,9 +847,15 @@ static float mrn_wrapper_ft_find_relevance(FT_INFO *handler, uchar *record,
                             GRN_TEXT_LEN(&(info->key)));
 
   if (record_id != GRN_ID_NIL) {
-    GRN_BULK_REWIND(&(info->score));
-    grn_obj_get_value(info->ctx, info->score_column, record_id, &(info->score));
-    score = (float)GRN_INT32_VALUE(&(info->score));
+    grn_id result_record_id;
+    result_record_id = grn_table_get(info->ctx, info->result,
+                                     &record_id, sizeof(grn_id));
+    if (result_record_id != GRN_ID_NIL) {
+      GRN_BULK_REWIND(&(info->score));
+      grn_obj_get_value(info->ctx, info->score_column,
+                        result_record_id, &(info->score));
+      score = (float)GRN_INT32_VALUE(&(info->score));
+    }
   }
 
   DBUG_RETURN(score);
