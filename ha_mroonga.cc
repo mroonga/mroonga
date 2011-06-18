@@ -2305,10 +2305,8 @@ int ha_mroonga::wrapper_rnd_init(bool scan)
                                          NULL, 0, NULL, 0,
                                          0, -1, 0);
     // TODO: error check.
-    error = wrap_handler->ha_index_init(table_share->primary_key, FALSE);
-  } else {
-    error = wrap_handler->ha_rnd_init(scan);
   }
+  error = wrap_handler->ha_rnd_init(scan);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -2340,10 +2338,7 @@ int ha_mroonga::wrapper_rnd_end()
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (fulltext_searching)
-    error = wrap_handler->ha_index_end();
-  else
-    error = wrap_handler->ha_rnd_end();
+  error = wrap_handler->ha_rnd_end();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -3134,6 +3129,8 @@ int ha_mroonga::wrapper_index_read_map(uchar * buf, const uchar * key,
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->index_read_map(buf, key, keypart_map, find_flag);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -3260,6 +3257,8 @@ int ha_mroonga::wrapper_index_read_last_map(uchar *buf, const uchar *key,
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->index_read_last_map(buf, key, keypart_map);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -3346,6 +3345,8 @@ int ha_mroonga::wrapper_index_next(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->index_next(buf);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -3387,6 +3388,8 @@ int ha_mroonga::wrapper_index_prev(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->index_prev(buf);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -3428,6 +3431,8 @@ int ha_mroonga::wrapper_index_first(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->index_first(buf);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -3497,6 +3502,8 @@ int ha_mroonga::wrapper_index_last(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->index_last(buf);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -3569,6 +3576,8 @@ int ha_mroonga::wrapper_index_next_same(uchar *buf, const uchar *key,
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->index_next_same(buf, key, keylen);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -3618,6 +3627,8 @@ int ha_mroonga::wrapper_read_range_first(const key_range *start_key,
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->read_range_first(start_key, end_key, eq_range,
                                             sorted);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
@@ -3739,6 +3750,8 @@ int ha_mroonga::wrapper_read_range_next()
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->read_range_next();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -4461,6 +4474,8 @@ int ha_mroonga::wrapper_read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->read_multi_range_first(found_range_p, ranges,
                                                   range_count, sorted, buffer);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
@@ -4499,6 +4514,8 @@ int ha_mroonga::wrapper_read_multi_range_next(KEY_MULTI_RANGE **found_range_p)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->read_multi_range_next(found_range_p);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
