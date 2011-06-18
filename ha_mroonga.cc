@@ -3838,12 +3838,21 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
   info->primary_key_length =
     table->key_info[table_share->primary_key].key_length;
 
-  // TODO: boolean mode support.
   grn_obj *index_column = grn_index_columns[key_nr];
-  grn_obj query;
-  GRN_TEXT_INIT(&query, GRN_OBJ_DO_SHALLOW_COPY);
-  GRN_TEXT_SET_REF(&query, key->ptr(), key->length());
-  grn_obj_search(info->ctx, index_column, &query, info->result, GRN_OP_OR, NULL);
+  if (flags & FT_BOOL) {
+    grn_query *query = grn_query_open(info->ctx, key->ptr(), key->length(),
+                                      GRN_OP_OR, MRN_MAX_EXPRS);
+    grn_obj_search(info->ctx, index_column, (grn_obj *)query, info->result,
+                   GRN_OP_OR, NULL);
+    grn_query_close(info->ctx, query);
+  } else {
+    grn_obj query;
+    GRN_TEXT_INIT(&query, GRN_OBJ_DO_SHALLOW_COPY);
+    GRN_TEXT_SET_REF(&query, key->ptr(), key->length());
+    grn_obj_search(info->ctx, index_column, &query, info->result,
+                   GRN_OP_OR, NULL);
+    grn_obj_unlink(ctx, &query);
+  }
 
   DBUG_RETURN((FT_INFO *)info);
 }
