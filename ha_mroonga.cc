@@ -2555,7 +2555,7 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
     uint n_keys = table->s->keys;
     for (i = 0; i < n_keys; i++) {
       grn_rc rc;
-      KEY key_info = table->s->key_info[i];
+      KEY key_info = table->key_info[i];
 
       if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
         continue;
