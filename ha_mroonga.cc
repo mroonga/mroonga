@@ -836,7 +836,18 @@ static float mrn_wrapper_ft_find_relevance(FT_INFO *handler, uchar *record,
 {
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
-  DBUG_RETURN((float)-1.0);
+
+  grn_obj *score_column;
+  score_column = grn_obj_column(info->ctx, info->result,
+                                MRN_SCORE_COL_NAME, strlen(MRN_SCORE_COL_NAME));
+  grn_obj score_value;
+  GRN_INT32_INIT(&score_value, 0);
+  grn_obj_get_value(info->ctx, score_column, info->record_id, &score_value);
+  float score = (float)GRN_INT32_VALUE(&score_value);
+  grn_obj_unlink(info->ctx, &score_value);
+  grn_obj_unlink(info->ctx, score_column);
+
+  DBUG_RETURN(score);
 }
 
 static void mrn_wrapper_ft_close_search(FT_INFO *handler)

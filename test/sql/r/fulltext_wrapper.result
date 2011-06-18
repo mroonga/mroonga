@@ -124,14 +124,14 @@ c1	c2	match(c2) against("ii")
 3	aa ii ii ii oo	3
 select c1,c2,match(c2) against("ii") from t1 where match(c2) against("ii");
 c1	c2	match(c2) against("ii")
-1	aa ii uu ee oo	-1
-3	aa ii ii ii oo	-1
-5	ta ti ii ii to	-1
+1	aa ii uu ee oo	1
+3	aa ii ii ii oo	3
+5	ta ti ii ii to	2
 select c1,c2,match(c2) against("ii") from t1 where match(c2) against("ii");
 c1	c2	match(c2) against("ii")
-1	aa ii uu ee oo	-1
-3	aa ii ii ii oo	-1
-5	ta ti ii ii to	-1
+1	aa ii uu ee oo	1
+3	aa ii ii ii oo	3
+5	ta ti ii ii to	2
 drop table t1,t2;
 create table t1 (c1 int primary key, c2 int, c3 text, fulltext index ft(c3)) COMMENT = 'engine "innodb"';
 insert into t1 values(1,10,"aa ii uu ee oo");
