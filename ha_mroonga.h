@@ -44,12 +44,12 @@ struct st_mrn_ft_info
   struct _ft_vft *please;
   grn_ctx *ctx;
   grn_obj *result;
-  grn_id rid;
+  grn_id record_id;
 };
 
 struct st_mrn_slot_data
 {
-  grn_id last_insert_rid;
+  grn_id last_insert_record_id;
 };
 
 /* handler class */
@@ -82,7 +82,7 @@ private:
   grn_obj *result0;
   grn_table_cursor *cur;
   grn_table_cursor *cur0;
-  grn_id row_id;
+  grn_id record_id;
   grn_obj *_score;
 
   st_mrn_ft_info mrn_ft_info;
@@ -211,7 +211,7 @@ private:
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
   void check_fast_order_limit();
-  void store_fields_from_primary_table(uchar *buf, grn_id rid);
+  void store_fields_from_primary_table(uchar *buf, grn_id record_id);
   int wrapper_create(const char *name, TABLE *table,
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
   int default_create(const char *name, TABLE *table,

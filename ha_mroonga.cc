@@ -243,8 +243,8 @@ int last_insert_grn_id(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *er
   if (slot_data == NULL) {
     return 0;
   }
-  int last_insert_rid = (int) slot_data->last_insert_rid;
-  return last_insert_rid;
+  int last_insert_record_id = (int)slot_data->last_insert_record_id;
+  return last_insert_record_id;
 }
 
 void last_insert_grn_id_deinit(UDF_INIT *initid)
@@ -846,7 +846,7 @@ static void mrn_wrapper_ft_close_search(FT_INFO *handler)
   grn_obj_unlink(info->ctx, info->result);
   info->ctx = NULL;
   info->result = NULL;
-  info->rid = GRN_ID_NIL;
+  info->record_id = GRN_ID_NIL;
   delete info;
   DBUG_VOID_RETURN;
 }
@@ -876,14 +876,14 @@ static float mrn_default_ft_find_relevance(FT_INFO *handler, uchar *record,
                                            uint length)
 {
   st_mrn_ft_info *info = (st_mrn_ft_info*) handler;
-  if (info->rid != GRN_ID_NIL) {
+  if (info->record_id != GRN_ID_NIL) {
     grn_ctx *ctx = info->ctx;
     grn_obj *result = info->result;
-    grn_id rid = info->rid;
+    grn_id record_id = info->record_id;
 
     if (result && result->header.flags & GRN_OBJ_WITH_SUBREC) {
       float score;
-      grn_id result_id = grn_table_get(ctx, result, &rid, sizeof(rid));
+      grn_id result_id = grn_table_get(ctx, result, &record_id, sizeof(record_id));
       if (result_id != GRN_ID_NIL) {
         return (float) -1.0;
       } else {
@@ -904,7 +904,7 @@ static void mrn_default_ft_close_search(FT_INFO *handler)
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
   info->ctx = NULL;
   info->result = NULL;
-  info->rid = GRN_ID_NIL;
+  info->record_id = GRN_ID_NIL;
 }
 
 static _ft_vft mrn_default_ft_vft = {
@@ -2360,20 +2360,20 @@ int ha_mroonga::wrapper_rnd_next(uchar *buf)
 int ha_mroonga::default_rnd_next(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  store_fields_from_primary_table(buf, row_id);
+  store_fields_from_primary_table(buf, record_id);
   table->status = 0;
 
   DBUG_RETURN(0);
@@ -2403,8 +2403,8 @@ int ha_mroonga::wrapper_rnd_pos(uchar *buf, uchar *pos)
 int ha_mroonga::default_rnd_pos(uchar *buf, uchar *pos)
 {
   MRN_DBUG_ENTER_METHOD();
-  row_id = *((grn_id*) pos);
-  store_fields_from_primary_table(buf, row_id);
+  record_id = *((grn_id*) pos);
+  store_fields_from_primary_table(buf, record_id);
   DBUG_RETURN(0);
 }
 
@@ -2431,7 +2431,7 @@ void ha_mroonga::wrapper_position(const uchar *record)
 void ha_mroonga::default_position(const uchar *record)
 {
   MRN_DBUG_ENTER_METHOD();
-  memcpy(ref, &row_id, sizeof(grn_id));
+  memcpy(ref, &record_id, sizeof(grn_id));
   DBUG_VOID_RETURN;
 }
 
@@ -2545,7 +2545,7 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
 
   if (!error) {
     // TODO: extract as a method.
-    grn_id row_id;
+    grn_id record_id;
 
     grn_obj key;
     GRN_TEXT_INIT(&key, 0);
@@ -2557,7 +2557,7 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
              table->key_info[table_share->primary_key].key_length);
 
     int added;
-    row_id = grn_table_add(ctx, grn_table,
+    record_id = grn_table_add(ctx, grn_table,
                            GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key),
                            &added);
     grn_obj_unlink(ctx, &key);
@@ -2587,7 +2587,7 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
 
         int column_size;
         mrn_set_buf(ctx, field, &value, &column_size);
-        rc = grn_column_index_update(ctx, index_column, row_id, 1, NULL, &value);
+        rc = grn_column_index_update(ctx, index_column, record_id, 1, NULL, &value);
         // TODO: check rc;
       }
     }
@@ -2654,7 +2654,7 @@ int ha_mroonga::default_write_row(uchar *buf)
   }
 
   int added;
-  row_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
+  record_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
   if (ctx->rc) {
 #ifndef DBUG_OFF
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -2669,7 +2669,7 @@ int ha_mroonga::default_write_row(uchar *buf)
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
     error = HA_ERR_FOUND_DUPP_KEY;
-    memcpy(dup_ref, &row_id, sizeof(grn_id));
+    memcpy(dup_ref, &record_id, sizeof(grn_id));
     dup_key = pkey_nr;
     if (!ignoring_duplicated_key) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
@@ -2699,7 +2699,7 @@ int ha_mroonga::default_write_row(uchar *buf)
     }
 
     mrn_set_buf(ctx, field, &colbuf, &col_size);
-    grn_obj_set_value(ctx, grn_columns[i], row_id, &colbuf, GRN_OBJ_SET);
+    grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
     if (ctx->rc) {
 #ifndef DBUG_OFF
       dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -2729,7 +2729,7 @@ int ha_mroonga::default_write_row(uchar *buf)
     }
     pthread_mutex_unlock(&mrn_allocated_thds_mutex);
   }
-  slot_data->last_insert_rid = row_id;
+  slot_data->last_insert_record_id = record_id;
 
   DBUG_RETURN(error);
 }
@@ -2817,7 +2817,7 @@ int ha_mroonga::default_update_row(const uchar *old_data, uchar *new_data)
       }
 
       mrn_set_buf(ctx, field, &colbuf, &col_size);
-      grn_obj_set_value(ctx, grn_columns[i], row_id, &colbuf, GRN_OBJ_SET);
+      grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
       if (ctx->rc) {
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -2861,7 +2861,7 @@ int ha_mroonga::wrapper_delete_row(const uchar *buf)
 int ha_mroonga::default_delete_row(const uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_table_delete_by_id(ctx, grn_table, row_id);
+  grn_table_delete_by_id(ctx, grn_table, record_id);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_WRITE);
@@ -3072,12 +3072,12 @@ int ha_mroonga::default_index_read_map(uchar * buf, const uchar * key,
 
     // for _id
     if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-      grn_id rid = *(grn_id*) key_min[key_nr];
-      if (grn_table_at(ctx, grn_table, rid) != GRN_ID_NIL) { // found
-        store_fields_from_primary_table(buf, rid);
+      grn_id found_record_id = *(grn_id *)key_min[key_nr];
+      if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
+        store_fields_from_primary_table(buf, found_record_id);
         table->status = 0;
         cur = NULL;
-        row_id = rid;
+        record_id = found_record_id;
         DBUG_RETURN(0);
       } else {
         table->status = STATUS_NOT_FOUND;
@@ -3123,20 +3123,20 @@ int ha_mroonga::default_index_read_map(uchar * buf, const uchar * key,
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  store_fields_from_primary_table(buf, row_id);
+  store_fields_from_primary_table(buf, record_id);
   table->status = 0;
   DBUG_RETURN(0);
 }
@@ -3211,20 +3211,20 @@ int ha_mroonga::default_index_read_last_map(uchar *buf, const uchar *key,
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  store_fields_from_primary_table(buf, row_id);
+  store_fields_from_primary_table(buf, record_id);
   table->status = 0;
   DBUG_RETURN(0);
 }
@@ -3253,20 +3253,20 @@ int ha_mroonga::wrapper_index_next(uchar *buf)
 int ha_mroonga::default_index_next(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  store_fields_from_primary_table(buf, row_id);
+  store_fields_from_primary_table(buf, record_id);
   table->status = 0;
   DBUG_RETURN(0);
 }
@@ -3294,20 +3294,20 @@ int ha_mroonga::wrapper_index_prev(uchar *buf)
 int ha_mroonga::default_index_prev(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  store_fields_from_primary_table(buf, row_id);
+  store_fields_from_primary_table(buf, record_id);
   table->status = 0;
   DBUG_RETURN(0);
 }
@@ -3363,20 +3363,20 @@ int ha_mroonga::default_index_first(uchar *buf)
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  store_fields_from_primary_table(buf, row_id);
+  store_fields_from_primary_table(buf, record_id);
   table->status = 0;
   DBUG_RETURN(0);
 }
@@ -3434,20 +3434,20 @@ int ha_mroonga::default_index_last(uchar *buf)
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  store_fields_from_primary_table(buf, row_id);
+  store_fields_from_primary_table(buf, record_id);
   table->status = 0;
   DBUG_RETURN(0);
 }
@@ -3481,21 +3481,21 @@ int ha_mroonga::default_index_next_same(uchar *buf, const uchar *key,
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
   if (!count_skip)
-    store_fields_from_primary_table(buf, row_id);
+    store_fields_from_primary_table(buf, record_id);
   table->status = 0;
   DBUG_RETURN(0);
 }
@@ -3557,17 +3557,17 @@ int ha_mroonga::default_read_range_first(const key_range *start_key,
     } else if (start_key->flag == HA_READ_KEY_EXACT) {
       // for _id
       if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-        grn_id rid = *(grn_id*) key_min[active_index];
-        if (grn_table_at(ctx, grn_table, rid) != GRN_ID_NIL) { // found
-          store_fields_from_primary_table(table->record[0], rid);
+        grn_id found_record_id = *(grn_id *)key_min[active_index];
+        if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
+          store_fields_from_primary_table(table->record[0], found_record_id);
           table->status = 0;
           cur = NULL;
-          row_id = rid;
+          record_id = found_record_id;
           DBUG_RETURN(0);
         } else {
           table->status = STATUS_NOT_FOUND;
           cur = NULL;
-          row_id = GRN_ID_NIL;
+          record_id = GRN_ID_NIL;
           DBUG_RETURN(HA_ERR_END_OF_FILE);
         }
       }
@@ -3602,20 +3602,20 @@ int ha_mroonga::default_read_range_first(const key_range *start_key,
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  store_fields_from_primary_table(table->record[0], row_id);
+  store_fields_from_primary_table(table->record[0], record_id);
   table->status = 0;
   DBUG_RETURN(0);
 }
@@ -3651,7 +3651,7 @@ int ha_mroonga::default_read_range_next()
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
 
-  row_id = grn_table_cursor_next(ctx, cur);
+  record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
@@ -3659,7 +3659,7 @@ int ha_mroonga::default_read_range_next()
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
 
-  if (row_id == GRN_ID_NIL) {
+  if (record_id == GRN_ID_NIL) {
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
@@ -3668,7 +3668,7 @@ int ha_mroonga::default_read_range_next()
 
   uint pkey_nr = table->s->primary_key;
   if (!count_skip)
-    store_fields_from_primary_table(table->record[0], row_id);
+    store_fields_from_primary_table(table->record[0], record_id);
   table->status = 0;
   DBUG_RETURN(0);
 }
@@ -3743,7 +3743,7 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
   info->result = grn_table_create(ctx, NULL, 0, NULL,
                                   GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                   grn_table, 0);
-  info->rid = GRN_ID_NIL;
+  info->record_id = GRN_ID_NIL;
   DBUG_RETURN((FT_INFO *)info);
 }
 
@@ -3769,7 +3769,7 @@ FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint key_nr, String *key)
     result = NULL;
   }
 
-  row_id = GRN_ID_NIL;
+  record_id = GRN_ID_NIL;
 
   result = grn_table_create(ctx, NULL, 0, NULL,
                             GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
@@ -3809,7 +3809,7 @@ FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint key_nr, String *key)
     mrn_ft_info.please = &mrn_default_ft_vft;
     mrn_ft_info.ctx = ctx;
     mrn_ft_info.result = result;
-    mrn_ft_info.rid = GRN_ID_NIL;
+    mrn_ft_info.record_id = GRN_ID_NIL;
   }
 
   DBUG_RETURN((FT_INFO*) &mrn_ft_info);
@@ -3833,9 +3833,9 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
 int ha_mroonga::default_ft_read(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_id rid;
+  grn_id found_record_id;
 
-  rid = grn_table_cursor_next(ctx, cur);
+  found_record_id = grn_table_cursor_next(ctx, cur);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     grn_table_cursor_close(ctx, cur);
@@ -3843,7 +3843,7 @@ int ha_mroonga::default_ft_read(uchar *buf)
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
 
-  if (rid == GRN_ID_NIL) { // res will be closed by reset()
+  if (found_record_id == GRN_ID_NIL) { // res will be closed by reset()
     grn_table_cursor_close(ctx, cur);
     cur = NULL;
     table->status = STATUS_NOT_FOUND;
@@ -3851,20 +3851,21 @@ int ha_mroonga::default_ft_read(uchar *buf)
   }
   table->status = 0;
 
-  if (count_skip && row_id != GRN_ID_NIL) {
+  if (count_skip && record_id != GRN_ID_NIL) {
     DBUG_RETURN(0);
   }
 
   if (!fast_order_limit) {
-    grn_table_get_key(ctx, result, rid, &row_id, sizeof(grn_id));
+    grn_table_get_key(ctx, result, found_record_id, &record_id, sizeof(grn_id));
   } else if (fast_order_limit_with_index) {
-    grn_table_get_key(ctx, result0, rid, &row_id, sizeof(grn_id));
+    grn_table_get_key(ctx, result0, found_record_id, &record_id, sizeof(grn_id));
   } else {
-    grn_id rid2;
-    grn_table_get_key(ctx, result0, rid, &rid2, sizeof(grn_id));
-    grn_table_get_key(ctx, result, rid2, &row_id, sizeof(grn_id));
+    grn_id found_record_id2;
+    grn_table_get_key(ctx, result0, found_record_id,
+                      &found_record_id2, sizeof(grn_id));
+    grn_table_get_key(ctx, result, found_record_id2, &record_id, sizeof(grn_id));
   }
-  store_fields_from_primary_table(buf, row_id);
+  store_fields_from_primary_table(buf, record_id);
   DBUG_RETURN(0);
 }
 
@@ -4148,7 +4149,7 @@ void ha_mroonga::check_fast_order_limit()
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
+void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id record_id)
 {
   MRN_DBUG_ENTER_METHOD();
   my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(buf, table->record[0]);
@@ -4170,14 +4171,14 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
       if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
         // for _id column
         field->set_notnull();
-        field->store((int) rid);
+        field->store((int) record_id);
       } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
         // for _score column
         if (result && result->header.flags & GRN_OBJ_WITH_SUBREC) {
           float score;
           grn_obj buf;
           GRN_INT32_INIT(&buf,0);
-          grn_id res_id = grn_table_get(ctx, result, &rid, sizeof(rid));
+          grn_id res_id = grn_table_get(ctx, result, &record_id, sizeof(record_id));
           grn_obj_get_value(ctx, _score, res_id, &buf);
           score = GRN_INT32_VALUE(&buf);
           grn_obj_unlink(ctx, &buf);
@@ -4189,7 +4190,7 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
         }
       } else {
         // actual column
-        mrn_store_field(ctx, field, grn_columns[i], rid);
+        mrn_store_field(ctx, field, grn_columns[i], record_id);
       }
       field->move_field_offset(-ptr_diff);
 #ifndef DBUG_OFF
@@ -4198,7 +4199,7 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
     }
   }
   // for "not match against"
-  mrn_ft_info.rid = rid;
+  mrn_ft_info.record_id = record_id;
 
   DBUG_VOID_RETURN;
 }
