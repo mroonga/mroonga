@@ -2526,6 +2526,8 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
   tmp_disable_binlog(thd);
   error = wrap_handler->ha_write_row(buf);
   reenable_binlog(thd);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
 
   if (!error) {
     // TODO: extract as a method.
@@ -2559,23 +2561,24 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
         continue;
       }
 
-      Field *field = table->field[i];
-      const char *column_name = field->field_name;
+      grn_obj *index_column = grn_index_columns[i];
 
-      if (field->is_null())
-        continue;
+      uint j;
+      for (j = 0; j < key_info.key_parts; j++) {
+        Field *field = key_info.key_part[j].field;
+        const char *column_name = field->field_name;
 
-      int column_size;
-      mrn_set_buf(ctx, field, &value, &column_size);
-      rc = grn_column_index_update(ctx, grn_index_columns[i], row_id, 1,
-                                   NULL, &value);
-      // TODO: check rc;
+        if (field->is_null())
+          continue;
+
+        int column_size;
+        mrn_set_buf(ctx, field, &value, &column_size);
+        rc = grn_column_index_update(ctx, index_column, row_id, 1, NULL, &value);
+        // TODO: check rc;
+      }
     }
     grn_obj_unlink(ctx, &value);
   }
-
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
 
   DBUG_RETURN(error);
 }
