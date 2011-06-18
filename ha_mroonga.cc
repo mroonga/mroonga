@@ -5028,6 +5028,18 @@ bool ha_mroonga::is_fatal_error(int error_num, uint flags)
   DBUG_RETURN(default_is_fatal_error(error_num, flags));
 }
 
+void ha_mroonga::set_pk_bitmap()
+{
+  KEY key_info = table->key_info[table_share->primary_key];
+  uint j;
+  MRN_DBUG_ENTER_METHOD();
+  for (j = 0; j < key_info.key_parts; j++) {
+    Field *field = key_info.key_part[j].field;
+    bitmap_set_bit(table->read_set, field->field_index);
+  }
+  DBUG_VOID_RETURN;
+}
+
 #ifdef __cplusplus
 }
 #endif

@@ -32,8 +32,6 @@ extern "C" {
 #include <groonga.h>
 #include "mrn_sys.h"
 
-class ha_mroonga;
-
 /* structs */
 struct st_mrn_statuses
 {
@@ -46,13 +44,12 @@ struct st_mrn_ft_info
   struct _ft_vft *please;
   grn_ctx *ctx;
   grn_obj *result;
-  grn_table_cursor *cursor;
-  grn_id record_id;
+  grn_id rid;
 };
 
 struct st_mrn_slot_data
 {
-  grn_id last_insert_record_id;
+  grn_id last_insert_rid;
 };
 
 /* handler class */
@@ -64,7 +61,7 @@ class ha_mroonga: public handler
   MRN_SHARE *share;
   KEY       *wrap_key_info;
   KEY       *base_key_info;
-  key_part_map pk_keypart_map;
+  key_part_map pk_keypart_map
   MEM_ROOT  mem_root;
 public:
   handler   *wrap_handler;
@@ -85,11 +82,10 @@ private:
   grn_obj *result0;
   grn_table_cursor *cur;
   grn_table_cursor *cur0;
-  grn_id record_id;
+  grn_id row_id;
   grn_obj *_score;
 
   st_mrn_ft_info mrn_ft_info;
-  st_mrn_ft_info *wrapper_ft_info;
 
   char **key_min;
   char **key_max;
@@ -167,7 +163,7 @@ public:
   int read_range_next();
 
   int ft_init();
-  void ft_end();
+  void ft_end()
   FT_INFO *ft_init_ext(uint flags, uint inx, String *key);
   int ft_read(uchar *buf);
 
@@ -215,7 +211,8 @@ private:
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
   void check_fast_order_limit();
-  void store_fields_from_primary_table(uchar *buf, grn_id record_id);
+  void store_fields_from_primary_table(uchar *buf, grn_id rid);
+  void set_pk_bitmap();
   int wrapper_create(const char *name, TABLE *table,
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
   int default_create(const char *name, TABLE *table,
