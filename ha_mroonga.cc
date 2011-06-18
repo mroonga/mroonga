@@ -2364,6 +2364,8 @@ int ha_mroonga::wrapper_rnd_next(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (fulltext_searching)
+    set_pk_bitmap();
   error = wrap_handler->rnd_next(buf);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
