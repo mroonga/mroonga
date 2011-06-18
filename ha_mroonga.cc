@@ -2565,6 +2565,9 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
     grn_obj value;
     GRN_VOID_INIT(&value);
 
+#ifndef DBUG_OFF
+    my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
+#endif
     uint i;
     uint n_keys = table->s->keys;
     for (i = 0; i < n_keys; i++) {
@@ -2591,6 +2594,9 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
         // TODO: check rc;
       }
     }
+#ifndef DBUG_OFF
+    dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
     grn_obj_unlink(ctx, &value);
   }
 
