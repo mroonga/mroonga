@@ -825,6 +825,46 @@ mysql_declare_plugin(mroonga)
 mysql_declare_plugin_end;
 
 
+static int mrn_wrapper_ft_read_next(FT_INFO *handler, char *record)
+{
+  return HA_ERR_END_OF_FILE;
+}
+
+static float mrn_wrapper_ft_find_relevance(FT_INFO *handler, uchar *record,
+                                           uint length)
+{
+  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  return (float) -1.0;
+}
+
+static void mrn_wrapper_ft_close_search(FT_INFO *handler)
+{
+  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  grn_obj_unlink(info->ctx, info->result);
+  info->ctx = NULL;
+  info->result = NULL;
+  info->rid = GRN_ID_NIL;
+  delete info;
+}
+
+static float mrn_wrapper_ft_get_relevance(FT_INFO *handler)
+{
+  return (float) -1.0;
+}
+
+static void mrn_wrapper_ft_reinit_search(FT_INFO *handler)
+{
+}
+
+static _ft_vft mrn_wrapper_ft_vft = {
+  mrn_wrapper_ft_read_next,
+  mrn_wrapper_ft_find_relevance,
+  mrn_wrapper_ft_close_search,
+  mrn_wrapper_ft_get_relevance,
+  mrn_wrapper_ft_reinit_search
+};
+
+
 static float mrn_default_ft_find_relevance(FT_INFO *handler, uchar *record,
                                            uint length)
 {
