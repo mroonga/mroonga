@@ -54,7 +54,7 @@ struct st_mrn_ft_info
 
 struct st_mrn_slot_data
 {
-  grn_id last_insert_rid;
+  grn_id last_insert_record_id;
 };
 
 /* handler class */
