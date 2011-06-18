@@ -66,7 +66,7 @@ class ha_mroonga: public handler
   MRN_SHARE *share;
   KEY       *wrap_key_info;
   KEY       *base_key_info;
-  key_part_map pk_keypart_map
+  key_part_map pk_keypart_map;
   MEM_ROOT  mem_root;
 public:
   handler   *wrap_handler;
