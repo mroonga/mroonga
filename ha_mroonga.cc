@@ -831,13 +831,13 @@ static float mrn_default_ft_find_relevance(FT_INFO *handler, uchar *record,
   st_mrn_ft_info *info = (st_mrn_ft_info*) handler;
   if (info->rid != GRN_ID_NIL) {
     grn_ctx *ctx = info->ctx;
-    grn_obj *res = info->res;
+    grn_obj *result = info->result;
     grn_id rid = info->rid;
 
-    if (res && res->header.flags & GRN_OBJ_WITH_SUBREC) {
+    if (result && result->header.flags & GRN_OBJ_WITH_SUBREC) {
       float score;
-      grn_id res_id = grn_table_get(ctx, res, &rid, sizeof(rid));
-      if (res_id != GRN_ID_NIL) {
+      grn_id result_id = grn_table_get(ctx, result, &rid, sizeof(rid));
+      if (result_id != GRN_ID_NIL) {
         return (float) -1.0;
       } else {
         return (float) 0.0;
@@ -854,9 +854,9 @@ static float mrn_default_ft_get_relevance(FT_INFO *handler)
 
 static void mrn_default_ft_close_search(FT_INFO *handler)
 {
-  st_mrn_ft_info *info = (st_mrn_ft_info*) handler;
+  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
   info->ctx = NULL;
-  info->res = NULL;
+  info->result = NULL;
   info->rid = GRN_ID_NIL;
 }
 
@@ -879,8 +879,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   grn_ctx_use(ctx, mrn_db);
   cur = NULL;
   cur0 = NULL;
-  res = NULL;
-  res0 = NULL;
+  result = NULL;
+  result0 = NULL;
   sort_keys = NULL;
   share = NULL;
   is_clone = FALSE;
@@ -3652,54 +3652,56 @@ FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint key_nr, String *key)
     sort_keys = NULL;
   }
   check_fast_order_limit();
-  if (res0 != NULL) {
-    grn_obj_unlink(ctx, res0);
-    res0 = NULL;
+  if (result0 != NULL) {
+    grn_obj_unlink(ctx, result0);
+    result0 = NULL;
   }
-  if (res != NULL) {
-    grn_obj_unlink(ctx, res);
+  if (result != NULL) {
+    grn_obj_unlink(ctx, result);
     _score = NULL;
-    res = NULL;
+    result = NULL;
   }
 
   row_id = GRN_ID_NIL;
 
-  res = grn_table_create(ctx, NULL, 0, NULL,
-                         GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC, grn_table, 0);
+  result = grn_table_create(ctx, NULL, 0, NULL,
+                            GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                            grn_table, 0);
 
   if (flags & FT_BOOL) {
     // boolean search
     grn_query *query = grn_query_open(ctx, keyword, keyword_size,
                                       GRN_OP_OR, MRN_MAX_EXPRS);
-    grn_obj_search(ctx, ft, (grn_obj*) query, res, GRN_OP_OR, NULL);
+    grn_obj_search(ctx, ft, (grn_obj*) query, result, GRN_OP_OR, NULL);
   } else {
     // nlq search
     grn_obj buf;
     GRN_TEXT_INIT(&buf, 0);
     GRN_TEXT_SET(ctx, &buf, keyword, keyword_size);
-    grn_obj_search(ctx, ft, &buf, res, GRN_OP_OR, NULL);
+    grn_obj_search(ctx, ft, &buf, result, GRN_OP_OR, NULL);
   }
-  _score = grn_obj_column(ctx, res, MRN_SCORE_COL_NAME, strlen(MRN_SCORE_COL_NAME));
-  int n_rec = grn_table_size(ctx, res);
+  _score = grn_obj_column(ctx, result,
+                          MRN_SCORE_COL_NAME, strlen(MRN_SCORE_COL_NAME));
+  int n_rec = grn_table_size(ctx, result);
   if (!fast_order_limit) {
-    cur = grn_table_cursor_open(ctx, res, NULL, 0, NULL, 0, 0, -1, 0);
+    cur = grn_table_cursor_open(ctx, result, NULL, 0, NULL, 0, 0, -1, 0);
   } else {
     st_select_lex *select_lex = table->pos_in_table_list->select_lex;
-    res0 = grn_table_create(ctx, NULL, 0, NULL,
-                            GRN_OBJ_TABLE_NO_KEY, NULL, res);
+    result0 = grn_table_create(ctx, NULL, 0, NULL,
+                               GRN_OBJ_TABLE_NO_KEY, NULL, result);
     for (int i = 0; i < n_sort_keys; i++) {
       if (!sort_keys[i].key) {
         sort_keys[i].key = _score;
       }
     }
-    grn_table_sort(ctx, res, 0, limit, res0, sort_keys, n_sort_keys);
-    cur = grn_table_cursor_open(ctx, res0, NULL, 0, NULL, 0, 0, -1, 0);
+    grn_table_sort(ctx, result, 0, limit, result0, sort_keys, n_sort_keys);
+    cur = grn_table_cursor_open(ctx, result0, NULL, 0, NULL, 0, 0, -1, 0);
   }
 
   { // for "not match"
     mrn_ft_info.please = &mrn_default_ft_vft;
     mrn_ft_info.ctx = ctx;
-    mrn_ft_info.res = res;
+    mrn_ft_info.result = result;
     mrn_ft_info.rid = GRN_ID_NIL;
   }
 
@@ -3746,13 +3748,13 @@ int ha_mroonga::default_ft_read(uchar *buf)
   }
 
   if (!fast_order_limit) {
-    grn_table_get_key(ctx, res, rid, &row_id, sizeof(grn_id));
+    grn_table_get_key(ctx, result, rid, &row_id, sizeof(grn_id));
   } else if (fast_order_limit_with_index) {
-    grn_table_get_key(ctx, res0, rid, &row_id, sizeof(grn_id));
+    grn_table_get_key(ctx, result0, rid, &row_id, sizeof(grn_id));
   } else {
     grn_id rid2;
-    grn_table_get_key(ctx, res0, rid, &rid2, sizeof(grn_id));
-    grn_table_get_key(ctx, res, rid2, &row_id, sizeof(grn_id));
+    grn_table_get_key(ctx, result0, rid, &rid2, sizeof(grn_id));
+    grn_table_get_key(ctx, result, rid2, &row_id, sizeof(grn_id));
   }
   store_fields_from_primary_table(buf, row_id);
   DBUG_RETURN(0);
@@ -4063,11 +4065,11 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id rid)
         field->store((int) rid);
       } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
         // for _score column
-        if (res && res->header.flags & GRN_OBJ_WITH_SUBREC) {
+        if (result && result->header.flags & GRN_OBJ_WITH_SUBREC) {
           float score;
           grn_obj buf;
           GRN_INT32_INIT(&buf,0);
-          grn_id res_id = grn_table_get(ctx, res, &rid, sizeof(rid));
+          grn_id res_id = grn_table_get(ctx, result, &rid, sizeof(rid));
           grn_obj_get_value(ctx, _score, res_id, &buf);
           score = GRN_INT32_VALUE(&buf);
           grn_obj_unlink(ctx, &buf);
@@ -4112,14 +4114,14 @@ int ha_mroonga::default_reset()
     free(sort_keys);
     sort_keys = NULL;
   }
-  if (res0 != NULL) {
-    grn_obj_unlink(ctx, res0);
-    res0 = NULL;
+  if (result0 != NULL) {
+    grn_obj_unlink(ctx, result0);
+    result0 = NULL;
   }
-  if (res != NULL) {
-    grn_obj_unlink(ctx, res);
+  if (result != NULL) {
+    grn_obj_unlink(ctx, result);
     _score = NULL;
-    res = NULL;
+    result = NULL;
   }
   DBUG_RETURN(0);
 }

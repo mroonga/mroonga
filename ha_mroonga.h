@@ -43,7 +43,7 @@ struct st_mrn_ft_info
 {
   struct _ft_vft *please;
   grn_ctx *ctx;
-  grn_obj *res;
+  grn_obj *result;
   grn_id rid;
 };
 
@@ -77,8 +77,8 @@ private:
   grn_obj **grn_index_tables;
   grn_obj **grn_index_columns;
 
-  grn_obj *res;
-  grn_obj *res0;
+  grn_obj *result;
+  grn_obj *result0;
   grn_table_cursor *cur;
   grn_table_cursor *cur0;
   grn_id row_id;
