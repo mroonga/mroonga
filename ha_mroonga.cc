@@ -3064,10 +3064,7 @@ int ha_mroonga::wrapper_index_init(uint idx, bool sorted)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (fulltext_searching)
-    error = wrap_handler->ha_index_init(table_share->primary_key, FALSE);
-  else
-    error = wrap_handler->ha_index_init(share->wrap_key_nr[idx], sorted);
+  error = wrap_handler->ha_index_init(share->wrap_key_nr[idx], sorted);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -3782,14 +3779,8 @@ int ha_mroonga::read_range_next()
 
 int ha_mroonga::wrapper_ft_init()
 {
-  int error;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_index_init(table_share->primary_key, FALSE);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(error);
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::default_ft_init()
@@ -3809,12 +3800,7 @@ int ha_mroonga::ft_init()
 void ha_mroonga::wrapper_ft_end()
 {
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  wrap_handler->ha_index_end();
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_VOID_RETURN;
+  DBUG_RETURN(0);
 }
 
 void ha_mroonga::default_ft_end()
