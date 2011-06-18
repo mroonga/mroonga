@@ -43,8 +43,13 @@ struct st_mrn_ft_info
 {
   struct _ft_vft *please;
   grn_ctx *ctx;
+  grn_obj *table;
   grn_obj *result;
-  grn_id rid;
+  grn_obj *score_column;
+  grn_obj key;
+  grn_obj score;
+  KEY *primary_key_info;
+  uint primary_key_length;
 };
 
 struct st_mrn_slot_data

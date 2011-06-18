@@ -836,16 +836,22 @@ static float mrn_wrapper_ft_find_relevance(FT_INFO *handler, uchar *record,
 {
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  float score = 0.0;
+  grn_id record_id;
 
-  grn_obj *score_column;
-  score_column = grn_obj_column(info->ctx, info->result,
-                                MRN_SCORE_COL_NAME, strlen(MRN_SCORE_COL_NAME));
-  grn_obj score_value;
-  GRN_INT32_INIT(&score_value, 0);
-  grn_obj_get_value(info->ctx, score_column, info->record_id, &score_value);
-  float score = (float)GRN_INT32_VALUE(&score_value);
-  grn_obj_unlink(info->ctx, &score_value);
-  grn_obj_unlink(info->ctx, score_column);
+  key_copy((uchar *)(GRN_TEXT_VALUE(&(info->key))), record,
+           info->primary_key_info, info->primary_key_length);
+  record_id = grn_table_get(info->ctx,
+                            info->table,
+                            GRN_TEXT_VALUE(&(info->key)),
+                            GRN_TEXT_LEN(&(info->key)));
+
+  if (record_id != GRN_ID_NIL) {
+    GRN_BULK_REWIND(&(info->score));
+    grn_obj_get_value(info->ctx, info->score_column,
+                      info->record_id, &(info->score));
+    score = (float)GRN_INT32_VALUE(&(info->score));
+  }
 
   DBUG_RETURN(score);
 }
@@ -855,9 +861,9 @@ static void mrn_wrapper_ft_close_search(FT_INFO *handler)
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
   grn_obj_unlink(info->ctx, info->result);
-  info->ctx = NULL;
-  info->result = NULL;
-  info->record_id = GRN_ID_NIL;
+  grn_obj_unlink(info->ctx, info->score_column);
+  grn_obj_unlink(info->ctx, &(info->key));
+  grn_obj_unlink(info->ctx, &(info->score));
   delete info;
   DBUG_VOID_RETURN;
 }
@@ -865,7 +871,7 @@ static void mrn_wrapper_ft_close_search(FT_INFO *handler)
 static float mrn_wrapper_ft_get_relevance(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  DBUG_RETURN((float)-1.0);
+  DBUG_RETURN((float)0.0);
 }
 
 static void mrn_wrapper_ft_reinit_search(FT_INFO *handler)
@@ -3825,18 +3831,26 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
   struct st_mrn_ft_info *info = new st_mrn_ft_info();
   info->please = &mrn_wrapper_ft_vft;
   info->ctx = ctx;
+  info->table = grn_table;
   info->result = grn_table_create(ctx, NULL, 0, NULL,
                                   GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                   grn_table, 0);
-  info->record_id = GRN_ID_NIL;
+  info->score_column = grn_obj_column(info->ctx, info->result,
+                                      MRN_SCORE_COL_NAME,
+                                      strlen(MRN_SCORE_COL_NAME));
+  GRN_TEXT_INIT(&(info->key), 0);
+  grn_bulk_space(ctx, &(info->key), table->key_info->key_length);
+  GRN_INT32_INIT(&(info->score), 0);
+  info->primary_key = &(table->key_info[table_share->primary_key]);
+  info->primary_key_length =
+    table->key_info[table_share->primary_key].key_length;
 
+  // TODO: boolean mode support.
   grn_obj *index_column = grn_index_columns[key_nr];
   grn_obj query;
   GRN_TEXT_INIT(&query, GRN_OBJ_DO_SHALLOW_COPY);
   GRN_TEXT_SET_REF(&query, key->ptr(), key->length());
   grn_obj_search(info->ctx, index_column, &query, info->result, GRN_OP_OR, NULL);
-
-  wrapper_ft_info = info; // FIXME: support multi init_ext call.
 
   DBUG_RETURN((FT_INFO *)info);
 }
