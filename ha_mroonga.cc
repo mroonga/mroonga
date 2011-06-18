@@ -992,7 +992,8 @@ ulonglong ha_mroonga::wrapper_table_flags() const
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  table_flags = wrap_handler->ha_table_flags() | HA_CAN_FULLTEXT;
+  table_flags = wrap_handler->ha_table_flags() |
+    HA_CAN_FULLTEXT | HA_PRIMARY_KEY_REQUIRED_FOR_DELETE;
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(table_flags);
@@ -1053,6 +1054,12 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   int error;
   handler *hnd;
   MRN_DBUG_ENTER_METHOD();
+
+  if (table_share->primary_key == MAX_KEY)
+  {
+    my_message(ER_REQUIRES_PRIMARY_KEY, ER(ER_REQUIRES_PRIMARY_KEY), MYF(0));
+    DBUG_RETURN(ER_REQUIRES_PRIMARY_KEY);
+  }
 
   error = wrapper_create_index(name, table, info, tmp_share);
   if (error)
