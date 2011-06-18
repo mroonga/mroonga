@@ -2558,8 +2558,8 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
 
     int added;
     record_id = grn_table_add(ctx, grn_table,
-                           GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key),
-                           &added);
+                              GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key),
+                              &added);
     grn_obj_unlink(ctx, &key);
 
     grn_obj value;
