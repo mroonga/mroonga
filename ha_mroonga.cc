@@ -848,8 +848,7 @@ static float mrn_wrapper_ft_find_relevance(FT_INFO *handler, uchar *record,
 
   if (record_id != GRN_ID_NIL) {
     GRN_BULK_REWIND(&(info->score));
-    grn_obj_get_value(info->ctx, info->score_column,
-                      info->record_id, &(info->score));
+    grn_obj_get_value(info->ctx, info->score_column, record_id, &(info->score));
     score = (float)GRN_INT32_VALUE(&(info->score));
   }
 
@@ -2299,16 +2298,7 @@ int ha_mroonga::wrapper_rnd_init(bool scan)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (fulltext_searching) {
-    st_mrn_ft_info *info = (st_mrn_ft_info *)wrapper_ft_info;
-    info->cursor = grn_table_cursor_open(info->ctx, info->result,
-                                         NULL, 0, NULL, 0,
-                                         0, -1, 0);
-    // TODO: error check.
-    error = wrap_handler->ha_index_init(table_share->primary_key, FALSE);
-  } else {
-    error = wrap_handler->ha_rnd_init(scan);
-  }
+  error = wrap_handler->ha_rnd_init(scan);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -2340,10 +2330,7 @@ int ha_mroonga::wrapper_rnd_end()
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (fulltext_searching)
-    error = wrap_handler->ha_index_end();
-  else
-    error = wrap_handler->ha_rnd_end();
+  error = wrap_handler->ha_rnd_end();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -2377,29 +2364,7 @@ int ha_mroonga::wrapper_rnd_next(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (fulltext_searching) {
-    st_mrn_ft_info *info = (st_mrn_ft_info *)wrapper_ft_info;
-    info->record_id = grn_table_cursor_next(info->ctx, info->cursor);
-    // TODO: error check.
-    if (info->record_id == GRN_ID_NIL) {
-      error = HA_ERR_END_OF_FILE;
-    } else {
-      grn_id relation_record_id;
-      uchar *key;
-      grn_table_get_key(ctx, info->result, info->record_id,
-                        &relation_record_id, sizeof(grn_id));
-      key = (uchar *)malloc(table->key_info->key_length);
-      grn_table_get_key(ctx, grn_table, relation_record_id,
-                        key, table->key_info->key_length);
-      error = wrap_handler->index_read_map(buf,
-                                           key,
-                                           pk_keypart_map,
-                                           HA_READ_KEY_EXACT);
-      free(key);
-    }
-  } else {
-    error = wrap_handler->rnd_next(buf);
-  }
+  error = wrap_handler->rnd_next(buf);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -2808,6 +2773,7 @@ int ha_mroonga::wrapper_update_row(const uchar *old_data, uchar *new_data)
   reenable_binlog(thd);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
+#if 0
   if (!error)
   {
     my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
@@ -2859,6 +2825,7 @@ int ha_mroonga::wrapper_update_row(const uchar *old_data, uchar *new_data)
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
   }
+#endif
   DBUG_RETURN(error);
 }
 
@@ -3806,7 +3773,7 @@ int ha_mroonga::ft_init()
 void ha_mroonga::wrapper_ft_end()
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(0);
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::default_ft_end()
@@ -3841,7 +3808,7 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
   GRN_TEXT_INIT(&(info->key), 0);
   grn_bulk_space(ctx, &(info->key), table->key_info->key_length);
   GRN_INT32_INIT(&(info->score), 0);
-  info->primary_key = &(table->key_info[table_share->primary_key]);
+  info->primary_key_info = &(table->key_info[table_share->primary_key]);
   info->primary_key_length =
     table->key_info[table_share->primary_key].key_length;
 

@@ -50,6 +50,7 @@ struct st_mrn_ft_info
   grn_obj score;
   KEY *primary_key_info;
   uint primary_key_length;
+  grn_id record_id; // TODO: remove me.
 };
 
 struct st_mrn_slot_data
