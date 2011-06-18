@@ -3684,7 +3684,14 @@ int ha_mroonga::ft_init()
 FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(0);
+  struct st_mrn_ft_info *info = new st_mrn_ft_info();
+  info->please = &mrn_wrapper_ft_vft;
+  info->ctx = ctx;
+  info->result = grn_table_create(ctx, NULL, 0, NULL,
+                                  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                  grn_table, 0);
+  info->rid = GRN_ID_NIL;
+  DBUG_RETURN((FT_INFO *)info);
 }
 
 FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint key_nr, String *key)
