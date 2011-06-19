@@ -3839,20 +3839,53 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
     table->key_info[table_share->primary_key].key_length;
 
   grn_obj *index_column = grn_index_columns[key_nr];
+  char index_column_name[GRN_TABLE_MAX_KEY_SIZE];
+  int index_column_name_length;
+  index_column_name_length = grn_obj_name(info->ctx,
+                                          index_column,
+                                          index_column_name,
+                                          GRN_TABLE_MAX_KEY_SIZE);
+  grn_obj *match_columns, *match_columns_variable;
+  GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table, match_columns,
+                            match_columns_variable);
+  grn_expr_parse(info->ctx, match_columns,
+                 index_column_name, index_column_name_length,
+                 NULL, GRN_OP_MATCH, GRN_OP_AND,
+                 GRN_EXPR_SYNTAX_SCRIPT);
+
+  grn_obj *expression, *expression_variable;
+  GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table,
+                            expression, expression_variable);
   if (flags & FT_BOOL) {
-    grn_query *query = grn_query_open(info->ctx, key->ptr(), key->length(),
-                                      GRN_OP_OR, MRN_MAX_EXPRS);
-    grn_obj_search(info->ctx, index_column, (grn_obj *)query, info->result,
-                   GRN_OP_OR, NULL);
-    grn_query_close(info->ctx, query);
+    const char *keyword = key->ptr();
+    uint keyword_length = key->length();
+    // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
+    if (keyword_length > 0 && keyword[0] == '+') {
+      keyword++;
+      keyword_length++;
+    }
+    grn_expr_flags expression_flags = GRN_EXPR_SYNTAX_QUERY;
+    grn_rc rc;
+    rc = grn_expr_parse(info->ctx, expression,
+                        keyword, keyword_length,
+                        match_columns, GRN_OP_MATCH, GRN_OP_OR,
+                        expression_flags);
+    // TODO: check rc
+    grn_table_select(info->ctx, info->table, expression,
+                     info->result, GRN_OP_OR);
   } else {
     grn_obj query;
     GRN_TEXT_INIT(&query, GRN_OBJ_DO_SHALLOW_COPY);
     GRN_TEXT_SET_REF(&query, key->ptr(), key->length());
-    grn_obj_search(info->ctx, index_column, &query, info->result,
-                   GRN_OP_OR, NULL);
-    grn_obj_unlink(ctx, &query);
+    grn_expr_append_obj(info->ctx, expression, match_columns, GRN_OP_PUSH, 1);
+    grn_expr_append_const(info->ctx, expression, &query, GRN_OP_PUSH, 1);
+    grn_expr_append_op(info->ctx, expression, GRN_OP_MATCH, 2);
+    grn_table_select(info->ctx, info->table, expression,
+                     info->result, GRN_OP_OR);
+    grn_obj_unlink(info->ctx, &query);
   }
+  grn_obj_unlink(info->ctx, expression);
+  grn_obj_unlink(info->ctx, match_columns);
 
   DBUG_RETURN((FT_INFO *)info);
 }
