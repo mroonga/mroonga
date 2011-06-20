@@ -2552,31 +2552,9 @@ int ha_mroonga::extra_opt(enum ha_extra_function operation, ulong cache_size)
   DBUG_RETURN(mrn_extra(operation));
 }
 
-int ha_mroonga::wrapper_write_row(uchar *buf)
-{
-  int error;
-  THD *thd = ha_thd();
-  MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  tmp_disable_binlog(thd);
-  error = wrap_handler->ha_write_row(buf);
-  reenable_binlog(thd);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-
-  if (!error) {
-    error = wrapper_write_row_index(buf);
-  }
-
-  DBUG_RETURN(error);
-}
-
-int ha_mroonga::wrapper_write_row_index(uchar *buf)
+bool ha_mroonga::wrapper_have_fulltext_index()
 {
   MRN_DBUG_ENTER_METHOD();
-
-  int error = 0;
 
   bool have_fulltext_index = FALSE;
 
@@ -2590,9 +2568,35 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
       break;
     }
   }
-  if (!have_fulltext_index) {
-    DBUG_RETURN(error);
+
+  DBUG_RETURN(have_fulltext_index);
+}
+
+int ha_mroonga::wrapper_write_row(uchar *buf)
+{
+  int error;
+  THD *thd = ha_thd();
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  tmp_disable_binlog(thd);
+  error = wrap_handler->ha_write_row(buf);
+  reenable_binlog(thd);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+
+  if (!error && wrapper_have_fulltext_index()) {
+    error = wrapper_write_row_index(buf);
   }
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::wrapper_write_row_index(uchar *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
 
   grn_obj key;
   GRN_TEXT_INIT(&key, 0);

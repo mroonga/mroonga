@@ -262,6 +262,7 @@ private:
   void default_start_bulk_insert(ha_rows rows);
   int wrapper_end_bulk_insert();
   int default_end_bulk_insert();
+  bool wrapper_have_fulltext_index();
   int wrapper_write_row(uchar *buf);
   int wrapper_write_row_index(uchar *buf);
   int default_write_row(uchar *buf);
