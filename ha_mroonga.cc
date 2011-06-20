@@ -2631,8 +2631,9 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
 #ifndef DBUG_OFF
   my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
+  uint i;
+  uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
-    grn_rc rc;
     KEY key_info = table->key_info[i];
 
     if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
@@ -2651,6 +2652,8 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
 
       int new_column_size;
       mrn_set_buf(ctx, field, &new_value, &new_column_size);
+
+      grn_rc rc;
       rc = grn_column_index_update(ctx, index_column, record_id, 1,
                                    NULL, &new_value);
       if (rc) {
