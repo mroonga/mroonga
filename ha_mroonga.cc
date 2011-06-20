@@ -2817,6 +2817,37 @@ int ha_mroonga::write_row(uchar *buf)
   DBUG_RETURN(default_write_row(buf));
 }
 
+int ha_mroonga::wrapper_get_record_id(uchar *data, grn_id *record_id,
+                                      const char *context)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+
+  grn_obj key;
+  GRN_TEXT_INIT(&key, 0);
+
+  grn_bulk_space(ctx, &key, table->key_info->key_length);
+  key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
+           data,
+           &(table->key_info[table_share->primary_key]),
+           table->key_info[table_share->primary_key].key_length);
+
+  *record_id = grn_table_get(ctx, grn_table,
+                             GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key));
+  if (*record_id == GRN_ID_NIL) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "%s: key=<%.*s>",
+             context, GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
+    error = ER_ERROR_ON_WRITE;
+    my_message(error, error_message, MYF(0));
+  }
+  grn_obj_unlink(ctx, &key);
+
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::wrapper_update_row(const uchar *old_data, uchar *new_data)
 {
   int error;
@@ -2842,28 +2873,10 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
   MRN_DBUG_ENTER_METHOD();
 
   int error = 0;
-
-  grn_obj key;
-  GRN_TEXT_INIT(&key, 0);
-
-  grn_bulk_space(ctx, &key, table->key_info->key_length);
-  key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
-           (uchar *)old_data,
-           &(table->key_info[table_share->primary_key]),
-           table->key_info[table_share->primary_key].key_length);
-
   grn_id record_id;
-  record_id = grn_table_get(ctx, grn_table,
-                            GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key));
-  if (record_id == GRN_ID_NIL) {
-    char error_message[MRN_MESSAGE_BUFFER_SIZE];
-    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "failed to get record ID for updating from groonga: key=<%.*s>",
-             GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
-    error = ER_ERROR_ON_WRITE;
-    my_message(error, error_message, MYF(0));
-  }
-  grn_obj_unlink(ctx, &key);
+  error = wrapper_get_record_id((uchar *)old_data, &record_id,
+                                "failed to get record ID "
+                                "for updating from groonga");
   if (error) {
     DBUG_RETURN(error);
   }
@@ -3033,27 +3046,10 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
 
   int error = 0;
 
-  grn_obj key;
-  GRN_TEXT_INIT(&key, 0);
-
-  grn_bulk_space(ctx, &key, table->key_info->key_length);
-  key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
-           (uchar *)buf,
-           &(table->key_info[table_share->primary_key]),
-           table->key_info[table_share->primary_key].key_length);
-
   grn_id record_id;
-  record_id = grn_table_get(ctx, grn_table,
-                            GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key));
-  if (record_id == GRN_ID_NIL) {
-    char error_message[MRN_MESSAGE_BUFFER_SIZE];
-    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "failed to get record ID for deleting from groonga: key=<%.*s>",
-             GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
-    error = ER_ERROR_ON_WRITE;
-    my_message(error, error_message, MYF(0));
-  }
-  grn_obj_unlink(ctx, &key);
+  error = wrapper_get_record_id((uchar *)buf, &record_id,
+                                "failed to get record ID "
+                                "for deleting from groonga");
   if (error) {
     DBUG_RETURN(error);
   }

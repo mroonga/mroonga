@@ -266,6 +266,7 @@ private:
   int wrapper_write_row(uchar *buf);
   int wrapper_write_row_index(uchar *buf);
   int default_write_row(uchar *buf);
+  int wrapper_get_record_id(uchar *data, grn_id *record_id, const char *context);
   int wrapper_update_row(const uchar *old_data, uchar *new_data);
   int wrapper_update_row_index(const uchar *old_data, uchar *new_data);
   int default_update_row(const uchar *old_data, uchar *new_data);
