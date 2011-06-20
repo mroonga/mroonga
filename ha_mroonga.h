@@ -263,6 +263,7 @@ private:
   int wrapper_end_bulk_insert();
   int default_end_bulk_insert();
   int wrapper_write_row(uchar *buf);
+  int wrapper_write_row_index(uchar *buf);
   int default_write_row(uchar *buf);
   int wrapper_update_row(const uchar *old_data, uchar *new_data);
   int default_update_row(const uchar *old_data, uchar *new_data);

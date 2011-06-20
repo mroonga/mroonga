@@ -61,10 +61,12 @@
 #include "mrn_table.h"
 #include "ha_mroonga.h"
 
+#define MRN_MESSAGE_BUFFER_SIZE 1024
+
 #define MRN_DBUG_ENTER_FUNCTION() DBUG_ENTER(__FUNCTION__)
 #if !defined(DBUG_OFF) && !defined(_lint)
 #  define MRN_DBUG_ENTER_METHOD()                 \
-    char method_name[512];                        \
+    char method_name[MRN_MESSAGE_BUFFER_SIZE];    \
     method_name[0] = '\0';                        \
     strcat(method_name, "ha_mroonga::");          \
     strcat(method_name, __FUNCTION__);            \
@@ -72,7 +74,6 @@
 #else
 #  define MRN_DBUG_ENTER_METHOD() MRN_DBUG_ENTER_FUNCTION()
 #endif
-
 
 #if MYSQL_VERSION_ID >= 50500
 extern mysql_mutex_t LOCK_open;
@@ -2565,61 +2566,101 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
   MRN_SET_BASE_TABLE_KEY(this, table);
 
   if (!error) {
-    // TODO: extract as a method.
-    grn_id record_id;
+    error = wrapper_write_row_index(buf);
+  }
 
-    grn_obj key;
-    GRN_TEXT_INIT(&key, 0);
+  DBUG_RETURN(error);
+}
 
-    grn_bulk_space(ctx, &key, table->key_info->key_length);
-    key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
-             table->record[0],
-             &(table->key_info[table_share->primary_key]),
-             table->key_info[table_share->primary_key].key_length);
+int ha_mroonga::wrapper_write_row_index(uchar *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
 
-    int added;
-    record_id = grn_table_add(ctx, grn_table,
-                              GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key),
-                              &added);
-    grn_obj_unlink(ctx, &key);
+  int error = 0;
 
-    grn_obj value;
-    GRN_VOID_INIT(&value);
+  bool have_fulltext_index = FALSE;
+
+  uint i;
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    KEY key_info = table->key_info[i];
+
+    if (key_info.algorithm == HA_KEY_ALG_FULLTEXT) {
+      have_fulltext_index = TRUE;
+      break;
+    }
+  }
+  if (!have_fulltext_index) {
+    DBUG_RETURN(error);
+  }
+
+  grn_obj key;
+  GRN_TEXT_INIT(&key, 0);
+
+  grn_bulk_space(ctx, &key, table->key_info->key_length);
+  key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
+           buf,
+           &(table->key_info[table_share->primary_key]),
+           table->key_info[table_share->primary_key].key_length);
+
+  int added;
+  grn_id record_id;
+  record_id = grn_table_add(ctx, grn_table,
+                            GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key),
+                            &added);
+  if (record_id == GRN_ID_NIL) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to add a new row into groonga: key=<%.*s>",
+             GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
+    error = ER_ERROR_ON_WRITE;
+    my_message(error, error_message, MYF(0));
+  }
+  grn_obj_unlink(ctx, &key);
+  if (error) {
+    DBUG_RETURN(error);
+  }
+
+  grn_obj new_value;
+  GRN_VOID_INIT(&new_value);
 
 #ifndef DBUG_OFF
-    my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
+  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
-    uint i;
-    uint n_keys = table->s->keys;
-    for (i = 0; i < n_keys; i++) {
-      grn_rc rc;
-      KEY key_info = table->key_info[i];
+  for (i = 0; i < n_keys; i++) {
+    grn_rc rc;
+    KEY key_info = table->key_info[i];
 
-      if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+    if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+      continue;
+    }
+
+    grn_obj *index_column = grn_index_columns[i];
+
+    uint j;
+    for (j = 0; j < key_info.key_parts; j++) {
+      Field *field = key_info.key_part[j].field;
+      const char *column_name = field->field_name;
+
+      if (field->is_null())
         continue;
-      }
 
-      grn_obj *index_column = grn_index_columns[i];
-
-      uint j;
-      for (j = 0; j < key_info.key_parts; j++) {
-        Field *field = key_info.key_part[j].field;
-        const char *column_name = field->field_name;
-
-        if (field->is_null())
-          continue;
-
-        int column_size;
-        mrn_set_buf(ctx, field, &value, &column_size);
-        rc = grn_column_index_update(ctx, index_column, record_id, 1, NULL, &value);
-        // TODO: check rc;
+      int new_column_size;
+      mrn_set_buf(ctx, field, &new_value, &new_column_size);
+      rc = grn_column_index_update(ctx, index_column, record_id, 1,
+                                   NULL, &new_value);
+      if (rc) {
+        error = ER_ERROR_ON_WRITE;
+        my_message(error, ctx->errbuf, MYF(0));
+        goto err;
       }
     }
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
-    grn_obj_unlink(ctx, &value);
   }
+err:
+#ifndef DBUG_OFF
+  dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+  grn_obj_unlink(ctx, &new_value);
 
   DBUG_RETURN(error);
 }
