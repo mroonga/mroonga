@@ -2772,7 +2772,7 @@ int ha_mroonga::write_row(uchar *buf)
 int ha_mroonga::wrapper_update_row(const uchar *old_data, uchar *new_data)
 {
   int error;
-  THD *thd= ha_thd();
+  THD *thd = ha_thd();
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
@@ -2781,7 +2781,7 @@ int ha_mroonga::wrapper_update_row(const uchar *old_data, uchar *new_data)
   reenable_binlog(thd);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-#if 0
+
   if (!error)
   {
     my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
@@ -2791,9 +2791,19 @@ int ha_mroonga::wrapper_update_row(const uchar *old_data, uchar *new_data)
 
     grn_bulk_space(ctx, &key, table->key_info->key_length);
     key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
-             old_data,
+             (uchar *)old_data,
              &(table->key_info[table_share->primary_key]),
              table->key_info[table_share->primary_key].key_length);
+
+    grn_id record_id;
+    record_id = grn_table_get(ctx, grn_table,
+                              GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key));
+    // TODO: check record_id == GRN_ID_NIL
+    grn_obj_unlink(ctx, &key);
+
+    grn_obj old_value, new_value;
+    GRN_TEXT_INIT(&old_value, 0);
+    GRN_TEXT_INIT(&new_value, 0);
 
 #ifndef DBUG_OFF
     my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
@@ -2815,25 +2825,25 @@ int ha_mroonga::wrapper_update_row(const uchar *old_data, uchar *new_data)
         Field *field = key_info.key_part[j].field;
         const char *column_name = field->field_name;
 
-        field->move_field_offset(ptr_diff);
-        if (field->is_null())
-        {
-          field->move_field_offset(-ptr_diff);
-          continue;
-        }
+        int new_column_size;
+        mrn_set_buf(ctx, field, &new_value, &new_column_size);
 
-        int column_size;
-        mrn_set_buf(ctx, field, &value, &column_size);
-        rc = grn_column_index_update(ctx, index_column, record_id, 1, NULL, &value);
-        // TODO: check rc;
+        field->move_field_offset(ptr_diff);
+        int old_column_size;
+        mrn_set_buf(ctx, field, &old_value, &old_column_size);
         field->move_field_offset(-ptr_diff);
+
+        rc = grn_column_index_update(ctx, index_column, record_id, 1,
+                                     &old_value, &new_value);
+        // TODO: check rc;
       }
     }
 #ifndef DBUG_OFF
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
+    grn_obj_unlink(ctx, &old_value);
+    grn_obj_unlink(ctx, &new_value);
   }
-#endif
   DBUG_RETURN(error);
 }
 
