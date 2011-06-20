@@ -2880,7 +2880,6 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
-    grn_rc rc;
     KEY key_info = table->key_info[i];
 
     if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
@@ -2902,6 +2901,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
       mrn_set_buf(ctx, field, &old_value, &old_column_size);
       field->move_field_offset(-ptr_diff);
 
+      grn_rc rc;
       rc = grn_column_index_update(ctx, index_column, record_id, 1,
                                    &old_value, &new_value);
       if (rc) {
@@ -3020,60 +3020,86 @@ int ha_mroonga::wrapper_delete_row(const uchar *buf)
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
 
-  if (!error) {
-    grn_obj key;
-    GRN_TEXT_INIT(&key, 0);
+  if (!error && wrapper_have_fulltext_index()) {
+    error = wrapper_delete_row_index(buf);
+  }
 
-    grn_bulk_space(ctx, &key, table->key_info->key_length);
-    key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
-             (uchar *)buf,
-             &(table->key_info[table_share->primary_key]),
-             table->key_info[table_share->primary_key].key_length);
+  DBUG_RETURN(error);
+}
 
-    grn_id record_id;
-    record_id = grn_table_get(ctx, grn_table,
-                              GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key));
-    // TODO: check record_id == GRN_ID_NIL
-    grn_obj_unlink(ctx, &key);
+int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
 
-    grn_obj old_value;
-    GRN_TEXT_INIT(&old_value, 0);
+  int error = 0;
+
+  grn_obj key;
+  GRN_TEXT_INIT(&key, 0);
+
+  grn_bulk_space(ctx, &key, table->key_info->key_length);
+  key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
+           (uchar *)buf,
+           &(table->key_info[table_share->primary_key]),
+           table->key_info[table_share->primary_key].key_length);
+
+  grn_id record_id;
+  record_id = grn_table_get(ctx, grn_table,
+                            GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key));
+  if (record_id == GRN_ID_NIL) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to get record ID for deleting from groonga: key=<%.*s>",
+             GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
+    error = ER_ERROR_ON_WRITE;
+    my_message(error, error_message, MYF(0));
+  }
+  grn_obj_unlink(ctx, &key);
+  if (error) {
+    DBUG_RETURN(error);
+  }
+
+  grn_obj old_value;
+  GRN_TEXT_INIT(&old_value, 0);
 
 #ifndef DBUG_OFF
-    my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
+  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
-    uint i;
-    uint n_keys = table->s->keys;
-    for (i = 0; i < n_keys; i++) {
-      grn_rc rc;
-      KEY key_info = table->key_info[i];
+  uint i;
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    KEY key_info = table->key_info[i];
 
-      if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+    if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+      continue;
+    }
+
+    grn_obj *index_column = grn_index_columns[i];
+
+    uint j;
+    for (j = 0; j < key_info.key_parts; j++) {
+      Field *field = key_info.key_part[j].field;
+      const char *column_name = field->field_name;
+
+      if (field->is_null())
         continue;
-      }
 
-      grn_obj *index_column = grn_index_columns[i];
-
-      uint j;
-      for (j = 0; j < key_info.key_parts; j++) {
-        Field *field = key_info.key_part[j].field;
-        const char *column_name = field->field_name;
-
-        if (field->is_null())
-          continue;
-
-        int old_column_size;
-        mrn_set_buf(ctx, field, &old_value, &old_column_size);
-        rc = grn_column_index_update(ctx, index_column, record_id, 1,
-                                     &old_value, NULL);
-        // TODO: check rc;
+      int old_column_size;
+      mrn_set_buf(ctx, field, &old_value, &old_column_size);
+      grn_rc rc;
+      rc = grn_column_index_update(ctx, index_column, record_id, 1,
+                                   &old_value, NULL);
+      if (rc) {
+        error = ER_ERROR_ON_WRITE;
+        my_message(error, ctx->errbuf, MYF(0));
+        goto err;
       }
     }
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
-    grn_obj_unlink(ctx, &old_value);
   }
+err:
+#ifndef DBUG_OFF
+  dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+  grn_obj_unlink(ctx, &old_value);
 
   DBUG_RETURN(error);
 }

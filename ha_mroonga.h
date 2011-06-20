@@ -270,6 +270,7 @@ private:
   int wrapper_update_row_index(const uchar *old_data, uchar *new_data);
   int default_update_row(const uchar *old_data, uchar *new_data);
   int wrapper_delete_row(const uchar *buf);
+  int wrapper_delete_row_index(const uchar *buf);
   int default_delete_row(const uchar *buf);
   ulonglong wrapper_table_flags() const;
   ulonglong default_table_flags() const;
