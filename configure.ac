@@ -1,4 +1,4 @@
-AC_INIT([groonga-storage-engine], [0.6], [ikdttr@gmail.com])
+AC_INIT([groonga-storage-engine], [0.7], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
