@@ -48,10 +48,10 @@
 #include <sql_plugin.h>
 #include <sql_show.h>
 #include "sql_partition.h"
+#include <key.h>
 #endif
 #include <sql_select.h>
 #include <ft_global.h>
-#include <key.h>
 #include <mysql.h>
 #include <pthread.h>
 #include <sys/types.h>
