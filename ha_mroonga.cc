@@ -39,16 +39,16 @@
 #include "mysql_version.h"
 
 #ifdef MYSQL51
-#include <mysql_priv.h>
-#include <mysql/plugin.h>
+#  include <mysql_priv.h>
+#  include <mysql/plugin.h>
 #else /* MYSQL51 */
-#include <sql_priv.h>
-#include <sql_class.h>
-#include <probes_mysql.h>
-#include <sql_plugin.h>
-#include <sql_show.h>
-#include <sql_partition.h>
-#include <key.h>
+#  include <sql_priv.h>
+#  include <sql_class.h>
+#  include <probes_mysql.h>
+#  include <sql_plugin.h>
+#  include <sql_show.h>
+#  include <sql_partition.h>
+#  include <key.h>
 #endif
 #include <sql_select.h>
 #include <ft_global.h>
