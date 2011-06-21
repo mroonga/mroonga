@@ -47,7 +47,7 @@
 #include <probes_mysql.h>
 #include <sql_plugin.h>
 #include <sql_show.h>
-#include "sql_partition.h"
+#include <sql_partition.h>
 #include <key.h>
 #endif
 #include <sql_select.h>
