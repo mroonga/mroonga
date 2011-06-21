@@ -13,8 +13,9 @@ remove-existing-packages:
 	done
 
 download:
-	for distribution in $(DISTRIBUTIONS); do			\
-	  rsync -avz $(RSYNC_PATH)/$${distribution}/ $${distribution};	\
+	for distribution in $(DISTRIBUTIONS); do		\
+	  rsync -avz --delete					\
+	    $(RSYNC_PATH)/$${distribution}/ $${distribution};	\
 	done
 
 update:
