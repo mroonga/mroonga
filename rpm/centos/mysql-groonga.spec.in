@@ -99,6 +99,9 @@ fi
 %doc %{_datadir}/mysql-groonga/doc/
 
 %changelog
+* Wed Jun 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.7-0
+- new upstream release.
+
 * Sun May 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.6-0
 - new upstream release.
 
