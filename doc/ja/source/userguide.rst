@@ -59,7 +59,7 @@ SHOW ENGINESコマンドでgroongaストレージエンジンがインストー�
 
  mysql> CREATE TABLE t1 (
       >   c1 INT PRIMARY KEY,
-      >   c2 VARCHAR(255), 
+      >   c2 VARCHAR(255),
       >   FULLTEXT INDEX (c2)
       > ) ENGINE = groonga DEFAULT CHARSET utf8;
  Query OK, 0 rows affected (0.22 sec)
