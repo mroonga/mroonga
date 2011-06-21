@@ -195,7 +195,9 @@ public:
   void start_bulk_insert(ha_rows rows);
   int end_bulk_insert();
   int delete_all_rows();
+#if MYSQL_VERSION_ID >= 50500
   int truncate();
+#endif
   double scan_time();
   double read_time(uint index, uint ranges, ha_rows rows);
   const key_map *keys_to_use_for_scanning();
@@ -362,8 +364,10 @@ private:
   int default_read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
   int wrapper_delete_all_rows();
   int default_delete_all_rows();
+#if MYSQL_VERSION_ID >= 50500
   int wrapper_truncate();
   int default_truncate();
+#endif
   double wrapper_scan_time();
   double default_scan_time();
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);

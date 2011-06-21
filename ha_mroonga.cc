@@ -4799,6 +4799,7 @@ int ha_mroonga::delete_all_rows()
   DBUG_RETURN(default_delete_all_rows());
 }
 
+#if MYSQL_VERSION_ID >= 50500
 int ha_mroonga::wrapper_truncate()
 {
   int error;
@@ -4824,6 +4825,7 @@ int ha_mroonga::truncate()
     DBUG_RETURN(wrapper_truncate());
   DBUG_RETURN(default_truncate());
 }
+#endif
 
 double ha_mroonga::wrapper_scan_time()
 {
