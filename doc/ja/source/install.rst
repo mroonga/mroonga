@@ -46,7 +46,9 @@ Debian GNU/Linux wheezy
 Debian GNU/Linux sid
 --------------------
 
-注: amd64版のみ提供でi386版は未提供。
+.. note::
+
+   amd64版のみ提供でi386版は未提供。
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -165,13 +167,13 @@ MySQLおよびgroongaが既にインストールされている必要があり�
 MySQLのインストール
 +++++++++++++++++++
 
-MySQL 5.1最新版のソースコードをダウンロードし、ビルド＆インストールして下さい。
+MySQL 5.5最新版のソースコードをダウンロードし、ビルド＆インストールして下さい。
 
-http://dev.mysql.com/doc/refman/5.1/ja/index.html
+http://dev.mysql.com/downloads/mysql/
 
-mysql-5.1.51を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
+mysql-5.5.13を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
 
- /usr/local/src/mysql-5.1.51
+ /usr/local/src/mysql-5.5.13
 
 MySQLのバイナリが以下にインストールされているものと仮定します。 ::
 
@@ -192,7 +194,7 @@ groongaストレージエンジンのビルド
 以下のように ``--with-mysql-source`` でMySQLソースコードディレクトリ、 ``--with-mysql-config`` でmysql_configコマンドのパスを指定してconfigureを実行します。 ::
 
  ./configure \
-   --with-mysql-source=/usr/local/src/mysql-5.1.51 \
+   --with-mysql-source=/usr/local/src/mysql-5.5.13 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 その後、"make"を実行します。 ::
