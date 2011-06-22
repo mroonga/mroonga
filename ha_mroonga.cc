@@ -2616,7 +2616,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
              "failed to add a new record into groonga: key=<%.*s>",
-             GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
+             (int)GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
     error = ER_ERROR_ON_WRITE;
     my_message(error, error_message, MYF(0));
   }
@@ -2839,7 +2839,7 @@ int ha_mroonga::wrapper_get_record_id(uchar *data, grn_id *record_id,
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
              "%s: key=<%.*s>",
-             context, GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
+             context, (int)GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
     error = ER_ERROR_ON_WRITE;
     my_message(error, error_message, MYF(0));
   }
