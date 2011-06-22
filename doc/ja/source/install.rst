@@ -10,7 +10,9 @@
 Debian GNU/Linux squeeze
 ------------------------
 
-注: amd64版のみ提供でi386版は未提供。
+.. note::
+
+   amd64版のみ提供でi386版は未提供。
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -26,7 +28,9 @@ Debian GNU/Linux squeeze
 Debian GNU/Linux wheezy
 -----------------------
 
-注: amd64版のみ提供でi386版は未提供。
+.. note::
+
+   amd64版のみ提供でi386版は未提供。
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -58,9 +62,13 @@ Debian GNU/Linux sid
 Ubuntu 10.04 LTS Lucid Lynx
 ---------------------------
 
-注: amd64版のみ提供でi386版は未提供。
+.. note::
 
-注: Ubuntu本家のuniverseセクションもインストール対象としておくこと
+   amd64版のみ提供でi386版は未提供。
+
+.. note::
+
+   Ubuntu本家のuniverseセクションもインストール対象としておくこと
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -76,9 +84,13 @@ Ubuntu 10.04 LTS Lucid Lynx
 Ubuntu 11.04 Natty Narwhal
 --------------------------
 
-注: amd64版のみ提供でi386版は未提供。
+.. note::
 
-注: Ubuntu本家のuniverseセクションもインストール対象としておくこと
+   amd64版のみ提供でi386版は未提供。
+
+.. note::
+
+   Ubuntu本家のuniverseセクションもインストール対象としておくこと
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -94,7 +106,9 @@ Ubuntu 11.04 Natty Narwhal
 CentOS 5
 --------
 
-注: amd64版のみ提供でi386版は未提供。
+.. note::
+
+   amd64版のみ提供でi386版は未提供。
 
 既にディストリビューション由来のMySQLパッケージがインストール済みの場合には事前に削除する必要があります。
 
@@ -111,7 +125,9 @@ CentOS 5
 Fedora 15
 ---------
 
-注: amd64版のみ提供でi386版は未提供。
+.. note::
+
+   amd64版のみ提供でi386版は未提供。
 
 インストール::
 
