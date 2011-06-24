@@ -49,32 +49,38 @@ Linux 用にパッケージを作成する必要があります。パッケー�
 Debian 系
 +++++++++
 
-まず apt ディレクトリに移動する ::
+まず apt ディレクトリに移動します。 ::
 
  $ cd apt
 
-その後、次のようにすれば一連のリリース作業（build update sign upload）が行われるが、途中で失敗することも多い。 ::
+その後、次のようにすれば一連のリリース作業（build update sign upload）が行われますが、途中で失敗することもあります。 ::
 
+ $ sudo apt-get install -y debootstrap
  $ make release
 
-そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともある。 ::
+そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともあります。 ::
 
  $ make build
  $ make update
  $ make sign
  $ make upload
 
+.. note::
+
+   現在のところ、パッケージの作成は Debian GNU/Linux (Ubuntu も可) でしか行えません。
+
 Red Hat 系
 ++++++++++
 
 まず yum ディレクトリに移動する。
 
-その後、次のようにすれば一連のリリース作業（build sign update upload）が行われるが、途中で失敗することも多い。 ::
+その後、次のようにすれば一連のリリース作業（build sign update upload）が行われますが、途中で失敗することもあります。 ::
 
  $ make release
 
-そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともある。 ::
+そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともあります。 ::
 
+ $ sudo apt-get install -y rinse createrepo rpm
  $ make build
  $ make sign
  $ make update
