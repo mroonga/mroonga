@@ -12,12 +12,21 @@ groongaストレージエンジンのソースコードの以下のディレク�
 
 ファイル一覧 ::
 
- binlog.test             drop_table.test               select_all.test
- btree.test              fulltext.test                 select_pkey.test
- count_performance.test  hash.test                     select_secondary_key.test
- create_table.test       information_schema.test       show_create_table.test
- delete.test             insert.test                   show_table_status.test
- drop_database.test      order_limit_performance.test  update.test
+  auto_increment.test        insert.test
+  binlog.test                insert_wrapper.test
+  btree.test                 last_insert_grn_id.test
+  count_performance.test     log_level.test
+  create_table.test          order_limit_performance.test
+  create_table_wrapper.test  replace.test
+  delete.test                select_all.test
+  delete_wrapper.test        select_pkey.test
+  drop_database.test         select_secondary_key.test
+  drop_table.test            show_create_table.test
+  flush_logs.test            show_table_status.test
+  fulltext.test              tinyint.test
+  fulltext_wrapper.test      update.test
+  hash.test                  update_wrapper.test
+  information_schema.test
 
 ここに記述されているSQL文が現在利用可能なSQL文となります。
 
