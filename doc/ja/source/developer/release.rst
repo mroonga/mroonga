@@ -4,7 +4,7 @@
 ============
 
 変更点の記述
----------------
+------------
 
 まず ``doc/ja/source/news.rst`` に変更点をまとめます。
 
@@ -25,13 +25,56 @@
 
  $ git log -p --reverse v0.6..
 
+配布用ファイルのアップロード
+----------------------------
+
+次に、配布用の ``tar.gz`` ファイルを作成します。 ::
+
+ $ make dist
+
+そして、作成された ``tar.gz`` ファイルを https://github.com/mroonga/mroonga/downloads よりアップロードします。
+
 パッケージの作成
 ----------------
 
 Linux 用にパッケージを作成する必要があります。パッケージは以下の 2 種類に分けることが可能です。
 
 1. Debian 系
-2. Redhat 系
+2. Red Hat 系
+
+Debian 系
++++++++++
+
+まず apt ディレクトリに移動する ::
+
+ $ cd apt
+
+その後、次のようにすれば一連のリリース作業（build update sign upload）が行われるが、途中で失敗することも多い。 ::
+
+ $ make release
+
+そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともある。 ::
+
+ $ make build
+ $ make update
+ $ make sign
+ $ make upload
+
+Red Hat 系
+++++++++++
+
+まず yum ディレクトリに移動する。
+
+その後、次のようにすれば一連のリリース作業（build sign update upload）が行われるが、途中で失敗することも多い。 ::
+
+ $ make release
+
+そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともある。 ::
+
+ $ make build
+ $ make sign
+ $ make update
+ $ make upload
 
 タグを打つ
 ----------
@@ -40,15 +83,6 @@ Linux 用にパッケージを作成する必要があります。パッケー�
 
  $ make tag
  $ git push --tags origin
-
-配布用ファイルのアップロード
-----------------------------
-
-まず、配布用の ``tar.gz`` ファイルを作成します。 ::
-
- $ make dist
-
-そして、作成された ``tar.gz`` ファイルを https://github.com/mroonga/mroonga/downloads よりアップロードします。
 
 ドキュメントのアップロード
 --------------------------
