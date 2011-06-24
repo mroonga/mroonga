@@ -72,6 +72,8 @@ http://github.com/mroonga/mroonga
 * ドキュメント(http://mroonga.github.com)のアップデート
 * リリースの告知
 
+:doc:`developer/release` へ移動予定。
+
 開発環境
 --------
 
