@@ -122,6 +122,7 @@ groongaストレージエンジンはconfigureのオプションに ``--with-deb
   % cd ~/work/
   % git clone git@github.com:mroonga/mroonga.git
   % cd mroonga
+  % ./autogen.sh
   % ./configure CFLAGS="-ggdb3 -O0" CXXFLAGS="-ggdb3 -O0" --with-debug --prefix=/tmp/local --with-mysql-source=$HOME/work/mysql-5.5.13 --with-mysql-config=$HOME/work/mysql-5.5.13/scripts/mysql_config
   % make
 
