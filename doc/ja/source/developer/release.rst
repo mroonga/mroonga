@@ -42,6 +42,10 @@ Linux 用にパッケージを作成する必要があります。パッケー�
 1. Debian 系
 2. Red Hat 系
 
+.. note::
+
+   現在のところ、パッケージの作成は Debian GNU/Linux (Ubuntu も可) でしか行えません。
+
 Debian 系
 +++++++++
 
