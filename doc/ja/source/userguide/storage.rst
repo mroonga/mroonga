@@ -262,7 +262,7 @@ groongaストレージエンジンの前身であるTritonn(MySQL+Senna)では�
 
 Tritonnではこの問題に対して特に対応はできていませんでしたが、最新レポジトリではsen_records_sort関数を活用してSennaからの読み出しをスコアの降順に対応させることでSQLクエリからORDER BY句を取り除く(※スコア降順を指定していたケースに対してのみ有効)回避方法を導入しました。
 
-groongaストレージエンジンでも行カウントを高速化するための仕組みを実装しています。
+groongaストレージエンジンでも ORDER BY LIMIT を高速化するための仕組みを実装しています。
 
 例えば以下のSELECT文では ORDER BY LIMIT は、groonga内で処理され、必要最小限のレコードだけをMySQLに返却しています。 ::
 
