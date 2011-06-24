@@ -41,14 +41,22 @@ Linux 用にパッケージを作成する必要があります。パッケー�
  $ make tag
  $ git push --tags origin
 
-アップロード
-------------
+配布用ファイルのアップロード
+----------------------------
 
 まず、配布用の ``tar.gz`` ファイルを作成します。 ::
 
  $ make dist
 
 そして、作成された ``tar.gz`` ファイルを https://github.com/mroonga/mroonga/downloads よりアップロードします。
+
+ドキュメントのアップロード
+--------------------------
+
+1. GitHub からドキュメントアップロード用のリポジトリ (mroonga.github.com) を clone
+2. mroonga/doc/ja/sphinx2github.sh を実行し mroonga/doc/ja/html 内のディレクトリ名を GitHub (Jekyll) 用に変更
+3. mroonga/doc/ja/html 内のファイルを 1. で clone した mroonga.github.com にコピー
+4. mroonga.github.com へコミットを行い GitHub へ push
 
 リリースメールの送信
 --------------------
