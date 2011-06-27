@@ -17,6 +17,18 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+/* We need to undefine them because my_config.h defines them. :< */
+#  undef VERSION
+#  undef PACKAGE
+#  undef PACKAGE_BUGREPORT
+#  undef PACKAGE_NAME
+#  undef PACKAGE_STRING
+#  undef PACKAGE_TARNAME
+#  undef PACKAGE_VERSION
+#endif
+
 #define MYSQL_SERVER 1
 #include "mysql_version.h"
 #if MYSQL_VERSION_ID < 50500
