@@ -119,38 +119,56 @@ nobase_dist_doc_ja_DATA =			\
 
 # find source -type f -not -name '*.pyc' | sort | sed -e 's,^,\t,g'
 source_files =					\
+	source/_static/images/storage-mode.png	\
+	source/_static/images/storage-mode.svg	\
+	source/_static/images/wrapper-mode.png	\
+	source/_static/images/wrapper-mode.svg	\
 	source/characteristic.rst		\
 	source/conf.py				\
 	source/developer.rst			\
+	source/developer/release.rst		\
 	source/index.rst			\
 	source/install.rst			\
 	source/news.rst				\
 	source/reference.rst			\
-	source/userguide.rst
+	source/userguide.rst			\
+	source/userguide/storage.rst		\
+	source/userguide/wrapper.rst
 
 # find html -type f | sort | sed -e 's,^,\t,g'
 html_files =					\
 	html/.buildinfo				\
+	html/_images/storage-mode.png		\
+	html/_images/wrapper-mode.png		\
 	html/_sources/characteristic.txt	\
 	html/_sources/developer.txt		\
+	html/_sources/developer/release.txt	\
 	html/_sources/index.txt			\
 	html/_sources/install.txt		\
 	html/_sources/news.txt			\
 	html/_sources/reference.txt		\
 	html/_sources/userguide.txt		\
+	html/_sources/userguide/storage.txt	\
+	html/_sources/userguide/wrapper.txt	\
 	html/_static/basic.css			\
 	html/_static/default.css		\
 	html/_static/doctools.js		\
 	html/_static/file.png			\
+	html/_static/images/storage-mode.png	\
+	html/_static/images/storage-mode.svg	\
+	html/_static/images/wrapper-mode.png	\
+	html/_static/images/wrapper-mode.svg	\
 	html/_static/jquery.js			\
 	html/_static/minus.png			\
 	html/_static/plus.png			\
 	html/_static/pygments.css		\
 	html/_static/searchtools.js		\
 	html/_static/sidebar.js			\
+	html/_static/translations.js		\
 	html/_static/underscore.js		\
 	html/characteristic.html		\
 	html/developer.html			\
+	html/developer/release.html		\
 	html/genindex.html			\
 	html/index.html				\
 	html/install.html			\
@@ -159,7 +177,10 @@ html_files =					\
 	html/reference.html			\
 	html/search.html			\
 	html/searchindex.js			\
-	html/userguide.html
+	html/userguide.html			\
+	html/userguide/storage.html		\
+	html/userguide/wrapper.html
+
 
 $(html_files): html-build-stamp
 html-build-stamp:
