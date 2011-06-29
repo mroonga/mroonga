@@ -17,7 +17,7 @@ rename _static static
 rename _sources sources
 rename _images images
 
-file_names="`ls *.html`"
+file_names=$(find . -name "*.html")
 for file_name in $file_names; do
     sed -e 's/_static/static/g' $file_name |
     sed -e 's/_sources/sources/g' |
