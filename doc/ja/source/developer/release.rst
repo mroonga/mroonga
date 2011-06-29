@@ -70,6 +70,12 @@ Debian 系
  $ make sign
  $ make upload
 
+make build に PARALLEL=yes とするとビルドが並列に走り、作業がより高速に行えます。
+
+また make build CODES=lucid などとすると、ビルド対象を指定することができます。
+
+このように Makefile.am を書き換えずにコマンドライン引数でビルドの挙動を変更する方法は、知っておいて損はないでしょう。
+
 Red Hat 系
 ++++++++++
 
