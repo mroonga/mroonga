@@ -3,6 +3,12 @@
 開発者向け情報
 ==============
 
+.. toctree::
+   :maxdepth: 2
+
+   developer/debug
+   developer/release
+
 開発手法について
 ----------------
 groongaストレージエンジン開発プロジェクトではBTSの1つであるRedmineを用いたチケット駆動開発を実施しています。
@@ -88,50 +94,6 @@ http://github.com/mroonga/mroonga
 
 glibc 2.5はRed Hat Enterprise Linux 5に相当します。
 
-デバッグ用ビルド方法
---------------------
-
-デバッグ用にビルドすることにより、gdb上でのシンボル解決など開発時に得られる情報が多くなります。そのため、開発時はデバッグ用にMySQLとgroongaストレージエンジンをビルドします。
-
-.. note::
-
-   片方だけデバッグ用ビルドにすると構造体のサイズなどが異なってしまうため、groongaストレージエンジンがロードできなかったり、実行時にassertに引っかかったりしてうまく動作しません。
-
-MySQLのデバッグ用ビルド方法
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing MySQL from a Standard Source Distribution`_ にある通り、CMakeのオプションに ``-DWITH_DEBUG=yes`` オプションを渡すことでデバッグ用にビルドすることができます。
-
-ダウンロードからビルドまでの流れは以下の通りです。::
-
-  % mkdir -p ~/work/
-  % cd ~/work/
-  % wget http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5/mysql-5.5.13.tar.gz
-  % tar xvzf mysql-5.5.13.tar.gz
-  % cd mysql-5.5.13
-  % cmake . -DCMAKE_INSTALL_PREFIX=/tmp/local -DWITH_DEBUG=yes
-  % make
-
-.. _`MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing MySQL from a Standard Source Distribution`: http://dev.mysql.com/doc/refman/5.5/en/installing-source-distribution.html
-
-groongaストレージエンジンのデバッグ用ビルド方法
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-groongaストレージエンジンはconfigureのオプションに ``--with-debug`` を渡すことでデバッグ用にビルドすることができます。
-
-リポジトリのcloneからビルドまでの流れは以下の通りです。::
-
-  % cd ~/work/
-  % git clone git@github.com:mroonga/mroonga.git
-  % cd mroonga
-  % ./autogen.sh
-  % ./configure CFLAGS="-ggdb3 -O0" CXXFLAGS="-ggdb3 -O0" --with-debug --prefix=/tmp/local --with-mysql-source=$HOME/work/mysql-5.5.13 --with-mysql-config=$HOME/work/mysql-5.5.13/scripts/mysql_config
-  % make
-
-無事にビルドができたら以下のようにテストを実行してください。すべてのテストが ``[pass]`` になればデバッグ用ビルドは成功しています。::
-
-  % test/run-sql-test.sh
-
 ソースディレクトリ解説
 ----------------------
 今のところソースファイルの数はごくわずかです。なるべくシンプルな状態を維持したいと考えています。
@@ -204,4 +166,3 @@ groongaストレージエンジンではドキュメント作成にsphinxを使�
 従って、各チケットに対するドキュメントのpushはmroongaレポジトリに対するpushのみで構いません。
 
 またsphinxの出力するディレクトリ名がgithubで使用できない問題を回避するため、"doc/ja/source"ディレクトリにてsphinx2github.shスクリプトを用意しています。mroonga.github.comにcommitする場合にはこのスクリプトを実行してsphinxの生成したファイルを修正して置きましょう。
-
