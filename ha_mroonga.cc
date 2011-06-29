@@ -955,6 +955,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   share = NULL;
   is_clone = FALSE;
   wrap_handler = NULL;
+  matched_record_keys = NULL;
   fulltext_searching = FALSE;
   DBUG_VOID_RETURN;
 }
@@ -4049,7 +4050,31 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
   grn_obj_unlink(info->ctx, expression);
   grn_obj_unlink(info->ctx, match_columns);
 
+  merge_matched_record_keys(info->result);
+
   DBUG_RETURN((FT_INFO *)info);
+}
+
+void ha_mroonga::merge_matched_record_keys(grn_obj *matched_result)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_operator operation = GRN_OP_AND;
+
+  if (!matched_record_keys) {
+    matched_record_keys = grn_table_create(ctx, NULL, 0, NULL,
+                                           GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                           grn_table, 0);
+    // OR for empty table
+    operation = GRN_OP_OR;
+  }
+
+  grn_rc rc;
+  rc = grn_table_setoperation(ctx, matched_record_keys, matched_result,
+                              matched_record_keys, operation);
+
+
+  DBUG_VOID_RETURN;
 }
 
 FT_INFO *ha_mroonga::default_ft_init_ext(uint flags, uint key_nr, String *key)
@@ -4518,6 +4543,12 @@ int ha_mroonga::wrapper_reset()
   error = wrap_handler->ha_reset();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
+  grn_obj_unlink(ctx, matched_record_keys);
+  matched_record_keys = NULL;
+  if (matched_record_keys) {
+    grn_obj_unlink(ctx, matched_record_keys);
+    matched_record_keys = NULL;
+  }
   DBUG_RETURN(error);
 }
 

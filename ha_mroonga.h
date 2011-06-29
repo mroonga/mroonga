@@ -92,6 +92,7 @@ private:
   grn_obj *_score;
 
   st_mrn_ft_info mrn_ft_info;
+  grn_obj *matched_record_keys;
 
   char **key_min;
   char **key_max;
@@ -329,6 +330,7 @@ private:
   int default_read_range_next();
   int wrapper_ft_init();
   int default_ft_init();
+  void merge_matched_record_keys(grn_obj *matched_result);
   void wrapper_ft_end();
   void default_ft_end();
   FT_INFO *wrapper_ft_init_ext(uint flags, uint key_nr, String *key);
