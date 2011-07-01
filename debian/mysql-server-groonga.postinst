@@ -9,6 +9,7 @@ install_plugin() {
 INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
 CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
 EOS
+    true
 }
 
 case "$1" in
