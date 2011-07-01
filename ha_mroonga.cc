@@ -4543,8 +4543,6 @@ int ha_mroonga::wrapper_reset()
   error = wrap_handler->ha_reset();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  grn_obj_unlink(ctx, matched_record_keys);
-  matched_record_keys = NULL;
   if (matched_record_keys) {
     grn_obj_unlink(ctx, matched_record_keys);
     matched_record_keys = NULL;
