@@ -1160,16 +1160,6 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
       continue;
     }
 
-    // must be single column key
-    int key_parts = key_info.key_parts;
-    if (key_parts != 1) {
-      GRN_LOG(ctx, GRN_LOG_ERROR,
-              "complex key is not supported yet: n-keys=<%d>", key_parts);
-      error = ER_NOT_SUPPORTED_YET;
-      my_message(error, "complex key is not supported yet.", MYF(0));
-      DBUG_RETURN(error);
-    }
-
     char index_name[MRN_MAX_PATH_SIZE];
     mrn_index_name_gen(grn_table_name, i, index_name);
 
