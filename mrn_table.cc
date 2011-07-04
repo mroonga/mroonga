@@ -31,16 +31,17 @@
 
 #define MYSQL_SERVER 1
 #include "mysql_version.h"
-#if MYSQL_VERSION_ID < 50500
-#  include "mysql_priv.h"
+
+#ifdef MYSQL51
+#  include <mysql_priv.h>
 #  include <mysql/plugin.h>
-#else
-#  include "sql_priv.h"
-#  include "probes_mysql.h"
-#  include "sql_class.h"
-#  include "sql_partition.h"
-#  include "sql_servers.h"
-#  include "sql_base.h"
+#else /* MYSQL51 */
+#  include <sql_priv.h>
+#  include <sql_class.h>
+#  include <probes_mysql.h>
+#  include <sql_partition.h>
+#  include <sql_servers.h>
+#  include <sql_base.h>
 #endif
 #include "mrn_err.h"
 #include "mrn_sys.h"
