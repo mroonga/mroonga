@@ -7,10 +7,12 @@ EXTRA_DIST = \
 	create_table.result \
 	create_table_wrapper.result \
 	delete.result \
+	delete_wrapper.result \
 	drop_database.result \
 	drop_table.result \
 	flush_logs.result \
 	fulltext.result \
+	fulltext_multiple_column_index_wrapper.result \
 	fulltext_wrapper.result \
 	hash.result \
 	information_schema.result \
@@ -27,4 +29,5 @@ EXTRA_DIST = \
 	show_table_status.result \
 	tinyint.result \
 	update.result \
+	update_wrapper.result \
 	$(NULL)
