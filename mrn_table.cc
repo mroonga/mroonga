@@ -457,6 +457,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
   char *tmp_name;
   uint length, *wrap_key_nr, i, j;
   KEY *wrap_key_info;
+  TABLE_SHARE *wrap_table_share;
   DBUG_ENTER("mrn_get_share");
   length = (uint) strlen(table_name);
   pthread_mutex_lock(&mrn_open_tables_mutex);
@@ -469,6 +470,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
         &tmp_name, length + 1,
         &wrap_key_nr, sizeof(*wrap_key_nr) * table->s->keys,
         &wrap_key_info, sizeof(*wrap_key_info) * table->s->keys,
+        &wrap_table_share, sizeof(*wrap_table_share),
         NullS))
     ) {
       *error = HA_ERR_OUT_OF_MEM;
@@ -515,6 +517,11 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
         share->wrap_key_info = NULL;
         share->wrap_primary_key = MAX_KEY;
       }
+      memcpy(wrap_table_share, table->s, sizeof(*wrap_table_share));
+      wrap_table_share->keys = share->wrap_keys;
+      wrap_table_share->key_info = share->wrap_key_info;
+      wrap_table_share->primary_key = share->wrap_primary_key;
+      share->wrap_table_share = wrap_table_share;
     }
 
     if (pthread_mutex_init(&share->mutex, MY_MUTEX_INIT_FAST))

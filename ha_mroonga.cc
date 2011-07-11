@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010 Kentoku SHIBA
+  Copyright(C) 2010-2011 Kentoku SHIBA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -3195,10 +3195,16 @@ ha_rows ha_mroonga::records_in_range(uint key_nr, key_range *range_min, key_rang
 int ha_mroonga::wrapper_index_init(uint idx, bool sorted)
 {
   int error;
+  KEY key_info = table->s->key_info[idx];
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_index_init(share->wrap_key_nr[idx], sorted);
+  if (key_info.algorithm != HA_KEY_ALG_FULLTEXT)
+  {
+    error = wrap_handler->ha_index_init(share->wrap_key_nr[idx], sorted);
+  } else {
+    error = wrap_handler->ha_index_init(share->wrap_primary_key, sorted);
+  }
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
@@ -3213,6 +3219,7 @@ int ha_mroonga::storage_index_init(uint idx, bool sorted)
 int ha_mroonga::index_init(uint idx, bool sorted)
 {
   MRN_DBUG_ENTER_METHOD();
+  DBUG_PRINT("info",("mroonga idx=%u", idx));
   active_index = idx;
   count_skip = FALSE;
   if (share->wrapper_mode)
@@ -3932,6 +3939,12 @@ int ha_mroonga::read_range_next()
 int ha_mroonga::wrapper_ft_init()
 {
   MRN_DBUG_ENTER_METHOD();
+  cur = grn_table_cursor_open(ctx, matched_record_keys, NULL, 0, NULL, 0, 0,
+    -1, 0);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
   DBUG_RETURN(0);
 }
 
@@ -4146,8 +4159,40 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint key_nr, String *key)
 
 int ha_mroonga::wrapper_ft_read(uchar *buf)
 {
+  int error;
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(0);
+  do {
+    record_id = grn_table_cursor_next(ctx, cur);
+    if (record_id == GRN_ID_NIL) {
+      error = HA_ERR_END_OF_FILE;
+      grn_table_cursor_close(ctx, cur);
+      cur = NULL;
+      break;
+    } else {
+      grn_id relation_record_id;
+#ifdef _MSC_VER
+      uchar *key;
+      key = (uchar *) malloc(table->key_info->key_length);
+#else
+      uchar key[table->key_info->key_length];
+#endif
+      grn_table_get_key(ctx, matched_record_keys, record_id,
+                        &relation_record_id, sizeof(grn_id));
+      grn_table_get_key(ctx, grn_table, relation_record_id,
+                        key, table->key_info->key_length);
+      MRN_SET_WRAP_SHARE_KEY(share, table->s);
+      MRN_SET_WRAP_TABLE_KEY(this, table);
+      set_pk_bitmap();
+      error = wrap_handler->index_read_map(
+        buf, key, pk_keypart_map, HA_READ_KEY_EXACT);
+      MRN_SET_BASE_SHARE_KEY(share, table->s);
+      MRN_SET_BASE_TABLE_KEY(this, table);
+#ifdef _MSC_VER
+      free(key);
+#endif
+    }
+  } while (error == HA_ERR_END_OF_FILE);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_ft_read(uchar *buf)
@@ -4564,6 +4609,11 @@ int ha_mroonga::reset()
   int error;
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info",("mroonga this=%p", this));
+  if (cur)
+  {
+    grn_table_cursor_close(ctx, cur);
+    cur = NULL;
+  }
   if (share->wrapper_mode)
     error = wrapper_reset();
   else

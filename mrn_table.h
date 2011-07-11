@@ -32,6 +32,7 @@ typedef struct st_mroonga_share
   pthread_mutex_t    mutex;
   THR_LOCK           lock;
   TABLE_SHARE        *table_share;
+  TABLE_SHARE        *wrap_table_share;
 
   char               *engine;
   int                engine_length;
@@ -47,21 +48,27 @@ typedef struct st_mroonga_share
   bool               wrapper_mode;
 } MRN_SHARE;
 
-#define MRN_SET_WRAP_SHARE_KEY(share, table_share) \
+#define MRN_SET_WRAP_SHARE_KEY(share, table_share)
+/*
   table_share->keys = share->wrap_keys; \
   table_share->key_info = share->wrap_key_info; \
   table_share->primary_key = share->wrap_primary_key;
+*/
 
-#define MRN_SET_BASE_SHARE_KEY(share, table_share) \
+#define MRN_SET_BASE_SHARE_KEY(share, table_share)
+/*
   table_share->keys = share->base_keys; \
   table_share->key_info = share->base_key_info; \
   table_share->primary_key = share->base_primary_key;
+*/
 
 #define MRN_SET_WRAP_TABLE_KEY(file, table) \
-  table->key_info = file->wrap_key_info;
+  table->key_info = file->wrap_key_info; \
+  table->s = share->wrap_table_share;
 
 #define MRN_SET_BASE_TABLE_KEY(file, table) \
-  table->key_info = file->base_key_info;
+  table->key_info = file->base_key_info; \
+  table->s = share->table_share;
 
 char *mrn_create_string(const char *str, uint length);
 char *mrn_get_string_between_quote(char *ptr, bool alloc);
