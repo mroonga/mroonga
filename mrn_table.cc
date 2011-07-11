@@ -187,7 +187,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
   if (!memcmp(table_name + table_name_length - 5, "#TMP#", 5))
     tmp_flg = TRUE;
 
-  DBUG_PRINT("info",("mroonga table_name=%s", table_name));
+  DBUG_PRINT("info", ("mroonga table_name=%s", table_name));
   List_iterator<partition_element> part_it(part_info->partitions);
   while ((*part_elem = part_it++))
   {
@@ -199,7 +199,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
         create_subpartition_name(tmp_name, table->s->path.str,
           (*part_elem)->partition_name, (*sub_elem)->partition_name,
           NORMAL_PART_NAME);
-        DBUG_PRINT("info",("mroonga tmp_name=%s", tmp_name));
+        DBUG_PRINT("info", ("mroonga tmp_name=%s", tmp_name));
         if (!memcmp(table_name, tmp_name, table_name_length + 1))
           DBUG_VOID_RETURN;
         if (
@@ -216,7 +216,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
     } else {
       create_partition_name(tmp_name, table->s->path.str,
         (*part_elem)->partition_name, NORMAL_PART_NAME, TRUE);
-      DBUG_PRINT("info",("mroonga tmp_name=%s", tmp_name));
+      DBUG_PRINT("info", ("mroonga tmp_name=%s", tmp_name));
       if (!memcmp(table_name, tmp_name, table_name_length + 1))
         DBUG_VOID_RETURN;
       if (
@@ -234,12 +234,12 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
   {
     *part_elem = tmp_part_elem;
     *sub_elem = tmp_sub_elem;
-    DBUG_PRINT("info",("mroonga tmp find"));
+    DBUG_PRINT("info", ("mroonga tmp find"));
     DBUG_VOID_RETURN;
   }
   *part_elem = NULL;
   *sub_elem = NULL;
-  DBUG_PRINT("info",("mroonga no hit"));
+  DBUG_PRINT("info", ("mroonga no hit"));
   DBUG_VOID_RETURN;
 }
 #endif
@@ -248,7 +248,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
 #define MRN_PARAM_STR(title_name, param_name) \
   if (!strncasecmp(tmp_ptr, title_name, title_length)) \
   { \
-    DBUG_PRINT("info",("mroonga "title_name" start")); \
+    DBUG_PRINT("info", ("mroonga "title_name" start")); \
     if (!share->param_name) \
     { \
       if ((share->param_name = mrn_get_string_between_quote( \
@@ -260,7 +260,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
           MYF(0), tmp_ptr); \
         goto error; \
       } \
-      DBUG_PRINT("info",("mroonga "title_name"=%s", share->param_name)); \
+      DBUG_PRINT("info", ("mroonga "title_name"=%s", share->param_name)); \
     } \
     break; \
   }
@@ -298,7 +298,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
       case 4:
         if (!sub_elem || !sub_elem->part_comment)
           continue;
-        DBUG_PRINT("info",("mroonga create sub comment string"));
+        DBUG_PRINT("info", ("mroonga create sub comment string"));
         if (
           !(param_string = mrn_create_string(
             sub_elem->part_comment,
@@ -307,12 +307,12 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           error = HA_ERR_OUT_OF_MEM;
           goto error_alloc_param_string;
         }
-        DBUG_PRINT("info",("mroonga sub comment string=%s", param_string));
+        DBUG_PRINT("info", ("mroonga sub comment string=%s", param_string));
         break;
       case 3:
         if (!part_elem || !part_elem->part_comment)
           continue;
-        DBUG_PRINT("info",("mroonga create part comment string"));
+        DBUG_PRINT("info", ("mroonga create part comment string"));
         if (
           !(param_string = mrn_create_string(
             part_elem->part_comment,
@@ -321,13 +321,13 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           error = HA_ERR_OUT_OF_MEM;
           goto error_alloc_param_string;
         }
-        DBUG_PRINT("info",("mroonga part comment string=%s", param_string));
+        DBUG_PRINT("info", ("mroonga part comment string=%s", param_string));
         break;
 #endif
       case 2:
         if (table->s->comment.length == 0)
           continue;
-        DBUG_PRINT("info",("mroonga create comment string"));
+        DBUG_PRINT("info", ("mroonga create comment string"));
         if (
           !(param_string = mrn_create_string(
             table->s->comment.str,
@@ -336,12 +336,12 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           error = HA_ERR_OUT_OF_MEM;
           goto error_alloc_param_string;
         }
-        DBUG_PRINT("info",("mroonga comment string=%s", param_string));
+        DBUG_PRINT("info", ("mroonga comment string=%s", param_string));
         break;
       default:
         if (table->s->connect_string.length == 0)
           continue;
-        DBUG_PRINT("info",("mroonga create connect_string string"));
+        DBUG_PRINT("info", ("mroonga create connect_string string"));
         if (
           !(param_string = mrn_create_string(
             table->s->connect_string.str,
@@ -350,7 +350,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           error = HA_ERR_OUT_OF_MEM;
           goto error_alloc_param_string;
         }
-        DBUG_PRINT("info",("mroonga connect_string=%s", param_string));
+        DBUG_PRINT("info", ("mroonga connect_string=%s", param_string));
         break;
     }
 
