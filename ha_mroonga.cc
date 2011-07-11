@@ -722,8 +722,8 @@ static int mrn_init(void *p)
   grn_ctx_use(ctx, mrn_db);
 
   // init hash
-  if (!(mrn_hash = grn_hash_create(ctx,NULL,
-                                   MRN_MAX_KEY_SIZE,sizeof(size_t),
+  if (!(mrn_hash = grn_hash_create(ctx, NULL,
+                                   MRN_MAX_KEY_SIZE, sizeof(size_t),
                                    GRN_OBJ_KEY_VAR_SIZE))) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
     goto err;
