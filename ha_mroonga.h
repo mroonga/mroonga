@@ -32,6 +32,8 @@ extern "C" {
 #include <groonga.h>
 #include "mrn_sys.h"
 
+class ha_mroonga;
+
 /* structs */
 struct st_mrn_statuses
 {
@@ -51,6 +53,7 @@ struct st_mrn_ft_info
   KEY *primary_key_info;
   uint primary_key_length;
   grn_id record_id; // TODO: remove me.
+  ha_mroonga *mroonga;
 };
 
 struct st_mrn_slot_data
@@ -74,6 +77,8 @@ public:
   bool      is_clone;
   ha_mroonga *parent_for_clone;
   MEM_ROOT  *mem_root_for_clone;
+  bool      pkey_init;
+  grn_obj   pkey;
 
 private:
   grn_ctx *ctx;

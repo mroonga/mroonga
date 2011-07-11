@@ -877,7 +877,27 @@ static void mrn_wrapper_ft_close_search(FT_INFO *handler)
 static float mrn_wrapper_ft_get_relevance(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  DBUG_RETURN((float)0.0);
+  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  float score = 0.0;
+  grn_id record_id;
+  ha_mroonga *mroonga = info->mroonga;
+  record_id = grn_table_get(info->ctx,
+                            info->table,
+                            GRN_TEXT_VALUE(&(mroonga->pkey)),
+                            GRN_TEXT_LEN(&(mroonga->pkey)));
+
+  if (record_id != GRN_ID_NIL) {
+    grn_id result_record_id;
+    result_record_id = grn_table_get(info->ctx, info->result,
+                                     &record_id, sizeof(grn_id));
+    if (result_record_id != GRN_ID_NIL) {
+      GRN_BULK_REWIND(&(info->score));
+      grn_obj_get_value(info->ctx, info->score_column,
+                        result_record_id, &(info->score));
+      score = (float)GRN_INT32_VALUE(&(info->score));
+    }
+  }
+  DBUG_RETURN(score);
 }
 
 static void mrn_wrapper_ft_reinit_search(FT_INFO *handler)
@@ -957,6 +977,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   wrap_handler = NULL;
   matched_record_keys = NULL;
   fulltext_searching = FALSE;
+  pkey_init = FALSE;
   DBUG_VOID_RETURN;
 }
 
@@ -1731,6 +1752,10 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     }
   }
 
+  GRN_TEXT_INIT(&(pkey), 0);
+  grn_bulk_space(ctx, &(pkey), table->key_info->key_length);
+  pkey_init = TRUE;
+
 error:
   if (error) {
     for (; i >= 0; i--) {
@@ -1757,6 +1782,10 @@ error:
     key_max = NULL;
     grn_index_columns = NULL;
     grn_index_tables = NULL;
+    if (pkey_init) {
+      grn_obj_unlink(ctx, &(pkey));
+      pkey_init = FALSE;
+    }
   }
 
   DBUG_RETURN(error);
@@ -1971,6 +2000,10 @@ int ha_mroonga::wrapper_close()
   }
   base_key_info = NULL;
   free_root(&mem_root, MYF(0));
+  if (pkey_init) {
+    grn_obj_unlink(ctx, &(pkey));
+    pkey_init = FALSE;
+  }
   DBUG_RETURN(error);
 }
 
@@ -2180,8 +2213,26 @@ int ha_mroonga::wrapper_info(uint flag)
   error = wrap_handler->info(flag);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  if (flag & (HA_STATUS_ERRKEY | HA_STATUS_NO_LOCK)) {
+  if (flag & HA_STATUS_ERRKEY) {
     errkey = wrap_handler->errkey;
+  }
+  if (flag & HA_STATUS_TIME) {
+    stats.update_time = wrap_handler->stats.update_time;
+  }
+  if (flag & HA_STATUS_CONST) {
+    stats.max_data_file_length = wrap_handler->stats.max_data_file_length;
+    stats.create_time = wrap_handler->stats.create_time;
+    stats.block_size = wrap_handler->stats.block_size;
+  }
+  if (flag & HA_STATUS_VARIABLE) {
+    stats.data_file_length = wrap_handler->stats.data_file_length;
+    stats.index_file_length = wrap_handler->stats.index_file_length;
+    stats.records = wrap_handler->stats.records;
+    stats.mean_rec_length = wrap_handler->stats.mean_rec_length;
+    stats.check_time = wrap_handler->stats.check_time;
+  }
+  if (flag & HA_STATUS_AUTO) {
+    stats.auto_increment_value = wrap_handler->stats.auto_increment_value;
   }
   DBUG_RETURN(error);
 }
@@ -3991,6 +4042,7 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
   MRN_DBUG_ENTER_METHOD();
   struct st_mrn_ft_info *info = new st_mrn_ft_info();
   info->please = &mrn_wrapper_ft_vft;
+  info->mroonga = this;
   info->ctx = ctx;
   info->table = grn_table;
   info->result = grn_table_create(ctx, NULL, 0, NULL,
@@ -4172,26 +4224,17 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
       break;
     } else {
       grn_id relation_record_id;
-#ifdef _MSC_VER
-      uchar *key;
-      key = (uchar *) malloc(table->key_info->key_length);
-#else
-      uchar key[table->key_info->key_length];
-#endif
       grn_table_get_key(ctx, matched_record_keys, record_id,
                         &relation_record_id, sizeof(grn_id));
       grn_table_get_key(ctx, grn_table, relation_record_id,
-                        key, table->key_info->key_length);
+                        GRN_TEXT_VALUE(&(pkey)), table->key_info->key_length);
       MRN_SET_WRAP_SHARE_KEY(share, table->s);
       MRN_SET_WRAP_TABLE_KEY(this, table);
-      set_pk_bitmap();
       error = wrap_handler->index_read_map(
-        buf, key, pk_keypart_map, HA_READ_KEY_EXACT);
+        buf, (uchar *) GRN_TEXT_VALUE(&(pkey)), pk_keypart_map,
+        HA_READ_KEY_EXACT);
       MRN_SET_BASE_SHARE_KEY(share, table->s);
       MRN_SET_BASE_TABLE_KEY(this, table);
-#ifdef _MSC_VER
-      free(key);
-#endif
     }
   } while (error == HA_ERR_END_OF_FILE);
   DBUG_RETURN(error);
