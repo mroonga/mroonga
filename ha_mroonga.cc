@@ -3202,8 +3202,7 @@ int ha_mroonga::wrapper_index_init(uint idx, bool sorted)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (key_info.algorithm != HA_KEY_ALG_FULLTEXT)
-  {
+  if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
     error = wrap_handler->ha_index_init(share->wrap_key_nr[idx], sorted);
   } else {
     error = wrap_handler->ha_index_init(share->wrap_primary_key, sorted);
