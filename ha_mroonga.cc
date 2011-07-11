@@ -1094,6 +1094,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     DBUG_RETURN(error);
   base_key_info = table->key_info;
 
+  share = tmp_share;
   MRN_SET_WRAP_SHARE_KEY(tmp_share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (!(hnd =
@@ -1102,6 +1103,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   {
     MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
+    share = NULL;
     if (wrap_key_info)
     {
       my_free(wrap_key_info, MYF(0));
@@ -1113,6 +1115,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   error = hnd->ha_create(name, table, info);
   MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
+  share = NULL;
   delete hnd;
 
   if (wrap_key_info)
