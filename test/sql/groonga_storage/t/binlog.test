@@ -15,7 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 source include/have_log_bin.inc;
-source suite/groonga_include/groonga.inc;
+source suite/groonga_include/groonga_init.inc;
 
 --disable_warnings
 drop table if exists t1;

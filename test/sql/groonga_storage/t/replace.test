@@ -16,7 +16,7 @@
 
 # Based on #910.
 
---source suite/groonga_include/groonga.inc
+--source suite/groonga_include/groonga_init.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS videos_master, videos_groonga;

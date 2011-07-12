@@ -1,3 +1,3 @@
 EXTRA_DIST = 					\
-	groonga.inc				\
+	groonga_init.inc				\
 	groonga_deinit.inc
