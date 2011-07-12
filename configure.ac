@@ -253,8 +253,13 @@ AC_CONFIG_FILES([
   test/Makefile
   test/unit/Makefile
   test/sql/Makefile
-  test/sql/r/Makefile
-  test/sql/t/Makefile
+  test/sql/groonga_include/Makefile
+  test/sql/groonga_storage/Makefile
+  test/sql/groonga_storage/r/Makefile
+  test/sql/groonga_storage/t/Makefile
+  test/sql/groonga_wrapper/Makefile
+  test/sql/groonga_wrapper/r/Makefile
+  test/sql/groonga_wrapper/t/Makefile
   apt/Makefile
   rpm/Makefile
   rpm/centos/Makefile
