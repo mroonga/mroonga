@@ -50,5 +50,9 @@ done
 make -C ${top_dir} install-pluginLTLIBRARIES plugindir=${plugins_dir} > /dev/null
 
 (cd "$build_mysql_test_dir" && \
-    ./mysql-test-run.pl --no-check-testcases \
-    --suite="${test_suite_names}" --force "$@")
+    ./mysql-test-run.pl \
+    --no-check-testcases \
+    --retry=1 \
+    --suite="${test_suite_names}" \
+    --force \
+    "$@")
