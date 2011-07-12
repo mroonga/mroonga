@@ -3,6 +3,7 @@ EXTRA_DIST = \
 	create_table.result \
 	delete.result \
 	fulltext.result \
+	fulltext_many_records.result \
 	fulltext_multiple_column_index.result \
 	insert.result \
 	update.result \
