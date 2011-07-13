@@ -4367,9 +4367,11 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
                         GRN_TEXT_VALUE(&(pkey)), table->key_info->key_length);
       MRN_SET_WRAP_SHARE_KEY(share, table->s);
       MRN_SET_WRAP_TABLE_KEY(this, table);
-      error = wrap_handler->index_read_map(
-        buf, (uchar *) GRN_TEXT_VALUE(&(pkey)), pk_keypart_map,
-        HA_READ_KEY_EXACT);
+      error = wrap_handler->index_read_idx_map(buf,
+                                               share->wrap_primary_key,
+                                               (uchar *)GRN_TEXT_VALUE(&(pkey)),
+                                               pk_keypart_map,
+                                               HA_READ_KEY_EXACT);
       MRN_SET_BASE_SHARE_KEY(share, table->s);
       MRN_SET_BASE_TABLE_KEY(this, table);
     }
