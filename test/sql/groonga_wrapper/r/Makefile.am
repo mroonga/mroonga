@@ -5,6 +5,7 @@ EXTRA_DIST = \
 	fulltext.result \
 	fulltext_many_records.result \
 	fulltext_multiple_column_index.result \
+	fulltext_myisam.result \
 	insert.result \
 	update.result \
 	$(NULL)
