@@ -4117,13 +4117,15 @@ int ha_mroonga::read_range_next()
 int ha_mroonga::wrapper_ft_init()
 {
   MRN_DBUG_ENTER_METHOD();
+  int error;
   cur = grn_table_cursor_open(ctx, matched_record_keys, NULL, 0, NULL, 0, 0,
-    -1, 0);
-  if (ctx->rc) {
-    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
-    DBUG_RETURN(ER_ERROR_ON_READ);
+                              -1, 0);
+  if (ctx->rc)
+  {
+    error = ER_ERROR_ON_READ;
+    my_message(error, ctx->errbuf, MYF(0));
   }
-  DBUG_RETURN(0);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_ft_init()
