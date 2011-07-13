@@ -4854,14 +4854,14 @@ handler *ha_mroonga::storage_clone(const char *name, MEM_ROOT *mem_root)
 handler *ha_mroonga::clone(const char *name, MEM_ROOT *mem_root)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error;
+  handler *cloned_handler;
   if (share->wrapper_mode)
   {
-    error = wrapper_clone(name, mem_root);
+    cloned_handler = wrapper_clone(name, mem_root);
   } else {
-    error = storage_clone(name, mem_root);
+    cloned_handler = storage_clone(name, mem_root);
   }
-  DBUG_RETURN(error);
+  DBUG_RETURN(cloned_handler);
 }
 #else
 handler *ha_mroonga::wrapper_clone(MEM_ROOT *mem_root)
