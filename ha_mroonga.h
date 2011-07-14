@@ -152,7 +152,7 @@ public:
 
   uint max_supported_record_length() const { return HA_MAX_REC_LENGTH; }
   uint max_supported_keys()          const { return 100; }
-  uint max_supported_key_parts()     const { return 1; }
+  uint max_supported_key_parts();
   uint max_supported_key_length()    const { return MAX_KEY_LENGTH; }
 
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
@@ -281,6 +281,8 @@ private:
   int wrapper_delete_row(const uchar *buf);
   int wrapper_delete_row_index(const uchar *buf);
   int storage_delete_row(const uchar *buf);
+  uint wrapper_max_supported_key_parts();
+  uint storage_max_supported_key_parts();
   ulonglong wrapper_table_flags() const;
   ulonglong storage_table_flags() const;
   ulong wrapper_index_flags(uint idx, uint part, bool all_parts) const;

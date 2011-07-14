@@ -3229,6 +3229,31 @@ int ha_mroonga::delete_row(const uchar *buf)
   DBUG_RETURN(error);
 }
 
+uint ha_mroonga::wrapper_max_supported_key_parts()
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(MAX_REF_PARTS);
+}
+
+uint ha_mroonga::storage_max_supported_key_parts()
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(1);
+}
+
+uint ha_mroonga::max_supported_key_parts()
+{
+  MRN_DBUG_ENTER_METHOD();
+  uint parts;
+  if (share->wrapper_mode)
+  {
+    parts = wrapper_max_supported_key_parts();
+  } else {
+    parts = storage_max_supported_key_parts();
+  }
+  DBUG_RETURN(parts);
+}
+
 ha_rows ha_mroonga::wrapper_records_in_range(uint key_nr, key_range *range_min,
                                              key_range *range_max)
 {
