@@ -25,7 +25,9 @@ create table diaries (
   id int primary key,
   title varchar(255),
   content text,
-  fulltext index (title, content)
+  fulltext index (title, content),
+  fulltext index (title),
+  fulltext index (content)
 ) default charset utf8 COMMENT = 'engine "innodb"';
 show create table diaries;
 insert into diaries values(1, "Hello", "はじめました。");
