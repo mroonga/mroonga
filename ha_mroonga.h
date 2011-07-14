@@ -77,7 +77,6 @@ public:
   bool      is_clone;
   ha_mroonga *parent_for_clone;
   MEM_ROOT  *mem_root_for_clone;
-  bool      pkey_init;
   grn_obj   pkey;
 
 private:

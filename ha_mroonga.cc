@@ -977,13 +977,14 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   wrap_handler = NULL;
   matched_record_keys = NULL;
   fulltext_searching = FALSE;
-  pkey_init = FALSE;
+  GRN_TEXT_INIT(&pkey, 0);
   DBUG_VOID_RETURN;
 }
 
 ha_mroonga::~ha_mroonga()
 {
   MRN_DBUG_ENTER_METHOD();
+  grn_obj_unlink(ctx, &pkey);
   grn_ctx_fin(ctx);
   DBUG_VOID_RETURN;
 }
@@ -1765,9 +1766,7 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     }
   }
 
-  GRN_TEXT_INIT(&(pkey), 0);
-  grn_bulk_space(ctx, &(pkey), table->key_info->key_length);
-  pkey_init = TRUE;
+  grn_bulk_space(ctx, &pkey, table->key_info->key_length);
 
 error:
   if (error) {
@@ -1795,10 +1794,6 @@ error:
     key_max = NULL;
     grn_index_columns = NULL;
     grn_index_tables = NULL;
-    if (pkey_init) {
-      grn_obj_unlink(ctx, &(pkey));
-      pkey_init = FALSE;
-    }
   }
 
   DBUG_RETURN(error);
@@ -2013,10 +2008,6 @@ int ha_mroonga::wrapper_close()
   }
   base_key_info = NULL;
   free_root(&mem_root, MYF(0));
-  if (pkey_init) {
-    grn_obj_unlink(ctx, &(pkey));
-    pkey_init = FALSE;
-  }
   DBUG_RETURN(error);
 }
 
@@ -4389,12 +4380,12 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
       grn_table_get_key(ctx, matched_record_keys, record_id,
                         &relation_record_id, sizeof(grn_id));
       grn_table_get_key(ctx, grn_table, relation_record_id,
-                        GRN_TEXT_VALUE(&(pkey)), table->key_info->key_length);
+                        GRN_TEXT_VALUE(&pkey), table->key_info->key_length);
       MRN_SET_WRAP_SHARE_KEY(share, table->s);
       MRN_SET_WRAP_TABLE_KEY(this, table);
       error = wrap_handler->index_read_idx_map(buf,
                                                share->wrap_primary_key,
-                                               (uchar *)GRN_TEXT_VALUE(&(pkey)),
+                                               (uchar *)GRN_TEXT_VALUE(&pkey),
                                                pk_keypart_map,
                                                HA_READ_KEY_EXACT);
       MRN_SET_BASE_SHARE_KEY(share, table->s);
