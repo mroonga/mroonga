@@ -47,7 +47,10 @@ for test_suite_name in groonga_include $(echo $test_suite_names | sed -e 's/,/ /
     fi
 done
 
-make -C ${top_dir} install-pluginLTLIBRARIES plugindir=${plugins_dir} > /dev/null
+make -C ${top_dir} \
+    install-pluginLTLIBRARIES \
+    plugindir=${plugins_dir} > /dev/null || \
+    exit 1
 
 (cd "$build_mysql_test_dir" && \
     ./mysql-test-run.pl \
