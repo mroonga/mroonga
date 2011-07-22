@@ -3025,7 +3025,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
       field->move_field_offset(-ptr_diff);
 
       grn_rc rc;
-      rc = grn_column_index_update(ctx, index_column, record_id, 1,
+      rc = grn_column_index_update(ctx, index_column, record_id, j + 1,
                                    &old_value, &new_value);
       if (rc) {
         error = ER_ERROR_ON_WRITE;

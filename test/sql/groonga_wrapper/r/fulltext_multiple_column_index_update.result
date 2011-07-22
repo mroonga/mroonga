@@ -22,16 +22,16 @@ diaries	CREATE TABLE `diaries` (
 insert into diaries values(1, "Hello", "はじめました。");
 insert into diaries values(2, "天気", "明日の富士山の天気について");
 insert into diaries values(3, "富士山", "今日もきれい。");
-update diaries set title = "チョモランマと富士山" where id = 1;
 update diaries set title = "チョモランマ" where id = 3;
+update diaries set content = "チョモランマと富士山" where id = 1;
 select * from diaries where match(title, content) against("富士山");
 id	title	content
-1	チョモランマと富士山	はじめました。
+1	Hello	チョモランマと富士山
 2	天気	明日の富士山の天気について
 select * from diaries where match(title) against("富士山");
 id	title	content
-1	チョモランマと富士山	はじめました。
 select * from diaries where match(content) against("富士山");
 id	title	content
+1	Hello	チョモランマと富士山
 2	天気	明日の富士山の天気について
 drop table diaries;
