@@ -1164,6 +1164,34 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::wrapper_validate_key_info(KEY *key_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+  uint i;
+  for (i = 0; i < key_info->key_parts; i++) {
+    Field *field = key_info->key_part[i].field;
+
+    int mysql_field_type = field->type();
+    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
+    if (gtype != GRN_DB_TEXT)
+    {
+      error = ER_CANT_CREATE_TABLE;
+      GRN_LOG(ctx, GRN_LOG_ERROR,
+              "key type must be text: <%d> "
+              "(TODO: We should show type name not type ID.)",
+              mysql_field_type);
+      my_message(ER_CANT_CREATE_TABLE,
+                 "key type must be text. (TODO: We should show type name.)",
+                 MYF(0));
+      DBUG_RETURN(error);
+    }
+  }
+
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
                                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
 {
@@ -1200,24 +1228,11 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
       continue;
     }
 
-    uint j;
-    for (j = 0; j < key_info.key_parts; j++) {
-      Field *field = key_info.key_part[j].field;
-
-      int mysql_field_type = field->type();
-      grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
-      if (gtype != GRN_DB_TEXT) {
-        grn_obj_remove(ctx, grn_table);
-        error = ER_CANT_CREATE_TABLE;
-        GRN_LOG(ctx, GRN_LOG_ERROR,
-                "key type must be text: <%d> "
-                "(TODO: We should show type name not type ID.)",
-                mysql_field_type);
-        my_message(ER_CANT_CREATE_TABLE,
-                   "key type must be text. (TODO: We should show type name.)",
-                   MYF(0));
-        DBUG_RETURN(error);
-      }
+    error = wrapper_validate_key_info(&key_info);
+    if (error)
+    {
+      grn_obj_remove(ctx, grn_table);
+      DBUG_RETURN(error);
     }
 
     char index_name[MRN_MAX_PATH_SIZE];
@@ -1241,8 +1256,8 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
     if (ctx->rc) {
       error = ER_CANT_CREATE_TABLE;
       my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-      grn_obj_remove(ctx, grn_table);
       grn_obj_unlink(ctx, column_type);
+      grn_obj_remove(ctx, grn_table);
       DBUG_RETURN(error);
     }
     grn_obj_unlink(ctx, column_type);
@@ -1259,10 +1274,10 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
                                               index_column_flags,
                                               grn_table);
     if (ctx->rc) {
-      grn_obj_remove(ctx, index_table);
-      grn_obj_remove(ctx, grn_table);
       error = ER_CANT_CREATE_TABLE;
       my_message(error, ctx->errbuf, MYF(0));
+      grn_obj_remove(ctx, index_table);
+      grn_obj_remove(ctx, grn_table);
       DBUG_RETURN(error);
     }
   }
