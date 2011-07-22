@@ -231,6 +231,11 @@ private:
   int storage_create(const char *name, TABLE *table,
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
   int wrapper_validate_key_info(KEY *key_info);
+  int wrapper_create_index_table(grn_obj *grn_table,
+                                 const char *grn_table_name,
+                                 int i,
+                                 KEY *key_info,
+                                 grn_obj **index_tables);
   int wrapper_create_index(const char *name, TABLE *table,
                            HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
   int storage_create_validate_pseudo_column(TABLE *table);

@@ -1192,6 +1192,63 @@ int ha_mroonga::wrapper_validate_key_info(KEY *key_info)
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::wrapper_create_index_table(grn_obj *grn_table,
+                                           const char *grn_table_name,
+                                           int i,
+                                           KEY *key_info,
+                                           grn_obj **index_tables)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+  char index_name[MRN_MAX_PATH_SIZE];
+  mrn_index_name_gen(grn_table_name, i, index_name);
+
+  grn_obj_flags index_table_flags =
+    GRN_OBJ_TABLE_PAT_KEY |
+    GRN_OBJ_PERSISTENT |
+    GRN_OBJ_KEY_NORMALIZE;
+  grn_obj *index_table;
+
+  grn_obj_flags index_column_flags =
+    GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
+  if (key_info->key_parts > 1) {
+    index_column_flags |= GRN_OBJ_WITH_SECTION;
+  }
+
+  grn_obj *column_type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  index_table = grn_table_create(ctx, index_name, strlen(index_name), NULL,
+                                 index_table_flags, column_type, 0);
+  if (ctx->rc) {
+    error = ER_CANT_CREATE_TABLE;
+    my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+    grn_obj_unlink(ctx, column_type);
+    DBUG_RETURN(error);
+  }
+  grn_obj_unlink(ctx, column_type);
+  index_tables[i] = index_table;
+
+  grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+  grn_obj *token_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
+  grn_obj_set_info(ctx, index_table, info_type, token_type);
+  grn_obj_unlink(ctx, token_type);
+
+  grn_obj *index_column = grn_column_create(ctx, index_table,
+                                            wrapper_index_column_name,
+                                            strlen(wrapper_index_column_name),
+                                            NULL,
+                                            index_column_flags,
+                                            grn_table);
+  if (ctx->rc) {
+    error = ER_CANT_CREATE_TABLE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+  grn_obj_unlink(ctx, index_column);
+
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
                                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
 {
@@ -1221,6 +1278,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 
   uint i;
   uint n_keys = table->s->keys;
+  grn_obj *index_tables[n_keys];
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->s->key_info[i];
 
@@ -1228,58 +1286,38 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
       continue;
     }
 
+    index_tables[i] = NULL;
     error = wrapper_validate_key_info(&key_info);
     if (error)
     {
-      grn_obj_remove(ctx, grn_table);
-      DBUG_RETURN(error);
+      break;
     }
 
-    char index_name[MRN_MAX_PATH_SIZE];
-    mrn_index_name_gen(grn_table_name, i, index_name);
-
-    grn_obj_flags index_table_flags =
-      GRN_OBJ_TABLE_PAT_KEY |
-      GRN_OBJ_PERSISTENT |
-      GRN_OBJ_KEY_NORMALIZE;
-    grn_obj *index_table;
-
-    grn_obj_flags index_column_flags =
-      GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
-    if (key_info.key_parts > 1) {
-      index_column_flags |= GRN_OBJ_WITH_SECTION;
+    error = wrapper_create_index_table(grn_table, grn_table_name, i, &key_info,
+                                       index_tables);
+    if (error)
+    {
+      break;
     }
+  }
 
-    grn_obj *column_type = grn_ctx_at(ctx, GRN_DB_TEXT);
-    index_table = grn_table_create(ctx, index_name, strlen(index_name), NULL,
-                                   index_table_flags, column_type, 0);
-    if (ctx->rc) {
-      error = ER_CANT_CREATE_TABLE;
-      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-      grn_obj_unlink(ctx, column_type);
-      grn_obj_remove(ctx, grn_table);
-      DBUG_RETURN(error);
+  if (error)
+  {
+    int j;
+    for (j = 0; j < i; j++) {
+      KEY key_info = table->s->key_info[j];
+
+      if (key_info.algorithm != HA_KEY_ALG_FULLTEXT)
+      {
+        continue;
+      }
+
+      if (index_tables[j])
+      {
+        grn_obj_remove(ctx, index_tables[j]);
+      }
     }
-    grn_obj_unlink(ctx, column_type);
-
-    grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-    grn_obj *token_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
-    grn_obj_set_info(ctx, index_table, info_type, token_type);
-    grn_obj_unlink(ctx, token_type);
-
-    grn_obj *index_column = grn_column_create(ctx, index_table,
-                                              wrapper_index_column_name,
-                                              strlen(wrapper_index_column_name),
-                                              NULL,
-                                              index_column_flags,
-                                              grn_table);
-    if (ctx->rc) {
-      error = ER_CANT_CREATE_TABLE;
-      my_message(error, ctx->errbuf, MYF(0));
-      grn_obj_remove(ctx, index_table);
-      grn_obj_remove(ctx, grn_table);
-      DBUG_RETURN(error);
-    }
+    grn_obj_remove(ctx, grn_table);
   }
 
   DBUG_RETURN(error);
