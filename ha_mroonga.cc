@@ -83,6 +83,8 @@ extern pthread_mutex_t LOCK_open;
 #  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
 #endif
 
+static const char *wrapper_index_column_name = "index";
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1198,6 +1200,26 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
       continue;
     }
 
+    uint j;
+    for (j = 0; j < key_info.key_parts; j++) {
+      Field *field = key_info.key_part[j].field;
+
+      int mysql_field_type = field->type();
+      grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
+      if (gtype != GRN_DB_TEXT) {
+        grn_obj_remove(ctx, grn_table);
+        error = ER_CANT_CREATE_TABLE;
+        GRN_LOG(ctx, GRN_LOG_ERROR,
+                "key type must be text: <%d> "
+                "(TODO: We should show type name not type ID.)",
+                mysql_field_type);
+        my_message(ER_CANT_CREATE_TABLE,
+                   "key type must be text. (TODO: We should show type name.)",
+                   MYF(0));
+        DBUG_RETURN(error);
+      }
+    }
+
     char index_name[MRN_MAX_PATH_SIZE];
     mrn_index_name_gen(grn_table_name, i, index_name);
 
@@ -1207,31 +1229,32 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
       GRN_OBJ_KEY_NORMALIZE;
     grn_obj *index_table;
 
-    Field *field = key_info.key_part[0].field;
-
-    int mysql_field_type = field->type();
-    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
-    grn_obj *column_type = grn_ctx_at(ctx, gtype);
     grn_obj_flags index_column_flags =
       GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
+    if (key_info.key_parts > 1) {
+      index_column_flags |= GRN_OBJ_WITH_SECTION;
+    }
 
+    grn_obj *column_type = grn_ctx_at(ctx, GRN_DB_TEXT);
     index_table = grn_table_create(ctx, index_name, strlen(index_name), NULL,
                                    index_table_flags, column_type, 0);
     if (ctx->rc) {
-      grn_obj_remove(ctx, grn_table);
       error = ER_CANT_CREATE_TABLE;
       my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+      grn_obj_remove(ctx, grn_table);
+      grn_obj_unlink(ctx, column_type);
       DBUG_RETURN(error);
     }
+    grn_obj_unlink(ctx, column_type);
 
     grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
     grn_obj *token_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
     grn_obj_set_info(ctx, index_table, info_type, token_type);
     grn_obj_unlink(ctx, token_type);
 
-    const char *column_name = field->field_name;
     grn_obj *index_column = grn_column_create(ctx, index_table,
-                                              column_name, strlen(column_name),
+                                              wrapper_index_column_name,
+                                              strlen(wrapper_index_column_name),
                                               NULL,
                                               index_column_flags,
                                               grn_table);
@@ -1754,11 +1777,9 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
       goto error;
     }
 
-    Field *field = key_info.key_part[0].field;
-    const char *column_name = field->field_name;
-    int column_name_size = strlen(column_name);
     grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
-                                          column_name, column_name_size);
+                                          wrapper_index_column_name,
+                                          strlen(wrapper_index_column_name));
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -2731,7 +2752,6 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
     uint j;
     for (j = 0; j < key_info.key_parts; j++) {
       Field *field = key_info.key_part[j].field;
-      const char *column_name = field->field_name;
 
       if (field->is_null())
         continue;
@@ -2740,7 +2760,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
       mrn_set_buf(ctx, field, &new_value, &new_column_size);
 
       grn_rc rc;
-      rc = grn_column_index_update(ctx, index_column, record_id, 1,
+      rc = grn_column_index_update(ctx, index_column, record_id, j + 1,
                                    NULL, &new_value);
       if (rc) {
         error = ER_ERROR_ON_WRITE;
@@ -2995,7 +3015,6 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     uint j;
     for (j = 0; j < key_info.key_parts; j++) {
       Field *field = key_info.key_part[j].field;
-      const char *column_name = field->field_name;
 
       int new_column_size;
       mrn_set_buf(ctx, field, &new_value, &new_column_size);
@@ -3170,7 +3189,6 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
     uint j;
     for (j = 0; j < key_info.key_parts; j++) {
       Field *field = key_info.key_part[j].field;
-      const char *column_name = field->field_name;
 
       if (field->is_null())
         continue;
@@ -3178,7 +3196,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
       int old_column_size;
       mrn_set_buf(ctx, field, &old_value, &old_column_size);
       grn_rc rc;
-      rc = grn_column_index_update(ctx, index_column, record_id, 1,
+      rc = grn_column_index_update(ctx, index_column, record_id, j + 1,
                                    &old_value, NULL);
       if (rc) {
         error = ER_ERROR_ON_WRITE;
