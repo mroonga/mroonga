@@ -197,6 +197,13 @@ groongaストレージエンジンのビルド
    --with-mysql-source=/usr/local/src/mysql-5.5.13 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
+groongaを/usr/libなど標準のパス以外にインストールした場合はPKG_CONFIG_PATHを指定する必要があります。例えば、ｰｰprefix=$HOME/localでgroongaをインストールした場合は以下のようにします。::
+
+ ./configure \
+   PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
+   --with-mysql-source=/usr/local/src/mysql-5.5.13 \
+   --with-mysql-config=/usr/local/mysql/bin/mysql_config
+
 その後、"make"を実行します。 ::
 
  make
