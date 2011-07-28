@@ -1,5 +1,5 @@
-%define mysql_version 5.5.13
-%define mysql_release 1%{?dist}
+%define mysql_version 5.5.14
+%define mysql_release 2%{?dist}
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/15/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/15/SRPMS
 
