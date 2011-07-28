@@ -1,3 +1,9 @@
+groonga-storage-engine (0.8-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kouhei Sutou <kou@clear-code.com>  Fri, 29 Jul 2011 00:00:00 +0900
+
 groonga-storage-engine (0.7-1) unstable; urgency=low
 
   * New upstream release.
