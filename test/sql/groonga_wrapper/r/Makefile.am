@@ -4,7 +4,9 @@ EXTRA_DIST = \
 	delete.result \
 	fulltext.result \
 	fulltext_many_records.result \
-	fulltext_multiple_column_index.result \
+	fulltext_multiple_column_index_delete.result \
+	fulltext_multiple_column_index_insert.result \
+	fulltext_multiple_column_index_update.result \
 	fulltext_myisam.result \
 	insert.result \
 	update.result \
