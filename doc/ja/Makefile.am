@@ -126,6 +126,7 @@ source_files =					\
 	source/characteristic.rst		\
 	source/conf.py				\
 	source/developer.rst			\
+	source/developer/debug.rst		\
 	source/developer/release.rst		\
 	source/index.rst			\
 	source/install.rst			\
@@ -138,10 +139,11 @@ source_files =					\
 # find html -type f | sort | sed -e 's,^,\t,g'
 html_files =					\
 	html/.buildinfo				\
-	html/_images/storage-mode.png		\
-	html/_images/wrapper-mode.png		\
+	html/_images/storage-mode1.png		\
+	html/_images/wrapper-mode1.png		\
 	html/_sources/characteristic.txt	\
 	html/_sources/developer.txt		\
+	html/_sources/developer/debug.txt	\
 	html/_sources/developer/release.txt	\
 	html/_sources/index.txt			\
 	html/_sources/install.txt		\
@@ -168,6 +170,7 @@ html_files =					\
 	html/_static/underscore.js		\
 	html/characteristic.html		\
 	html/developer.html			\
+	html/developer/debug.html		\
 	html/developer/release.html		\
 	html/genindex.html			\
 	html/index.html				\
@@ -180,7 +183,6 @@ html_files =					\
 	html/userguide.html			\
 	html/userguide/storage.html		\
 	html/userguide/wrapper.html
-
 
 $(html_files): html-build-stamp
 html-build-stamp:
