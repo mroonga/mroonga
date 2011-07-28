@@ -5284,14 +5284,14 @@ double ha_mroonga::storage_read_time(uint index, uint ranges, ha_rows rows)
 double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error;
+  double time;
   if (share->wrapper_mode)
   {
-    error = wrapper_read_time(index, ranges, rows);
+    time = wrapper_read_time(index, ranges, rows);
   } else {
-    error = storage_read_time(index, ranges, rows);
+    time = storage_read_time(index, ranges, rows);
   }
-  DBUG_RETURN(error);
+  DBUG_RETURN(time);
 }
 
 const key_map *ha_mroonga::wrapper_keys_to_use_for_scanning()
