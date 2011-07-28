@@ -1735,7 +1735,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
     }
     error = wrap_handler->ha_open(table, name, mode, test_if_locked);
   } else {
-#if MYSQL_VERSION_ID >= 50513
+#ifdef MRN_HANDLER_CLONE_NEED_NAME
     if (!(wrap_handler = parent_for_clone->wrap_handler->clone(name,
       mem_root_for_clone)))
 #else
@@ -4910,7 +4910,7 @@ int ha_mroonga::reset()
   DBUG_RETURN(error);
 }
 
-#if MYSQL_VERSION_ID >= 50513
+#ifdef MRN_HANDLER_CLONE_NEED_NAME
 handler *ha_mroonga::wrapper_clone(const char *name, MEM_ROOT *mem_root)
 {
   handler *cloned_handler;

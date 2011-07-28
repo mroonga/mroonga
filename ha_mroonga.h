@@ -32,6 +32,10 @@ extern "C" {
 #include <groonga.h>
 #include "mrn_sys.h"
 
+#if MYSQL_VERSION_ID >= 50513 || (MYSQL_VERSION_ID >= 50158 && MYSQL_VERSION_ID < 50500)
+#  define MRN_HANDLER_CLONE_NEED_NAME 1
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -185,7 +189,7 @@ public:
 
   int reset();
 
-#if MYSQL_VERSION_ID >= 50513
+#ifdef MRN_HANDLER_CLONE_NEED_NAME
   handler *clone(const char *name, MEM_ROOT *mem_root);
 #else
   handler *clone(MEM_ROOT *mem_root);
@@ -355,7 +359,7 @@ private:
   void storage_cond_pop();
   bool wrapper_get_error_message(int error, String *buf);
   bool storage_get_error_message(int error, String *buf);
-#if MYSQL_VERSION_ID >= 50513
+#ifdef MRN_HANDLER_CLONE_NEED_NAME
   handler *wrapper_clone(const char *name, MEM_ROOT *mem_root);
   handler *storage_clone(const char *name, MEM_ROOT *mem_root);
 #else
