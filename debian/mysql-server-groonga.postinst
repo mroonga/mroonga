@@ -5,11 +5,13 @@ set -e
 prevver="$2"
 
 install_plugin() {
-    cat <<EOS | mysql --defaults-file=/etc/mysql/debian.cnf
-INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
-CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
+    cat <<EOS | mysql --defaults-file=/etc/mysql/debian.cnf || true
+if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name="groonga"`)
+{
+  INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
+  CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
+}
 EOS
-    true
 }
 
 case "$1" in

@@ -3,8 +3,11 @@
 set -e
 
 cat <<EOS | mysql --defaults-file=/etc/mysql/debian.cnf || true
-DROP FUNCTION last_insert_grn_id;
-UNINSTALL PLUGIN groonga;
+if (`SELECT 1 FROM information_schema.plugins WHERE plugin_name="groonga"`)
+{
+  DROP FUNCTION last_insert_grn_id;
+  UNINSTALL PLUGIN groonga;
+}
 EOS
 
 if [ "$1" = "purge" ]; then
