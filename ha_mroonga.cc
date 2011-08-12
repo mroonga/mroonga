@@ -83,6 +83,12 @@ extern pthread_mutex_t LOCK_open;
 #  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
 #endif
 
+#if MYSQL_VERSION_ID >= 50603
+#  define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER::ORDER_ASC)
+#else
+#  define MRN_ORDER_IS_ASC(order) ((order)->asc)
+#endif
+
 static const char *wrapper_index_column_name = "index";
 
 #ifdef __cplusplus
@@ -4816,10 +4822,12 @@ void ha_mroonga::check_fast_order_limit()
         col_field_index = field->field_index;
       }
       sort_keys[i].offset = 0;
-      if (order->asc)
+      if (MRN_ORDER_IS_ASC(order))
+      {
         sort_keys[i].flags = GRN_TABLE_SORT_ASC;
-      else
+      } else {
         sort_keys[i].flags = GRN_TABLE_SORT_DESC;
+      }
     }
     grn_obj *index;
     if (i == 1 && col_field_index >= 0 &&
