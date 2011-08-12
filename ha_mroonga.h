@@ -32,7 +32,8 @@ extern "C" {
 #include <groonga.h>
 #include "mrn_sys.h"
 
-#if MYSQL_VERSION_ID >= 50513 || (MYSQL_VERSION_ID >= 50158 && MYSQL_VERSION_ID < 50500)
+#if (MYSQL_VERSION_ID >= 50513 && MYSQL_VERSION_ID < 50600) || \
+    (MYSQL_VERSION_ID >= 50158 && MYSQL_VERSION_ID < 50500)
 #  define MRN_HANDLER_CLONE_NEED_NAME 1
 #endif
 
