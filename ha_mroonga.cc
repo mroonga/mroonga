@@ -3729,7 +3729,11 @@ int ha_mroonga::wrapper_index_next(uchar *buf)
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
     set_pk_bitmap();
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_NEXT
+  error = wrap_handler->ha_index_next(buf);
+#else
   error = wrap_handler->index_next(buf);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);

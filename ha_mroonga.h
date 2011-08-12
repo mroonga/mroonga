@@ -41,6 +41,7 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_HA_CLOSE 1
 #  define MRN_HANDLER_HAVE_HA_RND_NEXT 1
 #  define MRN_HANDLER_HAVE_HA_RND_POS 1
+#  define MRN_HANDLER_HAVE_HA_INDEX_NEXT 1
 #endif
 
 #if MYSQL_VERSION_ID < 50600
@@ -183,7 +184,9 @@ public:
                      enum ha_rkey_function find_flag);
   int index_read_last_map(uchar *buf, const uchar *key,
                           key_part_map keypart_map);
-  int index_next(uchar * buf);
+#ifndef MRN_HANDLER_HAVE_HA_INDEX_NEXT
+  int index_next(uchar *buf);
+#endif
   int index_prev(uchar * buf);
   int index_first(uchar * buf);
   int index_last(uchar * buf);
@@ -247,6 +250,9 @@ protected:
 #endif
 #ifdef MRN_HANDLER_HAVE_HA_RND_POS
   int rnd_pos(uchar *buf, uchar *pos);
+#endif
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_NEXT
+  int index_next(uchar *buf);
 #endif
 
 private:
