@@ -4482,11 +4482,19 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
                         GRN_TEXT_VALUE(&pkey), table->key_info->key_length);
       MRN_SET_WRAP_SHARE_KEY(share, table->s);
       MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_IDX_MAP
+      error = wrap_handler->ha_index_read_idx_map(buf,
+                                                  share->wrap_primary_key,
+                                                  (uchar *)GRN_TEXT_VALUE(&pkey),
+                                                  pk_keypart_map,
+                                                  HA_READ_KEY_EXACT);
+#else
       error = wrap_handler->index_read_idx_map(buf,
                                                share->wrap_primary_key,
                                                (uchar *)GRN_TEXT_VALUE(&pkey),
                                                pk_keypart_map,
                                                HA_READ_KEY_EXACT);
+#endif
       MRN_SET_BASE_SHARE_KEY(share, table->s);
       MRN_SET_BASE_TABLE_KEY(this, table);
     }
