@@ -37,16 +37,10 @@ extern "C" {
 #  define MRN_HANDLER_CLONE_NEED_NAME 1
 #endif
 
-#if MYSQL_VERSION_ID < 50600
-#  define MRN_HANDLER_CLOSE_IS_PUBLIC 1
-#endif
-
-#if MYSQL_VERSION_ID < 50600
-#  define MRN_HANDLER_RND_NEXT_IS_PUBLIC 1
-#endif
-
-#if MYSQL_VERSION_ID < 50600
-#  define MRN_HANDLER_RND_POS_IS_PUBLIC 1
+#if MYSQL_VERSION_ID >= 50600
+#  define MRN_HANDLER_HAVE_HA_CLOSE 1
+#  define MRN_HANDLER_HAVE_HA_RND_NEXT 1
+#  define MRN_HANDLER_HAVE_HA_RND_POS 1
 #endif
 
 #if MYSQL_VERSION_ID < 50600
@@ -148,7 +142,7 @@ public:
 
   int create(const char *name, TABLE *form, HA_CREATE_INFO *info); // required
   int open(const char *name, int mode, uint test_if_locked);       // required
-#ifdef MRN_HANDLER_CLOSE_IS_PUBLIC
+#ifndef MRN_HANDLER_HAVE_HA_CLOSE
   int close();                                                     // required
 #endif
   int info(uint flag);                                             // required
@@ -161,10 +155,10 @@ public:
 
   int rnd_init(bool scan);                                         // required
   int rnd_end();
-#ifdef MRN_HANDLER_RND_NEXT_IS_PUBLIC
+#ifndef MRN_HANDLER_HAVE_HA_RND_NEXT
   int rnd_next(uchar *buf);                                        // required
 #endif
-#ifdef MRN_HANDLER_RND_POS_IS_PUBLIC
+#ifndef MRN_HANDLER_HAVE_HA_RND_POS
   int rnd_pos(uchar *buf, uchar *pos);                             // required
 #endif
   void position(const uchar *record);                              // required
@@ -248,15 +242,15 @@ public:
   bool is_fatal_error(int error_num, uint flags);
 
 protected:
-#ifndef MRN_HANDLER_RND_NEXT_IS_PUBLIC
+#ifdef MRN_HANDLER_HAVE_HA_RND_NEXT
   int rnd_next(uchar *buf);
 #endif
-#ifndef MRN_HANDLER_RND_POS_IS_PUBLIC
+#ifdef MRN_HANDLER_HAVE_HA_RND_POS
   int rnd_pos(uchar *buf, uchar *pos);
 #endif
 
 private:
-#ifndef MRN_HANDLER_CLOSE_IS_PUBLIC
+#ifdef MRN_HANDLER_HAVE_HA_CLOSE
   int close();
 #endif
   void check_count_skip(key_part_map start_key_part_map,

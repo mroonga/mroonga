@@ -2070,10 +2070,10 @@ int ha_mroonga::wrapper_close()
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-#ifdef MRN_HANDLER_CLOSE_IS_PUBLIC
-  error = wrap_handler->close();
-#else
+#ifdef MRN_HANDLER_HAVE_HA_CLOSE
   error = wrap_handler->ha_close();
+#else
+  error = wrap_handler->close();
 #endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -2526,10 +2526,10 @@ int ha_mroonga::wrapper_rnd_next(uchar *buf)
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
     set_pk_bitmap();
-#ifdef MRN_HANDLER_RND_NEXT_IS_PUBLIC
-  error = wrap_handler->rnd_next(buf);
-#else
+#ifdef MRN_HANDLER_HAVE_HA_RND_NEXT
   error = wrap_handler->ha_rnd_next(buf);
+#else
+  error = wrap_handler->rnd_next(buf);
 #endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -2577,10 +2577,10 @@ int ha_mroonga::wrapper_rnd_pos(uchar *buf, uchar *pos)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-#ifdef MRN_HANDLER_RND_POS_IS_PUBLIC
-  error = wrap_handler->rnd_pos(buf, pos);
-#else
+#ifdef MRN_HANDLER_HAVE_HA_RND_POS
   error = wrap_handler->ha_rnd_pos(buf, pos);
+#else
+  error = wrap_handler->rnd_pos(buf, pos);
 #endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
