@@ -46,6 +46,8 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_HA_INDEX_PREV 1
 #  define MRN_HANDLER_HAVE_HA_INDEX_FIRST 1
 #  define MRN_HANDLER_HAVE_HA_INDEX_LAST 1
+
+#  define MRN_HANDLER_HAVE_MULTI_RANGE_READ 1
 #endif
 
 #if MYSQL_VERSION_ID < 50600
@@ -225,12 +227,25 @@ public:
   handler *clone(MEM_ROOT *mem_root);
 #endif
   uint8 table_cache_type();
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ
+  ha_rows multi_range_read_info_const(uint keyno, RANGE_SEQ_IF *seq,
+                                      void *seq_init_param,
+                                      uint n_ranges, uint *bufsz,
+                                      uint *flags, COST_VECT *cost);
+  ha_rows multi_range_read_info(uint keyno, uint n_ranges, uint keys,
+                                uint *bufsz, uint *flags, COST_VECT *cost);
+  int multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
+                            uint n_ranges, uint mode,
+                            HANDLER_BUFFER *buf);
+  int multi_range_read_next(char **range_info);
+#else // MRN_HANDLER_HAVE_MULTI_RANGE_READ
   int read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
                              KEY_MULTI_RANGE *ranges,
                              uint range_count,
                              bool sorted,
                              HANDLER_BUFFER *buffer);
   int read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
+#endif // MRN_HANDLER_HAVE_MULTI_RANGE_READ
   void start_bulk_insert(ha_rows rows);
   int end_bulk_insert();
   int delete_all_rows();
@@ -421,6 +436,36 @@ private:
 #endif
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ
+  ha_rows wrapper_multi_range_read_info_const(uint keyno,
+                                              RANGE_SEQ_IF *seq,
+                                              void *seq_init_param,
+                                              uint n_ranges,
+                                              uint *bufsz,
+                                              uint *flags,
+                                              COST_VECT *cost);
+  ha_rows storage_multi_range_read_info_const(uint keyno,
+                                              RANGE_SEQ_IF *seq,
+                                              void *seq_init_param,
+                                              uint n_ranges,
+                                              uint *bufsz,
+                                              uint *flags,
+                                              COST_VECT *cost);
+  ha_rows wrapper_multi_range_read_info(uint keyno, uint n_ranges, uint keys,
+                                        uint *bufsz, uint *flags,
+                                        COST_VECT *cost);
+  ha_rows storage_multi_range_read_info(uint keyno, uint n_ranges, uint keys,
+                                        uint *bufsz, uint *flags,
+                                        COST_VECT *cost);
+  int wrapper_multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
+                                    uint n_ranges, uint mode,
+                                    HANDLER_BUFFER *buf);
+  int storage_multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
+                                    uint n_ranges, uint mode,
+                                    HANDLER_BUFFER *buf);
+  int wrapper_multi_range_read_next(char **range_info);
+  int storage_multi_range_read_next(char **range_info);
+#else // MRN_HANDLER_HAVE_MULTI_RANGE_READ
   int wrapper_read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
                                      KEY_MULTI_RANGE *ranges,
                                      uint range_count,
@@ -433,6 +478,7 @@ private:
                                      HANDLER_BUFFER *buffer);
   int wrapper_read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
   int storage_read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
+#endif // MRN_HANDLER_HAVE_MULTI_RANGE_READ
   int wrapper_delete_all_rows();
   int storage_delete_all_rows();
 #if MYSQL_VERSION_ID >= 50500
