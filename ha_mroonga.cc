@@ -3996,7 +3996,11 @@ int ha_mroonga::wrapper_index_next_same(uchar *buf, const uchar *key,
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
     set_pk_bitmap();
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_NEXT_SAME
+  error = wrap_handler->ha_index_next_same(buf, key, keylen);
+#else
   error = wrap_handler->index_next_same(buf, key, keylen);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
