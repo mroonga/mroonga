@@ -15,10 +15,21 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 disable_query_log;
-if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name="groonga"`)
+
+if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "groonga"`)
 {
   INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
   INSTALL PLUGIN groonga_stats SONAME 'ha_groonga.so';
 }
-set storage_engine=groonga;
+
+let have_default_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_storage_engine"`;
+if ($have_default_storage_engine_variable)
+{
+  set default_storage_engine=groonga;
+}
+if (!$have_default_storage_engine_variable)
+{
+  set storage_engine=groonga;
+}
+
 enable_query_log;

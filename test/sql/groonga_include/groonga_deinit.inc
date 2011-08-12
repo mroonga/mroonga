@@ -15,7 +15,17 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 disable_query_log;
-set storage_engine=MyISAM;
+
+if ($have_default_storage_engine_variable)
+{
+  set default_storage_engine=MyISAM;
+}
+if (!$have_default_storage_engine_variable)
+{
+  set storage_engine=MyISAM;
+}
+
 UNINSTALL PLUGIN groonga_stats;
 UNINSTALL PLUGIN groonga;
+
 enable_query_log;
