@@ -44,6 +44,7 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_HA_INDEX_NEXT 1
 #  define MRN_HANDLER_HAVE_HA_INDEX_PREV 1
 #  define MRN_HANDLER_HAVE_HA_INDEX_FIRST 1
+#  define MRN_HANDLER_HAVE_HA_INDEX_LAST 1
 #endif
 
 #if MYSQL_VERSION_ID < 50600
@@ -195,7 +196,9 @@ public:
 #ifndef MRN_HANDLER_HAVE_HA_INDEX_FIRST
   int index_first(uchar *buf);
 #endif
-  int index_last(uchar * buf);
+#ifndef MRN_HANDLER_HAVE_HA_INDEX_LAST
+  int index_last(uchar *buf);
+#endif
   int index_next_same(uchar *buf, const uchar *key, uint keylen);
 
   int read_range_first(const key_range *start_key,
@@ -265,6 +268,9 @@ protected:
 #endif
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_FIRST
   int index_first(uchar *buf);
+#endif
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_LAST
+  int index_last(uchar *buf);
 #endif
 
 private:

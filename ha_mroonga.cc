@@ -3913,7 +3913,11 @@ int ha_mroonga::wrapper_index_last(uchar *buf)
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
     set_pk_bitmap();
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_LAST
+  error = wrap_handler->ha_index_last(buf);
+#else
   error = wrap_handler->index_last(buf);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
