@@ -1063,14 +1063,14 @@ ulonglong ha_mroonga::table_flags() const
 {
   MRN_DBUG_ENTER_METHOD();
 
-  int error;
+  ulonglong flags;
   if (wrap_handler && share && share->wrapper_mode) {
-    error = wrapper_table_flags();
+    flags = wrapper_table_flags();
   } else {
-    error = storage_table_flags();
+    flags = storage_table_flags();
   }
 
-  DBUG_RETURN(error);
+  DBUG_RETURN(flags);
 }
 
 ulong ha_mroonga::wrapper_index_flags(uint idx, uint part, bool all_parts) const
