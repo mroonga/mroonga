@@ -3833,7 +3833,11 @@ int ha_mroonga::wrapper_index_first(uchar *buf)
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
     set_pk_bitmap();
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_FIRST
+  error = wrap_handler->ha_index_first(buf);
+#else
   error = wrap_handler->index_first(buf);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
