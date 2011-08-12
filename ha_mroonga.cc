@@ -2526,7 +2526,11 @@ int ha_mroonga::wrapper_rnd_next(uchar *buf)
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
     set_pk_bitmap();
+#ifdef MRN_HANDLER_RND_NEXT_IS_PUBLIC
   error = wrap_handler->rnd_next(buf);
+#else
+  error = wrap_handler->ha_rnd_next(buf);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);

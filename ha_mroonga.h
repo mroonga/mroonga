@@ -42,6 +42,10 @@ extern "C" {
 #endif
 
 #if MYSQL_VERSION_ID < 50600
+#  define MRN_HANDLER_RND_NEXT_IS_PUBLIC 1
+#endif
+
+#if MYSQL_VERSION_ID < 50600
   typedef Item COND;
 #endif
 
@@ -153,7 +157,9 @@ public:
 
   int rnd_init(bool scan);                                         // required
   int rnd_end();
+#ifdef MRN_HANDLER_RND_NEXT_IS_PUBLIC
   int rnd_next(uchar *buf);                                        // required
+#endif
   int rnd_pos(uchar *buf, uchar *pos);                             // required
   void position(const uchar *record);                              // required
   int extra(enum ha_extra_function operation);
@@ -234,6 +240,11 @@ public:
   int analyze(THD* thd, HA_CHECK_OPT* check_opt);
   int optimize(THD* thd, HA_CHECK_OPT* check_opt);
   bool is_fatal_error(int error_num, uint flags);
+
+protected:
+#ifndef MRN_HANDLER_RND_NEXT_IS_PUBLIC
+  int rnd_next(uchar *buf);
+#endif
 
 private:
 #ifndef MRN_HANDLER_CLOSE_IS_PUBLIC
