@@ -38,10 +38,10 @@
 #define MYSQL_SERVER 1
 #include "mysql_version.h"
 
-#ifdef MYSQL51
+#if MYSQL_VERSION_ID < 50500
 #  include <mysql_priv.h>
 #  include <mysql/plugin.h>
-#else /* MYSQL51 */
+#else
 #  include <sql_priv.h>
 #  include <sql_class.h>
 #  include <probes_mysql.h>

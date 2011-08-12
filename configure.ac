@@ -73,16 +73,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     AC_MSG_ERROR([failed to run "$ac_mysql_config": $plugindir])
   fi
   MYSQL_INC="$MYSQL_INC $($ac_mysql_config --include)"
-  ac_mysql_major_version="`$ac_mysql_config --version | cut -b 1,3`"
-  MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
-  if test $ac_mysql_major_version -lt 55; then
-    MYSQL_VERSION_CFLAGS="-DMYSQL51"
-    AC_SUBST(MYSQL_VERSION_CFLAGS)
-    MYSQL_VERSION="5.1"
-  else
-    MYSQL_VERSION="5.5"
-  fi
-  AC_SUBST(MYSQL_VERSION)
   AC_SUBST(plugindir)
 ])
 
