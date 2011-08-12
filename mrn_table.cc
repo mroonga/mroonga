@@ -47,6 +47,12 @@
 #include "mrn_sys.h"
 #include "mrn_table.h"
 
+#if MYSQL_VERSION_ID >= 50603
+#  define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), TRUE)
+#else
+#  define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
+#endif
+
 #define MRN_DEFAULT_STR "DEFAULT"
 #define MRN_DEFAULT_LEN (sizeof(MRN_DEFAULT_STR) - 1)
 #define MRN_GROONGA_STR "GROONGA"
@@ -420,7 +426,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
     } else {
       engine_name.str = share->engine;
       engine_name.length = share->engine_length;
-      if (!(share->plugin = ha_resolve_by_name(NULL, &engine_name)))
+      if (!(share->plugin = MRN_HA_RESOLVE_BY_NAME(&engine_name)))
       {
         my_error(ER_UNKNOWN_STORAGE_ENGINE, MYF(0), share->engine);
         error = ER_UNKNOWN_STORAGE_ENGINE;
