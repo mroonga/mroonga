@@ -1025,21 +1025,6 @@ const char **ha_mroonga::bas_ext() const
   DBUG_RETURN(ha_mroonga_exts);
 }
 
-ulonglong ha_mroonga_table_flags =
-    HA_NO_TRANSACTIONS |
-    HA_PARTIAL_COLUMN_READ |
-    HA_REC_NOT_IN_SEQ |
-    HA_NULL_IN_KEY |
-    HA_CAN_INDEX_BLOBS |
-    HA_STATS_RECORDS_IS_EXACT |
-    HA_NO_PREFIX_CHAR_KEYS |
-    HA_CAN_FULLTEXT |
-    HA_CAN_INSERT_DELAYED |
-    HA_BINLOG_FLAGS |
-    HA_CAN_BIT_FIELD |
-    HA_DUPLICATE_POS;
-    //HA_HAS_RECORDS;
-
 ulonglong ha_mroonga::wrapper_table_flags() const
 {
   ulonglong table_flags;
@@ -1056,7 +1041,21 @@ ulonglong ha_mroonga::wrapper_table_flags() const
 ulonglong ha_mroonga::storage_table_flags() const
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(ha_mroonga_table_flags);
+  ulonglong flags =
+    HA_NO_TRANSACTIONS |
+    HA_PARTIAL_COLUMN_READ |
+    HA_REC_NOT_IN_SEQ |
+    HA_NULL_IN_KEY |
+    HA_CAN_INDEX_BLOBS |
+    HA_STATS_RECORDS_IS_EXACT |
+    HA_NO_PREFIX_CHAR_KEYS |
+    HA_CAN_FULLTEXT |
+    HA_CAN_INSERT_DELAYED |
+    HA_BINLOG_FLAGS |
+    HA_CAN_BIT_FIELD |
+    HA_DUPLICATE_POS;
+    //HA_HAS_RECORDS;
+  DBUG_RETURN(flags);
 }
 
 ulonglong ha_mroonga::table_flags() const
