@@ -577,7 +577,6 @@ int mrn_free_share(MRN_SHARE *share)
 
 TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
 {
-  char key[MAX_DBKEY_LENGTH];
   uint key_length;
   TABLE_SHARE *share;
 #if MYSQL_VERSION_ID >= 50500
@@ -585,7 +584,13 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
 #endif
   THD *thd = current_thd;
   DBUG_ENTER("mrn_get_table_share");
+#if MYSQL_VERSION_ID >= 50603
+  const char *key;
+  key_length = get_table_def_key(table_list, &key);
+#else
+  char key[MAX_DBKEY_LENGTH];
   key_length = create_table_def_key(thd, key, table_list, FALSE);
+#endif
 #if MYSQL_VERSION_ID >= 50500
   hash_value = my_calc_hash(&table_def_cache, (uchar*) key, key_length);
   share = get_table_share(thd, table_list, key, key_length, 0, error,
