@@ -42,6 +42,7 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_HA_RND_NEXT 1
 #  define MRN_HANDLER_HAVE_HA_RND_POS 1
 #  define MRN_HANDLER_HAVE_HA_INDEX_NEXT 1
+#  define MRN_HANDLER_HAVE_HA_INDEX_PREV 1
 #endif
 
 #if MYSQL_VERSION_ID < 50600
@@ -187,7 +188,9 @@ public:
 #ifndef MRN_HANDLER_HAVE_HA_INDEX_NEXT
   int index_next(uchar *buf);
 #endif
-  int index_prev(uchar * buf);
+#ifndef MRN_HANDLER_HAVE_HA_INDEX_PREV
+  int index_prev(uchar *buf);
+#endif
   int index_first(uchar * buf);
   int index_last(uchar * buf);
   int index_next_same(uchar *buf, const uchar *key, uint keylen);
@@ -253,6 +256,9 @@ protected:
 #endif
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_NEXT
   int index_next(uchar *buf);
+#endif
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_PREV
+  int index_prev(uchar *buf);
 #endif
 
 private:
