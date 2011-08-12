@@ -2070,7 +2070,11 @@ int ha_mroonga::wrapper_close()
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_CLOSE_IS_PUBLIC
   error = wrap_handler->close();
+#else
+  error = wrap_handler->ha_close();
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   delete wrap_handler;

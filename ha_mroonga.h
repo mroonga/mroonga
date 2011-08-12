@@ -38,6 +38,10 @@ extern "C" {
 #endif
 
 #if MYSQL_VERSION_ID < 50600
+#  define MRN_HANDLER_CLOSE_IS_PUBLIC 1
+#endif
+
+#if MYSQL_VERSION_ID < 50600
   typedef Item COND;
 #endif
 
@@ -136,7 +140,9 @@ public:
 
   int create(const char *name, TABLE *form, HA_CREATE_INFO *info); // required
   int open(const char *name, int mode, uint test_if_locked);       // required
+#ifdef MRN_HANDLER_CLOSE_IS_PUBLIC
   int close();                                                     // required
+#endif
   int info(uint flag);                                             // required
 
   uint lock_count() const;
@@ -230,6 +236,9 @@ public:
   bool is_fatal_error(int error_num, uint flags);
 
 private:
+#ifndef MRN_HANDLER_CLOSE_IS_PUBLIC
+  int close();
+#endif
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
   void check_fast_order_limit();
