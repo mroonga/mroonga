@@ -300,7 +300,7 @@ static int i_s_groonga_stats_deinit(void* p)
 }
 
 static int i_s_groonga_stats_fill(
-  THD* thd, TABLE_LIST* tables, COND* cond)
+  THD* thd, TABLE_LIST* tables, Item* cond)
 {
   TABLE* table = (TABLE *) tables->table;
   int status = 0;
@@ -4518,9 +4518,9 @@ int ha_mroonga::ft_read(uchar *buf)
   DBUG_RETURN(error);
 }
 
-const COND *ha_mroonga::wrapper_cond_push(const COND *cond)
+const Item *ha_mroonga::wrapper_cond_push(const Item *cond)
 {
-  const COND *ret_cond;
+  const Item *ret_cond;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
@@ -4530,16 +4530,16 @@ const COND *ha_mroonga::wrapper_cond_push(const COND *cond)
   DBUG_RETURN(ret_cond);
 }
 
-const COND *ha_mroonga::storage_cond_push(const COND *cond)
+const Item *ha_mroonga::storage_cond_push(const Item *cond)
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_RETURN(NULL);
 }
 
-const COND *ha_mroonga::cond_push(const COND *cond)
+const Item *ha_mroonga::cond_push(const Item *cond)
 {
   MRN_DBUG_ENTER_METHOD();
-  const COND *pushed_cond;
+  const Item *pushed_cond;
   if (share->wrapper_mode)
   {
     pushed_cond = wrapper_cond_push(cond);

@@ -36,6 +36,10 @@ extern "C" {
 #  define MRN_HANDLER_CLONE_NEED_NAME 1
 #endif
 
+#if MYSQL_VERSION_ID < 50600
+  typedef Item COND;
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -182,7 +186,7 @@ public:
   FT_INFO *ft_init_ext(uint flags, uint inx, String *key);
   int ft_read(uchar *buf);
 
-  const COND *cond_push(const COND *cond);
+  const Item *cond_push(const Item *cond);
   void cond_pop();
 
   bool get_error_message(int error, String *buf);
@@ -353,8 +357,8 @@ private:
   FT_INFO *storage_ft_init_ext(uint flags, uint key_nr, String *key);
   int wrapper_ft_read(uchar *buf);
   int storage_ft_read(uchar *buf);
-  const COND *wrapper_cond_push(const COND *cond);
-  const COND *storage_cond_push(const COND *cond);
+  const Item *wrapper_cond_push(const Item *cond);
+  const Item *storage_cond_push(const Item *cond);
   void wrapper_cond_pop();
   void storage_cond_pop();
   bool wrapper_get_error_message(int error, String *buf);
