@@ -2577,7 +2577,11 @@ int ha_mroonga::wrapper_rnd_pos(uchar *buf, uchar *pos)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_RND_POS_IS_PUBLIC
   error = wrap_handler->rnd_pos(buf, pos);
+#else
+  error = wrap_handler->ha_rnd_pos(buf, pos);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
