@@ -641,3 +641,15 @@ KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
   *error = 0;
   DBUG_RETURN(wrap_key_info);
 }
+
+void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
+{
+  uint i;
+  DBUG_ENTER("mrn_set_bitmap_by_key");
+  for (i = 0; i < key_info->key_parts; i++)
+  {
+    Field *field = key_info->key_part[i].field;
+    bitmap_set_bit(map, field->field_index);
+  }
+  DBUG_VOID_RETURN;
+}

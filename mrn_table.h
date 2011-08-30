@@ -83,5 +83,6 @@ int mrn_free_share(MRN_SHARE *share);
 TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error);
 void mrn_free_table_share(TABLE_SHARE *share);
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
+void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info);
 
 #endif /* _mrn_table_h */
