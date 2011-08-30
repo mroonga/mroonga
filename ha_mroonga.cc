@@ -5965,6 +5965,258 @@ bool ha_mroonga::is_fatal_error(int error_num, uint flags)
   DBUG_RETURN(is_fatal_error);
 }
 
+bool ha_mroonga::wrapper_check_if_incompatible_data(
+  HA_CREATE_INFO *create_info, uint table_changes)
+{
+  bool res;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->check_if_incompatible_data(create_info, table_changes);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+bool ha_mroonga::storage_check_if_incompatible_data(
+  HA_CREATE_INFO *create_info, uint table_changes)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(COMPATIBLE_DATA_YES);
+}
+
+bool ha_mroonga::check_if_incompatible_data(
+  HA_CREATE_INFO *create_info, uint table_changes)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_check_if_incompatible_data(create_info, table_changes);
+  } else {
+    res = storage_check_if_incompatible_data(create_info, table_changes);
+  }
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::wrapper_alter_table_flags(uint flags)
+{
+  uint res;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->alter_table_flags(flags);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::storage_alter_table_flags(uint flags)
+{
+  MRN_DBUG_ENTER_METHOD();
+  uint res = handler::alter_table_flags(flags);
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::alter_table_flags(uint flags)
+{
+  MRN_DBUG_ENTER_METHOD();
+  uint res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_alter_table_flags(flags);
+  } else {
+    res = storage_alter_table_flags(flags);
+  }
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
+  uint num_of_keys, handler_add_index **add)
+{
+  int res = 0;
+  uint i, j;
+  uint n_keys = table->s->keys;
+  grn_obj *index_tables[num_of_keys + n_keys];
+  char grn_table_name[MRN_MAX_PATH_SIZE];
+  MRN_DBUG_ENTER_METHOD();
+  KEY *wrap_key_info = (KEY *) ha_thd()->alloc(sizeof(KEY) * num_of_keys);
+  mrn_table_name_gen(share->table_name, grn_table_name);
+  hnd_add_index = NULL;
+  for (i = 0, j = 0; i < num_of_keys; i++) {
+    if (!(key_info[i].flags & HA_FULLTEXT)) {
+      wrap_key_info[j] = key_info[i];
+      j++;
+      continue;
+    }
+
+    index_tables[i + n_keys] = NULL;
+    if ((res = wrapper_validate_key_info(&key_info[i])))
+    {
+      break;
+    }
+    if ((res = wrapper_create_index_table(grn_table, grn_table_name,
+                                          i + n_keys,
+                                          &key_info[i], index_tables)))
+    {
+      break;
+    }
+  }
+  if (!res && j)
+  {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->add_index(table_arg, wrap_key_info, j, &hnd_add_index);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
+  if (res)
+  {
+    int k;
+    for (k = 0; k < i; k++) {
+      if (!(key_info[k].flags & HA_FULLTEXT))
+      {
+        continue;
+      }
+      if (index_tables[k + n_keys])
+      {
+        grn_obj_remove(ctx, index_tables[k + n_keys]);
+      }
+    }
+  } else {
+    *add = new handler_add_index(table_arg, key_info, num_of_keys);
+  }
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
+  uint num_of_keys, handler_add_index **add)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res = handler::add_index(table_arg, key_info, num_of_keys, add);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
+  uint num_of_keys, handler_add_index **add)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_add_index(table_arg, key_info, num_of_keys, add);
+  } else {
+    res = storage_add_index(table_arg, key_info, num_of_keys, add);
+  }
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::wrapper_final_add_index(handler_add_index *add, bool commit)
+{
+  int res = 0;
+  MRN_DBUG_ENTER_METHOD();
+  if (hnd_add_index)
+  {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->final_add_index(hnd_add_index, commit);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
+  if (add)
+  {
+    delete add;
+  }
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::storage_final_add_index(handler_add_index *add, bool commit)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res = handler::final_add_index(add, commit);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::final_add_index(handler_add_index *add, bool commit)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_final_add_index(add, commit);
+  } else {
+    res = storage_final_add_index(add, commit);
+  }
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
+  uint num_of_keys)
+{
+  int res;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->prepare_drop_index(table_arg, key_num, num_of_keys);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
+  uint num_of_keys)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res = handler::prepare_drop_index(table_arg, key_num, num_of_keys);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::prepare_drop_index(TABLE *table_arg, uint *key_num,
+  uint num_of_keys)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_prepare_drop_index(table_arg, key_num, num_of_keys);
+  } else {
+    res = storage_prepare_drop_index(table_arg, key_num, num_of_keys);
+  }
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::wrapper_final_drop_index(TABLE *table_arg)
+{
+  uint res;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->final_drop_index(table_arg);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::storage_final_drop_index(TABLE *table_arg)
+{
+  MRN_DBUG_ENTER_METHOD();
+  uint res = handler::final_drop_index(table_arg);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::final_drop_index(TABLE *table_arg)
+{
+  MRN_DBUG_ENTER_METHOD();
+  uint res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_final_drop_index(table_arg);
+  } else {
+    res = storage_final_drop_index(table_arg);
+  }
+  DBUG_RETURN(res);
+}
+
 void ha_mroonga::set_pk_bitmap()
 {
   KEY key_info = table->key_info[table_share->primary_key];

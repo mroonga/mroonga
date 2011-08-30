@@ -1,6 +1,6 @@
 /* 
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010 Kentoku SHIBA
+  Copyright(C) 2010-2011 Kentoku SHIBA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -139,6 +139,8 @@ private:
   bool ignoring_duplicated_key;
   bool fulltext_searching;
 
+  handler_add_index *hnd_add_index;
+
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);
   ~ha_mroonga();
@@ -270,6 +272,14 @@ public:
   int analyze(THD* thd, HA_CHECK_OPT* check_opt);
   int optimize(THD* thd, HA_CHECK_OPT* check_opt);
   bool is_fatal_error(int error_num, uint flags);
+  bool check_if_incompatible_data(HA_CREATE_INFO *create_info,
+                                  uint table_changes);
+  uint alter_table_flags(uint flags);
+  int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
+                handler_add_index **add);
+  int final_add_index(handler_add_index *add, bool commit);
+  int prepare_drop_index(TABLE *table_arg, uint *key_num, uint num_of_keys);
+  int final_drop_index(TABLE *table_arg);
 
 protected:
 #ifdef MRN_HANDLER_HAVE_HA_RND_NEXT
@@ -519,6 +529,24 @@ private:
   int storage_optimize(THD* thd, HA_CHECK_OPT* check_opt);
   bool wrapper_is_fatal_error(int error_num, uint flags);
   bool storage_is_fatal_error(int error_num, uint flags);
+  bool wrapper_check_if_incompatible_data(HA_CREATE_INFO *create_info,
+                                          uint table_changes);
+  bool storage_check_if_incompatible_data(HA_CREATE_INFO *create_info,
+                                          uint table_changes);
+  uint wrapper_alter_table_flags(uint flags);
+  uint storage_alter_table_flags(uint flags);
+  int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
+                        handler_add_index **add);
+  int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
+                        handler_add_index **add);
+  int wrapper_final_add_index(handler_add_index *add, bool commit);
+  int storage_final_add_index(handler_add_index *add, bool commit);
+  int wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
+                                 uint num_of_keys);
+  int storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
+                                 uint num_of_keys);
+  int wrapper_final_drop_index(TABLE *table_arg);
+  int storage_final_drop_index(TABLE *table_arg);
 };
 
 #ifdef __cplusplus
