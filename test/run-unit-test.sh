@@ -8,7 +8,7 @@ if test -z "$NO_MAKE"; then
 fi
 
 if test -z "$CUTTER"; then
-    CUTTER="`make -s -C $BASE_DIR echo-cutter`"
+    CUTTER="`make -s -C $top_dir echo-cutter`"
 fi
 export CUTTER
 
