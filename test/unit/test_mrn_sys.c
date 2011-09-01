@@ -1,4 +1,6 @@
-/* Copyright(C) 2010 Tetsuro IKEDA
+/*
+  Copyright(C) 2010 Tetsuro IKEDA
+  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -192,10 +194,7 @@ void test_mrn_table_name_gen()
 void test_mrn_index_name_gen()
 {
   char buf[64], buf2[64];
-  const char *arg = "./hoge/fuga";
+  const char *arg = "./db/users";
   mrn_table_name_gen(arg, buf);
-  cut_assert_equal_string("fuga_0000", mrn_index_name_gen(buf, 0, buf2));
-  cut_assert_equal_string("fuga_0001", mrn_index_name_gen(buf, 1, buf2));
-  cut_assert_equal_string("fuga_0020", mrn_index_name_gen(buf, 20, buf2));
-  cut_assert_equal_string("fuga_0300", mrn_index_name_gen(buf, 300, buf2));
+  cut_assert_equal_string("users_name", mrn_index_name_gen(buf, "name", buf2));
 }
