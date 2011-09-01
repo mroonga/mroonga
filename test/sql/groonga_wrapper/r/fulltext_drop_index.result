@@ -25,6 +25,15 @@ id	title	content
 3	富士山	今日もきれい。
 drop index title on diaries;
 select * from diaries where match(title) against("富士山");
+ERROR HY000: Can't find FULLTEXT index matching the column list
+select * from diaries;
+id	title	content
+1	Hello	はじめました。
+2	天気	明日の富士山の天気について
+3	富士山	今日もきれい。
+id	title	content
+create index new_title_index on diaries (title);
+select * from diaries where match(title) against("富士山");
 id	title	content
 select * from diaries;
 id	title	content

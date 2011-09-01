@@ -33,6 +33,10 @@ insert into diaries values(2, "天気", "明日の富士山の天気について
 insert into diaries values(3, "富士山", "今日もきれい。");
 select * from diaries where match(title) against("富士山");
 drop index title on diaries;
+--error 1191
+select * from diaries where match(title) against("富士山");
+select * from diaries;
+create index new_title_index on diaries (title);
 select * from diaries where match(title) against("富士山");
 select * from diaries;
 drop table diaries;
