@@ -36,7 +36,7 @@ drop index title on diaries;
 --error 1191
 select * from diaries where match(title) against("富士山");
 select * from diaries;
-create index new_title_index on diaries (title);
+create fulltext index new_title_index on diaries (title);
 select * from diaries where match(title) against("富士山");
 select * from diaries;
 drop table diaries;
