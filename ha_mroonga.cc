@@ -5989,6 +5989,12 @@ bool ha_mroonga::check_if_incompatible_data(
 {
   MRN_DBUG_ENTER_METHOD();
   bool res;
+  if (
+    create_info->comment.str != table_share->comment.str ||
+    create_info->connect_string.str != table_share->connect_string.str
+  ) {
+    DBUG_RETURN(COMPATIBLE_DATA_NO);
+  }
   if (share->wrapper_mode)
   {
     res = wrapper_check_if_incompatible_data(create_info, table_changes);
@@ -6038,8 +6044,9 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   uint n_keys = table->s->keys;
   grn_obj *index_tables[num_of_keys + n_keys];
   char grn_table_name[MRN_MAX_PATH_SIZE];
+  THD *thd = ha_thd();
   MRN_DBUG_ENTER_METHOD();
-  KEY *wrap_key_info = (KEY *) ha_thd()->alloc(sizeof(KEY) * num_of_keys);
+  KEY *wrap_key_info = (KEY *) thd->alloc(sizeof(KEY) * num_of_keys);
   KEY *p_key_info = &table->key_info[table_share->primary_key], *tmp_key_info;
   mrn_table_name_gen(share->table_name, grn_table_name);
   hnd_add_index = NULL;
@@ -6065,7 +6072,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
     }
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
   }
-  if (!res && i > j)
+  if (!res && i > j && !(res = wrapper_external_lock(thd, F_WRLCK)))
   {
     if (!(res = wrapper_rnd_init(TRUE)))
     {
@@ -6136,6 +6143,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       else
         res = wrapper_rnd_end();
     }
+    wrapper_external_lock(thd, F_UNLCK);
   }
   bitmap_set_all(table->read_set);
   if (!res && j)
