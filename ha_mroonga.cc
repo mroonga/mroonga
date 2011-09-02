@@ -5609,6 +5609,11 @@ void ha_mroonga::storage_update_create_info(HA_CREATE_INFO* create_info)
 void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
 {
   MRN_DBUG_ENTER_METHOD();
+  if (!create_info->connect_string.str)
+  {
+    create_info->connect_string.str = table->s->connect_string.str;
+    create_info->connect_string.length = table->s->connect_string.length;
+  }
   if (share->wrapper_mode)
     wrapper_update_create_info(create_info);
   else
