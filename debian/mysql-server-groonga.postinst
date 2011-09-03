@@ -6,16 +6,60 @@ prevver="$2"
 
 install_plugin() {
     cat <<EOS | mysql --defaults-file=/etc/mysql/debian.cnf || true
-if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name="groonga"`)
-{
-  INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
-  CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
-}
+INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
+CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
 EOS
+}
+
+install_apparmor() {
+    mysql_apparmor_profile_name=usr.sbin.mysqld
+    mysql_apparmor_profile=/etc/apparmor.d/${mysql_apparmor_profile_name}
+    mysql_local_apparmor_profile=/etc/apparmor.d/local/${mysql_apparmor_profile_name}
+    apparmor_profile_name=mysql-server-groonga
+    include_profile="#include <abstractions/${apparmor_profile_name}>"
+    local_apparmor_profile=/etc/apparmor.d/local/${apparmor_profile_name}
+    if test -f "${mysql_local_apparmor_profile}"; then
+	if ! grep -q "${include_profile}" "${mysql_local_apparmor_profile}"; then
+	    echo >> "${mysql_local_apparmor_profile}"
+	    echo "${include_profile}" >> "${mysql_local_apparmor_profile}"
+	fi
+    else
+	mysql_abstraction_apparmor_profile=/etc/apparmor.d/abstractions/mysql
+	mysql_plugin_dir=/usr/lib/mysql/plugin
+	if test -f "${mysql_abstraction_apparmor_profile}" && \
+	    ! grep -q "${mysql_plugin_dir}" \
+	      "${mysql_abstraction_apparmor_profile}"; then
+            # For Lucid.
+	    cat <<EOF >> "${mysql_abstraction_apparmor_profile}"
+
+# ${apparmor_profile_name}: START
+# Added by mysql-server-groonga.
+${mysql_plugin_dir}/ r,
+${mysql_plugin_dir}/*.so* mr,
+${include_profile}
+# ${apparmor_profile_name}: END
+EOF
+	fi
+    fi
+
+    if ! test -e "$local_apparmor_profile"; then
+	mkdir -p $(dirname "$local_apparmor_profile")
+	cat <<EOF > "$local_apparmor_profile"
+# Site-specific additions and overrides for ${apparmor_profile_name}.
+# For more details, please see /etc/apparmor.d/local/README.
+EOF
+    fi
+
+    if aa-status --enabled 2>/dev/null; then
+	apparmor_parser -r -T -W "${mysql_apparmor_profile}" || true
+    fi
+
+    true
 }
 
 case "$1" in
     configure)
+	install_apparmor
         install_plugin
         ;;
     abort-upgrade|abort-deconfigure|abort-remove)
@@ -26,28 +70,5 @@ case "$1" in
         exit 1
         ;;
 esac
-
-mysql_apparmor_profile_name=usr.sbin.mysqld
-mysql_apparmor_profile=/etc/apparmor.d/${mysql_apparmor_profile_name}
-mysql_local_apparmor_profile=/etc/apparmor.d/local/${mysql_apparmor_profile_name}
-if test -f "${mysql_local_apparmor_profile}"; then
-    apparmor_profile_name=mysql-server-groonga
-    include_profile="#include <abstractions/${apparmor_profile_name}>"
-    if ! grep -q "${include_profile}" "${mysql_local_apparmor_profile}"; then
-	echo >> "${mysql_local_apparmor_profile}"
-	echo "${include_profile}" >> "${mysql_local_apparmor_profile}"
-    fi
-    local_apparmor_profile=/etc/apparmor.d/local/${apparmor_profile_name}
-    if ! test -e "$local_apparmor_profile"; then
-	mkdir -p $(dirname "$local_apparmor_profile")
-	cat <<EOF > "$local_apparmor_profile"
-# Site-specific additions and overrides for ${apparmor_profile_name}.
-# For more details, please see /etc/apparmor.d/local/README.
-EOF
-    fi
-    if aa-status --enabled 2>/dev/null; then
-        apparmor_parser -r -T -W "${mysql_apparmor_profile}" || true
-    fi
-fi
 
 #DEBHELPER#
