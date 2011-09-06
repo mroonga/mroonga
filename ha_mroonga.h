@@ -38,6 +38,11 @@ extern "C" {
 #  define MRN_HANDLER_CLONE_NEED_NAME 1
 #endif
 
+#if (MYSQL_VERSION_ID >= 50603) || \
+    (MYSQL_VERSION_ID >= 50514)
+#  define MRN_HANDLER_HAVE_ADD_INDEX 1
+#endif
+
 #if MYSQL_VERSION_ID >= 50600
 #  define MRN_HANDLER_HAVE_HA_CLOSE 1
 #  define MRN_HANDLER_HAVE_HA_RND_NEXT 1
@@ -139,7 +144,9 @@ private:
   bool ignoring_duplicated_key;
   bool fulltext_searching;
 
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
   handler_add_index *hnd_add_index;
+#endif
 
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);
@@ -275,11 +282,13 @@ public:
   bool check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                   uint table_changes);
   uint alter_table_flags(uint flags);
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
   int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                 handler_add_index **add);
   int final_add_index(handler_add_index *add, bool commit);
   int prepare_drop_index(TABLE *table_arg, uint *key_num, uint num_of_keys);
   int final_drop_index(TABLE *table_arg);
+#endif
 
 protected:
 #ifdef MRN_HANDLER_HAVE_HA_RND_NEXT
@@ -535,6 +544,7 @@ private:
                                           uint table_changes);
   uint wrapper_alter_table_flags(uint flags);
   uint storage_alter_table_flags(uint flags);
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
   int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                         handler_add_index **add);
   int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
@@ -547,6 +557,7 @@ private:
                                  uint num_of_keys);
   int wrapper_final_drop_index(TABLE *table_arg);
   int storage_final_drop_index(TABLE *table_arg);
+#endif
 };
 
 #ifdef __cplusplus

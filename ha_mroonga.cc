@@ -6041,8 +6041,9 @@ uint ha_mroonga::alter_table_flags(uint flags)
   DBUG_RETURN(res);
 }
 
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
 int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
-  uint num_of_keys, handler_add_index **add)
+                                  uint num_of_keys, handler_add_index **add)
 {
   int res = 0;
   uint i, j, k;
@@ -6326,6 +6327,7 @@ int ha_mroonga::final_drop_index(TABLE *table_arg)
   }
   DBUG_RETURN(res);
 }
+#endif
 
 void ha_mroonga::set_pk_bitmap()
 {
