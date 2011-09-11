@@ -2913,7 +2913,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
     DBUG_RETURN(ER_ERROR_ON_WRITE);
   }
   grn_obj_unlink(ctx, &wrapper);
-  if (added == 0) {
+  if (!added) {
     // duplicated error
 #ifndef DBUG_OFF
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
