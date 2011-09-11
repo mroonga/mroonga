@@ -4862,27 +4862,19 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id record_id)
   int n_columns = table->s->fields;
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
-    const char *col_name = field->field_name;
-    int col_name_size = strlen(col_name);
-
-    bool need_store_field = true;
-    if (ignoring_no_key_columns) {
-      need_store_field = false;
-      uint n_keys = table->s->keys;
-      for (uint j = 0; j < n_keys; j++) {
-        KEY key_info = table->s->key_info[j];
-        if (strcmp(key_info.key_part[0].field->field_name, col_name) == 0) {
-          need_store_field = true;
-          break;
-        }
-      }
-    }
-    if (!need_store_field) {
-      continue;
-    }
 
     if (bitmap_is_set(table->read_set, field->field_index) ||
         bitmap_is_set(table->write_set, field->field_index)) {
+      const char *col_name = field->field_name;
+      int col_name_size = strlen(col_name);
+
+      if (ignoring_no_key_columns) {
+        KEY key_info = table->s->key_info[active_index];
+        if (strcmp(key_info.key_part[0].field->field_name, col_name)) {
+          continue;
+        }
+      }
+
 #ifndef DBUG_OFF
       my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table,
                                                         table->write_set);
