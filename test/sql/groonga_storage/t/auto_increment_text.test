@@ -22,7 +22,7 @@ drop table if exists diaries;
 
 create table diaries (
   id int primary key auto_increment,
-  body varchar(256)
+  body text
 );
 insert into diaries (body) values ("started groonga (long text)");
 select * from diaries;
