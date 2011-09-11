@@ -4862,7 +4862,7 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id record_id)
         bitmap_is_set(table->write_set, field->field_index)) {
 #ifndef DBUG_OFF
       my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table,
-        table->write_set);
+                                                        table->write_set);
 #endif
       DBUG_PRINT("info", ("mroonga store column %d(%d)",i,field->field_index));
       field->move_field_offset(ptr_diff);
