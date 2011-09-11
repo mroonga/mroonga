@@ -148,6 +148,8 @@ private:
   handler_add_index *hnd_add_index;
 #endif
 
+  bool ignoring_no_key_columns;
+
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share);
   ~ha_mroonga();

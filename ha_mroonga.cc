@@ -970,7 +970,8 @@ static _ft_vft mrn_storage_ft_vft = {
 /* handler implementation */
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   :handler(hton, share),
-   ignoring_duplicated_key(false)
+   ignoring_duplicated_key(false),
+   ignoring_no_key_columns(false)
 {
   MRN_DBUG_ENTER_METHOD();
   ctx = grn_ctx_open(0);
@@ -2650,6 +2651,12 @@ int ha_mroonga::mrn_extra(enum ha_extra_function operation)
     break;
   case HA_EXTRA_NO_IGNORE_DUP_KEY:
     ignoring_duplicated_key = false;
+    break;
+  case HA_EXTRA_KEYREAD:
+    ignoring_no_key_columns = true;
+    break;
+  case HA_EXTRA_NO_KEYREAD:
+    ignoring_no_key_columns = false;
     break;
   default:
     break;
@@ -4858,6 +4865,22 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id record_id)
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
 
+    bool need_store_field = true;
+    if (ignoring_no_key_columns) {
+      need_store_field = false;
+      uint n_keys = table->s->keys;
+      for (uint j = 0; j < n_keys; j++) {
+        KEY key_info = table->s->key_info[j];
+        if (strcmp(key_info.key_part[0].field->field_name, col_name) == 0) {
+          need_store_field = true;
+          break;
+        }
+      }
+    }
+    if (!need_store_field) {
+      continue;
+    }
+
     if (bitmap_is_set(table->read_set, field->field_index) ||
         bitmap_is_set(table->write_set, field->field_index)) {
 #ifndef DBUG_OFF
@@ -4951,8 +4974,9 @@ int ha_mroonga::reset()
     error = wrapper_reset();
   else
     error = storage_reset();
-  ignoring_duplicated_key = FALSE;
-  fulltext_searching = FALSE;
+  ignoring_no_key_columns = false;
+  ignoring_duplicated_key = false;
+  fulltext_searching = false;
   DBUG_RETURN(error);
 }
 
