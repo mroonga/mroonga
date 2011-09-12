@@ -664,10 +664,10 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
   grn_obj buf;
   field->set_notnull();
   switch (field->type()) {
-  case (MYSQL_TYPE_BIT) :
-  case (MYSQL_TYPE_ENUM) :
-  case (MYSQL_TYPE_SET) :
-  case (MYSQL_TYPE_TINY) :
+  case MYSQL_TYPE_BIT :
+  case MYSQL_TYPE_ENUM :
+  case MYSQL_TYPE_SET :
+  case MYSQL_TYPE_TINY :
     {
       GRN_INT8_INIT(&buf,0);
       grn_obj_get_value(ctx, col, id, &buf);
@@ -675,7 +675,7 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       field->store(val);
       break;
     }
-  case (MYSQL_TYPE_SHORT) :
+  case MYSQL_TYPE_SHORT :
     {
       GRN_INT16_INIT(&buf,0);
       grn_obj_get_value(ctx, col, id, &buf);
@@ -683,8 +683,8 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       field->store(val);
       break;
     }
-  case (MYSQL_TYPE_INT24) :
-  case (MYSQL_TYPE_LONG) :
+  case MYSQL_TYPE_INT24 :
+  case MYSQL_TYPE_LONG :
     {
       GRN_INT32_INIT(&buf,0);
       grn_obj_get_value(ctx, col, id, &buf);
@@ -692,7 +692,7 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       field->store(val);
       break;
     }
-  case (MYSQL_TYPE_LONGLONG) :
+  case MYSQL_TYPE_LONGLONG :
     {
       GRN_INT64_INIT(&buf,0);
       grn_obj_get_value(ctx, col, id, &buf);
@@ -700,8 +700,8 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       field->store(val);
       break;
     }
-  case (MYSQL_TYPE_FLOAT) :
-  case (MYSQL_TYPE_DOUBLE) :
+  case MYSQL_TYPE_FLOAT :
+  case MYSQL_TYPE_DOUBLE :
     {
       GRN_FLOAT_INIT(&buf,0);
       grn_obj_get_value(ctx, col, id, &buf);
@@ -709,10 +709,10 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       field->store(val);
       break;
     }
-  case (MYSQL_TYPE_TIME) :
-  case (MYSQL_TYPE_DATE) :
-  case (MYSQL_TYPE_YEAR) :
-  case (MYSQL_TYPE_DATETIME) :
+  case MYSQL_TYPE_TIME :
+  case MYSQL_TYPE_DATE :
+  case MYSQL_TYPE_YEAR :
+  case MYSQL_TYPE_DATETIME :
     {
       GRN_TIME_INIT(&buf,0);
       grn_obj_get_value(ctx, col, id, &buf);
@@ -720,7 +720,7 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       field->store(val);
       break;
     }
-  case (MYSQL_TYPE_GEOMETRY) :
+  case MYSQL_TYPE_GEOMETRY :
     {
       GRN_WGS84_GEO_POINT_INIT(&buf, 0);
       grn_obj_get_value(ctx, col, id, &buf);
@@ -1602,11 +1602,11 @@ int ha_mroonga::storage_create_validate_pseudo_column(TABLE *table)
     int col_name_size = strlen(col_name);
     if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
       switch (field->type()) {
-      case (MYSQL_TYPE_TINY) :
-      case (MYSQL_TYPE_SHORT) :
-      case (MYSQL_TYPE_INT24) :
-      case (MYSQL_TYPE_LONG) :
-      case (MYSQL_TYPE_LONGLONG) :
+      case MYSQL_TYPE_TINY :
+      case MYSQL_TYPE_SHORT :
+      case MYSQL_TYPE_INT24 :
+      case MYSQL_TYPE_LONG :
+      case MYSQL_TYPE_LONGLONG :
         break;
       default:
         GRN_LOG(ctx, GRN_LOG_ERROR, "_id must be numeric data type");
@@ -1616,8 +1616,8 @@ int ha_mroonga::storage_create_validate_pseudo_column(TABLE *table)
       }
     } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
       switch (field->type()) {
-      case (MYSQL_TYPE_FLOAT) :
-      case (MYSQL_TYPE_DOUBLE) :
+      case MYSQL_TYPE_FLOAT :
+      case MYSQL_TYPE_DOUBLE :
         break;
       default:
         GRN_LOG(ctx, GRN_LOG_ERROR, "_score must be float or double");
