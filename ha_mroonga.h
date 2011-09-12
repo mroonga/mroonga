@@ -61,6 +61,16 @@ extern "C" {
   typedef Item COND;
 #endif
 
+#ifndef GRN_GEO_DEGREE2MSEC
+#  define GRN_GEO_DEGREE_ACCURACY 10000000
+#  define GRN_GEO_DEGREE2MSEC(degree)\
+    ((int)(((int)(degree) * 60 * 60 * 1000) +\
+           (((long)((degree) * GRN_GEO_DEGREE_ACCURACY) % GRN_GEO_DEGREE_ACCURACY) * 60 / GRN_GEO_DEGREE_ACCURACY * 60 * 1000) +\
+           (((long)((degree) * GRN_GEO_DEGREE_ACCURACY) % GRN_GEO_DEGREE_ACCURACY) * 60 % GRN_GEO_DEGREE_ACCURACY * 60 / 10000)))
+#  define GRN_GEO_MSEC2DEGREE(msec)\
+    ((((int)(msec)) / 3600.0) * 0.001)
+#endif
+
 class ha_mroonga;
 
 /* structs */

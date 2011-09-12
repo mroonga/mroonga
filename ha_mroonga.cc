@@ -52,6 +52,7 @@
 #endif
 #include <sql_select.h>
 #include <ft_global.h>
+#include <spatial.h>
 #include <mysql.h>
 #include <pthread.h>
 #include <sys/types.h>
@@ -420,6 +421,8 @@ static grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
   case MYSQL_TYPE_YEAR:     // year
   case MYSQL_TYPE_DATETIME: // datetime
     return GRN_DB_TIME; // micro sec from epoc time by int64
+  case MYSQL_TYPE_GEOMETRY: // geometry
+    return GRN_DB_WGS84_GEO_POINT; // geo point in WGS84
   }
   // tinytext=256, text=64K, mediumtext=16M, longtext=4G
   // tinyblob...
@@ -429,8 +432,38 @@ static grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
   return GRN_DB_TEXT;       // others
 }
 
+static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
+                            const char *wkb, uint wkb_size)
+{
+  int error = 0;
+  Geometry_buffer buffer;
+  Geometry *geometry;
+
+  geometry = Geometry::construct(&buffer, wkb, wkb_size);
+  switch (geometry->get_class_info()->m_type_id) {
+  case Geometry::wkb_point:
+    {
+      Gis_point *point = (Gis_point *)geometry;
+      double latitude, longitude;
+      point->get_xy(&longitude, &latitude);
+      grn_obj_reinit(ctx, buf, GRN_DB_WGS84_GEO_POINT, 0);
+      GRN_GEO_POINT_SET(ctx, buf,
+                        GRN_GEO_DEGREE2MSEC(latitude),
+                        GRN_GEO_DEGREE2MSEC(longitude));
+      break;
+    }
+  default:
+    error = HA_ERR_UNSUPPORTED;
+    break;
+  }
+  delete geometry;
+
+  return error;
+}
+
 static int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
 {
+  int error = 0;
   switch (field->type()) {
   case MYSQL_TYPE_BIT:
   case MYSQL_TYPE_ENUM:
@@ -510,10 +543,22 @@ static int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
       *size = len;
       break;
     }
+  case MYSQL_TYPE_GEOMETRY:
+    {
+      String tmp;
+      Field_geom *geometry = (Field_geom *)field;
+      const char *wkb = geometry->val_str(0, &tmp)->ptr();
+      int len = geometry->get_length();
+      error = mrn_set_geometry(ctx, buf, wkb, len);
+      if (!error) {
+        *size = len;
+      }
+      break;
+    }
   default:
     return HA_ERR_UNSUPPORTED;
   }
-  return 0;
+  return error;
 }
 
 static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
@@ -673,6 +718,28 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       grn_obj_get_value(ctx, col, id, &buf);
       long long int val = GRN_TIME_VALUE(&buf);
       field->store(val);
+      break;
+    }
+  case (MYSQL_TYPE_GEOMETRY) :
+    {
+      GRN_WGS84_GEO_POINT_INIT(&buf, 0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
+      int latitude, longitude;
+      GRN_GEO_POINT_VALUE(&buf, latitude, longitude);
+      bzero(wkb, SRID_SIZE);
+      memset(wkb + SRID_SIZE, Geometry::wkb_ndr, 1); // wkb_ndr is meaningless.
+      int4store(wkb + SRID_SIZE + 1, Geometry::wkb_point);
+      double latitude_in_degree, longitude_in_degree;
+      latitude_in_degree = GRN_GEO_MSEC2DEGREE(latitude);
+      longitude_in_degree = GRN_GEO_MSEC2DEGREE(longitude);
+      float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE,
+                  longitude_in_degree);
+      float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
+                  latitude_in_degree);
+      field->store((const char *)wkb,
+                   (uint)(sizeof(wkb) / sizeof(*wkb)),
+                   field->charset());
       break;
     }
   default: //strings etc..
@@ -1054,7 +1121,9 @@ ulonglong ha_mroonga::storage_table_flags() const
     HA_CAN_INSERT_DELAYED |
     HA_BINLOG_FLAGS |
     HA_CAN_BIT_FIELD |
-    HA_DUPLICATE_POS;
+    HA_DUPLICATE_POS |
+    HA_CAN_GEOMETRY |
+    HA_CAN_RTREEKEYS;
     //HA_HAS_RECORDS;
   DBUG_RETURN(flags);
 }

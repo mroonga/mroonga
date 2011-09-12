@@ -1,6 +1,7 @@
 # echo "EXTRA_DIST = \\"; ls *.result | sort | sed -e 's/^/\t/' -e 's,$, \\,'; echo -n "\t\$(NULL)"
 EXTRA_DIST = \
 	auto_increment.result \
+	auto_increment_text.result \
 	binlog.result \
 	btree.result \
 	count_performance.result \
@@ -10,6 +11,7 @@ EXTRA_DIST = \
 	drop_table.result \
 	flush_logs.result \
 	fulltext.result \
+	geometry.result \
 	hash.result \
 	information_schema.result \
 	insert.result \
