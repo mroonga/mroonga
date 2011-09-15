@@ -12,3 +12,4 @@ wget
 ncurses-devel
 sudo
 pkgconfig
+tar
