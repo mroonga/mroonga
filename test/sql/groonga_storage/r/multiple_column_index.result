@@ -27,9 +27,9 @@ id	last_name	first_name
 4	Taro	Tanaka
 select * from listing where last_name = "Taro";
 id	last_name	first_name
-1	Taro	Yamada
 2	Taro	Suzuki
 4	Taro	Tanaka
+1	Taro	Yamada
 select * from listing where last_name = "Taro" and first_name = "Suzuki";
 id	last_name	first_name
 2	Taro	Suzuki
