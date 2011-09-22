@@ -3038,10 +3038,15 @@ int ha_mroonga::storage_write_row(uchar *buf)
       DBUG_RETURN(ER_ERROR_ON_WRITE);
     }
   }
-#ifndef DBUG_OFF
-  dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
   grn_obj_unlink(ctx, &colbuf);
+
+  error = storage_write_row_index(buf, record_id);
+  if (error) {
+#ifndef DBUG_OFF
+    dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+    DBUG_RETURN(error);
+  }
 
   // for UDF last_insert_grn_id()
   st_mrn_slot_data *slot_data = (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
@@ -3059,6 +3064,58 @@ int ha_mroonga::storage_write_row(uchar *buf)
     pthread_mutex_unlock(&mrn_allocated_thds_mutex);
   }
   slot_data->last_insert_record_id = record_id;
+
+#ifndef DBUG_OFF
+  dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+
+#ifndef DBUG_OFF
+  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
+#endif
+
+  grn_obj key;
+  GRN_TEXT_INIT(&key, 0);
+
+  uint i;
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    KEY key_info = table->key_info[i];
+
+    if (key_info.key_parts == 1) {
+      continue;
+    }
+
+    grn_obj *index_column = grn_index_columns[i];
+
+    GRN_BULK_REWIND(&key);
+    grn_bulk_space(ctx, &key, key_info.key_length);
+    key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
+             buf,
+             &key_info,
+             key_info.key_length);
+
+    grn_rc rc;
+    rc = grn_column_index_update(ctx, index_column, record_id, 0, NULL, &key);
+    if (rc) {
+      error = ER_ERROR_ON_WRITE;
+      my_message(error, ctx->errbuf, MYF(0));
+      goto err;
+    }
+  }
+
+err:
+#ifndef DBUG_OFF
+  dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+  grn_obj_unlink(ctx, &key);
 
   DBUG_RETURN(error);
 }
