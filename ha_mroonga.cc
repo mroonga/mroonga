@@ -3690,22 +3690,18 @@ int ha_mroonga::wrapper_index_read_map(uchar * buf, const uchar * key,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_index_read_map(uchar * buf, const uchar * key,
+int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
                                        key_part_map keypart_map,
                                        enum ha_rkey_function find_flag)
 {
   MRN_DBUG_ENTER_METHOD();
-  uint key_nr = active_index;
-  KEY key_info = table->key_info[key_nr];
-  KEY_PART_INFO key_part = key_info.key_part[0];
   check_count_skip(keypart_map, 0, FALSE);
 
+  uint key_nr = active_index;
+  KEY key_info = table->key_info[key_nr];
   int flags = 0;
   uint size_min = 0, size_max = 0;
-  void *val_min = NULL, *val_max = NULL;
-  Field *field = key_part.field;
-  const char *col_name = field->field_name;
-  int col_name_size = strlen(col_name);
+  const void *val_min = NULL, *val_max = NULL;
 
   if (cur) {
     grn_table_cursor_close(ctx, cur);
@@ -3716,48 +3712,69 @@ int ha_mroonga::storage_index_read_map(uchar * buf, const uchar * key,
     cur0 = NULL;
   }
 
-  if (find_flag == HA_READ_KEY_EXACT) {
-    mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
-    val_min = key_min[key_nr];
-    val_max = key_min[key_nr];
-    size_max = size_min;
-
-    // for _id
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-      grn_id found_record_id = *(grn_id *)key_min[key_nr];
-      if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
-        store_fields_from_primary_table(buf, found_record_id);
-        table->status = 0;
-        cur = NULL;
-        record_id = found_record_id;
-        DBUG_RETURN(0);
-      } else {
-        table->status = STATUS_NOT_FOUND;
-        cur = NULL;
-        DBUG_RETURN(HA_ERR_END_OF_FILE);
-      }
-    }
-
-  } else if (
-    find_flag == HA_READ_BEFORE_KEY ||
-    find_flag == HA_READ_PREFIX_LAST_OR_PREV
-  ) {
-    mrn_set_key_buf(ctx, field, key, key_max[key_nr], &size_max);
-    val_max = key_max[key_nr];
-    if (find_flag == HA_READ_BEFORE_KEY) {
-      flags |= GRN_CURSOR_LT;
-    }
+  bool is_multiple_column_index = key_info.key_parts > 1;
+  if (is_multiple_column_index) {
+    flags |= GRN_CURSOR_PREFIX;
+    val_min = key;
+    size_min = calculate_key_len(table, active_index, key, keypart_map);
   } else {
-    mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
-    val_min = key_min[key_nr];
-    if (find_flag == HA_READ_AFTER_KEY) {
-      flags |= GRN_CURSOR_GT;
+    KEY_PART_INFO key_part = key_info.key_part[0];
+    Field *field = key_part.field;
+    if (find_flag == HA_READ_KEY_EXACT) {
+      const char *col_name = field->field_name;
+      int col_name_size = strlen(col_name);
+      // for _id
+      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+        grn_id found_record_id = *(grn_id *)key_min[key_nr];
+        if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
+          store_fields_from_primary_table(buf, found_record_id);
+          table->status = 0;
+          cur = NULL;
+          record_id = found_record_id;
+          DBUG_RETURN(0);
+        } else {
+          table->status = STATUS_NOT_FOUND;
+          cur = NULL;
+          DBUG_RETURN(HA_ERR_END_OF_FILE);
+        }
+      } else {
+        mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+        val_min = key_min[key_nr];
+        val_max = key_min[key_nr];
+        size_max = size_min;
+      }
+    } else if (
+      find_flag == HA_READ_BEFORE_KEY ||
+      find_flag == HA_READ_PREFIX_LAST_OR_PREV
+      ) {
+      mrn_set_key_buf(ctx, field, key, key_max[key_nr], &size_max);
+      val_max = key_max[key_nr];
+    } else {
+      mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+      val_min = key_min[key_nr];
     }
+  }
+
+  switch (find_flag) {
+  case HA_READ_BEFORE_KEY:
+    flags |= GRN_CURSOR_LT;
+    break;
+  case HA_READ_AFTER_KEY:
+    flags |= GRN_CURSOR_GT;
+    break;
+  default:
+    break;
   }
 
   uint pkey_nr = table->s->primary_key;
 
-  if (key_nr == pkey_nr) { // primary index
+  if (is_multiple_column_index) { // multiple column index
+    DBUG_PRINT("info", ("mroonga use multiple column key"));
+    cur = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
+                                val_min, size_min,
+                                val_max, size_max,
+                                0, -1, flags);
+  } else if (key_nr == pkey_nr) { // primary index
     DBUG_PRINT("info", ("mroonga use primary key"));
     cur =
       grn_table_cursor_open(ctx, grn_table, val_min, size_min, val_max, size_max,
