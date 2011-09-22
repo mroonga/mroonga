@@ -1423,23 +1423,22 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   uint pkey_nr = table->s->primary_key;
   if (pkey_nr != MAX_INDEXES) {
     KEY key_info = table->s->key_info[pkey_nr];
+    bool is_id;
 
-    // surpose simgle column key
     int key_parts = key_info.key_parts;
-    if (key_parts != 1) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
-      error = ER_NOT_SUPPORTED_YET;
-      my_message(error, "complex key is not supported yet", MYF(0));
-      DBUG_RETURN(error);
-    }
-    Field *pkey_field = key_info.key_part[0].field;
-    const char *col_name = pkey_field->field_name;
-    int col_name_size = strlen(col_name);
-    bool is_id = (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0);
+    if (key_parts == 1) {
+      Field *pkey_field = key_info.key_part[0].field;
+      const char *col_name = pkey_field->field_name;
+      int col_name_size = strlen(col_name);
+      is_id = (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0);
 
-    int mysql_field_type = pkey_field->type();
-    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
-    pkey_type = grn_ctx_at(ctx, gtype);
+      int mysql_field_type = pkey_field->type();
+      grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
+      pkey_type = grn_ctx_at(ctx, gtype);
+    } else {
+      is_id = false;
+      pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+    }
 
     // default algorithm is BTREE ==> PAT
     if (!is_id && key_info.algorithm == HA_KEY_ALG_HASH) {
@@ -1511,33 +1510,32 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       continue; // pkey is already handled
     }
 
-    grn_obj *idx_tbl_obj, *idx_col_obj, *col_obj, *col_type, buf;
+    grn_obj *idx_tbl_obj, *idx_col_obj;
+    grn_obj *column = NULL;
+    grn_obj *index_type = NULL;
     KEY key_info = table->s->key_info[i];
 
-    // must be single column key
     int key_parts = key_info.key_parts;
-    if (key_parts != 1) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
-      error = ER_NOT_SUPPORTED_YET;
-      my_message(error, "complex key is not supported yet.", MYF(0));
-      DBUG_RETURN(error);
+    if (key_parts == 1) {
+      Field *field = key_info.key_part[0].field;
+      const char *column_name = field->field_name;
+      int column_name_size = strlen(column_name);
+
+      if (strncmp(MRN_ID_COL_NAME, column_name, column_name_size) == 0) {
+        // skipping _id virtual column
+        continue;
+      }
+
+      column = grn_obj_column(ctx, tbl_obj, column_name, column_name_size);
+      int mysql_field_type = field->type();
+      grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
+      index_type = grn_ctx_at(ctx, groonga_type);
+    } else {
+      index_type = grn_ctx_at(ctx, GRN_DB_TEXT);
     }
 
     mrn_index_table_name_gen(tbl_name, key_info.name, idx_name);
 
-    Field *field = key_info.key_part[0].field;
-    const char *col_name = field->field_name;
-    int col_name_size = strlen(col_name);
-
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-      // skipping _id virtual column
-      continue;
-    }
-
-    col_obj = grn_obj_column(ctx, tbl_obj, col_name, col_name_size);
-    int mysql_field_type = field->type();
-    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
-    col_type = grn_ctx_at(ctx, gtype);
     grn_obj_flags idx_col_flags =
       GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
 
@@ -1552,7 +1550,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
 
     idx_tbl_obj = grn_table_create(ctx, idx_name, strlen(idx_name), NULL,
-                                   idx_tbl_flags, col_type, 0);
+                                   idx_tbl_flags, index_type, 0);
     if (ctx->rc) {
       grn_obj_remove(ctx, tbl_obj);
       error = ER_CANT_CREATE_TABLE;
@@ -1582,11 +1580,14 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       DBUG_RETURN(error);
     }
 
-    grn_id gid = grn_obj_id(ctx, col_obj);
-    GRN_TEXT_INIT(&buf, 0);
-    GRN_TEXT_SET(ctx, &buf, (char*) &gid, sizeof(grn_id));
-    grn_obj_set_info(ctx, idx_col_obj, GRN_INFO_SOURCE, &buf);
-    grn_obj_unlink(ctx, &buf);
+    if (column) {
+      grn_obj source_ids;
+      grn_id source_id = grn_obj_id(ctx, column);
+      GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
+      GRN_UINT32_PUT(ctx, &source_ids, source_id);
+      grn_obj_set_info(ctx, idx_col_obj, GRN_INFO_SOURCE, &source_ids);
+      grn_obj_unlink(ctx, &source_ids);
+    }
   }
 
   /* clean up */
@@ -1649,10 +1650,7 @@ int ha_mroonga::storage_create_validate_index(TABLE *table)
     // must be single column key
     int key_parts = key_info.key_parts;
     if (key_parts != 1) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "complex key is not supported yet");
-      error = ER_NOT_SUPPORTED_YET;
-      my_message(error, "complex key is not supported yet.", MYF(0));
-      DBUG_RETURN(error);
+      continue;
     }
     Field *field = key_info.key_part[0].field;
     const char *col_name = field->field_name;
