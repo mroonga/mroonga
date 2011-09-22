@@ -90,7 +90,7 @@ extern pthread_mutex_t LOCK_open;
 #  define MRN_ORDER_IS_ASC(order) ((order)->asc)
 #endif
 
-static const char *wrapper_index_column_name = "index";
+static const char *index_column_name = "index";
 
 #ifdef __cplusplus
 extern "C" {
@@ -1309,8 +1309,8 @@ int ha_mroonga::wrapper_create_index_table(grn_obj *grn_table,
   grn_obj_unlink(ctx, token_type);
 
   grn_obj *index_column = grn_column_create(ctx, index_table,
-                                            wrapper_index_column_name,
-                                            strlen(wrapper_index_column_name),
+                                            index_column_name,
+                                            strlen(index_column_name),
                                             NULL,
                                             index_column_flags,
                                             grn_table);
@@ -1566,8 +1566,13 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       grn_obj_set_info(ctx, idx_tbl_obj, info_type, token_type);
     }
 
-    idx_col_obj = grn_column_create(ctx, idx_tbl_obj, col_name, col_name_size, NULL,
-                                    idx_col_flags, tbl_obj);
+    idx_col_obj = grn_column_create(ctx,
+                                    idx_tbl_obj,
+                                    index_column_name,
+                                    strlen(index_column_name),
+                                    NULL,
+                                    idx_col_flags,
+                                    tbl_obj);
 
     if (ctx->rc) {
       grn_obj_remove(ctx, idx_tbl_obj);
@@ -1904,8 +1909,8 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     }
 
     grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
-                                          wrapper_index_column_name,
-                                          strlen(wrapper_index_column_name));
+                                          index_column_name,
+                                          strlen(index_column_name));
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -2070,10 +2075,10 @@ int ha_mroonga::storage_open_indexes(const char *name)
     }
 
     Field *field = key_info.key_part[0].field;
-    const char *column_name = field->field_name;
-    int column_name_size = strlen(column_name);
-    grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
-                                          column_name, column_name_size);
+    grn_index_columns[i] = grn_obj_column(ctx,
+                                          grn_index_tables[i],
+                                          index_column_name,
+                                          strlen(index_column_name));
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -6210,8 +6215,9 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
             mrn_set_buf(ctx, field, &new_value, &new_column_size);
 
             grn_obj *index_column = grn_obj_column(ctx,
-              index_tables[k + n_keys], wrapper_index_column_name,
-              strlen(wrapper_index_column_name));
+                                                   index_tables[k + n_keys],
+                                                   index_column_name,
+                                                   strlen(index_column_name));
 
             grn_rc rc;
             rc = grn_column_index_update(ctx, index_column, record_id, l + 1,
