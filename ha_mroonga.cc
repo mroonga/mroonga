@@ -1277,7 +1277,7 @@ int ha_mroonga::wrapper_create_index_table(grn_obj *grn_table,
 
   int error = 0;
   char index_name[MRN_MAX_PATH_SIZE];
-  mrn_index_name_gen(grn_table_name, key_info->name, index_name);
+  mrn_index_table_name_gen(grn_table_name, key_info->name, index_name);
 
   grn_obj_flags index_table_flags =
     GRN_OBJ_TABLE_PAT_KEY |
@@ -1523,7 +1523,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       DBUG_RETURN(error);
     }
 
-    mrn_index_name_gen(tbl_name, key_info.name, idx_name);
+    mrn_index_table_name_gen(tbl_name, key_info.name, idx_name);
 
     Field *field = key_info.key_part[0].field;
     const char *col_name = field->field_name;
@@ -1900,7 +1900,7 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     }
 
     char index_name[MRN_MAX_PATH_SIZE];
-    mrn_index_name_gen(table_name, key_info.name, index_name);
+    mrn_index_table_name_gen(table_name, key_info.name, index_name);
     grn_index_tables[i] = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
@@ -2066,7 +2066,7 @@ int ha_mroonga::storage_open_indexes(const char *name)
     }
 
     KEY key_info = table->s->key_info[i];
-    mrn_index_name_gen(table_name, key_info.name, index_name);
+    mrn_index_table_name_gen(table_name, key_info.name, index_name);
     grn_index_tables[i] = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
@@ -2255,7 +2255,7 @@ int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
   int i;
   for (i = 0; i < tmp_table_share->keys; i++) {
     char index_name[MRN_MAX_PATH_SIZE];
-    mrn_index_name_gen(table_name, tmp_table_share->key_info[i].name,
+    mrn_index_table_name_gen(table_name, tmp_table_share->key_info[i].name,
       index_name);
     grn_obj *index_table = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (index_table != NULL) {
@@ -2287,7 +2287,7 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
 
   int i;
   for (i = 0; i < tmp_table_share->keys; i++) {
-    mrn_index_name_gen(tbl_name, tmp_table_share->key_info[i].name, idx_name);
+    mrn_index_table_name_gen(tbl_name, tmp_table_share->key_info[i].name, idx_name);
     grn_obj *idx_tbl_obj = grn_ctx_get(ctx, idx_name, strlen(idx_name));
     if (idx_tbl_obj != NULL) {
       grn_obj_remove(ctx, idx_tbl_obj);
@@ -6347,8 +6347,8 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
     }
 
     char index_name[MRN_MAX_PATH_SIZE];
-    mrn_index_name_gen(grn_table_name, key_info[key_num[i]].name,
-      index_name);
+    mrn_index_table_name_gen(grn_table_name, key_info[key_num[i]].name,
+                             index_name);
     grn_obj *index_table = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (index_table != NULL) {
       grn_obj_remove(ctx, index_table);

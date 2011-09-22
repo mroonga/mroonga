@@ -191,10 +191,11 @@ void test_mrn_table_name_gen()
   cut_assert_equal_string("b", mrn_table_name_gen(arg3, buf));
 }
 
-void test_mrn_index_name_gen()
+void test_mrn_index_table_name_gen()
 {
   char buf[64], buf2[64];
   const char *arg = "./db/users";
   mrn_table_name_gen(arg, buf);
-  cut_assert_equal_string("users_name", mrn_index_name_gen(buf, "name", buf2));
+  cut_assert_equal_string("users_name",
+                          mrn_index_table_name_gen(buf, "name", buf2));
 }

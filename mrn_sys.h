@@ -1,5 +1,7 @@
-/* Copyright(C) 2010 Tetsuro IKEDA
-   Copyright(C) 2011 Kentoku SHIBA
+/*
+  Copyright(C) 2010 Tetsuro IKEDA
+  Copyright(C) 2011 Kentoku SHIBA
+  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -42,6 +44,6 @@ int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key);
 char *mrn_db_path_gen(const char *arg, char *dest);
 char *mrn_db_name_gen(const char *arg, char *dest);
 char *mrn_table_name_gen(const char *arg, char *dest);
-char *mrn_index_name_gen(const char *arg, const char *idx_name, char *dest);
+char *mrn_index_table_name_gen(const char *arg, const char *idx_name, char *dest);
 
 #endif /* _mrn_sys_h */

@@ -1,5 +1,7 @@
-/* Copyright(C) 2010 Tetsuro IKEDA
-   Copyright(C) 2011 Kentoku SHIBA
+/*
+  Copyright(C) 2010 Tetsuro IKEDA
+  Copyright(C) 2011 Kentoku SHIBA
+  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -122,14 +124,12 @@ char *mrn_table_name_gen(const char *arg, char *dest)
 }
 
 /**
- * "${tbl}" ==> "${tbl}#${idx}"
- * "${tbl}" ==> "${tbl}#${idx}"
- * "${tbl}" ==> "${tbl}#${idx}"
- * "${tbl}" ==> "${tbl}#${idx}"
- * ...
+ * "${table}" ==> "${table}_${index_name}"
  */
-char *mrn_index_name_gen(const char *table_name, const char *idx_name, char *dest)
+char *mrn_index_table_name_gen(const char *table_name,
+                               const char *index_name,
+                               char *dest)
 {
-  snprintf(dest, MRN_MAX_PATH_SIZE, "%s_%s", table_name, idx_name);
+  snprintf(dest, MRN_MAX_PATH_SIZE, "%s_%s", table_name, index_name);
   return dest;
 }
