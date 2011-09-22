@@ -3488,41 +3488,93 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
   int flags = 0;
   uint size_min = 0, size_max = 0;
   ha_rows row_count = 0;
-  void *val_min = NULL, *val_max = NULL;
+  const void *val_min = NULL, *val_max = NULL;
   KEY key_info = table->s->key_info[key_nr];
-  KEY_PART_INFO key_part = key_info.key_part[0];
-  Field *field = key_part.field;
-  const char *col_name = field->field_name;
-  int col_name_size = strlen(col_name);
 
-  if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
-    DBUG_RETURN((ha_rows) 1) ;
-  }
+  if (key_info.key_parts == 1) {
+    KEY_PART_INFO key_part = key_info.key_part[0];
+    Field *field = key_part.field;
+    const char *col_name = field->field_name;
+    int col_name_size = strlen(col_name);
 
-  if (range_min != NULL) {
-    mrn_set_key_buf(ctx, field, range_min->key, key_min[key_nr], &size_min);
-    val_min = key_min[key_nr];
-    if (range_min->flag == HA_READ_AFTER_KEY) {
-      flags |= GRN_CURSOR_GT;
+    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      DBUG_RETURN((ha_rows)1) ;
+    }
+
+    if (range_min) {
+      mrn_set_key_buf(ctx, field, range_min->key, key_min[key_nr], &size_min);
+      val_min = key_min[key_nr];
+    }
+    if (range_max) {
+      mrn_set_key_buf(ctx, field, range_max->key, key_max[key_nr], &size_max);
+      val_max = key_max[key_nr];
+    }
+  } else {
+    flags |= GRN_CURSOR_PREFIX;
+    if (range_min) {
+      if (range_max) {
+        if (range_min->length != range_max->length) {
+          DBUG_PRINT("error",
+                     ("min and max range length must be the same length: "
+                      "min=<%d>, max=<%d>",
+                      range_min->length, range_max->length));
+          DBUG_RETURN(0);
+        }
+        if (memcmp(range_min->key, range_max->key, range_min->length) != 0) {
+          DBUG_PRINT("error",
+                     ("min and max range key must be the same value: "
+                      "min=<%.*s>, max=<%.*s>",
+                      range_min->length, range_min->key,
+                      range_max->length, range_min->key));
+          DBUG_RETURN(0);
+        }
+      }
+      val_min = range_min->key;
+      size_min = range_min->length;
+    } else if (range_max) {
+      DBUG_PRINT("error",
+                 ("only max range is specified. It's not supported: "
+                  "max=<%.*s>",
+                  range_max->length, range_min->key));
+      DBUG_RETURN(0);
+    } else {
+      DBUG_PRINT("error",
+                 ("both min and max range are NULL"));
+      DBUG_RETURN(0);
     }
   }
-  if (range_max != NULL) {
-    mrn_set_key_buf(ctx, field, range_max->key, key_max[key_nr], &size_max);
-    val_max = key_max[key_nr];
-    if (range_max->flag == HA_READ_BEFORE_KEY) {
-      flags |= GRN_CURSOR_LT;
-    }
+
+  if (range_min && range_min->flag == HA_READ_AFTER_KEY) {
+    flags |= GRN_CURSOR_GT;
   }
+  if (range_max && range_max->flag == HA_READ_BEFORE_KEY) {
+    flags |= GRN_CURSOR_LT;
+  }
+
   uint pkey_nr = table->s->primary_key;
+  if (flags & GRN_CURSOR_PREFIX) { // multiple column index
+    grn_table_cursor *cursor;
 
-  if (key_nr == pkey_nr) { // primary index
-    grn_table_cursor *cur_t =
-      grn_table_cursor_open(ctx, grn_table, val_min, size_min, val_max, size_max, 0, -1, flags);
-    grn_id gid;
-    while ((gid = grn_table_cursor_next(ctx, cur_t)) != GRN_ID_NIL) {
+    cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
+                                   val_min, size_min,
+                                   val_max, size_max,
+                                   0, -1, flags);
+    while (grn_table_cursor_next(ctx, cursor) != GRN_ID_NIL) {
       row_count++;
     }
-    grn_table_cursor_close(ctx, cur_t);
+    grn_table_cursor_close(ctx, cursor);
+  } else if (key_nr == pkey_nr) { // primary index
+
+    grn_table_cursor *cursor;
+
+    cursor = grn_table_cursor_open(ctx, grn_table,
+                                   val_min, size_min,
+                                   val_max, size_max,
+                                   0, -1, flags);
+    while (grn_table_cursor_next(ctx, cursor) != GRN_ID_NIL) {
+      row_count++;
+    }
+    grn_table_cursor_close(ctx, cursor);
   } else { // normal index
     uint table_size = grn_table_size(ctx, grn_table);
     uint cardinality = grn_table_size(ctx, grn_index_tables[key_nr]);
