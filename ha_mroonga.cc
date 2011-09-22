@@ -3490,8 +3490,26 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
   ha_rows row_count = 0;
   const void *val_min = NULL, *val_max = NULL;
   KEY key_info = table->s->key_info[key_nr];
+  bool is_multiple_column_index = key_info.key_parts > 1;
 
-  if (key_info.key_parts == 1) {
+  if (is_multiple_column_index) {
+    if (range_min && range_max &&
+        range_min->length == range_max->length &&
+        memcmp(range_min->key, range_max->key, range_min->length) == 0) {
+      flags |= GRN_CURSOR_PREFIX;
+      val_min = range_min->key;
+      size_min = range_min->length;
+    } else {
+      if (range_min) {
+        val_min = range_min->key;
+        size_min = range_min->length;
+      }
+      if (range_max) {
+        val_max = range_max->key;
+        size_max = range_max->length;
+      }
+    }
+  } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
     Field *field = key_part.field;
     const char *col_name = field->field_name;
@@ -3509,39 +3527,6 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
       mrn_set_key_buf(ctx, field, range_max->key, key_max[key_nr], &size_max);
       val_max = key_max[key_nr];
     }
-  } else {
-    flags |= GRN_CURSOR_PREFIX;
-    if (range_min) {
-      if (range_max) {
-        if (range_min->length != range_max->length) {
-          DBUG_PRINT("error",
-                     ("min and max range length must be the same length: "
-                      "min=<%d>, max=<%d>",
-                      range_min->length, range_max->length));
-          DBUG_RETURN(0);
-        }
-        if (memcmp(range_min->key, range_max->key, range_min->length) != 0) {
-          DBUG_PRINT("error",
-                     ("min and max range key must be the same value: "
-                      "min=<%.*s>, max=<%.*s>",
-                      range_min->length, range_min->key,
-                      range_max->length, range_min->key));
-          DBUG_RETURN(0);
-        }
-      }
-      val_min = range_min->key;
-      size_min = range_min->length;
-    } else if (range_max) {
-      DBUG_PRINT("error",
-                 ("only max range is specified. It's not supported: "
-                  "max=<%.*s>",
-                  range_max->length, range_min->key));
-      DBUG_RETURN(0);
-    } else {
-      DBUG_PRINT("error",
-                 ("both min and max range are NULL"));
-      DBUG_RETURN(0);
-    }
   }
 
   if (range_min && range_min->flag == HA_READ_AFTER_KEY) {
@@ -3552,7 +3537,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
   }
 
   uint pkey_nr = table->s->primary_key;
-  if (flags & GRN_CURSOR_PREFIX) { // multiple column index
+  if (is_multiple_column_index) { // multiple column index
     grn_table_cursor *cursor;
 
     cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
