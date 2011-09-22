@@ -3526,18 +3526,22 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
   } else { // normal index
     uint table_size = grn_table_size(ctx, grn_table);
     uint cardinality = grn_table_size(ctx, grn_index_tables[key_nr]);
-    grn_table_cursor *cur_t0 =
-      grn_table_cursor_open(ctx, grn_index_tables[key_nr], val_min, size_min, val_max, size_max, 0, -1, flags);
-    grn_table_cursor *cur_t =
-      grn_index_cursor_open(ctx, cur_t0, grn_index_columns[key_nr],
-                            0, GRN_ID_MAX, 0);
-    grn_id gid;
-    while ((gid = grn_table_cursor_next(ctx, cur_t)) != GRN_ID_NIL) {
+    grn_table_cursor *cursor;
+    grn_table_cursor *index_cursor;
+
+    cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
+                                   val_min, size_min,
+                                   val_max, size_max,
+                                   0, -1, flags);
+    index_cursor = grn_index_cursor_open(ctx, cursor,
+                                         grn_index_columns[key_nr],
+                                         0, GRN_ID_MAX, 0);
+    while (grn_table_cursor_next(ctx, index_cursor) != GRN_ID_NIL) {
       row_count++;
     }
-    grn_table_cursor_close(ctx, cur_t);
-    grn_table_cursor_close(ctx, cur_t0);
-    row_count = (int) ((double) table_size * ((double) row_count / (double) cardinality));
+    grn_table_cursor_close(ctx, index_cursor);
+    grn_table_cursor_close(ctx, cursor);
+    row_count = (int)((double)table_size * ((double)row_count / (double)cardinality));
   }
   DBUG_RETURN(row_count);
 }
