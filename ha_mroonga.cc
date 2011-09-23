@@ -561,8 +561,143 @@ static int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   return error;
 }
 
+#ifdef WORDS_BIGENDIAN
+#define mrn_byte_order_host_to_network(buf, key, size)  \
+{                                                       \
+  uint32_t size_ = (uint32_t)(size);                    \
+  uint8_t *buf_ = (uint8_t *)(buf);                     \
+  uint8_t *key_ = (uint8_t *)(key);                     \
+  while (size_--) { *buf_++ = *key_++; }                \
+}
+#else /* WORDS_BIGENDIAN */
+#define mrn_byte_order_host_to_network(buf, key, size)  \
+{                                                       \
+  uint32_t size_ = (uint32_t)(size);                    \
+  uint8_t *buf_ = (uint8_t *)(buf);                     \
+  uint8_t *key_ = (uint8_t *)(key) + size_;             \
+  while (size_--) { *buf_++ = *(--key_); }              \
+}
+#endif /* WORDS_BIGENDIAN */
+
+static uchar *mrn_multiple_column_key_encode(KEY *key_info,
+                                             const uchar *key, uint key_length,
+                                             uchar *buffer, uint *encoded_length)
+{
+  const uchar *current_key = key;
+  const uchar *key_end = key + key_length;
+  uchar *current_buffer = buffer;
+
+  int n_key_parts = key_info->key_parts;
+  *encoded_length = 0;
+  for (int i = 0; i < n_key_parts && current_key < key_end; i++) {
+    KEY_PART_INFO key_part = key_info->key_part[i];
+    Field *field = key_part.field;
+
+    if (field->null_bit) {
+      current_key += 1;
+    }
+
+    enum {
+      TYPE_LONG_LONG_NUMBER,
+      TYPE_NUMBER,
+      TYPE_FLOAT,
+      TYPE_BYTE_SEQUENCE
+    } data_type;
+    uint32 data_size;
+    long long int long_long_value;
+    double float_value;
+    switch (field->type()) {
+    case MYSQL_TYPE_BIT:
+    case MYSQL_TYPE_ENUM:
+    case MYSQL_TYPE_SET:
+    case MYSQL_TYPE_TINY:
+      data_type = TYPE_NUMBER;
+      data_size = 1;
+      break;
+    case MYSQL_TYPE_SHORT:
+      data_type = TYPE_NUMBER;
+      data_size = 2;
+      break;
+    case MYSQL_TYPE_INT24:
+      data_type = TYPE_NUMBER;
+      data_size = 3;
+      break;
+    case MYSQL_TYPE_LONG:
+      data_type = TYPE_NUMBER;
+      data_size = 4;
+      break;
+    case MYSQL_TYPE_LONGLONG:
+      data_type = TYPE_NUMBER;
+      data_size = 8;
+      break;
+    case MYSQL_TYPE_FLOAT:
+      data_type = TYPE_FLOAT;
+      data_size = 8;
+      float4get(float_value, current_key);
+      break;
+    case MYSQL_TYPE_DOUBLE:
+      data_type = TYPE_FLOAT;
+      data_size = 8;
+      float8get(float_value, current_key);
+      break;
+    case MYSQL_TYPE_TIME:
+    case MYSQL_TYPE_YEAR:
+    case MYSQL_TYPE_DATE:
+    case MYSQL_TYPE_DATETIME:
+      data_type = TYPE_LONG_LONG_NUMBER;
+      long_long_value = (long long int)sint8korr(current_key);
+      data_size = 8;
+      break;
+    case MYSQL_TYPE_STRING:
+    case MYSQL_TYPE_VARCHAR:
+    case MYSQL_TYPE_BLOB:
+      data_type = TYPE_BYTE_SEQUENCE;
+      data_size = key_part.length;
+      break;
+    default:
+      data_type = TYPE_BYTE_SEQUENCE;
+      data_size = key_part.length;
+      break;
+    }
+
+    switch (data_type) {
+    case TYPE_LONG_LONG_NUMBER:
+      mrn_byte_order_host_to_network(current_buffer, &long_long_value,
+                                     data_size);
+      *((uint8_t *)(current_buffer)) ^= 0x80;
+      break;
+    case TYPE_NUMBER:
+      mrn_byte_order_host_to_network(current_buffer, current_key, data_size);
+      {
+        Field_num *number_field = (Field_num *)field;
+        if (!number_field->unsigned_flag) {
+          *((uint8_t *)(current_buffer)) ^= 0x80;
+        }
+      }
+      break;
+    case TYPE_FLOAT:
+      {
+        long_long_value = (long long int)(float_value);
+        long_long_value ^= ((long_long_value >> 63) | (1LL << 63));
+        mrn_byte_order_host_to_network(current_buffer, &long_long_value,
+                                       data_size);
+      }
+      break;
+    case TYPE_BYTE_SEQUENCE:
+      memcpy(current_buffer, current_key, data_size);
+      break;
+    }
+
+    current_key += data_size;
+    current_buffer += data_size;
+    *encoded_length += data_size;
+  }
+
+  return buffer;
+}
+
 static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
-                           const uchar *key, char *buf, uint *size)
+                           const uchar *key, uchar *buf, uint *size)
 {
   char *ptr = (char*) key;
 
@@ -576,8 +711,7 @@ static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
   case MYSQL_TYPE_SET:
   case MYSQL_TYPE_TINY:
     {
-      char val = *ptr;
-      buf[0] = val;
+      memcpy(buf, ptr, 1);
       *size = 1;
       break;
     }
@@ -1872,8 +2006,8 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     // for HA_KEY_ALG_FULLTEXT keys.
     grn_index_tables = (grn_obj **)malloc(sizeof(grn_obj *) * n_keys);
     grn_index_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_keys);
-    key_min = (char **)malloc(sizeof(char *) * n_keys);
-    key_max = (char **)malloc(sizeof(char *) * n_keys);
+    key_min = (uchar **)malloc(sizeof(uchar *) * n_keys);
+    key_max = (uchar **)malloc(sizeof(uchar *) * n_keys);
   } else {
     grn_index_tables = grn_index_columns = NULL;
     key_min = key_max = NULL;
@@ -1889,8 +2023,8 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
       continue;
     }
 
-    key_min[i] = (char *)malloc(MRN_MAX_KEY_SIZE);
-    key_max[i] = (char *)malloc(MRN_MAX_KEY_SIZE);
+    key_min[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
+    key_max[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
 
     if (i == n_primary_keys) {
       grn_index_tables[i] = grn_index_columns[i] = NULL;
@@ -2052,8 +2186,8 @@ int ha_mroonga::storage_open_indexes(const char *name)
   if (n_keys > 0) {
     grn_index_tables = (grn_obj **)malloc(sizeof(grn_obj *) * n_keys);
     grn_index_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_keys);
-    key_min = (char **)malloc(sizeof(char *) * n_keys);
-    key_max = (char **)malloc(sizeof(char *) * n_keys);
+    key_min = (uchar **)malloc(sizeof(uchar *) * n_keys);
+    key_max = (uchar **)malloc(sizeof(uchar *) * n_keys);
   } else {
     grn_index_tables = grn_index_columns = NULL;
     key_min = key_max = NULL;
@@ -2063,8 +2197,8 @@ int ha_mroonga::storage_open_indexes(const char *name)
   mrn_table_name_gen(name, table_name);
   int i = 0;
   for (i = 0; i < n_keys; i++) {
-    key_min[i] = (char *)malloc(MRN_MAX_KEY_SIZE);
-    key_max[i] = (char *)malloc(MRN_MAX_KEY_SIZE);
+    key_min[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
+    key_max[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
 
     if (i == pkey_nr) {
       grn_index_tables[i] = grn_index_columns[i] = NULL;
@@ -3089,8 +3223,9 @@ int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id)
   my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
 
-  grn_obj key;
+  grn_obj key, encoded_key;
   GRN_TEXT_INIT(&key, 0);
+  GRN_TEXT_INIT(&encoded_key, 0);
 
   uint i;
   uint n_keys = table->s->keys;
@@ -3109,9 +3244,18 @@ int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id)
              buf,
              &key_info,
              key_info.key_length);
+    GRN_BULK_REWIND(&encoded_key);
+    grn_bulk_space(ctx, &encoded_key, key_info.key_length);
+    uint encoded_key_length;
+    mrn_multiple_column_key_encode(&key_info,
+                                   (uchar *)(GRN_TEXT_VALUE(&key)),
+                                   key_info.key_length,
+                                   (uchar *)(GRN_TEXT_VALUE(&encoded_key)),
+                                   &encoded_key_length);
 
     grn_rc rc;
-    rc = grn_column_index_update(ctx, index_column, record_id, 0, NULL, &key);
+    rc = grn_column_index_update(ctx, index_column, record_id, 0, NULL,
+                                 &encoded_key);
     if (rc) {
       error = ER_ERROR_ON_WRITE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -3123,6 +3267,7 @@ err:
 #ifndef DBUG_OFF
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
+  grn_obj_unlink(ctx, &encoded_key);
   grn_obj_unlink(ctx, &key);
 
   DBUG_RETURN(error);
@@ -3505,16 +3650,25 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
         range_min->length == range_max->length &&
         memcmp(range_min->key, range_max->key, range_min->length) == 0) {
       flags |= GRN_CURSOR_PREFIX;
-      val_min = range_min->key;
-      size_min = range_min->length;
+      val_min = mrn_multiple_column_key_encode(&key_info,
+                                               range_min->key,
+                                               range_min->length,
+                                               key_min[key_nr],
+                                               &size_min);
     } else {
       if (range_min) {
-        val_min = range_min->key;
-        size_min = range_min->length;
+        val_min = mrn_multiple_column_key_encode(&key_info,
+                                                 range_min->key,
+                                                 range_min->length,
+                                                 key_min[key_nr],
+                                                 &size_min);
       }
       if (range_max) {
-        val_max = range_max->key;
-        size_max = range_max->length;
+        val_max = mrn_multiple_column_key_encode(&key_info,
+                                                 range_max->key,
+                                                 range_max->length,
+                                                 key_max[key_nr],
+                                                 &size_max);
       }
     }
   } else {
@@ -3723,8 +3877,10 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   bool is_multiple_column_index = key_info.key_parts > 1;
   if (is_multiple_column_index) {
     flags |= GRN_CURSOR_PREFIX;
-    val_min = key;
-    size_min = calculate_key_len(table, active_index, key, keypart_map);
+    uint key_length = calculate_key_len(table, active_index, key, keypart_map);
+    val_min = mrn_multiple_column_key_encode(&key_info,
+                                             key, key_length,
+                                             key_min[active_index], &size_min);
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
     Field *field = key_part.field;
@@ -4302,16 +4458,25 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
         start_key->length == end_key->length &&
         memcmp(start_key->key, end_key->key, start_key->length) == 0) {
       flags |= GRN_CURSOR_PREFIX;
-      val_min = start_key->key;
-      size_min = start_key->length;
+      val_min = mrn_multiple_column_key_encode(&key_info,
+                                               start_key->key,
+                                               start_key->length,
+                                               key_min[active_index],
+                                               &size_min);
     } else {
       if (start_key) {
-        val_min = start_key->key;
-        size_min = start_key->length;
+        val_min = mrn_multiple_column_key_encode(&key_info,
+                                                 start_key->key,
+                                                 start_key->length,
+                                                 key_min[active_index],
+                                                 &size_min);
       }
       if (end_key) {
-        val_max = end_key->key;
-        size_max = end_key->length;
+        val_max = mrn_multiple_column_key_encode(&key_info,
+                                                 end_key->key,
+                                                 end_key->length,
+                                                 key_max[active_index],
+                                                 &size_max);
       }
     }
   } else {

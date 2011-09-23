@@ -2,6 +2,7 @@ AC_INIT([groonga-storage-engine], [1.0], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
+AC_C_BIGENDIAN
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_CPP

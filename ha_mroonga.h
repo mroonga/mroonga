@@ -137,8 +137,8 @@ private:
   st_mrn_ft_info mrn_ft_info;
   grn_obj *matched_record_keys;
 
-  char **key_min;
-  char **key_max;
+  uchar **key_min;
+  uchar **key_max;
   int *key_min_len;
   int *key_max_len;
   uint dup_key;
