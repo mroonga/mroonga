@@ -1570,7 +1570,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     } else if (!is_id) {
       tbl_flags |= GRN_OBJ_TABLE_PAT_KEY;
     } else {
-      // for _id 
+      // for _id
       tbl_flags |= GRN_OBJ_TABLE_NO_KEY;
       pkey_type = NULL;
     }
