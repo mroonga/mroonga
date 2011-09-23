@@ -3264,7 +3264,7 @@ int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id)
                                    &encoded_key_length);
 
     grn_rc rc;
-    rc = grn_column_index_update(ctx, index_column, record_id, 0, NULL,
+    rc = grn_column_index_update(ctx, index_column, record_id, 1, NULL,
                                  &encoded_key);
     if (rc) {
       error = ER_ERROR_ON_WRITE;
@@ -3616,8 +3616,6 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
       continue;
     }
 
-    grn_obj *index_table = grn_index_tables[i];
-
     GRN_BULK_REWIND(&key);
     grn_bulk_space(ctx, &key, key_info.key_length);
     key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
@@ -3633,10 +3631,10 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
                                    (uchar *)(GRN_TEXT_VALUE(&encoded_key)),
                                    &encoded_key_length);
 
+    grn_obj *index_column = grn_index_columns[i];
     grn_rc rc;
-    rc = grn_table_delete(ctx, index_table,
-                          GRN_TEXT_VALUE(&encoded_key),
-                          GRN_TEXT_LEN(&encoded_key));
+    rc = grn_column_index_update(ctx, index_column, record_id, 1,
+                                 &encoded_key, NULL);
     if (rc) {
       error = ER_ERROR_ON_WRITE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -3769,21 +3767,9 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
   }
 
   uint pkey_nr = table->s->primary_key;
-  if (is_multiple_column_index) { // multiple column index
+  if (key_nr == pkey_nr) {
+    DBUG_PRINT("info", ("mroonga use primary key"));
     grn_table_cursor *cursor;
-
-    cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
-                                   val_min, size_min,
-                                   val_max, size_max,
-                                   0, -1, flags);
-    while (grn_table_cursor_next(ctx, cursor) != GRN_ID_NIL) {
-      row_count++;
-    }
-    grn_table_cursor_close(ctx, cursor);
-  } else if (key_nr == pkey_nr) { // primary index
-
-    grn_table_cursor *cursor;
-
     cursor = grn_table_cursor_open(ctx, grn_table,
                                    val_min, size_min,
                                    val_max, size_max,
@@ -3792,7 +3778,12 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
       row_count++;
     }
     grn_table_cursor_close(ctx, cursor);
-  } else { // normal index
+  } else {
+    if (is_multiple_column_index) {
+      DBUG_PRINT("info", ("mroonga use multiple column key%u", key_nr));
+    } else {
+      DBUG_PRINT("info", ("mroonga use key%u", key_nr));
+    }
     uint table_size = grn_table_size(ctx, grn_table);
     uint cardinality = grn_table_size(ctx, grn_index_tables[key_nr]);
     grn_table_cursor *cursor;
@@ -4001,20 +3992,17 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   }
 
   uint pkey_nr = table->s->primary_key;
-
-  if (is_multiple_column_index) { // multiple column index
-    DBUG_PRINT("info", ("mroonga use multiple column key"));
-    cur = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
-                                val_min, size_min,
-                                val_max, size_max,
-                                0, -1, flags);
-  } else if (key_nr == pkey_nr) { // primary index
+  if (key_nr == pkey_nr) {
     DBUG_PRINT("info", ("mroonga use primary key"));
     cur =
       grn_table_cursor_open(ctx, grn_table, val_min, size_min, val_max, size_max,
                             0, -1, flags);
-  } else { // normal index
-    DBUG_PRINT("info", ("mroonga use key%u", key_nr));
+  } else {
+    if (is_multiple_column_index) {
+      DBUG_PRINT("info", ("mroonga use multiple column key%u", key_nr));
+    } else {
+      DBUG_PRINT("info", ("mroonga use key%u", key_nr));
+    }
     cur0 = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
                                  val_min, size_min,
                                  val_max, size_max,
@@ -4592,19 +4580,17 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
   }
 
   uint pkey_nr = table->s->primary_key;
-  if (is_multiple_column_index) { // multiple column index
-    DBUG_PRINT("info", ("mroonga use multiple column key"));
-    cur = grn_table_cursor_open(ctx, grn_index_tables[active_index],
-                                val_min, size_min,
-                                val_max, size_max,
-                                0, -1, flags);
-  } else if (active_index == pkey_nr) { // primary index
+  if (active_index == pkey_nr) {
     DBUG_PRINT("info", ("mroonga use primary key"));
     cur =
       grn_table_cursor_open(ctx, grn_table, val_min, size_min, val_max, size_max,
                             0, -1, flags);
-  } else { // normal index
-    DBUG_PRINT("info", ("mroonga use key%u", active_index));
+  } else {
+    if (is_multiple_column_index) {
+      DBUG_PRINT("info", ("mroonga use multiple column key%u", active_index));
+    } else {
+      DBUG_PRINT("info", ("mroonga use key%u", active_index));
+    }
     cur0 = grn_table_cursor_open(ctx, grn_index_tables[active_index],
                                  val_min, size_min,
                                  val_max, size_max,
