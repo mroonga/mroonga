@@ -392,6 +392,7 @@ private:
   int wrapper_delete_row(const uchar *buf);
   int wrapper_delete_row_index(const uchar *buf);
   int storage_delete_row(const uchar *buf);
+  int storage_delete_row_index(const uchar *buf);
   uint wrapper_max_supported_key_parts();
   uint storage_max_supported_key_parts();
   ulonglong wrapper_table_flags() const;
