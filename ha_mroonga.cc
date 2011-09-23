@@ -1640,7 +1640,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     KEY key_info = table->s->key_info[i];
 
     int key_parts = key_info.key_parts;
-    grn_obj_flags idx_tbl_flags = GRN_OBJ_PERSISTENT;
+    grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
     if (key_parts == 1) {
       Field *field = key_info.key_part[0].field;
       const char *column_name = field->field_name;
@@ -1655,7 +1655,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       int mysql_field_type = field->type();
       grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
       index_type = grn_ctx_at(ctx, groonga_type);
-      idx_tbl_flags |= GRN_OBJ_KEY_NORMALIZE;
+      index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
     } else {
       index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
     }
@@ -1667,15 +1667,15 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
 
     int key_alg = key_info.algorithm;
     if (key_alg == HA_KEY_ALG_FULLTEXT) {
-      idx_tbl_flags |= GRN_OBJ_TABLE_PAT_KEY;
+      index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
     } else if (key_alg == HA_KEY_ALG_HASH) {
-      idx_tbl_flags |= GRN_OBJ_TABLE_HASH_KEY;
+      index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
     } else {
-      idx_tbl_flags |= GRN_OBJ_TABLE_PAT_KEY;
+      index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
     }
 
     idx_tbl_obj = grn_table_create(ctx, idx_name, strlen(idx_name), NULL,
-                                   idx_tbl_flags, index_type, 0);
+                                   index_table_flags, index_type, 0);
     if (ctx->rc) {
       grn_obj_remove(ctx, tbl_obj);
       error = ER_CANT_CREATE_TABLE;
