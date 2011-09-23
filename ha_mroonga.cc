@@ -768,18 +768,8 @@ static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
     }
   case MYSQL_TYPE_STRING:
   case MYSQL_TYPE_VARCHAR:
-    {
-      ptr += 2;
-      String tmp;
-      const char *val = ptr;
-      int len = strlen(val);
-      memcpy(buf, val, len);
-      *size = len;
-      break;
-    }
   case MYSQL_TYPE_BLOB:
     {
-      String tmp;
       ptr += HA_KEY_BLOB_LENGTH;
       const char *val = ptr;
       int len = strlen(val);
