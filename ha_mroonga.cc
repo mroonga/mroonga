@@ -779,8 +779,8 @@ static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
     }
   case MYSQL_TYPE_BLOB:
     {
-      ptr += 2;
       String tmp;
+      ptr += HA_KEY_BLOB_LENGTH;
       const char *val = ptr;
       int len = strlen(val);
       memcpy(buf, val, len);
