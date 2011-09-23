@@ -3723,6 +3723,11 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
     if (find_flag == HA_READ_KEY_EXACT) {
       const char *col_name = field->field_name;
       int col_name_size = strlen(col_name);
+
+      mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+      val_min = key_min[key_nr];
+      val_max = key_min[key_nr];
+      size_max = size_min;
       // for _id
       if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
         grn_id found_record_id = *(grn_id *)key_min[key_nr];
@@ -3737,11 +3742,6 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
           cur = NULL;
           DBUG_RETURN(HA_ERR_END_OF_FILE);
         }
-      } else {
-        mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
-        val_min = key_min[key_nr];
-        val_max = key_min[key_nr];
-        size_max = size_min;
       }
     } else if (
       find_flag == HA_READ_BEFORE_KEY ||
