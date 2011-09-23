@@ -1625,99 +1625,17 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
   }
 
-  /* create indexes */
-  char index_name[MRN_MAX_PATH_SIZE];
-
-  uint n_keys = table->s->keys;
-  for (i = 0; i < n_keys; i++) {
-    if (i == pkey_nr) {
-      continue; // pkey is already handled
-    }
-
-    grn_obj *idx_tbl_obj, *idx_col_obj;
-    grn_obj *column = NULL;
-    grn_obj *index_type = NULL;
-    KEY key_info = table->s->key_info[i];
-
-    int key_parts = key_info.key_parts;
-    grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
-    if (key_parts == 1) {
-      Field *field = key_info.key_part[0].field;
-      const char *column_name = field->field_name;
-      int column_name_size = strlen(column_name);
-
-      if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
-        // skipping _id virtual column
-        continue;
-      }
-
-      column = grn_obj_column(ctx, tbl_obj, column_name, column_name_size);
-      int mysql_field_type = field->type();
-      grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
-      index_type = grn_ctx_at(ctx, groonga_type);
-      index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
-    } else {
-      index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
-    }
-
-    mrn_index_table_name_gen(tbl_name, key_info.name, index_name);
-
-    grn_obj_flags idx_col_flags =
-      GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
-
-    int key_alg = key_info.algorithm;
-    if (key_alg == HA_KEY_ALG_FULLTEXT) {
-      index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    } else if (key_alg == HA_KEY_ALG_HASH) {
-      index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
-    } else {
-      index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    }
-
-    idx_tbl_obj = grn_table_create(ctx, index_name, strlen(index_name), NULL,
-                                   index_table_flags, index_type, 0);
-    if (ctx->rc) {
-      grn_obj_remove(ctx, tbl_obj);
-      error = ER_CANT_CREATE_TABLE;
-      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(error);
-    }
-
-    if (key_alg == HA_KEY_ALG_FULLTEXT) {
-      grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-      grn_obj *token_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
-      grn_obj_set_info(ctx, idx_tbl_obj, info_type, token_type);
-    }
-
-    idx_col_obj = grn_column_create(ctx,
-                                    idx_tbl_obj,
-                                    index_column_name,
-                                    strlen(index_column_name),
-                                    NULL,
-                                    idx_col_flags,
-                                    tbl_obj);
-
-    if (ctx->rc) {
-      grn_obj_remove(ctx, idx_tbl_obj);
-      grn_obj_remove(ctx, tbl_obj);
-      error = ER_CANT_CREATE_TABLE;
-      my_message(error, ctx->errbuf, MYF(0));
-      DBUG_RETURN(error);
-    }
-
-    if (column) {
-      grn_obj source_ids;
-      grn_id source_id = grn_obj_id(ctx, column);
-      GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
-      GRN_UINT32_PUT(ctx, &source_ids, source_id);
-      grn_obj_set_info(ctx, idx_col_obj, GRN_INFO_SOURCE, &source_ids);
-      grn_obj_unlink(ctx, &source_ids);
-    }
+  error = storage_create_index(table, tbl_name, tbl_obj);
+  if (error) {
+    grn_obj_remove(ctx, tbl_obj);
+    tbl_obj = NULL;
   }
 
-  /* clean up */
-  grn_obj_unlink(ctx, tbl_obj);
-  DBUG_RETURN(0);
+  if (tbl_obj) {
+    grn_obj_unlink(ctx, tbl_obj);
+  }
+
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_create_validate_pseudo_column(TABLE *table)
@@ -1794,6 +1712,107 @@ int ha_mroonga::storage_create_validate_index(TABLE *table)
       error = ER_CANT_CREATE_TABLE;
       my_message(error, "_score cannot be used for index", MYF(0));
       DBUG_RETURN(error);
+    }
+  }
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
+                                     grn_obj *grn_table)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+
+  char index_table_name[MRN_MAX_KEY_SIZE];
+
+  uint n_keys = table->s->keys;
+  for (int i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue; // pkey is already handled
+    }
+
+    grn_obj *index_table, *index_column;
+    grn_obj *column = NULL;
+    grn_obj *index_type = NULL;
+    KEY key_info = table->s->key_info[i];
+
+    mrn_index_table_name_gen(grn_table_name, key_info.name, index_table_name);
+
+    int key_parts = key_info.key_parts;
+    grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
+    if (key_parts == 1) {
+      Field *field = key_info.key_part[0].field;
+      const char *column_name = field->field_name;
+      int column_name_size = strlen(column_name);
+
+      if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
+        // skipping _id virtual column
+        continue;
+      }
+
+      column = grn_obj_column(ctx, grn_table, column_name, column_name_size);
+      int mysql_field_type = field->type();
+      grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
+      index_type = grn_ctx_at(ctx, groonga_type);
+      index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
+    } else {
+      index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+    }
+
+    int key_alg = key_info.algorithm;
+    if (key_alg == HA_KEY_ALG_FULLTEXT) {
+      index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
+    } else if (key_alg == HA_KEY_ALG_HASH) {
+      index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
+    } else {
+      index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
+    }
+
+    index_table = grn_table_create(ctx,
+                                   index_table_name,
+                                   strlen(index_table_name),
+                                   NULL,
+                                   index_table_flags,
+                                   index_type,
+                                   0);
+    if (ctx->rc) {
+      grn_obj_remove(ctx, grn_table);
+      error = ER_CANT_CREATE_TABLE;
+      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+      DBUG_RETURN(error);
+    }
+
+    if (key_alg == HA_KEY_ALG_FULLTEXT) {
+      grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+      grn_obj *token_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
+      grn_obj_set_info(ctx, index_table, info_type, token_type);
+    }
+
+    grn_obj_flags index_column_flags =
+      GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
+    index_column = grn_column_create(ctx,
+                                    index_table,
+                                    index_column_name,
+                                    strlen(index_column_name),
+                                    NULL,
+                                    index_column_flags,
+                                    grn_table);
+
+    if (ctx->rc) {
+      grn_obj_remove(ctx, index_table);
+      error = ER_CANT_CREATE_TABLE;
+      my_message(error, ctx->errbuf, MYF(0));
+      DBUG_RETURN(error);
+    }
+
+    if (column) {
+      grn_obj source_ids;
+      grn_id source_id = grn_obj_id(ctx, column);
+      GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
+      GRN_UINT32_PUT(ctx, &source_ids, source_id);
+      grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
+      grn_obj_unlink(ctx, &source_ids);
     }
   }
 
