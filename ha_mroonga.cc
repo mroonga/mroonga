@@ -1531,7 +1531,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
       index_type = grn_ctx_at(ctx, groonga_type);
     } else {
-      index_type = grn_ctx_at(ctx, GRN_DB_TEXT);
+      index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
     }
 
     mrn_index_table_name_gen(tbl_name, key_info.name, idx_name);
