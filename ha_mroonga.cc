@@ -1591,7 +1591,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   grn_obj *pkey_value_type = NULL; // we don't use this
 
   tbl_obj = grn_table_create(ctx, tbl_name, tbl_name_len, tbl_path,
-                         tbl_flags, pkey_type, pkey_value_type);
+                             tbl_flags, pkey_type, pkey_value_type);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
