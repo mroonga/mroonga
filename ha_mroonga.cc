@@ -3801,7 +3801,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     }
     grn_table_cursor_close(ctx, index_cursor);
     grn_table_cursor_close(ctx, cursor);
-    row_count = (int)((double)table_size * ((double)row_count / (double)cardinality));
+    row_count = (int)(round((double)table_size * ((double)row_count / (double)cardinality)));
   }
   DBUG_RETURN(row_count);
 }
