@@ -20,7 +20,7 @@
 drop table if exists t1, t2, t3;
 --enable_warnings
 
-create table t1 (_id int, a int, key (_id) using hash);
+create table t1 (_id int, a int, unique key (_id) using hash);
 insert into t1 values(null, 100);
 insert into t1 values(null, 100);
 insert into t1 values(null, 100);
