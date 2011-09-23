@@ -20,18 +20,7 @@
 drop table if exists t1, t2, t3;
 --enable_warnings
 
-# _id and hash index
 create table t1 (_id int, c1 int, unique key (_id) using hash);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-select * from t1;
-delete from t1 where _id = 2;
-select * from t1;
-drop table t1;
- 
-create table t1 (_id int, c1 int, key (_id) using hash);
 insert into t1 values(null, 100);
 insert into t1 values(null, 100);
 insert into t1 values(null, 100);
