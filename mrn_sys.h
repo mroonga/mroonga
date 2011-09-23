@@ -33,8 +33,8 @@
 #define MRN_LEX_SUFFIX "_lex"
 #define MRN_HASH_SUFFIX "_hash"
 #define MRN_PAT_SUFFIX "_pat"
-#define MRN_ID_COL_NAME "_id"
-#define MRN_SCORE_COL_NAME "_score"
+#define MRN_COLUMN_NAME_ID "_id"
+#define MRN_COLUMN_NAME_SCORE "_score"
 
 /* functions */
 int mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, void *value);

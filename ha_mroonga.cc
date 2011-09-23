@@ -1564,7 +1564,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       Field *pkey_field = key_info.key_part[0].field;
       const char *col_name = pkey_field->field_name;
       int col_name_size = strlen(col_name);
-      is_id = (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0);
+      is_id = (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0);
 
       int mysql_field_type = pkey_field->type();
       grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
@@ -1616,8 +1616,8 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
 
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) continue;
-    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) continue;
+    if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) continue;
+    if (strncmp(MRN_COLUMN_NAME_SCORE, col_name, col_name_size) == 0) continue;
 
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR;
     int mysql_field_type = field->type();
@@ -1655,7 +1655,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       const char *column_name = field->field_name;
       int column_name_size = strlen(column_name);
 
-      if (strncmp(MRN_ID_COL_NAME, column_name, column_name_size) == 0) {
+      if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
         // skipping _id virtual column
         continue;
       }
@@ -1740,7 +1740,7 @@ int ha_mroonga::storage_create_validate_pseudo_column(TABLE *table)
     Field *field = table->s->field[i];
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+    if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
       switch (field->type()) {
       case MYSQL_TYPE_TINY :
       case MYSQL_TYPE_SHORT :
@@ -1754,7 +1754,7 @@ int ha_mroonga::storage_create_validate_pseudo_column(TABLE *table)
         my_message(error, "_id must be numeric data type", MYF(0));
         DBUG_RETURN(error);
       }
-    } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+    } else if (strncmp(MRN_COLUMN_NAME_SCORE, col_name, col_name_size) == 0) {
       switch (field->type()) {
       case MYSQL_TYPE_FLOAT :
       case MYSQL_TYPE_DOUBLE :
@@ -1789,7 +1789,7 @@ int ha_mroonga::storage_create_validate_index(TABLE *table)
     Field *field = key_info.key_part[0].field;
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+    if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
       if (key_info.algorithm == HA_KEY_ALG_HASH) {
         continue; // hash index is ok
       }
@@ -1798,7 +1798,7 @@ int ha_mroonga::storage_create_validate_index(TABLE *table)
       my_message(error, "only hash index can be defined for _id", MYF(0));
       DBUG_RETURN(error);
     }
-    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+    if (strncmp(MRN_COLUMN_NAME_SCORE, col_name, col_name_size) == 0) {
       GRN_LOG(ctx, GRN_LOG_ERROR, "_score cannot be used for index");
       error = ER_CANT_CREATE_TABLE;
       my_message(error, "_score cannot be used for index", MYF(0));
@@ -2152,11 +2152,11 @@ int ha_mroonga::storage_open_columns(void)
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
 
-    if (strncmp(MRN_ID_COL_NAME, column_name, column_name_size) == 0) {
+    if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
       grn_columns[i] = NULL;
       continue;
     }
-    if (strncmp(MRN_SCORE_COL_NAME, column_name, column_name_size) == 0) {
+    if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
       grn_columns[i] = NULL;
       continue;
     }
@@ -3097,14 +3097,14 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
       if (field->is_null()) continue;
 
-      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
         my_message(ER_DATA_TOO_LONG, "cannot insert value to _id column", MYF(0));
         DBUG_RETURN(ER_DATA_TOO_LONG);
       }
-      if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      if (strncmp(MRN_COLUMN_NAME_SCORE, col_name, col_name_size) == 0) {
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
@@ -3157,13 +3157,13 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
     if (field->is_null()) continue;
 
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+    if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
       push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                    "data truncated for _id column");
       continue;
     }
 
-    if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+    if (strncmp(MRN_COLUMN_NAME_SCORE, col_name, col_name_size) == 0) {
       push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                    "data truncated for _score column");
       continue;
@@ -3418,11 +3418,11 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 
       if (bitmap_is_set(table->write_set, field->field_index)) {
         if (field->is_null()) continue;
-        if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+        if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
           my_message(ER_DATA_TOO_LONG, "cannot update value to _id column", MYF(0));
           DBUG_RETURN(ER_DATA_TOO_LONG);
         }
-        if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+        if (strncmp(MRN_COLUMN_NAME_SCORE, col_name, col_name_size) == 0) {
           my_message(ER_DATA_TOO_LONG, "cannot update value to _score column", MYF(0));
           DBUG_RETURN(ER_DATA_TOO_LONG);
         }
@@ -3443,7 +3443,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 
       if (field->is_null()) continue;
 
-      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
         push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                      "data truncated for  _id column");
 #ifndef DBUG_OFF
@@ -3452,7 +3452,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
         continue;
       }
 
-      if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      if (strncmp(MRN_COLUMN_NAME_SCORE, col_name, col_name_size) == 0) {
         push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                      "data truncated for  _score column");
 #ifndef DBUG_OFF
@@ -3677,7 +3677,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
 
-    if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+    if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
       DBUG_RETURN((ha_rows)1) ;
     }
 
@@ -3893,7 +3893,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       val_max = key_min[key_nr];
       size_max = size_min;
       // for _id
-      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
         grn_id found_record_id = *(grn_id *)key_min[key_nr];
         if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
           store_fields_from_primary_table(buf, found_record_id);
@@ -4490,7 +4490,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
       val_min = key_min[active_index];
       if (start_key->flag == HA_READ_KEY_EXACT) {
         // for _id
-        if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+        if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
           grn_id found_record_id = *(grn_id *)key_min[active_index];
           if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
             store_fields_from_primary_table(table->record[0], found_record_id);
@@ -4704,8 +4704,8 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
                                   GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                   grn_table, 0);
   info->score_column = grn_obj_column(info->ctx, info->result,
-                                      MRN_SCORE_COL_NAME,
-                                      strlen(MRN_SCORE_COL_NAME));
+                                      MRN_COLUMN_NAME_SCORE,
+                                      strlen(MRN_COLUMN_NAME_SCORE));
   GRN_TEXT_INIT(&(info->key), 0);
   grn_bulk_space(ctx, &(info->key), table->key_info->key_length);
   GRN_INT32_INIT(&(info->score), 0);
@@ -4830,7 +4830,7 @@ FT_INFO *ha_mroonga::storage_ft_init_ext(uint flags, uint key_nr, String *key)
     grn_obj_search(ctx, ft, &buf, result, GRN_OP_OR, NULL);
   }
   _score = grn_obj_column(ctx, result,
-                          MRN_SCORE_COL_NAME, strlen(MRN_SCORE_COL_NAME));
+                          MRN_COLUMN_NAME_SCORE, strlen(MRN_COLUMN_NAME_SCORE));
   int n_rec = grn_table_size(ctx, result);
   if (!fast_order_limit) {
     cur = grn_table_cursor_open(ctx, result, NULL, 0, NULL, 0, 0, -1, 0);
@@ -5211,9 +5211,9 @@ void ha_mroonga::check_fast_order_limit()
       const char *col_name = field->field_name;
       int col_name_size = strlen(col_name);
 
-      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
         sort_keys[i].key = grn_obj_column(ctx, grn_table, col_name, col_name_size);
-      } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      } else if (strncmp(MRN_COLUMN_NAME_SCORE, col_name, col_name_size) == 0) {
         sort_keys[i].key = NULL;
       } else {
         sort_keys[i].key = grn_columns[field->field_index];
@@ -5274,11 +5274,11 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id record_id)
 #endif
       DBUG_PRINT("info", ("mroonga store column %d(%d)",i,field->field_index));
       field->move_field_offset(ptr_diff);
-      if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
+      if (strncmp(MRN_COLUMN_NAME_ID, col_name, col_name_size) == 0) {
         // for _id column
         field->set_notnull();
         field->store((int) record_id);
-      } else if (strncmp(MRN_SCORE_COL_NAME, col_name, col_name_size) == 0) {
+      } else if (strncmp(MRN_COLUMN_NAME_SCORE, col_name, col_name_size) == 0) {
         // for _score column
         if (result && result->header.flags & GRN_OBJ_WITH_SUBREC) {
           float score;
