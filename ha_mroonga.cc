@@ -1626,7 +1626,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   }
 
   /* create indexes */
-  char idx_name[MRN_MAX_PATH_SIZE];
+  char index_name[MRN_MAX_PATH_SIZE];
 
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
@@ -1660,7 +1660,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
     }
 
-    mrn_index_table_name_gen(tbl_name, key_info.name, idx_name);
+    mrn_index_table_name_gen(tbl_name, key_info.name, index_name);
 
     grn_obj_flags idx_col_flags =
       GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
@@ -1674,7 +1674,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
     }
 
-    idx_tbl_obj = grn_table_create(ctx, idx_name, strlen(idx_name), NULL,
+    idx_tbl_obj = grn_table_create(ctx, index_name, strlen(index_name), NULL,
                                    index_table_flags, index_type, 0);
     if (ctx->rc) {
       grn_obj_remove(ctx, tbl_obj);
@@ -2410,7 +2410,7 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
   int error;
   TABLE_SHARE *tmp_table_share = tmp_share->table_share;
   MRN_DBUG_ENTER_METHOD();
-  char idx_name[MRN_MAX_PATH_SIZE];
+  char index_name[MRN_MAX_PATH_SIZE];
 
   error = ensure_database_open(name);
   if (error)
@@ -2418,8 +2418,8 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
 
   int i;
   for (i = 0; i < tmp_table_share->keys; i++) {
-    mrn_index_table_name_gen(tbl_name, tmp_table_share->key_info[i].name, idx_name);
-    grn_obj *idx_tbl_obj = grn_ctx_get(ctx, idx_name, strlen(idx_name));
+    mrn_index_table_name_gen(tbl_name, tmp_table_share->key_info[i].name, index_name);
+    grn_obj *idx_tbl_obj = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (idx_tbl_obj != NULL) {
       grn_obj_remove(ctx, idx_tbl_obj);
     }
