@@ -20,22 +20,13 @@
 drop table if exists t1, t2, t3;
 --enable_warnings
 
-create table t1 (_id int, a int, unique key (_id) using hash);
+create table t1 (_id int, a int, primary key (_id) using hash);
+--error 1048
 insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-select * from t1;
-select * from t1 where _id = 2;
-select * from t1 where _id = 20;
-drop table t1;
-
-
-create table t1 (_id int, a int, key (_id) using hash);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
+insert into t1 values(1,100);
+insert into t1 values(1,100);
+insert into t1 values(1,100);
+insert into t1 values(1,100);
 select * from t1;
 select * from t1 where _id = 2;
 select * from t1 where _id = 20;
