@@ -3088,10 +3088,6 @@ err:
 int ha_mroonga::storage_write_row(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_obj wrapper;
-  void *pkey = NULL;
-  int pkey_size = 0;
-  uint pkey_nr = table->s->primary_key;
   THD *thd = ha_thd();
   int i, col_size;
   int n_columns = table->s->fields;
@@ -3131,14 +3127,27 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
   }
 
-  GRN_VOID_INIT(&wrapper);
+  void *pkey = NULL;
+  int pkey_size = 0;
+  grn_obj pkey_data;
+  GRN_VOID_INIT(&pkey_data);
+  uint pkey_nr = table->s->primary_key;
   if (pkey_nr != MAX_INDEXES) {
-    KEY key_info = table->s->key_info[pkey_nr];
-    // surpose simgle column key
-    int field_no = key_info.key_part[0].field->field_index;
-    Field *pkey_field = table->field[field_no];
-    mrn_set_buf(ctx, pkey_field, &wrapper, &pkey_size);
-    pkey = GRN_TEXT_VALUE(&wrapper);
+    KEY key_info = table->key_info[pkey_nr];
+    if (key_info.key_parts == 1) {
+      Field *pkey_field = key_info.key_part[0].field;
+      mrn_set_buf(ctx, pkey_field, &pkey_data, &pkey_size);
+      pkey = GRN_TEXT_VALUE(&pkey_data);
+    } else {
+      uchar key[MRN_MAX_KEY_SIZE];
+      key_copy(key, buf, &key_info, key_info.key_length);
+      grn_bulk_space(ctx, &pkey_data, key_info.key_length);
+      pkey = mrn_multiple_column_key_encode(&key_info,
+                                            key,
+                                            key_info.key_length,
+                                            (uchar *)(GRN_TEXT_VALUE(&pkey_data)),
+                                            (uint *)&pkey_size);
+    }
   }
 
   int added;
@@ -3148,9 +3157,10 @@ int ha_mroonga::storage_write_row(uchar *buf)
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+    grn_obj_unlink(ctx, &pkey_data);
     DBUG_RETURN(ER_ERROR_ON_WRITE);
   }
-  grn_obj_unlink(ctx, &wrapper);
+  grn_obj_unlink(ctx, &pkey_data);
   if (!added) {
     // duplicated error
 #ifndef DBUG_OFF
@@ -3247,6 +3257,10 @@ int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id)
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue;
+    }
+
     KEY key_info = table->key_info[i];
 
     if (key_info.key_parts == 1) {
