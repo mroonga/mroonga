@@ -2224,11 +2224,18 @@ int ha_mroonga::storage_open_indexes(const char *name)
       goto error;
     }
 
-    Field *field = key_info.key_part[0].field;
     grn_index_columns[i] = grn_obj_column(ctx,
                                           grn_index_tables[i],
                                           index_column_name,
                                           strlen(index_column_name));
+    if (!grn_index_columns[i]) {
+      /* just for backward compatibility before 1.0. */
+      Field *field = key_info.key_part[0].field;
+      grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
+                                            field->field_name,
+                                            strlen(field->field_name));
+    }
+
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
