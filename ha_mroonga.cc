@@ -4054,7 +4054,7 @@ int ha_mroonga::storage_index_first(uchar *buf)
   }
   bool is_multiple_column_index = table->key_info[active_index].key_parts > 1;
   uint pkey_nr = table->s->primary_key;
-  if (is_multiple_column_index) { // primary index
+  if (is_multiple_column_index) { // multiple column index
     DBUG_PRINT("info", ("mroonga use multiple column key"));
     cur = grn_table_cursor_open(ctx, grn_index_tables[active_index],
                                 NULL, 0, NULL, 0,
@@ -4312,6 +4312,9 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
     const char *col_name = field->field_name;
     int col_name_size = strlen(col_name);
     if (start_key) {
+      mrn_set_key_buf(ctx, field, start_key->key, key_min[active_index],
+                      &size_min);
+      val_min = key_min[active_index];
       if (start_key->flag == HA_READ_KEY_EXACT) {
         // for _id
         if (strncmp(MRN_ID_COL_NAME, col_name, col_name_size) == 0) {
@@ -4328,10 +4331,6 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
             record_id = GRN_ID_NIL;
             DBUG_RETURN(HA_ERR_END_OF_FILE);
           }
-        } else {
-          mrn_set_key_buf(ctx, field, start_key->key, key_min[active_index],
-                          &size_min);
-          val_min = key_min[active_index];
         }
       }
     }
