@@ -3463,6 +3463,10 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
     }
   }
 
+  KEY *pkey_info = NULL;
+  if (table->s->primary_key != MAX_INDEXES) {
+    pkey_info = &(table->key_info[table->s->primary_key]);
+  }
   GRN_VOID_INIT(&colbuf);
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
@@ -3478,7 +3482,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 
       if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
         push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
-                     "data truncated for  _id column");
+                     "data truncated for _id column");
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
@@ -3487,11 +3491,32 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 
       if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
         push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
-                     "data truncated for  _score column");
+                     "data truncated for _score column");
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
         continue;
+      }
+
+      if (pkey_info) {
+        bool have_pkey = false;
+        for (int j = 0; j < pkey_info->key_parts; j++) {
+          Field *pkey_field = pkey_info->key_part[j].field;
+          if (strcmp(pkey_field->field_name, column_name) == 0) {
+            char message[MRN_BUFFER_SIZE];
+            snprintf(message, MRN_BUFFER_SIZE,
+                     "data truncated for primary key column: <%s>", column_name);
+            push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+                         message);
+            have_pkey = true;
+          }
+        }
+        if (have_pkey) {
+#ifndef DBUG_OFF
+          dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+          continue;
+        }
       }
 
       mrn_set_buf(ctx, field, &colbuf, &col_size);
@@ -3535,6 +3560,10 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue;
+    }
+
     KEY key_info = table->key_info[i];
 
     if (key_info.key_parts == 1) {
