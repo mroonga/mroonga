@@ -3721,6 +3721,10 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue;
+    }
+
     KEY key_info = table->key_info[i];
 
     if (key_info.key_parts == 1) {
