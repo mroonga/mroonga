@@ -4158,12 +4158,10 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
   MRN_DBUG_ENTER_METHOD();
   uint key_nr = active_index;
   KEY key_info = table->key_info[key_nr];
-  KEY_PART_INFO key_part = key_info.key_part[0];
 
   int flags = GRN_CURSOR_DESCENDING;
   uint size_min = 0, size_max = 0;
-  void *val_min = NULL, *val_max = NULL;
-  Field *field = key_part.field;
+  const void *val_min = NULL, *val_max = NULL;
 
   if (cur) {
     grn_table_cursor_close(ctx, cur);
@@ -4174,20 +4172,35 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
     cur0 = NULL;
   }
 
-  mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
-  val_min = key_min[key_nr];
-  val_max = key_min[key_nr];
-  size_max = size_min;
+  bool is_multiple_column_index = key_info.key_parts > 1;
+  if (is_multiple_column_index) {
+    flags |= GRN_CURSOR_PREFIX;
+    uint key_length = calculate_key_len(table, active_index, key, keypart_map);
+    val_min = mrn_multiple_column_key_encode(&key_info,
+                                             key, key_length,
+                                             key_min[key_nr], &size_min);
+  } else {
+    KEY_PART_INFO key_part = key_info.key_part[0];
+    Field *field = key_part.field;
+
+    mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+    val_min = key_min[key_nr];
+    val_max = key_min[key_nr];
+    size_max = size_min;
+  }
 
   uint pkey_nr = table->s->primary_key;
-
-  if (key_nr == pkey_nr) { // primary index
+  if (key_nr == pkey_nr) {
     DBUG_PRINT("info", ("mroonga use primary key"));
     cur =
       grn_table_cursor_open(ctx, grn_table, val_min, size_min, val_max, size_max,
                             0, -1, flags);
-  } else { // normal index
-    DBUG_PRINT("info", ("mroonga use key%u", key_nr));
+  } else {
+    if (is_multiple_column_index) {
+      DBUG_PRINT("info", ("mroonga use multiple column key%u", key_nr));
+    } else {
+      DBUG_PRINT("info", ("mroonga use key%u", key_nr));
+    }
     cur0 = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
                                  val_min, size_min,
                                  val_max, size_max,
