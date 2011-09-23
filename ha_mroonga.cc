@@ -3415,6 +3415,8 @@ err:
 int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 {
   MRN_DBUG_ENTER_METHOD();
+  int error;
+
   grn_obj colbuf;
   int i, col_size;
   int n_columns = table->s->fields;
@@ -3487,7 +3489,95 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
     }
   }
   grn_obj_unlink(ctx, &colbuf);
-  DBUG_RETURN(0);
+
+  error = storage_update_row_index(old_data, new_data);
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error;
+
+  grn_obj old_key, old_encoded_key, new_key, new_encoded_key;
+  GRN_TEXT_INIT(&old_key, 0);
+  GRN_TEXT_INIT(&old_encoded_key, 0);
+  GRN_TEXT_INIT(&new_key, 0);
+  GRN_TEXT_INIT(&new_encoded_key, 0);
+
+  my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
+
+#ifndef DBUG_OFF
+  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
+#endif
+  uint i;
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    KEY key_info = table->key_info[i];
+
+    if (key_info.key_parts == 1) {
+      continue;
+    }
+
+    GRN_BULK_REWIND(&old_key);
+    grn_bulk_space(ctx, &old_key, key_info.key_length);
+    for (int j = 0; j < key_info.key_parts; j++) {
+      Field *field = key_info.key_part[j].field;
+      field->move_field_offset(ptr_diff);
+    }
+    key_copy((uchar *)(GRN_TEXT_VALUE(&old_key)),
+             (uchar *)old_data,
+             &key_info,
+             key_info.key_length);
+    for (int j = 0; j < key_info.key_parts; j++) {
+      Field *field = key_info.key_part[j].field;
+      field->move_field_offset(-ptr_diff);
+    }
+    GRN_BULK_REWIND(&old_encoded_key);
+    grn_bulk_space(ctx, &old_encoded_key, key_info.key_length);
+    uint old_encoded_key_length;
+    mrn_multiple_column_key_encode(&key_info,
+                                   (uchar *)(GRN_TEXT_VALUE(&old_key)),
+                                   key_info.key_length,
+                                   (uchar *)(GRN_TEXT_VALUE(&old_encoded_key)),
+                                   &old_encoded_key_length);
+
+    GRN_BULK_REWIND(&new_key);
+    grn_bulk_space(ctx, &new_key, key_info.key_length);
+    key_copy((uchar *)(GRN_TEXT_VALUE(&new_key)),
+             (uchar *)new_data,
+             &key_info,
+             key_info.key_length);
+    GRN_BULK_REWIND(&new_encoded_key);
+    grn_bulk_space(ctx, &new_encoded_key, key_info.key_length);
+    uint new_encoded_key_length;
+    mrn_multiple_column_key_encode(&key_info,
+                                   (uchar *)(GRN_TEXT_VALUE(&new_key)),
+                                   key_info.key_length,
+                                   (uchar *)(GRN_TEXT_VALUE(&new_encoded_key)),
+                                   &new_encoded_key_length);
+
+    grn_obj *index_column = grn_index_columns[i];
+    grn_rc rc;
+    rc = grn_column_index_update(ctx, index_column, record_id, 1,
+                                 &old_encoded_key, &new_encoded_key);
+    if (rc) {
+      error = ER_ERROR_ON_WRITE;
+      my_message(error, ctx->errbuf, MYF(0));
+      goto err;
+    }
+  }
+err:
+#ifndef DBUG_OFF
+  dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+  grn_obj_unlink(ctx, &old_key);
+  grn_obj_unlink(ctx, &old_encoded_key);
+  grn_obj_unlink(ctx, &new_key);
+  grn_obj_unlink(ctx, &new_encoded_key);
+
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)

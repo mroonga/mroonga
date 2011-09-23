@@ -391,6 +391,7 @@ private:
   int wrapper_update_row(const uchar *old_data, uchar *new_data);
   int wrapper_update_row_index(const uchar *old_data, uchar *new_data);
   int storage_update_row(const uchar *old_data, uchar *new_data);
+  int storage_update_row_index(const uchar *old_data, uchar *new_data);
   int wrapper_delete_row(const uchar *buf);
   int wrapper_delete_row_index(const uchar *buf);
   int storage_delete_row(const uchar *buf);
