@@ -1397,7 +1397,8 @@ int ha_mroonga::wrapper_create_index_table(grn_obj *grn_table,
                                            const char *grn_table_name,
                                            int i,
                                            KEY *key_info,
-                                           grn_obj **index_tables)
+                                           grn_obj **index_tables,
+                                           MRN_SHARE *tmp_share)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -1430,7 +1431,8 @@ int ha_mroonga::wrapper_create_index_table(grn_obj *grn_table,
   index_tables[i] = index_table;
 
   grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-  grn_obj *token_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
+  grn_obj *token_type = grn_ctx_get(ctx, tmp_share->key_parser[i],
+                                    tmp_share->key_parser_length[i]);
   grn_obj_set_info(ctx, index_table, info_type, token_type);
   grn_obj_unlink(ctx, token_type);
 
@@ -1495,7 +1497,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
     }
 
     error = wrapper_create_index_table(grn_table, grn_table_name, i, &key_info,
-                                       index_tables);
+                                       index_tables, tmp_share);
     if (error)
     {
       break;
@@ -1627,7 +1629,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
   }
 
-  error = storage_create_index(table, tbl_name, tbl_obj);
+  error = storage_create_index(table, tbl_name, tbl_obj, tmp_share);
   if (error) {
     grn_obj_remove(ctx, tbl_obj);
     tbl_obj = NULL;
@@ -1721,7 +1723,7 @@ int ha_mroonga::storage_create_validate_index(TABLE *table)
 }
 
 int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
-                                     grn_obj *grn_table)
+                                     grn_obj *grn_table, MRN_SHARE *tmp_share)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -1787,7 +1789,8 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
 
     if (key_alg == HA_KEY_ALG_FULLTEXT) {
       grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-      grn_obj *token_type = grn_ctx_at(ctx, GRN_DB_BIGRAM);
+      grn_obj *token_type = grn_ctx_get(ctx, tmp_share->key_parser[i],
+                                        tmp_share->key_parser_length[i]);
       grn_obj_set_info(ctx, index_table, info_type, token_type);
     }
 
@@ -6654,9 +6657,23 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   grn_obj *index_tables[num_of_keys + n_keys];
   char grn_table_name[MRN_MAX_PATH_SIZE];
   THD *thd = ha_thd();
+  MRN_SHARE *tmp_share;
+  char **key_parser;
+  uint *key_parser_length;
   MRN_DBUG_ENTER_METHOD();
   KEY *wrap_key_info = (KEY *) thd->alloc(sizeof(KEY) * num_of_keys);
   KEY *p_key_info = &table->key_info[table_share->primary_key], *tmp_key_info;
+  if (!(tmp_share = (MRN_SHARE *)
+    my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+      &tmp_share, sizeof(*tmp_share),
+      &key_parser, sizeof(char *) * (n_keys + num_of_keys),
+      &key_parser_length, sizeof(uint) * (n_keys + num_of_keys),
+      NullS))
+  ) {
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  }
+  tmp_share->key_parser = key_parser;
+  tmp_share->key_parser_length = key_parser_length;
   mrn_table_name_gen(share->table_name, grn_table_name);
   hnd_add_index = NULL;
   bitmap_clear_all(table->read_set);
@@ -6667,7 +6684,10 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       j++;
       continue;
     }
-
+    if ((res = mrn_add_index_param(tmp_share, &key_info[i], i + n_keys)))
+    {
+      break;
+    }
     index_tables[i + n_keys] = NULL;
     if ((res = wrapper_validate_key_info(&key_info[i])))
     {
@@ -6675,7 +6695,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
     }
     if ((res = wrapper_create_index_table(grn_table, grn_table_name,
                                           i + n_keys,
-                                          &key_info[i], index_tables)))
+                                          &key_info[i], index_tables,
+                                          tmp_share)))
     {
       break;
     }
