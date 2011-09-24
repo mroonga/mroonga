@@ -3942,11 +3942,11 @@ ha_rows ha_mroonga::storage_records_in_range_geo(uint key_nr,
   ha_rows row_count;
 
   if (!range_min) {
-    DBUG_PRINT("info", ("range min is missing for geometry search"));
+    DBUG_PRINT("info", ("range min is missing for geometry range search"));
     DBUG_RETURN(HA_POS_ERROR);
   }
   if (range_max) {
-    DBUG_PRINT("info", ("range max is specified for geometry search"));
+    DBUG_PRINT("info", ("range max is specified for geometry range search"));
     DBUG_RETURN(HA_POS_ERROR);
   }
   if (!(range_min->flag & HA_READ_MBR_CONTAIN)) {
