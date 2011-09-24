@@ -428,10 +428,10 @@ private:
   int storage_index_init(uint idx, bool sorted);
   int wrapper_index_end();
   int storage_index_end();
-  int wrapper_index_read_map(uchar * buf, const uchar * key,
+  int wrapper_index_read_map(uchar *buf, const uchar *key,
                              key_part_map keypart_map,
                              enum ha_rkey_function find_flag);
-  int storage_index_read_map(uchar * buf, const uchar * key,
+  int storage_index_read_map(uchar *buf, const uchar *key,
                              key_part_map keypart_map,
                              enum ha_rkey_function find_flag);
   int wrapper_index_read_last_map(uchar *buf, const uchar *key,
