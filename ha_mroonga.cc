@@ -1240,7 +1240,6 @@ ulonglong ha_mroonga::storage_table_flags() const
     HA_NULL_IN_KEY |
     HA_CAN_INDEX_BLOBS |
     HA_STATS_RECORDS_IS_EXACT |
-    HA_NO_PREFIX_CHAR_KEYS |
     HA_CAN_FULLTEXT |
     HA_CAN_INSERT_DELAYED |
     HA_BINLOG_FLAGS |
