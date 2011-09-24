@@ -129,8 +129,8 @@ private:
 
   grn_obj *result;
   grn_obj *result0;
-  grn_table_cursor *cur;
-  grn_table_cursor *cur0;
+  grn_table_cursor *cursor;
+  grn_table_cursor *index_table_cursor;
   grn_id record_id;
   grn_obj *_score;
 
