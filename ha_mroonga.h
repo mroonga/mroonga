@@ -324,6 +324,8 @@ protected:
 
 private:
   void clear_cursor();
+  int storage_get_next_record(uchar *buf);
+
 #ifdef MRN_HANDLER_HAVE_HA_CLOSE
   int close();
 #endif
