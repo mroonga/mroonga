@@ -3955,39 +3955,8 @@ ha_rows ha_mroonga::storage_records_in_range_geo(uint key_nr,
     DBUG_RETURN(row_count);
   }
 
-  double locations[4];
-  for (int i = 0; i < 4; i++) {
-    uchar reversed_value[8];
-    for (int j = 0; j < 8; j++) {
-      reversed_value[j] = (range_min->key + (8 * i))[7 - j];
-    }
-    mi_float8get(locations[i], reversed_value);
-  }
-  double top_left_longitude = locations[0];
-  double bottom_right_longitude = locations[1];
-  double bottom_right_latitude = locations[2];
-  double top_left_latitude = locations[3];
-  grn_obj top_left_point, bottom_right_point;
-  GRN_WGS84_GEO_POINT_INIT(&top_left_point, 0);
-  GRN_WGS84_GEO_POINT_INIT(&bottom_right_point, 0);
-  GRN_GEO_POINT_SET(ctx, &top_left_point,
-                    GRN_GEO_DEGREE2MSEC(top_left_latitude),
-                    GRN_GEO_DEGREE2MSEC(top_left_longitude));
-  GRN_GEO_POINT_SET(ctx, &bottom_right_point,
-                    GRN_GEO_DEGREE2MSEC(bottom_right_latitude),
-                    GRN_GEO_DEGREE2MSEC(bottom_right_longitude));
-  grn_obj *result;
-  result = grn_table_create(ctx, NULL, 0, NULL,
-                            GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-                            grn_table, NULL);
-  // TODO: check result isn't NULL.
-  grn_rc rc;
-  rc = grn_geo_select_in_rectangle(ctx, grn_index_columns[key_nr],
-                                   &top_left_point, &bottom_right_point,
-                                   result, GRN_OP_OR);
-  // TODO: check rc;
-  grn_obj_unlink(ctx, &top_left_point);
-  grn_obj_unlink(ctx, &bottom_right_point);
+  grn_obj *result = storage_geo_select_in_rectangle(grn_index_columns[key_nr],
+                                                    range_min->key);
   row_count = grn_table_size(ctx, result);
   grn_obj_unlink(ctx, result);
   DBUG_RETURN(row_count);
@@ -5202,6 +5171,46 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
   }
   table->status = 0;
   DBUG_RETURN(0);
+}
+
+grn_obj *ha_mroonga::storage_geo_select_in_rectangle(grn_obj *index_column,
+                                                     const uchar *rectangle)
+{
+  double locations[4];
+  for (int i = 0; i < 4; i++) {
+    uchar reversed_value[8];
+    for (int j = 0; j < 8; j++) {
+      reversed_value[j] = (rectangle + (8 * i))[7 - j];
+    }
+    mi_float8get(locations[i], reversed_value);
+  }
+  double top_left_longitude = locations[0];
+  double bottom_right_longitude = locations[1];
+  double bottom_right_latitude = locations[2];
+  double top_left_latitude = locations[3];
+  grn_obj top_left_point, bottom_right_point;
+  GRN_WGS84_GEO_POINT_INIT(&top_left_point, 0);
+  GRN_WGS84_GEO_POINT_INIT(&bottom_right_point, 0);
+  GRN_GEO_POINT_SET(ctx, &top_left_point,
+                    GRN_GEO_DEGREE2MSEC(top_left_latitude),
+                    GRN_GEO_DEGREE2MSEC(top_left_longitude));
+  GRN_GEO_POINT_SET(ctx, &bottom_right_point,
+                    GRN_GEO_DEGREE2MSEC(bottom_right_latitude),
+                    GRN_GEO_DEGREE2MSEC(bottom_right_longitude));
+  grn_obj *result;
+  result = grn_table_create(ctx, NULL, 0, NULL,
+                            GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                            grn_table, NULL);
+  // TODO: check result isn't NULL.
+  grn_rc rc;
+  rc = grn_geo_select_in_rectangle(ctx, index_column,
+                                   &top_left_point, &bottom_right_point,
+                                   result, GRN_OP_OR);
+  // TODO: check rc;
+  grn_obj_unlink(ctx, &top_left_point);
+  grn_obj_unlink(ctx, &bottom_right_point);
+
+  return result;
 }
 
 void ha_mroonga::check_count_skip(key_part_map start_key_part_map,

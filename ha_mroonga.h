@@ -326,6 +326,8 @@ private:
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
   void clear_cursor();
   int storage_get_next_record(uchar *buf);
+  grn_obj *storage_geo_select_in_rectangle(grn_obj *index_column,
+                                           const uchar *rectangle);
 
 #ifdef MRN_HANDLER_HAVE_HA_CLOSE
   int close();
