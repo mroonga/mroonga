@@ -323,6 +323,7 @@ protected:
 #endif
 
 private:
+  void clear_cursor();
 #ifdef MRN_HANDLER_HAVE_HA_CLOSE
   int close();
 #endif

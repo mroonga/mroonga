@@ -2731,14 +2731,7 @@ int ha_mroonga::wrapper_rnd_end()
 int ha_mroonga::storage_rnd_end()
 {
   MRN_DBUG_ENTER_METHOD();
-  if (cursor) {
-    grn_table_cursor_close(ctx, cursor);
-    cursor = NULL;
-  }
-  if (index_table_cursor) {
-    grn_table_cursor_close(ctx, index_table_cursor);
-    index_table_cursor = NULL;
-  }
+  clear_cursor();
   DBUG_RETURN(0);
 }
 
@@ -4096,14 +4089,7 @@ int ha_mroonga::wrapper_index_end()
 int ha_mroonga::storage_index_end()
 {
   MRN_DBUG_ENTER_METHOD();
-  if (cursor) {
-    grn_table_cursor_close(ctx, cursor);
-    cursor = NULL;
-  }
-  if (index_table_cursor) {
-    grn_table_cursor_close(ctx, index_table_cursor);
-    index_table_cursor = NULL;
-  }
+  clear_cursor();
   DBUG_RETURN(0);
 }
 
@@ -4149,14 +4135,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   uint size_min = 0, size_max = 0;
   const void *val_min = NULL, *val_max = NULL;
 
-  if (cursor) {
-    grn_table_cursor_close(ctx, cursor);
-    cursor = NULL;
-  }
-  if (index_table_cursor) {
-    grn_table_cursor_close(ctx, index_table_cursor);
-    index_table_cursor = NULL;
-  }
+  clear_cursor();
 
   bool is_multiple_column_index = key_info.key_parts > 1;
   if (is_multiple_column_index) {
@@ -4298,14 +4277,7 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
   uint size_min = 0, size_max = 0;
   const void *val_min = NULL, *val_max = NULL;
 
-  if (cursor) {
-    grn_table_cursor_close(ctx, cursor);
-    cursor = NULL;
-  }
-  if (index_table_cursor) {
-    grn_table_cursor_close(ctx, index_table_cursor);
-    index_table_cursor = NULL;
-  }
+  clear_cursor();
 
   bool is_multiple_column_index = key_info.key_parts > 1;
   if (is_multiple_column_index) {
@@ -4505,14 +4477,7 @@ int ha_mroonga::wrapper_index_first(uchar *buf)
 int ha_mroonga::storage_index_first(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (cursor) {
-    grn_table_cursor_close(ctx, cursor);
-    cursor = NULL;
-  }
-  if (index_table_cursor) {
-    grn_table_cursor_close(ctx, index_table_cursor);
-    index_table_cursor = NULL;
-  }
+  clear_cursor();
   bool is_multiple_column_index = table->key_info[active_index].key_parts > 1;
   uint pkey_nr = table->s->primary_key;
   if (is_multiple_column_index) { // multiple column index
@@ -4591,14 +4556,7 @@ int ha_mroonga::wrapper_index_last(uchar *buf)
 int ha_mroonga::storage_index_last(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (cursor) {
-    grn_table_cursor_close(ctx, cursor);
-    cursor = NULL;
-  }
-  if (index_table_cursor) {
-    grn_table_cursor_close(ctx, index_table_cursor);
-    index_table_cursor = NULL;
-  }
+  clear_cursor();
   int flags = GRN_CURSOR_DESCENDING;
   uint pkey_nr = table->s->primary_key;
   if (active_index == pkey_nr) { // primary index
@@ -4739,14 +4697,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
   const void *val_min = NULL, *val_max = NULL;
   KEY key_info = table->s->key_info[active_index];
 
-  if (cursor) {
-    grn_table_cursor_close(ctx, cursor);
-    cursor = NULL;
-  }
-  if (index_table_cursor) {
-    grn_table_cursor_close(ctx, index_table_cursor);
-    index_table_cursor = NULL;
-  }
+  clear_cursor();
 
   bool is_multiple_column_index = key_info.key_parts > 1;
   if (is_multiple_column_index) {
@@ -5350,6 +5301,20 @@ bool ha_mroonga::get_error_message(int error, String *buf)
   DBUG_RETURN(success);
 }
 
+void ha_mroonga::clear_cursor()
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (cursor) {
+    grn_table_cursor_close(ctx, cursor);
+    cursor = NULL;
+  }
+  if (index_table_cursor) {
+    grn_table_cursor_close(ctx, index_table_cursor);
+    index_table_cursor = NULL;
+  }
+  DBUG_VOID_RETURN;
+}
+
 void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
                                   key_part_map end_key_part_map, bool fulltext)
 {
@@ -5646,11 +5611,7 @@ int ha_mroonga::reset()
   int error;
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga this=%p", this));
-  if (cursor)
-  {
-    grn_table_cursor_close(ctx, cursor);
-    cursor = NULL;
-  }
+  clear_cursor();
   if (share->wrapper_mode)
     error = wrapper_reset();
   else
