@@ -699,6 +699,7 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
 static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
                            const uchar *key, uchar *buf, uint *size)
 {
+  int error = 0;
   char *ptr = (char*) key;
 
   if (field->null_bit != 0x0) {
@@ -778,9 +779,10 @@ static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
       break;
     }
   default:
-    return -1;
+    error = HA_ERR_UNSUPPORTED;
+    break;
   }
-  return 0;
+  return error;
 }
 
 static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
