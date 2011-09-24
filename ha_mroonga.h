@@ -132,7 +132,7 @@ private:
   grn_table_cursor *cursor;
   grn_table_cursor *index_table_cursor;
   grn_id record_id;
-  grn_obj *_score;
+  grn_obj *score_column;
 
   st_mrn_ft_info mrn_ft_info;
   grn_obj *matched_record_keys;
@@ -144,8 +144,6 @@ private:
   uint dup_key;
 
   longlong limit;
-  grn_table_sort_key *sort_keys;
-  int n_sort_keys;
 
   bool count_skip;
   bool fast_order_limit;
@@ -324,7 +322,7 @@ protected:
 
 private:
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
-  void clear_cursor();
+  void clear_search_result();
   int storage_get_next_record(uchar *buf);
   grn_obj *storage_geo_select_in_rectangle(grn_obj *index_column,
                                            const uchar *rectangle);
@@ -334,7 +332,7 @@ private:
 #endif
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
-  void check_fast_order_limit();
+  void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys);
   void store_fields_from_primary_table(uchar *buf, grn_id record_id);
   void set_pk_bitmap();
   int wrapper_create(const char *name, TABLE *table,
