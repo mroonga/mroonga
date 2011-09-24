@@ -3894,13 +3894,18 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
       DBUG_RETURN((ha_rows)1) ;
     }
 
-    if (range_min) {
-      mrn_set_key_buf(ctx, field, range_min->key, key_min[key_nr], &size_min);
-      val_min = key_min[key_nr];
-    }
-    if (range_max) {
-      mrn_set_key_buf(ctx, field, range_max->key, key_max[key_nr], &size_max);
-      val_max = key_max[key_nr];
+    if (field->type() == MYSQL_TYPE_GEOMETRY) {
+      row_count = storage_records_in_range_geo(key_nr, range_min, range_max);
+      DBUG_RETURN(row_count);
+    } else {
+      if (range_min) {
+        mrn_set_key_buf(ctx, field, range_min->key, key_min[key_nr], &size_min);
+        val_min = key_min[key_nr];
+      }
+      if (range_max) {
+        mrn_set_key_buf(ctx, field, range_max->key, key_max[key_nr], &size_max);
+        val_max = key_max[key_nr];
+      }
     }
   }
 
@@ -3948,6 +3953,79 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     grn_table_cursor_close(ctx, cursor);
     row_count = (int)(round((double)table_size * ((double)row_count / (double)cardinality)));
   }
+  DBUG_RETURN(row_count);
+}
+
+ha_rows ha_mroonga::storage_records_in_range_geo(uint key_nr,
+                                                 key_range *range_min,
+                                                 key_range *range_max)
+{
+  MRN_DBUG_ENTER_METHOD();
+  ha_rows row_count;
+
+  if (!range_min) {
+    DBUG_PRINT("info", ("range min is missing for geometry search"));
+    DBUG_RETURN(HA_POS_ERROR);
+  }
+  if (range_max) {
+    DBUG_PRINT("info", ("range max is specified for geometry search"));
+    DBUG_RETURN(HA_POS_ERROR);
+  }
+  if (!(range_min->flag & HA_READ_MBR_CONTAIN)) {
+    char search_name[MRN_BUFFER_SIZE];
+    if (range_min->flag & HA_READ_MBR_INTERSECT) {
+      strcpy(search_name, "intersect");
+    } else if (range_min->flag & HA_READ_MBR_WITHIN) {
+      strcpy(search_name, "within");
+    } else if (range_min->flag & HA_READ_MBR_DISJOINT) {
+      strcpy(search_name, "disjoint");
+    } else if (range_min->flag & HA_READ_MBR_EQUAL) {
+      strcpy(search_name, "equal");
+    } else {
+      sprintf(search_name, "unknown: %d", range_min->flag);
+    }
+    DBUG_PRINT("info",
+               ("spatial index search "
+                "except MBRContains aren't supported: <%s>"));
+    row_count = grn_table_size(ctx, grn_table);
+    DBUG_RETURN(row_count);
+  }
+
+  double locations[4];
+  for (int i = 0; i < 4; i++) {
+    uchar reversed_value[8];
+    for (int j = 0; j < 8; j++) {
+      reversed_value[j] = (range_min->key + (8 * i))[7 - j];
+    }
+    mi_float8get(locations[i], reversed_value);
+  }
+  double top_left_longitude = locations[0];
+  double bottom_right_longitude = locations[1];
+  double bottom_right_latitude = locations[2];
+  double top_left_latitude = locations[3];
+  grn_obj top_left_point, bottom_right_point;
+  GRN_WGS84_GEO_POINT_INIT(&top_left_point, 0);
+  GRN_WGS84_GEO_POINT_INIT(&bottom_right_point, 0);
+  GRN_GEO_POINT_SET(ctx, &top_left_point,
+                    GRN_GEO_DEGREE2MSEC(top_left_latitude),
+                    GRN_GEO_DEGREE2MSEC(top_left_longitude));
+  GRN_GEO_POINT_SET(ctx, &bottom_right_point,
+                    GRN_GEO_DEGREE2MSEC(bottom_right_latitude),
+                    GRN_GEO_DEGREE2MSEC(bottom_right_longitude));
+  grn_obj *result;
+  result = grn_table_create(ctx, NULL, 0, NULL,
+                            GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                            grn_table, NULL);
+  // TODO: check result isn't NULL.
+  grn_rc rc;
+  rc = grn_geo_select_in_rectangle(ctx, grn_index_columns[key_nr],
+                                   &top_left_point, &bottom_right_point,
+                                   result, GRN_OP_OR);
+  // TODO: check rc;
+  grn_obj_unlink(ctx, &top_left_point);
+  grn_obj_unlink(ctx, &bottom_right_point);
+  row_count = grn_table_size(ctx, result);
+  grn_obj_unlink(ctx, result);
   DBUG_RETURN(row_count);
 }
 

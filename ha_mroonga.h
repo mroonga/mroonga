@@ -418,6 +418,8 @@ private:
                                    key_range *range_max);
   ha_rows storage_records_in_range(uint key_nr, key_range *range_min,
                                    key_range *range_max);
+  ha_rows storage_records_in_range_geo(uint key_nr, key_range *range_min,
+                                       key_range *range_max);
   int wrapper_index_init(uint idx, bool sorted);
   int storage_index_init(uint idx, bool sorted);
   int wrapper_index_end();
