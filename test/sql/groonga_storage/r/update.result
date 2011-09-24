@@ -73,14 +73,14 @@ c1	_id	_score
 set sql_mode="";
 update t1 set _id = 10 where c1 = 1;
 Warnings:
-Warning	1265	data truncated for  _id column
+Warning	1265	data truncated for _id column
 update t1 set _score = 20 where c1 = 2;
 Warnings:
-Warning	1265	data truncated for  _score column
+Warning	1265	data truncated for _score column
 update t1 set _id = 10, _score = 20 where c1 = 3;
 Warnings:
-Warning	1265	data truncated for  _id column
-Warning	1265	data truncated for  _score column
+Warning	1265	data truncated for _id column
+Warning	1265	data truncated for _score column
 select * from t1;
 c1	_id	_score
 1	1	0
