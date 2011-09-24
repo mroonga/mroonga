@@ -1173,6 +1173,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   index_table_cursor = NULL;
   result = NULL;
   result0 = NULL;
+  result_geo = NULL;
   score_column = NULL;
   share = NULL;
   is_clone = FALSE;
@@ -4176,10 +4177,10 @@ int ha_mroonga::storage_index_read_map_geo(uchar *buf, const uchar *key,
   int error = 0;
   int flags = 0;
   if (find_flag & HA_READ_MBR_CONTAIN) {
-    result = storage_geo_select_in_rectangle(grn_index_columns[active_index],
-                                             key);
+    result_geo = storage_geo_select_in_rectangle(grn_index_columns[active_index],
+                                                 key);
     // TODO: check result
-    cursor = grn_table_cursor_open(ctx, result, NULL, 0, NULL, 0,
+    cursor = grn_table_cursor_open(ctx, result_geo, NULL, 0, NULL, 0,
                                    0, -1, flags);
   } else {
     push_warning_unsupported_spatial_index_search(find_flag);
@@ -5184,6 +5185,10 @@ void ha_mroonga::clear_search_result()
     grn_obj_unlink(ctx, result);
     result = NULL;
   }
+  if (result_geo) {
+    grn_obj_unlink(ctx, result_geo);
+    result_geo = NULL;
+  }
   DBUG_VOID_RETURN;
 }
 
@@ -5197,9 +5202,9 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
     clear_search_result();
     DBUG_RETURN(error);
   }
-  if (result && record_id) {
+  if (result_geo && record_id) {
     grn_id real_record_id;
-    if (grn_table_get_key(ctx, result, record_id,
+    if (grn_table_get_key(ctx, result_geo, record_id,
                           &real_record_id, sizeof(real_record_id))) {
       record_id = real_record_id;
     } else {

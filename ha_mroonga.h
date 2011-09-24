@@ -129,6 +129,7 @@ private:
 
   grn_obj *result;
   grn_obj *result0;
+  grn_obj *result_geo;
   grn_table_cursor *cursor;
   grn_table_cursor *index_table_cursor;
   grn_id record_id;
