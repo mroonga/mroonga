@@ -57,6 +57,8 @@
 #define MRN_DEFAULT_LEN (sizeof(MRN_DEFAULT_STR) - 1)
 #define MRN_GROONGA_STR "GROONGA"
 #define MRN_GROONGA_LEN (sizeof(MRN_GROONGA_STR) - 1)
+#define MRN_DEFAULT_KEY_PARSER_STR "TokenBigram"
+#define MRN_DEFAULT_KEY_PARSER_LEN (sizeof(MRN_DEFAULT_KEY_PARSER_STR) - 1)
 
 extern HASH mrn_open_tables;
 extern pthread_mutex_t mrn_open_tables_mutex;
@@ -271,6 +273,28 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
     break; \
   }
 
+#define MRN_PARAM_STR_LIST(title_name, param_name, param_pos) \
+  if (!strncasecmp(tmp_ptr, title_name, title_length)) \
+  { \
+    DBUG_PRINT("info", ("mroonga "title_name" start")); \
+    if (!share->param_name[param_pos]) \
+    { \
+      if ((share->param_name[param_pos] = mrn_get_string_between_quote( \
+        start_ptr, TRUE))) \
+        share->MRN_PARAM_STR_LEN(param_name)[param_pos] = \
+          strlen(share->param_name[param_pos]); \
+      else { \
+        error = ER_MRN_INVALID_TABLE_PARAM_NUM; \
+        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR, \
+          MYF(0), tmp_ptr); \
+        goto error; \
+      } \
+      DBUG_PRINT("info", ("mroonga "title_name"[%d]=%s", param_pos, \
+        share->param_name[param_pos])); \
+    } \
+    break; \
+  }
+
 int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 {
   int i, error;
@@ -448,20 +472,149 @@ error_alloc_param_string:
   DBUG_RETURN(error);
 }
 
+int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
+{
+  int error;
+  int title_length;
+  char *param_string = NULL;
+#if MYSQL_VERSION_ID >= 50500
+  char *sprit_ptr[2];
+  char *tmp_ptr, *tmp_ptr2, *start_ptr;
+#endif
+  DBUG_ENTER("mrn_add_index_param");
+
+#if MYSQL_VERSION_ID >= 50500
+  if (key_info->comment.length == 0)
+  {
+    if (
+      !(share->key_parser[i] = mrn_create_string(
+        MRN_DEFAULT_KEY_PARSER_STR,
+        MRN_DEFAULT_KEY_PARSER_LEN))
+    ) {
+      error = HA_ERR_OUT_OF_MEM;
+      goto error;
+    }
+    DBUG_RETURN(0);
+  }
+  DBUG_PRINT("info", ("mroonga create comment string"));
+  if (
+    !(param_string = mrn_create_string(
+      key_info->comment.str,
+      key_info->comment.length))
+  ) {
+    error = HA_ERR_OUT_OF_MEM;
+    goto error_alloc_param_string;
+  }
+  DBUG_PRINT("info", ("mroonga comment string=%s", param_string));
+
+  sprit_ptr[0] = param_string;
+  while (sprit_ptr[0])
+  {
+    if ((sprit_ptr[1] = strchr(sprit_ptr[0], ',')))
+    {
+      *sprit_ptr[1] = '\0';
+      sprit_ptr[1]++;
+    }
+    tmp_ptr = sprit_ptr[0];
+    sprit_ptr[0] = sprit_ptr[1];
+    while (*tmp_ptr == ' ' || *tmp_ptr == '\r' ||
+      *tmp_ptr == '\n' || *tmp_ptr == '\t')
+      tmp_ptr++;
+
+    if (*tmp_ptr == '\0')
+      continue;
+
+    title_length = 0;
+    start_ptr = tmp_ptr;
+    while (*start_ptr != ' ' && *start_ptr != '\'' &&
+      *start_ptr != '"' && *start_ptr != '\0' &&
+      *start_ptr != '\r' && *start_ptr != '\n' &&
+      *start_ptr != '\t')
+    {
+      title_length++;
+      start_ptr++;
+    }
+
+    switch (title_length)
+    {
+      case 0:
+        continue;
+      case 6:
+        MRN_PARAM_STR_LIST("parser", key_parser, i);
+        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
+        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
+          MYF(0), tmp_ptr);
+        goto error;
+      default:
+        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
+        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
+          MYF(0), tmp_ptr);
+        goto error;
+    }
+  }
+#endif
+  if (
+    !share->key_parser[i] &&
+    !(share->key_parser[i] = mrn_create_string(
+      MRN_DEFAULT_KEY_PARSER_STR,
+      MRN_DEFAULT_KEY_PARSER_LEN))
+  ) {
+    error = HA_ERR_OUT_OF_MEM;
+    goto error;
+  }
+
+  if (param_string)
+    my_free(param_string, MYF(0));
+  DBUG_RETURN(0);
+
+error:
+  if (param_string)
+    my_free(param_string, MYF(0));
+error_alloc_param_string:
+  DBUG_RETURN(error);
+}
+
+int mrn_parse_index_param(MRN_SHARE *share, TABLE *table)
+{
+  int i, error;
+  DBUG_ENTER("mrn_parse_index_param");
+  for (i = 0; i < table->s->keys; i++)
+  {
+    KEY *key_info = &table->s->key_info[i];
+
+    if (!(key_info->flags & HA_FULLTEXT)) {
+      continue;
+    }
+
+    if ((error = mrn_add_index_param(share, key_info, i)))
+      goto error;
+  }
+  DBUG_RETURN(0);
+
+error:
+  DBUG_RETURN(error);
+}
+
 int mrn_free_share_alloc(
   MRN_SHARE *share
 ) {
+  uint i;
   DBUG_ENTER("mrn_free_share_alloc");
   if (share->engine)
     my_free(share->engine, MYF(0));
+  for (i = 0; i < share->table_share->keys; i++)
+  {
+    if (share->key_parser[i])
+      my_free(share->key_parser[i], MYF(0));
+  }
   DBUG_RETURN(0);
 }
 
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
   MRN_SHARE *share;
-  char *tmp_name;
-  uint length, *wrap_key_nr, i, j;
+  char *tmp_name, **key_parser;
+  uint length, *wrap_key_nr, *key_parser_length, i, j;
   KEY *wrap_key_info;
   TABLE_SHARE *wrap_table_share;
   DBUG_ENTER("mrn_get_share");
@@ -474,6 +627,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &share, sizeof(*share),
         &tmp_name, length + 1,
+        &key_parser, sizeof(char *) * table->s->keys,
+        &key_parser_length, sizeof(uint) * table->s->keys,
         &wrap_key_nr, sizeof(*wrap_key_nr) * table->s->keys,
         &wrap_key_info, sizeof(*wrap_key_info) * table->s->keys,
         &wrap_table_share, sizeof(*wrap_table_share),
@@ -485,10 +640,15 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     share->use_count = 0;
     share->table_name_length = length;
     share->table_name = tmp_name;
+    share->key_parser = key_parser;
+    share->key_parser_length = key_parser_length;
     strmov(share->table_name, table_name);
     share->table_share = table->s;
 
-    if ((*error = mrn_parse_table_param(share, table)))
+    if (
+      (*error = mrn_parse_table_param(share, table)) ||
+      (*error = mrn_parse_index_param(share, table))
+    )
       goto error_parse_table_param;
 
     if (share->wrapper_mode)

@@ -38,6 +38,8 @@ typedef struct st_mroonga_share
   int                engine_length;
   plugin_ref         plugin;
   handlerton         *hton;
+  char               **key_parser;
+  uint               *key_parser_length;
   uint               *wrap_key_nr;
   uint               wrap_keys;
   uint               base_keys;
@@ -78,7 +80,10 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
                             partition_element **sub_elem);
 #endif
 int mrn_parse_table_param(MRN_SHARE *share, TABLE *table);
+int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i);
+int mrn_parse_index_param(MRN_SHARE *share, TABLE *table);
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error);
+int mrn_free_share_alloc(MRN_SHARE *share);
 int mrn_free_share(MRN_SHARE *share);
 TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error);
 void mrn_free_table_share(TABLE_SHARE *share);
