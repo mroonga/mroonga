@@ -4478,24 +4478,23 @@ int ha_mroonga::storage_index_first(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   clear_cursor();
-  bool is_multiple_column_index = table->key_info[active_index].key_parts > 1;
+  int flags = GRN_CURSOR_ASCENDING;
   uint pkey_nr = table->s->primary_key;
-  if (is_multiple_column_index) { // multiple column index
-    DBUG_PRINT("info", ("mroonga use multiple column key"));
-    cursor = grn_table_cursor_open(ctx, grn_index_tables[active_index],
-                                   NULL, 0, NULL, 0,
-                                   0, -1, 0);
-  } else if (active_index == pkey_nr) { // primary index
+  if (active_index == pkey_nr) {
     DBUG_PRINT("info", ("mroonga use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
-                                   0, -1, 0);
-  } else { // normal index
-    DBUG_PRINT("info", ("mroonga use key%u", active_index));
+                                   0, -1, flags);
+  } else {
+    if (table->key_info[active_index].key_parts > 1) {
+      DBUG_PRINT("info", ("mroonga use multiple column key%u", active_index));
+    } else {
+      DBUG_PRINT("info", ("mroonga use key%u", active_index));
+    }
     index_table_cursor = grn_table_cursor_open(ctx,
                                                grn_index_tables[active_index],
                                                NULL, 0,
                                                NULL, 0,
-                                               0, -1, 0);
+                                               0, -1, flags);
     cursor = grn_index_cursor_open(ctx, index_table_cursor,
                                    grn_index_columns[active_index],
                                    0, GRN_ID_MAX, 0);
@@ -4559,12 +4558,16 @@ int ha_mroonga::storage_index_last(uchar *buf)
   clear_cursor();
   int flags = GRN_CURSOR_DESCENDING;
   uint pkey_nr = table->s->primary_key;
-  if (active_index == pkey_nr) { // primary index
+  if (active_index == pkey_nr) {
     DBUG_PRINT("info", ("mroonga use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
                                    0, -1, flags);
-  } else { // normal index
-    DBUG_PRINT("info", ("mroonga use key%u", active_index));
+  } else {
+    if (table->key_info[active_index].key_parts > 1) {
+      DBUG_PRINT("info", ("mroonga use multiple column key%u", active_index));
+    } else {
+      DBUG_PRINT("info", ("mroonga use key%u", active_index));
+    }
     index_table_cursor = grn_table_cursor_open(ctx,
                                                grn_index_tables[active_index],
                                                NULL, 0,
