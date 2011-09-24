@@ -4913,7 +4913,7 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
   info->ctx = ctx;
   info->table = grn_table;
   info->result = grn_table_create(ctx, NULL, 0, NULL,
-                                  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                   grn_table, 0);
   info->score_column = grn_obj_column(info->ctx, info->result,
                                       MRN_COLUMN_NAME_SCORE,
@@ -4987,7 +4987,7 @@ void ha_mroonga::merge_matched_record_keys(grn_obj *matched_result)
 
   if (!matched_record_keys) {
     matched_record_keys = grn_table_create(ctx, NULL, 0, NULL,
-                                           GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                           GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                            grn_table, 0);
     // OR for empty table
     operation = GRN_OP_OR;
@@ -5026,7 +5026,7 @@ FT_INFO *ha_mroonga::storage_ft_init_ext(uint flags, uint key_nr, String *key)
   record_id = GRN_ID_NIL;
 
   result = grn_table_create(ctx, NULL, 0, NULL,
-                            GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                            GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                             grn_table, 0);
 
   if (flags & FT_BOOL) {
