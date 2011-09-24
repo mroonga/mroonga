@@ -4089,6 +4089,12 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
     Field *field = key_part.field;
+
+    if (field->type() == MYSQL_TYPE_GEOMETRY) {
+      error = storage_index_read_map_geo(buf, key, field, find_flag);
+      DBUG_RETURN(error);
+    }
+
     if (find_flag == HA_READ_KEY_EXACT) {
       const char *column_name = field->field_name;
       int column_name_size = strlen(column_name);
@@ -4155,6 +4161,32 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
     cursor = grn_index_cursor_open(ctx, index_table_cursor,
                                    grn_index_columns[key_nr],
                                    0, GRN_ID_MAX, 0);
+  }
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
+  error = storage_get_next_record(buf);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_index_read_map_geo(uchar *buf, const uchar *key,
+                                           Field *field,
+                                           enum ha_rkey_function find_flag)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  int flags = 0;
+  if (find_flag & HA_READ_MBR_CONTAIN) {
+    result = storage_geo_select_in_rectangle(grn_index_columns[active_index],
+                                             key);
+    // TODO: check result
+    cursor = grn_table_cursor_open(ctx, result, NULL, 0, NULL, 0,
+                                   0, -1, flags);
+  } else {
+    push_warning_unsupported_spatial_index_search(find_flag);
+    cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
+                                   0, -1, flags);
   }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -5160,6 +5192,16 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
     my_message(error, ctx->errbuf, MYF(0));
     clear_cursor();
     DBUG_RETURN(error);
+  }
+  if (result && record_id) {
+    grn_id real_record_id;
+    if (grn_table_get_key(ctx, result, record_id,
+                          &real_record_id, sizeof(real_record_id))) {
+      record_id = real_record_id;
+    } else {
+      // TODO: handle not found case.
+      record_id = GRN_ID_NIL;
+    }
   }
   if (record_id == GRN_ID_NIL) {
     clear_cursor();
