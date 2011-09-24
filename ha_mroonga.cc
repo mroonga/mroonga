@@ -3950,21 +3950,7 @@ ha_rows ha_mroonga::storage_records_in_range_geo(uint key_nr,
     DBUG_RETURN(HA_POS_ERROR);
   }
   if (!(range_min->flag & HA_READ_MBR_CONTAIN)) {
-    char search_name[MRN_BUFFER_SIZE];
-    if (range_min->flag & HA_READ_MBR_INTERSECT) {
-      strcpy(search_name, "intersect");
-    } else if (range_min->flag & HA_READ_MBR_WITHIN) {
-      strcpy(search_name, "within");
-    } else if (range_min->flag & HA_READ_MBR_DISJOINT) {
-      strcpy(search_name, "disjoint");
-    } else if (range_min->flag & HA_READ_MBR_EQUAL) {
-      strcpy(search_name, "equal");
-    } else {
-      sprintf(search_name, "unknown: %d", range_min->flag);
-    }
-    DBUG_PRINT("info",
-               ("spatial index search "
-                "except MBRContains aren't supported: <%s>"));
+    push_warning_unsupported_spatial_index_search(range_min->flag);
     row_count = grn_table_size(ctx, grn_table);
     DBUG_RETURN(row_count);
   }
@@ -5158,6 +5144,28 @@ bool ha_mroonga::get_error_message(int error, String *buf)
     success = storage_get_error_message(error, buf);
   }
   DBUG_RETURN(success);
+}
+
+void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag)
+{
+  char search_name[MRN_BUFFER_SIZE];
+  if (flag == HA_READ_MBR_INTERSECT) {
+    strcpy(search_name, "intersect");
+  } else if (flag == HA_READ_MBR_WITHIN) {
+    strcpy(search_name, "within");
+  } else if (flag & HA_READ_MBR_DISJOINT) {
+    strcpy(search_name, "disjoint");
+  } else if (flag & HA_READ_MBR_EQUAL) {
+    strcpy(search_name, "equal");
+  } else {
+    sprintf(search_name, "unknown: %d", flag);
+  }
+  push_warning_printf(ha_thd(),
+                      MYSQL_ERROR::WARN_LEVEL_WARN,
+                      ER_UNSUPPORTED_EXTENSION,
+                      "spatial index search "
+                      "except MBRContains aren't supported: <%s>",
+                      search_name);
 }
 
 void ha_mroonga::clear_cursor()

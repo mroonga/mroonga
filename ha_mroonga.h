@@ -323,6 +323,7 @@ protected:
 #endif
 
 private:
+  void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
   void clear_cursor();
   int storage_get_next_record(uchar *buf);
 
