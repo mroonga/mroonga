@@ -12,7 +12,7 @@ diaries	CREATE TABLE `diaries` (
   `body` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `body_index` (`body`) COMMENT 'parser "TokenBigramSplitSymbolAlphaDigit"'
-) ENGINE=groonga COMMENT = 'engine "innodb"' DEFAULT CHARSET=utf8
+) ENGINE=groonga DEFAULT CHARSET=utf8 COMMENT='engine "innodb"'
 insert into diaries (body) values ("will start groonga!");
 insert into diaries (body) values ("starting groonga...");
 insert into diaries (body) values ("started groonga.");
