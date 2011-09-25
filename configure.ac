@@ -196,6 +196,15 @@ AC_ARG_WITH(rsync-path,
             [RSYNC_PATH=""])
 AC_SUBST(RSYNC_PATH)
 
+# document
+AC_MSG_CHECKING([whether enable document])
+AC_ARG_ENABLE(document,
+  [AS_HELP_STRING([--enable-document],
+    [enable document generation by Sphinx. [default=auto]])],
+  [enable_document="$enableval"],
+  [enable_document="auto"])
+AC_MSG_RESULT($enable_document)
+
 # check sphinx-build for documentation
 ac_sphinx_available="no"
 sphinx_required_version="1.0.1"
@@ -243,9 +252,17 @@ if test "$ac_sphinx_available" = "yes"; then
   fi
 fi
 AC_SUBST(SPHINX_BUILD)
+
+if test "$enable_document" = "auto"; then
+  if test "$ac_sphinx_available" = "yes" -o \
+          -f "$srcdir/doc/ja/html-build-stamp"; then
+    enable_document="yes"
+  else
+    enable_document="no"
+  fi
+fi
 AM_CONDITIONAL([ENABLE_DOCUMENT],
-               [test "$ac_sphinx_available" = "yes" -o \
-                     -f "$srcdir/doc/ja/html-build-stamp"])
+               [test "$enable_document" = "yes"])
 AC_MSG_CHECKING([for sphinx availablity])
 AC_MSG_RESULT($ac_sphinx_available (sphinx-build=$SPHINX_BUILD version=$sphinx_build_version required=$sphinx_required_version))
 
