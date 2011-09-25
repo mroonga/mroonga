@@ -167,6 +167,19 @@ AC_SUBST(plugindir)
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
+AC_ARG_WITH(default_tokenizer,
+    [AC_HELP_STRING([--with-default-tokenizer=TOKENIZER],
+                    [specify the default tokenizer like
+                     --with-default-tokenizer=TokenMecab.
+                     (default: TokenBigram)])],
+    [default_tokenizer=$withval],
+    [default_tokenizer=no])
+if test x"$default_tokenizer" != x"no"; then
+  AC_DEFINE_UNQUOTED(MRN_TOKENIZER_DEFAULT,
+		     "$default_tokenizer",
+		     "specified default tokenizer")
+fi
+
 # check Cutter with GLib support if available
 REQUIRED_MINIMUM_CUTTER_VERSION=1.1.3
 m4_ifdef([AC_CHECK_GCUTTER], [

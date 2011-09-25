@@ -18,11 +18,14 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "mrn_sys.h"
-#include "config.h"
 
 int mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, void *value)
 {
