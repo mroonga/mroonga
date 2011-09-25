@@ -124,6 +124,7 @@ FILE *mrn_logfile = NULL;
 int mrn_logfile_opened = 0;
 grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
+char *mrn_default_parser;
 
 static void mrn_logger_func(int level, const char *time, const char *title,
                             const char *msg, const char *location,
@@ -229,9 +230,17 @@ static MYSQL_SYSVAR_ENUM(log_level, mrn_log_level,
                          (ulong) mrn_log_level,
                          &mrn_log_level_typelib);
 
+static MYSQL_SYSVAR_STR(default_parser, mrn_default_parser,
+                        PLUGIN_VAR_RQCMDARG,
+                        "default fulltext parser",
+                        NULL,
+                        NULL,
+                        MRN_TOKENIZER_DEFAULT);
+
 struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
+  MYSQL_SYSVAR(default_parser),
   NULL
 };
 

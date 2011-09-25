@@ -61,6 +61,7 @@
 
 extern HASH mrn_open_tables;
 extern pthread_mutex_t mrn_open_tables_mutex;
+extern char *mrn_default_parser;
 
 char *mrn_create_string(const char *str, uint length)
 {
@@ -487,8 +488,8 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
   {
     if (
       !(share->key_parser[i] = mrn_create_string(
-        MRN_TOKENIZER_DEFAULT,
-        strlen(MRN_TOKENIZER_DEFAULT)))
+        mrn_default_parser,
+        strlen(mrn_default_parser)))
     ) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
@@ -556,8 +557,8 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
   if (!share->key_parser[i]) {
     if (
       !(share->key_parser[i] = mrn_create_string(
-        MRN_TOKENIZER_DEFAULT,
-        strlen(MRN_TOKENIZER_DEFAULT)))
+        mrn_default_parser,
+        strlen(mrn_default_parser)))
     ) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
