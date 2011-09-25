@@ -6,17 +6,34 @@ EXTRA_DIST = \
 	btree.test \
 	count_performance.test \
 	create_table.test \
-	delete.test \
+	delete_fulltext_column.test \
+	delete_id_index_hash_no_unique.test \
+	delete_id_index_hash_unique.test \
+	delete_normal_column.test \
 	drop_database.test \
 	drop_table.test \
 	flush_logs.test \
-	fulltext.test \
-	geometry.test \
-	hash.test \
+	fulltext_insert_select.test \
+	fulltext_insert_values.test \
+	fulltext_not_match_against.test \
+	fulltext_search_ascii.test \
+	fulltext_search_japanese.test \
+	geometry_contains.test \
+	hash_index_id_normal.test \
+	hash_index_id_primary.test \
+	hash_index_id_unique.test \
+	hash_index_normal_column_insert.test \
 	information_schema.test \
 	insert.test \
 	last_insert_grn_id.test \
 	log_level.test \
+	multiple_column_index_delete.test \
+	multiple_column_index_int.test \
+	multiple_column_index_text.test \
+	multiple_column_index_update.test \
+	multiple_column_primary_key_delete.test \
+	multiple_column_primary_key_int.test \
+	multiple_column_primary_key_update.test \
 	order_limit_performance.test \
 	replace.test \
 	select_all.test \

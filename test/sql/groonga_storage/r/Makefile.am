@@ -6,17 +6,34 @@ EXTRA_DIST = \
 	btree.result \
 	count_performance.result \
 	create_table.result \
-	delete.result \
+	delete_fulltext_column.result \
+	delete_id_index_hash_no_unique.result \
+	delete_id_index_hash_unique.result \
+	delete_normal_column.result \
 	drop_database.result \
 	drop_table.result \
 	flush_logs.result \
-	fulltext.result \
-	geometry.result \
-	hash.result \
+	fulltext_insert_select.result \
+	fulltext_insert_values.result \
+	fulltext_not_match_against.result \
+	fulltext_search_ascii.result \
+	fulltext_search_japanese.result \
+	geometry_contains.result \
+	hash_index_id_normal.result \
+	hash_index_id_primary.result \
+	hash_index_id_unique.result \
+	hash_index_normal_column_insert.result \
 	information_schema.result \
 	insert.result \
 	last_insert_grn_id.result \
 	log_level.result \
+	multiple_column_index_delete.result \
+	multiple_column_index_int.result \
+	multiple_column_index_text.result \
+	multiple_column_index_update.result \
+	multiple_column_primary_key_delete.result \
+	multiple_column_primary_key_int.result \
+	multiple_column_primary_key_update.result \
 	order_limit_performance.result \
 	replace.result \
 	select_all.result \
