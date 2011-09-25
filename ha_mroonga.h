@@ -117,8 +117,8 @@ public:
   bool      is_clone;
   ha_mroonga *parent_for_clone;
   MEM_ROOT  *mem_root_for_clone;
-  grn_obj   pkey;
-  grn_id record_id;
+  grn_obj   key_buffer;
+  grn_id    record_id;
 
 private:
   grn_ctx *ctx;

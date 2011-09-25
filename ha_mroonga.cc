@@ -1115,8 +1115,8 @@ static float mrn_wrapper_ft_get_relevance(FT_INFO *handler)
   ha_mroonga *mroonga = info->mroonga;
   record_id = grn_table_get(info->ctx,
                             info->table,
-                            GRN_TEXT_VALUE(&(mroonga->pkey)),
-                            GRN_TEXT_LEN(&(mroonga->pkey)));
+                            GRN_TEXT_VALUE(&(mroonga->key_buffer)),
+                            GRN_TEXT_LEN(&(mroonga->key_buffer)));
 
   if (record_id != GRN_ID_NIL) {
     grn_id result_record_id;
@@ -1253,14 +1253,14 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   wrap_handler = NULL;
   matched_record_keys = NULL;
   fulltext_searching = FALSE;
-  GRN_TEXT_INIT(&pkey, 0);
+  GRN_TEXT_INIT(&key_buffer, 0);
   DBUG_VOID_RETURN;
 }
 
 ha_mroonga::~ha_mroonga()
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_obj_unlink(ctx, &pkey);
+  grn_obj_unlink(ctx, &key_buffer);
   grn_ctx_fin(ctx);
   DBUG_VOID_RETURN;
 }
@@ -2142,7 +2142,7 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     }
   }
 
-  grn_bulk_space(ctx, &pkey, table->key_info->key_length);
+  grn_bulk_space(ctx, &key_buffer, table->key_info->key_length);
 
 error:
   if (error) {
@@ -5036,20 +5036,20 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
       clear_cursor();
       break;
     } else {
-      GRN_BULK_REWIND(&pkey);
-      grn_obj_get_value(ctx, key_accessor, found_record_id, &pkey);
+      GRN_BULK_REWIND(&key_buffer);
+      grn_obj_get_value(ctx, key_accessor, found_record_id, &key_buffer);
       MRN_SET_WRAP_SHARE_KEY(share, table->s);
       MRN_SET_WRAP_TABLE_KEY(this, table);
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_IDX_MAP
       error = wrap_handler->ha_index_read_idx_map(buf,
                                                   share->wrap_primary_key,
-                                                  (uchar *)GRN_TEXT_VALUE(&pkey),
+                                                  (uchar *)GRN_TEXT_VALUE(&key_buffer),
                                                   pk_keypart_map,
                                                   HA_READ_KEY_EXACT);
 #else
       error = wrap_handler->index_read_idx_map(buf,
                                                share->wrap_primary_key,
-                                               (uchar *)GRN_TEXT_VALUE(&pkey),
+                                               (uchar *)GRN_TEXT_VALUE(&key_buffer),
                                                pk_keypart_map,
                                                HA_READ_KEY_EXACT);
 #endif
@@ -5082,13 +5082,11 @@ int ha_mroonga::storage_ft_read(uchar *buf)
     DBUG_RETURN(0);
   }
 
-  grn_obj record_key_value;
-  GRN_VOID_INIT(&record_key_value);
-  grn_obj_get_value(ctx, key_accessor, found_record_id, &record_key_value);
+  GRN_BULK_REWIND(&key_buffer);
+  grn_obj_get_value(ctx, key_accessor, found_record_id, &key_buffer);
   record_id = grn_table_get(ctx, grn_table,
-                            GRN_TEXT_VALUE(&record_key_value),
-                            GRN_TEXT_LEN(&record_key_value));
-  grn_obj_unlink(ctx, &record_key_value);
+                            GRN_TEXT_VALUE(&key_buffer),
+                            GRN_TEXT_LEN(&key_buffer));
   store_fields_from_primary_table(buf, record_id);
   DBUG_RETURN(0);
 }
