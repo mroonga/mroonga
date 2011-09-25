@@ -78,21 +78,13 @@ drop table t1;
 
 
 # for virtual columns
-create table t1 (c1 int, _id int, _score float);
+create table t1 (c1 int, _id int);
 set sql_mode="";
 # warning 1265
 insert into t1 (c1,_id) values (1,1);
-# warning 1265
-insert into t1 (c1,_score) values (2,2);
-# warning 1265
-insert into t1 (c1,_id,_score) values (3,1,2);
 set sql_mode="strict_all_tables";
 --error 1406
 insert into t1 (c1,_id) values (4,1);
---error 1406
-insert into t1 (c1,_score) values (5,2);
---error 1406
-insert into t1 (c1,_id,_score) values (6,1,2);
 select * from t1;
 drop table t1;
 

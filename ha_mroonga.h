@@ -90,9 +90,9 @@ struct st_mrn_ft_info
   grn_obj *score_column;
   grn_obj key;
   grn_obj score;
+  uint active_index;
+  KEY *key_info;
   KEY *primary_key_info;
-  uint primary_key_length;
-  grn_id record_id; // TODO: remove me.
   ha_mroonga *mroonga;
 };
 
@@ -118,6 +118,7 @@ public:
   ha_mroonga *parent_for_clone;
   MEM_ROOT  *mem_root_for_clone;
   grn_obj   pkey;
+  grn_id record_id;
 
 private:
   grn_ctx *ctx;
@@ -128,16 +129,12 @@ private:
   grn_obj **grn_index_tables;
   grn_obj **grn_index_columns;
 
-  grn_obj *result;
-  grn_obj *result0;
   grn_obj *result_geo;
   grn_table_cursor *cursor;
   grn_table_cursor *index_table_cursor;
-  grn_id record_id;
   grn_obj *score_column;
   grn_obj *key_accessor;
 
-  st_mrn_ft_info mrn_ft_info;
   grn_obj *matched_record_keys;
 
   uchar **key_min;
@@ -145,8 +142,6 @@ private:
   int *key_min_len;
   int *key_max_len;
   uint dup_key;
-
-  longlong limit;
 
   bool count_skip;
   bool fast_order_limit;
@@ -344,7 +339,6 @@ private:
 #endif
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
-  void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys);
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit, grn_obj *score_column);
   void store_fields_from_primary_table(uchar *buf, grn_id record_id);
@@ -474,6 +468,7 @@ private:
                                bool eq_range, bool sorted);
   int wrapper_read_range_next();
   int storage_read_range_next();
+  int generic_ft_init();
   int wrapper_ft_init();
   int storage_ft_init();
   void merge_matched_record_keys(grn_obj *matched_result);
@@ -481,6 +476,7 @@ private:
   void storage_ft_end();
   FT_INFO *wrapper_ft_init_ext(uint flags, uint key_nr, String *key);
   FT_INFO *storage_ft_init_ext(uint flags, uint key_nr, String *key);
+  FT_INFO *generic_ft_init_ext(uint flags, uint key_nr, String *key);
   int wrapper_ft_read(uchar *buf);
   int storage_ft_read(uchar *buf);
   const Item *wrapper_cond_push(const Item *cond);

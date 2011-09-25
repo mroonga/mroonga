@@ -11,7 +11,6 @@ CREATE TABLE `videos_groonga` (
 `video_id` varchar(64) NOT NULL,
 `description` text,
 `tags_unpack` text,
-`_score` float,
 PRIMARY KEY (`video_id`),
 FULLTEXT INDEX (`description`),
 FULLTEXT INDEX (`tags_unpack`)
@@ -19,22 +18,24 @@ FULLTEXT INDEX (`tags_unpack`)
 INSERT INTO videos_master VALUES (1, "video-1", "My Familly", "familly human");
 INSERT INTO videos_master VALUES (2, "video-2", "My Cat", "family cat");
 REPLACE INTO videos_groonga
-SELECT v.id, v.video_id, v.description, NULL, NULL
+SELECT v.id, v.video_id, v.description, NULL
 FROM videos_master AS v
 WHERE v.video_id = (video_id);
-SELECT * FROM videos_groonga WHERE MATCH(description) AGAINST("cat");
-id	video_id	description	tags_unpack	_score
+SELECT *, MATCH(description) AGAINST("cat") FROM videos_groonga
+WHERE MATCH(description) AGAINST("cat");
+id	video_id	description	tags_unpack	MATCH(description) AGAINST("cat")
 2	video-2	My Cat		1
 INSERT INTO videos_master VALUES (3, "video-3", "My Dog", "family dog");
 REPLACE INTO videos_groonga
-SELECT v.id, v.video_id, v.description, NULL, NULL
+SELECT v.id, v.video_id, v.description, NULL
 FROM videos_master AS v
 WHERE v.video_id = (video_id);
 Warnings:
 Warning	1265	data truncated for primary key column: <video_id>
 Warning	1265	data truncated for primary key column: <video_id>
-SELECT * FROM videos_groonga WHERE MATCH(description) AGAINST("my");
-id	video_id	description	tags_unpack	_score
+SELECT *, MATCH(description) AGAINST("my") FROM videos_groonga
+WHERE MATCH(description) AGAINST("my");
+id	video_id	description	tags_unpack	MATCH(description) AGAINST("my")
 1	video-1	My Familly		1
 2	video-2	My Cat		1
 3	video-3	My Dog		1

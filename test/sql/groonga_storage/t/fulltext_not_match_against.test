@@ -21,15 +21,15 @@ drop table if exists t1, t2, t3;
 --enable_warnings
 
 # for "not match against"
-create table t1 (c1 int primary key, c2 int, c3 text, _score float, fulltext index ft(c3));
-insert into t1 values(1,10,"aa ii uu ee oo",null);
-insert into t1 values(2,10,"ka ki ku ke ko",null);
-insert into t1 values(3,10,"aa ii uu ee oo",null);
-insert into t1 values(4,10,"ka ki ku ke ko",null);
-insert into t1 values(5,20,"aa ii uu ee oo",null);
-insert into t1 values(6,20,"ka ki ku ke ko",null);
-insert into t1 values(7,20,"aa ii uu ee oo",null);
-insert into t1 values(8,20,"ka ki ku ke ko",null);
+create table t1 (c1 int primary key, c2 int, c3 text, fulltext index ft(c3));
+insert into t1 values(1,10,"aa ii uu ee oo");
+insert into t1 values(2,10,"ka ki ku ke ko");
+insert into t1 values(3,10,"aa ii uu ee oo");
+insert into t1 values(4,10,"ka ki ku ke ko");
+insert into t1 values(5,20,"aa ii uu ee oo");
+insert into t1 values(6,20,"ka ki ku ke ko");
+insert into t1 values(7,20,"aa ii uu ee oo");
+insert into t1 values(8,20,"ka ki ku ke ko");
 select * from t1;
 select * from t1 where match(c3) against("uu");
 select * from t1 where not match(c3) against("uu");

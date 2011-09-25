@@ -55,26 +55,18 @@ select * from t1 where match(c2) against("ki");
 drop table t1;
 
 # for virtual columns
-create table t1 (c1 int, _id int, _score float);
-insert into t1 values(1,null,null);
-insert into t1 values(2,null,null);
-insert into t1 values(3,null,null);
+create table t1 (c1 int, _id int);
+insert into t1 values(1,null);
+insert into t1 values(2,null);
+insert into t1 values(3,null);
 select * from t1;
 set sql_mode="";
 # warning 1265
 update t1 set _id = 10 where c1 = 1;
-# warning 1265
-update t1 set _score = 20 where c1 = 2;
-# warning 1265
-update t1 set _id = 10, _score = 20 where c1 = 3;
 select * from t1;
 set sql_mode="strict_all_tables";
 --error 1406
 update t1 set _id = 11 where c1 = 1;
---error 1406
-update t1 set _score = 22 where c1 = 2;
---error 1406
-update t1 set _id = 11, _score = 22 where c1 = 3;
 select * from t1;
 drop table t1;
 

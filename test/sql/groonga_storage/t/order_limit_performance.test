@@ -20,49 +20,69 @@
 drop table if exists t1;
 --enable_warnings
 
-create table t1 (c1 int primary key, c2 int, c3 text, _id int, _score float, key idx1(c2), fulltext index ft(c3));
-insert into t1 values(1,10,"aa ii uu ee oo",null,null);
-insert into t1 values(2,20,"ka ki ku ke ko",null,null);
-insert into t1 values(3,30,"ii si ii se ii",null,null);
-insert into t1 values(4,40,"ta ti tu te to",null,null);
-insert into t1 values(5,50,"aa ii uu ii oo",null,null);
+create table t1 (c1 int primary key, c2 int, c3 text, _id int, key idx1(c2), fulltext index ft(c3));
+insert into t1 values(1,10,"aa ii uu ee oo",null);
+insert into t1 values(2,20,"ka ki ku ke ko",null);
+insert into t1 values(3,30,"ii si ii se ii",null);
+insert into t1 values(4,40,"ta ti tu te to",null);
+insert into t1 values(5,50,"aa ii uu ii oo",null);
+
 show status like 'groonga_fast_order_limit';
-select * from t1 where match(c3) against("ii") order by c1 desc;
+
+select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c1 desc;
 show status like 'groonga_fast_order_limit';
-select * from t1 where match(c3) against("ii") order by c1 desc limit 1;
+
+select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c1 desc limit 1;
 show status like 'groonga_fast_order_limit';
-select * from t1 where match(c3) against("ii") order by c1;
+
+select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c1;
 show status like 'groonga_fast_order_limit';
-select * from t1 where match(c3) against("ii") order by c1 limit 1;
+
+select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c1 limit 1;
 show status like 'groonga_fast_order_limit';
-select * from t1 where match(c3) against("ii") order by c2 desc;
+
+select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c2 desc;
 show status like 'groonga_fast_order_limit';
-select * from t1 where match(c3) against("ii") order by c2 desc limit 1;
+
+select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c2 desc limit 1;
 show status like 'groonga_fast_order_limit';
-select * from t1 where match(c3) against("ii") order by c2;
+
+select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c2;
 show status like 'groonga_fast_order_limit';
-select * from t1 where match(c3) against("ii") order by c2 limit 1;
+
+select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c2 limit 1;
 show status like 'groonga_fast_order_limit';
-select c3, _score from t1 where match(c3) against("ii") order by _score desc;
+
+select c3, match(c3) against("ii") from t1 where match(c3) against("ii") order by match(c3) against("ii") desc;
 show status like 'groonga_fast_order_limit';
-select c3, _score from t1 where match(c3) against("ii") order by _score desc limit 1, 1;
+
+select c3, match(c3) against("ii") from t1 where match(c3) against("ii") order by match(c3) against("ii") desc limit 1, 1;
 show status like 'groonga_fast_order_limit';
-select c3, _score from t1 where match(c3) against("ii") order by _score;
+
+select c3, match(c3) against("ii") from t1 where match(c3) against("ii") order by match(c3) against("ii");
 show status like 'groonga_fast_order_limit';
-select c3, _score from t1 where match(c3) against("ii") order by _score limit 1;
+
+select c3, match(c3) against("ii") from t1 where match(c3) against("ii") order by match(c3) against("ii") limit 1;
 show status like 'groonga_fast_order_limit';
+
 select c3, _id from t1 where match(c3) against("ii") order by _id desc;
 show status like 'groonga_fast_order_limit';
+
 select c3, _id from t1 where match(c3) against("ii") order by _id desc limit 1;
 show status like 'groonga_fast_order_limit';
+
 select c3, _id from t1 where match(c3) against("ii") order by _id;
 show status like 'groonga_fast_order_limit';
+
 select c3, _id from t1 where match(c3) against("ii") order by _id limit 1;
 show status like 'groonga_fast_order_limit';
+
 select count(*) from t1 where match(c3) against("ii");
 show status like 'groonga_fast_order_limit';
-select * from t1 where match(c3) against("ii") order by c1 desc limit 1;
+
+select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c1 desc limit 1;
 show status like 'groonga_fast_order_limit';
+
 drop table t1;
 
 --source suite/groonga_include/groonga_deinit.inc

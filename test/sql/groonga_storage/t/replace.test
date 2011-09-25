@@ -35,7 +35,6 @@ CREATE TABLE `videos_groonga` (
   `video_id` varchar(64) NOT NULL,
   `description` text,
   `tags_unpack` text,
-  `_score` float,
   PRIMARY KEY (`video_id`),
   FULLTEXT INDEX (`description`),
   FULLTEXT INDEX (`tags_unpack`)
@@ -45,17 +44,19 @@ CREATE TABLE `videos_groonga` (
 INSERT INTO videos_master VALUES (1, "video-1", "My Familly", "familly human");
 INSERT INTO videos_master VALUES (2, "video-2", "My Cat", "family cat");
 REPLACE INTO videos_groonga
-SELECT v.id, v.video_id, v.description, NULL, NULL
-FROM videos_master AS v
-WHERE v.video_id = (video_id);
-SELECT * FROM videos_groonga WHERE MATCH(description) AGAINST("cat");
+  SELECT v.id, v.video_id, v.description, NULL
+    FROM videos_master AS v
+    WHERE v.video_id = (video_id);
+SELECT *, MATCH(description) AGAINST("cat") FROM videos_groonga
+  WHERE MATCH(description) AGAINST("cat");
 
 INSERT INTO videos_master VALUES (3, "video-3", "My Dog", "family dog");
 REPLACE INTO videos_groonga
-SELECT v.id, v.video_id, v.description, NULL, NULL
-FROM videos_master AS v
-WHERE v.video_id = (video_id);
-SELECT * FROM videos_groonga WHERE MATCH(description) AGAINST("my");
+  SELECT v.id, v.video_id, v.description, NULL
+    FROM videos_master AS v
+    WHERE v.video_id = (video_id);
+SELECT *, MATCH(description) AGAINST("my") FROM videos_groonga
+  WHERE MATCH(description) AGAINST("my");
 
 DROP TABLE videos_master, videos_groonga;
 
