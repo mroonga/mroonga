@@ -3181,23 +3181,22 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
   void *pkey = NULL;
   int pkey_size = 0;
-  grn_obj pkey_data;
-  GRN_VOID_INIT(&pkey_data);
   uint pkey_nr = table->s->primary_key;
+  GRN_BULK_REWIND(&key_buffer);
   if (pkey_nr != MAX_INDEXES) {
     KEY key_info = table->key_info[pkey_nr];
     if (key_info.key_parts == 1) {
       Field *pkey_field = key_info.key_part[0].field;
-      mrn_set_buf(ctx, pkey_field, &pkey_data, &pkey_size);
-      pkey = GRN_TEXT_VALUE(&pkey_data);
+      mrn_set_buf(ctx, pkey_field, &key_buffer, &pkey_size);
+      pkey = GRN_TEXT_VALUE(&key_buffer);
     } else {
       uchar key[MRN_MAX_KEY_SIZE];
       key_copy(key, buf, &key_info, key_info.key_length);
-      grn_bulk_space(ctx, &pkey_data, key_info.key_length);
+      grn_bulk_space(ctx, &key_buffer, key_info.key_length);
       pkey = mrn_multiple_column_key_encode(&key_info,
                                             key,
                                             key_info.key_length,
-                                            (uchar *)(GRN_TEXT_VALUE(&pkey_data)),
+                                            (uchar *)(GRN_TEXT_VALUE(&key_buffer)),
                                             (uint *)&pkey_size);
     }
   }
@@ -3209,10 +3208,8 @@ int ha_mroonga::storage_write_row(uchar *buf)
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
-    grn_obj_unlink(ctx, &pkey_data);
     DBUG_RETURN(ER_ERROR_ON_WRITE);
   }
-  grn_obj_unlink(ctx, &pkey_data);
   if (!added) {
     // duplicated error
 #ifndef DBUG_OFF
