@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011 Kentoku SHIBA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
@@ -57,8 +58,6 @@
 #define MRN_DEFAULT_LEN (sizeof(MRN_DEFAULT_STR) - 1)
 #define MRN_GROONGA_STR "GROONGA"
 #define MRN_GROONGA_LEN (sizeof(MRN_GROONGA_STR) - 1)
-#define MRN_DEFAULT_KEY_PARSER_STR "TokenBigram"
-#define MRN_DEFAULT_KEY_PARSER_LEN (sizeof(MRN_DEFAULT_KEY_PARSER_STR) - 1)
 
 extern HASH mrn_open_tables;
 extern pthread_mutex_t mrn_open_tables_mutex;
@@ -488,12 +487,13 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
   {
     if (
       !(share->key_parser[i] = mrn_create_string(
-        MRN_DEFAULT_KEY_PARSER_STR,
-        MRN_DEFAULT_KEY_PARSER_LEN))
+        MRN_TOKENIZER_DEFAULT,
+        strlen(MRN_TOKENIZER_DEFAULT)))
     ) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
     }
+    share->key_parser_length[i] = strlen(share->key_parser[i]);
     DBUG_RETURN(0);
   }
   DBUG_PRINT("info", ("mroonga create comment string"));
@@ -553,14 +553,16 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
     }
   }
 #endif
-  if (
-    !share->key_parser[i] &&
-    !(share->key_parser[i] = mrn_create_string(
-      MRN_DEFAULT_KEY_PARSER_STR,
-      MRN_DEFAULT_KEY_PARSER_LEN))
-  ) {
-    error = HA_ERR_OUT_OF_MEM;
-    goto error;
+  if (!share->key_parser[i]) {
+    if (
+      !(share->key_parser[i] = mrn_create_string(
+        MRN_TOKENIZER_DEFAULT,
+        strlen(MRN_TOKENIZER_DEFAULT)))
+    ) {
+      error = HA_ERR_OUT_OF_MEM;
+      goto error;
+    }
+    share->key_parser_length[i] = strlen(share->key_parser[i]);
   }
 
   if (param_string)

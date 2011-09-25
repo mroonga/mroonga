@@ -36,6 +36,7 @@
 #define MRN_PAT_SUFFIX "_pat"
 #define MRN_COLUMN_NAME_ID "_id"
 #define MRN_COLUMN_NAME_SCORE "_score"
+#define MRN_TOKENIZER_DEFAULT "TokenBigram"
 
 /* functions */
 int mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, void *value);

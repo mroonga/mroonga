@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011 Kentoku SHIBA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
