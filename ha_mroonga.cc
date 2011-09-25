@@ -1431,10 +1431,10 @@ int ha_mroonga::wrapper_create_index_table(grn_obj *grn_table,
   index_tables[i] = index_table;
 
   grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-  grn_obj *token_type = grn_ctx_get(ctx, tmp_share->key_parser[i],
-                                    tmp_share->key_parser_length[i]);
-  grn_obj_set_info(ctx, index_table, info_type, token_type);
-  grn_obj_unlink(ctx, token_type);
+  grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
+                                      tmp_share->key_parser_length[i]);
+  grn_obj_set_info(ctx, index_table, info_type, tokenizer);
+  grn_obj_unlink(ctx, tokenizer);
 
   grn_obj *index_column = grn_column_create(ctx, index_table,
                                             index_column_name,
@@ -1789,9 +1789,10 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
 
     if (key_alg == HA_KEY_ALG_FULLTEXT) {
       grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-      grn_obj *token_type = grn_ctx_get(ctx, tmp_share->key_parser[i],
-                                        tmp_share->key_parser_length[i]);
-      grn_obj_set_info(ctx, index_table, info_type, token_type);
+      grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
+                                          tmp_share->key_parser_length[i]);
+      grn_obj_set_info(ctx, index_table, info_type, tokenizer);
+      grn_obj_unlink(ctx, tokenizer);
     }
 
     grn_obj_flags index_column_flags =
@@ -5193,6 +5194,34 @@ void ha_mroonga::clear_search_result()
     result_geo = NULL;
   }
   DBUG_VOID_RETURN;
+}
+
+grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
+{
+  MRN_DBUG_ENTER_METHOD();
+  grn_obj *tokenizer;
+  tokenizer = grn_ctx_get(ctx, name, name_length);
+  if (!tokenizer) {
+    char message[MRN_BUFFER_SIZE];
+    sprintf(message,
+            "specified tokenizer <%.*s> doesn't exist. "
+            "default tokenizer <%s> is used instead.",
+            name_length, name,
+            MRN_TOKENIZER_DEFAULT);
+    push_warning(ha_thd(),
+                 MYSQL_ERROR::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 message);
+    tokenizer = grn_ctx_get(ctx,
+                            MRN_TOKENIZER_DEFAULT,
+                            strlen(MRN_TOKENIZER_DEFAULT));
+  }
+  if (!tokenizer) {
+    push_warning(ha_thd(),
+                 MYSQL_ERROR::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 "couldn't find tokenizer. use bigram tokenizer instead.");
+    tokenizer = grn_ctx_at(ctx, GRN_DB_BIGRAM);
+  }
+  DBUG_RETURN(tokenizer);
 }
 
 int ha_mroonga::storage_get_next_record(uchar *buf)
