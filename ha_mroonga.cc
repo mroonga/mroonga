@@ -5029,14 +5029,14 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
   int error;
   MRN_DBUG_ENTER_METHOD();
   do {
-    record_id = grn_table_cursor_next(ctx, cursor);
-    if (record_id == GRN_ID_NIL) {
+    grn_id found_record_id = grn_table_cursor_next(ctx, cursor);
+    if (found_record_id == GRN_ID_NIL) {
       error = HA_ERR_END_OF_FILE;
       clear_cursor();
       break;
     } else {
       GRN_BULK_REWIND(&pkey);
-      grn_obj_get_value(ctx, key_accessor, record_id, &pkey);
+      grn_obj_get_value(ctx, key_accessor, found_record_id, &pkey);
       MRN_SET_WRAP_SHARE_KEY(share, table->s);
       MRN_SET_WRAP_TABLE_KEY(this, table);
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_IDX_MAP
