@@ -6998,6 +6998,203 @@ int ha_mroonga::final_drop_index(TABLE *table_arg)
 }
 #endif
 
+int ha_mroonga::wrapper_update_auto_increment()
+{
+  int res;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->update_auto_increment();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::storage_update_auto_increment()
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res = handler::update_auto_increment();
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::update_auto_increment()
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_update_auto_increment();
+  } else {
+    res = storage_update_auto_increment();
+  }
+  DBUG_RETURN(res);
+}
+
+void ha_mroonga::wrapper_set_next_insert_id(ulonglong id)
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->set_next_insert_id(id);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_set_next_insert_id(ulonglong id)
+{
+  MRN_DBUG_ENTER_METHOD();
+  handler::set_next_insert_id(id);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::set_next_insert_id(ulonglong id)
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    wrapper_set_next_insert_id(id);
+  } else {
+    storage_set_next_insert_id(id);
+  }
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::wrapper_get_auto_increment(ulonglong offset,
+                                            ulonglong increment,
+                                            ulonglong nb_desired_values,
+                                            ulonglong *first_value,
+                                            ulonglong *nb_reserved_values)
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->get_auto_increment(offset, increment, nb_desired_values,
+                                      first_value, nb_reserved_values);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_get_auto_increment(ulonglong offset,
+                                            ulonglong increment,
+                                            ulonglong nb_desired_values,
+                                            ulonglong *first_value,
+                                            ulonglong *nb_reserved_values)
+{
+  MRN_DBUG_ENTER_METHOD();
+  handler::get_auto_increment(offset, increment, nb_desired_values,
+                              first_value, nb_reserved_values);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::get_auto_increment(ulonglong offset, ulonglong increment,
+                                    ulonglong nb_desired_values,
+                                    ulonglong *first_value,
+                                    ulonglong *nb_reserved_values)
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    wrapper_get_auto_increment(offset, increment, nb_desired_values,
+                               first_value, nb_reserved_values);
+  } else {
+    storage_get_auto_increment(offset, increment, nb_desired_values,
+                               first_value, nb_reserved_values);
+  }
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::wrapper_restore_auto_increment(ulonglong prev_insert_id)
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->restore_auto_increment(prev_insert_id);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_restore_auto_increment(ulonglong prev_insert_id)
+{
+  MRN_DBUG_ENTER_METHOD();
+  handler::restore_auto_increment(prev_insert_id);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::restore_auto_increment(ulonglong prev_insert_id)
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    wrapper_restore_auto_increment(prev_insert_id);
+  } else {
+    storage_restore_auto_increment(prev_insert_id);
+  }
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::wrapper_release_auto_increment()
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->ha_release_auto_increment();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_release_auto_increment()
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::release_auto_increment()
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    wrapper_release_auto_increment();
+  } else {
+    storage_release_auto_increment();
+  }
+  DBUG_VOID_RETURN;
+}
+
+int ha_mroonga::wrapper_reset_auto_increment(ulonglong value)
+{
+  int res;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->ha_reset_auto_increment(value);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::storage_reset_auto_increment(ulonglong value)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(HA_ERR_WRONG_COMMAND);
+}
+
+int ha_mroonga::reset_auto_increment(ulonglong value)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_reset_auto_increment(value);
+  } else {
+    res = storage_reset_auto_increment(value);
+  }
+  DBUG_RETURN(res);
+}
+
 void ha_mroonga::set_pk_bitmap()
 {
   KEY key_info = table->key_info[table_share->primary_key];
