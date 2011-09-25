@@ -20,19 +20,6 @@
 drop table if exists t1, t2, t3;
 --enable_warnings
 
-create table t1 (c1 int primary key, c2 int, c3 text, fulltext index ft(c3));
-insert into t1 values(1,10,"aa ii uu ee oo");
-insert into t1 values(2,20,"ka ki ku ke ko");
-insert into t1 values(3,30,"sa si su se so");
-insert into t1 values(4,40,"ta ti tu te to");
-insert into t1 values(5,50,"aa ii uu ee oo");
-select * from t1;
-select * from t1 where match(c3) against("su");
-select * from t1 where match(c3) against("ii");
-select * from t1 where match(c3) against("+su" in boolean mode);
-select * from t1 where match(c3) against("+ii" in boolean mode);
-drop table t1;
-
 set names utf8;
 create table t1 (c1 int primary key, c2 varchar(255), c3 text, fulltext index(c2), fulltext index(c3)) default charset utf8;
 insert into t1 values(1, "明日の富士山の天気について","あああああああ");
