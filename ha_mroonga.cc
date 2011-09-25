@@ -124,6 +124,7 @@ FILE *mrn_logfile = NULL;
 int mrn_logfile_opened = 0;
 grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
+char mrn_default_parser_name[MRN_MAX_KEY_SIZE];
 char *mrn_default_parser;
 
 static void mrn_logger_func(int level, const char *time, const char *title,
@@ -230,11 +231,28 @@ static MYSQL_SYSVAR_ENUM(log_level, mrn_log_level,
                          (ulong) mrn_log_level,
                          &mrn_log_level_typelib);
 
+static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
+                                      void *var_ptr, const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const char *new_value = *((const char **)save);
+  const char *old_value = mrn_default_parser;
+  grn_ctx ctx;
+  grn_ctx_init(&ctx, 0);
+  GRN_LOG(&ctx, GRN_LOG_NOTICE,
+          "default tokenizer changed from '%s' to '%s'",
+          old_value, new_value);
+  grn_ctx_fin(&ctx);
+  strcpy(mrn_default_parser_name, new_value);
+  mrn_default_parser = mrn_default_parser_name;
+  DBUG_VOID_RETURN;
+}
+
 static MYSQL_SYSVAR_STR(default_parser, mrn_default_parser,
                         PLUGIN_VAR_RQCMDARG,
                         "default fulltext parser",
                         NULL,
-                        NULL,
+                        mrn_default_parser_update,
                         MRN_TOKENIZER_DEFAULT);
 
 struct st_mysql_sys_var *mrn_system_variables[] =
