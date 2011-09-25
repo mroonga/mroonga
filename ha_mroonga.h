@@ -1,4 +1,4 @@
-/* 
+/*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2011 Kentoku SHIBA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
@@ -86,6 +86,7 @@ struct st_mrn_ft_info
   grn_ctx *ctx;
   grn_obj *table;
   grn_obj *result;
+  grn_obj *sorted_result;
   grn_obj *score_column;
   grn_obj key;
   grn_obj score;
@@ -134,6 +135,7 @@ private:
   grn_table_cursor *index_table_cursor;
   grn_id record_id;
   grn_obj *score_column;
+  grn_obj *key_accessor;
 
   st_mrn_ft_info mrn_ft_info;
   grn_obj *matched_record_keys;
@@ -330,6 +332,7 @@ protected:
 
 private:
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
+  void clear_cursor();
   void clear_search_result();
   grn_obj *find_tokenizer(const char *name, int name_length);
   int storage_get_next_record(uchar *buf);
@@ -342,6 +345,8 @@ private:
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys);
+  void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
+                              longlong *limit, grn_obj *score_column);
   void store_fields_from_primary_table(uchar *buf, grn_id record_id);
   void set_pk_bitmap();
   int wrapper_create(const char *name, TABLE *table,

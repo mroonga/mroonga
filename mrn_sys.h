@@ -35,6 +35,7 @@
 #define MRN_HASH_SUFFIX "_hash"
 #define MRN_PAT_SUFFIX "_pat"
 #define MRN_COLUMN_NAME_ID "_id"
+#define MRN_COLUMN_NAME_KEY "_key"
 #define MRN_COLUMN_NAME_SCORE "_score"
 #ifndef MRN_TOKENIZER_DEFAULT
 #  define MRN_TOKENIZER_DEFAULT "TokenBigram"

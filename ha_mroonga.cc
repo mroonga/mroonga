@@ -1095,6 +1095,7 @@ static void mrn_wrapper_ft_close_search(FT_INFO *handler)
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
   grn_obj_unlink(info->ctx, info->result);
+  grn_obj_unlink(info->ctx, info->sorted_result);
   grn_obj_unlink(info->ctx, info->score_column);
   grn_obj_unlink(info->ctx, &(info->key));
   grn_obj_unlink(info->ctx, &(info->score));
@@ -1202,6 +1203,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   result0 = NULL;
   result_geo = NULL;
   score_column = NULL;
+  key_accessor = NULL;
   share = NULL;
   is_clone = FALSE;
   wrap_handler = NULL;
@@ -4764,12 +4766,18 @@ int ha_mroonga::wrapper_ft_init()
 {
   MRN_DBUG_ENTER_METHOD();
   int error;
-  cursor = grn_table_cursor_open(ctx, matched_record_keys, NULL, 0, NULL, 0, 0,
-                                 -1, 0);
-  if (ctx->rc)
-  {
-    error = ER_ERROR_ON_READ;
-    my_message(error, ctx->errbuf, MYF(0));
+  if (!cursor) {
+    cursor = grn_table_cursor_open(ctx, matched_record_keys, NULL, 0, NULL, 0, 0,
+                                   -1, 0);
+    if (ctx->rc)
+    {
+      error = ER_ERROR_ON_READ;
+      my_message(error, ctx->errbuf, MYF(0));
+    } else {
+      key_accessor = grn_obj_column(ctx, matched_record_keys,
+                                    MRN_COLUMN_NAME_KEY,
+                                    strlen(MRN_COLUMN_NAME_KEY));
+    }
   }
   DBUG_RETURN(error);
 }
@@ -4818,6 +4826,9 @@ void ha_mroonga::ft_end()
 FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
+
+  clear_cursor();
+
   struct st_mrn_ft_info *info = new st_mrn_ft_info();
   info->please = &mrn_wrapper_ft_vft;
   info->mroonga = this;
@@ -4885,7 +4896,29 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
   grn_obj_unlink(info->ctx, expression);
   grn_obj_unlink(info->ctx, match_columns);
 
-  merge_matched_record_keys(info->result);
+  grn_table_sort_key *sort_keys = NULL;
+  int n_sort_keys = 0;
+  longlong limit = -1;
+  check_fast_order_limit(&sort_keys, &n_sort_keys, &limit, info->score_column);
+  if (fast_order_limit) {
+    info->sorted_result = grn_table_create(ctx, NULL,
+                                           0, NULL,
+                                           GRN_OBJ_TABLE_NO_KEY, NULL,
+                                           info->result);
+    grn_table_sort(ctx, info->result, 0, limit, info->sorted_result,
+                   sort_keys, n_sort_keys);
+    cursor = grn_table_cursor_open(ctx, info->sorted_result,
+                                   NULL, 0, NULL, 0,
+                                   0, -1, 0);
+    key_accessor = grn_obj_column(ctx, info->sorted_result,
+                                  MRN_COLUMN_NAME_KEY,
+                                  strlen(MRN_COLUMN_NAME_KEY));
+  } else {
+    merge_matched_record_keys(info->result);
+  }
+  if (sort_keys) {
+    free(sort_keys);
+  }
 
   DBUG_RETURN((FT_INFO *)info);
 }
@@ -4999,15 +5032,11 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
     record_id = grn_table_cursor_next(ctx, cursor);
     if (record_id == GRN_ID_NIL) {
       error = HA_ERR_END_OF_FILE;
-      grn_table_cursor_close(ctx, cursor);
-      cursor = NULL;
+      clear_cursor();
       break;
     } else {
-      grn_id relation_record_id;
-      grn_table_get_key(ctx, matched_record_keys, record_id,
-                        &relation_record_id, sizeof(grn_id));
-      grn_table_get_key(ctx, grn_table, relation_record_id,
-                        GRN_TEXT_VALUE(&pkey), table->key_info->key_length);
+      GRN_BULK_REWIND(&pkey);
+      grn_obj_get_value(ctx, key_accessor, record_id, &pkey);
       MRN_SET_WRAP_SHARE_KEY(share, table->s);
       MRN_SET_WRAP_TABLE_KEY(this, table);
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_IDX_MAP
@@ -5193,9 +5222,13 @@ void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_func
                       search_name);
 }
 
-void ha_mroonga::clear_search_result()
+void ha_mroonga::clear_cursor()
 {
   MRN_DBUG_ENTER_METHOD();
+  if (key_accessor) {
+    grn_obj_unlink(ctx, key_accessor);
+    key_accessor = NULL;
+  }
   if (cursor) {
     grn_table_cursor_close(ctx, cursor);
     cursor = NULL;
@@ -5204,6 +5237,13 @@ void ha_mroonga::clear_search_result()
     grn_table_cursor_close(ctx, index_table_cursor);
     index_table_cursor = NULL;
   }
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::clear_search_result()
+{
+  MRN_DBUG_ENTER_METHOD();
+  clear_cursor();
   if (result0) {
     grn_obj_unlink(ctx, result0);
     result0 = NULL;
@@ -5487,6 +5527,138 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       } else {
         (*sort_keys)[i].key = grn_columns[field->field_index];
         col_field_index = field->field_index;
+      }
+      (*sort_keys)[i].offset = 0;
+      if (MRN_ORDER_IS_ASC(order))
+      {
+        (*sort_keys)[i].flags = GRN_TABLE_SORT_ASC;
+      } else {
+        (*sort_keys)[i].flags = GRN_TABLE_SORT_DESC;
+      }
+    }
+    grn_obj *index;
+    if (i == 1 && col_field_index >= 0 &&
+        grn_column_index(ctx, grn_columns[col_field_index], GRN_OP_LESS,
+                         &index, 1, NULL)) {
+      DBUG_PRINT("info", ("mroonga fast_order_limit_with_index = TRUE"));
+      fast_order_limit_with_index = TRUE;
+    } else {
+      DBUG_PRINT("info", ("mroonga fast_order_limit_with_index = FALSE"));
+      fast_order_limit_with_index = FALSE;
+    }
+    DBUG_PRINT("info", ("mroonga fast_order_limit = TRUE"));
+    fast_order_limit = TRUE;
+    mrn_fast_order_limit++;
+    DBUG_VOID_RETURN;
+  }
+  DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+  fast_order_limit = FALSE;
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
+                                        int *n_sort_keys,
+                                        longlong *limit,
+                                        grn_obj *score_column)
+{
+  MRN_DBUG_ENTER_METHOD();
+  st_select_lex *select_lex = table->pos_in_table_list->select_lex;
+
+  if (
+    thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
+    !select_lex->with_sum_func &&
+    !select_lex->group_list.elements &&
+    !select_lex->having &&
+    select_lex->table_list.elements == 1 &&
+    select_lex->order_list.elements &&
+    select_lex->explicit_limit &&
+    select_lex->select_limit &&
+    select_lex->select_limit->val_int() > 0
+  ) {
+    if (select_lex->offset_limit) {
+      *limit = select_lex->offset_limit->val_int();
+    } else {
+      *limit = 0;
+    }
+    *limit += select_lex->select_limit->val_int();
+    if (*limit > (longlong)INT_MAX) {
+      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    Item *info = (Item *)select_lex->item_list.first_node()->info;
+    Item *where;
+    where = select_lex->where;
+    if (!where ||
+        where->type() != Item::FUNC_ITEM ||
+        ((Item_func *)where)->functype() != Item_func::FT_FUNC) {
+      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    Item_func *match_against = (Item_func *)where;
+    where = where->next;
+    if (!where ||
+        where->type() != Item::STRING_ITEM) {
+      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    where = where->next;
+    if (!where ||
+        where->type() != Item::FIELD_ITEM) {
+      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    for (where = where->next; where; where = where->next) {
+      if (grn_columns && where->type() == Item::FIELD_ITEM)
+        continue;
+      if (where->type() == Item::FUNC_ITEM && match_against->eq(where, true)) {
+        for (int i = 0; i < match_against->arg_count; i++) {
+          where = where->next;
+        }
+        continue;
+      }
+      if (where == info)
+        continue;
+      break;
+    }
+    if (where && (where != info || !where->eq(info, true))) {
+      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    *n_sort_keys = select_lex->order_list.elements;
+    *sort_keys = (grn_table_sort_key *)malloc(sizeof(grn_table_sort_key) *
+                                              *n_sort_keys);
+    ORDER *order;
+    int i, col_field_index = -1;
+    for (order = (ORDER *) select_lex->order_list.first, i = 0; order;
+         order = order->next, i++) {
+      Item *item = *order->item;
+      if (grn_columns && item->type() == Item::FIELD_ITEM)
+      {
+        Field *field = ((Item_field *) (*order->item))->field;
+        const char *column_name = field->field_name;
+        int column_name_size = strlen(column_name);
+
+        if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
+          (*sort_keys)[i].key = grn_obj_column(ctx, grn_table,
+                                               column_name, column_name_size);
+        } else if (strncmp(MRN_COLUMN_NAME_SCORE,
+                           column_name, column_name_size) == 0) {
+          (*sort_keys)[i].key = score_column;
+        } else {
+          (*sort_keys)[i].key = grn_columns[field->field_index];
+          col_field_index = field->field_index;
+        }
+      } else if (match_against->eq(item, true)) {
+        (*sort_keys)[i].key = score_column;
+      } else {
+        DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+        fast_order_limit = FALSE;
+        DBUG_VOID_RETURN;
       }
       (*sort_keys)[i].offset = 0;
       if (MRN_ORDER_IS_ASC(order))
