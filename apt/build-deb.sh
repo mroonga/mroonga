@@ -66,6 +66,7 @@ ln -fs \$(find ../mysql-package -maxdepth 1 -type d | tail -1) mysql
 tar xfz ${PACKAGE}_${VERSION}.orig.tar.gz
 cd ${PACKAGE}-${VERSION}/
 cp -rp /tmp/${PACKAGE}-debian debian
+# export DEB_BUILD_OPTIONS="noopt nostrip"
 debuild -us -uc
 EOF
 
