@@ -1054,6 +1054,19 @@ mysql_declare_plugin(mroonga)
 mysql_declare_plugin_end;
 
 
+static void mrn_generic_ft_close_search(FT_INFO *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  grn_obj_unlink(info->ctx, info->result);
+  grn_obj_unlink(info->ctx, info->sorted_result);
+  grn_obj_unlink(info->ctx, info->score_column);
+  grn_obj_unlink(info->ctx, &(info->key));
+  grn_obj_unlink(info->ctx, &(info->score));
+  delete info;
+  DBUG_VOID_RETURN;
+}
+
 static int mrn_wrapper_ft_read_next(FT_INFO *handler, char *record)
 {
   MRN_DBUG_ENTER_FUNCTION();
@@ -1096,13 +1109,7 @@ static float mrn_wrapper_ft_find_relevance(FT_INFO *handler, uchar *record,
 static void mrn_wrapper_ft_close_search(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
-  grn_obj_unlink(info->ctx, info->result);
-  grn_obj_unlink(info->ctx, info->sorted_result);
-  grn_obj_unlink(info->ctx, info->score_column);
-  grn_obj_unlink(info->ctx, &(info->key));
-  grn_obj_unlink(info->ctx, &(info->score));
-  delete info;
+  mrn_generic_ft_close_search(handler);
   DBUG_VOID_RETURN;
 }
 
@@ -1184,13 +1191,7 @@ static float mrn_storage_ft_find_relevance(FT_INFO *handler, uchar *record,
 static void mrn_storage_ft_close_search(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
-  grn_obj_unlink(info->ctx, info->result);
-  grn_obj_unlink(info->ctx, info->sorted_result);
-  grn_obj_unlink(info->ctx, info->score_column);
-  grn_obj_unlink(info->ctx, &(info->key));
-  grn_obj_unlink(info->ctx, &(info->score));
-  delete info;
+  mrn_generic_ft_close_search(handler);
   DBUG_VOID_RETURN;
 }
 
