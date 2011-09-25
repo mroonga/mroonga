@@ -3,6 +3,8 @@
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/15/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/15/SRPMS
 
+%define groonga_required_version 1.2.6
+
 Name:		mysql-groonga
 Version:	@VERSION@
 Release:	0%{?dist}
@@ -13,9 +15,9 @@ License:	LGPLv2.1
 URL:		http://mroonga.github.com/
 Source0:	http://github.com/downloads/mroonga/mroonga/groonga-storage-engine-%{version}.tar.gz
 
-BuildRequires:	groonga-devel
+BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	mysql-devel
-Requires:	groonga-libs
+Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	mysql-server
 Requires:	mysql-client
 

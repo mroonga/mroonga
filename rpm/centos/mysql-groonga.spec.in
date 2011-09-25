@@ -2,6 +2,8 @@
 %define mysql_release 1
 %define mysql_dist    rhel5
 
+%define groonga_required_version 1.2.6
+
 Name:		mysql-groonga
 Version:	@VERSION@
 Release:	0%{?dist}
@@ -13,9 +15,9 @@ URL:		http://mroonga.github.com/
 Source0:	http://github.com/downloads/mroonga/mroonga/groonga-storage-engine-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
-BuildRequires:	groonga-devel
+BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	wget
-Requires:	groonga-libs
+Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	MySQL-server = %{mysql_version}-%{mysql_release}
 Requires:	MySQL-client = %{mysql_version}-%{mysql_release}
 
