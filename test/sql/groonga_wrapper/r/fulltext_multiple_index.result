@@ -19,6 +19,11 @@ diaries	CREATE TABLE `diaries` (
 insert into diaries (title, body) values ("survey", "will start groonga!");
 insert into diaries (title, body) values ("groonga (1)", "starting groonga...");
 insert into diaries (title, body) values ("groonga (2)", "started groonga.");
+select * from diaries
+where match(title) against("survey") and
+match(body) against("groonga");
+id	title	body
+1	survey	will start groonga!
 select *, match(title) against("survey"), match(body) against("groonga")
 from diaries
 where match(title) against("survey") and
