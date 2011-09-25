@@ -240,7 +240,7 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
   grn_ctx ctx;
   grn_ctx_init(&ctx, 0);
   GRN_LOG(&ctx, GRN_LOG_NOTICE,
-          "default tokenizer changed from '%s' to '%s'",
+          "default parser changed from '%s' to '%s'",
           old_value, new_value);
   grn_ctx_fin(&ctx);
   strcpy(mrn_default_parser_name, new_value);
@@ -253,7 +253,7 @@ static MYSQL_SYSVAR_STR(default_parser, mrn_default_parser,
                         "default fulltext parser",
                         NULL,
                         mrn_default_parser_update,
-                        MRN_TOKENIZER_DEFAULT);
+                        MRN_PARSER_DEFAULT);
 
 struct st_mysql_sys_var *mrn_system_variables[] =
 {
@@ -5256,21 +5256,22 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
   if (!tokenizer) {
     char message[MRN_BUFFER_SIZE];
     sprintf(message,
-            "specified tokenizer <%.*s> doesn't exist. "
-            "default tokenizer <%s> is used instead.",
+            "specified fulltext parser <%.*s> doesn't exist. "
+            "default fulltext parser <%s> is used instead.",
             name_length, name,
-            MRN_TOKENIZER_DEFAULT);
+            MRN_PARSER_DEFAULT);
     push_warning(ha_thd(),
                  MYSQL_ERROR::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
                  message);
     tokenizer = grn_ctx_get(ctx,
-                            MRN_TOKENIZER_DEFAULT,
-                            strlen(MRN_TOKENIZER_DEFAULT));
+                            MRN_PARSER_DEFAULT,
+                            strlen(MRN_PARSER_DEFAULT));
   }
   if (!tokenizer) {
     push_warning(ha_thd(),
                  MYSQL_ERROR::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
-                 "couldn't find tokenizer. use bigram tokenizer instead.");
+                 "couldn't find fulltext parser. "
+                 "Bigram fulltext parser is used instead.");
     tokenizer = grn_ctx_at(ctx, GRN_DB_BIGRAM);
   }
   DBUG_RETURN(tokenizer);

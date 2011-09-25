@@ -37,8 +37,8 @@
 #define MRN_COLUMN_NAME_ID "_id"
 #define MRN_COLUMN_NAME_KEY "_key"
 #define MRN_COLUMN_NAME_SCORE "_score"
-#ifndef MRN_TOKENIZER_DEFAULT
-#  define MRN_TOKENIZER_DEFAULT "TokenBigram"
+#ifndef MRN_PARSER_DEFAULT
+#  define MRN_PARSER_DEFAULT "TokenBigram"
 #endif
 
 /* functions */

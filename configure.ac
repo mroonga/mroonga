@@ -167,17 +167,17 @@ AC_SUBST(plugindir)
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
-AC_ARG_WITH(default_tokenizer,
-    [AC_HELP_STRING([--with-default-tokenizer=TOKENIZER],
-                    [specify the default tokenizer like
-                     --with-default-tokenizer=TokenMecab.
+AC_ARG_WITH(default_parser,
+    [AC_HELP_STRING([--with-default-parser=PARSER],
+                    [specify the default fulltext parser like
+                     --with-default-parser=TokenMecab.
                      (default: TokenBigram)])],
-    [default_tokenizer=$withval],
-    [default_tokenizer=no])
-if test x"$default_tokenizer" != x"no"; then
-  AC_DEFINE_UNQUOTED(MRN_TOKENIZER_DEFAULT,
-		     "$default_tokenizer",
-		     "specified default tokenizer")
+    [default_parser=$withval],
+    [default_parser=no])
+if test x"$default_parser" != x"no"; then
+  AC_DEFINE_UNQUOTED(MRN_PARSER_DEFAULT,
+		     "$default_parser",
+		     "specified default fulltext parser")
 fi
 
 # check Cutter with GLib support if available
