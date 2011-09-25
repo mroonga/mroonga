@@ -5669,7 +5669,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       }
     }
     grn_obj *index;
-    if (i == 1 && col_field_index >= 0 &&
+    if (grn_columns && i == 1 && col_field_index >= 0 &&
         grn_column_index(ctx, grn_columns[col_field_index], GRN_OP_LESS,
                          &index, 1, NULL)) {
       DBUG_PRINT("info", ("mroonga fast_order_limit_with_index = TRUE"));
