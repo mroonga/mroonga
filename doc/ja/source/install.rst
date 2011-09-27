@@ -124,6 +124,25 @@ CentOS 5
   % sudo yum update
   % sudo yum install -y mysql-groonga
 
+CentOS 6
+--------
+
+.. note::
+
+   amd64版のみ提供でi386版は未提供。
+
+既にディストリビューション由来のMySQLパッケージがインストール済みの場合には事前に削除する必要があります。
+
+既存のMySQLパッケージを削除::
+
+  % sudo yum remove mysql*
+
+インストール::
+
+  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
+  % sudo yum update
+  % sudo yum install -y mysql-groonga
+
 Fedora 15
 ---------
 
@@ -147,15 +166,19 @@ Fedora 15
 +++++++++++++++++++++++++
 
 形態素単位でトークナイズした全文検索索引を使用したい場合は、
-groongaのインストール前にMeCab
-(http://mecab.sourceforge.net/)をインストールしてください。
+groongaのインストール前に `MeCab <http://mecab.sourceforge.net/>`_
+をインストールしてください。
 
 ダウンロード
 ++++++++++++
 
-以下のページからソースのtarballをダウンロード可能です。
+リリース版のソースコードを利用する場合は `GitHubのダウンロードページ <http://github.com/mroonga/mroonga/downloads>`_ からtarballをダウンロードしてください。
 
-http://github.com/mroonga/mroonga/downloads
+最新のソースコードを利用する場合は `GitHub <https://github.com/mroonga/mroonga/>`_ からcloneして `./autogen.sh` を実行してください。（GNU Autotoolsが必要です。）この方法は開発に慣れた方向けなので、そうでない方はtarballを使うことをお勧めします。::
+
+ % git clone https://github.com/mroonga/mroonga.git
+ % mroonga
+ % ./autogen.sh
 
 前提条件
 ++++++++
@@ -171,9 +194,9 @@ MySQL 5.5最新版のソースコードをダウンロードし、ビルド＆�
 
 http://dev.mysql.com/downloads/mysql/
 
-mysql-5.5.13を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
+mysql-5.5.16を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
 
- /usr/local/src/mysql-5.5.13
+ /usr/local/src/mysql-5.5.16
 
 MySQLのバイナリが以下にインストールされているものと仮定します。 ::
 
@@ -194,14 +217,14 @@ groongaストレージエンジンのビルド
 以下のように ``--with-mysql-source`` でMySQLソースコードディレクトリ、 ``--with-mysql-config`` でmysql_configコマンドのパスを指定してconfigureを実行します。 ::
 
  ./configure \
-   --with-mysql-source=/usr/local/src/mysql-5.5.13 \
+   --with-mysql-source=/usr/local/src/mysql-5.5.16 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 groongaを/usr/libなど標準のパス以外にインストールした場合はPKG_CONFIG_PATHを指定する必要があります。例えば、ｰｰprefix=$HOME/localでgroongaをインストールした場合は以下のようにします。::
 
  ./configure \
    PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
-   --with-mysql-source=/usr/local/src/mysql-5.5.13 \
+   --with-mysql-source=/usr/local/src/mysql-5.5.16 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 その後、"make"を実行します。 ::
@@ -241,16 +264,3 @@ INSERTを行った際にgroongaにより割当てられるレコードIDを取�
 以下のようにCREATE FUNCTIONを実行します。 ::
 
  mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
-
-githubからのインストール
-------------------------
-レポジトリから一式ダウンロードします。 ::
-
- git clone git://github.com/mroonga/mroonga.git
-
-configureやMakefile.inなどを生成します。GNU Autotoolsが必要です。  ::
-
- ./autogen.sh
-
-この後のステップは `ソースコードからのインストール`_ と同じです。
-
