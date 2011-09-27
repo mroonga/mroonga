@@ -47,16 +47,18 @@ SHOW ENGINESコマンドでgroongaストレージエンジンがインストー�
 
 ストレージモードの構成を図で表すと以下のようになります。MyISAMやInnoDBなど既存のストレージエンジンの代わりに利用します。
 
-.. figure:: _static/images/storage-mode.png
+.. figure:: /images/storage-mode.png
    :alt: ストレージモード
+   :align: center
 
 
 ラッパーモードでは全文検索機能のみgroongaの機能を利用し、データストアはInnoDBなど既存のストレージエンジンを利用します。ラッパーモードを利用することにより、ストレージエンジンとして多くの利用実績のあるInnoDBに全文検索エンジンとして実績のあるgroongaを組み合わせて、高速な全文検索機能付きの信頼性のあるデータベースとして利用できるという特長があります。
 
 ラッパーモードの構成を図で表すと以下のようになります。全文検索関連の処理はgroongaストレージエンジンで処理し、それ以外の処理はMyISAMやInnoDBなど既存のストレージエンジンを利用します。SQLを処理するSQL Handlerと既存のストレージエンジンの間に位置するため、すべてのデータが一度groongaストレージエンジンを通ることになります。これを利用して、全文検索用のインデックス作成などを透過的に行います。
 
-.. figure:: _static/images/wrapper-mode.png
+.. figure:: /images/wrapper-mode.png
    :alt: ラッパーモード
+   :align: center
 
 モード毎の利用方法
 ------------------
