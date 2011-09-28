@@ -5185,7 +5185,7 @@ bool ha_mroonga::get_error_message(int error, String *buf)
   MRN_DBUG_ENTER_METHOD();
   // XXX: success is valid variable name?
   bool success;
-  if (share->wrapper_mode)
+  if (share && share->wrapper_mode)
   {
     success = wrapper_get_error_message(error, buf);
   } else {
