@@ -156,10 +156,6 @@ html_files =					\
 	html/_static/default.css		\
 	html/_static/doctools.js		\
 	html/_static/file.png			\
-	html/_static/images/storage-mode.png	\
-	html/_static/images/storage-mode.svg	\
-	html/_static/images/wrapper-mode.png	\
-	html/_static/images/wrapper-mode.svg	\
 	html/_static/jquery.js			\
 	html/_static/minus.png			\
 	html/_static/plus.png			\
