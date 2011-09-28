@@ -20,24 +20,19 @@
 drop table if exists t1, t2, t3;
 --enable_warnings
 
-# _id and hash index
-create table t1 (_id int, c1 int, unique key (_id) using hash);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
+# for virtual columns
+create table t1 (c1 int, _id int);
+insert into t1 values(1,null);
+insert into t1 values(2,null);
+insert into t1 values(3,null);
 select * from t1;
-update t1 set c1 = 200 where _id = 2;
+set sql_mode="";
+# warning 1265
+update t1 set _id = 10 where c1 = 1;
 select * from t1;
-drop table t1;
- 
-create table t1 (_id int, c1 int, key (_id) using hash);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-insert into t1 values(null, 100);
-select * from t1;
-update t1 set c1 = 200 where _id = 2;
+set sql_mode="strict_all_tables";
+--error 1406
+update t1 set _id = 11 where c1 = 1;
 select * from t1;
 drop table t1;
 
