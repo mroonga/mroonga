@@ -68,6 +68,7 @@ cp /tmp/${PACKAGE}.spec rpm/SPECS/
 
 chmod o+rx . rpm rpm/RPMS rpm/SRPMS
 
+# rpmbuild -ba --define 'optflags -O0 -ggdb3' rpm/SPECS/${PACKAGE}.spec
 rpmbuild -ba rpm/SPECS/${PACKAGE}.spec
 EOF
 
