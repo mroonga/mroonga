@@ -3423,10 +3423,41 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
   MRN_DBUG_ENTER_METHOD();
 
   int error = 0;
-  grn_id record_id;
-  error = wrapper_get_record_id((uchar *)old_data, &record_id,
-                                "failed to get record ID "
+
+  KEY key_info = table->key_info[table_share->primary_key];
+  GRN_BULK_REWIND(&key_buffer);
+  key_copy((uchar *)(GRN_TEXT_VALUE(&key_buffer)),
+           new_data,
+           &key_info, key_info.key_length);
+  int added;
+  grn_id new_record_id;
+  new_record_id = grn_table_add(ctx, grn_table,
+                                GRN_TEXT_VALUE(&key_buffer),
+                                table->key_info->key_length,
+                                &added);
+  if (new_record_id == GRN_ID_NIL) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to get new record ID for updating from groonga: key=<%.*s>",
+             (int)GRN_TEXT_LEN(&key_buffer), GRN_TEXT_VALUE(&key_buffer));
+    error = ER_ERROR_ON_WRITE;
+    my_message(error, error_message, MYF(0));
+    DBUG_RETURN(error);
+  }
+
+  grn_id old_record_id;
+  my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
+  for (int j = 0; j < key_info.key_parts; j++) {
+    Field *field = key_info.key_part[j].field;
+    field->move_field_offset(ptr_diff);
+  }
+  error = wrapper_get_record_id((uchar *)old_data, &old_record_id,
+                                "failed to get old record ID "
                                 "for updating from groonga");
+  for (int j = 0; j < key_info.key_parts; j++) {
+    Field *field = key_info.key_part[j].field;
+    field->move_field_offset(-ptr_diff);
+  }
   if (error) {
     DBUG_RETURN(error);
   }
@@ -3434,8 +3465,6 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
   grn_obj old_value, new_value;
   GRN_TEXT_INIT(&old_value, 0);
   GRN_TEXT_INIT(&new_value, 0);
-
-  my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
 
 #ifndef DBUG_OFF
   my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
@@ -3464,8 +3493,20 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
       field->move_field_offset(-ptr_diff);
 
       grn_rc rc;
-      rc = grn_column_index_update(ctx, index_column, record_id, j + 1,
-                                   &old_value, &new_value);
+      if (old_record_id == new_record_id) {
+        rc = grn_column_index_update(ctx, index_column, old_record_id, j + 1,
+                                     &old_value, &new_value);
+      } else {
+        rc = grn_column_index_update(ctx, index_column, old_record_id, j + 1,
+                                     &old_value, NULL);
+        if (!rc) {
+          rc = grn_column_index_update(ctx, index_column, new_record_id, j + 1,
+                                       NULL, &new_value);
+        }
+        if (!rc) {
+          rc = grn_table_delete_by_id(ctx, grn_table, old_record_id);
+        }
+      }
       if (rc) {
         error = ER_ERROR_ON_WRITE;
         my_message(error, ctx->errbuf, MYF(0));
@@ -3768,6 +3809,12 @@ err:
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
   grn_obj_unlink(ctx, &old_value);
+
+  grn_table_delete_by_id(ctx, grn_table, record_id);
+  if (ctx->rc) {
+    error = ER_ERROR_ON_WRITE;
+    my_message(error, ctx->errbuf, MYF(0));
+  }
 
   DBUG_RETURN(error);
 }
