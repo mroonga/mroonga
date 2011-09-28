@@ -17,7 +17,6 @@
 .. note::
 
    ラッパーモードでは現在ストレージモードでサポートされていない、以下をサポートしています。
-   * マルチカラムインデックス
    * null値
 
 全文検索の利用方法
@@ -25,30 +24,30 @@
 
 それでは早速 groonga ストレージエンジンのラッパーモードを利用して、テーブルを1つ作成してみましょう。 ::
 
- mysql> CREATE TABLE weather_forecasts (
-     ->   id INT PRIMARY KEY,
-     ->   content VARCHAR(255),
-     ->   FULLTEXT INDEX (content)
-     -> ) ENGINE = groonga COMMENT = 'engine "innodb"' DEFAULT CHARSET utf8;
- Query OK, 0 rows affected (0.30 sec)
+  mysql> CREATE TABLE diaries (
+      ->   id INT PRIMARY KEY AUTO_INCREMENT,
+      ->   content VARCHAR(255),
+      ->   FULLTEXT INDEX (content)
+      -> ) ENGINE = groonga COMMENT = 'engine "innodb"' DEFAULT CHARSET utf8;
+  Query OK, 0 rows affected (0.52 sec)
 
 次に INSERT でデータを投入してみましょう。 ::
 
- mysql> INSERT INTO weather_forecasts VALUES(1, "明日の天気は晴れでしょう。");
- Query OK, 1 row affected (0.04 sec)
- 
- mysql> INSERT INTO weather_forecasts VALUES(2, "明日の天気は雨でしょう。");
- Query OK, 1 row affected (0.04 sec)
+  mysql> INSERT INTO diaries (content) VALUES ("明日の天気は晴れでしょう。");
+  Query OK, 1 row affected (0.26 sec)
+
+  mysql> INSERT INTO diaries (content) VALUES ("明日の天気は雨でしょう。");
+  Query OK, 1 row affected (0.29 sec)
 
 データの投入が終了したら、全文検索を実行してみます。 ::
 
- mysql> SELECT * FROM weather_forecasts WHERE MATCH(content) AGAINST("晴れ");
- +----+-----------------------------------------+
- | id | content                                 |
- +----+-----------------------------------------+
- |  1 | 明日の天気は晴れでしょう。 |
- +----+-----------------------------------------+
- 1 row in set (0.00 sec)
+  mysql> SELECT * FROM diaries WHERE MATCH(content) AGAINST("晴れ");
+  +----+-----------------------------------------+
+  | id | content                                 |
+  +----+-----------------------------------------+
+  |  1 | 明日の天気は晴れでしょう。 |
+  +----+-----------------------------------------+
+  1 row in set (0.00 sec)
 
 お、検索できましたね。
 
@@ -57,74 +56,171 @@
 
 全文検索を行う際、指定したキーワードにより内容が一致するレコードを上位に表示したいというような場合があります。そうしたケースでは検索スコアを利用します。
 
-ストレージモードでは、検索スコアの取得を行うために ``_score`` という名前の仮想カラムを作成していました。一方、ラッパーモードではこの必要がありません。その代わりに WHERE 句へ指定したものと同じ match against を ORDER BY や SELECT 部分に指定することで、そのマッチの検索スコアを利用することができるようになっています。これは MySQL の全文検索機能における標準的な検索スコアの取得方法にならったものです（ `MySQL 5.1 リファレンスマニュアル :: 11 関数と演算子 :: 11.7 全文検索関数`_ ）。
+検索スコアはMySQLの標準的な方法で取得 [#score]_ できます。つまり、SELECTの取得するカラム名を指定するところやORDER BYのところにMATCH...AGAINSTを指定します。
 
-.. _`MySQL 5.1 リファレンスマニュアル :: 11 関数と演算子 :: 11.7 全文検索関数`: http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search.html
+それでは実際にやってみましょう。::
 
-それでは、実際に検索スコアを利用してみることにしましょう。まずはテーブルを作成します。 ::
+  mysql> INSERT INTO diaries (content) VALUES ("今日は晴れました。明日も晴れるでしょう。");
+  Query OK, 1 row affected (0.18 sec)
 
- mysql> CREATE TABLE messages (
-     ->   id INT PRIMARY KEY,
-     ->   message TEXT,
-     ->   FULLTEXT INDEX (message)
-     -> ) ENGINE = groonga COMMENT = 'engine "innodb"' DEFAULT CHARSET utf8;
- Query OK, 0 rows affected (0.28 sec)
+  mysql> INSERT INTO diaries (content) VALUES ("今日は晴れましたが、明日は雨でしょう。");
+  Query OK, 1 row affected (0.46 sec)
 
-次に、検索対象となるデータを挿入します。 ::
+  mysql> SELECT *, MATCH (content) AGAINST ("晴れ") FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
+  +----+--------------------------------------------------------------+------------------------------------+
+  | id | content                                                      | MATCH (content) AGAINST ("晴れ") |
+  +----+--------------------------------------------------------------+------------------------------------+
+  |  3 | 今日は晴れました。明日も晴れるでしょう。 |                                  2 |
+  |  1 | 明日の天気は晴れでしょう。                      |                                  1 |
+  |  4 | 今日は晴れましたが、明日は雨でしょう。    |                                  1 |
+  +----+--------------------------------------------------------------+------------------------------------+
+  3 rows in set (0.01 sec)
 
- mysql>  INSERT INTO messages VALUES(1, "aa ii uu ee oo");
- Query OK, 1 row affected (0.04 sec)
 
- mysql>  INSERT INTO messages VALUES(2, "aa ii ii ii oo");
- Query OK, 1 row affected (0.04 sec)
-
- mysql>  INSERT INTO messages VALUES(3, "hoge huga hehe");
- Query OK, 1 row affected (0.05 sec)
-
- mysql>  INSERT INTO messages VALUES(4, "foo bar baz");
- Query OK, 1 row affected (0.04 sec)
-
-データが挿入し終わったので、実際に検索スコアを利用した検索を行なってみます。 ::
-
- mysql> SELECT * FROM messages WHERE MATCH(message) AGAINST("ii") ORDER BY MATCH(message) AGAINST("ii") DESC;
- +----+----------------+
- | id | message        |
- +----+----------------+
- |  2 | aa ii ii ii oo |
- |  1 | aa ii uu ee oo |
- +----+----------------+
- 2 row in set (0.00 sec)
-
-検索対象の文字列 ``ii`` をより多く含む、すなわち検索スコアの高い ``id = 2`` のメッセージが上に来ていることが確認できます。
-
-ここで、SELECT 句に match against を記述することで、検索スコアの値自体を検索結果に含めることも可能です。 ::
-
- mysql> SELECT *, MATCH(message) AGAINST("ii") FROM messages WHERE MATCH(message) AGAINST("ii") ORDER BY MATCH(message) AGAINST("ii") DESC;
- +----+----------------+------------------------------+
- | id | message        | MATCH(message) AGAINST("ii") |
- +----+----------------+------------------------------+
- |  2 | aa ii ii ii oo |                            3 |
- |  1 | aa ii uu ee oo |                            1 |
- +----+----------------+------------------------------+
- 2 rows in set (0.00 sec)
+検索対象の文字列 ``晴れ`` をより多く含む、すなわち検索スコアの高い ``id = 3`` のメッセージが上に来ていることが確認できます。また、SELECT句にMATCH AGAINSTを記述しているため、検索スコアも取得できています。
 
 属性名を変更したい場合は ``AS`` を使って下さい。 ::
 
- mysql> SELECT *, MATCH(message) AGAINST("ii") AS score FROM messages WHERE MATCH(message) AGAINST("ii") ORDER BY MATCH(message) AGAINST("ii") DESC;
- +----+----------------+-------+
- | id | message        | score |
- +----+----------------+-------+
- |  2 | aa ii ii ii oo |     3 |
- |  1 | aa ii uu ee oo |     1 |
- +----+----------------+-------+
- 2 rows in set (0.00 sec)
+  mysql> SELECT *, MATCH (content) AGAINST ("晴れ") AS score FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
+  +----+--------------------------------------------------------------+-------+
+  | id | content                                                      | score |
+  +----+--------------------------------------------------------------+-------+
+  |  3 | 今日は晴れました。明日も晴れるでしょう。 |     2 |
+  |  1 | 明日の天気は晴れでしょう。                      |     1 |
+  |  4 | 今日は晴れましたが、明日は雨でしょう。    |     1 |
+  +----+--------------------------------------------------------------+-------+
+  3 rows in set (0.00 sec)
 
-レコードIDの取得方法
---------------------
+全文検索用パーサの変更
+----------------------
 
-ストレージモードでは ``_id`` という名前のカラムを作成することにより groonga 内部でのレコード ID 値を取得することが可能となっていました。
+MySQLは全文検索用のパーサ [#parser]_ を指定する以下のような構文を持っています。::
 
-他方、ラッパーモードでは groonga 内部でのレコード ID 値を取得することができません。これは「レコードを一意に識別するためにはより MySQL の作法に従ったプライマリキーを利用すべきである」という設計方針によるものです。
+  FULLTEXT INDEX (content) WITH PARSER パーサ名
+
+しかし、この構文を利用する場合は、あらかじめすべてのパーサをMySQLに登録しておく必要があります。一方、groongaはトークナイザー（MySQLでいうパーサ）を動的に追加することができます。そのため、groognaストレージエンジンでもこの構文を採用するとgroonga側に動的に追加されたトークナイザーに対応できなくなります。groongaに動的に追加されるトークナイザーにはMeCabを用いたトークナイザーもあり、この制限に縛られることは利便性を損なうと判断し、以下のようなコメントを用いた独自の構文を採用することにしました。::
+
+  FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
+
+.. note::
+
+   ``FULLTEXT INDEX`` に ``COMMENT`` を指定できるのはMySQL 5.5からになります。MySQL 5.1を利用している場合は後述の ``groonga_default_parser`` 変数を利用してください。
+
+パーサに指定できるのは以下の値です。
+
+TokenBigram
+  バイグラムでトークナイズする。ただし、連続したアルファベット・連続した数字・連続した記号はそれぞれ1つのトークンとして扱う。そのため、3文字以上のトークンも存在する。これはノイズを減らすためである。
+
+  デフォルト値。
+
+TokenMecab
+  MeCabを用いてトークナイズする。groongaがMeCabサポート付きでビルドされている必要がある。
+
+TokenBigramSplitSymbol
+  バイグラムでトークナイズする。TokenBigramと異なり、記号が連続していても特別扱いして1つのトークンとして扱わず通常のバイグラムの処理を行う。
+
+  TokenBigramではなくTokenBigramSplitSymbolを利用すると「Is it really!?!?!?」の「!?!?!?」の部分に「!?」でマッチする。TokenBigramの場合は「!?!?!?」でないとマッチしない。
+
+TokenBigramSplitSymbolAlpha
+  バイグラムでトークナイズする。TokenBigramSplitSymbolに加えて、連続したアルファベットも特別扱いせずに通常のバイグラムの処理を行う。
+
+  TokenBigramではなくTokenBigramSplitSymbolAlphaを利用すると「Is it really?」に「real」でマッチする。TokenBigramの場合は「really」でないとマッチしない。
+
+TokenBigramSplitSymbolAlphaDigit
+  バイグラムでトークナイズする。TokenBigramSplitSymbolAlphaに加えて、連続した数字も特別扱いせずに通常のバイグラムの処理を行う。つまり、すべての字種を特別扱いせずにバイグラムの処理を行う。
+
+  TokenBigramではなくTokenBigramSplitSymbolAlphaDigitを利用すると「090-0123-4567」に「567」でマッチする。TokenBigramの場合は「4567」でないとマッチしない。
+
+TokenBigramIgnoreBlank
+  バイグラムでトークナイズする。TokenBigramと異なり、空白を無視して処理する。
+
+  TokenBigramではなくTokenBigramIgnoreBlankを利用すると「み な さ ん 注 目」に「みなさん」でマッチする。TokenBigramの場合は「み な さ ん」でないとマッチしない。
+
+TokenBigramIgnoreBlankSplitSymbol
+  バイグラムでトークナイズする。TokenBigramSymbolと異なり、空白を無視して処理する。
+
+  TokenBigramSplitSymbolではなくTokenBigramIgnoreBlankSplitSymbolを利用すると「! !? ??」に「???」でマッチする。TokenBigramSplitBlankの場合は「? ??」でないとマッチしない。
+
+TokenBigramIgnoreBlankSplitSymbolAlpha
+  バイグラムでトークナイズする。TokenBigramSymbolAlphaと異なり、空白を無視して処理する。
+
+  TokenBigramSplitSymbolAlphaではなくTokenBigramIgnoreBlankSplitSymbolAlphaを利用すると「I am a pen.」に「ama」でマッチする。TokenBigramSplitBlankAlphaの場合は「am a」でないとマッチしない。
+
+TokenBigramIgnoreBlankSplitSymbolAlphaDigit
+  バイグラムでトークナイズする。TokenBigramSymbolAlphaDigitと異なり、空白を無視して処理する。
+
+  TokenBigramSplitSymbolAlphaDigitではなくTokenBigramIgnoreBlankSplitSymbolAlphaDigitを利用すると「090 0123 4567」に「9001」でマッチする。TokenBigramSplitBlankAlphaDigitの場合は「90 01」でないとマッチしない。
+
+TokenDelimit
+  空白区切りでトークナイズする。
+
+  「映画 ホラー 話題」は「映画」・「ホラー」・「話題」にトークナイズされる。
+
+TokenDelimitNull
+  null文字（\\0）区切りでトークナイズする。
+
+  「映画\\0ホラー\\0話題」は「映画」・「ホラー」・「話題」にトークナイズされる。
+
+TokenUnigram
+  ユニグラムでトークナイズする。ただし、連続したアルファベット・連続した数字・連続した記号はそれぞれ1つのトークンとして扱う。そのため、2文字以上のトークンも存在する。これはノイズを減らすためである。
+
+TokenTrigram
+  トリグラムでトークナイズする。ただし、連続したアルファベット・連続した数字・連続した記号はそれぞれ1つのトークンとして扱う。そのため、4文字以上のトークンも存在する。これはノイズを減らすためである。
+
+デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションでビルド時に指定することができます。::
+
+  ./configure --with-default-parser TokenMecab ...
+
+また、my.cnfまたはSQL内で ``groonga_default_parser`` 変数を指定することでも指定できます。my.cnfで指定するとMySQLを再起動しても値は変更されたままですが、反映させるために再起動しなければいけません。一方、SQLで指定した場合はすぐに設定が反映されますが、MySQLが再起動すると設定は失われます。
+
+my.cnf::
+
+  [mysqld]
+  groonga_default_parser=TokenMecab
+
+SQL::
+
+  mysql> SET GLOBAL groonga_default_parser = TokenMecab;
+  Query OK, 0 rows affected (0.00 sec)
+
+..
+   位置情報検索の利用方法
+   ----------------------
+
+   ラッパーモードではラップ対象のストレージエンジンに全文検索機能だけではなく位置情報検索機能も追加します。ただし、インデックスを用いた高速な検索に対応しているのはMBRContainsだけです。MBRDisjointなどには対応していません。
+
+   位置情報検索を利用する場合のテーブル定義はMyISAMと同様にPOINT型のカラムを定義し、そのカラムに対してSPATIAL INDEXを指定します。::
+
+     mysql> CREATE TABLE shops (
+	 ->   id INT PRIMARY KEY AUTO_INCREMENT,
+	 ->   name VARCHAR(255),
+	 ->   location POINT NOT NULL,
+	 ->   SPATIAL INDEX (location)
+	 -> ) ENGINE = groonga COMMENT = 'engine "innodb"';
+     Query OK, 0 rows affected (0.34 sec)
+
+   データの登録方法もMyISAMのときと同様にGeomFromText()関数を使って文字列からPOINT型の値を作成します。::
+
+     mysql> INSERT INTO shops VALUES (null, '根津のたいやき', GeomFromText('POINT(139.762573 35.720253)'));
+     Query OK, 1 row affected (0.26 sec)
+
+     mysql> INSERT INTO shops VALUES (null, '浪花家', GeomFromText('POINT(139.796234 35.730061)'));
+     Query OK, 1 row affected (0.06 sec)
+
+     mysql> INSERT INTO shops VALUES (null, '柳屋 たい焼き', GeomFromText('POINT(139.783981 35.685341)'));
+     Query OK, 1 row affected (0.02 sec)
+
+   池袋駅（139.7101 35.7292）が左上の点、東京駅（139.7662 35.6815）が右下の点となるような長方形内にあるお店を探す場合は以下のようなSELECTになります。::
+
+     mysql> SELECT id, name, AsText(location) FROM shops WHERE MBRContains(GeomFromText('LineString(139.7101 35.7292, 139.7662 35.6815)'), location);
+     +----+-----------------------+------------------------------------------+
+     | id | name                  | AsText(location)                         |
+     +----+-----------------------+------------------------------------------+
+     |  1 | 根津のたいやき | POINT(139.762572777778 35.7202527777778) |
+     +----+-----------------------+------------------------------------------+
+     1 row in set (0.00 sec)
+
+   位置情報で検索できていますね！
 
 ログ出力
 --------
@@ -148,24 +244,24 @@ groongaストレージエンジンではデフォルトでログの出力を行�
 
 ログの出力レベルは ``groonga_log_level`` というシステム変数で確認することができます（グローバル変数）。またSET文で動的に出力レベルを変更することもできます。 ::
 
- mysql> SHOW VARIABLES LIKE 'groonga_log_level';
- +-------------------+--------+
- | Variable_name     | Value  |
- +-------------------+--------+
- | groonga_log_level | NOTICE |
- +-------------------+--------+
- 1 row in set (0.00 sec)
- 
- mysql> SET GLOBAL groonga_log_level=DUMP;
- Query OK, 0 rows affected (0.05 sec)
- 
- mysql> SHOW VARIABLES LIKE 'groonga_log_level';
- +-------------------+-------+
- | Variable_name     | Value |
- +-------------------+-------+
- | groonga_log_level | DUMP  |
- +-------------------+-------+
- 1 row in set (0.00 sec)
+  mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+  +-------------------+--------+
+  | Variable_name     | Value  |
+  +-------------------+--------+
+  | groonga_log_level | NOTICE |
+  +-------------------+--------+
+  1 row in set (0.00 sec)
+
+  mysql> SET GLOBAL groonga_log_level=DUMP;
+  Query OK, 0 rows affected (0.05 sec)
+
+  mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+  +-------------------+-------+
+  | Variable_name     | Value |
+  +-------------------+-------+
+  | groonga_log_level | DUMP  |
+  +-------------------+-------+
+  1 row in set (0.00 sec)
 
 設定可能なログレベルは以下の通りです。
 
@@ -185,48 +281,41 @@ groongaストレージエンジンではデフォルトでログの出力を行�
 1. ``groonga.log`` ファイルの名前を変更（OSコマンドのmvなどで）
 2. MySQLサーバに対して"FLUSH LOGS"を実行（mysqlコマンドあるいはmysqladminコマンドにて）
 
-注意点
-------
+全文検索時の ORDER BY LIMIT 高速化
+----------------------------------
 
-0.7でのラッパーモードの実装はMySQLのストレージエンジンAPIを実直に利用したものになっています。そのため、「全文検索結果で結果レコードを絞り込むことにより不要なレコードアクセスを減らし、全文検索結果を用いた高速な検索を実現する」ということができません。これはMySQLのストレージエンジンAPIの制限なのですが、0.8では解消し、高速に検索できるようにする予定です。
+一般的にMySQLでは"ORDER BY"はインデックス経由のレコード参照が行えればほぼノーコストで処理可能であり、"LIMIT"は検索結果が大量にヒットする場合でも処理対象を限定することでコストを一定に抑える効果があります。
 
-0.7での動作と0.8で予定している動作の概要は以下の通りです。
+しかし例えば全文検索のスコアの降順+LIMITのように"ORDER BY"の処理の際にインデックスが効かないクエリの場合、検索ヒット件数に比例したコストがかかってしまうため、特に大量の検索がヒットするようなキーワード検索においてクエリ処理に極端に時間がかかってしまうケースがあります。
 
-0.7での動作
-^^^^^^^^^^^
+Tritonnではこの問題に対して特に対応はできていませんでしたが、最新レポジトリではsen_records_sort関数を活用してSennaからの読み出しをスコアの降順に対応させることでSQLクエリからORDER BY句を取り除く(※スコア降順を指定していたケースに対してのみ有効)回避方法を導入しました。
 
-0.7ではMySQLのストレージエンジンAPIに素直に従った実装になってるため、全文検索結果を有効に活用しきれていません。MySQLのストレージエンジンAPIに従った場合の動作を以下に示します。
+groongaストレージエンジンでも ORDER BY LIMIT を高速化するための仕組みを実装しています。
 
-サンプルクエリは ``SELECT * FROM users WHERE users.age >= 20 AND MATCH(description) AGAINST("趣味");`` とします。
+例えば以下のSELECT文では ORDER BY LIMIT は、groonga内で処理され、必要最小限のレコードだけをMySQLに返却しています。 ::
 
-1. MySQLはクエリのうち全文検索条件の部分「 ``MATCH(description) AGAINST("趣味")`` 」だけで検索するようにgroongaストレージエンジンに依頼します。
-2. groongaストレージエンジンはMySQLから渡された条件で全文検索を行います。
-3. MySQLはクエリから全文検索条件の部分「 ``MATCH(description) AGAINST("趣味")`` 」を取り除いたクエリ「 ``SELECT * FROM users WHERE users.age >= 20`` 」で検索するようgroongaストレージエンジンに依頼します。
-4. groongaストレージエンジンはMySQLから渡された条件で検索するようにラップしているストレージエンジンに依頼します。
-5. MySQLはgroongaストレージエンジンにマッチしたレコードを順に返すように要求します。
-6. groongaストレージエンジンはラップしているストレージエンジンからレコードを順に取り出してMySQLに返します。このとき返すレコードは「 ``users.age >= 20`` 」にマッチしたレコードです。「 ``MATCH(description) AGAINST ("趣味")`` 」での絞り込みは行われていません。
-7. MySQLはgroongaストレージエンジンから返ってきたそれぞれのレコードについて、全文検索結果のスコアを問い合せます。
-8. groongaストレージエンジンは各レコードについて「 ``MATCH(description) AGAINST ("趣味")`` 」がヒットしていればスコアを返し、そうでなければ「ヒットしなかったという特別なスコア」を返します。
-9. MySQLはgroongaストレージエンジンが返したスコアを確認し、「ヒットしなかったという特別なスコア」が返されたレコードを検索結果から除去します。この時点ではじめて全文検索結果がレコードの絞り込みに使われます。
-10. MySQLはgroongaストレージエンジンが返したレコード（= ラップしているストレージエンジンが返したレコード）から、「 ``MATCH(description) AGAINST ("趣味")`` 」にヒットしなかったレコードを削除したものをクライアントに返します。
+  SELECT * FROM t1 WHERE MATCH(c2) AGAINST("hoge") ORDER BY c1 LIMIT 1;
 
-このうち、6.のところで全文検索結果を反映したレコードのみを返すことができれば余計なレコードアクセスが減り、より高いパフォーマンスをだせます。しかし、MySQLのストレージエンジンAPIでは「全文検索以外の条件でレコードを取得した後に全文検索結果を参照してレコードをフィルターする」という動作のためせっかくのgroongaの高速な全文検索機能を活かしきれていません。
+ORDER BY LIMIT 高速化の処理が行われたかどうかはステータス変数で確認することもできます。::
 
-0.8での動作
-^^^^^^^^^^^
+  mysql> SHOW STATUS LIKE 'groonga_fast_order_limit';
+  +--------------------------+-------+
+  | Variable_name            | Value |
+  +--------------------------+-------+
+  | groonga_fast_order_limit | 1     |
+  +--------------------------+-------+
+  1 row in set (0.00 sec)
 
-0.8ではMySQLのストレージエンジンAPIの制限を回避し、全文検索結果を有効に活用した高速な検索を実現する方法を実装する予定です。予定している実装方法を以下に示します。
+ORDER BY LIMIT 高速化の処理が行われる度に ``groonga_fast_order_limit`` ステータス変数がインクリメントされます。
 
-サンプルクエリは ``SELECT * FROM users WHERE users.age >= 20 AND MATCH(description) AGAINST("趣味");`` とします。
+備考：この高速化機能は、「select ... match against order by _score desc limit X, Y」を狙い撃ちした高速化で、現在のところ以下の条件が成立した場合に機能します。
 
-1. MySQLはクエリのうち全文検索条件の部分「 ``MATCH(description) AGAINST("趣味")`` 」だけで検索するようにgroongaストレージエンジンに依頼します。
-2. groongaストレージエンジンはMySQLから渡された条件で全文検索を行います。
-3. MySQLはクエリから全文検索条件の部分「 ``MATCH(description) AGAINST("趣味")`` 」を取り除いたクエリ「 ``SELECT * FROM users WHERE users.age >= 20`` 」で検索するようgroongaストレージエンジンに依頼します。
-4. groongaストレージエンジンはMySQLから渡されたクエリに全文検索でヒットしたレコードで絞り込む条件「 ``id IN (1, 3, 4, ...)`` 」を追加したクエリ「 ``SELECT * FROM users WHERE users.age >= 20 AND id IN (1, 3, 4, ...)`` 」で検索するよう、ラップしているストレージエンジンに依頼します。
-5. MySQLはgroongaストレージエンジンにレコードを順に返すように要求します。
-6. groongaストレージエンジンはラップしているストレージエンジンからレコードを順に取り出してMySQLに返します。このとき返すレコードは「 ``users.age >= 20 AND id IN (1, 3, 4, ...)`` 」にマッチしたレコードなので、「 ``MATCH(description) AGAINST ("趣味")`` 」での絞り込み結果も反映されています。
-7. MySQLはgroongaストレージエンジンから返ってきたそれぞれのレコードについて、全文検索結果のスコアを問い合せます。
-8. groongaストレージエンジンは各レコードについて「 ``MATCH(description) AGAINST ("趣味")`` 」で検索した結果のスコアを返します。
-9. MySQLはgroongaストレージエンジンが返したレコードをクライアントに返します。
+* where句がmatch...againstのみ
+* joinしていない
+* limitの指定がある
+* order byの指定がカラム(_id含む)またはwhere句に指定したmatch...againstである
 
-ポイントは4.の「全文検索でヒットしたレコードで絞り込む条件」を追加している部分です。これで「全文検索条件での絞り込みで無駄なレコードアクセスを減らすことができない」というMySQLのストレージエンジンAPIの制限を回避することができます。これにより、全文検索結果を用いて無駄なレコードアクセスを減らすことができるため、高速な全文検索を実現できます。
+.. rubric:: 脚注
+
+.. [#score] `MySQL 5.1 リファレンスマニュアル :: 11 関数と演算子 :: 11.7 全文検索関数 <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search.html>`_
+.. [#parser] groongaではトークナイザーと呼んでいる。
