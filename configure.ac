@@ -75,7 +75,12 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   fi
   MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
   MYSQL_INC="$MYSQL_INC $($ac_mysql_config --include)"
-  AC_SUBST(plugindir)
+  ac_mysql_major_version="`$ac_mysql_config --version | cut -b 1,3`"
+  if test $ac_mysql_major_version -lt 55; then
+    MYSQL_VERSION="5.1"
+  else
+    MYSQL_VERSION="5.5"
+  fi
 ])
 
 AC_DEFUN([CONFIG_OPTION_MECAB],[
@@ -164,6 +169,7 @@ else
 fi
 AC_SUBST(MYSQL_INC)
 AC_SUBST(MYSQL_CFLAGS)
+AC_SUBST(MYSQL_VERSION)
 AC_SUBST(plugindir)
 CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
