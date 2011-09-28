@@ -15,15 +15,15 @@
       ->   content VARCHAR(255),
       ->   FULLTEXT INDEX (content)
       -> ) ENGINE = groonga DEFAULT CHARSET utf8;
-  Query OK, 0 rows affected (0.22 sec)
+  Query OK, 0 rows affected (0.10 sec)
 
 INSERTでデータを投入してみましょう。 ::
 
-  mysql> INSERT INTO diaries VALUES ("明日の天気は晴れでしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("明日の天気は晴れでしょう。");
   Query OK, 1 row affected (0.01 sec)
 
-  mysql> INSERT INTO diaries VALUES ("明日の天気は雨でしょう。");
-  Query OK, 1 row affected (0.04 sec)
+  mysql> INSERT INTO diaries (content) VALUES ("明日の天気は雨でしょう。");
+  Query OK, 1 row affected (0.00 sec)
 
 全文検索を実行してみます。 ::
 
@@ -33,7 +33,7 @@ INSERTでデータを投入してみましょう。 ::
   +----+-----------------------------------------+
   |  1 | 明日の天気は晴れでしょう。 |
   +----+-----------------------------------------+
-  1 row in set (0.02 sec)
+  1 row in set (0.00 sec)
 
 おぉぉー。検索できましたね。
 
@@ -50,20 +50,21 @@ INSERTでデータを投入してみましょう。 ::
 
 それでは実際にやってみましょう。::
 
-  mysql> INSERT INTO diaries VALUES ("今日は晴れました。明日も晴れるでしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("今日は晴れました。明日も晴れるでしょう。");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO diaries VALUES ("今日は晴れましたが、明日は雨でしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("今日は晴れましたが、明日は雨でしょう。");
   Query OK, 1 row affected (0.00 sec)
 
   mysql> SELECT *, MATCH (content) AGAINST ("晴れ") FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
-  +----+----------------+--------+
-  | id | content             | MATCH(content) AGAINST("晴れ") |
-  +----+----------------+--------+
-  |  2 | aa ii ii ii oo |      3 |
-  |  1 | aa ii uu ee oo |      1 |
-  +----+----------------+--------+
-  2 rows in set (0.00 sec)
+  +----+--------------------------------------------------------------+------------------------------------+
+  | id | content                                                      | MATCH (content) AGAINST ("晴れ") |
+  +----+--------------------------------------------------------------+------------------------------------+
+  |  3 | 今日は晴れました。明日も晴れるでしょう。 |                                  2 |
+  |  1 | 明日の天気は晴れでしょう。                      |                                  1 |
+  |  4 | 今日は晴れましたが、明日は雨でしょう。    |                                  1 |
+  +----+--------------------------------------------------------------+------------------------------------+
+  3 rows in set (0.00 sec)
 
 検索スコアもORDER BYでのソートも効いていますね！
 
@@ -152,7 +153,7 @@ my.conf::
 SQL::
 
   mysql> SET GLOBAL groonga_default_parser = TokenMecab;
-  ... TODO ...
+  Query OK, 0 rows affected (0.00 sec)
 
 位置情報検索の利用方法
 ----------------------
@@ -167,23 +168,28 @@ SQL::
       ->   location POINT NOT NULL,
       ->   SPATIAL INDEX (location)
       -> ) ENGINE = groonga;
-  ... TODO ...
+  Query OK, 0 rows affected (0.06 sec)
 
 データの登録方法もMyISAMのときと同様にGeomFromText()関数を使って文字列からPOINT型の値を作成します。::
 
-  mysql> INSERT INTO shops VALUES ('根津のたいやき', GeomFromText('POINT(139.762573 35.720253)'));
-  ... TODO ...
+  mysql> INSERT INTO shops VALUES (null, '根津のたいやき', GeomFromText('POINT(139.762573 35.720253)'));
+  Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO shops VALUES ('浪花家', GeomFromText('POINT(139.796234 35.730061)'));
-  ... TODO ...
+  mysql> INSERT INTO shops VALUES (null, '浪花家', GeomFromText('POINT(139.796234 35.730061)'));
+  Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO shops VALUES ('柳屋 たい焼き', GeomFromText('POINT(139.783981 35.685341)');
-  ... TODO ...
+  mysql> INSERT INTO shops VALUES (null, '柳屋 たい焼き', GeomFromText('POINT(139.783981 35.685341)'));
+  Query OK, 1 row affected (0.00 sec)
 
 池袋駅（139.7101 35.7292）が左上の点、東京駅（139.7662 35.6815）が右下の点となるような長方形内にあるお店を探す場合は以下のようなSELECTになります。::
 
-  mysql> SELECT * FROM shops WHERE MBRContains(location, GeomFromText('LINE(139.7101 35.7292, 139.7662 35.6815)'));
-  ... TODO ...
+  mysql> SELECT id, name, AsText(location) FROM shops WHERE MBRContains(GeomFromText('LineString(139.7101 35.7292, 139.7662 35.6815)'), location);
+  +----+-----------------------+------------------------------------------+
+  | id | name                  | AsText(location)                         |
+  +----+-----------------------+------------------------------------------+
+  |  1 | 根津のたいやき | POINT(139.762572777778 35.7202527777778) |
+  +----+-----------------------+------------------------------------------+
+  1 row in set (0.00 sec)
 
 位置情報で検索できていますね！
 
@@ -196,12 +202,12 @@ groongaストレージエンジンではアプリケーションの開発を容�
 
 レコードIDを取得するためには、テーブル定義時に ``_id`` という名前のカラムを作成して下さい。 ::
 
- mysql> CREATE TABLE memos (
-     ->   _id INT,
-      >   content VARCHAR(255),
-     ->   UNIQUE KEY (_id) USING HASH
-     -> ) ENGINE = groonga;
- Query OK, 0 rows affected (0.01 sec)
+  mysql> CREATE TABLE memos (
+      ->   _id INT,
+       >   content VARCHAR(255),
+      ->   UNIQUE KEY (_id) USING HASH
+      -> ) ENGINE = groonga;
+  Query OK, 0 rows affected (0.04 sec)
 
 _idカラムのデータ型は整数型(TINYINT、SMALLINT、MEDIUMINT、INT、BIGINT)である必要があります。
 
@@ -210,35 +216,34 @@ _idカラムのデータ型は整数型(TINYINT、SMALLINT、MEDIUMINT、INT、B
 INSERTでテーブルにレコードを追加してみましょう。_idカラムは仮想カラムとして実装されており、また_idの値であるレコードIDはgroongaにより割当てられるため、SQLによる更新時に値を指定することはできません。
 更新対象から外すか、値に ``null`` を使用する必要があります。 ::
 
- mysql> INSERT INTO memo VALUES (null, "今夜はさんま。");
- Query OK, 1 row affected (0.00 sec)
- 
- mysql> INSERT INTO memo VALUES (null, "明日のgroongaをアップデート。");
- Query OK, 1 row affected (0.00 sec)
- 
- mysql> INSERT INTO memo VALUES (null, "帰りにおだんご。");
- Query OK, 1 row affected (0.00 sec)
- 
- mysql> INSERT INTO memo VALUES (null, "金曜日は肉の日。");
- Query OK, 1 row affected (0.00 sec)
+  mysql> INSERT INTO memos VALUES (null, "今夜はさんま。");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> INSERT INTO memos VALUES (null, "明日はgroongaをアップデート。");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> INSERT INTO memos VALUES (null, "帰りにおだんご。");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> INSERT INTO memos VALUES (null, "金曜日は肉の日。");
+  Query OK, 1 row affected (0.00 sec)
 
 レコードIDを取得するには、_idカラムを含むようにしてSELECTを行います。 ::
 
-  mysql> SELECT * FROM memo;
-  ... TODO ...
-  +------+------+
-  | _id  | foo  |
-  +------+------+
-  |    1 |  100 |
-  |    2 |  100 |
-  |    3 |  100 |
-  |    4 |  100 |
-  +------+------+
+  mysql> SELECT * FROM memos;
+  +------+------------------------------------------+
+  | _id  | content                                  |
+  +------+------------------------------------------+
+  |    1 | 今夜はさんま。                    |
+  |    2 | 明日はgroongaをアップデート。 |
+  |    3 | 帰りにおだんご。                 |
+  |    4 | 金曜日は肉の日。                 |
+  +------+------------------------------------------+
   4 rows in set (0.00 sec)
 
 また直前のINSERTにより割当てられたレコードIDについては、last_insert_grn_id関数により取得することもできます。 ::
 
-  mysql> INSERT INTO memo VALUES (null, "冷蔵庫に牛乳が残り1本。");
+  mysql> INSERT INTO memos VALUES (null, "冷蔵庫に牛乳が残り1本。");
   Query OK, 1 row affected (0.00 sec)
 
   mysql> SELECT last_insert_grn_id();
@@ -251,11 +256,11 @@ INSERTでテーブルにレコードを追加してみましょう。_idカラ�
 
 last_insert_grn_id関数はユーザ定義関数(UDF)としてgroongaストレージエンジンに含まれていますが、インストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関数定義DDLを実行しておく必要があります。 ::
 
- mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_groonga.so';
+  mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_groonga.so';
 
 ご覧のように_idカラムやlast_insert_grn_id関数を通じてレコードIDを取得することができました。ここで取得したレコードIDは後続のUPDATEなどのSQL文で利用すると便利です。 ::
 
-  mysql> UPDATE memo SET content = "冷蔵庫に牛乳はまだたくさんある。" WHERE _id = 5;
+  mysql> UPDATE memos SET content = "冷蔵庫に牛乳はまだたくさんある。" WHERE _id = last_insert_grn_id();
   ... TODO ...
 
 ログ出力
@@ -284,7 +289,7 @@ groongaストレージエンジンではデフォルトでログの出力を行�
   1 row in set (0.00 sec)
 
   mysql> SET GLOBAL groonga_log_level=DUMP;
-  Query OK, 0 rows affected (0.05 sec)
+  Query OK, 0 rows affected (0.00 sec)
 
   mysql> SHOW VARIABLES LIKE 'groonga_log_level';
   +-------------------+-------+
@@ -330,7 +335,7 @@ groongaでは各カラムごとにファイルを分けてデータを格納す�
     c12 VARCHAR(20),
     ...
     c20 DATETIME
-  ) ENGINE = InnoDB DEFAULT CHARSET utf8;
+  ) ENGINE = groonga DEFAULT CHARSET utf8;
 
 この時、以下のようなSELECT文が発行される場合、groongaストレージエンジンではSELECT句およびWHERE句で参照しているカラムに対してのみデータの読み取りを行ってSQL文を処理します（内部的に不要なカラムに対してはアクセスしません）。 ::
 
@@ -353,7 +358,7 @@ groongaストレージエンジンの前身であるTritonn(MySQL+Senna)では�
 
 行カウント高速化の処理が行われたかどうかはステータス変数で確認することもできます。::
 
-  mysql> show status like 'groonga_count_skip';
+  mysql> SHOW STATUS LIKE 'groonga_count_skip';
   +--------------------+-------+
   | Variable_name      | Value |
   +--------------------+-------+
@@ -382,7 +387,7 @@ groongaストレージエンジンでも ORDER BY LIMIT を高速化するため
 
 ORDER BY LIMIT 高速化の処理が行われたかどうかはステータス変数で確認することもできます。::
 
-  mysql> show status like 'groonga_fast_order_limit';
+  mysql> SHOW STATUS LIKE 'groonga_fast_order_limit';
   +--------------------------+-------+
   | Variable_name            | Value |
   +--------------------------+-------+
