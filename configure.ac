@@ -73,6 +73,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   if test $? -ne 0; then
     AC_MSG_ERROR([failed to run "$ac_mysql_config": $plugindir])
   fi
+  MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
   MYSQL_INC="$MYSQL_INC $($ac_mysql_config --include)"
   AC_SUBST(plugindir)
 ])
