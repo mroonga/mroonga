@@ -1492,16 +1492,16 @@ int ha_mroonga::wrapper_create_index_table(grn_obj *grn_table,
     index_column_flags |= GRN_OBJ_WITH_SECTION;
   }
 
-  grn_obj *column_type = grn_ctx_at(ctx, GRN_DB_TEXT);
+  grn_obj *lexicon_key_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
   index_table = grn_table_create(ctx, index_name, strlen(index_name), NULL,
-                                 index_table_flags, column_type, 0);
+                                 index_table_flags, lexicon_key_type, 0);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-    grn_obj_unlink(ctx, column_type);
+    grn_obj_unlink(ctx, lexicon_key_type);
     DBUG_RETURN(error);
   }
-  grn_obj_unlink(ctx, column_type);
+  grn_obj_unlink(ctx, lexicon_key_type);
   index_tables[i] = index_table;
 
   grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
