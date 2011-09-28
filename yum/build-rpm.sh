@@ -18,7 +18,17 @@ run()
 }
 
 distribution=$(cut -d ' ' -f 1 /etc/redhat-release | tr 'A-Z' 'a-z')
-distribution_version=$(cut -d ' ' -f 3 /etc/redhat-release)
+case $distribution in
+    fedora)
+	distribution_version=$(cut -d ' ' -f 3 /etc/redhat-release)
+	;;
+    centos)
+	distribution_version=$(cut -d ' ' -f 4 /etc/redhat-release)
+	;;
+esac
+
+rpmbuild_options=""
+
 if ! rpm -q ${distribution}-release > /dev/null 2>&1; then
     packages_dir=/var/cache/yum/core/packages
     release_rpm=${distribution}-release-${distribution_version}-*.rpm
@@ -36,6 +46,13 @@ case $distribution in
 	DEPENDED_PACKAGES="$DEPENDED_PACKAGES cmake libaio-devel systemtap-sdt-devel"
 	;;
     centos)
+	case $distribution_version in
+	    6.*)
+		DEPENDED_PACKAGES="$DEPENDED_PACKAGES mysql-devel"
+		DEPENDED_PACKAGES="$DEPENDED_PACKAGES perl-Time-HiRes"
+		rpmbuild_options="$rpmbuild_options --define 'use_system_mysql 1'"
+		;;
+	esac
 	;;
 esac
 
@@ -46,6 +63,9 @@ run yum clean packages
 if ! id $USER_NAME >/dev/null 2>&1; then
     run useradd -m $USER_NAME
 fi
+
+# for debug
+# rpmbuild_options="$rpmbuild_options --define 'optflags -O0 -ggdb3'"
 
 cat <<EOF > $BUILD_SCRIPT
 #!/bin/sh
@@ -68,8 +88,7 @@ cp /tmp/${PACKAGE}.spec rpm/SPECS/
 
 chmod o+rx . rpm rpm/RPMS rpm/SRPMS
 
-# rpmbuild -ba --define 'optflags -O0 -ggdb3' rpm/SPECS/${PACKAGE}.spec
-rpmbuild -ba rpm/SPECS/${PACKAGE}.spec
+rpmbuild -ba $rpmbuild_options rpm/SPECS/${PACKAGE}.spec
 EOF
 
 run chmod +x $BUILD_SCRIPT

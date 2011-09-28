@@ -113,7 +113,7 @@ build()
     run mkdir -p $source_pool_dir
     run cp -p $rpm_dir/*-${VERSION}* $binary_pool_dir
     run cp -p $srpm_dir/*-${VERSION}* $source_pool_dir
-    if [ $distribution = "centos" ]; then
+    if [ $distribution = "centos" -a $distribution_version -eq 5 ]; then
 	run cp -p $rpm_dir/MySQL-* $binary_pool_dir
 	run cp -p $srpm_dir/MySQL-* $source_pool_dir
     fi
