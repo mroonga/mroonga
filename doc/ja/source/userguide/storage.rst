@@ -79,6 +79,10 @@ MySQLは全文検索用のパーサ [#parser]_ を指定する以下のような
 
   FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
 
+.. note::
+
+   ``FULLTEXT INDEX`` に ``COMMENT`` を指定できるのはMySQL 5.5からになります。MySQL 5.1を利用している場合は後述の ``groonga_default_parser`` 変数を利用してください。
+
 パーサに指定できるのは以下の値です。
 
 TokenBigram
@@ -144,11 +148,12 @@ TokenTrigram
 
   ./configure --with-default-parser TokenMecab ...
 
-また、my.confまたはSQL内で ``groonga_default_parser`` 変数を指定することでも指定できます。
+また、my.cnfまたはSQL内で ``groonga_default_parser`` 変数を指定することでも指定できます。my.cnfで指定するとMySQLを再起動しても値は変更されたままですが、反映させるために再起動しなければいけません。一方、SQLで指定した場合はすぐに設定が反映されますが、MySQLが再起動すると設定は失われます。
 
-my.conf::
+my.cnf::
 
-  ... TODO ...
+  [mysqld]
+  groonga_default_parser=TokenMecab
 
 SQL::
 
@@ -261,7 +266,8 @@ last_insert_grn_id関数はユーザ定義関数(UDF)としてgroongaストレ�
 ご覧のように_idカラムやlast_insert_grn_id関数を通じてレコードIDを取得することができました。ここで取得したレコードIDは後続のUPDATEなどのSQL文で利用すると便利です。 ::
 
   mysql> UPDATE memos SET content = "冷蔵庫に牛乳はまだたくさんある。" WHERE _id = last_insert_grn_id();
-  ... TODO ...
+  Query OK, 1 row affected (0.00 sec)
+  Rows matched: 1  Changed: 1  Warnings: 0
 
 ログ出力
 --------
