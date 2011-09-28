@@ -32,12 +32,14 @@
 * [Ubuntu] Lucid上でインストールエラーが発生する問題を修正。 （Isao Sugimotoさんが報告）
 * auto_incrementを使った場合にテキストデータが壊れる問題を修正。 （@zaubermaerchenさんが報告） #1072
 * [Ubuntu] Lucid上でテーブルを削除するとクラッシュする問題を修正。 #1063 （Isao Sugimotoさんが報告）
+* MySQLと同じビルドオプションを使っていなかった問題を修正。 GitHub#4 (groongaのGitHubのIssues) （Tomohiro MITSUMUNEさんが報告）
 
 感謝
 ++++
 
 * Isao Sugimotoさん
 * @zaubermaerchenさん
+* Tomohiro MITSUMUNEさん
 
 .. _release-0-9:
 
