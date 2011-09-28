@@ -15,7 +15,10 @@ EXTRA_DIST = \
 	flush_logs.test \
 	fulltext_insert_select.test \
 	fulltext_insert_values.test \
+	fulltext_multiple_index.test \
 	fulltext_not_match_against.test \
+	fulltext_parser_comment.test \
+	fulltext_parser_default.test \
 	fulltext_search_ascii.test \
 	fulltext_search_japanese.test \
 	geometry_contains.test \
@@ -42,5 +45,10 @@ EXTRA_DIST = \
 	show_create_table.test \
 	show_table_status.test \
 	tinyint.test \
-	update.test \
+	update_by_last_insert_grn_id.test \
+	update_fulltext.test \
+	update_id_hash_index.test \
+	update_id_unique_hash_index.test \
+	update_int.test \
+	update_virtual_column.test \
 	$(NULL)
