@@ -3991,11 +3991,16 @@ ha_rows ha_mroonga::wrapper_records_in_range(uint key_nr, key_range *range_min,
 {
   ha_rows row_count;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  row_count = wrap_handler->records_in_range(key_nr, range_min, range_max);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
+  KEY key_info = table->s->key_info[key_nr];
+  if (mrn_is_geo_key(&key_info)) {
+    row_count = generic_records_in_range_geo(key_nr, range_min, range_max);
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    row_count = wrap_handler->records_in_range(key_nr, range_min, range_max);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
   DBUG_RETURN(row_count);
 }
 
@@ -4037,7 +4042,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
       }
     }
   } else if (mrn_is_geo_key(&key_info)) {
-    row_count = storage_records_in_range_geo(key_nr, range_min, range_max);
+    row_count = generic_records_in_range_geo(key_nr, range_min, range_max);
     DBUG_RETURN(row_count);
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
@@ -4106,7 +4111,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
   DBUG_RETURN(row_count);
 }
 
-ha_rows ha_mroonga::storage_records_in_range_geo(uint key_nr,
+ha_rows ha_mroonga::generic_records_in_range_geo(uint key_nr,
                                                  key_range *range_min,
                                                  key_range *range_max)
 {
@@ -4127,7 +4132,7 @@ ha_rows ha_mroonga::storage_records_in_range_geo(uint key_nr,
     DBUG_RETURN(row_count);
   }
 
-  grn_obj *result = storage_geo_select_in_rectangle(grn_index_columns[key_nr],
+  grn_obj *result = generic_geo_select_in_rectangle(grn_index_columns[key_nr],
                                                     range_min->key);
   row_count = grn_table_size(ctx, result);
   grn_obj_unlink(ctx, result);
@@ -4345,7 +4350,7 @@ int ha_mroonga::storage_index_read_map_geo(uchar *buf, const uchar *key,
   int error = 0;
   int flags = 0;
   if (find_flag & HA_READ_MBR_CONTAIN) {
-    result_geo = storage_geo_select_in_rectangle(grn_index_columns[active_index],
+    result_geo = generic_geo_select_in_rectangle(grn_index_columns[active_index],
                                                  key);
     // TODO: check result
     cursor = grn_table_cursor_open(ctx, result_geo, NULL, 0, NULL, 0,
@@ -5407,7 +5412,7 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
   DBUG_RETURN(0);
 }
 
-grn_obj *ha_mroonga::storage_geo_select_in_rectangle(grn_obj *index_column,
+grn_obj *ha_mroonga::generic_geo_select_in_rectangle(grn_obj *index_column,
                                                      const uchar *rectangle)
 {
   double locations[4];

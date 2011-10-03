@@ -333,7 +333,7 @@ private:
   void clear_search_result();
   grn_obj *find_tokenizer(const char *name, int name_length);
   int storage_get_next_record(uchar *buf);
-  grn_obj *storage_geo_select_in_rectangle(grn_obj *index_column,
+  grn_obj *generic_geo_select_in_rectangle(grn_obj *index_column,
                                            const uchar *rectangle);
 
 #ifdef MRN_HANDLER_HAVE_HA_CLOSE
@@ -439,7 +439,7 @@ private:
                                    key_range *range_max);
   ha_rows storage_records_in_range(uint key_nr, key_range *range_min,
                                    key_range *range_max);
-  ha_rows storage_records_in_range_geo(uint key_nr, key_range *range_min,
+  ha_rows generic_records_in_range_geo(uint key_nr, key_range *range_min,
                                        key_range *range_max);
   int wrapper_index_init(uint idx, bool sorted);
   int storage_index_init(uint idx, bool sorted);
