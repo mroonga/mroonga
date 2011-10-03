@@ -1538,6 +1538,55 @@ int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::wrapper_create_index_geo(grn_obj *grn_table,
+                                         const char *grn_table_name,
+                                         int i,
+                                         KEY *key_info,
+                                         grn_obj **index_tables,
+                                         MRN_SHARE *tmp_share)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+
+  char index_name[MRN_MAX_PATH_SIZE];
+  mrn_index_table_name_gen(grn_table_name, key_info->name, index_name);
+
+  grn_obj_flags index_table_flags =
+    GRN_OBJ_TABLE_PAT_KEY |
+    GRN_OBJ_PERSISTENT;
+  grn_obj *index_table;
+
+  grn_obj_flags index_column_flags =
+    GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
+
+  grn_obj *lexicon_key_type = grn_ctx_at(ctx, GRN_DB_WGS84_GEO_POINT);
+  index_table = grn_table_create(ctx, index_name, strlen(index_name), NULL,
+                                 index_table_flags, lexicon_key_type, 0);
+  if (ctx->rc) {
+    error = ER_CANT_CREATE_TABLE;
+    my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+    grn_obj_unlink(ctx, lexicon_key_type);
+    DBUG_RETURN(error);
+  }
+  grn_obj_unlink(ctx, lexicon_key_type);
+  index_tables[i] = index_table;
+
+  grn_obj *index_column = grn_column_create(ctx, index_table,
+                                            index_column_name,
+                                            strlen(index_column_name),
+                                            NULL,
+                                            index_column_flags,
+                                            grn_table);
+  if (ctx->rc) {
+    error = ER_CANT_CREATE_TABLE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+  grn_obj_unlink(ctx, index_column);
+
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
                                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
 {
@@ -1576,6 +1625,10 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
       error = wrapper_create_index_fulltext(grn_table, grn_table_name,
                                             i, &key_info,
                                             index_tables, tmp_share);
+    } else if (mrn_is_geo_key(&key_info)) {
+      error = wrapper_create_index_geo(grn_table, grn_table_name,
+                                       i, &key_info,
+                                       index_tables, tmp_share);
     }
   }
 
