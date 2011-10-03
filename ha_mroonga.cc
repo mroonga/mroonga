@@ -4467,17 +4467,22 @@ int ha_mroonga::wrapper_index_next(uchar *buf)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (fulltext_searching)
-    set_pk_bitmap();
+  KEY key_info = table->key_info[active_index];
+  if (mrn_is_geo_key(&key_info)) {
+    error = wrapper_get_next_record(buf);
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    if (fulltext_searching)
+      set_pk_bitmap();
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_NEXT
-  error = wrap_handler->ha_index_next(buf);
+    error = wrap_handler->ha_index_next(buf);
 #else
-  error = wrap_handler->index_next(buf);
+    error = wrap_handler->index_next(buf);
 #endif
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
   DBUG_RETURN(error);
 }
 
@@ -4505,17 +4510,22 @@ int ha_mroonga::wrapper_index_prev(uchar *buf)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (fulltext_searching)
-    set_pk_bitmap();
+  KEY key_info = table->key_info[active_index];
+  if (mrn_is_geo_key(&key_info)) {
+    error = wrapper_get_next_record(buf);
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    if (fulltext_searching)
+      set_pk_bitmap();
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_NEXT
-  error = wrap_handler->ha_index_prev(buf);
+    error = wrap_handler->ha_index_prev(buf);
 #else
-  error = wrap_handler->index_prev(buf);
+    error = wrap_handler->index_prev(buf);
 #endif
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
   DBUG_RETURN(error);
 }
 
