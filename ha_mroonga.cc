@@ -1557,13 +1557,13 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   uint n_keys = table->s->keys;
   grn_obj *index_tables[n_keys];
   for (i = 0; i < n_keys; i++) {
-    KEY key_info = table->s->key_info[i];
+    index_tables[i] = NULL;
 
+    KEY key_info = table->s->key_info[i];
     if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
       continue;
     }
 
-    index_tables[i] = NULL;
     error = wrapper_validate_key_info(&key_info);
     if (error)
     {
@@ -1580,15 +1580,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 
   if (error)
   {
-    int j;
-    for (j = 0; j < i; j++) {
-      KEY key_info = table->s->key_info[j];
-
-      if (key_info.algorithm != HA_KEY_ALG_FULLTEXT)
-      {
-        continue;
-      }
-
+    for (int j = 0; j < i; j++) {
       if (index_tables[j])
       {
         grn_obj_remove(ctx, index_tables[j]);
