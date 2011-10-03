@@ -3523,10 +3523,6 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     DBUG_RETURN(error);
   }
 
-  grn_obj old_value, new_value;
-  GRN_TEXT_INIT(&old_value, 0);
-  GRN_TEXT_INIT(&new_value, 0);
-
 #ifndef DBUG_OFF
   my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
@@ -3546,23 +3542,23 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
       Field *field = key_info.key_part[j].field;
 
       int new_column_size;
-      mrn_set_buf(ctx, field, &new_value, &new_column_size);
+      mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
 
       field->move_field_offset(ptr_diff);
       int old_column_size;
-      mrn_set_buf(ctx, field, &old_value, &old_column_size);
+      mrn_set_buf(ctx, field, &old_value_buffer, &old_column_size);
       field->move_field_offset(-ptr_diff);
 
       grn_rc rc;
       if (old_record_id == new_record_id) {
         rc = grn_column_index_update(ctx, index_column, old_record_id, j + 1,
-                                     &old_value, &new_value);
+                                     &old_value_buffer, &new_value_buffer);
       } else {
         rc = grn_column_index_update(ctx, index_column, old_record_id, j + 1,
-                                     &old_value, NULL);
+                                     &old_value_buffer, NULL);
         if (!rc) {
           rc = grn_column_index_update(ctx, index_column, new_record_id, j + 1,
-                                       NULL, &new_value);
+                                       NULL, &new_value_buffer);
         }
         if (!rc) {
           rc = grn_table_delete_by_id(ctx, grn_table, old_record_id);
@@ -3579,8 +3575,6 @@ err:
 #ifndef DBUG_OFF
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
-  grn_obj_unlink(ctx, &old_value);
-  grn_obj_unlink(ctx, &new_value);
 
   DBUG_RETURN(error);
 }
@@ -3829,9 +3823,6 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
     DBUG_RETURN(error);
   }
 
-  grn_obj old_value;
-  GRN_TEXT_INIT(&old_value, 0);
-
 #ifndef DBUG_OFF
   my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
@@ -3854,10 +3845,10 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
         continue;
 
       int old_column_size;
-      mrn_set_buf(ctx, field, &old_value, &old_column_size);
+      mrn_set_buf(ctx, field, &old_value_buffer, &old_column_size);
       grn_rc rc;
       rc = grn_column_index_update(ctx, index_column, record_id, j + 1,
-                                   &old_value, NULL);
+                                   &old_value_buffer, NULL);
       if (rc) {
         error = ER_ERROR_ON_WRITE;
         my_message(error, ctx->errbuf, MYF(0));
@@ -3869,7 +3860,6 @@ err:
 #ifndef DBUG_OFF
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
-  grn_obj_unlink(ctx, &old_value);
 
   grn_table_delete_by_id(ctx, grn_table, record_id);
   if (ctx->rc) {
@@ -6952,8 +6942,6 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       grn_obj key;
       GRN_TEXT_INIT(&key, 0);
       grn_bulk_space(ctx, &key, p_key_info->key_length);
-      grn_obj new_value;
-      GRN_VOID_INIT(&new_value);
       while (!(res = wrapper_rnd_next(table->record[0])))
       {
         key_copy((uchar *) (GRN_TEXT_VALUE(&key)), table->record[0],
@@ -6989,7 +6977,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
               continue;
 
             int new_column_size;
-            mrn_set_buf(ctx, field, &new_value, &new_column_size);
+            mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
 
             grn_obj *index_column = grn_obj_column(ctx,
                                                    index_tables[k + n_keys],
@@ -6998,7 +6986,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
 
             grn_rc rc;
             rc = grn_column_index_update(ctx, index_column, record_id, l + 1,
-              NULL, &new_value);
+                                         NULL, &new_value_buffer);
             grn_obj_unlink(ctx, index_column);
             if (rc) {
               res = ER_ERROR_ON_WRITE;
