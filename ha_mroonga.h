@@ -405,6 +405,7 @@ private:
   void storage_start_bulk_insert(ha_rows rows);
   int wrapper_end_bulk_insert();
   int storage_end_bulk_insert();
+  bool wrapper_is_target_index(KEY *key_info);
   bool wrapper_have_target_index();
   int wrapper_write_row(uchar *buf);
   int wrapper_write_row_index(uchar *buf);

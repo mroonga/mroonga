@@ -2154,8 +2154,7 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->s->key_info[i];
 
-    if (!(key_info.algorithm == HA_KEY_ALG_FULLTEXT ||
-          mrn_is_geo_key(&key_info))) {
+    if (!(wrapper_is_target_index(&key_info))) {
       continue;
     }
 
@@ -3070,6 +3069,14 @@ int ha_mroonga::extra_opt(enum ha_extra_function operation, ulong cache_size)
   DBUG_RETURN(error);
 }
 
+bool ha_mroonga::wrapper_is_target_index(KEY *key_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool target_index =
+    (key_info->algorithm == HA_KEY_ALG_FULLTEXT) || mrn_is_geo_key(key_info);
+  DBUG_RETURN(target_index);
+}
+
 bool ha_mroonga::wrapper_have_target_index()
 {
   MRN_DBUG_ENTER_METHOD();
@@ -3081,8 +3088,7 @@ bool ha_mroonga::wrapper_have_target_index()
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->key_info[i];
 
-    if (key_info.algorithm == HA_KEY_ALG_FULLTEXT ||
-        mrn_is_geo_key(&key_info)) {
+    if (wrapper_is_target_index(&key_info)) {
       have_target_index = TRUE;
       break;
     }
@@ -3152,8 +3158,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->key_info[i];
 
-    if (!(key_info.algorithm == HA_KEY_ALG_FULLTEXT ||
-          mrn_is_geo_key(&key_info))) {
+    if (!(wrapper_is_target_index(&key_info))) {
       continue;
     }
 
@@ -3530,8 +3535,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->key_info[i];
 
-    if (!(key_info.algorithm == HA_KEY_ALG_FULLTEXT ||
-          mrn_is_geo_key(&key_info))) {
+    if (!(wrapper_is_target_index(&key_info))) {
       continue;
     }
 
@@ -3836,7 +3840,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->key_info[i];
 
-    if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+    if (!(wrapper_is_target_index(&key_info))) {
       continue;
     }
 
