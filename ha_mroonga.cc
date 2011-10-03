@@ -1467,16 +1467,21 @@ int ha_mroonga::wrapper_validate_key_info(KEY *key_info)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_create_index_table(grn_obj *grn_table,
-                                           const char *grn_table_name,
-                                           int i,
-                                           KEY *key_info,
-                                           grn_obj **index_tables,
-                                           MRN_SHARE *tmp_share)
+int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
+                                              const char *grn_table_name,
+                                              int i,
+                                              KEY *key_info,
+                                              grn_obj **index_tables,
+                                              MRN_SHARE *tmp_share)
 {
   MRN_DBUG_ENTER_METHOD();
-
   int error = 0;
+
+  error = wrapper_validate_key_info(key_info);
+  if (error) {
+    DBUG_RETURN(error);
+  }
+
   char index_name[MRN_MAX_PATH_SIZE];
   mrn_index_table_name_gen(grn_table_name, key_info->name, index_name);
 
@@ -1560,21 +1565,10 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
     index_tables[i] = NULL;
 
     KEY key_info = table->s->key_info[i];
-    if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
-      continue;
-    }
-
-    error = wrapper_validate_key_info(&key_info);
-    if (error)
-    {
-      break;
-    }
-
-    error = wrapper_create_index_table(grn_table, grn_table_name, i, &key_info,
-                                       index_tables, tmp_share);
-    if (error)
-    {
-      break;
+    if (key_info.algorithm == HA_KEY_ALG_FULLTEXT) {
+      error = wrapper_create_index_fulltext(grn_table, grn_table_name,
+                                            i, &key_info,
+                                            index_tables, tmp_share);
     }
   }
 
@@ -6821,14 +6815,10 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       break;
     }
     index_tables[i + n_keys] = NULL;
-    if ((res = wrapper_validate_key_info(&key_info[i])))
-    {
-      break;
-    }
-    if ((res = wrapper_create_index_table(grn_table, grn_table_name,
-                                          i + n_keys,
-                                          &key_info[i], index_tables,
-                                          tmp_share)))
+    if ((res = wrapper_create_index_fulltext(grn_table, grn_table_name,
+                                             i + n_keys,
+                                             &key_info[i], index_tables,
+                                             tmp_share)))
     {
       break;
     }
