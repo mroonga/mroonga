@@ -425,6 +425,13 @@ static bool mrn_flush_logs(handlerton *hton)
   return result;
 }
 
+static bool mrn_is_geo_key(KEY *key_info)
+{
+  return key_info->algorithm == HA_KEY_ALG_UNDEF &&
+    key_info->key_parts == 1 &&
+    key_info->key_part[0].field->type() == MYSQL_TYPE_GEOMETRY;
+}
+
 static grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
 {
   switch (mysql_field_type) {
@@ -3966,6 +3973,9 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
                                                  &size_max);
       }
     }
+  } else if (mrn_is_geo_key(&key_info)) {
+    row_count = storage_records_in_range_geo(key_nr, range_min, range_max);
+    DBUG_RETURN(row_count);
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
     Field *field = key_part.field;
@@ -3976,18 +3986,13 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
       DBUG_RETURN((ha_rows)1) ;
     }
 
-    if (field->type() == MYSQL_TYPE_GEOMETRY) {
-      row_count = storage_records_in_range_geo(key_nr, range_min, range_max);
-      DBUG_RETURN(row_count);
-    } else {
-      if (range_min) {
-        mrn_set_key_buf(ctx, field, range_min->key, key_min[key_nr], &size_min);
-        val_min = key_min[key_nr];
-      }
-      if (range_max) {
-        mrn_set_key_buf(ctx, field, range_max->key, key_max[key_nr], &size_max);
-        val_max = key_max[key_nr];
-      }
+    if (range_min) {
+      mrn_set_key_buf(ctx, field, range_min->key, key_min[key_nr], &size_min);
+      val_min = key_min[key_nr];
+    }
+    if (range_max) {
+      mrn_set_key_buf(ctx, field, range_max->key, key_max[key_nr], &size_max);
+      val_max = key_max[key_nr];
     }
   }
 
@@ -4190,14 +4195,12 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
     val_min = mrn_multiple_column_key_encode(&key_info,
                                              key, key_length,
                                              key_min[active_index], &size_min);
+  } else if (mrn_is_geo_key(&key_info)) {
+    error = storage_index_read_map_geo(buf, key, find_flag);
+    DBUG_RETURN(error);
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
     Field *field = key_part.field;
-
-    if (field->type() == MYSQL_TYPE_GEOMETRY) {
-      error = storage_index_read_map_geo(buf, key, field, find_flag);
-      DBUG_RETURN(error);
-    }
 
     if (find_flag == HA_READ_KEY_EXACT) {
       const char *column_name = field->field_name;
@@ -4273,7 +4276,6 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
 }
 
 int ha_mroonga::storage_index_read_map_geo(uchar *buf, const uchar *key,
-                                           Field *field,
                                            enum ha_rkey_function find_flag)
 {
   MRN_DBUG_ENTER_METHOD();

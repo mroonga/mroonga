@@ -444,7 +444,6 @@ private:
                              key_part_map keypart_map,
                              enum ha_rkey_function find_flag);
   int storage_index_read_map_geo(uchar *buf, const uchar *key,
-                                 Field *field,
                                  enum ha_rkey_function find_flag);
   int wrapper_index_read_last_map(uchar *buf, const uchar *key,
                                   key_part_map keypart_map);
