@@ -3065,24 +3065,25 @@ int ha_mroonga::extra_opt(enum ha_extra_function operation, ulong cache_size)
   DBUG_RETURN(error);
 }
 
-bool ha_mroonga::wrapper_have_fulltext_index()
+bool ha_mroonga::wrapper_have_target_index()
 {
   MRN_DBUG_ENTER_METHOD();
 
-  bool have_fulltext_index = FALSE;
+  bool have_target_index = FALSE;
 
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->key_info[i];
 
-    if (key_info.algorithm == HA_KEY_ALG_FULLTEXT) {
-      have_fulltext_index = TRUE;
+    if (key_info.algorithm == HA_KEY_ALG_FULLTEXT ||
+        mrn_is_geo_key(&key_info)) {
+      have_target_index = TRUE;
       break;
     }
   }
 
-  DBUG_RETURN(have_fulltext_index);
+  DBUG_RETURN(have_target_index);
 }
 
 int ha_mroonga::wrapper_write_row(uchar *buf)
@@ -3098,7 +3099,7 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
 
-  if (!error && wrapper_have_fulltext_index()) {
+  if (!error && wrapper_have_target_index()) {
     error = wrapper_write_row_index(buf);
   }
 
@@ -3457,7 +3458,7 @@ int ha_mroonga::wrapper_update_row(const uchar *old_data, uchar *new_data)
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
 
-  if (!error && wrapper_have_fulltext_index()) {
+  if (!error && wrapper_have_target_index()) {
     error = wrapper_update_row_index(old_data, new_data);
   }
 
@@ -3793,7 +3794,7 @@ int ha_mroonga::wrapper_delete_row(const uchar *buf)
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
 
-  if (!error && wrapper_have_fulltext_index()) {
+  if (!error && wrapper_have_target_index()) {
     error = wrapper_delete_row_index(buf);
   }
 
