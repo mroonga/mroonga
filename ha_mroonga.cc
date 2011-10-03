@@ -3530,7 +3530,8 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->key_info[i];
 
-    if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+    if (!(key_info.algorithm == HA_KEY_ALG_FULLTEXT ||
+          mrn_is_geo_key(&key_info))) {
       continue;
     }
 
