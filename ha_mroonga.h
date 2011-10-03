@@ -118,6 +118,8 @@ public:
   ha_mroonga *parent_for_clone;
   MEM_ROOT  *mem_root_for_clone;
   grn_obj   key_buffer;
+  grn_obj   old_value_buffer;
+  grn_obj   new_value_buffer;
   grn_id    record_id;
 
 private:

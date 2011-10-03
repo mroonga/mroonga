@@ -1262,6 +1262,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   matched_record_keys = NULL;
   fulltext_searching = FALSE;
   GRN_TEXT_INIT(&key_buffer, 0);
+  GRN_VOID_INIT(&old_value_buffer);
+  GRN_VOID_INIT(&new_value_buffer);
   DBUG_VOID_RETURN;
 }
 
@@ -1269,6 +1271,8 @@ ha_mroonga::~ha_mroonga()
 {
   MRN_DBUG_ENTER_METHOD();
   grn_obj_unlink(ctx, &key_buffer);
+  grn_obj_unlink(ctx, &old_value_buffer);
+  grn_obj_unlink(ctx, &new_value_buffer);
   grn_ctx_fin(ctx);
   DBUG_VOID_RETURN;
 }
@@ -3140,9 +3144,6 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
     DBUG_RETURN(error);
   }
 
-  grn_obj new_value;
-  GRN_VOID_INIT(&new_value);
-
 #ifndef DBUG_OFF
   my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
@@ -3151,7 +3152,8 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->key_info[i];
 
-    if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+    if (!(key_info.algorithm == HA_KEY_ALG_FULLTEXT ||
+          mrn_is_geo_key(&key_info))) {
       continue;
     }
 
@@ -3165,11 +3167,18 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
         continue;
 
       int new_column_size;
-      mrn_set_buf(ctx, field, &new_value, &new_column_size);
+      error = mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
+      if (error) {
+        my_message(error,
+                   "mroonga: wrapper: "
+                   "failed to get new value for updating index.",
+                   MYF(0));
+        goto err;
+      }
 
       grn_rc rc;
       rc = grn_column_index_update(ctx, index_column, record_id, j + 1,
-                                   NULL, &new_value);
+                                   NULL, &new_value_buffer);
       if (rc) {
         error = ER_ERROR_ON_WRITE;
         my_message(error, ctx->errbuf, MYF(0));
@@ -3181,7 +3190,6 @@ err:
 #ifndef DBUG_OFF
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
-  grn_obj_unlink(ctx, &new_value);
 
   DBUG_RETURN(error);
 }
