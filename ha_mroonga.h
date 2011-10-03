@@ -332,9 +332,11 @@ private:
   void clear_cursor();
   void clear_search_result();
   grn_obj *find_tokenizer(const char *name, int name_length);
+  int wrapper_get_next_record(uchar *buf);
   int storage_get_next_record(uchar *buf);
   grn_obj *generic_geo_select_in_rectangle(grn_obj *index_column,
                                            const uchar *rectangle);
+  int generic_geo_open_cursor(const uchar *key, enum ha_rkey_function find_flag);
 
 #ifdef MRN_HANDLER_HAVE_HA_CLOSE
   int close();
@@ -451,8 +453,6 @@ private:
   int storage_index_read_map(uchar *buf, const uchar *key,
                              key_part_map keypart_map,
                              enum ha_rkey_function find_flag);
-  int storage_index_read_map_geo(uchar *buf, const uchar *key,
-                                 enum ha_rkey_function find_flag);
   int wrapper_index_read_last_map(uchar *buf, const uchar *key,
                                   key_part_map keypart_map);
   int storage_index_read_last_map(uchar *buf, const uchar *key,
