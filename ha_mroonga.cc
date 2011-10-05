@@ -1944,6 +1944,47 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::close_databases()
+{
+  int error = 0;
+  grn_obj *tmp_db;
+  grn_hash_cursor *hash_cursor;
+  grn_id tmp_id;
+  MRN_DBUG_ENTER_METHOD();
+  pthread_mutex_lock(&mrn_db_mutex);
+  hash_cursor =
+    grn_hash_cursor_open(ctx, mrn_hash, NULL, 0, NULL, 0, 0, -1, 0);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_READ);
+  }
+
+  do {
+    tmp_id = grn_hash_cursor_next(ctx, hash_cursor);
+    if (ctx->rc) {
+      error = ER_ERROR_ON_READ;
+      my_message(error, ctx->errbuf, MYF(0));
+      break;
+    }
+    if (tmp_id != GRN_ID_NIL)
+    {
+      grn_hash_cursor_get_value(ctx, hash_cursor, (void **) &(tmp_db));
+      grn_rc rc = grn_hash_cursor_delete(ctx, hash_cursor, NULL);
+      if (rc)
+      {
+        error = ER_ERROR_ON_READ;
+        my_message(error, ctx->errbuf, MYF(0));
+        break;
+      }
+      grn_obj_close(ctx, tmp_db);
+    }
+  } while (tmp_id != GRN_ID_NIL);
+
+  grn_hash_cursor_close(ctx, hash_cursor);
+  pthread_mutex_unlock(&mrn_db_mutex);
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::ensure_database_create(const char *name)
 {
   int error = 0;
@@ -2479,6 +2520,7 @@ int ha_mroonga::storage_close()
 int ha_mroonga::close()
 {
   int error = 0;
+  THD *thd = ha_thd();
   MRN_DBUG_ENTER_METHOD();
   if (share->wrapper_mode)
   {
@@ -2491,7 +2533,23 @@ int ha_mroonga::close()
   share = NULL;
   is_clone = FALSE;
   thr_lock_delete(&thr_lock);
-  DBUG_RETURN(0);
+  if (
+    thd &&
+    thd->lex &&
+    thd->lex->sql_command == SQLCOM_FLUSH &&
+    (thd->lex->type & REFRESH_TABLES)
+  ) {
+    /* flush tables */
+    pthread_mutex_lock(&mrn_open_tables_mutex);
+    if (!mrn_open_tables.records)
+    {
+      int tmp_error = close_databases();
+      if (tmp_error)
+        error = tmp_error;
+    }
+    pthread_mutex_unlock(&mrn_open_tables_mutex);
+  }
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,

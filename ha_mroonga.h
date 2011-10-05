@@ -370,6 +370,7 @@ private:
   int storage_create_validate_index(TABLE *table);
   int storage_create_index(TABLE *table, const char *grn_table_name,
                            grn_obj *grn_table, MRN_SHARE *tmp_share);
+  int close_databases();
   int ensure_database_create(const char *name);
   int ensure_database_open(const char *name);
   int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,
