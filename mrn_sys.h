@@ -42,8 +42,8 @@
 #endif
 
 /* functions */
-int mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, void *value);
-int mrn_hash_get(grn_ctx *ctx, grn_hash *hash, const char *key, void **value);
+int mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj *value);
+int mrn_hash_get(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj **value);
 int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key);
 
 char *mrn_db_path_gen(const char *arg, char *dest);

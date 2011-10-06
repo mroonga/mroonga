@@ -962,7 +962,7 @@ static int mrn_init(void *p)
 
   // init hash
   if (!(mrn_hash = grn_hash_create(ctx, NULL,
-                                   MRN_MAX_KEY_SIZE, sizeof(size_t),
+                                   MRN_MAX_KEY_SIZE, sizeof(grn_obj *),
                                    GRN_OBJ_KEY_VAR_SIZE))) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
     goto err_hash_create;
@@ -2005,28 +2005,28 @@ int ha_mroonga::ensure_database_create(const char *name)
   mrn_db_path_gen(name, db_path);
 
   pthread_mutex_lock(&mrn_db_mutex);
-  if (mrn_hash_get(ctx, mrn_hash, db_name, (void **) &(db)) != 0) {
+  if (mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db) != 0) {
     if (stat(db_path, &db_stat)) {
       // creating new database
       GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db_path);
-      db = grn_db_create(ctx, db_path, NULL);
-      if (ctx->rc) {
+      db = grn_db_create(&mrn_ctx, db_path, NULL);
+      if (mrn_ctx.rc) {
         pthread_mutex_unlock(&mrn_db_mutex);
         error = ER_CANT_CREATE_TABLE;
-        my_message(error, ctx->errbuf, MYF(0));
+        my_message(error, mrn_ctx.errbuf, MYF(0));
         DBUG_RETURN(error);
       }
     } else {
       // opening existing database
-      db = grn_db_open(ctx, db_path);
-      if (ctx->rc) {
+      db = grn_db_open(&mrn_ctx, db_path);
+      if (mrn_ctx.rc) {
         pthread_mutex_unlock(&mrn_db_mutex);
         error = ER_CANT_OPEN_FILE;
-        my_message(error, ctx->errbuf, MYF(0));
+        my_message(error, mrn_ctx.errbuf, MYF(0));
         DBUG_RETURN(error);
       }
     }
-    mrn_hash_put(ctx, mrn_hash, db_name, db);
+    mrn_hash_put(&mrn_ctx, mrn_hash, db_name, db);
   }
   pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db);
@@ -2046,15 +2046,15 @@ int ha_mroonga::ensure_database_open(const char *name)
   mrn_db_path_gen(name, db_path);
 
   pthread_mutex_lock(&mrn_db_mutex);
-  if (mrn_hash_get(ctx, mrn_hash, db_name, (void **) &(db)) != 0) {
-    db = grn_db_open(ctx, db_path);
+  if (mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db) != 0) {
+    db = grn_db_open(&mrn_ctx, db_path);
     if (ctx->rc) {
       pthread_mutex_unlock(&mrn_db_mutex);
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       DBUG_RETURN(error);
     }
-    mrn_hash_put(ctx, mrn_hash, db_name, db);
+    mrn_hash_put(&mrn_ctx, mrn_hash, db_name, db);
   }
   pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db);

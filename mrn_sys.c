@@ -27,36 +27,36 @@
 #include <string.h>
 #include "mrn_sys.h"
 
-int mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, void *value)
+int mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj *value)
 {
   int added, res=0;
   void *buf;
-  grn_hash_add(ctx, hash, (const char*) key, strlen(key), &buf, &added);
+  grn_hash_add(ctx, hash, (const char *)key, strlen(key), &buf, &added);
   // duplicate check
   if (added == 0) {
     GRN_LOG(ctx, GRN_LOG_WARNING, "hash put duplicated (key=%s)", key);
     res = -1;
   } else {
     // store address of value
-    memcpy(buf, &value, sizeof(buf));
+    memcpy(buf, &value, sizeof(grn_obj *));
     GRN_LOG(ctx, GRN_LOG_DEBUG, "hash put (key=%s)", key);
   }
   return res;
 }
 
-int mrn_hash_get(grn_ctx *ctx, grn_hash *hash, const char *key, void **value)
+int mrn_hash_get(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj **value)
 {
   int res = 0;
   grn_id id;
   void *buf;
-  id = grn_hash_get(ctx, hash, (const char*) key, strlen(key), &buf);
+  id = grn_hash_get(ctx, hash, (const char *)key, strlen(key), &buf);
   // key not found
   if (id == GRN_ID_NIL) {
     GRN_LOG(ctx, GRN_LOG_DEBUG, "hash get not found (key=%s)", key);
     res = -1;
   } else {
     // restore address of value
-    memcpy(value, buf, sizeof(buf));
+    memcpy(value, buf, sizeof(grn_obj *));
   }
   return res;
 }
