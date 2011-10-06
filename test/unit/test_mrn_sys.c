@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
@@ -22,15 +23,17 @@
 #include <glib/gstdio.h>
 #include "mrn_sys.h"
 
-grn_ctx *ctx;
-grn_obj *db;
+static grn_ctx *ctx;
+static grn_obj *db;
+static grn_hash *hash;
+static grn_obj buffer;
 
 void cut_startup()
 {
-  ctx = (grn_ctx*) malloc(sizeof(grn_ctx));
+  ctx = (grn_ctx *)malloc(sizeof(grn_ctx));
   grn_init();
-  grn_ctx_init(ctx,0);
-  db = grn_db_create(ctx, NULL,NULL);
+  grn_ctx_init(ctx, 0);
+  db = grn_db_create(ctx, NULL, NULL);
   grn_ctx_use(ctx, db);
 }
 
@@ -44,104 +47,48 @@ void cut_shutdown()
 
 void cut_setup()
 {
+  hash = grn_hash_create(ctx, NULL, 1024, sizeof(grn_obj *),
+                         GRN_OBJ_KEY_VAR_SIZE);
+  GRN_TEXT_INIT(&buffer, 0);
 }
 
 void cut_teardown()
 {
+  grn_hash_close(ctx, hash);
+  grn_obj_unlink(ctx, &buffer);
 }
 
 void test_mrn_hash_put()
 {
-  grn_hash *hash = grn_hash_create(ctx,NULL,1024,sizeof(size_t),
-                                   GRN_OBJ_KEY_VAR_SIZE);
+  const char *key = "mroonga";
 
-  const char *key1 = "aa";
-  const char *key2 = "bbb";
-  const char *key3 = "cccc";
-  const char *key4 = "primitive";
-  char *value1 = "11ddbb";
-  char *value2 = "22fefe2";
-  char *value3 = "3333r";
-  int value4 = 777;
-
-  cut_assert_equal_int(0,mrn_hash_put(ctx, hash, key1, (void*) value1));
-  cut_assert_equal_int(0,mrn_hash_put(ctx, hash, key2, (void*) value2));
-  cut_assert_equal_int(0,mrn_hash_put(ctx, hash, key3, (void*) value3));
-  cut_assert_equal_int(0,mrn_hash_put(ctx, hash, key4, (void*) &value4));
-  cut_assert_equal_int(-1,mrn_hash_put(ctx, hash, key1, (void*) value2));
-  cut_assert_equal_int(-1,mrn_hash_put(ctx, hash, key2, (void*) value3));
-  cut_assert_equal_int(-1,mrn_hash_put(ctx, hash, key3, (void*) value1));
-
-  grn_hash_close(ctx, hash);
+  cut_assert_equal_int(0, mrn_hash_put(ctx, hash, key, &buffer));
+  cut_assert_equal_int(-1, mrn_hash_put(ctx, hash, key, &buffer));
 }
 
 void test_mrn_hash_get()
-{ 
-  grn_hash *hash = grn_hash_create(ctx,NULL,1024,sizeof(size_t),
-                                   GRN_OBJ_KEY_VAR_SIZE);
-  const char *key1 = "aa";
-  const char *key2 = "bbb";
-  const char *key3 = "cccc";
-  const char *key4 = "not found";
-  const char *key5 = "primitive";
-  char *value1 = "abcdefg";
-  char *value2 = "hijklmnopq";
-  char *value3 = "rxyz012";
-  int value5 = 777;
-  char *res;
-  int *res_int;
+{
+  const char *key = "mroonga";
+  const char *value = "groonga storage engine";
+  grn_obj *result;
 
-  mrn_hash_put(ctx, hash, key1, (void*) value1);
-  mrn_hash_put(ctx, hash, key2, (void*) value2);
-  mrn_hash_put(ctx, hash, key3, (void*) value3);
-  mrn_hash_put(ctx, hash, key5, (void*) &value5);
+  GRN_TEXT_SETS(ctx, &buffer, value);
+  GRN_TEXT_PUT(ctx, &buffer, "\0", 1);
 
-  cut_assert_equal_int(0, mrn_hash_get(ctx, hash, key1, (void**) &res));
-  cut_assert_equal_string(value1, res);
-  cut_assert_equal_int(0, mrn_hash_get(ctx, hash, key2, (void**) &res));
-  cut_assert_equal_string(value2, res);
-  cut_assert_equal_int(0, mrn_hash_get(ctx, hash, key3, (void**) &res));
-  cut_assert_equal_string(value3, res);
-
-  cut_assert_equal_int(-1, mrn_hash_get(ctx, hash, key4, (void**) &res));
-
-  cut_assert_equal_int(0, mrn_hash_get(ctx, hash, key5, (void**) &res_int));
-  cut_assert_equal_int(value5, *res_int);
-
-  grn_hash_close(ctx, hash);
+  mrn_hash_put(ctx, hash, key, &buffer);
+  cut_assert_equal_int(0, mrn_hash_get(ctx, hash, key, &result));
+  cut_assert_equal_string(value, GRN_TEXT_VALUE(&buffer));
 }
 
 void test_mrn_hash_remove()
 {
-  grn_hash *hash = grn_hash_create(ctx,NULL,1024,sizeof(size_t),
-                                   GRN_OBJ_KEY_VAR_SIZE);
-  const char *key1 = "aa";
-  const char *key2 = "bbb";
-  const char *key3 = "cccc";
-  const char *key4 = "not found";
-  const char *key5 = "primitive";
-  char *value1 = "112233";
-  char *value2 = "2221115";
-  char *value3 = "333344";
-  int value5 = 777;
+  const char *key = "mroonga";
 
-  mrn_hash_put(ctx, hash, key1, (void*) value1);
-  mrn_hash_put(ctx, hash, key2, (void*) value2);
-  mrn_hash_put(ctx, hash, key3, (void*) value3);
-  mrn_hash_put(ctx, hash, key5, (void*) &value5);
+  mrn_hash_put(ctx, hash, key, &buffer);
 
-  cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, key4));
-  cut_assert_equal_int(0, mrn_hash_remove(ctx, hash, key1));
-  cut_assert_equal_int(0, mrn_hash_remove(ctx, hash, key2));
-  cut_assert_equal_int(0, mrn_hash_remove(ctx, hash, key3));
-  cut_assert_equal_int(0, mrn_hash_remove(ctx, hash, key5));
-
-  cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, key1));
-  cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, key2));
-  cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, key3));
-  cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, key5));
-
-  grn_hash_close(ctx, hash);
+  cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, "nonexistent"));
+  cut_assert_equal_int(0, mrn_hash_remove(ctx, hash, key));
+  cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, key));
 }
 
 void test_mrn_db_path_gen()
