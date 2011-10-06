@@ -97,13 +97,17 @@ extern "C" {
 #endif
 
 /* global variables */
-grn_obj *mrn_db;
-grn_hash *mrn_hash;
 pthread_mutex_t mrn_db_mutex;
 pthread_mutex_t mrn_log_mutex;
 handlerton *mrn_hton_ptr;
 HASH mrn_open_tables;
 pthread_mutex_t mrn_open_tables_mutex;
+
+/* internal variables */
+static grn_ctx mrn_ctx;
+static grn_obj *mrn_db;
+static grn_hash *mrn_hash;
+
 static uchar *mrn_open_tables_get_key(MRN_SHARE *share,
                                       size_t *length,
                                       my_bool not_used __attribute__ ((unused)))
@@ -121,7 +125,7 @@ long mrn_fast_order_limit = 0;
 /* logging */
 const char *mrn_logfile_name = MRN_LOG_FILE_NAME;
 FILE *mrn_logfile = NULL;
-int mrn_logfile_opened = 0;
+static bool mrn_logfile_opened = false;
 grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
 char mrn_default_parser_name[MRN_MAX_KEY_SIZE];
@@ -917,9 +921,8 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
 
 static int mrn_init(void *p)
 {
-  grn_ctx *ctx;
-
   // init handlerton
+  grn_ctx *ctx = NULL;
   handlerton *hton;
   hton = (handlerton *)p;
   hton->state = SHOW_OPTION_YES;
@@ -932,19 +935,20 @@ static int mrn_init(void *p)
 
   // init groonga
   if (grn_init() != GRN_SUCCESS) {
-    goto err;
+    goto err_grn_init;
   }
 
-  ctx = grn_ctx_open(0);
+  grn_ctx_init(&mrn_ctx, 0);
+  ctx = &mrn_ctx;
 
   if (pthread_mutex_init(&mrn_log_mutex, NULL) != 0) {
     goto err_log_mutex_init;
   }
   grn_logger_info_set(ctx, &mrn_logger_info);
   if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
-    goto err;
+    goto err_log_file_open;
   }
-  mrn_logfile_opened = 1;
+  mrn_logfile_opened = true;
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s started.", MRN_PACKAGE_STRING);
   GRN_LOG(ctx, GRN_LOG_NOTICE, "log level is '%s'",
           mrn_log_level_type_names[mrn_log_level]);
@@ -952,7 +956,7 @@ static int mrn_init(void *p)
   // init meta-info database
   if (!(mrn_db = grn_db_create(ctx, NULL, NULL))) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create system database, exiting");
-    goto err;
+    goto err_db_create;
   }
   grn_ctx_use(ctx, mrn_db);
 
@@ -961,7 +965,7 @@ static int mrn_init(void *p)
                                    MRN_MAX_KEY_SIZE, sizeof(size_t),
                                    GRN_OBJ_KEY_VAR_SIZE))) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
-    goto err;
+    goto err_hash_create;
   }
 
   // init lock
@@ -983,7 +987,6 @@ static int mrn_init(void *p)
     goto error_allocated_open_tables_hash_init;
   }
 
-  grn_ctx_fin(ctx);
   return 0;
 
 error_allocated_open_tables_hash_init:
@@ -995,19 +998,27 @@ error_allocated_thds_hash_init:
 err_allocated_thds_mutex_init:
   pthread_mutex_destroy(&mrn_db_mutex);
 err_db_mutex_init:
-err:
+  grn_hash_close(ctx, mrn_hash);
+err_hash_create:
+  grn_obj_unlink(ctx, mrn_db);
+err_db_create:
+  if (mrn_logfile_opened) {
+    fclose(mrn_logfile);
+    mrn_logfile_opened = false;
+  }
+err_log_file_open:
   pthread_mutex_destroy(&mrn_log_mutex);
 err_log_mutex_init:
   grn_ctx_fin(ctx);
   grn_fin();
+err_grn_init:
   return -1;
 }
 
 static int mrn_deinit(void *p)
 {
   THD *thd = current_thd, *tmp_thd;
-  grn_ctx *ctx;
-  ctx = grn_ctx_open(0);
+  grn_ctx *ctx = &mrn_ctx;
 
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
 
@@ -1034,7 +1045,7 @@ static int mrn_deinit(void *p)
 
   if (mrn_logfile_opened) {
     fclose(mrn_logfile);
-    mrn_logfile_opened = 0;
+    mrn_logfile_opened = false;
   }
 
   grn_ctx_fin(ctx);
@@ -1947,9 +1958,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
 int ha_mroonga::close_databases()
 {
   int error = 0;
-  grn_obj *tmp_db;
   grn_hash_cursor *hash_cursor;
-  grn_id tmp_id;
   MRN_DBUG_ENTER_METHOD();
   pthread_mutex_lock(&mrn_db_mutex);
   hash_cursor =
@@ -1959,28 +1968,25 @@ int ha_mroonga::close_databases()
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
 
-  do {
-    tmp_id = grn_hash_cursor_next(ctx, hash_cursor);
+  while (grn_hash_cursor_next(ctx, hash_cursor) != GRN_ID_NIL) {
     if (ctx->rc) {
       error = ER_ERROR_ON_READ;
       my_message(error, ctx->errbuf, MYF(0));
       break;
     }
-    if (tmp_id != GRN_ID_NIL)
+    grn_obj *db;
+    grn_hash_cursor_get_value(ctx, hash_cursor, (void **)&(db));
+    grn_rc rc = grn_hash_cursor_delete(ctx, hash_cursor, NULL);
+    if (rc)
     {
-      grn_hash_cursor_get_value(ctx, hash_cursor, (void **) &(tmp_db));
-      grn_rc rc = grn_hash_cursor_delete(ctx, hash_cursor, NULL);
-      if (rc)
-      {
-        error = ER_ERROR_ON_READ;
-        my_message(error, ctx->errbuf, MYF(0));
-        break;
-      }
-      grn_obj_close(ctx, tmp_db);
+      error = ER_ERROR_ON_READ;
+      my_message(error, ctx->errbuf, MYF(0));
+      break;
     }
-  } while (tmp_id != GRN_ID_NIL);
-
+    grn_obj_close(ctx, db);
+  }
   grn_hash_cursor_close(ctx, hash_cursor);
+
   pthread_mutex_unlock(&mrn_db_mutex);
   DBUG_RETURN(error);
 }
