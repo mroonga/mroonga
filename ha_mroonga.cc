@@ -1957,35 +1957,40 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
 
 int ha_mroonga::close_databases()
 {
-  int error = 0;
-  grn_hash_cursor *hash_cursor;
   MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
   pthread_mutex_lock(&mrn_db_mutex);
-  hash_cursor =
-    grn_hash_cursor_open(ctx, mrn_hash, NULL, 0, NULL, 0, 0, -1, 0);
-  if (ctx->rc) {
-    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+
+  grn_hash_cursor *hash_cursor;
+  hash_cursor = grn_hash_cursor_open(&mrn_ctx, mrn_hash,
+                                     NULL, 0, NULL, 0,
+                                     0, -1, 0);
+  if (mrn_ctx.rc) {
+    my_message(ER_ERROR_ON_READ, mrn_ctx.errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
 
-  while (grn_hash_cursor_next(ctx, hash_cursor) != GRN_ID_NIL) {
-    if (ctx->rc) {
+  while (grn_hash_cursor_next(&mrn_ctx, hash_cursor) != GRN_ID_NIL) {
+    if (mrn_ctx.rc) {
       error = ER_ERROR_ON_READ;
-      my_message(error, ctx->errbuf, MYF(0));
+      my_message(error, mrn_ctx.errbuf, MYF(0));
       break;
     }
+    void *value;
     grn_obj *db;
-    grn_hash_cursor_get_value(ctx, hash_cursor, (void **)&(db));
-    grn_rc rc = grn_hash_cursor_delete(ctx, hash_cursor, NULL);
+    grn_hash_cursor_get_value(&mrn_ctx, hash_cursor, &value);
+    memcpy(&db, value, sizeof(grn_obj *));
+    grn_rc rc = grn_hash_cursor_delete(&mrn_ctx, hash_cursor, NULL);
     if (rc)
     {
       error = ER_ERROR_ON_READ;
-      my_message(error, ctx->errbuf, MYF(0));
+      my_message(error, mrn_ctx.errbuf, MYF(0));
       break;
     }
-    grn_obj_close(ctx, db);
+    grn_obj_close(&mrn_ctx, db);
   }
-  grn_hash_cursor_close(ctx, hash_cursor);
+  grn_hash_cursor_close(&mrn_ctx, hash_cursor);
 
   pthread_mutex_unlock(&mrn_db_mutex);
   DBUG_RETURN(error);
