@@ -1265,6 +1265,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   cursor = NULL;
   index_table_cursor = NULL;
   result_geo = NULL;
+  GRN_WGS84_GEO_POINT_INIT(&top_left_point, 0);
+  GRN_WGS84_GEO_POINT_INIT(&bottom_right_point, 0);
   score_column = NULL;
   key_accessor = NULL;
   share = NULL;
@@ -1281,6 +1283,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
 ha_mroonga::~ha_mroonga()
 {
   MRN_DBUG_ENTER_METHOD();
+  grn_obj_unlink(ctx, &top_left_point);
+  grn_obj_unlink(ctx, &bottom_right_point);
   grn_obj_unlink(ctx, &key_buffer);
   grn_obj_unlink(ctx, &old_value_buffer);
   grn_obj_unlink(ctx, &new_value_buffer);
@@ -4196,10 +4200,11 @@ ha_rows ha_mroonga::generic_records_in_range_geo(uint key_nr,
     DBUG_RETURN(row_count);
   }
 
-  grn_obj *result = generic_geo_select_in_rectangle(grn_index_columns[key_nr],
-                                                    range_min->key);
-  row_count = grn_table_size(ctx, result);
-  grn_obj_unlink(ctx, result);
+  int error;
+  error = generic_geo_select_in_rectangle(grn_index_columns[key_nr],
+                                          range_min->key);
+  // TODO: check error.
+  row_count = grn_table_size(ctx, result_geo);
   DBUG_RETURN(row_count);
 }
 
@@ -4295,7 +4300,7 @@ int ha_mroonga::wrapper_index_read_map(uchar * buf, const uchar * key,
   MRN_DBUG_ENTER_METHOD();
   KEY key_info = table->key_info[active_index];
   if (mrn_is_geo_key(&key_info)) {
-    clear_search_result();
+    clear_cursor();
     error = generic_geo_open_cursor(key, find_flag);
     if (!error) {
       error = wrapper_get_next_record(buf);
@@ -5389,6 +5394,12 @@ void ha_mroonga::clear_search_result()
     grn_obj_unlink(ctx, matched_record_keys);
     matched_record_keys = NULL;
   }
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::clear_search_result_geo()
+{
+  MRN_DBUG_ENTER_METHOD();
   if (result_geo) {
     grn_obj_unlink(ctx, result_geo);
     result_geo = NULL;
@@ -5498,9 +5509,13 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
   DBUG_RETURN(0);
 }
 
-grn_obj *ha_mroonga::generic_geo_select_in_rectangle(grn_obj *index_column,
-                                                     const uchar *rectangle)
+int ha_mroonga::generic_geo_select_in_rectangle(grn_obj *index_column,
+                                                const uchar *rectangle)
 {
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+
   double locations[4];
   for (int i = 0; i < 4; i++) {
     uchar reversed_value[8];
@@ -5509,33 +5524,49 @@ grn_obj *ha_mroonga::generic_geo_select_in_rectangle(grn_obj *index_column,
     }
     mi_float8get(locations[i], reversed_value);
   }
-  double top_left_longitude = locations[0];
-  double bottom_right_longitude = locations[1];
-  double bottom_right_latitude = locations[2];
-  double top_left_latitude = locations[3];
-  grn_obj top_left_point, bottom_right_point;
-  GRN_WGS84_GEO_POINT_INIT(&top_left_point, 0);
-  GRN_WGS84_GEO_POINT_INIT(&bottom_right_point, 0);
+  double top_left_longitude_in_degree = locations[0];
+  double bottom_right_longitude_in_degree = locations[1];
+  double bottom_right_latitude_in_degree = locations[2];
+  double top_left_latitude_in_degree = locations[3];
+  int top_left_latitude = GRN_GEO_DEGREE2MSEC(top_left_latitude_in_degree);
+  int top_left_longitude = GRN_GEO_DEGREE2MSEC(top_left_longitude_in_degree);
+  int bottom_right_latitude = GRN_GEO_DEGREE2MSEC(bottom_right_latitude_in_degree);
+  int bottom_right_longitude = GRN_GEO_DEGREE2MSEC(bottom_right_longitude_in_degree);
+  if (result_geo) {
+    int cached_top_left_latitude, cached_top_left_longitude;
+    int cached_bottom_right_latitude, cached_bottom_right_longitude;
+    GRN_GEO_POINT_VALUE(&top_left_point,
+                        cached_top_left_latitude,
+                        cached_top_left_longitude);
+    GRN_GEO_POINT_VALUE(&bottom_right_point,
+                        cached_bottom_right_latitude,
+                        cached_bottom_right_longitude);
+    if (top_left_latitude == cached_top_left_latitude &&
+        top_left_longitude == cached_top_left_longitude &&
+        bottom_right_latitude == cached_bottom_right_latitude &&
+        bottom_right_longitude == cached_bottom_right_longitude) {
+      DBUG_PRINT("info", ("mroonga: reuse geo search result."));
+      DBUG_RETURN(error);
+    } else {
+      clear_search_result_geo();
+    }
+  }
   GRN_GEO_POINT_SET(ctx, &top_left_point,
-                    GRN_GEO_DEGREE2MSEC(top_left_latitude),
-                    GRN_GEO_DEGREE2MSEC(top_left_longitude));
+                    top_left_latitude, top_left_longitude);
   GRN_GEO_POINT_SET(ctx, &bottom_right_point,
-                    GRN_GEO_DEGREE2MSEC(bottom_right_latitude),
-                    GRN_GEO_DEGREE2MSEC(bottom_right_longitude));
-  grn_obj *result;
-  result = grn_table_create(ctx, NULL, 0, NULL,
+                    bottom_right_latitude, bottom_right_longitude);
+
+  result_geo = grn_table_create(ctx, NULL, 0, NULL,
                             GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                             grn_table, NULL);
   // TODO: check result isn't NULL.
   grn_rc rc;
   rc = grn_geo_select_in_rectangle(ctx, index_column,
                                    &top_left_point, &bottom_right_point,
-                                   result, GRN_OP_OR);
+                                   result_geo, GRN_OP_OR);
   // TODO: check rc;
-  grn_obj_unlink(ctx, &top_left_point);
-  grn_obj_unlink(ctx, &bottom_right_point);
 
-  return result;
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::generic_geo_open_cursor(const uchar *key,
@@ -5545,9 +5576,9 @@ int ha_mroonga::generic_geo_open_cursor(const uchar *key,
   int error = 0;
   int flags = 0;
   if (find_flag & HA_READ_MBR_CONTAIN) {
-    result_geo = generic_geo_select_in_rectangle(grn_index_columns[active_index],
-                                                 key);
-    // TODO: check result
+    error = generic_geo_select_in_rectangle(grn_index_columns[active_index],
+                                            key);
+    // TODO: check error
     cursor = grn_table_cursor_open(ctx, result_geo, NULL, 0, NULL, 0,
                                    0, -1, flags);
   } else {
@@ -5854,6 +5885,7 @@ int ha_mroonga::reset()
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga this=%p", this));
   clear_search_result();
+  clear_search_result_geo();
   if (share->wrapper_mode)
     error = wrapper_reset();
   else
