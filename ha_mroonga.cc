@@ -214,7 +214,7 @@ TYPELIB mrn_log_level_typelib=
 };
 
 static void mrn_log_level_update(THD *thd, struct st_mysql_sys_var *var,
-                                      void *var_ptr, const void *save)
+                                 void *var_ptr, const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   ulong new_value = *(ulong*) save;
