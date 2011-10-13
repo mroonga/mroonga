@@ -128,6 +128,8 @@ FILE *mrn_logfile = NULL;
 static bool mrn_logfile_opened = false;
 grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
+static char mrn_dry_write_default = false;
+static char mrn_dry_write = mrn_dry_write_default;
 char mrn_default_parser_name[MRN_MAX_KEY_SIZE];
 char *mrn_default_parser;
 
@@ -259,12 +261,37 @@ static MYSQL_SYSVAR_STR(default_parser, mrn_default_parser,
                         mrn_default_parser_update,
                         MRN_PARSER_DEFAULT);
 
+static void mrn_dry_write_update(THD *thd, struct st_mysql_sys_var *var,
+                                 void *var_ptr, const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  bool new_value = *(bool *)save;
+  bool old_value = mrn_dry_write;
+  mrn_dry_write = new_value;
+  grn_ctx ctx;
+  grn_ctx_init(&ctx, 0);
+  GRN_LOG(&ctx, GRN_LOG_NOTICE, "dry write changed from '%s' to '%s'",
+          old_value ? "true" : "false",
+          new_value ? "true" : "false");
+  grn_ctx_fin(&ctx);
+  DBUG_VOID_RETURN;
+}
+
+  static MYSQL_SYSVAR_BOOL(dry_write, mrn_dry_write,
+                         PLUGIN_VAR_RQCMDARG,
+                         "If dry_write is true, any write operations are ignored.",
+                         NULL,
+                         mrn_dry_write_update,
+                         mrn_dry_write_default);
+
 struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
   MYSQL_SYSVAR(default_parser),
+  MYSQL_SYSVAR(dry_write),
   NULL
 };
+
 
 /* UDF - last_insert_grn_id() */
 my_bool last_insert_grn_id_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
@@ -3275,10 +3302,16 @@ err:
 int ha_mroonga::storage_write_row(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+
+  if (mrn_dry_write) {
+    DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
+    DBUG_RETURN(error);
+  }
+
   THD *thd = ha_thd();
   int i, col_size;
   int n_columns = table->s->fields;
-  int error = 0;
 
   if (table->next_number_field && buf == table->record[0])
   {
@@ -3657,6 +3690,11 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
+  if (mrn_dry_write) {
+    DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
+    DBUG_RETURN(error);
+  }
+
   grn_obj colbuf;
   int i, col_size;
   int n_columns = table->s->fields;
@@ -3947,6 +3985,12 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+
+  if (mrn_dry_write) {
+    DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
+    DBUG_RETURN(error);
+  }
+
   grn_table_delete_by_id(ctx, grn_table, record_id);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
