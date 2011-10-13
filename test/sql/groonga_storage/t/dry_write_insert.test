@@ -26,14 +26,18 @@ create table diaries (
   fulltext index body_index (body)
 ) default charset utf8;
 show create table diaries;
+
 insert into diaries (body) values ("will start groonga!");
 select * from diaries;
+
 set global groonga_dry_write=true;
 insert into diaries (body) values ("starting groonga...");
 select * from diaries;
+
 set global groonga_dry_write=false;
 insert into diaries (body) values ("started groonga.");
 select * from diaries;
+
 drop table diaries;
 
 --source suite/groonga_include/groonga_deinit.inc
