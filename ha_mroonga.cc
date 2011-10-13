@@ -222,7 +222,7 @@ static void mrn_log_level_update(THD *thd, struct st_mysql_sys_var *var,
   mrn_log_level = new_value;
   mrn_logger_info.max_level = (grn_log_level) mrn_log_level;
   grn_ctx *ctx = grn_ctx_open(0);
-  GRN_LOG(ctx, GRN_LOG_NOTICE, "log level changed from '%s' to '%s'", 
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "log level changed from '%s' to '%s'",
           mrn_log_level_type_names[old_value],
           mrn_log_level_type_names[new_value]);
   grn_ctx_fin(ctx);
@@ -3442,7 +3442,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
   // for UDF last_insert_grn_id()
   st_mrn_slot_data *slot_data = (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
   if (slot_data == NULL) {
-    slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data)); 
+    slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data));
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
     pthread_mutex_lock(&mrn_allocated_thds_mutex);
     if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
