@@ -3572,9 +3572,10 @@ int ha_mroonga::wrapper_get_record_id(uchar *data, grn_id *record_id,
 
 int ha_mroonga::wrapper_update_row(const uchar *old_data, uchar *new_data)
 {
+  MRN_DBUG_ENTER_METHOD();
+
   int error = 0;
   THD *thd = ha_thd();
-  MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   tmp_disable_binlog(thd);
@@ -3912,9 +3913,10 @@ int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
 
 int ha_mroonga::wrapper_delete_row(const uchar *buf)
 {
+  MRN_DBUG_ENTER_METHOD();
+
   int error = 0;
   THD *thd= ha_thd();
-  MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   tmp_disable_binlog(thd);
