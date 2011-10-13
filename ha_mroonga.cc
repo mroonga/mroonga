@@ -3223,6 +3223,11 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
 
   int error = 0;
 
+  if (mrn_dry_write) {
+    DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
+    DBUG_RETURN(error);
+  }
+
   grn_obj key;
   GRN_TEXT_INIT(&key, 0);
 
@@ -3591,6 +3596,11 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
 
   int error = 0;
 
+  if (mrn_dry_write) {
+    DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
+    DBUG_RETURN(error);
+  }
+
   KEY key_info = table->key_info[table_share->primary_key];
   GRN_BULK_REWIND(&key_buffer);
   key_copy((uchar *)(GRN_TEXT_VALUE(&key_buffer)),
@@ -3925,6 +3935,11 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
   MRN_DBUG_ENTER_METHOD();
 
   int error = 0;
+
+  if (mrn_dry_write) {
+    DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
+    DBUG_RETURN(error);
+  }
 
   grn_id record_id;
   error = wrapper_get_record_id((uchar *)buf, &record_id,
