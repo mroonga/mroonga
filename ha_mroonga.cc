@@ -5182,7 +5182,7 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
     // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
     if (keyword_length > 0 && keyword[0] == '+') {
       keyword++;
-      keyword_length++;
+      keyword_length--;
     }
     grn_expr_flags expression_flags = GRN_EXPR_SYNTAX_QUERY;
     grn_rc rc;
