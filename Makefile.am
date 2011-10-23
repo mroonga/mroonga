@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS = 1.9.7
 AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) $(MECAB_INCLUDES) $(MYSQL_VERSION_CFLAGS)
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
-noinst_HEADERS = mrn_sys.h ha_mroonga.h mrn_table.h mrn_err.h
+noinst_HEADERS = mrn_sys.h ha_mroonga.h mrn_table.h mrn_err.h mrn_mysql.h
 
 plugin_LTLIBRARIES     = ha_groonga.la
 ha_groonga_la_LDFLAGS  = -module $(GROONGA_LIBS) $(MECAB_LIBS)

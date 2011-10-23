@@ -19,37 +19,18 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifdef HAVE_CONFIG_H
-#  include "config.h"
-/* We need to undefine them because my_config.h defines them. :< */
-#  undef VERSION
-#  undef PACKAGE
-#  undef PACKAGE_BUGREPORT
-#  undef PACKAGE_NAME
-#  undef PACKAGE_STRING
-#  undef PACKAGE_TARNAME
-#  undef PACKAGE_VERSION
-#endif
+#include "mrn_mysql.h"
 
 #ifdef USE_PRAGMA_IMPLEMENTATION
 #pragma implementation
 #endif
 
-#define MYSQL_SERVER 1
-#include "mysql_version.h"
-
-#if MYSQL_VERSION_ID < 50500
-#  include <mysql_priv.h>
-#  include <mysql/plugin.h>
-#else
-#  include <sql_priv.h>
-#  include <sql_class.h>
-#  include <probes_mysql.h>
+#if MYSQL_VERSION_ID >= 50500
 #  include <sql_plugin.h>
 #  include <sql_show.h>
-#  include <sql_partition.h>
 #  include <key.h>
 #endif
+
 #include <sql_select.h>
 #include <ft_global.h>
 #include <spatial.h>

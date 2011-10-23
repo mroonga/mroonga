@@ -187,6 +187,17 @@ if test x"$default_parser" != x"no"; then
 		     "specified default fulltext parser")
 fi
 
+AC_ARG_ENABLE(fast_mutexes,
+    [AC_HELP_STRING([--disable-fast-mutexes],
+                    [Force disable fast mutex.
+                     [default: use mysql_config output]])],
+    [enable_fast_mutexes=$enableval],
+    [enable_fast_mutexes=auto])
+if test "$enable_fast_mutexes" = "no"; then
+   AC_DEFINE(FORCE_FAST_MUTEX_DISABLED, [1],
+             [Define to 1 if force fast mutext disabled])
+fi
+
 # check Cutter with GLib support if available
 REQUIRED_MINIMUM_CUTTER_VERSION=1.1.3
 m4_ifdef([AC_CHECK_GCUTTER], [
