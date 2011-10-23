@@ -38,7 +38,8 @@ if [ ! -d ../mysql-%{mysql_version} ]; then
         ../../SPECS/mysql.spec
 fi
 %configure CPPFLAGS="-DDISABLE_DTRACE" \
-    --with-mysql-source=../mysql-%{mysql_version}
+    --with-mysql-source=../mysql-%{mysql_version} \
+    --disable-fast-mutexes
 make %{?_smp_mflags}
 
 
