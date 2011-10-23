@@ -19,7 +19,7 @@ BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	mysql-devel
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	mysql-server
-Requires:	mysql-client
+Requires:	mysql
 
 %description
 Groonga storage engine is a MySQL storage plugin.
