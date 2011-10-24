@@ -21,6 +21,7 @@
 * mysql_configがfast mutexesを有効にしていると報告しても、それを無視する `--disable-fast-mutexes` configureオプションを追加。
 * [ストレージモード] `create index` に対応。
 * [ストレージモード] `drop index` に対応。
+* [ストレージモード] 全文検索用のマルチカラムインデックスに対応。
 * MySQL 5.5.17に対応。
 * groonga 1.2.7に対応。（1.2.6以下のサポートを削除。）
 
