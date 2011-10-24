@@ -927,6 +927,23 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
   grn_obj_unlink(ctx, &buf);
 }
 
+static uint mrn_alter_table_flags(uint flags) {
+  uint ret_flags =
+    HA_INPLACE_ADD_INDEX_NO_READ_WRITE |
+    HA_INPLACE_DROP_INDEX_NO_READ_WRITE |
+    HA_INPLACE_ADD_UNIQUE_INDEX_NO_READ_WRITE |
+    HA_INPLACE_DROP_UNIQUE_INDEX_NO_READ_WRITE |
+    HA_INPLACE_ADD_PK_INDEX_NO_READ_WRITE |
+    HA_INPLACE_DROP_PK_INDEX_NO_READ_WRITE |
+    HA_INPLACE_ADD_INDEX_NO_WRITE |
+    HA_INPLACE_DROP_INDEX_NO_WRITE |
+    HA_INPLACE_ADD_UNIQUE_INDEX_NO_WRITE |
+    HA_INPLACE_DROP_UNIQUE_INDEX_NO_WRITE |
+    HA_INPLACE_ADD_PK_INDEX_NO_WRITE |
+    HA_INPLACE_DROP_PK_INDEX_NO_WRITE;
+  return ret_flags;
+}
+
 static int mrn_init(void *p)
 {
   // init handlerton
@@ -939,6 +956,7 @@ static int mrn_init(void *p)
   hton->drop_database = mrn_drop_db;
   hton->close_connection = mrn_close_connection;
   hton->flush_logs = mrn_flush_logs;
+  hton->alter_table_flags = mrn_alter_table_flags;
   mrn_hton_ptr = hton;
 
   // init groonga
@@ -1777,7 +1795,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
   }
 
-  error = storage_create_index(table, tbl_name, tbl_obj, tmp_share);
+  error = storage_create_indexs(table, tbl_name, tbl_obj, tmp_share);
   if (error) {
     grn_obj_remove(ctx, tbl_obj);
     tbl_obj = NULL;
@@ -1865,102 +1883,123 @@ int ha_mroonga::storage_create_validate_index(TABLE *table)
 }
 
 int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
-                                     grn_obj *grn_table, MRN_SHARE *tmp_share)
+                                     grn_obj *grn_table, MRN_SHARE *tmp_share,
+                                     KEY *key_info, grn_obj **index_tables,
+                                     uint i)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-
   char index_table_name[MRN_MAX_KEY_SIZE];
+  grn_obj *index_table, *index_column;
+  grn_obj *column = NULL;
+  grn_obj *index_type = NULL;
+
+  mrn_index_table_name_gen(grn_table_name, key_info->name, index_table_name);
+
+  int key_parts = key_info->key_parts;
+  grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
+  if (key_parts == 1) {
+    Field *field = key_info->key_part[0].field;
+    const char *column_name = field->field_name;
+    int column_name_size = strlen(column_name);
+
+    if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
+      // skipping _id virtual column
+      DBUG_RETURN(0);
+    }
+
+    column = grn_obj_column(ctx, grn_table, column_name, column_name_size);
+    int mysql_field_type = field->type();
+    grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
+    index_type = grn_ctx_at(ctx, groonga_type);
+    index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
+  } else {
+    index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+  }
+
+  int key_alg = key_info->algorithm;
+  if (key_alg == HA_KEY_ALG_FULLTEXT) {
+    index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
+  } else if (key_alg == HA_KEY_ALG_HASH) {
+    index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
+  } else {
+    index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
+  }
+
+  index_table = grn_table_create(ctx,
+                                 index_table_name,
+                                 strlen(index_table_name),
+                                 NULL,
+                                 index_table_flags,
+                                 index_type,
+                                 0);
+  if (ctx->rc) {
+    grn_obj_remove(ctx, grn_table);
+    error = ER_CANT_CREATE_TABLE;
+    my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+
+  if (key_alg == HA_KEY_ALG_FULLTEXT) {
+    grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+    grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
+                                        tmp_share->key_parser_length[i]);
+    grn_obj_set_info(ctx, index_table, info_type, tokenizer);
+    grn_obj_unlink(ctx, tokenizer);
+  }
+
+  grn_obj_flags index_column_flags =
+    GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
+  index_column = grn_column_create(ctx,
+                                  index_table,
+                                  index_column_name,
+                                  strlen(index_column_name),
+                                  NULL,
+                                  index_column_flags,
+                                  grn_table);
+
+  if (ctx->rc) {
+    grn_obj_remove(ctx, index_table);
+    error = ER_CANT_CREATE_TABLE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+
+  if (column) {
+    grn_obj source_ids;
+    grn_id source_id = grn_obj_id(ctx, column);
+    GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
+    GRN_UINT32_PUT(ctx, &source_ids, source_id);
+    grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
+    grn_obj_unlink(ctx, &source_ids);
+  }
+  index_tables[i] = index_table;
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_create_indexs(TABLE *table, const char *grn_table_name,
+                                      grn_obj *grn_table, MRN_SHARE *tmp_share)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0, i;
 
   uint n_keys = table->s->keys;
-  for (int i = 0; i < n_keys; i++) {
+  grn_obj *index_tables[n_keys];
+  for (i = 0; i < n_keys; i++) {
+    index_tables[i] = NULL;
     if (i == table->s->primary_key) {
       continue; // pkey is already handled
     }
-
-    grn_obj *index_table, *index_column;
-    grn_obj *column = NULL;
-    grn_obj *index_type = NULL;
-    KEY key_info = table->s->key_info[i];
-
-    mrn_index_table_name_gen(grn_table_name, key_info.name, index_table_name);
-
-    int key_parts = key_info.key_parts;
-    grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
-    if (key_parts == 1) {
-      Field *field = key_info.key_part[0].field;
-      const char *column_name = field->field_name;
-      int column_name_size = strlen(column_name);
-
-      if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
-        // skipping _id virtual column
-        continue;
+    if ((error = storage_create_index(table, grn_table_name, grn_table,
+                                      tmp_share, &table->s->key_info[i],
+                                      index_tables, i)))
+      DBUG_RETURN(error);
+  }
+  if (error) {
+    for (; i >= 0; i--) {
+      if (index_tables[i]) {
+        grn_obj_remove(ctx, index_tables[i]);
       }
-
-      column = grn_obj_column(ctx, grn_table, column_name, column_name_size);
-      int mysql_field_type = field->type();
-      grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
-      index_type = grn_ctx_at(ctx, groonga_type);
-      index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
-    } else {
-      index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
-    }
-
-    int key_alg = key_info.algorithm;
-    if (key_alg == HA_KEY_ALG_FULLTEXT) {
-      index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    } else if (key_alg == HA_KEY_ALG_HASH) {
-      index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
-    } else {
-      index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    }
-
-    index_table = grn_table_create(ctx,
-                                   index_table_name,
-                                   strlen(index_table_name),
-                                   NULL,
-                                   index_table_flags,
-                                   index_type,
-                                   0);
-    if (ctx->rc) {
-      grn_obj_remove(ctx, grn_table);
-      error = ER_CANT_CREATE_TABLE;
-      my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(error);
-    }
-
-    if (key_alg == HA_KEY_ALG_FULLTEXT) {
-      grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-      grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
-                                          tmp_share->key_parser_length[i]);
-      grn_obj_set_info(ctx, index_table, info_type, tokenizer);
-      grn_obj_unlink(ctx, tokenizer);
-    }
-
-    grn_obj_flags index_column_flags =
-      GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
-    index_column = grn_column_create(ctx,
-                                    index_table,
-                                    index_column_name,
-                                    strlen(index_column_name),
-                                    NULL,
-                                    index_column_flags,
-                                    grn_table);
-
-    if (ctx->rc) {
-      grn_obj_remove(ctx, index_table);
-      error = ER_CANT_CREATE_TABLE;
-      my_message(error, ctx->errbuf, MYF(0));
-      DBUG_RETURN(error);
-    }
-
-    if (column) {
-      grn_obj source_ids;
-      grn_id source_id = grn_obj_id(ctx, column);
-      GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
-      GRN_UINT32_PUT(ctx, &source_ids, source_id);
-      grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
-      grn_obj_unlink(ctx, &source_ids);
     }
   }
 
@@ -2085,6 +2124,14 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   int i, error = 0;
   MRN_SHARE *tmp_share;
   MRN_DBUG_ENTER_METHOD();
+  uint sql_command = thd_sql_command(ha_thd());
+  if (
+    sql_command == SQLCOM_CREATE_INDEX ||
+    sql_command == SQLCOM_DROP_INDEX ||
+    sql_command == SQLCOM_ALTER_TABLE
+  )
+    DBUG_RETURN(HA_ERR_WRONG_COMMAND);
+
   /* checking data type of virtual columns */
 
   if (!(tmp_share = mrn_get_share(name, table, &error)))
@@ -2677,6 +2724,13 @@ int ha_mroonga::delete_table(const char *name)
   TABLE tmp_table;
   MRN_SHARE *tmp_share;
   MRN_DBUG_ENTER_METHOD();
+  uint sql_command = thd_sql_command(ha_thd());
+  if (
+    sql_command == SQLCOM_CREATE_INDEX ||
+    sql_command == SQLCOM_DROP_INDEX ||
+    sql_command == SQLCOM_ALTER_TABLE
+  )
+    DBUG_RETURN(HA_ERR_WRONG_COMMAND);
   mrn_db_name_gen(name, db_name);
   mrn_table_name_gen(name, tbl_name);
 #if MYSQL_VERSION_ID >= 50500
@@ -6623,6 +6677,8 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+  if (!share)
+    DBUG_RETURN(HA_ERR_WRONG_COMMAND);
   if (share->wrapper_mode)
   {
     error = wrapper_rename_table(from, to);
@@ -7057,7 +7113,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   bitmap_clear_all(table->read_set);
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
   for (i = 0, j = 0; i < num_of_keys; i++) {
-    if (!(key_info[i].flags & HA_FULLTEXT)) {
+    if (!(key_info[i].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[i])) {
       wrap_key_info[j] = key_info[i];
       j++;
       continue;
@@ -7067,11 +7123,20 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       break;
     }
     index_tables[i + n_keys] = NULL;
-    if ((res = wrapper_create_index_fulltext(grn_table, grn_table_name,
-                                             i + n_keys,
-                                             &key_info[i], index_tables,
-                                             tmp_share)))
-    {
+    if (
+      (key_info[i].flags & HA_FULLTEXT) &&
+      (res = wrapper_create_index_fulltext(grn_table, grn_table_name,
+                                           i + n_keys,
+                                           &key_info[i], index_tables,
+                                           tmp_share))
+    ) {
+      break;
+    } else if (
+      mrn_is_geo_key(&key_info[i]) &&
+      (res = wrapper_create_index_geo(grn_table, grn_table_name,
+                                      i + n_keys, &key_info[i],
+                                      index_tables, tmp_share))
+    ) {
       break;
     }
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
@@ -7178,10 +7243,62 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
 }
 
 int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
-  uint num_of_keys, handler_add_index **add)
+                                  uint num_of_keys, handler_add_index **add)
 {
+  int res = 0;
+  uint i, j, k;
+  uint n_keys = table->s->keys;
+  grn_obj *index_tables[num_of_keys + n_keys];
+  char grn_table_name[MRN_MAX_PATH_SIZE];
+  THD *thd = ha_thd();
+  MRN_SHARE *tmp_share;
+  TABLE_SHARE tmp_table_share;
+  char **key_parser;
+  uint *key_parser_length;
   MRN_DBUG_ENTER_METHOD();
-  int res = handler::add_index(table_arg, key_info, num_of_keys, add);
+  KEY *wrap_key_info = (KEY *) thd->alloc(sizeof(KEY) * num_of_keys);
+  KEY *p_key_info = &table->key_info[table_share->primary_key], *tmp_key_info;
+  tmp_table_share.keys = n_keys + num_of_keys;
+  if (!(tmp_share = (MRN_SHARE *)
+    my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+      &tmp_share, sizeof(*tmp_share),
+      &key_parser, sizeof(char *) * (n_keys + num_of_keys),
+      &key_parser_length, sizeof(uint) * (n_keys + num_of_keys),
+      NullS))
+  ) {
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  }
+  tmp_share->engine = NULL;
+  tmp_share->table_share = &tmp_table_share;
+  tmp_share->key_parser = key_parser;
+  tmp_share->key_parser_length = key_parser_length;
+  mrn_table_name_gen(share->table_name, grn_table_name);
+  for (i = 0; i < num_of_keys; i++) {
+    index_tables[i + n_keys] = NULL;
+    if ((res = mrn_add_index_param(tmp_share, &key_info[i], i + n_keys)))
+    {
+      break;
+    }
+    if ((res = storage_create_index(table, grn_table_name, grn_table,
+                                    tmp_share, &key_info[i], index_tables,
+                                    i + n_keys)))
+    {
+      break;
+    }
+  }
+  if (res)
+  {
+    for (k = 0; k < i; k++) {
+      if (index_tables[k + n_keys])
+      {
+        grn_obj_remove(ctx, index_tables[k + n_keys]);
+      }
+    }
+  } else {
+    *add = new handler_add_index(table_arg, key_info, num_of_keys);
+  }
+  mrn_free_share_alloc(tmp_share);
+  my_free(tmp_share, MYF(0));
   DBUG_RETURN(res);
 }
 
@@ -7221,8 +7338,11 @@ int ha_mroonga::wrapper_final_add_index(handler_add_index *add, bool commit)
 int ha_mroonga::storage_final_add_index(handler_add_index *add, bool commit)
 {
   MRN_DBUG_ENTER_METHOD();
-  int res = handler::final_add_index(add, commit);
-  DBUG_RETURN(res);
+  if (add)
+  {
+    delete add;
+  }
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::final_add_index(handler_add_index *add, bool commit)
@@ -7276,9 +7396,21 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
 int ha_mroonga::storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
   uint num_of_keys)
 {
+  uint i;
+  KEY *key_info = table_share->key_info;
+  char grn_table_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
-  int res = handler::prepare_drop_index(table_arg, key_num, num_of_keys);
-  DBUG_RETURN(res);
+  mrn_table_name_gen(share->table_name, grn_table_name);
+  for (i = 0; i < num_of_keys; i++) {
+    char index_name[MRN_MAX_PATH_SIZE];
+    mrn_index_table_name_gen(grn_table_name, key_info[key_num[i]].name,
+                             index_name);
+    grn_obj *index_table = grn_ctx_get(ctx, index_name, strlen(index_name));
+    if (index_table != NULL) {
+      grn_obj_remove(ctx, index_table);
+    }
+  }
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::prepare_drop_index(TABLE *table_arg, uint *key_num,
@@ -7310,8 +7442,7 @@ int ha_mroonga::wrapper_final_drop_index(TABLE *table_arg)
 int ha_mroonga::storage_final_drop_index(TABLE *table_arg)
 {
   MRN_DBUG_ENTER_METHOD();
-  uint res = handler::final_drop_index(table_arg);
-  DBUG_RETURN(res);
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::final_drop_index(TABLE *table_arg)
