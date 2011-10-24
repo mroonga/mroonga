@@ -1898,6 +1898,8 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
 
   int key_parts = key_info->key_parts;
   grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
+  grn_obj_flags index_column_flags =
+    GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
   if (key_parts == 1) {
     Field *field = key_info->key_part[0].field;
     const char *column_name = field->field_name;
@@ -1912,14 +1914,15 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     int mysql_field_type = field->type();
     grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
     index_type = grn_ctx_at(ctx, groonga_type);
-    index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
   } else {
     index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+    index_column_flags |= GRN_OBJ_WITH_SECTION;
   }
 
   int key_alg = key_info->algorithm;
-  if (key_alg == HA_KEY_ALG_FULLTEXT) {
+  if (key_info->flags & HA_FULLTEXT) {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
+    index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
   } else if (key_alg == HA_KEY_ALG_HASH) {
     index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
   } else {
@@ -1932,7 +1935,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
                                  NULL,
                                  index_table_flags,
                                  index_type,
-                                 0);
+                                 NULL);
   if (ctx->rc) {
     grn_obj_remove(ctx, grn_table);
     error = ER_CANT_CREATE_TABLE;
@@ -1940,7 +1943,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     DBUG_RETURN(error);
   }
 
-  if (key_alg == HA_KEY_ALG_FULLTEXT) {
+  if (key_info->flags & HA_FULLTEXT) {
     grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
     grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
                                         tmp_share->key_parser_length[i]);
@@ -1948,8 +1951,6 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     grn_obj_unlink(ctx, tokenizer);
   }
 
-  grn_obj_flags index_column_flags =
-    GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
   index_column = grn_column_create(ctx,
                                   index_table,
                                   index_column_name,
@@ -1965,15 +1966,40 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     DBUG_RETURN(error);
   }
 
-  if (column) {
-    grn_obj source_ids;
-    grn_id source_id = grn_obj_id(ctx, column);
-    GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
-    GRN_UINT32_PUT(ctx, &source_ids, source_id);
-    grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
-    grn_obj_unlink(ctx, &source_ids);
+  if (key_parts == 1) {
+    if (column) {
+      grn_obj source_ids;
+      grn_id source_id = grn_obj_id(ctx, column);
+      GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
+      GRN_UINT32_PUT(ctx, &source_ids, source_id);
+      grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
+      grn_obj_unlink(ctx, &source_ids);
+    }
+  } else {
+    if (key_info->flags & HA_FULLTEXT) {
+      grn_obj source_ids;
+      GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
+
+      int j, n_key_parts = key_info->key_parts;
+      for (j = 0; j < n_key_parts; j++) {
+        Field *field = key_info->key_part[j].field;
+        const char *column_name = field->field_name;
+        int column_name_size = strlen(column_name);
+        grn_obj *source_column = grn_obj_column(ctx, grn_table,
+                                                column_name, column_name_size);
+        grn_id source_id = grn_obj_id(ctx, source_column);
+        GRN_UINT32_PUT(ctx, &source_ids, source_id);
+        grn_obj_unlink(ctx, source_column);
+      }
+      grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
+      grn_obj_unlink(ctx, &source_ids);
+    }
   }
+
   index_tables[i] = index_table;
+  if (column) {
+    grn_obj_unlink(ctx, column);
+  }
   DBUG_RETURN(error);
 }
 
@@ -1992,8 +2018,9 @@ int ha_mroonga::storage_create_indexs(TABLE *table, const char *grn_table_name,
     }
     if ((error = storage_create_index(table, grn_table_name, grn_table,
                                       tmp_share, &table->s->key_info[i],
-                                      index_tables, i)))
-      DBUG_RETURN(error);
+                                      index_tables, i))) {
+      break;
+    }
   }
   if (error) {
     for (; i >= 0; i--) {
@@ -3520,7 +3547,7 @@ int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id)
 
     KEY key_info = table->key_info[i];
 
-    if (key_info.key_parts == 1) {
+    if (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT)) {
       continue;
     }
 
@@ -3869,7 +3896,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
 
     KEY key_info = table->key_info[i];
 
-    if (key_info.key_parts == 1) {
+    if (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT)) {
       continue;
     }
 
@@ -4073,7 +4100,7 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
 
     KEY key_info = table->key_info[i];
 
-    if (key_info.key_parts == 1) {
+    if (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT)) {
       continue;
     }
 
