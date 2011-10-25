@@ -109,8 +109,6 @@ FILE *mrn_logfile = NULL;
 static bool mrn_logfile_opened = false;
 grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
-static char mrn_dry_write_default = false;
-static char mrn_dry_write = mrn_dry_write_default;
 char mrn_default_parser_name[MRN_MAX_KEY_SIZE];
 char *mrn_default_parser;
 
@@ -242,28 +240,20 @@ static MYSQL_SYSVAR_STR(default_parser, mrn_default_parser,
                         mrn_default_parser_update,
                         MRN_PARSER_DEFAULT);
 
-static void mrn_dry_write_update(THD *thd, struct st_mysql_sys_var *var,
-                                 void *var_ptr, const void *save)
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  bool new_value = *(bool *)save;
-  bool old_value = mrn_dry_write;
-  mrn_dry_write = new_value;
-  grn_ctx ctx;
-  grn_ctx_init(&ctx, 0);
-  GRN_LOG(&ctx, GRN_LOG_NOTICE, "dry write changed from '%s' to '%s'",
-          old_value ? "true" : "false",
-          new_value ? "true" : "false");
-  grn_ctx_fin(&ctx);
-  DBUG_VOID_RETURN;
-}
+static MYSQL_THDVAR_BOOL(
+  dry_write, /* name */
+  PLUGIN_VAR_OPCMDARG, /* opt */
+  "If dry_write is true, any write operations are ignored.", /* comment */
+  NULL, /* check */
+  NULL, /* update */
+  FALSE /* def */
+);
 
-  static MYSQL_SYSVAR_BOOL(dry_write, mrn_dry_write,
-                         PLUGIN_VAR_RQCMDARG,
-                         "If dry_write is true, any write operations are ignored.",
-                         NULL,
-                         mrn_dry_write_update,
-                         mrn_dry_write_default);
+static bool mrn_dry_write(THD *thd)
+{
+  DBUG_ENTER("mrn_dry_write");
+  DBUG_RETURN(THDVAR(thd, dry_write));
+}
 
 struct st_mysql_sys_var *mrn_system_variables[] =
 {
@@ -3285,7 +3275,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
 
   int error = 0;
 
-  if (mrn_dry_write) {
+  if (mrn_dry_write(ha_thd())) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -3371,7 +3361,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
-  if (mrn_dry_write) {
+  if (mrn_dry_write(ha_thd())) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -3659,7 +3649,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
 
   int error = 0;
 
-  if (mrn_dry_write) {
+  if (mrn_dry_write(ha_thd())) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -3763,7 +3753,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
-  if (mrn_dry_write) {
+  if (mrn_dry_write(ha_thd())) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -4000,7 +3990,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
 
   int error = 0;
 
-  if (mrn_dry_write) {
+  if (mrn_dry_write(ha_thd())) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -4065,7 +4055,7 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
-  if (mrn_dry_write) {
+  if (mrn_dry_write(ha_thd())) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
