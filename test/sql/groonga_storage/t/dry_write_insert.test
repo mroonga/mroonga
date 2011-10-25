@@ -30,11 +30,11 @@ show create table diaries;
 insert into diaries (body) values ("will start groonga!");
 select * from diaries;
 
-set global groonga_dry_write=true;
+set groonga_dry_write=true;
 insert into diaries (body) values ("starting groonga...");
 select * from diaries;
 
-set global groonga_dry_write=false;
+set groonga_dry_write=false;
 insert into diaries (body) values ("started groonga.");
 select * from diaries;
 

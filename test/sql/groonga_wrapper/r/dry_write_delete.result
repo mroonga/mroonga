@@ -20,7 +20,7 @@ id	body
 1	will start groonga!
 2	starting groonga...
 3	started groonga.
-set global groonga_dry_write=true;
+set groonga_dry_write=true;
 delete from diaries where id = 2;
 select * from diaries;
 id	body
@@ -31,7 +31,7 @@ id	body
 select * from diaries where match (body) against ("started");
 id	body
 3	started groonga.
-set global groonga_dry_write=false;
+set groonga_dry_write=false;
 delete from diaries where id = 3;
 select * from diaries;
 id	body

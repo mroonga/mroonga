@@ -29,11 +29,11 @@ show create table diaries;
 
 insert into diaries (body) values ("will start groonga!");
 
-set global groonga_dry_write=true;
+set groonga_dry_write=true;
 update diaries set body = "starting groonga..." where id = 1;
 select * from diaries;
 
-set global groonga_dry_write=false;
+set groonga_dry_write=false;
 update diaries set body = "starting groonga..." where id = 1;
 select * from diaries;
 

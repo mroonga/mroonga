@@ -32,13 +32,13 @@ insert into diaries (body) values ("starting groonga...");
 insert into diaries (body) values ("started groonga.");
 select * from diaries;
 
-set global groonga_dry_write=true;
+set groonga_dry_write=true;
 delete from diaries where id = 2;
 select * from diaries;
 select * from diaries where match (body) against ("starting");
 select * from diaries where match (body) against ("started");
 
-set global groonga_dry_write=false;
+set groonga_dry_write=false;
 delete from diaries where id = 3;
 select * from diaries;
 select * from diaries where match (body) against ("starting");
