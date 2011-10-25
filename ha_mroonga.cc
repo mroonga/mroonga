@@ -242,11 +242,11 @@ static MYSQL_SYSVAR_STR(default_parser, mrn_default_parser,
 
 static MYSQL_THDVAR_BOOL(
   dry_write, /* name */
-  PLUGIN_VAR_OPCMDARG, /* opt */
+  PLUGIN_VAR_OPCMDARG, /* options */
   "If dry_write is true, any write operations are ignored.", /* comment */
   NULL, /* check */
   NULL, /* update */
-  FALSE /* def */
+  FALSE /* default */
 );
 
 static bool mrn_dry_write(THD *thd)
