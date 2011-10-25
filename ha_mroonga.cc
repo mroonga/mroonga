@@ -686,10 +686,13 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
       data_size = 8;
       break;
     case MYSQL_TYPE_STRING:
+      data_type = TYPE_BYTE_SEQUENCE;
+      data_size = key_part.length;
+      break;
     case MYSQL_TYPE_VARCHAR:
     case MYSQL_TYPE_BLOB:
       data_type = TYPE_BYTE_SEQUENCE;
-      data_size = key_part.length;
+      data_size = HA_KEY_BLOB_LENGTH + key_part.length;
       break;
     default:
       data_type = TYPE_BYTE_SEQUENCE;
