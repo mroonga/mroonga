@@ -252,7 +252,8 @@ static MYSQL_THDVAR_BOOL(
 static bool mrn_dry_write(THD *thd)
 {
   DBUG_ENTER("mrn_dry_write");
-  DBUG_RETURN(THDVAR(thd, dry_write));
+  bool dry_write_p = THDVAR(thd, dry_write);
+  DBUG_RETURN(dry_write_p);
 }
 
 struct st_mysql_sys_var *mrn_system_variables[] =
