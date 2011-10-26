@@ -363,7 +363,8 @@ private:
   int storage_create_validate_index(TABLE *table);
   int storage_create_index(TABLE *table, const char *grn_table_name,
                            grn_obj *grn_table, MRN_SHARE *tmp_share,
-                           KEY *key_info, grn_obj **index_tables, uint i);
+                           KEY *key_info, grn_obj **index_tables,
+                           grn_obj **index_columns, uint i);
   int storage_create_indexs(TABLE *table, const char *grn_table_name,
                            grn_obj *grn_table, MRN_SHARE *tmp_share);
   int close_databases();
@@ -407,7 +408,10 @@ private:
   int wrapper_write_row(uchar *buf);
   int wrapper_write_row_index(uchar *buf);
   int storage_write_row(uchar *buf);
-  int storage_write_row_index(uchar *buf, grn_id record_id);
+  int storage_write_row_index(uchar *buf, grn_id record_id,
+                              KEY *key_info, grn_obj *index_column,
+                              grn_obj *key, grn_obj *encoded_key);
+  int storage_write_row_indexes(uchar *buf, grn_id record_id);
   int wrapper_get_record_id(uchar *data, grn_id *record_id, const char *context);
   int wrapper_update_row(const uchar *old_data, uchar *new_data);
   int wrapper_update_row_index(const uchar *old_data, uchar *new_data);
