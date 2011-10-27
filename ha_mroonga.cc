@@ -7323,7 +7323,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   TABLE_SHARE tmp_table_share;
   char **key_parser;
   uint *key_parser_length;
-  bool have_multicolumn_key = FALSE;
+  bool have_multiple_column_index = FALSE;
+
   MRN_DBUG_ENTER_METHOD();
   tmp_table_share.keys = n_keys + num_of_keys;
   if (!(tmp_share = (MRN_SHARE *)
@@ -7359,10 +7360,10 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
       !(key_info[i].flags & HA_FULLTEXT)
     ) {
       mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
-      have_multicolumn_key = TRUE;
+      have_multiple_column_index = TRUE;
     }
   }
-  if (!res && have_multicolumn_key)
+  if (!res && have_multiple_column_index)
   {
     res = storage_add_index_multiple_columns(key_info, num_of_keys,
                                              index_columns);
