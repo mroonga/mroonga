@@ -47,7 +47,7 @@ groongaストレージエンジンは以下の2つの動作モードのどちら
 
 ストレージモードの構成を図で表すと以下のようになります。MyISAMやInnoDBなど既存のストレージエンジンの代わりに利用します。
 
-.. figure:: /images/storage-mode.png
+.. figure:: ../../images/storage-mode.png
    :alt: ストレージモード
    :align: center
 
@@ -56,7 +56,7 @@ groongaストレージエンジンは以下の2つの動作モードのどちら
 
 ラッパーモードの構成を図で表すと以下のようになります。全文検索関連の処理はgroongaストレージエンジンで処理し、それ以外の処理はMyISAMやInnoDBなど既存のストレージエンジンを利用します。SQLを処理するSQL Handlerと既存のストレージエンジンの間に位置するため、すべてのデータが一度groongaストレージエンジンを通ることになります。これを利用して、全文検索用のインデックス作成などを透過的に行います。
 
-.. figure:: /images/wrapper-mode.png
+.. figure:: ../../images/wrapper-mode.png
    :alt: ラッパーモード
    :align: center
 
