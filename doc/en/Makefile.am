@@ -119,10 +119,6 @@ nobase_dist_doc_en_DATA =			\
 
 # find source -type f -not -name '*.pyc' | sort | sed -e 's,^,\t,g'
 source_files =					\
-	source/images/storage-mode.png		\
-	source/images/storage-mode.svg		\
-	source/images/wrapper-mode.png		\
-	source/images/wrapper-mode.svg		\
 	source/characteristic.rst		\
 	source/conf.py				\
 	source/developer.rst			\
