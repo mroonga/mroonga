@@ -12,9 +12,18 @@ EXTRA_DIST = \
 	delete_normal_column.result \
 	drop_database.result \
 	drop_table.result \
+	dry_write_delete.result \
+	dry_write_insert.result \
+	dry_write_update.result \
 	flush_logs.result \
+	fulltext_boolean_mode_pragma_default_operator.result \
+	fulltext_index_recreate.result \
 	fulltext_insert_select.result \
 	fulltext_insert_values.result \
+	fulltext_multiple_column_index_delete.result \
+	fulltext_multiple_column_index_insert.result \
+	fulltext_multiple_column_index_recreate.result \
+	fulltext_multiple_column_index_update.result \
 	fulltext_multiple_index.result \
 	fulltext_not_match_against.result \
 	fulltext_parser_comment.result \
@@ -32,8 +41,10 @@ EXTRA_DIST = \
 	log_level.result \
 	multiple_column_index_delete.result \
 	multiple_column_index_int.result \
-	multiple_column_index_text.result \
+	multiple_column_index_recreate.result \
+	multiple_column_index_string.result \
 	multiple_column_index_update.result \
+	multiple_column_index_varchar.result \
 	multiple_column_primary_key_delete.result \
 	multiple_column_primary_key_int.result \
 	multiple_column_primary_key_update.result \
