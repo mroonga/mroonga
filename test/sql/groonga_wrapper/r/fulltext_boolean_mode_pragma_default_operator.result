@@ -1,0 +1,45 @@
+drop table if exists diaries;
+set names utf8;
+create table diaries (
+id int primary key,
+title varchar(255),
+content text,
+fulltext index (content)
+) default charset utf8 comment = 'engine "innodb"';
+show create table diaries;
+Table	Create Table
+diaries	CREATE TABLE `diaries` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `content` text,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `content` (`content`)
+) ENGINE=groonga DEFAULT CHARSET=utf8 COMMENT='engine "innodb"'
+insert into diaries values(1, "Hello", "今日からはじめました。");
+insert into diaries values(2, "天気", "明日の富士山の天気について");
+insert into diaries values(3, "富士山", "今日も天気がよくてきれいに見える。");
+select * from diaries where match(content) against("今日 天気" in boolean mode);
+id	title	content
+1	Hello	今日からはじめました。
+3	富士山	今日も天気がよくてきれいに見える。
+2	天気	明日の富士山の天気について
+select * from diaries where match(content) against("*D+ 今日 天気" in boolean mode);
+id	title	content
+3	富士山	今日も天気がよくてきれいに見える。
+select * from diaries where match(content) against("*D- 今日 天気" in boolean mode);
+id	title	content
+1	Hello	今日からはじめました。
+3	富士山	今日も天気がよくてきれいに見える。
+2	天気	明日の富士山の天気について
+select * from diaries where match(content) against("*D- +今日 +天気" in boolean mode);
+id	title	content
+3	富士山	今日も天気がよくてきれいに見える。
+select * from diaries where match(content) against("*DOR 今日 天気" in boolean mode);
+id	title	content
+1	Hello	今日からはじめました。
+3	富士山	今日も天気がよくてきれいに見える。
+2	天気	明日の富士山の天気について
+select * from diaries where match(content) against("*DOR +今日 +天気" in boolean mode);
+id	title	content
+3	富士山	今日も天気がよくてきれいに見える。
+drop table diaries;

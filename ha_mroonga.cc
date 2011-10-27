@@ -5252,7 +5252,36 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   if (flags & FT_BOOL) {
     const char *keyword = key->ptr();
     uint keyword_length = key->length();
+    grn_operator default_operator = GRN_OP_OR;
+    // WORKAROUND: support only '*D+', '*D-' and '*DOR' pragma.
+    if (keyword_length > 0) {
+      if (keyword[0] == '*' && keyword_length > 1) {
+        switch (keyword[1]) {
+        case 'D':
+          if (keyword_length > 2 && keyword[2] == '+') {
+            default_operator = GRN_OP_AND;
+            keyword += 3;
+            keyword_length -= 3;
+          } else if (keyword_length > 2 && keyword[2] == '-') {
+            default_operator = GRN_OP_OR;
+            keyword += 3;
+            keyword_length -= 3;
+          } else if (keyword_length > 3 && memcmp(keyword + 2, "OR", 2) == 0) {
+            default_operator = GRN_OP_OR;
+            keyword += 4;
+            keyword_length -= 4;
+          }
+          break;
+        default:
+          break;
+        }
+      }
+    }
     // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
+    while (keyword_length > 0 && keyword[0] == ' ') {
+      keyword++;
+      keyword_length--;
+    }
     if (keyword_length > 0 && keyword[0] == '+') {
       keyword++;
       keyword_length--;
@@ -5261,7 +5290,7 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
     grn_rc rc;
     rc = grn_expr_parse(info->ctx, expression,
                         keyword, keyword_length,
-                        match_columns, GRN_OP_MATCH, GRN_OP_OR,
+                        match_columns, GRN_OP_MATCH, default_operator,
                         expression_flags);
     // TODO: check rc
     grn_table_select(info->ctx, info->table, expression,
