@@ -58,7 +58,7 @@ if [ ! -f ../../SRPMS/$srpm ]; then
         rpm=MySQL-${package}-${mysql_full_version}.%{_arch}.rpm
 	mkdir -p ../../RPMS/%{_arch}
 	if [ ! -f ../../RPMS/%{_arch}/$rpm ]; then
-            wget -O ../../RPMS/%{_arch}/$rpm $mysql_download_base_url/$rpm
+            wget -O ../../RPMS/%{_arch}/$rpm %{mysql_download_base_url}/$rpm
 	fi
     done
 fi
