@@ -57,6 +57,10 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ 1
 #endif
 
+#if MYSQL_VERSION_ID >= 50512
+#  define MRN_HANDLER_HAVE_HA_INPLACE_INDEX_CHANGE
+#endif
+
 #if MYSQL_VERSION_ID < 50600
   typedef Item COND;
 #endif
