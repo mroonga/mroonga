@@ -273,6 +273,7 @@ AC_SUBST(SPHINX_BUILD)
 
 if test "$enable_document" = "auto"; then
   if test "$ac_sphinx_available" = "yes" -o \
+          -f "$srcdir/doc/en/html-build-stamp" -o \
           -f "$srcdir/doc/ja/html-build-stamp"; then
     enable_document="yes"
   else
@@ -305,6 +306,7 @@ AC_CONFIG_FILES([
   rpm/fedora/Makefile
   yum/Makefile
   doc/Makefile
+  doc/en/Makefile
   doc/ja/Makefile
 ])
 AC_OUTPUT([
