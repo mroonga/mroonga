@@ -893,7 +893,7 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
       int latitude, longitude;
       GRN_GEO_POINT_VALUE(&buf, latitude, longitude);
-      bzero(wkb, SRID_SIZE);
+      memset(wkb, 0, SRID_SIZE);
       memset(wkb + SRID_SIZE, Geometry::wkb_ndr, 1); // wkb_ndr is meaningless.
       int4store(wkb + SRID_SIZE + 1, Geometry::wkb_point);
       double latitude_in_degree, longitude_in_degree;
