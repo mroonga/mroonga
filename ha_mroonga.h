@@ -71,7 +71,7 @@ extern "C" {
 #endif
 
 #if MYSQL_VERSION_ID < 50603
-  typedef Sql_condition MYSQL_ERROR;
+  typedef MYSQL_ERROR Sql_condition;
 #endif
 
 class ha_mroonga;
