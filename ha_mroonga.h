@@ -70,6 +70,10 @@ extern "C" {
   typedef Item COND;
 #endif
 
+#if MYSQL_VERSION_ID < 50603
+  typedef Sql_condition MYSQL_ERROR;
+#endif
+
 class ha_mroonga;
 
 /* structs */

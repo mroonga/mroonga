@@ -3469,13 +3469,13 @@ int ha_mroonga::storage_write_row(uchar *buf)
     if (field->is_null()) continue;
 
     if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
-      push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+      push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                    "data truncated for _id column");
       continue;
     }
 
     if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-      push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+      push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                    "data truncated for _score column");
       continue;
     }
@@ -3818,7 +3818,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       if (field->is_null()) continue;
 
       if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
-        push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+        push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                      "data truncated for _id column");
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -3827,7 +3827,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       }
 
       if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-        push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+        push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                      "data truncated for _score column");
 #ifndef DBUG_OFF
         dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -3843,7 +3843,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
             char message[MRN_BUFFER_SIZE];
             snprintf(message, MRN_BUFFER_SIZE,
                      "data truncated for primary key column: <%s>", column_name);
-            push_warning(thd, MYSQL_ERROR::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
+            push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                          message);
             have_pkey = true;
           }
@@ -5522,7 +5522,7 @@ void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_func
     sprintf(search_name, "unknown: %d", flag);
   }
   push_warning_printf(ha_thd(),
-                      MYSQL_ERROR::WARN_LEVEL_WARN,
+                      Sql_condition::WARN_LEVEL_WARN,
                       ER_UNSUPPORTED_EXTENSION,
                       "spatial index search "
                       "except MBRContains aren't supported: <%s>",
@@ -5588,7 +5588,7 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
             name_length, name,
             MRN_PARSER_DEFAULT);
     push_warning(ha_thd(),
-                 MYSQL_ERROR::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
                  message);
     tokenizer = grn_ctx_get(ctx,
                             MRN_PARSER_DEFAULT,
@@ -5596,7 +5596,7 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
   }
   if (!tokenizer) {
     push_warning(ha_thd(),
-                 MYSQL_ERROR::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
                  "couldn't find fulltext parser. "
                  "Bigram fulltext parser is used instead.");
     tokenizer = grn_ctx_at(ctx, GRN_DB_BIGRAM);
