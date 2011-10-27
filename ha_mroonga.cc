@@ -1295,6 +1295,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   matched_record_keys = NULL;
   fulltext_searching = FALSE;
   GRN_TEXT_INIT(&key_buffer, 0);
+  GRN_TEXT_INIT(&encoded_key_buffer, 0);
   GRN_VOID_INIT(&old_value_buffer);
   GRN_VOID_INIT(&new_value_buffer);
   DBUG_VOID_RETURN;
@@ -1306,6 +1307,7 @@ ha_mroonga::~ha_mroonga()
   grn_obj_unlink(ctx, &top_left_point);
   grn_obj_unlink(ctx, &bottom_right_point);
   grn_obj_unlink(ctx, &key_buffer);
+  grn_obj_unlink(ctx, &encoded_key_buffer);
   grn_obj_unlink(ctx, &old_value_buffer);
   grn_obj_unlink(ctx, &new_value_buffer);
   grn_ctx_fin(ctx);
@@ -3286,11 +3288,9 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
     DBUG_RETURN(error);
   }
 
-  grn_obj key;
-  GRN_TEXT_INIT(&key, 0);
-
-  grn_bulk_space(ctx, &key, table->key_info->key_length);
-  key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
+  GRN_BULK_REWIND(&key_buffer);
+  grn_bulk_space(ctx, &key_buffer, table->key_info->key_length);
+  key_copy((uchar *)(GRN_TEXT_VALUE(&key_buffer)),
            buf,
            &(table->key_info[table_share->primary_key]),
            table->key_info[table_share->primary_key].key_length);
@@ -3298,17 +3298,18 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
   int added;
   grn_id record_id;
   record_id = grn_table_add(ctx, grn_table,
-                            GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key),
+                            GRN_TEXT_VALUE(&key_buffer),
+                            GRN_TEXT_LEN(&key_buffer),
                             &added);
   if (record_id == GRN_ID_NIL) {
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
              "failed to add a new record into groonga: key=<%.*s>",
-             (int)GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
+             (int)GRN_TEXT_LEN(&key_buffer),
+             GRN_TEXT_VALUE(&key_buffer));
     error = ER_ERROR_ON_WRITE;
     my_message(error, error_message, MYF(0));
   }
-  grn_obj_unlink(ctx, &key);
   if (error) {
     DBUG_RETURN(error);
   }
@@ -3521,30 +3522,29 @@ int ha_mroonga::storage_write_row(uchar *buf)
 }
 
 int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id,
-                                        KEY *key_info, grn_obj *index_column,
-                                        grn_obj *key, grn_obj *encoded_key)
+                                        KEY *key_info, grn_obj *index_column)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
-  GRN_BULK_REWIND(key);
-  grn_bulk_space(ctx, key, key_info->key_length);
-  key_copy((uchar *)(GRN_TEXT_VALUE(key)),
+  GRN_BULK_REWIND(&key_buffer);
+  grn_bulk_space(ctx, &key_buffer, key_info->key_length);
+  key_copy((uchar *)(GRN_TEXT_VALUE(&key_buffer)),
            buf,
            key_info,
            key_info->key_length);
-  GRN_BULK_REWIND(encoded_key);
-  grn_bulk_space(ctx, encoded_key, key_info->key_length);
+  GRN_BULK_REWIND(&encoded_key_buffer);
+  grn_bulk_space(ctx, &encoded_key_buffer, key_info->key_length);
   uint encoded_key_length;
   mrn_multiple_column_key_encode(key_info,
-                                 (uchar *)(GRN_TEXT_VALUE(key)),
+                                 (uchar *)(GRN_TEXT_VALUE(&key_buffer)),
                                  key_info->key_length,
-                                 (uchar *)(GRN_TEXT_VALUE(encoded_key)),
+                                 (uchar *)(GRN_TEXT_VALUE(&encoded_key_buffer)),
                                  &encoded_key_length);
 
   grn_rc rc;
   rc = grn_column_index_update(ctx, index_column, record_id, 1, NULL,
-                               encoded_key);
+                               &encoded_key_buffer);
   if (rc) {
     error = ER_ERROR_ON_WRITE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -3562,10 +3562,6 @@ int ha_mroonga::storage_write_row_indexes(uchar *buf, grn_id record_id)
   my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
 
-  grn_obj key, encoded_key;
-  GRN_TEXT_INIT(&key, 0);
-  GRN_TEXT_INIT(&encoded_key, 0);
-
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
@@ -3582,8 +3578,7 @@ int ha_mroonga::storage_write_row_indexes(uchar *buf, grn_id record_id)
     grn_obj *index_column = grn_index_columns[i];
 
     if ((error = storage_write_row_index(buf, record_id, &key_info,
-                                         grn_index_columns[i], &key,
-                                         &encoded_key)))
+                                         grn_index_columns[i])))
     {
       goto err;
     }
@@ -3593,8 +3588,6 @@ err:
 #ifndef DBUG_OFF
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
-  grn_obj_unlink(ctx, &encoded_key);
-  grn_obj_unlink(ctx, &key);
 
   DBUG_RETURN(error);
 }
@@ -7396,10 +7389,6 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
 
   if (!(error = storage_rnd_init(TRUE)))
   {
-    grn_obj key, encoded_key;
-    GRN_TEXT_INIT(&key, 0);
-    GRN_TEXT_INIT(&encoded_key, 0);
-
     while (!(error = storage_rnd_next(table->record[0])))
     {
       for (uint i = 0; i < num_of_keys; i++) {
@@ -7424,9 +7413,7 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
         if ((error = storage_write_row_index(table->record[0],
                                              record_id,
                                              current_key_info,
-                                             index_columns[i + n_keys],
-                                             &key,
-                                             &encoded_key)))
+                                             index_columns[i + n_keys])))
         {
           break;
         }
@@ -7439,16 +7426,13 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
     } else {
       error = storage_rnd_end();
     }
-
-    grn_obj_unlink(ctx, &encoded_key);
-    grn_obj_unlink(ctx, &key);
   }
 
   DBUG_RETURN(error);
 }
 
 int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
-  uint num_of_keys, handler_add_index **add)
+                          uint num_of_keys, handler_add_index **add)
 {
   MRN_DBUG_ENTER_METHOD();
   int res;

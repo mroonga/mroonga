@@ -108,12 +108,14 @@ public:
   ha_mroonga *parent_for_clone;
   MEM_ROOT  *mem_root_for_clone;
   grn_obj   key_buffer;
-  grn_obj   old_value_buffer;
-  grn_obj   new_value_buffer;
   grn_id    record_id;
 
 private:
   grn_ctx *ctx;
+
+  grn_obj  encoded_key_buffer;
+  grn_obj  old_value_buffer;
+  grn_obj  new_value_buffer;
 
   grn_obj *grn_table;
   grn_obj **grn_columns;
@@ -409,8 +411,7 @@ private:
   int wrapper_write_row_index(uchar *buf);
   int storage_write_row(uchar *buf);
   int storage_write_row_index(uchar *buf, grn_id record_id,
-                              KEY *key_info, grn_obj *index_column,
-                              grn_obj *key, grn_obj *encoded_key);
+                              KEY *key_info, grn_obj *index_column);
   int storage_write_row_indexes(uchar *buf, grn_id record_id);
   int wrapper_get_record_id(uchar *data, grn_id *record_id, const char *context);
   int wrapper_update_row(const uchar *old_data, uchar *new_data);
