@@ -365,8 +365,8 @@ private:
                            grn_obj *grn_table, MRN_SHARE *tmp_share,
                            KEY *key_info, grn_obj **index_tables,
                            grn_obj **index_columns, uint i);
-  int storage_create_indexs(TABLE *table, const char *grn_table_name,
-                           grn_obj *grn_table, MRN_SHARE *tmp_share);
+  int storage_create_indexes(TABLE *table, const char *grn_table_name,
+                             grn_obj *grn_table, MRN_SHARE *tmp_share);
   int close_databases();
   int ensure_database_create(const char *name);
   int ensure_database_open(const char *name);

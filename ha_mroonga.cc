@@ -1789,7 +1789,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
   }
 
-  error = storage_create_indexs(table, tbl_name, tbl_obj, tmp_share);
+  error = storage_create_indexes(table, tbl_name, tbl_obj, tmp_share);
   if (error) {
     grn_obj_remove(ctx, tbl_obj);
     tbl_obj = NULL;
@@ -1999,8 +1999,8 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_create_indexs(TABLE *table, const char *grn_table_name,
-                                      grn_obj *grn_table, MRN_SHARE *tmp_share)
+int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
+                                       grn_obj *grn_table, MRN_SHARE *tmp_share)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0, i;
