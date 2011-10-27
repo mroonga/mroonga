@@ -7425,7 +7425,8 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
                                              record_id,
                                              current_key_info,
                                              index_columns[i + n_keys],
-                                             &key, &encoded_key)))
+                                             &key,
+                                             &encoded_key)))
         {
           break;
         }
@@ -7540,7 +7541,7 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
 }
 
 int ha_mroonga::storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
-  uint num_of_keys)
+                                           uint num_of_keys)
 {
   uint i;
   KEY *key_info = table_share->key_info;
