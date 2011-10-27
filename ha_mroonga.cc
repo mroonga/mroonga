@@ -7364,51 +7364,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   }
   if (!res && have_multicolumn_key)
   {
-    if (!(res = storage_rnd_init(TRUE)))
-    {
-      grn_obj key, encoded_key;
-      GRN_TEXT_INIT(&key, 0);
-      GRN_TEXT_INIT(&encoded_key, 0);
-
-      while (!(res = storage_rnd_next(table->record[0])))
-      {
-        for (j = 0; j < num_of_keys; j++) {
-          if (
-            key_info[j].key_parts == 1 ||
-            (key_info[j].flags & HA_FULLTEXT)
-          ) {
-            continue;
-          }
-          /* fix key_info.key_length */
-          for (k = 0; k < key_info[j].key_parts; k++) {
-            if (
-              !key_info[j].key_part[k].null_bit &&
-              key_info[j].key_part[k].field->null_bit
-            ) {
-              key_info[j].key_length++;
-              key_info[j].key_part[k].null_bit =
-                key_info[j].key_part[k].field->null_bit;
-            }
-          }
-          if ((res = storage_write_row_index(table->record[0], record_id,
-                                             &key_info[j],
-                                             index_columns[j + n_keys],
-                                             &key, &encoded_key)))
-          {
-            break;
-          }
-        }
-        if (res)
-          break;
-      }
-      if (res != HA_ERR_END_OF_FILE)
-        storage_rnd_end();
-      else
-        res = storage_rnd_end();
-
-      grn_obj_unlink(ctx, &encoded_key);
-      grn_obj_unlink(ctx, &key);
-    }
+    res = storage_add_index_multiple_columns(key_info, num_of_keys,
+                                             index_columns);
   }
   bitmap_set_all(table->read_set);
   if (res)
@@ -7425,6 +7382,67 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
   DBUG_RETURN(res);
+}
+
+int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
+                                                   uint num_of_keys,
+                                                   grn_obj **index_columns)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+  uint n_keys = table->s->keys;
+
+  if (!(error = storage_rnd_init(TRUE)))
+  {
+    grn_obj key, encoded_key;
+    GRN_TEXT_INIT(&key, 0);
+    GRN_TEXT_INIT(&encoded_key, 0);
+
+    while (!(error = storage_rnd_next(table->record[0])))
+    {
+      for (uint i = 0; i < num_of_keys; i++) {
+        KEY *current_key_info = key_info + i;
+        if (
+          current_key_info->key_parts == 1 ||
+          (current_key_info->flags & HA_FULLTEXT)
+          ) {
+          continue;
+        }
+        /* fix key_info.key_length */
+        for (uint j = 0; j < current_key_info->key_parts; j++) {
+          if (
+            !current_key_info->key_part[j].null_bit &&
+            current_key_info->key_part[j].field->null_bit
+            ) {
+            current_key_info->key_length++;
+            current_key_info->key_part[j].null_bit =
+              current_key_info->key_part[j].field->null_bit;
+          }
+        }
+        if ((error = storage_write_row_index(table->record[0],
+                                             record_id,
+                                             current_key_info,
+                                             index_columns[i + n_keys],
+                                             &key, &encoded_key)))
+        {
+          break;
+        }
+      }
+      if (error)
+        break;
+    }
+    if (error != HA_ERR_END_OF_FILE) {
+      storage_rnd_end();
+    } else {
+      error = storage_rnd_end();
+    }
+
+    grn_obj_unlink(ctx, &encoded_key);
+    grn_obj_unlink(ctx, &key);
+  }
+
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,

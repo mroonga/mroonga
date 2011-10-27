@@ -595,6 +595,8 @@ private:
                         handler_add_index **add);
   int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                         handler_add_index **add);
+  int storage_add_index_multiple_columns(KEY *key_info, uint num_of_keys,
+                                         grn_obj **index_columns);
   int wrapper_final_add_index(handler_add_index *add, bool commit);
   int storage_final_add_index(handler_add_index *add, bool commit);
   int wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
