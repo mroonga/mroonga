@@ -7513,8 +7513,8 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
     if (index_table != NULL) {
       grn_obj_remove(ctx, index_table);
     }
-    grn_index_tables[i] = NULL;
-    grn_index_columns[i] = NULL;
+    grn_index_tables[key_num[i]] = NULL;
+    grn_index_columns[key_num[i]] = NULL;
   }
   if (j)
   {
@@ -7543,8 +7543,8 @@ int ha_mroonga::storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
     if (index_table != NULL) {
       grn_obj_remove(ctx, index_table);
     }
-    grn_index_tables[i] = NULL;
-    grn_index_columns[i] = NULL;
+    grn_index_tables[key_num[i]] = NULL;
+    grn_index_columns[key_num[i]] = NULL;
   }
   DBUG_RETURN(0);
 }
