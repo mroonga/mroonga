@@ -212,9 +212,9 @@ MySQL 5.5最新版のソースコードをダウンロードし、ビルド＆�
 
 http://dev.mysql.com/downloads/mysql/
 
-mysql-5.5.16を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
+mysql-5.5.17を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
 
- /usr/local/src/mysql-5.5.16
+ /usr/local/src/mysql-5.5.17
 
 MySQLのバイナリが以下にインストールされているものと仮定します。 ::
 
@@ -235,14 +235,14 @@ groongaストレージエンジンのビルド
 以下のように ``--with-mysql-source`` でMySQLソースコードディレクトリ、 ``--with-mysql-config`` でmysql_configコマンドのパスを指定してconfigureを実行します。 ::
 
  ./configure \
-   --with-mysql-source=/usr/local/src/mysql-5.5.16 \
+   --with-mysql-source=/usr/local/src/mysql-5.5.17 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 groongaを/usr/libなど標準のパス以外にインストールした場合はPKG_CONFIG_PATHを指定する必要があります。例えば、ｰｰprefix=$HOME/localでgroongaをインストールした場合は以下のようにします。::
 
  ./configure \
    PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
-   --with-mysql-source=/usr/local/src/mysql-5.5.16 \
+   --with-mysql-source=/usr/local/src/mysql-5.5.17 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 その後、"make"を実行します。 ::
