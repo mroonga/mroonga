@@ -22,8 +22,11 @@ Improvements
 * [storage mode] support `create index`.
 * [storage mode] support `drop index`.
 * [storage mode] support multi columns index for full text search.
+* support `D` pragma.
 * support MySQL 5.5.17.
+* support MySQL 5.6.3-m6.
 * support groonga 1.2.7. (1.2.6 or below are no longer supported).
+* support Ubuntu 11.10 Oneiric Ocelot.
 
 Bug fixes
 +++++++++
@@ -31,6 +34,7 @@ Bug fixes
 * fix a bug that we have no results if we specify '+' at the beginning of the query in boolean mode. [reported by Hajime Nishiyama]
 * [Fedora] fix package dependencies. [reported by Takahiro Nagai]
 * [Fedora] fix a problem that we get undefined symbol error when the plugin is loaded. [reported by Takahiro Nagai]
+* [storage mode] fix a bug that index will not be correctly created if `varchar` is used in a multi-column index. #1143 [reported by Takahiro Nagai]
 
 Acknowledgements
 ++++++++++++++++
