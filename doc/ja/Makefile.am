@@ -135,8 +135,6 @@ source_files =					\
 # find html -type f | sort | sed -e 's,^,\t,g'
 html_files =					\
 	html/.buildinfo				\
-	html/_images/storage-mode.png		\
-	html/_images/wrapper-mode.png		\
 	html/_sources/characteristic.txt	\
 	html/_sources/developer.txt		\
 	html/_sources/developer/debug.txt	\
