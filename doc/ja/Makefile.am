@@ -119,6 +119,10 @@ nobase_dist_doc_ja_DATA =			\
 
 # find source -type f -not -name '*.pyc' | sort | sed -e 's,^,\t,g'
 source_files =					\
+	source/images/storage-mode.png          \
+	source/images/storage-mode.svg          \
+	source/images/wrapper-mode.png          \
+	source/images/wrapper-mode.svg          \
 	source/characteristic.rst		\
 	source/conf.py				\
 	source/developer.rst			\
@@ -135,6 +139,8 @@ source_files =					\
 # find html -type f | sort | sed -e 's,^,\t,g'
 html_files =					\
 	html/.buildinfo				\
+	html/_images/storage-mode.png		\
+	html/_images/wrapper-mode.png		\
 	html/_sources/characteristic.txt	\
 	html/_sources/developer.txt		\
 	html/_sources/developer/debug.txt	\
