@@ -129,17 +129,17 @@ TokenBigramIgnoreBlank
 TokenBigramIgnoreBlankSplitSymbol
   バイグラムでトークナイズする。TokenBigramSplitSymbolと異なり、空白を無視して処理する。
 
-  TokenBigramSplitSymbolではなくTokenBigramIgnoreBlankSplitSymbolを利用すると「! !? ??」に「???」でマッチする。TokenBigramSplitBlankの場合は「? ??」でないとマッチしない。
+  TokenBigramSplitSymbolではなくTokenBigramIgnoreBlankSplitSymbolを利用すると「! !? ??」に「???」でマッチする。TokenBigramSplitSymbolの場合は「? ??」でないとマッチしない。
 
 TokenBigramIgnoreBlankSplitSymbolAlpha
   バイグラムでトークナイズする。TokenBigramSplitSymbolAlphaと異なり、空白を無視して処理する。
 
-  TokenBigramSplitSymbolAlphaではなくTokenBigramIgnoreBlankSplitSymbolAlphaを利用すると「I am a pen.」に「ama」でマッチする。TokenBigramSplitBlankAlphaの場合は「am a」でないとマッチしない。
+  TokenBigramSplitSymbolAlphaではなくTokenBigramIgnoreBlankSplitSymbolAlphaを利用すると「I am a pen.」に「ama」でマッチする。TokenBigramSplitSymbolAlphaの場合は「am a」でないとマッチしない。
 
 TokenBigramIgnoreBlankSplitSymbolAlphaDigit
   バイグラムでトークナイズする。TokenBigramSplitSymbolAlphaDigitと異なり、空白を無視して処理する。
 
-  TokenBigramSplitSymbolAlphaDigitではなくTokenBigramIgnoreBlankSplitSymbolAlphaDigitを利用すると「090 0123 4567」に「9001」でマッチする。TokenBigramSplitBlankAlphaDigitの場合は「90 01」でないとマッチしない。
+  TokenBigramSplitSymbolAlphaDigitではなくTokenBigramIgnoreBlankSplitSymbolAlphaDigitを利用すると「090 0123 4567」に「9001」でマッチする。TokenBigramSplitSymbolAlphaDigitの場合は「90 01」でないとマッチしない。
 
 TokenDelimit
   空白区切りでトークナイズする。
