@@ -1,4 +1,4 @@
-SUBDIRS = en ja
+SUBDIRS = ja
 
 nobase_dist_doc_DATA =			\
 	images/storage-mode.png		\
