@@ -12,7 +12,7 @@
 %define mysql_download_base_url http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5
 %endif
 
-%define groonga_required_version 1.2.6
+%define groonga_required_version 1.2.7
 
 Name:		mysql-groonga
 Version:	@VERSION@
