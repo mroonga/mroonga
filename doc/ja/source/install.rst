@@ -105,6 +105,28 @@ Ubuntu 11.04 Natty Narwhal
   % sudo aptitude update
   % sudo aptitude -V -D -y install mysql-server-groonga
 
+Ubuntu 11.10 Oneiric Ocelot
+---------------------------
+
+.. note::
+
+   amd64版のみ提供でi386版は未提供。
+
+.. note::
+
+   Ubuntu本家のuniverseセクションもインストール対象としておくこと
+
+/etc/apt/sources.list.d/groonga.list::
+
+  deb http://packages.groonga.org/ubuntu/ oneiric universe
+  deb-src http://packages.groonga.org/ubuntu/ oneiric universe
+
+インストール::
+
+  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
+  % sudo aptitude update
+  % sudo aptitude -V -D -y install mysql-server-groonga
+
 CentOS 5
 --------
 
