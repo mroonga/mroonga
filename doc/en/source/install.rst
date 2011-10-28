@@ -3,23 +3,23 @@
 Installation Guide
 ==================
 
-バイナリパッケージを使用したインストールではgroonga関連パッケージと共にMySQL関連のパッケージもインストールされます。
+If you use binary packages, MySQL related packages will be also installed when you install groonga storage engine package.
 
-それぞれの環境毎にインストール方法を説明します。
+Here we explain how to install for each environment.
 
 Debian GNU/Linux squeeze
 ------------------------
 
 .. note::
 
-   amd64版のみ提供でi386版は未提供。
+   amd64 packages only. i386 packages are not provided.
 
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/debian/ squeeze main
   deb-src http://packages.groonga.org/debian/ squeeze main
 
-インストール::
+Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
@@ -30,14 +30,14 @@ Debian GNU/Linux wheezy
 
 .. note::
 
-   amd64版のみ提供でi386版は未提供。
+   amd64 packages only. i386 packages are not provided.
 
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/debian/ wheezy main
   deb-src http://packages.groonga.org/debian/ wheezy main
 
-インストール::
+Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
@@ -48,14 +48,14 @@ Debian GNU/Linux sid
 
 .. note::
 
-   amd64版のみ提供でi386版は未提供。
+   amd64 packages only. i386 packages are not provided.
 
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/debian/ unstable main
   deb-src http://packages.groonga.org/debian/ unstable main
 
-インストール::
+Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
@@ -66,18 +66,18 @@ Ubuntu 10.04 LTS Lucid Lynx
 
 .. note::
 
-   amd64版のみ提供でi386版は未提供。
+   amd64 packages only. i386 packages are not provided.
 
 .. note::
 
-   Ubuntu本家のuniverseセクションもインストール対象としておくこと
+   You need to enable the universe section in Ubuntu's software sources.
 
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/ubuntu/ lucid universe
   deb-src http://packages.groonga.org/ubuntu/ lucid universe
 
-インストール::
+Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
@@ -88,18 +88,18 @@ Ubuntu 11.04 Natty Narwhal
 
 .. note::
 
-   amd64版のみ提供でi386版は未提供。
+   amd64 packages only. i386 packages are not provided.
 
 .. note::
 
-   Ubuntu本家のuniverseセクションもインストール対象としておくこと
+   You need to enable the universe section in Ubuntu's software sources.
 
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/ubuntu/ natty universe
   deb-src http://packages.groonga.org/ubuntu/ natty universe
 
-インストール::
+Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
@@ -110,18 +110,18 @@ Ubuntu 11.10 Oneiric Ocelot
 
 .. note::
 
-   amd64版のみ提供でi386版は未提供。
+   amd64 packages only. i386 packages are not provided.
 
 .. note::
 
-   Ubuntu本家のuniverseセクションもインストール対象としておくこと
+   You need to enable the universe section in Ubuntu's software sources.
 
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/ubuntu/ oneiric universe
   deb-src http://packages.groonga.org/ubuntu/ oneiric universe
 
-インストール::
+Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
@@ -132,15 +132,15 @@ CentOS 5
 
 .. note::
 
-   amd64版のみ提供でi386版は未提供。
+   amd64 packages only. i386 packages are not provided.
 
-既にディストリビューション由来のMySQLパッケージがインストール済みの場合には事前に削除する必要があります。
+CentOS 5's MySQL packages should be removed beforehand if installed.
 
-既存のMySQLパッケージを削除::
+Remove existing MySQL packages ::
 
   % sudo yum remove mysql*
 
-インストール::
+Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
@@ -151,11 +151,11 @@ CentOS 6
 
 .. note::
 
-   amd64版のみ提供でi386版は未提供。
+   amd64 packages only. i386 packages are not provided.
 
-CentOS 6用のパッケージはCentOS 5用のパッケージと違い、ディストリビューション由来のMySQLパッケージ（MySQL 5.1系）を利用します。そのため、ディストリビューション由来のMySQLを削除する必要はありません。
+In CentOS 6, unlike in CentOS 5, we use CentOS's MySQL packages (version 5.1.x). So you don't need to remove CentOS's MySQL packages.
 
-インストール::
+Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
@@ -166,101 +166,98 @@ Fedora 15
 
 .. note::
 
-   amd64版のみ提供でi386版は未提供。
+   amd64 packages only. i386 packages are not provided.
 
-インストール::
+Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
   % sudo yum install -y mysql-groonga
 
-ソースコードからのインストール
+Install from the source code
 ------------------------------
 
-ソースコードからインストールする方法を説明します。パッケージ
-がない環境ではソースコードからインストールすることになります。
+Here we explain how to install from the source code. If your environment is not listed above, you need to do so.
 
-形態素解析(MeCab)について
-+++++++++++++++++++++++++
+Japanese morphological analysis system (MeCab)
+++++++++++++++++++++++++++++++++++++++++++++++
 
-形態素単位でトークナイズした全文検索索引を使用したい場合は、
-groongaのインストール前に `MeCab <http://mecab.sourceforge.net/>`_
-をインストールしてください。
+If you want to use indexes of tokenizing of each morpheme for full text search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing groonga.
 
-ダウンロード
-++++++++++++
+Download
+++++++++
 
-リリース版のソースコードを利用する場合は `GitHubのダウンロードページ <http://github.com/mroonga/mroonga/downloads>`_ からtarballをダウンロードしてください。
+To install the released version, download the tarball from `GitHub's download page <http://github.com/mroonga/mroonga/downloads>`_ .
 
-最新のソースコードを利用する場合は `GitHub <https://github.com/mroonga/mroonga/>`_ からcloneして `./autogen.sh` を実行してください。（GNU Autotoolsが必要です。）この方法は開発に慣れた方向けなので、そうでない方はtarballを使うことをお勧めします。::
+To install the latest source code, clone the code from `GitHub <https://github.com/mroonga/mroonga/>`_ and invoke `./autogen.sh` (GNU Autotools are required). This way is aimed at skilled developpers. If not, we recommend using the tarball. ::
 
  % git clone https://github.com/mroonga/mroonga.git
  % mroonga
  % ./autogen.sh
 
-前提条件
-++++++++
+Requirements
+++++++++++++
 
-MySQLおよびgroongaが既にインストールされている必要があります。
+MySQL and groonga should be already installed.
 
-またgroongaストレージエンジンをビルドするためにはMySQLのソースコードも必要です。
+And MySQL's source code is also required to build groonga storage engine.
 
-MySQLのインストール
-+++++++++++++++++++
+Install MySQL
++++++++++++++
 
-MySQL 5.5最新版のソースコードをダウンロードし、ビルド＆インストールして下さい。
+Download the latest MySQL 5.5 source code, then build and install it.
 
 http://dev.mysql.com/downloads/mysql/
 
-mysql-5.5.17を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::
+Here we assume that we use mysql-5.5.17 and its source code is extracted in the following directory. ::
 
  /usr/local/src/mysql-5.5.17
 
-MySQLのバイナリが以下にインストールされているものと仮定します。 ::
+And we assume that MySQL is installed in the following directory. ::
 
  /usr/local/mysql
 
-groongaのインストール
-+++++++++++++++++++++
+Install groonga
++++++++++++++++
 
-groongaの最新版をビルド＆インストールして下さい。
+Build and install the latest groonga.
 
 http://groonga.org/docs/
 
-ここでは/usr/libなどの標準パスにlibgroongaがインストールされているものと仮定します。
+Here we assume that libgroonga is installed in the standard location like /usr/lib etc.
 
-groongaストレージエンジンのビルド
-+++++++++++++++++++++++++++++++++
+Build groonga storage engine
+++++++++++++++++++++++++++++
 
-以下のように ``--with-mysql-source`` でMySQLソースコードディレクトリ、 ``--with-mysql-config`` でmysql_configコマンドのパスを指定してconfigureを実行します。 ::
+Run configure script by specifying the location of MySQL source code with ``--with-mysql-source`` and the path of mysql_config command with ``--with-mysql-config``. ::
 
  ./configure \
    --with-mysql-source=/usr/local/src/mysql-5.5.17 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
-groongaを/usr/libなど標準のパス以外にインストールした場合はPKG_CONFIG_PATHを指定する必要があります。例えば、ｰｰprefix=$HOME/localでgroongaをインストールした場合は以下のようにします。::
+If groonga is not installed in the standard location like /usr/lib, you need to specify its location by PKG_CONFIG_PATH. For example, if groonga is installed with ``--prefix=$HOME/local``, do like the following ::
 
  ./configure \
    PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
    --with-mysql-source=/usr/local/src/mysql-5.5.17 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
-その後、"make"を実行します。 ::
+Then invoke "make". ::
 
  make
 
-groongaストレージエンジンのインストール
-+++++++++++++++++++++++++++++++++++++++
+Install groonga storage engine
+++++++++++++++++++++++++++++++
 
-"make install"を実行するとMySQLのプラグイン用ディレクトリにha_groonga.soが配置されます。 ::
+By invoking "make install", ha_groonga.so will be installed in MySQL's plugin directory. ::
 
  make install
 
-その後、mysqldを起動し、mysqlクライアントで接続して"INSTALL PLUGIN"コマンドでインストールします。 ::
+Then start mysqld, connect to it by mysql client, and install it by "INSTALL PLUGIN" command. ::
 
  mysql> INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
 
-以下のように"SHOW ENGINES"コマンドで"groonga"が表示されればgroongaストレージエンジンのインストールは完了です。 ::
+If "groonga" is displayed in "SHOW ENGINES" command result like below, groonga storage engine is well installed. ::
 
  mysql> SHOW ENGINES;
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
@@ -275,10 +272,10 @@ groongaストレージエンジンのインストール
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
  6 rows in set (0.00 sec)
 
-続いてUDF(ユーザ定義関数)をインストールします。
+Next install UDF (User-Defined Function).
 
-INSERTを行った際にgroongaにより割当てられるレコードIDを取得するためのlast_insert_grn_id関数をインストールします。
+To get the record ID assigned by groonga in INSERT, install last_insert_grn_id function.
 
-以下のようにCREATE FUNCTIONを実行します。 ::
+Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
