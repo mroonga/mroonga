@@ -390,7 +390,7 @@ Optimisation for ORDER BY LIMIT in full text search
 
 Generally speaking, MySQL can process "ORDER BY" query with almost no cost if we can get records by index, and can process "LIMIT" with low cost by limiting the range of processing data even if the number of query result is very big.
 
-But for the query where "ORDER BY" cannot use index, like sort full text search result by the score and use LIMIT, the processing cost is propotional to the number of query results. So it might take very long time for the keyword query that matches with many records.
+But for the query where "ORDER BY" cannot use index, like sort full text search result by the score and use LIMIT, the processing cost is proportional to the number of query results. So it might take very long time for the keyword query that matches with many records.
 
 Tritonn took no specific countermeasure for this issue, but it introduced a workaround in the latest repository so that it sorted Senna result in descending order of the score by using sen_records_sort function so that we could remove ORDER BY from the SQL query.
 
@@ -412,7 +412,7 @@ You can check if this optimisation works or not by the status variable. ::
 
 Each time the optimisation for counting rows works, ``groonga_fast_order_limit`` status variable value is increased.
 
-Note : This optimisation is targetting queries like "select ... match against order by _score desc limit X, Y" only, and it works if all of the following conditions are right.
+Note : This optimisation is targeting queries like "select ... match against order by _score desc limit X, Y" only, and it works if all of the following conditions are right.
 
 * WHERE phrase has "match...against" only
 * no JOIN

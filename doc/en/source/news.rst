@@ -15,7 +15,7 @@ Improvements
 
 * [storage mode][wrapper mode] support reopening a database by `flush tables`.
 * [wrapper mode] support geolocation index. (Only Point type can be stored in a column. Search using index is only available for MBRContains).
-* [benchmark] add `groonga_dry_write` variable to specify not to write to groonga database, that is useful to check bottle neckes in benchmarks.
+* [benchmark] add `groonga_dry_write` variable to specify not to write to groonga database, that is useful to check bottle necks in benchmarks.
 * mention MySQL version in the installation guide for CentOS 6. [proposed by @yoshi_ken]
 * [geolocation] improve performance by skip needless processes.
 * add  `--disable-fast-mutexes` configure option to ignore fast mutexes even if mysql_config says it is enabled.
@@ -30,7 +30,7 @@ Bug fixes
 
 * fix a bug that we have no results if we specify '+' at the beginning of the query in boolean mode. [reported by Hajime Nishiyama]
 * [Fedora] fix package dependencies. [reported by Takahiro Nagai]
-* [Fedora] fix a problem that we get undefined symol error when the plugin is loaded. [reported by Takahiro Nagai]
+* [Fedora] fix a problem that we get undefined symbol error when the plugin is loaded. [reported by Takahiro Nagai]
 
 Acknowledgements
 ++++++++++++++++

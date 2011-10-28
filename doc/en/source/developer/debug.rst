@@ -6,7 +6,7 @@ How to debug
 Building for debugging
 -----------------------
 
-Whe you build software for debugging, you can get more information like symbol resolutions in gdb.
+When you build software for debugging, you can get more information like symbol resolutions in gdb.
 So we build both MySQL and groonga storage engine for debugging in development.
 
 .. note::
@@ -44,7 +44,7 @@ The procedure from cloning repository to build is the following. ::
   % ./configure CFLAGS="-ggdb3 -O0" CXXFLAGS="-ggdb3 -O0" --with-debug --prefix=/tmp/local --with-mysql-source=$HOME/work/mysql-5.5.13 --with-mysql-config=$HOME/work/mysql-5.5.13/scripts/mysql_config
   % make
 
-Whe you successfully build both, please invoke tests like the following.
+When you successfully build both, please invoke tests like the following.
 If you get ``[pass]`` for all tests, you succeeded to build for debugging. ::
 
   % test/run-sql-test.sh

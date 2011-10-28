@@ -50,7 +50,7 @@ Process of development
 We would like to develop in the following procedure.
 
 1. Create a new ticket and add a description
-2. Discuss in the development meating and update roadmaps
+2. Discuss in the development meeting and update roadmaps
 3. Assign the ticket, and the assignee starts development
 4. Implement features or fix bugs, then push to the repository if needed
 5. Add and run test codes, then push to the repository
@@ -126,8 +126,11 @@ test/sql/r/
 test/unit/
  The directory for per-function unit tests by C/C++
 
+doc/en/
+ English documents in sphinx format
+
 doc/ja/
- Documents in sphinx format
+ Japanese documents in sphinx format
 
 Since we are still in the early stage of the development of groonga storage engine, we will not make the documents of the specification of SQL queries for now.
 
@@ -165,7 +168,7 @@ We write documents in ReStructuredText format and we convert them to HTML etc.
 
 The source files of documents are files having .rst extension in "doc/ja/source" directory.
 
-When you add or modify them, please try to buid by "make html" etc. and confirm that no syntax error happens.
+When you add or modify them, please try to build by "make html" etc. and confirm that no syntax error happens.
 
 Documents are published in http://mroonga.github.com . Since we are using github's web site feature, they will be updated each time when HTML files are pushed to http://github.com/mroonga/mroonga.github.com repository. We push to mroonga.github.com repository after confirming the consistency between documents and current released version.
 
