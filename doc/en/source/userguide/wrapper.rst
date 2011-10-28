@@ -1,28 +1,28 @@
 .. highlightlang:: none
 
-ラッパーモード
-==============
+Wrapper mode
+============
 
-ここでは groonga ストレージエンジンにおけるラッパーモードの利用方法を説明します。
+Here we explain how to use wrapper mode of groonga storage engine.
 
-ラッパーモードの利用方法
-------------------------
+How to use wrapper mode
+-----------------------
 
-ラッパーモードでは、既存のストレージエンジンをラップするかたちで groonga ストレージエンジンが動作します。ラップする対象となるストレージエンジンは、現在のところ SQL のコメントを利用して ``COMMENT = 'engine "innodb"'`` のように指定するようになっています。
-
-.. note::
-
-   現在のところ、ラッパーモードではテーブルに必ずプライマリーキーを設定する必要があります。ストレージモードはこの限りではありません。
+In wrapper mode, groonga storage engine works in wrapping an existing storage engine. To specify the wrapped storage engine, we use SQL comment like ``COMMENT = 'engine "innodb"'`` for now.
 
 .. note::
 
-   ラッパーモードでは現在ストレージモードでサポートされていない、以下をサポートしています。
-   * null値
+   For now, a primary key is mandatory in wrapper mode. That is not the case with storage mode.
 
-全文検索の利用方法
-------------------
+.. note::
 
-それでは早速 groonga ストレージエンジンのラッパーモードを利用して、テーブルを1つ作成してみましょう。 ::
+   Wrapper mode supports the followings, that are not supported in storage mode for now.
+   * null value
+
+How to use full text search
+---------------------------
+
+After confirming the installation, let's create a table. The important point is to specify groonga storage engine by ``ENGINE = groonga``. ::
 
   mysql> CREATE TABLE diaries (
       ->   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -31,15 +31,15 @@
       -> ) ENGINE = groonga COMMENT = 'engine "innodb"' DEFAULT CHARSET utf8;
   Query OK, 0 rows affected (0.52 sec)
 
-次に INSERT でデータを投入してみましょう。 ::
+We put data by INSERT. ::
 
   mysql> INSERT INTO diaries (content) VALUES ("明日の天気は晴れでしょう。");
-  Query OK, 1 row affected (0.26 sec)
+  Query OK, 1 row affected (0.01 sec)
 
   mysql> INSERT INTO diaries (content) VALUES ("明日の天気は雨でしょう。");
-  Query OK, 1 row affected (0.29 sec)
+  Query OK, 1 row affected (0.00 sec)
 
-データの投入が終了したら、全文検索を実行してみます。 ::
+Try full text search. ::
 
   mysql> SELECT * FROM diaries WHERE MATCH(content) AGAINST("晴れ");
   +----+-----------------------------------------+
@@ -49,22 +49,26 @@
   +----+-----------------------------------------+
   1 row in set (0.00 sec)
 
-お、検索できましたね。
+Yes, full text search works.
 
-検索スコアの取得方法
---------------------
+How to get search score
+-----------------------
 
-全文検索を行う際、指定したキーワードにより内容が一致するレコードを上位に表示したいというような場合があります。そうしたケースでは検索スコアを利用します。
+.. note::
 
-検索スコアはMySQLの標準的な方法で取得 [#score]_ できます。つまり、SELECTの取得するカラム名を指定するところやORDER BYのところにMATCH...AGAINSTを指定します。
+   In version 1.0.0 or before, groonga storage engine used a special column named ``_score`` to get search score. From version 1.0.0, it follows MySQL's standard way to get search score.
 
-それでは実際にやってみましょう。::
+We often want to display more relevant results first in full text search. We use search score in such case.
+
+We can get search score by MySQL's standard way [#score]_, i.e. we use MATCH...AGAINST in one of columns in SELECT or ORDER BY.
+
+Let's try. ::
 
   mysql> INSERT INTO diaries (content) VALUES ("今日は晴れました。明日も晴れるでしょう。");
-  Query OK, 1 row affected (0.18 sec)
+  Query OK, 1 row affected (0.00 sec)
 
   mysql> INSERT INTO diaries (content) VALUES ("今日は晴れましたが、明日は雨でしょう。");
-  Query OK, 1 row affected (0.46 sec)
+  Query OK, 1 row affected (0.00 sec)
 
   mysql> SELECT *, MATCH (content) AGAINST ("晴れ") FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
   +----+--------------------------------------------------------------+------------------------------------+
@@ -74,104 +78,104 @@
   |  1 | 明日の天気は晴れでしょう。                      |                                  1 |
   |  4 | 今日は晴れましたが、明日は雨でしょう。    |                                  1 |
   +----+--------------------------------------------------------------+------------------------------------+
-  3 rows in set (0.01 sec)
-
-
-検索対象の文字列 ``晴れ`` をより多く含む、すなわち検索スコアの高い ``id = 3`` のメッセージが上に来ていることが確認できます。また、SELECT句にMATCH AGAINSTを記述しているため、検索スコアも取得できています。
-
-属性名を変更したい場合は ``AS`` を使って下さい。 ::
-
-  mysql> SELECT *, MATCH (content) AGAINST ("晴れ") AS score FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
-  +----+--------------------------------------------------------------+-------+
-  | id | content                                                      | score |
-  +----+--------------------------------------------------------------+-------+
-  |  3 | 今日は晴れました。明日も晴れるでしょう。 |     2 |
-  |  1 | 明日の天気は晴れでしょう。                      |     1 |
-  |  4 | 今日は晴れましたが、明日は雨でしょう。    |     1 |
-  +----+--------------------------------------------------------------+-------+
   3 rows in set (0.00 sec)
 
-全文検索用パーサの変更
-----------------------
+The result having the search word ``晴れ`` more, i.e. ``id = 3`` message having the higher search score, is displayed first. And you also get search score by using MATCH AGAINST in SELECT phrase.
 
-MySQLは全文検索用のパーサ [#parser]_ を指定する以下のような構文を持っています。::
+You can use ``AS`` to change the attribute name. ::
 
-  FULLTEXT INDEX (content) WITH PARSER パーサ名
+  mysql> SELECT *, MATCH (content) AGAINST ("晴れ") AS score FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
+  +----+--------------------------------------------------------------+------------------------------------+
+  | id | content                                                      | MATCH (content) AGAINST ("晴れ") |
+  +----+--------------------------------------------------------------+------------------------------------+
+  |  3 | 今日は晴れました。明日も晴れるでしょう。 |                                  2 |
+  |  1 | 明日の天気は晴れでしょう。                      |                                  1 |
+  |  4 | 今日は晴れましたが、明日は雨でしょう。    |                                  1 |
+  +----+--------------------------------------------------------------+------------------------------------+
+  3 rows in set (0.00 sec)
 
-しかし、この構文を利用する場合は、あらかじめすべてのパーサをMySQLに登録しておく必要があります。一方、groongaはトークナイザー（MySQLでいうパーサ）を動的に追加することができます。そのため、groognaストレージエンジンでもこの構文を採用するとgroonga側に動的に追加されたトークナイザーに対応できなくなります。groongaに動的に追加されるトークナイザーにはMeCabを用いたトークナイザーもあり、この制限に縛られることは利便性を損なうと判断し、以下のようなコメントを用いた独自の構文を採用することにしました。::
+How to specify the parser for full text search
+----------------------------------------------
+
+MySQL has the following syntax to specify the parser [#parser]_ for full text search. ::
+
+  FULLTEXT INDEX (content) WITH PARSER parser_name
+
+To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in groonga storage engine, tokenisers that are added in groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
 
   FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
 
 .. note::
 
-   ``FULLTEXT INDEX`` に ``COMMENT`` を指定できるのはMySQL 5.5からになります。MySQL 5.1を利用している場合は後述の ``groonga_default_parser`` 変数を利用してください。
+   ``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If you use MySQL 5.1, use ``groonga_default_parser`` variable described below.
 
-パーサに指定できるのは以下の値です。
+You can specify one of following values as the parser.
 
 TokenBigram
-  バイグラムでトークナイズする。ただし、連続したアルファベット・連続した数字・連続した記号はそれぞれ1つのトークンとして扱う。そのため、3文字以上のトークンも存在する。これはノイズを減らすためである。
+  It tokenises in bigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 3 letters or more. It is to reduce noises.
 
-  デフォルト値。
+  This is the default value.
 
 TokenMecab
-  MeCabを用いてトークナイズする。groongaがMeCabサポート付きでビルドされている必要がある。
+  It tokenises using MeCab. Groonga should be built with MeCab support.
 
 TokenBigramSplitSymbol
-  バイグラムでトークナイズする。TokenBigramと異なり、記号が連続していても特別扱いして1つのトークンとして扱わず通常のバイグラムの処理を行う。
+  It tokenises in bigram. Unlike TokenBigram, continuous symbols are not treated as a token, but tokenised in bigram.
 
-  TokenBigramではなくTokenBigramSplitSymbolを利用すると「Is it really!?!?!?」の「!?!?!?」の部分に「!?」でマッチする。TokenBigramの場合は「!?!?!?」でないとマッチしない。
+  When you use TokenBigramSplitSymbol instead of TokenBigram, "!?" can match "!?!?!?" in "Is it really!?!?!?". But when you use TokenBigram, only "!?!?!?" can match as well.
 
 TokenBigramSplitSymbolAlpha
-  バイグラムでトークナイズする。TokenBigramSplitSymbolに加えて、連続したアルファベットも特別扱いせずに通常のバイグラムの処理を行う。
+  It tokenise in bigram. In addition to TokenBigramSplitSymbol, continuous alphabets are not treated as a token either, but tokenised in bigram.
 
-  TokenBigramではなくTokenBigramSplitSymbolAlphaを利用すると「Is it really?」に「real」でマッチする。TokenBigramの場合は「really」でないとマッチしない。
+  When you use TokenBigramSplitSymbolAlpha instead of TokenBigram, "real" can match "Is it really?". But when you use TokenBigram, only "really" can match as well.
 
 TokenBigramSplitSymbolAlphaDigit
-  バイグラムでトークナイズする。TokenBigramSplitSymbolAlphaに加えて、連続した数字も特別扱いせずに通常のバイグラムの処理を行う。つまり、すべての字種を特別扱いせずにバイグラムの処理を行う。
+  It tokenise in bigram. In addition to TokenBigramSplitSymbolAlpha, continuous numbers are not treated as a token either, but tokenised in bigram. So any kind of characters are treated equally in bigram.
 
-  TokenBigramではなくTokenBigramSplitSymbolAlphaDigitを利用すると「090-0123-4567」に「567」でマッチする。TokenBigramの場合は「4567」でないとマッチしない。
+  When you use TokenBigramSplitSymbolAlphaDigit instead of TokenBigram, "567" can match "090-0123-4567". But when you use TokenBigram, only "4567" can match as well.
 
 TokenBigramIgnoreBlank
-  バイグラムでトークナイズする。TokenBigramと異なり、空白を無視して処理する。
+  It tokenise in bigram. Unlike TokenBigram, it ignores white spaces.
 
-  TokenBigramではなくTokenBigramIgnoreBlankを利用すると「み な さ ん 注 目」に「みなさん」でマッチする。TokenBigramの場合は「み な さ ん」でないとマッチしない。
+  When you use TokenBigramIgnoreBlank instead of TokenBigram, "みなさん" can match "み な さ ん 注 目". But when you use TokenBigram, only "み な さ ん" can match as well.
 
 TokenBigramIgnoreBlankSplitSymbol
-  バイグラムでトークナイズする。TokenBigramSymbolと異なり、空白を無視して処理する。
+  It tokenise in bigram. Unlike TokenBigramSplitSymbol, it ignores white spaces.
 
-  TokenBigramSplitSymbolではなくTokenBigramIgnoreBlankSplitSymbolを利用すると「! !? ??」に「???」でマッチする。TokenBigramSplitBlankの場合は「? ??」でないとマッチしない。
+  When you use TokenBigramIgnoreBlankSplitSymbol instead of TokenBigramSplitSymbol, "???" can match "! ? ???". But when you use TokenBigramSplitSymbol, only "? ??" can match as well.
 
 TokenBigramIgnoreBlankSplitSymbolAlpha
-  バイグラムでトークナイズする。TokenBigramSymbolAlphaと異なり、空白を無視して処理する。
+  It tokenise in bigram. Unlike TokenBigramSplitSymbolAlpha, it ignores white spaces.
 
-  TokenBigramSplitSymbolAlphaではなくTokenBigramIgnoreBlankSplitSymbolAlphaを利用すると「I am a pen.」に「ama」でマッチする。TokenBigramSplitBlankAlphaの場合は「am a」でないとマッチしない。
+  When you use TokenBigramIgnoreBlankSplitSymbolAlpha instead of TokenBigramSplitSymbolAlpha, "ama" can match "I am a pen.". But when you use TokenBigramSplitSymbolAlpha, only "am a" can match as well.
 
 TokenBigramIgnoreBlankSplitSymbolAlphaDigit
-  バイグラムでトークナイズする。TokenBigramSymbolAlphaDigitと異なり、空白を無視して処理する。
+  It tokenise in bigram. Unlike TokenBigramSplitSymbolAlphaDigit, it ignores white spaces.
 
-  TokenBigramSplitSymbolAlphaDigitではなくTokenBigramIgnoreBlankSplitSymbolAlphaDigitを利用すると「090 0123 4567」に「9001」でマッチする。TokenBigramSplitBlankAlphaDigitの場合は「90 01」でないとマッチしない。
+  When you use TokenBigramIgnoreBlankSplitSymbolAlphaDigit instead of TokenBigramSplitSymbolAlphaDigit, "9001" can match "090 0123 4567". But when you use TokenBigramSplitSymbolAlphaDigit, only "90 01" can match as well.
 
 TokenDelimit
-  空白区切りでトークナイズする。
+  It tokenise by splitting with a white space.
 
-  「映画 ホラー 話題」は「映画」・「ホラー」・「話題」にトークナイズされる。
+  "映画 ホラー 話題" will be tokenised as "映画", "ホラー", "話題".
 
 TokenDelimitNull
+  It tokenise by splitting with a null character (\\0).
   null文字（\\0）区切りでトークナイズする。
 
-  「映画\\0ホラー\\0話題」は「映画」・「ホラー」・「話題」にトークナイズされる。
+  "映画\\0ホラー\\0話題" will be tokenised as "映画", "ホラー", "話題".
 
 TokenUnigram
-  ユニグラムでトークナイズする。ただし、連続したアルファベット・連続した数字・連続した記号はそれぞれ1つのトークンとして扱う。そのため、2文字以上のトークンも存在する。これはノイズを減らすためである。
+  It tokenises in unigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 2 letters or more. It is to reduce noises.
 
 TokenTrigram
-  トリグラムでトークナイズする。ただし、連続したアルファベット・連続した数字・連続した記号はそれぞれ1つのトークンとして扱う。そのため、4文字以上のトークンも存在する。これはノイズを減らすためである。
+  It tokenises in trigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 4 letters or more. It is to reduce noises.
 
-デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションでビルド時に指定することができます。::
+You can specify the default parser by passing ``--with-default-parser`` option in ``configure`` when you build groonga storage engine. ::
 
   ./configure --with-default-parser TokenMecab ...
 
-また、my.cnfまたはSQL内で ``groonga_default_parser`` 変数を指定することでも指定できます。my.cnfで指定するとMySQLを再起動しても値は変更されたままですが、反映させるために再起動しなければいけません。一方、SQLで指定した場合はすぐに設定が反映されますが、MySQLが再起動すると設定は失われます。
+Or you can set ``groonga_default_parser`` variable in my.cnf or by SQL. If you specify it in my.cnf, the change will not be lost after restarting MySQL, but you need to restart MySQL to make it effective. On the other hand, if you set it in SQL, the change is effective immediately, but it will be lost when you restart MySQL.
 
 my.cnf::
 
@@ -183,66 +187,22 @@ SQL::
   mysql> SET GLOBAL groonga_default_parser = TokenMecab;
   Query OK, 0 rows affected (0.00 sec)
 
-..
-   位置情報検索の利用方法
-   ----------------------
+Logging
+-------
 
-   ラッパーモードではラップ対象のストレージエンジンに全文検索機能だけではなく位置情報検索機能も追加します。ただし、インデックスを用いた高速な検索に対応しているのはMBRContainsだけです。MBRDisjointなどには対応していません。
+groonga storage engine outputs the logs by default.
 
-   位置情報検索を利用する場合のテーブル定義はMyISAMと同様にPOINT型のカラムを定義し、そのカラムに対してSPATIAL INDEXを指定します。::
+Log files are located in MySQL's data directory with the filename  ``groonga.log``.
 
-     mysql> CREATE TABLE shops (
-	 ->   id INT PRIMARY KEY AUTO_INCREMENT,
-	 ->   name VARCHAR(255),
-	 ->   location POINT NOT NULL,
-	 ->   SPATIAL INDEX (location)
-	 -> ) ENGINE = groonga COMMENT = 'engine "innodb"';
-     Query OK, 0 rows affected (0.34 sec)
+Here is the example of the log. ::
 
-   データの登録方法もMyISAMのときと同様にGeomFromText()関数を使って文字列からPOINT型の値を作成します。::
+  2010-10-07 17:32:39.209379|n|b1858f80|groonga-storage-engine started.
+  2010-10-07 17:32:44.934048|d|46953940|hash get not found (key=test)
+  2010-10-07 17:32:44.936113|d|46953940|hash put (key=test)
 
-     mysql> INSERT INTO shops VALUES (null, '根津のたいやき', GeomFromText('POINT(139.762573 35.720253)'));
-     Query OK, 1 row affected (0.26 sec)
+The default log level is NOTICE, i.e. we have important information only and we don't have debug information etc.).
 
-     mysql> INSERT INTO shops VALUES (null, '浪花家', GeomFromText('POINT(139.796234 35.730061)'));
-     Query OK, 1 row affected (0.06 sec)
-
-     mysql> INSERT INTO shops VALUES (null, '柳屋 たい焼き', GeomFromText('POINT(139.783981 35.685341)'));
-     Query OK, 1 row affected (0.02 sec)
-
-   池袋駅（139.7101 35.7292）が左上の点、東京駅（139.7662 35.6815）が右下の点となるような長方形内にあるお店を探す場合は以下のようなSELECTになります。::
-
-     mysql> SELECT id, name, AsText(location) FROM shops WHERE MBRContains(GeomFromText('LineString(139.7101 35.7292, 139.7662 35.6815)'), location);
-     +----+-----------------------+------------------------------------------+
-     | id | name                  | AsText(location)                         |
-     +----+-----------------------+------------------------------------------+
-     |  1 | 根津のたいやき | POINT(139.762572777778 35.7202527777778) |
-     +----+-----------------------+------------------------------------------+
-     1 row in set (0.00 sec)
-
-   位置情報で検索できていますね！
-
-ログ出力
---------
-
-groongaストレージエンジンではデフォルトでログの出力を行うようになっています。
-
-ログファイルはMySQLのデータディレクトリ（/var/lib/mysql/ など）直下に ``groonga.log`` というファイル名で出力されます。
-
-以下はログの出力例です。 ::
-
- 2011-06-24 11:11:31.282121|n|6bdea740|groonga-storage-engine started.
- 2011-06-24 11:11:31.282154|n|6bdea740|log level is 'NOTICE'
- 2011-06-24 11:30:58.485508|n|3cda6700|DDL:table_create x
- 2011-06-24 11:31:05.131690|n|cee84700|DDL:obj_remove x
- 2011-06-24 13:37:31.692572|n|86ceb700|DDL:column_create t1_0001 c2
- 2011-06-24 13:37:31.781556|n|86ceb700|DDL:set_source t1_0001.c2 t1.c2
- 2011-06-24 13:49:27.767387|n|5cd1f700|DDL:obj_remove t1_0001
- 2011-06-24 14:33:55.867480| |8cd59700|96a20c50|:18446744072478952540 filter(2)
-
-ログのデフォルトの出力レベルは NOTICE （必要な情報のみ出力。デバッグ情報などは出力しない）となっています。
-
-ログの出力レベルは ``groonga_log_level`` というシステム変数で確認することができます（グローバル変数）。またSET文で動的に出力レベルを変更することもできます。 ::
+You can get the log level by ``groonga_log_level`` system variable, that is a global variable. You can also modify it dynamically by using SET phrase. ::
 
   mysql> SHOW VARIABLES LIKE 'groonga_log_level';
   +-------------------+--------+
@@ -253,7 +213,7 @@ groongaストレージエンジンではデフォルトでログの出力を行�
   1 row in set (0.00 sec)
 
   mysql> SET GLOBAL groonga_log_level=DUMP;
-  Query OK, 0 rows affected (0.05 sec)
+  Query OK, 0 rows affected (0.00 sec)
 
   mysql> SHOW VARIABLES LIKE 'groonga_log_level';
   +-------------------+-------+
@@ -263,7 +223,7 @@ groongaストレージエンジンではデフォルトでログの出力を行�
   +-------------------+-------+
   1 row in set (0.00 sec)
 
-設定可能なログレベルは以下の通りです。
+Available log levels are the followings.
 
 * NONE
 * EMERG
@@ -276,27 +236,27 @@ groongaストレージエンジンではデフォルトでログの出力を行�
 * DEBUG
 * DUMP
 
-またFLUSH LOGSでログの再オープンを行うことができます。MySQLサーバを停止せずにログのローテートを行いたいような場合には、以下の手順で実行すると良いでしょう。
+You can reopen the log file by FLUSH LOGS. If you want to rotate the log file without stopping MySQL server, you can do in the following procedure.
 
-1. ``groonga.log`` ファイルの名前を変更（OSコマンドのmvなどで）
-2. MySQLサーバに対して"FLUSH LOGS"を実行（mysqlコマンドあるいはmysqladminコマンドにて）
+1. change the file name of ``groonga.log`` (by using OS's mv command etc.).
+2. invoke "FLUSH LOGS" in MySQL server (by mysql command or mysqladmin command).
 
-全文検索時の ORDER BY LIMIT 高速化
-----------------------------------
+Optimisation for ORDER BY LIMIT in full text search
+---------------------------------------------------
 
-一般的にMySQLでは"ORDER BY"はインデックス経由のレコード参照が行えればほぼノーコストで処理可能であり、"LIMIT"は検索結果が大量にヒットする場合でも処理対象を限定することでコストを一定に抑える効果があります。
+Generally speaking, MySQL can process "ORDER BY" query with almost no cost if we can get records by index, and can process "LIMIT" with low cost by limiting the range of processing data even if the number of query result is very big.
 
-しかし例えば全文検索のスコアの降順+LIMITのように"ORDER BY"の処理の際にインデックスが効かないクエリの場合、検索ヒット件数に比例したコストがかかってしまうため、特に大量の検索がヒットするようなキーワード検索においてクエリ処理に極端に時間がかかってしまうケースがあります。
+But for the query where "ORDER BY" cannot use index, like sort full text search result by the score and use LIMIT, the processing cost is propotional to the number of query results. So it might take very long time for the keyword query that matches with many records.
 
-Tritonnではこの問題に対して特に対応はできていませんでしたが、最新レポジトリではsen_records_sort関数を活用してSennaからの読み出しをスコアの降順に対応させることでSQLクエリからORDER BY句を取り除く(※スコア降順を指定していたケースに対してのみ有効)回避方法を導入しました。
+Tritonn took no specific countermeasure for this issue, but it introduced a workaround in the latest repository so that it sorted Senna result in descending order of the score by using sen_records_sort function so that we could remove ORDER BY from the SQL query.
 
-groongaストレージエンジンでも ORDER BY LIMIT を高速化するための仕組みを実装しています。
+Groonga storage engine also has the optimisation for ORDER BY LIMIT.
 
-例えば以下のSELECT文では ORDER BY LIMIT は、groonga内で処理され、必要最小限のレコードだけをMySQLに返却しています。 ::
+In the SELECT example below, ORDER BY LIMIT is processed in groonga only and the minimal records are passed to MySQL. ::
 
   SELECT * FROM t1 WHERE MATCH(c2) AGAINST("hoge") ORDER BY c1 LIMIT 1;
 
-ORDER BY LIMIT 高速化の処理が行われたかどうかはステータス変数で確認することもできます。::
+You can check if this optimisation works or not by the status variable. ::
 
   mysql> SHOW STATUS LIKE 'groonga_fast_order_limit';
   +--------------------------+-------+
@@ -306,16 +266,16 @@ ORDER BY LIMIT 高速化の処理が行われたかどうかはステータス�
   +--------------------------+-------+
   1 row in set (0.00 sec)
 
-ORDER BY LIMIT 高速化の処理が行われる度に ``groonga_fast_order_limit`` ステータス変数がインクリメントされます。
+Each time the optimisation for counting rows works, ``groonga_fast_order_limit`` status variable value is increased.
 
-備考：この高速化機能は、「select ... match against order by _score desc limit X, Y」を狙い撃ちした高速化で、現在のところ以下の条件が成立した場合に機能します。
+Note : This optimisation is targetting queries like "select ... match against order by _score desc limit X, Y" only, and it works if all of the following conditions are right.
 
-* where句がmatch...againstのみ
-* joinしていない
-* limitの指定がある
-* order byの指定がカラム(_id含む)またはwhere句に指定したmatch...againstである
+* WHERE phrase has "match...against" only
+* no JOIN
+* with LIMIT
+* ORDER BY phrase has columns (including _id) or "match...against" that is used in WHERE phrase only
 
-.. rubric:: 脚注
+.. rubric:: Footnotes
 
-.. [#score] `MySQL 5.1 リファレンスマニュアル :: 11 関数と演算子 :: 11.7 全文検索関数 <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search.html>`_
-.. [#parser] groongaではトークナイザーと呼んでいる。
+.. [#score] `MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search.html>`_
+.. [#parser] In groonga, we call it a 'tokeniser'.

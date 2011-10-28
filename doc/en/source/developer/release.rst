@@ -1,7 +1,7 @@
 .. highlightlang:: none
 
 Release procedure (XXX not yet translated)
-=================
+==========================================
 
 変更点の記述
 ------------
