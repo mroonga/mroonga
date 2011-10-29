@@ -7,32 +7,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 21:56\n"
-"PO-Revision-Date: 2011-10-29 21:56+0900\n"
+"POT-Creation-Date: 2011-10-29 22:10\n"
+"PO-Revision-Date: 2011-10-29 23:11+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 # 3201cb917e1f451b8f06d4869e2057d3
 #: ../../../source/characteristic.rst:4
 msgid "The characteristics of groonga storage engine"
-msgstr ""
+msgstr "groongaストレージエンジンの特徴"
 
 # d6fda58830254a9d846b413792a35de0
 #: ../../../source/characteristic.rst:7
 msgid "What is groonga storage engine?"
-msgstr ""
+msgstr "groongaストレージエンジンとは"
 
 # 7fdd8aff04094e1cb0de682b719a7e5b
 #: ../../../source/characteristic.rst:8
 msgid ""
 "Groonga storage engine is a MySQL storage engine based on groonga, the full "
 "text search engine."
-msgstr ""
+msgstr "全文検索エンジンであるgroongaをベースとしたMySQLのストレージエンジンです。"
 
 # 3190020a0e974170b970478d0abc65f1
 #: ../../../source/characteristic.rst:10
@@ -40,17 +40,17 @@ msgid ""
 "In MySQL 5.1 or later, Pluggable Storage Engine interface is introduced, and "
 "we can use custom storage engines easily. So we implement groonga storage "
 "engine, so that we can use groonga through MySQL."
-msgstr ""
+msgstr "MySQLではver5.1からPluggable Storage Engineインタフェースが採用され、以前よりも柔軟に独自のストレージエンジンを利用できるようになりました。そこでgroongaにストレージエンジンインタフェースを実装し、MySQL経由でもgroongaを利用できるようにしました。"
 
 # 36ca579c28644598b1e434ff36469c95
 #: ../../../source/characteristic.rst:12
 msgid "By using groonga storage engine, you can use groonga with SQL."
-msgstr ""
+msgstr "groongaストレージエンジンを経由することでgroongaをSQLコマンドでも利用することができるようになります。"
 
 # 051a28c4f1ff4a9dbe1231b776fffcd0
 #: ../../../source/characteristic.rst:15
 msgid "The successor of Tritonn"
-msgstr ""
+msgstr "Tritonnの後継"
 
 # 72e14fee45b04d3aa19f8c7ca39c48cf
 #: ../../../source/characteristic.rst:17
@@ -58,12 +58,12 @@ msgid ""
 "To support Japanese full text search, Tritonn was developed by embedding "
 "Senna, the predecessor of groonga, in MySQL. Groonga storage engine is its "
 "successor."
-msgstr ""
+msgstr "MySQLで日本語全文検索を実現するための方法として、MySQLにgroongaの前身である全文検索ライブラリSennaを組み込んだプロダクトをTritonnプロジェクトから開発・リリースされて来ました。groongaストレージエンジンはその後継プロダクトとなります。"
 
 # 7533b5db0f9141c3b9ac6595e9d2c98a
 #: ../../../source/characteristic.rst:21
 msgid "Running as a MySQL plugin"
-msgstr ""
+msgstr "MySQLのプラグインとして動作"
 
 # 77da7307e4ef45589537a3d55823c0b8
 #: ../../../source/characteristic.rst:23
@@ -71,7 +71,7 @@ msgid ""
 "Since Tritonn was the modified version of MySQL, we need to build it by "
 "ourselves or use binary files provided by Tritonn project, thus we cannot "
 "use the official binary files provided by MySQL."
-msgstr ""
+msgstr "TritonnではMySQLサーバのソースコードを直接修正していましたので、使用するためには利用者がソースから自分でビルドするか、あるいはTritonnプロジェクトが配布するバイナリを使う必要がありました（MySQL本家が配布する公式バイナリを利用できませんでした）。"
 
 # ec33dc39fb874a3db1fb5f3db612a6d8
 #: ../../../source/characteristic.rst:25
@@ -80,49 +80,49 @@ msgid ""
 "library) using Pluggable Storage Engine interface, and we can dynamically "
 "load it on MySQL's official binary. So we can use it more easily than "
 "Tritonn."
-msgstr ""
+msgstr "一方、groongaストレージエンジンはPluggable Storage Engineインタフェースを利用した独立したプログラム(共有ライブラリ)であるため、MySQLの公式バイナリに手を加えずにプラグインとして動的にロードして利用することが可能となっています。これによりTritonnよりもさらに手軽に利用できるようになりました。"
 
 # ad7554c33bfd40fb91e937b5c43d2ff9
 #: ../../../source/characteristic.rst:29
 msgid "Faster index update"
-msgstr ""
+msgstr "更新性能の向上"
 
 # b67b3ded292a42549ac0ecad48ca5024
 #: ../../../source/characteristic.rst:31
 msgid ""
 "Comparing to Senna, groonga has much better throughput in adding or updating "
 "index."
-msgstr ""
+msgstr "Sennaと比較するとgroongaではインデックス追加/更新時のスループットが大幅に改善されています。"
 
 # 9e65528ec599424a8f13a030b0efadce
 #: ../../../source/characteristic.rst:33
 msgid ""
 "Groonga storage engine also has the benefit of this performance improvement."
-msgstr ""
+msgstr "groongaストレージエンジンでもこの更新性能の向上の恩恵を受けています。"
 
 # fa514e529f974dfdbce4ccdc8b4c25d2
 #: ../../../source/characteristic.rst:36
 msgid "Faster search"
-msgstr ""
+msgstr "検索性能の向上"
 
 # 65a485c1e226491586ec613e1f7b8902
 #: ../../../source/characteristic.rst:38
 msgid ""
 "In Tritonn, we use MyISAM storage engine, thus we have a exclusive table "
 "lock by updating data (and index), and it prevents the performance of search."
-msgstr ""
+msgstr "TritonnではMyISAMストレージエンジンを利用していたため、データ更新(インデックス更新)が発生するとテーブル全体に排他ロックがかかり、検索処理が阻害される問題がありました。"
 
 # 44fdb29bb0a74c9a889ec506e9a3e68d
 #: ../../../source/characteristic.rst:40
 msgid ""
 "But in groonga storage engine, we no longer have this issue, and the "
 "performance of search is better especially in frequent data update cases."
-msgstr ""
+msgstr "groongaストレージエンジンではこの問題がなくなり(参照ロックフリー)、特にデータ更新が多いケースでの検索性能が向上しています。"
 
 # 5618b1092006402284ad5ad76b28d953
 #: ../../../source/characteristic.rst:43
 msgid "Geolocation search"
-msgstr ""
+msgstr "位置情報検索のサポート"
 
 # 383e00ce25e442dab93dd6039000b290
 #: ../../../source/characteristic.rst:45
@@ -131,12 +131,12 @@ msgid ""
 "geolocation search using index. And MySQL also has the syntax for "
 "geolocation search. With groonga storage engine, you can use groonga's fast "
 "geolocation search by using MySQL's geolocation SQL syntax."
-msgstr ""
+msgstr "groongaには全文検索機能だけではなく、インデックスを利用した高速な位置情報検索機能があります。また、MySQLにも位置情報検索のための記法があります。groongaストレージエンジンでは、groognaの位置情報検索機能を使ってMySQLの位置情報の記法で書かれたSQLを実行するため、高速に位置情報検索を行うことができます。"
 
 # a5bb0392fe9e4333a23f84a359cb5181
 #: ../../../source/characteristic.rst:50
 msgid "Sharing the same groonga storage"
-msgstr ""
+msgstr "groongaストレージファイル経由でのシステム連携"
 
 # 1ae6027176824f5db8e70fb6c5987d12
 #: ../../../source/characteristic.rst:52
@@ -144,21 +144,21 @@ msgid ""
 "Groonga storage engine stores the data by using groonga's DB API. And its "
 "storage file's format is same as that of the file that is managed by groonga "
 "itself only. Therefore you can share the same groonga storage like below."
-msgstr ""
+msgstr "groongaストレージエンジンではgroongaのDB APIを使用してデータの格納を行っています。この時作成されるストレージファイルはgroonga単体でデータ管理を行う場合と同じフォーマットとなります。つまり以下のような使い方も可能となります。"
 
 # 2e6efb91bd4c44ffacaf7808584eee30
 #: ../../../source/characteristic.rst:56
 msgid ""
 "Store data through groonga storage engine (MySQL) and search from groonga "
 "server."
-msgstr ""
+msgstr "groongaストレージエンジン(MySQL)経由で格納したデータをgroongaサーバ(単体)の高度な検索機能を利用して検索"
 
 # 28150069fd544f3aacf2b7fce4403923
 #: ../../../source/characteristic.rst:57
 msgid ""
 "Store data through groonga server and search from groonga storage engine "
 "(MySQL)."
-msgstr ""
+msgstr "groongaサーバ(単体)経由で格納したデータをgroongaストレージエンジン(MySQL)経由で参照"
 
 # 61b83603178f4443b3f040485f37236a
 #: ../../../source/characteristic.rst:59
@@ -166,17 +166,17 @@ msgid ""
 "And groonga's storage file can be shared with multi-processes and multi-"
 "threads, so that we can invoke several search queries to the same storage "
 "file simultaneously."
-msgstr ""
+msgstr "またgroongaのストレージファイルは複数プロセスや複数スレッドで共有することができますので、同じストレージファイルに対して複数パタンでの同時アクセスも可能です。"
 
 # 2dafee7528ca4744ac9ca0bfa91c2b93
 #: ../../../source/characteristic.rst:62
 msgid "Associate with other storage engines"
-msgstr ""
+msgstr "他のストレージエンジンとの連携"
 
 # a57e6a11804441d8961a83c542b7ba11
 #: ../../../source/characteristic.rst:64
 msgid "Groonga storage engine has two running modes."
-msgstr ""
+msgstr "groongaストレージエンジンには2つの動作モードがあります。"
 
 # 33d1e7359a7442ba98a7a4b0afc350ca
 #: ../../../source/characteristic.rst:66
@@ -185,7 +185,7 @@ msgid ""
 "both storing data and searching. With this mode, you can have full benefits "
 "of groonga described above, like fast data update, lock-free full text "
 "search and geolocation search. But it does not support transactions."
-msgstr ""
+msgstr "1つが「ストレージモード」で、データストアも検索機能もすべてgroongaを使うモードです。これがデフォルトのモードです。上述の参照ロックフリーなgroongaの性能特性をフルに活かした高速なデータ更新・全文検索・位置情報検索が特長です。一方、トランザクションなどの機能は提供されません。"
 
 # c7ca310013334f8d9313c6d859187eec
 #: ../../../source/characteristic.rst:70
@@ -196,17 +196,17 @@ msgid ""
 "engine, ex. transaction in InnoDB. But you cannot have benefits from "
 "groonga's read-lock free characteristic. And you might have the performance "
 "bottle neck in the storage engine in updating data."
-msgstr ""
+msgstr "もう1つが「ラッパーモード」で、MyISAMやInnoDBといった他のストレージエンジンに *全文検索機能だけ* を追加するモードです。このモードではトランザクションなど他のストレージエンジンがサポートしている機能に加えてgroongaの高速な全文検索機能を利用することができます。一方、groongaの参照ロックフリーな特性は活かすことができません。また、更新処理は他のストレージエンジンがボトルネックになることが多いでしょう。"
 
 # 6362870ecad84afdb8be07de95ce395c
 #: ../../../source/characteristic.rst:76
 msgid "Supported platforms"
-msgstr ""
+msgstr "サポートしているプラットフォーム"
 
 # 1c372e72a445401a81a35504fe5cbe36
 #: ../../../source/characteristic.rst:78
 msgid "We currently support the following platforms."
-msgstr ""
+msgstr "現在サポートしているプラットフォームは以下の通りです。"
 
 # 706354fcbb93418f9d6142873a389bbf
 #: ../../../source/characteristic.rst:80
