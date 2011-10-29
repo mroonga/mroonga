@@ -1,0 +1,1067 @@
+# Japanese translations for groonga storage engine package.
+# Copyright (C) 2009-2011, groonga project
+# This file is distributed under the same license as the groonga storage engine package.
+# Kouhei Sutou <kou@clear-code.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: groonga storage engine 1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-29 21:56\n"
+"PO-Revision-Date: 2011-10-29 21:57+0900\n"
+"Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
+"Language-Team: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# 75952983cc6d4ed28a5c710f2d49b072
+#: ../../../source/userguide.rst:4
+msgid "User's guide"
+msgstr ""
+
+# 0053c4dffbca4dfb9f9b1d16bdf7b8ee
+#: ../../../source/userguide.rst:6
+msgid "Please read the following to see how to install : :doc:`install`"
+msgstr ""
+
+# fc0a0e99b2eb414c8cb57706f2bdda5e
+#: ../../../source/userguide.rst:9
+msgid "How to check the installation"
+msgstr ""
+
+# 9bd7aab3ecc643a8afd7ab92277f9a64
+#: ../../../source/userguide.rst:11
+msgid "The way to start or stop MySQL server is just same as the normal MySQL."
+msgstr ""
+
+# ca3e99a4398648fba077b020b4116035
+#: ../../../source/userguide.rst:13
+msgid ""
+"After invoking the MySQL server, connect to it by mysql command. If you set "
+"password, you need to add '-p' option. ::"
+msgstr ""
+
+# d9c945563e814dd284adffe1163e657f
+#: ../../../source/userguide.rst:17
+msgid ""
+"By using SHOW ENGINES command, you can check if groonga storage engine is "
+"installed. ::"
+msgstr ""
+
+# a0bf62ab86a443d9ab882ebc2629eb78
+#: ../../../source/userguide.rst:32
+msgid ""
+"If you see \"groonga\" storage engine like above, the installation is well "
+"done."
+msgstr ""
+
+# 4f7f7801bc014d8c8d5287442fcc6a79
+#: ../../../source/userguide.rst:34
+msgid "If not installed, invoke INSTALL PLUGIN command like below. ::"
+msgstr ""
+
+# b738e87ae2be49bb9b1a22a8f0c19121
+#: ../../../source/userguide.rst:39
+msgid "Running modes"
+msgstr ""
+
+# e270404d2da246c683a0b15d4c3c3649
+#: ../../../source/userguide.rst:41
+msgid "groonga storage engine can run in the following two modes."
+msgstr ""
+
+# 5b07a1b9a653436db239758db019ad3f
+#: ../../../source/userguide.rst:43
+msgid "storage mode"
+msgstr ""
+
+# ea57b6d5e55142c2876b5142347a3318
+#: ../../../source/userguide.rst:44
+msgid "wrapper mode"
+msgstr ""
+
+# 3cfe9823b2c74975a4affccab05bb804
+#: ../../../source/userguide.rst:46
+msgid ""
+"With the storage mode, we use groonga for both of the full text search "
+"function and the data storage. Since all functions of storage engine are "
+"realised with groonga, aggregations are fast, that is one of groonga's "
+"advantages, and you can manage the database directly by ``groonga`` command."
+msgstr ""
+
+# e0b3ce30b36844aca9249a0d652a3200
+#: ../../../source/userguide.rst:49
+msgid ""
+"The structure of the storage mode is the following. You use it instead of "
+"existing storage engines like MyISAM or InnoDB"
+msgstr ""
+
+# af165f29bd7a4b81a147ca60c18a97bc
+#: ../../../source/userguide.rst:55
+msgid ""
+"With the wrapper mode, groonga is used for full text search function only, "
+"and another existing storage engine like InnoDB is used for storing data. By "
+"using wrapper mode, you combine InnoDB that is well-use as the storage "
+"engine and groonga that is a proven full text search engine, and you can use "
+"it as the stable database having the fast full text search function."
+msgstr ""
+
+# 050eea325d7f4f23bce1f0ea217576e0
+#: ../../../source/userguide.rst:58
+msgid ""
+"The structure of the wrapper mode is the following. Full text search related "
+"operations are done by groonga storage engine, and other operations are done "
+"by existing storage engines like MyISAM, InnoDB etc. Groonga storage engine "
+"is located between SQL Handler that processes SQL and an existing storage "
+"engine, thus all data goes through groonga storage engine. With this way, "
+"full text search indexing etc. are done transparently."
+msgstr ""
+
+# 0d609ac138a14c35ad0a47e8df85c3cd
+#: ../../../source/userguide.rst:67
+msgid "Usage of each mode"
+msgstr ""
+
+# 873d30bc3ce04b2994850f5cc2fdd574
+#: ../../../source/userguide.rst:69
+msgid "Please see the following pages for the usage of each mode."
+msgstr ""
+
+# 1b46af265bbf4379982237591e50fac3
+#: ../../../source/userguide/storage.rst:4
+msgid "Storage mode"
+msgstr ""
+
+# c112d17f5e0143408f212937a2531d22
+#: ../../../source/userguide/storage.rst:6
+msgid "Here we explain how to use storage mode of groonga storage engine."
+msgstr ""
+
+# 009e40d9ac12435bbe803dd945407327
+# cef3ca2bca824198b5e16607d053e99e
+#: ../../../source/userguide/storage.rst:9
+#: ../../../source/userguide/wrapper.rst:23
+msgid "How to use full text search"
+msgstr ""
+
+# bda9437511184e36b37aeee34092e464
+# a265b3b4283a4717a4ca69ead5a5273c
+#: ../../../source/userguide/storage.rst:11
+#: ../../../source/userguide/wrapper.rst:25
+msgid ""
+"After confirming the installation, let's create a table. The important point "
+"is to specify groonga storage engine by ``ENGINE = groonga``. ::"
+msgstr ""
+
+# 66a1958036764bf4bb2575d0f5d5bf67
+# b5a4fbc3d59145989d77e88d10e43369
+#: ../../../source/userguide/storage.rst:20
+#: ../../../source/userguide/wrapper.rst:34
+msgid "We put data by INSERT. ::"
+msgstr ""
+
+# 68262b84d08147b4b2bd21b9efccde1e
+# a53f8a16f5f8419d9f33f0ac6b2faf62
+#: ../../../source/userguide/storage.rst:28
+#: ../../../source/userguide/wrapper.rst:42
+msgid "Try full text search. ::"
+msgstr ""
+
+# 4d6d39398f3e422e807445972adf8c55
+# 38d196558a6747cc9eacf7f7a3d46d3f
+#: ../../../source/userguide/storage.rst:38
+#: ../../../source/userguide/wrapper.rst:52
+msgid "Yes, full text search works."
+msgstr ""
+
+# b4ee05b9494e414a98950dbad51afd35
+# 457a451e8b02494683afb7a45b18a5d7
+#: ../../../source/userguide/storage.rst:41
+#: ../../../source/userguide/wrapper.rst:55
+msgid "How to get search score"
+msgstr ""
+
+# 5b531348c40447bda830c2ac223402c9
+# 800d3b365d5d49518986667eed622995
+#: ../../../source/userguide/storage.rst:43
+#: ../../../source/userguide/wrapper.rst:61
+msgid ""
+"We often want to display more relevant results first in full text search. We "
+"use search score in such case."
+msgstr ""
+
+# 1f49676ec5364d6db5d99df5da6db4d3
+# 9bfa6423d4af46939c1447d30b4ab67e
+#: ../../../source/userguide/storage.rst:45
+#: ../../../source/userguide/wrapper.rst:63
+msgid ""
+"We can get search score by MySQL's standard way [#score]_, i.e. we use "
+"MATCH...AGAINST in one of columns in SELECT or ORDER BY."
+msgstr ""
+
+# f3426ef97c11451c97b06ab6f2fd0e76
+# 1018f25fa12a42b481801255270cd75a
+#: ../../../source/userguide/storage.rst:47
+#: ../../../source/userguide/wrapper.rst:65
+msgid "Let's try. ::"
+msgstr ""
+
+# 32c2d5723166462c8017d3475d10734e
+# 78424892085c4a47b4825aaf30556f72
+#: ../../../source/userguide/storage.rst:65
+#: ../../../source/userguide/wrapper.rst:83
+msgid ""
+"The result having the search word ``晴れ`` more, i.e. ``id = 3`` message "
+"having the higher search score, is displayed first. And you also get search "
+"score by using MATCH AGAINST in SELECT phrase."
+msgstr ""
+
+# 40c4d29f3ccf4312916efe4271813832
+# 5a17b07b0ade45fc859fc2be5d47a17d
+#: ../../../source/userguide/storage.rst:67
+#: ../../../source/userguide/wrapper.rst:85
+msgid "You can use ``AS`` to change the attribute name. ::"
+msgstr ""
+
+# 0856c9615b044c9b9de7eafe5c154860
+# 5d1b1a5f13784f75bfcd6993674f2454
+#: ../../../source/userguide/storage.rst:80
+#: ../../../source/userguide/wrapper.rst:98
+msgid "How to specify the parser for full text search"
+msgstr ""
+
+# 51f94be89e804eb2bbdec1360b85966f
+# 8192193993594728a0e1f19de9ca2160
+#: ../../../source/userguide/storage.rst:82
+#: ../../../source/userguide/wrapper.rst:100
+msgid ""
+"MySQL has the following syntax to specify the parser [#parser]_ for full "
+"text search. ::"
+msgstr ""
+
+# edc91033ff67438cb24d037dbbfb9c9d
+# e738873cf77646218b2d98794bcbc8c6
+#: ../../../source/userguide/storage.rst:86
+#: ../../../source/userguide/wrapper.rst:104
+msgid ""
+"To use this syntax, you need to register all parsers in MySQL beforehand. On "
+"the other hand, groonga can dynamically add a tokeniser, that is a parser in "
+"MySQL. So if use this syntax in groonga storage engine, tokenisers that are "
+"added in groonga dynamically cannot be supported. We think that this "
+"limitation decreases the convenience, and we choose our own syntax using "
+"COMMENT like the following. ::"
+msgstr ""
+
+# a587fba35f384a7bba3bf45412659169
+# 7a84d191d0b4436bb0a83115bfaa5c1b
+#: ../../../source/userguide/storage.rst:92
+#: ../../../source/userguide/wrapper.rst:110
+msgid ""
+"``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If "
+"you use MySQL 5.1, use ``groonga_default_parser`` variable described below."
+msgstr ""
+
+# 0b25b84897b9493e8bd3aa5259ca1659
+# 022abb028d384449841b0104f2b51092
+#: ../../../source/userguide/storage.rst:94
+#: ../../../source/userguide/wrapper.rst:112
+msgid "You can specify one of following values as the parser."
+msgstr ""
+
+# 8c62217928584b579f6792515e9687f8
+# 6d3b824f2ebc469dbfce2270f719d3e2
+#: ../../../source/userguide/storage.rst:97
+#: ../../../source/userguide/wrapper.rst:115
+msgid ""
+"It tokenises in bigram. But continuous alphabets, numbers or symbols are "
+"treated as a token. So there can exist tokes with 3 letters or more. It is "
+"to reduce noises."
+msgstr ""
+
+# f47bfe66481c4e6ea15df8f72d711908
+# e1dedf981b70485a8a60b75384fdbb3f
+#: ../../../source/userguide/storage.rst:99
+#: ../../../source/userguide/wrapper.rst:117
+msgid "This is the default value."
+msgstr ""
+
+# e44aefcff5ff4356975abccd65afa13c
+# c521b1541ccd470bbde43465b22701be
+#: ../../../source/userguide/storage.rst:102
+#: ../../../source/userguide/wrapper.rst:120
+msgid "It tokenises using MeCab. Groonga should be built with MeCab support."
+msgstr ""
+
+# 073bd59d06d743d281edc5e5b26aab4c
+# a7bd25e18c604961b3261cbaff332256
+#: ../../../source/userguide/storage.rst:105
+#: ../../../source/userguide/wrapper.rst:123
+msgid ""
+"It tokenises in bigram. Unlike TokenBigram, continuous symbols are not "
+"treated as a token, but tokenised in bigram."
+msgstr ""
+
+# 6336234f685242a698e31059a9924d0e
+# c332b47b0c5f483f82233c4359db16c7
+#: ../../../source/userguide/storage.rst:107
+#: ../../../source/userguide/wrapper.rst:125
+msgid ""
+"When you use TokenBigramSplitSymbol instead of TokenBigram, \"!?\" can match "
+"\"!?!?!?\" in \"Is it really!?!?!?\". But when you use TokenBigram, only "
+"\"!?!?!?\" can match as well."
+msgstr ""
+
+# e4d3eaee409144d5a47f2de2ba28b936
+# 4322bcf184d944b2ab1273613bd4968e
+#: ../../../source/userguide/storage.rst:110
+#: ../../../source/userguide/wrapper.rst:128
+msgid ""
+"It tokenise in bigram. In addition to TokenBigramSplitSymbol, continuous "
+"alphabets are not treated as a token either, but tokenised in bigram."
+msgstr ""
+
+# c16a64b75b9344d59f5b9835cbd1c6c9
+# 4eef12c357b34c54b74d7f5005a9e690
+#: ../../../source/userguide/storage.rst:112
+#: ../../../source/userguide/wrapper.rst:130
+msgid ""
+"When you use TokenBigramSplitSymbolAlpha instead of TokenBigram, \"real\" "
+"can match \"Is it really?\". But when you use TokenBigram, only \"really\" "
+"can match as well."
+msgstr ""
+
+# 76738450c7a54b2e8c73563b88bc3760
+# 2c65f67d4a8e499f8e75e51f4c1d9e8b
+#: ../../../source/userguide/storage.rst:115
+#: ../../../source/userguide/wrapper.rst:133
+msgid ""
+"It tokenise in bigram. In addition to TokenBigramSplitSymbolAlpha, "
+"continuous numbers are not treated as a token either, but tokenised in "
+"bigram. So any kind of characters are treated equally in bigram."
+msgstr ""
+
+# 7ee790a07af14f03ad9ef746636e7b41
+# 7fa78a40f3b7405081a3a45de8685236
+#: ../../../source/userguide/storage.rst:117
+#: ../../../source/userguide/wrapper.rst:135
+msgid ""
+"When you use TokenBigramSplitSymbolAlphaDigit instead of TokenBigram, "
+"\"567\" can match \"090-0123-4567\". But when you use TokenBigram, only "
+"\"4567\" can match as well."
+msgstr ""
+
+# 6b61f8c17f604427b7a560d009a800d3
+# 758ab7755e0a4dc395243599be52f13c
+#: ../../../source/userguide/storage.rst:120
+#: ../../../source/userguide/wrapper.rst:138
+msgid "It tokenise in bigram. Unlike TokenBigram, it ignores white spaces."
+msgstr ""
+
+# 54f7c484bfd0467e83d347d5c600e79c
+# 42bcbf84fe6f41d398a72b97bf80e05b
+#: ../../../source/userguide/storage.rst:122
+#: ../../../source/userguide/wrapper.rst:140
+msgid ""
+"When you use TokenBigramIgnoreBlank instead of TokenBigram, \"みなさん\" can "
+"match \"み な さ ん 注 目\". But when you use TokenBigram, only \"み な さ ん"
+"\" can match as well."
+msgstr ""
+
+# 272137e8c42e450c8f34746be7649b44
+# 5938135a959149ce8e1f7ef9b1ae76f4
+#: ../../../source/userguide/storage.rst:125
+#: ../../../source/userguide/wrapper.rst:143
+msgid ""
+"It tokenise in bigram. Unlike TokenBigramSplitSymbol, it ignores white "
+"spaces."
+msgstr ""
+
+# d298e1bfb9c94dbd8c74434810f4b4f5
+# 72770a7f3bcb4fdaaef39dae42e6c26c
+#: ../../../source/userguide/storage.rst:127
+#: ../../../source/userguide/wrapper.rst:145
+msgid ""
+"When you use TokenBigramIgnoreBlankSplitSymbol instead of "
+"TokenBigramSplitSymbol, \"???\" can match \"! ? ???\". But when you use "
+"TokenBigramSplitSymbol, only \"? ??\" can match as well."
+msgstr ""
+
+# 377fd64220564a9e80d4bd6c76c0c8c2
+# 42d58569bbdf420497673c216bb20454
+#: ../../../source/userguide/storage.rst:130
+#: ../../../source/userguide/wrapper.rst:148
+msgid ""
+"It tokenise in bigram. Unlike TokenBigramSplitSymbolAlpha, it ignores white "
+"spaces."
+msgstr ""
+
+# 455a7e59158a44b988e353f36d41ce4b
+# 1364d06ee78748d6b3b1bdb5478c448a
+#: ../../../source/userguide/storage.rst:132
+#: ../../../source/userguide/wrapper.rst:150
+msgid ""
+"When you use TokenBigramIgnoreBlankSplitSymbolAlpha instead of "
+"TokenBigramSplitSymbolAlpha, \"ama\" can match \"I am a pen.\". But when you "
+"use TokenBigramSplitSymbolAlpha, only \"am a\" can match as well."
+msgstr ""
+
+# d3c109853fa445079561bf9c2e5bd101
+# 33d753c63a23426faee5bccc6ab03e78
+#: ../../../source/userguide/storage.rst:135
+#: ../../../source/userguide/wrapper.rst:153
+msgid ""
+"It tokenise in bigram. Unlike TokenBigramSplitSymbolAlphaDigit, it ignores "
+"white spaces."
+msgstr ""
+
+# 3664ea8ff96f45ce929bd4ccb417c637
+# d9970c030dee49019fd9e4a2dacc7d12
+#: ../../../source/userguide/storage.rst:137
+#: ../../../source/userguide/wrapper.rst:155
+msgid ""
+"When you use TokenBigramIgnoreBlankSplitSymbolAlphaDigit instead of "
+"TokenBigramSplitSymbolAlphaDigit, \"9001\" can match \"090 0123 4567\". But "
+"when you use TokenBigramSplitSymbolAlphaDigit, only \"90 01\" can match as "
+"well."
+msgstr ""
+
+# 0e6848a206714a5a86252e2a3697bbba
+# b3b2cf6c85cd4753be5cbb5982f4e7f7
+#: ../../../source/userguide/storage.rst:140
+#: ../../../source/userguide/wrapper.rst:158
+msgid "It tokenise by splitting with a white space."
+msgstr ""
+
+# a7ec1f79475d484294d8e30d642bab6a
+# bd8d3b2ec0b743ecad40187924c71134
+#: ../../../source/userguide/storage.rst:142
+#: ../../../source/userguide/wrapper.rst:160
+msgid ""
+"\"映画 ホラー 話題\" will be tokenised as \"映画\", \"ホラー\", \"話題\"."
+msgstr ""
+
+# 4198b03d6185442ebda6987d74309836
+# 1b3ba1c20e4e4e1ab5cb6567c6434721
+#: ../../../source/userguide/storage.rst:145
+#: ../../../source/userguide/wrapper.rst:163
+msgid ""
+"It tokenise by splitting with a null character (\\\\0). null文字（\\\\0）区切"
+"りでトークナイズする。"
+msgstr ""
+
+# 70462765ec8344ad802b933ac67b401b
+# a52d5f4bb2aa4982bbd4420a5141f9d7
+#: ../../../source/userguide/storage.rst:148
+#: ../../../source/userguide/wrapper.rst:166
+msgid ""
+"\"映画\\\\0ホラー\\\\0話題\" will be tokenised as \"映画\", \"ホラー\", \"話"
+"題\"."
+msgstr ""
+
+# 0e5a7a10cb104377a15b5fc6f2aadfc3
+# 50607e367cf44f019ded45f9892f197e
+#: ../../../source/userguide/storage.rst:151
+#: ../../../source/userguide/wrapper.rst:169
+msgid ""
+"It tokenises in unigram. But continuous alphabets, numbers or symbols are "
+"treated as a token. So there can exist tokes with 2 letters or more. It is "
+"to reduce noises."
+msgstr ""
+
+# 3e8ea92c2cab46b2b8fd9fc15054f573
+# 007cc4a9b065467ca55ee1656be3e7fb
+#: ../../../source/userguide/storage.rst:154
+#: ../../../source/userguide/wrapper.rst:172
+msgid ""
+"It tokenises in trigram. But continuous alphabets, numbers or symbols are "
+"treated as a token. So there can exist tokes with 4 letters or more. It is "
+"to reduce noises."
+msgstr ""
+
+# f447ce7358434894aad105e4b8e449fc
+# ade45ca3ded545b180131981c60d1e29
+#: ../../../source/userguide/storage.rst:156
+#: ../../../source/userguide/wrapper.rst:174
+msgid ""
+"You can specify the default parser by passing ``--with-default-parser`` "
+"option in ``configure`` when you build groonga storage engine. ::"
+msgstr ""
+
+# f83202df96fa4774b3ad120ea6c66e07
+# 08aa23875b1f454eb547715e8ece11c0
+#: ../../../source/userguide/storage.rst:160
+#: ../../../source/userguide/wrapper.rst:178
+msgid ""
+"Or you can set ``groonga_default_parser`` variable in my.cnf or by SQL. If "
+"you specify it in my.cnf, the change will not be lost after restarting "
+"MySQL, but you need to restart MySQL to make it effective. On the other "
+"hand, if you set it in SQL, the change is effective immediately, but it will "
+"be lost when you restart MySQL."
+msgstr ""
+
+# 3b2cf0a1eb4b4111bbabadaeceaeb875
+# 378b897e13fe49bc837b345dc7cb3eca
+#: ../../../source/userguide/storage.rst:162
+#: ../../../source/userguide/wrapper.rst:180
+msgid "my.cnf::"
+msgstr ""
+
+# daa09e682bd043c9ac8d0c2031c8068e
+# 72f78c946f6e4ed789c293492d3c6cf6
+#: ../../../source/userguide/storage.rst:167
+#: ../../../source/userguide/wrapper.rst:185
+msgid "SQL::"
+msgstr ""
+
+# a4af63de50aa4375a6f793cd930dedfb
+#: ../../../source/userguide/storage.rst:173
+msgid "How to use geolocation search"
+msgstr ""
+
+# 90223a0f82304edd9187a893337debaa
+#: ../../../source/userguide/storage.rst:175
+msgid ""
+"In storage mode, you can use fast geolocation search in addition to full "
+"text search. But unlike MyISAM, you can only store POINT type data. You "
+"cannot store other types data like LINE. And fast search using index only "
+"supports MBRContains. It does not support MBRDisjoint."
+msgstr ""
+
+# e4a005b091ea465a89f7a06beddb3bfd
+#: ../../../source/userguide/storage.rst:177
+msgid ""
+"For the table definition for geolocation search, you need to define a POINT "
+"type column like in MyISAM and define SPATIAL INDEX for it. ::"
+msgstr ""
+
+# 549f9fb355084231a248cd0e6877a2b1
+#: ../../../source/userguide/storage.rst:187
+msgid ""
+"To store data, you create POINT type data by using geomFromText() function "
+"like in MyISAM. ::"
+msgstr ""
+
+# f377f0a4760141bab6999225069b2a99
+#: ../../../source/userguide/storage.rst:198
+msgid ""
+"If you want to find shops within the rectangle where Ikebukuro station "
+"(139.7101 35.7292) is the top-left point and Tokyo Station (139.7662 "
+"35.6815) is the bottom-right point, SELECT phrase is like the following. ::"
+msgstr ""
+
+# 68ba537d54864e3eb8baf7e50577588a
+#: ../../../source/userguide/storage.rst:208
+msgid "Here you can search by geolocation!"
+msgstr ""
+
+# 5814a8cacefa41a3bcc035e92dc8372c
+#: ../../../source/userguide/storage.rst:211
+msgid "How to get the record ID"
+msgstr ""
+
+# 2ef4bd2e86024ebd8f6d23a2b8bb2327
+#: ../../../source/userguide/storage.rst:213
+msgid ""
+"groonga assigns a unique number to identify the record when a record is "
+"added in the table."
+msgstr ""
+
+# 5a06c0fa595d45a48d5263e6d04bbf16
+#: ../../../source/userguide/storage.rst:215
+msgid ""
+"To make the development of applications easier, you can get this record ID "
+"by SQL in groonga storage engine."
+msgstr ""
+
+# 7aa11369321440f8a07ea42e52bc241b
+#: ../../../source/userguide/storage.rst:217
+msgid ""
+"To get the record ID, you need to create a column named ``_id`` when you "
+"create a table. ::"
+msgstr ""
+
+# 79ecaad98b484cea9b00981f7d76a24c
+#: ../../../source/userguide/storage.rst:226
+msgid ""
+"Tye typo of _id column should be integer one (TINYINT, SMALLINT, MEDIUMINT, "
+"INT or BIGINT)."
+msgstr ""
+
+# 76bdf08cc8d34445912463bcfd1b57a4
+#: ../../../source/userguide/storage.rst:228
+msgid "You can create an index for _id column, but it should be HASH type."
+msgstr ""
+
+# 31d4a1b79faa4c97853dbf948a81bff3
+#: ../../../source/userguide/storage.rst:230
+msgid ""
+"Let's add records in the table by INSERT. Since _id column is implemented as "
+"a virtual column and its value is assigned by groonga, you cannot specify "
+"the value when updating. So you need to exclude it from setting columns, or "
+"you need to use ``null`` as its value. ::"
+msgstr ""
+
+# 13b1a10c1ce749baa31b1628bf213c1a
+#: ../../../source/userguide/storage.rst:245
+msgid "To get the record ID, you invoke SELECT with _id column. ::"
+msgstr ""
+
+# f8f40766ed2848e49b07d5a3ce13160f
+#: ../../../source/userguide/storage.rst:258
+msgid ""
+"By using last_insert_grn_id function, you can also get the record ID that is "
+"assigned by the last INSERT. ::"
+msgstr ""
+
+# e9d47bfe3afb41909e8e9718da34a057
+#: ../../../source/userguide/storage.rst:271
+msgid ""
+"last_insert_grn_id function is included in groonga storage engine as a User-"
+"Defined Function (UDF), but if you have not yet register it in MySQL by "
+"CREATE FUNCTION, you need to invoke the following SQL for defining a "
+"function. ::"
+msgstr ""
+
+# 204c2129edb8471bbf696ec0d3a19f24
+#: ../../../source/userguide/storage.rst:275
+msgid ""
+"As you can see in the example above, you can get the record ID by _id column "
+"or last_insert_grn_id function. It will be useful to use this value in the "
+"ensuing SQL queries like UPDATE. ::"
+msgstr ""
+
+# 427be2122c8147b6b295098426dd1385
+# d5bf046f8c2a42fe8c04e36ca2b44a5e
+#: ../../../source/userguide/storage.rst:282
+#: ../../../source/userguide/wrapper.rst:191
+msgid "Logging"
+msgstr ""
+
+# 8e3eec5bb14b43c88a4c3d3db52cd749
+# 34f55704cbe6413f8737215aa6af6a71
+#: ../../../source/userguide/storage.rst:284
+#: ../../../source/userguide/wrapper.rst:193
+msgid "groonga storage engine outputs the logs by default."
+msgstr ""
+
+# 98ea9b435e65427fa39f4d299b0752be
+# 98bf2131e26448ae9f9ec3f919607ac7
+#: ../../../source/userguide/storage.rst:286
+#: ../../../source/userguide/wrapper.rst:195
+msgid ""
+"Log files are located in MySQL's data directory with the filename  ``groonga."
+"log``."
+msgstr ""
+
+# f8a8f6bac6ba44e79a2f06f04d7f1828
+# 2f7246d538d04e59959c92837c9bc61f
+#: ../../../source/userguide/storage.rst:288
+#: ../../../source/userguide/wrapper.rst:197
+msgid "Here is the example of the log. ::"
+msgstr ""
+
+# 436bd531e4fc46aa8de567cbd37a53ed
+# 930df4473aab4c1f88270642478cb7e5
+#: ../../../source/userguide/storage.rst:294
+#: ../../../source/userguide/wrapper.rst:203
+msgid ""
+"The default log level is NOTICE, i.e. we have important information only and "
+"we don't have debug information etc.)."
+msgstr ""
+
+# f5507e06f74b4973a6cfa0c7c096aca4
+# 9ab91e6b23bb4c9ea452f7fe0dd5884c
+#: ../../../source/userguide/storage.rst:296
+#: ../../../source/userguide/wrapper.rst:205
+msgid ""
+"You can get the log level by ``groonga_log_level`` system variable, that is "
+"a global variable. You can also modify it dynamically by using SET phrase. ::"
+msgstr ""
+
+# e3e9b3ddfa5940618c0501d5bb6b5bde
+# c66255ea046e4c2c89f18dc31c35ab49
+#: ../../../source/userguide/storage.rst:317
+#: ../../../source/userguide/wrapper.rst:226
+msgid "Available log levels are the followings."
+msgstr ""
+
+# d813775357bf433c87f17b91422614e7
+# b9d3353d764649beb30f03af36e5c92e
+#: ../../../source/userguide/storage.rst:319
+#: ../../../source/userguide/wrapper.rst:228
+msgid "NONE"
+msgstr ""
+
+# 375ecb426bbd464b808a58a4fc8d88d6
+# 6b7cbda0d1554e6b9ce1440faecccc76
+#: ../../../source/userguide/storage.rst:320
+#: ../../../source/userguide/wrapper.rst:229
+msgid "EMERG"
+msgstr ""
+
+# aa8cd6108b5d42368f5afe21a57b7f35
+# 205d0a56511c4b118a2994a753768ba9
+#: ../../../source/userguide/storage.rst:321
+#: ../../../source/userguide/wrapper.rst:230
+msgid "ALERT"
+msgstr ""
+
+# d486d520881e4e8087f9552aca1985e0
+# 1b6d848a3e8a4845bbc68b85cd4d0508
+#: ../../../source/userguide/storage.rst:322
+#: ../../../source/userguide/wrapper.rst:231
+msgid "CRIT"
+msgstr ""
+
+# 48b7c19dc8954ec98e53a47b8d58c77f
+# 582c04556e6349199ce471c2cbccba41
+#: ../../../source/userguide/storage.rst:323
+#: ../../../source/userguide/wrapper.rst:232
+msgid "ERROR"
+msgstr ""
+
+# 17401a7cf5e543988bdaa2ee7dd4166e
+# e17410e94de84b41b4e87e4fb1197bd3
+#: ../../../source/userguide/storage.rst:324
+#: ../../../source/userguide/wrapper.rst:233
+msgid "WARNING"
+msgstr ""
+
+# 3e95bc9a79fd4c64aa9f22b2ee91f8fd
+# 351f6813a8264a2196ebde93db9285f4
+#: ../../../source/userguide/storage.rst:325
+#: ../../../source/userguide/wrapper.rst:234
+msgid "NOTICE"
+msgstr ""
+
+# eed35c97b9324ba5aefd5a6c939bb0e9
+# 0597f719e675405f80d1a59d7e0e097d
+#: ../../../source/userguide/storage.rst:326
+#: ../../../source/userguide/wrapper.rst:235
+msgid "INFO"
+msgstr ""
+
+# fb03bdf4720c4aa1962243e607f4f9e3
+# ae2000e98e69422c977dd72e558b4545
+#: ../../../source/userguide/storage.rst:327
+#: ../../../source/userguide/wrapper.rst:236
+msgid "DEBUG"
+msgstr ""
+
+# 6001042cea4a4684ab0071626c610df9
+# 3969739cea5a4915b01dfb4719381732
+#: ../../../source/userguide/storage.rst:328
+#: ../../../source/userguide/wrapper.rst:237
+msgid "DUMP"
+msgstr ""
+
+# 1a2e97698f17417d9e953fd8cbcedf46
+# 3d7b381b1ea549928d77907fcfd26f99
+#: ../../../source/userguide/storage.rst:330
+#: ../../../source/userguide/wrapper.rst:239
+msgid ""
+"You can reopen the log file by FLUSH LOGS. If you want to rotate the log "
+"file without stopping MySQL server, you can do in the following procedure."
+msgstr ""
+
+# f08a21d8ee4e42068bc507367654aef2
+# c56b2c0a2b1b4c1caa1c6bf9fdecee13
+#: ../../../source/userguide/storage.rst:332
+#: ../../../source/userguide/wrapper.rst:241
+msgid ""
+"change the file name of ``groonga.log`` (by using OS's mv command etc.)."
+msgstr ""
+
+# ee3362f80c284f1d9fba9ec05c78a8d2
+# 50cb10bbde814869982d774d6edbcb36
+#: ../../../source/userguide/storage.rst:333
+#: ../../../source/userguide/wrapper.rst:242
+msgid ""
+"invoke \"FLUSH LOGS\" in MySQL server (by mysql command or mysqladmin "
+"command)."
+msgstr ""
+
+# 3e5723beeed6441c89c8c41c9882008c
+#: ../../../source/userguide/storage.rst:336
+msgid "Choosing appropriate columns"
+msgstr ""
+
+# e9ae9bb8074d4f20b12b8ba8b3f55612
+#: ../../../source/userguide/storage.rst:338
+msgid ""
+"groonga uses one file per column to store data, and groonga storage engine "
+"accesses needed columns only when accessing a table to utilise this "
+"characteristic."
+msgstr ""
+
+# 0907f98e7c6a4e16b2d5d7228e950148
+#: ../../../source/userguide/storage.rst:340
+msgid ""
+"This optimisation is done automatically in groonga storage engine internal, "
+"you don't need any specific configuration."
+msgstr ""
+
+# 96d05aed70184389b95dd1e825209b01
+#: ../../../source/userguide/storage.rst:342
+msgid "Imagine that we have a table with 20 columns like below. ::"
+msgstr ""
+
+# 1bdfa57092df4ae8bb98919aa0d016ad
+#: ../../../source/userguide/storage.rst:355
+msgid ""
+"When we run SELECT phrase like the following, groonga storage engine reads "
+"data from columns that are referred by SELECT phrase and WHERE phrase only "
+"(and it does not access columns that not required internally)."
+msgstr ""
+
+# 742927067935426f89fbc0fed4c82fbc
+#: ../../../source/userguide/storage.rst:357
+msgid "SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = \"XXX\";"
+msgstr ""
+
+# d0dafd04db6145d7827862de70ff58c5
+#: ../../../source/userguide/storage.rst:359
+msgid ""
+"In this case above, only columns c1, c2, c11 and c12 are accessed, and we "
+"can process the SQL rapidly."
+msgstr ""
+
+# e73cf0d540c14dacafcaac61e9443100
+#: ../../../source/userguide/storage.rst:362
+msgid "Optimisation for counting rows"
+msgstr ""
+
+# 4f3965396d6747a6a5acabf21de233ed
+#: ../../../source/userguide/storage.rst:364
+msgid ""
+"In MySQL's storage engine interface, there is no difference between counting "
+"rows like COUNT(\\*) and normal data retrieving by SELECT. So access to data "
+"that is not included in SELECT result can happen even if you just want to "
+"count rows."
+msgstr ""
+
+# 6a21a050675d424788de2f2b64e4b6ac
+#: ../../../source/userguide/storage.rst:366
+msgid ""
+"Tritonn (MySQL + Senna), that is groonga storage engine's predecessor, "
+"introduced \"2ind patch\" to skip needless access to data and solved this "
+"performance issue."
+msgstr ""
+
+# 5beea7322ea84e3d915c770facc1c37f
+#: ../../../source/userguide/storage.rst:368
+msgid "Groonga storage engine also has the optimisation for counting rows."
+msgstr ""
+
+# 6145e4e8989f46de92a8b32da86cfdf0
+#: ../../../source/userguide/storage.rst:370
+msgid ""
+"In the following SELECT, for example, needless read of columns are skipped "
+"and you can get the result of counting rows with the minimal cost."
+msgstr ""
+
+# 90191fde86ef44289c83b1bf70972e47
+#: ../../../source/userguide/storage.rst:372
+msgid "SELECT COUNT(*) FROM t1 WHERE MATCH(c2) AGAINST(\"hoge\");"
+msgstr ""
+
+# 255bc9623f3c4b32a2de941908bd0ad9
+# a7b5b102e43b408f99098a1ec05b3180
+# 17f19cecd41e4a22a1c12463729d8386
+#: ../../../source/userguide/storage.rst:374
+#: ../../../source/userguide/storage.rst:403
+#: ../../../source/userguide/wrapper.rst:259
+msgid ""
+"You can check if this optimisation works or not by the status variable. ::"
+msgstr ""
+
+# 62d888995ebd4115b5a021aee5ca04f1
+#: ../../../source/userguide/storage.rst:384
+msgid ""
+"Each time the optimisation for counting rows works, ``groonga_count_skip`` "
+"status variable value is increased."
+msgstr ""
+
+# b42fb67a425b4c6d9a7bc5ec35dbfcfa
+#: ../../../source/userguide/storage.rst:386
+msgid ""
+"Note : This optimisation is implemented by using the index. It only works in "
+"the case where we records can be specified only by the index."
+msgstr ""
+
+# bf3a9a3bec954a65a21a1c38fcb9cc61
+# 6d3a5194d9084abd8f61ad13460e9641
+#: ../../../source/userguide/storage.rst:389
+#: ../../../source/userguide/wrapper.rst:245
+msgid "Optimisation for ORDER BY LIMIT in full text search"
+msgstr ""
+
+# c8fd2da996424bc98075fd37ce228d5c
+# 430c403ab8c44a0a95bfbf1a23026bd1
+#: ../../../source/userguide/storage.rst:391
+#: ../../../source/userguide/wrapper.rst:247
+msgid ""
+"Generally speaking, MySQL can process \"ORDER BY\" query with almost no cost "
+"if we can get records by index, and can process \"LIMIT\" with low cost by "
+"limiting the range of processing data even if the number of query result is "
+"very big."
+msgstr ""
+
+# 643bb74ce65e4124a0ae373040e4bb70
+# cbac85285efe446fb9d356f814a6d7c5
+#: ../../../source/userguide/storage.rst:393
+#: ../../../source/userguide/wrapper.rst:249
+msgid ""
+"But for the query where \"ORDER BY\" cannot use index, like sort full text "
+"search result by the score and use LIMIT, the processing cost is "
+"proportional to the number of query results. So it might take very long time "
+"for the keyword query that matches with many records."
+msgstr ""
+
+# 3ce90ca097ee40f5b1fce355dd758914
+# 31e0f5d8116a436faa7fd31d7c7085a2
+#: ../../../source/userguide/storage.rst:395
+#: ../../../source/userguide/wrapper.rst:251
+msgid ""
+"Tritonn took no specific countermeasure for this issue, but it introduced a "
+"workaround in the latest repository so that it sorted Senna result in "
+"descending order of the score by using sen_records_sort function so that we "
+"could remove ORDER BY from the SQL query."
+msgstr ""
+
+# 435f00fded8343b7b7f663466ecafeb6
+# 0342c41172f64335af021a6b77533d31
+#: ../../../source/userguide/storage.rst:397
+#: ../../../source/userguide/wrapper.rst:253
+msgid "Groonga storage engine also has the optimisation for ORDER BY LIMIT."
+msgstr ""
+
+# c361095559384f5f89d9b8cda98e4bf4
+# d9eb55ee8dbe4e139c345f31f304a131
+#: ../../../source/userguide/storage.rst:399
+#: ../../../source/userguide/wrapper.rst:255
+msgid ""
+"In the SELECT example below, ORDER BY LIMIT is processed in groonga only and "
+"the minimal records are passed to MySQL. ::"
+msgstr ""
+
+# 896eb0c6e2e44639acdfdce395a01156
+# 8433d9941d7d432ea3ddd33f78cf49e8
+#: ../../../source/userguide/storage.rst:413
+#: ../../../source/userguide/wrapper.rst:269
+msgid ""
+"Each time the optimisation for counting rows works, "
+"``groonga_fast_order_limit`` status variable value is increased."
+msgstr ""
+
+# 78d58e956c26402e822868c1992fdf3f
+# 7ee448e536f44a91b1bef6be303c7539
+#: ../../../source/userguide/storage.rst:415
+#: ../../../source/userguide/wrapper.rst:271
+msgid ""
+"Note : This optimisation is targeting queries like \"select ... match "
+"against order by _score desc limit X, Y\" only, and it works if all of the "
+"following conditions are right."
+msgstr ""
+
+# dbf52ca197ad41ba924d2305c96b1201
+# 3c3dc16d1fb74c0fb69a55406b732030
+#: ../../../source/userguide/storage.rst:417
+#: ../../../source/userguide/wrapper.rst:273
+msgid "WHERE phrase has \"match...against\" only"
+msgstr ""
+
+# e7ae9971fba24ac5b3c8e00d7a3833a9
+# 3afeb867da064862914d92e059f3e3cb
+#: ../../../source/userguide/storage.rst:418
+#: ../../../source/userguide/wrapper.rst:274
+msgid "no JOIN"
+msgstr ""
+
+# 20020fd58cd946a59677c422e59c8d69
+# 89750861c7af4749859c39627082de6b
+#: ../../../source/userguide/storage.rst:419
+#: ../../../source/userguide/wrapper.rst:275
+msgid "with LIMIT"
+msgstr ""
+
+# a329b256ff4a4c87a0adedb9caa9e635
+# 3df296cb0cec4ead9f6572c37544e498
+#: ../../../source/userguide/storage.rst:420
+#: ../../../source/userguide/wrapper.rst:276
+msgid ""
+"ORDER BY phrase has columns (including _id) or \"match...against\" that is "
+"used in WHERE phrase only"
+msgstr ""
+
+# f8fbb2e109bd4217a284393f1aeb65cd
+# 58aafef808b44298b192f0766fd16b32
+#: ../../../source/userguide/storage.rst:423
+#: ../../../source/userguide/wrapper.rst:279
+msgid "Footnotes"
+msgstr ""
+
+# 7db653a06e4340e488fa46470b7e92ce
+# f86f6f2d6dce41a09a1a61689c035a9b
+#: ../../../source/userguide/storage.rst:424
+#: ../../../source/userguide/wrapper.rst:280
+msgid ""
+"`MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text "
+"Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search."
+"html>`_"
+msgstr ""
+
+# ff9857fc8b1b473fab83dbea4e7fb6f9
+# 5f541a375e814c49ba633b7d82051e0a
+#: ../../../source/userguide/storage.rst:425
+#: ../../../source/userguide/wrapper.rst:281
+msgid "In groonga, we call it a 'tokeniser'."
+msgstr ""
+
+# 74bacf39a9f84cd8b3ebabfab04b56c9
+#: ../../../source/userguide/wrapper.rst:4
+msgid "Wrapper mode"
+msgstr ""
+
+# 9541898ed2b84956a70770a749efeec2
+#: ../../../source/userguide/wrapper.rst:6
+msgid "Here we explain how to use wrapper mode of groonga storage engine."
+msgstr ""
+
+# e1eaf98f29a74e1890617dca607d5dc7
+#: ../../../source/userguide/wrapper.rst:9
+msgid "How to use wrapper mode"
+msgstr ""
+
+# 59c53abcc6424959b8d47a2d43fe038c
+#: ../../../source/userguide/wrapper.rst:11
+msgid ""
+"In wrapper mode, groonga storage engine works in wrapping an existing "
+"storage engine. To specify the wrapped storage engine, we use SQL comment "
+"like ``COMMENT = 'engine \"innodb\"'`` for now."
+msgstr ""
+
+# 542e9fd42fd1436db2e6d35c5c1f18dd
+#: ../../../source/userguide/wrapper.rst:15
+msgid ""
+"For now, a primary key is mandatory in wrapper mode. That is not the case "
+"with storage mode."
+msgstr ""
+
+# 7f8431445d6a41fdbe04821d9959dc61
+#: ../../../source/userguide/wrapper.rst:19
+msgid ""
+"Wrapper mode supports the followings, that are not supported in storage mode "
+"for now. * null value"
+msgstr ""
+
+# 9ca016aa8fdd4d86b1adf9bbcc48043f
+#: ../../../source/userguide/wrapper.rst:59
+msgid ""
+"In version 1.0.0 or before, groonga storage engine used a special column "
+"named ``_score`` to get search score. From version 1.0.0, it follows MySQL's "
+"standard way to get search score."
+msgstr ""

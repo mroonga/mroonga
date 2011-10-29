@@ -36,6 +36,7 @@ cscope.out
 /doc/locale/*/html/
 /doc/locale/*/man/
 /doc/locale/*/LC_MESSAGES/*.pot
+/doc/locale/*/LC_MESSAGES/*.mo
 /doc/locale/*/LC_MESSAGES/doctrees/
 /doc/locale/*/*-build-stamp
 /doc/sphinx/

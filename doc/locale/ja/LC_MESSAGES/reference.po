@@ -1,0 +1,98 @@
+# Japanese translations for groonga storage engine package.
+# Copyright (C) 2009-2011, groonga project
+# This file is distributed under the same license as the groonga storage engine package.
+# Kouhei Sutou <kou@clear-code.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: groonga storage engine 1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-29 21:56\n"
+"PO-Revision-Date: 2011-10-29 21:57+0900\n"
+"Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
+"Language-Team: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# eb5b84533dd943fb855c37b10bfb31f8
+#: ../../../source/reference.rst:4
+msgid "Reference"
+msgstr ""
+
+# 8148232adadd435fb97e7442305eaac4
+#: ../../../source/reference.rst:7
+msgid "List of available SQL commands"
+msgstr ""
+
+# e6f4479a7a274b678d5dc9fa4bb9a87f
+#: ../../../source/reference.rst:9
+msgid ""
+"You can see many SQL examples in the following directory of groonga storage "
+"engine's source tree. ::"
+msgstr ""
+
+# 9ea631dd4a854d3d91f3b1cc6ea3f612
+#: ../../../source/reference.rst:13
+msgid "List of files ::"
+msgstr ""
+
+# 2b1be9bdd52f4ee78912fd53b5b57027
+#: ../../../source/reference.rst:31
+msgid "All SQL statements written there are currently available ones."
+msgstr ""
+
+# aa2d9a41e3404293a897248663b944eb
+#: ../../../source/reference.rst:33
+msgid ""
+"(Or we can say that any SQL statements that are not written there are not "
+"supported.)"
+msgstr ""
+
+# e392b3fe37ec4107a5d9a9bd57861b2a
+#: ../../../source/reference.rst:36
+msgid "List of server variables"
+msgstr ""
+
+# 784fa391908e482bb3be973ad03348ba
+#: ../../../source/reference.rst:38
+msgid "No server variable is added for now."
+msgstr ""
+
+# a1797cd59fdb403f950d338e4ed6f95d
+#: ../../../source/reference.rst:41
+msgid "List of status variables"
+msgstr ""
+
+# 23e55d2e20084940b30e3efb7d5fb7af
+#: ../../../source/reference.rst:43
+msgid ""
+"Here are the explanations of status variables that are introduced by groonga "
+"storage engine."
+msgstr ""
+
+# 055712d752cb4588b105099473cabd16
+#: ../../../source/reference.rst:46
+msgid "groonga_count_skip"
+msgstr ""
+
+# 267f1b18714740dc979e8b4b67752812
+#: ../../../source/reference.rst:48
+msgid ""
+"This value is increased when 'fast line count feature' is used. You can use "
+"this value to check if the feature is working when you enable it."
+msgstr ""
+
+# 707a3368bec3453bb3ffd2bfeb919bb6
+#: ../../../source/reference.rst:52
+msgid "groonga_fast_order_limit"
+msgstr ""
+
+# f07b04cb491d4edfa20546deee8bf2e4
+#: ../../../source/reference.rst:54
+msgid ""
+"This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
+"use this value to check if the feature is working when you enable it."
+msgstr ""

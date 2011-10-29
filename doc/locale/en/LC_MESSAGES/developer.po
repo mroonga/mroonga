@@ -1,0 +1,914 @@
+# English translations for groonga storage engine package.
+# Copyright (C) 2009-2011, groonga project
+# This file is distributed under the same license as the groonga storage engine package.
+# Kouhei Sutou <kou@clear-code.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: groonga storage engine 1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-29 21:57\n"
+"PO-Revision-Date: 2011-10-29 21:56+0900\n"
+"Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# c29fb6dfdbc1432d82257a679a472102
+#: ../../../source/developer.rst:4
+msgid "Developer's guide"
+msgstr "Developer's guide"
+
+# 9a2897b4a2ba4ced894647f0089ede67
+#: ../../../source/developer.rst:13
+msgid "How we are developing"
+msgstr "How we are developing"
+
+# 447d8e895832417bac00ff380504327a
+#: ../../../source/developer.rst:15
+msgid ""
+"We, the groonga storage engine development project, are doing Ticket Driven "
+"Development by using a BTS named Redmine."
+msgstr ""
+"We, the groonga storage engine development project, are doing Ticket Driven "
+"Development by using a BTS named Redmine."
+
+# 495015ae392f4a06858ca6b98b05342f
+#: ../../../source/developer.rst:17
+msgid "The location of our Redmine site is the following."
+msgstr "The location of our Redmine site is the following."
+
+# eaba967b2877443aa5e7d91ac5c5a8d1
+#: ../../../source/developer.rst:19
+msgid "http://redmine.groonga.org/projects/show/mroonga"
+msgstr "http://redmine.groonga.org/projects/show/mroonga"
+
+# d666858784124e039faec8fdf01261c8
+#: ../../../source/developer.rst:21
+msgid "Developments are done per ticket."
+msgstr "Developments are done per ticket."
+
+# 58116a378c21450e86bdbb6617cf037b
+#: ../../../source/developer.rst:23
+msgid "We would like to ask developers to register on the site above."
+msgstr "We would like to ask developers to register on the site above."
+
+# 18ec7d70cf9b4b06a067249ff2b387d7
+#: ../../../source/developer.rst:26
+msgid "Roadmaps"
+msgstr "Roadmaps"
+
+# 8337329189d542fca46e03c86988126c
+#: ../../../source/developer.rst:28
+msgid ""
+"You can see our roadmaps in the following page. Generally speaking, we "
+"develop based on the roadmap."
+msgstr ""
+"You can see our roadmaps in the following page. Generally speaking, we "
+"develop based on the roadmap."
+
+# 2320106c54314cb1a695794852fbff1e
+#: ../../../source/developer.rst:30
+msgid "http://redmine.groonga.org/projects/mroonga/roadmap"
+msgstr "http://redmine.groonga.org/projects/mroonga/roadmap"
+
+# 7c170369716442248c8b1d24ce062cfd
+#: ../../../source/developer.rst:32
+msgid "We decide our roadmaps by discussing in off-line or on-line meetings."
+msgstr "We decide our roadmaps by discussing in off-line or on-line meetings."
+
+# 94d04c77553b4dc29a24c76be37dd1ce
+#: ../../../source/developer.rst:34
+msgid "Roadmaps specify the list of adding features in each version."
+msgstr "Roadmaps specify the list of adding features in each version."
+
+# 4e99bbcac11548b09e0ce8d44051120e
+#: ../../../source/developer.rst:37
+msgid "Source code management"
+msgstr "Source code management"
+
+# 71088dfcb6bc4d96b4e774881a3556b0
+#: ../../../source/developer.rst:39
+msgid "We manage the source code using git on github."
+msgstr "We manage the source code using git on github."
+
+# 5a94bb7fdc294aa599799034fa776b59
+#: ../../../source/developer.rst:41
+msgid "http://github.com/mroonga/mroonga"
+msgstr "http://github.com/mroonga/mroonga"
+
+# 6a8f79a608284b24bb62c652446ecc36
+#: ../../../source/developer.rst:43
+msgid ""
+"If you want to contribute, please make clone in read/write mode, and then "
+"commit and push please."
+msgstr ""
+"If you want to contribute, please make clone in read/write mode, and then "
+"commit and push please."
+
+# 2b76140db8e64b5e943e61dfb8787ab1
+#: ../../../source/developer.rst:45
+msgid "If you still do not have your account on github.com, please register."
+msgstr "If you still do not have your account on github.com, please register."
+
+# 3858b04de01543798a73aa91f9008b2c
+#: ../../../source/developer.rst:48
+msgid "Process of development"
+msgstr "Process of development"
+
+# b1ddca0de9c646c5beb650bac1f23f44
+#: ../../../source/developer.rst:50
+msgid "We would like to develop in the following procedure."
+msgstr "We would like to develop in the following procedure."
+
+# 8c83e831ea2c42d4aa4a6e96e25ce00a
+#: ../../../source/developer.rst:52
+msgid "Create a new ticket and add a description"
+msgstr "Create a new ticket and add a description"
+
+# 4bec162413ad42ce89ccddbdd4c98642
+#: ../../../source/developer.rst:53
+msgid "Discuss in the development meeting and update roadmaps"
+msgstr "Discuss in the development meeting and update roadmaps"
+
+# 4da0f0cf5cdc413ca4682c89a19d3944
+#: ../../../source/developer.rst:54
+msgid "Assign the ticket, and the assignee starts development"
+msgstr "Assign the ticket, and the assignee starts development"
+
+# 3af833b821fe45108440213d9169a112
+#: ../../../source/developer.rst:55
+msgid "Implement features or fix bugs, then push to the repository if needed"
+msgstr "Implement features or fix bugs, then push to the repository if needed"
+
+# 812eb6e072e24d56b2479fcb0acab098
+#: ../../../source/developer.rst:56
+msgid "Add and run test codes, then push to the repository"
+msgstr "Add and run test codes, then push to the repository"
+
+# 3030d41eee1e4eac8871a5587520ee64
+#: ../../../source/developer.rst:57
+msgid "Review the implementation and tests, and go back to 4. if needed"
+msgstr "Review the implementation and tests, and go back to 4. if needed"
+
+# 10c71511a3be4e96b53f9e7f7f99a405
+#: ../../../source/developer.rst:58
+msgid "Add or update documents, then push to the repository"
+msgstr "Add or update documents, then push to the repository"
+
+# ecd7f0d9637845289db38bda4acbf75c
+#: ../../../source/developer.rst:59
+msgid "Close the ticket"
+msgstr "Close the ticket"
+
+# 1bddfd683c19438f995fa1c6adf28e23
+#: ../../../source/developer.rst:61
+msgid ""
+"We welcome your ideas about new features or changes of specifications. "
+"Please create a ticket first and describe your idea there."
+msgstr ""
+"We welcome your ideas about new features or changes of specifications. "
+"Please create a ticket first and describe your idea there."
+
+# fbafd74d4cd744bf97307203088e7417
+#: ../../../source/developer.rst:64
+msgid "For adding and running test codes, please refer the description below."
+msgstr "For adding and running test codes, please refer the description below."
+
+# 7608a15117704081a84bad9b96e76865
+#: ../../../source/developer.rst:66
+msgid ""
+"Generally speaking, we want to ask the assignee to handle whole the process, "
+"like design, implementation, test and documentations."
+msgstr ""
+"Generally speaking, we want to ask the assignee to handle whole the process, "
+"like design, implementation, test and documentations."
+
+# 35fadaac63f74b47841ed84f3fb66128
+#: ../../../source/developer.rst:68
+msgid ""
+"Then you ask other developers to review (especially in case of adding new "
+"features), and when it passes you add or update documents and the ticket can "
+"be closed."
+msgstr ""
+"Then you ask other developers to review (especially in case of adding new "
+"features), and when it passes you add or update documents and the ticket can "
+"be closed."
+
+# 52eb3fbbbb6a46549f609998b4d3e5ec
+#: ../../../source/developer.rst:70
+msgid "For adding and updating documents, please refer the description below."
+msgstr "For adding and updating documents, please refer the description below."
+
+# 9263e2f2a24744ceb512188d37195c7e
+#: ../../../source/developer.rst:73
+msgid "Release"
+msgstr "Release"
+
+# 796d3ac97cff474ab61c80b64a44b2d6
+#: ../../../source/developer.rst:75
+msgid "We release the software when all tickets of the roadmap are closed."
+msgstr "We release the software when all tickets of the roadmap are closed."
+
+# 124cc110c0444a82959e94836424bd41
+#: ../../../source/developer.rst:77
+msgid "We do the following to release."
+msgstr "We do the following to release."
+
+# 56a5372ba1954951a2ada1bb8bd32f5e
+#: ../../../source/developer.rst:79
+msgid "Create source packages"
+msgstr "Create source packages"
+
+# 4b4f2231c33d4d3bb63b85406e564817
+#: ../../../source/developer.rst:80
+msgid "Create binary packages"
+msgstr "Create binary packages"
+
+# 4c97936c9fab49ba8b7beb8fbdce8f45
+#: ../../../source/developer.rst:81
+msgid "Update documents on http://mroonga.github.com"
+msgstr "Update documents on http://mroonga.github.com"
+
+# c20d9428a2dc410da53c61d34814b59f
+#: ../../../source/developer.rst:82
+msgid "Announce the release"
+msgstr "Announce the release"
+
+# 38d23d51cd104d02b4e9ae3c21575818
+#: ../../../source/developer.rst:84
+msgid "(This section will be moved to :doc:`developer/release`)."
+msgstr "(This section will be moved to :doc:`developer/release`)."
+
+# e5546c09cc0c49f882ede88222266365
+#: ../../../source/developer.rst:87
+msgid "Development environment"
+msgstr "Development environment"
+
+# bb918795617b40b2b11b40cea78471a0
+#: ../../../source/developer.rst:89
+msgid "Currently we are assuming the following development environments."
+msgstr "Currently we are assuming the following development environments."
+
+# 8ae5499379584195b39bb73ecf10dffc
+#: ../../../source/developer.rst:91
+msgid "Linux x86_64"
+msgstr "Linux x86_64"
+
+# 460e36296edf454a8b2ca1d1913e0e57
+#: ../../../source/developer.rst:92
+msgid "glibc 2.5"
+msgstr "glibc 2.5"
+
+# 3e34f23cf9df45898ec30a1f62549a88
+#: ../../../source/developer.rst:93
+msgid "MySQL 5.5"
+msgstr "MySQL 5.5"
+
+# 0b9d997a737f4a48b58a5445659d77e5
+#: ../../../source/developer.rst:94
+msgid "groonga 1.2"
+msgstr "groonga 1.2"
+
+# 9da18b1d73c84bbb99460c609b710fca
+#: ../../../source/developer.rst:95
+msgid "cutter 1.1 (for C/C++ unit tests)"
+msgstr "cutter 1.1 (for C/C++ unit tests)"
+
+# 74a1926cacc441ff9e1232acae3ac96d
+#: ../../../source/developer.rst:96
+msgid "sphinx 1.0 (for documents)"
+msgstr "sphinx 1.0 (for documents)"
+
+# cbb740915fcd40c492452ed27e06e8b9
+#: ../../../source/developer.rst:98
+msgid "glibc 2.5 is used in Red Hat Enterprise Linux 5."
+msgstr "glibc 2.5 is used in Red Hat Enterprise Linux 5."
+
+# 4040ceab33134dd0abf635c95e47d17f
+#: ../../../source/developer.rst:101
+msgid "Contents of the source tree"
+msgstr "Contents of the source tree"
+
+# 31e087634bbd47b0a1e346a72c720ec7
+#: ../../../source/developer.rst:103
+msgid ""
+"There are just a few source files for now, and we would like to keep it "
+"simple as possible."
+msgstr ""
+"There are just a few source files for now, and we would like to keep it "
+"simple as possible."
+
+# 826e9638d3d6445fa180b86ef8bd0d70
+#: ../../../source/developer.rst:106
+msgid "The header file of groonga storage engine"
+msgstr "The header file of groonga storage engine"
+
+# 4610499f02634700bfe0fdbb2732efc8
+#: ../../../source/developer.rst:109
+msgid "The implementation of groonga storage engine"
+msgstr "The implementation of groonga storage engine"
+
+# 9a3f780ad3bc4d699b8cd6cffdb768a9
+#: ../../../source/developer.rst:112
+msgid "The header file of utility functions"
+msgstr "The header file of utility functions"
+
+# 561d69ac2003469c94ac38e3a4327337
+#: ../../../source/developer.rst:115
+msgid "The implementation of utility functions"
+msgstr "The implementation of utility functions"
+
+# 428d2b8d6d6e48d28452fb5b8c816141
+#: ../../../source/developer.rst:118
+msgid "The directory for tests by SQL"
+msgstr "The directory for tests by SQL"
+
+# 1db0e2d58a334037a74c12c9a458911b
+#: ../../../source/developer.rst:121
+msgid ""
+"SQL test scripts, that are also the definition of currently available SQL "
+"statements"
+msgstr ""
+"SQL test scripts, that are also the definition of currently available SQL "
+"statements"
+
+# 2b1dd3af001f4f63ace8827d5299f0b1
+#: ../../../source/developer.rst:124
+msgid ""
+"The expected results of SQL tests, that are also the definition of the "
+"current specification of supported SQL"
+msgstr ""
+"The expected results of SQL tests, that are also the definition of the "
+"current specification of supported SQL"
+
+# 04d083a46d9e48f28ca1ec9a4260261a
+#: ../../../source/developer.rst:127
+msgid "The directory for per-function unit tests by C/C++"
+msgstr "The directory for per-function unit tests by C/C++"
+
+# 02b43f553a5f41a18241c9974c860c20
+#: ../../../source/developer.rst:130
+msgid "English documents in sphinx format"
+msgstr "English documents in sphinx format"
+
+# 3055743b7410494ab08fc3bf6e64f9a2
+#: ../../../source/developer.rst:133
+msgid "Japanese documents in sphinx format"
+msgstr "Japanese documents in sphinx format"
+
+# 80c0700dc13740f69be83439c14e5e21
+#: ../../../source/developer.rst:135
+msgid ""
+"Since we are still in the early stage of the development of groonga storage "
+"engine, we will not make the documents of the specification of SQL queries "
+"for now."
+msgstr ""
+"Since we are still in the early stage of the development of groonga storage "
+"engine, we will not make the documents of the specification of SQL queries "
+"for now."
+
+# ee536664268047b4880f6521d8d579c5
+#: ../../../source/developer.rst:137
+msgid ""
+"Alternatively we consider our SQL tests and its expected results as the list "
+"of features and the definition of their specifications."
+msgstr ""
+"Alternatively we consider our SQL tests and its expected results as the list "
+"of features and the definition of their specifications."
+
+# fb526c8e4e144f38b7027a9bb48af400
+#: ../../../source/developer.rst:140
+msgid "Adding and running tests"
+msgstr "Adding and running tests"
+
+# c8cf5c6d155c423286dbb4a80e999c88
+#: ../../../source/developer.rst:142
+msgid ""
+"We use two kinds of regression tests to manage the quality of groonga "
+"storage engine."
+msgstr ""
+"We use two kinds of regression tests to manage the quality of groonga "
+"storage engine."
+
+# 6df137918b5344cb9df60e79b081b871
+#: ../../../source/developer.rst:145
+msgid ""
+"When you add features or fix bugs that can be confirmed by SQL queries, "
+"please always add SQL tests. You might think that performance improvements "
+"cannot be confirmed with SQL, but some can be still well tested by using "
+"status variables or information_schema plugin etc."
+msgstr ""
+"When you add features or fix bugs that can be confirmed by SQL queries, "
+"please always add SQL tests. You might think that performance improvements "
+"cannot be confirmed with SQL, but some can be still well tested by using "
+"status variables or information_schema plugin etc."
+
+# a0d7c217eb0145a19f40366b72443fe1
+#: ../../../source/developer.rst:148
+msgid ""
+"They are function level regression tests using cutter. When you add features "
+"that cannot differ SQL queries' results, like utility functions, please add "
+"tests here."
+msgstr ""
+"They are function level regression tests using cutter. When you add features "
+"that cannot differ SQL queries' results, like utility functions, please add "
+"tests here."
+
+# d42f1aa293054b84ad7677b8f0a08a2f
+#: ../../../source/developer.rst:150
+msgid ""
+"Before pushing to the repository, please always run the regression tests and "
+"confirm that you don't introduce any degradation."
+msgstr ""
+"Before pushing to the repository, please always run the regression tests and "
+"confirm that you don't introduce any degradation."
+
+# 7737e3dba07e45a0968749450a796d1c
+#: ../../../source/developer.rst:152
+msgid "You can invoke these two kinds of tests by \"make check\"."
+msgstr "You can invoke these two kinds of tests by \"make check\"."
+
+# bf3b9d2af3be44889b950f2a7d0275c1
+#: ../../../source/developer.rst:154
+msgid ""
+"SQL tests are implemented as \"sub test suite\" for \"mysql-test\" in "
+"MySQL's regression tests. For the detail about how to add test cases or how "
+"to modify expected result files, please refer the following MySQL document."
+msgstr ""
+"SQL tests are implemented as \"sub test suite\" for \"mysql-test\" in "
+"MySQL's regression tests. For the detail about how to add test cases or how "
+"to modify expected result files, please refer the following MySQL document."
+
+# fbd330d1d9f74246b76250a1a178e330
+#: ../../../source/developer.rst:156
+msgid "http://dev.mysql.com/doc/mysqltest/2.0/en/index.html"
+msgstr "http://dev.mysql.com/doc/mysqltest/2.0/en/index.html"
+
+# 0cb404a4d00c495196b2d8fde7422006
+#: ../../../source/developer.rst:158
+msgid ""
+"For the detail about C/C++ unit tests, please refer the following cutter "
+"document."
+msgstr ""
+"For the detail about C/C++ unit tests, please refer the following cutter "
+"document."
+
+# 826cfc99da2b47f8b93351d2fc8f1e99
+#: ../../../source/developer.rst:160
+msgid "http://cutter.sourceforge.net/"
+msgstr "http://cutter.sourceforge.net/"
+
+# 402a89047d264c648052fb62b93bb5cd
+#: ../../../source/developer.rst:163
+msgid "Adding and updating documents"
+msgstr "Adding and updating documents"
+
+# 22c1912012414df19594e8f9260af53e
+#: ../../../source/developer.rst:165
+msgid "We use sphinx for the documentation of groonga storage engine."
+msgstr "We use sphinx for the documentation of groonga storage engine."
+
+# cf096f3dbdb04a6a8cb8a7d5152c9efc
+#: ../../../source/developer.rst:167
+msgid ""
+"We write documents in ReStructuredText format and we convert them to HTML "
+"etc."
+msgstr ""
+"We write documents in ReStructuredText format and we convert them to HTML "
+"etc."
+
+# 1116ced63a76464898ad51279ab62906
+#: ../../../source/developer.rst:169
+msgid ""
+"The source files of documents are files having .rst extension in \"doc/ja/"
+"source\" directory."
+msgstr ""
+"The source files of documents are files having .rst extension in \"doc/ja/"
+"source\" directory."
+
+# f4154be6d63a45f19c8b21df02e15f00
+#: ../../../source/developer.rst:171
+msgid ""
+"When you add or modify them, please try to build by \"make html\" etc. and "
+"confirm that no syntax error happens."
+msgstr ""
+"When you add or modify them, please try to build by \"make html\" etc. and "
+"confirm that no syntax error happens."
+
+# ffdd8fbe63b84efb94b3a4892dcd35f4
+#: ../../../source/developer.rst:173
+msgid ""
+"Documents are published in http://mroonga.github.com . Since we are using "
+"github's web site feature, they will be updated each time when HTML files "
+"are pushed to http://github.com/mroonga/mroonga.github.com repository. We "
+"push to mroonga.github.com repository after confirming the consistency "
+"between documents and current released version."
+msgstr ""
+"Documents are published in http://mroonga.github.com . Since we are using "
+"github's web site feature, they will be updated each time when HTML files "
+"are pushed to http://github.com/mroonga/mroonga.github.com repository. We "
+"push to mroonga.github.com repository after confirming the consistency "
+"between documents and current released version."
+
+# 76d7e6f417464b708c7a4d4c0c51cdce
+#: ../../../source/developer.rst:175
+msgid ""
+"So you can just push to mroonga repository to push documents for each ticket."
+msgstr ""
+"So you can just push to mroonga repository to push documents for each ticket."
+
+# ef34f350969744b28dd2552d18951752
+#: ../../../source/developer.rst:177
+msgid ""
+"To avoid the issue that directory names of sphinx's output cannot be used in "
+"github, we prepare sphinx2github.sh script in \"doc/en/source\" directory. "
+"When you commit to mroonga.github.com repository, please modify sphinx's "
+"output files by using this script beforehand."
+msgstr ""
+"To avoid the issue that directory names of sphinx's output cannot be used in "
+"github, we prepare sphinx2github.sh script in \"doc/en/source\" directory. "
+"When you commit to mroonga.github.com repository, please modify sphinx's "
+"output files by using this script beforehand."
+
+# f1eb87684643432a83fbc169960165a8
+#: ../../../source/developer/debug.rst:4
+msgid "How to debug"
+msgstr "How to debug"
+
+# 9a502b1f857b49d5a26320628e474e63
+#: ../../../source/developer/debug.rst:7
+msgid "Building for debugging"
+msgstr "Building for debugging"
+
+# 03f812c0405c456eaa047fdc3b75ae86
+#: ../../../source/developer/debug.rst:9
+msgid ""
+"When you build software for debugging, you can get more information like "
+"symbol resolutions in gdb. So we build both MySQL and groonga storage engine "
+"for debugging in development."
+msgstr ""
+"When you build software for debugging, you can get more information like "
+"symbol resolutions in gdb. So we build both MySQL and groonga storage engine "
+"for debugging in development."
+
+# b6dbbd26e1a348139e39413ed44cd429
+#: ../../../source/developer/debug.rst:14
+msgid ""
+"If you build one of them for debugging, the size of structures etc. might be "
+"different, and you might not be able to load groonga storage engine, or "
+"assertions don't work in running."
+msgstr ""
+"If you build one of them for debugging, the size of structures etc. might be "
+"different, and you might not be able to load groonga storage engine, or "
+"assertions don't work in running."
+
+# 05ccd24069d54ee0a8dea702bb297f2f
+#: ../../../source/developer/debug.rst:17
+msgid "How to build MySQL for debugging"
+msgstr "How to build MySQL for debugging"
+
+# 9ef91b2923b84224a0c95d942a6d4d5f
+#: ../../../source/developer/debug.rst:19
+msgid ""
+"As you can see in `MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing "
+"MySQL from a Standard Source Distribution`_, you can build MySQL for "
+"debugging by passing ``-DWITH_DEBUG=yes`` option in CMAKE options."
+msgstr ""
+"As you can see in `MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing "
+"MySQL from a Standard Source Distribution`_, you can build MySQL for "
+"debugging by passing ``-DWITH_DEBUG=yes`` option in CMAKE options."
+
+# 16b01bc72a4246feb8c37ee914015b1e
+#: ../../../source/developer/debug.rst:21
+msgid "The procedure from download to build is the following. ::"
+msgstr "The procedure from download to build is the following. ::"
+
+# 2a9776bdd36f430298d4e3a901f4006f
+#: ../../../source/developer/debug.rst:34
+msgid "How tom build groonga storage engine for debugging"
+msgstr "How tom build groonga storage engine for debugging"
+
+# 5661cd8c8bf84b48b6e401ddd34bac13
+#: ../../../source/developer/debug.rst:36
+msgid ""
+"You can build groonga storage engine for debugging by passing ``--with-"
+"debug`` in configure options."
+msgstr ""
+"You can build groonga storage engine for debugging by passing ``--with-"
+"debug`` in configure options."
+
+# aecc8863552d408a8fa6a3613c3098bc
+#: ../../../source/developer/debug.rst:38
+msgid "The procedure from cloning repository to build is the following. ::"
+msgstr "The procedure from cloning repository to build is the following. ::"
+
+# 09c1131524314e7f8ef3930ed572117e
+#: ../../../source/developer/debug.rst:47
+msgid ""
+"When you successfully build both, please invoke tests like the following. If "
+"you get ``[pass]`` for all tests, you succeeded to build for debugging. ::"
+msgstr ""
+"When you successfully build both, please invoke tests like the following. If "
+"you get ``[pass]`` for all tests, you succeeded to build for debugging. ::"
+
+# 3eda6493184e40428d861e9e60b406b9
+#: ../../../source/developer/debug.rst:53
+msgid "More about run-sql-test.sh"
+msgstr "More about run-sql-test.sh"
+
+# 2d7877fae90d4320abd94e7c21f8919d
+#: ../../../source/developer/debug.rst:55
+msgid ""
+"run-sql-test.sh is our friend for debugging. Here we show some examples of "
+"its usage."
+msgstr ""
+"run-sql-test.sh is our friend for debugging. Here we show some examples of "
+"its usage."
+
+# 37c6c6274df84e1a9f6889e4e2d892f9
+#: ../../../source/developer/debug.rst:59
+msgid "Run the specified test only"
+msgstr "Run the specified test only"
+
+# 12b63d9932174fb7878007c8a41844c6
+#: ../../../source/developer/debug.rst:61
+msgid ""
+"When you invoke run-sql-test.sh without any option, all tests under ``test/"
+"sql/t/`` will be invoked."
+msgstr ""
+"When you invoke run-sql-test.sh without any option, all tests under ``test/"
+"sql/t/`` will be invoked."
+
+# d239fd67192e4c3eb4daa9e353040474
+#: ../../../source/developer/debug.rst:63
+msgid ""
+"So if you want to run certain tests only, you can specify the test name in --"
+"do-test option. ::"
+msgstr ""
+"So if you want to run certain tests only, you can specify the test name in --"
+"do-test option. ::"
+
+# 796bcbbdb59c4ad8b5b79500741e6967
+#: ../../../source/developer/debug.rst:68
+msgid "See the trace"
+msgstr "See the trace"
+
+# d627c91532e54f408dbb23befbd5ea23
+#: ../../../source/developer/debug.rst:70
+msgid ""
+"When you run tests by adding ``--debug`` option like the following, function "
+"calls information is recorded. This information is stored in ``${MySQL's "
+"working directory}/${MySQL version}/mysql-test/var/log/mysqld.1.trace``."
+msgstr ""
+"When you run tests by adding ``--debug`` option like the following, function "
+"calls information is recorded. This information is stored in ``${MySQL's "
+"working directory}/${MySQL version}/mysql-test/var/log/mysqld.1.trace``."
+
+# 2cb47656be8143fab90709f0044437ad
+#: ../../../source/developer/debug.rst:73
+msgid ""
+"When you add a new function, it would be a good idea to put it in the "
+"beginning of MRN_DBUG_ENTER_FUNCTION function and record its calls."
+msgstr ""
+"When you add a new function, it would be a good idea to put it in the "
+"beginning of MRN_DBUG_ENTER_FUNCTION function and record its calls."
+
+# 6bdb0161c9214be9ac5e6982088779dc
+#: ../../../source/developer/debug.rst:76
+msgid "Invoking GDB"
+msgstr "Invoking GDB"
+
+# eb4dc2ca44d54cb797ac0418e7b5b4f8
+#: ../../../source/developer/debug.rst:78
+msgid ""
+"By adding ``--gdb`` option, you can debug with GDB when you run tests. ::"
+msgstr ""
+"By adding ``--gdb`` option, you can debug with GDB when you run tests. ::"
+
+# d961c2d4ea9c410fa76910c99337de92
+#: ../../../source/developer/release.rst:4
+msgid "Release procedure (XXX not yet translated)"
+msgstr "Release procedure (XXX not yet translated)"
+
+# 890ecfe589e6458f8938f418f36a4b10
+#: ../../../source/developer/release.rst:7
+msgid "変更点の記述"
+msgstr "変更点の記述"
+
+# 3ada9fb6e7ec4a81b7160dc76ca3849d
+#: ../../../source/developer/release.rst:9
+msgid "まず ``doc/ja/source/news.rst`` に変更点をまとめます。"
+msgstr "まず ``doc/ja/source/news.rst`` に変更点をまとめます。"
+
+# c9cb019cfec148edb0dbd3afe72f2928
+#: ../../../source/developer/release.rst:11
+msgid "次に、バージョンを確かめます。"
+msgstr "次に、バージョンを確かめます。"
+
+# c0aa303e2be846b4b7071fdc1bc68919
+#: ../../../source/developer/release.rst:13
+msgid "例えば ``git tag`` の結果が次のようになっていたとき ::"
+msgstr "例えば ``git tag`` の結果が次のようになっていたとき ::"
+
+# 164ba8032eca4b84bf0cbaac13c434ce
+#: ../../../source/developer/release.rst:24
+msgid "次のようにすると、タグ ``v0.6`` 以降のコミットを閲覧できます。 ::"
+msgstr "次のようにすると、タグ ``v0.6`` 以降のコミットを閲覧できます。 ::"
+
+# 8f184720b0d14dde9c1ed781d4825798
+#: ../../../source/developer/release.rst:29
+msgid "配布用ファイルのアップロード"
+msgstr "配布用ファイルのアップロード"
+
+# fcafb3723eab43dd987465b576b98ded
+#: ../../../source/developer/release.rst:31
+msgid "次に、配布用の ``tar.gz`` ファイルを作成します。 ::"
+msgstr "次に、配布用の ``tar.gz`` ファイルを作成します。 ::"
+
+# 790ec58dd1e24eaba6fcf519409fdb72
+#: ../../../source/developer/release.rst:35
+msgid ""
+"そして、作成された ``tar.gz`` ファイルを https://github.com/mroonga/mroonga/"
+"downloads よりアップロードします。"
+msgstr ""
+"そして、作成された ``tar.gz`` ファイルを https://github.com/mroonga/mroonga/"
+"downloads よりアップロードします。"
+
+# a6d32fffe6804c389974e2e8c3fb4496
+#: ../../../source/developer/release.rst:38
+msgid "パッケージの作成"
+msgstr "パッケージの作成"
+
+# c474996b9a2b414aa8c2dd655fa48744
+#: ../../../source/developer/release.rst:40
+msgid ""
+"Linux 用にパッケージを作成する必要があります。パッケージは以下の 2 種類に分け"
+"ることが可能です。"
+msgstr ""
+"Linux 用にパッケージを作成する必要があります。パッケージは以下の 2 種類に分け"
+"ることが可能です。"
+
+# caa811f844b048cda8783ad7c60bef17
+# fedd49ebbe71413c8588801346e65d00
+#: ../../../source/developer/release.rst:42
+#: ../../../source/developer/release.rst:50
+msgid "Debian 系"
+msgstr "Debian 系"
+
+# 14dd6082631e4417a74fa13b016ef323
+# cd14bd5a8a3042dd89b855df68f2aad6
+#: ../../../source/developer/release.rst:43
+#: ../../../source/developer/release.rst:80
+msgid "Red Hat 系"
+msgstr "Red Hat 系"
+
+# 91d03db07ba2481ba6519d8596acaaa8
+#: ../../../source/developer/release.rst:47
+msgid ""
+"現在のところ、パッケージの作成は Debian GNU/Linux (Ubuntu も可) でしか行えま"
+"せん。"
+msgstr ""
+"現在のところ、パッケージの作成は Debian GNU/Linux (Ubuntu も可) でしか行えま"
+"せん。"
+
+# 084fe7f2a68340a6ae2d1885b730afba
+# 761aafc2e5b44938bf471e3279ef5558
+#: ../../../source/developer/release.rst:54
+#: ../../../source/developer/release.rst:84
+msgid ""
+"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
+"ケージ作成に必要なソフトウェアをインストールします。::"
+msgstr ""
+"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
+"ケージ作成に必要なソフトウェアをインストールします。::"
+
+# c8633ae66dbc43d5a8092a78e2e711b5
+#: ../../../source/developer/release.rst:58
+msgid "まず apt ディレクトリに移動します。 ::"
+msgstr "まず apt ディレクトリに移動します。 ::"
+
+# d0e55a7474154a9d8879b497c81760ed
+#: ../../../source/developer/release.rst:62
+msgid ""
+"その後、次のようにすれば一連のリリース作業（build update sign upload）が行わ"
+"れますが、途中で失敗することもあります。 ::"
+msgstr ""
+"その後、次のようにすれば一連のリリース作業（build update sign upload）が行わ"
+"れますが、途中で失敗することもあります。 ::"
+
+# 2e57d7330bf74f33b0a7386bde961826
+# 3f8fdd7e5ea7417bac00c66f08a8be80
+#: ../../../source/developer/release.rst:66
+#: ../../../source/developer/release.rst:94
+msgid ""
+"そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行ってい"
+"くほうが良いこともあります。 ::"
+msgstr ""
+"そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行ってい"
+"くほうが良いこともあります。 ::"
+
+# 67882af0ff984c129da669bbdaea4861
+#: ../../../source/developer/release.rst:73
+msgid ""
+"make build に PARALLEL=yes とするとビルドが並列に走り、作業がより高速に行えま"
+"す。"
+msgstr ""
+"make build に PARALLEL=yes とするとビルドが並列に走り、作業がより高速に行えま"
+"す。"
+
+# 2dac97c3e7af40a1aca8d416d3ca6889
+#: ../../../source/developer/release.rst:75
+msgid ""
+"また make build CODES=lucid などとすると、ビルド対象を指定することができま"
+"す。"
+msgstr ""
+"また make build CODES=lucid などとすると、ビルド対象を指定することができま"
+"す。"
+
+# 49bd6b2d78e141faa623f9074395fd2b
+#: ../../../source/developer/release.rst:77
+msgid ""
+"このように Makefile.am を書き換えずにコマンドライン引数でビルドの挙動を変更す"
+"る方法は、知っておいて損はないでしょう。"
+msgstr ""
+"このように Makefile.am を書き換えずにコマンドライン引数でビルドの挙動を変更す"
+"る方法は、知っておいて損はないでしょう。"
+
+# a5c781b584c74b3c98c2176058610ee9
+#: ../../../source/developer/release.rst:88
+msgid "まず yum ディレクトリに移動する。"
+msgstr "まず yum ディレクトリに移動する。"
+
+# d35179f8969141a4bc46e1935dc50840
+#: ../../../source/developer/release.rst:90
+msgid ""
+"その後、次のようにすれば一連のリリース作業（build sign update upload）が行わ"
+"れますが、途中で失敗することもあります。 ::"
+msgstr ""
+"その後、次のようにすれば一連のリリース作業（build sign update upload）が行わ"
+"れますが、途中で失敗することもあります。 ::"
+
+# 523df243851644058ff14cf709d4e098
+#: ../../../source/developer/release.rst:102
+msgid "タグを打つ"
+msgstr "タグを打つ"
+
+# 72d8561330604995b21f11c0d30bbdbf
+#: ../../../source/developer/release.rst:104
+msgid "``make tag`` とするとタグが打たれます。 ::"
+msgstr "``make tag`` とするとタグが打たれます。 ::"
+
+# f1d3992a37a84a2f8fd8b2a14bdf665c
+#: ../../../source/developer/release.rst:110
+msgid "ドキュメントのアップロード"
+msgstr "ドキュメントのアップロード"
+
+# c59681dd844f4d9a8237db69b6022eff
+#: ../../../source/developer/release.rst:112
+msgid ""
+"GitHub からドキュメントアップロード用のリポジトリ (mroonga.github.com) を "
+"clone"
+msgstr ""
+"GitHub からドキュメントアップロード用のリポジトリ (mroonga.github.com) を "
+"clone"
+
+# 2ec53f4658b14ff2a8f555d22eabd85f
+#: ../../../source/developer/release.rst:113
+msgid ""
+"mroonga/doc/ja/sphinx2github.sh を実行し mroonga/doc/ja/html 内のディレクトリ"
+"名を GitHub (Jekyll) 用に変更"
+msgstr ""
+"mroonga/doc/ja/sphinx2github.sh を実行し mroonga/doc/ja/html 内のディレクトリ"
+"名を GitHub (Jekyll) 用に変更"
+
+# 266072d9e55b46e2926c4a0fa4e6c16f
+#: ../../../source/developer/release.rst:114
+msgid ""
+"mroonga/doc/ja/html 内のファイルを 1. で clone した mroonga.github.com にコ"
+"ピー"
+msgstr ""
+"mroonga/doc/ja/html 内のファイルを 1. で clone した mroonga.github.com にコ"
+"ピー"
+
+# 493479dba3c34e7ca886ac88b2851381
+#: ../../../source/developer/release.rst:115
+msgid "mroonga.github.com へコミットを行い GitHub へ push"
+msgstr "mroonga.github.com へコミットを行い GitHub へ push"
+
+# 664c69048ff7429fad53e24f2e0e49f0
+#: ../../../source/developer/release.rst:118
+msgid "リリースメールの送信"
+msgstr "リリースメールの送信"
+
+# 27451ccdccf041639fd971a6a64f0b7a
+#: ../../../source/developer/release.rst:120
+msgid ""
+"メーリングリスト (ml@mysql.gr.jp) にリリースメールを流します。メッセージ内容"
+"のテンプレートを以下に示します。 ::"
+msgstr ""
+"メーリングリスト (ml@mysql.gr.jp) にリリースメールを流します。メッセージ内容"
+"のテンプレートを以下に示します。 ::"

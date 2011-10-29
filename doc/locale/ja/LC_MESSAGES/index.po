@@ -1,0 +1,48 @@
+# Japanese translations for groonga storage engine package.
+# Copyright (C) 2009-2011, groonga project
+# This file is distributed under the same license as the groonga storage engine package.
+# Kouhei Sutou <kou@clear-code.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: groonga storage engine 1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-29 21:56\n"
+"PO-Revision-Date: 2011-10-29 21:56+0900\n"
+"Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
+"Language-Team: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# fe0d4aaf72344a469b1bedb2d2ef29a3
+#: ../../../source/index.rst:7
+msgid "groonga storage engine"
+msgstr ""
+
+# 707886dc8cec47b9997f4abe89662952
+#: ../../../source/index.rst:9
+msgid "For the release history: :doc:`news`"
+msgstr ""
+
+# 6cff5cdfe40c47c993e401137fa93b8a
+#: ../../../source/index.rst:22
+msgid "Indices and tables"
+msgstr ""
+
+# f9f59feca6f9413a80d6e4261d7c8f10
+#: ../../../source/index.rst:24
+msgid ":ref:`genindex`"
+msgstr ""
+
+# ea3847dcb1e94d03aec42fb07f0270a3
+#: ../../../source/index.rst:25
+msgid ":ref:`modindex`"
+msgstr ""
+
+# 64e273c86bbb467887001e5a28f83ae7
+#: ../../../source/index.rst:26
+msgid ":ref:`search`"
+msgstr ""
