@@ -92,8 +92,8 @@ Currently we are assuming the following development environments.
 * glibc 2.5
 * MySQL 5.5
 * groonga 1.2
-* cutter 1.1 (for C/C++ unit tests)
-* sphinx 1.0 (for documents)
+* Cutter 1.1 (for C/C++ unit tests)
+* Sphinx 1.1 (for documents)
 
 glibc 2.5 is used in Red Hat Enterprise Linux 5.
 
@@ -127,10 +127,10 @@ test/unit/
  The directory for per-function unit tests by C/C++
 
 doc/en/
- English documents in sphinx format
+ English documents in Sphinx format
 
 doc/ja/
- Japanese documents in sphinx format
+ Japanese documents in Sphinx format
 
 Since we are still in the early stage of the development of groonga storage engine, we will not make the documents of the specification of SQL queries for now.
 
@@ -145,7 +145,7 @@ SQL tests
  When you add features or fix bugs that can be confirmed by SQL queries, please always add SQL tests. You might think that performance improvements cannot be confirmed with SQL, but some can be still well tested by using status variables or information_schema plugin etc.
 
 C/C++ unit tests
- They are function level regression tests using cutter. When you add features that cannot differ SQL queries' results, like utility functions, please add tests here.
+ They are function level regression tests using Cutter. When you add features that cannot differ SQL queries' results, like utility functions, please add tests here.
 
 Before pushing to the repository, please always run the regression tests and confirm that you don't introduce any degradation.
 
@@ -162,7 +162,7 @@ http://cutter.sourceforge.net/
 Adding and updating documents
 -----------------------------
 
-We use sphinx for the documentation of groonga storage engine.
+We use Sphinx for the documentation of groonga storage engine.
 
 We write documents in ReStructuredText format and we convert them to HTML etc.
 

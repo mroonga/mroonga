@@ -7,25 +7,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 21:56\n"
-"PO-Revision-Date: 2011-10-29 21:56+0900\n"
+"POT-Creation-Date: 2011-10-29 23:42\n"
+"PO-Revision-Date: 2011-10-29 23:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 # afaf0f450e9544a8acc5116afdcace63
 #: ../../../source/developer.rst:4
 msgid "Developer's guide"
-msgstr ""
+msgstr "開発者向け情報"
 
 # 5f722661ba45485aa0135c1354d9a109
 #: ../../../source/developer.rst:13
 msgid "How we are developing"
-msgstr ""
+msgstr "開発手法について"
 
 # a7afa1788a554be8a81dee99596432e8
 #: ../../../source/developer.rst:15
@@ -33,11 +33,13 @@ msgid ""
 "We, the groonga storage engine development project, are doing Ticket Driven "
 "Development by using a BTS named Redmine."
 msgstr ""
+"groongaストレージエンジン開発プロジェクトではBTSの1つであるRedmineを用いたチ"
+"ケット駆動開発を実施しています。"
 
 # ff145db4f3d54e2f866f02b0617e117f
 #: ../../../source/developer.rst:17
 msgid "The location of our Redmine site is the following."
-msgstr ""
+msgstr "Redmineは以下のサイトで運用されています。"
 
 # 7a1f4cbb271d4c34941334a31c3559ef
 #: ../../../source/developer.rst:19
@@ -47,17 +49,17 @@ msgstr ""
 # 52088113370a4c1d8c71608abeb057bc
 #: ../../../source/developer.rst:21
 msgid "Developments are done per ticket."
-msgstr ""
+msgstr "開発の作業はチケット単位で行っています。"
 
 # 014270beec31410fbc6320c48ef08ede
 #: ../../../source/developer.rst:23
 msgid "We would like to ask developers to register on the site above."
-msgstr ""
+msgstr "開発者の方は上記サイトへのアカウント登録をお願いします。"
 
 # 7002e08ec34543a2966ec0a2a8afb813
 #: ../../../source/developer.rst:26
 msgid "Roadmaps"
-msgstr ""
+msgstr "ロードマップについて"
 
 # 7b9b77119ee2407291dbdfd6693a5a9b
 #: ../../../source/developer.rst:28
@@ -65,6 +67,8 @@ msgid ""
 "You can see our roadmaps in the following page. Generally speaking, we "
 "develop based on the roadmap."
 msgstr ""
+"ロードマップは以下のページで確認できます。基本的に開発はロードマップに沿って"
+"行います。"
 
 # 1b70877aad744ce3b2ce18854f7e5ead
 #: ../../../source/developer.rst:30
@@ -75,21 +79,24 @@ msgstr ""
 #: ../../../source/developer.rst:32
 msgid "We decide our roadmaps by discussing in off-line or on-line meetings."
 msgstr ""
+"ロードマップはオフラインあるいはオンラインでの開発会議で検討を行った上で決定"
+"されます。"
 
 # a532e54a7fa44268a80e00945c2c2f16
 #: ../../../source/developer.rst:34
 msgid "Roadmaps specify the list of adding features in each version."
 msgstr ""
+"ロードマップは各バージョンごとに追加する機能の一覧として構成されています。"
 
 # 0a3aab2dee264380984bb6ee20254287
 #: ../../../source/developer.rst:37
 msgid "Source code management"
-msgstr ""
+msgstr "ソースコード管理について"
 
 # 0accfb13d6bf41d6a15a191b998cf874
 #: ../../../source/developer.rst:39
 msgid "We manage the source code using git on github."
-msgstr ""
+msgstr "githubを使用したgitによるソースコード管理を行っています。"
 
 # 8fb909af4b094ab7a4055a4c4ce93f19
 #: ../../../source/developer.rst:41
@@ -102,61 +109,63 @@ msgid ""
 "If you want to contribute, please make clone in read/write mode, and then "
 "commit and push please."
 msgstr ""
+"上記レポジトリに対してread/writeでcloneを作成し、commitおよびpushして下さい。"
 
 # 42343a42c6f44ec7a69675d5f2995992
 #: ../../../source/developer.rst:45
 msgid "If you still do not have your account on github.com, please register."
 msgstr ""
+"アカウントを作成していない開発者の方はgithub.comへの登録をお願いします。"
 
 # c0d640acbc8a48c897b25d81b738a08b
 #: ../../../source/developer.rst:48
 msgid "Process of development"
-msgstr ""
+msgstr "開発の流れについて"
 
 # 508b90a96bce49558baf4238ffbe7a5b
 #: ../../../source/developer.rst:50
 msgid "We would like to develop in the following procedure."
-msgstr ""
+msgstr "開発は以下の流れで行いたいと考えています。"
 
 # 9ee264cc6051443d90887269a84e0f9b
 #: ../../../source/developer.rst:52
 msgid "Create a new ticket and add a description"
-msgstr ""
+msgstr "チケットの新規作成と内容の記述"
 
 # c99b460513b249199139c45f5f8fe9fd
 #: ../../../source/developer.rst:53
 msgid "Discuss in the development meeting and update roadmaps"
-msgstr ""
+msgstr "開発会議での検討(ロードマップへの反映)"
 
 # 76aa7529d00d4a909fa9badce1ee0230
 #: ../../../source/developer.rst:54
 msgid "Assign the ticket, and the assignee starts development"
-msgstr ""
+msgstr "チケットの割り当て(担当者作業開始)"
 
 # ff60d54f2d104a5aba35d39ffb7d97e2
 #: ../../../source/developer.rst:55
 msgid "Implement features or fix bugs, then push to the repository if needed"
-msgstr ""
+msgstr "機能実装あるいはバグの修正作業、必要に応じてレポジトリへのpush"
 
 # 75361499ca3f42c4957f6bcc54afc8a1
 #: ../../../source/developer.rst:56
 msgid "Add and run test codes, then push to the repository"
-msgstr ""
+msgstr "テストコードの追加と実行、レポジトリへのpush"
 
 # cc48495c84f548bea912949765080529
 #: ../../../source/developer.rst:57
 msgid "Review the implementation and tests, and go back to 4. if needed"
-msgstr ""
+msgstr "実装/テスト内容に対するレビュー(必要に応じて4へ戻る)"
 
 # 025f5c8c1e86417e974238c1e40e34af
 #: ../../../source/developer.rst:58
 msgid "Add or update documents, then push to the repository"
-msgstr ""
+msgstr "ドキュメントの追加/変更、 レポジトリへのpush"
 
 # 96c62f8de5ef48ff8a3215a7e4f19ff5
 #: ../../../source/developer.rst:59
 msgid "Close the ticket"
-msgstr ""
+msgstr "チケットの完了"
 
 # fcb2ea0481fd4d33aaea0090b6d5a85a
 #: ../../../source/developer.rst:61
@@ -164,11 +173,14 @@ msgid ""
 "We welcome your ideas about new features or changes of specifications. "
 "Please create a ticket first and describe your idea there."
 msgstr ""
+"機能追加や仕様変更などについても積極的にアイデアを募集します。まずはチケット"
+"を新規作成して内容を記述して下さい。"
 
 # 4fa69f1d4dd84f9292bd4741fa2cb5de
 #: ../../../source/developer.rst:64
 msgid "For adding and running test codes, please refer the description below."
 msgstr ""
+"テストコードの追加と実行については後述しますのでそちらを参照して下さい。"
 
 # f6e8dceb2b41446c8f8b420e3216a94f
 #: ../../../source/developer.rst:66
@@ -176,6 +188,8 @@ msgid ""
 "Generally speaking, we want to ask the assignee to handle whole the process, "
 "like design, implementation, test and documentations."
 msgstr ""
+"基本的にチケットを担当されている方が設計、実装、テスト、ドキュメントまで一通"
+"りお願いしたいと考えています。"
 
 # 3d30eae8f4e44d90b25743194a5ef4a1
 #: ../../../source/developer.rst:68
@@ -184,61 +198,63 @@ msgid ""
 "features), and when it passes you add or update documents and the ticket can "
 "be closed."
 msgstr ""
+"他の開発者にレビューを依頼し(特に機能追加の場合)、無事パスしたら最後にドキュ"
+"メントを追加/変更してチケット完了となります。"
 
 # 2b3fed08c22e48afafba797308d038fe
 #: ../../../source/developer.rst:70
 msgid "For adding and updating documents, please refer the description below."
-msgstr ""
+msgstr "ドキュメントの追加/変更方法についても詳しくは後述します。"
 
 # 042640664ac8410d80a21fe02a77aaea
 #: ../../../source/developer.rst:73
 msgid "Release"
-msgstr ""
+msgstr "リリースについて"
 
 # c02f010b7ef448d2b306cfcde9aab569
 #: ../../../source/developer.rst:75
 msgid "We release the software when all tickets of the roadmap are closed."
-msgstr ""
+msgstr "リリースはロードマップ上のチケットが全て完了となった段階で行います。"
 
 # 6513eaa6d07d487bacf2c993b5624405
 #: ../../../source/developer.rst:77
 msgid "We do the following to release."
-msgstr ""
+msgstr "リリースにあたっては以下の作業を行っています。"
 
 # d4883cd1cd55478e838ca7f29b617753
 #: ../../../source/developer.rst:79
 msgid "Create source packages"
-msgstr ""
+msgstr "ソースパッケージ作成"
 
 # f3278389a1594fd29877dbe1f6b2b8c1
 #: ../../../source/developer.rst:80
 msgid "Create binary packages"
-msgstr ""
+msgstr "バイナリパッケージ作成"
 
 # da95ac6cc730482f9ee28be390b39387
 #: ../../../source/developer.rst:81
 msgid "Update documents on http://mroonga.github.com"
-msgstr ""
+msgstr "ドキュメント(http://mroonga.github.com)のアップデート"
 
 # 5a7984f28f794033a71b45dbed01f131
 #: ../../../source/developer.rst:82
 msgid "Announce the release"
-msgstr ""
+msgstr "リリースの告知"
 
 # 6c19524725bf49968af87a7a573e72bd
 #: ../../../source/developer.rst:84
 msgid "(This section will be moved to :doc:`developer/release`)."
-msgstr ""
+msgstr ":doc:`developer/release` へ移動予定。"
 
 # 694ef1a52a934a53af014cc09f1542d8
 #: ../../../source/developer.rst:87
 msgid "Development environment"
-msgstr ""
+msgstr "開発環境"
 
 # 9c8fee05a65945c9828ca1e4b3b1a150
 #: ../../../source/developer.rst:89
 msgid "Currently we are assuming the following development environments."
-msgstr ""
+msgstr "現在、以下のような開発環境を想定しています。"
 
 # 8e24af164d144329afd9f5147de18a8d
 #: ../../../source/developer.rst:91
@@ -262,23 +278,23 @@ msgstr ""
 
 # 53a8cc36a8d248bd8ba97126d3c06f19
 #: ../../../source/developer.rst:95
-msgid "cutter 1.1 (for C/C++ unit tests)"
-msgstr ""
+msgid "Cutter 1.1 (for C/C++ unit tests)"
+msgstr "Cutter 1.1 (C/C++単体テスト用)"
 
 # 65985f526b1144b0a4a74ddb20fea41b
 #: ../../../source/developer.rst:96
-msgid "sphinx 1.0 (for documents)"
-msgstr ""
+msgid "Sphinx 1.1 (for documents)"
+msgstr "Sphinx 1.1 (ドキュメント用)"
 
 # 62cff737088e4863882fa3970446e981
 #: ../../../source/developer.rst:98
 msgid "glibc 2.5 is used in Red Hat Enterprise Linux 5."
-msgstr ""
+msgstr "glibc 2.5はRed Hat Enterprise Linux 5に相当します。"
 
 # a90d7a700fc1444a9230867ec172aa87
 #: ../../../source/developer.rst:101
 msgid "Contents of the source tree"
-msgstr ""
+msgstr "ソースディレクトリ解説"
 
 # 996446e967484e15a8e07c4e7db5f09b
 #: ../../../source/developer.rst:103
@@ -286,31 +302,33 @@ msgid ""
 "There are just a few source files for now, and we would like to keep it "
 "simple as possible."
 msgstr ""
+"今のところソースファイルの数はごくわずかです。なるべくシンプルな状態を維持し"
+"たいと考えています。"
 
 # 6d8a04dcc41d4bc4b78488795e9c5d28
 #: ../../../source/developer.rst:106
 msgid "The header file of groonga storage engine"
-msgstr ""
+msgstr "groongaストレージエンジンのヘッダファイル"
 
 # de68c17cdf2a46958c805a6d7d4de0be
 #: ../../../source/developer.rst:109
 msgid "The implementation of groonga storage engine"
-msgstr ""
+msgstr "groongaストレージエンジンの実装コード"
 
 # 148c322ddf594efcb6896c5108eabe42
 #: ../../../source/developer.rst:112
 msgid "The header file of utility functions"
-msgstr ""
+msgstr "ユーティリティ関数のヘッダファイル"
 
 # df8d1f60bd2b44e9ac83567f67e6303d
 #: ../../../source/developer.rst:115
 msgid "The implementation of utility functions"
-msgstr ""
+msgstr "ユーティリティ関数の実装コード"
 
 # 336604c0ba9e460a84cef792b0a1e1a4
 #: ../../../source/developer.rst:118
 msgid "The directory for tests by SQL"
-msgstr ""
+msgstr "SQLによるテストコード用ディレクトリ"
 
 # 3e8df8b433f54644a788e4a79d946cd2
 #: ../../../source/developer.rst:121
@@ -318,28 +336,30 @@ msgid ""
 "SQL test scripts, that are also the definition of currently available SQL "
 "statements"
 msgstr ""
+"SQLによるテストコード用ディレクトリSQLテストスクリプト（現在実行可能なSQL文の"
+"定義も兼ねる）"
 
 # f374dac564f24c8581d3cd83bf63bf3a
 #: ../../../source/developer.rst:124
 msgid ""
 "The expected results of SQL tests, that are also the definition of the "
 "current specification of supported SQL"
-msgstr ""
+msgstr "SQLテスト想定実行結果（SQL動作仕様定義も兼ねる）"
 
 # 4114c2bfb1294078be0cf96a8cb9250a
 #: ../../../source/developer.rst:127
 msgid "The directory for per-function unit tests by C/C++"
-msgstr ""
+msgstr "C/C++関数単体でのテストコード用ディレクトリ"
 
 # 3ece773863174cd5b8a6672fccbba677
 #: ../../../source/developer.rst:130
-msgid "English documents in sphinx format"
-msgstr ""
+msgid "English documents in Sphinx format"
+msgstr "Sphinx形式の英語ドキュメント一式"
 
 # e193154e20cc40d486389f6971849227
 #: ../../../source/developer.rst:133
-msgid "Japanese documents in sphinx format"
-msgstr ""
+msgid "Japanese documents in Sphinx format"
+msgstr "Sphinx形式の日本語ドキュメント一式"
 
 # 653093e39c04421998e77a6a61ff1dd7
 #: ../../../source/developer.rst:135
@@ -348,6 +368,8 @@ msgid ""
 "engine, we will not make the documents of the specification of SQL queries "
 "for now."
 msgstr ""
+"groongaストレージエンジンはまだ開発の立ち上げ段階であるため、SQL実行に関する"
+"仕様のドキュメント化は当面行いません。"
 
 # 4ebf965b5a544c95945b6aa0d049a565
 #: ../../../source/developer.rst:137
@@ -355,11 +377,13 @@ msgid ""
 "Alternatively we consider our SQL tests and its expected results as the list "
 "of features and the definition of their specifications."
 msgstr ""
+"その代わりとしてSQLテストスクリプトとその想定実行結果を機能一覧/仕様定義とし"
+"て見なしています。"
 
 # 3184e93c00e94a75bdea2c4c28d3678a
 #: ../../../source/developer.rst:140
 msgid "Adding and running tests"
-msgstr ""
+msgstr "テストコードの追加と実行について"
 
 # b9520d1b90ca4887a8ec5a1351052b39
 #: ../../../source/developer.rst:142
@@ -367,6 +391,8 @@ msgid ""
 "We use two kinds of regression tests to manage the quality of groonga "
 "storage engine."
 msgstr ""
+"groongaストレージエンジンではプログラムの品質管理のため、2種類の回帰テストを"
+"用いています。"
 
 # 372c85c0fc1b48b0a743cd653e581874
 #: ../../../source/developer.rst:145
@@ -376,14 +402,21 @@ msgid ""
 "cannot be confirmed with SQL, but some can be still well tested by using "
 "status variables or information_schema plugin etc."
 msgstr ""
+"SQL実行により動作確認を行えるような機能追加/バグ修正に関しては必ずSQLテストを"
+"追加して下さい。高速化機能などは一見するとSQLによる動作確認ができないように見"
+"える場合もありますが、ステータス変数やinformation_schemaプラグインなどを使用"
+"することで上手くテストできるものもあります。"
 
 # dcbf580c584041faa453704b4f776318
 #: ../../../source/developer.rst:148
 msgid ""
-"They are function level regression tests using cutter. When you add features "
+"They are function level regression tests using Cutter. When you add features "
 "that cannot differ SQL queries' results, like utility functions, please add "
 "tests here."
 msgstr ""
+"Cutterを使用した関数レベルでの回帰テストです。ユーティリティ関数などSQL実行結"
+"果による動作の差異を確認できないような実装を追加した場合にはこちらにテストを"
+"追加して下さい。"
 
 # f95ee022da53467d890c4c80e5d63ccc
 #: ../../../source/developer.rst:150
@@ -391,11 +424,13 @@ msgid ""
 "Before pushing to the repository, please always run the regression tests and "
 "confirm that you don't introduce any degradation."
 msgstr ""
+"ソースコードレポジトリへのpushを行う前に必ず回帰テストを実行し、デグレードが"
+"発生していないことを確認して下さい。"
 
 # 57f6a163715942b190aeca7eaddd4b64
 #: ../../../source/developer.rst:152
 msgid "You can invoke these two kinds of tests by \"make check\"."
-msgstr ""
+msgstr "上記の回帰テストは\"make check\"で双方とも呼び出されます。"
 
 # d9878df7fd7346db94a9209e06504db3
 #: ../../../source/developer.rst:154
@@ -404,6 +439,9 @@ msgid ""
 "MySQL's regression tests. For the detail about how to add test cases or how "
 "to modify expected result files, please refer the following MySQL document."
 msgstr ""
+"SQLテストはMySQLの回帰テストである\"mysql-test\"に対する\"sub test suite\"と"
+"して実装しています。テストケースの追加や想定結果ファイルの改変方法などの詳細"
+"情報は以下のMySQLのドキュメントを参照して下さい。"
 
 # 548244c966de485d97fe370ac379eb16
 #: ../../../source/developer.rst:156
@@ -416,21 +454,23 @@ msgid ""
 "For the detail about C/C++ unit tests, please refer the following cutter "
 "document."
 msgstr ""
+"C/C++単体テストの書き方についてはcutterのドキュメントを参照して下さい。"
 
 # dd3242a1915c4e84b029c4019c89c0c7
 #: ../../../source/developer.rst:160
 msgid "http://cutter.sourceforge.net/"
-msgstr ""
+msgstr "http://cutter.sourceforge.net/index.html.ja"
 
 # 1d8904b6d713496dbb57587d37fb5a4a
 #: ../../../source/developer.rst:163
 msgid "Adding and updating documents"
-msgstr ""
+msgstr "ドキュメントの追加と変更について"
 
 # b43c6611d0b648d8a1d4be1854bf9db3
 #: ../../../source/developer.rst:165
-msgid "We use sphinx for the documentation of groonga storage engine."
+msgid "We use Sphinx for the documentation of groonga storage engine."
 msgstr ""
+"groongaストレージエンジンではドキュメント作成にSphinxを使用しています。"
 
 # f79df5fb8e974aaf959a87c658b94e1e
 #: ../../../source/developer.rst:167
@@ -438,6 +478,8 @@ msgid ""
 "We write documents in ReStructuredText format and we convert them to HTML "
 "etc."
 msgstr ""
+"ドキュメントはReStructuredText形式でソースファイルを書き、HTML形式などにビル"
+"ドしています。"
 
 # 6c48cd729c504ef08c02066659c280de
 #: ../../../source/developer.rst:169
@@ -445,6 +487,8 @@ msgid ""
 "The source files of documents are files having .rst extension in \"doc/ja/"
 "source\" directory."
 msgstr ""
+"ドキュメントのソースファイルは\"doc/ja/source\"ディレクトリにある拡張子が.rst"
+"のファイルです。"
 
 # 9517405540304fd7bad94079183710bf
 #: ../../../source/developer.rst:171
@@ -452,6 +496,8 @@ msgid ""
 "When you add or modify them, please try to build by \"make html\" etc. and "
 "confirm that no syntax error happens."
 msgstr ""
+"加筆修正を行ったら\"make html\"等でビルドして構文エラーが起きないことを確認し"
+"て下さい。"
 
 # 03077955ee6f44ba8e06234facbe3a07
 #: ../../../source/developer.rst:173
@@ -462,12 +508,19 @@ msgid ""
 "push to mroonga.github.com repository after confirming the consistency "
 "between documents and current released version."
 msgstr ""
+"ドキュメントの実際の公開場所は http://mroonga.github.com で、これはgithubのサ"
+"イト機能を使用しているため http://github.com/mroonga/mroonga.github.com レポ"
+"ジトリに最新のHTML出力ファイルをpushすることで更新が行われる仕組みとなってい"
+"ますが、mroonga.github.comレポジトリへのpushは現リリースバージョンとの整合性"
+"などを確認した上で別のタイミングでpushします。"
 
 # c71271c745e94e8db638b9d5cec9795e
 #: ../../../source/developer.rst:175
 msgid ""
 "So you can just push to mroonga repository to push documents for each ticket."
 msgstr ""
+"従って、各チケットに対するドキュメントのpushはmroongaレポジトリに対するpushの"
+"みで構いません。"
 
 # 5a34ae4798ed4abf8aedf119cd867279
 #: ../../../source/developer.rst:177
@@ -477,16 +530,20 @@ msgid ""
 "When you commit to mroonga.github.com repository, please modify sphinx's "
 "output files by using this script beforehand."
 msgstr ""
+"またsphinxの出力するディレクトリ名がgithubで使用できない問題を回避するた"
+"め、\"doc/ja/source\"ディレクトリにてsphinx2github.shスクリプトを用意していま"
+"す。mroonga.github.comにcommitする場合にはこのスクリプトを実行してsphinxの生"
+"成したファイルを修正して置きましょう。"
 
 # ff7118e7e369451cafd5d4dd6fa7f04f
 #: ../../../source/developer/debug.rst:4
 msgid "How to debug"
-msgstr ""
+msgstr "デバッグ方法"
 
 # 81fef6be76e24d56bfee57ea27d79f82
 #: ../../../source/developer/debug.rst:7
 msgid "Building for debugging"
-msgstr ""
+msgstr "デバッグ用ビルド方法"
 
 # 13082f32a78346e1a81353ae9b4d0c29
 #: ../../../source/developer/debug.rst:9
@@ -495,6 +552,9 @@ msgid ""
 "symbol resolutions in gdb. So we build both MySQL and groonga storage engine "
 "for debugging in development."
 msgstr ""
+"デバッグ用にビルドすることにより、gdb上でのシンボル解決など開発時に得られる情"
+"報が多くなります。そのため、開発時はデバッグ用にMySQLとgroongaストレージエン"
+"ジンをビルドします。"
 
 # 92983731565345c79f9e1e8ca791a88e
 #: ../../../source/developer/debug.rst:14
@@ -503,11 +563,14 @@ msgid ""
 "different, and you might not be able to load groonga storage engine, or "
 "assertions don't work in running."
 msgstr ""
+"片方だけデバッグ用ビルドにすると構造体のサイズなどが異なってしまうため、"
+"groongaストレージエンジンがロードできなかったり、実行時にassertに引っかかった"
+"りしてうまく動作しません。"
 
 # b5164744f0954e729ac51260910bf550
 #: ../../../source/developer/debug.rst:17
 msgid "How to build MySQL for debugging"
-msgstr ""
+msgstr "MySQLのデバッグ用ビルド方法"
 
 # f6c650034cb542b5980e8f07d7abc6de
 #: ../../../source/developer/debug.rst:19
@@ -516,16 +579,20 @@ msgid ""
 "MySQL from a Standard Source Distribution`_, you can build MySQL for "
 "debugging by passing ``-DWITH_DEBUG=yes`` option in CMAKE options."
 msgstr ""
+"`MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing MySQL from a "
+"Standard Source Distribution`_ にある通り、CMakeのオプションに ``-"
+"DWITH_DEBUG=yes`` オプションを渡すことでデバッグ用にビルドすることができま"
+"す。"
 
 # 86a74c7c4d52466192f89756fe1d5a7c
 #: ../../../source/developer/debug.rst:21
 msgid "The procedure from download to build is the following. ::"
-msgstr ""
+msgstr "ダウンロードからビルドまでの流れは以下の通りです。::"
 
 # 2f4a3ea0ee2e4b4b822ecbc8d573ecd5
 #: ../../../source/developer/debug.rst:34
 msgid "How tom build groonga storage engine for debugging"
-msgstr ""
+msgstr "groongaストレージエンジンのデバッグ用ビルド方法"
 
 # ad85b3bc74c045e0893d1cc709a34899
 #: ../../../source/developer/debug.rst:36
@@ -533,11 +600,13 @@ msgid ""
 "You can build groonga storage engine for debugging by passing ``--with-"
 "debug`` in configure options."
 msgstr ""
+"groongaストレージエンジンはconfigureのオプションに ``--with-debug`` を渡すこ"
+"とでデバッグ用にビルドすることができます。"
 
 # cb7104cec08c47f7825f45739bc2182f
 #: ../../../source/developer/debug.rst:38
 msgid "The procedure from cloning repository to build is the following. ::"
-msgstr ""
+msgstr "リポジトリのcloneからビルドまでの流れは以下の通りです。::"
 
 # a537403671e041a3bf4ce1a63338a35e
 #: ../../../source/developer/debug.rst:47
@@ -545,11 +614,13 @@ msgid ""
 "When you successfully build both, please invoke tests like the following. If "
 "you get ``[pass]`` for all tests, you succeeded to build for debugging. ::"
 msgstr ""
+"無事にビルドができたら以下のようにテストを実行してください。すべてのテストが "
+"``[pass]`` になればデバッグ用ビルドは成功しています。::"
 
 # f012a97be12840b3a0bbb77e0ce1a507
 #: ../../../source/developer/debug.rst:53
 msgid "More about run-sql-test.sh"
-msgstr ""
+msgstr "run-sql-test.sh を使いこなす"
 
 # c68ae2e0e4c648daa332e231c1cf6a58
 #: ../../../source/developer/debug.rst:55
@@ -557,11 +628,13 @@ msgid ""
 "run-sql-test.sh is our friend for debugging. Here we show some examples of "
 "its usage."
 msgstr ""
+"run-sql-test.sh はデバッグの友。ここでは、その便利な使い方の一例をご紹介しま"
+"す。"
 
 # 441d495b3de54d35bc3375af923bc28f
 #: ../../../source/developer/debug.rst:59
 msgid "Run the specified test only"
-msgstr ""
+msgstr "指定したテストを実行する"
 
 # 902b1950751d492f81dd149cf56941b3
 #: ../../../source/developer/debug.rst:61
@@ -569,6 +642,8 @@ msgid ""
 "When you invoke run-sql-test.sh without any option, all tests under ``test/"
 "sql/t/`` will be invoked."
 msgstr ""
+"何もオプションを渡さずに run-sql-test.sh を実行すると ``test/sql/t/`` 以下に"
+"ある全てのテスト (``*.test``) が実行されてしまいます。"
 
 # 370909df14c9452e9b845127fb34cbe2
 #: ../../../source/developer/debug.rst:63
@@ -576,11 +651,13 @@ msgid ""
 "So if you want to run certain tests only, you can specify the test name in --"
 "do-test option. ::"
 msgstr ""
+"特定のテストだけを実行したい、という場合は次のようにしてテスト名を --do-test "
+"オプションに渡します。 ::"
 
 # 2ac54c3522a543c4865d706a0c5e8404
 #: ../../../source/developer/debug.rst:68
 msgid "See the trace"
-msgstr ""
+msgstr "トレースを見る"
 
 # 6b18045f94454eec842d23c521f330f7
 #: ../../../source/developer/debug.rst:70
@@ -589,6 +666,9 @@ msgid ""
 "calls information is recorded. This information is stored in ``${MySQL's "
 "working directory}/${MySQL version}/mysql-test/var/log/mysqld.1.trace``."
 msgstr ""
+"次のようにして ``--debug`` オプションをつけてテストを実行すると、関数の呼び出"
+"しなどが記録されます。この呼び出しは ``${MySQLの作業ディレクトリ}/${MySQLの"
+"バージョン}/mysql-test/var/log/mysqld.1.trace`` に格納されます。"
 
 # 0281c4b9b3b743cb908ef0a96e872997
 #: ../../../source/developer/debug.rst:73
@@ -596,22 +676,26 @@ msgid ""
 "When you add a new function, it would be a good idea to put it in the "
 "beginning of MRN_DBUG_ENTER_FUNCTION function and record its calls."
 msgstr ""
+"新しく関数を作成した場合は MRN_DBUG_ENTER_FUNCTION 関数の先頭に配置し、関数の"
+"呼び出しを記録するようにすると良いでしょう。"
 
 # 0b8de0247d414b3bbeab49cb7a204534
 #: ../../../source/developer/debug.rst:76
 msgid "Invoking GDB"
-msgstr ""
+msgstr "GDB を立ち上げる"
 
 # 4cd451c0c87349da949f43b912ba79d5
 #: ../../../source/developer/debug.rst:78
 msgid ""
 "By adding ``--gdb`` option, you can debug with GDB when you run tests. ::"
 msgstr ""
+"``--gdb`` オプションを指定することで、テストを実行する際に GDB を用いてデバッ"
+"グを行うことができます。 ::"
 
 # bec96b3a4da24349a7f6e2f94b549001
 #: ../../../source/developer/release.rst:4
 msgid "Release procedure (XXX not yet translated)"
-msgstr ""
+msgstr "リリース手順"
 
 # 19b46912051241d181e21a0c9d412454
 #: ../../../source/developer/release.rst:7
