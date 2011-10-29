@@ -11,8 +11,8 @@ Makefile
 Makefile.in
 cscope.out
 /aclocal.m4
-/apt/debian/
-/apt/ubuntu/
+/packages/apt/debian/
+/packages/apt/ubuntu/
 /autom4te.cache
 /config.guess
 /config.h
@@ -29,9 +29,9 @@ cscope.out
 /stamp-h1
 /src/scratch
 /libgroonga_storage_engine.a
-/rpm/*/*.spec
-/yum/fedora/
-/yum/centos/
+/packages/rpm/*/*.spec
+/packages/yum/fedora/
+/packages/yum/centos/
 /doc/ja/build/
 /doc/ja/doctrees/
 /doc/ja/html/

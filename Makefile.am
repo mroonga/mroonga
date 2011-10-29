@@ -17,7 +17,7 @@ libgroonga_storage_engine_a_CXXFLAGS  = $(AM_CFLAGS) $(MYSQL_CFLAGS)
 libgroonga_storage_engine_a_CFLAGS    = $(AM_CFLAGS) $(MYSQL_CFLAGS)
 libgroonga_storage_engine_a_SOURCES   = ha_mroonga.cc mrn_sys.c mrn_table.cc
 
-SUBDIRS = test apt rpm yum doc
+SUBDIRS = test packages doc
 
 EXTRA_DIST = plug.in
 
@@ -48,9 +48,9 @@ update-latest-release:
 	  misc/update-latest-release.rb				\
 	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)		\
 	  $(VERSION) $(NEW_RELEASE_DATE)			\
-	  rpm/fedora/mysql-groonga.spec.in			\
-	  rpm/centos/mysql-groonga.spec.in			\
-	  debian/changelog
+	  packages/rpm/fedora/mysql-groonga.spec.in		\
+	  packages/rpm/centos/mysql-groonga.spec.in		\
+	  packages/debian/changelog
 
 echo-mysql-source:
 	echo $(MYSQL_SOURCE)

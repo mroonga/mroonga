@@ -299,15 +299,15 @@ AC_CONFIG_FILES([
   test/sql/groonga_wrapper/Makefile
   test/sql/groonga_wrapper/r/Makefile
   test/sql/groonga_wrapper/t/Makefile
-  apt/Makefile
-  rpm/Makefile
-  rpm/centos/Makefile
-  rpm/fedora/Makefile
-  yum/Makefile
+  packages/Makefile
+  packages/rpm/Makefile
+  packages/rpm/centos/Makefile
+  pakcages/rpm/fedora/Makefile
+  packages/yum/Makefile
   doc/Makefile
   doc/ja/Makefile
 ])
 AC_OUTPUT([
-  rpm/centos/mysql-groonga.spec
-  rpm/fedora/mysql-groonga.spec
+  packages/rpm/centos/mysql-groonga.spec
+  packages/rpm/fedora/mysql-groonga.spec
 ])
