@@ -302,7 +302,7 @@ AC_CONFIG_FILES([
   packages/Makefile
   packages/rpm/Makefile
   packages/rpm/centos/Makefile
-  pakcages/rpm/fedora/Makefile
+  packages/rpm/fedora/Makefile
   packages/yum/Makefile
   doc/Makefile
   doc/ja/Makefile
