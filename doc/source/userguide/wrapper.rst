@@ -54,10 +54,6 @@ Yes, full text search works.
 How to get search score
 -----------------------
 
-.. note::
-
-   In version 1.0.0 or before, groonga storage engine used a special column named ``_score`` to get search score. From version 1.0.0, it follows MySQL's standard way to get search score.
-
 We often want to display more relevant results first in full text search. We use search score in such case.
 
 We can get search score by MySQL's standard way [#score]_, i.e. we use MATCH...AGAINST in one of columns in SELECT or ORDER BY.
@@ -161,7 +157,6 @@ TokenDelimit
 
 TokenDelimitNull
   It tokenise by splitting with a null character (\\0).
-  null文字（\\0）区切りでトークナイズする。
 
   "映画\\0ホラー\\0話題" will be tokenised as "映画", "ホラー", "話題".
 
