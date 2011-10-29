@@ -180,12 +180,12 @@ Install from the source code
 Here we explain how to install from the source code. If your environment is not listed above, you need to do so.
 
 Japanese morphological analysis system (MeCab)
-++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you want to use indexes of tokenizing of each morpheme for full text search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing groonga.
 
 Download
-++++++++
+^^^^^^^^
 
 To install the released version, download the tarball from `GitHub's download page <http://github.com/mroonga/mroonga/downloads>`_ .
 
@@ -196,14 +196,14 @@ To install the latest source code, clone the code from `GitHub <https://github.c
  % ./autogen.sh
 
 Requirements
-++++++++++++
+^^^^^^^^^^^^
 
 MySQL and groonga should be already installed.
 
 And MySQL's source code is also required to build groonga storage engine.
 
 Install MySQL
-+++++++++++++
+^^^^^^^^^^^^^
 
 Download the latest MySQL 5.5 source code, then build and install it.
 
@@ -218,7 +218,7 @@ And we assume that MySQL is installed in the following directory. ::
  /usr/local/mysql
 
 Install groonga
-+++++++++++++++
+^^^^^^^^^^^^^^^
 
 Build and install the latest groonga.
 
@@ -227,7 +227,7 @@ http://groonga.org/docs/
 Here we assume that libgroonga is installed in the standard location like /usr/lib etc.
 
 Build groonga storage engine
-++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Run configure script by specifying the location of MySQL source code with ``--with-mysql-source`` and the path of mysql_config command with ``--with-mysql-config``. ::
 
@@ -247,7 +247,7 @@ Then invoke "make". ::
  make
 
 Install groonga storage engine
-++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 By invoking "make install", ha_groonga.so will be installed in MySQL's plugin directory. ::
 

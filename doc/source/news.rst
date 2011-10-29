@@ -1,17 +1,17 @@
 .. highlightlang:: none
 
-Recent news
-===========
+News
+====
 
 .. _release-1-0-1:
 
-1.0.1 released - 2011/10/29
----------------------------
+Release 1.0.1 - 2011/10/29
+--------------------------
 
 The important changes in this release are the enhancement of geolocation search and the improvement of dynamic index modification in storage mode.
 
 Improvements
-++++++++++++
+^^^^^^^^^^^^
 
 * [storage mode][wrapper mode] support reopening a database by `flush tables`.
 * [wrapper mode] support geolocation index. (Only Point type can be stored in a column. Search using index is only available for MBRContains).
@@ -28,16 +28,16 @@ Improvements
 * support groonga 1.2.7. (1.2.6 or below are no longer supported).
 * support Ubuntu 11.10 Oneiric Ocelot.
 
-Bug fixes
-+++++++++
+Fixes
+^^^^^
 
 * fix a bug that we have no results if we specify '+' at the beginning of the query in boolean mode. [reported by Hajime Nishiyama]
 * [Fedora] fix package dependencies. [reported by Takahiro Nagai]
 * [Fedora] fix a problem that we get undefined symbol error when the plugin is loaded. [reported by Takahiro Nagai]
 * [storage mode] fix a bug that index will not be correctly created if `varchar` is used in a multi-column index. #1143 [reported by Takahiro Nagai]
 
-Acknowledgements
-++++++++++++++++
+Thanks
+^^^^^^
 
 * @yoshi_ken
 * Hajime Nishiyama
@@ -51,7 +51,7 @@ Acknowledgements
 初回リリースから約1年経って、初のメジャーリリース！
 
 改良
-++++
+^^^^
 
 * [ラッパーモード] drop index対応。 #1040
 * [ストレージモード] GEOMETRY対応。（ただし、カラムに保存できる型はPointのみ対応。インデックスを利用した位置検索はMBRContainsのみ対応。） #1041
@@ -68,7 +68,7 @@ Acknowledgements
 * groonga 1.2.6に対応。（1.2.5以下のサポートを削除。）
 
 修正
-++++
+^^^^
 
 * [Ubuntu] Lucid上でインストールエラーが発生する問題を修正。 （Isao Sugimotoさんが報告）
 * auto_incrementを使った場合にテキストデータが壊れる問題を修正。 （@zaubermaerchenさんが報告） #1072
@@ -76,7 +76,7 @@ Acknowledgements
 * MySQLと同じビルドオプションを使っていなかった問題を修正。 GitHub#4 (groongaのGitHubのIssues) （Tomohiro MITSUMUNEさんが報告）
 
 感謝
-++++
+^^^^
 
 * Isao Sugimotoさん
 * @zaubermaerchenさん
@@ -88,7 +88,7 @@ Acknowledgements
 -------------------------
 
 改良
-++++
+^^^^
 
 * MySQL 5.1.58に対応。
 * MySQL 5.6.3に対応。
@@ -99,7 +99,7 @@ Acknowledgements
 -------------------------
 
 改良
-++++
+^^^^
 
 * [deb] プラグインインストール時のエラーを無視するようにした。
 * [ラッパーモード] マルチカラムインデックスのサポート。 #1031
@@ -112,7 +112,7 @@ Acknowledgements
 -------------------------
 
 改良
-++++
+^^^^
 
 * 既存のストレージエンジンに全文検索機能を追加する :doc:`userguide/wrapper` の追加。
 * MySQL 5.5.13サポートの追加。 #984
@@ -120,12 +120,12 @@ Acknowledgements
 * Mac OS Xでのビルドをサポート。（@issmさんが報告）
 
 修正
-++++
+^^^^
 
 * 常にデバッグモードでビルドされる問題を修正。（@supistarさんが報告）
 
 感謝
-++++
+^^^^
 
 * @issmさん
 * @supistarさん
@@ -136,7 +136,7 @@ Acknowledgements
 -------------------------
 
 改良
-++++
+^^^^
 
 * auto_increment機能の追加。#670
 * 不必要な"duplicated _id on insert"というエラーメッセージを
@@ -149,7 +149,7 @@ Acknowledgements
 * Fedora 14サポートの削除。
 
 修正
-++++
+^^^^
 
 * ORDER BY LIMITの高速化が機能しないケースがある問題の修正。#845
 * デバッグビルド時のメモリリークを修正。
@@ -157,7 +157,7 @@ Acknowledgements
   と一緒に使うとクラッシュする問題を修正。
 
 感謝
-++++
+^^^^
 
 * Mitsuhiro Shibuyaさん
 * Hiroki Minetaさん
@@ -167,7 +167,7 @@ Acknowledgements
 -------------------------
 
 改良
-++++
+^^^^
 
 * "uninstall plugin"対応 #741
 * MariaDB対応 （かずひこさんが提案）
@@ -176,7 +176,7 @@ Acknowledgements
 * エラーメッセージの改良
 
 感謝
-++++
+^^^^
 
 * かずひこさん
 
@@ -184,7 +184,7 @@ Acknowledgements
 -------------------------
 
 改良
-++++
+^^^^
 
 * 全文検索のスコア取得機能の追加。
 * レコードIDへのアクセス機能の追加。
@@ -198,7 +198,7 @@ Acknowledgements
 * MySQL 5.5への対応。
 
 感謝
-++++
+^^^^
 
 * とみたまさひろさん
 
@@ -206,7 +206,7 @@ Acknowledgements
 -------------------------
 
 改良
-++++
+^^^^
 
 * エラーメッセージの出力を実装。
 * カラムの刈り込みの実装を強化。
@@ -215,12 +215,12 @@ Acknowledgements
 * ユーザガイドドキュメントの追加。
 
 変更
-++++
+^^^^
 
 * インデックス作成時にNORMALIZEフラグを付与。
 
 修正
-++++
+^^^^
 
 * LIMITなどを用いた場合にカーソルが正しくクローズされない問題の修正。
 
@@ -228,26 +228,26 @@ Acknowledgements
 -------------------------
 
 改良
-++++
+^^^^
 
 * packages.groonga.orgでのバイナリパッケージ配布開始。aptitude/yumによるインストールが可能に。
 * バイナリログの出力に対応。
 
 変更
-++++
+^^^^
 
 * 共有ライブラリの名前を"libgroonga_storage_engine.so"から"ha_groonga.so"に変更。
 * configureオプションの ``--with-mysql`` および ``--libdir`` を削除。
 * configureオプションの ``--with-mysql-source`` および ``--with-mysql-config`` を追加。
 
 修正
-++++
+^^^^
 
 * ヘッダファイルのincludeパスを修正。
 * "SHOW CREATE TABLE"に出力されるENGINE名を修正。
 
 感謝
-++++
+^^^^
 
 * とみたまさひろさん
 
