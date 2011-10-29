@@ -18,8 +18,8 @@ For the release history: :doc:`news`
    reference
    developer
 
-Indices and tables
-==================
+Indices
+=======
 
 * :ref:`genindex`
 * :ref:`modindex`
