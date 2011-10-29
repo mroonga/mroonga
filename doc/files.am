@@ -4,6 +4,10 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/developer.rst \
 	$(top_srcdir)/doc/source/developer/debug.rst \
 	$(top_srcdir)/doc/source/developer/release.rst \
+	$(top_srcdir)/doc/source/images/storage-mode.png \
+	$(top_srcdir)/doc/source/images/storage-mode.svg \
+	$(top_srcdir)/doc/source/images/wrapper-mode.png \
+	$(top_srcdir)/doc/source/images/wrapper-mode.svg \
 	$(top_srcdir)/doc/source/index.rst \
 	$(top_srcdir)/doc/source/install.rst \
 	$(top_srcdir)/doc/source/news.rst \
@@ -33,6 +37,10 @@ source_files_relative_from_doc_dir = \
 	source/developer.rst \
 	source/developer/debug.rst \
 	source/developer/release.rst \
+	source/images/storage-mode.png \
+	source/images/storage-mode.svg \
+	source/images/wrapper-mode.png \
+	source/images/wrapper-mode.svg \
 	source/index.rst \
 	source/install.rst \
 	source/news.rst \
@@ -102,6 +110,8 @@ mo_files_relative_from_locale_dir = \
 
 html_files_relative_from_locale_dir = \
 	html/.buildinfo \
+	html/_images/storage-mode.png \
+	html/_images/wrapper-mode.png \
 	html/_sources/characteristic.txt \
 	html/_sources/developer.txt \
 	html/_sources/developer/debug.txt \

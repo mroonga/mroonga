@@ -48,7 +48,7 @@ Since all functions of storage engine are realised with groonga, aggregations ar
 
 The structure of the storage mode is the following. You use it instead of existing storage engines like MyISAM or InnoDB
 
-.. figure:: ../../images/storage-mode.png
+.. figure:: /images/storage-mode.png
    :alt: storage mode
    :align: center
 
@@ -59,7 +59,7 @@ The structure of the wrapper mode is the following. Full text search related ope
 Groonga storage engine is located between SQL Handler that processes SQL and an existing storage engine, thus all data goes through groonga storage engine.
 With this way, full text search indexing etc. are done transparently.
 
-.. figure:: ../../images/wrapper-mode.png
+.. figure:: /images/wrapper-mode.png
    :alt: wrapper mode
    :align: center
 
