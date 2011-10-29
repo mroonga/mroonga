@@ -35,10 +35,11 @@ cscope.out
 /doc/locale/*/doctrees/
 /doc/locale/*/html/
 /doc/locale/*/man/
+/doc/locale/*/*-build-stamp
 /doc/locale/*/LC_MESSAGES/*.pot
 /doc/locale/*/LC_MESSAGES/*.mo
 /doc/locale/*/LC_MESSAGES/doctrees/
-/doc/locale/*/*-build-stamp
+/doc/locale/*/LC_MESSAGES/*-build-stamp
 /doc/sphinx/
 /doc/ja/build/
 /doc/ja/doctrees/

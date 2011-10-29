@@ -1,0 +1,271 @@
+/* -*- css -*- */
+/*
+ * groonga.css_t
+ * ~~~~~~~~~~~~~
+ *
+ * Sphinx stylesheet -- groonga theme.
+ *
+ * :copyright: Copyright 2011 by the groonga team, see AUTHORS.
+ * :license: LGPLv2, see LICENSE for details.
+ *
+ */
+
+@import url("default.css");
+
+a:link,
+div.sphinxsidebar a:link,
+div.sphinxsidebar a:visited
+{
+    color: #992e1d;
+}
+
+a:visited
+{
+    color: #f6872e;
+}
+
+a:active,
+div.sphinxsidebar a:active,
+a:hover,
+div.sphinxsidebar a:hover
+{
+    color: #fff;
+    background-color: #992e1d;
+    text-decoration: none;
+}
+
+div.header
+{
+    /* background: url(header-background.png) repeat-y #ffe9c7; */
+}
+
+div.header h1.title
+{
+    background: url(logo.png) no-repeat;
+    background-position: 10px 25px;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0.1em 0.1em 0.1em rgb(200, 200, 200);
+    margin: 0;
+    margin-right: 360px;
+    padding: 0px;
+    height: 125px;
+}
+
+div.header h1.title a,
+div.header h1.title a:link,
+div.header h1.title a:visited
+{
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+div.header h1.title a
+{
+    display: block;
+    height: 105px;
+    position: relative;
+    top: 20px;
+    left: 0;
+}
+
+div.header h1.title span
+{
+    display: block;
+    padding-left: 260px;
+    margin-bottom: 2px;
+}
+
+div.header h1.title span.project,
+div.header h1.title span.separator
+{
+    display: none;
+}
+
+div.header h1.title span.description
+{
+    padding-top: 10px;
+}
+
+div.header div.facebook-buttons
+{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: #992e1d 2px solid;
+    background-color: white;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    width: 320px;
+    height: 90px;
+    overflow: hidden;
+}
+
+div.header div.other-language-links
+{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    /* width: 50px; */
+}
+
+div.header div.other-language-links ul,
+div.header div.other-language-links li
+{
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+header div.other-language-links a img
+{
+    border-style: none;
+}
+
+div.bodywrapper
+{
+    background-color: #fff5e5;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+div.body
+{
+    background-color: #fff5e5;
+    padding: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+div.body h1,
+div.body h2,
+div.body h3,
+div.body h4,
+div.body h5,
+div.body h6
+{
+    margin: 0;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+    border-bottom: 1px solid #992e1d;
+    color: #992e1d;
+    font-weight: bold;
+}
+
+div.related
+{
+    border-bottom: 1px solid #992e1d;
+    font-weight: bold;
+    background: #f6872e url(navigation-bar.png) no-repeat;
+    line-height: 36px;
+}
+
+div.related ul
+{
+    padding-left: 60px;
+}
+
+div.document
+{
+    position: relative;
+}
+
+div.document div.body img
+{
+    border: 1px solid #AAAAAA;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.5em;
+}
+
+div.sphinxsidebar
+{
+    position: absolute;
+    top: 0;
+    font-size: smaller;
+}
+
+div.sphinxsidebarwrapper
+{
+    padding-right: 0;
+}
+
+div.sphinxsidebar h3
+{
+    color: #fff;
+    background: url(menu-header.png) right top no-repeat;
+    margin: 0 0 10px 0;
+    padding: 0;
+    padding-left: 10px;
+    line-height: 36px;
+    font-weight: bold;
+}
+
+div.sphinxsidebar h3 a:link,
+div.sphinxsidebar h3 a:visited
+{
+    color: #fff;
+}
+
+div.sphinxsidebar h4
+{
+    font-size: small;
+}
+
+div.sphinxsidebar h4:before
+{
+    content: ">> ";
+    color: #53aa24;
+}
+
+div.sphinxsidebar ul,
+div.sphinxsidebar ul ul
+{
+    list-style-type: none;
+}
+
+div.sphinxsidebar li ul
+{
+    margin-top: 4px;
+}
+
+div.sphinxsidebar li ul li
+{
+    margin-bottom: 4px;
+}
+
+div.sphinxsidebar p.topless:before,
+div.sphinxsidebar ul li:before
+{
+    content: "> ";
+    font-weight: bold;
+    color: #2fa52f;
+}
+
+div.sphinxsidebar p.searchtip
+{
+    margin-right: 10px;
+}
+
+div.footer
+{
+    background: url(footer-bar.png) repeat-x scroll center top;
+}
