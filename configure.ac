@@ -206,6 +206,14 @@ AC_CHECK_GCUTTER(>= $REQUIRED_MINIMUM_CUTTER_VERSION)
 [ac_cv_use_cutter="no"])
 AM_CONDITIONAL([WITH_CUTTER], [test "$ac_cv_use_cutter" != "no"])
 
+# For mroonga.github.com
+AC_ARG_WITH(mroonga-github-com-path,
+            [AS_HELP_STRING([--with-mroonga-github-com-path=PATH],
+            [specify mroonga.github.com path to update mroonga.github.com.])],
+            [MROONGA_GITHUB_COM_PATH="$withval"],
+            [MROONGA_GITHUB_COM_PATH=""])
+AC_SUBST(MROONGA_GITHUB_COM_PATH)
+
 # For Debian package release
 AC_ARG_WITH(rsync-path,
             [AS_HELP_STRING([--with-rsync-path=PATH],
