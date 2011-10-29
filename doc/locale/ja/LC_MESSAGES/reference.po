@@ -7,71 +7,71 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 21:56\n"
-"PO-Revision-Date: 2011-10-29 21:57+0900\n"
+"POT-Creation-Date: 2011-10-29 22:10\n"
+"PO-Revision-Date: 2011-10-29 23:32+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 # eb5b84533dd943fb855c37b10bfb31f8
 #: ../../../source/reference.rst:4
 msgid "Reference"
-msgstr ""
+msgstr "リファレンス"
 
 # 8148232adadd435fb97e7442305eaac4
 #: ../../../source/reference.rst:7
 msgid "List of available SQL commands"
-msgstr ""
+msgstr "利用可能なSQLコマンドの一覧"
 
 # e6f4479a7a274b678d5dc9fa4bb9a87f
 #: ../../../source/reference.rst:9
 msgid ""
 "You can see many SQL examples in the following directory of groonga storage "
 "engine's source tree. ::"
-msgstr ""
+msgstr "groongaストレージエンジンのソースコードの以下のディレクトリにSQL実行サンプルファイルがたくさんあります。 ::"
 
 # 9ea631dd4a854d3d91f3b1cc6ea3f612
 #: ../../../source/reference.rst:13
 msgid "List of files ::"
-msgstr ""
+msgstr "ファイル一覧 ::"
 
 # 2b1be9bdd52f4ee78912fd53b5b57027
 #: ../../../source/reference.rst:31
 msgid "All SQL statements written there are currently available ones."
-msgstr ""
+msgstr "ここに記述されているSQL文が現在利用可能なSQL文となります。"
 
 # aa2d9a41e3404293a897248663b944eb
 #: ../../../source/reference.rst:33
 msgid ""
 "(Or we can say that any SQL statements that are not written there are not "
 "supported.)"
-msgstr ""
+msgstr "※逆に言うとここに記述されていないSQL文の動作はサポートしておりません。"
 
 # e392b3fe37ec4107a5d9a9bd57861b2a
 #: ../../../source/reference.rst:36
 msgid "List of server variables"
-msgstr ""
+msgstr "サーバ変数の一覧"
 
 # 784fa391908e482bb3be973ad03348ba
 #: ../../../source/reference.rst:38
 msgid "No server variable is added for now."
-msgstr ""
+msgstr "今のところ独自に追加されたサーバ変数はありません。"
 
 # a1797cd59fdb403f950d338e4ed6f95d
 #: ../../../source/reference.rst:41
 msgid "List of status variables"
-msgstr ""
+msgstr "ステータス変数の一覧"
 
 # 23e55d2e20084940b30e3efb7d5fb7af
 #: ../../../source/reference.rst:43
 msgid ""
 "Here are the explanations of status variables that are introduced by groonga "
 "storage engine."
-msgstr ""
+msgstr "独自に追加されたステータス変数を説明します。"
 
 # 055712d752cb4588b105099473cabd16
 #: ../../../source/reference.rst:46
@@ -83,7 +83,7 @@ msgstr ""
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
-msgstr ""
+msgstr "行カウント高速化機能が動作する度にカウントアップされます。スキーマ/SQLチューニングを行って行カウント高速化機能を利用できるようにした際の動作確認に利用できます。"
 
 # 707a3368bec3453bb3ffd2bfeb919bb6
 #: ../../../source/reference.rst:52
@@ -95,4 +95,4 @@ msgstr ""
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
-msgstr ""
+msgstr "ORDER BY LIMIT 高速化機能が動作する度にカウントアップされます。スキーマ/SQLチューニングを行って ORDER BY LIMIT 高速化機能を利用できるようにした際の動作確認に利用できます。"
