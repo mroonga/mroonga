@@ -7,32 +7,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 21:56\n"
-"PO-Revision-Date: 2011-10-29 21:56+0900\n"
+"POT-Creation-Date: 2011-10-29 22:10\n"
+"PO-Revision-Date: 2011-10-29 23:07+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 # e4d644099ee949d6a75f00a94541ac5f
 #: ../../../source/install.rst:4
 msgid "Installation Guide"
-msgstr ""
+msgstr "インストールガイド"
 
 # a4812128cf0e474fadcbb5780e246c93
 #: ../../../source/install.rst:6
 msgid ""
 "If you use binary packages, MySQL related packages will be also installed "
 "when you install groonga storage engine package."
-msgstr ""
+msgstr "バイナリパッケージを使用したインストールではgroonga関連パッケージと共にMySQL関連のパッケージもインストールされます。"
 
 # 0559e6c40ee14878ac91f0e1f68c08e0
 #: ../../../source/install.rst:8
 msgid "Here we explain how to install for each environment."
-msgstr ""
+msgstr "それぞれの環境毎にインストール方法を説明します。"
 
 # f436cba21e0d45e284d47464aba3b344
 #: ../../../source/install.rst:11
@@ -54,7 +54,7 @@ msgstr ""
 #: ../../../source/install.rst:135 ../../../source/install.rst:154
 #: ../../../source/install.rst:169
 msgid "amd64 packages only. i386 packages are not provided."
-msgstr ""
+msgstr "amd64版のみ提供でi386版は未提供。"
 
 # 70ae82432f824376a519279ce3257e76
 # 3af182f77aec433bbe508917e1424605
@@ -83,7 +83,7 @@ msgstr ""
 #: ../../../source/install.rst:143 ../../../source/install.rst:158
 #: ../../../source/install.rst:171
 msgid "Install ::"
-msgstr ""
+msgstr "インストール::"
 
 # e728eb065295457c8ad2f62ba044c31b
 #: ../../../source/install.rst:29
@@ -106,7 +106,7 @@ msgstr ""
 #: ../../../source/install.rst:73 ../../../source/install.rst:95
 #: ../../../source/install.rst:117
 msgid "You need to enable the universe section in Ubuntu's software sources."
-msgstr ""
+msgstr "Ubuntu本家のuniverseセクションもインストール対象としておくこと"
 
 # 2acf395f27734d2c9bec0a551eb2c86d
 #: ../../../source/install.rst:87
@@ -126,12 +126,12 @@ msgstr ""
 # b0b2bf8e29c248f7b9bd74e7c27f2f68
 #: ../../../source/install.rst:137
 msgid "CentOS 5's MySQL packages should be removed beforehand if installed."
-msgstr ""
+msgstr "既にディストリビューション由来のMySQLパッケージがインストール済みの場合には事前に削除する必要があります。"
 
 # 8f51f5ab5c0e430d9278f423cf8e0d43
 #: ../../../source/install.rst:139
 msgid "Remove existing MySQL packages ::"
-msgstr ""
+msgstr "既存のMySQLパッケージを削除::"
 
 # a74bf38bece449748ce88a4f5bccaacd
 #: ../../../source/install.rst:150
@@ -143,7 +143,7 @@ msgstr ""
 msgid ""
 "In CentOS 6, unlike in CentOS 5, we use CentOS's MySQL packages (version 5.1."
 "x). So you don't need to remove CentOS's MySQL packages."
-msgstr ""
+msgstr "CentOS 6用のパッケージはCentOS 5用のパッケージと違い、ディストリビューション由来のMySQLパッケージ（MySQL 5.1系）を利用します。そのため、ディストリビューション由来のMySQLを削除する必要はありません。"
 
 # 1b8e348a165d4381a9725926c274a6a2
 #: ../../../source/install.rst:165
@@ -153,19 +153,19 @@ msgstr ""
 # eb4280f85ca14d08ad5ea6857f1bf4d1
 #: ../../../source/install.rst:178
 msgid "Install from the source code"
-msgstr ""
+msgstr "ソースコードからのインストール"
 
 # 55aafca095344a3db2c5a63c24daabf2
 #: ../../../source/install.rst:180
 msgid ""
 "Here we explain how to install from the source code. If your environment is "
 "not listed above, you need to do so."
-msgstr ""
+msgstr "ソースコードからインストールする方法を説明します。パッケージがない環境ではソースコードからインストールすることになります。"
 
 # 0b4fe010015b445e8611b2e1705fa6cc
 #: ../../../source/install.rst:183
 msgid "Japanese morphological analysis system (MeCab)"
-msgstr ""
+msgstr "形態素解析(MeCab)について"
 
 # 3b50cd9745f54693abb064d6e6e4952b
 #: ../../../source/install.rst:185
@@ -173,19 +173,19 @@ msgid ""
 "If you want to use indexes of tokenizing of each morpheme for full text "
 "search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing "
 "groonga."
-msgstr ""
+msgstr "形態素単位でトークナイズした全文検索索引を使用したい場合は、groongaのインストール前に `MeCab <http://mecab.sourceforge.net/>`_ をインストールしてください。"
 
 # 933b523f65cb43389934af2f564efeb8
 #: ../../../source/install.rst:188
 msgid "Download"
-msgstr ""
+msgstr "ダウンロード"
 
 # 1a3637100ab344d0b956e72597eff2fc
 #: ../../../source/install.rst:190
 msgid ""
 "To install the released version, download the tarball from `GitHub's "
 "download page <http://github.com/mroonga/mroonga/downloads>`_ ."
-msgstr ""
+msgstr "リリース版のソースコードを利用する場合は `GitHubのダウンロードページ <http://github.com/mroonga/mroonga/downloads>`_ からtarballをダウンロードしてください。"
 
 # ea789102f4e24e4b949454212d0be502
 #: ../../../source/install.rst:192
@@ -194,33 +194,33 @@ msgid ""
 "github.com/mroonga/mroonga/>`_ and invoke `./autogen.sh` (GNU Autotools are "
 "required). This way is aimed at skilled developpers. If not, we recommend "
 "using the tarball. ::"
-msgstr ""
+msgstr "最新のソースコードを利用する場合は `GitHub <https://github.com/mroonga/mroonga/>`_ からcloneして `./autogen.sh` を実行してください。（GNU Autotoolsが必要です。）この方法は開発に慣れた方向けなので、そうでない方はtarballを使うことをお勧めします。::"
 
 # 5285082af7bf47c5bdf817e169038f9a
 #: ../../../source/install.rst:199
 msgid "Requirements"
-msgstr ""
+msgstr "前提条件"
 
 # ae84916b53b34dec8129116c58cded35
 #: ../../../source/install.rst:201
 msgid "MySQL and groonga should be already installed."
-msgstr ""
+msgstr "MySQLおよびgroongaが既にインストールされている必要があります。"
 
 # 9c13fe14534f450ea2acac74443bf8d6
 #: ../../../source/install.rst:203
 msgid ""
 "And MySQL's source code is also required to build groonga storage engine."
-msgstr ""
+msgstr "またgroongaストレージエンジンをビルドするためにはMySQLのソースコードも必要です。"
 
 # f9f82fc66af84864b5dc1acc1ab1013d
 #: ../../../source/install.rst:206
 msgid "Install MySQL"
-msgstr ""
+msgstr "MySQLのインストール"
 
 # e59b18960978411096e85c3db30345de
 #: ../../../source/install.rst:208
 msgid "Download the latest MySQL 5.5 source code, then build and install it."
-msgstr ""
+msgstr "MySQL 5.5最新版のソースコードをダウンロードし、ビルド＆インストールして下さい。"
 
 # 896a70ffc7004576b2220a9186fec8f8
 #: ../../../source/install.rst:210
@@ -232,39 +232,39 @@ msgstr ""
 msgid ""
 "Here we assume that we use mysql-5.5.17 and its source code is extracted in "
 "the following directory. ::"
-msgstr ""
+msgstr "mysql-5.5.17を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::"
 
 # aa0cbc7b42594bb9a095979846735541
 #: ../../../source/install.rst:216
 msgid "And we assume that MySQL is installed in the following directory. ::"
-msgstr ""
+msgstr "MySQLのバイナリが以下にインストールされているものと仮定します。 ::"
 
 # 96faa87e06744aba901adba70eef342c
 #: ../../../source/install.rst:221
 msgid "Install groonga"
-msgstr ""
+msgstr "groongaのインストール"
 
 # 6771d3ea2eba486f8eba6979cd8afc18
 #: ../../../source/install.rst:223
 msgid "Build and install the latest groonga."
-msgstr ""
+msgstr "groongaの最新版をビルド＆インストールして下さい。"
 
 # af58908797054cb7ae5069cd064f20f4
 #: ../../../source/install.rst:225
 msgid "http://groonga.org/docs/"
-msgstr ""
+msgstr "http://groonga.org/ja/docs/"
 
 # d4ffd94e45c2420d86aea88f8e491e3c
 #: ../../../source/install.rst:227
 msgid ""
 "Here we assume that libgroonga is installed in the standard location like /"
 "usr/lib etc."
-msgstr ""
+msgstr "ここでは/usr/libなどの標準パスにlibgroongaがインストールされているものと仮定します。"
 
 # d33bfb3a9e984f5d9de8aabeb90ed7a2
 #: ../../../source/install.rst:230
 msgid "Build groonga storage engine"
-msgstr ""
+msgstr "groongaストレージエンジンのビルド"
 
 # 527d0a85c7b945a18ab69dc223aec11c
 #: ../../../source/install.rst:232
@@ -272,7 +272,7 @@ msgid ""
 "Run configure script by specifying the location of MySQL source code with "
 "``--with-mysql-source`` and the path of mysql_config command with ``--with-"
 "mysql-config``. ::"
-msgstr ""
+msgstr "以下のように ``--with-mysql-source`` でMySQLソースコードディレクトリ、 ``--with-mysql-config`` でmysql_configコマンドのパスを指定してconfigureを実行します。 ::"
 
 # ab65988d487640da94c8554c6f71a66d
 #: ../../../source/install.rst:238
@@ -280,52 +280,52 @@ msgid ""
 "If groonga is not installed in the standard location like /usr/lib, you need "
 "to specify its location by PKG_CONFIG_PATH. For example, if groonga is "
 "installed with ``--prefix=$HOME/local``, do like the following ::"
-msgstr ""
+msgstr "groongaを/usr/libなど標準のパス以外にインストールした場合はPKG_CONFIG_PATHを指定する必要があります。例えば、ｰｰprefix=$HOME/localでgroongaをインストールした場合は以下のようにします。::"
 
 # a8476870a0f940368386c4eebe428920
 #: ../../../source/install.rst:245
 msgid "Then invoke \"make\". ::"
-msgstr ""
+msgstr "その後、\"make\"を実行します。 ::"
 
 # 53473a08db3c44b1bc551e06cd366cad
 #: ../../../source/install.rst:250
 msgid "Install groonga storage engine"
-msgstr ""
+msgstr "groongaストレージエンジンのインストール"
 
 # e02a752f95954d1280465c2ad245da73
 #: ../../../source/install.rst:252
 msgid ""
 "By invoking \"make install\", ha_groonga.so will be installed in MySQL's "
 "plugin directory. ::"
-msgstr ""
+msgstr "\"make install\"を実行するとMySQLのプラグイン用ディレクトリにha_groonga.soが配置されます。 ::"
 
 # 425b0856bf4d48308a0a810794d33007
 #: ../../../source/install.rst:256
 msgid ""
 "Then start mysqld, connect to it by mysql client, and install it by "
 "\"INSTALL PLUGIN\" command. ::"
-msgstr ""
+msgstr "その後、mysqldを起動し、mysqlクライアントで接続して\"INSTALL PLUGIN\"コマンドでインストールします。 ::"
 
 # 31909deb45384ecfa3bdb1b56246e1a7
 #: ../../../source/install.rst:260
 msgid ""
 "If \"groonga\" is displayed in \"SHOW ENGINES\" command result like below, "
 "groonga storage engine is well installed. ::"
-msgstr ""
+msgstr "以下のように\"SHOW ENGINES\"コマンドで\"groonga\"が表示されればgroongaストレージエンジンのインストールは完了です。 ::"
 
 # 42345ab063fc4290b4b136b1cbbf50b8
 #: ../../../source/install.rst:275
 msgid "Next install UDF (User-Defined Function)."
-msgstr ""
+msgstr "続いてUDF(ユーザ定義関数)をインストールします。"
 
 # 22a7c9d8c50649ad9cc2dd307ed5adbf
 #: ../../../source/install.rst:277
 msgid ""
 "To get the record ID assigned by groonga in INSERT, install "
 "last_insert_grn_id function."
-msgstr ""
+msgstr "INSERTを行った際にgroongaにより割当てられるレコードIDを取得するためのlast_insert_grn_id関数をインストールします。"
 
 # bca520b75e934ca4a195a154dff6a1fb
 #: ../../../source/install.rst:279
 msgid "Invoke CREATE FUNCTION like the following. ::"
-msgstr ""
+msgstr "以下のようにCREATE FUNCTIONを実行します。 ::"
