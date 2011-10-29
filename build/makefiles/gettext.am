@@ -1,0 +1,49 @@
+include $(top_srcdir)/doc/files.am
+include $(top_srcdir)/build/makefiles/sphinx-build.am
+
+if ENABLE_DOCUMENT
+BUILT_SOURCES +=				\
+	$(mo_files)
+endif
+
+EXTRA_DIST +=					\
+	$(po_files)				\
+	$(mo_files)
+
+SUFFIXES += .pot .po .mo
+
+.PHONY: gettext update build
+
+all:
+
+.pot.po:
+	msgmerge --quiet --update --sort-by-file $@ $<
+.po.mo:
+	msgfmt -o $@ $<
+
+update: pot-build-stamp $(po_files)
+build: $(mo_files)
+
+html-local: build
+man: build
+pdf-local: build
+
+gettext: sphinx-ensure-updated
+	rm *.pot || true
+	$(SPHINX_BUILD_COMMAND) -d doctrees -b gettext $(ALLSPHINXOPTS) .
+	xgettext --language Python --output conf.pot ../../../source/conf.py
+
+init: gettext
+	for pot in *.pot; do							\
+	  po=`basename $${pot} | sed -e 's,pot$$,po,g'`;			\
+	  test "$(FORCE_INIT)" = "yes" -o ! -f $${po} &&			\
+	    msginit --input=$${pot} --output-file=$${po} --locale=$(LOCALE);	\
+	  :;									\
+	done
+
+reinit:
+	$(MAKE) FORCE_INIT=yes init
+
+pot-build-stamp: $(absolute_source_files)
+	$(MAKE) gettext
+	@touch $@

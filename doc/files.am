@@ -1,0 +1,152 @@
+absolute_source_files = \
+	$(top_srcdir)/doc/source/characteristic.rst \
+	$(top_srcdir)/doc/source/conf.py \
+	$(top_srcdir)/doc/source/developer.rst \
+	$(top_srcdir)/doc/source/developer/debug.rst \
+	$(top_srcdir)/doc/source/developer/release.rst \
+	$(top_srcdir)/doc/source/index.rst \
+	$(top_srcdir)/doc/source/install.rst \
+	$(top_srcdir)/doc/source/news.rst \
+	$(top_srcdir)/doc/source/reference.rst \
+	$(top_srcdir)/doc/source/userguide.rst \
+	$(top_srcdir)/doc/source/userguide/storage.rst \
+	$(top_srcdir)/doc/source/userguide/wrapper.rst \
+	$(NULL)
+
+absolute_theme_files = \
+	$(top_srcdir)/doc/themes/groonga/layout.html \
+	$(top_srcdir)/doc/themes/groonga/static/favicon.ico \
+	$(top_srcdir)/doc/themes/groonga/static/footer-bar.png \
+	$(top_srcdir)/doc/themes/groonga/static/groonga.css_t \
+	$(top_srcdir)/doc/themes/groonga/static/header-background.png \
+	$(top_srcdir)/doc/themes/groonga/static/jp.png \
+	$(top_srcdir)/doc/themes/groonga/static/logo.png \
+	$(top_srcdir)/doc/themes/groonga/static/menu-header.png \
+	$(top_srcdir)/doc/themes/groonga/static/navigation-bar.png \
+	$(top_srcdir)/doc/themes/groonga/static/us.png \
+	$(top_srcdir)/doc/themes/groonga/theme.conf \
+	$(NULL)
+
+source_files_relative_from_doc_dir = \
+	source/characteristic.rst \
+	source/conf.py \
+	source/developer.rst \
+	source/developer/debug.rst \
+	source/developer/release.rst \
+	source/index.rst \
+	source/install.rst \
+	source/news.rst \
+	source/reference.rst \
+	source/userguide.rst \
+	source/userguide/storage.rst \
+	source/userguide/wrapper.rst \
+	$(NULL)
+
+theme_files_relative_from_doc_dir = \
+	themes/groonga/layout.html \
+	themes/groonga/static/favicon.ico \
+	themes/groonga/static/footer-bar.png \
+	themes/groonga/static/groonga.css_t \
+	themes/groonga/static/header-background.png \
+	themes/groonga/static/jp.png \
+	themes/groonga/static/logo.png \
+	themes/groonga/static/menu-header.png \
+	themes/groonga/static/navigation-bar.png \
+	themes/groonga/static/us.png \
+	themes/groonga/theme.conf \
+	$(NULL)
+
+po_files = \
+	characteristic.po \
+	conf.po \
+	developer.po \
+	index.po \
+	install.po \
+	news.po \
+	reference.po \
+	userguide.po \
+	$(NULL)
+
+po_files_relative_from_locale_dir = \
+	LC_MESSAGES/characteristic.po \
+	LC_MESSAGES/conf.po \
+	LC_MESSAGES/developer.po \
+	LC_MESSAGES/index.po \
+	LC_MESSAGES/install.po \
+	LC_MESSAGES/news.po \
+	LC_MESSAGES/reference.po \
+	LC_MESSAGES/userguide.po \
+	$(NULL)
+
+mo_files = \
+	characteristic.mo \
+	conf.mo \
+	developer.mo \
+	index.mo \
+	install.mo \
+	news.mo \
+	reference.mo \
+	userguide.mo \
+	$(NULL)
+
+mo_files_relative_from_locale_dir = \
+	LC_MESSAGES/characteristic.mo \
+	LC_MESSAGES/conf.mo \
+	LC_MESSAGES/developer.mo \
+	LC_MESSAGES/index.mo \
+	LC_MESSAGES/install.mo \
+	LC_MESSAGES/news.mo \
+	LC_MESSAGES/reference.mo \
+	LC_MESSAGES/userguide.mo \
+	$(NULL)
+
+html_files_relative_from_locale_dir = \
+	html/.buildinfo \
+	html/_sources/characteristic.txt \
+	html/_sources/developer.txt \
+	html/_sources/developer/debug.txt \
+	html/_sources/developer/release.txt \
+	html/_sources/index.txt \
+	html/_sources/install.txt \
+	html/_sources/news.txt \
+	html/_sources/reference.txt \
+	html/_sources/userguide.txt \
+	html/_sources/userguide/storage.txt \
+	html/_sources/userguide/wrapper.txt \
+	html/_static/ajax-loader.gif \
+	html/_static/basic.css \
+	html/_static/comment-bright.png \
+	html/_static/comment-close.png \
+	html/_static/comment.png \
+	html/_static/default.css \
+	html/_static/doctools.js \
+	html/_static/down-pressed.png \
+	html/_static/down.png \
+	html/_static/file.png \
+	html/_static/jquery.js \
+	html/_static/minus.png \
+	html/_static/plus.png \
+	html/_static/pygments.css \
+	html/_static/searchtools.js \
+	html/_static/sidebar.js \
+	html/_static/underscore.js \
+	html/_static/up-pressed.png \
+	html/_static/up.png \
+	html/_static/websupport.js \
+	html/characteristic.html \
+	html/developer.html \
+	html/developer/debug.html \
+	html/developer/release.html \
+	html/genindex.html \
+	html/index.html \
+	html/install.html \
+	html/news.html \
+	html/objects.inv \
+	html/reference.html \
+	html/search.html \
+	html/searchindex.js \
+	html/userguide.html \
+	html/userguide/storage.html \
+	html/userguide/wrapper.html \
+	$(NULL)
+

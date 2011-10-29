@@ -32,6 +32,13 @@ cscope.out
 /packages/rpm/*/*.spec
 /packages/yum/fedora/
 /packages/yum/centos/
+/doc/locale/*/doctrees/
+/doc/locale/*/html/
+/doc/locale/*/man/
+/doc/locale/*/LC_MESSAGES/*.pot
+/doc/locale/*/LC_MESSAGES/doctrees/
+/doc/locale/*/*-build-stamp
+/doc/sphinx/
 /doc/ja/build/
 /doc/ja/doctrees/
 /doc/ja/html/

@@ -1,0 +1,25 @@
+# You can set these variables from the command line.
+DOCTREES_BASE = doctrees
+
+SPHINXOPTS    =
+PAPER         =
+
+# Internal variables.
+SOURCE_DIR      = $(abs_top_srcdir)/doc/source
+PAPEROPT_a4     = -D latex_paper_size=a4
+PAPEROPT_letter = -D latex_paper_size=letter
+ALLSPHINXOPTS   = -E $(SPHINXOPTS) $(SOURCE_DIR)
+
+SPHINX_DIR = $(abs_top_builddir)/doc/sphinx
+SPHINX_BUILD = $(SPHINX_DIR)/sphinx-build.py
+SPHINX_BUILD_COMMAND = VERSION="$(VERSION)" LOCALE="$(LOCALE)" PYTHONPATH="$(SPHINX_DIR):$$PYTHONPATH" python $(SPHINX_BUILD)
+
+.PHONY: sphinx-ensure-updated
+
+$(SPHINX_BUILD):
+	$(HG) clone https://bitbucket.org/birkenfeld/sphinx $(SPHINX_DIR)
+
+sphinx-ensure-updated: $(SPHINX_BUILD)
+	if ! $(SPHINX_BUILD_COMMAND) 2>&1 | head -1 | grep v1.1 -q > /dev/null; then					\
+	  $(HG) pull $(SPHINX_DIR);						\
+	fi
