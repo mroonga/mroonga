@@ -17,7 +17,11 @@ libgroonga_storage_engine_a_CXXFLAGS  = $(AM_CFLAGS) $(MYSQL_CFLAGS)
 libgroonga_storage_engine_a_CFLAGS    = $(AM_CFLAGS) $(MYSQL_CFLAGS)
 libgroonga_storage_engine_a_SOURCES   = ha_mroonga.cc mrn_sys.c mrn_table.cc
 
-SUBDIRS = test packages doc
+SUBDIRS =					\
+	test					\
+	doc					\
+	tools					\
+	packages
 
 EXTRA_DIST = plug.in
 
@@ -51,6 +55,27 @@ update-latest-release:
 	  packages/rpm/fedora/mysql-groonga.spec.in		\
 	  packages/rpm/centos/mysql-groonga.spec.in		\
 	  packages/debian/changelog
+
+update-document:
+	@if test -z "$(MROONGA_GITHUB_COM_PATH)"; then			\
+	  echo "\$$(MROONGA_GITHUB_COM_PATH) is missing";		\
+	  echo "add --with-mroonga-github-com-path in configure";	\
+	  exit 1;							\
+	fi
+	rm -rf tmp-doc
+	mkdir tmp-doc
+	(cd doc && $(MAKE) clean-html)
+	(cd doc && $(MAKE) install docdir=$(abs_srcdir)/tmp-doc/install)
+	ruby $(srcdir)/tools/prepare-sphinx-html.rb tmp-doc/install tmp-doc/dist
+	rm -rf $(MROONGA_GITHUB_COM_PATH)/docs
+	mv tmp-doc/dist/en $(MROONGA_GITHUB_COM_PATH)/docs
+	for locale in `cd tmp-doc/dist; echo *`; do		\
+	  dest_base_dir=$(MROONGA_GITHUB_COM_PATH)/$${locale};	\
+	  mkdir -p $${dest_base_dir};				\
+	  dest_dir=$${dest_base_dir}/docs;			\
+	  rm -rf $${dest_dir};					\
+	  mv tmp-doc/dist/$${locale} $${dest_dir};		\
+	done
 
 echo-mysql-source:
 	echo $(MYSQL_SOURCE)
