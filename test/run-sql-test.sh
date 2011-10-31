@@ -24,10 +24,18 @@ build_mysql_test_dir="${MYSQL_BUILD}/mysql-test"
 source_test_suites_dir="${source_mysql_test_dir}/suite"
 build_test_suites_dir="${build_mysql_test_dir}/suite"
 case "${MYSQL_VERSION}" in
-    5.1)
+    5.1.*)
 	plugins_dir="${MYSQL_BUILD}/lib/mysql/plugin"
 	if ! test -d "${build_test_suites_dir}"; then
 	    mkdir -p "${build_test_suites_dir}"
+	fi
+	;;
+    5.3.*-MariaDB*)
+	if ! test -d "${build_test_suites_dir}"; then
+	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
+	fi
+	if ! test -d "${MYSQL_BUILD}/plugin/mroonga"; then
+	    ln -s "${top_dir}" "${MYSQL_BUILD}/plugin/mroonga"
 	fi
 	;;
     *)
@@ -47,10 +55,14 @@ for test_suite_name in groonga_include $(echo $test_suite_names | sed -e 's/,/ /
     fi
 done
 
-make -C ${top_dir} \
-    install-pluginLTLIBRARIES \
-    plugindir=${plugins_dir} > /dev/null || \
-    exit 1
+if test -n "${plugins_dir}"; then
+    make -C ${top_dir} \
+	install-pluginLTLIBRARIES \
+	plugindir=${plugins_dir} > /dev/null || \
+	exit 1
+else
+    make -C ${top_dir} > /dev/null || exit 1
+fi
 
 (cd "$build_mysql_test_dir" && \
     ./mysql-test-run.pl \
