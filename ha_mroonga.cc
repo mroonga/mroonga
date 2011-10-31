@@ -4576,6 +4576,7 @@ int ha_mroonga::index_read_map(uchar *buf, const uchar *key,
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
 int ha_mroonga::wrapper_index_read_last_map(uchar *buf, const uchar *key,
                                             key_part_map keypart_map)
 {
@@ -4662,6 +4663,7 @@ int ha_mroonga::index_read_last_map(uchar *buf, const uchar *key,
   }
   DBUG_RETURN(error);
 }
+#endif
 
 int ha_mroonga::wrapper_index_next(uchar *buf)
 {

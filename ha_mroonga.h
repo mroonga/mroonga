@@ -67,6 +67,10 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_HA_INPLACE_INDEX_CHANGE
 #endif
 
+#ifndef MRN_MARIADB_P
+#  define MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
+#endif
+
 #if MYSQL_VERSION_ID < 50600
   typedef Item COND;
 #endif
@@ -75,7 +79,7 @@ extern "C" {
   typedef MYSQL_ERROR Sql_condition;
 #endif
 
-#if !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
   typedef char *range_id_t;
 #endif
 
@@ -223,8 +227,10 @@ public:
                      key_part_map keypart_map,
                      enum ha_rkey_function find_flag);
 #endif
+#ifdef MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
   int index_read_last_map(uchar *buf, const uchar *key,
                           key_part_map keypart_map);
+#endif
 #ifndef MRN_HANDLER_HAVE_HA_INDEX_NEXT
   int index_next(uchar *buf);
 #endif
@@ -481,10 +487,12 @@ private:
   int storage_index_read_map(uchar *buf, const uchar *key,
                              key_part_map keypart_map,
                              enum ha_rkey_function find_flag);
+#ifdef MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
   int wrapper_index_read_last_map(uchar *buf, const uchar *key,
                                   key_part_map keypart_map);
   int storage_index_read_last_map(uchar *buf, const uchar *key,
                                   key_part_map keypart_map);
+#endif
   int wrapper_index_next(uchar *buf);
   int storage_index_next(uchar *buf);
   int wrapper_index_prev(uchar *buf);
