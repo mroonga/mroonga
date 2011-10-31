@@ -4422,7 +4422,7 @@ int ha_mroonga::index_end()
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_index_read_map(uchar * buf, const uchar * key,
+int ha_mroonga::wrapper_index_read_map(uchar *buf, const uchar *key,
                                        key_part_map keypart_map,
                                        enum ha_rkey_function find_flag)
 {
@@ -4442,7 +4442,11 @@ int ha_mroonga::wrapper_index_read_map(uchar * buf, const uchar * key,
     MRN_SET_WRAP_TABLE_KEY(this, table);
     if (fulltext_searching)
       set_pk_bitmap();
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_MAP
+    error = wrap_handler->ha_index_read_map(buf, key, keypart_map, find_flag);
+#else
     error = wrap_handler->index_read_map(buf, key, keypart_map, find_flag);
+#endif
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
@@ -4557,7 +4561,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::index_read_map(uchar * buf, const uchar * key,
+int ha_mroonga::index_read_map(uchar *buf, const uchar *key,
                                key_part_map keypart_map,
                                enum ha_rkey_function find_flag)
 {

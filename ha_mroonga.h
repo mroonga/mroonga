@@ -47,11 +47,12 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_ADD_INDEX 1
 #endif
 
-#if (MYSQL_VERSION_ID >= 50600) || \
+#if (MYSQL_VERSION_ID >= 50603) || \
     (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302)
 #  define MRN_HANDLER_HAVE_HA_CLOSE 1
 #  define MRN_HANDLER_HAVE_HA_RND_NEXT 1
 #  define MRN_HANDLER_HAVE_HA_RND_POS 1
+#  define MRN_HANDLER_HAVE_HA_INDEX_READ_MAP 1
 #  define MRN_HANDLER_HAVE_HA_INDEX_READ_IDX_MAP 1
 #  define MRN_HANDLER_HAVE_HA_INDEX_NEXT 1
 #  define MRN_HANDLER_HAVE_HA_INDEX_PREV 1
@@ -213,9 +214,11 @@ public:
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
   int index_init(uint idx, bool sorted);
   int index_end();
+#ifndef MRN_HANDLER_HAVE_HA_INDEX_READ_MAP
   int index_read_map(uchar * buf, const uchar * key,
                      key_part_map keypart_map,
                      enum ha_rkey_function find_flag);
+#endif
   int index_read_last_map(uchar *buf, const uchar *key,
                           key_part_map keypart_map);
 #ifndef MRN_HANDLER_HAVE_HA_INDEX_NEXT
@@ -320,6 +323,11 @@ protected:
 #endif
 #ifdef MRN_HANDLER_HAVE_HA_RND_POS
   int rnd_pos(uchar *buf, uchar *pos);
+#endif
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_MAP
+  int index_read_map(uchar *buf, const uchar *key,
+                     key_part_map keypart_map,
+                     enum ha_rkey_function find_flag);
 #endif
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_NEXT
   int index_next(uchar *buf);
