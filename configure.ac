@@ -280,6 +280,7 @@ AC_CONFIG_FILES([
   packages/rpm/fedora/Makefile
   packages/yum/Makefile
   packages/apt/Makefile
+  tools/Makefile
   doc/Makefile
   doc/locale/Makefile
   doc/locale/en/Makefile
