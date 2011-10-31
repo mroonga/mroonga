@@ -109,7 +109,6 @@ FILE *mrn_logfile = NULL;
 static bool mrn_logfile_opened = false;
 grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
-char mrn_default_parser_name[MRN_MAX_KEY_SIZE];
 char *mrn_default_parser;
 
 static void mrn_logger_func(int level, const char *time, const char *title,
@@ -228,13 +227,12 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
           "default parser changed from '%s' to '%s'",
           old_value, new_value);
   grn_ctx_fin(&ctx);
-  strcpy(mrn_default_parser_name, new_value);
-  mrn_default_parser = mrn_default_parser_name;
+  strncpy(mrn_default_parser, new_value, MRN_MAX_KEY_SIZE - 1);
   DBUG_VOID_RETURN;
 }
 
 static MYSQL_SYSVAR_STR(default_parser, mrn_default_parser,
-                        PLUGIN_VAR_RQCMDARG,
+                        PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
                         "default fulltext parser",
                         NULL,
                         mrn_default_parser_update,
@@ -1009,6 +1007,9 @@ static int mrn_init(void *p)
                    (my_hash_get_key) mrn_open_tables_get_key, 0, 0)) {
     goto error_allocated_open_tables_hash_init;
   }
+
+  mrn_default_parser = (char *)my_malloc(MRN_MAX_KEY_SIZE, MYF(MY_WME));
+  strncpy(mrn_default_parser, MRN_PARSER_DEFAULT, MRN_MAX_KEY_SIZE - 1);
 
   return 0;
 
