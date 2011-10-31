@@ -6319,7 +6319,7 @@ int ha_mroonga::multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_multi_range_read_next(char **range_info)
+int ha_mroonga::wrapper_multi_range_read_next(range_id_t *range_info)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -6333,14 +6333,14 @@ int ha_mroonga::wrapper_multi_range_read_next(char **range_info)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_multi_range_read_next(char **range_info)
+int ha_mroonga::storage_multi_range_read_next(range_id_t *range_info)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = handler::multi_range_read_next(range_info);
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::multi_range_read_next(char **range_info)
+int ha_mroonga::multi_range_read_next(range_id_t *range_info)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;

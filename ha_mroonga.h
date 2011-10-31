@@ -75,6 +75,10 @@ extern "C" {
   typedef MYSQL_ERROR Sql_condition;
 #endif
 
+#if !defined(MRN_MARIADB_P)
+  typedef char *range_id_t;
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -268,7 +272,7 @@ public:
   int multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
                             uint n_ranges, uint mode,
                             HANDLER_BUFFER *buf);
-  int multi_range_read_next(char **range_info);
+  int multi_range_read_next(range_id_t *range_info);
 #else // MRN_HANDLER_HAVE_MULTI_RANGE_READ
   int read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
                              KEY_MULTI_RANGE *ranges,
@@ -552,8 +556,8 @@ private:
   int storage_multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
                                     uint n_ranges, uint mode,
                                     HANDLER_BUFFER *buf);
-  int wrapper_multi_range_read_next(char **range_info);
-  int storage_multi_range_read_next(char **range_info);
+  int wrapper_multi_range_read_next(range_id_t *range_info);
+  int storage_multi_range_read_next(range_id_t *range_info);
 #else // MRN_HANDLER_HAVE_MULTI_RANGE_READ
   int wrapper_read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
                                      KEY_MULTI_RANGE *ranges,
