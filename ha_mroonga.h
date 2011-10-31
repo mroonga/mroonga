@@ -71,6 +71,10 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
 #endif
 
+#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302)
+#  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+#endif
+
 #if MYSQL_VERSION_ID < 50600
   typedef Item COND;
 #endif
@@ -274,6 +278,9 @@ public:
                                       uint n_ranges, uint *bufsz,
                                       uint *flags, COST_VECT *cost);
   ha_rows multi_range_read_info(uint keyno, uint n_ranges, uint keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                uint key_parts,
+#endif
                                 uint *bufsz, uint *flags, COST_VECT *cost);
   int multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
                             uint n_ranges, uint mode,
@@ -553,9 +560,15 @@ private:
                                               uint *flags,
                                               COST_VECT *cost);
   ha_rows wrapper_multi_range_read_info(uint keyno, uint n_ranges, uint keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                        uint key_parts,
+#endif
                                         uint *bufsz, uint *flags,
                                         COST_VECT *cost);
   ha_rows storage_multi_range_read_info(uint keyno, uint n_ranges, uint keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                        uint key_parts,
+#endif
                                         uint *bufsz, uint *flags,
                                         COST_VECT *cost);
   int wrapper_multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,

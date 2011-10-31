@@ -6232,7 +6232,11 @@ ha_rows ha_mroonga::multi_range_read_info_const(uint keyno, RANGE_SEQ_IF *seq,
 }
 
 ha_rows ha_mroonga::wrapper_multi_range_read_info(uint keyno, uint n_ranges,
-                                                  uint keys, uint *bufsz,
+                                                  uint keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                                  uint key_parts,
+#endif
+                                                  uint *bufsz,
                                                   uint *flags, COST_VECT *cost)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -6242,6 +6246,9 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info(uint keyno, uint n_ranges,
   if (fulltext_searching)
     set_pk_bitmap();
   rows = wrap_handler->multi_range_read_info(keyno, n_ranges, keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                             key_parts,
+#endif
                                              bufsz, flags, cost);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -6249,16 +6256,26 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info(uint keyno, uint n_ranges,
 }
 
 ha_rows ha_mroonga::storage_multi_range_read_info(uint keyno, uint n_ranges,
-                                                  uint keys, uint *bufsz,
+                                                  uint keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                                  uint key_parts,
+#endif
+                                                  uint *bufsz,
                                                   uint *flags, COST_VECT *cost)
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows = handler::multi_range_read_info(keyno, n_ranges, keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                                key_parts,
+#endif
                                                 bufsz, flags, cost);
   DBUG_RETURN(rows);
 }
 
 ha_rows ha_mroonga::multi_range_read_info(uint keyno, uint n_ranges, uint keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                          uint key_parts,
+#endif
                                           uint *bufsz, uint *flags,
                                           COST_VECT *cost)
 {
@@ -6267,9 +6284,15 @@ ha_rows ha_mroonga::multi_range_read_info(uint keyno, uint n_ranges, uint keys,
   if (share->wrapper_mode)
   {
     rows = wrapper_multi_range_read_info(keyno, n_ranges, keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                         key_parts,
+#endif
                                          bufsz, flags, cost);
   } else {
     rows = storage_multi_range_read_info(keyno, n_ranges, keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                         key_parts,
+#endif
                                          bufsz, flags, cost);
   }
   DBUG_RETURN(rows);
