@@ -77,6 +77,9 @@ static const char *index_column_name = "index";
 extern "C" {
 #endif
 
+/* groonga's internal functions */
+const char *grn_obj_get_value_(grn_ctx *ctx, grn_obj *obj, grn_id id, uint32 *size);
+
 /* global variables */
 pthread_mutex_t mrn_db_mutex;
 pthread_mutex_t mrn_log_mutex;
@@ -904,6 +907,15 @@ static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
       field->store((const char *)wkb,
                    (uint)(sizeof(wkb) / sizeof(*wkb)),
                    field->charset());
+      break;
+    }
+  case MYSQL_TYPE_BLOB:
+    {
+      GRN_VOID_INIT(&buf);
+      uint32 len;
+      const char *val = grn_obj_get_value_(ctx, col, id, &len);
+      Field_blob *blob = (Field_blob *)field;
+      blob->set_ptr((uchar *)&len, (uchar *)val);
       break;
     }
   default: //strings etc..
