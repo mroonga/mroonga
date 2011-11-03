@@ -1,33 +1,3 @@
-# echo "EXTRA_DIST = \\"; ls *.result | sort | sed -e 's/^/\t/' -e 's,$, \\,'; echo -n "\t\$(NULL)"
-EXTRA_DIST = \
-	auto_increment_text.result \
-	binlog.result \
-	bulk_insert.result \
-	create_table.result \
-	delete.result \
-	dry_write_delete.result \
-	dry_write_insert.result \
-	dry_write_update.result \
-	fulltext_boolean_mode_pragma_default_operator.result \
-	fulltext_index_recreate.result \
-	fulltext_insert_select.result \
-	fulltext_insert_values.result \
-	fulltext_many_records.result \
-	fulltext_multiple_column_index_delete.result \
-	fulltext_multiple_column_index_insert.result \
-	fulltext_multiple_column_index_recreate.result \
-	fulltext_multiple_column_index_update.result \
-	fulltext_multiple_index.result \
-	fulltext_myisam.result \
-	fulltext_not_match_against.result \
-	fulltext_parser_comment.result \
-	fulltext_search_ascii.result \
-	fulltext_search_japanese.result \
-	geometry_contains.result \
-	geometry_delete.result \
-	geometry_update.result \
-	insert.result \
-	order_limit_performance.result \
-	update_fulltext.result \
-	update_int.result \
-	$(NULL)
+include $(top_srcdir)/test/sql/groonga_wrapper/r/files.am
+
+EXTRA_DIST = $(result_files)
