@@ -77,6 +77,10 @@ update-document:
 	  mv tmp-doc/dist/$${locale} $${dest_dir};		\
 	done
 
+update-files:
+	cd $(srcdir)/doc && $(MAKE) update-files
+	cd $(srcdir)/test/sql && $(MAKE) update-files
+
 echo-mysql-source:
 	echo $(MYSQL_SOURCE)
 

@@ -35,7 +35,7 @@ EXTRA_DIST =					\
 $(source_files_relative_from_doc_dir): html
 
 update-images:
-	cd $(srcdir)/source/_static/images && \
+	cd $(srcdir)/source/images && \
 	  make -f $(abs_srcdir)/images.mk update-images
 
 if ENABLE_DOCUMENT
