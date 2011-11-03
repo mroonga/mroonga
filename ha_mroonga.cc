@@ -5662,19 +5662,38 @@ int ha_mroonga::wrapper_get_next_record(uchar *buf)
 
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
+    if (wrap_handler->inited == NONE)
+    {
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_IDX_MAP
-    error = wrap_handler->ha_index_read_idx_map(buf,
-                                                share->wrap_primary_key,
-                                                (uchar *)GRN_TEXT_VALUE(&key_buffer),
-                                                pk_keypart_map,
-                                                HA_READ_KEY_EXACT);
+      error = wrap_handler->ha_index_read_idx_map(buf,
+                                                  share->wrap_primary_key,
+                                                  (uchar *)GRN_TEXT_VALUE(
+                                                    &key_buffer),
+                                                  pk_keypart_map,
+                                                  HA_READ_KEY_EXACT);
 #else
-    error = wrap_handler->index_read_idx_map(buf,
-                                             share->wrap_primary_key,
-                                             (uchar *)GRN_TEXT_VALUE(&key_buffer),
-                                             pk_keypart_map,
-                                             HA_READ_KEY_EXACT);
+      error = wrap_handler->index_read_idx_map(buf,
+                                               share->wrap_primary_key,
+                                               (uchar *)GRN_TEXT_VALUE(
+                                                 &key_buffer),
+                                               pk_keypart_map,
+                                               HA_READ_KEY_EXACT);
 #endif
+    } else {
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_MAP
+      error = wrap_handler->ha_index_read_map(buf,
+                                              (uchar *)GRN_TEXT_VALUE(
+                                                &key_buffer),
+                                              pk_keypart_map,
+                                              HA_READ_KEY_EXACT);
+#else
+      error = wrap_handler->index_read_map(buf,
+                                           (uchar *)GRN_TEXT_VALUE(
+                                             &key_buffer),
+                                           pk_keypart_map,
+                                           HA_READ_KEY_EXACT);
+#endif
+    }
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   } while (error == HA_ERR_END_OF_FILE);
@@ -7844,6 +7863,39 @@ void ha_mroonga::set_pk_bitmap()
     bitmap_set_bit(table->read_set, field->field_index);
   }
   DBUG_VOID_RETURN;
+}
+
+int ha_mroonga::wrapper_start_stmt(THD *thd, thr_lock_type lock_type)
+{
+  int res;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->start_stmt(thd, lock_type);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::storage_start_stmt(THD *thd, thr_lock_type lock_type)
+{
+  int res;
+  MRN_DBUG_ENTER_METHOD();
+  res = handler::start_stmt(thd, lock_type);
+  DBUG_RETURN(res);
+}
+
+int ha_mroonga::start_stmt(THD *thd, thr_lock_type lock_type)
+{
+  int res;
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    res = wrapper_start_stmt(thd, lock_type);
+  } else {
+    res = storage_start_stmt(thd, lock_type);
+  }
+  DBUG_RETURN(res);
 }
 
 #ifdef __cplusplus

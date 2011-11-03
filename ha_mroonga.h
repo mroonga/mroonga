@@ -336,6 +336,7 @@ public:
   void restore_auto_increment(ulonglong prev_insert_id);
   void release_auto_increment();
   int reset_auto_increment(ulonglong value);
+  int start_stmt(THD *thd, thr_lock_type lock_type);
 
 protected:
 #ifdef MRN_HANDLER_HAVE_HA_RND_NEXT
@@ -674,6 +675,8 @@ private:
   void storage_release_auto_increment();
   int wrapper_reset_auto_increment(ulonglong value);
   int storage_reset_auto_increment(ulonglong value);
+  int wrapper_start_stmt(THD *thd, thr_lock_type lock_type);
+  int storage_start_stmt(THD *thd, thr_lock_type lock_type);
 };
 
 #ifdef __cplusplus
