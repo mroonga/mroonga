@@ -2,6 +2,7 @@
 EXTRA_DIST = \
 	auto_increment_text.test \
 	binlog.test \
+	bulk_insert.test \
 	create_table.test \
 	delete.test \
 	dry_write_delete.test \

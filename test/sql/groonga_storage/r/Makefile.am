@@ -49,7 +49,9 @@ EXTRA_DIST = \
 	multiple_column_primary_key_int.result \
 	multiple_column_primary_key_update.result \
 	order_limit_performance.result \
-	replace.result \
+	replace_select_varchar.result \
+	replace_text.result \
+	replace_varchar.result \
 	select_all.result \
 	select_pkey.result \
 	select_secondary_key.result \
