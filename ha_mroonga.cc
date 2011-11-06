@@ -4354,14 +4354,15 @@ ha_rows ha_mroonga::generic_records_in_range_geo(uint key_nr,
 ha_rows ha_mroonga::records_in_range(uint key_nr, key_range *range_min, key_range *range_max)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  ha_rows row_count = 0;
   if (share->wrapper_mode)
   {
-    error = wrapper_records_in_range(key_nr, range_min, range_max);
+    row_count = wrapper_records_in_range(key_nr, range_min, range_max);
   } else {
-    error = storage_records_in_range(key_nr, range_min, range_max);
+    row_count = storage_records_in_range(key_nr, range_min, range_max);
   }
-  DBUG_RETURN(error);
+  DBUG_PRINT("info", ("mroonga row_count=%d", row_count));
+  DBUG_RETURN(row_count);
 }
 
 int ha_mroonga::wrapper_index_init(uint idx, bool sorted)
@@ -4371,7 +4372,8 @@ int ha_mroonga::wrapper_index_init(uint idx, bool sorted)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  if (key_info.algorithm != HA_KEY_ALG_FULLTEXT) {
+  if (!mrn_is_geo_key(&key_info) && key_info.algorithm != HA_KEY_ALG_FULLTEXT)
+  {
     error = wrap_handler->ha_index_init(share->wrap_key_nr[idx], sorted);
   } else {
     error = wrap_handler->ha_index_init(share->wrap_primary_key, sorted);
@@ -4586,6 +4588,7 @@ int ha_mroonga::index_read_map(uchar *buf, const uchar *key,
   } else {
     error = storage_index_read_map(buf, key, keypart_map, find_flag);
   }
+  DBUG_PRINT("info", ("mroonga error=%d", error));
   DBUG_RETURN(error);
 }
 
@@ -4952,6 +4955,16 @@ int ha_mroonga::wrapper_read_range_first(const key_range *start_key,
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
+  KEY key_info = table->key_info[active_index];
+  if (mrn_is_geo_key(&key_info)) {
+    clear_cursor();
+    clear_cursor_geo();
+    error = generic_geo_open_cursor(start_key->key, start_key->flag);
+    if (!error) {
+      error = wrapper_get_next_record(table->record[0]);
+    }
+    DBUG_RETURN(error);
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
@@ -5095,6 +5108,11 @@ int ha_mroonga::wrapper_read_range_next()
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
+  KEY key_info = table->key_info[active_index];
+  if (mrn_is_geo_key(&key_info)) {
+    error = wrapper_get_next_record(table->record[0]);
+    DBUG_RETURN(error);
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
@@ -6216,6 +6234,12 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info_const(uint keyno,
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows;
+  KEY key_info = table->key_info[keyno];
+  if (mrn_is_geo_key(&key_info)) {
+    rows = handler::multi_range_read_info_const(keyno, seq, seq_init_param,
+                                                n_ranges, bufsz, flags, cost);
+    DBUG_RETURN(rows);
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
@@ -6237,7 +6261,8 @@ ha_rows ha_mroonga::storage_multi_range_read_info_const(uint keyno,
                                                         COST_VECT *cost)
 {
   MRN_DBUG_ENTER_METHOD();
-  ha_rows rows = handler::multi_range_read_info_const(keyno, seq, seq_init_param,
+  ha_rows rows = handler::multi_range_read_info_const(keyno, seq,
+                                                      seq_init_param,
                                                       n_ranges, bufsz, flags,
                                                       cost);
   DBUG_RETURN(rows);
@@ -6273,6 +6298,15 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info(uint keyno, uint n_ranges,
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows;
+  KEY key_info = table->key_info[keyno];
+  if (mrn_is_geo_key(&key_info)) {
+    rows = handler::multi_range_read_info(keyno, n_ranges, keys,
+#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+                                          key_parts,
+#endif
+                                          bufsz, flags, cost);
+    DBUG_RETURN(rows);
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
@@ -6337,6 +6371,12 @@ int ha_mroonga::wrapper_multi_range_read_init(RANGE_SEQ_IF *seq,
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+  KEY key_info = table->key_info[active_index];
+  if (mrn_is_geo_key(&key_info)) {
+    error = handler::multi_range_read_init(seq, seq_init_param,
+                                           n_ranges, mode, buf);
+    DBUG_RETURN(error);
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
@@ -6380,6 +6420,11 @@ int ha_mroonga::wrapper_multi_range_read_next(range_id_t *range_info)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+  KEY key_info = table->key_info[active_index];
+  if (mrn_is_geo_key(&key_info)) {
+    error = handler::multi_range_read_next(range_info);
+    DBUG_RETURN(error);
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
@@ -6418,6 +6463,12 @@ int ha_mroonga::wrapper_read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
+  KEY key_info = table->key_info[active_index];
+  if (mrn_is_geo_key(&key_info)) {
+    error = handler::read_multi_range_first(found_range_p, ranges,
+                                            range_count, sorted, buffer);
+    DBUG_RETURN(error);
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
@@ -6464,6 +6515,11 @@ int ha_mroonga::wrapper_read_multi_range_next(KEY_MULTI_RANGE **found_range_p)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
+  KEY key_info = table->key_info[active_index];
+  if (mrn_is_geo_key(&key_info)) {
+    error = handler::read_multi_range_next(found_range_p);
+    DBUG_RETURN(error);
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
@@ -6653,6 +6709,11 @@ double ha_mroonga::wrapper_read_time(uint index, uint ranges, ha_rows rows)
 {
   double res;
   MRN_DBUG_ENTER_METHOD();
+  KEY key_info = table->key_info[index];
+  if (mrn_is_geo_key(&key_info)) {
+    res = handler::read_time(index, ranges, rows);
+    DBUG_RETURN(res);
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   res = wrap_handler->read_time(share->wrap_key_nr[index], ranges, rows);
