@@ -113,6 +113,8 @@ static bool mrn_logfile_opened = false;
 grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
 char *mrn_default_parser;
+static char *mrn_libgroonga_version = (char *) grn_get_version();
+static char *mrn_version = MRN_VERSION;
 
 static void mrn_logger_func(int level, const char *time, const char *title,
                             const char *msg, const char *location,
@@ -257,11 +259,27 @@ static bool mrn_dry_write(THD *thd)
   DBUG_RETURN(dry_write_p);
 }
 
+static MYSQL_SYSVAR_STR(libgroonga_version, mrn_libgroonga_version,
+                        PLUGIN_VAR_NOCMDOPT | PLUGIN_VAR_READONLY,
+                        "The version of libgroonga",
+                        NULL,
+                        NULL,
+                        grn_get_version());
+
+static MYSQL_SYSVAR_STR(version, mrn_version,
+                        PLUGIN_VAR_NOCMDOPT | PLUGIN_VAR_READONLY,
+                        "The version of groonga storage engine",
+                        NULL,
+                        NULL,
+                        MRN_VERSION);
+
 struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
   MYSQL_SYSVAR(default_parser),
   MYSQL_SYSVAR(dry_write),
+  MYSQL_SYSVAR(libgroonga_version),
+  MYSQL_SYSVAR(version),
   NULL
 };
 
