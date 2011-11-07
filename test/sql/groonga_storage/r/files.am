@@ -34,7 +34,7 @@ result_files = \
 	hash_index_id_primary.result \
 	hash_index_id_unique.result \
 	hash_index_normal_column_insert.result \
-	information_schema.result \
+	information_schema.result.in \
 	insert.result \
 	last_insert_grn_id.result \
 	log_level.result \
