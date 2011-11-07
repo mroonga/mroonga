@@ -21,6 +21,9 @@ mrn_version_in_hex=`printf "0x%02x%02x" mrn_version_major mrn_version_minor[]mrn
 AC_DEFINE_UNQUOTED([MRN_VERSION_IN_HEX],
                    [$mrn_version_in_hex],
                    [Define groonga storage engine version in hex])
+AC_DEFINE_UNQUOTED([MRN_VERSION],
+		   ["$PACKAGE_VERSION"],
+		   [Define groonga storage engine version in string])
 
 AC_C_BIGENDIAN
 AC_PROG_CC
