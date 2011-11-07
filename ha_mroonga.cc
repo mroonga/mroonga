@@ -3196,7 +3196,7 @@ int ha_mroonga::extra(enum ha_extra_function operation)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  DBUG_PRINT("info", ("mroonga this=%p", this));
+  DBUG_PRINT("info", ("mroonga: this=%p", this));
   if (share->wrapper_mode)
   {
     if ((error = wrapper_extra(operation)))
@@ -3826,7 +3826,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 #ifndef DBUG_OFF
       my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
 #endif
-      DBUG_PRINT("info", ("mroonga update column %d(%d)",i,field->field_index));
+      DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,field->field_index));
 
       if (field->is_null()) continue;
 
@@ -4284,7 +4284,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
 
   uint pkey_nr = table->s->primary_key;
   if (key_nr == pkey_nr) {
-    DBUG_PRINT("info", ("mroonga use primary key"));
+    DBUG_PRINT("info", ("mroonga: use primary key"));
     grn_table_cursor *cursor;
     cursor = grn_table_cursor_open(ctx, grn_table,
                                    val_min, size_min,
@@ -4296,9 +4296,9 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     grn_table_cursor_close(ctx, cursor);
   } else {
     if (is_multiple_column_index) {
-      DBUG_PRINT("info", ("mroonga use multiple column key%u", key_nr));
+      DBUG_PRINT("info", ("mroonga: use multiple column key%u", key_nr));
     } else {
-      DBUG_PRINT("info", ("mroonga use key%u", key_nr));
+      DBUG_PRINT("info", ("mroonga: use key%u", key_nr));
     }
     uint table_size = grn_table_size(ctx, grn_table);
     uint cardinality = grn_table_size(ctx, grn_index_tables[key_nr]);
@@ -4330,11 +4330,13 @@ ha_rows ha_mroonga::generic_records_in_range_geo(uint key_nr,
   ha_rows row_count;
 
   if (!range_min) {
-    DBUG_PRINT("info", ("range min is missing for geometry range search"));
+    DBUG_PRINT("info",
+               ("mroonga: range min is missing for geometry range search"));
     DBUG_RETURN(HA_POS_ERROR);
   }
   if (range_max) {
-    DBUG_PRINT("info", ("range max is specified for geometry range search"));
+    DBUG_PRINT("info",
+               ("mroonga: range max is specified for geometry range search"));
     DBUG_RETURN(HA_POS_ERROR);
   }
   if (!(range_min->flag & HA_READ_MBR_CONTAIN)) {
@@ -4361,7 +4363,7 @@ ha_rows ha_mroonga::records_in_range(uint key_nr, key_range *range_min, key_rang
   } else {
     row_count = storage_records_in_range(key_nr, range_min, range_max);
   }
-  DBUG_PRINT("info", ("mroonga row_count=%d", row_count));
+  DBUG_PRINT("info", ("mroonga: row_count=%d", row_count));
   DBUG_RETURN(row_count);
 }
 
@@ -4392,7 +4394,7 @@ int ha_mroonga::storage_index_init(uint idx, bool sorted)
 int ha_mroonga::index_init(uint idx, bool sorted)
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_PRINT("info", ("mroonga idx=%u", idx));
+  DBUG_PRINT("info", ("mroonga: idx=%u", idx));
   active_index = idx;
   count_skip = FALSE;
   int error = 0;
@@ -4549,16 +4551,16 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
 
   uint pkey_nr = table->s->primary_key;
   if (key_nr == pkey_nr) {
-    DBUG_PRINT("info", ("mroonga use primary key"));
+    DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table,
                                    val_min, size_min,
                                    val_max, size_max,
                                    0, -1, flags);
   } else {
     if (is_multiple_column_index) {
-      DBUG_PRINT("info", ("mroonga use multiple column key%u", key_nr));
+      DBUG_PRINT("info", ("mroonga: use multiple column key%u", key_nr));
     } else {
-      DBUG_PRINT("info", ("mroonga use key%u", key_nr));
+      DBUG_PRINT("info", ("mroonga: use key%u", key_nr));
     }
     index_table_cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
                                                val_min, size_min,
@@ -4588,7 +4590,7 @@ int ha_mroonga::index_read_map(uchar *buf, const uchar *key,
   } else {
     error = storage_index_read_map(buf, key, keypart_map, find_flag);
   }
-  DBUG_PRINT("info", ("mroonga error=%d", error));
+  DBUG_PRINT("info", ("mroonga: error=%d", error));
   DBUG_RETURN(error);
 }
 
@@ -4640,15 +4642,15 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
 
   uint pkey_nr = table->s->primary_key;
   if (key_nr == pkey_nr) {
-    DBUG_PRINT("info", ("mroonga use primary key"));
+    DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table,
                                    val_min, size_min, val_max, size_max,
                                    0, -1, flags);
   } else {
     if (is_multiple_column_index) {
-      DBUG_PRINT("info", ("mroonga use multiple column key%u", key_nr));
+      DBUG_PRINT("info", ("mroonga: use multiple column key%u", key_nr));
     } else {
-      DBUG_PRINT("info", ("mroonga use key%u", key_nr));
+      DBUG_PRINT("info", ("mroonga: use key%u", key_nr));
     }
     index_table_cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
                                                val_min, size_min,
@@ -4792,14 +4794,14 @@ int ha_mroonga::storage_index_first(uchar *buf)
   int flags = GRN_CURSOR_ASCENDING;
   uint pkey_nr = table->s->primary_key;
   if (active_index == pkey_nr) {
-    DBUG_PRINT("info", ("mroonga use primary key"));
+    DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
                                    0, -1, flags);
   } else {
     if (table->key_info[active_index].key_parts > 1) {
-      DBUG_PRINT("info", ("mroonga use multiple column key%u", active_index));
+      DBUG_PRINT("info", ("mroonga: use multiple column key%u", active_index));
     } else {
-      DBUG_PRINT("info", ("mroonga use key%u", active_index));
+      DBUG_PRINT("info", ("mroonga: use key%u", active_index));
     }
     index_table_cursor = grn_table_cursor_open(ctx,
                                                grn_index_tables[active_index],
@@ -4856,14 +4858,14 @@ int ha_mroonga::storage_index_last(uchar *buf)
   int flags = GRN_CURSOR_DESCENDING;
   uint pkey_nr = table->s->primary_key;
   if (active_index == pkey_nr) {
-    DBUG_PRINT("info", ("mroonga use primary key"));
+    DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
                                    0, -1, flags);
   } else {
     if (table->key_info[active_index].key_parts > 1) {
-      DBUG_PRINT("info", ("mroonga use multiple column key%u", active_index));
+      DBUG_PRINT("info", ("mroonga: use multiple column key%u", active_index));
     } else {
-      DBUG_PRINT("info", ("mroonga use key%u", active_index));
+      DBUG_PRINT("info", ("mroonga: use key%u", active_index));
     }
     index_table_cursor = grn_table_cursor_open(ctx,
                                                grn_index_tables[active_index],
@@ -5061,15 +5063,15 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
 
   uint pkey_nr = table->s->primary_key;
   if (active_index == pkey_nr) {
-    DBUG_PRINT("info", ("mroonga use primary key"));
+    DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table,
                                    val_min, size_min, val_max, size_max,
                                    0, -1, flags);
   } else {
     if (is_multiple_column_index) {
-      DBUG_PRINT("info", ("mroonga use multiple column key%u", active_index));
+      DBUG_PRINT("info", ("mroonga: use multiple column key%u", active_index));
     } else {
-      DBUG_PRINT("info", ("mroonga use key%u", active_index));
+      DBUG_PRINT("info", ("mroonga: use key%u", active_index));
     }
     index_table_cursor = grn_table_cursor_open(ctx,
                                                grn_index_tables[active_index],
@@ -5922,7 +5924,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     }
     *limit += select_lex->select_limit->val_int();
     if (*limit > (longlong)INT_MAX) {
-      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
@@ -5932,7 +5934,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     if (!where ||
         where->type() != Item::FUNC_ITEM ||
         ((Item_func *)where)->functype() != Item_func::FT_FUNC) {
-      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
@@ -5940,14 +5942,14 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     where = where->next;
     if (!where ||
         where->type() != Item::STRING_ITEM) {
-      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
     where = where->next;
     if (!where ||
         where->type() != Item::FIELD_ITEM) {
-      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
@@ -5965,7 +5967,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       break;
     }
     if (where && (where != info || !where->eq(info, true))) {
-      DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
@@ -5996,7 +5998,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       } else if (match_against->eq(item, true)) {
         (*sort_keys)[i].key = score_column;
       } else {
-        DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+        DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
         fast_order_limit = FALSE;
         DBUG_VOID_RETURN;
       }
@@ -6012,18 +6014,18 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     if (grn_columns && i == 1 && col_field_index >= 0 &&
         grn_column_index(ctx, grn_columns[col_field_index], GRN_OP_LESS,
                          &index, 1, NULL)) {
-      DBUG_PRINT("info", ("mroonga fast_order_limit_with_index = TRUE"));
+      DBUG_PRINT("info", ("mroonga: fast_order_limit_with_index = TRUE"));
       fast_order_limit_with_index = TRUE;
     } else {
-      DBUG_PRINT("info", ("mroonga fast_order_limit_with_index = FALSE"));
+      DBUG_PRINT("info", ("mroonga: fast_order_limit_with_index = FALSE"));
       fast_order_limit_with_index = FALSE;
     }
-    DBUG_PRINT("info", ("mroonga fast_order_limit = TRUE"));
+    DBUG_PRINT("info", ("mroonga: fast_order_limit = TRUE"));
     fast_order_limit = TRUE;
     mrn_fast_order_limit++;
     DBUG_VOID_RETURN;
   }
-  DBUG_PRINT("info", ("mroonga fast_order_limit = FALSE"));
+  DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
   fast_order_limit = FALSE;
   DBUG_VOID_RETURN;
 }
@@ -6054,7 +6056,7 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id record_id)
       my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table,
                                                         table->write_set);
 #endif
-      DBUG_PRINT("info", ("mroonga store column %d(%d)",i,field->field_index));
+      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));
       field->move_field_offset(ptr_diff);
       if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
         // for _id column
@@ -6096,7 +6098,7 @@ int ha_mroonga::reset()
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  DBUG_PRINT("info", ("mroonga this=%p", this));
+  DBUG_PRINT("info", ("mroonga: this=%p", this));
   clear_search_result();
   clear_search_result_geo();
   if (share->wrapper_mode)
