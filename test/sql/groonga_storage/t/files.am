@@ -65,3 +65,6 @@ test_files = \
 	update_virtual_column.test \
 	$(NULL)
 
+generated_files = \
+	$(NULL)
+

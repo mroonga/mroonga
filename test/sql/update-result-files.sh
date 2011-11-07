@@ -25,3 +25,7 @@ list_paths()
  find . -type f -name '*.result.in') | \
     sed -e 's,\./,,' | \
     list_paths "result_files"
+
+find . -type f -name '*.result.in' | \
+    sed -e 's,\./,,' -e 's,\.in$,,' | \
+    list_paths "generated_files"

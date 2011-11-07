@@ -65,3 +65,7 @@ result_files = \
 	update_virtual_column.result \
 	$(NULL)
 
+generated_files = \
+	information_schema.result \
+	$(NULL)
+

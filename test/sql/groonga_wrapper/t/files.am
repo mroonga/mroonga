@@ -31,3 +31,6 @@ test_files = \
 	update_int.test \
 	$(NULL)
 
+generated_files = \
+	$(NULL)
+

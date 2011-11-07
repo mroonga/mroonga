@@ -55,13 +55,12 @@ for test_suite_name in groonga_include $(echo $test_suite_names | sed -e 's/,/ /
     fi
 done
 
+make -C ${top_dir} > /dev/null || exit 1
 if test -n "${plugins_dir}"; then
     make -C ${top_dir} \
 	install-pluginLTLIBRARIES \
 	plugindir=${plugins_dir} > /dev/null || \
 	exit 1
-else
-    make -C ${top_dir} > /dev/null || exit 1
 fi
 
 (cd "$build_mysql_test_dir" && \

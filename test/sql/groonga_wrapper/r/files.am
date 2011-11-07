@@ -31,3 +31,6 @@ result_files = \
 	update_int.result \
 	$(NULL)
 
+generated_files = \
+	$(NULL)
+
