@@ -1,6 +1,26 @@
-AC_INIT([groonga-storage-engine], [1.0.2], [ikdttr@gmail.com])
+m4_define([mrn_version_major], [1])
+m4_define([mrn_version_minor], [1])
+m4_define([mrn_version_micro], [0])
+m4_define([mrn_version],
+          [mrn_version_major.mrn_version_minor[]mrn_version_micro])
+
+AC_INIT([groonga-storage-engine], [mrn_version], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign tar-pax])
+
+AC_DEFINE([MRN_VERSION_MAJOR],
+	  [mrn_version_major],
+          [Define groonga storage engine major version])
+AC_DEFINE([MRN_VERSION_MINOR],
+	  [mrn_version_minor],
+          [Define groonga storage engine minor version])
+AC_DEFINE([MRN_VERSION_MICRO],
+	  [mrn_version_micro],
+          [Define groonga storage engine micro version])
+mrn_version_in_hex=`printf "0x%02x%02x" mrn_version_major mrn_version_minor[]mrn_version_micro`
+AC_DEFINE_UNQUOTED([MRN_VERSION_IN_HEX],
+                   [$mrn_version_in_hex],
+                   [Define groonga storage engine version in hex])
 
 AC_C_BIGENDIAN
 AC_PROG_CC
@@ -284,6 +304,7 @@ AC_CONFIG_FILES([
   doc/locale/ja/LC_MESSAGES/Makefile
 ])
 AC_OUTPUT([
+  test/sql/groonga_storage/r/information_schema.result
   packages/rpm/centos/mysql-groonga.spec
   packages/rpm/fedora/mysql-groonga.spec
 ])

@@ -1100,7 +1100,7 @@ mysql_declare_plugin(mroonga)
   0,
   mrn_init,
   mrn_deinit,
-  0x010a,
+  MRN_VERSION_IN_HEX,
   mrn_status_variables,
   mrn_system_variables,
   NULL

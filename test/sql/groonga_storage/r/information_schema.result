@@ -1,3 +1,0 @@
-select count(*) from information_schema.plugins where plugin_name = "groonga";
-count(*)
-1

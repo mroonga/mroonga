@@ -46,3 +46,4 @@ cscope.out
 /doc/ja/html/
 /misc/
 /tmp-doc/
+/test/sql/groonga_storage/r/information_schema.result

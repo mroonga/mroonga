@@ -12,6 +12,7 @@ list_paths()
     echo
 }
 
-find . -type f -name '*.result' | \
+(find . -type f -name '*.result'; \
+ find . -type f -name '*.result.in') | \
     sed -e 's,\./,,' | \
     list_paths "result_files"
