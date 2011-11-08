@@ -3,6 +3,26 @@
 News
 ====
 
+.. _release-1-10:
+
+Release 1.10 - ????/??/??
+-------------------------
+
+This release introduces MariaDB support and fixes several bugs.
+
+Improvements
+^^^^^^^^^^^^
+
+* add groonga_libgroonga_version and groonga_version variables
+* support MariaDB 5.2.9
+* support MariaDB 5.3.2-beta
+
+Fixes
+^^^^^
+
+* [storage mode] fix a bug that REPLACE INTO with TEXT column does not work #1153.
+* [wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with InnoDB #1154.
+
 .. _release-1-0-1:
 
 Release 1.0.1 - 2011/10/29
