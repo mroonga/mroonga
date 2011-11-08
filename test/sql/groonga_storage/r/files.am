@@ -63,9 +63,11 @@ result_files = \
 	update_id_unique_hash_index.result \
 	update_int.result \
 	update_virtual_column.result \
+	variables.result.in \
 	$(NULL)
 
 generated_files = \
 	information_schema.result \
+	variables.result \
 	$(NULL)
 

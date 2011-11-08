@@ -152,6 +152,9 @@ AC_DEFUN([CONFIG_OPTION_MECAB],[
 
 AC_DEFUN([CONFIG_OPTION_GROONGA],[
   PKG_CHECK_MODULES(GROONGA, groonga >= 1.2.7)
+  _PKG_CONFIG(GROONGA_VERSION, variable=groonga_version, groonga)
+  GROONGA_VERSION=$pkg_cv_GROONGA_VERSION
+  AC_SUBST(GROONGA_VERSION)
 ])
 
 AC_ARG_WITH(debug,
@@ -203,7 +206,11 @@ if test x"$default_parser" != x"no"; then
   AC_DEFINE_UNQUOTED(MRN_PARSER_DEFAULT,
 		     "$default_parser",
 		     "specified default fulltext parser")
+  MRN_DEFAULT_PARSER=$default_parser
+else
+  MRN_DEFAULT_PARSER=TokenBigram
 fi
+AC_SUBST(MRN_DEFAULT_PARSER)
 
 AC_ARG_ENABLE(fast_mutexes,
     [AC_HELP_STRING([--disable-fast-mutexes],
@@ -308,6 +315,7 @@ AC_CONFIG_FILES([
 ])
 AC_OUTPUT([
   test/sql/groonga_storage/r/information_schema.result
+  test/sql/groonga_storage/r/variables.result
   packages/rpm/centos/mysql-groonga.spec
   packages/rpm/fedora/mysql-groonga.spec
 ])

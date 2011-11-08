@@ -63,6 +63,7 @@ test_files = \
 	update_id_unique_hash_index.test \
 	update_int.test \
 	update_virtual_column.test \
+	variables.test \
 	$(NULL)
 
 generated_files = \
