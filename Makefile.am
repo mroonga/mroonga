@@ -12,7 +12,6 @@ ha_groonga_la_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_SOURCES  = ha_mroonga.cc mrn_sys.c mrn_table.cc
 
 plugin_LIBRARIES                      = libgroonga_storage_engine.a
-libgroonga_storage_engine_a_LDFLAGS   = $(GROONGA_LIBS) $(MECAB_LIBS)
 libgroonga_storage_engine_a_CXXFLAGS  = $(AM_CFLAGS) $(MYSQL_CFLAGS)
 libgroonga_storage_engine_a_CFLAGS    = $(AM_CFLAGS) $(MYSQL_CFLAGS)
 libgroonga_storage_engine_a_SOURCES   = ha_mroonga.cc mrn_sys.c mrn_table.cc
