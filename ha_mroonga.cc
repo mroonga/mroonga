@@ -5365,7 +5365,8 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   grn_table_sort_key *sort_keys = NULL;
   int n_sort_keys = 0;
   longlong limit = -1;
-  check_fast_order_limit(&sort_keys, &n_sort_keys, &limit, info->score_column);
+  check_fast_order_limit(&sort_keys, &n_sort_keys, &limit,
+                         info->result, info->score_column);
   if (fast_order_limit) {
     info->sorted_result = grn_table_create(ctx, NULL,
                                            0, NULL,
@@ -5383,6 +5384,11 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
     merge_matched_record_keys(info->result);
   }
   if (sort_keys) {
+    for (int i = 0; i < n_sort_keys; i++) {
+      if (sort_keys[i].key != info->score_column) {
+        grn_obj_unlink(ctx, sort_keys[i].key);
+      }
+    }
     free(sort_keys);
   }
 
@@ -5919,6 +5925,7 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
 void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                         int *n_sort_keys,
                                         longlong *limit,
+                                        grn_obj *target_table,
                                         grn_obj *score_column)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -5993,7 +6000,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     *sort_keys = (grn_table_sort_key *)malloc(sizeof(grn_table_sort_key) *
                                               *n_sort_keys);
     ORDER *order;
-    int i, col_field_index = -1;
+    int i;
     for (order = (ORDER *) select_lex->order_list.first, i = 0; order;
          order = order->next, i++) {
       Item *item = *order->item;
@@ -6003,15 +6010,11 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         const char *column_name = field->field_name;
         int column_name_size = strlen(column_name);
 
-        if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
-          (*sort_keys)[i].key = grn_obj_column(ctx, grn_table,
-                                               column_name, column_name_size);
-        } else if (strncmp(MRN_COLUMN_NAME_SCORE,
-                           column_name, column_name_size) == 0) {
+        if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
           (*sort_keys)[i].key = score_column;
         } else {
-          (*sort_keys)[i].key = grn_columns[field->field_index];
-          col_field_index = field->field_index;
+          (*sort_keys)[i].key = grn_obj_column(ctx, target_table,
+                                               column_name, column_name_size);
         }
       } else if (match_against->eq(item, true)) {
         (*sort_keys)[i].key = score_column;
@@ -6027,16 +6030,6 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       } else {
         (*sort_keys)[i].flags = GRN_TABLE_SORT_DESC;
       }
-    }
-    grn_obj *index;
-    if (grn_columns && i == 1 && col_field_index >= 0 &&
-        grn_column_index(ctx, grn_columns[col_field_index], GRN_OP_LESS,
-                         &index, 1, NULL)) {
-      DBUG_PRINT("info", ("mroonga: fast_order_limit_with_index = TRUE"));
-      fast_order_limit_with_index = TRUE;
-    } else {
-      DBUG_PRINT("info", ("mroonga: fast_order_limit_with_index = FALSE"));
-      fast_order_limit_with_index = FALSE;
     }
     DBUG_PRINT("info", ("mroonga: fast_order_limit = TRUE"));
     fast_order_limit = TRUE;

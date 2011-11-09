@@ -381,7 +381,8 @@ private:
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
-                              longlong *limit, grn_obj *score_column);
+                              longlong *limit,
+                              grn_obj *target_table, grn_obj *score_column);
   void store_fields_from_primary_table(uchar *buf, grn_id record_id);
   void set_pk_bitmap();
   int wrapper_create(const char *name, TABLE *table,
