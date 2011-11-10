@@ -101,55 +101,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_VERSION="$($ac_mysql_config --version)"
 ])
 
-AC_DEFUN([CONFIG_OPTION_MECAB],[
-  MECAB_INCLUDES=
-  MECAB_LIBS=
-
-  AC_MSG_CHECKING([mecab])
-  AC_ARG_WITH([mecab],[AS_HELP_STRING([--with-mecab=PATH],[mecab prefix PATH])],
-    [with_mecab=$withval],[with_mecab=no])
-
-  if test "$with_mecab" = "no"; then
-    AC_MSG_RESULT([no])
-  elif test "$with_mecab" = "yes"; then
-    if test -x /usr/bin/mecab-config; then
-      MECAB_CONFIG='/usr/bin/mecab-config'
-    elif test -x /usr/local/bin/mecab-config; then
-      MECAB_CONFIG='/usr/local/bin/mecab-config'
-    else
-      AC_MSG_ERROR([mecab not found!!])
-    fi
-    MECAB_INCLUDES="`\"$MECAB_CONFIG\" --cflags`"
-    MECAB_LIBS="`\"$MECAB_CONFIG\" --libs`"
-  elif test -d $with_mecab; then
-    MECAB_CONFIG="$with_mecab/bin/mecab-config"
-    MECAB_INCLUDES="`\"$MECAB_CONFIG\" --cflags`"
-    MECAB_LIBS="`\"$MECAB_CONFIG\" --libs`"
-  else
-    AC_MSG_ERROR([argument doesn't exists: --with-mecab=$with_mecab])
-  fi
-
-  _CPPFLAGS="${CPPFLAGS}"
-  _LIBS="${LIBS}"
-  CPPFLAGS="${CPPFLAGS} ${MECAB_INCLUDES}"
-  LIBS="${LIBS} ${MECAB_LIBS}"
-
-  AC_CHECK_FUNC(mecab_new, [
-    AC_DEFINE([HAVE_MECAB], [1], [Define to 1 if libmecab is available])
-    HAVE_MECAB=1
-  ], [
-    HAVE_MECAB=
-    MECAB_INCLUDES=
-    MECAB_LIBS=
-  ])
-
-  CPPFLAGS="${_CPPFLAGS}"
-  LIBS="${_LIBS}"
-
-  AC_SUBST(MECAB_INCLUDES)
-  AC_SUBST(MECAB_LIBS)
-])
-
 AC_DEFUN([CONFIG_OPTION_GROONGA],[
   PKG_CHECK_MODULES(GROONGA, groonga >= 1.2.7)
   _PKG_CONFIG(GROONGA_VERSION, variable=groonga_version, groonga)
@@ -192,7 +143,6 @@ AC_SUBST(MYSQL_INC)
 AC_SUBST(MYSQL_CFLAGS)
 AC_SUBST(MYSQL_VERSION)
 AC_SUBST(plugindir)
-CONFIG_OPTION_MECAB
 CONFIG_OPTION_GROONGA
 
 AC_ARG_WITH(default_parser,

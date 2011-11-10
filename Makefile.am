@@ -1,12 +1,12 @@
 AUTOMAKE_OPTIONS = 1.9.7
 
-AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) $(MECAB_INCLUDES) $(MYSQL_VERSION_CFLAGS)
+AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) $(MYSQL_VERSION_CFLAGS)
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
 noinst_HEADERS = mrn_sys.h ha_mroonga.h mrn_table.h mrn_err.h mrn_mysql.h
 
 plugin_LTLIBRARIES     = ha_groonga.la
-ha_groonga_la_LDFLAGS  = -module $(GROONGA_LIBS) $(MECAB_LIBS)
+ha_groonga_la_LDFLAGS  = -module $(GROONGA_LIBS)
 ha_groonga_la_CXXFLAGS = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_SOURCES  = ha_mroonga.cc mrn_sys.c mrn_table.cc
