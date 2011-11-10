@@ -5929,7 +5929,19 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                         grn_obj *score_column)
 {
   MRN_DBUG_ENTER_METHOD();
-  st_select_lex *select_lex = table->pos_in_table_list->select_lex;
+  TABLE_LIST *table_list = table->pos_in_table_list;
+  st_select_lex *select_lex = table_list->select_lex;
+  SELECT_LEX_UNIT *unit = table_list->derived;
+  st_select_lex *first_select_lex;
+  if (unit)
+  {
+    first_select_lex = unit->first_select();
+  } else {
+    first_select_lex = select_lex;
+  }
+  DBUG_PRINT("info",
+    ("mroonga: first_select_lex->options=%u",
+      first_select_lex ? first_select_lex->options : 0));
 
   if (
     thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
@@ -5950,6 +5962,12 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     *limit += select_lex->select_limit->val_int();
     if (*limit > (longlong)INT_MAX) {
       DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
+      fast_order_limit = FALSE;
+      DBUG_VOID_RETURN;
+    }
+    if (first_select_lex && (first_select_lex->options & OPTION_FOUND_ROWS)) {
+      DBUG_PRINT("info",
+        ("mroonga: fast_order_limit = FALSE by calc_found_rows"));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
