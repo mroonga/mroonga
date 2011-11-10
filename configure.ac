@@ -242,13 +242,13 @@ AC_CONFIG_FILES([
   test/Makefile
   test/unit/Makefile
   test/sql/Makefile
-  test/sql/groonga_include/Makefile
-  test/sql/groonga_storage/Makefile
-  test/sql/groonga_storage/r/Makefile
-  test/sql/groonga_storage/t/Makefile
-  test/sql/groonga_wrapper/Makefile
-  test/sql/groonga_wrapper/r/Makefile
-  test/sql/groonga_wrapper/t/Makefile
+  test/sql/include/Makefile
+  test/sql/suite/groonga_storage/Makefile
+  test/sql/suite/groonga_storage/r/Makefile
+  test/sql/suite/groonga_storage/t/Makefile
+  test/sql/suite/groonga_wrapper/Makefile
+  test/sql/suite/groonga_wrapper/r/Makefile
+  test/sql/suite/groonga_wrapper/t/Makefile
   packages/Makefile
   packages/rpm/Makefile
   packages/rpm/centos/Makefile
@@ -264,8 +264,8 @@ AC_CONFIG_FILES([
   doc/locale/ja/LC_MESSAGES/Makefile
 ])
 AC_OUTPUT([
-  test/sql/groonga_storage/r/information_schema.result
-  test/sql/groonga_storage/r/variables.result
+  test/sql/suite/groonga_storage/r/information_schema.result
+  test/sql/suite/groonga_storage/r/variables.result
   packages/rpm/centos/mysql-groonga.spec
   packages/rpm/fedora/mysql-groonga.spec
 ])

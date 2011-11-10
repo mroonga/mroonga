@@ -18,11 +18,13 @@ if test -z "$MYSQL_VERSION"; then
 fi
 export MYSQL_VERSION
 
+test_include_names="have_groonga.inc,have_groonga_deinit.inc"
 test_suite_names="groonga_storage,groonga_wrapper"
 source_mysql_test_dir="${MYSQL_SOURCE}/mysql-test"
 build_mysql_test_dir="${MYSQL_BUILD}/mysql-test"
 source_test_suites_dir="${source_mysql_test_dir}/suite"
 build_test_suites_dir="${build_mysql_test_dir}/suite"
+build_test_include_dir="${build_mysql_test_dir}/include"
 case "${MYSQL_VERSION}" in
     5.1.*)
 	plugins_dir="${MYSQL_BUILD}/lib/mysql/plugin"
@@ -46,8 +48,16 @@ case "${MYSQL_VERSION}" in
 	;;
 esac
 
-for test_suite_name in groonga_include $(echo $test_suite_names | sed -e 's/,/ /g'); do
-    local_groonga_mysql_test_suite_dir="${BASE_DIR}/sql/${test_suite_name}"
+local_groonga_mysql_test_include_dir="${BASE_DIR}/sql/include"
+for test_include_name in $(echo $test_include_names | sed -e 's/,/ /g'); do
+    if ! test -e "${build_test_include_dir}/${test_include_name}"; then
+        ln -s "${local_groonga_mysql_test_include_dir}/${test_include_name}" \
+	    "${build_test_include_dir}"
+    fi
+done
+
+for test_suite_name in $(echo $test_suite_names | sed -e 's/,/ /g'); do
+    local_groonga_mysql_test_suite_dir="${BASE_DIR}/sql/suite/${test_suite_name}"
     groonga_mysql_test_suite_dir="${build_test_suites_dir}/${test_suite_name}"
     if ! test -e "${groonga_mysql_test_suite_dir}"; then
 	ln -s "${local_groonga_mysql_test_suite_dir}" \
