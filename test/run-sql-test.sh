@@ -18,7 +18,6 @@ if test -z "$MYSQL_VERSION"; then
 fi
 export MYSQL_VERSION
 
-test_include_names="have_groonga.inc,have_groonga_deinit.inc"
 test_suite_names="groonga_storage,groonga_wrapper"
 source_mysql_test_dir="${MYSQL_SOURCE}/mysql-test"
 build_mysql_test_dir="${MYSQL_BUILD}/mysql-test"
@@ -49,7 +48,7 @@ case "${MYSQL_VERSION}" in
 esac
 
 local_groonga_mysql_test_include_dir="${BASE_DIR}/sql/include"
-for test_include_name in $(echo $test_include_names | sed -e 's/,/ /g'); do
+for test_include_name in $(ls $local_groonga_mysql_test_include_dir | grep '\.inc$'); do
     if ! test -e "${build_test_include_dir}/${test_include_name}"; then
         ln -s "${local_groonga_mysql_test_include_dir}/${test_include_name}" \
 	    "${build_test_include_dir}"
