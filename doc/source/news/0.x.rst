@@ -35,7 +35,7 @@
 改良
 ^^^^
 
-* 既存のストレージエンジンに全文検索機能を追加する :doc:`userguide/wrapper` の追加。
+* 既存のストレージエンジンに全文検索機能を追加する :doc:`/userguide/wrapper` の追加。
 * MySQL 5.5.13サポートの追加。 #984
 * 安定してきたので、groongaのデフォルトログレベルをDUMPからNOTICEに変更。
 * Mac OS Xでのビルドをサポート。（@issmさんが報告）
