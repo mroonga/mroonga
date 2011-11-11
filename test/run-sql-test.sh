@@ -47,18 +47,35 @@ case "${MYSQL_VERSION}" in
 	;;
 esac
 
+same_link_p()
+{
+    src=$1
+    dest=$2
+    if test -L "$dest" -a "$(readlink "$dest")" = "$src"; then
+	return 0
+    else
+	return 1
+    fi
+}
+
 local_groonga_mysql_test_include_dir="${BASE_DIR}/sql/include"
 for test_include_name in $(ls $local_groonga_mysql_test_include_dir | grep '\.inc$'); do
-    if ! test -e "${build_test_include_dir}/${test_include_name}"; then
-        ln -s "${local_groonga_mysql_test_include_dir}/${test_include_name}" \
-	    "${build_test_include_dir}"
+    local_groonga_mysql_test_include="${local_groonga_mysql_test_include_dir}/${test_include_name}"
+    groonga_mysql_test_include="${build_test_include_dir}/${test_include_name}"
+    if ! same_link_p "${local_groonga_mysql_test_include}" \
+			"${groonga_mysql_test_include}"; then
+	rm -f "${groonga_mysql_test_include}"
+        ln -s "${local_groonga_mysql_test_include}" \
+	    "${groonga_mysql_test_include}"
     fi
 done
 
 for test_suite_name in $(echo $test_suite_names | sed -e 's/,/ /g'); do
     local_groonga_mysql_test_suite_dir="${BASE_DIR}/sql/suite/${test_suite_name}"
     groonga_mysql_test_suite_dir="${build_test_suites_dir}/${test_suite_name}"
-    if ! test -e "${groonga_mysql_test_suite_dir}"; then
+    if ! same_link_p "${local_groonga_mysql_test_suite_dir}" \
+			"${groonga_mysql_test_suite_dir}"; then
+	rm -f "${groonga_mysql_test_suite_dir}"
 	ln -s "${local_groonga_mysql_test_suite_dir}" \
 	    "${groonga_mysql_test_suite_dir}"
     fi
