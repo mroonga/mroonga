@@ -17,15 +17,13 @@
 --source include/have_groonga.inc
 
 --disable_warnings
-drop table if exists t1, t2, t3;
+drop table if exists alphabet, `with-hyphen`;
 --enable_warnings
 
-create table t1 (c1 int primary key, c2 int, c3 int);
-create table t2 (c1 int primary key, c2 int, c3 int);
-create table t3 (c1 int primary key, c2 int, c3 int);
+create table alphabet (c1 int primary key, c2 int, c3 int);
+drop table alphabet;
 
-drop table t1;
-drop table t2;
-drop table t3;
+create table `with-hyphen` (c1 int primary key, c2 int, c3 int);
+drop table `with-hyphen`;
 
 --source include/have_groonga_deinit.inc
