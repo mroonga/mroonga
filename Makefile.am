@@ -7,12 +7,12 @@ noinst_HEADERS = mrn_sys.h ha_mroonga.h mrn_table.h mrn_err.h mrn_mysql.h
 
 plugin_LTLIBRARIES     = ha_groonga.la
 ha_groonga_la_LDFLAGS  = -module $(GROONGA_LIBS)
-ha_groonga_la_CXXFLAGS = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
+ha_groonga_la_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_SOURCES  = ha_mroonga.cc mrn_sys.c mrn_table.cc
 
 plugin_LIBRARIES                      = libgroonga_storage_engine.a
-libgroonga_storage_engine_a_CXXFLAGS  = $(AM_CFLAGS) $(MYSQL_CFLAGS)
+libgroonga_storage_engine_a_CXXFLAGS  = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
 libgroonga_storage_engine_a_CFLAGS    = $(AM_CFLAGS) $(MYSQL_CFLAGS)
 libgroonga_storage_engine_a_SOURCES   = ha_mroonga.cc mrn_sys.c mrn_table.cc
 
