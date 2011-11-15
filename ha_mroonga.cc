@@ -102,7 +102,6 @@ static uchar *mrn_open_tables_get_key(MRN_SHARE *share,
 }
 
 /* status */
-st_mrn_statuses mrn_status_vals;
 long mrn_count_skip = 0;
 long mrn_fast_order_limit = 0;
 
@@ -151,36 +150,13 @@ static uchar *mrn_allocated_thds_get_key(THD *thd,
 
 /* system functions */
 
-static void mrn_create_status()
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  mrn_status_vals.count_skip = mrn_count_skip;
-  mrn_status_vals.fast_order_limit = mrn_fast_order_limit;
-  DBUG_VOID_RETURN;
-}
-
-struct st_mysql_show_var mrn_statuses[] =
-{
-  {"count_skip", (char *) &mrn_status_vals.count_skip, SHOW_LONG},
-  {"fast_order_limit", (char *) &mrn_status_vals.fast_order_limit, SHOW_LONG},
-  {NullS, NullS, SHOW_LONG}
-};
-
-static int mrn_show_status(THD *thd, SHOW_VAR *var, char *buff)
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  mrn_create_status();
-  var->type = SHOW_ARRAY;
-  var->value = (char *) &mrn_statuses;
-  DBUG_RETURN(0);
-}
-
 struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
 
 struct st_mysql_show_var mrn_status_variables[] =
 {
-  {"groonga", (char *) &mrn_show_status, SHOW_FUNC},
+  {"groonga_count_skip", (char *) &mrn_count_skip, SHOW_LONG},
+  {"groonga_fast_order_limit", (char *) &mrn_fast_order_limit, SHOW_LONG},
   {NullS, NullS, SHOW_LONG}
 };
 

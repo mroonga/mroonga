@@ -93,12 +93,6 @@ extern "C" {
 class ha_mroonga;
 
 /* structs */
-struct st_mrn_statuses
-{
-  long count_skip;
-  long fast_order_limit;
-};
-
 struct st_mrn_ft_info
 {
   struct _ft_vft *please;
