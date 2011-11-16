@@ -13,15 +13,19 @@ This release introduces MariaDB support and fixes several bugs.
 Improvements
 ^^^^^^^^^^^^
 
-* add groonga_libgroonga_version and groonga_version variables
-* support MariaDB 5.2.9
-* support MariaDB 5.3.2-beta
+* add groonga_libgroonga_version and groonga_version variables #1158.
+* information_schema.plugins.plugin_version returns mroonga's version #1157.
+* FLUSH STATUS flushes groonga_* status variables #1166.
+* support MariaDB 5.2.9.
+* support MariaDB 5.3.2-beta.
 
 Fixes
 ^^^^^
 
 * [storage mode] fix a bug that REPLACE INTO with TEXT column does not work #1153.
 * [wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with InnoDB #1154.
+* fix a bug that using ORDER and LIMIT returns a wrong result #1161.
+* fix a bug that FOUND_ROWS() returns a wrong value when using SQL_CALC_FOUND_ROWS #1163.
 
 .. _release-1-0-1:
 
