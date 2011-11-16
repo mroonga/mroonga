@@ -1,29 +1,9 @@
-m4_define([mrn_version_major], [1])
-m4_define([mrn_version_minor], [1])
-m4_define([mrn_version_micro], [0])
-m4_define([mrn_version],
-          [mrn_version_major.mrn_version_minor[]mrn_version_micro])
-
 AC_INIT([groonga-storage-engine], [mrn_version], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([acmacros])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign tar-pax])
 
-AC_DEFINE([MRN_VERSION_MAJOR],
-	  [mrn_version_major],
-          [Define groonga storage engine major version])
-AC_DEFINE([MRN_VERSION_MINOR],
-	  [mrn_version_minor],
-          [Define groonga storage engine minor version])
-AC_DEFINE([MRN_VERSION_MICRO],
-	  [mrn_version_micro],
-          [Define groonga storage engine micro version])
-mrn_version_in_hex=`printf "0x%02x%02x" mrn_version_major mrn_version_minor[]mrn_version_micro`
-AC_DEFINE_UNQUOTED([MRN_VERSION_IN_HEX],
-                   [$mrn_version_in_hex],
-                   [Define groonga storage engine version in hex])
-AC_DEFINE_UNQUOTED([MRN_VERSION],
-		   ["$PACKAGE_VERSION"],
-		   [Define groonga storage engine version in string])
+MRN_VERSION_SETUP
 
 AC_C_BIGENDIAN
 AC_PROG_CC
@@ -256,6 +236,7 @@ AC_CONFIG_FILES([
   packages/yum/Makefile
   packages/apt/Makefile
   tools/Makefile
+  acmacros/Makefile
   doc/Makefile
   doc/locale/Makefile
   doc/locale/en/Makefile

@@ -105,7 +105,7 @@ fi
 echo "Running libtoolize ..."
 $LIBTOOLIZE --force --copy
 echo "Running aclocal ..."
-$ACLOCAL ${ACLOCAL_ARGS} -I .
+$ACLOCAL ${ACLOCAL_ARGS} -I acmacros
 echo "Running autoheader..."
 $AUTOHEADER
 echo "Running automake ..."
