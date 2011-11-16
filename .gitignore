@@ -48,3 +48,4 @@ cscope.out
 /tmp-doc/
 /test/sql/suite/groonga_storage/r/information_schema.result
 /test/sql/suite/groonga_storage/r/variables.result
+/mrn_version.h

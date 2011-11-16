@@ -1,9 +1,22 @@
+m4_define([mrn_version_major], [1])
+m4_define([mrn_version_minor], [1])
+m4_define([mrn_version_micro], [0])
+m4_define([mrn_version],
+          [mrn_version_major.mrn_version_minor[]mrn_version_micro])
+
 AC_INIT([groonga-storage-engine], [mrn_version], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_MACRO_DIR([acmacros])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign tar-pax])
 
-MRN_VERSION_SETUP
+MRN_VERSION_MAJOR=mrn_version_major
+MRN_VERSION_MINOR=mrn_version_minor
+MRN_VERSION_MICRO=mrn_version_micro
+AC_SUBST([MRN_VERSION_MAJOR])
+AC_SUBST([MRN_VERSION_MINOR])
+AC_SUBST([MRN_VERSION_MICRO])
+
+MRN_VERSION_IN_HEX=`printf "0x%02x%02x" mrn_version_major mrn_version_minor[]mrn_version_micro`
+AC_SUBST([MRN_VERSION_IN_HEX])
 
 AC_C_BIGENDIAN
 AC_PROG_CC
@@ -236,7 +249,6 @@ AC_CONFIG_FILES([
   packages/yum/Makefile
   packages/apt/Makefile
   tools/Makefile
-  acmacros/Makefile
   doc/Makefile
   doc/locale/Makefile
   doc/locale/en/Makefile
@@ -245,6 +257,7 @@ AC_CONFIG_FILES([
   doc/locale/ja/LC_MESSAGES/Makefile
 ])
 AC_OUTPUT([
+  mrn_version.h
   test/sql/suite/groonga_storage/r/information_schema.result
   test/sql/suite/groonga_storage/r/variables.result
   packages/rpm/centos/mysql-groonga.spec
