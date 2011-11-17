@@ -244,7 +244,7 @@ static MYSQL_SYSVAR_STR(libgroonga_version, mrn_libgroonga_version,
 
 static MYSQL_SYSVAR_STR(version, mrn_version,
                         PLUGIN_VAR_NOCMDOPT | PLUGIN_VAR_READONLY,
-                        "The version of groonga storage engine",
+                        "The version of mroonga",
                         NULL,
                         NULL,
                         MRN_VERSION);
@@ -286,15 +286,14 @@ void last_insert_grn_id_deinit(UDF_INIT *initid)
 {
 }
 
-/* Groonga information schema */
-int GROONGA_VERSION_SHORT = 0x0001;
+/* mroonga information schema */
 static const char plugin_author[] = "Yoshinori Matsunobu";
 static struct st_mysql_information_schema i_s_info =
 {
   MYSQL_INFORMATION_SCHEMA_INTERFACE_VERSION
 };
 
-static ST_FIELD_INFO i_s_groonga_stats_fields_info[] =
+static ST_FIELD_INFO i_s_mrn_stats_fields_info[] =
 {
   {
     "VERSION",
@@ -325,13 +324,13 @@ static ST_FIELD_INFO i_s_groonga_stats_fields_info[] =
   }
 };
 
-static int i_s_groonga_stats_deinit(void* p)
+static int i_s_mrn_stats_deinit(void* p)
 {
   MRN_DBUG_ENTER_FUNCTION();
   DBUG_RETURN(0);
 }
 
-static int i_s_groonga_stats_fill(
+static int i_s_mrn_stats_fill(
   THD* thd, TABLE_LIST* tables, Item* cond)
 {
   TABLE* table = (TABLE *) tables->table;
@@ -348,16 +347,16 @@ static int i_s_groonga_stats_fill(
   DBUG_RETURN(status);
 }
 
-static int i_s_groonga_stats_init(void* p)
+static int i_s_mrn_stats_init(void* p)
 {
   MRN_DBUG_ENTER_FUNCTION();
   ST_SCHEMA_TABLE* schema = (ST_SCHEMA_TABLE*) p;
-  schema->fields_info = i_s_groonga_stats_fields_info;
-  schema->fill_table = i_s_groonga_stats_fill;
+  schema->fields_info = i_s_mrn_stats_fields_info;
+  schema->fill_table = i_s_mrn_stats_fill;
   DBUG_RETURN(0);
 }
 
-struct st_mysql_plugin i_s_groonga_stats =
+struct st_mysql_plugin i_s_mrn_stats =
 {
   MYSQL_INFORMATION_SCHEMA_PLUGIN,
   &i_s_info,
@@ -365,14 +364,14 @@ struct st_mysql_plugin i_s_groonga_stats =
   plugin_author,
   "Statistics for groonga",
   PLUGIN_LICENSE_GPL,
-  i_s_groonga_stats_init,
-  i_s_groonga_stats_deinit,
-  0x0001,
+  i_s_mrn_stats_init,
+  i_s_mrn_stats_deinit,
+  MRN_VERSION_IN_HEX,
   NULL,
   NULL,
   NULL,
 };
-/* End of groonga information schema implementations */
+/* End of mroonga information schema implementations */
 
 static handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROOT *root)
 {
@@ -1098,7 +1097,7 @@ mysql_declare_plugin(mroonga)
   mrn_status_variables,
   mrn_system_variables,
   NULL
-},i_s_groonga_stats
+}, i_s_mrn_stats
 mysql_declare_plugin_end;
 
 static void mrn_generic_ft_close_search(FT_INFO *handler)
