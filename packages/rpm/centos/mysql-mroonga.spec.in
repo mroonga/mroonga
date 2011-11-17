@@ -14,15 +14,15 @@
 
 %define groonga_required_version 1.2.7
 
-Name:		mysql-groonga
+Name:		mysql-mroonga
 Version:	@VERSION@
 Release:	0%{?dist}
-Summary:	A MySQL storage engine powered by groonga.
+Summary:	A fast fulltext searchable storage engine for MySQL.
 
 Group:		Applications/Databases
 License:	LGPLv2.1
 URL:		http://mroonga.github.com/
-Source0:	http://github.com/downloads/mroonga/mroonga/groonga-storage-engine-%{version}.tar.gz
+Source0:	http://github.com/downloads/mroonga/mroonga/mroonga-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	groonga-devel >= %{groonga_required_version}
@@ -37,10 +37,12 @@ Requires:	MySQL-client = %{mysql_version}-%{mysql_release}
 %endif
 
 %description
-Groonga storage engine is a MySQL storage plugin.
+Mroonga is a fast fulltext searchable storage plugin for MySQL.
+It is based on groonga that is a fast fulltext search engine and
+column store. Groonga is good at real-time update.
 
 %prep
-%setup -q -n groonga-storage-engine-%{version}
+%setup -q -n mroonga-%{version}
 
 mysql_full_version=%{mysql_version}-%{mysql_release}.%{mysql_dist}
 %if %{use_system_mysql}
@@ -85,7 +87,7 @@ if [ ! -d ${mysql_source} ]; then
         --define 'optflags -O0' \
 	../../SPECS/${spec_base}
 fi
-%configure --with-mysql-source=${mysql_source}
+%configure --disable-static --with-mysql-source=${mysql_source}
 make %{?_smp_mflags}
 
 
@@ -93,9 +95,8 @@ make %{?_smp_mflags}
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_groonga.a
-mv $RPM_BUILD_ROOT%{_datadir}/groonga-storage-engine/ \
-    $RPM_BUILD_ROOT%{_datadir}/mysql-groonga/
+mv $RPM_BUILD_ROOT%{_datadir}/mroonga/ \
+    $RPM_BUILD_ROOT%{_datadir}/mysql-mroonga/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -109,7 +110,7 @@ CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
     command="/usr/bin/mysql -u root -e \"$sql\""
     echo $command
     eval $command || \
-	(echo "run the following command to register groonga storage engine:"; \
+	(echo "run the following command to register mroonga:"; \
 	 echo "  $command")
 fi
 
@@ -122,18 +123,19 @@ UNINSTALL PLUGIN groonga;
   command="/usr/bin/mysql -u root -e \"$sql\""
   echo $command
   eval $command || \
-      (echo "run the following command to unregister groonga storage engine:"; \
+      (echo "run the following command to unregister mroonga:"; \
        echo "  $command")
 fi
 
 %files
 %defattr(-,root,root,-)
 %{_libdir}/mysql/plugin/
-%doc %{_datadir}/mysql-groonga/doc/
+%doc %{_datadir}/mysql-mroonga/doc/
 
 %changelog
-* Sat Oct 29 2011 Kouhei Sutou <kou@clear-code.com> - 1.0.1-0
+* Sat Oct 29 2011 Kouhei Sutou <kou@clear-code.com> - 1.10-0
 - new upstream release.
+- groonga storage engine -> mroonga.
 
 * Thu Sep 29 2011 Kouhei Sutou <kou@clear-code.com> - 1.0.0-0
 - new upstream release.

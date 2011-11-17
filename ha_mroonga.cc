@@ -1101,7 +1101,6 @@ mysql_declare_plugin(mroonga)
 },i_s_groonga_stats
 mysql_declare_plugin_end;
 
-
 static void mrn_generic_ft_close_search(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();

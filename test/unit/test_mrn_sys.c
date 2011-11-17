@@ -69,7 +69,7 @@ void test_mrn_hash_put()
 void test_mrn_hash_get()
 {
   const char *key = "mroonga";
-  const char *value = "groonga storage engine";
+  const char *value = "A storage engine based on groonga.";
   grn_obj *result;
 
   GRN_TEXT_SETS(ctx, &buffer, value);

@@ -4,7 +4,7 @@ m4_define([mrn_version_micro], [0])
 m4_define([mrn_version],
           [mrn_version_major.mrn_version_minor[]mrn_version_micro])
 
-AC_INIT([groonga-storage-engine], [mrn_version], [ikdttr@gmail.com])
+AC_INIT([mroonga], [mrn_version], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign tar-pax])
 
@@ -185,7 +185,7 @@ AC_SUBST(MROONGA_GITHUB_COM_PATH)
 # For Debian package release
 AC_ARG_WITH(rsync-path,
             [AS_HELP_STRING([--with-rsync-path=PATH],
-            [specify rsync path to upload groonga storage engine Debian packages.])],
+            [specify rsync path to upload mroonga Debian packages.])],
             [RSYNC_PATH="$withval"],
             [RSYNC_PATH=""])
 AC_SUBST(RSYNC_PATH)
@@ -260,6 +260,6 @@ AC_OUTPUT([
   mrn_version.h
   test/sql/suite/groonga_storage/r/information_schema.result
   test/sql/suite/groonga_storage/r/variables.result
-  packages/rpm/centos/mysql-groonga.spec
-  packages/rpm/fedora/mysql-groonga.spec
+  packages/rpm/centos/mysql-mroonga.spec
+  packages/rpm/fedora/mysql-mroonga.spec
 ])

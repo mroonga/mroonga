@@ -19,19 +19,19 @@
 #ifndef _mrn_version_h
 #define _mrn_version_h
 
-/* Define groonga storage engine version in string */
+/* Define mroonga version in string */
 #define MRN_VERSION "@VERSION@"
 
-/* Define groonga storage engine version in hex */
+/* Define mroonga version in hex */
 #define MRN_VERSION_IN_HEX @MRN_VERSION_IN_HEX@
 
-/* Define groonga storage engine major version */
+/* Define mroonga major version */
 #define MRN_VERSION_MAJOR @MRN_VERSION_MAJOR@
 
-/* Define groonga storage engine minor version */
+/* Define mroonga minor version */
 #define MRN_VERSION_MINOR @MRN_VERSION_MINOR@
 
-/* Define groonga storage engine micro version */
+/* Define mroonga micro version */
 #define MRN_VERSION_MICRO @MRN_VERSION_MICRO@
 
 #endif /* _mrn_version_h */

@@ -11,10 +11,10 @@ ha_groonga_la_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_SOURCES  = ha_mroonga.cc mrn_sys.c mrn_table.cc
 
-plugin_LIBRARIES                      = libgroonga_storage_engine.a
-libgroonga_storage_engine_a_CXXFLAGS  = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
-libgroonga_storage_engine_a_CFLAGS    = $(AM_CFLAGS) $(MYSQL_CFLAGS)
-libgroonga_storage_engine_a_SOURCES   = ha_mroonga.cc mrn_sys.c mrn_table.cc
+plugin_LIBRARIES          = libha_groonga.a
+libha_groonga_a_CXXFLAGS  = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
+libha_groonga_a_CFLAGS    = $(AM_CFLAGS) $(MYSQL_CFLAGS)
+libha_groonga_a_SOURCES   = ha_mroonga.cc mrn_sys.c mrn_table.cc
 
 SUBDIRS =					\
 	test					\
@@ -29,7 +29,7 @@ installcheck-local: install
 
 tag:
 	cd $(top_srcdir) && \
-	  git tag v$(VERSION) -a -m 'groonga storage engine $(VERSION)!!!'
+	  git tag v$(VERSION) -a -m 'mroonga $(VERSION)!!!'
 
 update-latest-release:
 	@if test -z "$(OLD_RELEASE)"; then	\

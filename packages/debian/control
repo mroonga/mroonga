@@ -1,4 +1,4 @@
-Source: groonga-storage-engine
+Source: mroonga
 Section: database
 Priority: optional
 Maintainer: Kouhei Sutou <kou@clear-code.com>
@@ -11,27 +11,33 @@ Build-Depends:
 Standards-Version: 3.9.1
 Homepage: http://mroonga.github.com/
 
-Package: mysql-server-groonga
+Package: mysql-server-mroonga
 Section: database
 Architecture: any
+Replaces: mysql-server-groonga (<< 1.0.0-1)
+Breaks: mysql-server-groonga (<< 1.0.0-1)
 Depends:
 	${misc:Depends},
 	${shlibs:Depends},
 	libgroonga0 (>= 1.2.7),
 	mysql-server
-Description: MySQL storage enigne built on groonga.
- The groonga storage engine is a MySQL storage engine built on groonga,
- a fulltext search engine and column store.
+Description: A fast fulltext searchable storage engine for MySQL.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
  .
  This package provides a MySQL storage engine as a shared library.
 
-Package: mysql-server-groonga-doc
+Package: mysql-server-mroonga-doc
 Section: doc
 Architecture: all
+Replaces: mysql-server-groonga-doc (<< 1.0.0-1)
+Breaks: mysql-server-groonga-doc (<< 1.0.0-1)
 Depends:
 	${misc:Depends}
-Description: Documentation of the groonga storage engine.
- The groonga storage engine is a MySQL storage engine built on groonga,
- a fulltext search engine and column store.
+Description: Documentation of mroonga.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
  .
- This package provides documentation of the groonga storage engine.
+ This package provides documentation of mroonga.
