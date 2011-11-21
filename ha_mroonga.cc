@@ -382,8 +382,11 @@ static void mrn_drop_db(handlerton *hton, char *path)
 {
   char db_path[MRN_MAX_PATH_SIZE];
   char db_name[MRN_MAX_PATH_SIZE];
-  mrn_db_path_gen(path, db_path);
-  mrn_db_name_gen(path, db_name);
+  char decode_name[MRN_MAX_PATH_SIZE];
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) path, (const uchar *) path + strlen(path));
+  mrn_db_path_gen(decode_name, db_path);
+  mrn_db_name_gen(decode_name, db_name);
   grn_ctx *ctx;
   ctx = grn_ctx_open(0);
   struct stat dummy;
@@ -1648,7 +1651,10 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 
   grn_obj *grn_table;
   char grn_table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, grn_table_name);
+  char decode_name[MRN_MAX_PATH_SIZE];
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_table_name_gen(decode_name, grn_table_name);
   char *grn_table_path = NULL;     // we don't specify path
   grn_obj *pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
   grn_obj *pkey_value_type = NULL; // we don't use this
@@ -1757,7 +1763,10 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   /* create table */
   grn_obj *tbl_obj;
   char tbl_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, tbl_name);
+  char decode_name[MRN_MAX_PATH_SIZE];
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_table_name_gen(decode_name, tbl_name);
   int tbl_name_len = strlen(tbl_name);
 
   char *tbl_path = NULL;           // we don't specify path
@@ -2089,9 +2098,13 @@ int ha_mroonga::ensure_database_create(const char *name)
   grn_obj *db;
   char db_name[MRN_MAX_PATH_SIZE];
   char db_path[MRN_MAX_PATH_SIZE];
+  char decode_name[MRN_MAX_PATH_SIZE];
   struct stat db_stat;
-  mrn_db_name_gen(name, db_name);
-  mrn_db_path_gen(name, db_path);
+  mrn_decode((uchar *) decode_name,
+             (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_db_name_gen(decode_name, db_name);
+  mrn_db_path_gen(decode_name, db_path);
 
   pthread_mutex_lock(&mrn_db_mutex);
   if (mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db) != 0) {
@@ -2131,8 +2144,12 @@ int ha_mroonga::ensure_database_open(const char *name)
   grn_obj *db;
   char db_name[MRN_MAX_PATH_SIZE];
   char db_path[MRN_MAX_PATH_SIZE];
-  mrn_db_name_gen(name, db_name);
-  mrn_db_path_gen(name, db_path);
+  char decode_name[MRN_MAX_PATH_SIZE];
+  mrn_decode((uchar *) decode_name,
+             (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_db_name_gen(decode_name, db_name);
+  mrn_db_path_gen(decode_name, db_path);
 
   pthread_mutex_lock(&mrn_db_mutex);
   if (mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db) != 0) {
@@ -2293,7 +2310,10 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
   }
 
   char table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, table_name);
+  char decode_name[MRN_MAX_PATH_SIZE];
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_table_name_gen(decode_name, table_name);
   int i = 0;
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->s->key_info[i];
@@ -2407,7 +2427,10 @@ int ha_mroonga::open_table(const char *name)
   MRN_DBUG_ENTER_METHOD();
 
   char table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, table_name);
+  char decode_name[MRN_MAX_PATH_SIZE];
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_table_name_gen(decode_name, table_name);
   grn_table = grn_ctx_get(ctx, table_name, strlen(table_name));
   if (ctx->rc) {
     int error = ER_CANT_OPEN_FILE;
@@ -2473,7 +2496,10 @@ int ha_mroonga::storage_open_indexes(const char *name)
   }
 
   char table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, table_name);
+  char decode_name[MRN_MAX_PATH_SIZE];
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_table_name_gen(decode_name, table_name);
   int i = 0;
   for (i = 0; i < n_keys; i++) {
     key_min[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
@@ -2699,7 +2725,7 @@ int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
   for (i = 0; i < tmp_table_share->keys; i++) {
     char index_name[MRN_MAX_PATH_SIZE];
     mrn_index_table_name_gen(table_name, tmp_table_share->key_info[i].name,
-      index_name);
+                             index_name);
     grn_obj *index_table = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (index_table != NULL) {
       grn_obj_remove(ctx, index_table);
@@ -2730,7 +2756,8 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
 
   int i;
   for (i = 0; i < tmp_table_share->keys; i++) {
-    mrn_index_table_name_gen(tbl_name, tmp_table_share->key_info[i].name, index_name);
+    mrn_index_table_name_gen(tbl_name, tmp_table_share->key_info[i].name,
+                             index_name);
     grn_obj *idx_tbl_obj = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (idx_tbl_obj != NULL) {
       grn_obj_remove(ctx, idx_tbl_obj);
@@ -2752,6 +2779,7 @@ int ha_mroonga::delete_table(const char *name)
   int error = 0;
   char db_name[MRN_MAX_PATH_SIZE];
   char tbl_name[MRN_MAX_PATH_SIZE];
+  char decode_name[MRN_MAX_PATH_SIZE];
   TABLE_LIST table_list;
   TABLE_SHARE *tmp_table_share;
   TABLE tmp_table;
@@ -2764,8 +2792,10 @@ int ha_mroonga::delete_table(const char *name)
     sql_command == SQLCOM_ALTER_TABLE
   )
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
-  mrn_db_name_gen(name, db_name);
-  mrn_table_name_gen(name, tbl_name);
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_db_name_gen(decode_name, db_name);
+  mrn_table_name_gen(decode_name, tbl_name);
 #if MYSQL_VERSION_ID >= 50500
   table_list.init_one_table(db_name, strlen(db_name),
                             tbl_name, strlen(tbl_name), tbl_name, TL_WRITE);
@@ -7370,6 +7400,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   uint n_keys = table->s->keys;
   grn_obj *index_tables[num_of_keys + n_keys];
   char grn_table_name[MRN_MAX_PATH_SIZE];
+  char decode_name[MRN_MAX_PATH_SIZE];
   THD *thd = ha_thd();
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
@@ -7392,7 +7423,10 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
-  mrn_table_name_gen(share->table_name, grn_table_name);
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) share->table_name,
+             (const uchar *) share->table_name + share->table_name_length);
+  mrn_table_name_gen(decode_name, grn_table_name);
   hnd_add_index = NULL;
   bitmap_clear_all(table->read_set);
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
@@ -7535,6 +7569,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   grn_obj *index_tables[num_of_keys + n_keys];
   grn_obj *index_columns[num_of_keys + n_keys];
   char grn_table_name[MRN_MAX_PATH_SIZE];
+  char decode_name[MRN_MAX_PATH_SIZE];
   THD *thd = ha_thd();
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
@@ -7557,7 +7592,10 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
-  mrn_table_name_gen(share->table_name, grn_table_name);
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) share->table_name,
+             (const uchar *) share->table_name + share->table_name_length);
+  mrn_table_name_gen(decode_name, grn_table_name);
   bitmap_clear_all(table->read_set);
   for (i = 0; i < num_of_keys; i++) {
     index_tables[i + n_keys] = NULL;
@@ -7718,8 +7756,12 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
   uint wrap_key_num[num_of_keys], i, j;
   KEY *key_info = table_share->key_info;
   char grn_table_name[MRN_MAX_PATH_SIZE];
+  char decode_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
-  mrn_table_name_gen(share->table_name, grn_table_name);
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) share->table_name,
+             (const uchar *) share->table_name + share->table_name_length);
+  mrn_table_name_gen(decode_name, grn_table_name);
   for (i = 0, j = 0; i < num_of_keys; i++) {
     if (!(key_info[key_num[i]].flags & HA_FULLTEXT)) {
       wrap_key_num[j] = share->wrap_key_nr[key_num[i]];
@@ -7754,8 +7796,12 @@ int ha_mroonga::storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
   uint i;
   KEY *key_info = table_share->key_info;
   char grn_table_name[MRN_MAX_PATH_SIZE];
+  char decode_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
-  mrn_table_name_gen(share->table_name, grn_table_name);
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) share->table_name,
+             (const uchar *) share->table_name + share->table_name_length);
+  mrn_table_name_gen(decode_name, grn_table_name);
   for (i = 0; i < num_of_keys; i++) {
     char index_name[MRN_MAX_PATH_SIZE];
     mrn_index_table_name_gen(grn_table_name, key_info[key_num[i]].name,

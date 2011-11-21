@@ -796,3 +796,32 @@ void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
   }
   DBUG_VOID_RETURN;
 }
+
+uint mrn_decode(uchar *buf_st, uchar *buf_ed, const uchar *st, const uchar *ed)
+{
+  int res;
+  uchar *buf = buf_st;
+  my_wc_t wc;
+  my_charset_conv_mb_wc mb_wc = my_charset_filename.cset->mb_wc;
+  DBUG_ENTER("mrn_decode");
+  DBUG_PRINT("info", ("mroonga: in=%s", st));
+  buf_ed--;
+  for (; st < ed && buf < buf_ed; st += res)
+  {
+    if ((res = (*mb_wc)(NULL, &wc, (uchar *) st, (uchar *) ed)) > 0)
+    {
+      for (; wc; buf++, wc >>= 8)
+        *buf = (uchar)(wc & 0xff);
+    } else if (res == MY_CS_ILSEQ)
+    {
+      *buf = *st;
+      buf++;
+      res = 1;
+    } else {
+      break;
+    }
+  }
+  *buf = '\0';
+  DBUG_PRINT("info", ("mroonga: out=%s", buf_st));
+  DBUG_RETURN(buf - buf_st);
+}
