@@ -78,6 +78,10 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
 #endif
 
+#if MYSQL_VERSION_ID >= 50500
+#  define MRN_HANDLER_HAVE_TRUNCATE
+#endif
+
 #if MYSQL_VERSION_ID < 50600
   typedef Item COND;
 #endif
@@ -294,9 +298,9 @@ public:
   void start_bulk_insert(ha_rows rows);
   int end_bulk_insert();
   int delete_all_rows();
-#if MYSQL_VERSION_ID >= 50500
+#ifdef MRN_HANDLER_HAVE_TRUNCATE
   int truncate();
-#endif
+#endif // MRN_HANDLER_HAVE_TRUNCATE
   double scan_time();
   double read_time(uint index, uint ranges, ha_rows rows);
   const key_map *keys_to_use_for_scanning();
@@ -594,9 +598,9 @@ private:
 #endif // MRN_HANDLER_HAVE_MULTI_RANGE_READ
   int wrapper_delete_all_rows();
   int storage_delete_all_rows();
-#if MYSQL_VERSION_ID >= 50500
+#ifdef MRN_HANDLER_HAVE_TRUNCATE
   int wrapper_truncate();
-#endif
+#endif // MRN_HANDLER_HAVE_TRUNCATE
   int wrapper_truncate_index();
   int storage_truncate();
   int storage_truncate_index();
