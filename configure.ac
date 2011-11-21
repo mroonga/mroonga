@@ -92,6 +92,15 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
   MYSQL_INC="$MYSQL_INC $($ac_mysql_config --include)"
   MYSQL_VERSION="$($ac_mysql_config --version)"
+
+  AC_MSG_CHECKING([for InnoDB FTS])
+  mrn_mysql_innodb_fts_p=no
+  if test x"$MYSQL_VERSION" == x"5.6.3-labs-innodb-fts"; then
+    mrn_mysql_innodb_fts_p=yes
+    AC_DEFINE([MRN_MYSQL_INNODB_FTS_P], [1],
+              [Define to 1 if the target MySQL has InnoDB FTS])
+  fi
+  AC_MSG_RESULT($mrn_mysql_innodb_fts_p)
 ])
 
 AC_DEFUN([CONFIG_OPTION_GROONGA],[

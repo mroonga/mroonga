@@ -82,7 +82,7 @@ extern "C" {
   typedef Item COND;
 #endif
 
-#if MYSQL_VERSION_ID < 50603
+#if MYSQL_VERSION_ID < 50603 || defined(MRN_MYSQL_INNODB_FTS_P)
   typedef MYSQL_ERROR Sql_condition;
 #endif
 
