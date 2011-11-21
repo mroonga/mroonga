@@ -6623,13 +6623,18 @@ int ha_mroonga::wrapper_delete_all_rows()
   error = wrap_handler->ha_delete_all_rows();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
+
+  if (!error && wrapper_have_target_index()) {
+    error = wrapper_truncate_index();
+  }
+
   DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_delete_all_rows()
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN((my_errno = HA_ERR_WRONG_COMMAND));
+  DBUG_RETURN(storage_truncate());
 }
 
 int ha_mroonga::delete_all_rows()
@@ -6655,15 +6660,104 @@ int ha_mroonga::wrapper_truncate()
   error = wrap_handler->ha_truncate();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
+
+  if (!error && wrapper_have_target_index()) {
+    error = wrapper_truncate_index();
+  }
+
+  DBUG_RETURN(error);
+}
+#endif
+
+int ha_mroonga::wrapper_truncate_index()
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+
+  if (mrn_dry_write(ha_thd())) {
+    DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
+    DBUG_RETURN(error);
+  }
+
+  grn_rc rc;
+  uint i;
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    KEY key_info = table->key_info[i];
+
+    if (!(wrapper_is_target_index(&key_info))) {
+      continue;
+    }
+
+    rc = grn_table_truncate(ctx, grn_index_tables[i]);
+    if (rc) {
+      error = ER_ERROR_ON_WRITE;
+      my_message(error, ctx->errbuf, MYF(0));
+      goto err;
+    }
+  }
+err:
+  rc = grn_table_truncate(ctx, grn_table);
+  if (rc) {
+    error = ER_ERROR_ON_WRITE;
+    my_message(error, ctx->errbuf, MYF(0));
+  }
+
   DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_truncate()
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(HA_ERR_WRONG_COMMAND);
+  int error = 0;
+
+  if (mrn_dry_write(ha_thd())) {
+    DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
+    DBUG_RETURN(error);
+  }
+
+  grn_rc rc;
+  rc = grn_table_truncate(ctx, grn_table);
+  if (rc) {
+    my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_WRITE);
+  }
+  error = storage_truncate_index();
+  DBUG_RETURN(error);
 }
 
+int ha_mroonga::storage_truncate_index()
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+
+  grn_rc rc;
+  uint i;
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue;
+    }
+
+    KEY key_info = table->key_info[i];
+
+    if (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT)) {
+      continue;
+    }
+
+    rc = grn_table_truncate(ctx, grn_index_tables[i]);
+    if (rc) {
+      error = ER_ERROR_ON_WRITE;
+      my_message(error, ctx->errbuf, MYF(0));
+      goto err;
+    }
+  }
+err:
+  DBUG_RETURN(error);
+}
+
+#if MYSQL_VERSION_ID >= 50500
 int ha_mroonga::truncate()
 {
   MRN_DBUG_ENTER_METHOD();

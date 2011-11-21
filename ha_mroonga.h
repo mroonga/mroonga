@@ -596,8 +596,10 @@ private:
   int storage_delete_all_rows();
 #if MYSQL_VERSION_ID >= 50500
   int wrapper_truncate();
-  int storage_truncate();
 #endif
+  int wrapper_truncate_index();
+  int storage_truncate();
+  int storage_truncate_index();
   double wrapper_scan_time();
   double storage_scan_time();
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
