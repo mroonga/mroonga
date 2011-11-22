@@ -5618,7 +5618,7 @@ void ha_mroonga::clear_cursor_geo()
 {
   MRN_DBUG_ENTER_METHOD();
   if (geo_cursor) {
-    grn_obj_unlink(ctx, geo_cursor);
+    grn_obj_close(ctx, geo_cursor);
     geo_cursor = NULL;
   }
   DBUG_VOID_RETURN;
