@@ -28,6 +28,7 @@ Fixes
 * [wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with InnoDB #1154.
 * fix a bug that using ORDER and LIMIT returns a wrong result #1161.
 * fix a bug that FOUND_ROWS() returns a wrong value when using SQL_CALC_FOUND_ROWS #1163.
+* fix a bug that a table name containing '-' does not work #1165.
 
 .. _release-1-0-1:
 
