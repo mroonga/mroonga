@@ -1051,6 +1051,7 @@ static int mrn_deinit(void *p)
 {
   THD *thd = current_thd, *tmp_thd;
   grn_ctx *ctx = &mrn_ctx;
+  void *value;
 
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
 
@@ -1072,6 +1073,11 @@ static int mrn_deinit(void *p)
   pthread_mutex_destroy(&mrn_allocated_thds_mutex);
   pthread_mutex_destroy(&mrn_log_mutex);
   pthread_mutex_destroy(&mrn_db_mutex);
+  GRN_HASH_EACH(ctx, mrn_hash, id, NULL, 0, &value, {
+    grn_obj *db;
+    memcpy(&db, value, sizeof(grn_obj *));
+    grn_obj_unlink(ctx, db);
+  });
   grn_hash_close(ctx, mrn_hash);
   grn_obj_unlink(ctx, mrn_db);
 
