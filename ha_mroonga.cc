@@ -215,7 +215,7 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
 
     old_value = strdup(*old_value_ptr);
     GRN_LOG(&ctx, GRN_LOG_NOTICE,
-            "log file changed: <%s> -> <%s>",
+            "log file is changed: <%s> -> <%s>",
             old_value, new_value);
 
     my_free(*old_value_ptr, MYF(0));
@@ -230,7 +230,7 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
     pthread_mutex_unlock(&mrn_log_mutex);
 
     GRN_LOG(&ctx, GRN_LOG_NOTICE,
-            "log file changed: <%s> -> <%s>",
+            "log file is changed: <%s> -> <%s>",
             old_value, new_value);
     free(old_value);
   }
