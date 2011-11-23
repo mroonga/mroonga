@@ -30,7 +30,7 @@
 #define MRN_MAX_PATH_SIZE 256
 #define MRN_MAX_EXPRS 32
 #define MRN_DB_FILE_SUFFIX ".mrn"
-#define MRN_LOG_FILE_NAME "groonga.log"
+#define MRN_LOG_FILE_PATH "groonga.log"
 #define MRN_LEX_SUFFIX "_lex"
 #define MRN_HASH_SUFFIX "_hash"
 #define MRN_PAT_SUFFIX "_pat"

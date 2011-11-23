@@ -106,7 +106,7 @@ static long mrn_count_skip = 0;
 static long mrn_fast_order_limit = 0;
 
 /* logging */
-static const char *mrn_log_file_name = MRN_LOG_FILE_NAME;
+static char *mrn_log_file_path = NULL;
 static FILE *mrn_log_file = NULL;
 static bool mrn_log_file_opened = false;
 static grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
@@ -196,6 +196,56 @@ static MYSQL_SYSVAR_ENUM(log_level, mrn_log_level,
                          (ulong) mrn_log_level,
                          &mrn_log_level_typelib);
 
+static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
+                                void *var_ptr, const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const char *new_value = *((const char **)save);
+  char **old_value_ptr = (char **)var_ptr;
+  grn_ctx ctx;
+
+  grn_ctx_init(&ctx, 0);
+  if (strcmp(*old_value_ptr, new_value) == 0) {
+    GRN_LOG(&ctx, GRN_LOG_NOTICE,
+            "log file isn't changed "
+            "because the requested path isn't different: <%s>",
+            new_value);
+  } else {
+    char *old_value;
+
+    old_value = strdup(*old_value_ptr);
+    GRN_LOG(&ctx, GRN_LOG_NOTICE,
+            "log file changed: <%s> -> <%s>",
+            old_value, new_value);
+
+    my_free(*old_value_ptr, MYF(0));
+    *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+
+    pthread_mutex_lock(&mrn_log_mutex);
+    if (mrn_log_file_opened) {
+      fclose(mrn_log_file);
+    }
+    mrn_log_file = fopen(new_value, "a");
+    mrn_log_file_opened = true;
+    pthread_mutex_unlock(&mrn_log_mutex);
+
+    GRN_LOG(&ctx, GRN_LOG_NOTICE,
+            "log file changed: <%s> -> <%s>",
+            old_value, new_value);
+    free(old_value);
+  }
+  grn_ctx_fin(&ctx);
+
+  DBUG_VOID_RETURN;
+}
+
+static MYSQL_SYSVAR_STR(log_file, mrn_log_file_path,
+                        PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
+                        "log file for groonga",
+                        NULL,
+                        mrn_log_file_update,
+                        MRN_LOG_FILE_PATH);
+
 static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
                                       void *var_ptr, const void *save)
 {
@@ -252,6 +302,7 @@ static MYSQL_SYSVAR_STR(version, mrn_version,
 struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
+  MYSQL_SYSVAR(log_file),
   MYSQL_SYSVAR(default_parser),
   MYSQL_SYSVAR(dry_write),
   MYSQL_SYSVAR(libgroonga_version),
@@ -419,7 +470,7 @@ static bool mrn_flush_logs(handlerton *hton)
   if (mrn_log_file_opened) {
     pthread_mutex_lock(&mrn_log_mutex);
     fclose(mrn_log_file);
-    mrn_log_file = fopen(mrn_log_file_name, "a");
+    mrn_log_file = fopen(mrn_log_file_path, "a");
     pthread_mutex_unlock(&mrn_log_mutex);
   }
   return result;
@@ -973,8 +1024,9 @@ static int mrn_init(void *p)
   if (pthread_mutex_init(&mrn_log_mutex, NULL) != 0) {
     goto err_log_mutex_init;
   }
+
   grn_logger_info_set(ctx, &mrn_logger_info);
-  if (!(mrn_log_file = fopen(mrn_log_file_name, "a"))) {
+  if (!(mrn_log_file = fopen(mrn_log_file_path, "a"))) {
     goto err_log_file_open;
   }
   mrn_log_file_opened = true;
