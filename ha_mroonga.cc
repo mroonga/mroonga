@@ -5373,9 +5373,11 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table,
                             expression, expression_variable);
   if (flags & FT_BOOL) {
-    const char *keyword = key->ptr();
-    uint keyword_length = key->length();
+    const char *keyword, *keyword_original;
+    uint keyword_length, keyword_length_original;
     grn_operator default_operator = GRN_OP_OR;
+    keyword = keyword_original = key->ptr();
+    keyword_length = keyword_length_original = key->length();
     // WORKAROUND: support only '*D+', '*D-' and '*DOR' pragma.
     if (keyword_length > 0) {
       if (keyword[0] == '*' && keyword_length > 1) {
@@ -5415,9 +5417,18 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
                         keyword, keyword_length,
                         match_columns, GRN_OP_MATCH, default_operator,
                         expression_flags);
-    // TODO: check rc
-    grn_table_select(info->ctx, info->table, expression,
-                     info->result, GRN_OP_OR);
+    if (rc) {
+      char error_message[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+              "failed to parse fulltext search keyword: <%.*s>: <%s>",
+              keyword_length_original, keyword_original,
+              info->ctx->errbuf);
+      my_message(ER_PARSE_ERROR, error_message, MYF(0));
+      GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
+    } else {
+      grn_table_select(info->ctx, info->table, expression,
+                       info->result, GRN_OP_OR);
+    }
   } else {
     grn_obj query;
     GRN_TEXT_INIT(&query, GRN_OBJ_DO_SHALLOW_COPY);
