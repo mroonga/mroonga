@@ -106,9 +106,9 @@ long mrn_count_skip = 0;
 long mrn_fast_order_limit = 0;
 
 /* logging */
-const char *mrn_logfile_name = MRN_LOG_FILE_NAME;
-FILE *mrn_logfile = NULL;
-static bool mrn_logfile_opened = false;
+const char *mrn_log_file_name = MRN_LOG_FILE_NAME;
+FILE *mrn_log_file = NULL;
+static bool mrn_log_file_opened = false;
 grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 ulong mrn_log_level = (ulong) mrn_log_level_default;
 char *mrn_default_parser;
@@ -120,11 +120,11 @@ static void mrn_logger_func(int level, const char *time, const char *title,
                             void *func_arg)
 {
   const char slev[] = " EACewnid-";
-  if (mrn_logfile_opened) {
+  if (mrn_log_file_opened) {
     pthread_mutex_lock(&mrn_log_mutex);
-    fprintf(mrn_logfile, "%s|%c|%08x|%s\n", time,
+    fprintf(mrn_log_file, "%s|%c|%08x|%s\n", time,
             *(slev + level), (uint)(ulong)pthread_self(), msg);
-    fflush(mrn_logfile);
+    fflush(mrn_log_file);
     pthread_mutex_unlock(&mrn_log_mutex);
   }
 }
@@ -416,10 +416,10 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
 static bool mrn_flush_logs(handlerton *hton)
 {
   bool result = 0;
-  if (mrn_logfile_opened) {
+  if (mrn_log_file_opened) {
     pthread_mutex_lock(&mrn_log_mutex);
-    fclose(mrn_logfile);
-    mrn_logfile = fopen(mrn_logfile_name, "a");
+    fclose(mrn_log_file);
+    mrn_log_file = fopen(mrn_log_file_name, "a");
     pthread_mutex_unlock(&mrn_log_mutex);
   }
   return result;
@@ -974,10 +974,10 @@ static int mrn_init(void *p)
     goto err_log_mutex_init;
   }
   grn_logger_info_set(ctx, &mrn_logger_info);
-  if (!(mrn_logfile = fopen(mrn_logfile_name, "a"))) {
+  if (!(mrn_log_file = fopen(mrn_log_file_name, "a"))) {
     goto err_log_file_open;
   }
-  mrn_logfile_opened = true;
+  mrn_log_file_opened = true;
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s started.", MRN_PACKAGE_STRING);
   GRN_LOG(ctx, GRN_LOG_NOTICE, "log level is '%s'",
           mrn_log_level_type_names[mrn_log_level]);
@@ -1034,9 +1034,9 @@ err_db_mutex_init:
 err_hash_create:
   grn_obj_unlink(ctx, mrn_db);
 err_db_create:
-  if (mrn_logfile_opened) {
-    fclose(mrn_logfile);
-    mrn_logfile_opened = false;
+  if (mrn_log_file_opened) {
+    fclose(mrn_log_file);
+    mrn_log_file_opened = false;
   }
 err_log_file_open:
   pthread_mutex_destroy(&mrn_log_mutex);
@@ -1081,9 +1081,9 @@ static int mrn_deinit(void *p)
   grn_hash_close(ctx, mrn_hash);
   grn_obj_unlink(ctx, mrn_db);
 
-  if (mrn_logfile_opened) {
-    fclose(mrn_logfile);
-    mrn_logfile_opened = false;
+  if (mrn_log_file_opened) {
+    fclose(mrn_log_file);
+    mrn_log_file_opened = false;
   }
 
   grn_ctx_fin(ctx);
