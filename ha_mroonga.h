@@ -154,7 +154,7 @@ private:
   grn_obj bottom_right_point;
   grn_table_cursor *cursor;
   grn_table_cursor *index_table_cursor;
-  grn_obj *geo_cursor;
+  grn_obj *cursor_geo;
   grn_obj *score_column;
   grn_obj *key_accessor;
 
