@@ -111,7 +111,7 @@ static FILE *mrn_log_file = NULL;
 static bool mrn_log_file_opened = false;
 static grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 static ulong mrn_log_level = (ulong) mrn_log_level_default;
-char *mrn_default_parser;
+char *mrn_default_parser = NULL;
 static char *mrn_libgroonga_version = (char *) grn_get_version();
 static char *mrn_version = (char *) MRN_VERSION;
 
@@ -251,14 +251,25 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
 {
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
-  const char *old_value = mrn_default_parser;
+  char **old_value_ptr = (char **)var_ptr;
   grn_ctx ctx;
+
   grn_ctx_init(&ctx, 0);
-  GRN_LOG(&ctx, GRN_LOG_NOTICE,
-          "default parser changed from '%s' to '%s'",
-          old_value, new_value);
+  if (strcmp(*old_value_ptr, new_value) == 0) {
+    GRN_LOG(&ctx, GRN_LOG_NOTICE,
+            "default parser isn't changed "
+            "because the requested default parser isn't different: <%s>",
+            new_value);
+  } else {
+    GRN_LOG(&ctx, GRN_LOG_NOTICE,
+            "default fulltext parser is changed: <%s> -> <%s>",
+            *old_value_ptr, new_value);
+
+    my_free(*old_value_ptr, MYF(0));
+    *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+  }
   grn_ctx_fin(&ctx);
-  strncpy(mrn_default_parser, new_value, MRN_MAX_KEY_SIZE - 1);
+
   DBUG_VOID_RETURN;
 }
 
@@ -1067,9 +1078,6 @@ static int mrn_init(void *p)
                    (my_hash_get_key) mrn_open_tables_get_key, 0, 0)) {
     goto error_allocated_open_tables_hash_init;
   }
-
-  mrn_default_parser = (char *)my_malloc(MRN_MAX_KEY_SIZE, MYF(MY_WME));
-  strncpy(mrn_default_parser, MRN_PARSER_DEFAULT, MRN_MAX_KEY_SIZE - 1);
 
   return 0;
 
