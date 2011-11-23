@@ -24,7 +24,6 @@
 #include <groonga.h>
 
 /* constants */
-#define MRN_PACKAGE_STRING "groonga-storage-engine"
 #define MRN_BUFFER_SIZE 1024
 #define MRN_MAX_KEY_SIZE 1024
 #define MRN_MAX_PATH_SIZE 256
