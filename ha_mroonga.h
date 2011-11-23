@@ -152,9 +152,16 @@ private:
 
   grn_obj top_left_point;
   grn_obj bottom_right_point;
+  grn_obj source_point;
+  double top_left_longitude_in_degree;
+  double bottom_right_longitude_in_degree;
+  double bottom_right_latitude_in_degree;
+  double top_left_latitude_in_degree;
+  grn_obj *grn_source_column_geo;
+  grn_obj *cursor_geo;
+
   grn_table_cursor *cursor;
   grn_table_cursor *index_table_cursor;
-  grn_obj *cursor_geo;
   grn_obj *score_column;
   grn_obj *key_accessor;
 
@@ -381,7 +388,8 @@ private:
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit,
                               grn_obj *target_table, grn_obj *score_column);
-  void store_fields_from_primary_table(uchar *buf, grn_id record_id);
+  void store_to_field(grn_obj *col, grn_id id, Field *field);
+  void store_to_fields_from_primary_table(uchar *buf, grn_id record_id);
   void set_pk_bitmap();
   int wrapper_create(const char *name, TABLE *table,
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);

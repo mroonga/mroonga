@@ -884,111 +884,6 @@ static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
   return error;
 }
 
-static void mrn_store_field(grn_ctx *ctx, Field *field, grn_obj *col, grn_id id)
-{
-  grn_obj buf;
-  field->set_notnull();
-  switch (field->type()) {
-  case MYSQL_TYPE_BIT :
-  case MYSQL_TYPE_ENUM :
-  case MYSQL_TYPE_SET :
-  case MYSQL_TYPE_TINY :
-    {
-      GRN_INT8_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      int val = GRN_INT8_VALUE(&buf);
-      field->store(val);
-      break;
-    }
-  case MYSQL_TYPE_SHORT :
-    {
-      GRN_INT16_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      int val = GRN_INT16_VALUE(&buf);
-      field->store(val);
-      break;
-    }
-  case MYSQL_TYPE_INT24 :
-  case MYSQL_TYPE_LONG :
-    {
-      GRN_INT32_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      int val = GRN_INT32_VALUE(&buf);
-      field->store(val);
-      break;
-    }
-  case MYSQL_TYPE_LONGLONG :
-    {
-      GRN_INT64_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      long long int val = GRN_INT64_VALUE(&buf);
-      field->store(val);
-      break;
-    }
-  case MYSQL_TYPE_FLOAT :
-  case MYSQL_TYPE_DOUBLE :
-    {
-      GRN_FLOAT_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      double val = GRN_FLOAT_VALUE(&buf);
-      field->store(val);
-      break;
-    }
-  case MYSQL_TYPE_TIME :
-  case MYSQL_TYPE_DATE :
-  case MYSQL_TYPE_YEAR :
-  case MYSQL_TYPE_DATETIME :
-    {
-      GRN_TIME_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      long long int val = GRN_TIME_VALUE(&buf);
-      field->store(val);
-      break;
-    }
-  case MYSQL_TYPE_GEOMETRY :
-    {
-      GRN_WGS84_GEO_POINT_INIT(&buf, 0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
-      int latitude, longitude;
-      GRN_GEO_POINT_VALUE(&buf, latitude, longitude);
-      memset(wkb, 0, SRID_SIZE);
-      memset(wkb + SRID_SIZE, Geometry::wkb_ndr, 1); // wkb_ndr is meaningless.
-      int4store(wkb + SRID_SIZE + 1, Geometry::wkb_point);
-      double latitude_in_degree, longitude_in_degree;
-      latitude_in_degree = GRN_GEO_MSEC2DEGREE(latitude);
-      longitude_in_degree = GRN_GEO_MSEC2DEGREE(longitude);
-      float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE,
-                  longitude_in_degree);
-      float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
-                  latitude_in_degree);
-      field->store((const char *)wkb,
-                   (uint)(sizeof(wkb) / sizeof(*wkb)),
-                   field->charset());
-      break;
-    }
-  case MYSQL_TYPE_BLOB:
-    {
-      GRN_VOID_INIT(&buf);
-      uint32 len;
-      const char *val = grn_obj_get_value_(ctx, col, id, &len);
-      Field_blob *blob = (Field_blob *)field;
-      blob->set_ptr((uchar *)&len, (uchar *)val);
-      break;
-    }
-  default: //strings etc..
-    {
-      GRN_TEXT_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      char *val = GRN_TEXT_VALUE(&buf);
-      int len = GRN_TEXT_LEN(&buf);
-      field->store(val, len, field->charset());
-      break;
-    }
-  }
-  grn_obj_unlink(ctx, &buf);
-}
-
 static uint mrn_alter_table_flags(uint flags) {
   uint ret_flags = 0;
 #ifdef MRN_HANDLER_HAVE_HA_INPLACE_INDEX_CHANGE
@@ -1361,9 +1256,11 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
   grn_columns = NULL;
   cursor = NULL;
   index_table_cursor = NULL;
-  cursor_geo = NULL;
   GRN_WGS84_GEO_POINT_INIT(&top_left_point, 0);
   GRN_WGS84_GEO_POINT_INIT(&bottom_right_point, 0);
+  GRN_WGS84_GEO_POINT_INIT(&source_point, 0);
+  grn_source_column_geo = NULL;
+  cursor_geo = NULL;
   score_column = NULL;
   key_accessor = NULL;
   share = NULL;
@@ -1383,6 +1280,7 @@ ha_mroonga::~ha_mroonga()
   MRN_DBUG_ENTER_METHOD();
   grn_obj_unlink(ctx, &top_left_point);
   grn_obj_unlink(ctx, &bottom_right_point);
+  grn_obj_unlink(ctx, &source_point);
   grn_obj_unlink(ctx, &key_buffer);
   grn_obj_unlink(ctx, &encoded_key_buffer);
   grn_obj_unlink(ctx, &old_value_buffer);
@@ -3194,7 +3092,7 @@ int ha_mroonga::storage_rnd_pos(uchar *buf, uchar *pos)
 {
   MRN_DBUG_ENTER_METHOD();
   record_id = *((grn_id*) pos);
-  store_fields_from_primary_table(buf, record_id);
+  store_to_fields_from_primary_table(buf, record_id);
   DBUG_RETURN(0);
 }
 
@@ -4511,6 +4409,7 @@ int ha_mroonga::storage_index_end()
 {
   MRN_DBUG_ENTER_METHOD();
   clear_search_result();
+  clear_search_result_geo();
   DBUG_RETURN(0);
 }
 
@@ -4605,7 +4504,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
         grn_id found_record_id = *(grn_id *)key_min[key_nr];
         if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
-          store_fields_from_primary_table(buf, found_record_id);
+          store_to_fields_from_primary_table(buf, found_record_id);
           table->status = 0;
           record_id = found_record_id;
           DBUG_RETURN(0);
@@ -5112,7 +5011,8 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
         if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
           grn_id found_record_id = *(grn_id *)key_min[active_index];
           if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
-            store_fields_from_primary_table(table->record[0], found_record_id);
+            store_to_fields_from_primary_table(table->record[0],
+                                               found_record_id);
             table->status = 0;
             cursor = NULL;
             record_id = found_record_id;
@@ -5533,7 +5433,7 @@ int ha_mroonga::storage_ft_read(uchar *buf)
   record_id = grn_table_get(ctx, grn_table,
                             GRN_TEXT_VALUE(&key_buffer),
                             GRN_TEXT_LEN(&key_buffer));
-  store_fields_from_primary_table(buf, record_id);
+  store_to_fields_from_primary_table(buf, record_id);
   DBUG_RETURN(0);
 }
 
@@ -5707,6 +5607,10 @@ void ha_mroonga::clear_search_result_geo()
 {
   MRN_DBUG_ENTER_METHOD();
   clear_cursor_geo();
+  if (grn_source_column_geo) {
+    grn_obj_unlink(ctx, grn_source_column_geo);
+    grn_source_column_geo = NULL;
+  }
   DBUG_VOID_RETURN;
 }
 
@@ -5843,11 +5747,37 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
     DBUG_RETURN(error);
   }
   if (record_id == GRN_ID_NIL) {
+    DBUG_PRINT("info", ("mroonga: storage_get_next_record: end-of-file"));
     table->status = STATUS_NOT_FOUND;
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
   if (buf) {
-    store_fields_from_primary_table(buf, record_id);
+    store_to_fields_from_primary_table(buf, record_id);
+    if (cursor_geo && grn_source_column_geo) {
+      int latitude, longitude;
+      GRN_GEO_POINT_VALUE(&source_point, latitude, longitude);
+      double latitude_in_degree = GRN_GEO_MSEC2DEGREE(latitude);
+      double longitude_in_degree = GRN_GEO_MSEC2DEGREE(longitude);
+      if (!((bottom_right_latitude_in_degree <= latitude_in_degree &&
+             latitude_in_degree <= top_left_latitude_in_degree) &&
+            (top_left_longitude_in_degree <= longitude_in_degree &&
+             longitude_in_degree <= bottom_right_longitude_in_degree))) {
+        DBUG_PRINT("info",
+                   ("mroonga: remove not contained geo point: "
+                    "<%g,%g>(<%d,%d>); key: <%g,%g>(<%d,%d>), <%g,%g>(<%d,%d>)",
+                    latitude_in_degree, longitude_in_degree,
+                    latitude, longitude,
+                    top_left_latitude_in_degree, top_left_longitude_in_degree,
+                    GRN_GEO_DEGREE2MSEC(top_left_latitude_in_degree),
+                    GRN_GEO_DEGREE2MSEC(top_left_longitude_in_degree),
+                    bottom_right_latitude_in_degree,
+                    bottom_right_longitude_in_degree,
+                    GRN_GEO_DEGREE2MSEC(bottom_right_latitude_in_degree),
+                    GRN_GEO_DEGREE2MSEC(bottom_right_longitude_in_degree)));
+        int error = storage_get_next_record(buf);
+        DBUG_RETURN(error);
+      }
+    }
   }
   table->status = 0;
   DBUG_RETURN(0);
@@ -5867,10 +5797,10 @@ void ha_mroonga::geo_store_rectangle(const uchar *rectangle)
     }
     mi_float8get(locations[i], reversed_value);
   }
-  double top_left_longitude_in_degree = locations[0];
-  double bottom_right_longitude_in_degree = locations[1];
-  double bottom_right_latitude_in_degree = locations[2];
-  double top_left_latitude_in_degree = locations[3];
+  top_left_longitude_in_degree = locations[0];
+  bottom_right_longitude_in_degree = locations[1];
+  bottom_right_latitude_in_degree = locations[2];
+  top_left_latitude_in_degree = locations[3];
   int top_left_latitude = GRN_GEO_DEGREE2MSEC(top_left_latitude_in_degree);
   int top_left_longitude = GRN_GEO_DEGREE2MSEC(top_left_longitude_in_degree);
   int bottom_right_latitude = GRN_GEO_DEGREE2MSEC(bottom_right_latitude_in_degree);
@@ -5897,6 +5827,16 @@ int ha_mroonga::generic_geo_open_cursor(const uchar *key,
                                                   &top_left_point,
                                                   &bottom_right_point,
                                                   0, -1);
+    if (cursor_geo) {
+      if (grn_source_column_geo) {
+        grn_obj_unlink(ctx, grn_source_column_geo);
+      }
+      grn_obj sources;
+      GRN_OBJ_INIT(&sources, GRN_BULK, 0, GRN_ID_NIL);
+      grn_obj_get_info(ctx, index, GRN_INFO_SOURCE, &sources);
+      grn_source_column_geo = grn_ctx_at(ctx, GRN_RECORD_VALUE(&sources));
+      grn_obj_unlink(ctx, &sources);
+    }
   } else {
     push_warning_unsupported_spatial_index_search(find_flag);
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
@@ -6136,7 +6076,115 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id record_id)
+void ha_mroonga::store_to_field(grn_obj *col, grn_id id, Field *field)
+{
+  grn_obj buf;
+  field->set_notnull();
+  switch (field->type()) {
+  case MYSQL_TYPE_BIT :
+  case MYSQL_TYPE_ENUM :
+  case MYSQL_TYPE_SET :
+  case MYSQL_TYPE_TINY :
+    {
+      GRN_INT8_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      int val = GRN_INT8_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case MYSQL_TYPE_SHORT :
+    {
+      GRN_INT16_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      int val = GRN_INT16_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case MYSQL_TYPE_INT24 :
+  case MYSQL_TYPE_LONG :
+    {
+      GRN_INT32_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      int val = GRN_INT32_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case MYSQL_TYPE_LONGLONG :
+    {
+      GRN_INT64_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      long long int val = GRN_INT64_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case MYSQL_TYPE_FLOAT :
+  case MYSQL_TYPE_DOUBLE :
+    {
+      GRN_FLOAT_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      double val = GRN_FLOAT_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case MYSQL_TYPE_TIME :
+  case MYSQL_TYPE_DATE :
+  case MYSQL_TYPE_YEAR :
+  case MYSQL_TYPE_DATETIME :
+    {
+      GRN_TIME_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      long long int val = GRN_TIME_VALUE(&buf);
+      field->store(val);
+      break;
+    }
+  case MYSQL_TYPE_GEOMETRY :
+    {
+      GRN_WGS84_GEO_POINT_INIT(&buf, 0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
+      int latitude, longitude;
+      GRN_GEO_POINT_VALUE(&buf, latitude, longitude);
+      if (grn_source_column_geo) {
+        GRN_GEO_POINT_SET(ctx, &source_point, latitude, longitude);
+      }
+      memset(wkb, 0, SRID_SIZE);
+      memset(wkb + SRID_SIZE, Geometry::wkb_ndr, 1); // wkb_ndr is meaningless.
+      int4store(wkb + SRID_SIZE + 1, Geometry::wkb_point);
+      double latitude_in_degree, longitude_in_degree;
+      latitude_in_degree = GRN_GEO_MSEC2DEGREE(latitude);
+      longitude_in_degree = GRN_GEO_MSEC2DEGREE(longitude);
+      float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE,
+                  longitude_in_degree);
+      float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
+                  latitude_in_degree);
+      field->store((const char *)wkb,
+                   (uint)(sizeof(wkb) / sizeof(*wkb)),
+                   field->charset());
+      break;
+    }
+  case MYSQL_TYPE_BLOB:
+    {
+      GRN_VOID_INIT(&buf);
+      uint32 len;
+      const char *val = grn_obj_get_value_(ctx, col, id, &len);
+      Field_blob *blob = (Field_blob *)field;
+      blob->set_ptr((uchar *)&len, (uchar *)val);
+      break;
+    }
+  default: //strings etc..
+    {
+      GRN_TEXT_INIT(&buf,0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      char *val = GRN_TEXT_VALUE(&buf);
+      int len = GRN_TEXT_LEN(&buf);
+      field->store(val, len, field->charset());
+      break;
+    }
+  }
+  grn_obj_unlink(ctx, &buf);
+}
+
+void ha_mroonga::store_to_fields_from_primary_table(uchar *buf, grn_id record_id)
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: stored record ID: %d", record_id));
@@ -6170,7 +6218,7 @@ void ha_mroonga::store_fields_from_primary_table(uchar *buf, grn_id record_id)
         field->store((int)record_id);
       } else {
         // actual column
-        mrn_store_field(ctx, field, grn_columns[i], record_id);
+        store_to_field(grn_columns[i], record_id, field);
       }
       field->move_field_offset(-ptr_diff);
 #ifndef DBUG_OFF
