@@ -81,9 +81,9 @@ extern "C" {
 const char *grn_obj_get_value_(grn_ctx *ctx, grn_obj *obj, grn_id id, uint32 *size);
 
 /* global variables */
-pthread_mutex_t mrn_db_mutex;
-pthread_mutex_t mrn_log_mutex;
-handlerton *mrn_hton_ptr;
+static pthread_mutex_t mrn_db_mutex;
+static pthread_mutex_t mrn_log_mutex;
+static handlerton *mrn_hton_ptr;
 HASH mrn_open_tables;
 pthread_mutex_t mrn_open_tables_mutex;
 
@@ -102,15 +102,15 @@ static uchar *mrn_open_tables_get_key(MRN_SHARE *share,
 }
 
 /* status */
-long mrn_count_skip = 0;
-long mrn_fast_order_limit = 0;
+static long mrn_count_skip = 0;
+static long mrn_fast_order_limit = 0;
 
 /* logging */
-const char *mrn_log_file_name = MRN_LOG_FILE_NAME;
-FILE *mrn_log_file = NULL;
+static const char *mrn_log_file_name = MRN_LOG_FILE_NAME;
+static FILE *mrn_log_file = NULL;
 static bool mrn_log_file_opened = false;
-grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
-ulong mrn_log_level = (ulong) mrn_log_level_default;
+static grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
+static ulong mrn_log_level = (ulong) mrn_log_level_default;
 char *mrn_default_parser;
 static char *mrn_libgroonga_version = (char *) grn_get_version();
 static char *mrn_version = (char *) MRN_VERSION;
@@ -129,7 +129,7 @@ static void mrn_logger_func(int level, const char *time, const char *title,
   }
 }
 
-grn_logger_info mrn_logger_info = {
+static grn_logger_info mrn_logger_info = {
   mrn_log_level_default,
   GRN_LOG_TIME|GRN_LOG_MESSAGE,
   mrn_logger_func,
@@ -137,8 +137,8 @@ grn_logger_info mrn_logger_info = {
 };
 
 /* global hashes and mutexes */
-HASH mrn_allocated_thds;
-pthread_mutex_t mrn_allocated_thds_mutex;
+static HASH mrn_allocated_thds;
+static pthread_mutex_t mrn_allocated_thds_mutex;
 static uchar *mrn_allocated_thds_get_key(THD *thd,
                                          size_t *length,
                                          my_bool not_used __attribute__ ((unused)))
@@ -150,21 +150,21 @@ static uchar *mrn_allocated_thds_get_key(THD *thd,
 
 /* system functions */
 
-struct st_mysql_storage_engine storage_engine_structure =
+static struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
 
-struct st_mysql_show_var mrn_status_variables[] =
+static struct st_mysql_show_var mrn_status_variables[] =
 {
   {"groonga_count_skip", (char *) &mrn_count_skip, SHOW_LONG},
   {"groonga_fast_order_limit", (char *) &mrn_fast_order_limit, SHOW_LONG},
   {NullS, NullS, SHOW_LONG}
 };
 
-const char *mrn_log_level_type_names[] = { "NONE", "EMERG", "ALERT",
-                                           "CRIT", "ERROR", "WARNING",
-                                           "NOTICE", "INFO", "DEBUG",
-                                           "DUMP", NullS };
-TYPELIB mrn_log_level_typelib=
+static const char *mrn_log_level_type_names[] = { "NONE", "EMERG", "ALERT",
+                                                  "CRIT", "ERROR", "WARNING",
+                                                  "NOTICE", "INFO", "DEBUG",
+                                                  "DUMP", NullS };
+static TYPELIB mrn_log_level_typelib =
 {
   array_elements(mrn_log_level_type_names)-1,
   "mrn_log_level_typelib",
