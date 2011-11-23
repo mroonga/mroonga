@@ -25,14 +25,18 @@
 
 /* constants */
 #define MRN_BUFFER_SIZE 1024
-#define MRN_MAX_KEY_SIZE 1024
-#define MRN_MAX_PATH_SIZE 256
-#define MRN_MAX_EXPRS 32
+#define MRN_MAX_KEY_SIZE GRN_TABLE_MAX_KEY_SIZE
+#if defined(MAX_PATH)
+#  define MRN_MAX_PATH_SIZE (MAX_PATH + 1)
+#elif defined(PATH_MAX)
+#  define MRN_MAX_PATH_SIZE (PATH_MAX)
+#elif defined(MAXPATHLEN)
+#  define MRN_MAX_PATH_SIZE (MAXPATHLEN)
+#else
+#  define MRN_MAX_PATH_SIZE (256)
+#endif
 #define MRN_DB_FILE_SUFFIX ".mrn"
 #define MRN_LOG_FILE_PATH "groonga.log"
-#define MRN_LEX_SUFFIX "_lex"
-#define MRN_HASH_SUFFIX "_hash"
-#define MRN_PAT_SUFFIX "_pat"
 #define MRN_COLUMN_NAME_ID "_id"
 #define MRN_COLUMN_NAME_KEY "_key"
 #define MRN_COLUMN_NAME_SCORE "_score"
