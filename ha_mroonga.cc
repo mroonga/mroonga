@@ -1243,6 +1243,46 @@ static _ft_vft mrn_storage_ft_vft = {
   mrn_storage_ft_reinit_search
 };
 
+static int mrn_no_such_key_ft_read_next(FT_INFO *handler, char *record)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  DBUG_RETURN(HA_ERR_END_OF_FILE);
+}
+
+static float mrn_no_such_key_ft_find_relevance(FT_INFO *handler, uchar *record,
+                                               uint length)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  DBUG_RETURN(0.0);
+}
+
+static void mrn_no_such_key_ft_close_search(FT_INFO *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  delete info;
+  DBUG_VOID_RETURN;
+}
+
+static float mrn_no_such_key_ft_get_relevance(FT_INFO *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  DBUG_RETURN(0.0);
+}
+
+static void mrn_no_such_key_ft_reinit_search(FT_INFO *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  DBUG_VOID_RETURN;
+}
+
+static _ft_vft mrn_no_such_key_ft_vft = {
+  mrn_no_such_key_ft_read_next,
+  mrn_no_such_key_ft_find_relevance,
+  mrn_no_such_key_ft_close_search,
+  mrn_no_such_key_ft_get_relevance,
+  mrn_no_such_key_ft_reinit_search
+};
 
 /* handler implementation */
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
@@ -5390,11 +5430,17 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint key_nr, String *key)
   MRN_DBUG_ENTER_METHOD();
   fulltext_searching = TRUE;
   FT_INFO *info;
-  if (share->wrapper_mode)
-  {
-    info = wrapper_ft_init_ext(flags, key_nr, key);
+  if (key_nr == NO_SUCH_KEY) {
+    struct st_mrn_ft_info *mrn_ft_info = new st_mrn_ft_info();
+    mrn_ft_info->please = &mrn_no_such_key_ft_vft;
+    info = (FT_INFO *)mrn_ft_info;
   } else {
-    info = storage_ft_init_ext(flags, key_nr, key);
+    if (share->wrapper_mode)
+    {
+      info = wrapper_ft_init_ext(flags, key_nr, key);
+    } else {
+      info = storage_ft_init_ext(flags, key_nr, key);
+    }
   }
   DBUG_RETURN(info);
 }
