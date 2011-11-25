@@ -7136,36 +7136,215 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
   DBUG_VOID_RETURN;
 }
 
-int ha_mroonga::wrapper_rename_table(const char *from, const char *to)
+int ha_mroonga::wrapper_rename_table(const char *from, const char *to,
+                                     MRN_SHARE *tmp_share,
+                                     const char *from_table_name,
+                                     const char *to_table_name)
 {
   int error = 0;
+  handler *hnd;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_rename_table(from, to);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
+  MRN_SET_WRAP_SHARE_KEY(tmp_share, tmp_share->table_share);
+  if (!(hnd =
+      tmp_share->hton->create(tmp_share->hton, tmp_share->table_share,
+      current_thd->mem_root)))
+  {
+    MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  }
+  MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
+
+  if ((error = hnd->ha_rename_table(from, to)))
+  {
+    delete hnd;
+    DBUG_RETURN(error);
+  }
+
+  error = wrapper_rename_index(from, to, tmp_share,
+                               from_table_name, to_table_name);
+
+  delete hnd;
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_rename_table(const char *from, const char *to)
+int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
+                                     MRN_SHARE *tmp_share,
+                                     const char *from_table_name,
+                                     const char *to_table_name)
 {
+  int error = 0;
+  grn_rc rc;
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(handler::rename_table(from, to));
+
+  error = ensure_database_open(from);
+  if (error)
+    DBUG_RETURN(error);
+
+  TABLE_SHARE *tmp_table_share = tmp_share->table_share;
+
+  int i;
+  for (i = 0; i < tmp_table_share->keys; i++) {
+    char from_index_name[MRN_MAX_PATH_SIZE];
+    char to_index_name[MRN_MAX_PATH_SIZE];
+    mrn_index_table_name_gen(from_table_name,
+                             tmp_table_share->key_info[i].name,
+                             from_index_name);
+    mrn_index_table_name_gen(to_table_name,
+                             tmp_table_share->key_info[i].name,
+                             to_index_name);
+    grn_obj *index_table = grn_ctx_get(ctx, from_index_name,
+                                       strlen(from_index_name));
+    if (index_table != NULL) {
+      rc = grn_table_rename(ctx, index_table, to_index_name,
+                            strlen(to_index_name));
+      if (rc != GRN_SUCCESS) {
+        error = ER_CANT_OPEN_FILE;
+        my_message(error, ctx->errbuf, MYF(0));
+        DBUG_RETURN(error);
+      }
+    }
+  }
+
+  grn_obj *table = grn_ctx_get(ctx, from_table_name, strlen(from_table_name));
+  if (ctx->rc != GRN_SUCCESS) {
+    error = ER_CANT_OPEN_FILE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+  rc = grn_table_rename(ctx, table, to_table_name,
+                        strlen(to_table_name));
+  if (rc != GRN_SUCCESS) {
+    error = ER_CANT_OPEN_FILE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::storage_rename_table(const char *from, const char *to,
+                                     MRN_SHARE *tmp_share,
+                                     const char *from_tbl_name,
+                                     const char *to_tbl_name)
+{
+  int error = 0;
+  grn_rc rc;
+  TABLE_SHARE *tmp_table_share = tmp_share->table_share;
+  MRN_DBUG_ENTER_METHOD();
+  char from_index_name[MRN_MAX_PATH_SIZE];
+  char to_index_name[MRN_MAX_PATH_SIZE];
+
+  error = ensure_database_open(from);
+  if (error)
+    DBUG_RETURN(error);
+
+  int i;
+  for (i = 0; i < tmp_table_share->keys; i++) {
+    mrn_index_table_name_gen(from_tbl_name, tmp_table_share->key_info[i].name,
+                             from_index_name);
+    mrn_index_table_name_gen(to_tbl_name, tmp_table_share->key_info[i].name,
+                             to_index_name);
+    grn_obj *idx_tbl_obj = grn_ctx_get(ctx, from_index_name,
+                                       strlen(from_index_name));
+    if (idx_tbl_obj != NULL) {
+      rc = grn_table_rename(ctx, idx_tbl_obj, to_index_name,
+                            strlen(to_index_name));
+      if (rc != GRN_SUCCESS) {
+        error = ER_CANT_OPEN_FILE;
+        my_message(error, ctx->errbuf, MYF(0));
+        DBUG_RETURN(error);
+      }
+    }
+  }
+
+  grn_obj *tbl_obj = grn_ctx_get(ctx, from_tbl_name, strlen(from_tbl_name));
+  if (ctx->rc != GRN_SUCCESS) {
+    error = ER_CANT_OPEN_FILE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+  rc = grn_table_rename(ctx, tbl_obj, to_tbl_name,
+                        strlen(to_tbl_name));
+  if (rc != GRN_SUCCESS) {
+    error = ER_CANT_OPEN_FILE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::rename_table(const char *from, const char *to)
 {
-  MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  if (!share)
+  char from_db_name[MRN_MAX_PATH_SIZE];
+  char to_db_name[MRN_MAX_PATH_SIZE];
+  char from_tbl_name[MRN_MAX_PATH_SIZE];
+  char to_tbl_name[MRN_MAX_PATH_SIZE];
+  char decode_name[MRN_MAX_PATH_SIZE];
+  TABLE_LIST table_list;
+  TABLE_SHARE *tmp_table_share;
+  TABLE tmp_table;
+  MRN_SHARE *tmp_share;
+  MRN_DBUG_ENTER_METHOD();
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) from, (const uchar *) from + strlen(from));
+  mrn_db_name_gen(decode_name, from_db_name);
+  mrn_table_name_gen(decode_name, from_tbl_name);
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) to, (const uchar *) to + strlen(to));
+  mrn_db_name_gen(decode_name, to_db_name);
+  mrn_table_name_gen(decode_name, to_tbl_name);
+  if (strcmp(from_db_name, to_db_name))
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
-  if (share->wrapper_mode)
+
+#if MYSQL_VERSION_ID >= 50500
+  table_list.init_one_table(from_db_name, strlen(from_db_name),
+                            from_tbl_name, strlen(from_tbl_name),
+                            from_tbl_name, TL_WRITE);
+#else
+  table_list.init_one_table(from_db_name, from_tbl_name, TL_WRITE);
+#endif
+#if MYSQL_VERSION_ID >= 50500
+  mysql_mutex_lock(&LOCK_open);
+#endif
+  if (!(tmp_table_share = mrn_get_table_share(&table_list, &error)))
   {
-    error = wrapper_rename_table(from, to);
-  } else {
-    error = storage_rename_table(from, to);
+#if MYSQL_VERSION_ID >= 50500
+    mysql_mutex_unlock(&LOCK_open);
+#endif
+    DBUG_RETURN(error);
   }
+#if MYSQL_VERSION_ID >= 50500
+  mysql_mutex_unlock(&LOCK_open);
+#endif
+  /* This is previous version */
+  tmp_table_share->version--;
+  tmp_table.s = tmp_table_share;
+#ifdef WITH_PARTITION_STORAGE_ENGINE
+  tmp_table.part_info = NULL;
+#endif
+  if (!(tmp_share = mrn_get_share(from, &tmp_table, &error)))
+  {
+    mrn_free_table_share(tmp_table_share);
+    DBUG_RETURN(error);
+  }
+
+  if (tmp_share->wrapper_mode)
+  {
+    error = wrapper_rename_table(from, to, tmp_share,
+                                 from_tbl_name, to_tbl_name);
+  } else {
+    error = storage_rename_table(from, to, tmp_share,
+                                 from_tbl_name, to_tbl_name);
+  }
+
+  mrn_free_share(tmp_share);
+#if MYSQL_VERSION_ID >= 50500
+  mysql_mutex_lock(&LOCK_open);
+#endif
+  mrn_free_table_share(tmp_table_share);
+#if MYSQL_VERSION_ID >= 50500
+  mysql_mutex_unlock(&LOCK_open);
+#endif
   DBUG_RETURN(error);
 }
 

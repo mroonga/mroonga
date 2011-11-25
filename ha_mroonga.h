@@ -622,8 +622,18 @@ private:
   ha_rows storage_estimate_rows_upper_bound();
   void wrapper_update_create_info(HA_CREATE_INFO* create_info);
   void storage_update_create_info(HA_CREATE_INFO* create_info);
-  int wrapper_rename_table(const char *from, const char *to);
-  int storage_rename_table(const char *from, const char *to);
+  int wrapper_rename_table(const char *from, const char *to,
+                           MRN_SHARE *tmp_share,
+                           const char *from_table_name,
+                           const char *to_table_name);
+  int wrapper_rename_index(const char *from, const char *to,
+                           MRN_SHARE *tmp_share,
+                           const char *from_table_name,
+                           const char *to_table_name);
+  int storage_rename_table(const char *from, const char *to,
+                           MRN_SHARE *tmp_share,
+                           const char *from_tbl_name,
+                           const char *to_tbl_name);
   bool wrapper_is_crashed() const;
   bool storage_is_crashed() const;
   bool wrapper_auto_repair() const;
