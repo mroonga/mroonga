@@ -34,4 +34,7 @@
 /* Define mroonga micro version */
 #define MRN_VERSION_MICRO @MRN_VERSION_MICRO@
 
+/* Define to the full name and version of this package. */
+#define MRN_PACKAGE_STRING "@PACKAGE_STRING@"
+
 #endif /* _mrn_version_h */

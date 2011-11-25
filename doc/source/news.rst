@@ -16,7 +16,6 @@ Improvements
 * add groonga_libgroonga_version and groonga_version variables #1158.
 * information_schema.plugins.plugin_version returns mroonga's version #1157.
 * FLUSH STATUS flushes groonga_* status variables #1166.
-* support ALTER TABLE #1168.
 * support TRUNCATE TABLE #1151.
 * support MariaDB 5.2.9.
 * support MariaDB 5.3.2-beta.
