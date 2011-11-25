@@ -18,10 +18,6 @@ AC_SUBST([MRN_VERSION_MICRO])
 MRN_VERSION_IN_HEX=`printf "0x%02x%02x" mrn_version_major mrn_version_minor[]mrn_version_micro`
 AC_SUBST([MRN_VERSION_IN_HEX])
 
-AC_DEFINE_UNQUOTED(MRN_PACKAGE_STRING,
-                   ["$PACKAGE_STRING"],
-                   [Define to the full name and version of this package.])
-
 AC_C_BIGENDIAN
 AC_PROG_CC
 AC_PROG_CXX
