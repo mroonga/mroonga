@@ -3562,7 +3562,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
 #endif
       DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
-  slot_data->last_insert_record_id = (int) record_id;
+  slot_data->last_insert_record_id = record_id;
 
 #ifndef DBUG_OFF
   dbug_tmp_restore_column_map(table->read_set, tmp_map);

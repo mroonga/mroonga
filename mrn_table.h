@@ -21,6 +21,8 @@
 #ifndef _mrn_table_h
 #define _mrn_table_h
 
+#include <groonga.h>
+
 #if MYSQL_VERSION_ID >= 50500
 #define my_free(A,B) my_free(A)
 #endif
@@ -60,7 +62,7 @@ struct st_mrn_alter_share
 
 struct st_mrn_slot_data
 {
-  int last_insert_record_id;
+  grn_id last_insert_record_id;
   st_mrn_alter_share *first_alter_share;
 };
 

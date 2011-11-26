@@ -878,6 +878,7 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
     (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
   if (slot_data == NULL) {
     slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data));
+    slot_data->last_insert_record_id = GRN_ID_NIL;
     slot_data->first_alter_share = NULL;
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
     pthread_mutex_lock(&mrn_allocated_thds_mutex);
