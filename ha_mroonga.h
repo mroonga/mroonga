@@ -32,10 +32,6 @@ extern "C" {
 #include <groonga.h>
 #include "mrn_sys.h"
 
-#ifdef MARIADB_BASE_VERSION
-#  define MRN_MARIADB_P 1
-#endif
-
 #if (MYSQL_VERSION_ID >= 50603) || \
     (MYSQL_VERSION_ID >= 50513 && MYSQL_VERSION_ID < 50600) || \
     (MYSQL_VERSION_ID >= 50158 && MYSQL_VERSION_ID < 50500)

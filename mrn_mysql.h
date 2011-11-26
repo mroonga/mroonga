@@ -53,6 +53,10 @@
 #  include <sql_partition.h>
 #endif
 
+#ifdef MARIADB_BASE_VERSION
+#  define MRN_MARIADB_P 1
+#endif
+
 #if MYSQL_VERSION_ID >= 50500
 #  define my_free(PTR, FLAG) my_free(PTR)
 #endif
