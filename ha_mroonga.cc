@@ -2815,7 +2815,7 @@ int ha_mroonga::delete_table(const char *name)
   }
   if (!tmp_table_share)
   {
-#if MYSQL_VERSION_ID >= 50500
+#ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
     table_list.init_one_table(db_name, strlen(db_name),
                               tbl_name, strlen(tbl_name), tbl_name, TL_WRITE);
 #else
@@ -7296,7 +7296,7 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   if (strcmp(from_db_name, to_db_name))
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 
-#if MYSQL_VERSION_ID >= 50500
+#ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
   table_list.init_one_table(from_db_name, strlen(from_db_name),
                             from_tbl_name, strlen(from_tbl_name),
                             from_tbl_name, TL_WRITE);

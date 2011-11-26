@@ -78,6 +78,10 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_TRUNCATE
 #endif
 
+#if MYSQL_VERSION_ID >= 50500
+#  define MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
+#endif
+
 #if MYSQL_VERSION_ID < 50600
   typedef Item COND;
 #endif
