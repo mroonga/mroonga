@@ -17,7 +17,7 @@
 --source include/have_groonga.inc
 
 --disable_warnings
-drop table if exists diaries;
+drop table if exists shops;
 --enable_warnings
 
 create table shops (
