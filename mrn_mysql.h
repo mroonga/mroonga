@@ -53,4 +53,8 @@
 #  include <sql_partition.h>
 #endif
 
+#if MYSQL_VERSION_ID >= 50500
+#  define my_free(PTR, FLAG) my_free(PTR)
+#endif
+
 #endif /* _mrn_mysql_h */

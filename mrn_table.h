@@ -23,10 +23,6 @@
 
 #include <groonga.h>
 
-#if MYSQL_VERSION_ID >= 50500
-#define my_free(A,B) my_free(A)
-#endif
-
 typedef struct st_mroonga_share
 {
   char               *table_name;
