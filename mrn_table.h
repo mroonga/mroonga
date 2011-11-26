@@ -51,6 +51,19 @@ typedef struct st_mroonga_share
   bool               wrapper_mode;
 } MRN_SHARE;
 
+struct st_mrn_alter_share
+{
+  char path[FN_REFLEN + 1];
+  TABLE_SHARE *alter_share;
+  st_mrn_alter_share *next;
+};
+
+struct st_mrn_slot_data
+{
+  int last_insert_record_id;
+  st_mrn_alter_share *first_alter_share;
+};
+
 #define MRN_SET_WRAP_SHARE_KEY(share, table_share)
 /*
   table_share->keys = share->wrap_keys; \
@@ -88,9 +101,14 @@ int mrn_free_share_alloc(MRN_SHARE *share);
 int mrn_free_share(MRN_SHARE *share);
 TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error);
 void mrn_free_table_share(TABLE_SHARE *share);
+TABLE_SHARE *mrn_q_get_table_share(TABLE_LIST *table_list, const char *path,
+                                   int *error);
+void mrn_q_free_table_share(TABLE_SHARE *share);
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info);
 uint mrn_decode(uchar *buf_st, uchar *buf_ed,
                 const uchar *st, const uchar *ed);
+st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create);
+void mrn_clear_alter_share(THD *thd);
 
 #endif /* _mrn_table_h */

@@ -42,6 +42,9 @@
 extern HASH mrn_open_tables;
 extern pthread_mutex_t mrn_open_tables_mutex;
 extern char *mrn_default_parser;
+extern handlerton *mrn_hton_ptr;
+extern HASH mrn_allocated_thds;
+extern pthread_mutex_t mrn_allocated_thds_mutex;
 
 char *mrn_create_string(const char *str, uint length)
 {
@@ -755,6 +758,48 @@ void mrn_free_table_share(TABLE_SHARE *share)
   DBUG_VOID_RETURN;
 }
 
+TABLE_SHARE *mrn_q_get_table_share(TABLE_LIST *table_list, const char *path,
+                                   int *error)
+{
+  uint key_length;
+  TABLE_SHARE *share;
+  THD *thd = current_thd;
+  DBUG_ENTER("mrn_q_get_table_share");
+#if MYSQL_VERSION_ID >= 50603
+  const char *key;
+  key_length = get_table_def_key(table_list, &key);
+#else
+  char key[MAX_DBKEY_LENGTH];
+  key_length = create_table_def_key(thd, key, table_list, FALSE);
+#endif
+#if MYSQL_VERSION_ID >= 50500
+  if (!(share = alloc_table_share(table_list, key, key_length)))
+  {
+    *error = ER_CANT_OPEN_FILE;
+    DBUG_RETURN(NULL);
+  }
+  share->path.str = (char *) path;
+  share->path.length = strlen(path);
+  share->normalized_path.str = share->path.str;
+  share->normalized_path.length = share->path.length;
+  if (open_table_def(thd, share, 0))
+  {
+    *error = ER_CANT_OPEN_FILE;
+    DBUG_RETURN(NULL);
+  }
+#else
+  share = get_table_share(thd, table_list, key, key_length, 0, error);
+#endif
+  DBUG_RETURN(share);
+}
+
+void mrn_q_free_table_share(TABLE_SHARE *share)
+{
+  DBUG_ENTER("mrn_q_free_table_share");
+  share->destroy();
+  DBUG_VOID_RETURN;
+}
+
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
 {
   uint *wrap_key_nr = share->wrap_key_nr, i, j;
@@ -824,4 +869,45 @@ uint mrn_decode(uchar *buf_st, uchar *buf_ed, const uchar *st, const uchar *ed)
   *buf = '\0';
   DBUG_PRINT("info", ("mroonga: out=%s", buf_st));
   DBUG_RETURN(buf - buf_st);
+}
+
+st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
+{
+  DBUG_ENTER("mrn_get_slot_data");
+  st_mrn_slot_data *slot_data =
+    (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
+  if (slot_data == NULL) {
+    slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data));
+    slot_data->first_alter_share = NULL;
+    *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
+    pthread_mutex_lock(&mrn_allocated_thds_mutex);
+    if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
+    {
+      pthread_mutex_unlock(&mrn_allocated_thds_mutex);
+      free(slot_data);
+      DBUG_RETURN(NULL);
+    }
+    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
+  }
+  DBUG_RETURN(slot_data);
+}
+
+void mrn_clear_alter_share(THD *thd)
+{
+  DBUG_ENTER("mrn_clear_alter_share");
+  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
+  if (slot_data && slot_data->first_alter_share)
+  {
+    st_mrn_alter_share *tmp_alter_share;
+    st_mrn_alter_share *alter_share = slot_data->first_alter_share;
+    while (alter_share)
+    {
+      tmp_alter_share = alter_share->next;
+      mrn_q_free_table_share(alter_share->alter_share);
+      free(alter_share);
+      alter_share = tmp_alter_share;
+    }
+    slot_data->first_alter_share = NULL;
+  }
+  DBUG_VOID_RETURN;
 }

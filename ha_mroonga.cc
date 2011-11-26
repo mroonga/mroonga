@@ -83,7 +83,7 @@ const char *grn_obj_get_value_(grn_ctx *ctx, grn_obj *obj, grn_id id, uint32 *si
 /* global variables */
 static pthread_mutex_t mrn_db_mutex;
 static pthread_mutex_t mrn_log_mutex;
-static handlerton *mrn_hton_ptr;
+handlerton *mrn_hton_ptr;
 HASH mrn_open_tables;
 pthread_mutex_t mrn_open_tables_mutex;
 
@@ -137,8 +137,8 @@ static grn_logger_info mrn_logger_info = {
 };
 
 /* global hashes and mutexes */
-static HASH mrn_allocated_thds;
-static pthread_mutex_t mrn_allocated_thds_mutex;
+HASH mrn_allocated_thds;
+pthread_mutex_t mrn_allocated_thds_mutex;
 static uchar *mrn_allocated_thds_get_key(THD *thd,
                                          size_t *length,
                                          my_bool not_used __attribute__ ((unused)))
@@ -336,7 +336,7 @@ my_bool last_insert_grn_id_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
 int last_insert_grn_id(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error)
 {
   THD *thd = current_thd;
-  st_mrn_slot_data *slot_data = (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
+  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
   if (slot_data == NULL) {
     return 0;
   }
@@ -1014,7 +1014,8 @@ static int mrn_deinit(void *p)
     pthread_mutex_lock(&mrn_allocated_thds_mutex);
     while ((tmp_thd = (THD *) my_hash_element(&mrn_allocated_thds, 0)))
     {
-      void *slot_ptr = *thd_ha_data(tmp_thd, mrn_hton_ptr);
+      mrn_clear_alter_share(tmp_thd);
+      void *slot_ptr = mrn_get_slot_data(tmp_thd, FALSE);
       if (slot_ptr) free(slot_ptr);
       *thd_ha_data(tmp_thd, mrn_hton_ptr) = (void *) NULL;
       my_hash_delete(&mrn_allocated_thds, (uchar *) tmp_thd);
@@ -1487,6 +1488,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     base_key_info = NULL;
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
+  hnd->init();
   error = hnd->ha_create(name, table, info);
   MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -2178,14 +2180,6 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   int i, error = 0;
   MRN_SHARE *tmp_share;
   MRN_DBUG_ENTER_METHOD();
-  uint sql_command = thd_sql_command(ha_thd());
-  if (
-    sql_command == SQLCOM_CREATE_INDEX ||
-    sql_command == SQLCOM_DROP_INDEX ||
-    sql_command == SQLCOM_ALTER_TABLE
-  )
-    DBUG_RETURN(HA_ERR_WRONG_COMMAND);
-
   /* checking data type of virtual columns */
 
   if (!(tmp_share = mrn_get_share(name, table, &error)))
@@ -2245,6 +2239,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
       base_key_info = NULL;
       DBUG_RETURN(HA_ERR_OUT_OF_MEM);
     }
+    wrap_handler->init();
     error = wrap_handler->ha_open(table, name, mode, test_if_locked);
   } else {
 #ifdef MRN_HANDLER_CLONE_NEED_NAME
@@ -2699,6 +2694,7 @@ int ha_mroonga::wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,
     MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
+  hnd->init();
   MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
 
   if ((error = hnd->ha_delete_table(name)))
@@ -2781,53 +2777,71 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
 int ha_mroonga::delete_table(const char *name)
 {
   int error = 0;
+  THD *thd = ha_thd();
   char db_name[MRN_MAX_PATH_SIZE];
   char tbl_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
   TABLE_LIST table_list;
-  TABLE_SHARE *tmp_table_share;
+  TABLE_SHARE *tmp_table_share = NULL;
   TABLE tmp_table;
   MRN_SHARE *tmp_share;
+  st_mrn_alter_share *alter_share, *tmp_alter_share;
   MRN_DBUG_ENTER_METHOD();
-  uint sql_command = thd_sql_command(ha_thd());
-  if (
-    sql_command == SQLCOM_CREATE_INDEX ||
-    sql_command == SQLCOM_DROP_INDEX ||
-    sql_command == SQLCOM_ALTER_TABLE
-  )
-    DBUG_RETURN(HA_ERR_WRONG_COMMAND);
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) name, (const uchar *) name + strlen(name));
   mrn_db_name_gen(decode_name, db_name);
   mrn_table_name_gen(decode_name, tbl_name);
-#if MYSQL_VERSION_ID >= 50500
-  table_list.init_one_table(db_name, strlen(db_name),
-                            tbl_name, strlen(tbl_name), tbl_name, TL_WRITE);
-#else
-  table_list.init_one_table(db_name, tbl_name, TL_WRITE);
-#endif
-#if MYSQL_VERSION_ID >= 50500
-  mysql_mutex_lock(&LOCK_open);
-#endif
-  if (!(tmp_table_share = mrn_get_table_share(&table_list, &error)))
+  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
+  if (slot_data && slot_data->first_alter_share)
   {
+    tmp_alter_share = NULL;
+    alter_share = slot_data->first_alter_share;
+    while (alter_share)
+    {
+      if (!strcmp(alter_share->path, name))
+      {
+        /* found */
+        tmp_table_share = alter_share->alter_share;
+        if (tmp_alter_share)
+          tmp_alter_share->next = alter_share->next;
+        else
+          slot_data->first_alter_share = alter_share->next;
+        free(alter_share);
+        break;
+      }
+      tmp_alter_share = alter_share;
+      alter_share = alter_share->next;
+    }
+  }
+  if (!tmp_table_share)
+  {
+#if MYSQL_VERSION_ID >= 50500
+    table_list.init_one_table(db_name, strlen(db_name),
+                              tbl_name, strlen(tbl_name), tbl_name, TL_WRITE);
+#else
+    table_list.init_one_table(db_name, tbl_name, TL_WRITE);
+#endif
+#if MYSQL_VERSION_ID >= 50500
+    mysql_mutex_lock(&LOCK_open);
+#endif
+    if (!(tmp_table_share = mrn_q_get_table_share(&table_list, name, &error)))
+    {
+#if MYSQL_VERSION_ID >= 50500
+      mysql_mutex_unlock(&LOCK_open);
+#endif
+      DBUG_RETURN(error);
+    }
 #if MYSQL_VERSION_ID >= 50500
     mysql_mutex_unlock(&LOCK_open);
 #endif
-    DBUG_RETURN(error);
   }
-#if MYSQL_VERSION_ID >= 50500
-  mysql_mutex_unlock(&LOCK_open);
-#endif
-  /* This is previous version */
-  tmp_table_share->version--;
   tmp_table.s = tmp_table_share;
 #ifdef WITH_PARTITION_STORAGE_ENGINE
   tmp_table.part_info = NULL;
 #endif
   if (!(tmp_share = mrn_get_share(name, &tmp_table, &error)))
   {
-    mrn_free_table_share(tmp_table_share);
+    mrn_q_free_table_share(tmp_table_share);
     DBUG_RETURN(error);
   }
 
@@ -2842,7 +2856,7 @@ int ha_mroonga::delete_table(const char *name)
 #if MYSQL_VERSION_ID >= 50500
   mysql_mutex_lock(&LOCK_open);
 #endif
-  mrn_free_table_share(tmp_table_share);
+  mrn_q_free_table_share(tmp_table_share);
 #if MYSQL_VERSION_ID >= 50500
   mysql_mutex_unlock(&LOCK_open);
 #endif
@@ -3541,21 +3555,14 @@ int ha_mroonga::storage_write_row(uchar *buf)
   }
 
   // for UDF last_insert_grn_id()
-  st_mrn_slot_data *slot_data = (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
+  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, TRUE);
   if (slot_data == NULL) {
-    slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data));
-    *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
-    pthread_mutex_lock(&mrn_allocated_thds_mutex);
-    if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
-    {
 #ifndef DBUG_OFF
       dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
       DBUG_RETURN(HA_ERR_OUT_OF_MEM);
-    }
-    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
   }
-  slot_data->last_insert_record_id = record_id;
+  slot_data->last_insert_record_id = (int) record_id;
 
 #ifndef DBUG_OFF
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -6297,6 +6304,7 @@ int ha_mroonga::storage_reset()
 int ha_mroonga::reset()
 {
   int error = 0;
+  THD *thd = ha_thd();
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: this=%p", this));
   clear_search_result();
@@ -6308,6 +6316,7 @@ int ha_mroonga::reset()
   ignoring_no_key_columns = false;
   ignoring_duplicated_key = false;
   fulltext_searching = false;
+  mrn_clear_alter_share(thd);
   DBUG_RETURN(error);
 }
 
@@ -7152,6 +7161,7 @@ int ha_mroonga::wrapper_rename_table(const char *from, const char *to,
     MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
+  hnd->init();
   MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
 
   if ((error = hnd->ha_rename_table(from, to)))
@@ -7275,6 +7285,7 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
 int ha_mroonga::rename_table(const char *from, const char *to)
 {
   int error = 0;
+  THD *thd = ha_thd();
   char from_db_name[MRN_MAX_PATH_SIZE];
   char to_db_name[MRN_MAX_PATH_SIZE];
   char from_tbl_name[MRN_MAX_PATH_SIZE];
@@ -7306,7 +7317,7 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 #if MYSQL_VERSION_ID >= 50500
   mysql_mutex_lock(&LOCK_open);
 #endif
-  if (!(tmp_table_share = mrn_get_table_share(&table_list, &error)))
+  if (!(tmp_table_share = mrn_q_get_table_share(&table_list, from, &error)))
   {
 #if MYSQL_VERSION_ID >= 50500
     mysql_mutex_unlock(&LOCK_open);
@@ -7316,16 +7327,37 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 #if MYSQL_VERSION_ID >= 50500
   mysql_mutex_unlock(&LOCK_open);
 #endif
-  /* This is previous version */
-  tmp_table_share->version--;
   tmp_table.s = tmp_table_share;
 #ifdef WITH_PARTITION_STORAGE_ENGINE
   tmp_table.part_info = NULL;
 #endif
   if (!(tmp_share = mrn_get_share(from, &tmp_table, &error)))
   {
-    mrn_free_table_share(tmp_table_share);
+    mrn_q_free_table_share(tmp_table_share);
     DBUG_RETURN(error);
+  }
+
+  if (to_tbl_name[0] == '#')
+  {
+    st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, TRUE);
+    if (!slot_data)
+      DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+    st_mrn_alter_share *alter_share =
+      (st_mrn_alter_share *) malloc(sizeof(st_mrn_alter_share));
+    if (!alter_share)
+      DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+    alter_share->next = NULL;
+    strcpy(alter_share->path, to);
+    alter_share->alter_share = tmp_table_share;
+    if (slot_data->first_alter_share)
+    {
+      st_mrn_alter_share *tmp_alter_share = slot_data->first_alter_share;
+      while (tmp_alter_share->next)
+        tmp_alter_share = tmp_alter_share->next;
+      tmp_alter_share->next = alter_share;
+    } else {
+      slot_data->first_alter_share = alter_share;
+    }
   }
 
   if (tmp_share->wrapper_mode)
@@ -7338,13 +7370,16 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   }
 
   mrn_free_share(tmp_share);
+  if (to_tbl_name[0] != '#')
+  {
 #if MYSQL_VERSION_ID >= 50500
-  mysql_mutex_lock(&LOCK_open);
+    mysql_mutex_lock(&LOCK_open);
 #endif
-  mrn_free_table_share(tmp_table_share);
+    mrn_q_free_table_share(tmp_table_share);
 #if MYSQL_VERSION_ID >= 50500
-  mysql_mutex_unlock(&LOCK_open);
+    mysql_mutex_unlock(&LOCK_open);
 #endif
+  }
   DBUG_RETURN(error);
 }
 

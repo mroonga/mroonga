@@ -113,11 +113,6 @@ struct st_mrn_ft_info
   ha_mroonga *mroonga;
 };
 
-struct st_mrn_slot_data
-{
-  grn_id last_insert_record_id;
-};
-
 /* handler class */
 class ha_mroonga: public handler
 {
