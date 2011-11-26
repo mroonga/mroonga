@@ -3,6 +3,10 @@
 export BASE_DIR="$(cd $(dirname $0); pwd)"
 top_dir="$BASE_DIR/.."
 
+if test "$NO_MAKE" != "yes"; then
+    make -C ${top_dir} > /dev/null || exit 1
+fi
+
 if test -z "$MYSQL_SOURCE"; then
     MYSQL_SOURCE="$(make -s -C $top_dir echo-mysql-source)"
 fi
@@ -81,7 +85,6 @@ for test_suite_name in $(echo $test_suite_names | sed -e 's/,/ /g'); do
     fi
 done
 
-make -C ${top_dir} > /dev/null || exit 1
 if test -n "${plugins_dir}"; then
     make -C ${top_dir} \
 	install-pluginLTLIBRARIES \
