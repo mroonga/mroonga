@@ -2834,7 +2834,7 @@ int ha_mroonga::delete_table(const char *name)
 #endif
   if (!(tmp_share = mrn_get_share(name, &tmp_table, &error)))
   {
-    mrn_q_free_table_share(tmp_table_share);
+    free_table_share(tmp_table_share);
     DBUG_RETURN(error);
   }
 
@@ -2847,7 +2847,7 @@ int ha_mroonga::delete_table(const char *name)
 
   mrn_free_share(tmp_share);
   mysql_mutex_lock(&LOCK_open);
-  mrn_q_free_table_share(tmp_table_share);
+  free_table_share(tmp_table_share);
   mysql_mutex_unlock(&LOCK_open);
   DBUG_RETURN(error);
 }
@@ -7315,7 +7315,7 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 #endif
   if (!(tmp_share = mrn_get_share(from, &tmp_table, &error)))
   {
-    mrn_q_free_table_share(tmp_table_share);
+    free_table_share(tmp_table_share);
     DBUG_RETURN(error);
   }
 
@@ -7355,7 +7355,7 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   if (to_tbl_name[0] != '#')
   {
     mysql_mutex_lock(&LOCK_open);
-    mrn_q_free_table_share(tmp_table_share);
+    free_table_share(tmp_table_share);
     mysql_mutex_unlock(&LOCK_open);
   }
   DBUG_RETURN(error);

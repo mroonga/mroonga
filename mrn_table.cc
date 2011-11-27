@@ -747,17 +747,6 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   DBUG_RETURN(share);
 }
 
-void mrn_free_table_share(TABLE_SHARE *share)
-{
-  DBUG_ENTER("mrn_free_table_share");
-#if MYSQL_VERSION_ID >= 50500
-  release_table_share(share);
-#else
-  release_table_share(share, RELEASE_NORMAL);
-#endif
-  DBUG_VOID_RETURN;
-}
-
 TABLE_SHARE *mrn_q_get_table_share(TABLE_LIST *table_list, const char *path,
                                    int *error)
 {
@@ -791,13 +780,6 @@ TABLE_SHARE *mrn_q_get_table_share(TABLE_LIST *table_list, const char *path,
   share = get_table_share(thd, table_list, key, key_length, 0, error);
 #endif
   DBUG_RETURN(share);
-}
-
-void mrn_q_free_table_share(TABLE_SHARE *share)
-{
-  DBUG_ENTER("mrn_q_free_table_share");
-  share->destroy();
-  DBUG_VOID_RETURN;
 }
 
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
@@ -904,7 +886,7 @@ void mrn_clear_alter_share(THD *thd)
     while (alter_share)
     {
       tmp_alter_share = alter_share->next;
-      mrn_q_free_table_share(alter_share->alter_share);
+      free_table_share(alter_share->alter_share);
       free(alter_share);
       alter_share = tmp_alter_share;
     }
