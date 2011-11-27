@@ -41,7 +41,7 @@ extern "C" {
 
 #if (MYSQL_VERSION_ID >= 50603) || \
     (MYSQL_VERSION_ID >= 50514)
-#  define MRN_HANDLER_HAVE_ADD_INDEX 1
+#  define MRN_HANDLER_HAVE_FINAL_ADD_INDEX 1
 #endif
 
 #if (MYSQL_VERSION_ID >= 50603) || \
@@ -160,7 +160,7 @@ private:
   bool ignoring_duplicated_key;
   bool fulltext_searching;
 
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   handler_add_index *hnd_add_index;
 #endif
 
@@ -307,7 +307,7 @@ public:
   bool check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                   uint table_changes);
   uint alter_table_flags(uint flags);
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                 handler_add_index **add);
   int final_add_index(handler_add_index *add, bool commit);
@@ -643,7 +643,7 @@ private:
                                           uint table_changes);
   uint wrapper_alter_table_flags(uint flags);
   uint storage_alter_table_flags(uint flags);
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                         handler_add_index **add);
   int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
@@ -654,7 +654,7 @@ private:
 #endif
   int storage_add_index_multiple_columns(KEY *key_info, uint num_of_keys,
                                          grn_obj **index_columns);
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   int wrapper_final_add_index(handler_add_index *add, bool commit);
   int storage_final_add_index(handler_add_index *add, bool commit);
 #endif
