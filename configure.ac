@@ -56,7 +56,12 @@ AC_DEFUN([CHECK_CXXFLAG], [
 
 if test "$GCC" = "yes"; then
   CHECK_CFLAG([-Wall])
+  CHECK_CFLAG([-Wextra])
+  CHECK_CFLAG([-Wno-unused-parameter])
+
   CHECK_CXXFLAG([-Wall])
+  CHECK_CXXFLAG([-Wextra])
+  CHECK_CXXFLAG([-Wno-unused-parameter])
 fi
 
 standalone_build=
