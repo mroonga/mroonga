@@ -285,7 +285,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
   int title_length;
   char *param_string = NULL;
   char *sprit_ptr[2];
-  char *tmp_ptr, *tmp_ptr2, *start_ptr;
+  char *tmp_ptr, *start_ptr;
 #ifdef WITH_PARTITION_STORAGE_ENGINE
   partition_element *part_elem;
   partition_element *sub_elem;
@@ -459,11 +459,10 @@ error_alloc_param_string:
 int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 {
   int error;
-  int title_length;
   char *param_string = NULL;
 #if MYSQL_VERSION_ID >= 50500
   char *sprit_ptr[2];
-  char *tmp_ptr, *tmp_ptr2, *start_ptr;
+  char *tmp_ptr, *start_ptr;
 #endif
   DBUG_ENTER("mrn_add_index_param");
 
@@ -557,15 +556,14 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 error:
   if (param_string)
     my_free(param_string, MYF(0));
-error_alloc_param_string:
   DBUG_RETURN(error);
 }
 
 int mrn_parse_index_param(MRN_SHARE *share, TABLE *table)
 {
-  int i, error;
+  int error;
   DBUG_ENTER("mrn_parse_index_param");
-  for (i = 0; i < table->s->keys; i++)
+  for (uint i = 0; i < table->s->keys; i++)
   {
     KEY *key_info = &table->s->key_info[i];
 

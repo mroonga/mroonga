@@ -1426,12 +1426,14 @@ ulong ha_mroonga::wrapper_index_flags(uint idx, uint part, bool all_parts) const
 ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
 {
   MRN_DBUG_ENTER_METHOD();
+  ulong flags;
   KEY key = table_share->key_info[idx];
   if (key.algorithm == HA_KEY_ALG_BTREE || key.algorithm == HA_KEY_ALG_UNDEF) {
-    DBUG_RETURN(HA_READ_NEXT | HA_READ_PREV | HA_READ_ORDER | HA_READ_RANGE);
+    flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_ORDER | HA_READ_RANGE;
   } else {
-    DBUG_RETURN(HA_ONLY_WHOLE_INDEX | HA_KEY_SCAN_NOT_ROR);
+    flags = HA_ONLY_WHOLE_INDEX | HA_KEY_SCAN_NOT_ROR;
   }
+  DBUG_RETURN(flags);
 }
 
 ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
@@ -1700,7 +1702,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 
   if (error)
   {
-    for (int j = 0; j < i; j++) {
+    for (uint j = 0; j < i; j++) {
       if (index_tables[j])
       {
         grn_obj_remove(ctx, index_tables[j]);
@@ -1715,7 +1717,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 int ha_mroonga::storage_create(const char *name, TABLE *table,
                                HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
 {
-  int error, i;
+  int error;
   MRN_DBUG_ENTER_METHOD();
 
   error = storage_create_validate_pseudo_column(table);
@@ -1793,8 +1795,8 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
 
   /* create columns */
   uint n_columns = table->s->fields;
-  for (i = 0; i < n_columns; i++) {
-    grn_obj *col_obj, *col_type;
+  for (uint i = 0; i < n_columns; i++) {
+    grn_obj *col_type;
     Field *field = table->s->field[i];
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
@@ -1809,8 +1811,8 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     col_type = grn_ctx_at(ctx, gtype);
     char *col_path = NULL; // we don't specify path
 
-    col_obj = grn_column_create(ctx, tbl_obj, column_name, column_name_size,
-                                col_path, col_flags, col_type);
+    grn_column_create(ctx, tbl_obj, column_name, column_name_size,
+                      col_path, col_flags, col_type);
     if (ctx->rc) {
       grn_obj_remove(ctx, tbl_obj);
       error = ER_CANT_CREATE_TABLE;
@@ -2033,9 +2035,10 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
                                        grn_obj *grn_table, MRN_SHARE *tmp_share)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0, i;
+  int error = 0;
 
   uint n_keys = table->s->keys;
+  uint i;
   grn_obj *index_tables[n_keys];
   for (i = 0; i < n_keys; i++) {
     index_tables[i] = NULL;
@@ -2182,7 +2185,7 @@ int ha_mroonga::ensure_database_open(const char *name)
 
 int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 {
-  int i, error = 0;
+  int error = 0;
   MRN_SHARE *tmp_share;
   MRN_DBUG_ENTER_METHOD();
   /* checking data type of virtual columns */
@@ -2298,7 +2301,6 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
 
   MRN_DBUG_ENTER_METHOD();
 
-  char index_name[MRN_MAX_PATH_SIZE];
   uint n_keys = table->s->keys;
   uint n_primary_keys = table->s->primary_key;
   if (n_keys > 0) {
@@ -2318,7 +2320,7 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) name, (const uchar *) name + strlen(name));
   mrn_table_name_gen(decode_name, table_name);
-  int i = 0;
+  uint i = 0;
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->s->key_info[i];
 
@@ -2504,7 +2506,7 @@ int ha_mroonga::storage_open_indexes(const char *name)
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) name, (const uchar *) name + strlen(name));
   mrn_table_name_gen(decode_name, table_name);
-  int i = 0;
+  uint i;
   for (i = 0; i < n_keys; i++) {
     key_min[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
     key_max[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
@@ -2626,7 +2628,7 @@ int ha_mroonga::wrapper_close()
 int ha_mroonga::storage_close()
 {
   MRN_DBUG_ENTER_METHOD();
-  int i;
+  uint i;
   uint n_keys = table->s->keys;
   uint pkey_nr = table->s->primary_key;
   for (i = 0; i < n_keys; i++) {
@@ -2726,7 +2728,7 @@ int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
 
   TABLE_SHARE *tmp_table_share = tmp_share->table_share;
 
-  int i;
+  uint i;
   for (i = 0; i < tmp_table_share->keys; i++) {
     char index_name[MRN_MAX_PATH_SIZE];
     mrn_index_table_name_gen(table_name, tmp_table_share->key_info[i].name,
@@ -2759,7 +2761,7 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
   if (error)
     DBUG_RETURN(error);
 
-  int i;
+  uint i;
   for (i = 0; i < tmp_table_share->keys; i++) {
     mrn_index_table_name_gen(tbl_name, tmp_table_share->key_info[i].name,
                              index_name);
@@ -3621,9 +3623,8 @@ int ha_mroonga::storage_write_row_indexes(uchar *buf, grn_id record_id)
     }
 
     grn_obj *index_column = grn_index_columns[i];
-
     if ((error = storage_write_row_index(buf, record_id, &key_info,
-                                         grn_index_columns[i])))
+                                         index_column)))
     {
       goto err;
     }
@@ -3736,14 +3737,14 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
 
   grn_id old_record_id;
   my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
-  for (int j = 0; j < key_info.key_parts; j++) {
+  for (uint j = 0; j < key_info.key_parts; j++) {
     Field *field = key_info.key_part[j].field;
     field->move_field_offset(ptr_diff);
   }
   error = wrapper_get_record_id((uchar *)old_data, &old_record_id,
                                 "failed to get old record ID "
                                 "for updating from groonga");
-  for (int j = 0; j < key_info.key_parts; j++) {
+  for (uint j = 0; j < key_info.key_parts; j++) {
     Field *field = key_info.key_part[j].field;
     field->move_field_offset(-ptr_diff);
   }
@@ -3879,7 +3880,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 
       if (pkey_info) {
         bool have_pkey = false;
-        for (int j = 0; j < pkey_info->key_parts; j++) {
+        for (uint j = 0; j < pkey_info->key_parts; j++) {
           Field *pkey_field = pkey_info->key_part[j].field;
           if (strcmp(pkey_field->field_name, column_name) == 0) {
             char message[MRN_BUFFER_SIZE];
@@ -3951,7 +3952,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
 
     GRN_BULK_REWIND(&old_key);
     grn_bulk_space(ctx, &old_key, key_info.key_length);
-    for (int j = 0; j < key_info.key_parts; j++) {
+    for (uint j = 0; j < key_info.key_parts; j++) {
       Field *field = key_info.key_part[j].field;
       field->move_field_offset(ptr_diff);
     }
@@ -3959,7 +3960,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
              (uchar *)old_data,
              &key_info,
              key_info.key_length);
-    for (int j = 0; j < key_info.key_parts; j++) {
+    for (uint j = 0; j < key_info.key_parts; j++) {
       Field *field = key_info.key_part[j].field;
       field->move_field_offset(-ptr_diff);
     }
@@ -4392,7 +4393,7 @@ ha_rows ha_mroonga::records_in_range(uint key_nr, key_range *range_min, key_rang
   } else {
     row_count = storage_records_in_range(key_nr, range_min, range_max);
   }
-  DBUG_PRINT("info", ("mroonga: row_count=%d", row_count));
+  DBUG_PRINT("info", ("mroonga: row_count=%lu", row_count));
   DBUG_RETURN(row_count);
 }
 
@@ -5258,7 +5259,14 @@ void ha_mroonga::merge_matched_record_keys(grn_obj *matched_result)
   grn_rc rc;
   rc = grn_table_setoperation(ctx, matched_record_keys, matched_result,
                               matched_record_keys, operation);
-
+  if (rc) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to merge matched record keys: <%s>",
+             ctx->errbuf);
+    my_message(ER_ERROR_ON_READ, error_message, MYF(0));
+    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+  }
 
   DBUG_VOID_RETURN;
 }
@@ -5836,8 +5844,6 @@ void ha_mroonga::geo_store_rectangle(const uchar *rectangle)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  int error = 0;
-
   double locations[4];
   for (int i = 0; i < 4; i++) {
     uchar reversed_value[8];
@@ -5924,7 +5930,7 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
       DBUG_VOID_RETURN;
     }
 
-    int i = 0;
+    uint i = 0;
     Item *where;
     if (fulltext) {
       where = select_lex->where;
@@ -5961,7 +5967,7 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
           Field *field = ((Item_field *)where)->field;
           if (field->table != table)
             break;
-          int j;
+          uint j;
           for (j = 0; j < key_info.key_parts; j++) {
             if (key_part[j].field == field)
             {
@@ -6006,7 +6012,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     first_select_lex = select_lex;
   }
   DBUG_PRINT("info",
-    ("mroonga: first_select_lex->options=%u",
+    ("mroonga: first_select_lex->options=%llu",
       first_select_lex ? first_select_lex->options : 0));
 
   if (
@@ -6066,7 +6072,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       if (grn_columns && where->type() == Item::FIELD_ITEM)
         continue;
       if (where->type() == Item::FUNC_ITEM && match_against->eq(where, true)) {
-        for (int i = 0; i < match_against->arg_count; i++) {
+        for (uint i = 0; i < match_against->arg_count; i++) {
           where = where->next;
         }
         continue;
@@ -7188,7 +7194,7 @@ int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
 
   TABLE_SHARE *tmp_table_share = tmp_share->table_share;
 
-  int i;
+  uint i;
   for (i = 0; i < tmp_table_share->keys; i++) {
     char from_index_name[MRN_MAX_PATH_SIZE];
     char to_index_name[MRN_MAX_PATH_SIZE];
@@ -7243,7 +7249,7 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
   if (error)
     DBUG_RETURN(error);
 
-  int i;
+  uint i;
   for (i = 0; i < tmp_table_share->keys; i++) {
     mrn_index_table_name_gen(from_tbl_name, tmp_table_share->key_info[i].name,
                              from_index_name);
