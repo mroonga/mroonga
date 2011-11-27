@@ -1313,6 +1313,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   wrap_handler = NULL;
   matched_record_keys = NULL;
   fulltext_searching = FALSE;
+  mrn_lock_type = F_UNLCK;
   GRN_TEXT_INIT(&key_buffer, 0);
   GRN_TEXT_INIT(&encoded_key_buffer, 0);
   GRN_VOID_INIT(&old_value_buffer);
@@ -3017,6 +3018,7 @@ int ha_mroonga::external_lock(THD *thd, int lock_type)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+  mrn_lock_type = lock_type;
   if (share->wrapper_mode)
   {
     error = wrapper_external_lock(thd, lock_type);
@@ -6327,6 +6329,7 @@ int ha_mroonga::reset()
   ignoring_no_key_columns = false;
   ignoring_duplicated_key = false;
   fulltext_searching = false;
+  mrn_lock_type = F_UNLCK;
   mrn_clear_alter_share(thd);
   DBUG_RETURN(error);
 }
@@ -7848,8 +7851,9 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
     }
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
   }
-  if (!res && i > j && !(res = wrapper_external_lock(thd, F_WRLCK)))
-  {
+  if (!res && i > j &&
+    (mrn_lock_type != F_UNLCK || !(res = wrapper_external_lock(thd, F_WRLCK)))
+  ) {
     if (!(res = wrapper_rnd_init(TRUE)))
     {
       grn_obj key;
@@ -7918,7 +7922,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       else
         res = wrapper_rnd_end();
     }
-    wrapper_external_lock(thd, F_UNLCK);
+    if (mrn_lock_type == F_UNLCK)
+      wrapper_external_lock(thd, F_UNLCK);
   }
   bitmap_set_all(table->read_set);
   if (!res && j)

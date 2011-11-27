@@ -461,6 +461,7 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
   int error;
   char *param_string = NULL;
 #if MYSQL_VERSION_ID >= 50500
+  int title_length;
   char *sprit_ptr[2];
   char *tmp_ptr, *start_ptr;
 #endif
@@ -556,6 +557,9 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 error:
   if (param_string)
     my_free(param_string, MYF(0));
+#if MYSQL_VERSION_ID >= 50500
+error_alloc_param_string:
+#endif
   DBUG_RETURN(error);
 }
 

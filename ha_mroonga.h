@@ -156,6 +156,7 @@ private:
   int *key_min_len;
   int *key_max_len;
   uint dup_key;
+  int mrn_lock_type;
 
   bool count_skip;
   bool fast_order_limit;
