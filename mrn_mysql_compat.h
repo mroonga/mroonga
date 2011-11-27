@@ -17,46 +17,23 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_mysql_h
-#define _mrn_mysql_h
+#ifndef _mrn_mysql_compat_h
+#define _mrn_mysql_compat_h
 
-#ifdef HAVE_CONFIG_H
-#  include "config.h"
-/* We need to undefine them because my_config.h defines them. :< */
-#  undef VERSION
-#  undef PACKAGE
-#  undef PACKAGE_BUGREPORT
-#  undef PACKAGE_NAME
-#  undef PACKAGE_STRING
-#  undef PACKAGE_TARNAME
-#  undef PACKAGE_VERSION
+#if MYSQL_VERSION_ID >= 50500
+#  define my_free(PTR, FLAG) my_free(PTR)
 #endif
 
-#include "mrn_version.h"
-
-#ifdef FORCE_FAST_MUTEX_DISABLED
-#  ifdef MY_PTHREAD_FASTMUTEX
-#    undef MY_PTHREAD_FASTMUTEX
-#  endif
+#if MYSQL_VERSION_ID < 50600
+  typedef Item COND;
 #endif
 
-#define MYSQL_SERVER 1
-#include <mysql_version.h>
-
-#if MYSQL_VERSION_ID < 50500
-#  include <mysql_priv.h>
-#  include <mysql/plugin.h>
-#else
-#  include <sql_priv.h>
-#  include <sql_class.h>
-#  include <probes_mysql.h>
-#  include <sql_partition.h>
+#if MYSQL_VERSION_ID < 50603 || defined(MRN_MYSQL_INNODB_FTS_P)
+  typedef MYSQL_ERROR Sql_condition;
 #endif
 
-#ifdef MARIADB_BASE_VERSION
-#  define MRN_MARIADB_P 1
+#ifndef MRN_MARIADB_P
+  typedef char *range_id_t;
 #endif
 
-#define MRN_DBUG_ENTER_FUNCTION() DBUG_ENTER(__FUNCTION__)
-
-#endif /* _mrn_mysql_h */
+#endif /* _mrn_mysql_compat_h */

@@ -31,6 +31,7 @@ extern "C" {
 
 #include <groonga.h>
 #include "mrn_sys.h"
+#include "mrn_mysql_compat.h"
 
 #if (MYSQL_VERSION_ID >= 50603) || \
     (MYSQL_VERSION_ID >= 50513 && MYSQL_VERSION_ID < 50600) || \
@@ -80,18 +81,6 @@ extern "C" {
 
 #if MYSQL_VERSION_ID >= 50500
 #  define MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
-#endif
-
-#if MYSQL_VERSION_ID < 50600
-  typedef Item COND;
-#endif
-
-#if MYSQL_VERSION_ID < 50603 || defined(MRN_MYSQL_INNODB_FTS_P)
-  typedef MYSQL_ERROR Sql_condition;
-#endif
-
-#ifndef MRN_MARIADB_P
-  typedef char *range_id_t;
 #endif
 
 class ha_mroonga;

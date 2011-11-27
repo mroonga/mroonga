@@ -27,6 +27,7 @@
 #include "mrn_err.h"
 #include "mrn_sys.h"
 #include "mrn_table.h"
+#include "mrn_mysql_compat.h"
 
 #if MYSQL_VERSION_ID >= 50603
 #  define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), TRUE)
