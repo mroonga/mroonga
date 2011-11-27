@@ -18,7 +18,7 @@ All SQL statements written there are currently available ones.
 List of server variables
 ------------------------
 
-Here are the explanations of server variables that are introduced by groonga storage engine.
+Here are the explanations of server variables that are introduced by mroonga.
 
 groonga_default_parser
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -34,17 +34,17 @@ The version string of the groonga library.
 groonga_log_file
 ^^^^^^^^^^^^^^^^
 
-The path of the log file of the groonga storage engine. The default value is ``groonga.log``.
+The path of the log file of mroonga. The default value is ``groonga.log``.
 
 groonga_log_level
 ^^^^^^^^^^^^^^^^^
 
-The log level of the groonga storage engine. The default value is ``NOTICE``.
+The output level of mroonga log file. The default value is ``NOTICE``.
 
 groonga_version
 ^^^^^^^^^^^^^^^
 
-The version string of the groonga storage engine.
+The version string of mroonga.
 
 List of status variables
 ------------------------

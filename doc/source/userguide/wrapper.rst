@@ -166,7 +166,7 @@ TokenUnigram
 TokenTrigram
   It tokenises in trigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 4 letters or more. It is to reduce noises.
 
-You can specify the default parser by passing ``--with-default-parser`` option in ``configure`` when you build groonga storage engine. ::
+You can specify the default parser by passing ``--with-default-parser`` option in ``configure`` when you build mroonga. ::
 
   ./configure --with-default-parser TokenMecab ...
 

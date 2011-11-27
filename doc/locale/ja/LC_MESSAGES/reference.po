@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 23:56\n"
-"PO-Revision-Date: 2011-11-28 00:04+0900\n"
+"POT-Creation-Date: 2011-11-27 20:42\n"
+"PO-Revision-Date: 2011-11-27 20:50+0100\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -32,53 +32,105 @@ msgstr "利用可能なSQLコマンドの一覧"
 msgid ""
 "You can see many SQL examples in the following directory of mroonga's source "
 "tree. ::"
-msgstr "mroongaのソースコードの以下のディレクトリにSQL実行サンプルファイルがたくさんあります。 ::"
-
-# 9ea631dd4a854d3d91f3b1cc6ea3f612
-#: ../../../source/reference.rst:13
-msgid "List of files ::"
-msgstr "ファイル一覧 ::"
+msgstr ""
+"mroongaのソースコードの以下のディレクトリにSQL実行サンプルファイルがたくさん"
+"あります。 ::"
 
 # 2b1be9bdd52f4ee78912fd53b5b57027
-#: ../../../source/reference.rst:31
+#: ../../../source/reference.rst:14
 msgid "All SQL statements written there are currently available ones."
 msgstr "ここに記述されているSQL文が現在利用可能なSQL文となります。"
 
 # aa2d9a41e3404293a897248663b944eb
-#: ../../../source/reference.rst:33
+#: ../../../source/reference.rst:16
 msgid ""
 "(Or we can say that any SQL statements that are not written there are not "
 "supported.)"
 msgstr "※逆に言うとここに記述されていないSQL文の動作はサポートしておりません。"
 
 # e392b3fe37ec4107a5d9a9bd57861b2a
-#: ../../../source/reference.rst:36
+#: ../../../source/reference.rst:19
 msgid "List of server variables"
 msgstr "サーバ変数の一覧"
 
-# 784fa391908e482bb3be973ad03348ba
-#: ../../../source/reference.rst:38
-msgid "No server variable is added for now."
-msgstr "今のところ独自に追加されたサーバ変数はありません。"
+# 23e55d2e20084940b30e3efb7d5fb7af
+#: ../../../source/reference.rst:21
+msgid ""
+"Here are the explanations of server variables that are introduced by mroonga."
+msgstr "独自に追加されたサーバ変数を説明します。"
+
+# 72938681680f46ac9d593e6b60adce4d
+#: ../../../source/reference.rst:24
+msgid "groonga_default_parser"
+msgstr ""
+
+# e12a4104fc9741cda25bae8ebfc902ca
+#: ../../../source/reference.rst:26
+msgid ""
+"The default parser of the full text search. The default value can be "
+"specified by ``--with-default-parser=PARSER`` configure argument, whose "
+"default value is ``TokenBigram``."
+msgstr "デフォルトの全文検索用パーサ。デフォルト値はconfigureの ``with-default-parser`` オプションで指定できます（無指定時は ``TokenBigram`` ）。"
+
+# 72938681680f46ac9d593e6b60adce4d
+#: ../../../source/reference.rst:30
+msgid "groonga_libgroonga_version"
+msgstr ""
+
+# 16c600e1ea5f4c98abdedf73f42a156d
+#: ../../../source/reference.rst:32
+msgid "The version string of the groonga library."
+msgstr "groongaライブラリのバージョン"
+
+# 9f31484a7f1c461c96790c6997bac2ce
+#: ../../../source/reference.rst:35
+msgid "groonga_log_file"
+msgstr ""
+
+# f8193ef7958543a4ad432bc0f502af33
+#: ../../../source/reference.rst:37
+msgid ""
+"The path of the log file of mroonga. The default value is ``groonga.log``."
+msgstr "mroongaのログファイル名。デフォルト値は ``groonga.log`` 。"
+
+# 9f31484a7f1c461c96790c6997bac2ce
+#: ../../../source/reference.rst:40
+msgid "groonga_log_level"
+msgstr ""
+
+# 834d5940c3844cf4a109cd5ba7d0f5c4
+#: ../../../source/reference.rst:42
+msgid "The output level of mroonga log file. The default value is ``NOTICE``."
+msgstr "mroongaのログの出力レベル。デフォルト値は ``NOTICE`` 。"
+
+# 9f31484a7f1c461c96790c6997bac2ce
+#: ../../../source/reference.rst:45
+msgid "groonga_version"
+msgstr ""
+
+# 16c600e1ea5f4c98abdedf73f42a156d
+#: ../../../source/reference.rst:47
+msgid "The version string of mroonga."
+msgstr "mroongaのバージョン"
 
 # a1797cd59fdb403f950d338e4ed6f95d
-#: ../../../source/reference.rst:41
+#: ../../../source/reference.rst:50
 msgid "List of status variables"
 msgstr "ステータス変数の一覧"
 
 # 23e55d2e20084940b30e3efb7d5fb7af
-#: ../../../source/reference.rst:43
+#: ../../../source/reference.rst:52
 msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
 msgstr "独自に追加されたステータス変数を説明します。"
 
 # 055712d752cb4588b105099473cabd16
-#: ../../../source/reference.rst:46
+#: ../../../source/reference.rst:55
 msgid "groonga_count_skip"
 msgstr ""
 
 # 267f1b18714740dc979e8b4b67752812
-#: ../../../source/reference.rst:48
+#: ../../../source/reference.rst:57
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
@@ -88,12 +140,12 @@ msgstr ""
 "きます。"
 
 # 707a3368bec3453bb3ffd2bfeb919bb6
-#: ../../../source/reference.rst:52
+#: ../../../source/reference.rst:61
 msgid "groonga_fast_order_limit"
 msgstr ""
 
 # f07b04cb491d4edfa20546deee8bf2e4
-#: ../../../source/reference.rst:54
+#: ../../../source/reference.rst:63
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
