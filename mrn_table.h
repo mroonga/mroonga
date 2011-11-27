@@ -98,8 +98,9 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error);
 int mrn_free_share_alloc(MRN_SHARE *share);
 int mrn_free_share(MRN_SHARE *share);
 TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error);
-TABLE_SHARE *mrn_q_get_table_share(TABLE_LIST *table_list, const char *path,
-                                   int *error);
+TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path,
+                                        int *error);
+void mrn_free_tmp_table_share(TABLE_SHARE *table_share);
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info);
 uint mrn_decode(uchar *buf_st, uchar *buf_ed,

@@ -61,4 +61,6 @@
 #  define my_free(PTR, FLAG) my_free(PTR)
 #endif
 
+#define MRN_DBUG_ENTER_FUNCTION() DBUG_ENTER(__FUNCTION__)
+
 #endif /* _mrn_mysql_h */

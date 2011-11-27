@@ -747,26 +747,30 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   DBUG_RETURN(share);
 }
 
-TABLE_SHARE *mrn_q_get_table_share(TABLE_LIST *table_list, const char *path,
-                                   int *error)
+TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path,
+                                        int *error)
 {
   uint key_length;
   TABLE_SHARE *share;
   THD *thd = current_thd;
-  DBUG_ENTER("mrn_q_get_table_share");
 #if MYSQL_VERSION_ID >= 50603
   const char *key;
-  key_length = get_table_def_key(table_list, &key);
 #else
   char key[MAX_DBKEY_LENGTH];
+#endif
+
+  MRN_DBUG_ENTER_FUNCTION();
+#if MYSQL_VERSION_ID >= 50603
+  key_length = get_table_def_key(table_list, &key);
+#else
   key_length = create_table_def_key(thd, key, table_list, FALSE);
 #endif
-#if MYSQL_VERSION_ID >= 50500
   if (!(share = alloc_table_share(table_list, key, key_length)))
   {
     *error = ER_CANT_OPEN_FILE;
     DBUG_RETURN(NULL);
   }
+  share->tmp_table = INTERNAL_TMP_TABLE; // TODO: is this right?
   share->path.str = (char *) path;
   share->path.length = strlen(path);
   share->normalized_path.str = share->path.str;
@@ -776,10 +780,14 @@ TABLE_SHARE *mrn_q_get_table_share(TABLE_LIST *table_list, const char *path,
     *error = ER_CANT_OPEN_FILE;
     DBUG_RETURN(NULL);
   }
-#else
-  share = get_table_share(thd, table_list, key, key_length, 0, error);
-#endif
   DBUG_RETURN(share);
+}
+
+void mrn_free_tmp_table_share(TABLE_SHARE *tmp_table_share)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  free_table_share(tmp_table_share);
+  DBUG_VOID_RETURN;
 }
 
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
@@ -886,7 +894,7 @@ void mrn_clear_alter_share(THD *thd)
     while (alter_share)
     {
       tmp_alter_share = alter_share->next;
-      free_table_share(alter_share->alter_share);
+      mrn_free_tmp_table_share(alter_share->alter_share);
       free(alter_share);
       alter_share = tmp_alter_share;
     }

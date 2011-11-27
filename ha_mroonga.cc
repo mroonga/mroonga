@@ -2826,7 +2826,7 @@ int ha_mroonga::delete_table(const char *name)
     table_list.init_one_table(db_name, tbl_name, TL_WRITE);
 #endif
     mrn_open_mutex_lock();
-    tmp_table_share = mrn_q_get_table_share(&table_list, name, &error);
+    tmp_table_share = mrn_create_tmp_table_share(&table_list, name, &error);
     mrn_open_mutex_unlock();
     if (!tmp_table_share) {
       DBUG_RETURN(error);
@@ -2838,7 +2838,9 @@ int ha_mroonga::delete_table(const char *name)
 #endif
   if (!(tmp_share = mrn_get_share(name, &tmp_table, &error)))
   {
-    free_table_share(tmp_table_share);
+    mrn_open_mutex_lock();
+    mrn_free_tmp_table_share(tmp_table_share);
+    mrn_open_mutex_unlock();
     DBUG_RETURN(error);
   }
 
@@ -2851,7 +2853,7 @@ int ha_mroonga::delete_table(const char *name)
 
   mrn_free_share(tmp_share);
   mrn_open_mutex_lock();
-  free_table_share(tmp_table_share);
+  mrn_free_tmp_table_share(tmp_table_share);
   mrn_open_mutex_unlock();
   DBUG_RETURN(error);
 }
@@ -7308,7 +7310,7 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   table_list.init_one_table(from_db_name, from_tbl_name, TL_WRITE);
 #endif
   mrn_open_mutex_lock();
-  tmp_table_share = mrn_q_get_table_share(&table_list, from, &error);
+  tmp_table_share = mrn_create_tmp_table_share(&table_list, from, &error);
   mrn_open_mutex_unlock();
   if (!tmp_table_share) {
     DBUG_RETURN(error);
@@ -7319,7 +7321,9 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 #endif
   if (!(tmp_share = mrn_get_share(from, &tmp_table, &error)))
   {
-    free_table_share(tmp_table_share);
+    mrn_open_mutex_lock();
+    mrn_free_tmp_table_share(tmp_table_share);
+    mrn_open_mutex_unlock();
     DBUG_RETURN(error);
   }
 
@@ -7359,7 +7363,7 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   if (to_tbl_name[0] != '#')
   {
     mrn_open_mutex_lock();
-    free_table_share(tmp_table_share);
+    mrn_free_tmp_table_share(tmp_table_share);
     mrn_open_mutex_unlock();
   }
   DBUG_RETURN(error);
