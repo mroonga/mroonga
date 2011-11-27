@@ -8,25 +8,8 @@ List of available SQL commands
 
 You can see many SQL examples in the following directory of groonga storage engine's source tree. ::
 
- test/sql/t
-
-List of files ::
-
-  auto_increment.test        insert.test
-  binlog.test                insert_wrapper.test
-  btree.test                 last_insert_grn_id.test
-  count_performance.test     log_level.test
-  create_table.test          order_limit_performance.test
-  create_table_wrapper.test  replace.test
-  delete.test                select_all.test
-  delete_wrapper.test        select_pkey.test
-  drop_database.test         select_secondary_key.test
-  drop_table.test            show_create_table.test
-  flush_logs.test            show_table_status.test
-  fulltext.test              tinyint.test
-  fulltext_wrapper.test      update.test
-  hash.test                  update_wrapper.test
-  information_schema.test
+  test/sql/suite/groonga_storage/t
+  test/sql/suite/groonga_wrapper/t
 
 All SQL statements written there are currently available ones.
 
@@ -35,7 +18,33 @@ All SQL statements written there are currently available ones.
 List of server variables
 ------------------------
 
-No server variable is added for now.
+Here are the explanations of server variables that are introduced by groonga storage engine.
+
+groonga_default_parser
+^^^^^^^^^^^^^^^^^^^^^^
+
+The default parser of the full text search.
+The default value can be specified by ``--with-default-parser=PARSER`` configure argument, whose default value is ``TokenBigram``.
+
+groonga_libgroonga_version
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The version string of the groonga library.
+
+groonga_log_file
+^^^^^^^^^^^^^^^^
+
+The path of the log file of the groonga storage engine. The default value is ``groonga.log``.
+
+groonga_log_level
+^^^^^^^^^^^^^^^^^
+
+The log level of the groonga storage engine. The default value is ``NOTICE``.
+
+groonga_version
+^^^^^^^^^^^^^^^
+
+The version string of the groonga storage engine.
 
 List of status variables
 ------------------------
