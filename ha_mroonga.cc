@@ -890,7 +890,6 @@ static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
 
 static uint mrn_alter_table_flags(uint flags) {
   uint ret_flags = 0;
-#ifdef MRN_HANDLER_HAVE_HA_INPLACE_INDEX_CHANGE
   ret_flags |=
     HA_INPLACE_ADD_INDEX_NO_READ_WRITE |
     HA_INPLACE_DROP_INDEX_NO_READ_WRITE |
@@ -904,7 +903,6 @@ static uint mrn_alter_table_flags(uint flags) {
     HA_INPLACE_DROP_UNIQUE_INDEX_NO_WRITE |
     HA_INPLACE_ADD_PK_INDEX_NO_WRITE |
     HA_INPLACE_DROP_PK_INDEX_NO_WRITE;
-#endif
   return ret_flags;
 }
 
