@@ -59,10 +59,14 @@
 
 #if MYSQL_VERSION_ID >= 50500
 extern mysql_mutex_t LOCK_open;
+#  define mrn_open_mutex_lock() mysql_mutex_lock(&LOCK_open)
+#  define mrn_open_mutex_unlock() mysql_mutex_unlock(&LOCK_open)
 #else
 extern pthread_mutex_t LOCK_open;
 #  define mysql_mutex_lock(mutex) pthread_mutex_lock(mutex)
 #  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
+#  define mrn_open_mutex_lock()
+#  define mrn_open_mutex_unlock()
 #endif
 
 #if MYSQL_VERSION_ID >= 50603
@@ -2821,9 +2825,9 @@ int ha_mroonga::delete_table(const char *name)
 #else
     table_list.init_one_table(db_name, tbl_name, TL_WRITE);
 #endif
-    mysql_mutex_lock(&LOCK_open);
+    mrn_open_mutex_lock();
     tmp_table_share = mrn_q_get_table_share(&table_list, name, &error);
-    mysql_mutex_unlock(&LOCK_open);
+    mrn_open_mutex_unlock();
     if (!tmp_table_share) {
       DBUG_RETURN(error);
     }
@@ -2846,9 +2850,9 @@ int ha_mroonga::delete_table(const char *name)
   }
 
   mrn_free_share(tmp_share);
-  mysql_mutex_lock(&LOCK_open);
+  mrn_open_mutex_lock();
   free_table_share(tmp_table_share);
-  mysql_mutex_unlock(&LOCK_open);
+  mrn_open_mutex_unlock();
   DBUG_RETURN(error);
 }
 
@@ -7303,9 +7307,9 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 #else
   table_list.init_one_table(from_db_name, from_tbl_name, TL_WRITE);
 #endif
-  mysql_mutex_lock(&LOCK_open);
+  mrn_open_mutex_lock();
   tmp_table_share = mrn_q_get_table_share(&table_list, from, &error);
-  mysql_mutex_unlock(&LOCK_open);
+  mrn_open_mutex_unlock();
   if (!tmp_table_share) {
     DBUG_RETURN(error);
   }
@@ -7354,9 +7358,9 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   mrn_free_share(tmp_share);
   if (to_tbl_name[0] != '#')
   {
-    mysql_mutex_lock(&LOCK_open);
+    mrn_open_mutex_lock();
     free_table_share(tmp_table_share);
-    mysql_mutex_unlock(&LOCK_open);
+    mrn_open_mutex_unlock();
   }
   DBUG_RETURN(error);
 }
