@@ -7965,13 +7965,12 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
 #endif
 {
   int res = 0;
-  uint i, j, k;
+  uint i;
   uint n_keys = table->s->keys;
   grn_obj *index_tables[num_of_keys + n_keys];
   grn_obj *index_columns[num_of_keys + n_keys];
   char grn_table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
-  THD *thd = ha_thd();
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
   char **key_parser;
@@ -8027,10 +8026,10 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   bitmap_set_all(table->read_set);
   if (res)
   {
-    for (k = 0; k < i; k++) {
-      if (index_tables[k + n_keys])
+    for (uint j = 0; j < i; j++) {
+      if (index_tables[j + n_keys])
       {
-        grn_obj_remove(ctx, index_tables[k + n_keys]);
+        grn_obj_remove(ctx, index_tables[j + n_keys]);
       }
     }
   }
