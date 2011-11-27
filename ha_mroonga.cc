@@ -4402,7 +4402,7 @@ ha_rows ha_mroonga::records_in_range(uint key_nr, key_range *range_min, key_rang
   } else {
     row_count = storage_records_in_range(key_nr, range_min, range_max);
   }
-  DBUG_PRINT("info", ("mroonga: row_count=%llu", row_count));
+  DBUG_PRINT("info", ("mroonga: row_count=%" MRN_HA_ROWS_FORMAT, row_count));
   DBUG_RETURN(row_count);
 }
 
