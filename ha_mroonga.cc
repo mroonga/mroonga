@@ -890,7 +890,6 @@ static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
 
 static uint mrn_alter_table_flags(uint flags) {
   uint ret_flags = 0;
-#ifdef MRN_HANDLER_HAVE_HA_INPLACE_INDEX_CHANGE
   ret_flags |=
     HA_INPLACE_ADD_INDEX_NO_READ_WRITE |
     HA_INPLACE_DROP_INDEX_NO_READ_WRITE |
@@ -904,7 +903,6 @@ static uint mrn_alter_table_flags(uint flags) {
     HA_INPLACE_DROP_UNIQUE_INDEX_NO_WRITE |
     HA_INPLACE_ADD_PK_INDEX_NO_WRITE |
     HA_INPLACE_DROP_PK_INDEX_NO_WRITE;
-#endif
   return ret_flags;
 }
 
@@ -7777,7 +7775,7 @@ uint ha_mroonga::alter_table_flags(uint flags)
   DBUG_RETURN(res);
 }
 
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
 int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
                                   uint num_of_keys, handler_add_index **add)
 #else
@@ -7817,7 +7815,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
              (const uchar *) share->table_name,
              (const uchar *) share->table_name + share->table_name_length);
   mrn_table_name_gen(decode_name, grn_table_name);
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   hnd_add_index = NULL;
 #endif
   bitmap_clear_all(table->read_set);
@@ -7930,7 +7928,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
     res = wrap_handler->add_index(table_arg, wrap_key_info, j, &hnd_add_index);
 #else
     res = wrap_handler->add_index(table_arg, wrap_key_info, j);
@@ -7951,7 +7949,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       }
     }
   }
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   else {
     *add = new handler_add_index(table_arg, key_info, num_of_keys);
   }
@@ -7961,7 +7959,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   DBUG_RETURN(res);
 }
 
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
 int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
                                   uint num_of_keys, handler_add_index **add)
 #else
@@ -7970,13 +7968,12 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
 #endif
 {
   int res = 0;
-  uint i, j, k;
+  uint i;
   uint n_keys = table->s->keys;
   grn_obj *index_tables[num_of_keys + n_keys];
   grn_obj *index_columns[num_of_keys + n_keys];
   char grn_table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
-  THD *thd = ha_thd();
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
   char **key_parser;
@@ -8032,14 +8029,14 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   bitmap_set_all(table->read_set);
   if (res)
   {
-    for (k = 0; k < i; k++) {
-      if (index_tables[k + n_keys])
+    for (uint j = 0; j < i; j++) {
+      if (index_tables[j + n_keys])
       {
-        grn_obj_remove(ctx, index_tables[k + n_keys]);
+        grn_obj_remove(ctx, index_tables[j + n_keys]);
       }
     }
   }
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   else {
     *add = new handler_add_index(table_arg, key_info, num_of_keys);
   }
@@ -8102,7 +8099,7 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
   DBUG_RETURN(error);
 }
 
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
 int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
                           uint num_of_keys, handler_add_index **add)
 {
@@ -8132,7 +8129,7 @@ int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
 }
 #endif
 
-#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
 int ha_mroonga::wrapper_final_add_index(handler_add_index *add, bool commit)
 {
   int res = 0;
