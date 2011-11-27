@@ -7852,8 +7852,10 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   if (!res && i > j &&
     (mrn_lock_type != F_UNLCK || !(res = wrapper_external_lock(thd, F_WRLCK)))
   ) {
-    if (!(res = wrapper_rnd_init(TRUE)))
-    {
+    if (
+      !(res = wrapper_start_stmt(thd, thr_lock_data.type)) &&
+      !(res = wrapper_rnd_init(TRUE))
+    ) {
       grn_obj key;
       GRN_TEXT_INIT(&key, 0);
       grn_bulk_space(ctx, &key, p_key_info->key_length);
