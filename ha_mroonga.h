@@ -171,7 +171,7 @@ private:
   bool ignoring_no_key_columns;
 
 public:
-  ha_mroonga(handlerton *hton, TABLE_SHARE *share);
+  ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg);
   ~ha_mroonga();
   const char *table_type() const;           // required
   const char *index_type(uint inx);
@@ -315,9 +315,11 @@ public:
   int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                 handler_add_index **add);
   int final_add_index(handler_add_index *add, bool commit);
+#else
+  int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
+#endif
   int prepare_drop_index(TABLE *table_arg, uint *key_num, uint num_of_keys);
   int final_drop_index(TABLE *table_arg);
-#endif
   int update_auto_increment();
   void set_next_insert_id(ulonglong id);
   void get_auto_increment(ulonglong offset, ulonglong increment, ulonglong nb_desired_values,
@@ -351,6 +353,7 @@ protected:
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_LAST
   int index_last(uchar *buf);
 #endif
+  void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
 
 private:
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
@@ -649,17 +652,22 @@ private:
                         handler_add_index **add);
   int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                         handler_add_index **add);
+#else
+  int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
+  int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
+#endif
   int storage_add_index_multiple_columns(KEY *key_info, uint num_of_keys,
                                          grn_obj **index_columns);
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
   int wrapper_final_add_index(handler_add_index *add, bool commit);
   int storage_final_add_index(handler_add_index *add, bool commit);
+#endif
   int wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
                                  uint num_of_keys);
   int storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
                                  uint num_of_keys);
   int wrapper_final_drop_index(TABLE *table_arg);
   int storage_final_drop_index(TABLE *table_arg);
-#endif
   int wrapper_update_auto_increment();
   int storage_update_auto_increment();
   void wrapper_set_next_insert_id(ulonglong id);
@@ -680,6 +688,8 @@ private:
   int storage_reset_auto_increment(ulonglong value);
   int wrapper_start_stmt(THD *thd, thr_lock_type lock_type);
   int storage_start_stmt(THD *thd, thr_lock_type lock_type);
+  void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
+  void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
 };
 
 #ifdef __cplusplus

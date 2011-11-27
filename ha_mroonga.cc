@@ -1290,8 +1290,8 @@ static _ft_vft mrn_no_such_key_ft_vft = {
 };
 
 /* handler implementation */
-ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share)
-  :handler(hton, share),
+ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
+  :handler(hton, share_arg),
    ignoring_duplicated_key(false),
    ignoring_no_key_columns(false)
 {
@@ -2052,10 +2052,13 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
     }
   }
   if (error) {
-    for (; i >= 0; i--) {
+    while (TRUE) {
       if (index_tables[i]) {
         grn_obj_remove(ctx, index_tables[i]);
       }
+      if (!i)
+        break;
+      i--;
     }
   }
 
@@ -2367,7 +2370,7 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
 
 error:
   if (error) {
-    for (; i >= 0; i--) {
+    while (TRUE) {
       if (key_min[i]) {
         free(key_min[i]);
       }
@@ -2382,6 +2385,9 @@ error:
       if (index_table) {
         grn_obj_unlink(ctx, index_table);
       }
+      if (!i)
+        break;
+      i--;
     }
     free(key_min);
     free(key_max);
@@ -2546,7 +2552,7 @@ int ha_mroonga::storage_open_indexes(const char *name)
 
 error:
   if (error) {
-    for (; i >= 0; i--) {
+    while (TRUE) {
       if (key_min[i]) {
         free(key_min[i]);
       }
@@ -2561,6 +2567,9 @@ error:
       if (index_table) {
         grn_obj_unlink(ctx, index_table);
       }
+      if (!i)
+        break;
+      i--;
     }
     free(key_min);
     free(key_max);
@@ -7768,6 +7777,10 @@ uint ha_mroonga::alter_table_flags(uint flags)
 #ifdef MRN_HANDLER_HAVE_ADD_INDEX
 int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
                                   uint num_of_keys, handler_add_index **add)
+#else
+int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
+                                  uint num_of_keys)
+#endif
 {
   int res = 0;
   uint i, j, k;
@@ -7801,7 +7814,9 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
              (const uchar *) share->table_name,
              (const uchar *) share->table_name + share->table_name_length);
   mrn_table_name_gen(decode_name, grn_table_name);
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
   hnd_add_index = NULL;
+#endif
   bitmap_clear_all(table->read_set);
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
   for (i = 0, j = 0; i < num_of_keys; i++) {
@@ -7910,7 +7925,11 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
     res = wrap_handler->add_index(table_arg, wrap_key_info, j, &hnd_add_index);
+#else
+    res = wrap_handler->add_index(table_arg, wrap_key_info, j);
+#endif
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
@@ -7926,16 +7945,24 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
         grn_obj_remove(ctx, index_tables[k + n_keys]);
       }
     }
-  } else {
+  }
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+  else {
     *add = new handler_add_index(table_arg, key_info, num_of_keys);
   }
+#endif
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
   DBUG_RETURN(res);
 }
 
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
 int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
                                   uint num_of_keys, handler_add_index **add)
+#else
+int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
+                                  uint num_of_keys)
+#endif
 {
   int res = 0;
   uint i, j, k;
@@ -8006,9 +8033,12 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
         grn_obj_remove(ctx, index_tables[k + n_keys]);
       }
     }
-  } else {
+  }
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
+  else {
     *add = new handler_add_index(table_arg, key_info, num_of_keys);
   }
+#endif
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
   DBUG_RETURN(res);
@@ -8067,6 +8097,7 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
 int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
                           uint num_of_keys, handler_add_index **add)
 {
@@ -8080,7 +8111,23 @@ int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
   }
   DBUG_RETURN(res);
 }
+#else
+int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
+                          uint num_of_keys)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_add_index(table_arg, key_info, num_of_keys);
+  } else {
+    res = storage_add_index(table_arg, key_info, num_of_keys);
+  }
+  DBUG_RETURN(res);
+}
+#endif
 
+#ifdef MRN_HANDLER_HAVE_ADD_INDEX
 int ha_mroonga::wrapper_final_add_index(handler_add_index *add, bool commit)
 {
   int res = 0;
@@ -8122,6 +8169,7 @@ int ha_mroonga::final_add_index(handler_add_index *add, bool commit)
   }
   DBUG_RETURN(res);
 }
+#endif
 
 int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
   uint num_of_keys)
@@ -8234,7 +8282,6 @@ int ha_mroonga::final_drop_index(TABLE *table_arg)
   }
   DBUG_RETURN(res);
 }
-#endif
 
 int ha_mroonga::wrapper_update_auto_increment()
 {
@@ -8476,6 +8523,38 @@ int ha_mroonga::start_stmt(THD *thd, thr_lock_type lock_type)
     res = storage_start_stmt(thd, lock_type);
   }
   DBUG_RETURN(res);
+}
+
+void ha_mroonga::wrapper_change_table_ptr(TABLE *table_arg,
+                                          TABLE_SHARE *share_arg)
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->change_table_ptr(table_arg, share->wrap_table_share);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_change_table_ptr(TABLE *table_arg,
+                                          TABLE_SHARE *share_arg)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg)
+{
+  MRN_DBUG_ENTER_METHOD();
+  handler::change_table_ptr(table_arg, share_arg);
+  if (share && share->wrapper_mode)
+  {
+    wrapper_change_table_ptr(table_arg, share_arg);
+  } else {
+    storage_change_table_ptr(table_arg, share_arg);
+  }
+  DBUG_VOID_RETURN;
 }
 
 #ifdef __cplusplus
