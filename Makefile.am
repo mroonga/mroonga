@@ -1,5 +1,7 @@
 AUTOMAKE_OPTIONS = 1.9.7
 
+LOCALES = ja
+
 AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) $(MYSQL_VERSION_CFLAGS)
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
@@ -60,6 +62,11 @@ update-latest-release:
 	  packages/rpm/fedora/mysql-groonga.spec.in		\
 	  packages/rpm/centos/mysql-groonga.spec.in		\
 	  packages/debian/changelog
+
+update-po:
+	@for lang in $(LOCALES); do						\
+	  (cd $(top_srcdir)/doc/locale/$$lang/LC_MESSAGES && make update)	\
+	done
 
 update-document:
 	@if test -z "$(MROONGA_GITHUB_COM_PATH)"; then			\
