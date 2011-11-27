@@ -3,16 +3,14 @@
 Installation Guide
 ==================
 
-If you use binary packages, MySQL related packages will be also installed when you install groonga storage engine package.
+If you use binary packages, MySQL related packages will be also installed when you install mroonga package.
+
+We distribute packages for both 32-bit and 64-bit but we recommend that you should use 64-bit package for server. You should use 32-bit package just only for test or development. You will get no memory error with 32-bit package even if you just process medium size data.
 
 Here we explain how to install for each environment.
 
 Debian GNU/Linux squeeze
 ------------------------
-
-.. note::
-
-   amd64 packages only. i386 packages are not provided.
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -23,14 +21,10 @@ Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga
+  % sudo aptitude -V -D -y install mysql-server-mroonga
 
 Debian GNU/Linux wheezy
 -----------------------
-
-.. note::
-
-   amd64 packages only. i386 packages are not provided.
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -41,14 +35,10 @@ Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga
+  % sudo aptitude -V -D -y install mysql-server-mroonga
 
 Debian GNU/Linux sid
 --------------------
-
-.. note::
-
-   amd64 packages only. i386 packages are not provided.
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -59,14 +49,10 @@ Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga
+  % sudo aptitude -V -D -y install mysql-server-mroonga
 
 Ubuntu 10.04 LTS Lucid Lynx
 ---------------------------
-
-.. note::
-
-   amd64 packages only. i386 packages are not provided.
 
 .. note::
 
@@ -81,14 +67,10 @@ Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga
+  % sudo aptitude -V -D -y install mysql-server-mroonga
 
 Ubuntu 11.04 Natty Narwhal
 --------------------------
-
-.. note::
-
-   amd64 packages only. i386 packages are not provided.
 
 .. note::
 
@@ -103,14 +85,10 @@ Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga
+  % sudo aptitude -V -D -y install mysql-server-mroonga
 
 Ubuntu 11.10 Oneiric Ocelot
 ---------------------------
-
-.. note::
-
-   amd64 packages only. i386 packages are not provided.
 
 .. note::
 
@@ -125,14 +103,10 @@ Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-groonga
+  % sudo aptitude -V -D -y install mysql-server-mroonga
 
 CentOS 5
 --------
-
-.. note::
-
-   amd64 packages only. i386 packages are not provided.
 
 CentOS 5's MySQL packages should be removed beforehand if installed.
 
@@ -144,14 +118,10 @@ Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
-  % sudo yum install -y mysql-groonga
+  % sudo yum install -y mysql-mroonga
 
 CentOS 6
 --------
-
-.. note::
-
-   amd64 packages only. i386 packages are not provided.
 
 In CentOS 6, unlike in CentOS 5, we use CentOS's MySQL packages (version 5.1.x). So you don't need to remove CentOS's MySQL packages.
 
@@ -159,20 +129,16 @@ Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
-  % sudo yum install -y mysql-groonga
+  % sudo yum install -y mysql-mroonga
 
 Fedora 15
 ---------
-
-.. note::
-
-   amd64 packages only. i386 packages are not provided.
 
 Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
-  % sudo yum install -y mysql-groonga
+  % sudo yum install -y mysql-mroonga
 
 Install from the source code
 ------------------------------
@@ -200,7 +166,7 @@ Requirements
 
 MySQL and groonga should be already installed.
 
-And MySQL's source code is also required to build groonga storage engine.
+And MySQL's source code is also required to build mroonga.
 
 Install MySQL
 ^^^^^^^^^^^^^
@@ -226,8 +192,8 @@ http://groonga.org/docs/
 
 Here we assume that libgroonga is installed in the standard location like /usr/lib etc.
 
-Build groonga storage engine
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Build mroonga
+^^^^^^^^^^^^^
 
 Run configure script by specifying the location of MySQL source code with ``--with-mysql-source`` and the path of mysql_config command with ``--with-mysql-config``. ::
 
@@ -246,8 +212,8 @@ Then invoke "make". ::
 
  make
 
-Install groonga storage engine
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Install mroonga
+^^^^^^^^^^^^^^^
 
 By invoking "make install", ha_groonga.so will be installed in MySQL's plugin directory. ::
 
@@ -257,7 +223,7 @@ Then start mysqld, connect to it by mysql client, and install it by "INSTALL PLU
 
  mysql> INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
 
-If "groonga" is displayed in "SHOW ENGINES" command result like below, groonga storage engine is well installed. ::
+If "groonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
 
  mysql> SHOW ENGINES;
  +------------+---------+------------------------------------------------------------+--------------+------+------------+

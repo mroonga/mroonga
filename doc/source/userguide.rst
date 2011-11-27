@@ -14,7 +14,7 @@ After invoking the MySQL server, connect to it by mysql command. If you set pass
 
  shell> mysql -uroot test
 
-By using SHOW ENGINES command, you can check if groonga storage engine is installed. ::
+By using SHOW ENGINES command, you can check if mroonga is installed. ::
 
  mysql> SHOW ENGINES;
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
@@ -38,7 +38,7 @@ If not installed, invoke INSTALL PLUGIN command like below. ::
 Running modes
 -------------
 
-groonga storage engine can run in the following two modes.
+Mroonga can run in the following two modes.
 
 * storage mode
 * wrapper mode
@@ -55,8 +55,8 @@ The structure of the storage mode is the following. You use it instead of existi
 With the wrapper mode, groonga is used for full text search function only, and another existing storage engine like InnoDB is used for storing data.
 By using wrapper mode, you combine InnoDB that is well-use as the storage engine and groonga that is a proven full text search engine, and you can use it as the stable database having the fast full text search function.
 
-The structure of the wrapper mode is the following. Full text search related operations are done by groonga storage engine, and other operations are done by existing storage engines like MyISAM, InnoDB etc.
-Groonga storage engine is located between SQL Handler that processes SQL and an existing storage engine, thus all data goes through groonga storage engine.
+The structure of the wrapper mode is the following. Full text search related operations are done by mroonga, and other operations are done by existing storage engines like MyISAM, InnoDB etc.
+Mroonga is located between SQL Handler that processes SQL and an existing storage engine, thus all data goes through mroonga
 With this way, full text search indexing etc. are done transparently.
 
 .. figure:: /images/wrapper-mode.png

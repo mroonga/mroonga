@@ -125,9 +125,9 @@ Red Hat 系
  ダウンロード
    http://github.com/mroonga/mroonga/downloads
 
- groongaストレージエンジンとは、全文検索エンジンであるgroonga
- をベースとしたMySQLのストレージエンジンです。Tritonnの後継プ
- ロジェクトとなります。
+ mroongaとは、全文検索エンジンであるgroongaをベースとした
+ MySQLのストレージエンジンです。Tritonnの後継プロジェクトとな
+ ります。
 
 
  最近のトピックス
@@ -135,10 +135,9 @@ Red Hat 系
 
  # <<<ユーモアを交えて最近のトピックスを>>>
 
- 先月開催されたMySQL Conference 2011でgroongaストレージエンジ
- ンについて発表してきました。（私じゃなくて開発チームのみなさ
- んが。）英語ですが、以下の発表資料があるので興味がある方はご
- 覧ください。
+ 先月開催されたMySQL Conference 2011でmroongaについて発表して
+ きました。（私じゃなくて開発チームのみなさんが。）英語ですが、
+ 以下の発表資料があるので興味がある方はご覧ください。
 
    http://groonga.org/ja/publication/
 

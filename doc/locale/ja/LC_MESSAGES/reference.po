@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 22:10\n"
-"PO-Revision-Date: 2011-10-29 23:32+0900\n"
+"POT-Creation-Date: 2011-11-27 23:56\n"
+"PO-Revision-Date: 2011-11-28 00:04+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -30,9 +30,9 @@ msgstr "利用可能なSQLコマンドの一覧"
 # e6f4479a7a274b678d5dc9fa4bb9a87f
 #: ../../../source/reference.rst:9
 msgid ""
-"You can see many SQL examples in the following directory of groonga storage "
-"engine's source tree. ::"
-msgstr "groongaストレージエンジンのソースコードの以下のディレクトリにSQL実行サンプルファイルがたくさんあります。 ::"
+"You can see many SQL examples in the following directory of mroonga's source "
+"tree. ::"
+msgstr "mroongaのソースコードの以下のディレクトリにSQL実行サンプルファイルがたくさんあります。 ::"
 
 # 9ea631dd4a854d3d91f3b1cc6ea3f612
 #: ../../../source/reference.rst:13
@@ -69,8 +69,7 @@ msgstr "ステータス変数の一覧"
 # 23e55d2e20084940b30e3efb7d5fb7af
 #: ../../../source/reference.rst:43
 msgid ""
-"Here are the explanations of status variables that are introduced by groonga "
-"storage engine."
+"Here are the explanations of status variables that are introduced by mroonga."
 msgstr "独自に追加されたステータス変数を説明します。"
 
 # 055712d752cb4588b105099473cabd16
@@ -83,7 +82,10 @@ msgstr ""
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
-msgstr "行カウント高速化機能が動作する度にカウントアップされます。スキーマ/SQLチューニングを行って行カウント高速化機能を利用できるようにした際の動作確認に利用できます。"
+msgstr ""
+"行カウント高速化機能が動作する度にカウントアップされます。スキーマ/SQLチュー"
+"ニングを行って行カウント高速化機能を利用できるようにした際の動作確認に利用で"
+"きます。"
 
 # 707a3368bec3453bb3ffd2bfeb919bb6
 #: ../../../source/reference.rst:52
@@ -95,4 +97,7 @@ msgstr ""
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
-msgstr "ORDER BY LIMIT 高速化機能が動作する度にカウントアップされます。スキーマ/SQLチューニングを行って ORDER BY LIMIT 高速化機能を利用できるようにした際の動作確認に利用できます。"
+msgstr ""
+"ORDER BY LIMIT 高速化機能が動作する度にカウントアップされます。スキーマ/SQL"
+"チューニングを行って ORDER BY LIMIT 高速化機能を利用できるようにした際の動作"
+"確認に利用できます。"

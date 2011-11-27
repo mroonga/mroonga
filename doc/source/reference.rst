@@ -6,7 +6,7 @@ Reference
 List of available SQL commands
 ------------------------------
 
-You can see many SQL examples in the following directory of groonga storage engine's source tree. ::
+You can see many SQL examples in the following directory of mroonga's source tree. ::
 
   test/sql/suite/groonga_storage/t
   test/sql/suite/groonga_wrapper/t
@@ -49,7 +49,7 @@ The version string of the groonga storage engine.
 List of status variables
 ------------------------
 
-Here are the explanations of status variables that are introduced by groonga storage engine.
+Here are the explanations of status variables that are introduced by mroonga.
 
 groonga_count_skip
 ^^^^^^^^^^^^^^^^^^

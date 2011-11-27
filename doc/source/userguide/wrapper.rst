@@ -3,12 +3,12 @@
 Wrapper mode
 ============
 
-Here we explain how to use wrapper mode of groonga storage engine.
+Here we explain how to use wrapper mode of mroonga
 
 How to use wrapper mode
 -----------------------
 
-In wrapper mode, groonga storage engine works in wrapping an existing storage engine. To specify the wrapped storage engine, we use SQL comment like ``COMMENT = 'engine "innodb"'`` for now.
+In wrapper mode, mroonga works in wrapping an existing storage engine. To specify the wrapped storage engine, we use SQL comment like ``COMMENT = 'engine "innodb"'`` for now.
 
 .. note::
 
@@ -22,7 +22,7 @@ In wrapper mode, groonga storage engine works in wrapping an existing storage en
 How to use full text search
 ---------------------------
 
-After confirming the installation, let's create a table. The important point is to specify groonga storage engine by ``ENGINE = groonga``. ::
+After confirming the installation, let's create a table. The important point is to specify mroonga by ``ENGINE = groonga``. ::
 
   mysql> CREATE TABLE diaries (
       ->   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -97,7 +97,7 @@ MySQL has the following syntax to specify the parser [#parser]_ for full text se
 
   FULLTEXT INDEX (content) WITH PARSER parser_name
 
-To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in groonga storage engine, tokenisers that are added in groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
+To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in mroonga, tokenisers that are added in groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
 
   FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
 
@@ -185,13 +185,13 @@ SQL::
 Logging
 -------
 
-groonga storage engine outputs the logs by default.
+Mroonga outputs the logs by default.
 
 Log files are located in MySQL's data directory with the filename  ``groonga.log``.
 
 Here is the example of the log. ::
 
-  2010-10-07 17:32:39.209379|n|b1858f80|groonga-storage-engine started.
+  2010-10-07 17:32:39.209379|n|b1858f80|mroonga 1.10 started.
   2010-10-07 17:32:44.934048|d|46953940|hash get not found (key=test)
   2010-10-07 17:32:44.936113|d|46953940|hash put (key=test)
 
@@ -245,7 +245,7 @@ But for the query where "ORDER BY" cannot use index, like sort full text search 
 
 Tritonn took no specific countermeasure for this issue, but it introduced a workaround in the latest repository so that it sorted Senna result in descending order of the score by using sen_records_sort function so that we could remove ORDER BY from the SQL query.
 
-Groonga storage engine also has the optimisation for ORDER BY LIMIT.
+Mroonga also has the optimisation for ORDER BY LIMIT.
 
 In the SELECT example below, ORDER BY LIMIT is processed in groonga only and the minimal records are passed to MySQL. ::
 

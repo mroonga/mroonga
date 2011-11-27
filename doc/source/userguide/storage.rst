@@ -3,12 +3,12 @@
 Storage mode
 ============
 
-Here we explain how to use storage mode of groonga storage engine.
+Here we explain how to use storage mode of mroonga
 
 How to use full text search
 ---------------------------
 
-After confirming the installation, let's create a table. The important point is to specify groonga storage engine by ``ENGINE = groonga``. ::
+After confirming the installation, let's create a table. The important point is to specify mroonga by ``ENGINE = groonga``. ::
 
   mysql> CREATE TABLE diaries (
       ->   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -42,7 +42,7 @@ How to get search score
 
 .. note::
 
-   In version 1.0.0 or before, groonga storage engine used a special column named ``_score`` to get search score. From version 1.0.0, it follows MySQL's standard way to get search score.
+   In version 1.0.0 or before, mroonga used a special column named ``_score`` to get search score. From version 1.0.0, it follows MySQL's standard way to get search score.
 
 We often want to display more relevant results first in full text search. We use search score in such case.
 
@@ -87,7 +87,7 @@ MySQL has the following syntax to specify the parser [#parser]_ for full text se
 
   FULLTEXT INDEX (content) WITH PARSER parser_name
 
-To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in groonga storage engine, tokenisers that are added in groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
+To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in mroonga, tokenisers that are added in groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
 
   FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
 
@@ -156,7 +156,7 @@ TokenUnigram
 TokenTrigram
   It tokenises in trigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 4 letters or more. It is to reduce noises.
 
-You can specify the default parser by passing ``--with-default-parser`` option in ``configure`` when you build groonga storage engine. ::
+You can specify the default parser by passing ``--with-default-parser`` option in ``configure`` when you build mroonga ::
 
   ./configure --with-default-parser TokenMecab ...
 
@@ -213,9 +213,9 @@ Here you can search by geolocation!
 How to get the record ID
 ------------------------
 
-groonga assigns a unique number to identify the record when a record is added in the table.
+Groonga assigns a unique number to identify the record when a record is added in the table.
 
-To make the development of applications easier, you can get this record ID by SQL in groonga storage engine.
+To make the development of applications easier, you can get this record ID by SQL in mroonga
 
 To get the record ID, you need to create a column named ``_id`` when you create a table. ::
 
@@ -271,7 +271,7 @@ By using last_insert_grn_id function, you can also get the record ID that is ass
   +----------------------+
   1 row in set (0.00 sec)
 
-last_insert_grn_id function is included in groonga storage engine as a User-Defined Function (UDF), but if you have not yet register it in MySQL by CREATE FUNCTION, you need to invoke the following SQL for defining a function. ::
+last_insert_grn_id function is included in mroonga as a User-Defined Function (UDF), but if you have not yet register it in MySQL by CREATE FUNCTION, you need to invoke the following SQL for defining a function. ::
 
   mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_groonga.so';
 
@@ -284,13 +284,13 @@ As you can see in the example above, you can get the record ID by _id column or 
 Logging
 -------
 
-groonga storage engine outputs the logs by default.
+Mroonga outputs the logs by default.
 
 Log files are located in MySQL's data directory with the filename  ``groonga.log``.
 
 Here is the example of the log. ::
 
-  2010-10-07 17:32:39.209379|n|b1858f80|groonga-storage-engine started.
+  2010-10-07 17:32:39.209379|n|b1858f80|mroonga 1.10 started.
   2010-10-07 17:32:44.934048|d|46953940|hash get not found (key=test)
   2010-10-07 17:32:44.936113|d|46953940|hash put (key=test)
 
@@ -338,9 +338,9 @@ You can reopen the log file by FLUSH LOGS. If you want to rotate the log file wi
 Choosing appropriate columns
 ----------------------------
 
-groonga uses one file per column to store data, and groonga storage engine accesses needed columns only when accessing a table to utilise this characteristic.
+Groonga uses one file per column to store data, and mroonga accesses needed columns only when accessing a table to utilise this characteristic.
 
-This optimisation is done automatically in groonga storage engine internal, you don't need any specific configuration.
+This optimisation is done automatically in mroonga internal, you don't need any specific configuration.
 
 Imagine that we have a table with 20 columns like below. ::
 
@@ -355,7 +355,7 @@ Imagine that we have a table with 20 columns like below. ::
     c20 DATETIME
   ) ENGINE = groonga DEFAULT CHARSET utf8;
 
-When we run SELECT phrase like the following, groonga storage engine reads data from columns that are referred by SELECT phrase and WHERE phrase only (and it does not access columns that not required internally).
+When we run SELECT phrase like the following, mroonga reads data from columns that are referred by SELECT phrase and WHERE phrase only (and it does not access columns that not required internally).
 
   SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = "XXX";
 
@@ -366,9 +366,9 @@ Optimisation for counting rows
 
 In MySQL's storage engine interface, there is no difference between counting rows like COUNT(\*) and normal data retrieving by SELECT. So access to data that is not included in SELECT result can happen even if you just want to count rows.
 
-Tritonn (MySQL + Senna), that is groonga storage engine's predecessor, introduced "2ind patch" to skip needless access to data and solved this performance issue.
+Tritonn (MySQL + Senna), that is mroonga's predecessor, introduced "2ind patch" to skip needless access to data and solved this performance issue.
 
-Groonga storage engine also has the optimisation for counting rows.
+Mroonga also has the optimisation for counting rows.
 
 In the following SELECT, for example, needless read of columns are skipped and you can get the result of counting rows with the minimal cost.
 
@@ -397,7 +397,7 @@ But for the query where "ORDER BY" cannot use index, like sort full text search 
 
 Tritonn took no specific countermeasure for this issue, but it introduced a workaround in the latest repository so that it sorted Senna result in descending order of the score by using sen_records_sort function so that we could remove ORDER BY from the SQL query.
 
-Groonga storage engine also has the optimisation for ORDER BY LIMIT.
+Mroonga also has the optimisation for ORDER BY LIMIT.
 
 In the SELECT example below, ORDER BY LIMIT is processed in groonga only and the minimal records are passed to MySQL. ::
 

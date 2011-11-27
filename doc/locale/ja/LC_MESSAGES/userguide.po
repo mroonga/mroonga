@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 23:28\n"
-"PO-Revision-Date: 2011-10-29 23:30+0900\n"
+"POT-Creation-Date: 2011-11-27 23:56\n"
+"PO-Revision-Date: 2011-11-28 00:07+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -49,11 +49,8 @@ msgstr ""
 # d9c945563e814dd284adffe1163e657f
 #: ../../../source/userguide.rst:17
 msgid ""
-"By using SHOW ENGINES command, you can check if groonga storage engine is "
-"installed. ::"
-msgstr ""
-"SHOW ENGINESコマンドでgroongaストレージエンジンがインストールされているかどう"
-"かを確認します。::"
+"By using SHOW ENGINES command, you can check if mroonga is installed. ::"
+msgstr "SHOW ENGINESコマンドでmroongaがインストールされているかどうかを確認します。::"
 
 # a0bf62ab86a443d9ab882ebc2629eb78
 #: ../../../source/userguide.rst:32
@@ -78,9 +75,8 @@ msgstr "動作モード"
 
 # e270404d2da246c683a0b15d4c3c3649
 #: ../../../source/userguide.rst:41
-msgid "groonga storage engine can run in the following two modes."
-msgstr ""
-"groongaストレージエンジンは以下の2つの動作モードのどちらかで動作します。"
+msgid "Mroonga can run in the following two modes."
+msgstr "mroongaは以下の2つの動作モードのどちらかで動作します。"
 
 # 5b07a1b9a653436db239758db019ad3f
 #: ../../../source/userguide.rst:43
@@ -133,18 +129,12 @@ msgstr ""
 #: ../../../source/userguide.rst:58
 msgid ""
 "The structure of the wrapper mode is the following. Full text search related "
-"operations are done by groonga storage engine, and other operations are done "
-"by existing storage engines like MyISAM, InnoDB etc. Groonga storage engine "
-"is located between SQL Handler that processes SQL and an existing storage "
-"engine, thus all data goes through groonga storage engine. With this way, "
-"full text search indexing etc. are done transparently."
-msgstr ""
-"ラッパーモードの構成を図で表すと以下のようになります。全文検索関連の処理は"
-"groongaストレージエンジンで処理し、それ以外の処理はMyISAMやInnoDBなど既存のス"
-"トレージエンジンを利用します。SQLを処理するSQL Handlerと既存のストレージエン"
-"ジンの間に位置するため、すべてのデータが一度groongaストレージエンジンを通るこ"
-"とになります。これを利用して、全文検索用のインデックス作成などを透過的に行い"
-"ます。"
+"operations are done by mroonga, and other operations are done by existing "
+"storage engines like MyISAM, InnoDB etc. Mroonga is located between SQL "
+"Handler that processes SQL and an existing storage engine, thus all data "
+"goes through mroonga With this way, full text search indexing etc. are done "
+"transparently."
+msgstr "ラッパーモードの構成を図で表すと以下のようになります。全文検索関連の処理はgroongaストレージエンジンで処理し、それ以外の処理はMyISAMやInnoDBなど既存のストレージエンジンを利用します。SQLを処理するSQL Handlerと既存のストレージエンジンの間に位置するため、すべてのデータが一度mroongaを通ることになります。これを利用して、全文検索用のインデックス作成などを透過的に行います。"
 
 # 0d609ac138a14c35ad0a47e8df85c3cd
 #: ../../../source/userguide.rst:67
@@ -163,10 +153,8 @@ msgstr "ストレージモード"
 
 # c112d17f5e0143408f212937a2531d22
 #: ../../../source/userguide/storage.rst:6
-msgid "Here we explain how to use storage mode of groonga storage engine."
-msgstr ""
-"ここでは groonga ストレージエンジンにおけるストレージモードの利用方法を説明し"
-"ます。"
+msgid "Here we explain how to use storage mode of mroonga"
+msgstr "ここでは mroonga におけるストレージモードの利用方法を説明します。"
 
 # 009e40d9ac12435bbe803dd945407327
 # cef3ca2bca824198b5e16607d053e99e
@@ -181,10 +169,8 @@ msgstr "全文検索の利用方法"
 #: ../../../source/userguide/wrapper.rst:25
 msgid ""
 "After confirming the installation, let's create a table. The important point "
-"is to specify groonga storage engine by ``ENGINE = groonga``. ::"
-msgstr ""
-"インストールが確認できたら、テーブルを1つ作成してみましょう。 ``ENGINE = "
-"groonga`` とgroongaストレージエンジンを指定するところがポイントです。::"
+"is to specify mroonga by ``ENGINE = groonga``. ::"
+msgstr "インストールが確認できたら、テーブルを1つ作成してみましょう。 ``ENGINE = groonga`` とmroongaを指定するところがポイントです。::"
 
 # 66a1958036764bf4bb2575d0f5d5bf67
 # b5a4fbc3d59145989d77e88d10e43369
@@ -217,13 +203,10 @@ msgstr "検索スコアの取得方法"
 # 9ca016aa8fdd4d86b1adf9bbcc48043f
 #: ../../../source/userguide/storage.rst:45
 msgid ""
-"In version 1.0.0 or before, groonga storage engine used a special column "
-"named ``_score`` to get search score. From version 1.0.0, it follows MySQL's "
-"standard way to get search score."
-msgstr ""
-"1.0.0以前のgroongaストレージエンジンではMySQLの標準的な検索スコアの取得方法で"
-"はなく、 ``_score`` という専用のカラムを作成するという独自の方法でした。1.0.0"
-"からはMySQLの標準的な取得方法になっています。"
+"In version 1.0.0 or before, mroonga used a special column named ``_score`` "
+"to get search score. From version 1.0.0, it follows MySQL's standard way to "
+"get search score."
+msgstr "1.0.0以前のmroongaではMySQLの標準的な検索スコアの取得方法ではなく、 ``_score`` という専用のカラムを作成するという独自の方法でした。1.0.0からはMySQLの標準的な取得方法になっています。"
 
 # 5b531348c40447bda830c2ac223402c9
 # 800d3b365d5d49518986667eed622995
@@ -300,18 +283,11 @@ msgstr ""
 msgid ""
 "To use this syntax, you need to register all parsers in MySQL beforehand. On "
 "the other hand, groonga can dynamically add a tokeniser, that is a parser in "
-"MySQL. So if use this syntax in groonga storage engine, tokenisers that are "
-"added in groonga dynamically cannot be supported. We think that this "
-"limitation decreases the convenience, and we choose our own syntax using "
-"COMMENT like the following. ::"
-msgstr ""
-"しかし、この構文を利用する場合は、あらかじめすべてのパーサをMySQLに登録してお"
-"く必要があります。一方、groongaはトークナイザー（MySQLでいうパーサ）を動的に"
-"追加することができます。そのため、groognaストレージエンジンでもこの構文を採用"
-"するとgroonga側に動的に追加されたトークナイザーに対応できなくなります。"
-"groongaに動的に追加されるトークナイザーにはMeCabを用いたトークナイザーもあ"
-"り、この制限に縛られることは利便性を損なうと判断し、以下のようなコメントを用"
-"いた独自の構文を採用することにしました。::"
+"MySQL. So if use this syntax in mroonga, tokenisers that are added in "
+"groonga dynamically cannot be supported. We think that this limitation "
+"decreases the convenience, and we choose our own syntax using COMMENT like "
+"the following. ::"
+msgstr "しかし、この構文を利用する場合は、あらかじめすべてのパーサをMySQLに登録しておく必要があります。一方、groongaはトークナイザー（MySQLでいうパーサ）を動的に追加することができます。そのため、mroognaでもこの構文を採用するとgroonga側に動的に追加されたトークナイザーに対応できなくなります。groongaに動的に追加されるトークナイザーにはMeCabを用いたトークナイザーもあり、この制限に縛られることは利便性を損なうと判断し、以下のようなコメントを用いた独自の構文を採用することにしました。::"
 
 # a587fba35f384a7bba3bf45412659169
 # 7a84d191d0b4436bb0a83115bfaa5c1b
@@ -548,13 +524,14 @@ msgstr ""
 # 4198b03d6185442ebda6987d74309836
 # 1b3ba1c20e4e4e1ab5cb6567c6434721
 #: ../../../source/userguide/storage.rst:149
+#: ../../../source/userguide/wrapper.rst:159
 msgid "It tokenise by splitting with a null character (\\\\0)."
 msgstr "null文字（\\\\0）区切りでトークナイズする。"
 
 # 70462765ec8344ad802b933ac67b401b
 # a52d5f4bb2aa4982bbd4420a5141f9d7
 #: ../../../source/userguide/storage.rst:151
-#: ../../../source/userguide/wrapper.rst:162
+#: ../../../source/userguide/wrapper.rst:161
 msgid ""
 "\"映画\\\\0ホラー\\\\0話題\" will be tokenised as \"映画\", \"ホラー\", \"話"
 "題\"."
@@ -565,17 +542,20 @@ msgstr ""
 # 0e5a7a10cb104377a15b5fc6f2aadfc3
 # 50607e367cf44f019ded45f9892f197e
 #: ../../../source/userguide/storage.rst:154
-#: ../../../source/userguide/wrapper.rst:165
+#: ../../../source/userguide/wrapper.rst:164
 msgid ""
 "It tokenises in unigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 2 letters or more. It is "
 "to reduce noises."
-msgstr "ユニグラムでトークナイズする。ただし、連続したアルファベット・連続した数字・連続した記号はそれぞれ1つのトークンとして扱う。そのため、2文字以上のトークンも存在する。これはノイズを減らすためである。"
+msgstr ""
+"ユニグラムでトークナイズする。ただし、連続したアルファベット・連続した数字・"
+"連続した記号はそれぞれ1つのトークンとして扱う。そのため、2文字以上のトークン"
+"も存在する。これはノイズを減らすためである。"
 
 # 3e8ea92c2cab46b2b8fd9fc15054f573
 # 007cc4a9b065467ca55ee1656be3e7fb
 #: ../../../source/userguide/storage.rst:157
-#: ../../../source/userguide/wrapper.rst:168
+#: ../../../source/userguide/wrapper.rst:167
 msgid ""
 "It tokenises in trigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 4 letters or more. It is "
@@ -588,18 +568,15 @@ msgstr ""
 # f447ce7358434894aad105e4b8e449fc
 # ade45ca3ded545b180131981c60d1e29
 #: ../../../source/userguide/storage.rst:159
-#: ../../../source/userguide/wrapper.rst:170
 msgid ""
 "You can specify the default parser by passing ``--with-default-parser`` "
-"option in ``configure`` when you build groonga storage engine. ::"
-msgstr ""
-"デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションで"
-"ビルド時に指定することができます。::"
+"option in ``configure`` when you build mroonga ::"
+msgstr "デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションでビルド時に指定することができます。::"
 
 # f83202df96fa4774b3ad120ea6c66e07
 # 08aa23875b1f454eb547715e8ece11c0
 #: ../../../source/userguide/storage.rst:163
-#: ../../../source/userguide/wrapper.rst:174
+#: ../../../source/userguide/wrapper.rst:173
 msgid ""
 "Or you can set ``groonga_default_parser`` variable in my.cnf or by SQL. If "
 "you specify it in my.cnf, the change will not be lost after restarting "
@@ -617,14 +594,14 @@ msgstr ""
 # 3b2cf0a1eb4b4111bbabadaeceaeb875
 # 378b897e13fe49bc837b345dc7cb3eca
 #: ../../../source/userguide/storage.rst:165
-#: ../../../source/userguide/wrapper.rst:176
+#: ../../../source/userguide/wrapper.rst:175
 msgid "my.cnf::"
 msgstr ""
 
 # daa09e682bd043c9ac8d0c2031c8068e
 # 72f78c946f6e4ed789c293492d3c6cf6
 #: ../../../source/userguide/storage.rst:170
-#: ../../../source/userguide/wrapper.rst:181
+#: ../../../source/userguide/wrapper.rst:180
 msgid "SQL::"
 msgstr ""
 
@@ -687,20 +664,16 @@ msgstr "レコードIDの取得方法"
 # 2ef4bd2e86024ebd8f6d23a2b8bb2327
 #: ../../../source/userguide/storage.rst:216
 msgid ""
-"groonga assigns a unique number to identify the record when a record is "
+"Groonga assigns a unique number to identify the record when a record is "
 "added in the table."
-msgstr ""
-"groongaではテーブルにレコードを追加した際にレコードを一意に識別するための番号"
-"が割当てられます。"
+msgstr "groongaではテーブルにレコードを追加した際にレコードを一意に識別するための番号が割当てられます。"
 
 # 5a06c0fa595d45a48d5263e6d04bbf16
 #: ../../../source/userguide/storage.rst:218
 msgid ""
 "To make the development of applications easier, you can get this record ID "
-"by SQL in groonga storage engine."
-msgstr ""
-"groongaストレージエンジンではアプリケーションの開発を容易にするため、このレ"
-"コードIDをSQLで取得できるようになっています。"
+"by SQL in mroonga"
+msgstr "mroongaではアプリケーションの開発を容易にするため、このレコードIDをSQLで取得できるようになっています。"
 
 # 7aa11369321440f8a07ea42e52bc241b
 #: ../../../source/userguide/storage.rst:220
@@ -758,14 +731,10 @@ msgstr ""
 # e9d47bfe3afb41909e8e9718da34a057
 #: ../../../source/userguide/storage.rst:274
 msgid ""
-"last_insert_grn_id function is included in groonga storage engine as a User-"
-"Defined Function (UDF), but if you have not yet register it in MySQL by "
-"CREATE FUNCTION, you need to invoke the following SQL for defining a "
-"function. ::"
-msgstr ""
-"last_insert_grn_id関数はユーザ定義関数(UDF)としてgroongaストレージエンジンに"
-"含まれていますが、インストール時にCREATE FUNCTIONでMySQLに追加していない場合"
-"には、以下の関数定義DDLを実行しておく必要があります。 ::"
+"last_insert_grn_id function is included in mroonga as a User-Defined "
+"Function (UDF), but if you have not yet register it in MySQL by CREATE "
+"FUNCTION, you need to invoke the following SQL for defining a function. ::"
+msgstr "last_insert_grn_id関数はユーザ定義関数(UDF)としてmroongaに含まれていますが、インストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関数定義DDLを実行しておく必要があります。 ::"
 
 # 204c2129edb8471bbf696ec0d3a19f24
 #: ../../../source/userguide/storage.rst:278
@@ -781,22 +750,21 @@ msgstr ""
 # 427be2122c8147b6b295098426dd1385
 # d5bf046f8c2a42fe8c04e36ca2b44a5e
 #: ../../../source/userguide/storage.rst:285
-#: ../../../source/userguide/wrapper.rst:187
+#: ../../../source/userguide/wrapper.rst:186
 msgid "Logging"
 msgstr "ログ出力"
 
 # 8e3eec5bb14b43c88a4c3d3db52cd749
 # 34f55704cbe6413f8737215aa6af6a71
 #: ../../../source/userguide/storage.rst:287
-#: ../../../source/userguide/wrapper.rst:189
-msgid "groonga storage engine outputs the logs by default."
-msgstr ""
-"groongaストレージエンジンではデフォルトでログの出力を行うようになっています。"
+#: ../../../source/userguide/wrapper.rst:188
+msgid "Mroonga outputs the logs by default."
+msgstr "mroongaではデフォルトでログの出力を行うようになっています。"
 
 # 98ea9b435e65427fa39f4d299b0752be
 # 98bf2131e26448ae9f9ec3f919607ac7
 #: ../../../source/userguide/storage.rst:289
-#: ../../../source/userguide/wrapper.rst:191
+#: ../../../source/userguide/wrapper.rst:190
 msgid ""
 "Log files are located in MySQL's data directory with the filename  ``groonga."
 "log``."
@@ -807,14 +775,14 @@ msgstr ""
 # f8a8f6bac6ba44e79a2f06f04d7f1828
 # 2f7246d538d04e59959c92837c9bc61f
 #: ../../../source/userguide/storage.rst:291
-#: ../../../source/userguide/wrapper.rst:193
+#: ../../../source/userguide/wrapper.rst:192
 msgid "Here is the example of the log. ::"
 msgstr "以下はログの出力例です。 ::"
 
 # 436bd531e4fc46aa8de567cbd37a53ed
 # 930df4473aab4c1f88270642478cb7e5
 #: ../../../source/userguide/storage.rst:297
-#: ../../../source/userguide/wrapper.rst:199
+#: ../../../source/userguide/wrapper.rst:198
 msgid ""
 "The default log level is NOTICE, i.e. we have important information only and "
 "we don't have debug information etc.)."
@@ -825,7 +793,7 @@ msgstr ""
 # f5507e06f74b4973a6cfa0c7c096aca4
 # 9ab91e6b23bb4c9ea452f7fe0dd5884c
 #: ../../../source/userguide/storage.rst:299
-#: ../../../source/userguide/wrapper.rst:201
+#: ../../../source/userguide/wrapper.rst:200
 msgid ""
 "You can get the log level by ``groonga_log_level`` system variable, that is "
 "a global variable. You can also modify it dynamically by using SET phrase. ::"
@@ -837,84 +805,84 @@ msgstr ""
 # e3e9b3ddfa5940618c0501d5bb6b5bde
 # c66255ea046e4c2c89f18dc31c35ab49
 #: ../../../source/userguide/storage.rst:320
-#: ../../../source/userguide/wrapper.rst:222
+#: ../../../source/userguide/wrapper.rst:221
 msgid "Available log levels are the followings."
 msgstr "設定可能なログレベルは以下の通りです。"
 
 # d813775357bf433c87f17b91422614e7
 # b9d3353d764649beb30f03af36e5c92e
 #: ../../../source/userguide/storage.rst:322
-#: ../../../source/userguide/wrapper.rst:224
+#: ../../../source/userguide/wrapper.rst:223
 msgid "NONE"
 msgstr ""
 
 # 375ecb426bbd464b808a58a4fc8d88d6
 # 6b7cbda0d1554e6b9ce1440faecccc76
 #: ../../../source/userguide/storage.rst:323
-#: ../../../source/userguide/wrapper.rst:225
+#: ../../../source/userguide/wrapper.rst:224
 msgid "EMERG"
 msgstr ""
 
 # aa8cd6108b5d42368f5afe21a57b7f35
 # 205d0a56511c4b118a2994a753768ba9
 #: ../../../source/userguide/storage.rst:324
-#: ../../../source/userguide/wrapper.rst:226
+#: ../../../source/userguide/wrapper.rst:225
 msgid "ALERT"
 msgstr ""
 
 # d486d520881e4e8087f9552aca1985e0
 # 1b6d848a3e8a4845bbc68b85cd4d0508
 #: ../../../source/userguide/storage.rst:325
-#: ../../../source/userguide/wrapper.rst:227
+#: ../../../source/userguide/wrapper.rst:226
 msgid "CRIT"
 msgstr ""
 
 # 48b7c19dc8954ec98e53a47b8d58c77f
 # 582c04556e6349199ce471c2cbccba41
 #: ../../../source/userguide/storage.rst:326
-#: ../../../source/userguide/wrapper.rst:228
+#: ../../../source/userguide/wrapper.rst:227
 msgid "ERROR"
 msgstr ""
 
 # 17401a7cf5e543988bdaa2ee7dd4166e
 # e17410e94de84b41b4e87e4fb1197bd3
 #: ../../../source/userguide/storage.rst:327
-#: ../../../source/userguide/wrapper.rst:229
+#: ../../../source/userguide/wrapper.rst:228
 msgid "WARNING"
 msgstr ""
 
 # 3e95bc9a79fd4c64aa9f22b2ee91f8fd
 # 351f6813a8264a2196ebde93db9285f4
 #: ../../../source/userguide/storage.rst:328
-#: ../../../source/userguide/wrapper.rst:230
+#: ../../../source/userguide/wrapper.rst:229
 msgid "NOTICE"
 msgstr ""
 
 # eed35c97b9324ba5aefd5a6c939bb0e9
 # 0597f719e675405f80d1a59d7e0e097d
 #: ../../../source/userguide/storage.rst:329
-#: ../../../source/userguide/wrapper.rst:231
+#: ../../../source/userguide/wrapper.rst:230
 msgid "INFO"
 msgstr ""
 
 # fb03bdf4720c4aa1962243e607f4f9e3
 # ae2000e98e69422c977dd72e558b4545
 #: ../../../source/userguide/storage.rst:330
-#: ../../../source/userguide/wrapper.rst:232
+#: ../../../source/userguide/wrapper.rst:231
 msgid "DEBUG"
 msgstr ""
 
 # 6001042cea4a4684ab0071626c610df9
 # 3969739cea5a4915b01dfb4719381732
 #: ../../../source/userguide/storage.rst:331
-#: ../../../source/userguide/wrapper.rst:233
+#: ../../../source/userguide/wrapper.rst:232
 msgid "DUMP"
 msgstr ""
 
 # 1a2e97698f17417d9e953fd8cbcedf46
 # 3d7b381b1ea549928d77907fcfd26f99
 #: ../../../source/userguide/storage.rst:333
-#: ../../../source/userguide/wrapper.rst:235
+#: ../../../source/userguide/wrapper.rst:234
 msgid ""
 "You can reopen the log file by FLUSH LOGS. If you want to rotate the log "
 "file without stopping MySQL server, you can do in the following procedure."
@@ -926,7 +894,7 @@ msgstr ""
 # f08a21d8ee4e42068bc507367654aef2
 # c56b2c0a2b1b4c1caa1c6bf9fdecee13
 #: ../../../source/userguide/storage.rst:335
-#: ../../../source/userguide/wrapper.rst:237
+#: ../../../source/userguide/wrapper.rst:236
 msgid ""
 "change the file name of ``groonga.log`` (by using OS's mv command etc.)."
 msgstr "``groonga.log`` ファイルの名前を変更（OSコマンドのmvなどで）"
@@ -934,7 +902,7 @@ msgstr "``groonga.log`` ファイルの名前を変更（OSコマンドのmvな�
 # ee3362f80c284f1d9fba9ec05c78a8d2
 # 50cb10bbde814869982d774d6edbcb36
 #: ../../../source/userguide/storage.rst:336
-#: ../../../source/userguide/wrapper.rst:238
+#: ../../../source/userguide/wrapper.rst:237
 msgid ""
 "invoke \"FLUSH LOGS\" in MySQL server (by mysql command or mysqladmin "
 "command)."
@@ -950,22 +918,16 @@ msgstr "カラムの刈り込み"
 # e9ae9bb8074d4f20b12b8ba8b3f55612
 #: ../../../source/userguide/storage.rst:341
 msgid ""
-"groonga uses one file per column to store data, and groonga storage engine "
-"accesses needed columns only when accessing a table to utilise this "
-"characteristic."
-msgstr ""
-"groongaでは各カラムごとにファイルを分けてデータを格納する「カラムストア方式」"
-"が採用されており、groongaストレージエンジンではこの特性を活かすためにテーブル"
-"アクセス時に必要なカラムに対してのみアクセスを行う実装を行っています。"
+"Groonga uses one file per column to store data, and mroonga accesses needed "
+"columns only when accessing a table to utilise this characteristic."
+msgstr "groongaでは各カラムごとにファイルを分けてデータを格納する「カラムストア方式」が採用されており、mroongaではこの特性を活かすためにテーブルアクセス時に必要なカラムに対してのみアクセスを行う実装を行っています。"
 
 # 0907f98e7c6a4e16b2d5d7228e950148
 #: ../../../source/userguide/storage.rst:343
 msgid ""
-"This optimisation is done automatically in groonga storage engine internal, "
-"you don't need any specific configuration."
-msgstr ""
-"この高速化の仕組みはgroongaストレージエンジン内部で自動的に行われるため、特に"
-"設定などを行う必要はありません。"
+"This optimisation is done automatically in mroonga internal, you don't need "
+"any specific configuration."
+msgstr "この高速化の仕組みはmroonga内部で自動的に行われるため、特に設定などを行う必要はありません。"
 
 # 96d05aed70184389b95dd1e825209b01
 #: ../../../source/userguide/storage.rst:345
@@ -977,13 +939,10 @@ msgstr ""
 # 1bdfa57092df4ae8bb98919aa0d016ad
 #: ../../../source/userguide/storage.rst:358
 msgid ""
-"When we run SELECT phrase like the following, groonga storage engine reads "
-"data from columns that are referred by SELECT phrase and WHERE phrase only "
-"(and it does not access columns that not required internally)."
-msgstr ""
-"この時、以下のようなSELECT文が発行される場合、groongaストレージエンジンでは"
-"SELECT句およびWHERE句で参照しているカラムに対してのみデータの読み取りを行って"
-"SQL文を処理します（内部的に不要なカラムに対してはアクセスしません）。 ::"
+"When we run SELECT phrase like the following, mroonga reads data from "
+"columns that are referred by SELECT phrase and WHERE phrase only (and it "
+"does not access columns that not required internally)."
+msgstr "この時、以下のようなSELECT文が発行される場合、mroongaではSELECT句およびWHERE句で参照しているカラムに対してのみデータの読み取りを行ってSQL文を処理します（内部的に不要なカラムに対してはアクセスしません）。 ::"
 
 # 742927067935426f89fbc0fed4c82fbc
 #: ../../../source/userguide/storage.rst:360
@@ -1021,20 +980,14 @@ msgstr ""
 # 6a21a050675d424788de2f2b64e4b6ac
 #: ../../../source/userguide/storage.rst:369
 msgid ""
-"Tritonn (MySQL + Senna), that is groonga storage engine's predecessor, "
-"introduced \"2ind patch\" to skip needless access to data and solved this "
-"performance issue."
-msgstr ""
-"groongaストレージエンジンの前身であるTritonn(MySQL+Senna)ではこの問題に対して"
-"\"2indパッチ\"という不要なレコードアクセスを省略する仕組みを独自に実装してこ"
-"の性能問題を回避していました。"
+"Tritonn (MySQL + Senna), that is mroonga's predecessor, introduced \"2ind "
+"patch\" to skip needless access to data and solved this performance issue."
+msgstr "mroongaの前身であるTritonn(MySQL+Senna)ではこの問題に対して\"2indパッチ\"という不要なレコードアクセスを省略する仕組みを独自に実装してこの性能問題を回避していました。"
 
 # 5beea7322ea84e3d915c770facc1c37f
 #: ../../../source/userguide/storage.rst:371
-msgid "Groonga storage engine also has the optimisation for counting rows."
-msgstr ""
-"これに引き続き、groongaストレージエンジンでも行カウントを高速化するための仕組"
-"みを実装しています。"
+msgid "Mroonga also has the optimisation for counting rows."
+msgstr "これに引き続き、mroongaでも行カウントを高速化するための仕組みを実装しています。"
 
 # 6145e4e8989f46de92a8b32da86cfdf0
 #: ../../../source/userguide/storage.rst:373
@@ -1055,7 +1008,7 @@ msgstr ""
 # 17f19cecd41e4a22a1c12463729d8386
 #: ../../../source/userguide/storage.rst:377
 #: ../../../source/userguide/storage.rst:406
-#: ../../../source/userguide/wrapper.rst:255
+#: ../../../source/userguide/wrapper.rst:254
 msgid ""
 "You can check if this optimisation works or not by the status variable. ::"
 msgstr ""
@@ -1083,14 +1036,14 @@ msgstr ""
 # bf3a9a3bec954a65a21a1c38fcb9cc61
 # 6d3a5194d9084abd8f61ad13460e9641
 #: ../../../source/userguide/storage.rst:392
-#: ../../../source/userguide/wrapper.rst:241
+#: ../../../source/userguide/wrapper.rst:240
 msgid "Optimisation for ORDER BY LIMIT in full text search"
 msgstr "全文検索時の ORDER BY LIMIT 高速化"
 
 # c8fd2da996424bc98075fd37ce228d5c
 # 430c403ab8c44a0a95bfbf1a23026bd1
 #: ../../../source/userguide/storage.rst:394
-#: ../../../source/userguide/wrapper.rst:243
+#: ../../../source/userguide/wrapper.rst:242
 msgid ""
 "Generally speaking, MySQL can process \"ORDER BY\" query with almost no cost "
 "if we can get records by index, and can process \"LIMIT\" with low cost by "
@@ -1104,7 +1057,7 @@ msgstr ""
 # 643bb74ce65e4124a0ae373040e4bb70
 # cbac85285efe446fb9d356f814a6d7c5
 #: ../../../source/userguide/storage.rst:396
-#: ../../../source/userguide/wrapper.rst:245
+#: ../../../source/userguide/wrapper.rst:244
 msgid ""
 "But for the query where \"ORDER BY\" cannot use index, like sort full text "
 "search result by the score and use LIMIT, the processing cost is "
@@ -1119,7 +1072,7 @@ msgstr ""
 # 3ce90ca097ee40f5b1fce355dd758914
 # 31e0f5d8116a436faa7fd31d7c7085a2
 #: ../../../source/userguide/storage.rst:398
-#: ../../../source/userguide/wrapper.rst:247
+#: ../../../source/userguide/wrapper.rst:246
 msgid ""
 "Tritonn took no specific countermeasure for this issue, but it introduced a "
 "workaround in the latest repository so that it sorted Senna result in "
@@ -1134,16 +1087,14 @@ msgstr ""
 # 435f00fded8343b7b7f663466ecafeb6
 # 0342c41172f64335af021a6b77533d31
 #: ../../../source/userguide/storage.rst:400
-#: ../../../source/userguide/wrapper.rst:249
-msgid "Groonga storage engine also has the optimisation for ORDER BY LIMIT."
-msgstr ""
-"groongaストレージエンジンでも ORDER BY LIMIT を高速化するための仕組みを実装し"
-"ています。"
+#: ../../../source/userguide/wrapper.rst:248
+msgid "Mroonga also has the optimisation for ORDER BY LIMIT."
+msgstr "mroongaでも ORDER BY LIMIT を高速化するための仕組みを実装しています。"
 
 # c361095559384f5f89d9b8cda98e4bf4
 # d9eb55ee8dbe4e139c345f31f304a131
 #: ../../../source/userguide/storage.rst:402
-#: ../../../source/userguide/wrapper.rst:251
+#: ../../../source/userguide/wrapper.rst:250
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in groonga only and "
 "the minimal records are passed to MySQL. ::"
@@ -1154,7 +1105,7 @@ msgstr ""
 # 896eb0c6e2e44639acdfdce395a01156
 # 8433d9941d7d432ea3ddd33f78cf49e8
 #: ../../../source/userguide/storage.rst:416
-#: ../../../source/userguide/wrapper.rst:265
+#: ../../../source/userguide/wrapper.rst:264
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``groonga_fast_order_limit`` status variable value is increased."
@@ -1165,7 +1116,7 @@ msgstr ""
 # 78d58e956c26402e822868c1992fdf3f
 # 7ee448e536f44a91b1bef6be303c7539
 #: ../../../source/userguide/storage.rst:418
-#: ../../../source/userguide/wrapper.rst:267
+#: ../../../source/userguide/wrapper.rst:266
 msgid ""
 "Note : This optimisation is targeting queries like \"select ... match "
 "against order by _score desc limit X, Y\" only, and it works if all of the "
@@ -1178,28 +1129,28 @@ msgstr ""
 # dbf52ca197ad41ba924d2305c96b1201
 # 3c3dc16d1fb74c0fb69a55406b732030
 #: ../../../source/userguide/storage.rst:420
-#: ../../../source/userguide/wrapper.rst:269
+#: ../../../source/userguide/wrapper.rst:268
 msgid "WHERE phrase has \"match...against\" only"
 msgstr "where句がmatch...againstのみ"
 
 # e7ae9971fba24ac5b3c8e00d7a3833a9
 # 3afeb867da064862914d92e059f3e3cb
 #: ../../../source/userguide/storage.rst:421
-#: ../../../source/userguide/wrapper.rst:270
+#: ../../../source/userguide/wrapper.rst:269
 msgid "no JOIN"
 msgstr "joinしていない"
 
 # 20020fd58cd946a59677c422e59c8d69
 # 89750861c7af4749859c39627082de6b
 #: ../../../source/userguide/storage.rst:422
-#: ../../../source/userguide/wrapper.rst:271
+#: ../../../source/userguide/wrapper.rst:270
 msgid "with LIMIT"
 msgstr "limitの指定がある"
 
 # a329b256ff4a4c87a0adedb9caa9e635
 # 3df296cb0cec4ead9f6572c37544e498
 #: ../../../source/userguide/storage.rst:423
-#: ../../../source/userguide/wrapper.rst:272
+#: ../../../source/userguide/wrapper.rst:271
 msgid ""
 "ORDER BY phrase has columns (including _id) or \"match...against\" that is "
 "used in WHERE phrase only"
@@ -1209,14 +1160,14 @@ msgstr ""
 # f8fbb2e109bd4217a284393f1aeb65cd
 # 58aafef808b44298b192f0766fd16b32
 #: ../../../source/userguide/storage.rst:426
-#: ../../../source/userguide/wrapper.rst:275
+#: ../../../source/userguide/wrapper.rst:274
 msgid "Footnotes"
 msgstr "脚注"
 
 # 7db653a06e4340e488fa46470b7e92ce
 # f86f6f2d6dce41a09a1a61689c035a9b
 #: ../../../source/userguide/storage.rst:427
-#: ../../../source/userguide/wrapper.rst:276
+#: ../../../source/userguide/wrapper.rst:275
 msgid ""
 "`MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text "
 "Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search."
@@ -1228,7 +1179,7 @@ msgstr ""
 # ff9857fc8b1b473fab83dbea4e7fb6f9
 # 5f541a375e814c49ba633b7d82051e0a
 #: ../../../source/userguide/storage.rst:428
-#: ../../../source/userguide/wrapper.rst:277
+#: ../../../source/userguide/wrapper.rst:276
 msgid "In groonga, we call it a 'tokeniser'."
 msgstr "groongaではトークナイザーと呼んでいる。"
 
@@ -1239,10 +1190,8 @@ msgstr "ラッパーモード"
 
 # 9541898ed2b84956a70770a749efeec2
 #: ../../../source/userguide/wrapper.rst:6
-msgid "Here we explain how to use wrapper mode of groonga storage engine."
-msgstr ""
-"ここでは groonga ストレージエンジンにおけるラッパーモードの利用方法を説明しま"
-"す。"
+msgid "Here we explain how to use wrapper mode of mroonga"
+msgstr "ここでは mroonga におけるラッパーモードの利用方法を説明します。"
 
 # e1eaf98f29a74e1890617dca607d5dc7
 #: ../../../source/userguide/wrapper.rst:9
@@ -1252,14 +1201,10 @@ msgstr "ラッパーモードの利用方法"
 # 59c53abcc6424959b8d47a2d43fe038c
 #: ../../../source/userguide/wrapper.rst:11
 msgid ""
-"In wrapper mode, groonga storage engine works in wrapping an existing "
-"storage engine. To specify the wrapped storage engine, we use SQL comment "
-"like ``COMMENT = 'engine \"innodb\"'`` for now."
-msgstr ""
-"ラッパーモードでは、既存のストレージエンジンをラップするかたちで groonga スト"
-"レージエンジンが動作します。ラップする対象となるストレージエンジンは、現在の"
-"ところ SQL のコメントを利用して ``COMMENT = 'engine \"innodb\"'`` のように指"
-"定するようになっています。"
+"In wrapper mode, mroonga works in wrapping an existing storage engine. To "
+"specify the wrapped storage engine, we use SQL comment like ``COMMENT = "
+"'engine \"innodb\"'`` for now."
+msgstr "ラッパーモードでは、既存のストレージエンジンをラップするかたちで mroonga が動作します。ラップする対象となるストレージエンジンは、現在のところ SQL のコメントを利用して ``COMMENT = 'engine \"innodb\"'`` のように指定するようになっています。"
 
 # 542e9fd42fd1436db2e6d35c5c1f18dd
 #: ../../../source/userguide/wrapper.rst:15
@@ -1279,3 +1224,12 @@ msgstr ""
 "ラッパーモードでは現在ストレージモードでサポートされていない、以下をサポート"
 "しています。"
 
+# f447ce7358434894aad105e4b8e449fc
+# ade45ca3ded545b180131981c60d1e29
+#: ../../../source/userguide/wrapper.rst:169
+msgid ""
+"You can specify the default parser by passing ``--with-default-parser`` "
+"option in ``configure`` when you build groonga storage engine. ::"
+msgstr ""
+"デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションで"
+"ビルド時に指定することができます。::"

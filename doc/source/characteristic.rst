@@ -1,28 +1,29 @@
 .. highlightlang:: none
 
-The characteristics of groonga storage engine
-=============================================
+The characteristics of mroonga
+==============================
 
-What is groonga storage engine?
--------------------------------
-Groonga storage engine is a MySQL storage engine based on groonga, the full text search engine.
+What is mroonga?
+----------------
 
-In MySQL 5.1 or later, Pluggable Storage Engine interface is introduced, and we can use custom storage engines easily. So we implement groonga storage engine, so that we can use groonga through MySQL.
+Mroonga is a MySQL storage engine based on groonga, the full text search engine.
 
-By using groonga storage engine, you can use groonga with SQL.
+In MySQL 5.1 or later, Pluggable Storage Engine interface is introduced, and we can use custom storage engines easily. So we implement mroonga, so that we can use groonga through MySQL.
+
+By using mroonga, you can use groonga with SQL.
 
 The successor of Tritonn
 ------------------------
 
 To support Japanese full text search, Tritonn was developed by embedding Senna, the predecessor of groonga, in MySQL.
-Groonga storage engine is its successor.
+Mroogna is its successor.
 
 Running as a MySQL plugin
 -------------------------
 
 Since Tritonn was the modified version of MySQL, we need to build it by ourselves or use binary files provided by Tritonn project, thus we cannot use the official binary files provided by MySQL.
 
-On the other hand, groonga storage engine is an independent program (shared library) using Pluggable Storage Engine interface, and we can dynamically load it on MySQL's official binary.
+On the other hand, mroonga is an independent program (shared library) using Pluggable Storage Engine interface, and we can dynamically load it on MySQL's official binary.
 So we can use it more easily than Tritonn.
 
 Faster index update
@@ -30,38 +31,38 @@ Faster index update
 
 Comparing to Senna, groonga has much better throughput in adding or updating index.
 
-Groonga storage engine also has the benefit of this performance improvement.
+Mroonga also has the benefit of this performance improvement.
 
 Faster search
 -------------
 
 In Tritonn, we use MyISAM storage engine, thus we have a exclusive table lock by updating data (and index), and it prevents the performance of search.
 
-But in groonga storage engine, we no longer have this issue, and the performance of search is better especially in frequent data update cases.
+But in mroonga, we no longer have this issue, and the performance of search is better especially in frequent data update cases.
 
 Geolocation search
 ------------------
 
 Groonga supports not only the full text search, but also the fast geolocation search using index.
 And MySQL also has the syntax for geolocation search.
-With groonga storage engine, you can use groonga's fast geolocation search by using MySQL's geolocation SQL syntax.
+With mroonga, you can use groonga's fast geolocation search by using MySQL's geolocation SQL syntax.
 
 Sharing the same groonga storage
 --------------------------------
 
-Groonga storage engine stores the data by using groonga's DB API.
+Mroonga stores the data by using groonga's DB API.
 And its storage file's format is same as that of the file that is managed by groonga itself only.
 Therefore you can share the same groonga storage like below.
 
-* Store data through groonga storage engine (MySQL) and search from groonga server.
-* Store data through groonga server and search from groonga storage engine (MySQL).
+* Store data through mroonga (MySQL) and search from groonga server.
+* Store data through groonga server and search from mroonga (MySQL).
 
 And groonga's storage file can be shared with multi-processes and multi-threads, so that we can invoke several search queries to the same storage file simultaneously.
 
 Associate with other storage engines
 ------------------------------------
 
-Groonga storage engine has two running modes.
+Mroonga has two running modes.
 
 One is "storage mode", that is the default mode, and we use groonga for both storing data and searching.
 With this mode, you can have full benefits of groonga described above, like fast data update, lock-free full text search and geolocation search.

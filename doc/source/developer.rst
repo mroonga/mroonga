@@ -12,7 +12,7 @@ Developer's guide
 How we are developing
 ---------------------
 
-We, the groonga storage engine development project, are doing Ticket Driven Development by using a BTS named Redmine.
+We, the mroonga development project, are doing Ticket Driven Development by using a BTS named Redmine.
 
 The location of our Redmine site is the following.
 
@@ -91,7 +91,7 @@ Currently we are assuming the following development environments.
 * Linux x86_64
 * glibc 2.5
 * MySQL 5.5
-* groonga 1.2
+* groonga 1.2.8
 * Cutter 1.1 (for C/C++ unit tests)
 * Sphinx 1.1 (for documents)
 
@@ -103,10 +103,10 @@ Contents of the source tree
 There are just a few source files for now, and we would like to keep it simple as possible.
 
 ha_mroonga.h
- The header file of groonga storage engine
+ The header file of mroonga.
 
 ha_mroonga.cc
- The implementation of groonga storage engine
+ The implementation of mroonga.
 
 mrnsys.h
  The header file of utility functions
@@ -132,14 +132,14 @@ doc/en/
 doc/ja/
  Japanese documents in Sphinx format
 
-Since we are still in the early stage of the development of groonga storage engine, we will not make the documents of the specification of SQL queries for now.
+Since we are still in the early stage of the development of mroonga, we will not make the documents of the specification of SQL queries for now.
 
 Alternatively we consider our SQL tests and its expected results as the list of features and the definition of their specifications.
 
 Adding and running tests
 ------------------------
 
-We use two kinds of regression tests to manage the quality of groonga storage engine.
+We use two kinds of regression tests to manage the quality of mroonga.
 
 SQL tests
  When you add features or fix bugs that can be confirmed by SQL queries, please always add SQL tests. You might think that performance improvements cannot be confirmed with SQL, but some can be still well tested by using status variables or information_schema plugin etc.
@@ -162,7 +162,7 @@ http://cutter.sourceforge.net/
 Adding and updating documents
 -----------------------------
 
-We use Sphinx for the documentation of groonga storage engine.
+We use Sphinx for the documentation of mroonga.
 
 We write documents in ReStructuredText format and we convert them to HTML etc.
 

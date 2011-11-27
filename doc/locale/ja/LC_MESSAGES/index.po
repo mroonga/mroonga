@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 23:00\n"
-"PO-Revision-Date: 2011-10-29 23:00+0900\n"
+"POT-Creation-Date: 2011-11-27 23:56\n"
+"PO-Revision-Date: 2011-11-28 00:02+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -17,10 +17,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-# fe0d4aaf72344a469b1bedb2d2ef29a3
+# 29e98ecfbe074a37ace8d9b83c63bced
 #: ../../../source/index.rst:7
-msgid "groonga storage engine"
-msgstr "groongaストレージエンジン"
+msgid "Mroonga"
+msgstr "mroonga"
 
 # 707886dc8cec47b9997f4abe89662952
 #: ../../../source/index.rst:9

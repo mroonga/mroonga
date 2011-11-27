@@ -4,14 +4,14 @@ How to debug
 ============
 
 Building for debugging
------------------------
+----------------------
 
 When you build software for debugging, you can get more information like symbol resolutions in gdb.
-So we build both MySQL and groonga storage engine for debugging in development.
+So we build both MySQL and mroonga for debugging in development.
 
 .. note::
 
-   If you build one of them for debugging, the size of structures etc. might be different, and you might not be able to load groonga storage engine, or assertions don't work in running.
+   If you build one of them for debugging, the size of structures etc. might be different, and you might not be able to load mroonga, or assertions don't work in running.
 
 How to build MySQL for debugging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -30,10 +30,10 @@ The procedure from download to build is the following. ::
 
 .. _`MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing MySQL from a Standard Source Distribution`: http://dev.mysql.com/doc/refman/5.5/en/installing-source-distribution.html
 
-How tom build groonga storage engine for debugging
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+How tom build mroonga for debugging
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can build groonga storage engine for debugging by passing ``--with-debug`` in configure options.
+You can build mroonga for debugging by passing ``--with-debug`` in configure options.
 
 The procedure from cloning repository to build is the following. ::
 
