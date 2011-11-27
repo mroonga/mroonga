@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-27 23:56\n"
-"PO-Revision-Date: 2011-11-27 16:42+0100\n"
+"PO-Revision-Date: 2011-11-28 01:06+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -100,7 +100,7 @@ msgstr "[ラッパーモード] LOCK TABLE内のINSERTがInnoDBで動かない�
 # 92d5ee7007f64485b2e88808e8e1dcb6
 #: ../../../source/news.rst:30
 msgid "fix a bug that using ORDER and LIMIT returns a wrong result #1161."
-msgstr "ORDERとLIMITの療法を使うと結果が正しくないバグの修正。 #1161"
+msgstr "ORDERとLIMITの両方を使うと結果が正しくないバグの修正。 #1161"
 
 # 95850f170d024ebb89debc1cd00990ec
 #: ../../../source/news.rst:31
