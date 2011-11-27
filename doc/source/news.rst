@@ -5,7 +5,7 @@ News
 
 .. _release-1-10:
 
-Release 1.10 - ????/??/??
+Release 1.10 - 2011/11/29
 -------------------------
 
 This release introduces MariaDB support and fixes several bugs.
