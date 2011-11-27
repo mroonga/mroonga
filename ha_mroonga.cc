@@ -1369,7 +1369,8 @@ ulonglong ha_mroonga::wrapper_table_flags() const
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   table_flags = wrap_handler->ha_table_flags() |
-    HA_CAN_FULLTEXT | HA_PRIMARY_KEY_REQUIRED_FOR_DELETE;
+    HA_CAN_FULLTEXT | HA_PRIMARY_KEY_REQUIRED_FOR_DELETE  |
+    HA_CAN_RTREEKEYS;
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(table_flags);
