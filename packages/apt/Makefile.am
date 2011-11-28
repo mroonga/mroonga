@@ -38,7 +38,12 @@ upload: ensure-rsync-path
 	  );						\
 	done
 
-build:
+build: source
 	./build-in-chroot.sh \
 	  $(PACKAGE) $(VERSION) $(CHROOT_BASE) \
 	  '$(ARCHITECTURES)' '$(CODES)'
+
+source: ../$(PACKAGE)-$(VERSION).tar.gz
+
+../$(PACKAGE)-$(VERSION).tar.gz:
+	ln -s $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz ../

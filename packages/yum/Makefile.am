@@ -37,7 +37,12 @@ upload: ensure-rsync-path
 
 build: build-in-chroot
 
-build-in-chroot:
+build-in-chroot: source
 	./build-in-chroot.sh				\
 	  mysql-groonga $(VERSION) $(CHROOT_BASE)	\
 	  '$(ARCHITECTURES)' '$(DISTRIBUTIONS)'
+
+source: ../$(PACKAGE)-$(VERSION).tar.gz
+
+../$(PACKAGE)-$(VERSION).tar.gz:
+	ln -s $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz ../
