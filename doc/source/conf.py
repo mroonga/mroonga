@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# groonga storage engine documentation build configuration file, created by
+# mroonga documentation build configuration file, created by
 # sphinx-quickstart on Tue Aug 03 14:53:35 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -41,7 +41,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'groonga storage engine'
+project = u'mroonga'
 copyright = u'2009-' + unicode(datetime.today().year) + u', groonga project'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -191,7 +191,7 @@ html_show_sphinx = False
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'groongastorageenginedoc'
+htmlhelp_basename = 'mroongadoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -205,7 +205,7 @@ htmlhelp_basename = 'groongastorageenginedoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'groongastorageengine.tex', u'groonga storage engine Documentation',
+  ('index', 'mroonga.tex', u'mroonga Documentation',
    u'groonga project', 'manual'),
 ]
 
@@ -238,6 +238,6 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'groongastorageengine', u'groonga storage engine Documentation',
-     [u'groonga project'], 1)
+    ('index', 'mroonga', u'mroonga Documentation',
+     [u'mroonga project'], 1)
 ]
