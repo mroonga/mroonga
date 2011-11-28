@@ -95,6 +95,10 @@ update-files:
 	cd $(srcdir)/doc && $(MAKE) update-files
 	cd $(srcdir)/test/sql && $(MAKE) update-files
 
+upload-to-github:
+	ruby $(srcdir)/tools/upload-to-github.rb \
+	  $$USER $(PACKAGE)-$(VERSION).tar.gz
+
 echo-mysql-source:
 	echo $(MYSQL_SOURCE)
 
