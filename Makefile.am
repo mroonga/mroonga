@@ -55,13 +55,15 @@ update-latest-release:
 	cd $(top_srcdir) && test -d "misc" ||					\
 	  svn export --force							\
 	  https://cutter.svn.sourceforge.net/svnroot/cutter/cutter/trunk/misc
-	cd $(top_srcdir) &&					\
-	  misc/update-latest-release.rb				\
-	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)		\
-	  $(VERSION) $(NEW_RELEASE_DATE)			\
-	  packages/rpm/fedora/mysql-groonga.spec.in		\
-	  packages/rpm/centos/mysql-groonga.spec.in		\
-	  packages/debian/changelog
+	cd $(top_srcdir) &&				\
+	  misc/update-latest-release.rb			\
+	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
+	  $(VERSION) $(NEW_RELEASE_DATE)		\
+	  packages/rpm/fedora/mysql-groonga.spec.in	\
+	  packages/rpm/centos/mysql-groonga.spec.in	\
+	  packages/debian/changelog			\
+	  $(MROONGA_GITHUB_COM_PATH)/index.html		\
+	  $(MROONGA_GITHUB_COM_PATH)/ja/index.html
 
 update-po:
 	@for lang in $(LOCALES); do						\
