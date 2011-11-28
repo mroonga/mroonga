@@ -8,6 +8,9 @@ News
 Release 1.10 - 2011/11/29
 -------------------------
 
+Since this release, this project and product is called
+"mroonga" instead of "groonga storage engine".
+
 This release introduces MariaDB support and fixes several bugs.
 
 Improvements
@@ -21,6 +24,7 @@ Improvements
 * support ALTER TABLE #1168.
 * support MariaDB 5.2.9.
 * support MariaDB 5.3.2-beta.
+* [rpm] split document package.
 
 Fixes
 ^^^^^
