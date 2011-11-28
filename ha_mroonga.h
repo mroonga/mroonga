@@ -79,7 +79,7 @@ extern "C" {
 #  define MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
 #endif
 
-#if MYSQL_VERSION_ID >= 50600
+#ifdef BIG_TABLES
 #  define MRN_HA_ROWS_FORMAT "llu"
 #else
 #  define MRN_HA_ROWS_FORMAT "lu"
