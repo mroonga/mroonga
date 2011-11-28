@@ -133,8 +133,28 @@ groonga_count_skip
 This value is increased when 'fast line count feature' is used.
 You can use this value to check if the feature is working when you enable it.
 
+Here is an example how to check it::
+
+  mysql> SHOW STATUS LIKE 'groonga_count_skip';
+  +--------------------+-------+
+  | Variable_name      | Value |
+  +--------------------+-------+
+  | groonga_count_skip | 0     |
+  +--------------------+-------+
+  1 row in set (0.00 sec)
+
 groonga_fast_order_limit
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 This value is increased when 'fast ORDER BY LIMIT feature' is used.
 You can use this value to check if the feature is working when you enable it.
+
+Here is an example how to check it::
+
+  mysql> SHOW STATUS LIKE 'groonga_fast_order_limit';
+  +--------------------------+-------+
+  | Variable_name            | Value |
+  +--------------------------+-------+
+  | groonga_fast_order_limit | 0     |
+  +--------------------------+-------+
+  1 row in set (0.00 sec)
