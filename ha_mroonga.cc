@@ -548,7 +548,7 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
   case Geometry::wkb_point:
     {
       Gis_point *point = (Gis_point *)geometry;
-      double latitude, longitude;
+      double latitude = 0.0, longitude = 0.0;
       point->get_xy(&longitude, &latitude);
       grn_obj_reinit(ctx, buf, GRN_DB_WGS84_GEO_POINT, 0);
       GRN_GEO_POINT_SET(ctx, buf,
