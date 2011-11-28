@@ -112,7 +112,7 @@ List of unavailable SQL commands
 I found an unlisted SQL command
 -------------------------------
 
-If you find unlisted SQL command and confirm whether the SQL command works well or not, please send a patch against `the source file <https://github.com/mroonga/mroonga/blob/master/doc/source/reference.rst>`_ to list it.
+If you find unlisted SQL command and confirm whether the SQL command works well or not, we want to list it. Please mail it to `us <http://groonga.org/docs/community.html>`_ or send a patch against `the source file <https://github.com/mroonga/mroonga/blob/master/doc/source/reference.rst>`_ by pull request system on GitHub.
 
 List of server variables
 ------------------------
@@ -143,7 +143,7 @@ groonga_libgroonga_version
 
 The version string of the groonga library.
 
-Here is an example SQL to confirm the using groonga version::
+Here is an example SQL to confirm the using groonga library version::
 
   mysql> SHOW VARIABLES LIKE 'groonga_libgroonga_version';
   +----------------------------+------------------+
