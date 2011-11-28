@@ -96,7 +96,7 @@ build()
     pool_base_dir=${distribution}/${distribution_version}
     binary_pool_dir=$pool_base_dir/$architecture/Packages
     source_pool_dir=$pool_base_dir/source/SRPMS
-    run cp $source_dir/groonga-storage-engine-${VERSION}.tar.gz \
+    run cp $source_dir/mroonga-${VERSION}.tar.gz \
 	${CHROOT_BASE}/$target/tmp/
     run cp $source_dir/rpm/${distribution}/${PACKAGE}.spec \
 	${CHROOT_BASE}/$target/tmp/

@@ -83,7 +83,7 @@ mkdir -p rpm/BUILD
 mkdir -p rpm/RPMS
 mkdir -p rpm/SRPMS
 
-cp /tmp/groonga-storage-engine-$VERSION.tar.gz rpm/SOURCES/
+cp /tmp/mroonga-$VERSION.tar.gz rpm/SOURCES/
 cp /tmp/${PACKAGE}.spec rpm/SPECS/
 
 chmod o+rx . rpm rpm/RPMS rpm/SRPMS
