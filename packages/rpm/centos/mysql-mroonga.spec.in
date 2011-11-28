@@ -42,6 +42,15 @@ Mroonga is a fast fulltext searchable storage plugin for MySQL.
 It is based on groonga that is a fast fulltext search engine and
 column store. Groonga is good at real-time update.
 
+%package doc
+Summary:	Documentation for mroonga
+Group:		Documentation
+License:	LGPLv2
+
+%description doc
+Documentation for mroonga
+
+
 %prep
 %setup -q -n mroonga-%{version}
 
@@ -96,8 +105,7 @@ make %{?_smp_mflags}
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
-mv $RPM_BUILD_ROOT%{_datadir}/mroonga/ \
-    $RPM_BUILD_ROOT%{_datadir}/mysql-mroonga/
+mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -131,7 +139,13 @@ fi
 %files
 %defattr(-,root,root,-)
 %{_libdir}/mysql/plugin/
-%doc %{_datadir}/mysql-mroonga/doc/
+%{_datadir}/man/man1/*
+%{_datadir}/man/*/man1/*
+
+%files doc
+%defattr(-,root,root,-)
+%doc README COPYING
+%doc mysql-mroonga-doc/*
 
 %changelog
 * Sat Oct 29 2011 Kouhei Sutou <kou@clear-code.com> - 1.10-0
