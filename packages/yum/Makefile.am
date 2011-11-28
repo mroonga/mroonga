@@ -39,7 +39,7 @@ build: build-in-chroot
 
 build-in-chroot: source
 	./build-in-chroot.sh				\
-	  mysql-groonga $(VERSION) $(CHROOT_BASE)	\
+	  mysql-mroonga $(VERSION) $(CHROOT_BASE)	\
 	  '$(ARCHITECTURES)' '$(DISTRIBUTIONS)'
 
 source: ../$(PACKAGE)-$(VERSION).tar.gz
