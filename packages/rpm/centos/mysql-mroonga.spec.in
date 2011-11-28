@@ -35,6 +35,7 @@ Requires:	mysql
 Requires:	MySQL-server = %{mysql_version}-%{mysql_release}
 Requires:	MySQL-client = %{mysql_version}-%{mysql_release}
 %endif
+Obsoletes:      mysql-groonga < 1.10-0
 
 %description
 Mroonga is a fast fulltext searchable storage plugin for MySQL.
