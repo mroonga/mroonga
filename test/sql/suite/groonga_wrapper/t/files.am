@@ -1,4 +1,9 @@
 test_files = \
+	alter_table_add_column.test \
+	alter_table_change_engine.test \
+	alter_table_fulltext.test \
+	alter_table_rename_table.test \
+	alter_table_spatial.test \
 	auto_increment_text.test \
 	binlog.test \
 	bulk_insert.test \
@@ -27,6 +32,7 @@ test_files = \
 	geometry_update.test \
 	insert.test \
 	order_limit_performance.test \
+	truncate.test \
 	update_fulltext.test \
 	update_int.test \
 	$(NULL)

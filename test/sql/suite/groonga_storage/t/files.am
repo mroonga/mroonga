@@ -1,4 +1,9 @@
 test_files = \
+	alter_table_add_column.test \
+	alter_table_change_engine.test \
+	alter_table_fulltext.test \
+	alter_table_rename_table.test \
+	alter_table_spatial.test \
 	auto_increment.test \
 	auto_increment_text.test \
 	binlog.test \
@@ -16,6 +21,7 @@ test_files = \
 	dry_write_update.test \
 	flush_logs.test \
 	fulltext_boolean_mode_pragma_default_operator.test \
+	fulltext_found_rows.test \
 	fulltext_index_recreate.test \
 	fulltext_insert_select.test \
 	fulltext_insert_values.test \
@@ -24,7 +30,9 @@ test_files = \
 	fulltext_multiple_column_index_recreate.test \
 	fulltext_multiple_column_index_update.test \
 	fulltext_multiple_index.test \
+	fulltext_no_such_key.test \
 	fulltext_not_match_against.test \
+	fulltext_order_limit.test \
 	fulltext_parser_comment.test \
 	fulltext_parser_default.test \
 	fulltext_search_ascii.test \
@@ -57,6 +65,7 @@ test_files = \
 	show_create_table.test \
 	show_table_status.test \
 	tinyint.test \
+	truncate.test \
 	update_by_last_insert_grn_id.test \
 	update_fulltext.test \
 	update_id_hash_index.test \

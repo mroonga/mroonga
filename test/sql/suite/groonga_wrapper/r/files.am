@@ -1,4 +1,9 @@
 result_files = \
+	alter_table_add_column.result \
+	alter_table_change_engine.result \
+	alter_table_fulltext.result \
+	alter_table_rename_table.result \
+	alter_table_spatial.result \
 	auto_increment_text.result \
 	binlog.result \
 	bulk_insert.result \
@@ -27,6 +32,7 @@ result_files = \
 	geometry_update.result \
 	insert.result \
 	order_limit_performance.result \
+	truncate.result \
 	update_fulltext.result \
 	update_int.result \
 	$(NULL)
