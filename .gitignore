@@ -50,3 +50,4 @@ cscope.out
 /test/sql/suite/groonga_storage/r/variables.result
 /mrn_version.h
 /mroonga-*.tar.gz
+/packages/mroonga-*.tar.gz
