@@ -435,7 +435,11 @@ struct st_mysql_plugin i_s_mrn_stats =
   MRN_VERSION_IN_HEX,
   NULL,
   NULL,
-  NULL,
+  NULL
+#ifdef MRN_PLUGIN_HAVE_FLAGS
+  ,
+  0
+#endif
 };
 /* End of mroonga information schema implementations */
 
@@ -1064,6 +1068,10 @@ mysql_declare_plugin(mroonga)
   mrn_status_variables,
   mrn_system_variables,
   NULL
+#ifdef MRN_PLUGIN_HAVE_FLAGS
+  ,
+  0
+#endif
 }, i_s_mrn_stats
 mysql_declare_plugin_end;
 

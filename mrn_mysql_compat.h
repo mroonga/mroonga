@@ -48,6 +48,10 @@
   typedef MYSQL_ERROR Sql_condition;
 #endif
 
+#if MYSQL_VERSION_ID >= 50516 && MYSQL_VERSION_ID < 50603
+#  define MRN_PLUGIN_HAVE_FLAGS 1
+#endif
+
 #ifndef MRN_MARIADB_P
   typedef char *range_id_t;
 #endif
