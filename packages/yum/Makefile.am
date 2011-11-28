@@ -1,5 +1,5 @@
 DISTRIBUTIONS = fedora centos
-ARCHITECTURES = x86_64
+ARCHITECTURES = i386 x86_64
 CHROOT_BASE = /var/lib/chroot
 
 all:
