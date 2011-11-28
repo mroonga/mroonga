@@ -25,7 +25,7 @@ required_build_stamps =				\
 EXTRA_DIST += $(required_build_stamps)
 
 man_files =					\
-	man/groongastorageengine.1
+	man/mroonga.1
 
 generated_files =				\
 	$(DOCTREES_BASE)			\
