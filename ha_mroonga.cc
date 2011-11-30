@@ -1377,7 +1377,7 @@ ulonglong ha_mroonga::wrapper_table_flags() const
   MRN_SET_WRAP_TABLE_KEY(this, table);
   table_flags = wrap_handler->ha_table_flags() |
     HA_CAN_FULLTEXT | HA_PRIMARY_KEY_REQUIRED_FOR_DELETE  |
-    HA_CAN_RTREEKEYS;
+    HA_CAN_RTREEKEYS | HA_CAN_REPAIR;
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(table_flags);
@@ -7555,14 +7555,8 @@ int ha_mroonga::check(THD* thd, HA_CHECK_OPT* check_opt)
 
 int ha_mroonga::wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt)
 {
-  int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_repair(thd, check_opt);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(error);
+  DBUG_RETURN(HA_ADMIN_TRY_ALTER);
 }
 
 int ha_mroonga::storage_repair(THD* thd, HA_CHECK_OPT* check_opt)
@@ -7650,14 +7644,8 @@ int ha_mroonga::analyze(THD* thd, HA_CHECK_OPT* check_opt)
 
 int ha_mroonga::wrapper_optimize(THD* thd, HA_CHECK_OPT* check_opt)
 {
-  int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_optimize(thd, check_opt);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(error);
+  DBUG_RETURN(HA_ADMIN_TRY_ALTER);
 }
 
 int ha_mroonga::storage_optimize(THD* thd, HA_CHECK_OPT* check_opt)
