@@ -2334,6 +2334,11 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->s->key_info[i];
 
+    key_min[i] = NULL;
+    key_max[i] = NULL;
+    grn_index_tables[i] = NULL;
+    grn_index_columns[i] = NULL;
+
     if (!(wrapper_is_target_index(&key_info))) {
       continue;
     }
@@ -2342,7 +2347,6 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     key_max[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
 
     if (i == n_primary_keys) {
-      grn_index_tables[i] = grn_index_columns[i] = NULL;
       continue;
     }
 
@@ -2352,6 +2356,8 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
+      free(key_min[i]);
+      free(key_max[i]);
       goto error;
     }
 
@@ -2369,6 +2375,9 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
+      free(key_min[i]);
+      free(key_max[i]);
+      grn_obj_unlink(ctx, grn_index_tables[i]);
       goto error;
     }
   }
@@ -2377,7 +2386,7 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
 
 error:
   if (error) {
-    while (TRUE) {
+    while (i-- > 0) {
       if (key_min[i]) {
         free(key_min[i]);
       }
@@ -2392,9 +2401,6 @@ error:
       if (index_table) {
         grn_obj_unlink(ctx, index_table);
       }
-      if (!i)
-        break;
-      i--;
     }
     free(key_min);
     free(key_max);
