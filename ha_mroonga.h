@@ -107,7 +107,6 @@ struct st_mrn_ft_info
 /* handler class */
 class ha_mroonga: public handler
 {
-  THR_LOCK thr_lock;
   THR_LOCK_DATA thr_lock_data;
 
   MRN_SHARE *share;

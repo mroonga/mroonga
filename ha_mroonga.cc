@@ -2354,6 +2354,14 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     mrn_index_table_name_gen(table_name, key_info.name, index_name);
     grn_index_tables[i] = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (ctx->rc) {
+      DBUG_PRINT("info",
+        ("mroonga: sql_command=%u", thd_sql_command(ha_thd())));
+      if (thd_sql_command(ha_thd()) == SQLCOM_REPAIR)
+      {
+        DBUG_PRINT("info", ("mroonga: continue"));
+        grn_index_tables[i] = NULL;
+        continue;
+      }
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       free(key_min[i]);
@@ -2373,6 +2381,14 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     }
 
     if (ctx->rc) {
+      DBUG_PRINT("info",
+        ("mroonga: sql_command=%u", thd_sql_command(ha_thd())));
+      if (thd_sql_command(ha_thd()) == SQLCOM_REPAIR)
+      {
+        DBUG_PRINT("info", ("mroonga: continue"));
+        grn_index_columns[i] = NULL;
+        continue;
+      }
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       free(key_min[i]);
@@ -2601,8 +2617,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  thr_lock_init(&thr_lock);
-  thr_lock_data_init(&thr_lock, &thr_lock_data, NULL);
+  thr_lock_data_init(&share->lock,&thr_lock_data,NULL);
 
   if (!(share = mrn_get_share(name, table, &error)))
     DBUG_RETURN(error);
@@ -2689,7 +2704,6 @@ int ha_mroonga::close()
   mrn_free_share(share);
   share = NULL;
   is_clone = FALSE;
-  thr_lock_delete(&thr_lock);
   if (
     thd &&
     thd->lex &&
@@ -2952,7 +2966,7 @@ uint ha_mroonga::wrapper_lock_count() const
   lock_count = wrap_handler->lock_count();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(lock_count + 1);
+  DBUG_RETURN(lock_count);
 }
 
 uint ha_mroonga::storage_lock_count() const
@@ -2990,6 +3004,10 @@ THR_LOCK_DATA **ha_mroonga::storage_store_lock(THD *thd, THR_LOCK_DATA **to,
                                                enum thr_lock_type lock_type)
 {
   MRN_DBUG_ENTER_METHOD();
+  if (lock_type != TL_IGNORE && thr_lock_data.type == TL_UNLOCK) {
+    thr_lock_data.type = lock_type;
+  }
+  *to++ = &thr_lock_data;
   DBUG_RETURN(to);
 }
 
@@ -2997,10 +3015,6 @@ THR_LOCK_DATA **ha_mroonga::store_lock(THD *thd, THR_LOCK_DATA **to,
                                        enum thr_lock_type lock_type)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (lock_type != TL_IGNORE && thr_lock_data.type == TL_UNLOCK) {
-    thr_lock_data.type = lock_type;
-  }
-  *to++ = &thr_lock_data;
   if (share->wrapper_mode)
     to = wrapper_store_lock(thd, to, lock_type);
   else
@@ -3311,6 +3325,7 @@ bool ha_mroonga::wrapper_is_target_index(KEY *key_info)
   MRN_DBUG_ENTER_METHOD();
   bool target_index =
     (key_info->algorithm == HA_KEY_ALG_FULLTEXT) || mrn_is_geo_key(key_info);
+  DBUG_PRINT("info", ("mroonga: %s", target_index ? "TRUE" : "FALSE"));
   DBUG_RETURN(target_index);
 }
 
@@ -3331,6 +3346,7 @@ bool ha_mroonga::wrapper_have_target_index()
     }
   }
 
+  DBUG_PRINT("info", ("mroonga: %s", have_target_index ? "TRUE" : "FALSE"));
   DBUG_RETURN(have_target_index);
 }
 
@@ -7234,6 +7250,11 @@ int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
       rc = grn_table_rename(ctx, index_table, to_index_name,
                             strlen(to_index_name));
       if (rc != GRN_SUCCESS) {
+        if (thd_sql_command(ha_thd()) == SQLCOM_REPAIR)
+        {
+          DBUG_PRINT("info", ("mroonga: continue"));
+          continue;
+        }
         error = ER_CANT_OPEN_FILE;
         my_message(error, ctx->errbuf, MYF(0));
         DBUG_RETURN(error);
