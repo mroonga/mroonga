@@ -2617,10 +2617,10 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  thr_lock_data_init(&share->lock,&thr_lock_data,NULL);
 
   if (!(share = mrn_get_share(name, table, &error)))
     DBUG_RETURN(error);
+  thr_lock_data_init(&share->lock,&thr_lock_data,NULL);
 
   if (share->wrapper_mode)
   {
