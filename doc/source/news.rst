@@ -3,6 +3,19 @@
 News
 ====
 
+.. _release-1-11:
+
+Release 1.11 - ????/??/??
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+Fixes
+^^^^^
+
+* [storage mode] fix a bug that full text search on a table without primary key returns empty results #1193.
+
 .. _release-1-10:
 
 Release 1.10 - 2011/11/29
