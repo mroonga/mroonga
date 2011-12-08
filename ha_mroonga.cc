@@ -5525,10 +5525,16 @@ int ha_mroonga::storage_ft_read(uchar *buf)
   }
 
   GRN_BULK_REWIND(&key_buffer);
-  grn_obj_get_value(ctx, key_accessor, found_record_id, &key_buffer);
-  record_id = grn_table_get(ctx, grn_table,
-                            GRN_TEXT_VALUE(&key_buffer),
-                            GRN_TEXT_LEN(&key_buffer));
+  if (key_accessor) {
+    grn_obj_get_value(ctx, key_accessor, found_record_id, &key_buffer);
+    record_id = grn_table_get(ctx, grn_table,
+                              GRN_TEXT_VALUE(&key_buffer),
+                              GRN_TEXT_LEN(&key_buffer));
+  } else {
+    void *key;
+    grn_table_cursor_get_key(ctx, cursor, &key);
+    record_id = *((grn_id *)key);
+  }
   store_to_fields_from_primary_table(buf, record_id);
   DBUG_RETURN(0);
 }
