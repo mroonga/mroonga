@@ -45,6 +45,8 @@ SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
 REPAIR TABLE diaries;
 
+SELECT * FROM diaries;
+
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
 DROP TABLE diaries;

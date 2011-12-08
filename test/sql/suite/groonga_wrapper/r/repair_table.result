@@ -27,6 +27,11 @@ REPAIR TABLE diaries;
 Table	Op	Msg_type	Msg_text
 test.diaries	repair	note	Table does not support optimize, doing recreate + analyze instead
 test.diaries	repair	status	OK
+SELECT * FROM diaries;
+id	title	body
+1	survey	will start groonga!
+2	groonga (1)	starting groonga...
+3	groonga (2)	started groonga.
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 id	title	body
 2	groonga (1)	starting groonga...
