@@ -29,24 +29,35 @@ This release introduces MariaDB support and fixes several bugs.
 Improvements
 ^^^^^^^^^^^^
 
-* add groonga_libgroonga_version and groonga_version variables #1158.
-* information_schema.plugins.plugin_version returns mroonga's version #1157.
-* add groonga_log_file variable #1178.
-* FLUSH STATUS flushes groonga_* status variables #1166.
+* rename to "mroonga" from "groonga storage engine". #1170
+* add groonga_libgroonga_version and groonga_version variables. #1158
+* information_schema.plugins.plugin_version returns mroonga's version. #1157
+* add groonga_log_file variable. #1178
+* FLUSH STATUS flushes groonga_* status variables. #1166 [Reported by Kazuhiko]
 * support TRUNCATE TABLE #1151.
 * support ALTER TABLE #1168.
-* support MariaDB 5.2.9.
-* support MariaDB 5.3.2-beta.
+* support MariaDB 5.2.9. #1152 [Reported by Kazuhiko]
+* support MariaDB 5.3.2-beta. #1152 [Reported by Kazuhiko]
 * [rpm] split document package.
+* improve memory allocation for string system variables.
+* use PLUGIN_LICENSE_GPL. [Suggested by Kazuhiko]
+* remove needless MeCab related configurations.
+* support FOUND_ROWS() and SQL_CALC_FOUND_ROWS. #1163 [Reported by Horikoshi Yuki]
+* support table name that contains '-'. #1165 [Reported by nobody]
 
 Fixes
 ^^^^^
 
-* [storage mode] fix a bug that REPLACE INTO with TEXT column does not work #1153.
-* [wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with InnoDB #1154.
-* fix a bug that using ORDER and LIMIT returns a wrong result #1161.
-* fix a bug that FOUND_ROWS() returns a wrong value when using SQL_CALC_FOUND_ROWS #1163.
-* fix a bug that a table name containing '-' does not work #1165.
+* [storage mode] fix a bug that REPLACE INTO with TEXT column does not work. #1153 [Reported by Kazuhiko]
+* [wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with InnoDB. #1154 [Reported by Kazuhiko]
+* fix a bug that using ORDER and LIMIT returns a wrong result. #1161 [Reported by Horikoshi Yuki]
+
+Thanks
+^^^^^^
+
+* Kazuhiko
+* Horikoshi Yuki
+* nobody
 
 .. _release-1-0-1:
 
