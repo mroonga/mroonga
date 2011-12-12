@@ -41,9 +41,6 @@ cscope.out
 /doc/locale/*/LC_MESSAGES/doctrees/
 /doc/locale/*/LC_MESSAGES/*-build-stamp
 /doc/sphinx/
-/doc/ja/build/
-/doc/ja/doctrees/
-/doc/ja/html/
 /misc/
 /tmp-doc/
 /test/sql/suite/groonga_storage/r/information_schema.result
