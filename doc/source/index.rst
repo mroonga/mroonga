@@ -16,6 +16,7 @@ For the release history: :doc:`news`
    install
    userguide
    reference
+   community
    developer
 
 Indices
