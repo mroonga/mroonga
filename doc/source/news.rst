@@ -32,9 +32,9 @@ Improvements
 * rename to "mroonga" from "groonga storage engine". #1170
 * add groonga_libgroonga_version and groonga_version variables. #1158
 * information_schema.plugins.plugin_version returns mroonga's version. #1157
-* add groonga_log_file variable. #1178
+* add groonga_log_file variable. #1178 [Suggested by nobody]
 * FLUSH STATUS flushes groonga_* status variables. #1166 [Reported by Kazuhiko]
-* support TRUNCATE TABLE #1151.
+* support TRUNCATE TABLE #1151. [Suggested by Takahiro Nagai]
 * support ALTER TABLE #1168.
 * support MariaDB 5.2.9. #1152 [Reported by Kazuhiko]
 * support MariaDB 5.3.2-beta. #1152 [Reported by Kazuhiko]
@@ -44,6 +44,9 @@ Improvements
 * remove needless MeCab related configurations.
 * support FOUND_ROWS() and SQL_CALC_FOUND_ROWS. #1163 [Reported by Horikoshi Yuki]
 * support table name that contains '-'. #1165 [Reported by nobody]
+* support inplace index change on MySQL 5.1.
+* [deb] support i386.
+* [rpm] support i386.
 
 Fixes
 ^^^^^
@@ -51,6 +54,7 @@ Fixes
 * [storage mode] fix a bug that REPLACE INTO with TEXT column does not work. #1153 [Reported by Kazuhiko]
 * [wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with InnoDB. #1154 [Reported by Kazuhiko]
 * fix a bug that using ORDER and LIMIT returns a wrong result. #1161 [Reported by Horikoshi Yuki]
+* fix a crash bug when FORCE INDEX with unknown key is used. #1181 [Reported by Takahiro Nagai]
 
 Thanks
 ^^^^^^
@@ -58,6 +62,7 @@ Thanks
 * Kazuhiko
 * Horikoshi Yuki
 * nobody
+* Takahiro Nagai
 
 .. _release-1-0-1:
 
