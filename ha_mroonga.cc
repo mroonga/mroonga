@@ -704,12 +704,13 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
     enum {
       TYPE_LONG_LONG_NUMBER,
       TYPE_NUMBER,
-      TYPE_FLOAT,
+      TYPE_DOUBLE,
       TYPE_BYTE_SEQUENCE
     } data_type;
     uint32 data_size;
     long long int long_long_value;
-    double float_value;
+    float float_value;
+    double double_value;
     switch (field->type()) {
     case MYSQL_TYPE_BIT:
     case MYSQL_TYPE_ENUM:
@@ -735,14 +736,15 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
       data_size = 8;
       break;
     case MYSQL_TYPE_FLOAT:
-      data_type = TYPE_FLOAT;
+      data_type = TYPE_DOUBLE;
       data_size = 8;
       float4get(float_value, current_key);
+      double_value = float_value;
       break;
     case MYSQL_TYPE_DOUBLE:
-      data_type = TYPE_FLOAT;
+      data_type = TYPE_DOUBLE;
       data_size = 8;
-      float8get(float_value, current_key);
+      float8get(double_value, current_key);
       break;
     case MYSQL_TYPE_TIME:
     case MYSQL_TYPE_YEAR:
@@ -782,9 +784,9 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
         }
       }
       break;
-    case TYPE_FLOAT:
+    case TYPE_DOUBLE:
       {
-        long_long_value = (long long int)(float_value);
+        long_long_value = (long long int)(double_value);
         long_long_value ^= ((long_long_value >> 63) | (1LL << 63));
         mrn_byte_order_host_to_network(current_buffer, &long_long_value,
                                        data_size);
@@ -850,9 +852,11 @@ static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
     }
   case MYSQL_TYPE_FLOAT:
     {
-      double val;
-      float4get(val, ptr);
-      memcpy(buf, &val, 8);
+      float float_value;
+      double double_value;
+      float4get(float_value, ptr);
+      double_value = float_value;
+      memcpy(buf, &double_value, 8);
       *size = 8;
       break;
     }
