@@ -1428,12 +1428,17 @@ ulonglong ha_mroonga::table_flags() const
 ulong ha_mroonga::wrapper_index_flags(uint idx, uint part, bool all_parts) const
 {
   ulong index_flags;
+  KEY key = table_share->key_info[idx];
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  index_flags = wrap_handler->index_flags(idx, part, all_parts);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
+  if (key.algorithm == HA_KEY_ALG_BTREE || key.algorithm == HA_KEY_ALG_UNDEF) {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    index_flags = wrap_handler->index_flags(idx, part, all_parts);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  } else {
+    index_flags = HA_ONLY_WHOLE_INDEX | HA_KEY_SCAN_NOT_ROR;
+  }
   DBUG_RETURN(index_flags);
 }
 
@@ -2290,6 +2295,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   init();
+  wrapper_overwrite_index_bits();
 
   pk_keypart_map = make_prev_keypart_map(
     table->key_info[table_share->primary_key].key_parts);
@@ -2436,6 +2442,51 @@ error:
   }
 
   DBUG_RETURN(error);
+}
+
+void ha_mroonga::wrapper_overwrite_index_bits()
+{
+  uint i, j;
+  longlong table_option = table_flags();
+  MRN_DBUG_ENTER_METHOD();
+  table_share->keys_for_keyread.clear_all();
+  for (i = 0; i < table_share->fields; i++)
+  {
+    Field *field = table_share->field[i];
+    field->part_of_key.clear_all();
+    field->part_of_key_not_clustered.clear_all();
+    field->part_of_sortkey.clear_all();
+  }
+  for (i = 0; i < table_share->keys; i++) {
+    KEY *key_info = &table->s->key_info[i];
+    KEY_PART_INFO *key_part = key_info->key_part;
+    for (j = 0 ; j < key_info->key_parts; key_part++, j++)
+    {
+      Field *field = key_part->field;
+      if (field->key_length() == key_part->length &&
+          !(field->flags & BLOB_FLAG))
+      {
+        if (index_flags(i, j, 0) & HA_KEYREAD_ONLY)
+        {
+          table_share->keys_for_keyread.set_bit(i);
+          field->part_of_key.set_bit(i);
+          field->part_of_key_not_clustered.set_bit(i);
+        }
+        if (index_flags(i, j, 1) & HA_READ_ORDER)
+          field->part_of_sortkey.set_bit(i);
+      }
+      if (i == table_share->primary_key &&
+          (table_option & HA_PRIMARY_KEY_IN_READ_INDEX))
+      {
+        if (field->key_length() == key_part->length &&
+            !(field->flags & BLOB_FLAG))
+          field->part_of_key = table_share->keys_in_use;
+        if (field->part_of_sortkey.is_set(i))
+          field->part_of_sortkey = table_share->keys_in_use;
+      }
+    }
+  }
+  DBUG_VOID_RETURN;
 }
 
 int ha_mroonga::storage_open(const char *name, int mode, uint test_if_locked)
@@ -8595,6 +8646,37 @@ void ha_mroonga::change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg)
     storage_change_table_ptr(table_arg, share_arg);
   }
   DBUG_VOID_RETURN;
+}
+
+bool ha_mroonga::wrapper_primary_key_is_clustered()
+{
+  bool res;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->primary_key_is_clustered();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+bool ha_mroonga::storage_primary_key_is_clustered()
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(handler::primary_key_is_clustered());
+}
+
+bool ha_mroonga::primary_key_is_clustered()
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_primary_key_is_clustered();
+  } else {
+    res = storage_primary_key_is_clustered();
+  }
+  DBUG_RETURN(res);
 }
 
 #ifdef __cplusplus

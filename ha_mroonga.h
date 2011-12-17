@@ -356,6 +356,7 @@ protected:
   int index_last(uchar *buf);
 #endif
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
+  bool primary_key_is_clustered();
 
 private:
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
@@ -422,6 +423,7 @@ private:
   int open_table(const char *name);
   int storage_open_columns(void);
   int storage_open_indexes(const char *name);
+  void wrapper_overwrite_index_bits();
   int wrapper_close();
   int storage_close();
   int mrn_extra(enum ha_extra_function operation);
@@ -692,6 +694,8 @@ private:
   int storage_start_stmt(THD *thd, thr_lock_type lock_type);
   void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
+  bool wrapper_primary_key_is_clustered();
+  bool storage_primary_key_is_clustered();
 };
 
 #ifdef __cplusplus
