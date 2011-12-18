@@ -8663,7 +8663,8 @@ bool ha_mroonga::wrapper_primary_key_is_clustered()
 bool ha_mroonga::storage_primary_key_is_clustered()
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(handler::primary_key_is_clustered());
+  bool is_clustered = handler::primary_key_is_clustered();
+  DBUG_RETURN(is_clustered);
 }
 
 bool ha_mroonga::primary_key_is_clustered()
