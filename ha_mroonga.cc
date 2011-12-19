@@ -565,6 +565,7 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     break;
   case MYSQL_TYPE_NEWDECIMAL:   // ???
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
+    break;
   case MYSQL_TYPE_ENUM:         // ENUM; <= 2bytes
     type = GRN_DB_INT16;        // 2bytes
     break;
