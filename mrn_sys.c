@@ -83,7 +83,7 @@ int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key)
 }
 
 /**
- * "./${db}/${tbl}" ==> "${db}.mrn"
+ * "./${db}/${table}" ==> "${db}.mrn"
  * "./${db}/"       ==> "${db}.mrn"
  */
 char *mrn_db_path_gen(const char *arg, char *dest)
@@ -98,7 +98,7 @@ char *mrn_db_path_gen(const char *arg, char *dest)
 }
 
 /**
- * "./${db}/${tbl}" ==> "${db}"
+ * "./${db}/${table}" ==> "${db}"
  * "./${db}/"       ==> "${db}"
  */
 char *mrn_db_name_gen(const char *arg, char *dest)
@@ -112,7 +112,7 @@ char *mrn_db_name_gen(const char *arg, char *dest)
 }
 
 /**
- * "./${db}/${tbl}" ==> "${tbl}"
+ * "./${db}/${table}" ==> "${table}"
  */
 char *mrn_table_name_gen(const char *arg, char *dest)
 {

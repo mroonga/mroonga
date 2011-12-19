@@ -416,7 +416,7 @@ private:
   int wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
                            const char *table_name);
   int storage_delete_table(const char *name, MRN_SHARE *tmp_share,
-                           const char *tbl_name);
+                           const char *table_name);
   int wrapper_open(const char *name, int mode, uint test_if_locked);
   int wrapper_open_indexes(const char *name);
   int storage_open(const char *name, int mode, uint test_if_locked);
@@ -623,8 +623,8 @@ private:
                            const char *to_table_name);
   int storage_rename_table(const char *from, const char *to,
                            MRN_SHARE *tmp_share,
-                           const char *from_tbl_name,
-                           const char *to_tbl_name);
+                           const char *from_table_name,
+                           const char *to_table_name);
   bool wrapper_is_crashed() const;
   bool storage_is_crashed() const;
   bool wrapper_auto_repair() const;

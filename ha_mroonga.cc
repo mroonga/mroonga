@@ -1838,7 +1838,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   if (error)
     DBUG_RETURN(error);
 
-  grn_obj_flags tbl_flags = GRN_OBJ_PERSISTENT;
+  grn_obj_flags table_flags = GRN_OBJ_PERSISTENT;
 
   /* primary key must be handled before creating table */
   grn_obj *pkey_type;
@@ -1863,35 +1863,35 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
 
     // default algorithm is BTREE ==> PAT
     if (!is_id && key_info.algorithm == HA_KEY_ALG_HASH) {
-      tbl_flags |= GRN_OBJ_TABLE_HASH_KEY;
+      table_flags |= GRN_OBJ_TABLE_HASH_KEY;
     } else if (!is_id) {
-      tbl_flags |= GRN_OBJ_TABLE_PAT_KEY;
+      table_flags |= GRN_OBJ_TABLE_PAT_KEY;
     } else {
       // for _id
-      tbl_flags |= GRN_OBJ_TABLE_NO_KEY;
+      table_flags |= GRN_OBJ_TABLE_NO_KEY;
       pkey_type = NULL;
     }
 
   } else {
     // primary key doesn't exists
-    tbl_flags |= GRN_OBJ_TABLE_NO_KEY;
+    table_flags |= GRN_OBJ_TABLE_NO_KEY;
     pkey_type = NULL;
   }
 
   /* create table */
-  grn_obj *tbl_obj;
-  char tbl_name[MRN_MAX_PATH_SIZE];
+  grn_obj *table_obj;
+  char table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) name, (const uchar *) name + strlen(name));
-  mrn_table_name_gen(decode_name, tbl_name);
-  int tbl_name_len = strlen(tbl_name);
+  mrn_table_name_gen(decode_name, table_name);
+  int table_name_len = strlen(table_name);
 
-  char *tbl_path = NULL;           // we don't specify path
+  char *table_path = NULL;           // we don't specify path
   grn_obj *pkey_value_type = NULL; // we don't use this
 
-  tbl_obj = grn_table_create(ctx, tbl_name, tbl_name_len, tbl_path,
-                             tbl_flags, pkey_type, pkey_value_type);
+  table_obj = grn_table_create(ctx, table_name, table_name_len, table_path,
+                             table_flags, pkey_type, pkey_value_type);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -1915,24 +1915,24 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     col_type = grn_ctx_at(ctx, gtype);
     char *col_path = NULL; // we don't specify path
 
-    grn_column_create(ctx, tbl_obj, column_name, column_name_size,
+    grn_column_create(ctx, table_obj, column_name, column_name_size,
                       col_path, col_flags, col_type);
     if (ctx->rc) {
-      grn_obj_remove(ctx, tbl_obj);
+      grn_obj_remove(ctx, table_obj);
       error = ER_CANT_CREATE_TABLE;
       my_message(error, ctx->errbuf, MYF(0));
       DBUG_RETURN(error);
     }
   }
 
-  error = storage_create_indexes(table, tbl_name, tbl_obj, tmp_share);
+  error = storage_create_indexes(table, table_name, table_obj, tmp_share);
   if (error) {
-    grn_obj_remove(ctx, tbl_obj);
-    tbl_obj = NULL;
+    grn_obj_remove(ctx, table_obj);
+    table_obj = NULL;
   }
 
-  if (tbl_obj) {
-    grn_obj_unlink(ctx, tbl_obj);
+  if (table_obj) {
+    grn_obj_unlink(ctx, table_obj);
   }
 
   DBUG_RETURN(error);
@@ -2928,7 +2928,7 @@ int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
 }
 
 int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
-                                     const char *tbl_name)
+                                     const char *table_name)
 {
   int error = 0;
   TABLE_SHARE *tmp_table_share = tmp_share->table_share;
@@ -2941,21 +2941,21 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
 
   uint i;
   for (i = 0; i < tmp_table_share->keys; i++) {
-    mrn_index_table_name_gen(tbl_name, tmp_table_share->key_info[i].name,
+    mrn_index_table_name_gen(table_name, tmp_table_share->key_info[i].name,
                              index_name);
-    grn_obj *idx_tbl_obj = grn_ctx_get(ctx, index_name, strlen(index_name));
-    if (idx_tbl_obj != NULL) {
-      grn_obj_remove(ctx, idx_tbl_obj);
+    grn_obj *idx_table_obj = grn_ctx_get(ctx, index_name, strlen(index_name));
+    if (idx_table_obj != NULL) {
+      grn_obj_remove(ctx, idx_table_obj);
     }
   }
 
-  grn_obj *tbl_obj = grn_ctx_get(ctx, tbl_name, strlen(tbl_name));
+  grn_obj *table_obj = grn_ctx_get(ctx, table_name, strlen(table_name));
   if (ctx->rc) {
     error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
-  error = grn_obj_remove(ctx, tbl_obj);
+  error = grn_obj_remove(ctx, table_obj);
   DBUG_RETURN(error);
 }
 
@@ -2964,7 +2964,7 @@ int ha_mroonga::delete_table(const char *name)
   int error = 0;
   THD *thd = ha_thd();
   char db_name[MRN_MAX_PATH_SIZE];
-  char tbl_name[MRN_MAX_PATH_SIZE];
+  char table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
   TABLE_LIST table_list;
   TABLE_SHARE *tmp_table_share = NULL;
@@ -2975,7 +2975,7 @@ int ha_mroonga::delete_table(const char *name)
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) name, (const uchar *) name + strlen(name));
   mrn_db_name_gen(decode_name, db_name);
-  mrn_table_name_gen(decode_name, tbl_name);
+  mrn_table_name_gen(decode_name, table_name);
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
   if (slot_data && slot_data->first_alter_share)
   {
@@ -3002,9 +3002,9 @@ int ha_mroonga::delete_table(const char *name)
   {
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
     table_list.init_one_table(db_name, strlen(db_name),
-                              tbl_name, strlen(tbl_name), tbl_name, TL_WRITE);
+                              table_name, strlen(table_name), table_name, TL_WRITE);
 #else
-    table_list.init_one_table(db_name, tbl_name, TL_WRITE);
+    table_list.init_one_table(db_name, table_name, TL_WRITE);
 #endif
     mrn_open_mutex_lock();
     tmp_table_share = mrn_create_tmp_table_share(&table_list, name, &error);
@@ -3027,9 +3027,9 @@ int ha_mroonga::delete_table(const char *name)
 
   if (tmp_share->wrapper_mode)
   {
-    error = wrapper_delete_table(name, tmp_share, tbl_name);
+    error = wrapper_delete_table(name, tmp_share, table_name);
   } else {
-    error = storage_delete_table(name, tmp_share, tbl_name);
+    error = storage_delete_table(name, tmp_share, table_name);
   }
 
   mrn_free_share(tmp_share);
@@ -7428,8 +7428,8 @@ int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
 
 int ha_mroonga::storage_rename_table(const char *from, const char *to,
                                      MRN_SHARE *tmp_share,
-                                     const char *from_tbl_name,
-                                     const char *to_tbl_name)
+                                     const char *from_table_name,
+                                     const char *to_table_name)
 {
   int error = 0;
   grn_rc rc;
@@ -7444,14 +7444,14 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
 
   uint i;
   for (i = 0; i < tmp_table_share->keys; i++) {
-    mrn_index_table_name_gen(from_tbl_name, tmp_table_share->key_info[i].name,
+    mrn_index_table_name_gen(from_table_name, tmp_table_share->key_info[i].name,
                              from_index_name);
-    mrn_index_table_name_gen(to_tbl_name, tmp_table_share->key_info[i].name,
+    mrn_index_table_name_gen(to_table_name, tmp_table_share->key_info[i].name,
                              to_index_name);
-    grn_obj *idx_tbl_obj = grn_ctx_get(ctx, from_index_name,
+    grn_obj *idx_table_obj = grn_ctx_get(ctx, from_index_name,
                                        strlen(from_index_name));
-    if (idx_tbl_obj != NULL) {
-      rc = grn_table_rename(ctx, idx_tbl_obj, to_index_name,
+    if (idx_table_obj != NULL) {
+      rc = grn_table_rename(ctx, idx_table_obj, to_index_name,
                             strlen(to_index_name));
       if (rc != GRN_SUCCESS) {
         error = ER_CANT_OPEN_FILE;
@@ -7461,14 +7461,14 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
     }
   }
 
-  grn_obj *tbl_obj = grn_ctx_get(ctx, from_tbl_name, strlen(from_tbl_name));
+  grn_obj *table_obj = grn_ctx_get(ctx, from_table_name, strlen(from_table_name));
   if (ctx->rc != GRN_SUCCESS) {
     error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
-  rc = grn_table_rename(ctx, tbl_obj, to_tbl_name,
-                        strlen(to_tbl_name));
+  rc = grn_table_rename(ctx, table_obj, to_table_name,
+                        strlen(to_table_name));
   if (rc != GRN_SUCCESS) {
     error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -7483,8 +7483,8 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   THD *thd = ha_thd();
   char from_db_name[MRN_MAX_PATH_SIZE];
   char to_db_name[MRN_MAX_PATH_SIZE];
-  char from_tbl_name[MRN_MAX_PATH_SIZE];
-  char to_tbl_name[MRN_MAX_PATH_SIZE];
+  char from_table_name[MRN_MAX_PATH_SIZE];
+  char to_table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
   TABLE_LIST table_list;
   TABLE_SHARE *tmp_table_share;
@@ -7494,20 +7494,20 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) from, (const uchar *) from + strlen(from));
   mrn_db_name_gen(decode_name, from_db_name);
-  mrn_table_name_gen(decode_name, from_tbl_name);
+  mrn_table_name_gen(decode_name, from_table_name);
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) to, (const uchar *) to + strlen(to));
   mrn_db_name_gen(decode_name, to_db_name);
-  mrn_table_name_gen(decode_name, to_tbl_name);
+  mrn_table_name_gen(decode_name, to_table_name);
   if (strcmp(from_db_name, to_db_name))
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
   table_list.init_one_table(from_db_name, strlen(from_db_name),
-                            from_tbl_name, strlen(from_tbl_name),
-                            from_tbl_name, TL_WRITE);
+                            from_table_name, strlen(from_table_name),
+                            from_table_name, TL_WRITE);
 #else
-  table_list.init_one_table(from_db_name, from_tbl_name, TL_WRITE);
+  table_list.init_one_table(from_db_name, from_table_name, TL_WRITE);
 #endif
   mrn_open_mutex_lock();
   tmp_table_share = mrn_create_tmp_table_share(&table_list, from, &error);
@@ -7527,7 +7527,7 @@ int ha_mroonga::rename_table(const char *from, const char *to)
     DBUG_RETURN(error);
   }
 
-  if (to_tbl_name[0] == '#')
+  if (to_table_name[0] == '#')
   {
     st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, TRUE);
     if (!slot_data)
@@ -7553,14 +7553,14 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   if (tmp_share->wrapper_mode)
   {
     error = wrapper_rename_table(from, to, tmp_share,
-                                 from_tbl_name, to_tbl_name);
+                                 from_table_name, to_table_name);
   } else {
     error = storage_rename_table(from, to, tmp_share,
-                                 from_tbl_name, to_tbl_name);
+                                 from_table_name, to_table_name);
   }
 
   mrn_free_share(tmp_share);
-  if (to_tbl_name[0] != '#')
+  if (to_table_name[0] != '#')
   {
     mrn_open_mutex_lock();
     mrn_free_tmp_table_share(tmp_table_share);
