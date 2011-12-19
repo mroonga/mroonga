@@ -611,7 +611,7 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     break;
   case MYSQL_TYPE_STRING:       // ??? CHAR???; < 1Kbytes =~ (255 * 4)bytes
                                 //              4 is the maximum size of a character
-    type = GRN_DB_SHORT_TEXT; // 4Kbytes
+    type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_GEOMETRY:     // ???bytes
     type = GRN_DB_WGS84_GEO_POINT; // 8bytes
