@@ -502,38 +502,50 @@ static bool mrn_is_geo_key(KEY *key_info)
     key_info->key_part[0].field->type() == MYSQL_TYPE_GEOMETRY;
 }
 
-static grn_builtin_type mrn_get_type(grn_ctx *ctx, int mysql_field_type)
+static grn_builtin_type mrn_get_type(grn_ctx *ctx,
+                                     enum_field_types mysql_field_type)
 {
+  grn_builtin_type type;
   switch (mysql_field_type) {
   case MYSQL_TYPE_BIT:      // bit
   case MYSQL_TYPE_ENUM:     // enum
   case MYSQL_TYPE_SET:      // set
   case MYSQL_TYPE_TINY:     // tinyint
-    return GRN_DB_INT8;
+    type = GRN_DB_INT8;
+    break;
   case MYSQL_TYPE_SHORT:    // smallint
-    return GRN_DB_INT16; // 2bytes
+    type = GRN_DB_INT16; // 2bytes
+    break;
   case MYSQL_TYPE_INT24:    // mediumint
   case MYSQL_TYPE_LONG:     // int
-    return GRN_DB_INT32; // 4bytes
+    type = GRN_DB_INT32; // 4bytes
+    break;
   case MYSQL_TYPE_LONGLONG: // bigint
-    return GRN_DB_INT64; // 8bytes
+    type = GRN_DB_INT64; // 8bytes
+    break;
   case MYSQL_TYPE_FLOAT:    // float
   case MYSQL_TYPE_DOUBLE:   // double
-    return GRN_DB_FLOAT; // 8bytes
+    type = GRN_DB_FLOAT; // 8bytes
+    break;
   case MYSQL_TYPE_DATE:     // date
   case MYSQL_TYPE_TIME:     // time
   case MYSQL_TYPE_YEAR:     // year
   case MYSQL_TYPE_DATETIME: // datetime
-    return GRN_DB_TIME; // micro sec from epoc time by int64
+    type = GRN_DB_TIME; // micro sec from epoc time by int64
+    break;
   case MYSQL_TYPE_GEOMETRY: // geometry
-    return GRN_DB_WGS84_GEO_POINT; // geo point in WGS84
+    type = GRN_DB_WGS84_GEO_POINT; // geo point in WGS84
+    break;
+  default:
+    // tinytext=256, text=64K, mediumtext=16M, longtext=4G
+    // tinyblob...
+    // GRN_DB_SHORTTEXT 4096bytes
+    // GRN_DB_TEXT      ???bytes
+    // GRN_DB_LONGTEXT  ???bytes
+    type = GRN_DB_TEXT;       // others
+    break;
   }
-  // tinytext=256, text=64K, mediumtext=16M, longtext=4G
-  // tinyblob...
-  // GRN_DB_SHORTTEXT 4096bytes
-  // GRN_DB_TEXT      ???bytes
-  // GRN_DB_LONGTEXT  ???bytes
-  return GRN_DB_TEXT;       // others
+  return type;
 }
 
 static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
@@ -1539,7 +1551,7 @@ int ha_mroonga::wrapper_validate_key_info(KEY *key_info)
   for (i = 0; i < key_info->key_parts; i++) {
     Field *field = key_info->key_part[i].field;
 
-    int mysql_field_type = field->type();
+    enum_field_types mysql_field_type = field->type();
     grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
     if (gtype != GRN_DB_TEXT)
     {
@@ -1767,7 +1779,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       int column_name_size = strlen(column_name);
       is_id = (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0);
 
-      int mysql_field_type = pkey_field->type();
+      enum_field_types mysql_field_type = pkey_field->type();
       grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
       pkey_type = grn_ctx_at(ctx, gtype);
     } else {
@@ -1825,7 +1837,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
 
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR;
-    int mysql_field_type = field->type();
+    enum_field_types mysql_field_type = field->type();
     grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
     col_type = grn_ctx_at(ctx, gtype);
     char *col_path = NULL; // we don't specify path
@@ -1956,7 +1968,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     }
 
     column = grn_obj_column(ctx, grn_table, column_name, column_name_size);
-    int mysql_field_type = field->type();
+    enum_field_types mysql_field_type = field->type();
     grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
     index_type = grn_ctx_at(ctx, groonga_type);
   } else {
