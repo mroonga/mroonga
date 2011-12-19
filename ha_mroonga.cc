@@ -524,12 +524,12 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   case MYSQL_TYPE_LONG:         // INT; 4bytes
     type = GRN_DB_INT32;        // 4bytes
     break;
-  case MYSQL_TYPE_FLOAT:        // FLOAT; 4bytes
+  case MYSQL_TYPE_FLOAT:        // FLOAT; 4 or 8bytes
   case MYSQL_TYPE_DOUBLE:       // DOUBLE; 8bytes
     type = GRN_DB_FLOAT;        // 8bytes
     break;
-  case MYSQL_TYPE_NULL:         // NULL; ???
-    type = GRN_DB_INT8;         // XXX: Is it OK?
+  case MYSQL_TYPE_NULL:         // NULL; 1byte
+    type = GRN_DB_INT8;         // 1byte
     break;
   case MYSQL_TYPE_TIMESTAMP:    // TIMESTAMP; 4bytes
     type = GRN_DB_TIME;         // 8bytes
@@ -540,14 +540,14 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   case MYSQL_TYPE_INT24:        // MEDIUMINT; 3bytes
     type = GRN_DB_INT32;        // 4bytes
     break;
-  case MYSQL_TYPE_DATE:         // DATE; 3bytes
+  case MYSQL_TYPE_DATE:         // DATE; 4bytes
   case MYSQL_TYPE_TIME:         // TIME; 3bytes
   case MYSQL_TYPE_DATETIME:     // DATETIME; 8bytes
   case MYSQL_TYPE_YEAR:         // YEAR; 1byte
-  case MYSQL_TYPE_NEWDATE:      // ???
+  case MYSQL_TYPE_NEWDATE:      // DATE; 3bytes
     type = GRN_DB_TIME;         // 8bytes
     break;
-  case MYSQL_TYPE_VARCHAR:      // VARCHAR; <= 64KB + 1bytes
+  case MYSQL_TYPE_VARCHAR:      // VARCHAR; <= 64KB * 4 + 2bytes
     if (for_index_key) {
       type = GRN_DB_SHORT_TEXT; // 4Kbytes
     } else {
@@ -563,44 +563,44 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   case MYSQL_TYPE_BIT:          // BIT; <= 8bytes
     type = GRN_DB_INT64;        // 8bytes
     break;
-  case MYSQL_TYPE_NEWDECIMAL:   // ???
+  case MYSQL_TYPE_NEWDECIMAL:   // DECIMAL; <= 9bytes
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_ENUM:         // ENUM; <= 2bytes
-    type = GRN_DB_INT8;         // 1byte
+    // type = GRN_DB_INT8;         // 1byte
     // XXX: Should we use INT16?
-    // type = GRN_DB_INT16;        // 2bytes
+    type = GRN_DB_INT16;        // 2bytes
     break;
   case MYSQL_TYPE_SET:          // SET; <= 8bytes
-    type = GRN_DB_INT8;         // 1byte
+    // type = GRN_DB_INT8;         // 1byte
     // XXX: Should we use INT64?
-    // type = GRN_DB_INT64;        // 8bytes
+    type = GRN_DB_INT64;        // 8bytes
     break;
-  case MYSQL_TYPE_TINY_BLOB:    // TINYBLOB; <= 256bytes
+  case MYSQL_TYPE_TINY_BLOB:    // TINYBLOB; <= 256bytes + 1byte
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
-  case MYSQL_TYPE_MEDIUM_BLOB:  // MEDIUMBLOB; <= 16Mbytes + 2bytes
+  case MYSQL_TYPE_MEDIUM_BLOB:  // MEDIUMBLOB; <= 16Mbytes + 3bytes
     if (for_index_key) {
       type = GRN_DB_SHORT_TEXT; // 4Kbytes
     } else {
       type = GRN_DB_LONG_TEXT;  // 2Gbytes
     }
     break;
-  case MYSQL_TYPE_LONG_BLOB:    // LONGBLOB; <= 4Gbytes + 3bytes
+  case MYSQL_TYPE_LONG_BLOB:    // LONGBLOB; <= 4Gbytes + 4bytes
     if (for_index_key) {
       type = GRN_DB_SHORT_TEXT; // 4Kbytes
     } else {
       type = GRN_DB_LONG_TEXT;  // 2Gbytes
     }
     break;
-  case MYSQL_TYPE_BLOB:         // BLOB; <= 64Kbytes + 1bytes
+  case MYSQL_TYPE_BLOB:         // BLOB; <= 64Kbytes + 2bytes
     if (for_index_key) {
       type = GRN_DB_SHORT_TEXT; // 4Kbytes
     } else {
       type = GRN_DB_LONG_TEXT;  // 2Gbytes
     }
     break;
-  case MYSQL_TYPE_VAR_STRING:   // ??? VARCHAR???; <= 64KB + 1bytes
+  case MYSQL_TYPE_VAR_STRING:   // VARCHAR; <= 255byte * 4 + 1bytes
     if (for_index_key) {
       type = GRN_DB_SHORT_TEXT; // 4Kbytes
     } else {
@@ -613,11 +613,11 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
       }
     }
     break;
-  case MYSQL_TYPE_STRING:       // ??? CHAR???; < 1Kbytes =~ (255 * 4)bytes
+  case MYSQL_TYPE_STRING:       // CHAR; < 1Kbytes =~ (255 * 4)bytes
                                 //              4 is the maximum size of a character
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
-  case MYSQL_TYPE_GEOMETRY:     // ???bytes
+  case MYSQL_TYPE_GEOMETRY:     // case-by-case
     type = GRN_DB_WGS84_GEO_POINT; // 8bytes
     break;
   }
