@@ -45,6 +45,10 @@
 
 #define MRN_MESSAGE_BUFFER_SIZE 1024
 
+#define MRN_SHORT_TEXT_SIZE (1 << 12) //  4Kbytes
+#define MRN_TEXT_SIZE       (1 << 16) // 64Kbytes
+#define MRN_LONG_TEXT_SIZE  (1 << 31) //  2Gbytes
+
 #define MRN_DBUG_ENTER_FUNCTION() DBUG_ENTER(__FUNCTION__)
 #if !defined(DBUG_OFF) && !defined(_lint)
 #  define MRN_DBUG_ENTER_METHOD()                 \
@@ -502,47 +506,114 @@ static bool mrn_is_geo_key(KEY *key_info)
     key_info->key_part[0].field->type() == MYSQL_TYPE_GEOMETRY;
 }
 
-static grn_builtin_type mrn_get_type(grn_ctx *ctx,
-                                     enum_field_types mysql_field_type)
+static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
+                                                bool for_index_key)
 {
-  grn_builtin_type type;
+  grn_builtin_type type = GRN_DB_VOID;
+  enum_field_types mysql_field_type = field->type();
   switch (mysql_field_type) {
-  case MYSQL_TYPE_BIT:      // bit
-  case MYSQL_TYPE_ENUM:     // enum
-  case MYSQL_TYPE_SET:      // set
-  case MYSQL_TYPE_TINY:     // tinyint
-    type = GRN_DB_INT8;
+  case MYSQL_TYPE_DECIMAL:      // DECIMAL; <= 65bytes
+    type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
-  case MYSQL_TYPE_SHORT:    // smallint
-    type = GRN_DB_INT16; // 2bytes
+  case MYSQL_TYPE_TINY:         // TINYINT; 1byte
+    type = GRN_DB_INT8;         // 1byte
     break;
-  case MYSQL_TYPE_INT24:    // mediumint
-  case MYSQL_TYPE_LONG:     // int
-    type = GRN_DB_INT32; // 4bytes
+  case MYSQL_TYPE_SHORT:        // SMALLINT; 2bytes
+    type = GRN_DB_INT16;        // 2bytes
     break;
-  case MYSQL_TYPE_LONGLONG: // bigint
-    type = GRN_DB_INT64; // 8bytes
+  case MYSQL_TYPE_LONG:         // INT; 4bytes
+    type = GRN_DB_INT32;        // 4bytes
     break;
-  case MYSQL_TYPE_FLOAT:    // float
-  case MYSQL_TYPE_DOUBLE:   // double
-    type = GRN_DB_FLOAT; // 8bytes
+  case MYSQL_TYPE_FLOAT:        // FLOAT; 4bytes
+  case MYSQL_TYPE_DOUBLE:       // DOUBLE; 8bytes
+    type = GRN_DB_FLOAT;        // 8bytes
     break;
-  case MYSQL_TYPE_DATE:     // date
-  case MYSQL_TYPE_TIME:     // time
-  case MYSQL_TYPE_YEAR:     // year
-  case MYSQL_TYPE_DATETIME: // datetime
-    type = GRN_DB_TIME; // micro sec from epoc time by int64
+  case MYSQL_TYPE_NULL:         // NULL; ???
+    type = GRN_DB_INT8;         // XXX: Is it OK?
     break;
-  case MYSQL_TYPE_GEOMETRY: // geometry
-    type = GRN_DB_WGS84_GEO_POINT; // geo point in WGS84
+  case MYSQL_TYPE_TIMESTAMP:    // TIMESTAMP; 4bytes
+    type = GRN_DB_TIME;         // 8bytes
     break;
-  default:
-    // tinytext=256, text=64K, mediumtext=16M, longtext=4G
-    // tinyblob...
-    // GRN_DB_SHORTTEXT 4096bytes
-    // GRN_DB_TEXT      ???bytes
-    // GRN_DB_LONGTEXT  ???bytes
-    type = GRN_DB_TEXT;       // others
+  case MYSQL_TYPE_LONGLONG:     // BIGINT; 8bytes
+    type = GRN_DB_INT64;        // 8bytes
+    break;
+  case MYSQL_TYPE_INT24:        // MEDIUMINT; 3bytes
+    type = GRN_DB_INT32;        // 4bytes
+    break;
+  case MYSQL_TYPE_DATE:         // DATE; 3bytes
+  case MYSQL_TYPE_TIME:         // TIME; 3bytes
+  case MYSQL_TYPE_DATETIME:     // DATETIME; 8bytes
+  case MYSQL_TYPE_YEAR:         // YEAR; 1byte
+  case MYSQL_TYPE_NEWDATE:      // ???
+    type = GRN_DB_TIME;         // 8bytes
+    break;
+  case MYSQL_TYPE_VARCHAR:      // VARCHAR; <= 64KB + 1bytes
+    if (for_index_key) {
+      type = GRN_DB_SHORT_TEXT; // 4Kbytes
+    } else {
+      if (field->field_length <= MRN_SHORT_TEXT_SIZE) {
+        type = GRN_DB_SHORT_TEXT; //  4Kbytes
+      } else if (field->field_length <= MRN_TEXT_SIZE) {
+        type = GRN_DB_TEXT;       // 64Kbytes
+      } else {
+        type = GRN_DB_LONG_TEXT;  //  2Gbytes
+      }
+    }
+    break;
+  case MYSQL_TYPE_BIT:          // BIT; <= 8bytes
+    type = GRN_DB_INT64;        // 8bytes
+    break;
+  case MYSQL_TYPE_NEWDECIMAL:   // ???
+    type = GRN_DB_SHORT_TEXT;   // 4Kbytes
+  case MYSQL_TYPE_ENUM:         // ENUM; <= 2bytes
+    type = GRN_DB_INT16;        // 2bytes
+    break;
+  case MYSQL_TYPE_SET:          // SET; <= 8bytes
+    type = GRN_DB_INT64;        // 8bytes
+    break;
+  case MYSQL_TYPE_TINY_BLOB:    // TINYBLOB; <= 256bytes
+    type = GRN_DB_SHORT_TEXT;   // 4Kbytes
+    break;
+  case MYSQL_TYPE_MEDIUM_BLOB:  // MEDIUMBLOB; <= 16Mbytes + 2bytes
+    if (for_index_key) {
+      type = GRN_DB_SHORT_TEXT; // 4Kbytes
+    } else {
+      type = GRN_DB_LONG_TEXT;  // 2Gbytes
+    }
+    break;
+  case MYSQL_TYPE_LONG_BLOB:    // LONGBLOB; <= 4Gbytes + 3bytes
+    if (for_index_key) {
+      type = GRN_DB_SHORT_TEXT; // 4Kbytes
+    } else {
+      type = GRN_DB_LONG_TEXT;  // 2Gbytes
+    }
+    break;
+  case MYSQL_TYPE_BLOB:         // BLOB; <= 64Kbytes + 1bytes
+    if (for_index_key) {
+      type = GRN_DB_SHORT_TEXT; // 4Kbytes
+    } else {
+      type = GRN_DB_LONG_TEXT;  // 2Gbytes
+    }
+    break;
+  case MYSQL_TYPE_VAR_STRING:   // ??? VARCHAR???; <= 64KB + 1bytes
+    if (for_index_key) {
+      type = GRN_DB_SHORT_TEXT; // 4Kbytes
+    } else {
+      if (field->field_length <= MRN_SHORT_TEXT_SIZE) {
+        type = GRN_DB_SHORT_TEXT; //  4Kbytes
+      } else if (field->field_length <= MRN_TEXT_SIZE) {
+        type = GRN_DB_TEXT;       // 64Kbytes
+      } else {
+        type = GRN_DB_LONG_TEXT;  //  2Gbytes
+      }
+    }
+    break;
+  case MYSQL_TYPE_STRING:       // ??? CHAR???; < 1Kbytes =~ (255 * 4)bytes
+                                //              4 is the maximum size of a character
+    type = GRN_DB_SHORT_TEXT; // 4Kbytes
+    break;
+  case MYSQL_TYPE_GEOMETRY:     // ???bytes
+    type = GRN_DB_WGS84_GEO_POINT; // 8bytes
     break;
   }
   return type;
@@ -1542,7 +1613,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_validate_key_info(KEY *key_info)
+int ha_mroonga::wrapper_create_index_fulltext_validate(KEY *key_info)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -1551,15 +1622,14 @@ int ha_mroonga::wrapper_validate_key_info(KEY *key_info)
   for (i = 0; i < key_info->key_parts; i++) {
     Field *field = key_info->key_part[i].field;
 
-    enum_field_types mysql_field_type = field->type();
-    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
-    if (gtype != GRN_DB_TEXT)
+    grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, true);
+    if (gtype != GRN_DB_SHORT_TEXT)
     {
       error = ER_CANT_CREATE_TABLE;
       GRN_LOG(ctx, GRN_LOG_ERROR,
               "key type must be text: <%d> "
               "(TODO: We should show type name not type ID.)",
-              mysql_field_type);
+              field->type());
       my_message(ER_CANT_CREATE_TABLE,
                  "key type must be text. (TODO: We should show type name.)",
                  MYF(0));
@@ -1580,7 +1650,7 @@ int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
-  error = wrapper_validate_key_info(key_info);
+  error = wrapper_create_index_fulltext_validate(key_info);
   if (error) {
     DBUG_RETURN(error);
   }
@@ -1779,8 +1849,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       int column_name_size = strlen(column_name);
       is_id = (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0);
 
-      enum_field_types mysql_field_type = pkey_field->type();
-      grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
+      grn_builtin_type gtype = mrn_grn_type_from_field(ctx, pkey_field, false);
       pkey_type = grn_ctx_at(ctx, gtype);
     } else {
       is_id = false;
@@ -1837,8 +1906,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
 
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR;
-    enum_field_types mysql_field_type = field->type();
-    grn_builtin_type gtype = mrn_get_type(ctx, mysql_field_type);
+    grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
     col_type = grn_ctx_at(ctx, gtype);
     char *col_path = NULL; // we don't specify path
 
@@ -1968,8 +2036,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     }
 
     column = grn_obj_column(ctx, grn_table, column_name, column_name_size);
-    enum_field_types mysql_field_type = field->type();
-    grn_builtin_type groonga_type = mrn_get_type(ctx, mysql_field_type);
+    grn_builtin_type groonga_type = mrn_grn_type_from_field(ctx, field, true);
     index_type = grn_ctx_at(ctx, groonga_type);
   } else {
     index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
