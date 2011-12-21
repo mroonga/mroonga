@@ -48,11 +48,11 @@
   typedef MYSQL_ERROR Sql_condition;
 #endif
 
-#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302)
+#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302) || MYSQL_VERSION_ID >= 50603
   typedef COST_VECT Cost_estimate;
 #endif
 
-#if MYSQL_VERSION_ID >= 50516
+#if (MYSQL_VERSION_ID >= 50516 && MYSQL_VERSION_ID < 50600) || MYSQL_VERSION_ID >= 50604
 #  define MRN_PLUGIN_HAVE_FLAGS 1
 #endif
 
