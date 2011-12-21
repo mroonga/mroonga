@@ -6631,7 +6631,7 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info_const(uint keyno,
                                                         uint n_ranges,
                                                         uint *bufsz,
                                                         uint *flags,
-                                                        COST_VECT *cost)
+                                                        Cost_estimate *cost)
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows;
@@ -6659,7 +6659,7 @@ ha_rows ha_mroonga::storage_multi_range_read_info_const(uint keyno,
                                                         uint n_ranges,
                                                         uint *bufsz,
                                                         uint *flags,
-                                                        COST_VECT *cost)
+                                                        Cost_estimate *cost)
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows = handler::multi_range_read_info_const(keyno, seq,
@@ -6672,7 +6672,8 @@ ha_rows ha_mroonga::storage_multi_range_read_info_const(uint keyno,
 ha_rows ha_mroonga::multi_range_read_info_const(uint keyno, RANGE_SEQ_IF *seq,
                                                 void *seq_init_param,
                                                 uint n_ranges, uint *bufsz,
-                                                uint *flags, COST_VECT *cost)
+                                                uint *flags,
+                                                Cost_estimate *cost)
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows;
@@ -6695,7 +6696,8 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info(uint keyno, uint n_ranges,
                                                   uint key_parts,
 #endif
                                                   uint *bufsz,
-                                                  uint *flags, COST_VECT *cost)
+                                                  uint *flags,
+                                                  Cost_estimate *cost)
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows;
@@ -6728,7 +6730,8 @@ ha_rows ha_mroonga::storage_multi_range_read_info(uint keyno, uint n_ranges,
                                                   uint key_parts,
 #endif
                                                   uint *bufsz,
-                                                  uint *flags, COST_VECT *cost)
+                                                  uint *flags,
+                                                  Cost_estimate *cost)
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows = handler::multi_range_read_info(keyno, n_ranges, keys,
@@ -6744,7 +6747,7 @@ ha_rows ha_mroonga::multi_range_read_info(uint keyno, uint n_ranges, uint keys,
                                           uint key_parts,
 #endif
                                           uint *bufsz, uint *flags,
-                                          COST_VECT *cost)
+                                          Cost_estimate *cost)
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows;

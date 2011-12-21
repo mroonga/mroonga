@@ -44,8 +44,12 @@
   typedef Item COND;
 #endif
 
-#if MYSQL_VERSION_ID < 50603 || defined(MRN_MYSQL_INNODB_FTS_P)
+#if MYSQL_VERSION_ID < 50603
   typedef MYSQL_ERROR Sql_condition;
+#endif
+
+#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302)
+  typedef Cost_estimate COND_VECT;
 #endif
 
 #if MYSQL_VERSION_ID >= 50516 && MYSQL_VERSION_ID < 50603

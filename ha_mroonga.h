@@ -57,7 +57,7 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_HA_INDEX_NEXT_SAME 1
 #endif
 
-#if (MYSQL_VERSION_ID >= 50603) || \
+#if (MYSQL_VERSION_ID >= 50604) || \
     (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302)
 #  define MRN_HANDLER_HAVE_HA_CLOSE 1
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ 1
@@ -270,12 +270,12 @@ public:
   ha_rows multi_range_read_info_const(uint keyno, RANGE_SEQ_IF *seq,
                                       void *seq_init_param,
                                       uint n_ranges, uint *bufsz,
-                                      uint *flags, COST_VECT *cost);
+                                      uint *flags, Cost_estimate *cost);
   ha_rows multi_range_read_info(uint keyno, uint n_ranges, uint keys,
 #ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
                                 uint key_parts,
 #endif
-                                uint *bufsz, uint *flags, COST_VECT *cost);
+                                uint *bufsz, uint *flags, Cost_estimate *cost);
   int multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
                             uint n_ranges, uint mode,
                             HANDLER_BUFFER *buf);
@@ -553,26 +553,26 @@ private:
                                               uint n_ranges,
                                               uint *bufsz,
                                               uint *flags,
-                                              COST_VECT *cost);
+                                              Cost_estimate *cost);
   ha_rows storage_multi_range_read_info_const(uint keyno,
                                               RANGE_SEQ_IF *seq,
                                               void *seq_init_param,
                                               uint n_ranges,
                                               uint *bufsz,
                                               uint *flags,
-                                              COST_VECT *cost);
+                                              Cost_estimate *cost);
   ha_rows wrapper_multi_range_read_info(uint keyno, uint n_ranges, uint keys,
 #ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
                                         uint key_parts,
 #endif
                                         uint *bufsz, uint *flags,
-                                        COST_VECT *cost);
+                                        Cost_estimate *cost);
   ha_rows storage_multi_range_read_info(uint keyno, uint n_ranges, uint keys,
 #ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
                                         uint key_parts,
 #endif
                                         uint *bufsz, uint *flags,
-                                        COST_VECT *cost);
+                                        Cost_estimate *cost);
   int wrapper_multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
                                     uint n_ranges, uint mode,
                                     HANDLER_BUFFER *buf);
