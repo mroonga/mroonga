@@ -91,6 +91,11 @@ extern "C" {
 #  define MRN_HAVE_MYSQL_TYPE_TIME2
 #endif
 
+#if (MYSQL_VERSION_ID < 50519) || \
+    (50600 <= MYSQL_VERSION_ID && MYSQL_VERSION_ID < 50604)
+#  define MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
+#endif
+
 class ha_mroonga;
 
 /* structs */

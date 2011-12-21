@@ -273,7 +273,9 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
             "default fulltext parser is changed: <%s> -> <%s>",
             *old_value_ptr, new_value);
 
+#ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
     my_free(*old_value_ptr, MYF(0));
+#endif
     *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
   }
   grn_ctx_fin(&ctx);
