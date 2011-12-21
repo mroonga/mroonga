@@ -49,7 +49,7 @@
 #endif
 
 #if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302)
-  typedef Cost_estimate COND_VECT;
+  typedef COST_VECT Cost_estimate;
 #endif
 
 #if MYSQL_VERSION_ID >= 50516
