@@ -563,6 +563,21 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   case MYSQL_TYPE_BIT:          // BIT; <= 8bytes
     type = GRN_DB_INT64;        // 8bytes
     break;
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+  case MYSQL_TYPE_TIMESTAMP2:   // TIMESTAMP; 4bytes
+    type = GRN_DB_TIME;         // 8bytes
+    break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+  case MYSQL_TYPE_DATETIME2:    // DATETIME; 8bytes
+    type = GRN_DB_TIME;         // 8bytes
+    break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+  case MYSQL_TYPE_TIME2:        // TIME; 3bytes
+    type = GRN_DB_TIME;         // 8bytes
+    break;
+#endif
   case MYSQL_TYPE_NEWDECIMAL:   // DECIMAL; <= 9bytes
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
