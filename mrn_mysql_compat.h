@@ -52,7 +52,7 @@
   typedef Cost_estimate COND_VECT;
 #endif
 
-#if MYSQL_VERSION_ID >= 50516 && MYSQL_VERSION_ID < 50603
+#if MYSQL_VERSION_ID >= 50516
 #  define MRN_PLUGIN_HAVE_FLAGS 1
 #endif
 
