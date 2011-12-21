@@ -100,6 +100,157 @@ static grn_ctx mrn_ctx;
 static grn_obj *mrn_db;
 static grn_hash *mrn_hash;
 
+#if !defined(DBUG_OFF) && !defined(_lint)
+static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
+{
+  const char *inspected = "<unknown>";
+  switch (operation) {
+  case HA_EXTRA_NORMAL:
+    inspected = "HA_EXTRA_NORMAL";
+    break;
+  case HA_EXTRA_QUICK:
+    inspected = "HA_EXTRA_QUICK";
+    break;
+  case HA_EXTRA_NOT_USED:
+    inspected = "HA_EXTRA_NOT_USED";
+    break;
+  case HA_EXTRA_CACHE:
+    inspected = "HA_EXTRA_CACHE";
+    break;
+  case HA_EXTRA_NO_CACHE:
+    inspected = "HA_EXTRA_NO_CACHE";
+    break;
+  case HA_EXTRA_NO_READCHECK:
+    inspected = "HA_EXTRA_NO_READCHECK";
+    break;
+  case HA_EXTRA_READCHECK:
+    inspected = "HA_EXTRA_READCHECK";
+    break;
+  case HA_EXTRA_KEYREAD:
+    inspected = "HA_EXTRA_KEYREAD";
+    break;
+  case HA_EXTRA_NO_KEYREAD:
+    inspected = "HA_EXTRA_NO_KEYREAD";
+    break;
+  case HA_EXTRA_NO_USER_CHANGE:
+    inspected = "HA_EXTRA_NO_USER_CHANGE";
+    break;
+  case HA_EXTRA_KEY_CACHE:
+    inspected = "HA_EXTRA_KEY_CACHE";
+    break;
+  case HA_EXTRA_NO_KEY_CACHE:
+    inspected = "HA_EXTRA_NO_KEY_CACHE";
+    break;
+  case HA_EXTRA_WAIT_LOCK:
+    inspected = "HA_EXTRA_WAIT_LOCK";
+    break;
+  case HA_EXTRA_NO_WAIT_LOCK:
+    inspected = "HA_EXTRA_NO_WAIT_LOCK";
+    break;
+  case HA_EXTRA_WRITE_CACHE:
+    inspected = "HA_EXTRA_WRITE_CACHE";
+    break;
+  case HA_EXTRA_FLUSH_CACHE:
+    inspected = "HA_EXTRA_FLUSH_CACHE";
+    break;
+  case HA_EXTRA_NO_KEYS:
+    inspected = "HA_EXTRA_NO_KEYS";
+    break;
+  case HA_EXTRA_KEYREAD_CHANGE_POS:
+    inspected = "HA_EXTRA_KEYREAD_CHANGE_POS";
+    break;
+  case HA_EXTRA_REMEMBER_POS:
+    inspected = "HA_EXTRA_REMEMBER_POS";
+    break;
+  case HA_EXTRA_RESTORE_POS:
+    inspected = "HA_EXTRA_RESTORE_POS";
+    break;
+  case HA_EXTRA_REINIT_CACHE:
+    inspected = "HA_EXTRA_REINIT_CACHE";
+    break;
+  case HA_EXTRA_FORCE_REOPEN:
+    inspected = "HA_EXTRA_FORCE_REOPEN";
+    break;
+  case HA_EXTRA_FLUSH:
+    inspected = "HA_EXTRA_FLUSH";
+    break;
+  case HA_EXTRA_NO_ROWS:
+    inspected = "HA_EXTRA_NO_ROWS";
+    break;
+  case HA_EXTRA_RESET_STATE:
+    inspected = "HA_EXTRA_RESET_STATE";
+    break;
+  case HA_EXTRA_IGNORE_DUP_KEY:
+    inspected = "HA_EXTRA_IGNORE_DUP_KEY";
+    break;
+  case HA_EXTRA_NO_IGNORE_DUP_KEY:
+    inspected = "HA_EXTRA_NO_IGNORE_DUP_KEY";
+    break;
+  case HA_EXTRA_PREPARE_FOR_DROP:
+    inspected = "HA_EXTRA_PREPARE_FOR_DROP";
+    break;
+  case HA_EXTRA_PREPARE_FOR_UPDATE:
+    inspected = "HA_EXTRA_PREPARE_FOR_UPDATE";
+    break;
+  case HA_EXTRA_PRELOAD_BUFFER_SIZE:
+    inspected = "HA_EXTRA_PRELOAD_BUFFER_SIZE";
+    break;
+  case HA_EXTRA_CHANGE_KEY_TO_UNIQUE:
+    inspected = "HA_EXTRA_CHANGE_KEY_TO_UNIQUE";
+    break;
+  case HA_EXTRA_CHANGE_KEY_TO_DUP:
+    inspected = "HA_EXTRA_CHANGE_KEY_TO_DUP";
+    break;
+  case HA_EXTRA_KEYREAD_PRESERVE_FIELDS:
+    inspected = "HA_EXTRA_KEYREAD_PRESERVE_FIELDS";
+    break;
+  case HA_EXTRA_MMAP:
+    inspected = "HA_EXTRA_MMAP";
+    break;
+  case HA_EXTRA_IGNORE_NO_KEY:
+    inspected = "HA_EXTRA_IGNORE_NO_KEY";
+    break;
+  case HA_EXTRA_NO_IGNORE_NO_KEY:
+    inspected = "HA_EXTRA_NO_IGNORE_NO_KEY";
+    break;
+  case HA_EXTRA_MARK_AS_LOG_TABLE:
+    inspected = "HA_EXTRA_MARK_AS_LOG_TABLE";
+    break;
+  case HA_EXTRA_WRITE_CAN_REPLACE:
+    inspected = "HA_EXTRA_WRITE_CAN_REPLACE";
+    break;
+  case HA_EXTRA_WRITE_CANNOT_REPLACE:
+    inspected = "HA_EXTRA_WRITE_CANNOT_REPLACE";
+    break;
+  case HA_EXTRA_DELETE_CANNOT_BATCH:
+    inspected = "HA_EXTRA_DELETE_CANNOT_BATCH";
+    break;
+  case HA_EXTRA_UPDATE_CANNOT_BATCH:
+    inspected = "HA_EXTRA_UPDATE_CANNOT_BATCH";
+    break;
+  case HA_EXTRA_INSERT_WITH_UPDATE:
+    inspected = "HA_EXTRA_INSERT_WITH_UPDATE";
+    break;
+  case HA_EXTRA_PREPARE_FOR_RENAME:
+    inspected = "HA_EXTRA_PREPARE_FOR_RENAME";
+    break;
+  case HA_EXTRA_ADD_CHILDREN_LIST:
+    inspected = "HA_EXTRA_ADD_CHILDREN_LIST";
+    break;
+  case HA_EXTRA_ATTACH_CHILDREN:
+    inspected = "HA_EXTRA_ATTACH_CHILDREN";
+    break;
+  case HA_EXTRA_IS_ATTACHED_CHILDREN:
+    inspected = "HA_EXTRA_IS_ATTACHED_CHILDREN";
+    break;
+  case HA_EXTRA_DETACH_CHILDREN:
+    inspected = "HA_EXTRA_DETACH_CHILDREN";
+    break;
+  }
+  return inspected;
+}
+#endif
+
 static uchar *mrn_open_tables_get_key(MRN_SHARE *share,
                                       size_t *length,
                                       my_bool not_used __attribute__ ((unused)))
@@ -3430,7 +3581,9 @@ int ha_mroonga::extra(enum ha_extra_function operation)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  DBUG_PRINT("info", ("mroonga: this=%p", this));
+  DBUG_PRINT("info",
+             ("mroonga: this=%p; %s",
+              this, mrn_inspect_extra_function(operation)));
   if (share->wrapper_mode)
   {
     if ((error = wrapper_extra(operation)))
