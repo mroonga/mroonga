@@ -92,6 +92,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
                             partition_element **sub_elem);
 #endif
 int mrn_parse_table_param(MRN_SHARE *share, TABLE *table);
+bool mrn_is_geo_key(KEY *key_info);
 int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i);
 int mrn_parse_index_param(MRN_SHARE *share, TABLE *table);
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error);

@@ -456,6 +456,13 @@ error_alloc_param_string:
   DBUG_RETURN(error);
 }
 
+bool mrn_is_geo_key(KEY *key_info)
+{
+  return key_info->algorithm == HA_KEY_ALG_UNDEF &&
+    key_info->key_parts == 1 &&
+    key_info->key_part[0].field->type() == MYSQL_TYPE_GEOMETRY;
+}
+
 int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 {
   int error;
@@ -571,7 +578,7 @@ int mrn_parse_index_param(MRN_SHARE *share, TABLE *table)
   {
     KEY *key_info = &table->s->key_info[i];
 
-    if (!(key_info->flags & HA_FULLTEXT)) {
+    if (!(key_info->flags & HA_FULLTEXT) && !mrn_is_geo_key(key_info)) {
       continue;
     }
 
@@ -645,7 +652,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       j = 0;
       for (i = 0; i < table->s->keys; i++)
       {
-        if (table->s->key_info[i].algorithm != HA_KEY_ALG_FULLTEXT)
+        if (table->s->key_info[i].algorithm != HA_KEY_ALG_FULLTEXT &&
+          !mrn_is_geo_key(&table->s->key_info[i]))
         {
           wrap_key_nr[i] = j;
           memcpy(&wrap_key_info[j], &table->s->key_info[i],

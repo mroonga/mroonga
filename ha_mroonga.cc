@@ -652,13 +652,6 @@ static bool mrn_flush_logs(handlerton *hton)
   return result;
 }
 
-static bool mrn_is_geo_key(KEY *key_info)
-{
-  return key_info->algorithm == HA_KEY_ALG_UNDEF &&
-    key_info->key_parts == 1 &&
-    key_info->key_part[0].field->type() == MYSQL_TYPE_GEOMETRY;
-}
-
 static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
                                                 bool for_index_key)
 {
@@ -8226,7 +8219,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
 
         for (k = 0; k < num_of_keys; k++) {
           tmp_key_info = &key_info[k];
-          if (!(tmp_key_info->flags & HA_FULLTEXT)) {
+          if (!(tmp_key_info->flags & HA_FULLTEXT) &&
+            !mrn_is_geo_key(tmp_key_info)) {
             continue;
           }
 
@@ -8285,7 +8279,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   if (res)
   {
     for (k = 0; k < i; k++) {
-      if (!(key_info[k].flags & HA_FULLTEXT))
+      if (!(key_info[k].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[k]))
       {
         continue;
       }
@@ -8533,7 +8527,8 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
              (const uchar *) share->table_name + share->table_name_length);
   mrn_table_name_gen(decode_name, grn_table_name);
   for (i = 0, j = 0; i < num_of_keys; i++) {
-    if (!(key_info[key_num[i]].flags & HA_FULLTEXT)) {
+    if (!(key_info[key_num[i]].flags & HA_FULLTEXT) &&
+      !mrn_is_geo_key(&key_info[key_num[i]])) {
       wrap_key_num[j] = share->wrap_key_nr[key_num[i]];
       j++;
       continue;
