@@ -20,5 +20,7 @@
 
 #define ER_MRN_INVALID_TABLE_PARAM_NUM 16501
 #define ER_MRN_INVALID_TABLE_PARAM_STR "The table parameter '%-.64s' is invalid"
+#define ER_MRN_CHARSET_NOT_SUPPORT_NUM 16502
+#define ER_MRN_CHARSET_NOT_SUPPORT_STR "The character set '%s[%s]' is not supported by groonga"
 
 #endif /* _mrn_err_h */

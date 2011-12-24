@@ -100,6 +100,191 @@ static grn_ctx mrn_ctx;
 static grn_obj *mrn_db;
 static grn_hash *mrn_hash;
 
+static CHARSET_INFO *mrn_charset_utf8 = NULL;
+static CHARSET_INFO *mrn_charset_binary = NULL;
+static CHARSET_INFO *mrn_charset_ascii = NULL;
+static CHARSET_INFO *mrn_charset_latin1_1 = NULL;
+static CHARSET_INFO *mrn_charset_latin1_2 = NULL;
+static CHARSET_INFO *mrn_charset_cp932 = NULL;
+static CHARSET_INFO *mrn_charset_sjis = NULL;
+static CHARSET_INFO *mrn_charset_eucjpms = NULL;
+static CHARSET_INFO *mrn_charset_ujis = NULL;
+static CHARSET_INFO *mrn_charset_koi8r = NULL;
+
+static void mrn_init_encoding_map()
+{
+  CHARSET_INFO **cs;
+  MRN_DBUG_ENTER_FUNCTION();
+  for (cs = all_charsets; cs < all_charsets + MY_ALL_CHARSETS_SIZE; cs++)
+  {
+    if (!cs[0])
+      continue;
+    if (!strcmp(cs[0]->csname, "utf8"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+        cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_utf8)
+        mrn_charset_utf8 = cs[0];
+      else if (mrn_charset_utf8->cset != cs[0]->cset)
+        DBUG_ASSERT(0);
+      continue;
+    }
+    if (!strcmp(cs[0]->csname, "binary"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+        cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_binary)
+        mrn_charset_binary = cs[0];
+      else if (mrn_charset_binary->cset != cs[0]->cset)
+        DBUG_ASSERT(0);
+      continue;
+    }
+    if (!strcmp(cs[0]->csname, "ascii"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+        cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_ascii)
+        mrn_charset_ascii = cs[0];
+      else if (mrn_charset_ascii->cset != cs[0]->cset)
+        DBUG_ASSERT(0);
+      continue;
+    }
+    if (!strcmp(cs[0]->csname, "latin1"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+        cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_latin1_1)
+        mrn_charset_latin1_1 = cs[0];
+      else if (mrn_charset_latin1_1->cset != cs[0]->cset)
+      {
+        if (!mrn_charset_latin1_2)
+          mrn_charset_latin1_2 = cs[0];
+        else if (mrn_charset_latin1_2->cset != cs[0]->cset)
+          DBUG_ASSERT(0);
+      }
+      continue;
+    }
+    if (!strcmp(cs[0]->csname, "cp932"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+        cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_cp932)
+        mrn_charset_cp932 = cs[0];
+      else if (mrn_charset_cp932->cset != cs[0]->cset)
+        DBUG_ASSERT(0);
+      continue;
+    }
+    if (!strcmp(cs[0]->csname, "sjis"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+        cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_sjis)
+        mrn_charset_sjis = cs[0];
+      else if (mrn_charset_sjis->cset != cs[0]->cset)
+        DBUG_ASSERT(0);
+      continue;
+    }
+    if (!strcmp(cs[0]->csname, "eucjpms"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+        cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_eucjpms)
+        mrn_charset_eucjpms = cs[0];
+      else if (mrn_charset_eucjpms->cset != cs[0]->cset)
+        DBUG_ASSERT(0);
+      continue;
+    }
+    if (!strcmp(cs[0]->csname, "ujis"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+        cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_ujis)
+        mrn_charset_ujis = cs[0];
+      else if (mrn_charset_ujis->cset != cs[0]->cset)
+        DBUG_ASSERT(0);
+      continue;
+    }
+    if (!strcmp(cs[0]->csname, "koi8r"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+        cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_koi8r)
+        mrn_charset_koi8r = cs[0];
+      else if (mrn_charset_koi8r->cset != cs[0]->cset)
+        DBUG_ASSERT(0);
+      continue;
+    }
+    DBUG_PRINT("info", ("mroonga: %s[%s][%p] is not supported",
+      cs[0]->name, cs[0]->csname, cs[0]->cset));
+  }
+  DBUG_VOID_RETURN;
+}
+
+static int mrn_change_encoding(grn_ctx *ctx, CHARSET_INFO *charset)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  if (!charset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_utf8->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_cp932->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_SJIS);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_eucjpms->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_EUC_JP);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_latin1_1->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_LATIN1);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_latin1_2->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_LATIN1);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_koi8r->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_KOI8R);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_binary->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_ascii->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_sjis->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_SJIS);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_ujis->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_EUC_JP);
+    DBUG_RETURN(0);
+  }
+  GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
+  my_printf_error(ER_MRN_CHARSET_NOT_SUPPORT_NUM,
+    ER_MRN_CHARSET_NOT_SUPPORT_STR,
+    MYF(0), charset->name, charset->csname);
+  DBUG_RETURN(ER_MRN_CHARSET_NOT_SUPPORT_NUM);
+}
+
 #if !defined(DBUG_OFF) && !defined(_lint)
 static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
 {
@@ -340,6 +525,7 @@ static void mrn_log_level_update(THD *thd, struct st_mysql_sys_var *var,
   mrn_log_level = new_value;
   mrn_logger_info.max_level = (grn_log_level) mrn_log_level;
   grn_ctx *ctx = grn_ctx_open(0);
+  mrn_change_encoding(ctx, system_charset_info);
   GRN_LOG(ctx, GRN_LOG_NOTICE, "log level changed from '%s' to '%s'",
           mrn_log_level_type_names[old_value],
           mrn_log_level_type_names[new_value]);
@@ -364,6 +550,7 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
   grn_ctx ctx;
 
   grn_ctx_init(&ctx, 0);
+  mrn_change_encoding(&ctx, system_charset_info);
   if (strcmp(*old_value_ptr, new_value) == 0) {
     GRN_LOG(&ctx, GRN_LOG_NOTICE,
             "log file isn't changed "
@@ -414,6 +601,7 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
   grn_ctx ctx;
 
   grn_ctx_init(&ctx, 0);
+  mrn_change_encoding(&ctx, system_charset_info);
   if (strcmp(*old_value_ptr, new_value) == 0) {
     GRN_LOG(&ctx, GRN_LOG_NOTICE,
             "default parser isn't changed "
@@ -616,6 +804,7 @@ static void mrn_drop_db(handlerton *hton, char *path)
   mrn_db_name_gen(decode_name, db_name);
   grn_ctx *ctx;
   ctx = grn_ctx_open(0);
+  mrn_change_encoding(ctx, system_charset_info);
   struct stat dummy;
   if (stat(db_path, &dummy) == 0) {
     grn_obj *db = grn_db_open(ctx, db_path);
@@ -816,7 +1005,10 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 
 static int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
 {
-  int error = 0;
+  int error;
+  error = mrn_change_encoding(ctx, field->charset());
+  if (error)
+    return error;
   switch (field->type()) {
   case MYSQL_TYPE_BIT:
   case MYSQL_TYPE_ENUM:
@@ -1057,8 +1249,12 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
 static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
                            const uchar *key, uchar *buf, uint *size)
 {
-  int error = 0;
+  int error;
   char *ptr = (char*) key;
+
+  error = mrn_change_encoding(ctx, field->charset());
+  if (error)
+    return error;
 
   if (field->null_bit != 0x0) {
     ptr += 1;
@@ -1183,8 +1379,12 @@ static int mrn_init(void *p)
     goto err_grn_init;
   }
 
+  mrn_init_encoding_map();
+
   grn_ctx_init(&mrn_ctx, 0);
   ctx = &mrn_ctx;
+  if (mrn_change_encoding(ctx, system_charset_info))
+    goto err_mrn_change_encoding;
 
   if (pthread_mutex_init(&mrn_log_mutex, NULL) != 0) {
     goto err_log_mutex_init;
@@ -1255,6 +1455,7 @@ err_db_create:
 err_log_file_open:
   pthread_mutex_destroy(&mrn_log_mutex);
 err_log_mutex_init:
+err_mrn_change_encoding:
   grn_ctx_fin(ctx);
   grn_fin();
 err_grn_init:
@@ -1355,6 +1556,7 @@ static float mrn_wrapper_ft_find_relevance(FT_INFO *handler, uchar *record,
   float score = 0.0;
   grn_id record_id;
 
+  mrn_change_encoding(info->ctx, NULL);
   key_copy((uchar *)(GRN_TEXT_VALUE(&(info->key))), record,
            info->primary_key_info, info->primary_key_info->key_length);
   record_id = grn_table_get(info->ctx,
@@ -1394,6 +1596,7 @@ static float mrn_wrapper_ft_get_relevance(FT_INFO *handler)
   float score = 0.0;
   grn_id record_id;
   ha_mroonga *mroonga = info->mroonga;
+  mrn_change_encoding(info->ctx, NULL);
   record_id = grn_table_get(info->ctx,
                             info->table,
                             GRN_TEXT_VALUE(&(mroonga->key_buffer)),
@@ -1443,6 +1646,7 @@ static float mrn_storage_ft_find_relevance(FT_INFO *handler, uchar *record,
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
   ha_mroonga *mroonga = info->mroonga;
+  mrn_change_encoding(info->ctx, NULL);
 
   float score = 0.0;
   if (mroonga->record_id != GRN_ID_NIL) {
@@ -1474,6 +1678,7 @@ static float mrn_storage_ft_get_relevance(FT_INFO *handler)
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
   ha_mroonga *mroonga = info->mroonga;
+  mrn_change_encoding(info->ctx, NULL);
 
   float score = 0.0;
   if (mroonga->record_id != GRN_ID_NIL) {
@@ -1556,6 +1761,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 {
   MRN_DBUG_ENTER_METHOD();
   ctx = grn_ctx_open(0);
+  mrn_change_encoding(ctx, system_charset_info);
   grn_ctx_use(ctx, mrn_db);
   grn_columns = NULL;
   cursor = NULL;
@@ -1821,6 +2027,10 @@ int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
     DBUG_RETURN(error);
   }
 
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
   char index_name[MRN_MAX_PATH_SIZE];
   mrn_index_table_name_gen(grn_table_name, key_info->name, index_name);
 
@@ -1837,6 +2047,11 @@ int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
   }
 
   grn_obj *lexicon_key_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+  error = mrn_change_encoding(ctx, key_info->key_part->field->charset());
+  if (error) {
+    grn_obj_unlink(ctx, lexicon_key_type);
+    DBUG_RETURN(error);
+  }
   index_table = grn_table_create(ctx, index_name, strlen(index_name), NULL,
                                  index_table_flags, lexicon_key_type, 0);
   if (ctx->rc) {
@@ -1845,6 +2060,7 @@ int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
     grn_obj_unlink(ctx, lexicon_key_type);
     DBUG_RETURN(error);
   }
+  mrn_change_encoding(ctx, system_charset_info);
   grn_obj_unlink(ctx, lexicon_key_type);
   index_tables[i] = index_table;
 
@@ -1878,7 +2094,11 @@ int ha_mroonga::wrapper_create_index_geo(grn_obj *grn_table,
                                          MRN_SHARE *tmp_share)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error;
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
 
   char index_name[MRN_MAX_PATH_SIZE];
   mrn_index_table_name_gen(grn_table_name, key_info->name, index_name);
@@ -1926,6 +2146,10 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 
   int error = 0;
   error = ensure_database_create(name);
+  if (error)
+    DBUG_RETURN(error);
+
+  error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
     DBUG_RETURN(error);
 
@@ -1996,6 +2220,10 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     DBUG_RETURN(error);
 
   error = ensure_database_create(name);
+  if (error)
+    DBUG_RETURN(error);
+
+  error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
     DBUG_RETURN(error);
 
@@ -2185,6 +2413,10 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   grn_obj *column = NULL;
   grn_obj *index_type = NULL;
 
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
   mrn_index_table_name_gen(grn_table_name, key_info->name, index_table_name);
 
   int key_parts = key_info->key_parts;
@@ -2213,6 +2445,11 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   if (key_info->flags & HA_FULLTEXT) {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
     index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
+    error = mrn_change_encoding(ctx, key_info->key_part->field->charset());
+    if (error) {
+      grn_obj_remove(ctx, grn_table);
+      DBUG_RETURN(error);
+    }
   } else if (key_alg == HA_KEY_ALG_HASH) {
     index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
   } else {
@@ -2256,6 +2493,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     DBUG_RETURN(error);
   }
 
+  mrn_change_encoding(ctx, system_charset_info);
   if (key_parts == 1) {
     if (column) {
       grn_obj source_ids;
@@ -2372,7 +2610,7 @@ int ha_mroonga::close_databases()
 
 int ha_mroonga::ensure_database_create(const char *name)
 {
-  int error = 0;
+  int error;
 
   MRN_DBUG_ENTER_METHOD();
   /* before creating table, we must check if database is alreadly opened, created */
@@ -2381,6 +2619,11 @@ int ha_mroonga::ensure_database_create(const char *name)
   char db_path[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
   struct stat db_stat;
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
   mrn_decode((uchar *) decode_name,
              (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) name, (const uchar *) name + strlen(name));
@@ -2419,13 +2662,18 @@ int ha_mroonga::ensure_database_create(const char *name)
 
 int ha_mroonga::ensure_database_open(const char *name)
 {
-  int error = 0;
+  int error;
 
   MRN_DBUG_ENTER_METHOD();
   grn_obj *db;
   char db_name[MRN_MAX_PATH_SIZE];
   char db_path[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
   mrn_decode((uchar *) decode_name,
              (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) name, (const uchar *) name + strlen(name));
@@ -2565,9 +2813,13 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
 
 int ha_mroonga::wrapper_open_indexes(const char *name)
 {
-  int error = 0;
+  int error;
 
   MRN_DBUG_ENTER_METHOD();
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
 
   uint n_keys = table->s->keys;
   uint n_primary_keys = table->s->primary_key;
@@ -2768,7 +3020,12 @@ int ha_mroonga::storage_open(const char *name, int mode, uint test_if_locked)
 
 int ha_mroonga::open_table(const char *name)
 {
+  int error;
   MRN_DBUG_ENTER_METHOD();
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
 
   char table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
@@ -2777,7 +3034,7 @@ int ha_mroonga::open_table(const char *name)
   mrn_table_name_gen(decode_name, table_name);
   grn_table = grn_ctx_get(ctx, table_name, strlen(table_name));
   if (ctx->rc) {
-    int error = ER_CANT_OPEN_FILE;
+    error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
@@ -2787,7 +3044,12 @@ int ha_mroonga::open_table(const char *name)
 
 int ha_mroonga::storage_open_columns(void)
 {
+  int error;
   MRN_DBUG_ENTER_METHOD();
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
 
   int n_columns = table->s->fields;
   grn_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
@@ -2822,9 +3084,13 @@ int ha_mroonga::storage_open_columns(void)
 
 int ha_mroonga::storage_open_indexes(const char *name)
 {
-  int error = 0;
+  int error;
 
   MRN_DBUG_ENTER_METHOD();
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
 
   char index_name[MRN_MAX_PATH_SIZE];
   uint n_keys = table->s->keys;
@@ -3065,6 +3331,10 @@ int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
   if (error)
     DBUG_RETURN(error);
 
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
   TABLE_SHARE *tmp_table_share = tmp_share->table_share;
 
   uint i;
@@ -3097,6 +3367,10 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
   char index_name[MRN_MAX_PATH_SIZE];
 
   error = ensure_database_open(name);
+  if (error)
+    DBUG_RETURN(error);
+
+  error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
     DBUG_RETURN(error);
 
@@ -3236,6 +3510,7 @@ int ha_mroonga::wrapper_info(uint flag)
 int ha_mroonga::storage_info(uint flag)
 {
   MRN_DBUG_ENTER_METHOD();
+  mrn_change_encoding(ctx, NULL);
   ha_rows rows = grn_table_size(ctx, grn_table);
   stats.records = rows;
 
@@ -3372,6 +3647,7 @@ int ha_mroonga::wrapper_rnd_init(bool scan)
 int ha_mroonga::storage_rnd_init(bool scan)
 {
   MRN_DBUG_ENTER_METHOD();
+  mrn_change_encoding(ctx, NULL);
   cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0, 0, -1, 0);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -3686,6 +3962,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
     DBUG_RETURN(error);
   }
 
+  mrn_change_encoding(ctx, NULL);
   GRN_BULK_REWIND(&key_buffer);
   grn_bulk_space(ctx, &key_buffer, table->key_info->key_length);
   key_copy((uchar *)(GRN_TEXT_VALUE(&key_buffer)),
@@ -3733,6 +4010,9 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
       if (field->is_null())
         continue;
 
+      error = mrn_change_encoding(ctx, field->charset());
+      if (error)
+        goto err;
       int new_column_size;
       error = mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
       if (error) {
@@ -3817,9 +4097,17 @@ int ha_mroonga::storage_write_row(uchar *buf)
     KEY key_info = table->key_info[pkey_nr];
     if (key_info.key_parts == 1) {
       Field *pkey_field = key_info.key_part[0].field;
+      error = mrn_change_encoding(ctx, pkey_field->charset());
+      if (error) {
+#ifndef DBUG_OFF
+        dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+        DBUG_RETURN(error);
+      }
       mrn_set_buf(ctx, pkey_field, &key_buffer, &pkey_size);
       pkey = GRN_TEXT_VALUE(&key_buffer);
     } else {
+      mrn_change_encoding(ctx, NULL);
       uchar key[MRN_MAX_KEY_SIZE];
       key_copy(key, buf, &key_info, key_info.key_length);
       grn_bulk_space(ctx, &key_buffer, key_info.key_length);
@@ -3875,6 +4163,14 @@ int ha_mroonga::storage_write_row(uchar *buf)
       continue;
     }
 
+    error = mrn_change_encoding(ctx, field->charset());
+    if (error) {
+#ifndef DBUG_OFF
+      dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+      grn_obj_unlink(ctx, &colbuf);
+      DBUG_RETURN(error);
+    }
     mrn_set_buf(ctx, field, &colbuf, &col_size);
     grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
     if (ctx->rc) {
@@ -3918,6 +4214,7 @@ int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id,
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
+  mrn_change_encoding(ctx, NULL);
   GRN_BULK_REWIND(&key_buffer);
   grn_bulk_space(ctx, &key_buffer, key_info->key_length);
   key_copy((uchar *)(GRN_TEXT_VALUE(&key_buffer)),
@@ -4005,6 +4302,7 @@ int ha_mroonga::wrapper_get_record_id(uchar *data, grn_id *record_id,
   grn_obj key;
   GRN_TEXT_INIT(&key, 0);
 
+  mrn_change_encoding(ctx, NULL);
   grn_bulk_space(ctx, &key, table->key_info->key_length);
   key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
            data,
@@ -4058,6 +4356,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     DBUG_RETURN(error);
   }
 
+  mrn_change_encoding(ctx, NULL);
   KEY key_info = table->key_info[table_share->primary_key];
   GRN_BULK_REWIND(&key_buffer);
   key_copy((uchar *)(GRN_TEXT_VALUE(&key_buffer)),
@@ -4221,6 +4520,9 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 #endif
         continue;
       }
+      error = mrn_change_encoding(ctx, field->charset());
+      if (error)
+        DBUG_RETURN(error);
 
       if (pkey_info) {
         bool have_pkey = false;
@@ -4283,6 +4585,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
 #endif
   uint i;
   uint n_keys = table->s->keys;
+  mrn_change_encoding(ctx, NULL);
   for (i = 0; i < n_keys; i++) {
     if (i == table->s->primary_key) {
       continue;
@@ -4399,6 +4702,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
     DBUG_RETURN(error);
   }
 
+  mrn_change_encoding(ctx, NULL);
   grn_id record_id;
   error = wrapper_get_record_id((uchar *)buf, &record_id,
                                 "failed to get record ID "
@@ -4464,6 +4768,7 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
     DBUG_RETURN(error);
   }
 
+  mrn_change_encoding(ctx, NULL);
   grn_table_delete_by_id(ctx, grn_table, record_id);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
@@ -4487,6 +4792,7 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
 #endif
   uint i;
   uint n_keys = table->s->keys;
+  mrn_change_encoding(ctx, NULL);
   for (i = 0; i < n_keys; i++) {
     if (i == table->s->primary_key) {
       continue;
@@ -4601,6 +4907,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
   bool is_multiple_column_index = key_info.key_parts > 1;
 
   if (is_multiple_column_index) {
+    mrn_change_encoding(ctx, NULL);
     if (range_min && range_max &&
         range_min->length == range_max->length &&
         memcmp(range_min->key, range_max->key, range_min->length) == 0) {
@@ -4627,6 +4934,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
       }
     }
   } else if (mrn_is_geo_key(&key_info)) {
+    mrn_change_encoding(ctx, key_info.key_part->field->charset());
     row_count = generic_records_in_range_geo(key_nr, range_min, range_max);
     DBUG_RETURN(row_count);
   } else {
@@ -4634,6 +4942,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     Field *field = key_part.field;
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
+    mrn_change_encoding(ctx, field->charset());
 
     if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
       DBUG_RETURN((ha_rows)1) ;
@@ -4702,6 +5011,7 @@ ha_rows ha_mroonga::generic_records_in_range_geo(uint key_nr,
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows row_count;
+  int error;
 
   if (!range_min) {
     DBUG_PRINT("info",
@@ -4713,6 +5023,10 @@ ha_rows ha_mroonga::generic_records_in_range_geo(uint key_nr,
                ("mroonga: range max is specified for geometry range search"));
     DBUG_RETURN(HA_POS_ERROR);
   }
+  error = mrn_change_encoding(ctx,
+    table->key_info[key_nr].key_part->field->charset());
+  if (error)
+    DBUG_RETURN(error);
   if (!(range_min->flag & HA_READ_MBR_CONTAIN)) {
     push_warning_unsupported_spatial_index_search(range_min->flag);
     row_count = grn_table_size(ctx, grn_table);
@@ -4865,12 +5179,16 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
 
   bool is_multiple_column_index = key_info.key_parts > 1;
   if (is_multiple_column_index) {
+    mrn_change_encoding(ctx, NULL);
     flags |= GRN_CURSOR_PREFIX;
     uint key_length = calculate_key_len(table, active_index, key, keypart_map);
     val_min = mrn_multiple_column_key_encode(&key_info,
                                              key, key_length,
                                              key_min[active_index], &size_min);
   } else if (mrn_is_geo_key(&key_info)) {
+    error = mrn_change_encoding(ctx, key_info.key_part->field->charset());
+    if (error)
+      DBUG_RETURN(error);
     error = generic_geo_open_cursor(key, find_flag);
     if (!error) {
       error = storage_get_next_record(buf);
@@ -4879,6 +5197,9 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
     Field *field = key_part.field;
+    error = mrn_change_encoding(ctx, field->charset());
+    if (error)
+      DBUG_RETURN(error);
 
     if (find_flag == HA_READ_KEY_EXACT) {
       const char *column_name = field->field_name;
@@ -4992,7 +5313,7 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
   uint key_nr = active_index;
   KEY key_info = table->key_info[key_nr];
 
-  int flags = GRN_CURSOR_DESCENDING;
+  int flags = GRN_CURSOR_DESCENDING, error;
   uint size_min = 0, size_max = 0;
   const void *val_min = NULL, *val_max = NULL;
 
@@ -5000,6 +5321,7 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
 
   bool is_multiple_column_index = key_info.key_parts > 1;
   if (is_multiple_column_index) {
+    mrn_change_encoding(ctx, NULL);
     flags |= GRN_CURSOR_PREFIX;
     uint key_length = calculate_key_len(table, active_index, key, keypart_map);
     val_min = mrn_multiple_column_key_encode(&key_info,
@@ -5008,6 +5330,9 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
     Field *field = key_part.field;
+    error = mrn_change_encoding(ctx, field->charset());
+    if (error)
+      DBUG_RETURN(error);
 
     mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
     val_min = key_min[key_nr];
@@ -5039,7 +5364,7 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  int error = storage_get_next_record(buf);
+  error = storage_get_next_record(buf);
   DBUG_RETURN(error);
 }
 
@@ -5168,6 +5493,7 @@ int ha_mroonga::storage_index_first(uchar *buf)
   clear_search_result();
   int flags = GRN_CURSOR_ASCENDING;
   uint pkey_nr = table->s->primary_key;
+  mrn_change_encoding(ctx, NULL);
   if (active_index == pkey_nr) {
     DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
@@ -5232,6 +5558,7 @@ int ha_mroonga::storage_index_last(uchar *buf)
   clear_search_result();
   int flags = GRN_CURSOR_DESCENDING;
   uint pkey_nr = table->s->primary_key;
+  mrn_change_encoding(ctx, NULL);
   if (active_index == pkey_nr) {
     DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
@@ -5351,7 +5678,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
   MRN_DBUG_ENTER_METHOD();
   check_count_skip(start_key ? start_key->keypart_map : 0,
                    end_key ? end_key->keypart_map : 0, FALSE);
-  int flags = 0;
+  int flags = 0, error;
   uint size_min = 0, size_max = 0;
   const void *val_min = NULL, *val_max = NULL;
   KEY key_info = table->s->key_info[active_index];
@@ -5360,6 +5687,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
 
   bool is_multiple_column_index = key_info.key_parts > 1;
   if (is_multiple_column_index) {
+    mrn_change_encoding(ctx, NULL);
     if (start_key && end_key &&
         start_key->length == end_key->length &&
         memcmp(start_key->key, end_key->key, start_key->length) == 0) {
@@ -5390,6 +5718,9 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
     Field *field = key_part.field;
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
+    error = mrn_change_encoding(ctx, field->charset());
+    if (error)
+      DBUG_RETURN(error);
     if (start_key) {
       mrn_set_key_buf(ctx, field, start_key->key, key_min[active_index],
                       &size_min);
@@ -5453,7 +5784,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
   }
-  int error = storage_get_next_record(table->record[0]);
+  error = storage_get_next_record(table->record[0]);
   DBUG_RETURN(error);
 }
 
@@ -5521,6 +5852,7 @@ int ha_mroonga::generic_ft_init()
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+  mrn_change_encoding(ctx, NULL);
   if (!cursor) {
     cursor = grn_table_cursor_open(ctx, matched_record_keys, NULL, 0, NULL, 0, 0,
                                    -1, 0);
@@ -5589,6 +5921,7 @@ void ha_mroonga::ft_end()
 void ha_mroonga::merge_matched_record_keys(grn_obj *matched_result)
 {
   MRN_DBUG_ENTER_METHOD();
+  mrn_change_encoding(ctx, NULL);
 
   grn_operator operation = GRN_OP_AND;
 
@@ -5623,6 +5956,7 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
 
   clear_cursor();
 
+  mrn_change_encoding(ctx, system_charset_info);
   struct st_mrn_ft_info *info = new st_mrn_ft_info();
   info->mroonga = this;
   info->ctx = ctx;
@@ -5658,6 +5992,8 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   grn_obj *expression, *expression_variable;
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table,
                             expression, expression_variable);
+
+  mrn_change_encoding(ctx, table->key_info[key_nr].key_part->field->charset());
   if (flags & FT_BOOL) {
     const char *keyword, *keyword_original;
     uint keyword_length, keyword_length_original;
@@ -5811,6 +6147,7 @@ int ha_mroonga::storage_ft_read(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   grn_id found_record_id;
+  mrn_change_encoding(ctx, NULL);
 
   found_record_id = grn_table_cursor_next(ctx, cursor);
   if (ctx->rc) {
@@ -6025,6 +6362,7 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
 {
   MRN_DBUG_ENTER_METHOD();
   grn_obj *tokenizer;
+  mrn_change_encoding(ctx, system_charset_info);
   tokenizer = grn_ctx_get(ctx, name, name_length);
   if (!tokenizer) {
     char message[MRN_BUFFER_SIZE];
@@ -6054,6 +6392,7 @@ int ha_mroonga::wrapper_get_next_record(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+  mrn_change_encoding(ctx, NULL);
   do {
     GRN_BULK_REWIND(&key_buffer);
     if (cursor_geo) {
@@ -6453,6 +6792,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
           (*sort_keys)[i].key = score_column;
         } else {
+          mrn_change_encoding(ctx, system_charset_info);
           (*sort_keys)[i].key = grn_obj_column(ctx, target_table,
                                                column_name, column_name_size);
         }
@@ -6484,6 +6824,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
 void ha_mroonga::store_to_field(grn_obj *col, grn_id id, Field *field)
 {
   grn_obj buf;
+  mrn_change_encoding(ctx, field->charset());
   field->set_notnull();
   switch (field->type()) {
   case MYSQL_TYPE_BIT :
@@ -7538,9 +7879,12 @@ int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
                                      const char *from_table_name,
                                      const char *to_table_name)
 {
-  int error = 0;
+  int error;
   grn_rc rc;
   MRN_DBUG_ENTER_METHOD();
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
 
   error = ensure_database_open(from);
   if (error)
@@ -7597,12 +7941,15 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
                                      const char *from_table_name,
                                      const char *to_table_name)
 {
-  int error = 0;
+  int error;
   grn_rc rc;
   TABLE_SHARE *tmp_table_share = tmp_share->table_share;
   MRN_DBUG_ENTER_METHOD();
   char from_index_name[MRN_MAX_PATH_SIZE];
   char to_index_name[MRN_MAX_PATH_SIZE];
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
 
   error = ensure_database_open(from);
   if (error)
@@ -8202,6 +8549,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
           p_key_info, p_key_info->key_length);
         int added;
         grn_id record_id;
+        mrn_change_encoding(ctx, NULL);
         record_id = grn_table_add(ctx, grn_table,
           GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key), &added);
         if (record_id == GRN_ID_NIL)
@@ -8230,6 +8578,9 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
 
             if (field->is_null())
               continue;
+            res = mrn_change_encoding(ctx, field->charset());
+            if (res)
+              break;
 
             int new_column_size;
             mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
@@ -8522,6 +8873,10 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
   char grn_table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
+  res = mrn_change_encoding(ctx, system_charset_info);
+  if (res)
+    DBUG_RETURN(res);
+
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) share->table_name,
              (const uchar *) share->table_name + share->table_name_length);
@@ -8558,11 +8913,16 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
 int ha_mroonga::storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
                                            uint num_of_keys)
 {
+  int error;
   uint i;
   KEY *key_info = table_share->key_info;
   char grn_table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) share->table_name,
              (const uchar *) share->table_name + share->table_name_length);
