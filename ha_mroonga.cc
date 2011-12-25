@@ -3977,16 +3977,16 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
                             GRN_TEXT_LEN(&key_buffer),
                             &added);
   if (record_id == GRN_ID_NIL) {
+    DBUG_PRINT("info", ("mroonga: failed to add a new record into groonga"));
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
              "failed to add a new record into groonga: key=<%.*s>",
              (int)GRN_TEXT_LEN(&key_buffer),
              GRN_TEXT_VALUE(&key_buffer));
     error = ER_ERROR_ON_WRITE;
-    my_message(error, error_message, MYF(0));
-  }
-  if (error) {
-    DBUG_RETURN(error);
+    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN, error,
+                 error_message);
+    DBUG_RETURN(0);
   }
 
 #ifndef DBUG_OFF
@@ -4312,12 +4312,14 @@ int ha_mroonga::wrapper_get_record_id(uchar *data, grn_id *record_id,
   *record_id = grn_table_get(ctx, grn_table,
                              GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key));
   if (*record_id == GRN_ID_NIL) {
+    DBUG_PRINT("info", ("mroonga: %s", context));
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
              "%s: key=<%.*s>",
              context, (int)GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
     error = ER_ERROR_ON_WRITE;
-    my_message(error, error_message, MYF(0));
+    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN, error,
+                 error_message);
   }
   grn_obj_unlink(ctx, &key);
 
@@ -4392,7 +4394,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     field->move_field_offset(-ptr_diff);
   }
   if (error) {
-    DBUG_RETURN(error);
+    DBUG_RETURN(0);
   }
 
 #ifndef DBUG_OFF
@@ -4708,7 +4710,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
                                 "failed to get record ID "
                                 "for deleting from groonga");
   if (error) {
-    DBUG_RETURN(error);
+    DBUG_RETURN(0);
   }
 
 #ifndef DBUG_OFF
