@@ -5,16 +5,41 @@ News
 
 .. _release-1-11:
 
-Release 1.11 - ????/??/??
+Release 1.11 - 2011/12/29
 -------------------------
 
 Improvements
 ^^^^^^^^^^^^
 
+* Supported MySQL 5.5.19.
+* Supported MySQL 5.6.4.
+* Dropped MySQL 5.6.3 support.
+* [wrapper mode] Supported REPAIR TABLE. [#1191]
+* Suppress strict-aliasing warnings. [groonga-dev,00659]
+  [Reported by Kazuhiko Shiozaki]
+* Supported utf8, binary, ascii, latin1, cp932, sjis,
+  eucjpms, ujis and koi8r charset. [#1160] [Reported by nobody]
+* [wrapper mode] Improved rollback handling on
+  delete. [#1224] [Reported by Koichi Shishikura]
+
 Fixes
 ^^^^^
 
-* [storage mode] fix a bug that full text search on a table without primary key returns empty results #1193.
+* [storage mode] Fixed a bug that full text search on a
+  table without primary key returns empty results. [#1193]
+  [Reported by Kazuhiko Shiozaki]
+* Fixed -Wno- compiler flag detection. [Patch by Arnaud Fontaine]
+* [wrapper mode] Fixed a problem that index isn't
+  used for full count. [#1196][groonga-dev,0653] [Reported by Kaneoka]
+
+Thanks
+^^^^^^
+
+* Kazuhiko Shiozaki
+* Arnaud Fontaine
+* Kaneoka
+* nobody
+* Koichi Shishikura
 
 .. _release-1-10:
 
