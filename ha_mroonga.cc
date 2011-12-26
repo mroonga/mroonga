@@ -4425,8 +4425,17 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
 
       grn_rc rc;
       if (old_record_id == new_record_id) {
-        rc = grn_column_index_update(ctx, index_column, old_record_id, j + 1,
-                                     &old_value_buffer, &new_value_buffer);
+        if (added) {
+          rc = grn_column_index_update(ctx, index_column, old_record_id, j + 1,
+                                       &old_value_buffer, NULL);
+          if (!rc) {
+            rc = grn_column_index_update(ctx, index_column, new_record_id, j + 1,
+                                         NULL, &new_value_buffer);
+          }
+        } else {
+          rc = grn_column_index_update(ctx, index_column, old_record_id, j + 1,
+                                       &old_value_buffer, &new_value_buffer);
+        }
       } else {
         rc = grn_column_index_update(ctx, index_column, old_record_id, j + 1,
                                      &old_value_buffer, NULL);
