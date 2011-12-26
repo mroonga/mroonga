@@ -43,6 +43,7 @@
 extern HASH mrn_open_tables;
 extern pthread_mutex_t mrn_open_tables_mutex;
 extern char *mrn_default_parser;
+extern char *mrn_default_wrapper_engine;
 extern handlerton *mrn_hton_ptr;
 extern HASH mrn_allocated_thds;
 extern pthread_mutex_t mrn_allocated_thds_mutex;
@@ -412,6 +413,19 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
             MYF(0), tmp_ptr);
           goto error;
       }
+    }
+  }
+
+  if (!share->engine && mrn_default_wrapper_engine)
+  {
+    share->engine_length = strlen(mrn_default_wrapper_engine);
+    if (
+      !(share->engine = mrn_create_string(
+        mrn_default_wrapper_engine,
+        share->engine_length))
+    ) {
+      error = HA_ERR_OUT_OF_MEM;
+      goto error;
     }
   }
 

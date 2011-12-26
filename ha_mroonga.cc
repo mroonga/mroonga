@@ -456,6 +456,7 @@ static bool mrn_log_file_opened = false;
 static grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 static ulong mrn_log_level = (ulong) mrn_log_level_default;
 char *mrn_default_parser = NULL;
+char *mrn_default_wrapper_engine = NULL;
 static char *mrn_libgroonga_version = (char *) grn_get_version();
 static char *mrn_version = (char *) MRN_VERSION;
 
@@ -645,6 +646,13 @@ static bool mrn_dry_write(THD *thd)
   DBUG_RETURN(dry_write_p);
 }
 
+static MYSQL_SYSVAR_STR(default_wrapper_engine, mrn_default_wrapper_engine,
+                        PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_READONLY,
+                        "The default engine for wrapper mode",
+                        NULL,
+                        NULL,
+                        NULL);
+
 static MYSQL_SYSVAR_STR(libgroonga_version, mrn_libgroonga_version,
                         PLUGIN_VAR_NOCMDOPT | PLUGIN_VAR_READONLY,
                         "The version of libgroonga",
@@ -665,6 +673,7 @@ struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(log_file),
   MYSQL_SYSVAR(default_parser),
   MYSQL_SYSVAR(dry_write),
+  MYSQL_SYSVAR(default_wrapper_engine),
   MYSQL_SYSVAR(libgroonga_version),
   MYSQL_SYSVAR(version),
   NULL
