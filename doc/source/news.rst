@@ -20,7 +20,7 @@ Improvements
 * Supported utf8, binary, ascii, latin1, cp932, sjis,
   eucjpms, ujis and koi8r charset. [#1160] [Reported by nobody]
 * [wrapper mode] Improved rollback handling on
-  delete. [#1224]
+  delete. [#1224] [Reported by Koichi Shishikura]
 
 Fixes
 ^^^^^
@@ -39,6 +39,7 @@ Thanks
 * Arnaud Fontaine
 * Kaneoka
 * nobody
+* Koichi Shishikura
 
 .. _release-1-10:
 
