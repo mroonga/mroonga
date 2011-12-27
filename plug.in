@@ -2,5 +2,5 @@ MYSQL_STORAGE_ENGINE(groonga,,[groonga storage engine],
 [Fulltext search, column base],
 [max,max-no-ndb])
 MYSQL_PLUGIN_DIRECTORY(groonga, [storage/groonga-storage-engine])
-MYSQL_PLUGIN_STATIC(groonga,  [libgroonga.la])
+MYSQL_PLUGIN_STATIC(groonga,  [libgroonga.a])
 MYSQL_PLUGIN_DYNAMIC(groonga, [ha_groonga.la])
