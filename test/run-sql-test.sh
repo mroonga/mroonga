@@ -93,15 +93,11 @@ fi
 if ! test -d "${groonga_wrapper_innodb_test_suite_dir}"; then
     cp -rp "${innodb_test_suite_dir}" "${groonga_wrapper_innodb_test_suite_dir}"
     ruby -i'' \
-	-pe "\$_.gsub!(/\bengine\s*=\s*innodb\b/i,
-                      \"ENGINE = groonga COMMENT = 'ENGINE \\\"InnoDB\\\"'\")
-            " \
-	${groonga_wrapper_innodb_test_suite_dir}/t/*.test
-    ruby -i'' \
 	-pe "\$_.gsub!(/\bengine\s*=\s*innodb\b([^;\\n]*)/i,
                       \"ENGINE=groonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
             " \
-	${groonga_wrapper_innodb_test_suite_dir}/r/*.result
+	${groonga_wrapper_innodb_test_suite_dir}/r/*.result \
+	${groonga_wrapper_innodb_test_suite_dir}/t/*.test
     sed -i'' \
 	-e '1 i --source include/have_groonga.inc' \
 	${groonga_wrapper_innodb_test_suite_dir}/t/*.test
