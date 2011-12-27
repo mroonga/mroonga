@@ -85,6 +85,21 @@ for test_suite_name in $(echo $test_suite_names | sed -e 's/,/ /g'); do
     fi
 done
 
+innodb_test_suite_dir="${build_test_suites_dir}/innodb"
+groonga_wrapper_innodb_test_suite_dir="${build_test_suites_dir}/groonga_wrapper_innodb"
+if ! test -d "${groonga_wrapper_innodb_test_suite_dir}"; then
+    cp -rp "${innodb_test_suite_dir}" "${groonga_wrapper_innodb_test_suite_dir}"
+    ruby -i'' \
+	-pe "\$_.gsub!(/\bengine\s*=\s*innodb\b/i,
+                      \"ENGINE = groonga COMMENT = 'ENGINE \\\"InnoDB\\\"'\")
+            " \
+	${groonga_wrapper_innodb_test_suite_dir}/r/*.result \
+	${groonga_wrapper_innodb_test_suite_dir}/t/*.test
+    sed -i'' \
+	-e '1 i --source include/have_groonga.inc' \
+	${groonga_wrapper_innodb_test_suite_dir}/t/*.test
+fi
+
 if test -n "${plugins_dir}"; then
     make -C ${top_dir} \
 	install-pluginLTLIBRARIES \
