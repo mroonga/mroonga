@@ -19,6 +19,6 @@ override_dh_auto_test:
 # 	dh_install
 # 	if test -x /usr/bin/dh_apparmor; then			\
 # 	  dh_apparmor						\
-# 	    -pmysql-server-groonga				\
+# 	    -pmysql-server-mroonga				\
 # 	    --profile-name=usr.lib.mysql.plugin.ha_groonga;	\
 # 	fi
