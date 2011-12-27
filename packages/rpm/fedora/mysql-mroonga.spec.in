@@ -102,6 +102,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Dec 29 2011 Kouhei Sutou <kou@clear-code.com> - 1.11-0
+- new upstream release.
+
 * Sat Oct 29 2011 Kouhei Sutou <kou@clear-code.com> - 1.10-0
 - new upstream release.
 - groonga storage engine -> mroonga.
