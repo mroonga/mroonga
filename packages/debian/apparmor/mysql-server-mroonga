@@ -3,4 +3,4 @@
 /etc/mecabrc r,
 # /usr/share/mecab/ r,
 # /usr/share/mecab/** r,
-#include <local/mysql-server-groonga>
+#include <local/mysql-server-mroonga>

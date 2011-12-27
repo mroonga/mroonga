@@ -1,6 +1,8 @@
 mroonga (1.11-1) unstable; urgency=low
 
   * New upstream release.
+  * Change apparmor configuration file name:
+    mysql-server-groonga -> mysql-server-mroonga
 
  -- Kouhei Sutou <kou@clear-code.com>  Thu, 29 Dec 2011 00:00:00 +0900
 
