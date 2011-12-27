@@ -97,7 +97,9 @@ if ! test -d "${groonga_wrapper_innodb_test_suite_dir}"; then
                       \"ENGINE=groonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
             " \
 	${groonga_wrapper_innodb_test_suite_dir}/r/*.result \
-	${groonga_wrapper_innodb_test_suite_dir}/t/*.test
+	${groonga_wrapper_innodb_test_suite_dir}/t/*.test \
+	${groonga_wrapper_innodb_test_suite_dir}/include/*.inc \
+	${build_test_include_dir}/innodb_*.inc # over our work. :<
     sed -i'' \
 	-e '1 i --source include/have_groonga.inc' \
 	${groonga_wrapper_innodb_test_suite_dir}/t/*.test
