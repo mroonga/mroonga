@@ -19,10 +19,10 @@ ha_groonga_la_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_SOURCES  = ha_mroonga.cc mrn_sys.c mrn_table.cc
 
-plugin_LIBRARIES          = libha_groonga.a
-libha_groonga_a_CXXFLAGS  = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
-libha_groonga_a_CFLAGS    = $(AM_CFLAGS) $(MYSQL_CFLAGS)
-libha_groonga_a_SOURCES   = ha_mroonga.cc mrn_sys.c mrn_table.cc
+plugin_LIBRARIES       = libgroonga.a
+libgroonga_la_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
+libgroonga_la_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS)
+libgroonga_la_SOURCES  = ha_mroonga.cc mrn_sys.c mrn_table.cc
 
 SUBDIRS =					\
 	test					\
