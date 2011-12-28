@@ -13,16 +13,21 @@ noinst_HEADERS =				\
 	mrn_mysql.h				\
 	mrn_mysql_compat.h
 
+sources =					\
+	ha_mroonga.cc				\
+	mrn_sys.c				\
+	mrn_table.cc
+
 plugin_LTLIBRARIES     = ha_groonga.la
 ha_groonga_la_LDFLAGS  = -module $(GROONGA_LIBS)
 ha_groonga_la_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 ha_groonga_la_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
-ha_groonga_la_SOURCES  = ha_mroonga.cc mrn_sys.c mrn_table.cc
+ha_groonga_la_SOURCES  = $(sources)
 
 plugin_LIBRARIES       = libgroonga.a
-libgroonga_a_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
-libgroonga_a_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS)
-libgroonga_a_SOURCES  = ha_mroonga.cc mrn_sys.c mrn_table.cc
+libgroonga_a_CXXFLAGS  = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
+libgroonga_a_CFLAGS    = $(AM_CFLAGS) $(MYSQL_CFLAGS)
+libgroonga_a_SOURCES   = $(sources)
 
 SUBDIRS =					\
 	test					\

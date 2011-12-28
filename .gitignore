@@ -28,7 +28,7 @@ cscope.out
 /missing
 /stamp-h1
 /src/scratch
-/libha_groonga.a
+/libgroonga.a
 /packages/rpm/*/*.spec
 /packages/yum/fedora/
 /packages/yum/centos/
