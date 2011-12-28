@@ -56,6 +56,11 @@
 #  define MRN_PLUGIN_HAVE_FLAGS 1
 #endif
 
+// for MySQL < 5.5
+#ifndef MY_ALL_CHARSETS_SIZE
+#  define MY_ALL_CHARSETS_SIZE 256
+#endif
+
 #ifndef MRN_MARIADB_P
   typedef char *range_id_t;
 #endif
