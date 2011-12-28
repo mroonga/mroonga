@@ -940,14 +940,14 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_ENUM:         // ENUM; <= 2bytes
-    // type = GRN_DB_INT8;         // 1byte
-    // XXX: Should we use INT16?
-    type = GRN_DB_INT16;        // 2bytes
+    type = GRN_DB_INT8;         // 1byte
+    // XXX: We should use INT16
+    // type = GRN_DB_INT16;        // 2bytes
     break;
   case MYSQL_TYPE_SET:          // SET; <= 8bytes
-    // type = GRN_DB_INT8;         // 1byte
-    // XXX: Should we use INT64?
-    type = GRN_DB_INT64;        // 8bytes
+    type = GRN_DB_INT8;         // 1byte
+    // XXX: We should use INT64.
+    // type = GRN_DB_INT64;        // 8bytes
     break;
   case MYSQL_TYPE_TINY_BLOB:    // TINYBLOB; <= 256bytes + 1byte
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
