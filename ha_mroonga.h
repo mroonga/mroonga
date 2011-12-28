@@ -101,6 +101,11 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_IS_ATTACHED_CHILDREN
 #endif
 
+#ifdef MRN_MARIADB_P
+#  define MRN_HAVE_HA_EXTRA_DETACH_CHILD
+#  define MRN_HAVE_HA_EXTRA_PREPARE_FOR_FORCED_CLOSE
+#endif
+
 class ha_mroonga;
 
 /* structs */

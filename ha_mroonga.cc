@@ -435,6 +435,16 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_DETACH_CHILDREN:
     inspected = "HA_EXTRA_DETACH_CHILDREN";
     break;
+#ifdef MRN_HAVE_HA_EXTRA_DETACH_CHILD
+  case HA_EXTRA_DETACH_CHILD:
+    inspected = "HA_EXTRA_DETACH_CHILD";
+    break;
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_PREPARE_FOR_FORCED_CLOSE
+  case HA_EXTRA_PREPARE_FOR_FORCED_CLOSE:
+    inspected = "HA_EXTRA_PREPARE_FOR_FORCED_CLOSE";
+    break;
+#endif
   }
   return inspected;
 }
