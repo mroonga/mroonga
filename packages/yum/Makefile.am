@@ -1,6 +1,9 @@
 DISTRIBUTIONS = fedora centos
 ARCHITECTURES = i386 x86_64
 CHROOT_BASE = /var/lib/chroot
+HAVE_DEVELOPMENT_BRANCH = no
+USE_RPMFORGE = no
+USE_ATRPMS = no
 
 all:
 
@@ -38,9 +41,17 @@ upload: ensure-rsync-path
 build: build-in-chroot
 
 build-in-chroot: source
-	./build-in-chroot.sh				\
-	  mysql-mroonga $(VERSION) $(CHROOT_BASE)	\
-	  '$(ARCHITECTURES)' '$(DISTRIBUTIONS)'
+	./build-in-chroot.sh			\
+	  mysql-mroonga				\
+	  $(VERSION)				\
+	  $(top_builddir)/$(PACKAGE)		\
+	  ../rpm				\
+	  $(CHROOT_BASE)			\
+	  '$(ARCHITECTURES)'			\
+	  '$(DISTRIBUTIONS)'			\
+	  '$(HAVE_DEVELOPMENT_BRANCH)'		\
+	  '$(USE_RPMFORGE)'			\
+	  '$(USE_ATRPMS)'
 
 source: ../$(PACKAGE)-$(VERSION).tar.gz
 

@@ -1,16 +1,21 @@
 #!/bin/sh
 
-if [ $# != 5 ]; then
-    echo "Usage: $0 PACKAGE VERSION CHROOT_BASE ARCHITECTURES DISTRIBUTIONS"
-    echo " e.g.: $0 groonga 1.1.1 /var/lib/chroot 'i386 x86_64' 'fedora centos'"
+if [ $# != 10 ]; then
+    echo "Usage: $0 PACKAGE VERSION SOURCE_BASE_NAME SPEC_DIR CHROOT_BASE ARCHITECTURES DISTRIBUTIONS HAVE_DEVELOPMENT_BRANCH USE_RPMFORGE USE_ATRPMS"
+    echo " e.g.: $0 milter-manager 1.1.1 ../milter-manager ../rpm /var/lib/chroot 'i386 x86_64' 'fedora centos' yes no no"
     exit 1
 fi
 
 PACKAGE=$1
 VERSION=$2
-CHROOT_BASE=$3
-ARCHITECTURES=$4
-DISTRIBUTIONS=$5
+SOURCE_BASE_NAME=$3
+SPEC_DIR=$4
+CHROOT_BASE=$5
+ARCHITECTURES=$6
+DISTRIBUTIONS=$7
+HAVE_DEVELOPMENT_BRANCH=$8
+USE_RPMFORGE=$9
+USE_ATRPMS=$10
 
 PATH=/usr/local/sbin:/usr/sbin:$PATH
 
@@ -47,14 +52,16 @@ build_chroot()
         distribution_architecture=$architecture
     else
 	rinse_architecture=$architecture
-	case $distribution_name in
-	    fedora)
-		distribution_architecture=i686
-		;;
-	    *)
-		distribution_architecture=$architecture
-		;;
-	esac
+	if [ "$distribution_name-$distribution_version" = "centos-5" ]; then
+	    distribution_architecture=$architecture
+	else
+	    distribution_architecture=i686
+	fi
+    fi
+    if [ "$distribution_name-$distribution_version" = "fedora-16" ]; then
+	rinse_distribution_version="15"
+    else
+	rinse_distribution_version="$distribution_version"
     fi
 
     run_sudo mkdir -p ${base_dir}/etc/rpm
@@ -62,7 +69,7 @@ build_chroot()
     run_sudo sh -c "echo ${rpm_platform} > ${base_dir}/etc/rpm/platform"
     run_sudo rinse \
 	--arch $rinse_architecture \
-	--distribution $distribution_name-$distribution_version \
+	--distribution $distribution_name-$rinse_distribution_version \
 	--directory $base_dir
     run_sudo rinse --arch $rinse_architecture --clean-cache
 
@@ -73,6 +80,13 @@ build_chroot()
     run_sudo mount ${base_dir}/dev
     run_sudo mount ${base_dir}/dev/pts
     run_sudo mount ${base_dir}/proc
+
+    if [ "$distribution_name-$distribution_version" = "fedora-16" ]; then
+	yes | run_sudo su -c "chroot ${base_dir} rpm --import https://fedoraproject.org/static/A82BA4B7.txt"
+	run_sudo su -c "chroot ${base_dir} yum -y update yum"
+	run_sudo su -c "chroot ${base_dir} yum -y clean all"
+	run_sudo su -c "chroot ${base_dir} yum -y --releasever=16 --disableplugin=presto distro-sync"
+    fi
 }
 
 build()
@@ -87,27 +101,45 @@ build()
 	run build_chroot $architecture $distribution $distribution_version
     fi
 
-    source_dir=${script_base_dir}/..
     build_user=${PACKAGE}-build
     build_user_dir=${base_dir}/home/${build_user}
     rpm_base_dir=${build_user_dir}/rpm
     rpm_dir=${rpm_base_dir}/RPMS/${architecture}
     srpm_dir=${rpm_base_dir}/SRPMS
     pool_base_dir=${distribution}/${distribution_version}
+    if test "${HAVE_DEVELOPMENT_BRANCH}" = "yes"; then
+	minor_version=$(echo $VERSION | ruby -pe '$_.gsub!(/\A\d+\.(\d+)\..*/, "\\1")')
+	if test $(expr ${minor_version} % 2) -eq 0; then
+	    branch_name=stable
+	else
+	    branch_name=development
+	fi
+	pool_base_dir=${pool_base_dir}/${branch_name}
+    fi
     binary_pool_dir=$pool_base_dir/$architecture/Packages
     source_pool_dir=$pool_base_dir/source/SRPMS
-    run cp $source_dir/mroonga-${VERSION}.tar.gz \
-	${CHROOT_BASE}/$target/tmp/
-    run cp $source_dir/rpm/${distribution}/${PACKAGE}.spec \
-	${CHROOT_BASE}/$target/tmp/
+    if test -f ${SOURCE_BASE_NAME}-${VERSION}-*.src.rpm; then
+	run cp ${SOURCE_BASE_NAME}-${VERSION}-*.src.rpm \
+	    ${CHROOT_BASE}/$target/tmp/
+    else
+	run cp ${SOURCE_BASE_NAME}-${VERSION}.* \
+	    ${CHROOT_BASE}/$target/tmp/
+	run cp ${SPEC_DIR}/${distribution}/${PACKAGE}.spec \
+	    ${CHROOT_BASE}/$target/tmp/
+    fi
     run echo $PACKAGE > ${CHROOT_BASE}/$target/tmp/build-package
     run echo $VERSION > ${CHROOT_BASE}/$target/tmp/build-version
+    run echo $(basename ${SOURCE_BASE_NAME}) > \
+	${CHROOT_BASE}/$target/tmp/build-source-base-name
     run echo $build_user > ${CHROOT_BASE}/$target/tmp/build-user
     run cp ${script_base_dir}/${PACKAGE}-depended-packages \
 	${CHROOT_BASE}/$target/tmp/depended-packages
-    run cp ${script_base_dir}/build-rpm.sh \
-	${CHROOT_BASE}/$target/tmp/
-    # run_sudo rm -rf $rpm_dir $srpm_dir
+    run echo $USE_RPMFORGE > ${CHROOT_BASE}/$target/tmp/build-use-rpmforge
+    run echo $USE_ATRPMS > ${CHROOT_BASE}/$target/tmp/build-use-atrpms
+    run cp ${script_base_dir}/${PACKAGE}-build-options \
+	${CHROOT_BASE}/$target/tmp/build-options
+    run cp ${script_base_dir}/build-rpm.sh ${CHROOT_BASE}/$target/tmp/
+    run_sudo rm -rf $rpm_dir $srpm_dir
     run_sudo su -c "chroot ${CHROOT_BASE}/$target /tmp/build-rpm.sh"
     run mkdir -p $binary_pool_dir
     run mkdir -p $source_pool_dir
@@ -133,7 +165,7 @@ for architecture in $ARCHITECTURES; do
     for distribution in $DISTRIBUTIONS; do
 	case $distribution in
 	    fedora)
-		distribution_versions="15"
+		distribution_versions="16"
 		;;
 	    centos)
 		distribution_versions="5 6"
