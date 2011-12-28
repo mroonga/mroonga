@@ -15,10 +15,12 @@ override_dh_auto_configure:
 # disable 'make check'.
 override_dh_auto_test:
 
-# override_dh_install:
-# 	dh_install
-# 	if test -x /usr/bin/dh_apparmor; then			\
-# 	  dh_apparmor						\
-# 	    -pmysql-server-mroonga				\
-# 	    --profile-name=usr.lib.mysql.plugin.ha_groonga;	\
-# 	fi
+override_dh_install:
+	mv debian/tmp/usr/share/doc/mroonga/ \
+	  debian/tmp/usr/share/doc/mysql-server-mroonga-doc/
+	dh_install
+#	if test -x /usr/bin/dh_apparmor; then			\
+#	  dh_apparmor						\
+#	    -pmysql-server-mroonga				\
+#	    --profile-name=usr.lib.mysql.plugin.ha_groonga;	\
+#	fi
