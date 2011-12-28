@@ -1552,6 +1552,26 @@ mysql_declare_plugin(mroonga)
 }, i_s_mrn_stats
 mysql_declare_plugin_end;
 
+#ifdef MRN_MARIADB_P
+maria_declare_plugin(groonga)
+{
+  MYSQL_STORAGE_ENGINE_PLUGIN,
+  &storage_engine_structure,
+  "groonga",
+  "Tetsuro IKEDA",
+  "Fulltext search, column base",
+  PLUGIN_LICENSE_GPL,
+  mrn_init,
+  mrn_deinit,
+  MRN_VERSION_IN_HEX,
+  mrn_status_variables,
+  mrn_system_variables,
+  MRN_VERSION,
+  MariaDB_PLUGIN_MATURITY_EXPERIMENTAL
+}
+maria_declare_plugin_end;
+#endif
+
 static void mrn_generic_ft_close_search(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
