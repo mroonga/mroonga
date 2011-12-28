@@ -6,7 +6,7 @@
 %define mysql_dist    el6_0.1
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/centos/6/updates/SRPMS
 %else
-%define mysql_version 5.5.18
+%define mysql_version 5.5.19
 %define mysql_release 1
 %define mysql_dist    rhel5
 %define mysql_download_base_url http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5
