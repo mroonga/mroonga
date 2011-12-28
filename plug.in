@@ -1,4 +1,4 @@
-MYSQL_STORAGE_ENGINE(groonga,,[groonga],
+MYSQL_STORAGE_ENGINE(groonga,,[mroonga],
 [[CJK-ready fulltext search, column store]],
 [max,max-no-ndb])
 MYSQL_PLUGIN_DIRECTORY(groonga, [storage/mroonga])
