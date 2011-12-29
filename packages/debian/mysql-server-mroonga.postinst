@@ -15,7 +15,7 @@ install_apparmor() {
     mysql_apparmor_profile_name=usr.sbin.mysqld
     mysql_apparmor_profile=/etc/apparmor.d/${mysql_apparmor_profile_name}
     mysql_local_apparmor_profile=/etc/apparmor.d/local/${mysql_apparmor_profile_name}
-    apparmor_profile_name=mysql-server-groonga
+    apparmor_profile_name=mysql-server-mroonga
     include_profile="#include <abstractions/${apparmor_profile_name}>"
     local_apparmor_profile=/etc/apparmor.d/local/${apparmor_profile_name}
     if test -f "${mysql_local_apparmor_profile}"; then
@@ -33,7 +33,7 @@ install_apparmor() {
 	    cat <<EOF >> "${mysql_abstraction_apparmor_profile}"
 
 # ${apparmor_profile_name}: START
-# Added by mysql-server-groonga.
+# Added by mysql-server-mroonga.
 ${mysql_plugin_dir}/ r,
 ${mysql_plugin_dir}/*.so* mr,
 ${include_profile}
