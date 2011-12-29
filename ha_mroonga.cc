@@ -79,6 +79,16 @@ extern pthread_mutex_t LOCK_open;
 #  define MRN_ORDER_IS_ASC(order) ((order)->asc)
 #endif
 
+#define MRN_STRINGIFY(macro_or_string)  MRN_STRINGIFY_ARG(macro_or_string)
+#define MRN_STRINGIFY_ARG(contents)     #contents
+
+#ifdef MRN_USE_DEPRECATED_NAME
+#  define MRN_PLUGIN_NAME groonga
+#else
+#  define MRN_PLUGIN_NAME mroonga
+#endif
+#define MRN_PLUGIN_NAME_STRING MRN_STRINGIFY(MRN_PLUGIN_NAME)
+
 static const char *index_column_name = "index";
 
 #ifdef __cplusplus
@@ -514,8 +524,10 @@ static struct st_mysql_storage_engine storage_engine_structure =
 
 static struct st_mysql_show_var mrn_status_variables[] =
 {
-  {"groonga_count_skip", (char *) &mrn_count_skip, SHOW_LONG},
-  {"groonga_fast_order_limit", (char *) &mrn_fast_order_limit, SHOW_LONG},
+  {MRN_PLUGIN_NAME_STRING "_count_skip",
+   (char *)&mrn_count_skip, SHOW_LONG},
+  {MRN_PLUGIN_NAME_STRING "_fast_order_limit",
+   (char *)&mrn_fast_order_limit, SHOW_LONG},
   {NullS, NullS, SHOW_LONG}
 };
 
@@ -602,7 +614,7 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
 
 static MYSQL_SYSVAR_STR(log_file, mrn_log_file_path,
                         PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
-                        "log file for groonga",
+                        "log file for " MRN_PLUGIN_NAME_STRING,
                         NULL,
                         mrn_log_file_update,
                         MRN_LOG_FILE_PATH);
@@ -794,9 +806,9 @@ struct st_mysql_plugin i_s_mrn_stats =
 {
   MYSQL_INFORMATION_SCHEMA_PLUGIN,
   &i_s_info,
-  "groonga_stats",
+  MRN_PLUGIN_NAME_STRING "_stats",
   plugin_author,
-  "Statistics for groonga",
+  "Statistics for " MRN_PLUGIN_NAME_STRING,
   PLUGIN_LICENSE_GPL,
   i_s_mrn_stats_init,
   i_s_mrn_stats_deinit,
@@ -1531,11 +1543,11 @@ static int mrn_deinit(void *p)
   return 0;
 }
 
-mysql_declare_plugin(mroonga)
+mysql_declare_plugin(MRN_PLUGIN_NAME)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
-  "groonga",
+  MRN_PLUGIN_NAME_STRING,
   "Tetsuro IKEDA",
   "CJK-ready fulltext search, column store",
   PLUGIN_LICENSE_GPL,
@@ -1553,11 +1565,11 @@ mysql_declare_plugin(mroonga)
 mysql_declare_plugin_end;
 
 #ifdef MRN_MARIADB_P
-maria_declare_plugin(groonga)
+maria_declare_plugin(MRN_PLUGIN_NAME)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
-  "groonga",
+  MRN_PLUGIN_NAME_STRING,
   "Tetsuro IKEDA",
   "CJK-ready fulltext search, column store",
   PLUGIN_LICENSE_GPL,
@@ -1846,7 +1858,7 @@ ha_mroonga::~ha_mroonga()
 const char *ha_mroonga::table_type() const
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN("groonga");
+  DBUG_RETURN(MRN_PLUGIN_NAME_STRING);
 }
 
 const char *ha_mroonga::index_type(uint key_nr)

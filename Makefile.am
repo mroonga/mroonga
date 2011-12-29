@@ -18,16 +18,26 @@ sources =					\
 	mrn_sys.c				\
 	mrn_table.cc
 
-plugin_LTLIBRARIES     = ha_groonga.la
-ha_groonga_la_LDFLAGS  = -module $(GROONGA_LIBS)
-ha_groonga_la_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
-ha_groonga_la_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
+dynamic_plugin_ldflags  = -module $(GROONGA_LIBS)
+dynamic_plugin_cxxflags = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
+dynamic_plugin_cflags   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
+
+plugin_LTLIBRARIES     = ha_mroonga.la
+ha_mroonga_la_LDFLAGS  = $(dynamic_plugin_ldflags)
+ha_mroonga_la_CXXFLAGS = $(dynamic_plugin_cxxflags)
+ha_mroonga_la_CFLAGS   = $(dynamic_plugin_cflags)
+ha_mroonga_la_SOURCES  = $(sources)
+
+plugin_LTLIBRARIES    += ha_groonga.la
+ha_groonga_la_LDFLAGS  = $(dynamic_plugin_ldflags)
+ha_groonga_la_CXXFLAGS = $(dynamic_plugin_cxxflags) -DMRN_USE_DEPRECATED_NAME
+ha_groonga_la_CFLAGS   = $(dynamic_plugin_cflags) -DMRN_USE_DEPRECATED_NAME
 ha_groonga_la_SOURCES  = $(sources)
 
-plugin_LIBRARIES         = libha_groonga.a
-libha_groonga_a_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
-libha_groonga_a_CFLAGS   = $(AM_CFLAGS) $(MYSQL_CFLAGS)
-libha_groonga_a_SOURCES  = $(sources)
+plugin_LIBRARIES         = libmroonga.a
+libmroonga_a_CXXFLAGS    = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
+libmroonga_a_CFLAGS      = $(AM_CFLAGS) $(MYSQL_CFLAGS)
+libmroonga_a_SOURCES     = $(sources)
 
 SUBDIRS =					\
 	test					\
