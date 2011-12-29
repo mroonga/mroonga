@@ -131,7 +131,7 @@ Install ::
   % sudo yum update
   % sudo yum install -y mysql-mroonga
 
-Fedora 15
+Fedora 16
 ---------
 
 Install ::
