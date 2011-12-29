@@ -16,6 +16,7 @@ Section: database
 Architecture: any
 Replaces: mysql-server-groonga (<< 1.0.0-1)
 Breaks: mysql-server-groonga (<< 1.0.0-1)
+Conflicts: mysql-server-mroonga-compatible
 Depends:
 	${misc:Depends},
 	${shlibs:Depends},
@@ -27,6 +28,31 @@ Description: A fast fulltext searchable storage engine for MySQL.
  Groonga is good at real time update.
  .
  This package provides a MySQL storage engine as a shared library.
+ This provides "mroonga" storage engine. It means you can use
+ "ENGINE = mroonga" in "CREATE TABLE". You can use
+ "ENGINE = groonga" in "CREATE TABLE" with mysql-server-mroonga-compatible
+ package. It provides "groonga" storage engine. But "groonga" storage engine
+ is deprecated. We recommend that you use "mroonga" storage engine
+ rather than "groonga" storage engine.
+
+Package: mysql-server-mroonga-compatible
+Section: database
+Architecture: any
+Conflicts: mysql-server-mroonga
+Depends:
+	${misc:Depends},
+	${shlibs:Depends},
+	libgroonga0 (>= 1.2.8),
+	mysql-server
+Description: A fast fulltext searchable storage engine for MySQL.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
+ .
+ This package provides a MySQL storage engine as a shared library.
+ This provides "groonga" storage engine. It means you can use
+ "ENGINE = groonga" in "CREATE TABLE" but "groonga" storage engine
+ is deprecated. You should use "mroonga" storage engine.
 
 Package: mysql-server-mroonga-doc
 Section: doc

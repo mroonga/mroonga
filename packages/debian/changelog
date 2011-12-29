@@ -1,3 +1,10 @@
+mroonga (1.20-1) unstable; urgency=low
+
+  * New upstream release.
+  * Add mysql-server-mroonga-compatible package for "groonga" storage engine.
+
+ -- Kouhei Sutou <kou@clear-code.com>  Sun, 29 Jan 2012 00:00:00 +0900
+
 mroonga (1.11-1) unstable; urgency=low
 
   * New upstream release.
