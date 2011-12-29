@@ -22,7 +22,7 @@ if test -z "$MYSQL_VERSION"; then
 fi
 export MYSQL_VERSION
 
-test_suite_names="groonga_storage,groonga_wrapper"
+test_suite_names="mroonga_storage,mroonga_wrapper"
 source_mysql_test_dir="${MYSQL_SOURCE}/mysql-test"
 build_mysql_test_dir="${MYSQL_BUILD}/mysql-test"
 source_test_suites_dir="${source_mysql_test_dir}/suite"
@@ -62,47 +62,47 @@ same_link_p()
     fi
 }
 
-local_groonga_mysql_test_include_dir="${BASE_DIR}/sql/include"
-for test_include_name in $(ls $local_groonga_mysql_test_include_dir | grep '\.inc$'); do
-    local_groonga_mysql_test_include="${local_groonga_mysql_test_include_dir}/${test_include_name}"
-    groonga_mysql_test_include="${build_test_include_dir}/${test_include_name}"
-    if ! same_link_p "${local_groonga_mysql_test_include}" \
-			"${groonga_mysql_test_include}"; then
-	rm -f "${groonga_mysql_test_include}"
-        ln -s "${local_groonga_mysql_test_include}" \
-	    "${groonga_mysql_test_include}"
+local_mroonga_mysql_test_include_dir="${BASE_DIR}/sql/include"
+for test_include_name in $(ls $local_mroonga_mysql_test_include_dir | grep '\.inc$'); do
+    local_mroonga_mysql_test_include="${local_mroonga_mysql_test_include_dir}/${test_include_name}"
+    mroonga_mysql_test_include="${build_test_include_dir}/${test_include_name}"
+    if ! same_link_p "${local_mroonga_mysql_test_include}" \
+			"${mroonga_mysql_test_include}"; then
+	rm -f "${mroonga_mysql_test_include}"
+        ln -s "${local_mroonga_mysql_test_include}" \
+	    "${mroonga_mysql_test_include}"
     fi
 done
 
 for test_suite_name in $(echo $test_suite_names | sed -e 's/,/ /g'); do
-    local_groonga_mysql_test_suite_dir="${BASE_DIR}/sql/suite/${test_suite_name}"
-    groonga_mysql_test_suite_dir="${build_test_suites_dir}/${test_suite_name}"
-    if ! same_link_p "${local_groonga_mysql_test_suite_dir}" \
-			"${groonga_mysql_test_suite_dir}"; then
-	rm -f "${groonga_mysql_test_suite_dir}"
-	ln -s "${local_groonga_mysql_test_suite_dir}" \
-	    "${groonga_mysql_test_suite_dir}"
+    local_mroonga_mysql_test_suite_dir="${BASE_DIR}/sql/suite/${test_suite_name}"
+    mroonga_mysql_test_suite_dir="${build_test_suites_dir}/${test_suite_name}"
+    if ! same_link_p "${local_mroonga_mysql_test_suite_dir}" \
+			"${mroonga_mysql_test_suite_dir}"; then
+	rm -f "${mroonga_mysql_test_suite_dir}"
+	ln -s "${local_mroonga_mysql_test_suite_dir}" \
+	    "${mroonga_mysql_test_suite_dir}"
     fi
 done
 
 innodb_test_suite_dir="${build_test_suites_dir}/innodb"
-groonga_wrapper_innodb_test_suite_dir="${build_test_suites_dir}/groonga_wrapper_innodb"
-if test "$0" -nt "$(dirname "${groonga_wrapper_innodb_test_suite_dir}")"; then
-    rm -rf "${groonga_wrapper_innodb_test_suite_dir}"
+mroonga_wrapper_innodb_test_suite_dir="${build_test_suites_dir}/mroonga_wrapper_innodb"
+if test "$0" -nt "$(dirname "${mroonga_wrapper_innodb_test_suite_dir}")"; then
+    rm -rf "${mroonga_wrapper_innodb_test_suite_dir}"
 fi
-if ! test -d "${groonga_wrapper_innodb_test_suite_dir}"; then
-    cp -rp "${innodb_test_suite_dir}" "${groonga_wrapper_innodb_test_suite_dir}"
+if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
+    cp -rp "${innodb_test_suite_dir}" "${mroonga_wrapper_innodb_test_suite_dir}"
     ruby -i'' \
 	-pe "\$_.gsub!(/\bengine\s*=\s*innodb\b([^;\\n]*)/i,
-                      \"ENGINE=groonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
+                      \"ENGINE=mroonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
             " \
-	${groonga_wrapper_innodb_test_suite_dir}/r/*.result \
-	${groonga_wrapper_innodb_test_suite_dir}/t/*.test \
-	${groonga_wrapper_innodb_test_suite_dir}/include/*.inc \
+	${mroonga_wrapper_innodb_test_suite_dir}/r/*.result \
+	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test \
+	${mroonga_wrapper_innodb_test_suite_dir}/include/*.inc \
 	${build_test_include_dir}/innodb_*.inc # over our work. :<
     sed -i'' \
-	-e '1 i --source include/have_groonga.inc' \
-	${groonga_wrapper_innodb_test_suite_dir}/t/*.test
+	-e '1 i --source include/have_mroonga.inc' \
+	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test
 fi
 
 if test -n "${plugins_dir}"; then

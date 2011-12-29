@@ -288,12 +288,12 @@ AC_CONFIG_FILES([
   test/unit/Makefile
   test/sql/Makefile
   test/sql/include/Makefile
-  test/sql/suite/groonga_storage/Makefile
-  test/sql/suite/groonga_storage/r/Makefile
-  test/sql/suite/groonga_storage/t/Makefile
-  test/sql/suite/groonga_wrapper/Makefile
-  test/sql/suite/groonga_wrapper/r/Makefile
-  test/sql/suite/groonga_wrapper/t/Makefile
+  test/sql/suite/mroonga_storage/Makefile
+  test/sql/suite/mroonga_storage/r/Makefile
+  test/sql/suite/mroonga_storage/t/Makefile
+  test/sql/suite/mroonga_wrapper/Makefile
+  test/sql/suite/mroonga_wrapper/r/Makefile
+  test/sql/suite/mroonga_wrapper/t/Makefile
   packages/Makefile
   packages/rpm/Makefile
   packages/rpm/centos/Makefile
@@ -310,8 +310,8 @@ AC_CONFIG_FILES([
 ])
 AC_OUTPUT([
   mrn_version.h
-  test/sql/suite/groonga_storage/r/information_schema.result
-  test/sql/suite/groonga_storage/r/variables.result
+  test/sql/suite/mroonga_storage/r/information_schema.result
+  test/sql/suite/mroonga_storage/r/variables.result
   packages/rpm/centos/mysql-mroonga.spec
   packages/rpm/fedora/mysql-mroonga.spec
 ])

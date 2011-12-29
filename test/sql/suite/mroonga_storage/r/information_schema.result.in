@@ -1,0 +1,4 @@
+select PLUGIN_NAME, PLUGIN_VERSION, PLUGIN_TYPE
+from information_schema.plugins where plugin_name = "mroonga";
+PLUGIN_NAME	PLUGIN_VERSION	PLUGIN_TYPE
+mroonga	@VERSION@	STORAGE ENGINE
