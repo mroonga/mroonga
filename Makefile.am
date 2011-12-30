@@ -45,7 +45,9 @@ SUBDIRS =					\
 	tools					\
 	packages
 
-EXTRA_DIST = plug.in
+EXTRA_DIST =					\
+	AUTHORS					\
+	plug.in
 
 installcheck-local: install
 	test/run-sql-test.sh

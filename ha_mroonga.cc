@@ -105,6 +105,7 @@ extern pthread_mutex_t LOCK_open;
 #endif
 
 static const char *index_column_name = "index";
+static const char *mrn_plugin_author = "The mroonga project";
 
 #ifdef __cplusplus
 extern "C" {
@@ -748,7 +749,6 @@ void last_insert_grn_id_deinit(UDF_INIT *initid)
 }
 
 /* mroonga information schema */
-static const char plugin_author[] = "Yoshinori Matsunobu";
 static struct st_mysql_information_schema i_s_info =
 {
   MYSQL_INFORMATION_SCHEMA_INTERFACE_VERSION
@@ -822,7 +822,7 @@ struct st_mysql_plugin i_s_mrn_stats =
   MYSQL_INFORMATION_SCHEMA_PLUGIN,
   &i_s_info,
   MRN_PLUGIN_NAME_STRING "_stats",
-  plugin_author,
+  mrn_plugin_author,
   "Statistics for " MRN_PLUGIN_NAME_STRING,
   PLUGIN_LICENSE_GPL,
   i_s_mrn_stats_init,
@@ -1559,7 +1559,7 @@ mrn_declare_plugin(MRN_PLUGIN_NAME)
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
   MRN_PLUGIN_NAME_STRING,
-  "Tetsuro IKEDA",
+  mrn_plugin_author,
   "CJK-ready fulltext search, column store",
   PLUGIN_LICENSE_GPL,
   mrn_init,
