@@ -89,6 +89,21 @@ extern pthread_mutex_t LOCK_open;
 #endif
 #define MRN_PLUGIN_NAME_STRING MRN_STRINGIFY(MRN_PLUGIN_NAME)
 
+#ifdef MRN_MARIADB_P
+#  define st_mysql_plugin          st_maria_plugin
+#  define mrn_declare_plugin(NAME) maria_declare_plugin(NAME)
+#  define mrn_declare_plugin_end   maria_declare_plugin_end
+#  define MRN_PLUGIN_LAST_VALUES   MRN_VERSION, MariaDB_PLUGIN_MATURITY_EXPERIMENTAL
+#else
+#  define mrn_declare_plugin(NAME) mysql_declare_plugin(NAME)
+#  define mrn_declare_plugin_end   mysql_declare_plugin_end
+#  ifdef MRN_PLUGIN_HAVE_FLAGS
+#    define MRN_PLUGIN_LAST_VALUES NULL, 0
+#  else
+#    define MRN_PLUGIN_LAST_VALUES NULL
+#  endif
+#endif
+
 static const char *index_column_name = "index";
 
 #ifdef __cplusplus
@@ -815,11 +830,7 @@ struct st_mysql_plugin i_s_mrn_stats =
   MRN_VERSION_IN_HEX,
   NULL,
   NULL,
-  NULL
-#ifdef MRN_PLUGIN_HAVE_FLAGS
-  ,
-  0
-#endif
+  MRN_PLUGIN_LAST_VALUES
 };
 /* End of mroonga information schema implementations */
 
@@ -1543,7 +1554,7 @@ static int mrn_deinit(void *p)
   return 0;
 }
 
-mysql_declare_plugin(MRN_PLUGIN_NAME)
+mrn_declare_plugin(MRN_PLUGIN_NAME)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
@@ -1556,33 +1567,10 @@ mysql_declare_plugin(MRN_PLUGIN_NAME)
   MRN_VERSION_IN_HEX,
   mrn_status_variables,
   mrn_system_variables,
-  NULL
-#ifdef MRN_PLUGIN_HAVE_FLAGS
-  ,
-  0
-#endif
-}, i_s_mrn_stats
-mysql_declare_plugin_end;
-
-#ifdef MRN_MARIADB_P
-maria_declare_plugin(MRN_PLUGIN_NAME)
-{
-  MYSQL_STORAGE_ENGINE_PLUGIN,
-  &storage_engine_structure,
-  MRN_PLUGIN_NAME_STRING,
-  "Tetsuro IKEDA",
-  "CJK-ready fulltext search, column store",
-  PLUGIN_LICENSE_GPL,
-  mrn_init,
-  mrn_deinit,
-  MRN_VERSION_IN_HEX,
-  mrn_status_variables,
-  mrn_system_variables,
-  MRN_VERSION,
-  MariaDB_PLUGIN_MATURITY_EXPERIMENTAL
-}
-maria_declare_plugin_end;
-#endif
+  MRN_PLUGIN_LAST_VALUES
+},
+i_s_mrn_stats
+mrn_declare_plugin_end;
 
 static void mrn_generic_ft_close_search(FT_INFO *handler)
 {
