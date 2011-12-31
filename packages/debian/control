@@ -14,8 +14,8 @@ Homepage: http://mroonga.github.com/
 Package: mysql-server-mroonga
 Section: database
 Architecture: any
-Replaces: mysql-server-groonga (<< 1.0.0-1)
-Breaks: mysql-server-groonga (<< 1.0.0-1)
+Replaces: mysql-server-groonga (<< 1.10-1)
+Breaks: mysql-server-groonga (<< 1.10-1)
 Conflicts: mysql-server-mroonga-compatible
 Depends:
 	${misc:Depends},
@@ -57,8 +57,8 @@ Description: A fast fulltext searchable storage engine for MySQL.
 Package: mysql-server-mroonga-doc
 Section: doc
 Architecture: all
-Replaces: mysql-server-groonga-doc (<< 1.0.0-1)
-Breaks: mysql-server-groonga-doc (<< 1.0.0-1)
+Replaces: mysql-server-groonga-doc (<< 1.10-1)
+Breaks: mysql-server-groonga-doc (<< 1.10-1)
 Depends:
 	${misc:Depends}
 Description: Documentation of mroonga.
