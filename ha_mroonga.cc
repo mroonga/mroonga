@@ -285,6 +285,27 @@ static int mrn_change_encoding(grn_ctx *ctx, CHARSET_INFO *charset)
   DBUG_RETURN(ER_MRN_CHARSET_NOT_SUPPORT_NUM);
 }
 
+static bool mrn_need_normalize(Field *field)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  DBUG_PRINT("info", ("mroonga: result_type = %u", field->result_type()));
+  DBUG_PRINT("info", ("mroonga: charset->name = %s",
+    field->charset()->name));
+  DBUG_PRINT("info", ("mroonga: charset->csname = %s",
+    field->charset()->csname));
+  DBUG_PRINT("info", ("mroonga: charset->state = %u",
+    field->charset()->state));
+  if (
+    field->result_type() == STRING_RESULT &&
+    !(field->charset()->state & (MY_CS_BINSORT | MY_CS_CSSORT))
+  ) {
+    DBUG_PRINT("info", ("mroonga: TRUE"));
+    DBUG_RETURN(TRUE);
+  }
+  DBUG_PRINT("info", ("mroonga: FALSE"));
+  DBUG_RETURN(FALSE);
+}
+
 #if !defined(DBUG_OFF) && !defined(_lint)
 static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
 {
@@ -1926,7 +1947,12 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
   ulong flags;
   KEY key = table_share->key_info[idx];
   if (key.algorithm == HA_KEY_ALG_BTREE || key.algorithm == HA_KEY_ALG_UNDEF) {
-    flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_ORDER | HA_READ_RANGE;
+    flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE;
+    if (key.key_parts > 1 ||
+      !mrn_need_normalize(&key.key_part->field[0])
+    ) {
+      flags |= HA_READ_ORDER;
+    }
   } else {
     flags = HA_ONLY_WHOLE_INDEX | HA_KEY_SCAN_NOT_ROR;
   }
@@ -2059,8 +2085,11 @@ int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
 
   grn_obj_flags index_table_flags =
     GRN_OBJ_TABLE_PAT_KEY |
-    GRN_OBJ_PERSISTENT |
-    GRN_OBJ_KEY_NORMALIZE;
+    GRN_OBJ_PERSISTENT;
+  if (mrn_need_normalize(&key_info->key_part->field[0]))
+  {
+    index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
+  }
   grn_obj *index_table;
 
   grn_obj_flags index_column_flags =
@@ -2278,6 +2307,12 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       table_flags |= GRN_OBJ_TABLE_HASH_KEY;
     } else if (!is_id) {
       table_flags |= GRN_OBJ_TABLE_PAT_KEY;
+      if (
+        key_parts == 1 &&
+        mrn_need_normalize(&key_info.key_part->field[0])
+      ) {
+        table_flags |= GRN_OBJ_KEY_NORMALIZE;
+      }
     } else {
       // for _id
       table_flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -2303,7 +2338,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   grn_obj *pkey_value_type = NULL; // we don't use this
 
   table_obj = grn_table_create(ctx, table_name, table_name_len, table_path,
-                             table_flags, pkey_type, pkey_value_type);
+                               table_flags, pkey_type, pkey_value_type);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -2467,7 +2502,10 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   int key_alg = key_info->algorithm;
   if (key_info->flags & HA_FULLTEXT) {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
+    if (mrn_need_normalize(&key_info->key_part->field[0]))
+    {
+      index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
+    }
     error = mrn_change_encoding(ctx, key_info->key_part->field->charset());
     if (error) {
       grn_obj_remove(ctx, grn_table);
@@ -2477,6 +2515,10 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
   } else {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
+    if (mrn_need_normalize(&key_info->key_part->field[0]))
+    {
+      index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
+    }
   }
 
   index_table = grn_table_create(ctx,
@@ -6823,6 +6865,16 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         const char *column_name = field->field_name;
         int column_name_size = strlen(column_name);
 
+        if (mrn_need_normalize(field))
+        {
+          DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
+          fast_order_limit = FALSE;
+          free(*sort_keys);
+          *sort_keys = NULL;
+          *n_sort_keys = 0;
+          DBUG_VOID_RETURN;
+        }
+
         if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
           (*sort_keys)[i].key = score_column;
         } else {
@@ -6835,6 +6887,9 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       } else {
         DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
         fast_order_limit = FALSE;
+        free(*sort_keys);
+        *sort_keys = NULL;
+        *n_sort_keys = 0;
         DBUG_VOID_RETURN;
       }
       (*sort_keys)[i].offset = 0;
