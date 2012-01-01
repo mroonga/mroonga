@@ -14,7 +14,8 @@ Improvements
 * Supported MySQL 5.5.19.
 * Supported MySQL 5.6.4.
 * Dropped MySQL 5.6.3 support.
-* [wrapper mode] Supported REPAIR TABLE. [#1191]
+* Supported Fedora 16.
+* Dropped Fedora 15 support.
 * Suppress strict-aliasing warnings. [groonga-dev,00659]
   [Reported by Kazuhiko Shiozaki]
 * Supported utf8, binary, ascii, latin1, cp932, sjis,

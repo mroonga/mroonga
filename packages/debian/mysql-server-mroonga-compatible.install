@@ -1,0 +1,2 @@
+usr/lib/mysql/plugin/ha_groonga.so*
+debian/apparmor/mysql-server-mroonga etc/apparmor.d/abstractions/

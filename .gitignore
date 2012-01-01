@@ -28,7 +28,7 @@ cscope.out
 /missing
 /stamp-h1
 /src/scratch
-/libgroonga.a
+/libmroonga.a
 /packages/rpm/*/*.spec
 /packages/yum/fedora/
 /packages/yum/centos/
@@ -43,8 +43,8 @@ cscope.out
 /doc/sphinx/
 /misc/
 /tmp-doc/
-/test/sql/suite/groonga_storage/r/information_schema.result
-/test/sql/suite/groonga_storage/r/variables.result
+/test/sql/suite/mroonga_storage/r/information_schema.result
+/test/sql/suite/mroonga_storage/r/variables.result
 /mrn_version.h
 /mroonga-*.tar.gz
 /packages/mroonga-*.tar.gz

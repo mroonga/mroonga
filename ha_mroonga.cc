@@ -79,7 +79,33 @@ extern pthread_mutex_t LOCK_open;
 #  define MRN_ORDER_IS_ASC(order) ((order)->asc)
 #endif
 
+#define MRN_STRINGIFY(macro_or_string)  MRN_STRINGIFY_ARG(macro_or_string)
+#define MRN_STRINGIFY_ARG(contents)     #contents
+
+#ifdef MRN_USE_DEPRECATED_NAME
+#  define MRN_PLUGIN_NAME groonga
+#else
+#  define MRN_PLUGIN_NAME mroonga
+#endif
+#define MRN_PLUGIN_NAME_STRING MRN_STRINGIFY(MRN_PLUGIN_NAME)
+
+#ifdef MRN_MARIADB_P
+#  define st_mysql_plugin          st_maria_plugin
+#  define mrn_declare_plugin(NAME) maria_declare_plugin(NAME)
+#  define mrn_declare_plugin_end   maria_declare_plugin_end
+#  define MRN_PLUGIN_LAST_VALUES   MRN_VERSION, MariaDB_PLUGIN_MATURITY_STABLE
+#else
+#  define mrn_declare_plugin(NAME) mysql_declare_plugin(NAME)
+#  define mrn_declare_plugin_end   mysql_declare_plugin_end
+#  ifdef MRN_PLUGIN_HAVE_FLAGS
+#    define MRN_PLUGIN_LAST_VALUES NULL, 0
+#  else
+#    define MRN_PLUGIN_LAST_VALUES NULL
+#  endif
+#endif
+
 static const char *index_column_name = "index";
+static const char *mrn_plugin_author = "The mroonga project";
 
 #ifdef __cplusplus
 extern "C" {
@@ -535,8 +561,10 @@ static struct st_mysql_storage_engine storage_engine_structure =
 
 static struct st_mysql_show_var mrn_status_variables[] =
 {
-  {"groonga_count_skip", (char *) &mrn_count_skip, SHOW_LONG},
-  {"groonga_fast_order_limit", (char *) &mrn_fast_order_limit, SHOW_LONG},
+  {MRN_PLUGIN_NAME_STRING "_count_skip",
+   (char *)&mrn_count_skip, SHOW_LONG},
+  {MRN_PLUGIN_NAME_STRING "_fast_order_limit",
+   (char *)&mrn_fast_order_limit, SHOW_LONG},
   {NullS, NullS, SHOW_LONG}
 };
 
@@ -623,7 +651,7 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
 
 static MYSQL_SYSVAR_STR(log_file, mrn_log_file_path,
                         PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
-                        "log file for groonga",
+                        "log file for " MRN_PLUGIN_NAME_STRING,
                         NULL,
                         mrn_log_file_update,
                         MRN_LOG_FILE_PATH);
@@ -742,7 +770,6 @@ void last_insert_grn_id_deinit(UDF_INIT *initid)
 }
 
 /* mroonga information schema */
-static const char plugin_author[] = "Yoshinori Matsunobu";
 static struct st_mysql_information_schema i_s_info =
 {
   MYSQL_INFORMATION_SCHEMA_INTERFACE_VERSION
@@ -815,20 +842,16 @@ struct st_mysql_plugin i_s_mrn_stats =
 {
   MYSQL_INFORMATION_SCHEMA_PLUGIN,
   &i_s_info,
-  "groonga_stats",
-  plugin_author,
-  "Statistics for groonga",
+  MRN_PLUGIN_NAME_STRING "_stats",
+  mrn_plugin_author,
+  "Statistics for " MRN_PLUGIN_NAME_STRING,
   PLUGIN_LICENSE_GPL,
   i_s_mrn_stats_init,
   i_s_mrn_stats_deinit,
   MRN_VERSION_IN_HEX,
   NULL,
   NULL,
-  NULL
-#ifdef MRN_PLUGIN_HAVE_FLAGS
-  ,
-  0
-#endif
+  MRN_PLUGIN_LAST_VALUES
 };
 /* End of mroonga information schema implementations */
 
@@ -961,14 +984,14 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_ENUM:         // ENUM; <= 2bytes
-    // type = GRN_DB_INT8;         // 1byte
-    // XXX: Should we use INT16?
-    type = GRN_DB_INT16;        // 2bytes
+    type = GRN_DB_INT8;         // 1byte
+    // XXX: We should use INT16
+    // type = GRN_DB_INT16;        // 2bytes
     break;
   case MYSQL_TYPE_SET:          // SET; <= 8bytes
-    // type = GRN_DB_INT8;         // 1byte
-    // XXX: Should we use INT64?
-    type = GRN_DB_INT64;        // 8bytes
+    type = GRN_DB_INT8;         // 1byte
+    // XXX: We should use INT64.
+    // type = GRN_DB_INT64;        // 8bytes
     break;
   case MYSQL_TYPE_TINY_BLOB:    // TINYBLOB; <= 256bytes + 1byte
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
@@ -1552,26 +1575,23 @@ static int mrn_deinit(void *p)
   return 0;
 }
 
-mysql_declare_plugin(mroonga)
+mrn_declare_plugin(MRN_PLUGIN_NAME)
 {
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
-  "groonga",
-  "Tetsuro IKEDA",
-  "Fulltext search, column base",
+  MRN_PLUGIN_NAME_STRING,
+  mrn_plugin_author,
+  "CJK-ready fulltext search, column store",
   PLUGIN_LICENSE_GPL,
   mrn_init,
   mrn_deinit,
   MRN_VERSION_IN_HEX,
   mrn_status_variables,
   mrn_system_variables,
-  NULL
-#ifdef MRN_PLUGIN_HAVE_FLAGS
-  ,
-  0
-#endif
-}, i_s_mrn_stats
-mysql_declare_plugin_end;
+  MRN_PLUGIN_LAST_VALUES
+},
+i_s_mrn_stats
+mrn_declare_plugin_end;
 
 static void mrn_generic_ft_close_search(FT_INFO *handler)
 {
@@ -1847,7 +1867,7 @@ ha_mroonga::~ha_mroonga()
 const char *ha_mroonga::table_type() const
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN("groonga");
+  DBUG_RETURN(MRN_PLUGIN_NAME_STRING);
 }
 
 const char *ha_mroonga::index_type(uint key_nr)

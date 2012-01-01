@@ -1,3 +1,0 @@
-show variables like 'groonga_version';
-Variable_name	Value
-groonga_version	@VERSION@

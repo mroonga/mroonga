@@ -4,7 +4,7 @@ set -e
 
 cat <<EOS | mysql --defaults-file=/etc/mysql/debian.cnf || true
 DROP FUNCTION last_insert_grn_id;
-UNINSTALL PLUGIN groonga;
+UNINSTALL PLUGIN mroonga;
 EOS
 
 if [ "$1" = "purge" ]; then
