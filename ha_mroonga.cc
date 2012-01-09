@@ -730,7 +730,7 @@ static MYSQL_SYSVAR_STR(version, mrn_version,
                         NULL,
                         MRN_VERSION);
 
-struct st_mysql_sys_var *mrn_system_variables[] =
+static struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
   MYSQL_SYSVAR(log_file),
