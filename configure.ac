@@ -65,6 +65,7 @@ if test "$GCC" = "yes"; then
   CHECK_BUILD_FLAG([-Wall])
   CHECK_BUILD_FLAG([-Wextra])
   CHECK_BUILD_FLAG([-Wno-unused-parameter])
+  CHECK_BUILD_FLAG([-Wno-strict-aliasing])
 fi
 
 standalone_build=
