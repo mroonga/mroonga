@@ -3319,26 +3319,7 @@ int ha_mroonga::wrapper_close()
 int ha_mroonga::storage_close()
 {
   MRN_DBUG_ENTER_METHOD();
-  uint i;
-  uint n_keys = table->s->keys;
-  uint pkey_nr = table->s->primary_key;
-  for (i = 0; i < n_keys; i++) {
-    free(key_min[i]);
-    free(key_max[i]);
-    if (i == pkey_nr) {
-      continue;
-    }
-    grn_obj_unlink(ctx, grn_index_tables[i]);
-  }
   grn_obj_unlink(ctx, grn_table);
-
-  if (grn_index_tables != NULL) {
-    free(grn_index_tables);
-    free(grn_index_columns);
-    free(key_min);
-    free(key_max);
-  }
-
   free(grn_columns);
   DBUG_RETURN(0);
 }
@@ -3348,6 +3329,9 @@ int ha_mroonga::close()
   int error = 0;
   THD *thd = ha_thd();
   MRN_DBUG_ENTER_METHOD();
+
+  clear_indexes();
+
   if (share->wrapper_mode)
   {
     error = wrapper_close();
@@ -6451,6 +6435,52 @@ void ha_mroonga::clear_search_result_geo()
     grn_obj_unlink(ctx, grn_source_column_geo);
     grn_source_column_geo = NULL;
   }
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::clear_indexes()
+{
+  MRN_DBUG_ENTER_METHOD();
+  uint n_keys = table->s->keys;
+  uint pkey_nr = table->s->primary_key;
+
+  for (uint i = 0; i < n_keys; i++) {
+    if (i != pkey_nr) {
+      if (grn_index_tables) {
+        grn_obj_unlink(ctx, grn_index_tables[i]);
+      }
+      if (grn_index_columns) {
+        grn_obj_unlink(ctx, grn_index_columns[i]);
+      }
+    }
+    if (key_min) {
+      free(key_min[i]);
+    }
+    if (key_max) {
+      free(key_max[i]);
+    }
+  }
+
+  if (grn_index_tables) {
+    free(grn_index_tables);
+    grn_index_tables = NULL;
+  }
+
+  if (grn_index_columns) {
+    free(grn_index_columns);
+    grn_index_columns = NULL;
+  }
+
+  if (key_min) {
+    free(key_min);
+    key_min = NULL;
+  }
+
+  if (key_max) {
+    free(key_max);
+    key_max = NULL;
+  }
+
   DBUG_VOID_RETURN;
 }
 

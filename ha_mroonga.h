@@ -385,6 +385,7 @@ private:
   void clear_cursor_geo();
   void clear_search_result();
   void clear_search_result_geo();
+  void clear_indexes();
   grn_obj *find_tokenizer(const char *name, int name_length);
   int wrapper_get_next_record(uchar *buf);
   int storage_get_next_record(uchar *buf);
