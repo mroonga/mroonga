@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2011 Kentoku SHIBA
-  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1077,6 +1077,25 @@ static int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
   if (error)
     return error;
   switch (field->type()) {
+  case MYSQL_TYPE_DECIMAL:
+    {
+      String val;
+      field->val_str(NULL, &val);
+      grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
+      GRN_TEXT_SET(ctx, buf, val.ptr(), val.length());
+      *size = val.length();
+    }
+    break;
+  case MYSQL_TYPE_NEWDECIMAL:
+    {
+      String val;
+      Field_new_decimal *new_decimal_field = (Field_new_decimal *)field;
+      new_decimal_field->val_str(&val, NULL);
+      grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
+      GRN_TEXT_SET(ctx, buf, val.ptr(), val.length());
+      *size = val.length();
+    }
+    break;
   case MYSQL_TYPE_BIT:
   case MYSQL_TYPE_ENUM:
   case MYSQL_TYPE_SET:
@@ -6966,6 +6985,14 @@ void ha_mroonga::store_to_field(grn_obj *col, grn_id id, Field *field)
   mrn_change_encoding(ctx, field->charset());
   field->set_notnull();
   switch (field->type()) {
+  case MYSQL_TYPE_DECIMAL:
+  case MYSQL_TYPE_NEWDECIMAL:
+    {
+      GRN_TEXT_INIT(&buf, 0);
+      grn_obj_get_value(ctx, col, id, &buf);
+      field->store(GRN_TEXT_VALUE(&buf), GRN_TEXT_LEN(&buf), field->charset());
+    }
+    break;
   case MYSQL_TYPE_BIT :
   case MYSQL_TYPE_ENUM :
   case MYSQL_TYPE_SET :
