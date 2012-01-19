@@ -657,6 +657,7 @@ private:
   int storage_enable_indexes(uint mode);
   int wrapper_check(THD* thd, HA_CHECK_OPT* check_opt);
   int storage_check(THD* thd, HA_CHECK_OPT* check_opt);
+  int wrapper_recreate_indexes(THD *thd);
   int wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt);
   int storage_repair(THD* thd, HA_CHECK_OPT* check_opt);
   bool wrapper_check_and_repair(THD *thd);

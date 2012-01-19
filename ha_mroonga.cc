@@ -8407,10 +8407,136 @@ int ha_mroonga::check(THD* thd, HA_CHECK_OPT* check_opt)
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::wrapper_recreate_indexes(THD *thd)
+{
+  int res;
+  uint i, n_keys = table_share->keys;
+  KEY *p_key_info = &table->key_info[table_share->primary_key], *tmp_key_info,
+    *key_info = table->key_info;
+  char db_name[MRN_MAX_PATH_SIZE];
+  char table_name[MRN_MAX_PATH_SIZE];
+  char decode_name[MRN_MAX_PATH_SIZE];
+  grn_obj *db;
+  MRN_DBUG_ENTER_METHOD();
+  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) table_share->normalized_path.str,
+             (const uchar *) table_share->normalized_path.str +
+             table_share->normalized_path.length);
+  mrn_db_name_gen(decode_name, db_name);
+  mrn_table_name_gen(decode_name, table_name);
+  mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db);
+  bitmap_clear_all(table->read_set);
+  record_id = grn_table_get(ctx, db,
+                            table_name,
+                            strlen(table_name));
+  if (record_id != GRN_ID_NIL) {
+    grn_obj_delete_by_id(ctx, db, record_id, GRN_TRUE);
+  }
+  mrn_set_bitmap_by_key(table->read_set, p_key_info);
+  for (i = 0; i < n_keys; i++) {
+    if (!(key_info[i].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[i])) {
+      continue;
+    }
+    char index_name[MRN_MAX_PATH_SIZE];
+    mrn_index_table_name_gen(table_name, table_share->key_info[i].name,
+                             index_name);
+    record_id = grn_table_get(ctx, db,
+                              index_name,
+                              strlen(index_name));
+    if (record_id != GRN_ID_NIL) {
+      grn_obj_delete_by_id(ctx, db, record_id, GRN_TRUE);
+    }
+    mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
+  }
+  if ((res = wrapper_create_index(table_share->normalized_path.str, table,
+    NULL, share)))
+    DBUG_RETURN(res);
+  if (
+    (mrn_lock_type != F_UNLCK || !(res = wrapper_external_lock(thd, F_WRLCK)))
+  ) {
+    if (
+      !(res = wrapper_start_stmt(thd, thr_lock_data.type)) &&
+      !(res = wrapper_rnd_init(TRUE))
+    ) {
+      grn_obj key;
+      GRN_TEXT_INIT(&key, 0);
+      grn_bulk_space(ctx, &key, p_key_info->key_length);
+      while (!(res = wrapper_rnd_next(table->record[0])))
+      {
+        key_copy((uchar *) (GRN_TEXT_VALUE(&key)), table->record[0],
+          p_key_info, p_key_info->key_length);
+        int added;
+        grn_id record_id;
+        mrn_change_encoding(ctx, NULL);
+        record_id = grn_table_add(ctx, grn_table,
+          GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key), &added);
+        if (record_id == GRN_ID_NIL)
+        {
+          char error_message[MRN_MESSAGE_BUFFER_SIZE];
+          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                   "failed to add a new record into groonga: key=<%.*s>",
+                   (int) GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
+          res = ER_ERROR_ON_WRITE;
+          my_message(res, error_message, MYF(0));
+        }
+        grn_obj_unlink(ctx, &key);
+        if (res)
+          break;
+
+        uint k;
+        for (k = 0; k < n_keys; k++) {
+          tmp_key_info = &key_info[k];
+          if (!(tmp_key_info->flags & HA_FULLTEXT) &&
+            !mrn_is_geo_key(tmp_key_info)) {
+            continue;
+          }
+
+          uint l;
+          for (l = 0; l < tmp_key_info->key_parts; l++) {
+            Field *field = tmp_key_info->key_part[l].field;
+
+            if (field->is_null())
+              continue;
+            res = mrn_change_encoding(ctx, field->charset());
+            if (res)
+              break;
+
+            int new_column_size;
+            mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
+
+            grn_obj *index_column = grn_index_columns[k];
+            grn_rc rc;
+            rc = grn_column_index_update(ctx, index_column, record_id, l + 1,
+                                         NULL, &new_value_buffer);
+            grn_obj_unlink(ctx, index_column);
+            if (rc) {
+              res = ER_ERROR_ON_WRITE;
+              my_message(res, ctx->errbuf, MYF(0));
+              break;
+            }
+          }
+          if (res)
+            break;
+        }
+        if (res)
+          break;
+      }
+      if (res != HA_ERR_END_OF_FILE)
+        wrapper_rnd_end();
+      else
+        res = wrapper_rnd_end();
+    }
+    if (mrn_lock_type == F_UNLCK)
+      wrapper_external_lock(thd, F_UNLCK);
+  }
+  bitmap_set_all(table->read_set);
+  DBUG_RETURN(res);
+}
+
 int ha_mroonga::wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt)
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(HA_ADMIN_TRY_ALTER);
+  DBUG_RETURN(wrapper_recreate_indexes(thd));
 }
 
 int ha_mroonga::storage_repair(THD* thd, HA_CHECK_OPT* check_opt)
