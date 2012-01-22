@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2011 Kentoku SHIBA
+  Copyright(C) 2010-2012 Kentoku SHIBA
   Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -1212,7 +1212,9 @@ static int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
 
 static uchar *mrn_multiple_column_key_encode(KEY *key_info,
                                              const uchar *key, uint key_length,
-                                             uchar *buffer, uint *encoded_length)
+                                             uchar *buffer,
+                                             uint *encoded_length,
+                                             bool decode)
 {
   const uchar *current_key = key;
   const uchar *key_end = key + key_length;
@@ -1225,7 +1227,10 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
     Field *field = key_part.field;
 
     if (field->null_bit) {
+      *current_buffer = *current_key;
       current_key += 1;
+      current_buffer += 1;
+      (*encoded_length)++;
     }
 
     enum {
@@ -1298,12 +1303,23 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
 
     switch (data_type) {
     case TYPE_LONG_LONG_NUMBER:
+      if (decode)
+        *((uint8_t *)(&long_long_value)) ^= 0x80;
       mrn_byte_order_host_to_network(current_buffer, &long_long_value,
                                      data_size);
-      *((uint8_t *)(current_buffer)) ^= 0x80;
+      if (!decode)
+        *((uint8_t *)(current_buffer)) ^= 0x80;
       break;
     case TYPE_NUMBER:
+      if (decode)
+      {
+        Field_num *number_field = (Field_num *)field;
+        if (!number_field->unsigned_flag) {
+          *((uint8_t *)(current_key)) ^= 0x80;
+        }
+      }
       mrn_byte_order_host_to_network(current_buffer, current_key, data_size);
+      if (!decode)
       {
         Field_num *number_field = (Field_num *)field;
         if (!number_field->unsigned_flag) {
@@ -1314,9 +1330,15 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
     case TYPE_DOUBLE:
       {
         long_long_value = (long long int)(double_value);
-        long_long_value ^= ((long_long_value >> 63) | (1LL << 63));
+        if (!decode)
+          long_long_value ^= ((long_long_value >> 63) | (1LL << 63));
         mrn_byte_order_host_to_network(current_buffer, &long_long_value,
                                        data_size);
+        if (decode) {
+          *((long long int *)current_buffer) ^= (1LL << 63);
+          *((long long int *)current_buffer) ^=
+            (*((long long int *)current_buffer) >> 63);
+        }
       }
       break;
     case TYPE_BYTE_SEQUENCE:
@@ -1861,6 +1883,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   wrap_handler = NULL;
   matched_record_keys = NULL;
   fulltext_searching = FALSE;
+  keyread = FALSE;
   mrn_lock_type = F_UNLCK;
   GRN_TEXT_INIT(&key_buffer, 0);
   GRN_TEXT_INIT(&encoded_key_buffer, 0);
@@ -1986,7 +2009,7 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
   ulong flags;
   KEY key = table_share->key_info[idx];
   if (key.algorithm == HA_KEY_ALG_BTREE || key.algorithm == HA_KEY_ALG_UNDEF) {
-    flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE;
+    flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE | HA_KEYREAD_ONLY;
     if (key.key_parts > 1 ||
       !mrn_need_normalize(&key.key_part->field[0])
     ) {
@@ -3919,6 +3942,17 @@ int ha_mroonga::wrapper_extra(enum ha_extra_function operation)
 int ha_mroonga::storage_extra(enum ha_extra_function operation)
 {
   MRN_DBUG_ENTER_METHOD();
+  switch (operation)
+  {
+    case HA_EXTRA_KEYREAD:
+      keyread = TRUE;
+      break;
+    case HA_EXTRA_NO_KEYREAD:
+      keyread = FALSE;
+      break;
+    default:
+      break;
+  }
   DBUG_RETURN(0);
 }
 
@@ -4191,7 +4225,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
                                             key,
                                             key_info.key_length,
                                             (uchar *)(GRN_TEXT_VALUE(&key_buffer)),
-                                            (uint *)&pkey_size);
+                                            (uint *)&pkey_size, FALSE);
     }
   }
 
@@ -4304,7 +4338,7 @@ int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id,
                                  (uchar *)(GRN_TEXT_VALUE(&key_buffer)),
                                  key_info->key_length,
                                  (uchar *)(GRN_TEXT_VALUE(&encoded_key_buffer)),
-                                 &encoded_key_length);
+                                 &encoded_key_length, FALSE);
 
   grn_rc rc;
   rc = grn_column_index_update(ctx, index_column, record_id, 1, NULL,
@@ -4705,7 +4739,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
                                    (uchar *)(GRN_TEXT_VALUE(&old_key)),
                                    key_info.key_length,
                                    (uchar *)(GRN_TEXT_VALUE(&old_encoded_key)),
-                                   &old_encoded_key_length);
+                                   &old_encoded_key_length, FALSE);
 
     GRN_BULK_REWIND(&new_key);
     grn_bulk_space(ctx, &new_key, key_info.key_length);
@@ -4720,7 +4754,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
                                    (uchar *)(GRN_TEXT_VALUE(&new_key)),
                                    key_info.key_length,
                                    (uchar *)(GRN_TEXT_VALUE(&new_encoded_key)),
-                                   &new_encoded_key_length);
+                                   &new_encoded_key_length, FALSE);
 
     grn_obj *index_column = grn_index_columns[i];
     grn_rc rc;
@@ -4904,7 +4938,7 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
                                    (uchar *)(GRN_TEXT_VALUE(&key)),
                                    key_info.key_length,
                                    (uchar *)(GRN_TEXT_VALUE(&encoded_key)),
-                                   &encoded_key_length);
+                                   &encoded_key_length, FALSE);
 
     grn_obj *index_column = grn_index_columns[i];
     grn_rc rc;
@@ -5003,21 +5037,21 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
                                                range_min->key,
                                                range_min->length,
                                                key_min[key_nr],
-                                               &size_min);
+                                               &size_min, FALSE);
     } else {
       if (range_min) {
         val_min = mrn_multiple_column_key_encode(&key_info,
                                                  range_min->key,
                                                  range_min->length,
                                                  key_min[key_nr],
-                                                 &size_min);
+                                                 &size_min, FALSE);
       }
       if (range_max) {
         val_max = mrn_multiple_column_key_encode(&key_info,
                                                  range_max->key,
                                                  range_max->length,
                                                  key_max[key_nr],
-                                                 &size_max);
+                                                 &size_max, FALSE);
       }
     }
   } else if (mrn_is_geo_key(&key_info)) {
@@ -5271,7 +5305,8 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
     uint key_length = calculate_key_len(table, active_index, key, keypart_map);
     val_min = mrn_multiple_column_key_encode(&key_info,
                                              key, key_length,
-                                             key_min[active_index], &size_min);
+                                             key_min[active_index], &size_min,
+                                             FALSE);
   } else if (mrn_is_geo_key(&key_info)) {
     error = mrn_change_encoding(ctx, key_info.key_part->field->charset());
     if (error)
@@ -5413,7 +5448,8 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
     uint key_length = calculate_key_len(table, active_index, key, keypart_map);
     val_min = mrn_multiple_column_key_encode(&key_info,
                                              key, key_length,
-                                             key_min[key_nr], &size_min);
+                                             key_min[key_nr], &size_min,
+                                             FALSE);
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
     Field *field = key_part.field;
@@ -5783,21 +5819,21 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
                                                start_key->key,
                                                start_key->length,
                                                key_min[active_index],
-                                               &size_min);
+                                               &size_min, FALSE);
     } else {
       if (start_key) {
         val_min = mrn_multiple_column_key_encode(&key_info,
                                                  start_key->key,
                                                  start_key->length,
                                                  key_min[active_index],
-                                                 &size_min);
+                                                 &size_min, FALSE);
       }
       if (end_key) {
         val_max = mrn_multiple_column_key_encode(&key_info,
                                                  end_key->key,
                                                  end_key->length,
                                                  key_max[active_index],
-                                                 &size_max);
+                                                 &size_max, FALSE);
       }
     }
   } else {
@@ -6631,7 +6667,10 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
   if (buf) {
-    store_to_fields_from_primary_table(buf, record_id);
+    if (keyread)
+      store_to_fields_from_index(buf);
+    else
+      store_to_fields_from_primary_table(buf, record_id);
     if (cursor_geo && grn_source_column_geo) {
       int latitude, longitude;
       GRN_GEO_POINT_VALUE(&source_point, latitude, longitude);
@@ -6967,7 +7006,8 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::store_to_field(grn_obj *col, grn_id id, Field *field)
+void ha_mroonga::store_to_field(grn_obj *col, grn_id id, Field *field,
+                                void *key, int key_length)
 {
   grn_obj buf;
   mrn_change_encoding(ctx, field->charset());
@@ -6977,7 +7017,10 @@ void ha_mroonga::store_to_field(grn_obj *col, grn_id id, Field *field)
   case MYSQL_TYPE_NEWDECIMAL:
     {
       GRN_TEXT_INIT(&buf, 0);
-      grn_obj_get_value(ctx, col, id, &buf);
+      if (key)
+        GRN_TEXT_SET(ctx, &buf, key, key_length);
+      else
+        grn_obj_get_value(ctx, col, id, &buf);
       field->store(GRN_TEXT_VALUE(&buf), GRN_TEXT_LEN(&buf), field->charset());
     }
     break;
@@ -6986,43 +7029,73 @@ void ha_mroonga::store_to_field(grn_obj *col, grn_id id, Field *field)
   case MYSQL_TYPE_SET :
   case MYSQL_TYPE_TINY :
     {
-      GRN_INT8_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      int val = GRN_INT8_VALUE(&buf);
+      int val;
+      if (key) {
+        GRN_VOID_INIT(&buf);
+        val = *((int *) key);
+      } else {
+        GRN_INT8_INIT(&buf,0);
+        grn_obj_get_value(ctx, col, id, &buf);
+        val = GRN_INT8_VALUE(&buf);
+      }
       field->store(val);
       break;
     }
   case MYSQL_TYPE_SHORT :
     {
-      GRN_INT16_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      int val = GRN_INT16_VALUE(&buf);
+      int val;
+      if (key) {
+        GRN_VOID_INIT(&buf);
+        val = *((int *) key);
+      } else {
+        GRN_INT16_INIT(&buf,0);
+        grn_obj_get_value(ctx, col, id, &buf);
+        val = GRN_INT16_VALUE(&buf);
+      }
       field->store(val);
       break;
     }
   case MYSQL_TYPE_INT24 :
   case MYSQL_TYPE_LONG :
     {
-      GRN_INT32_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      int val = GRN_INT32_VALUE(&buf);
+      int val;
+      if (key) {
+        GRN_VOID_INIT(&buf);
+        val = *((int *) key);
+      } else {
+        GRN_INT32_INIT(&buf,0);
+        grn_obj_get_value(ctx, col, id, &buf);
+        val = GRN_INT32_VALUE(&buf);
+      }
       field->store(val);
       break;
     }
   case MYSQL_TYPE_LONGLONG :
     {
-      GRN_INT64_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      long long int val = GRN_INT64_VALUE(&buf);
+      long long int val;
+      if (key) {
+        GRN_VOID_INIT(&buf);
+        val = *((int *) key);
+      } else {
+        GRN_INT64_INIT(&buf,0);
+        grn_obj_get_value(ctx, col, id, &buf);
+        val = GRN_INT64_VALUE(&buf);
+      }
       field->store(val);
       break;
     }
   case MYSQL_TYPE_FLOAT :
   case MYSQL_TYPE_DOUBLE :
     {
-      GRN_FLOAT_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      double val = GRN_FLOAT_VALUE(&buf);
+      double val;
+      if (key) {
+        GRN_VOID_INIT(&buf);
+        val = *((int *) key);
+      } else {
+        GRN_FLOAT_INIT(&buf,0);
+        grn_obj_get_value(ctx, col, id, &buf);
+        val = GRN_FLOAT_VALUE(&buf);
+      }
       field->store(val);
       break;
     }
@@ -7031,9 +7104,15 @@ void ha_mroonga::store_to_field(grn_obj *col, grn_id id, Field *field)
   case MYSQL_TYPE_YEAR :
   case MYSQL_TYPE_DATETIME :
     {
-      GRN_TIME_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
-      long long int val = GRN_TIME_VALUE(&buf);
+      long long int val;
+      if (key) {
+        GRN_VOID_INIT(&buf);
+        val = *((int *) key);
+      } else {
+        GRN_TIME_INIT(&buf,0);
+        grn_obj_get_value(ctx, col, id, &buf);
+        val = GRN_TIME_VALUE(&buf);
+      }
       field->store(val);
       break;
     }
@@ -7074,7 +7153,10 @@ void ha_mroonga::store_to_field(grn_obj *col, grn_id id, Field *field)
   default: //strings etc..
     {
       GRN_TEXT_INIT(&buf,0);
-      grn_obj_get_value(ctx, col, id, &buf);
+      if (key)
+        GRN_TEXT_SET(ctx, &buf, key, key_length);
+      else
+        grn_obj_get_value(ctx, col, id, &buf);
       char *val = GRN_TEXT_VALUE(&buf);
       int len = GRN_TEXT_LEN(&buf);
       field->store(val, len, field->charset());
@@ -7118,7 +7200,7 @@ void ha_mroonga::store_to_fields_from_primary_table(uchar *buf, grn_id record_id
         field->store((int)record_id);
       } else {
         // actual column
-        store_to_field(grn_columns[i], record_id, field);
+        store_to_field(grn_columns[i], record_id, field, NULL, 0);
       }
       field->move_field_offset(-ptr_diff);
 #ifndef DBUG_OFF
@@ -7127,6 +7209,48 @@ void ha_mroonga::store_to_fields_from_primary_table(uchar *buf, grn_id record_id
     }
   }
 
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::store_to_fields_from_index(uchar *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int key_length;
+  void *key;
+  KEY *key_info = &table->key_info[active_index];
+  if (table->s->primary_key == active_index)
+    key_length = grn_table_cursor_get_key(ctx, cursor, &key);
+  else
+    key_length = grn_table_cursor_get_key(ctx, index_table_cursor, &key);
+
+  if (key_info->key_parts == 1) {
+    my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(buf, table->record[0]);
+    Field *field = key_info->key_part->field;
+#ifndef DBUG_OFF
+    my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table,
+                                                      table->write_set);
+#endif
+    field->move_field_offset(ptr_diff);
+    store_to_field(NULL, 0, field, key, key_length);
+    field->move_field_offset(-ptr_diff);
+#ifndef DBUG_OFF
+    dbug_tmp_restore_column_map(table->write_set, tmp_map);
+#endif
+  } else {
+    grn_obj grn_buf;
+    uchar enc_buf[MAX_KEY_LENGTH];
+    GRN_TEXT_INIT(&grn_buf,0);
+    GRN_TEXT_SET(ctx, &grn_buf, key, key_length);
+    char *val = GRN_TEXT_VALUE(&grn_buf);
+    uint len = GRN_TEXT_LEN(&grn_buf), enc_len;
+    mrn_multiple_column_key_encode(key_info,
+                                   (uchar *) val,
+                                   len,
+                                   enc_buf,
+                                   &enc_len, TRUE);
+    key_restore(buf, enc_buf, key_info, enc_len);
+    grn_obj_unlink(ctx, &grn_buf);
+  }
   DBUG_VOID_RETURN;
 }
 
@@ -7145,6 +7269,7 @@ int ha_mroonga::wrapper_reset()
 int ha_mroonga::storage_reset()
 {
   MRN_DBUG_ENTER_METHOD();
+  keyread = FALSE;
   DBUG_RETURN(0);
 }
 

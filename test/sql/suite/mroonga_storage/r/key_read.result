@@ -1,0 +1,53 @@
+drop table if exists t1;
+create table t1 (c1 int, c2 int, c3 int, primary key(c1), key idx1(c2), key idx2(c3, c2));
+insert into t1 values(1,2,4);
+insert into t1 select c1 + 1, c2 + 2, c3 + 4 from t1;
+insert into t1 select c1 + 2, c2 + 4, c3 + 8 from t1;
+insert into t1 select c1 + 4, c2 + 8, c3 + 16 from t1;
+insert into t1 select c1 + 8, c2 + 16, c3 + 32 from t1;
+insert into t1 select c1 + 16, c2 + 32, c3 + 64 from t1;
+select c1 from t1 where c1 between 10 and 16;
+c1
+10
+11
+12
+13
+14
+15
+16
+select c2 from t1 where c2 between 10 and 16;
+c2
+10
+12
+14
+16
+select c2, c3 from t1 where c3 between 10 and 16;
+c2	c3
+6	12
+drop table t1;
+create table t1 (c1 varchar(10), c2 varchar(10), c3 varchar(10), primary key(c1), key idx1(c2), key idx2(c3, c2));
+insert into t1 values('1','2','4');
+insert into t1 select c1 + 1, c2 + 2, c3 + 4 from t1;
+insert into t1 select c1 + 2, c2 + 4, c3 + 8 from t1;
+insert into t1 select c1 + 4, c2 + 8, c3 + 16 from t1;
+insert into t1 select c1 + 8, c2 + 16, c3 + 32 from t1;
+insert into t1 select c1 + 16, c2 + 32, c3 + 64 from t1;
+select c1 from t1 where c1 between '10' and '16';
+c1
+10
+11
+12
+13
+14
+15
+16
+select c2 from t1 where c2 between '10' and '16';
+c2
+10
+12
+14
+16
+select c2, c3 from t1 where c3 between '10' and '16';
+c2	c3
+6	12
+drop table t1;
