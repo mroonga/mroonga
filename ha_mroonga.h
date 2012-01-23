@@ -401,10 +401,10 @@ private:
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit,
                               grn_obj *target_table, grn_obj *score_column);
-  void storage_store_to_field(grn_obj *col, grn_id id, Field *field,
-                              void *key, int key_length);
-  void storage_store_to_fields_from_primary_table(uchar *buf, grn_id record_id);
-  void storage_store_to_fields_from_index(uchar *buf);
+  void storage_store_field(grn_obj *col, grn_id id, Field *field,
+                           void *key, int key_length);
+  void storage_store_fields(uchar *buf, grn_id record_id);
+  void storage_store_fields_by_index(uchar *buf);
   void set_pk_bitmap();
   int wrapper_create(const char *name, TABLE *table,
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);

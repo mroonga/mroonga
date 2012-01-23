@@ -3859,7 +3859,7 @@ int ha_mroonga::storage_rnd_pos(uchar *buf, uchar *pos)
 {
   MRN_DBUG_ENTER_METHOD();
   record_id = *((grn_id*) pos);
-  storage_store_to_fields_from_primary_table(buf, record_id);
+  storage_store_fields(buf, record_id);
   DBUG_RETURN(0);
 }
 
@@ -5335,7 +5335,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
         grn_id found_record_id = *(grn_id *)key_min[key_nr];
         if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
-          storage_store_to_fields_from_primary_table(buf, found_record_id);
+          storage_store_fields(buf, found_record_id);
           table->status = 0;
           record_id = found_record_id;
           DBUG_RETURN(0);
@@ -5853,8 +5853,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
         if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
           grn_id found_record_id = *(grn_id *)key_min[active_index];
           if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
-            storage_store_to_fields_from_primary_table(table->record[0],
-                                                       found_record_id);
+            storage_store_fields(table->record[0], found_record_id);
             table->status = 0;
             cursor = NULL;
             record_id = found_record_id;
@@ -6300,7 +6299,7 @@ int ha_mroonga::storage_ft_read(uchar *buf)
     grn_table_cursor_get_key(ctx, cursor, &key);
     record_id = *((grn_id *)key);
   }
-  storage_store_to_fields_from_primary_table(buf, record_id);
+  storage_store_fields(buf, record_id);
   DBUG_RETURN(0);
 }
 
@@ -6668,9 +6667,9 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
   }
   if (buf) {
     if (keyread)
-      storage_store_to_fields_from_index(buf);
+      storage_store_fields_by_index(buf);
     else
-      storage_store_to_fields_from_primary_table(buf, record_id);
+      storage_store_fields(buf, record_id);
     if (cursor_geo && grn_source_column_geo) {
       int latitude, longitude;
       GRN_GEO_POINT_VALUE(&source_point, latitude, longitude);
@@ -7006,7 +7005,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::storage_store_to_field(grn_obj *col, grn_id id, Field *field,
+void ha_mroonga::storage_store_field(grn_obj *col, grn_id id, Field *field,
                                         void *key, int key_length)
 {
   grn_obj buf;
@@ -7166,7 +7165,7 @@ void ha_mroonga::storage_store_to_field(grn_obj *col, grn_id id, Field *field,
   grn_obj_unlink(ctx, &buf);
 }
 
-void ha_mroonga::storage_store_to_fields_from_primary_table(uchar *buf, grn_id record_id)
+void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: stored record ID: %d", record_id));
@@ -7200,7 +7199,7 @@ void ha_mroonga::storage_store_to_fields_from_primary_table(uchar *buf, grn_id r
         field->store((int)record_id);
       } else {
         // actual column
-        storage_store_to_field(grn_columns[i], record_id, field, NULL, 0);
+        storage_store_field(grn_columns[i], record_id, field, NULL, 0);
       }
       field->move_field_offset(-ptr_diff);
 #ifndef DBUG_OFF
@@ -7212,7 +7211,7 @@ void ha_mroonga::storage_store_to_fields_from_primary_table(uchar *buf, grn_id r
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::storage_store_to_fields_from_index(uchar *buf)
+void ha_mroonga::storage_store_fields_by_index(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int key_length;
@@ -7231,7 +7230,7 @@ void ha_mroonga::storage_store_to_fields_from_index(uchar *buf)
                                                       table->write_set);
 #endif
     field->move_field_offset(ptr_diff);
-    storage_store_to_field(NULL, 0, field, key, key_length);
+    storage_store_field(NULL, 0, field, key, key_length);
     field->move_field_offset(-ptr_diff);
 #ifndef DBUG_OFF
     dbug_tmp_restore_column_map(table->write_set, tmp_map);
