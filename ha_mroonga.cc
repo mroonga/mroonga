@@ -984,14 +984,10 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_ENUM:         // ENUM; <= 2bytes
-    type = GRN_DB_INT8;         // 1byte
-    // XXX: We should use INT16
-    // type = GRN_DB_INT16;        // 2bytes
+    type = GRN_DB_INT16;        // 2bytes
     break;
   case MYSQL_TYPE_SET:          // SET; <= 8bytes
-    type = GRN_DB_INT8;         // 1byte
-    // XXX: We should use INT64.
-    // type = GRN_DB_INT64;        // 8bytes
+    type = GRN_DB_INT64;        // 8bytes
     break;
   case MYSQL_TYPE_TINY_BLOB:    // TINYBLOB; <= 256bytes + 1byte
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
@@ -7011,101 +7007,190 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   DBUG_VOID_RETURN;
 }
 
+void ha_mroonga::storage_store_field_string(Field *field,
+                                            const char *value,
+                                            uint value_length)
+{
+  field->store(value, value_length, field->charset());
+}
+
+void ha_mroonga::storage_store_field_integer(Field *field,
+                                             const char *value,
+                                             uint value_length)
+{
+    switch (value_length) {
+    case 1:
+      {
+        char field_value;
+        field_value = *((char *)value);
+        field->store(field_value);
+        break;
+      }
+    case 2:
+      {
+        short field_value;
+        field_value = *((short *)value);
+        field->store(field_value);
+        break;
+      }
+    case 4:
+      {
+        int field_value;
+        field_value = *((int *)value);
+        field->store(field_value);
+        break;
+      }
+    case 8:
+      {
+        long long int field_value;
+        field_value = *((long long int *)value);
+        field->store(field_value);
+        break;
+      }
+    default:
+      {
+        // Why!?
+        char error_message[MRN_MESSAGE_BUFFER_SIZE];
+        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                 "unknown integer value size: <%d>: "
+                 "available sizes: [1, 2, 4, 8]",
+                 value_length);
+        push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+                     HA_ERR_UNSUPPORTED, error_message);
+      }
+      storage_store_field_string(field, value, value_length);
+      break;
+    }
+}
+
+void ha_mroonga::storage_store_field_float(Field *field,
+                                           const char *value,
+                                           uint value_length)
+{
+  double field_value;
+  field_value = *((double *)value);
+  field->store(field_value);
+}
+
+void ha_mroonga::storage_store_field_time(Field *field,
+                                          const char *value,
+                                          uint value_length)
+{
+  long long int field_value;
+  field_value = *((long long int *)value);
+  field->store(field_value);
+}
+
+void ha_mroonga::storage_store_field_blob(Field *field,
+                                          const char *value,
+                                          uint value_length)
+{
+  Field_blob *blob = (Field_blob *)field;
+  blob->set_ptr((uchar *)&value_length, (uchar *)value);
+}
+
+void ha_mroonga::storage_store_field_geometry(Field *field,
+                                              const char *value,
+                                              uint value_length)
+{
+  uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
+  grn_geo_point *field_value = (grn_geo_point *)value;
+  int latitude, longitude;
+  latitude = field_value->latitude;
+  longitude = field_value->longitude;
+  if (grn_source_column_geo) {
+    GRN_GEO_POINT_SET(ctx, &source_point, latitude, longitude);
+  }
+  memset(wkb, 0, SRID_SIZE);
+  memset(wkb + SRID_SIZE, Geometry::wkb_ndr, 1); // wkb_ndr is meaningless.
+  int4store(wkb + SRID_SIZE + 1, Geometry::wkb_point);
+  double latitude_in_degree, longitude_in_degree;
+  latitude_in_degree = GRN_GEO_MSEC2DEGREE(latitude);
+  longitude_in_degree = GRN_GEO_MSEC2DEGREE(longitude);
+  float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE,
+              longitude_in_degree);
+  float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
+              latitude_in_degree);
+  field->store((const char *)wkb,
+               (uint)(sizeof(wkb) / sizeof(*wkb)),
+               field->charset());
+}
+
 void ha_mroonga::storage_store_field(Field *field,
                                      const char *value, uint value_length)
 {
   field->set_notnull();
   switch (field->type()) {
   case MYSQL_TYPE_DECIMAL:
-  case MYSQL_TYPE_NEWDECIMAL:
-    field->store(value, value_length, field->charset());
+    storage_store_field_string(field, value, value_length);
     break;
-  case MYSQL_TYPE_BIT :
-  case MYSQL_TYPE_ENUM :
-  case MYSQL_TYPE_SET :
-  case MYSQL_TYPE_TINY :
-    {
-      signed char field_value;
-      field_value = *((signed char *)value);
-      field->store(field_value);
-      break;
-    }
-  case MYSQL_TYPE_SHORT :
-    {
-      signed short field_value;
-      field_value = *((signed short *)value);
-      field->store(field_value);
-      break;
-    }
-  case MYSQL_TYPE_INT24 :
-  case MYSQL_TYPE_LONG :
-    {
-      int field_value;
-      field_value = *((int *)value);
-      field->store(field_value);
-      break;
-    }
-  case MYSQL_TYPE_LONGLONG :
-    {
-      long long int field_value;
-      field_value = *((long long int *)value);
-      field->store(field_value);
-      break;
-    }
-  case MYSQL_TYPE_FLOAT :
-  case MYSQL_TYPE_DOUBLE :
-    {
-      double field_value;
-      field_value = *((double *)value);
-      field->store(field_value);
-      break;
-    }
-  case MYSQL_TYPE_TIME :
-  case MYSQL_TYPE_DATE :
-  case MYSQL_TYPE_YEAR :
-  case MYSQL_TYPE_DATETIME :
-    {
-      long long int field_value;
-      field_value = *((long long int *)value);
-      field->store(field_value);
-      break;
-    }
-  case MYSQL_TYPE_GEOMETRY :
-    {
-      uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
-      grn_geo_point *field_value = (grn_geo_point *)value;
-      int latitude, longitude;
-      latitude = field_value->latitude;
-      longitude = field_value->longitude;
-      if (grn_source_column_geo) {
-        GRN_GEO_POINT_SET(ctx, &source_point, latitude, longitude);
-      }
-      memset(wkb, 0, SRID_SIZE);
-      memset(wkb + SRID_SIZE, Geometry::wkb_ndr, 1); // wkb_ndr is meaningless.
-      int4store(wkb + SRID_SIZE + 1, Geometry::wkb_point);
-      double latitude_in_degree, longitude_in_degree;
-      latitude_in_degree = GRN_GEO_MSEC2DEGREE(latitude);
-      longitude_in_degree = GRN_GEO_MSEC2DEGREE(longitude);
-      float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE,
-                  longitude_in_degree);
-      float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
-                  latitude_in_degree);
-      field->store((const char *)wkb,
-                   (uint)(sizeof(wkb) / sizeof(*wkb)),
-                   field->charset());
-      break;
-    }
+  case MYSQL_TYPE_TINY:
+  case MYSQL_TYPE_SHORT:
+  case MYSQL_TYPE_LONG:
+    storage_store_field_integer(field, value, value_length);
+    break;
+  case MYSQL_TYPE_FLOAT:
+  case MYSQL_TYPE_DOUBLE:
+    storage_store_field_float(field, value, value_length);
+    break;
+  case MYSQL_TYPE_NULL:
+    storage_store_field_integer(field, value, value_length);
+    break;
+  case MYSQL_TYPE_TIMESTAMP:
+    storage_store_field_time(field, value, value_length);
+    break;
+  case MYSQL_TYPE_LONGLONG:
+  case MYSQL_TYPE_INT24:
+    storage_store_field_integer(field, value, value_length);
+    break;
+  case MYSQL_TYPE_DATE:
+  case MYSQL_TYPE_TIME:
+  case MYSQL_TYPE_DATETIME:
+  case MYSQL_TYPE_YEAR:
+  case MYSQL_TYPE_NEWDATE:
+    storage_store_field_time(field, value, value_length);
+    break;
+  case MYSQL_TYPE_VARCHAR:
+    storage_store_field_string(field, value, value_length);
+    break;
+  case MYSQL_TYPE_BIT:
+    storage_store_field_integer(field, value, value_length);
+    break;
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+  case MYSQL_TYPE_TIMESTAMP2:
+    storage_store_field_time(field, value, value_length);
+    break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+  case MYSQL_TYPE_DATETIME2:
+    storage_store_field_time(field, value, value_length);
+    break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+  case MYSQL_TYPE_TIME2:
+    storage_store_field_time(field, value, value_length);
+    break;
+#endif
+  case MYSQL_TYPE_NEWDECIMAL:
+    storage_store_field_string(field, value, value_length);
+    break;
+  case MYSQL_TYPE_ENUM:
+  case MYSQL_TYPE_SET:
+    storage_store_field_integer(field, value, value_length);
+    break;
+  case MYSQL_TYPE_TINY_BLOB:
+  case MYSQL_TYPE_MEDIUM_BLOB:
+  case MYSQL_TYPE_LONG_BLOB:
   case MYSQL_TYPE_BLOB:
-    {
-      Field_blob *blob = (Field_blob *)field;
-      blob->set_ptr((uchar *)&value_length, (uchar *)value);
-      break;
-    }
-  default: //strings etc..
-    {
-      field->store(value, value_length, field->charset());
-      break;
-    }
+    storage_store_field_blob(field, value, value_length);
+    break;
+  case MYSQL_TYPE_VAR_STRING:
+  case MYSQL_TYPE_STRING:
+    storage_store_field_string(field, value, value_length);
+    break;
+  case MYSQL_TYPE_GEOMETRY:
+    storage_store_field_geometry(field, value, value_length);
+    break;
   }
 }
 

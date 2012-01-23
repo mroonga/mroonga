@@ -400,6 +400,18 @@ private:
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit,
                               grn_obj *target_table, grn_obj *score_column);
+  void storage_store_field_string(Field *field,
+                                  const char *value, uint value_length);
+  void storage_store_field_integer(Field *field,
+                                   const char *value, uint value_length);
+  void storage_store_field_float(Field *field,
+                                 const char *value, uint value_length);
+  void storage_store_field_time(Field *field,
+                                const char *value, uint value_length);
+  void storage_store_field_blob(Field *field,
+                                const char *value, uint value_length);
+  void storage_store_field_geometry(Field *field,
+                                    const char *value, uint value_length);
   void storage_store_field(Field *field, const char *value, uint value_length);
   void storage_store_fields(uchar *buf, grn_id record_id);
   void storage_store_fields_by_index(uchar *buf);
