@@ -1883,7 +1883,6 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   wrap_handler = NULL;
   matched_record_keys = NULL;
   fulltext_searching = FALSE;
-  keyread = FALSE;
   mrn_lock_type = F_UNLCK;
   GRN_TEXT_INIT(&key_buffer, 0);
   GRN_TEXT_INIT(&encoded_key_buffer, 0);
@@ -3942,17 +3941,6 @@ int ha_mroonga::wrapper_extra(enum ha_extra_function operation)
 int ha_mroonga::storage_extra(enum ha_extra_function operation)
 {
   MRN_DBUG_ENTER_METHOD();
-  switch (operation)
-  {
-    case HA_EXTRA_KEYREAD:
-      keyread = TRUE;
-      break;
-    case HA_EXTRA_NO_KEYREAD:
-      keyread = FALSE;
-      break;
-    default:
-      break;
-  }
   DBUG_RETURN(0);
 }
 
@@ -6666,7 +6654,7 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
   if (buf) {
-    if (keyread)
+    if (ignoring_no_key_columns)
       storage_store_fields_by_index(buf);
     else
       storage_store_fields(buf, record_id);
@@ -7263,7 +7251,6 @@ int ha_mroonga::wrapper_reset()
 int ha_mroonga::storage_reset()
 {
   MRN_DBUG_ENTER_METHOD();
-  keyread = FALSE;
   DBUG_RETURN(0);
 }
 

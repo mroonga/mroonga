@@ -192,7 +192,6 @@ private:
 #endif
 
   bool ignoring_no_key_columns;
-  bool keyread;
 
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg);
