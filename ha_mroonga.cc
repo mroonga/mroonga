@@ -7018,49 +7018,49 @@ void ha_mroonga::storage_store_field_integer(Field *field,
                                              const char *value,
                                              uint value_length)
 {
-    switch (value_length) {
-    case 1:
-      {
-        char field_value;
-        field_value = *((char *)value);
-        field->store(field_value);
-        break;
-      }
-    case 2:
-      {
-        short field_value;
-        field_value = *((short *)value);
-        field->store(field_value);
-        break;
-      }
-    case 4:
-      {
-        int field_value;
-        field_value = *((int *)value);
-        field->store(field_value);
-        break;
-      }
-    case 8:
-      {
-        long long int field_value;
-        field_value = *((long long int *)value);
-        field->store(field_value);
-        break;
-      }
-    default:
-      {
-        // Why!?
-        char error_message[MRN_MESSAGE_BUFFER_SIZE];
-        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-                 "unknown integer value size: <%d>: "
-                 "available sizes: [1, 2, 4, 8]",
-                 value_length);
-        push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
-                     HA_ERR_UNSUPPORTED, error_message);
-      }
-      storage_store_field_string(field, value, value_length);
-      break;
-    }
+  switch (value_length) {
+  case 1:
+  {
+    char field_value;
+    field_value = *((char *)value);
+    field->store(field_value);
+    break;
+  }
+  case 2:
+  {
+    short field_value;
+    field_value = *((short *)value);
+    field->store(field_value);
+    break;
+  }
+  case 4:
+  {
+    int field_value;
+    field_value = *((int *)value);
+    field->store(field_value);
+    break;
+  }
+  case 8:
+  {
+    long long int field_value;
+    field_value = *((long long int *)value);
+    field->store(field_value);
+    break;
+  }
+  default:
+  {
+    // Why!?
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "unknown integer value size: <%d>: "
+             "available sizes: [1, 2, 4, 8]",
+             value_length);
+    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+                 HA_ERR_UNSUPPORTED, error_message);
+  }
+  storage_store_field_string(field, value, value_length);
+  break;
+  }
 }
 
 void ha_mroonga::storage_store_field_float(Field *field,
