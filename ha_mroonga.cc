@@ -7237,19 +7237,14 @@ void ha_mroonga::store_to_fields_from_index(uchar *buf)
     dbug_tmp_restore_column_map(table->write_set, tmp_map);
 #endif
   } else {
-    grn_obj grn_buf;
     uchar enc_buf[MAX_KEY_LENGTH];
-    GRN_TEXT_INIT(&grn_buf,0);
-    GRN_TEXT_SET(ctx, &grn_buf, key, key_length);
-    char *val = GRN_TEXT_VALUE(&grn_buf);
-    uint len = GRN_TEXT_LEN(&grn_buf), enc_len;
+    uint enc_len;
     mrn_multiple_column_key_encode(key_info,
-                                   (uchar *) val,
-                                   len,
+                                   (uchar *)key,
+                                   key_length,
                                    enc_buf,
                                    &enc_len, TRUE);
     key_restore(buf, enc_buf, key_info, enc_len);
-    grn_obj_unlink(ctx, &grn_buf);
   }
   DBUG_VOID_RETURN;
 }
