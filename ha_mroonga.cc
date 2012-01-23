@@ -7011,97 +7011,53 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::storage_store_field(grn_obj *col, grn_id id, Field *field,
-                                        void *key, int key_length)
+void ha_mroonga::storage_store_field(Field *field,
+                                     const char *value, uint value_length)
 {
-  grn_obj buf;
-  mrn_change_encoding(ctx, field->charset());
   field->set_notnull();
   switch (field->type()) {
   case MYSQL_TYPE_DECIMAL:
   case MYSQL_TYPE_NEWDECIMAL:
-    {
-      GRN_TEXT_INIT(&buf, 0);
-      if (key)
-        GRN_TEXT_SET(ctx, &buf, key, key_length);
-      else
-        grn_obj_get_value(ctx, col, id, &buf);
-      field->store(GRN_TEXT_VALUE(&buf), GRN_TEXT_LEN(&buf), field->charset());
-    }
+    field->store(value, value_length, field->charset());
     break;
   case MYSQL_TYPE_BIT :
   case MYSQL_TYPE_ENUM :
   case MYSQL_TYPE_SET :
   case MYSQL_TYPE_TINY :
     {
-      int val;
-      if (key) {
-        GRN_VOID_INIT(&buf);
-        val = *((int *) key);
-      } else {
-        GRN_INT8_INIT(&buf,0);
-        grn_obj_get_value(ctx, col, id, &buf);
-        val = GRN_INT8_VALUE(&buf);
-      }
-      field->store(val);
+      signed char field_value;
+      field_value = *((signed char *)value);
+      field->store(field_value);
       break;
     }
   case MYSQL_TYPE_SHORT :
     {
-      int val;
-      if (key) {
-        GRN_VOID_INIT(&buf);
-        val = *((int *) key);
-      } else {
-        GRN_INT16_INIT(&buf,0);
-        grn_obj_get_value(ctx, col, id, &buf);
-        val = GRN_INT16_VALUE(&buf);
-      }
-      field->store(val);
+      signed short field_value;
+      field_value = *((signed short *)value);
+      field->store(field_value);
       break;
     }
   case MYSQL_TYPE_INT24 :
   case MYSQL_TYPE_LONG :
     {
-      int val;
-      if (key) {
-        GRN_VOID_INIT(&buf);
-        val = *((int *) key);
-      } else {
-        GRN_INT32_INIT(&buf,0);
-        grn_obj_get_value(ctx, col, id, &buf);
-        val = GRN_INT32_VALUE(&buf);
-      }
-      field->store(val);
+      int field_value;
+      field_value = *((int *)value);
+      field->store(field_value);
       break;
     }
   case MYSQL_TYPE_LONGLONG :
     {
-      long long int val;
-      if (key) {
-        GRN_VOID_INIT(&buf);
-        val = *((int *) key);
-      } else {
-        GRN_INT64_INIT(&buf,0);
-        grn_obj_get_value(ctx, col, id, &buf);
-        val = GRN_INT64_VALUE(&buf);
-      }
-      field->store(val);
+      long long int field_value;
+      field_value = *((long long int *)value);
+      field->store(field_value);
       break;
     }
   case MYSQL_TYPE_FLOAT :
   case MYSQL_TYPE_DOUBLE :
     {
-      double val;
-      if (key) {
-        GRN_VOID_INIT(&buf);
-        val = *((int *) key);
-      } else {
-        GRN_FLOAT_INIT(&buf,0);
-        grn_obj_get_value(ctx, col, id, &buf);
-        val = GRN_FLOAT_VALUE(&buf);
-      }
-      field->store(val);
+      double field_value;
+      field_value = *((double *)value);
+      field->store(field_value);
       break;
     }
   case MYSQL_TYPE_TIME :
@@ -7109,25 +7065,18 @@ void ha_mroonga::storage_store_field(grn_obj *col, grn_id id, Field *field,
   case MYSQL_TYPE_YEAR :
   case MYSQL_TYPE_DATETIME :
     {
-      long long int val;
-      if (key) {
-        GRN_VOID_INIT(&buf);
-        val = *((int *) key);
-      } else {
-        GRN_TIME_INIT(&buf,0);
-        grn_obj_get_value(ctx, col, id, &buf);
-        val = GRN_TIME_VALUE(&buf);
-      }
-      field->store(val);
+      long long int field_value;
+      field_value = *((long long int *)value);
+      field->store(field_value);
       break;
     }
   case MYSQL_TYPE_GEOMETRY :
     {
-      GRN_WGS84_GEO_POINT_INIT(&buf, 0);
-      grn_obj_get_value(ctx, col, id, &buf);
       uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
+      grn_geo_point *field_value = (grn_geo_point *)value;
       int latitude, longitude;
-      GRN_GEO_POINT_VALUE(&buf, latitude, longitude);
+      latitude = field_value->latitude;
+      longitude = field_value->longitude;
       if (grn_source_column_geo) {
         GRN_GEO_POINT_SET(ctx, &source_point, latitude, longitude);
       }
@@ -7148,27 +7097,16 @@ void ha_mroonga::storage_store_field(grn_obj *col, grn_id id, Field *field,
     }
   case MYSQL_TYPE_BLOB:
     {
-      GRN_VOID_INIT(&buf);
-      uint32 len;
-      const char *val = grn_obj_get_value_(ctx, col, id, &len);
       Field_blob *blob = (Field_blob *)field;
-      blob->set_ptr((uchar *)&len, (uchar *)val);
+      blob->set_ptr((uchar *)&value_length, (uchar *)value);
       break;
     }
   default: //strings etc..
     {
-      GRN_TEXT_INIT(&buf,0);
-      if (key)
-        GRN_TEXT_SET(ctx, &buf, key, key_length);
-      else
-        grn_obj_get_value(ctx, col, id, &buf);
-      char *val = GRN_TEXT_VALUE(&buf);
-      int len = GRN_TEXT_LEN(&buf);
-      field->store(val, len, field->charset());
+      field->store(value, value_length, field->charset());
       break;
     }
   }
-  grn_obj_unlink(ctx, &buf);
 }
 
 void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
@@ -7205,7 +7143,11 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         field->store((int)record_id);
       } else {
         // actual column
-        storage_store_field(grn_columns[i], record_id, field, NULL, 0);
+        const char *value;
+        uint32 value_length;
+        value = grn_obj_get_value_(ctx, grn_columns[i], record_id,
+                                   &value_length);
+        storage_store_field(field, value, value_length);
       }
       field->move_field_offset(-ptr_diff);
 #ifndef DBUG_OFF
@@ -7220,7 +7162,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
 void ha_mroonga::storage_store_fields_by_index(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  int key_length;
+  uint key_length;
   void *key;
   KEY *key_info = &table->key_info[active_index];
   if (table->s->primary_key == active_index)
@@ -7236,7 +7178,7 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
                                                       table->write_set);
 #endif
     field->move_field_offset(ptr_diff);
-    storage_store_field(NULL, 0, field, key, key_length);
+    storage_store_field(field, (const char *)key, key_length);
     field->move_field_offset(-ptr_diff);
 #ifndef DBUG_OFF
     dbug_tmp_restore_column_map(table->write_set, tmp_map);
