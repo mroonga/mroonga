@@ -1337,21 +1337,25 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
         mrn_byte_order_host_to_network(current_buffer, &int_value, data_size);
         if (decode) {
           int_value = *((int *)current_buffer);
-          *((int *)current_buffer) = int_value ^ (((int_value ^ (1 << n_bits)) >> n_bits) | (1 << n_bits));
+          *((int *)current_buffer) =
+            int_value ^ (((int_value ^ (1 << n_bits)) >> n_bits) |
+                         (1 << n_bits));
         }
       }
       break;
     case TYPE_DOUBLE:
       {
-        long_long_value = (long long int)(double_value);
+        int n_bits = (data_size * 8 - 1);
+        long_long_value = *((long long int *)(&double_value));
         if (!decode)
-          long_long_value ^= ((long_long_value >> 63) | (1LL << 63));
+          long_long_value ^= ((long_long_value >> n_bits) | (1LL << n_bits));
         mrn_byte_order_host_to_network(current_buffer, &long_long_value,
                                        data_size);
         if (decode) {
-          *((long long int *)current_buffer) ^= (1LL << 63);
-          *((long long int *)current_buffer) ^=
-            (*((long long int *)current_buffer) >> 63);
+          long_long_value = *((long long int *)current_buffer);
+          *((long long int *)current_buffer) =
+            long_long_value ^ (((long_long_value ^ (1LL << n_bits)) >> n_bits) |
+                               (1LL << n_bits));
         }
       }
       break;
