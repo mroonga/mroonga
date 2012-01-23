@@ -1236,10 +1236,12 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
     enum {
       TYPE_LONG_LONG_NUMBER,
       TYPE_NUMBER,
+      TYPE_FLOAT,
       TYPE_DOUBLE,
       TYPE_BYTE_SEQUENCE
     } data_type;
     uint32 data_size;
+    int int_value;
     long long int long_long_value;
     float float_value;
     double double_value;
@@ -1268,10 +1270,9 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
       data_size = 8;
       break;
     case MYSQL_TYPE_FLOAT:
-      data_type = TYPE_DOUBLE;
-      data_size = 8;
+      data_type = TYPE_FLOAT;
+      data_size = 4;
       float4get(float_value, current_key);
-      double_value = float_value;
       break;
     case MYSQL_TYPE_DOUBLE:
       data_type = TYPE_DOUBLE;
@@ -1324,6 +1325,19 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
         Field_num *number_field = (Field_num *)field;
         if (!number_field->unsigned_flag) {
           *((uint8_t *)(current_buffer)) ^= 0x80;
+        }
+      }
+      break;
+    case TYPE_FLOAT:
+      {
+        int n_bits = (data_size * 8 - 1);
+        int_value = *((int *)(&float_value));
+        if (!decode)
+          int_value ^= ((int_value >> n_bits) | (1 << n_bits));
+        mrn_byte_order_host_to_network(current_buffer, &int_value, data_size);
+        if (decode) {
+          int_value = *((int *)current_buffer);
+          *((int *)current_buffer) = int_value ^ (((int_value ^ (1 << n_bits)) >> n_bits) | (1 << n_bits));
         }
       }
       break;
