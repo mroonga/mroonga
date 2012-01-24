@@ -6874,6 +6874,8 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
         if (where->type() == Item::FIELD_ITEM)
         {
           Field *field = ((Item_field *)where)->field;
+          if (!field)
+            break;
           if (field->table != table)
             break;
           uint j;
