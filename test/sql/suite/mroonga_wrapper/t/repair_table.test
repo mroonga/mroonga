@@ -18,6 +18,10 @@
 --source include/have_mroonga_helper.inc
 
 --disable_warnings
+DROP DATABASE IF EXISTS repair_test;
+CREATE DATABASE repair_test;
+USE repair_test;
+
 DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
@@ -35,11 +39,11 @@ INSERT INTO diaries (title, body) VALUES ("groonga (2)", "started groonga.");
 
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
---remove_file $MYSQLD_DATADIR/test.mrn.0000101
+--remove_file $MYSQLD_DATADIR/repair_test.mrn.0000101
 
 FLUSH TABLES;
 
-# Error 1016 syscall error 'test.mrn.0000101' (No such file or directory)
+# Error 1016 syscall error 'repair_test.mrn.0000101' (No such file or directory)
 --error 1016
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
@@ -50,5 +54,8 @@ SELECT * FROM diaries;
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
 DROP TABLE diaries;
+
+DROP DATABASE repair_test;
+USE test;
 
 --source include/have_mroonga_deinit.inc
