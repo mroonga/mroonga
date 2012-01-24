@@ -38,6 +38,7 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <dirent.h>
 #include <unistd.h>
 #include "mrn_err.h"
 #include "mrn_table.h"
@@ -2872,7 +2873,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
   if (error)
     DBUG_RETURN(error);
 
-  error = wrapper_open_indexes(name);
+  error = wrapper_open_indexes(name, thd_sql_command(ha_thd()) == SQLCOM_REPAIR);
   if (error) {
     grn_obj_unlink(ctx, grn_table);
     grn_table = NULL;
@@ -2951,7 +2952,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_open_indexes(const char *name)
+int ha_mroonga::wrapper_open_indexes(const char *name, bool ignore_open_error)
 {
   int error;
 
@@ -3005,7 +3006,13 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     grn_index_tables[i] = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (ctx->rc) {
       DBUG_PRINT("info",
-        ("mroonga: sql_command=%u", thd_sql_command(ha_thd())));
+                 ("mroonga: sql_command=%u", thd_sql_command(ha_thd())));
+      if (ignore_open_error)
+      {
+        DBUG_PRINT("info", ("mroonga: continue"));
+        grn_index_tables[i] = NULL;
+        continue;
+      }
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       free(key_min[i]);
@@ -3027,6 +3034,12 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     if (ctx->rc) {
       DBUG_PRINT("info",
         ("mroonga: sql_command=%u", thd_sql_command(ha_thd())));
+      if (ignore_open_error)
+      {
+        DBUG_PRINT("info", ("mroonga: continue"));
+        grn_index_columns[i] = NULL;
+        continue;
+      }
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       free(key_min[i]);
@@ -6528,6 +6541,40 @@ void ha_mroonga::clear_indexes()
   DBUG_VOID_RETURN;
 }
 
+void ha_mroonga::remove_grn_obj_force(const char *name)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_obj *obj = grn_ctx_get(ctx, name, strlen(name));
+  if (obj) {
+    grn_obj_remove(ctx, obj);
+  } else {
+    grn_obj *db = grn_ctx_db(ctx);
+    grn_id id = grn_table_get(ctx, db, name, strlen(name));
+    if (id) {
+      char path[MRN_MAX_PATH_SIZE];
+      grn_obj_delete_by_id(ctx, db, id, GRN_TRUE);
+      if (grn_obj_path_by_id(ctx, db, id, path) == GRN_SUCCESS) {
+        size_t path_length = strlen(path);
+        DIR *dir = opendir(".");
+        if (dir) {
+          while (struct dirent *entry = readdir(dir)) {
+            if (entry->d_type != DT_REG) {
+              continue;
+            }
+            if (strncmp(entry->d_name, path, path_length) == 0) {
+              unlink(entry->d_name);
+            }
+          }
+          closedir(dir);
+        }
+      }
+    }
+  }
+
+  DBUG_VOID_RETURN;
+}
+
 grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -8550,7 +8597,6 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
   char db_name[MRN_MAX_PATH_SIZE];
   char table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
-  grn_obj *db, *grn_table;
   MRN_DBUG_ENTER_METHOD();
   mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
              (const uchar *) table_share->normalized_path.str,
@@ -8558,45 +8604,28 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
              table_share->normalized_path.length);
   mrn_db_name_gen(decode_name, db_name);
   mrn_table_name_gen(decode_name, table_name);
-  mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db);
   bitmap_clear_all(table->read_set);
   clear_indexes();
-  grn_table = grn_ctx_get(ctx, table_name, strlen(table_name));
-  if (grn_table != NULL) {
-    grn_obj_remove(ctx, grn_table);
-  } else {
-    record_id = grn_table_get(ctx, db,
-                              table_name,
-                              strlen(table_name));
-    if (record_id != GRN_ID_NIL) {
-      grn_obj_delete_by_id(ctx, db, record_id, GRN_TRUE);
-    }
-  }
+  remove_grn_obj_force(table_name);
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
   for (i = 0; i < n_keys; i++) {
     if (!(key_info[i].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[i])) {
       continue;
     }
     char index_name[MRN_MAX_PATH_SIZE];
+    char index_column_full_name[MRN_MAX_PATH_SIZE];
     mrn_index_table_name_gen(table_name, table_share->key_info[i].name,
                              index_name);
-    grn_table = grn_ctx_get(ctx, index_name, strlen(index_name));
-    if (grn_table != NULL) {
-      grn_obj_remove(ctx, grn_table);
-    } else {
-      record_id = grn_table_get(ctx, db,
-                                index_name,
-                                strlen(index_name));
-      if (record_id != GRN_ID_NIL) {
-        grn_obj_delete_by_id(ctx, db, record_id, GRN_TRUE);
-      }
-    }
+    snprintf(index_column_full_name, MRN_MAX_PATH_SIZE,
+             "%s.%s", index_name, index_column_name);
+    remove_grn_obj_force(index_column_full_name);
+    remove_grn_obj_force(index_name);
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
   }
   if (
     (res = wrapper_create_index(table_share->normalized_path.str, table,
       NULL, share)) ||
-    (res = wrapper_open_indexes(table_share->normalized_path.str))
+    (res = wrapper_open_indexes(table_share->normalized_path.str, false))
   )
     DBUG_RETURN(res);
   if (
@@ -8692,7 +8721,8 @@ int ha_mroonga::wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt)
   MRN_SET_BASE_TABLE_KEY(this, table);
   if (error && error != HA_ADMIN_NOT_IMPLEMENTED)
     DBUG_RETURN(error);
-  DBUG_RETURN(wrapper_recreate_indexes(thd));
+  error = wrapper_recreate_indexes(thd);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_repair(THD* thd, HA_CHECK_OPT* check_opt)

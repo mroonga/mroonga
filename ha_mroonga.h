@@ -1,7 +1,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2012 Kentoku SHIBA
-  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -386,6 +386,7 @@ private:
   void clear_search_result();
   void clear_search_result_geo();
   void clear_indexes();
+  void remove_grn_obj_force(const char *name);
   grn_obj *find_tokenizer(const char *name, int name_length);
   int wrapper_get_next_record(uchar *buf);
   int storage_get_next_record(uchar *buf);
@@ -453,7 +454,7 @@ private:
   int storage_delete_table(const char *name, MRN_SHARE *tmp_share,
                            const char *table_name);
   int wrapper_open(const char *name, int mode, uint test_if_locked);
-  int wrapper_open_indexes(const char *name);
+  int wrapper_open_indexes(const char *name, bool ignore_open_error);
   int storage_open(const char *name, int mode, uint test_if_locked);
   int open_table(const char *name);
   int storage_open_columns(void);

@@ -25,7 +25,6 @@ SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 ERROR HY000: syscall error 'test.mrn.0000101' (No such file or directory)
 REPAIR TABLE diaries;
 Table	Op	Msg_type	Msg_text
-test.diaries	repair	note	Table does not support optimize, doing recreate + analyze instead
 test.diaries	repair	status	OK
 SELECT * FROM diaries;
 id	title	body
