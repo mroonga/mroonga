@@ -20,7 +20,7 @@ By using SHOW ENGINES command, you can check if mroonga is installed. ::
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
  | Engine     | Support | Comment                                                    | Transactions | XA   | Savepoints |
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
- | groonga    | YES     | Fulltext search, column base                               | NO           | NO   | NO         |
+ | mroonga    | YES     | Fulltext search, column base                               | NO           | NO   | NO         |
  | MRG_MYISAM | YES     | Collection of identical MyISAM tables                      | NO           | NO   | NO         |
  | CSV        | YES     | CSV storage engine                                         | NO           | NO   | NO         |
  | MyISAM     | DEFAULT | Default engine as of MySQL 3.23 with great performance     | NO           | NO   | NO         |
@@ -29,11 +29,11 @@ By using SHOW ENGINES command, you can check if mroonga is installed. ::
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
  6 rows in set (0.00 sec)
 
-If you see "groonga" storage engine like above, the installation is well done.
+If you see "mroonga" storage engine like above, the installation is well done.
 
 If not installed, invoke INSTALL PLUGIN command like below. ::
 
- mysql> INSTALL PLUGIN groonga SONAME 'ha_mroonga.so';
+ mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
 
 Running modes
 -------------
@@ -53,7 +53,7 @@ The structure of the storage mode is the following. You use it instead of existi
    :align: center
 
 With the wrapper mode, groonga is used for full text search function only, and another existing storage engine like InnoDB is used for storing data.
-By using wrapper mode, you combine InnoDB that is well-use as the storage engine and groonga that is a proven full text search engine, and you can use it as the stable database having the fast full text search function.
+By using wrapper mode, you combine InnoDB that is well-use as the storage engine and mroonga that is a proven full text search engine, and you can use it as the stable database having the fast full text search function.
 
 The structure of the wrapper mode is the following. Full text search related operations are done by mroonga, and other operations are done by existing storage engines like MyISAM, InnoDB etc.
 Mroonga is located between SQL Handler that processes SQL and an existing storage engine, thus all data goes through mroonga

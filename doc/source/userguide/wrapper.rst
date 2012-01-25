@@ -22,13 +22,13 @@ In wrapper mode, mroonga works in wrapping an existing storage engine. To specif
 How to use full text search
 ---------------------------
 
-After confirming the installation, let's create a table. The important point is to specify mroonga by ``ENGINE = groonga``. ::
+After confirming the installation, let's create a table. The important point is to specify mroonga by ``ENGINE = mroonga``. ::
 
   mysql> CREATE TABLE diaries (
       ->   id INT PRIMARY KEY AUTO_INCREMENT,
       ->   content VARCHAR(255),
       ->   FULLTEXT INDEX (content)
-      -> ) ENGINE = groonga COMMENT = 'engine "innodb"' DEFAULT CHARSET utf8;
+      -> ) ENGINE = mroonga COMMENT = 'engine "innodb"' DEFAULT CHARSET utf8;
   Query OK, 0 rows affected (0.52 sec)
 
 We put data by INSERT. ::
@@ -97,13 +97,13 @@ MySQL has the following syntax to specify the parser [#parser]_ for full text se
 
   FULLTEXT INDEX (content) WITH PARSER parser_name
 
-To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in mroonga, tokenisers that are added in groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
+To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, mroonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in mroonga, tokenisers that are added in mroonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
 
   FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
 
 .. note::
 
-   ``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If you use MySQL 5.1, use ``groonga_default_parser`` variable described below.
+   ``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If you use MySQL 5.1, use ``mroonga_default_parser`` variable described below.
 
 You can specify one of following values as the parser.
 
@@ -170,16 +170,16 @@ You can specify the default parser by passing ``--with-default-parser`` option i
 
   ./configure --with-default-parser TokenMecab ...
 
-Or you can set ``groonga_default_parser`` variable in my.cnf or by SQL. If you specify it in my.cnf, the change will not be lost after restarting MySQL, but you need to restart MySQL to make it effective. On the other hand, if you set it in SQL, the change is effective immediately, but it will be lost when you restart MySQL.
+Or you can set ``mroonga_default_parser`` variable in my.cnf or by SQL. If you specify it in my.cnf, the change will not be lost after restarting MySQL, but you need to restart MySQL to make it effective. On the other hand, if you set it in SQL, the change is effective immediately, but it will be lost when you restart MySQL.
 
 my.cnf::
 
   [mysqld]
-  groonga_default_parser=TokenMecab
+  mroonga_default_parser=TokenMecab
 
 SQL::
 
-  mysql> SET GLOBAL groonga_default_parser = TokenMecab;
+  mysql> SET GLOBAL mroonga_default_parser = TokenMecab;
   Query OK, 0 rows affected (0.00 sec)
 
 Logging
@@ -197,24 +197,24 @@ Here is the example of the log. ::
 
 The default log level is NOTICE, i.e. we have important information only and we don't have debug information etc.).
 
-You can get the log level by ``groonga_log_level`` system variable, that is a global variable. You can also modify it dynamically by using SET phrase. ::
+You can get the log level by ``mroonga_log_level`` system variable, that is a global variable. You can also modify it dynamically by using SET phrase. ::
 
-  mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+  mysql> SHOW VARIABLES LIKE 'mroonga_log_level';
   +-------------------+--------+
   | Variable_name     | Value  |
   +-------------------+--------+
-  | groonga_log_level | NOTICE |
+  | mroonga_log_level | NOTICE |
   +-------------------+--------+
   1 row in set (0.00 sec)
 
-  mysql> SET GLOBAL groonga_log_level=DUMP;
+  mysql> SET GLOBAL mroonga_log_level=DUMP;
   Query OK, 0 rows affected (0.00 sec)
 
-  mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+  mysql> SHOW VARIABLES LIKE 'mroonga_log_level';
   +-------------------+-------+
   | Variable_name     | Value |
   +-------------------+-------+
-  | groonga_log_level | DUMP  |
+  | mroonga_log_level | DUMP  |
   +-------------------+-------+
   1 row in set (0.00 sec)
 
@@ -247,21 +247,21 @@ Tritonn took no specific countermeasure for this issue, but it introduced a work
 
 Mroonga also has the optimisation for ORDER BY LIMIT.
 
-In the SELECT example below, ORDER BY LIMIT is processed in groonga only and the minimal records are passed to MySQL. ::
+In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and the minimal records are passed to MySQL. ::
 
   SELECT * FROM t1 WHERE MATCH(c2) AGAINST("hoge") ORDER BY c1 LIMIT 1;
 
 You can check if this optimisation works or not by the status variable. ::
 
-  mysql> SHOW STATUS LIKE 'groonga_fast_order_limit';
+  mysql> SHOW STATUS LIKE 'mroonga_fast_order_limit';
   +--------------------------+-------+
   | Variable_name            | Value |
   +--------------------------+-------+
-  | groonga_fast_order_limit | 1     |
+  | mroonga_fast_order_limit | 1     |
   +--------------------------+-------+
   1 row in set (0.00 sec)
 
-Each time the optimisation for counting rows works, ``groonga_fast_order_limit`` status variable value is increased.
+Each time the optimisation for counting rows works, ``mroonga_fast_order_limit`` status variable value is increased.
 
 Note : This optimisation is targeting queries like "select ... match against order by _score desc limit X, Y" only, and it works if all of the following conditions are right.
 

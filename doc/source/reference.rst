@@ -9,7 +9,7 @@ List of available SQL commands
 * ``ALTER TABLE table_name ADD COLUMN column_name TEXT``
 * ``ALTER TABLE table_name ADD FULLTEXT INDEX index_name (column_name)``
 * ``ALTER TABLE table_name ADD SPATIAL KEY index_name (geometry_column_name)``
-* ``ALTER TABLE table_name ENGINE = groonga``
+* ``ALTER TABLE table_name ENGINE = mroonga``
 * ``ALTER TABLE table_name RENAME new_table_name``
 * ``COMMIT``
 * ``CREATE FULLTEXT INDEX index_name ON table_name(column_name)``
@@ -23,8 +23,8 @@ List of available SQL commands
 * ``CREATE TABLE table_name (... INDEX USING BTREE (column_name))``
 * ``CREATE TABLE table_name (... PRIMARY KEY (column_name))``
 * ``CREATE TABLE table_name (...) CAHRSET UTF8``
-* ``CREATE TABLE table_name (...) ENGINE=groonga COMMENT = 'ENGINE "InnoDB"'``
-* ``CREATE TABLE table_name (...) ENGINE=groonga``
+* ``CREATE TABLE table_name (...) ENGINE=mroonga COMMENT = 'ENGINE "InnoDB"'``
+* ``CREATE TABLE table_name (...) ENGINE=mroonga``
 * ``CREATE TABLE table_name (\`_id\` INT)``
 * ``CREATE TABLE table_name (\`_id\` INT, KEY(_id) USING HASH)``
 * ``CREATE TABLE table_name (column_name BIGINT)``
@@ -69,7 +69,7 @@ List of available SQL commands
 * ``INSERT INTO ... VALUES ...``
 * ``INSERT INTO table_name (column_name, ...) SELECT ... FROM other_table_name``
 * ``REPLACE INTO table_name SELECT ... FROM other_table_name ...``
-* ``SELECT * FROM information_schema.plugins WHERE plugin_name = "groonga"``
+* ``SELECT * FROM information_schema.plugins WHERE plugin_name = "mroonga"``
 * ``SELECT * FROM table_name FORCE INDEX(index_name) WHERE ...``
 * ``SELECT * FROM table_name ORDER BY column_name ASC LIMIT ...``
 * ``SELECT * FROM table_name ORDER BY column_name ASC``
@@ -119,7 +119,7 @@ List of server variables
 
 Here are the explanations of server variables that are introduced by mroonga.
 
-groonga_default_parser
+mroonga_default_parser
 ^^^^^^^^^^^^^^^^^^^^^^
 
 The default parser of the full text search.
@@ -130,7 +130,7 @@ Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext sea
 .. code-block:: sql
    :linenos:
 
-   SET GLOBAL groonga_default_parser=TokenBigramSplitSymbolAlphaDigit;
+   SET GLOBAL mroonga_default_parser=TokenBigramSplitSymbolAlphaDigit;
    CREATE TABLE diaries (
      id INT PRIMARY KEY AUTO_INCREMENT,
      body TEXT,
@@ -138,86 +138,86 @@ Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext sea
    ) DEFAULT CHARSET UTF8;
 
 
-groonga_libgroonga_version
+mroonga_libgroonga_version
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The version string of the groonga library.
 
 Here is an example SQL to confirm the using groonga library version::
 
-  mysql> SHOW VARIABLES LIKE 'groonga_libgroonga_version';
+  mysql> SHOW VARIABLES LIKE 'mroonga_libgroonga_version';
   +----------------------------+------------------+
   | Variable_name              | Value            |
   +----------------------------+------------------+
-  | groonga_libgroonga_version | 1.2.8-9-gbf05b82 |
+  | mroonga_libgroonga_version | 1.2.8-9-gbf05b82 |
   +----------------------------+------------------+
   1 row in set (0.00 sec)
 
-groonga_log_file
+mroonga_log_file
 ^^^^^^^^^^^^^^^^
 
 The path of the log file of mroonga. The default value is ``groonga.log``.
 
 Here is an example transcript to change log file to ``/tmp/mroonga.log``::
 
-  mysql> SHOW VARIABLES LIKE 'groonga_log_file';
+  mysql> SHOW VARIABLES LIKE 'mroonga_log_file';
   +------------------+-------------+
   | Variable_name    | Value       |
   +------------------+-------------+
-  | groonga_log_file | groonga.log |
+  | mroonga_log_file | groonga.log |
   +------------------+-------------+
   1 row in set (0.00 sec)
 
-  mysql> SET GLOBAL groonga_log_file = "/tmp/mroonga.log";
+  mysql> SET GLOBAL mroonga_log_file = "/tmp/mroonga.log";
   Query OK, 0 rows affected (0.00 sec)
 
-  mysql> SHOW VARIABLES LIKE 'groonga_log_file';
+  mysql> SHOW VARIABLES LIKE 'mroonga_log_file';
   +------------------+------------------+
   | Variable_name    | Value            |
   +------------------+------------------+
-  | groonga_log_file | /tmp/mroonga.log |
+  | mroonga_log_file | /tmp/mroonga.log |
   +------------------+------------------+
   1 row in set (0.00 sec)
 
 
-groonga_log_level
+mroonga_log_level
 ^^^^^^^^^^^^^^^^^
 
 The output level of mroonga log file. The default value is ``NOTICE``.
 
 Here is an example transcript to change log level to ``DEBUG`` that logs many messages for debugging::
 
-  mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+  mysql> SHOW VARIABLES LIKE 'mroonga_log_level';
   +-------------------+--------+
   | Variable_name     | Value  |
   +-------------------+--------+
-  | groonga_log_level | NOTICE |
+  | mroonga_log_level | NOTICE |
   +-------------------+--------+
   1 row in set (0.00 sec)
 
-  mysql> SET GLOBAL groonga_log_level = "debug";
+  mysql> SET GLOBAL mroonga_log_level = "debug";
   Query OK, 0 rows affected (0.00 sec)
 
-  mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+  mysql> SHOW VARIABLES LIKE 'mroonga_log_level';
   +-------------------+-------+
   | Variable_name     | Value |
   +-------------------+-------+
-  | groonga_log_level | DEBUG |
+  | mroonga_log_level | DEBUG |
   +-------------------+-------+
   1 row in set (0.00 sec)
 
-groonga_version
+mroonga_version
 ^^^^^^^^^^^^^^^
 
 The version string of mroonga.
 
 Here is an example SQL to confirm the running mroonga version::
 
-  mysql> SHOW VARIABLES LIKE 'groonga_version';
+  mysql> SHOW VARIABLES LIKE 'mroonga_version';
   +-----------------+-------+
   | Variable_name   | Value |
   +-----------------+-------+
-  | groonga_version | 1.10  |
+  | mroonga_version | 1.10  |
   +-----------------+-------+
   1 row in set (0.00 sec)
 
@@ -226,7 +226,7 @@ List of status variables
 
 Here are the explanations of status variables that are introduced by mroonga.
 
-groonga_count_skip
+mroonga_count_skip
 ^^^^^^^^^^^^^^^^^^
 
 This value is increased when 'fast line count feature' is used.
@@ -234,15 +234,15 @@ You can use this value to check if the feature is working when you enable it.
 
 Here is an example how to check it::
 
-  mysql> SHOW STATUS LIKE 'groonga_count_skip';
+  mysql> SHOW STATUS LIKE 'mroonga_count_skip';
   +--------------------+-------+
   | Variable_name      | Value |
   +--------------------+-------+
-  | groonga_count_skip | 0     |
+  | mroonga_count_skip | 0     |
   +--------------------+-------+
   1 row in set (0.00 sec)
 
-groonga_fast_order_limit
+mroonga_fast_order_limit
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 This value is increased when 'fast ORDER BY LIMIT feature' is used.
@@ -250,10 +250,10 @@ You can use this value to check if the feature is working when you enable it.
 
 Here is an example how to check it::
 
-  mysql> SHOW STATUS LIKE 'groonga_fast_order_limit';
+  mysql> SHOW STATUS LIKE 'mroonga_fast_order_limit';
   +--------------------------+-------+
   | Variable_name            | Value |
   +--------------------------+-------+
-  | groonga_fast_order_limit | 0     |
+  | mroonga_fast_order_limit | 0     |
   +--------------------------+-------+
   1 row in set (0.00 sec)

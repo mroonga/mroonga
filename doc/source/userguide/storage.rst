@@ -8,13 +8,13 @@ Here we explain how to use storage mode of mroonga
 How to use full text search
 ---------------------------
 
-After confirming the installation, let's create a table. The important point is to specify mroonga by ``ENGINE = groonga``. ::
+After confirming the installation, let's create a table. The important point is to specify mroonga by ``ENGINE = mroonga``. ::
 
   mysql> CREATE TABLE diaries (
       ->   id INT PRIMARY KEY AUTO_INCREMENT,
       ->   content VARCHAR(255),
       ->   FULLTEXT INDEX (content)
-      -> ) ENGINE = groonga DEFAULT CHARSET utf8;
+      -> ) ENGINE = mroonga DEFAULT CHARSET utf8;
   Query OK, 0 rows affected (0.10 sec)
 
 We put data by INSERT. ::
@@ -87,13 +87,13 @@ MySQL has the following syntax to specify the parser [#parser]_ for full text se
 
   FULLTEXT INDEX (content) WITH PARSER parser_name
 
-To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in mroonga, tokenisers that are added in groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
+To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, mroonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in mroonga, tokenisers that are added in mroonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
 
   FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
 
 .. note::
 
-   ``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If you use MySQL 5.1, use ``groonga_default_parser`` variable described below.
+   ``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If you use MySQL 5.1, use ``mroonga_default_parser`` variable described below.
 
 You can specify one of following values as the parser.
 
@@ -160,16 +160,16 @@ You can specify the default parser by passing ``--with-default-parser`` option i
 
   ./configure --with-default-parser TokenMecab ...
 
-Or you can set ``groonga_default_parser`` variable in my.cnf or by SQL. If you specify it in my.cnf, the change will not be lost after restarting MySQL, but you need to restart MySQL to make it effective. On the other hand, if you set it in SQL, the change is effective immediately, but it will be lost when you restart MySQL.
+Or you can set ``mroonga_default_parser`` variable in my.cnf or by SQL. If you specify it in my.cnf, the change will not be lost after restarting MySQL, but you need to restart MySQL to make it effective. On the other hand, if you set it in SQL, the change is effective immediately, but it will be lost when you restart MySQL.
 
 my.cnf::
 
   [mysqld]
-  groonga_default_parser=TokenMecab
+  mroonga_default_parser=TokenMecab
 
 SQL::
 
-  mysql> SET GLOBAL groonga_default_parser = TokenMecab;
+  mysql> SET GLOBAL mroonga_default_parser = TokenMecab;
   Query OK, 0 rows affected (0.00 sec)
 
 How to use geolocation search
@@ -184,7 +184,7 @@ For the table definition for geolocation search, you need to define a POINT type
       ->   name VARCHAR(255),
       ->   location POINT NOT NULL,
       ->   SPATIAL INDEX (location)
-      -> ) ENGINE = groonga;
+      -> ) ENGINE = mroonga;
   Query OK, 0 rows affected (0.06 sec)
 
 To store data, you create POINT type data by using geomFromText() function like in MyISAM. ::
@@ -223,7 +223,7 @@ To get the record ID, you need to create a column named ``_id`` when you create 
       ->   _id INT,
        >   content VARCHAR(255),
       ->   UNIQUE KEY (_id) USING HASH
-      -> ) ENGINE = groonga;
+      -> ) ENGINE = mroonga;
   Query OK, 0 rows affected (0.04 sec)
 
 Tye typo of _id column should be integer one (TINYINT, SMALLINT, MEDIUMINT, INT or BIGINT).
@@ -236,7 +236,7 @@ So you need to exclude it from setting columns, or you need to use ``null`` as i
   mysql> INSERT INTO memos VALUES (null, "今夜はさんま。");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO memos VALUES (null, "明日はgroongaをアップデート。");
+  mysql> INSERT INTO memos VALUES (null, "明日はmroongaをアップデート。");
   Query OK, 1 row affected (0.00 sec)
 
   mysql> INSERT INTO memos VALUES (null, "帰りにおだんご。");
@@ -252,7 +252,7 @@ To get the record ID, you invoke SELECT with _id column. ::
   | _id  | content                                  |
   +------+------------------------------------------+
   |    1 | 今夜はさんま。                    |
-  |    2 | 明日はgroongaをアップデート。 |
+  |    2 | 明日はmroongaをアップデート。 |
   |    3 | 帰りにおだんご。                 |
   |    4 | 金曜日は肉の日。                 |
   +------+------------------------------------------+
@@ -296,24 +296,24 @@ Here is the example of the log. ::
 
 The default log level is NOTICE, i.e. we have important information only and we don't have debug information etc.).
 
-You can get the log level by ``groonga_log_level`` system variable, that is a global variable. You can also modify it dynamically by using SET phrase. ::
+You can get the log level by ``mroonga_log_level`` system variable, that is a global variable. You can also modify it dynamically by using SET phrase. ::
 
-  mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+  mysql> SHOW VARIABLES LIKE 'mroonga_log_level';
   +-------------------+--------+
   | Variable_name     | Value  |
   +-------------------+--------+
-  | groonga_log_level | NOTICE |
+  | mroonga_log_level | NOTICE |
   +-------------------+--------+
   1 row in set (0.00 sec)
 
-  mysql> SET GLOBAL groonga_log_level=DUMP;
+  mysql> SET GLOBAL mroonga_log_level=DUMP;
   Query OK, 0 rows affected (0.00 sec)
 
-  mysql> SHOW VARIABLES LIKE 'groonga_log_level';
+  mysql> SHOW VARIABLES LIKE 'mroonga_log_level';
   +-------------------+-------+
   | Variable_name     | Value |
   +-------------------+-------+
-  | groonga_log_level | DUMP  |
+  | mroonga_log_level | DUMP  |
   +-------------------+-------+
   1 row in set (0.00 sec)
 
@@ -353,7 +353,7 @@ Imagine that we have a table with 20 columns like below. ::
     c12 VARCHAR(20),
     ...
     c20 DATETIME
-  ) ENGINE = groonga DEFAULT CHARSET utf8;
+  ) ENGINE = mroonga DEFAULT CHARSET utf8;
 
 When we run SELECT phrase like the following, mroonga reads data from columns that are referred by SELECT phrase and WHERE phrase only (and it does not access columns that not required internally).
 
@@ -376,15 +376,15 @@ In the following SELECT, for example, needless read of columns are skipped and y
 
 You can check if this optimisation works or not by the status variable. ::
 
-  mysql> SHOW STATUS LIKE 'groonga_count_skip';
+  mysql> SHOW STATUS LIKE 'mroonga_count_skip';
   +--------------------+-------+
   | Variable_name      | Value |
   +--------------------+-------+
-  | groonga_count_skip | 1     |
+  | mroonga_count_skip | 1     |
   +--------------------+-------+
   1 row in set (0.00 sec)
 
-Each time the optimisation for counting rows works, ``groonga_count_skip`` status variable value is increased.
+Each time the optimisation for counting rows works, ``mroonga_count_skip`` status variable value is increased.
 
 Note : This optimisation is implemented by using the index. It only works in the case where we records can be specified only by the index.
 
@@ -405,15 +405,15 @@ In the SELECT example below, ORDER BY LIMIT is processed in groonga only and the
 
 You can check if this optimisation works or not by the status variable. ::
 
-  mysql> SHOW STATUS LIKE 'groonga_fast_order_limit';
+  mysql> SHOW STATUS LIKE 'mroonga_fast_order_limit';
   +--------------------------+-------+
   | Variable_name            | Value |
   +--------------------------+-------+
-  | groonga_fast_order_limit | 1     |
+  | mroonga_fast_order_limit | 1     |
   +--------------------------+-------+
   1 row in set (0.00 sec)
 
-Each time the optimisation for counting rows works, ``groonga_fast_order_limit`` status variable value is increased.
+Each time the optimisation for counting rows works, ``mroonga_fast_order_limit`` status variable value is increased.
 
 Note : This optimisation is targeting queries like "select ... match against order by _score desc limit X, Y" only, and it works if all of the following conditions are right.
 
