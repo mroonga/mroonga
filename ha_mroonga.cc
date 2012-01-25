@@ -149,7 +149,7 @@ static void mrn_init_encoding_map()
     if (!strcmp(cs[0]->csname, "utf8"))
     {
       DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-        cs[0]->name, cs[0]->csname, cs[0]->cset));
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
       if (!mrn_charset_utf8)
         mrn_charset_utf8 = cs[0];
       else if (mrn_charset_utf8->cset != cs[0]->cset)
@@ -159,7 +159,7 @@ static void mrn_init_encoding_map()
     if (!strcmp(cs[0]->csname, "binary"))
     {
       DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-        cs[0]->name, cs[0]->csname, cs[0]->cset));
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
       if (!mrn_charset_binary)
         mrn_charset_binary = cs[0];
       else if (mrn_charset_binary->cset != cs[0]->cset)
@@ -169,7 +169,7 @@ static void mrn_init_encoding_map()
     if (!strcmp(cs[0]->csname, "ascii"))
     {
       DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-        cs[0]->name, cs[0]->csname, cs[0]->cset));
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
       if (!mrn_charset_ascii)
         mrn_charset_ascii = cs[0];
       else if (mrn_charset_ascii->cset != cs[0]->cset)
@@ -179,7 +179,7 @@ static void mrn_init_encoding_map()
     if (!strcmp(cs[0]->csname, "latin1"))
     {
       DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-        cs[0]->name, cs[0]->csname, cs[0]->cset));
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
       if (!mrn_charset_latin1_1)
         mrn_charset_latin1_1 = cs[0];
       else if (mrn_charset_latin1_1->cset != cs[0]->cset)
@@ -194,7 +194,7 @@ static void mrn_init_encoding_map()
     if (!strcmp(cs[0]->csname, "cp932"))
     {
       DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-        cs[0]->name, cs[0]->csname, cs[0]->cset));
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
       if (!mrn_charset_cp932)
         mrn_charset_cp932 = cs[0];
       else if (mrn_charset_cp932->cset != cs[0]->cset)
@@ -204,7 +204,7 @@ static void mrn_init_encoding_map()
     if (!strcmp(cs[0]->csname, "sjis"))
     {
       DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-        cs[0]->name, cs[0]->csname, cs[0]->cset));
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
       if (!mrn_charset_sjis)
         mrn_charset_sjis = cs[0];
       else if (mrn_charset_sjis->cset != cs[0]->cset)
@@ -214,7 +214,7 @@ static void mrn_init_encoding_map()
     if (!strcmp(cs[0]->csname, "eucjpms"))
     {
       DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-        cs[0]->name, cs[0]->csname, cs[0]->cset));
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
       if (!mrn_charset_eucjpms)
         mrn_charset_eucjpms = cs[0];
       else if (mrn_charset_eucjpms->cset != cs[0]->cset)
@@ -224,7 +224,7 @@ static void mrn_init_encoding_map()
     if (!strcmp(cs[0]->csname, "ujis"))
     {
       DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-        cs[0]->name, cs[0]->csname, cs[0]->cset));
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
       if (!mrn_charset_ujis)
         mrn_charset_ujis = cs[0];
       else if (mrn_charset_ujis->cset != cs[0]->cset)
@@ -234,7 +234,7 @@ static void mrn_init_encoding_map()
     if (!strcmp(cs[0]->csname, "koi8r"))
     {
       DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-        cs[0]->name, cs[0]->csname, cs[0]->cset));
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
       if (!mrn_charset_koi8r)
         mrn_charset_koi8r = cs[0];
       else if (mrn_charset_koi8r->cset != cs[0]->cset)
@@ -242,7 +242,7 @@ static void mrn_init_encoding_map()
       continue;
     }
     DBUG_PRINT("info", ("mroonga: %s[%s][%p] is not supported",
-      cs[0]->name, cs[0]->csname, cs[0]->cset));
+                        cs[0]->name, cs[0]->csname, cs[0]->cset));
   }
   DBUG_VOID_RETURN;
 }
