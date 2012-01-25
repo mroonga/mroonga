@@ -22,5 +22,5 @@ override_dh_install:
 #	if test -x /usr/bin/dh_apparmor; then			\
 #	  dh_apparmor						\
 #	    -pmysql-server-mroonga				\
-#	    --profile-name=usr.lib.mysql.plugin.ha_groonga;	\
+#	    --profile-name=usr.lib.mysql.plugin.ha_mroonga;	\
 #	fi

@@ -67,8 +67,8 @@ rm -rf $RPM_BUILD_ROOT
 %post
 if [ $1 -eq 1 ]; then
     sql="
-INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
-CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
+INSTALL PLUGIN groonga SONAME 'ha_mroonga.so';
+CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_mroonga.so';
 "
     command="/usr/bin/mysql -u root -e \"$sql\""
     echo $command
