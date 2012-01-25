@@ -215,13 +215,13 @@ Then invoke "make". ::
 Install mroonga
 ^^^^^^^^^^^^^^^
 
-By invoking "make install", ha_groonga.so will be installed in MySQL's plugin directory. ::
+By invoking "make install", ha_mroonga.so will be installed in MySQL's plugin directory. ::
 
  make install
 
 Then start mysqld, connect to it by mysql client, and install it by "INSTALL PLUGIN" command. ::
 
- mysql> INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
+ mysql> INSTALL PLUGIN groonga SONAME 'ha_mroonga.so';
 
 If "groonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
 
@@ -244,4 +244,4 @@ To get the record ID assigned by groonga in INSERT, install last_insert_grn_id f
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_groonga.so';
+ mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_mroonga.so';

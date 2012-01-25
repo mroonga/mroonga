@@ -33,7 +33,7 @@ If you see "groonga" storage engine like above, the installation is well done.
 
 If not installed, invoke INSTALL PLUGIN command like below. ::
 
- mysql> INSTALL PLUGIN groonga SONAME 'ha_groonga.so';
+ mysql> INSTALL PLUGIN groonga SONAME 'ha_mroonga.so';
 
 Running modes
 -------------
