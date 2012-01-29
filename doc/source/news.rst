@@ -13,7 +13,7 @@ Release 1.20 - 2012/01/29
    This release breaks backward compatibility. We need to
    dump and restore our database for upgrading.
 
-Since this release, mroonga has two changes that requires
+In this release, mroonga has two changes that requires
 database recreation:
 
 1. Storage engine name is changed to "mroonga" from "groonga".
@@ -21,7 +21,7 @@ database recreation:
    and TIMESTAMP type values.
 
 We need to modify dumped database to change "ENGINE=groonga"
-in "CREATE TABLE" SQL. Here are migration sequence.
+in "CREATE TABLE" SQL. Here are upgrade sequence.
 
 We dump a database that uses mroonga::
 
@@ -75,6 +75,7 @@ Improvements
 ^^^^^^^^^^^^
 
 * Supported MySQL 5.5.20.
+* Supported MySQL 5.1.61.
 * Required groonga 1.3.0 or later.
 * [incompatible] Changed storage engine name to "mroonga" from "groonga".
 * Supported UTF8_BIN collate. [#1150]
@@ -87,12 +88,8 @@ Improvements
 * [storage mode] Mapped enum and set types to more suitable
   groonga data types.
 * [wrapper mode] Supported REPAIR TABLE.
-* [storage mode] Supported count(*) on view. [#1255]
+* [storage mode] Supported ``count(*)`` on view. [#1255]
   [Reported by Takahiro Nagai]
-* [deb] Added mysql-server-mroonga-compatible package for
-  backward compatibility.
-* [rpm] Added mysql-mroonga-compatible package for
-  backward compatibility.
 * [incompatible] Groonga's native time value is used for
   DATE, DATETIME and TIMESTAMPE type values.
 
