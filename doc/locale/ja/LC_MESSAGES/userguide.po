@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 23:56\n"
-"PO-Revision-Date: 2011-11-28 00:07+0900\n"
+"POT-Creation-Date: 2012-01-30 02:53\n"
+"PO-Revision-Date: 2012-01-30 02:54+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -50,15 +50,16 @@ msgstr ""
 #: ../../../source/userguide.rst:17
 msgid ""
 "By using SHOW ENGINES command, you can check if mroonga is installed. ::"
-msgstr "SHOW ENGINESコマンドでmroongaがインストールされているかどうかを確認します。::"
+msgstr ""
+"SHOW ENGINESコマンドでmroongaがインストールされているかどうかを確認します。::"
 
 # a0bf62ab86a443d9ab882ebc2629eb78
 #: ../../../source/userguide.rst:32
 msgid ""
-"If you see \"groonga\" storage engine like above, the installation is well "
+"If you see \"mroonga\" storage engine like above, the installation is well "
 "done."
 msgstr ""
-"上記のように\"groonga\"ストレージエンジンが見えていればインストールは無事完了"
+"上記のように\"mroonga\"ストレージエンジンが見えていればインストールは無事完了"
 "しています。"
 
 # 4f7f7801bc014d8c8d5287442fcc6a79
@@ -116,13 +117,13 @@ msgid ""
 "With the wrapper mode, groonga is used for full text search function only, "
 "and another existing storage engine like InnoDB is used for storing data. By "
 "using wrapper mode, you combine InnoDB that is well-use as the storage "
-"engine and groonga that is a proven full text search engine, and you can use "
+"engine and mroonga that is a proven full text search engine, and you can use "
 "it as the stable database having the fast full text search function."
 msgstr ""
 "ラッパーモードでは全文検索機能のみgroongaの機能を利用し、データストアはInnoDB"
 "など既存のストレージエンジンを利用します。ラッパーモードを利用することによ"
 "り、ストレージエンジンとして多くの利用実績のあるInnoDBに全文検索エンジンとし"
-"て実績のあるgroongaを組み合わせて、高速な全文検索機能付きの信頼性のあるデータ"
+"て実績のあるmroongaを組み合わせて、高速な全文検索機能付きの信頼性のあるデータ"
 "ベースとして利用できるという特長があります。"
 
 # 050eea325d7f4f23bce1f0ea217576e0
@@ -134,7 +135,12 @@ msgid ""
 "Handler that processes SQL and an existing storage engine, thus all data "
 "goes through mroonga With this way, full text search indexing etc. are done "
 "transparently."
-msgstr "ラッパーモードの構成を図で表すと以下のようになります。全文検索関連の処理はgroongaストレージエンジンで処理し、それ以外の処理はMyISAMやInnoDBなど既存のストレージエンジンを利用します。SQLを処理するSQL Handlerと既存のストレージエンジンの間に位置するため、すべてのデータが一度mroongaを通ることになります。これを利用して、全文検索用のインデックス作成などを透過的に行います。"
+msgstr ""
+"ラッパーモードの構成を図で表すと以下のようになります。全文検索関連の処理は"
+"groongaストレージエンジンで処理し、それ以外の処理はMyISAMやInnoDBなど既存のス"
+"トレージエンジンを利用します。SQLを処理するSQL Handlerと既存のストレージエン"
+"ジンの間に位置するため、すべてのデータが一度mroongaを通ることになります。これ"
+"を利用して、全文検索用のインデックス作成などを透過的に行います。"
 
 # 0d609ac138a14c35ad0a47e8df85c3cd
 #: ../../../source/userguide.rst:67
@@ -169,8 +175,10 @@ msgstr "全文検索の利用方法"
 #: ../../../source/userguide/wrapper.rst:25
 msgid ""
 "After confirming the installation, let's create a table. The important point "
-"is to specify mroonga by ``ENGINE = groonga``. ::"
-msgstr "インストールが確認できたら、テーブルを1つ作成してみましょう。 ``ENGINE = groonga`` とmroongaを指定するところがポイントです。::"
+"is to specify mroonga by ``ENGINE = mroonga``. ::"
+msgstr ""
+"インストールが確認できたら、テーブルを1つ作成してみましょう。 ``ENGINE = "
+"mroonga`` とmroongaを指定するところがポイントです。::"
 
 # 66a1958036764bf4bb2575d0f5d5bf67
 # b5a4fbc3d59145989d77e88d10e43369
@@ -206,7 +214,10 @@ msgid ""
 "In version 1.0.0 or before, mroonga used a special column named ``_score`` "
 "to get search score. From version 1.0.0, it follows MySQL's standard way to "
 "get search score."
-msgstr "1.0.0以前のmroongaではMySQLの標準的な検索スコアの取得方法ではなく、 ``_score`` という専用のカラムを作成するという独自の方法でした。1.0.0からはMySQLの標準的な取得方法になっています。"
+msgstr ""
+"1.0.0以前のmroongaではMySQLの標準的な検索スコアの取得方法ではなく、 "
+"``_score`` という専用のカラムを作成するという独自の方法でした。1.0.0からは"
+"MySQLの標準的な取得方法になっています。"
 
 # 5b531348c40447bda830c2ac223402c9
 # 800d3b365d5d49518986667eed622995
@@ -287,7 +298,14 @@ msgid ""
 "groonga dynamically cannot be supported. We think that this limitation "
 "decreases the convenience, and we choose our own syntax using COMMENT like "
 "the following. ::"
-msgstr "しかし、この構文を利用する場合は、あらかじめすべてのパーサをMySQLに登録しておく必要があります。一方、groongaはトークナイザー（MySQLでいうパーサ）を動的に追加することができます。そのため、mroognaでもこの構文を採用するとgroonga側に動的に追加されたトークナイザーに対応できなくなります。groongaに動的に追加されるトークナイザーにはMeCabを用いたトークナイザーもあり、この制限に縛られることは利便性を損なうと判断し、以下のようなコメントを用いた独自の構文を採用することにしました。::"
+msgstr ""
+"しかし、この構文を利用する場合は、あらかじめすべてのパーサをMySQLに登録してお"
+"く必要があります。一方、groongaはトークナイザー（MySQLでいうパーサ）を動的に"
+"追加することができます。そのため、mroognaでもこの構文を採用するとgroonga側に"
+"動的に追加されたトークナイザーに対応できなくなります。groongaに動的に追加され"
+"るトークナイザーにはMeCabを用いたトークナイザーもあり、この制限に縛られること"
+"は利便性を損なうと判断し、以下のようなコメントを用いた独自の構文を採用するこ"
+"とにしました。::"
 
 # a587fba35f384a7bba3bf45412659169
 # 7a84d191d0b4436bb0a83115bfaa5c1b
@@ -295,10 +313,10 @@ msgstr "しかし、この構文を利用する場合は、あらかじめすべ
 #: ../../../source/userguide/wrapper.rst:106
 msgid ""
 "``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If "
-"you use MySQL 5.1, use ``groonga_default_parser`` variable described below."
+"you use MySQL 5.1, use ``mroonga_default_parser`` variable described below."
 msgstr ""
 "``FULLTEXT INDEX`` に ``COMMENT`` を指定できるのはMySQL 5.5からになります。"
-"MySQL 5.1を利用している場合は後述の ``groonga_default_parser`` 変数を利用して"
+"MySQL 5.1を利用している場合は後述の ``mroonga_default_parser`` 変数を利用して"
 "ください。"
 
 # 0b25b84897b9493e8bd3aa5259ca1659
@@ -571,14 +589,16 @@ msgstr ""
 msgid ""
 "You can specify the default parser by passing ``--with-default-parser`` "
 "option in ``configure`` when you build mroonga ::"
-msgstr "デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションでビルド時に指定することができます。::"
+msgstr ""
+"デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションで"
+"ビルド時に指定することができます。::"
 
 # f83202df96fa4774b3ad120ea6c66e07
 # 08aa23875b1f454eb547715e8ece11c0
 #: ../../../source/userguide/storage.rst:163
 #: ../../../source/userguide/wrapper.rst:173
 msgid ""
-"Or you can set ``groonga_default_parser`` variable in my.cnf or by SQL. If "
+"Or you can set ``mroonga_default_parser`` variable in my.cnf or by SQL. If "
 "you specify it in my.cnf, the change will not be lost after restarting "
 "MySQL, but you need to restart MySQL to make it effective. On the other "
 "hand, if you set it in SQL, the change is effective immediately, but it will "
@@ -586,7 +606,7 @@ msgid ""
 msgstr ""
 "デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションで"
 "ビルド時に指定することができます。::また、my.cnfまたはSQL内で "
-"``groonga_default_parser`` 変数を指定することでも指定できます。my.cnfで指定す"
+"``mroonga_default_parser`` 変数を指定することでも指定できます。my.cnfで指定す"
 "るとMySQLを再起動しても値は変更されたままですが、反映させるために再起動しなけ"
 "ればいけません。一方、SQLで指定した場合はすぐに設定が反映されますが、MySQLが"
 "再起動すると設定は失われます。"
@@ -666,14 +686,18 @@ msgstr "レコードIDの取得方法"
 msgid ""
 "Groonga assigns a unique number to identify the record when a record is "
 "added in the table."
-msgstr "groongaではテーブルにレコードを追加した際にレコードを一意に識別するための番号が割当てられます。"
+msgstr ""
+"groongaではテーブルにレコードを追加した際にレコードを一意に識別するための番号"
+"が割当てられます。"
 
 # 5a06c0fa595d45a48d5263e6d04bbf16
 #: ../../../source/userguide/storage.rst:218
 msgid ""
 "To make the development of applications easier, you can get this record ID "
 "by SQL in mroonga"
-msgstr "mroongaではアプリケーションの開発を容易にするため、このレコードIDをSQLで取得できるようになっています。"
+msgstr ""
+"mroongaではアプリケーションの開発を容易にするため、このレコードIDをSQLで取得"
+"できるようになっています。"
 
 # 7aa11369321440f8a07ea42e52bc241b
 #: ../../../source/userguide/storage.rst:220
@@ -734,7 +758,10 @@ msgid ""
 "last_insert_grn_id function is included in mroonga as a User-Defined "
 "Function (UDF), but if you have not yet register it in MySQL by CREATE "
 "FUNCTION, you need to invoke the following SQL for defining a function. ::"
-msgstr "last_insert_grn_id関数はユーザ定義関数(UDF)としてmroongaに含まれていますが、インストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関数定義DDLを実行しておく必要があります。 ::"
+msgstr ""
+"last_insert_grn_id関数はユーザ定義関数(UDF)としてmroongaに含まれていますが、"
+"インストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関数定"
+"義DDLを実行しておく必要があります。 ::"
 
 # 204c2129edb8471bbf696ec0d3a19f24
 #: ../../../source/userguide/storage.rst:278
@@ -795,10 +822,10 @@ msgstr ""
 #: ../../../source/userguide/storage.rst:299
 #: ../../../source/userguide/wrapper.rst:200
 msgid ""
-"You can get the log level by ``groonga_log_level`` system variable, that is "
+"You can get the log level by ``mroonga_log_level`` system variable, that is "
 "a global variable. You can also modify it dynamically by using SET phrase. ::"
 msgstr ""
-"ログの出力レベルは ``groonga_log_level`` というシステム変数で確認することがで"
+"ログの出力レベルは ``mroonga_log_level`` というシステム変数で確認することがで"
 "きます（グローバル変数）。またSET文で動的に出力レベルを変更することもできま"
 "す。 ::"
 
@@ -920,14 +947,19 @@ msgstr "カラムの刈り込み"
 msgid ""
 "Groonga uses one file per column to store data, and mroonga accesses needed "
 "columns only when accessing a table to utilise this characteristic."
-msgstr "groongaでは各カラムごとにファイルを分けてデータを格納する「カラムストア方式」が採用されており、mroongaではこの特性を活かすためにテーブルアクセス時に必要なカラムに対してのみアクセスを行う実装を行っています。"
+msgstr ""
+"groongaでは各カラムごとにファイルを分けてデータを格納する「カラムストア方式」"
+"が採用されており、mroongaではこの特性を活かすためにテーブルアクセス時に必要な"
+"カラムに対してのみアクセスを行う実装を行っています。"
 
 # 0907f98e7c6a4e16b2d5d7228e950148
 #: ../../../source/userguide/storage.rst:343
 msgid ""
 "This optimisation is done automatically in mroonga internal, you don't need "
 "any specific configuration."
-msgstr "この高速化の仕組みはmroonga内部で自動的に行われるため、特に設定などを行う必要はありません。"
+msgstr ""
+"この高速化の仕組みはmroonga内部で自動的に行われるため、特に設定などを行う必要"
+"はありません。"
 
 # 96d05aed70184389b95dd1e825209b01
 #: ../../../source/userguide/storage.rst:345
@@ -942,7 +974,10 @@ msgid ""
 "When we run SELECT phrase like the following, mroonga reads data from "
 "columns that are referred by SELECT phrase and WHERE phrase only (and it "
 "does not access columns that not required internally)."
-msgstr "この時、以下のようなSELECT文が発行される場合、mroongaではSELECT句およびWHERE句で参照しているカラムに対してのみデータの読み取りを行ってSQL文を処理します（内部的に不要なカラムに対してはアクセスしません）。 ::"
+msgstr ""
+"この時、以下のようなSELECT文が発行される場合、mroongaではSELECT句およびWHERE"
+"句で参照しているカラムに対してのみデータの読み取りを行ってSQL文を処理します"
+"（内部的に不要なカラムに対してはアクセスしません）。 ::"
 
 # 742927067935426f89fbc0fed4c82fbc
 #: ../../../source/userguide/storage.rst:360
@@ -982,12 +1017,17 @@ msgstr ""
 msgid ""
 "Tritonn (MySQL + Senna), that is mroonga's predecessor, introduced \"2ind "
 "patch\" to skip needless access to data and solved this performance issue."
-msgstr "mroongaの前身であるTritonn(MySQL+Senna)ではこの問題に対して\"2indパッチ\"という不要なレコードアクセスを省略する仕組みを独自に実装してこの性能問題を回避していました。"
+msgstr ""
+"mroongaの前身であるTritonn(MySQL+Senna)ではこの問題に対して\"2indパッチ\"とい"
+"う不要なレコードアクセスを省略する仕組みを独自に実装してこの性能問題を回避し"
+"ていました。"
 
 # 5beea7322ea84e3d915c770facc1c37f
 #: ../../../source/userguide/storage.rst:371
 msgid "Mroonga also has the optimisation for counting rows."
-msgstr "これに引き続き、mroongaでも行カウントを高速化するための仕組みを実装しています。"
+msgstr ""
+"これに引き続き、mroongaでも行カウントを高速化するための仕組みを実装していま"
+"す。"
 
 # 6145e4e8989f46de92a8b32da86cfdf0
 #: ../../../source/userguide/storage.rst:373
@@ -1018,10 +1058,10 @@ msgstr ""
 # 62d888995ebd4115b5a021aee5ca04f1
 #: ../../../source/userguide/storage.rst:387
 msgid ""
-"Each time the optimisation for counting rows works, ``groonga_count_skip`` "
+"Each time the optimisation for counting rows works, ``mroonga_count_skip`` "
 "status variable value is increased."
 msgstr ""
-"行カウント高速化の処理が行われる度に ``groonga_count_skip`` ステータス変数が"
+"行カウント高速化の処理が行われる度に ``mroonga_count_skip`` ステータス変数が"
 "インクリメントされます。"
 
 # b42fb67a425b4c6d9a7bc5ec35dbfcfa
@@ -1094,7 +1134,6 @@ msgstr "mroongaでも ORDER BY LIMIT を高速化するための仕組みを実�
 # c361095559384f5f89d9b8cda98e4bf4
 # d9eb55ee8dbe4e139c345f31f304a131
 #: ../../../source/userguide/storage.rst:402
-#: ../../../source/userguide/wrapper.rst:250
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in groonga only and "
 "the minimal records are passed to MySQL. ::"
@@ -1108,9 +1147,9 @@ msgstr ""
 #: ../../../source/userguide/wrapper.rst:264
 msgid ""
 "Each time the optimisation for counting rows works, "
-"``groonga_fast_order_limit`` status variable value is increased."
+"``mroonga_fast_order_limit`` status variable value is increased."
 msgstr ""
-"ORDER BY LIMIT 高速化の処理が行われる度に ``groonga_fast_order_limit`` ステー"
+"ORDER BY LIMIT 高速化の処理が行われる度に ``mroonga_fast_order_limit`` ステー"
 "タス変数がインクリメントされます。"
 
 # 78d58e956c26402e822868c1992fdf3f
@@ -1204,7 +1243,11 @@ msgid ""
 "In wrapper mode, mroonga works in wrapping an existing storage engine. To "
 "specify the wrapped storage engine, we use SQL comment like ``COMMENT = "
 "'engine \"innodb\"'`` for now."
-msgstr "ラッパーモードでは、既存のストレージエンジンをラップするかたちで mroonga が動作します。ラップする対象となるストレージエンジンは、現在のところ SQL のコメントを利用して ``COMMENT = 'engine \"innodb\"'`` のように指定するようになっています。"
+msgstr ""
+"ラッパーモードでは、既存のストレージエンジンをラップするかたちで mroonga が動"
+"作します。ラップする対象となるストレージエンジンは、現在のところ SQL のコメン"
+"トを利用して ``COMMENT = 'engine \"innodb\"'`` のように指定するようになってい"
+"ます。"
 
 # 542e9fd42fd1436db2e6d35c5c1f18dd
 #: ../../../source/userguide/wrapper.rst:15
@@ -1233,3 +1276,13 @@ msgid ""
 msgstr ""
 "デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションで"
 "ビルド時に指定することができます。::"
+
+# c361095559384f5f89d9b8cda98e4bf4
+# d9eb55ee8dbe4e139c345f31f304a131
+#: ../../../source/userguide/wrapper.rst:250
+msgid ""
+"In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and "
+"the minimal records are passed to MySQL. ::"
+msgstr ""
+"例えば以下のSELECT文では ORDER BY LIMIT は、mroonga内で処理され、必要最小限の"
+"レコードだけをMySQLに返却しています。 ::"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 23:56\n"
-"PO-Revision-Date: 2011-11-28 00:04+0900\n"
+"POT-Creation-Date: 2012-01-30 02:49\n"
+"PO-Revision-Date: 2012-01-30 02:49+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -27,7 +27,9 @@ msgstr "インストールガイド"
 msgid ""
 "If you use binary packages, MySQL related packages will be also installed "
 "when you install mroonga package."
-msgstr "バイナリパッケージを使用したインストールではgroonga関連パッケージと共にMySQL関連のパッケージもインストールされます。"
+msgstr ""
+"バイナリパッケージを使用したインストールではgroonga関連パッケージと共にMySQL"
+"関連のパッケージもインストールされます。"
 
 # 453e15cee86d419aacde654268d5770b
 #: ../../../source/install.rst:8
@@ -36,7 +38,11 @@ msgid ""
 "should use 64-bit package for server. You should use 32-bit package just "
 "only for test or development. You will get no memory error with 32-bit "
 "package even if you just process medium size data."
-msgstr "32-bit用と64-bit用のパッケージを配布していますが、サーバ用途には64-bitパッケージを利用することをオススメします。32-bit用パッケージはテスト用か開発用にだけ使って下さい。32-bit用パッケージを使った場合は、中程度のサイズのデータでもメモリ不足エラーになることがあります。"
+msgstr ""
+"32-bit用と64-bit用のパッケージを配布していますが、サーバ用途には64-bitパッ"
+"ケージを利用することをオススメします。32-bit用パッケージはテスト用か開発用に"
+"だけ使って下さい。32-bit用パッケージを使った場合は、中程度のサイズのデータで"
+"もメモリ不足エラーになることがあります。"
 
 # 0559e6c40ee14878ac91f0e1f68c08e0
 #: ../../../source/install.rst:10
@@ -142,9 +148,9 @@ msgstr ""
 "由来のMySQLパッケージ（MySQL 5.1系）を利用します。そのため、ディストリビュー"
 "ション由来のMySQLを削除する必要はありません。"
 
-# 1b8e348a165d4381a9725926c274a6a2
+# 514f418cd75f42f08db7c127c68188b0
 #: ../../../source/install.rst:135
-msgid "Fedora 15"
+msgid "Fedora 16"
 msgstr ""
 
 # eb4280f85ca14d08ad5ea6857f1bf4d1
@@ -315,11 +321,9 @@ msgstr "mroongaのインストール"
 # e02a752f95954d1280465c2ad245da73
 #: ../../../source/install.rst:218
 msgid ""
-"By invoking \"make install\", ha_groonga.so will be installed in MySQL's "
+"By invoking \"make install\", ha_mroonga.so will be installed in MySQL's "
 "plugin directory. ::"
-msgstr ""
-"\"make install\"を実行するとMySQLのプラグイン用ディレクトリにha_groonga.soが"
-"配置されます。 ::"
+msgstr "\"make install\"を実行するとMySQLのプラグイン用ディレクトリにha_mroonga.soが配置されます。 ::"
 
 # 425b0856bf4d48308a0a810794d33007
 #: ../../../source/install.rst:222
@@ -335,7 +339,9 @@ msgstr ""
 msgid ""
 "If \"groonga\" is displayed in \"SHOW ENGINES\" command result like below, "
 "mroonga is well installed. ::"
-msgstr "以下のように\"SHOW ENGINES\"コマンドで\"groonga\"が表示されればmroongaのインストールは完了です。 ::"
+msgstr ""
+"以下のように\"SHOW ENGINES\"コマンドで\"groonga\"が表示されればmroongaのイン"
+"ストールは完了です。 ::"
 
 # 42345ab063fc4290b4b136b1cbbf50b8
 #: ../../../source/install.rst:241

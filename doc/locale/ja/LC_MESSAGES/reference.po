@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-28 17:39\n"
+"POT-Creation-Date: 2012-01-30 02:49\n"
 "PO-Revision-Date: 2011-11-28 17:40+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -43,9 +43,9 @@ msgid ""
 "``ALTER TABLE table_name ADD SPATIAL KEY index_name (geometry_column_name)``"
 msgstr ""
 
-# 5a8734c85f73480598ede847c163812b
+# b03430ea5aff42c3932c60a159777e1b
 #: ../../../source/reference.rst:12
-msgid "``ALTER TABLE table_name ENGINE = groonga``"
+msgid "``ALTER TABLE table_name ENGINE = mroonga``"
 msgstr ""
 
 # a476fd561581433f8da1d8ee3865ced2
@@ -118,16 +118,16 @@ msgstr ""
 msgid "``CREATE TABLE table_name (...) CAHRSET UTF8``"
 msgstr ""
 
-# 6c1eed947e2c42a5b1f1efde28232e25
+# a28426158e424baa8499f3821c839601
 #: ../../../source/reference.rst:26
 msgid ""
-"``CREATE TABLE table_name (...) ENGINE=groonga COMMENT = 'ENGINE \"InnoDB"
+"``CREATE TABLE table_name (...) ENGINE=mroonga COMMENT = 'ENGINE \"InnoDB"
 "\"'``"
 msgstr ""
 
-# d996be21b1fe4507a546ab527ff367d3
+# feec83f12c5541269181c9668c4c74b1
 #: ../../../source/reference.rst:27
-msgid "``CREATE TABLE table_name (...) ENGINE=groonga``"
+msgid "``CREATE TABLE table_name (...) ENGINE=mroonga``"
 msgstr ""
 
 # 4095ca40084b4cbbb2026003d16718d5
@@ -354,10 +354,10 @@ msgstr ""
 msgid "``REPLACE INTO table_name SELECT ... FROM other_table_name ...``"
 msgstr ""
 
-# 4f1f27e6d2734d31a6b7ce291fc63641
+# 7a4a98e1613b4fbc9fe07727427d5673
 #: ../../../source/reference.rst:72
 msgid ""
-"``SELECT * FROM information_schema.plugins WHERE plugin_name = \"groonga\"``"
+"``SELECT * FROM information_schema.plugins WHERE plugin_name = \"mroonga\"``"
 msgstr ""
 
 # 83ac5c8569de481a9dbeb0ee40f028c2
@@ -570,7 +570,13 @@ msgid ""
 "docs/community.html>`_ or send a patch against `the source file <https://"
 "github.com/mroonga/mroonga/blob/master/doc/source/reference.rst>`_ by pull "
 "request system on GitHub."
-msgstr "もし、あなたがリストにないSQLコマンドを見つけて、そのSQLコマンドが動くかどうかを確認した場合は、そのSQLコマンドをこのリストに追加させてください。そのSQLコマンドを `開発チーム <http://groonga.org/ja/docs/community.html>`_ に連絡してもらうか、 `ソースファイル <https://github.com/mroonga/mroonga/blob/master/doc/source/reference.rst>`_ に対するパッチをGitHubでpull requestしてくれれば取り込みます！"
+msgstr ""
+"もし、あなたがリストにないSQLコマンドを見つけて、そのSQLコマンドが動くかどう"
+"かを確認した場合は、そのSQLコマンドをこのリストに追加させてください。そのSQL"
+"コマンドを `開発チーム <http://groonga.org/ja/docs/community.html>`_ に連絡し"
+"てもらうか、 `ソースファイル <https://github.com/mroonga/mroonga/blob/master/"
+"doc/source/reference.rst>`_ に対するパッチをGitHubでpull requestしてくれれば"
+"取り込みます！"
 
 # e392b3fe37ec4107a5d9a9bd57861b2a
 #: ../../../source/reference.rst:118
@@ -583,9 +589,9 @@ msgid ""
 "Here are the explanations of server variables that are introduced by mroonga."
 msgstr "独自に追加されたサーバ変数を説明します。"
 
-# 72938681680f46ac9d593e6b60adce4d
+# 3f5fb8dfbc954a2c99f47e0c08dff40a
 #: ../../../source/reference.rst:123
-msgid "groonga_default_parser"
+msgid "mroonga_default_parser"
 msgstr ""
 
 # e12a4104fc9741cda25bae8ebfc902ca
@@ -608,9 +614,9 @@ msgstr ""
 "の例では ``body_index`` 全文検索インデックスは "
 "``TokenBigramSplitSymbolAlphaDigit`` を使います。"
 
-# 72938681680f46ac9d593e6b60adce4d
+# 3f5fb8dfbc954a2c99f47e0c08dff40a
 #: ../../../source/reference.rst:142
-msgid "groonga_libgroonga_version"
+msgid "mroonga_libgroonga_version"
 msgstr ""
 
 # 16c600e1ea5f4c98abdedf73f42a156d
@@ -623,9 +629,9 @@ msgstr "groongaライブラリのバージョン"
 msgid "Here is an example SQL to confirm the using groonga library version::"
 msgstr "groongaライブラリのバージョンを確認するためのSQL例です::"
 
-# 9f31484a7f1c461c96790c6997bac2ce
+# 0afc389c9a5b4651bd86962657c0034b
 #: ../../../source/reference.rst:157
-msgid "groonga_log_file"
+msgid "mroonga_log_file"
 msgstr ""
 
 # f8193ef7958543a4ad432bc0f502af33
@@ -640,9 +646,9 @@ msgid ""
 "Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
 msgstr "ログファイルを ``/tmp/mroonga.log`` に変更する例です::"
 
-# 9f31484a7f1c461c96790c6997bac2ce
+# 0afc389c9a5b4651bd86962657c0034b
 #: ../../../source/reference.rst:184
-msgid "groonga_log_level"
+msgid "mroonga_log_level"
 msgstr ""
 
 # 834d5940c3844cf4a109cd5ba7d0f5c4
@@ -659,9 +665,9 @@ msgstr ""
 "ログレベルを ``DEBUG`` に変更する例です。 ``DEBUG`` レベルにするとデバッグ用"
 "のたくさんのメッセージがログに出力されます::"
 
-# 9f31484a7f1c461c96790c6997bac2ce
+# 0afc389c9a5b4651bd86962657c0034b
 #: ../../../source/reference.rst:210
-msgid "groonga_version"
+msgid "mroonga_version"
 msgstr ""
 
 # 16c600e1ea5f4c98abdedf73f42a156d
@@ -685,9 +691,9 @@ msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
 msgstr "独自に追加されたステータス変数を説明します。"
 
-# 055712d752cb4588b105099473cabd16
+# 0afc389c9a5b4651bd86962657c0034b
 #: ../../../source/reference.rst:230
-msgid "groonga_count_skip"
+msgid "mroonga_count_skip"
 msgstr ""
 
 # 267f1b18714740dc979e8b4b67752812
@@ -706,9 +712,9 @@ msgstr ""
 msgid "Here is an example how to check it::"
 msgstr "確認例です::"
 
-# 707a3368bec3453bb3ffd2bfeb919bb6
+# 3f5fb8dfbc954a2c99f47e0c08dff40a
 #: ../../../source/reference.rst:246
-msgid "groonga_fast_order_limit"
+msgid "mroonga_fast_order_limit"
 msgstr ""
 
 # f07b04cb491d4edfa20546deee8bf2e4
