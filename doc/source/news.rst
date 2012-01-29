@@ -3,6 +3,116 @@
 News
 ====
 
+.. _release-1-20:
+
+Release 1.20 - 2012/01/29
+-------------------------
+
+.. caution::
+
+   This release breaks backward compatibility. We need to
+   dump and restore our database for upgrading.
+
+Since this release, mroonga has two changes that requires
+database recreation:
+
+1. Storage engine name is changed to "mroonga" from "groonga".
+2. Groonga's native time data value are used for DATE, DATETIME
+   and TIMESTAMP type values.
+
+We need to modify dumped database to change "ENGINE=groonga"
+in "CREATE TABLE" SQL. Here are migration sequence.
+
+We dump a database that uses mroonga::
+
+  % mysqldump MY_MROONGA_DATABASE > database-groonga.dump
+
+We convert storage engine in dump file::
+
+  % sed -e 's/^) ENGINE=groonga/) ENGINE=mroonga/' database-groonga.dump > database-mroonga.dump
+
+We confirm that ``ENGINE=groonga`` only in ``CREATE TABLE``
+is replaced with ``ENGINE=mroonga``. We need to check ``@@
+... @@`` line includes ``CREATE TABLE``. If the line
+includes ``CREATE TABLE``, the hunk will be a change for
+``CREATE TABLE``::
+
+  % diff -up database-groonga.dump database-mroonga.dump
+  --- database-groonga.dump	2012-01-29 16:53:20.732624670 +0900
+  +++ database-mroonga.dump	2012-01-29 16:54:47.608420981 +0900
+  @@ -29,7 +29,7 @@ CREATE TABLE `diaries` (
+     PRIMARY KEY (`id`),
+     FULLTEXT KEY `title_index` (`title`),
+     FULLTEXT KEY `body_index` (`body`)
+  -) ENGINE=groonga DEFAULT CHARSET=utf8;
+  +) ENGINE=mroonga DEFAULT CHARSET=utf8;
+   /*!40101 SET character_set_client = @saved_cs_client */;
+
+   --
+
+We drop the existing database::
+
+  % mysql -u root -e 'DROP DATABASE MY_MROONGA_DATABASE'
+
+We upgrade to "mroonga" storage engine. We will use
+``apt-get`` on Debian GNU/Linux or Ubuntu and ``yum`` on
+CentOS or Fedora::
+
+  % sudo apt-get install -y mysql-server-mroonga # for Debian GNU/Linux or Ubuntu
+  % sudo yum install -y mysql-mroonga # for CentOS or Fedora
+
+We recreate a database::
+
+  % mysql -u root -e 'CREATE DATABASE MY_MROONGA_DATABASE'
+
+We restore a database by modified dump file::
+
+  % mysql -u root MY_MROONGA_DATABASE < database-mroonga.dump
+
+Now, we can use mroonga 1.20.
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MySQL 5.5.20.
+* Required groonga 1.3.0 or later.
+* [incompatible] Changed storage engine name to "mroonga" from "groonga".
+* Supported UTF8_BIN collate. [#1150]
+* Disabled strict-aliasing warnings. [Reported by @issm]
+* Supported decimal. [#1249] [Reported by @Kiske]
+* [storage mode] Supported HA_KEYREAD_ONLY. It will improve
+  column value access in index. [#1212]
+* [storage mode] Supported float value in multiple column index.
+* [storage mode] Supported double value in multiple column index.
+* [storage mode] Mapped enum and set types to more suitable
+  groonga data types.
+* [wrapper mode] Supported REPAIR TABLE.
+* [storage mode] Supported count(*) on view. [#1255]
+  [Reported by Takahiro Nagai]
+* [deb] Added mysql-server-mroonga-compatible package for
+  backward compatibility.
+* [rpm] Added mysql-mroonga-compatible package for
+  backward compatibility.
+* [incompatible] Groonga's native time value is used for
+  DATE, DATETIME and TIMESTAMPE type values.
+
+Fixes
+^^^^^
+
+* [debian] Fixed wrong mysql-server-groonga version in
+  replaces and breaks. [Reported by @ytaka5]
+* [doc] Fixed wrong execution result. [Reported by Hidekazu Tanaka]
+* [wrapper mode] Fixed a memory leak. [Reported by montywi]
+
+Thanks
+^^^^^^
+
+* @ytaka5
+* Hidekazu Tanaka
+* @issm
+* montywi
+* @Kiske
+
 .. _release-1-11:
 
 Release 1.11 - 2011/12/29
