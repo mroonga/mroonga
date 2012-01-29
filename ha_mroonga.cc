@@ -1257,7 +1257,7 @@ static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
   if (error)
     return error;
 
-  if (field->null_bit != 0x0) {
+  if (field->null_bit) {
     ptr += 1;
   }
 
