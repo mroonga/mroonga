@@ -426,6 +426,9 @@ private:
   void storage_store_field(Field *field, const char *value, uint value_length);
   void storage_store_fields(uchar *buf, grn_id record_id);
   void storage_store_fields_by_index(uchar *buf);
+
+  int storage_encode_key(Field *field, const uchar *key, uchar *buf, uint *size);
+
   void set_pk_bitmap();
   int wrapper_create(const char *name, TABLE *table,
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);

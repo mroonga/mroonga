@@ -1247,101 +1247,6 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
   return buffer;
 }
 
-static int mrn_set_key_buf(grn_ctx *ctx, Field *field,
-                           const uchar *key, uchar *buf, uint *size)
-{
-  int error;
-  char *ptr = (char*) key;
-
-  error = mrn_change_encoding(ctx, field->charset());
-  if (error)
-    return error;
-
-  if (field->null_bit) {
-    ptr += 1;
-  }
-
-  switch (field->type()) {
-  case MYSQL_TYPE_BIT:
-  case MYSQL_TYPE_ENUM:
-  case MYSQL_TYPE_SET:
-  case MYSQL_TYPE_TINY:
-    {
-      memcpy(buf, ptr, 1);
-      *size = 1;
-      break;
-    }
-  case MYSQL_TYPE_SHORT:
-    {
-      memcpy(buf, ptr, 2);
-      *size = 2;
-      break;
-    }
-  case MYSQL_TYPE_INT24:
-    {
-      memcpy(buf, ptr, 3);
-      buf[3] = 0;
-      *size = 4;
-      break;
-    }
-  case MYSQL_TYPE_LONG:
-    {
-      memcpy(buf, ptr, 4);
-      *size = 4;
-      break;
-    }
-  case MYSQL_TYPE_LONGLONG:
-    {
-      memcpy(buf, ptr, 8);
-      *size = 8;
-      break;
-    }
-  case MYSQL_TYPE_FLOAT:
-    {
-      float float_value;
-      double double_value;
-      float4get(float_value, ptr);
-      double_value = float_value;
-      memcpy(buf, &double_value, 8);
-      *size = 8;
-      break;
-    }
-  case MYSQL_TYPE_DOUBLE:
-    {
-      double val;
-      float8get(val, ptr);
-      memcpy(buf, &val, 8);
-      *size = 8;
-      break;
-    }
-  case MYSQL_TYPE_TIME:
-  case MYSQL_TYPE_YEAR:
-  case MYSQL_TYPE_DATE:
-  case MYSQL_TYPE_DATETIME:
-    {
-      long long int val = (long long int) sint8korr(ptr);
-      memcpy(buf, &val, 8);
-      *size = 8;
-      break;
-    }
-  case MYSQL_TYPE_STRING:
-  case MYSQL_TYPE_VARCHAR:
-  case MYSQL_TYPE_BLOB:
-    {
-      ptr += HA_KEY_BLOB_LENGTH;
-      const char *val = ptr;
-      int len = strlen(val);
-      memcpy(buf, val, len);
-      *size = len;
-      break;
-    }
-  default:
-    error = HA_ERR_UNSUPPORTED;
-    break;
-  }
-  return error;
-}
-
 static uint mrn_alter_table_flags(uint flags) {
   uint ret_flags = 0;
   ret_flags |=
@@ -4963,11 +4868,11 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     }
 
     if (range_min) {
-      mrn_set_key_buf(ctx, field, range_min->key, key_min[key_nr], &size_min);
+      storage_encode_key(field, range_min->key, key_min[key_nr], &size_min);
       val_min = key_min[key_nr];
     }
     if (range_max) {
-      mrn_set_key_buf(ctx, field, range_max->key, key_max[key_nr], &size_max);
+      storage_encode_key(field, range_max->key, key_max[key_nr], &size_max);
       val_max = key_max[key_nr];
     }
   }
@@ -5220,7 +5125,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       const char *column_name = field->field_name;
       int column_name_size = strlen(column_name);
 
-      mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+      storage_encode_key(field, key, key_min[key_nr], &size_min);
       val_min = key_min[key_nr];
       val_max = key_min[key_nr];
       size_max = size_min;
@@ -5241,10 +5146,10 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       find_flag == HA_READ_BEFORE_KEY ||
       find_flag == HA_READ_PREFIX_LAST_OR_PREV
       ) {
-      mrn_set_key_buf(ctx, field, key, key_max[key_nr], &size_max);
+      storage_encode_key(field, key, key_max[key_nr], &size_max);
       val_max = key_max[key_nr];
     } else {
-      mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+      storage_encode_key(field, key, key_min[key_nr], &size_min);
       val_min = key_min[key_nr];
     }
   }
@@ -5350,7 +5255,7 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
     if (error)
       DBUG_RETURN(error);
 
-    mrn_set_key_buf(ctx, field, key, key_min[key_nr], &size_min);
+    storage_encode_key(field, key, key_min[key_nr], &size_min);
     val_min = key_min[key_nr];
     val_max = key_min[key_nr];
     size_max = size_min;
@@ -5738,8 +5643,8 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
     if (error)
       DBUG_RETURN(error);
     if (start_key) {
-      mrn_set_key_buf(ctx, field, start_key->key, key_min[active_index],
-                      &size_min);
+      storage_encode_key(field, start_key->key, key_min[active_index],
+                         &size_min);
       val_min = key_min[active_index];
       if (start_key->flag == HA_READ_KEY_EXACT) {
         // for _id
@@ -5761,8 +5666,8 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
       }
     }
     if (end_key) {
-      mrn_set_key_buf(ctx, field, end_key->key, key_max[active_index],
-                      &size_max);
+      storage_encode_key(field, end_key->key, key_max[active_index],
+                         &size_max);
       val_max = key_max[active_index];
     }
   }
@@ -7445,6 +7350,102 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
     key_restore(buf, enc_buf, key_info, enc_len);
   }
   DBUG_VOID_RETURN;
+}
+
+int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
+                                   uchar *buf, uint *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error;
+  char *ptr = (char *)key;
+
+  error = mrn_change_encoding(ctx, field->charset());
+  if (error)
+    DBUG_RETURN(error);
+
+  if (field->null_bit) {
+    ptr += 1;
+  }
+
+  switch (field->type()) {
+  case MYSQL_TYPE_BIT:
+  case MYSQL_TYPE_ENUM:
+  case MYSQL_TYPE_SET:
+  case MYSQL_TYPE_TINY:
+    {
+      memcpy(buf, ptr, 1);
+      *size = 1;
+      break;
+    }
+  case MYSQL_TYPE_SHORT:
+    {
+      memcpy(buf, ptr, 2);
+      *size = 2;
+      break;
+    }
+  case MYSQL_TYPE_INT24:
+    {
+      memcpy(buf, ptr, 3);
+      buf[3] = 0;
+      *size = 4;
+      break;
+    }
+  case MYSQL_TYPE_LONG:
+    {
+      memcpy(buf, ptr, 4);
+      *size = 4;
+      break;
+    }
+  case MYSQL_TYPE_LONGLONG:
+    {
+      memcpy(buf, ptr, 8);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_FLOAT:
+    {
+      float float_value;
+      double double_value;
+      float4get(float_value, ptr);
+      double_value = float_value;
+      memcpy(buf, &double_value, 8);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_DOUBLE:
+    {
+      double val;
+      float8get(val, ptr);
+      memcpy(buf, &val, 8);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_TIME:
+  case MYSQL_TYPE_YEAR:
+  case MYSQL_TYPE_DATE:
+  case MYSQL_TYPE_DATETIME:
+    {
+      long long int val = (long long int) sint8korr(ptr);
+      memcpy(buf, &val, 8);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_STRING:
+  case MYSQL_TYPE_VARCHAR:
+  case MYSQL_TYPE_BLOB:
+    {
+      ptr += HA_KEY_BLOB_LENGTH;
+      const char *val = ptr;
+      int len = strlen(val);
+      memcpy(buf, val, len);
+      *size = len;
+      break;
+    }
+  default:
+    error = HA_ERR_UNSUPPORTED;
+    break;
+  }
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::wrapper_reset()
