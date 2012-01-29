@@ -3921,8 +3921,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
       error = mrn_change_encoding(ctx, field->charset());
       if (error)
         goto err;
-      int new_column_size;
-      error = generic_store_bulk(field, &new_value_buffer, &new_column_size);
+      error = generic_store_bulk(field, &new_value_buffer);
       if (error) {
         my_message(error,
                    "mroonga: wrapper: "
@@ -3960,7 +3959,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
   }
 
   THD *thd = ha_thd();
-  int i, col_size;
+  int i;
   int n_columns = table->s->fields;
 
   if (table->next_number_field && buf == table->record[0])
@@ -4012,8 +4011,9 @@ int ha_mroonga::storage_write_row(uchar *buf)
 #endif
         DBUG_RETURN(error);
       }
-      generic_store_bulk(pkey_field, &key_buffer, &pkey_size);
+      generic_store_bulk(pkey_field, &key_buffer);
       pkey = GRN_TEXT_VALUE(&key_buffer);
+      pkey_size = GRN_TEXT_LEN(&key_buffer);
     } else {
       mrn_change_encoding(ctx, NULL);
       uchar key[MRN_MAX_KEY_SIZE];
@@ -4079,7 +4079,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
       grn_obj_unlink(ctx, &colbuf);
       DBUG_RETURN(error);
     }
-    generic_store_bulk(field, &colbuf, &col_size);
+    generic_store_bulk(field, &colbuf);
     grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
     if (ctx->rc) {
 #ifndef DBUG_OFF
@@ -4323,12 +4323,10 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     for (j = 0; j < key_info.key_parts; j++) {
       Field *field = key_info.key_part[j].field;
 
-      int new_column_size;
-      generic_store_bulk(field, &new_value_buffer, &new_column_size);
+      generic_store_bulk(field, &new_value_buffer);
 
       field->move_field_offset(ptr_diff);
-      int old_column_size;
-      generic_store_bulk(field, &old_value_buffer, &old_column_size);
+      generic_store_bulk(field, &old_value_buffer);
       field->move_field_offset(-ptr_diff);
 
       grn_rc rc;
@@ -4381,7 +4379,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   }
 
   grn_obj colbuf;
-  int i, col_size;
+  int i;
   int n_columns = table->s->fields;
   THD *thd = ha_thd();
 
@@ -4464,7 +4462,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
         }
       }
 
-      generic_store_bulk(field, &colbuf, &col_size);
+      generic_store_bulk(field, &colbuf);
       grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
       if (ctx->rc) {
 #ifndef DBUG_OFF
@@ -4651,8 +4649,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
       if (field->is_null())
         continue;
 
-      int old_column_size;
-      generic_store_bulk(field, &old_value_buffer, &old_column_size);
+      generic_store_bulk(field, &old_value_buffer);
       grn_rc rc;
       rc = grn_column_index_update(ctx, index_column, record_id, j + 1,
                                    &old_value_buffer, NULL);
@@ -6839,7 +6836,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   DBUG_VOID_RETURN;
 }
 
-int ha_mroonga::generic_store_bulk_string(Field *field, grn_obj *buf, int *size)
+int ha_mroonga::generic_store_bulk_string(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -6847,17 +6844,16 @@ int ha_mroonga::generic_store_bulk_string(Field *field, grn_obj *buf, int *size)
   field->val_str(NULL, &value);
   grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
   GRN_TEXT_SET(ctx, buf, value.ptr(), value.length());
-  *size = value.length();
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf, int *size)
+int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   long long value = field->val_int();
-  *size = field->pack_length();
-  switch (*size) {
+  uint32 size = field->pack_length();
+  switch (size) {
   case 1:
     grn_obj_reinit(ctx, buf, GRN_DB_INT8, 0);
     GRN_INT8_SET(ctx, buf, value);
@@ -6880,9 +6876,9 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf, int *size
     error = HA_ERR_UNSUPPORTED;
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "unknown integer value size: <%d>: "
+             "unknown integer value size: <%u>: "
              "available sizes: [1, 2, 3, 4, 8]",
-             *size);
+             size);
     push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
                  error, error_message);
     break;
@@ -6890,13 +6886,13 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf, int *size
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf, int *size)
+int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   double value = field->val_real();
-  *size = field->pack_length();
-  switch (*size) {
+  uint32 size = field->pack_length();
+  switch (size) {
   case 4:
   case 8:
     grn_obj_reinit(ctx, buf, GRN_DB_FLOAT, 0);
@@ -6907,9 +6903,9 @@ int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf, int *size)
     error = HA_ERR_UNSUPPORTED;
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "unknown float value size: <%d>: "
+             "unknown float value size: <%u>: "
              "available sizes: [4, 8]",
-             *size);
+             size);
     push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
                  error, error_message);
     break;
@@ -6917,7 +6913,7 @@ int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf, int *size)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf, int *size)
+int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -6925,8 +6921,8 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf, int *size)
   // FIXME: value isn't epoch time. We should store epoch
   // time to bulk.
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
-  *size = field->pack_length();
-  switch (*size) {
+  uint32 size = field->pack_length();
+  switch (size) {
   case 1:
   case 2:
   case 3:
@@ -6939,9 +6935,9 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf, int *size)
     error = HA_ERR_UNSUPPORTED;
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "unknown integer value size: <%d>: "
+             "unknown integer value size: <%u>: "
              "available sizes: [1, 2, 3, 4, 8]",
-             *size);
+             size);
     push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
                  error, error_message);
     break;
@@ -6949,7 +6945,7 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf, int *size)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::generic_store_bulk_new_decimal(Field *field, grn_obj *buf, int *size)
+int ha_mroonga::generic_store_bulk_new_decimal(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -6958,24 +6954,22 @@ int ha_mroonga::generic_store_bulk_new_decimal(Field *field, grn_obj *buf, int *
   new_decimal_field->val_str(&value, NULL);
   grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
   GRN_TEXT_SET(ctx, buf, value.ptr(), value.length());
-  *size = value.length();
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::generic_store_bulk_blob(Field *field, grn_obj *buf, int *size)
+int ha_mroonga::generic_store_bulk_blob(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   String buffer;
   Field_blob *blob = (Field_blob *)field;
   const char *value = blob->val_str(0, &buffer)->ptr();
-  *size = blob->get_length();
   grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
-  GRN_TEXT_SET(ctx, buf, value, *size);
+  GRN_TEXT_SET(ctx, buf, value, blob->get_length());
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf, int *size)
+int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -6984,13 +6978,10 @@ int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf, int *siz
   const char *wkb = geometry->val_str(0, &buffer)->ptr();
   int len = geometry->get_length();
   error = mrn_set_geometry(ctx, buf, wkb, len);
-  if (!error) {
-    *size = len;
-  }
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf, int *size)
+int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error;
@@ -6999,74 +6990,74 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf, int *size)
     return error;
   switch (field->type()) {
   case MYSQL_TYPE_DECIMAL:
-    error = generic_store_bulk_string(field, buf, size);
+    error = generic_store_bulk_string(field, buf);
     break;
   case MYSQL_TYPE_TINY:
   case MYSQL_TYPE_SHORT:
   case MYSQL_TYPE_LONG:
-    error = generic_store_bulk_integer(field, buf, size);
+    error = generic_store_bulk_integer(field, buf);
     break;
   case MYSQL_TYPE_FLOAT:
   case MYSQL_TYPE_DOUBLE:
-    error = generic_store_bulk_float(field, buf, size);
+    error = generic_store_bulk_float(field, buf);
     break;
   case MYSQL_TYPE_NULL:
-    error = generic_store_bulk_integer(field, buf, size);
+    error = generic_store_bulk_integer(field, buf);
     break;
   case MYSQL_TYPE_TIMESTAMP:
-    error = generic_store_bulk_time(field, buf, size);
+    error = generic_store_bulk_time(field, buf);
     break;
   case MYSQL_TYPE_LONGLONG:
   case MYSQL_TYPE_INT24:
-    error = generic_store_bulk_integer(field, buf, size);
+    error = generic_store_bulk_integer(field, buf);
     break;
   case MYSQL_TYPE_DATE:
   case MYSQL_TYPE_TIME:
   case MYSQL_TYPE_DATETIME:
   case MYSQL_TYPE_YEAR:
   case MYSQL_TYPE_NEWDATE:
-    error = generic_store_bulk_time(field, buf, size);
+    error = generic_store_bulk_time(field, buf);
     break;
   case MYSQL_TYPE_VARCHAR:
-    error = generic_store_bulk_string(field, buf, size);
+    error = generic_store_bulk_string(field, buf);
     break;
   case MYSQL_TYPE_BIT:
-    error = generic_store_bulk_integer(field, buf, size);
+    error = generic_store_bulk_integer(field, buf);
     break;
 #ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:
-    error = generic_store_bulk_time(field, buf, size);
+    error = generic_store_bulk_time(field, buf);
     break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   case MYSQL_TYPE_DATETIME2:
-    error = generic_store_bulk_time(field, buf, size);
+    error = generic_store_bulk_time(field, buf);
     break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   case MYSQL_TYPE_TIME2:
-    error = generic_store_bulk_time(field, buf, size);
+    error = generic_store_bulk_time(field, buf);
     break;
 #endif
   case MYSQL_TYPE_NEWDECIMAL:
-    error = generic_store_bulk_new_decimal(field, buf, size);
+    error = generic_store_bulk_new_decimal(field, buf);
     break;
   case MYSQL_TYPE_ENUM:
   case MYSQL_TYPE_SET:
-    error = generic_store_bulk_integer(field, buf, size);
+    error = generic_store_bulk_integer(field, buf);
     break;
   case MYSQL_TYPE_TINY_BLOB:
   case MYSQL_TYPE_MEDIUM_BLOB:
   case MYSQL_TYPE_LONG_BLOB:
   case MYSQL_TYPE_BLOB:
-    error = generic_store_bulk_blob(field, buf, size);
+    error = generic_store_bulk_blob(field, buf);
     break;
   case MYSQL_TYPE_VAR_STRING:
   case MYSQL_TYPE_STRING:
-    error = generic_store_bulk_string(field, buf, size);
+    error = generic_store_bulk_string(field, buf);
     break;
   case MYSQL_TYPE_GEOMETRY:
-    error = generic_store_bulk_geometry(field, buf, size);
+    error = generic_store_bulk_geometry(field, buf);
     break;
   default:
     error = HA_ERR_UNSUPPORTED;
@@ -8798,8 +8789,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
             if (res)
               break;
 
-            int new_column_size;
-            generic_store_bulk(field, &new_value_buffer, &new_column_size);
+            generic_store_bulk(field, &new_value_buffer);
 
             grn_obj *index_column = grn_index_columns[k];
             grn_rc rc;
@@ -9180,8 +9170,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
             if (res)
               break;
 
-            int new_column_size;
-            generic_store_bulk(field, &new_value_buffer, &new_column_size);
+            generic_store_bulk(field, &new_value_buffer);
 
             grn_obj *index_column = grn_obj_column(ctx,
                                                    index_tables[k + n_keys],
