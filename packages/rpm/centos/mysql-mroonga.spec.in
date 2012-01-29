@@ -4,9 +4,9 @@
 %define mysql_version 5.1.52
 %define mysql_release 1
 %define mysql_dist    el6_0.1
-%define mysql_download_base_url http://vault.centos.org/6.1/os/SRPMS/Packages
+%define mysql_download_base_urlh ttp://vault.centos.org/6.1/os/SRPMS/Packages
 %else
-%define mysql_version 5.5.19
+%define mysql_version 5.5.20
 %define mysql_release 1
 %define mysql_dist    rhel5
 %define mysql_download_base_url http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5
@@ -152,6 +152,7 @@ fi
 - new upstream release.
 - require groonga 1.3.0.
 - groonga -> mroonga.
+- use MySQL 5.5.20.
 
 * Thu Dec 29 2011 Kouhei Sutou <kou@clear-code.com> - 1.11-0
 - new upstream release.
