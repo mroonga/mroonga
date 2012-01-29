@@ -4959,7 +4959,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     mrn_change_encoding(ctx, field->charset());
 
     if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
-      DBUG_RETURN((ha_rows)1) ;
+      DBUG_RETURN((ha_rows)1);
     }
 
     if (range_min) {
