@@ -915,7 +915,7 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
                                                 bool for_index_key)
 {
   grn_builtin_type type = GRN_DB_VOID;
-  enum_field_types mysql_field_type = field->type();
+  enum_field_types mysql_field_type = field->real_type();
   switch (mysql_field_type) {
   case MYSQL_TYPE_DECIMAL:      // DECIMAL; <= 65bytes
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
@@ -1122,7 +1122,7 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
     long long int long_long_value;
     float float_value;
     double double_value;
-    switch (field->type()) {
+    switch (field->real_type()) {
     case MYSQL_TYPE_BIT:
     case MYSQL_TYPE_ENUM:
     case MYSQL_TYPE_SET:
@@ -6988,6 +6988,25 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::generic_store_bulk_new_date(Field *field, grn_obj *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  Field_newdate *newdate_field = (Field_newdate *)field;
+  MYSQL_TIME mysql_date;
+  newdate_field->get_time(&mysql_date);
+  struct tm date;
+  memset(&date, 0, sizeof(struct tm));
+  date.tm_year = mysql_date.year - 1900;
+  date.tm_mon = mysql_date.month - 1;
+  date.tm_mday = mysql_date.day;
+  int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
+  long long int time = GRN_TIME_PACK(seconds, 0);
+  grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
+  GRN_TIME_SET(ctx, buf, time);
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::generic_store_bulk_new_decimal(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -7031,7 +7050,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
   error = mrn_change_encoding(ctx, field->charset());
   if (error)
     return error;
-  switch (field->type()) {
+  switch (field->real_type()) {
   case MYSQL_TYPE_DECIMAL:
     error = generic_store_bulk_string(field, buf);
     break;
@@ -7060,8 +7079,10 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
   case MYSQL_TYPE_TIME:
   case MYSQL_TYPE_DATETIME:
   case MYSQL_TYPE_YEAR:
-  case MYSQL_TYPE_NEWDATE:
     error = generic_store_bulk_time(field, buf);
+    break;
+  case MYSQL_TYPE_NEWDATE:
+    error = generic_store_bulk_new_date(field, buf);
     break;
   case MYSQL_TYPE_VARCHAR:
     error = generic_store_bulk_string(field, buf);
@@ -7204,6 +7225,26 @@ void ha_mroonga::storage_store_field_date(Field *field,
   field->store(date_in_mysql);
 }
 
+void ha_mroonga::storage_store_field_new_date(Field *field,
+                                              const char *value,
+                                              uint value_length)
+{
+  long long int time = *((long long int *)value);
+  int32 sec, usec __attribute__((unused));
+  GRN_TIME_UNPACK(time, sec, usec);
+  struct tm date;
+  time_t sec_t = sec;
+  gmtime_r(&sec_t, &date);
+  MYSQL_TIME mysql_date;
+  memset(&mysql_date, 0, sizeof(MYSQL_TIME));
+  mysql_date.time_type = MYSQL_TIMESTAMP_DATE;
+  mysql_date.year = date.tm_year + 1900;
+  mysql_date.month = date.tm_mon + 1;
+  mysql_date.day = date.tm_mday;
+  Field_newdate *newdate_field = (Field_newdate *)field;
+  newdate_field->store_time(&mysql_date, MYSQL_TIMESTAMP_DATE);
+}
+
 void ha_mroonga::storage_store_field_time(Field *field,
                                           const char *value,
                                           uint value_length)
@@ -7255,7 +7296,7 @@ void ha_mroonga::storage_store_field(Field *field,
                                      const char *value, uint value_length)
 {
   field->set_notnull();
-  switch (field->type()) {
+  switch (field->real_type()) {
   case MYSQL_TYPE_DECIMAL:
     storage_store_field_string(field, value, value_length);
     break;
@@ -7284,8 +7325,10 @@ void ha_mroonga::storage_store_field(Field *field,
   case MYSQL_TYPE_TIME:
   case MYSQL_TYPE_DATETIME:
   case MYSQL_TYPE_YEAR:
-  case MYSQL_TYPE_NEWDATE:
     storage_store_field_time(field, value, value_length);
+    break;
+  case MYSQL_TYPE_NEWDATE:
+    storage_store_field_new_date(field, value, value_length);
     break;
   case MYSQL_TYPE_VARCHAR:
     storage_store_field_string(field, value, value_length);
@@ -7433,7 +7476,7 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
     ptr += 1;
   }
 
-  switch (field->type()) {
+  switch (field->real_type()) {
   case MYSQL_TYPE_BIT:
   case MYSQL_TYPE_ENUM:
   case MYSQL_TYPE_SET:
@@ -7486,7 +7529,16 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       *size = 8;
       break;
     }
-  case MYSQL_TYPE_DATE:
+  case MYSQL_TYPE_TIME:
+  case MYSQL_TYPE_YEAR:
+  case MYSQL_TYPE_DATETIME:
+    {
+      long long int val = (long long int) sint8korr(ptr);
+      memcpy(buf, &val, 8);
+      *size = 8;
+      break;
+    }
+  case MYSQL_TYPE_NEWDATE:
     {
       uint32 encoded_date = uint3korr(ptr);
       struct tm date;
@@ -7497,15 +7549,6 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
       long long int time = GRN_TIME_PACK(seconds, 0);
       memcpy(buf, &time, 8);
-      *size = 8;
-      break;
-    }
-  case MYSQL_TYPE_TIME:
-  case MYSQL_TYPE_YEAR:
-  case MYSQL_TYPE_DATETIME:
-    {
-      long long int val = (long long int) sint8korr(ptr);
-      memcpy(buf, &val, 8);
       *size = 8;
       break;
     }
