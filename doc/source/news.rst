@@ -56,10 +56,22 @@ We drop the existing database::
 
 We upgrade to "mroonga" storage engine. We will use
 ``apt-get`` on Debian GNU/Linux or Ubuntu and ``yum`` on
-CentOS or Fedora::
+CentOS or Fedora.
 
-  % sudo apt-get install -y mysql-server-mroonga # for Debian GNU/Linux or Ubuntu
-  % sudo yum install -y mysql-mroonga # for CentOS or Fedora
+apt-get::
+
+  % sudo apt-get install -y mysql-server-mroonga
+
+yum::
+
+  % sudo yum remove -y mysql-mroonga
+  % sudo yum install -y mysql-mroonga
+
+.. caution::
+
+   We don't forget to run ``yum remove`` before ``yum
+   install``. If we forget to run ``yum remove``, we will break
+   a MySQL's system table.
 
 We recreate a database::
 
