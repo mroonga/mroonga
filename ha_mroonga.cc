@@ -138,6 +138,8 @@ static CHARSET_INFO *mrn_charset_eucjpms = NULL;
 static CHARSET_INFO *mrn_charset_ujis = NULL;
 static CHARSET_INFO *mrn_charset_koi8r = NULL;
 
+static int32 mrn_utc_diff_in_seconds = 0;
+
 static void mrn_init_encoding_map()
 {
   CHARSET_INFO **cs;
@@ -1265,6 +1267,15 @@ static uint mrn_alter_table_flags(uint flags) {
   return ret_flags;
 }
 
+static void mrn_init_time(void)
+{
+  struct tm now_tm;
+  time_t now;
+  time(&now);
+  gmtime_r(&now, &now_tm);
+  mrn_utc_diff_in_seconds = now - mktime(&now_tm);
+}
+
 static int mrn_init(void *p)
 {
   // init handlerton
@@ -1338,6 +1349,8 @@ static int mrn_init(void *p)
                    (my_hash_get_key) mrn_open_tables_get_key, 0, 0)) {
     goto error_allocated_open_tables_hash_init;
   }
+
+  mrn_init_time();
 
   return 0;
 
@@ -6926,6 +6939,23 @@ int ha_mroonga::generic_store_bulk_timestamp(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::generic_store_bulk_date(Field *field, grn_obj *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  long long int date_value = field->val_int();
+  struct tm date;
+  memset(&date, 0, sizeof(struct tm));
+  date.tm_year = date_value / 10000 % 10000 - 1900;
+  date.tm_mon = date_value / 100 % 100 - 1;
+  date.tm_mday = date_value % 100;
+  int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
+  long long int time = GRN_TIME_PACK(seconds, 0);
+  grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
+  GRN_TIME_SET(ctx, buf, time);
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -7025,6 +7055,8 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     error = generic_store_bulk_integer(field, buf);
     break;
   case MYSQL_TYPE_DATE:
+    error = generic_store_bulk_date(field, buf);
+    break;
   case MYSQL_TYPE_TIME:
   case MYSQL_TYPE_DATETIME:
   case MYSQL_TYPE_YEAR:
@@ -7155,6 +7187,23 @@ void ha_mroonga::storage_store_field_timestamp(Field *field,
   timestamp_field->store_timestamp(sec);
 }
 
+void ha_mroonga::storage_store_field_date(Field *field,
+                                          const char *value,
+                                          uint value_length)
+{
+  long long int time = *((long long int *)value);
+  int32 sec, usec __attribute__((unused));
+  GRN_TIME_UNPACK(time, sec, usec);
+  struct tm date;
+  time_t sec_t = sec;
+  gmtime_r(&sec_t, &date);
+  long long int date_in_mysql =
+    (date.tm_year + 1900) * 10000 +
+    (date.tm_mon + 1) * 100 +
+    date.tm_mday;
+  field->store(date_in_mysql);
+}
+
 void ha_mroonga::storage_store_field_time(Field *field,
                                           const char *value,
                                           uint value_length)
@@ -7230,6 +7279,8 @@ void ha_mroonga::storage_store_field(Field *field,
     storage_store_field_integer(field, value, value_length);
     break;
   case MYSQL_TYPE_DATE:
+    storage_store_field_date(field, value, value_length);
+    break;
   case MYSQL_TYPE_TIME:
   case MYSQL_TYPE_DATETIME:
   case MYSQL_TYPE_YEAR:
@@ -7435,9 +7486,22 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       *size = 8;
       break;
     }
+  case MYSQL_TYPE_DATE:
+    {
+      uint32 encoded_date = uint3korr(ptr);
+      struct tm date;
+      memset(&date, 0, sizeof(struct tm));
+      date.tm_year = encoded_date / (16 * 32) - 1900;
+      date.tm_mon = encoded_date / 32 % 16 - 1;
+      date.tm_mday = encoded_date % 32;
+      int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
+      long long int time = GRN_TIME_PACK(seconds, 0);
+      memcpy(buf, &time, 8);
+      *size = 8;
+      break;
+    }
   case MYSQL_TYPE_TIME:
   case MYSQL_TYPE_YEAR:
-  case MYSQL_TYPE_DATE:
   case MYSQL_TYPE_DATETIME:
     {
       long long int val = (long long int) sint8korr(ptr);
