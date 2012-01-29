@@ -12,7 +12,7 @@ if [ "$1" = "purge" ]; then
     mysql_apparmor_profile=/etc/apparmor.d/${mysql_apparmor_profile_name}
     mysql_local_apparmor_profile=/etc/apparmor.d/local/${mysql_apparmor_profile_name}
     mysql_abstraction_apparmor_profile=/etc/apparmor.d/abstractions/mysql
-    apparmor_profile_name=mysql-server-groonga
+    apparmor_profile_name=mysql-server-mroonga
     if test -f "${mysql_local_apparmor_profile}"; then
 	include_profile="#include <abstractions/${apparmor_profile_name}>"
 	if grep -q "${include_profile}" "${mysql_local_apparmor_profile}"; then
