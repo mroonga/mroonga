@@ -1067,128 +1067,6 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
   return error;
 }
 
-static int mrn_set_buf(grn_ctx *ctx, Field *field, grn_obj *buf, int *size)
-{
-  int error;
-  error = mrn_change_encoding(ctx, field->charset());
-  if (error)
-    return error;
-  switch (field->type()) {
-  case MYSQL_TYPE_DECIMAL:
-    {
-      String val;
-      field->val_str(NULL, &val);
-      grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
-      GRN_TEXT_SET(ctx, buf, val.ptr(), val.length());
-      *size = val.length();
-    }
-    break;
-  case MYSQL_TYPE_NEWDECIMAL:
-    {
-      String val;
-      Field_new_decimal *new_decimal_field = (Field_new_decimal *)field;
-      new_decimal_field->val_str(&val, NULL);
-      grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
-      GRN_TEXT_SET(ctx, buf, val.ptr(), val.length());
-      *size = val.length();
-    }
-    break;
-  case MYSQL_TYPE_BIT:
-  case MYSQL_TYPE_ENUM:
-  case MYSQL_TYPE_SET:
-  case MYSQL_TYPE_TINY:
-    {
-      int val = field->val_int();
-      grn_obj_reinit(ctx, buf, GRN_DB_INT8, 0);
-      GRN_INT8_SET(ctx, buf, val);
-      *size = 1;
-      break;
-    }
-  case MYSQL_TYPE_SHORT:
-    {
-      int val = field->val_int();
-      grn_obj_reinit(ctx, buf, GRN_DB_INT16, 0);
-      GRN_INT16_SET(ctx, buf, val);
-      *size = 2;
-      break;
-    }
-  case MYSQL_TYPE_INT24:
-  case MYSQL_TYPE_LONG:
-    {
-      int val = field->val_int();
-      grn_obj_reinit(ctx, buf, GRN_DB_INT32, 0);
-      GRN_INT32_SET(ctx, buf, val);
-      *size = 4;
-      break;
-    }
-  case MYSQL_TYPE_LONGLONG:
-    {
-      long long int val = field->val_int();
-      grn_obj_reinit(ctx, buf, GRN_DB_INT64, 0);
-      GRN_INT64_SET(ctx, buf, val);
-      *size = 8;
-      break;
-    }
-  case MYSQL_TYPE_FLOAT:
-  case MYSQL_TYPE_DOUBLE:
-    {
-      double val = field->val_real();
-      grn_obj_reinit(ctx, buf, GRN_DB_FLOAT, 0);
-      GRN_FLOAT_SET(ctx, buf, val);
-      *size = 8;
-      break;
-    }
-  case MYSQL_TYPE_TIME:
-  case MYSQL_TYPE_YEAR:
-  case MYSQL_TYPE_DATE:
-  case MYSQL_TYPE_DATETIME:
-    {
-      long long int val = field->val_int();
-      grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
-      GRN_TIME_SET(ctx, buf, val);
-      *size = 8;
-      break;
-    }
-  case MYSQL_TYPE_STRING:
-  case MYSQL_TYPE_VARCHAR:
-    {
-      String tmp;
-      const char *val = field->val_str(&tmp)->ptr();
-      int len = field->data_length();
-      grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
-      GRN_TEXT_SET(ctx, buf, val, len);
-      *size = len;
-      break;
-    }
-  case MYSQL_TYPE_BLOB:
-    {
-      String tmp;
-      Field_blob *blob = (Field_blob*) field;
-      const char *val = blob->val_str(0,&tmp)->ptr();
-      int len = blob->get_length();
-      grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
-      GRN_TEXT_SET(ctx, buf, val, len);
-      *size = len;
-      break;
-    }
-  case MYSQL_TYPE_GEOMETRY:
-    {
-      String tmp;
-      Field_geom *geometry = (Field_geom *)field;
-      const char *wkb = geometry->val_str(0, &tmp)->ptr();
-      int len = geometry->get_length();
-      error = mrn_set_geometry(ctx, buf, wkb, len);
-      if (!error) {
-        *size = len;
-      }
-      break;
-    }
-  default:
-    return HA_ERR_UNSUPPORTED;
-  }
-  return error;
-}
-
 #ifdef WORDS_BIGENDIAN
 #define mrn_byte_order_host_to_network(buf, key, size)  \
 {                                                       \
@@ -4139,7 +4017,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
       if (error)
         goto err;
       int new_column_size;
-      error = mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
+      error = generic_store_bulk(field, &new_value_buffer, &new_column_size);
       if (error) {
         my_message(error,
                    "mroonga: wrapper: "
@@ -4229,7 +4107,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
 #endif
         DBUG_RETURN(error);
       }
-      mrn_set_buf(ctx, pkey_field, &key_buffer, &pkey_size);
+      generic_store_bulk(pkey_field, &key_buffer, &pkey_size);
       pkey = GRN_TEXT_VALUE(&key_buffer);
     } else {
       mrn_change_encoding(ctx, NULL);
@@ -4296,7 +4174,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
       grn_obj_unlink(ctx, &colbuf);
       DBUG_RETURN(error);
     }
-    mrn_set_buf(ctx, field, &colbuf, &col_size);
+    generic_store_bulk(field, &colbuf, &col_size);
     grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
     if (ctx->rc) {
 #ifndef DBUG_OFF
@@ -4541,11 +4419,11 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
       Field *field = key_info.key_part[j].field;
 
       int new_column_size;
-      mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
+      generic_store_bulk(field, &new_value_buffer, &new_column_size);
 
       field->move_field_offset(ptr_diff);
       int old_column_size;
-      mrn_set_buf(ctx, field, &old_value_buffer, &old_column_size);
+      generic_store_bulk(field, &old_value_buffer, &old_column_size);
       field->move_field_offset(-ptr_diff);
 
       grn_rc rc;
@@ -4681,7 +4559,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
         }
       }
 
-      mrn_set_buf(ctx, field, &colbuf, &col_size);
+      generic_store_bulk(field, &colbuf, &col_size);
       grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
       if (ctx->rc) {
 #ifndef DBUG_OFF
@@ -4869,7 +4747,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
         continue;
 
       int old_column_size;
-      mrn_set_buf(ctx, field, &old_value_buffer, &old_column_size);
+      generic_store_bulk(field, &old_value_buffer, &old_column_size);
       grn_rc rc;
       rc = grn_column_index_update(ctx, index_column, record_id, j + 1,
                                    &old_value_buffer, NULL);
@@ -7056,6 +6934,242 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   DBUG_VOID_RETURN;
 }
 
+int ha_mroonga::generic_store_bulk_string(Field *field, grn_obj *buf, int *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  String value;
+  field->val_str(NULL, &value);
+  grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
+  GRN_TEXT_SET(ctx, buf, value.ptr(), value.length());
+  *size = value.length();
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf, int *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  long long value = field->val_int();
+  *size = field->pack_length();
+  switch (*size) {
+  case 1:
+    grn_obj_reinit(ctx, buf, GRN_DB_INT8, 0);
+    GRN_INT8_SET(ctx, buf, value);
+    break;
+  case 2:
+    grn_obj_reinit(ctx, buf, GRN_DB_INT16, 0);
+    GRN_INT16_SET(ctx, buf, value);
+    break;
+  case 3:
+  case 4:
+    grn_obj_reinit(ctx, buf, GRN_DB_INT32, 0);
+    GRN_INT32_SET(ctx, buf, value);
+    break;
+  case 8:
+    grn_obj_reinit(ctx, buf, GRN_DB_INT64, 0);
+    GRN_INT64_SET(ctx, buf, value);
+    break;
+  default:
+    // Why!?
+    error = HA_ERR_UNSUPPORTED;
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "unknown integer value size: <%d>: "
+             "available sizes: [1, 2, 3, 4, 8]",
+             *size);
+    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+                 error, error_message);
+    break;
+  }
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf, int *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  double value = field->val_real();
+  *size = field->pack_length();
+  switch (*size) {
+  case 4:
+  case 8:
+    grn_obj_reinit(ctx, buf, GRN_DB_FLOAT, 0);
+    GRN_FLOAT_SET(ctx, buf, value);
+    break;
+  default:
+    // Why!?
+    error = HA_ERR_UNSUPPORTED;
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "unknown float value size: <%d>: "
+             "available sizes: [4, 8]",
+             *size);
+    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+                 error, error_message);
+    break;
+  }
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf, int *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  long long value = field->val_int();
+  // FIXME: value isn't epoch time. We should store epoch
+  // time to bulk.
+  grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
+  *size = field->pack_length();
+  switch (*size) {
+  case 1:
+  case 2:
+  case 3:
+  case 4:
+  case 8:
+    GRN_TIME_SET(ctx, buf, value);
+    break;
+  default:
+    // Why!?
+    error = HA_ERR_UNSUPPORTED;
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "unknown integer value size: <%d>: "
+             "available sizes: [1, 2, 3, 4, 8]",
+             *size);
+    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+                 error, error_message);
+    break;
+  }
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::generic_store_bulk_new_decimal(Field *field, grn_obj *buf, int *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  String value;
+  Field_new_decimal *new_decimal_field = (Field_new_decimal *)field;
+  new_decimal_field->val_str(&value, NULL);
+  grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
+  GRN_TEXT_SET(ctx, buf, value.ptr(), value.length());
+  *size = value.length();
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::generic_store_bulk_blob(Field *field, grn_obj *buf, int *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  String buffer;
+  Field_blob *blob = (Field_blob *)field;
+  const char *value = blob->val_str(0, &buffer)->ptr();
+  *size = blob->get_length();
+  grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
+  GRN_TEXT_SET(ctx, buf, value, *size);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf, int *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  String buffer;
+  Field_geom *geometry = (Field_geom *)field;
+  const char *wkb = geometry->val_str(0, &buffer)->ptr();
+  int len = geometry->get_length();
+  error = mrn_set_geometry(ctx, buf, wkb, len);
+  if (!error) {
+    *size = len;
+  }
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf, int *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error;
+  error = mrn_change_encoding(ctx, field->charset());
+  if (error)
+    return error;
+  switch (field->type()) {
+  case MYSQL_TYPE_DECIMAL:
+    error = generic_store_bulk_string(field, buf, size);
+    break;
+  case MYSQL_TYPE_TINY:
+  case MYSQL_TYPE_SHORT:
+  case MYSQL_TYPE_LONG:
+    error = generic_store_bulk_integer(field, buf, size);
+    break;
+  case MYSQL_TYPE_FLOAT:
+  case MYSQL_TYPE_DOUBLE:
+    error = generic_store_bulk_float(field, buf, size);
+    break;
+  case MYSQL_TYPE_NULL:
+    error = generic_store_bulk_integer(field, buf, size);
+    break;
+  case MYSQL_TYPE_TIMESTAMP:
+    error = generic_store_bulk_time(field, buf, size);
+    break;
+  case MYSQL_TYPE_LONGLONG:
+  case MYSQL_TYPE_INT24:
+    error = generic_store_bulk_integer(field, buf, size);
+    break;
+  case MYSQL_TYPE_DATE:
+  case MYSQL_TYPE_TIME:
+  case MYSQL_TYPE_DATETIME:
+  case MYSQL_TYPE_YEAR:
+  case MYSQL_TYPE_NEWDATE:
+    error = generic_store_bulk_time(field, buf, size);
+    break;
+  case MYSQL_TYPE_VARCHAR:
+    error = generic_store_bulk_string(field, buf, size);
+    break;
+  case MYSQL_TYPE_BIT:
+    error = generic_store_bulk_integer(field, buf, size);
+    break;
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+  case MYSQL_TYPE_TIMESTAMP2:
+    error = generic_store_bulk_time(field, buf, size);
+    break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+  case MYSQL_TYPE_DATETIME2:
+    error = generic_store_bulk_time(field, buf, size);
+    break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+  case MYSQL_TYPE_TIME2:
+    error = generic_store_bulk_time(field, buf, size);
+    break;
+#endif
+  case MYSQL_TYPE_NEWDECIMAL:
+    error = generic_store_bulk_new_decimal(field, buf, size);
+    break;
+  case MYSQL_TYPE_ENUM:
+  case MYSQL_TYPE_SET:
+    error = generic_store_bulk_integer(field, buf, size);
+    break;
+  case MYSQL_TYPE_TINY_BLOB:
+  case MYSQL_TYPE_MEDIUM_BLOB:
+  case MYSQL_TYPE_LONG_BLOB:
+  case MYSQL_TYPE_BLOB:
+    error = generic_store_bulk_blob(field, buf, size);
+    break;
+  case MYSQL_TYPE_VAR_STRING:
+  case MYSQL_TYPE_STRING:
+    error = generic_store_bulk_string(field, buf, size);
+    break;
+  case MYSQL_TYPE_GEOMETRY:
+    error = generic_store_bulk_geometry(field, buf, size);
+    break;
+  default:
+    error = HA_ERR_UNSUPPORTED;
+    break;
+  }
+  DBUG_RETURN(error);
+}
+
 void ha_mroonga::storage_store_field_string(Field *field,
                                             const char *value,
                                             uint value_length)
@@ -7117,6 +7231,9 @@ void ha_mroonga::storage_store_field_time(Field *field,
 {
   long long int field_value;
   field_value = *((long long int *)value);
+  // FIXME: field_value should be epoch time and convert
+  // epoch time to MySQL time. See also
+  // ha_mroonga::generic_store_bulk_time().
   field->store(field_value);
 }
 
@@ -8671,7 +8788,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
               break;
 
             int new_column_size;
-            mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
+            generic_store_bulk(field, &new_value_buffer, &new_column_size);
 
             grn_obj *index_column = grn_index_columns[k];
             grn_rc rc;
@@ -9053,7 +9170,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
               break;
 
             int new_column_size;
-            mrn_set_buf(ctx, field, &new_value_buffer, &new_column_size);
+            generic_store_bulk(field, &new_value_buffer, &new_column_size);
 
             grn_obj *index_column = grn_obj_column(ctx,
                                                    index_tables[k + n_keys],

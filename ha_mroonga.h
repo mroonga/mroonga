@@ -401,6 +401,16 @@ private:
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit,
                               grn_obj *target_table, grn_obj *score_column);
+
+  int generic_store_bulk_string(Field *field, grn_obj *buf, int *size);
+  int generic_store_bulk_integer(Field *field, grn_obj *buf, int *size);
+  int generic_store_bulk_float(Field *field, grn_obj *buf, int *size);
+  int generic_store_bulk_time(Field *field, grn_obj *buf, int *size);
+  int generic_store_bulk_new_decimal(Field *field, grn_obj *buf, int *size);
+  int generic_store_bulk_blob(Field *field, grn_obj *buf, int *size);
+  int generic_store_bulk_geometry(Field *field, grn_obj *buf, int *size);
+  int generic_store_bulk(Field *field, grn_obj *buf, int *size);
+
   void storage_store_field_string(Field *field,
                                   const char *value, uint value_length);
   void storage_store_field_integer(Field *field,
