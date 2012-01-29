@@ -7106,9 +7106,8 @@ void ha_mroonga::storage_store_field_integer(Field *field,
              value_length);
     push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
                  HA_ERR_UNSUPPORTED, error_message);
-  }
-  storage_store_field_string(field, value, value_length);
-  break;
+    storage_store_field_string(field, value, value_length);
+    break;
   }
 }
 
