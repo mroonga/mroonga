@@ -6913,6 +6913,19 @@ int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::generic_store_bulk_timestamp(Field *field, grn_obj *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  my_bool is_null_value;
+  Field_timestamp *timestamp_field = (Field_timestamp *)field;
+  long seconds = timestamp_field->get_timestamp(&is_null_value);
+  long long int time = GRN_TIME_PACK(seconds, 0);
+  grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
+  GRN_TIME_SET(ctx, buf, time);
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -7005,7 +7018,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     error = generic_store_bulk_integer(field, buf);
     break;
   case MYSQL_TYPE_TIMESTAMP:
-    error = generic_store_bulk_time(field, buf);
+    error = generic_store_bulk_timestamp(field, buf);
     break;
   case MYSQL_TYPE_LONGLONG:
   case MYSQL_TYPE_INT24:
@@ -7026,7 +7039,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     break;
 #ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:
-    error = generic_store_bulk_time(field, buf);
+    error = generic_store_bulk_timestamp(field, buf);
     break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
@@ -7131,6 +7144,17 @@ void ha_mroonga::storage_store_field_float(Field *field,
   field->store(field_value);
 }
 
+void ha_mroonga::storage_store_field_timestamp(Field *field,
+                                               const char *value,
+                                               uint value_length)
+{
+  long long int time = *((long long int *)value);
+  int32 sec, usec __attribute__((unused));
+  GRN_TIME_UNPACK(time, sec, usec);
+  Field_timestamp *timestamp_field = (Field_timestamp *)field;
+  timestamp_field->store_timestamp(sec);
+}
+
 void ha_mroonga::storage_store_field_time(Field *field,
                                           const char *value,
                                           uint value_length)
@@ -7199,7 +7223,7 @@ void ha_mroonga::storage_store_field(Field *field,
     storage_store_field_integer(field, value, value_length);
     break;
   case MYSQL_TYPE_TIMESTAMP:
-    storage_store_field_time(field, value, value_length);
+    storage_store_field_timestamp(field, value, value_length);
     break;
   case MYSQL_TYPE_LONGLONG:
   case MYSQL_TYPE_INT24:
@@ -7220,7 +7244,7 @@ void ha_mroonga::storage_store_field(Field *field,
     break;
 #ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:
-    storage_store_field_time(field, value, value_length);
+    storage_store_field_timestamp(field, value, value_length);
     break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2

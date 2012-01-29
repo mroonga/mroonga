@@ -405,6 +405,7 @@ private:
   int generic_store_bulk_string(Field *field, grn_obj *buf);
   int generic_store_bulk_integer(Field *field, grn_obj *buf);
   int generic_store_bulk_float(Field *field, grn_obj *buf);
+  int generic_store_bulk_timestamp(Field *field, grn_obj *buf);
   int generic_store_bulk_time(Field *field, grn_obj *buf);
   int generic_store_bulk_new_decimal(Field *field, grn_obj *buf);
   int generic_store_bulk_blob(Field *field, grn_obj *buf);
@@ -417,6 +418,8 @@ private:
                                    const char *value, uint value_length);
   void storage_store_field_float(Field *field,
                                  const char *value, uint value_length);
+  void storage_store_field_timestamp(Field *field,
+                                     const char *value, uint value_length);
   void storage_store_field_time(Field *field,
                                 const char *value, uint value_length);
   void storage_store_field_blob(Field *field,
