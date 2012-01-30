@@ -103,7 +103,7 @@ Improvements
 * [storage mode] Supported ``count(*)`` on view. [#1255]
   [Reported by Takahiro Nagai]
 * [incompatible] Groonga's native time value is used for
-  DATE, DATETIME and TIMESTAMPE type values.
+  DATE, DATETIME and TIMESTAMP type values.
 
 Fixes
 ^^^^^

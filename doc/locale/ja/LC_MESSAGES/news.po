@@ -218,7 +218,7 @@ msgstr ""
 #: ../../../source/news.rst:105
 msgid ""
 "[incompatible] Groonga's native time value is used for DATE, DATETIME and "
-"TIMESTAMPE type values."
+"TIMESTAMP type values."
 msgstr ""
 "[非互換] DATE、DATETIME、TIMESTAMP型の値にgroongaが提供する時間の値を使うよう"
 "にした。"
