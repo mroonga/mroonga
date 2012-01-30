@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-30 08:08\n"
-"PO-Revision-Date: 2012-01-30 08:09+0900\n"
+"PO-Revision-Date: 2012-01-30 10:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -40,8 +40,7 @@ msgstr ""
 #: ../../../source/news.rst:16
 msgid ""
 "In this release, mroonga has two changes that requires database recreation:"
-msgstr ""
-"このリリースでは、mroongaはデータベースの再作成が必要な変更点が2つあります。"
+msgstr "このリリースでは、データベースの再作成が必要な変更点が2つあります。"
 
 # 63ebc8639e4a40da862d1ff2ca0dc2da
 #: ../../../source/news.rst:19
