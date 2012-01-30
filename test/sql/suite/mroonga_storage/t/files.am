@@ -1,6 +1,8 @@
 test_files = \
 	alter_table_add_column.test \
 	alter_table_change_engine.test \
+	alter_table_drop_column.test \
+	alter_table_engine_decimal.test \
 	alter_table_fulltext.test \
 	alter_table_rename_table.test \
 	alter_table_spatial.test \
@@ -8,7 +10,12 @@ test_files = \
 	auto_increment_text.test \
 	binlog.test \
 	btree.test \
+	column_date.test \
+	column_datetime.test \
+	column_decimal.test \
+	column_timestamp.test \
 	count_performance.test \
+	count_star_index_view.test \
 	create_table.test \
 	delete_fulltext_column.test \
 	delete_id_index_hash_no_unique.test \
@@ -30,12 +37,15 @@ test_files = \
 	fulltext_multiple_column_index_recreate.test \
 	fulltext_multiple_column_index_update.test \
 	fulltext_multiple_index.test \
+	fulltext_no_primary_key.test \
 	fulltext_no_such_key.test \
 	fulltext_not_match_against.test \
 	fulltext_order_limit.test \
 	fulltext_parser_comment.test \
 	fulltext_parser_default.test \
 	fulltext_search_ascii.test \
+	fulltext_search_cp932.test \
+	fulltext_search_eucjpms.test \
 	fulltext_search_japanese.test \
 	geometry_contains.test \
 	hash_index_id_normal.test \
@@ -44,9 +54,12 @@ test_files = \
 	hash_index_normal_column_insert.test \
 	information_schema.test \
 	insert.test \
+	key_read.test \
 	last_insert_grn_id.test \
 	log_level.test \
 	multiple_column_index_delete.test \
+	multiple_column_index_double.test \
+	multiple_column_index_float.test \
 	multiple_column_index_int.test \
 	multiple_column_index_recreate.test \
 	multiple_column_index_string.test \

@@ -1,12 +1,14 @@
 test_files = \
 	alter_table_add_column.test \
 	alter_table_change_engine.test \
+	alter_table_drop_column.test \
 	alter_table_fulltext.test \
 	alter_table_rename_table.test \
 	alter_table_spatial.test \
 	auto_increment_text.test \
 	binlog.test \
 	bulk_insert.test \
+	count_star_index.test \
 	create_table.test \
 	delete.test \
 	dry_write_delete.test \
@@ -26,12 +28,17 @@ test_files = \
 	fulltext_not_match_against.test \
 	fulltext_parser_comment.test \
 	fulltext_search_ascii.test \
+	fulltext_search_cp932.test \
+	fulltext_search_eucjpms.test \
 	fulltext_search_japanese.test \
 	geometry_contains.test \
 	geometry_delete.test \
 	geometry_update.test \
 	insert.test \
 	order_limit_performance.test \
+	repair_table.test \
+	transaction_rollback_delete_delete.test \
+	transaction_rollback_delete_update.test \
 	truncate.test \
 	update_fulltext.test \
 	update_int.test \

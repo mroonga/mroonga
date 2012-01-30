@@ -1,5 +1,6 @@
 absolute_source_files = \
 	$(top_srcdir)/doc/source/characteristic.rst \
+	$(top_srcdir)/doc/source/community.rst \
 	$(top_srcdir)/doc/source/conf.py \
 	$(top_srcdir)/doc/source/developer.rst \
 	$(top_srcdir)/doc/source/developer/debug.rst \
@@ -38,6 +39,7 @@ absolute_theme_files = \
 
 source_files_relative_from_doc_dir = \
 	source/characteristic.rst \
+	source/community.rst \
 	source/conf.py \
 	source/developer.rst \
 	source/developer/debug.rst \
@@ -76,6 +78,7 @@ theme_files_relative_from_doc_dir = \
 
 po_files = \
 	characteristic.po \
+	community.po \
 	conf.po \
 	developer.po \
 	index.po \
@@ -87,6 +90,7 @@ po_files = \
 
 po_files_relative_from_locale_dir = \
 	LC_MESSAGES/characteristic.po \
+	LC_MESSAGES/community.po \
 	LC_MESSAGES/conf.po \
 	LC_MESSAGES/developer.po \
 	LC_MESSAGES/index.po \
@@ -98,6 +102,7 @@ po_files_relative_from_locale_dir = \
 
 mo_files = \
 	characteristic.mo \
+	community.mo \
 	conf.mo \
 	developer.mo \
 	index.mo \
@@ -109,6 +114,7 @@ mo_files = \
 
 mo_files_relative_from_locale_dir = \
 	LC_MESSAGES/characteristic.mo \
+	LC_MESSAGES/community.mo \
 	LC_MESSAGES/conf.mo \
 	LC_MESSAGES/developer.mo \
 	LC_MESSAGES/index.mo \
@@ -123,6 +129,7 @@ html_files_relative_from_locale_dir = \
 	html/_images/storage-mode.png \
 	html/_images/wrapper-mode.png \
 	html/_sources/characteristic.txt \
+	html/_sources/community.txt \
 	html/_sources/developer.txt \
 	html/_sources/developer/debug.txt \
 	html/_sources/developer/release.txt \
@@ -166,6 +173,7 @@ html_files_relative_from_locale_dir = \
 	html/_static/us.png \
 	html/_static/websupport.js \
 	html/characteristic.html \
+	html/community.html \
 	html/developer.html \
 	html/developer/debug.html \
 	html/developer/release.html \

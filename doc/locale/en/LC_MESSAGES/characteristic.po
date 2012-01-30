@@ -7,74 +7,79 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-03 17:56\n"
+"POT-Creation-Date: 2012-01-30 10:49\n"
 "PO-Revision-Date: 2011-11-03 17:56+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # 12e8a8bcb388498497ae564098bebb1a
 #: ../../../source/characteristic.rst:4
-msgid "The characteristics of groonga storage engine"
+#, fuzzy
+msgid "The characteristics of mroonga"
 msgstr "The characteristics of groonga storage engine"
 
 # 929cb8a864ad4a4f914f5b9ba699b7cb
 #: ../../../source/characteristic.rst:7
-msgid "What is groonga storage engine?"
+#, fuzzy
+msgid "What is mroonga?"
 msgstr "What is groonga storage engine?"
 
 # 74e1033d18b2420db62f1c627dbd4f2a
-#: ../../../source/characteristic.rst:8
+#: ../../../source/characteristic.rst:9
+#, fuzzy
 msgid ""
-"Groonga storage engine is a MySQL storage engine based on groonga, the full "
-"text search engine."
+"Mroonga is a MySQL storage engine based on groonga, the full text search "
+"engine."
 msgstr ""
 "Groonga storage engine is a MySQL storage engine based on groonga, the full "
 "text search engine."
 
 # fe04c69ccfee409c9d736e493ccffe4b
-#: ../../../source/characteristic.rst:10
+#: ../../../source/characteristic.rst:11
+#, fuzzy
 msgid ""
 "In MySQL 5.1 or later, Pluggable Storage Engine interface is introduced, and "
-"we can use custom storage engines easily. So we implement groonga storage "
-"engine, so that we can use groonga through MySQL."
+"we can use custom storage engines easily. So we implement mroonga, so that "
+"we can use groonga through MySQL."
 msgstr ""
 "In MySQL 5.1 or later, Pluggable Storage Engine interface is introduced, and "
 "we can use custom storage engines easily. So we implement groonga storage "
 "engine, so that we can use groonga through MySQL."
 
 # 2c15627f005a49aebab71b494702e9e3
-#: ../../../source/characteristic.rst:12
-msgid "By using groonga storage engine, you can use groonga with SQL."
+#: ../../../source/characteristic.rst:13
+#, fuzzy
+msgid "By using mroonga, you can use groonga with SQL."
 msgstr "By using groonga storage engine, you can use groonga with SQL."
 
 # e84cbfcff5ea44a3810bc69aab485f14
-#: ../../../source/characteristic.rst:15
+#: ../../../source/characteristic.rst:16
 msgid "The successor of Tritonn"
 msgstr "The successor of Tritonn"
 
 # ca36652f7c5b42d7b99baf38a3bd7030
-#: ../../../source/characteristic.rst:17
+#: ../../../source/characteristic.rst:18
+#, fuzzy
 msgid ""
 "To support Japanese full text search, Tritonn was developed by embedding "
-"Senna, the predecessor of groonga, in MySQL. Groonga storage engine is its "
-"successor."
+"Senna, the predecessor of groonga, in MySQL. Mroogna is its successor."
 msgstr ""
 "To support Japanese full text search, Tritonn was developed by embedding "
 "Senna, the predecessor of groonga, in MySQL. Groonga storage engine is its "
 "successor."
 
 # e66c109f84d745af9cd1ef046fb0f1b9
-#: ../../../source/characteristic.rst:21
+#: ../../../source/characteristic.rst:22
 msgid "Running as a MySQL plugin"
 msgstr "Running as a MySQL plugin"
 
 # 75a3b74d39ca48c0a81f7eccbe232ab0
-#: ../../../source/characteristic.rst:23
+#: ../../../source/characteristic.rst:24
 msgid ""
 "Since Tritonn was the modified version of MySQL, we need to build it by "
 "ourselves or use binary files provided by Tritonn project, thus we cannot "
@@ -85,12 +90,12 @@ msgstr ""
 "use the official binary files provided by MySQL."
 
 # 2df6464a67d9490ab4d6f2e4f014da53
-#: ../../../source/characteristic.rst:25
+#: ../../../source/characteristic.rst:26
+#, fuzzy
 msgid ""
-"On the other hand, groonga storage engine is an independent program (shared "
-"library) using Pluggable Storage Engine interface, and we can dynamically "
-"load it on MySQL's official binary. So we can use it more easily than "
-"Tritonn."
+"On the other hand, mroonga is an independent program (shared library) using "
+"Pluggable Storage Engine interface, and we can dynamically load it on "
+"MySQL's official binary. So we can use it more easily than Tritonn."
 msgstr ""
 "On the other hand, groonga storage engine is an independent program (shared "
 "library) using Pluggable Storage Engine interface, and we can dynamically "
@@ -98,12 +103,12 @@ msgstr ""
 "Tritonn."
 
 # 37f6b25d0f8f4ceeb839e0406df20c46
-#: ../../../source/characteristic.rst:29
+#: ../../../source/characteristic.rst:30
 msgid "Faster index update"
 msgstr "Faster index update"
 
 # 8c19aae38d924d1dbf08795fe7df9b3e
-#: ../../../source/characteristic.rst:31
+#: ../../../source/characteristic.rst:32
 msgid ""
 "Comparing to Senna, groonga has much better throughput in adding or updating "
 "index."
@@ -112,19 +117,19 @@ msgstr ""
 "index."
 
 # 312c06d3ae8644b0b33daf27afd44dfc
-#: ../../../source/characteristic.rst:33
-msgid ""
-"Groonga storage engine also has the benefit of this performance improvement."
+#: ../../../source/characteristic.rst:34
+#, fuzzy
+msgid "Mroonga also has the benefit of this performance improvement."
 msgstr ""
 "Groonga storage engine also has the benefit of this performance improvement."
 
 # 62643faa248e401dae40b66e5255bf4a
-#: ../../../source/characteristic.rst:36
+#: ../../../source/characteristic.rst:37
 msgid "Faster search"
 msgstr "Faster search"
 
 # 5f5ee5ae90ca4a54b5595ee115a71323
-#: ../../../source/characteristic.rst:38
+#: ../../../source/characteristic.rst:39
 msgid ""
 "In Tritonn, we use MyISAM storage engine, thus we have a exclusive table "
 "lock by updating data (and index), and it prevents the performance of search."
@@ -133,26 +138,28 @@ msgstr ""
 "lock by updating data (and index), and it prevents the performance of search."
 
 # dc14bf5d9c934e6b9448d715391d1c47
-#: ../../../source/characteristic.rst:40
+#: ../../../source/characteristic.rst:41
+#, fuzzy
 msgid ""
-"But in groonga storage engine, we no longer have this issue, and the "
-"performance of search is better especially in frequent data update cases."
+"But in mroonga, we no longer have this issue, and the performance of search "
+"is better especially in frequent data update cases."
 msgstr ""
 "But in groonga storage engine, we no longer have this issue, and the "
 "performance of search is better especially in frequent data update cases."
 
 # 244415c6f8214141a7d8b8da44ef49f1
-#: ../../../source/characteristic.rst:43
+#: ../../../source/characteristic.rst:44
 msgid "Geolocation search"
 msgstr "Geolocation search"
 
 # 890090ef166f44d9ba1191e9556eeb29
-#: ../../../source/characteristic.rst:45
+#: ../../../source/characteristic.rst:46
+#, fuzzy
 msgid ""
 "Groonga supports not only the full text search, but also the fast "
 "geolocation search using index. And MySQL also has the syntax for "
-"geolocation search. With groonga storage engine, you can use groonga's fast "
-"geolocation search by using MySQL's geolocation SQL syntax."
+"geolocation search. With mroonga, you can use groonga's fast geolocation "
+"search by using MySQL's geolocation SQL syntax."
 msgstr ""
 "Groonga supports not only the full text search, but also the fast "
 "geolocation search using index. And MySQL also has the syntax for "
@@ -160,41 +167,40 @@ msgstr ""
 "geolocation search by using MySQL's geolocation SQL syntax."
 
 # ad5cd9b226fe438b8e6430a5da771c35
-#: ../../../source/characteristic.rst:50
+#: ../../../source/characteristic.rst:51
 msgid "Sharing the same groonga storage"
 msgstr "Sharing the same groonga storage"
 
 # d1ef85852efd4bb487135eec1a841afc
-#: ../../../source/characteristic.rst:52
+#: ../../../source/characteristic.rst:53
+#, fuzzy
 msgid ""
-"Groonga storage engine stores the data by using groonga's DB API. And its "
-"storage file's format is same as that of the file that is managed by groonga "
-"itself only. Therefore you can share the same groonga storage like below."
+"Mroonga stores the data by using groonga's DB API. And its storage file's "
+"format is same as that of the file that is managed by groonga itself only. "
+"Therefore you can share the same groonga storage like below."
 msgstr ""
 "Groonga storage engine stores the data by using groonga's DB API. And its "
 "storage file's format is same as that of the file that is managed by groonga "
 "itself only. Therefore you can share the same groonga storage like below."
 
 # 250e4e80fb8c4ba5928627636e62b075
-#: ../../../source/characteristic.rst:56
-msgid ""
-"Store data through groonga storage engine (MySQL) and search from groonga "
-"server."
+#: ../../../source/characteristic.rst:57
+#, fuzzy
+msgid "Store data through mroonga (MySQL) and search from groonga server."
 msgstr ""
 "Store data through groonga storage engine (MySQL) and search from groonga "
 "server."
 
 # bc0e96451205470b90f5dfc558da60eb
-#: ../../../source/characteristic.rst:57
-msgid ""
-"Store data through groonga server and search from groonga storage engine "
-"(MySQL)."
+#: ../../../source/characteristic.rst:58
+#, fuzzy
+msgid "Store data through groonga server and search from mroonga (MySQL)."
 msgstr ""
 "Store data through groonga server and search from groonga storage engine "
 "(MySQL)."
 
 # 5888f82175874e6b9f081ba8012b6284
-#: ../../../source/characteristic.rst:59
+#: ../../../source/characteristic.rst:60
 msgid ""
 "And groonga's storage file can be shared with multi-processes and multi-"
 "threads, so that we can invoke several search queries to the same storage "
@@ -205,17 +211,18 @@ msgstr ""
 "file simultaneously."
 
 # cac1f3d47ee348f4906bac156101474c
-#: ../../../source/characteristic.rst:62
+#: ../../../source/characteristic.rst:63
 msgid "Associate with other storage engines"
 msgstr "Associate with other storage engines"
 
 # 1920954d5ed24f4e811434fe7d41ff4f
-#: ../../../source/characteristic.rst:64
-msgid "Groonga storage engine has two running modes."
+#: ../../../source/characteristic.rst:65
+#, fuzzy
+msgid "Mroonga has two running modes."
 msgstr "Groonga storage engine has two running modes."
 
 # d7ff530027aa436d80abb65efcc762eb
-#: ../../../source/characteristic.rst:66
+#: ../../../source/characteristic.rst:67
 msgid ""
 "One is \"storage mode\", that is the default mode, and we use groonga for "
 "both storing data and searching. With this mode, you can have full benefits "
@@ -228,7 +235,7 @@ msgstr ""
 "search and geolocation search. But it does not support transactions."
 
 # 886f3a91013445efb7de8849e9f7ab13
-#: ../../../source/characteristic.rst:70
+#: ../../../source/characteristic.rst:71
 msgid ""
 "Another one is \"wrapper mode\", that adds full text search function on "
 "other storage engines like MyISAM or InnoDB. With this mode, you can use "
@@ -245,16 +252,16 @@ msgstr ""
 "bottle neck in the storage engine in updating data."
 
 # 8ca166b8fc29403da53c55afdc288449
-#: ../../../source/characteristic.rst:76
+#: ../../../source/characteristic.rst:77
 msgid "Supported platforms"
 msgstr "Supported platforms"
 
 # 9a396b366bfd4db686e11cf64f4d44e8
-#: ../../../source/characteristic.rst:78
+#: ../../../source/characteristic.rst:79
 msgid "We currently support the following platforms."
 msgstr "We currently support the following platforms."
 
 # 5a04cee668ef41018c59abfccea66eb1
-#: ../../../source/characteristic.rst:80
+#: ../../../source/characteristic.rst:81
 msgid "Linux x86_64 (Intel64/AMD64)"
 msgstr "Linux x86_64 (Intel64/AMD64)"

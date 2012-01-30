@@ -1,6 +1,8 @@
 result_files = \
 	alter_table_add_column.result \
 	alter_table_change_engine.result \
+	alter_table_drop_column.result \
+	alter_table_engine_decimal.result \
 	alter_table_fulltext.result \
 	alter_table_rename_table.result \
 	alter_table_spatial.result \
@@ -8,7 +10,12 @@ result_files = \
 	auto_increment_text.result \
 	binlog.result \
 	btree.result \
+	column_date.result \
+	column_datetime.result \
+	column_decimal.result \
+	column_timestamp.result \
 	count_performance.result \
+	count_star_index_view.result \
 	create_table.result \
 	delete_fulltext_column.result \
 	delete_id_index_hash_no_unique.result \
@@ -30,12 +37,15 @@ result_files = \
 	fulltext_multiple_column_index_recreate.result \
 	fulltext_multiple_column_index_update.result \
 	fulltext_multiple_index.result \
+	fulltext_no_primary_key.result \
 	fulltext_no_such_key.result \
 	fulltext_not_match_against.result \
 	fulltext_order_limit.result \
 	fulltext_parser_comment.result \
 	fulltext_parser_default.result \
 	fulltext_search_ascii.result \
+	fulltext_search_cp932.result \
+	fulltext_search_eucjpms.result \
 	fulltext_search_japanese.result \
 	geometry_contains.result \
 	hash_index_id_normal.result \
@@ -44,9 +54,12 @@ result_files = \
 	hash_index_normal_column_insert.result \
 	information_schema.result.in \
 	insert.result \
+	key_read.result \
 	last_insert_grn_id.result \
 	log_level.result \
 	multiple_column_index_delete.result \
+	multiple_column_index_double.result \
+	multiple_column_index_float.result \
 	multiple_column_index_int.result \
 	multiple_column_index_recreate.result \
 	multiple_column_index_string.result \

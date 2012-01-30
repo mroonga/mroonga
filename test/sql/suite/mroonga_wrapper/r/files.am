@@ -1,12 +1,14 @@
 result_files = \
 	alter_table_add_column.result \
 	alter_table_change_engine.result \
+	alter_table_drop_column.result \
 	alter_table_fulltext.result \
 	alter_table_rename_table.result \
 	alter_table_spatial.result \
 	auto_increment_text.result \
 	binlog.result \
 	bulk_insert.result \
+	count_star_index.result \
 	create_table.result \
 	delete.result \
 	dry_write_delete.result \
@@ -26,12 +28,17 @@ result_files = \
 	fulltext_not_match_against.result \
 	fulltext_parser_comment.result \
 	fulltext_search_ascii.result \
+	fulltext_search_cp932.result \
+	fulltext_search_eucjpms.result \
 	fulltext_search_japanese.result \
 	geometry_contains.result \
 	geometry_delete.result \
 	geometry_update.result \
 	insert.result \
 	order_limit_performance.result \
+	repair_table.result \
+	transaction_rollback_delete_delete.result \
+	transaction_rollback_delete_update.result \
 	truncate.result \
 	update_fulltext.result \
 	update_int.result \
