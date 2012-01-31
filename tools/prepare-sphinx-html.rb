@@ -6,6 +6,7 @@ if ARGV.size != 2
 end
 
 require 'pathname'
+require "fileutils"
 
 def fix_link(text, extension, language)
   send("fix_#{extension}_link", text, language)
