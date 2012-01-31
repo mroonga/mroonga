@@ -249,7 +249,7 @@ static void mrn_init_encoding_map()
   DBUG_VOID_RETURN;
 }
 
-static int mrn_change_encoding(grn_ctx *ctx, CHARSET_INFO *charset)
+static int mrn_change_encoding(grn_ctx *ctx, const CHARSET_INFO *charset)
 {
   MRN_DBUG_ENTER_FUNCTION();
   if (!charset)
