@@ -1,0 +1,60 @@
+# English translations for mroonga package.
+# Copyright (C) 2009-2012, mroonga project
+# This file is distributed under the same license as the mroonga package.
+# Kouhei Sutou <kou@clear-code.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mroonga 1.21\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-31 11:40\n"
+"PO-Revision-Date: 2012-01-31 11:40+0900\n"
+"Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# 1293c4792de74aea8c3fe81be48261b0
+#: ../../../source/community.rst:4
+msgid "Community"
+msgstr "Community"
+
+# c474485ad648407c9df110b96f0226f4
+#: ../../../source/community.rst:6
+msgid ""
+"There are some places for sharing groonga and mroonga information. We "
+"welcome you to join our community."
+msgstr ""
+"There are some places for sharing groonga and mroonga information. We "
+"welcome you to join our community."
+
+# 1511c3e2dbe541faad93fac074120cd4
+#: ../../../source/community.rst:9
+msgid "Mailing List"
+msgstr "Mailing List"
+
+# b9682606bfa740998c8e1bd1425959b2
+#: ../../../source/community.rst:11
+msgid "There are mailing lists for discussion about groonga and mroonga."
+msgstr "There are mailing lists for discussion about groonga and mroonga."
+
+# b73dbb5be65b44bca75952bba308cbfc
+#: ../../../source/community.rst:14
+msgid ""
+"`groonga-talk@lists.sourceforge.net <http://lists.sourceforge.net/mailman/"
+"listinfo/groonga-talk>`_"
+msgstr ""
+"`groonga-talk@lists.sourceforge.net <http://lists.sourceforge.net/mailman/"
+"listinfo/groonga-talk>`_"
+
+# 03ae78db17a147fb8a1dd4639dd9c768
+#: ../../../source/community.rst:17
+msgid ""
+"`groonga-dev@lists.sourceforge.jp <http://lists.sourceforge.jp/mailman/"
+"listinfo/groonga-dev>`_"
+msgstr ""
+"`groonga-dev@lists.sourceforge.jp <http://lists.sourceforge.jp/mailman/"
+"listinfo/groonga-dev>`_"
