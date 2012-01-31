@@ -6926,14 +6926,36 @@ int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
+long long int ha_mroonga::get_grn_time_from_timestamp_field(Field_timestamp *field)
+{
+  MRN_DBUG_ENTER_METHOD();
+  long long int grn_time = 0;
+#ifdef MRN_FIELD_TIMESTAMP_GET_TIMESTAMP_USE_TIMEVAL
+  int warnings = 0;
+  struct timeval time_value;
+  if (field->get_timestamp(&time_value, &warnings)) {
+    // XXX: Should we report warnings or MySQL does?
+  } else {
+    grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
+  }
+#elif defined(MRN_FIELD_TIMESTAMP_GET_TIMESTAMP_USE_MY_TIME_T)
+  unsigned long long int micro_seconds;
+  my_time_t seconds = field->get_timestamp(&micro_seconds);
+  grn_time = GRN_TIME_PACK(seconds, micro_seconds);
+#else
+  my_bool is_null_value;
+  long seconds = field->get_timestamp(&is_null_value);
+  grn_time = GRN_TIME_PACK(seconds, 0);
+#endif
+  DBUG_RETURN(grn_time);
+}
+
 int ha_mroonga::generic_store_bulk_timestamp(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  my_bool is_null_value;
   Field_timestamp *timestamp_field = (Field_timestamp *)field;
-  long seconds = timestamp_field->get_timestamp(&is_null_value);
-  long long int time = GRN_TIME_PACK(seconds, 0);
+  long long int time = get_grn_time_from_timestamp_field(timestamp_field);
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);

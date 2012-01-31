@@ -106,6 +106,14 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_PREPARE_FOR_FORCED_CLOSE
 #endif
 
+#if MYSQL_VERSION_ID >= 50604
+#  define MRN_FIELD_TIMESTAMP_GET_TIMESTAMP_USE_TIMEVAL
+#elif defined(MRN_MARIADB_P)
+#  define MRN_FIELD_TIMESTAMP_GET_TIMESTAMP_USE_MY_TIME_T
+#else
+#  define MRN_FIELD_TIMESTAMP_GET_TIMESTAMP_USE_LONG
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -401,6 +409,8 @@ private:
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit,
                               grn_obj *target_table, grn_obj *score_column);
+
+  long long int get_grn_time_from_timestamp_field(Field_timestamp *field);
 
   int generic_store_bulk_string(Field *field, grn_obj *buf);
   int generic_store_bulk_integer(Field *field, grn_obj *buf);
