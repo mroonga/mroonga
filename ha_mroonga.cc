@@ -6939,7 +6939,7 @@ long long int ha_mroonga::get_grn_time_from_timestamp_field(Field_timestamp *fie
     grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
   }
 #elif defined(MRN_FIELD_TIMESTAMP_GET_TIMESTAMP_USE_MY_TIME_T)
-  unsigned long long int micro_seconds;
+  unsigned long int micro_seconds;
   my_time_t seconds = field->get_timestamp(&micro_seconds);
   grn_time = GRN_TIME_PACK(seconds, micro_seconds);
 #else
