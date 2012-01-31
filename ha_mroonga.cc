@@ -6930,7 +6930,7 @@ long long int ha_mroonga::get_grn_time_from_timestamp_field(Field_timestamp *fie
 {
   MRN_DBUG_ENTER_METHOD();
   long long int grn_time = 0;
-#ifdef MRN_FIELD_TIMESTAMP_GET_TIMESTAMP_USE_TIMEVAL
+#ifdef MRN_TIMESTAMP_USE_TIMEVAL
   int warnings = 0;
   struct timeval time_value;
   if (field->get_timestamp(&time_value, &warnings)) {
@@ -6938,7 +6938,7 @@ long long int ha_mroonga::get_grn_time_from_timestamp_field(Field_timestamp *fie
   } else {
     grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
   }
-#elif defined(MRN_FIELD_TIMESTAMP_GET_TIMESTAMP_USE_MY_TIME_T)
+#elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
   unsigned long int micro_seconds;
   my_time_t seconds = field->get_timestamp(&micro_seconds);
   grn_time = GRN_TIME_PACK(seconds, micro_seconds);
@@ -7250,10 +7250,20 @@ void ha_mroonga::storage_store_field_timestamp(Field *field,
                                                uint value_length)
 {
   long long int time = *((long long int *)value);
+  Field_timestamp *timestamp_field = (Field_timestamp *)field;
+#ifdef MRN_TIMESTAMP_USE_TIMEVAL
+  struct timeval time_value;
+  GRN_TIME_UNPACK(time, time_value.tv_sec, time_value.tv_usec);
+  timestamp_field->store_timestamp(&time_value);
+#elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
+  int32 sec, usec;
+  GRN_TIME_UNPACK(time, sec, usec);
+  timestamp_field->store_TIME(sec, usec);
+#else
   int32 sec, usec __attribute__((unused));
   GRN_TIME_UNPACK(time, sec, usec);
-  Field_timestamp *timestamp_field = (Field_timestamp *)field;
   timestamp_field->store_timestamp(sec);
+#endif
 }
 
 void ha_mroonga::storage_store_field_date(Field *field,
