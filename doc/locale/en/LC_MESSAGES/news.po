@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-30 10:49\n"
+"POT-Creation-Date: 2012-01-31 11:40\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -209,7 +209,7 @@ msgstr "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
 #: ../../../source/news.rst:105
 msgid ""
 "[incompatible] Groonga's native time value is used for DATE, DATETIME and "
-"TIMESTAMPE type values."
+"TIMESTAMP type values."
 msgstr ""
 
 # 52963dbb41db4a1f8990a3e08b9a46b7
