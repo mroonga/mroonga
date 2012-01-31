@@ -114,6 +114,10 @@ extern "C" {
 #  define MRN_TIMESTAMP_USE_LONG
 #endif
 
+#if 50500 <= MYSQL_VERSION_ID && MYSQL_VERSION_ID <= 50604
+#  define MRN_FIELD_STORE_TIME_NEED_TYPE
+#endif
+
 class ha_mroonga;
 
 /* structs */

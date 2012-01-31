@@ -7300,7 +7300,7 @@ void ha_mroonga::storage_store_field_datetime(Field *field,
                                               uint value_length)
 {
   long long int time = *((long long int *)value);
-  int32 sec, usec __attribute__((unused));
+  int32 sec, usec;
   GRN_TIME_UNPACK(time, sec, usec);
   struct tm date;
   time_t sec_t = sec;
@@ -7314,8 +7314,13 @@ void ha_mroonga::storage_store_field_datetime(Field *field,
   mysql_date.hour = date.tm_hour;
   mysql_date.minute = date.tm_min;
   mysql_date.second = date.tm_sec;
+  mysql_date.second_part = usec;
   Field_datetime *datetime_field = (Field_datetime *)field;
+#ifdef MRN_FIELD_STORE_TIME_NEED_TYPE
   datetime_field->store_time(&mysql_date, MYSQL_TIMESTAMP_DATETIME);
+#else
+  datetime_field->store_time(&mysql_date);
+#endif
 }
 
 void ha_mroonga::storage_store_field_new_date(Field *field,
@@ -7335,7 +7340,11 @@ void ha_mroonga::storage_store_field_new_date(Field *field,
   mysql_date.month = date.tm_mon + 1;
   mysql_date.day = date.tm_mday;
   Field_newdate *newdate_field = (Field_newdate *)field;
+#ifdef MRN_FIELD_STORE_TIME_NEED_TYPE
   newdate_field->store_time(&mysql_date, MYSQL_TIMESTAMP_DATE);
+#else
+  newdate_field->store_time(&mysql_date);
+#endif
 }
 
 void ha_mroonga::storage_store_field_blob(Field *field,
