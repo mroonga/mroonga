@@ -1688,6 +1688,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   grn_source_column_geo = NULL;
   cursor_geo = NULL;
   score_column = NULL;
+  id_accessor = NULL;
   key_accessor = NULL;
   share = NULL;
   is_clone = FALSE;
@@ -6010,9 +6011,15 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
     cursor = grn_table_cursor_open(ctx, info->sorted_result,
                                    NULL, 0, NULL, 0,
                                    0, -1, 0);
-    key_accessor = grn_obj_column(ctx, info->sorted_result,
-                                  MRN_COLUMN_NAME_KEY,
-                                  strlen(MRN_COLUMN_NAME_KEY));
+    if (grn_table->header.type == GRN_TABLE_NO_KEY) {
+      id_accessor = grn_obj_column(ctx, info->sorted_result,
+                                   MRN_COLUMN_NAME_ID,
+                                   strlen(MRN_COLUMN_NAME_ID));
+    } else {
+      key_accessor = grn_obj_column(ctx, info->sorted_result,
+                                    MRN_COLUMN_NAME_KEY,
+                                    strlen(MRN_COLUMN_NAME_KEY));
+    }
   } else {
     merge_matched_record_keys(info->result);
   }
@@ -6097,7 +6104,12 @@ int ha_mroonga::storage_ft_read(uchar *buf)
   }
 
   GRN_BULK_REWIND(&key_buffer);
-  if (key_accessor) {
+  if (id_accessor) {
+    grn_obj id_buffer;
+    GRN_RECORD_INIT(&id_buffer, 0, grn_obj_id(ctx, grn_table));
+    grn_obj_get_value(ctx, id_accessor, found_record_id, &id_buffer);
+    record_id = GRN_RECORD_VALUE(&id_buffer);
+  } else if (key_accessor) {
     grn_obj_get_value(ctx, key_accessor, found_record_id, &key_buffer);
     record_id = grn_table_get(ctx, grn_table,
                               GRN_TEXT_VALUE(&key_buffer),
@@ -6105,7 +6117,14 @@ int ha_mroonga::storage_ft_read(uchar *buf)
   } else {
     void *key;
     grn_table_cursor_get_key(ctx, cursor, &key);
-    record_id = *((grn_id *)key);
+    if (ctx->rc) {
+      record_id = GRN_ID_NIL;
+      my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+      clear_search_result();
+      DBUG_RETURN(ER_ERROR_ON_READ);
+    } else {
+      record_id = *((grn_id *)key);
+    }
   }
   storage_store_fields(buf, record_id);
   DBUG_RETURN(0);
@@ -6241,6 +6260,10 @@ void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_func
 void ha_mroonga::clear_cursor()
 {
   MRN_DBUG_ENTER_METHOD();
+  if (id_accessor) {
+    grn_obj_unlink(ctx, id_accessor);
+    id_accessor = NULL;
+  }
   if (key_accessor) {
     grn_obj_unlink(ctx, key_accessor);
     key_accessor = NULL;

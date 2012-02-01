@@ -181,6 +181,7 @@ private:
   grn_table_cursor *cursor;
   grn_table_cursor *index_table_cursor;
   grn_obj *score_column;
+  grn_obj *id_accessor;
   grn_obj *key_accessor;
 
   grn_obj *matched_record_keys;
