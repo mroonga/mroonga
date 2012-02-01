@@ -7315,11 +7315,11 @@ void ha_mroonga::storage_store_field_datetime(Field *field,
   mysql_date.minute = date.tm_min;
   mysql_date.second = date.tm_sec;
   mysql_date.second_part = usec;
-  Field_datetime *datetime_field = (Field_datetime *)field;
 #ifdef MRN_FIELD_STORE_TIME_NEED_TYPE
+  Field_datetime *datetime_field = (Field_datetime *)field;
   datetime_field->store_time(&mysql_date, MYSQL_TIMESTAMP_DATETIME);
 #else
-  datetime_field->store_time(&mysql_date);
+  field->store_time(&mysql_date);
 #endif
 }
 
@@ -7339,11 +7339,11 @@ void ha_mroonga::storage_store_field_new_date(Field *field,
   mysql_date.year = date.tm_year + 1900;
   mysql_date.month = date.tm_mon + 1;
   mysql_date.day = date.tm_mday;
-  Field_newdate *newdate_field = (Field_newdate *)field;
 #ifdef MRN_FIELD_STORE_TIME_NEED_TYPE
+  Field_newdate *newdate_field = (Field_newdate *)field;
   newdate_field->store_time(&mysql_date, MYSQL_TIMESTAMP_DATE);
 #else
-  newdate_field->store_time(&mysql_date);
+  field->store_time(&mysql_date);
 #endif
 }
 
