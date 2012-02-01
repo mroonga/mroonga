@@ -42,6 +42,8 @@ INSERT INTO diaries VALUES(6, 2011, 12, 2, "初雪", "今日の天気は雪！")
 
 SELECT * FROM diaries WHERE MATCH(content) AGAINST("今日 天気" IN BOOLEAN MODE) ORDER BY day LIMIT 0,5;
 
+SHOW STATUS LIKE 'mroonga_fast_order_limit';
+
 DROP TABLE diaries;
 
 --source include/have_mroonga_deinit.inc
