@@ -114,7 +114,7 @@ extern "C" {
 #  define MRN_TIMESTAMP_USE_LONG
 #endif
 
-#if 50500 <= MYSQL_VERSION_ID && MYSQL_VERSION_ID <= 50604
+#if MYSQL_VERSION_ID < 50600 && !defined(MRN_MARIADB_P)
 #  define MRN_FIELD_STORE_TIME_NEED_TYPE
 #endif
 
