@@ -411,7 +411,9 @@ private:
 #endif
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
-  bool is_fulltext_search_item(Item *item);
+  bool is_groonga_layer_condition(const Item *item,
+                                  const Item_func **match_against=NULL);
+  bool is_fulltext_search_item(const Item *item);
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit,
                               grn_obj *target_table, grn_obj *score_column);
@@ -605,6 +607,8 @@ private:
   void storage_ft_end();
   FT_INFO *wrapper_ft_init_ext(uint flags, uint key_nr, String *key);
   FT_INFO *storage_ft_init_ext(uint flags, uint key_nr, String *key);
+  void generic_ft_init_ext_add_conditions_fast_order_limit(
+      struct st_mrn_ft_info *info, grn_obj *expression);
   FT_INFO *generic_ft_init_ext(uint flags, uint key_nr, String *key);
   int wrapper_ft_read(uchar *buf);
   int storage_ft_read(uchar *buf);
