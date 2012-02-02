@@ -6818,7 +6818,8 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
 
         if (mrn_need_normalize(field))
         {
-          DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
+          DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE: "
+                              "sort by collated value isn't supported yet."));
           fast_order_limit = FALSE;
           free(*sort_keys);
           *sort_keys = NULL;
@@ -6836,7 +6837,8 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       } else if (match_against->eq(item, true)) {
         (*sort_keys)[i].key = score_column;
       } else {
-        DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
+        DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE: "
+                            "sort by computed value isn't supported."));
         fast_order_limit = FALSE;
         free(*sort_keys);
         *sort_keys = NULL;
