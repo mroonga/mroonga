@@ -6760,13 +6760,17 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     }
     *limit += select_lex->select_limit->val_int();
     if (*limit > (longlong)INT_MAX) {
-      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
+      DBUG_PRINT("info",
+                 ("mroonga: fast_order_limit = FALSE: "
+                  "too long limit: %lld <= %d is required",
+                  *limit, INT_MAX));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
     if (first_select_lex && (first_select_lex->options & OPTION_FOUND_ROWS)) {
       DBUG_PRINT("info",
-        ("mroonga: fast_order_limit = FALSE by calc_found_rows"));
+                 ("mroonga: fast_order_limit = FALSE: "
+                  "SQL_CALC_FOUND_ROWS is specified"));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
@@ -6776,7 +6780,8 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     if (!where ||
         where->type() != Item::FUNC_ITEM ||
         ((Item_func *)where)->functype() != Item_func::FT_FUNC) {
-      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
+      DBUG_PRINT("info",
+                 ("mroonga: fast_order_limit = FALSE: not fulltext search"));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
