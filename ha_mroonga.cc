@@ -6158,7 +6158,7 @@ const Item *ha_mroonga::wrapper_cond_push(const Item *cond)
 const Item *ha_mroonga::storage_cond_push(const Item *cond)
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(NULL);
+  DBUG_RETURN(cond);
 }
 
 const Item *ha_mroonga::cond_push(const Item *cond)
