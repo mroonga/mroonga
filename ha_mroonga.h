@@ -411,6 +411,7 @@ private:
 #endif
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
+  bool is_fulltext_search_item(Item *item);
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit,
                               grn_obj *target_table, grn_obj *score_column);

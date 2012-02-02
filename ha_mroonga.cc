@@ -6721,6 +6721,26 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
   DBUG_VOID_RETURN;
 }
 
+bool ha_mroonga::is_fulltext_search_item(Item *item)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  if (!item) {
+    DBUG_RETURN(false);
+  }
+
+  if (item->type() != Item::FUNC_ITEM) {
+    DBUG_RETURN(false);
+  }
+
+  Item_func *func_item = (Item_func *)item;
+  if (func_item->functype() != Item_func::FT_FUNC) {
+    DBUG_RETURN(false);
+  }
+
+  DBUG_RETURN(true);
+}
+
 void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                         int *n_sort_keys,
                                         longlong *limit,
@@ -6774,50 +6794,14 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
-    Item *info = (Item *)select_lex->item_list.first_node()->info;
-    Item *where;
-    where = select_lex->where;
-    if (!where ||
-        where->type() != Item::FUNC_ITEM ||
-        ((Item_func *)where)->functype() != Item_func::FT_FUNC) {
+    Item *where = select_lex->where;
+    if (!is_fulltext_search_item(where)) {
       DBUG_PRINT("info",
                  ("mroonga: fast_order_limit = FALSE: not fulltext search"));
       fast_order_limit = FALSE;
       DBUG_VOID_RETURN;
     }
     Item_func *match_against = (Item_func *)where;
-    where = where->next;
-    if (!where ||
-        where->type() != Item::STRING_ITEM) {
-      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
-      fast_order_limit = FALSE;
-      DBUG_VOID_RETURN;
-    }
-    where = where->next;
-    if (!where ||
-        where->type() != Item::FIELD_ITEM) {
-      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
-      fast_order_limit = FALSE;
-      DBUG_VOID_RETURN;
-    }
-    for (where = where->next; where; where = where->next) {
-      if (grn_columns && where->type() == Item::FIELD_ITEM)
-        continue;
-      if (where->type() == Item::FUNC_ITEM && match_against->eq(where, true)) {
-        for (uint i = 0; i < match_against->arg_count; i++) {
-          where = where->next;
-        }
-        continue;
-      }
-      if (where == info)
-        continue;
-      break;
-    }
-    if (where && (where != info || !where->eq(info, true))) {
-      DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE"));
-      fast_order_limit = FALSE;
-      DBUG_VOID_RETURN;
-    }
     *n_sort_keys = select_lex->order_list.elements;
     *sort_keys = (grn_table_sort_key *)malloc(sizeof(grn_table_sort_key) *
                                               *n_sort_keys);
