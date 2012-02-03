@@ -7190,6 +7190,30 @@ int ha_mroonga::generic_store_bulk_datetime(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  Field_datetimef *datetimef_field = (Field_datetimef *)field;
+  MYSQL_TIME mysql_time;
+  datetimef_field->get_time(&mysql_time);
+  struct tm date;
+  memset(&date, 0, sizeof(struct tm));
+  date.tm_year = mysql_time.year - 1900;
+  date.tm_mon = mysql_time.month - 1;
+  date.tm_mday = mysql_time.day;
+  date.tm_hour = mysql_time.hour;
+  date.tm_min = mysql_time.minute;
+  date.tm_sec = mysql_time.second;
+  int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
+  long long int time = GRN_TIME_PACK(seconds, 0);
+  grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
+  GRN_TIME_SET(ctx, buf, time);
+  DBUG_RETURN(error);
+}
+#endif
+
 int ha_mroonga::generic_store_bulk_new_date(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -7303,7 +7327,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   case MYSQL_TYPE_DATETIME2:
-    error = generic_store_bulk_time(field, buf);
+    error = generic_store_bulk_datetime2(field, buf);
     break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
@@ -7505,6 +7529,31 @@ void ha_mroonga::storage_store_field_new_date(Field *field,
 #endif
 }
 
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+void ha_mroonga::storage_store_field_datetime2(Field *field,
+                                               const char *value,
+                                               uint value_length)
+{
+  long long int time = *((long long int *)value);
+  int32 sec, usec;
+  GRN_TIME_UNPACK(time, sec, usec);
+  struct tm date;
+  time_t sec_t = sec;
+  gmtime_r(&sec_t, &date);
+  MYSQL_TIME mysql_date;
+  memset(&mysql_date, 0, sizeof(MYSQL_TIME));
+  mysql_date.time_type = MYSQL_TIMESTAMP_DATETIME;
+  mysql_date.year = date.tm_year + 1900;
+  mysql_date.month = date.tm_mon + 1;
+  mysql_date.day = date.tm_mday;
+  mysql_date.hour = date.tm_hour;
+  mysql_date.minute = date.tm_min;
+  mysql_date.second = date.tm_sec;
+  mysql_date.second_part = usec;
+  field->store_time(&mysql_date);
+}
+#endif
+
 void ha_mroonga::storage_store_field_blob(Field *field,
                                           const char *value,
                                           uint value_length)
@@ -7595,7 +7644,7 @@ void ha_mroonga::storage_store_field(Field *field,
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   case MYSQL_TYPE_DATETIME2:
-    storage_store_field_time(field, value, value_length);
+    storage_store_field_datetime2(field, value, value_length);
     break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2

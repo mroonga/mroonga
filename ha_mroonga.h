@@ -428,6 +428,9 @@ private:
   int generic_store_bulk_time(Field *field, grn_obj *buf);
   int generic_store_bulk_datetime(Field *field, grn_obj *buf);
   int generic_store_bulk_new_date(Field *field, grn_obj *buf);
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+  int generic_store_bulk_datetime2(Field *field, grn_obj *buf);
+#endif
   int generic_store_bulk_new_decimal(Field *field, grn_obj *buf);
   int generic_store_bulk_blob(Field *field, grn_obj *buf);
   int generic_store_bulk_geometry(Field *field, grn_obj *buf);
@@ -449,6 +452,10 @@ private:
                                     const char *value, uint value_length);
   void storage_store_field_new_date(Field *field,
                                     const char *value, uint value_length);
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+  void storage_store_field_datetime2(Field *field,
+                                     const char *value, uint value_length);
+#endif
   void storage_store_field_blob(Field *field,
                                 const char *value, uint value_length);
   void storage_store_field_geometry(Field *field,
