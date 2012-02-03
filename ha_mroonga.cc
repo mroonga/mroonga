@@ -946,7 +946,11 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_INT32;        // 4bytes
     break;
   case MYSQL_TYPE_DATE:         // DATE; 4bytes
+    type = GRN_DB_TIME;         // 8bytes
+    break;
   case MYSQL_TYPE_TIME:         // TIME; 3bytes
+    type = GRN_DB_INT32;        // 4bytes
+    break;
   case MYSQL_TYPE_DATETIME:     // DATETIME; 8bytes
   case MYSQL_TYPE_YEAR:         // YEAR; 1byte
   case MYSQL_TYPE_NEWDATE:      // DATE; 3bytes
@@ -7141,30 +7145,8 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   long long value = field->val_int();
-  // FIXME: value isn't epoch time. We should store epoch
-  // time to bulk.
-  grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
-  uint32 size = field->pack_length();
-  switch (size) {
-  case 1:
-  case 2:
-  case 3:
-  case 4:
-  case 8:
-    GRN_TIME_SET(ctx, buf, value);
-    break;
-  default:
-    // Why!?
-    error = HA_ERR_UNSUPPORTED;
-    char error_message[MRN_MESSAGE_BUFFER_SIZE];
-    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "unknown integer value size: <%u>: "
-             "available sizes: [1, 2, 3, 4, 8]",
-             size);
-    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
-                 error, error_message);
-    break;
-  }
+  grn_obj_reinit(ctx, buf, GRN_DB_INT32, 0);
+  GRN_INT32_SET(ctx, buf, value);
   DBUG_RETURN(error);
 }
 
@@ -7469,11 +7451,8 @@ void ha_mroonga::storage_store_field_time(Field *field,
                                           const char *value,
                                           uint value_length)
 {
-  long long int field_value;
-  field_value = *((long long int *)value);
-  // FIXME: field_value should be epoch time and convert
-  // epoch time to MySQL time. See also
-  // ha_mroonga::generic_store_bulk_time().
+  int field_value;
+  field_value = *((int *)value);
   field->store(field_value);
 }
 
@@ -7831,6 +7810,12 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       break;
     }
   case MYSQL_TYPE_TIME:
+    {
+      int val = (int)sint3korr(ptr);
+      memcpy(buf, &val, 4);
+      *size = 4;
+      break;
+    }
   case MYSQL_TYPE_YEAR:
     {
       long long int val = (long long int) sint8korr(ptr);
