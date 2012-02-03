@@ -7184,7 +7184,7 @@ int ha_mroonga::generic_store_bulk_datetime(Field *field, grn_obj *buf)
   date.tm_min = mysql_time.minute;
   date.tm_sec = mysql_time.second;
   int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
-  long long int time = GRN_TIME_PACK(seconds, 0);
+  long long int time = GRN_TIME_PACK(seconds, mysql_time.second_part);
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -7207,7 +7207,7 @@ int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
   date.tm_min = mysql_time.minute;
   date.tm_sec = mysql_time.second;
   int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
-  long long int time = GRN_TIME_PACK(seconds, 0);
+  long long int time = GRN_TIME_PACK(seconds, mysql_time.second_part);
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
