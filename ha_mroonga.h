@@ -472,6 +472,8 @@ private:
   void storage_store_fields(uchar *buf, grn_id record_id);
   void storage_store_fields_by_index(uchar *buf);
 
+  int storage_encode_key_time(Field *field, const uchar *key,
+                              uchar *buf, uint *size);
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   int storage_encode_key_time2(Field *field, const uchar *key,
                                uchar *buf, uint *size);

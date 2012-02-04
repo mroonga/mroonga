@@ -949,7 +949,7 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_TIME;         // 8bytes
     break;
   case MYSQL_TYPE_TIME:         // TIME; 3bytes
-    type = GRN_DB_INT32;        // 4bytes
+    type = GRN_DB_TIME;         // 8bytes
     break;
   case MYSQL_TYPE_DATETIME:     // DATETIME; 8bytes
   case MYSQL_TYPE_YEAR:         // YEAR; 1byte
@@ -1298,6 +1298,55 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
   usec = mysql_time->second_part;
   long long int grn_time = GRN_TIME_PACK(sec, usec);
   DBUG_RETURN(grn_time);
+}
+
+static void mrn_grn_time_to_mysql_time(long long int grn_time,
+                                       MYSQL_TIME *mysql_time)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  int sec, usec;
+  GRN_TIME_UNPACK(grn_time, sec, usec);
+
+  if (sec < 0) {
+    mysql_time->neg = true;
+    sec = -sec;
+  }
+
+  switch (mysql_time->time_type) {
+  case MYSQL_TIMESTAMP_DATE:
+    {
+      struct tm date;
+      time_t sec_t = sec;
+      gmtime_r(&sec_t, &date);
+      mysql_time->year = date.tm_year + 1900;
+      mysql_time->month = date.tm_mon + 1;
+      mysql_time->day = date.tm_mday;
+    }
+    break;
+  case MYSQL_TIMESTAMP_DATETIME:
+    {
+      struct tm date;
+      time_t sec_t = sec;
+      gmtime_r(&sec_t, &date);
+      mysql_time->year = date.tm_year + 1900;
+      mysql_time->month = date.tm_mon + 1;
+      mysql_time->day = date.tm_mday;
+      mysql_time->hour = date.tm_hour;
+      mysql_time->minute = date.tm_min;
+      mysql_time->second = date.tm_sec;
+      mysql_time->second_part = usec;
+    }
+    break;
+  case MYSQL_TIMESTAMP_TIME:
+    mysql_time->hour = sec / 60 / 60;
+    mysql_time->minute = sec / 60 % 60;
+    mysql_time->second = sec % 60;
+    mysql_time->second_part = usec;
+    break;
+  default:
+    break;
+  }
+  DBUG_VOID_RETURN;
 }
 
 static uint mrn_alter_table_flags(uint flags) {
@@ -7195,9 +7244,12 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  long long int value = field->val_int();
-  grn_obj_reinit(ctx, buf, GRN_DB_INT32, 0);
-  GRN_INT32_SET(ctx, buf, value);
+  Field_time *time_field = (Field_time *)field;
+  MYSQL_TIME mysql_time;
+  time_field->get_time(&mysql_time);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_time);
+  grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
+  GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
 }
 
@@ -7492,9 +7544,17 @@ void ha_mroonga::storage_store_field_time(Field *field,
                                           const char *value,
                                           uint value_length)
 {
-  int field_value;
-  field_value = *((int *)value);
-  field->store(field_value);
+  long long int time = *((long long int *)value);
+  MYSQL_TIME mysql_time;
+  memset(&mysql_time, 0, sizeof(MYSQL_TIME));
+  mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
+  mrn_grn_time_to_mysql_time(time, &mysql_time);
+#ifdef MRN_FIELD_STORE_TIME_NEED_TYPE
+  Field_time *time_field = (Field_time *)field;
+  time_field->store_time(&mysql_time, mysql_time.time_type);
+#else
+  field->store_time(&mysql_time);
+#endif
 }
 
 void ha_mroonga::storage_store_field_datetime(Field *field,
@@ -7502,26 +7562,15 @@ void ha_mroonga::storage_store_field_datetime(Field *field,
                                               uint value_length)
 {
   long long int time = *((long long int *)value);
-  int32 sec, usec;
-  GRN_TIME_UNPACK(time, sec, usec);
-  struct tm date;
-  time_t sec_t = sec;
-  gmtime_r(&sec_t, &date);
-  MYSQL_TIME mysql_date;
-  memset(&mysql_date, 0, sizeof(MYSQL_TIME));
-  mysql_date.time_type = MYSQL_TIMESTAMP_DATETIME;
-  mysql_date.year = date.tm_year + 1900;
-  mysql_date.month = date.tm_mon + 1;
-  mysql_date.day = date.tm_mday;
-  mysql_date.hour = date.tm_hour;
-  mysql_date.minute = date.tm_min;
-  mysql_date.second = date.tm_sec;
-  mysql_date.second_part = usec;
+  MYSQL_TIME mysql_datetime;
+  memset(&mysql_datetime, 0, sizeof(MYSQL_TIME));
+  mysql_datetime.time_type = MYSQL_TIMESTAMP_DATETIME;
+  mrn_grn_time_to_mysql_time(time, &mysql_datetime);
 #ifdef MRN_FIELD_STORE_TIME_NEED_TYPE
   Field_datetime *datetime_field = (Field_datetime *)field;
-  datetime_field->store_time(&mysql_date, MYSQL_TIMESTAMP_DATETIME);
+  datetime_field->store_time(&mysql_datetime, mysql_datetime.time_type);
 #else
-  field->store_time(&mysql_date);
+  field->store_time(&mysql_datetime);
 #endif
 }
 
@@ -7530,17 +7579,10 @@ void ha_mroonga::storage_store_field_new_date(Field *field,
                                               uint value_length)
 {
   long long int time = *((long long int *)value);
-  int32 sec, usec __attribute__((unused));
-  GRN_TIME_UNPACK(time, sec, usec);
-  struct tm date;
-  time_t sec_t = sec;
-  gmtime_r(&sec_t, &date);
   MYSQL_TIME mysql_date;
   memset(&mysql_date, 0, sizeof(MYSQL_TIME));
   mysql_date.time_type = MYSQL_TIMESTAMP_DATE;
-  mysql_date.year = date.tm_year + 1900;
-  mysql_date.month = date.tm_mon + 1;
-  mysql_date.day = date.tm_mday;
+  mrn_grn_time_to_mysql_time(time, &mysql_date);
 #ifdef MRN_FIELD_STORE_TIME_NEED_TYPE
   Field_newdate *newdate_field = (Field_newdate *)field;
   newdate_field->store_time(&mysql_date, MYSQL_TIMESTAMP_DATE);
@@ -7555,22 +7597,11 @@ void ha_mroonga::storage_store_field_datetime2(Field *field,
                                                uint value_length)
 {
   long long int time = *((long long int *)value);
-  int sec, usec;
-  GRN_TIME_UNPACK(time, sec, usec);
-  struct tm date;
-  time_t sec_t = sec;
-  gmtime_r(&sec_t, &date);
-  MYSQL_TIME mysql_date;
-  memset(&mysql_date, 0, sizeof(MYSQL_TIME));
-  mysql_date.time_type = MYSQL_TIMESTAMP_DATETIME;
-  mysql_date.year = date.tm_year + 1900;
-  mysql_date.month = date.tm_mon + 1;
-  mysql_date.day = date.tm_mday;
-  mysql_date.hour = date.tm_hour;
-  mysql_date.minute = date.tm_min;
-  mysql_date.second = date.tm_sec;
-  mysql_date.second_part = usec;
-  field->store_time(&mysql_date);
+  MYSQL_TIME mysql_datetime;
+  memset(&mysql_datetime, 0, sizeof(MYSQL_TIME));
+  mysql_datetime.time_type = MYSQL_TIMESTAMP_DATETIME;
+  mrn_grn_time_to_mysql_time(time, &mysql_datetime);
+  field->store_time(&mysql_datetime);
 }
 #endif
 
@@ -7579,21 +7610,12 @@ void ha_mroonga::storage_store_field_time2(Field *field,
                                            const char *value,
                                            uint value_length)
 {
+  long long int time = *((long long int *)value);
+
   MYSQL_TIME mysql_time;
   memset(&mysql_time, 0, sizeof(MYSQL_TIME));
-
-  long long int time = *((long long int *)value);
-  if (time < 0) {
-    mysql_time.neg = true;
-    time = -time;
-  }
-  int sec, usec;
-  GRN_TIME_UNPACK(time, sec, usec);
   mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
-  mysql_time.hour = sec / (60 * 60);
-  mysql_time.minute = sec / 60 % 60;
-  mysql_time.second = sec % 60;
-  mysql_time.second_part = usec;
+  mrn_grn_time_to_mysql_time(time, &mysql_time);
   field->store_time(&mysql_time);
 }
 #endif
@@ -7806,6 +7828,23 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
   DBUG_VOID_RETURN;
 }
 
+int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
+                                        uchar *buf, uint *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  int mysql_time = (int)sint3korr(key);
+  int sec =
+    mysql_time / 10000 * 60 * 60 +
+    mysql_time / 100 % 100 * 60 +
+    mysql_time % 60;
+  int usec = 0;
+  long long int time = GRN_TIME_PACK(sec, usec);
+  memcpy(buf, &time, 8);
+  *size = 8;
+  DBUG_RETURN(error);
+}
+
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
 int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
                                          uchar *buf, uint *size)
@@ -7901,12 +7940,8 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       break;
     }
   case MYSQL_TYPE_TIME:
-    {
-      int val = (int)sint3korr(ptr);
-      memcpy(buf, &val, 4);
-      *size = 4;
-      break;
-    }
+    storage_encode_key_time(field, ptr, buf, size);
+    break;
   case MYSQL_TYPE_YEAR:
     {
       long long int val = (long long int) sint8korr(ptr);
