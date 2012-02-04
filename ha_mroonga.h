@@ -184,6 +184,7 @@ private:
   grn_obj *id_accessor;
   grn_obj *key_accessor;
 
+  grn_obj *sorted_result;
   grn_obj *matched_record_keys;
 
   uchar **key_min;
