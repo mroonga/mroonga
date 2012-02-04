@@ -983,7 +983,8 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
-  case MYSQL_TYPE_TIME2:        // TIME; 3bytes
+  case MYSQL_TYPE_TIME2:        // TIME(FSP); 3 + (FSP + 1) / 2 bytes
+                                // 0 <= FSP <= 6; 3-6bytes
     type = GRN_DB_TIME;         // 8bytes
     break;
 #endif
@@ -1251,6 +1252,52 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
   }
 
   return buffer;
+}
+
+static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  int sec = 0, usec = 0;
+  switch (mysql_time->time_type) {
+  case MYSQL_TIMESTAMP_DATE:
+    {
+      struct tm date;
+      memset(&date, 0, sizeof(struct tm));
+      date.tm_year = mysql_time->year - 1900;
+      date.tm_mon = mysql_time->month - 1;
+      date.tm_mday = mysql_time->day;
+      sec = mktime(&date) + mrn_utc_diff_in_seconds;
+    }
+    break;
+  case MYSQL_TIMESTAMP_DATETIME:
+    {
+      struct tm datetime;
+      memset(&datetime, 0, sizeof(struct tm));
+      datetime.tm_year = mysql_time->year - 1900;
+      datetime.tm_mon = mysql_time->month - 1;
+      datetime.tm_mday = mysql_time->day;
+      datetime.tm_hour = mysql_time->hour;
+      datetime.tm_min = mysql_time->minute;
+      datetime.tm_sec = mysql_time->second;
+      sec = mktime(&datetime) + mrn_utc_diff_in_seconds;
+    }
+    break;
+  case MYSQL_TIMESTAMP_TIME:
+    sec =
+      mysql_time->hour * 60 * 60 +
+      mysql_time->minute * 60 +
+      mysql_time->second;
+    break;
+  default:
+    sec = 0;
+    break;
+  }
+  if (mysql_time->neg) {
+    sec = -sec;
+  }
+  usec = mysql_time->second_part;
+  long long int grn_time = GRN_TIME_PACK(sec, usec);
+  DBUG_RETURN(grn_time);
 }
 
 static uint mrn_alter_table_flags(uint flags) {
@@ -7148,7 +7195,7 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  long long value = field->val_int();
+  long long int value = field->val_int();
   grn_obj_reinit(ctx, buf, GRN_DB_INT32, 0);
   GRN_INT32_SET(ctx, buf, value);
   DBUG_RETURN(error);
@@ -7161,16 +7208,7 @@ int ha_mroonga::generic_store_bulk_datetime(Field *field, grn_obj *buf)
   Field_datetime *datetime_field = (Field_datetime *)field;
   MYSQL_TIME mysql_time;
   datetime_field->get_time(&mysql_time);
-  struct tm date;
-  memset(&date, 0, sizeof(struct tm));
-  date.tm_year = mysql_time.year - 1900;
-  date.tm_mon = mysql_time.month - 1;
-  date.tm_mday = mysql_time.day;
-  date.tm_hour = mysql_time.hour;
-  date.tm_min = mysql_time.minute;
-  date.tm_sec = mysql_time.second;
-  int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
-  long long int time = GRN_TIME_PACK(seconds, mysql_time.second_part);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_time);
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -7184,16 +7222,21 @@ int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
   Field_datetimef *datetimef_field = (Field_datetimef *)field;
   MYSQL_TIME mysql_time;
   datetimef_field->get_time(&mysql_time);
-  struct tm date;
-  memset(&date, 0, sizeof(struct tm));
-  date.tm_year = mysql_time.year - 1900;
-  date.tm_mon = mysql_time.month - 1;
-  date.tm_mday = mysql_time.day;
-  date.tm_hour = mysql_time.hour;
-  date.tm_min = mysql_time.minute;
-  date.tm_sec = mysql_time.second;
-  int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
-  long long int time = GRN_TIME_PACK(seconds, mysql_time.second_part);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_time);
+  grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
+  GRN_TIME_SET(ctx, buf, time);
+  DBUG_RETURN(error);
+}
+#endif
+
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+int ha_mroonga::generic_store_bulk_time2(Field *field, grn_obj *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  MYSQL_TIME mysql_time;
+  field->get_time(&mysql_time);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_time);
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -7207,13 +7250,7 @@ int ha_mroonga::generic_store_bulk_new_date(Field *field, grn_obj *buf)
   Field_newdate *newdate_field = (Field_newdate *)field;
   MYSQL_TIME mysql_date;
   newdate_field->get_time(&mysql_date);
-  struct tm date;
-  memset(&date, 0, sizeof(struct tm));
-  date.tm_year = mysql_date.year - 1900;
-  date.tm_mon = mysql_date.month - 1;
-  date.tm_mday = mysql_date.day;
-  int32 seconds = mktime(&date) + mrn_utc_diff_in_seconds;
-  long long int time = GRN_TIME_PACK(seconds, 0);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_date);
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -7318,7 +7355,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   case MYSQL_TYPE_TIME2:
-    error = generic_store_bulk_time(field, buf);
+    error = generic_store_bulk_time2(field, buf);
     break;
 #endif
   case MYSQL_TYPE_NEWDECIMAL:
@@ -7518,7 +7555,7 @@ void ha_mroonga::storage_store_field_datetime2(Field *field,
                                                uint value_length)
 {
   long long int time = *((long long int *)value);
-  int32 sec, usec;
+  int sec, usec;
   GRN_TIME_UNPACK(time, sec, usec);
   struct tm date;
   time_t sec_t = sec;
@@ -7534,6 +7571,30 @@ void ha_mroonga::storage_store_field_datetime2(Field *field,
   mysql_date.second = date.tm_sec;
   mysql_date.second_part = usec;
   field->store_time(&mysql_date);
+}
+#endif
+
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+void ha_mroonga::storage_store_field_time2(Field *field,
+                                           const char *value,
+                                           uint value_length)
+{
+  MYSQL_TIME mysql_time;
+  memset(&mysql_time, 0, sizeof(MYSQL_TIME));
+
+  long long int time = *((long long int *)value);
+  if (time < 0) {
+    mysql_time.neg = true;
+    time = -time;
+  }
+  int sec, usec;
+  GRN_TIME_UNPACK(time, sec, usec);
+  mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
+  mysql_time.hour = sec / (60 * 60);
+  mysql_time.minute = sec / 60 % 60;
+  mysql_time.second = sec % 60;
+  mysql_time.second_part = usec;
+  field->store_time(&mysql_time);
 }
 #endif
 
@@ -7632,7 +7693,7 @@ void ha_mroonga::storage_store_field(Field *field,
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   case MYSQL_TYPE_TIME2:
-    storage_store_field_time(field, value, value_length);
+    storage_store_field_time2(field, value, value_length);
     break;
 #endif
   case MYSQL_TYPE_NEWDECIMAL:
@@ -7745,12 +7806,38 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
+                                         uchar *buf, uint *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+
+  Field_timef *time2_field = (Field_timef *)field;
+  long long int packed_time =
+    my_time_packed_from_binary(key, time2_field->decimals());
+  MYSQL_TIME mysql_time;
+  TIME_from_longlong_time_packed(&mysql_time, packed_time);
+  int sec, usec;
+  sec = mysql_time.hour * 60 * 60 + mysql_time.minute * 60 + mysql_time.second;
+  if (mysql_time.neg) {
+    sec = -sec;
+  }
+  usec = mysql_time.second_part;
+  long long int time = GRN_TIME_PACK(sec, usec);
+  memcpy(buf, &time, 8);
+  *size = 8;
+
+  DBUG_RETURN(error);
+}
+#endif
+
 int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
                                    uchar *buf, uint *size)
 {
   MRN_DBUG_ENTER_METHOD();
   int error;
-  char *ptr = (char *)key;
+  const uchar *ptr = key;
 
   error = mrn_change_encoding(ctx, field->charset());
   if (error)
@@ -7861,12 +7948,17 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       *size = 8;
       break;
     }
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+  case MYSQL_TYPE_TIME2:
+    storage_encode_key_time2(field, ptr, buf, size);
+    break;
+#endif
   case MYSQL_TYPE_STRING:
   case MYSQL_TYPE_VARCHAR:
   case MYSQL_TYPE_BLOB:
     {
       ptr += HA_KEY_BLOB_LENGTH;
-      const char *val = ptr;
+      const char *val = (const char *)ptr;
       int len = strlen(val);
       memcpy(buf, val, len);
       *size = len;

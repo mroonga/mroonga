@@ -432,6 +432,9 @@ private:
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   int generic_store_bulk_datetime2(Field *field, grn_obj *buf);
 #endif
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+  int generic_store_bulk_time2(Field *field, grn_obj *buf);
+#endif
   int generic_store_bulk_new_decimal(Field *field, grn_obj *buf);
   int generic_store_bulk_blob(Field *field, grn_obj *buf);
   int generic_store_bulk_geometry(Field *field, grn_obj *buf);
@@ -457,6 +460,10 @@ private:
   void storage_store_field_datetime2(Field *field,
                                      const char *value, uint value_length);
 #endif
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+  void storage_store_field_time2(Field *field,
+                                 const char *value, uint value_length);
+#endif
   void storage_store_field_blob(Field *field,
                                 const char *value, uint value_length);
   void storage_store_field_geometry(Field *field,
@@ -465,6 +472,10 @@ private:
   void storage_store_fields(uchar *buf, grn_id record_id);
   void storage_store_fields_by_index(uchar *buf);
 
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+  int storage_encode_key_time2(Field *field, const uchar *key,
+                               uchar *buf, uint *size);
+#endif
   int storage_encode_key(Field *field, const uchar *key, uchar *buf, uint *size);
 
   void set_pk_bitmap();
