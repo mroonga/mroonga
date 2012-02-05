@@ -14,21 +14,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/have_mariadb.inc
-
-if ($have_mariadb)
-{
-  let $fractional_seconds = 1;
-}
-
-if (!have_mariadb)
-{
 --disable_query_log
-  let $fractional_seconds = `SELECT @@global.version >= '5.6'`;
+let $have_mariadb = `SELECT LOCATE('MariaDB', @@global.version) > 0`;
 --enable_query_log
-}
-
-if (!$fractional_seconds)
-{
-  skip fractional seconds in time values are available in MySQL version 5.6 or later or MariaDB;
-}
