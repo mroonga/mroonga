@@ -21,7 +21,7 @@ if ($have_mariadb)
   let $fractional_seconds = 1;
 }
 
-if (!have_mariadb)
+if (!$have_mariadb)
 {
 --disable_query_log
   let $fractional_seconds = `SELECT @@global.version >= '5.6'`;
