@@ -428,6 +428,7 @@ private:
   int generic_store_bulk_date(Field *field, grn_obj *buf);
   int generic_store_bulk_time(Field *field, grn_obj *buf);
   int generic_store_bulk_datetime(Field *field, grn_obj *buf);
+  int generic_store_bulk_year(Field *field, grn_obj *buf);
   int generic_store_bulk_new_date(Field *field, grn_obj *buf);
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   int generic_store_bulk_datetime2(Field *field, grn_obj *buf);
@@ -454,6 +455,8 @@ private:
                                 const char *value, uint value_length);
   void storage_store_field_datetime(Field *field,
                                     const char *value, uint value_length);
+  void storage_store_field_year(Field *field,
+                                const char *value, uint value_length);
   void storage_store_field_new_date(Field *field,
                                     const char *value, uint value_length);
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
@@ -473,6 +476,8 @@ private:
   void storage_store_fields_by_index(uchar *buf);
 
   int storage_encode_key_time(Field *field, const uchar *key,
+                              uchar *buf, uint *size);
+  int storage_encode_key_year(Field *field, const uchar *key,
                               uchar *buf, uint *size);
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   int storage_encode_key_time2(Field *field, const uchar *key,
