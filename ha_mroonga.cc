@@ -7876,13 +7876,31 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+  long long int time;
+#ifdef MRN_MARIADB_P
+  // TODO: remove me when MariaDB becomes based on MySQL 5.6.
+  // This implementation may be costful.
+  Field_time_hires *time_hires_field = (Field_time_hires *)field;
+  Field_time_hires unpacker((uchar *)key,
+                            (uchar *)(key - 1),
+                            time_hires_field->null_bit,
+                            time_hires_field->unireg_check,
+                            time_hires_field->field_name,
+                            time_hires_field->decimals(),
+                            time_hires_field->charset());
+  MYSQL_TIME mysql_time;
+  uint fuzzy_date = 0;
+  unpacker.get_date(&mysql_time, fuzzy_date);
+  time = mrn_mysql_time_to_grn_time(&mysql_time);
+#else
   int mysql_time = (int)sint3korr(key);
   int sec =
     mysql_time / 10000 * 60 * 60 +
     mysql_time / 100 % 100 * 60 +
     mysql_time % 60;
   int usec = 0;
-  long long int time = GRN_TIME_PACK(sec, usec);
+  time = GRN_TIME_PACK(sec, usec);
+#endif
   memcpy(buf, &time, 8);
   *size = 8;
   DBUG_RETURN(error);
