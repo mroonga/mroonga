@@ -3611,7 +3611,15 @@ THR_LOCK_DATA **ha_mroonga::storage_store_lock(THD *thd, THR_LOCK_DATA **to,
                                                enum thr_lock_type lock_type)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (lock_type != TL_IGNORE && thr_lock_data.type == TL_UNLOCK) {
+  if (lock_type != TL_IGNORE && thr_lock_data.type == TL_UNLOCK &&
+    !thd_in_lock_tables(thd)) {
+    if (lock_type == TL_READ_NO_INSERT) {
+      lock_type = TL_READ;
+    } else if (lock_type >= TL_WRITE_CONCURRENT_INSERT &&
+               lock_type <= TL_WRITE && !thd_tablespace_op(thd)) {
+      lock_type = TL_WRITE_ALLOW_WRITE;
+    }
+
     thr_lock_data.type = lock_type;
   }
   *to++ = &thr_lock_data;
@@ -3622,6 +3630,7 @@ THR_LOCK_DATA **ha_mroonga::store_lock(THD *thd, THR_LOCK_DATA **to,
                                        enum thr_lock_type lock_type)
 {
   MRN_DBUG_ENTER_METHOD();
+  DBUG_PRINT("info", ("mroonga: lock_type=%d", lock_type));
   if (share->wrapper_mode)
     to = wrapper_store_lock(thd, to, lock_type);
   else
