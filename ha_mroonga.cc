@@ -3889,7 +3889,7 @@ int ha_mroonga::extra(enum ha_extra_function operation)
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info",
-             ("mroonga: this=%p; %s",
+             ("mroonga: this=%p; extra-operation=%s",
               this, mrn_inspect_extra_function(operation)));
   if (share->wrapper_mode)
   {
