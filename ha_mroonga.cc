@@ -336,6 +336,56 @@ static bool mrn_need_normalize(Field *field)
 }
 
 #if !defined(DBUG_OFF) && !defined(_lint)
+static const char *mrn_inspect_thr_lock_type(enum thr_lock_type lock_type)
+{
+  const char *inspected = "<unknown>";
+  switch (lock_type) {
+  case TL_IGNORE:
+    inspected = "TL_IGNORE";
+    break;
+  case TL_UNLOCK:
+    inspected = "TL_UNLOCK";
+    break;
+  case TL_READ_DEFAULT:
+    inspected = "TL_READ_DEFAULT";
+    break;
+  case TL_READ:
+    inspected = "TL_READ";
+    break;
+  case TL_READ_WITH_SHARED_LOCKS:
+    inspected = "TL_READ_WITH_SHARED_LOCKS";
+    break;
+  case TL_READ_HIGH_PRIORITY:
+    inspected = "TL_READ_HIGH_PRIORITY";
+    break;
+  case TL_READ_NO_INSERT:
+    inspected = "TL_READ_NO_INSERT";
+    break;
+  case TL_WRITE_ALLOW_WRITE:
+    inspected = "TL_WRITE_ALLOW_WRITE";
+    break;
+  case TL_WRITE_CONCURRENT_INSERT:
+    inspected = "TL_WRITE_CONCURRENT_INSERT";
+    break;
+  case TL_WRITE_DELAYED:
+    inspected = "TL_WRITE_DELAYED";
+    break;
+  case TL_WRITE_DEFAULT:
+    inspected = "TL_WRITE_DEFAULT";
+    break;
+  case TL_WRITE_LOW_PRIORITY:
+    inspected = "TL_WRITE_LOW_PRIORITY";
+    break;
+  case TL_WRITE:
+    inspected = "TL_WRITE";
+    break;
+  case TL_WRITE_ONLY:
+    inspected = "TL_WRITE_ONLY";
+    break;
+  }
+  return inspected;
+}
+
 static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
 {
   const char *inspected = "<unknown>";
@@ -3630,7 +3680,8 @@ THR_LOCK_DATA **ha_mroonga::store_lock(THD *thd, THR_LOCK_DATA **to,
                                        enum thr_lock_type lock_type)
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_PRINT("info", ("mroonga: lock_type=%d", lock_type));
+  DBUG_PRINT("info", ("mroonga: lock_type=%s",
+                      mrn_inspect_thr_lock_type(lock_type)));
   if (share->wrapper_mode)
     to = wrapper_store_lock(thd, to, lock_type);
   else
