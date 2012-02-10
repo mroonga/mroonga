@@ -6878,7 +6878,7 @@ int ha_mroonga::generic_geo_open_cursor(const uchar *key,
 
 bool ha_mroonga::is_enable_optimization()
 {
-  MRN_DBUG_ENTER_FUNCTION();
+  MRN_DBUG_ENTER_METHOD();
   bool enable_optimization_p = THDVAR(ha_thd(), enable_optimization);
   DBUG_RETURN(enable_optimization_p);
 }
