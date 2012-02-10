@@ -762,6 +762,15 @@ static bool mrn_dry_write(THD *thd)
   DBUG_RETURN(dry_write_p);
 }
 
+static MYSQL_THDVAR_BOOL(
+  enable_optimization, /* name */
+  PLUGIN_VAR_OPCMDARG, /* options */
+  "If enable_optimization is true, some optimizations will be applied.", /* comment */
+  NULL, /* check */
+  NULL, /* update */
+  true /* default */
+);
+
 static MYSQL_SYSVAR_STR(default_wrapper_engine, mrn_default_wrapper_engine,
                         PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_READONLY,
                         "The default engine for wrapper mode",
@@ -789,6 +798,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(log_file),
   MYSQL_SYSVAR(default_parser),
   MYSQL_SYSVAR(dry_write),
+  MYSQL_SYSVAR(enable_optimization),
   MYSQL_SYSVAR(default_wrapper_engine),
   MYSQL_SYSVAR(libgroonga_version),
   MYSQL_SYSVAR(version),
@@ -6866,10 +6876,24 @@ int ha_mroonga::generic_geo_open_cursor(const uchar *key,
   DBUG_RETURN(error);
 }
 
+bool ha_mroonga::is_enable_optimization()
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  bool enable_optimization_p = THDVAR(ha_thd(), enable_optimization);
+  DBUG_RETURN(enable_optimization_p);
+}
+
 void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
                                   key_part_map end_key_part_map, bool fulltext)
 {
   MRN_DBUG_ENTER_METHOD();
+
+  if (!is_enable_optimization()) {
+    DBUG_PRINT("info", ("mroonga: count skip: optimization is disabled"));
+    count_skip = false;
+    DBUG_VOID_RETURN;
+  }
+
   st_select_lex *select_lex = table->pos_in_table_list->select_lex;
 
   if (
@@ -7044,6 +7068,13 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                         grn_obj *score_column)
 {
   MRN_DBUG_ENTER_METHOD();
+
+  if (!is_enable_optimization()) {
+    DBUG_PRINT("info", ("mroonga: fast order limit: optimization is disabled"));
+    fast_order_limit = false;
+    DBUG_VOID_RETURN;
+  }
+
   TABLE_LIST *table_list = table->pos_in_table_list;
   st_select_lex *select_lex = table_list->select_lex;
   SELECT_LEX_UNIT *unit = table_list->derived;
