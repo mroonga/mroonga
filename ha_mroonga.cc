@@ -755,13 +755,6 @@ static MYSQL_THDVAR_BOOL(
   FALSE /* default */
 );
 
-static bool mrn_dry_write(THD *thd)
-{
-  DBUG_ENTER("mrn_dry_write");
-  bool dry_write_p = THDVAR(thd, dry_write);
-  DBUG_RETURN(dry_write_p);
-}
-
 static MYSQL_THDVAR_BOOL(
   enable_optimization, /* name */
   PLUGIN_VAR_OPCMDARG, /* options */
@@ -4056,7 +4049,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
 
   int error = 0;
 
-  if (mrn_dry_write(ha_thd())) {
+  if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -4144,7 +4137,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
-  if (mrn_dry_write(ha_thd())) {
+  if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -4452,7 +4445,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
 
   int error = 0;
 
-  if (mrn_dry_write(ha_thd())) {
+  if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -4564,7 +4557,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
-  if (mrn_dry_write(ha_thd())) {
+  if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -4805,7 +4798,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
 
   int error = 0;
 
-  if (mrn_dry_write(ha_thd())) {
+  if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -4870,7 +4863,7 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
-  if (mrn_dry_write(ha_thd())) {
+  if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -6876,6 +6869,13 @@ int ha_mroonga::generic_geo_open_cursor(const uchar *key,
   DBUG_RETURN(error);
 }
 
+bool ha_mroonga::is_dry_write()
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool dry_write_p = THDVAR(ha_thd(), dry_write);
+  DBUG_RETURN(dry_write_p);
+}
+
 bool ha_mroonga::is_enable_optimization()
 {
   MRN_DBUG_ENTER_METHOD();
@@ -8775,7 +8775,7 @@ int ha_mroonga::wrapper_truncate_index()
 
   int error = 0;
 
-  if (mrn_dry_write(ha_thd())) {
+  if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }
@@ -8812,7 +8812,7 @@ int ha_mroonga::storage_truncate()
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
-  if (mrn_dry_write(ha_thd())) {
+  if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
   }

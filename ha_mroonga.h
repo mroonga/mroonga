@@ -410,6 +410,7 @@ private:
 #ifdef MRN_HANDLER_HAVE_HA_CLOSE
   int close();
 #endif
+  bool is_dry_write();
   bool is_enable_optimization();
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
