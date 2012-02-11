@@ -118,6 +118,10 @@ extern "C" {
 #  define MRN_FIELD_STORE_TIME_NEED_TYPE
 #endif
 
+#if MYSQL_VERSION_ID < 50500
+#  define MRN_HAVE_TL_WRITE_ALLOW_READ
+#endif
+
 class ha_mroonga;
 
 /* structs */

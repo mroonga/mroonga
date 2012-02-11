@@ -364,6 +364,11 @@ static const char *mrn_inspect_thr_lock_type(enum thr_lock_type lock_type)
   case TL_WRITE_ALLOW_WRITE:
     inspected = "TL_WRITE_ALLOW_WRITE";
     break;
+#ifdef MRN_HAVE_TL_WRITE_ALLOW_READ
+  case TL_WRITE_ALLOW_READ:
+    inspected = "TL_WRITE_ALLOW_READ";
+    break;
+#endif
   case TL_WRITE_CONCURRENT_INSERT:
     inspected = "TL_WRITE_CONCURRENT_INSERT";
     break;
