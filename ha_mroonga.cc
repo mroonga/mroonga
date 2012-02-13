@@ -1431,6 +1431,32 @@ static uint mrn_alter_table_flags(uint flags) {
   return ret_flags;
 }
 
+static int mrn_add_alter_share(const char *path, TABLE_SHARE *tmp_table_share)
+{
+  THD *thd = current_thd;
+  MRN_DBUG_ENTER_FUNCTION();
+  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, TRUE);
+  if (!slot_data)
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  st_mrn_alter_share *alter_share =
+    (st_mrn_alter_share *) malloc(sizeof(st_mrn_alter_share));
+  if (!alter_share)
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  alter_share->next = NULL;
+  strcpy(alter_share->path, path);
+  alter_share->alter_share = tmp_table_share;
+  if (slot_data->first_alter_share)
+  {
+    st_mrn_alter_share *tmp_alter_share = slot_data->first_alter_share;
+    while (tmp_alter_share->next)
+      tmp_alter_share = tmp_alter_share->next;
+    tmp_alter_share->next = alter_share;
+  } else {
+    slot_data->first_alter_share = alter_share;
+  }
+  DBUG_RETURN(0);
+}
+
 static void mrn_init_time(void)
 {
   struct tm now_tm;
@@ -3357,6 +3383,41 @@ int ha_mroonga::close()
     error = storage_close();
   }
 
+  if (share->table_name[0] != '.') {
+    /* temporary table */
+    char db_name[MRN_MAX_PATH_SIZE];
+    char table_name[MRN_MAX_PATH_SIZE];
+    char decode_name[MRN_MAX_PATH_SIZE];
+    TABLE_LIST table_list;
+    TABLE_SHARE *tmp_table_share;
+    int tmp_error;
+    mrn_decode((uchar *) decode_name,
+               (uchar *) decode_name + MRN_MAX_PATH_SIZE,
+               (const uchar *) share->table_name,
+               (const uchar *) share->table_name + strlen(share->table_name));
+    mrn_db_name_gen(decode_name, db_name);
+    mrn_table_name_gen(decode_name, table_name);
+#ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
+    table_list.init_one_table(db_name, strlen(db_name),
+                              table_name, strlen(table_name), table_name,
+                              TL_WRITE);
+#else
+    table_list.init_one_table(db_name, table_name, TL_WRITE);
+#endif
+    mrn_open_mutex_lock();
+    tmp_table_share =
+      mrn_create_tmp_table_share(&table_list, share->table_name, &tmp_error);
+    mrn_open_mutex_unlock();
+    if (!tmp_table_share) {
+      error = tmp_error;
+    } else if ((tmp_error = mrn_add_alter_share(share->table_name,
+                                                tmp_table_share))) {
+      error = tmp_error;
+      mrn_open_mutex_lock();
+      mrn_free_tmp_table_share(tmp_table_share);
+      mrn_open_mutex_unlock();
+    }
+  }
   mrn_free_share(share);
   share = NULL;
   is_clone = FALSE;
@@ -3524,7 +3585,8 @@ int ha_mroonga::delete_table(const char *name)
   {
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
     table_list.init_one_table(db_name, strlen(db_name),
-                              table_name, strlen(table_name), table_name, TL_WRITE);
+                              table_name, strlen(table_name), table_name,
+                              TL_WRITE);
 #else
     table_list.init_one_table(db_name, table_name, TL_WRITE);
 #endif
@@ -9190,7 +9252,6 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
 int ha_mroonga::rename_table(const char *from, const char *to)
 {
   int error = 0;
-  THD *thd = ha_thd();
   char from_db_name[MRN_MAX_PATH_SIZE];
   char to_db_name[MRN_MAX_PATH_SIZE];
   char from_table_name[MRN_MAX_PATH_SIZE];
@@ -9239,25 +9300,8 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 
   if (to_table_name[0] == '#')
   {
-    st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, TRUE);
-    if (!slot_data)
-      DBUG_RETURN(HA_ERR_OUT_OF_MEM);
-    st_mrn_alter_share *alter_share =
-      (st_mrn_alter_share *) malloc(sizeof(st_mrn_alter_share));
-    if (!alter_share)
-      DBUG_RETURN(HA_ERR_OUT_OF_MEM);
-    alter_share->next = NULL;
-    strcpy(alter_share->path, to);
-    alter_share->alter_share = tmp_table_share;
-    if (slot_data->first_alter_share)
-    {
-      st_mrn_alter_share *tmp_alter_share = slot_data->first_alter_share;
-      while (tmp_alter_share->next)
-        tmp_alter_share = tmp_alter_share->next;
-      tmp_alter_share->next = alter_share;
-    } else {
-      slot_data->first_alter_share = alter_share;
-    }
+    if ((error = mrn_add_alter_share(to, tmp_table_share)))
+      DBUG_RETURN(error);
   }
 
   if (tmp_share->wrapper_mode)

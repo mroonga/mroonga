@@ -1,6 +1,6 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2011 Kentoku SHIBA
+  Copyright(C) 2011-2012 Kentoku SHIBA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -88,9 +88,12 @@ int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key)
  */
 char *mrn_db_path_gen(const char *arg, char *dest)
 {
-  int i=2, j=0, len = strlen(arg);
-  while (arg[i] != '/' && i < len) {
-    dest[j++] = arg[i++];
+  int i=2, j=0, len;
+  if (arg[0] == '.') {
+    len = strlen(arg);
+    while (arg[i] != '/' && i < len) {
+      dest[j++] = arg[i++];
+    }
   }
   dest[j] = '\0';
   strcat(dest, MRN_DB_FILE_SUFFIX);
@@ -103,9 +106,12 @@ char *mrn_db_path_gen(const char *arg, char *dest)
  */
 char *mrn_db_name_gen(const char *arg, char *dest)
 {
-  int i=2, j=0, len = strlen(arg);
-  while (arg[i] != '/' && i < len) {
-    dest[j++] = arg[i++];
+  int i=2, j=0, len;
+  if (arg[0] == '.') {
+    len = strlen(arg);
+    while (arg[i] != '/' && i < len) {
+      dest[j++] = arg[i++];
+    }
   }
   dest[j] = '\0';
   return dest;
