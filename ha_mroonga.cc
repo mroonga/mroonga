@@ -6930,13 +6930,14 @@ bool ha_mroonga::is_enable_optimization()
 bool ha_mroonga::is_need_normalize(Field *field) const
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_PRINT("info", ("mroonga: result_type = %u", field->result_type()));
-  DBUG_PRINT("info", ("mroonga: charset->name = %s",
-    field->charset()->name));
-  DBUG_PRINT("info", ("mroonga: charset->csname = %s",
-    field->charset()->csname));
-  DBUG_PRINT("info", ("mroonga: charset->state = %u",
-    field->charset()->state));
+  DBUG_PRINT("info",
+             ("mroonga: result_type = %u", field->result_type()));
+  DBUG_PRINT("info",
+             ("mroonga: charset->name = %s", field->charset()->name));
+  DBUG_PRINT("info",
+             ("mroonga: charset->csname = %s", field->charset()->csname));
+  DBUG_PRINT("info",
+             ("mroonga: charset->state = %u", field->charset()->state));
   if (
     field->result_type() == STRING_RESULT &&
     !(field->charset()->state & (MY_CS_BINSORT | MY_CS_CSSORT))
