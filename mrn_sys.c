@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2011-2012 Kentoku SHIBA
@@ -83,37 +84,45 @@ int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key)
 }
 
 /**
- * "./${db}/${table}" ==> "${db}.mrn"
- * "./${db}/"       ==> "${db}.mrn"
+ * "./${db}/${table}"                              ==> "${db}.mrn"
+ * "./${db}/"                                      ==> "${db}.mrn"
+ * "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0" ==>
+ *   "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0.mrn"
  */
 char *mrn_db_path_gen(const char *arg, char *dest)
 {
-  int i=2, j=0, len;
-  if (arg[0] == '.') {
+  if (strncmp(arg, "./", 2) == 0) {
+    int i = 2, j = 0, len;
     len = strlen(arg);
     while (arg[i] != '/' && i < len) {
       dest[j++] = arg[i++];
     }
+    dest[j] = '\0';
+  } else {
+    strcpy(dest, arg);
   }
-  dest[j] = '\0';
   strcat(dest, MRN_DB_FILE_SUFFIX);
   return dest;
 }
 
 /**
- * "./${db}/${table}" ==> "${db}"
- * "./${db}/"       ==> "${db}"
+ * "./${db}/${table}"                              ==> "${db}"
+ * "./${db}/"                                      ==> "${db}"
+ * "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0" ==>
+ *   "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0"
  */
 char *mrn_db_name_gen(const char *arg, char *dest)
 {
-  int i=2, j=0, len;
-  if (arg[0] == '.') {
+  if (strncmp(arg, "./", 2) == 0) {
+    int i = 2, j = 0, len;
     len = strlen(arg);
     while (arg[i] != '/' && i < len) {
       dest[j++] = arg[i++];
     }
+    dest[j] = '\0';
+  } else {
+    strcpy(dest, arg);
   }
-  dest[j] = '\0';
   return dest;
 }
 
