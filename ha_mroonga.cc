@@ -3392,10 +3392,10 @@ int ha_mroonga::close()
     TABLE_LIST table_list;
     TABLE_SHARE *tmp_table_share;
     int tmp_error;
-    mrn_decode((uchar *) decode_name,
-               (uchar *) decode_name + MRN_MAX_PATH_SIZE,
-               (const uchar *) share->table_name,
-               (const uchar *) share->table_name + strlen(share->table_name));
+    mrn_decode((uchar *)decode_name,
+               (uchar *)decode_name + MRN_MAX_PATH_SIZE,
+               (const uchar *)share->table_name,
+               (const uchar *)share->table_name + strlen(share->table_name));
     mrn_db_name_gen(decode_name, db_name);
     mrn_table_name_gen(decode_name, table_name);
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
