@@ -31,7 +31,7 @@ CREATE TABLE diaries (
   FULLTEXT INDEX(content),
   KEY(month),
   KEY(day)
-) DEFAULT CHARSET UTF8 COLLATE UTF8_BIN;
+) DEFAULT CHARSET UTF8;
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries VALUES(1, 2011, 11, 9, "Hello", "今日からはじめました。");
