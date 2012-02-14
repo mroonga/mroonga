@@ -314,27 +314,6 @@ static int mrn_change_encoding(grn_ctx *ctx, const CHARSET_INFO *charset)
   DBUG_RETURN(ER_MRN_CHARSET_NOT_SUPPORT_NUM);
 }
 
-static bool mrn_need_normalize(Field *field)
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  DBUG_PRINT("info", ("mroonga: result_type = %u", field->result_type()));
-  DBUG_PRINT("info", ("mroonga: charset->name = %s",
-    field->charset()->name));
-  DBUG_PRINT("info", ("mroonga: charset->csname = %s",
-    field->charset()->csname));
-  DBUG_PRINT("info", ("mroonga: charset->state = %u",
-    field->charset()->state));
-  if (
-    field->result_type() == STRING_RESULT &&
-    !(field->charset()->state & (MY_CS_BINSORT | MY_CS_CSSORT))
-  ) {
-    DBUG_PRINT("info", ("mroonga: TRUE"));
-    DBUG_RETURN(TRUE);
-  }
-  DBUG_PRINT("info", ("mroonga: FALSE"));
-  DBUG_RETURN(FALSE);
-}
-
 #if !defined(DBUG_OFF) && !defined(_lint)
 static const char *mrn_inspect_thr_lock_type(enum thr_lock_type lock_type)
 {
@@ -1986,9 +1965,7 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
   KEY key = table_share->key_info[idx];
   if (key.algorithm == HA_KEY_ALG_BTREE || key.algorithm == HA_KEY_ALG_UNDEF) {
     flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE | HA_KEYREAD_ONLY;
-    if (key.key_parts > 1 ||
-      !mrn_need_normalize(&key.key_part->field[0])
-    ) {
+    if (key.key_parts > 1 || !is_need_normalize(&key.key_part->field[0])) {
       flags |= HA_READ_ORDER;
     }
   } else {
@@ -2124,7 +2101,7 @@ int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
   grn_obj_flags index_table_flags =
     GRN_OBJ_TABLE_PAT_KEY |
     GRN_OBJ_PERSISTENT;
-  if (mrn_need_normalize(&key_info->key_part->field[0]))
+  if (is_need_normalize(&key_info->key_part->field[0]))
   {
     index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
   }
@@ -2347,7 +2324,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       table_flags |= GRN_OBJ_TABLE_PAT_KEY;
       if (
         key_parts == 1 &&
-        mrn_need_normalize(&key_info.key_part->field[0])
+        is_need_normalize(&key_info.key_part->field[0])
       ) {
         table_flags |= GRN_OBJ_KEY_NORMALIZE;
       }
@@ -2540,7 +2517,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   int key_alg = key_info->algorithm;
   if (key_info->flags & HA_FULLTEXT) {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    if (mrn_need_normalize(&key_info->key_part->field[0]))
+    if (is_need_normalize(&key_info->key_part->field[0]))
     {
       index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
     }
@@ -2553,7 +2530,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
   } else {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    if (mrn_need_normalize(&key_info->key_part->field[0]))
+    if (is_need_normalize(&key_info->key_part->field[0]))
     {
       index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
     }
@@ -6950,6 +6927,27 @@ bool ha_mroonga::is_enable_optimization()
   DBUG_RETURN(enable_optimization_p);
 }
 
+bool ha_mroonga::is_need_normalize(Field *field) const
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_PRINT("info", ("mroonga: result_type = %u", field->result_type()));
+  DBUG_PRINT("info", ("mroonga: charset->name = %s",
+    field->charset()->name));
+  DBUG_PRINT("info", ("mroonga: charset->csname = %s",
+    field->charset()->csname));
+  DBUG_PRINT("info", ("mroonga: charset->state = %u",
+    field->charset()->state));
+  if (
+    field->result_type() == STRING_RESULT &&
+    !(field->charset()->state & (MY_CS_BINSORT | MY_CS_CSSORT))
+  ) {
+    DBUG_PRINT("info", ("mroonga: TRUE"));
+    DBUG_RETURN(TRUE);
+  }
+  DBUG_PRINT("info", ("mroonga: FALSE"));
+  DBUG_RETURN(FALSE);
+}
+
 void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
                                   key_part_map end_key_part_map, bool fulltext)
 {
@@ -7228,7 +7226,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         const char *column_name = field->field_name;
         int column_name_size = strlen(column_name);
 
-        if (mrn_need_normalize(field))
+        if (is_need_normalize(field))
         {
           DBUG_PRINT("info", ("mroonga: fast_order_limit = FALSE: "
                               "sort by collated value isn't supported yet."));
