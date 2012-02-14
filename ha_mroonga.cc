@@ -3966,7 +3966,7 @@ void ha_mroonga::position(const uchar *record)
   DBUG_VOID_RETURN;
 }
 
-int ha_mroonga::mrn_extra(enum ha_extra_function operation)
+int ha_mroonga::generic_extra(enum ha_extra_function operation)
 {
   MRN_DBUG_ENTER_METHOD();
   switch (operation) {
@@ -4021,7 +4021,7 @@ int ha_mroonga::extra(enum ha_extra_function operation)
     if ((error = storage_extra(operation)))
       DBUG_RETURN(error);
   }
-  error = mrn_extra(operation);
+  error = generic_extra(operation);
   DBUG_RETURN(error);
 }
 
@@ -4057,7 +4057,7 @@ int ha_mroonga::extra_opt(enum ha_extra_function operation, ulong cache_size)
     if ((error = storage_extra_opt(operation, cache_size)))
       DBUG_RETURN(error);
   }
-  error = mrn_extra(operation);
+  error = generic_extra(operation);
   DBUG_RETURN(error);
 }
 

@@ -537,7 +537,7 @@ private:
   void wrapper_overwrite_index_bits();
   int wrapper_close();
   int storage_close();
-  int mrn_extra(enum ha_extra_function operation);
+  int generic_extra(enum ha_extra_function operation);
   int wrapper_extra(enum ha_extra_function operation);
   int storage_extra(enum ha_extra_function operation);
   int wrapper_extra_opt(enum ha_extra_function operation, ulong cache_size);
