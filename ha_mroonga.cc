@@ -3569,6 +3569,10 @@ int ha_mroonga::delete_table(const char *name)
   mrn_open_mutex_lock();
   mrn_free_tmp_table_share(tmp_table_share);
   mrn_open_mutex_unlock();
+  if (name[0] != '.') {
+    /* temporary table */
+    mrn_drop_db(mrn_hton_ptr, (char *) name);
+  }
   DBUG_RETURN(error);
 }
 
