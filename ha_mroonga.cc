@@ -6940,15 +6940,22 @@ bool ha_mroonga::is_need_normalize(Field *field) const
              ("mroonga: charset->csname = %s", field->charset()->csname));
   DBUG_PRINT("info",
              ("mroonga: charset->state = %u", field->charset()->state));
-  if (
-    field->result_type() == STRING_RESULT &&
-    !(field->charset()->state & (MY_CS_BINSORT | MY_CS_CSSORT))
-  ) {
-    DBUG_PRINT("info", ("mroonga: TRUE"));
-    DBUG_RETURN(TRUE);
+  bool need_normalize_p = false;
+  if (field->charset()->state & (MY_CS_BINSORT | MY_CS_CSSORT)) {
+    need_normalize_p = false;
+    DBUG_PRINT("info", ("mroonga: is_need_normalize: false: sort is required"));
+  } else {
+    grn_builtin_type grn_type;
+    grn_type = mrn_grn_type_from_field(ctx, field, true);
+    if (GRN_DB_SHORT_TEXT <= grn_type && grn_type <= GRN_DB_LONG_TEXT) {
+      need_normalize_p = true;
+      DBUG_PRINT("info", ("mroonga: is_need_normalize: true: text type"));
+    } else {
+      need_normalize_p = false;
+      DBUG_PRINT("info", ("mroonga: is_need_normalize: false: no text type"));
+    }
   }
-  DBUG_PRINT("info", ("mroonga: FALSE"));
-  DBUG_RETURN(FALSE);
+  DBUG_RETURN(need_normalize_p);
 }
 
 void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
