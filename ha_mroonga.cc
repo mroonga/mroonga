@@ -2344,8 +2344,10 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   grn_obj *table_obj;
   char table_name[MRN_MAX_PATH_SIZE];
   char decode_name[MRN_MAX_PATH_SIZE];
-  mrn_decode((uchar *) decode_name, (uchar *) decode_name + MRN_MAX_PATH_SIZE,
-             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_decode((uchar *)decode_name,
+             (uchar *)decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *)name,
+             (const uchar *)name + strlen(name));
   mrn_table_name_gen(decode_name, table_name);
   int table_name_len = strlen(table_name);
 
