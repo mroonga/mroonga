@@ -1431,32 +1431,6 @@ static uint mrn_alter_table_flags(uint flags) {
   return ret_flags;
 }
 
-static int mrn_add_alter_share(const char *path, TABLE_SHARE *tmp_table_share)
-{
-  THD *thd = current_thd;
-  MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, TRUE);
-  if (!slot_data)
-    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
-  st_mrn_alter_share *alter_share =
-    (st_mrn_alter_share *) malloc(sizeof(st_mrn_alter_share));
-  if (!alter_share)
-    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
-  alter_share->next = NULL;
-  strcpy(alter_share->path, path);
-  alter_share->alter_share = tmp_table_share;
-  if (slot_data->first_alter_share)
-  {
-    st_mrn_alter_share *tmp_alter_share = slot_data->first_alter_share;
-    while (tmp_alter_share->next)
-      tmp_alter_share = tmp_alter_share->next;
-    tmp_alter_share->next = alter_share;
-  } else {
-    slot_data->first_alter_share = alter_share;
-  }
-  DBUG_RETURN(0);
-}
-
 static void mrn_init_time(void)
 {
   struct tm now_tm;
@@ -3411,8 +3385,8 @@ int ha_mroonga::close()
     mrn_open_mutex_unlock();
     if (!tmp_table_share) {
       error = tmp_error;
-    } else if ((tmp_error = mrn_add_alter_share(share->table_name,
-                                                tmp_table_share))) {
+    } else if ((tmp_error = alter_share_add(share->table_name,
+                                            tmp_table_share))) {
       error = tmp_error;
       mrn_open_mutex_lock();
       mrn_free_tmp_table_share(tmp_table_share);
@@ -6667,6 +6641,31 @@ void ha_mroonga::clear_indexes()
   DBUG_VOID_RETURN;
 }
 
+int ha_mroonga::alter_share_add(const char *path, TABLE_SHARE *table_share)
+{
+  MRN_DBUG_ENTER_METHOD();
+  st_mrn_slot_data *slot_data = mrn_get_slot_data(ha_thd(), TRUE);
+  if (!slot_data)
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  st_mrn_alter_share *alter_share =
+    (st_mrn_alter_share *)malloc(sizeof(st_mrn_alter_share));
+  if (!alter_share)
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  alter_share->next = NULL;
+  strcpy(alter_share->path, path);
+  alter_share->alter_share = table_share;
+  if (slot_data->first_alter_share)
+  {
+    st_mrn_alter_share *tmp_alter_share = slot_data->first_alter_share;
+    while (tmp_alter_share->next)
+      tmp_alter_share = tmp_alter_share->next;
+    tmp_alter_share->next = alter_share;
+  } else {
+    slot_data->first_alter_share = alter_share;
+  }
+  DBUG_RETURN(0);
+}
+
 void ha_mroonga::remove_grn_obj_force(const char *name)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -9301,7 +9300,7 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 
   if (to_table_name[0] == '#')
   {
-    if ((error = mrn_add_alter_share(to, tmp_table_share)))
+    if ((error = alter_share_add(to, tmp_table_share)))
       DBUG_RETURN(error);
   }
 

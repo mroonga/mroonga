@@ -404,6 +404,7 @@ private:
   void clear_search_result();
   void clear_search_result_geo();
   void clear_indexes();
+  int alter_share_add(const char *path, TABLE_SHARE *table_share);
   void remove_grn_obj_force(const char *name);
   grn_obj *find_tokenizer(const char *name, int name_length);
   int wrapper_get_next_record(uchar *buf);
