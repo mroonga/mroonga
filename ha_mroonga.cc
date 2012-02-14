@@ -2753,9 +2753,10 @@ int ha_mroonga::ensure_database_create(const char *name)
   if (error)
     DBUG_RETURN(error);
 
-  mrn_decode((uchar *) decode_name,
-             (uchar *) decode_name + MRN_MAX_PATH_SIZE,
-             (const uchar *) name, (const uchar *) name + strlen(name));
+  mrn_decode((uchar *)decode_name,
+             (uchar *)decode_name + MRN_MAX_PATH_SIZE,
+             (const uchar *)name,
+             (const uchar *)name + strlen(name));
   mrn_db_name_gen(decode_name, db_name);
   mrn_db_path_gen(decode_name, db_path);
 
