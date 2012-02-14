@@ -14,7 +14,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/have_fractional_seconds.inc
 --source include/have_mroonga.inc
 
 --disable_warnings
@@ -24,30 +23,22 @@ DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title TEXT,
-  created_at DATETIME(6),
-  updated_at DATETIME(6),
-  KEY (updated_at)
+  created_at DATETIME,
+  KEY (created_at)
 ) DEFAULT CHARSET UTF8;
 SHOW CREATE TABLE diaries;
 
-INSERT INTO diaries (title, created_at, updated_at)
-       VALUES ("clear day",
-               "2012-01-29 21:51:01.111111",
-               "2012-01-29 21:51:02.222222");
-INSERT INTO diaries (title, created_at, updated_at)
-       VALUES ("rainy day",
-               "2012-01-30 01:23:45.333",
-               "2012-01-30 01:23:46.444");
-INSERT INTO diaries (title, created_at, updated_at)
-       VALUES ("cloudy day",
-               "2012-01-31 08:32:10.5555",
-               "2012-01-31 08:32:11.6666");
+INSERT INTO diaries (title, created_at)
+       VALUES ("clear day", "2012-01-29 21:51:01");
+INSERT INTO diaries (title, created_at)
+       VALUES ("rainy day", "2012-01-30 01:23:45");
+INSERT INTO diaries (title, created_at)
+       VALUES ("cloudy day", "2012-01-31 08:32:10");
 
 SELECT * FROM diaries;
 
 SELECT * FROM diaries
-         WHERE updated_at BETWEEN "2012-01-29 00:00:00.123456" AND
-                                  "2012-01-31 00:00:00.999999";
+         WHERE created_at BETWEEN "2012-01-29 00:00:00" AND "2012-01-31 00:00:00";
 
 DROP TABLE diaries;
 

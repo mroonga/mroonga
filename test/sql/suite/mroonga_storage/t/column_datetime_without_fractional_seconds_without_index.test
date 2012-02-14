@@ -23,23 +23,21 @@ DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title TEXT,
-  created_at DATETIME,
-  updated_at DATETIME,
-  KEY (updated_at)
+  created_at DATETIME
 ) DEFAULT CHARSET UTF8;
 SHOW CREATE TABLE diaries;
 
-INSERT INTO diaries (title, created_at, updated_at)
-       VALUES ("clear day", "2012-01-29 21:51:01", "2012-01-29 21:51:02");
-INSERT INTO diaries (title, created_at, updated_at)
-       VALUES ("rainy day", "2012-01-30 01:23:45", "2012-01-30 01:23:46");
-INSERT INTO diaries (title, created_at, updated_at)
-       VALUES ("cloudy day", "2012-01-31 08:32:10", "2012-01-31 08:32:11");
+INSERT INTO diaries (title, created_at)
+       VALUES ("clear day", "2012-01-29 21:51:01");
+INSERT INTO diaries (title, created_at)
+       VALUES ("rainy day", "2012-01-30 01:23:45");
+INSERT INTO diaries (title, created_at)
+       VALUES ("cloudy day", "2012-01-31 08:32:10");
 
 SELECT * FROM diaries;
 
 SELECT * FROM diaries
-         WHERE updated_at BETWEEN "2012-01-29 00:00:00" AND "2012-01-31 00:00:00";
+         WHERE created_at BETWEEN "2012-01-29 00:00:00" AND "2012-01-31 00:00:00";
 
 DROP TABLE diaries;
 
