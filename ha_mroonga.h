@@ -203,6 +203,7 @@ private:
   bool fast_order_limit_with_index;
 
   bool ignoring_duplicated_key;
+  bool inserting_with_update;
   bool fulltext_searching;
 
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX

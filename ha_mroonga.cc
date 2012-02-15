@@ -1813,6 +1813,7 @@ static _ft_vft mrn_no_such_key_ft_vft = {
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   :handler(hton, share_arg),
    ignoring_duplicated_key(false),
+   inserting_with_update(false),
    ignoring_no_key_columns(false)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -3926,6 +3927,9 @@ int ha_mroonga::generic_extra(enum ha_extra_function operation)
   case HA_EXTRA_NO_IGNORE_DUP_KEY:
     ignoring_duplicated_key = false;
     break;
+  case HA_EXTRA_INSERT_WITH_UPDATE:
+    inserting_with_update = true;
+    break;
   case HA_EXTRA_KEYREAD:
     ignoring_no_key_columns = true;
     break;
@@ -4643,7 +4647,9 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       if (error)
         DBUG_RETURN(error);
 
-      if (pkey_info) {
+      bool on_duplicate_key_update =
+        (inserting_with_update && ignoring_duplicated_key);
+      if (!on_duplicate_key_update && pkey_info) {
         bool have_pkey = false;
         for (uint j = 0; j < pkey_info->key_parts; j++) {
           Field *pkey_field = pkey_info->key_part[j].field;
@@ -8284,6 +8290,7 @@ int ha_mroonga::reset()
   else
     error = storage_reset();
   ignoring_no_key_columns = false;
+  inserting_with_update = false;
   ignoring_duplicated_key = false;
   fulltext_searching = false;
   mrn_lock_type = F_UNLCK;
