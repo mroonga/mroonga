@@ -3333,7 +3333,7 @@ int ha_mroonga::close()
     error = storage_close();
   }
 
-  if (is_temporary_table_name(share->table_name[0])) {
+  if (is_temporary_table_name(share->table_name)) {
     char db_name[MRN_MAX_PATH_SIZE];
     char table_name[MRN_MAX_PATH_SIZE];
     TABLE_LIST table_list;
