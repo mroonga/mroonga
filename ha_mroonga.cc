@@ -916,7 +916,9 @@ static void mrn_drop_db(handlerton *hton, char *path)
       GRN_LOG(ctx, GRN_LOG_ERROR, "cannot drop database (%s)", db_path);
     }
   }
+  pthread_mutex_lock(&mrn_db_mutex);
   mrn_hash_remove(ctx, mrn_hash, db_name);
+  pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_fin(ctx);
 }
 
