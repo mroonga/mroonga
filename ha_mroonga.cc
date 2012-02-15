@@ -3569,7 +3569,7 @@ int ha_mroonga::delete_table(const char *name)
   mrn_open_mutex_lock();
   mrn_free_tmp_table_share(tmp_table_share);
   mrn_open_mutex_unlock();
-  if (name[0] != '.') {
+  if (is_temporary_table_name(name)) {
     /* temporary table */
     mrn_drop_db(mrn_hton_ptr, (char *) name);
   }
@@ -6955,6 +6955,14 @@ bool ha_mroonga::is_need_normalize(Field *field) const
     }
   }
   DBUG_RETURN(need_normalize_p);
+}
+
+bool ha_mroonga::is_temporary_table_name(const char *name) const
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_PRINT("info", ("mroonga: table name = %s", name));
+  bool temporary_table_name_p = (name[0] != '.');
+  DBUG_RETURN(temporary_table_name_p);
 }
 
 void ha_mroonga::check_count_skip(key_part_map start_key_part_map,

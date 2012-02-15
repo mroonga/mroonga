@@ -418,6 +418,7 @@ private:
   bool is_dry_write();
   bool is_enable_optimization();
   bool is_need_normalize(Field *field) const;
+  bool is_temporary_table_name(const char *name) const;
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
   bool is_groonga_layer_condition(const Item *item,
