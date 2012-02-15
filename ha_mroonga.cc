@@ -3333,8 +3333,7 @@ int ha_mroonga::close()
     error = storage_close();
   }
 
-  if (share->table_name[0] != '.') {
-    /* temporary table */
+  if (is_temporary_table_name(share->table_name[0])) {
     char db_name[MRN_MAX_PATH_SIZE];
     char table_name[MRN_MAX_PATH_SIZE];
     TABLE_LIST table_list;
@@ -3570,7 +3569,6 @@ int ha_mroonga::delete_table(const char *name)
   mrn_free_tmp_table_share(tmp_table_share);
   mrn_open_mutex_unlock();
   if (is_temporary_table_name(name)) {
-    /* temporary table */
     mrn_drop_db(mrn_hton_ptr, (char *) name);
   }
   DBUG_RETURN(error);
