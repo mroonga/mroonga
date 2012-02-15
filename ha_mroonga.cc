@@ -2235,7 +2235,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
                                pkey_type, pkey_value_type);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
-    my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
+    my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
 
