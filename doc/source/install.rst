@@ -221,15 +221,15 @@ By invoking "make install", ha_mroonga.so will be installed in MySQL's plugin di
 
 Then start mysqld, connect to it by mysql client, and install it by "INSTALL PLUGIN" command. ::
 
- mysql> INSTALL PLUGIN groonga SONAME 'ha_mroonga.so';
+ mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
 
-If "groonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
+If "mroonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
 
  mysql> SHOW ENGINES;
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
  | Engine     | Support | Comment                                                    | Transactions | XA   | Savepoints |
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
- | groonga    | YES     | Fulltext search, column base                               | NO           | NO   | NO         |
+ | mroonga    | YES     | Fulltext search, column base                               | NO           | NO   | NO         |
  | MRG_MYISAM | YES     | Collection of identical MyISAM tables                      | NO           | NO   | NO         |
  | CSV        | YES     | CSV storage engine                                         | NO           | NO   | NO         |
  | MyISAM     | DEFAULT | Default engine as of MySQL 3.23 with great performance     | NO           | NO   | NO         |
