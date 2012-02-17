@@ -153,7 +153,7 @@ c1	int(11)	YES		NULL
 _id	int(11)	YES		NULL	
 drop table t1;
 create table t1 (c1 int, `_score` float) engine = mroonga;
-ERROR HY000: [column][create]: name can't start with '_' and contains only 0-9, A-Z, a-z, #, - or _: <_score>
+ERROR HY000: [column][create] name can't start with '_' and contains only 0-9, A-Z, a-z, #, @, - or _: <_score>
 create table t1 (c1 int, `_id` text) engine = mroonga;
 ERROR HY000: _id must be numeric data type
 create table t1 (c1 int, `_id` int, index(`_id`)) engine = mroonga;
