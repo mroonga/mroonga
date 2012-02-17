@@ -2222,7 +2222,12 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 
   grn_obj *grn_table;
   char grn_table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, grn_table_name);
+  char decode_src_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, decode_src_name);
+  mrn_decode((uchar *) grn_table_name,
+             (uchar *) grn_table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   char *grn_table_path = NULL;     // we don't specify path
   grn_obj *pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
   grn_obj *pkey_value_type = NULL; // we don't use this
@@ -2340,7 +2345,12 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   /* create table */
   grn_obj *table_obj;
   char table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, table_name);
+  char decode_src_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, decode_src_name);
+  mrn_decode((uchar *) table_name,
+             (uchar *) table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   int table_name_len = strlen(table_name);
 
   char *table_path = NULL;           // we don't specify path
@@ -2902,7 +2912,12 @@ int ha_mroonga::wrapper_open_indexes(const char *name, bool ignore_open_error)
   }
 
   char table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, table_name);
+  char decode_src_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, decode_src_name);
+  mrn_decode((uchar *) table_name,
+             (uchar *) table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   uint i = 0;
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->s->key_info[i];
@@ -3091,7 +3106,12 @@ int ha_mroonga::open_table(const char *name)
     DBUG_RETURN(error);
 
   char table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, table_name);
+  char decode_src_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, decode_src_name);
+  mrn_decode((uchar *) table_name,
+             (uchar *) table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   grn_table = grn_ctx_get(ctx, table_name, strlen(table_name));
   if (ctx->rc) {
     error = ER_CANT_OPEN_FILE;
@@ -3166,7 +3186,12 @@ int ha_mroonga::storage_open_indexes(const char *name)
   }
 
   char table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, table_name);
+  char decode_src_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, decode_src_name);
+  mrn_decode((uchar *) table_name,
+             (uchar *) table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   uint i;
   for (i = 0; i < n_keys; i++) {
     key_min[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
@@ -3314,21 +3339,18 @@ int ha_mroonga::close()
   if (is_temporary_table_name(share->table_name)) {
     char db_name[MRN_MAX_PATH_SIZE];
     char table_name[MRN_MAX_PATH_SIZE];
-    char mysql_table_name[MRN_MAX_PATH_SIZE];
     TABLE_LIST table_list;
     TABLE_SHARE *tmp_table_share;
     int tmp_error;
     /* no need to decode */
     mrn_db_name_gen(share->table_name, db_name);
     mrn_table_name_gen(share->table_name, table_name);
-    mrn_table_name_gen_for_mysql(share->table_name, mysql_table_name);
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
     table_list.init_one_table(db_name, strlen(db_name),
-                              mysql_table_name, strlen(mysql_table_name),
-                              mysql_table_name,
+                              table_name, strlen(table_name), table_name,
                               TL_WRITE);
 #else
-    table_list.init_one_table(db_name, mysql_table_name, TL_WRITE);
+    table_list.init_one_table(db_name, table_name, TL_WRITE);
 #endif
     mrn_open_mutex_lock();
     tmp_table_share =
@@ -3474,7 +3496,7 @@ int ha_mroonga::delete_table(const char *name)
   THD *thd = ha_thd();
   char db_name[MRN_MAX_PATH_SIZE];
   char table_name[MRN_MAX_PATH_SIZE];
-  char mysql_table_name[MRN_MAX_PATH_SIZE];
+  char decode_src_name[MRN_MAX_PATH_SIZE];
   TABLE_LIST table_list;
   TABLE_SHARE *tmp_table_share = NULL;
   TABLE tmp_table;
@@ -3482,8 +3504,11 @@ int ha_mroonga::delete_table(const char *name)
   st_mrn_alter_share *alter_share, *tmp_alter_share;
   MRN_DBUG_ENTER_METHOD();
   mrn_db_name_gen(name, db_name);
-  mrn_table_name_gen(name, table_name);
-  mrn_table_name_gen_for_mysql(name, mysql_table_name);
+  mrn_table_name_gen(name, decode_src_name);
+  mrn_decode((uchar *) table_name,
+             (uchar *) table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
   if (slot_data && slot_data->first_alter_share)
   {
@@ -3510,11 +3535,11 @@ int ha_mroonga::delete_table(const char *name)
   {
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
     table_list.init_one_table(db_name, strlen(db_name),
-                              mysql_table_name, strlen(mysql_table_name),
-                              mysql_table_name,
+                              decode_src_name, strlen(decode_src_name),
+                              decode_src_name,
                               TL_WRITE);
 #else
-    table_list.init_one_table(db_name, mysql_table_name, TL_WRITE);
+    table_list.init_one_table(db_name, decode_src_name, TL_WRITE);
 #endif
     mrn_open_mutex_lock();
     tmp_table_share = mrn_create_tmp_table_share(&table_list, name, &error);
@@ -9253,27 +9278,33 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   char to_db_name[MRN_MAX_PATH_SIZE];
   char from_table_name[MRN_MAX_PATH_SIZE];
   char to_table_name[MRN_MAX_PATH_SIZE];
-  char from_mysql_table_name[MRN_MAX_PATH_SIZE];
+  char decode_src_name[MRN_MAX_PATH_SIZE];
   TABLE_LIST table_list;
   TABLE_SHARE *tmp_table_share;
   TABLE tmp_table;
   MRN_SHARE *tmp_share;
   MRN_DBUG_ENTER_METHOD();
   mrn_db_name_gen(to, to_db_name);
-  mrn_table_name_gen(to, to_table_name);
+  mrn_table_name_gen(to, decode_src_name);
+  mrn_decode((uchar *) to_table_name,
+             (uchar *) to_table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   mrn_db_name_gen(from, from_db_name);
-  mrn_table_name_gen(from, from_table_name);
-  mrn_table_name_gen_for_mysql(from, from_mysql_table_name);
+  mrn_table_name_gen(from, decode_src_name);
+  mrn_decode((uchar *) from_table_name,
+             (uchar *) from_table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   if (strcmp(from_db_name, to_db_name))
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
   table_list.init_one_table(from_db_name, strlen(from_db_name),
-                            from_mysql_table_name,
-                            strlen(from_mysql_table_name),
-                            from_mysql_table_name, TL_WRITE);
+                            decode_src_name, strlen(decode_src_name),
+                            decode_src_name, TL_WRITE);
 #else
-  table_list.init_one_table(from_db_name, from_mysql_table_name, TL_WRITE);
+  table_list.init_one_table(from_db_name, decode_src_name, TL_WRITE);
 #endif
   mrn_open_mutex_lock();
   tmp_table_share = mrn_create_tmp_table_share(&table_list, from, &error);
@@ -9485,9 +9516,14 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
     *key_info = table->key_info;
   char db_name[MRN_MAX_PATH_SIZE];
   char table_name[MRN_MAX_PATH_SIZE];
+  char decode_src_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
   mrn_db_name_gen(table_share->normalized_path.str, db_name);
-  mrn_table_name_gen(table_share->normalized_path.str, table_name);
+  mrn_table_name_gen(table_share->normalized_path.str, decode_src_name);
+  mrn_decode((uchar *) table_name,
+             (uchar *) table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   bitmap_clear_all(table->read_set);
   clear_indexes();
   remove_grn_obj_force(table_name);
@@ -9833,6 +9869,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   uint n_keys = table->s->keys;
   grn_obj *index_tables[num_of_keys + n_keys];
   char grn_table_name[MRN_MAX_PATH_SIZE];
+  char decode_src_name[MRN_MAX_PATH_SIZE];
   THD *thd = ha_thd();
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
@@ -9855,7 +9892,11 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
-  mrn_table_name_gen(share->table_name, grn_table_name);
+  mrn_table_name_gen(share->table_name, decode_src_name);
+  mrn_decode((uchar *) grn_table_name,
+             (uchar *) grn_table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   hnd_add_index = NULL;
 #endif
@@ -10020,6 +10061,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   grn_obj *index_tables[num_of_keys + n_keys];
   grn_obj *index_columns[num_of_keys + n_keys];
   char grn_table_name[MRN_MAX_PATH_SIZE];
+  char decode_src_name[MRN_MAX_PATH_SIZE];
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
   char **key_parser;
@@ -10041,7 +10083,11 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
-  mrn_table_name_gen(share->table_name, grn_table_name);
+  mrn_table_name_gen(share->table_name, decode_src_name);
+  mrn_decode((uchar *) grn_table_name,
+             (uchar *) grn_table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   bitmap_clear_all(table->read_set);
   for (i = 0; i < num_of_keys; i++) {
     index_tables[i + n_keys] = NULL;
@@ -10223,12 +10269,17 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
   uint wrap_key_num[num_of_keys], i, j;
   KEY *key_info = table_share->key_info;
   char grn_table_name[MRN_MAX_PATH_SIZE];
+  char decode_src_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
   res = mrn_change_encoding(ctx, system_charset_info);
   if (res)
     DBUG_RETURN(res);
 
-  mrn_table_name_gen(share->table_name, grn_table_name);
+  mrn_table_name_gen(share->table_name, decode_src_name);
+  mrn_decode((uchar *) grn_table_name,
+             (uchar *) grn_table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   for (i = 0, j = 0; i < num_of_keys; i++) {
     if (!(key_info[key_num[i]].flags & HA_FULLTEXT) &&
       !mrn_is_geo_key(&key_info[key_num[i]])) {
@@ -10265,12 +10316,17 @@ int ha_mroonga::storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
   uint i;
   KEY *key_info = table_share->key_info;
   char grn_table_name[MRN_MAX_PATH_SIZE];
+  char decode_src_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
   error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
     DBUG_RETURN(error);
 
-  mrn_table_name_gen(share->table_name, grn_table_name);
+  mrn_table_name_gen(share->table_name, decode_src_name);
+  mrn_decode((uchar *) grn_table_name,
+             (uchar *) grn_table_name + MRN_MAX_PATH_SIZE,
+             (const uchar *) decode_src_name,
+             (const uchar *) decode_src_name + strlen(decode_src_name));
   for (i = 0; i < num_of_keys; i++) {
     char index_name[MRN_MAX_PATH_SIZE];
     mrn_index_table_name_gen(grn_table_name, key_info[key_num[i]].name,

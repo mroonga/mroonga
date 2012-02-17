@@ -52,7 +52,6 @@ int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key);
 char *mrn_db_path_gen(const char *arg, char *dest);
 char *mrn_db_name_gen(const char *arg, char *dest);
 char *mrn_table_name_gen(const char *arg, char *dest);
-char *mrn_table_name_gen_for_mysql(const char *arg, char *dest);
 char *mrn_index_table_name_gen(const char *arg, const char *idx_name, char *dest);
 
 #endif /* _mrn_sys_h */
