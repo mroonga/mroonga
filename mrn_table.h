@@ -104,8 +104,8 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
 void mrn_free_tmp_table_share(TABLE_SHARE *table_share);
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info);
-uint mrn_decode(uchar *buf_st, uchar *buf_ed,
-                const uchar *st, const uchar *ed);
+uint mrn_encode(char *buf_st, char *buf_ed, const char *st, const char *ed);
+uint mrn_decode(char *buf_st, char *buf_ed, const char *st, const char *ed);
 st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create);
 void mrn_clear_alter_share(THD *thd);
 

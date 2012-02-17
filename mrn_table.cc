@@ -857,10 +857,42 @@ void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
   DBUG_VOID_RETURN;
 }
 
-uint mrn_decode(uchar *buf_st, uchar *buf_ed, const uchar *st, const uchar *ed)
+uint mrn_encode(char *buf_st, char *buf_ed, const char *st, const char *ed)
+{
+  int res1, res2;
+  char *buf = buf_st;
+  my_wc_t wc;
+  my_charset_conv_mb_wc mb_wc = system_charset_info->cset->mb_wc;
+  my_charset_conv_wc_mb wc_mb = my_charset_filename.cset->wc_mb;
+  DBUG_ENTER("mrn_encode");
+  DBUG_PRINT("info", ("mroonga: in=%s", st));
+  buf_ed--;
+  for (; st < ed && buf < buf_ed; st += res1, buf += res2)
+  {
+    if ((res1 = (*mb_wc)(NULL, &wc, (uchar *) st, (uchar *) ed)) > 0)
+    {
+      if ((res2 = (*wc_mb)(NULL, wc, (uchar *) buf, (uchar *) buf_ed)) <= 0)
+      {
+        break;
+      }
+    } else if (res1 == MY_CS_ILSEQ)
+    {
+      *buf = *st;
+      res1 = 1;
+      res2 = 1;
+    } else {
+      break;
+    }
+  }
+  *buf = '\0';
+  DBUG_PRINT("info", ("mroonga: out=%s", buf_st));
+  DBUG_RETURN(buf - buf_st);
+}
+
+uint mrn_decode(char *buf_st, char *buf_ed, const char *st, const char *ed)
 {
   int res;
-  uchar *buf = buf_st;
+  char *buf = buf_st;
   my_wc_t wc;
   my_charset_conv_mb_wc mb_wc = my_charset_filename.cset->mb_wc;
   DBUG_ENTER("mrn_decode");

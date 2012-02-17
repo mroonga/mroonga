@@ -127,9 +127,32 @@ char *mrn_db_name_gen(const char *db_path_in_mysql, char *dest)
 }
 
 /**
- * "./${db}/${table}" ==> "${table}"
+ * "./${db}/${table}" ==> "${table}" (with encoding first '_')
  */
 char *mrn_table_name_gen(const char *arg, char *dest)
+{
+  int len = strlen(arg);
+  int i=len, j=0;
+  for (; arg[--i] != '/' ;) {}
+  if (arg[i + 1] == '_') {
+    dest[j++] = '@';
+    dest[j++] = '0';
+    dest[j++] = '0';
+    dest[j++] = '5';
+    dest[j++] = 'f';
+    i++;
+  }
+  for (; i <= len ;) {
+    dest[j++] = arg[++i];
+  }
+  dest[j] = '\0';
+  return dest;
+}
+
+/**
+ * "./${db}/${table}" ==> "${table}" (without encoding first '_')
+ */
+char *mrn_table_name_gen_for_mysql(const char *arg, char *dest)
 {
   int len = strlen(arg);
   int i=len, j=0;
@@ -142,12 +165,12 @@ char *mrn_table_name_gen(const char *arg, char *dest)
 }
 
 /**
- * "${table}" ==> "${table}_${index_name}"
+ * "${table}" ==> "${table}#${index_name}"
  */
 char *mrn_index_table_name_gen(const char *table_name,
                                const char *index_name,
                                char *dest)
 {
-  snprintf(dest, MRN_MAX_PATH_SIZE, "%s_%s", table_name, index_name);
+  snprintf(dest, MRN_MAX_PATH_SIZE, "%s#%s", table_name, index_name);
   return dest;
 }
