@@ -1851,6 +1851,10 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   matched_record_keys = NULL;
   fulltext_searching = FALSE;
   mrn_lock_type = F_UNLCK;
+  grn_index_tables = grn_index_columns = NULL;
+  key_id = NULL;
+  del_key_id = NULL;
+  key_min = key_max = NULL;
   GRN_TEXT_INIT(&key_buffer, 0);
   GRN_TEXT_INIT(&encoded_key_buffer, 0);
   GRN_VOID_INIT(&old_value_buffer);
@@ -3170,16 +3174,20 @@ int ha_mroonga::storage_open_indexes(const char *name)
   if (n_keys > 0) {
     grn_index_tables = (grn_obj **)malloc(sizeof(grn_obj *) * n_keys);
     grn_index_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_keys);
+    key_id = (grn_id *)malloc(sizeof(grn_id) * n_keys);
+    del_key_id = (grn_id *)malloc(sizeof(grn_id) * n_keys);
     key_min = (uchar **)malloc(sizeof(uchar *) * n_keys);
     key_max = (uchar **)malloc(sizeof(uchar *) * n_keys);
   } else {
     grn_index_tables = grn_index_columns = NULL;
+    key_id = NULL;
+    del_key_id = NULL;
     key_min = key_max = NULL;
   }
 
   char table_name[MRN_MAX_PATH_SIZE];
   mrn_table_name_gen(name, table_name);
-  uint i;
+  uint i, j;
   for (i = 0; i < n_keys; i++) {
     key_min[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
     key_max[i] = (uchar *)malloc(MRN_MAX_KEY_SIZE);
@@ -3190,6 +3198,14 @@ int ha_mroonga::storage_open_indexes(const char *name)
     }
 
     KEY key_info = table->s->key_info[i];
+    if (key_info.key_parts > 1) {
+      KEY_PART_INFO *key_part = key_info.key_part;
+      for (j = 0; j < key_info.key_parts; j++) {
+        bitmap_set_bit(&multiple_column_key_bitmap,
+                       key_part[j].field->field_index);
+      }
+    }
+
     mrn_index_table_name_create(table_name, key_info.name, index_name);
     grn_index_tables[i] = grn_ctx_get(ctx, index_name, strlen(index_name));
     if (ctx->rc) {
@@ -3219,31 +3235,37 @@ int ha_mroonga::storage_open_indexes(const char *name)
 
 error:
   if (error) {
-    while (TRUE) {
-      if (key_min[i]) {
-        free(key_min[i]);
+    if (i) {
+      while (TRUE) {
+        if (key_min[i]) {
+          free(key_min[i]);
+        }
+        if (key_max[i]) {
+          free(key_max[i]);
+        }
+        grn_obj *index_column = grn_index_columns[i];
+        if (index_column) {
+          grn_obj_unlink(ctx, index_column);
+        }
+        grn_obj *index_table = grn_index_tables[i];
+        if (index_table) {
+          grn_obj_unlink(ctx, index_table);
+        }
+        if (!i)
+          break;
+        i--;
       }
-      if (key_max[i]) {
-        free(key_max[i]);
-      }
-      grn_obj *index_column = grn_index_columns[i];
-      if (index_column) {
-        grn_obj_unlink(ctx, index_column);
-      }
-      grn_obj *index_table = grn_index_tables[i];
-      if (index_table) {
-        grn_obj_unlink(ctx, index_table);
-      }
-      if (!i)
-        break;
-      i--;
     }
     free(key_min);
     free(key_max);
+    free(key_id);
+    free(del_key_id);
     free(grn_index_columns);
     free(grn_index_tables);
     key_min = NULL;
     key_max = NULL;
+    key_id = NULL;
+    del_key_id = NULL;
     grn_index_columns = NULL;
     grn_index_tables = NULL;
   }
@@ -3260,6 +3282,13 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
     DBUG_RETURN(error);
   thr_lock_data_init(&share->lock,&thr_lock_data,NULL);
 
+  if (bitmap_init(&multiple_column_key_bitmap, NULL, table->s->fields, FALSE))
+  {
+    mrn_free_share(share);
+    share = NULL;
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  }
+
   if (share->wrapper_mode)
   {
     error = wrapper_open(name, mode, test_if_locked);
@@ -3269,6 +3298,7 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 
   if (error)
   {
+    bitmap_free(&multiple_column_key_bitmap);
     mrn_free_share(share);
     share = NULL;
   }
@@ -3356,6 +3386,7 @@ int ha_mroonga::close()
       mrn_open_mutex_unlock();
     }
   }
+  bitmap_free(&multiple_column_key_bitmap);
   mrn_free_share(share);
   share = NULL;
   is_clone = FALSE;
@@ -4155,6 +4186,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
   THD *thd = ha_thd();
   int i;
+  uint j;
   int n_columns = table->s->fields;
 
   if (table->next_number_field && buf == table->record[0])
@@ -4245,6 +4277,15 @@ int ha_mroonga::storage_write_row(uchar *buf)
     DBUG_RETURN(error);
   }
 
+  st_mrn_slot_data *slot_data;
+  if ((error = storage_write_row_unique_indexes(buf, record_id)))
+  {
+#ifndef DBUG_OFF
+    dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+    goto err1;
+  }
+
   grn_obj colbuf;
   GRN_VOID_INIT(&colbuf);
   for (i = 0; i < n_columns; i++) {
@@ -4272,7 +4313,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
       dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
       grn_obj_unlink(ctx, &colbuf);
-      DBUG_RETURN(error);
+      goto err2;
     }
     generic_store_bulk(field, &colbuf);
     grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
@@ -4282,7 +4323,8 @@ int ha_mroonga::storage_write_row(uchar *buf)
 #endif
       grn_obj_unlink(ctx, &colbuf);
       my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
-      DBUG_RETURN(ER_ERROR_ON_WRITE);
+      error = ER_ERROR_ON_WRITE;
+      goto err2;
     }
   }
   grn_obj_unlink(ctx, &colbuf);
@@ -4292,22 +4334,37 @@ int ha_mroonga::storage_write_row(uchar *buf)
 #ifndef DBUG_OFF
     dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
-    DBUG_RETURN(error);
+    goto err2;
   }
 
   // for UDF last_insert_grn_id()
-  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, TRUE);
+  slot_data = mrn_get_slot_data(thd, TRUE);
   if (slot_data == NULL) {
 #ifndef DBUG_OFF
-      dbug_tmp_restore_column_map(table->read_set, tmp_map);
+    dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
-      DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+    error = HA_ERR_OUT_OF_MEM;
+    goto err2;
   }
   slot_data->last_insert_record_id = record_id;
 
 #ifndef DBUG_OFF
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
+  DBUG_RETURN(0);
+
+err2:
+  for (j = 0; j < table->s->keys; j++) {
+    if (j == pkey_nr) {
+      continue;
+    }
+    KEY *key_info = &table->key_info[j];
+    if (key_info->flags & HA_NOSAME) {
+      grn_table_delete_by_id(ctx, grn_index_tables[j], key_id[j]);
+    }
+  }
+err1:
+  grn_table_delete_by_id(ctx, grn_table, record_id);
   DBUG_RETURN(error);
 }
 
@@ -4379,6 +4436,104 @@ err:
   dbug_tmp_restore_column_map(table->read_set, tmp_map);
 #endif
 
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_write_row_unique_index(uchar *buf, grn_id record_id,
+                                               KEY *key_info,
+                                               grn_obj *index_table,
+                                               grn_id *key_id)
+{
+  void *ukey = NULL;
+  int error, ukey_size = 0;
+  MRN_DBUG_ENTER_METHOD();
+  GRN_BULK_REWIND(&key_buffer);
+  if (key_info->key_parts == 1) {
+    Field *ukey_field = key_info->key_part[0].field;
+    error = mrn_change_encoding(ctx, ukey_field->charset());
+    if (error) {
+      DBUG_RETURN(error);
+    }
+    generic_store_bulk(ukey_field, &key_buffer);
+    ukey = GRN_TEXT_VALUE(&key_buffer);
+    ukey_size = GRN_TEXT_LEN(&key_buffer);
+  } else {
+    mrn_change_encoding(ctx, NULL);
+    uchar key[MRN_MAX_KEY_SIZE];
+    key_copy(key, buf, key_info, key_info->key_length);
+    grn_bulk_space(ctx, &key_buffer, key_info->key_length);
+    ukey = mrn_multiple_column_key_encode(key_info,
+                                          key,
+                                          key_info->key_length,
+                                          (uchar *)(GRN_TEXT_VALUE(
+                                            &key_buffer)),
+                                          (uint *)&ukey_size, FALSE);
+  }
+
+  int added;
+  *key_id = grn_table_add(ctx, index_table, ukey, ukey_size, &added);
+  if (ctx->rc) {
+    my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_WRITE);
+  }
+  if (!added) {
+    // duplicated error
+    error = HA_ERR_FOUND_DUPP_KEY;
+    memcpy(dup_ref, key_id, sizeof(grn_id));
+    if (!ignoring_duplicated_key) {
+      GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
+    }
+    DBUG_RETURN(error);
+  }
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::storage_write_row_unique_indexes(uchar *buf, grn_id record_id)
+{
+  int error = 0;
+  uint i;
+  uint n_keys = table->s->keys;
+  MRN_DBUG_ENTER_METHOD();
+
+  for (i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue;
+    }
+
+    KEY *key_info = &table->key_info[i];
+
+    if (!(key_info->flags & HA_NOSAME)) {
+      continue;
+    }
+
+    grn_obj *index_table = grn_index_tables[i];
+    if (!index_table) {
+      continue;
+    }
+
+    if ((error = storage_write_row_unique_index(buf, record_id, key_info,
+                                                index_table, &key_id[i])))
+    {
+      if (error == HA_ERR_FOUND_DUPP_KEY)
+      {
+        dup_key = i;
+      }
+      goto err;
+    }
+  }
+  DBUG_RETURN(0);
+
+err:
+  if (i) {
+    mrn_change_encoding(ctx, NULL);
+    do {
+      i--;
+      KEY *key_info = &table->key_info[i];
+      if (key_info->flags & HA_NOSAME) {
+        grn_table_delete_by_id(ctx, grn_index_tables[i], key_id[i]);
+      }
+    } while (i);
+  }
   DBUG_RETURN(error);
 }
 
@@ -4575,6 +4730,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 
   grn_obj colbuf;
   int i;
+  uint j;
   int n_columns = table->s->fields;
   THD *thd = ha_thd();
 
@@ -4599,6 +4755,30 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   }
 
   KEY *pkey_info = NULL;
+  storage_store_fields_for_prep_update(old_data, new_data, record_id);
+  {
+#ifndef DBUG_OFF
+    my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
+#endif
+    if ((error = storage_prepare_delete_row_unique_indexes(old_data,
+                                                           record_id))) {
+#ifndef DBUG_OFF
+      dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+      DBUG_RETURN(error);
+    }
+    if ((error = storage_update_row_unique_indexes(new_data, record_id)))
+    {
+#ifndef DBUG_OFF
+      dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+      DBUG_RETURN(error);
+    }
+#ifndef DBUG_OFF
+    dbug_tmp_restore_column_map(table->read_set, tmp_map);
+#endif
+  }
+
   if (table->s->primary_key != MAX_INDEXES) {
     pkey_info = &(table->key_info[table->s->primary_key]);
   }
@@ -4634,13 +4814,13 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       }
       error = mrn_change_encoding(ctx, field->charset());
       if (error)
-        DBUG_RETURN(error);
+        goto err;
 
       bool on_duplicate_key_update =
         (inserting_with_update && ignoring_duplicated_key);
       if (!on_duplicate_key_update && pkey_info) {
         bool have_pkey = false;
-        for (uint j = 0; j < pkey_info->key_parts; j++) {
+        for (j = 0; j < pkey_info->key_parts; j++) {
           Field *pkey_field = pkey_info->key_part[j].field;
           if (strcmp(pkey_field->field_name, column_name) == 0) {
             char message[MRN_BUFFER_SIZE];
@@ -4667,7 +4847,8 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 #endif
         grn_obj_unlink(ctx, &colbuf);
         my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
-        DBUG_RETURN(ER_ERROR_ON_WRITE);
+        error = ER_ERROR_ON_WRITE;
+        goto err;
       }
 #ifndef DBUG_OFF
       dbug_tmp_restore_column_map(table->read_set, tmp_map);
@@ -4676,8 +4857,28 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   }
   grn_obj_unlink(ctx, &colbuf);
 
-  error = storage_update_row_index(old_data, new_data);
+  if ((error = storage_update_row_index(old_data, new_data)))
+  {
+    goto err;
+  }
 
+  if ((error = storage_delete_row_unique_indexes()))
+  {
+    DBUG_RETURN(error);
+  }
+
+  DBUG_RETURN(0);
+
+err:
+  for (j = 0; j < table->s->keys; j++) {
+    if (j == table->s->primary_key) {
+      continue;
+    }
+    KEY *key_info = &table->key_info[j];
+    if ((key_info->flags & HA_NOSAME) && key_id[j] != GRN_ID_NIL) {
+      grn_table_delete_by_id(ctx, grn_index_tables[j], key_id[j]);
+    }
+  }
   DBUG_RETURN(error);
 }
 
@@ -4768,6 +4969,76 @@ err:
   grn_obj_unlink(ctx, &new_key);
   grn_obj_unlink(ctx, &new_encoded_key);
 
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_update_row_unique_indexes(uchar *new_data,
+                                                  grn_id record_id)
+{
+  int error;
+  uint i;
+  uint n_keys = table->s->keys;
+  MRN_DBUG_ENTER_METHOD();
+
+  for (i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue;
+    }
+
+    KEY *key_info = &table->key_info[i];
+    if (!(key_info->flags & HA_NOSAME)) {
+      continue;
+    }
+
+    grn_obj *index_table = grn_index_tables[i];
+    if (!index_table) {
+      key_id[i] = GRN_ID_NIL;
+      del_key_id[i] = GRN_ID_NIL;
+      continue;
+    }
+
+    if (
+      key_info->key_parts == 1 &&
+      !bitmap_is_set(table->write_set,
+                     key_info->key_part[0].field->field_index)
+    ) {
+      /* no change */
+      key_id[i] = GRN_ID_NIL;
+      del_key_id[i] = GRN_ID_NIL;
+      continue;
+    }
+
+    if ((error = storage_write_row_unique_index(new_data, record_id, key_info,
+                                                index_table, &key_id[i])))
+    {
+      if (error == HA_ERR_FOUND_DUPP_KEY)
+      {
+        if (key_id[i] == del_key_id[i]) {
+          /* no change */
+          key_id[i] = GRN_ID_NIL;
+          del_key_id[i] = GRN_ID_NIL;
+          continue;
+        }
+        dup_key = i;
+        DBUG_PRINT("info", ("mroonga: different key ID: %d record ID: %d,%d",
+          i, key_id[i], del_key_id[i]));
+      }
+      goto err;
+    }
+  }
+  DBUG_RETURN(0);
+
+err:
+  if (i) {
+    mrn_change_encoding(ctx, NULL);
+    do {
+      i--;
+      KEY *key_info = &table->key_info[i];
+      if ((key_info->flags & HA_NOSAME) && key_id[i] != GRN_ID_NIL) {
+        grn_table_delete_by_id(ctx, grn_index_tables[i], key_id[i]);
+      }
+    } while (i);
+  }
   DBUG_RETURN(error);
 }
 
@@ -4874,21 +5145,30 @@ err:
 int ha_mroonga::storage_delete_row(const uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error;
 
   if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
-    DBUG_RETURN(error);
+    DBUG_RETURN(0);
   }
 
+  storage_store_fields_for_prep_update(buf, NULL, record_id);
+  if ((error = storage_prepare_delete_row_unique_indexes(buf, record_id))) {
+    DBUG_RETURN(error);
+  }
   mrn_change_encoding(ctx, NULL);
   grn_table_delete_by_id(ctx, grn_table, record_id);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_WRITE);
   }
-  error = storage_delete_row_index(buf);
-  DBUG_RETURN(error);
+  if (
+    (error = storage_delete_row_index(buf)) ||
+    (error = storage_delete_row_unique_indexes())
+  ) {
+    DBUG_RETURN(error);
+  }
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::storage_delete_row_index(const uchar *buf)
@@ -4949,6 +5229,115 @@ err:
   grn_obj_unlink(ctx, &encoded_key);
   grn_obj_unlink(ctx, &key);
 
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_delete_row_unique_index(grn_obj *index_table,
+                                                grn_id del_key_id)
+{
+  MRN_DBUG_ENTER_METHOD();
+  grn_rc rc = grn_table_delete_by_id(ctx, index_table, del_key_id);
+  if (rc) {
+    my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_WRITE);
+  }
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::storage_delete_row_unique_indexes()
+{
+  int error = 0, tmp_error;
+  uint i;
+  uint n_keys = table->s->keys;
+  MRN_DBUG_ENTER_METHOD();
+
+  for (i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue;
+    }
+
+    KEY *key_info = &table->key_info[i];
+    if ((!(key_info->flags & HA_NOSAME)) || del_key_id[i] == GRN_ID_NIL) {
+      continue;
+    }
+
+    grn_obj *index_table = grn_index_tables[i];
+    if ((tmp_error = storage_delete_row_unique_index(index_table,
+                                                     del_key_id[i])))
+    {
+      error = tmp_error;
+    }
+  }
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_prepare_delete_row_unique_index(const uchar *buf,
+                                                        grn_id record_id,
+                                                        KEY *key_info,
+                                                        grn_obj *index_table,
+                                                        grn_obj *index_column,
+                                                        grn_id *del_key_id)
+{
+  const void *ukey = NULL;
+  uint32 ukey_size = 0;
+  MRN_DBUG_ENTER_METHOD();
+  if (key_info->key_parts == 1) {
+    ukey = grn_obj_get_value_(ctx, index_column, record_id, &ukey_size);
+  } else {
+    mrn_change_encoding(ctx, NULL);
+    uchar key[MRN_MAX_KEY_SIZE];
+    key_copy(key, (uchar *) buf, key_info, key_info->key_length);
+    grn_bulk_space(ctx, &key_buffer, key_info->key_length);
+    ukey = mrn_multiple_column_key_encode(key_info,
+                                          key,
+                                          key_info->key_length,
+                                          (uchar *)(GRN_TEXT_VALUE(
+                                            &key_buffer)),
+                                          (uint *)&ukey_size, FALSE);
+  }
+  *del_key_id = grn_table_get(ctx, index_table, ukey, ukey_size);
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::storage_prepare_delete_row_unique_indexes(const uchar *buf,
+                                                          grn_id record_id)
+{
+  int error = 0, tmp_error;
+  uint i;
+  uint n_keys = table->s->keys;
+  MRN_DBUG_ENTER_METHOD();
+
+  for (i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue;
+    }
+
+    KEY *key_info = &table->key_info[i];
+    if (!(key_info->flags & HA_NOSAME)) {
+      continue;
+    }
+
+    grn_obj *index_table = grn_index_tables[i];
+    if (!index_table) {
+      del_key_id[i] = GRN_ID_NIL;
+      continue;
+    }
+
+    grn_obj *index_column;
+    if (key_info->key_parts == 1) {
+      index_column = grn_columns[key_info->key_part[0].field->field_index];
+    } else {
+      index_column = grn_index_columns[i];
+    }
+    if ((tmp_error = storage_prepare_delete_row_unique_index(buf, record_id,
+                                                             key_info,
+                                                             index_table,
+                                                             index_column,
+                                                             &del_key_id[i])))
+    {
+      error = tmp_error;
+    }
+  }
   DBUG_RETURN(error);
 }
 
@@ -6599,6 +6988,16 @@ void ha_mroonga::clear_indexes()
     grn_index_columns = NULL;
   }
 
+  if (key_id) {
+    free(key_id);
+    key_id = NULL;
+  }
+
+  if (del_key_id) {
+    free(del_key_id);
+    del_key_id = NULL;
+  }
+
   if (key_min) {
     free(key_min);
     key_min = NULL;
@@ -8000,6 +8399,54 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
   DBUG_VOID_RETURN;
 }
 
+void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
+                                                      uchar *new_data,
+                                                      grn_id record_id)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_PRINT("info", ("mroonga: stored record ID: %d", record_id));
+  my_ptrdiff_t ptr_diff_old = PTR_BYTE_DIFF(old_data, table->record[0]);
+  my_ptrdiff_t ptr_diff_new = 0;
+  if (new_data) {
+    ptr_diff_new = PTR_BYTE_DIFF(new_data, table->record[0]);
+  }
+  int i;
+  int n_columns = table->s->fields;
+  for (i = 0; i < n_columns; i++) {
+    Field *field = table->field[i];
+
+    if (
+      !bitmap_is_set(table->read_set, field->field_index) &&
+      !bitmap_is_set(table->write_set, field->field_index) &&
+      bitmap_is_set(&multiple_column_key_bitmap, field->field_index)
+    ) {
+#ifndef DBUG_OFF
+      my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table,
+                                                        table->write_set);
+#endif
+      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));      const char *value;
+      uint32 value_length;
+      value = grn_obj_get_value_(ctx, grn_columns[i], record_id,
+                                 &value_length);
+      // old column
+      field->move_field_offset(ptr_diff_old);
+      storage_store_field(field, value, value_length);
+      field->move_field_offset(-ptr_diff_old);
+      if (new_data) {
+        // new column
+        field->move_field_offset(ptr_diff_new);
+        storage_store_field(field, value, value_length);
+        field->move_field_offset(-ptr_diff_new);
+      }
+#ifndef DBUG_OFF
+      dbug_tmp_restore_column_map(table->write_set, tmp_map);
+#endif
+    }
+  }
+
+  DBUG_VOID_RETURN;
+}
+
 void ha_mroonga::storage_store_fields_by_index(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -8918,7 +9365,10 @@ int ha_mroonga::storage_truncate_index()
 
     KEY key_info = table->key_info[i];
 
-    if (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT)) {
+    if (
+      !(key_info.flags & HA_NOSAME) &&
+      (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT))
+    ) {
       continue;
     }
 
@@ -10071,6 +10521,16 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
       break;
     }
     if (
+      key_info[i].key_parts == 1 &&
+      (key_info[i].flags & HA_NOSAME) &&
+      grn_table_size(ctx, grn_table) !=
+        grn_table_size(ctx, index_tables[i + n_keys])
+    ) {
+      res = HA_ERR_FOUND_DUPP_UNIQUE;
+      i++;
+      break;
+    }
+    if (
       key_info[i].key_parts != 1 &&
       !(key_info[i].flags & HA_FULLTEXT)
     ) {
@@ -10081,6 +10541,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   if (!res && have_multiple_column_index)
   {
     res = storage_add_index_multiple_columns(key_info, num_of_keys,
+                                             index_tables,
                                              index_columns);
   }
   bitmap_set_all(table->read_set);
@@ -10089,6 +10550,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
     for (uint j = 0; j < i; j++) {
       if (index_tables[j + n_keys])
       {
+        grn_obj_remove(ctx, index_columns[j + n_keys]);
         grn_obj_remove(ctx, index_tables[j + n_keys]);
       }
     }
@@ -10105,6 +10567,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
 
 int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
                                                    uint num_of_keys,
+                                                   grn_obj **index_tables,
                                                    grn_obj **index_columns)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -10134,6 +10597,19 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
             current_key_info->key_part[j].null_bit =
               current_key_info->key_part[j].field->null_bit;
           }
+        }
+        grn_id key_id;
+        if ((error = storage_write_row_unique_index(table->record[0],
+                                                    record_id,
+                                                    current_key_info,
+                                                    index_tables[i + n_keys],
+                                                    &key_id)))
+        {
+          if (error == HA_ERR_FOUND_DUPP_KEY)
+          {
+            error = HA_ERR_FOUND_DUPP_UNIQUE;
+          }
+          break;
         }
         if ((error = storage_write_row_index(table->record[0],
                                              record_id,

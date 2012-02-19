@@ -158,6 +158,9 @@ public:
   MEM_ROOT  *mem_root_for_clone;
   grn_obj   key_buffer;
   grn_id    record_id;
+  grn_id    *key_id;
+  grn_id    *del_key_id;
+  MY_BITMAP multiple_column_key_bitmap;
 
 private:
   grn_ctx *ctx;
@@ -483,6 +486,9 @@ private:
                                     const char *value, uint value_length);
   void storage_store_field(Field *field, const char *value, uint value_length);
   void storage_store_fields(uchar *buf, grn_id record_id);
+  void storage_store_fields_for_prep_update(const uchar *old_data,
+                                            uchar *new_data,
+                                            grn_id record_id);
   void storage_store_fields_by_index(uchar *buf);
 
   int storage_encode_key_time(Field *field, const uchar *key,
@@ -568,15 +574,30 @@ private:
   int storage_write_row_index(uchar *buf, grn_id record_id,
                               KEY *key_info, grn_obj *index_column);
   int storage_write_row_indexes(uchar *buf, grn_id record_id);
+  int storage_write_row_unique_index(uchar *buf, grn_id record_id,
+                                     KEY *key_info, grn_obj *index_table,
+                                     grn_id *key_id);
+  int storage_write_row_unique_indexes(uchar *buf, grn_id record_id);
   int wrapper_get_record_id(uchar *data, grn_id *record_id, const char *context);
   int wrapper_update_row(const uchar *old_data, uchar *new_data);
   int wrapper_update_row_index(const uchar *old_data, uchar *new_data);
   int storage_update_row(const uchar *old_data, uchar *new_data);
   int storage_update_row_index(const uchar *old_data, uchar *new_data);
+  int storage_update_row_unique_indexes(uchar *new_data, grn_id record_id);
   int wrapper_delete_row(const uchar *buf);
   int wrapper_delete_row_index(const uchar *buf);
   int storage_delete_row(const uchar *buf);
   int storage_delete_row_index(const uchar *buf);
+  int storage_delete_row_unique_index(grn_obj *index_table, grn_id del_key_id);
+  int storage_delete_row_unique_indexes();
+  int storage_prepare_delete_row_unique_index(const uchar *buf,
+                                              grn_id record_id,
+                                              KEY *key_info,
+                                              grn_obj *index_table,
+                                              grn_obj *index_column,
+                                              grn_id *del_key_id);
+  int storage_prepare_delete_row_unique_indexes(const uchar *buf,
+                                                grn_id record_id);
   uint wrapper_max_supported_key_parts();
   uint storage_max_supported_key_parts();
   ulonglong wrapper_table_flags() const;
@@ -779,6 +800,7 @@ private:
   int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
 #endif
   int storage_add_index_multiple_columns(KEY *key_info, uint num_of_keys,
+                                         grn_obj **index_tables,
                                          grn_obj **index_columns);
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   int wrapper_final_add_index(handler_add_index *add, bool commit);
