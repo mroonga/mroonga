@@ -318,11 +318,12 @@ static char *mrn_index_table_name_create(const char *table_name,
                                          const char *index_name,
                                          char *dest)
 {
+  MRN_DBUG_ENTER_FUNCTION();
   char encode_name[MRN_MAX_PATH_SIZE];
-  DBUG_ENTER("mrn_index_table_name_create");
   mrn_encode(encode_name, encode_name + MRN_MAX_PATH_SIZE,
              index_name, index_name + strlen(index_name));
-  DBUG_RETURN(mrn_index_table_name_gen(table_name, encode_name, dest));
+  mrn_index_table_name_gen(table_name, encode_name, dest);
+  DBUG_RETURN(dest);
 }
 
 #if !defined(DBUG_OFF) && !defined(_lint)
