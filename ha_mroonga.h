@@ -255,10 +255,11 @@ public:
   int update_row(const uchar *old_data, uchar *new_data);
   int delete_row(const uchar *buf);
 
-  uint max_supported_record_length() const { return HA_MAX_REC_LENGTH; }
-  uint max_supported_keys()          const { return 100; }
+  uint max_supported_record_length()   const { return HA_MAX_REC_LENGTH; }
+  uint max_supported_keys()            const { return 100; }
   uint max_supported_key_parts();
-  uint max_supported_key_length()    const { return MAX_KEY_LENGTH; }
+  uint max_supported_key_length()      const { return MAX_KEY_LENGTH; }
+  uint max_supported_key_part_length() const { return MAX_KEY_LENGTH; }
 
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
   int index_init(uint idx, bool sorted);
@@ -520,7 +521,9 @@ private:
                                grn_obj **index_tables,
                                MRN_SHARE *tmp_share);
   int wrapper_create_index(const char *name, TABLE *table,
-                           HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
+                           HA_CREATE_INFO *info, MRN_SHARE *tmp_share,
+                           char *grn_table_name);
+  int wrapper_create_index_check(handler *hnd, TABLE *table);
   int storage_create_validate_pseudo_column(TABLE *table);
   int storage_create_validate_index(TABLE *table);
   int storage_create_index(TABLE *table, const char *grn_table_name,

@@ -2021,7 +2021,9 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     DBUG_RETURN(ER_REQUIRES_PRIMARY_KEY);
   }
 
-  error = wrapper_create_index(name, table, info, tmp_share);
+  char grn_table_name[MRN_MAX_PATH_SIZE];
+  mrn_table_name_gen(name, grn_table_name);
+  error = wrapper_create_index(name, table, info, tmp_share, grn_table_name);
   if (error)
     DBUG_RETURN(error);
 
@@ -2049,11 +2051,18 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
   hnd->init();
-  error = hnd->ha_create(name, table, info);
+  error = wrapper_create_index_check(hnd, table);
+  if (!error) {
+    error = hnd->ha_create(name, table, info);
+  }
   MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   share = NULL;
   delete hnd;
+
+  if (error) {
+    wrapper_delete_index(name, tmp_share, grn_table_name);
+  }
 
   if (wrap_key_info)
   {
@@ -2222,7 +2231,9 @@ int ha_mroonga::wrapper_create_index_geo(grn_obj *grn_table,
 }
 
 int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
-                                     HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
+                                     HA_CREATE_INFO *info,
+                                     MRN_SHARE *tmp_share,
+                                     char *grn_table_name)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -2236,8 +2247,6 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
     DBUG_RETURN(error);
 
   grn_obj *grn_table;
-  char grn_table_name[MRN_MAX_PATH_SIZE];
-  mrn_table_name_gen(name, grn_table_name);
   char *grn_table_path = NULL;     // we don't specify path
   grn_obj *pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
   grn_obj *pkey_value_type = NULL; // we don't use this
@@ -2282,6 +2291,24 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   }
 
   DBUG_RETURN(error);
+}
+
+int ha_mroonga::wrapper_create_index_check(handler *hnd, TABLE *table)
+{
+  MRN_DBUG_ENTER_METHOD();
+  uint i, j;
+  for (i = 0; i < table->s->keys; i++) {
+    KEY *key_info = &table->s->key_info[i];
+    KEY_PART_INFO *key_part = key_info->key_part;
+    for (j = 0; j < key_info->key_parts; j++) {
+      if (key_part[j].length > hnd->max_key_part_length())
+      {
+        my_error(ER_TOO_LONG_KEY, MYF(0), hnd->max_key_part_length());
+        DBUG_RETURN(ER_TOO_LONG_KEY);
+      }
+    }
+  }
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::storage_create(const char *name, TABLE *table,
@@ -9972,7 +9999,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
   }
   if (
     (res = wrapper_create_index(table_share->normalized_path.str, table,
-      NULL, share)) ||
+      NULL, share, table_name)) ||
     (res = wrapper_open_indexes(table_share->normalized_path.str, false))
   )
     DBUG_RETURN(res);
