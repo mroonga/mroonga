@@ -2895,6 +2895,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
     }
   }
   ref_length = wrap_handler->ref_length;
+  key_used_on_scan = wrap_handler->key_used_on_scan;
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   init();
@@ -11053,6 +11054,99 @@ void ha_mroonga::set_pk_bitmap()
   for (j = 0; j < key_info.key_parts; j++) {
     Field *field = key_info.key_part[j].field;
     bitmap_set_bit(table->read_set, field->field_index);
+  }
+  DBUG_VOID_RETURN;
+}
+
+bool ha_mroonga::wrapper_was_semi_consistent_read()
+{
+  bool res;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->was_semi_consistent_read();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+bool ha_mroonga::storage_was_semi_consistent_read()
+{
+  bool res;
+  MRN_DBUG_ENTER_METHOD();
+  res = handler::was_semi_consistent_read();
+  DBUG_RETURN(res);
+}
+
+bool ha_mroonga::was_semi_consistent_read()
+{
+  bool res;
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    res = wrapper_was_semi_consistent_read();
+  } else {
+    res = storage_was_semi_consistent_read();
+  }
+  DBUG_RETURN(res);
+}
+
+void ha_mroonga::wrapper_try_semi_consistent_read(bool yes)
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->try_semi_consistent_read(yes);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_try_semi_consistent_read(bool yes)
+{
+  MRN_DBUG_ENTER_METHOD();
+  handler::try_semi_consistent_read(yes);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::try_semi_consistent_read(bool yes)
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    wrapper_try_semi_consistent_read(yes);
+  } else {
+    storage_try_semi_consistent_read(yes);
+  }
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::wrapper_unlock_row()
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->unlock_row();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_unlock_row()
+{
+  MRN_DBUG_ENTER_METHOD();
+  handler::unlock_row();
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::unlock_row()
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    wrapper_unlock_row();
+  } else {
+    storage_unlock_row();
   }
   DBUG_VOID_RETURN;
 }

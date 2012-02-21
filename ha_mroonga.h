@@ -373,6 +373,9 @@ public:
   void restore_auto_increment(ulonglong prev_insert_id);
   void release_auto_increment();
   int reset_auto_increment(ulonglong value);
+  bool was_semi_consistent_read();
+  void try_semi_consistent_read(bool yes);
+  void unlock_row();
   int start_stmt(THD *thd, thr_lock_type lock_type);
 
 protected:
@@ -833,6 +836,12 @@ private:
   void storage_release_auto_increment();
   int wrapper_reset_auto_increment(ulonglong value);
   int storage_reset_auto_increment(ulonglong value);
+  bool wrapper_was_semi_consistent_read();
+  bool storage_was_semi_consistent_read();
+  void wrapper_try_semi_consistent_read(bool yes);
+  void storage_try_semi_consistent_read(bool yes);
+  void wrapper_unlock_row();
+  void storage_unlock_row();
   int wrapper_start_stmt(THD *thd, thr_lock_type lock_type);
   int storage_start_stmt(THD *thd, thr_lock_type lock_type);
   void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
