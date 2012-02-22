@@ -9795,12 +9795,6 @@ int ha_mroonga::rename_table(const char *from, const char *to)
     DBUG_RETURN(error);
   }
 
-  if (to_table_name[0] == '#')
-  {
-    if ((error = alter_share_add(to, tmp_table_share)))
-      DBUG_RETURN(error);
-  }
-
   if (tmp_share->wrapper_mode)
   {
     error = wrapper_rename_table(from, to, tmp_share,
@@ -9811,8 +9805,12 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   }
 
   mrn_free_share(tmp_share);
-  if (to_table_name[0] != '#')
-  {
+  if (!error && to_table_name[0] == '#') {
+    if ((error = alter_share_add(to, tmp_table_share)))
+      DBUG_RETURN(error);
+  } else if (error && from_table_name[0] == '#') {
+    alter_share_add(from, tmp_table_share);
+  } else {
     mrn_open_mutex_lock();
     mrn_free_tmp_table_share(tmp_table_share);
     mrn_open_mutex_unlock();
