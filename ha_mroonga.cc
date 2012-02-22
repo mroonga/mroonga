@@ -8520,19 +8520,37 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
   int error = 0;
   long long int time;
 #ifdef MRN_MARIADB_P
-  // TODO: remove me when MariaDB becomes based on MySQL 5.6.
-  // This implementation may be costful.
-  Field_time_hires *time_hires_field = (Field_time_hires *)field;
-  Field_time_hires unpacker((uchar *)key,
-                            (uchar *)(key - 1),
-                            time_hires_field->null_bit,
-                            time_hires_field->unireg_check,
-                            time_hires_field->field_name,
-                            time_hires_field->decimals(),
-                            time_hires_field->charset());
   MYSQL_TIME mysql_time;
-  uint fuzzy_date = 0;
-  unpacker.get_date(&mysql_time, fuzzy_date);
+  if (field->decimals() == 0) {
+    long long int packed_time = sint3korr(key);
+    mysql_time.neg = false;
+    if (packed_time < 0) {
+      mysql_time.neg = true;
+      packed_time = -packed_time;
+    }
+    mysql_time.year = 0;
+    mysql_time.month = 0;
+    mysql_time.day = 0;
+    mysql_time.hour = (int)(packed_time / 10000);
+    long long int minute_part = packed_time - mysql_time.hour * 10000;
+    mysql_time.minute = (int)(minute_part / 100);
+    mysql_time.second = (int)(minute_part % 100);
+    mysql_time.second_part = 0;
+    mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
+  } else {
+    // TODO: remove me when MariaDB becomes based on MySQL 5.6.
+    // This implementation may be costful.
+    Field_time_hires *time_hires_field = (Field_time_hires *)field;
+    Field_time_hires unpacker((uchar *)key,
+                              (uchar *)(key - 1),
+                              time_hires_field->null_bit,
+                              time_hires_field->unireg_check,
+                              time_hires_field->field_name,
+                              time_hires_field->decimals(),
+                              time_hires_field->charset());
+    uint fuzzy_date = 0;
+    unpacker.get_date(&mysql_time, fuzzy_date);
+  }
   time = mrn_mysql_time_to_grn_time(&mysql_time);
 #else
   int mysql_time = (int)sint3korr(key);
