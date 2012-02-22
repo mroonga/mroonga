@@ -165,12 +165,12 @@ char *mrn_table_name_gen_for_mysql(const char *arg, char *dest)
 }
 
 /**
- * "${table}" ==> "${table}#${index_name}"
+ * "${table}" ==> "${table}-${index_name}"
  */
 char *mrn_index_table_name_gen(const char *table_name,
                                const char *index_name,
                                char *dest)
 {
-  snprintf(dest, MRN_MAX_PATH_SIZE, "%s#%s", table_name, index_name);
+  snprintf(dest, MRN_MAX_PATH_SIZE, "%s-%s", table_name, index_name);
   return dest;
 }

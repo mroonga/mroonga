@@ -6580,19 +6580,10 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   info->primary_key_info = &(table->key_info[table_share->primary_key]);
 
   grn_obj *index_column = grn_index_columns[key_nr];
-  char index_column_name[GRN_TABLE_MAX_KEY_SIZE];
-  int index_column_name_length;
-  index_column_name_length = grn_obj_name(info->ctx,
-                                          index_column,
-                                          index_column_name,
-                                          GRN_TABLE_MAX_KEY_SIZE);
   grn_obj *match_columns, *match_columns_variable;
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table, match_columns,
                             match_columns_variable);
-  grn_expr_parse(info->ctx, match_columns,
-                 index_column_name, index_column_name_length,
-                 NULL, GRN_OP_MATCH, GRN_OP_AND,
-                 GRN_EXPR_SYNTAX_SCRIPT);
+  grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
 
   grn_obj *expression, *expression_variable;
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table,
