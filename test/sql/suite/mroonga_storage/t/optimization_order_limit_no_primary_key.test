@@ -20,6 +20,8 @@
 DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
+FLUSH STATUS;
+
 SET NAMES UTF8;
 CREATE TABLE diaries (
   id INT UNSIGNED NOT NULL,
