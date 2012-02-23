@@ -404,6 +404,15 @@ protected:
 #endif
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   bool primary_key_is_clustered();
+  bool is_fk_defined_on_table_or_index(uint index);
+  char *get_foreign_key_create_info();
+  char *get_tablespace_name(THD *thd, char *name, uint name_len);
+  bool can_switch_engines();
+  int get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+  int get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+  uint referenced_by_foreign_key();
+  void init_table_handle_for_HANDLER();
+  void free_foreign_key_create_info(char* str);
 
 private:
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
@@ -848,6 +857,24 @@ private:
   void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   bool wrapper_primary_key_is_clustered();
   bool storage_primary_key_is_clustered();
+  bool wrapper_is_fk_defined_on_table_or_index(uint index);
+  bool storage_is_fk_defined_on_table_or_index(uint index);
+  char *wrapper_get_foreign_key_create_info();
+  char *storage_get_foreign_key_create_info();
+  char *wrapper_get_tablespace_name(THD *thd, char *name, uint name_len);
+  char *storage_get_tablespace_name(THD *thd, char *name, uint name_len);
+  bool wrapper_can_switch_engines();
+  bool storage_can_switch_engines();
+  int wrapper_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+  int storage_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+  int wrapper_get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+  int storage_get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+  uint wrapper_referenced_by_foreign_key();
+  uint storage_referenced_by_foreign_key();
+  void wrapper_init_table_handle_for_HANDLER();
+  void storage_init_table_handle_for_HANDLER();
+  void wrapper_free_foreign_key_create_info(char* str);
+  void storage_free_foreign_key_create_info(char* str);
 };
 
 #ifdef __cplusplus
