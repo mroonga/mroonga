@@ -1110,7 +1110,9 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
       break;
     }
   default:
-    error = HA_ERR_UNSUPPORTED;
+    my_printf_error(ER_MRN_GEOMETRY_NOT_SUPPORT_NUM,
+      ER_MRN_GEOMETRY_NOT_SUPPORT_STR, MYF(0));
+    error = ER_MRN_GEOMETRY_NOT_SUPPORT_NUM;
     break;
   }
   delete geometry;

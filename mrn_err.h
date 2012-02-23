@@ -22,5 +22,7 @@
 #define ER_MRN_INVALID_TABLE_PARAM_STR "The table parameter '%-.64s' is invalid"
 #define ER_MRN_CHARSET_NOT_SUPPORT_NUM 16502
 #define ER_MRN_CHARSET_NOT_SUPPORT_STR "The character set '%s[%s]' is not supported by groonga"
+#define ER_MRN_GEOMETRY_NOT_SUPPORT_NUM 16503
+#define ER_MRN_GEOMETRY_NOT_SUPPORT_STR "This geometry type is not supported. Groonga is supported point only"
 
 #endif /* _mrn_err_h */
