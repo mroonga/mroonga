@@ -2103,8 +2103,7 @@ int ha_mroonga::wrapper_create_index_fulltext_validate(KEY *key_info)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
-                                              const char *grn_table_name,
+int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
                                               int i,
                                               KEY *key_info,
                                               grn_obj **index_tables,
@@ -2180,8 +2179,7 @@ int ha_mroonga::wrapper_create_index_fulltext(grn_obj *grn_table,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_create_index_geo(grn_obj *grn_table,
-                                         const char *grn_table_name,
+int ha_mroonga::wrapper_create_index_geo(const char *grn_table_name,
                                          int i,
                                          KEY *key_info,
                                          grn_obj **index_tables,
@@ -2249,20 +2247,24 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   if (error)
     DBUG_RETURN(error);
 
-  grn_obj *grn_table;
+  grn_obj *grn_index_table;
   char *grn_table_path = NULL;     // we don't specify path
   grn_obj *pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
   grn_obj *pkey_value_type = NULL; // we don't use this
   grn_obj_flags grn_table_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_HASH_KEY;
 
-  grn_table = grn_table_create(ctx, grn_table_name, strlen(grn_table_name),
-                               grn_table_path, grn_table_flags,
-                               pkey_type, pkey_value_type);
+  grn_index_table = grn_table_create(ctx, grn_table_name, strlen(grn_table_name),
+                                     grn_table_path, grn_table_flags,
+                                     pkey_type, pkey_value_type);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
+  if (grn_table) {
+    grn_obj_unlink(ctx, grn_table);
+  }
+  grn_table = grn_index_table;
 
   uint i;
   uint n_keys = table->s->keys;
@@ -2272,11 +2274,11 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 
     KEY key_info = table->s->key_info[i];
     if (key_info.algorithm == HA_KEY_ALG_FULLTEXT) {
-      error = wrapper_create_index_fulltext(grn_table, grn_table_name,
+      error = wrapper_create_index_fulltext(grn_table_name,
                                             i, &key_info,
                                             index_tables, tmp_share);
     } else if (mrn_is_geo_key(&key_info)) {
-      error = wrapper_create_index_geo(grn_table, grn_table_name,
+      error = wrapper_create_index_geo(grn_table_name,
                                        i, &key_info,
                                        index_tables, tmp_share);
     }
@@ -2291,6 +2293,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
       }
     }
     grn_obj_remove(ctx, grn_table);
+    grn_table = NULL;
   }
 
   DBUG_RETURN(error);
@@ -9994,9 +9997,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
   bitmap_clear_all(table->read_set);
   clear_indexes();
   remove_grn_obj_force(table_name);
-  if (grn_table) {
-    grn_table = NULL;
-  }
+  grn_table = NULL;
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
   for (i = 0; i < n_keys; i++) {
     if (!(key_info[i].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[i])) {
@@ -10382,7 +10383,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
     index_tables[i + n_keys] = NULL;
     if (
       (key_info[i].flags & HA_FULLTEXT) &&
-      (res = wrapper_create_index_fulltext(grn_table, grn_table_name,
+      (res = wrapper_create_index_fulltext(grn_table_name,
                                            i + n_keys,
                                            &key_info[i], index_tables,
                                            tmp_share))
@@ -10390,7 +10391,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       break;
     } else if (
       mrn_is_geo_key(&key_info[i]) &&
-      (res = wrapper_create_index_geo(grn_table, grn_table_name,
+      (res = wrapper_create_index_geo(grn_table_name,
                                       i + n_keys, &key_info[i],
                                       index_tables, tmp_share))
     ) {
