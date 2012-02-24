@@ -10012,11 +10012,12 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
     remove_grn_obj_force(index_name);
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
   }
-  if (
-    (error = wrapper_create_index(table_share->normalized_path.str, table,
-      NULL, share, table_name)) ||
-    (error = wrapper_open_indexes(table_share->normalized_path.str, false))
-  )
+  error = wrapper_create_index(table_share->normalized_path.str, table,
+                               NULL, share, table_name);
+  if (error)
+    DBUG_RETURN(error);
+  error = wrapper_open_indexes(table_share->normalized_path.str, false);
+  if (error)
     DBUG_RETURN(error);
   if (
     (mrn_lock_type != F_UNLCK || !(error = wrapper_external_lock(thd, F_WRLCK)))
