@@ -10030,13 +10030,14 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
       grn_bulk_space(ctx, &key, p_key_info->key_length);
       while (!(res = wrapper_rnd_next(table->record[0])))
       {
-        key_copy((uchar *) (GRN_TEXT_VALUE(&key)), table->record[0],
-          p_key_info, p_key_info->key_length);
+        key_copy((uchar *)(GRN_TEXT_VALUE(&key)), table->record[0],
+                 p_key_info, p_key_info->key_length);
         int added;
         grn_id record_id;
         mrn_change_encoding(ctx, NULL);
         record_id = grn_table_add(ctx, grn_table,
-          GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key), &added);
+                                  GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key),
+                                  &added);
         if (record_id == GRN_ID_NIL)
         {
           char error_message[MRN_MESSAGE_BUFFER_SIZE];
