@@ -9981,7 +9981,7 @@ int ha_mroonga::check(THD* thd, HA_CHECK_OPT* check_opt)
 
 int ha_mroonga::wrapper_recreate_indexes(THD *thd)
 {
-  int res;
+  int error;
   uint i, n_keys = table_share->keys;
   KEY *p_key_info = &table->key_info[table_share->primary_key];
   KEY *tmp_key_info;
@@ -10013,22 +10013,22 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
   }
   if (
-    (res = wrapper_create_index(table_share->normalized_path.str, table,
+    (error = wrapper_create_index(table_share->normalized_path.str, table,
       NULL, share, table_name)) ||
-    (res = wrapper_open_indexes(table_share->normalized_path.str, false))
+    (error = wrapper_open_indexes(table_share->normalized_path.str, false))
   )
-    DBUG_RETURN(res);
+    DBUG_RETURN(error);
   if (
-    (mrn_lock_type != F_UNLCK || !(res = wrapper_external_lock(thd, F_WRLCK)))
+    (mrn_lock_type != F_UNLCK || !(error = wrapper_external_lock(thd, F_WRLCK)))
   ) {
     if (
-      !(res = wrapper_start_stmt(thd, thr_lock_data.type)) &&
-      !(res = wrapper_rnd_init(TRUE))
+      !(error = wrapper_start_stmt(thd, thr_lock_data.type)) &&
+      !(error = wrapper_rnd_init(TRUE))
     ) {
       grn_obj key;
       GRN_TEXT_INIT(&key, 0);
       grn_bulk_space(ctx, &key, p_key_info->key_length);
-      while (!(res = wrapper_rnd_next(table->record[0])))
+      while (!(error = wrapper_rnd_next(table->record[0])))
       {
         key_copy((uchar *)(GRN_TEXT_VALUE(&key)), table->record[0],
                  p_key_info, p_key_info->key_length);
@@ -10044,11 +10044,11 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
           snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
                    "failed to add a new record into groonga: key=<%.*s>",
                    (int) GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
-          res = ER_ERROR_ON_WRITE;
-          my_message(res, error_message, MYF(0));
+          error = ER_ERROR_ON_WRITE;
+          my_message(error, error_message, MYF(0));
         }
         grn_obj_unlink(ctx, &key);
-        if (res)
+        if (error)
           break;
 
         uint k;
@@ -10065,8 +10065,8 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
 
             if (field->is_null())
               continue;
-            res = mrn_change_encoding(ctx, field->charset());
-            if (res)
+            error = mrn_change_encoding(ctx, field->charset());
+            if (error)
               break;
 
             generic_store_bulk(field, &new_value_buffer);
@@ -10077,27 +10077,27 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
                                          NULL, &new_value_buffer);
             grn_obj_unlink(ctx, index_column);
             if (rc) {
-              res = ER_ERROR_ON_WRITE;
-              my_message(res, ctx->errbuf, MYF(0));
+              error = ER_ERROR_ON_WRITE;
+              my_message(error, ctx->errbuf, MYF(0));
               break;
             }
           }
-          if (res)
+          if (error)
             break;
         }
-        if (res)
+        if (error)
           break;
       }
-      if (res != HA_ERR_END_OF_FILE)
+      if (error != HA_ERR_END_OF_FILE)
         wrapper_rnd_end();
       else
-        res = wrapper_rnd_end();
+        error = wrapper_rnd_end();
     }
     if (mrn_lock_type == F_UNLCK)
       wrapper_external_lock(thd, F_UNLCK);
   }
   bitmap_set_all(table->read_set);
-  DBUG_RETURN(res);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt)
