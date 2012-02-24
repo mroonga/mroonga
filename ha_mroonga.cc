@@ -1836,6 +1836,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   ctx = grn_ctx_open(0);
   mrn_change_encoding(ctx, system_charset_info);
   grn_ctx_use(ctx, mrn_db);
+  grn_table = NULL;
   grn_columns = NULL;
   cursor = NULL;
   index_table_cursor = NULL;
