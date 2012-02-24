@@ -9994,6 +9994,9 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
   bitmap_clear_all(table->read_set);
   clear_indexes();
   remove_grn_obj_force(table_name);
+  if (grn_table) {
+    grn_table = NULL;
+  }
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
   for (i = 0; i < n_keys; i++) {
     if (!(key_info[i].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[i])) {
