@@ -9983,8 +9983,9 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
 {
   int res;
   uint i, n_keys = table_share->keys;
-  KEY *p_key_info = &table->key_info[table_share->primary_key], *tmp_key_info,
-    *key_info = table->key_info;
+  KEY *p_key_info = &table->key_info[table_share->primary_key];
+  KEY *tmp_key_info;
+  KEY *key_info = table->key_info;
   char db_name[MRN_MAX_PATH_SIZE];
   char table_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
