@@ -1,12 +1,11 @@
-drop table if exists listing;
-set names utf8;
-create table scores (
-id int primary key auto_increment not null,
-name char(30) not null,
-score int not null,
-index property (score, name)
-) default charset utf8;
-show create table scores;
+DROP TABLE IF EXISTS listing;
+CREATE TABLE scores (
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+name CHAR(30) NOT NULL,
+score INT NOT NULL,
+INDEX property (score, name)
+) DEFAULT CHARSET=UTF8;
+SHOW CREATE TABLE scores;
 Table	Create Table
 scores	CREATE TABLE `scores` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -15,24 +14,24 @@ scores	CREATE TABLE `scores` (
   PRIMARY KEY (`id`),
   KEY `property` (`score`,`name`)
 ) ENGINE=mroonga DEFAULT CHARSET=utf8
-insert into scores (name, score) values("Taro Yamada", 29);
-insert into scores (name, score) values("Taro Yamada", -12);
-insert into scores (name, score) values("Jiro Yamada", 27);
-insert into scores (name, score) values("Taro Yamada", 10);
-select * from scores;
+INSERT INTO scores (name, score) VALUES("Taro Yamada", 29);
+INSERT INTO scores (name, score) VALUES("Taro Yamada", -12);
+INSERT INTO scores (name, score) VALUES("Jiro Yamada", 27);
+INSERT INTO scores (name, score) VALUES("Taro Yamada", 10);
+SELECT * FROM scores;
 id	name	score
 1	Taro Yamada	29
 2	Taro Yamada	-12
 3	Jiro Yamada	27
 4	Taro Yamada	10
-select * from scores where score = 29;
+SELECT * FROM scores WHERE score = 29;
 id	name	score
 1	Taro Yamada	29
-select * from scores where score = 29 and name = "Taro Yamada";
+SELECT * FROM scores WHERE score = 29 AND name = "Taro Yamada";
 id	name	score
 1	Taro Yamada	29
-select * from scores where (score >= -12 and score < 29) and name = "Taro Yamada";
+SELECT * FROM scores WHERE (score >= -12 AND score < 29) AND name = "Taro Yamada";
 id	name	score
 2	Taro Yamada	-12
 4	Taro Yamada	10
-drop table scores;
+DROP TABLE scores;
