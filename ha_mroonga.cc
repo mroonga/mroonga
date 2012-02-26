@@ -1174,9 +1174,10 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
     float float_value;
     double double_value;
     switch (field->real_type()) {
-    case MYSQL_TYPE_BIT:
-    case MYSQL_TYPE_ENUM:
-    case MYSQL_TYPE_SET:
+    case MYSQL_TYPE_DECIMAL:
+      data_type = TYPE_BYTE_SEQUENCE;
+      data_size = key_part.length;
+      break;
     case MYSQL_TYPE_TINY:
       data_type = TYPE_NUMBER;
       data_size = 1;
@@ -1185,17 +1186,9 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
       data_type = TYPE_NUMBER;
       data_size = 2;
       break;
-    case MYSQL_TYPE_INT24:
-      data_type = TYPE_NUMBER;
-      data_size = 3;
-      break;
     case MYSQL_TYPE_LONG:
       data_type = TYPE_NUMBER;
       data_size = 4;
-      break;
-    case MYSQL_TYPE_LONGLONG:
-      data_type = TYPE_NUMBER;
-      data_size = 8;
       break;
     case MYSQL_TYPE_FLOAT:
       data_type = TYPE_FLOAT;
@@ -1207,24 +1200,95 @@ static uchar *mrn_multiple_column_key_encode(KEY *key_info,
       data_size = 8;
       float8get(double_value, current_key);
       break;
-    case MYSQL_TYPE_TIME:
-    case MYSQL_TYPE_YEAR:
+    case MYSQL_TYPE_NULL:
+      data_type = TYPE_NUMBER;
+      data_size = 1;
+      break;
+    case MYSQL_TYPE_TIMESTAMP:
+      // TODO
+      data_type = TYPE_BYTE_SEQUENCE;
+      data_size = key_part.length;
+      break;
+    case MYSQL_TYPE_LONGLONG:
+      data_type = TYPE_NUMBER;
+      data_size = 8;
+      break;
+    case MYSQL_TYPE_INT24:
+      data_type = TYPE_NUMBER;
+      data_size = 3;
+      break;
     case MYSQL_TYPE_DATE:
+    case MYSQL_TYPE_TIME:
     case MYSQL_TYPE_DATETIME:
+    case MYSQL_TYPE_YEAR:
+    case MYSQL_TYPE_NEWDATE:
       data_type = TYPE_LONG_LONG_NUMBER;
       long_long_value = (long long int)sint8korr(current_key);
       data_size = 8;
       break;
-    case MYSQL_TYPE_STRING:
-      data_type = TYPE_BYTE_SEQUENCE;
-      data_size = key_part.length;
-      break;
     case MYSQL_TYPE_VARCHAR:
-    case MYSQL_TYPE_BLOB:
       data_type = TYPE_BYTE_SEQUENCE;
       data_size = HA_KEY_BLOB_LENGTH + key_part.length;
       break;
-    default:
+    case MYSQL_TYPE_BIT:
+      // TODO
+      data_type = TYPE_NUMBER;
+      data_size = 1;
+      break;
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+    case MYSQL_TYPE_TIMESTAMP2:
+      // TODO
+      data_type = TYPE_LONG_LONG_NUMBER;
+      long_long_value = (long long int)sint8korr(current_key);
+      data_size = 8;
+      break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+    case MYSQL_TYPE_DATETIME2:
+      // TODO
+      data_type = TYPE_LONG_LONG_NUMBER;
+      long_long_value = (long long int)sint8korr(current_key);
+      data_size = 8;
+      break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+    case MYSQL_TYPE_TIME2:
+      // TODO
+      data_type = TYPE_LONG_LONG_NUMBER;
+      long_long_value = (long long int)sint8korr(current_key);
+      data_size = 8;
+      break;
+#endif
+    case MYSQL_TYPE_NEWDECIMAL:
+      data_type = TYPE_BYTE_SEQUENCE;
+      data_size = key_part.length;
+      break;
+    case MYSQL_TYPE_ENUM:
+      // TODO
+      data_type = TYPE_NUMBER;
+      data_size = 1;
+      break;
+    case MYSQL_TYPE_SET:
+      // TODO
+      data_type = TYPE_NUMBER;
+      data_size = 1;
+      break;
+    case MYSQL_TYPE_TINY_BLOB:
+    case MYSQL_TYPE_MEDIUM_BLOB:
+    case MYSQL_TYPE_LONG_BLOB:
+    case MYSQL_TYPE_BLOB:
+      // TODO
+      data_type = TYPE_BYTE_SEQUENCE;
+      data_size = HA_KEY_BLOB_LENGTH + key_part.length;
+      break;
+    case MYSQL_TYPE_VAR_STRING:
+    case MYSQL_TYPE_STRING:
+      // TODO
+      data_type = TYPE_BYTE_SEQUENCE;
+      data_size = key_part.length;
+      break;
+    case MYSQL_TYPE_GEOMETRY:
+      // TODO
       data_type = TYPE_BYTE_SEQUENCE;
       data_size = key_part.length;
       break;
