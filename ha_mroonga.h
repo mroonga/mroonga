@@ -516,6 +516,10 @@ private:
                                uchar *buf, uint *size);
 #endif
   int storage_encode_key(Field *field, const uchar *key, uchar *buf, uint *size);
+  int storage_encode_multiple_column_key(KEY *key_info,
+                                         const uchar *key, uint key_length,
+                                         uchar *buffer, uint *encoded_length,
+                                         bool decode);
 
   void set_pk_bitmap();
   int wrapper_create(const char *name, TABLE *table,
