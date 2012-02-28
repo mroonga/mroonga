@@ -99,7 +99,7 @@ eval $command || \
 %doc mysql-mroonga-doc/*
 
 %changelog
-* Wed Feb 29 2012 Kouhei Sutou <kou@clear-code.com> - 1.30-0
+* Wed Feb 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.00-0
 - new upstream release.
 - always install/uninstall plugin.
 - use MySQL 5.5.20.
