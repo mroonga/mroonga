@@ -8606,17 +8606,18 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
     }
 
     enum {
+      TYPE_UNKNOWN,
       TYPE_LONG_LONG_NUMBER,
       TYPE_NUMBER,
       TYPE_FLOAT,
       TYPE_DOUBLE,
       TYPE_BYTE_SEQUENCE
-    } data_type;
-    uint32 data_size;
-    int int_value;
-    long long int long_long_value;
-    float float_value;
-    double double_value;
+    } data_type = TYPE_UNKNOWN;
+    uint32 data_size = 0;
+    int int_value = 0;
+    long long int long_long_value = 0;
+    float float_value = 0.0;
+    double double_value = 0.0;
     switch (field->real_type()) {
     case MYSQL_TYPE_DECIMAL:
       data_type = TYPE_BYTE_SEQUENCE;
@@ -8739,6 +8740,11 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
     }
 
     switch (data_type) {
+    case TYPE_UNKNOWN:
+      // TODO: This will not be happen. This is just for
+      // suppressing warnings by gcc -O2. :<
+      error = HA_ERR_UNSUPPORTED;
+      break;
     case TYPE_LONG_LONG_NUMBER:
       if (decode)
         *((uint8_t *)(&long_long_value)) ^= 0x80;
@@ -8797,6 +8803,10 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       break;
     case TYPE_BYTE_SEQUENCE:
       memcpy(current_buffer, current_key, data_size);
+      break;
+    }
+
+    if (error) {
       break;
     }
 
