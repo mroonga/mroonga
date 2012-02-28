@@ -75,8 +75,8 @@ Improvements
   groonga to improve groonga integration.
 * [storage mode] Removed a needless write lock on update.
   [#1271] [Reported by Takahiro Nagai]
-* Added ``mroonga_enable_optimization`` thread variable to
-  on/off optimizations. It's useful for benchmark.
+* Added ``mroonga_enable_optimization`` system variable to
+  on/off optimization. It's useful for benchmark.
 * [wrapper mode] Supported temporary table. [#1267]
 * [incompatible] Supported ``/`` in database name. [#1281]
 * Suppressed needless messages on ``INSERT ... ON DUPLICATE
