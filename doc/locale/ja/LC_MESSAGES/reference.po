@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-30 02:49\n"
-"PO-Revision-Date: 2011-11-28 17:40+0900\n"
+"POT-Creation-Date: 2012-02-28 14:34\n"
+"PO-Revision-Date: 2012-02-28 14:36+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -647,17 +647,17 @@ msgid ""
 msgstr "ログファイルを ``/tmp/mroonga.log`` に変更する例です::"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference.rst:184
+#: ../../../source/reference.rst:183
 msgid "mroonga_log_level"
 msgstr ""
 
 # 834d5940c3844cf4a109cd5ba7d0f5c4
-#: ../../../source/reference.rst:186
+#: ../../../source/reference.rst:185
 msgid "The output level of mroonga log file. The default value is ``NOTICE``."
 msgstr "mroongaのログの出力レベル。デフォルト値は ``NOTICE`` 。"
 
 # a79415e7cef840b98a955e797f77b8a2
-#: ../../../source/reference.rst:188
+#: ../../../source/reference.rst:187
 msgid ""
 "Here is an example transcript to change log level to ``DEBUG`` that logs "
 "many messages for debugging::"
@@ -666,38 +666,84 @@ msgstr ""
 "のたくさんのメッセージがログに出力されます::"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference.rst:210
+#: ../../../source/reference.rst:209
 msgid "mroonga_version"
 msgstr ""
 
 # 16c600e1ea5f4c98abdedf73f42a156d
-#: ../../../source/reference.rst:212
+#: ../../../source/reference.rst:211
 msgid "The version string of mroonga."
 msgstr "mroongaのバージョン"
 
 # fd16998818f44f5da06767458a00d329
-#: ../../../source/reference.rst:214
+#: ../../../source/reference.rst:213
 msgid "Here is an example SQL to confirm the running mroonga version::"
 msgstr "実行中のmroongaのバージョンを確認するためのSQL例です::"
 
+# e84afdfd558e4abdb81cb8d681bbeb4a
+#: ../../../source/reference.rst:224
+msgid "mroonga_dry_write"
+msgstr ""
+
+# a21ce3ce10fb4fd4946db0ec63d293ae
+#: ../../../source/reference.rst:226
+msgid ""
+"Whether really write data to groonga database or not. The default value is "
+"``OFF`` that means data are really written to groonga database. Usually we "
+"don't need to change the value of this variable. This variable is useful for "
+"benchmark because we can measure processing time MySQL and mroonga. It "
+"doesn't include groonga's processing time."
+msgstr ""
+"groongaデータベースに実際にデータを書き込むかどうかを指定します。デフォルト値"
+"は ``OFF`` で、実際にgroongaデータベースにデータを書き込みます。通常はこの値"
+"を変更する必要はありません。この変数はベンチマーク時に便利です。この値を "
+"``ON`` にすることでMySQLとmroongaだけの処理時間を計測することができます。この"
+"時間にgroongaの処理時間は含まれません。"
+
+# fd16998818f44f5da06767458a00d329
+#: ../../../source/reference.rst:233
+msgid "Here is an example SQL to disable writing data to groonga database::"
+msgstr "groongaデータベースに値を書き込まないようにするSQLの例です::"
+
+# 18afece537e5420b80cfda6b5a78f234
+#: ../../../source/reference.rst:256
+msgid "mroonga_enable_optimization"
+msgstr ""
+
+# 318a50da3b1e4e5391e159c49e053348
+#: ../../../source/reference.rst:258
+msgid ""
+"Whether enable optimization or not. The default value is ``ON`` that means "
+"optimization is enabled. Usually we don't need to change the value of this "
+"variable. This variable is useful for benchmark."
+msgstr ""
+"最適化を有効にするかどうかを指定します。デフォルト値は ``ON`` で最適化は有効"
+"になっています。通常はこの値を変更する必要はありません。この変数はベンチマー"
+"ク時に便利です。"
+
+# fd16998818f44f5da06767458a00d329
+#: ../../../source/reference.rst:263
+msgid "Here is an example SQL to disable optimization::"
+msgstr "最適化を無効にするSQLの例です::"
+
 # a1797cd59fdb403f950d338e4ed6f95d
-#: ../../../source/reference.rst:225
+#: ../../../source/reference.rst:285
 msgid "List of status variables"
 msgstr "ステータス変数の一覧"
 
 # 23e55d2e20084940b30e3efb7d5fb7af
-#: ../../../source/reference.rst:227
+#: ../../../source/reference.rst:287
 msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
 msgstr "独自に追加されたステータス変数を説明します。"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference.rst:230
+#: ../../../source/reference.rst:290
 msgid "mroonga_count_skip"
 msgstr ""
 
 # 267f1b18714740dc979e8b4b67752812
-#: ../../../source/reference.rst:232
+#: ../../../source/reference.rst:292
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
@@ -708,17 +754,17 @@ msgstr ""
 
 # 3af28e93f34447b397943795efe4ebd6
 # 7f4ccc55b07949d9a265ec7daa36d154
-#: ../../../source/reference.rst:235 ../../../source/reference.rst:251
+#: ../../../source/reference.rst:295 ../../../source/reference.rst:311
 msgid "Here is an example how to check it::"
 msgstr "確認例です::"
 
 # 3f5fb8dfbc954a2c99f47e0c08dff40a
-#: ../../../source/reference.rst:246
+#: ../../../source/reference.rst:306
 msgid "mroonga_fast_order_limit"
 msgstr ""
 
 # f07b04cb491d4edfa20546deee8bf2e4
-#: ../../../source/reference.rst:248
+#: ../../../source/reference.rst:308
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."

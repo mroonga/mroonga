@@ -179,7 +179,6 @@ Here is an example transcript to change log file to ``/tmp/mroonga.log``::
   +------------------+------------------+
   1 row in set (0.00 sec)
 
-
 mroonga_log_level
 ^^^^^^^^^^^^^^^^^
 
@@ -219,6 +218,67 @@ Here is an example SQL to confirm the running mroonga version::
   +-----------------+-------+
   | mroonga_version | 1.10  |
   +-----------------+-------+
+  1 row in set (0.00 sec)
+
+mroonga_dry_write
+^^^^^^^^^^^^^^^^^
+
+Whether really write data to groonga database or not. The
+default value is ``OFF`` that means data are really written
+to groonga database. Usually we don't need to change the
+value of this variable. This variable is useful for
+benchmark because we can measure processing time MySQL and
+mroonga. It doesn't include groonga's processing time.
+
+Here is an example SQL to disable writing data to groonga
+database::
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_dry_write';
+  +-------------------+-------+
+  | Variable_name     | Value |
+  +-------------------+-------+
+  | mroonga_dry_write | OFF   |
+  +-------------------+-------+
+  1 row in set (0.00 sec)
+
+  mysql> SET mroonga_dry_write = true;
+  Query OK, 0 rows affected (0.00 sec)
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_dry_write';
+  +-------------------+-------+
+  | Variable_name     | Value |
+  +-------------------+-------+
+  | mroonga_dry_write | ON    |
+  +-------------------+-------+
+  1 row in set (0.00 sec)
+
+mroonga_enable_optimization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Whether enable optimization or not. The default value is
+``ON`` that means optimization is enabled. Usually we don't
+need to change the value of this variable. This variable is
+useful for benchmark.
+
+Here is an example SQL to disable optimization::
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_enable_optimization';
+  +-----------------------------+-------+
+  | Variable_name               | Value |
+  +-----------------------------+-------+
+  | mroonga_enable_optimization | ON    |
+  +-----------------------------+-------+
+  1 row in set (0.00 sec)
+
+  mysql> SET mroonga_enable_optimization = false;
+  Query OK, 0 rows affected (0.00 sec)
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_enable_optimization';
+  +-----------------------------+-------+
+  | Variable_name               | Value |
+  +-----------------------------+-------+
+  | mroonga_enable_optimization | OFF   |
+  +-----------------------------+-------+
   1 row in set (0.00 sec)
 
 List of status variables
