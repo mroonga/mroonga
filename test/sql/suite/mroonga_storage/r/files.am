@@ -10,12 +10,23 @@ result_files = \
 	auto_increment_text.result \
 	binlog.result \
 	btree.result \
-	column_date.result \
-	column_datetime.result \
-	column_decimal.result \
-	column_timestamp.result \
-	count_performance.result \
-	count_star_index_view.result \
+	column_date_with_index.result \
+	column_date_without_index.result \
+	column_datetime_with_fractional_seconds_with_index.result \
+	column_datetime_with_fractional_seconds_without_index.result \
+	column_datetime_without_fractional_seconds_with_index.result \
+	column_datetime_without_fractional_seconds_without_index.result \
+	column_decimal_with_fractional_seconds_with_index.result \
+	column_decimal_with_fractional_seconds_without_index.result \
+	column_decimal_without_fractional_seconds_with_index.result \
+	column_decimal_without_fractional_seconds_without_index.result \
+	column_time_with_fractional_seconds.result \
+	column_time_without_fractional_seconds.result \
+	column_timestamp_with_fractional_seconds.result \
+	column_timestamp_without_fractional_seconds.result \
+	column_year_with_index.result \
+	column_year_without_index.result \
+	create_database_name_slash.result \
 	create_table.result \
 	delete_fulltext_column.result \
 	delete_id_index_hash_no_unique.result \
@@ -40,7 +51,6 @@ result_files = \
 	fulltext_no_primary_key.result \
 	fulltext_no_such_key.result \
 	fulltext_not_match_against.result \
-	fulltext_order_limit.result \
 	fulltext_parser_comment.result \
 	fulltext_parser_default.result \
 	fulltext_search_ascii.result \
@@ -54,6 +64,8 @@ result_files = \
 	hash_index_normal_column_insert.result \
 	information_schema.result.in \
 	insert.result \
+	insert_on_duplicate_key_update_primary_key.result \
+	insert_on_duplicate_key_update_unique_key.result \
 	key_read.result \
 	last_insert_grn_id.result \
 	log_level.result \
@@ -68,7 +80,24 @@ result_files = \
 	multiple_column_primary_key_delete.result \
 	multiple_column_primary_key_int.result \
 	multiple_column_primary_key_update.result \
-	order_limit_performance.result \
+	optimization_order_limit_disabled.result \
+	optimization_order_limit_equal_int.result \
+	optimization_order_limit_have_primary_key.result \
+	optimization_order_limit_no_primary_key.result \
+	optimization_order_limit_todo_split_me.result \
+	optimization_skip_count_disabled.result \
+	optimization_skip_count_index_view.result \
+	optimization_skip_count_todo_split_me.result \
+	primary_key_date.result \
+	primary_key_datetime_with_fractional_seconds.result \
+	primary_key_datetime_without_fractional_seconds.result \
+	primary_key_decimal_with_fractional_seconds.result \
+	primary_key_decimal_without_fractional_seconds.result \
+	primary_key_time_with_fractional_seconds.result \
+	primary_key_time_without_fractional_seconds.result \
+	primary_key_timestamp_with_fractional_seconds.result \
+	primary_key_timestamp_without_fractional_seconds.result \
+	primary_key_year.result \
 	replace_select_varchar.result \
 	replace_text.result \
 	replace_varchar.result \
@@ -77,6 +106,8 @@ result_files = \
 	select_secondary_key.result \
 	show_create_table.result \
 	show_table_status.result \
+	sub_query_fulltext.result \
+	temporary_table.result \
 	tinyint.result \
 	truncate.result \
 	update_by_last_insert_grn_id.result \

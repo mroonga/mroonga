@@ -10,12 +10,23 @@ test_files = \
 	auto_increment_text.test \
 	binlog.test \
 	btree.test \
-	column_date.test \
-	column_datetime.test \
-	column_decimal.test \
-	column_timestamp.test \
-	count_performance.test \
-	count_star_index_view.test \
+	column_date_with_index.test \
+	column_date_without_index.test \
+	column_datetime_with_fractional_seconds_with_index.test \
+	column_datetime_with_fractional_seconds_without_index.test \
+	column_datetime_without_fractional_seconds_with_index.test \
+	column_datetime_without_fractional_seconds_without_index.test \
+	column_decimal_with_fractional_seconds_with_index.test \
+	column_decimal_with_fractional_seconds_without_index.test \
+	column_decimal_without_fractional_seconds_with_index.test \
+	column_decimal_without_fractional_seconds_without_index.test \
+	column_time_with_fractional_seconds.test \
+	column_time_without_fractional_seconds.test \
+	column_timestamp_with_fractional_seconds.test \
+	column_timestamp_without_fractional_seconds.test \
+	column_year_with_index.test \
+	column_year_without_index.test \
+	create_database_name_slash.test \
 	create_table.test \
 	delete_fulltext_column.test \
 	delete_id_index_hash_no_unique.test \
@@ -40,7 +51,6 @@ test_files = \
 	fulltext_no_primary_key.test \
 	fulltext_no_such_key.test \
 	fulltext_not_match_against.test \
-	fulltext_order_limit.test \
 	fulltext_parser_comment.test \
 	fulltext_parser_default.test \
 	fulltext_search_ascii.test \
@@ -54,6 +64,8 @@ test_files = \
 	hash_index_normal_column_insert.test \
 	information_schema.test \
 	insert.test \
+	insert_on_duplicate_key_update_primary_key.test \
+	insert_on_duplicate_key_update_unique_key.test \
 	key_read.test \
 	last_insert_grn_id.test \
 	log_level.test \
@@ -68,7 +80,24 @@ test_files = \
 	multiple_column_primary_key_delete.test \
 	multiple_column_primary_key_int.test \
 	multiple_column_primary_key_update.test \
-	order_limit_performance.test \
+	optimization_order_limit_disabled.test \
+	optimization_order_limit_equal_int.test \
+	optimization_order_limit_have_primary_key.test \
+	optimization_order_limit_no_primary_key.test \
+	optimization_order_limit_todo_split_me.test \
+	optimization_skip_count_disabled.test \
+	optimization_skip_count_index_view.test \
+	optimization_skip_count_todo_split_me.test \
+	primary_key_date.test \
+	primary_key_datetime_with_fractional_seconds.test \
+	primary_key_datetime_without_fractional_seconds.test \
+	primary_key_decimal_with_fractional_seconds.test \
+	primary_key_decimal_without_fractional_seconds.test \
+	primary_key_time_with_fractional_seconds.test \
+	primary_key_time_without_fractional_seconds.test \
+	primary_key_timestamp_with_fractional_seconds.test \
+	primary_key_timestamp_without_fractional_seconds.test \
+	primary_key_year.test \
 	replace_select_varchar.test \
 	replace_text.test \
 	replace_varchar.test \
@@ -77,6 +106,8 @@ test_files = \
 	select_secondary_key.test \
 	show_create_table.test \
 	show_table_status.test \
+	sub_query_fulltext.test \
+	temporary_table.test \
 	tinyint.test \
 	truncate.test \
 	update_by_last_insert_grn_id.test \

@@ -35,8 +35,9 @@ test_files = \
 	geometry_delete.test \
 	geometry_update.test \
 	insert.test \
-	order_limit_performance.test \
+	optimization_order_limit_todo_split_me.test \
 	repair_table.test \
+	temporary_table.test \
 	transaction_rollback_delete_delete.test \
 	transaction_rollback_delete_update.test \
 	truncate.test \

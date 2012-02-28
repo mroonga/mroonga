@@ -35,8 +35,9 @@ result_files = \
 	geometry_delete.result \
 	geometry_update.result \
 	insert.result \
-	order_limit_performance.result \
+	optimization_order_limit_todo_split_me.result \
 	repair_table.result \
+	temporary_table.result \
 	transaction_rollback_delete_delete.result \
 	transaction_rollback_delete_update.result \
 	truncate.result \
