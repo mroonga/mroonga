@@ -48,3 +48,4 @@ cscope.out
 /mrn_version.h
 /mroonga-*.tar.gz
 /packages/mroonga-*.tar.gz
+/configure.lineno
