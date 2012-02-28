@@ -3,7 +3,7 @@
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/16/SRPMS
 
-%define groonga_required_version 1.3.0
+%define groonga_required_version 1.3.1
 
 Name:		mysql-mroonga
 Version:	@VERSION@
@@ -103,6 +103,7 @@ eval $command || \
 - new upstream release.
 - always install/uninstall plugin.
 - use MySQL 5.5.20.
+- require groonga 1.3.1 or later.
 
 * Sun Jan 29 2012 Kouhei Sutou <kou@clear-code.com> - 1.20-0
 - new upstream release.
