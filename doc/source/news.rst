@@ -3,9 +3,9 @@
 News
 ====
 
-.. _release-1-30:
+.. _release-2-00:
 
-Release 1.30 - 2012/02/29
+Release 2.00 - 2012/02/29
 -------------------------
 
 .. caution::
@@ -58,7 +58,7 @@ We restore a database by modified dump file::
 
   % mysql -u root MY_MROONGA_DATABASE < database-mroonga.dump
 
-Now, we can use mroonga 1.30.
+Now, we can use mroonga 2.00.
 
 Improvements
 ^^^^^^^^^^^^

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-28 14:35\n"
-"PO-Revision-Date: 2012-02-28 14:35+0900\n"
+"POT-Creation-Date: 2012-02-28 16:51\n"
+"PO-Revision-Date: 2012-02-28 18:04+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -24,8 +24,8 @@ msgstr "お知らせ"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:9
-msgid "Release 1.30 - 2012/02/29"
-msgstr "1.30リリース - 2012/02/29"
+msgid "Release 2.00 - 2012/02/29"
+msgstr "2.00リリース - 2012/02/29"
 
 # a2ce1087cbb84d2c9e8e7e88398f2115
 #: ../../../source/news.rst:13 ../../../source/news.rst:119
@@ -108,8 +108,8 @@ msgstr "修正したダンプファイルを使ってデータベースを復旧
 
 # 2803378906bf4e088c131d33492b6b3a
 #: ../../../source/news.rst:61
-msgid "Now, we can use mroonga 1.30."
-msgstr "これで1.30を使うことができるようになりました。"
+msgid "Now, we can use mroonga 2.00."
+msgstr "これで2.00を使うことができるようになりました。"
 
 # 056232ecba044abab1ea54c34b9ce282
 #: ../../../source/news.rst:64 ../../../source/news.rst:193
