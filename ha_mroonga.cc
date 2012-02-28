@@ -1776,7 +1776,7 @@ ulonglong ha_mroonga::storage_table_flags() const
     HA_CAN_FULLTEXT |
     HA_CAN_INSERT_DELAYED |
     HA_BINLOG_FLAGS |
-    //HA_CAN_BIT_FIELD |
+    HA_CAN_BIT_FIELD |
     HA_DUPLICATE_POS |
     HA_CAN_GEOMETRY |
     HA_CAN_RTREEKEYS;
