@@ -3,6 +3,112 @@
 News
 ====
 
+.. _release-1-30:
+
+Release 1.30 - 2012/02/29
+-------------------------
+
+.. caution::
+
+   This release breaks backward compatibility. We need to
+   dump and restore our database for upgrading.
+
+In this release, mroonga has two changes that requires
+database recreation:
+
+1. Supported all characters for database, table and column
+   names.
+2. Groonga's native time data type is used for ``YEAR`` type
+   in MySQL.
+
+Here are upgrade sequence.
+
+We dump a database that uses mroonga::
+
+  % mysqldump MY_MROONGA_DATABASE > database-mroonga.dump
+
+We drop the existing database::
+
+  % mysql -u root -e 'DROP DATABASE MY_MROONGA_DATABASE'
+
+We upgrade to "mroonga" storage engine. We will use
+``apt-get`` on Debian GNU/Linux or Ubuntu and ``yum`` on
+CentOS or Fedora.
+
+apt-get::
+
+  % sudo apt-get install -y mysql-server-mroonga
+
+yum::
+
+  % sudo yum remove -y mysql-mroonga
+  % sudo yum install -y mysql-mroonga
+
+.. caution::
+
+   We don't forget to run ``yum remove`` before ``yum
+   install``. If we forget to run ``yum remove``, we will break
+   a MySQL's system table.
+
+We recreate a database::
+
+  % mysql -u root -e 'CREATE DATABASE MY_MROONGA_DATABASE'
+
+We restore a database by modified dump file::
+
+  % mysql -u root MY_MROONGA_DATABASE < database-mroonga.dump
+
+Now, we can use mroonga 1.30.
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MySQL 5.5.21.
+* Required groonga 1.3.1 or later.
+* Supported TIMESTAMP with fractional seconds on MySQL 5.6 and MariaDB.
+* [storage mode] Supported ``ORDER LIMIT`` optimization on no primary key.
+* [storage mode] Supported ``ORDER LIMIT`` optimization with
+  fulltext search and ``COLUMN = INT_VALUE``.
+* [storage] Supported fulltext search in sub query.
+  [Reported by @camyuy]
+* [incompatible] Mapped ``YEAR`` in MySQL to ``Time`` in
+  groonga to improve groonga integration.
+* [storage mode] Removed a needless write lock on update.
+  [#1271] [Reported by Takahiro Nagai]
+* Added ``mroonga_enable_optimization`` thread variable to
+  on/off optimizations. It's useful for benchmark.
+* [wrapper mode] Supported temporary table. [#1267]
+* [incompatible] Supported ``/`` in database name. [#1281]
+* Suppressed needless comments on ``INSERT ... ON DUPLICATE
+  KEY UPDATE``.
+* Supported ``INSERT ... ON DUPLICATE KEY UPDATE`` with
+  ``UNIQUE KEY``. [#1283] [Reported by @104yuki_n]
+* Supported ``DATETIME``, ``DATE``, ``TIMESTAMP``, ``TIME``,
+  ``DECIMAL``, ``YEAR`` for primary key.
+* [incompatible] Supported all characters for database, table and
+  column names. [#1284]
+* [wrapper mode] Supported 255 bytes over index. [#1282]
+* [wrapper mode] Supported updating primary key. [#1195]
+* [wrapper mode] Supported error handling on alter table. [#1195]
+* [wrapper mode] Improved error message on unsupported
+  geometry type like ``LineString``. [#1195]
+* [wrapper mode] Supported
+  ``INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS``. [#1195]
+
+Fixes
+^^^^^
+
+* [rpm] Changed to ensure re-install plugin.
+* [doc] Fixed wrong storage engine name. [Reported by Tomoatsu Shimada]
+
+Thanks
+^^^^^^
+
+* @camyuy
+* Takahiro Nagai
+* Tomoatsu Shimada
+* @104yuki_n
+
 .. _release-1-20:
 
 Release 1.20 - 2012/01/29
@@ -17,8 +123,8 @@ In this release, mroonga has two changes that requires
 database recreation:
 
 1. Storage engine name is changed to "mroonga" from "groonga".
-2. Groonga's native time data value are used for DATE, DATETIME
-   and TIMESTAMP type values.
+2. Groonga's native time data type is used for DATE, DATETIME
+   and TIMESTAMP type in MySQL.
 
 We need to modify dumped database to change "ENGINE=groonga"
 in "CREATE TABLE" SQL. Here are upgrade sequence.
