@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-28 13:37\n"
-"PO-Revision-Date: 2012-01-30 10:57+0900\n"
+"POT-Creation-Date: 2012-02-28 13:59\n"
+"PO-Revision-Date: 2012-02-28 14:00+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -24,9 +24,8 @@ msgstr "お知らせ"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:9
-#, fuzzy
 msgid "Release 1.30 - 2012/02/29"
-msgstr "1.20リリース - 2012/01/29"
+msgstr "1.30リリース - 2012/02/29"
 
 # a2ce1087cbb84d2c9e8e7e88398f2115
 #: ../../../source/news.rst:13 ../../../source/news.rst:119
@@ -46,19 +45,17 @@ msgstr "このリリースでは、データベースの再作成が必要な変
 # 46548a94e1a34aad9493556abcba506f
 #: ../../../source/news.rst:19
 msgid "Supported all characters for database, table and column names."
-msgstr ""
+msgstr "データベース名、テーブル名、カラム名に任意の文字を使えるようにした。"
 
 # 514e01eb11594c0d8834a905398f7c05
 #: ../../../source/news.rst:21
-#, fuzzy
 msgid "Groonga's native time data type is used for ``YEAR`` type in MySQL."
-msgstr ""
-"DATE、DATETIME、TIMESTAMP型の値にgroongaが提供する時間の値を使うようにした。"
+msgstr "MySQLの ``YEAR`` 型にｈgroongaが提供する時間型を使うようにした。"
 
 # 0c488a71cd2842fb8d3b84be052d8fdc
 #: ../../../source/news.rst:24
 msgid "Here are upgrade sequence."
-msgstr ""
+msgstr "以下が更新手順です。"
 
 # 63d74f1cc38640b688c9f9ab14f613a6
 #: ../../../source/news.rst:26 ../../../source/news.rst:132
@@ -111,9 +108,8 @@ msgstr "修正したダンプファイルを使ってデータベースを復旧
 
 # 2803378906bf4e088c131d33492b6b3a
 #: ../../../source/news.rst:61
-#, fuzzy
 msgid "Now, we can use mroonga 1.30."
-msgstr "これで1.20を使うことができるようになりました。"
+msgstr "これで1.30を使うことができるようになりました。"
 
 # 056232ecba044abab1ea54c34b9ce282
 #: ../../../source/news.rst:64 ../../../source/news.rst:193
@@ -124,26 +120,26 @@ msgstr "改良"
 
 # 3754145a2bb74e9da532cb818bf851b6
 #: ../../../source/news.rst:66
-#, fuzzy
 msgid "Supported MySQL 5.5.21."
-msgstr "MySQL 5.5.20に対応。"
+msgstr "MySQL 5.5.21に対応。"
 
 # e50707438bd14803829f2477237fc29f
 #: ../../../source/news.rst:67
-#, fuzzy
 msgid "Required groonga 1.3.1 or later."
-msgstr "groonga 1.3.0以降を必須にした。"
+msgstr "groonga 1.3.1以降を必須にした。"
 
 # 75ed5dbde8df43f28b205cb959ad5dd4
 #: ../../../source/news.rst:68
 msgid "Supported TIMESTAMP with fractional seconds on MySQL 5.6 and MariaDB."
-msgstr ""
+msgstr "MySQL 5.6とMariaDBで使える小数付きのTIMESTAMPに対応した。"
 
 # cbc23651575542cab184948db3b5f2d7
 #: ../../../source/news.rst:69
 msgid ""
 "[storage mode] Supported ``ORDER LIMIT`` optimization on no primary key."
 msgstr ""
+"[ストレージモード] 主キーがない場合でも ``ORDER LIMIT`` を最適化できるように"
+"した。"
 
 # 93e7cf885b534732aeb176d833f6b205
 #: ../../../source/news.rst:70
@@ -151,11 +147,15 @@ msgid ""
 "[storage mode] Supported ``ORDER LIMIT`` optimization with fulltext search "
 "and ``COLUMN = INT_VALUE``."
 msgstr ""
+"[ストレージモード] 全文検索と ``COLUMN = INT_VALUE`` を一緒に使った場合でも "
+"``ORDER LIMIT`` を最適化できるようにした。"
 
 # 63807ef9c8fe4132972b5104cbc7f3c6
 #: ../../../source/news.rst:72
-msgid "[storage] Supported fulltext search in sub query. [Reported by @camyuy]"
+msgid ""
+"[storage mode] Supported fulltext search in sub query. [Reported by @camyuy]"
 msgstr ""
+"[ストレージモード] サブクエリ内での全文検索に対応した。 [@camyuyさんが報告]"
 
 # 83f0f6890d3c449098e4489bb97fefe6
 #: ../../../source/news.rst:74
@@ -163,16 +163,17 @@ msgid ""
 "[incompatible] Mapped ``YEAR`` in MySQL to ``Time`` in groonga to improve "
 "groonga integration."
 msgstr ""
+"[非互換] groongaからデータを読めるように、MySQLの ``YEAR`` をgroongaの "
+"``Time`` に対応させるようにした。"
 
 # 043f0c71a08446d393779bcf3e08bb58
 #: ../../../source/news.rst:76
-#, fuzzy
 msgid ""
 "[storage mode] Removed a needless write lock on update. [#1271] [Reported by "
 "Takahiro Nagai]"
 msgstr ""
-"[ストレージモード] viewでの ``count(*)`` に対応。 [#1255] [Takahiro Nagaiさん"
-"が報告]"
+"[ストレージモード] 更新時の必要ない書き込みロックを削除した。 [#1271] "
+"[Takahiro Nagaiさんが報告]"
 
 # 1025e29407b94fe6b398dbfb775c2713
 #: ../../../source/news.rst:78
@@ -180,22 +181,25 @@ msgid ""
 "Added ``mroonga_enable_optimization`` thread variable to on/off "
 "optimizations. It's useful for benchmark."
 msgstr ""
+"最適化のオン・オフを切り替える ``mroonga_enable_optimization`` スレッド変数を"
+"追加した。ベンチマーク時に便利。"
 
 # bdca0e02d8f9459fa43deaae796cc9c2
 #: ../../../source/news.rst:80
-#, fuzzy
 msgid "[wrapper mode] Supported temporary table. [#1267]"
-msgstr "[ラッパーモード] REPAIR TABLE対応。"
+msgstr "[ラッパーモード] 一時テーブルに対応した。 [#1267]"
 
 # 94a325bb23c94c939ba07c06e7a0f697
 #: ../../../source/news.rst:81
 msgid "[incompatible] Supported ``/`` in database name. [#1281]"
-msgstr ""
+msgstr "[非互換] データベース名に ``/`` を使えるようにした。 [#1281]"
 
 # 7f7809a2c67e43c8a0dd68bc658ee4da
 #: ../../../source/news.rst:82
-msgid "Suppressed needless comments on ``INSERT ... ON DUPLICATE KEY UPDATE``."
+msgid "Suppressed needless messages on ``INSERT ... ON DUPLICATE KEY UPDATE``."
 msgstr ""
+"``INSERT ... ON DUPLICATE KEY UPDATE`` のときに不必要なメッセージが表示されな"
+"いようにした。"
 
 # 277be1b464484094831587694df6c795
 #: ../../../source/news.rst:84
@@ -203,6 +207,8 @@ msgid ""
 "Supported ``INSERT ... ON DUPLICATE KEY UPDATE`` with ``UNIQUE KEY``. "
 "[#1283] [Reported by @104yuki_n]"
 msgstr ""
+"``UNIQUE KEY`` を使った ``INSERT ... ON DUPLICATE KEY UPDATE`` に対応した。 "
+"[#1283] [@104yuki_nさんが報告]"
 
 # dc358e21766a42b98feefe90c2eca0ea
 #: ../../../source/news.rst:86
@@ -210,6 +216,8 @@ msgid ""
 "Supported ``DATETIME``, ``DATE``, ``TIMESTAMP``, ``TIME``, ``DECIMAL``, "
 "``YEAR`` for primary key."
 msgstr ""
+"主キーに ``DATETIME``, ``DATE``, ``TIMESTAMP``, ``TIME``, ``DECIMAL``, "
+"``YEAR`` を使えるようになった。"
 
 # 232707f9ef484985b2f87a518fc5b528
 #: ../../../source/news.rst:88
@@ -217,21 +225,25 @@ msgid ""
 "[incompatible] Supported all characters for database, table and column "
 "names. [#1284]"
 msgstr ""
+"[非互換] データベース名、テーブル名、カラム名にすべての文字を使えるようになっ"
+"た。 [#1284]"
 
 # 4ff2aa8c176a41d996e7280e9e3d6823
 #: ../../../source/news.rst:90
 msgid "[wrapper mode] Supported 255 bytes over index. [#1282]"
-msgstr ""
+msgstr "[ラッパーモード] 255バイト以上のインデックスに対応した。 [#1282]"
 
 # cbc23651575542cab184948db3b5f2d7
 #: ../../../source/news.rst:91
 msgid "[wrapper mode] Supported updating primary key. [#1195]"
-msgstr ""
+msgstr "[ラッパーモード] 主キーの更新に対応した。 [#1195]"
 
 # 63807ef9c8fe4132972b5104cbc7f3c6
 #: ../../../source/news.rst:92
-msgid "[wrapper mode] Supported error handling on alter table. [#1195]"
+msgid "[wrapper mode] Supported error handling on ``ALTER TABLE``. [#1195]"
 msgstr ""
+"[ラッパーモード] ``ALTER TABLE`` でエラーが発生したときの処理を追加した。 "
+"[#1195]"
 
 # 1e5bbac68f0f4ee3bf7870f597a05da6
 #: ../../../source/news.rst:93
@@ -239,6 +251,8 @@ msgid ""
 "[wrapper mode] Improved error message on unsupported geometry type like "
 "``LineString``. [#1195]"
 msgstr ""
+"[ラッパーモード] ``LineString`` のような未サポートの位置情報型を使った場合の"
+"エラーメッセージを改良した。 [#1195]"
 
 # f3fd79f530614f1fb7fa0fa6f1cffd7f
 #: ../../../source/news.rst:95
@@ -246,6 +260,8 @@ msgid ""
 "[wrapper mode] Supported ``INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS``. "
 "[#1195]"
 msgstr ""
+"[ラッパーモード] ``INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS`` に対応した。 "
+"[#1195]"
 
 # 08e3d478781f474c8a19fd0acb16a2bf
 #: ../../../source/news.rst:99 ../../../source/news.rst:215
@@ -257,13 +273,14 @@ msgstr "修正"
 # 40ea91f9ffda4f33bab8ec3d5b61c732
 #: ../../../source/news.rst:101
 msgid "[rpm] Changed to ensure re-install plugin."
-msgstr ""
+msgstr "[rpm] プラグインを再インストールするようにした。"
 
 # 6a406578c85a44c2a4a5e69e375a6db8
 #: ../../../source/news.rst:102
-#, fuzzy
 msgid "[doc] Fixed wrong storage engine name. [Reported by Tomoatsu Shimada]"
-msgstr "[doc] 実行結果が間違っていた問題を修正。 [Hidekazu Tanakaさんが報告]"
+msgstr ""
+"[doc] ストレージエンジン名が間違っていた問題を修正。 [Tomoatsu Shimadaさんが"
+"報告]"
 
 # 2371feae1d1549e59cd05415194e5dcf
 #: ../../../source/news.rst:105 ../../../source/news.rst:223
@@ -275,7 +292,7 @@ msgstr "感謝"
 # e9281e9993104ae7ae67efd9e5725f9e
 #: ../../../source/news.rst:107
 msgid "@camyuy"
-msgstr ""
+msgstr "@camyuyさん"
 
 # 9fbab937473c4396940d089ab165279e
 #: ../../../source/news.rst:108 ../../../source/news.rst:316
@@ -286,12 +303,12 @@ msgstr "Takahiro Nagaiさん"
 # 4445030bc7a44d8faf506fcbdb7e480a
 #: ../../../source/news.rst:109
 msgid "Tomoatsu Shimada"
-msgstr ""
+msgstr "Tomoatsu Shimadaさん"
 
 # 6723c5a727ac49338d0334d9918ec437
 #: ../../../source/news.rst:110
 msgid "@104yuki_n"
-msgstr ""
+msgstr "@104yuki_nさん"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:115
@@ -305,12 +322,12 @@ msgstr "ストレージエンジン名を\"groonga\"から\"mroonga\"へ改名�
 
 # 514e01eb11594c0d8834a905398f7c05
 #: ../../../source/news.rst:126
-#, fuzzy
 msgid ""
 "Groonga's native time data type is used for DATE, DATETIME and TIMESTAMP "
 "type in MySQL."
 msgstr ""
-"DATE、DATETIME、TIMESTAMP型の値にgroongaが提供する時間の値を使うようにした。"
+"MySQLのDATE、DATETIME、TIMESTAMP型にgroongaが提供する時間の値を使うようにし"
+"た。"
 
 # c754dcd25a6e4b2cabded37160dca861
 #: ../../../source/news.rst:129

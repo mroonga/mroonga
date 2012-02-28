@@ -69,7 +69,7 @@ Improvements
 * [storage mode] Supported ``ORDER LIMIT`` optimization on no primary key.
 * [storage mode] Supported ``ORDER LIMIT`` optimization with
   fulltext search and ``COLUMN = INT_VALUE``.
-* [storage] Supported fulltext search in sub query.
+* [storage mode] Supported fulltext search in sub query.
   [Reported by @camyuy]
 * [incompatible] Mapped ``YEAR`` in MySQL to ``Time`` in
   groonga to improve groonga integration.
@@ -79,7 +79,7 @@ Improvements
   on/off optimizations. It's useful for benchmark.
 * [wrapper mode] Supported temporary table. [#1267]
 * [incompatible] Supported ``/`` in database name. [#1281]
-* Suppressed needless comments on ``INSERT ... ON DUPLICATE
+* Suppressed needless messages on ``INSERT ... ON DUPLICATE
   KEY UPDATE``.
 * Supported ``INSERT ... ON DUPLICATE KEY UPDATE`` with
   ``UNIQUE KEY``. [#1283] [Reported by @104yuki_n]
@@ -89,7 +89,7 @@ Improvements
   column names. [#1284]
 * [wrapper mode] Supported 255 bytes over index. [#1282]
 * [wrapper mode] Supported updating primary key. [#1195]
-* [wrapper mode] Supported error handling on alter table. [#1195]
+* [wrapper mode] Supported error handling on ``ALTER TABLE``. [#1195]
 * [wrapper mode] Improved error message on unsupported
   geometry type like ``LineString``. [#1195]
 * [wrapper mode] Supported
