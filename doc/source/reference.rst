@@ -39,7 +39,6 @@ List of available SQL commands
 * ``CREATE TABLE table_name (column_name ENUM(...))``
 * ``CREATE TABLE table_name (column_name FLOAT)``
 * ``CREATE TABLE table_name (column_name GEOMETRY NOT NULL)``
-* ``CREATE TABLE table_name (column_name INT PRIMARY KEY AUTO_INCREMENT)``
 * ``CREATE TABLE table_name (column_name INT UNSIGNED)``
 * ``CREATE TABLE table_name (column_name INT)``
 * ``CREATE TABLE table_name (column_name LONGBLOB)``
@@ -58,18 +57,40 @@ List of available SQL commands
 * ``CREATE TABLE table_name (column_name VARBINARY(...))``
 * ``CREATE TABLE table_name (column_name VARCHAR(...))``
 * ``CREATE TABLE table_name (column_name YEAR)``
+* ``CREATE TABLE table_name (column_name INT AUTO_INCREMENT)``
+* ``CREATE TABLE table_name (column_name INT PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name DATE PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name DATETIME PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name DATETIME(fractional_seconds_precision) PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name DECIMAL PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name DECIMAL(maximum_number_digits, fractional_seconds_precision) PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name TIME PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name TIME(fractional_seconds_precision) PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name TIMESTAMP PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name TIMESTAMP(fractional_seconds_precision) PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name YEAR PRIMARY KEY)``
+* ``CREATE TABLE table_name (column_name1 INT, column_name2 ..., KEY (column_name1, column_name2))``
+* ``CREATE TABLE table_name (column_name1 DOUBLE, column_name2 ..., KEY (column_name1, column_name2))``
+* ``CREATE TABLE table_name (column_name1 FLOAT, column_name2 ..., KEY (column_name1, column_name2))``
+* ``CREATE TABLE table_name (column_name1 CHAR(...), column_name2 ..., KEY (column_name1, column_name2))``
+* ``CREATE TABLE table_name (column_name1 VARCHAR(...), column_name2 ..., KEY (column_name1, column_name2))``
+* ``CREATE TEMPORARY TABLE table_name (...)``
 * ``DELETE FROM table_name WHERE ...``
 * ``DROP INDEX column_name ON table_name``
 * ``DROP TABLE IF EXISTS table_name, ...``
 * ``DROP TABLE \`table-name-with-hyphen\`, ...``
 * ``DROP TABLE table_name, ...``
+* ``DROP TEMPORARY TABLE table_name``
 * ``FLUSH LOGS``
 * ``FLUSH TABLES``
 * ``INSERT INTO (geometry_column_name) VALUES (GeomFromText('POINT(...)'))``
 * ``INSERT INTO ... VALUES ...``
+* ``INSERT INTO ... VALUES ... ON DUPLICATE KEY UPDATE ...`` (for ``PRIMARY KEY``)
+* ``INSERT INTO ... VALUES ... ON DUPLICATE KEY UPDATE ...`` (for ``UNIQUE KEY``)
 * ``INSERT INTO table_name (column_name, ...) SELECT ... FROM other_table_name``
 * ``REPLACE INTO table_name SELECT ... FROM other_table_name ...``
 * ``SELECT * FROM information_schema.plugins WHERE plugin_name = "mroonga"``
+* ``SELECT * FROM table_name``
 * ``SELECT * FROM table_name FORCE INDEX(index_name) WHERE ...``
 * ``SELECT * FROM table_name ORDER BY column_name ASC LIMIT ...``
 * ``SELECT * FROM table_name ORDER BY column_name ASC``
@@ -90,7 +111,7 @@ List of available SQL commands
 * ``SELECT * FROM table_name WHERE column_name > ...``
 * ``SELECT * FROM table_name WHERE column_name >= ...``
 * ``SELECT * FROM table_name WHERE column_name BETWEEN ... AND ...``
-* ``SELECT * FROM table_name``
+* ``SELECT * FROM table_name WHERE column_name IN (SELECT sub_column_name FROM sub_table_name WHERE MATCH(sub_text_column_name) AGAINST("..."))``
 * ``SELECT *, MATCH(column_name) AGAINST("..." IN BOOLEAN MODE) FROM table_name WHERE MATCH(column_name) AGAINST("..." IN BOOLEAN MODE)``
 * ``SELECT FOUND_ROWS()``
 * ``SELECT SQL_CALC_FOUND_ROWS * FROM table_name WHERE MATCH(...) AGAINST("..." IN BOOLEAN MODE) ORDER BY column_name LIMIT start,n_records``
