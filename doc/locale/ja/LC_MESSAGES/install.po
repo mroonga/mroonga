@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-30 02:49\n"
+"POT-Creation-Date: 2012-02-28 13:37\n"
 "PO-Revision-Date: 2012-01-30 02:49+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -323,7 +323,9 @@ msgstr "mroongaのインストール"
 msgid ""
 "By invoking \"make install\", ha_mroonga.so will be installed in MySQL's "
 "plugin directory. ::"
-msgstr "\"make install\"を実行するとMySQLのプラグイン用ディレクトリにha_mroonga.soが配置されます。 ::"
+msgstr ""
+"\"make install\"を実行するとMySQLのプラグイン用ディレクトリにha_mroonga.soが"
+"配置されます。 ::"
 
 # 425b0856bf4d48308a0a810794d33007
 #: ../../../source/install.rst:222
@@ -336,8 +338,9 @@ msgstr ""
 
 # 31909deb45384ecfa3bdb1b56246e1a7
 #: ../../../source/install.rst:226
+#, fuzzy
 msgid ""
-"If \"groonga\" is displayed in \"SHOW ENGINES\" command result like below, "
+"If \"mroonga\" is displayed in \"SHOW ENGINES\" command result like below, "
 "mroonga is well installed. ::"
 msgstr ""
 "以下のように\"SHOW ENGINES\"コマンドで\"groonga\"が表示されればmroongaのイン"

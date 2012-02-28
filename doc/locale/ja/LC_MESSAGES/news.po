@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-30 08:08\n"
+"POT-Creation-Date: 2012-02-28 13:37\n"
 "PO-Revision-Date: 2012-01-30 10:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -24,11 +24,12 @@ msgstr "お知らせ"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:9
-msgid "Release 1.20 - 2012/01/29"
+#, fuzzy
+msgid "Release 1.30 - 2012/02/29"
 msgstr "1.20リリース - 2012/01/29"
 
 # a2ce1087cbb84d2c9e8e7e88398f2115
-#: ../../../source/news.rst:13
+#: ../../../source/news.rst:13 ../../../source/news.rst:119
 msgid ""
 "This release breaks backward compatibility. We need to dump and restore our "
 "database for upgrading."
@@ -37,26 +38,282 @@ msgstr ""
 "ンプ・リストアする必要があります。"
 
 # 76829f1e1e9d41b7a93237d446141769
-#: ../../../source/news.rst:16
+#: ../../../source/news.rst:16 ../../../source/news.rst:122
 msgid ""
 "In this release, mroonga has two changes that requires database recreation:"
 msgstr "このリリースでは、データベースの再作成が必要な変更点が2つあります。"
 
-# 63ebc8639e4a40da862d1ff2ca0dc2da
+# 46548a94e1a34aad9493556abcba506f
 #: ../../../source/news.rst:19
+msgid "Supported all characters for database, table and column names."
+msgstr ""
+
+# 514e01eb11594c0d8834a905398f7c05
+#: ../../../source/news.rst:21
+#, fuzzy
+msgid "Groonga's native time data type is used for ``YEAR`` type in MySQL."
+msgstr ""
+"DATE、DATETIME、TIMESTAMP型の値にgroongaが提供する時間の値を使うようにした。"
+
+# 0c488a71cd2842fb8d3b84be052d8fdc
+#: ../../../source/news.rst:24
+msgid "Here are upgrade sequence."
+msgstr ""
+
+# 63d74f1cc38640b688c9f9ab14f613a6
+#: ../../../source/news.rst:26 ../../../source/news.rst:132
+msgid "We dump a database that uses mroonga::"
+msgstr "mroongaを使っているデータベースをダンプします::"
+
+# 242fb02d59a9402093456de3f7600144
+#: ../../../source/news.rst:30 ../../../source/news.rst:159
+msgid "We drop the existing database::"
+msgstr "既存のデータベースを削除します::"
+
+# 12d5e1e0501f42f0926939ef43c5ed3b
+#: ../../../source/news.rst:34 ../../../source/news.rst:163
+msgid ""
+"We upgrade to \"mroonga\" storage engine. We will use ``apt-get`` on Debian "
+"GNU/Linux or Ubuntu and ``yum`` on CentOS or Fedora."
+msgstr ""
+"\"mroonga\"ストレージエンジンにアップグレードします。Debian GNU/LinuxやUbuntu"
+"では ``apt-get`` を使います。CentOSやFedoraでは ``yum`` を使います。"
+
+# b7f174faf4404a7c8731a8cf595b52ab
+#: ../../../source/news.rst:38 ../../../source/news.rst:167
+msgid "apt-get::"
+msgstr ""
+
+# 2992abcbdb714af1bc3dc0646a462744
+#: ../../../source/news.rst:42 ../../../source/news.rst:171
+msgid "yum::"
+msgstr ""
+
+# 090f1fc7e5b14d599dda18e201dc74a0
+#: ../../../source/news.rst:49 ../../../source/news.rst:178
+msgid ""
+"We don't forget to run ``yum remove`` before ``yum install``. If we forget "
+"to run ``yum remove``, we will break a MySQL's system table."
+msgstr ""
+"``yum install`` の前に ``yum remove`` を実行することを忘れてはいけません。も"
+"し、 ``yum remove`` を実行することを忘れると、MySQLのシステムテーブルを壊して"
+"しまうかもしれません。"
+
+# 91264ac5d4524f66a8708b5964af8c7b
+#: ../../../source/news.rst:53 ../../../source/news.rst:182
+msgid "We recreate a database::"
+msgstr "データベースを作り直します::"
+
+# d3ed03166cfa4156a979128ed95c834e
+#: ../../../source/news.rst:57 ../../../source/news.rst:186
+msgid "We restore a database by modified dump file::"
+msgstr "修正したダンプファイルを使ってデータベースを復旧します::"
+
+# 2803378906bf4e088c131d33492b6b3a
+#: ../../../source/news.rst:61
+#, fuzzy
+msgid "Now, we can use mroonga 1.30."
+msgstr "これで1.20を使うことができるようになりました。"
+
+# 056232ecba044abab1ea54c34b9ce282
+#: ../../../source/news.rst:64 ../../../source/news.rst:193
+#: ../../../source/news.rst:237 ../../../source/news.rst:281
+#: ../../../source/news.rst:326
+msgid "Improvements"
+msgstr "改良"
+
+# 3754145a2bb74e9da532cb818bf851b6
+#: ../../../source/news.rst:66
+#, fuzzy
+msgid "Supported MySQL 5.5.21."
+msgstr "MySQL 5.5.20に対応。"
+
+# e50707438bd14803829f2477237fc29f
+#: ../../../source/news.rst:67
+#, fuzzy
+msgid "Required groonga 1.3.1 or later."
+msgstr "groonga 1.3.0以降を必須にした。"
+
+# 75ed5dbde8df43f28b205cb959ad5dd4
+#: ../../../source/news.rst:68
+msgid "Supported TIMESTAMP with fractional seconds on MySQL 5.6 and MariaDB."
+msgstr ""
+
+# cbc23651575542cab184948db3b5f2d7
+#: ../../../source/news.rst:69
+msgid ""
+"[storage mode] Supported ``ORDER LIMIT`` optimization on no primary key."
+msgstr ""
+
+# 93e7cf885b534732aeb176d833f6b205
+#: ../../../source/news.rst:70
+msgid ""
+"[storage mode] Supported ``ORDER LIMIT`` optimization with fulltext search "
+"and ``COLUMN = INT_VALUE``."
+msgstr ""
+
+# 63807ef9c8fe4132972b5104cbc7f3c6
+#: ../../../source/news.rst:72
+msgid "[storage] Supported fulltext search in sub query. [Reported by @camyuy]"
+msgstr ""
+
+# 83f0f6890d3c449098e4489bb97fefe6
+#: ../../../source/news.rst:74
+msgid ""
+"[incompatible] Mapped ``YEAR`` in MySQL to ``Time`` in groonga to improve "
+"groonga integration."
+msgstr ""
+
+# 043f0c71a08446d393779bcf3e08bb58
+#: ../../../source/news.rst:76
+#, fuzzy
+msgid ""
+"[storage mode] Removed a needless write lock on update. [#1271] [Reported by "
+"Takahiro Nagai]"
+msgstr ""
+"[ストレージモード] viewでの ``count(*)`` に対応。 [#1255] [Takahiro Nagaiさん"
+"が報告]"
+
+# 1025e29407b94fe6b398dbfb775c2713
+#: ../../../source/news.rst:78
+msgid ""
+"Added ``mroonga_enable_optimization`` thread variable to on/off "
+"optimizations. It's useful for benchmark."
+msgstr ""
+
+# bdca0e02d8f9459fa43deaae796cc9c2
+#: ../../../source/news.rst:80
+#, fuzzy
+msgid "[wrapper mode] Supported temporary table. [#1267]"
+msgstr "[ラッパーモード] REPAIR TABLE対応。"
+
+# 94a325bb23c94c939ba07c06e7a0f697
+#: ../../../source/news.rst:81
+msgid "[incompatible] Supported ``/`` in database name. [#1281]"
+msgstr ""
+
+# 7f7809a2c67e43c8a0dd68bc658ee4da
+#: ../../../source/news.rst:82
+msgid "Suppressed needless comments on ``INSERT ... ON DUPLICATE KEY UPDATE``."
+msgstr ""
+
+# 277be1b464484094831587694df6c795
+#: ../../../source/news.rst:84
+msgid ""
+"Supported ``INSERT ... ON DUPLICATE KEY UPDATE`` with ``UNIQUE KEY``. "
+"[#1283] [Reported by @104yuki_n]"
+msgstr ""
+
+# dc358e21766a42b98feefe90c2eca0ea
+#: ../../../source/news.rst:86
+msgid ""
+"Supported ``DATETIME``, ``DATE``, ``TIMESTAMP``, ``TIME``, ``DECIMAL``, "
+"``YEAR`` for primary key."
+msgstr ""
+
+# 232707f9ef484985b2f87a518fc5b528
+#: ../../../source/news.rst:88
+msgid ""
+"[incompatible] Supported all characters for database, table and column "
+"names. [#1284]"
+msgstr ""
+
+# 4ff2aa8c176a41d996e7280e9e3d6823
+#: ../../../source/news.rst:90
+msgid "[wrapper mode] Supported 255 bytes over index. [#1282]"
+msgstr ""
+
+# cbc23651575542cab184948db3b5f2d7
+#: ../../../source/news.rst:91
+msgid "[wrapper mode] Supported updating primary key. [#1195]"
+msgstr ""
+
+# 63807ef9c8fe4132972b5104cbc7f3c6
+#: ../../../source/news.rst:92
+msgid "[wrapper mode] Supported error handling on alter table. [#1195]"
+msgstr ""
+
+# 1e5bbac68f0f4ee3bf7870f597a05da6
+#: ../../../source/news.rst:93
+msgid ""
+"[wrapper mode] Improved error message on unsupported geometry type like "
+"``LineString``. [#1195]"
+msgstr ""
+
+# f3fd79f530614f1fb7fa0fa6f1cffd7f
+#: ../../../source/news.rst:95
+msgid ""
+"[wrapper mode] Supported ``INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS``. "
+"[#1195]"
+msgstr ""
+
+# 08e3d478781f474c8a19fd0acb16a2bf
+#: ../../../source/news.rst:99 ../../../source/news.rst:215
+#: ../../../source/news.rst:252 ../../../source/news.rst:303
+#: ../../../source/news.rst:344
+msgid "Fixes"
+msgstr "修正"
+
+# 40ea91f9ffda4f33bab8ec3d5b61c732
+#: ../../../source/news.rst:101
+msgid "[rpm] Changed to ensure re-install plugin."
+msgstr ""
+
+# 6a406578c85a44c2a4a5e69e375a6db8
+#: ../../../source/news.rst:102
+#, fuzzy
+msgid "[doc] Fixed wrong storage engine name. [Reported by Tomoatsu Shimada]"
+msgstr "[doc] 実行結果が間違っていた問題を修正。 [Hidekazu Tanakaさんが報告]"
+
+# 2371feae1d1549e59cd05415194e5dcf
+#: ../../../source/news.rst:105 ../../../source/news.rst:223
+#: ../../../source/news.rst:262 ../../../source/news.rst:311
+#: ../../../source/news.rst:352
+msgid "Thanks"
+msgstr "感謝"
+
+# e9281e9993104ae7ae67efd9e5725f9e
+#: ../../../source/news.rst:107
+msgid "@camyuy"
+msgstr ""
+
+# 9fbab937473c4396940d089ab165279e
+#: ../../../source/news.rst:108 ../../../source/news.rst:316
+#: ../../../source/news.rst:356
+msgid "Takahiro Nagai"
+msgstr "Takahiro Nagaiさん"
+
+# 4445030bc7a44d8faf506fcbdb7e480a
+#: ../../../source/news.rst:109
+msgid "Tomoatsu Shimada"
+msgstr ""
+
+# 6723c5a727ac49338d0334d9918ec437
+#: ../../../source/news.rst:110
+msgid "@104yuki_n"
+msgstr ""
+
+# f9a0af18e31849ac94867b7745d42030
+#: ../../../source/news.rst:115
+msgid "Release 1.20 - 2012/01/29"
+msgstr "1.20リリース - 2012/01/29"
+
+# 63ebc8639e4a40da862d1ff2ca0dc2da
+#: ../../../source/news.rst:125
 msgid "Storage engine name is changed to \"mroonga\" from \"groonga\"."
 msgstr "ストレージエンジン名を\"groonga\"から\"mroonga\"へ改名。"
 
 # 514e01eb11594c0d8834a905398f7c05
-#: ../../../source/news.rst:20
+#: ../../../source/news.rst:126
+#, fuzzy
 msgid ""
-"Groonga's native time data value are used for DATE, DATETIME and TIMESTAMP "
-"type values."
+"Groonga's native time data type is used for DATE, DATETIME and TIMESTAMP "
+"type in MySQL."
 msgstr ""
 "DATE、DATETIME、TIMESTAMP型の値にgroongaが提供する時間の値を使うようにした。"
 
 # c754dcd25a6e4b2cabded37160dca861
-#: ../../../source/news.rst:23
+#: ../../../source/news.rst:129
 msgid ""
 "We need to modify dumped database to change \"ENGINE=groonga\" in \"CREATE "
 "TABLE\" SQL. Here are upgrade sequence."
@@ -64,18 +321,13 @@ msgstr ""
 "\"CREATE TABLE\" SQL内の\"ENGINE=groonga\"を変更するためにダンプしたデータ"
 "ベースを変更する必要があります。以下が更新手順です。"
 
-# 63d74f1cc38640b688c9f9ab14f613a6
-#: ../../../source/news.rst:26
-msgid "We dump a database that uses mroonga::"
-msgstr "mroongaを使っているデータベースをダンプします::"
-
 # 929387a0be37482db6d372da33f91c58
-#: ../../../source/news.rst:30
+#: ../../../source/news.rst:136
 msgid "We convert storage engine in dump file::"
 msgstr "ダンプファイル中のストレージエンジンを変更します::"
 
 # a3496e1fb828442f8850a2680c8be7be
-#: ../../../source/news.rst:34
+#: ../../../source/news.rst:140
 msgid ""
 "We confirm that ``ENGINE=groonga`` only in ``CREATE TABLE`` is replaced with "
 "``ENGINE=mroonga``. We need to check ``@@ ... @@`` line includes ``CREATE "
@@ -87,94 +339,49 @@ msgstr ""
 "確認します。この行が ``CREATE TABLE`` を含んでいたら、その変更はほぼ間違いな"
 "く ``CREATE TABLE`` 用の変更です::"
 
-# 242fb02d59a9402093456de3f7600144
-#: ../../../source/news.rst:53
-msgid "We drop the existing database::"
-msgstr "既存のデータベースを削除します::"
-
-# 12d5e1e0501f42f0926939ef43c5ed3b
-#: ../../../source/news.rst:57
-msgid ""
-"We upgrade to \"mroonga\" storage engine. We will use ``apt-get`` on Debian "
-"GNU/Linux or Ubuntu and ``yum`` on CentOS or Fedora."
-msgstr "\"mroonga\"ストレージエンジンにアップグレードします。Debian GNU/LinuxやUbuntuでは ``apt-get`` を使います。CentOSやFedoraでは ``yum`` を使います。"
-
-# b7f174faf4404a7c8731a8cf595b52ab
-#: ../../../source/news.rst:61
-msgid "apt-get::"
-msgstr ""
-
-# 2992abcbdb714af1bc3dc0646a462744
-#: ../../../source/news.rst:65
-msgid "yum::"
-msgstr ""
-
-# 090f1fc7e5b14d599dda18e201dc74a0
-#: ../../../source/news.rst:72
-msgid ""
-"We don't forget to run ``yum remove`` before ``yum install``. If we forget "
-"to run ``yum remove``, we will break a MySQL's system table."
-msgstr "``yum install`` の前に ``yum remove`` を実行することを忘れてはいけません。もし、 ``yum remove`` を実行することを忘れると、MySQLのシステムテーブルを壊してしまうかもしれません。"
-
-# 91264ac5d4524f66a8708b5964af8c7b
-#: ../../../source/news.rst:76
-msgid "We recreate a database::"
-msgstr "データベースを作り直します::"
-
-# d3ed03166cfa4156a979128ed95c834e
-#: ../../../source/news.rst:80
-msgid "We restore a database by modified dump file::"
-msgstr "修正したダンプファイルを使ってデータベースを復旧します::"
-
 # 2803378906bf4e088c131d33492b6b3a
-#: ../../../source/news.rst:84
+#: ../../../source/news.rst:190
 msgid "Now, we can use mroonga 1.20."
 msgstr "これで1.20を使うことができるようになりました。"
 
-# 056232ecba044abab1ea54c34b9ce282
-#: ../../../source/news.rst:87 ../../../source/news.rst:131
-#: ../../../source/news.rst:175 ../../../source/news.rst:220
-msgid "Improvements"
-msgstr "改良"
-
 # 3754145a2bb74e9da532cb818bf851b6
-#: ../../../source/news.rst:89
+#: ../../../source/news.rst:195
 msgid "Supported MySQL 5.5.20."
 msgstr "MySQL 5.5.20に対応。"
 
 # 3754145a2bb74e9da532cb818bf851b6
-#: ../../../source/news.rst:90
+#: ../../../source/news.rst:196
 msgid "Supported MySQL 5.1.61."
 msgstr "MySQL 5.1.61に対応。"
 
 # e50707438bd14803829f2477237fc29f
-#: ../../../source/news.rst:91
+#: ../../../source/news.rst:197
 msgid "Required groonga 1.3.0 or later."
 msgstr "groonga 1.3.0以降を必須にした。"
 
 # 5d4ddc8d633945fb8c3131f69d3b2ff8
-#: ../../../source/news.rst:92
+#: ../../../source/news.rst:198
 msgid ""
 "[incompatible] Changed storage engine name to \"mroonga\" from \"groonga\"."
 msgstr "[非互換] ストレージエンジン名を\"groonga\"から\"mroonga\"に変更。"
 
 # ba583a2e7b034cb7aa9b87f21c18b186
-#: ../../../source/news.rst:93
+#: ../../../source/news.rst:199
 msgid "Supported UTF8_BIN collate. [#1150]"
 msgstr "UTF8_BINコレーションに対応。 [#1150]"
 
 # 4b40955794f74002b18004e96d8cd1ae
-#: ../../../source/news.rst:94
+#: ../../../source/news.rst:200
 msgid "Disabled strict-aliasing warnings. [Reported by @issm]"
 msgstr "strict-aliasingの警告が出ないようにした。 [@issmさんが報告]"
 
 # 3754145a2bb74e9da532cb818bf851b6
-#: ../../../source/news.rst:95
+#: ../../../source/news.rst:201
 msgid "Supported decimal. [#1249] [Reported by @Kiske]"
 msgstr "DECIMALに対応した。 [#1249] [@Kiskeさんが報告]"
 
 # 64e507e0a50a4a02a215ee270d87d397
-#: ../../../source/news.rst:96
+#: ../../../source/news.rst:202
 msgid ""
 "[storage mode] Supported HA_KEYREAD_ONLY. It will improve column value "
 "access in index. [#1212]"
@@ -183,17 +390,17 @@ msgstr ""
 "になるはず。 [#1212]"
 
 # 059e46365944448c9fcb0a52cac2298e
-#: ../../../source/news.rst:98
+#: ../../../source/news.rst:204
 msgid "[storage mode] Supported float value in multiple column index."
 msgstr "[ストレージモード] float値のマルチカラムインデックスに対応。"
 
 # 6f36a298120e4435a29495d4a3478057
-#: ../../../source/news.rst:99
+#: ../../../source/news.rst:205
 msgid "[storage mode] Supported double value in multiple column index."
 msgstr "[ストレージモード] double値のマルチカラムインデックスに対応。"
 
 # 76c1ceb69dc2430d93a80383ee3f2ecf
-#: ../../../source/news.rst:100
+#: ../../../source/news.rst:206
 msgid ""
 "[storage mode] Mapped enum and set types to more suitable groonga data types."
 msgstr ""
@@ -201,12 +408,12 @@ msgstr ""
 "にした。"
 
 # bdca0e02d8f9459fa43deaae796cc9c2
-#: ../../../source/news.rst:102
+#: ../../../source/news.rst:208
 msgid "[wrapper mode] Supported REPAIR TABLE."
 msgstr "[ラッパーモード] REPAIR TABLE対応。"
 
 # 043f0c71a08446d393779bcf3e08bb58
-#: ../../../source/news.rst:103
+#: ../../../source/news.rst:209
 msgid ""
 "[storage mode] Supported ``count(*)`` on view. [#1255] [Reported by Takahiro "
 "Nagai]"
@@ -215,7 +422,7 @@ msgstr ""
 "が報告]"
 
 # 757555f980664869900fa860aefbde87
-#: ../../../source/news.rst:105
+#: ../../../source/news.rst:211
 msgid ""
 "[incompatible] Groonga's native time value is used for DATE, DATETIME and "
 "TIMESTAMP type values."
@@ -223,14 +430,8 @@ msgstr ""
 "[非互換] DATE、DATETIME、TIMESTAMP型の値にgroongaが提供する時間の値を使うよう"
 "にした。"
 
-# 08e3d478781f474c8a19fd0acb16a2bf
-#: ../../../source/news.rst:109 ../../../source/news.rst:146
-#: ../../../source/news.rst:197 ../../../source/news.rst:238
-msgid "Fixes"
-msgstr "修正"
-
 # aa083c36b35440b889fc380c233af67a
-#: ../../../source/news.rst:111
+#: ../../../source/news.rst:217
 msgid ""
 "[debian] Fixed wrong mysql-server-groonga version in replaces and breaks. "
 "[Reported by @ytaka5]"
@@ -239,78 +440,72 @@ msgstr ""
 "さんが報告]"
 
 # 6a406578c85a44c2a4a5e69e375a6db8
-#: ../../../source/news.rst:113
+#: ../../../source/news.rst:219
 msgid "[doc] Fixed wrong execution result. [Reported by Hidekazu Tanaka]"
 msgstr "[doc] 実行結果が間違っていた問題を修正。 [Hidekazu Tanakaさんが報告]"
 
 # e30afe287eae45c38d71c938087b6253
-#: ../../../source/news.rst:114
+#: ../../../source/news.rst:220
 msgid "[wrapper mode] Fixed a memory leak. [Reported by montywi]"
 msgstr "[ラッパーモード] メモリリークを修正。 [montywiさんが報告]"
 
-# 2371feae1d1549e59cd05415194e5dcf
-#: ../../../source/news.rst:117 ../../../source/news.rst:156
-#: ../../../source/news.rst:205 ../../../source/news.rst:246
-msgid "Thanks"
-msgstr "感謝"
-
 # 7cc42792a2ca464fafb907793d65bd2d
-#: ../../../source/news.rst:119
+#: ../../../source/news.rst:225
 msgid "@ytaka5"
 msgstr "@ytaka5さん"
 
 # 9952ee5eeb2b4d83b41e65a3934484eb
-#: ../../../source/news.rst:120
+#: ../../../source/news.rst:226
 msgid "Hidekazu Tanaka"
 msgstr "Hidekazu Tanakaさん"
 
 # 23eb010c032b4cc99aa758bf1d9f9487
-#: ../../../source/news.rst:121
+#: ../../../source/news.rst:227
 msgid "@issm"
 msgstr "@issmさん"
 
 # 5660985c137b4f99ab6dab33a59d702b
-#: ../../../source/news.rst:122
+#: ../../../source/news.rst:228
 msgid "montywi"
 msgstr "montywiさん"
 
 # 52eafff2403f4e5b8e44ee362feceaf8
-#: ../../../source/news.rst:123
+#: ../../../source/news.rst:229
 msgid "@Kiske"
 msgstr "@Kiskeさん"
 
 # f9a0af18e31849ac94867b7745d42030
-#: ../../../source/news.rst:128
+#: ../../../source/news.rst:234
 msgid "Release 1.11 - 2011/12/29"
 msgstr "1.11リリース - 2011/12/29"
 
 # 3754145a2bb74e9da532cb818bf851b6
-#: ../../../source/news.rst:133
+#: ../../../source/news.rst:239
 msgid "Supported MySQL 5.5.19."
 msgstr "MySQL 5.5.19に対応。"
 
 # 3b00d891c01c48a98c1c01704efcbacd
-#: ../../../source/news.rst:134
+#: ../../../source/news.rst:240
 msgid "Supported MySQL 5.6.4."
 msgstr "MySQL 5.6.4に対応。"
 
 # 537082f4d2bd4a5fa44c25c71f597d6b
-#: ../../../source/news.rst:135
+#: ../../../source/news.rst:241
 msgid "Dropped MySQL 5.6.3 support."
 msgstr "MySQL 5.6.3対応をやめた。"
 
 # 3b00d891c01c48a98c1c01704efcbacd
-#: ../../../source/news.rst:136
+#: ../../../source/news.rst:242
 msgid "Supported Fedora 16."
 msgstr "Fedora 16に対応。"
 
 # 537082f4d2bd4a5fa44c25c71f597d6b
-#: ../../../source/news.rst:137
+#: ../../../source/news.rst:243
 msgid "Dropped Fedora 15 support."
 msgstr "Fedora 15対応をやめた。"
 
 # 4b40955794f74002b18004e96d8cd1ae
-#: ../../../source/news.rst:138
+#: ../../../source/news.rst:244
 msgid ""
 "Suppress strict-aliasing warnings. [groonga-dev,00659] [Reported by Kazuhiko "
 "Shiozaki]"
@@ -319,7 +514,7 @@ msgstr ""
 "告]"
 
 # 8252c8ad414c4467944b3d4b0a6fc573
-#: ../../../source/news.rst:140
+#: ../../../source/news.rst:246
 msgid ""
 "Supported utf8, binary, ascii, latin1, cp932, sjis, eucjpms, ujis and koi8r "
 "charset. [#1160] [Reported by nobody]"
@@ -328,7 +523,7 @@ msgstr ""
 "応。 [#1160] [nobodyさんが報告]"
 
 # 63807ef9c8fe4132972b5104cbc7f3c6
-#: ../../../source/news.rst:142
+#: ../../../source/news.rst:248
 msgid ""
 "[wrapper mode] Improved rollback handling on delete. [#1224] [Reported by "
 "Koichi Shishikura]"
@@ -337,7 +532,7 @@ msgstr ""
 "[#1224] [宍倉功一さんが報告]"
 
 # c9928c55a6e84330b16673b4f78ea3d1
-#: ../../../source/news.rst:148
+#: ../../../source/news.rst:254
 msgid ""
 "[storage mode] Fixed a bug that full text search on a table without primary "
 "key returns empty results. [#1193] [Reported by Kazuhiko Shiozaki]"
@@ -346,14 +541,14 @@ msgstr ""
 "正。 [#1193] [かずひこさんが報告]"
 
 # 8d1435a459144868a5df32af35dde0e9
-#: ../../../source/news.rst:151
+#: ../../../source/news.rst:257
 msgid "Fixed -Wno- compiler flag detection. [Patch by Arnaud Fontaine]"
 msgstr ""
 "コンパイラの-Wno-というフラグの検出に失敗していた問題を修正。 [Arnaud "
 "Fontaineさんがパッチを作成]"
 
 # 5a2108e806b54760adbc09e502c70b30
-#: ../../../source/news.rst:152
+#: ../../../source/news.rst:258
 msgid ""
 "[wrapper mode] Fixed a problem that index isn't used for full count. [#1196]"
 "[groonga-dev,0653] [Reported by Kaneoka]"
@@ -362,37 +557,37 @@ msgstr ""
 "[groonga-dev,0653] [金岡勲さんが報告]"
 
 # fea7719a822846df81706447d8eb4e29
-#: ../../../source/news.rst:158
+#: ../../../source/news.rst:264
 msgid "Kazuhiko Shiozaki"
 msgstr "かずひこさん"
 
 # 4596a0fbdcc24c52a64751a856923fa2
-#: ../../../source/news.rst:159
+#: ../../../source/news.rst:265
 msgid "Arnaud Fontaine"
 msgstr "Arnaud Fontaineさん"
 
 # fea7719a822846df81706447d8eb4e29
-#: ../../../source/news.rst:160
+#: ../../../source/news.rst:266
 msgid "Kaneoka"
 msgstr "金岡勲さん"
 
 # 1135ca6cf11d4eaa9e59862485825610
-#: ../../../source/news.rst:161 ../../../source/news.rst:209
+#: ../../../source/news.rst:267 ../../../source/news.rst:315
 msgid "nobody"
 msgstr "nobodyさん"
 
 # fb3ef5f9986f444790766a9bbff7e28f
-#: ../../../source/news.rst:162
+#: ../../../source/news.rst:268
 msgid "Koichi Shishikura"
 msgstr "宍倉功一さん"
 
 # f9a0af18e31849ac94867b7745d42030
-#: ../../../source/news.rst:167
+#: ../../../source/news.rst:273
 msgid "Release 1.10 - 2011/11/29"
 msgstr "1.0.1リリース - 2011/11/29"
 
 # 76829f1e1e9d41b7a93237d446141769
-#: ../../../source/news.rst:169
+#: ../../../source/news.rst:275
 msgid ""
 "Since this release, this project and product is called \"mroonga\" instead "
 "of \"groonga storage engine\"."
@@ -401,22 +596,22 @@ msgstr ""
 "「mroonga」に変更しました。"
 
 # 4fcc53a05fc2439eab33e906533947e0
-#: ../../../source/news.rst:172
+#: ../../../source/news.rst:278
 msgid "This release introduces MariaDB support and fixes several bugs."
 msgstr "MariaDB対応とバグ修正が主な変更点のリリース。"
 
 # 63ebc8639e4a40da862d1ff2ca0dc2da
-#: ../../../source/news.rst:177
+#: ../../../source/news.rst:283
 msgid "rename to \"mroonga\" from \"groonga storage engine\". #1170"
 msgstr "「groonga storage engine」から「mroonga」に改名。 #1170"
 
 # 42a5ac5ba327408e87e2a78dda4372ea
-#: ../../../source/news.rst:178
+#: ../../../source/news.rst:284
 msgid "add groonga_libgroonga_version and groonga_version variables. #1158"
 msgstr "groonga_libgroonga_version変数およびgroonga_version変数の追加。 #1158"
 
 # bd5688f62865413f93e859afa3ff821a
-#: ../../../source/news.rst:179
+#: ../../../source/news.rst:285
 msgid ""
 "information_schema.plugins.plugin_version returns mroonga's version. #1157"
 msgstr ""
@@ -424,12 +619,12 @@ msgstr ""
 "た。 #1157"
 
 # cbc3ac6cb58d4305ba8482901e21bbc4
-#: ../../../source/news.rst:180
+#: ../../../source/news.rst:286
 msgid "add groonga_log_file variable. #1178 [Suggested by nobody]"
 msgstr "groonga_log_file変数の追加。 #1178 [nobodyさんが提案]"
 
 # 4ededddab688419b9a4301927a8927e6
-#: ../../../source/news.rst:181
+#: ../../../source/news.rst:287
 msgid ""
 "FLUSH STATUS flushes groonga_* status variables. #1166 [Reported by Kazuhiko]"
 msgstr ""
@@ -437,47 +632,47 @@ msgstr ""
 "こさんが報告]"
 
 # 019ce395f4b14928b54d3da3bc399cd3
-#: ../../../source/news.rst:182
+#: ../../../source/news.rst:288
 msgid "support TRUNCATE TABLE #1151. [Suggested by Takahiro Nagai]"
 msgstr "TRUNCATE TABLEに対応。 #1151 [Takahiro Nagaiさんが提案]"
 
 # 53608f90822e41aa99a995f16f3cfd5e
-#: ../../../source/news.rst:183
+#: ../../../source/news.rst:289
 msgid "support ALTER TABLE #1168."
 msgstr "ALTER TABLEに対応。 #1168"
 
 # 3754145a2bb74e9da532cb818bf851b6
-#: ../../../source/news.rst:184
+#: ../../../source/news.rst:290
 msgid "support MariaDB 5.2.9. #1152 [Reported by Kazuhiko]"
 msgstr "MariaDB 5.2.9に対応。 #1152 [Kazuhikoさんが報告]"
 
 # 3b00d891c01c48a98c1c01704efcbacd
-#: ../../../source/news.rst:185
+#: ../../../source/news.rst:291
 msgid "support MariaDB 5.3.2-beta. #1152 [Reported by Kazuhiko]"
 msgstr "MariaDB 5.3.2-betaに対応。 #1152 [かずひこさんが報告]"
 
 # b26f7a47324541298e2818d5351d8ab2
-#: ../../../source/news.rst:186
+#: ../../../source/news.rst:292
 msgid "[rpm] split document package."
 msgstr "[rpm] ドキュメントのパッケージを分離。"
 
 # e1377b22adf54be492375092124e5bbd
-#: ../../../source/news.rst:187
+#: ../../../source/news.rst:293
 msgid "improve memory allocation for string system variables."
 msgstr "文字列のシステム変数のメモリ確保方法を改良。"
 
 # a4230d24a4d64919a9f6cecc491bfae9
-#: ../../../source/news.rst:188
+#: ../../../source/news.rst:294
 msgid "use PLUGIN_LICENSE_GPL. [Suggested by Kazuhiko]"
 msgstr "PLUGIN_LICENSE_GPLを使うようにした。 [Kazuhikoさんが提案]"
 
 # 677dc4162ed645e3ae80bbe05d2ec30f
-#: ../../../source/news.rst:189
+#: ../../../source/news.rst:295
 msgid "remove needless MeCab related configurations."
 msgstr "MeCab関連の設定を削除。"
 
 # 2c32a273614045869c45b7f732cf692a
-#: ../../../source/news.rst:190
+#: ../../../source/news.rst:296
 msgid ""
 "support FOUND_ROWS() and SQL_CALC_FOUND_ROWS. #1163 [Reported by Horikoshi "
 "Yuki]"
@@ -485,27 +680,27 @@ msgstr ""
 "FOUND_ROWS()とSQL_CALC_FOUND_ROWSに対応。 #1163 [Horikoshi Yukiさんが報告]"
 
 # f357506ebd05491b8b85c1b295745843
-#: ../../../source/news.rst:191
+#: ../../../source/news.rst:297
 msgid "support table name that contains '-'. #1165 [Reported by nobody]"
 msgstr "'-'を含むテーブル名に対応。 #1165 [nobodyさんが報告]"
 
 # 1d8e12164cf44199985503c793509f0e
-#: ../../../source/news.rst:192
+#: ../../../source/news.rst:298
 msgid "support inplace index change on MySQL 5.1."
 msgstr "MySQL 5.1上でテーブルを作りなおさないインデックス変更に対応。"
 
 # b4463c7092b441a789ec614565ec9fb6
-#: ../../../source/news.rst:193
+#: ../../../source/news.rst:299
 msgid "[deb] support i386."
 msgstr "[deb] i386対応。"
 
 # e12adc40bee04218ba183dbb9906a77e
-#: ../../../source/news.rst:194
+#: ../../../source/news.rst:300
 msgid "[rpm] support i386."
 msgstr "[rpm] i386対応。"
 
 # c9928c55a6e84330b16673b4f78ea3d1
-#: ../../../source/news.rst:199
+#: ../../../source/news.rst:305
 msgid ""
 "[storage mode] fix a bug that REPLACE INTO with TEXT column does not work. "
 "#1153 [Reported by Kazuhiko]"
@@ -514,7 +709,7 @@ msgstr ""
 "[Kazuhikoさんが報告]"
 
 # a31500f1a80a4373857a14ddf44dc080
-#: ../../../source/news.rst:200
+#: ../../../source/news.rst:306
 msgid ""
 "[wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with "
 "InnoDB. #1154 [Reported by Kazuhiko]"
@@ -523,7 +718,7 @@ msgstr ""
 "[Kazuhikoさんが報告]"
 
 # 92d5ee7007f64485b2e88808e8e1dcb6
-#: ../../../source/news.rst:201
+#: ../../../source/news.rst:307
 msgid ""
 "fix a bug that using ORDER and LIMIT returns a wrong result. #1161 [Reported "
 "by Horikoshi Yuki]"
@@ -532,7 +727,7 @@ msgstr ""
 "さんが報告]"
 
 # f9c24bd8e04b4c9bb1da8302526885f0
-#: ../../../source/news.rst:202
+#: ../../../source/news.rst:308
 msgid ""
 "fix a crash bug when FORCE INDEX with unknown key is used. #1181 [Reported "
 "by Takahiro Nagai]"
@@ -541,27 +736,22 @@ msgstr ""
 "[Takahiro Nagaiさんが報告]"
 
 # fea7719a822846df81706447d8eb4e29
-#: ../../../source/news.rst:207
+#: ../../../source/news.rst:313
 msgid "Kazuhiko"
 msgstr "Kazuhikoさん"
 
 # 78947072c112492dbf50abc37359fc8c
-#: ../../../source/news.rst:208
+#: ../../../source/news.rst:314
 msgid "Horikoshi Yuki"
 msgstr "Horikoshi Yukiさん"
 
-# 9fbab937473c4396940d089ab165279e
-#: ../../../source/news.rst:210 ../../../source/news.rst:250
-msgid "Takahiro Nagai"
-msgstr "Takahiro Nagaiさん"
-
 # f9a0af18e31849ac94867b7745d42030
-#: ../../../source/news.rst:215
+#: ../../../source/news.rst:321
 msgid "Release 1.0.1 - 2011/10/29"
 msgstr "1.0.1リリース - 2011/10/29"
 
 # de1ed166ba1c44449a9b7e71b03c89f4
-#: ../../../source/news.rst:217
+#: ../../../source/news.rst:323
 msgid ""
 "The important changes in this release are the enhancement of geolocation "
 "search and the improvement of dynamic index modification in storage mode."
@@ -570,7 +760,7 @@ msgstr ""
 "化が目玉のリリース。"
 
 # 04ebd836ffa24f2e85e841961d68c843
-#: ../../../source/news.rst:222
+#: ../../../source/news.rst:328
 msgid ""
 "[storage mode][wrapper mode] support reopening a database by `flush tables`."
 msgstr ""
@@ -578,7 +768,7 @@ msgstr ""
 "プンに対応。"
 
 # 89fb0a6fe24643b0a29b0052d62c9c4b
-#: ../../../source/news.rst:223
+#: ../../../source/news.rst:329
 msgid ""
 "[wrapper mode] support geolocation index. (Only Point type can be stored in "
 "a column. Search using index is only available for MBRContains)."
@@ -587,7 +777,7 @@ msgstr ""
 "Pointのみ対応。インデックスを利用した位置検索はMBRContainsのみ対応。）"
 
 # c0f830c6a06c4ce1aed362acc999b24c
-#: ../../../source/news.rst:224
+#: ../../../source/news.rst:330
 msgid ""
 "[benchmark] add `groonga_dry_write` variable to specify not to write to "
 "groonga database, that is useful to check bottle necks in benchmarks."
@@ -596,7 +786,7 @@ msgstr ""
 "`groonga_dry_write` 変数の追加。ベンチマーク時などボトルネック処理の確認用。"
 
 # e6298a5c8d5547569c235e3f25b0df4e
-#: ../../../source/news.rst:225
+#: ../../../source/news.rst:331
 msgid ""
 "mention MySQL version in the installation guide for CentOS 6. [proposed by "
 "@yoshi_ken]"
@@ -605,12 +795,12 @@ msgstr ""
 "[@yoshi_kenさんが提案]"
 
 # 37dab6cb5997498abb0adea0ca5c28d1
-#: ../../../source/news.rst:226
+#: ../../../source/news.rst:332
 msgid "[geolocation] improve performance by skip needless processes."
 msgstr "[位置情報検索] 不必要な処理をなるべくしないようにして高速化。"
 
 # 7a236cd050f1407d97bfd03aa47aaca7
-#: ../../../source/news.rst:227
+#: ../../../source/news.rst:333
 msgid ""
 "add  `--disable-fast-mutexes` configure option to ignore fast mutexes even "
 "if mysql_config says it is enabled."
@@ -619,47 +809,47 @@ msgstr ""
 "disable-fast-mutexes` configureオプションを追加。"
 
 # 6f36a298120e4435a29495d4a3478057
-#: ../../../source/news.rst:228
+#: ../../../source/news.rst:334
 msgid "[storage mode] support `create index`."
 msgstr "[ストレージモード] `create index` に対応。"
 
 # 79346c769ec740eaaeee13439211c3a2
-#: ../../../source/news.rst:229
+#: ../../../source/news.rst:335
 msgid "[storage mode] support `drop index`."
 msgstr "[ストレージモード] `drop index` に対応。"
 
 # 059e46365944448c9fcb0a52cac2298e
-#: ../../../source/news.rst:230
+#: ../../../source/news.rst:336
 msgid "[storage mode] support multi columns index for full text search."
 msgstr "[ストレージモード] 全文検索用のマルチカラムインデックスに対応。"
 
 # 4810cbfcc16b44a49c35adf13d7502c9
-#: ../../../source/news.rst:231
+#: ../../../source/news.rst:337
 msgid "support `D` pragma."
 msgstr "`D` プラグマに対応。"
 
 # 3754145a2bb74e9da532cb818bf851b6
-#: ../../../source/news.rst:232
+#: ../../../source/news.rst:338
 msgid "support MySQL 5.5.17."
 msgstr "MySQL 5.5.17に対応。"
 
 # 3b00d891c01c48a98c1c01704efcbacd
-#: ../../../source/news.rst:233
+#: ../../../source/news.rst:339
 msgid "support MySQL 5.6.3-m6."
 msgstr "MySQL 5.6.3-m6に対応。"
 
 # ca41d629f81e45d9b59fdab5c8bc563e
-#: ../../../source/news.rst:234
+#: ../../../source/news.rst:340
 msgid "support groonga 1.2.7. (1.2.6 or below are no longer supported)."
 msgstr "groonga 1.2.7に対応。（1.2.6以下のサポートを削除。）"
 
 # 38e09f4e78b348369c7ceb5cf2b688a2
-#: ../../../source/news.rst:235
+#: ../../../source/news.rst:341
 msgid "support Ubuntu 11.10 Oneiric Ocelot."
 msgstr "Ubuntu 11.10 Oneiric Ocelotに対応。"
 
 # ee497e915df14032814b471bf181517a
-#: ../../../source/news.rst:240
+#: ../../../source/news.rst:346
 msgid ""
 "fix a bug that we have no results if we specify '+' at the beginning of the "
 "query in boolean mode. [reported by Hajime Nishiyama]"
@@ -668,12 +858,12 @@ msgstr ""
 "正。 [西山はじめさんが報告]"
 
 # 043f0c71a08446d393779bcf3e08bb58
-#: ../../../source/news.rst:241
+#: ../../../source/news.rst:347
 msgid "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
 msgstr "[Fedora] パッケージの依存関係を修正。 [Takahiro Nagaiさんが報告]"
 
 # 4ba5cc410a4845b893f5f4aa0558b379
-#: ../../../source/news.rst:242
+#: ../../../source/news.rst:348
 msgid ""
 "[Fedora] fix a problem that we get undefined symbol error when the plugin is "
 "loaded. [reported by Takahiro Nagai]"
@@ -682,7 +872,7 @@ msgstr ""
 "正。 [Takahiro Nagaiさんが報告]"
 
 # 9032cf194ab44ca0b8eb1dfa13876bf8
-#: ../../../source/news.rst:243
+#: ../../../source/news.rst:349
 msgid ""
 "[storage mode] fix a bug that index will not be correctly created if "
 "`varchar` is used in a multi-column index. #1143 [reported by Takahiro Nagai]"
@@ -691,22 +881,22 @@ msgstr ""
 "が正常に作成されない問題を修正。 #1143 [Takahiro Nagaiさんが報告]"
 
 # c68057f4a7c94497ada2fb34ec2a8cd5
-#: ../../../source/news.rst:248
+#: ../../../source/news.rst:354
 msgid "@yoshi_ken"
 msgstr "@yoshi_kenさん"
 
 # 2b5d347737434ccfbd58b19aa8be4e3a
-#: ../../../source/news.rst:249
+#: ../../../source/news.rst:355
 msgid "Hajime Nishiyama"
 msgstr "西山はじめさん"
 
 # 98c8db834d794b05ae9fece4c31300b5
-#: ../../../source/news.rst:255
+#: ../../../source/news.rst:361
 msgid "1.0.0 リリース - 2011/09/29"
 msgstr ""
 
 # 9157bae11406410e9a778ec3e3d83450
-#: ../../../source/news.rst:257
+#: ../../../source/news.rst:363
 msgid "初回リリースから約1年経って、初のメジャーリリース！"
 msgstr ""
 
@@ -719,7 +909,7 @@ msgstr ""
 # b7d91b7cf2584f63bebcef2d9c08dc05
 # 878e6929c84f489382e2729a0f27aa49
 # 7d4e03fc48274b118b99e04b7e661793
-#: ../../../source/news.rst:260 ../../../source/news/0.x.rst:12
+#: ../../../source/news.rst:366 ../../../source/news/0.x.rst:12
 #: ../../../source/news/0.x.rst:23 ../../../source/news/0.x.rst:36
 #: ../../../source/news/0.x.rst:60 ../../../source/news/0.x.rst:91
 #: ../../../source/news/0.x.rst:108 ../../../source/news/0.x.rst:130
@@ -728,80 +918,80 @@ msgid "改良"
 msgstr ""
 
 # 63d4961723fb42368da4e58ddf6b6fc2
-#: ../../../source/news.rst:262
+#: ../../../source/news.rst:368
 msgid "[ラッパーモード] drop index対応。 #1040"
 msgstr ""
 
 # 9b7ee7ff3ab242329d460e9415bbd69e
-#: ../../../source/news.rst:263
+#: ../../../source/news.rst:369
 msgid ""
 "[ストレージモード] GEOMETRY対応。（ただし、カラムに保存できる型はPointのみ対"
 "応。インデックスを利用した位置検索はMBRContainsのみ対応。） #1041"
 msgstr ""
 
 # b129b2338e5c45c08b24930bd24ff2f8
-#: ../../../source/news.rst:264
+#: ../../../source/news.rst:370
 msgid "[ストレージモード] マルチカラムインデックスに対応。 #455"
 msgstr ""
 
 # 7857bbe02cea41ac9ba26c93f1ee126d
-#: ../../../source/news.rst:265
+#: ../../../source/news.rst:371
 msgid ""
 "[ストレージモード][ラッパーモード] 全文検索用パーサー（トークナイザー）のカス"
 "タマイズに対応。 #592"
 msgstr ""
 
 # 8362045673bc43c18bf5b8d6f19c51a3
-#: ../../../source/news.rst:266
+#: ../../../source/news.rst:372
 msgid ""
 "configureにデフォルトの全文検索用パーサーを指定する `--with-default-parser` "
 "オプションを追加。"
 msgstr ""
 
 # 37bb2dbbf9614f8a937ead143aaa75a5
-#: ../../../source/news.rst:267
+#: ../../../source/news.rst:373
 msgid ""
 "実行時にデフォルトの全文検索用パーサーを指定する `groonga_default_parser` 変"
 "数を追加。"
 msgstr ""
 
 # 5ecea39af2c14385950601f0e7900da2
-#: ../../../source/news.rst:268
+#: ../../../source/news.rst:374
 msgid ""
 "[ラッパーモード] ストレージモードで実装している `order` と `limit` が指定され"
 "た場合に必要のないレコードを返さないようにする高速化に対応。"
 msgstr ""
 
 # d9a899b8d6114a85be4a9568c6bf8bfd
-#: ../../../source/news.rst:269
+#: ../../../source/news.rst:375
 msgid ""
 "[ストレージモード] 1つの `select` 中での複数の `match against` 指定に対応。"
 msgstr ""
 
 # bd3f23cc39d5431ca2707282a65d0936
-#: ../../../source/news.rst:270
+#: ../../../source/news.rst:376
 msgid ""
 "[非互換][ストレージモード] `_score` カラムの削除。代わりにMySQL標準の書き方で"
 "ある `match against` を使ってください。"
 msgstr ""
 
 # 778c4b4e6d4b49c4881a5f43cb46e8dc
-#: ../../../source/news.rst:271
+#: ../../../source/news.rst:377
 msgid "[ラッパーモード] プライマリキーの更新に対応。"
 msgstr ""
 
 # feedefd8a04b46d5ba9c493afd17afa6
-#: ../../../source/news.rst:272
+#: ../../../source/news.rst:378
 msgid "MySQL 5.5.16に対応。"
 msgstr ""
 
 # ef2e152167524d9ca5b9b82e40c77f9c
-#: ../../../source/news.rst:273
+#: ../../../source/news.rst:379
 msgid "CentOS 6に対応。"
 msgstr ""
 
 # 9ebcbe9cfb3446db9b40827d3ec1b291
-#: ../../../source/news.rst:274
+#: ../../../source/news.rst:380
 msgid "groonga 1.2.6に対応。（1.2.5以下のサポートを削除。）"
 msgstr ""
 
@@ -810,35 +1000,35 @@ msgstr ""
 # 05adf57291214e16987916921625e765
 # 8e76c95d91a14cbfb40def73bf138a20
 # 893447f19f1340c8b9c69347714dac3d
-#: ../../../source/news.rst:277 ../../../source/news/0.x.rst:44
+#: ../../../source/news.rst:383 ../../../source/news/0.x.rst:44
 #: ../../../source/news/0.x.rst:73 ../../../source/news/0.x.rst:144
 #: ../../../source/news/0.x.rst:165
 msgid "修正"
 msgstr ""
 
 # 958dd89b09314ea4ae2a6db978afd4e6
-#: ../../../source/news.rst:279
+#: ../../../source/news.rst:385
 msgid ""
 "[Ubuntu] Lucid上でインストールエラーが発生する問題を修正。 （Isao Sugimotoさ"
 "んが報告）"
 msgstr ""
 
 # d2e814951ae04a3583364c34311274c3
-#: ../../../source/news.rst:280
+#: ../../../source/news.rst:386
 msgid ""
 "auto_incrementを使った場合にテキストデータが壊れる問題を修正。 "
 "（@zaubermaerchenさんが報告） #1072"
 msgstr ""
 
 # de0aa31025a148e1bbdf49c93d3f2c54
-#: ../../../source/news.rst:281
+#: ../../../source/news.rst:387
 msgid ""
 "[Ubuntu] Lucid上でテーブルを削除するとクラッシュする問題を修正。 #1063 "
 "（Isao Sugimotoさんが報告）"
 msgstr ""
 
 # f2685dc4164949a999a27d2bb08a97d8
-#: ../../../source/news.rst:282
+#: ../../../source/news.rst:388
 msgid ""
 "MySQLと同じビルドオプションを使っていなかった問題を修正。 GitHub#4 (groongaの"
 "GitHubのIssues) （Tomohiro MITSUMUNEさんが報告）"
@@ -850,29 +1040,29 @@ msgstr ""
 # 41d8911c9b4d406ea154d19814c65891
 # 19d5003a58db4917bf233923f452108d
 # 0dcd7e901e314a8bb38cba75c4a0de09
-#: ../../../source/news.rst:285 ../../../source/news/0.x.rst:49
+#: ../../../source/news.rst:391 ../../../source/news/0.x.rst:49
 #: ../../../source/news/0.x.rst:81 ../../../source/news/0.x.rst:100
 #: ../../../source/news/0.x.rst:122 ../../../source/news/0.x.rst:171
 msgid "感謝"
 msgstr ""
 
 # 8f081415763c4815bf063dc220b73086
-#: ../../../source/news.rst:287
+#: ../../../source/news.rst:393
 msgid "Isao Sugimotoさん"
 msgstr ""
 
 # e2e5debe6ea9403e87c1124a4c223021
-#: ../../../source/news.rst:288
+#: ../../../source/news.rst:394
 msgid "@zaubermaerchenさん"
 msgstr ""
 
 # ce80097cfa5f4c8aa4d3102cff25c6d4
-#: ../../../source/news.rst:289
+#: ../../../source/news.rst:395
 msgid "Tomohiro MITSUMUNEさん"
 msgstr ""
 
 # ee975c9fa2aa4d3ca168c4a5e44bb75e
-#: ../../../source/news.rst:292
+#: ../../../source/news.rst:398
 msgid "Past releases"
 msgstr ""
 

@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mroonga 1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-31 11:43\n"
+"POT-Creation-Date: 2012-02-28 13:37\n"
 "PO-Revision-Date: 2012-01-31 11:48+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 # e62395de44d64d548e3188d2205f30d3
@@ -27,7 +27,9 @@ msgstr "コミュニティ"
 msgid ""
 "There are some places for sharing groonga and mroonga information. We "
 "welcome you to join our community."
-msgstr "groongaとmroongaの情報を共有する場所がいくつかあります。これらのコミュニティにぜひ参加してください。"
+msgstr ""
+"groongaとmroongaの情報を共有する場所がいくつかあります。これらのコミュニティ"
+"にぜひ参加してください。"
 
 # fb1792bbb0eb48aab88b7e4ef4694cf0
 #: ../../../source/community.rst:9
