@@ -1,6 +1,6 @@
 m4_define([mrn_version_major], [1])
-m4_define([mrn_version_minor], [2])
-m4_define([mrn_version_micro], [1])
+m4_define([mrn_version_minor], [3])
+m4_define([mrn_version_micro], [0])
 m4_define([mrn_version],
           [mrn_version_major.mrn_version_minor[]mrn_version_micro])
 
