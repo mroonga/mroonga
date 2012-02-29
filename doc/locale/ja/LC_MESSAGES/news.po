@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-28 16:51\n"
-"PO-Revision-Date: 2012-02-28 18:04+0900\n"
+"PO-Revision-Date: 2012-02-29 13:56+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -125,8 +125,8 @@ msgstr "MySQL 5.5.21に対応。"
 
 # e50707438bd14803829f2477237fc29f
 #: ../../../source/news.rst:67
-msgid "Required groonga 1.3.1 or later."
-msgstr "groonga 1.3.1以降を必須にした。"
+msgid "Required groonga 2.0.0 or later."
+msgstr "groonga 2.0.0以降を必須にした。"
 
 # 75ed5dbde8df43f28b205cb959ad5dd4
 #: ../../../source/news.rst:68

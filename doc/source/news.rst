@@ -64,7 +64,7 @@ Improvements
 ^^^^^^^^^^^^
 
 * Supported MySQL 5.5.21.
-* Required groonga 1.3.1 or later.
+* Required groonga 2.0.0 or later.
 * Supported TIMESTAMP with fractional seconds on MySQL 5.6 and MariaDB.
 * [storage mode] Supported ``ORDER LIMIT`` optimization on no primary key.
 * [storage mode] Supported ``ORDER LIMIT`` optimization with
