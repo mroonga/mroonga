@@ -50,7 +50,7 @@ msgstr "データベース名、テーブル名、カラム名に任意の文字
 # 514e01eb11594c0d8834a905398f7c05
 #: ../../../source/news.rst:21
 msgid "Groonga's native time data type is used for ``YEAR`` type in MySQL."
-msgstr "MySQLの ``YEAR`` 型にｈgroongaが提供する時間型を使うようにした。"
+msgstr "MySQLの ``YEAR`` 型にgroongaが提供する時間型を使うようにした。"
 
 # 0c488a71cd2842fb8d3b84be052d8fdc
 #: ../../../source/news.rst:24
