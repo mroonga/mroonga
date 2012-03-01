@@ -1,6 +1,7 @@
 mroonga (2.01-1) unstable; urgency=low
 
   * New upstream release.
+  * Ensure plugin is uninstalled by closing all tables use mroonga.
 
  -- Kouhei Sutou <kou@clear-code.com>  Thu, 29 Mar 2012 00:00:00 +0900
 

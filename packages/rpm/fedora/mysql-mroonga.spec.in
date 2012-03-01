@@ -80,6 +80,7 @@ eval $command || \
 sql="
 DROP FUNCTION last_insert_grn_id;
 UNINSTALL PLUGIN mroonga;
+FLUSH TABLES;
 "
 command="/usr/bin/mysql -u root -e \"$sql\""
 echo $command
@@ -101,6 +102,7 @@ eval $command || \
 %changelog
 * Thu Mar 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.01-0
 - new upstream release.
+- ensure plugin is uninstalled by closing all tables use mroonga.
 
 * Wed Feb 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.00-0
 - new upstream release.
