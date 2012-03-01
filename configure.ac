@@ -18,6 +18,9 @@ AC_SUBST([MRN_VERSION_MICRO])
 MRN_VERSION_IN_HEX=`printf "0x%02x%02x" mrn_version_major mrn_version_minor[]mrn_version_micro`
 AC_SUBST([MRN_VERSION_IN_HEX])
 
+MRN_PLUGIN_VERSION=`printf "%d.%d" mrn_version_major mrn_version_minor[]mrn_version_micro`
+AC_SUBST([MRN_PLUGIN_VERSION])
+
 AC_C_BIGENDIAN
 AC_PROG_CC
 AC_PROG_CXX
