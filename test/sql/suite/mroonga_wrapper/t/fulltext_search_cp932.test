@@ -15,6 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_mroonga.inc
+--source include/have_cp932.inc
 
 --disable_warnings
 drop table if exists t1, t2, t3;
