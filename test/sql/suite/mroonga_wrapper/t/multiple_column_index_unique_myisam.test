@@ -17,10 +17,10 @@
 --source include/have_mroonga.inc
 
 --disable_warnings
-DROP TEMPORARY TABLE IF EXISTS diaries;
+DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
-CREATE TEMPORARY TABLE diaries (
+CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
   date TIMESTAMP NOT NULL,
   title VARCHAR(100) NOT NULL,
