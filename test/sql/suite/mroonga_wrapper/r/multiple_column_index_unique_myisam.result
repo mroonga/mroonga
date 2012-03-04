@@ -8,7 +8,7 @@ UNIQUE INDEX (date, title)
 ) DEFAULT CHARSET=UTF8 COMMENT='ENGINE "MyISAM"';
 SHOW CREATE TABLE diaries;
 Table	Create Table
-diaries	CREATE TEMPORARY TABLE `diaries` (
+diaries	CREATE TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` varchar(100) NOT NULL,
@@ -22,12 +22,17 @@ INSERT INTO diaries (date, title, content)
 VALUES ("2012-03-04", "shopping", "I buy a new shirt.");
 INSERT INTO diaries (date, title, content)
 VALUES ("2012-03-05", "rainy day", "Today is rainy day...");
+SELECT * FROM diaries;
+id	date	title	content
+1	2012-03-04 00:00:00	cloudy day	Today is cloudy day...
+2	2012-03-04 00:00:00	shopping	I buy a new shirt.
+3	2012-03-05 00:00:00	rainy day	Today is rainy day...
 INSERT INTO diaries (date, title, content)
 VALUES ("2012-03-04", "shopping", "I buy new shoes.")
 ON DUPLICATE KEY UPDATE content = "I buy a new hat.";
 SELECT * FROM diaries;
 id	date	title	content
 1	2012-03-04 00:00:00	cloudy day	Today is cloudy day...
-2	2012-03-04 16:49:23	shopping	I buy a new hat.
+2	2012-03-04 00:00:00	shopping	I buy a new hat.
 3	2012-03-05 00:00:00	rainy day	Today is rainy day...
 DROP TABLE diaries;

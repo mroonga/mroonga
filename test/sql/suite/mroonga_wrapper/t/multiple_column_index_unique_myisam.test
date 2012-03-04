@@ -35,10 +35,12 @@ INSERT INTO diaries (date, title, content)
        VALUES ("2012-03-04", "shopping", "I buy a new shirt.");
 INSERT INTO diaries (date, title, content)
        VALUES ("2012-03-05", "rainy day", "Today is rainy day...");
+
+SELECT * FROM diaries;
+
 INSERT INTO diaries (date, title, content)
        VALUES ("2012-03-04", "shopping", "I buy new shoes.")
        ON DUPLICATE KEY UPDATE content = "I buy a new hat.";
-
 SELECT * FROM diaries;
 
 DROP TABLE diaries;
