@@ -35,6 +35,8 @@ test_files = \
 	geometry_delete.test \
 	geometry_update.test \
 	insert.test \
+	insert_on_duplicate_key_multiple_column_primary_key_myisam.test \
+	insert_on_duplicate_key_multiple_column_unique_index_myisam.test \
 	optimization_order_limit_todo_split_me.test \
 	repair_table.test \
 	temporary_table.test \

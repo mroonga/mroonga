@@ -70,15 +70,16 @@ test_files = \
 	last_insert_grn_id.test \
 	log_level.test \
 	multiple_column_index_delete.test \
-	multiple_column_index_double.test \
-	multiple_column_index_float.test \
-	multiple_column_index_int.test \
 	multiple_column_index_recreate.test \
-	multiple_column_index_string.test \
+	multiple_column_index_select_double.test \
+	multiple_column_index_select_float.test \
+	multiple_column_index_select_int.test \
+	multiple_column_index_select_string.test \
+	multiple_column_index_select_varchar.test \
 	multiple_column_index_update.test \
-	multiple_column_index_varchar.test \
+	multiple_column_index_update_int.test \
 	multiple_column_primary_key_delete.test \
-	multiple_column_primary_key_int.test \
+	multiple_column_primary_key_select_int.test \
 	multiple_column_primary_key_update.test \
 	optimization_order_limit_disabled.test \
 	optimization_order_limit_equal_int.test \
