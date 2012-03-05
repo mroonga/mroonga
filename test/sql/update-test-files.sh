@@ -4,7 +4,7 @@ list_paths()
 {
     variable_name=$1
     echo "$variable_name = \\"
-    sort | \
+    LC_ALL=C sort | \
     sed \
       -e 's,^,\t,' \
       -e 's,$, \\,'
