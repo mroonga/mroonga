@@ -35,6 +35,8 @@ result_files = \
 	geometry_delete.result \
 	geometry_update.result \
 	insert.result \
+	insert_on_duplicate_key_multiple_column_primary_key_myisam.result \
+	insert_on_duplicate_key_multiple_column_unique_index_myisam.result \
 	optimization_order_limit_todo_split_me.result \
 	repair_table.result \
 	temporary_table.result \
