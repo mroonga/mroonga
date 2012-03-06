@@ -25,6 +25,6 @@ id	name	score
 UPDATE scores SET name = "Saburo YAMADA" WHERE id = 3;
 SELECT * FROM scores WHERE score = 29;
 id	name	score
-3	Saburo Yamada	29
-1	Taro YAMADA	29
+3	Saburo YAMADA	29
+1	Taro Yamada	29
 DROP TABLE scores;
