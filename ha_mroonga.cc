@@ -3689,6 +3689,9 @@ int ha_mroonga::wrapper_info(uint flag)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
+  if (flag & HA_STATUS_ERRKEY) {
+    wrap_handler->dup_ref = dup_ref;
+  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   error = wrap_handler->info(flag);
