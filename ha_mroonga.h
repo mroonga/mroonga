@@ -152,6 +152,14 @@ class ha_mroonga: public handler
   KEY       *base_key_info;
   key_part_map pk_keypart_map;
   MEM_ROOT  mem_root;
+
+  /* for create table and alter table */
+  mutable bool        analyzed_for_create;
+  mutable TABLE       table_for_create;
+  mutable MRN_SHARE   share_for_create;
+  mutable TABLE_SHARE table_share_for_create;
+  mutable MEM_ROOT    mem_root_for_create;
+  mutable handler     *wrap_handler_for_create;
 public:
   handler   *wrap_handler;
   bool      is_clone;
@@ -256,11 +264,11 @@ public:
   int update_row(const uchar *old_data, uchar *new_data);
   int delete_row(const uchar *buf);
 
-  uint max_supported_record_length()   const { return HA_MAX_REC_LENGTH; }
-  uint max_supported_keys()            const { return 100; }
+  uint max_supported_record_length()   const;
+  uint max_supported_keys()            const;
   uint max_supported_key_parts();
-  uint max_supported_key_length()      const { return MAX_KEY_LENGTH; }
-  uint max_supported_key_part_length() const { return MAX_KEY_LENGTH; }
+  uint max_supported_key_length()      const;
+  uint max_supported_key_part_length() const;
 
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
   int index_init(uint idx, bool sorted);
@@ -522,6 +530,7 @@ private:
                                          bool decode);
 
   void set_pk_bitmap();
+  int create_share_for_create() const;
   int wrapper_create(const char *name, TABLE *table,
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
   int storage_create(const char *name, TABLE *table,
@@ -540,7 +549,6 @@ private:
   int wrapper_create_index(const char *name, TABLE *table,
                            HA_CREATE_INFO *info, MRN_SHARE *tmp_share,
                            char *grn_table_name);
-  int wrapper_create_index_check(handler *hnd, TABLE *table);
   int storage_create_validate_pseudo_column(TABLE *table);
   int storage_create_validate_index(TABLE *table);
   int storage_create_index(TABLE *table, const char *grn_table_name,
@@ -618,8 +626,16 @@ private:
                                               grn_id *del_key_id);
   int storage_prepare_delete_row_unique_indexes(const uchar *buf,
                                                 grn_id record_id);
+  uint wrapper_max_supported_record_length() const;
+  uint storage_max_supported_record_length() const;
+  uint wrapper_max_supported_keys() const;
+  uint storage_max_supported_keys() const;
   uint wrapper_max_supported_key_parts();
   uint storage_max_supported_key_parts();
+  uint wrapper_max_supported_key_length() const;
+  uint storage_max_supported_key_length() const;
+  uint wrapper_max_supported_key_part_length() const;
+  uint storage_max_supported_key_part_length() const;
   ulonglong wrapper_table_flags() const;
   ulonglong storage_table_flags() const;
   ulong wrapper_index_flags(uint idx, uint part, bool all_parts) const;

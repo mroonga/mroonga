@@ -1701,12 +1701,23 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   GRN_TEXT_INIT(&encoded_key_buffer, 0);
   GRN_VOID_INIT(&old_value_buffer);
   GRN_VOID_INIT(&new_value_buffer);
+  analyzed_for_create = FALSE;
   DBUG_VOID_RETURN;
 }
 
 ha_mroonga::~ha_mroonga()
 {
   MRN_DBUG_ENTER_METHOD();
+  if (analyzed_for_create) {
+    if (wrap_handler_for_create) {
+      delete wrap_handler_for_create;
+    }
+    if (share_for_create.wrapper_mode) {
+      plugin_unlock(NULL, share_for_create.plugin);
+    }
+    mrn_free_share_alloc(&share_for_create);
+    free_root(&mem_root_for_create, MYF(0));
+  }
   grn_obj_unlink(ctx, &top_left_point);
   grn_obj_unlink(ctx, &bottom_right_point);
   grn_obj_unlink(ctx, &source_point);
@@ -1746,20 +1757,192 @@ const char **ha_mroonga::bas_ext() const
   DBUG_RETURN(ha_mroonga_exts);
 }
 
+uint ha_mroonga::wrapper_max_supported_record_length() const
+{
+  uint res;
+  MRN_DBUG_ENTER_METHOD();
+  if (analyzed_for_create) {
+    res = wrap_handler_for_create->max_supported_record_length();
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->max_supported_record_length();
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::storage_max_supported_record_length() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(HA_MAX_REC_LENGTH);
+}
+
+uint ha_mroonga::max_supported_record_length() const
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  uint res;
+  if (!share && !analyzed_for_create &&
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    create_share_for_create();
+  }
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
+    res = wrapper_max_supported_record_length();
+  } else if (wrap_handler && share && share->wrapper_mode) {
+    res = wrapper_max_supported_record_length();
+  } else {
+    res = storage_max_supported_record_length();
+  }
+
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::wrapper_max_supported_keys() const
+{
+  uint res;
+  MRN_DBUG_ENTER_METHOD();
+  if (analyzed_for_create) {
+    res = wrap_handler_for_create->max_supported_keys();
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->max_supported_keys();
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::storage_max_supported_keys() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(HA_MAX_REC_LENGTH);
+}
+
+uint ha_mroonga::max_supported_keys() const
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  uint res;
+  if (!share && !analyzed_for_create &&
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    create_share_for_create();
+  }
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
+    res = wrapper_max_supported_keys();
+  } else if (wrap_handler && share && share->wrapper_mode) {
+    res = wrapper_max_supported_keys();
+  } else {
+    res = storage_max_supported_keys();
+  }
+
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::wrapper_max_supported_key_length() const
+{
+  uint res;
+  MRN_DBUG_ENTER_METHOD();
+  if (analyzed_for_create) {
+    res = wrap_handler_for_create->max_supported_key_length();
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->max_supported_key_length();
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::storage_max_supported_key_length() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(HA_MAX_REC_LENGTH);
+}
+
+uint ha_mroonga::max_supported_key_length() const
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  uint res;
+  if (!share && !analyzed_for_create &&
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    create_share_for_create();
+  }
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
+    res = wrapper_max_supported_key_length();
+  } else if (wrap_handler && share && share->wrapper_mode) {
+    res = wrapper_max_supported_key_length();
+  } else {
+    res = storage_max_supported_key_length();
+  }
+
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::wrapper_max_supported_key_part_length() const
+{
+  uint res;
+  MRN_DBUG_ENTER_METHOD();
+  if (analyzed_for_create) {
+    res = wrap_handler_for_create->max_supported_key_part_length();
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->max_supported_key_part_length();
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
+  DBUG_RETURN(res);
+}
+
+uint ha_mroonga::storage_max_supported_key_part_length() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(HA_MAX_REC_LENGTH);
+}
+
+uint ha_mroonga::max_supported_key_part_length() const
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  uint res;
+  if (!share && !analyzed_for_create &&
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    create_share_for_create();
+  }
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
+    res = wrapper_max_supported_key_part_length();
+  } else if (wrap_handler && share && share->wrapper_mode) {
+    res = wrapper_max_supported_key_part_length();
+  } else {
+    res = storage_max_supported_key_part_length();
+  }
+
+  DBUG_RETURN(res);
+}
+
 ulonglong ha_mroonga::wrapper_table_flags() const
 {
   ulonglong table_flags;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  table_flags = wrap_handler->ha_table_flags() |
-    HA_CAN_FULLTEXT | HA_PRIMARY_KEY_REQUIRED_FOR_DELETE  |
+  if (analyzed_for_create) {
+    table_flags = wrap_handler_for_create->ha_table_flags();
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    table_flags = wrap_handler->ha_table_flags();
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
+  table_flags |= HA_CAN_FULLTEXT | HA_PRIMARY_KEY_REQUIRED_FOR_DELETE |
     HA_CAN_RTREEKEYS;
 #ifdef HA_CAN_REPAIR
   table_flags |= HA_CAN_REPAIR;
 #endif
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(table_flags);
 }
 
@@ -1789,7 +1972,13 @@ ulonglong ha_mroonga::table_flags() const
   MRN_DBUG_ENTER_METHOD();
 
   ulonglong flags;
-  if (wrap_handler && share && share->wrapper_mode) {
+  if (!share && !analyzed_for_create &&
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    create_share_for_create();
+  }
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
+    flags = wrapper_table_flags();
+  } else if (wrap_handler && share && share->wrapper_mode) {
     flags = wrapper_table_flags();
   } else {
     flags = storage_table_flags();
@@ -1850,6 +2039,55 @@ ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::create_share_for_create() const
+{
+  int error;
+  THD *thd = ha_thd();
+  LEX *lex = thd->lex;
+  HA_CREATE_INFO *create_info = &lex->create_info;
+  TABLE_LIST *table_list = lex->select_lex.table_list.first;
+  MRN_DBUG_ENTER_METHOD();
+  wrap_handler_for_create = NULL;
+  memset(&table_for_create, 0, sizeof(TABLE));
+  memset(&share_for_create, 0, sizeof(MRN_SHARE));
+  memset(&table_share_for_create, 0, sizeof(TABLE_SHARE));
+  init_alloc_root(&mem_root_for_create, 1024, 0);
+  analyzed_for_create = TRUE;
+  share_for_create.table_name = table_list->table_name;
+  share_for_create.table_name_length = table_list->table_name_length;
+  share_for_create.table_share = &table_share_for_create;
+  table_share_for_create.comment = create_info->comment;
+  table_share_for_create.connect_string = create_info->connect_string;
+  table_for_create.s = &table_share_for_create;
+#ifdef WITH_PARTITION_STORAGE_ENGINE
+  table_for_create.part_info = thd->work_part_info;
+#endif
+  if ((error = mrn_parse_table_param(&share_for_create, &table_for_create)))
+    goto error;
+
+  if (share_for_create.wrapper_mode)
+  {
+    wrap_handler_for_create =
+      share_for_create.hton->create(share_for_create.hton, NULL,
+                                    &mem_root_for_create);
+    if (!wrap_handler_for_create) {
+      error = HA_ERR_OUT_OF_MEM;
+      goto error;
+    }
+    wrap_handler_for_create->init();
+  }
+  DBUG_RETURN(0);
+
+error:
+  if (share_for_create.wrapper_mode) {
+    plugin_unlock(NULL, share_for_create.plugin);
+  }
+  mrn_free_share_alloc(&share_for_create);
+  free_root(&mem_root_for_create, MYF(0));
+  analyzed_for_create = FALSE;
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::wrapper_create(const char *name, TABLE *table,
                                HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
 {
@@ -1893,10 +2131,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
   hnd->init();
-  error = wrapper_create_index_check(hnd, table);
-  if (!error) {
-    error = hnd->ha_create(name, table, info);
-  }
+  error = hnd->ha_create(name, table, info);
   MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   share = NULL;
@@ -2136,24 +2371,6 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   }
 
   DBUG_RETURN(error);
-}
-
-int ha_mroonga::wrapper_create_index_check(handler *hnd, TABLE *table)
-{
-  MRN_DBUG_ENTER_METHOD();
-  uint i, j;
-  for (i = 0; i < table->s->keys; i++) {
-    KEY *key_info = &table->s->key_info[i];
-    KEY_PART_INFO *key_part = key_info->key_part;
-    for (j = 0; j < key_info->key_parts; j++) {
-      if (key_part[j].length > hnd->max_key_part_length())
-      {
-        my_error(ER_TOO_LONG_KEY, MYF(0), hnd->max_key_part_length());
-        DBUG_RETURN(ER_TOO_LONG_KEY);
-      }
-    }
-  }
-  DBUG_RETURN(0);
 }
 
 int ha_mroonga::storage_create(const char *name, TABLE *table,
