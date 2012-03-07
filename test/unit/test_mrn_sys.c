@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -143,6 +143,6 @@ void test_mrn_index_table_name_gen()
   char buf[64], buf2[64];
   const char *arg = "./db/users";
   mrn_table_name_gen(arg, buf);
-  cut_assert_equal_string("users#name",
+  cut_assert_equal_string("users-name",
                           mrn_index_table_name_gen(buf, "name", buf2));
 }
