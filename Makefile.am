@@ -6,6 +6,7 @@ AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) $(MYSQL_VERSION_CFLAGS)
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
 noinst_HEADERS =				\
+	mrn_macro.h				\
 	mrn_sys.h				\
 	ha_mroonga.h				\
 	mrn_table.h				\

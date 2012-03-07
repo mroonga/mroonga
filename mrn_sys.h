@@ -21,15 +21,8 @@
 #ifndef _mrn_sys_h
 #define _mrn_sys_h
 
-#ifdef  __cplusplus
-# define MRN_BEGIN_DECLS  extern "C" {
-# define MRN_END_DECLS    }
-#else
-# define MRN_BEGIN_DECLS
-# define MRN_END_DECLS
-#endif
-
 #include <groonga.h>
+#include "mrn_macro.h"
 
 MRN_BEGIN_DECLS
 
