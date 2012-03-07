@@ -3,7 +3,7 @@ noinst_LTLIBRARIES = test_mrn_sys.la
 endif
 
 AM_CPPFLAGS = $(GROONGA_CFLAGS) $(MECAB_INCLUDES) $(CPPCUTTER_CFLAGS)
-AM_INCLUDES = -l. -l..
+AM_INCLUDES = -I$(top_srcdir)
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
 DEFS          = @DEFS@

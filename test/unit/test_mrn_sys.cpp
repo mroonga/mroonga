@@ -20,7 +20,8 @@
 
 #include <string.h>
 #include <cppcutter.h>
-#include "mrn_sys.h"
+
+#include <mrn_sys.h>
 
 static grn_ctx *ctx;
 static grn_obj *db;
