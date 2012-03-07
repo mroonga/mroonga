@@ -222,10 +222,10 @@ if test "$enable_fast_mutexes" = "no"; then
              [Define to 1 if force fast mutext disabled])
 fi
 
-# check Cutter with GLib support if available
+# check Cutter with C++ support if available
 REQUIRED_MINIMUM_CUTTER_VERSION=1.1.3
-m4_ifdef([AC_CHECK_GCUTTER], [
-AC_CHECK_GCUTTER(>= $REQUIRED_MINIMUM_CUTTER_VERSION)
+m4_ifdef([AC_CHECK_CPPCUTTER], [
+AC_CHECK_CPPCUTTER(>= $REQUIRED_MINIMUM_CUTTER_VERSION)
 ],
 [ac_cv_use_cutter="no"])
 AM_CONDITIONAL([WITH_CUTTER], [test "$ac_cv_use_cutter" != "no"])
