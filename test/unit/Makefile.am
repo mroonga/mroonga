@@ -14,4 +14,4 @@ LIBS = $(CUTTER_LIBS) $(GROONGA_LIBS) $(MECAB_LIBS)
 
 EXTERNAL_SRC = ../../mrn_sys.c
 
-test_mrn_sys_la_SOURCES = $(EXTERNAL_SRC) test_mrn_sys.c
+test_mrn_sys_la_SOURCES = $(EXTERNAL_SRC) test_mrn_sys.cpp

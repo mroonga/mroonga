@@ -1,7 +1,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2011 Kentoku SHIBA
-  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,17 @@
 #ifndef _mrn_sys_h
 #define _mrn_sys_h
 
+#ifdef  __cplusplus
+# define MRN_BEGIN_DECLS  extern "C" {
+# define MRN_END_DECLS    }
+#else
+# define MRN_BEGIN_DECLS
+# define MRN_END_DECLS
+#endif
+
 #include <groonga.h>
+
+MRN_BEGIN_DECLS
 
 /* constants */
 #define MRN_BUFFER_SIZE 1024
@@ -54,5 +64,7 @@ char *mrn_db_name_gen(const char *arg, char *dest);
 char *mrn_table_name_gen(const char *arg, char *dest);
 char *mrn_table_name_gen_for_mysql(const char *arg, char *dest);
 char *mrn_index_table_name_gen(const char *arg, const char *idx_name, char *dest);
+
+MRN_END_DECLS
 
 #endif /* _mrn_sys_h */
