@@ -177,7 +177,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
   if (!part_info)
     DBUG_VOID_RETURN;
 
-  if (!memcmp(table_name + table_name_length - 5, "#TMP#", 5))
+  if (table_name && !memcmp(table_name + table_name_length - 5, "#TMP#", 5))
     tmp_flg = TRUE;
 
   DBUG_PRINT("info", ("mroonga table_name=%s", table_name));
@@ -193,10 +193,11 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
           (*part_elem)->partition_name, (*sub_elem)->partition_name,
           NORMAL_PART_NAME);
         DBUG_PRINT("info", ("mroonga tmp_name=%s", tmp_name));
-        if (!memcmp(table_name, tmp_name, table_name_length + 1))
+        if (table_name && !memcmp(table_name, tmp_name, table_name_length + 1))
           DBUG_VOID_RETURN;
         if (
           tmp_flg &&
+          table_name &&
           *(tmp_name + table_name_length - 5) == '\0' &&
           !memcmp(table_name, tmp_name, table_name_length - 5)
         ) {
@@ -210,10 +211,11 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
       create_partition_name(tmp_name, table->s->path.str,
         (*part_elem)->partition_name, NORMAL_PART_NAME, TRUE);
       DBUG_PRINT("info", ("mroonga tmp_name=%s", tmp_name));
-      if (!memcmp(table_name, tmp_name, table_name_length + 1))
+      if (table_name && !memcmp(table_name, tmp_name, table_name_length + 1))
         DBUG_VOID_RETURN;
       if (
         tmp_flg &&
+        table_name &&
         *(tmp_name + table_name_length - 5) == '\0' &&
         !memcmp(table_name, tmp_name, table_name_length - 5)
       ) {

@@ -2053,8 +2053,10 @@ int ha_mroonga::create_share_for_create() const
   memset(&table_share_for_create, 0, sizeof(TABLE_SHARE));
   init_alloc_root(&mem_root_for_create, 1024, 0);
   analyzed_for_create = TRUE;
-  share_for_create.table_name = table_list->table_name;
-  share_for_create.table_name_length = table_list->table_name_length;
+  if (table_list) {
+    share_for_create.table_name = table_list->table_name;
+    share_for_create.table_name_length = table_list->table_name_length;
+  }
   share_for_create.table_share = &table_share_for_create;
   table_share_for_create.comment = create_info->comment;
   table_share_for_create.connect_string = create_info->connect_string;
