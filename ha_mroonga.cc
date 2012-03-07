@@ -5682,7 +5682,6 @@ int ha_mroonga::index_init(uint idx, bool sorted)
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: idx=%u", idx));
   active_index = idx;
-  count_skip = FALSE;
   int error = 0;
   if (share->wrapper_mode)
   {
