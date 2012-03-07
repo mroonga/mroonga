@@ -25,7 +25,7 @@ CREATE TABLE diaries (
   title VARCHAR(100) NOT NULL,
   content TEXT NOT NULL,
   PRIMARY KEY (date, title)
-) CHARSET=UTF8 COMMENT='ENGINE "MyISAM"';
+) DEFAULT CHARSET=UTF8 COMMENT='ENGINE "MyISAM"';
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (date, title, content)
