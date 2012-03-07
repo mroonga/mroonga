@@ -20,7 +20,6 @@
 
 #include <string.h>
 #include <cppcutter.h>
-#include <glib/gstdio.h>
 #include "mrn_sys.h"
 
 static grn_ctx *ctx;
