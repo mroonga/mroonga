@@ -3885,7 +3885,6 @@ int ha_mroonga::storage_rnd_init(bool scan)
 int ha_mroonga::rnd_init(bool scan)
 {
   MRN_DBUG_ENTER_METHOD();
-  count_skip = FALSE;
   int error = 0;
   if (share->wrapper_mode)
   {
