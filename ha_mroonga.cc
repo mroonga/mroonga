@@ -909,11 +909,14 @@ struct st_mysql_plugin i_s_mrn_stats =
 
 static handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROOT *root)
 {
-  return (new (root) ha_mroonga(hton, share));
+  MRN_DBUG_ENTER_FUNCTION();
+  handler *new_handler = new (root) ha_mroonga(hton, share);
+  DBUG_RETURN(new_handler);
 }
 
 static void mrn_drop_db(handlerton *hton, char *path)
 {
+  MRN_DBUG_ENTER_FUNCTION();
   char db_path[MRN_MAX_PATH_SIZE];
   char db_name[MRN_MAX_PATH_SIZE];
   mrn_db_path_gen(path, db_path);
@@ -932,10 +935,12 @@ static void mrn_drop_db(handlerton *hton, char *path)
   mrn_hash_remove(ctx, mrn_hash, db_name);
   pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_fin(ctx);
+  DBUG_VOID_RETURN;
 }
 
 static int mrn_close_connection(handlerton *hton, THD *thd)
 {
+  MRN_DBUG_ENTER_FUNCTION();
   void *p = *thd_ha_data(thd, mrn_hton_ptr);
   if (p) {
     free(p);
@@ -944,11 +949,12 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
     my_hash_delete(&mrn_allocated_thds, (uchar*) thd);
     pthread_mutex_unlock(&mrn_allocated_thds_mutex);
   }
-  return 0;
+  DBUG_RETURN(0);
 }
 
 static bool mrn_flush_logs(handlerton *hton)
 {
+  MRN_DBUG_ENTER_FUNCTION();
   bool result = 0;
   if (mrn_log_file_opened) {
     pthread_mutex_lock(&mrn_log_mutex);
@@ -956,7 +962,7 @@ static bool mrn_flush_logs(handlerton *hton)
     mrn_log_file = fopen(mrn_log_file_path, "a");
     pthread_mutex_unlock(&mrn_log_mutex);
   }
-  return result;
+  DBUG_RETURN(result);
 }
 
 static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
