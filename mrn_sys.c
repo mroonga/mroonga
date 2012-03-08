@@ -142,7 +142,7 @@ char *mrn_table_name_gen(const char *arg, char *dest)
     dest[j++] = 'f';
     i++;
   }
-  for (; i <= len ;) {
+  for (; i < len ;) {
     dest[j++] = arg[++i];
   }
   dest[j] = '\0';
@@ -157,7 +157,7 @@ char *mrn_table_name_gen_for_mysql(const char *arg, char *dest)
   int len = strlen(arg);
   int i=len, j=0;
   for (; arg[--i] != '/' ;) {}
-  for (; i <= len ;) {
+  for (; i < len ;) {
     dest[j++] = arg[++i];
   }
   dest[j] = '\0';
