@@ -921,20 +921,21 @@ static void mrn_drop_db(handlerton *hton, char *path)
   char db_name[MRN_MAX_PATH_SIZE];
   mrn_db_path_gen(path, db_path);
   mrn_db_name_gen(path, db_name);
-  grn_ctx *ctx;
-  ctx = grn_ctx_open(0);
-  mrn_change_encoding(ctx, system_charset_info);
-  struct stat dummy;
-  if (stat(db_path, &dummy) == 0) {
-    grn_obj *db = grn_db_open(ctx, db_path);
-    if (grn_obj_remove(ctx, db)) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "cannot drop database (%s)", db_path);
+  pthread_mutex_lock(&mrn_db_mutex);
+  grn_obj *db = NULL;
+  if (mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db) != 0) {
+    struct stat dummy;
+    if (stat(db_path, &dummy) == 0) {
+      db = grn_db_open(&mrn_ctx, db_path);
     }
   }
-  pthread_mutex_lock(&mrn_db_mutex);
-  mrn_hash_remove(ctx, mrn_hash, db_name);
+  if (db) {
+    if (grn_obj_remove(&mrn_ctx, db)) {
+      GRN_LOG(&mrn_ctx, GRN_LOG_ERROR, "cannot drop database (%s)", db_path);
+    }
+  }
+  mrn_hash_remove(&mrn_ctx, mrn_hash, db_name);
   pthread_mutex_unlock(&mrn_db_mutex);
-  grn_ctx_fin(ctx);
   DBUG_VOID_RETURN;
 }
 
