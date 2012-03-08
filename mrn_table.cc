@@ -35,6 +35,9 @@
 #  define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
 #endif
 
+#define LEX_STRING_IS_EMPTY(string)                                     \
+  ((string).length == 0 || !(string).str || (string).str[0] == '\0')
+
 #define MRN_DEFAULT_STR "DEFAULT"
 #define MRN_DEFAULT_LEN (sizeof(MRN_DEFAULT_STR) - 1)
 #define MRN_GROONGA_STR "GROONGA"
@@ -342,7 +345,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         break;
 #endif
       case 2:
-        if (table->s->comment.length == 0)
+        if (LEX_STRING_IS_EMPTY(table->s->comment))
           continue;
         DBUG_PRINT("info", ("mroonga create comment string"));
         if (
@@ -356,7 +359,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         DBUG_PRINT("info", ("mroonga comment string=%s", param_string));
         break;
       default:
-        if (table->s->connect_string.length == 0)
+        if (LEX_STRING_IS_EMPTY(table->s->connect_string))
           continue;
         DBUG_PRINT("info", ("mroonga create connect_string string"));
         if (
