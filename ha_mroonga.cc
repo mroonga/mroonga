@@ -727,8 +727,10 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
 
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
     my_free(*old_value_ptr, MYF(0));
-#endif
     *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+#else
+    *old_value_ptr = (char *)new_value;
+#endif
   }
   grn_ctx_fin(&ctx);
 
