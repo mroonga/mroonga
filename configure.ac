@@ -181,6 +181,15 @@ else
   CXXFLAGS="$OPTIMIZE_CXXFLAGS $CXXFLAGS"
 fi
 
+AC_ARG_WITH(valgrind,
+  [AS_HELP_STRING([--with-valgrind], [Use valgrind. [default=no]])],
+  [with_valgrind="$withval"],
+  [with_valgrind="no"])
+if test "$with_debug" != "no"; then
+  CFLAGS="-DHAVE_valgrind $CFLAGS"
+  CXXFLAGS="-DHAVE_valgrind $CXXFLAGS"
+fi
+
 CONFIG_OPTION_PLUGINS
 if test "$standalone_build" = "yes"; then
   CONFIG_OPTION_MYSQL
