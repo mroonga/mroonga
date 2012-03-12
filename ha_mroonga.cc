@@ -8651,6 +8651,51 @@ int ha_mroonga::storage_encode_key_year(Field *field, const uchar *key,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
+                                            uchar *buf, uint *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  long long int time;
+#ifdef MRN_MARIADB_P
+  if (field->decimals() > 0) {
+    // TODO: remove me when MariaDB becomes based on MySQL 5.6.
+    // This implementation may be costful.
+    Field_datetime_hires *datetime_hires_field = (Field_datetime_hires *)field;
+    Field_datetime_hires unpacker((uchar *)key,
+                                  (uchar *)(key - 1),
+                                  datetime_hires_field->null_bit,
+                                  datetime_hires_field->unireg_check,
+                                  datetime_hires_field->field_name,
+                                  datetime_hires_field->decimals(),
+                                  datetime_hires_field->charset());
+    MYSQL_TIME mysql_time;
+    uint fuzzy_date = 0;
+    unpacker.get_date(&mysql_time, fuzzy_date);
+    time = mrn_mysql_time_to_grn_time(&mysql_time);
+  } else
+#endif
+  {
+    long long int encoded_datetime = sint8korr(key);
+    uint32 part1 = (uint32)(encoded_datetime / LL(1000000));
+    uint32 part2 = (uint32)(encoded_datetime -
+                            (unsigned long long int)part1 * LL(1000000));
+    struct tm date;
+    memset(&date, 0, sizeof(struct tm));
+    date.tm_year = part1 / 10000 - 1900;
+    date.tm_mon = part1 / 100 % 100 - 1;
+    date.tm_mday = part1 % 100;
+    date.tm_hour = part2 / 10000;
+    date.tm_min = part2 / 100 % 100;
+    date.tm_sec = part2 % 100;
+    int usec = 0;
+    time = mrn_tm_to_grn_time(&date, usec);
+  }
+  memcpy(buf, &time, 8);
+  *size = 8;
+  DBUG_RETURN(error);
+}
+
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
 int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
                                          uchar *buf, uint *size)
@@ -8752,25 +8797,8 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
     storage_encode_key_year(field, ptr, buf, size);
     break;
   case MYSQL_TYPE_DATETIME:
-    {
-      long long int encoded_datetime = sint8korr(ptr);
-      uint32 part1 = (uint32)(encoded_datetime / LL(1000000));
-      uint32 part2 = (uint32)(encoded_datetime -
-                              (unsigned long long int)part1 * LL(1000000));
-      struct tm date;
-      memset(&date, 0, sizeof(struct tm));
-      date.tm_year = part1 / 10000 - 1900;
-      date.tm_mon = part1 / 100 % 100 - 1;
-      date.tm_mday = part1 % 100;
-      date.tm_hour = part2 / 10000;
-      date.tm_min = part2 / 100 % 100;
-      date.tm_sec = part2 % 100;
-      int usec = 0;
-      long long int time = mrn_tm_to_grn_time(&date, usec);
-      memcpy(buf, &time, 8);
-      *size = 8;
-      break;
-    }
+    storage_encode_key_datetime(field, ptr, buf, size);
+    break;
   case MYSQL_TYPE_NEWDATE:
     {
       uint32 encoded_date = uint3korr(ptr);

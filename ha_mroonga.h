@@ -519,6 +519,8 @@ private:
                               uchar *buf, uint *size);
   int storage_encode_key_year(Field *field, const uchar *key,
                               uchar *buf, uint *size);
+  int storage_encode_key_datetime(Field *field, const uchar *key,
+                                  uchar *buf, uint *size);
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   int storage_encode_key_time2(Field *field, const uchar *key,
                                uchar *buf, uint *size);
