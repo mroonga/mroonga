@@ -808,14 +808,14 @@ my_bool last_insert_grn_id_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
   return 0;
 }
 
-int last_insert_grn_id(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error)
+longlong last_insert_grn_id(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error)
 {
   THD *thd = current_thd;
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
   if (slot_data == NULL) {
     return 0;
   }
-  int last_insert_record_id = (int)slot_data->last_insert_record_id;
+  longlong last_insert_record_id = slot_data->last_insert_record_id;
   return last_insert_record_id;
 }
 
