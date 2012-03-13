@@ -76,6 +76,10 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_GET_PARENT_FOREIGN_KEY_LIST
 #endif
 
+#if (MYSQL_VERSION_ID < 50600)
+#  define MRN_HANDLER_HAVE_GET_TABLESPACE_NAME 1
+#endif
+
 #if MYSQL_VERSION_ID >= 50500
 #  define MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
 #endif
@@ -415,7 +419,9 @@ protected:
   bool primary_key_is_clustered();
   bool is_fk_defined_on_table_or_index(uint index);
   char *get_foreign_key_create_info();
+#ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
   char *get_tablespace_name(THD *thd, char *name, uint name_len);
+#endif
   bool can_switch_engines();
   int get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
 #ifdef MRN_HANDLER_HAVE_GET_PARENT_FOREIGN_KEY_LIST
@@ -884,8 +890,10 @@ private:
   bool storage_is_fk_defined_on_table_or_index(uint index);
   char *wrapper_get_foreign_key_create_info();
   char *storage_get_foreign_key_create_info();
+#ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
   char *wrapper_get_tablespace_name(THD *thd, char *name, uint name_len);
   char *storage_get_tablespace_name(THD *thd, char *name, uint name_len);
+#endif
   bool wrapper_can_switch_engines();
   bool storage_can_switch_engines();
   int wrapper_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);

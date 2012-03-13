@@ -11665,6 +11665,7 @@ char *ha_mroonga::get_foreign_key_create_info()
   DBUG_RETURN(res);
 }
 
+#ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
 char *ha_mroonga::wrapper_get_tablespace_name(THD *thd, char *name,
                                               uint name_len)
 {
@@ -11698,6 +11699,7 @@ char *ha_mroonga::get_tablespace_name(THD *thd, char *name, uint name_len)
   }
   DBUG_RETURN(res);
 }
+#endif
 
 bool ha_mroonga::wrapper_can_switch_engines()
 {
