@@ -32,4 +32,10 @@ if (!$have_default_storage_engine_variable)
   set storage_engine=mroonga;
 }
 
+let have_default_tmp_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_tmp_storage_engine"`;
+if ($have_default_tmp_storage_engine_variable)
+{
+  set default_tmp_storage_engine=mroonga;
+}
+
 enable_query_log;

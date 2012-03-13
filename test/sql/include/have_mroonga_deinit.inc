@@ -26,6 +26,11 @@ if (!$have_default_storage_engine_variable)
   set storage_engine=MyISAM;
 }
 
+if ($have_default_tmp_storage_engine_variable)
+{
+  set default_tmp_storage_engine=MyISAM;
+}
+
 UNINSTALL PLUGIN mroonga_stats;
 UNINSTALL PLUGIN mroonga;
 
