@@ -383,3 +383,16 @@ voidを省略
 	 column.set_value(value);
       }
     }
+
+定数
+----
+
+フラグやサイズなどを示す定数には ``const`` オブジェクトを用いる。これはデバッガー上でプログラムを走らせているときに名前で値を参照できるようにするためである。
+
+よい例:
+
+    const char *MRN_LOG_FILE_PATH = "groonga.log";
+
+悪い例（ ``#define`` を用いている）:
+
+    #define MRN_LOG_FILE_PATH "groonga.log"
