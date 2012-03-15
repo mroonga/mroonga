@@ -293,3 +293,34 @@ TODO: ちゃんと考える。
         this.age_ = object.age_;
       }
     }
+
+クラスの代入
+------------
+
+基本的に定義したクラスの代入を禁止する。
+
+よい例:
+
+    class MyClass
+    {
+    private:
+      MyClass &operator=(const MyClass &);
+    }
+
+悪い例（代入を禁止していない）:
+
+    class MyClass
+    {
+    }
+
+悪い例（代入を使っている）:
+
+    class MyClass
+    {
+      unsigned int age_;
+      MyClass &operator=(const MyClass &object)
+      {
+        age_ = object.age_;
+        return *this;
+      }
+    }
