@@ -452,3 +452,18 @@ bool型を用いる
     boolean is_searching = true;
     if (is_searching == false) { ... }
 
+``NULL`` と比較しない
+^^^^^^^^^^^^^^^^^^^^^^
+
+``NULL`` かどうかを条件式に使う場合は ``value == NULL`` ではなく ``!value`` というように書く。多くの言語で ``NULL`` に相当する値（たとえばLispの ``nil`` ）は偽を表すため、明示的に ``NULL`` と比較しなくても意図は伝わるからである。
+
+よい例:
+
+    char *name = NULL;
+    if (!name) { ... }
+
+悪い例（ ``NULL`` と比較している）:
+
+    char *name = NULL;
+    if (name == NULL) { ... }
+
