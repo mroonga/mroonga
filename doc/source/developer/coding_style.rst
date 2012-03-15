@@ -404,3 +404,20 @@ voidを省略
 悪い例（ ``#define`` を用いている）:
 
     #define MRN_LOG_FILE_PATH "groonga.log"
+
+条件式
+------
+
+bool型を用いる
+^^^^^^^^^^^^^^
+
+真偽値には ``bool`` 型を用いる。
+
+よい例:
+
+    bool is_searching;
+
+悪い例（ ``int`` 型を用いている）:
+
+    int is_searching;
+
