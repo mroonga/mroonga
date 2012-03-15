@@ -69,3 +69,23 @@ TODO: 読みやすさの他にデバッグのしやすさ（gdbでの追いや�
 悪い例（ ``.h`` を使っている）:
 
     ha_mroonga.h
+
+名前空間
+--------
+
+ヘッダーファイルでは ``using namespace`` を使わない。ソースコードでは ``using namespace std`` であれば使ってもよい。他の名前空間は使ってはいけない。
+
+よい例:
+
+    ha_mroonga.cpp:
+      using namespace std;
+
+悪い例（ヘッダーファイル内で ``using namespace`` を使っている）:
+
+    ha_mroonga.hpp:
+      using namespace std;
+
+悪い例（ ``std`` 以外の名前空間に対して ``using namespace`` を使っている）:
+
+    ha_mroonga.cpp:
+      using namespace zmq;
