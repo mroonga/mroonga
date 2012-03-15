@@ -264,3 +264,32 @@ TODO: ちゃんと考える。
       };
     }
 
+コピーコンストラクタ
+--------------------
+
+基本的にコピーコンストラクタの使用を禁止する。
+
+よい例:
+
+    class MyClass
+    {
+    private:
+      MyClass(const MyClass &);
+    }
+
+悪い例（コピーコンストラクタを禁止していない）:
+
+    class MyClass
+    {
+    }
+
+悪い例（カスタムコピーコンストラクタを使っている）:
+
+    class MyClass
+    {
+      unsigned int age_;
+      MyClass(const MyClass &object)
+      {
+        this.age_ = object.age_;
+      }
+    }
