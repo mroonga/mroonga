@@ -226,3 +226,41 @@ TODO: ちゃんと考える。
       const char *_my_name() {return my_name_;};
     }
 
+書き込み用アクセサ名
+^^^^^^^^^^^^^^^^^^^^
+
+メンバー変数の値を設定するメソッドの名前は、メンバー変数名の末尾のアンダースコアを除き、先頭に ``set_`` を加えたものにする。
+
+よい例:
+
+    class MyClass
+    {
+      unsigned int age_;
+      void set_age(unsigned int age)
+      {
+        age_ = age;
+      };
+    }
+
+悪い例（末尾にアンダースコアが残っている）:
+
+    class MyClass
+    {
+      unsigned int age_;
+      void set_age_(unsigned int age)
+      {
+        age_ = age;
+      };
+    }
+
+悪い例（先頭に ``set_`` ではなく ``update_`` を付けている）:
+
+    class MyClass
+    {
+      unsigned int age_;
+      void update_age(unsigned int age)
+      {
+        age_ = age;
+      };
+    }
+
