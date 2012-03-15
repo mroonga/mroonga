@@ -89,3 +89,44 @@ TODO: 読みやすさの他にデバッグのしやすさ（gdbでの追いや�
 
     ha_mroonga.cpp:
       using namespace zmq;
+
+文字列
+------
+
+文字列はポインタと長さで表現する。 ``\0`` での終端を仮定しない。
+
+よい例（本当はもっとすっきりした例がよいけど。。。）:
+
+    char *raw_data = "table_name column_name column_value"
+    char *column_name;
+    size_t column_name_size;
+    column_name = raw_data + strlen("table_name ");
+    column_name_size = strlen("column_name");
+
+悪い例（無理やり ``\0`` 終端にしている）:
+
+    char *raw_data = "table_name column_name column_value"
+    char *column_name;
+    column_name = strndup(raw_data + strlen("table_name "), strlen("column_name"));
+
+ただし、ファイル名など ``\0`` が前提であるものに関しては ``\0`` 終端を仮定してよい。
+
+よい例:
+
+    char *database_path = "db/test.mrn";
+
+悪い例（ ``\0`` 終端を仮定せず、長さも管理している）:
+
+    char *database_path = "db/test.mrn";
+    size_t database_path_size = strlen("db/test.mrn");
+
+``std::string`` は内部でメモリ確保などの処理が発生するので多用しない。
+
+よい例:
+
+    char database_path[MAX_PATH];
+
+悪い例（最大サイズがわかっているのに ``std::string`` を使っている）:
+
+    std::string database_path;
+
