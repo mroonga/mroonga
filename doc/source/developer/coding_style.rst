@@ -136,3 +136,37 @@ TODO: 読みやすさの他にデバッグのしやすさ（gdbでの追いや�
 TODO: ちゃんと考える。
 
 何度も繰り返し使う領域（バッファ）が必要な場合は ``GRN_BULK`` を使う。例えば、カラムの値を取得する領域などである。
+
+命名規則
+--------
+
+クラス名
+^^^^^^^^
+
+クラスの名前は ``UpperCamelCase`` とする。
+
+よい例:
+
+    class MyClass
+    {
+    }
+
+悪い例（ ``snail_case`` である）:
+
+    class my_class
+    {
+    }
+
+ただし、 ``ha_mroonga`` などMySQLとのインターフェイスとなるクラスでかつ他の類似のモジュールに命名規則がある場合はそれに従う。
+
+よい例:
+
+    class ha_mroonga: public handler
+    {
+    }
+
+悪い例（ ``UpperCamelCase`` になっている）:
+
+    class HaMroonga: public handler
+    {
+    }
