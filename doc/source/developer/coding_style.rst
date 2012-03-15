@@ -354,3 +354,32 @@ voidを省略
          return age_;
       };
     }
+
+入力用引数にはconstを付ける
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+入力のみに用いる引数には ``const`` を付ける。
+
+よい例:
+
+    class Table
+    {
+      void insert(unsigned int id, const char *column_name, const char *value)
+      {
+         Record *record = records[i];
+         Column *column = columns[column_name];
+	 column.set_value(value);
+      }
+    }
+
+悪い例（入力のみに用いているのに ``const`` が付いていない）:
+
+    class Table
+    {
+      void insert(unsigned int id, char *column_name, char *value)
+      {
+         Record *record = records[i];
+         Column *column = columns[column_name];
+	 column.set_value(value);
+      }
+    }
