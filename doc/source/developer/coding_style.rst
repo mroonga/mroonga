@@ -290,7 +290,7 @@ TODO: ちゃんと考える。
       unsigned int age_;
       MyClass(const MyClass &object)
       {
-        this.age_ = object.age_;
+        age_ = object.age_;
       }
     }
 
