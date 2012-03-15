@@ -405,7 +405,7 @@ voidを省略
 
     #define MRN_LOG_FILE_PATH "groonga.log"
 
-条件式
+真偽値
 ------
 
 bool型を用いる
