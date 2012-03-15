@@ -431,3 +431,22 @@ bool型を用いる
 悪い例（ ``0`` 以外の値を真の値として用いている）:
 
     bool is_searching = 1;
+
+条件式
+------
+
+真偽値は比較しない
+^^^^^^^^^^^^^^^^^^
+
+真偽値の値は ``boolean_value == true`` などとせず、 ``boolean_value`` として条件式に使用する。すでに真偽値の値を真偽値のリテラルと比較することは重複したコードだからである。
+
+よい例:
+
+    boolean is_searching = true;
+    if (!is_searching) { ... }
+
+悪い例（真偽値のリテラルと比較している）:
+
+    boolean is_searching = true;
+    if (is_searching == false) { ... }
+
