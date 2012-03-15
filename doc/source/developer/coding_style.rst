@@ -170,3 +170,30 @@ TODO: ちゃんと考える。
     class HaMroonga: public handler
     {
     }
+
+メンバー変数名
+^^^^^^^^^^^^^^
+
+メンバー変数名は ``snail_case`` とし、末尾にアンダースコア（ ``_`` ）を付ける。
+
+よい例:
+
+     class MyClass
+     {
+       char *my_name_;
+     }
+
+悪い例（ ``UpperCamelCase`` である）:
+
+     class MyClass
+     {
+       char *MyName_;
+     }
+
+悪い例（末尾にアンダースコアがない）:
+
+     class MyClass
+     {
+       char *my_name;
+     }
+
