@@ -197,3 +197,32 @@ TODO: ちゃんと考える。
        char *my_name;
      }
 
+読み込み用アクセサ名
+^^^^^^^^^^^^^^^^^^^^
+
+メンバー変数の値を読み込むメソッドの名前はメンバー変数名の末尾のアンダースコアを除いたものにする。
+
+よい例:
+
+    class MyClass
+    {
+      char *my_name_;
+      const char *my_name() {return my_name_;};
+    }
+
+悪い例（末尾にアンダースコアが残っている）:
+
+    class MyClass
+    {
+      char *my_name_;
+      const char *my_name_() {return my_name_;};
+    }
+
+悪い例（先頭に ``get_`` を付けている）:
+
+    class MyClass
+    {
+      char *my_name_;
+      const char *_my_name() {return my_name_;};
+    }
+
