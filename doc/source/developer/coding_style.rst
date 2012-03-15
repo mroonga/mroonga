@@ -324,3 +324,33 @@ TODO: ちゃんと考える。
         return *this;
       }
     }
+
+引数
+----
+
+voidを省略
+^^^^^^^^^^
+
+引数がない場合は ``void`` を省略する。
+
+よい例:
+
+    class MyClass
+    {
+      unsigned int age_;
+      unsigned int age()
+      {
+         return age_;
+      };
+    }
+
+悪い例（ ``void`` を省略していない）:
+
+    class MyClass
+    {
+      unsigned int age_;
+      unsigned int age(void)
+      {
+         return age_;
+      };
+    }
