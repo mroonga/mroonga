@@ -485,3 +485,38 @@ C++では真偽値に ``bool`` を使うためこのような状況は発生し�
      if (!memcmp(value1, value2, value_size)) {
        printf("same value!\n");
      }
+
+初期化
+------
+
+メンバー変数の初期化には初期化リストを用いる
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+無駄な処理を省くためにコンストラクターでのメンバー変数の初期化には初期化リストを用いる。初期化リストを用いないとコンストラクターの処理とコピーコンストラクター・代入処理が行われたりなど非効率である。（後述）
+
+よい例:
+
+    class Table
+    {
+      Table(const char *name);
+      std::string name_;
+    }
+
+    Table::Table(const char *name) :
+      name_(name)
+    {
+    }
+
+悪い例（ ``std::string(name)`` のところでコンストラクターが動き、 ``name_ = ...`` のところで代入演算子が動いて2回初期化している）:
+
+    class Table
+    {
+      Table(const char *name);
+      std::string name_;
+    }
+
+    Table::Table(const char *name)
+    {
+      name_ = std::string(name);
+    }
+
