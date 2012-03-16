@@ -185,7 +185,7 @@ AC_ARG_WITH(valgrind,
   [AS_HELP_STRING([--with-valgrind], [Use valgrind. [default=no]])],
   [with_valgrind="$withval"],
   [with_valgrind="no"])
-if test "$with_debug" != "no"; then
+if test "$with_valgrind" != "no"; then
   CFLAGS="-DHAVE_valgrind $CFLAGS"
   CXXFLAGS="-DHAVE_valgrind $CXXFLAGS"
 fi
