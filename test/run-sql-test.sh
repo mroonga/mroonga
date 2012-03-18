@@ -96,11 +96,11 @@ if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
 	"${mroonga_wrapper_innodb_test_suite_dir}/include/"
     ruby -i'' \
 	-pe "\$_.gsub!(/\\bengine\\s*=\\s*innodb\\b([^;\\n]*)/i,
-                      \"ENGINE=mroonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
+                       \"ENGINE=mroonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
              \$_.gsub!(/\\b(storage_engine\\s*=\\s*)innodb\\b([^;\\n]*)/i,
-                      \"\\\1mroonga\")
+                       \"\\\1mroonga\")
              \$_.gsub!(/^(--\\s*source\\s+)(include\\/innodb)/i,
-                      \"\\\1suite/mroonga_wrapper_innodb/\\\2\")
+                       \"\\\1suite/mroonga_wrapper_innodb/\\\2\")
             " \
 	${mroonga_wrapper_innodb_test_suite_dir}/r/*.result \
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test \
