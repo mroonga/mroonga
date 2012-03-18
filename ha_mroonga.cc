@@ -8844,9 +8844,9 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
   DBUG_RETURN(error);
 }
 
-uint32 ha_mroonga::storage_encode_multiple_column_key_float(const uchar *key,
-                                                            uchar *buffer,
-                                                            bool decode)
+uint ha_mroonga::storage_encode_multiple_column_key_float(const uchar *key,
+                                                          uchar *buffer,
+                                                          bool decode)
 {
   MRN_DBUG_ENTER_METHOD();
   uint data_size = 4;
@@ -8865,12 +8865,12 @@ uint32 ha_mroonga::storage_encode_multiple_column_key_float(const uchar *key,
   DBUG_RETURN(data_size);
 }
 
-uint32 ha_mroonga::storage_encode_multiple_column_key_double(const uchar *key,
-                                                             uchar *buffer,
-                                                             bool decode)
+uint ha_mroonga::storage_encode_multiple_column_key_double(const uchar *key,
+                                                           uchar *buffer,
+                                                           bool decode)
 {
   MRN_DBUG_ENTER_METHOD();
-  uint32 data_size = 8;
+  uint data_size = 8;
   double double_value = 0.0;
   float8get(double_value, key);
   int n_bits = (data_size * 8 - 1);
@@ -8923,7 +8923,7 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       TYPE_DOUBLE,
       TYPE_BYTE_SEQUENCE
     } data_type = TYPE_UNKNOWN;
-    uint32 data_size = 0;
+    uint data_size = 0;
     long long int long_long_value = 0;
     switch (field->real_type()) {
     case MYSQL_TYPE_DECIMAL:
