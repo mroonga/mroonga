@@ -1,4 +1,4 @@
-/* -*- c-basic-offset: 2 -*- */
+/* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2012 Kentoku SHIBA
@@ -8845,8 +8845,8 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
 }
 
 uint32 ha_mroonga::storage_encode_multiple_column_key_float(const uchar *key,
-							    uchar *buffer,
-							    bool decode)
+                                                            uchar *buffer,
+                                                            bool decode)
 {
   MRN_DBUG_ENTER_METHOD();
   uint data_size = 4;
@@ -8860,7 +8860,7 @@ uint32 ha_mroonga::storage_encode_multiple_column_key_float(const uchar *key,
   if (decode) {
     int_value = *((int *)buffer);
     *((int *)buffer) = int_value ^ (((int_value ^ (1 << n_bits)) >> n_bits) |
-				    (1 << n_bits));
+                                    (1 << n_bits));
   }
   DBUG_RETURN(data_size);
 }
