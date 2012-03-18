@@ -93,9 +93,9 @@ fi
 if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
     cp -rp "${innodb_test_suite_dir}" "${mroonga_wrapper_innodb_test_suite_dir}"
     ruby -i'' \
-	-pe "\$_.gsub!(/\bengine\s*=\s*innodb\b([^;\\n]*)/i,
+	-pe "\$_.gsub!(/\\bengine\\s*=\\s*innodb\\b([^;\\n]*)/i,
                       \"ENGINE=mroonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
-             \$_.gsub!(/\b(storage_engine\s*=\s*)innodb\b([^;\\n]*)/i,
+             \$_.gsub!(/\\b(storage_engine\\s*=\\s*)innodb\\b([^;\\n]*)/i,
                       \"\\\1mroonga\")
             " \
 	${mroonga_wrapper_innodb_test_suite_dir}/r/*.result \
