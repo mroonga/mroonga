@@ -8923,8 +8923,8 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
     case MYSQL_TYPE_FLOAT:
       data_type = TYPE_FLOAT;
       data_size = storage_encode_multiple_column_key_float(current_key,
-							   current_buffer,
-							   decode);
+                                                           current_buffer,
+                                                           decode);
       break;
     case MYSQL_TYPE_DOUBLE:
       data_type = TYPE_DOUBLE;
