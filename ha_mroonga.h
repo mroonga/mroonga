@@ -537,7 +537,8 @@ private:
                                                 uint data_size,
                                                 uchar *buffer,
                                                 bool decode);
-  uint storage_encode_multiple_column_key_double(const uchar *key,
+  void storage_encode_multiple_column_key_double(double value,
+                                                 uint data_size,
                                                  uchar *buffer,
                                                  bool decode);
   int storage_encode_multiple_column_key(KEY *key_info,
