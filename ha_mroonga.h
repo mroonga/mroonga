@@ -533,7 +533,8 @@ private:
                                uchar *buf, uint *size);
 #endif
   int storage_encode_key(Field *field, const uchar *key, uchar *buf, uint *size);
-  uint storage_encode_multiple_column_key_float(const uchar *key,
+  void storage_encode_multiple_column_key_float(float vlaue,
+                                                uint data_size,
                                                 uchar *buffer,
                                                 bool decode);
   uint storage_encode_multiple_column_key_double(const uchar *key,

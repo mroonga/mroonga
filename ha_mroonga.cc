@@ -8844,16 +8844,14 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
   DBUG_RETURN(error);
 }
 
-uint ha_mroonga::storage_encode_multiple_column_key_float(const uchar *key,
+void ha_mroonga::storage_encode_multiple_column_key_float(float value,
+                                                          uint data_size,
                                                           uchar *buffer,
                                                           bool decode)
 {
   MRN_DBUG_ENTER_METHOD();
-  uint data_size = 4;
-  float float_value = 0.0;
-  float4get(float_value, key);
   int n_bits = (data_size * 8 - 1);
-  int int_value = *((int *)(&float_value));
+  int int_value = *((int *)(&value));
   if (!decode)
     int_value ^= ((int_value >> n_bits) | (1 << n_bits));
   mrn_byte_order_host_to_network(buffer, &int_value, data_size);
@@ -8862,7 +8860,7 @@ uint ha_mroonga::storage_encode_multiple_column_key_float(const uchar *key,
     *((int *)buffer) = int_value ^ (((int_value ^ (1 << n_bits)) >> n_bits) |
                                     (1 << n_bits));
   }
-  DBUG_RETURN(data_size);
+  DBUG_VOID_RETURN;
 }
 
 uint ha_mroonga::storage_encode_multiple_column_key_double(const uchar *key,
@@ -8944,9 +8942,13 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       break;
     case MYSQL_TYPE_FLOAT:
       data_type = TYPE_FLOAT;
-      data_size = storage_encode_multiple_column_key_float(current_key,
-                                                           current_buffer,
-                                                           decode);
+      data_size = 4;
+      {
+        float value;
+        float4get(value, current_key);
+        storage_encode_multiple_column_key_float(value, data_size,
+                                                 current_buffer, decode);
+      }
       break;
     case MYSQL_TYPE_DOUBLE:
       data_type = TYPE_DOUBLE;
