@@ -95,6 +95,8 @@ if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
     ruby -i'' \
 	-pe "\$_.gsub!(/\bengine\s*=\s*innodb\b([^;\\n]*)/i,
                       \"ENGINE=mroonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
+             \$_.gsub!(/\b(storage_engine\s*=\s*)innodb\b([^;\\n]*)/i,
+                      \"\\\1mroonga\")
             " \
 	${mroonga_wrapper_innodb_test_suite_dir}/r/*.result \
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test \
