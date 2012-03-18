@@ -58,6 +58,10 @@ Ubuntu 10.04 LTS Lucid Lynx
 
    You need to enable the universe section in Ubuntu's software sources.
 
+.. note::
+
+   You need to enable the securiy update repository.
+
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/ubuntu/ lucid universe
@@ -76,6 +80,10 @@ Ubuntu 11.04 Natty Narwhal
 
    You need to enable the universe section in Ubuntu's software sources.
 
+.. note::
+
+   You need to enable the securiy update repository.
+
 /etc/apt/sources.list.d/groonga.list::
 
   deb http://packages.groonga.org/ubuntu/ natty universe
@@ -93,6 +101,10 @@ Ubuntu 11.10 Oneiric Ocelot
 .. note::
 
    You need to enable the universe section in Ubuntu's software sources.
+
+.. note::
+
+   You need to enable the securiy update repository.
 
 /etc/apt/sources.list.d/groonga.list::
 
