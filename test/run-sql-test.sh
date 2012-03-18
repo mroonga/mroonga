@@ -92,16 +92,19 @@ if test "$0" -nt "$(dirname "${mroonga_wrapper_innodb_test_suite_dir}")"; then
 fi
 if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
     cp -rp "${innodb_test_suite_dir}" "${mroonga_wrapper_innodb_test_suite_dir}"
+    cp -rp "${build_test_include_dir}"/innodb[-_]*.inc \
+	"${mroonga_wrapper_innodb_test_suite_dir}/include/"
     ruby -i'' \
 	-pe "\$_.gsub!(/\\bengine\\s*=\\s*innodb\\b([^;\\n]*)/i,
                       \"ENGINE=mroonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
              \$_.gsub!(/\\b(storage_engine\\s*=\\s*)innodb\\b([^;\\n]*)/i,
                       \"\\\1mroonga\")
+             \$_.gsub!(/^(--\\s*source\\s+)(include\\/innodb)/i,
+                      \"\\\1suite/mroonga_wrapper_innodb/\\\2\")
             " \
 	${mroonga_wrapper_innodb_test_suite_dir}/r/*.result \
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test \
-	${mroonga_wrapper_innodb_test_suite_dir}/include/*.inc \
-	${build_test_include_dir}/innodb_*.inc # over our work. :<
+	${mroonga_wrapper_innodb_test_suite_dir}/include/*.inc
     sed -i'' \
 	-e '1 i --source include/have_mroonga.inc' \
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test
