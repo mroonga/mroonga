@@ -8336,6 +8336,7 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
                                               const char *value,
                                               uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
   grn_geo_point *field_value = (grn_geo_point *)value;
   int latitude, longitude;
@@ -8357,6 +8358,7 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
   field->store((const char *)wkb,
                (uint)(sizeof(wkb) / sizeof(*wkb)),
                field->charset());
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field(Field *field,
