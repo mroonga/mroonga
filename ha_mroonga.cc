@@ -1098,6 +1098,7 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   return type;
 }
 
+#ifdef HAVE_SPATIAL
 static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
                             const char *wkb, uint wkb_size)
 {
@@ -1128,6 +1129,7 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 
   return error;
 }
+#endif
 
 #ifdef WORDS_BIGENDIAN
 #define mrn_byte_order_host_to_network(buf, key, size)  \
@@ -8028,11 +8030,13 @@ int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+#ifdef HAVE_SPATIAL
   String buffer;
   Field_geom *geometry = (Field_geom *)field;
   const char *wkb = geometry->val_str(0, &buffer)->ptr();
   int len = geometry->get_length();
   error = mrn_set_geometry(ctx, buf, wkb, len);
+#endif
   DBUG_RETURN(error);
 }
 
@@ -8337,6 +8341,7 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
                                               uint value_length)
 {
   MRN_DBUG_ENTER_METHOD();
+#ifdef HAVE_SPATIAL
   uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
   grn_geo_point *field_value = (grn_geo_point *)value;
   int latitude, longitude;
@@ -8358,6 +8363,7 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
   field->store((const char *)wkb,
                (uint)(sizeof(wkb) / sizeof(*wkb)),
                field->charset());
+#endif
   DBUG_VOID_RETURN;
 }
 
