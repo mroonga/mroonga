@@ -8865,6 +8865,29 @@ uint32 ha_mroonga::storage_encode_multiple_column_key_float(const uchar *key,
   DBUG_RETURN(data_size);
 }
 
+uint32 ha_mroonga::storage_encode_multiple_column_key_double(const uchar *key,
+                                                             uchar *buffer,
+                                                             bool decode)
+{
+  MRN_DBUG_ENTER_METHOD();
+  uint32 data_size = 8;
+  double double_value = 0.0;
+  float8get(double_value, key);
+  int n_bits = (data_size * 8 - 1);
+  volatile long long int *long_long_value_pointer =
+    (long long int *)(&double_value);
+  volatile long long int long_long_value = *long_long_value_pointer;
+  if (!decode)
+     long_long_value ^= ((long_long_value >> n_bits) | (1LL << n_bits));
+  mrn_byte_order_host_to_network(buffer, &long_long_value, data_size);
+  if (decode) {
+    long_long_value = *((long long int *)buffer);
+    *((long long int *)buffer) =
+      long_long_value ^ (((long_long_value ^ (1LL << n_bits)) >> n_bits) |
+                          (1LL << n_bits));
+  }
+  DBUG_RETURN(data_size);
+}
 
 int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
                                                    const uchar *key,
@@ -8901,8 +8924,7 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       TYPE_BYTE_SEQUENCE
     } data_type = TYPE_UNKNOWN;
     uint32 data_size = 0;
-    volatile long long int long_long_value = 0;
-    volatile double double_value = 0.0;
+    long long int long_long_value = 0;
     switch (field->real_type()) {
     case MYSQL_TYPE_DECIMAL:
       data_type = TYPE_BYTE_SEQUENCE;
@@ -8928,8 +8950,9 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       break;
     case MYSQL_TYPE_DOUBLE:
       data_type = TYPE_DOUBLE;
-      data_size = 8;
-      float8get(double_value, current_key);
+      data_size = storage_encode_multiple_column_key_double(current_key,
+                                                            current_buffer,
+                                                            decode);
       break;
     case MYSQL_TYPE_NULL:
       data_type = TYPE_NUMBER;
@@ -9059,22 +9082,6 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
     case TYPE_FLOAT:
       break;
     case TYPE_DOUBLE:
-      {
-        int n_bits = (data_size * 8 - 1);
-        volatile long long int *encoded_value_pointer =
-          (long long int *)(&double_value);
-        long_long_value = *encoded_value_pointer;
-        if (!decode)
-          long_long_value ^= ((long_long_value >> n_bits) | (1LL << n_bits));
-        mrn_byte_order_host_to_network(current_buffer, &long_long_value,
-                                       data_size);
-        if (decode) {
-          long_long_value = *((long long int *)current_buffer);
-          *((long long int *)current_buffer) =
-            long_long_value ^ (((long_long_value ^ (1LL << n_bits)) >> n_bits) |
-                               (1LL << n_bits));
-        }
-      }
       break;
     case TYPE_BYTE_SEQUENCE:
       memcpy(current_buffer, current_key, data_size);
