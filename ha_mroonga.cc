@@ -8844,6 +8844,28 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
   DBUG_RETURN(error);
 }
 
+uint32 ha_mroonga::storage_encode_multiple_column_key_float(const uchar *key,
+							    uchar *buffer,
+							    bool decode)
+{
+  MRN_DBUG_ENTER_METHOD();
+  uint data_size = 4;
+  float float_value = 0.0;
+  float4get(float_value, key);
+  int n_bits = (data_size * 8 - 1);
+  int int_value = *((int *)(&float_value));
+  if (!decode)
+    int_value ^= ((int_value >> n_bits) | (1 << n_bits));
+  mrn_byte_order_host_to_network(buffer, &int_value, data_size);
+  if (decode) {
+    int_value = *((int *)buffer);
+    *((int *)buffer) = int_value ^ (((int_value ^ (1 << n_bits)) >> n_bits) |
+				    (1 << n_bits));
+  }
+  DBUG_RETURN(data_size);
+}
+
+
 int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
                                                    const uchar *key,
                                                    uint key_length,
@@ -8879,9 +8901,7 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       TYPE_BYTE_SEQUENCE
     } data_type = TYPE_UNKNOWN;
     uint32 data_size = 0;
-    volatile int int_value = 0;
     volatile long long int long_long_value = 0;
-    volatile float float_value = 0.0;
     volatile double double_value = 0.0;
     switch (field->real_type()) {
     case MYSQL_TYPE_DECIMAL:
@@ -8902,8 +8922,9 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       break;
     case MYSQL_TYPE_FLOAT:
       data_type = TYPE_FLOAT;
-      data_size = 4;
-      float4get(float_value, current_key);
+      data_size = storage_encode_multiple_column_key_float(current_key,
+							   current_buffer,
+							   decode);
       break;
     case MYSQL_TYPE_DOUBLE:
       data_type = TYPE_DOUBLE;
@@ -9036,19 +9057,6 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       }
       break;
     case TYPE_FLOAT:
-      {
-        int n_bits = (data_size * 8 - 1);
-        int_value = *((int *)(&float_value));
-        if (!decode)
-          int_value ^= ((int_value >> n_bits) | (1 << n_bits));
-        mrn_byte_order_host_to_network(current_buffer, &int_value, data_size);
-        if (decode) {
-          int_value = *((int *)current_buffer);
-          *((int *)current_buffer) =
-            int_value ^ (((int_value ^ (1 << n_bits)) >> n_bits) |
-                         (1 << n_bits));
-        }
-      }
       break;
     case TYPE_DOUBLE:
       {
