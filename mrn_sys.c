@@ -84,49 +84,6 @@ int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key)
 }
 
 /**
- * "./${db}/${table}"                              ==> "${db}.mrn"
- * "./${db}/"                                      ==> "${db}.mrn"
- * "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0" ==>
- *   "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0.mrn"
- */
-char *mrn_db_path_gen(const char *db_path_in_mysql, char *dest)
-{
-  if (strncmp(db_path_in_mysql, "./", 2) == 0) {
-    int i = 2, j = 0, len;
-    len = strlen(db_path_in_mysql);
-    while (db_path_in_mysql[i] != '/' && i < len) {
-      dest[j++] = db_path_in_mysql[i++];
-    }
-    dest[j] = '\0';
-  } else {
-    strcpy(dest, db_path_in_mysql);
-  }
-  strcat(dest, MRN_DB_FILE_SUFFIX);
-  return dest;
-}
-
-/**
- * "./${db}/${table}"                              ==> "${db}"
- * "./${db}/"                                      ==> "${db}"
- * "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0" ==>
- *   "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0"
- */
-char *mrn_db_name_gen(const char *db_path_in_mysql, char *dest)
-{
-  if (strncmp(db_path_in_mysql, "./", 2) == 0) {
-    int i = 2, j = 0, len;
-    len = strlen(db_path_in_mysql);
-    while (db_path_in_mysql[i] != '/' && i < len) {
-      dest[j++] = db_path_in_mysql[i++];
-    }
-    dest[j] = '\0';
-  } else {
-    strcpy(dest, db_path_in_mysql);
-  }
-  return dest;
-}
-
-/**
  * "./${db}/${table}" ==> "${table}" (with encoding first '_')
  */
 char *mrn_table_name_gen(const char *arg, char *dest)

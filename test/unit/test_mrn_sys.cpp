@@ -93,42 +93,6 @@ namespace test_mrn_sys
     cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, key));
   }
 
-  void test_mrn_db_path_gen()
-  {
-    char buf[64];
-    const char *arg1 = "./hoge/fuga";
-    const char *arg2 = "./foobar/mysql";
-    const char *arg3 = "./d/b";
-    cut_assert_equal_string("hoge.mrn", mrn_db_path_gen(arg1, buf));
-    cut_assert_equal_string("foobar.mrn", mrn_db_path_gen(arg2, buf));
-    cut_assert_equal_string("d.mrn", mrn_db_path_gen(arg3, buf));
-
-    const char *arg4 = "./hoge/";
-    const char *arg5 = "./foobar/";
-    const char *arg6 = "./d/";
-    cut_assert_equal_string("hoge.mrn", mrn_db_path_gen(arg4, buf));
-    cut_assert_equal_string("foobar.mrn", mrn_db_path_gen(arg5, buf));
-    cut_assert_equal_string("d.mrn", mrn_db_path_gen(arg6, buf));
-  }
-
-  void test_mrn_db_name_gen()
-  {
-    char buf[64];
-    const char *arg1 = "./hoge/fuga";
-    const char *arg2 = "./foobar/mysql";
-    const char *arg3 = "./d/b";
-    cut_assert_equal_string("hoge", mrn_db_name_gen(arg1, buf));
-    cut_assert_equal_string("foobar", mrn_db_name_gen(arg2, buf));
-    cut_assert_equal_string("d", mrn_db_name_gen(arg3, buf));
-
-    const char *arg4 = "./hoge/";
-    const char *arg5 = "./foobar/";
-    const char *arg6 = "./d/";
-    cut_assert_equal_string("hoge", mrn_db_name_gen(arg4, buf));
-    cut_assert_equal_string("foobar", mrn_db_name_gen(arg5, buf));
-    cut_assert_equal_string("d", mrn_db_name_gen(arg6, buf));
-  }
-
   void test_mrn_table_name_gen()
   {
     char buf[64];

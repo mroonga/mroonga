@@ -43,6 +43,7 @@
 #include "mrn_err.h"
 #include "mrn_table.h"
 #include "ha_mroonga.h"
+#include <mrn_path_mapper.hpp>
 
 #define MRN_MESSAGE_BUFFER_SIZE 1024
 
@@ -919,24 +920,22 @@ static handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROO
 static void mrn_drop_db(handlerton *hton, char *path)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  char db_path[MRN_MAX_PATH_SIZE];
-  char db_name[MRN_MAX_PATH_SIZE];
-  mrn_db_path_gen(path, db_path);
-  mrn_db_name_gen(path, db_name);
+  mrn::PathMapper mapper(path);
   pthread_mutex_lock(&mrn_db_mutex);
   grn_obj *db = NULL;
-  if (mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db) != 0) {
+  if (mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db) != 0) {
     struct stat dummy;
-    if (stat(db_path, &dummy) == 0) {
-      db = grn_db_open(&mrn_ctx, db_path);
+    if (stat(mapper.db_path(), &dummy) == 0) {
+      db = grn_db_open(&mrn_ctx, mapper.db_path());
     }
   }
   if (db) {
     if (grn_obj_remove(&mrn_ctx, db)) {
-      GRN_LOG(&mrn_ctx, GRN_LOG_ERROR, "cannot drop database (%s)", db_path);
+      GRN_LOG(&mrn_ctx, GRN_LOG_ERROR,
+              "cannot drop database (%s)", mapper.db_path());
     }
   }
-  mrn_hash_remove(&mrn_ctx, mrn_hash, db_name);
+  mrn_hash_remove(&mrn_ctx, mrn_hash, mapper.db_name());
   pthread_mutex_unlock(&mrn_db_mutex);
   DBUG_VOID_RETURN;
 }
@@ -2807,23 +2806,20 @@ int ha_mroonga::ensure_database_create(const char *name)
   MRN_DBUG_ENTER_METHOD();
   /* before creating table, we must check if database is alreadly opened, created */
   grn_obj *db;
-  char db_name[MRN_MAX_PATH_SIZE];
-  char db_path[MRN_MAX_PATH_SIZE];
   struct stat db_stat;
 
   error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
     DBUG_RETURN(error);
 
-  mrn_db_name_gen(name, db_name);
-  mrn_db_path_gen(name, db_path);
-
+  mrn::PathMapper mapper(name);
   pthread_mutex_lock(&mrn_db_mutex);
-  if (mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db) != 0) {
-    if (stat(db_path, &db_stat)) {
+  if (mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db) != 0) {
+    if (stat(mapper.db_path(), &db_stat)) {
       // creating new database
-      GRN_LOG(ctx, GRN_LOG_INFO, "database not found. creating...(%s)", db_path);
-      db = grn_db_create(&mrn_ctx, db_path, NULL);
+      GRN_LOG(ctx, GRN_LOG_INFO,
+              "database not found. creating...(%s)", mapper.db_path());
+      db = grn_db_create(&mrn_ctx, mapper.db_path(), NULL);
       if (mrn_ctx.rc) {
         pthread_mutex_unlock(&mrn_db_mutex);
         error = ER_CANT_CREATE_TABLE;
@@ -2832,7 +2828,7 @@ int ha_mroonga::ensure_database_create(const char *name)
       }
     } else {
       // opening existing database
-      db = grn_db_open(&mrn_ctx, db_path);
+      db = grn_db_open(&mrn_ctx, mapper.db_path());
       if (mrn_ctx.rc) {
         pthread_mutex_unlock(&mrn_db_mutex);
         error = ER_CANT_OPEN_FILE;
@@ -2840,7 +2836,7 @@ int ha_mroonga::ensure_database_create(const char *name)
         DBUG_RETURN(error);
       }
     }
-    mrn_hash_put(&mrn_ctx, mrn_hash, db_name, db);
+    mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
   }
   pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db);
@@ -2854,26 +2850,22 @@ int ha_mroonga::ensure_database_open(const char *name)
 
   MRN_DBUG_ENTER_METHOD();
   grn_obj *db;
-  char db_name[MRN_MAX_PATH_SIZE];
-  char db_path[MRN_MAX_PATH_SIZE];
 
   error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
     DBUG_RETURN(error);
 
-  mrn_db_name_gen(name, db_name);
-  mrn_db_path_gen(name, db_path);
-
+  mrn::PathMapper mapper(name);
   pthread_mutex_lock(&mrn_db_mutex);
-  if (mrn_hash_get(&mrn_ctx, mrn_hash, db_name, &db) != 0) {
-    db = grn_db_open(&mrn_ctx, db_path);
+  if (mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db) != 0) {
+    db = grn_db_open(&mrn_ctx, mapper.db_path());
     if (ctx->rc) {
       pthread_mutex_unlock(&mrn_db_mutex);
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       DBUG_RETURN(error);
     }
-    mrn_hash_put(&mrn_ctx, mrn_hash, db_name, db);
+    mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
   }
   pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db);
@@ -3457,23 +3449,22 @@ int ha_mroonga::close()
   }
 
   if (is_temporary_table_name(share->table_name)) {
-    char db_name[MRN_MAX_PATH_SIZE];
     char table_name[MRN_MAX_PATH_SIZE];
     char mysql_table_name[MRN_MAX_PATH_SIZE];
     TABLE_LIST table_list;
     TABLE_SHARE *tmp_table_share;
     int tmp_error;
     /* no need to decode */
-    mrn_db_name_gen(share->table_name, db_name);
+    mrn::PathMapper mapper(share->table_name);
     mrn_table_name_gen(share->table_name, table_name);
     mrn_table_name_gen_for_mysql(share->table_name, mysql_table_name);
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
-    table_list.init_one_table(db_name, strlen(db_name),
+    table_list.init_one_table(mapper.db_name(), strlen(mapper.db_name()),
                               mysql_table_name, strlen(mysql_table_name),
                               mysql_table_name,
                               TL_WRITE);
 #else
-    table_list.init_one_table(db_name, mysql_table_name, TL_WRITE);
+    table_list.init_one_table(mapper.db_name(), mysql_table_name, TL_WRITE);
 #endif
     mrn_open_mutex_lock();
     tmp_table_share =
@@ -3618,7 +3609,6 @@ int ha_mroonga::delete_table(const char *name)
 {
   int error = 0;
   THD *thd = ha_thd();
-  char db_name[MRN_MAX_PATH_SIZE];
   char table_name[MRN_MAX_PATH_SIZE];
   char mysql_table_name[MRN_MAX_PATH_SIZE];
   TABLE_LIST table_list;
@@ -3627,7 +3617,6 @@ int ha_mroonga::delete_table(const char *name)
   MRN_SHARE *tmp_share;
   st_mrn_alter_share *alter_share, *tmp_alter_share;
   MRN_DBUG_ENTER_METHOD();
-  mrn_db_name_gen(name, db_name);
   mrn_table_name_gen(name, table_name);
   mrn_table_name_gen_for_mysql(name, mysql_table_name);
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
@@ -3654,13 +3643,14 @@ int ha_mroonga::delete_table(const char *name)
   }
   if (!tmp_table_share)
   {
+    mrn::PathMapper mapper(name);
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
-    table_list.init_one_table(db_name, strlen(db_name),
+    table_list.init_one_table(mapper.db_name(), strlen(mapper.db_name()),
                               mysql_table_name, strlen(mysql_table_name),
                               mysql_table_name,
                               TL_WRITE);
 #else
-    table_list.init_one_table(db_name, mysql_table_name, TL_WRITE);
+    table_list.init_one_table(mapper.db_name(), mysql_table_name, TL_WRITE);
 #endif
     mrn_open_mutex_lock();
     tmp_table_share = mrn_create_tmp_table_share(&table_list, name, &error);
@@ -10125,8 +10115,6 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
 int ha_mroonga::rename_table(const char *from, const char *to)
 {
   int error = 0;
-  char from_db_name[MRN_MAX_PATH_SIZE];
-  char to_db_name[MRN_MAX_PATH_SIZE];
   char from_table_name[MRN_MAX_PATH_SIZE];
   char to_table_name[MRN_MAX_PATH_SIZE];
   char from_mysql_table_name[MRN_MAX_PATH_SIZE];
@@ -10135,21 +10123,23 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   TABLE tmp_table;
   MRN_SHARE *tmp_share;
   MRN_DBUG_ENTER_METHOD();
-  mrn_db_name_gen(to, to_db_name);
+  mrn::PathMapper to_mapper(to);
+  mrn::PathMapper from_mapper(from);
   mrn_table_name_gen(to, to_table_name);
-  mrn_db_name_gen(from, from_db_name);
   mrn_table_name_gen(from, from_table_name);
   mrn_table_name_gen_for_mysql(from, from_mysql_table_name);
-  if (strcmp(from_db_name, to_db_name))
+  if (strcmp(from_mapper.db_name(), to_mapper.db_name()))
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
-  table_list.init_one_table(from_db_name, strlen(from_db_name),
+  table_list.init_one_table(from_mapper.db_name(),
+                            strlen(from_mapper.db_name()),
                             from_mysql_table_name,
                             strlen(from_mysql_table_name),
                             from_mysql_table_name, TL_WRITE);
 #else
-  table_list.init_one_table(from_db_name, from_mysql_table_name, TL_WRITE);
+  table_list.init_one_table(from_mapper.db_name(), from_mysql_table_name,
+                            TL_WRITE);
 #endif
   mrn_open_mutex_lock();
   tmp_table_share = mrn_create_tmp_table_share(&table_list, from, &error);
@@ -10358,10 +10348,8 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
   KEY *p_key_info = &table->key_info[table_share->primary_key];
   KEY *tmp_key_info;
   KEY *key_info = table->key_info;
-  char db_name[MRN_MAX_PATH_SIZE];
   char table_name[MRN_MAX_PATH_SIZE];
   MRN_DBUG_ENTER_METHOD();
-  mrn_db_name_gen(table_share->normalized_path.str, db_name);
   mrn_table_name_gen(table_share->normalized_path.str, table_name);
   bitmap_clear_all(table->read_set);
   clear_indexes();

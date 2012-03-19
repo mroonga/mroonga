@@ -19,6 +19,9 @@ sources =					\
 	mrn_sys.c				\
 	mrn_table.cc
 
+libraries =					\
+	$(top_builddir)/lib/libmroonga.la
+
 dynamic_plugin_ldflags  = -module $(GROONGA_LIBS)
 dynamic_plugin_cxxflags = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 dynamic_plugin_cflags   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
@@ -28,17 +31,20 @@ ha_mroonga_la_LDFLAGS  = $(dynamic_plugin_ldflags)
 ha_mroonga_la_CXXFLAGS = $(dynamic_plugin_cxxflags)
 ha_mroonga_la_CFLAGS   = $(dynamic_plugin_cflags)
 ha_mroonga_la_SOURCES  = $(sources)
+ha_mroonga_la_LIBADD   = $(libraries)
 
 plugin_LTLIBRARIES    += ha_groonga.la
 ha_groonga_la_LDFLAGS  = $(dynamic_plugin_ldflags)
 ha_groonga_la_CXXFLAGS = $(dynamic_plugin_cxxflags) -DMRN_USE_DEPRECATED_NAME
 ha_groonga_la_CFLAGS   = $(dynamic_plugin_cflags) -DMRN_USE_DEPRECATED_NAME
 ha_groonga_la_SOURCES  = $(sources)
+ha_groonga_la_LIBADD   = $(libraries)
 
 plugin_LIBRARIES         = libmroonga.a
 libmroonga_a_CXXFLAGS    = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
 libmroonga_a_CFLAGS      = $(AM_CFLAGS) $(MYSQL_CFLAGS)
 libmroonga_a_SOURCES     = $(sources)
+libmroonga_a_LIBADD      = $(libraries)
 
 SUBDIRS =					\
 	lib					\
