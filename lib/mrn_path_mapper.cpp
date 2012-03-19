@@ -28,7 +28,7 @@
 #include <string.h>
 
 namespace mrn {
-  PathMapper::PathMapper(const char *mysql_path)
+  PathMapper::PathMapper(const char* mysql_path)
     : mysql_path_(mysql_path) {
     db_path_[0] = '\0';
     db_name_[0] = '\0';
@@ -40,7 +40,7 @@ namespace mrn {
    * "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0" ==>
    *   "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0.mrn"
    */
-  const char *PathMapper::db_path() {
+  const char* PathMapper::db_path() {
     if (db_path_[0] != '\0') {
       return db_path_;
     }
@@ -65,7 +65,7 @@ namespace mrn {
    * "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0" ==>
    *   "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0"
    */
-  const char *PathMapper::db_name() {
+  const char* PathMapper::db_name() {
     if (db_name_[0] != '\0') {
       return db_name_;
     }
