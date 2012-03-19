@@ -297,6 +297,7 @@ CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -f
 
 AC_CONFIG_FILES([
   Makefile
+  lib/Makefile
   test/Makefile
   test/unit/Makefile
   test/sql/Makefile

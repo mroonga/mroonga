@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = 1.9.7
 
 LOCALES = ja
 
-AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) $(MYSQL_VERSION_CFLAGS)
+AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) $(MYSQL_VERSION_CFLAGS) -I$(top_srcdir)/lib
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
 noinst_HEADERS =				\
@@ -41,6 +41,7 @@ libmroonga_a_CFLAGS      = $(AM_CFLAGS) $(MYSQL_CFLAGS)
 libmroonga_a_SOURCES     = $(sources)
 
 SUBDIRS =					\
+	lib					\
 	test					\
 	doc					\
 	tools					\
