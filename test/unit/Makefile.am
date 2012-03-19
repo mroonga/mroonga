@@ -9,7 +9,6 @@ AM_CPPFLAGS =					\
 	$(CPPCUTTER_CFLAGS)			\
 	-I$(top_srcdir)				\
 	-I$(top_srcdir)/lib
-ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
 DEFS          = @DEFS@
 
