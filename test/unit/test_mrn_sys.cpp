@@ -99,9 +99,11 @@ namespace test_mrn_sys
     const char *arg1 = "./hoge/fuga";
     const char *arg2 = "./foobar/mysql";
     const char *arg3 = "./d/b";
+    const char *arg4 = "./d/_b";
     cut_assert_equal_string("fuga", mrn_table_name_gen(arg1, buf));
     cut_assert_equal_string("mysql", mrn_table_name_gen(arg2, buf));
     cut_assert_equal_string("b", mrn_table_name_gen(arg3, buf));
+    cut_assert_equal_string("@005fb", mrn_table_name_gen(arg4, buf));
   }
 
   void test_mrn_index_table_name_gen()
