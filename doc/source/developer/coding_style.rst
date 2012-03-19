@@ -90,6 +90,36 @@ TODO: 読みやすさの他にデバッグのしやすさ（gdbでの追いや�
     ha_mroonga.cpp:
       using namespace zmq;
 
+``include`` ガード
+------------------
+
+2重 ``include`` を防ぐためのマクロは、ヘッダーファイルの名前をすべて大文字にし、単語の区切りをアンダースコアにしたものにし、最後にアンダースコアをつけて ``HEADER_FILE_NAME_HPP_`` という名前にする。
+
+よい例:
+
+    mrn_db_path.hpp:
+      #ifndef MRN_DB_PATH_HPP_
+      #define MRN_DB_PATH_HPP_
+      ...
+      #endif // MRN_DB_PATH_HPP_
+
+悪い例（小文字になっている）:
+
+    mrn_db_path.hpp:
+      #ifndef mrn_db_path_hpp_
+      #define mrn_db_path_hpp_
+      ...
+      #endif // mrn_db_path_hpp_
+
+悪い例（アンダースコアが最後ではなく先頭についている）:
+
+    mrn_db_path.hpp:
+      #ifndef _MRN_DB_PATH_HPP
+      #define _MRN_DB_PATH_HPP
+      ...
+      #endif // _MRN_DB_PATH_HPP
+
+
 文字列
 ------
 
