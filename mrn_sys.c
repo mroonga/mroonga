@@ -84,44 +84,6 @@ int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key)
 }
 
 /**
- * "./${db}/${table}" ==> "${table}" (with encoding first '_')
- */
-char *mrn_table_name_gen(const char *arg, char *dest)
-{
-  int len = strlen(arg);
-  int i=len, j=0;
-  for (; arg[--i] != '/' ;) {}
-  if (arg[i + 1] == '_') {
-    dest[j++] = '@';
-    dest[j++] = '0';
-    dest[j++] = '0';
-    dest[j++] = '5';
-    dest[j++] = 'f';
-    i++;
-  }
-  for (; i < len ;) {
-    dest[j++] = arg[++i];
-  }
-  dest[j] = '\0';
-  return dest;
-}
-
-/**
- * "./${db}/${table}" ==> "${table}" (without encoding first '_')
- */
-char *mrn_table_name_gen_for_mysql(const char *arg, char *dest)
-{
-  int len = strlen(arg);
-  int i=len, j=0;
-  for (; arg[--i] != '/' ;) {}
-  for (; i < len ;) {
-    dest[j++] = arg[++i];
-  }
-  dest[j] = '\0';
-  return dest;
-}
-
-/**
  * "${table}" ==> "${table}-${index_name}"
  */
 char *mrn_index_table_name_gen(const char *table_name,
