@@ -30,10 +30,12 @@ namespace mrn {
     PathMapper(const char* mysql_path);
     const char* db_path();
     const char* db_name();
+    const char* table_name();
   private:
     const char* mysql_path_;
     char db_path_[MRN_MAX_PATH_SIZE];
     char db_name_[MRN_MAX_PATH_SIZE];
+    char table_name_[MRN_MAX_PATH_SIZE];
   };
 }
 
