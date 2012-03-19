@@ -33,6 +33,7 @@ namespace mrn {
     db_path_[0] = '\0';
     db_name_[0] = '\0';
     table_name_[0] = '\0';
+    mysql_table_name_[0] = '\0';
   }
 
   /**
@@ -108,5 +109,23 @@ namespace mrn {
     }
     table_name_[j] = '\0';
     return table_name_;
+  }
+
+  /**
+   * "./${db}/${table}" ==> "${table}" (without encoding first '_')
+   */
+  const char* PathMapper::mysql_table_name() {
+    if (mysql_table_name_[0] != '\0') {
+      return mysql_table_name_;
+    }
+
+    int len = strlen(mysql_path_);
+    int i = len, j = 0;
+    for (; mysql_path_[--i] != '/' ;) {}
+    for (; i < len ;) {
+      mysql_table_name_[j++] = mysql_path_[++i];
+    }
+    mysql_table_name_[j] = '\0';
+    return mysql_table_name_;
   }
 }

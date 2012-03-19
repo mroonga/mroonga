@@ -75,5 +75,22 @@ namespace test_mrn_path_mapper {
       cppcut_assert_equal("@005ftable", mapper.table_name());
     }
   }
+
+  namespace mysql_table_name {
+    void test_normal_table() {
+      mrn::PathMapper mapper("./db/table");
+      cppcut_assert_equal("table", mapper.mysql_table_name());
+    }
+
+    void test_temporary_table() {
+      mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0");
+      cppcut_assert_equal("#sql27c5_1_0", mapper.mysql_table_name());
+    }
+
+    void test_underscore_start_table() {
+      mrn::PathMapper mapper("./db/_table");
+      cppcut_assert_equal("_table", mapper.mysql_table_name());
+    }
+  }
 }
 
