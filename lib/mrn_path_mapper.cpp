@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2011-2012 Kentoku SHIBA
-  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -30,6 +30,8 @@
 namespace mrn {
   PathMapper::PathMapper(const char *mysql_path)
     : mysql_path_(mysql_path) {
+    db_path_[0] = '\0';
+    db_name_[0] = '\0';
   }
 
   /**
@@ -39,6 +41,10 @@ namespace mrn {
    *   "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0.mrn"
    */
   const char *PathMapper::db_path() {
+    if (db_path_[0] != '\0') {
+      return db_path_;
+    }
+
     if (strncmp(mysql_path_, "./", 2) == 0) {
       int i = 2, j = 0, len;
       len = strlen(mysql_path_);
@@ -60,6 +66,10 @@ namespace mrn {
    *   "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0"
    */
   const char *PathMapper::db_name() {
+    if (db_name_[0] != '\0') {
+      return db_name_;
+    }
+
     if (strncmp(mysql_path_, "./", 2) == 0) {
       int i = 2, j = 0, len;
       len = strlen(mysql_path_);
