@@ -7152,7 +7152,11 @@ void ha_mroonga::remove_grn_obj_force(const char *name)
         DIR *dir = opendir(".");
         if (dir) {
           while (struct dirent *entry = readdir(dir)) {
-            if (entry->d_type != DT_REG) {
+            struct stat file_status;
+            if (stat(entry->d_name, &file_status) != 0) {
+              continue;
+            }
+            if (!((file_status.st_mode & S_IFMT) && S_IFREG)) {
               continue;
             }
             if (strncmp(entry->d_name, path, path_length) == 0) {
