@@ -565,7 +565,7 @@ private:
                                MRN_SHARE *tmp_share);
   int wrapper_create_index(const char *name, TABLE *table,
                            HA_CREATE_INFO *info, MRN_SHARE *tmp_share,
-                           char *grn_table_name);
+                           const char *grn_table_name);
   int storage_create_validate_pseudo_column(TABLE *table);
   int storage_create_validate_index(TABLE *table);
   int storage_create_index(TABLE *table, const char *grn_table_name,

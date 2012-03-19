@@ -2320,7 +2320,7 @@ int ha_mroonga::wrapper_create_index_geo(const char *grn_table_name,
 int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
                                      HA_CREATE_INFO *info,
                                      MRN_SHARE *tmp_share,
-                                     char *grn_table_name)
+                                     const char *grn_table_name)
 {
   MRN_DBUG_ENTER_METHOD();
 
