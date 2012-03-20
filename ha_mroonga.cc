@@ -1974,6 +1974,9 @@ ulonglong ha_mroonga::storage_table_flags() const
     HA_CAN_GEOMETRY |
     HA_CAN_RTREEKEYS;
     //HA_HAS_RECORDS;
+#ifdef HA_MUST_USE_TABLE_CONDITION_PUSHDOWN
+  flags |= HA_MUST_USE_TABLE_CONDITION_PUSHDOWN;
+#endif
   DBUG_RETURN(flags);
 }
 
