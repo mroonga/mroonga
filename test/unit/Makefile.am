@@ -12,7 +12,7 @@ AM_CPPFLAGS =					\
 
 DEFS          = @DEFS@
 
-LDFLAGS =					\
+AM_LDFLAGS =					\
 	-module					\
 	-rpath $(libdir)			\
 	-avoid-version				\
