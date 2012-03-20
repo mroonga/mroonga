@@ -8,9 +8,11 @@ AC_INIT([mroonga], [mrn_version], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign tar-pax])
 
+MRN_VERSION=mrn_version
 MRN_VERSION_MAJOR=mrn_version_major
 MRN_VERSION_MINOR=mrn_version_minor
 MRN_VERSION_MICRO=mrn_version_micro
+AC_SUBST([MRN_VERSION])
 AC_SUBST([MRN_VERSION_MAJOR])
 AC_SUBST([MRN_VERSION_MINOR])
 AC_SUBST([MRN_VERSION_MICRO])
@@ -20,6 +22,9 @@ AC_SUBST([MRN_VERSION_IN_HEX])
 
 MRN_PLUGIN_VERSION=`printf "%d.%d" mrn_version_major mrn_version_minor[]mrn_version_micro`
 AC_SUBST([MRN_PLUGIN_VERSION])
+
+MRN_PACKAGE_STRING="$PACKAGE_STRING"
+AC_SUBST([MRN_PACKAGE_STRING])
 
 AC_C_BIGENDIAN
 AC_PROG_CC

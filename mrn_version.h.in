@@ -20,7 +20,7 @@
 #define _mrn_version_h
 
 /* Define mroonga version in string */
-#define MRN_VERSION "@VERSION@"
+#define MRN_VERSION "@MRN_VERSION@"
 
 /* Define mroonga version in hex */
 #define MRN_VERSION_IN_HEX @MRN_VERSION_IN_HEX@
@@ -35,6 +35,6 @@
 #define MRN_VERSION_MICRO @MRN_VERSION_MICRO@
 
 /* Define to the full name and version of this package. */
-#define MRN_PACKAGE_STRING "@PACKAGE_STRING@"
+#define MRN_PACKAGE_STRING "@MRN_PACKAGE_STRING@"
 
 #endif /* _mrn_version_h */
