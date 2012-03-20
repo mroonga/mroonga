@@ -26,24 +26,7 @@ set(MRN_VERSION_IN_HEX
   "0x0${MRN_VERSION_MAJOR}${MRN_VERSION_MINOR}${MRN_VERSION_MICRO}")
 set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
-set(MROONGA_C_SOURCES
-  mrn_sys.c
-  mrn_sys.h
-
-  mrn_macro.h
-  mrn_err.h
-  mrn_mysql.h
-  mrn_mysql_compat.h
-  )
-set(MROONGA_CPP_SOURCES
-  ha_mroonga.cc
-  ha_mroonga.h
-  mrn_table.cc
-  mrn_table.h
-  lib/mrn_path_mapper.cpp
-  lib/mrn_path_mapper.hpp
-  )
-set(MROONGA_SOURCES ${MROONGA_C_SOURCES} ${MROONGA_CPP_SOURCES})
+include(build/cmake/files.cmake)
 
 # TODO: set VERSIONINFO for Microsoft Visual C++.
 #       http://msdn.microsoft.com/en-us/library/aa381058%28VS.85%29.aspx
