@@ -49,3 +49,4 @@ cscope.out
 /mroonga-*.tar.gz
 /packages/mroonga-*.tar.gz
 /configure.lineno
+/config.sh

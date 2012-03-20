@@ -7,20 +7,7 @@ if test "$NO_MAKE" != "yes"; then
     make -C ${top_dir} > /dev/null || exit 1
 fi
 
-if test -z "$MYSQL_SOURCE"; then
-    MYSQL_SOURCE="$(make -s -C $top_dir echo-mysql-source)"
-fi
-export MYSQL_SOURCE
-
-if test -z "$MYSQL_BUILD"; then
-    MYSQL_BUILD="$(make -s -C $top_dir echo-mysql-build)"
-fi
-export MYSQL_BUILD
-
-if test -z "$MYSQL_VERSION"; then
-    MYSQL_VERSION="$(make -s -C $top_dir echo-mysql-version)"
-fi
-export MYSQL_VERSION
+. "${top_dir}/config.sh"
 
 test_suite_names="mroonga_storage,mroonga_wrapper"
 source_mysql_test_dir="${MYSQL_SOURCE}/mysql-test"

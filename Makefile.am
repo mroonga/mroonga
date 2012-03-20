@@ -124,14 +124,5 @@ upload-to-github:
 	ruby $(srcdir)/tools/upload-to-github.rb \
 	  $$USER $(PACKAGE)-$(VERSION).tar.gz
 
-echo-mysql-source:
-	echo $(MYSQL_SOURCE)
-
-echo-mysql-build:
-	echo $(MYSQL_BUILD)
-
-echo-mysql-version:
-	echo $(MYSQL_VERSION)
-
 echo-cutter:
 	echo $(CUTTER)

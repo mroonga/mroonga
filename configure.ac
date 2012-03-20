@@ -328,6 +328,7 @@ AC_CONFIG_FILES([
   doc/locale/ja/LC_MESSAGES/Makefile
 ])
 AC_OUTPUT([
+  config.sh
   mrn_version.h
   test/sql/suite/mroonga_storage/r/information_schema.result
   test/sql/suite/mroonga_storage/r/variables.result
