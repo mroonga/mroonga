@@ -50,3 +50,5 @@ cscope.out
 /packages/mroonga-*.tar.gz
 /configure.lineno
 /config.sh
+/CMakeCache.txt
+/CMakeFiles/
