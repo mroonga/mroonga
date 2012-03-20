@@ -118,12 +118,12 @@ link_directories(
 
 install(TARGETS ha_mroonga DESTINATION "${MYSQL_PLUGIN_DIR}")
 
-configure_file (
+configure_file(
   "${PROJECT_SOURCE_DIR}/mrn_version.h.in"
   "${PROJECT_BINARY_DIR}/mrn_version.h"
   )
 
-configure_file (
+configure_file(
   "${PROJECT_SOURCE_DIR}/config.sh.in"
   "${PROJECT_BINARY_DIR}/config.sh"
   )
