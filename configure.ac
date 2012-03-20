@@ -292,11 +292,6 @@ AM_CONDITIONAL([ENABLE_DOCUMENT],
 AC_MSG_CHECKING([whether document available])
 AC_MSG_RESULT($document_available)
 
-AM_CONDITIONAL([ENABLE_DOCUMENT],
-               [test "${document_available}" = "yes"])
-AC_MSG_CHECKING([whether document available])
-AC_MSG_RESULT($document_available)
-
 CFLAGS="$CFLAGS -Werror"
 CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
 
