@@ -112,8 +112,8 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     ],
     [AC_MSG_ERROR([--with-mysql-source=PATH is required for standalone build])]
   )
-  MYSQL_SOURCE="$ac_mysql_source_dir"
-  AC_SUBST(MYSQL_SOURCE)
+  MYSQL_SOURCE_DIR="$ac_mysql_source_dir"
+  AC_SUBST(MYSQL_SOURCE_DIR)
 
   ac_mysql_build_dir=
   AC_ARG_WITH([mysql-build],
@@ -121,8 +121,8 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     [ac_mysql_build_dir="$withval"],
     [ac_mysql_build_dir="$ac_mysql_source_dir"]
   )
-  MYSQL_BUILD="$ac_mysql_build_dir"
-  AC_SUBST(MYSQL_BUILD)
+  MYSQL_BUILD_DIR="$ac_mysql_build_dir"
+  AC_SUBST(MYSQL_BUILD_DIR)
 
   AC_MSG_CHECKING([mysql_config])
   AC_ARG_WITH([mysql-config],

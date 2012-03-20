@@ -10,14 +10,14 @@ fi
 . "${top_dir}/config.sh"
 
 test_suite_names="mroonga_storage,mroonga_wrapper"
-source_mysql_test_dir="${MYSQL_SOURCE}/mysql-test"
-build_mysql_test_dir="${MYSQL_BUILD}/mysql-test"
+source_mysql_test_dir="${MYSQL_SOURCE_DIR}/mysql-test"
+build_mysql_test_dir="${MYSQL_BUILD_DIR}/mysql-test"
 source_test_suites_dir="${source_mysql_test_dir}/suite"
 build_test_suites_dir="${build_mysql_test_dir}/suite"
 build_test_include_dir="${build_mysql_test_dir}/include"
 case "${MYSQL_VERSION}" in
     5.1.*)
-	plugins_dir="${MYSQL_BUILD}/lib/mysql/plugin"
+	plugins_dir="${MYSQL_BUILD_DIR}/lib/mysql/plugin"
 	if ! test -d "${build_test_suites_dir}"; then
 	    mkdir -p "${build_test_suites_dir}"
 	fi
@@ -26,15 +26,15 @@ case "${MYSQL_VERSION}" in
 	if ! test -d "${build_test_suites_dir}"; then
 	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
 	fi
-	if ! test -d "${MYSQL_BUILD}/plugin/mroonga"; then
-	    ln -s "${top_dir}" "${MYSQL_BUILD}/plugin/mroonga"
+	if ! test -d "${MYSQL_BUILD_DIR}/plugin/mroonga"; then
+	    ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
 	fi
 	;;
     *)
 	if ! test -d "${build_test_suites_dir}"; then
 	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
 	fi
-	plugins_dir="${MYSQL_SOURCE}/lib/plugin"
+	plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
 	;;
 esac
 
