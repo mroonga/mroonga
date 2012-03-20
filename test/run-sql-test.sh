@@ -98,10 +98,14 @@ if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
 fi
 
 if test -n "${plugins_dir}"; then
-    make -C ${top_dir} \
-	install-pluginLTLIBRARIES \
-	plugindir=${plugins_dir} > /dev/null || \
-	exit 1
+    if test -d "${top_dir}/.libs"; then
+	make -C ${top_dir} \
+	    install-pluginLTLIBRARIES \
+	    plugindir=${plugins_dir} > /dev/null || \
+	    exit 1
+    else
+	cp "${top_dir}/ha_mroonga.so" "${plugins_dir}" || exit 1
+    fi
 fi
 
 (cd "$build_mysql_test_dir" && \
