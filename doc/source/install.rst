@@ -70,8 +70,8 @@ Ubuntu 10.04 LTS Lucid Lynx
 Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
-  % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-mroonga
+  % sudo apt-get update
+  % sudo apt-get -y install mysql-server-mroonga
 
 Ubuntu 11.04 Natty Narwhal
 --------------------------
@@ -92,8 +92,8 @@ Ubuntu 11.04 Natty Narwhal
 Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
-  % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-mroonga
+  % sudo apt-get update
+  % sudo apt-get -y install mysql-server-mroonga
 
 Ubuntu 11.10 Oneiric Ocelot
 ---------------------------
@@ -114,8 +114,8 @@ Ubuntu 11.10 Oneiric Ocelot
 Install ::
 
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
-  % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-mroonga
+  % sudo apt-get update
+  % sudo apt-get -y install mysql-server-mroonga
 
 CentOS 5
 --------
