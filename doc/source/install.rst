@@ -23,6 +23,12 @@ Install ::
   % sudo aptitude update
   % sudo aptitude -V -D -y install mysql-server-mroonga
 
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo aptitude -V -D -y install groonga-tokenizer-mecab
+
 Debian GNU/Linux wheezy
 -----------------------
 
@@ -37,6 +43,12 @@ Install ::
   % sudo aptitude update
   % sudo aptitude -V -D -y install mysql-server-mroonga
 
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo aptitude -V -D -y install groonga-tokenizer-mecab
+
 Debian GNU/Linux sid
 --------------------
 
@@ -50,6 +62,12 @@ Install ::
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
   % sudo aptitude -V -D -y install mysql-server-mroonga
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo aptitude -V -D -y install groonga-tokenizer-mecab
 
 Ubuntu 10.04 LTS Lucid Lynx
 ---------------------------
@@ -73,6 +91,12 @@ Install ::
   % sudo apt-get update
   % sudo apt-get -y install mysql-server-mroonga
 
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo apt-get -y install groonga-tokenizer-mecab
+
 Ubuntu 11.04 Natty Narwhal
 --------------------------
 
@@ -94,6 +118,12 @@ Install ::
   % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo apt-get update
   % sudo apt-get -y install mysql-server-mroonga
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo apt-get -y install groonga-tokenizer-mecab
 
 Ubuntu 11.10 Oneiric Ocelot
 ---------------------------
@@ -117,6 +147,12 @@ Install ::
   % sudo apt-get update
   % sudo apt-get -y install mysql-server-mroonga
 
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo apt-get -y install groonga-tokenizer-mecab
+
 CentOS 5
 --------
 
@@ -132,6 +168,12 @@ Install ::
   % sudo yum update
   % sudo yum install -y mysql-mroonga
 
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
+
 CentOS 6
 --------
 
@@ -143,6 +185,12 @@ Install ::
   % sudo yum update
   % sudo yum install -y mysql-mroonga
 
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
+
 Fedora 16
 ---------
 
@@ -151,6 +199,12 @@ Install ::
   % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
   % sudo yum install -y mysql-mroonga
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
 
 Install from the source code
 ------------------------------
