@@ -1771,7 +1771,7 @@ uint ha_mroonga::wrapper_max_supported_record_length() const
 {
   uint res;
   MRN_DBUG_ENTER_METHOD();
-  if (analyzed_for_create) {
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
     res = wrap_handler_for_create->max_supported_record_length();
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
@@ -1795,7 +1795,12 @@ uint ha_mroonga::max_supported_record_length() const
 
   uint res;
   if (!share && !analyzed_for_create &&
-      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    (
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE ||
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX ||
+      thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE
+    )
+  ) {
     create_share_for_create();
   }
   if (analyzed_for_create && share_for_create.wrapper_mode) {
@@ -1813,7 +1818,7 @@ uint ha_mroonga::wrapper_max_supported_keys() const
 {
   uint res;
   MRN_DBUG_ENTER_METHOD();
-  if (analyzed_for_create) {
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
     res = wrap_handler_for_create->max_supported_keys();
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
@@ -1837,7 +1842,12 @@ uint ha_mroonga::max_supported_keys() const
 
   uint res;
   if (!share && !analyzed_for_create &&
-      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    (
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE ||
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX ||
+      thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE
+    )
+  ) {
     create_share_for_create();
   }
   if (analyzed_for_create && share_for_create.wrapper_mode) {
@@ -1855,7 +1865,7 @@ uint ha_mroonga::wrapper_max_supported_key_length() const
 {
   uint res;
   MRN_DBUG_ENTER_METHOD();
-  if (analyzed_for_create) {
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
     res = wrap_handler_for_create->max_supported_key_length();
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
@@ -1879,7 +1889,12 @@ uint ha_mroonga::max_supported_key_length() const
 
   uint res;
   if (!share && !analyzed_for_create &&
-      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    (
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE ||
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX ||
+      thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE
+    )
+  ) {
     create_share_for_create();
   }
   if (analyzed_for_create && share_for_create.wrapper_mode) {
@@ -1897,7 +1912,7 @@ uint ha_mroonga::wrapper_max_supported_key_part_length() const
 {
   uint res;
   MRN_DBUG_ENTER_METHOD();
-  if (analyzed_for_create) {
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
     res = wrap_handler_for_create->max_supported_key_part_length();
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
@@ -1921,7 +1936,12 @@ uint ha_mroonga::max_supported_key_part_length() const
 
   uint res;
   if (!share && !analyzed_for_create &&
-      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    (
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE ||
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX ||
+      thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE
+    )
+  ) {
     create_share_for_create();
   }
   if (analyzed_for_create && share_for_create.wrapper_mode) {
@@ -1939,7 +1959,7 @@ ulonglong ha_mroonga::wrapper_table_flags() const
 {
   ulonglong table_flags;
   MRN_DBUG_ENTER_METHOD();
-  if (analyzed_for_create) {
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
     table_flags = wrap_handler_for_create->ha_table_flags();
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
@@ -1986,7 +2006,12 @@ ulonglong ha_mroonga::table_flags() const
 
   ulonglong flags;
   if (!share && !analyzed_for_create &&
-      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE) {
+    (
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_TABLE ||
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX ||
+      thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE
+    )
+  ) {
     create_share_for_create();
   }
   if (analyzed_for_create && share_for_create.wrapper_mode) {
@@ -2064,6 +2089,33 @@ int ha_mroonga::create_share_for_create() const
   memset(&table_for_create, 0, sizeof(TABLE));
   memset(&share_for_create, 0, sizeof(MRN_SHARE));
   memset(&table_share_for_create, 0, sizeof(TABLE_SHARE));
+  table_share_for_create.comment = create_info->comment;
+  table_share_for_create.connect_string = create_info->connect_string;
+  if (thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE ||
+      thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX) {
+    st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
+    if (slot_data && slot_data->alter_create_info) {
+      create_info = slot_data->alter_create_info;
+      if (slot_data->alter_connect_string) {
+        table_share_for_create.connect_string.str =
+          slot_data->alter_connect_string;
+        table_share_for_create.connect_string.length =
+          strlen(slot_data->alter_connect_string);
+      } else {
+        table_share_for_create.connect_string.str = NULL;
+        table_share_for_create.connect_string.length = 0;
+      }
+      if (slot_data->alter_comment) {
+        table_share_for_create.comment.str =
+          slot_data->alter_comment;
+        table_share_for_create.comment.length =
+          strlen(slot_data->alter_comment);
+      } else {
+        table_share_for_create.comment.str = NULL;
+        table_share_for_create.comment.length = 0;
+      }
+    }
+  }
   init_alloc_root(&mem_root_for_create, 1024, 0);
   analyzed_for_create = TRUE;
   if (table_list) {
@@ -2071,8 +2123,6 @@ int ha_mroonga::create_share_for_create() const
     share_for_create.table_name_length = table_list->table_name_length;
   }
   share_for_create.table_share = &table_share_for_create;
-  table_share_for_create.comment = create_info->comment;
-  table_share_for_create.connect_string = create_info->connect_string;
   table_for_create.s = &table_share_for_create;
 #ifdef WITH_PARTITION_STORAGE_ENGINE
   table_for_create.part_info = thd->work_part_info;
@@ -2100,6 +2150,7 @@ error:
   mrn_free_share_alloc(&share_for_create);
   free_root(&mem_root_for_create, MYF(0));
   analyzed_for_create = FALSE;
+  thd->clear_error();
   DBUG_RETURN(error);
 }
 
@@ -9962,6 +10013,26 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
     wrapper_update_create_info(create_info);
   else
     storage_update_create_info(create_info);
+  st_mrn_slot_data *slot_data = mrn_get_slot_data(ha_thd(), TRUE);
+  if (slot_data) {
+    slot_data->alter_create_info = create_info;
+    if (slot_data->alter_connect_string) {
+      my_free(slot_data->alter_connect_string, MYF(0));
+      slot_data->alter_connect_string = NULL;
+    }
+    if (create_info->connect_string.str) {
+      slot_data->alter_connect_string = mrn_create_string(
+        create_info->connect_string.str, create_info->connect_string.length);
+    }
+    if (slot_data->alter_comment) {
+      my_free(slot_data->alter_comment, MYF(0));
+      slot_data->alter_comment = NULL;
+    }
+    if (create_info->comment.str) {
+      slot_data->alter_comment = mrn_create_string(
+        create_info->comment.str, create_info->comment.length);
+    }
+  }
   DBUG_VOID_RETURN;
 }
 

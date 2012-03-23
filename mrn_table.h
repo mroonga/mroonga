@@ -60,6 +60,9 @@ struct st_mrn_slot_data
 {
   grn_id last_insert_record_id;
   st_mrn_alter_share *first_alter_share;
+  HA_CREATE_INFO *alter_create_info;
+  char *alter_connect_string;
+  char *alter_comment;
 };
 
 #define MRN_SET_WRAP_SHARE_KEY(share, table_share)

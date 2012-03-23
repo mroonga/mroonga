@@ -932,6 +932,9 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
     slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data));
     slot_data->last_insert_record_id = GRN_ID_NIL;
     slot_data->first_alter_share = NULL;
+    slot_data->alter_create_info = NULL;
+    slot_data->alter_connect_string = NULL;
+    slot_data->alter_comment = NULL;
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
     pthread_mutex_lock(&mrn_allocated_thds_mutex);
     if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
@@ -949,18 +952,28 @@ void mrn_clear_alter_share(THD *thd)
 {
   DBUG_ENTER("mrn_clear_alter_share");
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
-  if (slot_data && slot_data->first_alter_share)
-  {
-    st_mrn_alter_share *tmp_alter_share;
-    st_mrn_alter_share *alter_share = slot_data->first_alter_share;
-    while (alter_share)
-    {
-      tmp_alter_share = alter_share->next;
-      mrn_free_tmp_table_share(alter_share->alter_share);
-      free(alter_share);
-      alter_share = tmp_alter_share;
+  if (slot_data) {
+    if (slot_data->first_alter_share) {
+      st_mrn_alter_share *tmp_alter_share;
+      st_mrn_alter_share *alter_share = slot_data->first_alter_share;
+      while (alter_share)
+      {
+        tmp_alter_share = alter_share->next;
+        mrn_free_tmp_table_share(alter_share->alter_share);
+        free(alter_share);
+        alter_share = tmp_alter_share;
+      }
+      slot_data->first_alter_share = NULL;
     }
-    slot_data->first_alter_share = NULL;
+    slot_data->alter_create_info = NULL;
+    if (slot_data->alter_connect_string) {
+      my_free(slot_data->alter_connect_string, MYF(0));
+      slot_data->alter_connect_string = NULL;
+    }
+    if (slot_data->alter_comment) {
+      my_free(slot_data->alter_comment, MYF(0));
+      slot_data->alter_comment = NULL;
+    }
   }
   DBUG_VOID_RETURN;
 }
