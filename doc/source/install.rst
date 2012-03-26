@@ -78,7 +78,7 @@ Ubuntu 10.04 LTS Lucid Lynx
 
 .. note::
 
-   You need to enable the securiy update repository.
+   You need to enable the security update repository.
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -106,7 +106,7 @@ Ubuntu 11.04 Natty Narwhal
 
 .. note::
 
-   You need to enable the securiy update repository.
+   You need to enable the security update repository.
 
 /etc/apt/sources.list.d/groonga.list::
 
@@ -134,7 +134,7 @@ Ubuntu 11.10 Oneiric Ocelot
 
 .. note::
 
-   You need to enable the securiy update repository.
+   You need to enable the security update repository.
 
 /etc/apt/sources.list.d/groonga.list::
 
