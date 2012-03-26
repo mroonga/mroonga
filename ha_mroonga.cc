@@ -2089,30 +2089,35 @@ int ha_mroonga::create_share_for_create() const
   memset(&table_for_create, 0, sizeof(TABLE));
   memset(&share_for_create, 0, sizeof(MRN_SHARE));
   memset(&table_share_for_create, 0, sizeof(TABLE_SHARE));
-  table_share_for_create.comment = create_info->comment;
-  table_share_for_create.connect_string = create_info->connect_string;
-  if (thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE ||
-      thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX) {
-    st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
-    if (slot_data && slot_data->alter_create_info) {
-      create_info = slot_data->alter_create_info;
-      if (slot_data->alter_connect_string) {
-        table_share_for_create.connect_string.str =
-          slot_data->alter_connect_string;
-        table_share_for_create.connect_string.length =
-          strlen(slot_data->alter_connect_string);
-      } else {
-        table_share_for_create.connect_string.str = NULL;
-        table_share_for_create.connect_string.length = 0;
-      }
-      if (slot_data->alter_comment) {
-        table_share_for_create.comment.str =
-          slot_data->alter_comment;
-        table_share_for_create.comment.length =
-          strlen(slot_data->alter_comment);
-      } else {
-        table_share_for_create.comment.str = NULL;
-        table_share_for_create.comment.length = 0;
+  if (table_share) {
+    table_share_for_create.comment = table_share->comment;
+    table_share_for_create.connect_string = table_share->connect_string;
+  } else {
+    table_share_for_create.comment = create_info->comment;
+    table_share_for_create.connect_string = create_info->connect_string;
+    if (thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE ||
+        thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX) {
+      st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
+      if (slot_data && slot_data->alter_create_info) {
+        create_info = slot_data->alter_create_info;
+        if (slot_data->alter_connect_string) {
+          table_share_for_create.connect_string.str =
+            slot_data->alter_connect_string;
+          table_share_for_create.connect_string.length =
+            strlen(slot_data->alter_connect_string);
+        } else {
+          table_share_for_create.connect_string.str = NULL;
+          table_share_for_create.connect_string.length = 0;
+        }
+        if (slot_data->alter_comment) {
+          table_share_for_create.comment.str =
+            slot_data->alter_comment;
+          table_share_for_create.comment.length =
+            strlen(slot_data->alter_comment);
+        } else {
+          table_share_for_create.comment.str = NULL;
+          table_share_for_create.comment.length = 0;
+        }
       }
     }
   }
