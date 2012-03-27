@@ -8921,14 +8921,15 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
   DBUG_RETURN(error);
 }
 
-void ha_mroonga::storage_encode_multiple_column_key_float(float value,
+void ha_mroonga::storage_encode_multiple_column_key_float(volatile float value,
                                                           uint data_size,
                                                           uchar *buffer,
                                                           bool decode)
 {
   MRN_DBUG_ENTER_METHOD();
   int n_bits = (data_size * 8 - 1);
-  int int_value = *((int *)(&value));
+  volatile int *int_value_pointer = (int *)(&value);
+  int int_value = *int_value_pointer;
   if (!decode)
     int_value ^= ((int_value >> n_bits) | (1 << n_bits));
   mrn_byte_order_host_to_network(buffer, &int_value, data_size);
@@ -8940,13 +8941,14 @@ void ha_mroonga::storage_encode_multiple_column_key_float(float value,
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::storage_encode_multiple_column_key_double(double value,
+void ha_mroonga::storage_encode_multiple_column_key_double(volatile double value,
                                                            uint data_size,
                                                            uchar *buffer,
                                                            bool decode)
 {
   MRN_DBUG_ENTER_METHOD();
   int n_bits = (data_size * 8 - 1);
+  volatile double double_value = value;
   volatile long long int *long_long_value_pointer = (long long int *)(&value);
   volatile long long int long_long_value = *long_long_value_pointer;
   if (!decode)
