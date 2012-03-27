@@ -160,7 +160,7 @@ CentOS 5's MySQL packages should be removed beforehand if installed.
 
 Remove existing MySQL packages ::
 
-  % sudo yum remove mysql*
+  % sudo yum remove 'mysql*'
 
 Install ::
 
