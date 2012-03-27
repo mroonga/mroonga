@@ -166,7 +166,10 @@ Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
+  % sudo yum install -y MySQL-server
+  % sudo service mysql start
   % sudo yum install -y mysql-mroonga
+  (% /usr/bin/mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
 
@@ -183,7 +186,10 @@ Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-repository-1.0.0-0.noarch.rpm
   % sudo yum update
+  % sudo yum install -y mysql-server
+  % sudo service mysqld start
   % sudo yum install -y mysql-mroonga
+  (% /usr/bin/mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
 
