@@ -6559,6 +6559,7 @@ int ha_mroonga::storage_ft_init()
 {
   MRN_DBUG_ENTER_METHOD();
   int error = generic_ft_init();
+  record_id = GRN_ID_NIL;
   DBUG_RETURN(error);
 }
 
@@ -8948,7 +8949,6 @@ void ha_mroonga::storage_encode_multiple_column_key_double(volatile double value
 {
   MRN_DBUG_ENTER_METHOD();
   int n_bits = (data_size * 8 - 1);
-  volatile double double_value = value;
   volatile long long int *long_long_value_pointer = (long long int *)(&value);
   volatile long long int long_long_value = *long_long_value_pointer;
   if (!decode)
