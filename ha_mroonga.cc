@@ -4465,6 +4465,16 @@ int ha_mroonga::storage_write_row(uchar *buf)
       goto err2;
     }
     generic_store_bulk(field, &colbuf);
+    if (added && is_grn_zero_column_value(grn_columns[i], &colbuf)) {
+      // WORKAROUND: groonga can't index newly added '0' value for
+      // fix size column. So we add non-'0' value first then add
+      // real '0' value again. It will be removed when groonga
+      // supports 'null' value.
+      char *bytes = GRN_BULK_HEAD(&colbuf);
+      bytes[0] = '\1';
+      grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
+      bytes[0] = '\0';
+    }
     grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
     if (ctx->rc) {
 #ifndef DBUG_OFF
@@ -7676,6 +7686,25 @@ bool ha_mroonga::is_fulltext_search_item(const Item *item)
   const Item_func *func_item = (const Item_func *)item;
   if (func_item->functype() != Item_func::FT_FUNC) {
     DBUG_RETURN(false);
+  }
+
+  DBUG_RETURN(true);
+}
+
+bool ha_mroonga::is_grn_zero_column_value(grn_obj *column, grn_obj *value)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  if (column->header.type != GRN_COLUMN_FIX_SIZE) {
+    DBUG_RETURN(false);
+  }
+
+  char *bytes = GRN_BULK_HEAD(value);
+  unsigned int size = GRN_BULK_VSIZE(value);
+  for (unsigned int i = 0; i < size; ++i) {
+    if (bytes[i] != '\0') {
+      DBUG_RETURN(false);
+    }
   }
 
   DBUG_RETURN(true);

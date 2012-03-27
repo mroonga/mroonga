@@ -460,6 +460,7 @@ private:
   bool is_groonga_layer_condition(const Item *item,
                                   const Item_func **match_against=NULL);
   bool is_fulltext_search_item(const Item *item);
+  bool is_grn_zero_column_value(grn_obj *column, grn_obj *value);
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit,
                               grn_obj *target_table, grn_obj *score_column);
