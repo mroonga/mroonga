@@ -59,11 +59,11 @@ LANGUAGE_TO_LOCALE = {
 def insert_facebook_html_header(html)
   html.gsub(/<\/head>/) do
     <<-HTML
-    <meta property="fb:page_id" content="238184682903165" /><!-- groonga storage engine -->
+    <meta property="fb:page_id" content="238184682903165" /><!-- mroonga -->
     <meta property="fb:admins" content="664204556" /><!-- kouhei.sutou -->
     <meta property="og:type" content="product" />
     <meta property="og:image" content="http://groonga.org/images/mroonga.png" />
-    <meta property="og:site_name" content="groonga storage engine" />
+    <meta property="og:site_name" content="mroonga" />
 
     <link rel="stylesheet" href="/css/sphinx.css" type="text/css" />
   </head>
@@ -84,7 +84,7 @@ def insert_facebook_html_buttons(html)
   html.gsub(/(<div class="other-language-links">)/) do
     <<-HTML
     <div class="facebook-buttons">
-      <fb:like href="http://www.facebook.com/pages/groonga-storage-engine/238184682903165"
+      <fb:like href="http://www.facebook.com/pages/mroonga/238184682903165"
                layout="standard"
                width="290"></fb:like>
     </div>
