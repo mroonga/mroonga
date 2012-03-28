@@ -27,24 +27,22 @@ CREATE TABLE t1 (
   FULLTEXT INDEX ft(title)
 );
 
-INSERT INTO t1 VALUES("aa ii uu ee oo");
-INSERT INTO t1 VALUES("ka ki ku ke ko");
-INSERT INTO t1 VALUES("sa si su se so");
-INSERT INTO t1 VALUES("ta ti tu te to");
-INSERT INTO t1 VALUES("aa ii uu ee oo");
+INSERT INTO t1 VALUES("Hello mroonga!");
+INSERT INTO t1 VALUES("It's funny.");
+INSERT INTO t1 VALUES("Happy birthday!");
 
 SHOW STATUS LIKE 'mroonga_count_skip';
-SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("+su" IN BOOLEAN MODE);
+SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
 SHOW STATUS LIKE 'mroonga_count_skip';
 
 CONNECT (thread2, localhost, root, ,);
 CONNECTION thread2;
-INSERT INTO t1 VALUES("");
+INSERT INTO t1 VALUES("Rainy day...");
 DISCONNECT thread2;
 CONNECTION default;
 
 SHOW STATUS LIKE 'mroonga_count_skip';
-SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("+su" IN BOOLEAN MODE);
+SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
 SHOW STATUS LIKE 'mroonga_count_skip';
 
 DROP TABLE t1;

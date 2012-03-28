@@ -4,25 +4,23 @@ CREATE TABLE t1 (
 title TEXT,
 FULLTEXT INDEX ft(title)
 );
-INSERT INTO t1 VALUES("aa ii uu ee oo");
-INSERT INTO t1 VALUES("ka ki ku ke ko");
-INSERT INTO t1 VALUES("sa si su se so");
-INSERT INTO t1 VALUES("ta ti tu te to");
-INSERT INTO t1 VALUES("aa ii uu ee oo");
+INSERT INTO t1 VALUES("Hello mroonga!");
+INSERT INTO t1 VALUES("It's funny.");
+INSERT INTO t1 VALUES("Happy birthday!");
 SHOW STATUS LIKE 'mroonga_count_skip';
 Variable_name	Value
 mroonga_count_skip	0
-SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("+su" IN BOOLEAN MODE);
+SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
 COUNT(*)
 1
 SHOW STATUS LIKE 'mroonga_count_skip';
 Variable_name	Value
 mroonga_count_skip	1
-INSERT INTO t1 VALUES("");
+INSERT INTO t1 VALUES("Rainy day...");
 SHOW STATUS LIKE 'mroonga_count_skip';
 Variable_name	Value
 mroonga_count_skip	1
-SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("+su" IN BOOLEAN MODE);
+SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
 COUNT(*)
 1
 SHOW STATUS LIKE 'mroonga_count_skip';
