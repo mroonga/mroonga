@@ -1,15 +1,14 @@
 DROP TABLE IF EXISTS t1;
 FLUSH STATUS;
 CREATE TABLE t1 (
-c1 INT PRIMARY KEY,
 c3 TEXT,
 FULLTEXT INDEX ft(c3)
 );
-INSERT INTO t1 VALUES(1, "aa ii uu ee oo");
-INSERT INTO t1 VALUES(2, "ka ki ku ke ko");
-INSERT INTO t1 VALUES(3, "sa si su se so");
-INSERT INTO t1 VALUES(4, "ta ti tu te to");
-INSERT INTO t1 VALUES(5, "aa ii uu ee oo");
+INSERT INTO t1 VALUES("aa ii uu ee oo");
+INSERT INTO t1 VALUES("ka ki ku ke ko");
+INSERT INTO t1 VALUES("sa si su se so");
+INSERT INTO t1 VALUES("ta ti tu te to");
+INSERT INTO t1 VALUES("aa ii uu ee oo");
 SHOW STATUS LIKE 'mroonga_count_skip';
 Variable_name	Value
 mroonga_count_skip	0
@@ -19,7 +18,7 @@ COUNT(*)
 SHOW STATUS LIKE 'mroonga_count_skip';
 Variable_name	Value
 mroonga_count_skip	1
-INSERT INTO t1 VALUES(6, "");
+INSERT INTO t1 VALUES("");
 SHOW STATUS LIKE 'mroonga_count_skip';
 Variable_name	Value
 mroonga_count_skip	1
