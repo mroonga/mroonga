@@ -29,15 +29,10 @@ CREATE TABLE diaries (
 
 INSERT INTO diaries VALUES("Hello mroonga!");
 INSERT INTO diaries VALUES("It's funny.");
-INSERT INTO diaries VALUES("Happy birthday!");
-
-SHOW STATUS LIKE 'mroonga_count_skip';
-SELECT COUNT(*) FROM diaries WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
-SHOW STATUS LIKE 'mroonga_count_skip';
 
 CONNECT (thread2, localhost, root, ,);
 CONNECTION thread2;
-INSERT INTO diaries VALUES("Rainy day...");
+INSERT INTO diaries VALUES("Happy birthday!");
 DISCONNECT thread2;
 CONNECTION default;
 

@@ -16,14 +16,4 @@ COUNT(*)
 SHOW STATUS LIKE 'mroonga_count_skip';
 Variable_name	Value
 mroonga_count_skip	1
-INSERT INTO diaries VALUES("Rainy day...");
-SHOW STATUS LIKE 'mroonga_count_skip';
-Variable_name	Value
-mroonga_count_skip	1
-SELECT COUNT(*) FROM diaries WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
-COUNT(*)
-1
-SHOW STATUS LIKE 'mroonga_count_skip';
-Variable_name	Value
-mroonga_count_skip	2
 DROP TABLE diaries;
