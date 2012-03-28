@@ -18,33 +18,33 @@
 --source include/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
 FLUSH STATUS;
-CREATE TABLE t1 (
+CREATE TABLE diaries (
   title TEXT,
   FULLTEXT INDEX ft(title)
 );
 
-INSERT INTO t1 VALUES("Hello mroonga!");
-INSERT INTO t1 VALUES("It's funny.");
-INSERT INTO t1 VALUES("Happy birthday!");
+INSERT INTO diaries VALUES("Hello mroonga!");
+INSERT INTO diaries VALUES("It's funny.");
+INSERT INTO diaries VALUES("Happy birthday!");
 
 SHOW STATUS LIKE 'mroonga_count_skip';
-SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
+SELECT COUNT(*) FROM diaries WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
 SHOW STATUS LIKE 'mroonga_count_skip';
 
 CONNECT (thread2, localhost, root, ,);
 CONNECTION thread2;
-INSERT INTO t1 VALUES("Rainy day...");
+INSERT INTO diaries VALUES("Rainy day...");
 DISCONNECT thread2;
 CONNECTION default;
 
 SHOW STATUS LIKE 'mroonga_count_skip';
-SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
+SELECT COUNT(*) FROM diaries WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
 SHOW STATUS LIKE 'mroonga_count_skip';
 
-DROP TABLE t1;
+DROP TABLE diaries;
 
 --source include/have_mroonga_deinit.inc
