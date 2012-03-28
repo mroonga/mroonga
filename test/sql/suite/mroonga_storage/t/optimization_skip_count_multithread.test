@@ -23,8 +23,8 @@ DROP TABLE IF EXISTS t1;
 
 FLUSH STATUS;
 CREATE TABLE t1 (
-  c3 TEXT,
-  FULLTEXT INDEX ft(c3)
+  title TEXT,
+  FULLTEXT INDEX ft(title)
 );
 
 INSERT INTO t1 VALUES("aa ii uu ee oo");
@@ -34,7 +34,7 @@ INSERT INTO t1 VALUES("ta ti tu te to");
 INSERT INTO t1 VALUES("aa ii uu ee oo");
 
 SHOW STATUS LIKE 'mroonga_count_skip';
-SELECT COUNT(*) FROM t1 WHERE MATCH(c3) AGAINST("+su" IN BOOLEAN MODE);
+SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("+su" IN BOOLEAN MODE);
 SHOW STATUS LIKE 'mroonga_count_skip';
 
 CONNECT (thread2, localhost, root, ,);
@@ -44,7 +44,7 @@ DISCONNECT thread2;
 CONNECTION default;
 
 SHOW STATUS LIKE 'mroonga_count_skip';
-SELECT COUNT(*) FROM t1 WHERE MATCH(c3) AGAINST("+su" IN BOOLEAN MODE);
+SELECT COUNT(*) FROM t1 WHERE MATCH(title) AGAINST("+su" IN BOOLEAN MODE);
 SHOW STATUS LIKE 'mroonga_count_skip';
 
 DROP TABLE t1;
