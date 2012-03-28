@@ -28,7 +28,6 @@ absolute_theme_files = \
 	$(top_srcdir)/doc/themes/mroonga/static/header-background.png \
 	$(top_srcdir)/doc/themes/mroonga/static/jp.png \
 	$(top_srcdir)/doc/themes/mroonga/static/logo.png \
-	$(top_srcdir)/doc/themes/mroonga/static/logo.svg \
 	$(top_srcdir)/doc/themes/mroonga/static/menu-header.png \
 	$(top_srcdir)/doc/themes/mroonga/static/mroonga.css_t \
 	$(top_srcdir)/doc/themes/mroonga/static/navigation-bar.png \
@@ -66,7 +65,6 @@ theme_files_relative_from_doc_dir = \
 	themes/mroonga/static/header-background.png \
 	themes/mroonga/static/jp.png \
 	themes/mroonga/static/logo.png \
-	themes/mroonga/static/logo.svg \
 	themes/mroonga/static/menu-header.png \
 	themes/mroonga/static/mroonga.css_t \
 	themes/mroonga/static/navigation-bar.png \
@@ -155,7 +153,6 @@ html_files_relative_from_locale_dir = \
 	html/_static/jp.png \
 	html/_static/jquery.js \
 	html/_static/logo.png \
-	html/_static/logo.svg \
 	html/_static/menu-header.png \
 	html/_static/minus.png \
 	html/_static/mroonga.css \
