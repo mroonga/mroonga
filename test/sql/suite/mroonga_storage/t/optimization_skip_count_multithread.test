@@ -30,19 +30,19 @@ CREATE TABLE t1 (
   FULLTEXT INDEX ft(c3)
 );
 
-INSERT INTO t1 VALUES(1,10,"aa ii uu ee oo");
-INSERT INTO t1 VALUES(2,20,"ka ki ku ke ko");
-INSERT INTO t1 VALUES(3,30,"sa si su se so");
-INSERT INTO t1 VALUES(4,40,"ta ti tu te to");
-INSERT INTO t1 VALUES(5,50,"aa ii uu ee oo");
+INSERT INTO t1 VALUES(1, 10, "aa ii uu ee oo");
+INSERT INTO t1 VALUES(2, 20, "ka ki ku ke ko");
+INSERT INTO t1 VALUES(3, 30, "sa si su se so");
+INSERT INTO t1 VALUES(4, 40, "ta ti tu te to");
+INSERT INTO t1 VALUES(5, 50, "aa ii uu ee oo");
 
 SHOW STATUS LIKE 'mroonga_count_skip';
 SELECT COUNT(*) FROM t1 WHERE MATCH(c3) AGAINST("+su" IN BOOLEAN MODE);
 SHOW STATUS LIKE 'mroonga_count_skip';
 
-CONNECT (thread2, localhost, root,,);
+CONNECT (thread2, localhost, root, ,);
 CONNECTION thread2;
-INSERT INTO t1 VALUES(6,60,"");
+INSERT INTO t1 VALUES(6, 60, "");
 DISCONNECT thread2;
 CONNECTION default;
 
