@@ -111,6 +111,7 @@ fi
 (cd "$build_mysql_test_dir" && \
     ./mysql-test-run.pl \
     --no-check-testcases \
+    --parallel=4 \
     --retry=1 \
     --suite="${test_suite_names}" \
     --force \
