@@ -1,4 +1,5 @@
 # Copyright(C) 2012 Kentoku SHIBA
+# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,7 @@
 --source include/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS t1, t2, t3;
+DROP TABLE IF EXISTS t1;
 --enable_warnings
 
 FLUSH STATUS;
