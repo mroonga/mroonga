@@ -3,6 +3,7 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/community.rst \
 	$(top_srcdir)/doc/source/conf.py \
 	$(top_srcdir)/doc/source/developer.rst \
+	$(top_srcdir)/doc/source/developer/coding_style.rst \
 	$(top_srcdir)/doc/source/developer/debug.rst \
 	$(top_srcdir)/doc/source/developer/release.rst \
 	$(top_srcdir)/doc/source/images/mroonga.png \
@@ -24,11 +25,8 @@ absolute_source_files = \
 absolute_theme_files = \
 	$(top_srcdir)/doc/themes/mroonga/layout.html \
 	$(top_srcdir)/doc/themes/mroonga/static/favicon.ico \
-	$(top_srcdir)/doc/themes/mroonga/static/footer-bar.png \
-	$(top_srcdir)/doc/themes/mroonga/static/header-background.png \
 	$(top_srcdir)/doc/themes/mroonga/static/jp.png \
 	$(top_srcdir)/doc/themes/mroonga/static/logo.png \
-	$(top_srcdir)/doc/themes/mroonga/static/menu-header.png \
 	$(top_srcdir)/doc/themes/mroonga/static/mroonga.css_t \
 	$(top_srcdir)/doc/themes/mroonga/static/navigation-bar.png \
 	$(top_srcdir)/doc/themes/mroonga/static/us.png \
@@ -40,6 +38,7 @@ source_files_relative_from_doc_dir = \
 	source/community.rst \
 	source/conf.py \
 	source/developer.rst \
+	source/developer/coding_style.rst \
 	source/developer/debug.rst \
 	source/developer/release.rst \
 	source/images/mroonga.png \
@@ -61,11 +60,8 @@ source_files_relative_from_doc_dir = \
 theme_files_relative_from_doc_dir = \
 	themes/mroonga/layout.html \
 	themes/mroonga/static/favicon.ico \
-	themes/mroonga/static/footer-bar.png \
-	themes/mroonga/static/header-background.png \
 	themes/mroonga/static/jp.png \
 	themes/mroonga/static/logo.png \
-	themes/mroonga/static/menu-header.png \
 	themes/mroonga/static/mroonga.css_t \
 	themes/mroonga/static/navigation-bar.png \
 	themes/mroonga/static/us.png \
@@ -127,6 +123,7 @@ html_files_relative_from_locale_dir = \
 	html/_sources/characteristic.txt \
 	html/_sources/community.txt \
 	html/_sources/developer.txt \
+	html/_sources/developer/coding_style.txt \
 	html/_sources/developer/debug.txt \
 	html/_sources/developer/release.txt \
 	html/_sources/index.txt \
@@ -142,25 +139,20 @@ html_files_relative_from_locale_dir = \
 	html/_static/comment-bright.png \
 	html/_static/comment-close.png \
 	html/_static/comment.png \
-	html/_static/default.css \
 	html/_static/doctools.js \
 	html/_static/down-pressed.png \
 	html/_static/down.png \
 	html/_static/favicon.ico \
 	html/_static/file.png \
-	html/_static/footer-bar.png \
-	html/_static/header-background.png \
 	html/_static/jp.png \
 	html/_static/jquery.js \
 	html/_static/logo.png \
-	html/_static/menu-header.png \
 	html/_static/minus.png \
 	html/_static/mroonga.css \
 	html/_static/navigation-bar.png \
 	html/_static/plus.png \
 	html/_static/pygments.css \
 	html/_static/searchtools.js \
-	html/_static/sidebar.js \
 	html/_static/underscore.js \
 	html/_static/up-pressed.png \
 	html/_static/up.png \
@@ -169,6 +161,7 @@ html_files_relative_from_locale_dir = \
 	html/characteristic.html \
 	html/community.html \
 	html/developer.html \
+	html/developer/coding_style.html \
 	html/developer/debug.html \
 	html/developer/release.html \
 	html/genindex.html \
