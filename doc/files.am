@@ -24,7 +24,6 @@ absolute_source_files = \
 absolute_theme_files = \
 	$(top_srcdir)/doc/themes/mroonga/layout.html \
 	$(top_srcdir)/doc/themes/mroonga/static/favicon.ico \
-	$(top_srcdir)/doc/themes/mroonga/static/favicon.svg \
 	$(top_srcdir)/doc/themes/mroonga/static/footer-bar.png \
 	$(top_srcdir)/doc/themes/mroonga/static/header-background.png \
 	$(top_srcdir)/doc/themes/mroonga/static/jp.png \
@@ -63,7 +62,6 @@ source_files_relative_from_doc_dir = \
 theme_files_relative_from_doc_dir = \
 	themes/mroonga/layout.html \
 	themes/mroonga/static/favicon.ico \
-	themes/mroonga/static/favicon.svg \
 	themes/mroonga/static/footer-bar.png \
 	themes/mroonga/static/header-background.png \
 	themes/mroonga/static/jp.png \
@@ -151,7 +149,6 @@ html_files_relative_from_locale_dir = \
 	html/_static/down-pressed.png \
 	html/_static/down.png \
 	html/_static/favicon.ico \
-	html/_static/favicon.svg \
 	html/_static/file.png \
 	html/_static/footer-bar.png \
 	html/_static/header-background.png \
