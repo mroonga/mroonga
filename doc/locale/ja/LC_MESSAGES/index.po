@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-30 02:49\n"
+"POT-Creation-Date: 2012-03-29 11:05\n"
 "PO-Revision-Date: 2011-11-28 00:02+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -19,7 +19,8 @@ msgstr ""
 
 # 29e98ecfbe074a37ace8d9b83c63bced
 #: ../../../source/index.rst:7
-msgid "Mroonga"
+#, fuzzy
+msgid "mroonga"
 msgstr "mroonga"
 
 # 707886dc8cec47b9997f4abe89662952
