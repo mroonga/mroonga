@@ -3,6 +3,71 @@
 News
 ====
 
+.. _release-2-01:
+
+Release 2.01 - 2012/03/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MySQL 5.5.22.
+* Supported MySQL 5.1.61.
+* Required groonga 2.0.1 or later.
+* [rpm] Improved plugin uninstall on upgrade.
+* [rpm] Improved plugin uninstall on upgrade.
+* [wrapper mode] Supported ``INSERT ON DUPLICATE KEY ERROR``
+  with MyISAM. [#1300] [Reported by @104yuki_n]
+* [wrapper mode] Used wrapped table's ``table_flags()``
+  correctly. [#1304]
+* Added ``--with-valgrind`` configure option for MySQL that
+  enables valgrind support.
+* [mariadb] Supported ``DATETIME`` type with fraction
+  seconds.
+* Supported building without geometry support.
+  [#1313] [Reported by Kazuhiko]
+* [storage mode] Supported multiple column index with
+  optimization build flags on i386 environment.
+  [Reported by Kazuhiko]
+* [wrapper mode] Confirmed InnoDB tests are passed with
+  wrapper mode.
+* [solaris] Supported build on Solaris 11. [Reported by Kazuhiko]
+* [mariadb55] Supported ``mroonga_default_parser`` with
+  MariaDB 5.5. [#1314] [Reported by Kazuhiko]
+* [mariadb55] Supported ``ORDER LIMIT`` optimization with
+  MariaDB 5.5. [#1315] [Reported by Kazuhiko]
+* [doc] Added about MeCab.
+* [storage mode] Supported index search for 0 value.
+  [Reported by @104yuki_n]
+* [storage mode] Supported Ubuntu Hardy with optimize
+  build flags. [Reported by Kazuhiko]
+* Added `logos <http://mroonga.github.com/logo/>`_ .
+* Updated HTML design.
+
+Fixes
+^^^^^
+
+* [storage mode] Fixed a memory leak.
+* [storage mode] Fixed a bug that search by multi column
+  index may not return some found records.
+  [#1300] [Reported by @ytaka5]
+* [storage mode] Fixed a bug that ``COUNT (*)`` isn't effective.
+  [groonga-dev,00717] [Reported by Takayuki Honda]
+* Fixed a memory leak on ``DROP DATABASE``.
+* [storage mode] Fixed a bug that ``last_insert_grn_id()``
+  may return broken value on 32bit environment.
+  [Reported by Kazuhiko]
+* [storage mode] Fixed a bug that ``COUNT (*)`` may
+  return 0. [groonga-dev,00736] [Reported by Takayuki Honda]
+
+Thanks
+^^^^^^
+
+* @camyuy
+* Takahiro Nagai
+* Tomoatsu Shimada
+* @104yuki_n
+
 .. _release-2-00:
 
 Release 2.00 - 2012/02/29
