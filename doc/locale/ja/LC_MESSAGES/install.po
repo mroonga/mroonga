@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-29 11:05\n"
-"PO-Revision-Date: 2012-03-29 11:26+0900\n"
+"POT-Creation-Date: 2012-03-29 11:28\n"
+"PO-Revision-Date: 2012-03-29 11:30+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -100,7 +100,9 @@ msgstr "インストール::"
 msgid ""
 "If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. "
 "please install groonga-tokenizer-mecab package."
-msgstr "トークナイザーとして `MeCab <http://mecab.sourceforge.net/>`_ を利用したい場合はgroonga-tokenizer-mecabをインストールしてください。"
+msgstr ""
+"トークナイザーとして `MeCab <http://mecab.sourceforge.net/>`_ を利用したい場"
+"合はgroonga-tokenizer-mecabをインストールしてください。"
 
 # e75688db23904eed9cb3e9b483786b63
 # 276a6bbcec924e6090f99b4959c4d37b
@@ -290,11 +292,9 @@ msgstr ""
 # ffc421e920ac4c479be6a13c90ff6da6
 #: ../../../source/install.rst:250
 msgid ""
-"Here we assume that we use mysql-5.5.17 and its source code is extracted in "
+"Here we assume that we use mysql-5.5.22 and its source code is extracted in "
 "the following directory. ::"
-msgstr ""
-"mysql-5.5.17を使用し、以下にソースディレクトリが展開されているものと仮定しま"
-"す。 ::"
+msgstr "mysql-5.5.22を使用し、以下にソースディレクトリが展開されているものと仮定します。 ::"
 
 # aa0cbc7b42594bb9a095979846735541
 #: ../../../source/install.rst:254
@@ -385,7 +385,9 @@ msgstr ""
 msgid ""
 "If \"mroonga\" is displayed in \"SHOW ENGINES\" command result like below, "
 "mroonga is well installed. ::"
-msgstr "以下のように\"SHOW ENGINES\"コマンドで\"mroonga\"が表示されればmroongaのインストールは完了です。 ::"
+msgstr ""
+"以下のように\"SHOW ENGINES\"コマンドで\"mroonga\"が表示されればmroongaのイン"
+"ストールは完了です。 ::"
 
 # 42345ab063fc4290b4b136b1cbbf50b8
 #: ../../../source/install.rst:313
