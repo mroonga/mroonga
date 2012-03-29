@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-29 11:05\n"
-"PO-Revision-Date: 2012-01-30 02:49+0900\n"
+"PO-Revision-Date: 2012-03-29 11:26+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -100,7 +100,7 @@ msgstr "インストール::"
 msgid ""
 "If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. "
 "please install groonga-tokenizer-mecab package."
-msgstr ""
+msgstr "トークナイザーとして `MeCab <http://mecab.sourceforge.net/>`_ を利用したい場合はgroonga-tokenizer-mecabをインストールしてください。"
 
 # e75688db23904eed9cb3e9b483786b63
 # 276a6bbcec924e6090f99b4959c4d37b
@@ -117,7 +117,7 @@ msgstr ""
 #: ../../../source/install.rst:176 ../../../source/install.rst:196
 #: ../../../source/install.rst:211
 msgid "Install groonga-tokenizer-mecab package::"
-msgstr ""
+msgstr "groonga-tokenizer-mecabをインストール::"
 
 # e728eb065295457c8ad2f62ba044c31b
 #: ../../../source/install.rst:33
@@ -147,9 +147,8 @@ msgstr "Ubuntu本家のuniverseセクションもインストール対象とし�
 # 778c627ec52a43b09a398439cb165ffe
 #: ../../../source/install.rst:81 ../../../source/install.rst:109
 #: ../../../source/install.rst:137
-#, fuzzy
 msgid "You need to enable the security update repository."
-msgstr "Ubuntu本家のuniverseセクションもインストール対象としておくこと"
+msgstr "セキュリティアップデートリポジトリもインストール対象としておくこと"
 
 # 2acf395f27734d2c9bec0a551eb2c86d
 #: ../../../source/install.rst:101
@@ -329,7 +328,7 @@ msgstr ""
 # 14ba828334054674b9645fca03854e45
 #: ../../../source/install.rst:268
 msgid "Build mroonga"
-msgstr ""
+msgstr "mroongaのビルド"
 
 # 527d0a85c7b945a18ab69dc223aec11c
 #: ../../../source/install.rst:270
@@ -383,13 +382,10 @@ msgstr ""
 
 # 31909deb45384ecfa3bdb1b56246e1a7
 #: ../../../source/install.rst:298
-#, fuzzy
 msgid ""
 "If \"mroonga\" is displayed in \"SHOW ENGINES\" command result like below, "
 "mroonga is well installed. ::"
-msgstr ""
-"以下のように\"SHOW ENGINES\"コマンドで\"groonga\"が表示されればmroongaのイン"
-"ストールは完了です。 ::"
+msgstr "以下のように\"SHOW ENGINES\"コマンドで\"mroonga\"が表示されればmroongaのインストールは完了です。 ::"
 
 # 42345ab063fc4290b4b136b1cbbf50b8
 #: ../../../source/install.rst:313
