@@ -12,7 +12,7 @@ Improvements
 ^^^^^^^^^^^^
 
 * Supported MySQL 5.5.22.
-* Supported MySQL 5.1.61.
+* Supported MySQL 5.1.62.
 * Required groonga 2.0.1 or later.
 * [rpm] Improved plugin uninstall on upgrade.
 * [rpm] Improved plugin uninstall on upgrade.
