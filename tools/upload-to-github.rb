@@ -26,5 +26,17 @@ files.each do |file|
                                           :size => File.size(file),
                                           :description => File.basename(file),
                                           :content_type => content_type)
-  github.repos.upload(resource, File.basename(file))
+  p resource
+
+  system("curl",
+    "-F", "key=#{resource.path}",
+    "-F", "acl=#{resource.acl}",
+    "-F", "success_action_status=201",
+    "-F", "Filename=#{resource.name}",
+    "-F", "AWSAccessKeyId=#{resource.accesskeyid}",
+    "-F", "Policy=#{resource.policy}",
+    "-F", "Signature=#{resource.signature}",
+    "-F", "Content-Type=#{resource.mime_type[0]['Content-Type']}",
+    "-F", "file=@#{file}",
+    resourec.s3_url)
 end
