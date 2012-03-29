@@ -63,10 +63,10 @@ Fixes
 Thanks
 ^^^^^^
 
-* @camyuy
-* Takahiro Nagai
-* Tomoatsu Shimada
+* @ytaka5
 * @104yuki_n
+* Takayuki Honda
+* Kazuhiko
 
 .. _release-2-00:
 
