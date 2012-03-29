@@ -1,4 +1,4 @@
-%define mysql_version 5.5.20
+%define mysql_version 5.5.21
 %define mysql_release 1%{?dist}
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/16/SRPMS
@@ -103,6 +103,7 @@ eval $command || \
 * Thu Mar 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.01-0
 - new upstream release.
 - ensure plugin is uninstalled by closing all tables use mroonga.
+- use MySQL 5.5.21.
 
 * Wed Feb 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.00-0
 - new upstream release.
