@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-29 11:05\n"
-"PO-Revision-Date: 2012-02-29 13:56+0900\n"
+"POT-Creation-Date: 2012-03-29 11:20\n"
+"PO-Revision-Date: 2012-03-29 11:21+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -24,9 +24,8 @@ msgstr "お知らせ"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:9
-#, fuzzy
 msgid "Release 2.01 - 2012/03/29"
-msgstr "2.00リリース - 2012/02/29"
+msgstr "2.01リリース - 2012/03/29"
 
 # 056232ecba044abab1ea54c34b9ce282
 #: ../../../source/news.rst:12 ../../../source/news.rst:129
@@ -37,61 +36,62 @@ msgstr "改良"
 
 # 3754145a2bb74e9da532cb818bf851b6
 #: ../../../source/news.rst:14
-#, fuzzy
 msgid "Supported MySQL 5.5.22."
-msgstr "MySQL 5.5.21に対応。"
+msgstr "MySQL 5.5.22に対応。"
 
 # 3754145a2bb74e9da532cb818bf851b6
-#: ../../../source/news.rst:15 ../../../source/news.rst:261
-msgid "Supported MySQL 5.1.61."
-msgstr "MySQL 5.1.61に対応。"
+#: ../../../source/news.rst:15
+msgid "Supported MySQL 5.1.62."
+msgstr "MySQL 5.1.62に対応。"
 
 # e50707438bd14803829f2477237fc29f
 #: ../../../source/news.rst:16
-#, fuzzy
 msgid "Required groonga 2.0.1 or later."
-msgstr "groonga 2.0.0以降を必須にした。"
+msgstr "groonga 2.0.1以降を必須にした。"
 
 # bda8636c615649a0a693ba889279d38e
 # aed50af830b84412ad8359bba1d6b797
 #: ../../../source/news.rst:17 ../../../source/news.rst:18
 msgid "[rpm] Improved plugin uninstall on upgrade."
-msgstr ""
+msgstr "[rpm] アップグレード時のプラグインアンインストール処理を改良した。"
 
 # 277be1b464484094831587694df6c795
 #: ../../../source/news.rst:19
-#, fuzzy
 msgid ""
 "[wrapper mode] Supported ``INSERT ON DUPLICATE KEY ERROR`` with MyISAM. "
 "[#1300] [Reported by @104yuki_n]"
 msgstr ""
-"``UNIQUE KEY`` を使った ``INSERT ... ON DUPLICATE KEY UPDATE`` に対応した。 "
-"[#1283] [@104yuki_nさんが報告]"
+"[ラッパーモード] MyISAMと一緒に使ったときに ``INSERT ON DUPLICATE KEY "
+"ERROR`` を使えるようにした。 [#1300] [@104yuki_nさんが報告]"
 
 # f0240a61623643c0b9d2329e650d9d81
 #: ../../../source/news.rst:21
 msgid ""
 "[wrapper mode] Used wrapped table's ``table_flags()`` correctly. [#1304]"
 msgstr ""
+"[ラッパーモード] ラップしているテーブルの ``table_flags()`` を使うようにし"
+"た。 [#1304]"
 
 # c3811639f4654110a55b1a57371c2b45
 #: ../../../source/news.rst:23
 msgid ""
-"Added ``--with-valgrind`` configure option for MySQL that enables valgrind "
+"Added ``--with-valgrind`` configure option for MySQL that enables Valgrind "
 "support."
 msgstr ""
+"MySQLがValgrindサポート付きでビルドされているとき用に ``--with-valgrind`` "
+"configureオプションを追加した。"
 
 # 1951e849179e4c5581d57783c739ba50
 #: ../../../source/news.rst:25
 msgid "[mariadb] Supported ``DATETIME`` type with fraction seconds."
-msgstr ""
+msgstr "[mariadb] 小数形式秒指定を使った ``DATETIME`` 型をサポートした。"
 
 # 3754145a2bb74e9da532cb818bf851b6
 #: ../../../source/news.rst:27
-#, fuzzy
 msgid ""
 "Supported building without geometry support. [#1313] [Reported by Kazuhiko]"
-msgstr "DECIMALに対応した。 [#1249] [@Kiskeさんが報告]"
+msgstr ""
+"位置情報サポートなしでのビルドをサポートした。 [#1313] [かずひこさんが報告]"
 
 # 80657afabd604521a89fb2a39687c4a9
 #: ../../../source/news.rst:29
@@ -99,67 +99,71 @@ msgid ""
 "[storage mode] Supported multiple column index with optimization build flags "
 "on i386 environment. [Reported by Kazuhiko]"
 msgstr ""
+"[ストレージモード] i386環境で最適化オプションを指定したときでもマルチカラムイ"
+"ンデックスが動くようにした。 [かずひこさんが報告]"
 
 # 30ce02f0afb34e3fa595531697733057
 #: ../../../source/news.rst:32
 msgid "[wrapper mode] Confirmed InnoDB tests are passed with wrapper mode."
 msgstr ""
+"[ラッパーモード] ラッパーモードでInnoDBを使って、InnoDBのテストが通ることを確"
+"認した。"
 
 # 3754145a2bb74e9da532cb818bf851b6
 #: ../../../source/news.rst:34
-#, fuzzy
 msgid "[solaris] Supported build on Solaris 11. [Reported by Kazuhiko]"
-msgstr "MariaDB 5.2.9に対応。 #1152 [Kazuhikoさんが報告]"
+msgstr ""
+"[solaris] Solaris 11上でのビルドできるようにした。 [かずひこさんが報告]"
 
 # 3754145a2bb74e9da532cb818bf851b6
 #: ../../../source/news.rst:35
-#, fuzzy
 msgid ""
 "[mariadb55] Supported ``mroonga_default_parser`` with MariaDB 5.5. [#1314] "
 "[Reported by Kazuhiko]"
-msgstr "MariaDB 5.2.9に対応。 #1152 [Kazuhikoさんが報告]"
+msgstr ""
+"[mariadb55] MariaDB 5.5で ``mroonga_default_parser`` が動くようにした。 "
+"[#1314] [かずひこさんが報告]"
 
 # cbc23651575542cab184948db3b5f2d7
 #: ../../../source/news.rst:37
-#, fuzzy
 msgid ""
 "[mariadb55] Supported ``ORDER LIMIT`` optimization with MariaDB 5.5. [#1315] "
 "[Reported by Kazuhiko]"
 msgstr ""
-"[ストレージモード] 主キーがない場合でも ``ORDER LIMIT`` を最適化できるように"
-"した。"
+"[mariadb55] MariaDB 5.5で ``ORDER LIMIT`` 最適化が動くようにした。 [#1315] "
+"[かずひこさんが報告]"
 
 # 360ad9fcc74941c8bc28fe1dba7ae3ee
 #: ../../../source/news.rst:39
 msgid "[doc] Added about MeCab."
-msgstr ""
+msgstr "[doc] MeCabについて追記した。"
 
 # 63807ef9c8fe4132972b5104cbc7f3c6
 #: ../../../source/news.rst:40
-#, fuzzy
 msgid ""
 "[storage mode] Supported index search for 0 value. [Reported by @104yuki_n]"
 msgstr ""
-"[ストレージモード] サブクエリ内での全文検索に対応した。 [@camyuyさんが報告]"
+"[ストレージモード] 値が0のレコードをインデックスを使って検索できるようにし"
+"た。 [@104yuki_nさんが報告]"
 
 # 63807ef9c8fe4132972b5104cbc7f3c6
 #: ../../../source/news.rst:42
-#, fuzzy
 msgid ""
 "[storage mode] Supported Ubuntu Hardy with optimize build flags. [Reported "
 "by Kazuhiko]"
 msgstr ""
-"[ストレージモード] サブクエリ内での全文検索に対応した。 [@camyuyさんが報告]"
+"[ストレージモード] 最適化ビルドフラグを指定してもUbuntu Hardy上で正しく動くよ"
+"うにした。 [かずひこさんが報告]"
 
 # 406f7f07fb4144bda5404acfaa6b4663
 #: ../../../source/news.rst:44
 msgid "Added `logos <http://mroonga.github.com/logo/>`_ ."
-msgstr ""
+msgstr "`ロゴ <http://mroonga.github.com/ja/logo/>`_ を追加した。"
 
 # 52a4cf5864814e2ab9ef4edd413e5f63
 #: ../../../source/news.rst:45
 msgid "Updated HTML design."
-msgstr ""
+msgstr "HTMLのデザインを更新した。"
 
 # 08e3d478781f474c8a19fd0acb16a2bf
 #: ../../../source/news.rst:48 ../../../source/news.rst:164
@@ -170,54 +174,49 @@ msgstr "修正"
 
 # e30afe287eae45c38d71c938087b6253
 #: ../../../source/news.rst:50
-#, fuzzy
 msgid "[storage mode] Fixed a memory leak."
-msgstr "[ラッパーモード] メモリリークを修正。 [montywiさんが報告]"
+msgstr "[ストレージモード] メモリリークを修正。"
 
 # c9928c55a6e84330b16673b4f78ea3d1
 #: ../../../source/news.rst:51
-#, fuzzy
 msgid ""
 "[storage mode] Fixed a bug that search by multi column index may not return "
 "some found records. [#1300] [Reported by @ytaka5]"
 msgstr ""
-"[storage mode] 主キーがないテーブルで全文検索すると結果が空になる問題を修"
-"正。 [#1193] [かずひこさんが報告]"
+"[ストレージモード] マルチカラムインデックスを使って検索したときに見つかったの"
+"に結果が返されない問題を修正した。 [#1300] [@ytaka5さんが報告]"
 
 # 5a2108e806b54760adbc09e502c70b30
 #: ../../../source/news.rst:54
-#, fuzzy
 msgid ""
 "[storage mode] Fixed a bug that ``COUNT (*)`` isn't effective. [groonga-"
 "dev,00717] [Reported by Takayuki Honda]"
 msgstr ""
-"[wrapper mode] 全件カウント時にインデックスが使われない問題を修正。 [#1196]"
-"[groonga-dev,0653] [金岡勲さんが報告]"
+"[ストレージモード] ``COUNT (*)`` の効果がなかった問題を修正した。 [groonga-"
+"dev,00717] [Takayuki Hondaさんが報告]"
 
 # f350e7eb4c3f435f80086d03f9a886d3
 #: ../../../source/news.rst:56
 msgid "Fixed a memory leak on ``DROP DATABASE``."
-msgstr ""
+msgstr "``DROP DATABASE`` 時に発生していたメモリリークを修正した。"
 
 # c9928c55a6e84330b16673b4f78ea3d1
 #: ../../../source/news.rst:57
-#, fuzzy
 msgid ""
 "[storage mode] Fixed a bug that ``last_insert_grn_id()`` may return broken "
 "value on 32bit environment. [Reported by Kazuhiko]"
 msgstr ""
-"[storage mode] 主キーがないテーブルで全文検索すると結果が空になる問題を修"
-"正。 [#1193] [かずひこさんが報告]"
+"[ストレージモード] 32bit環境で ``last_insert_grn_id()`` が壊れた値を返すこと"
+"がある問題を修正した。 [かずひこさんが報告]"
 
 # 5a2108e806b54760adbc09e502c70b30
 #: ../../../source/news.rst:60
-#, fuzzy
 msgid ""
 "[storage mode] Fixed a bug that ``COUNT (*)`` may return 0. [groonga-"
 "dev,00736] [Reported by Takayuki Honda]"
 msgstr ""
-"[wrapper mode] 全件カウント時にインデックスが使われない問題を修正。 [#1196]"
-"[groonga-dev,0653] [金岡勲さんが報告]"
+"[ストレージモード] ``COUNT (*)`` が0を返すことがある問題を修正した。 "
+"[groonga-dev,00736] [Takayuki Hondaさんが報告]"
 
 # 2371feae1d1549e59cd05415194e5dcf
 #: ../../../source/news.rst:64 ../../../source/news.rst:170
@@ -226,26 +225,25 @@ msgstr ""
 msgid "Thanks"
 msgstr "感謝"
 
-# e9281e9993104ae7ae67efd9e5725f9e
-#: ../../../source/news.rst:66 ../../../source/news.rst:172
-msgid "@camyuy"
-msgstr "@camyuyさん"
-
-# 9fbab937473c4396940d089ab165279e
-#: ../../../source/news.rst:67 ../../../source/news.rst:173
-#: ../../../source/news.rst:381 ../../../source/news.rst:421
-msgid "Takahiro Nagai"
-msgstr "Takahiro Nagaiさん"
-
-# 4445030bc7a44d8faf506fcbdb7e480a
-#: ../../../source/news.rst:68 ../../../source/news.rst:174
-msgid "Tomoatsu Shimada"
-msgstr "Tomoatsu Shimadaさん"
+# 7cc42792a2ca464fafb907793d65bd2d
+#: ../../../source/news.rst:66 ../../../source/news.rst:290
+msgid "@ytaka5"
+msgstr "@ytaka5さん"
 
 # 6723c5a727ac49338d0334d9918ec437
-#: ../../../source/news.rst:69 ../../../source/news.rst:175
+#: ../../../source/news.rst:67 ../../../source/news.rst:175
 msgid "@104yuki_n"
 msgstr "@104yuki_nさん"
+
+# 1e2c95cd88764240a781363b73cdf83a
+#: ../../../source/news.rst:68
+msgid "Takayuki Honda"
+msgstr "Takayuki Hondaさん"
+
+# fea7719a822846df81706447d8eb4e29
+#: ../../../source/news.rst:69 ../../../source/news.rst:378
+msgid "Kazuhiko"
+msgstr "かずひこさん"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:74
@@ -493,6 +491,22 @@ msgstr ""
 "[doc] ストレージエンジン名が間違っていた問題を修正。 [Tomoatsu Shimadaさんが"
 "報告]"
 
+# e9281e9993104ae7ae67efd9e5725f9e
+#: ../../../source/news.rst:172
+msgid "@camyuy"
+msgstr "@camyuyさん"
+
+# 9fbab937473c4396940d089ab165279e
+#: ../../../source/news.rst:173 ../../../source/news.rst:381
+#: ../../../source/news.rst:421
+msgid "Takahiro Nagai"
+msgstr "Takahiro Nagaiさん"
+
+# 4445030bc7a44d8faf506fcbdb7e480a
+#: ../../../source/news.rst:174
+msgid "Tomoatsu Shimada"
+msgstr "Tomoatsu Shimadaさん"
+
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:180
 msgid "Release 1.20 - 2012/01/29"
@@ -548,6 +562,11 @@ msgstr "これで1.20を使うことができるようになりました。"
 #: ../../../source/news.rst:260
 msgid "Supported MySQL 5.5.20."
 msgstr "MySQL 5.5.20に対応。"
+
+# 3754145a2bb74e9da532cb818bf851b6
+#: ../../../source/news.rst:261
+msgid "Supported MySQL 5.1.61."
+msgstr "MySQL 5.1.61に対応。"
 
 # e50707438bd14803829f2477237fc29f
 #: ../../../source/news.rst:262
@@ -643,11 +662,6 @@ msgstr "[doc] 実行結果が間違っていた問題を修正。 [Hidekazu Tana
 #: ../../../source/news.rst:285
 msgid "[wrapper mode] Fixed a memory leak. [Reported by montywi]"
 msgstr "[ラッパーモード] メモリリークを修正。 [montywiさんが報告]"
-
-# 7cc42792a2ca464fafb907793d65bd2d
-#: ../../../source/news.rst:290
-msgid "@ytaka5"
-msgstr "@ytaka5さん"
 
 # 9952ee5eeb2b4d83b41e65a3934484eb
 #: ../../../source/news.rst:291
@@ -929,11 +943,6 @@ msgid ""
 msgstr ""
 "FORCE INDEXで存在しないキーを指定するクラッシュするバグを修正。 #1181 "
 "[Takahiro Nagaiさんが報告]"
-
-# fea7719a822846df81706447d8eb4e29
-#: ../../../source/news.rst:378
-msgid "Kazuhiko"
-msgstr "Kazuhikoさん"
 
 # 78947072c112492dbf50abc37359fc8c
 #: ../../../source/news.rst:379
