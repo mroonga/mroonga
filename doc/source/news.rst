@@ -21,7 +21,7 @@ Improvements
 * [wrapper mode] Used wrapped table's ``table_flags()``
   correctly. [#1304]
 * Added ``--with-valgrind`` configure option for MySQL that
-  enables valgrind support.
+  enables Valgrind support.
 * [mariadb] Supported ``DATETIME`` type with fraction
   seconds.
 * Supported building without geometry support.
