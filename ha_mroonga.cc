@@ -3247,7 +3247,7 @@ int ha_mroonga::storage_open(const char *name, int mode, uint test_if_locked)
     DBUG_RETURN(error);
   }
 
-  ref_length = sizeof(my_off_t);
+  ref_length = sizeof(grn_id);
   DBUG_RETURN(0);
 }
 
