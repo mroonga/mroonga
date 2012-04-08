@@ -146,6 +146,9 @@ eval $command || \
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sun Apr 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.02-0
+- new upstream release.
+
 * Thu Mar 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.01-0
 - new upstream release.
 - ensure plugin is uninstalled by closing all tables use mroonga.
