@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -47,7 +47,7 @@ INSERT INTO diaries VALUES(2, 2011, 12, 1, "久しぶり", "天気が悪いか�
 INSERT INTO diaries VALUES(3, 2011, 12, 2, "初雪", "今年はじめての雪！");
 
 SELECT * FROM diaries;
-SELECT * FROM diaries WHERE MATCH(content) AGAINST("今日 天気" IN BOOLEAN MODE);
+SELECT * FROM diaries WHERE MATCH(content) AGAINST("悪い" IN BOOLEAN MODE);
 
 
 DROP TABLE diaries;
