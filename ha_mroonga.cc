@@ -920,7 +920,7 @@ static handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROO
   DBUG_RETURN(new_handler);
 }
 
-static void mrn_drop_db(handlerton *hton, char *path)
+static void mrn_drop_db(const char *path)
 {
   MRN_DBUG_ENTER_FUNCTION();
   mrn::PathMapper mapper(path);
@@ -940,6 +940,13 @@ static void mrn_drop_db(handlerton *hton, char *path)
   }
   mrn_hash_remove(&mrn_ctx, mrn_hash, mapper.db_name());
   pthread_mutex_unlock(&mrn_db_mutex);
+  DBUG_VOID_RETURN;
+}
+
+static void mrn_drop_database(handlerton *hton, char *path)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  mrn_drop_db(path);
   DBUG_VOID_RETURN;
 }
 
@@ -1292,7 +1299,7 @@ static int mrn_init(void *p)
   hton->state = SHOW_OPTION_YES;
   hton->create = mrn_handler_create;
   hton->flags = 0;
-  hton->drop_database = mrn_drop_db;
+  hton->drop_database = mrn_drop_database;
   hton->close_connection = mrn_close_connection;
   hton->flush_logs = mrn_flush_logs;
   hton->alter_table_flags = mrn_alter_table_flags;
@@ -3740,7 +3747,7 @@ int ha_mroonga::delete_table(const char *name)
   mrn_free_tmp_table_share(tmp_table_share);
   mrn_open_mutex_unlock();
   if (is_temporary_table_name(name)) {
-    mrn_drop_db(mrn_hton_ptr, (char *) name);
+    mrn_drop_db(name);
   }
   DBUG_RETURN(error);
 }
