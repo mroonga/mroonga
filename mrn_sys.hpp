@@ -48,9 +48,9 @@ MRN_BEGIN_DECLS
 #endif
 
 /* functions */
-int mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj *value);
-int mrn_hash_get(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj **value);
-int mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key);
+bool mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj *value);
+bool mrn_hash_get(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj **value);
+bool mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key);
 
 char *mrn_index_table_name_gen(const char *arg, const char *idx_name, char *dest);
 

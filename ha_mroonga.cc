@@ -926,7 +926,7 @@ static void mrn_drop_db(const char *path)
   mrn::PathMapper mapper(path);
   pthread_mutex_lock(&mrn_db_mutex);
   grn_obj *db = NULL;
-  if (mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db) != 0) {
+  if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
     struct stat dummy;
     if (stat(mapper.db_path(), &dummy) == 0) {
       db = grn_db_open(&mrn_ctx, mapper.db_path());
@@ -2884,7 +2884,7 @@ int ha_mroonga::ensure_database_create(const char *name)
 
   mrn::PathMapper mapper(name);
   pthread_mutex_lock(&mrn_db_mutex);
-  if (mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db) != 0) {
+  if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
     if (stat(mapper.db_path(), &db_stat)) {
       // creating new database
       GRN_LOG(ctx, GRN_LOG_INFO,
@@ -2927,7 +2927,7 @@ int ha_mroonga::ensure_database_open(const char *name)
 
   mrn::PathMapper mapper(name);
   pthread_mutex_lock(&mrn_db_mutex);
-  if (mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db) != 0) {
+  if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
     db = grn_db_open(&mrn_ctx, mapper.db_path());
     if (ctx->rc) {
       pthread_mutex_unlock(&mrn_db_mutex);
