@@ -422,7 +422,7 @@ voidを省略
       {
          Record *record = records[i];
          Column *column = columns[column_name];
-	 column.set_value(value);
+         column.set_value(value);
       }
     }
 
@@ -434,7 +434,7 @@ voidを省略
       {
          Record *record = records[i];
          Column *column = columns[column_name];
-	 column.set_value(value);
+         column.set_value(value);
       }
     }
 
