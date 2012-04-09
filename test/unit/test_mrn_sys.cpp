@@ -21,7 +21,7 @@
 #include <string.h>
 #include <cppcutter.h>
 
-#include <mrn_sys.h>
+#include <mrn_sys.hpp>
 
 static grn_ctx *ctx;
 static grn_obj *db;

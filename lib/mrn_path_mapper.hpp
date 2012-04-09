@@ -22,7 +22,7 @@
 #ifndef MRN_PATH_MAPPER_HPP_
 #define MRN_PATH_MAPPER_HPP_
 
-#include "mrn_sys.h"
+#include "mrn_sys.hpp"
 
 namespace mrn {
   class PathMapper {

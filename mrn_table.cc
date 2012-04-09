@@ -25,7 +25,7 @@
 #  include <sql_base.h>
 #endif
 #include "mrn_err.h"
-#include "mrn_sys.h"
+#include "mrn_sys.hpp"
 #include "mrn_table.h"
 #include "mrn_mysql_compat.h"
 

@@ -23,7 +23,7 @@ LIBS =						\
 	$(GROONGA_LIBS)				\
 	$(MECAB_LIBS)
 
-EXTERNAL_SRC = ../../mrn_sys.c
+EXTERNAL_SRC = ../../mrn_sys.cpp
 
 test_mrn_sys_la_SOURCES =			\
 	$(EXTERNAL_SRC)				\

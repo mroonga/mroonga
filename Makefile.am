@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
 noinst_HEADERS =				\
 	mrn_macro.h				\
-	mrn_sys.h				\
+	mrn_sys.hpp				\
 	ha_mroonga.h				\
 	mrn_table.h				\
 	mrn_err.h				\
@@ -16,7 +16,7 @@ noinst_HEADERS =				\
 
 sources =					\
 	ha_mroonga.cc				\
-	mrn_sys.c				\
+	mrn_sys.cpp				\
 	mrn_table.cc
 
 libraries =					\

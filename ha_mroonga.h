@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 #include <groonga.h>
-#include "mrn_sys.h"
+#include "mrn_sys.hpp"
 #include "mrn_mysql_compat.h"
 
 #if (MYSQL_VERSION_ID >= 50603) || \
