@@ -18,22 +18,25 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MRN_PATH_ENCODER_HPP_
-#define MRN_PATH_ENCODER_HPP_
+#ifndef MRN_INDEX_TABLE_NAME_MAPPER_HPP_
+#define MRN_INDEX_TABLE_NAME_HPP_
 
 #include "mrn_sys.hpp"
 
 namespace mrn {
-  class PathEncoder {
+  class IndexTableName {
   public:
-    PathEncoder(const char *name);
-    const char *path();
+    IndexTableName(const char *table_name, const char *mysql_index_name);
+    const char *c_str();
+    size_t length();
   private:
-    const char *name_;
-    char path_[MRN_MAX_PATH_SIZE];
+    const char *table_name_;
+    const char *mysql_index_name_;
+    char name_[MRN_MAX_PATH_SIZE];
+    size_t length_;
 
     uint encode(char *buf_st, char *buf_ed, const char *st, const char *ed);
   };
 }
 
-#endif /* MRN_PATH_ENCODER_HPP_ */
+#endif /* MRN_INDEX_TABLE_NAME_MAPPER_HPP_ */

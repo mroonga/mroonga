@@ -20,25 +20,31 @@
 
 #include <mrn_mysql.h>
 
-#include "mrn_path_encoder.hpp"
+#include "mrn_index_table_name.hpp"
 
 namespace mrn {
-  PathEncoder::PathEncoder(const char *name)
-    : name_(name) {
-    path_[0] = '\0';
+  IndexTableName::IndexTableName(const char *table_name,
+                                 const char *mysql_index_name)
+    : table_name_(table_name),
+      mysql_index_name_(mysql_index_name) {
+    char encoded_mysql_index_name[MRN_MAX_PATH_SIZE];
+    encode(encoded_mysql_index_name,
+           encoded_mysql_index_name + MRN_MAX_PATH_SIZE,
+           mysql_index_name_, mysql_index_name_ + strlen(mysql_index_name_));
+    snprintf(name_, MRN_MAX_PATH_SIZE,
+             "%s-%s", table_name_, encoded_mysql_index_name);
+    length_ = strlen(name_);
   }
 
-  const char *PathEncoder::path() {
-    if (path_[0] != '\0') {
-      return path_;
-    }
-
-    encode(path_, path_ + MRN_MAX_PATH_SIZE,
-           name_, name_ + strlen(name_));
-    return path_;
+  const char *IndexTableName::c_str() {
+    return name_;
   }
 
-  uint PathEncoder::encode(char *buf_st, char *buf_ed, const char *st, const char *ed) {
+  size_t IndexTableName::length() {
+    return length_;
+  }
+
+  uint IndexTableName::encode(char *buf_st, char *buf_ed, const char *st, const char *ed) {
     int res1, res2;
     char *buf = buf_st;
     my_wc_t wc;

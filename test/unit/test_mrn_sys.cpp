@@ -92,11 +92,4 @@ namespace test_mrn_sys
     cut_assert_equal_int(0, mrn_hash_remove(ctx, hash, key));
     cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, key));
   }
-
-  void test_mrn_index_table_name_gen()
-  {
-    char buf[64];
-    cut_assert_equal_string("users-name",
-                            mrn_index_table_name_gen("users", "name", buf));
-  }
 }

@@ -13,5 +13,5 @@ libmroonga_la_SOURCES =				\
 	mrn_path_mapper.hpp
 
 libmrn_need_mysql_la_SOURCES =			\
-	mrn_path_encoder.cpp			\
-	mrn_path_encoder.hpp
+	mrn_index_table_name.cpp		\
+	mrn_index_table_name.hpp
