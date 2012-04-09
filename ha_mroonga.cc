@@ -569,8 +569,8 @@ static grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 static ulong mrn_log_level = mrn_log_level_default;
 char *mrn_default_parser = NULL;
 char *mrn_default_wrapper_engine = NULL;
-static char *mrn_libgroonga_version = (char *) grn_get_version();
-static char *mrn_version = (char *) MRN_VERSION;
+static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
+static char *mrn_version = const_cast<char *>(MRN_VERSION);
 
 static void mrn_logger_func(int level, const char *time, const char *title,
                             const char *msg, const char *location,
