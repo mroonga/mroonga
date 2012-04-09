@@ -580,7 +580,9 @@ static void mrn_logger_func(int level, const char *time, const char *title,
   if (mrn_log_file_opened) {
     pthread_mutex_lock(&mrn_log_mutex);
     fprintf(mrn_log_file, "%s|%c|%08x|%s\n", time,
-            *(slev + level), (uint)(ulong)pthread_self(), msg);
+            *(slev + level),
+            static_cast<uint>(static_cast<ulong>(pthread_self())),
+            msg);
     fflush(mrn_log_file);
     pthread_mutex_unlock(&mrn_log_mutex);
   }
