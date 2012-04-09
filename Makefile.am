@@ -9,7 +9,7 @@ noinst_HEADERS =				\
 	mrn_macro.h				\
 	mrn_sys.hpp				\
 	ha_mroonga.hpp				\
-	mrn_table.h				\
+	mrn_table.hpp				\
 	mrn_err.h				\
 	mrn_mysql.h				\
 	mrn_mysql_compat.h
@@ -17,7 +17,7 @@ noinst_HEADERS =				\
 sources =					\
 	ha_mroonga.cpp				\
 	mrn_sys.cpp				\
-	mrn_table.cc
+	mrn_table.cpp
 
 libraries =					\
 	$(top_builddir)/lib/libmroonga.la

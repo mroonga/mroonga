@@ -18,8 +18,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_table_h
-#define _mrn_table_h
+#ifndef _mrn_table_hpp
+#define _mrn_table_hpp
 
 #include <groonga.h>
 
@@ -112,4 +112,4 @@ uint mrn_decode(char *buf_st, char *buf_ed, const char *st, const char *ed);
 st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create);
 void mrn_clear_alter_share(THD *thd);
 
-#endif /* _mrn_table_h */
+#endif /* _mrn_table_hpp */

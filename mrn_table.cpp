@@ -26,7 +26,7 @@
 #endif
 #include "mrn_err.h"
 #include "mrn_sys.hpp"
-#include "mrn_table.h"
+#include "mrn_table.hpp"
 #include "mrn_mysql_compat.h"
 
 #if MYSQL_VERSION_ID >= 50603

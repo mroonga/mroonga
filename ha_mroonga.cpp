@@ -41,7 +41,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include "mrn_err.h"
-#include "mrn_table.h"
+#include "mrn_table.hpp"
 #include "ha_mroonga.hpp"
 #include <mrn_path_mapper.hpp>
 
