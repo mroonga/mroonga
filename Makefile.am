@@ -20,7 +20,8 @@ sources =					\
 	mrn_table.cpp
 
 libraries =					\
-	$(top_builddir)/lib/libmroonga.la
+	$(top_builddir)/lib/libmroonga.la	\
+	$(top_builddir)/lib/libmrn_need_mysql.la
 
 dynamic_plugin_ldflags  = -module $(GROONGA_LIBS)
 dynamic_plugin_cxxflags = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN

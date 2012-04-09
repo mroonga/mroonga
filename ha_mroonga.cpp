@@ -44,6 +44,7 @@
 #include "mrn_table.hpp"
 #include "ha_mroonga.hpp"
 #include <mrn_path_mapper.hpp>
+#include <mrn_path_encoder.hpp>
 
 #define MRN_SHORT_TEXT_SIZE (1 << 12) //  4Kbytes
 #define MRN_TEXT_SIZE       (1 << 16) // 64Kbytes
@@ -306,10 +307,8 @@ static char *mrn_index_table_name_create(const char *table_name,
                                          char *dest)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  char encode_name[MRN_MAX_PATH_SIZE];
-  mrn_encode(encode_name, encode_name + MRN_MAX_PATH_SIZE,
-             index_name, index_name + strlen(index_name));
-  mrn_index_table_name_gen(table_name, encode_name, dest);
+  mrn::PathEncoder encoder(index_name);
+  mrn_index_table_name_gen(table_name, encoder.path(), dest);
   DBUG_RETURN(dest);
 }
 
