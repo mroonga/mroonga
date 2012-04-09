@@ -18,8 +18,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_sys_h
-#define _mrn_sys_h
+#ifndef _mrn_sys_hpp
+#define _mrn_sys_hpp
 
 #include <groonga.h>
 #include "mrn_macro.h"
@@ -56,4 +56,4 @@ char *mrn_index_table_name_gen(const char *arg, const char *idx_name, char *dest
 
 MRN_END_DECLS
 
-#endif /* _mrn_sys_h */
+#endif /* _mrn_sys_hpp */
