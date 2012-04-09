@@ -57,6 +57,19 @@
 #  define MRN_MARIADB_P 1
 #endif
 
+#define MRN_MESSAGE_BUFFER_SIZE 1024
+
 #define MRN_DBUG_ENTER_FUNCTION() DBUG_ENTER(__FUNCTION__)
+
+#if !defined(DBUG_OFF) && !defined(_lint)
+#  define MRN_DBUG_ENTER_METHOD()                 \
+    char method_name[MRN_MESSAGE_BUFFER_SIZE];    \
+    method_name[0] = '\0';                        \
+    strcat(method_name, "ha_mroonga::");          \
+    strcat(method_name, __FUNCTION__);            \
+    DBUG_ENTER(method_name)
+#else
+#  define MRN_DBUG_ENTER_METHOD() MRN_DBUG_ENTER_FUNCTION()
+#endif
 
 #endif /* _mrn_mysql_h */
