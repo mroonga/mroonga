@@ -8,14 +8,14 @@ ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 noinst_HEADERS =				\
 	mrn_macro.h				\
 	mrn_sys.hpp				\
-	ha_mroonga.h				\
+	ha_mroonga.hpp				\
 	mrn_table.h				\
 	mrn_err.h				\
 	mrn_mysql.h				\
 	mrn_mysql_compat.h
 
 sources =					\
-	ha_mroonga.cc				\
+	ha_mroonga.cpp				\
 	mrn_sys.cpp				\
 	mrn_table.cc
 

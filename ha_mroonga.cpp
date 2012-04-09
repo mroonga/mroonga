@@ -42,7 +42,7 @@
 #include <unistd.h>
 #include "mrn_err.h"
 #include "mrn_table.h"
-#include "ha_mroonga.h"
+#include "ha_mroonga.hpp"
 #include <mrn_path_mapper.hpp>
 
 #define MRN_MESSAGE_BUFFER_SIZE 1024
