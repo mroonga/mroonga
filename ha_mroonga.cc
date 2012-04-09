@@ -547,13 +547,14 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
 }
 #endif
 
-static uchar *mrn_open_tables_get_key(MRN_SHARE *share,
+static uchar *mrn_open_tables_get_key(const uchar *record,
                                       size_t *length,
                                       my_bool not_used __attribute__ ((unused)))
 {
   MRN_DBUG_ENTER_FUNCTION();
+  MRN_SHARE *share = reinterpret_cast<MRN_SHARE *>(const_cast<uchar *>(record));
   *length = share->table_name_length;
-  DBUG_RETURN((uchar*) share->table_name);
+  DBUG_RETURN(reinterpret_cast<uchar *>(share->table_name));
 }
 
 /* status */
@@ -595,13 +596,13 @@ static grn_logger_info mrn_logger_info = {
 /* global hashes and mutexes */
 HASH mrn_allocated_thds;
 pthread_mutex_t mrn_allocated_thds_mutex;
-static uchar *mrn_allocated_thds_get_key(THD *thd,
+static uchar *mrn_allocated_thds_get_key(const uchar *record,
                                          size_t *length,
                                          my_bool not_used __attribute__ ((unused)))
 {
   MRN_DBUG_ENTER_FUNCTION();
   *length = sizeof(THD *);
-  DBUG_RETURN((uchar*) thd);
+  DBUG_RETURN(const_cast<uchar *>(record));
 }
 
 /* system functions */
@@ -1343,14 +1344,14 @@ static int mrn_init(void *p)
     goto err_allocated_thds_mutex_init;
   }
   if (my_hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
-                   (my_hash_get_key) mrn_allocated_thds_get_key, 0, 0)) {
+                   mrn_allocated_thds_get_key, 0, 0)) {
     goto error_allocated_thds_hash_init;
   }
   if ((pthread_mutex_init(&mrn_open_tables_mutex, NULL) != 0)) {
     goto err_allocated_open_tables_mutex_init;
   }
   if (my_hash_init(&mrn_open_tables, system_charset_info, 32, 0, 0,
-                   (my_hash_get_key) mrn_open_tables_get_key, 0, 0)) {
+                   mrn_open_tables_get_key, 0, 0)) {
     goto error_allocated_open_tables_hash_init;
   }
 
