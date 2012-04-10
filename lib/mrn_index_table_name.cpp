@@ -27,11 +27,11 @@ namespace mrn {
                                  const char *mysql_index_name)
     : table_name_(table_name),
       mysql_index_name_(mysql_index_name) {
-    char encoded_mysql_index_name[MRN_MAX_PATH_SIZE];
+    char encoded_mysql_index_name[MRN_MAX_KEY_SIZE];
     encode(encoded_mysql_index_name,
-           encoded_mysql_index_name + MRN_MAX_PATH_SIZE,
+           encoded_mysql_index_name + MRN_MAX_KEY_SIZE,
            mysql_index_name_, mysql_index_name_ + strlen(mysql_index_name_));
-    snprintf(name_, MRN_MAX_PATH_SIZE,
+    snprintf(name_, MRN_MAX_KEY_SIZE,
              "%s-%s", table_name_, encoded_mysql_index_name);
     length_ = strlen(name_);
   }

@@ -32,7 +32,7 @@ namespace mrn {
   private:
     const char *table_name_;
     const char *mysql_index_name_;
-    char name_[MRN_MAX_PATH_SIZE];
+    char name_[MRN_MAX_KEY_SIZE];
     size_t length_;
 
     uint encode(char *buf_st, char *buf_ed, const char *st, const char *ed);
