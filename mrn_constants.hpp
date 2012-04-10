@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2012 Kentoku SHIBA
+  Copyright(C) 2011 Kentoku SHIBA
   Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -19,26 +19,29 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MRN_PATH_MAPPER_HPP_
-#define MRN_PATH_MAPPER_HPP_
+#ifndef MRN_CONSTANTS_HPP_
+#define MRN_CONSTANTS_HPP_
 
-#include <mrn_constants.hpp>
+#include <groonga.h>
 
-namespace mrn {
-  class PathMapper {
-  public:
-    PathMapper(const char *mysql_path);
-    const char *db_path();
-    const char *db_name();
-    const char *table_name();
-    const char *mysql_table_name();
-  private:
-    const char *mysql_path_;
-    char db_path_[MRN_MAX_PATH_SIZE];
-    char db_name_[MRN_MAX_PATH_SIZE];
-    char table_name_[MRN_MAX_PATH_SIZE];
-    char mysql_table_name_[MRN_MAX_PATH_SIZE];
-  };
-}
+#define MRN_BUFFER_SIZE 1024
+#define MRN_MAX_KEY_SIZE GRN_TABLE_MAX_KEY_SIZE
+#if defined(MAX_PATH)
+#  define MRN_MAX_PATH_SIZE (MAX_PATH + 1)
+#elif defined(PATH_MAX)
+#  define MRN_MAX_PATH_SIZE (PATH_MAX)
+#elif defined(MAXPATHLEN)
+#  define MRN_MAX_PATH_SIZE (MAXPATHLEN)
+#else
+#  define MRN_MAX_PATH_SIZE (256)
+#endif
+#define MRN_DB_FILE_SUFFIX ".mrn"
+#define MRN_LOG_FILE_PATH "groonga.log"
+#define MRN_COLUMN_NAME_ID "_id"
+#define MRN_COLUMN_NAME_KEY "_key"
+#define MRN_COLUMN_NAME_SCORE "_score"
+#ifndef MRN_PARSER_DEFAULT
+#  define MRN_PARSER_DEFAULT "TokenBigram"
+#endif
 
-#endif /* MRN_PATH_MAPPER_HPP_ */
+#endif /* MRN_CONSTANTS_HPP_ */

@@ -8,6 +8,7 @@ ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 noinst_HEADERS =				\
 	mrn_macro.h				\
 	mrn_sys.hpp				\
+	mrn_constants.hpp			\
 	ha_mroonga.hpp				\
 	mrn_table.hpp				\
 	mrn_err.h				\

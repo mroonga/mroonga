@@ -21,7 +21,7 @@
 #ifndef MRN_INDEX_TABLE_NAME_MAPPER_HPP_
 #define MRN_INDEX_TABLE_NAME_HPP_
 
-#include "mrn_sys.hpp"
+#include <mrn_constants.hpp>
 
 namespace mrn {
   class IndexTableName {
