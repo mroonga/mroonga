@@ -18,7 +18,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MRN_INDEX_TABLE_NAME_MAPPER_HPP_
+#ifndef MRN_INDEX_TABLE_NAME_HPP_
 #define MRN_INDEX_TABLE_NAME_HPP_
 
 #include <mrn_constants.hpp>
@@ -39,4 +39,4 @@ namespace mrn {
   };
 }
 
-#endif /* MRN_INDEX_TABLE_NAME_MAPPER_HPP_ */
+#endif /* MRN_INDEX_TABLE_NAME_HPP_ */
