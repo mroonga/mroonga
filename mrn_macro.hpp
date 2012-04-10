@@ -16,8 +16,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_macro_h
-#define _mrn_marco_h
+#ifndef MRN_MACRO_HPP_
+#define MRN_MACRO_HPP_
 
 #ifdef  __cplusplus
 #  define MRN_BEGIN_DECLS  extern "C" {
@@ -27,4 +27,4 @@
 #  define MRN_END_DECLS
 #endif
 
-#endif /* _mrn_macro_h */
+#endif /* MRN_MACRO_HPP_ */

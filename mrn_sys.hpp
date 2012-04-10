@@ -22,7 +22,7 @@
 #define _mrn_sys_hpp
 
 #include <groonga.h>
-#include "mrn_macro.h"
+#include "mrn_macro.hpp"
 
 MRN_BEGIN_DECLS
 

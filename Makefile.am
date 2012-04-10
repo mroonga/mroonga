@@ -6,7 +6,7 @@ AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) -I$(top_srcdir)/lib
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
 noinst_HEADERS =				\
-	mrn_macro.h				\
+	mrn_macro.hpp				\
 	mrn_sys.hpp				\
 	mrn_constants.hpp			\
 	ha_mroonga.hpp				\
