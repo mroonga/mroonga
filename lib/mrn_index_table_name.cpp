@@ -52,7 +52,6 @@ namespace mrn {
                               const uchar *mysql_string_start,
                               const uchar *mysql_string_end) {
     MRN_DBUG_ENTER_METHOD();
-    my_wc_t wc;
     my_charset_conv_mb_wc mb_wc = system_charset_info->cset->mb_wc;
     my_charset_conv_wc_mb wc_mb = my_charset_filename.cset->wc_mb;
     DBUG_PRINT("info", ("mroonga: in=%s", mysql_string_start));
@@ -60,6 +59,7 @@ namespace mrn {
     uchar *encoded = encoded_start;
     const uchar *mysql_string = mysql_string_start;
     while (mysql_string < mysql_string_end && encoded < encoded_end) {
+      my_wc_t wc;
       int mb_wc_converted_length;
       int wc_mb_converted_length;
       mb_wc_converted_length =
