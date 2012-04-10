@@ -1661,42 +1661,67 @@ static _ft_vft mrn_no_such_key_ft_vft = {
 /* handler implementation */
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   :handler(hton, share_arg),
+   wrap_handler(NULL),
+   is_clone(false),
+   parent_for_clone(NULL),
+   mem_root_for_clone(NULL),
+   record_id(GRN_ID_NIL),
+   key_id(NULL),
+   del_key_id(NULL),
+
+   share(NULL),
+   wrap_key_info(NULL),
+   base_key_info(NULL),
+
+   analyzed_for_create(false),
+   wrap_handler_for_create(NULL),
+
+   grn_table(NULL),
+   grn_columns(NULL),
+   grn_index_tables(NULL),
+   grn_index_columns(NULL),
+   grn_source_column_geo(NULL),
+   cursor_geo(NULL),
+
+   cursor(NULL),
+   index_table_cursor(NULL),
+   score_column(NULL),
+   id_accessor(NULL),
+   key_accessor(NULL),
+
+   sorted_result(NULL),
+   matched_record_keys(NULL),
+
+   key_min(NULL),
+   key_max(NULL),
+   key_min_len(NULL),
+   key_max_len(NULL),
+   dup_key(0),
+   mrn_lock_type(F_UNLCK),
+
+   count_skip(false),
+   fast_order_limit(false),
+   fast_order_limit_with_index(false),
+
    ignoring_duplicated_key(false),
    inserting_with_update(false),
+   fulltext_searching(false),
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
+   hnd_add_index(NULL),
+#endif
    ignoring_no_key_columns(false)
 {
   MRN_DBUG_ENTER_METHOD();
   ctx = grn_ctx_open(0);
   mrn_change_encoding(ctx, system_charset_info);
   grn_ctx_use(ctx, mrn_db);
-  grn_table = NULL;
-  grn_columns = NULL;
-  cursor = NULL;
-  index_table_cursor = NULL;
   GRN_WGS84_GEO_POINT_INIT(&top_left_point, 0);
   GRN_WGS84_GEO_POINT_INIT(&bottom_right_point, 0);
   GRN_WGS84_GEO_POINT_INIT(&source_point, 0);
-  grn_source_column_geo = NULL;
-  cursor_geo = NULL;
-  score_column = NULL;
-  id_accessor = NULL;
-  key_accessor = NULL;
-  share = NULL;
-  is_clone = false;
-  wrap_handler = NULL;
-  sorted_result = NULL;
-  matched_record_keys = NULL;
-  fulltext_searching = false;
-  mrn_lock_type = F_UNLCK;
-  grn_index_tables = grn_index_columns = NULL;
-  key_id = NULL;
-  del_key_id = NULL;
-  key_min = key_max = NULL;
   GRN_TEXT_INIT(&key_buffer, 0);
   GRN_TEXT_INIT(&encoded_key_buffer, 0);
   GRN_VOID_INIT(&old_value_buffer);
   GRN_VOID_INIT(&new_value_buffer);
-  analyzed_for_create = false;
   DBUG_VOID_RETURN;
 }
 
