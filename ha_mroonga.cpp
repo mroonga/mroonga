@@ -1770,7 +1770,7 @@ const char *ha_mroonga::index_type(uint key_nr)
   }
 }
 
-static const char*ha_mroonga_exts[] = {
+static const char *ha_mroonga_exts[] = {
   NullS
 };
 const char **ha_mroonga::bas_ext() const
