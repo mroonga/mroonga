@@ -7190,7 +7190,7 @@ void ha_mroonga::remove_grn_obj_force(const char *name)
     grn_id id = grn_table_get(ctx, db, name, strlen(name));
     if (id) {
       char path[MRN_MAX_PATH_SIZE];
-      grn_obj_delete_by_id(ctx, db, id, GRN_true);
+      grn_obj_delete_by_id(ctx, db, id, GRN_TRUE);
       if (grn_obj_path_by_id(ctx, db, id, path) == GRN_SUCCESS) {
         size_t path_length = strlen(path);
         DIR *dir = opendir(".");
