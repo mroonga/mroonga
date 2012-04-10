@@ -35,7 +35,8 @@ namespace mrn {
     char name_[MRN_MAX_KEY_SIZE];
     size_t length_;
 
-    uint encode(char *buf_st, char *buf_ed, const char *st, const char *ed);
+    uint encode(char *encoded_start, char *encoded_end,
+                const char *mysql_string_start, const char *mysql_string_end);
   };
 }
 

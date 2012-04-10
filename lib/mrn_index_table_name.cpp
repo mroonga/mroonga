@@ -44,34 +44,44 @@ namespace mrn {
     return length_;
   }
 
-  uint IndexTableName::encode(char *buf_st, char *buf_ed, const char *st, const char *ed) {
+  uint IndexTableName::encode(char *encoded_start,
+                              char *encoded_end,
+                              const char *mysql_string_start,
+                              const char *mysql_string_end) {
     MRN_DBUG_ENTER_METHOD();
     int res1, res2;
-    char *buf = buf_st;
     my_wc_t wc;
     my_charset_conv_mb_wc mb_wc = system_charset_info->cset->mb_wc;
     my_charset_conv_wc_mb wc_mb = my_charset_filename.cset->wc_mb;
-    DBUG_PRINT("info", ("mroonga: in=%s", st));
-    buf_ed--;
-    for (; st < ed && buf < buf_ed; st += res1, buf += res2)
+    DBUG_PRINT("info", ("mroonga: in=%s", mysql_string_start));
+    encoded_end--;
+    char *encoded;
+    const char *mysql_string;
+    for (encoded = encoded_start, mysql_string = mysql_string_start;
+         mysql_string < mysql_string_end && encoded < encoded_end;
+         mysql_string += res1, encoded += res2)
     {
-      if ((res1 = (*mb_wc)(NULL, &wc, (uchar *) st, (uchar *) ed)) > 0)
+      if ((res1 = (*mb_wc)(NULL, &wc,
+                           (uchar *)mysql_string,
+                           (uchar *)mysql_string_end)) > 0)
       {
-        if ((res2 = (*wc_mb)(NULL, wc, (uchar *) buf, (uchar *) buf_ed)) <= 0)
+        if ((res2 = (*wc_mb)(NULL, wc,
+                             (uchar *)encoded,
+                             (uchar *)encoded_end)) <= 0)
         {
           break;
         }
       } else if (res1 == MY_CS_ILSEQ)
       {
-        *buf = *st;
+        *encoded = *mysql_string;
         res1 = 1;
         res2 = 1;
       } else {
         break;
       }
     }
-    *buf = '\0';
-    DBUG_PRINT("info", ("mroonga: out=%s", buf_st));
-    DBUG_RETURN(buf - buf_st);
+    *encoded = '\0';
+    DBUG_PRINT("info", ("mroonga: out=%s", encoded_start));
+    DBUG_RETURN(encoded - encoded_start);
   }
 }
