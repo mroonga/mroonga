@@ -52,7 +52,8 @@ namespace mrn {
                               const uchar *mysql_string_start,
                               const uchar *mysql_string_end) {
     MRN_DBUG_ENTER_METHOD();
-    int res1, res2;
+    int mb_wc_converted_length = 0;
+    int wc_mb_converted_length = 0;
     my_wc_t wc;
     my_charset_conv_mb_wc mb_wc = system_charset_info->cset->mb_wc;
     my_charset_conv_wc_mb wc_mb = my_charset_filename.cset->wc_mb;
@@ -60,21 +61,27 @@ namespace mrn {
     encoded_end--;
     uchar *encoded;
     const uchar *mysql_string;
-    for (encoded = encoded_start, mysql_string = mysql_string_start;
-         mysql_string < mysql_string_end && encoded < encoded_end;
-         mysql_string += res1, encoded += res2)
+    for (encoded = encoded_start,
+           mysql_string = mysql_string_start;
+         mysql_string < mysql_string_end &&
+           encoded < encoded_end;
+         mysql_string += mb_wc_converted_length,
+           encoded += wc_mb_converted_length)
     {
-      if ((res1 = (*mb_wc)(NULL, &wc, mysql_string, mysql_string_end)) > 0)
+      mb_wc_converted_length =
+        (*mb_wc)(NULL, &wc, mysql_string, mysql_string_end);
+      if (mb_wc_converted_length > 0)
       {
-        if ((res2 = (*wc_mb)(NULL, wc, encoded, encoded_end)) <= 0)
+        wc_mb_converted_length = (*wc_mb)(NULL, wc, encoded, encoded_end);
+        if (wc_mb_converted_length <= 0)
         {
           break;
         }
-      } else if (res1 == MY_CS_ILSEQ)
+      } else if (mb_wc_converted_length == MY_CS_ILSEQ)
       {
         *encoded = *mysql_string;
-        res1 = 1;
-        res2 = 1;
+        mb_wc_converted_length = 1;
+        wc_mb_converted_length = 1;
       } else {
         break;
       }
