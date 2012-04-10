@@ -14,4 +14,6 @@ libmrn_no_mysql_la_SOURCES =			\
 
 libmrn_need_mysql_la_SOURCES =			\
 	mrn_index_table_name.cpp		\
-	mrn_index_table_name.hpp
+	mrn_index_table_name.hpp		\
+	mrn_debug_column_access.cpp		\
+	mrn_debug_column_access.hpp

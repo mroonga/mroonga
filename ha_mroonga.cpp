@@ -45,6 +45,7 @@
 #include "ha_mroonga.hpp"
 #include <mrn_path_mapper.hpp>
 #include <mrn_index_table_name.hpp>
+#include <mrn_debug_column_access.hpp>
 
 #define MRN_SHORT_TEXT_SIZE (1 << 12) //  4Kbytes
 #define MRN_TEXT_SIZE       (1 << 16) // 64Kbytes
@@ -4287,9 +4288,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
     DBUG_RETURN(0);
   }
 
-#ifndef DBUG_OFF
-  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
-#endif
+  mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
@@ -4331,9 +4330,6 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
     }
   }
 err:
-#ifndef DBUG_OFF
-  dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
 
   DBUG_RETURN(error);
 }
@@ -4359,9 +4355,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
       DBUG_RETURN(error);
   }
 
-#ifndef DBUG_OFF
-  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
-#endif
+  mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   if (thd->abort_on_warning) {
     for (i = 0; i < n_columns; i++) {
       Field *field = table->field[i];
@@ -4371,16 +4365,10 @@ int ha_mroonga::storage_write_row(uchar *buf)
       if (field->is_null()) continue;
 
       if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
-#ifndef DBUG_OFF
-        dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
         my_message(ER_DATA_TOO_LONG, "cannot insert value to _id column", MYF(0));
         DBUG_RETURN(ER_DATA_TOO_LONG);
       }
       if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-#ifndef DBUG_OFF
-        dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
         my_message(ER_DATA_TOO_LONG, "cannot insert value to _score column", MYF(0));
         DBUG_RETURN(ER_DATA_TOO_LONG);
       }
@@ -4397,9 +4385,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
       Field *pkey_field = key_info.key_part[0].field;
       error = mrn_change_encoding(ctx, pkey_field->charset());
       if (error) {
-#ifndef DBUG_OFF
-        dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
         DBUG_RETURN(error);
       }
       generic_store_bulk(pkey_field, &key_buffer);
@@ -4421,17 +4406,11 @@ int ha_mroonga::storage_write_row(uchar *buf)
   int added;
   record_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
   if (ctx->rc) {
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_WRITE);
   }
   if (!added) {
     // duplicated error
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
     error = HA_ERR_FOUND_DUPP_KEY;
     memcpy(dup_ref, &record_id, sizeof(grn_id));
     dup_key = pkey_nr;
@@ -4444,9 +4423,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
   st_mrn_slot_data *slot_data;
   if ((error = storage_write_row_unique_indexes(buf, record_id)))
   {
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
     goto err1;
   }
 
@@ -4473,9 +4449,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
     error = mrn_change_encoding(ctx, field->charset());
     if (error) {
-#ifndef DBUG_OFF
-      dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
       grn_obj_unlink(ctx, &colbuf);
       goto err2;
     }
@@ -4492,9 +4465,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
     grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
     if (ctx->rc) {
-#ifndef DBUG_OFF
-      dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
       grn_obj_unlink(ctx, &colbuf);
       my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
       error = ER_ERROR_ON_WRITE;
@@ -4505,26 +4475,17 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
   error = storage_write_row_indexes(buf, record_id);
   if (error) {
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
     goto err2;
   }
 
   // for UDF last_insert_grn_id()
   slot_data = mrn_get_slot_data(thd, true);
   if (slot_data == NULL) {
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
     error = HA_ERR_OUT_OF_MEM;
     goto err2;
   }
   slot_data->last_insert_record_id = record_id;
 
-#ifndef DBUG_OFF
-  dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
   DBUG_RETURN(0);
 
 err2:
@@ -4580,10 +4541,7 @@ int ha_mroonga::storage_write_row_indexes(uchar *buf, grn_id record_id)
 
   int error = 0;
 
-#ifndef DBUG_OFF
-  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
-#endif
-
+  mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
@@ -4606,9 +4564,6 @@ int ha_mroonga::storage_write_row_indexes(uchar *buf, grn_id record_id)
   }
 
 err:
-#ifndef DBUG_OFF
-  dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
 
   DBUG_RETURN(error);
 }
@@ -4828,9 +4783,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     DBUG_RETURN(0);
   }
 
-#ifndef DBUG_OFF
-  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
-#endif
+  mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
@@ -4884,9 +4837,6 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     }
   }
 err:
-#ifndef DBUG_OFF
-  dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
 
   DBUG_RETURN(error);
 }
@@ -4930,26 +4880,15 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   KEY *pkey_info = NULL;
   storage_store_fields_for_prep_update(old_data, new_data, record_id);
   {
-#ifndef DBUG_OFF
-    my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
-#endif
+    mrn::DebugColumnAccess debug_column_access(table, table->read_set);
     if ((error = storage_prepare_delete_row_unique_indexes(old_data,
                                                            record_id))) {
-#ifndef DBUG_OFF
-      dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
       DBUG_RETURN(error);
     }
     if ((error = storage_update_row_unique_indexes(new_data, record_id)))
     {
-#ifndef DBUG_OFF
-      dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
       DBUG_RETURN(error);
     }
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
   }
 
   if (table->s->primary_key != MAX_INDEXES) {
@@ -4961,9 +4900,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
     if (bitmap_is_set(table->write_set, field->field_index)) {
-#ifndef DBUG_OFF
-      my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
-#endif
+      mrn::DebugColumnAccess debug_column_access(table, table->read_set);
       DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,field->field_index));
 
       if (field->is_null()) continue;
@@ -4971,18 +4908,12 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
         push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                      "data truncated for _id column");
-#ifndef DBUG_OFF
-        dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
         continue;
       }
 
       if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
         push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                      "data truncated for _score column");
-#ifndef DBUG_OFF
-        dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
         continue;
       }
       error = mrn_change_encoding(ctx, field->charset());
@@ -5005,9 +4936,6 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
           }
         }
         if (have_pkey) {
-#ifndef DBUG_OFF
-          dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
           continue;
         }
       }
@@ -5015,17 +4943,11 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       generic_store_bulk(field, &colbuf);
       grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
       if (ctx->rc) {
-#ifndef DBUG_OFF
-        dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
         grn_obj_unlink(ctx, &colbuf);
         my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
         error = ER_ERROR_ON_WRITE;
         goto err;
       }
-#ifndef DBUG_OFF
-      dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
     }
   }
   grn_obj_unlink(ctx, &colbuf);
@@ -5068,9 +4990,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
 
   my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
 
-#ifndef DBUG_OFF
-  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
-#endif
+  mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   uint i;
   uint n_keys = table->s->keys;
   mrn_change_encoding(ctx, NULL);
@@ -5136,9 +5056,6 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
     }
   }
 err:
-#ifndef DBUG_OFF
-  dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
   grn_obj_unlink(ctx, &old_key);
   grn_obj_unlink(ctx, &old_encoded_key);
   grn_obj_unlink(ctx, &new_key);
@@ -5271,9 +5188,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
     DBUG_RETURN(0);
   }
 
-#ifndef DBUG_OFF
-  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
-#endif
+  mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   uint i;
   uint n_keys = table->s->keys;
   for (i = 0; i < n_keys; i++) {
@@ -5304,10 +5219,6 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
     }
   }
 err:
-#ifndef DBUG_OFF
-  dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
-
   grn_table_delete_by_id(ctx, grn_table, record_id);
   if (ctx->rc) {
     error = ER_ERROR_ON_WRITE;
@@ -5355,9 +5266,7 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
   GRN_TEXT_INIT(&key, 0);
   GRN_TEXT_INIT(&encoded_key, 0);
 
-#ifndef DBUG_OFF
-  my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table, table->read_set);
-#endif
+  mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   uint i;
   uint n_keys = table->s->keys;
   mrn_change_encoding(ctx, NULL);
@@ -5399,9 +5308,6 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
     }
   }
 err:
-#ifndef DBUG_OFF
-  dbug_tmp_restore_column_map(table->read_set, tmp_map);
-#endif
   grn_obj_unlink(ctx, &encoded_key);
   grn_obj_unlink(ctx, &key);
 
@@ -8568,10 +8474,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         }
       }
 
-#ifndef DBUG_OFF
-      my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table,
-                                                        table->write_set);
-#endif
+      mrn::DebugColumnAccess debug_column_access(table, table->write_set);
       DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));
       field->move_field_offset(ptr_diff);
       if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
@@ -8587,9 +8490,6 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         storage_store_field(field, value, value_length);
       }
       field->move_field_offset(-ptr_diff);
-#ifndef DBUG_OFF
-      dbug_tmp_restore_column_map(table->write_set, tmp_map);
-#endif
     }
   }
 
@@ -8617,10 +8517,7 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
       !bitmap_is_set(table->write_set, field->field_index) &&
       bitmap_is_set(&multiple_column_key_bitmap, field->field_index)
     ) {
-#ifndef DBUG_OFF
-      my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table,
-                                                        table->write_set);
-#endif
+      mrn::DebugColumnAccess debug_column_access(table, table->write_set);
       DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));      const char *value;
       uint32 value_length;
       value = grn_obj_get_value_(ctx, grn_columns[i], record_id,
@@ -8635,9 +8532,6 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
         storage_store_field(field, value, value_length);
         field->move_field_offset(-ptr_diff_new);
       }
-#ifndef DBUG_OFF
-      dbug_tmp_restore_column_map(table->write_set, tmp_map);
-#endif
     }
   }
 
@@ -8658,16 +8552,10 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
   if (key_info->key_parts == 1) {
     my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(buf, table->record[0]);
     Field *field = key_info->key_part->field;
-#ifndef DBUG_OFF
-    my_bitmap_map *tmp_map = dbug_tmp_use_all_columns(table,
-                                                      table->write_set);
-#endif
+    mrn::DebugColumnAccess debug_column_access(table, table->write_set);
     field->move_field_offset(ptr_diff);
     storage_store_field(field, (const char *)key, key_length);
     field->move_field_offset(-ptr_diff);
-#ifndef DBUG_OFF
-    dbug_tmp_restore_column_map(table->write_set, tmp_map);
-#endif
   } else {
     uchar enc_buf[MAX_KEY_LENGTH];
     uint enc_len;
