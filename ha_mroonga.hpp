@@ -151,6 +151,18 @@ struct st_mrn_ft_info
 /* handler class */
 class ha_mroonga: public handler
 {
+public:
+  handler   *wrap_handler;
+  bool      is_clone;
+  ha_mroonga *parent_for_clone;
+  MEM_ROOT  *mem_root_for_clone;
+  grn_obj   key_buffer;
+  grn_id    record_id;
+  grn_id    *key_id;
+  grn_id    *del_key_id;
+  MY_BITMAP multiple_column_key_bitmap;
+
+private:
   THR_LOCK_DATA thr_lock_data;
 
   MRN_SHARE *share;
@@ -166,18 +178,7 @@ class ha_mroonga: public handler
   mutable TABLE_SHARE table_share_for_create;
   mutable MEM_ROOT    mem_root_for_create;
   mutable handler     *wrap_handler_for_create;
-public:
-  handler   *wrap_handler;
-  bool      is_clone;
-  ha_mroonga *parent_for_clone;
-  MEM_ROOT  *mem_root_for_clone;
-  grn_obj   key_buffer;
-  grn_id    record_id;
-  grn_id    *key_id;
-  grn_id    *del_key_id;
-  MY_BITMAP multiple_column_key_bitmap;
 
-private:
   grn_ctx *ctx;
 
   grn_obj  encoded_key_buffer;
