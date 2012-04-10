@@ -165,32 +165,35 @@ public:
 private:
   THR_LOCK_DATA thr_lock_data;
 
+  // for wrapper mode (TODO: need to be confirmed)
   MRN_SHARE *share;
   KEY       *wrap_key_info;
   KEY       *base_key_info;
   key_part_map pk_keypart_map;
   MEM_ROOT  mem_root;
-
-  /* for create table and alter table */
+  /// for create table and alter table
   mutable bool        analyzed_for_create;
   mutable TABLE       table_for_create;
   mutable MRN_SHARE   share_for_create;
   mutable TABLE_SHARE table_share_for_create;
   mutable MEM_ROOT    mem_root_for_create;
   mutable handler     *wrap_handler_for_create;
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
+  handler_add_index *hnd_add_index;
+#endif
+  int mrn_lock_type;
 
+  // for groonga objects
   grn_ctx *ctx;
-
-  grn_obj  encoded_key_buffer;
-  grn_obj  old_value_buffer;
-  grn_obj  new_value_buffer;
-
   grn_obj *grn_table;
   grn_obj **grn_columns;
-
   grn_obj **grn_index_tables;
   grn_obj **grn_index_columns;
 
+  // buffers
+  grn_obj  encoded_key_buffer;
+  grn_obj  old_value_buffer;
+  grn_obj  new_value_buffer;
   grn_obj top_left_point;
   grn_obj bottom_right_point;
   grn_obj source_point;
@@ -198,37 +201,35 @@ private:
   double bottom_right_longitude_in_degree;
   double bottom_right_latitude_in_degree;
   double top_left_latitude_in_degree;
+
+  // for search
   grn_obj *grn_source_column_geo;
   grn_obj *cursor_geo;
-
   grn_table_cursor *cursor;
   grn_table_cursor *index_table_cursor;
   grn_obj *score_column;
   grn_obj *id_accessor;
   grn_obj *key_accessor;
-
   grn_obj *sorted_result;
   grn_obj *matched_record_keys;
-
+  /// for range search
   uchar **key_min;
   uchar **key_max;
   int *key_min_len;
   int *key_max_len;
-  uint dup_key;
-  int mrn_lock_type;
 
+  // for error report
+  uint dup_key;
+
+  // for optimization
   bool count_skip;
   bool fast_order_limit;
   bool fast_order_limit_with_index;
 
+  // for context
   bool ignoring_duplicated_key;
   bool inserting_with_update;
   bool fulltext_searching;
-
-#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
-  handler_add_index *hnd_add_index;
-#endif
-
   bool ignoring_no_key_columns;
 
 public:

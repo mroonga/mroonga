@@ -1675,6 +1675,10 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 
    analyzed_for_create(false),
    wrap_handler_for_create(NULL),
+#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
+   hnd_add_index(NULL),
+#endif
+   mrn_lock_type(F_UNLCK),
 
    grn_table(NULL),
    grn_columns(NULL),
@@ -1696,8 +1700,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    key_max(NULL),
    key_min_len(NULL),
    key_max_len(NULL),
+
    dup_key(0),
-   mrn_lock_type(F_UNLCK),
 
    count_skip(false),
    fast_order_limit(false),
@@ -1706,9 +1710,6 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    ignoring_duplicated_key(false),
    inserting_with_update(false),
    fulltext_searching(false),
-#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
-   hnd_add_index(NULL),
-#endif
    ignoring_no_key_columns(false)
 {
   MRN_DBUG_ENTER_METHOD();
