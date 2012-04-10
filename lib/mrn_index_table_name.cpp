@@ -27,12 +27,15 @@ namespace mrn {
                                  const char *mysql_index_name)
     : table_name_(table_name),
       mysql_index_name_(mysql_index_name) {
-    char encoded_mysql_index_name[MRN_MAX_KEY_SIZE];
-    encode(encoded_mysql_index_name,
-           encoded_mysql_index_name + MRN_MAX_KEY_SIZE,
-           mysql_index_name_, mysql_index_name_ + strlen(mysql_index_name_));
+    uchar encoded_mysql_index_name_multibyte[MRN_MAX_KEY_SIZE];
+    const uchar *mysql_index_name_multibyte =
+      reinterpret_cast<const uchar *>(mysql_index_name_);
+    encode(encoded_mysql_index_name_multibyte,
+           encoded_mysql_index_name_multibyte + MRN_MAX_KEY_SIZE,
+           mysql_index_name_multibyte,
+           mysql_index_name_multibyte + strlen(mysql_index_name_));
     snprintf(name_, MRN_MAX_KEY_SIZE,
-             "%s-%s", table_name_, encoded_mysql_index_name);
+             "%s-%s", table_name_, encoded_mysql_index_name_multibyte);
     length_ = strlen(name_);
   }
 
@@ -44,10 +47,10 @@ namespace mrn {
     return length_;
   }
 
-  uint IndexTableName::encode(char *encoded_start,
-                              char *encoded_end,
-                              const char *mysql_string_start,
-                              const char *mysql_string_end) {
+  uint IndexTableName::encode(uchar *encoded_start,
+                              uchar *encoded_end,
+                              const uchar *mysql_string_start,
+                              const uchar *mysql_string_end) {
     MRN_DBUG_ENTER_METHOD();
     int res1, res2;
     my_wc_t wc;
@@ -55,19 +58,15 @@ namespace mrn {
     my_charset_conv_wc_mb wc_mb = my_charset_filename.cset->wc_mb;
     DBUG_PRINT("info", ("mroonga: in=%s", mysql_string_start));
     encoded_end--;
-    char *encoded;
-    const char *mysql_string;
+    uchar *encoded;
+    const uchar *mysql_string;
     for (encoded = encoded_start, mysql_string = mysql_string_start;
          mysql_string < mysql_string_end && encoded < encoded_end;
          mysql_string += res1, encoded += res2)
     {
-      if ((res1 = (*mb_wc)(NULL, &wc,
-                           (uchar *)mysql_string,
-                           (uchar *)mysql_string_end)) > 0)
+      if ((res1 = (*mb_wc)(NULL, &wc, mysql_string, mysql_string_end)) > 0)
       {
-        if ((res2 = (*wc_mb)(NULL, wc,
-                             (uchar *)encoded,
-                             (uchar *)encoded_end)) <= 0)
+        if ((res2 = (*wc_mb)(NULL, wc, encoded, encoded_end)) <= 0)
         {
           break;
         }
