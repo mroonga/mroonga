@@ -52,21 +52,16 @@ namespace mrn {
                               const uchar *mysql_string_start,
                               const uchar *mysql_string_end) {
     MRN_DBUG_ENTER_METHOD();
-    int mb_wc_converted_length = 0;
-    int wc_mb_converted_length = 0;
     my_wc_t wc;
     my_charset_conv_mb_wc mb_wc = system_charset_info->cset->mb_wc;
     my_charset_conv_wc_mb wc_mb = my_charset_filename.cset->wc_mb;
     DBUG_PRINT("info", ("mroonga: in=%s", mysql_string_start));
     encoded_end--;
-    uchar *encoded;
-    const uchar *mysql_string;
-    for (encoded = encoded_start,
-           mysql_string = mysql_string_start;
-         mysql_string < mysql_string_end &&
-           encoded < encoded_end;
-         mysql_string += mb_wc_converted_length,
-           encoded += wc_mb_converted_length) {
+    uchar *encoded = encoded_start;
+    const uchar *mysql_string = mysql_string_start;
+    while (mysql_string < mysql_string_end && encoded < encoded_end) {
+      int mb_wc_converted_length;
+      int wc_mb_converted_length;
       mb_wc_converted_length =
         (*mb_wc)(NULL, &wc, mysql_string, mysql_string_end);
       if (mb_wc_converted_length > 0) {
@@ -81,6 +76,8 @@ namespace mrn {
       } else {
         break;
       }
+      mysql_string += mb_wc_converted_length;
+      encoded += wc_mb_converted_length;
     }
     *encoded = '\0';
     DBUG_PRINT("info", ("mroonga: out=%s", encoded_start));
