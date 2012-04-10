@@ -66,19 +66,15 @@ namespace mrn {
          mysql_string < mysql_string_end &&
            encoded < encoded_end;
          mysql_string += mb_wc_converted_length,
-           encoded += wc_mb_converted_length)
-    {
+           encoded += wc_mb_converted_length) {
       mb_wc_converted_length =
         (*mb_wc)(NULL, &wc, mysql_string, mysql_string_end);
-      if (mb_wc_converted_length > 0)
-      {
+      if (mb_wc_converted_length > 0) {
         wc_mb_converted_length = (*wc_mb)(NULL, wc, encoded, encoded_end);
-        if (wc_mb_converted_length <= 0)
-        {
+        if (wc_mb_converted_length <= 0) {
           break;
         }
-      } else if (mb_wc_converted_length == MY_CS_ILSEQ)
-      {
+      } else if (mb_wc_converted_length == MY_CS_ILSEQ) {
         *encoded = *mysql_string;
         mb_wc_converted_length = 1;
         wc_mb_converted_length = 1;
