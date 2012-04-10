@@ -20,11 +20,11 @@
 #define _mrn_marco_h
 
 #ifdef  __cplusplus
-# define MRN_BEGIN_DECLS  extern "C" {
-# define MRN_END_DECLS    }
+#  define MRN_BEGIN_DECLS  extern "C" {
+#  define MRN_END_DECLS    }
 #else
-# define MRN_BEGIN_DECLS
-# define MRN_END_DECLS
+#  define MRN_BEGIN_DECLS
+#  define MRN_END_DECLS
 #endif
 
 #endif /* _mrn_macro_h */
