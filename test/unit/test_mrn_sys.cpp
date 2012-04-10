@@ -64,8 +64,8 @@ namespace test_mrn_sys
   {
     const char *key = "mroonga";
 
-    cut_assert_equal_int(0, mrn_hash_put(ctx, hash, key, &buffer));
-    cut_assert_equal_int(-1, mrn_hash_put(ctx, hash, key, &buffer));
+    cut_assert_true(mrn_hash_put(ctx, hash, key, &buffer));
+    cut_assert_false(mrn_hash_put(ctx, hash, key, &buffer));
   }
 
   void test_mrn_hash_get()
@@ -78,8 +78,8 @@ namespace test_mrn_sys
     GRN_TEXT_PUT(ctx, &buffer, "\0", 1);
 
     mrn_hash_put(ctx, hash, key, &buffer);
-    cut_assert_equal_int(0, mrn_hash_get(ctx, hash, key, &result));
-    cut_assert_equal_string(value, GRN_TEXT_VALUE(&buffer));
+    cut_assert_true(mrn_hash_get(ctx, hash, key, &result));
+    cppcut_assert_equal(value, GRN_TEXT_VALUE(&buffer));
   }
 
   void test_mrn_hash_remove()
@@ -88,8 +88,8 @@ namespace test_mrn_sys
 
     mrn_hash_put(ctx, hash, key, &buffer);
 
-    cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, "nonexistent"));
-    cut_assert_equal_int(0, mrn_hash_remove(ctx, hash, key));
-    cut_assert_equal_int(-1, mrn_hash_remove(ctx, hash, key));
+    cut_assert_false(mrn_hash_remove(ctx, hash, "nonexistent"));
+    cut_assert_true(mrn_hash_remove(ctx, hash, key));
+    cut_assert_false(mrn_hash_remove(ctx, hash, key));
   }
 }
