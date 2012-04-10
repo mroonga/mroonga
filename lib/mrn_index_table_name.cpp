@@ -45,12 +45,12 @@ namespace mrn {
   }
 
   uint IndexTableName::encode(char *buf_st, char *buf_ed, const char *st, const char *ed) {
+    MRN_DBUG_ENTER_METHOD();
     int res1, res2;
     char *buf = buf_st;
     my_wc_t wc;
     my_charset_conv_mb_wc mb_wc = system_charset_info->cset->mb_wc;
     my_charset_conv_wc_mb wc_mb = my_charset_filename.cset->wc_mb;
-    DBUG_ENTER("mrn_encode");
     DBUG_PRINT("info", ("mroonga: in=%s", st));
     buf_ed--;
     for (; st < ed && buf < buf_ed; st += res1, buf += res2)
