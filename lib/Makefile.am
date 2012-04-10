@@ -5,10 +5,10 @@ AM_CPPFLAGS =					\
 	-I$(top_srcdir)
 
 noinst_LTLIBRARIES =				\
-	libmroonga.la				\
+	libmrn_no_mysql.la			\
 	libmrn_need_mysql.la
 
-libmroonga_la_SOURCES =				\
+libmrn_no_mysql_la_SOURCES =			\
 	mrn_path_mapper.cpp			\
 	mrn_path_mapper.hpp
 

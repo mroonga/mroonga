@@ -33,4 +33,4 @@ test_mrn_path_mapper_la_SOURCES =		\
 	test_mrn_path_mapper.cpp
 
 test_mrn_path_mapper_la_LIBADD =		\
-	$(top_builddir)/lib/libmroonga.la
+	$(top_builddir)/lib/libmrn_no_mysql.la
