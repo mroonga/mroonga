@@ -75,7 +75,7 @@ if test "$GCC" = "yes"; then
   CHECK_BUILD_FLAG([-Wno-unused-parameter])
   CHECK_BUILD_FLAG([-Wno-strict-aliasing])
   # REMOVEME: workaround for MySQL/MariaDB 5.5.22 :<
-  # They uses deprecated MYSQL::generate_name style in class definition.
+  # They use deprecated MYSQL::generate_name style in class definition.
   CHECK_BUILD_FLAG([-Wno-deprecated])
 fi
 
