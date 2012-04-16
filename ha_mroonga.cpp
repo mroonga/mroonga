@@ -10226,7 +10226,7 @@ bool ha_mroonga::wrapper_auto_repair(int error) const
 #ifdef MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
   crashed = wrap_handler->auto_repair(error);
 #else
-  crashed = wrap_handler->auto_repair(error);
+  crashed = wrap_handler->auto_repair();
 #endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
