@@ -10249,7 +10249,9 @@ bool ha_mroonga::auto_repair(int error) const
 {
   MRN_DBUG_ENTER_METHOD();
   bool crashed;
-  if (share->wrapper_mode)
+  // TODO: We should consider about creating share for error =
+  // ER_CANT_OPEN_FILE. The following code just ignores the error.
+  if (share && share->wrapper_mode)
   {
     crashed = wrapper_auto_repair(error);
   } else {
