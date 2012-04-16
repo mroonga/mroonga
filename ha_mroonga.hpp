@@ -129,6 +129,10 @@ extern "C" {
 #  define MRN_HAVE_TL_WRITE_ALLOW_READ
 #endif
 
+#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50523)
+#  define MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -362,6 +366,7 @@ public:
   void update_create_info(HA_CREATE_INFO* create_info);
   int rename_table(const char *from, const char *to);
   bool is_crashed() const;
+  bool auto_repair(int error) const;
   bool auto_repair() const;
   int disable_indexes(uint mode);
   int enable_indexes(uint mode);
@@ -822,8 +827,8 @@ private:
                            const char *to_table_name);
   bool wrapper_is_crashed() const;
   bool storage_is_crashed() const;
-  bool wrapper_auto_repair() const;
-  bool storage_auto_repair() const;
+  bool wrapper_auto_repair(int error) const;
+  bool storage_auto_repair(int error) const;
   int wrapper_disable_indexes(uint mode);
   int storage_disable_indexes(uint mode);
   int wrapper_enable_indexes(uint mode);

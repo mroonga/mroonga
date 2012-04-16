@@ -10217,35 +10217,51 @@ bool ha_mroonga::is_crashed() const
   DBUG_RETURN(crashed);
 }
 
-bool ha_mroonga::wrapper_auto_repair() const
+bool ha_mroonga::wrapper_auto_repair(int error) const
 {
   bool crashed;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  crashed = wrap_handler->auto_repair();
+#ifdef MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
+  crashed = wrap_handler->auto_repair(error);
+#else
+  crashed = wrap_handler->auto_repair(error);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(crashed);
 }
 
-bool ha_mroonga::storage_auto_repair() const
+bool ha_mroonga::storage_auto_repair(int error) const
 {
   MRN_DBUG_ENTER_METHOD();
-  bool crashed = handler::auto_repair();
+  bool crashed;
+#ifdef MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
+  crashed = handler::auto_repair(error);
+#else
+  crashed = handler::auto_repair();
+#endif
+  DBUG_RETURN(crashed);
+}
+
+bool ha_mroonga::auto_repair(int error) const
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool crashed;
+  if (share->wrapper_mode)
+  {
+    crashed = wrapper_auto_repair(error);
+  } else {
+    crashed = storage_auto_repair(error);
+  }
   DBUG_RETURN(crashed);
 }
 
 bool ha_mroonga::auto_repair() const
 {
   MRN_DBUG_ENTER_METHOD();
-  bool crashed;
-  if (share->wrapper_mode)
-  {
-    crashed = wrapper_auto_repair();
-  } else {
-    crashed = storage_auto_repair();
-  }
+  bool crashed = auto_repair(HA_ERR_CRASHED_ON_USAGE);
   DBUG_RETURN(crashed);
 }
 
