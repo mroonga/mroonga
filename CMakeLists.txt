@@ -38,6 +38,29 @@ read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_need_mysql_sources.am
 string(REGEX REPLACE "([^;]+)" "lib/\\1"
   LIBMRN_NEED_MYSQL_SOURCES "${LIBMRN_NEED_MYSQL_SOURCES}")
 
+set(MYSQL_SOURCE_DIR "PATH" CACHE PATH "MySQL source directory")
+set(MYSQL_INCLUDE_DIRS
+  "${MYSQL_SOURCE_DIR}/sql"
+  "${MYSQL_SOURCE_DIR}/include"
+  "${MYSQL_SOURCE_DIR}/regex"
+  "${MYSQL_SOURCE_DIR}"
+  CACHE INTERNAL "MySQL include directories")
+
+set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
+
+set(MYSQL_CONFIG "PATH" CACHE PATH "mysql-config command path")
+find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
+
+macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
+  execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
+    OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
+  string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
+endmacro()
+
+set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
+set_mysql_config_value("--cflags" MYSQL_CFLAGS)
+set_mysql_config_value("--version" MYSQL_VERSION)
+
 include(FindPkgConfig)
 pkg_check_modules(GROONGA REQUIRED "groonga >= 2.0.0")
 
@@ -87,29 +110,6 @@ if(DISABLE_FAST_MUTEXES)
   set_property(TARGET ha_mroonga APPEND PROPERTY
     COMPILE_DEFINITIONS "FORCE_FAST_MUTEX_DISABLED=1")
 endif()
-
-set(MYSQL_SOURCE_DIR "PATH" CACHE PATH "MySQL source directory")
-set(MYSQL_INCLUDE_DIRS
-  "${MYSQL_SOURCE_DIR}/sql"
-  "${MYSQL_SOURCE_DIR}/include"
-  "${MYSQL_SOURCE_DIR}/regex"
-  "${MYSQL_SOURCE_DIR}"
-  CACHE INTERNAL "MySQL include directories")
-
-set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
-
-set(MYSQL_CONFIG "PATH" CACHE PATH "mysql-config command path")
-find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
-
-macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
-  execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
-    OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
-  string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
-endmacro()
-
-set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
-set_mysql_config_value("--cflags" MYSQL_CFLAGS)
-set_mysql_config_value("--version" MYSQL_VERSION)
 
 set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
 
