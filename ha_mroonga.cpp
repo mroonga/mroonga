@@ -10219,36 +10219,34 @@ bool ha_mroonga::is_crashed() const
 
 bool ha_mroonga::wrapper_auto_repair() const
 {
-  bool res;
+  bool crashed;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->auto_repair();
+  crashed = wrap_handler->auto_repair();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(res);
+  DBUG_RETURN(crashed);
 }
 
 bool ha_mroonga::storage_auto_repair() const
 {
   MRN_DBUG_ENTER_METHOD();
-  // XXX: success is valid variable name?
-  bool success = handler::auto_repair();
-  DBUG_RETURN(success);
+  bool crashed = handler::auto_repair();
+  DBUG_RETURN(crashed);
 }
 
 bool ha_mroonga::auto_repair() const
 {
   MRN_DBUG_ENTER_METHOD();
-  // XXX: success is valid variable name?
-  bool success;
+  bool crashed;
   if (share->wrapper_mode)
   {
-    success = wrapper_auto_repair();
+    crashed = wrapper_auto_repair();
   } else {
-    success = storage_auto_repair();
+    crashed = storage_auto_repair();
   }
-  DBUG_RETURN(success);
+  DBUG_RETURN(crashed);
 }
 
 int ha_mroonga::wrapper_disable_indexes(uint mode)
