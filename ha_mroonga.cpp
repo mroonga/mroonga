@@ -3762,9 +3762,6 @@ int ha_mroonga::wrapper_info(uint flag)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  if (flag & HA_STATUS_ERRKEY) {
-    wrap_handler->dup_ref = dup_ref;
-  }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   error = wrap_handler->info(flag);
@@ -3772,6 +3769,7 @@ int ha_mroonga::wrapper_info(uint flag)
   MRN_SET_BASE_TABLE_KEY(this, table);
   if (flag & HA_STATUS_ERRKEY) {
     errkey = wrap_handler->errkey;
+    memcpy(dup_ref, wrap_handler->dup_ref, wrap_handler->ref_length);
   }
   if (flag & HA_STATUS_TIME) {
     stats.update_time = wrap_handler->stats.update_time;
