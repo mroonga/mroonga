@@ -89,6 +89,8 @@ set_target_properties(ha_mroonga PROPERTIES
   COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN"
   PREFIX ""
   OUTPUT_NAME "ha_mroonga")
+
+set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
 set_property(TARGET ha_mroonga APPEND PROPERTY
   COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
 
@@ -111,8 +113,6 @@ if(DISABLE_FAST_MUTEXES)
   set_property(TARGET ha_mroonga APPEND PROPERTY
     COMPILE_DEFINITIONS "FORCE_FAST_MUTEX_DISABLED=1")
 endif()
-
-set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
 
 install(TARGETS ha_mroonga DESTINATION "${MYSQL_PLUGIN_DIR}")
 
