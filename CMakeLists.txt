@@ -83,7 +83,8 @@ add_library(ha_mroonga MODULE
   ${LIBMRN_NO_MYSQL_SOURCES}
   ${LIBMRN_NEED_MYSQL_SOURCES})
 set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
-  COMPILE_FLAGS "-Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
+  COMPILE_FLAGS
+  "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
 set_target_properties(ha_mroonga PROPERTIES
   COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN"
   PREFIX ""
