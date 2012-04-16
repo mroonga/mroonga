@@ -5,20 +5,7 @@ LOCALES = ja
 AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) -I$(top_srcdir)/lib
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
-noinst_HEADERS =				\
-	mrn_macro.hpp				\
-	mrn_sys.hpp				\
-	mrn_constants.hpp			\
-	ha_mroonga.hpp				\
-	mrn_table.hpp				\
-	mrn_err.h				\
-	mrn_mysql.h				\
-	mrn_mysql_compat.h
-
-sources =					\
-	ha_mroonga.cpp				\
-	mrn_sys.cpp				\
-	mrn_table.cpp
+include sources.am
 
 libraries =					\
 	$(top_builddir)/lib/libmrn_no_mysql.la	\

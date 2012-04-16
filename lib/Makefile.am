@@ -8,12 +8,5 @@ noinst_LTLIBRARIES =				\
 	libmrn_no_mysql.la			\
 	libmrn_need_mysql.la
 
-libmrn_no_mysql_la_SOURCES =			\
-	mrn_path_mapper.cpp			\
-	mrn_path_mapper.hpp
-
-libmrn_need_mysql_la_SOURCES =			\
-	mrn_index_table_name.cpp		\
-	mrn_index_table_name.hpp		\
-	mrn_debug_column_access.cpp		\
-	mrn_debug_column_access.hpp
+include libmrn_no_mysql_sources.am
+include libmrn_need_mysql_sources.am

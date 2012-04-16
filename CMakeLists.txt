@@ -26,20 +26,48 @@ set(MRN_VERSION_IN_HEX
   "0x0${MRN_VERSION_MAJOR}${MRN_VERSION_MINOR}${MRN_VERSION_MICRO}")
 set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
-include(build/cmake/files.cmake)
+include(${CMAKE_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
+
+read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/sources.am MROONGA_SOURCES)
+read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_no_mysql_sources.am
+  LIBMRN_NO_MYSQL_SOURCES)
+string(REGEX REPLACE "([^;]+)" "lib/\\1"
+  LIBMRN_NO_MYSQL_SOURCES "${LIBMRN_NO_MYSQL_SOURCES}")
+read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_need_mysql_sources.am
+  LIBMRN_NEED_MYSQL_SOURCES)
+string(REGEX REPLACE "([^;]+)" "lib/\\1"
+  LIBMRN_NEED_MYSQL_SOURCES "${LIBMRN_NEED_MYSQL_SOURCES}")
+
+include(FindPkgConfig)
+pkg_check_modules(GROONGA REQUIRED "groonga >= 2.0.0")
+
+include_directories(
+  "${PROJECT_BINARY_DIR}"
+  "${PROJECT_SOURCE_DIR}"
+  "${PROJECT_SOURCE_DIR}/lib"
+  ${MYSQL_INCLUDE_DIRS}
+  ${GROONGA_INCLUDE_DIRS}
+  )
+
+link_directories(
+  ${GROONGA_LIBRARY_DIRS}
+  )
 
 # TODO: set VERSIONINFO for Microsoft Visual C++.
 #       http://msdn.microsoft.com/en-us/library/aa381058%28VS.85%29.aspx
-add_library(ha_mroonga MODULE ${MROONGA_SOURCES})
+add_library(ha_mroonga MODULE
+  ${MROONGA_SOURCES}
+  ${LIBMRN_NO_MYSQL_SOURCES}
+  ${LIBMRN_NEED_MYSQL_SOURCES})
+set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
+  COMPILE_FLAGS "-Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
 set_target_properties(ha_mroonga PROPERTIES
   COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN"
   PREFIX ""
   OUTPUT_NAME "ha_mroonga")
-set_source_files_properties(${MROONGA_CPP_SOURCES} PROPERTIES
-  COMPILE_FLAGS "-Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
+set_property(TARGET ha_mroonga APPEND PROPERTY
+  COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
 
-include(FindPkgConfig)
-pkg_check_modules(GROONGA REQUIRED "groonga >= 2.0.0")
 target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
 
 option(WITH_DEBUG "Enable debug options" OFF)
@@ -84,20 +112,6 @@ set_mysql_config_value("--cflags" MYSQL_CFLAGS)
 set_mysql_config_value("--version" MYSQL_VERSION)
 
 set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
-set_property(TARGET ha_mroonga APPEND PROPERTY
-  COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
-
-include_directories(
-  "${PROJECT_BINARY_DIR}"
-  "${PROJECT_SOURCE_DIR}"
-  "${PROJECT_SOURCE_DIR}/lib"
-  ${MYSQL_INCLUDE_DIRS}
-  ${GROONGA_INCLUDE_DIRS}
-  )
-
-link_directories(
-  ${GROONGA_LIBRARY_DIRS}
-  )
 
 install(TARGETS ha_mroonga DESTINATION "${MYSQL_PLUGIN_DIR}")
 

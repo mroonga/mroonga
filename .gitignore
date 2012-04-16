@@ -1,6 +1,7 @@
 *.la
 *.lo
 *.o
+*.so
 *.i
 *.ii
 *.s
@@ -10,6 +11,7 @@
 Makefile
 Makefile.in
 cscope.out
+cmake_install.cmake
 /aclocal.m4
 /packages/apt/debian/
 /packages/apt/ubuntu/

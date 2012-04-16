@@ -1,0 +1,3 @@
+libmrn_no_mysql_la_SOURCES =			\
+	mrn_path_mapper.cpp			\
+	mrn_path_mapper.hpp
