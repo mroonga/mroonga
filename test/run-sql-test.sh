@@ -22,19 +22,20 @@ case "${MYSQL_VERSION}" in
 	    mkdir -p "${build_test_suites_dir}"
 	fi
 	;;
-    *-MariaDB*)
-	if ! test -d "${build_test_suites_dir}"; then
-	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
-	fi
-	if ! test -d "${MYSQL_BUILD_DIR}/plugin/mroonga"; then
-	    ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
-	fi
-	;;
     *)
 	if ! test -d "${build_test_suites_dir}"; then
 	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
 	fi
+	if ! test -d "${build_test_suites_dir}"; then
+	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
+	fi
 	plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
+	if ! test -d "${plugins_dir}"; then
+	    if ! test -d "${MYSQL_BUILD_DIR}/plugin/mroonga"; then
+		ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
+	    fi
+	    plugins_dir=
+	fi
 	;;
 esac
 
