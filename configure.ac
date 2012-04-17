@@ -1,8 +1,9 @@
-m4_define([mrn_version_major], [2])
-m4_define([mrn_version_minor], [0])
-m4_define([mrn_version_micro], [2])
-m4_define([mrn_version],
-          [mrn_version_major.mrn_version_minor[]mrn_version_micro])
+m4_define([mrn_version_major],  m4_include(version_major))
+m4_define([mrn_version_minor],  m4_include(version_minor))
+m4_define([mrn_version_micro],  m4_include(version_micro))
+m4_define([mrn_version],        m4_include(version))
+m4_define([mrn_version_in_hex], m4_include(version_in_hex))
+m4_define([mrn_plugin_version], m4_include(plugin_version))
 
 AC_INIT([mroonga], [mrn_version], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
@@ -12,15 +13,13 @@ MRN_VERSION=mrn_version
 MRN_VERSION_MAJOR=mrn_version_major
 MRN_VERSION_MINOR=mrn_version_minor
 MRN_VERSION_MICRO=mrn_version_micro
+MRN_VERSION_IN_HEX=mrn_version_in_hex
+MRN_PLUGIN_VERSION=mrn_plugin_version
 AC_SUBST([MRN_VERSION])
 AC_SUBST([MRN_VERSION_MAJOR])
 AC_SUBST([MRN_VERSION_MINOR])
 AC_SUBST([MRN_VERSION_MICRO])
-
-MRN_VERSION_IN_HEX=`printf "0x%02x%02x" mrn_version_major mrn_version_minor[]mrn_version_micro`
 AC_SUBST([MRN_VERSION_IN_HEX])
-
-MRN_PLUGIN_VERSION=`printf "%d.%d" mrn_version_major mrn_version_minor[]mrn_version_micro`
 AC_SUBST([MRN_PLUGIN_VERSION])
 
 MRN_PACKAGE_STRING="$PACKAGE_STRING"

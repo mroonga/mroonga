@@ -109,6 +109,31 @@ update-files:
 	cd $(srcdir)/doc && $(MAKE) update-files
 	cd $(srcdir)/test/sql && $(MAKE) update-files
 
+update-version:
+	@if test -z "$(NEW_VERSION_MAJOR)"; then	\
+	  echo "\$$(NEW_VERSION_MAJOR) is missing";	\
+	  exit 1;					\
+	fi
+	@if test -z "$(NEW_VERSION_MINOR)"; then	\
+	  echo "\$$(NEW_VERSION_MINOR) is missing";	\
+	  exit 1;					\
+	fi
+	@if test -z "$(NEW_VERSION_MICRO)"; then	\
+	  echo "\$$(NEW_VERSION_MICRO) is missing";	\
+	  exit 1;					\
+	fi
+	@echo -n $(NEW_VERSION_MAJOR) > $(srcdir)/version_major
+	@echo -n $(NEW_VERSION_MINOR) > $(srcdir)/version_minor
+	@echo -n $(NEW_VERSION_MICRO) > $(srcdir)/version_micro
+	@echo -n $(NEW_VERSION_MAJOR).$(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) \
+	  > $(srcdir)/version
+	@printf "0x%02x%02x" \
+	  $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR) $(NEW_VERSION_MICRO) \
+	  > $(srcdir)/version_in_hex
+	@printf "%d.%d" \
+	  $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) \
+	  > $(srcdir)/plugin_version
+
 upload-to-github:
 	ruby $(srcdir)/tools/upload-to-github.rb \
 	  $$USER $(PACKAGE)-$(VERSION).tar.gz
