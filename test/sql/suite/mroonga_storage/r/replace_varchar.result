@@ -26,8 +26,6 @@ id	content
 2	明日の富士山の天気について
 3	今日も天気がよくてきれいに見える。
 replace into diaries values(2, "明日の天気は雨みたい。");
-Warnings:
-Warning	1265	data truncated for primary key column: <id>
 select * from diaries where match(content) against("天気");
 id	content
 2	明日の天気は雨みたい。

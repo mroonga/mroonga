@@ -30,9 +30,6 @@ REPLACE INTO videos_groonga
 SELECT v.id, v.video_id, v.description, NULL
 FROM videos_master AS v
 WHERE v.video_id = (video_id);
-Warnings:
-Warning	1265	data truncated for primary key column: <video_id>
-Warning	1265	data truncated for primary key column: <video_id>
 SELECT *, MATCH(description) AGAINST("my") FROM videos_groonga
 WHERE MATCH(description) AGAINST("my");
 id	video_id	description	tags_unpack	MATCH(description) AGAINST("my")
