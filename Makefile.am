@@ -36,6 +36,7 @@ libmroonga_a_SOURCES     = $(sources)
 libmroonga_a_LIBADD      = $(libraries)
 
 SUBDIRS =					\
+	build					\
 	lib					\
 	test					\
 	doc					\
@@ -44,7 +45,8 @@ SUBDIRS =					\
 
 EXTRA_DIST =					\
 	AUTHORS					\
-	plug.in
+	plug.in					\
+	CMakeLists.txt
 
 installcheck-local: install
 	test/run-sql-test.sh
