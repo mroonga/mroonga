@@ -235,6 +235,7 @@ private:
   bool inserting_with_update;
   bool fulltext_searching;
   bool ignoring_no_key_columns;
+  bool replacing_;
 
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg);

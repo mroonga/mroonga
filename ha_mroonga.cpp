@@ -1711,7 +1711,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    ignoring_duplicated_key(false),
    inserting_with_update(false),
    fulltext_searching(false),
-   ignoring_no_key_columns(false)
+   ignoring_no_key_columns(false),
+   replacing_(false)
 {
   MRN_DBUG_ENTER_METHOD();
   ctx = grn_ctx_open(0);
@@ -4110,6 +4111,12 @@ int ha_mroonga::generic_extra(enum ha_extra_function operation)
   case HA_EXTRA_NO_IGNORE_DUP_KEY:
     ignoring_duplicated_key = false;
     break;
+  case HA_EXTRA_WRITE_CAN_REPLACE:
+    replacing_ = true;
+    break;
+  case HA_EXTRA_WRITE_CANNOT_REPLACE:
+    replacing_ = false;
+    break;
   case HA_EXTRA_INSERT_WITH_UPDATE:
     inserting_with_update = true;
     break;
@@ -4925,11 +4932,14 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
         for (j = 0; j < pkey_info->key_parts; j++) {
           Field *pkey_field = pkey_info->key_part[j].field;
           if (strcmp(pkey_field->field_name, column_name) == 0) {
-            char message[MRN_BUFFER_SIZE];
-            snprintf(message, MRN_BUFFER_SIZE,
-                     "data truncated for primary key column: <%s>", column_name);
-            push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
-                         message);
+            if (!replacing_) {
+              char message[MRN_BUFFER_SIZE];
+              snprintf(message, MRN_BUFFER_SIZE,
+                       "data truncated for primary key column: <%s>",
+                       column_name);
+              push_warning(thd, Sql_condition::WARN_LEVEL_WARN,
+                           WARN_DATA_TRUNCATED, message);
+            }
             have_pkey = true;
           }
         }
@@ -9117,6 +9127,7 @@ int ha_mroonga::reset()
   inserting_with_update = false;
   ignoring_duplicated_key = false;
   fulltext_searching = false;
+  replacing_ = false;
   mrn_lock_type = F_UNLCK;
   mrn_clear_alter_share(thd);
   DBUG_RETURN(error);
