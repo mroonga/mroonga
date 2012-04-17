@@ -128,7 +128,7 @@ update-version:
 	@echo -n $(NEW_VERSION_MAJOR).$(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) \
 	  > $(srcdir)/version
 	@printf "0x%02x%02x" \
-	  $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR) $(NEW_VERSION_MICRO) \
+	  $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) \
 	  > $(srcdir)/version_in_hex
 	@printf "%d.%d" \
 	  $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) \
