@@ -125,3 +125,8 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/config.sh.in"
   "${PROJECT_BINARY_DIR}/config.sh"
   )
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga_storage/r/information_schema.result.in"
+  "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga_storage/r/information_schema.result"
+  )
