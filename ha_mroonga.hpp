@@ -542,6 +542,8 @@ private:
   int storage_encode_key_time2(Field *field, const uchar *key,
                                uchar *buf, uint *size);
 #endif
+  int storage_encode_key_enum(Field *field, const uchar *key,
+                              uchar *buf, uint *size);
   int storage_encode_key(Field *field, const uchar *key, uchar *buf, uint *size);
   void storage_encode_multiple_column_key_float(float value,
                                                 uint data_size,

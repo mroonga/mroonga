@@ -8719,6 +8719,22 @@ int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
 }
 #endif
 
+int ha_mroonga::storage_encode_key_enum(Field *field, const uchar *key,
+                                        uchar *buf, uint *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  uint16 value;
+  if (field->pack_length() == 1) {
+    value = static_cast<uint16>(key[0]);
+  } else {
+    shortget(value, key);
+  }
+  memcpy(buf, &value, 2);
+  *size = 2;
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
                                    uchar *buf, uint *size)
 {
@@ -8736,7 +8752,6 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
 
   switch (field->real_type()) {
   case MYSQL_TYPE_BIT:
-  case MYSQL_TYPE_ENUM:
   case MYSQL_TYPE_SET:
   case MYSQL_TYPE_TINY:
     {
@@ -8826,6 +8841,9 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       *size = len;
       break;
     }
+  case MYSQL_TYPE_ENUM:
+    storage_encode_key_enum(field, ptr, buf, size);
+    break;
   default:
     error = HA_ERR_UNSUPPORTED;
     break;
