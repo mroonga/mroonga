@@ -1033,7 +1033,7 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_UINT16;       // 2bytes
     break;
   case MYSQL_TYPE_SET:          // SET; <= 8bytes
-    type = GRN_DB_INT64;        // 8bytes
+    type = GRN_DB_UINT64;       // 8bytes
     break;
   case MYSQL_TYPE_TINY_BLOB:    // TINYBLOB; <= 256bytes + 1byte
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
