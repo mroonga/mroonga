@@ -26,12 +26,17 @@ case "${MYSQL_VERSION}" in
 	if ! test -d "${build_test_suites_dir}"; then
 	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
 	fi
-	plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
-	if ! test -d "${plugins_dir}"; then
-	    if ! test -d "${MYSQL_BUILD_DIR}/plugin/mroonga"; then
-		ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
-	    fi
+	maria_storage_dir="${MYSQL_SOURCE_DIR}/storage/maria"
+	if test -d "${maria_storage_dir}"; then
+	    mariadb="yes"
+	else
+	    mariadb="no"
+	fi
+	if test "${mariadb}" = "yes"; then
+	    ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
 	    plugins_dir=
+	else
+	    plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
 	fi
 	;;
 esac
