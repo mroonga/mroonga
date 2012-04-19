@@ -72,13 +72,15 @@ done
 
 innodb_test_suite_dir="${build_test_suites_dir}/innodb"
 mroonga_wrapper_innodb_test_suite_dir="${build_test_suites_dir}/mroonga_wrapper_innodb"
+mroonga_wrapper_innodb_include_dir="${mroonga_wrapper_innodb_test_suite_dir}/include/"
 if test "$0" -nt "$(dirname "${mroonga_wrapper_innodb_test_suite_dir}")"; then
     rm -rf "${mroonga_wrapper_innodb_test_suite_dir}"
 fi
 if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
     cp -rp "${innodb_test_suite_dir}" "${mroonga_wrapper_innodb_test_suite_dir}"
+    mkdir -p "${mroonga_wrapper_innodb_include_dir}"
     cp -rp "${build_test_include_dir}"/innodb[-_]*.inc \
-	"${mroonga_wrapper_innodb_test_suite_dir}/include/"
+	"${mroonga_wrapper_innodb_include_dir}"
     ruby -i'' \
 	-pe "\$_.gsub!(/\\bengine\\s*=\\s*innodb\\b([^;\\n]*)/i,
                        \"ENGINE=mroonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
