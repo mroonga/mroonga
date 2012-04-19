@@ -6926,36 +6926,36 @@ void ha_mroonga::cond_pop()
 
 bool ha_mroonga::wrapper_get_error_message(int error, String *buf)
 {
-  bool res;
+  bool temporay_error;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->get_error_message(error, buf);
+  temporay_error = wrap_handler->get_error_message(error, buf);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(res);
+  DBUG_RETURN(temporay_error);
 }
 
 bool ha_mroonga::storage_get_error_message(int error, String *buf)
 {
   MRN_DBUG_ENTER_METHOD();
+  bool temporay_error = false;
   // latest error message
   buf->copy(ctx->errbuf, (uint) strlen(ctx->errbuf), system_charset_info);
-  DBUG_RETURN(false);
+  DBUG_RETURN(temporay_error);
 }
 
 bool ha_mroonga::get_error_message(int error, String *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  // XXX: success is valid variable name?
-  bool success;
+  bool temporay_error;
   if (share && share->wrapper_mode)
   {
-    success = wrapper_get_error_message(error, buf);
+    temporay_error = wrapper_get_error_message(error, buf);
   } else {
-    success = storage_get_error_message(error, buf);
+    temporay_error = storage_get_error_message(error, buf);
   }
-  DBUG_RETURN(success);
+  DBUG_RETURN(temporay_error);
 }
 
 void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag)
