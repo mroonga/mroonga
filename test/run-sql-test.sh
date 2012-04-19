@@ -26,9 +26,6 @@ case "${MYSQL_VERSION}" in
 	if ! test -d "${build_test_suites_dir}"; then
 	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
 	fi
-	if ! test -d "${build_test_suites_dir}"; then
-	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
-	fi
 	plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
 	if ! test -d "${plugins_dir}"; then
 	    if ! test -d "${MYSQL_BUILD_DIR}/plugin/mroonga"; then
