@@ -1681,6 +1681,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 #endif
    mrn_lock_type(F_UNLCK),
 
+   ctx_entity_(),
+   ctx(&ctx_entity_),
    grn_table(NULL),
    grn_columns(NULL),
    grn_index_tables(NULL),
@@ -1715,7 +1717,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    replacing_(false)
 {
   MRN_DBUG_ENTER_METHOD();
-  ctx = grn_ctx_open(0);
+  grn_ctx_init(ctx, 0);
   mrn_change_encoding(ctx, system_charset_info);
   grn_ctx_use(ctx, mrn_db);
   GRN_WGS84_GEO_POINT_INIT(&top_left_point, 0);

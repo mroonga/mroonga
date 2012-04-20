@@ -188,6 +188,7 @@ private:
   int mrn_lock_type;
 
   // for groonga objects
+  grn_ctx ctx_entity_;
   grn_ctx *ctx;
   grn_obj *grn_table;
   grn_obj **grn_columns;
