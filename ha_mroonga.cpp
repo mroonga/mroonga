@@ -6926,36 +6926,36 @@ void ha_mroonga::cond_pop()
 
 bool ha_mroonga::wrapper_get_error_message(int error, String *buf)
 {
-  bool temporay_error;
+  bool temporary_error;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  temporay_error = wrap_handler->get_error_message(error, buf);
+  temporary_error = wrap_handler->get_error_message(error, buf);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(temporay_error);
+  DBUG_RETURN(temporary_error);
 }
 
 bool ha_mroonga::storage_get_error_message(int error, String *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  bool temporay_error = false;
+  bool temporary_error = false;
   // latest error message
   buf->copy(ctx->errbuf, (uint) strlen(ctx->errbuf), system_charset_info);
-  DBUG_RETURN(temporay_error);
+  DBUG_RETURN(temporary_error);
 }
 
 bool ha_mroonga::get_error_message(int error, String *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  bool temporay_error;
+  bool temporary_error;
   if (share && share->wrapper_mode)
   {
-    temporay_error = wrapper_get_error_message(error, buf);
+    temporary_error = wrapper_get_error_message(error, buf);
   } else {
-    temporay_error = storage_get_error_message(error, buf);
+    temporary_error = storage_get_error_message(error, buf);
   }
-  DBUG_RETURN(temporay_error);
+  DBUG_RETURN(temporary_error);
 }
 
 void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag)
