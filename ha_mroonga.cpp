@@ -1701,8 +1701,6 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 
    key_min(NULL),
    key_max(NULL),
-   key_min_len(NULL),
-   key_max_len(NULL),
 
    dup_key(0),
 

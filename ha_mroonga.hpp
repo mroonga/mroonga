@@ -220,8 +220,6 @@ private:
   /// for range search
   uchar **key_min;
   uchar **key_max;
-  int *key_min_len;
-  int *key_max_len;
 
   // for error report
   uint dup_key;
