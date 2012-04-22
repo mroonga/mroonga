@@ -10687,7 +10687,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
                                   uint num_of_keys)
 #endif
 {
-  int res = 0;
+  int error = 0;
   uint i, j, k;
   uint n_keys = table->s->keys;
   grn_obj *index_tables[num_of_keys + n_keys];
@@ -10725,40 +10725,40 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       j++;
       continue;
     }
-    if ((res = mrn_add_index_param(tmp_share, &key_info[i], i + n_keys)))
+    if ((error = mrn_add_index_param(tmp_share, &key_info[i], i + n_keys)))
     {
       break;
     }
     index_tables[i + n_keys] = NULL;
     if (
       (key_info[i].flags & HA_FULLTEXT) &&
-      (res = wrapper_create_index_fulltext(mapper.table_name(),
-                                           i + n_keys,
-                                           &key_info[i], index_tables,
-                                           tmp_share))
+      (error = wrapper_create_index_fulltext(mapper.table_name(),
+                                             i + n_keys,
+                                             &key_info[i], index_tables,
+                                             tmp_share))
     ) {
       break;
     } else if (
       mrn_is_geo_key(&key_info[i]) &&
-      (res = wrapper_create_index_geo(mapper.table_name(),
-                                      i + n_keys, &key_info[i],
-                                      index_tables, tmp_share))
+      (error = wrapper_create_index_geo(mapper.table_name(),
+                                        i + n_keys, &key_info[i],
+                                        index_tables, tmp_share))
     ) {
       break;
     }
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
   }
-  if (!res && i > j &&
-    (mrn_lock_type != F_UNLCK || !(res = wrapper_external_lock(thd, F_WRLCK)))
+  if (!error && i > j &&
+    (mrn_lock_type != F_UNLCK || !(error = wrapper_external_lock(thd, F_WRLCK)))
   ) {
     if (
-      !(res = wrapper_start_stmt(thd, thr_lock_data.type)) &&
-      !(res = wrapper_rnd_init(true))
+      !(error = wrapper_start_stmt(thd, thr_lock_data.type)) &&
+      !(error = wrapper_rnd_init(true))
     ) {
       grn_obj key;
       GRN_TEXT_INIT(&key, 0);
       grn_bulk_space(ctx, &key, p_key_info->key_length);
-      while (!(res = wrapper_rnd_next(table->record[0])))
+      while (!(error = wrapper_rnd_next(table->record[0])))
       {
         key_copy((uchar *) (GRN_TEXT_VALUE(&key)), table->record[0],
           p_key_info, p_key_info->key_length);
@@ -10773,11 +10773,11 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
           snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
                    "failed to add a new record into groonga: key=<%.*s>",
                    (int) GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
-          res = ER_ERROR_ON_WRITE;
-          my_message(res, error_message, MYF(0));
+          error = ER_ERROR_ON_WRITE;
+          my_message(error, error_message, MYF(0));
         }
         grn_obj_unlink(ctx, &key);
-        if (res)
+        if (error)
           break;
 
         for (k = 0; k < num_of_keys; k++) {
@@ -10793,8 +10793,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
 
             if (field->is_null())
               continue;
-            res = mrn_change_encoding(ctx, field->charset());
-            if (res)
+            error = mrn_change_encoding(ctx, field->charset());
+            if (error)
               break;
 
             generic_store_bulk(field, &new_value_buffer);
@@ -10809,39 +10809,39 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
                                          NULL, &new_value_buffer);
             grn_obj_unlink(ctx, index_column);
             if (rc) {
-              res = ER_ERROR_ON_WRITE;
-              my_message(res, ctx->errbuf, MYF(0));
+              error = ER_ERROR_ON_WRITE;
+              my_message(error, ctx->errbuf, MYF(0));
               break;
             }
           }
-          if (res)
+          if (error)
             break;
         }
-        if (res)
+        if (error)
           break;
       }
-      if (res != HA_ERR_END_OF_FILE)
+      if (error != HA_ERR_END_OF_FILE)
         wrapper_rnd_end();
       else
-        res = wrapper_rnd_end();
+        error = wrapper_rnd_end();
     }
     if (mrn_lock_type == F_UNLCK)
       wrapper_external_lock(thd, F_UNLCK);
   }
   bitmap_set_all(table->read_set);
-  if (!res && j)
+  if (!error && j)
   {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
-    res = wrap_handler->add_index(table_arg, wrap_key_info, j, &hnd_add_index);
+    error = wrap_handler->add_index(table_arg, wrap_key_info, j, &hnd_add_index);
 #else
-    res = wrap_handler->add_index(table_arg, wrap_key_info, j);
+    error = wrap_handler->add_index(table_arg, wrap_key_info, j);
 #endif
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
-  if (res)
+  if (error)
   {
     for (k = 0; k < i; k++) {
       if (!(key_info[k].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[k]))
@@ -10861,7 +10861,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
 #endif
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
-  DBUG_RETURN(res);
+  DBUG_RETURN(error);
 }
 
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
@@ -10872,7 +10872,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
                                   uint num_of_keys)
 #endif
 {
-  int res = 0;
+  int error = 0;
   uint i;
   uint n_keys = table->s->keys;
   grn_obj *index_tables[num_of_keys + n_keys];
@@ -10903,13 +10903,13 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   for (i = 0; i < num_of_keys; i++) {
     index_tables[i + n_keys] = NULL;
     index_columns[i + n_keys] = NULL;
-    if ((res = mrn_add_index_param(tmp_share, &key_info[i], i + n_keys)))
+    if ((error = mrn_add_index_param(tmp_share, &key_info[i], i + n_keys)))
     {
       break;
     }
-    if ((res = storage_create_index(table, mapper.table_name(), grn_table,
-                                    tmp_share, &key_info[i], index_tables,
-                                    index_columns, i + n_keys)))
+    if ((error = storage_create_index(table, mapper.table_name(), grn_table,
+                                      tmp_share, &key_info[i], index_tables,
+                                      index_columns, i + n_keys)))
     {
       break;
     }
@@ -10919,7 +10919,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
       grn_table_size(ctx, grn_table) !=
         grn_table_size(ctx, index_tables[i + n_keys])
     ) {
-      res = HA_ERR_FOUND_DUPP_UNIQUE;
+      error = HA_ERR_FOUND_DUPP_UNIQUE;
       i++;
       break;
     }
@@ -10931,14 +10931,14 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
       have_multiple_column_index = true;
     }
   }
-  if (!res && have_multiple_column_index)
+  if (!error && have_multiple_column_index)
   {
-    res = storage_add_index_multiple_columns(key_info, num_of_keys,
-                                             index_tables,
-                                             index_columns);
+    error = storage_add_index_multiple_columns(key_info, num_of_keys,
+                                               index_tables,
+                                               index_columns);
   }
   bitmap_set_all(table->read_set);
-  if (res)
+  if (error)
   {
     for (uint j = 0; j < i; j++) {
       if (index_tables[j + n_keys])
@@ -10955,7 +10955,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
 #endif
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
-  DBUG_RETURN(res);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
@@ -11030,28 +11030,28 @@ int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
                           uint num_of_keys, handler_add_index **add)
 {
   MRN_DBUG_ENTER_METHOD();
-  int res;
+  int error;
   if (share->wrapper_mode)
   {
-    res = wrapper_add_index(table_arg, key_info, num_of_keys, add);
+    error = wrapper_add_index(table_arg, key_info, num_of_keys, add);
   } else {
-    res = storage_add_index(table_arg, key_info, num_of_keys, add);
+    error = storage_add_index(table_arg, key_info, num_of_keys, add);
   }
-  DBUG_RETURN(res);
+  DBUG_RETURN(error);
 }
 #else
 int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
                           uint num_of_keys)
 {
   MRN_DBUG_ENTER_METHOD();
-  int res;
+  int error;
   if (share->wrapper_mode)
   {
-    res = wrapper_add_index(table_arg, key_info, num_of_keys);
+    error = wrapper_add_index(table_arg, key_info, num_of_keys);
   } else {
-    res = storage_add_index(table_arg, key_info, num_of_keys);
+    error = storage_add_index(table_arg, key_info, num_of_keys);
   }
-  DBUG_RETURN(res);
+  DBUG_RETURN(error);
 }
 #endif
 
