@@ -218,8 +218,8 @@ private:
   grn_obj *sorted_result;
   grn_obj *matched_record_keys;
   /// for range search
-  uchar **key_min;
-  uchar **key_max;
+  uchar **keys_min;
+  uchar **keys_max;
 
   // for error report
   uint dup_key;
