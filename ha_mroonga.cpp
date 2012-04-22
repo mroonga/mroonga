@@ -11058,13 +11058,13 @@ int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
 int ha_mroonga::wrapper_final_add_index(handler_add_index *add, bool commit)
 {
-  int res = 0;
+  int error = 0;
   MRN_DBUG_ENTER_METHOD();
   if (hnd_add_index)
   {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
-    res = wrap_handler->final_add_index(hnd_add_index, commit);
+    error = wrap_handler->final_add_index(hnd_add_index, commit);
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
@@ -11072,7 +11072,7 @@ int ha_mroonga::wrapper_final_add_index(handler_add_index *add, bool commit)
   {
     delete add;
   }
-  DBUG_RETURN(res);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_final_add_index(handler_add_index *add, bool commit)
@@ -11088,14 +11088,14 @@ int ha_mroonga::storage_final_add_index(handler_add_index *add, bool commit)
 int ha_mroonga::final_add_index(handler_add_index *add, bool commit)
 {
   MRN_DBUG_ENTER_METHOD();
-  int res;
+  int error;
   if (share->wrapper_mode)
   {
-    res = wrapper_final_add_index(add, commit);
+    error = wrapper_final_add_index(add, commit);
   } else {
-    res = storage_final_add_index(add, commit);
+    error = storage_final_add_index(add, commit);
   }
-  DBUG_RETURN(res);
+  DBUG_RETURN(error);
 }
 #endif
 
