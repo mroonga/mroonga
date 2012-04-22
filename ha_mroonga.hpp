@@ -217,9 +217,6 @@ private:
   grn_obj *key_accessor;
   grn_obj *sorted_result;
   grn_obj *matched_record_keys;
-  /// for range search
-  uchar **keys_min;
-  uchar **keys_max;
 
   // for error report
   uint dup_key;
