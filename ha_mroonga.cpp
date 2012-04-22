@@ -5493,7 +5493,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
   int flags = 0;
   uint size_min = 0, size_max = 0;
   ha_rows row_count = 0;
-  uchar *val_min = NULL, *val_max = NULL;
+  uchar *key_min = NULL, *key_max = NULL;
   KEY key_info = table->s->key_info[key_nr];
   bool is_multiple_column_index = key_info.key_parts > 1;
 
@@ -5503,24 +5503,24 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
         range_min->length == range_max->length &&
         memcmp(range_min->key, range_max->key, range_min->length) == 0) {
       flags |= GRN_CURSOR_PREFIX;
-      val_min = keys_min[key_nr];
+      key_min = keys_min[key_nr];
       storage_encode_multiple_column_key(&key_info,
                                          range_min->key, range_min->length,
-                                         val_min, &size_min,
+                                         key_min, &size_min,
                                          false);
     } else {
       if (range_min) {
-        val_min = keys_min[key_nr];
+        key_min = keys_min[key_nr];
         storage_encode_multiple_column_key(&key_info,
                                            range_min->key, range_min->length,
-                                           val_min, &size_min,
+                                           key_min, &size_min,
                                            false);
       }
       if (range_max) {
-        val_max = keys_max[key_nr];
+        key_max = keys_max[key_nr];
         storage_encode_multiple_column_key(&key_info,
                                            range_max->key, range_max->length,
-                                           val_max, &size_max,
+                                           key_max, &size_max,
                                            false);
       }
     }
@@ -5541,11 +5541,11 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
 
     if (range_min) {
       storage_encode_key(field, range_min->key, keys_min[key_nr], &size_min);
-      val_min = keys_min[key_nr];
+      key_min = keys_min[key_nr];
     }
     if (range_max) {
       storage_encode_key(field, range_max->key, keys_max[key_nr], &size_max);
-      val_max = keys_max[key_nr];
+      key_max = keys_max[key_nr];
     }
   }
 
@@ -5561,8 +5561,8 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     DBUG_PRINT("info", ("mroonga: use primary key"));
     grn_table_cursor *cursor;
     cursor = grn_table_cursor_open(ctx, grn_table,
-                                   val_min, size_min,
-                                   val_max, size_max,
+                                   key_min, size_min,
+                                   key_max, size_max,
                                    0, -1, flags);
     while (grn_table_cursor_next(ctx, cursor) != GRN_ID_NIL) {
       row_count++;
@@ -5580,8 +5580,8 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     grn_table_cursor *index_cursor;
 
     cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
-                                   val_min, size_min,
-                                   val_max, size_max,
+                                   key_min, size_min,
+                                   key_max, size_max,
                                    0, -1, flags);
     index_cursor = grn_index_cursor_open(ctx, cursor,
                                          grn_index_columns[key_nr],
@@ -5762,7 +5762,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   KEY key_info = table->key_info[key_nr];
   int flags = 0;
   uint size_min = 0, size_max = 0;
-  uchar *val_min = NULL, *val_max = NULL;
+  uchar *key_min = NULL, *key_max = NULL;
 
   clear_cursor();
   clear_cursor_geo();
@@ -5772,10 +5772,10 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
     mrn_change_encoding(ctx, NULL);
     flags |= GRN_CURSOR_PREFIX;
     uint key_length = calculate_key_len(table, active_index, key, keypart_map);
-    val_min = keys_min[active_index];
+    key_min = keys_min[active_index];
     storage_encode_multiple_column_key(&key_info,
                                        key, key_length,
-                                       val_min, &size_min,
+                                       key_min, &size_min,
                                        false);
   } else if (mrn_is_geo_key(&key_info)) {
     error = mrn_change_encoding(ctx, key_info.key_part->field->charset());
@@ -5798,8 +5798,8 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       int column_name_size = strlen(column_name);
 
       storage_encode_key(field, key, keys_min[key_nr], &size_min);
-      val_min = keys_min[key_nr];
-      val_max = keys_min[key_nr];
+      key_min = keys_min[key_nr];
+      key_max = keys_min[key_nr];
       size_max = size_min;
       // for _id
       if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
@@ -5819,10 +5819,10 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       find_flag == HA_READ_PREFIX_LAST_OR_PREV
       ) {
       storage_encode_key(field, key, keys_max[key_nr], &size_max);
-      val_max = keys_max[key_nr];
+      key_max = keys_max[key_nr];
     } else {
       storage_encode_key(field, key, keys_min[key_nr], &size_min);
-      val_min = keys_min[key_nr];
+      key_min = keys_min[key_nr];
     }
   }
 
@@ -5841,8 +5841,8 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   if (key_nr == pkey_nr) {
     DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table,
-                                   val_min, size_min,
-                                   val_max, size_max,
+                                   key_min, size_min,
+                                   key_max, size_max,
                                    0, -1, flags);
   } else {
     if (is_multiple_column_index) {
@@ -5851,8 +5851,8 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       DBUG_PRINT("info", ("mroonga: use key%u", key_nr));
     }
     index_table_cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
-                                               val_min, size_min,
-                                               val_max, size_max,
+                                               key_min, size_min,
+                                               key_max, size_max,
                                                0, -1, flags);
     cursor = grn_index_cursor_open(ctx, index_table_cursor,
                                    grn_index_columns[key_nr],
@@ -5907,7 +5907,7 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
 
   int flags = GRN_CURSOR_DESCENDING, error;
   uint size_min = 0, size_max = 0;
-  uchar *val_min = NULL, *val_max = NULL;
+  uchar *key_min = NULL, *key_max = NULL;
 
   clear_cursor();
 
@@ -5916,10 +5916,10 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
     mrn_change_encoding(ctx, NULL);
     flags |= GRN_CURSOR_PREFIX;
     uint key_length = calculate_key_len(table, active_index, key, keypart_map);
-    val_min = keys_min[key_nr];
+    key_min = keys_min[key_nr];
     storage_encode_multiple_column_key(&key_info,
                                        key, key_length,
-                                       val_min, &size_min,
+                                       key_min, &size_min,
                                        false);
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
@@ -5929,8 +5929,8 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
       DBUG_RETURN(error);
 
     storage_encode_key(field, key, keys_min[key_nr], &size_min);
-    val_min = keys_min[key_nr];
-    val_max = keys_min[key_nr];
+    key_min = keys_min[key_nr];
+    key_max = keys_min[key_nr];
     size_max = size_min;
   }
 
@@ -5938,7 +5938,7 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
   if (key_nr == pkey_nr) {
     DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table,
-                                   val_min, size_min, val_max, size_max,
+                                   key_min, size_min, key_max, size_max,
                                    0, -1, flags);
   } else {
     if (is_multiple_column_index) {
@@ -5947,8 +5947,8 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
       DBUG_PRINT("info", ("mroonga: use key%u", key_nr));
     }
     index_table_cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
-                                               val_min, size_min,
-                                               val_max, size_max,
+                                               key_min, size_min,
+                                               key_max, size_max,
                                                0, -1, flags);
     cursor = grn_index_cursor_open(ctx, index_table_cursor,
                                    grn_index_columns[key_nr],
@@ -6274,7 +6274,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
                    end_key ? end_key->keypart_map : 0, false);
   int flags = 0, error;
   uint size_min = 0, size_max = 0;
-  uchar *val_min = NULL, *val_max = NULL;
+  uchar *key_min = NULL, *key_max = NULL;
   KEY key_info = table->s->key_info[active_index];
 
   clear_cursor();
@@ -6286,24 +6286,24 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
         start_key->length == end_key->length &&
         memcmp(start_key->key, end_key->key, start_key->length) == 0) {
       flags |= GRN_CURSOR_PREFIX;
-      val_min = keys_min[active_index];
+      key_min = keys_min[active_index];
       storage_encode_multiple_column_key(&key_info,
                                          start_key->key, start_key->length,
-                                         val_min, &size_min,
+                                         key_min, &size_min,
                                          false);
     } else {
       if (start_key) {
-        val_min = keys_min[active_index];
+        key_min = keys_min[active_index];
         storage_encode_multiple_column_key(&key_info,
                                            start_key->key, start_key->length,
-                                           val_min, &size_min,
+                                           key_min, &size_min,
                                            false);
       }
       if (end_key) {
-        val_max = keys_max[active_index];
+        key_max = keys_max[active_index];
         storage_encode_multiple_column_key(&key_info,
                                            end_key->key, end_key->length,
-                                           val_max, &size_max,
+                                           key_max, &size_max,
                                            false);
       }
     }
@@ -6318,7 +6318,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
     if (start_key) {
       storage_encode_key(field, start_key->key, keys_min[active_index],
                          &size_min);
-      val_min = keys_min[active_index];
+      key_min = keys_min[active_index];
       if (start_key->flag == HA_READ_KEY_EXACT) {
         // for _id
         if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
@@ -6341,7 +6341,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
     if (end_key) {
       storage_encode_key(field, end_key->key, keys_max[active_index],
                          &size_max);
-      val_max = keys_max[active_index];
+      key_max = keys_max[active_index];
     }
   }
 
@@ -6356,7 +6356,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
   if (active_index == pkey_nr) {
     DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table,
-                                   val_min, size_min, val_max, size_max,
+                                   key_min, size_min, key_max, size_max,
                                    0, -1, flags);
   } else {
     if (is_multiple_column_index) {
@@ -6366,8 +6366,8 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
     }
     index_table_cursor = grn_table_cursor_open(ctx,
                                                grn_index_tables[active_index],
-                                               val_min, size_min,
-                                               val_max, size_max,
+                                               key_min, size_min,
+                                               key_max, size_max,
                                                0, -1, flags);
     cursor = grn_index_cursor_open(ctx, index_table_cursor,
                                    grn_index_columns[active_index],
