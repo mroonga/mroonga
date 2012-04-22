@@ -4437,7 +4437,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
   }
   grn_obj_unlink(ctx, &colbuf);
 
-  error = storage_write_row_indexes(buf, record_id);
+  error = storage_write_row_multiple_column_indexes(buf, record_id);
   if (error) {
     goto err2;
   }
@@ -4467,8 +4467,10 @@ err1:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id,
-                                        KEY *key_info, grn_obj *index_column)
+int ha_mroonga::storage_write_row_multiple_column_index(uchar *buf,
+                                                        grn_id record_id,
+                                                        KEY *key_info,
+                                                        grn_obj *index_column)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -4499,7 +4501,8 @@ int ha_mroonga::storage_write_row_index(uchar *buf, grn_id record_id,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_write_row_indexes(uchar *buf, grn_id record_id)
+int ha_mroonga::storage_write_row_multiple_column_indexes(uchar *buf,
+                                                          grn_id record_id)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -4520,8 +4523,10 @@ int ha_mroonga::storage_write_row_indexes(uchar *buf, grn_id record_id)
     }
 
     grn_obj *index_column = grn_index_columns[i];
-    if ((error = storage_write_row_index(buf, record_id, &key_info,
-                                         index_column)))
+    if ((error = storage_write_row_multiple_column_index(buf,
+                                                         record_id,
+                                                         &key_info,
+                                                         index_column)))
     {
       goto err;
     }
@@ -11004,10 +11009,10 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
           }
           break;
         }
-        if ((error = storage_write_row_index(table->record[0],
-                                             record_id,
-                                             current_key_info,
-                                             index_columns[i + n_keys])))
+        if ((error = storage_write_row_multiple_column_index(table->record[0],
+                                                             record_id,
+                                                             current_key_info,
+                                                             index_columns[i + n_keys])))
         {
           break;
         }

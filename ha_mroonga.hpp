@@ -624,9 +624,11 @@ private:
   int wrapper_write_row(uchar *buf);
   int wrapper_write_row_index(uchar *buf);
   int storage_write_row(uchar *buf);
-  int storage_write_row_index(uchar *buf, grn_id record_id,
-                              KEY *key_info, grn_obj *index_column);
-  int storage_write_row_indexes(uchar *buf, grn_id record_id);
+  int storage_write_row_multiple_column_index(uchar *buf,
+                                              grn_id record_id,
+                                              KEY *key_info,
+                                              grn_obj *index_column);
+  int storage_write_row_multiple_column_indexes(uchar *buf, grn_id record_id);
   int storage_write_row_unique_index(uchar *buf, grn_id record_id,
                                      KEY *key_info, grn_obj *index_table,
                                      grn_id *key_id);
