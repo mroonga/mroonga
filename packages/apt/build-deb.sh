@@ -7,7 +7,6 @@ USER_NAME=$(cat /tmp/build-user)
 VERSION=$(cat /tmp/build-version)
 DEPENDED_PACKAGES=$(cat /tmp/depended-packages)
 BUILD_SCRIPT=/tmp/build-deb-in-chroot.sh
-CODE_NAME=$(cat /tmp/code-name)
 
 mysql_server_package=mysql-server-5.1
 
@@ -23,24 +22,6 @@ run()
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
 
-case $CODE_NAME in
-    lenny|squeeze|wheezy)
-	cat <<EOF > /etc/apt/sources.list.d/security.list
-deb http://security.debian.org/ ${CODE_NAME}/updates main
-deb-src http://security.debian.org/ ${CODE_NAME}/updates main
-EOF
-	;;
-    unstable)
-	:
-	;;
-    *)
-	cat <<EOF > /etc/apt/sources.list.d/security.list
-deb http://security.ubuntu.com/ubuntu ${CODE_NAME}-security main restricted
-deb-src http://security.ubuntu.com/ubuntu ${CODE_NAME}-security main restricted
-EOF
-	;;
-esac
-
 groonga_apt_key=1C837F31
 if ! apt-key list | grep -q ${groonga_apt_key}; then
     apt-key adv --recv-keys --keyserver keyserver.ubuntu.com ${groonga_apt_key}
@@ -52,6 +33,35 @@ if [ ! -x /usr/bin/aptitude ]; then
 fi
 run aptitude update -V -D
 run aptitude safe-upgrade -V -D -y
+
+security_list=/etc/apt/sources.list.d/security.list
+if [ ! -d "${security_list}" ]; then
+    run aptitude install -V -D -y lsb-release
+
+    distribution=$(lsb_release --id --short)
+    code_name=$(lsb_release --codename --short)
+    case ${distribution} in
+	Debian)
+	    if [ "${code_name}" = "sid" ]; then
+		touch "${security_list}"
+	    else
+		cat <<EOF > "${security_list}"
+deb http://security.debian.org/ ${code_name}/updates main
+deb-src http://security.debian.org/ ${code_name}/updates main
+EOF
+		;;
+	    fi
+	Ubuntu)
+	    cat <<EOF > "${security_list}"
+deb http://security.ubuntu.com/ubuntu ${code_name}-security main restricted
+deb-src http://security.ubuntu.com/ubuntu ${code_name}-security main restricted
+EOF
+	    ;;
+    esac
+
+    run aptitude update -V -D
+    run aptitude safe-upgrade -V -D -y
+fi
 
 run aptitude install -V -D -y devscripts ${DEPENDED_PACKAGES}
 run aptitude build-dep -V -D -y ${mysql_server_package}
