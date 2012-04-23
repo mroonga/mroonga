@@ -6569,7 +6569,7 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
               grn_expr_append_op(info->ctx, expression, GRN_OP_AND, 2);
             }
           }
-        break;
+          break;
         default:
           break;
         }
