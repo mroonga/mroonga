@@ -7,6 +7,7 @@ USER_NAME=$(cat /tmp/build-user)
 VERSION=$(cat /tmp/build-version)
 DEPENDED_PACKAGES=$(cat /tmp/depended-packages)
 BUILD_SCRIPT=/tmp/build-deb-in-chroot.sh
+CODE_NAME=$(cat /tmp/code-name)
 
 mysql_server_package=mysql-server-5.1
 
@@ -21,6 +22,24 @@ run()
 
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
+
+case $code_name in
+    lenny|squeeze|wheezy)
+	cat <<EOF > /etc/apt/sources.list.d/security.list
+deb http://security.debian.org/ ${code_name}/updates main
+deb-src http://security.debian.org/ ${code_name}/updates main
+EOF
+	;;
+    unstable)
+	:
+	;;
+    *)
+	cat <<EOF > /etc/apt/sources.list.d/security.list
+deb http://security.ubuntu.com/ubuntu ${code_name}-security main restricted
+deb-src http://security.ubuntu.com/ubuntu ${code_name}-security main restricted
+EOF
+	;;
+esac
 
 groonga_apt_key=1C837F31
 if ! apt-key list | grep -q ${groonga_apt_key}; then

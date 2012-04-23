@@ -51,7 +51,6 @@ build_chroot()
 	    run_sudo sed -i'' \
 		-e 's,http://archive,http://jp.archive,' \
 		-e 's/main$/main universe/' \
-		-e "\$adeb http://security.ubuntu.com/ubuntu ${code_name}-security main universe" \
 		$base_dir/etc/apt/sources.list
 	    ;;
     esac
@@ -104,6 +103,7 @@ build()
     run echo $PACKAGE > ${CHROOT_BASE}/$target/tmp/build-package
     run echo $VERSION > ${CHROOT_BASE}/$target/tmp/build-version
     run echo $build_user > ${CHROOT_BASE}/$target/tmp/build-user
+    run echo $code_name > ${CHROOT_BASE}/$target/tmp/code-name
     run cp ${script_base_dir}/${PACKAGE}-depended-packages \
 	${CHROOT_BASE}/$target/tmp/depended-packages
     run cp ${script_base_dir}/build-deb.sh \
