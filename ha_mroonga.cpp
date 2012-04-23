@@ -9669,6 +9669,10 @@ int ha_mroonga::wrapper_truncate_index()
 
   int error = 0;
 
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
   if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
     DBUG_RETURN(error);
@@ -9725,6 +9729,10 @@ int ha_mroonga::storage_truncate_index()
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
 
   grn_rc rc;
   uint i;
