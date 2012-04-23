@@ -5,7 +5,7 @@ Maintainer: Kouhei Sutou <kou@clear-code.com>
 Build-Depends:
 	debhelper (>= 7.0.50),
 	autotools-dev,
-	libgroonga-dev (>= 2.0.0),
+	libgroonga-dev (>= 2.0.2),
 	libmysqlclient-dev,
 	libssl-dev
 Standards-Version: 3.9.1
@@ -19,7 +19,7 @@ Breaks: mysql-server-groonga (<< 1.10-1)
 Depends:
 	${misc:Depends},
 	${shlibs:Depends},
-	libgroonga0 (>= 2.0.0),
+	libgroonga0 (>= 2.0.2),
 	mysql-server
 Description: A fast fulltext searchable storage engine for MySQL.
  Mroonga is a fast fulltext searchable storage engine for MySQL.
