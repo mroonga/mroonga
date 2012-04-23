@@ -23,11 +23,11 @@ run()
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
 
-case $code_name in
+case $CODE_NAME in
     lenny|squeeze|wheezy)
 	cat <<EOF > /etc/apt/sources.list.d/security.list
-deb http://security.debian.org/ ${code_name}/updates main
-deb-src http://security.debian.org/ ${code_name}/updates main
+deb http://security.debian.org/ ${CODE_NAME}/updates main
+deb-src http://security.debian.org/ ${CODE_NAME}/updates main
 EOF
 	;;
     unstable)
@@ -35,8 +35,8 @@ EOF
 	;;
     *)
 	cat <<EOF > /etc/apt/sources.list.d/security.list
-deb http://security.ubuntu.com/ubuntu ${code_name}-security main restricted
-deb-src http://security.ubuntu.com/ubuntu ${code_name}-security main restricted
+deb http://security.ubuntu.com/ubuntu ${CODE_NAME}-security main restricted
+deb-src http://security.ubuntu.com/ubuntu ${CODE_NAME}-security main restricted
 EOF
 	;;
 esac
