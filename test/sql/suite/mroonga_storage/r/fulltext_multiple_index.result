@@ -29,5 +29,5 @@ from diaries
 where match(title) against("survey") and
 match(body) against("groonga");
 id	title	body	match(title) against("survey")	match(body) against("groonga")
-1	survey	will start groonga!	1	1
+1	survey	will start groonga!	1048577	149797
 drop table diaries;

@@ -6690,7 +6690,7 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
     GRN_TEXT_SET(info->ctx, &query, key->ptr(), key->length());
     grn_expr_append_obj(info->ctx, expression, match_columns, GRN_OP_PUSH, 1);
     grn_expr_append_const(info->ctx, expression, &query, GRN_OP_PUSH, 1);
-    grn_expr_append_op(info->ctx, expression, GRN_OP_MATCH, 2);
+    grn_expr_append_op(info->ctx, expression, GRN_OP_SIMILAR, 2);
     grn_obj_unlink(info->ctx, &query);
   }
 
