@@ -6478,12 +6478,14 @@ int ha_mroonga::ft_init()
 void ha_mroonga::wrapper_ft_end()
 {
   MRN_DBUG_ENTER_METHOD();
+  handler::ft_end();
   DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_ft_end()
 {
   MRN_DBUG_ENTER_METHOD();
+  handler::ft_end();
   DBUG_VOID_RETURN;
 }
 
