@@ -26,15 +26,17 @@ case "${MYSQL_VERSION}" in
 	if ! test -d "${build_test_suites_dir}"; then
 	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
 	fi
-	if ! test -d "${build_test_suites_dir}"; then
-	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
+	maria_storage_dir="${MYSQL_SOURCE_DIR}/storage/maria"
+	if test -d "${maria_storage_dir}"; then
+	    mariadb="yes"
+	else
+	    mariadb="no"
 	fi
-	plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
-	if ! test -d "${plugins_dir}"; then
-	    if ! test -d "${MYSQL_BUILD_DIR}/plugin/mroonga"; then
-		ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
-	    fi
+	if test "${mariadb}" = "yes"; then
+	    ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
 	    plugins_dir=
+	else
+	    plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
 	fi
 	;;
 esac
@@ -75,13 +77,15 @@ done
 
 innodb_test_suite_dir="${build_test_suites_dir}/innodb"
 mroonga_wrapper_innodb_test_suite_dir="${build_test_suites_dir}/mroonga_wrapper_innodb"
+mroonga_wrapper_innodb_include_dir="${mroonga_wrapper_innodb_test_suite_dir}/include/"
 if test "$0" -nt "$(dirname "${mroonga_wrapper_innodb_test_suite_dir}")"; then
     rm -rf "${mroonga_wrapper_innodb_test_suite_dir}"
 fi
 if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
     cp -rp "${innodb_test_suite_dir}" "${mroonga_wrapper_innodb_test_suite_dir}"
+    mkdir -p "${mroonga_wrapper_innodb_include_dir}"
     cp -rp "${build_test_include_dir}"/innodb[-_]*.inc \
-	"${mroonga_wrapper_innodb_test_suite_dir}/include/"
+	"${mroonga_wrapper_innodb_include_dir}"
     ruby -i'' \
 	-pe "\$_.gsub!(/\\bengine\\s*=\\s*innodb\\b([^;\\n]*)/i,
                        \"ENGINE=mroonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")

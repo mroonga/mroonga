@@ -114,24 +114,24 @@ c1	c2
 5	ta ti ii ii to
 select *,match(c2) against("ii") from t1 where match(c2) against("ii") order by match(c2) against("ii") desc;
 c1	c2	match(c2) against("ii")
-3	aa ii ii ii oo	3
-5	ta ti ii ii to	2
-1	aa ii uu ee oo	1
+3	aa ii ii ii oo	524289
+5	ta ti ii ii to	349526
+1	aa ii uu ee oo	174763
 select *,match(c2) against("ii") from t2 where match(c2) against("ii") order by match(c2) against("ii") asc;
 c1	c2	match(c2) against("ii")
-1	aa ii uu ee oo	1
-5	ta ti ii ii to	2
-3	aa ii ii ii oo	3
+1	aa ii uu ee oo	174763
+5	ta ti ii ii to	349526
+3	aa ii ii ii oo	524289
 select c1,c2,match(c2) against("ii") from t1 where match(c2) against("ii");
 c1	c2	match(c2) against("ii")
-1	aa ii uu ee oo	1
-3	aa ii ii ii oo	3
-5	ta ti ii ii to	2
+1	aa ii uu ee oo	174763
+3	aa ii ii ii oo	524289
+5	ta ti ii ii to	349526
 select c1,c2,match(c2) against("ii") from t1 where match(c2) against("ii");
 c1	c2	match(c2) against("ii")
-1	aa ii uu ee oo	1
-3	aa ii ii ii oo	3
-5	ta ti ii ii to	2
+1	aa ii uu ee oo	174763
+3	aa ii ii ii oo	524289
+5	ta ti ii ii to	349526
 drop table t1,t2;
 create table t1 (c1 int primary key, c2 int, c3 text, fulltext index ft(c3)) COMMENT = 'engine "myisam"';
 insert into t1 values(1,10,"aa ii uu ee oo");
@@ -154,10 +154,10 @@ c1	c2	c3
 8	20	ka ki ku ke ko
 select *,match(c3) against("uu") from t1 where match(c3) against("uu");
 c1	c2	c3	match(c3) against("uu")
-1	10	aa ii uu ee oo	1
-3	10	aa ii uu ee oo	1
-5	20	aa ii uu ee oo	1
-7	20	aa ii uu ee oo	1
+1	10	aa ii uu ee oo	131073
+3	10	aa ii uu ee oo	131073
+5	20	aa ii uu ee oo	131073
+7	20	aa ii uu ee oo	131073
 select * from t1 where not match(c3) against("uu");
 c1	c2	c3
 2	10	ka ki ku ke ko

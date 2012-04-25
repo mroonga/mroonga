@@ -24,7 +24,7 @@ WHERE v.video_id = (video_id);
 SELECT *, MATCH(description) AGAINST("cat") FROM videos_groonga
 WHERE MATCH(description) AGAINST("cat");
 id	video_id	description	tags_unpack	MATCH(description) AGAINST("cat")
-2	video-2	My Cat		1
+2	video-2	My Cat		1048577
 INSERT INTO videos_master VALUES (3, "video-3", "My Dog", "family dog");
 REPLACE INTO videos_groonga
 SELECT v.id, v.video_id, v.description, NULL
@@ -33,7 +33,7 @@ WHERE v.video_id = (video_id);
 SELECT *, MATCH(description) AGAINST("my") FROM videos_groonga
 WHERE MATCH(description) AGAINST("my");
 id	video_id	description	tags_unpack	MATCH(description) AGAINST("my")
-1	video-1	My Familly		1
-2	video-2	My Cat		1
-3	video-3	My Dog		1
+1	video-1	My Familly		209716
+2	video-2	My Cat		209716
+3	video-3	My Dog		209716
 DROP TABLE videos_master, videos_groonga;

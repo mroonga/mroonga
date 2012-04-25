@@ -3,7 +3,7 @@
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/16/SRPMS
 
-%define groonga_required_version 2.0.0
+%define groonga_required_version 2.0.2
 
 Name:		mysql-mroonga
 Version:	@VERSION@
@@ -102,6 +102,7 @@ eval $command || \
 %changelog
 * Sun Apr 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.02-0
 - new upstream release.
+* require groonga >= 2.0.2.
 
 * Thu Mar 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.01-0
 - new upstream release.

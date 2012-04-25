@@ -34,6 +34,35 @@ fi
 run aptitude update -V -D
 run aptitude safe-upgrade -V -D -y
 
+security_list=/etc/apt/sources.list.d/security.list
+if [ ! -d "${security_list}" ]; then
+    run aptitude install -V -D -y lsb-release
+
+    distribution=$(lsb_release --id --short)
+    code_name=$(lsb_release --codename --short)
+    case ${distribution} in
+	Debian)
+	    if [ "${code_name}" = "sid" ]; then
+		touch "${security_list}"
+	    else
+		cat <<EOF > "${security_list}"
+deb http://security.debian.org/ ${code_name}/updates main
+deb-src http://security.debian.org/ ${code_name}/updates main
+EOF
+		;;
+	    fi
+	Ubuntu)
+	    cat <<EOF > "${security_list}"
+deb http://security.ubuntu.com/ubuntu ${code_name}-security main restricted
+deb-src http://security.ubuntu.com/ubuntu ${code_name}-security main restricted
+EOF
+	    ;;
+    esac
+
+    run aptitude update -V -D
+    run aptitude safe-upgrade -V -D -y
+fi
+
 run aptitude install -V -D -y devscripts ${DEPENDED_PACKAGES}
 run aptitude build-dep -V -D -y ${mysql_server_package}
 run aptitude clean

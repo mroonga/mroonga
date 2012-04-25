@@ -188,6 +188,7 @@ private:
   int mrn_lock_type;
 
   // for groonga objects
+  grn_ctx ctx_entity_;
   grn_ctx *ctx;
   grn_obj *grn_table;
   grn_obj **grn_columns;
@@ -216,11 +217,6 @@ private:
   grn_obj *key_accessor;
   grn_obj *sorted_result;
   grn_obj *matched_record_keys;
-  /// for range search
-  uchar **key_min;
-  uchar **key_max;
-  int *key_min_len;
-  int *key_max_len;
 
   // for error report
   uint dup_key;
@@ -628,9 +624,11 @@ private:
   int wrapper_write_row(uchar *buf);
   int wrapper_write_row_index(uchar *buf);
   int storage_write_row(uchar *buf);
-  int storage_write_row_index(uchar *buf, grn_id record_id,
-                              KEY *key_info, grn_obj *index_column);
-  int storage_write_row_indexes(uchar *buf, grn_id record_id);
+  int storage_write_row_multiple_column_index(uchar *buf,
+                                              grn_id record_id,
+                                              KEY *key_info,
+                                              grn_obj *index_column);
+  int storage_write_row_multiple_column_indexes(uchar *buf, grn_id record_id);
   int storage_write_row_unique_index(uchar *buf, grn_id record_id,
                                      KEY *key_info, grn_obj *index_table,
                                      grn_id *key_id);
