@@ -3804,6 +3804,22 @@ int ha_mroonga::storage_info(uint flag)
     errkey = dup_key;
   }
 
+  if ((flag & HA_STATUS_AUTO) && table->found_next_number_field) {
+    THD *thd = ha_thd();
+    struct system_variables *variables = &thd->variables;
+    ulonglong nb_reserved_values;
+    bool next_number_field_is_null = !table->next_number_field;
+    if (next_number_field_is_null) {
+      table->next_number_field = table->found_next_number_field;
+    }
+    storage_get_auto_increment(variables->auto_increment_offset,
+                               variables->auto_increment_increment, 1,
+                               &stats.auto_increment_value,
+                               &nb_reserved_values);
+    if (next_number_field_is_null) {
+      table->next_number_field = NULL;
+    }
+  }
   DBUG_RETURN(0);
 }
 

@@ -12,3 +12,13 @@ show table status like 't2';
 Name	Engine	Version	Row_format	Rows	Avg_row_length	Data_length	Max_data_length	Index_length	Data_free	Auto_increment	Create_time	Update_time	Check_time	Collation	Checksum	Create_options	Comment
 t2	mroonga	10	Fixed	0	0	0	0	0	0	NULL	NULL	NULL	NULL	latin1_swedish_ci	NULL		
 drop table t1,t2;
+create table t1 (c1 int auto_increment, primary key(c1));
+show table status like 't1';
+Name	Engine	Version	Row_format	Rows	Avg_row_length	Data_length	Max_data_length	Index_length	Data_free	Auto_increment	Create_time	Update_time	Check_time	Collation	Checksum	Create_options	Comment
+t1	mroonga	10	Fixed	0	0	0	0	0	0	1	NULL	NULL	NULL	latin1_swedish_ci	NULL		
+drop table t1;
+create table t1 (c1 int, primary key(c1));
+show table status like 't1';
+Name	Engine	Version	Row_format	Rows	Avg_row_length	Data_length	Max_data_length	Index_length	Data_free	Auto_increment	Create_time	Update_time	Check_time	Collation	Checksum	Create_options	Comment
+t1	mroonga	10	Fixed	0	0	0	0	0	0	NULL	NULL	NULL	NULL	latin1_swedish_ci	NULL		
+drop table t1;
