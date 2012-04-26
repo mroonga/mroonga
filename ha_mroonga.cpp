@@ -6514,36 +6514,6 @@ void ha_mroonga::ft_end()
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::merge_matched_record_keys(grn_obj *matched_result)
-{
-  MRN_DBUG_ENTER_METHOD();
-  mrn_change_encoding(ctx, NULL);
-
-  grn_operator operation = GRN_OP_AND;
-
-  if (!matched_record_keys) {
-    matched_record_keys = grn_table_create(ctx, NULL, 0, NULL,
-                                           GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-                                           grn_table, 0);
-    // OR for empty table
-    operation = GRN_OP_OR;
-  }
-
-  grn_rc rc;
-  rc = grn_table_setoperation(ctx, matched_record_keys, matched_result,
-                              matched_record_keys, operation);
-  if (rc) {
-    char error_message[MRN_MESSAGE_BUFFER_SIZE];
-    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "failed to merge matched record keys: <%s>",
-             ctx->errbuf);
-    my_message(ER_ERROR_ON_READ, error_message, MYF(0));
-    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
-  }
-
-  DBUG_VOID_RETURN;
-}
-
 void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
   struct st_mrn_ft_info *info, grn_obj *expression)
 {

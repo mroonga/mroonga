@@ -719,7 +719,6 @@ private:
   int generic_ft_init();
   int wrapper_ft_init();
   int storage_ft_init();
-  void merge_matched_record_keys(grn_obj *matched_result);
   void wrapper_ft_end();
   void storage_ft_end();
   FT_INFO *wrapper_ft_init_ext(uint flags, uint key_nr, String *key);
