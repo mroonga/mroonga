@@ -1396,7 +1396,6 @@ static int mrn_deinit(void *p)
   pthread_mutex_destroy(&mrn_open_tables_mutex);
   my_hash_free(&mrn_allocated_thds);
   pthread_mutex_destroy(&mrn_allocated_thds_mutex);
-  pthread_mutex_destroy(&mrn_log_mutex);
   pthread_mutex_destroy(&mrn_db_mutex);
   GRN_HASH_EACH(ctx, mrn_hash, id, NULL, 0, &value, {
     grn_obj *db;
@@ -1406,13 +1405,14 @@ static int mrn_deinit(void *p)
   grn_hash_close(ctx, mrn_hash);
   grn_obj_unlink(ctx, mrn_db);
 
+  grn_ctx_fin(ctx);
+  grn_fin();
+
   if (mrn_log_file_opened) {
     fclose(mrn_log_file);
     mrn_log_file_opened = false;
   }
-
-  grn_ctx_fin(ctx);
-  grn_fin();
+  pthread_mutex_destroy(&mrn_log_mutex);
 
   return 0;
 }
