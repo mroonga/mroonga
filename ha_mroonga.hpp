@@ -142,7 +142,6 @@ struct st_mrn_ft_info
   grn_ctx *ctx;
   grn_obj *table;
   grn_obj *result;
-  grn_obj *sorted_result;
   grn_obj *score_column;
   grn_obj key;
   grn_obj score;
@@ -466,8 +465,7 @@ private:
   bool is_fulltext_search_item(const Item *item);
   bool is_grn_zero_column_value(grn_obj *column, grn_obj *value);
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
-                              longlong *limit,
-                              grn_obj *target_table, grn_obj *score_column);
+                              longlong *limit);
 
   long long int get_grn_time_from_timestamp_field(Field_timestamp *field);
 
@@ -729,6 +727,9 @@ private:
   FT_INFO *storage_ft_init_ext(uint flags, uint key_nr, String *key);
   void generic_ft_init_ext_add_conditions_fast_order_limit(
       struct st_mrn_ft_info *info, grn_obj *expression);
+  struct st_mrn_ft_info *generic_ft_init_ext_select(uint flags,
+                                                    uint key_nr,
+                                                    String *key);
   FT_INFO *generic_ft_init_ext(uint flags, uint key_nr, String *key);
   int wrapper_ft_read(uchar *buf);
   int storage_ft_read(uchar *buf);

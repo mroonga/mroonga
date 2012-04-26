@@ -1440,10 +1440,10 @@ static void mrn_generic_ft_close_search(FT_INFO *handler)
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
   grn_obj_unlink(info->ctx, info->result);
-  grn_obj_unlink(info->ctx, info->sorted_result);
   grn_obj_unlink(info->ctx, info->score_column);
   grn_obj_unlink(info->ctx, &(info->key));
   grn_obj_unlink(info->ctx, &(info->score));
+  grn_ctx_fin(info->ctx);
   delete info;
   DBUG_VOID_RETURN;
 }
@@ -6603,27 +6603,25 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
   DBUG_VOID_RETURN;
 }
 
-FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
+struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
+                                                              uint key_nr,
+                                                              String *key)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  check_count_skip(0, 0, true);
-
-  clear_cursor();
-
-  mrn_change_encoding(ctx, system_charset_info);
   struct st_mrn_ft_info *info = new st_mrn_ft_info();
   info->mroonga = this;
-  info->ctx = ctx;
+  info->ctx = grn_ctx_open(0);
+  grn_ctx_use(info->ctx, grn_ctx_db(ctx));
   info->table = grn_table;
-  info->result = grn_table_create(ctx, NULL, 0, NULL,
+  info->result = grn_table_create(info->ctx, NULL, 0, NULL,
                                   GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                   grn_table, 0);
   info->score_column = grn_obj_column(info->ctx, info->result,
                                       MRN_COLUMN_NAME_SCORE,
                                       strlen(MRN_COLUMN_NAME_SCORE));
   GRN_TEXT_INIT(&(info->key), 0);
-  grn_bulk_space(ctx, &(info->key), table->key_info->key_length);
+  grn_bulk_space(info->ctx, &(info->key), table->key_info->key_length);
   GRN_INT32_INIT(&(info->score), 0);
   info->active_index = key_nr;
   info->key_info = &(table->key_info[key_nr]);
@@ -6639,14 +6637,9 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table,
                             expression, expression_variable);
 
-  grn_table_sort_key *sort_keys = NULL;
-  int n_sort_keys = 0;
-  longlong limit = -1;
-  check_fast_order_limit(&sort_keys, &n_sort_keys, &limit,
-                         info->result, info->score_column);
-
   grn_rc rc = GRN_SUCCESS;
-  mrn_change_encoding(ctx, table->key_info[key_nr].key_part->field->charset());
+  mrn_change_encoding(info->ctx,
+                      table->key_info[key_nr].key_part->field->charset());
   if (flags & FT_BOOL) {
     const char *keyword, *keyword_original;
     uint keyword_length, keyword_length_original;
@@ -6721,22 +6714,56 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   grn_obj_unlink(info->ctx, expression);
   grn_obj_unlink(info->ctx, match_columns);
 
+  DBUG_RETURN(info);
+}
+
+FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  check_count_skip(0, 0, true);
+
+  clear_cursor();
+
+  mrn_change_encoding(ctx, system_charset_info);
+  grn_operator operation = GRN_OP_AND;
+  if (!matched_record_keys) {
+    matched_record_keys = grn_table_create(ctx, NULL, 0, NULL,
+                                           GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                           grn_table, 0);
+    operation = GRN_OP_OR;
+  }
+
+  grn_table_sort_key *sort_keys = NULL;
+  int n_sort_keys = 0;
+  longlong limit = -1;
+  check_fast_order_limit(&sort_keys, &n_sort_keys, &limit);
+
+  struct st_mrn_ft_info *info =
+    generic_ft_init_ext_select(flags, key_nr, key);
+
+  grn_rc rc;
+  rc = grn_table_setoperation(ctx, matched_record_keys, info->result,
+                              matched_record_keys, operation);
+  if (rc) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to merge matched record keys: <%s>",
+             ctx->errbuf);
+    my_message(ER_ERROR_ON_READ, error_message, MYF(0));
+    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+  }
   if (fast_order_limit) {
-    info->sorted_result = grn_table_create(ctx, NULL,
-                                           0, NULL,
-                                           GRN_OBJ_TABLE_NO_KEY, NULL,
-                                           info->result);
-    grn_table_sort(ctx, info->result, 0, limit, info->sorted_result,
+    sorted_result = grn_table_create(ctx, NULL,
+                                     0, NULL,
+                                     GRN_OBJ_TABLE_NO_KEY, NULL,
+                                     matched_record_keys);
+    grn_table_sort(ctx, matched_record_keys, 0, limit, sorted_result,
                    sort_keys, n_sort_keys);
-    sorted_result = info->sorted_result;
-  } else {
-    merge_matched_record_keys(info->result);
   }
   if (sort_keys) {
     for (int i = 0; i < n_sort_keys; i++) {
-      if (sort_keys[i].key != info->score_column) {
-        grn_obj_unlink(ctx, sort_keys[i].key);
-      }
+      grn_obj_unlink(info->ctx, sort_keys[i].key);
     }
     free(sort_keys);
   }
@@ -7005,6 +7032,7 @@ void ha_mroonga::clear_search_result()
   MRN_DBUG_ENTER_METHOD();
   clear_cursor();
   if (sorted_result) {
+    grn_obj_unlink(ctx, sorted_result);
     sorted_result = NULL;
   }
   if (matched_record_keys) {
@@ -7614,9 +7642,7 @@ bool ha_mroonga::is_grn_zero_column_value(grn_obj *column, grn_obj *value)
 
 void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                         int *n_sort_keys,
-                                        longlong *limit,
-                                        grn_obj *target_table,
-                                        grn_obj *score_column)
+                                        longlong *limit)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -7703,6 +7729,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                               *n_sort_keys);
     ORDER *order;
     int i;
+    mrn_change_encoding(ctx, system_charset_info);
     for (order = (ORDER *) select_lex->order_list.first, i = 0; order;
          order = order->next, i++) {
       Item *item = *order->item;
@@ -7723,15 +7750,12 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
           DBUG_VOID_RETURN;
         }
 
-        if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-          (*sort_keys)[i].key = score_column;
-        } else {
-          mrn_change_encoding(ctx, system_charset_info);
-          (*sort_keys)[i].key = grn_obj_column(ctx, target_table,
-                                               column_name, column_name_size);
-        }
+        (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
+                                             column_name, column_name_size);
       } else if (match_against->eq(item, true)) {
-        (*sort_keys)[i].key = score_column;
+        (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
+                                             MRN_COLUMN_NAME_SCORE,
+                                             strlen(MRN_COLUMN_NAME_SCORE));
       } else {
         DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
                             "sort by computed value isn't supported."));
