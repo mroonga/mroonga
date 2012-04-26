@@ -1692,7 +1692,6 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 
    cursor(NULL),
    index_table_cursor(NULL),
-   score_column(NULL),
    id_accessor(NULL),
    key_accessor(NULL),
 
