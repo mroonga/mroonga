@@ -129,7 +129,9 @@ extern "C" {
 #  define MRN_HAVE_TL_WRITE_ALLOW_READ
 #endif
 
-#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50523)
+#if (defined(MRN_MARIADB_P) && \
+     ((MYSQL_VERSION_ID >= 50306 && MYSQL_VERSION_ID < 50500) || \
+      MYSQL_VERSION_ID >= 50523))
 #  define MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
 #endif
 
