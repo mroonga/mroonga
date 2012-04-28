@@ -69,6 +69,7 @@ rm -rf $RPM_BUILD_ROOT
 sql="
 INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
 CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_mroonga.so';
+
 "
 command="/usr/bin/mysql -u root -e \"$sql\""
 echo $command
@@ -102,7 +103,7 @@ eval $command || \
 %changelog
 * Sun Apr 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.02-0
 - new upstream release.
-* require groonga >= 2.0.2.
+* require groonga 2.0.2 or later.
 
 * Thu Mar 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.01-0
 - new upstream release.
