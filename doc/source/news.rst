@@ -10,52 +10,82 @@ Release 2.02 - 2012/04/29
 
 .. caution::
 
-   This release breaks backward compatibility. We changed to
-   use similar search for MATCH AGAINST IN NATURAL LANGUAGE MODE as
-   default. this change affects the result of phrase search.
+   The package sign key is changed since this release. Import the new
+   package sign key before updating groogna packages.
+
+   Debian/Ubuntu::
+
+     % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com F10399C0
+     % sudo apt-get update
+     % sudo apt-get -V -y install groonga-keyring
+
+   CentOS/Fedora::
+
+     % sudo yum update
+     % sudo yum install --nogpgcheck -y groonga-repository
+
+.. caution::
+
+   This release breaks a backward compatibility for ``ENUM`` type. If
+   you have ``ENUM`` type and it has 256 or more values, you need to
+   dump your table before upgrade and restore your table after
+   upgrade.
+
+.. caution::
+
+   This release breaks a backward compatibility for ``SET`` type. If
+   you have ``SET`` type and it has 32 or more values, you need to
+   dump your table before upgrade and restore your table after
+   upgrade.
 
 Improvements
 ^^^^^^^^^^^^
 
-* [doc] Added a coding style rule about cast, variable declaration.
-* [storage mode] Supported search ENUM values by index. [#1336]
+* Added workaround for build for GCC 4.7 and MySQL 5.5.22.
+  The combination makes build error with ``-Wdeprecated`` gcc
+  option. [#1337] [Reported by Kazuhiko Shiozaki]
+* [mariadb] Supported MariaDB 5.5.23.
+  [#1339] [Reported by Kazuhiko Shiozaki] [Reported by Ryo Onodera]
+* [storage mode] Stopped needless primary key truncated warning on
+  ``REPLACE``.
+* [storage mode] Supported search ``ENUM`` values by index. [#1336]
   [Suggested by @104yuki_n]
-* Supported MySQL 5.5.23 experimentally.
-* Supported Debian "wheezy"
+* [incompatible] Changed groonga type for ``ENUM`` to unsigned 2bytes
+  integer type from signed 2bytes integer type. ``ENUM`` column
+  recreation is needed.
+* [incompatible] Changed groonga type for ``SET`` to unsigned 8bytes
+  integer type from signed 8bytes integer type. ``SET`` column
+  recreation is needed.
+* Supported MySQL 5.5.23.
 * Required groonga 2.0.2 or later.
-* [incompatible] Changed to use similar search for MATCH AGAINST IN
-  NATURAL LANGUAGE MODE.
+* [incompatible][experimental] Changed to use similar search instead
+  of phrase search for MATCH AGAINST IN NATURAL LANGUAGE MODE.
+
+* [apt][yum] Changed package sign key.
 
 Fixes
 ^^^^^
 
-* [storage mode] Fixed ref_length because of causing invalid memory
-  access. [#1321] [groonga-dev,00743]
-* [rpm] Changed required MySQL version from 5.5.20 to 5.5.21.
-* Added a test file of full text search keyword problem related to
-  [#1335]
-* [mysql55] Fixed build error for GCC 4.7 and MySQL 5.5.22. [#1337]
-  [Reported by Kazuhiko Shiozaki]
-* Fixed english in configure.ac. [Pointed out by Ryo Onodera]
-* [mariadb523] Fixed to follow the change of auto_repair() signature
-  in MariaDB 5.5.23. [#1339] [Reported by Kazuhiko Shiozaki]
-* [mariadb5523] Fixed to avoid EA_CANT_OPEN_FILE error caused in
-  open() by adding NULL check into auto_repair() [#1339]
-  [Reported by Kazuhiko Shiozaki]
-* Removed a needless 'error' parameter in auto_repair()
-  [Reported by Ryo Onodera]
-* Fixed a broken cmake process.
-* [wrapper mode] Fixed to copy values by memcpy() instead of share
-  them to avoid double free [#1301]
-* Fixed typos in ha_mroonga.cpp [Pointed out by Ryo Onodera]
-* [mysql51] Fixed to use set encoding on truncate.
+* [storage mode] Fixed wrong key length is used.
+* Fixed a crash bug that is caused when searching with updaging very large
+  inverted index. [#1321]
+  [groonga-dev,00743] [Reported by Takashi Kawano]
+  [groonga-dev,00746] [Reported by Takken Ishibashi]
+* Fixed a bug that truncated table has invalid tokenizer and encoding.
+  [#1335] [Reported by @boss_sato]
+* Fixed a bug that the first insert is failed with Spider and mroonga
+  combination. [#1319] [groonga-dev,00736] [Reported by Takayuki Honda]
 
 Thanks
 ^^^^^^
 
+* Takashi Kawano
+* @boss_sato
 * Kazuhiko Shiozaki
 * Ryo Onodera
 * @104yuki_n
+* Takayuki Honda
+* Takken Ishibashi
 
 .. _release-2-01:
 
