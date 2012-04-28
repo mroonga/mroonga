@@ -38,5 +38,5 @@ files.each do |file|
     "-F", "Signature=#{resource.signature}",
     "-F", "Content-Type=#{resource.mime_type[0]['Content-Type']}",
     "-F", "file=@#{file}",
-    resourec.s3_url)
+    resource.s3_url)
 end
