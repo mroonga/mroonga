@@ -101,7 +101,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     [AS_HELP_STRING([--with-mysql-source=PATH], [MySQL source directory PATH])],
     [
       ac_mysql_source_dir="$withval"
-      if test -f "$ac_mysql_source_dir/sql/handler.h" ; then
+      if test -f "$ac_mysql_source_dir/sql/handler.h"; then
         MYSQL_INC="-I$ac_mysql_source_dir/sql"
         MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir/include"
         MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir/regex"
