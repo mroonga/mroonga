@@ -15,9 +15,8 @@ Release 2.02 - 2012/04/29
 
    Debian/Ubuntu::
 
-     % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com F10399C0
      % sudo apt-get update
-     % sudo apt-get -V -y install groonga-keyring
+     % sudo apt-get -y --allow-unauthenticated install groonga-keyring
 
    CentOS/Fedora::
 
