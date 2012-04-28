@@ -2001,11 +2001,13 @@ ulonglong ha_mroonga::storage_table_flags() const
     HA_CAN_BIT_FIELD |
     HA_DUPLICATE_POS |
     HA_CAN_GEOMETRY |
-    HA_CAN_RTREEKEYS |
-    HA_CAN_REPAIR;
+    HA_CAN_RTREEKEYS;
     //HA_HAS_RECORDS;
 #ifdef HA_MUST_USE_TABLE_CONDITION_PUSHDOWN
   flags |= HA_MUST_USE_TABLE_CONDITION_PUSHDOWN;
+#endif
+#ifdef HA_CAN_REPAIR
+  table_flags |= HA_CAN_REPAIR;
 #endif
   DBUG_RETURN(flags);
 }
