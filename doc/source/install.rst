@@ -19,8 +19,8 @@ Debian GNU/Linux squeeze
 
 Install ::
 
-  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
+  % sudo aptitude -V -D -y --allow-untrusted install groonga-keyring
   % sudo aptitude -V -D -y install mysql-server-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
@@ -39,8 +39,8 @@ Debian GNU/Linux wheezy
 
 Install ::
 
-  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
+  % sudo aptitude -V -D -y --allow-untrusted install groonga-keyring
   % sudo aptitude -V -D -y install mysql-server-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
@@ -59,8 +59,8 @@ Debian GNU/Linux sid
 
 Install ::
 
-  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo aptitude update
+  % sudo aptitude -V -D -y --allow-untrusted install groonga-keyring
   % sudo aptitude -V -D -y install mysql-server-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
@@ -87,8 +87,8 @@ Ubuntu 10.04 LTS Lucid Lynx
 
 Install ::
 
-  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo apt-get update
+  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
   % sudo apt-get -y install mysql-server-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
@@ -115,8 +115,8 @@ Ubuntu 11.04 Natty Narwhal
 
 Install ::
 
-  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo apt-get update
+  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
   % sudo apt-get -y install mysql-server-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
@@ -143,8 +143,8 @@ Ubuntu 11.10 Oneiric Ocelot
 
 Install ::
 
-  % sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 1C837F31
   % sudo apt-get update
+  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
   % sudo apt-get -y install mysql-server-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
