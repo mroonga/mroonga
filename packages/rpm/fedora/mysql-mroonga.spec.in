@@ -1,4 +1,4 @@
-%define mysql_version 5.5.21
+%define mysql_version 5.5.22
 %define mysql_release 1%{?dist}
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/16/SRPMS
@@ -104,6 +104,7 @@ eval $command || \
 * Sun Apr 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.02-0
 - new upstream release.
 - require groonga 2.0.2 or later.
+- use MySQL 5.5.22.
 
 * Thu Mar 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.01-0
 - new upstream release.
