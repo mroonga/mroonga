@@ -391,6 +391,7 @@ public:
                           ulonglong *first_value, ulonglong *nb_reserved_values);
   void restore_auto_increment(ulonglong prev_insert_id);
   void release_auto_increment();
+  int check_for_upgrade(HA_CHECK_OPT *check_opt);
   int reset_auto_increment(ulonglong value);
   bool was_semi_consistent_read();
   void try_semi_consistent_read(bool yes);
@@ -892,6 +893,8 @@ private:
   void storage_restore_auto_increment(ulonglong prev_insert_id);
   void wrapper_release_auto_increment();
   void storage_release_auto_increment();
+  int wrapper_check_for_upgrade(HA_CHECK_OPT *check_opt);
+  int storage_check_for_upgrade(HA_CHECK_OPT *check_opt);
   int wrapper_reset_auto_increment(ulonglong value);
   int storage_reset_auto_increment(ulonglong value);
   bool wrapper_was_semi_consistent_read();

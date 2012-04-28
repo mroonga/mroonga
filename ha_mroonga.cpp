@@ -2001,7 +2001,8 @@ ulonglong ha_mroonga::storage_table_flags() const
     HA_CAN_BIT_FIELD |
     HA_DUPLICATE_POS |
     HA_CAN_GEOMETRY |
-    HA_CAN_RTREEKEYS;
+    HA_CAN_RTREEKEYS |
+    HA_CAN_REPAIR;
     //HA_HAS_RECORDS;
 #ifdef HA_MUST_USE_TABLE_CONDITION_PUSHDOWN
   flags |= HA_MUST_USE_TABLE_CONDITION_PUSHDOWN;
@@ -11401,6 +11402,57 @@ void ha_mroonga::release_auto_increment()
     storage_release_auto_increment();
   }
   DBUG_VOID_RETURN;
+}
+
+int ha_mroonga::wrapper_check_for_upgrade(HA_CHECK_OPT *check_opt)
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  int error = wrap_handler->ha_check_for_upgrade(check_opt);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_check_for_upgrade(HA_CHECK_OPT *check_opt)
+{
+  MRN_DBUG_ENTER_METHOD();
+  for (uint i = 0; i < table->s->fields; ++i) {
+    grn_obj *column = grn_columns[i];
+    if (!column) {
+      continue;
+    }
+    Field *field = table->field[i];
+    grn_id column_range = grn_obj_get_range(ctx, column);
+    switch (field->real_type()) {
+    case MYSQL_TYPE_ENUM:
+      if (column_range != GRN_DB_UINT16) {
+        DBUG_RETURN(HA_ADMIN_NEEDS_ALTER);
+      }
+      break;
+    case MYSQL_TYPE_SET:
+      if (column_range != GRN_DB_UINT64) {
+        DBUG_RETURN(HA_ADMIN_NEEDS_ALTER);
+      }
+      break;
+    default:
+      break;
+    }
+  }
+  DBUG_RETURN(HA_ADMIN_OK);
+}
+
+int ha_mroonga::check_for_upgrade(HA_CHECK_OPT *check_opt)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error;
+  if (share->wrapper_mode) {
+    error = wrapper_check_for_upgrade(check_opt);
+  } else {
+    error = storage_check_for_upgrade(check_opt);
+  }
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::wrapper_reset_auto_increment(ulonglong value)
