@@ -14,7 +14,7 @@ remove-existing-packages:
 
 download:
 	for distribution in $(DISTRIBUTIONS); do		\
-	  rsync -avz --delete					\
+	  rsync -avz --progress --delete			\
 	    $(RSYNC_PATH)/$${distribution}/ $${distribution};	\
 	done
 
@@ -33,7 +33,7 @@ ensure-rsync-path:
 upload: ensure-rsync-path
 	for distribution in $(DISTRIBUTIONS); do	\
 	  (cd $${distribution};				\
-	   rsync -avz --delete				\
+	   rsync -avz --progress --delete		\
 	   dists pool $(RSYNC_PATH)/$${distribution};	\
 	  );						\
 	done

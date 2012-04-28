@@ -22,7 +22,7 @@ ensure-rsync-path:
 
 download: ensure-rsync-path
 	for distribution in $(DISTRIBUTIONS); do		\
-	  rsync -avz --delete					\
+	  rsync -avz --progress --delete			\
 	    $(RSYNC_PATH)/$${distribution}/ $${distribution};	\
 	done
 
@@ -34,7 +34,7 @@ update:
 
 upload: ensure-rsync-path
 	for distribution in $(DISTRIBUTIONS); do		\
-	  rsync -avz --exclude .gitignore --delete		\
+	  rsync -avz --progress --exclude .gitignore --delete	\
 	    $${distribution}/ $(RSYNC_PATH)/$${distribution};	\
 	done
 
