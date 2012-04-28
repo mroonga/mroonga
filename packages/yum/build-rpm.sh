@@ -77,6 +77,7 @@ fi
 if ! rpm -q groonga-repository > /dev/null 2>&1; then
     run rpm -Uvh http://packages.groonga.org/${distribution}/groonga-repository-1.0.0-0.noarch.rpm
 fi
+run yum install --nogpgcheck -y groonga-repository
 
 rpmbuild_options="${BUILD_OPTIONS}"
 
