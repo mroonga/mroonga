@@ -149,7 +149,7 @@ eval $command || \
 * Sun Apr 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.02-0
 - new upstream release.
 - use MySQL 5.5.21.
-- require groonga or later.
+- require groonga 2.0.2 or later.
 
 * Thu Mar 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.01-0
 - new upstream release.
