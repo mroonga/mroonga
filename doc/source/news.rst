@@ -59,8 +59,7 @@ Improvements
 * Supported MySQL 5.5.23.
 * Required groonga 2.0.2 or later.
 * [incompatible][experimental] Changed to use similar search instead
-  of phrase search for MATCH AGAINST IN NATURAL LANGUAGE MODE.
-
+  of phrase search for ``MATCH AGAINST IN NATURAL LANGUAGE MODE``.
 * [apt][yum] Changed package sign key.
 
 Fixes
