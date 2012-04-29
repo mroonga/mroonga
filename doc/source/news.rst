@@ -60,6 +60,7 @@ Improvements
 * [incompatible][experimental] Changed to use similar search instead
   of phrase search for ``MATCH AGAINST IN NATURAL LANGUAGE MODE``.
 * [apt][yum] Changed package sign key.
+* Supported Ubuntu 12.04 Precise Pangolin.
 
 Fixes
 ^^^^^
