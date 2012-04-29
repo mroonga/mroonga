@@ -102,6 +102,14 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     [
       ac_mysql_source_dir="$withval"
       if test -f "$ac_mysql_source_dir/sql/handler.h"; then
+        case "$ac_mysql_source_dir" in
+        /*)
+            :
+            ;;
+        *)
+            ac_mysql_source_dir="\$(top_builddir)/$ac_mysql_source_dir"
+            ;;
+        esac
         MYSQL_INC="-I$ac_mysql_source_dir/sql"
         MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir/include"
         MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir/regex"
