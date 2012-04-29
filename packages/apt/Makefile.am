@@ -5,7 +5,7 @@ CODES = squeeze wheezy unstable lucid natty oneiric precise
 
 all:
 
-release: build update sign upload
+release: build update-repository sign-repository upload
 
 remove-existing-packages:
 	for distribution in $(DISTRIBUTIONS); do	\
@@ -18,10 +18,10 @@ download:
 	    $(RSYNC_PATH)/$${distribution}/ $${distribution};	\
 	done
 
-update:
+update-repository:
 	./update-repository.sh '$(PACKAGE_NAME)' '$(ARCHITECTURES)' '$(CODES)'
 
-sign:
+sign-repository:
 	./sign-repository.sh '$(CODES)'
 
 ensure-rsync-path:
