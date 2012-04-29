@@ -139,15 +139,18 @@ build()
     run cp ${script_base_dir}/${PACKAGE}-build-options \
 	${CHROOT_BASE}/$target/tmp/build-options
     run cp ${script_base_dir}/build-rpm.sh ${CHROOT_BASE}/$target/tmp/
-    run_sudo rm -rf $rpm_dir $srpm_dir
     run_sudo su -c "chroot ${CHROOT_BASE}/$target /tmp/build-rpm.sh"
     run mkdir -p $binary_pool_dir
     run mkdir -p $source_pool_dir
     run cp -p $rpm_dir/*-${VERSION}* $binary_pool_dir
     run cp -p $srpm_dir/*-${VERSION}* $source_pool_dir
     if [ $distribution = "centos" -a $distribution_version -eq 5 ]; then
-	run cp -p $rpm_dir/MySQL-* $binary_pool_dir
-	run cp -p $srpm_dir/MySQL-* $source_pool_dir
+	mysql_version=$(grep '%define mysql_version' \
+	    ${CHROOT_BASE}/$target/tmp/${PACKAGE}.spec | \
+	    sed -e 's/%define mysql_version //g' | \
+	    tail -1)
+	run cp -p $rpm_dir/MySQL-*-${mysql_version}* $binary_pool_dir
+	run cp -p $srpm_dir/MySQL-${mysql_version}* $source_pool_dir
     fi
 
     dependencies_dir=${build_user_dir}/dependencies
