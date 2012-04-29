@@ -20,6 +20,9 @@ result_files = \
 	column_decimal_with_fractional_seconds_without_index.result \
 	column_decimal_without_fractional_seconds_with_index.result \
 	column_decimal_without_fractional_seconds_without_index.result \
+	column_enum_less_with_index.result \
+	column_enum_many_with_index.result \
+	column_int_with_index_zero_value.result \
 	column_time_with_fractional_seconds.result \
 	column_time_without_fractional_seconds.result \
 	column_timestamp_with_fractional_seconds.result \
@@ -71,6 +74,7 @@ result_files = \
 	log_level.result \
 	multiple_column_index_delete.result \
 	multiple_column_index_recreate.result \
+	multiple_column_index_replace.result \
 	multiple_column_index_select_double.result \
 	multiple_column_index_select_float.result \
 	multiple_column_index_select_int.result \
@@ -86,6 +90,8 @@ result_files = \
 	optimization_order_limit_have_primary_key.result \
 	optimization_order_limit_no_primary_key.result \
 	optimization_order_limit_todo_split_me.result \
+	optimization_skip_count_after_insert_multithread.result \
+	optimization_skip_count_after_insert_single_thread.result \
 	optimization_skip_count_disabled.result \
 	optimization_skip_count_index_view.result \
 	optimization_skip_count_todo_split_me.result \
@@ -107,6 +113,7 @@ result_files = \
 	select_secondary_key.result \
 	show_create_table.result \
 	show_table_status.result \
+	show_table_status_for_auto_increment.result \
 	sub_query_fulltext.result \
 	temporary_table.result \
 	tinyint.result \
