@@ -8,7 +8,7 @@ VERSION=$(cat /tmp/build-version)
 DEPENDED_PACKAGES=$(cat /tmp/depended-packages)
 BUILD_SCRIPT=/tmp/build-deb-in-chroot.sh
 
-mysql_server_package=mysql-server-5.1
+mysql_server_package=mysql-server
 
 run()
 {
