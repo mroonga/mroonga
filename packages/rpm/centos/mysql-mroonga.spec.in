@@ -58,19 +58,20 @@ mysql_full_version=%{mysql_version}-%{mysql_release}.%{mysql_dist}
 %if %{use_system_mysql}
 srpm=mysql-${mysql_full_version}.src.rpm
 if [ ! -f ../../SRPMS/$srpm ]; then
-    wget -O ../../SRPMS/$srpm %{mysql_download_base_url}/$srpm
+    wget --continue -O ../../SRPMS/$srpm %{mysql_download_base_url}/$srpm
     rpm -Uvh ../../SRPMS/$srpm
 fi
 %else
 srpm=MySQL-${mysql_full_version}.src.rpm
 if [ ! -f ../../SRPMS/$srpm ]; then
-    wget -O ../../SRPMS/$srpm %{mysql_download_base_url}/$srpm
+    wget --continue -O ../../SRPMS/$srpm %{mysql_download_base_url}/$srpm
     rpm -Uvh ../../SRPMS/$srpm
     for package in client devel embedded server shared test; do
         rpm=MySQL-${package}-${mysql_full_version}.%{_arch}.rpm
 	mkdir -p ../../RPMS/%{_arch}
 	if [ ! -f ../../RPMS/%{_arch}/$rpm ]; then
-            wget -O ../../RPMS/%{_arch}/$rpm %{mysql_download_base_url}/$rpm
+            wget --continue -O ../../RPMS/%{_arch}/$rpm \
+		%{mysql_download_base_url}/$rpm
 	fi
     done
 fi
