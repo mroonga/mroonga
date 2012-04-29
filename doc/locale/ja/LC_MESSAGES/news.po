@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-28 23:54\n"
-"PO-Revision-Date: 2012-04-29 15:57+0900\n"
+"PO-Revision-Date: 2012-04-29 15:59+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -87,7 +87,7 @@ msgstr "[mariadb] MariaDB 5.5.23をサポート。 [#1339] [かずひこさん�
 #: ../../../source/news.rst:49
 msgid ""
 "[storage mode] Stopped needless primary key truncated warning on ``REPLACE``."
-msgstr "[storage mode] ``REPLACE`` 時に、プライマリーキーを使わなかったという必要のない警告がでないようにした。"
+msgstr "[ストレージモード] ``REPLACE`` 時に、プライマリーキーを使わなかったという必要のない警告がでないようにした。"
 
 # 63807ef9c8fe4132972b5104cbc7f3c6
 #: ../../../source/news.rst:51
