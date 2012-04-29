@@ -36,7 +36,7 @@ files.each do |file|
     "-F", "AWSAccessKeyId=#{resource.accesskeyid}",
     "-F", "Policy=#{resource.policy}",
     "-F", "Signature=#{resource.signature}",
-    "-F", "Content-Type=#{resource.mime_type[0]['Content-Type']}",
+    "-F", "Content-Type=#{resource.mime_type}",
     "-F", "file=@#{file}",
     resource.s3_url)
 end
