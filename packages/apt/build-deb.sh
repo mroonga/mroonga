@@ -32,6 +32,7 @@ if [ ! -x /usr/bin/aptitude ]; then
     run apt-get install -y aptitude
 fi
 run aptitude update -V -D
+run aptitude install -V -D -y --allow-untrusted groonga-keyring
 run aptitude safe-upgrade -V -D -y
 
 security_list=/etc/apt/sources.list.d/security.list
