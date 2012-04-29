@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-28 23:54\n"
-"PO-Revision-Date: 2012-04-29 00:15+0900\n"
+"PO-Revision-Date: 2012-04-29 15:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -178,7 +178,7 @@ msgstr "感謝"
 # 9fbab937473c4396940d089ab165279e
 #: ../../../source/news.rst:82
 msgid "Takashi Kawano"
-msgstr "河野隆志"
+msgstr "河野隆志さん"
 
 # 5b7543aee10242a88b42b30a9fd7bea1
 #: ../../../source/news.rst:83
