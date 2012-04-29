@@ -2007,7 +2007,7 @@ ulonglong ha_mroonga::storage_table_flags() const
   flags |= HA_MUST_USE_TABLE_CONDITION_PUSHDOWN;
 #endif
 #ifdef HA_CAN_REPAIR
-  table_flags |= HA_CAN_REPAIR;
+  flags |= HA_CAN_REPAIR;
 #endif
   DBUG_RETURN(flags);
 }
