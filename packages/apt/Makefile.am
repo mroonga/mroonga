@@ -5,7 +5,7 @@ CODES = squeeze wheezy unstable lucid natty oneiric precise
 
 all:
 
-release: build update-repository sign-repository upload
+release: build sign-packages update-repository sign-repository upload
 
 remove-existing-packages:
 	for distribution in $(DISTRIBUTIONS); do	\
@@ -17,6 +17,9 @@ download:
 	  rsync -avz --progress --delete			\
 	    $(RSYNC_PATH)/$${distribution}/ $${distribution};	\
 	done
+
+sign-packages:
+	./sign-packages.sh '$(GPG_UID)' '$(CODES)'
 
 update-repository:
 	./update-repository.sh '$(PACKAGE_NAME)' '$(ARCHITECTURES)' '$(CODES)'
