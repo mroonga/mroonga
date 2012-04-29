@@ -27,7 +27,7 @@ download: ensure-rsync-path
 	done
 
 sign:
-	./sign-rpm.sh '$(DISTRIBUTIONS)'
+	./sign-rpm.sh '$(GPG_UID)' '$(DISTRIBUTIONS)'
 
 update:
 	./update-repository.sh '$(DISTRIBUTIONS)'

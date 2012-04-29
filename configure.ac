@@ -262,6 +262,9 @@ AC_ARG_WITH(rsync-path,
             [RSYNC_PATH=""])
 AC_SUBST(RSYNC_PATH)
 
+GPG_UID=m4_include(gpg_uid)
+AC_SUBST(GPG_UID)
+
 # Document
 AC_MSG_CHECKING([whether enable document])
 AC_ARG_ENABLE(document,
