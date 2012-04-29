@@ -254,10 +254,10 @@ AC_ARG_WITH(mroonga-github-com-path,
             [MROONGA_GITHUB_COM_PATH=""])
 AC_SUBST(MROONGA_GITHUB_COM_PATH)
 
-# For Debian package release
+# For package
 AC_ARG_WITH(rsync-path,
             [AS_HELP_STRING([--with-rsync-path=PATH],
-            [specify rsync path to upload mroonga Debian packages.])],
+            [specify rsync path to upload mroonga packages.])],
             [RSYNC_PATH="$withval"],
             [RSYNC_PATH=""])
 AC_SUBST(RSYNC_PATH)
