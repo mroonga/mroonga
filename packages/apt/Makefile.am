@@ -25,7 +25,7 @@ update-repository:
 	./update-repository.sh '$(PACKAGE_NAME)' '$(ARCHITECTURES)' '$(CODES)'
 
 sign-repository:
-	./sign-repository.sh '$(CODES)'
+	./sign-repository.sh '$(GPG_UID)' '$(CODES)'
 
 ensure-rsync-path:
 	@if test -z "$(RSYNC_PATH)"; then				\
