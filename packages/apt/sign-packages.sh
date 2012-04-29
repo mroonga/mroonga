@@ -30,7 +30,7 @@ for code_name in ${CODES}; do
 	    ;;
     esac
 
-    base_directory=packages/${distribution}
+    base_directory=${distribution}
     debsign --re-sign -k${GPG_UID} \
 	$(find ${base_directory} -name '*.dsc' -or -name '*.changes') &
     if [ "${PARALLEL}" != "yes" ]; then
