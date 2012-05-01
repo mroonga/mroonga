@@ -703,6 +703,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       wrap_table_share->keys = share->wrap_keys;
       wrap_table_share->key_info = share->wrap_key_info;
       wrap_table_share->primary_key = share->wrap_primary_key;
+      wrap_table_share->keys_in_use.init(share->wrap_keys);
+      wrap_table_share->keys_for_keyread.init(share->wrap_keys);
       share->wrap_table_share = wrap_table_share;
     }
 

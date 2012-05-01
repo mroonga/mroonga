@@ -838,6 +838,8 @@ private:
   int storage_enable_indexes(uint mode);
   int wrapper_check(THD* thd, HA_CHECK_OPT* check_opt);
   int storage_check(THD* thd, HA_CHECK_OPT* check_opt);
+  int wrapper_fill_indexes(THD *thd, KEY *key_info,
+                           grn_obj **index_columns, uint n_keys);
   int wrapper_recreate_indexes(THD *thd);
   int wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt);
   int storage_repair(THD* thd, HA_CHECK_OPT* check_opt);
@@ -866,7 +868,8 @@ private:
 #endif
   int storage_add_index_multiple_columns(KEY *key_info, uint num_of_keys,
                                          grn_obj **index_tables,
-                                         grn_obj **index_columns);
+                                         grn_obj **index_columns,
+                                         bool skip_unique_key);
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   int wrapper_final_add_index(handler_add_index *add, bool commit);
   int storage_final_add_index(handler_add_index *add, bool commit);
@@ -931,6 +934,8 @@ private:
   void storage_init_table_handle_for_HANDLER();
   void wrapper_free_foreign_key_create_info(char* str);
   void storage_free_foreign_key_create_info(char* str);
+  void wrapper_set_keys_in_use();
+  void storage_set_keys_in_use();
 };
 
 #ifdef __cplusplus
