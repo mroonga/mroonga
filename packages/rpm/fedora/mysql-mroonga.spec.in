@@ -101,6 +101,9 @@ eval $command || \
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Tue May 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.03-0
+- new upstream release.
+
 * Sun Apr 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.02-0
 - new upstream release.
 - require groonga 2.0.2 or later.
