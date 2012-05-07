@@ -2,4 +2,6 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_index_table_name.cpp		\
 	mrn_index_table_name.hpp		\
 	mrn_debug_column_access.cpp		\
-	mrn_debug_column_access.hpp
+	mrn_debug_column_access.hpp		\
+	mrn_auto_increment_value_lock.cpp	\
+	mrn_auto_increment_value_lock.hpp

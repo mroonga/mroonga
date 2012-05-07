@@ -24,6 +24,11 @@
 #  define my_free(PTR, FLAG) my_free(PTR)
 #endif
 
+#if MYSQL_VERSION_ID < 50500
+#  define mysql_mutex_lock(mutex) pthread_mutex_lock(mutex)
+#  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
+#endif
+
 #ifndef HA_INPLACE_ADD_INDEX_NO_READ_WRITE
 #  define HA_INPLACE_ADD_INDEX_NO_READ_WRITE         HA_ONLINE_ADD_INDEX_NO_WRITES
 #  define HA_INPLACE_DROP_INDEX_NO_READ_WRITE        HA_ONLINE_DROP_INDEX_NO_WRITES

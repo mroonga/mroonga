@@ -46,6 +46,7 @@
 #include <mrn_path_mapper.hpp>
 #include <mrn_index_table_name.hpp>
 #include <mrn_debug_column_access.hpp>
+#include <mrn_auto_increment_value_lock.hpp>
 
 #define MRN_SHORT_TEXT_SIZE (1 << 12) //  4Kbytes
 #define MRN_TEXT_SIZE       (1 << 16) // 64Kbytes
@@ -57,8 +58,6 @@ extern mysql_mutex_t LOCK_open;
 #  define mrn_open_mutex_unlock() mysql_mutex_unlock(&LOCK_open)
 #else
 extern pthread_mutex_t LOCK_open;
-#  define mysql_mutex_lock(mutex) pthread_mutex_lock(mutex)
-#  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
 #  define mrn_open_mutex_lock()
 #  define mrn_open_mutex_unlock()
 #endif
@@ -3727,8 +3726,7 @@ void ha_mroonga::wrapper_set_keys_in_use()
 {
   uint i, j;
   MRN_DBUG_ENTER_METHOD();
-  if (table_share->tmp_table == NO_TMP_TABLE)
-    mysql_mutex_lock(&table_share->LOCK_ha_data);
+  mrn::AutoIncrementValueLock lock_(table_share);
   table_share->keys_in_use.set_prefix(table_share->keys);
   for (i = 0; i < table_share->keys; i++) {
     j = share->wrap_key_nr[i];
@@ -3746,8 +3744,6 @@ void ha_mroonga::wrapper_set_keys_in_use()
   }
   table_share->keys_for_keyread.set_prefix(table_share->keys);
   table_share->keys_for_keyread.intersect(table_share->keys_in_use);
-  if (table_share->tmp_table == NO_TMP_TABLE)
-    mysql_mutex_unlock(&table_share->LOCK_ha_data);
   DBUG_VOID_RETURN;
 }
 
@@ -3755,8 +3751,7 @@ void ha_mroonga::storage_set_keys_in_use()
 {
   uint i;
   MRN_DBUG_ENTER_METHOD();
-  if (table_share->tmp_table == NO_TMP_TABLE)
-    mysql_mutex_lock(&table_share->LOCK_ha_data);
+  mrn::AutoIncrementValueLock lock_(table_share);
   table_share->keys_in_use.set_prefix(table_share->keys);
   for (i = 0; i < table_share->keys; i++) {
     if (i == table_share->primary_key) {
@@ -3770,8 +3765,6 @@ void ha_mroonga::storage_set_keys_in_use()
   }
   table_share->keys_for_keyread.set_prefix(table_share->keys);
   table_share->keys_for_keyread.intersect(table_share->keys_in_use);
-  if (table_share->tmp_table == NO_TMP_TABLE)
-    mysql_mutex_unlock(&table_share->LOCK_ha_data);
   DBUG_VOID_RETURN;
 }
 
