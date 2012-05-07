@@ -496,6 +496,9 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 #if MYSQL_VERSION_ID >= 50500
   if (key_info->comment.length == 0)
   {
+    if (share->key_parser[i]) {
+      my_free(share->key_parser[i], MYF(0));
+    }
     if (
       !(share->key_parser[i] = mrn_create_string(
         mrn_default_parser,

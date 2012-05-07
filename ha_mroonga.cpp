@@ -930,6 +930,7 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
   MRN_DBUG_ENTER_FUNCTION();
   void *p = *thd_ha_data(thd, mrn_hton_ptr);
   if (p) {
+    mrn_clear_alter_share(thd);
     free(p);
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) NULL;
     pthread_mutex_lock(&mrn_allocated_thds_mutex);
@@ -11186,8 +11187,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   if (!error && have_multiple_column_index)
   {
     error = storage_add_index_multiple_columns(key_info, num_of_keys,
-                                               index_tables,
-                                               index_columns, FALSE);
+                                               index_tables + n_keys,
+                                               index_columns + n_keys, FALSE);
   }
   bitmap_set_all(table->read_set);
   if (error)
@@ -11219,7 +11220,6 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
   MRN_DBUG_ENTER_METHOD();
 
   int error = 0;
-  uint n_keys = table->s->keys;
 
   if (!(error = storage_rnd_init(true)))
   {
@@ -11236,7 +11236,7 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
         if (skip_unique_key && (key_info[i].flags & HA_NOSAME)) {
           continue;
         }
-        if (!index_columns[i + n_keys]) {
+        if (!index_columns[i]) {
           continue;
         }
 
@@ -11251,23 +11251,25 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
               current_key_info->key_part[j].field->null_bit;
           }
         }
-        grn_id key_id;
-        if ((error = storage_write_row_unique_index(table->record[0],
-                                                    record_id,
-                                                    current_key_info,
-                                                    index_tables[i + n_keys],
-                                                    &key_id)))
-        {
-          if (error == HA_ERR_FOUND_DUPP_KEY)
+        if (key_info[i].flags & HA_NOSAME) {
+          grn_id key_id;
+          if ((error = storage_write_row_unique_index(table->record[0],
+                                                      record_id,
+                                                      current_key_info,
+                                                      index_tables[i],
+                                                      &key_id)))
           {
-            error = HA_ERR_FOUND_DUPP_UNIQUE;
+            if (error == HA_ERR_FOUND_DUPP_KEY)
+            {
+              error = HA_ERR_FOUND_DUPP_UNIQUE;
+            }
+            break;
           }
-          break;
         }
         if ((error = storage_write_row_multiple_column_index(table->record[0],
                                                              record_id,
                                                              current_key_info,
-                                                             index_columns[i + n_keys])))
+                                                             index_columns[i])))
         {
           break;
         }
