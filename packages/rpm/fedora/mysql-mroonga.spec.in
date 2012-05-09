@@ -89,7 +89,7 @@ eval $command || \
 	(echo "run the following command to register mroonga:"; \
 	 echo "  $command")
 
-%postun
+%preun
 if [ "$1" = 0 ]; then
     sql="
     DROP FUNCTION last_insert_grn_id;
