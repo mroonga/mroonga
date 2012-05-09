@@ -66,6 +66,18 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
+if [ "$1" = 2 ] ; then
+sql="
+DROP FUNCTION last_insert_grn_id;
+UNINSTALL PLUGIN mroonga;
+FLUSH TABLES;
+"
+command="/usr/bin/mysql -u root -e \"$sql\""
+echo $command
+eval $command || \
+      (echo "run the following command to unregister mroonga:"; \
+       echo "  $command")
+fi
 sql="
 INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
 CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_mroonga.so';
@@ -78,6 +90,7 @@ eval $command || \
 	 echo "  $command")
 
 %postun
+if [ "$1" = 0 ]; then
 sql="
 DROP FUNCTION last_insert_grn_id;
 UNINSTALL PLUGIN mroonga;
@@ -88,6 +101,7 @@ echo $command
 eval $command || \
       (echo "run the following command to unregister mroonga:"; \
        echo "  $command")
+fi
 
 %files
 %defattr(-,root,root,-)
