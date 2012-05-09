@@ -7298,7 +7298,7 @@ int ha_mroonga::wrapper_get_next_record(uchar *buf)
     }
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
-  } while (error == HA_ERR_END_OF_FILE);
+  } while (error == HA_ERR_END_OF_FILE || error == HA_ERR_KEY_NOT_FOUND);
   DBUG_RETURN(error);
 }
 
