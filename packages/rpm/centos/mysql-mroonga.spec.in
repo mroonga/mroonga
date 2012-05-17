@@ -6,7 +6,7 @@
 %define mysql_dist    el6_2.1
 %define mysql_download_base_url http://vault.centos.org/6.2/updates/Source/SPackages
 %else
-%define mysql_version 5.5.23
+%define mysql_version 5.5.24
 %define mysql_release 1
 %define mysql_dist    rhel5
 %define mysql_download_base_url http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5
@@ -163,6 +163,7 @@ fi
 %changelog
 * Tue May 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.03-0
 - new upstream release.
+- use MySQL 5.5.24.
 
 * Sun Apr 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.02-0
 - new upstream release.
