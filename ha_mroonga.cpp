@@ -47,6 +47,7 @@
 #include <mrn_index_table_name.hpp>
 #include <mrn_debug_column_access.hpp>
 #include <mrn_auto_increment_value_lock.hpp>
+#include <mrn_match_escalation_threshold_scope.hpp>
 
 #define MRN_SHORT_TEXT_SIZE (1 << 12) //  4Kbytes
 #define MRN_TEXT_SIZE       (1 << 16) // 64Kbytes
@@ -741,6 +742,16 @@ static MYSQL_THDVAR_BOOL(
   true /* default */
 );
 
+static MYSQL_THDVAR_LONGLONG(match_escalation_threshold,
+                             PLUGIN_VAR_RQCMDARG,
+                             "The threshold to determin whether search method is escalated",
+                             NULL,
+                             NULL,
+                             grn_get_default_match_escalation_threshold(),
+                             -1,
+                             LONGLONG_MAX,
+                             0);
+
 static MYSQL_SYSVAR_STR(default_wrapper_engine, mrn_default_wrapper_engine,
                         PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_READONLY,
                         "The default engine for wrapper mode",
@@ -769,6 +780,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(default_parser),
   MYSQL_SYSVAR(dry_write),
   MYSQL_SYSVAR(enable_optimization),
+  MYSQL_SYSVAR(match_escalation_threshold),
   MYSQL_SYSVAR(default_wrapper_engine),
   MYSQL_SYSVAR(libgroonga_version),
   MYSQL_SYSVAR(version),
@@ -6742,6 +6754,8 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
     if (fast_order_limit) {
       generic_ft_init_ext_add_conditions_fast_order_limit(info, expression);
     }
+    longlong escalation_threshold = THDVAR(ha_thd(), match_escalation_threshold);
+    mrn::MatchEscalationThresholdScope scope(info->ctx, escalation_threshold);
     grn_table_select(info->ctx, info->table, expression,
                      info->result, GRN_OP_OR);
   }

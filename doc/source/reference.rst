@@ -302,6 +302,73 @@ Here is an example SQL to disable optimization::
   +-----------------------------+-------+
   1 row in set (0.00 sec)
 
+mroonga_match_escalation_threshold
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The threshold to determin whether search method is escalated. See
+`search specification for groonga
+<http://groonga.org/docs/spec/search.html>`_ about search method
+escalation.
+
+The default value is the same as groonga's default value. It's 0 for
+the default installation. The dafault value can be configured in
+my.cnf or by ``SET GLOBAL mroonga_match_escalation_threshold =
+THRESHOLD;``. Because this variable's scope is both global and
+session.
+
+Here is an example to use -1 as a threshold to determin whether search
+method is escalated. -1 means that never escalated.
+
+.. code-block:: sql
+   :linenos:
+
+   SET GLOBAL mroonga_match_escalation_threshold = -1;
+
+Here is an another example to show behavior change by the variable
+value.
+
+.. code-block:: sql
+   :linenos:
+
+   CREATE TABLE diaries (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     title TEXT,
+     tags TEXT,
+     FULLTEXT INDEX tags_index (tags) COMMENT 'parser "TokenDelimit"'
+   ) ENGINE=mroonga DEFAULT CHARSET=UTF8;
+
+   -- Test data
+   INSERT INTO diaries (title, tags) VALUES ("Hello groonga!", "groonga install");
+   INSERT INTO diaries (title, tags) VALUES ("Hello mroonga!", "mroonga install");
+
+   -- Matches all records that have "install" tag.
+   SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("install" IN BOOLEAN MODE);
+   -- id	title	tags
+   -- 1	Hello groonga!	groonga install
+   -- 2	Hello mroonga!	mroonga install
+
+   -- Matches no records by "gr" tag search because no "gr" tag is used.
+   -- But matches a record that has "groonga" tag because search
+   -- method is escalated and prefix search with "gr" is used.
+   -- The default threshold is 0. It means that no records are matched then
+   -- search method is escalated.
+   SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
+   -- id	title	tags
+   -- 1	Hello groonga!	groonga install
+
+   -- Disables escalation.
+   SET mroonga_match_escalation_threshold = -1;
+   -- No records are matched.
+   SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
+   -- id	title	tags
+
+   -- Enables escalation again.
+   SET mroonga_match_escalation_threshold = 0;
+   -- Matches a record by prefix search with "gr".
+   SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
+   -- id	title	tags
+   -- 1	Hello groonga!	groonga install
+
 List of status variables
 ------------------------
 
