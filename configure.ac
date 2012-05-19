@@ -107,7 +107,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
             :
             ;;
         *)
-            ac_mysql_source_dir="\$(top_builddir)/$ac_mysql_source_dir"
+            ac_mysql_source_dir="$ac_pwd/$ac_mysql_source_dir"
             ;;
         esac
         MYSQL_INC="-I$ac_mysql_source_dir/sql"
