@@ -24,6 +24,8 @@ file(READ ${CMAKE_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
 file(READ ${CMAKE_SOURCE_DIR}/version_in_hex MRN_VERSION_IN_HEX)
 file(READ ${CMAKE_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
 
+file(READ ${CMAKE_SOURCE_DIR}/required_groonga_version REQUIRED_GROONGA_VERSION)
+
 set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
 include(${CMAKE_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
@@ -62,7 +64,7 @@ set_mysql_config_value("--cflags" MYSQL_CFLAGS)
 set_mysql_config_value("--version" MYSQL_VERSION)
 
 include(FindPkgConfig)
-pkg_check_modules(GROONGA REQUIRED "groonga >= 2.0.0")
+pkg_check_modules(GROONGA REQUIRED "groonga >= ${REQUIRED_GROONGA_VERSION}")
 
 include_directories(
   "${PROJECT_BINARY_DIR}"

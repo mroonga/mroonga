@@ -165,8 +165,9 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_MSG_RESULT($mrn_mysql_innodb_fts_p)
 ])
 
+m4_define([mrn_required_groonga_version], m4_include(required_groonga_version))
 AC_DEFUN([CONFIG_OPTION_GROONGA],[
-  PKG_CHECK_MODULES(GROONGA, groonga >= 2.0.2)
+  PKG_CHECK_MODULES(GROONGA, groonga >= 2.0.3)
   _PKG_CONFIG(GROONGA_VERSION, variable=groonga_version, groonga)
   GROONGA_VERSION=$pkg_cv_GROONGA_VERSION
   AC_SUBST(GROONGA_VERSION)
