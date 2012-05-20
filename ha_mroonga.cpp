@@ -37,8 +37,12 @@
 #include <mysql.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <dirent.h>
-#include <unistd.h>
+
+#ifndef WIN32
+#  include <dirent.h>
+#  include <unistd.h>
+#endif
+
 #include "mrn_err.h"
 #include "mrn_table.hpp"
 #include "ha_mroonga.hpp"
@@ -7166,6 +7170,48 @@ int ha_mroonga::alter_share_add(const char *path, TABLE_SHARE *table_share)
   DBUG_RETURN(0);
 }
 
+void ha_mroonga::remove_related_files(const char *base_path)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  const char *base_directory_name = ".";
+  size_t base_path_length = strlen(base_path);
+#ifdef WIN32
+  WIN32_FIND_DATA data;
+  HANDLE finder = FindFirstFile(base_directory_name, &data);
+  if (finder != INVALID_HANDLE_VALUE) {
+    do {
+      if (!(data.dwFileAttributes & FILE_ATTRIBUTE_NORMAL)) {
+        continue;
+      }
+      if (strncmp(data.cFileName, base_path, base_path_length) == 0) {
+        unlink(data.cFileName);
+      }
+    } while (FindNextFile(finder, &data) != 0);
+    FindClose(finder);
+  }
+#else
+  DIR *dir = opendir(base_directory_name);
+  if (dir) {
+    while (struct dirent *entry = readdir(dir)) {
+      struct stat file_status;
+      if (stat(entry->d_name, &file_status) != 0) {
+        continue;
+      }
+      if (!((file_status.st_mode & S_IFMT) && S_IFREG)) {
+        continue;
+      }
+      if (strncmp(entry->d_name, base_path, base_path_length) == 0) {
+        unlink(entry->d_name);
+      }
+    }
+    closedir(dir);
+  }
+#endif
+
+  DBUG_VOID_RETURN;
+}
+
 void ha_mroonga::remove_grn_obj_force(const char *name)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -7180,23 +7226,7 @@ void ha_mroonga::remove_grn_obj_force(const char *name)
       char path[MRN_MAX_PATH_SIZE];
       grn_obj_delete_by_id(ctx, db, id, GRN_TRUE);
       if (grn_obj_path_by_id(ctx, db, id, path) == GRN_SUCCESS) {
-        size_t path_length = strlen(path);
-        DIR *dir = opendir(".");
-        if (dir) {
-          while (struct dirent *entry = readdir(dir)) {
-            struct stat file_status;
-            if (stat(entry->d_name, &file_status) != 0) {
-              continue;
-            }
-            if (!((file_status.st_mode & S_IFMT) && S_IFREG)) {
-              continue;
-            }
-            if (strncmp(entry->d_name, path, path_length) == 0) {
-              unlink(entry->d_name);
-            }
-          }
-          closedir(dir);
-        }
+        remove_related_files(path);
       }
     }
   }
