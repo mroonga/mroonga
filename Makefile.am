@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = 1.9.7
 
 LOCALES = ja
 
-AM_CPPFLAGS = $(MYSQL_INC) $(GROONGA_CFLAGS) -I$(top_srcdir)/lib
+AM_CPPFLAGS = $(MYSQL_INCLUDES) $(GROONGA_CFLAGS) -I$(top_srcdir)/lib
 ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 
 include sources.am

@@ -43,6 +43,7 @@ string(REGEX REPLACE "([^;]+)" "lib/\\1"
 
 set(MYSQL_SOURCE_DIR "PATH" CACHE PATH "MySQL source directory")
 set(MYSQL_INCLUDE_DIRS
+  "${MYSQL_BUILD_DIR}/include"
   "${MYSQL_SOURCE_DIR}/sql"
   "${MYSQL_SOURCE_DIR}/include"
   "${MYSQL_SOURCE_DIR}/regex"

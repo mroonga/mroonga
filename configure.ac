@@ -110,11 +110,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
             ac_mysql_source_dir="$ac_pwd/$ac_mysql_source_dir"
             ;;
         esac
-        MYSQL_INC="-I$ac_mysql_source_dir/sql"
-        MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir/include"
-        MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir/regex"
-        MYSQL_INC="$MYSQL_INC -I$ac_mysql_source_dir"
-        AC_SUBST(MYSQL_INC)
         AC_MSG_RESULT([yes])
       else
         AC_MSG_ERROR([invalid MySQL source directory])
@@ -131,8 +126,24 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     [ac_mysql_build_dir="$withval"],
     [ac_mysql_build_dir="$ac_mysql_source_dir"]
   )
+  case "$ac_mysql_build_dir" in
+  /*)
+      :
+      ;;
+  *)
+      ac_mysql_build_dir="$ac_pwd/$ac_mysql_build_dir"
+      ;;
+  esac
   MYSQL_BUILD_DIR="$ac_mysql_build_dir"
   AC_SUBST(MYSQL_BUILD_DIR)
+
+  MYSQL_INCLUDES=""
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_build_dir/include"
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/sql"
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/include"
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/regex"
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir"
+  AC_SUBST(MYSQL_INCLUDES)
 
   AC_MSG_CHECKING([mysql_config])
   AC_ARG_WITH([mysql-config],
@@ -152,7 +163,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     AC_MSG_ERROR([failed to run "$ac_mysql_config": $plugindir])
   fi
   MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
-  MYSQL_INC="$MYSQL_INC $($ac_mysql_config --include)"
+  MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
   MYSQL_VERSION="$($ac_mysql_config --version)"
 
   AC_MSG_CHECKING([for InnoDB FTS])
@@ -210,10 +221,10 @@ CONFIG_OPTION_PLUGINS
 if test "$standalone_build" = "yes"; then
   CONFIG_OPTION_MYSQL
 else
-  MYSQL_INC="-I../../sql -I../../include -I../../regex -I../.."
+  MYSQL_INCLUDES="-I../../sql -I../../include -I../../regex -I../.."
   plugindir="\$(pkglibdir)/plugin"
 fi
-AC_SUBST(MYSQL_INC)
+AC_SUBST(MYSQL_INCLUDES)
 AC_SUBST(MYSQL_CFLAGS)
 AC_SUBST(MYSQL_VERSION)
 AC_SUBST(plugindir)
