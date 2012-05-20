@@ -1134,17 +1134,17 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 #ifdef WORDS_BIGENDIAN
 #define mrn_byte_order_host_to_network(buf, key, size)  \
 {                                                       \
-  uint32_t size_ = (uint32_t)(size);                    \
-  uint8_t *buf_ = (uint8_t *)(buf);                     \
-  uint8_t *key_ = (uint8_t *)(key);                     \
+  uint32 size_ = (uint32)(size);                        \
+  uint8 *buf_ = (uint8 *)(buf);                         \
+  uint8 *key_ = (uint8 *)(key);                         \
   while (size_--) { *buf_++ = *key_++; }                \
 }
 #else /* WORDS_BIGENDIAN */
 #define mrn_byte_order_host_to_network(buf, key, size)  \
 {                                                       \
-  uint32_t size_ = (uint32_t)(size);                    \
-  uint8_t *buf_ = (uint8_t *)(buf);                     \
-  uint8_t *key_ = (uint8_t *)(key) + size_;             \
+  uint32 size_ = (uint32)(size);                        \
+  uint8 *buf_ = (uint8 *)(buf);                         \
+  uint8 *key_ = (uint8 *)(key) + size_;                 \
   while (size_--) { *buf_++ = *(--key_); }              \
 }
 #endif /* WORDS_BIGENDIAN */
