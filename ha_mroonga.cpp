@@ -9141,18 +9141,18 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       break;
     case TYPE_LONG_LONG_NUMBER:
       if (decode)
-        *((uint8_t *)(&long_long_value)) ^= 0x80;
+        *((uint8 *)(&long_long_value)) ^= 0x80;
       mrn_byte_order_host_to_network(current_buffer, &long_long_value,
                                      data_size);
       if (!decode)
-        *((uint8_t *)(current_buffer)) ^= 0x80;
+        *((uint8 *)(current_buffer)) ^= 0x80;
       break;
     case TYPE_NUMBER:
       if (decode)
       {
         Field_num *number_field = (Field_num *)field;
         if (!number_field->unsigned_flag) {
-          *((uint8_t *)(current_key)) ^= 0x80;
+          *((uint8 *)(current_key)) ^= 0x80;
         }
       }
       mrn_byte_order_host_to_network(current_buffer, current_key, data_size);
@@ -9160,7 +9160,7 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       {
         Field_num *number_field = (Field_num *)field;
         if (!number_field->unsigned_flag) {
-          *((uint8_t *)(current_buffer)) ^= 0x80;
+          *((uint8 *)(current_buffer)) ^= 0x80;
         }
       }
       break;
