@@ -56,16 +56,16 @@ set(MYSQL_CONFIG "PATH" CACHE PATH "mysql-config command path")
 find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
 
 macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
-  execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
-    OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
-  string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
+  if(NOT ${VARIABLE})
+    execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
+      OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
+    string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
+  endif()
 endmacro()
 
-if(MYSQL_CONFIG)
-  set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
-  set_mysql_config_value("--cflags" MYSQL_CFLAGS)
-  set_mysql_config_value("--version" MYSQL_VERSION)
-endif()
+set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
+set_mysql_config_value("--cflags" MYSQL_CFLAGS)
+set_mysql_config_value("--version" MYSQL_VERSION)
 
 include(FindPkgConfig)
 pkg_check_modules(GROONGA REQUIRED "groonga >= ${REQUIRED_GROONGA_VERSION}")
