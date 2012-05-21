@@ -3,7 +3,7 @@
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/16/SRPMS
 
-%define groonga_required_version 2.0.2
+%define groonga_required_version 2.0.3
 
 Name:		mysql-mroonga
 Version:	@VERSION@
@@ -118,6 +118,7 @@ fi
 * Tue May 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.03-0
 - new upstream release.
 - use MySQL 5.5.23.
+- require groonga 2.0.3 or later.
 
 * Sun Apr 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.02-0
 - new upstream release.

@@ -5,7 +5,7 @@ Maintainer: Kouhei Sutou <kou@clear-code.com>
 Build-Depends:
 	debhelper (>= 7.0.50),
 	autotools-dev,
-	libgroonga-dev (>= 2.0.2),
+	libgroonga-dev (>= 2.0.3),
 	libmysqlclient-dev,
 	libssl-dev
 Standards-Version: 3.9.1
