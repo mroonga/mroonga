@@ -1,5 +1,5 @@
 AM_CPPFLAGS =					\
-	$(MYSQL_INC)				\
+	$(MYSQL_INCLUDES)			\
 	$(GROONGA_CFLAGS)			\
 	$(MYSQL_VERSION_CFLAGS)			\
 	-I$(top_srcdir)
