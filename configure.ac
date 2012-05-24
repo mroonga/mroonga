@@ -177,8 +177,10 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 ])
 
 m4_define([mrn_required_groonga_version], m4_include(required_groonga_version))
+REQUIRED_GROONGA_VERSION=mrn_required_groonga_version
+AC_SUBST(REQUIRED_GROONGA_VERSION)
 AC_DEFUN([CONFIG_OPTION_GROONGA],[
-  PKG_CHECK_MODULES(GROONGA, groonga >= 2.0.3)
+  PKG_CHECK_MODULES(GROONGA, groonga >= ${REQUIRED_GROONGA_VERSION})
   _PKG_CONFIG(GROONGA_VERSION, variable=groonga_version, groonga)
   GROONGA_VERSION=$pkg_cv_GROONGA_VERSION
   AC_SUBST(GROONGA_VERSION)
@@ -354,6 +356,7 @@ AC_OUTPUT([
   mrn_version.h
   test/sql/suite/mroonga_storage/r/information_schema.result
   test/sql/suite/mroonga_storage/r/variables.result
+  packages/debian/control
   packages/rpm/centos/mysql-mroonga.spec
   packages/rpm/fedora/mysql-mroonga.spec
 ])

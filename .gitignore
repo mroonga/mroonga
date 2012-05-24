@@ -31,6 +31,7 @@ cmake_install.cmake
 /stamp-h1
 /src/scratch
 /libmroonga.a
+/packages/debian/control
 /packages/rpm/*/*.spec
 /packages/yum/fedora/
 /packages/yum/centos/
