@@ -3,6 +3,38 @@
 News
 ====
 
+.. _release-2-03:
+
+Release 2.03 - 2012/05/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage mode][wrapper mode] Supported to disable/enable keys in bulk insert.
+  [#1310][#1311]
+* [rpm][centos] Supported MySQL 5.5.24.
+* [rpm][fedora] Supported MySQL 5.5.23.
+* [doc] Added entry for mroonga_match_escalation_threshold system variable.
+* Required groonga 2.0.3 or later.
+
+Fixes
+^^^^^
+
+* [wrapper mode] Fixed to ignore not found keys in wrapped handler.
+  [#1322][groonga-dev,00746] [Reported by Takken Ishibashi]
+* [rpm] Fixed post/postun scripts. [groonga-dev,00810]
+  [Reported by Takken Ishibashi]
+* [rpm] Fixed a bug that mroonga plugin is unregistered when upgrading.
+  [groonga-dev,00810] [Patch by Iwai, Masaharu]
+* [rpm] Fixed yum repository RPM URL
+
+Thanks
+^^^^^^
+
+* Takken Ishibashi
+* Iwai, Masaharu
+
 .. _release-2-02:
 
 Release 2.02 - 2012/04/29
