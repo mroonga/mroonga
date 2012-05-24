@@ -302,6 +302,8 @@ Here is an example SQL to disable optimization::
   +-----------------------------+-------+
   1 row in set (0.00 sec)
 
+.. _mroonga_match_escalation_threshold:
+
 mroonga_match_escalation_threshold
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
