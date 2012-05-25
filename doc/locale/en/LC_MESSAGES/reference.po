@@ -660,9 +660,8 @@ msgstr ""
 
 # b089c40304aa4805a4fca045ed8b3a2c
 #: ../../../source/reference.rst:126
-#, fuzzy
 msgid "List of unavailable SQL commands"
-msgstr "List of available SQL commands"
+msgstr ""
 
 # dd3502df72fc4edc847d9ba4562a90ce
 #: ../../../source/reference.rst:128
@@ -708,18 +707,14 @@ msgstr "List of server variables"
 
 # 74f8ebbd34854d6f8bfed223beac1b84
 #: ../../../source/reference.rst:141
-#, fuzzy
 msgid ""
 "Here are the explanations of server variables that are introduced by mroonga."
 msgstr ""
-"Here are the explanations of status variables that are introduced by groonga "
-"storage engine."
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
 #: ../../../source/reference.rst:144
-#, fuzzy
 msgid "mroonga_default_parser"
-msgstr "groonga_fast_order_limit"
+msgstr ""
 
 # 597fc102127842ab80166cb87684cd66
 #: ../../../source/reference.rst:146
@@ -802,9 +797,8 @@ msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
 #: ../../../source/reference.rst:245
-#, fuzzy
 msgid "mroonga_dry_write"
-msgstr "groonga_fast_order_limit"
+msgstr ""
 
 # 662d6ddf9b7248cba67f48c09902b1cf
 #: ../../../source/reference.rst:247
@@ -881,18 +875,14 @@ msgstr "List of status variables"
 
 # 74f8ebbd34854d6f8bfed223beac1b84
 #: ../../../source/reference.rst:377
-#, fuzzy
 msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
 msgstr ""
-"Here are the explanations of status variables that are introduced by groonga "
-"storage engine."
 
 # 44a69951fb964d71be14e20f56f9657c
 #: ../../../source/reference.rst:380
-#, fuzzy
 msgid "mroonga_count_skip"
-msgstr "groonga_count_skip"
+msgstr ""
 
 # f66bd47adc1f4141ae9432c72e8bf6a7
 #: ../../../source/reference.rst:382
@@ -911,9 +901,8 @@ msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
 #: ../../../source/reference.rst:396
-#, fuzzy
 msgid "mroonga_fast_order_limit"
-msgstr "groonga_fast_order_limit"
+msgstr ""
 
 # 052f5e42b1d84e8d919523fb99c8e5d5
 #: ../../../source/reference.rst:398
