@@ -1,6 +1,7 @@
 test_files = \
 	alter_table_add_column.test \
 	alter_table_change_engine.test \
+	alter_table_disable_enable_keys.test \
 	alter_table_drop_column.test \
 	alter_table_fulltext.test \
 	alter_table_rename_table.test \
@@ -26,6 +27,7 @@ test_files = \
 	fulltext_multiple_index.test \
 	fulltext_myisam.test \
 	fulltext_not_match_against.test \
+	fulltext_order_by_in_transaction.test \
 	fulltext_parser_comment.test \
 	fulltext_search_ascii.test \
 	fulltext_search_cp932.test \
@@ -37,6 +39,8 @@ test_files = \
 	insert.test \
 	insert_on_duplicate_key_multiple_column_primary_key_myisam.test \
 	insert_on_duplicate_key_multiple_column_unique_index_myisam.test \
+	match_escalation_threshold_global.test \
+	match_escalation_threshold_session.test \
 	optimization_order_limit_todo_split_me.test \
 	repair_table.test \
 	temporary_table.test \

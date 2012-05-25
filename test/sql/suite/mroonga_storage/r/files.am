@@ -1,6 +1,8 @@
 result_files = \
 	alter_table_add_column.result \
+	alter_table_add_key_multiple_column_with_data.result \
 	alter_table_change_engine.result \
+	alter_table_disable_enable_keys.result \
 	alter_table_drop_column.result \
 	alter_table_engine_decimal.result \
 	alter_table_fulltext.result \
@@ -72,6 +74,8 @@ result_files = \
 	key_read.result \
 	last_insert_grn_id.result \
 	log_level.result \
+	match_escalation_threshold_global.result \
+	match_escalation_threshold_session.result \
 	multiple_column_index_delete.result \
 	multiple_column_index_recreate.result \
 	multiple_column_index_replace.result \

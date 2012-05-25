@@ -1,6 +1,8 @@
 test_files = \
 	alter_table_add_column.test \
+	alter_table_add_key_multiple_column_with_data.test \
 	alter_table_change_engine.test \
+	alter_table_disable_enable_keys.test \
 	alter_table_drop_column.test \
 	alter_table_engine_decimal.test \
 	alter_table_fulltext.test \
@@ -72,6 +74,8 @@ test_files = \
 	key_read.test \
 	last_insert_grn_id.test \
 	log_level.test \
+	match_escalation_threshold_global.test \
+	match_escalation_threshold_session.test \
 	multiple_column_index_delete.test \
 	multiple_column_index_recreate.test \
 	multiple_column_index_replace.test \
