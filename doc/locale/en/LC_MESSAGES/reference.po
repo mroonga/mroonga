@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-29 10:51\n"
+"POT-Creation-Date: 2012-05-25 12:53\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -839,13 +839,48 @@ msgstr ""
 msgid "Here is an example SQL to disable optimization::"
 msgstr ""
 
+# 15ee150a65fa41839a0aba95515d5138
+#: ../../../source/reference.rst:308
+msgid "mroonga_match_escalation_threshold"
+msgstr ""
+
+# 0e73cf4e41ca4603b94042818a703d01
+#: ../../../source/reference.rst:310
+msgid ""
+"The threshold to determin whether search method is escalated. See `search "
+"specification for groonga <http://groonga.org/docs/spec/search.html>`_ about "
+"search method escalation."
+msgstr ""
+
+# 7aff1a3ab66945bcbe486da9fb4ca5d0
+#: ../../../source/reference.rst:315
+msgid ""
+"The default value is the same as groonga's default value. It's 0 for the "
+"default installation. The dafault value can be configured in my.cnf or by "
+"``SET GLOBAL mroonga_match_escalation_threshold = THRESHOLD;``. Because this "
+"variable's scope is both global and session."
+msgstr ""
+
+# efa1344961a9445ca9061b8fe591007c
+#: ../../../source/reference.rst:321
+msgid ""
+"Here is an example to use -1 as a threshold to determin whether search "
+"method is escalated. -1 means that never escalated."
+msgstr ""
+
+# 4ef63d1019614da3a29580b42060f249
+#: ../../../source/reference.rst:329
+msgid ""
+"Here is an another example to show behavior change by the variable value."
+msgstr ""
+
 # 6f57bcd862b3492b9828d7d4ec559909
-#: ../../../source/reference.rst:306
+#: ../../../source/reference.rst:375
 msgid "List of status variables"
 msgstr "List of status variables"
 
 # 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference.rst:308
+#: ../../../source/reference.rst:377
 #, fuzzy
 msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
@@ -854,13 +889,13 @@ msgstr ""
 "storage engine."
 
 # 44a69951fb964d71be14e20f56f9657c
-#: ../../../source/reference.rst:311
+#: ../../../source/reference.rst:380
 #, fuzzy
 msgid "mroonga_count_skip"
 msgstr "groonga_count_skip"
 
 # f66bd47adc1f4141ae9432c72e8bf6a7
-#: ../../../source/reference.rst:313
+#: ../../../source/reference.rst:382
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
@@ -870,18 +905,18 @@ msgstr ""
 
 # c376c0400a38426e833beae3faabbc28
 # 14a1b5c728a747ab9c8167c4165387ea
-#: ../../../source/reference.rst:316 ../../../source/reference.rst:332
+#: ../../../source/reference.rst:385 ../../../source/reference.rst:401
 msgid "Here is an example how to check it::"
 msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference.rst:327
+#: ../../../source/reference.rst:396
 #, fuzzy
 msgid "mroonga_fast_order_limit"
 msgstr "groonga_fast_order_limit"
 
 # 052f5e42b1d84e8d919523fb99c8e5d5
-#: ../../../source/reference.rst:329
+#: ../../../source/reference.rst:398
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
