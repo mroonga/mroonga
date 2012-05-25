@@ -24,9 +24,8 @@ msgstr "News"
 
 # ec49610ff0d445c8870b64d923b8997d
 #: ../../../source/news.rst:9
-#, fuzzy
 msgid "Release 2.03 - 2012/05/29"
-msgstr "Release 1.0.1 - 2011/10/29"
+msgstr "Release 2.03 - 2012/05/29"
 
 # 95494fd77e4d4ec4a4d8518e62b9b557
 #: ../../../source/news.rst:12 ../../../source/news.rst:76
@@ -38,24 +37,20 @@ msgstr "Improvements"
 
 # 771142852a944d1f9ba6d94a3d496e91
 #: ../../../source/news.rst:14
-#, fuzzy
 msgid ""
 "[storage mode][wrapper mode] Supported disable/enable keys in bulk insert. "
 "[#1310][#1311]"
 msgstr ""
-"[storage mode][wrapper mode] support reopening a database by `flush tables`."
 
 # 19e201e605f64d09ba23f9be0a9d7674
 #: ../../../source/news.rst:16
-#, fuzzy
 msgid "[rpm][centos] Supported MySQL 5.5.24."
-msgstr "support MySQL 5.5.17."
+msgstr ""
 
 # 19e201e605f64d09ba23f9be0a9d7674
 #: ../../../source/news.rst:17
-#, fuzzy
 msgid "[rpm][fedora] Supported MySQL 5.5.23."
-msgstr "support MySQL 5.5.17."
+msgstr ""
 
 # d0173021b02e4bc6a5372fc66154bcfb
 #: ../../../source/news.rst:18
@@ -122,9 +117,8 @@ msgstr ""
 
 # ec49610ff0d445c8870b64d923b8997d
 #: ../../../source/news.rst:44
-#, fuzzy
 msgid "Release 2.02 - 2012/04/29"
-msgstr "Release 1.0.1 - 2011/10/29"
+msgstr ""
 
 # 4b366edfa882421d93283e311aa2c832
 #: ../../../source/news.rst:48
@@ -203,9 +197,8 @@ msgstr ""
 
 # 19e201e605f64d09ba23f9be0a9d7674
 #: ../../../source/news.rst:93
-#, fuzzy
 msgid "Supported MySQL 5.5.23."
-msgstr "support MySQL 5.5.17."
+msgstr ""
 
 # eac12478379549459fa61633b51e307a
 #: ../../../source/news.rst:94
@@ -226,9 +219,8 @@ msgstr ""
 
 # b48d53cb285d4d45baef3eb00a77db3d
 #: ../../../source/news.rst:98
-#, fuzzy
 msgid "Supported Ubuntu 12.04 Precise Pangolin."
-msgstr "support Ubuntu 11.10 Oneiric Ocelot."
+msgstr ""
 
 # 862e6cc2459d4f56af4047e41f017e14
 #: ../../../source/news.rst:103
@@ -259,9 +251,8 @@ msgstr ""
 
 # d20c5e983fa840b3a4a0b4a64cc48a63
 #: ../../../source/news.rst:116
-#, fuzzy
 msgid "Takashi Kawano"
-msgstr "Takahiro Nagai"
+msgstr ""
 
 # 12db276592394e9e9b231ec94aac6426
 #: ../../../source/news.rst:117
@@ -292,21 +283,18 @@ msgstr ""
 
 # ec49610ff0d445c8870b64d923b8997d
 #: ../../../source/news.rst:127
-#, fuzzy
 msgid "Release 2.01 - 2012/03/29"
-msgstr "Release 1.0.1 - 2011/10/29"
+msgstr ""
 
 # 19e201e605f64d09ba23f9be0a9d7674
 #: ../../../source/news.rst:132
-#, fuzzy
 msgid "Supported MySQL 5.5.22."
-msgstr "support MySQL 5.5.17."
+msgstr ""
 
 # 19e201e605f64d09ba23f9be0a9d7674
 #: ../../../source/news.rst:133
-#, fuzzy
 msgid "Supported MySQL 5.1.62."
-msgstr "support MySQL 5.5.17."
+msgstr ""
 
 # 6e3508a426974f3bb29676f83176c8c6
 #: ../../../source/news.rst:134
@@ -388,18 +376,16 @@ msgstr ""
 
 # de17eaf4907346c080c743737b718205
 #: ../../../source/news.rst:158
-#, fuzzy
 msgid ""
 "[storage mode] Supported index search for 0 value. [Reported by @104yuki_n]"
-msgstr "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
+msgstr ""
 
 # de17eaf4907346c080c743737b718205
 #: ../../../source/news.rst:160
-#, fuzzy
 msgid ""
 "[storage mode] Supported Ubuntu Hardy with optimize build flags. [Reported "
 "by Kazuhiko]"
-msgstr "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
+msgstr ""
 
 # 4116a00ba0f9414aac63f4c20d895e1e
 #: ../../../source/news.rst:162
@@ -461,9 +447,8 @@ msgstr ""
 
 # ec49610ff0d445c8870b64d923b8997d
 #: ../../../source/news.rst:192
-#, fuzzy
 msgid "Release 2.00 - 2012/02/29"
-msgstr "Release 1.0.1 - 2011/10/29"
+msgstr ""
 
 # 8d17a636b27f47ddbf1b91e375309881
 #: ../../../source/news.rst:196 ../../../source/news.rst:302
@@ -544,9 +529,8 @@ msgstr ""
 
 # 19e201e605f64d09ba23f9be0a9d7674
 #: ../../../source/news.rst:249
-#, fuzzy
 msgid "Supported MySQL 5.5.21."
-msgstr "support MySQL 5.5.17."
+msgstr ""
 
 # 082a2a128ae24be0b53cc2aea48cccb7
 #: ../../../source/news.rst:250
@@ -573,10 +557,9 @@ msgstr ""
 
 # de17eaf4907346c080c743737b718205
 #: ../../../source/news.rst:255
-#, fuzzy
 msgid ""
 "[storage mode] Supported fulltext search in sub query. [Reported by @camyuy]"
-msgstr "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
+msgstr ""
 
 # bfc75fba13664b8fb56d82a9600854f6
 #: ../../../source/news.rst:257
@@ -587,11 +570,10 @@ msgstr ""
 
 # de17eaf4907346c080c743737b718205
 #: ../../../source/news.rst:259
-#, fuzzy
 msgid ""
 "[storage mode] Removed a needless write lock on update. [#1271] [Reported by "
 "Takahiro Nagai]"
-msgstr "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
+msgstr ""
 
 # 397dcc16b2a84f37b0fefcde20140417
 #: ../../../source/news.rst:261
@@ -693,9 +675,8 @@ msgstr ""
 
 # ec49610ff0d445c8870b64d923b8997d
 #: ../../../source/news.rst:298
-#, fuzzy
 msgid "Release 1.20 - 2012/01/29"
-msgstr "Release 1.0.1 - 2011/10/29"
+msgstr ""
 
 # a1b0fc06ff814f0fadb76859a1ec1835
 #: ../../../source/news.rst:308
@@ -737,15 +718,13 @@ msgstr ""
 
 # 19e201e605f64d09ba23f9be0a9d7674
 #: ../../../source/news.rst:378
-#, fuzzy
 msgid "Supported MySQL 5.5.20."
-msgstr "support MySQL 5.5.17."
+msgstr ""
 
 # 19e201e605f64d09ba23f9be0a9d7674
 #: ../../../source/news.rst:379
-#, fuzzy
 msgid "Supported MySQL 5.1.61."
-msgstr "support MySQL 5.5.17."
+msgstr ""
 
 # 7e31da284a4b4fdc9d4f162ad5b5ee10
 #: ../../../source/news.rst:380
@@ -782,15 +761,13 @@ msgstr ""
 
 # 862e6cc2459d4f56af4047e41f017e14
 #: ../../../source/news.rst:387
-#, fuzzy
 msgid "[storage mode] Supported float value in multiple column index."
-msgstr "[storage mode] support multi columns index for full text search."
+msgstr ""
 
 # 3470fadbc0df4faab7fd20d619a5c9c8
 #: ../../../source/news.rst:388
-#, fuzzy
 msgid "[storage mode] Supported double value in multiple column index."
-msgstr "[storage mode] support `create index`."
+msgstr ""
 
 # 7b37df639cb14100a909bbdab0843073
 #: ../../../source/news.rst:389
@@ -805,11 +782,10 @@ msgstr ""
 
 # de17eaf4907346c080c743737b718205
 #: ../../../source/news.rst:392
-#, fuzzy
 msgid ""
 "[storage mode] Supported ``count(*)`` on view. [#1255] [Reported by Takahiro "
 "Nagai]"
-msgstr "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
+msgstr ""
 
 # 3d1fdbb6b87c46799fead76d6d3ac5ae
 #: ../../../source/news.rst:394
@@ -842,9 +818,8 @@ msgstr ""
 
 # af84daadf88a4cee949f0fbaf956e6be
 #: ../../../source/news.rst:410
-#, fuzzy
 msgid "@issm"
-msgstr "@issmさん"
+msgstr ""
 
 # cb85831e01844cacb83f63d2dc8d5d3a
 #: ../../../source/news.rst:411
@@ -858,21 +833,18 @@ msgstr ""
 
 # ec49610ff0d445c8870b64d923b8997d
 #: ../../../source/news.rst:417
-#, fuzzy
 msgid "Release 1.11 - 2011/12/29"
-msgstr "Release 1.0.1 - 2011/10/29"
+msgstr ""
 
 # 19e201e605f64d09ba23f9be0a9d7674
 #: ../../../source/news.rst:422
-#, fuzzy
 msgid "Supported MySQL 5.5.19."
-msgstr "support MySQL 5.5.17."
+msgstr ""
 
 # f1b1dbde64be46ab9d3c7b46701e2fba
 #: ../../../source/news.rst:423
-#, fuzzy
 msgid "Supported MySQL 5.6.4."
-msgstr "support MySQL 5.6.3-m6."
+msgstr ""
 
 # d59d2d3506d04a748fedcb0e37c4b2ca
 #: ../../../source/news.rst:424
@@ -952,9 +924,8 @@ msgstr ""
 
 # ec49610ff0d445c8870b64d923b8997d
 #: ../../../source/news.rst:456
-#, fuzzy
 msgid "Release 1.10 - 2011/11/29"
-msgstr "Release 1.0.1 - 2011/10/29"
+msgstr ""
 
 # 8151123b2af748dab73b40038b826e71
 #: ../../../source/news.rst:458
@@ -1488,13 +1459,10 @@ msgstr "0.7 リリース - 2011/06/29"
 
 # 8cd9aa31d4fc44e98071b7a3f32d08e3
 #: ../../../source/news/0.x.rst:38
-#, fuzzy
 msgid ""
 "既存のストレージエンジンに全文検索機能を追加する :doc:`/userguide/wrapper` の"
 "追加。"
 msgstr ""
-"既存のストレージエンジンに全文検索機能を追加する :doc:`userguide/wrapper` の"
-"追加。"
 
 # 6943703a8b334fe4ab7ccd6f33cf5630
 #: ../../../source/news/0.x.rst:39
