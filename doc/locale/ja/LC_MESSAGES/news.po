@@ -47,12 +47,12 @@ msgstr ""
 # 3754145a2bb74e9da532cb818bf851b6
 #: ../../../source/news.rst:16
 msgid "[rpm][centos] Supported MySQL 5.5.24."
-msgstr "MySQL 5.5.24に対応。"
+msgstr "[rpm][centos] MySQL 5.5.24に対応。"
 
 # 3754145a2bb74e9da532cb818bf851b6
 #: ../../../source/news.rst:17
 msgid "[rpm][fedora] Supported MySQL 5.5.23."
-msgstr "MySQL 5.5.23に対応。"
+msgstr "[rpm][fedora] MySQL 5.5.23に対応。"
 
 # 02c2ca351f3b4ed4ba3ed9c6173d2bac
 #: ../../../source/news.rst:18
@@ -70,7 +70,7 @@ msgid ""
 "[yum] Changed RPM package name that provides Yum repository from groonga-"
 "repository to groonga-release to follow RPM package name convension such as "
 "centos-release and fedora-release."
-msgstr "groongaのYumリポジトリを提供するRPMパッケージ名を"
+msgstr "[yum] groongaのYumリポジトリを提供するRPMパッケージ名を"
 "groonga-repositoryからgroonga-releaseへと変更し、RPMパッケージ命名"
 "規則をcentos-releaseやfedora-releaseに合わせた。"
 
