@@ -123,7 +123,7 @@ msgstr "石橋卓見さん"
 # 59f7674ce86f4f93ad7ce8226b90c44a
 #: ../../../source/news.rst:39
 msgid "Iwai, Masaharu"
-msgstr ""
+msgstr "Iwai, Masaharuさん"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:44
