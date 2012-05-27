@@ -1723,7 +1723,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    inserting_with_update(false),
    fulltext_searching(false),
    ignoring_no_key_columns(false),
-   replacing_(false)
+   replacing_(false),
+   written_by_row_based_binlog(0)
 {
   MRN_DBUG_ENTER_METHOD();
   grn_ctx_init(ctx, 0);
@@ -8586,6 +8587,17 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
   DBUG_PRINT("info", ("mroonga: stored record ID: %d", record_id));
   my_ptrdiff_t ptr_diff_old = PTR_BYTE_DIFF(old_data, table->record[0]);
   my_ptrdiff_t ptr_diff_new = 0;
+#ifdef MRN_RBR_UPDATE_NEED_ALL_COLUMNS
+  if (!written_by_row_based_binlog) {
+    if (check_written_by_row_based_binlog()) {
+      written_by_row_based_binlog = 2;
+    } else {
+      written_by_row_based_binlog = 1;
+    }
+  }
+  bool need_all_columns =
+    (new_data && written_by_row_based_binlog == 2);
+#endif
   if (new_data) {
     ptr_diff_new = PTR_BYTE_DIFF(new_data, table->record[0]);
   }
@@ -8597,10 +8609,18 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
     if (
       !bitmap_is_set(table->read_set, field->field_index) &&
       !bitmap_is_set(table->write_set, field->field_index) &&
-      bitmap_is_set(&multiple_column_key_bitmap, field->field_index)
+#ifdef MRN_RBR_UPDATE_NEED_ALL_COLUMNS
+      (
+        need_all_columns ||
+#endif
+        bitmap_is_set(&multiple_column_key_bitmap, field->field_index)
+#ifdef MRN_RBR_UPDATE_NEED_ALL_COLUMNS
+      )
+#endif
     ) {
       mrn::DebugColumnAccess debug_column_access(table, table->write_set);
-      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));      const char *value;
+      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));
+      const char *value;
       uint32 value_length;
       value = grn_obj_get_value_(ctx, grn_columns[i], record_id,
                                  &value_length);
@@ -9220,6 +9240,7 @@ int ha_mroonga::reset()
   ignoring_duplicated_key = false;
   fulltext_searching = false;
   replacing_ = false;
+  written_by_row_based_binlog = 0;
   mrn_lock_type = F_UNLCK;
   mrn_clear_alter_share(thd);
   DBUG_RETURN(error);
@@ -12262,6 +12283,27 @@ void ha_mroonga::free_foreign_key_create_info(char* str)
     storage_free_foreign_key_create_info(str);
   }
   DBUG_VOID_RETURN;
+}
+
+bool ha_mroonga::check_written_by_row_based_binlog()
+{
+  MRN_DBUG_ENTER_METHOD();
+  THD *thd = ha_thd();
+  DBUG_RETURN(
+#ifdef MRN_ROW_BASED_CHECK_IS_METHOD
+    thd->is_current_stmt_binlog_format_row() &&
+#else
+    thd->current_stmt_binlog_row_based &&
+#endif
+    table->s->tmp_table == NO_TMP_TABLE &&
+    binlog_filter->db_ok(table->s->db.str) &&
+#ifdef MRN_OPTION_BITS_IS_UNDER_VARIABLES
+    (thd->variables.option_bits & OPTION_BIN_LOG) &&
+#else
+    (thd->options & OPTION_BIN_LOG) &&
+#endif
+    mysql_bin_log.is_open()
+  );
 }
 
 #ifdef __cplusplus

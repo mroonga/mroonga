@@ -135,6 +135,15 @@ extern "C" {
 #  define MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
 #endif
 
+#if MYSQL_VERSION_ID < 50600
+#  define MRN_RBR_UPDATE_NEED_ALL_COLUMNS
+#endif
+
+#if MYSQL_VERSION_ID >= 50500
+#  define MRN_ROW_BASED_CHECK_IS_METHOD
+#  define MRN_OPTION_BITS_IS_UNDER_VARIABLES
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -232,6 +241,7 @@ private:
   bool fulltext_searching;
   bool ignoring_no_key_columns;
   bool replacing_;
+  uint written_by_row_based_binlog;
 
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg);
@@ -937,6 +947,7 @@ private:
   void storage_free_foreign_key_create_info(char* str);
   void wrapper_set_keys_in_use();
   void storage_set_keys_in_use();
+  bool check_written_by_row_based_binlog();
 };
 
 #ifdef __cplusplus
