@@ -2691,11 +2691,11 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     DBUG_RETURN(error);
 
   mrn::IndexTableName index_table_name(grn_table_name, key_info->name);
-  int key_parts = key_info->key_parts;
+  bool is_multiple_column_index = key_info->key_parts > 1;
   grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
   grn_obj_flags index_column_flags =
     GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
-  if (key_parts == 1) {
+  if (!is_multiple_column_index) {
     Field *field = key_info->key_part[0].field;
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
@@ -2773,7 +2773,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   }
 
   mrn_change_encoding(ctx, system_charset_info);
-  if (key_parts == 1) {
+  if (!is_multiple_column_index) {
     if (column) {
       grn_obj source_ids;
       grn_id source_id = grn_obj_id(ctx, column);
