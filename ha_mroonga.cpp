@@ -2729,8 +2729,8 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
   } else {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    if (is_need_normalize(&key_info->key_part->field[0]))
-    {
+    if (!is_multiple_column_index &&
+        is_need_normalize(&key_info->key_part->field[0])) {
       index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
     }
   }
