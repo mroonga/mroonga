@@ -31,12 +31,16 @@ Fixes
 * [rpm] Fixed a bug that mroonga plugin is unregistered when upgrading.
   [groonga-dev,00810]
   [Reported by Takken Ishibashi] [Patch by Iwai, Masaharu]
+* Fixed a bug that row based replication transfers wrong data on MySQL
+  5.5 or earlier.
+  [#1379][groonga-dev,00902] [Reported by Kenji Doi]
 
 Thanks
 ^^^^^^
 
 * Takken Ishibashi
 * Iwai, Masaharu
+* Kenji Doi
 
 .. _release-2-02:
 
