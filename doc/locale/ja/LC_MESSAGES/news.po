@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-28 14:01\n"
-"PO-Revision-Date: 2012-05-28 14:23+0900\n"
+"PO-Revision-Date: 2012-05-28 15:17+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -57,7 +57,7 @@ msgstr "[rpm][fedora] MySQL 5.5.23に対応。"
 # 02c2ca351f3b4ed4ba3ed9c6173d2bac
 #: ../../../source/news.rst:18
 msgid "Added :ref:`mroonga_match_escalation_threshold` system variable."
-msgstr "`mroonga_match_escalation_threshold` システム変数を追加。"
+msgstr ":ref:`mroonga_match_escalation_threshold` システム変数を追加。"
 
 # e50707438bd14803829f2477237fc29f
 #: ../../../source/news.rst:19
