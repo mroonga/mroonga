@@ -2695,7 +2695,10 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
   grn_obj_flags index_column_flags =
     GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
-  if (!is_multiple_column_index) {
+  if (is_multiple_column_index) {
+    index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+    index_column_flags |= GRN_OBJ_WITH_SECTION;
+  } else {
     Field *field = key_info->key_part[0].field;
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
@@ -2708,9 +2711,6 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     column = grn_obj_column(ctx, grn_table, column_name, column_name_size);
     grn_builtin_type groonga_type = mrn_grn_type_from_field(ctx, field, true);
     index_type = grn_ctx_at(ctx, groonga_type);
-  } else {
-    index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
-    index_column_flags |= GRN_OBJ_WITH_SECTION;
   }
 
   int key_alg = key_info->algorithm;
@@ -2773,16 +2773,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   }
 
   mrn_change_encoding(ctx, system_charset_info);
-  if (!is_multiple_column_index) {
-    if (column) {
-      grn_obj source_ids;
-      grn_id source_id = grn_obj_id(ctx, column);
-      GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
-      GRN_UINT32_PUT(ctx, &source_ids, source_id);
-      grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
-      grn_obj_unlink(ctx, &source_ids);
-    }
-  } else {
+  if (is_multiple_column_index) {
     if (key_info->flags & HA_FULLTEXT) {
       grn_obj source_ids;
       GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
@@ -2798,6 +2789,15 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
         GRN_UINT32_PUT(ctx, &source_ids, source_id);
         grn_obj_unlink(ctx, source_column);
       }
+      grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
+      grn_obj_unlink(ctx, &source_ids);
+    }
+  } else {
+    if (column) {
+      grn_obj source_ids;
+      grn_id source_id = grn_obj_id(ctx, column);
+      GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
+      GRN_UINT32_PUT(ctx, &source_ids, source_id);
       grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
       grn_obj_unlink(ctx, &source_ids);
     }
