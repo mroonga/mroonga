@@ -17,7 +17,7 @@ Improvements
 * [rpm][fedora] Supported MySQL 5.5.23.
 * Added :ref:`mroonga_match_escalation_threshold` system variable.
 * Required groonga 2.0.3 or later.
-* [yum] Changed RPM package name that provides Yum repository from
+* [yum] Changed RPM package name that provides yum repository from
   groonga-repository to groonga-release to follow RPM package name
   convension such as centos-release and fedora-release.
 
