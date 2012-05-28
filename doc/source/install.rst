@@ -240,6 +240,15 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
+Mac OS X
+--------
+
+Install::
+
+  % brew install https://raw.github.com/mroonga/homebrew/master/mroonga.rb --use-homebrew-mysql
+
+.. seealso:: `mroonga/homebrew on GitHub <https://github.com/mroonga/homebrew>`_
+
 Install from the source code
 ------------------------------
 
