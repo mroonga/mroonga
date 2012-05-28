@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-28 15:47\n"
-"PO-Revision-Date: 2012-02-28 16:14+0900\n"
+"POT-Creation-Date: 2012-05-28 14:01\n"
+"PO-Revision-Date: 2012-05-28 14:10+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -854,24 +854,59 @@ msgstr ""
 msgid "Here is an example SQL to disable optimization::"
 msgstr "最適化を無効にするSQLの例です::"
 
+# 35b05552724e47eeb94e464809f6576a
+#: ../../../source/reference.rst:308
+msgid "mroonga_match_escalation_threshold"
+msgstr ""
+
+# f4f99e7e5bf34ce1bfd3b220d53b1e44
+#: ../../../source/reference.rst:310
+msgid ""
+"The threshold to determin whether match method is escalated. See `search "
+"specification for groonga <http://groonga.org/docs/spec/search.html>`_ about "
+"match method escalation."
+msgstr "マッチ方法をエスカレーションするかどうかを決定する閾値です。マッチ方法については `groongaの検索の仕様 <http://groonga.org/docs/spec/search.html>`_ を確認してください。"
+
+# a3f559165602416ab08ab47755132017
+#: ../../../source/reference.rst:315
+msgid ""
+"The default value is the same as groonga's default value. It's 0 for the "
+"default installation. The dafault value can be configured in my.cnf or by "
+"``SET GLOBAL mroonga_match_escalation_threshold = THRESHOLD;``. Because this "
+"variable's scope is both global and session."
+msgstr "デフォルト値はgroongaのデフォルト値と同じです。デフォルトの設定でインストールした場合は0になります。この変数のスコープは「グローバル」と「セッション」の両方なので、my.cnfまたは ``SET GLOBAL mroonga_match_escalation_threshold = THRESHOLD;`` でデフォルト値を設定できます。"
+
+# 1d2e6e246f654b57b1276c9a64fc09b5
+#: ../../../source/reference.rst:321
+msgid ""
+"Here is an example to use -1 as a threshold to determin whether match "
+"method is escalated. -1 means that never escalated."
+msgstr "マッチ方法がエスカレーションするかどうかを決定する閾値として-1を使った例です。-1は絶対エスカレーションしないという意味です。"
+
+# 08b07f5a18bf41738ab639ad2e2017a8
+#: ../../../source/reference.rst:329
+msgid ""
+"Here is an another example to show behavior change by the variable value."
+msgstr "この変数の値による挙動の変化を示す別の例です。"
+
 # a1797cd59fdb403f950d338e4ed6f95d
-#: ../../../source/reference.rst:306
+#: ../../../source/reference.rst:375
 msgid "List of status variables"
 msgstr "ステータス変数の一覧"
 
 # 23e55d2e20084940b30e3efb7d5fb7af
-#: ../../../source/reference.rst:308
+#: ../../../source/reference.rst:377
 msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
 msgstr "独自に追加されたステータス変数を説明します。"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference.rst:311
+#: ../../../source/reference.rst:380
 msgid "mroonga_count_skip"
 msgstr ""
 
 # 267f1b18714740dc979e8b4b67752812
-#: ../../../source/reference.rst:313
+#: ../../../source/reference.rst:382
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
@@ -882,17 +917,17 @@ msgstr ""
 
 # 3af28e93f34447b397943795efe4ebd6
 # 7f4ccc55b07949d9a265ec7daa36d154
-#: ../../../source/reference.rst:316 ../../../source/reference.rst:332
+#: ../../../source/reference.rst:385 ../../../source/reference.rst:401
 msgid "Here is an example how to check it::"
 msgstr "確認例です::"
 
 # 3f5fb8dfbc954a2c99f47e0c08dff40a
-#: ../../../source/reference.rst:327
+#: ../../../source/reference.rst:396
 msgid "mroonga_fast_order_limit"
 msgstr ""
 
 # f07b04cb491d4edfa20546deee8bf2e4
-#: ../../../source/reference.rst:329
+#: ../../../source/reference.rst:398
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."

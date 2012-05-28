@@ -307,9 +307,9 @@ Here is an example SQL to disable optimization::
 mroonga_match_escalation_threshold
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The threshold to determin whether search method is escalated. See
+The threshold to determin whether match method is escalated. See
 `search specification for groonga
-<http://groonga.org/docs/spec/search.html>`_ about search method
+<http://groonga.org/docs/spec/search.html>`_ about match method
 escalation.
 
 The default value is the same as groonga's default value. It's 0 for
@@ -318,7 +318,7 @@ my.cnf or by ``SET GLOBAL mroonga_match_escalation_threshold =
 THRESHOLD;``. Because this variable's scope is both global and
 session.
 
-Here is an example to use -1 as a threshold to determin whether search
+Here is an example to use -1 as a threshold to determin whether match
 method is escalated. -1 means that never escalated.
 
 .. code-block:: sql
