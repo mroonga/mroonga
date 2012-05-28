@@ -106,7 +106,6 @@ msgstr "[rpm] mroongaプラグインがアップグレードのときに登録�
 
 # 5a2108e806b54760adbc09e502c70b30
 #: ../../../source/news.rst:34
-#, fuzzy
 msgid ""
 "Fixed a bug that row based replication transfers wrong data on MySQL 5.5 or "
 "earlier. [#1379][groonga-dev,00902] [Reported by Kenji Doi]"
