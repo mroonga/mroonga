@@ -17,7 +17,7 @@ remove-existing-packages:
 download:
 	for distribution in $(DISTRIBUTIONS); do			\
 	  rsync -avz --progress --delete				\
-	    $(RSYNC_PATH)/$${distribution}/ $(REPOSITORIES_PATH)/;	\
+	    $(RSYNC_PATH)/$${distribution} $(REPOSITORIES_PATH)/;	\
 	done
 
 sign-packages:
