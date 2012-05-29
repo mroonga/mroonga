@@ -110,14 +110,19 @@ Red Hat 系
 --------------------------
 
 1. GitHub からドキュメントアップロード用のリポジトリ (mroonga.github.com) を clone
-2. mroonga/doc/ja/sphinx2github.sh を実行し mroonga/doc/ja/html 内のディレクトリ名を GitHub (Jekyll) 用に変更
-3. mroonga/doc/ja/html 内のファイルを 1. で clone した mroonga.github.com にコピー
-4. mroonga.github.com へコミットを行い GitHub へ push
+2. clone済みmroongaディレクトリ内でmake update-documentを実行し、clone したドキュメントアップロード用のリポジトリへ反映する
+3. mroonga.github.com へコミットを行い GitHub へ push
 
 リリースメールの送信
 --------------------
 
-メーリングリスト (ml@mysql.gr.jp) にリリースメールを流します。メッセージ内容のテンプレートを以下に示します。 ::
+各種メーリングリストにリリースメールを流します。
+
+* ml@mysql.gr.jp 日本語アナウンス
+* groonga-dev@lists.sourceforge.jp 日本語アナウンス
+* groonga-talk@lists.sourceforge.net 英語アナウンス
+
+メッセージ内容のテンプレートを以下に示します。 ::
 
  ドキュメント(インストールガイド含む)
    http://mroonga.github.com/
