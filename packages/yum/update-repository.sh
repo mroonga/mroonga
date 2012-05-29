@@ -2,13 +2,14 @@
 
 script_base_dir=`dirname $0`
 
-if [ $# != 1 ]; then
-    echo "Usage: $0 DISTRIBUTIONS"
-    echo " e.g.: $0 'fedora centos'"
+if [ $# != 2 ]; then
+    echo "Usage: $0 DESTINATION DISTRIBUTIONS"
+    echo " e.g.: $0 repositories/ 'fedora centos'"
     exit 1
 fi
 
-DISTRIBUTIONS=$1
+DESTINATION=$1
+DISTRIBUTIONS=$2
 
 run()
 {
@@ -20,7 +21,7 @@ run()
 }
 
 for distribution in ${DISTRIBUTIONS}; do
-    for dir in $script_base_dir/${distribution}/*/*; do
-	run createrepo $dir
+    for dir in ${DESTINATION}${distribution}/*/*; do
+	test -d $dir &&	run createrepo $dir
     done;
 done

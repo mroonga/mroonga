@@ -1,8 +1,8 @@
 #!/bin/sh
 
-if [ $# != 10 ]; then
-    echo "Usage: $0 PACKAGE VERSION SOURCE_BASE_NAME SPEC_DIR CHROOT_BASE ARCHITECTURES DISTRIBUTIONS HAVE_DEVELOPMENT_BRANCH USE_RPMFORGE USE_ATRPMS"
-    echo " e.g.: $0 milter-manager 1.1.1 ../milter-manager ../rpm /var/lib/chroot 'i386 x86_64' 'fedora centos' yes no no"
+if [ $# != 11 ]; then
+    echo "Usage: $0 PACKAGE VERSION SOURCE_BASE_NAME SPEC_DIR DESTINATION CHROOT_BASE ARCHITECTURES DISTRIBUTIONS HAVE_DEVELOPMENT_BRANCH USE_RPMFORGE USE_ATRPMS"
+    echo " e.g.: $0 milter-manager 1.1.1 ../milter-manager ../rpm repositories/ /var/lib/chroot 'i386 x86_64' 'fedora centos' yes no no"
     exit 1
 fi
 
@@ -10,12 +10,13 @@ PACKAGE=$1
 VERSION=$2
 SOURCE_BASE_NAME=$3
 SPEC_DIR=$4
-CHROOT_BASE=$5
-ARCHITECTURES=$6
-DISTRIBUTIONS=$7
-HAVE_DEVELOPMENT_BRANCH=$8
-USE_RPMFORGE=$9
-USE_ATRPMS=$10
+DESTINATION=$5
+CHROOT_BASE=$6
+ARCHITECTURES=$7
+DISTRIBUTIONS=$8
+HAVE_DEVELOPMENT_BRANCH=$9
+USE_RPMFORGE=$10
+USE_ATRPMS=$11
 
 PATH=/usr/local/sbin:/usr/sbin:$PATH
 
@@ -58,18 +59,13 @@ build_chroot()
 	    distribution_architecture=i686
 	fi
     fi
-    if [ "$distribution_name-$distribution_version" = "fedora-16" ]; then
-	rinse_distribution_version="15"
-    else
-	rinse_distribution_version="$distribution_version"
-    fi
 
     run_sudo mkdir -p ${base_dir}/etc/rpm
     rpm_platform=${distribution_architecture}-${distribution}-linux
     run_sudo sh -c "echo ${rpm_platform} > ${base_dir}/etc/rpm/platform"
     run_sudo rinse \
 	--arch $rinse_architecture \
-	--distribution $distribution_name-$rinse_distribution_version \
+	--distribution $distribution_name-$distribution_version \
 	--directory $base_dir
     run_sudo rinse --arch $rinse_architecture --clean-cache
 
@@ -106,7 +102,7 @@ build()
     rpm_base_dir=${build_user_dir}/rpm
     rpm_dir=${rpm_base_dir}/RPMS/${architecture}
     srpm_dir=${rpm_base_dir}/SRPMS
-    pool_base_dir=${distribution}/${distribution_version}
+    pool_base_dir=${DESTINATION}${distribution}/${distribution_version}
     if test "${HAVE_DEVELOPMENT_BRANCH}" = "yes"; then
 	minor_version=$(echo $VERSION | ruby -pe '$_.gsub!(/\A\d+\.(\d+)\..*/, "\\1")')
 	if test $(expr ${minor_version} % 2) -eq 0; then
@@ -139,19 +135,12 @@ build()
     run cp ${script_base_dir}/${PACKAGE}-build-options \
 	${CHROOT_BASE}/$target/tmp/build-options
     run cp ${script_base_dir}/build-rpm.sh ${CHROOT_BASE}/$target/tmp/
+    run_sudo rm -rf $rpm_dir $srpm_dir
     run_sudo su -c "chroot ${CHROOT_BASE}/$target /tmp/build-rpm.sh"
     run mkdir -p $binary_pool_dir
     run mkdir -p $source_pool_dir
     run cp -p $rpm_dir/*-${VERSION}* $binary_pool_dir
     run cp -p $srpm_dir/*-${VERSION}* $source_pool_dir
-    if [ $distribution = "centos" -a $distribution_version -eq 5 ]; then
-	mysql_version=$(grep '%define mysql_version_default' \
-	    ${CHROOT_BASE}/$target/tmp/${PACKAGE}.spec | \
-	    sed -e 's/%define mysql_version_default //g' | \
-	    tail -1)
-	run cp -p $rpm_dir/MySQL-*-${mysql_version}* $binary_pool_dir
-	run cp -p $srpm_dir/MySQL-${mysql_version}* $source_pool_dir
-    fi
 
     dependencies_dir=${build_user_dir}/dependencies
     dependencies_rpm_dir=${dependencies_dir}/RPMS

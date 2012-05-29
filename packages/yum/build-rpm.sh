@@ -74,10 +74,13 @@ EOF
     yum_options="$yum_options --enablerepo=atrpms"
 fi
 
-if ! rpm -q groonga-repository > /dev/null 2>&1; then
-    run rpm -Uvh http://packages.groonga.org/${distribution}/groonga-repository-1.0.0-0.noarch.rpm
+if ! rpm -q groonga-release > /dev/null 2>&1; then
+    release_rpm=groonga-release-1.1.0-0.noarch.rpm
+    wget http://packages.groonga.org/${distribution}/${release_rpm}
+    run rpm -Uvh ${release_rpm}
+    rm -f ${release_rpm}
 fi
-run yum install --nogpgcheck -y groonga-repository
+run yum install --nogpgcheck -y groonga-release
 
 rpmbuild_options="${BUILD_OPTIONS}"
 

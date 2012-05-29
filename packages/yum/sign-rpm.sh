@@ -2,14 +2,15 @@
 
 script_base_dir=`dirname $0`
 
-if [ $# != 2 ]; then
-    echo "Usage: $0 GPG_UID DISTRIBUTIONS"
-    echo " e.g.: $0 'F10399C0' 'fedora centos'"
+if [ $# != 3 ]; then
+    echo "Usage: $0 GPG_UID DESTINATION DISTRIBUTIONS"
+    echo " e.g.: $0 'F10399C0' repositories/ 'fedora centos'"
     exit 1
 fi
 
 GPG_UID=$1
-DISTRIBUTIONS=$2
+DESTINATION=$2
+DISTRIBUTIONS=$3
 
 run()
 {
@@ -22,7 +23,7 @@ run()
 
 rpms=""
 for distribution in ${DISTRIBUTIONS}; do
-    rpms="${rpms} $(echo $script_base_dir/${distribution}/*/*/*/*.rpm)"
+    rpms="${rpms} $(echo ${DESTINATION}${distribution}/*/*/*/*.rpm)"
 done
 
 echo "NOTE: YOU JUST ENTER! YOU DON'T NEED TO INPUT PASSWORD!"
