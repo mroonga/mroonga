@@ -31,6 +31,7 @@ Improvements
 * [yum] Changed RPM package name that provides yum repository from
   groonga-repository to groonga-release to follow RPM package name
   convension such as centos-release and fedora-release.
+* [mac os x] Supported installing by Homebrew. :doc:`/install` about details.
 
 Fixes
 ^^^^^
