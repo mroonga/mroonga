@@ -55,3 +55,4 @@ cmake_install.cmake
 /config.sh
 /CMakeCache.txt
 /CMakeFiles/
+/INSTALL
