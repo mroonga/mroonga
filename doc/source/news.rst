@@ -22,8 +22,8 @@ Release 2.03 - 2012/05/29
 Improvements
 ^^^^^^^^^^^^
 
-* [storage mode][wrapper mode] Supported disable/enable keys in bulk insert.
-  [#1310][#1311]
+* [storage mode] Supported disable/enable keys in bulk insert.
+  [#1310]
 * [rpm][centos] Supported MySQL 5.5.24.
 * [rpm][fedora] Supported MySQL 5.5.23.
 * Added :ref:`mroonga_match_escalation_threshold` system variable.
@@ -31,7 +31,8 @@ Improvements
 * [yum] Changed RPM package name that provides yum repository from
   groonga-repository to groonga-release to follow RPM package name
   convension such as centos-release and fedora-release.
-* [mac os x] Supported installing by Homebrew. :doc:`/install` about details.
+* [mac os x] Supported installing by Homebrew.
+  See :doc:`/install` about details.
 
 Fixes
 ^^^^^
