@@ -33,8 +33,8 @@ cmake_install.cmake
 /libmroonga.a
 /packages/debian/control
 /packages/rpm/*/*.spec
-/packages/yum/fedora/
-/packages/yum/centos/
+/packages/apt/repositories/
+/packages/yum/repositories/
 /doc/locale/*/doctrees/
 /doc/locale/*/html/
 /doc/locale/*/man/
