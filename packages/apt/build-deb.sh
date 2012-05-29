@@ -22,12 +22,30 @@ run()
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
 
-run apt-get update -V
-run apt-get install -V -y --allow-unauthenticated groonga-keyring
-run apt-get upgrade -V -y
-
 distribution=$(lsb_release --id --short)
 code_name=$(lsb_release --codename --short)
+
+groonga_list=/etc/apt/sources.list.d/groonga.list
+if [ ! -f "${groonga_list}" ]; then
+    case ${distribution} in
+	Debian)
+	    component=main
+	    ;;
+	Ubuntu)
+	    component=universe
+	    ;;
+    esac
+    downcased_distribtion=$(echo ${distribution} | tr A-Z a-z)
+    run cat <<EOF | run tee ${groonga_list}
+deb http://packages.groonga.org/${downcased_distribtion}/ ${code_name} ${component}
+deb-src http://packages.groonga.org/${downcased_distribtion}/ ${code_name} ${component}
+EOF
+    apt-get update -V
+    run apt-get -V -y --allow-unauthenticated install groonga-keyring
+fi
+
+run apt-get update -V
+run apt-get upgrade -V -y
 
 security_list=/etc/apt/sources.list.d/security.list
 if [ ! -f "${security_list}" ]; then
@@ -54,24 +72,6 @@ EOF
 
     run apt-get update -V
     run apt-get upgrade -V -y
-fi
-
-groonga_list=/etc/apt/sources.list.d/groonga.list
-if [ ! -f "${groonga_list}" ]; then
-    case ${distribution} in
-	Debian)
-	    component=main
-	    ;;
-	Ubuntu)
-	    component=universe
-	    ;;
-    esac
-    run cat <<EOF | run_sudo tee ${groonga_list}
-deb http://packages.groonga.org/${distribution}/ ${code_name} ${component}
-deb-src http://packages.groonga.org/${distribution}/ ${code_name} ${component}
-EOF
-    apt-get update
-    run apt-get -y --allow-unauthenticated install groonga-keyring
 fi
 
 run apt-get install -V -y devscripts ${DEPENDED_PACKAGES}
