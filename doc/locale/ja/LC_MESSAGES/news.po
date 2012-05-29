@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-29 14:25\n"
-"PO-Revision-Date: 2012-05-29 14:26+0900\n"
+"PO-Revision-Date: 2012-05-29 16:31+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -102,7 +102,7 @@ msgstr "修正"
 # a74f0de84d544b91b8462dcea9c4967e
 #: ../../../source/news.rst:40
 msgid "Fixed build failure on Mac OS X."
-msgstr "Mac OS Xでビルドに失敗するのを修正。"
+msgstr "Mac OS Xでビルドに失敗する問題を修正。"
 
 # 5a2108e806b54760adbc09e502c70b30
 #: ../../../source/news.rst:41
