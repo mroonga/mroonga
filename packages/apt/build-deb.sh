@@ -22,6 +22,8 @@ run()
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
 
+run apt-get update -V
+run apt-get install -V -y lsb-release
 distribution=$(lsb_release --id --short)
 code_name=$(lsb_release --codename --short)
 
@@ -72,6 +74,16 @@ EOF
 
     run apt-get update -V
     run apt-get upgrade -V -y
+fi
+
+universe_list=/etc/apt/sources.list.d/universe.list
+if [ ! -f "$universe_list}" ]; then
+    case ${distribution} in
+	Ubuntu)
+	    sed -e 's/main/universe/' /etc/apt/sources.list > ${universe_list}
+	    run apt-get update -V
+	    ;;
+    esac
 fi
 
 run apt-get install -V -y devscripts ${DEPENDED_PACKAGES}
