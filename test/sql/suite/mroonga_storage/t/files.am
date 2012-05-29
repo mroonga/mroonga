@@ -4,6 +4,7 @@ test_files = \
 	alter_table_change_engine.test \
 	alter_table_disable_enable_keys.test \
 	alter_table_drop_column.test \
+	alter_table_drop_key_multiple_column_with_data.test \
 	alter_table_engine_decimal.test \
 	alter_table_fulltext.test \
 	alter_table_rename_table.test \

@@ -4,6 +4,7 @@ result_files = \
 	alter_table_change_engine.result \
 	alter_table_disable_enable_keys.result \
 	alter_table_drop_column.result \
+	alter_table_drop_key_multiple_column_with_data.result \
 	alter_table_engine_decimal.result \
 	alter_table_fulltext.result \
 	alter_table_rename_table.result \
