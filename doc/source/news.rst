@@ -8,6 +8,17 @@ News
 Release 2.03 - 2012/05/29
 -------------------------
 
+.. caution::
+
+   This release has a backward incompatible change against multiple
+   column index. If you have any tables that uses
+   :doc:`/userguide/storage` and any multiple comlumn indexes, please
+   recreate those indexes by ``ALTER TABLE DISABLE KEYS`` and ``ALTER
+   TABLE ENBALE KEYS``::
+
+     mysql> ALTER TABLE table_name DISABLE KEYS;
+     mysql> ALTER TABLE table_name ENABLE KEYS;
+
 Improvements
 ^^^^^^^^^^^^
 
