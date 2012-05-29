@@ -26,12 +26,13 @@ run apt-get update -V
 run apt-get install -V -y --allow-unauthenticated groonga-keyring
 run apt-get upgrade -V -y
 
+distribution=$(lsb_release --id --short)
+code_name=$(lsb_release --codename --short)
+
 security_list=/etc/apt/sources.list.d/security.list
-if [ ! -d "${security_list}" ]; then
+if [ ! -f "${security_list}" ]; then
     run apt-get install -V -y lsb-release
 
-    distribution=$(lsb_release --id --short)
-    code_name=$(lsb_release --codename --short)
     case ${distribution} in
 	Debian)
 	    if [ "${code_name}" = "sid" ]; then
@@ -53,6 +54,22 @@ EOF
 
     run apt-get update -V
     run apt-get upgrade -V -y
+fi
+
+groonga_list=/etc/apt/sources.list.d/groonga.list
+if [ ! -f "${groonga_list}" ]; then
+    case ${distribution} in
+	Debian)
+	    component=main
+	    ;;
+	Ubuntu)
+	    component=universe
+	    ;;
+    esac
+    run cat <<EOF | run_sudo tee ${groonga_list}
+deb http://packages.groonga.org/${distribution}/ ${code_name} ${component}
+deb-src http://packages.groonga.org/${distribution}/ ${code_name} ${component}
+EOF
 fi
 
 run apt-get install -V -y devscripts ${DEPENDED_PACKAGES}

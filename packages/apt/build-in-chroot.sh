@@ -1,16 +1,18 @@
 #!/bin/sh
 
-if [ $# != 5 ]; then
-    echo "Usage: $0 PACKAGE VERSION CHROOT_BASE ARCHITECTURES CODES"
-    echo " e.g.: $0 groonga 0.1.9 /var/lib/chroot 'i386 amd64' 'lenny unstable hardy karmic'"
+if [ $# != 7 ]; then
+    echo "Usage: $0 PACKAGE VERSION SOURCE_DIR DESTINATION CHROOT_BASE ARCHITECTURES CODES"
+    echo " e.g.: $0 groonga 0.1.9 SOURCE_DIR repositories/ /var/lib/chroot 'i386 amd64' 'lenny unstable hardy karmic'"
     exit 1
 fi
 
 PACKAGE=$1
 VERSION=$2
-CHROOT_BASE=$3
-ARCHITECTURES=$4
-CODES=$5
+SOURCE_DIR=$3
+DESTINATION=$4
+CHROOT_BASE=$5
+ARCHITECTURES=$6
+CODES=$7
 
 PATH=/usr/local/sbin:/usr/sbin:$PATH
 
@@ -88,11 +90,11 @@ build()
 	    ;;
     esac
 
-    source_dir=${script_base_dir}/..
+    source_dir=${SOURCE_DIR}
     build_user=${PACKAGE}-build
     build_user_dir=${base_dir}/home/$build_user
     build_dir=${build_user_dir}/build
-    pool_base_dir=${script_base_dir}/${distribution}/pool/${code_name}/${component}
+    pool_base_dir=${DESTINATION}${distribution}/pool/${code_name}/${component}
     package_initial=$(echo ${PACKAGE} | sed -e 's/\(.\).*/\1/')
     pool_dir=${pool_base_dir}/${package_initial}/${PACKAGE}
     run cp $source_dir/${PACKAGE}-${VERSION}.tar.gz \
@@ -107,17 +109,6 @@ build()
 	${CHROOT_BASE}/$target/tmp/depended-packages
     run cp ${script_base_dir}/build-deb.sh \
 	${CHROOT_BASE}/$target/tmp/
-    sources_list_d=${CHROOT_BASE}/${target}/etc/apt/sources.list.d
-    run cat <<EOF | run_sudo tee ${sources_list_d}/groonga.list
-deb http://packages.groonga.org/${distribution}/ ${code_name} ${component}
-deb-src http://packages.groonga.org/${distribution}/ ${code_name} ${component}
-EOF
-    if [ "${code_name}" = "lenny" ]; then
-	run cat <<EOF | run_sudo tee ${sources_list_d}/backports.list
-deb http://backports.debian.org/debian-backports lenny-backports main
-deb-src http://backports.debian.org/debian-backports lenny-backports main
-EOF
-    fi
     run_sudo rm -rf $build_dir
     run_sudo su -c "/usr/sbin/chroot ${CHROOT_BASE}/$target /tmp/build-deb.sh"
     run mkdir -p $pool_dir
@@ -133,7 +124,7 @@ for architecture in $ARCHITECTURES; do
 	else
 	    build $architecture $code_name
 	fi;
-    done
+    done;
 done
 
 if test "$parallel" = "yes"; then
