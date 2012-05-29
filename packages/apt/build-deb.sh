@@ -70,6 +70,8 @@ if [ ! -f "${groonga_list}" ]; then
 deb http://packages.groonga.org/${distribution}/ ${code_name} ${component}
 deb-src http://packages.groonga.org/${distribution}/ ${code_name} ${component}
 EOF
+    apt-get update
+    run apt-get -y --allow-unauthenticated install groonga-keyring
 fi
 
 run apt-get install -V -y devscripts ${DEPENDED_PACKAGES}
