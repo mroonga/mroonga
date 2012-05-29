@@ -8,18 +8,24 @@ PAPER         =
 SOURCE_DIR      = $(abs_top_srcdir)/doc/source
 PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
-ALLSPHINXOPTS   = -E $(SPHINXOPTS) $(SOURCE_DIR)
+ALLSPHINXOPTS   = $(PAPEROPT_$(PAPER)) -E $(SPHINXOPTS) $(SOURCE_DIR)
 
 SPHINX_DIR = $(abs_top_builddir)/doc/sphinx
 SPHINX_BUILD = $(SPHINX_DIR)/sphinx-build.py
-SPHINX_BUILD_COMMAND = VERSION="$(VERSION)" LOCALE="$(LOCALE)" PYTHONPATH="$(SPHINX_DIR):$$PYTHONPATH" python $(SPHINX_BUILD)
+SPHINX_BUILD_COMMAND =				\
+	VERSION="$(DOCUMENT_VERSION)"		\
+	VERSION_FULL="$(DOCUMENT_VERSION_FULL)"	\
+	LOCALE="$(LOCALE)"			\
+	PYTHONPATH="$(SPHINX_DIR):$$PYTHONPATH"	\
+	python $(SPHINX_BUILD)
 
 .PHONY: sphinx-ensure-updated
 
-$(SPHINX_BUILD):
-	$(HG) clone https://bitbucket.org/birkenfeld/sphinx $(SPHINX_DIR)
-
-sphinx-ensure-updated: $(SPHINX_BUILD)
+if DOCUMENT_BUILDABLE
+sphinx-ensure-updated:
 	if ! $(SPHINX_BUILD_COMMAND) 2>&1 | head -1 | grep 'v1.[2]' -q > /dev/null; then \
 	  (cd $(SPHINX_DIR) && $(HG) pull --update);					 \
 	fi
+else
+sphinx-ensure-updated:
+endif

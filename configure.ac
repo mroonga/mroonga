@@ -1,3 +1,5 @@
+AC_PREREQ(2.59)
+
 m4_define([mrn_version_major],  m4_include(version_major))
 m4_define([mrn_version_minor],  m4_include(version_minor))
 m4_define([mrn_version_micro],  m4_include(version_micro))
@@ -297,28 +299,48 @@ AC_ARG_ENABLE(document,
   [enable_document="auto"])
 AC_MSG_RESULT($enable_document)
 
-# check sphinx-build for documentation
 document_available=no
+document_buildable=no
+have_built_document=no
 if test x"$enable_document" != x"no"; then
-  AC_PATH_PROG(HG, hg, hg-not-found)
   if test -f "$srcdir/doc/build-stamp"; then
     document_available=yes
-  else
-    if test x"$HG" = x"hg-not-found"; then
-      if test x"$enable_document" = x"yes"; then
-        AC_MSG_ERROR("No hg found")
-      fi
-    else
+    have_built_document=yes
+  fi
+
+  if test x"$enable_document" = x"yes"; then
+    AC_PATH_PROG(HG, hg, [])
+    if test -n "$HG"; then
       document_available=yes
+      document_buildable=yes
+    else
+      AC_MSG_ERROR("No hg found")
     fi
+    AC_SUBST(HG)
   fi
 fi
-AC_SUBST(HG)
 
-AM_CONDITIONAL([ENABLE_DOCUMENT],
+AM_CONDITIONAL([WITH_HG], [test -n "${HG}"])
+
+AM_CONDITIONAL([DOCUMENT_AVAILABLE],
                [test "${document_available}" = "yes"])
 AC_MSG_CHECKING([whether document available])
 AC_MSG_RESULT($document_available)
+
+AM_CONDITIONAL([DOCUMENT_BUILDABLE],
+               [test "${document_buildable}" = "yes"])
+AC_MSG_CHECKING([whether document buildable])
+AC_MSG_RESULT($document_buildable)
+
+AM_CONDITIONAL([HAVE_BUILT_DOCUMENT],
+               [test "${have_built_document}" = "yes"])
+AC_MSG_CHECKING([whether having built document])
+AC_MSG_RESULT($have_built_document)
+
+DOCUMENT_VERSION=mrn_version
+DOCUMENT_VERSION_FULL="$DOCUMENT_VERSION"
+AC_SUBST(DOCUMENT_VERSION)
+AC_SUBST(DOCUMENT_VERSION_FULL)
 
 CFLAGS="$CFLAGS -Werror"
 CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"

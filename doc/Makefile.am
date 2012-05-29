@@ -1,6 +1,9 @@
 SUBDIRS =					\
 	locale
 
+BUILT_SOURCES =
+CLEANFILES =
+
 all:
 
 include $(top_srcdir)/doc/files.am
@@ -38,15 +41,27 @@ update-images:
 	cd $(srcdir)/source/images && \
 	  make -f $(abs_srcdir)/images.mk update-images
 
-if ENABLE_DOCUMENT
+nobase_dist_doc_DATA =                          \
+	$(source_files_relative_from_doc_dir)
+
+if DOCUMENT_BUILDABLE
 dist-hook: html man
 	@touch $(distdir)/build-stamp
-BUILT_SOURCES =					\
-	$(source_files_relative_from_doc_dir)
-nobase_dist_doc_DATA =				\
-	$(source_files_relative_from_doc_dir)
+
+CLEANFILES += build-stamp
+
+sphinx:
+	$(HG) clone https://bitbucket.org/birkenfeld/sphinx sphinx
+
+BUILT_SOURCES += sphinx
+
+maintainer-clean-local:
+	-rm -rf sphinx
+
+distclean-local:
+	-rm -rf sphinx
 else
-dist-hook:
-	@echo "must specify --enable-document for 'make dist'"
-	@false
+if HAVE_BUILT_DOCUMENT
+EXTRA_DIST += build-stamp
+endif
 endif
