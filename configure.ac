@@ -7,7 +7,8 @@ m4_define([mrn_plugin_version], m4_include(plugin_version))
 
 AC_INIT([mroonga], [mrn_version], [ikdttr@gmail.com])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([-Wall -Werror foreign tar-pax])
+
+AM_INIT_AUTOMAKE(tar-pax)
 
 MRN_VERSION=mrn_version
 MRN_VERSION_MAJOR=mrn_version_major
