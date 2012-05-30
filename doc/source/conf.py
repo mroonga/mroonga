@@ -49,9 +49,9 @@ copyright = u'2009-' + unicode(datetime.today().year) + u', mroonga project'
 # built documents.
 
 # The short X.Y version.
-version = os.environ["VERSION"]
+version = os.environ["DOCUMENT_VERSION"]
 # The full version, including alpha/beta/rc tags.
-release = version
+release = os.environ["DOCUMENT_VERSION_FULL"]
 
 # The directories that has *.mo files.
 locale_dirs = ["../locale"]
