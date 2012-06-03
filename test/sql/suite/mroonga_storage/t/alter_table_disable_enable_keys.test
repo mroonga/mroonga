@@ -42,7 +42,9 @@ select * from diaries where id = 2;
 explain select * from diaries where match(title) against("富士山");
 --error 1191
 select * from diaries where match(title) against("富士山");
+--error 1191
 explain select * from diaries where match(content) against("富士山");
+--error 1191
 select * from diaries where match(content) against("富士山");
 explain select * from diaries where create_dt = "2012-04-30 20:00:00";
 select * from diaries where create_dt = "2012-04-30 20:00:00";

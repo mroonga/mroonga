@@ -877,6 +877,7 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
     slot_data->last_insert_record_id = GRN_ID_NIL;
     slot_data->first_alter_share = NULL;
     slot_data->alter_create_info = NULL;
+    slot_data->disable_keys_create_info = NULL;
     slot_data->alter_connect_string = NULL;
     slot_data->alter_comment = NULL;
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
@@ -910,6 +911,7 @@ void mrn_clear_alter_share(THD *thd)
       slot_data->first_alter_share = NULL;
     }
     slot_data->alter_create_info = NULL;
+    slot_data->disable_keys_create_info = NULL;
     if (slot_data->alter_connect_string) {
       my_free(slot_data->alter_connect_string, MYF(0));
       slot_data->alter_connect_string = NULL;

@@ -144,6 +144,10 @@ extern "C" {
 #  define MRN_OPTION_BITS_IS_UNDER_VARIABLES
 #endif
 
+#if MYSQL_VERSION_ID >= 50600
+#  define MRN_HAVE_HA_REBIND_PSI
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -447,6 +451,10 @@ protected:
   uint referenced_by_foreign_key();
   void init_table_handle_for_HANDLER();
   void free_foreign_key_create_info(char* str);
+#ifdef MRN_HAVE_HA_REBIND_PSI
+  void unbind_psi();
+  void rebind_psi();
+#endif
 
 private:
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
@@ -576,11 +584,13 @@ private:
                                     int i,
                                     KEY *key_info,
                                     grn_obj **index_tables,
+                                    grn_obj **index_columns,
                                     MRN_SHARE *tmp_share);
   int wrapper_create_index_geo(const char *grn_table_name,
                                int i,
                                KEY *key_info,
                                grn_obj **index_tables,
+                               grn_obj **index_columns,
                                MRN_SHARE *tmp_share);
   int wrapper_create_index(const char *name, TABLE *table,
                            HA_CREATE_INFO *info, MRN_SHARE *tmp_share,
@@ -948,6 +958,12 @@ private:
   void wrapper_set_keys_in_use();
   void storage_set_keys_in_use();
   bool check_written_by_row_based_binlog();
+#ifdef MRN_HAVE_HA_REBIND_PSI
+  void wrapper_unbind_psi();
+  void storage_unbind_psi();
+  void wrapper_rebind_psi();
+  void storage_rebind_psi();
+#endif
 };
 
 #ifdef __cplusplus

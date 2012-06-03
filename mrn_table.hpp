@@ -47,6 +47,7 @@ typedef struct st_mroonga_share
   uint               wrap_primary_key;
   uint               base_primary_key;
   bool               wrapper_mode;
+  bool               disable_keys;
 } MRN_SHARE;
 
 struct st_mrn_alter_share
@@ -61,6 +62,7 @@ struct st_mrn_slot_data
   grn_id last_insert_record_id;
   st_mrn_alter_share *first_alter_share;
   HA_CREATE_INFO *alter_create_info;
+  HA_CREATE_INFO *disable_keys_create_info;
   char *alter_connect_string;
   char *alter_comment;
 };
