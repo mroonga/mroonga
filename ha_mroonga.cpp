@@ -12415,6 +12415,69 @@ void ha_mroonga::rebind_psi()
 }
 #endif
 
+my_bool ha_mroonga::wrapper_register_query_cache_table(THD *thd,
+                                                       char *table_key,
+                                                       uint key_length,
+                                                       qc_engine_callback
+                                                       *engine_callback,
+                                                       ulonglong *engine_data)
+{
+  MRN_DBUG_ENTER_METHOD();
+  my_bool res;
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->register_query_cache_table(thd,
+                                                 table_key,
+                                                 key_length,
+                                                 engine_callback,
+                                                 engine_data);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+my_bool ha_mroonga::storage_register_query_cache_table(THD *thd,
+                                                       char *table_key,
+                                                       uint key_length,
+                                                       qc_engine_callback
+                                                       *engine_callback,
+                                                       ulonglong *engine_data)
+{
+  MRN_DBUG_ENTER_METHOD();
+  my_bool res = handler::register_query_cache_table(thd,
+                                                    table_key,
+                                                    key_length,
+                                                    engine_callback,
+                                                    engine_data);
+  DBUG_RETURN(res);
+}
+
+my_bool ha_mroonga::register_query_cache_table(THD *thd,
+                                               char *table_key,
+                                               uint key_length,
+                                               qc_engine_callback
+                                               *engine_callback,
+                                               ulonglong *engine_data)
+{
+  MRN_DBUG_ENTER_METHOD();
+  my_bool res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_register_query_cache_table(thd,
+                                             table_key,
+                                             key_length,
+                                             engine_callback,
+                                             engine_data);
+  } else {
+    res = storage_register_query_cache_table(thd,
+                                             table_key,
+                                             key_length,
+                                             engine_callback,
+                                             engine_data);
+  }
+  DBUG_RETURN(res);
+}
+
 #ifdef __cplusplus
 }
 #endif

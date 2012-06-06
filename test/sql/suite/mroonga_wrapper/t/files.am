@@ -42,6 +42,7 @@ test_files = \
 	match_escalation_threshold_global.test \
 	match_escalation_threshold_session.test \
 	optimization_order_limit_todo_split_me.test \
+	query_cache_with_transaction.test \
 	repair_table.test \
 	temporary_table.test \
 	transaction_rollback_delete_delete.test \

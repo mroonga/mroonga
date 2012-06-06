@@ -42,6 +42,7 @@ result_files = \
 	match_escalation_threshold_global.result \
 	match_escalation_threshold_session.result \
 	optimization_order_limit_todo_split_me.result \
+	query_cache_with_transaction.result \
 	repair_table.result \
 	temporary_table.result \
 	transaction_rollback_delete_delete.result \

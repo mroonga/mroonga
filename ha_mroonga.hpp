@@ -455,6 +455,11 @@ protected:
   void unbind_psi();
   void rebind_psi();
 #endif
+  my_bool register_query_cache_table(THD *thd,
+                                     char *table_key,
+                                     uint key_length,
+                                     qc_engine_callback *engine_callback,
+                                     ulonglong *engine_data);
 
 private:
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
@@ -964,6 +969,18 @@ private:
   void wrapper_rebind_psi();
   void storage_rebind_psi();
 #endif
+  my_bool wrapper_register_query_cache_table(THD *thd,
+                                             char *table_key,
+                                             uint key_length,
+                                             qc_engine_callback
+                                             *engine_callback,
+                                             ulonglong *engine_data);
+  my_bool storage_register_query_cache_table(THD *thd,
+                                             char *table_key,
+                                             uint key_length,
+                                             qc_engine_callback
+                                             *engine_callback,
+                                             ulonglong *engine_data);
 };
 
 #ifdef __cplusplus
