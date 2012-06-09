@@ -193,7 +193,7 @@ Remove existing MySQL packages ::
 Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-0.noarch.rpm
-  % sudo yum update
+  % sudo yum makecache
   % sudo yum install -y MySQL-server
   % sudo service mysql start
   % sudo yum install -y mysql-mroonga
@@ -231,7 +231,7 @@ Fedora 16
 Install ::
 
   % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-release-1.1.0-0.noarch.rpm
-  % sudo yum update
+  % sudo yum makecache
   % sudo yum install -y mysql-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
