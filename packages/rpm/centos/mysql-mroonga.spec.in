@@ -166,6 +166,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Fri Jun 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.04-0
+- new upstream release.
+
 * Tue May 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.03-0
 - new upstream release.
 - use MySQL 5.5.24.
