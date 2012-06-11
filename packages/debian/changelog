@@ -1,6 +1,8 @@
 mroonga (2.04-1) unstable; urgency=low
 
   * New upstream release.
+  * Ensure deleting mroonga plugin before install.
+    Suggested by Kazuhiro Isobe. Thanks!!!
 
  -- Kouhei Sutou <kou@clear-code.com>  Fri, 29 Jun 2012 00:00:00 +0900
 
