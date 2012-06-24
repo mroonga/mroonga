@@ -1,0 +1,8 @@
+SET GLOBAL mroonga_log_file = "new-mroonga.log";
+SHOW GLOBAL VARIABLES LIKE 'mroonga_log_file';
+Variable_name	Value
+mroonga_log_file	new-mroonga.log
+SET GLOBAL mroonga_log_file = "nonexistent/mroonga.log";
+SHOW GLOBAL VARIABLES LIKE 'mroonga_log_file';
+Variable_name	Value
+mroonga_log_file	new-mroonga.log

@@ -654,28 +654,43 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
             "because the requested path isn't different: <%s>",
             new_value);
   } else {
-    char *old_value;
-
-    old_value = strdup(*old_value_ptr);
     GRN_LOG(&ctx, GRN_LOG_NOTICE,
             "log file is changed: <%s> -> <%s>",
-            old_value, new_value);
-
-    my_free(*old_value_ptr, MYF(0));
-    *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+            *old_value_ptr, new_value);
 
     pthread_mutex_lock(&mrn_log_mutex);
-    if (mrn_log_file_opened) {
-      fclose(mrn_log_file);
+    FILE *new_log_file;
+    int log_file_open_errno = 0;
+    new_log_file = fopen(new_value, "a");
+    if (new_log_file) {
+      if (mrn_log_file_opened) {
+        fclose(mrn_log_file);
+      }
+      mrn_log_file = new_log_file;
+      mrn_log_file_opened = true;
+    } else {
+      log_file_open_errno = errno;
     }
-    mrn_log_file = fopen(new_value, "a");
-    mrn_log_file_opened = true;
     pthread_mutex_unlock(&mrn_log_mutex);
 
-    GRN_LOG(&ctx, GRN_LOG_NOTICE,
-            "log file is changed: <%s> -> <%s>",
-            old_value, new_value);
-    free(old_value);
+    if (log_file_open_errno == 0) {
+      GRN_LOG(&ctx, GRN_LOG_NOTICE,
+              "log file is changed: <%s> -> <%s>",
+              *old_value_ptr, new_value);
+      *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+    } else {
+      if (mrn_log_file) {
+        GRN_LOG(&ctx, GRN_LOG_ERROR,
+                "log file isn't changed "
+                "because the requested path can't be opened: <%s>: <%s>",
+                new_value, strerror(log_file_open_errno));
+      } else {
+        GRN_LOG(&ctx, GRN_LOG_ERROR,
+                "log file can't be opened: <%s>: <%s>",
+                new_value, strerror(log_file_open_errno));
+      }
+      *old_value_ptr = my_strdup(*old_value_ptr, MYF(MY_WME));
+    }
   }
   grn_ctx_fin(&ctx);
 
