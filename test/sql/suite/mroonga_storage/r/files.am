@@ -74,6 +74,7 @@ result_files = \
 	insert_on_duplicate_key_update_unique_key.result \
 	key_read.result \
 	last_insert_grn_id.result \
+	log_file.result \
 	log_level.result \
 	match_escalation_threshold_global.result \
 	match_escalation_threshold_session.result \

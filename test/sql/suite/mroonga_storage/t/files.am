@@ -74,6 +74,7 @@ test_files = \
 	insert_on_duplicate_key_update_unique_key.test \
 	key_read.test \
 	last_insert_grn_id.test \
+	log_file.test \
 	log_level.test \
 	match_escalation_threshold_global.test \
 	match_escalation_threshold_session.test \
