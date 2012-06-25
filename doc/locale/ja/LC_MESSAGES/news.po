@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-25 15:20\n"
+"POT-Creation-Date: 2012-06-25 16:31\n"
 "PO-Revision-Date: 2012-05-29 16:31+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -67,16 +67,18 @@ msgstr "パーティションを明示的に無効化した。 [#1391]"
 msgid ""
 "[rpm][deb] Fixed to ensure deleting mroonga plugin from mysql.plugin before "
 "install. [groonga-dev,00948] [Suggested by Kazuhiko Isobe]"
-msgstr "[rpm][deb] インストール前にmysql.pluginからmroongaプラグインを"
-"確実に削除するようにした。"
+msgstr ""
+"[rpm][deb] インストール前にmysql.pluginからmroongaプラグインを確実に削除する"
+"ようにした。"
 
 # 28bc9cbdc60a460e87c704dca8b510eb
 #: ../../../source/news.rst:23
 msgid ""
-"Fixed a crash bug by setting nonexistent path to mroonga_log_file variable. "
-"[#1404] [Reported by @nabebeb]"
-msgstr "存在しないパスを mroonga_log_file 変数へと設定するとクラッシュ"
-"する不具合を修正した。 [#1404] [@nabebebさんが報告]"
+"Fixed a crash bug by setting nonexistent path to ``mroonga_log_file`` "
+"variable. [#1404] [Reported by @nabebeb]"
+msgstr ""
+"存在しないパスを ``mroonga_log_file`` 変数へと設定するとクラッシュする不具合を修"
+"正した。 [#1404] [@nabebebさんが報告]"
 
 # 2371feae1d1549e59cd05415194e5dcf
 #: ../../../source/news.rst:27 ../../../source/news.rst:78
