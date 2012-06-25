@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-29 11:05\n"
+"POT-Creation-Date: 2012-06-25 15:20\n"
 "PO-Revision-Date: 2011-11-28 00:00+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -641,6 +641,8 @@ msgstr ""
 #: ../../../source/developer/coding_style.rst:523
 #: ../../../source/developer/coding_style.rst:543
 #: ../../../source/developer/coding_style.rst:574
+#: ../../../source/developer/coding_style.rst:654
+#: ../../../source/developer/coding_style.rst:658
 msgid "よい例:"
 msgstr ""
 
@@ -1708,60 +1710,200 @@ msgstr ""
 msgid "悪い例（後置形式を用いている）:"
 msgstr ""
 
-# 6231837c1b98405a8718668bed89ae20
+# a377a7cf922449118636213cf82bede9
 #: ../../../source/developer/coding_style.rst:602
+msgid "キャスト"
+msgstr ""
+
+# 818477b560404f4a9584f019244c721d
+#: ../../../source/developer/coding_style.rst:605
+msgid "C++のスタイルを用いる"
+msgstr ""
+
+# 200764df4dee4044891c667dcad2b6d8
+#: ../../../source/developer/coding_style.rst:607
+msgid ""
+"Cスタイルのキャストはなんでもキャストできてしまうため、意図しないキャストにも"
+"気付かない可能性がある。例えば、単に ``const`` を外したいだけなのに、間違って"
+"違う型に変換していても気付けない。C++のキャストでは ``const`` を外したいとき"
+"は ``const_cast`` を使用し、型を変換するときは ``static_cast`` を指定する。こ"
+"うすれば、 ``static_cast`` で間違って ``const`` を外してしまっている場合も気"
+"付ける。 ``reinterpret_cast`` はどうしても必要なときのみ注意して使う。"
+msgstr ""
+
+# 5a3a190ffcc241fe8a20cc04e6c86602
+#: ../../../source/developer/coding_style.rst:609
+msgid "よい例（ ``const_cast`` を使っている）:"
+msgstr ""
+
+# f97fd887246b41809fc0c2001a11bce6
+#: ../../../source/developer/coding_style.rst:611
+msgid ""
+"uchar *to_key; const ucahr *from_key; KEY *key_info; uint key_length; "
+"key_copy(to_key, const_cast<uchar *>from_key, key_info, key_length);"
+msgstr ""
+
+# 7f5ae2e71e1948e3bbe47f58b71e276b
+#: ../../../source/developer/coding_style.rst:617
+msgid "よい例（ ``static_cast`` を使っている）:"
+msgstr ""
+
+# 6fe488ea8c5f4349be59be27a1e6f6b8
+# 57fe99f0ffe54683b36634b8265b9e16
+#: ../../../source/developer/coding_style.rst:619
+#: ../../../source/developer/coding_style.rst:630
+msgid ""
+"int n_hits = 1; int n_documents = 10; float hit_ratio = (float)(n_hits) / "
+"n_documents;"
+msgstr ""
+
+# eb3bb0a6d44e4ea9b34b81adaafdd87e
+#: ../../../source/developer/coding_style.rst:623
+msgid ""
+"よい例（ ``static_cast`` では無理なので ``reinterpret_cast`` を使っている）:"
+msgstr ""
+
+# 762c6e9ec97f4edea1eb616408360a06
+#: ../../../source/developer/coding_style.rst:625
+msgid ""
+"THD *thread = current_thd; my_hash_delete(&mrn_allocated_thds, "
+"reinterpret_cast<uchar *>(thread));"
+msgstr ""
+
+# 1642b2ed4dc547069854a49dc817fe17
+#: ../../../source/developer/coding_style.rst:628
+msgid "悪い例（Cスタイルのキャストを使っている）:"
+msgstr ""
+
+# 1eb85037b94142b2ad9288728f2685bd
+#: ../../../source/developer/coding_style.rst:634
+msgid ""
+"悪い例（ ``static_cast`` で十分なのに ``reinterpret_cast`` を使っている）:"
+msgstr ""
+
+# 26ab4bbfc7ca42088d05ea38072f6926
+#: ../../../source/developer/coding_style.rst:636
+msgid ""
+"void *value = get_value(key); char *name; name = reinterpret_cast<char *>"
+"(value);"
+msgstr ""
+
+# f08ecd304cb3441d8614cb70af9cb149
+#: ../../../source/developer/coding_style.rst:641
+msgid "変数宣言"
+msgstr ""
+
+# 6468ce8c9ff04d259458ddb90c8555e1
+#: ../../../source/developer/coding_style.rst:644
+msgid "ポインタ型を示す ``*`` とリファレンス型を示す ``&`` は変数名に寄せる"
+msgstr ""
+
+# 542b678ceb7c4271a4ca5abbef5fa10e
+#: ../../../source/developer/coding_style.rst:646
+msgid ""
+"Cと同様にポインタ型を示す ``*`` は型名ではなく変数名に寄せる。これは、以下の"
+"ように複数の変数を一度に宣言したときに一貫性がなくなるためである。2つめ以降の"
+"変数は近くに型名がないため ``*`` を寄せる場所がない。"
+msgstr ""
+
+# dfbc9329c24f4906bff2445e3a32f3b4
+#: ../../../source/developer/coding_style.rst:648
+msgid "char* key, *value;"
+msgstr ""
+
+# 9eee62c8b180413d90df93ee12c97bee
+#: ../../../source/developer/coding_style.rst:650
+msgid "同様に、リファレンス型を示す ``&`` も変数名に寄せる。"
+msgstr ""
+
+# 1991cfb95f214208acf1449963f517e4
+#: ../../../source/developer/coding_style.rst:652
+msgid "なお、 ``*`` や ``&`` と型名の間にはスペースを入れない。"
+msgstr ""
+
+# 7c3233da37f14a49af90895efb14beca
+#: ../../../source/developer/coding_style.rst:656
+msgid "char *key;"
+msgstr ""
+
+# 35bd591bd69f4938bca5f0d50360c387
+#: ../../../source/developer/coding_style.rst:660
+msgid "bool is_exist(const std::string &file_name);"
+msgstr ""
+
+# 5565fad6d5254c12aa37ca19c16ab333
+#: ../../../source/developer/coding_style.rst:662
+msgid "悪い例（型名に寄せている）:"
+msgstr ""
+
+# 7293969a5c3a4ea2a503af18e108bce6
+#: ../../../source/developer/coding_style.rst:664
+msgid "char* key;"
+msgstr ""
+
+# 6231837c1b98405a8718668bed89ae20
+#: ../../../source/developer/coding_style.rst:667
 msgid "その他"
 msgstr ""
 
+# 82fe004f66e045e294b3fc92872ab9e6
+#: ../../../source/developer/coding_style.rst:669
+msgid ""
+"ここに書いていないものについては特にスタイルを定めないが、 プロジェクト内で常"
+"に一貫性のあるスタイルを使用すること。 同じような事をするときは同じような書き"
+"方にすること。 複数の書き方で同じようなことを実現している場合は1つの方法に合"
+"わせること。"
+msgstr ""
+
 # 2851692195574eb8beab1df3ea82b355
-#: ../../../source/developer/coding_style.rst:604
+#: ../../../source/developer/coding_style.rst:674
 msgid "以下、具体例が必要。"
 msgstr ""
 
 # 8eea28f23e15423f97a0de03882a5330
-#: ../../../source/developer/coding_style.rst:606
+#: ../../../source/developer/coding_style.rst:676
 msgid "ビルド時にできることを実行時に延ばさない(静的チェックを活用)"
 msgstr ""
 
 # df85fda4f16c4fc5a52b70c4d3a982d7
-#: ../../../source/developer/coding_style.rst:607
+#: ../../../source/developer/coding_style.rst:677
 msgid "なるべく局所的に変数を定義し、同時に初期化する"
 msgstr ""
 
 # b7498afc74fb4903a519c59bf8207d29
-#: ../../../source/developer/coding_style.rst:608
+#: ../../../source/developer/coding_style.rst:678
 msgid ""
 "長い関数や深いブロックのネストを避ける * 2つに分けた方がよさそう。あと目安が"
 "あるといいかも。"
 msgstr ""
 
 # 00ab53c74d364ab5a112631b93773003
-#: ../../../source/developer/coding_style.rst:610
+#: ../../../source/developer/coding_style.rst:680
 msgid "100行以上は長いよねーとか3段以上はデンジャーとか。"
 msgstr ""
 
 # 184a7f855fbc417aa1cb85c562a53460
-#: ../../../source/developer/coding_style.rst:611
+#: ../../../source/developer/coding_style.rst:681
 msgid "必要以上にオブジェクトを複製しない"
 msgstr ""
 
 # 8b1b829057a840778437960115f3ed15
-#: ../../../source/developer/coding_style.rst:612
+#: ../../../source/developer/coding_style.rst:682
 msgid "暗黙の型変換はなるべく避ける"
 msgstr ""
 
 # fa1302660c0840fc8796745a1ead7249
-#: ../../../source/developer/coding_style.rst:613
+#: ../../../source/developer/coding_style.rst:683
 msgid "assertを積極的に使う"
 msgstr ""
 
 # 75ccf15a7da145ad9d874effee7f9668
-#: ../../../source/developer/coding_style.rst:616
+#: ../../../source/developer/coding_style.rst:686
 msgid "メモ"
 msgstr ""
 
 # 3ca46d6ed88f461bb004c3914ca0dc5a
-#: ../../../source/developer/coding_style.rst:618
+#: ../../../source/developer/coding_style.rst:688
 msgid ""
 "動的テンプレートを使わない。（要追加情報。implicit template instantiationのこ"
 "とであれば、これはふつうに使わ れているものなので特に禁止しないんでいいんじゃ"
@@ -1769,20 +1911,15 @@ msgid ""
 msgstr ""
 
 # ee79023d775548e8bc70a7a871d810bf
-#: ../../../source/developer/coding_style.rst:621
+#: ../../../source/developer/coding_style.rst:691
 msgid "typeidを使わない。"
 msgstr ""
 
 # da20d99e9bb74722968354d3b9ae43ad
-#: ../../../source/developer/coding_style.rst:622
+#: ../../../source/developer/coding_style.rst:692
 msgid ""
 "例外はMySQLで問題がないようであればOK。mroongaから外の世 界（MySQLの世界）に"
 "はださないようにする。"
-msgstr ""
-
-# d433472597bd4831b96fc7c77441e364
-#: ../../../source/developer/coding_style.rst:624
-msgid "castはCのキャストではなくC++のキャストを使う。"
 msgstr ""
 
 # ff7118e7e369451cafd5d4dd6fa7f04f
@@ -2107,35 +2244,46 @@ msgid ""
 "clone"
 msgstr ""
 
-# 55844f5f2d1344568d6006ef65883d36
+# 5c92a439d5644f0f9f9d89179d4d7c90
 #: ../../../source/developer/release.rst:113
 msgid ""
-"mroonga/doc/ja/sphinx2github.sh を実行し mroonga/doc/ja/html 内のディレクトリ"
-"名を GitHub (Jekyll) 用に変更"
-msgstr ""
-
-# a9a77658f0674d6e8f7b49affddd61b7
-#: ../../../source/developer/release.rst:114
-msgid ""
-"mroonga/doc/ja/html 内のファイルを 1. で clone した mroonga.github.com にコ"
-"ピー"
+"clone済みmroongaディレクトリ内でmake update-documentを実行し、clone したド"
+"キュメントアップロード用のリポジトリへ反映する"
 msgstr ""
 
 # 5e4a403434664faea7a3687a7d31fe17
-#: ../../../source/developer/release.rst:115
+#: ../../../source/developer/release.rst:114
 msgid "mroonga.github.com へコミットを行い GitHub へ push"
 msgstr ""
 
 # 9687d4ae39f0404abc8b7870e36ae7e9
-#: ../../../source/developer/release.rst:118
+#: ../../../source/developer/release.rst:117
 msgid "リリースメールの送信"
 msgstr ""
 
-# 3230d92609d947d98a146cbc03b1b89a
-#: ../../../source/developer/release.rst:120
-msgid ""
-"メーリングリスト (ml@mysql.gr.jp) にリリースメールを流します。メッセージ内容"
-"のテンプレートを以下に示します。 ::"
+# 0cf6ee0710ab4cc1abb33a9ea09b0523
+#: ../../../source/developer/release.rst:119
+msgid "各種メーリングリストにリリースメールを流します。"
+msgstr ""
+
+# 02cc6fddaf29415eab167e97217a77c6
+#: ../../../source/developer/release.rst:121
+msgid "ml@mysql.gr.jp 日本語アナウンス"
+msgstr ""
+
+# b3303b3025c5420693a516a9d378fef8
+#: ../../../source/developer/release.rst:122
+msgid "groonga-dev@lists.sourceforge.jp 日本語アナウンス"
+msgstr ""
+
+# b0255dd8919549768bb0bff21727df01
+#: ../../../source/developer/release.rst:123
+msgid "groonga-talk@lists.sourceforge.net 英語アナウンス"
+msgstr ""
+
+# 8ffd8e30b1104ec59376afe1f7f0eadf
+#: ../../../source/developer/release.rst:125
+msgid "メッセージ内容のテンプレートを以下に示します。 ::"
 msgstr ""
 
 # 2f4a3ea0ee2e4b4b822ecbc8d573ecd5
