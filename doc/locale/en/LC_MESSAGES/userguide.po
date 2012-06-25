@@ -49,22 +49,16 @@ msgstr ""
 
 # 9f56ebdaa9ca482ca782015a0329afb0
 #: ../../../source/userguide.rst:17
-#, fuzzy
 msgid ""
 "By using SHOW ENGINES command, you can check if mroonga is installed. ::"
 msgstr ""
-"By using SHOW ENGINES command, you can check if groonga storage engine is "
-"installed. ::"
 
 # a3916eb35b5d4de7b86fc75e40d3ff69
 #: ../../../source/userguide.rst:32
-#, fuzzy
 msgid ""
 "If you see \"mroonga\" storage engine like above, the installation is well "
 "done."
 msgstr ""
-"If you see \"groonga\" storage engine like above, the installation is well "
-"done."
 
 # 2bf62b09b4f840a985478c928fdfc4f4
 #: ../../../source/userguide.rst:34
@@ -78,9 +72,8 @@ msgstr "Running modes"
 
 # 853830b3a97249238cbfa572b9577f0d
 #: ../../../source/userguide.rst:41
-#, fuzzy
 msgid "Mroonga can run in the following two modes."
-msgstr "groonga storage engine can run in the following two modes."
+msgstr ""
 
 # b3aae35eac024581987777aa13eef34e
 #: ../../../source/userguide.rst:43
@@ -116,7 +109,6 @@ msgstr ""
 
 # 6d1811ce32cc4b06b03ee4e00ac2d90e
 #: ../../../source/userguide.rst:55
-#, fuzzy
 msgid ""
 "With the wrapper mode, groonga is used for full text search function only, "
 "and another existing storage engine like InnoDB is used for storing data. By "
@@ -124,15 +116,9 @@ msgid ""
 "engine and mroonga that is a proven full text search engine, and you can use "
 "it as the stable database having the fast full text search function."
 msgstr ""
-"With the wrapper mode, groonga is used for full text search function only, "
-"and another existing storage engine like InnoDB is used for storing data. By "
-"using wrapper mode, you combine InnoDB that is well-use as the storage "
-"engine and groonga that is a proven full text search engine, and you can use "
-"it as the stable database having the fast full text search function."
 
 # 1f4ee5444fb64a5bb92428b849a87333
 #: ../../../source/userguide.rst:58
-#, fuzzy
 msgid ""
 "The structure of the wrapper mode is the following. Full text search related "
 "operations are done by mroonga, and other operations are done by existing "
@@ -141,12 +127,6 @@ msgid ""
 "goes through mroonga With this way, full text search indexing etc. are done "
 "transparently."
 msgstr ""
-"The structure of the wrapper mode is the following. Full text search related "
-"operations are done by groonga storage engine, and other operations are done "
-"by existing storage engines like MyISAM, InnoDB etc. Groonga storage engine "
-"is located between SQL Handler that processes SQL and an existing storage "
-"engine, thus all data goes through groonga storage engine. With this way, "
-"full text search indexing etc. are done transparently."
 
 # 512331dc17c641f69634833a5ea52f73
 #: ../../../source/userguide.rst:67
@@ -165,9 +145,8 @@ msgstr "Storage mode"
 
 # 3c88b5e9dfff4b78b8c698f7482a46e2
 #: ../../../source/userguide/storage.rst:6
-#, fuzzy
 msgid "Here we explain how to use storage mode of mroonga"
-msgstr "Here we explain how to use storage mode of groonga storage engine."
+msgstr ""
 
 # fef2130e47cd4370aa8efd813bf4da62
 # 0e5c7f350f434a8794719b73369f130c
@@ -180,13 +159,10 @@ msgstr "How to use full text search"
 # 985babbbe59a42d19ca7be384ebc70a2
 #: ../../../source/userguide/storage.rst:11
 #: ../../../source/userguide/wrapper.rst:25
-#, fuzzy
 msgid ""
 "After confirming the installation, let's create a table. The important point "
 "is to specify mroonga by ``ENGINE = mroonga``. ::"
 msgstr ""
-"After confirming the installation, let's create a table. The important point "
-"is to specify groonga storage engine by ``ENGINE = groonga``. ::"
 
 # 5ee8b6c56f064f4894d656856b0c81a4
 # eda0fb5176a04bc7aab38959dec4b69e
@@ -218,15 +194,11 @@ msgstr "How to get search score"
 
 # feeb2f0a3c0948ad971d5971781ae424
 #: ../../../source/userguide/storage.rst:45
-#, fuzzy
 msgid ""
 "In version 1.0.0 or before, mroonga used a special column named ``_score`` "
 "to get search score. From version 1.0.0, it follows MySQL's standard way to "
 "get search score."
 msgstr ""
-"In version 1.0.0 or before, groonga storage engine used a special column "
-"named ``_score`` to get search score. From version 1.0.0, it follows MySQL's "
-"standard way to get search score."
 
 # 0d20615f6dff4275967170e489f8545a
 # cb74d92e9c204e97a31c253e5477cf10
@@ -299,7 +271,6 @@ msgstr ""
 # 8cfaae0c4c3c408fb39ba418d868f83e
 #: ../../../source/userguide/storage.rst:90
 #: ../../../source/userguide/wrapper.rst:100
-#, fuzzy
 msgid ""
 "To use this syntax, you need to register all parsers in MySQL beforehand. On "
 "the other hand, groonga can dynamically add a tokeniser, that is a parser in "
@@ -308,24 +279,15 @@ msgid ""
 "decreases the convenience, and we choose our own syntax using COMMENT like "
 "the following. ::"
 msgstr ""
-"To use this syntax, you need to register all parsers in MySQL beforehand. On "
-"the other hand, groonga can dynamically add a tokeniser, that is a parser in "
-"MySQL. So if use this syntax in groonga storage engine, tokenisers that are "
-"added in groonga dynamically cannot be supported. We think that this "
-"limitation decreases the convenience, and we choose our own syntax using "
-"COMMENT like the following. ::"
 
 # 1ad51f525ef240fb907f5ce88235d062
 # b706bbb56dbf42a488a1a47fe81ce809
 #: ../../../source/userguide/storage.rst:96
 #: ../../../source/userguide/wrapper.rst:106
-#, fuzzy
 msgid ""
 "``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If "
 "you use MySQL 5.1, use ``mroonga_default_parser`` variable described below."
 msgstr ""
-"``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If "
-"you use MySQL 5.1, use ``groonga_default_parser`` variable described below."
 
 # 0b196e3e246846fd9094b3c830ea588d
 # 95fafbd509774ff3a40052588a9fe247
@@ -592,19 +554,15 @@ msgstr ""
 # 6328d27e015448dd8ecf36efd8208f23
 # bd4f25db45634e568ba34b1f54e9c752
 #: ../../../source/userguide/storage.rst:159
-#, fuzzy
 msgid ""
 "You can specify the default parser by passing ``--with-default-parser`` "
 "option in ``configure`` when you build mroonga ::"
 msgstr ""
-"You can specify the default parser by passing ``--with-default-parser`` "
-"option in ``configure`` when you build groonga storage engine. ::"
 
 # 166c792f98ea4a99b8eff480712aa8a1
 # 43df8447a7044b05b62043ef436a0820
 #: ../../../source/userguide/storage.rst:163
 #: ../../../source/userguide/wrapper.rst:173
-#, fuzzy
 msgid ""
 "Or you can set ``mroonga_default_parser`` variable in my.cnf or by SQL. If "
 "you specify it in my.cnf, the change will not be lost after restarting "
@@ -612,11 +570,6 @@ msgid ""
 "hand, if you set it in SQL, the change is effective immediately, but it will "
 "be lost when you restart MySQL."
 msgstr ""
-"Or you can set ``groonga_default_parser`` variable in my.cnf or by SQL. If "
-"you specify it in my.cnf, the change will not be lost after restarting "
-"MySQL, but you need to restart MySQL to make it effective. On the other "
-"hand, if you set it in SQL, the change is effective immediately, but it will "
-"be lost when you restart MySQL."
 
 # b8d262367c95467b9b3b35a449928eae
 # af95cd4dba404307adf25a83ea18a2a0
@@ -691,23 +644,17 @@ msgstr "How to get the record ID"
 
 # fb91834b29884d808f2e9d01cdc12f2d
 #: ../../../source/userguide/storage.rst:216
-#, fuzzy
 msgid ""
 "Groonga assigns a unique number to identify the record when a record is "
 "added in the table."
 msgstr ""
-"groonga assigns a unique number to identify the record when a record is "
-"added in the table."
 
 # 025e7a3d10d0461889d893ecbef3be62
 #: ../../../source/userguide/storage.rst:218
-#, fuzzy
 msgid ""
 "To make the development of applications easier, you can get this record ID "
 "by SQL in mroonga"
 msgstr ""
-"To make the development of applications easier, you can get this record ID "
-"by SQL in groonga storage engine."
 
 # ec7a6034bd2140e68e64c1db0443238e
 #: ../../../source/userguide/storage.rst:220
@@ -761,16 +708,11 @@ msgstr ""
 
 # aec8646c909440dbb9c7f09f64d8b1d4
 #: ../../../source/userguide/storage.rst:274
-#, fuzzy
 msgid ""
 "last_insert_grn_id function is included in mroonga as a User-Defined "
 "Function (UDF), but if you have not yet register it in MySQL by CREATE "
 "FUNCTION, you need to invoke the following SQL for defining a function. ::"
 msgstr ""
-"last_insert_grn_id function is included in groonga storage engine as a User-"
-"Defined Function (UDF), but if you have not yet register it in MySQL by "
-"CREATE FUNCTION, you need to invoke the following SQL for defining a "
-"function. ::"
 
 # c39fbe48314c4ee287c759acf23ef4d2
 #: ../../../source/userguide/storage.rst:278
@@ -794,9 +736,8 @@ msgstr "Logging"
 # ed63bbea39d446d1b815f34748066707
 #: ../../../source/userguide/storage.rst:287
 #: ../../../source/userguide/wrapper.rst:188
-#, fuzzy
 msgid "Mroonga outputs the logs by default."
-msgstr "groonga storage engine outputs the logs by default."
+msgstr ""
 
 # 236544b4815e433a9b7901a8620ec7f3
 # 8c39046aa899458cac9035b9fd947db1
@@ -831,13 +772,10 @@ msgstr ""
 # 0254a17c99d94fd99bd921974c05ef39
 #: ../../../source/userguide/storage.rst:299
 #: ../../../source/userguide/wrapper.rst:200
-#, fuzzy
 msgid ""
 "You can get the log level by ``mroonga_log_level`` system variable, that is "
 "a global variable. You can also modify it dynamically by using SET phrase. ::"
 msgstr ""
-"You can get the log level by ``groonga_log_level`` system variable, that is "
-"a global variable. You can also modify it dynamically by using SET phrase. ::"
 
 # 30beef7058a44d94865b8b3d084b9999
 # 49666ac1388443c0965e41452a44ba9e
@@ -954,24 +892,17 @@ msgstr "Choosing appropriate columns"
 
 # 79b267705e364bbe88c73d71368be1c1
 #: ../../../source/userguide/storage.rst:341
-#, fuzzy
 msgid ""
 "Groonga uses one file per column to store data, and mroonga accesses needed "
 "columns only when accessing a table to utilise this characteristic."
 msgstr ""
-"groonga uses one file per column to store data, and groonga storage engine "
-"accesses needed columns only when accessing a table to utilise this "
-"characteristic."
 
 # 542c4fcf517c436d9e35ce64ea015e14
 #: ../../../source/userguide/storage.rst:343
-#, fuzzy
 msgid ""
 "This optimisation is done automatically in mroonga internal, you don't need "
 "any specific configuration."
 msgstr ""
-"This optimisation is done automatically in groonga storage engine internal, "
-"you don't need any specific configuration."
 
 # 354dd5e9f98b4460913fdb838039d104
 #: ../../../source/userguide/storage.rst:345
@@ -980,15 +911,11 @@ msgstr "Imagine that we have a table with 20 columns like below. ::"
 
 # 18e085ff88c44a91858c999dda65a98c
 #: ../../../source/userguide/storage.rst:358
-#, fuzzy
 msgid ""
 "When we run SELECT phrase like the following, mroonga reads data from "
 "columns that are referred by SELECT phrase and WHERE phrase only (and it "
 "does not access columns that not required internally)."
 msgstr ""
-"When we run SELECT phrase like the following, groonga storage engine reads "
-"data from columns that are referred by SELECT phrase and WHERE phrase only "
-"(and it does not access columns that not required internally)."
 
 # d02732b24c9f40c59702cba710102206
 #: ../../../source/userguide/storage.rst:360
@@ -1024,20 +951,15 @@ msgstr ""
 
 # fb356c31621449e79862cd77433b6f2d
 #: ../../../source/userguide/storage.rst:369
-#, fuzzy
 msgid ""
 "Tritonn (MySQL + Senna), that is mroonga's predecessor, introduced \"2ind "
 "patch\" to skip needless access to data and solved this performance issue."
 msgstr ""
-"Tritonn (MySQL + Senna), that is groonga storage engine's predecessor, "
-"introduced \"2ind patch\" to skip needless access to data and solved this "
-"performance issue."
 
 # 8e0c9ebe908d44e98c948ee5b8c67897
 #: ../../../source/userguide/storage.rst:371
-#, fuzzy
 msgid "Mroonga also has the optimisation for counting rows."
-msgstr "Groonga storage engine also has the optimisation for counting rows."
+msgstr ""
 
 # e7b548b8992c47609f72d239f228103a
 #: ../../../source/userguide/storage.rst:373
@@ -1066,13 +988,10 @@ msgstr ""
 
 # b1cdb1201d204330b6e4ed282f14c6ee
 #: ../../../source/userguide/storage.rst:387
-#, fuzzy
 msgid ""
 "Each time the optimisation for counting rows works, ``mroonga_count_skip`` "
 "status variable value is increased."
 msgstr ""
-"Each time the optimisation for counting rows works, ``groonga_count_skip`` "
-"status variable value is increased."
 
 # 9ea47d5029304dc4a7e9261a3d989546
 #: ../../../source/userguide/storage.rst:389
@@ -1139,9 +1058,8 @@ msgstr ""
 # 927db709fbfc48eb84e04ac88328e3be
 #: ../../../source/userguide/storage.rst:400
 #: ../../../source/userguide/wrapper.rst:248
-#, fuzzy
 msgid "Mroonga also has the optimisation for ORDER BY LIMIT."
-msgstr "Groonga storage engine also has the optimisation for ORDER BY LIMIT."
+msgstr ""
 
 # 0bf3c72114ee45959ea9be4b5f162ce8
 # 6c31e461eb9443c1988f337f41f6e2fb
@@ -1157,13 +1075,10 @@ msgstr ""
 # 655751d615a445b297c7eb2068086c6d
 #: ../../../source/userguide/storage.rst:416
 #: ../../../source/userguide/wrapper.rst:264
-#, fuzzy
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``mroonga_fast_order_limit`` status variable value is increased."
 msgstr ""
-"Each time the optimisation for counting rows works, "
-"``groonga_fast_order_limit`` status variable value is increased."
 
 # 40837c2fbcec427db5e898c6eacec629
 # e977c18423794c639b57ffcbbb89caee
@@ -1244,9 +1159,8 @@ msgstr "Wrapper mode"
 
 # 22c1c7e780964b9f916b629ec9b01db7
 #: ../../../source/userguide/wrapper.rst:6
-#, fuzzy
 msgid "Here we explain how to use wrapper mode of mroonga"
-msgstr "Here we explain how to use wrapper mode of groonga storage engine."
+msgstr ""
 
 # 5209a48ed7714ca0aeaebd988b635d4a
 #: ../../../source/userguide/wrapper.rst:9
@@ -1255,15 +1169,11 @@ msgstr "How to use wrapper mode"
 
 # f4a4cf1553ec45f5802bdc88f6a40050
 #: ../../../source/userguide/wrapper.rst:11
-#, fuzzy
 msgid ""
 "In wrapper mode, mroonga works in wrapping an existing storage engine. To "
 "specify the wrapped storage engine, we use SQL comment like ``COMMENT = "
 "'engine \"innodb\"'`` for now."
 msgstr ""
-"In wrapper mode, groonga storage engine works in wrapping an existing "
-"storage engine. To specify the wrapped storage engine, we use SQL comment "
-"like ``COMMENT = 'engine \"innodb\"'`` for now."
 
 # aec3b48251204c0695a651ce23a064ab
 #: ../../../source/userguide/wrapper.rst:15
@@ -1286,21 +1196,15 @@ msgstr ""
 # 6328d27e015448dd8ecf36efd8208f23
 # bd4f25db45634e568ba34b1f54e9c752
 #: ../../../source/userguide/wrapper.rst:169
-#, fuzzy
 msgid ""
 "You can specify the default parser by passing ``--with-default-parser`` "
 "option in ``configure`` when you build mroonga. ::"
 msgstr ""
-"You can specify the default parser by passing ``--with-default-parser`` "
-"option in ``configure`` when you build groonga storage engine. ::"
 
 # 0bf3c72114ee45959ea9be4b5f162ce8
 # 6c31e461eb9443c1988f337f41f6e2fb
 #: ../../../source/userguide/wrapper.rst:250
-#, fuzzy
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and "
 "the minimal records are passed to MySQL. ::"
 msgstr ""
-"In the SELECT example below, ORDER BY LIMIT is processed in groonga only and "
-"the minimal records are passed to MySQL. ::"
