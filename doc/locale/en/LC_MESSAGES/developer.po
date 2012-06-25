@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-29 10:51\n"
+"POT-Creation-Date: 2012-06-25 15:24\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -29,13 +29,10 @@ msgstr "How we are developing"
 
 # 447d8e895832417bac00ff380504327a
 #: ../../../source/developer.rst:15
-#, fuzzy
 msgid ""
 "We, the mroonga development project, are doing Ticket Driven Development by "
 "using a BTS named Redmine."
 msgstr ""
-"We, the groonga storage engine development project, are doing Ticket Driven "
-"Development by using a BTS named Redmine."
 
 # 495015ae392f4a06858ca6b98b05342f
 #: ../../../source/developer.rst:17
@@ -271,9 +268,8 @@ msgstr "MySQL 5.5"
 
 # 0b9d997a737f4a48b58a5445659d77e5
 #: ../../../source/developer.rst:94
-#, fuzzy
 msgid "groonga 1.2.8"
-msgstr "groonga 1.2"
+msgstr ""
 
 # 9da18b1d73c84bbb99460c609b710fca
 #: ../../../source/developer.rst:95
@@ -306,15 +302,13 @@ msgstr ""
 
 # 826e9638d3d6445fa180b86ef8bd0d70
 #: ../../../source/developer.rst:106
-#, fuzzy
 msgid "The header file of mroonga."
-msgstr "The header file of groonga storage engine"
+msgstr ""
 
 # 4610499f02634700bfe0fdbb2732efc8
 #: ../../../source/developer.rst:109
-#, fuzzy
 msgid "The implementation of mroonga."
-msgstr "The implementation of groonga storage engine"
+msgstr ""
 
 # 9a3f780ad3bc4d699b8cd6cffdb768a9
 #: ../../../source/developer.rst:112
@@ -366,14 +360,10 @@ msgstr "Japanese documents in Sphinx format"
 
 # 80c0700dc13740f69be83439c14e5e21
 #: ../../../source/developer.rst:135
-#, fuzzy
 msgid ""
 "Since we are still in the early stage of the development of mroonga, we will "
 "not make the documents of the specification of SQL queries for now."
 msgstr ""
-"Since we are still in the early stage of the development of groonga storage "
-"engine, we will not make the documents of the specification of SQL queries "
-"for now."
 
 # ee536664268047b4880f6521d8d579c5
 #: ../../../source/developer.rst:137
@@ -391,11 +381,8 @@ msgstr "Adding and running tests"
 
 # c8cf5c6d155c423286dbb4a80e999c88
 #: ../../../source/developer.rst:142
-#, fuzzy
 msgid "We use two kinds of regression tests to manage the quality of mroonga."
 msgstr ""
-"We use two kinds of regression tests to manage the quality of groonga "
-"storage engine."
 
 # 6df137918b5344cb9df60e79b081b871
 #: ../../../source/developer.rst:145
@@ -472,9 +459,8 @@ msgstr "Adding and updating documents"
 
 # 22c1912012414df19594e8f9260af53e
 #: ../../../source/developer.rst:165
-#, fuzzy
 msgid "We use Sphinx for the documentation of mroonga."
-msgstr "We use Sphinx for the documentation of groonga storage engine."
+msgstr ""
 
 # cf096f3dbdb04a6a8cb8a7d5152c9efc
 #: ../../../source/developer.rst:167
@@ -1944,27 +1930,19 @@ msgstr "Building for debugging"
 
 # 03f812c0405c456eaa047fdc3b75ae86
 #: ../../../source/developer/debug.rst:9
-#, fuzzy
 msgid ""
 "When you build software for debugging, you can get more information like "
 "symbol resolutions in gdb. So we build both MySQL and mroonga for debugging "
 "in development."
 msgstr ""
-"When you build software for debugging, you can get more information like "
-"symbol resolutions in gdb. So we build both MySQL and groonga storage engine "
-"for debugging in development."
 
 # b6dbbd26e1a348139e39413ed44cd429
 #: ../../../source/developer/debug.rst:14
-#, fuzzy
 msgid ""
 "If you build one of them for debugging, the size of structures etc. might be "
 "different, and you might not be able to load mroonga, or assertions don't "
 "work in running."
 msgstr ""
-"If you build one of them for debugging, the size of structures etc. might be "
-"different, and you might not be able to load groonga storage engine, or "
-"assertions don't work in running."
 
 # 05ccd24069d54ee0a8dea702bb297f2f
 #: ../../../source/developer/debug.rst:17
@@ -1989,19 +1967,15 @@ msgstr "The procedure from download to build is the following. ::"
 
 # 05ccd24069d54ee0a8dea702bb297f2f
 #: ../../../source/developer/debug.rst:34
-#, fuzzy
 msgid "How tom build mroonga for debugging"
-msgstr "How to build MySQL for debugging"
+msgstr ""
 
 # 5661cd8c8bf84b48b6e401ddd34bac13
 #: ../../../source/developer/debug.rst:36
-#, fuzzy
 msgid ""
 "You can build mroonga for debugging by passing ``--with-debug`` in configure "
 "options."
 msgstr ""
-"You can build groonga storage engine for debugging by passing ``--with-"
-"debug`` in configure options."
 
 # aecc8863552d408a8fa6a3613c3098bc
 #: ../../../source/developer/debug.rst:38
@@ -2278,43 +2252,45 @@ msgstr ""
 "GitHub からドキュメントアップロード用のリポジトリ (mroonga.github.com) を "
 "clone"
 
-# 2ec53f4658b14ff2a8f555d22eabd85f
+# 757c4a7835b1434fb5a22c5d9b5af56d
 #: ../../../source/developer/release.rst:113
 msgid ""
-"mroonga/doc/ja/sphinx2github.sh を実行し mroonga/doc/ja/html 内のディレクトリ"
-"名を GitHub (Jekyll) 用に変更"
+"clone済みmroongaディレクトリ内でmake update-documentを実行し、clone したド"
+"キュメントアップロード用のリポジトリへ反映する"
 msgstr ""
-"mroonga/doc/ja/sphinx2github.sh を実行し mroonga/doc/ja/html 内のディレクトリ"
-"名を GitHub (Jekyll) 用に変更"
-
-# 266072d9e55b46e2926c4a0fa4e6c16f
-#: ../../../source/developer/release.rst:114
-msgid ""
-"mroonga/doc/ja/html 内のファイルを 1. で clone した mroonga.github.com にコ"
-"ピー"
-msgstr ""
-"mroonga/doc/ja/html 内のファイルを 1. で clone した mroonga.github.com にコ"
-"ピー"
 
 # 493479dba3c34e7ca886ac88b2851381
-#: ../../../source/developer/release.rst:115
+#: ../../../source/developer/release.rst:114
 msgid "mroonga.github.com へコミットを行い GitHub へ push"
 msgstr "mroonga.github.com へコミットを行い GitHub へ push"
 
 # 664c69048ff7429fad53e24f2e0e49f0
-#: ../../../source/developer/release.rst:118
+#: ../../../source/developer/release.rst:117
 msgid "リリースメールの送信"
 msgstr "リリースメールの送信"
 
-# 27451ccdccf041639fd971a6a64f0b7a
-#: ../../../source/developer/release.rst:120
-msgid ""
-"メーリングリスト (ml@mysql.gr.jp) にリリースメールを流します。メッセージ内容"
-"のテンプレートを以下に示します。 ::"
+# d9942158a7c0464596ce4237c1f85408
+#: ../../../source/developer/release.rst:119
+msgid "各種メーリングリストにリリースメールを流します。"
 msgstr ""
-"メーリングリスト (ml@mysql.gr.jp) にリリースメールを流します。メッセージ内容"
-"のテンプレートを以下に示します。 ::"
 
-# 2a9776bdd36f430298d4e3a901f4006f
-#~ msgid "How tom build groonga storage engine for debugging"
-#~ msgstr "How tom build groonga storage engine for debugging"
+# dd99d2a206534168b8ee02ad52a5f310
+#: ../../../source/developer/release.rst:121
+msgid "ml@mysql.gr.jp 日本語アナウンス"
+msgstr ""
+
+# 93311ece15004f76821d7a67b8cf4586
+#: ../../../source/developer/release.rst:122
+msgid "groonga-dev@lists.sourceforge.jp 日本語アナウンス"
+msgstr ""
+
+# ccb63e5b202c42d7803e63b08041e40c
+#: ../../../source/developer/release.rst:123
+msgid "groonga-talk@lists.sourceforge.net 英語アナウンス"
+msgstr ""
+
+# 27451ccdccf041639fd971a6a64f0b7a
+#: ../../../source/developer/release.rst:125
+msgid "メッセージ内容のテンプレートを以下に示します。 ::"
+msgstr ""
+
