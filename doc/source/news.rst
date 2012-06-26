@@ -19,14 +19,14 @@ Fixes
 * Fixed to disable query cache with transaction. [#1384]
 * Disabled partition explicitly. [#1391]
 * [rpm][deb] Fixed to ensure deleting mroonga plugin from ``mysql.plugin`` table
-  before install. [groonga-dev,00948] [Suggested by Kazuhiko Isobe]
+  before install. [groonga-dev,00948] [Suggested by Kazuhiro Isobe]
 * Fixed a crash bug by setting nonexistent path to ``mroonga_log_file``
   variable. [#1404] [Reported by @nabebeb]
 
 Thanks
 ^^^^^^
 
-* Kazuhiko Isobe
+* Kazuhiro Isobe
 * @nabebeb
 
 .. _release-2-03:
