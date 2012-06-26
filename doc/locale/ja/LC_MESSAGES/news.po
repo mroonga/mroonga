@@ -97,7 +97,7 @@ msgstr "磯部和弘さん"
 # ad8551d7f1ed42db93e7d8a9334c6152
 #: ../../../source/news.rst:30
 msgid "@nabebeb"
-msgstr "nabebebさん"
+msgstr "@nabebebさん"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:35
