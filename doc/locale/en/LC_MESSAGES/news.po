@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-25 16:41\n"
+"POT-Creation-Date: 2012-06-26 10:54\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -63,8 +63,8 @@ msgstr ""
 # 7238a3b2e76742f9ba4cf721fd1ecd12
 #: ../../../source/news.rst:21
 msgid ""
-"[rpm][deb] Fixed to ensure deleting mroonga plugin from mysql.plugin before "
-"install. [groonga-dev,00948] [Suggested by Kazuhiko Isobe]"
+"[rpm][deb] Fixed to ensure deleting mroonga plugin from ``mysql.plugin`` "
+"table before install. [groonga-dev,00948] [Suggested by Kazuhiro Isobe]"
 msgstr ""
 
 # d81b2d5b41794690abf04701c397e885
@@ -85,12 +85,12 @@ msgstr "Thanks"
 
 # 39aa646b724d414fa3d0cc950e37d809
 #: ../../../source/news.rst:29
-msgid "Kazuhiko Isobe"
+msgid "Kazuhiro Isobe"
 msgstr ""
 
 # be04b7719ed84464b32068461573f489
 #: ../../../source/news.rst:30
-msgid "nabebeb"
+msgid "@nabebeb"
 msgstr ""
 
 # ec49610ff0d445c8870b64d923b8997d
