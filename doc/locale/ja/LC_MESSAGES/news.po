@@ -41,7 +41,7 @@ msgstr "改良"
 msgid "[wrapper mode] Supported disable/enable keys in bulk insert. [#1311]"
 msgstr ""
 "[ラッパーモード] バルクインサートにてインデックスの有効/無効化をサポート。 "
-"[#1310]"
+"[#1311]"
 
 # 08e3d478781f474c8a19fd0acb16a2bf
 #: ../../../source/news.rst:17 ../../../source/news.rst:64
