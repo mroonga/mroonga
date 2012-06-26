@@ -1,0 +1,12 @@
+SET GLOBAL mroonga_database_path_prefix = "mroonga.data/";
+SHOW GLOBAL VARIABLES LIKE 'mroonga_database_path_prefix';
+Variable_name	Value
+mroonga_database_path_prefix	mroonga.data/
+CREATE TABLE counts (
+id INT PRIMARY KEY AUTO_INCREMENT
+);
+INSERT INTO counts VALUES (NULL);
+SELECT * FROM counts;
+id
+1
+DROP TABLE counts;

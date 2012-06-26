@@ -24,36 +24,56 @@
 
 namespace test_mrn_path_mapper {
   namespace db_path {
-    void test_normal_db() {
-      mrn::PathMapper mapper("./db/");
-      cppcut_assert_equal("db.mrn", mapper.db_path());
+    namespace without_prefix {
+      void test_normal_db() {
+        mrn::PathMapper mapper("./db/", NULL);
+        cppcut_assert_equal("db.mrn", mapper.db_path());
+      }
+
+      void test_normal_table() {
+        mrn::PathMapper mapper("./db/table", NULL);
+        cppcut_assert_equal("db.mrn", mapper.db_path());
+      }
+
+      void test_temporary_table() {
+        mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0", NULL);
+        cppcut_assert_equal("/tmp/mysqld.1/#sql27c5_1_0.mrn",
+                            mapper.db_path());
+      }
     }
 
-    void test_normal_table() {
-      mrn::PathMapper mapper("./db/table");
-      cppcut_assert_equal("db.mrn", mapper.db_path());
-    }
+    namespace with_prefix {
+      void test_normal_db() {
+        mrn::PathMapper mapper("./db/", "mroonga.data/");
+        cppcut_assert_equal("mroonga.data/db.mrn", mapper.db_path());
+      }
 
-    void test_temporary_table() {
-      mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0");
-      cppcut_assert_equal("/tmp/mysqld.1/#sql27c5_1_0.mrn",
-                          mapper.db_path());
+      void test_normal_table() {
+        mrn::PathMapper mapper("./db/table", "mroonga.data/");
+        cppcut_assert_equal("mroonga.data/db.mrn", mapper.db_path());
+      }
+
+      void test_temporary_table() {
+        mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0", "mroonga.data/");
+        cppcut_assert_equal("/tmp/mysqld.1/#sql27c5_1_0.mrn",
+                            mapper.db_path());
+      }
     }
   }
 
   namespace db_name {
     void test_normal_db() {
-      mrn::PathMapper mapper("./db/");
+      mrn::PathMapper mapper("./db/", NULL);
       cppcut_assert_equal("db", mapper.db_name());
     }
 
     void test_normal_table() {
-      mrn::PathMapper mapper("./db/table");
+      mrn::PathMapper mapper("./db/table", NULL);
       cppcut_assert_equal("db", mapper.db_name());
     }
 
     void test_temporary_table() {
-      mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0");
+      mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0", NULL);
       cppcut_assert_equal("/tmp/mysqld.1/#sql27c5_1_0",
                           mapper.db_name());
     }
@@ -61,34 +81,34 @@ namespace test_mrn_path_mapper {
 
   namespace table_name {
     void test_normal_table() {
-      mrn::PathMapper mapper("./db/table");
+      mrn::PathMapper mapper("./db/table", NULL);
       cppcut_assert_equal("table", mapper.table_name());
     }
 
     void test_temporary_table() {
-      mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0");
+      mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0", NULL);
       cppcut_assert_equal("#sql27c5_1_0", mapper.table_name());
     }
 
     void test_underscore_start_table() {
-      mrn::PathMapper mapper("./db/_table");
+      mrn::PathMapper mapper("./db/_table", NULL);
       cppcut_assert_equal("@005ftable", mapper.table_name());
     }
   }
 
   namespace mysql_table_name {
     void test_normal_table() {
-      mrn::PathMapper mapper("./db/table");
+      mrn::PathMapper mapper("./db/table", NULL);
       cppcut_assert_equal("table", mapper.mysql_table_name());
     }
 
     void test_temporary_table() {
-      mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0");
+      mrn::PathMapper mapper("/tmp/mysqld.1/#sql27c5_1_0", NULL);
       cppcut_assert_equal("#sql27c5_1_0", mapper.mysql_table_name());
     }
 
     void test_underscore_start_table() {
-      mrn::PathMapper mapper("./db/_table");
+      mrn::PathMapper mapper("./db/_table", NULL);
       cppcut_assert_equal("_table", mapper.mysql_table_name());
     }
   }

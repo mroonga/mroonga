@@ -28,8 +28,9 @@
 #include <string.h>
 
 namespace mrn {
-  PathMapper::PathMapper(const char *mysql_path)
-    : mysql_path_(mysql_path) {
+  PathMapper::PathMapper(const char *mysql_path, const char *path_prefix)
+    : mysql_path_(mysql_path),
+      path_prefix_(path_prefix) {
     db_path_[0] = '\0';
     db_name_[0] = '\0';
     table_name_[0] = '\0';
@@ -48,7 +49,11 @@ namespace mrn {
     }
 
     if (strncmp(mysql_path_, "./", 2) == 0) {
-      int i = 2, j = 0, len;
+      if (path_prefix_) {
+        strncat(db_path_, path_prefix_, MRN_MAX_PATH_SIZE);
+      }
+
+      int i = 2, j = strlen(db_path_), len;
       len = strlen(mysql_path_);
       while (mysql_path_[i] != '/' && i < len) {
         db_path_[j++] = mysql_path_[i++];

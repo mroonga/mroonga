@@ -27,13 +27,14 @@
 namespace mrn {
   class PathMapper {
   public:
-    PathMapper(const char *mysql_path);
+    PathMapper(const char *mysql_path, const char *path_prefix);
     const char *db_path();
     const char *db_name();
     const char *table_name();
     const char *mysql_table_name();
   private:
     const char *mysql_path_;
+    const char *path_prefix_;
     char db_path_[MRN_MAX_PATH_SIZE];
     char db_name_[MRN_MAX_PATH_SIZE];
     char table_name_[MRN_MAX_PATH_SIZE];
