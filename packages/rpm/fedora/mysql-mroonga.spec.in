@@ -1,4 +1,4 @@
-%define mysql_version 5.5.23
+%define mysql_version 5.5.24
 %define mysql_release 1%{?dist}
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/16/SRPMS
@@ -120,6 +120,7 @@ fi
 - new upstream release.
 - ensure deleting mroonga plugin before install.
   Suggested by Kazuhiro Isobe. Thanks!!!
+- use MySQL 5.5.24.
 
 * Tue May 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.03-0
 - new upstream release.
