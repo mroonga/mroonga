@@ -86,7 +86,7 @@ if [ ! -f "$universe_list}" ]; then
     esac
 fi
 
-run apt-get install -V -y --force-yes devscripts ${DEPENDED_PACKAGES}
+run apt-get install -V -y devscripts ${DEPENDED_PACKAGES}
 run apt-get build-dep -V -y ${mysql_server_package}
 run apt-get clean
 
