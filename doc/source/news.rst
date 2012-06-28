@@ -22,6 +22,8 @@ Fixes
   before install. [groonga-dev,00948] [Suggested by Kazuhiro Isobe]
 * Fixed a crash bug by setting nonexistent path to ``mroonga_log_file``
   variable. [#1404] [Reported by @nabebeb]
+* [experimental] Supported mroonga related data path change.
+  [groonga-dev,00914] [#1392] [Suggested by Kazuhiro Isobe]
 
 Thanks
 ^^^^^^
