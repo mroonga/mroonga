@@ -48,9 +48,9 @@ namespace mrn {
       return db_path_;
     }
 
-    size_t db_len = strlen(db_path_);
     if (strncmp(mysql_path_, "./", 2) == 0) {
       if (path_prefix_) {
+        size_t db_len = strlen(db_path_);
         strncat(db_path_, path_prefix_, MRN_MAX_PATH_SIZE - db_len - 1);
       }
 
