@@ -34,6 +34,7 @@ test_files = \
 	column_year_without_index.test \
 	create_database_name_slash.test \
 	create_table.test \
+	database_path_prefix.test \
 	delete_fulltext_column.test \
 	delete_id_index_hash_no_unique.test \
 	delete_id_index_hash_unique.test \

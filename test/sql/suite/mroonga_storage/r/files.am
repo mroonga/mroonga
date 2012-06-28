@@ -34,6 +34,7 @@ result_files = \
 	column_year_without_index.result \
 	create_database_name_slash.result \
 	create_table.result \
+	database_path_prefix.result \
 	delete_fulltext_column.result \
 	delete_id_index_hash_no_unique.result \
 	delete_id_index_hash_unique.result \
