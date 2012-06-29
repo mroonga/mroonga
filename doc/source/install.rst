@@ -40,10 +40,10 @@ Debian GNU/Linux wheezy
 
 Install ::
 
-  % sudo aptitude update
-  % sudo aptitude -V -D -y --allow-untrusted install groonga-keyring
-  % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-mroonga
+  % sudo apt-get update
+  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
+  % sudo apt-get update
+  % sudo apt-get -y install mysql-server-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
 
