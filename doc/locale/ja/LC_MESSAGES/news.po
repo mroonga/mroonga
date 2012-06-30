@@ -69,7 +69,7 @@ msgid ""
 "table before install. [groonga-dev,00948] [Suggested by Kazuhiro Isobe]"
 msgstr ""
 "[rpm][deb] インストール前に ``mysql.plugin`` テーブルからmroongaプラグインを"
-"確実に削除するようにした。 [groonga-dev,00948] [磯部和弘さんが提案]"
+"確実に削除するようにした。 [groonga-dev,00948] [磯部和広さんが提案]"
 
 # 28bc9cbdc60a460e87c704dca8b510eb
 #: ../../../source/news.rst:23
@@ -87,7 +87,7 @@ msgid ""
 "dev,00914] [#1392] [Suggested by Kazuhiro Isobe]"
 msgstr ""
 "[実験的] mroonga関連のデータを配置するパスの変更をサポート。 "
-"[groonga-dev,00914] [#1392] [磯部和弘さんが提案]"
+"[groonga-dev,00914] [#1392] [磯部和広さんが提案]"
 
 # 2371feae1d1549e59cd05415194e5dcf
 #: ../../../source/news.rst:29 ../../../source/news.rst:80
@@ -101,7 +101,7 @@ msgstr "感謝"
 # fea7719a822846df81706447d8eb4e29
 #: ../../../source/news.rst:31
 msgid "Kazuhiro Isobe"
-msgstr "磯部和弘さん"
+msgstr "磯部和広さん"
 
 # ad8551d7f1ed42db93e7d8a9334c6152
 #: ../../../source/news.rst:32
