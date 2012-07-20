@@ -1073,7 +1073,22 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_UINT16;       // 2bytes
     break;
   case MYSQL_TYPE_SET:          // SET; <= 8bytes
-    type = GRN_DB_UINT64;       // 8bytes
+    switch (field->pack_length()) {
+    case 1:
+      type = GRN_DB_UINT8;      // 1byte
+      break;
+    case 2:
+      type = GRN_DB_UINT16;     // 2bytes
+      break;
+    case 3:
+    case 4:
+      type = GRN_DB_UINT32;     // 3bytes
+      break;
+    case 8:
+    default:
+      type = GRN_DB_UINT64;     // 8bytes
+      break;
+    }
     break;
   case MYSQL_TYPE_TINY_BLOB:    // TINYBLOB; <= 256bytes + 1byte
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
@@ -8037,6 +8052,46 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::generic_store_bulk_unsigned_integer(Field *field, grn_obj *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  long long signed_value = field->val_int();
+  unsigned long long unsigned_value = *((unsigned long long *)(&signed_value));
+  uint32 size = field->pack_length();
+  switch (size) {
+  case 1:
+    grn_obj_reinit(ctx, buf, GRN_DB_UINT8, 0);
+    GRN_UINT8_SET(ctx, buf, unsigned_value);
+    break;
+  case 2:
+    grn_obj_reinit(ctx, buf, GRN_DB_UINT16, 0);
+    GRN_UINT16_SET(ctx, buf, unsigned_value);
+    break;
+  case 3:
+  case 4:
+    grn_obj_reinit(ctx, buf, GRN_DB_UINT32, 0);
+    GRN_UINT32_SET(ctx, buf, unsigned_value);
+    break;
+  case 8:
+    grn_obj_reinit(ctx, buf, GRN_DB_UINT64, 0);
+    GRN_UINT64_SET(ctx, buf, unsigned_value);
+    break;
+  default:
+    // Why!?
+    error = HA_ERR_UNSUPPORTED;
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "unknown unsigned integer value size: <%u>: "
+             "available sizes: [1, 2, 3, 4, 8]",
+             size);
+    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+                 error, error_message);
+    break;
+  }
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -8317,8 +8372,10 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     error = generic_store_bulk_new_decimal(field, buf);
     break;
   case MYSQL_TYPE_ENUM:
-  case MYSQL_TYPE_SET:
     error = generic_store_bulk_integer(field, buf);
+    break;
+  case MYSQL_TYPE_SET:
+    error = generic_store_bulk_unsigned_integer(field, buf);
     break;
   case MYSQL_TYPE_TINY_BLOB:
   case MYSQL_TYPE_MEDIUM_BLOB:
@@ -8954,6 +9011,55 @@ int ha_mroonga::storage_encode_key_enum(Field *field, const uchar *key,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::storage_encode_key_set(Field *field, const uchar *key,
+                                       uchar *buf, uint *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  Field_set unpacker((uchar *)key, field->field_length, (uchar *)(key - 1),
+                     field->null_bit, field->unireg_check, field->field_name,
+                     field->pack_length(),
+                     static_cast<Field_set*>(field)->typelib,
+                     static_cast<Field_set*>(field)->charset());
+  switch (field->pack_length()) {
+  case 1:
+    {
+      int8 signed_value = (int8)(unpacker.val_int());
+      uint8 unsigned_value = *((uint8 *)&signed_value);
+      *size = 1;
+      memcpy(buf, &unsigned_value, *size);
+    }
+    break;
+  case 2:
+    {
+      int16 signed_value = (int16)(unpacker.val_int());
+      uint16 unsigned_value = *((uint16 *)&signed_value);
+      *size = 2;
+      memcpy(buf, &unsigned_value, *size);
+    }
+    break;
+  case 3:
+  case 4:
+    {
+      int32 signed_value = (int32)(unpacker.val_int());
+      uint32 unsigned_value = *((uint32 *)&signed_value);
+      *size = 4;
+      memcpy(buf, &unsigned_value, *size);
+    }
+    break;
+  case 8:
+  default:
+    {
+      int64 signed_value = (int64)(unpacker.val_int());
+      uint64 unsigned_value = *((uint64 *)&signed_value);
+      *size = 8;
+      memcpy(buf, &unsigned_value, *size);
+    }
+    break;
+  }
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
                                    uchar *buf, uint *size)
 {
@@ -8971,7 +9077,6 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
 
   switch (field->real_type()) {
   case MYSQL_TYPE_BIT:
-  case MYSQL_TYPE_SET:
   case MYSQL_TYPE_TINY:
     {
       memcpy(buf, ptr, 1);
@@ -9062,6 +9167,9 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
     }
   case MYSQL_TYPE_ENUM:
     storage_encode_key_enum(field, ptr, buf, size);
+    break;
+  case MYSQL_TYPE_SET:
+    storage_encode_key_set(field, ptr, buf, size);
     break;
   default:
     error = HA_ERR_UNSUPPORTED;

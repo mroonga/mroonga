@@ -499,6 +499,7 @@ private:
 
   int generic_store_bulk_string(Field *field, grn_obj *buf);
   int generic_store_bulk_integer(Field *field, grn_obj *buf);
+  int generic_store_bulk_unsigned_integer(Field *field, grn_obj *buf);
   int generic_store_bulk_float(Field *field, grn_obj *buf);
   int generic_store_bulk_timestamp(Field *field, grn_obj *buf);
   int generic_store_bulk_date(Field *field, grn_obj *buf);
@@ -566,6 +567,8 @@ private:
 #endif
   int storage_encode_key_enum(Field *field, const uchar *key,
                               uchar *buf, uint *size);
+  int storage_encode_key_set(Field *field, const uchar *key,
+                             uchar *buf, uint *size);
   int storage_encode_key(Field *field, const uchar *key, uchar *buf, uint *size);
   void storage_encode_multiple_column_key_float(float value,
                                                 uint data_size,
