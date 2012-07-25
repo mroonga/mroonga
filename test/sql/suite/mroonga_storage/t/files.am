@@ -26,6 +26,11 @@ test_files = \
 	column_enum_less_with_index.test \
 	column_enum_many_with_index.test \
 	column_int_with_index_zero_value.test \
+	column_set_16_with_index.test \
+	column_set_24_with_index.test \
+	column_set_32_with_index.test \
+	column_set_64_with_index.test \
+	column_set_8_with_index.test \
 	column_time_with_fractional_seconds.test \
 	column_time_without_fractional_seconds.test \
 	column_timestamp_with_fractional_seconds.test \
