@@ -6837,9 +6837,9 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
     if (rc) {
       char error_message[MRN_MESSAGE_BUFFER_SIZE];
       snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-              "failed to parse fulltext search keyword: <%.*s>: <%s>",
-              keyword_length_original, keyword_original,
-              info->ctx->errbuf);
+               "failed to parse fulltext search keyword: <%.*s>: <%s>",
+               keyword_length_original, keyword_original,
+               info->ctx->errbuf);
       my_message(ER_PARSE_ERROR, error_message, MYF(0));
       GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
     }
