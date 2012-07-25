@@ -290,6 +290,22 @@ AC_SUBST(RSYNC_PATH)
 GPG_UID=m4_include(gpg_uid)
 AC_SUBST(GPG_UID)
 
+# For update-version
+AC_ARG_WITH(cutter-source-path,
+            [AS_HELP_STRING([--with-cutter-source-path=PATH],
+            [specify Cutter source path for mroonga's release manager.])],
+            [CUTTER_SOURCE_PATH="$withval"])
+case "$CUTTER_SOURCE_PATH" in
+  ""|/*)
+    : # do nothing
+    ;;
+  *)
+    CUTTER_SOURCE_PATH="\$(top_builddir)/${CUTTER_SOURCE_PATH}"
+    ;;
+esac
+AC_SUBST(CUTTER_SOURCE_PATH)
+
+
 # Document
 AC_MSG_CHECKING([whether enable document])
 AC_ARG_ENABLE(document,
