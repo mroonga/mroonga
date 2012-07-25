@@ -56,7 +56,7 @@ tag:
 	cd $(top_srcdir) && \
 	  git tag v$(VERSION) -a -m 'mroonga $(VERSION)!!!'
 
-update-latest-release:
+update-latest-release: misc
 	@if test -z "$(OLD_RELEASE)"; then	\
 	  echo "\$$(OLD_RELEASE) is missing";	\
 	  exit 1;				\
@@ -69,9 +69,6 @@ update-latest-release:
 	  echo "\$$(NEW_RELEASE_DATE) is missing";	\
 	  exit 1;					\
 	fi
-	cd $(top_srcdir) && test -d "misc" ||			\
-	  git clone git://github.com/clear-code/cutter.git
-	ln -sf cutter/misc misc
 	cd $(top_srcdir) &&				\
 	  misc/update-latest-release.rb			\
 	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
@@ -143,3 +140,11 @@ upload-to-github:
 
 echo-cutter:
 	echo $(CUTTER)
+
+misc:
+	@if test -z "$(CUTTER_SOURCE_PATH)"; then \
+	  echo "\$$(CUTTER_SOURCE_PATH) is missing"; \
+	  exit 1; \
+	fi
+	ln -s "$(CUTTER_SOURCE_PATH)/misc" misc;
+
