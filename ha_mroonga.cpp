@@ -1003,7 +1003,11 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_TINY:         // TINYINT; 1byte
-    type = GRN_DB_INT8;         // 1byte
+    if (static_cast<Field_num *>(field)->unsigned_flag) {
+      type = GRN_DB_UINT8;      // 1byte
+    } else {
+      type = GRN_DB_INT8;       // 1byte
+    }
     break;
   case MYSQL_TYPE_SHORT:        // SMALLINT; 2bytes
     type = GRN_DB_INT16;        // 2bytes
@@ -8019,10 +8023,17 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf)
   int error = 0;
   long long value = field->val_int();
   uint32 size = field->pack_length();
+  Field_num *field_num = static_cast<Field_num *>(field);
+  bool is_unsigned = field_num->unsigned_flag;
   switch (size) {
   case 1:
-    grn_obj_reinit(ctx, buf, GRN_DB_INT8, 0);
-    GRN_INT8_SET(ctx, buf, value);
+    if (is_unsigned) {
+      grn_obj_reinit(ctx, buf, GRN_DB_UINT8, 0);
+      GRN_UINT8_SET(ctx, buf, value);
+    } else {
+      grn_obj_reinit(ctx, buf, GRN_DB_INT8, 0);
+      GRN_INT8_SET(ctx, buf, value);
+    }
     break;
   case 2:
     grn_obj_reinit(ctx, buf, GRN_DB_INT16, 0);
@@ -8408,12 +8419,20 @@ void ha_mroonga::storage_store_field_integer(Field *field,
                                              const char *value,
                                              uint value_length)
 {
+  Field_num *field_num = static_cast<Field_num *>(field);
+  bool is_unsigned = field_num->unsigned_flag;
   switch (value_length) {
   case 1:
     {
-      char field_value;
-      field_value = *((char *)value);
-      field->store(field_value);
+      if (is_unsigned) {
+        unsigned char field_value;
+        field_value = *((unsigned char *)value);
+        field->store(field_value);
+      } else {
+        char field_value;
+        field_value = *((char *)value);
+        field->store(field_value);
+      }
       break;
     }
   case 2:
