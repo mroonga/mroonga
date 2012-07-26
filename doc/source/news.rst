@@ -3,6 +3,30 @@
 News
 ====
 
+.. _release-2-05:
+
+Release 2.05 - 2012/07/29
+-------------------------
+
+.. caution::
+
+   This release has a backward incompatible change against SET column
+   and ENUM.
+   If you use SET column or ENUM that has the number of elements < 256
+   in :doc:`/userguide/storage`, please recreate (dump and restore)
+   database.
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage mode] Supported index for SET column.
+* [rpm] Supported MySQL 5.5.25a.
+* Supported Fedora 17.
+* Dropped Fedora 16 support.
+* [storage mode] Supported TINYINT UNSIGNED/SMALLINT UNSIGNED/
+  MEDIUMINT UNSIGNED/INT UNSIGNED/BIGINT UNSIGNED type.
+* [storage mode] Reduced storage size for ENUM.
+
 .. _release-2-04:
 
 Release 2.04 - 2012/06/29
