@@ -1017,7 +1017,11 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     }
     break;
   case MYSQL_TYPE_LONG:         // INT; 4bytes
-    type = GRN_DB_INT32;        // 4bytes
+    if (static_cast<Field_num *>(field)->unsigned_flag) {
+      type = GRN_DB_UINT32;     // 4bytes
+    } else {
+      type = GRN_DB_INT32;      // 4bytes
+    }
     break;
   case MYSQL_TYPE_FLOAT:        // FLOAT; 4 or 8bytes
   case MYSQL_TYPE_DOUBLE:       // DOUBLE; 8bytes
