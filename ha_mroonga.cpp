@@ -1090,7 +1090,11 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_ENUM:         // ENUM; <= 2bytes
-    type = GRN_DB_UINT16;       // 2bytes
+    if (field->pack_length() == 1) {
+      type = GRN_DB_UINT8;      // 1bytes
+    } else {
+      type = GRN_DB_UINT16;     // 2bytes
+    }
     break;
   case MYSQL_TYPE_SET:          // SET; <= 8bytes
     switch (field->pack_length()) {
@@ -9068,14 +9072,17 @@ int ha_mroonga::storage_encode_key_enum(Field *field, const uchar *key,
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  uint16 value;
   if (field->pack_length() == 1) {
-    value = static_cast<uint16>(key[0]);
+    uchar value;
+    value = key[0];
+    *size = 1;
+    memcpy(buf, &value, *size);
   } else {
+    uint16 value;
     shortget(value, key);
+    *size = 2;
+    memcpy(buf, &value, *size);
   }
-  memcpy(buf, &value, 2);
-  *size = 2;
   DBUG_RETURN(error);
 }
 
