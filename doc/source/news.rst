@@ -16,6 +16,45 @@ Release 2.05 - 2012/07/29
    in :doc:`/userguide/storage`, please recreate (dump and restore)
    database.
 
+Here are upgrade sequence.
+
+We dump a database that uses mroonga::
+
+  % mysqldump MY_MROONGA_DATABASE > database-mroonga.dump
+
+We drop the existing database::
+
+  % mysql -u root -e 'DROP DATABASE MY_MROONGA_DATABASE'
+
+We upgrade to "mroonga" storage engine. We will use
+``apt-get`` on Debian GNU/Linux or Ubuntu and ``yum`` on
+CentOS or Fedora.
+
+apt-get::
+
+  % sudo apt-get install -y mysql-server-mroonga
+
+yum::
+
+  % sudo yum remove -y mysql-mroonga
+  % sudo yum install -y mysql-mroonga
+
+.. caution::
+
+   We don't forget to run ``yum remove`` before ``yum
+   install``. If we forget to run ``yum remove``, we will break
+   a MySQL's system table.
+
+We recreate a database::
+
+  % mysql -u root -e 'CREATE DATABASE MY_MROONGA_DATABASE'
+
+We restore a database by modified dump file::
+
+  % mysql -u root MY_MROONGA_DATABASE < database-mroonga.dump
+
+Now, we can use mroonga 2.05.
+
 Improvements
 ^^^^^^^^^^^^
 
