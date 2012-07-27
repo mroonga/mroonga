@@ -47,7 +47,7 @@ yum (upgrade from mroonga release v2.03 or later)::
 
    Don't forget to run ``yum remove`` before ``yum
    install`` if you upgrade mroonga prior to v2.02 release.
-   If we forget to run ``yum remove``, we will break
+   If you forget to run ``yum remove``, we will break
    a MySQL's system table.
 
 Recreate a database::
