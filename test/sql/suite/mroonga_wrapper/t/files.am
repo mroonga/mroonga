@@ -33,6 +33,7 @@ test_files = \
 	fulltext_search_cp932.test \
 	fulltext_search_eucjpms.test \
 	fulltext_search_japanese.test \
+	fulltext_select_and_order.test \
 	geometry_contains.test \
 	geometry_delete.test \
 	geometry_update.test \

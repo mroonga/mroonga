@@ -1764,7 +1764,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    fulltext_searching(false),
    ignoring_no_key_columns(false),
    replacing_(false),
-   written_by_row_based_binlog(0)
+   written_by_row_based_binlog(0),
+   current_ft_item(NULL)
 {
   MRN_DBUG_ENTER_METHOD();
   grn_ctx_init(ctx, 0);
@@ -6872,6 +6873,16 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
 FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
+  COND *select_cond = get_select_cond();
+  current_ft_item = get_tgt_ft_item(current_ft_item);
+  if (select_cond && !check_ft_in_where_item_type(select_cond, current_ft_item))
+  {
+    DBUG_PRINT("info", ("mroonga: key[%u] '%s' is not used for where clause",
+      key_nr, key->c_ptr_safe()));
+    struct st_mrn_ft_info *info =
+      generic_ft_init_ext_select(flags, key_nr, key);
+    DBUG_RETURN((FT_INFO *)info);
+  }
 
   check_count_skip(0, 0, true);
 
@@ -9476,6 +9487,7 @@ int ha_mroonga::reset()
   written_by_row_based_binlog = 0;
   mrn_lock_type = F_UNLCK;
   mrn_clear_alter_share(thd);
+  current_ft_item = NULL;
   DBUG_RETURN(error);
 }
 
@@ -12676,6 +12688,106 @@ my_bool ha_mroonga::register_query_cache_table(THD *thd,
                                              engine_data);
   }
   DBUG_RETURN(res);
+}
+
+COND *ha_mroonga::get_select_cond()
+{
+  MRN_DBUG_ENTER_METHOD();
+  st_select_lex *select_lex = table->pos_in_table_list->select_lex;
+  DBUG_PRINT("info", ("mroonga: select_lex = %p", select_lex));
+  JOIN *join = select_lex->join;
+  DBUG_PRINT("info", ("mroonga: join = %p", join));
+  JOIN_TAB *join_tab = join->join_tab + join->const_tables;
+  DBUG_PRINT("info", ("mroonga: join_tab = %p", join_tab));
+  COND *select_cond = join_tab->select_cond;
+  DBUG_PRINT("info", ("mroonga: select_cond = %p", select_cond));
+  DBUG_RETURN(select_cond);
+}
+
+Item_func_match *ha_mroonga::get_tgt_ft_item(Item_func_match *current)
+{
+  MRN_DBUG_ENTER_METHOD();
+  st_select_lex *select_lex = table->pos_in_table_list->select_lex;
+  DBUG_PRINT("info", ("mroonga: select_lex = %p", select_lex));
+  List_iterator<Item_func_match> li(*(select_lex->ftfunc_list));
+  Item_func_match *item_func_match;
+  while ((item_func_match = li++)) {
+    if (current) {
+      if (current == item_func_match) {
+        current = NULL;
+      }
+      continue;
+    }
+    if (item_func_match->table == table) {
+      if (item_func_match->master && item_func_match->master->ft_handler) {
+        continue;
+      }
+      DBUG_PRINT("info", ("mroonga: item_func_match = %p", item_func_match));
+      DBUG_RETURN(item_func_match);
+    }
+  }
+  DBUG_RETURN(NULL);
+}
+
+bool ha_mroonga::check_ft_in_where_item_type(Item *item, Item *ft_item)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_PRINT("info", ("mroonga: COND type=%d", item->type()));
+  switch (item->type())
+  {
+    case Item::FUNC_ITEM:
+      DBUG_RETURN(check_ft_in_where_item_func((Item_func *) item, ft_item));
+    case Item::COND_ITEM:
+      DBUG_RETURN(check_ft_in_where_item_cond((Item_cond *) item, ft_item));
+    default:
+      break;
+  }
+  DBUG_RETURN(FALSE);
+}
+
+bool ha_mroonga::check_ft_in_where_item_cond(Item_cond *item_cond,
+                                             Item *ft_item)
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (item_cond->functype() == Item_func::COND_AND_FUNC) {
+    List_iterator_fast<Item> lif(*(item_cond->argument_list()));
+    Item *item;
+    while ((item = lif++))
+    {
+      if (check_ft_in_where_item_type(item, ft_item))
+      {
+        DBUG_RETURN(TRUE);
+      }
+    }
+  }
+  DBUG_RETURN(FALSE);
+}
+
+bool ha_mroonga::check_ft_in_where_item_func(Item_func *item_func,
+                                             Item *ft_item)
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (item_func->functype() == Item_func::FT_FUNC)
+  {
+    Item_func_match *item_func_match = (Item_func_match *)item_func;
+    while (item_func_match->master) {
+      DBUG_PRINT("info", ("mroonga: has master child=%p", item_func_match));
+      item_func_match = item_func_match->master;
+    }
+    Item_func_match *current_func_match = (Item_func_match *)ft_item;
+    while (current_func_match->master) {
+      DBUG_PRINT("info", ("mroonga: current has master child=%p",
+        current_func_match));
+      current_func_match = current_func_match->master;
+    }
+    DBUG_PRINT("info", ("mroonga: item_func_match=%p current_func_match=%p",
+      item_func_match, current_func_match));
+    if (item_func_match == current_func_match) {
+      DBUG_PRINT("info", ("mroonga: match ft item"));
+      DBUG_RETURN(TRUE);
+    }
+  }
+  DBUG_RETURN(FALSE);
 }
 
 #ifdef __cplusplus

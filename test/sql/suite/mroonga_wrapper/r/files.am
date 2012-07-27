@@ -33,6 +33,7 @@ result_files = \
 	fulltext_search_cp932.result \
 	fulltext_search_eucjpms.result \
 	fulltext_search_japanese.result \
+	fulltext_select_and_order.result \
 	geometry_contains.result \
 	geometry_delete.result \
 	geometry_update.result \

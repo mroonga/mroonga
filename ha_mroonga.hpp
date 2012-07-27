@@ -247,6 +247,9 @@ private:
   bool replacing_;
   uint written_by_row_based_binlog;
 
+  // for ft in where clause test
+  Item_func_match *current_ft_item;
+
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg);
   ~ha_mroonga();
@@ -987,6 +990,11 @@ private:
                                              qc_engine_callback
                                              *engine_callback,
                                              ulonglong *engine_data);
+  COND *get_select_cond();
+  Item_func_match *get_tgt_ft_item(Item_func_match *current);
+  bool check_ft_in_where_item_type(Item *item, Item *ft_item);
+  bool check_ft_in_where_item_cond(Item_cond *item_cond, Item *ft_item);
+  bool check_ft_in_where_item_func(Item_func *item_func, Item *ft_item);
 };
 
 #ifdef __cplusplus
