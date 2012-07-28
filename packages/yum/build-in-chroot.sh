@@ -77,6 +77,12 @@ build_chroot()
     run_sudo mount ${base_dir}/dev/pts
     run_sudo mount ${base_dir}/proc
 
+    if [ "$distribution_name-$distribution_version" = "fedora-16" ]; then
+	yes | run_sudo su -c "chroot ${base_dir} rpm --import https://fedoraproject.org/static/A82BA4B7.txt"
+	run_sudo su -c "chroot ${base_dir} yum -y update yum"
+	run_sudo su -c "chroot ${base_dir} yum -y clean all"
+	run_sudo su -c "chroot ${base_dir} yum -y --releasever=16 --disableplugin=presto distro-sync"
+    fi
     if [ "$distribution_name-$distribution_version" = "fedora-17" ]; then
 	yes | run_sudo su -c "chroot ${base_dir} rpm --import https://fedoraproject.org/static/1ACA3465.txt"
 	run_sudo su -c "chroot ${base_dir} yum -y update yum"
@@ -99,7 +105,7 @@ build()
 
     build_user=${PACKAGE}-build
     build_user_dir=${base_dir}/home/${build_user}
-    rpm_base_dir=${build_user_dir}/rpm
+    rpm_base_dir=${build_user_dir}/rpmbuild
     rpm_dir=${rpm_base_dir}/RPMS/${architecture}
     srpm_dir=${rpm_base_dir}/SRPMS
     pool_base_dir=${DESTINATION}${distribution}/${distribution_version}
@@ -175,7 +181,9 @@ for architecture in $ARCHITECTURES; do
 	    if test "$parallel" = "yes"; then
 		build $architecture $distribution $distribution_version &
 	    else
-		build $architecture $distribution $distribution_version
+		mkdir -p tmp
+		build_log=tmp/build-$distribution-$distribution_version-$architecture.log
+		build $architecture $distribution $distribution_version 2>&1 | tee $build_log
 	    fi;
 	done;
     done;
