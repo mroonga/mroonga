@@ -105,7 +105,8 @@ cp /tmp/${PACKAGE}-${VERSION}.tar.gz build/${PACKAGE}_${VERSION}.orig.tar.gz
 mkdir -p mysql-package
 cd mysql-package
 apt-get source ${mysql_server_package}
-ln -fs \$(find . -maxdepth 1 -type d | sort | tail -1) mysql
+rm -f mysql
+ln -s \$(find . -maxdepth 1 -type d | sort | tail -1) mysql
 cd */debian/..
 debuild -us -uc -Tconfigure
 make -C builddir/include
