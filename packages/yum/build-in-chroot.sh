@@ -60,12 +60,19 @@ build_chroot()
 	fi
     fi
 
+    rinse_distribution_version=$distribution_version
+    if [ "$distribution_name" = "fedora" ]; then
+	if [ $distribution_version -gt 16 ]; then
+	    rinse_distribution_version=16
+	fi
+    fi
+
     run_sudo mkdir -p ${base_dir}/etc/rpm
     rpm_platform=${distribution_architecture}-${distribution}-linux
     run_sudo sh -c "echo ${rpm_platform} > ${base_dir}/etc/rpm/platform"
     run_sudo rinse \
 	--arch $rinse_architecture \
-	--distribution $distribution_name-$distribution_version \
+	--distribution $distribution_name-$rinse_distribution_version \
 	--directory $base_dir
     run_sudo rinse --arch $rinse_architecture --clean-cache
 
@@ -77,17 +84,19 @@ build_chroot()
     run_sudo mount ${base_dir}/dev/pts
     run_sudo mount ${base_dir}/proc
 
-    if [ "$distribution_name-$distribution_version" = "fedora-16" ]; then
-	yes | run_sudo su -c "chroot ${base_dir} rpm --import https://fedoraproject.org/static/A82BA4B7.txt"
-	run_sudo su -c "chroot ${base_dir} yum -y update yum"
-	run_sudo su -c "chroot ${base_dir} yum -y clean all"
-	run_sudo su -c "chroot ${base_dir} yum -y --releasever=16 --disableplugin=presto distro-sync"
-    fi
-    if [ "$distribution_name-$distribution_version" = "fedora-17" ]; then
-	yes | run_sudo su -c "chroot ${base_dir} rpm --import https://fedoraproject.org/static/1ACA3465.txt"
-	run_sudo su -c "chroot ${base_dir} yum -y update yum"
-	run_sudo su -c "chroot ${base_dir} yum -y clean all"
-	run_sudo su -c "chroot ${base_dir} yum -y --releasever=17 --disableplugin=presto distro-sync"
+    if [ "$distribution_name" = "fedora" ]; then
+	if [ $distribution_version -ge 16 ]; then
+	    yes | run_sudo su -c "chroot ${base_dir} rpm --import https://fedoraproject.org/static/A82BA4B7.txt"
+	    run_sudo su -c "chroot ${base_dir} yum -y update yum"
+	    run_sudo su -c "chroot ${base_dir} yum -y clean all"
+	    run_sudo su -c "chroot ${base_dir} yum -y --releasever=16 --disableplugin=presto distro-sync"
+	fi
+	if [ $distribution_version -ge 17 ]; then
+	    yes | run_sudo su -c "chroot ${base_dir} rpm --import https://fedoraproject.org/static/1ACA3465.txt"
+	    run_sudo su -c "chroot ${base_dir} yum -y update yum"
+	    run_sudo su -c "chroot ${base_dir} yum -y clean all"
+	    run_sudo su -c "chroot ${base_dir} yum -y --releasever=17 --disableplugin=presto distro-sync"
+	fi
     fi
 }
 
