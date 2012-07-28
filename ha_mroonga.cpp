@@ -1003,13 +1003,25 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_TINY:         // TINYINT; 1byte
-    type = GRN_DB_INT8;         // 1byte
+    if (static_cast<Field_num *>(field)->unsigned_flag) {
+      type = GRN_DB_UINT8;      // 1byte
+    } else {
+      type = GRN_DB_INT8;       // 1byte
+    }
     break;
   case MYSQL_TYPE_SHORT:        // SMALLINT; 2bytes
-    type = GRN_DB_INT16;        // 2bytes
+    if (static_cast<Field_num *>(field)->unsigned_flag) {
+      type = GRN_DB_UINT16;     // 2bytes
+    } else {
+      type = GRN_DB_INT16;      // 2bytes
+    }
     break;
   case MYSQL_TYPE_LONG:         // INT; 4bytes
-    type = GRN_DB_INT32;        // 4bytes
+    if (static_cast<Field_num *>(field)->unsigned_flag) {
+      type = GRN_DB_UINT32;     // 4bytes
+    } else {
+      type = GRN_DB_INT32;      // 4bytes
+    }
     break;
   case MYSQL_TYPE_FLOAT:        // FLOAT; 4 or 8bytes
   case MYSQL_TYPE_DOUBLE:       // DOUBLE; 8bytes
@@ -1022,10 +1034,18 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_TIME;         // 8bytes
     break;
   case MYSQL_TYPE_LONGLONG:     // BIGINT; 8bytes
-    type = GRN_DB_INT64;        // 8bytes
+    if (static_cast<Field_num *>(field)->unsigned_flag) {
+      type = GRN_DB_UINT64;     // 8bytes
+    } else {
+      type = GRN_DB_INT64;      // 8bytes
+    }
     break;
   case MYSQL_TYPE_INT24:        // MEDIUMINT; 3bytes
-    type = GRN_DB_INT32;        // 4bytes
+    if (static_cast<Field_num *>(field)->unsigned_flag) {
+      type = GRN_DB_UINT32;     // 4bytes
+    } else {
+      type = GRN_DB_INT32;      // 4bytes
+    }
     break;
   case MYSQL_TYPE_DATE:         // DATE; 4bytes
   case MYSQL_TYPE_TIME:         // TIME; 3bytes
@@ -1070,7 +1090,11 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_ENUM:         // ENUM; <= 2bytes
-    type = GRN_DB_UINT16;       // 2bytes
+    if (field->pack_length() == 1) {
+      type = GRN_DB_UINT8;      // 1bytes
+    } else {
+      type = GRN_DB_UINT16;     // 2bytes
+    }
     break;
   case MYSQL_TYPE_SET:          // SET; <= 8bytes
     switch (field->pack_length()) {
@@ -8030,23 +8054,45 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf)
   int error = 0;
   long long value = field->val_int();
   uint32 size = field->pack_length();
+  Field_num *field_num = static_cast<Field_num *>(field);
+  bool is_unsigned = field_num->unsigned_flag;
   switch (size) {
   case 1:
-    grn_obj_reinit(ctx, buf, GRN_DB_INT8, 0);
-    GRN_INT8_SET(ctx, buf, value);
+    if (is_unsigned) {
+      grn_obj_reinit(ctx, buf, GRN_DB_UINT8, 0);
+      GRN_UINT8_SET(ctx, buf, value);
+    } else {
+      grn_obj_reinit(ctx, buf, GRN_DB_INT8, 0);
+      GRN_INT8_SET(ctx, buf, value);
+    }
     break;
   case 2:
-    grn_obj_reinit(ctx, buf, GRN_DB_INT16, 0);
-    GRN_INT16_SET(ctx, buf, value);
+    if (is_unsigned) {
+      grn_obj_reinit(ctx, buf, GRN_DB_UINT16, 0);
+      GRN_UINT16_SET(ctx, buf, value);
+    } else {
+      grn_obj_reinit(ctx, buf, GRN_DB_INT16, 0);
+      GRN_INT16_SET(ctx, buf, value);
+    }
     break;
   case 3:
   case 4:
-    grn_obj_reinit(ctx, buf, GRN_DB_INT32, 0);
-    GRN_INT32_SET(ctx, buf, value);
+    if (is_unsigned) {
+      grn_obj_reinit(ctx, buf, GRN_DB_UINT32, 0);
+      GRN_UINT32_SET(ctx, buf, value);
+    } else {
+      grn_obj_reinit(ctx, buf, GRN_DB_INT32, 0);
+      GRN_INT32_SET(ctx, buf, value);
+    }
     break;
   case 8:
-    grn_obj_reinit(ctx, buf, GRN_DB_INT64, 0);
-    GRN_INT64_SET(ctx, buf, value);
+    if (is_unsigned) {
+      grn_obj_reinit(ctx, buf, GRN_DB_UINT64, 0);
+      GRN_UINT64_SET(ctx, buf, value);
+    } else {
+      grn_obj_reinit(ctx, buf, GRN_DB_INT64, 0);
+      GRN_INT64_SET(ctx, buf, value);
+    }
     break;
   default:
     // Why!?
@@ -8419,33 +8465,59 @@ void ha_mroonga::storage_store_field_integer(Field *field,
                                              const char *value,
                                              uint value_length)
 {
+  Field_num *field_num = static_cast<Field_num *>(field);
+  bool is_unsigned = field_num->unsigned_flag;
   switch (value_length) {
   case 1:
     {
-      char field_value;
-      field_value = *((char *)value);
-      field->store(field_value);
+      if (is_unsigned) {
+        unsigned char field_value;
+        field_value = *((unsigned char *)value);
+        field->store(field_value);
+      } else {
+        char field_value;
+        field_value = *((char *)value);
+        field->store(field_value);
+      }
       break;
     }
   case 2:
     {
-      short field_value;
-      field_value = *((short *)value);
-      field->store(field_value);
+      if (is_unsigned) {
+        unsigned short field_value;
+        field_value = *((unsigned short *)value);
+        field->store(field_value);
+      } else {
+        short field_value;
+        field_value = *((short *)value);
+        field->store(field_value);
+      }
       break;
     }
   case 4:
     {
-      int field_value;
-      field_value = *((int *)value);
-      field->store(field_value);
+      if (is_unsigned) {
+        unsigned int field_value;
+        field_value = *((unsigned int *)value);
+        field->store(field_value);
+      } else {
+        int field_value;
+        field_value = *((int *)value);
+        field->store(field_value);
+      }
       break;
     }
   case 8:
     {
-      long long int field_value;
-      field_value = *((long long int *)value);
-      field->store(field_value);
+      if (is_unsigned) {
+        unsigned long long int field_value;
+        field_value = *((unsigned long long int *)value);
+        field->store(field_value);
+      } else {
+        long long int field_value;
+        field_value = *((long long int *)value);
+        field->store(field_value);
+      }
       break;
     }
   default:
@@ -9011,14 +9083,17 @@ int ha_mroonga::storage_encode_key_enum(Field *field, const uchar *key,
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  uint16 value;
   if (field->pack_length() == 1) {
-    value = static_cast<uint16>(key[0]);
+    uchar value;
+    value = key[0];
+    *size = 1;
+    memcpy(buf, &value, *size);
   } else {
+    uint16 value;
     shortget(value, key);
+    *size = 2;
+    memcpy(buf, &value, *size);
   }
-  memcpy(buf, &value, 2);
-  *size = 2;
   DBUG_RETURN(error);
 }
 

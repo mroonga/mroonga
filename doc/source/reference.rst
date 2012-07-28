@@ -27,6 +27,7 @@ List of available SQL commands
 * ``CREATE TABLE table_name (...) ENGINE=mroonga``
 * ``CREATE TABLE table_name (\`_id\` INT)``
 * ``CREATE TABLE table_name (\`_id\` INT, KEY(_id) USING HASH)``
+* ``CREATE TABLE table_name (column_name BIGINT UNSIGNED)``
 * ``CREATE TABLE table_name (column_name BIGINT)``
 * ``CREATE TABLE table_name (column_name BINARY(...))``
 * ``CREATE TABLE table_name (column_name BIT)``
@@ -44,14 +45,17 @@ List of available SQL commands
 * ``CREATE TABLE table_name (column_name LONGBLOB)``
 * ``CREATE TABLE table_name (column_name LONGTEXT)``
 * ``CREATE TABLE table_name (column_name MEDIUMBLOB)``
+* ``CREATE TABLE table_name (column_name MEDIUMINT UNSIGNED)``
 * ``CREATE TABLE table_name (column_name MEDIUMINT)``
 * ``CREATE TABLE table_name (column_name MEDIUMTEXT)``
 * ``CREATE TABLE table_name (column_name SET(...))``
+* ``CREATE TABLE table_name (column_name SMALLINT UNSIGNED)``
 * ``CREATE TABLE table_name (column_name SMALLINT)``
 * ``CREATE TABLE table_name (column_name TEXT)``
 * ``CREATE TABLE table_name (column_name TIME)``
 * ``CREATE TABLE table_name (column_name TIMESTAMP)``
 * ``CREATE TABLE table_name (column_name TINYBLOB)``
+* ``CREATE TABLE table_name (column_name TINYINT UNSIGNED)``
 * ``CREATE TABLE table_name (column_name TINYINT)``
 * ``CREATE TABLE table_name (column_name TINYTEXT)``
 * ``CREATE TABLE table_name (column_name VARBINARY(...))``

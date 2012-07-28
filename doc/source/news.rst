@@ -3,6 +3,74 @@
 News
 ====
 
+.. _release-2-05:
+
+Release 2.05 - 2012/07/29
+-------------------------
+
+.. caution::
+
+   This release has a backward incompatible change against SET column
+   and ENUM.
+   If you use SET column or ENUM that has the number of elements < 256
+   in :doc:`/userguide/storage`, please recreate (dump and restore)
+   database.
+
+Here is upgrade sequence.
+
+Dump a database that uses mroonga::
+
+  % mysqldump MY_MROONGA_DATABASE > database-mroonga.dump
+
+Drop the existing database::
+
+  % mysql -u root -e 'DROP DATABASE MY_MROONGA_DATABASE'
+
+You must upgrade to "mroonga" storage engine. Use
+``apt-get`` on Debian GNU/Linux or Ubuntu and ``yum`` on
+CentOS or Fedora.
+
+apt-get::
+
+  % sudo apt-get install -y mysql-server-mroonga
+
+yum (upgrade from mroonga release prior to v2.02)::
+
+  % sudo yum remove -y mysql-mroonga
+  % sudo yum install -y mysql-mroonga
+
+yum (upgrade from mroonga release v2.03 or later)::
+
+  % sudo yum install -y mysql-mroonga
+
+.. caution::
+
+   Don't forget to run ``yum remove`` before ``yum
+   install`` if you upgrade mroonga prior to v2.02 release.
+   If you forget to run ``yum remove``, we will break
+   a MySQL's system table.
+
+Recreate a database::
+
+  % mysql -u root -e 'CREATE DATABASE MY_MROONGA_DATABASE'
+
+Restore a database by modified dump file::
+
+  % mysql -u root MY_MROONGA_DATABASE < database-mroonga.dump
+
+Now, we can use mroonga 2.05.
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage mode] Supported index for SET column.
+* [rpm] Supported MySQL 5.5.25a.
+* Supported Fedora 17.
+* Dropped Fedora 16 support.
+* [storage mode] Supported TINYINT UNSIGNED/SMALLINT UNSIGNED/
+  MEDIUMINT UNSIGNED/INT UNSIGNED/BIGINT UNSIGNED type.
+* [storage mode] Reduced storage size for ENUM.
+
 .. _release-2-04:
 
 Release 2.04 - 2012/06/29

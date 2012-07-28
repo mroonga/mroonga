@@ -31,10 +31,20 @@ test_files = \
 	column_set_32_with_index.test \
 	column_set_64_with_index.test \
 	column_set_8_with_index.test \
+	column_signed_bigint_with_index.test \
+	column_signed_int_with_index.test \
+	column_signed_mediumint_with_index.test \
+	column_signed_smallint_with_index.test \
+	column_signed_tinyint_with_index.test \
 	column_time_with_fractional_seconds.test \
 	column_time_without_fractional_seconds.test \
 	column_timestamp_with_fractional_seconds.test \
 	column_timestamp_without_fractional_seconds.test \
+	column_unsigned_bigint_with_index.test \
+	column_unsigned_int_with_index.test \
+	column_unsigned_mediumint_with_index.test \
+	column_unsigned_smallint_with_index.test \
+	column_unsigned_tinyint_with_index.test \
 	column_year_with_index.test \
 	column_year_without_index.test \
 	create_database_name_slash.test \

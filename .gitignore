@@ -56,3 +56,5 @@ cmake_install.cmake
 /CMakeCache.txt
 /CMakeFiles/
 /INSTALL
+/packages/apt/tmp/
+/packages/yum/tmp/
