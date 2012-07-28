@@ -111,8 +111,21 @@ run yum clean ${yum_options} packages
 cat <<EOF > $BUILD_SCRIPT
 #!/bin/sh
 
-rm -rf .rpmmacros
-rpmdev-setuptree
+if [ -x /usr/bin/rpmdev-setuptree ]; then
+    rm -rf .rpmmacros
+    rpmdev-setuptree
+else
+    cat <<EOM > ~/.rpmmacros
+%_topdir \$HOME/rpmbuild
+EOM
+
+    # rm -rf rpmbuild
+    mkdir -p rpmbuild/SOURCES
+    mkdir -p rpmbuild/SPECS
+    mkdir -p rpmbuild/BUILD
+    mkdir -p rpmbuild/RPMS
+    mkdir -p rpmbuild/SRPMS
+fi
 
 if test -f /tmp/${SOURCE_BASE_NAME}-$VERSION-*.src.rpm; then
     if ! rpm -Uvh /tmp/${SOURCE_BASE_NAME}-$VERSION-*.src.rpm; then
