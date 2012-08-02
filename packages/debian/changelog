@@ -1,3 +1,9 @@
+mroonga (2.06-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kouhei Sutou <kou@clear-code.com>  Wed, 29 Aug 2012 00:00:00 +0900
+
 mroonga (2.05-1) unstable; urgency=low
 
   * New upstream release.
