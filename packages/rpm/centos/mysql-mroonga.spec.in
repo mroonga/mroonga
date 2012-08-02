@@ -104,7 +104,8 @@ if [ ! -d ${mysql_source} ]; then
         --define 'optflags -O0' \
 	../../SPECS/%{mysql_spec_file}
 fi
-%configure --disable-static --with-mysql-source=${mysql_source}
+%configure --disable-static --with-mysql-source=${mysql_source} \
+    %{?mroonga_configure_options}
 make %{?_smp_mflags}
 
 
@@ -171,6 +172,7 @@ fi
 * Wed Aug 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.06-0
 - new upstream release.
 - make MySQL spec file name customizable.
+- make mroonga configure options customizable.
 
 * Sun Jul 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.05-0
 - new upstream release.
