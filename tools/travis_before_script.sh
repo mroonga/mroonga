@@ -7,6 +7,7 @@ mkdir -p vendor
 cd vendor
 if [ "$MYSQL_VERSION" = "system" ]; then
     sudo apt-get -y build-dep mysql-server
+    apt-cache show mysql-server
     apt-get source mysql-server
     ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
     cd mysql
