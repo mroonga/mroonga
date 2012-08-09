@@ -3,19 +3,24 @@
 export BASE_DIR="$(cd $(dirname $0); pwd)"
 top_dir="$BASE_DIR/.."
 
+n_processors=1
+case `uname` in
+    Linux)
+	n_processors="$(grep '^processor' /proc/cpuinfo | wc -l)"
+	;;
+    Darwin)
+	n_processors="$(/usr/sbin/sysctl -n hw.ncpu)"
+	;;
+    *)
+	:
+	;;
+esac
+
 if test "$NO_MAKE" != "yes"; then
     MAKE_ARGS=
-    case `uname` in
-	Linux)
-	    MAKE_ARGS="-j$(grep '^processor' /proc/cpuinfo | wc -l)"
-	    ;;
-	Darwin)
-	    MAKE_ARGS="-j$(/usr/sbin/sysctl -n hw.ncpu)"
-	    ;;
-	*)
-	    :
-	    ;;
-    esac
+    if test -n "$n_processors"; then
+	MAKE_ARGS="-j${n_processors}"
+    fi
     make $MAKE_ARGS -C $top_dir > /dev/null || exit 1
 fi
 
@@ -128,7 +133,7 @@ fi
 (cd "$build_mysql_test_dir" && \
     ./mysql-test-run.pl \
     --no-check-testcases \
-    --parallel=4 \
+    --parallel="${n_processors}" \
     --retry=1 \
     --suite="${test_suite_names}" \
     --force \
