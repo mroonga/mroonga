@@ -27,4 +27,4 @@ cd ..
 ./autogen.sh
 ./configure \
     --with-mysql-source=$PWD/vendor/mysql \
-    --with-mysql-config=$PWD/vendor/mysql/mysql_config
+    --with-mysql-config=$PWD/vendor/mysql/scripts/mysql_config
