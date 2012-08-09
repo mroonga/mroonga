@@ -1,7 +1,7 @@
 #!/bin/sh
 
 warn() {
-	echo -e "\tWARNING: $@" 1>&2
+	echo "  WARNING: $@" 1>&2
 }
 
 # init
@@ -25,13 +25,13 @@ esac
 # libtoolize
 echo "Searching libtoolize..."
 if [ `which $LIBTOOLIZE` ] ; then
-  echo -e "\tFOUND: libtoolize -> $LIBTOOLIZE"
+  echo "  FOUND: libtoolize -> $LIBTOOLIZE"
 else
   warn "Cannot Found libtoolize... input libtool command"
   read LIBTOOLIZE
   LIBTOOLIZE=`which $LIBTOOLIZE`
   if [ `which $LIBTOOLIZE` ] ; then
-    echo -e "\tSET: libtoolize -> $LIBTOOLIZE"
+    echo "  SET: libtoolize -> $LIBTOOLIZE"
   else
     warn "$LIBTOOLIZE: Command not found."
     exit 1;
@@ -41,13 +41,13 @@ fi
 # aclocal
 echo "Searching aclocal..."
 if [ `which $ACLOCAL` ] ; then
-  echo -e "\tFOUND: aclocal -> $ACLOCAL"
+  echo "  FOUND: aclocal -> $ACLOCAL"
 else
   warn "Cannot Found aclocal... input aclocal command"
   read ACLOCAL
   ACLOCAL=`which $ACLOCAL`
   if [ `which $ACLOCAL` ] ; then
-    echo -e "\tSET: aclocal -> $ACLOCAL"
+    echo "  SET: aclocal -> $ACLOCAL"
   else
     warn "$ACLOCAL: Command not found."
     exit 1;
@@ -57,13 +57,13 @@ fi
 # automake
 echo "Searching automake..."
 if [ `which $AUTOMAKE` ] ; then
-  echo -e "\tFOUND: automake -> $AUTOMAKE"
+  echo "  FOUND: automake -> $AUTOMAKE"
 else
   warn "Cannot Found automake... input automake command"
   read AUTOMAKE
   ACLOCAL=`which $AUTOMAKE`
   if [ `which $AUTOMAKE` ] ; then
-    echo -e "\tSET: automake -> $AUTOMAKE"
+    echo "  SET: automake -> $AUTOMAKE"
   else
     warn "$AUTOMAKE: Command not found."
     exit 1;
@@ -73,13 +73,13 @@ fi
 # autoheader
 echo "Searching autoheader..."
 if [ `which $AUTOHEADER` ] ; then
-  echo -e "\tFOUND: autoheader -> $AUTOHEADER"
+  echo "  FOUND: autoheader -> $AUTOHEADER"
 else
   warn "Cannot Found autoheader... input autoheader command"
   read AUTOHEADER
   ACLOCAL=`which $AUTOHEADER`
   if [ `which $AUTOHEADER` ] ; then
-    echo -e "\tSET: autoheader -> $AUTOHEADER"
+    echo "  SET: autoheader -> $AUTOHEADER"
   else
     warn "$AUTOHEADER: Command not found."
     exit 1;
@@ -89,13 +89,13 @@ fi
 # autoconf
 echo "Searching autoconf..."
 if [ `which $AUTOCONF` ] ; then
-  echo -e "\tFOUND: autoconf -> $AUTOCONF"
+  echo "  FOUND: autoconf -> $AUTOCONF"
 else
   warn "Cannot Found autoconf... input autoconf command"
   read AUTOCONF
   ACLOCAL=`which $AUTOCONF`
   if [ `which $AUTOCONF` ] ; then
-    echo -e "\tSET: autoconf -> $AUTOCONF"
+    echo "  SET: autoconf -> $AUTOCONF"
   else
     warn "$AUTOCONF: Command not found."
     exit 1;
