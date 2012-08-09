@@ -102,6 +102,8 @@ else
   fi
 fi
 
+set -e
+
 echo "Running libtoolize ..."
 $LIBTOOLIZE --force --copy
 echo "Running aclocal ..."
