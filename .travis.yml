@@ -1,0 +1,37 @@
+notifications:
+  recipients:
+    - kou@clear-code.com
+env:
+  - MYSQL_VERSION=system
+  - MYSQL_VERSION=5.5.25a
+install:
+  - echo "deb http://packages.groonga.org/ubuntu/ $(lsb_release --short --codename) universe" | sudo tee /etc/apt/sources.list.d/groonga.list
+  - sudo apt-get update
+  - sudo apt-get -y --allow-unauthenticated install groonga-keyring
+  - sudo apt-get -y purge zeromq
+  - sudo apt-get update
+  - sudo apt-get -y install libgroonga-dev
+  - sudo apt-get -y build-dep mysql-server
+  - sudo apt-get -y install cmake
+before_script:
+  - |
+    if [ "$MYSQL_VERSION" = "system" ]; then
+      apt-get source mysql-server
+      ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
+      cd mysql
+      debuild -us -uc -Tconfigure
+      make -j$(grep '^processor' /proc/cpuinfo | wc -l) > /dev/null
+      cd ..
+    else
+      wget http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5/mysql-${MYSQL_VERSION}.tar.gz
+      tar xvzf mysql-${MYSQL_VERSION}.tar.gz
+      ln -s mysql-${MYSQL_VERSION} mysql
+      cd mysql
+      BUILD/compile-amd64-debug-max
+      cd ..
+    fi
+  - ./autogen.sh
+  - ./configure --with-mysql-source=$PWD/mysql --with-mysql-config=$PWD/mysql_config
+script:
+  - test/run-unit-test.sh
+  - test/run-sql-test.sh
