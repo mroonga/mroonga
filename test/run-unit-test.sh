@@ -4,7 +4,19 @@ export BASE_DIR="`dirname $0`"
 top_dir="$BASE_DIR/.."
 
 if test -z "$NO_MAKE"; then
-    make -C $top_dir > /dev/null || exit 1
+    MAKE_ARGS=
+    case `uname` in
+	Linux)
+	    MAKE_ARGS="-j$(grep '^processor' /proc/cpuinfo | wc -l)"
+	    ;;
+	Darwin)
+	    MAKE_ARGS="-j$(/usr/sbin/sysctl -n hw.ncpu)"
+	    ;;
+	*)
+	    :
+	    ;;
+    esac
+    make $MAKE_ARGS -C $top_dir > /dev/null || exit 1
 fi
 
 if test -z "$CUTTER"; then
