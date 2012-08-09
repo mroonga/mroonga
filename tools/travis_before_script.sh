@@ -26,6 +26,7 @@ else
 fi
 cd ..
 
+touch NEWS # For old automake
 ./autogen.sh
 ./configure \
     --with-mysql-source=$PWD/vendor/mysql \
