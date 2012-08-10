@@ -1,6 +1,7 @@
 notifications:
   recipients:
     - kou@clear-code.com
+language: cpp
 env:
 #  - MYSQL_VERSION=system
   - MYSQL_VERSION=5.5.27
