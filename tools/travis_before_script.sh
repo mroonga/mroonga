@@ -19,7 +19,7 @@ if [ "$MYSQL_VERSION" = "system" ]; then
 else
     sudo apt-get -y install cmake
     wget http://cdn.mysql.com/Downloads/MySQL-5.5/mysql-${MYSQL_VERSION}.tar.gz
-    tar xvzf mysql-${MYSQL_VERSION}.tar.gz
+    tar xzf mysql-${MYSQL_VERSION}.tar.gz
     ln -s mysql-${MYSQL_VERSION} mysql
     cd mysql
     BUILD/compile-amd64-debug-max
