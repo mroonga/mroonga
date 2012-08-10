@@ -18,9 +18,15 @@ if [ "$MYSQL_VERSION" = "system" ]; then
     cd ..
 else
     sudo apt-get -y install cmake
-    wget http://cdn.mysql.com/Downloads/MySQL-5.5/mysql-${MYSQL_VERSION}.tar.gz
-    tar xzf mysql-${MYSQL_VERSION}.tar.gz
-    ln -s mysql-${MYSQL_VERSION} mysql
+    if [ "$MYSQL_TYPE" = "mariadb" ]; then
+	http://mirror3.layerjet.com/mariadb/mariadb-${MYSQL_VERSION}/kvm-tarbake-jaunty-x86/mariadb-${MYSQL_VERSION}.tar.gz
+	tar xzf mariadb-${MYSQL_VERSION}.tar.gz
+	ln -s mariadb-${MYSQL_VERSION} mysql
+    else
+	wget http://cdn.mysql.com/Downloads/MySQL-5.5/mysql-${MYSQL_VERSION}.tar.gz
+	tar xzf mysql-${MYSQL_VERSION}.tar.gz
+	ln -s mysql-${MYSQL_VERSION} mysql
+    fi
     cd mysql
     BUILD/compile-amd64-max
     cd ..
