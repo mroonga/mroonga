@@ -23,7 +23,6 @@ else
     ln -s mysql-${MYSQL_VERSION} mysql
     cd mysql
     BUILD/compile-amd64-max
-    strings sql/mysqld | grep plugin_unlock
     cd ..
 fi
 cd ..
