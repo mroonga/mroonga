@@ -6,7 +6,7 @@ language: cpp
 env:
 #  - MYSQL_VERSION=system
   - MYSQL_VERSION=5.5.27
-  - MYSQL_TYPE=mariadb MYSQL_VERSION=5.5.25
+  - MARIADB_VERSION=5.5.25
 install:
   - echo "deb http://packages.groonga.org/ubuntu/ $(lsb_release --short --codename) universe" | sudo tee /etc/apt/sources.list.d/groonga.list
   - echo "deb-src http://packages.groonga.org/ubuntu/ $(lsb_release --short --codename) universe" | sudo tee --append /etc/apt/sources.list.d/groonga.list
