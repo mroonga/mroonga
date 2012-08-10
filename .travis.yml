@@ -1,6 +1,7 @@
 notifications:
   recipients:
-    - kou@clear-code.com
+    - groonga-commit@lists.sourceforge.jp
+    - travis@clear-code.com
 language: cpp
 env:
 #  - MYSQL_VERSION=system
