@@ -19,4 +19,6 @@ before_script:
   - tools/travis_before_script.sh
 script:
   - test/run-unit-test.sh
+  - ldd .libs/ha_mroonga.so
+  - nm .libs/ha_mroonga.so
   - test/run-sql-test.sh
