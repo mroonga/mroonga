@@ -19,7 +19,7 @@ if [ "$MYSQL_VERSION" = "system" ]; then
 else
     sudo apt-get -y install cmake
     if [ "$MYSQL_TYPE" = "mariadb" ]; then
-	http://mirror3.layerjet.com/mariadb/mariadb-${MYSQL_VERSION}/kvm-tarbake-jaunty-x86/mariadb-${MYSQL_VERSION}.tar.gz
+	wget http://mirror3.layerjet.com/mariadb/mariadb-${MYSQL_VERSION}/kvm-tarbake-jaunty-x86/mariadb-${MYSQL_VERSION}.tar.gz
 	tar xzf mariadb-${MYSQL_VERSION}.tar.gz
 	ln -s mariadb-${MYSQL_VERSION} mysql
     else
