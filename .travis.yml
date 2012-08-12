@@ -13,7 +13,7 @@ install:
   - echo "deb http://downloads.sourceforge.net/project/cutter/ubuntu/ $(lsb_release --short --codename) main" | sudo tee /etc/apt/sources.list.d/cutter.list
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1C837F31
   - sudo apt-get update
-  - sudo apt-get -y install cutter-testing-framework
+  - sudo apt-get -y install groonga-tokenizer-mecab cutter-testing-framework
 before_script:
   - tools/travis_before_script.sh
 script:
