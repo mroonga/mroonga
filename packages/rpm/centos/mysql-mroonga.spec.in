@@ -37,6 +37,7 @@ BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	wget
 Requires:	groonga-libs >= %{groonga_required_version}
 %if %{use_system_mysql}
+BuildRequires:	mysql-devel
 Requires:	mysql-server
 Requires:	mysql
 %else
@@ -173,6 +174,7 @@ fi
 - new upstream release.
 - make MySQL spec file name customizable.
 - make mroonga configure options customizable.
+- add missing mysql-devel BuildRequires. Reported by wing. Thanks!!!
 
 * Sun Jul 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.05-0
 - new upstream release.
