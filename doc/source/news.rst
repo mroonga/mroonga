@@ -8,6 +8,12 @@ News
 Release 2.06 - 2012/08/29
 -------------------------
 
+.. caution::
+
+   This release has a backward compatibility about a database.
+   But this release depends on new functionality introduced at groonga 2.0.6.
+   Note that you must use mroonga 2.06 with groonga 2.0.6.
+
 Improvements
 ^^^^^^^^^^^^
 
