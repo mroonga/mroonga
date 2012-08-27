@@ -8,6 +8,11 @@ News
 Release 2.06 - 2012/08/29
 -------------------------
 
+Improvements
+^^^^^^^^^^^^
+
+* Supported "-WORD" syntax in BOOLEAN MODE.
+
 Fixes
 ^^^^^
 
