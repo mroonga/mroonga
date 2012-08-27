@@ -5,13 +5,13 @@
 %define mysql_release_default 1
 %define mysql_dist_default    el6_2.1
 %define mysql_download_base_url_default http://vault.centos.org/6.2/updates/Source/SPackages
-%define mysql_spec_file_default mysql.%{mysql_version_default}.spec
+%define mysql_spec_file_default mysql.spec
 %else
 %define mysql_version_default 5.5.25a
 %define mysql_release_default 1
 %define mysql_dist_default    rhel5
 %define mysql_download_base_url_default http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5
-%define mysql_spec_file_default mysql.spec
+%define mysql_spec_file_default mysql.%{mysql_version_default}.spec
 %endif
 
 %{!?mysql_version:%define mysql_version %{mysql_version_default}}
