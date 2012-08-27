@@ -23,15 +23,17 @@ Fixes
 ^^^^^
 
 * Fixed nallowing records by "order by" clause with fulltext condition.
-  [groonga-dev,00977] [#1422]
+  [groonga-dev,00977] [#1422] [Reported by Nakatani Munetaka]
 * Removed needless build flags. [#1453] [Reported by @nabebeb]
-* [rpm][centos] Fixed missing mysql-devel BuildRequires. [groonga-dev,01009] [Reported by wing]
+* [rpm][centos] Fixed missing mysql-devel BuildRequires. 
+  [groonga-dev,01009] [Reported by wing]
 
 Thanks
 ^^^^^^
 
 * @nabebeb
 * wing
+* Nakatani Munetaka
 
 .. _release-2-05:
 
