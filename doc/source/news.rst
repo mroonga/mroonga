@@ -3,6 +3,25 @@
 News
 ====
 
+.. _release-2-06:
+
+Release 2.06 - 2012/08/29
+-------------------------
+
+Fixes
+^^^^^
+
+* Fixed nallowing records by "order by" clause with fulltext condition.
+  [groonga-dev,00977] [#1422]
+* Removed needless build flags. [#1453] [Reported by @nabebeb]
+* [rpm][centos] Fixed missing mysql-devel BuildRequires. [groonga-dev,01009] [Reported by wing]
+
+Thanks
+^^^^^^
+
+* @nabebeb
+* wing
+
 .. _release-2-05:
 
 Release 2.05 - 2012/07/29
