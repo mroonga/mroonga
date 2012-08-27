@@ -6854,7 +6854,8 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
       keyword++;
       keyword_length--;
     }
-    grn_expr_flags expression_flags = GRN_EXPR_SYNTAX_QUERY;
+    grn_expr_flags expression_flags =
+      GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
     rc = grn_expr_parse(info->ctx, expression,
                         keyword, keyword_length,
                         match_columns, GRN_OP_MATCH, default_operator,
