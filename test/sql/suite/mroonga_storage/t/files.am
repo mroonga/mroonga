@@ -60,6 +60,7 @@ test_files = \
 	dry_write_insert.test \
 	dry_write_update.test \
 	flush_logs.test \
+	fulltext_boolean_mode_leading_not.test \
 	fulltext_boolean_mode_pragma_default_operator.test \
 	fulltext_found_rows.test \
 	fulltext_index_recreate.test \

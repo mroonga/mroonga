@@ -60,6 +60,7 @@ result_files = \
 	dry_write_insert.result \
 	dry_write_update.result \
 	flush_logs.result \
+	fulltext_boolean_mode_leading_not.result \
 	fulltext_boolean_mode_pragma_default_operator.result \
 	fulltext_found_rows.result \
 	fulltext_index_recreate.result \

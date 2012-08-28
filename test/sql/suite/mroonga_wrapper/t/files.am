@@ -15,6 +15,7 @@ test_files = \
 	dry_write_delete.test \
 	dry_write_insert.test \
 	dry_write_update.test \
+	fulltext_boolean_mode_leading_not.test \
 	fulltext_boolean_mode_pragma_default_operator.test \
 	fulltext_index_recreate.test \
 	fulltext_insert_select.test \
@@ -43,6 +44,7 @@ test_files = \
 	match_escalation_threshold_global.test \
 	match_escalation_threshold_session.test \
 	optimization_order_limit_todo_split_me.test \
+	performance_schema.test \
 	query_cache_with_transaction.test \
 	repair_table.test \
 	temporary_table.test \
