@@ -232,7 +232,7 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
-Fedora 16
+Fedora 17
 ---------
 
 Install ::

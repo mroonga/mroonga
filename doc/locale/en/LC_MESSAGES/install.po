@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-25 15:24\n"
+"POT-Creation-Date: 2012-08-29 15:50\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -191,9 +191,9 @@ msgstr ""
 "In CentOS 6, unlike in CentOS 5, we use CentOS's MySQL packages (version 5.1."
 "x). So you don't need to remove CentOS's MySQL packages."
 
-# 82fdcf95a8494e6dac6870a3e5365b6c
+# 000b936720ea4adba5f2e3db1e533ce0
 #: ../../../source/install.rst:236
-msgid "Fedora 16"
+msgid "Fedora 17"
 msgstr ""
 
 # 6c2be73040b54b8481f3e90dcc866b96

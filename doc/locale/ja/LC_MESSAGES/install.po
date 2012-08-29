@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-25 15:20\n"
+"POT-Creation-Date: 2012-08-29 15:51\n"
 "PO-Revision-Date: 2012-05-28 19:43+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -200,9 +200,9 @@ msgstr ""
 "由来のMySQLパッケージ（MySQL 5.1系）を利用します。そのため、ディストリビュー"
 "ション由来のMySQLを削除する必要はありません。"
 
-# 514f418cd75f42f08db7c127c68188b0
+# 70a2ebddcd684a1db57a3f71ff5c5dd0
 #: ../../../source/install.rst:236
-msgid "Fedora 16"
+msgid "Fedora 17"
 msgstr ""
 
 # 86f5d7b63ff0455a99e2feb1e5c25a49
