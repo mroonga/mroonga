@@ -199,3 +199,30 @@ Red Hat 系
      Mitsuhiro Shibuyaさん
      Hiroki Minetaさん
      @kodakaさん
+
+freecode.comへリリース情報を登録
+--------------------------------
+
+mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。
+
+freecode.comのプロジェクトページは以下の通りです。
+
+  https://freecode.com/projects/mroonga
+
+プロジェクトの管理メニューから「Submit a release」をクリックし、
+新規リリース情報を登録します。
+
+  https://freecode.com/projects/mroonga/releases/new
+
+リリース後にやること
+---------------------
+
+リリースバージョンを以下のようにして更新します。::
+
+  $ make update-version NEW_VERSION_MAJOR=2 NEW_VERSION_MINOR=0 NEW_VERSION_MICRO=7
+
+
+
+
+
+
