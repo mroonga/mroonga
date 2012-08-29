@@ -21,11 +21,11 @@ puts
 github = Github.new(:login => user, :password => password)
 files.each do |file|
   content_type = MIME::Types.type_for(file)[0].to_s
-  resource = github.repos.create_download("mroonga", "mroonga",
-                                          :name => File.basename(file),
-                                          :size => File.size(file),
-                                          :description => File.basename(file),
-                                          :content_type => content_type)
+  resource = github.repos.downloads.create("mroonga", "mroonga",
+                                           :name => File.basename(file),
+                                           :size => File.size(file),
+                                           :description => File.basename(file),
+                                           :content_type => content_type)
   p resource
 
   system("curl",
