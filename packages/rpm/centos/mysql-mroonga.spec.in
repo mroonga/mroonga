@@ -20,7 +20,7 @@
 %{!?mysql_download_base_url:%define mysql_download_base_url %{mysql_download_base_url_default}}
 %{!?mysql_spec_file:%define mysql_spec_file %{mysql_spec_file_default}}
 
-%define groonga_required_version 2.0.3
+%define groonga_required_version 2.0.6
 
 Name:		mysql-mroonga
 Version:	@VERSION@

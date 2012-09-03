@@ -3,7 +3,7 @@
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/17/SRPMS
 
-%define groonga_required_version 2.0.3
+%define groonga_required_version 2.0.6
 
 Name:		mysql-mroonga
 Version:	@VERSION@
