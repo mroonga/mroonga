@@ -17,6 +17,7 @@ result_files = \
 	column_date_without_index.result \
 	column_datetime_with_fractional_seconds_with_index.result \
 	column_datetime_with_fractional_seconds_without_index.result \
+	column_datetime_without_fractional_seconds_out_of_range.result \
 	column_datetime_without_fractional_seconds_with_index.result \
 	column_datetime_without_fractional_seconds_without_index.result \
 	column_decimal_with_fractional_seconds_with_index.result \

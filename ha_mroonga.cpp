@@ -1216,7 +1216,7 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 static long long int mrn_tm_to_grn_time(struct tm *time, int usec)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  int sec = mktime(time) + mrn_utc_diff_in_seconds;
+  long long int sec = mktime(time) + mrn_utc_diff_in_seconds;
   long long int grn_time = GRN_TIME_PACK(sec, usec);
   DBUG_RETURN(grn_time);
 }
@@ -1232,8 +1232,8 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
       struct tm date;
       memset(&date, 0, sizeof(struct tm));
       date.tm_year = mysql_time->year - 1900;
-      date.tm_mon = mysql_time->month - 1;
-      date.tm_mday = mysql_time->day;
+      date.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
+      date.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
       grn_time = mrn_tm_to_grn_time(&date, usec);
     }
     break;
@@ -1242,8 +1242,8 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
       struct tm datetime;
       memset(&datetime, 0, sizeof(struct tm));
       datetime.tm_year = mysql_time->year - 1900;
-      datetime.tm_mon = mysql_time->month - 1;
-      datetime.tm_mday = mysql_time->day;
+      datetime.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
+      datetime.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
       datetime.tm_hour = mysql_time->hour;
       datetime.tm_min = mysql_time->minute;
       datetime.tm_sec = mysql_time->second;
@@ -1257,14 +1257,14 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
         mysql_time->minute * 60 +
         mysql_time->second;
       grn_time = GRN_TIME_PACK(sec, usec);
+      if (mysql_time->neg) {
+        grn_time = -grn_time;
+      }
     }
     break;
   default:
     grn_time = 0;
     break;
-  }
-  if (mysql_time->neg) {
-    grn_time = -grn_time;
   }
   DBUG_RETURN(grn_time);
 }
@@ -1273,14 +1273,9 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
                                        MYSQL_TIME *mysql_time)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  int sec, usec;
+  long long int sec;
+  int usec;
   GRN_TIME_UNPACK(grn_time, sec, usec);
-
-  if (sec < 0) {
-    mysql_time->neg = true;
-    sec = -sec;
-  }
-
   switch (mysql_time->time_type) {
   case MYSQL_TIMESTAMP_DATE:
     {
@@ -1307,6 +1302,10 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
     }
     break;
   case MYSQL_TIMESTAMP_TIME:
+    if (sec < 0) {
+      mysql_time->neg = true;
+      sec = -sec;
+    }
     mysql_time->hour = sec / 60 / 60;
     mysql_time->minute = sec / 60 % 60;
     mysql_time->second = sec % 60;
