@@ -24,5 +24,9 @@
 #define ER_MRN_CHARSET_NOT_SUPPORT_STR "The character set '%s[%s]' is not supported by groonga"
 #define ER_MRN_GEOMETRY_NOT_SUPPORT_NUM 16503
 #define ER_MRN_GEOMETRY_NOT_SUPPORT_STR "This geometry type is not supported. Groonga is supported point only"
+#define ER_MRN_ERROR_FROM_GROONGA_NUM 16504
+#define ER_MRN_ERROR_FROM_GROONGA_STR "Error from Groonga [%s]"
+#define ER_MRN_INVALID_NULL_VALUE_NUM 16505
+#define ER_MRN_INVALID_NULL_VALUE_STR "NULL value can't be used for %s"
 
 #endif /* _mrn_err_h */

@@ -842,6 +842,270 @@ void last_insert_grn_id_deinit(UDF_INIT *initid)
 {
 }
 
+struct st_mrn_snip_info
+{
+  grn_ctx ctx;
+  grn_snip *snippet;
+  String result_str;
+};
+
+my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
+                            char *message, grn_snip **snippet)
+{
+  unsigned int i;
+  CHARSET_INFO *cs;
+  grn_ctx *ctx = &snip_info->ctx;
+  long long snip_max_len;
+  long long snip_max_num;
+  long long skip_leading_spaces;
+  long long html_escape;
+  int flags = GRN_SNIP_COPY_TAG;
+  grn_snip_mapping *mapping = NULL;
+  grn_rc rc;
+  String *result_str = &snip_info->result_str;
+
+  *snippet = NULL;
+  snip_max_len = *((long long *) args->args[1]);
+  snip_max_num = *((long long *) args->args[2]);
+
+  if (args->arg_type[3] == STRING_RESULT) {
+    if (!(cs = get_charset_by_name(args->args[3], MYF(0)))) {
+      my_error(ER_UNKNOWN_COLLATION, MYF(0), args->args[3]);
+      goto error;
+    }
+  } else {
+    if (!(cs = get_charset(*((long long *) args->args[3]), MYF(0)))) {
+      my_error(ER_UNKNOWN_COLLATION, MYF(0), "");
+      goto error;
+    }
+  }
+  if (mrn_change_encoding(ctx, cs)) {
+    goto error;
+  }
+
+  if (!(cs->state & (MY_CS_BINSORT | MY_CS_CSSORT))) {
+    flags |= GRN_SNIP_NORMALIZE;
+  }
+
+  skip_leading_spaces = *((long long *) args->args[4]);
+  if (skip_leading_spaces) {
+    flags |= GRN_SNIP_SKIP_LEADING_SPACES;
+  }
+
+  html_escape = *((long long *) args->args[5]);
+  if (html_escape) {
+    mapping = (grn_snip_mapping *) -1;
+  }
+
+  *snippet = grn_snip_open(ctx, flags, snip_max_len, snip_max_num,
+                           "", 0, "", 0, mapping);
+  if (ctx->rc) {
+    my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
+                    ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+    goto error;
+  }
+
+  for (i = 8; i < args->arg_count; i += 3) {
+    rc = grn_snip_add_cond(ctx, *snippet,
+                           args->args[i], args->lengths[i],
+                           args->args[i + 1], args->lengths[i + 1],
+                           args->args[i + 2], args->lengths[i + 2]);
+    if (rc) {
+      my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
+                      ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+      goto error;
+    }
+  }
+
+  result_str->set_charset(cs);
+  return FALSE;
+
+error:
+  if (*snippet) {
+    grn_snip_close(ctx, *snippet);
+  }
+  if (message) {
+    strcpy(message, MRN_GET_ERROR_MESSAGE);
+  }
+  return TRUE;
+}
+
+my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
+{
+  uint i;
+  st_mrn_snip_info *snip_info = NULL;
+  bool can_open_snippet = TRUE;
+  initid->ptr = NULL;
+  if (args->arg_count < 11 || (args->arg_count - 11) % 3)
+  {
+    sprintf(message, "Incorrect number of arguments for mroonga_snippet(): %u",
+            args->arg_count);
+    goto error;
+  }
+  if (args->arg_type[0] != STRING_RESULT) {
+    strcpy(message, "mroonga_snippet() requires string for 1st argument");
+    goto error;
+  }
+  if (args->arg_type[1] != INT_RESULT) {
+    strcpy(message, "mroonga_snippet() requires int for 2nd argument");
+    goto error;
+  }
+  if (args->arg_type[2] != INT_RESULT) {
+    strcpy(message, "mroonga_snippet() requires int for 3rd argument");
+    goto error;
+  }
+  if (
+    args->arg_type[3] != STRING_RESULT &&
+    args->arg_type[3] != INT_RESULT
+  ) {
+    strcpy(message,
+      "mroonga_snippet() requires string or int for 4th argument");
+    goto error;
+  }
+  if (args->arg_type[4] != INT_RESULT) {
+    strcpy(message, "mroonga_snippet() requires int for 5th argument");
+    goto error;
+  }
+  if (args->arg_type[5] != INT_RESULT) {
+    strcpy(message, "mroonga_snippet() requires int for 6th argument");
+    goto error;
+  }
+  for (i = 6; i < args->arg_count; i++) {
+    if (args->arg_type[i] != STRING_RESULT) {
+      sprintf(message, "mroonga_snippet() requires string for %uth argument",
+              i);
+      goto error;
+    }
+  }
+  initid->maybe_null = 1;
+  initid->const_item = 1;
+
+  if (!(snip_info = (st_mrn_snip_info *) my_malloc(sizeof(st_mrn_snip_info),
+                                                   MYF(MY_WME | MY_ZEROFILL))))
+  {
+    strcpy(message, "mroonga_snippet() out of memory");
+    goto error;
+  }
+  grn_ctx_init(&snip_info->ctx, 0);
+
+  for (i = 1; i < args->arg_count; i++) {
+    if (!args->args[i]) {
+      can_open_snippet = FALSE;
+      break;
+    }
+  }
+  if (can_open_snippet) {
+    if (mrn_snippet_prepare(snip_info, args, message, &snip_info->snippet)) {
+      goto error;
+    }
+  }
+  initid->ptr = (char *) snip_info;
+
+  return FALSE;
+
+error:
+  if (snip_info) {
+    grn_ctx_fin(&snip_info->ctx);
+    my_free(snip_info, MYF(0));
+  }
+  return TRUE;
+}
+
+char *mroonga_snippet(UDF_INIT *initid, UDF_ARGS *args, char *result,
+                      unsigned long *length, char *is_null, char *error)
+{
+  st_mrn_snip_info *snip_info = (st_mrn_snip_info *) initid->ptr;
+  grn_ctx *ctx = &snip_info->ctx;
+  String *result_str = &snip_info->result_str;
+  char *target;
+  unsigned int target_length;
+  grn_snip *snippet = NULL;
+  grn_rc rc;
+  unsigned int i, n_results, max_tagged_length, result_length;
+
+  if (!args->args[0]) {
+    *is_null = 1;
+    return NULL;
+  }
+  *is_null = 0;
+  target = args->args[0];
+  target_length = args->lengths[0];
+
+  if (!snip_info->snippet) {
+    for (i = 1; i < args->arg_count; i++) {
+      if (!args->args[i]) {
+        my_printf_error(ER_MRN_INVALID_NULL_VALUE_NUM,
+                        ER_MRN_INVALID_NULL_VALUE_STR, MYF(0),
+                        "mroonga_snippet() arguments");
+        goto error;
+      }
+    }
+
+    if (mrn_snippet_prepare(snip_info, args, NULL, &snippet)) {
+      goto error;
+    }
+  } else {
+    snippet = snip_info->snippet;
+  }
+
+  rc = grn_snip_exec(ctx, snippet, target, target_length,
+                     &n_results, &max_tagged_length);
+  if (rc) {
+    my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
+                    ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+    goto error;
+  }
+
+  result_str->length(0);
+  if (result_str->reserve((args->lengths[6] + args->lengths[7] +
+                          max_tagged_length) * n_results)) {
+    my_error(ER_OUT_OF_RESOURCES, MYF(0), HA_ERR_OUT_OF_MEM);
+    goto error;
+  }
+  for (i = 0; i < n_results; i++) {
+    result_str->q_append(args->args[6], args->lengths[6]);
+    rc = grn_snip_get_result(ctx, snippet, i,
+                             (char *) result_str->ptr() + result_str->length(),
+                             &result_length);
+    if (rc) {
+      my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
+                      ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+      goto error;
+    }
+    result_str->length(result_str->length() + result_length);
+    result_str->q_append(args->args[7], args->lengths[7]);
+  }
+
+  if (!snip_info->snippet) {
+    rc = grn_snip_close(ctx, snippet);
+    if (rc) {
+      my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
+                      ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+      goto error;
+    }
+  }
+
+  *length = result_str->length();
+  return (char *) result_str->ptr();
+
+error:
+  *error = 1;
+  return NULL;
+}
+
+void mroonga_snippet_deinit(UDF_INIT *initid)
+{
+  st_mrn_snip_info *snip_info = (st_mrn_snip_info *) initid->ptr;
+  if (snip_info) {
+    if (snip_info->snippet) {
+      grn_snip_close(&snip_info->ctx, snip_info->snippet);
+    }
+    snip_info->result_str.free();
+    grn_ctx_fin(&snip_info->ctx);
+    my_free(snip_info, MYF(0));
+  }
+}
+
 /* mroonga information schema */
 static struct st_mysql_information_schema i_s_info =
 {

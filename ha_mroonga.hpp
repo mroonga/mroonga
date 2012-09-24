@@ -148,6 +148,12 @@ extern "C" {
 #  define MRN_HAVE_HA_REBIND_PSI
 #endif
 
+#if MYSQL_VERSION_ID >= 50500
+#  define MRN_GET_ERROR_MESSAGE current_thd->stmt_da->message()
+#else
+#  define MRN_GET_ERROR_MESSAGE current_thd->main_da.message()
+#endif
+
 class ha_mroonga;
 
 /* structs */

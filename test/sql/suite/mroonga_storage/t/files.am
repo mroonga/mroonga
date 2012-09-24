@@ -139,6 +139,10 @@ test_files = \
 	show_create_table.test \
 	show_table_status.test \
 	show_table_status_for_auto_increment.test \
+	snippet_ascii.test \
+	snippet_cp932.test \
+	snippet_eucjpms.test \
+	snippet_japanese.test \
 	sub_query_fulltext.test \
 	temporary_table.test \
 	tinyint.test \

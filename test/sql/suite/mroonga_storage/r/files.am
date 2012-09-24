@@ -139,6 +139,10 @@ result_files = \
 	show_create_table.result \
 	show_table_status.result \
 	show_table_status_for_auto_increment.result \
+	snippet_ascii.result \
+	snippet_cp932.result \
+	snippet_eucjpms.result \
+	snippet_japanese.result \
 	sub_query_fulltext.result \
 	temporary_table.result \
 	tinyint.result \
