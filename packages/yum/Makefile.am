@@ -8,7 +8,7 @@ USE_ATRPMS = no
 
 all:
 
-release: build sign update upload
+release: build sign-packages update-repository upload
 
 remove-existing-packages:
 	for distribution in $(DISTRIBUTIONS); do	\
@@ -28,10 +28,10 @@ download: ensure-rsync-path
 	    $(RSYNC_PATH)/$${distribution} $(REPOSITORIES_PATH)/;	\
 	done
 
-sign:
+sign-packages:
 	./sign-rpm.sh '$(GPG_UID)' '$(REPOSITORIES_PATH)/' '$(DISTRIBUTIONS)'
 
-update:
+update-repository:
 	./update-repository.sh '$(REPOSITORIES_PATH)/' '$(DISTRIBUTIONS)'
 
 upload: ensure-rsync-path
