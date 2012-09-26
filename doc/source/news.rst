@@ -3,6 +3,29 @@
 News
 ====
 
+.. _release-2-07:
+
+Release 2.07 - 2012/09/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [deb] Enabled AppArmor configuration for MeCab. [Reported by @Qurage]
+* Added mroonga_snippet() function. [#1442]
+
+Fixes
+^^^^^
+
+* Fixed ``groonga_required_version``. [groonga-dev,01033] [Reported by wing]
+* Fixed datetime out of range problems. [groonga-dev,01035] [#1476]
+  [Reported by Nakatani Munetaka]
+
+Thanks
+^^^^^^
+* wing
+* @Qurage
+
 .. _release-2-06:
 
 Release 2.06 - 2012/08/29
