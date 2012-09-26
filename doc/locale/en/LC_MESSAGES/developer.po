@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-25 15:24\n"
+"POT-Creation-Date: 2012-09-26 11:15\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -2294,3 +2294,44 @@ msgstr ""
 msgid "メッセージ内容のテンプレートを以下に示します。 ::"
 msgstr ""
 
+# c4b7c2c16dfd4d0e90e1b35b73e88de4
+#: ../../../source/developer/release.rst:204
+msgid "freecode.comへリリース情報を登録"
+msgstr ""
+
+# 6436b5db89f5439bbab22fbe81a1a263
+#: ../../../source/developer/release.rst:206
+msgid "mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。"
+msgstr ""
+
+# 106c59e47a9f42318c2d33e9dc1b94fc
+#: ../../../source/developer/release.rst:208
+msgid "freecode.comのプロジェクトページは以下の通りです。"
+msgstr ""
+
+# eaba967b2877443aa5e7d91ac5c5a8d1
+#: ../../../source/developer/release.rst:210
+msgid "https://freecode.com/projects/mroonga"
+msgstr ""
+
+# 0d476160029e44e3ac446ea25385e37a
+#: ../../../source/developer/release.rst:212
+msgid ""
+"プロジェクトの管理メニューから「Submit a release」をクリックし、 新規リリース"
+"情報を登録します。"
+msgstr ""
+
+# 2320106c54314cb1a695794852fbff1e
+#: ../../../source/developer/release.rst:215
+msgid "https://freecode.com/projects/mroonga/releases/new"
+msgstr ""
+
+# 664c69048ff7429fad53e24f2e0e49f0
+#: ../../../source/developer/release.rst:218
+msgid "リリース後にやること"
+msgstr ""
+
+# d5e35c782932415c945257e7b11ebb52
+#: ../../../source/developer/release.rst:220
+msgid "リリースバージョンを以下のようにして更新します。::"
+msgstr ""
