@@ -118,6 +118,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sat Sep 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.07-0
+- new upstream release.
+
 * Wed Aug 29 2012 Kouhei Sutou <kou@clear-code.com> - 2.06-0
 - new upstream release.
 - use MySQL 5.5.27.
