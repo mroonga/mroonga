@@ -12,7 +12,7 @@ Improvements
 ^^^^^^^^^^^^
 
 * [deb] Enabled AppArmor configuration for MeCab. [Reported by @Qurage]
-* Added mroonga_snippet() function. [#1442]
+* [experimental] Added mroonga_snippet() function. [#1442]
 
 Fixes
 ^^^^^
