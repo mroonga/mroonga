@@ -284,6 +284,12 @@ As you can see in the example above, you can get the record ID by _id column or 
 How to get snippet (Keyword in context)
 ---------------------------------------
 
+.. note::
+
+   This feature is in experimental stage.
+   So, the required arguments or value is changed without notice in the
+   future.
+
 There is a case that you want to extract keyword and surrounding text as a
 search results.
 
