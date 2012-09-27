@@ -411,3 +411,82 @@ Here is an example how to check it::
   | mroonga_fast_order_limit | 0     |
   +--------------------------+-------+
   1 row in set (0.00 sec)
+
+Limitations
+-----------
+
+There are some limitations in mroonga storage engine.
+
+Limitations about the value of columns
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There is a limitation about DATE, DATETIME, TIMESTAMP column in storage mode.
+
+mroonga storage engine automatically convert 0 into 1 as the value of month or date.
+
+Thus, the value 0 is treated as the 1st month (January) of the year or
+the 1st date of the month.
+
+And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 00:00:00).
+
+Here is an example to show behavior described above.
+
+.. code-block:: sql
+   :linenos:
+
+   CREATE TABLE date_limitation (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     input varchar(32) DEFAULT NULL,
+     date DATE DEFAULT NULL
+   ) ENGINE=mroonga DEFAULT CHARSET=UTF8;
+   CREATE TABLE datetime_limitation (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     input varchar(32) DEFAULT NULL,
+     datetime DATETIME DEFAULT NULL
+   ) ENGINE=mroonga DEFAULT CHARSET=UTF8;
+   CREATE TABLE timestamp_limitation (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     input varchar(32) DEFAULT NULL,
+     timestamp TIMESTAMP DEFAULT NULL
+   ) ENGINE=mroonga DEFAULT CHARSET=UTF8;
+
+   -- Test data for date_limitation
+   INSERT INTO date_limitation (input) VALUES ("NULL");
+   INSERT INTO date_limitation (input, date) VALUES ("1970-00-00", "1970-00-00");
+
+   -- Test data for datetime_limitation
+   INSERT INTO datetime_limitation (input) VALUES ("NULL");
+   INSERT INTO datetime_limitation (input, datetime) VALUES ("1970-00-00 00:00:00", "1970-00-00 00:00:00");
+
+   -- Test data for timestamp_limitation
+   INSERT INTO timestamp_limitation (input) VALUES ("NULL");
+   INSERT INTO timestamp_limitation (input, timestamp) VALUES ("1970-00-00 00:00:00", "1970-00-00 00:00:00");
+
+Here is the results of execution example::
+
+  mysql> select * from date_limitation;
+  +----+------------+------------+
+  | id | input      | date       |
+  +----+------------+------------+
+  |  1 | NULL       | 1970-01-01 |
+  |  2 | 1970-00-00 | 1970-01-01 |
+  +----+------------+------------+
+  2 rows in set (0.00 sec)
+  
+  mysql> select * from datetime_limitation;
+  +----+---------------------+---------------------+
+  | id | input               | datetime            |
+  +----+---------------------+---------------------+
+  |  1 | NULL                | 1970-01-01 00:00:00 |
+  |  2 | 1970-00-00 00:00:00 | 1970-01-01 00:00:00 |
+  +----+---------------------+---------------------+
+  2 rows in set (0.00 sec)
+  
+  mysql> select * from timestamp_limitation;
+  +----+---------------------+---------------------+
+  | id | input               | timestamp           |
+  +----+---------------------+---------------------+
+  |  1 | NULL                | 0000-00-00 00:00:00 |
+  |  2 | 1970-00-00 00:00:00 | 0000-00-00 00:00:00 |
+  +----+---------------------+---------------------+
+  2 rows in set (0.00 sec)
