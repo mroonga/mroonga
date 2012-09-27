@@ -301,9 +301,9 @@ It is called 'Keyword in context'.
 Here is the syntax of ``mroonga_snippet`` function::
 
   SELECT mroonga_snippet(document, max_length, max_count, encoding,
-    skip_leading_spaces, html_encoding, start_tag, end_tag,
-    word1, word1_start_tag, word1_end_tag,
-    word2, word2_start_tag, word2_end_tag, ...);
+    skip_leading_spaces, html_escape, prefix, suffix,
+    word1, word1_prefix, word1_suffix,
+    word2, word2_prefix, word2_suffix, ...);
 
 Here is the detail of ``mroonga_snippet`` arguments.
 
@@ -325,24 +325,24 @@ skip_leading_spaces
   Specify whether skip leading spaces or not.
   Specify the value 1 for skipping leading spaces, 0 for not.
 
-html_encoding
-  HTML encoding is enabled or not.
-  Specify the value 1 for enabling HTML encoding, 0 for not.
+html_escape
+  HTML escape is enabled or not.
+  Specify the value 1 for enabling HTML escape, 0 for not.
 
-start_tag
-  The start tag of snippet.
+prefix
+  The start text of snippet.
 
-end_tag
-  The end tag of snippet.
+suffix
+  The end text of snippet.
 
 wordN
   Specify any word.
 
-wordN_start_tag
-  It is the start tag of wordN.
+wordN_prefix
+  It is the start text of wordN.
 
-wordN_end_tag
-  It is the end tag of wordN.
+wordN_suffix
+  It is the end text of wordN.
 
 mroonga_snippet function is included in mroonga as a User-Defined Function (UDF), but if you have not yet register it in MySQL by CREATE FUNCTION, you need to invoke the following SQL for defining a function. ::
 

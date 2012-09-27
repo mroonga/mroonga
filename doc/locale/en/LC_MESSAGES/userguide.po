@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 16:19\n"
+"POT-Creation-Date: 2012-09-27 18:40\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -801,18 +801,18 @@ msgstr ""
 # ad7a27238c204a1e9aca9af473dc9e61
 #: ../../../source/userguide/storage.rst:329
 msgid ""
-"HTML encoding is enabled or not. Specify the value 1 for enabling HTML "
-"encoding, 0 for not."
+"HTML escape is enabled or not. Specify the value 1 for enabling HTML escape, "
+"0 for not."
 msgstr ""
 
 # e777f99475d4425da2e075021f6b586c
 #: ../../../source/userguide/storage.rst:333
-msgid "The start tag of snippet."
+msgid "The start text of snippet."
 msgstr ""
 
 # fc4352c69946473386c248f88978b1c4
 #: ../../../source/userguide/storage.rst:336
-msgid "The end tag of snippet."
+msgid "The end text of snippet."
 msgstr ""
 
 # 5fa5a1e7b9ac417c84825a313d21fcc0
@@ -822,12 +822,12 @@ msgstr ""
 
 # 06c957ab31b045a7acdd5364818281e0
 #: ../../../source/userguide/storage.rst:342
-msgid "It is the start tag of wordN."
+msgid "It is the start text of wordN."
 msgstr ""
 
 # 06c957ab31b045a7acdd5364818281e0
 #: ../../../source/userguide/storage.rst:345
-msgid "It is the end tag of wordN."
+msgid "It is the end text of wordN."
 msgstr ""
 
 # 2f615704a31443a7b90cee87835a74c1

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 16:21\n"
+"POT-Creation-Date: 2012-09-27 18:41\n"
 "PO-Revision-Date: 2012-06-27 16:05+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -784,7 +784,8 @@ msgstr "スニペットの取得方法 (文脈付き索引)"
 msgid ""
 "This feature is in experimental stage. So, the required arguments or value "
 "is changed without notice in the future."
-msgstr "この機能は実験的です。引数や引数の値が予告なく変更される可能性があります。"
+msgstr ""
+"この機能は実験的です。引数や引数の値が予告なく変更される可能性があります。"
 
 # d43dd9311558422fab8a998b86377477
 #: ../../../source/userguide/storage.rst:293
@@ -798,14 +799,17 @@ msgstr "キーワードと周辺のテキストを検索結果として取得し
 msgid ""
 "Snippet means 'keyword and surrounding text'. It is called 'Keyword in "
 "context'."
-msgstr "スニペットは'キーワードと関連するテキスト'を意味します。文脈付き索引ともいいます。"
+msgstr ""
+"スニペットは'キーワードと関連するテキスト'を意味します。文脈付き索引ともいい"
+"ます。"
 
 # acd190c69d70429bb9fb50346a0b7fe0
 #: ../../../source/userguide/storage.rst:299
 msgid ""
 "``mroonga_snippet`` function provides the way to get snippet from search "
 "results."
-msgstr "``mroonga_snippet`` 関数は検索結果からスニペットを取得する方法を提供します。"
+msgstr ""
+"``mroonga_snippet`` 関数は検索結果からスニペットを取得する方法を提供します。"
 
 # ba0c0f229a164ea5b091c2538c63a91e
 #: ../../../source/userguide/storage.rst:301
@@ -838,8 +842,10 @@ msgid ""
 "The encoding of document is required. You can specify the value of encoding "
 "such as 'ascii_general_ci', 'cp932_japanese_ci', 'eucjpms_japanese_ci', "
 "'utf8_japanese_ci' and so on."
-msgstr "文書のエンコーディングを指定します。値として 'ascii_general_ci'、"
-"'cp932_japanese_ci'、'eucjpms_japanese_ci'、'utf8_japanese_ci'などが指定できます。"
+msgstr ""
+"文書のエンコーディングを指定します。値として "
+"'ascii_general_ci'、'cp932_japanese_ci'、'eucjpms_japanese_ci'、'utf8_japanese_ci'な"
+"どが指定できます。"
 
 # 0582a713adde4a8db66009941734b356
 #: ../../../source/userguide/storage.rst:325
@@ -851,19 +857,22 @@ msgstr "先頭の空白を無視するかを指定します。1なら無視し�
 # 3badd69acc0c4e7e881cf69a43ec10a9
 #: ../../../source/userguide/storage.rst:329
 msgid ""
-"HTML encoding is enabled or not. Specify the value 1 for enabling HTML "
-"encoding, 0 for not."
-msgstr "HTMLのエンコードをするか否かを指定します。1ならエンコードし、0ならそのまま出力します。"
+"HTML escape is enabled or not. Specify the value 1 for enabling HTML escape, "
+"0 for not."
+msgstr ""
+"HTMLのエスケープを行うか指定します。1ならエスケープし、0ならそのまま出"
+"力します。"
 
 # 1239a1f98e674694aa08e02a30b1f361
 #: ../../../source/userguide/storage.rst:333
-msgid "The start tag of snippet."
-msgstr "スニペットの開始タグを指定。"
+msgid "The start text of snippet."
+msgstr "スニペットの開始テキストを指定。"
 
 # 15ce52d790ea42caaeffd5a707a8fce1
 #: ../../../source/userguide/storage.rst:336
-msgid "The end tag of snippet."
-msgstr "スニペットの終了タグを指定。"
+#, fuzzy
+msgid "The end text of snippet."
+msgstr "スニペットの終了テキストを指定。"
 
 # 8d33c305e5654946b1a45016bdc692d4
 #: ../../../source/userguide/storage.rst:339
@@ -872,13 +881,15 @@ msgstr "単語を指定。"
 
 # deeddc7c93044aea8a80c4d66970aa3e
 #: ../../../source/userguide/storage.rst:342
-msgid "It is the start tag of wordN."
-msgstr "N番目の単語の開始タグを指定。"
+#, fuzzy
+msgid "It is the start text of wordN."
+msgstr "N番目の単語の開始テキストを指定。"
 
 # deeddc7c93044aea8a80c4d66970aa3e
 #: ../../../source/userguide/storage.rst:345
-msgid "It is the end tag of wordN."
-msgstr "N番目の単語の開始タグを指定。"
+#, fuzzy
+msgid "It is the end text of wordN."
+msgstr "N番目の単語の開始テキストを指定。"
 
 # e9d47bfe3afb41909e8e9718da34a057
 #: ../../../source/userguide/storage.rst:347
@@ -887,17 +898,18 @@ msgid ""
 "(UDF), but if you have not yet register it in MySQL by CREATE FUNCTION, you "
 "need to invoke the following SQL for defining a function. ::"
 msgstr ""
-"mroonga_snippet 関数はユーザ定義関数(UDF)としてmroongaに含まれていますが、"
-"インストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関数定"
-"義DDLを実行しておく必要があります。 ::"
+"mroonga_snippet 関数はユーザ定義関数(UDF)としてmroongaに含まれていますが、イ"
+"ンストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関数定義"
+"DDLを実行しておく必要があります。 ::"
 
 # bcd35e7b5d2d48b68aa76bbc87dc9cc2
 #: ../../../source/userguide/storage.rst:351
 msgid ""
 "``mroonga_snippet`` function is useful for searching the text which contains "
 "keyword and associated one by using MATCH .. AGAINST syntax."
-msgstr "``mroonga_snippet`` 関数は MATCH ... AGAINST構文とともに使用して、"
-"テキストに含まれるキーワードとその関連語句を検索するのに便利です。"
+msgstr ""
+"``mroonga_snippet`` 関数は MATCH ... AGAINST構文とともに使用して、テキストに"
+"含まれるキーワードとその関連語句を検索するのに便利です。"
 
 # a13ea9cfb1334a1e9b8f769013b55336
 #: ../../../source/userguide/storage.rst:354
@@ -905,8 +917,9 @@ msgid ""
 "Imagine searching the document which contains 'fulltext' as a keyword. "
 "Assume that some keyword such as 'MySQL' and 'search' are associated with "
 "'fulltext'."
-msgstr "'fulltext'というキーワードと'MySQL'と'search'という関連語を含む"
-"文書の検索をしてみましょう。"
+msgstr ""
+"'fulltext'というキーワードと'MySQL'と'search'という関連語を含む文書の検索をし"
+"てみましょう。"
 
 # be6cc28520214548b763f4175257c712
 #: ../../../source/userguide/storage.rst:357
@@ -934,7 +947,8 @@ msgstr "実行結果はこちら::"
 msgid ""
 "The keyword 'fulltext' and associated keyword 'MySQL' and 'search' has been "
 "extracted."
-msgstr "'fulltext'というキーワードと関連する'MySQL'と'search'が抽出できました。"
+msgstr ""
+"'fulltext'というキーワードと関連する'MySQL'と'search'が抽出できました。"
 
 # 427be2122c8147b6b295098426dd1385
 # d5bf046f8c2a42fe8c04e36ca2b44a5e
