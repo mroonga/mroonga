@@ -308,16 +308,20 @@ max_length
   The max length of snippet (bytes) is required.
 
 max_count
-  The max elements of snippets is required.
+  The max elements of snippets (N word) is required.
 
 encoding
   The encoding of document is required.
+  You can specify the value of encoding such as 'ascii_general_ci',
+  'cp932_japanese_ci', 'eucjpms_japanese_ci', 'utf8_japanese_ci' and so on.
 
 skip_leading_spaces
   Specify whether skip leading spaces or not.
+  Specify the value 1 for skipping leading spaces, 0 for not.
 
 html_encoding
   HTML encoding is enabled or not.
+  Specify the value 1 for enabling HTML encoding, 0 for not.
 
 start_tag
   The start tag of snippet.
