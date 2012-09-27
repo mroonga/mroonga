@@ -281,6 +281,69 @@ As you can see in the example above, you can get the record ID by _id column or 
   Query OK, 1 row affected (0.00 sec)
   Rows matched: 1  Changed: 1  Warnings: 0
 
+How to get snippet (Keyword in context)
+---------------------------------------
+
+There is a case that you want to extract keyword and surrounding text as a
+search results.
+
+Snippet means 'keyword and surrounding text'.
+It is called 'Keyword in context'.
+
+``mroonga_snippet`` function provides the way to get snippet from search results.
+
+Here is the syntax of ``mroonga_snippet`` function::
+
+  SELECT mroonga_snippet(document, max_length, max_count, encoding,
+    skip_leading_spaces, html_encoding, start_tag, end_tag,
+    word1, word1_start_tag, word1_end_tag,
+    word2, word2_start_tag, word2_end_tag, ...);
+
+Here is the detail of ``mroonga_snippet`` arguments.
+
+document
+  The column name or string value is required.
+
+max_length
+  The max length of snippet (bytes) is required.
+
+max_count
+  The max elements of snippets is required.
+
+encoding
+  The encoding of document is required.
+
+skip_leading_spaces
+  Specify whether skip leading spaces or not.
+
+html_encoding
+  HTML encoding is enabled or not.
+
+start_tag
+  The start tag of snippet.
+
+end_tag
+  The end tag of snippet.
+
+wordN
+  Specify any word.
+
+wordN_start_tag
+  It is the start tag of wordN.
+
+wordN_end_tag
+  It is the end tag of wordN.
+
+mroonga_snippet function is included in mroonga as a User-Defined Function (UDF), but if you have not yet register it in MySQL by CREATE FUNCTION, you need to invoke the following SQL for defining a function. ::
+
+  mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
+
+Here is the results of execution examples::
+
+TODO:
+
+
+
 Logging
 -------
 
