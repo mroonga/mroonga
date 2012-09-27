@@ -420,7 +420,7 @@ There are some limitations in mroonga storage engine.
 Limitations about the value of columns
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There is a limitation about DATE, DATETIME, TIMESTAMP column in storage mode.
+There is a limitation about DATE, DATETIME column in storage mode.
 
 mroonga storage engine automatically convert 0 into 1 as the value of month or date.
 
@@ -444,11 +444,6 @@ Here is an example to show behavior described above.
      input varchar(32) DEFAULT NULL,
      datetime DATETIME DEFAULT NULL
    ) ENGINE=mroonga DEFAULT CHARSET=UTF8;
-   CREATE TABLE timestamp_limitation (
-     id INT PRIMARY KEY AUTO_INCREMENT,
-     input varchar(32) DEFAULT NULL,
-     timestamp TIMESTAMP DEFAULT NULL
-   ) ENGINE=mroonga DEFAULT CHARSET=UTF8;
 
    -- Test data for date_limitation
    INSERT INTO date_limitation (input) VALUES ("NULL");
@@ -457,10 +452,6 @@ Here is an example to show behavior described above.
    -- Test data for datetime_limitation
    INSERT INTO datetime_limitation (input) VALUES ("NULL");
    INSERT INTO datetime_limitation (input, datetime) VALUES ("1970-00-00 00:00:00", "1970-00-00 00:00:00");
-
-   -- Test data for timestamp_limitation
-   INSERT INTO timestamp_limitation (input) VALUES ("NULL");
-   INSERT INTO timestamp_limitation (input, timestamp) VALUES ("1970-00-00 00:00:00", "1970-00-00 00:00:00");
 
 Here is the results of execution example::
 
@@ -482,11 +473,3 @@ Here is the results of execution example::
   +----+---------------------+---------------------+
   2 rows in set (0.00 sec)
   
-  mysql> select * from timestamp_limitation;
-  +----+---------------------+---------------------+
-  | id | input               | timestamp           |
-  +----+---------------------+---------------------+
-  |  1 | NULL                | 0000-00-00 00:00:00 |
-  |  2 | 1970-00-00 00:00:00 | 0000-00-00 00:00:00 |
-  +----+---------------------+---------------------+
-  2 rows in set (0.00 sec)
