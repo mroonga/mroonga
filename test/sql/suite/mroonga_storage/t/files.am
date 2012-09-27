@@ -17,6 +17,10 @@ test_files = \
 	column_date_without_index.test \
 	column_datetime_with_fractional_seconds_with_index.test \
 	column_datetime_with_fractional_seconds_without_index.test \
+	column_datetime_without_fractional_seconds_2038.test \
+	column_datetime_without_fractional_seconds_before_unix_epoch.test \
+	column_datetime_without_fractional_seconds_max.test \
+	column_datetime_without_fractional_seconds_null.test \
 	column_datetime_without_fractional_seconds_out_of_range.test \
 	column_datetime_without_fractional_seconds_with_index.test \
 	column_datetime_without_fractional_seconds_without_index.test \

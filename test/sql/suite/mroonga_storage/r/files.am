@@ -17,6 +17,10 @@ result_files = \
 	column_date_without_index.result \
 	column_datetime_with_fractional_seconds_with_index.result \
 	column_datetime_with_fractional_seconds_without_index.result \
+	column_datetime_without_fractional_seconds_2038.result \
+	column_datetime_without_fractional_seconds_before_unix_epoch.result \
+	column_datetime_without_fractional_seconds_max.result \
+	column_datetime_without_fractional_seconds_null.result \
 	column_datetime_without_fractional_seconds_out_of_range.result \
 	column_datetime_without_fractional_seconds_with_index.result \
 	column_datetime_without_fractional_seconds_without_index.result \
