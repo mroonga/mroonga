@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-26 11:15\n"
+"POT-Creation-Date: 2012-09-27 16:21\n"
 "PO-Revision-Date: 2012-05-29 16:31+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -44,8 +44,8 @@ msgstr "[deb] MeCab向けにAppArmorの設定を有効にした。 [@Qurageさ�
 
 # 779e97efc49542818cd4ae3e856f45f9
 #: ../../../source/news.rst:15
-msgid "Added mroonga_snippet() function. [#1442]"
-msgstr "mroonga_snippet()関数を追加。 [#1442]"
+msgid "[experimental] Added mroonga_snippet() function. [#1442]"
+msgstr "[experimental] mroonga_snippet()関数を追加。 [#1442]"
 
 # 08e3d478781f474c8a19fd0acb16a2bf
 #: ../../../source/news.rst:18 ../../../source/news.rst:46
@@ -70,8 +70,8 @@ msgid ""
 "Fixed datetime out of range problems. [groonga-dev,01035] [#1476] [Reported "
 "by Nakatani Munetaka]"
 msgstr ""
-"datetime型として保持できる値の範囲が狭く、意図しない値が設定される問題を修正。 "
-"[groonga-dev,01035] [#1476] [中谷宗嵩さんが報告]"
+"datetime型として保持できる値の範囲が狭く、意図しない値が設定される問題を修"
+"正。 [groonga-dev,01035] [#1476] [中谷宗嵩さんが報告]"
 
 # 2371feae1d1549e59cd05415194e5dcf
 #: ../../../source/news.rst:25 ../../../source/news.rst:55

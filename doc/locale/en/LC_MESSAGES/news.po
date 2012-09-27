@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-26 11:15\n"
+"POT-Creation-Date: 2012-09-27 16:19\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -44,7 +44,7 @@ msgstr ""
 
 # c6d774cda3f74bbea023eca30b734ff1
 #: ../../../source/news.rst:15
-msgid "Added mroonga_snippet() function. [#1442]"
+msgid "[experimental] Added mroonga_snippet() function. [#1442]"
 msgstr ""
 
 # 52963dbb41db4a1f8990a3e08b9a46b7
