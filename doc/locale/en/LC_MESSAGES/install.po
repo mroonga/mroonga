@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-29 15:50\n"
+"POT-Creation-Date: 2012-09-27 11:30\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -412,6 +412,12 @@ msgstr ""
 "last_insert_grn_id function."
 
 # 4be5e073ea314c558475d430707c283d
-#: ../../../source/install.rst:361
+#: ../../../source/install.rst:361 ../../../source/install.rst:367
 msgid "Invoke CREATE FUNCTION like the following. ::"
 msgstr "Invoke CREATE FUNCTION like the following. ::"
+
+# aedf0867730041579b6fb6db56230a28
+#: ../../../source/install.rst:365
+msgid ""
+"To enable snippet (keyword in context) UDF, install mroonga_snippet function."
+msgstr ""

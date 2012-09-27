@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-29 15:51\n"
+"POT-Creation-Date: 2012-09-27 11:26\n"
 "PO-Revision-Date: 2012-05-28 19:43+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -430,6 +430,14 @@ msgstr ""
 "last_insert_grn_id関数をインストールします。"
 
 # bca520b75e934ca4a195a154dff6a1fb
-#: ../../../source/install.rst:361
+#: ../../../source/install.rst:361 ../../../source/install.rst:367
 msgid "Invoke CREATE FUNCTION like the following. ::"
 msgstr "以下のようにCREATE FUNCTIONを実行します。 ::"
+
+# 8228e7d62609485ebc8f2efd64669684
+#: ../../../source/install.rst:365
+msgid ""
+"To enable snippet (keyword in context) UDF, install mroonga_snippet function."
+msgstr "スニペット(キーワード周辺のテキスト)を取得するために、"
+"mroonga_snippet関数をインストールします。"
+
