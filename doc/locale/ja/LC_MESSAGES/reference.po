@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-27 10:30\n"
+"POT-Creation-Date: 2012-09-27 11:30\n"
 "PO-Revision-Date: 2012-05-28 14:10+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -964,3 +964,57 @@ msgstr ""
 "ORDER BY LIMIT 高速化機能が動作する度にカウントアップされます。スキーマ/SQL"
 "チューニングを行って ORDER BY LIMIT 高速化機能を利用できるようにした際の動作"
 "確認に利用できます。"
+
+# 8aab0ebd312e4cfd8988e825d1241540
+#: ../../../source/reference.rst:416
+msgid "Limitations"
+msgstr "制限事項"
+
+# a7184caf914f42f1846aaefcd3fade87
+#: ../../../source/reference.rst:418
+msgid "There are some limitations in mroonga storage engine."
+msgstr "mroongaストレージエンジンにはいくつか制限があります。"
+
+# 8e1b8a90de50463588ac7bd4157c61d6
+#: ../../../source/reference.rst:421
+msgid "Limitations about the value of columns"
+msgstr "カラムの値に関する制限事項"
+
+# 4762241ec9314616841081e4cc55181b
+#: ../../../source/reference.rst:423
+msgid "There is a limitation about DATE, DATETIME column in storage mode."
+msgstr ""
+"ストレージモードにおいて、DATE、DATETIME型のカラムには制限がありま"
+"す。"
+
+# 9147c792adca459a9d7e2db39ebc555d
+#: ../../../source/reference.rst:425
+msgid ""
+"mroonga storage engine automatically convert 0 into 1 as the value of month "
+"or date."
+msgstr ""
+"mroongaストレージエンジンは月や日の値に指定された0を1へと自動的に補正します。"
+
+# 2ed6ac878f2f45d09664581f1e6f48db
+#: ../../../source/reference.rst:427
+msgid ""
+"Thus, the value 0 is treated as the 1st month (January) of the year or the "
+"1st date of the month."
+msgstr "つまり、0月は1月へ、0日は1日として扱います。"
+
+# 073a9516cdfc46f584a864866242bc98
+#: ../../../source/reference.rst:430
+msgid ""
+"And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
+"00:00:00)."
+msgstr "そして、NULL値はUNIX時間の0秒 (1970-01-01)として扱います。"
+
+# 08b07f5a18bf41738ab639ad2e2017a8
+#: ../../../source/reference.rst:432
+msgid "Here is an example to show behavior described above."
+msgstr "上記挙動を示す例はこちらです。"
+
+# 382273e01cd948e4bb5d6f9d5754944d
+#: ../../../source/reference.rst:456
+msgid "Here is the results of execution example::"
+msgstr "実行結果はこちらです。::"

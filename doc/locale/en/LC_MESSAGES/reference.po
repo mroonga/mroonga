@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-28 13:06\n"
+"POT-Creation-Date: 2012-09-27 11:30\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -932,3 +932,54 @@ msgid ""
 msgstr ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
+
+# 47b07cd2bb7d44c98a8c3ea8bd47e37b
+#: ../../../source/reference.rst:416
+msgid "Limitations"
+msgstr ""
+
+# 5bf56a4d5df24b33ae8b6d972fcf2a7f
+#: ../../../source/reference.rst:418
+msgid "There are some limitations in mroonga storage engine."
+msgstr ""
+
+# 5da669841908480d9071c98823fddf08
+#: ../../../source/reference.rst:421
+msgid "Limitations about the value of columns"
+msgstr ""
+
+# bf33f1ba0a3441149c9c7aae10ab7c00
+#: ../../../source/reference.rst:423
+msgid "There is a limitation about DATE, DATETIME column in storage mode."
+msgstr ""
+
+# 49133a6b106b4d028daabbdf784d5044
+#: ../../../source/reference.rst:425
+msgid ""
+"mroonga storage engine automatically convert 0 into 1 as the value of month "
+"or date."
+msgstr ""
+
+# 95b13e6ab35541e3a286f029f6f77555
+#: ../../../source/reference.rst:427
+msgid ""
+"Thus, the value 0 is treated as the 1st month (January) of the year or the "
+"1st date of the month."
+msgstr ""
+
+# ba510e03144642b3bcad7ff9499c13cd
+#: ../../../source/reference.rst:430
+msgid ""
+"And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
+"00:00:00)."
+msgstr ""
+
+# eda122b1b17c4e08b10677d5e2c5275c
+#: ../../../source/reference.rst:432
+msgid "Here is an example to show behavior described above."
+msgstr ""
+
+# 88bdd5c373c54e11b4ede629c17ffffc
+#: ../../../source/reference.rst:456
+msgid "Here is the results of execution example::"
+msgstr ""
