@@ -12,19 +12,21 @@ Improvements
 ^^^^^^^^^^^^
 
 * [deb] Enabled AppArmor configuration for MeCab. [Reported by @Qurage]
-* [experimental] Added mroonga_snippet() function. [#1442]
+* [storage mode][experimental] Added mroonga_snippet() function. [#1442]
 
 Fixes
 ^^^^^
 
-* Fixed ``groonga_required_version``. [groonga-dev,01033] [Reported by wing]
+* [rpm] Fixed ``groonga_required_version``. [groonga-dev,01033] [Reported by wing]
 * Fixed datetime out of range problems. [groonga-dev,01035] [#1476]
   [Reported by Nakatani Munetaka]
 
 Thanks
 ^^^^^^
-* wing
+
 * @Qurage
+* wing
+* Nakatani Munetaka
 
 .. _release-2-06:
 
