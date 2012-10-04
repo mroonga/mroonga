@@ -12911,19 +12911,32 @@ bool ha_mroonga::check_written_by_row_based_binlog()
 #else
   current_stmt_binlog_row = thd->current_stmt_binlog_row_based;
 #endif
+  if (!current_stmt_binlog_row) {
+    DBUG_RETURN(false);
+  }
+
+  if (table->s->tmp_table != NO_TMP_TABLE) {
+    DBUG_RETURN(false);
+  }
+
+  if (!binlog_filter->db_ok(table->s->db.str)) {
+    DBUG_RETURN(false);
+  }
+
 #ifdef MRN_OPTION_BITS_IS_UNDER_VARIABLES
   option_bits = thd->variables.option_bits & OPTION_BIN_LOG;
 #else
   option_bits = thd->options & OPTION_BIN_LOG;
 #endif
+  if (!option_bits) {
+    DBUG_RETURN(false);
+  }
 
-  DBUG_RETURN(
-    current_stmt_binlog_row &&
-    table->s->tmp_table == NO_TMP_TABLE &&
-    binlog_filter->db_ok(table->s->db.str) &&
-    option_bits &&
-    mysql_bin_log.is_open()
-  );
+  if (!mysql_bin_log.is_open()) {
+    DBUG_RETURN(false);
+  }
+
+  DBUG_RETURN(true);
 }
 
 #ifdef MRN_HAVE_HA_REBIND_PSI
