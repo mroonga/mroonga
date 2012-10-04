@@ -12903,11 +12903,11 @@ bool ha_mroonga::check_written_by_row_based_binlog()
 #ifdef _WIN32
   unsigned __int64 option_bits;
 #else
-  uint64 option_bits; 
+  uint64 option_bits;
 #endif
- 
+
 #ifdef MRN_ROW_BASED_CHECK_IS_METHOD
-  current_stmt_binlog_row =  thd->is_current_stmt_binlog_format_row();
+  current_stmt_binlog_row = thd->is_current_stmt_binlog_format_row();
 #else
   current_stmt_binlog_row = thd->current_stmt_binlog_row_based;
 #endif
