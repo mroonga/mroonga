@@ -42,10 +42,14 @@
 #  include <math.h>
 #  include <direct.h>
 #  define MRN_MKDIR(pathname, mode) _mkdir((pathname))
+#  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
+    type* variable_name = (type*)_malloca(sizeof(type) * variable_size)
 #else
 #  include <dirent.h>
 #  include <unistd.h>
 #  define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
+#  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
+    type variable_name[variable_size]
 #endif
 
 #include "mrn_err.h"
@@ -2794,7 +2798,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 
   uint i;
   uint n_keys = table->s->keys;
-  grn_obj *index_tables[n_keys];
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_tables, n_keys);
   if (!tmp_share->disable_keys) {
     for (i = 0; i < n_keys; i++) {
       index_tables[i] = NULL;
@@ -3172,7 +3176,7 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
 
   uint n_keys = table->s->keys;
   uint i;
-  grn_obj *index_tables[n_keys];
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_tables, n_keys);
   for (i = 0; i < n_keys; i++) {
     index_tables[i] = NULL;
     if (i == table->s->primary_key) {
@@ -11128,8 +11132,8 @@ int ha_mroonga::wrapper_enable_indexes(uint mode)
     KEY *p_key_info = &table->key_info[table_share->primary_key];
     KEY *key_info = table_share->key_info;
     uint n_keys = table_share->keys;
-    grn_obj *index_tables[n_keys];
-    grn_obj *index_columns[n_keys];
+    MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_tables, n_keys);
+    MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_columns, n_keys);
     bitmap_clear_all(table->read_set);
     mrn_set_bitmap_by_key(table->read_set, p_key_info);
     mrn::PathMapper mapper(share->table_name, mrn_database_path_prefix);
@@ -11193,8 +11197,8 @@ int ha_mroonga::storage_enable_indexes(uint mode)
 {
   int error = 0;
   uint n_keys = table_share->keys;
-  grn_obj *index_tables[n_keys];
-  grn_obj *index_columns[n_keys];
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_tables, n_keys);
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_columns, n_keys);
   bool have_multiple_column_index = false;
   bool skip_unique_key = (mode == HA_KEY_SWITCH_NONUNIQ_SAVE);
   MRN_DBUG_ENTER_METHOD();
@@ -11674,8 +11678,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   int error = 0;
   uint i, j, k;
   uint n_keys = table->s->keys;
-  grn_obj *index_tables[num_of_keys + n_keys];
-  grn_obj *index_columns[num_of_keys + n_keys];
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_tables, num_of_keys + n_keys);
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_columns, num_of_keys + n_keys);
   THD *thd = ha_thd();
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
@@ -11799,8 +11803,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   int error = 0;
   uint i;
   uint n_keys = table->s->keys;
-  grn_obj *index_tables[num_of_keys + n_keys];
-  grn_obj *index_columns[num_of_keys + n_keys];
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_tables, num_of_keys + n_keys);
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_columns, num_of_keys + n_keys);
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
   char **key_parser;
@@ -12039,13 +12043,14 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
   uint num_of_keys)
 {
   int res = 0;
-  uint wrap_key_num[num_of_keys], i, j;
+  uint i, j;
   KEY *key_info = table_share->key_info;
   MRN_DBUG_ENTER_METHOD();
   res = mrn_change_encoding(ctx, system_charset_info);
   if (res)
     DBUG_RETURN(res);
 
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(uint, wrap_key_num, num_of_keys);
   mrn::PathMapper mapper(share->table_name, mrn_database_path_prefix);
   for (i = 0, j = 0; i < num_of_keys; i++) {
     if (!(key_info[key_num[i]].flags & HA_FULLTEXT) &&
