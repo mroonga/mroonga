@@ -41,12 +41,12 @@
 #ifndef WIN32
 #  include <dirent.h>
 #  include <unistd.h>
-#define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
+#  define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
 #else
 #  include <math.h>
 inline double round(double x) { return (floor(x + 0.5)); }
 #  include <direct.h>
-#define MRN_MKDIR(pathname, mode) _mkdir((pathname))
+#  define MRN_MKDIR(pathname, mode) _mkdir((pathname))
 #endif
 
 #include "mrn_err.h"
