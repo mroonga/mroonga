@@ -38,14 +38,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#ifndef WIN32
-#  include <dirent.h>
-#  include <unistd.h>
-#  define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
-#else
+#ifdef WIN32
 #  include <math.h>
 #  include <direct.h>
 #  define MRN_MKDIR(pathname, mode) _mkdir((pathname))
+#else
+#  include <dirent.h>
+#  include <unistd.h>
+#  define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
 #endif
 
 #include "mrn_err.h"
