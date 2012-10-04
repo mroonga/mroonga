@@ -44,7 +44,6 @@
 #  define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
 #else
 #  include <math.h>
-inline double round(double x) { return (floor(x + 0.5)); }
 #  include <direct.h>
 #  define MRN_MKDIR(pathname, mode) _mkdir((pathname))
 #endif
@@ -138,6 +137,13 @@ static CHARSET_INFO *mrn_charset_ujis = NULL;
 static CHARSET_INFO *mrn_charset_koi8r = NULL;
 
 static int32 mrn_utc_diff_in_seconds = 0;
+
+#ifdef WIN32
+static double round(double x)
+{
+  return (floor(x + 0.5));
+}
+#endif
 
 static void mrn_init_encoding_map()
 {
