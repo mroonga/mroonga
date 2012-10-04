@@ -41,9 +41,12 @@
 #ifndef WIN32
 #  include <dirent.h>
 #  include <unistd.h>
+#define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
 #else
 #  include <math.h>
 inline double round(double x) { return (floor(x + 0.5)); }
+#  include <direct.h>
+#define MRN_MKDIR(pathname, mode) _mkdir((pathname))
 #endif
 
 #include "mrn_err.h"
@@ -7441,7 +7444,7 @@ void ha_mroonga::mkdir_p(const char *directory)
       if (stat(sub_directory, &directory_status) != 0) {
         DBUG_PRINT("info", ("mroonga: creating directory: <%s>", sub_directory));
         GRN_LOG(ctx, GRN_LOG_INFO, "creating directory: <%s>", sub_directory);
-        if (mkdir(sub_directory, S_IRWXU) == 0) {
+        if (MRN_MKDIR(sub_directory, S_IRWXU) == 0) {
           DBUG_PRINT("info",
                      ("mroonga: created directory: <%s>", sub_directory));
           GRN_LOG(ctx, GRN_LOG_INFO, "created directory: <%s>", sub_directory);
