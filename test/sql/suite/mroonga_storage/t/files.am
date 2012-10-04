@@ -114,6 +114,7 @@ test_files = \
 	multiple_column_primary_key_delete.test \
 	multiple_column_primary_key_select_int.test \
 	multiple_column_primary_key_update.test \
+	multiple_column_unique_index_date.test \
 	optimization_order_limit_disabled.test \
 	optimization_order_limit_equal_int.test \
 	optimization_order_limit_have_primary_key.test \

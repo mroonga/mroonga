@@ -114,6 +114,7 @@ result_files = \
 	multiple_column_primary_key_delete.result \
 	multiple_column_primary_key_select_int.result \
 	multiple_column_primary_key_update.result \
+	multiple_column_unique_index_date.result \
 	optimization_order_limit_disabled.result \
 	optimization_order_limit_equal_int.result \
 	optimization_order_limit_have_primary_key.result \

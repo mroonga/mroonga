@@ -587,6 +587,9 @@ private:
                                                  uint data_size,
                                                  uchar *buffer,
                                                  bool decode);
+  void storage_encode_multiple_column_key_reverse(const uchar *key,
+                                                  uint data_size,
+                                                  uchar *buffer);
   int storage_encode_multiple_column_key(KEY *key_info,
                                          const uchar *key, uint key_length,
                                          uchar *buffer, uint *encoded_length,

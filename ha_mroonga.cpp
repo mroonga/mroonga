@@ -4986,6 +4986,9 @@ int ha_mroonga::storage_write_row_multiple_column_index(uchar *buf,
                                      key_info->key_length,
                                      (uchar *)(GRN_TEXT_VALUE(&encoded_key_buffer)),
                                      &encoded_key_length, false);
+  DBUG_PRINT("info", ("mroonga: key_length=%u", key_info->key_length));
+  DBUG_PRINT("info", ("mroonga: encoded_key_length=%u", encoded_key_length));
+  DBUG_ASSERT(key_info->key_length >= encoded_key_length);
 
   grn_rc rc;
   rc = grn_column_index_update(ctx, index_column, record_id, 1, NULL,
@@ -9585,6 +9588,17 @@ void ha_mroonga::storage_encode_multiple_column_key_double(volatile double value
   DBUG_VOID_RETURN;
 }
 
+void ha_mroonga::storage_encode_multiple_column_key_reverse(const uchar *key,
+                                                            uint data_size,
+                                                            uchar *buffer)
+{
+  MRN_DBUG_ENTER_METHOD();
+  for (uint i = 0; i < data_size; i++) {
+    buffer[i] = key[data_size - i - 1];
+  }
+  DBUG_VOID_RETURN;
+}
+
 int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
                                                    const uchar *key,
                                                    uint key_length,
@@ -9599,12 +9613,15 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
   uchar *current_buffer = buffer;
 
   int n_key_parts = key_info->key_parts;
+  DBUG_PRINT("info", ("mroonga: n_key_parts=%d", n_key_parts));
   *encoded_length = 0;
   for (int i = 0; i < n_key_parts && current_key < key_end; i++) {
     KEY_PART_INFO key_part = key_info->key_part[i];
     Field *field = key_part.field;
+    DBUG_PRINT("info", ("mroonga: key_part.length=%u", key_part.length));
 
     if (field->null_bit) {
+      DBUG_PRINT("info", ("mroonga: field has null bit"));
       *current_buffer = *current_key;
       current_key += 1;
       current_buffer += 1;
@@ -9617,28 +9634,34 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       TYPE_NUMBER,
       TYPE_FLOAT,
       TYPE_DOUBLE,
-      TYPE_BYTE_SEQUENCE
+      TYPE_BYTE_SEQUENCE,
+      TYPE_BYTE_REVERSE
     } data_type = TYPE_UNKNOWN;
     uint data_size = 0;
     long long int long_long_value = 0;
     switch (field->real_type()) {
     case MYSQL_TYPE_DECIMAL:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DECIMAL"));
       data_type = TYPE_BYTE_SEQUENCE;
       data_size = key_part.length;
       break;
     case MYSQL_TYPE_TINY:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TINY"));
       data_type = TYPE_NUMBER;
       data_size = 1;
       break;
     case MYSQL_TYPE_SHORT:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_SHORT"));
       data_type = TYPE_NUMBER;
       data_size = 2;
       break;
     case MYSQL_TYPE_LONG:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_LONG"));
       data_type = TYPE_NUMBER;
       data_size = 4;
       break;
     case MYSQL_TYPE_FLOAT:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_FLOAT"));
       data_type = TYPE_FLOAT;
       data_size = 4;
       {
@@ -9649,6 +9672,7 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       }
       break;
     case MYSQL_TYPE_DOUBLE:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DOUBLE"));
       data_type = TYPE_DOUBLE;
       data_size = 8;
       {
@@ -9659,43 +9683,52 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       }
       break;
     case MYSQL_TYPE_NULL:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_NULL"));
       data_type = TYPE_NUMBER;
       data_size = 1;
       break;
     case MYSQL_TYPE_TIMESTAMP:
-      // TODO
-      data_type = TYPE_BYTE_SEQUENCE;
+    case MYSQL_TYPE_DATE:
+    case MYSQL_TYPE_DATETIME:
+    case MYSQL_TYPE_YEAR:
+    case MYSQL_TYPE_NEWDATE:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME"));
+      data_type = TYPE_BYTE_REVERSE;
       data_size = key_part.length;
+      storage_encode_multiple_column_key_reverse(current_key, data_size,
+                                                 current_buffer);
       break;
     case MYSQL_TYPE_LONGLONG:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_LONGLONG"));
       data_type = TYPE_NUMBER;
       data_size = 8;
       break;
     case MYSQL_TYPE_INT24:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_INT24"));
       data_type = TYPE_NUMBER;
       data_size = 3;
       break;
-    case MYSQL_TYPE_DATE:
     case MYSQL_TYPE_TIME:
-    case MYSQL_TYPE_DATETIME:
-    case MYSQL_TYPE_YEAR:
-    case MYSQL_TYPE_NEWDATE:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME"));
       data_type = TYPE_LONG_LONG_NUMBER;
       long_long_value = (long long int)sint8korr(current_key);
       data_size = 8;
       break;
     case MYSQL_TYPE_VARCHAR:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_VARCHAR"));
       data_type = TYPE_BYTE_SEQUENCE;
       data_size = HA_KEY_BLOB_LENGTH + key_part.length;
       break;
     case MYSQL_TYPE_BIT:
       // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_BIT"));
       data_type = TYPE_NUMBER;
       data_size = 1;
       break;
 #ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
     case MYSQL_TYPE_TIMESTAMP2:
       // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIMESTAMP2"));
       data_type = TYPE_LONG_LONG_NUMBER;
       long_long_value = (long long int)sint8korr(current_key);
       data_size = 8;
@@ -9704,6 +9737,7 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
     case MYSQL_TYPE_DATETIME2:
       // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME2"));
       data_type = TYPE_LONG_LONG_NUMBER;
       long_long_value = (long long int)sint8korr(current_key);
       data_size = 8;
@@ -9712,22 +9746,26 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
     case MYSQL_TYPE_TIME2:
       // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME2"));
       data_type = TYPE_LONG_LONG_NUMBER;
       long_long_value = (long long int)sint8korr(current_key);
       data_size = 8;
       break;
 #endif
     case MYSQL_TYPE_NEWDECIMAL:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_NEWDECIMAL"));
       data_type = TYPE_BYTE_SEQUENCE;
       data_size = key_part.length;
       break;
     case MYSQL_TYPE_ENUM:
       // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_ENUM"));
       data_type = TYPE_NUMBER;
       data_size = 1;
       break;
     case MYSQL_TYPE_SET:
       // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_SET"));
       data_type = TYPE_NUMBER;
       data_size = 1;
       break;
@@ -9736,17 +9774,20 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
     case MYSQL_TYPE_LONG_BLOB:
     case MYSQL_TYPE_BLOB:
       // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_BLOB"));
       data_type = TYPE_BYTE_SEQUENCE;
       data_size = HA_KEY_BLOB_LENGTH + key_part.length;
       break;
     case MYSQL_TYPE_VAR_STRING:
     case MYSQL_TYPE_STRING:
       // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_STRING"));
       data_type = TYPE_BYTE_SEQUENCE;
       data_size = key_part.length;
       break;
     case MYSQL_TYPE_GEOMETRY:
       // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_GEOMETRY"));
       data_type = TYPE_BYTE_SEQUENCE;
       data_size = key_part.length;
       break;
@@ -9789,6 +9830,8 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       break;
     case TYPE_BYTE_SEQUENCE:
       memcpy(current_buffer, current_key, data_size);
+      break;
+    case TYPE_BYTE_REVERSE:
       break;
     }
 
