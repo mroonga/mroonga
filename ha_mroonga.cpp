@@ -139,7 +139,7 @@ static CHARSET_INFO *mrn_charset_koi8r = NULL;
 static int32 mrn_utc_diff_in_seconds = 0;
 
 #ifdef WIN32
-static double round(double x)
+static inline double round(double x)
 {
   return (floor(x + 0.5));
 }
