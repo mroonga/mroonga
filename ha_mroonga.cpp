@@ -12893,19 +12893,29 @@ bool ha_mroonga::check_written_by_row_based_binlog()
 {
   MRN_DBUG_ENTER_METHOD();
   THD *thd = ha_thd();
-  DBUG_RETURN(
-#ifdef MRN_ROW_BASED_CHECK_IS_METHOD
-    thd->is_current_stmt_binlog_format_row() &&
+  int current_stmt_binlog_row;
+#ifdef _WIN32
+  unsigned __int64 option_bits;
 #else
-    thd->current_stmt_binlog_row_based &&
+  uint64 option_bits; 
 #endif
+ 
+#ifdef MRN_ROW_BASED_CHECK_IS_METHOD
+  current_stmt_binlog_row =  thd->is_current_stmt_binlog_format_row();
+#else
+  current_stmt_binlog_row = thd->current_stmt_binlog_row_based;
+#endif
+#ifdef MRN_OPTION_BITS_IS_UNDER_VARIABLES
+  option_bits = thd->variables.option_bits & OPTION_BIN_LOG;
+#else
+  option_bits = thd->options & OPTION_BIN_LOG;
+#endif
+
+  DBUG_RETURN(
+    current_stmt_binlog_row &&
     table->s->tmp_table == NO_TMP_TABLE &&
     binlog_filter->db_ok(table->s->db.str) &&
-#ifdef MRN_OPTION_BITS_IS_UNDER_VARIABLES
-    (thd->variables.option_bits & OPTION_BIN_LOG) &&
-#else
-    (thd->options & OPTION_BIN_LOG) &&
-#endif
+    option_bits &&
     mysql_bin_log.is_open()
   );
 }
