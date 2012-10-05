@@ -43,7 +43,7 @@
 #  include <direct.h>
 #  define MRN_MKDIR(pathname, mode) _mkdir((pathname))
 #  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
-    type* variable_name = (type*)_malloca(sizeof(type) * variable_size)
+    type *variable_name = (type *)_malloca(sizeof(type) * variable_size)
 #else
 #  include <dirent.h>
 #  include <unistd.h>
