@@ -6301,6 +6301,9 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   case HA_READ_BEFORE_KEY:
     flags |= GRN_CURSOR_LT | GRN_CURSOR_DESCENDING;
     break;
+  case HA_READ_PREFIX_LAST_OR_PREV:
+    flags |= GRN_CURSOR_LE | GRN_CURSOR_DESCENDING;
+    break;
   case HA_READ_AFTER_KEY:
     flags |= GRN_CURSOR_GT;
     break;
