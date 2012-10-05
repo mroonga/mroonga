@@ -6821,8 +6821,17 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
     }
   }
 
-  if (start_key && start_key->flag == HA_READ_AFTER_KEY) {
-    flags |= GRN_CURSOR_GT | GRN_CURSOR_ASCENDING;
+  if (start_key) {
+    switch (start_key->flag) {
+    case HA_READ_AFTER_KEY:
+      flags |= GRN_CURSOR_GT | GRN_CURSOR_ASCENDING;
+      break;
+    case HA_READ_KEY_OR_NEXT:
+      flags |= GRN_CURSOR_GE | GRN_CURSOR_ASCENDING;
+      break;
+    default:
+      break;
+    }
   }
   if (end_key && end_key->flag == HA_READ_BEFORE_KEY) {
     flags |= GRN_CURSOR_LT;
