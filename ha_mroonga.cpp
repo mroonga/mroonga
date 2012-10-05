@@ -6833,8 +6833,17 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
       break;
     }
   }
-  if (end_key && end_key->flag == HA_READ_BEFORE_KEY) {
-    flags |= GRN_CURSOR_LT | GRN_CURSOR_ASCENDING;
+  if (end_key) {
+    switch (end_key->flag) {
+    case HA_READ_BEFORE_KEY:
+      flags |= GRN_CURSOR_LT | GRN_CURSOR_ASCENDING;
+      break;
+    case HA_READ_AFTER_KEY:
+      flags |= GRN_CURSOR_GE | GRN_CURSOR_ASCENDING;
+      break;
+    default:
+      break;
+    }
   }
 
   uint pkey_nr = table->s->primary_key;
