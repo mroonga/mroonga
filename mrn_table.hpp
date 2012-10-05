@@ -21,6 +21,10 @@
 #ifndef _mrn_table_hpp
 #define _mrn_table_hpp
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <groonga.h>
 
 typedef struct st_mroonga_share
@@ -111,5 +115,9 @@ KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info);
 st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create);
 void mrn_clear_alter_share(THD *thd);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _mrn_table_hpp */

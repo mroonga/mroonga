@@ -43,6 +43,10 @@
 #define MRN_GROONGA_STR "GROONGA"
 #define MRN_GROONGA_LEN (sizeof(MRN_GROONGA_STR) - 1)
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern HASH mrn_open_tables;
 extern pthread_mutex_t mrn_open_tables_mutex;
 extern char *mrn_default_parser;
@@ -923,3 +927,7 @@ void mrn_clear_alter_share(THD *thd)
   }
   DBUG_VOID_RETURN;
 }
+
+#ifdef __cplusplus
+}
+#endif
