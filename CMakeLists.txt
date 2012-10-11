@@ -102,6 +102,10 @@ set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
 set_property(TARGET ha_mroonga APPEND PROPERTY
   COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
 if(WIN32)
+# TODO: set DBUG_OFF to link with MySQL release/debug import library.
+#       it is better that you can customize this definition.
+# TODO: support security enhancements introduced in the CRT.
+#       http://msdn.microsoft.com/en-us/library/8ef0s5kh%28v=vs.90%29.aspx
   set_property(TARGET ha_mroonga APPEND PROPERTY
     COMPILE_DEFINITIONS "DBUG_OFF" "_CRT_SECURE_NO_WARNINGS")
 endif()
