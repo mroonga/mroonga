@@ -78,8 +78,15 @@ include_directories(
   ${GROONGA_INCLUDE_DIRS}
   )
 
+if(WIN32)
+  set(MYSQL_LIBRARY_DIRS
+    "${MYSQL_BUILD_DIR}/lib"
+    "${MYSQL_BUILD_DIR}/libmysqld"
+    )
+endif()
 link_directories(
   ${GROONGA_LIBRARY_DIRS}
+  ${MYSQL_LIBRARY_DIRS}
   )
 
 # TODO: set VERSIONINFO for Microsoft Visual C++.
