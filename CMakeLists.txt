@@ -110,7 +110,13 @@ if(WIN32)
     COMPILE_DEFINITIONS "DBUG_OFF" "_CRT_SECURE_NO_WARNINGS")
 endif()
 
-target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
+if(WIN32)
+  set(MYSQL_IMPORT_LIBRARIES
+    "libmysqld${IMPORT_SUFFIX};mysqlserver${IMPORT_SUFFIX}")
+  target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES} ${MYSQL_IMPORT_LIBRARIES})
+else()
+  target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
+endif()
 
 option(WITH_DEBUG "Enable debug options" OFF)
 if(WITH_DEBUG)
