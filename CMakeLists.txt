@@ -101,6 +101,10 @@ set_target_properties(ha_mroonga PROPERTIES
 set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
 set_property(TARGET ha_mroonga APPEND PROPERTY
   COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
+if(WIN32)
+  set_property(TARGET ha_mroonga APPEND PROPERTY
+    COMPILE_DEFINITIONS "DBUG_OFF" "_CRT_SECURE_NO_WARNINGS")
+endif()
 
 target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
 
