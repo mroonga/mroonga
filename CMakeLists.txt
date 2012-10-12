@@ -118,6 +118,12 @@ if(WIN32)
 endif()
 
 if(WIN32)
+# NOTE: ignore incompatible runtime libraries explicitly.
+#       http://msdn.microsoft.com/en-us/library/6wtdswk0%28v=vs.80%29.aspx 
+  set_target_properties(ha_mroonga PROPERTIES
+    LINK_FLAGS_DEBUG "/NODEFAULTLIB:libcmt.lib /NODEFAULTLIB:msvcrtd.lib")
+  set_target_properties(ha_mroonga PROPERTIES
+    LINK_FLAGS_RELEASE "/NODEFAULTLIB:libcmtd.lib /NODEFAULTLIB:msvcrtd.lib")
   set(MYSQL_IMPORT_LIBRARIES
     "libmysqld${IMPORT_SUFFIX};mysqlserver${IMPORT_SUFFIX}")
   target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES} ${MYSQL_IMPORT_LIBRARIES})
