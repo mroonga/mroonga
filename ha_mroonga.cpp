@@ -41,6 +41,7 @@
 #ifdef WIN32
 #  include <math.h>
 #  include <direct.h>
+#  include <time.h>
 #  define MRN_MKDIR(pathname, mode) _mkdir((pathname))
 #  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
     type *variable_name = (type *)_malloca(sizeof(type) * variable_size)
@@ -1620,7 +1621,11 @@ static void mrn_init_time(void)
   struct tm now_tm;
   time_t now;
   time(&now);
+#ifdef _MSC_VER
+  gmtime_s(&now_tm, &now);
+#else
   gmtime_r(&now, &now_tm);
+#endif
   mrn_utc_diff_in_seconds = now - mktime(&now_tm);
 }
 
