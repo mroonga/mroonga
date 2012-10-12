@@ -4227,8 +4227,6 @@ int ha_mroonga::storage_info(uint flag)
 {
   MRN_DBUG_ENTER_METHOD();
   mrn_change_encoding(ctx, NULL);
-  ha_rows rows = grn_table_size(ctx, grn_table);
-  stats.records = rows;
 
   if (flag & (HA_STATUS_ERRKEY | HA_STATUS_NO_LOCK)) {
     errkey = dup_key;
@@ -4261,7 +4259,51 @@ int ha_mroonga::storage_info(uint flag)
     storage_set_keys_in_use();
   }
 
+  if (flag & HA_STATUS_VARIABLE) {
+    storage_info_variable();
+  }
+
   DBUG_RETURN(0);
+}
+
+void ha_mroonga::storage_info_variable()
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  storage_info_variable_records();
+  storage_info_variable_data_file_length();
+
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_info_variable_records()
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  stats.records = grn_table_size(ctx, grn_table);
+
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_info_variable_data_file_length()
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  stats.data_file_length = 0;
+  stats.data_file_length += file_size(grn_obj_path(ctx, grn_table));
+  grn_hash *columns = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
+                                      GRN_OBJ_TABLE_HASH_KEY);
+  grn_table_columns(ctx, grn_table, NULL, 0, (grn_obj *)columns);
+  grn_id id __attribute__((unused));
+  grn_id *column_id;
+  GRN_HASH_EACH(ctx, columns, id, &column_id, NULL, NULL, {
+    grn_obj *column = grn_ctx_at(ctx, *column_id);
+    stats.data_file_length += file_size(grn_obj_path(ctx, column));
+    grn_obj_unlink(ctx, column);
+  });
+  grn_hash_close(ctx, columns);
+
+  DBUG_VOID_RETURN;
 }
 
 int ha_mroonga::info(uint flag)
@@ -7511,6 +7553,18 @@ void ha_mroonga::mkdir_p(const char *directory)
   }
 
   DBUG_VOID_RETURN;
+}
+
+ulonglong ha_mroonga::file_size(const char *path)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  struct stat file_status;
+  if (stat(path, &file_status) == 0) {
+    DBUG_RETURN(file_status.st_size);
+  } else {
+    DBUG_RETURN(0);
+  }
 }
 
 void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag)

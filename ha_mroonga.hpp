@@ -478,6 +478,7 @@ protected:
 
 private:
   void mkdir_p(const char *directory);
+  ulonglong file_size(const char *path);
 
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
   void clear_cursor();
@@ -719,6 +720,9 @@ private:
   ulong storage_index_flags(uint idx, uint part, bool all_parts) const;
   int wrapper_info(uint flag);
   int storage_info(uint flag);
+  void storage_info_variable();
+  void storage_info_variable_records();
+  void storage_info_variable_data_file_length();
   int wrapper_rnd_init(bool scan);
   int storage_rnd_init(bool scan);
   int wrapper_rnd_end();
