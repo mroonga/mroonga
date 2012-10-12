@@ -154,6 +154,10 @@ extern "C" {
 #  define MRN_GET_ERROR_MESSAGE current_thd->main_da.message()
 #endif
 
+#if defined(_WIN32) || defined(_WIN64)
+#define MRN_API __declspec(dllexport)
+#endif
+
 class ha_mroonga;
 
 /* structs */

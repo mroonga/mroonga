@@ -834,7 +834,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
 
 
 /* UDF - last_insert_grn_id() */
-my_bool last_insert_grn_id_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
+MRN_API my_bool last_insert_grn_id_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
 {
   if (args->arg_count != 0) {
     strcpy(message, "last_insert_grn_id must not have arguments");
@@ -844,7 +844,7 @@ my_bool last_insert_grn_id_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
   return 0;
 }
 
-longlong last_insert_grn_id(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error)
+MRN_API longlong last_insert_grn_id(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error)
 {
   THD *thd = current_thd;
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, false);
@@ -855,7 +855,7 @@ longlong last_insert_grn_id(UDF_INIT *initid, UDF_ARGS *args, char *is_null, cha
   return last_insert_record_id;
 }
 
-void last_insert_grn_id_deinit(UDF_INIT *initid)
+MRN_API void last_insert_grn_id_deinit(UDF_INIT *initid)
 {
 }
 
@@ -947,7 +947,7 @@ error:
   return TRUE;
 }
 
-my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
+MRN_API my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
 {
   uint i;
   st_mrn_snip_info *snip_info = NULL;
@@ -1028,7 +1028,7 @@ error:
   return TRUE;
 }
 
-char *mroonga_snippet(UDF_INIT *initid, UDF_ARGS *args, char *result,
+MRN_API char *mroonga_snippet(UDF_INIT *initid, UDF_ARGS *args, char *result,
                       unsigned long *length, char *is_null, char *error)
 {
   st_mrn_snip_info *snip_info = (st_mrn_snip_info *) initid->ptr;
@@ -1110,7 +1110,7 @@ error:
   return NULL;
 }
 
-void mroonga_snippet_deinit(UDF_INIT *initid)
+MRN_API void mroonga_snippet_deinit(UDF_INIT *initid)
 {
   st_mrn_snip_info *snip_info = (st_mrn_snip_info *) initid->ptr;
   if (snip_info) {
