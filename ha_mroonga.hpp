@@ -156,6 +156,8 @@ extern "C" {
 
 #if defined(_WIN32) || defined(_WIN64)
 #  define MRN_API __declspec(dllexport)
+#else
+#  define MRN_API
 #endif
 
 class ha_mroonga;
