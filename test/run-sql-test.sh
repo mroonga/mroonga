@@ -26,7 +26,6 @@ fi
 
 . "${top_dir}/config.sh"
 
-test_suite_names="mroonga_storage,mroonga_wrapper"
 source_mysql_test_dir="${MYSQL_SOURCE_DIR}/mysql-test"
 build_mysql_test_dir="${MYSQL_BUILD_DIR}/mysql-test"
 source_test_suites_dir="${source_mysql_test_dir}/suite"
@@ -81,7 +80,7 @@ for test_include_name in $(ls $local_mroonga_mysql_test_include_dir | grep '\.in
     fi
 done
 
-for test_suite_name in $(echo $test_suite_names | sed -e 's/,/ /g'); do
+for test_suite_name in mroonga; do
     local_mroonga_mysql_test_suite_dir="${BASE_DIR}/sql/suite/${test_suite_name}"
     mroonga_mysql_test_suite_dir="${build_test_suites_dir}/${test_suite_name}"
     if ! same_link_p "${local_mroonga_mysql_test_suite_dir}" \
@@ -93,7 +92,8 @@ for test_suite_name in $(echo $test_suite_names | sed -e 's/,/ /g'); do
 done
 
 innodb_test_suite_dir="${build_test_suites_dir}/innodb"
-mroonga_wrapper_innodb_test_suite_dir="${build_test_suites_dir}/mroonga_wrapper_innodb"
+mroonga_wrapper_innodb_test_suite_name="mroonga_wrapper_innodb"
+mroonga_wrapper_innodb_test_suite_dir="${build_test_suites_dir}/${mroonga_wrapper_innodb_test_suite_name}"
 mroonga_wrapper_innodb_include_dir="${mroonga_wrapper_innodb_test_suite_dir}/include/"
 if test "$0" -nt "$(dirname "${mroonga_wrapper_innodb_test_suite_dir}")"; then
     rm -rf "${mroonga_wrapper_innodb_test_suite_dir}"
@@ -118,6 +118,16 @@ if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
 	-e '1 i --source include/have_mroonga.inc' \
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test
 fi
+
+test_suite_names=""
+cd "${BASE_DIR}/sql/suite"
+for test_suite_name in $(find mroonga -type d '!' -name '[tr]'); do
+    if [ -n "${test_suite_names}" ]; then
+	test_suite_names="${test_suite_names},"
+    fi
+    test_suite_names="${test_suite_names}${test_suite_name}"
+done
+cd -
 
 if test -n "${plugins_dir}"; then
     if test -d "${top_dir}/.libs"; then
