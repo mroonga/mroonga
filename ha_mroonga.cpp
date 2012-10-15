@@ -8632,6 +8632,7 @@ int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
     year = field->val_int();
   }
 
+  DBUG_PRINT("info", ("mroonga: year=%d", year));
   struct tm date;
   memset(&date, 0, sizeof(struct tm));
   date.tm_year = year - 1900;
@@ -8987,12 +8988,15 @@ void ha_mroonga::storage_store_field_year(Field *field,
                                           const char *value,
                                           uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int *)value);
   MYSQL_TIME mysql_time;
   memset(&mysql_time, 0, sizeof(MYSQL_TIME));
   mysql_time.time_type = MYSQL_TIMESTAMP_DATE;
   mrn_grn_time_to_mysql_time(time, &mysql_time);
-  field->store(mysql_time.year);
+  DBUG_PRINT("info", ("mroonga: stored %d", mysql_time.year));
+  field->store(mysql_time.year, FALSE);
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field_new_date(Field *field,
@@ -9729,6 +9733,7 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       data_size = key_part.length;
       break;
     case MYSQL_TYPE_TINY:
+    case MYSQL_TYPE_YEAR:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TINY"));
       data_type = TYPE_NUMBER;
       data_size = 1;
@@ -9773,7 +9778,6 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
     case MYSQL_TYPE_TIMESTAMP:
     case MYSQL_TYPE_DATE:
     case MYSQL_TYPE_DATETIME:
-    case MYSQL_TYPE_YEAR:
     case MYSQL_TYPE_NEWDATE:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME"));
       data_type = TYPE_BYTE_REVERSE;
@@ -9794,8 +9798,8 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
     case MYSQL_TYPE_TIME:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME"));
       data_type = TYPE_LONG_LONG_NUMBER;
-      long_long_value = (long long int)sint8korr(current_key);
-      data_size = 8;
+      long_long_value = (long long int)sint3korr(current_key);
+      data_size = 3;
       break;
     case MYSQL_TYPE_VARCHAR:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_VARCHAR"));
