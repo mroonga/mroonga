@@ -121,7 +121,7 @@ if(WIN32)
 # NOTE: ignore incompatible runtime libraries explicitly.
 #       http://msdn.microsoft.com/en-us/library/6wtdswk0%28v=vs.80%29.aspx 
   set_target_properties(ha_mroonga PROPERTIES
-    LINK_FLAGS "/NODEFAULTLIB:msvcrtd.lib")
+    LINK_FLAGS "/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib")
   set_target_properties(ha_mroonga PROPERTIES
     LINK_FLAGS_DEBUG "/NODEFAULTLIB:libcmt.lib")
   set_target_properties(ha_mroonga PROPERTIES
