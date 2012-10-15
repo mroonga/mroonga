@@ -162,6 +162,6 @@ configure_file(
   )
 
 configure_file(
-  "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga_storage/r/information_schema.result.in"
-  "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga_storage/r/information_schema.result"
+  "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result.in"
+  "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result"
   )
