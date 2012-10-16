@@ -114,7 +114,7 @@ if(WIN32)
 # TODO: support security enhancements introduced in the CRT.
 #       http://msdn.microsoft.com/en-us/library/8ef0s5kh%28v=vs.90%29.aspx
   set_property(TARGET ha_mroonga APPEND PROPERTY
-    COMPILE_DEFINITIONS "DBUG_OFF" "_CRT_SECURE_NO_WARNINGS")
+    COMPILE_DEFINITIONS "__WIN__" "DBUG_OFF" "_CRT_SECURE_NO_WARNINGS")
 endif()
 
 if(WIN32)
