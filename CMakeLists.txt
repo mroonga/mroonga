@@ -113,8 +113,14 @@ if(WIN32)
 #       it is better that you can customize this definition.
 # TODO: support security enhancements introduced in the CRT.
 #       http://msdn.microsoft.com/en-us/library/8ef0s5kh%28v=vs.90%29.aspx
-  set_property(TARGET ha_mroonga APPEND PROPERTY
-    COMPILE_DEFINITIONS "__WIN__" "DBUG_OFF" "_CRT_SECURE_NO_WARNINGS")
+  set_property(TARGET ha_mroonga APPEND PROPERTY COMPILE_DEFINITIONS
+    "__WIN__"
+    "DBUG_OFF"
+    "_CRT_SECURE_NO_WARNINGS"
+    "_WIN32_WINNT=0x0501"
+    "WIN32_LEAN_AND_MEAN"
+  )
+  
 endif()
 
 if(WIN32)
