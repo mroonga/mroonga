@@ -369,14 +369,6 @@ AC_CONFIG_FILES([
   test/Makefile
   test/unit/Makefile
   test/sql/Makefile
-  test/sql/include/Makefile
-  test/sql/suite/mroonga/Makefile
-  test/sql/suite/mroonga/storage/Makefile
-  test/sql/suite/mroonga/storage/r/Makefile
-  test/sql/suite/mroonga/storage/t/Makefile
-  test/sql/suite/mroonga/wrapper/Makefile
-  test/sql/suite/mroonga/wrapper/r/Makefile
-  test/sql/suite/mroonga/wrapper/t/Makefile
   packages/Makefile
   packages/rpm/Makefile
   packages/rpm/centos/Makefile
