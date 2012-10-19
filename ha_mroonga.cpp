@@ -131,6 +131,7 @@ static grn_obj *mrn_db;
 static grn_hash *mrn_hash;
 
 static CHARSET_INFO *mrn_charset_utf8 = NULL;
+static CHARSET_INFO *mrn_charset_utf8mb4 = NULL;
 static CHARSET_INFO *mrn_charset_binary = NULL;
 static CHARSET_INFO *mrn_charset_ascii = NULL;
 static CHARSET_INFO *mrn_charset_latin1_1 = NULL;
@@ -165,6 +166,16 @@ static void mrn_init_encoding_map()
       if (!mrn_charset_utf8)
         mrn_charset_utf8 = cs[0];
       else if (mrn_charset_utf8->cset != cs[0]->cset)
+        DBUG_ASSERT(0);
+      continue;
+    }
+    if (!strcmp(cs[0]->csname, "utf8mb4"))
+    {
+      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+                          cs[0]->name, cs[0]->csname, cs[0]->cset));
+      if (!mrn_charset_utf8mb4)
+        mrn_charset_utf8mb4 = cs[0];
+      else if (mrn_charset_utf8mb4->cset != cs[0]->cset)
         DBUG_ASSERT(0);
       continue;
     }
@@ -268,6 +279,11 @@ static int mrn_change_encoding(grn_ctx *ctx, const CHARSET_INFO *charset)
     DBUG_RETURN(0);
   }
   if (charset->cset == mrn_charset_utf8->cset)
+  {
+    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
+    DBUG_RETURN(0);
+  }
+  if (charset->cset == mrn_charset_utf8mb4->cset)
   {
     GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
     DBUG_RETURN(0);
