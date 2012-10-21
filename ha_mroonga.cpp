@@ -9738,7 +9738,8 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       TYPE_FLOAT,
       TYPE_DOUBLE,
       TYPE_BYTE_SEQUENCE,
-      TYPE_BYTE_REVERSE
+      TYPE_BYTE_REVERSE,
+      TYPE_BYTE_BLOB
     } data_type = TYPE_UNKNOWN;
     uint data_size = 0;
     long long int long_long_value = 0;
@@ -9819,8 +9820,8 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       break;
     case MYSQL_TYPE_VARCHAR:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_VARCHAR"));
-      data_type = TYPE_BYTE_SEQUENCE;
-      data_size = HA_KEY_BLOB_LENGTH + key_part.length;
+      data_type = TYPE_BYTE_BLOB;
+      data_size = key_part.length;
       break;
     case MYSQL_TYPE_BIT:
       // TODO
@@ -9878,8 +9879,8 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
     case MYSQL_TYPE_BLOB:
       // TODO
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_BLOB"));
-      data_type = TYPE_BYTE_SEQUENCE;
-      data_size = HA_KEY_BLOB_LENGTH + key_part.length;
+      data_type = TYPE_BYTE_BLOB;
+      data_size = key_part.length;
       break;
     case MYSQL_TYPE_VAR_STRING:
     case MYSQL_TYPE_STRING:
@@ -9935,6 +9936,16 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
       memcpy(current_buffer, current_key, data_size);
       break;
     case TYPE_BYTE_REVERSE:
+      break;
+    case TYPE_BYTE_BLOB:
+      if (decode) {
+        memcpy(current_buffer, current_key + data_size, HA_KEY_BLOB_LENGTH);
+        memcpy(current_buffer + HA_KEY_BLOB_LENGTH, current_key, data_size);
+      } else {
+        memcpy(current_buffer + data_size, current_key, HA_KEY_BLOB_LENGTH);
+        memcpy(current_buffer, current_key + HA_KEY_BLOB_LENGTH, data_size);
+      }
+      data_size += HA_KEY_BLOB_LENGTH;
       break;
     }
 
