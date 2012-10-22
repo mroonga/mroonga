@@ -95,6 +95,7 @@ eval $command || \
 %preun
 if [ "$1" = 0 ]; then
     sql="
+    DROP FUNCTION mroonga_snippet;
     DROP FUNCTION last_insert_grn_id;
     UNINSTALL PLUGIN mroonga;
     FLUSH TABLES;
@@ -118,6 +119,11 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Mon Oct 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.08-0
+- new upstream release.
+- add missing "DROP FUNCTION mroonga_snippet".
+  Reported by @tokuhy. Thanks!!!
+
 * Sat Sep 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.07-0
 - new upstream release.
 
