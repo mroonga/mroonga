@@ -29,6 +29,12 @@
 #  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
 #endif
 
+#if MYSQL_VERSION_ID >= 50604
+#  define MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+#  define MRN_HAVE_MYSQL_TYPE_DATETIME2
+#  define MRN_HAVE_MYSQL_TYPE_TIME2
+#endif
+
 #ifndef HA_INPLACE_ADD_INDEX_NO_READ_WRITE
 #  define HA_INPLACE_ADD_INDEX_NO_READ_WRITE         HA_ONLINE_ADD_INDEX_NO_WRITES
 #  define HA_INPLACE_DROP_INDEX_NO_READ_WRITE        HA_ONLINE_DROP_INDEX_NO_WRITES

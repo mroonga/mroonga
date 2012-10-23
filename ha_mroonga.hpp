@@ -91,12 +91,6 @@ extern "C" {
 #  define MRN_HA_ROWS_FORMAT "lu"
 #endif
 
-#if MYSQL_VERSION_ID >= 50604
-#  define MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
-#  define MRN_HAVE_MYSQL_TYPE_DATETIME2
-#  define MRN_HAVE_MYSQL_TYPE_TIME2
-#endif
-
 #if (MYSQL_VERSION_ID < 50519) || \
     defined(MRN_MARIADB_P) || \
     (50600 <= MYSQL_VERSION_ID && MYSQL_VERSION_ID < 50604)
