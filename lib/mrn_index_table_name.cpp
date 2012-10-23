@@ -22,6 +22,9 @@
 
 #include "mrn_index_table_name.hpp"
 
+// for debug
+#define MRN_CLASS_NAME "mrn::IndexTableName"
+
 namespace mrn {
   IndexTableName::IndexTableName(const char *table_name,
                                  const char *mysql_index_name)

@@ -63,6 +63,9 @@
 #include <mrn_external_lock.hpp>
 #include <mrn_match_escalation_threshold_scope.hpp>
 
+// for debug
+#define MRN_CLASS_NAME "ha_mroonga"
+
 #define MRN_SHORT_TEXT_SIZE (1 << 12) //  4Kbytes
 #define MRN_TEXT_SIZE       (1 << 16) // 64Kbytes
 #define MRN_LONG_TEXT_SIZE  (1 << 31) //  2Gbytes
