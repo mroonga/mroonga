@@ -168,15 +168,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
   MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
   MYSQL_VERSION="$($ac_mysql_config --version)"
-
-  AC_MSG_CHECKING([for InnoDB FTS])
-  mrn_mysql_innodb_fts_p=no
-  if test x"$MYSQL_VERSION" == x"5.6.3-labs-innodb-fts"; then
-    mrn_mysql_innodb_fts_p=yes
-    AC_DEFINE([MRN_MYSQL_INNODB_FTS_P], [1],
-              [Define to 1 if the target MySQL has InnoDB FTS])
-  fi
-  AC_MSG_RESULT($mrn_mysql_innodb_fts_p)
 ])
 
 m4_define([mrn_required_groonga_version], m4_include(required_groonga_version))
