@@ -20,22 +20,23 @@ run_unit_test()
 
 prepare_mysql_test_dir()
 {
+    mysql_test_dir=/usr/mysql-test
     if [ -d /usr/lib/mysql-testsuite/ ]; then
-	sudo cp -a /usr/lib/mysql-testsuite/ /usr/mysql-test/
+	sudo cp -a /usr/lib/mysql-testsuite/ ${mysql_test_dir}/
     elif [ -d /opt/mysql/ ]; then
-	sudo ln -s /opt/mysql/server-*/mysql-test /usr/mysql-test
+	mysql_test_dir=$(echo /opt/mysql/server-*/mysql-test)
     else
-	sudo cp -a ${MYSQL_SOURCE_DIR}/mysql-test/ /usr/mysql-test/
+	sudo cp -a ${MYSQL_SOURCE_DIR}/mysql-test/ ${mysql_test_dir}/
     fi
-    (cd /usr/mysql-test && sudo chown -R $(id -u):$(id -g) .)
+    sudo chown -R $(id -u):$(id -g) ${mysql_test_dir}/
 
-    cp -a ${top_dir}/test/sql/include/*.inc /usr/mysql-test/include/
-    cp -a ${top_dir}/test/sql/suite/mroonga/ /usr/mysql-test/suite/
+    cp -a ${top_dir}/test/sql/include/*.inc ${mysql_test_dir}/include/
+    cp -a ${top_dir}/test/sql/suite/mroonga/ ${mysql_test_dir}/suite/
 }
 
 collect_test_suite_names()
 {
-    cd /usr/mysql-test/suite/
+    cd ${mysql_test_dir}/suite/
     test_suite_names=""
     for test_suite_name in $(find mroonga -type d '!' -name '[tr]'); do
 	if [ -n "${test_suite_names}" ]; then
@@ -57,7 +58,7 @@ run_sql_test()
 {
     prepare_sql_test
 
-    cd /usr/mysql-test
+    cd ${mysql_test_dir}/
     ./mysql-test-run.pl \
 	--no-check-testcases \
 	--parallel="${n_processors}" \
