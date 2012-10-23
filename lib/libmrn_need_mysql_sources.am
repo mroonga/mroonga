@@ -5,5 +5,7 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_debug_column_access.hpp		\
 	mrn_auto_increment_value_lock.cpp	\
 	mrn_auto_increment_value_lock.hpp	\
-	mrn_external_lock.cpp	\
-	mrn_external_lock.hpp
+	mrn_external_lock.cpp			\
+	mrn_external_lock.hpp			\
+	mrn_multiple_column_key_codec.cpp	\
+	mrn_multiple_column_key_codec.hpp
