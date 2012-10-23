@@ -11,9 +11,9 @@ install:
   - curl https://raw.github.com/groonga/groonga/master/data/travis/setup.sh | sh
   - curl https://raw.github.com/clear-code/cutter/master/data/travis/setup.sh | sh
   - sudo apt-get -y install groonga-tokenizer-mecab
-  - tools/travis_install_mysql.sh
+  - tools/travis/install_mysql.sh
 before_script:
-  - tools/travis_before_script.sh
+  - tools/travis/before_script.sh
 script:
   - test/run-unit-test.sh
   - test/run-sql-test.sh
