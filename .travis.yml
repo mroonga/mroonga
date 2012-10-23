@@ -4,13 +4,12 @@ notifications:
     - travis@clear-code.com
 language: cpp
 env:
-#  - MYSQL_VERSION=system
-  - MYSQL_VERSION=5.5.27
-  - MARIADB_VERSION=5.5.25
+  - MYSQL_VERSION=mysql-system
+  - MYSQL_VERSION=mysql-5.5.28
+  - MYSQL_VERSION=mariadb-5.5.28
 install:
   - tools/travis/install.sh
 before_script:
   - tools/travis/before_script.sh
 script:
-  - test/run-unit-test.sh
-  - test/run-sql-test.sh
+  - tools/travis/script.sh
