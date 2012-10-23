@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -x
+# set -x
 set -e
 
 curl https://raw.github.com/groonga/groonga/master/data/travis/setup.sh | sh

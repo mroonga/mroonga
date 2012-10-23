@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -x
+# set -x
 set -e
 
 base_dir="$(cd $(dirname $0); pwd)"
