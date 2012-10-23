@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,128 +18,131 @@
 --source include/have_mroonga.inc
 
 --disable_warnings
-drop table if exists shops;
+DROP TABLE IF EXISTS shops;
 --enable_warnings
 
-create table shops (
-  id int primary key auto_increment,
-  name text,
-  location geometry NOT NULL,
-  spatial key location_index (location)
+CREATE TABLE shops (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name TEXT,
+  location GEOMETRY NOT NULL,
+  SPATIAL KEY location_index (location)
 );
-show create table shops;
-insert into shops (name, location)
-           values ('nezu-no-taiyaki',
+SHOW CREATE TABLE shops;
+
+INSERT INTO shops (name, location)
+           VALUES ('nezu-no-taiyaki',
                    GeomFromText('POINT(139.762573 35.720253)'));
-insert into shops (name, location)
-           values ('taiyaki-kataoka',
+INSERT INTO shops (name, location)
+           VALUES ('taiyaki-kataoka',
                    GeomFromText('POINT(139.715591 35.712521)'));
-insert into shops (name, location)
-           values ('soba-taiyaki-ku',
+INSERT INTO shops (name, location)
+           VALUES ('soba-taiyaki-ku',
                    GeomFromText('POINT(139.659088 35.683712)'));
-insert into shops (name, location)
-           values ('kuruma',
+INSERT INTO shops (name, location)
+           VALUES ('kuruma',
                    GeomFromText('POINT(139.706207 35.721516)'));
-insert into shops (name, location)
-           values ('hirose-ya',
+INSERT INTO shops (name, location)
+           VALUES ('hirose-ya',
                    GeomFromText('POINT(139.685608 35.714844)'));
-insert into shops (name, location)
-           values ('sazare',
+INSERT INTO shops (name, location)
+           VALUES ('sazare',
                    GeomFromText('POINT(139.685043 35.714653)'));
-insert into shops (name, location)
-           values ('omede-taiyaki',
+INSERT INTO shops (name, location)
+           VALUES ('omede-taiyaki',
                    GeomFromText('POINT(139.817154 35.700516)'));
-insert into shops (name, location)
-           values ('onaga-ya',
+INSERT INTO shops (name, location)
+           VALUES ('onaga-ya',
                    GeomFromText('POINT(139.81105 35.698254)'));
-insert into shops (name, location)
-           values ('shiro-ya',
+INSERT INTO shops (name, location)
+           VALUES ('shiro-ya',
                    GeomFromText('POINT(139.638611 35.705517)'));
-insert into shops (name, location)
-           values ('fuji-ya',
+INSERT INTO shops (name, location)
+           VALUES ('fuji-ya',
                    GeomFromText('POINT(139.637115 35.703938)'));
-insert into shops (name, location)
-           values ('miyoshi',
+INSERT INTO shops (name, location)
+           VALUES ('miyoshi',
                    GeomFromText('POINT(139.537323 35.644539)'));
-insert into shops (name, location)
-           values ('juju-ya',
+INSERT INTO shops (name, location)
+           VALUES ('juju-ya',
                    GeomFromText('POINT(139.695755 35.628922)'));
-insert into shops (name, location)
-           values ('tatsumi-ya',
+INSERT INTO shops (name, location)
+           VALUES ('tatsumi-ya',
                    GeomFromText('POINT(139.638657 35.665501)'));
-insert into shops (name, location)
-           values ('tetsuji',
+INSERT INTO shops (name, location)
+           VALUES ('tetsuji',
                    GeomFromText('POINT(139.76857 35.680912)'));
-insert into shops (name, location)
-           values ('gazuma-ya',
+INSERT INTO shops (name, location)
+           VALUES ('gazuma-ya',
                    GeomFromText('POINT(139.647598 35.700817)'));
-insert into shops (name, location)
-           values ('honma-mon',
+INSERT INTO shops (name, location)
+           VALUES ('honma-mon',
                    GeomFromText('POINT(139.652573 35.722736)'));
-insert into shops (name, location)
-           values ('naniwa-ya',
+INSERT INTO shops (name, location)
+           VALUES ('naniwa-ya',
                    GeomFromText('POINT(139.796234 35.730061)'));
-insert into shops (name, location)
-           values ('kuro-dai',
+INSERT INTO shops (name, location)
+           VALUES ('kuro-dai',
                    GeomFromText('POINT(139.704834 35.650345)'));
-insert into shops (name, location)
-           values ('daruma',
+INSERT INTO shops (name, location)
+           VALUES ('daruma',
                    GeomFromText('POINT(139.770599 35.681461)'));
-insert into shops (name, location)
-           values ('yanagi-ya',
+INSERT INTO shops (name, location)
+           VALUES ('yanagi-ya',
                    GeomFromText('POINT(139.783981 35.685341)'));
-insert into shops (name, location)
-           values ('sharaku',
+INSERT INTO shops (name, location)
+           VALUES ('sharaku',
                    GeomFromText('POINT(139.794846 35.716969)'));
-insert into shops (name, location)
-           values ('takane',
+INSERT INTO shops (name, location)
+           VALUES ('takane',
                    GeomFromText('POINT(139.560913 35.698601)'));
-insert into shops (name, location)
-           values ('chiyoda',
+INSERT INTO shops (name, location)
+           VALUES ('chiyoda',
                    GeomFromText('POINT(139.652817 35.642601)'));
-insert into shops (name, location)
-           values ('da-ka-po',
+INSERT INTO shops (name, location)
+           VALUES ('da-ka-po',
                    GeomFromText('POINT(139.727356 35.627346)'));
-insert into shops (name, location)
-           values ('matsushima-ya',
+INSERT INTO shops (name, location)
+           VALUES ('matsushima-ya',
                    GeomFromText('POINT(139.737381 35.640556)'));
-insert into shops (name, location)
-           values ('kazuya',
+INSERT INTO shops (name, location)
+           VALUES ('kazuya',
                    GeomFromText('POINT(139.760895 35.673508)'));
-insert into shops (name, location)
-           values ('furuya-kogane-an',
+INSERT INTO shops (name, location)
+           VALUES ('furuya-kogane-an',
                    GeomFromText('POINT(139.676071 35.680603)'));
-insert into shops (name, location)
-           values ('hachi-no-ie',
+INSERT INTO shops (name, location)
+           VALUES ('hachi-no-ie',
                    GeomFromText('POINT(139.668106 35.608021)'));
-insert into shops (name, location)
-           values ('azuki-chan',
+INSERT INTO shops (name, location)
+           VALUES ('azuki-chan',
                    GeomFromText('POINT(139.673203 35.64151)'));
-insert into shops (name, location)
-           values ('kuriko-an',
+INSERT INTO shops (name, location)
+           VALUES ('kuriko-an',
                    GeomFromText('POINT(139.796829 35.712013)'));
-insert into shops (name, location)
-           values ('yume-no-aru-machi-no-taiyaki-ya-san',
+INSERT INTO shops (name, location)
+           VALUES ('yume-no-aru-machi-no-taiyaki-ya-san',
                    GeomFromText('POINT(139.712524 35.616199)'));
-insert into shops (name, location)
-           values ('naze-ya',
+INSERT INTO shops (name, location)
+           VALUES ('naze-ya',
                    GeomFromText('POINT(139.665833 35.609039)'));
-insert into shops (name, location)
-           values ('sanoki-ya',
+INSERT INTO shops (name, location)
+           VALUES ('sanoki-ya',
                    GeomFromText('POINT(139.770721 35.66592)'));
-insert into shops (name, location)
-           values ('shigeta',
+INSERT INTO shops (name, location)
+           VALUES ('shigeta',
                    GeomFromText('POINT(139.780273 35.672626)'));
-insert into shops (name, location)
-           values ('nishimi-ya',
+INSERT INTO shops (name, location)
+           VALUES ('nishimi-ya',
                    GeomFromText('POINT(139.774628 35.671825)'));
-insert into shops (name, location)
-           values ('hiiragi',
+INSERT INTO shops (name, location)
+           VALUES ('hiiragi',
                    GeomFromText('POINT(139.711517 35.647701)'));
-select id, name, AsText(location) as location_text from shops;
-select id, name, AsText(location) as location_text from shops
-  where MBRContains(GeomFromText('LineString(139.7727 35.6684, 139.7038 35.7121)'), location)
-  order by id;
-drop table shops;
+
+SELECT id, name, AsText(location) AS location_text FROM shops;
+SELECT id, name, AsText(location) AS location_text FROM shops
+  WHERE MBRContains(GeomFromText('LineString(139.7727 35.6684, 139.7038 35.7121)'), location)
+  ORDER BY id;
+
+DROP TABLE shops;
 
 --source include/have_mroonga_deinit.inc
