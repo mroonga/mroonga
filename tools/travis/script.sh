@@ -33,7 +33,7 @@ prepare_mysql_test_dir()
 
 collect_test_suite_names()
 {
-    cd /usr/mysql-test/suite/mroonga/
+    cd /usr/mysql-test/suite/
     test_suite_names=""
     for test_suite_name in $(find mroonga -type d '!' -name '[tr]'); do
 	if [ -n "${test_suite_names}" ]; then
