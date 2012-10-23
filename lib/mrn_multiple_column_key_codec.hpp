@@ -32,6 +32,7 @@ namespace mrn {
     int encode(const uchar *key, uint key_length,
                uchar *buffer, uint *encoded_length,
                bool decode);
+    uint size();
 
   private:
     enum DataType {

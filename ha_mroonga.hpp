@@ -590,6 +590,13 @@ private:
                                          const uchar *key, uint key_length,
                                          uchar *buffer, uint *encoded_length,
                                          bool decode);
+  int storage_encode_multiple_column_key_range(KEY *key_info,
+                                               const key_range *start,
+                                               const key_range *end,
+                                               uchar *min_buffer,
+                                               uint *min_encoded_size,
+                                               uchar *max_buffer,
+                                               uint *max_encoded_size);
 
   void set_pk_bitmap();
   int create_share_for_create() const;

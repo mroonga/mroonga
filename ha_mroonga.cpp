@@ -6027,20 +6027,12 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
                                          key_min, &size_min,
                                          false);
     } else {
-      if (range_min) {
-        key_min = key_min_entity;
-        storage_encode_multiple_column_key(&key_info,
-                                           range_min->key, range_min->length,
-                                           key_min, &size_min,
-                                           false);
-      }
-      if (range_max) {
-        key_max = key_max_entity;
-        storage_encode_multiple_column_key(&key_info,
-                                           range_max->key, range_max->length,
-                                           key_max, &size_max,
-                                           false);
-      }
+      key_min = key_min_entity;
+      key_max = key_max_entity;
+      storage_encode_multiple_column_key_range(&key_info,
+                                               range_min, range_max,
+                                               key_min, &size_min,
+                                               key_max, &size_max);
     }
   } else if (mrn_is_geo_key(&key_info)) {
     mrn_change_encoding(ctx, key_info.key_part->field->charset());
@@ -6821,19 +6813,17 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
                                          key_min, &size_min,
                                          false);
     } else {
-      if (start_key) {
-        key_min = key_min_entity;
-        storage_encode_multiple_column_key(&key_info,
-                                           start_key->key, start_key->length,
-                                           key_min, &size_min,
-                                           false);
+      key_min = key_min_entity;
+      key_max = key_max_entity;
+      storage_encode_multiple_column_key_range(&key_info,
+                                               start_key, end_key,
+                                               key_min, &size_min,
+                                               key_max, &size_max);
+      if (size_min == 0) {
+        key_min = NULL;
       }
-      if (end_key) {
-        key_max = key_max_entity;
-        storage_encode_multiple_column_key(&key_info,
-                                           end_key->key, end_key->length,
-                                           key_max, &size_max,
-                                           false);
+      if (size_max == 0) {
+        key_max = NULL;
       }
     }
   } else {
@@ -9646,6 +9636,37 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
   MRN_DBUG_ENTER_METHOD();
   mrn::MultipleColumnKeyCodec codec(key_info);
   int error = codec.encode(key, key_length, buffer, encoded_length, decode);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_encode_multiple_column_key_range(KEY *key_info,
+                                                         const key_range *start,
+                                                         const key_range *end,
+                                                         uchar *min_buffer,
+                                                         uint *min_encoded_size,
+                                                         uchar *max_buffer,
+                                                         uint *max_encoded_size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  mrn::MultipleColumnKeyCodec codec(key_info);
+  uint encoded_key_size = codec.size();
+  if (start) {
+    memset(min_buffer, 0, encoded_key_size);
+    error = codec.encode(start->key, start->length,
+                         min_buffer, min_encoded_size,
+                         false);
+    // TODO: handle error?
+    *min_encoded_size = encoded_key_size;
+  }
+  if (end) {
+    memset(max_buffer, 0xff, encoded_key_size);
+    error = codec.encode(end->key, end->length,
+                         max_buffer, max_encoded_size,
+                         false);
+    // TODO: handle error?
+    *max_encoded_size = encoded_key_size;
+  }
   DBUG_RETURN(error);
 }
 

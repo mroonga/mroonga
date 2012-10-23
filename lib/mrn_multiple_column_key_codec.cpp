@@ -165,6 +165,35 @@ namespace mrn {
     DBUG_RETURN(error);
   }
 
+  uint MultipleColumnKeyCodec::size() {
+    MRN_DBUG_ENTER_METHOD();
+
+    int n_key_parts = key_info_->key_parts;
+    DBUG_PRINT("info", ("mroonga: n_key_parts=%d", n_key_parts));
+
+    uint total_size = 0;
+    for (int i = 0; i < n_key_parts; ++i) {
+      KEY_PART_INFO *key_part = &(key_info_->key_part[i]);
+      Field *field = key_part->field;
+      DBUG_PRINT("info", ("mroonga: key_part->length=%u", key_part->length));
+
+      if (field->null_bit) {
+        DBUG_PRINT("info", ("mroonga: field has null bit"));
+        ++total_size;
+      }
+
+      DataType data_type = TYPE_UNKNOWN;
+      uint data_size = 0;
+      get_key_info(key_part, &data_type, &data_size);
+      total_size += data_size;
+      if (data_type == TYPE_BYTE_BLOB) {
+        total_size += HA_KEY_BLOB_LENGTH;
+      }
+    }
+
+    DBUG_RETURN(total_size);
+  }
+
   void MultipleColumnKeyCodec::get_key_info(KEY_PART_INFO *key_part,
                                             DataType *data_type,
                                             uint *data_size) {
