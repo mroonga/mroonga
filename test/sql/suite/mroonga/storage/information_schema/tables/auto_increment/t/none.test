@@ -1,4 +1,5 @@
 # Copyright(C) 2012 Kentoku SHIBA
+# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,15 +18,17 @@
 --source include/have_mroonga.inc
 
 --disable_warnings
-drop table if exists t1;
+DROP TABLE IF EXISTS ids;
 --enable_warnings
 
-create table t1 (c1 int auto_increment, primary key(c1));
-show table status like 't1';
-drop table t1;
+CREATE TABLE ids (
+  id INT PRIMARY KEY
+);
 
-create table t1 (c1 int, primary key(c1));
-show table status like 't1';
-drop table t1;
+SELECT AUTO_INCREMENT
+       FROM INFORMATION_SCHEMA.TABLES
+       WHERE TABLE_NAME = "ids";
+
+DROP TABLE ids;
 
 --source include/have_mroonga_deinit.inc
