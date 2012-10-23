@@ -26,6 +26,7 @@ case "$MYSQL_VERSION" in
 	    curl -O ${download_base}${deb} &
 	    curl -O ${download_base}${tar_gz} &
 	    wait
+	    sudo apt-get -qq -y install libaio1
 	    sudo dpkg -i $deb
 	    tar xzf $tar_gz
 	    ln -s mysql-${version} mysql
