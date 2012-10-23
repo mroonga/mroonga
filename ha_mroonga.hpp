@@ -40,8 +40,7 @@ extern "C" {
 #  define MRN_HANDLER_CLONE_NEED_NAME 1
 #endif
 
-#if (MYSQL_VERSION_ID >= 50603) || \
-    (MYSQL_VERSION_ID >= 50514)
+#if (MYSQL_VERSION_ID >= 50514 && MYSQL_VERSION_ID < 50600)
 #  define MRN_HANDLER_HAVE_FINAL_ADD_INDEX 1
 #endif
 
