@@ -3,6 +3,10 @@
 set -x
 set -e
 
+curl https://raw.github.com/groonga/groonga/master/data/travis/setup.sh | sh
+curl https://raw.github.com/clear-code/cutter/master/data/travis/setup.sh | sh
+sudo apt-get -y install groonga-tokenizer-mecab
+
 mkdir -p vendor
 cd vendor
 if [ "$MYSQL_VERSION" = "system" ]; then
