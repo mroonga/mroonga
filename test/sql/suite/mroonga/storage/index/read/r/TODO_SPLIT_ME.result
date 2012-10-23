@@ -24,6 +24,7 @@ c2
 select c2, c3 from t1 where c3 between 10 and 16;
 c2	c3
 6	12
+8	16
 drop table t1;
 create table t1 (c1 varchar(10), c2 varchar(10), c3 varchar(10), primary key(c1), key idx1(c2), key idx2(c3, c2));
 insert into t1 values('1','2','4');
@@ -49,5 +50,13 @@ c2
 16
 select c2, c3 from t1 where c3 between '10' and '16';
 c2	c3
+50	100
+52	104
+54	108
+56	112
+58	116
 6	12
+60	120
+62	124
+64	128
 drop table t1;
