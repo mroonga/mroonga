@@ -23,7 +23,7 @@ prepare_mysql_test_dir()
     if [ -d /usr/lib/mysql-testsuite/ ]; then
 	sudo cp -a /usr/lib/mysql-testsuite/ /usr/mysql-test/
     elif [ -d /opt/mysql/ ]; then
-	sudo ln -s /opt/mysql/server-*/mysql-test/ /usr/mysql-test/
+	sudo ln -s /opt/mysql/server-*/mysql-test /usr/mysql-test
     else
 	sudo cp -a ${MYSQL_SOURCE_DIR}/mysql-test/ /usr/mysql-test/
     fi
