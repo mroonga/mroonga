@@ -47,6 +47,9 @@ namespace mrn {
 
     KEY *key_info_;
 
+    void get_key_info(KEY_PART_INFO *key_part,
+                      DataType *data_type, uint *data_size);
+
     void encode_float(volatile float value, uint data_size,
                       uchar *buffer, bool decode);
     void encode_double(volatile double value, uint data_size,

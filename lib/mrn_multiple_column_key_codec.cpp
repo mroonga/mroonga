@@ -63,9 +63,9 @@ namespace mrn {
     DBUG_PRINT("info", ("mroonga: n_key_parts=%d", n_key_parts));
     *encoded_length = 0;
     for (int i = 0; i < n_key_parts && current_key < key_end; i++) {
-      KEY_PART_INFO key_part = key_info_->key_part[i];
-      Field *field = key_part.field;
-      DBUG_PRINT("info", ("mroonga: key_part.length=%u", key_part.length));
+      KEY_PART_INFO *key_part = &(key_info_->key_part[i]);
+      Field *field = key_part->field;
+      DBUG_PRINT("info", ("mroonga: key_part->length=%u", key_part->length));
 
       if (field->null_bit) {
         DBUG_PRINT("info", ("mroonga: field has null bit"));
@@ -77,157 +77,7 @@ namespace mrn {
 
       DataType data_type = TYPE_UNKNOWN;
       uint data_size = 0;
-      long long int long_long_value = 0;
-      switch (field->real_type()) {
-      case MYSQL_TYPE_DECIMAL:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DECIMAL"));
-        data_type = TYPE_BYTE_SEQUENCE;
-        data_size = key_part.length;
-        break;
-      case MYSQL_TYPE_TINY:
-      case MYSQL_TYPE_YEAR:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TINY"));
-        data_type = TYPE_NUMBER;
-        data_size = 1;
-        break;
-      case MYSQL_TYPE_SHORT:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_SHORT"));
-        data_type = TYPE_NUMBER;
-        data_size = 2;
-        break;
-      case MYSQL_TYPE_LONG:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_LONG"));
-        data_type = TYPE_NUMBER;
-        data_size = 4;
-        break;
-      case MYSQL_TYPE_FLOAT:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_FLOAT"));
-        data_type = TYPE_FLOAT;
-        data_size = 4;
-        {
-          float value;
-          float4get(value, current_key);
-          encode_float(value, data_size, current_buffer, decode);
-        }
-        break;
-      case MYSQL_TYPE_DOUBLE:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DOUBLE"));
-        data_type = TYPE_DOUBLE;
-        data_size = 8;
-        {
-          double value;
-          float8get(value, current_key);
-          encode_double(value, data_size, current_buffer, decode);
-        }
-        break;
-      case MYSQL_TYPE_NULL:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_NULL"));
-        data_type = TYPE_NUMBER;
-        data_size = 1;
-        break;
-      case MYSQL_TYPE_TIMESTAMP:
-      case MYSQL_TYPE_DATE:
-      case MYSQL_TYPE_DATETIME:
-      case MYSQL_TYPE_NEWDATE:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME"));
-        data_type = TYPE_BYTE_REVERSE;
-        data_size = key_part.length;
-        encode_reverse(current_key, data_size, current_buffer);
-        break;
-      case MYSQL_TYPE_LONGLONG:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_LONGLONG"));
-        data_type = TYPE_NUMBER;
-        data_size = 8;
-        break;
-      case MYSQL_TYPE_INT24:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_INT24"));
-        data_type = TYPE_NUMBER;
-        data_size = 3;
-        break;
-      case MYSQL_TYPE_TIME:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME"));
-        data_type = TYPE_LONG_LONG_NUMBER;
-        long_long_value = (long long int)sint3korr(current_key);
-        data_size = 3;
-        break;
-      case MYSQL_TYPE_VARCHAR:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_VARCHAR"));
-        data_type = TYPE_BYTE_BLOB;
-        data_size = key_part.length;
-        break;
-      case MYSQL_TYPE_BIT:
-        // TODO
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_BIT"));
-        data_type = TYPE_NUMBER;
-        data_size = 1;
-        break;
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
-      case MYSQL_TYPE_TIMESTAMP2:
-        // TODO
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIMESTAMP2"));
-        data_type = TYPE_LONG_LONG_NUMBER;
-        long_long_value = (long long int)sint8korr(current_key);
-        data_size = 8;
-        break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
-      case MYSQL_TYPE_DATETIME2:
-        // TODO
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME2"));
-        data_type = TYPE_LONG_LONG_NUMBER;
-        long_long_value = (long long int)sint8korr(current_key);
-        data_size = 8;
-        break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
-      case MYSQL_TYPE_TIME2:
-        // TODO
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME2"));
-        data_type = TYPE_LONG_LONG_NUMBER;
-        long_long_value = (long long int)sint8korr(current_key);
-        data_size = 8;
-        break;
-#endif
-      case MYSQL_TYPE_NEWDECIMAL:
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_NEWDECIMAL"));
-        data_type = TYPE_BYTE_SEQUENCE;
-        data_size = key_part.length;
-        break;
-      case MYSQL_TYPE_ENUM:
-        // TODO
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_ENUM"));
-        data_type = TYPE_NUMBER;
-        data_size = 1;
-        break;
-      case MYSQL_TYPE_SET:
-        // TODO
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_SET"));
-        data_type = TYPE_NUMBER;
-        data_size = 1;
-        break;
-      case MYSQL_TYPE_TINY_BLOB:
-      case MYSQL_TYPE_MEDIUM_BLOB:
-      case MYSQL_TYPE_LONG_BLOB:
-      case MYSQL_TYPE_BLOB:
-        // TODO
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_BLOB"));
-        data_type = TYPE_BYTE_BLOB;
-        data_size = key_part.length;
-        break;
-      case MYSQL_TYPE_VAR_STRING:
-      case MYSQL_TYPE_STRING:
-        // TODO
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_STRING"));
-        data_type = TYPE_BYTE_SEQUENCE;
-        data_size = key_part.length;
-        break;
-      case MYSQL_TYPE_GEOMETRY:
-        // TODO
-        DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_GEOMETRY"));
-        data_type = TYPE_BYTE_SEQUENCE;
-        data_size = key_part.length;
-        break;
-      }
+      get_key_info(key_part, &data_type, &data_size);
 
       switch (data_type) {
       case TYPE_UNKNOWN:
@@ -236,12 +86,23 @@ namespace mrn {
         error = HA_ERR_UNSUPPORTED;
         break;
       case TYPE_LONG_LONG_NUMBER:
-        if (decode)
-          *((uint8 *)(&long_long_value)) ^= 0x80;
-        mrn_byte_order_host_to_network(current_buffer, &long_long_value,
-                                       data_size);
-        if (!decode)
-          *((uint8 *)(current_buffer)) ^= 0x80;
+        {
+          long long int long_long_value = 0;
+          switch (data_size) {
+          case 3:
+            long_long_value = (long long int)sint3korr(current_key);
+            break;
+          case 8:
+            long_long_value = (long long int)sint8korr(current_key);
+            break;
+          }
+          if (decode)
+            *((uint8 *)(&long_long_value)) ^= 0x80;
+          mrn_byte_order_host_to_network(current_buffer, &long_long_value,
+                                         data_size);
+          if (!decode)
+            *((uint8 *)(current_buffer)) ^= 0x80;
+        }
         break;
       case TYPE_NUMBER:
         if (decode)
@@ -261,13 +122,24 @@ namespace mrn {
         }
         break;
       case TYPE_FLOAT:
+        {
+          float value;
+          float4get(value, current_key);
+          encode_float(value, data_size, current_buffer, decode);
+        }
         break;
       case TYPE_DOUBLE:
+        {
+          double value;
+          float8get(value, current_key);
+          encode_double(value, data_size, current_buffer, decode);
+        }
         break;
       case TYPE_BYTE_SEQUENCE:
         memcpy(current_buffer, current_key, data_size);
         break;
       case TYPE_BYTE_REVERSE:
+        encode_reverse(current_key, data_size, current_buffer);
         break;
       case TYPE_BYTE_BLOB:
         if (decode) {
@@ -291,6 +163,153 @@ namespace mrn {
     }
 
     DBUG_RETURN(error);
+  }
+
+  void MultipleColumnKeyCodec::get_key_info(KEY_PART_INFO *key_part,
+                                            DataType *data_type,
+                                            uint *data_size) {
+    MRN_DBUG_ENTER_METHOD();
+
+    *data_type = TYPE_UNKNOWN;
+    *data_size = 0;
+
+    Field *field = key_part->field;
+    switch (field->real_type()) {
+    case MYSQL_TYPE_DECIMAL:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DECIMAL"));
+      *data_type = TYPE_BYTE_SEQUENCE;
+      *data_size = key_part->length;
+      break;
+    case MYSQL_TYPE_TINY:
+    case MYSQL_TYPE_YEAR:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TINY"));
+      *data_type = TYPE_NUMBER;
+      *data_size = 1;
+      break;
+    case MYSQL_TYPE_SHORT:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_SHORT"));
+      *data_type = TYPE_NUMBER;
+      *data_size = 2;
+      break;
+    case MYSQL_TYPE_LONG:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_LONG"));
+      *data_type = TYPE_NUMBER;
+      *data_size = 4;
+      break;
+    case MYSQL_TYPE_FLOAT:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_FLOAT"));
+      *data_type = TYPE_FLOAT;
+      *data_size = 4;
+      break;
+    case MYSQL_TYPE_DOUBLE:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DOUBLE"));
+      *data_type = TYPE_DOUBLE;
+      *data_size = 8;
+      break;
+    case MYSQL_TYPE_NULL:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_NULL"));
+      *data_type = TYPE_NUMBER;
+      *data_size = 1;
+      break;
+    case MYSQL_TYPE_TIMESTAMP:
+    case MYSQL_TYPE_DATE:
+    case MYSQL_TYPE_DATETIME:
+    case MYSQL_TYPE_NEWDATE:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME"));
+      *data_type = TYPE_BYTE_REVERSE;
+      *data_size = key_part->length;
+      break;
+    case MYSQL_TYPE_LONGLONG:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_LONGLONG"));
+      *data_type = TYPE_NUMBER;
+      *data_size = 8;
+      break;
+    case MYSQL_TYPE_INT24:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_INT24"));
+      *data_type = TYPE_NUMBER;
+      *data_size = 3;
+      break;
+    case MYSQL_TYPE_TIME:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME"));
+      *data_type = TYPE_LONG_LONG_NUMBER;
+      *data_size = 3;
+      break;
+    case MYSQL_TYPE_VARCHAR:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_VARCHAR"));
+      *data_type = TYPE_BYTE_BLOB;
+      *data_size = key_part->length;
+      break;
+    case MYSQL_TYPE_BIT:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_BIT"));
+      *data_type = TYPE_NUMBER;
+      *data_size = 1;
+      break;
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+    case MYSQL_TYPE_TIMESTAMP2:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIMESTAMP2"));
+      *data_type = TYPE_LONG_LONG_NUMBER;
+      *data_size = 8;
+      break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+    case MYSQL_TYPE_DATETIME2:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME2"));
+      *data_type = TYPE_LONG_LONG_NUMBER;
+      *data_size = 8;
+      break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+    case MYSQL_TYPE_TIME2:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME2"));
+      *data_type = TYPE_LONG_LONG_NUMBER;
+      *data_size = 8;
+      break;
+#endif
+    case MYSQL_TYPE_NEWDECIMAL:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_NEWDECIMAL"));
+      *data_type = TYPE_BYTE_SEQUENCE;
+      *data_size = key_part->length;
+      break;
+    case MYSQL_TYPE_ENUM:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_ENUM"));
+      *data_type = TYPE_NUMBER;
+      *data_size = 1;
+      break;
+    case MYSQL_TYPE_SET:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_SET"));
+      *data_type = TYPE_NUMBER;
+      *data_size = 1;
+      break;
+    case MYSQL_TYPE_TINY_BLOB:
+    case MYSQL_TYPE_MEDIUM_BLOB:
+    case MYSQL_TYPE_LONG_BLOB:
+    case MYSQL_TYPE_BLOB:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_BLOB"));
+      *data_type = TYPE_BYTE_BLOB;
+      *data_size = key_part->length;
+      break;
+    case MYSQL_TYPE_VAR_STRING:
+    case MYSQL_TYPE_STRING:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_STRING"));
+      *data_type = TYPE_BYTE_SEQUENCE;
+      *data_size = key_part->length;
+      break;
+    case MYSQL_TYPE_GEOMETRY:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_GEOMETRY"));
+      *data_type = TYPE_BYTE_SEQUENCE;
+      *data_size = key_part->length;
+      break;
+    }
+    DBUG_VOID_RETURN;
   }
 
   void MultipleColumnKeyCodec::encode_float(volatile float value, uint data_size,
