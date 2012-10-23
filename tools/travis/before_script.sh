@@ -6,6 +6,8 @@ set -e
 touch NEWS # For old automake
 ./autogen.sh
 
-PATH=$PWD/vendor/mysql/scripts:$PATH
+if [ -d /opt/mysql/ ]; then
+    PATH=$(echo /opt/mysql/server-*/bin/):$PATH
+fi
 ./configure \
     --with-mysql-source=$PWD/vendor/mysql
