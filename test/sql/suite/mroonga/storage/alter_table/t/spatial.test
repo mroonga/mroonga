@@ -140,7 +140,8 @@ INSERT INTO shops (name, location)
 ALTER TABLE shops ADD SPATIAL KEY location_index (location);
 
 SELECT id, name, AsText(location) AS location_text FROM shops
-  WHERE MBRContains(GeomFromText('LineString(139.7727 35.6684, 139.7038 35.7121)'), location);
+  WHERE MBRContains(GeomFromText('LineString(139.7727 35.6684, 139.7038 35.7121)'), location)
+  ORDER BY id;
 
 SHOW CREATE TABLE shops;
 
