@@ -113,7 +113,7 @@ extern pthread_mutex_t LOCK_open;
 #endif
 
 static const char *INDEX_COLUMN_NAME = "index";
-static const char *mrn_plugin_author = "The mroonga project";
+static const char *MRN_PLUGIN_AUTHOR = "The mroonga project";
 static const long long int TM_YEAR_BASE = 1900;
 static const long long int UNIX_EPOCH_TIME_YEAR = 1970;
 
@@ -1225,7 +1225,7 @@ struct st_mysql_plugin i_s_mrn_stats =
   MYSQL_INFORMATION_SCHEMA_PLUGIN,
   &i_s_info,
   MRN_PLUGIN_NAME_STRING "_stats",
-  mrn_plugin_author,
+  MRN_PLUGIN_AUTHOR,
   "Statistics for " MRN_PLUGIN_NAME_STRING,
   PLUGIN_LICENSE_GPL,
   i_s_mrn_stats_init,
@@ -1803,7 +1803,7 @@ mrn_declare_plugin(MRN_PLUGIN_NAME)
   MYSQL_STORAGE_ENGINE_PLUGIN,
   &storage_engine_structure,
   MRN_PLUGIN_NAME_STRING,
-  mrn_plugin_author,
+  MRN_PLUGIN_AUTHOR,
   "CJK-ready fulltext search, column store",
   PLUGIN_LICENSE_GPL,
   mrn_init,
