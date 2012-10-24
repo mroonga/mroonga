@@ -112,7 +112,7 @@ extern pthread_mutex_t LOCK_open;
 #  endif
 #endif
 
-static const char *index_column_name = "index";
+static const char *INDEX_COLUMN_NAME = "index";
 static const char *mrn_plugin_author = "The mroonga project";
 static const long long int TM_YEAR_BASE = 1900;
 static const long long int UNIX_EPOCH_TIME_YEAR = 1970;
@@ -2706,8 +2706,8 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   grn_obj_unlink(ctx, tokenizer);
 
   grn_obj *index_column = grn_column_create(ctx, index_table,
-                                            index_column_name,
-                                            strlen(index_column_name),
+                                            INDEX_COLUMN_NAME,
+                                            strlen(INDEX_COLUMN_NAME),
                                             NULL,
                                             index_column_flags,
                                             grn_table);
@@ -2765,8 +2765,8 @@ int ha_mroonga::wrapper_create_index_geo(const char *grn_table_name,
   index_tables[i] = index_table;
 
   grn_obj *index_column = grn_column_create(ctx, index_table,
-                                            index_column_name,
-                                            strlen(index_column_name),
+                                            INDEX_COLUMN_NAME,
+                                            strlen(INDEX_COLUMN_NAME),
                                             NULL,
                                             index_column_flags,
                                             grn_table);
@@ -3138,8 +3138,8 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
 
   index_column = grn_column_create(ctx,
                                   index_table,
-                                  index_column_name,
-                                  strlen(index_column_name),
+                                  INDEX_COLUMN_NAME,
+                                  strlen(INDEX_COLUMN_NAME),
                                   NULL,
                                   index_column_flags,
                                   grn_table);
@@ -3548,8 +3548,8 @@ int ha_mroonga::wrapper_open_indexes(const char *name, bool ignore_open_error)
     }
 
     grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
-                                          index_column_name,
-                                          strlen(index_column_name));
+                                          INDEX_COLUMN_NAME,
+                                          strlen(INDEX_COLUMN_NAME));
     if (!grn_index_columns[i]) {
       /* just for backward compatibility before 1.0. */
       Field *field = key_info.key_part[0].field;
@@ -3788,8 +3788,8 @@ int ha_mroonga::storage_open_indexes(const char *name)
 
     grn_index_columns[i] = grn_obj_column(ctx,
                                           grn_index_tables[i],
-                                          index_column_name,
-                                          strlen(index_column_name));
+                                          INDEX_COLUMN_NAME,
+                                          strlen(INDEX_COLUMN_NAME));
     if (!grn_index_columns[i]) {
       /* just for backward compatibility before 1.0. */
       Field *field = key_info.key_part[0].field;
@@ -11304,7 +11304,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
                                          table_share->key_info[i].name);
     char index_column_full_name[MRN_MAX_PATH_SIZE];
     snprintf(index_column_full_name, MRN_MAX_PATH_SIZE,
-             "%s.%s", index_table_name.c_str(), index_column_name);
+             "%s.%s", index_table_name.c_str(), INDEX_COLUMN_NAME);
     remove_grn_obj_force(index_column_full_name);
     remove_grn_obj_force(index_table_name.c_str());
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
@@ -11631,8 +11631,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       }
       index_columns[k + n_keys] = grn_obj_column(ctx,
                                                  index_tables[k + n_keys],
-                                                 index_column_name,
-                                                 strlen(index_column_name));
+                                                 INDEX_COLUMN_NAME,
+                                                 strlen(INDEX_COLUMN_NAME));
     }
     error = wrapper_fill_indexes(thd, key_info, &index_columns[n_keys],
                                  num_of_keys);
