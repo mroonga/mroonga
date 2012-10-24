@@ -274,7 +274,7 @@ To install the released version, download the tarball from `GitHub's download pa
 To install the latest source code, clone the code from `GitHub <https://github.com/mroonga/mroonga/>`_ and invoke `./autogen.sh` (GNU Autotools are required). This way is aimed at skilled developpers. If not, we recommend using the tarball. ::
 
  % git clone https://github.com/mroonga/mroonga.git
- % mroonga
+ % cd mroonga
  % ./autogen.sh
 
 Requirements
