@@ -594,6 +594,12 @@ static void mrn_logger_func(int level, const char *time, const char *title,
                             const char *msg, const char *location,
                             void *func_arg)
 {
+  // TODO: REMOVE ME if groonga supports query logger.
+  // level == GRN_LOG_NONE means the log is query log.
+  if (level == GRN_LOG_NONE) {
+    return;
+  }
+
   const char slev[] = " EACewnid-";
   if (mrn_log_file_opened) {
     pthread_mutex_lock(&mrn_log_mutex);
