@@ -8,12 +8,24 @@ News
 Release 2.08 - 2012/10/29
 -------------------------
 
+.. caution::
+
+   This release has a backward incompatible change against multiple
+   column index. If you have any tables that uses
+   any multiple comlumn indexes against VARCHAR or CHAR,
+   please recreate those indexes by ``ALTER TABLE DISABLE KEYS``
+   and ``ALTER TABLE ENBALE KEYS``::
+
+     mysql> ALTER TABLE table_name DISABLE KEYS;
+     mysql> ALTER TABLE table_name ENABLE KEYS;
+
 Improvements
 ^^^^^^^^^^^^
 
 * [storage mode] Supported ``INFORMATION_SCHEMA.TABLES.DATA_LENGTH``.
   [Suggested by @9m]
 * Supported utf8mb4. [groonga-dev,01049] [Reported by warp kawada]
+* Supported Ubuntu 12.10 (Quantal Quetzal)
 
 Fixes
 ^^^^^
@@ -25,7 +37,8 @@ Fixes
 * [rpm] Fixed missing ``DROP FUNCTION mroonga_snippet``.
   [Reported by @tokuhy]
 * Fixed range search by multi column index by int.
-
+* [doc] Fixed wrong command line operation during build process.
+  [groonga-dev,01061] [Reported by Kazuhiro Isobe]
 
 Thanks
 ^^^^^^
@@ -35,6 +48,7 @@ Thanks
 * jd fonc
 * @taro252
 * @tokuhy
+* Kazuhiro Isobe
 
 .. _release-2-07:
 
