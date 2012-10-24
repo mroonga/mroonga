@@ -1508,7 +1508,7 @@ static long long int mrn_tm_to_grn_time(struct tm *time, int usec)
   long long int grn_time;
   long long int sec = mktime(time);
   bool failed = (sec == -1);
-  bool overflowed = (time.tm_year >= 0 && sec < 0);
+  bool overflowed = (time->tm_year >= 0 && sec < 0);
   if (failed || overflowed) {
     grn_time = 0;
   } else {
