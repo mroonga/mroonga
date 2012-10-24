@@ -114,6 +114,7 @@ extern pthread_mutex_t LOCK_open;
 
 static const char *index_column_name = "index";
 static const char *mrn_plugin_author = "The mroonga project";
+static const long long int TM_YEAR_BASE = 1900;
 
 #ifdef __cplusplus
 extern "C" {
@@ -1527,7 +1528,7 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
     {
       struct tm date;
       memset(&date, 0, sizeof(struct tm));
-      date.tm_year = mysql_time->year - 1900;
+      date.tm_year = mysql_time->year - TM_YEAR_BASE;
       date.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
       date.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
       grn_time = mrn_tm_to_grn_time(&date, usec);
@@ -1537,7 +1538,7 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
     {
       struct tm datetime;
       memset(&datetime, 0, sizeof(struct tm));
-      datetime.tm_year = mysql_time->year - 1900;
+      datetime.tm_year = mysql_time->year - TM_YEAR_BASE;
       datetime.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
       datetime.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
       datetime.tm_hour = mysql_time->hour;
@@ -1578,7 +1579,7 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
       struct tm date;
       time_t sec_t = sec;
       gmtime_r(&sec_t, &date);
-      mysql_time->year = date.tm_year + 1900;
+      mysql_time->year = date.tm_year + TM_YEAR_BASE;
       mysql_time->month = date.tm_mon + 1;
       mysql_time->day = date.tm_mday;
     }
@@ -1588,7 +1589,7 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
       struct tm date;
       time_t sec_t = sec;
       gmtime_r(&sec_t, &date);
-      mysql_time->year = date.tm_year + 1900;
+      mysql_time->year = date.tm_year + TM_YEAR_BASE;
       mysql_time->month = date.tm_mon + 1;
       mysql_time->day = date.tm_mday;
       mysql_time->hour = date.tm_hour;
@@ -8589,7 +8590,7 @@ int ha_mroonga::generic_store_bulk_date(Field *field, grn_obj *buf)
   long long int date_value = field->val_int();
   struct tm date;
   memset(&date, 0, sizeof(struct tm));
-  date.tm_year = date_value / 10000 % 10000 - 1900;
+  date.tm_year = date_value / 10000 % 10000 - TM_YEAR_BASE;
   date.tm_mon = date_value / 100 % 100 - 1;
   date.tm_mday = date_value % 100;
   int usec = 0;
@@ -8640,7 +8641,7 @@ int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
   DBUG_PRINT("info", ("mroonga: year=%d", year));
   struct tm date;
   memset(&date, 0, sizeof(struct tm));
-  date.tm_year = year - 1900;
+  date.tm_year = year - TM_YEAR_BASE;
   date.tm_mon = 0;
   date.tm_mday = 1;
 
@@ -8949,7 +8950,7 @@ void ha_mroonga::storage_store_field_date(Field *field,
   time_t sec_t = sec;
   gmtime_r(&sec_t, &date);
   long long int date_in_mysql =
-    (date.tm_year + 1900) * 10000 +
+    (date.tm_year + TM_YEAR_BASE) * 10000 +
     (date.tm_mon + 1) * 100 +
     date.tm_mday;
   field->store(date_in_mysql);
@@ -9413,7 +9414,7 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
                             (unsigned long long int)part1 * LL(1000000));
     struct tm date;
     memset(&date, 0, sizeof(struct tm));
-    date.tm_year = part1 / 10000 - 1900;
+    date.tm_year = part1 / 10000 - TM_YEAR_BASE;
     date.tm_mon = part1 / 100 % 100 - 1;
     date.tm_mday = part1 % 100;
     date.tm_hour = part2 / 10000;
@@ -9601,7 +9602,7 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       uint32 encoded_date = uint3korr(ptr);
       struct tm date;
       memset(&date, 0, sizeof(struct tm));
-      date.tm_year = encoded_date / (16 * 32) - 1900;
+      date.tm_year = encoded_date / (16 * 32) - TM_YEAR_BASE;
       date.tm_mon = encoded_date / 32 % 16 - 1;
       date.tm_mday = encoded_date % 32;
       int usec = 0;
