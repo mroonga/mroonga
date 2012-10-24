@@ -107,7 +107,6 @@ update-document:
 
 update-files:
 	cd $(srcdir)/doc && $(MAKE) update-files
-	cd $(srcdir)/test/sql && $(MAKE) update-files
 
 update-version:
 	@if test -z "$(NEW_VERSION_MAJOR)"; then	\
