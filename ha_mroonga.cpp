@@ -115,6 +115,7 @@ extern pthread_mutex_t LOCK_open;
 static const char *index_column_name = "index";
 static const char *mrn_plugin_author = "The mroonga project";
 static const long long int TM_YEAR_BASE = 1900;
+static const long long int UNIX_EPOCH_TIME_YEAR = 1970;
 
 #ifdef __cplusplus
 extern "C" {
@@ -1509,7 +1510,8 @@ static long long int mrn_tm_to_grn_time(struct tm *time, int usec)
   long long int grn_time;
   long long int sec = mktime(time);
   bool failed = (sec == -1);
-  bool overflowed = (time->tm_year >= 0 && sec < 0);
+  bool overflowed = (time->tm_year >= (UNIX_EPOCH_TIME_YEAR - TM_YEAR_BASE) &&
+                     sec < 0);
   if (failed || overflowed) {
     grn_time = 0;
   } else {
