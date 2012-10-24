@@ -1507,7 +1507,9 @@ static long long int mrn_tm_to_grn_time(struct tm *time, int usec)
   MRN_DBUG_ENTER_FUNCTION();
   long long int grn_time;
   long long int sec = mktime(time);
-  if (sec == -1) {
+  bool failed = (sec == -1);
+  bool overflowed = (time.tm_year >= 0 && sec < 0);
+  if (failed || overflowed) {
     grn_time = 0;
   } else {
     grn_time = GRN_TIME_PACK(sec + mrn_utc_diff_in_seconds, usec);
