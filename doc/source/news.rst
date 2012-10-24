@@ -3,6 +3,39 @@
 News
 ====
 
+.. _release-2-08:
+
+Release 2.08 - 2012/10/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage mode] Supported ``INFORMATION_SCHEMA.TABLES.DATA_LENGTH``.
+  [Suggested by @9m]
+* Supported utf8mb4. [groonga-dev,01049] [Reported by warp kawada]
+
+Fixes
+^^^^^
+
+* [storage mode] Fixed unique judge problem of multiple column unique index
+  with date column. [groonga-dev,01041] [#1495] [Reported by jd fonc]
+* Fixed a bug that ``WHERE index < XXX ORDER BY DESC`` doesn't sort by descending.
+  [Reported by @taro252]
+* [rpm] Fixed missing ``DROP FUNCTION mroonga_snippet``.
+  [Reported by @tokuhy]
+* Fixed range search by multi column index by int.
+
+
+Thanks
+^^^^^^
+
+* @9m
+* warp kawada
+* jd fonc
+* @taro252
+* @tokuhy
+
 .. _release-2-07:
 
 Release 2.07 - 2012/09/29
