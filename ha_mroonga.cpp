@@ -1507,13 +1507,9 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 static long long int mrn_tm_to_grn_time(struct tm *time, int usec)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  bool after_epoch_time =
-    (time->tm_year >= (UNIX_EPOCH_TIME_YEAR - TM_YEAR_BASE));
   long long int grn_time;
   long long int sec = mktime(time);
-  bool failed = (sec == -1);
-  bool overflowed = (after_epoch_time && sec < 0);
-  if (failed || overflowed) {
+  if (sec == -1) {
     grn_time = 0;
   } else {
     grn_time = GRN_TIME_PACK(sec + mrn_utc_diff_in_seconds, usec);
