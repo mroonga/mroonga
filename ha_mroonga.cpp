@@ -1577,6 +1577,7 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
     {
       struct tm date;
       time_t sec_t = sec;
+      // TODO: Add error check
       gmtime_r(&sec_t, &date);
       mysql_time->year = date.tm_year + TM_YEAR_BASE;
       mysql_time->month = date.tm_mon + 1;
@@ -1587,6 +1588,7 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
     {
       struct tm date;
       time_t sec_t = sec;
+      // TODO: Add error check
       gmtime_r(&sec_t, &date);
       mysql_time->year = date.tm_year + TM_YEAR_BASE;
       mysql_time->month = date.tm_mon + 1;
