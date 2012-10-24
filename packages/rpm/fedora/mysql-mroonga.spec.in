@@ -1,4 +1,4 @@
-%define mysql_version 5.5.27
+%define mysql_version 5.5.28
 %define mysql_release 1%{?dist}
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/17/SRPMS
@@ -123,6 +123,7 @@ fi
 - new upstream release.
 - add missing "DROP FUNCTION mroonga_snippet".
   Reported by @tokuhy. Thanks!!!
+- use MySQL 5.5.28.
 
 * Sat Sep 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.07-0
 - new upstream release.
