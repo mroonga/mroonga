@@ -26,6 +26,7 @@ Improvements
   [Suggested by @9m]
 * Supported utf8mb4. [groonga-dev,01049] [Reported by warp kawada]
 * Supported Ubuntu 12.10 (Quantal Quetzal)
+* [rpm][fedora] Supported MySQL 5.5.28.
 
 Fixes
 ^^^^^
