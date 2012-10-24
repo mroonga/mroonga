@@ -1505,8 +1505,13 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 static long long int mrn_tm_to_grn_time(struct tm *time, int usec)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  long long int sec = mktime(time) + mrn_utc_diff_in_seconds;
-  long long int grn_time = GRN_TIME_PACK(sec, usec);
+  long long int grn_time;
+  long long int sec = mktime(time);
+  if (sec == -1) {
+    grn_time = 0;
+  } else {
+    grn_time = GRN_TIME_PACK(sec + mrn_utc_diff_in_seconds, usec);
+  }
   DBUG_RETURN(grn_time);
 }
 
