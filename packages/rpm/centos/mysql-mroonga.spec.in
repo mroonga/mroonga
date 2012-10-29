@@ -3,11 +3,11 @@
 %if %{use_system_mysql}
 %define mysql_version_default 5.1.61
 %define mysql_release_default 1
-%define mysql_dist_default    el6_2.1
-%define mysql_download_base_url_default http://vault.centos.org/6.2/updates/Source/SPackages
+%define mysql_dist_default    el6
+%define mysql_download_base_url_default http://vault.centos.org/6.3/os/Source/SPackages
 %define mysql_spec_file_default mysql.spec
 %else
-%define mysql_version_default 5.5.27
+%define mysql_version_default 5.5.28
 %define mysql_release_default 1
 %define mysql_dist_default    rhel5
 %define mysql_download_base_url_default http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5
@@ -173,6 +173,11 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Nov 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.09-0
+- new upstream release.
+- use MySQL 5.5.28 on CentOS 5.
+- use MySQL 5.1.61 on CentOS 6.
+
 * Mon Oct 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.08-0
 - new upstream release.
 - add missing "DROP FUNCTION mroonga_snippet".
