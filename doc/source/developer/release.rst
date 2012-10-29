@@ -32,7 +32,18 @@ Release procedure (XXX not yet translated)
 
  $ make dist
 
-そして、作成された ``tar.gz`` ファイルを https://github.com/mroonga/mroonga/downloads よりアップロードします。
+.. note::
+
+   以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッケージ作成に必要なソフトウェアをインストールします。::
+
+    $ sudo gem install github_api
+
+作成された ``tar.gz`` ファイルのアップロードを行うには以下のコマンドを実行します。 ::
+
+ $ make upload-to-github
+
+これで、 https://github.com/mroonga/mroonga/downloads から ``tar.gz`` のダウンロードが行えるようになります。
+
 
 パッケージの作成
 ----------------
@@ -200,6 +211,16 @@ Red Hat 系
      Hiroki Minetaさん
      @kodakaさん
 
+Twitterでリリースアナウンスをする
+-------------------------------
+
+mroongaブログのリリースエントリには「リンクをあなたのフォロワーに共有する」ためのツイートボタンがあるので、そのボタンを使ってリリースアナウンスします。(画面下部に配置されている)
+
+このボタンを経由する場合、ツイート内容に自動的にリリースタイトル(「mroonga 2.08リリース」など)とmroongaブログのリリースエントリのURLが挿入されます。
+
+この作業はmroongaブログの英語版、日本語版それぞれで行います。
+あらかじめgroongaアカウントでログインしておくとアナウンスを円滑に行うことができます。
+
 freecode.comへリリース情報を登録
 --------------------------------
 
@@ -213,6 +234,9 @@ freecode.comのプロジェクトページは以下の通りです。
 新規リリース情報を登録します。
 
   https://freecode.com/projects/mroonga/releases/new
+
+.. note::
+   投稿した内容に対するレビューが運営側で実施されるので、反映されるまでしばらく時間がかかります。
 
 リリース後にやること
 ---------------------
