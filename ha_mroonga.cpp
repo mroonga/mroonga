@@ -289,7 +289,7 @@ static int mrn_change_encoding(grn_ctx *ctx, const CHARSET_INFO *charset)
     GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
     DBUG_RETURN(0);
   }
-  if (charset->cset == mrn_charset_utf8mb4->cset)
+  if (mrn_charset_utf8mb4 && charset->cset == mrn_charset_utf8mb4->cset)
   {
     GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
     DBUG_RETURN(0);
