@@ -9618,6 +9618,13 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
     break;
 #endif
   case MYSQL_TYPE_STRING:
+    {
+      const char *val = (const char *)ptr;
+      int len = strlen(val);
+      memcpy(buf, val, len);
+      *size = len;
+      break;
+    }
   case MYSQL_TYPE_VARCHAR:
   case MYSQL_TYPE_BLOB:
     {

@@ -1,0 +1,9 @@
+drop table if exists t1;
+create table t1 (c1 char(10) primary key);
+insert into t1 values('abcdefghij');
+insert into t1 values('klmnopqrst');
+insert into t1 values('uvwxyz0123');
+select c1 from t1 force index(PRIMARY) where c1 = 'abcdefghij';
+c1
+abcdefghij
+drop table t1;
