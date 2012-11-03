@@ -6074,9 +6074,11 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     }
   }
 
+  DBUG_PRINT("info", ("mroonga: range_min->flag=%u", range_min->flag));
   if (range_min && range_min->flag == HA_READ_AFTER_KEY) {
     flags |= GRN_CURSOR_GT;
   }
+  DBUG_PRINT("info", ("mroonga: range_min->flag=%u", range_max->flag));
   if (range_max && range_max->flag == HA_READ_BEFORE_KEY) {
     flags |= GRN_CURSOR_LT;
   }
@@ -6116,7 +6118,16 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     }
     grn_obj_unlink(ctx, index_cursor);
     grn_table_cursor_close(ctx, cursor);
-    row_count = (int)(round((double)table_size * ((double)row_count / (double)cardinality)));
+    ha_rows tmp_row_count = (int)(round((double)table_size * ((double)row_count / (double)cardinality)));
+    if (tmp_row_count < 2) {
+      if (row_count == 1) {
+        row_count = 1;
+      } else {
+        row_count = 2;
+      }
+    } else {
+      row_count = tmp_row_count;
+    }
   }
   DBUG_RETURN(row_count);
 }

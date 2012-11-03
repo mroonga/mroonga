@@ -1,0 +1,22 @@
+drop table if exists t1;
+create table t1 (c1 bigint unsigned, c2 bigint unsigned, primary key(c1), key idx1(c2));
+insert into t1 values(1, 5);
+insert into t1 values(18446744073709551615, 1);
+insert into t1 values(3, 18446744073709551615);
+insert into t1 values(9223372036854775808, 3);
+insert into t1 values(5, 9223372036854775808);
+select c1, c2 from t1 order by c2 desc;
+c1	c2
+3	18446744073709551615
+5	9223372036854775808
+1	5
+9223372036854775808	3
+18446744073709551615	1
+delete from t1 where c2 = 18446744073709551615;
+delete from t1 where c2 = 5;
+delete from t1 where c2 = 1;
+delete from t1 where c2 = 3;
+delete from t1 where c2 = 9223372036854775808;
+select c1, c2 from t1 order by c2 desc;
+c1	c2
+drop table t1;
