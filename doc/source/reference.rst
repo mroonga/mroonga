@@ -22,7 +22,7 @@ List of available SQL commands
 * ``CREATE TABLE table_name (... INDEX (column_name, ...))``
 * ``CREATE TABLE table_name (... INDEX USING BTREE (column_name))``
 * ``CREATE TABLE table_name (... PRIMARY KEY (column_name))``
-* ``CREATE TABLE table_name (...) CAHRSET UTF8``
+* ``CREATE TABLE table_name (...) CHARSET UTF8``
 * ``CREATE TABLE table_name (...) ENGINE=mroonga COMMENT = 'ENGINE "InnoDB"'``
 * ``CREATE TABLE table_name (...) ENGINE=mroonga``
 * ``CREATE TABLE table_name (\`_id\` INT)``
@@ -129,7 +129,7 @@ List of available SQL commands
 List of unavailable SQL commands
 --------------------------------
 
-* ``CREATE TABLE (...) CAHRSET not_utf8``
+* ``CREATE TABLE (...) CHARSET not_utf8``
 * ``INSERT INTO (geometry_column_name) VALUES (GeomFromText('LineString(...)'))``
 * ``INSERT INTO (...) VALUES (null)``
 * ``START TRANSACTION``
