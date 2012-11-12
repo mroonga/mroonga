@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 11:30\n"
+"POT-Creation-Date: 2012-11-12 18:50\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -113,605 +113,657 @@ msgstr ""
 msgid "``CREATE TABLE table_name (... PRIMARY KEY (column_name))``"
 msgstr ""
 
-# a03c5f2a866b456a86881380f1f1761d
+# f4dbc545191f413f9fdc6dcf502d7a61
 #: ../../../source/reference.rst:25
-msgid "``CREATE TABLE table_name (...) CAHRSET UTF8``"
+msgid "``CREATE TABLE table_name (...) CHARSET ASCII``"
+msgstr ""
+
+# f4dbc545191f413f9fdc6dcf502d7a61
+#: ../../../source/reference.rst:26
+msgid "``CREATE TABLE table_name (...) CHARSET BINARY``"
+msgstr ""
+
+# f4dbc545191f413f9fdc6dcf502d7a61
+#: ../../../source/reference.rst:27
+msgid "``CREATE TABLE table_name (...) CHARSET CP932``"
+msgstr ""
+
+# f4dbc545191f413f9fdc6dcf502d7a61
+#: ../../../source/reference.rst:28
+msgid "``CREATE TABLE table_name (...) CHARSET EUCJPMS``"
+msgstr ""
+
+# 71a7439036d445c3b55fa9a9ecc2ab19
+#: ../../../source/reference.rst:29
+msgid "``CREATE TABLE table_name (...) CHARSET KOI8R``"
+msgstr ""
+
+# 71a7439036d445c3b55fa9a9ecc2ab19
+#: ../../../source/reference.rst:30
+msgid "``CREATE TABLE table_name (...) CHARSET LATIN1``"
+msgstr ""
+
+# 71a7439036d445c3b55fa9a9ecc2ab19
+#: ../../../source/reference.rst:31
+msgid "``CREATE TABLE table_name (...) CHARSET SJIS``"
+msgstr ""
+
+# f4dbc545191f413f9fdc6dcf502d7a61
+#: ../../../source/reference.rst:32
+msgid "``CREATE TABLE table_name (...) CHARSET UJIS``"
+msgstr ""
+
+# 71a7439036d445c3b55fa9a9ecc2ab19
+#: ../../../source/reference.rst:33
+msgid "``CREATE TABLE table_name (...) CHARSET UTF8``"
+msgstr ""
+
+# 71a7439036d445c3b55fa9a9ecc2ab19
+#: ../../../source/reference.rst:34
+msgid "``CREATE TABLE table_name (...) CHARSET UTF8MB4``"
 msgstr ""
 
 # efe59f4a2fc446659523b43a4e7c1ceb
-#: ../../../source/reference.rst:26
+#: ../../../source/reference.rst:35
 msgid ""
 "``CREATE TABLE table_name (...) ENGINE=mroonga COMMENT = 'ENGINE \"InnoDB"
 "\"'``"
 msgstr ""
 
 # fdf11d64b9d7469784fd6789080fc11d
-#: ../../../source/reference.rst:27
+#: ../../../source/reference.rst:36
 msgid "``CREATE TABLE table_name (...) ENGINE=mroonga``"
 msgstr ""
 
 # 5153a2628be04fb2bf9da1185c9fa09a
-#: ../../../source/reference.rst:28
+#: ../../../source/reference.rst:37
 msgid "``CREATE TABLE table_name (\\`_id\\` INT)``"
 msgstr ""
 
 # e2aa8b9b73de400f8dfbf2e1adedd1c2
-#: ../../../source/reference.rst:29
+#: ../../../source/reference.rst:38
 msgid "``CREATE TABLE table_name (\\`_id\\` INT, KEY(_id) USING HASH)``"
 msgstr ""
 
 # 456142b80ed74272b7d617a0e24da7ad
-#: ../../../source/reference.rst:30
+#: ../../../source/reference.rst:39
 msgid "``CREATE TABLE table_name (column_name BIGINT UNSIGNED)``"
 msgstr ""
 
 # b364b85688a2473780d8f52d18288ca7
-#: ../../../source/reference.rst:31
+#: ../../../source/reference.rst:40
 msgid "``CREATE TABLE table_name (column_name BIGINT)``"
 msgstr ""
 
 # d5ef607db3854afcac11cc619f33f90c
-#: ../../../source/reference.rst:32
+#: ../../../source/reference.rst:41
 msgid "``CREATE TABLE table_name (column_name BINARY(...))``"
 msgstr ""
 
 # 1721e8ade2114c278a2db5b1828cac6a
-#: ../../../source/reference.rst:33
+#: ../../../source/reference.rst:42
 msgid "``CREATE TABLE table_name (column_name BIT)``"
 msgstr ""
 
 # d73376ac08d141b3a7c7be4ab5db34b4
-#: ../../../source/reference.rst:34
+#: ../../../source/reference.rst:43
 msgid "``CREATE TABLE table_name (column_name BLOB)``"
 msgstr ""
 
 # 6d50a690b69c47a0ba00218c8977979a
-#: ../../../source/reference.rst:35
+#: ../../../source/reference.rst:44
 msgid "``CREATE TABLE table_name (column_name CHAR(...))``"
 msgstr ""
 
 # 540a6042ef7d4f49a0b18260fce3a3f9
-#: ../../../source/reference.rst:36
+#: ../../../source/reference.rst:45
 msgid "``CREATE TABLE table_name (column_name DATE)``"
 msgstr ""
 
 # 546d86916f3a407aa7eb1f45e619c209
-#: ../../../source/reference.rst:37
+#: ../../../source/reference.rst:46
 msgid "``CREATE TABLE table_name (column_name DATETIME)``"
 msgstr ""
 
 # 5d75a8ed6c5c4b7f8f73176e89499d43
-#: ../../../source/reference.rst:38
+#: ../../../source/reference.rst:47
 msgid "``CREATE TABLE table_name (column_name DECIMAL)``"
 msgstr ""
 
 # 307719e9a4644e0eaedc4eec2562a83b
-#: ../../../source/reference.rst:39
+#: ../../../source/reference.rst:48
 msgid "``CREATE TABLE table_name (column_name DOUBLE)``"
 msgstr ""
 
 # a6f829bf28534f85af06f42ac10c8dfb
-#: ../../../source/reference.rst:40
+#: ../../../source/reference.rst:49
 msgid "``CREATE TABLE table_name (column_name ENUM(...))``"
 msgstr ""
 
 # ab5ce541e12d49fe8fa308aafbbaf135
-#: ../../../source/reference.rst:41
+#: ../../../source/reference.rst:50
 msgid "``CREATE TABLE table_name (column_name FLOAT)``"
 msgstr ""
 
 # f925d091e1cc437698168714c1107ec2
-#: ../../../source/reference.rst:42
+#: ../../../source/reference.rst:51
 msgid "``CREATE TABLE table_name (column_name GEOMETRY NOT NULL)``"
 msgstr ""
 
 # a3f2d983b3b04f9bbda0b2dda35b82a9
-#: ../../../source/reference.rst:43
+#: ../../../source/reference.rst:52
 msgid "``CREATE TABLE table_name (column_name INT UNSIGNED)``"
 msgstr ""
 
 # 370a0ebd514f4055828323935f7aadc2
-#: ../../../source/reference.rst:44
+#: ../../../source/reference.rst:53
 msgid "``CREATE TABLE table_name (column_name INT)``"
 msgstr ""
 
 # b77cae91dd354786aa96f476f1e4cb54
-#: ../../../source/reference.rst:45
+#: ../../../source/reference.rst:54
 msgid "``CREATE TABLE table_name (column_name LONGBLOB)``"
 msgstr ""
 
 # e1bf0eb622c04d609a3c916640224fae
-#: ../../../source/reference.rst:46
+#: ../../../source/reference.rst:55
 msgid "``CREATE TABLE table_name (column_name LONGTEXT)``"
 msgstr ""
 
 # 898793ee1321458c91206c5e481f0731
-#: ../../../source/reference.rst:47
+#: ../../../source/reference.rst:56
 msgid "``CREATE TABLE table_name (column_name MEDIUMBLOB)``"
 msgstr ""
 
 # d0ebd43291794c789f132ad16bfada14
-#: ../../../source/reference.rst:48
+#: ../../../source/reference.rst:57
 msgid "``CREATE TABLE table_name (column_name MEDIUMINT UNSIGNED)``"
 msgstr ""
 
 # dc3d15547d414a8c8532574d197214f0
-#: ../../../source/reference.rst:49
+#: ../../../source/reference.rst:58
 msgid "``CREATE TABLE table_name (column_name MEDIUMINT)``"
 msgstr ""
 
 # affafcb0dbe641df92f33a16b19c557f
-#: ../../../source/reference.rst:50
+#: ../../../source/reference.rst:59
 msgid "``CREATE TABLE table_name (column_name MEDIUMTEXT)``"
 msgstr ""
 
 # 845af4095c664c839572d0aea87a80d5
-#: ../../../source/reference.rst:51
+#: ../../../source/reference.rst:60
 msgid "``CREATE TABLE table_name (column_name SET(...))``"
 msgstr ""
 
 # 3c33c17a065241e88f828e2024ca03e3
-#: ../../../source/reference.rst:52
+#: ../../../source/reference.rst:61
 msgid "``CREATE TABLE table_name (column_name SMALLINT UNSIGNED)``"
 msgstr ""
 
 # dbae046996204901a26d486893e2f59c
-#: ../../../source/reference.rst:53
+#: ../../../source/reference.rst:62
 msgid "``CREATE TABLE table_name (column_name SMALLINT)``"
 msgstr ""
 
 # b2e4cfd8bd4c43ef8a83866d1e393e8a
-#: ../../../source/reference.rst:54
+#: ../../../source/reference.rst:63
 msgid "``CREATE TABLE table_name (column_name TEXT)``"
 msgstr ""
 
 # f44b7441a94f4762ba8286449cbafcd3
-#: ../../../source/reference.rst:55
+#: ../../../source/reference.rst:64
 msgid "``CREATE TABLE table_name (column_name TIME)``"
 msgstr ""
 
 # a2d68efa1b404843bc990973483c7bf8
-#: ../../../source/reference.rst:56
+#: ../../../source/reference.rst:65
 msgid "``CREATE TABLE table_name (column_name TIMESTAMP)``"
 msgstr ""
 
 # 8ee6b7c404514af9a8a474627042f3c8
-#: ../../../source/reference.rst:57
+#: ../../../source/reference.rst:66
 msgid "``CREATE TABLE table_name (column_name TINYBLOB)``"
 msgstr ""
 
 # 719045d3f60d4699a31a21aefc6378dd
-#: ../../../source/reference.rst:58
+#: ../../../source/reference.rst:67
 msgid "``CREATE TABLE table_name (column_name TINYINT UNSIGNED)``"
 msgstr ""
 
 # 77c8afe0cf6745039daa545da8299ee6
-#: ../../../source/reference.rst:59
+#: ../../../source/reference.rst:68
 msgid "``CREATE TABLE table_name (column_name TINYINT)``"
 msgstr ""
 
 # f868f0458f6d44e28f6699eb92dfee8b
-#: ../../../source/reference.rst:60
+#: ../../../source/reference.rst:69
 msgid "``CREATE TABLE table_name (column_name TINYTEXT)``"
 msgstr ""
 
 # 799d9e40959641009032b3dd63622d39
-#: ../../../source/reference.rst:61
+#: ../../../source/reference.rst:70
 msgid "``CREATE TABLE table_name (column_name VARBINARY(...))``"
 msgstr ""
 
 # 05703ba15274479281b6f75edd6ec0f7
-#: ../../../source/reference.rst:62
+#: ../../../source/reference.rst:71
 msgid "``CREATE TABLE table_name (column_name VARCHAR(...))``"
 msgstr ""
 
 # 47db6197de48433eb83a113f88f383d9
-#: ../../../source/reference.rst:63
+#: ../../../source/reference.rst:72
 msgid "``CREATE TABLE table_name (column_name YEAR)``"
 msgstr ""
 
 # 6f9cb37a0a5341499b5907534dd61a11
-#: ../../../source/reference.rst:64
+#: ../../../source/reference.rst:73
 msgid "``CREATE TABLE table_name (column_name INT AUTO_INCREMENT)``"
 msgstr ""
 
 # 6f63794d163d4a8b8ef972f03ed846d6
-#: ../../../source/reference.rst:65
+#: ../../../source/reference.rst:74
 msgid "``CREATE TABLE table_name (column_name INT PRIMARY KEY)``"
 msgstr ""
 
 # 625c15f5f33846abaa81cb6fa1f8cbf1
-#: ../../../source/reference.rst:66
+#: ../../../source/reference.rst:75
 msgid "``CREATE TABLE table_name (column_name DATE PRIMARY KEY)``"
 msgstr ""
 
 # 8411e5944e3744a7a9e02cfb35699c99
-#: ../../../source/reference.rst:67
+#: ../../../source/reference.rst:76
 msgid "``CREATE TABLE table_name (column_name DATETIME PRIMARY KEY)``"
 msgstr ""
 
 # 7c3a1068e3ae4e7d93e7000350988666
-#: ../../../source/reference.rst:68
+#: ../../../source/reference.rst:77
 msgid ""
 "``CREATE TABLE table_name (column_name DATETIME"
 "(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 # 11838c8f2cb74bd0a6550a512e748220
-#: ../../../source/reference.rst:69
+#: ../../../source/reference.rst:78
 msgid "``CREATE TABLE table_name (column_name DECIMAL PRIMARY KEY)``"
 msgstr ""
 
 # 8cb6eb5b070d4862a577650046962287
-#: ../../../source/reference.rst:70
+#: ../../../source/reference.rst:79
 msgid ""
 "``CREATE TABLE table_name (column_name DECIMAL(maximum_number_digits, "
 "fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 # debef4b9c22d45eeafe4bb17d5bdef29
-#: ../../../source/reference.rst:71
+#: ../../../source/reference.rst:80
 msgid "``CREATE TABLE table_name (column_name TIME PRIMARY KEY)``"
 msgstr ""
 
 # 9695eea381454fe9bf316ecf8ae0376e
-#: ../../../source/reference.rst:72
+#: ../../../source/reference.rst:81
 msgid ""
 "``CREATE TABLE table_name (column_name TIME(fractional_seconds_precision) "
 "PRIMARY KEY)``"
 msgstr ""
 
 # c4f3281e9077493cafd9c02b78e11a70
-#: ../../../source/reference.rst:73
+#: ../../../source/reference.rst:82
 msgid "``CREATE TABLE table_name (column_name TIMESTAMP PRIMARY KEY)``"
 msgstr ""
 
 # b6cac615904c4bb7adb71b70946c2674
-#: ../../../source/reference.rst:74
+#: ../../../source/reference.rst:83
 msgid ""
 "``CREATE TABLE table_name (column_name TIMESTAMP"
 "(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 # 87840845f1b94ca3b73d46c8993d01b5
-#: ../../../source/reference.rst:75
+#: ../../../source/reference.rst:84
 msgid "``CREATE TABLE table_name (column_name YEAR PRIMARY KEY)``"
 msgstr ""
 
 # a3c05d0f52844a54a0da4a5ecbf8b876
-#: ../../../source/reference.rst:76
+#: ../../../source/reference.rst:85
 msgid ""
 "``CREATE TABLE table_name (column_name1 INT, column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
 # f815b3f832fe497caa7afd482b3da88e
-#: ../../../source/reference.rst:77
+#: ../../../source/reference.rst:86
 msgid ""
 "``CREATE TABLE table_name (column_name1 DOUBLE, column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
 # dd073f8eba6e4fcb89e5146324d5cab4
-#: ../../../source/reference.rst:78
+#: ../../../source/reference.rst:87
 msgid ""
 "``CREATE TABLE table_name (column_name1 FLOAT, column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
 # 45ef046ba79f4f61bd6401e6e6e3dac4
-#: ../../../source/reference.rst:79
+#: ../../../source/reference.rst:88
 msgid ""
 "``CREATE TABLE table_name (column_name1 CHAR(...), column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
 # 373f0b9fe9084b56aed124cd4993401f
-#: ../../../source/reference.rst:80
+#: ../../../source/reference.rst:89
 msgid ""
 "``CREATE TABLE table_name (column_name1 VARCHAR(...), column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
 # 59baa9e7e9924ee0b599f056a940d94c
-#: ../../../source/reference.rst:81
+#: ../../../source/reference.rst:90
 msgid "``CREATE TEMPORARY TABLE table_name (...)``"
 msgstr ""
 
 # cb7641b0c8e341e584134e3d9660dacc
-#: ../../../source/reference.rst:82
+#: ../../../source/reference.rst:91
 msgid "``DELETE FROM table_name WHERE ...``"
 msgstr ""
 
 # 92f4fa05424d47b1b62e8e1eb5c8e9e8
-#: ../../../source/reference.rst:83
+#: ../../../source/reference.rst:92
 msgid "``DROP INDEX column_name ON table_name``"
 msgstr ""
 
 # 28b7e0ab67184c2ca79e61008fc19a55
-#: ../../../source/reference.rst:84
+#: ../../../source/reference.rst:93
 msgid "``DROP TABLE IF EXISTS table_name, ...``"
 msgstr ""
 
 # b69165cbb40143a9a6d0a0b7173e20b2
-#: ../../../source/reference.rst:85
+#: ../../../source/reference.rst:94
 msgid "``DROP TABLE \\`table-name-with-hyphen\\`, ...``"
 msgstr ""
 
 # 0c710398a55543768edc0a4716cd0ae0
-#: ../../../source/reference.rst:86
+#: ../../../source/reference.rst:95
 msgid "``DROP TABLE table_name, ...``"
 msgstr ""
 
 # 83ca6a0c9f72445ca82874b0f9fd358e
-#: ../../../source/reference.rst:87
+#: ../../../source/reference.rst:96
 msgid "``DROP TEMPORARY TABLE table_name``"
 msgstr ""
 
 # 9f549d865fba466391c36f20ce3d6c66
-#: ../../../source/reference.rst:88
+#: ../../../source/reference.rst:97
 msgid "``FLUSH LOGS``"
 msgstr ""
 
 # a4cf401c675541d2b1a904debe64bd6c
-#: ../../../source/reference.rst:89
+#: ../../../source/reference.rst:98
 msgid "``FLUSH TABLES``"
 msgstr ""
 
 # 62996b9fbf5348fa92da9db1549f8327
-#: ../../../source/reference.rst:90
+#: ../../../source/reference.rst:99
 msgid ""
 "``INSERT INTO (geometry_column_name) VALUES (GeomFromText('POINT(...)'))``"
 msgstr ""
 
 # fb667c464f6b4d4a82627b67006b6782
-#: ../../../source/reference.rst:91
+#: ../../../source/reference.rst:100
 msgid "``INSERT INTO ... VALUES ...``"
 msgstr ""
 
 # 435f7105de9e4b4eba17263776f702c0
-#: ../../../source/reference.rst:92
+#: ../../../source/reference.rst:101
 msgid ""
 "``INSERT INTO ... VALUES ... ON DUPLICATE KEY UPDATE ...`` (for ``PRIMARY "
 "KEY``)"
 msgstr ""
 
 # 67208c11d6dd41c8816cab822f5635ca
-#: ../../../source/reference.rst:93
+#: ../../../source/reference.rst:102
 msgid ""
 "``INSERT INTO ... VALUES ... ON DUPLICATE KEY UPDATE ...`` (for ``UNIQUE "
 "KEY``)"
 msgstr ""
 
 # 3fa46f4303b84af1bdc12f01e27af973
-#: ../../../source/reference.rst:94
+#: ../../../source/reference.rst:103
 msgid ""
 "``INSERT INTO table_name (column_name, ...) SELECT ... FROM "
 "other_table_name``"
 msgstr ""
 
 # dcedb7d5350c45fcafb7face9f224bee
-#: ../../../source/reference.rst:95
+#: ../../../source/reference.rst:104
 msgid "``REPLACE INTO table_name SELECT ... FROM other_table_name ...``"
 msgstr ""
 
 # 74a4962a41df4a11b659d6c58c519d17
-#: ../../../source/reference.rst:96
+#: ../../../source/reference.rst:105
 msgid ""
 "``SELECT * FROM information_schema.plugins WHERE plugin_name = \"mroonga\"``"
 msgstr ""
 
 # b54e4aba504c42b792b33401a8c65cc3
-#: ../../../source/reference.rst:97
+#: ../../../source/reference.rst:106
 msgid "``SELECT * FROM table_name``"
 msgstr ""
 
 # 76bcb028fdbc41e09f431134989927e5
-#: ../../../source/reference.rst:98
+#: ../../../source/reference.rst:107
 msgid "``SELECT * FROM table_name FORCE INDEX(index_name) WHERE ...``"
 msgstr ""
 
 # 36c1986dc7bc4cce9fa7343a1da0e5be
-#: ../../../source/reference.rst:99
+#: ../../../source/reference.rst:108
 msgid "``SELECT * FROM table_name ORDER BY column_name ASC LIMIT ...``"
 msgstr ""
 
 # f16fc4c6dba74d4993a873d60e0e823f
-#: ../../../source/reference.rst:100
+#: ../../../source/reference.rst:109
 msgid "``SELECT * FROM table_name ORDER BY column_name ASC``"
 msgstr ""
 
 # db6189ed3cc04b4b9dc2ccb23d81615e
-#: ../../../source/reference.rst:101
+#: ../../../source/reference.rst:110
 msgid "``SELECT * FROM table_name ORDER BY column_name DESC LIMIT ...``"
 msgstr ""
 
 # eaf68547caba4966af9c9ff9c2be30b4
-#: ../../../source/reference.rst:102
+#: ../../../source/reference.rst:111
 msgid "``SELECT * FROM table_name ORDER BY column_name DESC``"
 msgstr ""
 
 # e05cee46607f4660a081a58b20dc69bd
-#: ../../../source/reference.rst:103
+#: ../../../source/reference.rst:112
 msgid "``SELECT * FROM table_name ORDER BY column_name``"
 msgstr ""
 
 # 3a2c58c6c0a947e88608a383355ccdc3
-#: ../../../source/reference.rst:104
+#: ../../../source/reference.rst:113
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*D+ word ...\" "
 "IN BOOLEAN MODE)``"
 msgstr ""
 
 # 249b2571dbb247559445fcddfffed94c
-#: ../../../source/reference.rst:105
+#: ../../../source/reference.rst:114
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*D- word ...\" "
 "IN BOOLEAN MODE)``"
 msgstr ""
 
 # 3ea838c67d7e47f2b56391fe5599a09d
-#: ../../../source/reference.rst:106
+#: ../../../source/reference.rst:115
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*DOR word ..."
 "\" IN BOOLEAN MODE)``"
 msgstr ""
 
 # 08094a3506ca4735bd36e09d6500fcbb
-#: ../../../source/reference.rst:107
+#: ../../../source/reference.rst:116
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"+word ...\" IN "
 "BOOLEAN MODE)``"
 msgstr ""
 
 # 8dfedf8477554319a4913f502ce185bc
-#: ../../../source/reference.rst:108
+#: ../../../source/reference.rst:117
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"...\" IN "
 "BOOLEAN MODE)``"
 msgstr ""
 
 # 3bf2d7c52d334e8e9416e773c7c36150
-#: ../../../source/reference.rst:109
+#: ../../../source/reference.rst:118
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name, ...) AGAINST(\"...\" IN "
 "BOOLEAN MODE)``"
 msgstr ""
 
 # 1fc98641c232410e92cdf63b48cb1ec2
-#: ../../../source/reference.rst:110
+#: ../../../source/reference.rst:119
 msgid ""
 "``SELECT * FROM table_name WHERE MBRContains(GeomFromText('LineString"
 "(...)'), geometry_column_name)``"
 msgstr ""
 
 # c282e435cc244d4ba86619e5040a30f1
-#: ../../../source/reference.rst:111
+#: ../../../source/reference.rst:120
 msgid ""
 "``SELECT * FROM table_name WHERE NOT MATCH(column_name) AGAINST(\"...\" IN "
 "BOOLEAN MODE)``"
 msgstr ""
 
 # a2c34958fe5644f7bcdd7a02649a43a2
-#: ../../../source/reference.rst:112
+#: ../../../source/reference.rst:121
 msgid "``SELECT * FROM table_name WHERE column_name < ...``"
 msgstr ""
 
 # d36c4f28d64e46ecab353dc8ea9ac892
-#: ../../../source/reference.rst:113
+#: ../../../source/reference.rst:122
 msgid "``SELECT * FROM table_name WHERE column_name <= ...``"
 msgstr ""
 
 # a165991a94c145d4a2262dce478772cb
-#: ../../../source/reference.rst:114
+#: ../../../source/reference.rst:123
 msgid "``SELECT * FROM table_name WHERE column_name = ...``"
 msgstr ""
 
 # 04e9c0d93c0a417db37fa3ab8644cffb
-#: ../../../source/reference.rst:115
+#: ../../../source/reference.rst:124
 msgid "``SELECT * FROM table_name WHERE column_name > ...``"
 msgstr ""
 
 # 0184738eacab4b008b2650b8b552852b
-#: ../../../source/reference.rst:116
+#: ../../../source/reference.rst:125
 msgid "``SELECT * FROM table_name WHERE column_name >= ...``"
 msgstr ""
 
 # f83294e246814b06abc0c14ed3dc17d2
-#: ../../../source/reference.rst:117
+#: ../../../source/reference.rst:126
 msgid "``SELECT * FROM table_name WHERE column_name BETWEEN ... AND ...``"
 msgstr ""
 
 # c9c8fdf805a44846aa3df7194b4c8831
-#: ../../../source/reference.rst:118
+#: ../../../source/reference.rst:127
 msgid ""
 "``SELECT * FROM table_name WHERE column_name IN (SELECT sub_column_name FROM "
 "sub_table_name WHERE MATCH(sub_text_column_name) AGAINST(\"...\"))``"
 msgstr ""
 
 # 63e7f9a8ac524276ad2399c8cdca6392
-#: ../../../source/reference.rst:119
+#: ../../../source/reference.rst:128
 msgid ""
 "``SELECT *, MATCH(column_name) AGAINST(\"...\" IN BOOLEAN MODE) FROM "
 "table_name WHERE MATCH(column_name) AGAINST(\"...\" IN BOOLEAN MODE)``"
 msgstr ""
 
 # 8f3c1da579f842df9de6bac1b8cd914d
-#: ../../../source/reference.rst:120
+#: ../../../source/reference.rst:129
 msgid "``SELECT FOUND_ROWS()``"
 msgstr ""
 
 # 552ded43ee5c4bc88891a3c832cb7755
-#: ../../../source/reference.rst:121
+#: ../../../source/reference.rst:130
 msgid ""
 "``SELECT SQL_CALC_FOUND_ROWS * FROM table_name WHERE MATCH(...) AGAINST(\"..."
 "\" IN BOOLEAN MODE) ORDER BY column_name LIMIT start,n_records``"
 msgstr ""
 
 # da4a4c21291e444b85405fc57a4e20e7
-#: ../../../source/reference.rst:122
+#: ../../../source/reference.rst:131
 msgid "``SELECT last_insert_grn_id()``"
 msgstr ""
 
 # 39f1b0be04a84034b02c47dd88feef94
-#: ../../../source/reference.rst:123
+#: ../../../source/reference.rst:132
 msgid "``SET binlog_format=\"MIXED\"``"
 msgstr ""
 
 # b41fac6d8f8c4bb8910136add61431f4
-#: ../../../source/reference.rst:124
+#: ../../../source/reference.rst:133
 msgid "``SET binlog_format=\"ROW\"``"
 msgstr ""
 
 # c677876f21484830aed4986182be8707
-#: ../../../source/reference.rst:125
+#: ../../../source/reference.rst:134
 msgid "``SET binlog_format=\"STATEMENT\"``"
 msgstr ""
 
 # 468656877d8b41ce8e10aebcfbbf0b61
-#: ../../../source/reference.rst:126
+#: ../../../source/reference.rst:135
 msgid "``TRUNCATE TABLE table_name``"
 msgstr ""
 
 # 8400d1e7d8514e3b82b77b18cad0eb87
-#: ../../../source/reference.rst:127
+#: ../../../source/reference.rst:136
 msgid "``UPDATE table_name SET column_name = ...``"
 msgstr ""
 
 # b089c40304aa4805a4fca045ed8b3a2c
-#: ../../../source/reference.rst:130
+#: ../../../source/reference.rst:139
 msgid "List of unavailable SQL commands"
 msgstr ""
 
-# dd3502df72fc4edc847d9ba4562a90ce
-#: ../../../source/reference.rst:132
-msgid "``CREATE TABLE (...) CAHRSET not_utf8``"
+# 6adc617fbec0459da5d6cd5f577aa399
+#: ../../../source/reference.rst:141
+msgid "``CREATE TABLE (...) CHARSET not_listed_charset_above``"
 msgstr ""
 
 # 6857c598caab4c0588c28d380dc5e9f2
-#: ../../../source/reference.rst:133
+#: ../../../source/reference.rst:142
 msgid ""
 "``INSERT INTO (geometry_column_name) VALUES (GeomFromText('LineString(...)'))"
 "``"
 msgstr ""
 
 # 6669ecac6be34402bd6cbe0b169f6d6e
-#: ../../../source/reference.rst:134
+#: ../../../source/reference.rst:143
 msgid "``INSERT INTO (...) VALUES (null)``"
 msgstr ""
 
 # 12b10c3b5cbc4b11bdc201d6ecd3a9e0
-#: ../../../source/reference.rst:135
+#: ../../../source/reference.rst:144
 msgid "``START TRANSACTION``"
 msgstr ""
 
+# 560c35288ed942369cc2291c429c2cdc
+#: ../../../source/reference.rst:146
+msgid ""
+"Basically, The character set which groonga supports (EUC-JP/UTF-8/SJIS/"
+"LATIN1/KOI8R) is also supported in mroonga."
+msgstr ""
+
 # 092e509502e240dea3ee4f872b6dd0e3
-#: ../../../source/reference.rst:138
+#: ../../../source/reference.rst:149
 msgid "I found an unlisted SQL command"
 msgstr ""
 
 # 65f62f6ca0c3446a99ff4db23eb76186
-#: ../../../source/reference.rst:140
+#: ../../../source/reference.rst:151
 msgid ""
 "If you find unlisted SQL command and confirm whether the SQL command works "
 "well or not, we want to list it. Please mail it to `us <http://groonga.org/"
@@ -721,23 +773,23 @@ msgid ""
 msgstr ""
 
 # 8ff1c074e74941daac4c8ab4c78c249f
-#: ../../../source/reference.rst:143
+#: ../../../source/reference.rst:154
 msgid "List of server variables"
 msgstr "List of server variables"
 
 # 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference.rst:145
+#: ../../../source/reference.rst:156
 msgid ""
 "Here are the explanations of server variables that are introduced by mroonga."
 msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference.rst:148
+#: ../../../source/reference.rst:159
 msgid "mroonga_default_parser"
 msgstr ""
 
 # 597fc102127842ab80166cb87684cd66
-#: ../../../source/reference.rst:150
+#: ../../../source/reference.rst:161
 msgid ""
 "The default parser of the full text search. The default value can be "
 "specified by ``--with-default-parser=PARSER`` configure argument, whose "
@@ -745,83 +797,83 @@ msgid ""
 msgstr ""
 
 # 1c0ee125f1704835b0d40b9691385897
-#: ../../../source/reference.rst:153
+#: ../../../source/reference.rst:164
 msgid ""
 "Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
 "search parser. It is used by ``body_index`` fulltext index."
 msgstr ""
 
 # 34c4eb348536490591dae8d0cd98e7f3
-#: ../../../source/reference.rst:167
+#: ../../../source/reference.rst:178
 msgid "mroonga_libgroonga_version"
 msgstr ""
 
 # 5b05ddcf181c4d30bd68b5f774f6a185
-#: ../../../source/reference.rst:169
+#: ../../../source/reference.rst:180
 msgid "The version string of the groonga library."
 msgstr ""
 
 # e4f9f9cffbe54b978e4062cd0e005f50
-#: ../../../source/reference.rst:171
+#: ../../../source/reference.rst:182
 msgid "Here is an example SQL to confirm the using groonga library version::"
 msgstr ""
 
 # 9f986358d0e24f628d8354dee8ce6d09
-#: ../../../source/reference.rst:182
+#: ../../../source/reference.rst:193
 msgid "mroonga_log_file"
 msgstr ""
 
 # eb81c839e63641c9ac6ead777681c0ae
-#: ../../../source/reference.rst:184
+#: ../../../source/reference.rst:195
 msgid ""
 "The path of the log file of mroonga. The default value is ``groonga.log``."
 msgstr ""
 
 # f05044e929c6453cbe06c3a9ea9968d8
-#: ../../../source/reference.rst:186
+#: ../../../source/reference.rst:197
 msgid ""
 "Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
 msgstr ""
 
 # 5d537f02eb434090ab886218ab972313
-#: ../../../source/reference.rst:208
+#: ../../../source/reference.rst:219
 msgid "mroonga_log_level"
 msgstr ""
 
 # 734cd9fdf1c7415d892b2ab22d30dc2f
-#: ../../../source/reference.rst:210
+#: ../../../source/reference.rst:221
 msgid "The output level of mroonga log file. The default value is ``NOTICE``."
 msgstr ""
 
 # 14d9ca2399ef4d2e8c552c6558bb44ef
-#: ../../../source/reference.rst:212
+#: ../../../source/reference.rst:223
 msgid ""
 "Here is an example transcript to change log level to ``DEBUG`` that logs "
 "many messages for debugging::"
 msgstr ""
 
 # 2344911c007541ec8521b01b20e65228
-#: ../../../source/reference.rst:234
+#: ../../../source/reference.rst:245
 msgid "mroonga_version"
 msgstr ""
 
 # 8faefebf66ce4409aa34d482fa4b3172
-#: ../../../source/reference.rst:236
+#: ../../../source/reference.rst:247
 msgid "The version string of mroonga."
 msgstr ""
 
 # d6161a998b614d92a7b5441de8fe2fa6
-#: ../../../source/reference.rst:238
+#: ../../../source/reference.rst:249
 msgid "Here is an example SQL to confirm the running mroonga version::"
 msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference.rst:249
+#: ../../../source/reference.rst:260
 msgid "mroonga_dry_write"
 msgstr ""
 
 # 662d6ddf9b7248cba67f48c09902b1cf
-#: ../../../source/reference.rst:251
+#: ../../../source/reference.rst:262
 msgid ""
 "Whether really write data to groonga database or not. The default value is "
 "``OFF`` that means data are really written to groonga database. Usually we "
@@ -831,17 +883,17 @@ msgid ""
 msgstr ""
 
 # 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference.rst:258
+#: ../../../source/reference.rst:269
 msgid "Here is an example SQL to disable writing data to groonga database::"
 msgstr ""
 
 # d9f67e26e6bc4883affa4c663cd3d120
-#: ../../../source/reference.rst:281
+#: ../../../source/reference.rst:292
 msgid "mroonga_enable_optimization"
 msgstr ""
 
 # 53f18a9714d145d2a32b452e68be0dfa
-#: ../../../source/reference.rst:283
+#: ../../../source/reference.rst:294
 msgid ""
 "Whether enable optimization or not. The default value is ``ON`` that means "
 "optimization is enabled. Usually we don't need to change the value of this "
@@ -849,17 +901,17 @@ msgid ""
 msgstr ""
 
 # ccf6f86f8e4e4772902db8fd12751b1c
-#: ../../../source/reference.rst:288
+#: ../../../source/reference.rst:299
 msgid "Here is an example SQL to disable optimization::"
 msgstr ""
 
 # 15ee150a65fa41839a0aba95515d5138
-#: ../../../source/reference.rst:312
+#: ../../../source/reference.rst:323
 msgid "mroonga_match_escalation_threshold"
 msgstr ""
 
 # 6713a39526c8497eaee1250509b6b6ac
-#: ../../../source/reference.rst:314
+#: ../../../source/reference.rst:325
 msgid ""
 "The threshold to determin whether match method is escalated. See `search "
 "specification for groonga <http://groonga.org/docs/spec/search.html>`_ about "
@@ -867,7 +919,7 @@ msgid ""
 msgstr ""
 
 # 7aff1a3ab66945bcbe486da9fb4ca5d0
-#: ../../../source/reference.rst:319
+#: ../../../source/reference.rst:330
 msgid ""
 "The default value is the same as groonga's default value. It's 0 for the "
 "default installation. The dafault value can be configured in my.cnf or by "
@@ -876,36 +928,36 @@ msgid ""
 msgstr ""
 
 # aeb0d450bd6943cea8a607bfd7039a03
-#: ../../../source/reference.rst:325
+#: ../../../source/reference.rst:336
 msgid ""
 "Here is an example to use -1 as a threshold to determin whether match method "
 "is escalated. -1 means that never escalated."
 msgstr ""
 
 # 4ef63d1019614da3a29580b42060f249
-#: ../../../source/reference.rst:333
+#: ../../../source/reference.rst:344
 msgid ""
 "Here is an another example to show behavior change by the variable value."
 msgstr ""
 
 # 6f57bcd862b3492b9828d7d4ec559909
-#: ../../../source/reference.rst:379
+#: ../../../source/reference.rst:390
 msgid "List of status variables"
 msgstr "List of status variables"
 
 # 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference.rst:381
+#: ../../../source/reference.rst:392
 msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
 msgstr ""
 
 # 44a69951fb964d71be14e20f56f9657c
-#: ../../../source/reference.rst:384
+#: ../../../source/reference.rst:395
 msgid "mroonga_count_skip"
 msgstr ""
 
 # f66bd47adc1f4141ae9432c72e8bf6a7
-#: ../../../source/reference.rst:386
+#: ../../../source/reference.rst:397
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
@@ -915,17 +967,17 @@ msgstr ""
 
 # c376c0400a38426e833beae3faabbc28
 # 14a1b5c728a747ab9c8167c4165387ea
-#: ../../../source/reference.rst:389 ../../../source/reference.rst:405
+#: ../../../source/reference.rst:400 ../../../source/reference.rst:416
 msgid "Here is an example how to check it::"
 msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference.rst:400
+#: ../../../source/reference.rst:411
 msgid "mroonga_fast_order_limit"
 msgstr ""
 
 # 052f5e42b1d84e8d919523fb99c8e5d5
-#: ../../../source/reference.rst:402
+#: ../../../source/reference.rst:413
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
@@ -934,52 +986,52 @@ msgstr ""
 "use this value to check if the feature is working when you enable it."
 
 # 47b07cd2bb7d44c98a8c3ea8bd47e37b
-#: ../../../source/reference.rst:416
+#: ../../../source/reference.rst:427
 msgid "Limitations"
 msgstr ""
 
 # 5bf56a4d5df24b33ae8b6d972fcf2a7f
-#: ../../../source/reference.rst:418
+#: ../../../source/reference.rst:429
 msgid "There are some limitations in mroonga storage engine."
 msgstr ""
 
 # 5da669841908480d9071c98823fddf08
-#: ../../../source/reference.rst:421
+#: ../../../source/reference.rst:432
 msgid "Limitations about the value of columns"
 msgstr ""
 
 # bf33f1ba0a3441149c9c7aae10ab7c00
-#: ../../../source/reference.rst:423
+#: ../../../source/reference.rst:434
 msgid "There is a limitation about DATE, DATETIME column in storage mode."
 msgstr ""
 
 # 49133a6b106b4d028daabbdf784d5044
-#: ../../../source/reference.rst:425
+#: ../../../source/reference.rst:436
 msgid ""
 "mroonga storage engine automatically convert 0 into 1 as the value of month "
 "or date."
 msgstr ""
 
 # 95b13e6ab35541e3a286f029f6f77555
-#: ../../../source/reference.rst:427
+#: ../../../source/reference.rst:438
 msgid ""
 "Thus, the value 0 is treated as the 1st month (January) of the year or the "
 "1st date of the month."
 msgstr ""
 
 # ba510e03144642b3bcad7ff9499c13cd
-#: ../../../source/reference.rst:430
+#: ../../../source/reference.rst:441
 msgid ""
 "And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
 "00:00:00)."
 msgstr ""
 
 # eda122b1b17c4e08b10677d5e2c5275c
-#: ../../../source/reference.rst:432
+#: ../../../source/reference.rst:443
 msgid "Here is an example to show behavior described above."
 msgstr ""
 
 # 88bdd5c373c54e11b4ede629c17ffffc
-#: ../../../source/reference.rst:456
+#: ../../../source/reference.rst:467
 msgid "Here is the results of execution example::"
 msgstr ""
