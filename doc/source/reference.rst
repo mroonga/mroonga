@@ -23,6 +23,7 @@ List of available SQL commands
 * ``CREATE TABLE table_name (... INDEX USING BTREE (column_name))``
 * ``CREATE TABLE table_name (... PRIMARY KEY (column_name))``
 * ``CREATE TABLE table_name (...) CHARSET ASCII``
+* ``CREATE TABLE table_name (...) CHARSET BINARY``
 * ``CREATE TABLE table_name (...) CHARSET CP932``
 * ``CREATE TABLE table_name (...) CHARSET EUCJPMS``
 * ``CREATE TABLE table_name (...) CHARSET KOI8R``
