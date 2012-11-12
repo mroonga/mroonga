@@ -22,7 +22,15 @@ List of available SQL commands
 * ``CREATE TABLE table_name (... INDEX (column_name, ...))``
 * ``CREATE TABLE table_name (... INDEX USING BTREE (column_name))``
 * ``CREATE TABLE table_name (... PRIMARY KEY (column_name))``
+* ``CREATE TABLE table_name (...) CHARSET ASCII``
+* ``CREATE TABLE table_name (...) CHARSET CP932``
+* ``CREATE TABLE table_name (...) CHARSET EUCJPMS``
+* ``CREATE TABLE table_name (...) CHARSET KOI8R``
+* ``CREATE TABLE table_name (...) CHARSET LATIN1``
+* ``CREATE TABLE table_name (...) CHARSET SJIS``
+* ``CREATE TABLE table_name (...) CHARSET UJIS``
 * ``CREATE TABLE table_name (...) CHARSET UTF8``
+* ``CREATE TABLE table_name (...) CHARSET UTF8MB4``
 * ``CREATE TABLE table_name (...) ENGINE=mroonga COMMENT = 'ENGINE "InnoDB"'``
 * ``CREATE TABLE table_name (...) ENGINE=mroonga``
 * ``CREATE TABLE table_name (\`_id\` INT)``
@@ -129,10 +137,12 @@ List of available SQL commands
 List of unavailable SQL commands
 --------------------------------
 
-* ``CREATE TABLE (...) CHARSET not_utf8``
+* ``CREATE TABLE (...) CHARSET not_listed_charset_above``
 * ``INSERT INTO (geometry_column_name) VALUES (GeomFromText('LineString(...)'))``
 * ``INSERT INTO (...) VALUES (null)``
 * ``START TRANSACTION``
+
+Basically, The character set which groonga supports (EUC-JP/UTF-8/SJIS/LATIN1/KOI8R) is also supported in mroonga.
 
 I found an unlisted SQL command
 -------------------------------
