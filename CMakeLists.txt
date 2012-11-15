@@ -17,19 +17,25 @@
 cmake_minimum_required(VERSION 2.6)
 project(mroonga)
 
-file(READ ${CMAKE_SOURCE_DIR}/version        MRN_VERSION)
-file(READ ${CMAKE_SOURCE_DIR}/version_major  MRN_VERSION_MAJOR)
-file(READ ${CMAKE_SOURCE_DIR}/version_minor  MRN_VERSION_MINOR)
-file(READ ${CMAKE_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
-file(READ ${CMAKE_SOURCE_DIR}/version_in_hex MRN_VERSION_IN_HEX)
-file(READ ${CMAKE_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
+if(WITH_MROONGA_STORAGE_ENGINE)
+  set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR}/storage/mroonga)
+else()
+  set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR})
+endif()
 
-file(READ ${CMAKE_SOURCE_DIR}/required_groonga_version REQUIRED_GROONGA_VERSION)
+file(READ ${MRN_SOURCE_DIR}/version        MRN_VERSION)
+file(READ ${MRN_SOURCE_DIR}/version_major  MRN_VERSION_MAJOR)
+file(READ ${MRN_SOURCE_DIR}/version_minor  MRN_VERSION_MINOR)
+file(READ ${MRN_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
+file(READ ${MRN_SOURCE_DIR}/version_in_hex MRN_VERSION_IN_HEX)
+file(READ ${MRN_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
+
+file(READ ${MRN_SOURCE_DIR}/required_groonga_version REQUIRED_GROONGA_VERSION)
 string(STRIP "${REQUIRED_GROONGA_VERSION}" REQUIRED_GROONGA_VERSION)
 
 set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
-include(${CMAKE_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
+include(${MRN_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
 
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/sources.am MROONGA_SOURCES)
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_no_mysql_sources.am
