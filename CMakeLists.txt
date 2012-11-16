@@ -47,7 +47,12 @@ read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_need_mysql_sources.am
 string(REGEX REPLACE "([^;]+)" "lib/\\1"
   LIBMRN_NEED_MYSQL_SOURCES "${LIBMRN_NEED_MYSQL_SOURCES}")
 
-set(MYSQL_SOURCE_DIR "PATH" CACHE PATH "MySQL source directory")
+if(WITH_MROONGA_STORAGE_ENGINE)
+  set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR} CACHE PATH "MySQL source directory")
+else()
+  set(MYSQL_SOURCE_DIR "PATH" CACHE PATH "MySQL source directory")
+endif()
+
 set(MYSQL_INCLUDE_DIRS
   "${MYSQL_BUILD_DIR}/include"
   "${MYSQL_SOURCE_DIR}/sql"
