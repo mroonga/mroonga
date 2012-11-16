@@ -6105,9 +6105,9 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     } else {
       DBUG_PRINT("info", ("mroonga: use key%u", key_nr));
     }
+
     grn_table_cursor *cursor;
     grn_table_cursor *index_cursor;
-
     cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
                                    key_min, size_min,
                                    key_max, size_max,
