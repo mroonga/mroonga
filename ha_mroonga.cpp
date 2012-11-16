@@ -6074,13 +6074,17 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     }
   }
 
-  DBUG_PRINT("info", ("mroonga: range_min->flag=%u", range_min->flag));
-  if (range_min && range_min->flag == HA_READ_AFTER_KEY) {
-    flags |= GRN_CURSOR_GT;
+  if (range_min) {
+    DBUG_PRINT("info", ("mroonga: range_min->flag=%u", range_min->flag));
+    if (range_min->flag == HA_READ_AFTER_KEY) {
+      flags |= GRN_CURSOR_GT;
+    }
   }
-  DBUG_PRINT("info", ("mroonga: range_min->flag=%u", range_max->flag));
-  if (range_max && range_max->flag == HA_READ_BEFORE_KEY) {
-    flags |= GRN_CURSOR_LT;
+  if (range_max) {
+    DBUG_PRINT("info", ("mroonga: range_min->flag=%u", range_max->flag));
+    if (range_max->flag == HA_READ_BEFORE_KEY) {
+      flags |= GRN_CURSOR_LT;
+    }
   }
 
   uint pkey_nr = table->s->primary_key;
