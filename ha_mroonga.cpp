@@ -6105,8 +6105,6 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     } else {
       DBUG_PRINT("info", ("mroonga: use key%u", key_nr));
     }
-    uint table_size = grn_table_size(ctx, grn_table);
-    uint cardinality = grn_table_size(ctx, grn_index_tables[key_nr]);
     grn_table_cursor *cursor;
     grn_table_cursor *index_cursor;
 
@@ -6122,6 +6120,9 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     }
     grn_obj_unlink(ctx, index_cursor);
     grn_table_cursor_close(ctx, cursor);
+
+    uint table_size = grn_table_size(ctx, grn_table);
+    uint cardinality = grn_table_size(ctx, grn_index_tables[key_nr]);
     row_count = ceil((double)table_size * ((double)row_count / (double)cardinality));
   }
   DBUG_RETURN(row_count);
