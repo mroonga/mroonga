@@ -63,7 +63,12 @@ set(MYSQL_INCLUDE_DIRS
 
 set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
 
-set(MYSQL_CONFIG "PATH" CACHE PATH "mysql-config command path")
+if(WITH_MROONGA_STORAGE_ENGINE)
+  set(MYSQL_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mysql_config
+    CACHE PATH "mysql-config command path")
+else()
+  set(MYSQL_CONFIG "PATH" CACHE PATH "mysql-config command path")
+endif()
 find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
 
 macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
