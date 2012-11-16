@@ -37,22 +37,25 @@ set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
 include(${MRN_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
 
+if(WITH_MROONGA_STORAGE_ENGINE)
+  set(LIBMRN_DIR_PREFIX "${MRN_SOURCE_DIR}/")
+else()
+  set(LIBMRN_DIR_PREFIX "")
+endif()
+
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/sources.am MROONGA_SOURCES)
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_no_mysql_sources.am
   LIBMRN_NO_MYSQL_SOURCES)
+string(REGEX REPLACE "([^;]+)" "${LIBMRN_DIR_PREFIX}lib/\\1"
+  LIBMRN_NO_MYSQL_SOURCES "${LIBMRN_NO_MYSQL_SOURCES}")
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_need_mysql_sources.am
   LIBMRN_NEED_MYSQL_SOURCES)
+string(REGEX REPLACE "([^;]+)" "${LIBMRN_DIR_PREFIX}lib/\\1"
+  LIBMRN_NEED_MYSQL_SOURCES "${LIBMRN_NEED_MYSQL_SOURCES}")
+
 if(WITH_MROONGA_STORAGE_ENGINE)
-  string(REGEX REPLACE "([^;]+)" "${MRN_SOURCE_DIR}/lib/\\1"
-    LIBMRN_NO_MYSQL_SOURCES "${LIBMRN_NO_MYSQL_SOURCES}")
-  string(REGEX REPLACE "([^;]+)" "${MRN_SOURCE_DIR}/lib/\\1"
-    LIBMRN_NEED_MYSQL_SOURCES "${LIBMRN_NEED_MYSQL_SOURCES}")
   set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR} CACHE PATH "MySQL source directory")
 else()
-  string(REGEX REPLACE "([^;]+)" "lib/\\1"
-    LIBMRN_NO_MYSQL_SOURCES "${LIBMRN_NO_MYSQL_SOURCES}")
-  string(REGEX REPLACE "([^;]+)" "lib/\\1"
-    LIBMRN_NEED_MYSQL_SOURCES "${LIBMRN_NEED_MYSQL_SOURCES}")
   set(MYSQL_SOURCE_DIR "PATH" CACHE PATH "MySQL source directory")
 endif()
 
