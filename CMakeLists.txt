@@ -139,6 +139,13 @@ if(WIN32)
   
 endif()
 
+if(WITH_MROONGA_STORAGE_ENGINE)
+  MYSQL_ADD_PLUGIN(mroonga "${MROONGA_SOURCES}"
+    STORAGE_ENGINE
+    LINK_LIBRARIES ${GROONGA_LIBRARIES}
+    RECOMPILE_FOR_EMBEDDED)
+endif()
+
 if(WIN32)
 # NOTE: ignore incompatible runtime libraries explicitly.
 #       http://msdn.microsoft.com/en-us/library/6wtdswk0%28v=vs.80%29.aspx 
