@@ -1,4 +1,5 @@
 # Copyright(C) 2012 Kentoku SHIBA
+# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -20,11 +21,11 @@
 drop table if exists t1;
 --enable_warnings
 
-create table t1 (c1 char(10) primary key);
+create table t1 (c1 char(10) primary key) engine=myisam;
 insert into t1 values('abcdefghij');
-insert into t1 values('klmnopqrst');
-insert into t1 values('uvwxyz0123');
-select c1 from t1 force index(PRIMARY) where c1 = 'abcdefghij';
+insert into t1 values(  'cdefghij');
+insert into t1 values(    'efghij');
+select c1 from t1 force index(PRIMARY) where c1 = 'cdefghij';
 drop table t1;
 
 --source include/have_mroonga_deinit.inc

@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS ids;
 --enable_warnings
 
 CREATE TABLE ids (
-  id CHAR(6) CHARACTER SET LATIN1 PRIMARY KEY
+  id char(6) CHARACTER SET latin1 PRIMARY KEY
 );
 
 INSERT INTO ids VALUES("abcdef");
