@@ -48,7 +48,7 @@ show global variables like 'mroonga_log_level';
 set global mroonga_log_level=DUMP;
 show global variables like 'mroonga_log_level';
 
---error 1231
+--error ER_WRONG_VALUE_FOR_VAR
 set global mroonga_log_level=dummy;
 
 --error 1229
