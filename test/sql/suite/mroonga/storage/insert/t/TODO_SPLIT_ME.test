@@ -84,7 +84,7 @@ set sql_mode="";
 # warning 1265
 insert into t1 (c1,_id) values (1,1);
 set sql_mode="strict_all_tables";
---error 1406
+--error ER_DATA_TOO_LONG
 insert into t1 (c1,_id) values (4,1);
 select * from t1;
 drop table t1;

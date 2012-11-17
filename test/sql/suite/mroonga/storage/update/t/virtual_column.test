@@ -32,7 +32,7 @@ set sql_mode="";
 update t1 set _id = 10 where c1 = 1;
 select * from t1;
 set sql_mode="strict_all_tables";
---error 1406
+--error ER_DATA_TOO_LONG
 update t1 set _id = 11 where c1 = 1;
 select * from t1;
 drop table t1;
