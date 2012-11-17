@@ -9627,13 +9627,13 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       break;
     }
   case MYSQL_TYPE_TIME:
-    storage_encode_key_time(field, ptr, buf, size);
+    error = storage_encode_key_time(field, ptr, buf, size);
     break;
   case MYSQL_TYPE_YEAR:
-    storage_encode_key_year(field, ptr, buf, size);
+    error = storage_encode_key_year(field, ptr, buf, size);
     break;
   case MYSQL_TYPE_DATETIME:
-    storage_encode_key_datetime(field, ptr, buf, size);
+    error = storage_encode_key_datetime(field, ptr, buf, size);
     break;
   case MYSQL_TYPE_NEWDATE:
     {
@@ -9651,21 +9651,21 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
     }
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   case MYSQL_TYPE_TIME2:
-    storage_encode_key_time2(field, ptr, buf, size);
+    error = storage_encode_key_time2(field, ptr, buf, size);
     break;
 #endif
   case MYSQL_TYPE_STRING:
-    storage_encode_key_fixed_size_string(field, ptr, buf, size);
+    error = storage_encode_key_fixed_size_string(field, ptr, buf, size);
     break;
   case MYSQL_TYPE_VARCHAR:
   case MYSQL_TYPE_BLOB:
-    storage_encode_key_variable_size_string(field, ptr, buf, size);
+    error = storage_encode_key_variable_size_string(field, ptr, buf, size);
     break;
   case MYSQL_TYPE_ENUM:
-    storage_encode_key_enum(field, ptr, buf, size);
+    error = storage_encode_key_enum(field, ptr, buf, size);
     break;
   case MYSQL_TYPE_SET:
-    storage_encode_key_set(field, ptr, buf, size);
+    error = storage_encode_key_set(field, ptr, buf, size);
     break;
   default:
     error = HA_ERR_UNSUPPORTED;
