@@ -5,12 +5,12 @@ id CHAR(6) CHARACTER SET LATIN1 PRIMARY KEY
 INSERT INTO ids VALUES("abcdef");
 INSERT INTO ids VALUES(  "cdef");
 INSERT INTO ids VALUES(    "ef");
-SELECT * FROM ids ORDER BY id;
+SELECT * FROM ids FORCE INDEX(PRIMARY) ORDER BY id;
 id
 abcdef
 cdef
 ef
-SELECT * FROM ids WHERE id = "cdef";
+SELECT * FROM ids FORCE INDEX(PRIMARY) WHERE id = "cdef";
 id
 cdef
 DROP TABLE ids;
