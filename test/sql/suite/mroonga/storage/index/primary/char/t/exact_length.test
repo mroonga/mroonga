@@ -1,4 +1,5 @@
 # Copyright(C) 2012 Kentoku SHIBA
+# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,14 +18,21 @@
 --source include/have_mroonga.inc
 
 --disable_warnings
-drop table if exists t1;
+DROP TABLE IF EXISTS ids;
 --enable_warnings
 
-create table t1 (c1 char(10) primary key);
-insert into t1 values('abcdefghij');
-insert into t1 values('klmnopqrst');
-insert into t1 values('uvwxyz0123');
-select c1 from t1 force index(PRIMARY) where c1 = 'abcdefghij';
-drop table t1;
+CREATE TABLE ids (
+  id char(10) CHARACTER SET latin1 PRIMARY KEY
+);
+
+INSERT INTO ids VALUES('abcdefghij');
+INSERT INTO ids VALUES('klmnopqrst');
+INSERT INTO ids VALUES('uvwxyz0123');
+
+SELECT * FROM ids FORCE INDEX(PRIMARY) ORDER BY id;
+
+SELECT * FROM ids FORCE INDEX(PRIMARY) WHERE id = 'abcdefghij';
+
+DROP TABLE ids;
 
 --source include/have_mroonga_deinit.inc
