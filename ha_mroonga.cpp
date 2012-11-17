@@ -8413,7 +8413,17 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   DBUG_VOID_RETURN;
 }
 
-int ha_mroonga::generic_store_bulk_string(Field *field, grn_obj *buf)
+int ha_mroonga::generic_store_bulk_fixed_size_string(Field *field, grn_obj *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
+  GRN_TEXT_SET(ctx, buf, field->ptr, field->field_length);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::generic_store_bulk_variable_size_string(Field *field,
+                                                        grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -8745,7 +8755,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     return error;
   switch (field->real_type()) {
   case MYSQL_TYPE_DECIMAL:
-    error = generic_store_bulk_string(field, buf);
+    error = generic_store_bulk_variable_size_string(field, buf);
     break;
   case MYSQL_TYPE_TINY:
   case MYSQL_TYPE_SHORT:
@@ -8782,7 +8792,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     error = generic_store_bulk_new_date(field, buf);
     break;
   case MYSQL_TYPE_VARCHAR:
-    error = generic_store_bulk_string(field, buf);
+    error = generic_store_bulk_variable_size_string(field, buf);
     break;
   case MYSQL_TYPE_BIT:
     error = generic_store_bulk_integer(field, buf);
@@ -8818,8 +8828,10 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     error = generic_store_bulk_blob(field, buf);
     break;
   case MYSQL_TYPE_VAR_STRING:
+    error = generic_store_bulk_variable_size_string(field, buf);
+    break;
   case MYSQL_TYPE_STRING:
-    error = generic_store_bulk_string(field, buf);
+    error = generic_store_bulk_fixed_size_string(field, buf);
     break;
   case MYSQL_TYPE_GEOMETRY:
     error = generic_store_bulk_geometry(field, buf);

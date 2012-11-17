@@ -514,7 +514,8 @@ private:
 
   long long int get_grn_time_from_timestamp_field(Field_timestamp *field);
 
-  int generic_store_bulk_string(Field *field, grn_obj *buf);
+  int generic_store_bulk_fixed_size_string(Field *field, grn_obj *buf);
+  int generic_store_bulk_variable_size_string(Field *field, grn_obj *buf);
   int generic_store_bulk_integer(Field *field, grn_obj *buf);
   int generic_store_bulk_unsigned_integer(Field *field, grn_obj *buf);
   int generic_store_bulk_float(Field *field, grn_obj *buf);

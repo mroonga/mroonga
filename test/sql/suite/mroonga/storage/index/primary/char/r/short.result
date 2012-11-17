@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS ids;
+SET NAMES UTF8;
+CREATE TABLE ids (
+id CHAR(6) PRIMARY KEY
+) DEFAULT CHARSET UTF8;
+INSERT INTO ids VALUES("abcdef");
+INSERT INTO ids VALUES(  "cdef");
+INSERT INTO ids VALUES(    "ef");
+SELECT * FROM ids ORDER BY id;
+id
+abcdef
+cdef
+ef
+SELECT * FROM ids WHERE id = "cdef";
+id
+cdef
+DROP TABLE ids;
