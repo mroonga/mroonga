@@ -94,7 +94,7 @@ drop table t1;
 create table t1 (c1 int primary key, c2 int);
 insert into t1 values(1,100);
 select * from t1;
---error 1062
+--error ER_DUP_ENTRY
 insert into t1 values(1,200);
 select * from t1;
 drop table t1;

@@ -30,7 +30,7 @@ select c1, c2, c3 from t1 force index(uk1) where c2 = -9876543210987654321098765
 select c1, c2, c3 from t1 force index(uk1) order by c2, c3;
 select c1, c2, c3 from t1 force index(uk1) order by c2 desc, c3 desc;
 select c2, c3 from t1 force index(uk1) order by c2, c3;
---error 1062
+--error ER_DUP_ENTRY
 insert into t1 values(6,123.456,0.000000000000000000000000000001);
 delete from t1 where c1 = 1;
 insert into t1 values(1,123.456,0.000000000000000000000000000001);
