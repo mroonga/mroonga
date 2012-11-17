@@ -93,7 +93,7 @@ desc t1;
 drop table t1;
 
 # error test
---error 1173
+--error ER_REQUIRES_PRIMARY_KEY
 create table t1 (c1 int) COMMENT = 'engine "innodb"';
 
 --source include/have_mroonga_deinit.inc
