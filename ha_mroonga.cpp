@@ -4760,6 +4760,7 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
   MRN_SET_WRAP_TABLE_KEY(this, table);
   tmp_disable_binlog(thd);
   error = wrap_handler->ha_write_row(buf);
+  insert_id_for_cur_row = wrap_handler->insert_id_for_cur_row;
   reenable_binlog(thd);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
