@@ -37,7 +37,7 @@ insert into diaries values(3, "富士山", "今日もきれい。");
 select * from diaries where match(title, content) against("富士山");
 
 drop index title on diaries;
---error 1191
+--error ER_FT_MATCHING_KEY_NOT_FOUND
 select * from diaries where match(title, content) against("富士山");
 
 create fulltext index new_title_content_index on diaries (title, content);

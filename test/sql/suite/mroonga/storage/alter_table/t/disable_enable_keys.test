@@ -38,13 +38,13 @@ insert into diaries values(3, "富士山", "今日もきれい。", "2012-04-30 
 create fulltext index content_index on diaries (content);
 explain select * from diaries where id = 2;
 select * from diaries where id = 2;
---error 1191
+--error ER_FT_MATCHING_KEY_NOT_FOUND
 explain select * from diaries where match(title) against("富士山");
---error 1191
+--error ER_FT_MATCHING_KEY_NOT_FOUND
 select * from diaries where match(title) against("富士山");
---error 1191
+--error ER_FT_MATCHING_KEY_NOT_FOUND
 explain select * from diaries where match(content) against("富士山");
---error 1191
+--error ER_FT_MATCHING_KEY_NOT_FOUND
 select * from diaries where match(content) against("富士山");
 explain select * from diaries where create_dt = "2012-04-30 20:00:00";
 select * from diaries where create_dt = "2012-04-30 20:00:00";
