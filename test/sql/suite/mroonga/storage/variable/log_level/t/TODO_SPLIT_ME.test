@@ -51,7 +51,7 @@ show global variables like 'mroonga_log_level';
 --error ER_WRONG_VALUE_FOR_VAR
 set global mroonga_log_level=dummy;
 
---error 1229
+--error ER_GLOBAL_VARIABLE
 set session mroonga_log_level=NOTICE;
 
 --source include/have_mroonga_deinit.inc
