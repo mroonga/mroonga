@@ -9338,6 +9338,17 @@ int ha_mroonga::storage_encode_key_fixed_size_string(Field *field,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::storage_encode_key_variable_size_string(Field *field,
+                                                        const uchar *key,
+                                                        uchar *buf, uint *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  *size = uint2korr(key);
+  memcpy(buf, key + HA_KEY_BLOB_LENGTH, *size);
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
                                         uchar *buf, uint *size)
 {
@@ -9648,14 +9659,8 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
     break;
   case MYSQL_TYPE_VARCHAR:
   case MYSQL_TYPE_BLOB:
-    {
-      ptr += HA_KEY_BLOB_LENGTH;
-      const char *val = (const char *)ptr;
-      int len = strlen(val);
-      memcpy(buf, val, len);
-      *size = len;
-      break;
-    }
+    storage_encode_key_variable_size_string(field, ptr, buf, size);
+    break;
   case MYSQL_TYPE_ENUM:
     storage_encode_key_enum(field, ptr, buf, size);
     break;

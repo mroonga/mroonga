@@ -575,6 +575,8 @@ private:
 
   int storage_encode_key_fixed_size_string(Field *field, const uchar *key,
                                            uchar *buf, uint *size);
+  int storage_encode_key_variable_size_string(Field *field, const uchar *key,
+                                              uchar *buf, uint *size);
   int storage_encode_key_time(Field *field, const uchar *key,
                               uchar *buf, uint *size);
   int storage_encode_key_year(Field *field, const uchar *key,
