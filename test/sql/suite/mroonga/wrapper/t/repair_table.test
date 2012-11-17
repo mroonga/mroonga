@@ -45,8 +45,8 @@ SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
 FLUSH TABLES;
 
-# Error 1016 syscall error 'repair_test.mrn.0000101' (No such file or directory)
---error 1016
+# Error ER_CANT_OPEN_FILE syscall error 'repair_test.mrn.0000101' (No such file or directory)
+--error ER_CANT_OPEN_FILE
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
 REPAIR TABLE diaries;
