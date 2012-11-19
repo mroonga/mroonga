@@ -290,10 +290,9 @@ namespace mrn {
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
     case MYSQL_TYPE_TIME2:
-      // TODO
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME2"));
-      *data_type = TYPE_LONG_LONG_NUMBER;
-      *data_size = 8;
+      *data_type = TYPE_BYTE_SEQUENCE;
+      *data_size = key_part->length;
       break;
 #endif
     case MYSQL_TYPE_NEWDECIMAL:
