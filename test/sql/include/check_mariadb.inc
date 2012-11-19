@@ -15,5 +15,5 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --disable_query_log
-let $have_mariadb = `SELECT LOCATE('MariaDB', @@global.version) > 0`;
+let $mariadb = `SELECT LOCATE('MariaDB', @@global.version) > 0`;
 --enable_query_log
