@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS diaries;
 SET NAMES utf8;
 CREATE TABLE diaries (
 created_at datetime,
-title VARCHAR(256),
+title varchar(256),
 KEY created_at_key(created_at)
 ) DEFAULT CHARSET=utf8;
 INSERT INTO diaries VALUES ("1000-01-01 00:00:00", "The start");
