@@ -479,7 +479,7 @@ error_alloc_param_string:
   DBUG_RETURN(error);
 }
 
-bool mrn_is_geo_key(KEY *key_info)
+bool mrn_is_geo_key(const KEY *key_info)
 {
   return key_info->algorithm == HA_KEY_ALG_UNDEF &&
     key_info->key_parts == 1 &&
