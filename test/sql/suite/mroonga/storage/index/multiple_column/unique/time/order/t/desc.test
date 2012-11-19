@@ -1,4 +1,5 @@
 # Copyright(C) 2012 Kentoku SHIBA
+# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,24 +15,29 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+--source include/have_64bit.inc
 --source include/have_mroonga.inc
 
 --disable_warnings
-drop table if exists t1;
+DROP TABLE IF EXISTS ranges;
 --enable_warnings
 
-create table t1 (c1 int primary key, c2 time, c3 time, unique key uk1(c2,c3));
-insert into t1 values(1,'15:11:12','00:00:00');
-insert into t1 values(2,'15:11:11','00:00:00');
-insert into t1 values(3,'838:59:59','13:21:48');
-insert into t1 values(4,'-838:59:59','838:59:59');
-insert into t1 values(5,'01:02:03','-838:59:59');
-select c1, c2, c3 from t1 force index(uk1) where c2 = '-838:59:59' and c3 = '838:59:59';
-select c1, c2, c3 from t1 force index(uk1) order by c2, c3;
-select c1, c2, c3 from t1 force index(uk1) order by c2 desc, c3 desc;
-select c2, c3 from t1 force index(uk1) order by c2, c3;
-delete from t1 where c1 = 1;
-insert into t1 values(1,'15:11:12','00:00:00');
-drop table t1;
+CREATE TABLE ranges (
+  id int PRIMARY KEY,
+  start time,
+  end time,
+  UNIQUE KEY range_key(start, end)
+);
+
+INSERT INTO ranges VALUES (1, "15:11:12", "838:59:59");
+INSERT INTO ranges VALUES (2, "00:00:00", "15:11:11");
+INSERT INTO ranges VALUES (3, "838:59:59", "00:00:00");
+INSERT INTO ranges VALUES (4, "00:00:00", "838:59:59");
+INSERT INTO ranges VALUES (5, "-838:59:59", "838:59:59");
+
+SELECT * FROM ranges FORCE INDEX(range_key)
+         ORDER BY start DESC, end DESC;
+
+DROP TABLE ranges;
 
 --source include/have_mroonga_deinit.inc
