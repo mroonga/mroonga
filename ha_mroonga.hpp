@@ -140,6 +140,10 @@ extern "C" {
 #  define MRN_JOIN_TAB_HAVE_CONDITION
 #endif
 
+#if MYSQL_VERSION_ID >= 50607
+#  define MRN_ITEM_HAVE_ITEM_NAME
+#endif
+
 #if MYSQL_VERSION_ID < 50600
 #  define MRN_RBR_UPDATE_NEED_ALL_COLUMNS
 #endif

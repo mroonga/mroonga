@@ -7118,7 +7118,13 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
             Item *right_item = arguments[1];
             if (left_item->type() == Item::FIELD_ITEM) {
               GRN_BULK_REWIND(&column_name);
+#ifdef MRN_ITEM_HAVE_ITEM_NAME
+              Item_name_string *name = &(left_item->item_name);
+              GRN_TEXT_PUT(info->ctx, &column_name,
+                           name->ptr(), name->length());
+#else
               GRN_TEXT_PUTS(info->ctx, &column_name, left_item->name);
+#endif
               grn_expr_append_const(info->ctx, expression, &column_name,
                                     GRN_OP_PUSH, 1);
               grn_expr_append_op(info->ctx, expression, GRN_OP_GET_VALUE, 1);
