@@ -11649,8 +11649,18 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info)
 {
-  enum_alter_inplace_result result;
   MRN_DBUG_ENTER_METHOD();
+
+  uint n_keys = altered_table->s->keys;
+  for (uint i = 0; i < n_keys; ++i) {
+    const KEY *key = &(altered_table->key_info[i]);
+    if (key->flags & HA_FULLTEXT || mrn_is_geo_key(key)) {
+      // TODO: Use HA_ALTER_INPLACE_SHARED_LOCK instead of NOT_SUPPORTED
+      DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
+    }
+  }
+
+  enum_alter_inplace_result result;
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   result = wrap_handler->check_if_supported_inplace_alter(altered_table,
