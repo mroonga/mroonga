@@ -9493,7 +9493,7 @@ int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
   int error = 0;
 
   Field_timef *time2_field = (Field_timef *)field;
-  long long int packed_time =
+  longlong packed_time =
     my_time_packed_from_binary(key, time2_field->decimals());
   MYSQL_TIME mysql_time;
   TIME_from_longlong_time_packed(&mysql_time, packed_time);
