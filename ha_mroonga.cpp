@@ -8591,16 +8591,19 @@ long long int ha_mroonga::get_grn_time_from_timestamp_field(Field_timestamp *fie
   if (field->get_timestamp(&time_value, &warnings)) {
     // XXX: Should we report warnings or MySQL does?
   } else {
-    grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
+    grn_time = GRN_TIME_PACK(time_value.tv_sec + mrn_utc_diff_in_seconds,
+                             time_value.tv_usec);
   }
 #elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
   unsigned long int micro_seconds;
   my_time_t seconds = field->get_timestamp(&micro_seconds);
-  grn_time = GRN_TIME_PACK(seconds, micro_seconds);
+  grn_time = GRN_TIME_PACK(seconds + mrn_utc_diff_in_seconds,
+                           micro_seconds);
 #else
   my_bool is_null_value;
   long seconds = field->get_timestamp(&is_null_value);
-  grn_time = GRN_TIME_PACK(seconds, 0);
+  grn_time = GRN_TIME_PACK(seconds + mrn_utc_diff_in_seconds,
+                           0);
 #endif
   DBUG_RETURN(grn_time);
 }
@@ -8962,14 +8965,17 @@ void ha_mroonga::storage_store_field_timestamp(Field *field,
 #ifdef MRN_TIMESTAMP_USE_TIMEVAL
   struct timeval time_value;
   GRN_TIME_UNPACK(time, time_value.tv_sec, time_value.tv_usec);
+  time_value.tv_sec -= mrn_utc_diff_in_seconds;
   timestamp_field->store_timestamp(&time_value);
 #elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
   int32 sec, usec;
   GRN_TIME_UNPACK(time, sec, usec);
+  time_value.tv_sec -= mrn_utc_diff_in_seconds;
   timestamp_field->store_TIME(sec, usec);
 #else
   int32 sec, usec __attribute__((unused));
   GRN_TIME_UNPACK(time, sec, usec);
+  time_value.tv_sec -= mrn_utc_diff_in_seconds;
   timestamp_field->store_timestamp(sec);
 #endif
 }
