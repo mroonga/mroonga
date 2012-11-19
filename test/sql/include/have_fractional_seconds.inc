@@ -15,20 +15,18 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_mariadb.inc
+--source include/check_version.inc
 
-if ($have_mariadb)
-{
+if ($have_mariadb) {
   let $fractional_seconds = 1;
 }
 
-if (!$have_mariadb)
-{
---disable_query_log
-  let $fractional_seconds = `SELECT @@global.version >= '5.6'`;
---enable_query_log
+if (!$have_mariadb) {
+  if ($version_56) {
+    let $fractional_seconds = `SELECT @@global.version >= '5.6'`;
+  }
 }
 
-if (!$fractional_seconds)
-{
+if (!$fractional_seconds) {
   skip fractional seconds in time values are available in MySQL version 5.6 or later or MariaDB;
 }
