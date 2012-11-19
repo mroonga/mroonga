@@ -31,6 +31,10 @@
 #  include <key.h>
 #endif
 
+#ifdef MRN_HAVE_SQL_OPTIMIZER_H
+#  include <sql_optimizer.h>
+#endif
+
 #include <sql_select.h>
 #include <ft_global.h>
 #include <spatial.h>
