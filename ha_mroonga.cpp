@@ -9497,13 +9497,7 @@ int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
     my_time_packed_from_binary(key, time2_field->decimals());
   MYSQL_TIME mysql_time;
   TIME_from_longlong_time_packed(&mysql_time, packed_time);
-  int sec, usec;
-  sec = mysql_time.hour * 60 * 60 + mysql_time.minute * 60 + mysql_time.second;
-  if (mysql_time.neg) {
-    sec = -sec;
-  }
-  usec = mysql_time.second_part;
-  long long int time = GRN_TIME_PACK(sec, usec);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_time);
   memcpy(buf, &time, 8);
   *size = 8;
 
