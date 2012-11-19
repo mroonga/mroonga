@@ -39,6 +39,7 @@
 
 #include <ft_global.h>
 #include <spatial.h>
+#include <tztime.h>
 #include <mysql.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -9491,6 +9492,26 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
+                                              uchar *buf, uint *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+
+  Field_timestampf *timestamp2_field = (Field_timestampf *)field;
+  struct timeval tm;
+  my_timestamp_from_binary(&tm, key, timestamp2_field->decimals());
+  MYSQL_TIME mysql_time;
+  ha_thd()->time_zone()->gmt_sec_to_TIME(&mysql_time, tm);
+  long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time);
+  memcpy(buf, &grn_time, 8);
+  *size = 8;
+
+  DBUG_RETURN(error);
+}
+#endif
+
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
 int ha_mroonga::storage_encode_key_datetime2(Field *field, const uchar *key,
                                              uchar *buf, uint *size)
@@ -9688,6 +9709,11 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       *size = 8;
       break;
     }
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+  case MYSQL_TYPE_TIMESTAMP2:
+    error = storage_encode_key_timestamp2(field, ptr, buf, size);
+    break;
+#endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   case MYSQL_TYPE_DATETIME2:
     error = storage_encode_key_datetime2(field, ptr, buf, size);

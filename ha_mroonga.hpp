@@ -614,6 +614,10 @@ private:
                               uchar *buf, uint *size);
   int storage_encode_key_datetime(Field *field, const uchar *key,
                                   uchar *buf, uint *size);
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+  int storage_encode_key_timestamp2(Field *field, const uchar *key,
+                                    uchar *buf, uint *size);
+#endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   int storage_encode_key_datetime2(Field *field, const uchar *key,
                                    uchar *buf, uint *size);
