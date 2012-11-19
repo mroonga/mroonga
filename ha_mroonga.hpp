@@ -137,7 +137,7 @@ extern "C" {
 #endif
 
 #if MYSQL_VERSION_ID >= 50604
-#  define MRN_JOIN_TAB_HAVE_CONDITION 1
+#  define MRN_JOIN_TAB_HAVE_CONDITION
 #endif
 
 #if MYSQL_VERSION_ID < 50600
