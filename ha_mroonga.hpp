@@ -64,7 +64,6 @@ extern "C" {
 #endif
 
 #if (MYSQL_VERSION_ID >= 50607)
-// TODO
 #  define MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER 1
 #  define MRN_HANDLER_HAVE_HA_PREPARE_INPLACE_ALTER_TABLE 1
 #  define MRN_HANDLER_HAVE_HA_INPLACE_ALTER_TABLE 1
@@ -421,16 +420,22 @@ public:
   bool is_fatal_error(int error_num, uint flags);
   bool check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                   uint table_changes);
+#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
+  enum_alter_inplace_result
+  check_if_supported_inplace_alter(TABLE *altered_table,
+                                   Alter_inplace_info *ha_alter_info);
+#else
   uint alter_table_flags(uint flags);
-#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
+#  ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                 handler_add_index **add);
   int final_add_index(handler_add_index *add, bool commit);
-#else
+#  else
   int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
-#endif
+#  endif
   int prepare_drop_index(TABLE *table_arg, uint *key_num, uint num_of_keys);
   int final_drop_index(TABLE *table_arg);
+#endif
   int update_auto_increment();
   void set_next_insert_id(ulonglong id);
   void get_auto_increment(ulonglong offset, ulonglong increment, ulonglong nb_desired_values,
@@ -492,6 +497,16 @@ protected:
                                      uint key_length,
                                      qc_engine_callback *engine_callback,
                                      ulonglong *engine_data);
+#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
+  bool prepare_inplace_alter_table(TABLE *altered_table,
+                                   Alter_inplace_info *ha_alter_info);
+  bool inplace_alter_table(TABLE *altered_table,
+                           Alter_inplace_info *ha_alter_info);
+  bool commit_inplace_alter_table(TABLE *altered_table,
+                                  Alter_inplace_info *ha_alter_info,
+                                  bool commit);
+  void notify_table_changed();
+#endif
 
 private:
   void mkdir_p(const char *directory);
@@ -927,31 +942,56 @@ private:
                                           uint table_changes);
   bool storage_check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                           uint table_changes);
-  uint wrapper_alter_table_flags(uint flags);
-  uint storage_alter_table_flags(uint flags);
-#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
-  int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
-                        handler_add_index **add);
-  int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
-                        handler_add_index **add);
-#else
-  int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
-  int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
-#endif
   int storage_add_index_multiple_columns(KEY *key_info, uint num_of_keys,
                                          grn_obj **index_tables,
                                          grn_obj **index_columns,
                                          bool skip_unique_key);
-#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
+#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
+  enum_alter_inplace_result
+  wrapper_check_if_supported_inplace_alter(TABLE *altered_table,
+                                           Alter_inplace_info *ha_alter_info);
+  enum_alter_inplace_result
+  storage_check_if_supported_inplace_alter(TABLE *altered_table,
+                                           Alter_inplace_info *ha_alter_info);
+  bool wrapper_prepare_inplace_alter_table(TABLE *altered_table,
+                                           Alter_inplace_info *ha_alter_info);
+  bool storage_prepare_inplace_alter_table(TABLE *altered_table,
+                                           Alter_inplace_info *ha_alter_info);
+  bool wrapper_inplace_alter_table(TABLE *altered_table,
+                                   Alter_inplace_info *ha_alter_info);
+  bool storage_inplace_alter_table(TABLE *altered_table,
+                                   Alter_inplace_info *ha_alter_info);
+  bool wrapper_commit_inplace_alter_table(TABLE *altered_table,
+                                          Alter_inplace_info *ha_alter_info,
+                                          bool commit);
+  bool storage_commit_inplace_alter_table(TABLE *altered_table,
+                                          Alter_inplace_info *ha_alter_info,
+                                          bool commit);
+  void wrapper_notify_table_changed();
+  void storage_notify_table_changed();
+#else
+  uint wrapper_alter_table_flags(uint flags);
+  uint storage_alter_table_flags(uint flags);
+#  ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
+  int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
+                        handler_add_index **add);
+  int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
+                        handler_add_index **add);
+#  else
+  int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
+  int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
+#  endif
+#  ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   int wrapper_final_add_index(handler_add_index *add, bool commit);
   int storage_final_add_index(handler_add_index *add, bool commit);
-#endif
+#  endif
   int wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
                                  uint num_of_keys);
   int storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
                                  uint num_of_keys);
   int wrapper_final_drop_index(TABLE *table_arg);
   int storage_final_drop_index(TABLE *table_arg);
+#endif
   int wrapper_update_auto_increment();
   int storage_update_auto_increment();
   void wrapper_set_next_insert_id(ulonglong id);

@@ -1627,6 +1627,7 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
 
 static uint mrn_alter_table_flags(uint flags) {
   uint ret_flags = 0;
+#ifdef HA_INPLACE_ADD_INDEX_NO_READ_WRITE
   ret_flags |=
     HA_INPLACE_ADD_INDEX_NO_READ_WRITE |
     HA_INPLACE_DROP_INDEX_NO_READ_WRITE |
@@ -1640,6 +1641,7 @@ static uint mrn_alter_table_flags(uint flags) {
     HA_INPLACE_DROP_UNIQUE_INDEX_NO_WRITE |
     HA_INPLACE_ADD_PK_INDEX_NO_WRITE |
     HA_INPLACE_DROP_PK_INDEX_NO_WRITE;
+#endif
   return ret_flags;
 }
 
@@ -11566,6 +11568,267 @@ bool ha_mroonga::check_if_incompatible_data(
   DBUG_RETURN(res);
 }
 
+int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
+                                                   uint num_of_keys,
+                                                   grn_obj **index_tables,
+                                                   grn_obj **index_columns,
+                                                   bool skip_unique_key)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+
+  if (!(error = storage_rnd_init(true)))
+  {
+    while (!(error = storage_rnd_next(table->record[0])))
+    {
+      for (uint i = 0; i < num_of_keys; i++) {
+        KEY *current_key_info = key_info + i;
+        if (
+          current_key_info->key_parts == 1 ||
+          (current_key_info->flags & HA_FULLTEXT)
+          ) {
+          continue;
+        }
+        if (skip_unique_key && (key_info[i].flags & HA_NOSAME)) {
+          continue;
+        }
+        if (!index_columns[i]) {
+          continue;
+        }
+
+        /* fix key_info.key_length */
+        for (uint j = 0; j < current_key_info->key_parts; j++) {
+          if (
+            !current_key_info->key_part[j].null_bit &&
+            current_key_info->key_part[j].field->null_bit
+            ) {
+            current_key_info->key_length++;
+            current_key_info->key_part[j].null_bit =
+              current_key_info->key_part[j].field->null_bit;
+          }
+        }
+        if (key_info[i].flags & HA_NOSAME) {
+          grn_id key_id;
+          if ((error = storage_write_row_unique_index(table->record[0],
+                                                      record_id,
+                                                      current_key_info,
+                                                      index_tables[i],
+                                                      &key_id)))
+          {
+            if (error == HA_ERR_FOUND_DUPP_KEY)
+            {
+              error = HA_ERR_FOUND_DUPP_UNIQUE;
+            }
+            break;
+          }
+        }
+        if ((error = storage_write_row_multiple_column_index(table->record[0],
+                                                             record_id,
+                                                             current_key_info,
+                                                             index_columns[i])))
+        {
+          break;
+        }
+      }
+      if (error)
+        break;
+    }
+    if (error != HA_ERR_END_OF_FILE) {
+      storage_rnd_end();
+    } else {
+      error = storage_rnd_end();
+    }
+  }
+
+  DBUG_RETURN(error);
+}
+
+#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
+enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  enum_alter_inplace_result result;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  result = wrap_handler->check_if_supported_inplace_alter(altered_table,
+                                                          ha_alter_info);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(result);
+}
+
+enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+  // TODO: Use HA_ALTER_INPLACE_SHARED_LOCK instead of NOT_SUPPORTED
+  DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
+}
+
+enum_alter_inplace_result ha_mroonga::check_if_supported_inplace_alter(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+  enum_alter_inplace_result result;
+  if (share->wrapper_mode) {
+    result = wrapper_check_if_supported_inplace_alter(altered_table,
+                                                      ha_alter_info);
+  } else {
+    result = storage_check_if_supported_inplace_alter(altered_table,
+                                                      ha_alter_info);
+  }
+  DBUG_RETURN(result);
+}
+
+bool ha_mroonga::wrapper_prepare_inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  bool result;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  result = wrap_handler->ha_prepare_inplace_alter_table(altered_table,
+                                                        ha_alter_info);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(result);
+}
+
+bool ha_mroonga::storage_prepare_inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(true);
+}
+
+bool ha_mroonga::prepare_inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool result;
+  if (share->wrapper_mode) {
+    result = wrapper_prepare_inplace_alter_table(altered_table, ha_alter_info);
+  } else {
+    result = storage_prepare_inplace_alter_table(altered_table, ha_alter_info);
+  }
+  DBUG_RETURN(result);
+}
+
+bool ha_mroonga::wrapper_inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  bool result;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  result = wrap_handler->ha_inplace_alter_table(altered_table, ha_alter_info);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(result);
+}
+
+bool ha_mroonga::storage_inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(true);
+}
+
+bool ha_mroonga::inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool result;
+  if (share->wrapper_mode) {
+    result = wrapper_inplace_alter_table(altered_table, ha_alter_info);
+  } else {
+    result = storage_inplace_alter_table(altered_table, ha_alter_info);
+  }
+  DBUG_RETURN(result);
+}
+
+bool ha_mroonga::wrapper_commit_inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info,
+  bool commit)
+{
+  bool result;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  result = wrap_handler->ha_commit_inplace_alter_table(altered_table,
+                                                       ha_alter_info,
+                                                       commit);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(result);
+}
+
+bool ha_mroonga::storage_commit_inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info,
+  bool commit)
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(true);
+}
+
+bool ha_mroonga::commit_inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info,
+  bool commit)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool result;
+  if (share->wrapper_mode) {
+    result = wrapper_commit_inplace_alter_table(altered_table, ha_alter_info,
+                                                commit);
+  } else {
+    result = storage_commit_inplace_alter_table(altered_table, ha_alter_info,
+                                                commit);
+  }
+  DBUG_RETURN(result);
+}
+
+void ha_mroonga::wrapper_notify_table_changed()
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->ha_notify_table_changed();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_notify_table_changed()
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::notify_table_changed()
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode) {
+    wrapper_notify_table_changed();
+  } else {
+    storage_notify_table_changed();
+  }
+  DBUG_VOID_RETURN;
+}
+#else
 uint ha_mroonga::wrapper_alter_table_flags(uint flags)
 {
   uint res;
@@ -11819,83 +12082,6 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   my_free(tmp_share, MYF(0));
   DBUG_RETURN(error);
 }
-
-int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
-                                                   uint num_of_keys,
-                                                   grn_obj **index_tables,
-                                                   grn_obj **index_columns,
-                                                   bool skip_unique_key)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  int error = 0;
-
-  if (!(error = storage_rnd_init(true)))
-  {
-    while (!(error = storage_rnd_next(table->record[0])))
-    {
-      for (uint i = 0; i < num_of_keys; i++) {
-        KEY *current_key_info = key_info + i;
-        if (
-          current_key_info->key_parts == 1 ||
-          (current_key_info->flags & HA_FULLTEXT)
-          ) {
-          continue;
-        }
-        if (skip_unique_key && (key_info[i].flags & HA_NOSAME)) {
-          continue;
-        }
-        if (!index_columns[i]) {
-          continue;
-        }
-
-        /* fix key_info.key_length */
-        for (uint j = 0; j < current_key_info->key_parts; j++) {
-          if (
-            !current_key_info->key_part[j].null_bit &&
-            current_key_info->key_part[j].field->null_bit
-            ) {
-            current_key_info->key_length++;
-            current_key_info->key_part[j].null_bit =
-              current_key_info->key_part[j].field->null_bit;
-          }
-        }
-        if (key_info[i].flags & HA_NOSAME) {
-          grn_id key_id;
-          if ((error = storage_write_row_unique_index(table->record[0],
-                                                      record_id,
-                                                      current_key_info,
-                                                      index_tables[i],
-                                                      &key_id)))
-          {
-            if (error == HA_ERR_FOUND_DUPP_KEY)
-            {
-              error = HA_ERR_FOUND_DUPP_UNIQUE;
-            }
-            break;
-          }
-        }
-        if ((error = storage_write_row_multiple_column_index(table->record[0],
-                                                             record_id,
-                                                             current_key_info,
-                                                             index_columns[i])))
-        {
-          break;
-        }
-      }
-      if (error)
-        break;
-    }
-    if (error != HA_ERR_END_OF_FILE) {
-      storage_rnd_end();
-    } else {
-      error = storage_rnd_end();
-    }
-  }
-
-  DBUG_RETURN(error);
-}
-
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
 int ha_mroonga::add_index(TABLE *table_arg, KEY *key_info,
                           uint num_of_keys, handler_add_index **add)
@@ -12084,6 +12270,7 @@ int ha_mroonga::final_drop_index(TABLE *table_arg)
   }
   DBUG_RETURN(res);
 }
+#endif
 
 int ha_mroonga::wrapper_update_auto_increment()
 {
