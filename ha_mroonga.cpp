@@ -566,6 +566,11 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = "HA_EXTRA_PREPARE_FOR_FORCED_CLOSE";
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_EXPORT
+  case HA_EXTRA_EXPORT:
+    inspected = "HA_EXTRA_EXPORT";
+    break;
+#endif
   }
   return inspected;
 }
