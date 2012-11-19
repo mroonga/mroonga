@@ -7262,7 +7262,7 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
 FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
-  COND *select_cond = get_select_cond();
+  Item *select_cond = get_select_cond();
   current_ft_item = get_tgt_ft_item(current_ft_item);
   if (select_cond && !check_ft_in_where_item_type(select_cond, current_ft_item))
   {
@@ -12984,7 +12984,7 @@ my_bool ha_mroonga::register_query_cache_table(THD *thd,
   DBUG_RETURN(res);
 }
 
-COND *ha_mroonga::get_select_cond()
+Item *ha_mroonga::get_select_cond()
 {
   MRN_DBUG_ENTER_METHOD();
   st_select_lex *select_lex = table->pos_in_table_list->select_lex;
@@ -12993,7 +12993,11 @@ COND *ha_mroonga::get_select_cond()
   DBUG_PRINT("info", ("mroonga: join = %p", join));
   JOIN_TAB *join_tab = join->join_tab + join->const_tables;
   DBUG_PRINT("info", ("mroonga: join_tab = %p", join_tab));
-  COND *select_cond = join_tab->select_cond;
+#ifdef MRN_JOIN_TAB_HAVE_CONDITION
+  Item *select_cond = join_tab->condition();
+#else
+  Item *select_cond = join_tab->select_cond;
+#endif
   DBUG_PRINT("info", ("mroonga: select_cond = %p", select_cond));
   DBUG_RETURN(select_cond);
 }

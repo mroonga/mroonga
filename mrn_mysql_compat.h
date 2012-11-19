@@ -51,10 +51,6 @@
 #  define HA_INPLACE_DROP_PK_INDEX_NO_WRITE          HA_ONLINE_DROP_PK_INDEX
 #endif
 
-#if MYSQL_VERSION_ID < 50600
-  typedef Item COND;
-#endif
-
 #if MYSQL_VERSION_ID < 50603
   typedef MYSQL_ERROR Sql_condition;
 #endif

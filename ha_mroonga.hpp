@@ -136,6 +136,10 @@ extern "C" {
 #  define MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
 #endif
 
+#if MYSQL_VERSION_ID >= 50604
+#  define MRN_JOIN_TAB_HAVE_CONDITION 1
+#endif
+
 #if MYSQL_VERSION_ID < 50600
 #  define MRN_RBR_UPDATE_NEED_ALL_COLUMNS
 #endif
@@ -1011,7 +1015,7 @@ private:
                                              qc_engine_callback
                                              *engine_callback,
                                              ulonglong *engine_data);
-  COND *get_select_cond();
+  Item *get_select_cond();
   Item_func_match *get_tgt_ft_item(Item_func_match *current);
   bool check_ft_in_where_item_type(Item *item, Item *ft_item);
   bool check_ft_in_where_item_cond(Item_cond *item_cond, Item *ft_item);
