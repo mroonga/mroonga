@@ -22,7 +22,7 @@ FORCE INDEX (created_at_index)
 WHERE created_at = "2012-04-30 20:00:00";
 id	title	created_at
 1	Hello	2012-04-30 20:00:00
-ALTER TABLE diaries DISABLE keys;
+ALTER TABLE diaries DISABLE KEYS;
 EXPLAIN
 SELECT *
 FROM diaries

@@ -20,7 +20,7 @@ FORCE INDEX (PRIMARY)
 WHERE id = 2;
 id	title
 2	天気
-ALTER TABLE diaries DISABLE keys;
+ALTER TABLE diaries DISABLE KEYS;
 EXPLAIN
 SELECT *
 FROM diaries
