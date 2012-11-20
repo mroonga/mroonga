@@ -42,7 +42,7 @@ SELECT *
        FORCE INDEX (title_index)
        WHERE MATCH (title) AGAINST ("富士山");
 
-ALTER TABLE diaries DISABLE KEYS
+ALTER TABLE diaries DISABLE KEYS;
 
 --error ER_FT_MATCHING_KEY_NOT_FOUND
 EXPLAIN
