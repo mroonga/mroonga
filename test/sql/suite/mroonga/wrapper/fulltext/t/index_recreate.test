@@ -18,28 +18,34 @@
 --source include/have_mroonga.inc
 
 --disable_warnings
-drop table if exists diaries;
+DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
-set names utf8;
-create table diaries (
-  id int primary key,
+SET NAMES utf8;
+CREATE TABLE diaries (
+  id int PRIMARY KEY,
   title varchar(255),
   content text,
-  fulltext index (title)
-) default charset utf8 COMMENT = 'engine "innodb"';
-show create table diaries;
-insert into diaries values(1, "Hello", "はじめました。");
-insert into diaries values(2, "天気", "明日の富士山の天気について");
-insert into diaries values(3, "富士山", "今日もきれい。");
-select * from diaries where match(title) against("富士山");
-drop index title on diaries;
+  FULLTEXT INDEX (title)
+) DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"';
+SHOW CREATE TABLE diaries;
+
+INSERT INTO diaries VALUES(1, "Hello", "はじめました。");
+INSERT INTO diaries VALUES(2, "天気", "明日の富士山の天気について");
+INSERT INTO diaries VALUES(3, "富士山", "今日もきれい。");
+
+SELECT * FROM diaries WHERE MATCH(title) AGAINST("富士山");
+
+DROP INDEX title ON diaries;
+
 --error ER_FT_MATCHING_KEY_NOT_FOUND
-select * from diaries where match(title) against("富士山");
-select * from diaries;
-create fulltext index new_title_index on diaries (title);
-select * from diaries where match(title) against("富士山");
-select * from diaries;
-drop table diaries;
+SELECT * FROM diaries WHERE MATCH(title) AGAINST("富士山");
+SELECT * FROM diaries;
+
+CREATE FULLTEXT INDEX new_title_index ON diaries (title);
+SELECT * FROM diaries WHERE MATCH(title) AGAINST("富士山");
+SELECT * FROM diaries;
+
+DROP TABLE diaries;
 
 --source include/have_mroonga_deinit.inc
