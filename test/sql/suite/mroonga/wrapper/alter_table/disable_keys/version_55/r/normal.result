@@ -29,7 +29,7 @@ FROM diaries
 FORCE INDEX (created_at_index)
 WHERE created_at = "2012-04-30 20:00:00";
 id	select_type	table	type	possible_keys	key	key_len	ref	rows	Extra
-1	SIMPLE	diaries	ALL	NULL	NULL	NULL	NULL	3	Using where
+1	SIMPLE	diaries	ref	created_at_index	created_at_index	9	const	1	Using where
 SELECT *
 FROM diaries
 FORCE INDEX (created_at_index)
