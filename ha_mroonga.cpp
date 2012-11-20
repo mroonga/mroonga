@@ -2052,6 +2052,151 @@ static _ft_vft mrn_no_such_key_ft_vft = {
   mrn_no_such_key_ft_reinit_search
 };
 
+#ifdef HA_CAN_FULLTEXT_EXT
+static uint mrn_generic_ft_get_version()
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  // This value is not used in MySQL 5.6.7-rc. So it is
+  // meaningless. It may be used in the future...
+  uint version = 1;
+  DBUG_RETURN(version);
+}
+
+static ulonglong mrn_generic_ft_ext_get_flags()
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  // TODO: Should we support FTS_ORDERED_RESULT?
+  // TODO: Shuold we support FTS_DOCID_IN_RESULT?
+  ulonglong flags = 0;
+  DBUG_RETURN(flags);
+}
+
+// This function is used if we enable FTS_DOCID_IN_RESULT flag and the
+// table has "FTS_DOC_ID" (defined as FTS_DOC_ID_COL_NAME macro)
+// special name column. Should we support "FTS_DOC_ID" special name
+// column?
+// See also sql/sql_optimizer.cc:JOIN::optimize_fts_query().
+static ulonglong mrn_generic_ft_ext_get_docid(FT_INFO_EXT *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong id = GRN_ID_NIL;
+  DBUG_RETURN(id);
+}
+
+static ulonglong mrn_generic_ft_ext_count_matches(FT_INFO_EXT *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  st_mrn_ft_info *info = reinterpret_cast<st_mrn_ft_info *>(handler);
+  ulonglong n_records = grn_table_size(info->ctx, info->result);
+  DBUG_RETURN(n_records);
+}
+
+static uint mrn_wrapper_ft_ext_get_version()
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  uint version = mrn_generic_ft_get_version();
+  DBUG_RETURN(version);
+}
+
+static ulonglong mrn_wrapper_ft_ext_get_flags()
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong flags = mrn_generic_ft_ext_get_flags();
+  DBUG_RETURN(flags);
+}
+
+static ulonglong mrn_wrapper_ft_ext_get_docid(FT_INFO_EXT *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong id = mrn_generic_ft_ext_get_docid(handler);
+  DBUG_RETURN(id);
+}
+
+static ulonglong mrn_wrapper_ft_ext_count_matches(FT_INFO_EXT *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong n_records = mrn_generic_ft_ext_count_matches(handler);
+  DBUG_RETURN(n_records);
+}
+
+static _ft_vft_ext mrn_wrapper_ft_vft_ext = {
+  mrn_wrapper_ft_ext_get_version,
+  mrn_wrapper_ft_ext_get_flags,
+  mrn_wrapper_ft_ext_get_docid,
+  mrn_wrapper_ft_ext_count_matches
+};
+
+static uint mrn_storage_ft_ext_get_version()
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  uint version = mrn_generic_ft_get_version();
+  DBUG_RETURN(version);
+}
+
+static ulonglong mrn_storage_ft_ext_get_flags()
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong flags = mrn_generic_ft_ext_get_flags();
+  DBUG_RETURN(flags);
+}
+
+static ulonglong mrn_storage_ft_ext_get_docid(FT_INFO_EXT *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong id = mrn_generic_ft_ext_get_docid(handler);
+  DBUG_RETURN(id);
+}
+
+static ulonglong mrn_storage_ft_ext_count_matches(FT_INFO_EXT *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong n_records = mrn_generic_ft_ext_count_matches(handler);
+  DBUG_RETURN(n_records);
+}
+
+static _ft_vft_ext mrn_storage_ft_vft_ext = {
+  mrn_storage_ft_ext_get_version,
+  mrn_storage_ft_ext_get_flags,
+  mrn_storage_ft_ext_get_docid,
+  mrn_storage_ft_ext_count_matches
+};
+
+static uint mrn_no_such_key_ft_ext_get_version()
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  uint version = mrn_generic_ft_get_version();
+  DBUG_RETURN(version);
+}
+
+static ulonglong mrn_no_such_key_ft_ext_get_flags()
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong flags = mrn_generic_ft_ext_get_flags();
+  DBUG_RETURN(flags);
+}
+
+static ulonglong mrn_no_such_key_ft_ext_get_docid(FT_INFO_EXT *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong id = GRN_ID_NIL;
+  DBUG_RETURN(id);
+}
+
+static ulonglong mrn_no_such_key_ft_ext_count_matches(FT_INFO_EXT *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  ulonglong n_records = 0;
+  DBUG_RETURN(n_records);
+}
+
+static _ft_vft_ext mrn_no_such_key_ft_vft_ext = {
+  mrn_no_such_key_ft_ext_get_version,
+  mrn_no_such_key_ft_ext_get_flags,
+  mrn_no_such_key_ft_ext_get_docid,
+  mrn_no_such_key_ft_ext_count_matches
+};
+#endif
+
 /* handler implementation */
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   :handler(hton, share_arg),
@@ -2377,6 +2522,9 @@ ulonglong ha_mroonga::wrapper_table_flags() const
 #ifdef HA_CAN_REPAIR
   table_flags |= HA_CAN_REPAIR;
 #endif
+#ifdef HA_CAN_FULLTEXT_EXT
+  table_flags |= HA_CAN_FULLTEXT_EXT;
+#endif
   DBUG_RETURN(table_flags);
 }
 
@@ -2403,6 +2551,9 @@ ulonglong ha_mroonga::storage_table_flags() const
 #endif
 #ifdef HA_CAN_REPAIR
   flags |= HA_CAN_REPAIR;
+#endif
+#ifdef HA_CAN_FULLTEXT_EXT
+  flags |= HA_CAN_FULLTEXT_EXT;
 #endif
   DBUG_RETURN(flags);
 }
@@ -7348,6 +7499,9 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
   FT_INFO *info = generic_ft_init_ext(flags, key_nr, key);
   struct st_mrn_ft_info *mrn_ft_info = (struct st_mrn_ft_info *)info;
   mrn_ft_info->please = &mrn_wrapper_ft_vft;
+#ifdef HA_CAN_FULLTEXT_EXT
+  mrn_ft_info->could_you = &mrn_wrapper_ft_vft_ext;
+#endif
   DBUG_RETURN(info);
 }
 
@@ -7357,6 +7511,9 @@ FT_INFO *ha_mroonga::storage_ft_init_ext(uint flags, uint key_nr, String *key)
   FT_INFO *info = generic_ft_init_ext(flags, key_nr, key);
   struct st_mrn_ft_info *mrn_ft_info = (struct st_mrn_ft_info *)info;
   mrn_ft_info->please = &mrn_storage_ft_vft;
+#ifdef HA_CAN_FULLTEXT_EXT
+  mrn_ft_info->could_you = &mrn_storage_ft_vft_ext;
+#endif
   DBUG_RETURN(info);
 }
 
@@ -7368,6 +7525,9 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint key_nr, String *key)
   if (key_nr == NO_SUCH_KEY) {
     struct st_mrn_ft_info *mrn_ft_info = new st_mrn_ft_info();
     mrn_ft_info->please = &mrn_no_such_key_ft_vft;
+#ifdef HA_CAN_FULLTEXT_EXT
+    mrn_ft_info->could_you = &mrn_no_such_key_ft_vft_ext;
+#endif
     info = (FT_INFO *)mrn_ft_info;
   } else {
     if (share->wrapper_mode)
@@ -13257,11 +13417,14 @@ Item *ha_mroonga::get_select_cond()
   DBUG_PRINT("info", ("mroonga: join = %p", join));
   JOIN_TAB *join_tab = join->join_tab + join->const_tables;
   DBUG_PRINT("info", ("mroonga: join_tab = %p", join_tab));
+  Item *select_cond = NULL;
+  if (join_tab) {
 #ifdef MRN_JOIN_TAB_HAVE_CONDITION
-  Item *select_cond = join_tab->condition();
+    select_cond = join_tab->condition();
 #else
-  Item *select_cond = join_tab->select_cond;
+    select_cond = join_tab->select_cond;
 #endif
+  }
   DBUG_PRINT("info", ("mroonga: select_cond = %p", select_cond));
   DBUG_RETURN(select_cond);
 }

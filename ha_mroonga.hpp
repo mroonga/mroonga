@@ -182,6 +182,9 @@ class ha_mroonga;
 struct st_mrn_ft_info
 {
   struct _ft_vft *please;
+#ifdef HA_CAN_FULLTEXT_EXT
+  struct _ft_vft_ext *could_you;
+#endif
   grn_ctx *ctx;
   grn_obj *table;
   grn_obj *result;
