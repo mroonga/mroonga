@@ -9535,6 +9535,43 @@ int ha_mroonga::storage_encode_key_variable_size_string(Field *field,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
+                                             uchar *buf, uint *size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  long long int time;
+  MYSQL_TIME mysql_time;
+#ifdef MRN_MARIADB_P
+  if (field->decimals() == 0) {
+    my_time_t my_time = sint4korr(key);
+    ha_thd()->variables.time_zone->gmt_sec_to_TIME(&mysql_time, my_time);
+    mysql_time.second_part = 0;
+  } else {
+    // TODO: remove me when MariaDB becomes based on MySQL 5.6.
+    // This implementation may be costful.
+    Field_timestamp_hires *timestamp_hires_field =
+      (Field_timestamp_hires *)field;
+    Field_timestamp_hires unpacker((uchar *)key,
+                                   (uchar *)(key - 1),
+                                   timestamp_hires_field->null_bit,
+                                   timestamp_hires_field->unireg_check,
+                                   timestamp_hires_field->field_name,
+                                   timestamp_hires_field->decimals(),
+                                   timestamp_hires_field->charset());
+    uint fuzzy_date = 0;
+    unpacker.get_date(&mysql_time, fuzzy_date);
+  }
+#else
+  my_time_t my_time = uint4korr(key);
+  ha_thd()->variables.time_zone->gmt_sec_to_TIME(&mysql_time, my_time);
+#endif
+  time = mrn_mysql_time_to_grn_time(&mysql_time);
+  memcpy(buf, &time, 8);
+  *size = 8;
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
                                         uchar *buf, uint *size)
 {
@@ -9822,6 +9859,9 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       *size = 4;
       break;
     }
+  case MYSQL_TYPE_TIMESTAMP:
+    error = storage_encode_key_timestamp(field, ptr, buf, size);
+    break;
   case MYSQL_TYPE_LONGLONG:
     {
       memcpy(buf, ptr, 8);
