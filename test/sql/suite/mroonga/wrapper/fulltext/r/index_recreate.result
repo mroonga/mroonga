@@ -15,14 +15,14 @@ diaries	CREATE TABLE `diaries` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title` (`title`)
 ) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"'
-INSERT INTO diaries VALUES(1, "Hello", "はじめました。");
-INSERT INTO diaries VALUES(2, "天気", "明日の富士山の天気について");
-INSERT INTO diaries VALUES(3, "富士山", "今日もきれい。");
-SELECT * FROM diaries WHERE MATCH(title) AGAINST("富士山");
+INSERT INTO diaries VALUES (1, "Hello", "はじめました。");
+INSERT INTO diaries VALUES (2, "天気", "明日の富士山の天気について");
+INSERT INTO diaries VALUES (3, "富士山", "今日もきれい。");
+SELECT * FROM diaries WHERE MATCH (title) AGAINST ("富士山");
 id	title	content
 3	富士山	今日もきれい。
 DROP INDEX title ON diaries;
-SELECT * FROM diaries WHERE MATCH(title) AGAINST("富士山");
+SELECT * FROM diaries WHERE MATCH (title) AGAINST ("富士山");
 ERROR HY000: Can't find FULLTEXT index matching the column list
 SELECT * FROM diaries;
 id	title	content
@@ -30,7 +30,7 @@ id	title	content
 2	天気	明日の富士山の天気について
 3	富士山	今日もきれい。
 CREATE FULLTEXT INDEX new_title_index ON diaries (title);
-SELECT * FROM diaries WHERE MATCH(title) AGAINST("富士山");
+SELECT * FROM diaries WHERE MATCH (title) AGAINST ("富士山");
 id	title	content
 3	富士山	今日もきれい。
 SELECT * FROM diaries;
