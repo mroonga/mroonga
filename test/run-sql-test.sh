@@ -16,9 +16,9 @@ case `uname` in
 	;;
 esac
 
-if test "$NO_MAKE" != "yes"; then
+if [ "$NO_MAKE" != "yes" ]; then
     MAKE_ARGS=
-    if test -n "$n_processors"; then
+    if [ -n "$n_processors" ]; then
 	MAKE_ARGS="-j${n_processors}"
     fi
     make $MAKE_ARGS -C $top_dir > /dev/null || exit 1
@@ -34,21 +34,21 @@ build_test_include_dir="${build_mysql_test_dir}/include"
 case "${MYSQL_VERSION}" in
     5.1.*)
 	plugins_dir="${MYSQL_BUILD_DIR}/lib/mysql/plugin"
-	if ! test -d "${build_test_suites_dir}"; then
+	if [ ! -d "${build_test_suites_dir}" ]; then
 	    mkdir -p "${build_test_suites_dir}"
 	fi
 	;;
     *)
-	if ! test -d "${build_test_suites_dir}"; then
+	if [ ! -d "${build_test_suites_dir}" ]; then
 	    ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
 	fi
 	maria_storage_dir="${MYSQL_SOURCE_DIR}/storage/maria"
-	if test -d "${maria_storage_dir}"; then
+	if [ -d "${maria_storage_dir}" ]; then
 	    mariadb="yes"
 	else
 	    mariadb="no"
 	fi
-	if test "${mariadb}" = "yes"; then
+	if [ "${mariadb}" = "yes" ]; then
 	    ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
 	    plugins_dir=
 	else
@@ -61,7 +61,7 @@ same_link_p()
 {
     src=$1
     dest=$2
-    if test -L "$dest" -a "$(readlink "$dest")" = "$src"; then
+    if [ -L "$dest" -a "$(readlink "$dest")" = "$src" ]; then
 	return 0
     else
 	return 1
@@ -95,10 +95,10 @@ innodb_test_suite_dir="${build_test_suites_dir}/innodb"
 mroonga_wrapper_innodb_test_suite_name="mroonga_wrapper_innodb"
 mroonga_wrapper_innodb_test_suite_dir="${build_test_suites_dir}/${mroonga_wrapper_innodb_test_suite_name}"
 mroonga_wrapper_innodb_include_dir="${mroonga_wrapper_innodb_test_suite_dir}/include/"
-if test "$0" -nt "$(dirname "${mroonga_wrapper_innodb_test_suite_dir}")"; then
+if [ "$0" -nt "$(dirname "${mroonga_wrapper_innodb_test_suite_dir}")" ]; then
     rm -rf "${mroonga_wrapper_innodb_test_suite_dir}"
 fi
-if ! test -d "${mroonga_wrapper_innodb_test_suite_dir}"; then
+if [ ! -d "${mroonga_wrapper_innodb_test_suite_dir}" ]; then
     cp -rp "${innodb_test_suite_dir}" "${mroonga_wrapper_innodb_test_suite_dir}"
     mkdir -p "${mroonga_wrapper_innodb_include_dir}"
     cp -rp "${build_test_include_dir}"/innodb[-_]*.inc \
@@ -129,8 +129,8 @@ for test_suite_name in $(find mroonga -type d '!' -name '[tr]'); do
 done
 cd -
 
-if test -n "${plugins_dir}"; then
-    if test -d "${top_dir}/.libs"; then
+if [ -n "${plugins_dir}" ]; then
+    if [ -d "${top_dir}/.libs" ]; then
 	make -C ${top_dir} \
 	    install-pluginLTLIBRARIES \
 	    plugindir=${plugins_dir} > /dev/null || \
