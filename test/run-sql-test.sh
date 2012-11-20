@@ -119,13 +119,14 @@ if [ ! -d "${mroonga_wrapper_innodb_test_suite_dir}" ]; then
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test
 fi
 
-test_suite_names=""
-cd "${BASE_DIR}/sql/suite"
+all_test_suite_names=""
+suite_dir="${BASE_DIR}/sql/suite"
+cd "${suite_dir}"
 for test_suite_name in $(find mroonga -type d '!' -name '[tr]'); do
-    if [ -n "${test_suite_names}" ]; then
-	test_suite_names="${test_suite_names},"
+    if [ -n "${all_test_suite_names}" ]; then
+	all_test_suite_names="${all_test_suite_names},"
     fi
-    test_suite_names="${test_suite_names}${test_suite_name}"
+    all_test_suite_names="${all_test_suite_names}${test_suite_name}"
 done
 cd -
 
@@ -138,6 +139,32 @@ if [ -n "${plugins_dir}" ]; then
     else
 	cp "${top_dir}/ha_mroonga.so" "${plugins_dir}" || exit 1
     fi
+fi
+
+test_suite_names=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+	--*)
+	    break
+	    ;;
+	*)
+	    if [ -d "$1" ]; then
+		test_suite_name=$(cd "$1" && pwd)
+	    else
+		test_suite_name="$1"
+	    fi
+	    shift
+	    test_suite_name=$(echo "$test_suite_name" | sed -e "s,^${suite_dir},,")
+	    if [ -n "${test_suite_names}" ]; then
+		test_suite_names="${test_suite_names},"
+	    fi
+	    test_suite_names="${test_suite_names}${test_suite_name}"
+	    ;;
+    esac
+done
+
+if [ -z "$test_suite_names" ]; then
+    test_suite_names="${all_test_suite_names}"
 fi
 
 (cd "$build_mysql_test_dir" && \
