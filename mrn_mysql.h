@@ -59,7 +59,9 @@
 #endif
 
 #if MYSQL_VERSION_ID >= 50607
-#  define MRN_HAVE_SQL_OPTIMIZER_H
+#  if !defined(MRN_MARIADB_P)
+#    define MRN_HAVE_SQL_OPTIMIZER_H
+#  endif
 #endif
 
 #define MRN_MESSAGE_BUFFER_SIZE 1024
