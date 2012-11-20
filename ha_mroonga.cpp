@@ -8971,12 +8971,12 @@ void ha_mroonga::storage_store_field_timestamp(Field *field,
 #elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
   int32 sec, usec;
   GRN_TIME_UNPACK(time, sec, usec);
-  time_value.tv_sec -= mrn_utc_diff_in_seconds;
+  sec -= mrn_utc_diff_in_seconds;
   timestamp_field->store_TIME(sec, usec);
 #else
   int32 sec, usec __attribute__((unused));
   GRN_TIME_UNPACK(time, sec, usec);
-  time_value.tv_sec -= mrn_utc_diff_in_seconds;
+  sec -= mrn_utc_diff_in_seconds;
   timestamp_field->store_timestamp(sec);
 #endif
 }
