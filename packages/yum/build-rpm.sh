@@ -45,6 +45,7 @@ if test "$USE_RPMFORGE" = "yes"; then
 	architecture=$(cut -d '-' -f 1 /etc/rpm/platform)
 	rpmforge_url=http://packages.sw.be/rpmforge-release
 	rpmforge_rpm_base=rpmforge-release-0.5.2-2.el5.rf.${architecture}.rpm
+	run yum install -y wget
 	wget $rpmforge_url/$rpmforge_rpm_base
 	run rpm -Uvh $rpmforge_rpm_base
 	rm $rpmforge_rpm_base
@@ -77,6 +78,7 @@ fi
 
 if ! rpm -q groonga-release > /dev/null 2>&1; then
     release_rpm=groonga-release-1.1.0-0.noarch.rpm
+    run yum install -y wget
     wget http://packages.groonga.org/${distribution}/${release_rpm}
     run rpm -Uvh ${release_rpm}
     rm -f ${release_rpm}
