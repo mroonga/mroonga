@@ -119,6 +119,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Nov 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.09-0
+- new upstream release.
+
 * Mon Oct 29 2012 HAYASHI Kentaro <hayashi@clear-code.com> - 2.08-0
 - new upstream release.
 - add missing "DROP FUNCTION mroonga_snippet".
