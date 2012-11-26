@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 18:40\n"
+"POT-Creation-Date: 2012-11-26 18:12\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -309,12 +309,26 @@ msgstr ""
 "treated as a token. So there can exist tokes with 3 letters or more. It is "
 "to reduce noises."
 
+# 81c965dc92ef4e66bfac97b5a3fb961b
+# f3947e5bf49f40fb8527919a65abcd79
+#: ../../../source/userguide/storage.rst:102
+#: ../../../source/userguide/wrapper.rst:112
+msgid "TokenBigram"
+msgstr ""
+
 # 14b2dcc6c93d4c8fa2a4dd7c253fa51b
 # f3748d0487734ce29f0687bce9ac25a9
 #: ../../../source/userguide/storage.rst:103
 #: ../../../source/userguide/wrapper.rst:113
 msgid "This is the default value."
 msgstr "This is the default value."
+
+# 286cc0f836e4466f89dbc79d021cbaf1
+# 4058d20f5a0c4d36b8a4b4d4e1949330
+#: ../../../source/userguide/storage.rst:105
+#: ../../../source/userguide/wrapper.rst:115
+msgid "TokenMecab"
+msgstr ""
 
 # 44df86cd28954625be68570a294a4c00
 # 08301e25861b43cb854a0e2943da34fa
@@ -333,6 +347,13 @@ msgid ""
 msgstr ""
 "It tokenises in bigram. Unlike TokenBigram, continuous symbols are not "
 "treated as a token, but tokenised in bigram."
+
+# 8b73f9c1b71c4c7e91d22fc7c6264e39
+# 430585ec818e4cc3a8a89100a549b9fa
+#: ../../../source/userguide/storage.rst:110
+#: ../../../source/userguide/wrapper.rst:120
+msgid "TokenBigramSplitSymbol"
+msgstr ""
 
 # 4c744fa34b894b9c902324f47ce169d1
 # 2cb6e51f8998490bb6dbd341efad76e2
@@ -357,6 +378,13 @@ msgid ""
 msgstr ""
 "It tokenise in bigram. In addition to TokenBigramSplitSymbol, continuous "
 "alphabets are not treated as a token either, but tokenised in bigram."
+
+# fc4162abe9164625b1d8d6a85f4af7b3
+# 9dae3053cb674a1eb5799f2b65ce5bc7
+#: ../../../source/userguide/storage.rst:115
+#: ../../../source/userguide/wrapper.rst:125
+msgid "TokenBigramSplitSymbolAlpha"
+msgstr ""
 
 # a8155152862a440fad981c902e21d563
 # 68870984558f44d8b2b470bc9810a231
@@ -384,6 +412,13 @@ msgstr ""
 "continuous numbers are not treated as a token either, but tokenised in "
 "bigram. So any kind of characters are treated equally in bigram."
 
+# 23cde3cd611b47608b6c611229d72bef
+# 3e08e368383c4aa682672c73cc024c33
+#: ../../../source/userguide/storage.rst:120
+#: ../../../source/userguide/wrapper.rst:130
+msgid "TokenBigramSplitSymbolAlphaDigit"
+msgstr ""
+
 # a30ca135ec754bac9a208d3354180bd9
 # 6398b19a796340bc91b2a44e60bfac03
 #: ../../../source/userguide/storage.rst:121
@@ -403,6 +438,13 @@ msgstr ""
 #: ../../../source/userguide/wrapper.rst:134
 msgid "It tokenise in bigram. Unlike TokenBigram, it ignores white spaces."
 msgstr "It tokenise in bigram. Unlike TokenBigram, it ignores white spaces."
+
+# 9a7cabfeaeed435da820e04468f142b8
+# 8fa031884571406fb825b7d6e29f0ac0
+#: ../../../source/userguide/storage.rst:125
+#: ../../../source/userguide/wrapper.rst:135
+msgid "TokenBigramIgnoreBlank"
+msgstr ""
 
 # a2d864bc1edc4d39b28f8f3a3df3153c
 # e4ada083d8fa4c719e26d7d18fddc619
@@ -428,6 +470,13 @@ msgstr ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbol, it ignores white "
 "spaces."
 
+# bfd64336eb6a42dd80c6c84147138180
+# 8f436abbf03c4f76a63ffdcea56757cd
+#: ../../../source/userguide/storage.rst:130
+#: ../../../source/userguide/wrapper.rst:140
+msgid "TokenBigramIgnoreBlankSplitSymbol"
+msgstr ""
+
 # ceb4d9fdb2dc412ab0c52902995177fc
 # 5e692b29f3304a90a53b43387f3fc646
 #: ../../../source/userguide/storage.rst:131
@@ -451,6 +500,13 @@ msgid ""
 msgstr ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbolAlpha, it ignores white "
 "spaces."
+
+# 464d1efdcd5b472c9aa292a1e7190d26
+# 05af191b81524aa4be2333a90d7c6505
+#: ../../../source/userguide/storage.rst:135
+#: ../../../source/userguide/wrapper.rst:145
+msgid "TokenBigramIgnoreBlankSplitSymbolAlpha"
+msgstr ""
 
 # 30351ebbcfed446eb7237cae5abff33e
 # c72216f3d0184bc28c97314f81d3da62
@@ -476,6 +532,13 @@ msgstr ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbolAlphaDigit, it ignores "
 "white spaces."
 
+# e56c7504c874427cba3c4c1b6531af11
+# 0ad0adcd0d234f95857f5bcdba9e6cca
+#: ../../../source/userguide/storage.rst:140
+#: ../../../source/userguide/wrapper.rst:150
+msgid "TokenBigramIgnoreBlankSplitSymbolAlphaDigit"
+msgstr ""
+
 # b619b3859a2e4f7da9b150c2f6f8504a
 # bc0193dc45fb467ead99293003b2a157
 #: ../../../source/userguide/storage.rst:141
@@ -498,6 +561,13 @@ msgstr ""
 msgid "It tokenise by splitting with a white space."
 msgstr "It tokenise by splitting with a white space."
 
+# edb67293295d4d3aa9a3ed5d75b7f146
+# 2c65f7b9c8244036af562a1353ba6825
+#: ../../../source/userguide/storage.rst:145
+#: ../../../source/userguide/wrapper.rst:155
+msgid "TokenDelimit"
+msgstr ""
+
 # 029ddb59f9824733823b80fd8ce0e11e
 # 8871ecea8d31424e99d861da278faa88
 #: ../../../source/userguide/storage.rst:146
@@ -514,6 +584,13 @@ msgstr ""
 msgid "It tokenise by splitting with a null character (\\\\0)."
 msgstr "It tokenise by splitting with a null character (\\\\0)."
 
+# 37cd2b992de049d387888a4183488ab3
+# 65d0a4cd703d47678eeabbb164694114
+#: ../../../source/userguide/storage.rst:150
+#: ../../../source/userguide/wrapper.rst:160
+msgid "TokenDelimitNull"
+msgstr ""
+
 # f11342aa2753459fb40017ba11835d72
 # 04fdca00ce744601afa7a357fa6c7cf2
 #: ../../../source/userguide/storage.rst:151
@@ -524,6 +601,13 @@ msgid ""
 msgstr ""
 "\"映画\\\\0ホラー\\\\0話題\" will be tokenised as \"映画\", \"ホラー\", \"話"
 "題\"."
+
+# 3571b6c01dfc4c91b55bd32b35877124
+# 19f35147abbb415ba8fdcfa82c1a5eb6
+#: ../../../source/userguide/storage.rst:153
+#: ../../../source/userguide/wrapper.rst:163
+msgid "TokenUnigram"
+msgstr ""
 
 # 12c15c9dd71d416b84ae465e9e594248
 # e37db6a859d74f059e053b19c7d6b8f9
@@ -537,6 +621,13 @@ msgstr ""
 "It tokenises in unigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 2 letters or more. It is "
 "to reduce noises."
+
+# 6f452ab5bf254cf3865b7f11a1760a86
+# 9880cde389834bf4847b32736eb063e3
+#: ../../../source/userguide/storage.rst:156
+#: ../../../source/userguide/wrapper.rst:166
+msgid "TokenTrigram"
+msgstr ""
 
 # a4cec4a394944032bfcb56a3fe86ba58
 # 4e0d80bb9509440ca5e2c22563ae09b4
@@ -768,14 +859,29 @@ msgstr ""
 msgid "Here is the detail of ``mroonga_snippet`` arguments."
 msgstr ""
 
+# c83038644b2d43d6adc1570c4fc00d25
+#: ../../../source/userguide/storage.rst:310
+msgid "document"
+msgstr ""
+
 # 3154893f08f048169e4ba0c8637e4add
 #: ../../../source/userguide/storage.rst:311
 msgid "The column name or string value is required."
 msgstr ""
 
+# 5be70906fa844952b908760bfacecbeb
+#: ../../../source/userguide/storage.rst:313
+msgid "max_length"
+msgstr ""
+
 # f54a58c0cce04d93a3d5198c57e2f610
 #: ../../../source/userguide/storage.rst:314
 msgid "The max length of snippet (bytes) is required."
+msgstr ""
+
+# 9e63b71611ed4db2877581650f8afa06
+#: ../../../source/userguide/storage.rst:316
+msgid "max_count"
 msgstr ""
 
 # 5503eab516b142e29086352ee68ac9d9
@@ -791,11 +897,21 @@ msgid ""
 "'utf8_japanese_ci' and so on."
 msgstr ""
 
+# 937a07168a514f5092b23392f28de482
+#: ../../../source/userguide/storage.rst:321
+msgid "encoding"
+msgstr ""
+
 # 61fcffa471144f3e9f5e1350d53b1be1
 #: ../../../source/userguide/storage.rst:325
 msgid ""
 "Specify whether skip leading spaces or not. Specify the value 1 for skipping "
 "leading spaces, 0 for not."
+msgstr ""
+
+# 3ac2c95e63124e239da1a0c9b1b5ee59
+#: ../../../source/userguide/storage.rst:325
+msgid "skip_leading_spaces"
 msgstr ""
 
 # ad7a27238c204a1e9aca9af473dc9e61
@@ -805,9 +921,24 @@ msgid ""
 "0 for not."
 msgstr ""
 
+# fa25bd6ab9734c6f9c36e0367f609381
+#: ../../../source/userguide/storage.rst:329
+msgid "html_escape"
+msgstr ""
+
+# 4528f4695f06476cafb51083c5013218
+#: ../../../source/userguide/storage.rst:332
+msgid "prefix"
+msgstr ""
+
 # e777f99475d4425da2e075021f6b586c
 #: ../../../source/userguide/storage.rst:333
 msgid "The start text of snippet."
+msgstr ""
+
+# 7d8db70c110846d78f83f612c5276862
+#: ../../../source/userguide/storage.rst:335
+msgid "suffix"
 msgstr ""
 
 # fc4352c69946473386c248f88978b1c4
@@ -815,14 +946,29 @@ msgstr ""
 msgid "The end text of snippet."
 msgstr ""
 
+# 916cacd670c64937a999c64b6796681c
+#: ../../../source/userguide/storage.rst:338
+msgid "wordN"
+msgstr ""
+
 # 5fa5a1e7b9ac417c84825a313d21fcc0
 #: ../../../source/userguide/storage.rst:339
 msgid "Specify any word."
 msgstr ""
 
+# f91cbc38382b4185b06f76b49536a0ad
+#: ../../../source/userguide/storage.rst:341
+msgid "wordN_prefix"
+msgstr ""
+
 # 06c957ab31b045a7acdd5364818281e0
 #: ../../../source/userguide/storage.rst:342
 msgid "It is the start text of wordN."
+msgstr ""
+
+# f875a7bb319a4f71b5504b57a216de49
+#: ../../../source/userguide/storage.rst:344
+msgid "wordN_suffix"
 msgstr ""
 
 # 06c957ab31b045a7acdd5364818281e0

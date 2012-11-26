@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-26 11:15\n"
+"POT-Creation-Date: 2012-11-26 19:05\n"
 "PO-Revision-Date: 2011-11-28 00:00+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -305,30 +305,62 @@ msgstr ""
 "今のところソースファイルの数はごくわずかです。なるべくシンプルな状態を維持し"
 "たいと考えています。"
 
+# d0d6a242f72544d3bed765e0d8883628
+#: ../../../source/developer.rst:105
+#: ../../../source/developer/coding_style.rst:71
+msgid "ha_mroonga.h"
+msgstr ""
+
 # 6d8a04dcc41d4bc4b78488795e9c5d28
 #: ../../../source/developer.rst:106
 msgid "The header file of mroonga."
 msgstr "mroongaのヘッダファイル"
+
+# f2ee50ba37af49919552ab98ef7dbd82
+#: ../../../source/developer.rst:108
+#: ../../../source/developer/coding_style.rst:61
+msgid "ha_mroonga.cc"
+msgstr ""
 
 # de68c17cdf2a46958c805a6d7d4de0be
 #: ../../../source/developer.rst:109
 msgid "The implementation of mroonga."
 msgstr "mroongaの実装コード"
 
+# 0a94cde23b3a468e8c6e1db3f3fe106e
+#: ../../../source/developer.rst:111
+msgid "mrnsys.h"
+msgstr ""
+
 # 148c322ddf594efcb6896c5108eabe42
 #: ../../../source/developer.rst:112
 msgid "The header file of utility functions"
 msgstr "ユーティリティ関数のヘッダファイル"
+
+# fadb96b9669740dabbe2e86139efb695
+#: ../../../source/developer.rst:114
+msgid "mrnsys.c"
+msgstr ""
 
 # df8d1f60bd2b44e9ac83567f67e6303d
 #: ../../../source/developer.rst:115
 msgid "The implementation of utility functions"
 msgstr "ユーティリティ関数の実装コード"
 
+# 00830176491348c59b25df9a76c729bd
+#: ../../../source/developer.rst:117
+msgid "test/sql/"
+msgstr ""
+
 # 336604c0ba9e460a84cef792b0a1e1a4
 #: ../../../source/developer.rst:118
 msgid "The directory for tests by SQL"
 msgstr "SQLによるテストコード用ディレクトリ"
+
+# 523c5383f5af4de68a19a3ebe761c4fb
+#: ../../../source/developer.rst:120
+msgid "test/sql/t/"
+msgstr ""
 
 # 3e8df8b433f54644a788e4a79d946cd2
 #: ../../../source/developer.rst:121
@@ -339,6 +371,11 @@ msgstr ""
 "SQLによるテストコード用ディレクトリSQLテストスクリプト（現在実行可能なSQL文の"
 "定義も兼ねる）"
 
+# d99e1b846c9644d3a20a286a7033082a
+#: ../../../source/developer.rst:123
+msgid "test/sql/r/"
+msgstr ""
+
 # f374dac564f24c8581d3cd83bf63bf3a
 #: ../../../source/developer.rst:124
 msgid ""
@@ -346,15 +383,30 @@ msgid ""
 "current specification of supported SQL"
 msgstr "SQLテスト想定実行結果（SQL動作仕様定義も兼ねる）"
 
+# 2b4ad9bf93ee459ab391cf2a55f03c4d
+#: ../../../source/developer.rst:126
+msgid "test/unit/"
+msgstr ""
+
 # 4114c2bfb1294078be0cf96a8cb9250a
 #: ../../../source/developer.rst:127
 msgid "The directory for per-function unit tests by C/C++"
 msgstr "C/C++関数単体でのテストコード用ディレクトリ"
 
+# 1c80e5a0448c4e34b613f4b9fd83dc83
+#: ../../../source/developer.rst:129
+msgid "doc/en/"
+msgstr ""
+
 # 3ece773863174cd5b8a6672fccbba677
 #: ../../../source/developer.rst:130
 msgid "English documents in Sphinx format"
 msgstr "Sphinx形式の英語ドキュメント一式"
+
+# 261208bfcdeb4af68b2f250c8cb6f7d2
+#: ../../../source/developer.rst:132
+msgid "doc/ja/"
+msgstr ""
 
 # e193154e20cc40d486389f6971849227
 #: ../../../source/developer.rst:133
@@ -390,6 +442,11 @@ msgid "We use two kinds of regression tests to manage the quality of mroonga."
 msgstr ""
 "mroongaではプログラムの品質管理のため、2種類の回帰テストを用いています。"
 
+# 3629935c50844ff88537020ebf56fad2
+#: ../../../source/developer.rst:144
+msgid "SQL tests"
+msgstr ""
+
 # 372c85c0fc1b48b0a743cd653e581874
 #: ../../../source/developer.rst:145
 msgid ""
@@ -402,6 +459,11 @@ msgstr ""
 "追加して下さい。高速化機能などは一見するとSQLによる動作確認ができないように見"
 "える場合もありますが、ステータス変数やinformation_schemaプラグインなどを使用"
 "することで上手くテストできるものもあります。"
+
+# 53a8cc36a8d248bd8ba97126d3c06f19
+#: ../../../source/developer.rst:147
+msgid "C/C++ unit tests"
+msgstr "C/C++単体テスト"
 
 # dcbf580c584041faa453704b4f776318
 #: ../../../source/developer.rst:148
@@ -717,11 +779,6 @@ msgstr ""
 msgid "悪い例（ ``.cc`` を使っている）:"
 msgstr ""
 
-# f2ee50ba37af49919552ab98ef7dbd82
-#: ../../../source/developer/coding_style.rst:61
-msgid "ha_mroonga.cc"
-msgstr ""
-
 # 0e3804ac0e194a61a8d55f3fe5360616
 #: ../../../source/developer/coding_style.rst:63
 msgid "ヘッダーファイルの拡張子は ``.hpp`` にします。"
@@ -737,11 +794,6 @@ msgstr ""
 msgid "悪い例（ ``.h`` を使っている）:"
 msgstr ""
 
-# d0d6a242f72544d3bed765e0d8883628
-#: ../../../source/developer/coding_style.rst:71
-msgid "ha_mroonga.h"
-msgstr ""
-
 # 1dcfa6c6fb1d4362a29d0d5ca338ed0a
 #: ../../../source/developer/coding_style.rst:74
 msgid "名前空間"
@@ -755,6 +807,13 @@ msgid ""
 "い。"
 msgstr ""
 
+# 91d19d2b9c6247ccb40f50338f802dd7
+# 827edddd82b74325a12c97df0d3c8cf2
+#: ../../../source/developer/coding_style.rst:80
+#: ../../../source/developer/coding_style.rst:90
+msgid "ha_mroonga.cpp:"
+msgstr ""
+
 # 23e871972f9447489cb69f8f21afcc1e
 # 30e88f9e54f94de7acaaba8eddc5a6a7
 #: ../../../source/developer/coding_style.rst:81
@@ -765,6 +824,11 @@ msgstr ""
 # bb701693f8654044a041a823598b091c
 #: ../../../source/developer/coding_style.rst:83
 msgid "悪い例（ヘッダーファイル内で ``using namespace`` を使っている）:"
+msgstr ""
+
+# f9c6b03605f14e90b0d7472e9fd1182c
+#: ../../../source/developer/coding_style.rst:85
+msgid "ha_mroonga.hpp:"
 msgstr ""
 
 # 93cb7c2df3d8414bafe588f983634ace
@@ -796,6 +860,15 @@ msgstr ""
 msgid ""
 "#ifndef MRN_DB_PATH_HPP_ #define MRN_DB_PATH_HPP_ ... #endif // "
 "MRN_DB_PATH_HPP_"
+msgstr ""
+
+# 28850db2cf094bf2b3f11ff0b4206697
+# 1a03a47f8e7e4258a7e66a3620194ea6
+# 7b6ff834e5cd41e79f2754879adea2e8
+#: ../../../source/developer/coding_style.rst:103
+#: ../../../source/developer/coding_style.rst:111
+#: ../../../source/developer/coding_style.rst:119
+msgid "mrn_db_path.hpp:"
 msgstr ""
 
 # 4d0d39ad8482484da00cacd5aa1c7737
@@ -1587,6 +1660,11 @@ msgid ""
 "``int`` のときはすべて数値として扱う。"
 msgstr ""
 
+# cd2d054dfd25467aabd849029770fe06
+#: ../../../source/developer/coding_style.rst:524
+msgid "if (memcmp(value1, value2, value_size) == 0) {"
+msgstr ""
+
 # 6384f44362ff442d81bb51fa9f105921
 # c82b69f896534961b7f87f162b674290
 #: ../../../source/developer/coding_style.rst:526
@@ -1597,6 +1675,11 @@ msgstr ""
 # d0647257ce7b4df498428d95fef5bab1
 #: ../../../source/developer/coding_style.rst:529
 msgid "悪い例（ ``0`` を偽の値として扱っている）:"
+msgstr ""
+
+# 2c1290d4d8724d05b5275d03ae82cf12
+#: ../../../source/developer/coding_style.rst:530
+msgid "if (!memcmp(value1, value2, value_size)) {"
 msgstr ""
 
 # 6abf769bdfd844a2aa4a218a15e4ee75
@@ -1622,6 +1705,11 @@ msgstr ""
 #: ../../../source/developer/coding_style.rst:547
 #: ../../../source/developer/coding_style.rst:560
 msgid "Table(const char *name); std::string name_;"
+msgstr ""
+
+# 5b96fd0f35964308bf0c6e608c51f15b
+#: ../../../source/developer/coding_style.rst:550
+msgid "Table::Table(const char *name) :"
 msgstr ""
 
 # 77cb3bfcaea64566ace46dc0ec0fdd60
@@ -2119,20 +2207,37 @@ msgstr ""
 msgid "次に、配布用の ``tar.gz`` ファイルを作成します。 ::"
 msgstr ""
 
-# 18925680b9104757921c7a75a52c7f86
-#: ../../../source/developer/release.rst:35
+# f6717b49646c4ae7927239ef55a17414
+# d517b3a422b344b8bcb291ec38a7bc7b
+#: ../../../source/developer/release.rst:37
+#: ../../../source/developer/release.rst:65
+#: ../../../source/developer/release.rst:95
 msgid ""
-"そして、作成された ``tar.gz`` ファイルを https://github.com/mroonga/mroonga/"
-"downloads よりアップロードします。"
+"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
+"ケージ作成に必要なソフトウェアをインストールします。::"
+msgstr ""
+
+# ba2ae0fe63224c3ab4844ea2a5164f43
+#: ../../../source/developer/release.rst:41
+msgid ""
+"作成された ``tar.gz`` ファイルのアップロードを行うには以下のコマンドを実行し"
+"ます。 ::"
+msgstr ""
+
+# 5ca50b48283645ba9ab1b7e56ebee47e
+#: ../../../source/developer/release.rst:45
+msgid ""
+"これで、 https://github.com/mroonga/mroonga/downloads から ``tar.gz`` のダウ"
+"ンロードが行えるようになります。"
 msgstr ""
 
 # 54b79204ca4f46dc8337a401137cc5e5
-#: ../../../source/developer/release.rst:38
+#: ../../../source/developer/release.rst:49
 msgid "パッケージの作成"
 msgstr ""
 
 # caecbb03de6047e3ba0fd0757e59139d
-#: ../../../source/developer/release.rst:40
+#: ../../../source/developer/release.rst:51
 msgid ""
 "Linux 用にパッケージを作成する必要があります。パッケージは以下の 2 種類に分け"
 "ることが可能です。"
@@ -2140,41 +2245,32 @@ msgstr ""
 
 # f3b5f70dc52c405fb09ebdd6fcdcac9f
 # a1c95dd7397e44228cc641a503a45a07
-#: ../../../source/developer/release.rst:42
-#: ../../../source/developer/release.rst:50
+#: ../../../source/developer/release.rst:53
+#: ../../../source/developer/release.rst:61
 msgid "Debian 系"
 msgstr ""
 
 # 9a1edaab0e8e4b958a8a34e5b485c358
 # 04d268f8cdbf4624b50e2de16464e9d0
-#: ../../../source/developer/release.rst:43
-#: ../../../source/developer/release.rst:80
+#: ../../../source/developer/release.rst:54
+#: ../../../source/developer/release.rst:91
 msgid "Red Hat 系"
 msgstr ""
 
 # 19ac15b8a1004339a9d254836bdb83a6
-#: ../../../source/developer/release.rst:47
+#: ../../../source/developer/release.rst:58
 msgid ""
 "現在のところ、パッケージの作成は Debian GNU/Linux (Ubuntu も可) でしか行えま"
 "せん。"
 msgstr ""
 
-# f6717b49646c4ae7927239ef55a17414
-# d517b3a422b344b8bcb291ec38a7bc7b
-#: ../../../source/developer/release.rst:54
-#: ../../../source/developer/release.rst:84
-msgid ""
-"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
-"ケージ作成に必要なソフトウェアをインストールします。::"
-msgstr ""
-
 # d5268274cacd449cb8ceba52925f9f01
-#: ../../../source/developer/release.rst:58
+#: ../../../source/developer/release.rst:69
 msgid "まず apt ディレクトリに移動します。 ::"
 msgstr ""
 
 # 0f2537bfa45249279c68eed020d70127
-#: ../../../source/developer/release.rst:62
+#: ../../../source/developer/release.rst:73
 msgid ""
 "その後、次のようにすれば一連のリリース作業（build update sign upload）が行わ"
 "れますが、途中で失敗することもあります。 ::"
@@ -2182,149 +2278,183 @@ msgstr ""
 
 # 6b7b395bf2c847439402c42df10107df
 # 0b8fe3681d104b7eb6386c4f88de09bb
-#: ../../../source/developer/release.rst:66
-#: ../../../source/developer/release.rst:94
+#: ../../../source/developer/release.rst:77
+#: ../../../source/developer/release.rst:105
 msgid ""
 "そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行ってい"
 "くほうが良いこともあります。 ::"
 msgstr ""
 
 # de548dbcc37f40ee960545bcc37972a7
-#: ../../../source/developer/release.rst:73
+#: ../../../source/developer/release.rst:84
 msgid ""
 "make build に PARALLEL=yes とするとビルドが並列に走り、作業がより高速に行えま"
 "す。"
 msgstr ""
 
 # 6fd0e6c4a86f484fa90286d4dbd58ef9
-#: ../../../source/developer/release.rst:75
+#: ../../../source/developer/release.rst:86
 msgid ""
 "また make build CODES=lucid などとすると、ビルド対象を指定することができま"
 "す。"
 msgstr ""
 
 # f30af69967ca4c35990cb81f7b1b5721
-#: ../../../source/developer/release.rst:77
+#: ../../../source/developer/release.rst:88
 msgid ""
 "このように Makefile.am を書き換えずにコマンドライン引数でビルドの挙動を変更す"
 "る方法は、知っておいて損はないでしょう。"
 msgstr ""
 
 # 090a27233fcc41e4b0911975891cbc75
-#: ../../../source/developer/release.rst:88
+#: ../../../source/developer/release.rst:99
 msgid "まず yum ディレクトリに移動する。"
 msgstr ""
 
 # 42503247c2bb4fecbb32d5dddf230d15
-#: ../../../source/developer/release.rst:90
+#: ../../../source/developer/release.rst:101
 msgid ""
 "その後、次のようにすれば一連のリリース作業（build sign update upload）が行わ"
 "れますが、途中で失敗することもあります。 ::"
 msgstr ""
 
 # a76f70dc81b94f30a4b230714f3ed41d
-#: ../../../source/developer/release.rst:102
+#: ../../../source/developer/release.rst:113
 msgid "タグを打つ"
 msgstr ""
 
 # 027bc496b49746348c2c61ff7bc5538e
-#: ../../../source/developer/release.rst:104
+#: ../../../source/developer/release.rst:115
 msgid "``make tag`` とするとタグが打たれます。 ::"
 msgstr ""
 
 # c4ce971ecbb842bbb313100272f50f49
-#: ../../../source/developer/release.rst:110
+#: ../../../source/developer/release.rst:121
 msgid "ドキュメントのアップロード"
 msgstr ""
 
 # b9114d1ec379492ca73c070d39db99ae
-#: ../../../source/developer/release.rst:112
+#: ../../../source/developer/release.rst:123
 msgid ""
 "GitHub からドキュメントアップロード用のリポジトリ (mroonga.github.com) を "
 "clone"
 msgstr ""
 
 # 5c92a439d5644f0f9f9d89179d4d7c90
-#: ../../../source/developer/release.rst:113
+#: ../../../source/developer/release.rst:124
 msgid ""
 "clone済みmroongaディレクトリ内でmake update-documentを実行し、clone したド"
 "キュメントアップロード用のリポジトリへ反映する"
 msgstr ""
 
 # 5e4a403434664faea7a3687a7d31fe17
-#: ../../../source/developer/release.rst:114
+#: ../../../source/developer/release.rst:125
 msgid "mroonga.github.com へコミットを行い GitHub へ push"
 msgstr ""
 
 # 9687d4ae39f0404abc8b7870e36ae7e9
-#: ../../../source/developer/release.rst:117
+#: ../../../source/developer/release.rst:128
 msgid "リリースメールの送信"
 msgstr ""
 
 # 0cf6ee0710ab4cc1abb33a9ea09b0523
-#: ../../../source/developer/release.rst:119
+#: ../../../source/developer/release.rst:130
 msgid "各種メーリングリストにリリースメールを流します。"
 msgstr ""
 
 # 02cc6fddaf29415eab167e97217a77c6
-#: ../../../source/developer/release.rst:121
+#: ../../../source/developer/release.rst:132
 msgid "ml@mysql.gr.jp 日本語アナウンス"
 msgstr ""
 
 # b3303b3025c5420693a516a9d378fef8
-#: ../../../source/developer/release.rst:122
+#: ../../../source/developer/release.rst:133
 msgid "groonga-dev@lists.sourceforge.jp 日本語アナウンス"
 msgstr ""
 
 # b0255dd8919549768bb0bff21727df01
-#: ../../../source/developer/release.rst:123
+#: ../../../source/developer/release.rst:134
 msgid "groonga-talk@lists.sourceforge.net 英語アナウンス"
 msgstr ""
 
 # 8ffd8e30b1104ec59376afe1f7f0eadf
-#: ../../../source/developer/release.rst:125
+#: ../../../source/developer/release.rst:136
 msgid "メッセージ内容のテンプレートを以下に示します。 ::"
 msgstr ""
 
+# 5a9ef4dd4e294fbdb895b8833c09ef65
+#: ../../../source/developer/release.rst:215
+msgid "Twitterでリリースアナウンスをする"
+msgstr ""
+
+# 6d903125d2604dacbf11469113877b35
+#: ../../../source/developer/release.rst:217
+msgid ""
+"mroongaブログのリリースエントリには「リンクをあなたのフォロワーに共有する」た"
+"めのツイートボタンがあるので、そのボタンを使ってリリースアナウンスします。(画"
+"面下部に配置されている)"
+msgstr ""
+
+# 04fdc27c754841fd8e4b54ea84b07904
+#: ../../../source/developer/release.rst:219
+msgid ""
+"このボタンを経由する場合、ツイート内容に自動的にリリースタイトル(「mroonga "
+"2.08リリース」など)とmroongaブログのリリースエントリのURLが挿入されます。"
+msgstr ""
+
+# ddf1559d68ec470b910e89923290a3c5
+#: ../../../source/developer/release.rst:221
+msgid ""
+"この作業はmroongaブログの英語版、日本語版それぞれで行います。 あらかじめ"
+"groongaアカウントでログインしておくとアナウンスを円滑に行うことができます。"
+msgstr ""
+
 # 3be6b739902748269e46cd8d2f59e2d1
-#: ../../../source/developer/release.rst:204
+#: ../../../source/developer/release.rst:225
 msgid "freecode.comへリリース情報を登録"
 msgstr ""
 
 # 31b8862408604d1ba6c013c2af27ff2e
-#: ../../../source/developer/release.rst:206
+#: ../../../source/developer/release.rst:227
 msgid "mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。"
 msgstr ""
 
 # 341c2410cce240b2997af60fb70c7cd8
-#: ../../../source/developer/release.rst:208
+#: ../../../source/developer/release.rst:229
 msgid "freecode.comのプロジェクトページは以下の通りです。"
 msgstr ""
 
 # a8f93246795b4562b179cf462effe01a
-#: ../../../source/developer/release.rst:210
+#: ../../../source/developer/release.rst:231
 msgid "https://freecode.com/projects/mroonga"
 msgstr ""
 
 # 9bfda42dda234bc2ae834deb1ca3c35c
-#: ../../../source/developer/release.rst:212
+#: ../../../source/developer/release.rst:233
 msgid ""
 "プロジェクトの管理メニューから「Submit a release」をクリックし、 新規リリース"
 "情報を登録します。"
 msgstr ""
 
 # f3ba8374e820461a98747c794e46b45c
-#: ../../../source/developer/release.rst:215
+#: ../../../source/developer/release.rst:236
 msgid "https://freecode.com/projects/mroonga/releases/new"
 msgstr ""
 
+# cb6243e256c54db8a26883a046ea269c
+#: ../../../source/developer/release.rst:239
+msgid ""
+"投稿した内容に対するレビューが運営側で実施されるので、反映されるまでしばらく"
+"時間がかかります。"
+msgstr ""
+
 # 61ff6f790dd74e55a98576d02bb1aeaf
-#: ../../../source/developer/release.rst:218
+#: ../../../source/developer/release.rst:242
 msgid "リリース後にやること"
 msgstr ""
 
 # a052a17161124a6e906b1221eeb389d8
-#: ../../../source/developer/release.rst:220
+#: ../../../source/developer/release.rst:244
 msgid "リリースバージョンを以下のようにして更新します。::"
 msgstr ""
 

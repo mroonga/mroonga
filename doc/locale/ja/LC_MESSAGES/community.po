@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mroonga 1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-28 13:37\n"
+"POT-Creation-Date: 2012-11-26 19:05\n"
 "PO-Revision-Date: 2012-01-31 11:48+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -41,12 +41,22 @@ msgstr "メーリングリスト"
 msgid "There are mailing lists for discussion about groonga and mroonga."
 msgstr "groongaとmroongaに関する話題を扱うメーリングリストがあります。"
 
+# faa5d5afde354ddf9044249ae81d0c8c
+#: ../../../source/community.rst:13
+msgid "For English speaker"
+msgstr "英語で話題を扱う場合"
+
 # d4095067e5c448f798a832f55eae3560
 #: ../../../source/community.rst:14
 msgid ""
 "`groonga-talk@lists.sourceforge.net <http://lists.sourceforge.net/mailman/"
 "listinfo/groonga-talk>`_"
 msgstr ""
+
+# 5af3d55aec9046c08e5f6a1dac264a86
+#: ../../../source/community.rst:15
+msgid "For Japanese speaker"
+msgstr "日本語で話題を扱う場合"
 
 # 1faa269d78f943a2b12efe15517657c4
 #: ../../../source/community.rst:17
