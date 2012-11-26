@@ -3,6 +3,45 @@
 News
 ====
 
+.. _release-2-09:
+
+Release 2.09 - 2012/11/29
+-------------------------
+
+.. caution::
+
+   This release has a backward incompatible change against timestamp
+   value. Timestamp value is changed to store as UTC timezone.
+   If you have any table that uses timestamp column with no UTC timezone,
+   please recreate (dump and restore) database.
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm][centos] Supported MySQL 5.5.28 on CentOS 5.
+* [rpm][centos] Supported MySQL 5.1.61 on CentOS 6.
+* [wrapper mode] Supported last_insert_id() [#1540] [Reported by @soundkitchen]
+
+Fixes
+^^^^^
+
+* [mysql51] Fixed crash bug by checking existence of utf8mb4.
+  MySQL 5.1 doesn't have utf8mb4. [groonga-dev,01069] [Reported by wakisuke]
+* [storage mode] Fixed impossible deleting problem that matched records.
+  [#1533] [Reported by @HANZUBON]
+* Fixed a bug that primary indexed char(N) can't be searched.
+  This bug affects if any value of char(N) has M-length (M < N) string or
+  it has one more spaces at the last and require index recreation.
+* Fixed a bug that content after NULL character is ignored for char(N)
+* Fixed to store timestamp value as UTC. This is backward in
+
+Thanks
+^^^^^^
+
+* @soundkitchen
+* wakisuke
+* @HANZUBON
+
 .. _release-2-08:
 
 Release 2.08 - 2012/10/29
