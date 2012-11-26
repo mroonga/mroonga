@@ -9557,6 +9557,7 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
                                    timestamp_hires_field->null_bit,
                                    timestamp_hires_field->unireg_check,
                                    timestamp_hires_field->field_name,
+                                   table->s,
                                    timestamp_hires_field->decimals(),
                                    timestamp_hires_field->charset());
     uint fuzzy_date = 0;
