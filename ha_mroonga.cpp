@@ -29,6 +29,7 @@
 #  include <sql_plugin.h>
 #  include <sql_show.h>
 #  include <key.h>
+#  include <tztime.h>
 #endif
 
 #include <sql_select.h>
@@ -39,7 +40,6 @@
 
 #include <ft_global.h>
 #include <spatial.h>
-#include <tztime.h>
 #include <mysql.h>
 #include <sys/types.h>
 #include <sys/stat.h>
