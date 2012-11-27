@@ -106,7 +106,8 @@ mkdir -p mysql-package
 cd mysql-package
 apt-get source ${mysql_server_package}
 rm -f mysql
-ln -s \$(find . -maxdepth 1 -type d | sort | tail -1) mysql
+MYSQL_SOURCE_DIR=\$(find . -maxdepth 1 -type d | sort | tail -1)
+ln -s \$MYSQL_SOURCE_DIR mysql
 cd */debian/..
 debuild -us -uc -Tconfigure
 make -C builddir/include
@@ -120,6 +121,16 @@ tar xfz ${PACKAGE}_${VERSION}.orig.tar.gz
 cd ${PACKAGE}-${VERSION}/
 cp -rp /tmp/${PACKAGE}-debian debian
 # export DEB_BUILD_OPTIONS="noopt nostrip"
+case \$MYSQL_SOURCE_DIR in
+  *mysql-5.1*)
+  MYSQL_SOURCE_VERSION=\${MYSQL_SOURCE_DIR##./mysql-5.1-}
+  sed -i "s/@VERSION@/\$MYSQL_SOURCE_VERSION/" debian/control
+  ;;
+  *mysql-5.5*)
+  MYSQL_SOURCE_VERSION=\${MYSQL_SOURCE_DIR##./mysql-5.5-}
+  sed -i "s/@VERSION@/\$MYSQL_SOURCE_VERSION/" debian/control
+  ;;
+esac
 debuild -us -uc
 EOF
 
