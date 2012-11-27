@@ -24,7 +24,7 @@ common_deb_procedure ()
     for code in $CODES; do
 	for arch in $DEB_ARCHITECTURES; do
 	    root_dir=$CHROOT_ROOT/$code-$arch
-	    eval $1 $code $arch "" $root_dir
+	    eval $1 $code $arch $root_dir
 	done
     done
 }
@@ -166,7 +166,7 @@ check_installed_mroonga_deb_packages ()
 {
     code=$1
     arch=$2
-    root_dir=$4
+    root_dir=$3
     cat > tmp/check-deb-mroonga.sh <<EOF
 #!/bin/sh
 dpkg -l | grep $CHECK_INSTALL_PACKAGE
