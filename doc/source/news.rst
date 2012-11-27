@@ -10,10 +10,30 @@ Release 2.09 - 2012/11/29
 
 .. caution::
 
-   This release has a backward incompatible change against timestamp
-   value. Timestamp value is changed to store as UTC timezone.
-   If you have any table that uses timestamp column with no UTC timezone,
+   This release has backward incompatible changes against ``TIMESTAMP``
+   value and primary indexed char(N).
+
+   ``TIMESTAMP`` value is changed to store as UTC timezone.
+   If you have any table that uses ``TIMESTAMP`` column with no UTC timezone,
    please recreate (dump and restore) database.
+
+   If you have any table that uses char(N) as primary key,
+   please recreate index.
+
+   Here is a procedure how to recreate database or recreate index.
+
+Recreate a database::
+
+  % mysql -u root -e 'CREATE DATABASE MY_MROONGA_DATABASE'
+
+Restore a database by modified dump file::
+
+  % mysql -u root MY_MROONGA_DATABASE < database-mroonga.dump
+
+Recreate a index::
+
+   mysql> ALTER TABLE table_name DROP PRIMARY KEY;
+   mysql> ALTER TABLE table_name ADD PRIMARY KEY(column_name);
 
 Improvements
 ^^^^^^^^^^^^
@@ -33,7 +53,8 @@ Fixes
   This bug affects if any value of char(N) has M-length (M < N) string or
   it has one more spaces at the last and require index recreation.
 * Fixed a bug that content after NULL character is ignored for char(N)
-* Fixed to store timestamp value as UTC. This is backward in
+* Fixed to store ``TIMESTAMP`` value as UTC timezone.
+  This is backward incompatible change.
 
 Thanks
 ^^^^^^
