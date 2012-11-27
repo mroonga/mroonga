@@ -108,7 +108,7 @@ apt-get source ${mysql_server_package}
 rm -f mysql
 MYSQL_SOURCE_DIR=\$(find . -maxdepth 1 -type d | sort | tail -1)
 ln -s \$MYSQL_SOURCE_DIR mysql
-cd */debian/..
+cd mysql/debian/..
 debuild -us -uc -Tconfigure
 make -C builddir/include
 make -C builddir/scripts
