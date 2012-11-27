@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-27 14:34\n"
+"POT-Creation-Date: 2012-11-27 15:26\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -54,9 +54,9 @@ msgstr ""
 msgid "Here is a procedure how to recreate database or recreate index."
 msgstr ""
 
-# 049e4e85a5b640f8b5c763f0f49d4a8b
-#: ../../../source/news.rst:25 ../../../source/news.rst:218
-msgid "Recreate a database::"
+# 18ff1c08fee74a14ad3f29ea9ab1d78e
+#: ../../../source/news.rst:25 ../../../source/news.rst:186
+msgid "Dump a database that uses mroonga::"
 msgstr ""
 
 # b473895f435d421c8291625d4add56f6
@@ -369,11 +369,6 @@ msgstr ""
 msgid "Here is upgrade sequence."
 msgstr ""
 
-# 18ff1c08fee74a14ad3f29ea9ab1d78e
-#: ../../../source/news.rst:186
-msgid "Dump a database that uses mroonga::"
-msgstr ""
-
 # a7dfa5b8ec864506bd69f92e80b7a49b
 #: ../../../source/news.rst:190
 msgid "Drop the existing database::"
@@ -408,6 +403,11 @@ msgid ""
 "Don't forget to run ``yum remove`` before ``yum install`` if you upgrade "
 "mroonga prior to v2.02 release. If you forget to run ``yum remove``, we will "
 "break a MySQL's system table."
+msgstr ""
+
+# 049e4e85a5b640f8b5c763f0f49d4a8b
+#: ../../../source/news.rst:218
+msgid "Recreate a database::"
 msgstr ""
 
 # 0e70df924bcd40de994d856444706c79
