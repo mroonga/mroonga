@@ -75,7 +75,7 @@ msgstr "修正したダンプファイルを使ってデータベースを復旧
 # 91264ac5d4524f66a8708b5964af8c7b
 #: ../../../source/news.rst:33
 msgid "Recreate a index::"
-msgstr "インデックスをを作り直します::"
+msgstr "インデックスを作り直します::"
 
 # 056232ecba044abab1ea54c34b9ce282
 #: ../../../source/news.rst:39 ../../../source/news.rst:83
