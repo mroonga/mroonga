@@ -22,9 +22,9 @@ Release 2.09 - 2012/11/29
 
    Here is a procedure how to recreate database or recreate index.
 
-Recreate a database::
+Dump a database that uses mroonga::
 
-  % mysql -u root -e 'CREATE DATABASE MY_MROONGA_DATABASE'
+  % mysqldump MY_MROONGA_DATABASE > database-mroonga.dump
 
 Restore a database by modified dump file::
 
