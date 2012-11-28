@@ -182,6 +182,15 @@ SQL::
   mysql> SET GLOBAL mroonga_default_parser = TokenMecab;
   Query OK, 0 rows affected (0.00 sec)
 
+How to get snippet (Keyword in context)
+---------------------------------------
+
+.. include:: mroonga_snippet_syntax.rst
+
+.. include:: mroonga_snippet_wrapper.rst
+
+.. include:: mroonga_snippet_example.rst
+
 Logging
 -------
 
