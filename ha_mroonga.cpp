@@ -3331,6 +3331,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
         GRN_UINT32_PUT(ctx, &source_ids, source_id);
         grn_obj_unlink(ctx, source_column);
       }
+      mrn_change_encoding(ctx, key_info->key_part->field->charset());
       grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
       grn_obj_unlink(ctx, &source_ids);
     }
@@ -3340,10 +3341,12 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
       grn_id source_id = grn_obj_id(ctx, column);
       GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
       GRN_UINT32_PUT(ctx, &source_ids, source_id);
+      mrn_change_encoding(ctx, key_info->key_part->field->charset());
       grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
       grn_obj_unlink(ctx, &source_ids);
     }
   }
+  mrn_change_encoding(ctx, system_charset_info);
 
   index_tables[i] = index_table;
   if (index_columns)
