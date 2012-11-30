@@ -3300,12 +3300,12 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   }
 
   index_column = grn_column_create(ctx,
-                                  index_table,
-                                  INDEX_COLUMN_NAME,
-                                  strlen(INDEX_COLUMN_NAME),
-                                  NULL,
-                                  index_column_flags,
-                                  grn_table);
+                                   index_table,
+                                   INDEX_COLUMN_NAME,
+                                   strlen(INDEX_COLUMN_NAME),
+                                   NULL,
+                                   index_column_flags,
+                                   grn_table);
 
   if (ctx->rc) {
     grn_obj_remove(ctx, index_table);
