@@ -5067,7 +5067,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
   }
 
-  uchar *pkey = NULL;
+  char *pkey = NULL;
   int pkey_size = 0;
   uint pkey_nr = table->s->primary_key;
   GRN_BULK_REWIND(&key_buffer);
@@ -5080,17 +5080,17 @@ int ha_mroonga::storage_write_row(uchar *buf)
         DBUG_RETURN(error);
       }
       generic_store_bulk(pkey_field, &key_buffer);
-      pkey = (uchar *)(GRN_TEXT_VALUE(&key_buffer));
+      pkey = GRN_TEXT_VALUE(&key_buffer);
       pkey_size = GRN_TEXT_LEN(&key_buffer);
     } else {
       mrn_change_encoding(ctx, NULL);
       uchar key[MRN_MAX_KEY_SIZE];
       key_copy(key, buf, &key_info, key_info.key_length);
       grn_bulk_space(ctx, &key_buffer, key_info.key_length);
-      pkey = (uchar *)(GRN_TEXT_VALUE(&key_buffer));
+      pkey = GRN_TEXT_VALUE(&key_buffer);
       storage_encode_multiple_column_key(&key_info,
                                          key, key_info.key_length,
-                                         pkey, (uint *)&pkey_size,
+                                         (uchar *)pkey, (uint *)&pkey_size,
                                          false);
     }
   }
@@ -5107,7 +5107,9 @@ int ha_mroonga::storage_write_row(uchar *buf)
     memcpy(dup_ref, &record_id, sizeof(grn_id));
     dup_key = pkey_nr;
     if (!ignoring_duplicated_key) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
+      GRN_LOG(ctx, GRN_LOG_ERROR,
+              "duplicated id on insert: update primary key: <%.*s>",
+              pkey_size, pkey);
     }
     DBUG_RETURN(error);
   }
@@ -5277,7 +5279,7 @@ int ha_mroonga::storage_write_row_unique_index(uchar *buf, grn_id record_id,
                                                grn_obj *index_table,
                                                grn_id *key_id)
 {
-  void *ukey = NULL;
+  char *ukey = NULL;
   int error, ukey_size = 0;
   MRN_DBUG_ENTER_METHOD();
   GRN_BULK_REWIND(&key_buffer);
@@ -5313,7 +5315,9 @@ int ha_mroonga::storage_write_row_unique_index(uchar *buf, grn_id record_id,
     error = HA_ERR_FOUND_DUPP_KEY;
     memcpy(dup_ref, key_id, sizeof(grn_id));
     if (!ignoring_duplicated_key) {
-      GRN_LOG(ctx, GRN_LOG_ERROR, "duplicated _id on insert");
+      GRN_LOG(ctx, GRN_LOG_ERROR,
+              "duplicated id on insert: update unique index: <%.*s>",
+              ukey_size, ukey);
     }
     DBUG_RETURN(error);
   }
