@@ -59,7 +59,7 @@ namespace mrn {
     const uchar *key_end = key + key_length;
     uchar *current_buffer = buffer;
 
-    int n_key_parts = key_info_->key_parts;
+    int n_key_parts = KEY_N_KEY_PARTS(key_info_);
     DBUG_PRINT("info", ("mroonga: n_key_parts=%d", n_key_parts));
     *encoded_length = 0;
     for (int i = 0; i < n_key_parts && current_key < key_end; i++) {
@@ -168,7 +168,7 @@ namespace mrn {
   uint MultipleColumnKeyCodec::size() {
     MRN_DBUG_ENTER_METHOD();
 
-    int n_key_parts = key_info_->key_parts;
+    int n_key_parts = KEY_N_KEY_PARTS(key_info_);
     DBUG_PRINT("info", ("mroonga: n_key_parts=%d", n_key_parts));
 
     uint total_size = 0;

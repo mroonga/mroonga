@@ -482,7 +482,7 @@ error_alloc_param_string:
 bool mrn_is_geo_key(const KEY *key_info)
 {
   return key_info->algorithm == HA_KEY_ALG_UNDEF &&
-    key_info->key_parts == 1 &&
+    KEY_N_KEY_PARTS(key_info) == 1 &&
     key_info->key_part[0].field->type() == MYSQL_TYPE_GEOMETRY;
 }
 
@@ -863,7 +863,7 @@ void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
 {
   uint i;
   DBUG_ENTER("mrn_set_bitmap_by_key");
-  for (i = 0; i < key_info->key_parts; i++)
+  for (i = 0; i < KEY_N_KEY_PARTS(key_info); i++)
   {
     Field *field = key_info->key_part[i].field;
     bitmap_set_bit(map, field->field_index);

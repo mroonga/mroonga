@@ -58,4 +58,14 @@
   typedef char *range_id_t;
 #endif
 
+#if MYSQL_VERSION_ID >= 50609
+#  define MRN_KEY_HAS_USER_DEFINED_KEYPARTS
+#endif
+
+#ifdef MRN_KEY_HAS_USER_DEFINED_KEYPARTS
+#  define KEY_N_KEY_PARTS(key) (key)->user_defined_key_parts
+#else
+#  define KEY_N_KEY_PARTS(key) (key)->key_parts
+#endif
+
 #endif /* _mrn_mysql_compat_h */

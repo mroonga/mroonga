@@ -2607,7 +2607,7 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
   KEY key = table_share->key_info[idx];
   if (key.algorithm == HA_KEY_ALG_BTREE || key.algorithm == HA_KEY_ALG_UNDEF) {
     flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE | HA_KEYREAD_ONLY;
-    if (key.key_parts > 1 || !is_need_normalize(&key.key_part->field[0])) {
+    if (KEY_N_KEY_PARTS(&key) > 1 || !is_need_normalize(&key.key_part->field[0])) {
       flags |= HA_READ_ORDER;
     }
   } else {
@@ -2785,7 +2785,7 @@ int ha_mroonga::wrapper_create_index_fulltext_validate(KEY *key_info)
 
   int error = 0;
   uint i;
-  for (i = 0; i < key_info->key_parts; i++) {
+  for (i = 0; i < KEY_N_KEY_PARTS(key_info); i++) {
     Field *field = key_info->key_part[i].field;
 
     grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, true);
@@ -2836,7 +2836,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
 
   grn_obj_flags index_column_flags =
     GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
-  if (key_info->key_parts > 1) {
+  if (KEY_N_KEY_PARTS(key_info) > 1) {
     index_column_flags |= GRN_OBJ_WITH_SECTION;
   }
 
@@ -3048,7 +3048,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     KEY key_info = table->s->key_info[pkey_nr];
     bool is_id;
 
-    int key_parts = key_info.key_parts;
+    int key_parts = KEY_N_KEY_PARTS(&key_info);
     if (key_parts == 1) {
       Field *pkey_field = key_info.key_part[0].field;
       const char *column_name = pkey_field->field_name;
@@ -3196,7 +3196,7 @@ int ha_mroonga::storage_create_validate_index(TABLE *table)
   for (i = 0; i < n_keys; i++) {
     KEY key_info = table->s->key_info[i];
     // must be single column key
-    int key_parts = key_info.key_parts;
+    int key_parts = KEY_N_KEY_PARTS(&key_info);
     if (key_parts != 1) {
       continue;
     }
@@ -3233,7 +3233,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     DBUG_RETURN(error);
 
   mrn::IndexTableName index_table_name(grn_table_name, key_info->name);
-  bool is_multiple_column_index = key_info->key_parts > 1;
+  bool is_multiple_column_index = KEY_N_KEY_PARTS(key_info) > 1;
   grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
   grn_obj_flags index_column_flags =
     GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
@@ -3320,7 +3320,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
       grn_obj source_ids;
       GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
 
-      int j, n_key_parts = key_info->key_parts;
+      int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
       for (j = 0; j < n_key_parts; j++) {
         Field *field = key_info->key_part[j].field;
         const char *column_name = field->field_name;
@@ -3638,7 +3638,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
   wrapper_set_keys_in_use();
 
   pk_keypart_map = make_prev_keypart_map(
-    table->key_info[table_share->primary_key].key_parts);
+    KEY_N_KEY_PARTS(&(table->key_info[table_share->primary_key])));
 
   if (error)
   {
@@ -3779,7 +3779,7 @@ void ha_mroonga::wrapper_overwrite_index_bits()
   for (i = 0; i < table_share->keys; i++) {
     KEY *key_info = &table->s->key_info[i];
     KEY_PART_INFO *key_part = key_info->key_part;
-    for (j = 0 ; j < key_info->key_parts; key_part++, j++)
+    for (j = 0 ; j < KEY_N_KEY_PARTS(key_info); key_part++, j++)
     {
       Field *field = key_part->field;
       if (field->key_length() == key_part->length &&
@@ -3934,9 +3934,9 @@ int ha_mroonga::storage_open_indexes(const char *name)
     }
 
     KEY key_info = table->s->key_info[i];
-    if (key_info.key_parts > 1) {
+    if (KEY_N_KEY_PARTS(&key_info) > 1) {
       KEY_PART_INFO *key_part = key_info.key_part;
-      for (j = 0; j < key_info.key_parts; j++) {
+      for (j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
         bitmap_set_bit(&multiple_column_key_bitmap,
                        key_part[j].field->field_index);
       }
@@ -4993,7 +4993,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
     }
 
     uint j;
-    for (j = 0; j < key_info.key_parts; j++) {
+    for (j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
       Field *field = key_info.key_part[j].field;
 
       if (field->is_null())
@@ -5073,7 +5073,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
   GRN_BULK_REWIND(&key_buffer);
   if (pkey_nr != MAX_INDEXES) {
     KEY key_info = table->key_info[pkey_nr];
-    if (key_info.key_parts == 1) {
+    if (KEY_N_KEY_PARTS(&key_info) == 1) {
       Field *pkey_field = key_info.key_part[0].field;
       error = mrn_change_encoding(ctx, pkey_field->charset());
       if (error) {
@@ -5251,7 +5251,7 @@ int ha_mroonga::storage_write_row_multiple_column_indexes(uchar *buf,
 
     KEY key_info = table->key_info[i];
 
-    if (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT)) {
+    if (KEY_N_KEY_PARTS(&key_info) == 1 || (key_info.flags & HA_FULLTEXT)) {
       continue;
     }
 
@@ -5283,7 +5283,7 @@ int ha_mroonga::storage_write_row_unique_index(uchar *buf, grn_id record_id,
   int error, ukey_size = 0;
   MRN_DBUG_ENTER_METHOD();
   GRN_BULK_REWIND(&key_buffer);
-  if (key_info->key_parts == 1) {
+  if (KEY_N_KEY_PARTS(key_info) == 1) {
     Field *ukey_field = key_info->key_part[0].field;
     error = mrn_change_encoding(ctx, ukey_field->charset());
     if (error) {
@@ -5476,14 +5476,14 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
 
   grn_id old_record_id;
   my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
-  for (uint j = 0; j < key_info.key_parts; j++) {
+  for (uint j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
     Field *field = key_info.key_part[j].field;
     field->move_field_offset(ptr_diff);
   }
   error = wrapper_get_record_id((uchar *)old_data, &old_record_id,
                                 "failed to get old record ID "
                                 "for updating from groonga");
-  for (uint j = 0; j < key_info.key_parts; j++) {
+  for (uint j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
     Field *field = key_info.key_part[j].field;
     field->move_field_offset(-ptr_diff);
   }
@@ -5504,7 +5504,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     grn_obj *index_column = grn_index_columns[i];
 
     uint j;
-    for (j = 0; j < key_info.key_parts; j++) {
+    for (j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
       Field *field = key_info.key_part[j].field;
 
       generic_store_bulk(field, &new_value_buffer);
@@ -5632,7 +5632,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
         (inserting_with_update && ignoring_duplicated_key);
       if (!on_duplicate_key_update && pkey_info) {
         bool have_pkey = false;
-        for (j = 0; j < pkey_info->key_parts; j++) {
+        for (j = 0; j < KEY_N_KEY_PARTS(pkey_info); j++) {
           Field *pkey_field = pkey_info->key_part[j].field;
           if (strcmp(pkey_field->field_name, column_name) == 0) {
             if (!replacing_) {
@@ -5712,13 +5712,13 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
 
     KEY key_info = table->key_info[i];
 
-    if (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT)) {
+    if (KEY_N_KEY_PARTS(&key_info) == 1 || (key_info.flags & HA_FULLTEXT)) {
       continue;
     }
 
     GRN_BULK_REWIND(&old_key);
     grn_bulk_space(ctx, &old_key, key_info.key_length);
-    for (uint j = 0; j < key_info.key_parts; j++) {
+    for (uint j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
       Field *field = key_info.key_part[j].field;
       field->move_field_offset(ptr_diff);
     }
@@ -5726,7 +5726,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
              (uchar *)old_data,
              &key_info,
              key_info.key_length);
-    for (uint j = 0; j < key_info.key_parts; j++) {
+    for (uint j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
       Field *field = key_info.key_part[j].field;
       field->move_field_offset(-ptr_diff);
     }
@@ -5801,7 +5801,7 @@ int ha_mroonga::storage_update_row_unique_indexes(uchar *new_data,
     }
 
     if (
-      key_info->key_parts == 1 &&
+      KEY_N_KEY_PARTS(key_info) == 1 &&
       !bitmap_is_set(table->write_set,
                      key_info->key_part[0].field->field_index)
     ) {
@@ -5912,7 +5912,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
     grn_obj *index_column = grn_index_columns[i];
 
     uint j;
-    for (j = 0; j < key_info.key_parts; j++) {
+    for (j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
       Field *field = key_info.key_part[j].field;
 
       if (field->is_null())
@@ -5988,7 +5988,7 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
 
     KEY key_info = table->key_info[i];
 
-    if (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT)) {
+    if (KEY_N_KEY_PARTS(&key_info) == 1 || (key_info.flags & HA_FULLTEXT)) {
       continue;
     }
 
@@ -6074,7 +6074,7 @@ int ha_mroonga::storage_prepare_delete_row_unique_index(const uchar *buf,
   const void *ukey = NULL;
   uint32 ukey_size = 0;
   MRN_DBUG_ENTER_METHOD();
-  if (key_info->key_parts == 1) {
+  if (KEY_N_KEY_PARTS(key_info) == 1) {
     ukey = grn_obj_get_value_(ctx, index_column, record_id, &ukey_size);
   } else {
     mrn_change_encoding(ctx, NULL);
@@ -6116,7 +6116,7 @@ int ha_mroonga::storage_prepare_delete_row_unique_indexes(const uchar *buf,
     }
 
     grn_obj *index_column;
-    if (key_info->key_parts == 1) {
+    if (KEY_N_KEY_PARTS(key_info) == 1) {
       index_column = grn_columns[key_info->key_part[0].field->field_index];
     } else {
       index_column = grn_index_columns[i];
@@ -6200,7 +6200,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
   uchar key_min_entity[MRN_MAX_KEY_SIZE];
   uchar key_max_entity[MRN_MAX_KEY_SIZE];
   KEY key_info = table->s->key_info[key_nr];
-  bool is_multiple_column_index = key_info.key_parts > 1;
+  bool is_multiple_column_index = KEY_N_KEY_PARTS(&key_info) > 1;
 
   if (is_multiple_column_index) {
     mrn_change_encoding(ctx, NULL);
@@ -6469,7 +6469,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   clear_cursor();
   clear_cursor_geo();
 
-  bool is_multiple_column_index = key_info.key_parts > 1;
+  bool is_multiple_column_index = KEY_N_KEY_PARTS(&key_info) > 1;
   if (is_multiple_column_index) {
     mrn_change_encoding(ctx, NULL);
     flags |= GRN_CURSOR_PREFIX;
@@ -6620,7 +6620,7 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
 
   clear_cursor();
 
-  bool is_multiple_column_index = key_info.key_parts > 1;
+  bool is_multiple_column_index = KEY_N_KEY_PARTS(&key_info) > 1;
   if (is_multiple_column_index) {
     mrn_change_encoding(ctx, NULL);
     flags |= GRN_CURSOR_PREFIX;
@@ -6802,7 +6802,7 @@ int ha_mroonga::storage_index_first(uchar *buf)
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
                                    0, -1, flags);
   } else {
-    if (table->key_info[active_index].key_parts > 1) {
+    if (KEY_N_KEY_PARTS(&(table->key_info[active_index])) > 1) {
       DBUG_PRINT("info", ("mroonga: use multiple column key%u", active_index));
     } else {
       DBUG_PRINT("info", ("mroonga: use key%u", active_index));
@@ -6867,7 +6867,7 @@ int ha_mroonga::storage_index_last(uchar *buf)
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
                                    0, -1, flags);
   } else {
-    if (table->key_info[active_index].key_parts > 1) {
+    if (KEY_N_KEY_PARTS(&(table->key_info[active_index])) > 1) {
       DBUG_PRINT("info", ("mroonga: use multiple column key%u", active_index));
     } else {
       DBUG_PRINT("info", ("mroonga: use key%u", active_index));
@@ -6990,7 +6990,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
 
   clear_cursor();
 
-  bool is_multiple_column_index = key_info.key_parts > 1;
+  bool is_multiple_column_index = KEY_N_KEY_PARTS(&key_info) > 1;
   if (is_multiple_column_index) {
     mrn_change_encoding(ctx, NULL);
     if (start_key && end_key &&
@@ -8333,17 +8333,17 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
           if (field->table != table)
             break;
           uint j;
-          for (j = 0; j < key_info.key_parts; j++) {
+          for (j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
             if (key_part[j].field == field)
             {
               if (!(start_key_part_map >> j) && !(end_key_part_map >> j))
-                j = key_info.key_parts;
+                j = KEY_N_KEY_PARTS(&key_info);
               else
                 i++;
               break;
             }
           }
-          if (j >= key_info.key_parts)
+          if (j >= KEY_N_KEY_PARTS(&key_info))
             break;
         }
         if (i >= select_lex->select_n_where_fields)
@@ -9501,7 +9501,7 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
   else
     key_length = grn_table_cursor_get_key(ctx, index_table_cursor, &key);
 
-  if (key_info->key_parts == 1) {
+  if (KEY_N_KEY_PARTS(key_info) == 1) {
     my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(buf, table->record[0]);
     Field *field = key_info->key_part->field;
     mrn::DebugColumnAccess debug_column_access(table, table->write_set);
@@ -10679,7 +10679,7 @@ int ha_mroonga::storage_truncate_index()
 
     if (
       !(key_info.flags & HA_NOSAME) &&
-      (key_info.key_parts == 1 || (key_info.flags & HA_FULLTEXT))
+      (KEY_N_KEY_PARTS(&key_info) == 1 || (key_info.flags & HA_FULLTEXT))
     ) {
       continue;
     }
@@ -11432,7 +11432,7 @@ int ha_mroonga::storage_enable_indexes(uint mode)
           break;
         }
         if (
-          key_info[i].key_parts != 1 &&
+          KEY_N_KEY_PARTS(&(key_info[i])) != 1 &&
           !(key_info[i].flags & HA_FULLTEXT)
         ) {
           mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
@@ -11554,7 +11554,7 @@ int ha_mroonga::wrapper_fill_indexes(THD *thd, KEY *key_info,
           }
 
           uint l;
-          for (l = 0; l < tmp_key_info->key_parts; l++) {
+          for (l = 0; l < KEY_N_KEY_PARTS(tmp_key_info); l++) {
             Field *field = tmp_key_info->key_part[l].field;
 
             if (field->is_null())
@@ -11844,7 +11844,7 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
       for (uint i = 0; i < num_of_keys; i++) {
         KEY *current_key_info = key_info + i;
         if (
-          current_key_info->key_parts == 1 ||
+          KEY_N_KEY_PARTS(current_key_info) == 1 ||
           (current_key_info->flags & HA_FULLTEXT)
           ) {
           continue;
@@ -11857,7 +11857,7 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
         }
 
         /* fix key_info.key_length */
-        for (uint j = 0; j < current_key_info->key_parts; j++) {
+        for (uint j = 0; j < KEY_N_KEY_PARTS(current_key_info); j++) {
           if (
             !current_key_info->key_part[j].null_bit &&
             current_key_info->key_part[j].field->null_bit
@@ -12308,7 +12308,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
       break;
     }
     if (
-      key_info[i].key_parts == 1 &&
+      KEY_N_KEY_PARTS(&(key_info[i])) == 1 &&
       (key_info[i].flags & HA_NOSAME) &&
       grn_table_size(ctx, grn_table) !=
         grn_table_size(ctx, index_tables[i + n_keys])
@@ -12318,7 +12318,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
       break;
     }
     if (
-      key_info[i].key_parts != 1 &&
+      KEY_N_KEY_PARTS(&(key_info[i])) != 1 &&
       !(key_info[i].flags & HA_FULLTEXT)
     ) {
       mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
@@ -12794,7 +12794,7 @@ void ha_mroonga::set_pk_bitmap()
   KEY key_info = table->key_info[table_share->primary_key];
   uint j;
   MRN_DBUG_ENTER_METHOD();
-  for (j = 0; j < key_info.key_parts; j++) {
+  for (j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
     Field *field = key_info.key_part[j].field;
     bitmap_set_bit(table->read_set, field->field_index);
   }
