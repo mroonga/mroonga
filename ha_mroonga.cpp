@@ -5192,6 +5192,8 @@ int ha_mroonga::storage_write_row(uchar *buf)
   }
   slot_data->last_insert_record_id = record_id;
 
+  grn_db_touch(ctx, grn_ctx_db(ctx));
+
   DBUG_RETURN(0);
 
 err2:
@@ -5685,6 +5687,8 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
     DBUG_RETURN(error);
   }
 
+  grn_db_touch(ctx, grn_ctx_db(ctx));
+
   DBUG_RETURN(0);
 
 err:
@@ -5977,6 +5981,9 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
   ) {
     DBUG_RETURN(error);
   }
+
+  grn_db_touch(ctx, grn_ctx_db(ctx));
+
   DBUG_RETURN(0);
 }
 
