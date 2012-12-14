@@ -2,12 +2,10 @@ DROP TABLE IF EXISTS users, posts, comments;
 SET NAMES utf8;
 CREATE TABLE users (
 id int NOT NULL,
-name varchar(256) NOT NULL,
+name varchar(50) NOT NULL,
 PRIMARY KEY (id),
 KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-Warnings:
-Warning	1071	Specified key was too long; max key length is 767 bytes
 CREATE TABLE posts (
 id int NOT NULL,
 content mediumtext,
