@@ -1043,6 +1043,7 @@ MRN_API my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *mes
     goto error;
   }
   grn_ctx_init(&snip_info->ctx, 0);
+  grn_db_create(&snip_info->ctx, NULL, 0);
 
   for (i = 1; i < args->arg_count; i++) {
     if (!args->args[i]) {
@@ -1061,6 +1062,7 @@ MRN_API my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *mes
 
 error:
   if (snip_info) {
+    grn_obj_close(&snip_info->ctx, grn_ctx_db(&snip_info->ctx));
     grn_ctx_fin(&snip_info->ctx);
     my_free(snip_info, MYF(0));
   }
@@ -1157,6 +1159,7 @@ MRN_API void mroonga_snippet_deinit(UDF_INIT *initid)
       grn_snip_close(&snip_info->ctx, snip_info->snippet);
     }
     snip_info->result_str.free();
+    grn_obj_close(&snip_info->ctx, grn_ctx_db(&snip_info->ctx));
     grn_ctx_fin(&snip_info->ctx);
     my_free(snip_info, MYF(0));
   }
