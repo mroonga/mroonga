@@ -10791,9 +10791,7 @@ const key_map *ha_mroonga::wrapper_keys_to_use_for_scanning()
 const key_map *ha_mroonga::storage_keys_to_use_for_scanning()
 {
   MRN_DBUG_ENTER_METHOD();
-  const key_map *key_map;
-  key_map = handler::keys_to_use_for_scanning();
-  DBUG_RETURN(key_map);
+  DBUG_RETURN(&key_map_full);
 }
 
 const key_map *ha_mroonga::keys_to_use_for_scanning()
