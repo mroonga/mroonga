@@ -286,7 +286,9 @@ How to get snippet (Keyword in context)
 
 .. include:: mroonga_snippet_syntax.inc
 
+
 .. include:: mroonga_snippet_storage.inc
+
 
 .. include:: mroonga_snippet_example.inc
 
