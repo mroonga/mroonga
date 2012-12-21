@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-21 14:10\n"
+"POT-Creation-Date: 2012-12-21 15:38\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -76,14 +76,16 @@ msgstr "Fixes"
 
 # 26933640c84e4369a78519e29ebb1d43
 #: ../../../source/news.rst:24
-msgid "Fixed to use MySQL 5.1.66-2 on CentOS 6. [Reported by @wakisuke.ua]"
+msgid ""
+"[rpm][centos] Fixed to use MySQL 5.1.66-2 on CentOS 6. [Reported by "
+"@wakisuke.ua]"
 msgstr ""
 
 # 98028768ccf14c6a9656e2be87712381
 #: ../../../source/news.rst:25
 msgid ""
-"Fixed a bug that MATCH AGAINST with INNSER JOIN syntax causes an error. "
-"[Reported by ooshiro]"
+"Fixed a bug that ``MATCH AGAINST`` with ``INNER JOIN`` syntax causes an "
+"error. [Reported by ooshiro]"
 msgstr ""
 
 # 5fed27d0e41f45a7ba91d23bce6867c3
