@@ -72,7 +72,7 @@ Assume that some keyword such as 'MySQL' and 'search' are associated with 'fullt
 
 Here is the schema definition for execution examples::
 
-.. include:: mroonga_snippet_storage.rst
+.. include:: mroonga_snippet_storage.inc
 
   CREATE TABLE `snippet_test` (
     `id` int(11) NOT NULL,
