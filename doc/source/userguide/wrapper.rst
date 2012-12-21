@@ -185,11 +185,11 @@ SQL::
 How to get snippet (Keyword in context)
 ---------------------------------------
 
-.. include:: mroonga_snippet_syntax.rst
+.. include:: mroonga_snippet_syntax.inc
 
-.. include:: mroonga_snippet_wrapper.rst
+.. include:: mroonga_snippet_wrapper.inc
 
-.. include:: mroonga_snippet_example.rst
+.. include:: mroonga_snippet_example.inc
 
 Logging
 -------

@@ -284,11 +284,11 @@ As you can see in the example above, you can get the record ID by _id column or 
 How to get snippet (Keyword in context)
 ---------------------------------------
 
-.. include:: mroonga_snippet_syntax.rst
+.. include:: mroonga_snippet_syntax.inc
 
-.. include:: mroonga_snippet_storage.rst
+.. include:: mroonga_snippet_storage.inc
 
-.. include:: mroonga_snippet_example.rst
+.. include:: mroonga_snippet_example.inc
 
 Logging
 -------
