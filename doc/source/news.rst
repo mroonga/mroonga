@@ -3,6 +3,36 @@
 News
 ====
 
+.. _release-2-10:
+
+Release 2.10 - 2012/12/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported to use ENABLE KEYS/DISABLE KEYS against table whose charset is
+  different from system charset. [Reported by @kokoronavi]
+* Improved to show the value of duplicated key on error message.
+* Supported MySQL 5.6.9-rc. [Reported by wing]
+* [storage] Supported to use ``GROUP BY`` with index.
+  This change improves search speed against ``GROUP BY``.
+
+Fixes
+^^^^^
+
+* Fixed to use MySQL 5.1.66-2 on CentOS 6. [Reported by @wakisuke.ua]
+* Fixed a bug that MATCH AGAINST with INNSER JOIN syntax causes an error.
+  [Reported by ooshiro]
+
+Thanks
+^^^^^^
+
+* @kokoronavi
+* @wakisuke.ua
+* wing
+* ooshiro
+
 .. _release-2-09:
 
 Release 2.09 - 2012/11/29
