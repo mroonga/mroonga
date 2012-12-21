@@ -35,6 +35,7 @@ cmake_install.cmake
 /packages/rpm/*/*.spec
 /packages/apt/repositories/
 /packages/yum/repositories/
+/packages/source/files/
 /doc/locale/*/doctrees/
 /doc/locale/*/html/
 /doc/locale/*/man/
