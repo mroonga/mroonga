@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-21 14:50\n"
+"POT-Creation-Date: 2012-12-21 16:07\n"
 "PO-Revision-Date: 2012-06-27 16:05+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -369,11 +369,6 @@ msgstr ""
 #: ../../../source/userguide/mroonga_snippet_syntax.inc:71
 msgid "``mroonga_snippet`` function meets above."
 msgstr "``mroonga_snippet`` 関数は上記のことができます。"
-
-# 04c40f102bfe4b93b280562ef2c662a5
-#: ../../../source/userguide/mroonga_snippet_syntax.inc:73
-msgid "Here is the schema definition for execution examples::"
-msgstr "実行例で使用するスキーマ定義はこちら::"
 
 # 1b46af265bbf4379982237591e50fac3
 #: ../../../source/userguide/storage.rst:4
@@ -1094,24 +1089,30 @@ msgstr ""
 msgid "How to get snippet (Keyword in context)"
 msgstr "スニペットの取得方法 (文脈付き索引)"
 
+# 04c40f102bfe4b93b280562ef2c662a5
+#: ../../../source/userguide/storage.rst:289
+#: ../../../source/userguide/wrapper.rst:191
+msgid "Here is the schema definition for execution examples::"
+msgstr "実行例で使用するスキーマ定義はこちら::"
+
 # 427be2122c8147b6b295098426dd1385
 # d5bf046f8c2a42fe8c04e36ca2b44a5e
-#: ../../../source/userguide/storage.rst:296
-#: ../../../source/userguide/wrapper.rst:197
+#: ../../../source/userguide/storage.rst:301
+#: ../../../source/userguide/wrapper.rst:203
 msgid "Logging"
 msgstr "ログ出力"
 
 # 8e3eec5bb14b43c88a4c3d3db52cd749
 # 34f55704cbe6413f8737215aa6af6a71
-#: ../../../source/userguide/storage.rst:298
-#: ../../../source/userguide/wrapper.rst:199
+#: ../../../source/userguide/storage.rst:303
+#: ../../../source/userguide/wrapper.rst:205
 msgid "Mroonga outputs the logs by default."
 msgstr "mroongaではデフォルトでログの出力を行うようになっています。"
 
 # 98ea9b435e65427fa39f4d299b0752be
 # 98bf2131e26448ae9f9ec3f919607ac7
-#: ../../../source/userguide/storage.rst:300
-#: ../../../source/userguide/wrapper.rst:201
+#: ../../../source/userguide/storage.rst:305
+#: ../../../source/userguide/wrapper.rst:207
 msgid ""
 "Log files are located in MySQL's data directory with the filename  ``groonga."
 "log``."
@@ -1121,15 +1122,15 @@ msgstr ""
 
 # f8a8f6bac6ba44e79a2f06f04d7f1828
 # 2f7246d538d04e59959c92837c9bc61f
-#: ../../../source/userguide/storage.rst:302
-#: ../../../source/userguide/wrapper.rst:203
+#: ../../../source/userguide/storage.rst:307
+#: ../../../source/userguide/wrapper.rst:209
 msgid "Here is the example of the log. ::"
 msgstr "以下はログの出力例です。 ::"
 
 # 436bd531e4fc46aa8de567cbd37a53ed
 # 930df4473aab4c1f88270642478cb7e5
-#: ../../../source/userguide/storage.rst:308
-#: ../../../source/userguide/wrapper.rst:209
+#: ../../../source/userguide/storage.rst:313
+#: ../../../source/userguide/wrapper.rst:215
 msgid ""
 "The default log level is NOTICE, i.e. we have important information only and "
 "we don't have debug information etc.)."
@@ -1139,8 +1140,8 @@ msgstr ""
 
 # f5507e06f74b4973a6cfa0c7c096aca4
 # 9ab91e6b23bb4c9ea452f7fe0dd5884c
-#: ../../../source/userguide/storage.rst:310
-#: ../../../source/userguide/wrapper.rst:211
+#: ../../../source/userguide/storage.rst:315
+#: ../../../source/userguide/wrapper.rst:217
 msgid ""
 "You can get the log level by ``mroonga_log_level`` system variable, that is "
 "a global variable. You can also modify it dynamically by using SET phrase. ::"
@@ -1151,85 +1152,85 @@ msgstr ""
 
 # e3e9b3ddfa5940618c0501d5bb6b5bde
 # c66255ea046e4c2c89f18dc31c35ab49
-#: ../../../source/userguide/storage.rst:331
-#: ../../../source/userguide/wrapper.rst:232
+#: ../../../source/userguide/storage.rst:336
+#: ../../../source/userguide/wrapper.rst:238
 msgid "Available log levels are the followings."
 msgstr "設定可能なログレベルは以下の通りです。"
 
 # d813775357bf433c87f17b91422614e7
 # b9d3353d764649beb30f03af36e5c92e
-#: ../../../source/userguide/storage.rst:333
-#: ../../../source/userguide/wrapper.rst:234
+#: ../../../source/userguide/storage.rst:338
+#: ../../../source/userguide/wrapper.rst:240
 msgid "NONE"
 msgstr ""
 
 # 375ecb426bbd464b808a58a4fc8d88d6
 # 6b7cbda0d1554e6b9ce1440faecccc76
-#: ../../../source/userguide/storage.rst:334
-#: ../../../source/userguide/wrapper.rst:235
+#: ../../../source/userguide/storage.rst:339
+#: ../../../source/userguide/wrapper.rst:241
 msgid "EMERG"
 msgstr ""
 
 # aa8cd6108b5d42368f5afe21a57b7f35
 # 205d0a56511c4b118a2994a753768ba9
-#: ../../../source/userguide/storage.rst:335
-#: ../../../source/userguide/wrapper.rst:236
+#: ../../../source/userguide/storage.rst:340
+#: ../../../source/userguide/wrapper.rst:242
 msgid "ALERT"
 msgstr ""
 
 # d486d520881e4e8087f9552aca1985e0
 # 1b6d848a3e8a4845bbc68b85cd4d0508
-#: ../../../source/userguide/storage.rst:336
-#: ../../../source/userguide/wrapper.rst:237
+#: ../../../source/userguide/storage.rst:341
+#: ../../../source/userguide/wrapper.rst:243
 msgid "CRIT"
 msgstr ""
 
 # 48b7c19dc8954ec98e53a47b8d58c77f
 # 582c04556e6349199ce471c2cbccba41
-#: ../../../source/userguide/storage.rst:337
-#: ../../../source/userguide/wrapper.rst:238
+#: ../../../source/userguide/storage.rst:342
+#: ../../../source/userguide/wrapper.rst:244
 msgid "ERROR"
 msgstr ""
 
 # 17401a7cf5e543988bdaa2ee7dd4166e
 # e17410e94de84b41b4e87e4fb1197bd3
-#: ../../../source/userguide/storage.rst:338
-#: ../../../source/userguide/wrapper.rst:239
+#: ../../../source/userguide/storage.rst:343
+#: ../../../source/userguide/wrapper.rst:245
 msgid "WARNING"
 msgstr ""
 
 # 3e95bc9a79fd4c64aa9f22b2ee91f8fd
 # 351f6813a8264a2196ebde93db9285f4
-#: ../../../source/userguide/storage.rst:339
-#: ../../../source/userguide/wrapper.rst:240
+#: ../../../source/userguide/storage.rst:344
+#: ../../../source/userguide/wrapper.rst:246
 msgid "NOTICE"
 msgstr ""
 
 # eed35c97b9324ba5aefd5a6c939bb0e9
 # 0597f719e675405f80d1a59d7e0e097d
-#: ../../../source/userguide/storage.rst:340
-#: ../../../source/userguide/wrapper.rst:241
+#: ../../../source/userguide/storage.rst:345
+#: ../../../source/userguide/wrapper.rst:247
 msgid "INFO"
 msgstr ""
 
 # fb03bdf4720c4aa1962243e607f4f9e3
 # ae2000e98e69422c977dd72e558b4545
-#: ../../../source/userguide/storage.rst:341
-#: ../../../source/userguide/wrapper.rst:242
+#: ../../../source/userguide/storage.rst:346
+#: ../../../source/userguide/wrapper.rst:248
 msgid "DEBUG"
 msgstr ""
 
 # 6001042cea4a4684ab0071626c610df9
 # 3969739cea5a4915b01dfb4719381732
-#: ../../../source/userguide/storage.rst:342
-#: ../../../source/userguide/wrapper.rst:243
+#: ../../../source/userguide/storage.rst:347
+#: ../../../source/userguide/wrapper.rst:249
 msgid "DUMP"
 msgstr ""
 
 # 1a2e97698f17417d9e953fd8cbcedf46
 # 3d7b381b1ea549928d77907fcfd26f99
-#: ../../../source/userguide/storage.rst:344
-#: ../../../source/userguide/wrapper.rst:245
+#: ../../../source/userguide/storage.rst:349
+#: ../../../source/userguide/wrapper.rst:251
 msgid ""
 "You can reopen the log file by FLUSH LOGS. If you want to rotate the log "
 "file without stopping MySQL server, you can do in the following procedure."
@@ -1240,16 +1241,16 @@ msgstr ""
 
 # f08a21d8ee4e42068bc507367654aef2
 # c56b2c0a2b1b4c1caa1c6bf9fdecee13
-#: ../../../source/userguide/storage.rst:346
-#: ../../../source/userguide/wrapper.rst:247
+#: ../../../source/userguide/storage.rst:351
+#: ../../../source/userguide/wrapper.rst:253
 msgid ""
 "change the file name of ``groonga.log`` (by using OS's mv command etc.)."
 msgstr "``groonga.log`` ファイルの名前を変更（OSコマンドのmvなどで）"
 
 # ee3362f80c284f1d9fba9ec05c78a8d2
 # 50cb10bbde814869982d774d6edbcb36
-#: ../../../source/userguide/storage.rst:347
-#: ../../../source/userguide/wrapper.rst:248
+#: ../../../source/userguide/storage.rst:352
+#: ../../../source/userguide/wrapper.rst:254
 msgid ""
 "invoke \"FLUSH LOGS\" in MySQL server (by mysql command or mysqladmin "
 "command)."
@@ -1258,12 +1259,12 @@ msgstr ""
 "ンドにて）"
 
 # 3e5723beeed6441c89c8c41c9882008c
-#: ../../../source/userguide/storage.rst:350
+#: ../../../source/userguide/storage.rst:355
 msgid "Choosing appropriate columns"
 msgstr "カラムの刈り込み"
 
 # e9ae9bb8074d4f20b12b8ba8b3f55612
-#: ../../../source/userguide/storage.rst:352
+#: ../../../source/userguide/storage.rst:357
 msgid ""
 "Groonga uses one file per column to store data, and mroonga accesses needed "
 "columns only when accessing a table to utilise this characteristic."
@@ -1273,7 +1274,7 @@ msgstr ""
 "カラムに対してのみアクセスを行う実装を行っています。"
 
 # 0907f98e7c6a4e16b2d5d7228e950148
-#: ../../../source/userguide/storage.rst:354
+#: ../../../source/userguide/storage.rst:359
 msgid ""
 "This optimisation is done automatically in mroonga internal, you don't need "
 "any specific configuration."
@@ -1282,14 +1283,14 @@ msgstr ""
 "はありません。"
 
 # 96d05aed70184389b95dd1e825209b01
-#: ../../../source/userguide/storage.rst:356
+#: ../../../source/userguide/storage.rst:361
 msgid "Imagine that we have a table with 20 columns like below. ::"
 msgstr ""
 "例えば以下のようにカラムが20個定義されているテーブルが存在するものと仮定しま"
 "す。 ::"
 
 # 1bdfa57092df4ae8bb98919aa0d016ad
-#: ../../../source/userguide/storage.rst:369
+#: ../../../source/userguide/storage.rst:374
 msgid ""
 "When we run SELECT phrase like the following, mroonga reads data from "
 "columns that are referred by SELECT phrase and WHERE phrase only (and it "
@@ -1300,12 +1301,12 @@ msgstr ""
 "（内部的に不要なカラムに対してはアクセスしません）。 ::"
 
 # 742927067935426f89fbc0fed4c82fbc
-#: ../../../source/userguide/storage.rst:371
+#: ../../../source/userguide/storage.rst:376
 msgid "SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = \"XXX\";"
 msgstr ""
 
 # d0dafd04db6145d7827862de70ff58c5
-#: ../../../source/userguide/storage.rst:373
+#: ../../../source/userguide/storage.rst:378
 msgid ""
 "In this case above, only columns c1, c2, c11 and c12 are accessed, and we "
 "can process the SQL rapidly."
@@ -1314,12 +1315,12 @@ msgstr ""
 "れることになります。"
 
 # e73cf0d540c14dacafcaac61e9443100
-#: ../../../source/userguide/storage.rst:376
+#: ../../../source/userguide/storage.rst:381
 msgid "Optimisation for counting rows"
 msgstr "行カウント高速化"
 
 # 4f3965396d6747a6a5acabf21de233ed
-#: ../../../source/userguide/storage.rst:378
+#: ../../../source/userguide/storage.rst:383
 msgid ""
 "In MySQL's storage engine interface, there is no difference between counting "
 "rows like COUNT(\\*) and normal data retrieving by SELECT. So access to data "
@@ -1333,7 +1334,7 @@ msgstr ""
 "アクセス）が行われる問題があります。"
 
 # 6a21a050675d424788de2f2b64e4b6ac
-#: ../../../source/userguide/storage.rst:380
+#: ../../../source/userguide/storage.rst:385
 msgid ""
 "Tritonn (MySQL + Senna), that is mroonga's predecessor, introduced \"2ind "
 "patch\" to skip needless access to data and solved this performance issue."
@@ -1343,14 +1344,14 @@ msgstr ""
 "ていました。"
 
 # 5beea7322ea84e3d915c770facc1c37f
-#: ../../../source/userguide/storage.rst:382
+#: ../../../source/userguide/storage.rst:387
 msgid "Mroonga also has the optimisation for counting rows."
 msgstr ""
 "これに引き続き、mroongaでも行カウントを高速化するための仕組みを実装していま"
 "す。"
 
 # 6145e4e8989f46de92a8b32da86cfdf0
-#: ../../../source/userguide/storage.rst:384
+#: ../../../source/userguide/storage.rst:389
 msgid ""
 "In the following SELECT, for example, needless read of columns are skipped "
 "and you can get the result of counting rows with the minimal cost."
@@ -1359,16 +1360,16 @@ msgstr ""
 "コストで行カウントの結果を返すことができます。 ::"
 
 # 90191fde86ef44289c83b1bf70972e47
-#: ../../../source/userguide/storage.rst:386
+#: ../../../source/userguide/storage.rst:391
 msgid "SELECT COUNT(*) FROM t1 WHERE MATCH(c2) AGAINST(\"hoge\");"
 msgstr ""
 
 # 255bc9623f3c4b32a2de941908bd0ad9
 # a7b5b102e43b408f99098a1ec05b3180
 # 17f19cecd41e4a22a1c12463729d8386
-#: ../../../source/userguide/storage.rst:388
-#: ../../../source/userguide/storage.rst:417
-#: ../../../source/userguide/wrapper.rst:265
+#: ../../../source/userguide/storage.rst:393
+#: ../../../source/userguide/storage.rst:422
+#: ../../../source/userguide/wrapper.rst:271
 msgid ""
 "You can check if this optimisation works or not by the status variable. ::"
 msgstr ""
@@ -1376,7 +1377,7 @@ msgstr ""
 "ます。::"
 
 # 62d888995ebd4115b5a021aee5ca04f1
-#: ../../../source/userguide/storage.rst:398
+#: ../../../source/userguide/storage.rst:403
 msgid ""
 "Each time the optimisation for counting rows works, ``mroonga_count_skip`` "
 "status variable value is increased."
@@ -1385,7 +1386,7 @@ msgstr ""
 "インクリメントされます。"
 
 # b42fb67a425b4c6d9a7bc5ec35dbfcfa
-#: ../../../source/userguide/storage.rst:400
+#: ../../../source/userguide/storage.rst:405
 msgid ""
 "Note : This optimisation is implemented by using the index. It only works in "
 "the case where we records can be specified only by the index."
@@ -1395,15 +1396,15 @@ msgstr ""
 
 # bf3a9a3bec954a65a21a1c38fcb9cc61
 # 6d3a5194d9084abd8f61ad13460e9641
-#: ../../../source/userguide/storage.rst:403
-#: ../../../source/userguide/wrapper.rst:251
+#: ../../../source/userguide/storage.rst:408
+#: ../../../source/userguide/wrapper.rst:257
 msgid "Optimisation for ORDER BY LIMIT in full text search"
 msgstr "全文検索時の ORDER BY LIMIT 高速化"
 
 # c8fd2da996424bc98075fd37ce228d5c
 # 430c403ab8c44a0a95bfbf1a23026bd1
-#: ../../../source/userguide/storage.rst:405
-#: ../../../source/userguide/wrapper.rst:253
+#: ../../../source/userguide/storage.rst:410
+#: ../../../source/userguide/wrapper.rst:259
 msgid ""
 "Generally speaking, MySQL can process \"ORDER BY\" query with almost no cost "
 "if we can get records by index, and can process \"LIMIT\" with low cost by "
@@ -1416,8 +1417,8 @@ msgstr ""
 
 # 643bb74ce65e4124a0ae373040e4bb70
 # cbac85285efe446fb9d356f814a6d7c5
-#: ../../../source/userguide/storage.rst:407
-#: ../../../source/userguide/wrapper.rst:255
+#: ../../../source/userguide/storage.rst:412
+#: ../../../source/userguide/wrapper.rst:261
 msgid ""
 "But for the query where \"ORDER BY\" cannot use index, like sort full text "
 "search result by the score and use LIMIT, the processing cost is "
@@ -1431,8 +1432,8 @@ msgstr ""
 
 # 3ce90ca097ee40f5b1fce355dd758914
 # 31e0f5d8116a436faa7fd31d7c7085a2
-#: ../../../source/userguide/storage.rst:409
-#: ../../../source/userguide/wrapper.rst:257
+#: ../../../source/userguide/storage.rst:414
+#: ../../../source/userguide/wrapper.rst:263
 msgid ""
 "Tritonn took no specific countermeasure for this issue, but it introduced a "
 "workaround in the latest repository so that it sorted Senna result in "
@@ -1446,14 +1447,14 @@ msgstr ""
 
 # 435f00fded8343b7b7f663466ecafeb6
 # 0342c41172f64335af021a6b77533d31
-#: ../../../source/userguide/storage.rst:411
-#: ../../../source/userguide/wrapper.rst:259
+#: ../../../source/userguide/storage.rst:416
+#: ../../../source/userguide/wrapper.rst:265
 msgid "Mroonga also has the optimisation for ORDER BY LIMIT."
 msgstr "mroongaでも ORDER BY LIMIT を高速化するための仕組みを実装しています。"
 
 # c361095559384f5f89d9b8cda98e4bf4
 # d9eb55ee8dbe4e139c345f31f304a131
-#: ../../../source/userguide/storage.rst:413
+#: ../../../source/userguide/storage.rst:418
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in groonga only and "
 "the minimal records are passed to MySQL. ::"
@@ -1463,8 +1464,8 @@ msgstr ""
 
 # 896eb0c6e2e44639acdfdce395a01156
 # 8433d9941d7d432ea3ddd33f78cf49e8
-#: ../../../source/userguide/storage.rst:427
-#: ../../../source/userguide/wrapper.rst:275
+#: ../../../source/userguide/storage.rst:432
+#: ../../../source/userguide/wrapper.rst:281
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``mroonga_fast_order_limit`` status variable value is increased."
@@ -1474,8 +1475,8 @@ msgstr ""
 
 # 78d58e956c26402e822868c1992fdf3f
 # 7ee448e536f44a91b1bef6be303c7539
-#: ../../../source/userguide/storage.rst:429
-#: ../../../source/userguide/wrapper.rst:277
+#: ../../../source/userguide/storage.rst:434
+#: ../../../source/userguide/wrapper.rst:283
 msgid ""
 "Note : This optimisation is targeting queries like \"select ... match "
 "against order by _score desc limit X, Y\" only, and it works if all of the "
@@ -1487,29 +1488,29 @@ msgstr ""
 
 # dbf52ca197ad41ba924d2305c96b1201
 # 3c3dc16d1fb74c0fb69a55406b732030
-#: ../../../source/userguide/storage.rst:431
-#: ../../../source/userguide/wrapper.rst:279
+#: ../../../source/userguide/storage.rst:436
+#: ../../../source/userguide/wrapper.rst:285
 msgid "WHERE phrase has \"match...against\" only"
 msgstr "where句がmatch...againstのみ"
 
 # e7ae9971fba24ac5b3c8e00d7a3833a9
 # 3afeb867da064862914d92e059f3e3cb
-#: ../../../source/userguide/storage.rst:432
-#: ../../../source/userguide/wrapper.rst:280
+#: ../../../source/userguide/storage.rst:437
+#: ../../../source/userguide/wrapper.rst:286
 msgid "no JOIN"
 msgstr "joinしていない"
 
 # 20020fd58cd946a59677c422e59c8d69
 # 89750861c7af4749859c39627082de6b
-#: ../../../source/userguide/storage.rst:433
-#: ../../../source/userguide/wrapper.rst:281
+#: ../../../source/userguide/storage.rst:438
+#: ../../../source/userguide/wrapper.rst:287
 msgid "with LIMIT"
 msgstr "limitの指定がある"
 
 # a329b256ff4a4c87a0adedb9caa9e635
 # 3df296cb0cec4ead9f6572c37544e498
-#: ../../../source/userguide/storage.rst:434
-#: ../../../source/userguide/wrapper.rst:282
+#: ../../../source/userguide/storage.rst:439
+#: ../../../source/userguide/wrapper.rst:288
 msgid ""
 "ORDER BY phrase has columns (including _id) or \"match...against\" that is "
 "used in WHERE phrase only"
@@ -1518,15 +1519,15 @@ msgstr ""
 
 # f8fbb2e109bd4217a284393f1aeb65cd
 # 58aafef808b44298b192f0766fd16b32
-#: ../../../source/userguide/storage.rst:437
-#: ../../../source/userguide/wrapper.rst:285
+#: ../../../source/userguide/storage.rst:442
+#: ../../../source/userguide/wrapper.rst:291
 msgid "Footnotes"
 msgstr "脚注"
 
 # 7db653a06e4340e488fa46470b7e92ce
 # f86f6f2d6dce41a09a1a61689c035a9b
-#: ../../../source/userguide/storage.rst:438
-#: ../../../source/userguide/wrapper.rst:286
+#: ../../../source/userguide/storage.rst:443
+#: ../../../source/userguide/wrapper.rst:292
 msgid ""
 "`MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text "
 "Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search."
@@ -1537,8 +1538,8 @@ msgstr ""
 
 # ff9857fc8b1b473fab83dbea4e7fb6f9
 # 5f541a375e814c49ba633b7d82051e0a
-#: ../../../source/userguide/storage.rst:439
-#: ../../../source/userguide/wrapper.rst:287
+#: ../../../source/userguide/storage.rst:444
+#: ../../../source/userguide/wrapper.rst:293
 msgid "In groonga, we call it a 'tokeniser'."
 msgstr "groongaではトークナイザーと呼んでいる。"
 
@@ -1599,7 +1600,7 @@ msgstr ""
 
 # c361095559384f5f89d9b8cda98e4bf4
 # d9eb55ee8dbe4e139c345f31f304a131
-#: ../../../source/userguide/wrapper.rst:261
+#: ../../../source/userguide/wrapper.rst:267
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and "
 "the minimal records are passed to MySQL. ::"
