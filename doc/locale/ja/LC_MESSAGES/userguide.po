@@ -302,7 +302,6 @@ msgstr ""
 
 # 15ce52d790ea42caaeffd5a707a8fce1
 #: ../../../source/userguide/mroonga_snippet_syntax.inc:50
-#, fuzzy
 msgid "The end text of snippet."
 msgstr "スニペットの終了テキストを指定。"
 
@@ -323,7 +322,6 @@ msgstr ""
 
 # deeddc7c93044aea8a80c4d66970aa3e
 #: ../../../source/userguide/mroonga_snippet_syntax.inc:56
-#, fuzzy
 msgid "It is the start text of wordN."
 msgstr "N番目の単語の開始テキストを指定。"
 
@@ -334,7 +332,6 @@ msgstr ""
 
 # deeddc7c93044aea8a80c4d66970aa3e
 #: ../../../source/userguide/mroonga_snippet_syntax.inc:59
-#, fuzzy
 msgid "It is the end text of wordN."
 msgstr "N番目の単語の開始テキストを指定。"
 
