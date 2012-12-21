@@ -269,7 +269,7 @@ If you want to use indexes of tokenizing of each morpheme for full text search, 
 Download
 ^^^^^^^^
 
-To install the released version, download the tarball from `GitHub's download page <http://github.com/mroonga/mroonga/downloads>`_ .
+To install the released version, download the tarball from `packages.groonga.org <http://packages.groonga.org/source/mroonga>`_ .
 
 To install the latest source code, clone the code from `GitHub <https://github.com/mroonga/mroonga/>`_ and invoke `./autogen.sh` (GNU Autotools are required). This way is aimed at skilled developpers. If not, we recommend using the tarball. ::
 

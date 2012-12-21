@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-21 11:35\n"
+"POT-Creation-Date: 2012-12-21 16:57\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -252,11 +252,9 @@ msgstr "Download"
 # b41032aa8caa4a2b94d3740e8ce4b09f
 #: ../../../source/install.rst:272
 msgid ""
-"To install the released version, download the tarball from `GitHub's "
-"download page <http://github.com/mroonga/mroonga/downloads>`_ ."
+"To install the released version, download the tarball from `packages.groonga."
+"org <http://packages.groonga.org/source/mroonga>`_ ."
 msgstr ""
-"To install the released version, download the tarball from `GitHub's "
-"download page <http://github.com/mroonga/mroonga/downloads>`_ ."
 
 # 4c3701a1b7a641359a010d66934c57c3
 #: ../../../source/install.rst:274
