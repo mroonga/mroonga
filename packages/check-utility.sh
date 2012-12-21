@@ -13,6 +13,7 @@ CHECK_ADDRESS=0
 CHECK_INSTALL=0
 CHECK_INSTALL_PACKAGE=mysql-server-mroonga
 CHECK_BUILD=0
+CHECK_DEPENDS=0
 ENABLE_REPOSITORY=0
 DISABLE_REPOSITORY=0
 INSTALL_SCRIPT=0
@@ -153,6 +154,49 @@ check_build_rpm_packages ()
     else
         PACKAGE_COUNT=`find $FIND_PATH -name "*$BASE_VERSION*" | wc -l`
         printf "%8s %6s %s => %2d rpms\n" $dist$ver $arch $BASE_VERSION $PACKAGE_COUNT
+    fi
+}
+
+check_depends_packages ()
+{
+    common_deb_procedure "check_depends_deb_packages"
+    common_rpm_procedure "check_depends_rpm_packages"
+}
+
+check_depends_deb_packages ()
+{
+    code=$1
+    arch=$2
+    BASE_VERSION=`cat ../version`
+    FIND_PATH=apt/repositories/*/pool/$code
+    RESULT_SET=`find $FIND_PATH -name "*$BASE_VERSION*.deb"`
+    if [ -z "$RESULT_SET" ]; then
+	printf "%8s %5s %s => 404 deb\n" $code $arch $BASE_VERSION
+    else
+	for pkg in $RESULT_SET; do
+	    DEB_NAME=`basename $pkg`
+	    DEPENDS=`dpkg -I $pkg | grep "Depends"`
+	    printf "%8s %5s %s => %s\n" $code $arch $DEB_NAME "$DEPENDS"
+	done
+    fi
+}
+
+check_depends_rpm_packages ()
+{
+    dist=$1
+    arch=$2
+    ver=$3
+    BASE_VERSION=`cat ../version`
+    FIND_PATH=yum/repositories/$dist/$ver/$arch
+    RESULT_SET=`find $FIND_PATH -name "*$BASE_VERSION*"`
+    if [ -z "$RESULT_SET" ]; then
+        printf "%8s %6s %s => 404 rpm\n" $dist$ver $arch $BASE_VERSION
+    else
+	for pkg in $RESULT_SET; do
+	    RPM_NAME=`basename $pkg`
+	    DEPENDS=`rpm -qp --requires $pkg | grep -i "mysql" | tr -t '\n' ' '`
+	    printf "%9s %6s %s => %s\n" $dist$ver $arch $RPM_NAME "$DEPENDS"
+	done
     fi
 }
 
@@ -459,6 +503,10 @@ while [ $# -ne 0 ]; do
 	    CHECK_ADDRESS=1
 	    shift
 	    ;;
+	--check-depends)
+	    CHECK_DEPENDS=1
+	    shift
+	    ;;
 	--check-build)
 	    CHECK_BUILD=1
 	    shift
@@ -533,6 +581,9 @@ if [ $CHECK_ADDRESS -ne 0 ]; then
 fi
 if [ $CHECK_BUILD -ne 0 ]; then
     check_build_packages
+fi
+if [ $CHECK_DEPENDS -ne 0 ]; then
+    check_depends_packages
 fi
 if [ $ENABLE_REPOSITORY -ne 0 ]; then
     enable_temporaly_mroonga_repository
