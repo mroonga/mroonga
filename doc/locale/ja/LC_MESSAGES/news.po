@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-21 14:50\n"
+"POT-Creation-Date: 2012-12-21 15:41\n"
 "PO-Revision-Date: 2012-05-29 16:31+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -45,14 +45,15 @@ msgid ""
 "Supported to use ENABLE KEYS/DISABLE KEYS against table whose charset is "
 "different from system charset. [Reported by @kokoronavi]"
 msgstr ""
-"システムと異なる文字コードのテーブルでもENABLE KEYS/DISABLE KEYSを使"
-"えるようにした。 [@kokoronaviさんが報告]"
+"システムと異なる文字コードのテーブルでもENABLE KEYS/DISABLE KEYSを使えるよう"
+"にした。 [@kokoronaviさんが報告]"
 
 # 031ff521c17d474d8bbd6d05e63358d0
 #: ../../../source/news.rst:16
 msgid "Improved to show the value of duplicated key on error message."
 msgstr ""
-"キーが重複している場合、エラーメッセージにそのキーの値を表示するように改善した。"
+"キーが重複している場合、エラーメッセージにそのキーの値を表示するように改善し"
+"た。"
 
 # 3b00d891c01c48a98c1c01704efcbacd
 #: ../../../source/news.rst:17
@@ -65,8 +66,8 @@ msgid ""
 "[storage] Supported to use ``GROUP BY`` with index. This change improves "
 "search speed against ``GROUP BY``."
 msgstr ""
-"[ストレージモード] ``GROUP BY`` をインデックスを使っての検索できるようにした。"
-"この変更で ``GROUP BY`` を使った検索速度を改善できます。"
+"[ストレージモード] ``GROUP BY`` をインデックスを使っての検索できるようにし"
+"た。この変更で ``GROUP BY`` を使った検索速度を改善できます。"
 
 # 08e3d478781f474c8a19fd0acb16a2bf
 #: ../../../source/news.rst:22 ../../../source/news.rst:76
@@ -81,18 +82,19 @@ msgstr "修正"
 
 # 720aa4c229654f9b942d6020aec03969
 #: ../../../source/news.rst:24
-msgid "Fixed to use MySQL 5.1.66-2 on CentOS 6. [Reported by @wakisuke.ua]"
-msgstr ""
-"[centos] CentOS6でMySQL 5.1.66-2を使うように修正した。[宮脇さんが報告]"
+msgid ""
+"[rpm][centos] Fixed to use MySQL 5.1.66-2 on CentOS 6. [Reported by "
+"@wakisuke.ua]"
+msgstr "[rpm][centos] CentOS6でMySQL 5.1.66-2を使うように修正した。[宮脇さんが報告]"
 
 # 2cd0e997c0e94429b92870b3a9e1bce0
 #: ../../../source/news.rst:25
 msgid ""
-"Fixed a bug that MATCH AGAINST with INNSER JOIN syntax causes an error. "
-"[Reported by ooshiro]"
+"Fixed a bug that ``MATCH AGAINST`` with ``INNER JOIN`` syntax causes an "
+"error. [Reported by ooshiro]"
 msgstr ""
-"``MATCH AGAINST`` を ``INNER JOIN`` と一緒に使うとエラーになる不具合"
-"を修正した。 [大城さんが報告]"
+"``MATCH AGAINST`` を ``INNER JOIN`` と一緒に使うとエラーになる不具合を修正し"
+"た。 [大城さんが報告]"
 
 # 2371feae1d1549e59cd05415194e5dcf
 #: ../../../source/news.rst:29 ../../../source/news.rst:90
