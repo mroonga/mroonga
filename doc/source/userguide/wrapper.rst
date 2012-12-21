@@ -188,8 +188,14 @@ How to get snippet (Keyword in context)
 .. include:: mroonga_snippet_syntax.inc
 
 
-.. include:: mroonga_snippet_wrapper.inc
+Here is the schema definition for execution examples::
 
+  CREATE TABLE `snippet_test` (
+    `id` int(11) NOT NULL,
+    `text` text,
+    PRIMARY KEY (`id`),
+    FULLTEXT KEY `text` (`text`)
+  ) ENGINE=mroonga COMMENT 'engine = "innodb"' DEFAULT CHARSET=utf8
 
 .. include:: mroonga_snippet_example.inc
 

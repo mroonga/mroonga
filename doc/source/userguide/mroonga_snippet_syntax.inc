@@ -70,5 +70,3 @@ Assume that some keyword such as 'MySQL' and 'search' are associated with 'fullt
 
 ``mroonga_snippet`` function meets above.
 
-Here is the schema definition for execution examples::
-

@@ -286,9 +286,14 @@ How to get snippet (Keyword in context)
 
 .. include:: mroonga_snippet_syntax.inc
 
+Here is the schema definition for execution examples::
 
-.. include:: mroonga_snippet_storage.inc
-
+  CREATE TABLE `snippet_test` (
+    `id` int(11) NOT NULL,
+    `text` text,
+    PRIMARY KEY (`id`),
+    FULLTEXT KEY `text` (`text`)
+  ) ENGINE=mroonga DEFAULT CHARSET=utf8
 
 .. include:: mroonga_snippet_example.inc
 

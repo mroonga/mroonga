@@ -19,9 +19,7 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/reference.rst \
 	$(top_srcdir)/doc/source/userguide.rst \
 	$(top_srcdir)/doc/source/userguide/mroonga_snippet_example.inc \
-	$(top_srcdir)/doc/source/userguide/mroonga_snippet_storage.inc \
 	$(top_srcdir)/doc/source/userguide/mroonga_snippet_syntax.inc \
-	$(top_srcdir)/doc/source/userguide/mroonga_snippet_wrapper.inc \
 	$(top_srcdir)/doc/source/userguide/storage.rst \
 	$(top_srcdir)/doc/source/userguide/wrapper.rst \
 	$(NULL)
@@ -58,9 +56,7 @@ source_files_relative_from_doc_dir = \
 	source/reference.rst \
 	source/userguide.rst \
 	source/userguide/mroonga_snippet_example.inc \
-	source/userguide/mroonga_snippet_storage.inc \
 	source/userguide/mroonga_snippet_syntax.inc \
-	source/userguide/mroonga_snippet_wrapper.inc \
 	source/userguide/storage.rst \
 	source/userguide/wrapper.rst \
 	$(NULL)
