@@ -21,8 +21,8 @@ Improvements
 Fixes
 ^^^^^
 
-* Fixed to use MySQL 5.1.66-2 on CentOS 6. [Reported by @wakisuke.ua]
-* Fixed a bug that MATCH AGAINST with INNSER JOIN syntax causes an error.
+* [rpm][centos] Fixed to use MySQL 5.1.66-2 on CentOS 6. [Reported by @wakisuke.ua]
+* Fixed a bug that ``MATCH AGAINST`` with ``INNER JOIN`` syntax causes an error.
   [Reported by ooshiro]
 
 Thanks
