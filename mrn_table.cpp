@@ -395,6 +395,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
       if (*tmp_ptr == '\0')
         continue;
 
+      DBUG_PRINT("info", ("mroonga title_str=%s", tmp_ptr));
       title_length = 0;
       start_ptr = tmp_ptr;
       while (*start_ptr != ' ' && *start_ptr != '\'' &&
@@ -405,6 +406,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         title_length++;
         start_ptr++;
       }
+      DBUG_PRINT("info", ("mroonga title_length=%u", title_length));
 
       switch (title_length)
       {

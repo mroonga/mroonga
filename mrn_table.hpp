@@ -71,6 +71,31 @@ struct st_mrn_slot_data
   char *alter_comment;
 };
 
+#define MRN_SET_WRAP_ALTER_KEY(file, ha_alter_info) \
+  Alter_inplace_info::HA_ALTER_FLAGS base_handler_flags = ha_alter_info->handler_flags; \
+  KEY  *base_key_info_buffer = ha_alter_info->key_info_buffer; \
+  uint base_key_count = ha_alter_info->key_count; \
+  uint base_index_drop_count = ha_alter_info->index_drop_count; \
+  KEY  **base_index_drop_buffer = ha_alter_info->index_drop_buffer; \
+  uint base_index_add_count = ha_alter_info->index_add_count; \
+  uint *base_index_add_buffer = ha_alter_info->index_add_buffer; \
+  ha_alter_info->handler_flags = file->alter_handler_flags; \
+  ha_alter_info->key_info_buffer = file->alter_key_info_buffer; \
+  ha_alter_info->key_count = file->alter_key_count; \
+  ha_alter_info->index_drop_count = file->alter_index_drop_count; \
+  ha_alter_info->index_drop_buffer = &file->alter_index_drop_buffer; \
+  ha_alter_info->index_add_count = file->alter_index_add_count; \
+  ha_alter_info->index_add_buffer = file->alter_index_add_buffer;
+
+#define MRN_SET_BASE_ALTER_KEY(share, table_share) \
+  ha_alter_info->handler_flags = base_handler_flags; \
+  ha_alter_info->key_info_buffer = base_key_info_buffer; \
+  ha_alter_info->key_count = base_key_count; \
+  ha_alter_info->index_drop_count = base_index_drop_count; \
+  ha_alter_info->index_drop_buffer = base_index_drop_buffer; \
+  ha_alter_info->index_add_count = base_index_add_count; \
+  ha_alter_info->index_add_buffer = base_index_add_buffer;
+
 #define MRN_SET_WRAP_SHARE_KEY(share, table_share)
 /*
   table_share->keys = share->wrap_keys; \

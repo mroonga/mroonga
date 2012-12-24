@@ -230,6 +230,19 @@ private:
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   handler_add_index *hnd_add_index;
 #endif
+#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
+  Alter_inplace_info::HA_ALTER_FLAGS alter_handler_flags;
+  KEY         *alter_key_info_buffer;
+  uint        alter_key_count;
+  uint        alter_index_drop_count;
+  KEY         *alter_index_drop_buffer;
+  uint        alter_index_add_count;
+  uint        *alter_index_add_buffer;
+  TABLE       *wrap_altered_table;
+  KEY         *wrap_altered_table_key_info;
+  TABLE_SHARE *wrap_altered_table_share;
+  KEY         *wrap_altered_table_share_key_info;
+#endif
   int mrn_lock_type;
 
   // for groonga objects
