@@ -11420,7 +11420,7 @@ int ha_mroonga::storage_enable_indexes(uint mode)
       DBUG_PRINT("info", ("mroonga: keys are enabled already"));
       DBUG_RETURN(0);
     }
-    KEY *key_info = table_share->key_info;
+    KEY *key_info = table->key_info;
     bitmap_clear_all(table->read_set);
     mrn::PathMapper mapper(share->table_name, mrn_database_path_prefix);
     for (i = 0; i < n_keys; i++) {
