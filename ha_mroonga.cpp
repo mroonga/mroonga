@@ -10013,10 +10013,12 @@ int ha_mroonga::wrapper_reset()
   error = wrap_handler->ha_reset();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   if (alter_key_info_buffer) {
     my_free(alter_key_info_buffer, MYF(0));
     alter_key_info_buffer = NULL;
   }
+#endif
   DBUG_RETURN(error);
 }
 
