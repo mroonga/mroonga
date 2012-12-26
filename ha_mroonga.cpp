@@ -12176,8 +12176,8 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   uint *key_parser_length;
   KEY *p_key_info = &table->key_info[table_share->primary_key];
   bool need_fill_index = FALSE;
-  memset(index_tables, NULL, sizeof(grn_obj *) * ha_alter_info->key_count);
-  memset(index_columns, NULL, sizeof(grn_obj *) * ha_alter_info->key_count);
+  memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
+  memset(index_columns, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   tmp_table_share.keys = ha_alter_info->key_count;
   if (!(tmp_share = (MRN_SHARE *)
     my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
@@ -12326,8 +12326,8 @@ bool ha_mroonga::storage_inplace_alter_table(
   uint *key_parser_length;
   KEY *p_key_info = &table->key_info[table_share->primary_key];
   bool have_multiple_column_index = FALSE;
-  memset(index_tables, NULL, sizeof(grn_obj *) * ha_alter_info->key_count);
-  memset(index_columns, NULL, sizeof(grn_obj *) * ha_alter_info->key_count);
+  memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
+  memset(index_columns, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   tmp_table_share.keys = ha_alter_info->key_count;
   if (!(tmp_share = (MRN_SHARE *)
     my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
