@@ -6,11 +6,11 @@ language: cpp
 env:
   - MYSQL_VERSION=mysql-system
   - MYSQL_VERSION=mysql-5.5.28
-  - MYSQL_VERSION=mysql-5.6.7-rc
+  - MYSQL_VERSION=mysql-5.6.9-rc
   - MYSQL_VERSION=mariadb-5.5.28
-matrix:
-  allow_failures:
-    - env: MYSQL_VERSION=mysql-5.6.7-rc
+#matrix:
+#  allow_failures:
+#    - env: MYSQL_VERSION=mysql-5.6.9-rc
 install:
   - tools/travis/install.sh
 before_script:
