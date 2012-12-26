@@ -14,7 +14,7 @@ Improvements
 * Supported to use ENABLE KEYS/DISABLE KEYS against table whose charset is
   different from system charset. [Reported by @kokoronavi]
 * Improved to show the value of duplicated key on error message.
-* Supported MySQL 5.6.9-rc. [Reported by wing]
+* Supported MySQL 5.6.9-rc. [#1547] [#1548] [Reported by wing]
 * [storage] Supported to use ``GROUP BY`` with index.
   This change improves search speed against ``GROUP BY``.
 * Dropped Ubuntu 11.04 (Natty Narwhal) support.
