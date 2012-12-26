@@ -199,7 +199,7 @@ Remove existing MySQL packages ::
 
 Install ::
 
-  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-0.noarch.rpm
+  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y MySQL-server
   % sudo service mysql start
@@ -219,7 +219,7 @@ In CentOS 6, unlike in CentOS 5, we use CentOS's MySQL packages (version 5.1.x).
 
 Install ::
 
-  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-0.noarch.rpm
+  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql-server
   % sudo service mysqld start
@@ -237,7 +237,7 @@ Fedora 17
 
 Install ::
 
-  % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-release-1.1.0-0.noarch.rpm
+  % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql-mroonga
 
