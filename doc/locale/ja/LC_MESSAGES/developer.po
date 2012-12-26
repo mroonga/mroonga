@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-26 19:05\n"
+"POT-Creation-Date: 2012-12-26 15:16\n"
 "PO-Revision-Date: 2011-11-28 00:00+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -318,7 +318,6 @@ msgstr "mroongaのヘッダファイル"
 
 # f2ee50ba37af49919552ab98ef7dbd82
 #: ../../../source/developer.rst:108
-#: ../../../source/developer/coding_style.rst:61
 msgid "ha_mroonga.cc"
 msgstr ""
 
@@ -651,32 +650,34 @@ msgstr ""
 msgid "基本的にすべてC++で記述します。よほどのことがない限りCは使いません。"
 msgstr ""
 
-# 43b46d165aa64ee98e3436631f559753
-# 1d2990180a07414b96e7560c8c54ac26
-# 030568fc99b3458ba1a534fcecce6958
-# 53f598ea3d3d446e844f562f1965b569
-# 15704cb5f36344fa96b6a57bb5d2255e
-# a6f97c8bb93b416d9cceebd8e8a9b74d
-# bdb052b2657044c9bff80210013cde5a
-# 8627f488522a4efabf8cf65d8647ed53
-# 98d4ba0226654590804e113981618f42
-# 04fb2b65cf0f4f488526455fa49964de
-# 3432eac95a90491f8234209ab325b1e9
-# edb11e130a034f21860450ee19a1d484
-# 24778dfcc9b247a485f1a34f0d9ce1aa
-# 9873b9766feb429eb0cb4446d2a0f0f2
-# aa63d74d740d47ffacfd7cf07a96d5b4
-# 80eac6e2d90040198675d64091ccf894
-# c1193f7a44f0452cb8e6bec98bc2e084
-# 31542c5ee26c4fab9adb73a0f75e53ec
-# 70929c4620544e54b2b96cfc5e9f0f01
-# a6174bb4d9eb4e7999823f137dc49e69
-# 6aee77b2f6804c2fab579a37697a4efc
-# f90e2141838a47abb1021ca5c1a69195
-# d902cb1a4df74c77aa897f0c7d7de4b6
-# e26036be1d814b00be3fec8967ed10db
-# 5fafb4cfc98543788a899681e11ec812
-# d94e38820b6f49818946e42ad9993cfe
+# b671555dbe95410583bcf19be1a5e950
+# 714051bac55e47a49efe782a26536bfa
+# 2a3018a8af614160b122a32eb6ada585
+# d958618cea7f4a5396811342800fd13f
+# 3c7866bc54274b3fa8b897a4055a9637
+# fc6cfa3be77344de8d1aa8ce377e1fa2
+# 4733c3e5344a45138ba0f062c5b160de
+# 87c1a6f29e9e4ba996d62d04012af5e2
+# 4a84e70c34a24f959fb09aba609e7933
+# 525f141de8dd413089f0eaf18948ec94
+# baeacaf2007146d682ebb17276bb47a3
+# b671555dbe95410583bcf19be1a5e950
+# e6d646e9ea8b42f4bcd85375b3131448
+# eed1014f4e674e25add14c2c72dfdbb3
+# baeacaf2007146d682ebb17276bb47a3
+# 782bcf52aae4462dbc94fdde8b90ee03
+# 782bcf52aae4462dbc94fdde8b90ee03
+# 3c7866bc54274b3fa8b897a4055a9637
+# e6d646e9ea8b42f4bcd85375b3131448
+# e6d646e9ea8b42f4bcd85375b3131448
+# 72dff8e33e1a43b99f32bce1e2f52020
+# 949e5db59b324f19bfdf91b95b768947
+# 27904b472bf44672a1dd771a0fcc40ab
+# baeacaf2007146d682ebb17276bb47a3
+# 2a3018a8af614160b122a32eb6ada585
+# 714051bac55e47a49efe782a26536bfa
+# 3dcfe6c5a47b48c59f1e71b0220e6229
+# baeacaf2007146d682ebb17276bb47a3
 #: ../../../source/developer/coding_style.rst:24
 #: ../../../source/developer/coding_style.rst:37
 #: ../../../source/developer/coding_style.rst:55
@@ -703,28 +704,14 @@ msgstr ""
 #: ../../../source/developer/coding_style.rst:523
 #: ../../../source/developer/coding_style.rst:543
 #: ../../../source/developer/coding_style.rst:574
-#: ../../../source/developer/coding_style.rst:654
-#: ../../../source/developer/coding_style.rst:658
-msgid "よい例:"
+#: ../../../source/developer/coding_style.rst:656
+#: ../../../source/developer/coding_style.rst:660
+msgid "よい例::"
 msgstr ""
 
-# e5f8c9ef79b946538eb18eb17e9f98ee
-# 4dd45f153c2b42e2aad001a6ac65f208
-# c5ff88adeaa247b39f9055b3be3a18d0
-#: ../../../source/developer/coding_style.rst:26
-#: ../../../source/developer/coding_style.rst:39
-#: ../../../source/developer/coding_style.rst:57
-msgid "ha_mroonga.cpp"
-msgstr ""
-
-# b1bbfe85e35d40098cb67409a26be3c7
+# 35b3c0c225ea4c339c29235c4606c2da
 #: ../../../source/developer/coding_style.rst:28
-msgid "悪い例（C言語を使っている）:"
-msgstr ""
-
-# 5bbcb793c7a7434a81db773397e395ad
-#: ../../../source/developer/coding_style.rst:30
-msgid "mrn_sys.c"
+msgid "悪い例（C言語を使っている）::"
 msgstr ""
 
 # 0aa920deb3334531855abb4b76c729f1
@@ -739,34 +726,19 @@ msgid ""
 "す。"
 msgstr ""
 
-# a2cf8302055b4e31ae71be79e4744875
+# e2f7d719625e4c0cb9e6220ff2eeea16
 #: ../../../source/developer/coding_style.rst:41
-msgid "悪い例（大文字を使っている）:"
+msgid "悪い例（大文字を使っている）::"
 msgstr ""
 
-# 8a514ad47ef24658a1edf856a263e7df
-#: ../../../source/developer/coding_style.rst:43
-msgid "HA_MROONGA.cpp"
-msgstr ""
-
-# 80287c78cbe74e4183abf0f76b192cd5
+# 9fb93ac7530244d7a850c3e8987b5a1e
 #: ../../../source/developer/coding_style.rst:45
-msgid "悪い例（単語を\"_\"で区切らずにくっつけている）:"
+msgid "悪い例（単語を\"_\"で区切らずにくっつけている）::"
 msgstr ""
 
-# fb7374a8e2244a5ab70d7add05093b86
-#: ../../../source/developer/coding_style.rst:47
-msgid "hamroonga.cpp"
-msgstr ""
-
-# 6dfa17a9f6554842a091543b47fe3d79
+# 0b3a2a73c0d34aa2a091d38845130b81
 #: ../../../source/developer/coding_style.rst:49
-msgid "悪い例（単語を\"-\"で区切っている）:"
-msgstr ""
-
-# e3e167e1b6eb4a2bbdfdc9afebfc6cbe
-#: ../../../source/developer/coding_style.rst:51
-msgid "ha-mroonga.cpp"
+msgid "悪い例（単語を\"-\"で区切っている）::"
 msgstr ""
 
 # 0a87338763df405cab5eaba397511951
@@ -774,19 +746,14 @@ msgstr ""
 msgid "ソースコードの拡張子 ``.cpp`` にします。"
 msgstr ""
 
-# 84726a0180cb48c9b998d8cfaaa8c473
+# f6108592b11f436ca8b4a1d84f263166
 #: ../../../source/developer/coding_style.rst:59
-msgid "悪い例（ ``.cc`` を使っている）:"
+msgid "悪い例（ ``.cc`` を使っている）::"
 msgstr ""
 
 # 0e3804ac0e194a61a8d55f3fe5360616
 #: ../../../source/developer/coding_style.rst:63
 msgid "ヘッダーファイルの拡張子は ``.hpp`` にします。"
-msgstr ""
-
-# 0bc8cdd2516742a5a8b72f271d5de2fe
-#: ../../../source/developer/coding_style.rst:67
-msgid "ha_mroonga.hpp"
 msgstr ""
 
 # d6f545fed6c2431bbb4daeb2af6696a4
@@ -807,39 +774,15 @@ msgid ""
 "い。"
 msgstr ""
 
-# 91d19d2b9c6247ccb40f50338f802dd7
-# 827edddd82b74325a12c97df0d3c8cf2
-#: ../../../source/developer/coding_style.rst:80
-#: ../../../source/developer/coding_style.rst:90
-msgid "ha_mroonga.cpp:"
-msgstr ""
-
-# 23e871972f9447489cb69f8f21afcc1e
-# 30e88f9e54f94de7acaaba8eddc5a6a7
-#: ../../../source/developer/coding_style.rst:81
-#: ../../../source/developer/coding_style.rst:86
-msgid "using namespace std;"
-msgstr ""
-
-# bb701693f8654044a041a823598b091c
+# 6b21ca1ccf9b46909939dd7d9dcddb51
 #: ../../../source/developer/coding_style.rst:83
-msgid "悪い例（ヘッダーファイル内で ``using namespace`` を使っている）:"
+msgid "悪い例（ヘッダーファイル内で ``using namespace`` を使っている）::"
 msgstr ""
 
-# f9c6b03605f14e90b0d7472e9fd1182c
-#: ../../../source/developer/coding_style.rst:85
-msgid "ha_mroonga.hpp:"
-msgstr ""
-
-# 93cb7c2df3d8414bafe588f983634ace
+# dfbeace8ce56489cb2a1e58b0a9459fe
 #: ../../../source/developer/coding_style.rst:88
 msgid ""
-"悪い例（ ``std`` 以外の名前空間に対して ``using namespace`` を使っている）:"
-msgstr ""
-
-# b8a2382cbb4740a2bb8f9d61c6756389
-#: ../../../source/developer/coding_style.rst:91
-msgid "using namespace zmq;"
+"悪い例（ ``std`` 以外の名前空間に対して ``using namespace`` を使っている）::"
 msgstr ""
 
 # 388524737e074fa4a805365148da3977
@@ -855,44 +798,14 @@ msgid ""
 "``HEADER_FILE_NAME_HPP_`` という名前にする。"
 msgstr ""
 
-# 283438e24fd847679078f5b57eafabc7
-#: ../../../source/developer/coding_style.rst:101
-msgid ""
-"#ifndef MRN_DB_PATH_HPP_ #define MRN_DB_PATH_HPP_ ... #endif // "
-"MRN_DB_PATH_HPP_"
-msgstr ""
-
-# 28850db2cf094bf2b3f11ff0b4206697
-# 1a03a47f8e7e4258a7e66a3620194ea6
-# 7b6ff834e5cd41e79f2754879adea2e8
-#: ../../../source/developer/coding_style.rst:103
-#: ../../../source/developer/coding_style.rst:111
-#: ../../../source/developer/coding_style.rst:119
-msgid "mrn_db_path.hpp:"
-msgstr ""
-
-# 4d0d39ad8482484da00cacd5aa1c7737
+# ec3446401f22450e93eec5384d27e930
 #: ../../../source/developer/coding_style.rst:106
-msgid "悪い例（小文字になっている）:"
+msgid "悪い例（小文字になっている）::"
 msgstr ""
 
-# c3285dd246e6408493f899ae675d10c0
-#: ../../../source/developer/coding_style.rst:109
-msgid ""
-"#ifndef mrn_db_path_hpp_ #define mrn_db_path_hpp_ ... #endif // "
-"mrn_db_path_hpp_"
-msgstr ""
-
-# 57304fc7aafd4f49955cfdda35a05849
+# 77043f7cadf74dc885805da0a8a3df9e
 #: ../../../source/developer/coding_style.rst:114
-msgid "悪い例（アンダースコアが最後ではなく先頭についている）:"
-msgstr ""
-
-# d1e3ce1af047472bb6b52b03ff48839c
-#: ../../../source/developer/coding_style.rst:117
-msgid ""
-"#ifndef _MRN_DB_PATH_HPP #define _MRN_DB_PATH_HPP ... #endif // "
-"_MRN_DB_PATH_HPP"
+msgid "悪い例（アンダースコアが最後ではなく先頭についている）::"
 msgstr ""
 
 # 60cc265fff9a4b8e905756333992ee01
@@ -905,29 +818,14 @@ msgstr ""
 msgid "``=`` の前後に1つスペースを入れる。"
 msgstr ""
 
-# fdecabe0e2454c56b4e0338c13af6d29
-#: ../../../source/developer/coding_style.rst:129
-msgid "int i = 0;"
-msgstr ""
-
-# e39e53866fd1450b9bb59f1310b48f90
+# c0483a0255fd404ebe0947b57de09245
 #: ../../../source/developer/coding_style.rst:131
-msgid "悪い例（スペースが入っていない）;"
+msgid "悪い例（スペースが入っていない）::"
 msgstr ""
 
-# 4d2fab347e0a4054a06459ec4abfd92b
-#: ../../../source/developer/coding_style.rst:133
-msgid "for (i=0; i<10; ++i) {...}"
-msgstr ""
-
-# ecc48bd3c7b849da84774cb51c8e06ec
+# 4ba7bb2b3b824d69bfeb37ff94cde987
 #: ../../../source/developer/coding_style.rst:135
-msgid "悪い例（2つスペースが入っている）"
-msgstr ""
-
-# 829a19b63ad24808bd50b2184e254338
-#: ../../../source/developer/coding_style.rst:137
-msgid "int i  = 0;"
+msgid "悪い例（2つスペースが入っている）::"
 msgstr ""
 
 # 124934a6d139486984ae55ed99153bef
@@ -940,30 +838,14 @@ msgstr ""
 msgid "文字列はポインタと長さで表現する。 ``\\0`` での終端を仮定しない。"
 msgstr ""
 
-# 67c07f2a60894bfa9cb3834c7aa8dc14
+# 01b4599ff62543b2ac83d8a0bacb12a1
 #: ../../../source/developer/coding_style.rst:144
-msgid "よい例（本当はもっとすっきりした例がよいけど。。。）:"
+msgid "よい例（本当はもっとすっきりした例がよいけど。。。）::"
 msgstr ""
 
-# ec5052d59e984d54bf82396275d47a79
-#: ../../../source/developer/coding_style.rst:146
-msgid ""
-"char *raw_data = \"table_name column_name column_value\" char *column_name; "
-"size_t column_name_size; column_name = raw_data + strlen(\"table_name \"); "
-"column_name_size = strlen(\"column_name\");"
-msgstr ""
-
-# 7e76044de9c3489c9d409cb2b858ec5c
+# 11158e9dca464b51abda8fdbdd4650df
 #: ../../../source/developer/coding_style.rst:152
-msgid "悪い例（無理やり ``\\0`` 終端にしている）:"
-msgstr ""
-
-# 9e637b1fa87e4896983a1d4997629a04
-#: ../../../source/developer/coding_style.rst:154
-msgid ""
-"char *raw_data = \"table_name column_name column_value\" char *column_name; "
-"column_name = strndup(raw_data + strlen(\"table_name \"), strlen"
-"(\"column_name\"));"
+msgid "悪い例（無理やり ``\\0`` 終端にしている）::"
 msgstr ""
 
 # e9609281a24141dea4ac7f1ebb951d8c
@@ -973,21 +855,9 @@ msgid ""
 "してよい。"
 msgstr ""
 
-# 71c5889add3e4ac99f64dcc7417474b3
-#: ../../../source/developer/coding_style.rst:162
-msgid "char *database_path = \"db/test.mrn\";"
-msgstr ""
-
-# 4b5d6b18d94742d5965ba9d258c0e1ab
+# ff5a7ef7c5e74bf39ab89d3a9e129ddf
 #: ../../../source/developer/coding_style.rst:164
-msgid "悪い例（ ``\\0`` 終端を仮定せず、長さも管理している）:"
-msgstr ""
-
-# 6cf5e07543624029bbc9bce15c7a7146
-#: ../../../source/developer/coding_style.rst:166
-msgid ""
-"char *database_path = \"db/test.mrn\"; size_t database_path_size = strlen"
-"(\"db/test.mrn\");"
+msgid "悪い例（ ``\\0`` 終端を仮定せず、長さも管理している）::"
 msgstr ""
 
 # 006a6406ae9c4906890481681bae082b
@@ -995,19 +865,9 @@ msgstr ""
 msgid "``std::string`` は内部でメモリ確保などの処理が発生するので多用しない。"
 msgstr ""
 
-# ca32258efb8d4d8295ea83b44c28dee0
-#: ../../../source/developer/coding_style.rst:173
-msgid "char database_path[MAX_PATH];"
-msgstr ""
-
-# b15addda592e4b149be7d6d863b37086
+# 760915e0f2a74eaba1bc96d2243309c3
 #: ../../../source/developer/coding_style.rst:175
-msgid "悪い例（最大サイズがわかっているのに ``std::string`` を使っている）:"
-msgstr ""
-
-# 7ed60c0f8eba4aefacadfa506b3f8880
-#: ../../../source/developer/coding_style.rst:177
-msgid "std::string database_path;"
+msgid "悪い例（最大サイズがわかっているのに ``std::string`` を使っている）::"
 msgstr ""
 
 # e66a0b7f29704f24b1d171ba2852def0
@@ -1042,23 +902,9 @@ msgstr ""
 msgid "クラスの名前は ``UpperCamelCase`` とする。"
 msgstr ""
 
-# 6464b2fd02ed49faa940999d85fc47aa
-# 476d0556a901410eab27d6ff4ccadbae
-# 6a2d71f8a22544e6a23a3309c2cb9bc7
-#: ../../../source/developer/coding_style.rst:196
-#: ../../../source/developer/coding_style.rst:332
-#: ../../../source/developer/coding_style.rst:366
-msgid "class MyClass { }"
-msgstr ""
-
-# 5d76bfcff69e4d02a572fabf9e5049fd
+# 8277b41f07ef4f0a92ef529ae9d6c8e3
 #: ../../../source/developer/coding_style.rst:200
-msgid "悪い例（ ``snail_case`` である）:"
-msgstr ""
-
-# 0d12047680994b0b9571ea1cd09b7e08
-#: ../../../source/developer/coding_style.rst:202
-msgid "class my_class { }"
+msgid "悪い例（ ``snail_case`` である）::"
 msgstr ""
 
 # dccfc5d568ea4af2b190cd222aadb2c9
@@ -1068,19 +914,9 @@ msgid ""
 "似のモジュールに命名規則がある場合はそれに従う。"
 msgstr ""
 
-# 9252a89c5d9b4956b16131549512b3d9
-#: ../../../source/developer/coding_style.rst:210
-msgid "class ha_mroonga: public handler { }"
-msgstr ""
-
-# 6858c45626084dcb9b6b3db5fa24bcda
+# ef48bb68f4ff43b29fa8c4005d5de6f7
 #: ../../../source/developer/coding_style.rst:214
-msgid "悪い例（ ``UpperCamelCase`` になっている）:"
-msgstr ""
-
-# d27de92b5d71449c9f5ba43a4691f973
-#: ../../../source/developer/coding_style.rst:216
-msgid "class HaMroonga: public handler { }"
+msgid "悪い例（ ``UpperCamelCase`` になっている）::"
 msgstr ""
 
 # b84a2b6c777644698ccf136ce28c2a75
@@ -1095,113 +931,14 @@ msgid ""
 "る。"
 msgstr ""
 
-# c7252dccc3384d519575a45d1f6933c4
-# 3be2ed71a13a4fa79212d36e4704ec13
-# 9ed76a625b3144159b305385832e525e
-# e5325fb8767e4fb6bc7bf9a93411811e
-# 74bbf54135804f85b78a35e11a7abe41
-# 37032935dd844bc19bf47ade1964c82b
-# 66ad19ecbe4543edb897beed6f6f6d5b
-# d49cbf476a55498ebed1a7d95072933d
-# f9d3ed49310d4eb790e5495135f5d3bf
-# 4fe212d9ddfe435889ae14da85f20641
-# c168527e6c6b47ff8da67efec90d35eb
-# 3c67ea8935ac480bab23fca009bf5b6d
-# b7bc3bad6b654b1e94f3858986044c80
-#: ../../../source/developer/coding_style.rst:227
-#: ../../../source/developer/coding_style.rst:234
-#: ../../../source/developer/coding_style.rst:241
-#: ../../../source/developer/coding_style.rst:253
-#: ../../../source/developer/coding_style.rst:261
-#: ../../../source/developer/coding_style.rst:269
-#: ../../../source/developer/coding_style.rst:282
-#: ../../../source/developer/coding_style.rst:293
-#: ../../../source/developer/coding_style.rst:304
-#: ../../../source/developer/coding_style.rst:338
-#: ../../../source/developer/coding_style.rst:372
-#: ../../../source/developer/coding_style.rst:392
-#: ../../../source/developer/coding_style.rst:403
-msgid "class MyClass {"
-msgstr ""
-
-# 99c3328879e346e3a0a86faffccdf3d0
-#: ../../../source/developer/coding_style.rst:229
-msgid "char *my_name_;"
-msgstr ""
-
-# 4bbdec52efcb4379a46b5a5af10ef855
-# 9072740d6f424721a1f6e29cbb9f1eba
-# b60c3d32251447b3904519085f5905d0
-# c237fe43f12d439f9fbf57e4f547ba08
-# 167e9c453d304306bd0ca3f90393c646
-# cb2715adb94a4ad3ba3762bc0f0e7e51
-# a0a918b1d7cf43b18d3a5c438634e7fa
-# 09bb9a9b4ac543fc9a23304dfc72e156
-# f8e2d17d5cbc411aaaaa7ec9230aa33f
-# 376693f8c1a548a2a265994490b04844
-# c095c1a173424b558b5a64f08196c2ee
-# aa9f6907801447a5b6bec24ec7a4355e
-# 67850c80461a49d99689e479c2ea1257
-# bb6abe148c124966a196da19a1927a0e
-# 84e9d9d3a0244ff9befb7ac01c2bec5b
-# 1bf88094b0f54036982210938e654ca2
-# 9be34292558941c8af227e5b76ba6c7c
-# 193a17affb414cf3ae73d3f2a2103720
-# f9f5d35b499743d6a14a0d1f97c308bd
-# d14db2fd9d9e4018868a23a82452e819
-# e8169d1daee4437e91508383369a408d
-# 7d2519a20c524103ac867955e56250b3
-# d2983df94b4b4ed8beb4e8652aa83b91
-# 0f23362e9e6a410f896bcf6f8eb8555b
-# dbf5ce82f6c344a7b0226e4160782fdd
-# 48288d2453c547849b44f43f22a85fde
-#: ../../../source/developer/coding_style.rst:230
-#: ../../../source/developer/coding_style.rst:237
-#: ../../../source/developer/coding_style.rst:244
-#: ../../../source/developer/coding_style.rst:257
-#: ../../../source/developer/coding_style.rst:265
-#: ../../../source/developer/coding_style.rst:273
-#: ../../../source/developer/coding_style.rst:289
-#: ../../../source/developer/coding_style.rst:300
-#: ../../../source/developer/coding_style.rst:311
-#: ../../../source/developer/coding_style.rst:328
-#: ../../../source/developer/coding_style.rst:344
-#: ../../../source/developer/coding_style.rst:345
-#: ../../../source/developer/coding_style.rst:362
-#: ../../../source/developer/coding_style.rst:379
-#: ../../../source/developer/coding_style.rst:380
-#: ../../../source/developer/coding_style.rst:399
-#: ../../../source/developer/coding_style.rst:410
-#: ../../../source/developer/coding_style.rst:426
-#: ../../../source/developer/coding_style.rst:427
-#: ../../../source/developer/coding_style.rst:438
-#: ../../../source/developer/coding_style.rst:439
-#: ../../../source/developer/coding_style.rst:527
-#: ../../../source/developer/coding_style.rst:533
-#: ../../../source/developer/coding_style.rst:549
-#: ../../../source/developer/coding_style.rst:562
-#: ../../../source/developer/coding_style.rst:567
-msgid "}"
-msgstr ""
-
-# 073a8af5c85a45f6b9070059ada317bc
+# 5f1e931d0aa643d699fdae273a8b06a7
 #: ../../../source/developer/coding_style.rst:232
-msgid "悪い例（ ``UpperCamelCase`` である）:"
+msgid "悪い例（ ``UpperCamelCase`` である）::"
 msgstr ""
 
-# ede891ae6d944d5ba11cbbc1f215fce6
-#: ../../../source/developer/coding_style.rst:236
-msgid "char *MyName_;"
-msgstr ""
-
-# 234a24bdf115464994ec3daf80bb233f
+# b822a3d5fa804896bfadbd45b15337c3
 #: ../../../source/developer/coding_style.rst:239
-msgid "悪い例（末尾にアンダースコアがない）:"
-msgstr ""
-
-# 533e459458174b818278d97fe4367beb
-#: ../../../source/developer/coding_style.rst:243
-msgid "char *my_name;"
+msgid "悪い例（末尾にアンダースコアがない）::"
 msgstr ""
 
 # e04a8ba11391467db5b590432958d344
@@ -1216,31 +953,16 @@ msgid ""
 "アを除いたものにする。"
 msgstr ""
 
-# 93a7fab0204d4b92bee3e4e7bcfe2d1f
-#: ../../../source/developer/coding_style.rst:255
-msgid "char *my_name_; const char *my_name() {return my_name_;};"
-msgstr ""
-
-# a000dc1d5fbb4fad8b3ce81fccc5a574
-# ceefa6cbb41e4bf88febe88e66373ae8
+# 1e46a875835c46cab5b21c36b2dfbb82
+# 1e46a875835c46cab5b21c36b2dfbb82
 #: ../../../source/developer/coding_style.rst:259
 #: ../../../source/developer/coding_style.rst:291
-msgid "悪い例（末尾にアンダースコアが残っている）:"
+msgid "悪い例（末尾にアンダースコアが残っている）::"
 msgstr ""
 
-# 0bd7196de4364d59bf4ab3c0de688cc1
-#: ../../../source/developer/coding_style.rst:263
-msgid "char *my_name_; const char *my_name_() {return my_name_;};"
-msgstr ""
-
-# 68091886b09f4fa49cba3bd0c8943609
+# 7f08b01e363745b88dab042718b51659
 #: ../../../source/developer/coding_style.rst:267
-msgid "悪い例（先頭に ``get_`` を付けている）:"
-msgstr ""
-
-# c58e9b676d5a48bfbf0f8ec49b777ecb
-#: ../../../source/developer/coding_style.rst:271
-msgid "char *my_name_; const char *_my_name() {return my_name_;};"
+msgid "悪い例（先頭に ``get_`` を付けている）::"
 msgstr ""
 
 # a15b97cfe6a6434abf5457649c1ea480
@@ -1255,46 +977,9 @@ msgid ""
 "コアを除き、先頭に ``set_`` を加えたものにする。"
 msgstr ""
 
-# c0761223b2ec4ff384158bd82a6916cc
-#: ../../../source/developer/coding_style.rst:284
-msgid "unsigned int age_; void set_age(unsigned int age) {"
-msgstr ""
-
-# 2d3e046143984bc7a1355c2e9ae35464
-# 5bbb741b1a5b48ec81edd91e54abbba2
-# 8f30721bd7944fc59a73b8daca443c70
-#: ../../../source/developer/coding_style.rst:287
-#: ../../../source/developer/coding_style.rst:298
-#: ../../../source/developer/coding_style.rst:309
-msgid "age_ = age;"
-msgstr ""
-
-# 0bb252c4d8d4432f8bbb285ecf4a8d07
-# 4aa45c8a4fc0463a926106b2888a6369
-# 4e685f1987ac466eb026174d37aa6cc4
-# 6bedc55282fd4c698e1efe1a3d6f2c17
-# 954af36ba5cd49d882e59afcb8077d72
-#: ../../../source/developer/coding_style.rst:288
-#: ../../../source/developer/coding_style.rst:299
-#: ../../../source/developer/coding_style.rst:310
-#: ../../../source/developer/coding_style.rst:398
-#: ../../../source/developer/coding_style.rst:409
-msgid "};"
-msgstr ""
-
-# aa93456b785c4fc396fe76bdc89a16c0
-#: ../../../source/developer/coding_style.rst:295
-msgid "unsigned int age_; void set_age_(unsigned int age) {"
-msgstr ""
-
-# 5c9ba023295b41e4b57f25830e93a736
+# f0013b6c5820484c9822d3c4d4d5a8ab
 #: ../../../source/developer/coding_style.rst:302
-msgid "悪い例（先頭に ``set_`` ではなく ``update_`` を付けている）:"
-msgstr ""
-
-# 7cf64698c6124b2a8c51dc1e803d66a2
-#: ../../../source/developer/coding_style.rst:306
-msgid "unsigned int age_; void update_age(unsigned int age) {"
+msgid "悪い例（先頭に ``set_`` ではなく ``update_`` を付けている）::"
 msgstr ""
 
 # 878ad37c1a3e4072b29aa2f514f07d2f
@@ -1325,36 +1010,14 @@ msgid ""
 "る。そのため、明示的にコピーコンストラクターを定義しない場合は無効にする。"
 msgstr ""
 
-# b1954924b6df44fa9531c1fea5a39715
-# 2e0c90eb1dbd45539e10472302e7f666
-#: ../../../source/developer/coding_style.rst:324
-#: ../../../source/developer/coding_style.rst:358
-msgid "class MyClass { private:"
-msgstr ""
-
-# 165be6de2bc34237979666582f5866c8
-#: ../../../source/developer/coding_style.rst:327
-msgid "MyClass(const MyClass &);"
-msgstr ""
-
-# 6c8324591d10472ba866cc41e4be0185
+# b8e25c4484374e868b70c9a438f24812
 #: ../../../source/developer/coding_style.rst:330
-msgid "悪い例（コピーコンストラクターを禁止していない）:"
+msgid "悪い例（コピーコンストラクターを禁止していない）::"
 msgstr ""
 
-# f386c5f6547747688b423826338c24c2
+# 6e60a78873e0436287688f01250e6a72
 #: ../../../source/developer/coding_style.rst:336
-msgid "悪い例（カスタムコピーコンストラクターを使っている）:"
-msgstr ""
-
-# 330df2f2af6b4ae2b1b4335e708d2c85
-#: ../../../source/developer/coding_style.rst:340
-msgid "unsigned int age_; MyClass(const MyClass &object) {"
-msgstr ""
-
-# adb184b2d6324491b94b5fb87f6cb9e5
-#: ../../../source/developer/coding_style.rst:343
-msgid "age_ = object.age_;"
+msgid "悪い例（カスタムコピーコンストラクターを使っている）::"
 msgstr ""
 
 # 52784b0b38ad49aabaefe09e6aec0a27
@@ -1384,29 +1047,14 @@ msgid ""
 "め、明示的に代入演算子を定義しない場合は無効にする。"
 msgstr ""
 
-# 13bc6f2f86604a57b3b11bb304af7f5d
-#: ../../../source/developer/coding_style.rst:361
-msgid "MyClass &operator=(const MyClass &);"
-msgstr ""
-
-# bc8c1e249e474b29b49110919d4b436a
+# eeb3b06c19f04e929161bb112d85d0fe
 #: ../../../source/developer/coding_style.rst:364
-msgid "悪い例（代入を禁止していない）:"
+msgid "悪い例（代入を禁止していない）::"
 msgstr ""
 
-# 05d79f3bc1f44300a79e6a11de466546
+# 82cd99674a4441e6b1248cfcade31d38
 #: ../../../source/developer/coding_style.rst:370
-msgid "悪い例（代入を使っている）:"
-msgstr ""
-
-# a2332a7ed62e4dbb92ea2c178e9b1fc5
-#: ../../../source/developer/coding_style.rst:374
-msgid "unsigned int age_; MyClass &operator=(const MyClass &object) {"
-msgstr ""
-
-# 58a57d21f784482eba40721fd19fde8f
-#: ../../../source/developer/coding_style.rst:377
-msgid "age_ = object.age_; return *this;"
+msgid "悪い例（代入を使っている）::"
 msgstr ""
 
 # 39327dae6dc648fe8b57152c565902d5
@@ -1424,26 +1072,9 @@ msgstr ""
 msgid "引数がない場合は ``void`` を省略する。"
 msgstr ""
 
-# a9eaa4279b2d46fbb91fc137d2f8a98d
-#: ../../../source/developer/coding_style.rst:394
-msgid "unsigned int age_; unsigned int age() {"
-msgstr ""
-
-# 71ad25aaa8fb426c85220d5f864a0012
-# 23a44460340f4ac797aff872e9054abf
-#: ../../../source/developer/coding_style.rst:397
-#: ../../../source/developer/coding_style.rst:408
-msgid "return age_;"
-msgstr ""
-
-# 583ddbf66b9746499d374fc1707be1d7
+# 807111ba0bd648d1aa2ef3730e7a6c65
 #: ../../../source/developer/coding_style.rst:401
-msgid "悪い例（ ``void`` を省略していない）:"
-msgstr ""
-
-# 0a96fb0f103e4d8794bf2fc8356271e9
-#: ../../../source/developer/coding_style.rst:405
-msgid "unsigned int age_; unsigned int age(void) {"
+msgid "悪い例（ ``void`` を省略していない）::"
 msgstr ""
 
 # f692563042f24012b3a2a0d3a1bc1249
@@ -1458,40 +1089,9 @@ msgid ""
 "る事を明示するためと、間違って引数を変更してしまわないためである。"
 msgstr ""
 
-# 7f0154f9d57747689e0bd6d1e92d6392
-# 7a403a39b35f4d9d84ca59a651af4050
-# 66dc080070024f00bf0d4bccafd23664
-# f5f05279e45343ecb90e204fa89933d2
-#: ../../../source/developer/coding_style.rst:419
-#: ../../../source/developer/coding_style.rst:431
-#: ../../../source/developer/coding_style.rst:545
-#: ../../../source/developer/coding_style.rst:558
-msgid "class Table {"
-msgstr ""
-
-# 9aa29e25d73a4db29225654fc3b6c7f5
-#: ../../../source/developer/coding_style.rst:421
-msgid ""
-"void insert(unsigned int id, const char *column_name, const char *value) {"
-msgstr ""
-
-# 9f1a324971bc40dd87ed5a1a44f0cbb4
-# 8be6bb14e7044105919b23457d7b7b60
-#: ../../../source/developer/coding_style.rst:423
-#: ../../../source/developer/coding_style.rst:435
-msgid ""
-"Record *record = records[i]; Column *column = columns[column_name]; column."
-"set_value(value);"
-msgstr ""
-
-# 38581ae2ca7a4f6687ce0963f57a3f30
+# a6a5aa29d11a401dafcf8ba9e6b7f656
 #: ../../../source/developer/coding_style.rst:429
-msgid "悪い例（入力のみに用いているのに ``const`` が付いていない）:"
-msgstr ""
-
-# 5c12c40174f7477cb40122ddd6d1980b
-#: ../../../source/developer/coding_style.rst:433
-msgid "void insert(unsigned int id, char *column_name, char *value) {"
+msgid "悪い例（入力のみに用いているのに ``const`` が付いていない）::"
 msgstr ""
 
 # a2ae48739aaf4f3290b0785ec2b27e63
@@ -1507,19 +1107,9 @@ msgid ""
 "る。"
 msgstr ""
 
-# ad85ea0f42e64d3d862ffa936ce26411
-#: ../../../source/developer/coding_style.rst:448
-msgid "const char *MRN_LOG_FILE_PATH = \"groonga.log\";"
-msgstr ""
-
-# 178fd05250564651bda788c66ca4867e
+# 1de305263dc442ed9e0617c26cc8cbf2
 #: ../../../source/developer/coding_style.rst:450
-msgid "悪い例（ ``#define`` を用いている）:"
-msgstr ""
-
-# 33431fe016f446b4b4f1d26f71c2aae3
-#: ../../../source/developer/coding_style.rst:452
-msgid "#define MRN_LOG_FILE_PATH \"groonga.log\""
+msgid "悪い例（ ``#define`` を用いている）::"
 msgstr ""
 
 # 85a49ff869ef4c6da74a026b8b3abeae
@@ -1537,19 +1127,9 @@ msgstr ""
 msgid "真偽値には ``bool`` 型を用いる。"
 msgstr ""
 
-# 5db5f96e05ff4b459baf4a064a228038
-#: ../../../source/developer/coding_style.rst:464
-msgid "bool is_searching;"
-msgstr ""
-
-# b2cdbfffdd2a4a278fe79c198326fa03
+# e5631b388c8e47eda1a7a22bb9cedfcf
 #: ../../../source/developer/coding_style.rst:466
-msgid "悪い例（ ``int`` 型を用いている）:"
-msgstr ""
-
-# c9ca002e2aa74dfa85cab54443a8aafa
-#: ../../../source/developer/coding_style.rst:468
-msgid "int is_searching;"
+msgid "悪い例（ ``int`` 型を用いている）::"
 msgstr ""
 
 # b9cdae4d862e47f4892fd0d5f74395bb
@@ -1562,19 +1142,9 @@ msgstr ""
 msgid "真偽値の値として ``true`` と ``false`` はより完結で説明的だからである。"
 msgstr ""
 
-# fca08e2c140d401bb978e6b9b7f3c7a0
-#: ../../../source/developer/coding_style.rst:477
-msgid "bool is_searching = true;"
-msgstr ""
-
-# 551e272465f144bdb53ee8722951e1d7
+# b0a4661888af40c0a2765b9b480df69d
 #: ../../../source/developer/coding_style.rst:479
-msgid "悪い例（ ``0`` 以外の値を真の値として用いている）:"
-msgstr ""
-
-# c4f67d80a5be477388d58fa704e0594a
-#: ../../../source/developer/coding_style.rst:481
-msgid "bool is_searching = 1;"
+msgid "悪い例（ ``0`` 以外の値を真の値として用いている）::"
 msgstr ""
 
 # dfd2b03729c1452cb0c979cc2fa5abbd
@@ -1595,19 +1165,9 @@ msgid ""
 "コードだからである。"
 msgstr ""
 
-# fcc04beaa66d44bcb85a451195d80f17
-#: ../../../source/developer/coding_style.rst:493
-msgid "boolean is_searching = true; if (!is_searching) { ... }"
-msgstr ""
-
-# 56a927fc466145159a5edefd06e078df
+# cd926848f0b440aa96fbbce65c8faacc
 #: ../../../source/developer/coding_style.rst:496
-msgid "悪い例（真偽値のリテラルと比較している）:"
-msgstr ""
-
-# 096b91f14faf4b69937cf130b2aa4ab5
-#: ../../../source/developer/coding_style.rst:498
-msgid "boolean is_searching = true; if (is_searching == false) { ... }"
+msgid "悪い例（真偽値のリテラルと比較している）::"
 msgstr ""
 
 # b0a1dbbd6c77432fa1b3336af7f85516
@@ -1624,19 +1184,9 @@ msgid ""
 "である。"
 msgstr ""
 
-# 5d7939aea3e041ebb90f8c72d2079b9c
-#: ../../../source/developer/coding_style.rst:508
-msgid "char *name = NULL; if (!name) { ... }"
-msgstr ""
-
-# fbb8432eefdf4e75a5621de73ef18f5e
+# f1e4331a65b64721887a14617ae942e5
 #: ../../../source/developer/coding_style.rst:511
-msgid "悪い例（ ``NULL`` と比較している）:"
-msgstr ""
-
-# cf2bfb422952487c81559795d13e5688
-#: ../../../source/developer/coding_style.rst:513
-msgid "char *name = NULL; if (name == NULL) { ... }"
+msgid "悪い例（ ``NULL`` と比較している）::"
 msgstr ""
 
 # b3db28d10b01480e8dd753c2f6f8b2a3
@@ -1660,26 +1210,9 @@ msgid ""
 "``int`` のときはすべて数値として扱う。"
 msgstr ""
 
-# cd2d054dfd25467aabd849029770fe06
-#: ../../../source/developer/coding_style.rst:524
-msgid "if (memcmp(value1, value2, value_size) == 0) {"
-msgstr ""
-
-# 6384f44362ff442d81bb51fa9f105921
-# c82b69f896534961b7f87f162b674290
-#: ../../../source/developer/coding_style.rst:526
-#: ../../../source/developer/coding_style.rst:532
-msgid "printf(\"same value!\\n\");"
-msgstr ""
-
-# d0647257ce7b4df498428d95fef5bab1
+# 0ec99887631c45d4aae9c6b8acf4610a
 #: ../../../source/developer/coding_style.rst:529
-msgid "悪い例（ ``0`` を偽の値として扱っている）:"
-msgstr ""
-
-# 2c1290d4d8724d05b5275d03ae82cf12
-#: ../../../source/developer/coding_style.rst:530
-msgid "if (!memcmp(value1, value2, value_size)) {"
+msgid "悪い例（ ``0`` を偽の値として扱っている）::"
 msgstr ""
 
 # 6abf769bdfd844a2aa4a218a15e4ee75
@@ -1700,38 +1233,11 @@ msgid ""
 "クター・代入処理が行われたりなど非効率である。（後述）"
 msgstr ""
 
-# 543ff35ab24840988f2c3e92fec049e1
-# 8e29bd0b2dda47bd858ad4cb9ac3a155
-#: ../../../source/developer/coding_style.rst:547
-#: ../../../source/developer/coding_style.rst:560
-msgid "Table(const char *name); std::string name_;"
-msgstr ""
-
-# 5b96fd0f35964308bf0c6e608c51f15b
-#: ../../../source/developer/coding_style.rst:550
-msgid "Table::Table(const char *name) :"
-msgstr ""
-
-# 77cb3bfcaea64566ace46dc0ec0fdd60
-#: ../../../source/developer/coding_style.rst:552
-msgid "name_(name)"
-msgstr ""
-
-# aea4e05c670c4063abbb83e2cce2757f
+# f1990947bcec4513b45d8bc9ce5fe127
 #: ../../../source/developer/coding_style.rst:556
 msgid ""
 "悪い例（ ``std::string(name)`` のところでコンストラクターが動き、 ``name_ "
-"= ...`` のところで代入演算子が動いて2回初期化している）:"
-msgstr ""
-
-# d24a710afcd44c7b88119fdbf0b78bf0
-#: ../../../source/developer/coding_style.rst:564
-msgid "Table::Table(const char *name) {"
-msgstr ""
-
-# f0d6b0e344c542eba8cd2836d7358b04
-#: ../../../source/developer/coding_style.rst:566
-msgid "name_ = std::string(name);"
+"= ...`` のところで代入演算子が動いて2回初期化している）::"
 msgstr ""
 
 # 41db0c14a80a4494ab571259dbf6b623
@@ -1746,21 +1252,11 @@ msgid ""
 "と、無駄な処理が発生する可能性があるため非効率である。（後述）"
 msgstr ""
 
-# eeeb23e372c74a729be9333920aef80d
-#: ../../../source/developer/coding_style.rst:576
-msgid "std::string name(\"users\");"
-msgstr ""
-
-# e9aca65440bb4baaa22f8c6cd744a763
+# 708942440b514f139e7d6dfdbb01c3de
 #: ../../../source/developer/coding_style.rst:578
 msgid ""
 "悪い例（ ``std::string()`` のところでコンストラクターが動き、 ``name = ...`` "
-"のところで代入演算子が動いて2回初期化している）:"
-msgstr ""
-
-# 89b0e37ce53b473aa17e468a45b4d32e
-#: ../../../source/developer/coding_style.rst:580
-msgid "std::string name; name = std::string(\"users\");"
+"のところで代入演算子が動いて2回初期化している）::"
 msgstr ""
 
 # a667b247c96840ac812183b20a95e4a1
@@ -1780,22 +1276,15 @@ msgid ""
 "め、できるだけ前置形式を用いる。"
 msgstr ""
 
-# 2b44f910470b4d8f9a60b471b48778de
+# 84bc957c54ed40db9289162153d864ff
 #: ../../../source/developer/coding_style.rst:591
 msgid ""
-"よい例（ ``int`` だと効率は変わらないので本当はあんまりよい例ではない）:"
+"よい例（ ``int`` だと効率は変わらないので本当はあんまりよい例ではない）::"
 msgstr ""
 
-# 17b0be6b79b544658eef1772680fbd06
-# 388f9546b9204292b51c8202f9e87028
-#: ../../../source/developer/coding_style.rst:593
-#: ../../../source/developer/coding_style.rst:598
-msgid "for (int i = 0; i < 10; ++i) { }"
-msgstr ""
-
-# 852499f73f004a5ea61d0db568b9e7a3
+# 8f00bf0aea0343f9a8d18a060be9ca2e
 #: ../../../source/developer/coding_style.rst:596
-msgid "悪い例（後置形式を用いている）:"
+msgid "悪い例（後置形式を用いている）::"
 msgstr ""
 
 # a377a7cf922449118636213cf82bede9
@@ -1819,61 +1308,31 @@ msgid ""
 "付ける。 ``reinterpret_cast`` はどうしても必要なときのみ注意して使う。"
 msgstr ""
 
-# 5a3a190ffcc241fe8a20cc04e6c86602
+# 1d819c9d5a604610ba64ff197a8697f8
 #: ../../../source/developer/coding_style.rst:609
-msgid "よい例（ ``const_cast`` を使っている）:"
+msgid "よい例（ ``const_cast`` を使っている）::"
 msgstr ""
 
-# f97fd887246b41809fc0c2001a11bce6
-#: ../../../source/developer/coding_style.rst:611
-msgid ""
-"uchar *to_key; const ucahr *from_key; KEY *key_info; uint key_length; "
-"key_copy(to_key, const_cast<uchar *>from_key, key_info, key_length);"
-msgstr ""
-
-# 7f5ae2e71e1948e3bbe47f58b71e276b
+# c323e9351f824c338fd8bfa2f32dd6e5
 #: ../../../source/developer/coding_style.rst:617
-msgid "よい例（ ``static_cast`` を使っている）:"
+msgid "よい例（ ``static_cast`` を使っている）::"
 msgstr ""
 
-# 6fe488ea8c5f4349be59be27a1e6f6b8
-# 57fe99f0ffe54683b36634b8265b9e16
-#: ../../../source/developer/coding_style.rst:619
-#: ../../../source/developer/coding_style.rst:630
-msgid ""
-"int n_hits = 1; int n_documents = 10; float hit_ratio = (float)(n_hits) / "
-"n_documents;"
-msgstr ""
-
-# eb3bb0a6d44e4ea9b34b81adaafdd87e
+# c507ac5fc03e4ece8631a0adf52b6b64
 #: ../../../source/developer/coding_style.rst:623
 msgid ""
-"よい例（ ``static_cast`` では無理なので ``reinterpret_cast`` を使っている）:"
+"よい例（ ``static_cast`` では無理なので ``reinterpret_cast`` を使っている）::"
 msgstr ""
 
-# 762c6e9ec97f4edea1eb616408360a06
-#: ../../../source/developer/coding_style.rst:625
-msgid ""
-"THD *thread = current_thd; my_hash_delete(&mrn_allocated_thds, "
-"reinterpret_cast<uchar *>(thread));"
-msgstr ""
-
-# 1642b2ed4dc547069854a49dc817fe17
+# 1d9122d644194116a759038bd1a78281
 #: ../../../source/developer/coding_style.rst:628
-msgid "悪い例（Cスタイルのキャストを使っている）:"
+msgid "悪い例（Cスタイルのキャストを使っている）::"
 msgstr ""
 
-# 1eb85037b94142b2ad9288728f2685bd
+# 58ea4f160b944a808c31b0dfec258f1e
 #: ../../../source/developer/coding_style.rst:634
 msgid ""
-"悪い例（ ``static_cast`` で十分なのに ``reinterpret_cast`` を使っている）:"
-msgstr ""
-
-# 26ab4bbfc7ca42088d05ea38072f6926
-#: ../../../source/developer/coding_style.rst:636
-msgid ""
-"void *value = get_value(key); char *name; name = reinterpret_cast<char *>"
-"(value);"
+"悪い例（ ``static_cast`` で十分なのに ``reinterpret_cast`` を使っている）::"
 msgstr ""
 
 # f08ecd304cb3441d8614cb70af9cb149
@@ -1894,48 +1353,33 @@ msgid ""
 "変数は近くに型名がないため ``*`` を寄せる場所がない。"
 msgstr ""
 
-# dfbc9329c24f4906bff2445e3a32f3b4
+# ef6d1a8023e04af799610da44f973436
 #: ../../../source/developer/coding_style.rst:648
-msgid "char* key, *value;"
+msgid "例::"
 msgstr ""
 
 # 9eee62c8b180413d90df93ee12c97bee
-#: ../../../source/developer/coding_style.rst:650
+#: ../../../source/developer/coding_style.rst:652
 msgid "同様に、リファレンス型を示す ``&`` も変数名に寄せる。"
 msgstr ""
 
 # 1991cfb95f214208acf1449963f517e4
-#: ../../../source/developer/coding_style.rst:652
+#: ../../../source/developer/coding_style.rst:654
 msgid "なお、 ``*`` や ``&`` と型名の間にはスペースを入れない。"
 msgstr ""
 
-# 7c3233da37f14a49af90895efb14beca
-#: ../../../source/developer/coding_style.rst:656
-msgid "char *key;"
-msgstr ""
-
-# 35bd591bd69f4938bca5f0d50360c387
-#: ../../../source/developer/coding_style.rst:660
-msgid "bool is_exist(const std::string &file_name);"
-msgstr ""
-
-# 5565fad6d5254c12aa37ca19c16ab333
-#: ../../../source/developer/coding_style.rst:662
-msgid "悪い例（型名に寄せている）:"
-msgstr ""
-
-# 7293969a5c3a4ea2a503af18e108bce6
+# 7eef68318ed3418791c30fa8f5e8e1fd
 #: ../../../source/developer/coding_style.rst:664
-msgid "char* key;"
+msgid "悪い例（型名に寄せている）::"
 msgstr ""
 
 # 6231837c1b98405a8718668bed89ae20
-#: ../../../source/developer/coding_style.rst:667
+#: ../../../source/developer/coding_style.rst:669
 msgid "その他"
 msgstr ""
 
 # 82fe004f66e045e294b3fc92872ab9e6
-#: ../../../source/developer/coding_style.rst:669
+#: ../../../source/developer/coding_style.rst:671
 msgid ""
 "ここに書いていないものについては特にスタイルを定めないが、 プロジェクト内で常"
 "に一貫性のあるスタイルを使用すること。 同じような事をするときは同じような書き"
@@ -1944,54 +1388,54 @@ msgid ""
 msgstr ""
 
 # 2851692195574eb8beab1df3ea82b355
-#: ../../../source/developer/coding_style.rst:674
+#: ../../../source/developer/coding_style.rst:676
 msgid "以下、具体例が必要。"
 msgstr ""
 
 # 8eea28f23e15423f97a0de03882a5330
-#: ../../../source/developer/coding_style.rst:676
+#: ../../../source/developer/coding_style.rst:678
 msgid "ビルド時にできることを実行時に延ばさない(静的チェックを活用)"
 msgstr ""
 
 # df85fda4f16c4fc5a52b70c4d3a982d7
-#: ../../../source/developer/coding_style.rst:677
+#: ../../../source/developer/coding_style.rst:679
 msgid "なるべく局所的に変数を定義し、同時に初期化する"
 msgstr ""
 
 # b7498afc74fb4903a519c59bf8207d29
-#: ../../../source/developer/coding_style.rst:678
+#: ../../../source/developer/coding_style.rst:680
 msgid ""
 "長い関数や深いブロックのネストを避ける * 2つに分けた方がよさそう。あと目安が"
 "あるといいかも。"
 msgstr ""
 
 # 00ab53c74d364ab5a112631b93773003
-#: ../../../source/developer/coding_style.rst:680
+#: ../../../source/developer/coding_style.rst:682
 msgid "100行以上は長いよねーとか3段以上はデンジャーとか。"
 msgstr ""
 
 # 184a7f855fbc417aa1cb85c562a53460
-#: ../../../source/developer/coding_style.rst:681
+#: ../../../source/developer/coding_style.rst:683
 msgid "必要以上にオブジェクトを複製しない"
 msgstr ""
 
 # 8b1b829057a840778437960115f3ed15
-#: ../../../source/developer/coding_style.rst:682
+#: ../../../source/developer/coding_style.rst:684
 msgid "暗黙の型変換はなるべく避ける"
 msgstr ""
 
 # fa1302660c0840fc8796745a1ead7249
-#: ../../../source/developer/coding_style.rst:683
+#: ../../../source/developer/coding_style.rst:685
 msgid "assertを積極的に使う"
 msgstr ""
 
 # 75ccf15a7da145ad9d874effee7f9668
-#: ../../../source/developer/coding_style.rst:686
+#: ../../../source/developer/coding_style.rst:688
 msgid "メモ"
 msgstr ""
 
 # 3ca46d6ed88f461bb004c3914ca0dc5a
-#: ../../../source/developer/coding_style.rst:688
+#: ../../../source/developer/coding_style.rst:690
 msgid ""
 "動的テンプレートを使わない。（要追加情報。implicit template instantiationのこ"
 "とであれば、これはふつうに使わ れているものなので特に禁止しないんでいいんじゃ"
@@ -1999,12 +1443,12 @@ msgid ""
 msgstr ""
 
 # ee79023d775548e8bc70a7a871d810bf
-#: ../../../source/developer/coding_style.rst:691
+#: ../../../source/developer/coding_style.rst:693
 msgid "typeidを使わない。"
 msgstr ""
 
 # da20d99e9bb74722968354d3b9ae43ad
-#: ../../../source/developer/coding_style.rst:692
+#: ../../../source/developer/coding_style.rst:694
 msgid ""
 "例外はMySQLで問題がないようであればOK。mroongaから外の世 界（MySQLの世界）に"
 "はださないようにする。"
