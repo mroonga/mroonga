@@ -17,10 +17,6 @@ FROM diaries
 WHERE MATCH (title) AGAINST ("富士山");
 ERROR HY000: Can't find FULLTEXT index matching the column list
 CREATE FULLTEXT INDEX title_index on diaries (title);
-Warnings:
-Error	16501	The table parameter '' is invalid
-Error	16501	The table parameter '' is invalid
-Error	16501	The table parameter '' is invalid
 EXPLAIN
 SELECT *
 FROM diaries
