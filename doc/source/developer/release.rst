@@ -34,15 +34,15 @@ Release procedure (XXX not yet translated)
 
 .. note::
 
-   以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッケージ作成に必要なソフトウェアをインストールします。::
+   以前はGitHubのアーカイブ機能でtar.gzを配布していましたが、その機能が廃止( https://github.com/blog/1302-goodbye-uploads )されるため、2012年12月のリリースよりpackages.groonga.orgでの配布に切り替えました。
 
-    $ sudo gem install github_api
+packages/sourceディレクトリへと移動し、make downloadでアップストリームと同期した後にmake uploadでアーカイブをアップロードを実行します。::
 
-作成された ``tar.gz`` ファイルのアップロードを行うには以下のコマンドを実行します。 ::
+ $ cd packages/source
+ $ make download
+ $ make upload
 
- $ make upload-to-github
-
-これで、 https://github.com/mroonga/mroonga/downloads から ``tar.gz`` のダウンロードが行えるようになります。
+これで、 http://packages.groonga.org/source/mroonga/ から ``tar.gz`` のダウンロードが行えるようになります。
 
 
 パッケージの作成
