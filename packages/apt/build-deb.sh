@@ -123,7 +123,7 @@ cp -rp /tmp/${PACKAGE}-debian debian
 # export DEB_BUILD_OPTIONS="noopt nostrip"
 MYSQL_PACKAGE_INFO=\$(apt-cache show mysql-server | grep Version | sort | tail -1)
 MYSQL_PACKAGE_VERSION=\${MYSQL_PACKAGE_INFO##Version: }
-sed -i "s/@VERSION@/\$MYSQL_PACKAGE_VERSION/" debian/control
+sed -i "s/MYSQL_VERSION/\$MYSQL_PACKAGE_VERSION/" debian/control
 debuild -us -uc
 EOF
 

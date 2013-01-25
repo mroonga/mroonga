@@ -20,7 +20,7 @@ Depends:
 	${misc:Depends},
 	${shlibs:Depends},
 	libgroonga0 (>= @REQUIRED_GROONGA_VERSION@),
-	mysql-server (= @MYSQL_VERSION@)
+	mysql-server (= MYSQL_VERSION)
 Description: A fast fulltext searchable storage engine for MySQL.
  Mroonga is a fast fulltext searchable storage engine for MySQL.
  It is based on groonga, a fast fulltext search engine and column store.
