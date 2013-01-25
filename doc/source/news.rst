@@ -3,6 +3,27 @@
 News
 ====
 
+.. _release-2-11:
+
+Release 2.11 - 2013/2/9
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported Fedora 18.
+* Dropped Fedora 17 support.
+
+Fixes
+^^^^^
+
+* TODO
+
+Thanks
+^^^^^^
+
+* TODO
+
 .. _release-2-10:
 
 Release 2.10 - 2012/12/29
