@@ -35,7 +35,7 @@ common_rpm_procedure ()
     for dist in $DISTRIBUTIONS; do
 	case $dist in
 	    "fedora")
-		DISTRIBUTIONS_VERSION="17"
+		DISTRIBUTIONS_VERSION="18"
 		;;
 	    "centos")
 		DISTRIBUTIONS_VERSION="5 6"
@@ -333,7 +333,7 @@ EOF
 	centos-6)
 	    INSTALL_SCRIPT=install-centos6-mroonga.sh
 	    ;;
-	fedora-17)
+	fedora-18)
 	    INSTALL_SCRIPT=install-fedora-mroonga.sh
 	    ;;
 	*)
