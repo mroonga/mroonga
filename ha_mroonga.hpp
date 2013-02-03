@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2012 Kentoku SHIBA
-  Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -186,6 +186,7 @@ struct st_mrn_ft_info
   struct _ft_vft_ext *could_you;
 #endif
   grn_ctx *ctx;
+  grn_encoding encoding;
   grn_obj *table;
   grn_obj *result;
   grn_obj *score_column;

@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2012 Kentoku SHIBA
-  Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -7189,15 +7189,16 @@ int ha_mroonga::read_range_next()
 int ha_mroonga::generic_ft_init()
 {
   MRN_DBUG_ENTER_METHOD();
+  struct st_mrn_ft_info *mrn_ft_info =
+    reinterpret_cast<struct st_mrn_ft_info *>(ft_handler);
+  GRN_CTX_SET_ENCODING(ctx, mrn_ft_info->encoding);
+
   int error = 0;
-  mrn_change_encoding(ctx, NULL);
   if (sorted_result) {
     cursor = grn_table_cursor_open(ctx, sorted_result,
                                    NULL, 0, NULL, 0,
                                    0, -1, 0);
   } else {
-    struct st_mrn_ft_info *mrn_ft_info =
-      reinterpret_cast<struct st_mrn_ft_info *>(ft_handler);
     cursor = grn_table_cursor_open(ctx, mrn_ft_info->result, NULL, 0, NULL, 0, 0,
                                    -1, 0);
   }
@@ -7216,8 +7217,6 @@ int ha_mroonga::generic_ft_init()
                                       strlen(MRN_COLUMN_NAME_KEY));
       }
     } else {
-      struct st_mrn_ft_info *mrn_ft_info =
-        reinterpret_cast<struct st_mrn_ft_info *>(ft_handler);
       key_accessor = grn_obj_column(ctx, mrn_ft_info->result,
                                     MRN_COLUMN_NAME_KEY,
                                     strlen(MRN_COLUMN_NAME_KEY));
@@ -7352,6 +7351,9 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
   info->mroonga = this;
   info->ctx = grn_ctx_open(0);
   grn_ctx_use(info->ctx, grn_ctx_db(ctx));
+  mrn_change_encoding(info->ctx,
+                      table->key_info[key_nr].key_part->field->charset());
+  info->encoding = GRN_CTX_GET_ENCODING(info->ctx);
   info->table = grn_table;
   info->result = grn_table_create(info->ctx, NULL, 0, NULL,
                                   GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
@@ -7377,8 +7379,6 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
                             expression, expression_variable);
 
   grn_rc rc = GRN_SUCCESS;
-  mrn_change_encoding(info->ctx,
-                      table->key_info[key_nr].key_part->field->charset());
   if (flags & FT_BOOL) {
     const char *keyword, *keyword_original;
     uint keyword_length, keyword_length_original;
@@ -7570,9 +7570,11 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
 int ha_mroonga::storage_ft_read(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_id found_record_id;
-  mrn_change_encoding(ctx, NULL);
+  struct st_mrn_ft_info *mrn_ft_info =
+    reinterpret_cast<struct st_mrn_ft_info *>(ft_handler);
+  GRN_CTX_SET_ENCODING(ctx, mrn_ft_info->encoding);
 
+  grn_id found_record_id;
   found_record_id = grn_table_cursor_next(ctx, cursor);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
