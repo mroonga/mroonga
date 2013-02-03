@@ -2840,10 +2840,6 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   grn_obj_flags index_table_flags =
     GRN_OBJ_TABLE_PAT_KEY |
     GRN_OBJ_PERSISTENT;
-  if (is_need_normalize(&key_info->key_part->field[0]))
-  {
-    index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
-  }
   grn_obj *index_table;
 
   grn_obj_flags index_column_flags =
@@ -2879,6 +2875,15 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
                                       tmp_share->key_parser_length[i]);
   grn_obj_set_info(ctx, index_table, info_type, tokenizer);
   grn_obj_unlink(ctx, tokenizer);
+
+  if (is_need_normalize(&key_info->key_part->field[0])) {
+    grn_info_type info_type = GRN_INFO_NORMALIZER;
+    grn_obj *normalizer = find_normalizer(&key_info->key_part->field[0]);
+    if (normalizer) {
+      grn_obj_set_info(ctx, index_table, info_type, normalizer);
+      grn_obj_unlink(ctx, normalizer);
+    }
+  }
 
   grn_obj *index_column = grn_column_create(ctx, index_table,
                                             INDEX_COLUMN_NAME,
@@ -3079,12 +3084,6 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       table_flags |= GRN_OBJ_TABLE_HASH_KEY;
     } else if (!is_id) {
       table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-      if (
-        key_parts == 1 &&
-        is_need_normalize(&key_info.key_part->field[0])
-      ) {
-        table_flags |= GRN_OBJ_KEY_NORMALIZE;
-      }
     } else {
       // for _id
       table_flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -3112,6 +3111,22 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
+  }
+
+  if (table_flags & GRN_OBJ_TABLE_PAT_KEY) {
+    KEY key_info = table->s->key_info[pkey_nr];
+    int key_parts = KEY_N_KEY_PARTS(&key_info);
+    if (key_parts == 1) {
+      Field *field = &(key_info.key_part->field[0]);
+      if (is_need_normalize(field)) {
+        grn_obj *normalizer = find_normalizer(field);
+        if (normalizer) {
+          grn_info_type info_type = GRN_INFO_NORMALIZER;
+          grn_obj_set_info(ctx, table_obj, info_type, normalizer);
+          grn_obj_unlink(ctx, normalizer);
+        }
+      }
+    }
   }
 
   /* create columns */
@@ -3270,10 +3285,6 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   int key_alg = key_info->algorithm;
   if (key_info->flags & HA_FULLTEXT) {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    if (is_need_normalize(&key_info->key_part->field[0]))
-    {
-      index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
-    }
     error = mrn_change_encoding(ctx, key_info->key_part->field->charset());
     if (error) {
       grn_obj_remove(ctx, grn_table);
@@ -3283,10 +3294,6 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     index_table_flags |= GRN_OBJ_TABLE_HASH_KEY;
   } else {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    if (!is_multiple_column_index &&
-        is_need_normalize(&key_info->key_part->field[0])) {
-      index_table_flags |= GRN_OBJ_KEY_NORMALIZE;
-    }
   }
 
   index_table = grn_table_create(ctx,
@@ -3309,6 +3316,25 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
                                         tmp_share->key_parser_length[i]);
     grn_obj_set_info(ctx, index_table, info_type, tokenizer);
     grn_obj_unlink(ctx, tokenizer);
+  }
+
+  {
+    grn_obj *normalizer = NULL;
+    Field *field = &(key_info->key_part->field[0]);
+    if (key_info->flags & HA_FULLTEXT) {
+      if (is_need_normalize(field)) {
+        normalizer = find_normalizer(field);
+      }
+    } else if (key_alg != HA_KEY_ALG_HASH) {
+      if (!is_multiple_column_index && is_need_normalize(field)) {
+        normalizer = find_normalizer(field);
+      }
+    }
+    if (normalizer) {
+      grn_info_type info_type = GRN_INFO_NORMALIZER;
+      grn_obj_set_info(ctx, index_table, info_type, normalizer);
+      grn_obj_unlink(ctx, normalizer);
+    }
   }
 
   index_column = grn_column_create(ctx,
@@ -3516,6 +3542,9 @@ int ha_mroonga::ensure_database_create(const char *name)
   }
   pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db);
+#ifdef WITH_GROONGA_NORMALIZER_MYSQL
+  grn_plugin_register(ctx, GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME);
+#endif
 
   DBUG_RETURN(error);
 }
@@ -3545,6 +3574,9 @@ int ha_mroonga::ensure_database_open(const char *name)
   }
   pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db);
+#ifdef WITH_GROONGA_NORMALIZER_MYSQL
+  grn_plugin_register(ctx, GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME);
+#endif
 
   DBUG_RETURN(error);
 }
@@ -8016,6 +8048,22 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
     tokenizer = grn_ctx_at(ctx, GRN_DB_BIGRAM);
   }
   DBUG_RETURN(tokenizer);
+}
+
+grn_obj *ha_mroonga::find_normalizer(Field *field)
+{
+  MRN_DBUG_ENTER_METHOD();
+  CHARSET_INFO *charset_info = field->charset();
+  grn_obj *normalizer = NULL;
+  if ((strcmp(charset_info->name, "utf8_general_ci") == 0) ||
+      (strcmp(charset_info->name, "utf8mb4_general_ci") == 0)) {
+    normalizer = grn_ctx_get(ctx, "NormalizerMySQLGeneralCI", -1);
+    // TODO: if (!normalizer) {ERROR?}
+    // Or?: normalizer = grn_ctx_get(ctx, "NormalizerAuto", -1);
+  } else {
+    normalizer = grn_ctx_get(ctx, "NormalizerAuto", -1);
+  }
+  DBUG_RETURN(normalizer);
 }
 
 int ha_mroonga::wrapper_get_next_record(uchar *buf)

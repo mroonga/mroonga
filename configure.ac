@@ -180,6 +180,24 @@ AC_DEFUN([CONFIG_OPTION_GROONGA],[
   AC_SUBST(GROONGA_VERSION)
 ])
 
+AC_DEFUN([CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL], [
+  AC_MSG_CHECKING([for groonga-normalizer-mysql])
+  PKG_CHECK_EXISTS([groonga-normalizer-mysql],
+                   [WITH_GROONGA_NORMALIZER_MYSQL=yes],
+                   [WITH_GROONGA_NORMALIZER_MYSQL=no])
+  AC_MSG_RESULT($WITH_GROONGA_NORMALIZER_MYSQL)
+  if test "$WITH_GROONGA_NORMALIZER_MYSQL" = "yes"; then
+    AC_DEFINE([WITH_GROONGA_NORMALIZER_MYSQL],
+              [1],
+              [Use MySQL normalizer plugin for groonga])
+    _PKG_CONFIG(plugin_name, variable=plugin_name, groonga-normalizer-mysql)
+    GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME=$pkg_cv_plugin_name
+    AC_DEFINE_UNQUOTED([GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME],
+                       "${GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME}",
+                       [Name of MySQL normalizer plugin for groonga])
+  fi
+])
+
 AC_ARG_WITH(debug,
     [  --with-debug            Add debug code
   --with-debug=full       Add debug code (adds memory checker, very slow)],
@@ -225,6 +243,7 @@ AC_SUBST(MYSQL_CFLAGS)
 AC_SUBST(MYSQL_VERSION)
 AC_SUBST(plugindir)
 CONFIG_OPTION_GROONGA
+CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL
 
 AC_ARG_WITH(default_parser,
     [AC_HELP_STRING([--with-default-parser=PARSER],

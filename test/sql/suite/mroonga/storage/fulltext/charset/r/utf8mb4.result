@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS diaries;
 SET NAMES utf8mb4;
 CREATE TABLE diaries (
 id INT PRIMARY KEY,
-title VARCHAR(255) CHARSET utf8mb4,
-content TEXT CHARSET utf8mb4,
+title VARCHAR(255) CHARSET utf8mb4 COLLATE utf8mb4_general_ci,
+content TEXT CHARSET utf8mb4 COLLATE utf8mb4_general_ci,
 FULLTEXT INDEX (content)
 ) DEFAULT CHARSET utf8mb4;
 SHOW CREATE TABLE diaries;
@@ -23,5 +23,4 @@ FROM diaries
 WHERE MATCH (content) AGAINST("ABCDE" IN BOOLEAN MODE);
 id	title	content
 1	Alphabet	ABCDE
-2	Mathmatics	𝐀𝐁𝐂𝐃𝐄 | U+1D400-U+1D405
 DROP TABLE diaries;
