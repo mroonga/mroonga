@@ -173,7 +173,7 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
-* Sat Feb 02 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 2.10-2
+* Tue Feb 05 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 2.10-2
 - use MySQL 5.1.67-1 on CentOS 6.
   Reported by wakisuke.ua. Thanks!!!
 
