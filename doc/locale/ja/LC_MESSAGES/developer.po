@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-26 15:16\n"
+"POT-Creation-Date: 2013-02-06 11:39\n"
 "PO-Revision-Date: 2011-11-28 00:00+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -1651,28 +1651,26 @@ msgstr ""
 msgid "次に、配布用の ``tar.gz`` ファイルを作成します。 ::"
 msgstr ""
 
-# f6717b49646c4ae7927239ef55a17414
-# d517b3a422b344b8bcb291ec38a7bc7b
+# acb4dc8ee3f846d3afa3d024ae72bdf3
 #: ../../../source/developer/release.rst:37
-#: ../../../source/developer/release.rst:65
-#: ../../../source/developer/release.rst:95
 msgid ""
-"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
-"ケージ作成に必要なソフトウェアをインストールします。::"
+"以前はGitHubのアーカイブ機能でtar.gzを配布していましたが、その機能が廃止"
+"( https://github.com/blog/1302-goodbye-uploads )されるため、2012年12月のリ"
+"リースよりpackages.groonga.orgでの配布に切り替えました。"
 msgstr ""
 
-# ba2ae0fe63224c3ab4844ea2a5164f43
-#: ../../../source/developer/release.rst:41
+# 9d5276b423644b159d0a33d0618be032
+#: ../../../source/developer/release.rst:39
 msgid ""
-"作成された ``tar.gz`` ファイルのアップロードを行うには以下のコマンドを実行し"
-"ます。 ::"
+"packages/sourceディレクトリへと移動し、make downloadでアップストリームと同期"
+"した後にmake uploadでアーカイブをアップロードを実行します。::"
 msgstr ""
 
-# 5ca50b48283645ba9ab1b7e56ebee47e
+# 0f6384082e664351b1ec89a1dc25673e
 #: ../../../source/developer/release.rst:45
 msgid ""
-"これで、 https://github.com/mroonga/mroonga/downloads から ``tar.gz`` のダウ"
-"ンロードが行えるようになります。"
+"これで、 http://packages.groonga.org/source/mroonga/ から ``tar.gz`` のダウン"
+"ロードが行えるようになります。"
 msgstr ""
 
 # 54b79204ca4f46dc8337a401137cc5e5
@@ -1706,6 +1704,15 @@ msgstr ""
 msgid ""
 "現在のところ、パッケージの作成は Debian GNU/Linux (Ubuntu も可) でしか行えま"
 "せん。"
+msgstr ""
+
+# f6717b49646c4ae7927239ef55a17414
+# d517b3a422b344b8bcb291ec38a7bc7b
+#: ../../../source/developer/release.rst:65
+#: ../../../source/developer/release.rst:95
+msgid ""
+"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
+"ケージ作成に必要なソフトウェアをインストールします。::"
 msgstr ""
 
 # d5268274cacd449cb8ceba52925f9f01
