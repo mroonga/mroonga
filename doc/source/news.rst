@@ -3,9 +3,9 @@
 News
 ====
 
-.. _release-2-11:
+.. _release-3-00:
 
-Release 2.11 - 2013/2/9
+Release 3.00 - 2013/2/9
 -------------------------
 
 Improvements
@@ -13,16 +13,20 @@ Improvements
 
 * Supported Fedora 18.
 * Dropped Fedora 17 support.
+* Supported ``utf8_general_ci`` and ``utf8mb4_generic_ci``
+  compatible normalizer.
+* [rpm][centos] Supported MySQL 5.6.10 on CentOS 5.
 
 Fixes
 ^^^^^
 
-* TODO
+* [storage] Fixed a groonga derived bug that unique key doesn't
+  match mixed case keyword. [groonga-dev,01187] [Reported by Kouhei Tanabe]
 
 Thanks
 ^^^^^^
 
-* TODO
+* Kouhei Tanabe
 
 .. _release-2-10:
 
