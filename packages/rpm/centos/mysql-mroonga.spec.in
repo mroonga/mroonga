@@ -7,10 +7,10 @@
 %define mysql_download_base_url_default http://vault.centos.org/6.3/updates/Source/SPackages
 %define mysql_spec_file_default mysql.spec
 %else
-%define mysql_version_default 5.5.28
+%define mysql_version_default 5.6.10
 %define mysql_release_default 1
 %define mysql_dist_default    rhel5
-%define mysql_download_base_url_default http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5
+%define mysql_download_base_url_default http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.6
 %define mysql_spec_file_default mysql.%{mysql_version_default}.spec
 %endif
 
