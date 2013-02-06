@@ -8058,9 +8058,18 @@ grn_obj *ha_mroonga::find_normalizer(Field *field)
   if ((strcmp(charset_info->name, "utf8_general_ci") == 0) ||
       (strcmp(charset_info->name, "utf8mb4_general_ci") == 0)) {
     normalizer = grn_ctx_get(ctx, "NormalizerMySQLGeneralCI", -1);
-    // TODO: if (!normalizer) {ERROR?}
-    // Or?: normalizer = grn_ctx_get(ctx, "NormalizerAuto", -1);
-  } else {
+    if (!normalizer) {
+      char error_message[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+               "NormalizerMySQLGeneralCI normalizer isn't found for %s. "
+               "Install groonga-normalizer-mysql normalizer. "
+               "NormalizerAuto is used as fallback.",
+               charset_info->name);
+      push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+                   HA_ERR_UNSUPPORTED, error_message);
+    }
+  }
+  if (!normalizer) {
     normalizer = grn_ctx_get(ctx, "NormalizerAuto", -1);
   }
   DBUG_RETURN(normalizer);
