@@ -5,8 +5,8 @@ notifications:
 language: cpp
 env:
   - MYSQL_VERSION=mysql-system
-  - MYSQL_VERSION=mysql-5.5.28
-  - MYSQL_VERSION=mysql-5.6.9-rc
+  - MYSQL_VERSION=mysql-5.5.29
+  - MYSQL_VERSION=mysql-5.6.10
   - MYSQL_VERSION=mariadb-5.5.28
 #matrix:
 #  allow_failures:
