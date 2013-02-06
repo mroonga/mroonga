@@ -8053,7 +8053,7 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
 grn_obj *ha_mroonga::find_normalizer(Field *field)
 {
   MRN_DBUG_ENTER_METHOD();
-  CHARSET_INFO *charset_info = field->charset();
+  const CHARSET_INFO *charset_info = field->charset();
   grn_obj *normalizer = NULL;
   if ((strcmp(charset_info->name, "utf8_general_ci") == 0) ||
       (strcmp(charset_info->name, "utf8mb4_general_ci") == 0)) {
