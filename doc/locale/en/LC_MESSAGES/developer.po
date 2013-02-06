@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-26 15:14\n"
+"POT-Creation-Date: 2013-02-06 11:34\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -1635,30 +1635,26 @@ msgstr "配布用ファイルのアップロード"
 msgid "次に、配布用の ``tar.gz`` ファイルを作成します。 ::"
 msgstr "次に、配布用の ``tar.gz`` ファイルを作成します。 ::"
 
-# 084fe7f2a68340a6ae2d1885b730afba
-# 761aafc2e5b44938bf471e3279ef5558
+# 4a7827aa4e0b4f85bc5583c20c33e54f
 #: ../../../source/developer/release.rst:37
-#: ../../../source/developer/release.rst:65
-#: ../../../source/developer/release.rst:95
 msgid ""
-"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
-"ケージ作成に必要なソフトウェアをインストールします。::"
-msgstr ""
-"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
-"ケージ作成に必要なソフトウェアをインストールします。::"
-
-# 5e11e460d9c141979d87b7682cb8fcd6
-#: ../../../source/developer/release.rst:41
-msgid ""
-"作成された ``tar.gz`` ファイルのアップロードを行うには以下のコマンドを実行し"
-"ます。 ::"
+"以前はGitHubのアーカイブ機能でtar.gzを配布していましたが、その機能が廃止"
+"( https://github.com/blog/1302-goodbye-uploads )されるため、2012年12月のリ"
+"リースよりpackages.groonga.orgでの配布に切り替えました。"
 msgstr ""
 
-# 790ec58dd1e24eaba6fcf519409fdb72
+# fba7b0ae66b84dd6b6fdc794ddb85b13
+#: ../../../source/developer/release.rst:39
+msgid ""
+"packages/sourceディレクトリへと移動し、make downloadでアップストリームと同期"
+"した後にmake uploadでアーカイブをアップロードを実行します。::"
+msgstr ""
+
+# e31b95b62c324f6d874a2b4f9752f999
 #: ../../../source/developer/release.rst:45
 msgid ""
-"これで、 https://github.com/mroonga/mroonga/downloads から ``tar.gz`` のダウ"
-"ンロードが行えるようになります。"
+"これで、 http://packages.groonga.org/source/mroonga/ から ``tar.gz`` のダウン"
+"ロードが行えるようになります。"
 msgstr ""
 
 # a6d32fffe6804c389974e2e8c3fb4496
@@ -1697,6 +1693,17 @@ msgid ""
 msgstr ""
 "現在のところ、パッケージの作成は Debian GNU/Linux (Ubuntu も可) でしか行えま"
 "せん。"
+
+# 084fe7f2a68340a6ae2d1885b730afba
+# 761aafc2e5b44938bf471e3279ef5558
+#: ../../../source/developer/release.rst:65
+#: ../../../source/developer/release.rst:95
+msgid ""
+"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
+"ケージ作成に必要なソフトウェアをインストールします。::"
+msgstr ""
+"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
+"ケージ作成に必要なソフトウェアをインストールします。::"
 
 # c8633ae66dbc43d5a8092a78e2e711b5
 #: ../../../source/developer/release.rst:69
