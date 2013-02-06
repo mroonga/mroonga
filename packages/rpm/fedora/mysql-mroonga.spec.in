@@ -3,7 +3,7 @@
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/18/SRPMS
 
-%define groonga_required_version 2.0.6
+%define groonga_required_version 3.0.0
 
 Name:		mysql-mroonga
 Version:	@VERSION@
@@ -119,10 +119,11 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
-* Sat Feb 09 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 2.11-0
+* Sat Feb 09 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.00-0
 - new upstream release.
 - support Fedora 18.
 - drop Fedora 17 support.
+- require groonga 3.0.0 or later
 
 * Thu Jan 24 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 2.10-1
 - build with MySQL 5.5.29 on Fedora 17.

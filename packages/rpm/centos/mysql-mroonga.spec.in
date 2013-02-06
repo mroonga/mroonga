@@ -20,11 +20,11 @@
 %{!?mysql_download_base_url:%define mysql_download_base_url %{mysql_download_base_url_default}}
 %{!?mysql_spec_file:%define mysql_spec_file %{mysql_spec_file_default}}
 
-%define groonga_required_version 2.0.6
+%define groonga_required_version 3.0.0
 
 Name:		mysql-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	0%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL.
 
 Group:		Applications/Databases
@@ -173,6 +173,10 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sat Feb 09 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.00-0
+- new upstream release.
+- require groonga 3.0.0 or later
+
 * Tue Feb 05 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 2.10-2
 - use MySQL 5.1.67-1 on CentOS 6.
   Reported by wakisuke.ua. Thanks!!!
