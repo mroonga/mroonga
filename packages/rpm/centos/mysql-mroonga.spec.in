@@ -44,6 +44,7 @@ Requires:	MySQL-server = %{mysql_version}-%{mysql_release}
 Requires:	MySQL-client = %{mysql_version}-%{mysql_release}
 %endif
 Requires:	groonga-libs >= %{groonga_required_version}
+Requires:	groonga-normalizer-mysql
 Obsoletes:      mysql-groonga < 1.10-0
 
 %description
