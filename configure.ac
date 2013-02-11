@@ -182,7 +182,7 @@ AC_DEFUN([CONFIG_OPTION_GROONGA],[
 
 AC_DEFUN([CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL], [
   AC_MSG_CHECKING([for groonga-normalizer-mysql])
-  PKG_CHECK_EXISTS([groonga-normalizer-mysql],
+  PKG_CHECK_EXISTS([groonga-normalizer-mysql >= 1.0.1],
                    [WITH_GROONGA_NORMALIZER_MYSQL=yes],
                    [WITH_GROONGA_NORMALIZER_MYSQL=no])
   AC_MSG_RESULT($WITH_GROONGA_NORMALIZER_MYSQL)

@@ -8274,25 +8274,39 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
 grn_obj *ha_mroonga::find_normalizer(Field *field)
 {
   MRN_DBUG_ENTER_METHOD();
+
   const CHARSET_INFO *charset_info = field->charset();
-  grn_obj *normalizer = NULL;
+  const char *normalizer_name = NULL;
+  const char *default_normalizer_name = "NormalizerAuto";
   if ((strcmp(charset_info->name, "utf8_general_ci") == 0) ||
       (strcmp(charset_info->name, "utf8mb4_general_ci") == 0)) {
-    normalizer = grn_ctx_get(ctx, "NormalizerMySQLGeneralCI", -1);
+    normalizer_name = "NormalizerMySQLGeneralCI";
+  } else if ((strcmp(charset_info->name, "utf8_unicode_ci") == 0) ||
+             (strcmp(charset_info->name, "utf8mb4_unicode_ci") == 0)) {
+    normalizer_name = "NormalizerMySQLUnicodeCI";
+  }
+
+  grn_obj *normalizer = NULL;
+  if (normalizer_name) {
+    normalizer = grn_ctx_get(ctx, normalizer_name, -1);
     if (!normalizer) {
       char error_message[MRN_MESSAGE_BUFFER_SIZE];
       snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-               "NormalizerMySQLGeneralCI normalizer isn't found for %s. "
+               "%s normalizer isn't found for %s. "
                "Install groonga-normalizer-mysql normalizer. "
-               "NormalizerAuto is used as fallback.",
-               charset_info->name);
+               "%s is used as fallback.",
+               normalizer_name,
+               charset_info->name,
+               default_normalizer_name);
       push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
                    HA_ERR_UNSUPPORTED, error_message);
     }
   }
+
   if (!normalizer) {
-    normalizer = grn_ctx_get(ctx, "NormalizerAuto", -1);
+    normalizer = grn_ctx_get(ctx, default_normalizer_name, -1);
   }
+
   DBUG_RETURN(normalizer);
 }
 

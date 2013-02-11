@@ -13,3 +13,4 @@ ncurses-devel
 sudo
 pkgconfig
 tar
+groonga-normalizer-mysql
