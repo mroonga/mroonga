@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2012 Kentoku SHIBA
+  Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -68,6 +68,7 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_HA_PREPARE_INPLACE_ALTER_TABLE 1
 #  define MRN_HANDLER_HAVE_HA_INPLACE_ALTER_TABLE 1
 #  define MRN_HANDLER_HAVE_HA_COMMIT_INPLACE_ALTER_TABLE 1
+#  define MRN_SUPPORT_FOREIGN_KEYS 1
 #endif
 
 #ifndef MRN_MARIADB_P
@@ -686,6 +687,10 @@ private:
                            HA_CREATE_INFO *info, MRN_SHARE *tmp_share,
                            const char *grn_table_name);
   int storage_create_validate_pseudo_column(TABLE *table);
+#ifdef MRN_SUPPORT_FOREIGN_KEYS
+  bool storage_create_foreign_key(TABLE *table, const char *grn_table_name,
+                                  Field *field, grn_obj *table_obj, int &error);
+#endif
   int storage_create_validate_index(TABLE *table);
   int storage_create_index(TABLE *table, const char *grn_table_name,
                            grn_obj *grn_table, MRN_SHARE *tmp_share,
@@ -943,6 +948,11 @@ private:
                            MRN_SHARE *tmp_share,
                            const char *from_table_name,
                            const char *to_table_name);
+#ifdef MRN_SUPPORT_FOREIGN_KEYS
+  int storage_rename_foreign_key(MRN_SHARE *tmp_share,
+                                 const char *from_table_name,
+                                 const char *to_table_name);
+#endif
   bool wrapper_is_crashed() const;
   bool storage_is_crashed() const;
   bool wrapper_auto_repair(int error) const;
