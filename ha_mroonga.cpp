@@ -4123,6 +4123,15 @@ int ha_mroonga::open_table(const char *name)
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
+  if (!grn_table) {
+    error = ER_CANT_OPEN_FILE;
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "mroonga: failed to open table: <%s>",
+             mapper.table_name());
+    my_message(error, error_message, MYF(0));
+    DBUG_RETURN(error);
+  }
 
   DBUG_RETURN(0);
 }
