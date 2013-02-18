@@ -273,6 +273,15 @@ if test "$enable_fast_mutexes" = "no"; then
              [Define to 1 if force fast mutext disabled])
 fi
 
+AC_ARG_ENABLE(dtrace,
+    [AC_HELP_STRING([--enable-dtrace],
+                    [Enable DTrace. [default: no]])],
+    [enable_dtrace=$enableval],
+    [enable_dtrace=no])
+if test "$enable_dtrace" = "no"; then
+   AC_DEFINE(DISABLE_DTRACE, [1], [Define to 1 if DTrace is disabled])
+fi
+
 # check Cutter with C++ support if available
 REQUIRED_MINIMUM_CUTTER_VERSION=1.1.3
 m4_ifdef([AC_CHECK_CPPCUTTER], [
