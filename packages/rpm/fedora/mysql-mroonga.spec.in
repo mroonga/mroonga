@@ -1,4 +1,4 @@
-%define mysql_version 5.5.29
+%define mysql_version 5.5.30
 %define mysql_release 1%{?dist}
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/18/SRPMS
@@ -122,6 +122,7 @@ fi
 %changelog
 * Thu Feb 28 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.01-0
 - new upstream release.
+- use MySQL 5.5.30 on Fedora 18.
 
 * Sat Feb 09 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.00-0
 - new upstream release.
