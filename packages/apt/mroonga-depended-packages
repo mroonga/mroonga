@@ -5,5 +5,6 @@ pkg-config
 libmecab-dev
 mecab-utils
 libmysqlclient-dev
+libmysqld-dev
 libssl-dev
 groonga-normalizer-mysql
