@@ -3,6 +3,32 @@
 News
 ====
 
+.. _release-3-01:
+
+
+Release 3.01 - 2013/2/28
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported ``utf8_unicode_ci`` and ``utf8mb4_unicode_ci``.
+  Note that ``groonga-normalizer-mysql`` >= 1.0.1 is required.
+* [experimental] Supported foreign key for storage mode. [#1612]
+
+Fixes
+^^^^^
+
+* Fixed groonga derived bug that the records in specific range returns 0 records
+  unexpectedly. [groonga-dev,01192] [Reported by b senboku]
+* Fixed to disable DTrace by default for Mac OS X.
+
+Thanks
+^^^^^^
+
+* b senboku
+
+
 .. _release-3-00:
 
 Release 3.00 - 2013/2/9
