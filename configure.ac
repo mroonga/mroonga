@@ -168,6 +168,16 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
   MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
   MYSQL_VERSION="$($ac_mysql_config --version)"
+  MYSQL_MAJOR_MINOR_VERSION=`echo $MYSQL_VERSION | sed -r 's/([0-9]+)\.([0-9]+)\.([0-9]+)$/\1.\2/'`
+  case "$MYSQL_MAJOR_MINOR_VERSION" in
+  5.6*)
+      USE_LIBMYSQLSERVICES="yes"
+      ;;
+  *)
+      USE_LIBMYSQLSERVICES="no"
+      ;;
+  esac
+  AM_CONDITIONAL([WITH_LIBMYSQLSERVICES], [test "${USE_LIBMYSQLSERVICES}" != "no"])
 ])
 
 m4_define([mrn_required_groonga_version], m4_include(required_groonga_version))
