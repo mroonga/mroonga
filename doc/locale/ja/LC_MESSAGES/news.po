@@ -46,7 +46,7 @@ msgid ""
 "Supported ``utf8_unicode_ci`` and ``utf8mb4_unicode_ci``. Note that "
 "``groonga-normalizer-mysql`` >= 1.0.1 is required."
 msgstr ""
-"``utf8_unicode_ci`` と ``utf8mb4_unicode_ci`` をサポート。"
+"``utf8_unicode_ci`` と ``utf8mb4_unicode_ci`` をサポート。 "
 "``groonga-normalizer-mysql`` >= 1.0.1が必須です。"
 
 # f4697fdc18864619a8dcca66fda8abe9
@@ -95,7 +95,7 @@ msgstr "感謝"
 # 1a40249fe89f40878819fd864bbd7a82
 #: ../../../source/news.rst:29
 msgid "b senboku"
-msgstr ""
+msgstr "b senbokuさん"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:35
