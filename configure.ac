@@ -177,7 +177,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
       USE_LIBMYSQLSERVICES="no"
       ;;
   esac
-  AM_CONDITIONAL([WITH_LIBMYSQLSERVICES], [test "${USE_LIBMYSQLSERVICES}" != "no"])
+  AM_CONDITIONAL([WITH_LIBMYSQLSERVICES], [test "${USE_LIBMYSQLSERVICES}" = "yes"])
 ])
 
 m4_define([mrn_required_groonga_version], m4_include(required_groonga_version))
