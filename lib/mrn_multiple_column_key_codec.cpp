@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013 Kentoku SHIBA
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -69,7 +70,7 @@ namespace mrn {
 
       if (field->null_bit) {
         DBUG_PRINT("info", ("mroonga: field has null bit"));
-        *current_buffer = *current_key;
+        *current_buffer = 0;
         current_key += 1;
         current_buffer += 1;
         (*encoded_length)++;
