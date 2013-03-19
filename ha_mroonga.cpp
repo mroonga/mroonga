@@ -92,7 +92,7 @@ extern pthread_mutex_t LOCK_open;
 #  define mrn_open_mutex_unlock()
 #endif
 
-#if MYSQL_VERSION_ID >= 50603
+#if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
 #  define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER::ORDER_ASC)
 #else
 #  define MRN_ORDER_IS_ASC(order) ((order)->asc)
@@ -2696,7 +2696,7 @@ int ha_mroonga::create_share_for_create() const
       }
     }
   }
-  init_alloc_root(&mem_root_for_create, 1024, 0);
+  init_alloc_root(&mem_root_for_create, 1024, 0, MYF(0));
   analyzed_for_create = true;
   if (table_list) {
     share_for_create.table_name = table_list->table_name;
@@ -3849,7 +3849,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
     DBUG_RETURN(error);
   }
 
-  init_alloc_root(&mem_root, 1024, 0);
+  init_alloc_root(&mem_root, 1024, 0, MYF(0));
   wrap_key_info = mrn_create_key_info_for_table(share, table, &error);
   if (error)
     DBUG_RETURN(error);

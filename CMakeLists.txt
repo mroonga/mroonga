@@ -17,7 +17,7 @@
 cmake_minimum_required(VERSION 2.6)
 project(mroonga)
 
-if(WITH_MROONGA_STORAGE_ENGINE)
+if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
   set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR}/storage/mroonga)
 else()
   set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR})
@@ -37,7 +37,7 @@ set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
 include(${MRN_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
 
-if(WITH_MROONGA_STORAGE_ENGINE)
+if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
   set(LIBMRN_DIR_PREFIX "${MRN_SOURCE_DIR}/")
 else()
   set(LIBMRN_DIR_PREFIX "")
@@ -53,44 +53,51 @@ read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_need_mysql_sources.am
 string(REGEX REPLACE "([^;]+)" "${LIBMRN_DIR_PREFIX}lib/\\1"
   LIBMRN_NEED_MYSQL_SOURCES "${LIBMRN_NEED_MYSQL_SOURCES}")
 
-if(WITH_MROONGA_STORAGE_ENGINE)
-  set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR} CACHE PATH "MySQL source directory")
+if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+  set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR})
+  set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR})
+  set(MYSQL_INCLUDE_DIRS
+    "${MYSQL_BUILD_DIR}/include"
+    "${MYSQL_SOURCE_DIR}/sql"
+    "${MYSQL_SOURCE_DIR}/include"
+    "${MYSQL_SOURCE_DIR}/regex"
+    "${MYSQL_SOURCE_DIR}")
+  set(MYSQL_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mysql_config)
 else()
   set(MYSQL_SOURCE_DIR "PATH" CACHE PATH "MySQL source directory")
-endif()
-
-set(MYSQL_INCLUDE_DIRS
-  "${MYSQL_BUILD_DIR}/include"
-  "${MYSQL_SOURCE_DIR}/sql"
-  "${MYSQL_SOURCE_DIR}/include"
-  "${MYSQL_SOURCE_DIR}/regex"
-  "${MYSQL_SOURCE_DIR}"
-  CACHE INTERNAL "MySQL include directories")
-
-set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
-
-if(WITH_MROONGA_STORAGE_ENGINE)
-  set(MYSQL_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mysql_config
-    CACHE PATH "mysql-config command path")
-else()
+  set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
+  set(MYSQL_INCLUDE_DIRS
+    "${MYSQL_BUILD_DIR}/include"
+    "${MYSQL_SOURCE_DIR}/sql"
+    "${MYSQL_SOURCE_DIR}/include"
+    "${MYSQL_SOURCE_DIR}/regex"
+    "${MYSQL_SOURCE_DIR}"
+    CACHE INTERNAL "MySQL include directories")
   set(MYSQL_CONFIG "PATH" CACHE PATH "mysql-config command path")
 endif()
 find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
 
-macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
-  if(NOT ${VARIABLE})
-    execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
-      OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
-    string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
-  endif()
-endmacro()
+if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+  set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
+  set(MYSQL_CFLAGS "${CMAKE_C_FLAGS}")
+  set(MYSQL_VERSION "${MYSQL_BASE_VERSION}")
+else()
+  macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
+    if(NOT ${VARIABLE})
+      execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
+        OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
+      string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
+    endif()
+  endmacro()
 
-set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
-set_mysql_config_value("--cflags" MYSQL_CFLAGS)
-set_mysql_config_value("--version" MYSQL_VERSION)
+  set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
+  set_mysql_config_value("--cflags" MYSQL_CFLAGS)
+  set_mysql_config_value("--version" MYSQL_VERSION)
+endif()
 
 include(FindPkgConfig)
 pkg_check_modules(GROONGA REQUIRED "groonga >= ${REQUIRED_GROONGA_VERSION}")
+pkg_check_modules(GROONGA_NORMALIZER_MYSQL "groonga-normalizer-mysql >= 1.0.1")
 
 include_directories(
   "${PROJECT_BINARY_DIR}"
@@ -127,6 +134,15 @@ set_target_properties(ha_mroonga PROPERTIES
   PREFIX ""
   OUTPUT_NAME "ha_mroonga")
 
+if(GROONGA_NORMALIZER_MYSQL_FOUND)
+  set(WITH_GROONGA_NORMALIZER_MYSQL 1)
+  set_property(TARGET ha_mroonga APPEND PROPERTY
+    COMPILE_DEFINITIONS "WITH_GROONGA_NORMALIZER_MYSQL=1")
+  set(GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME \"normalizers/mysql\")
+  set_property(TARGET ha_mroonga APPEND PROPERTY
+    COMPILE_DEFINITIONS "GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME=\"normalizers/mysql\"")
+endif()
+
 set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
 set_property(TARGET ha_mroonga APPEND PROPERTY
   COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
@@ -145,12 +161,11 @@ if(WIN32)
   
 endif()
 
-if(WITH_MROONGA_STORAGE_ENGINE)
+if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
   MYSQL_ADD_PLUGIN(mroonga
     "${MROONGA_SOURCES};${LIBMRN_NEED_MYSQL_SOURCES};${LIBMRN_NO_MYSQL_SOURCES}"
-    STORAGE_ENGINE MANDATORY
-    LINK_LIBRARIES ${GROONGA_LIBRARIES}
-    RECOMPILE_FOR_EMBEDDED)
+    STORAGE_ENGINE MODULE_ONLY
+    LINK_LIBRARIES ${GROONGA_LIBRARIES})
 endif()
 
 if(WIN32)
@@ -169,22 +184,25 @@ else()
   target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
 endif()
 
-option(WITH_DEBUG "Enable debug options" OFF)
-if(WITH_DEBUG)
-  set_property(TARGET ha_mroonga APPEND PROPERTY
-    COMPILE_DEFINITIONS "SAFE_MUTEX")
-endif()
+if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+else()
+  option(WITH_DEBUG "Enable debug options" OFF)
+  if(WITH_DEBUG)
+    set_property(TARGET ha_mroonga APPEND PROPERTY
+      COMPILE_DEFINITIONS "SAFE_MUTEX")
+  endif()
 
-option(WITH_DEBUG_FULL "Enable full debug options" OFF)
-if(WITH_DEBUG_FULL)
-  set_property(TARGET ha_mroonga APPEND PROPERTY
-    COMPILE_DEFINITIONS "SAFE_MUTEX" "SAFEMALLOC")
-endif()
+  option(WITH_DEBUG_FULL "Enable full debug options" OFF)
+  if(WITH_DEBUG_FULL)
+    set_property(TARGET ha_mroonga APPEND PROPERTY
+      COMPILE_DEFINITIONS "SAFE_MUTEX" "SAFEMALLOC")
+  endif()
 
-option(DISABLE_FAST_MUTEXES "Force disabling fast mutex" OFF)
-if(DISABLE_FAST_MUTEXES)
-  set_property(TARGET ha_mroonga APPEND PROPERTY
-    COMPILE_DEFINITIONS "FORCE_FAST_MUTEX_DISABLED=1")
+  option(DISABLE_FAST_MUTEXES "Force disabling fast mutex" OFF)
+  if(DISABLE_FAST_MUTEXES)
+    set_property(TARGET ha_mroonga APPEND PROPERTY
+      COMPILE_DEFINITIONS "FORCE_FAST_MUTEX_DISABLED=1")
+  endif()
 endif()
 
 install(TARGETS ha_mroonga DESTINATION "${MYSQL_PLUGIN_DIR}")

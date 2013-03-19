@@ -29,7 +29,7 @@
 #  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
 #endif
 
-#if MYSQL_VERSION_ID >= 50604
+#if MYSQL_VERSION_ID >= 50604 && !defined(MRN_MARIADB_P)
 #  define MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
 #  define MRN_HAVE_MYSQL_TYPE_DATETIME2
 #  define MRN_HAVE_MYSQL_TYPE_TIME2
@@ -58,7 +58,7 @@
   typedef char *range_id_t;
 #endif
 
-#if MYSQL_VERSION_ID >= 50609
+#if MYSQL_VERSION_ID >= 50609 && !defined(MRN_MARIADB_P)
 #  define MRN_KEY_HAS_USER_DEFINED_KEYPARTS
 #endif
 
@@ -66,6 +66,10 @@
 #  define KEY_N_KEY_PARTS(key) (key)->user_defined_key_parts
 #else
 #  define KEY_N_KEY_PARTS(key) (key)->key_parts
+#endif
+
+#if MYSQL_VERSION_ID < 100000 || !defined(MRN_MARIADB_P)
+#  define init_alloc_root(PTR, SZ1, SZ2, FLAG) init_alloc_root(PTR, SZ1, SZ2)
 #endif
 
 #endif /* _mrn_mysql_compat_h */

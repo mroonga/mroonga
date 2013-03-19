@@ -29,7 +29,7 @@
 #include "mrn_table.hpp"
 #include "mrn_mysql_compat.h"
 
-#if MYSQL_VERSION_ID >= 50603
+#if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
 #  define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), TRUE)
 #else
 #  define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
@@ -771,7 +771,7 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
 #endif
   THD *thd = current_thd;
   DBUG_ENTER("mrn_get_table_share");
-#if MYSQL_VERSION_ID >= 50603
+#if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
   const char *key;
   key_length = get_table_def_key(table_list, &key);
 #else
@@ -794,14 +794,14 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
   uint key_length;
   TABLE_SHARE *share;
   THD *thd = current_thd;
-#if MYSQL_VERSION_ID >= 50603
+#if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
   const char *key;
 #else
   char key[MAX_DBKEY_LENGTH];
 #endif
 
   MRN_DBUG_ENTER_FUNCTION();
-#if MYSQL_VERSION_ID >= 50603
+#if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
   key_length = get_table_def_key(table_list, &key);
 #else
   key_length = create_table_def_key(thd, key, table_list, FALSE);
