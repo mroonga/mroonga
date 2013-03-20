@@ -248,6 +248,8 @@ Available log levels are the followings.
 * DEBUG
 * DUMP
 
+See :ref:`mroonga_log_level` about details.
+
 You can reopen the log file by FLUSH LOGS. If you want to rotate the log file without stopping MySQL server, you can do in the following procedure.
 
 1. change the file name of ``groonga.log`` (by using OS's mv command etc.).
