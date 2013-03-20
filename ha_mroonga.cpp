@@ -11903,18 +11903,17 @@ int ha_mroonga::wrapper_fill_indexes(THD *thd, KEY *key_info,
         grn_id record_id;
         mrn_change_encoding(ctx, NULL);
         record_id = grn_table_add(ctx, grn_table,
-                                  GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key),
+                                  GRN_TEXT_VALUE(&key), p_key_info->key_length,
                                   &added);
         if (record_id == GRN_ID_NIL)
         {
           char error_message[MRN_MESSAGE_BUFFER_SIZE];
           snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
                    "failed to add a new record into groonga: key=<%.*s>",
-                   (int) GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
+                   (int) p_key_info->key_length, GRN_TEXT_VALUE(&key));
           error = ER_ERROR_ON_WRITE;
           my_message(error, error_message, MYF(0));
         }
-        grn_obj_unlink(ctx, &key);
         if (error)
           break;
 
@@ -11966,6 +11965,7 @@ int ha_mroonga::wrapper_fill_indexes(THD *thd, KEY *key_info,
         if (error)
           break;
       }
+      grn_obj_unlink(ctx, &key);
       if (error != HA_ERR_END_OF_FILE)
         wrapper_rnd_end();
       else
