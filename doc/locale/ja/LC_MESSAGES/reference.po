@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-12 18:57\n"
+"POT-Creation-Date: 2013-03-20 16:31\n"
 "PO-Revision-Date: 2012-05-28 14:10+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -756,8 +756,8 @@ msgid ""
 "Basically, The character set which groonga supports (EUC-JP/UTF-8/SJIS/"
 "LATIN1/KOI8R) is also supported in mroonga."
 msgstr ""
-"基本的には、groongaがサポートしているキャラクタセット(EUC-JP/UTF-8/SJIS/LATIN1/KOI8R)"
-"はmroongaでもサポートされています。"
+"基本的には、groongaがサポートしているキャラクタセット(EUC-JP/UTF-8/SJIS/"
+"LATIN1/KOI8R)はmroongaでもサポートされています。"
 
 # 6fecd10308b843ddb7b5d5c28aebf578
 #: ../../../source/reference.rst:149
@@ -849,17 +849,134 @@ msgid ""
 msgstr "ログファイルを ``/tmp/mroonga.log`` に変更する例です::"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference.rst:219
+#: ../../../source/reference.rst:221
 msgid "mroonga_log_level"
 msgstr ""
 
 # 834d5940c3844cf4a109cd5ba7d0f5c4
-#: ../../../source/reference.rst:221
+#: ../../../source/reference.rst:223
 msgid "The output level of mroonga log file. The default value is ``NOTICE``."
 msgstr "mroongaのログの出力レベル。デフォルト値は ``NOTICE`` 。"
 
+# 0887399d570741bf9cbf86eb9970a428
+#: ../../../source/reference.rst:225
+msgid "Here is the list of ``mroonga_log_level`` which you can use."
+msgstr "使用可能な ``mroonga_log_level`` のリストです。"
+
+# e92214c930c34bd1b3e047bd7f127af9
+#: ../../../source/reference.rst:228
+msgid "Description"
+msgstr "説明"
+
+# b536826e52fd4b788468545b75f4266a
+#: ../../../source/reference.rst:228
+msgid "Log level"
+msgstr "ログレベル"
+
+# 454a33f99ba74bce82b1b56409997148
+#: ../../../source/reference.rst:230
+msgid "NONE"
+msgstr ""
+
+# 8c026dc6d9794af5801363ae577ea6d8
+#: ../../../source/reference.rst:230
+msgid "No logging output."
+msgstr "ログ出力なし。"
+
+# 2ac35583cf384b04a7a5c8a323c8ac5f
+#: ../../../source/reference.rst:232
+msgid "EMERG"
+msgstr ""
+
+# 73d91abce9f64060aebf21d2e1e08359
+#: ../../../source/reference.rst:232
+msgid "Logging emergency messages such as database corruption."
+msgstr "データベースの破損などの緊急に対処が必要なログメッセージを出力する。"
+
+# 6c3a1436519b4b6cbbad63837df2031d
+#: ../../../source/reference.rst:234
+msgid "ALERT"
+msgstr ""
+
+# 73d91abce9f64060aebf21d2e1e08359
+#: ../../../source/reference.rst:234
+msgid "Logging alert messages such as internal error."
+msgstr "内部的なエラーを示すログを出力する。"
+
+# 2d37f46dda7a4ca3aee19803fe093a4a
+#: ../../../source/reference.rst:236
+msgid "CRIT"
+msgstr ""
+
+# e5e3cd326741487b83dcdc9f29a760bb
+#: ../../../source/reference.rst:236
+msgid "Logging critical messasge such as deadlock."
+msgstr "デッドロックの発生など致命的なログメッセージを出力する。"
+
+# ed67330e2fda48978904a9cc95935cff
+#: ../../../source/reference.rst:238
+msgid "ERROR"
+msgstr ""
+
+# 73d91abce9f64060aebf21d2e1e08359
+#: ../../../source/reference.rst:238
+msgid "Logging error messages such as API error which mroonga use."
+msgstr "mroongaが使用しているAPIのエラーログメッセージを出力する。"
+
+# 73d91abce9f64060aebf21d2e1e08359
+#: ../../../source/reference.rst:240
+msgid "Logging warning messages such as invalid argument."
+msgstr "引数の誤りなどの警告ログメッセージを出力する。"
+
+# 2049c9b8daaf4794b50448aa2de1a459
+#: ../../../source/reference.rst:240
+msgid "WARNING"
+msgstr ""
+
+# 73d91abce9f64060aebf21d2e1e08359
+#: ../../../source/reference.rst:242
+msgid "Logging notice messages such as configuration or status changed."
+msgstr "設定や状態の変化を示すログメッセージを出力する。"
+
+# 3e94e148364b4015a4acf56cc35efc8e
+#: ../../../source/reference.rst:242
+msgid "NOTICE"
+msgstr ""
+
+# 8843939417ac4be3ae9a5b89c5a20667
+#: ../../../source/reference.rst:244
+msgid "INFO"
+msgstr ""
+
+# cd02f092324847a38b275ccf3a4889fc
+#: ../../../source/reference.rst:244
+msgid "Logging informative messages such as file system operation."
+msgstr "ファイル操作などの情報をログメッセージとして出力する。"
+
+# 6e833ff062f647b795e61722a94e2975
+#: ../../../source/reference.rst:246
+msgid "DEBUG"
+msgstr ""
+
+# 73d91abce9f64060aebf21d2e1e08359
+#: ../../../source/reference.rst:246
+msgid ""
+"Logging debug messages. Recommend to use for mroonga developer or bug "
+"reporter."
+msgstr "デバッグメッセージを出力する。mroonga開発者やバグレポートの際にお勧めします。"
+
+# 346133d311844f71b2292d0ceb0ccb6b
+#: ../../../source/reference.rst:249
+msgid "DUMP"
+msgstr ""
+
+# 9912af361be94a8bafa8d46e43f3c7fa
+#: ../../../source/reference.rst:249
+msgid "Logging dump messages."
+msgstr "テストツール向けのダンプログメッセージを出力します。"
+
 # a79415e7cef840b98a955e797f77b8a2
-#: ../../../source/reference.rst:223
+#: ../../../source/reference.rst:252
 msgid ""
 "Here is an example transcript to change log level to ``DEBUG`` that logs "
 "many messages for debugging::"
@@ -868,27 +985,27 @@ msgstr ""
 "のたくさんのメッセージがログに出力されます::"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference.rst:245
+#: ../../../source/reference.rst:274
 msgid "mroonga_version"
 msgstr ""
 
 # 16c600e1ea5f4c98abdedf73f42a156d
-#: ../../../source/reference.rst:247
+#: ../../../source/reference.rst:276
 msgid "The version string of mroonga."
 msgstr "mroongaのバージョン"
 
 # fd16998818f44f5da06767458a00d329
-#: ../../../source/reference.rst:249
+#: ../../../source/reference.rst:278
 msgid "Here is an example SQL to confirm the running mroonga version::"
 msgstr "実行中のmroongaのバージョンを確認するためのSQL例です::"
 
 # e84afdfd558e4abdb81cb8d681bbeb4a
-#: ../../../source/reference.rst:260
+#: ../../../source/reference.rst:289
 msgid "mroonga_dry_write"
 msgstr ""
 
 # a21ce3ce10fb4fd4946db0ec63d293ae
-#: ../../../source/reference.rst:262
+#: ../../../source/reference.rst:291
 msgid ""
 "Whether really write data to groonga database or not. The default value is "
 "``OFF`` that means data are really written to groonga database. Usually we "
@@ -903,17 +1020,17 @@ msgstr ""
 "時間にgroongaの処理時間は含まれません。"
 
 # fd16998818f44f5da06767458a00d329
-#: ../../../source/reference.rst:269
+#: ../../../source/reference.rst:298
 msgid "Here is an example SQL to disable writing data to groonga database::"
 msgstr "groongaデータベースに値を書き込まないようにするSQLの例です::"
 
 # 18afece537e5420b80cfda6b5a78f234
-#: ../../../source/reference.rst:292
+#: ../../../source/reference.rst:321
 msgid "mroonga_enable_optimization"
 msgstr ""
 
 # 318a50da3b1e4e5391e159c49e053348
-#: ../../../source/reference.rst:294
+#: ../../../source/reference.rst:323
 msgid ""
 "Whether enable optimization or not. The default value is ``ON`` that means "
 "optimization is enabled. Usually we don't need to change the value of this "
@@ -924,17 +1041,17 @@ msgstr ""
 "ク時に便利です。"
 
 # fd16998818f44f5da06767458a00d329
-#: ../../../source/reference.rst:299
+#: ../../../source/reference.rst:328
 msgid "Here is an example SQL to disable optimization::"
 msgstr "最適化を無効にするSQLの例です::"
 
 # 35b05552724e47eeb94e464809f6576a
-#: ../../../source/reference.rst:323
+#: ../../../source/reference.rst:352
 msgid "mroonga_match_escalation_threshold"
 msgstr ""
 
 # f4f99e7e5bf34ce1bfd3b220d53b1e44
-#: ../../../source/reference.rst:325
+#: ../../../source/reference.rst:354
 msgid ""
 "The threshold to determin whether match method is escalated. See `search "
 "specification for groonga <http://groonga.org/docs/spec/search.html>`_ about "
@@ -945,7 +1062,7 @@ msgstr ""
 "してください。"
 
 # a3f559165602416ab08ab47755132017
-#: ../../../source/reference.rst:330
+#: ../../../source/reference.rst:359
 msgid ""
 "The default value is the same as groonga's default value. It's 0 for the "
 "default installation. The dafault value can be configured in my.cnf or by "
@@ -958,7 +1075,7 @@ msgstr ""
 "THRESHOLD;`` でデフォルト値を設定できます。"
 
 # 1d2e6e246f654b57b1276c9a64fc09b5
-#: ../../../source/reference.rst:336
+#: ../../../source/reference.rst:365
 msgid ""
 "Here is an example to use -1 as a threshold to determin whether match method "
 "is escalated. -1 means that never escalated."
@@ -967,29 +1084,29 @@ msgstr ""
 "す。-1は絶対エスカレーションしないという意味です。"
 
 # 08b07f5a18bf41738ab639ad2e2017a8
-#: ../../../source/reference.rst:344
+#: ../../../source/reference.rst:373
 msgid ""
 "Here is an another example to show behavior change by the variable value."
 msgstr "この変数の値による挙動の変化を示す別の例です。"
 
 # a1797cd59fdb403f950d338e4ed6f95d
-#: ../../../source/reference.rst:390
+#: ../../../source/reference.rst:419
 msgid "List of status variables"
 msgstr "ステータス変数の一覧"
 
 # 23e55d2e20084940b30e3efb7d5fb7af
-#: ../../../source/reference.rst:392
+#: ../../../source/reference.rst:421
 msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
 msgstr "独自に追加されたステータス変数を説明します。"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference.rst:395
+#: ../../../source/reference.rst:424
 msgid "mroonga_count_skip"
 msgstr ""
 
 # 267f1b18714740dc979e8b4b67752812
-#: ../../../source/reference.rst:397
+#: ../../../source/reference.rst:426
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
@@ -1000,17 +1117,17 @@ msgstr ""
 
 # 3af28e93f34447b397943795efe4ebd6
 # 7f4ccc55b07949d9a265ec7daa36d154
-#: ../../../source/reference.rst:400 ../../../source/reference.rst:416
+#: ../../../source/reference.rst:429 ../../../source/reference.rst:445
 msgid "Here is an example how to check it::"
 msgstr "確認例です::"
 
 # 3f5fb8dfbc954a2c99f47e0c08dff40a
-#: ../../../source/reference.rst:411
+#: ../../../source/reference.rst:440
 msgid "mroonga_fast_order_limit"
 msgstr ""
 
 # f07b04cb491d4edfa20546deee8bf2e4
-#: ../../../source/reference.rst:413
+#: ../../../source/reference.rst:442
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
@@ -1020,27 +1137,27 @@ msgstr ""
 "確認に利用できます。"
 
 # 8aab0ebd312e4cfd8988e825d1241540
-#: ../../../source/reference.rst:427
+#: ../../../source/reference.rst:456
 msgid "Limitations"
 msgstr "制限事項"
 
 # a7184caf914f42f1846aaefcd3fade87
-#: ../../../source/reference.rst:429
+#: ../../../source/reference.rst:458
 msgid "There are some limitations in mroonga storage engine."
 msgstr "mroongaストレージエンジンにはいくつか制限があります。"
 
 # 8e1b8a90de50463588ac7bd4157c61d6
-#: ../../../source/reference.rst:432
+#: ../../../source/reference.rst:461
 msgid "Limitations about the value of columns"
 msgstr "カラムの値に関する制限事項"
 
 # 4762241ec9314616841081e4cc55181b
-#: ../../../source/reference.rst:434
+#: ../../../source/reference.rst:463
 msgid "There is a limitation about DATE, DATETIME column in storage mode."
 msgstr "ストレージモードにおいて、DATE、DATETIME型のカラムには制限があります。"
 
 # 9147c792adca459a9d7e2db39ebc555d
-#: ../../../source/reference.rst:436
+#: ../../../source/reference.rst:465
 msgid ""
 "mroonga storage engine automatically convert 0 into 1 as the value of month "
 "or date."
@@ -1048,25 +1165,25 @@ msgstr ""
 "mroongaストレージエンジンは月や日の値に指定された0を1へと自動的に補正します。"
 
 # 2ed6ac878f2f45d09664581f1e6f48db
-#: ../../../source/reference.rst:438
+#: ../../../source/reference.rst:467
 msgid ""
 "Thus, the value 0 is treated as the 1st month (January) of the year or the "
 "1st date of the month."
 msgstr "つまり、0月は1月へ、0日は1日として扱います。"
 
 # 073a9516cdfc46f584a864866242bc98
-#: ../../../source/reference.rst:441
+#: ../../../source/reference.rst:470
 msgid ""
 "And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
 "00:00:00)."
 msgstr "そして、NULL値はUNIX時間の0秒 (1970-01-01)として扱います。"
 
 # 08b07f5a18bf41738ab639ad2e2017a8
-#: ../../../source/reference.rst:443
+#: ../../../source/reference.rst:472
 msgid "Here is an example to show behavior described above."
 msgstr "上記挙動を示す例はこちらです。"
 
 # 382273e01cd948e4bb5d6f9d5754944d
-#: ../../../source/reference.rst:467
+#: ../../../source/reference.rst:496
 msgid "Here is the results of execution example::"
 msgstr "実行結果はこちらです。::"
