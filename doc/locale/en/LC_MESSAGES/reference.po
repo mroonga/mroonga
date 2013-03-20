@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-12 18:50\n"
+"POT-Creation-Date: 2013-03-20 16:31\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -836,44 +836,161 @@ msgid ""
 msgstr ""
 
 # 5d537f02eb434090ab886218ab972313
-#: ../../../source/reference.rst:219
+#: ../../../source/reference.rst:221
 msgid "mroonga_log_level"
 msgstr ""
 
 # 734cd9fdf1c7415d892b2ab22d30dc2f
-#: ../../../source/reference.rst:221
+#: ../../../source/reference.rst:223
 msgid "The output level of mroonga log file. The default value is ``NOTICE``."
 msgstr ""
 
+# f86725ac8c9c4e6a913f3002a4d80a32
+#: ../../../source/reference.rst:225
+msgid "Here is the list of ``mroonga_log_level`` which you can use."
+msgstr ""
+
+# 14abca7033d14aa0a250688e65f1563b
+#: ../../../source/reference.rst:228
+msgid "Description"
+msgstr ""
+
+# cefceb982c6446698a3bf822c760250a
+#: ../../../source/reference.rst:228
+msgid "Log level"
+msgstr ""
+
+# 5958a7621fe04a1c81704c3dc9c20737
+#: ../../../source/reference.rst:230
+msgid "NONE"
+msgstr ""
+
+# b98cfc807eeb4220845d544328322558
+#: ../../../source/reference.rst:230
+msgid "No logging output."
+msgstr ""
+
+# 81fc3c527261449cba32fc8b2785de0d
+#: ../../../source/reference.rst:232
+msgid "EMERG"
+msgstr ""
+
+# fca6ba1c33344302980f505e2683c934
+#: ../../../source/reference.rst:232
+msgid "Logging emergency messages such as database corruption."
+msgstr ""
+
+# 97854b9eee444dd79d6898e07b9b13dc
+#: ../../../source/reference.rst:234
+msgid "ALERT"
+msgstr ""
+
+# fca6ba1c33344302980f505e2683c934
+#: ../../../source/reference.rst:234
+msgid "Logging alert messages such as internal error."
+msgstr ""
+
+# ea999e2e11d648fcabc40a9c6188eb0b
+#: ../../../source/reference.rst:236
+msgid "CRIT"
+msgstr ""
+
+# b1c0fbb5d0684fe4a8d21e642a17c45e
+#: ../../../source/reference.rst:236
+msgid "Logging critical messasge such as deadlock."
+msgstr ""
+
+# a0fcfa921d25438e904f912579b4b6ea
+#: ../../../source/reference.rst:238
+msgid "ERROR"
+msgstr ""
+
+# fca6ba1c33344302980f505e2683c934
+#: ../../../source/reference.rst:238
+msgid "Logging error messages such as API error which mroonga use."
+msgstr ""
+
+# fca6ba1c33344302980f505e2683c934
+#: ../../../source/reference.rst:240
+msgid "Logging warning messages such as invalid argument."
+msgstr ""
+
+# 50ac5d3e013a4fdab5972f5937331f53
+#: ../../../source/reference.rst:240
+msgid "WARNING"
+msgstr ""
+
+# fca6ba1c33344302980f505e2683c934
+#: ../../../source/reference.rst:242
+msgid "Logging notice messages such as configuration or status changed."
+msgstr ""
+
+# 80ab5291a9da4cb5a2a82797a324dda4
+#: ../../../source/reference.rst:242
+msgid "NOTICE"
+msgstr ""
+
+# 5863e684674c4fb68302924ca66f39fd
+#: ../../../source/reference.rst:244
+msgid "INFO"
+msgstr ""
+
+# 3632fd1b768d4e15bb50d1c61f0ed102
+#: ../../../source/reference.rst:244
+msgid "Logging informative messages such as file system operation."
+msgstr ""
+
+# a62a192464644e39bf1650a66ce87118
+#: ../../../source/reference.rst:246
+msgid "DEBUG"
+msgstr ""
+
+# fca6ba1c33344302980f505e2683c934
+#: ../../../source/reference.rst:246
+msgid ""
+"Logging debug messages. Recommend to use for mroonga developer or bug "
+"reporter."
+msgstr ""
+
+# 61c5f9f19b71498789e2022a4e0ae695
+#: ../../../source/reference.rst:249
+msgid "DUMP"
+msgstr ""
+
+# 72729a3fdba345cdb9b60f44aba93d35
+#: ../../../source/reference.rst:249
+msgid "Logging dump messages."
+msgstr ""
+
 # 14d9ca2399ef4d2e8c552c6558bb44ef
-#: ../../../source/reference.rst:223
+#: ../../../source/reference.rst:252
 msgid ""
 "Here is an example transcript to change log level to ``DEBUG`` that logs "
 "many messages for debugging::"
 msgstr ""
 
 # 2344911c007541ec8521b01b20e65228
-#: ../../../source/reference.rst:245
+#: ../../../source/reference.rst:274
 msgid "mroonga_version"
 msgstr ""
 
 # 8faefebf66ce4409aa34d482fa4b3172
-#: ../../../source/reference.rst:247
+#: ../../../source/reference.rst:276
 msgid "The version string of mroonga."
 msgstr ""
 
 # d6161a998b614d92a7b5441de8fe2fa6
-#: ../../../source/reference.rst:249
+#: ../../../source/reference.rst:278
 msgid "Here is an example SQL to confirm the running mroonga version::"
 msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference.rst:260
+#: ../../../source/reference.rst:289
 msgid "mroonga_dry_write"
 msgstr ""
 
 # 662d6ddf9b7248cba67f48c09902b1cf
-#: ../../../source/reference.rst:262
+#: ../../../source/reference.rst:291
 msgid ""
 "Whether really write data to groonga database or not. The default value is "
 "``OFF`` that means data are really written to groonga database. Usually we "
@@ -883,17 +1000,17 @@ msgid ""
 msgstr ""
 
 # 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference.rst:269
+#: ../../../source/reference.rst:298
 msgid "Here is an example SQL to disable writing data to groonga database::"
 msgstr ""
 
 # d9f67e26e6bc4883affa4c663cd3d120
-#: ../../../source/reference.rst:292
+#: ../../../source/reference.rst:321
 msgid "mroonga_enable_optimization"
 msgstr ""
 
 # 53f18a9714d145d2a32b452e68be0dfa
-#: ../../../source/reference.rst:294
+#: ../../../source/reference.rst:323
 msgid ""
 "Whether enable optimization or not. The default value is ``ON`` that means "
 "optimization is enabled. Usually we don't need to change the value of this "
@@ -901,17 +1018,17 @@ msgid ""
 msgstr ""
 
 # ccf6f86f8e4e4772902db8fd12751b1c
-#: ../../../source/reference.rst:299
+#: ../../../source/reference.rst:328
 msgid "Here is an example SQL to disable optimization::"
 msgstr ""
 
 # 15ee150a65fa41839a0aba95515d5138
-#: ../../../source/reference.rst:323
+#: ../../../source/reference.rst:352
 msgid "mroonga_match_escalation_threshold"
 msgstr ""
 
 # 6713a39526c8497eaee1250509b6b6ac
-#: ../../../source/reference.rst:325
+#: ../../../source/reference.rst:354
 msgid ""
 "The threshold to determin whether match method is escalated. See `search "
 "specification for groonga <http://groonga.org/docs/spec/search.html>`_ about "
@@ -919,7 +1036,7 @@ msgid ""
 msgstr ""
 
 # 7aff1a3ab66945bcbe486da9fb4ca5d0
-#: ../../../source/reference.rst:330
+#: ../../../source/reference.rst:359
 msgid ""
 "The default value is the same as groonga's default value. It's 0 for the "
 "default installation. The dafault value can be configured in my.cnf or by "
@@ -928,36 +1045,36 @@ msgid ""
 msgstr ""
 
 # aeb0d450bd6943cea8a607bfd7039a03
-#: ../../../source/reference.rst:336
+#: ../../../source/reference.rst:365
 msgid ""
 "Here is an example to use -1 as a threshold to determin whether match method "
 "is escalated. -1 means that never escalated."
 msgstr ""
 
 # 4ef63d1019614da3a29580b42060f249
-#: ../../../source/reference.rst:344
+#: ../../../source/reference.rst:373
 msgid ""
 "Here is an another example to show behavior change by the variable value."
 msgstr ""
 
 # 6f57bcd862b3492b9828d7d4ec559909
-#: ../../../source/reference.rst:390
+#: ../../../source/reference.rst:419
 msgid "List of status variables"
 msgstr "List of status variables"
 
 # 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference.rst:392
+#: ../../../source/reference.rst:421
 msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
 msgstr ""
 
 # 44a69951fb964d71be14e20f56f9657c
-#: ../../../source/reference.rst:395
+#: ../../../source/reference.rst:424
 msgid "mroonga_count_skip"
 msgstr ""
 
 # f66bd47adc1f4141ae9432c72e8bf6a7
-#: ../../../source/reference.rst:397
+#: ../../../source/reference.rst:426
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
@@ -967,17 +1084,17 @@ msgstr ""
 
 # c376c0400a38426e833beae3faabbc28
 # 14a1b5c728a747ab9c8167c4165387ea
-#: ../../../source/reference.rst:400 ../../../source/reference.rst:416
+#: ../../../source/reference.rst:429 ../../../source/reference.rst:445
 msgid "Here is an example how to check it::"
 msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference.rst:411
+#: ../../../source/reference.rst:440
 msgid "mroonga_fast_order_limit"
 msgstr ""
 
 # 052f5e42b1d84e8d919523fb99c8e5d5
-#: ../../../source/reference.rst:413
+#: ../../../source/reference.rst:442
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
@@ -986,52 +1103,52 @@ msgstr ""
 "use this value to check if the feature is working when you enable it."
 
 # 47b07cd2bb7d44c98a8c3ea8bd47e37b
-#: ../../../source/reference.rst:427
+#: ../../../source/reference.rst:456
 msgid "Limitations"
 msgstr ""
 
 # 5bf56a4d5df24b33ae8b6d972fcf2a7f
-#: ../../../source/reference.rst:429
+#: ../../../source/reference.rst:458
 msgid "There are some limitations in mroonga storage engine."
 msgstr ""
 
 # 5da669841908480d9071c98823fddf08
-#: ../../../source/reference.rst:432
+#: ../../../source/reference.rst:461
 msgid "Limitations about the value of columns"
 msgstr ""
 
 # bf33f1ba0a3441149c9c7aae10ab7c00
-#: ../../../source/reference.rst:434
+#: ../../../source/reference.rst:463
 msgid "There is a limitation about DATE, DATETIME column in storage mode."
 msgstr ""
 
 # 49133a6b106b4d028daabbdf784d5044
-#: ../../../source/reference.rst:436
+#: ../../../source/reference.rst:465
 msgid ""
 "mroonga storage engine automatically convert 0 into 1 as the value of month "
 "or date."
 msgstr ""
 
 # 95b13e6ab35541e3a286f029f6f77555
-#: ../../../source/reference.rst:438
+#: ../../../source/reference.rst:467
 msgid ""
 "Thus, the value 0 is treated as the 1st month (January) of the year or the "
 "1st date of the month."
 msgstr ""
 
 # ba510e03144642b3bcad7ff9499c13cd
-#: ../../../source/reference.rst:441
+#: ../../../source/reference.rst:470
 msgid ""
 "And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
 "00:00:00)."
 msgstr ""
 
 # eda122b1b17c4e08b10677d5e2c5275c
-#: ../../../source/reference.rst:443
+#: ../../../source/reference.rst:472
 msgid "Here is an example to show behavior described above."
 msgstr ""
 
 # 88bdd5c373c54e11b4ede629c17ffffc
-#: ../../../source/reference.rst:467
+#: ../../../source/reference.rst:496
 msgid "Here is the results of execution example::"
 msgstr ""

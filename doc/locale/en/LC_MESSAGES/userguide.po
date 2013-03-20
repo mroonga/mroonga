@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-21 16:05\n"
+"POT-Creation-Date: 2013-03-20 16:34\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -1158,10 +1158,16 @@ msgstr "DEBUG"
 msgid "DUMP"
 msgstr "DUMP"
 
-# 0b0ad0c51cc54de78ff4f5c494fdb4aa
-# 17ac16799fae4800a0885302ec534755
+# abf5a15085724c038e2fda013543299e
 #: ../../../source/userguide/storage.rst:349
 #: ../../../source/userguide/wrapper.rst:251
+msgid "See :ref:`mroonga_log_level` about details."
+msgstr ""
+
+# 0b0ad0c51cc54de78ff4f5c494fdb4aa
+# 17ac16799fae4800a0885302ec534755
+#: ../../../source/userguide/storage.rst:351
+#: ../../../source/userguide/wrapper.rst:253
 msgid ""
 "You can reopen the log file by FLUSH LOGS. If you want to rotate the log "
 "file without stopping MySQL server, you can do in the following procedure."
@@ -1171,8 +1177,8 @@ msgstr ""
 
 # 93a775c4fcd94a6a821c152178833042
 # ee93d296d4424a08802ab0a60d6ca96a
-#: ../../../source/userguide/storage.rst:351
-#: ../../../source/userguide/wrapper.rst:253
+#: ../../../source/userguide/storage.rst:353
+#: ../../../source/userguide/wrapper.rst:255
 msgid ""
 "change the file name of ``groonga.log`` (by using OS's mv command etc.)."
 msgstr ""
@@ -1180,8 +1186,8 @@ msgstr ""
 
 # 58e0b7fdf1354ae199a90157c31f69af
 # cb23fadea00f4705a3f33e0344794439
-#: ../../../source/userguide/storage.rst:352
-#: ../../../source/userguide/wrapper.rst:254
+#: ../../../source/userguide/storage.rst:354
+#: ../../../source/userguide/wrapper.rst:256
 msgid ""
 "invoke \"FLUSH LOGS\" in MySQL server (by mysql command or mysqladmin "
 "command)."
@@ -1190,31 +1196,31 @@ msgstr ""
 "command)."
 
 # 3591e7f3c5b141e5bf37371cce0f06a5
-#: ../../../source/userguide/storage.rst:355
+#: ../../../source/userguide/storage.rst:357
 msgid "Choosing appropriate columns"
 msgstr "Choosing appropriate columns"
 
 # 79b267705e364bbe88c73d71368be1c1
-#: ../../../source/userguide/storage.rst:357
+#: ../../../source/userguide/storage.rst:359
 msgid ""
 "Groonga uses one file per column to store data, and mroonga accesses needed "
 "columns only when accessing a table to utilise this characteristic."
 msgstr ""
 
 # 542c4fcf517c436d9e35ce64ea015e14
-#: ../../../source/userguide/storage.rst:359
+#: ../../../source/userguide/storage.rst:361
 msgid ""
 "This optimisation is done automatically in mroonga internal, you don't need "
 "any specific configuration."
 msgstr ""
 
 # 354dd5e9f98b4460913fdb838039d104
-#: ../../../source/userguide/storage.rst:361
+#: ../../../source/userguide/storage.rst:363
 msgid "Imagine that we have a table with 20 columns like below. ::"
 msgstr "Imagine that we have a table with 20 columns like below. ::"
 
 # 18e085ff88c44a91858c999dda65a98c
-#: ../../../source/userguide/storage.rst:374
+#: ../../../source/userguide/storage.rst:376
 msgid ""
 "When we run SELECT phrase like the following, mroonga reads data from "
 "columns that are referred by SELECT phrase and WHERE phrase only (and it "
@@ -1222,12 +1228,12 @@ msgid ""
 msgstr ""
 
 # d02732b24c9f40c59702cba710102206
-#: ../../../source/userguide/storage.rst:376
+#: ../../../source/userguide/storage.rst:378
 msgid "SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = \"XXX\";"
 msgstr "SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = \"XXX\";"
 
 # de10f144bf574ad79db9b7fd76192438
-#: ../../../source/userguide/storage.rst:378
+#: ../../../source/userguide/storage.rst:380
 msgid ""
 "In this case above, only columns c1, c2, c11 and c12 are accessed, and we "
 "can process the SQL rapidly."
@@ -1236,12 +1242,12 @@ msgstr ""
 "can process the SQL rapidly."
 
 # cf41beed7ef347948ae6c1840f5abcdb
-#: ../../../source/userguide/storage.rst:381
+#: ../../../source/userguide/storage.rst:383
 msgid "Optimisation for counting rows"
 msgstr "Optimisation for counting rows"
 
 # 3a6776d61a9441e6a55319b9e7df19b2
-#: ../../../source/userguide/storage.rst:383
+#: ../../../source/userguide/storage.rst:385
 msgid ""
 "In MySQL's storage engine interface, there is no difference between counting "
 "rows like COUNT(\\*) and normal data retrieving by SELECT. So access to data "
@@ -1254,19 +1260,19 @@ msgstr ""
 "count rows."
 
 # fb356c31621449e79862cd77433b6f2d
-#: ../../../source/userguide/storage.rst:385
+#: ../../../source/userguide/storage.rst:387
 msgid ""
 "Tritonn (MySQL + Senna), that is mroonga's predecessor, introduced \"2ind "
 "patch\" to skip needless access to data and solved this performance issue."
 msgstr ""
 
 # 8e0c9ebe908d44e98c948ee5b8c67897
-#: ../../../source/userguide/storage.rst:387
+#: ../../../source/userguide/storage.rst:389
 msgid "Mroonga also has the optimisation for counting rows."
 msgstr ""
 
 # e7b548b8992c47609f72d239f228103a
-#: ../../../source/userguide/storage.rst:389
+#: ../../../source/userguide/storage.rst:391
 msgid ""
 "In the following SELECT, for example, needless read of columns are skipped "
 "and you can get the result of counting rows with the minimal cost."
@@ -1275,30 +1281,30 @@ msgstr ""
 "and you can get the result of counting rows with the minimal cost."
 
 # 060341b763e646db8fc525b5434939b7
-#: ../../../source/userguide/storage.rst:391
+#: ../../../source/userguide/storage.rst:393
 msgid "SELECT COUNT(*) FROM t1 WHERE MATCH(c2) AGAINST(\"hoge\");"
 msgstr "SELECT COUNT(*) FROM t1 WHERE MATCH(c2) AGAINST(\"hoge\");"
 
 # d8ad63d5f8924162927af389e57e7db4
 # d8ad63d5f8924162927af389e57e7db4
 # 2d684ba7a0ff4f3d8451710794884180
-#: ../../../source/userguide/storage.rst:393
-#: ../../../source/userguide/storage.rst:422
-#: ../../../source/userguide/wrapper.rst:271
+#: ../../../source/userguide/storage.rst:395
+#: ../../../source/userguide/storage.rst:424
+#: ../../../source/userguide/wrapper.rst:273
 msgid ""
 "You can check if this optimisation works or not by the status variable. ::"
 msgstr ""
 "You can check if this optimisation works or not by the status variable. ::"
 
 # b1cdb1201d204330b6e4ed282f14c6ee
-#: ../../../source/userguide/storage.rst:403
+#: ../../../source/userguide/storage.rst:405
 msgid ""
 "Each time the optimisation for counting rows works, ``mroonga_count_skip`` "
 "status variable value is increased."
 msgstr ""
 
 # 9ea47d5029304dc4a7e9261a3d989546
-#: ../../../source/userguide/storage.rst:405
+#: ../../../source/userguide/storage.rst:407
 msgid ""
 "Note : This optimisation is implemented by using the index. It only works in "
 "the case where we records can be specified only by the index."
@@ -1308,15 +1314,15 @@ msgstr ""
 
 # 3a038f61068f49f4a7ccb769f16fae4b
 # e49b3542f61b430d82f18ce272c79d9b
-#: ../../../source/userguide/storage.rst:408
-#: ../../../source/userguide/wrapper.rst:257
+#: ../../../source/userguide/storage.rst:410
+#: ../../../source/userguide/wrapper.rst:259
 msgid "Optimisation for ORDER BY LIMIT in full text search"
 msgstr "Optimisation for ORDER BY LIMIT in full text search"
 
 # 53d2e34b1e9d48adb78f206a5458d1ec
 # 3a9f40d827ef45918827c87f1bad5b59
-#: ../../../source/userguide/storage.rst:410
-#: ../../../source/userguide/wrapper.rst:259
+#: ../../../source/userguide/storage.rst:412
+#: ../../../source/userguide/wrapper.rst:261
 msgid ""
 "Generally speaking, MySQL can process \"ORDER BY\" query with almost no cost "
 "if we can get records by index, and can process \"LIMIT\" with low cost by "
@@ -1330,8 +1336,8 @@ msgstr ""
 
 # 581900abc23f49b7b0fddda5be2057c6
 # fe8b753ca719496ca7b5ce08934ad3b9
-#: ../../../source/userguide/storage.rst:412
-#: ../../../source/userguide/wrapper.rst:261
+#: ../../../source/userguide/storage.rst:414
+#: ../../../source/userguide/wrapper.rst:263
 msgid ""
 "But for the query where \"ORDER BY\" cannot use index, like sort full text "
 "search result by the score and use LIMIT, the processing cost is "
@@ -1345,8 +1351,8 @@ msgstr ""
 
 # a1c12526cfec489ba08f22f0a83a8186
 # 46f88354df4a4708b4d8782c51f796c2
-#: ../../../source/userguide/storage.rst:414
-#: ../../../source/userguide/wrapper.rst:263
+#: ../../../source/userguide/storage.rst:416
+#: ../../../source/userguide/wrapper.rst:265
 msgid ""
 "Tritonn took no specific countermeasure for this issue, but it introduced a "
 "workaround in the latest repository so that it sorted Senna result in "
@@ -1360,14 +1366,14 @@ msgstr ""
 
 # 8cf402e1dc5b43a39df23ccd2d8914ab
 # 927db709fbfc48eb84e04ac88328e3be
-#: ../../../source/userguide/storage.rst:416
-#: ../../../source/userguide/wrapper.rst:265
+#: ../../../source/userguide/storage.rst:418
+#: ../../../source/userguide/wrapper.rst:267
 msgid "Mroonga also has the optimisation for ORDER BY LIMIT."
 msgstr ""
 
 # 0bf3c72114ee45959ea9be4b5f162ce8
 # 6c31e461eb9443c1988f337f41f6e2fb
-#: ../../../source/userguide/storage.rst:418
+#: ../../../source/userguide/storage.rst:420
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in groonga only and "
 "the minimal records are passed to MySQL. ::"
@@ -1377,8 +1383,8 @@ msgstr ""
 
 # ea0ac4ae9150459b96f8f0060518f51b
 # 655751d615a445b297c7eb2068086c6d
-#: ../../../source/userguide/storage.rst:432
-#: ../../../source/userguide/wrapper.rst:281
+#: ../../../source/userguide/storage.rst:434
+#: ../../../source/userguide/wrapper.rst:283
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``mroonga_fast_order_limit`` status variable value is increased."
@@ -1386,8 +1392,8 @@ msgstr ""
 
 # 40837c2fbcec427db5e898c6eacec629
 # e977c18423794c639b57ffcbbb89caee
-#: ../../../source/userguide/storage.rst:434
-#: ../../../source/userguide/wrapper.rst:283
+#: ../../../source/userguide/storage.rst:436
+#: ../../../source/userguide/wrapper.rst:285
 msgid ""
 "Note : This optimisation is targeting queries like \"select ... match "
 "against order by _score desc limit X, Y\" only, and it works if all of the "
@@ -1399,29 +1405,29 @@ msgstr ""
 
 # 85d9a896698c4fdbbf7bd705dc182fcb
 # cd8bfad8f3cf4d80af5c6eda3b16aecd
-#: ../../../source/userguide/storage.rst:436
-#: ../../../source/userguide/wrapper.rst:285
+#: ../../../source/userguide/storage.rst:438
+#: ../../../source/userguide/wrapper.rst:287
 msgid "WHERE phrase has \"match...against\" only"
 msgstr "WHERE phrase has \"match...against\" only"
 
 # 19513e734d384ca2b3cd91fba2350587
 # 4911b6863b7b4b1f90cf454ec3fe6c65
-#: ../../../source/userguide/storage.rst:437
-#: ../../../source/userguide/wrapper.rst:286
+#: ../../../source/userguide/storage.rst:439
+#: ../../../source/userguide/wrapper.rst:288
 msgid "no JOIN"
 msgstr "no JOIN"
 
 # 2759021c9d4e43439e94eca3a8d4f657
 # 4ff19330c30946679667e95f97e011df
-#: ../../../source/userguide/storage.rst:438
-#: ../../../source/userguide/wrapper.rst:287
+#: ../../../source/userguide/storage.rst:440
+#: ../../../source/userguide/wrapper.rst:289
 msgid "with LIMIT"
 msgstr "with LIMIT"
 
 # 1b134292155440b08dec17f409b4e921
 # b6e9199585964acc9b60093b0b8c91e3
-#: ../../../source/userguide/storage.rst:439
-#: ../../../source/userguide/wrapper.rst:288
+#: ../../../source/userguide/storage.rst:441
+#: ../../../source/userguide/wrapper.rst:290
 msgid ""
 "ORDER BY phrase has columns (including _id) or \"match...against\" that is "
 "used in WHERE phrase only"
@@ -1431,15 +1437,15 @@ msgstr ""
 
 # 21e513319fb4443c8d8b8889b5d44c5e
 # 91398666e3b54178bf04653658f15f26
-#: ../../../source/userguide/storage.rst:442
-#: ../../../source/userguide/wrapper.rst:291
+#: ../../../source/userguide/storage.rst:444
+#: ../../../source/userguide/wrapper.rst:293
 msgid "Footnotes"
 msgstr "Footnotes"
 
 # 49a4bdd6356b496d986b733227c3f471
 # 715f5447f2fa46f8a50ce2be8ad0a8aa
-#: ../../../source/userguide/storage.rst:443
-#: ../../../source/userguide/wrapper.rst:292
+#: ../../../source/userguide/storage.rst:445
+#: ../../../source/userguide/wrapper.rst:294
 msgid ""
 "`MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text "
 "Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search."
@@ -1451,8 +1457,8 @@ msgstr ""
 
 # 7a0ef89a05f94383871537ddefa5b629
 # 8d241533c8644930920bb9badd6ea5fd
-#: ../../../source/userguide/storage.rst:444
-#: ../../../source/userguide/wrapper.rst:293
+#: ../../../source/userguide/storage.rst:446
+#: ../../../source/userguide/wrapper.rst:295
 msgid "In groonga, we call it a 'tokeniser'."
 msgstr "In groonga, we call it a 'tokeniser'."
 
@@ -1507,7 +1513,7 @@ msgstr ""
 
 # 0bf3c72114ee45959ea9be4b5f162ce8
 # 6c31e461eb9443c1988f337f41f6e2fb
-#: ../../../source/userguide/wrapper.rst:267
+#: ../../../source/userguide/wrapper.rst:269
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and "
 "the minimal records are passed to MySQL. ::"
