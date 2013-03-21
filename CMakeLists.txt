@@ -1,4 +1,5 @@
 # Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -118,21 +119,29 @@ link_directories(
   ${MYSQL_LIBRARY_DIRS}
   )
 
-# TODO: set VERSIONINFO for Microsoft Visual C++.
-#       http://msdn.microsoft.com/en-us/library/aa381058%28VS.85%29.aspx
-add_library(ha_mroonga MODULE
-  ${MROONGA_SOURCES}
-  ${LIBMRN_NO_MYSQL_SOURCES}
-  ${LIBMRN_NEED_MYSQL_SOURCES})
-if(NOT WIN32)
-  set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
+if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+  MYSQL_ADD_PLUGIN(ha_mroonga
+    "${MROONGA_SOURCES};${LIBMRN_NEED_MYSQL_SOURCES};${LIBMRN_NO_MYSQL_SOURCES}"
+    STORAGE_ENGINE MODULE_ONLY
+    LINK_LIBRARIES ${GROONGA_LIBRARIES}
+    MODULE_OUTPUT_NAME "ha_mroonga")
+else()
+  # TODO: set VERSIONINFO for Microsoft Visual C++.
+  #       http://msdn.microsoft.com/en-us/library/aa381058%28VS.85%29.aspx
+  add_library(ha_mroonga MODULE
+    ${MROONGA_SOURCES}
+    ${LIBMRN_NO_MYSQL_SOURCES}
+    ${LIBMRN_NEED_MYSQL_SOURCES})
+  if(NOT WIN32)
+    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
+  endif()
+  set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
+    COMPILE_FLAGS "${MYSQL_CFLAGS}")
+  set_target_properties(ha_mroonga PROPERTIES
+    COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN"
+    PREFIX ""
+    OUTPUT_NAME "ha_mroonga")
 endif()
-set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
-  COMPILE_FLAGS "${MYSQL_CFLAGS}")
-set_target_properties(ha_mroonga PROPERTIES
-  COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN"
-  PREFIX ""
-  OUTPUT_NAME "ha_mroonga")
 
 if(GROONGA_NORMALIZER_MYSQL_FOUND)
   set(WITH_GROONGA_NORMALIZER_MYSQL 1)
@@ -146,46 +155,39 @@ endif()
 set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
 set_property(TARGET ha_mroonga APPEND PROPERTY
   COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
-if(WIN32)
-# TODO: set DBUG_OFF to link with MySQL release/debug import library.
-#       it is better that you can customize this definition.
-# TODO: support security enhancements introduced in the CRT.
-#       http://msdn.microsoft.com/en-us/library/8ef0s5kh%28v=vs.90%29.aspx
-  set_property(TARGET ha_mroonga APPEND PROPERTY COMPILE_DEFINITIONS
-    "__WIN__"
-    "DBUG_OFF"
-    "_CRT_SECURE_NO_WARNINGS"
-    "_WIN32_WINNT=0x0501"
-    "WIN32_LEAN_AND_MEAN"
-  )
-  
-endif()
-
-if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
-  MYSQL_ADD_PLUGIN(mroonga
-    "${MROONGA_SOURCES};${LIBMRN_NEED_MYSQL_SOURCES};${LIBMRN_NO_MYSQL_SOURCES}"
-    STORAGE_ENGINE MODULE_ONLY
-    LINK_LIBRARIES ${GROONGA_LIBRARIES})
-endif()
-
-if(WIN32)
-# NOTE: ignore incompatible runtime libraries explicitly.
-#       http://msdn.microsoft.com/en-us/library/6wtdswk0%28v=vs.80%29.aspx 
-  set_target_properties(ha_mroonga PROPERTIES
-    LINK_FLAGS "/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib")
-  set_target_properties(ha_mroonga PROPERTIES
-    LINK_FLAGS_DEBUG "/NODEFAULTLIB:libcmt.lib")
-  set_target_properties(ha_mroonga PROPERTIES
-    LINK_FLAGS_RELEASE "/NODEFAULTLIB:libcmtd.lib")
-  set(MYSQL_IMPORT_LIBRARIES
-    "libmysqld${IMPORT_SUFFIX};mysqlserver${IMPORT_SUFFIX}")
-  target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES} ${MYSQL_IMPORT_LIBRARIES})
-else()
-  target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
-endif()
-
 if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
 else()
+  if(WIN32)
+  # TODO: set DBUG_OFF to link with MySQL release/debug import library.
+  #       it is better that you can customize this definition.
+  # TODO: support security enhancements introduced in the CRT.
+  #       http://msdn.microsoft.com/en-us/library/8ef0s5kh%28v=vs.90%29.aspx
+    set_property(TARGET ha_mroonga APPEND PROPERTY COMPILE_DEFINITIONS
+      "__WIN__"
+      "DBUG_OFF"
+      "_CRT_SECURE_NO_WARNINGS"
+      "_WIN32_WINNT=0x0501"
+      "WIN32_LEAN_AND_MEAN"
+    )
+    
+  endif()
+
+  if(WIN32)
+  # NOTE: ignore incompatible runtime libraries explicitly.
+  #       http://msdn.microsoft.com/en-us/library/6wtdswk0%28v=vs.80%29.aspx 
+    set_target_properties(ha_mroonga PROPERTIES
+      LINK_FLAGS "/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib")
+    set_target_properties(ha_mroonga PROPERTIES
+      LINK_FLAGS_DEBUG "/NODEFAULTLIB:libcmt.lib")
+    set_target_properties(ha_mroonga PROPERTIES
+      LINK_FLAGS_RELEASE "/NODEFAULTLIB:libcmtd.lib")
+    set(MYSQL_IMPORT_LIBRARIES
+      "libmysqld${IMPORT_SUFFIX};mysqlserver${IMPORT_SUFFIX}")
+    target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES} ${MYSQL_IMPORT_LIBRARIES})
+  else()
+    target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
+  endif()
+
   option(WITH_DEBUG "Enable debug options" OFF)
   if(WITH_DEBUG)
     set_property(TARGET ha_mroonga APPEND PROPERTY
@@ -203,9 +205,9 @@ else()
     set_property(TARGET ha_mroonga APPEND PROPERTY
       COMPILE_DEFINITIONS "FORCE_FAST_MUTEX_DISABLED=1")
   endif()
-endif()
 
-install(TARGETS ha_mroonga DESTINATION "${MYSQL_PLUGIN_DIR}")
+  install(TARGETS ha_mroonga DESTINATION "${MYSQL_PLUGIN_DIR}")
+endif()
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/mrn_version.h.in"
