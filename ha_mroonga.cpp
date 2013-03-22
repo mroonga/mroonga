@@ -159,8 +159,6 @@ static CHARSET_INFO *mrn_charset_eucjpms = NULL;
 static CHARSET_INFO *mrn_charset_ujis = NULL;
 static CHARSET_INFO *mrn_charset_koi8r = NULL;
 
-static int32 mrn_utc_diff_in_seconds = 0;
-
 #ifdef WIN32
 static inline double round(double x)
 {
@@ -1523,15 +1521,37 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 }
 #endif
 
+static time_t get_timegm(struct tm *time)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  struct tm gmdate;
+  time_t sec_t = mktime(time);
+  gmtime_r(&sec_t, &gmdate);
+  int32 mrn_utc_diff_in_seconds =
+    (
+      time->tm_mday > 25 && gmdate.tm_mday == 1 ? -1 :
+      time->tm_mday == 1 && gmdate.tm_mday > 25 ? 1 :
+      time->tm_mday - gmdate.tm_mday
+    ) * 24 * 60 * 60 +
+    (time->tm_hour - gmdate.tm_hour) * 60 * 60 +
+    (time->tm_min - gmdate.tm_min) * 60 +
+    (time->tm_sec - gmdate.tm_sec);
+  DBUG_PRINT("info", ("mroonga: mrn_utc_diff_in_seconds=%d",
+    mrn_utc_diff_in_seconds));
+  DBUG_RETURN(sec_t + mrn_utc_diff_in_seconds);
+}
+
 static long long int mrn_tm_to_grn_time(struct tm *time, int usec)
 {
   MRN_DBUG_ENTER_FUNCTION();
   long long int grn_time;
-  long long int sec = mktime(time);
+  long long int sec = get_timegm(time);
+  DBUG_PRINT("info", ("mroonga: sec=%lld", sec));
+  DBUG_PRINT("info", ("mroonga: usec=%d", usec));
   if (sec == -1) {
     grn_time = 0;
   } else {
-    grn_time = GRN_TIME_PACK(sec + mrn_utc_diff_in_seconds, usec);
+    grn_time = GRN_TIME_PACK(sec, usec);
   }
   DBUG_RETURN(grn_time);
 }
@@ -1544,33 +1564,46 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
   switch (mysql_time->time_type) {
   case MYSQL_TIMESTAMP_DATE:
     {
+      DBUG_PRINT("info", ("mroonga: MYSQL_TIMESTAMP_DATE"));
       struct tm date;
       memset(&date, 0, sizeof(struct tm));
       date.tm_year = mysql_time->year - TM_YEAR_BASE;
+      DBUG_PRINT("info", ("mroonga: tm_year=%d", date.tm_year));
       date.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
+      DBUG_PRINT("info", ("mroonga: tm_mon=%d", date.tm_mon));
       date.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
+      DBUG_PRINT("info", ("mroonga: tm_mday=%d", date.tm_mday));
       grn_time = mrn_tm_to_grn_time(&date, usec);
     }
     break;
   case MYSQL_TIMESTAMP_DATETIME:
     {
+      DBUG_PRINT("info", ("mroonga: MYSQL_TIMESTAMP_DATETIME"));
       struct tm datetime;
       memset(&datetime, 0, sizeof(struct tm));
       datetime.tm_year = mysql_time->year - TM_YEAR_BASE;
+      DBUG_PRINT("info", ("mroonga: tm_year=%d", datetime.tm_year));
       datetime.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
+      DBUG_PRINT("info", ("mroonga: tm_mon=%d", datetime.tm_mon));
       datetime.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
+      DBUG_PRINT("info", ("mroonga: tm_mday=%d", datetime.tm_mday));
       datetime.tm_hour = mysql_time->hour;
+      DBUG_PRINT("info", ("mroonga: tm_hour=%d", datetime.tm_hour));
       datetime.tm_min = mysql_time->minute;
+      DBUG_PRINT("info", ("mroonga: tm_min=%d", datetime.tm_min));
       datetime.tm_sec = mysql_time->second;
+      DBUG_PRINT("info", ("mroonga: tm_sec=%d", datetime.tm_sec));
       grn_time = mrn_tm_to_grn_time(&datetime, usec);
     }
     break;
   case MYSQL_TIMESTAMP_TIME:
     {
+      DBUG_PRINT("info", ("mroonga: MYSQL_TIMESTAMP_TIME"));
       int sec =
         mysql_time->hour * 60 * 60 +
         mysql_time->minute * 60 +
         mysql_time->second;
+      DBUG_PRINT("info", ("mroonga: sec=%d", sec));
       grn_time = GRN_TIME_PACK(sec, usec);
       if (mysql_time->neg) {
         grn_time = -grn_time;
@@ -1578,6 +1611,7 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
     }
     break;
   default:
+    DBUG_PRINT("info", ("mroonga: default"));
     grn_time = 0;
     break;
   }
@@ -1591,34 +1625,48 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
   long long int sec;
   int usec;
   GRN_TIME_UNPACK(grn_time, sec, usec);
+  DBUG_PRINT("info", ("mroonga: sec=%lld", sec));
+  DBUG_PRINT("info", ("mroonga: usec=%d", usec));
   switch (mysql_time->time_type) {
   case MYSQL_TIMESTAMP_DATE:
     {
+      DBUG_PRINT("info", ("mroonga: MYSQL_TIMESTAMP_DATE"));
       struct tm date;
       time_t sec_t = sec;
       // TODO: Add error check
       gmtime_r(&sec_t, &date);
+      DBUG_PRINT("info", ("mroonga: tm_year=%d", date.tm_year));
       mysql_time->year = date.tm_year + TM_YEAR_BASE;
+      DBUG_PRINT("info", ("mroonga: tm_mon=%d", date.tm_mon));
       mysql_time->month = date.tm_mon + 1;
+      DBUG_PRINT("info", ("mroonga: tm_mday=%d", date.tm_mday));
       mysql_time->day = date.tm_mday;
     }
     break;
   case MYSQL_TIMESTAMP_DATETIME:
     {
+      DBUG_PRINT("info", ("mroonga: MYSQL_TIMESTAMP_DATETIME"));
       struct tm date;
       time_t sec_t = sec;
       // TODO: Add error check
       gmtime_r(&sec_t, &date);
+      DBUG_PRINT("info", ("mroonga: tm_year=%d", date.tm_year));
       mysql_time->year = date.tm_year + TM_YEAR_BASE;
+      DBUG_PRINT("info", ("mroonga: tm_mon=%d", date.tm_mon));
       mysql_time->month = date.tm_mon + 1;
+      DBUG_PRINT("info", ("mroonga: tm_mday=%d", date.tm_mday));
       mysql_time->day = date.tm_mday;
+      DBUG_PRINT("info", ("mroonga: tm_hour=%d", date.tm_hour));
       mysql_time->hour = date.tm_hour;
+      DBUG_PRINT("info", ("mroonga: tm_min=%d", date.tm_min));
       mysql_time->minute = date.tm_min;
+      DBUG_PRINT("info", ("mroonga: tm_sec=%d", date.tm_sec));
       mysql_time->second = date.tm_sec;
       mysql_time->second_part = usec;
     }
     break;
   case MYSQL_TIMESTAMP_TIME:
+    DBUG_PRINT("info", ("mroonga: MYSQL_TIMESTAMP_TIME"));
     if (sec < 0) {
       mysql_time->neg = true;
       sec = -sec;
@@ -1629,6 +1677,7 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
     mysql_time->second_part = usec;
     break;
   default:
+    DBUG_PRINT("info", ("mroonga: default"));
     break;
   }
   DBUG_VOID_RETURN;
@@ -1652,19 +1701,6 @@ static uint mrn_alter_table_flags(uint flags) {
     HA_INPLACE_DROP_PK_INDEX_NO_WRITE;
 #endif
   return ret_flags;
-}
-
-static void mrn_init_time(void)
-{
-  struct tm now_tm;
-  time_t now;
-  time(&now);
-#ifdef _MSC_VER
-  gmtime_s(&now_tm, &now);
-#else
-  gmtime_r(&now, &now_tm);
-#endif
-  mrn_utc_diff_in_seconds = now - mktime(&now_tm);
 }
 
 static int mrn_init(void *p)
@@ -1740,8 +1776,6 @@ static int mrn_init(void *p)
                    mrn_open_tables_get_key, 0, 0)) {
     goto error_allocated_open_tables_hash_init;
   }
-
-  mrn_init_time();
 
   return 0;
 
@@ -9077,19 +9111,19 @@ long long int ha_mroonga::get_grn_time_from_timestamp_field(Field_timestamp *fie
   if (field->get_timestamp(&time_value, &warnings)) {
     // XXX: Should we report warnings or MySQL does?
   } else {
-    grn_time = GRN_TIME_PACK(time_value.tv_sec + mrn_utc_diff_in_seconds,
-                             time_value.tv_usec);
+    DBUG_PRINT("info", ("mroonga: timeval tv_sec=%ld", time_value.tv_sec));
+    grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
   }
 #elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
   unsigned long int micro_seconds;
   my_time_t seconds = field->get_timestamp(&micro_seconds);
-  grn_time = GRN_TIME_PACK(seconds + mrn_utc_diff_in_seconds,
-                           micro_seconds);
+  DBUG_PRINT("info", ("mroonga: my_time_t seconds=%ld", seconds));
+  grn_time = GRN_TIME_PACK(seconds, micro_seconds);
 #else
   my_bool is_null_value;
   long seconds = field->get_timestamp(&is_null_value);
-  grn_time = GRN_TIME_PACK(seconds + mrn_utc_diff_in_seconds,
-                           0);
+  DBUG_PRINT("info", ("mroonga: long seconds=%ld", seconds));
+  grn_time = GRN_TIME_PACK(seconds, 0);
 #endif
   DBUG_RETURN(grn_time);
 }
@@ -9451,17 +9485,14 @@ void ha_mroonga::storage_store_field_timestamp(Field *field,
 #ifdef MRN_TIMESTAMP_USE_TIMEVAL
   struct timeval time_value;
   GRN_TIME_UNPACK(time, time_value.tv_sec, time_value.tv_usec);
-  time_value.tv_sec -= mrn_utc_diff_in_seconds;
   timestamp_field->store_timestamp(&time_value);
 #elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
   int32 sec, usec;
   GRN_TIME_UNPACK(time, sec, usec);
-  sec -= mrn_utc_diff_in_seconds;
   timestamp_field->store_TIME(sec, usec);
 #else
   int32 sec, usec __attribute__((unused));
   GRN_TIME_UNPACK(time, sec, usec);
-  sec -= mrn_utc_diff_in_seconds;
   timestamp_field->store_timestamp(sec);
 #endif
 }
@@ -9870,7 +9901,7 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
 #ifdef MRN_MARIADB_P
   if (field->decimals() == 0) {
     my_time_t my_time = sint4korr(key);
-    ha_thd()->variables.time_zone->gmt_sec_to_TIME(&mysql_time, my_time);
+    my_tz_UTC->gmt_sec_to_TIME(&mysql_time, my_time);
     mysql_time.second_part = 0;
   } else {
     // TODO: remove me when MariaDB becomes based on MySQL 5.6.
@@ -9890,7 +9921,7 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
   }
 #else
   my_time_t my_time = uint4korr(key);
-  ha_thd()->variables.time_zone->gmt_sec_to_TIME(&mysql_time, my_time);
+  my_tz_UTC->gmt_sec_to_TIME(&mysql_time, my_time);
 #endif
   time = mrn_mysql_time_to_grn_time(&mysql_time);
   memcpy(buf, &time, 8);
@@ -10026,7 +10057,7 @@ int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
   struct timeval tm;
   my_timestamp_from_binary(&tm, key, timestamp2_field->decimals());
   MYSQL_TIME mysql_time;
-  ha_thd()->time_zone()->gmt_sec_to_TIME(&mysql_time, tm);
+  my_tz_UTC->gmt_sec_to_TIME(&mysql_time, tm);
   long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time);
   memcpy(buf, &grn_time, 8);
   *size = 8;
