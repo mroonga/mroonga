@@ -521,3 +521,97 @@ To enable snippet (keyword in context) UDF, install mroonga_snippet function.
 Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING soname 'ha_mroonga.so';
+
+Install from the source code with MariaDB
+-------------------------------------------
+
+Here we explain how to install from the source code with MariaDB. If your environment is not listed above, you need to do so.
+
+Japanese morphological analysis system (MeCab)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you want to use indexes of tokenizing of each morpheme for full text search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing groonga.
+
+Download
+^^^^^^^^
+
+Download mroonga tarball from `packages.groonga.org <http://packages.groonga.org/source/mroonga>`_ .
+
+Download MariaDB tarball from `downloads.mariadb.org <https://downloads.mariadb.org/>`_ .
+
+Requirements
+^^^^^^^^^^^^
+
+Groonga should be already installed.
+
+Install groonga
+^^^^^^^^^^^^^^^
+
+Build and install the latest groonga.
+
+http://groonga.org/docs/
+
+Here we assume that libgroonga is installed in the standard location like /usr/lib etc.
+
+Build mroonga with MariaDB
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Uncompress MariaDB tarball. ::
+
+ tar xvfz ./mariadb-10.0.1.tar.gz
+
+Uncompress mroonga tarball then move into storage directory. ::
+
+ tar xvfz ./mroonga-3.02.tar.gz
+ mv ./mroonga-3.02 ./mariadb-10.0.1/storage/
+
+Run "cmake". ::
+
+ cd mariadb-10.0.1
+ cmake .
+
+Then invoke "make". ::
+
+ make
+
+Install mroonga with MariaDB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+By invoking "make install", MariaDB and mroonga will be installed in "/usr/local/mysql" directory. ::
+
+ make install
+
+Then start mysqld, connect to it by MariaDB client, and install it by "INSTALL PLUGIN" command. ::
+
+ mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
+
+If "mroonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
+
+ mysql> SHOW ENGINES;
+ +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
+ | Engine             | Support | Comment                                                    | Transactions | XA   | Savepoints |
+ +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
+ | CSV                | YES     | CSV storage engine                                         | NO           | NO   | NO         |
+ | PERFORMANCE_SCHEMA | YES     | Performance Schema                                         | NO           | NO   | NO         |
+ | MEMORY             | YES     | Hash based, stored in memory, useful for temporary tables  | NO           | NO   | NO         |
+ | MyISAM             | DEFAULT | MyISAM storage engine                                      | NO           | NO   | NO         |
+ | MRG_MyISAM         | YES     | Collection of identical MyISAM tables                      | NO           | NO   | NO         |
+ | InnoDB             | NO      | Supports transactions, row-level locking, and foreign keys | NULL         | NULL | NULL       |
+ | mroonga            | YES     | CJK-ready fulltext search, column store                    | NO           | NO   | NO         |
+ | Aria               | YES     | Crash-safe tables with MyISAM heritage                     | NO           | NO   | NO         |
+ +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
+ 8 rows in set (0.01 sec)
+
+Next install UDF (User-Defined Function).
+
+To get the record ID assigned by groonga in INSERT, install last_insert_grn_id function.
+
+Invoke CREATE FUNCTION like the following. ::
+
+ mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_mroonga.so';
+
+To enable snippet (keyword in context) UDF, install mroonga_snippet function.
+
+Invoke CREATE FUNCTION like the following. ::
+
+ mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING soname 'ha_mroonga.so';
