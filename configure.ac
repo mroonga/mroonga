@@ -125,14 +125,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_BUILD_DIR="$ac_mysql_build_dir"
   AC_SUBST(MYSQL_BUILD_DIR)
 
-  MYSQL_INCLUDES=""
-  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_build_dir/include"
-  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/sql"
-  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/include"
-  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/regex"
-  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir"
-  AC_SUBST(MYSQL_INCLUDES)
-
   AC_MSG_CHECKING([mysql_config])
   AC_ARG_WITH([mysql-config],
     [AS_HELP_STRING([--with-mysql-config=PATH],
@@ -155,7 +147,16 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
   AC_SUBST(MYSQL_CFLAGS)
+
+  MYSQL_INCLUDES=""
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_build_dir/include"
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/sql"
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/include"
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/regex"
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir"
   MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
+  AC_SUBST(MYSQL_INCLUDES)
+
   MYSQL_VERSION="$($ac_mysql_config --version)"
   AC_SUBST(MYSQL_VERSION)
   MYSQL_MAJOR_MINOR_VERSION=`echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)$/\1.\2/'`
