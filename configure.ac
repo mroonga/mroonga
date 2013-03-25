@@ -7,7 +7,7 @@ m4_define([mrn_version],        m4_include(version))
 m4_define([mrn_version_in_hex], m4_include(version_in_hex))
 m4_define([mrn_plugin_version], m4_include(plugin_version))
 
-AC_INIT([mroonga], [mrn_version], [ikdttr@gmail.com])
+AC_INIT([mroonga], [mrn_version], [groonga-talk@lists.sourceforge.net])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE(tar-pax)
