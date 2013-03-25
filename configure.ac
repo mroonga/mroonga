@@ -202,8 +202,12 @@ AC_DEFUN([CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL], [
 ])
 
 AC_ARG_WITH(debug,
-    [  --with-debug            Add debug code
-  --with-debug=full       Add debug code (adds memory checker, very slow)],
+    [dnl
+AS_HELP_STRING([--with-debug],
+               [Add debug code])
+AS_HELP_STRING([--with-debug=full],
+               [Add debug code (adds memory checker, very slow)])dnl
+    ],
     [with_debug=$withval],
     [with_debug=no])
 if test "$with_debug" = "yes"
