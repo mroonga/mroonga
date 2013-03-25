@@ -19,8 +19,8 @@
 # set -x
 set -e
 
-export GROONGA_MASTER=yes
-export GROONGA_NORMALIZER_MYSQL_MASTER=yes
+# export GROONGA_MASTER=yes
+# export GROONGA_NORMALIZER_MYSQL_MASTER=yes
 
 curl https://raw.github.com/groonga/groonga/master/data/travis/setup.sh | sh
 curl https://raw.github.com/groonga/groonga-normalizer-mysql/master/data/travis/setup.sh | sh
