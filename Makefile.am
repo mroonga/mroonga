@@ -11,10 +11,7 @@ libraries =					\
 	$(top_builddir)/lib/libmrn_no_mysql.la	\
 	$(top_builddir)/lib/libmrn_need_mysql.la
 
-dynamic_plugin_ldflags  = -module $(GROONGA_LIBS)
-if WITH_LIBMYSQLSERVICES
-dynamic_plugin_ldflags += -L$(plugindir)/.. -lmysqlservices
-endif
+dynamic_plugin_ldflags  = -module $(GROONGA_LIBS) $(MYSQL_LIBS)
 dynamic_plugin_cxxflags = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 dynamic_plugin_cflags   = $(AM_CFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN
 

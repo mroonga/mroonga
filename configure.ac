@@ -169,15 +169,17 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
   MYSQL_VERSION="$($ac_mysql_config --version)"
   MYSQL_MAJOR_MINOR_VERSION=`echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)$/\1.\2/'`
+
+  mysql_libdirs=["$($ac_mysql_config --libs | sed -e 's/ *-l[^ ]*//g')"]
   case "$MYSQL_MAJOR_MINOR_VERSION" in
   5.6*)
-      USE_LIBMYSQLSERVICES="yes"
+      MYSQL_LIBS="$mysql_libdirs -lmysqlservices"
       ;;
   *)
-      USE_LIBMYSQLSERVICES="no"
+      MYSQL_LIBS=""
       ;;
   esac
-  AM_CONDITIONAL([WITH_LIBMYSQLSERVICES], [test "${USE_LIBMYSQLSERVICES}" = "yes"])
+  AC_SUBST(MYSQL_LIBS)
 ])
 
 m4_define([mrn_required_groonga_version], m4_include(required_groonga_version))
