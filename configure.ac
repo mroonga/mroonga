@@ -166,8 +166,10 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     AC_MSG_ERROR([failed to run "$ac_mysql_config": $plugindir])
   fi
   MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
+  AC_SUBST(MYSQL_CFLAGS)
   MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
   MYSQL_VERSION="$($ac_mysql_config --version)"
+  AC_SUBST(MYSQL_VERSION)
   MYSQL_MAJOR_MINOR_VERSION=`echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)$/\1.\2/'`
 
   mysql_libdirs=["$($ac_mysql_config --libs | sed -e 's/ *-l[^ ]*//g')"]
@@ -250,9 +252,6 @@ else
   MYSQL_INCLUDES="-I../../sql -I../../include -I../../regex -I../.."
   plugindir="\$(pkglibdir)/plugin"
 fi
-AC_SUBST(MYSQL_INCLUDES)
-AC_SUBST(MYSQL_CFLAGS)
-AC_SUBST(MYSQL_VERSION)
 AC_SUBST(plugindir)
 CONFIG_OPTION_GROONGA
 CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL
