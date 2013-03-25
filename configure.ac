@@ -81,21 +81,6 @@ if test "$GCC" = "yes"; then
   CHECK_BUILD_FLAG([-Wno-deprecated])
 fi
 
-standalone_build=
-
-AC_DEFUN([CONFIG_OPTION_PLUGINS],
-  AC_MSG_CHECKING([standalone build])
-  AC_ARG_WITH([plugins],,
-    [
-      standalone_build="no"
-      AC_MSG_RESULT([no])
-    ],
-    [
-      standalone_build="yes"
-      AC_MSG_RESULT([yes])
-    ])
-)
-
 AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_MSG_CHECKING([mysql source])
 
@@ -118,7 +103,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
         AC_MSG_ERROR([invalid MySQL source directory])
       fi
     ],
-    [AC_MSG_ERROR([--with-mysql-source=PATH is required for standalone build])]
+    [AC_MSG_ERROR([--with-mysql-source=PATH is required])]
   )
   MYSQL_SOURCE_DIR="$ac_mysql_source_dir"
   AC_SUBST(MYSQL_SOURCE_DIR)
@@ -245,13 +230,7 @@ if test "$with_valgrind" != "no"; then
   CXXFLAGS="-DHAVE_valgrind $CXXFLAGS"
 fi
 
-CONFIG_OPTION_PLUGINS
-if test "$standalone_build" = "yes"; then
-  CONFIG_OPTION_MYSQL
-else
-  MYSQL_INCLUDES="-I../../sql -I../../include -I../../regex -I../.."
-  plugindir="\$(pkglibdir)/plugin"
-fi
+CONFIG_OPTION_MYSQL
 AC_SUBST(plugindir)
 CONFIG_OPTION_GROONGA
 CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL

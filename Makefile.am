@@ -29,12 +29,6 @@ ha_groonga_la_CFLAGS   = $(dynamic_plugin_cflags) -DMRN_USE_DEPRECATED_NAME
 ha_groonga_la_SOURCES  = $(sources)
 ha_groonga_la_LIBADD   = $(libraries)
 
-plugin_LIBRARIES         = libmroonga.a
-libmroonga_a_CXXFLAGS    = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
-libmroonga_a_CFLAGS      = $(AM_CFLAGS) $(MYSQL_CFLAGS)
-libmroonga_a_SOURCES     = $(sources)
-libmroonga_a_LIBADD      = $(libraries)
-
 SUBDIRS =					\
 	build					\
 	lib					\
