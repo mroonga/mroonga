@@ -146,10 +146,13 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     AC_MSG_ERROR([can't detect mysql_config. Please specify mysql_config path by --with-mysql-config=PATH.])
   fi
   AC_MSG_RESULT([$ac_mysql_config])
+
   plugindir="$($ac_mysql_config --plugindir)"
   if test $? -ne 0; then
     AC_MSG_ERROR([failed to run "$ac_mysql_config": $plugindir])
   fi
+  AC_SUBST(plugindir)
+
   MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
   AC_SUBST(MYSQL_CFLAGS)
   MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
@@ -231,7 +234,6 @@ if test "$with_valgrind" != "no"; then
 fi
 
 CONFIG_OPTION_MYSQL
-AC_SUBST(plugindir)
 CONFIG_OPTION_GROONGA
 CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL
 
