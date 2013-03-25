@@ -243,7 +243,7 @@ CONFIG_OPTION_GROONGA
 CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL
 
 AC_ARG_WITH(default_parser,
-    [AC_HELP_STRING([--with-default-parser=PARSER],
+    [AS_HELP_STRING([--with-default-parser=PARSER],
                     [specify the default fulltext parser like
                      --with-default-parser=TokenMecab.
                      (default: TokenBigram)])],
@@ -260,7 +260,7 @@ fi
 AC_SUBST(MRN_DEFAULT_PARSER)
 
 AC_ARG_ENABLE(fast_mutexes,
-    [AC_HELP_STRING([--disable-fast-mutexes],
+    [AS_HELP_STRING([--disable-fast-mutexes],
                     [Force disable fast mutex.
                      [default: use mysql_config output]])],
     [enable_fast_mutexes=$enableval],
@@ -271,7 +271,7 @@ if test "$enable_fast_mutexes" = "no"; then
 fi
 
 AC_ARG_ENABLE(dtrace,
-    [AC_HELP_STRING([--enable-dtrace],
+    [AS_HELP_STRING([--enable-dtrace],
                     [Enable DTrace. [default: no]])],
     [enable_dtrace=$enableval],
     [enable_dtrace=no])
