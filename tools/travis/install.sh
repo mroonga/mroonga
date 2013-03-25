@@ -44,7 +44,12 @@ case "$MYSQL_VERSION" in
 	    ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
 	else
 	    download_base="http://cdn.mysql.com/Downloads/MySQL-${series}/"
-	    deb=mysql-${version}-debian6.0-i686.deb
+	    if [ "$(uname -m)" = "x86_64" ]; then
+		architecture=x86_64
+	    else
+		architecture=i686
+	    fi
+	    deb=mysql-${version}-debian6.0-${architecture}.deb
 	    tar_gz=mysql-${version}.tar.gz
 	    curl -O ${download_base}${deb} &
 	    curl -O ${download_base}${tar_gz} &
