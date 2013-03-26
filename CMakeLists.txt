@@ -18,7 +18,13 @@
 cmake_minimum_required(VERSION 2.6)
 project(mroonga)
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+  set(MRN_BUNDLED FALSE)
+else()
+  set(MRN_BUNDLED TRUE)
+endif()
+
+if(MRN_BUNDLED)
   set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR}/storage/mroonga)
 else()
   set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR})
@@ -38,7 +44,7 @@ set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
 include(${MRN_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+if(MRN_BUNDLED)
   set(LIBMRN_DIR_PREFIX "${MRN_SOURCE_DIR}/")
 else()
   set(LIBMRN_DIR_PREFIX "")
@@ -54,7 +60,7 @@ read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_need_mysql_sources.am
 string(REGEX REPLACE "([^;]+)" "${LIBMRN_DIR_PREFIX}lib/\\1"
   LIBMRN_NEED_MYSQL_SOURCES "${LIBMRN_NEED_MYSQL_SOURCES}")
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+if(MRN_BUNDLED)
   set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR})
   set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR})
   set(MYSQL_INCLUDE_DIRS
@@ -78,7 +84,7 @@ else()
 endif()
 find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+if(MRN_BUNDLED)
   set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
   set(MYSQL_CFLAGS "${CMAKE_C_FLAGS}")
   set(MYSQL_VERSION "${MYSQL_BASE_VERSION}")
@@ -119,7 +125,7 @@ link_directories(
   ${MYSQL_LIBRARY_DIRS}
   )
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+if(MRN_BUNDLED)
   MYSQL_ADD_PLUGIN(ha_mroonga
     "${MROONGA_SOURCES};${LIBMRN_NEED_MYSQL_SOURCES};${LIBMRN_NO_MYSQL_SOURCES}"
     STORAGE_ENGINE MODULE_ONLY
@@ -155,7 +161,7 @@ endif()
 set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
 set_property(TARGET ha_mroonga APPEND PROPERTY
   COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
-if(EXISTS ${CMAKE_SOURCE_DIR}/storage/mroonga/version)
+if(MRN_BUNDLED)
 else()
   if(WIN32)
   # TODO: set DBUG_OFF to link with MySQL release/debug import library.
