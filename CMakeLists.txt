@@ -175,7 +175,6 @@ else()
       "_WIN32_WINNT=0x0501"
       "WIN32_LEAN_AND_MEAN"
     )
-    
   endif()
 
   if(WIN32)
