@@ -136,7 +136,9 @@ else()
     ${MROONGA_SOURCES}
     ${LIBMRN_NO_MYSQL_SOURCES}
     ${LIBMRN_NEED_MYSQL_SOURCES})
-  set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
+  if(CMAKE_COMPILER_IS_GNUCXX)
+    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
+  endif()
   set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
     COMPILE_FLAGS "${MYSQL_CFLAGS}")
   set_target_properties(ha_mroonga PROPERTIES
