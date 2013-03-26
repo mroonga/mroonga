@@ -33,6 +33,7 @@ fi
 if [ "${MRN_BUNDLED}" = "yes" ]; then
     mkdir -p .mroonga
     mv * .mroonga/
+    mv .mroonga/tools ./
     sudo apt-get -qq -y build-dep mysql-server
     # Support MariaDB for now.
     download_base=http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/${MYSQL_VERSION}
