@@ -49,7 +49,9 @@ case "${MYSQL_VERSION}" in
 	    mariadb="no"
 	fi
 	if [ "${mariadb}" = "yes" ]; then
-	    ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
+	    if [ "${MRN_BUNDLED}" != "TRUE" ]; then
+		ln -s "${top_dir}" "${MYSQL_BUILD_DIR}/plugin/mroonga"
+	    fi
 	    plugins_dir=
 	else
 	    plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
