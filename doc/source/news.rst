@@ -3,6 +3,36 @@
 News
 ====
 
+.. _release-3-02:
+
+
+Release 3.02 - 2013/3/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Improved bundling to MariaDB 10.0 for Linux. [#1644]
+* Added the value of list documentation about ``mroonga_log_level``
+  in reference manual. [groonga-dev,01255] [Reported by Kazuhiro Isobe]
+
+Fixes
+^^^^^
+
+* Fixed a bug that less than conditional expression on WHERE clause doesn't work
+  for multiple nullable column index. [groonga-dev,01253] [#1670]
+  [Reported by Horikoshi Yuki]
+* [storage][wrapper] Fixed the invalid timing to free ``key`` object too early.
+  This bug may occurs when recreating indexes by DISABLE KEYS/ENABLE KEYS. [#1671]
+  [Reported by keigo ito]
+
+Thanks
+^^^^^^
+
+* Kazuhiro Isobe
+* Horikoshi Yuki
+* keigo ito
+
 .. _release-3-01:
 
 
