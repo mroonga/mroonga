@@ -44,51 +44,51 @@ if [ "${MRN_BUNDLED}" = "yes" ]; then
     mv .mroonga storage/mroonga
     rm -rf ${MYSQL_VERSION}
 else
-mkdir -p vendor
-cd vendor
+    mkdir -p vendor
+    cd vendor
 
-version=$(echo "$MYSQL_VERSION" | sed -e 's/^\(mysql\|mariadb\)-//')
-series=$(echo "$version" | sed -e 's/\.[0-9]*\(-[a-z]*\)\?$//g')
-case "$MYSQL_VERSION" in
-    mysql-*)
-	sudo apt-get -qq -y build-dep mysql-server
-	if [ "$version" = "system" ]; then
+    version=$(echo "$MYSQL_VERSION" | sed -e 's/^\(mysql\|mariadb\)-//')
+    series=$(echo "$version" | sed -e 's/\.[0-9]*\(-[a-z]*\)\?$//g')
+    case "$MYSQL_VERSION" in
+	mysql-*)
+	    sudo apt-get -qq -y build-dep mysql-server
+	    if [ "$version" = "system" ]; then
+		sudo apt-get -qq -y install mysql-server mysql-testsuite
+		apt-get -qq source mysql-server
+		ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
+	    else
+		download_base="http://cdn.mysql.com/Downloads/MySQL-${series}/"
+		if [ "$(uname -m)" = "x86_64" ]; then
+		    architecture=x86_64
+		else
+		    architecture=i686
+		fi
+		deb=mysql-${version}-debian6.0-${architecture}.deb
+		tar_gz=mysql-${version}.tar.gz
+		curl -O ${download_base}${deb} &
+		curl -O ${download_base}${tar_gz} &
+		wait
+		sudo apt-get -qq -y install libaio1
+		sudo dpkg -i $deb
+		tar xzf $tar_gz
+		ln -s mysql-${version} mysql
+	    fi
+	    ;;
+	mariadb-*)
+	    distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
+	    code_name=$(lsb_release --short --codename)
+	    component=main
+	    apt_url_base="http://ftp.osuosl.org/pub/mariadb/repo/${series}"
+	    cat <<EOF | sudo tee /etc/apt/sources.list.d/mariadb.list
+    deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
+    deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
+    EOF
+	    sudo apt-get -qq -y build-dep mysql-server
 	    sudo apt-get -qq -y install mysql-server mysql-testsuite
 	    apt-get -qq source mysql-server
 	    ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
-	else
-	    download_base="http://cdn.mysql.com/Downloads/MySQL-${series}/"
-	    if [ "$(uname -m)" = "x86_64" ]; then
-		architecture=x86_64
-	    else
-		architecture=i686
-	    fi
-	    deb=mysql-${version}-debian6.0-${architecture}.deb
-	    tar_gz=mysql-${version}.tar.gz
-	    curl -O ${download_base}${deb} &
-	    curl -O ${download_base}${tar_gz} &
-	    wait
-	    sudo apt-get -qq -y install libaio1
-	    sudo dpkg -i $deb
-	    tar xzf $tar_gz
-	    ln -s mysql-${version} mysql
-	fi
-	;;
-    mariadb-*)
-	distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
-	code_name=$(lsb_release --short --codename)
-	component=main
-	apt_url_base="http://ftp.osuosl.org/pub/mariadb/repo/${series}"
-	cat <<EOF | sudo tee /etc/apt/sources.list.d/mariadb.list
-deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
-deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
-EOF
-	sudo apt-get -qq -y build-dep mysql-server
-	sudo apt-get -qq -y install mysql-server mysql-testsuite
-	apt-get -qq source mysql-server
-	ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
-	;;
-esac
+	    ;;
+    esac
 
-cd ..
+    cd ..
 fi
