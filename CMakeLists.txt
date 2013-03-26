@@ -132,15 +132,11 @@ if(MRN_BUNDLED)
     LINK_LIBRARIES ${GROONGA_LIBRARIES}
     MODULE_OUTPUT_NAME "ha_mroonga")
 else()
-  # TODO: set VERSIONINFO for Microsoft Visual C++.
-  #       http://msdn.microsoft.com/en-us/library/aa381058%28VS.85%29.aspx
   add_library(ha_mroonga MODULE
     ${MROONGA_SOURCES}
     ${LIBMRN_NO_MYSQL_SOURCES}
     ${LIBMRN_NEED_MYSQL_SOURCES})
-  if(NOT WIN32)
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
-  endif()
+  set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
   set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
     COMPILE_FLAGS "${MYSQL_CFLAGS}")
   set_target_properties(ha_mroonga PROPERTIES
@@ -163,35 +159,7 @@ set_property(TARGET ha_mroonga APPEND PROPERTY
   COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
 if(MRN_BUNDLED)
 else()
-  if(WIN32)
-    # TODO: set DBUG_OFF to link with MySQL release/debug import library.
-    #       it is better that you can customize this definition.
-    # TODO: support security enhancements introduced in the CRT.
-    #       http://msdn.microsoft.com/en-us/library/8ef0s5kh%28v=vs.90%29.aspx
-    set_property(TARGET ha_mroonga APPEND PROPERTY COMPILE_DEFINITIONS
-      "__WIN__"
-      "DBUG_OFF"
-      "_CRT_SECURE_NO_WARNINGS"
-      "_WIN32_WINNT=0x0501"
-      "WIN32_LEAN_AND_MEAN"
-    )
-  endif()
-
-  if(WIN32)
-    # NOTE: ignore incompatible runtime libraries explicitly.
-    #       http://msdn.microsoft.com/en-us/library/6wtdswk0%28v=vs.80%29.aspx 
-    set_target_properties(ha_mroonga PROPERTIES
-      LINK_FLAGS "/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib")
-    set_target_properties(ha_mroonga PROPERTIES
-      LINK_FLAGS_DEBUG "/NODEFAULTLIB:libcmt.lib")
-    set_target_properties(ha_mroonga PROPERTIES
-      LINK_FLAGS_RELEASE "/NODEFAULTLIB:libcmtd.lib")
-    set(MYSQL_IMPORT_LIBRARIES
-      "libmysqld${IMPORT_SUFFIX};mysqlserver${IMPORT_SUFFIX}")
-    target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES} ${MYSQL_IMPORT_LIBRARIES})
-  else()
-    target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
-  endif()
+  target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
 
   option(WITH_DEBUG "Enable debug options" OFF)
   if(WITH_DEBUG)
