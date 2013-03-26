@@ -61,6 +61,18 @@ case "$MYSQL_VERSION" in
 	fi
 	;;
     mariadb-*)
+	if [ "${MRN_BUNDLED}" = "yes" ]; then
+	    mkdir -p .mroonga
+	    mv * .mroonga/
+	    sudo apt-get -qq -y build-dep mysql-server
+	    download_base=http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/${MYSQL_VERSION}
+	    tar_gz=${MYSQL_VERSION}.tar.gz
+	    curl -O ${download_base}/kvm-tarbake-jaunty-x86/${tar_gz}
+	    tar xzf $tar_gz
+	    mv ${MYSQL_VERSION}/* ./
+	    mv .mroonga storage/mroonga
+	    rm -rf ${MYSQL_VERSION}
+	else
 	distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
 	code_name=$(lsb_release --short --codename)
 	component=main
@@ -73,6 +85,7 @@ EOF
 	sudo apt-get -qq -y install mysql-server mysql-testsuite
 	apt-get -qq source mysql-server
 	ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
+	fi
 	;;
 esac
 

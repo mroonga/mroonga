@@ -19,6 +19,9 @@
 # set -x
 set -e
 
+if [ "$MRN_BUNDLED" = "yes" ]; then
+    cmake . -DWITH_DEBUG=1
+else
 ./autogen.sh
 
 if [ -d /opt/mysql/ ]; then
@@ -26,3 +29,4 @@ if [ -d /opt/mysql/ ]; then
 fi
 ./configure \
     --with-mysql-source=$PWD/vendor/mysql
+fi

@@ -31,7 +31,11 @@ build()
 
 run_unit_test()
 {
+    if [ "${MRN_BUNDLED}" = "yes" ]; then
+	NO_MAKE=yes storage/mroonga/test/run-unit-test.sh
+    else
     NO_MAKE=yes test/run-unit-test.sh
+    fi
 }
 
 prepare_mysql_test_dir()
@@ -72,7 +76,9 @@ prepare_sql_test()
 
 run_sql_test()
 {
+    if [ "${MRN_BUNDLED}" != "yes" ]; then
     prepare_sql_test
+    fi
 
     cd ${mysql_test_dir}/
     ./mysql-test-run.pl \
