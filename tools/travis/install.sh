@@ -62,6 +62,7 @@ case "$MYSQL_VERSION" in
 	;;
     mariadb-*)
 	if [ "${MRN_BUNDLED}" = "yes" ]; then
+	    cd ..
 	    mkdir -p .mroonga
 	    mv * .mroonga/
 	    sudo apt-get -qq -y build-dep mysql-server
@@ -88,5 +89,3 @@ EOF
 	fi
 	;;
 esac
-
-cd ..
