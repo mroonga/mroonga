@@ -20,9 +20,13 @@
 set -e
 
 base_dir="$(cd $(dirname $0); pwd)"
-top_dir="$base_dir/../.."
+if [ "${MRN_BUNDLED}" = "yes" ]; then
+    mroonga_dir="$base_dir/../../storage/mroonga"
+else
+    mroonga_dir="$base_dir/../.."
+fi
 n_processors="$(grep '^processor' /proc/cpuinfo | wc -l)"
-. "${top_dir}/config.sh"
+. "${mroonga_dir}/config.sh"
 
 build()
 {
@@ -31,11 +35,7 @@ build()
 
 run_unit_test()
 {
-    if [ "${MRN_BUNDLED}" = "yes" ]; then
-	NO_MAKE=yes storage/mroonga/test/run-unit-test.sh
-    else
-    NO_MAKE=yes test/run-unit-test.sh
-    fi
+    NO_MAKE=yes ${mroonga_dir}/test/run-unit-test.sh
 }
 
 prepare_mysql_test_dir()
@@ -50,8 +50,8 @@ prepare_mysql_test_dir()
     fi
     sudo chown -R $(id -u):$(id -g) ${mysql_test_dir}/
 
-    cp -a ${top_dir}/test/sql/include/*.inc ${mysql_test_dir}/include/
-    cp -a ${top_dir}/test/sql/suite/mroonga/ ${mysql_test_dir}/suite/
+    cp -a ${mroonga_dir}/test/sql/include/*.inc ${mysql_test_dir}/include/
+    cp -a ${mroonga_dir}/test/sql/suite/mroonga/ ${mysql_test_dir}/suite/
 }
 
 collect_test_suite_names()
