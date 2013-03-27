@@ -522,6 +522,13 @@ Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING soname 'ha_mroonga.so';
 
+To enable invoking groonga query from mroonga, install mroonga_command function.
+
+Invoke CREATE FUNCTION like the following. ::
+
+ mysql> CREATE FUNCTION mroonga_command RETURNS STRING soname 'ha_mroonga.so';
+
+
 Install from the source code with MariaDB
 -------------------------------------------
 
@@ -615,3 +622,9 @@ To enable snippet (keyword in context) UDF, install mroonga_snippet function.
 Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING soname 'ha_mroonga.so';
+
+To enable invoking groonga query from mroonga, install mroonga_command function.
+
+Invoke CREATE FUNCTION like the following. ::
+
+ mysql> CREATE FUNCTION mroonga_command RETURNS STRING soname 'ha_mroonga.so';
