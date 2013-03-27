@@ -71,6 +71,7 @@ if [ "$1" = 2 ] ; then
     sql="
     DROP FUNCTION mroonga_snippet;
     DROP FUNCTION last_insert_grn_id;
+    DROP FUNCTION mroonga_command;
     UNINSTALL PLUGIN mroonga;
     FLUSH TABLES;
     "
@@ -85,6 +86,7 @@ DELETE IGNORE FROM mysql.plugin WHERE name = 'mroonga';
 INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
 CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_mroonga.so';
 CREATE FUNCTION mroonga_snippet RETURNS STRING soname 'ha_mroonga.so';
+CREATE FUNCTION mroonga_command RETURNS STRING soname 'ha_mroonga.so';
 
 "
 command="/usr/bin/mysql -u root -e \"$sql\""
@@ -98,6 +100,7 @@ if [ "$1" = 0 ]; then
     sql="
     DROP FUNCTION mroonga_snippet;
     DROP FUNCTION last_insert_grn_id;
+    DROP FUNCTION mroonga_command;
     UNINSTALL PLUGIN mroonga;
     FLUSH TABLES;
     "
