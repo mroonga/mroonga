@@ -35,7 +35,9 @@ build()
 
 run_unit_test()
 {
+    if [ "${MRN_BUNDLED}" != "yes" ]; then
     NO_MAKE=yes ${mroonga_dir}/test/run-unit-test.sh
+    fi
 }
 
 prepare_mysql_test_dir()
