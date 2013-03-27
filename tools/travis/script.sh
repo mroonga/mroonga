@@ -20,7 +20,7 @@
 set -e
 
 base_dir="$(cd $(dirname $0); pwd)"
-if [ "${MRN_BUNDLED}" = "yes" ]; then
+if [ "${MRN_BUNDLED}" = "TRUE" ]; then
     mroonga_dir="$base_dir/../../storage/mroonga"
 else
     mroonga_dir="$base_dir/../.."
@@ -35,7 +35,7 @@ build()
 
 run_unit_test()
 {
-    if [ "${MRN_BUNDLED}" != "yes" ]; then
+    if [ "${MRN_BUNDLED}" != "TRUE" ]; then
     NO_MAKE=yes ${mroonga_dir}/test/run-unit-test.sh
     fi
 }
@@ -78,7 +78,7 @@ prepare_sql_test()
 
 run_sql_test()
 {
-    if [ "${MRN_BUNDLED}" != "yes" ]; then
+    if [ "${MRN_BUNDLED}" != "TRUE" ]; then
     prepare_sql_test
     fi
 
