@@ -15,7 +15,7 @@ Improvements
 * Improved bundling to MariaDB 10.0 for Linux. [#1644]
 * Added the value of list documentation about ``mroonga_log_level``
   in reference manual. [groonga-dev,01255] [Reported by Kazuhiro Isobe]
-* [experimental] Added ``mroonga_command`` UDF.
+* [experimental] Added ``mroonga_command`` UDF. [#1643]
   This UDF supports to send query directly to ``groonga``.
 
 Fixes
