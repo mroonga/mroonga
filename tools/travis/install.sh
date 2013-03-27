@@ -80,9 +80,9 @@ else
 	    component=main
 	    apt_url_base="http://ftp.osuosl.org/pub/mariadb/repo/${series}"
 	    cat <<EOF | sudo tee /etc/apt/sources.list.d/mariadb.list
-    deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
-    deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
-    EOF
+deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
+deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
+EOF
 	    sudo apt-get -qq -y build-dep mysql-server
 	    sudo apt-get -qq -y install mysql-server mysql-testsuite
 	    apt-get -qq source mysql-server
