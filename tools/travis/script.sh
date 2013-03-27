@@ -40,7 +40,7 @@ build()
 run_unit_test()
 {
     if [ "${MRN_BUNDLED}" != "TRUE" ]; then
-    NO_MAKE=yes ${mroonga_dir}/test/run-unit-test.sh
+	NO_MAKE=yes ${mroonga_dir}/test/run-unit-test.sh
     fi
 }
 
@@ -85,15 +85,15 @@ run_sql_test()
     if [ "${MRN_BUNDLED}" = "TRUE" ]; then
 	${mroonga_dir}/test/run-sql-test.sh
     else
-    prepare_sql_test
+	prepare_sql_test
 
-    cd ${mysql_test_dir}/
-    ./mysql-test-run.pl \
-	--no-check-testcases \
-	--parallel="${n_processors}" \
-	--retry=1 \
-	--suite="${test_suite_names}" \
-	--force
+	cd ${mysql_test_dir}/
+	./mysql-test-run.pl \
+	    --no-check-testcases \
+	    --parallel="${n_processors}" \
+	    --retry=1 \
+	    --suite="${test_suite_names}" \
+	    --force
     fi
 }
 

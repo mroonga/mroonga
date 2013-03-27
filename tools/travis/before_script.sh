@@ -22,11 +22,11 @@ set -e
 if [ "$MRN_BUNDLED" = "yes" ]; then
     cmake . -DWITH_DEBUG=1
 else
-./autogen.sh
+    ./autogen.sh
 
-if [ -d /opt/mysql/ ]; then
-    PATH=$(echo /opt/mysql/server-*/bin/):$PATH
-fi
-./configure \
-    --with-mysql-source=$PWD/vendor/mysql
+    if [ -d /opt/mysql/ ]; then
+	PATH=$(echo /opt/mysql/server-*/bin/):$PATH
+    fi
+    ./configure \
+	--with-mysql-source=$PWD/vendor/mysql
 fi
