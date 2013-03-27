@@ -22,7 +22,7 @@ Fixes
 * Fixed a bug that less than conditional expression on WHERE clause doesn't work
   for multiple nullable column index. [groonga-dev,01253] [#1670]
   [Reported by Horikoshi Yuki]
-* [storage][wrapper] Fixed the invalid timing to free ``key`` object too early.
+* [wrapper] Fixed the invalid timing to free ``key`` object too early.
   This bug may occurs when recreating indexes by DISABLE KEYS/ENABLE KEYS. [#1671]
   [Reported by keigo ito]
 
