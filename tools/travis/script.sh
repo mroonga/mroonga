@@ -20,13 +20,17 @@
 set -e
 
 base_dir="$(cd $(dirname $0); pwd)"
-if [ "${MRN_BUNDLED}" = "TRUE" ]; then
-    mroonga_dir="$base_dir/../../storage/mroonga"
-else
-    mroonga_dir="$base_dir/../.."
-fi
+top_dir="${base_dir}/../.."
 n_processors="$(grep '^processor' /proc/cpuinfo | wc -l)"
-. "${mroonga_dir}/config.sh"
+
+bundled_mroonga_dir="${top_dir}/storage/mroonga"
+if [ -f "${bundled_mroonga_dir}/config.sh" ]; then
+    mroonga_dir="${bundled_mroonga_dir}"
+    . "${bundled_mroonga_dir}/config.sh"
+else
+    mroonga_dir="${top_dir}"
+    . "${top_dir}/config.sh"
+fi
 
 build()
 {
