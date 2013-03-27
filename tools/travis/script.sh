@@ -82,9 +82,10 @@ prepare_sql_test()
 
 run_sql_test()
 {
-    if [ "${MRN_BUNDLED}" != "TRUE" ]; then
+    if [ "${MRN_BUNDLED}" = "TRUE" ]; then
+	${mroonga_dir}/test/run-sql-test.sh
+    else
     prepare_sql_test
-    fi
 
     cd ${mysql_test_dir}/
     ./mysql-test-run.pl \
@@ -93,6 +94,7 @@ run_sql_test()
 	--retry=1 \
 	--suite="${test_suite_names}" \
 	--force
+    fi
 }
 
 build
