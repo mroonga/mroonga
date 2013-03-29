@@ -1,4 +1,5 @@
 # Copyright(C) 2010 Tetsuro IKEDA
+# Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,8 +19,18 @@ disable_query_log;
 
 if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`)
 {
-  INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
-  INSTALL PLUGIN mroonga_stats SONAME 'ha_mroonga.so';
+  let $VERSION_COMPILE_OS_WIN=
+    `SELECT IF(@@version_compile_os like 'Win%', 1, 0)`;
+  if ($VERSION_COMPILE_OS_WIN)
+  {
+    INSTALL PLUGIN mroonga SONAME 'ha_mroonga.dll';
+    INSTALL PLUGIN mroonga_stats SONAME 'ha_mroonga.dll';
+  }
+  if (!$VERSION_COMPILE_OS_WIN)
+  {
+    INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
+    INSTALL PLUGIN mroonga_stats SONAME 'ha_mroonga.so';
+  }
 }
 
 let have_default_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_storage_engine"`;
