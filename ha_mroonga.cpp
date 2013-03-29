@@ -9101,9 +9101,12 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   long long value = field->val_int();
+  DBUG_PRINT("info", ("mroonga: value=%lld", value));
   uint32 size = field->pack_length();
+  DBUG_PRINT("info", ("mroonga: size=%u", size));
   Field_num *field_num = static_cast<Field_num *>(field);
   bool is_unsigned = field_num->unsigned_flag;
+  DBUG_PRINT("info", ("mroonga: is_unsigned=%s", is_unsigned ? "true" : "false"));
   switch (size) {
   case 1:
     if (is_unsigned) {
@@ -9519,6 +9522,7 @@ void ha_mroonga::storage_store_field_integer(Field *field,
                                              const char *value,
                                              uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   Field_num *field_num = static_cast<Field_num *>(field);
   bool is_unsigned = field_num->unsigned_flag;
   switch (value_length) {
@@ -9527,11 +9531,11 @@ void ha_mroonga::storage_store_field_integer(Field *field,
       if (is_unsigned) {
         unsigned char field_value;
         field_value = *((unsigned char *)value);
-        field->store(field_value);
+        field->store(field_value, is_unsigned);
       } else {
         char field_value;
         field_value = *((char *)value);
-        field->store(field_value);
+        field->store(field_value, is_unsigned);
       }
       break;
     }
@@ -9540,11 +9544,11 @@ void ha_mroonga::storage_store_field_integer(Field *field,
       if (is_unsigned) {
         unsigned short field_value;
         field_value = *((unsigned short *)value);
-        field->store(field_value);
+        field->store(field_value, is_unsigned);
       } else {
         short field_value;
         field_value = *((short *)value);
-        field->store(field_value);
+        field->store(field_value, is_unsigned);
       }
       break;
     }
@@ -9553,11 +9557,11 @@ void ha_mroonga::storage_store_field_integer(Field *field,
       if (is_unsigned) {
         unsigned int field_value;
         field_value = *((unsigned int *)value);
-        field->store(field_value);
+        field->store(field_value, is_unsigned);
       } else {
         int field_value;
         field_value = *((int *)value);
-        field->store(field_value);
+        field->store(field_value, is_unsigned);
       }
       break;
     }
@@ -9566,11 +9570,12 @@ void ha_mroonga::storage_store_field_integer(Field *field,
       if (is_unsigned) {
         unsigned long long int field_value;
         field_value = *((unsigned long long int *)value);
-        field->store(field_value);
+        DBUG_PRINT("info", ("mroonga: field_value=%llu", field_value));
+        field->store(field_value, is_unsigned);
       } else {
         long long int field_value;
         field_value = *((long long int *)value);
-        field->store(field_value);
+        field->store(field_value, is_unsigned);
       }
       break;
     }
@@ -9588,6 +9593,7 @@ void ha_mroonga::storage_store_field_integer(Field *field,
       break;
     }
   }
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field_float(Field *field,
@@ -9892,6 +9898,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         uint32 value_length;
         value = grn_obj_get_value_(ctx, grn_columns[i], record_id,
                                    &value_length);
+        DBUG_PRINT("info", ("mroonga: value_length=%u",value_length));
         storage_store_field(field, value, value_length);
       }
       field->move_field_offset(-ptr_diff);
