@@ -9640,7 +9640,7 @@ void ha_mroonga::storage_store_field_date(Field *field,
     (date.tm_year + TM_YEAR_BASE) * 10000 +
     (date.tm_mon + 1) * 100 +
     date.tm_mday;
-  field->store(date_in_mysql);
+  field->store(date_in_mysql, FALSE);
 }
 
 void ha_mroonga::storage_store_field_time(Field *field,
