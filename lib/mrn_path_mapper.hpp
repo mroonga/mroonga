@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2012 Kentoku SHIBA
+  Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@
 #ifndef MRN_PATH_MAPPER_HPP_
 #define MRN_PATH_MAPPER_HPP_
 
+#include <mrn_mysql.h>
 #include <mrn_constants.hpp>
 
 namespace mrn {

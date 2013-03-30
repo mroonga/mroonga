@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2011-2012 Kentoku SHIBA
+  Copyright(C) 2011-2013 Kentoku SHIBA
   Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -48,14 +48,14 @@ namespace mrn {
       return db_path_;
     }
 
-    if (strncmp(mysql_path_, "./", 2) == 0) {
+    if (mysql_path_[0] == FN_CURLIB && mysql_path_[1] == FN_LIBCHAR) {
       if (path_prefix_) {
         strcpy(db_path_, path_prefix_);
       }
 
       int i = 2, j = strlen(db_path_), len;
       len = strlen(mysql_path_);
-      while (mysql_path_[i] != '/' && i < len) {
+      while (mysql_path_[i] != FN_LIBCHAR && i < len) {
         db_path_[j++] = mysql_path_[i++];
       }
       db_path_[j] = '\0';
@@ -77,10 +77,10 @@ namespace mrn {
       return db_name_;
     }
 
-    if (strncmp(mysql_path_, "./", 2) == 0) {
+    if (mysql_path_[0] == FN_CURLIB && mysql_path_[1] == FN_LIBCHAR) {
       int i = 2, j = 0, len;
       len = strlen(mysql_path_);
-      while (mysql_path_[i] != '/' && i < len) {
+      while (mysql_path_[i] != FN_LIBCHAR && i < len) {
         db_name_[j++] = mysql_path_[i++];
       }
       db_name_[j] = '\0';
@@ -100,7 +100,7 @@ namespace mrn {
 
     int len = strlen(mysql_path_);
     int i = len, j = 0;
-    for (; mysql_path_[--i] != '/' ;) {}
+    for (; mysql_path_[--i] != FN_LIBCHAR ;) {}
     if (mysql_path_[i + 1] == '_') {
       table_name_[j++] = '@';
       table_name_[j++] = '0';
@@ -126,7 +126,7 @@ namespace mrn {
 
     int len = strlen(mysql_path_);
     int i = len, j = 0;
-    for (; mysql_path_[--i] != '/' ;) {}
+    for (; mysql_path_[--i] != FN_LIBCHAR ;) {}
     for (; i < len ;) {
       mysql_table_name_[j++] = mysql_path_[++i];
     }
