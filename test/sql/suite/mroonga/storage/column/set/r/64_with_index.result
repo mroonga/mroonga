@@ -81,7 +81,7 @@ SELECT * FROM items;
 name	colors
 t-shart	black,white,lawn green,dark violet
 hat	white,dark violet,yellow green
-parka	green,brown,lime green
+parka	red,green,brown,lime green
 SELECT * FROM items WHERE colors = "white,dark violet,yellow green";
 name	colors
 hat	white,dark violet,yellow green
