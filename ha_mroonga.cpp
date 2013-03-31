@@ -50,13 +50,15 @@
 #  include <time.h>
 #  define MRN_MKDIR(pathname, mode) _mkdir((pathname))
 #  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
-    type *variable_name = (type *)_malloca(sizeof(type) * variable_size)
+    type *variable_name = (type *)_malloca(sizeof(type) * (variable_size))
+#  define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) _freea(variable_name)
 #else
 #  include <dirent.h>
 #  include <unistd.h>
 #  define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
 #  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
     type variable_name[variable_size]
+#  define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name)
 #endif
 
 #include "mrn_err.h"
@@ -83,7 +85,9 @@
 #define MRN_LONG_TEXT_SIZE  (1 << 31) //  2Gbytes
 
 #if MYSQL_VERSION_ID >= 50500
+#ifdef DBUG_OFF
 extern MYSQL_PLUGIN_IMPORT mysql_mutex_t LOCK_open;
+#endif
 #  define mrn_open_mutex_lock() mysql_mutex_lock(&LOCK_open)
 #  define mrn_open_mutex_unlock() mysql_mutex_unlock(&LOCK_open)
 #else
@@ -3192,7 +3196,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
     grn_obj_remove(ctx, grn_table);
     grn_table = NULL;
   }
-
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
   DBUG_RETURN(error);
 }
 
@@ -3807,7 +3811,7 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
       i--;
     }
   }
-
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
   DBUG_RETURN(error);
 }
 
@@ -11916,6 +11920,8 @@ int ha_mroonga::wrapper_enable_indexes(uint mode)
                                    n_keys);
     }
     bitmap_set_all(table->read_set);
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   } else {
     tmp_error = HA_ERR_WRONG_COMMAND;
   }
@@ -11952,6 +11958,8 @@ int ha_mroonga::storage_enable_indexes(uint mode)
     }
     if (i == table_share->keys) {
       DBUG_PRINT("info", ("mroonga: keys are enabled already"));
+      MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+      MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
       DBUG_RETURN(0);
     }
     KEY *key_info = table->key_info;
@@ -11997,8 +12005,12 @@ int ha_mroonga::storage_enable_indexes(uint mode)
     }
     bitmap_set_all(table->read_set);
   } else {
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
   }
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   DBUG_RETURN(error);
 }
 
@@ -12723,6 +12735,8 @@ bool ha_mroonga::wrapper_inplace_alter_table(
       &key_parser_length, sizeof(uint) * (tmp_table_share.keys),
       NullS))
   ) {
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
   tmp_share->engine = NULL;
@@ -12818,6 +12832,8 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   }
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   DBUG_RETURN(result);
 }
 
@@ -12873,6 +12889,8 @@ bool ha_mroonga::storage_inplace_alter_table(
       &key_parser_length, sizeof(uint) * (tmp_table_share.keys),
       NullS))
   ) {
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
   tmp_share->engine = NULL;
@@ -12956,6 +12974,8 @@ bool ha_mroonga::storage_inplace_alter_table(
   }
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   DBUG_RETURN(result);
 }
 
@@ -13114,6 +13134,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
       &key_parser_length, sizeof(uint) * (n_keys + num_of_keys),
       NullS))
   ) {
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
   tmp_share->engine = NULL;
@@ -13207,6 +13229,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
 #endif
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   DBUG_RETURN(error);
 }
 
@@ -13238,6 +13262,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
       &key_parser_length, sizeof(uint) * (n_keys + num_of_keys),
       NullS))
   ) {
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
   tmp_share->engine = NULL;
@@ -13304,6 +13330,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
 #endif
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   DBUG_RETURN(error);
 }
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
@@ -13420,6 +13448,7 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(wrap_key_num);
   DBUG_RETURN(res);
 }
 
