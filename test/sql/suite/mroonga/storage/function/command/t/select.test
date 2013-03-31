@@ -1,4 +1,5 @@
 # Copyright(C) 2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,7 +22,16 @@ DROP TABLE IF EXISTS diaries;
 DROP FUNCTION IF EXISTS mroonga_command;
 --enable_warnings
 
-CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
+--disable_query_log
+if ($VERSION_COMPILE_OS_WIN)
+{
+  CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.dll';
+}
+if (!$VERSION_COMPILE_OS_WIN)
+{
+  CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
+}
+--enable_query_log
 
 SET NAMES UTF8;
 CREATE TABLE diaries(

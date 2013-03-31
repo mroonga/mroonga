@@ -1,5 +1,4 @@
 drop table if exists t1, t2, t3;
-create function mroonga_snippet returns string soname 'ha_mroonga.so';
 set names utf8;
 create table t1 (c1 int primary key, c2 varchar(255), c3 text, fulltext index(c2), fulltext index(c3)) default charset utf8;
 insert into t1 values(1, "あああああ","２９日の富士山の天気について");

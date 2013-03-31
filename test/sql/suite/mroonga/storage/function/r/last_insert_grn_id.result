@@ -1,6 +1,5 @@
 drop table if exists t1, t2, t3;
 drop function if exists last_insert_grn_id;
-create function last_insert_grn_id returns integer soname 'ha_mroonga.so';
 create table t1 (_id int, c1 int);
 select last_insert_grn_id();
 last_insert_grn_id()

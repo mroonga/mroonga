@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS diaries;
 DROP FUNCTION IF EXISTS mroonga_command;
-CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
 SET NAMES UTF8;
 CREATE TABLE diaries(
 title TEXT,

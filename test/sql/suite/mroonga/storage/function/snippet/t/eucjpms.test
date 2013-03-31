@@ -1,4 +1,4 @@
-# Copyright(C) 2012 Kentoku SHIBA
+# Copyright(C) 2012-2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,16 @@
 drop table if exists t1, t2, t3;
 --enable_warnings
 
-create function mroonga_snippet returns string soname 'ha_mroonga.so';
+--disable_query_log
+if ($VERSION_COMPILE_OS_WIN)
+{
+  CREATE FUNCTION mroonga_snippet RETURNS string SONAME 'ha_mroonga.dll';
+}
+if (!$VERSION_COMPILE_OS_WIN)
+{
+  CREATE FUNCTION mroonga_snippet RETURNS string SONAME 'ha_mroonga.so';
+}
+--enable_query_log
 
 set names eucjpms;
 create table t1 (c1 int primary key, c2 varchar(255), c3 text, fulltext index(c2), fulltext index(c3)) default charset eucjpms;

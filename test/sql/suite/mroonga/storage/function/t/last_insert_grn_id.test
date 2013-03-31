@@ -1,4 +1,5 @@
 # Copyright(C) 2010 Tetsuro IKEDA
+# Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,7 +22,16 @@ drop table if exists t1, t2, t3;
 drop function if exists last_insert_grn_id;
 --enable_warnings
 
-create function last_insert_grn_id returns integer soname 'ha_mroonga.so';
+--disable_query_log
+if ($VERSION_COMPILE_OS_WIN)
+{
+  CREATE FUNCTION last_insert_grn_id RETURNS integer SONAME 'ha_mroonga.dll';
+}
+if (!$VERSION_COMPILE_OS_WIN)
+{
+  CREATE FUNCTION last_insert_grn_id RETURNS integer SONAME 'ha_mroonga.so';
+}
+--enable_query_log
 
 create table t1 (_id int, c1 int);
 select last_insert_grn_id();
