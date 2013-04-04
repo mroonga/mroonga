@@ -2377,6 +2377,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    key_id(NULL),
    del_key_id(NULL),
 
+   wrap_ft_init_count(0),
    share(NULL),
    wrap_key_info(NULL),
    base_key_info(NULL),
@@ -7945,6 +7946,7 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
 #ifdef HA_CAN_FULLTEXT_EXT
   mrn_ft_info->could_you = &mrn_wrapper_ft_vft_ext;
 #endif
+  ++wrap_ft_init_count;
   DBUG_RETURN(info);
 }
 
@@ -7986,6 +7988,8 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint key_nr, String *key)
 int ha_mroonga::wrapper_ft_read(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
+  if (wrap_ft_init_count)
+    set_pk_bitmap();
   int error = wrapper_get_next_record(buf);
   DBUG_RETURN(error);
 }
@@ -8766,6 +8770,7 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
       ((Item_sum *) info)->max_arg_level != -1 ||
       ((Item_sum *) info)->max_sum_func_level != -1
     ) {
+      DBUG_PRINT("info", ("mroonga: count skip: sum func is not match"));
       count_skip = false;
       DBUG_VOID_RETURN;
     }
@@ -8773,31 +8778,38 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
     uint i = 0;
     Item *where;
     if (fulltext) {
+      DBUG_PRINT("info", ("mroonga: count skip: fulltext"));
       where = select_lex->where;
       if (!where ||
           where->type() != Item::FUNC_ITEM ||
           ((Item_func *)where)->functype() != Item_func::FT_FUNC) {
+        DBUG_PRINT("info", ("mroonga: count skip: ft func is not match"));
         count_skip = false;
         DBUG_VOID_RETURN;
       }
       where = where->next;
       if (!where ||
           where->type() != Item::STRING_ITEM) {
+        DBUG_PRINT("info", ("mroonga: count skip: string item is not match"));
         count_skip = false;
         DBUG_VOID_RETURN;
       }
       for (where = where->next; where; where = where->next) {
         if (where->type() != Item::FIELD_ITEM)
           break;
+        DBUG_PRINT("info", ("mroonga: count skip: FIELD_ITEM=%p", where));
       }
       if (where != info) {
+        DBUG_PRINT("info", ("mroonga: count skip: where clause is not match"));
         count_skip = false;
         DBUG_VOID_RETURN;
       }
+      DBUG_PRINT("info", ("mroonga: count skip: skip enabled"));
       count_skip = true;
       mrn_count_skip++;
       DBUG_VOID_RETURN;
     } else {
+      DBUG_PRINT("info", ("mroonga: count skip: without fulltext"));
       uint key_nr = active_index;
       KEY key_info = table->key_info[key_nr];
       KEY_PART_INFO *key_part = key_info.key_part;
@@ -8825,13 +8837,16 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
         }
         if (i >= select_lex->select_n_where_fields)
         {
+          DBUG_PRINT("info", ("mroonga: count skip: skip enabled"));
           count_skip = true;
           mrn_count_skip++;
           DBUG_VOID_RETURN;
         }
       }
+      DBUG_PRINT("info", ("mroonga: count skip: skip disabled"));
     }
   }
+  DBUG_PRINT("info", ("mroonga: count skip: select type is not match"));
   count_skip = false;
   DBUG_VOID_RETURN;
 }
@@ -10494,6 +10509,7 @@ int ha_mroonga::wrapper_reset()
     alter_key_info_buffer = NULL;
   }
 #endif
+  wrap_ft_init_count = 0;
   DBUG_RETURN(error);
 }
 

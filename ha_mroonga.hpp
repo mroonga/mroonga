@@ -217,6 +217,7 @@ private:
   THR_LOCK_DATA thr_lock_data;
 
   // for wrapper mode (TODO: need to be confirmed)
+  uint      wrap_ft_init_count;
   MRN_SHARE *share;
   KEY       *wrap_key_info;
   KEY       *base_key_info;
