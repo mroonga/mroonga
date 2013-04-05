@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-20 16:31\n"
+"POT-Creation-Date: 2013-04-05 18:03\n"
 "PO-Revision-Date: 2012-05-28 14:10+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -963,7 +963,8 @@ msgstr ""
 msgid ""
 "Logging debug messages. Recommend to use for mroonga developer or bug "
 "reporter."
-msgstr "デバッグメッセージを出力する。mroonga開発者やバグレポートの際にお勧めします。"
+msgstr ""
+"デバッグメッセージを出力する。mroonga開発者やバグレポートの際にお勧めします。"
 
 # 346133d311844f71b2292d0ceb0ccb6b
 #: ../../../source/reference.rst:249
@@ -1146,18 +1147,89 @@ msgstr "制限事項"
 msgid "There are some limitations in mroonga storage engine."
 msgstr "mroongaストレージエンジンにはいくつか制限があります。"
 
-# 8e1b8a90de50463588ac7bd4157c61d6
+# 8aab0ebd312e4cfd8988e825d1241540
 #: ../../../source/reference.rst:461
+msgid "Limitations of table"
+msgstr "テーブルの制限事項"
+
+# f0406f9de9fc4ef49c690b3888c5587f
+#: ../../../source/reference.rst:463
+msgid ""
+"A table has the following limitations. This limitation is derived from "
+"groonga."
+msgstr ""
+"テーブルには以下の制限があります。この制限はgroongaに由来します。"
+
+# 804dcac77f2649a796cfa3a73bb7e7f8
+#: ../../../source/reference.rst:466
+msgid "The maximum one key size: 4096Bytes"
+msgstr "1つのキーの最大サイズ: 4096Bytes"
+
+# 3e5a0a17e0ab457495373eda664e4c94
+#: ../../../source/reference.rst:467
+msgid "The maximum total size of keys: 4GBytes"
+msgstr "キーのサイズを合計した上限値: 4GBytes"
+
+# 467a3411bc894e279d1e02c42b14e206
+# fee7faa5a772489396dbdb1236587bba
+#: ../../../source/reference.rst:469 ../../../source/reference.rst:481
+msgid "Keep in mind that these limitations may vary depending on conditions."
+msgstr "実際には他の諸条件の制約により上記の値まで到達しない場合もあります。"
+
+# 8aab0ebd312e4cfd8988e825d1241540
+#: ../../../source/reference.rst:472
+msgid "Limitations of indexing"
+msgstr "インデックスの制限事項"
+
+# 4e1d0f4baf27410580028b83d5f54cc2
+#: ../../../source/reference.rst:474
+msgid ""
+"A full-text index has the following limitations. This limitation is derived "
+"from groonga."
+msgstr ""
+"1つのインデックスにおける論理上の上限値は以下のとおりです。この制限は"
+"groongaに由来します。"
+
+# 19dcd3b0b8c84dfebbd800d7b747774d
+#: ../../../source/reference.rst:477
+msgid "The maximum number of records: 268,435,455 (more than 268 million)"
+msgstr ""
+"最大レコード数: 268,435,455 (約2億6千万)"
+
+# 1b4f83fa9e63478b98f537b15ae259f4
+#: ../../../source/reference.rst:478
+msgid ""
+"The maximum number of distinct terms: 268,435,455 (more than 268 million)"
+msgstr ""
+"最大語彙数: 268,435,455 (約2億6千万)"
+
+# 5434050722e54721b81396ed968eca6b
+#: ../../../source/reference.rst:479
+msgid "The maximum index size: 256GBytes"
+msgstr ""
+"最大インデックスサイズ: 256GByte"
+
+# e1002ab69ee64c1482f660342f76442f
+#: ../../../source/reference.rst:483
+msgid ""
+"Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your "
+"table data matches to this limitations."
+msgstr ""
+"テーブルがこの制限に該当するかは ``SHOW TABLE STATUS`` や ``SHOW INDEX FROM ...`` "
+"などで確認してください。"
+
+# 8e1b8a90de50463588ac7bd4157c61d6
+#: ../../../source/reference.rst:487
 msgid "Limitations about the value of columns"
 msgstr "カラムの値に関する制限事項"
 
 # 4762241ec9314616841081e4cc55181b
-#: ../../../source/reference.rst:463
+#: ../../../source/reference.rst:489
 msgid "There is a limitation about DATE, DATETIME column in storage mode."
 msgstr "ストレージモードにおいて、DATE、DATETIME型のカラムには制限があります。"
 
 # 9147c792adca459a9d7e2db39ebc555d
-#: ../../../source/reference.rst:465
+#: ../../../source/reference.rst:491
 msgid ""
 "mroonga storage engine automatically convert 0 into 1 as the value of month "
 "or date."
@@ -1165,25 +1237,25 @@ msgstr ""
 "mroongaストレージエンジンは月や日の値に指定された0を1へと自動的に補正します。"
 
 # 2ed6ac878f2f45d09664581f1e6f48db
-#: ../../../source/reference.rst:467
+#: ../../../source/reference.rst:493
 msgid ""
 "Thus, the value 0 is treated as the 1st month (January) of the year or the "
 "1st date of the month."
 msgstr "つまり、0月は1月へ、0日は1日として扱います。"
 
 # 073a9516cdfc46f584a864866242bc98
-#: ../../../source/reference.rst:470
+#: ../../../source/reference.rst:496
 msgid ""
 "And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
 "00:00:00)."
 msgstr "そして、NULL値はUNIX時間の0秒 (1970-01-01)として扱います。"
 
 # 08b07f5a18bf41738ab639ad2e2017a8
-#: ../../../source/reference.rst:472
+#: ../../../source/reference.rst:498
 msgid "Here is an example to show behavior described above."
 msgstr "上記挙動を示す例はこちらです。"
 
 # 382273e01cd948e4bb5d6f9d5754944d
-#: ../../../source/reference.rst:496
+#: ../../../source/reference.rst:522
 msgid "Here is the results of execution example::"
 msgstr "実行結果はこちらです。::"
