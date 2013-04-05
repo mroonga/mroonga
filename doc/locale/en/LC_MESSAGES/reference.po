@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-20 16:31\n"
+"POT-Creation-Date: 2013-04-05 18:04\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -1112,43 +1112,106 @@ msgstr ""
 msgid "There are some limitations in mroonga storage engine."
 msgstr ""
 
-# 5da669841908480d9071c98823fddf08
+# 98d32e761e394d3b8a47225eb82e188e
 #: ../../../source/reference.rst:461
+msgid "Limitations of table"
+msgstr ""
+
+# cd587bbdc41e4bec99991bf1b23fd9b6
+#: ../../../source/reference.rst:463
+msgid ""
+"A table has the following limitations. This limitation is derived from "
+"groonga."
+msgstr ""
+
+# 735364908c9940d19c30a3c88f9e8a7e
+#: ../../../source/reference.rst:466
+msgid "The maximum one key size: 4096Bytes"
+msgstr ""
+
+# 081ca34cabc34dab95a6320893253836
+#: ../../../source/reference.rst:467
+msgid "The maximum total size of keys: 4GBytes"
+msgstr ""
+
+# 7702a62d91504eaaa9326a2b25e015c8
+# aa24de6ee9d74c5193d443d59a0d32d9
+#: ../../../source/reference.rst:469 ../../../source/reference.rst:481
+msgid "Keep in mind that these limitations may vary depending on conditions."
+msgstr ""
+
+# 98d32e761e394d3b8a47225eb82e188e
+#: ../../../source/reference.rst:472
+msgid "Limitations of indexing"
+msgstr ""
+
+# 423ae5ceb0334d079538b8276201b1d2
+#: ../../../source/reference.rst:474
+msgid ""
+"A full-text index has the following limitations. This limitation is derived "
+"from groonga."
+msgstr ""
+
+# 5ad82b57f44d46dcbe6831262570482c
+#: ../../../source/reference.rst:477
+msgid "The maximum number of records: 268,435,455 (more than 268 million)"
+msgstr ""
+
+# 0f6a1b1802334b38858dc62f480e0253
+#: ../../../source/reference.rst:478
+msgid ""
+"The maximum number of distinct terms: 268,435,455 (more than 268 million)"
+msgstr ""
+
+# 78e07f9a2c9e4a0080d5b3ba75614f7b
+#: ../../../source/reference.rst:479
+msgid "The maximum index size: 256GBytes"
+msgstr ""
+
+# 2de3b1cb8c1f492bbf8ecf2832a66924
+#: ../../../source/reference.rst:483
+msgid ""
+"Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your "
+"table data matches to this limitations."
+msgstr ""
+
+# 5da669841908480d9071c98823fddf08
+#: ../../../source/reference.rst:487
 msgid "Limitations about the value of columns"
 msgstr ""
 
 # bf33f1ba0a3441149c9c7aae10ab7c00
-#: ../../../source/reference.rst:463
+#: ../../../source/reference.rst:489
 msgid "There is a limitation about DATE, DATETIME column in storage mode."
 msgstr ""
 
 # 49133a6b106b4d028daabbdf784d5044
-#: ../../../source/reference.rst:465
+#: ../../../source/reference.rst:491
 msgid ""
 "mroonga storage engine automatically convert 0 into 1 as the value of month "
 "or date."
 msgstr ""
 
 # 95b13e6ab35541e3a286f029f6f77555
-#: ../../../source/reference.rst:467
+#: ../../../source/reference.rst:493
 msgid ""
 "Thus, the value 0 is treated as the 1st month (January) of the year or the "
 "1st date of the month."
 msgstr ""
 
 # ba510e03144642b3bcad7ff9499c13cd
-#: ../../../source/reference.rst:470
+#: ../../../source/reference.rst:496
 msgid ""
 "And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
 "00:00:00)."
 msgstr ""
 
 # eda122b1b17c4e08b10677d5e2c5275c
-#: ../../../source/reference.rst:472
+#: ../../../source/reference.rst:498
 msgid "Here is an example to show behavior described above."
 msgstr ""
 
 # 88bdd5c373c54e11b4ede629c17ffffc
-#: ../../../source/reference.rst:496
+#: ../../../source/reference.rst:522
 msgid "Here is the results of execution example::"
 msgstr ""
