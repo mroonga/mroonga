@@ -457,6 +457,32 @@ Limitations
 
 There are some limitations in mroonga storage engine.
 
+Limitations of table
+^^^^^^^^^^^^^^^^^^^^
+
+A table has the following limitations.
+This limitation is derived from groonga.
+
+* The maximum one key size: 4096Bytes
+* The maximum total size of keys: 4GBytes
+
+Keep in mind that these limitations may vary depending on conditions.
+
+Limitations of indexing
+^^^^^^^^^^^^^^^^^^^^^^^
+
+A full-text index has the following limitations.
+This limitation is derived from groonga.
+
+* The maximum number of records: 268,435,455 (more than 268 million)
+* The maximum number of distinct terms: 268,435,455 (more than 268 million)
+* The maximum index size: 256GBytes
+
+Keep in mind that these limitations may vary depending on conditions.
+
+Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your table data matches to this limitations.
+
+
 Limitations about the value of columns
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
