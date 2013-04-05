@@ -472,7 +472,7 @@ Limitations of indexing
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 A full-text index has the following limitations.
-This limitation is derived from groonga.
+This limitation is derived from groonga and applied to each table.
 
 * The maximum number of records: 268,435,455 (more than 268 million)
 * The maximum number of distinct terms: 268,435,455 (more than 268 million)
