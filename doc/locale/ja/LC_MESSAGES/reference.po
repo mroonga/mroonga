@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-05 18:03\n"
+"POT-Creation-Date: 2013-04-05 18:23\n"
 "PO-Revision-Date: 2012-05-28 14:10+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -1157,8 +1157,7 @@ msgstr "テーブルの制限事項"
 msgid ""
 "A table has the following limitations. This limitation is derived from "
 "groonga."
-msgstr ""
-"テーブルには以下の制限があります。この制限はgroongaに由来します。"
+msgstr "テーブルには以下の制限があります。この制限はgroongaに由来します。"
 
 # 804dcac77f2649a796cfa3a73bb7e7f8
 #: ../../../source/reference.rst:466
@@ -1185,29 +1184,26 @@ msgstr "インデックスの制限事項"
 #: ../../../source/reference.rst:474
 msgid ""
 "A full-text index has the following limitations. This limitation is derived "
-"from groonga."
+"from groonga and applied to each table."
 msgstr ""
-"1つのインデックスにおける論理上の上限値は以下のとおりです。この制限は"
-"groongaに由来します。"
+"1つのインデックスにおける論理上の上限値は以下のとおりです。"
+"テーブルごとに適用されるgroonga由来の制限です。"
 
 # 19dcd3b0b8c84dfebbd800d7b747774d
 #: ../../../source/reference.rst:477
 msgid "The maximum number of records: 268,435,455 (more than 268 million)"
-msgstr ""
-"最大レコード数: 268,435,455 (約2億6千万)"
+msgstr "最大レコード数: 268,435,455 (約2億6千万)"
 
 # 1b4f83fa9e63478b98f537b15ae259f4
 #: ../../../source/reference.rst:478
 msgid ""
 "The maximum number of distinct terms: 268,435,455 (more than 268 million)"
-msgstr ""
-"最大語彙数: 268,435,455 (約2億6千万)"
+msgstr "最大語彙数: 268,435,455 (約2億6千万)"
 
 # 5434050722e54721b81396ed968eca6b
 #: ../../../source/reference.rst:479
 msgid "The maximum index size: 256GBytes"
-msgstr ""
-"最大インデックスサイズ: 256GByte"
+msgstr "最大インデックスサイズ: 256GByte"
 
 # e1002ab69ee64c1482f660342f76442f
 #: ../../../source/reference.rst:483
@@ -1215,8 +1211,8 @@ msgid ""
 "Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your "
 "table data matches to this limitations."
 msgstr ""
-"テーブルがこの制限に該当するかは ``SHOW TABLE STATUS`` や ``SHOW INDEX FROM ...`` "
-"などで確認してください。"
+"テーブルがこの制限に該当するかは ``SHOW TABLE STATUS`` や ``SHOW INDEX "
+"FROM ...`` などで確認してください。"
 
 # 8e1b8a90de50463588ac7bd4157c61d6
 #: ../../../source/reference.rst:487
