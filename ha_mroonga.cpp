@@ -47,7 +47,6 @@
 #ifdef WIN32
 #  include <math.h>
 #  include <direct.h>
-#  include <time.h>
 #  define MRN_MKDIR(pathname, mode) _mkdir((pathname))
 #  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
     type *variable_name = (type *)_malloca(sizeof(type) * (variable_size))
@@ -1653,6 +1652,8 @@ static time_t get_timegm(struct tm *time)
   MRN_DBUG_ENTER_FUNCTION();
   struct tm gmdate;
   time_t sec_t = mktime(time);
+  if (sec_t == -1)
+    DBUG_RETURN(sec_t);
   gmtime_r(&sec_t, &gmdate);
   int32 mrn_utc_diff_in_seconds =
     (
@@ -1663,6 +1664,12 @@ static time_t get_timegm(struct tm *time)
     (time->tm_hour - gmdate.tm_hour) * 60 * 60 +
     (time->tm_min - gmdate.tm_min) * 60 +
     (time->tm_sec - gmdate.tm_sec);
+  DBUG_PRINT("info", ("mroonga: time->tm_year=%d", time->tm_year));
+  DBUG_PRINT("info", ("mroonga: time->tm_mon=%d", time->tm_mon));
+  DBUG_PRINT("info", ("mroonga: time->tm_mday=%d", time->tm_mday));
+  DBUG_PRINT("info", ("mroonga: time->tm_hour=%d", time->tm_hour));
+  DBUG_PRINT("info", ("mroonga: time->tm_min=%d", time->tm_min));
+  DBUG_PRINT("info", ("mroonga: time->tm_sec=%d", time->tm_sec));
   DBUG_PRINT("info", ("mroonga: mrn_utc_diff_in_seconds=%d",
     mrn_utc_diff_in_seconds));
   DBUG_RETURN(sec_t + mrn_utc_diff_in_seconds);
@@ -1695,10 +1702,10 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
       struct tm date;
       memset(&date, 0, sizeof(struct tm));
       date.tm_year = mysql_time->year - TM_YEAR_BASE;
-      DBUG_PRINT("info", ("mroonga: tm_year=%d", date.tm_year));
       date.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
-      DBUG_PRINT("info", ("mroonga: tm_mon=%d", date.tm_mon));
       date.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
+      DBUG_PRINT("info", ("mroonga: tm_year=%d", date.tm_year));
+      DBUG_PRINT("info", ("mroonga: tm_mon=%d", date.tm_mon));
       DBUG_PRINT("info", ("mroonga: tm_mday=%d", date.tm_mday));
       grn_time = mrn_tm_to_grn_time(&date, usec);
     }
@@ -1709,16 +1716,16 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
       struct tm datetime;
       memset(&datetime, 0, sizeof(struct tm));
       datetime.tm_year = mysql_time->year - TM_YEAR_BASE;
-      DBUG_PRINT("info", ("mroonga: tm_year=%d", datetime.tm_year));
       datetime.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
-      DBUG_PRINT("info", ("mroonga: tm_mon=%d", datetime.tm_mon));
       datetime.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
-      DBUG_PRINT("info", ("mroonga: tm_mday=%d", datetime.tm_mday));
       datetime.tm_hour = mysql_time->hour;
-      DBUG_PRINT("info", ("mroonga: tm_hour=%d", datetime.tm_hour));
       datetime.tm_min = mysql_time->minute;
-      DBUG_PRINT("info", ("mroonga: tm_min=%d", datetime.tm_min));
       datetime.tm_sec = mysql_time->second;
+      DBUG_PRINT("info", ("mroonga: tm_year=%d", datetime.tm_year));
+      DBUG_PRINT("info", ("mroonga: tm_mon=%d", datetime.tm_mon));
+      DBUG_PRINT("info", ("mroonga: tm_mday=%d", datetime.tm_mday));
+      DBUG_PRINT("info", ("mroonga: tm_hour=%d", datetime.tm_hour));
+      DBUG_PRINT("info", ("mroonga: tm_min=%d", datetime.tm_min));
       DBUG_PRINT("info", ("mroonga: tm_sec=%d", datetime.tm_sec));
       grn_time = mrn_tm_to_grn_time(&datetime, usec);
     }
