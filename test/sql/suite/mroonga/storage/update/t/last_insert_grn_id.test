@@ -21,7 +21,16 @@ drop table if exists memos;
 drop function if exists last_insert_grn_id;
 --enable_warnings
 
-create function last_insert_grn_id returns integer soname 'ha_mroonga.so';
+--disable_query_log
+if ($VERSION_COMPILE_OS_WIN)
+{
+  CREATE FUNCTION last_insert_grn_id RETURNS integer SONAME 'ha_mroonga.dll';
+}
+if (!$VERSION_COMPILE_OS_WIN)
+{
+  CREATE FUNCTION last_insert_grn_id RETURNS integer SONAME 'ha_mroonga.so';
+}
+--enable_query_log
 
 create table memos (
   _id int,

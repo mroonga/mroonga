@@ -1,6 +1,5 @@
 drop table if exists memos;
 drop function if exists last_insert_grn_id;
-create function last_insert_grn_id returns integer soname 'ha_mroonga.so';
 create table memos (
 _id int,
 content varchar(255),

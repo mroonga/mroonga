@@ -12,5 +12,4 @@ INSERT INTO ranges VALUES (4, 2155, 1901);
 SELECT * FROM ranges FORCE INDEX(range_key)
 WHERE start = 1901 AND end = 2155;
 id	start	end
-2	1970	2155
 DROP TABLE ranges;
