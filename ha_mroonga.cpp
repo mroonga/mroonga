@@ -614,13 +614,13 @@ static void mrn_logger_log(grn_ctx *ctx, grn_log_level level,
                            const char *message, const char *location,
                            void *user_data)
 {
-  const char slev[] = " EACewnid-";
+  const char level_marks[] = " EACewnid-";
   if (mrn_log_file_opened) {
     pthread_mutex_lock(&mrn_log_mutex);
     fprintf(mrn_log_file,
             "%s|%c|%08x|%s\n",
             timestamp,
-            *(slev + level),
+            *(level_marks + level),
             static_cast<uint>((ulong)(pthread_self())),
             message);
     fflush(mrn_log_file);
