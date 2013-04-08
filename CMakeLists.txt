@@ -80,7 +80,7 @@ else()
     "${MYSQL_SOURCE_DIR}/regex"
     "${MYSQL_SOURCE_DIR}"
     CACHE INTERNAL "MySQL include directories")
-  set(MYSQL_CONFIG "PATH" CACHE PATH "mysql-config command path")
+  set(MYSQL_CONFIG "mysql_config" CACHE PATH "mysql-config command path")
 endif()
 find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
 
