@@ -136,6 +136,8 @@ else()
   endif()
   set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
     COMPILE_FLAGS "${MYSQL_CFLAGS}")
+  set_source_files_properties(${LIBMRN_NEED_MYSQL_SOURCES} PROPERTIES
+    COMPILE_FLAGS "${MYSQL_CFLAGS}")
   set_target_properties(ha_mroonga PROPERTIES
     COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN"
     PREFIX ""
