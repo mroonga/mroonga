@@ -609,32 +609,31 @@ static char *mrn_database_path_prefix = NULL;
 static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
 static char *mrn_version = const_cast<char *>(MRN_VERSION);
 
-static void mrn_logger_func(int level, const char *time, const char *title,
-                            const char *msg, const char *location,
-                            void *func_arg)
+static void mrn_logger_log(grn_ctx *ctx, grn_log_level level,
+                           const char *timestamp, const char *title,
+                           const char *message, const char *location,
+                           void *user_data)
 {
-  // TODO: REMOVE ME if groonga supports query logger.
-  // level == GRN_LOG_NONE means the log is query log.
-  if (level == GRN_LOG_NONE) {
-    return;
-  }
-
   const char slev[] = " EACewnid-";
   if (mrn_log_file_opened) {
     pthread_mutex_lock(&mrn_log_mutex);
-    fprintf(mrn_log_file, "%s|%c|%08x|%s\n", time,
+    fprintf(mrn_log_file,
+            "%s|%c|%08x|%s\n",
+            timestamp,
             *(slev + level),
             static_cast<uint>((ulong)(pthread_self())),
-            msg);
+            message);
     fflush(mrn_log_file);
     pthread_mutex_unlock(&mrn_log_mutex);
   }
 }
 
-static grn_logger_info mrn_logger_info = {
+static grn_logger mrn_logger = {
   mrn_log_level_default,
   GRN_LOG_TIME|GRN_LOG_MESSAGE,
-  mrn_logger_func,
+  NULL,
+  mrn_logger_log,
+  NULL,
   NULL
 };
 
@@ -683,7 +682,8 @@ static void mrn_log_level_update(THD *thd, struct st_mysql_sys_var *var,
   ulong new_value = *(ulong*) save;
   ulong old_value = mrn_log_level;
   mrn_log_level = new_value;
-  mrn_logger_info.max_level = (grn_log_level) mrn_log_level;
+  mrn_logger.max_level = (grn_log_level) mrn_log_level;
+  grn_logger_set(&mrn_ctx, &mrn_logger);
   grn_ctx *ctx = grn_ctx_open(0);
   mrn_change_encoding(ctx, system_charset_info);
   GRN_LOG(ctx, GRN_LOG_NOTICE, "log level changed from '%s' to '%s'",
@@ -1868,7 +1868,7 @@ static int mrn_init(void *p)
     goto err_log_mutex_init;
   }
 
-  grn_logger_info_set(ctx, &mrn_logger_info);
+  grn_logger_set(ctx, &mrn_logger);
   if (!(mrn_log_file = fopen(mrn_log_file_path, "a"))) {
     goto err_log_file_open;
   }
