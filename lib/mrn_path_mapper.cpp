@@ -27,6 +27,8 @@
 
 #include <string.h>
 
+#include <mrn_mysql.h>
+
 namespace mrn {
   PathMapper::PathMapper(const char *mysql_path, const char *path_prefix)
     : mysql_path_(mysql_path),

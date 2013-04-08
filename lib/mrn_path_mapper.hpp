@@ -22,7 +22,6 @@
 #ifndef MRN_PATH_MAPPER_HPP_
 #define MRN_PATH_MAPPER_HPP_
 
-#include <mrn_mysql.h>
 #include <mrn_constants.hpp>
 
 namespace mrn {
