@@ -10,8 +10,6 @@ AM_CPPFLAGS =					\
 	-I$(top_srcdir)				\
 	-I$(top_srcdir)/lib
 
-DEFS          = @DEFS@
-
 AM_LDFLAGS =					\
 	-module					\
 	-rpath $(libdir)			\
