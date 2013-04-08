@@ -164,6 +164,9 @@ else()
   if(WITH_DEBUG)
     set_property(TARGET ha_mroonga APPEND PROPERTY
       COMPILE_DEFINITIONS "SAFE_MUTEX")
+  else()
+    set_property(TARGET ha_mroonga APPEND PROPERTY
+      COMPILE_DEFINITIONS "DBUG_OFF")
   endif()
 
   option(WITH_DEBUG_FULL "Enable full debug options" OFF)
