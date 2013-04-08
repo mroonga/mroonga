@@ -620,7 +620,7 @@ static void mrn_logger_log(grn_ctx *ctx, grn_log_level level,
     fprintf(mrn_log_file,
             "%s|%c|%08x|%s\n",
             timestamp,
-            *(level_marks + level),
+            level_marks[level],
             static_cast<uint>((ulong)(pthread_self())),
             message);
     fflush(mrn_log_file);
