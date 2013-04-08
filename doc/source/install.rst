@@ -514,19 +514,19 @@ To get the record ID assigned by groonga in INSERT, install last_insert_grn_id f
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_mroonga.so';
+ mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga.so';
 
 To enable snippet (keyword in context) UDF, install mroonga_snippet function.
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING soname 'ha_mroonga.so';
+ mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
 
 To enable invoking groonga query from mroonga, install mroonga_command function.
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION mroonga_command RETURNS STRING soname 'ha_mroonga.so';
+ mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
 
 
 Install from the source code with MariaDB
@@ -615,16 +615,16 @@ To get the record ID assigned by groonga in INSERT, install last_insert_grn_id f
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER soname 'ha_mroonga.so';
+ mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga.so';
 
 To enable snippet (keyword in context) UDF, install mroonga_snippet function.
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING soname 'ha_mroonga.so';
+ mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
 
 To enable invoking groonga query from mroonga, install mroonga_command function.
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION mroonga_command RETURNS STRING soname 'ha_mroonga.so';
+ mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
