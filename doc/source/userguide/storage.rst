@@ -297,6 +297,114 @@ Here is the schema definition for execution examples::
 
 .. include:: mroonga_snippet_example.inc
 
+How to run groonga command
+--------------------------
+
+In storage mode, mroonga stores all your data into groonga
+database. You can access groonga database by SQL with mroonga. SQL is
+very powerful but it is not good for some operations such as faceted
+search.
+
+Faceted search is popular recently. Many online shopping sites such as
+amazon.com and ebay.com support faceted search. Faceted search refines
+the current search by available search parameters before users refine
+their search. And faceted search shows refined searches. Users just
+select a refined search. Users benefit from faceted search:
+
+* Users don't need to think about how to refine their search.
+  Users just select a showed refined search.
+* Users don't get boared "not match" page. Faceted search showes only
+  refined searches that has one or more matched items.
+
+Faceted search needs multiple `GROUP BY` operations against searched
+result set. To do faceted search by SQL, multiple `SELECT` requests
+are needed. It is not effective.
+
+Groonga can do faceted search by only one groonga command. It is
+effective. Groonga has the `select` command that can search records
+with faceted search. Faceted search is called as `drilldown` in
+groonga. See `groonga's document
+<http://groonga.org/docs/reference/commands/select.html>`_ about
+groonga's `select` command.
+
+Mroonga provides `mroonga_command()` function. You can run groonga
+command in SQL by the function. But you should use only `select`
+command. Other commands that change schema or data may break
+consistency.
+
+Here is the schema definition for execution examples::
+
+  CREATE TABLE diaries (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    content VARCHAR(255),
+    date DATE,
+    year YEAR,
+    `year_month` VARCHAR(9),
+    tag VARCHAR(32),
+    FULLTEXT INDEX (content)
+  ) ENGINE = mroonga DEFAULT CHARSET utf8;
+
+Here is the sample data for execution examples::
+
+  INSERT INTO diaries (content, date, year, `year_month`, tag)
+         VALUES ('Groonga is an open-source fulltext search engine and column store.',
+                 '2013-04-08',
+                 '2013',
+                 '2013-04',
+                 'groonga');
+  INSERT INTO diaries (content, date, year, `year_month`, tag)
+         VALUES ('Mroonga is an open-source storage engine for fast fulltext search with MySQL.',
+                 '2013-04-09',
+                 '2013',
+                 '2013-04',
+                 'MySQL');
+  INSERT INTO diaries (content, date, year, `year_month`, tag)
+         VALUES ('Tritonn is a patched version of MySQL that supports better fulltext search function with Senna.',
+                 '2013-03-29',
+                 '2013',
+                 '2013-03',
+                 'MySQL');
+
+Each record has `groonga` or `MySQL` as `tag`. Each record also has
+`year` and `year_month`. You can use `tag`, `year` and `year_month` as
+faceted search keys.
+
+Groonga calls faceted search as drilldown. So parameter key in groonga
+is `--groonga`. Groonga returns search result as JSON. So
+`mroonga_command()` also returns search result as JSON. It is not SQL
+friendly. You need to parse search result JSON by yourself.
+
+Here is the example of faceted search by all of them (result JSON is
+pretty printted)::
+
+
+  SELECT mroonga_command("select diaries --output_columns _id --limit 0 --drilldown tag,year,year_month") AS faceted_result;
+  +-----------------------------+
+  | faceted_result              |
+  +-----------------------------+
+  | [[[3],                      |
+  |   [["_id","UInt32"]]],      |
+  |  [[2],                      |
+  |   [["_key","ShortText"],    |
+  |    ["_nsubrecs","Int32"]],  |
+  |   ["groonga",1],            |
+  |   ["MySQL",2]],             |
+  |  [[1],                      |
+  |   [["_key","Time"],         |
+  |    ["_nsubrecs","Int32"]],  |
+  |   [1356998400.0,3]],        |
+  |  [[2],                      |
+  |   [["_key","ShortText"],    |
+  |    ["_nsubrecs","Int32"]],  |
+  |   ["2013-04",2],            |
+  |   ["2013-03",1]]]           |
+  +-----------------------------+
+  1 row in set (0.00 sec)
+
+See `groonga's select command document
+<http://groonga.org/docs/reference/commands/select.html>`_ for more
+details.
+
 Logging
 -------
 
