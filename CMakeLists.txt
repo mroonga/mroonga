@@ -63,26 +63,21 @@ string(REGEX REPLACE "([^;]+)" "${LIBMRN_DIR_PREFIX}lib/\\1"
 if(MRN_BUNDLED)
   set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR})
   set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR})
-  set(MYSQL_INCLUDE_DIRS
-    "${MYSQL_BUILD_DIR}/include"
-    "${MYSQL_SOURCE_DIR}/sql"
-    "${MYSQL_SOURCE_DIR}/include"
-    "${MYSQL_SOURCE_DIR}/regex"
-    "${MYSQL_SOURCE_DIR}")
   set(MYSQL_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mysql_config)
 else()
   set(MYSQL_SOURCE_DIR "PATH" CACHE PATH "MySQL source directory")
   set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
-  set(MYSQL_INCLUDE_DIRS
-    "${MYSQL_BUILD_DIR}/include"
-    "${MYSQL_SOURCE_DIR}/sql"
-    "${MYSQL_SOURCE_DIR}/include"
-    "${MYSQL_SOURCE_DIR}/regex"
-    "${MYSQL_SOURCE_DIR}"
-    CACHE INTERNAL "MySQL include directories")
   set(MYSQL_CONFIG "mysql_config" CACHE PATH "mysql-config command path")
 endif()
 find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
+
+set(MYSQL_INCLUDE_DIRS
+  "${MYSQL_BUILD_DIR}/include"
+  "${MYSQL_SOURCE_DIR}/sql"
+  "${MYSQL_SOURCE_DIR}/include"
+  "${MYSQL_SOURCE_DIR}/regex"
+  "${MYSQL_SOURCE_DIR}"
+  CACHE INTERNAL "MySQL include directories")
 
 if(MRN_BUNDLED)
   set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
