@@ -679,10 +679,10 @@ static void mrn_log_level_update(THD *thd, struct st_mysql_sys_var *var,
                                  void *var_ptr, const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  ulong new_value = *(ulong*) save;
+  ulong new_value = *static_cast<const ulong *>(save);
   ulong old_value = mrn_log_level;
   mrn_log_level = new_value;
-  mrn_logger.max_level = (grn_log_level) mrn_log_level;
+  mrn_logger.max_level = static_cast<grn_log_level>(mrn_log_level);
   grn_logger_set(&mrn_ctx, &mrn_logger);
   grn_ctx *ctx = grn_ctx_open(0);
   mrn_change_encoding(ctx, system_charset_info);
@@ -698,7 +698,7 @@ static MYSQL_SYSVAR_ENUM(log_level, mrn_log_level,
                          "logging level",
                          NULL,
                          mrn_log_level_update,
-                         (ulong) mrn_log_level,
+                         static_cast<ulong>(mrn_log_level),
                          &mrn_log_level_typelib);
 
 static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
