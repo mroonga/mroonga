@@ -370,12 +370,12 @@ Each record has `groonga` or `MySQL` as `tag`. Each record also has
 faceted search keys.
 
 Groonga calls faceted search as drilldown. So parameter key in groonga
-is `--groonga`. Groonga returns search result as JSON. So
+is `--drilldown`. Groonga returns search result as JSON. So
 `mroonga_command()` also returns search result as JSON. It is not SQL
 friendly. You need to parse search result JSON by yourself.
 
-Here is the example of faceted search by all of them (result JSON is
-pretty printted)::
+Here is the example of faceted search by all available faceted search
+keys (result JSON is pretty printted)::
 
 
   SELECT mroonga_command("select diaries --output_columns _id --limit 0 --drilldown tag,year,year_month") AS faceted_result;
