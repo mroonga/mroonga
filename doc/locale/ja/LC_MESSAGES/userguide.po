@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-04-09 15:45\n"
-"PO-Revision-Date: 2013-04-04 18:23+0900\n"
+"PO-Revision-Date: 2013-04-09 16:22+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1098,7 +1098,7 @@ msgstr "実行例で使用するスキーマ定義はこちら::"
 # 96274d47708b4dc5bdd840150b0f8bc7
 #: ../../../source/userguide/storage.rst:301
 msgid "How to run groonga command"
-msgstr ""
+msgstr "groongaコマンドの実行方法"
 
 # d2e2ce5e55554abab59d2b7ef93f95db
 #: ../../../source/userguide/storage.rst:303
@@ -1106,7 +1106,7 @@ msgid ""
 "In storage mode, mroonga stores all your data into groonga database. You can "
 "access groonga database by SQL with mroonga. SQL is very powerful but it is "
 "not good for some operations such as faceted search."
-msgstr ""
+msgstr "ストレージモードではmroongaはすべてのデータをgroongaのデータベースに保存します。mroongaを使うことでSQLでgroongaのデータベースにアクセスできるようになります。SQLはとても強力ですが、ファセット検索などのようないくつかの操作が得意ではありません。"
 
 # cd7295a27efe46b3851954ad79a9f942
 #: ../../../source/userguide/storage.rst:308
@@ -1116,21 +1116,21 @@ msgid ""
 "current search by available search parameters before users refine their "
 "search. And faceted search shows refined searches. Users just select a "
 "refined search. Users benefit from faceted search:"
-msgstr ""
+msgstr "最近ではファセット検索は一般的なものになりました。amazon.comやebay.comのように多くのオンラインショッピングサイトがファセット検索をサポートしています。ファセット検索はユーザが検索結果を絞り込む前に絞り込み検索をし、その絞り込み検索の結果を表示します。ユーザは絞りこまれた結果から自分が探しているものを選ぶだけです。ファセット検索を使うとユーザは以下のようなメリットがあります。"
 
 # e0b55bdefff04b33b6e2451ffb9d8c00
 #: ../../../source/userguide/storage.rst:314
 msgid ""
 "Users don't need to think about how to refine their search. Users just "
 "select a showed refined search."
-msgstr ""
+msgstr "ユーザはどうやって検索結果を絞り込むかを考える必要はありません。単に表示された絞り込み結果から選ぶだけです。"
 
 # 2b1526a00ecd4473a15bef8dd993a6a8
 #: ../../../source/userguide/storage.rst:316
 msgid ""
 "Users don't get boared \"not match\" page. Faceted search showes only "
 "refined searches that has one or more matched items."
-msgstr ""
+msgstr "ユーザは「見つかりませんでした」ページを見ることがありません。ファセット検索では絞り込んだ結果のうち、ヒットする項目がある結果だけを表示します。"
 
 # b86b332677844293b14bb44084d6b3c1
 #: ../../../source/userguide/storage.rst:319
@@ -1138,7 +1138,7 @@ msgid ""
 "Faceted search needs multiple `GROUP BY` operations against searched result "
 "set. To do faceted search by SQL, multiple `SELECT` requests are needed. It "
 "is not effective."
-msgstr ""
+msgstr "絞り込み検索は検索結果に対して複数の `GROUP BY` 操作を実行する必要があります。SQLでファセット検索をやろうとすると、複数の `SELECT` リクエストが必要になります。これは効率的ではありません。"
 
 # 9d12326acea64282a90802c4ebc01339
 #: ../../../source/userguide/storage.rst:323
@@ -1148,7 +1148,7 @@ msgid ""
 "search. Faceted search is called as `drilldown` in groonga. See `groonga's "
 "document <http://groonga.org/docs/reference/commands/select.html>`_ about "
 "groonga's `select` command."
-msgstr ""
+msgstr "groongaは1回のgroongaコマンドでファセット検索をできます。これは効率的です。groongaには `select` コマンドというファセット検索に対応した検索コマンドがあります。groongaではファセット検索は `ドリルダウン（drilldown）` と呼ばれています。groongaの `select` コマンドの詳細については `groongaのドキュメント <http://groonga.org/ja/docs/reference/commands/select.html>`_ を参照してください。"
 
 # f179f8865051493b8d58cd2d1eaeb762
 #: ../../../source/userguide/storage.rst:330
@@ -1156,7 +1156,7 @@ msgid ""
 "Mroonga provides `mroonga_command()` function. You can run groonga command "
 "in SQL by the function. But you should use only `select` command. Other "
 "commands that change schema or data may break consistency."
-msgstr ""
+msgstr "mroongaは `mroonga_command()` 関数を提供しています。この関数を使えばSQLの中で好きなgroongaコマンドを実行できます。しかし、使うのは `select` コマンドだけにしておくべきです。スキーマやデータを変更するコマンドを使うと一貫性が壊れてしまうかもしれません。"
 
 # c933c46a68434179ad9da557b13882e3
 #: ../../../source/userguide/storage.rst:368
@@ -1164,30 +1164,30 @@ msgid ""
 "Each record has `groonga` or `MySQL` as `tag`. Each record also has `year` "
 "and `year_month`. You can use `tag`, `year` and `year_month` as faceted "
 "search keys."
-msgstr ""
+msgstr "各レコードは `tag` として `groonga` と `MySQL` が付いています。各レコードは `year` と `year_month` も持っています。ファセット検索のキーとして `tag` 、 `year` 、 `year_month` を使えます。"
 
 # 1dbf0c3cdc1e45578163b8a90236b17b
 #: ../../../source/userguide/storage.rst:372
 msgid ""
 "Groonga calls faceted search as drilldown. So parameter key in groonga is `--"
-"groonga`. Groonga returns search result as JSON. So `mroonga_command()` also "
+"drilldown`. Groonga returns search result as JSON. So `mroonga_command()` also "
 "returns search result as JSON. It is not SQL friendly. You need to parse "
 "search result JSON by yourself."
-msgstr ""
+msgstr "groongaはファセット検索のことをドリルダウンと呼んでいます。そのため、groongaでのパラメータ名は `--drilldown` となっています。groongaは検索結果をJSONで返します。そのため、 `mroonga_command()` も検索結果をJSONで返します。これはSQLらしくありません。JSON形式の検索結果は自分でパースしないといけません。"
 
 # 84db40bca99c4e6db1b319adf5ca4eed
 #: ../../../source/userguide/storage.rst:377
 msgid ""
-"Here is the example of faceted search by all of them (result JSON is pretty "
+"Here is the example of faceted search by all available faceted search keys (result JSON is pretty "
 "printted)::"
-msgstr ""
+msgstr "以下は利用可能なファセット検索キーをすべて使った例です。（結果のJSONは整形済み）::"
 
 # cb13b0e089e047a0b2446f95d74a1539
 #: ../../../source/userguide/storage.rst:404
 msgid ""
 "See `groonga's select command document <http://groonga.org/docs/reference/"
 "commands/select.html>`_ for more details."
-msgstr ""
+msgstr "詳細は `groongaのselectコマンドのドキュメント <http://groonga.org/ja/docs/reference/commands/select.html>`_ を確認してください。"
 
 # 427be2122c8147b6b295098426dd1385
 # d5bf046f8c2a42fe8c04e36ca2b44a5e
