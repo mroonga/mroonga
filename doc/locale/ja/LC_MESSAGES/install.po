@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-25 03:26\n"
+"POT-Creation-Date: 2013-04-09 15:45\n"
 "PO-Revision-Date: 2012-05-28 19:43+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 # e4d644099ee949d6a75f00a94541ac5f
@@ -306,6 +306,11 @@ msgstr ""
 msgid "Install::"
 msgstr "インストール::"
 
+# 9c9e33f1e6b544bc8cc8d9edb660aaae
+#: ../../../source/install.rst:411
+msgid "`mroonga/homebrew on GitHub <https://github.com/mroonga/homebrew>`_"
+msgstr ""
+
 # eb4280f85ca14d08ad5ea6857f1bf4d1
 #: ../../../source/install.rst:414
 msgid "Install from the source code"
@@ -321,12 +326,12 @@ msgstr ""
 "ソースコードからインストールすることになります。"
 
 # 0b4fe010015b445e8611b2e1705fa6cc
-#: ../../../source/install.rst:419 ../../../source/install.rst:531
+#: ../../../source/install.rst:419 ../../../source/install.rst:538
 msgid "Japanese morphological analysis system (MeCab)"
 msgstr "形態素解析(MeCab)について"
 
 # 3b50cd9745f54693abb064d6e6e4952b
-#: ../../../source/install.rst:421 ../../../source/install.rst:533
+#: ../../../source/install.rst:421 ../../../source/install.rst:540
 msgid ""
 "If you want to use indexes of tokenizing of each morpheme for full text "
 "search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing "
@@ -337,7 +342,7 @@ msgstr ""
 "い。"
 
 # 933b523f65cb43389934af2f564efeb8
-#: ../../../source/install.rst:424 ../../../source/install.rst:536
+#: ../../../source/install.rst:424 ../../../source/install.rst:543
 msgid "Download"
 msgstr "ダウンロード"
 
@@ -365,7 +370,7 @@ msgstr ""
 "ことをお勧めします。::"
 
 # 5285082af7bf47c5bdf817e169038f9a
-#: ../../../source/install.rst:435 ../../../source/install.rst:543
+#: ../../../source/install.rst:435 ../../../source/install.rst:550
 msgid "Requirements"
 msgstr "前提条件"
 
@@ -411,22 +416,22 @@ msgid "And we assume that MySQL is installed in the following directory. ::"
 msgstr "MySQLのバイナリが以下にインストールされているものと仮定します。 ::"
 
 # 96faa87e06744aba901adba70eef342c
-#: ../../../source/install.rst:457 ../../../source/install.rst:548
+#: ../../../source/install.rst:457 ../../../source/install.rst:555
 msgid "Install groonga"
 msgstr "groongaのインストール"
 
 # 6771d3ea2eba486f8eba6979cd8afc18
-#: ../../../source/install.rst:459 ../../../source/install.rst:550
+#: ../../../source/install.rst:459 ../../../source/install.rst:557
 msgid "Build and install the latest groonga."
 msgstr "groongaの最新版をビルド＆インストールして下さい。"
 
 # af58908797054cb7ae5069cd064f20f4
-#: ../../../source/install.rst:461 ../../../source/install.rst:552
+#: ../../../source/install.rst:461 ../../../source/install.rst:559
 msgid "http://groonga.org/docs/"
 msgstr "http://groonga.org/ja/docs/"
 
 # d4ffd94e45c2420d86aea88f8e491e3c
-#: ../../../source/install.rst:463 ../../../source/install.rst:554
+#: ../../../source/install.rst:463 ../../../source/install.rst:561
 msgid ""
 "Here we assume that libgroonga is installed in the standard location like /"
 "usr/lib etc."
@@ -462,7 +467,7 @@ msgstr ""
 "た場合は以下のようにします。::"
 
 # a8476870a0f940368386c4eebe428920
-#: ../../../source/install.rst:481 ../../../source/install.rst:573
+#: ../../../source/install.rst:481 ../../../source/install.rst:580
 msgid "Then invoke \"make\". ::"
 msgstr "その後、\"make\"を実行します。 ::"
 
@@ -490,7 +495,7 @@ msgstr ""
 "でインストールします。 ::"
 
 # 31909deb45384ecfa3bdb1b56246e1a7
-#: ../../../source/install.rst:496 ../../../source/install.rst:588
+#: ../../../source/install.rst:496 ../../../source/install.rst:595
 msgid ""
 "If \"mroonga\" is displayed in \"SHOW ENGINES\" command result like below, "
 "mroonga is well installed. ::"
@@ -499,12 +504,12 @@ msgstr ""
 "ストールは完了です。 ::"
 
 # 42345ab063fc4290b4b136b1cbbf50b8
-#: ../../../source/install.rst:511 ../../../source/install.rst:605
+#: ../../../source/install.rst:511 ../../../source/install.rst:612
 msgid "Next install UDF (User-Defined Function)."
 msgstr "続いてUDF(ユーザ定義関数)をインストールします。"
 
 # 22a7c9d8c50649ad9cc2dd307ed5adbf
-#: ../../../source/install.rst:513 ../../../source/install.rst:607
+#: ../../../source/install.rst:513 ../../../source/install.rst:614
 msgid ""
 "To get the record ID assigned by groonga in INSERT, install "
 "last_insert_grn_id function."
@@ -514,34 +519,45 @@ msgstr ""
 
 # bca520b75e934ca4a195a154dff6a1fb
 #: ../../../source/install.rst:515 ../../../source/install.rst:521
-#: ../../../source/install.rst:609 ../../../source/install.rst:615
+#: ../../../source/install.rst:527 ../../../source/install.rst:616
+#: ../../../source/install.rst:622 ../../../source/install.rst:628
 msgid "Invoke CREATE FUNCTION like the following. ::"
 msgstr "以下のようにCREATE FUNCTIONを実行します。 ::"
 
 # 8228e7d62609485ebc8f2efd64669684
-#: ../../../source/install.rst:519 ../../../source/install.rst:613
+#: ../../../source/install.rst:519 ../../../source/install.rst:620
 msgid ""
 "To enable snippet (keyword in context) UDF, install mroonga_snippet function."
 msgstr ""
 "スニペット(キーワード周辺のテキスト)を取得するために、mroonga_snippet関数をイ"
 "ンストールします。"
 
+# 8228e7d62609485ebc8f2efd64669684
+#: ../../../source/install.rst:525 ../../../source/install.rst:626
+#, fuzzy
+msgid ""
+"To enable invoking groonga query from mroonga, install mroonga_command "
+"function."
+msgstr ""
+"スニペット(キーワード周辺のテキスト)を取得するために、mroonga_snippet関数をイ"
+"ンストールします。"
+
 # eb4280f85ca14d08ad5ea6857f1bf4d1
-#: ../../../source/install.rst:526
+#: ../../../source/install.rst:533
 msgid "Install from the source code with MariaDB"
 msgstr "MariaDBにバンドルしたソースコードからのインストール"
 
 # 55aafca095344a3db2c5a63c24daabf2
-#: ../../../source/install.rst:528
+#: ../../../source/install.rst:535
 msgid ""
 "Here we explain how to install from the source code with MariaDB. If your "
 "environment is not listed above, you need to do so."
 msgstr ""
-"MariaDBにバンドルしてソースコードからインストールする方法を説明します。"
-"パッケージがない環境ではソースコードからインストールすることになります。"
+"MariaDBにバンドルしてソースコードからインストールする方法を説明します。パッ"
+"ケージがない環境ではソースコードからインストールすることになります。"
 
 # 1a3637100ab344d0b956e72597eff2fc
-#: ../../../source/install.rst:538
+#: ../../../source/install.rst:545
 msgid ""
 "Download mroonga tarball from `packages.groonga.org <http://packages.groonga."
 "org/source/mroonga>`_ ."
@@ -550,7 +566,7 @@ msgstr ""
 "mroongaのtarballをダウンロードしてください。"
 
 # ddcdb873230b45cc9be24551aabcc61a
-#: ../../../source/install.rst:540
+#: ../../../source/install.rst:547
 msgid ""
 "Download MariaDB tarball from `downloads.mariadb.org <https://downloads."
 "mariadb.org/>`_ ."
@@ -559,49 +575,49 @@ msgstr ""
 "tarballをダウンロードしてください。"
 
 # ae84916b53b34dec8129116c58cded35
-#: ../../../source/install.rst:545
+#: ../../../source/install.rst:552
 msgid "Groonga should be already installed."
 msgstr "groongaが既にインストールされている必要があります。"
 
 # 14ba828334054674b9645fca03854e45
-#: ../../../source/install.rst:557
+#: ../../../source/install.rst:564
 msgid "Build mroonga with MariaDB"
 msgstr "MariaDBとmroongaのビルド"
 
 # ec9cd73b234e4b40b3c07824d12c2a09
-#: ../../../source/install.rst:559
+#: ../../../source/install.rst:566
 msgid "Uncompress MariaDB tarball. ::"
 msgstr "MariaDBのtarballの解凍。 ::"
 
 # 4c5f54e9246a438887009729a11d72ee
-#: ../../../source/install.rst:563
+#: ../../../source/install.rst:570
 msgid "Uncompress mroonga tarball then move into storage directory. ::"
 msgstr "mroongaのtarballの解凍後、storageディレクトリへ移動。 ::"
 
 # a8476870a0f940368386c4eebe428920
-#: ../../../source/install.rst:568
+#: ../../../source/install.rst:575
 msgid "Run \"cmake\". ::"
 msgstr "\"cmake\"を実行します。 ::"
 
 # 96faa87e06744aba901adba70eef342c
-#: ../../../source/install.rst:578
+#: ../../../source/install.rst:585
 msgid "Install mroonga with MariaDB"
 msgstr "MariDBとmroongaのインストール"
 
 # e02a752f95954d1280465c2ad245da73
-#: ../../../source/install.rst:580
+#: ../../../source/install.rst:587
 msgid ""
 "By invoking \"make install\", MariaDB and mroonga will be installed in \"/"
 "usr/local/mysql\" directory. ::"
 msgstr ""
-"\"make install\"を実行すると\"usr/local/mysql\"ディレクトリにMariaDBと"
-"mroongaが配置されます。 ::"
+"\"make install\"を実行すると\"usr/local/mysql\"ディレクトリにMariaDBとmroonga"
+"が配置されます。 ::"
 
 # 425b0856bf4d48308a0a810794d33007
-#: ../../../source/install.rst:584
+#: ../../../source/install.rst:591
 msgid ""
 "Then start mysqld, connect to it by MariaDB client, and install it by "
 "\"INSTALL PLUGIN\" command. ::"
 msgstr ""
-"その後、mysqldを起動し、MariaDBクライアントで接続して\"INSTALL PLUGIN\""
-"コマンドでインストールします。 ::"
+"その後、mysqldを起動し、MariaDBクライアントで接続して\"INSTALL PLUGIN\"コマン"
+"ドでインストールします。 ::"
