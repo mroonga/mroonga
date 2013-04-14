@@ -144,23 +144,40 @@ if [ -n "${plugins_dir}" ]; then
 fi
 
 test_suite_names=""
+test_names=""
 while [ $# -gt 0 ]; do
     case "$1" in
 	--*)
 	    break
 	    ;;
 	*)
-	    if [ -d "$1" ]; then
-		test_suite_name=$(cd "$1" && pwd)
-	    else
-		test_suite_name="$1"
-	    fi
+	    case "$1" in
+		*/t/*.test)
+		    test_suite_name=$(echo "$1" | sed -e 's,/t/.*\.test,,g')
+		    test_suite_name=$(cd "$test_suite_name" && pwd)
+		    test_name=$(echo "$1" | sed -e 's,.*/t/\(.*\)\.test,\1,g')
+		    ;;
+		*)
+		    if [ -d "$1" ]; then
+			test_suite_name=$(cd "$1" && pwd)
+		    else
+			test_suite_name="$1"
+		    fi
+		    test_name=""
+		    ;;
+	    esac
 	    shift
 	    test_suite_name=$(echo "$test_suite_name" | sed -e "s,^${suite_dir},,")
 	    if [ -n "${test_suite_names}" ]; then
 		test_suite_names="${test_suite_names},"
 	    fi
 	    test_suite_names="${test_suite_names}${test_suite_name}"
+	    if [ -n "${test_name}" ]; then
+		if [ -n "${test_names}" ]; then
+		    test_names="${test_names},"
+		fi
+		test_names="${test_names}${test_name}"
+	    fi
 	    ;;
     esac
 done
@@ -169,11 +186,17 @@ if [ -z "$test_suite_names" ]; then
     test_suite_names="${all_test_suite_names}"
 fi
 
+mysql_test_run_args=""
+mysql_test_run_args="${mysql_test_run_args} --no-check-testcases"
+mysql_test_run_args="${mysql_test_run_args} --parallel=${n_processors}"
+mysql_test_run_args="${mysql_test_run_args} --retry=1"
+mysql_test_run_args="${mysql_test_run_args} --suite=${test_suite_names}"
+mysql_test_run_args="${mysql_test_run_args} --force"
+if [ -n "$test_names" ]; then
+    mysql_test_run_args="${mysql_test_run_args} --do-test=${test_names}"
+fi
+
 (cd "$build_mysql_test_dir" && \
     ./mysql-test-run.pl \
-    --no-check-testcases \
-    --parallel="${n_processors}" \
-    --retry=1 \
-    --suite="${test_suite_names}" \
-    --force \
+    ${mysql_test_run_args} \
     "$@")
