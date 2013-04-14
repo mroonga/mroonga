@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-04-09 15:45\n"
-"PO-Revision-Date: 2012-05-28 19:43+0900\n"
+"PO-Revision-Date: 2013-04-14 22:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -534,13 +534,10 @@ msgstr ""
 
 # 8228e7d62609485ebc8f2efd64669684
 #: ../../../source/install.rst:525 ../../../source/install.rst:626
-#, fuzzy
 msgid ""
 "To enable invoking groonga query from mroonga, install mroonga_command "
 "function."
-msgstr ""
-"スニペット(キーワード周辺のテキスト)を取得するために、mroonga_snippet関数をイ"
-"ンストールします。"
+msgstr "mroongaからgroongaのクエリを実行するために、mroonga_command関数をインストールします。"
 
 # eb4280f85ca14d08ad5ea6857f1bf4d1
 #: ../../../source/install.rst:533
