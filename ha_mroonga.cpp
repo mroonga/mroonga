@@ -3326,7 +3326,17 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
 #endif
 
-    grn_obj_flags col_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR;
+    grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
+    if (tmp_share->col_flags[i]) {
+      // TODO: parse flags
+      if (strcmp(tmp_share->col_flags[i], "COLUMN_VECTOR") == 0) {
+        col_flags |= GRN_OBJ_COLUMN_VECTOR;
+      } else {
+        col_flags |= GRN_OBJ_COLUMN_SCALAR;
+      }
+    } else {
+      col_flags |= GRN_OBJ_COLUMN_SCALAR;
+    }
     grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
     col_type = grn_ctx_at(ctx, gtype);
     char *col_path = NULL; // we don't specify path
