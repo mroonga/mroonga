@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011 Kentoku SHIBA
+  Copyright(C) 2011-2013 Kentoku SHIBA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -619,6 +619,110 @@ error:
   DBUG_RETURN(error);
 }
 
+int mrn_add_column_param(MRN_SHARE *share, Field *field, int i)
+{
+  int error;
+  char *param_string = NULL;
+  int title_length;
+  char *sprit_ptr[2];
+  char *tmp_ptr, *start_ptr;
+  DBUG_ENTER("mrn_add_column_param");
+
+  DBUG_PRINT("info", ("mroonga create comment string"));
+  if (
+    !(param_string = mrn_create_string(
+      field->comment.str,
+      field->comment.length))
+  ) {
+    error = HA_ERR_OUT_OF_MEM;
+    goto error_alloc_param_string;
+  }
+  DBUG_PRINT("info", ("mroonga comment string=%s", param_string));
+
+  sprit_ptr[0] = param_string;
+  while (sprit_ptr[0])
+  {
+    if ((sprit_ptr[1] = strchr(sprit_ptr[0], ',')))
+    {
+      *sprit_ptr[1] = '\0';
+      sprit_ptr[1]++;
+    }
+    tmp_ptr = sprit_ptr[0];
+    sprit_ptr[0] = sprit_ptr[1];
+    while (*tmp_ptr == ' ' || *tmp_ptr == '\r' ||
+      *tmp_ptr == '\n' || *tmp_ptr == '\t')
+      tmp_ptr++;
+
+    if (*tmp_ptr == '\0')
+      continue;
+
+    title_length = 0;
+    start_ptr = tmp_ptr;
+    while (*start_ptr != ' ' && *start_ptr != '\'' &&
+      *start_ptr != '"' && *start_ptr != '\0' &&
+      *start_ptr != '\r' && *start_ptr != '\n' &&
+      *start_ptr != '\t')
+    {
+      title_length++;
+      start_ptr++;
+    }
+
+    switch (title_length)
+    {
+      case 0:
+        continue;
+      case 4:
+        MRN_PARAM_STR_LIST("type", col_type, i);
+        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
+        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
+          MYF(0), tmp_ptr);
+        goto error;
+      case 5:
+        MRN_PARAM_STR_LIST("flags", col_flags, i);
+        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
+        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
+          MYF(0), tmp_ptr);
+        goto error;
+      default:
+        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
+        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
+          MYF(0), tmp_ptr);
+        goto error;
+    }
+  }
+
+  if (param_string)
+    my_free(param_string, MYF(0));
+  DBUG_RETURN(0);
+
+error:
+  if (param_string)
+    my_free(param_string, MYF(0));
+error_alloc_param_string:
+  DBUG_RETURN(error);
+}
+
+int mrn_parse_column_param(MRN_SHARE *share, TABLE *table)
+{
+  int error;
+  DBUG_ENTER("mrn_parse_column_param");
+  for (uint i = 0; i < table->s->fields; i++)
+  {
+    Field *field = table->s->field[i];
+
+    if (LEX_STRING_IS_EMPTY(field->comment)) {
+      continue;
+    }
+
+    if ((error = mrn_add_column_param(share, field, i)))
+      goto error;
+  }
+  DBUG_RETURN(0);
+
+error:
+  DBUG_RETURN(error);
+}
+
 int mrn_free_share_alloc(
   MRN_SHARE *share
 ) {
@@ -631,14 +735,22 @@ int mrn_free_share_alloc(
     if (share->key_parser[i])
       my_free(share->key_parser[i], MYF(0));
   }
+  for (i = 0; i < share->table_share->fields; i++)
+  {
+    if (share->col_flags[i])
+      my_free(share->col_flags[i], MYF(0));
+    if (share->col_type[i])
+      my_free(share->col_type[i], MYF(0));
+  }
   DBUG_RETURN(0);
 }
 
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
   MRN_SHARE *share;
-  char *tmp_name, **key_parser;
-  uint length, *wrap_key_nr, *key_parser_length, i, j;
+  char *tmp_name, **key_parser, **col_flags, **col_type;
+  uint length, *wrap_key_nr, *key_parser_length, *col_flags_length,
+    *col_type_length, i, j;
   KEY *wrap_key_info;
   TABLE_SHARE *wrap_table_share;
   DBUG_ENTER("mrn_get_share");
@@ -653,6 +765,10 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
         &tmp_name, length + 1,
         &key_parser, sizeof(char *) * table->s->keys,
         &key_parser_length, sizeof(uint) * table->s->keys,
+        &col_flags, sizeof(char *) * table->s->fields,
+        &col_flags_length, sizeof(uint) * table->s->fields,
+        &col_type, sizeof(char *) * table->s->fields,
+        &col_type_length, sizeof(uint) * table->s->fields,
         &wrap_key_nr, sizeof(*wrap_key_nr) * table->s->keys,
         &wrap_key_info, sizeof(*wrap_key_info) * table->s->keys,
         &wrap_table_share, sizeof(*wrap_table_share),
@@ -666,11 +782,16 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     share->table_name = tmp_name;
     share->key_parser = key_parser;
     share->key_parser_length = key_parser_length;
+    share->col_flags = col_flags;
+    share->col_flags_length = col_flags_length;
+    share->col_type = col_type;
+    share->col_type_length = col_type_length;
     strmov(share->table_name, table_name);
     share->table_share = table->s;
 
     if (
       (*error = mrn_parse_table_param(share, table)) ||
+      (*error = mrn_parse_column_param(share, table)) ||
       (*error = mrn_parse_index_param(share, table))
     )
       goto error_parse_table_param;

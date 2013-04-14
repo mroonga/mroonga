@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011 Kentoku SHIBA
+  Copyright(C) 2011-2013 Kentoku SHIBA
   Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -42,7 +42,11 @@ typedef struct st_mroonga_share
   plugin_ref         plugin;
   handlerton         *hton;
   char               **key_parser;
+  char               **col_flags;
+  char               **col_type;
   uint               *key_parser_length;
+  uint               *col_flags_length;
+  uint               *col_type_length;
   uint               *wrap_key_nr;
   uint               wrap_keys;
   uint               base_keys;
@@ -129,6 +133,8 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table);
 bool mrn_is_geo_key(const KEY *key_info);
 int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i);
 int mrn_parse_index_param(MRN_SHARE *share, TABLE *table);
+int mrn_add_column_param(MRN_SHARE *share, Field *field, int i);
+int mrn_parse_column_param(MRN_SHARE *share, TABLE *table);
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error);
 int mrn_free_share_alloc(MRN_SHARE *share);
 int mrn_free_share(MRN_SHARE *share);
