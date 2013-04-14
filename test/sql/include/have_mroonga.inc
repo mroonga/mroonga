@@ -15,22 +15,14 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/check_windows.inc
+--source include/check_ha_mroonga_so.inc
 
 disable_query_log;
 
 if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`)
 {
-  if ($VERSION_COMPILE_OS_WIN)
-  {
-    INSTALL PLUGIN mroonga SONAME 'ha_mroonga.dll';
-    INSTALL PLUGIN mroonga_stats SONAME 'ha_mroonga.dll';
-  }
-  if (!$VERSION_COMPILE_OS_WIN)
-  {
-    INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
-    INSTALL PLUGIN mroonga_stats SONAME 'ha_mroonga.so';
-  }
+  eval INSTALL PLUGIN mroonga SONAME $ha_mroonga_so;
+  eval INSTALL PLUGIN mroonga_stats SONAME $ha_mroonga_so;
 }
 
 let have_default_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_storage_engine"`;
