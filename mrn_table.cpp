@@ -737,9 +737,9 @@ int mrn_free_share_alloc(
   }
   for (i = 0; i < share->table_share->fields; i++)
   {
-    if (share->col_flags[i])
+    if (share->col_flags && share->col_flags[i])
       my_free(share->col_flags[i], MYF(0));
-    if (share->col_type[i])
+    if (share->col_type && share->col_type[i])
       my_free(share->col_type[i], MYF(0));
   }
   DBUG_RETURN(0);

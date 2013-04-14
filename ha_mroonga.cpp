@@ -13165,6 +13165,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
+  tmp_share->col_flags = NULL;
+  tmp_share->col_type = NULL;
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   hnd_add_index = NULL;
 #endif
@@ -13293,6 +13295,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
+  tmp_share->col_flags = NULL;
+  tmp_share->col_type = NULL;
   bitmap_clear_all(table->read_set);
   mrn::PathMapper mapper(share->table_name, mrn_database_path_prefix);
   for (i = 0; i < num_of_keys; i++) {
