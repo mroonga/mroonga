@@ -1,5 +1,4 @@
 drop table if exists memos;
-drop function if exists last_insert_grn_id;
 create table memos (
 _id int,
 content varchar(255),
@@ -28,4 +27,3 @@ _id	content
 4	金曜日は肉の日。
 5	冷蔵庫に牛乳はまだたくさんある。
 drop table memos;
-drop function last_insert_grn_id;

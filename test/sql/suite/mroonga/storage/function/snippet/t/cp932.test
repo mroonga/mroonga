@@ -1,4 +1,5 @@
 # Copyright(C) 2012-2013 Kentoku SHIBA
+# Copyright(C) 2013 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,21 +17,11 @@
 
 --source include/have_cp932.inc
 --source include/have_mroonga.inc
+--source include/load_mroonga_functions.inc
 
 --disable_warnings
 drop table if exists t1, t2, t3;
 --enable_warnings
-
---disable_query_log
-if ($VERSION_COMPILE_OS_WIN)
-{
-  CREATE FUNCTION mroonga_snippet RETURNS string SONAME 'ha_mroonga.dll';
-}
-if (!$VERSION_COMPILE_OS_WIN)
-{
-  CREATE FUNCTION mroonga_snippet RETURNS string SONAME 'ha_mroonga.so';
-}
---enable_query_log
 
 set names cp932;
 create table t1 (c1 int primary key, c2 varchar(255), c3 text, fulltext index(c2), fulltext index(c3)) default charset cp932;
@@ -46,6 +37,6 @@ select c1, c2, mroonga_snippet(c3, 10, 2, 'cp932_bin', 0, 0, '...', '...\n', '‚Q
 select c1, c2, mroonga_snippet(c3, 10, 2, 'cp932_japanese_ci', 1, 0, '...', '...\n', '‚Q‚X“ú', '(w1)[', ']', '“V‹C', '(w2)[', ']', '•xŽmŽR', '(w3)[', ']') from t1;
 select c1, c2, mroonga_snippet(c3, 10, 2, 'cp932_bin', 1, 0, '...', '...\n', '‚Q‚X“ú', '(w1)[', ']', '“V‹C', '(w2)[', ']', '•xŽmŽR', '(w3)[', ']') from t1;
 drop table t1;
-drop function mroonga_snippet;
 
+--source include/unload_mroonga_functions.inc
 --source include/have_mroonga_deinit.inc

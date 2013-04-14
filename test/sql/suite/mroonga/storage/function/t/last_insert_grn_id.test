@@ -1,5 +1,6 @@
 # Copyright(C) 2010 Tetsuro IKEDA
 # Copyright(C) 2013 Kentoku SHIBA
+# Copyright(C) 2013 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,22 +17,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_mroonga.inc
+--source include/load_mroonga_functions.inc
 
 --disable_warnings
 drop table if exists t1, t2, t3;
-drop function if exists last_insert_grn_id;
 --enable_warnings
-
---disable_query_log
-if ($VERSION_COMPILE_OS_WIN)
-{
-  CREATE FUNCTION last_insert_grn_id RETURNS integer SONAME 'ha_mroonga.dll';
-}
-if (!$VERSION_COMPILE_OS_WIN)
-{
-  CREATE FUNCTION last_insert_grn_id RETURNS integer SONAME 'ha_mroonga.so';
-}
---enable_query_log
 
 create table t1 (_id int, c1 int);
 select last_insert_grn_id();
@@ -53,6 +43,5 @@ select last_insert_grn_id(1);
 
 drop table t1;
 
-drop function last_insert_grn_id;
-
+--source include/unload_mroonga_functions.inc
 --source include/have_mroonga_deinit.inc

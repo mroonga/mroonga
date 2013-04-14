@@ -93,4 +93,3 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_bin', 1, 0, '...', '...\n', '２９日', 
 ...(w2)[天気]に...
 
 drop table t1;
-drop function mroonga_snippet;

@@ -118,4 +118,3 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'ascii_bin', 1, 0, '...', '...\n', 'bb', '(w1)[
 
 5	50	
 drop table t1;
-drop function mroonga_snippet;

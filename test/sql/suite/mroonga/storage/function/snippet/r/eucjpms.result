@@ -89,4 +89,3 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'eucjpms_bin', 1, 0, '...', '...\n', '２９日', 
 3	ううううう	...の(w3)[富士山]の...
 
 drop table t1;
-drop function mroonga_snippet;

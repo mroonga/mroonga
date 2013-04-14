@@ -89,4 +89,3 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'cp932_bin', 1, 0, '...', '...\n', '‚Q‚X“ú', '(
 3	‚¤‚¤‚¤‚¤‚¤	...‚Ì(w3)[•xŽmŽR]‚Ì...
 
 drop table t1;
-drop function mroonga_snippet;

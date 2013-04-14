@@ -15,21 +15,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_mroonga.inc
+--source include/load_mroonga_functions.inc
 
 --disable_warnings
 drop table if exists t1, t2, t3;
 --enable_warnings
-
---disable_query_log
-if ($VERSION_COMPILE_OS_WIN)
-{
-  CREATE FUNCTION mroonga_snippet RETURNS string SONAME 'ha_mroonga.dll';
-}
-if (!$VERSION_COMPILE_OS_WIN)
-{
-  CREATE FUNCTION mroonga_snippet RETURNS string SONAME 'ha_mroonga.so';
-}
---enable_query_log
 
 set names utf8;
 create table t1 (c1 int primary key, c2 varchar(255), c3 text, fulltext index(c2), fulltext index(c3)) default charset utf8;
@@ -45,6 +35,6 @@ select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_bin', 0, 0, '...', '...\n', '２
 select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
 select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_bin', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
 drop table t1;
-drop function mroonga_snippet;
 
+--source include/unload_mroonga_functions.inc
 --source include/have_mroonga_deinit.inc
