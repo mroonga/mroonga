@@ -15,12 +15,12 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+--source include/check_windows.inc
+
 disable_query_log;
 
 if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`)
 {
-  let $VERSION_COMPILE_OS_WIN=
-    `SELECT IF(@@version_compile_os like 'Win%', 1, 0)`;
   if ($VERSION_COMPILE_OS_WIN)
   {
     INSTALL PLUGIN mroonga SONAME 'ha_mroonga.dll';
