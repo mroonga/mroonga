@@ -2403,6 +2403,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    ctx(&ctx_entity_),
    grn_table(NULL),
    grn_columns(NULL),
+   grn_column_ranges(NULL),
    grn_index_tables(NULL),
    grn_index_columns(NULL),
    grn_source_column_geo(NULL),
@@ -4341,6 +4342,7 @@ int ha_mroonga::storage_open_columns(void)
 
   int n_columns = table->s->fields;
   grn_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
+  grn_column_ranges = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
 
   int i;
   for (i = 0; i < n_columns; i++) {
@@ -4350,15 +4352,19 @@ int ha_mroonga::storage_open_columns(void)
 
     if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
       grn_columns[i] = NULL;
+      grn_column_ranges[i] = NULL;
       continue;
     }
     if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
       grn_columns[i] = NULL;
+      grn_column_ranges[i] = NULL;
       continue;
     }
 
     grn_columns[i] = grn_obj_column(ctx, grn_table,
                                     column_name, column_name_size);
+    grn_id range_id = grn_obj_get_range(ctx, grn_columns[i]);
+    grn_column_ranges[i] = grn_ctx_at(ctx, range_id);
     if (ctx->rc) {
       // TODO: free grn_columns and set NULL;
       int error = ER_CANT_OPEN_FILE;
@@ -4530,7 +4536,10 @@ int ha_mroonga::storage_close()
 {
   MRN_DBUG_ENTER_METHOD();
   grn_obj_unlink(ctx, grn_table);
+  // TODO: unlink elements
   free(grn_columns);
+  // TODO: unlink elements
+  free(grn_column_ranges);
   DBUG_RETURN(0);
 }
 
@@ -9952,8 +9961,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         DBUG_PRINT("info", ("mroonga: value_length=%u",value_length));
         if (((grn_columns[i]->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
              GRN_OBJ_COLUMN_VECTOR)) {
-          grn_id range_id = grn_obj_get_range(ctx, grn_columns[i]);
-          grn_obj *range = grn_ctx_at(ctx, range_id);
+          grn_obj *range = grn_column_ranges[i];
           // TODO: Check whether reference type or not
           grn_obj unvectored_value;
           GRN_TEXT_INIT(&unvectored_value, 0);
