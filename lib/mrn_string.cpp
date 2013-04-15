@@ -24,7 +24,7 @@ namespace mrn {
   namespace string {
     char *strndup(const char *string, uint length) {
       char *res;
-      DBUG_ENTER("mrn::string::strndup");
+      MRN_DBUG_ENTER_FUNCTION();
       if (!(res = (char*) my_malloc(length + 1, MYF(MY_WME))))
         DBUG_RETURN(NULL);
       memcpy(res, string, length);
