@@ -11468,16 +11468,20 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
       slot_data->alter_connect_string = NULL;
     }
     if (create_info->connect_string.str) {
-      slot_data->alter_connect_string = mrn_create_string(
-        create_info->connect_string.str, create_info->connect_string.length);
+      slot_data->alter_connect_string =
+        my_strndup(create_info->connect_string.str,
+                   create_info->connect_string.length,
+                   MYF(MY_WME));
     }
     if (slot_data->alter_comment) {
       my_free(slot_data->alter_comment, MYF(0));
       slot_data->alter_comment = NULL;
     }
     if (create_info->comment.str) {
-      slot_data->alter_comment = mrn_create_string(
-        create_info->comment.str, create_info->comment.length);
+      slot_data->alter_comment =
+        my_strndup(create_info->comment.str,
+                   create_info->comment.length,
+                   MYF(MY_WME));
     }
     if (share && share->disable_keys) {
       slot_data->disable_keys_create_info = create_info;

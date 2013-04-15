@@ -55,13 +55,6 @@ extern handlerton *mrn_hton_ptr;
 extern HASH mrn_allocated_thds;
 extern pthread_mutex_t mrn_allocated_thds_mutex;
 
-char *mrn_create_string(const char *str, uint length)
-{
-  DBUG_ENTER("mrn_create_string");
-  char *res = my_strndup(str, length, MYF(MY_WME));
-  DBUG_RETURN(res);
-}
-
 char *mrn_get_string_between_quote(char *ptr, bool alloc)
 {
   char *start_ptr, *end_ptr, *tmp_ptr, *esc_ptr;
@@ -155,11 +148,7 @@ char *mrn_get_string_between_quote(char *ptr, bool alloc)
   }
   if (alloc)
   {
-    DBUG_RETURN(
-      mrn_create_string(
-      start_ptr,
-      strlen(start_ptr))
-    );
+    DBUG_RETURN(my_strdup(start_ptr, MYF(MY_WME)));
   } else {
     DBUG_RETURN(start_ptr);
   }
@@ -320,9 +309,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           continue;
         DBUG_PRINT("info", ("mroonga create sub comment string"));
         if (
-          !(param_string = mrn_create_string(
-            sub_elem->part_comment,
-            strlen(sub_elem->part_comment)))
+          !(param_string = my_strdup(sub_elem->part_comment, MYF(MY_WME)))
         ) {
           error = HA_ERR_OUT_OF_MEM;
           goto error_alloc_param_string;
@@ -334,9 +321,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           continue;
         DBUG_PRINT("info", ("mroonga create part comment string"));
         if (
-          !(param_string = mrn_create_string(
-            part_elem->part_comment,
-            strlen(part_elem->part_comment)))
+          !(param_string = my_strdup(part_elem->part_comment, MYF(MY_WME)))
         ) {
           error = HA_ERR_OUT_OF_MEM;
           goto error_alloc_param_string;
@@ -349,9 +334,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           continue;
         DBUG_PRINT("info", ("mroonga create comment string"));
         if (
-          !(param_string = mrn_create_string(
-            table->s->comment.str,
-            table->s->comment.length))
+          !(param_string = my_strndup(table->s->comment.str,
+                                      table->s->comment.length,
+                                      MYF(MY_WME)))
         ) {
           error = HA_ERR_OUT_OF_MEM;
           goto error_alloc_param_string;
@@ -363,9 +348,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           continue;
         DBUG_PRINT("info", ("mroonga create connect_string string"));
         if (
-          !(param_string = mrn_create_string(
-            table->s->connect_string.str,
-            table->s->connect_string.length))
+          !(param_string = my_strndup(table->s->connect_string.str,
+                                      table->s->connect_string.length,
+                                      MYF(MY_WME)))
         ) {
           error = HA_ERR_OUT_OF_MEM;
           goto error_alloc_param_string;
@@ -433,9 +418,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
   {
     share->engine_length = strlen(mrn_default_wrapper_engine);
     if (
-      !(share->engine = mrn_create_string(
-        mrn_default_wrapper_engine,
-        share->engine_length))
+      !(share->engine = my_strndup(mrn_default_wrapper_engine,
+                                   share->engine_length,
+                                   MYF(MY_WME)))
     ) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
@@ -508,9 +493,7 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
       my_free(share->key_parser[i], MYF(0));
     }
     if (
-      !(share->key_parser[i] = mrn_create_string(
-        mrn_default_parser,
-        strlen(mrn_default_parser)))
+      !(share->key_parser[i] = my_strdup(mrn_default_parser, MYF(MY_WME)))
     ) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
@@ -520,9 +503,9 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
   }
   DBUG_PRINT("info", ("mroonga create comment string"));
   if (
-    !(param_string = mrn_create_string(
-      key_info->comment.str,
-      key_info->comment.length))
+    !(param_string = my_strndup(key_info->comment.str,
+                                key_info->comment.length,
+                                MYF(MY_WME)))
   ) {
     error = HA_ERR_OUT_OF_MEM;
     goto error_alloc_param_string;
@@ -577,9 +560,7 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 #endif
   if (!share->key_parser[i]) {
     if (
-      !(share->key_parser[i] = mrn_create_string(
-        mrn_default_parser,
-        strlen(mrn_default_parser)))
+      !(share->key_parser[i] = my_strdup(mrn_default_parser, MYF(MY_WME)))
     ) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
@@ -632,9 +613,9 @@ int mrn_add_column_param(MRN_SHARE *share, Field *field, int i)
 
   DBUG_PRINT("info", ("mroonga create comment string"));
   if (
-    !(param_string = mrn_create_string(
-      field->comment.str,
-      field->comment.length))
+    !(param_string = my_strndup(field->comment.str,
+                                field->comment.length,
+                                MYF(MY_WME)))
   ) {
     error = HA_ERR_OUT_OF_MEM;
     goto error_alloc_param_string;
