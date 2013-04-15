@@ -286,8 +286,8 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 {
   int i, error;
   int title_length;
-  char *sprit_ptr[2];
-  char *tmp_ptr, *start_ptr;
+  const char *sprit_ptr[2];
+  const char *tmp_ptr, *start_ptr;
 #ifdef WITH_PARTITION_STORAGE_ENGINE
   partition_element *part_elem;
   partition_element *sub_elem;
@@ -355,7 +355,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 
     {
       std::string params_string(params_string_value, params_string_length);
-      sprit_ptr[0] = const_cast<char *>(params_string.c_str());
+      sprit_ptr[0] = params_string.c_str();
       while (sprit_ptr[0])
       {
         if ((sprit_ptr[1] = strchr(sprit_ptr[0], ',')))
