@@ -9950,7 +9950,36 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         value = grn_obj_get_value_(ctx, grn_columns[i], record_id,
                                    &value_length);
         DBUG_PRINT("info", ("mroonga: value_length=%u",value_length));
-        storage_store_field(field, value, value_length);
+        if (((grn_columns[i]->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
+             GRN_OBJ_COLUMN_VECTOR)) {
+          grn_id range_id = grn_obj_get_range(ctx, grn_columns[i]);
+          grn_obj *range = grn_ctx_at(ctx, range_id);
+          // TODO: Check whether reference type or not
+          grn_obj unvectored_value;
+          GRN_TEXT_INIT(&unvectored_value, 0);
+          grn_id *ids = (grn_id *)value;
+          for (int i = 0; i * sizeof(grn_id) < value_length; i++) {
+            grn_id id = ids[i];
+            if (i > 0) {
+              GRN_TEXT_PUTC(ctx, &unvectored_value, ' ');
+            }
+            char key[GRN_TABLE_MAX_KEY_SIZE];
+            int key_length;
+            key_length = grn_table_get_key(ctx, range, id,
+                                           &key, GRN_TABLE_MAX_KEY_SIZE);
+            GRN_TEXT_PUT(ctx, &unvectored_value, key, key_length);
+          }
+          storage_store_field(field,
+                              GRN_TEXT_VALUE(&unvectored_value),
+                              GRN_TEXT_LEN(&unvectored_value));
+          // TODO: support not blob type
+          Field_blob *blob = (Field_blob *)field;
+          blob->copy();
+          GRN_OBJ_FIN(ctx, &unvectored_value);
+          grn_obj_unlink(ctx, range);
+        } else {
+          storage_store_field(field, value, value_length);
+        }
       }
       field->move_field_offset(-ptr_diff);
     }

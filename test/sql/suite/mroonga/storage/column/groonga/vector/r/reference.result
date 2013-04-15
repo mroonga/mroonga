@@ -1,0 +1,20 @@
+DROP TABLE IF EXISTS Tags, Bugs;
+CREATE TABLE Tags (
+name VARCHAR(64) PRIMARY KEY
+) DEFAULT CHARSET=utf8
+COLLATE=utf8_bin
+COMMENT='default_tokenizer "TokenDelimit"';
+CREATE TABLE Bugs (
+id INT UNSIGNED PRIMARY KEY,
+tags TEXT COMMENT 'flags "COLUMN_VECTOR", type "Tags"'
+) DEFAULT CHARSET=utf8;
+INSERT INTO Bugs (id, tags) VALUES (1, "Linux MySQL groonga");
+SELECT * FROM Bugs;
+id	tags
+1	Linux MySQL groonga
+SELECT * FROM Tags;
+name
+Linux
+MySQL
+groonga
+DROP TABLE Tags, Bugs;
