@@ -55,7 +55,7 @@ extern handlerton *mrn_hton_ptr;
 extern HASH mrn_allocated_thds;
 extern pthread_mutex_t mrn_allocated_thds_mutex;
 
-char *mrn_get_string_between_quote(char *ptr, bool alloc)
+char *mrn_get_string_between_quote(char *ptr)
 {
   char *start_ptr, *end_ptr, *tmp_ptr, *esc_ptr;
   bool find_flg = FALSE, esc_flg = FALSE;
@@ -146,12 +146,7 @@ char *mrn_get_string_between_quote(char *ptr, bool alloc)
       strcpy(esc_ptr, esc_ptr + 1);
     }
   }
-  if (alloc)
-  {
-    DBUG_RETURN(my_strdup(start_ptr, MYF(MY_WME)));
-  } else {
-    DBUG_RETURN(start_ptr);
-  }
+  DBUG_RETURN(my_strdup(start_ptr, MYF(MY_WME)));
 }
 
 #ifdef WITH_PARTITION_STORAGE_ENGINE
@@ -239,7 +234,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
     if (!share->param_name) \
     { \
       if ((share->param_name = mrn_get_string_between_quote( \
-        start_ptr, TRUE))) \
+        start_ptr))) \
         share->MRN_PARAM_STR_LEN(param_name) = strlen(share->param_name); \
       else { \
         error = ER_MRN_INVALID_TABLE_PARAM_NUM; \
@@ -259,7 +254,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
     if (!share->param_name[param_pos]) \
     { \
       if ((share->param_name[param_pos] = mrn_get_string_between_quote( \
-        start_ptr, TRUE))) \
+        start_ptr))) \
         share->MRN_PARAM_STR_LEN(param_name)[param_pos] = \
           strlen(share->param_name[param_pos]); \
       else { \
