@@ -29,8 +29,6 @@
 #include "mrn_table.hpp"
 #include "mrn_mysql_compat.h"
 
-#include <mrn_string.hpp>
-
 #if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
 #  define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), TRUE)
 #else
@@ -60,7 +58,7 @@ extern pthread_mutex_t mrn_allocated_thds_mutex;
 char *mrn_create_string(const char *str, uint length)
 {
   DBUG_ENTER("mrn_create_string");
-  char *res = mrn::string::strndup(str, length);
+  char *res = my_strndup(str, length, MYF(MY_WME));
   DBUG_RETURN(res);
 }
 
