@@ -20,6 +20,8 @@
 #ifndef _mrn_mysql_compat_h
 #define _mrn_mysql_compat_h
 
+#include "mrn_mysql.h"
+
 #if MYSQL_VERSION_ID >= 50500
 #  define my_free(PTR, FLAG) my_free(PTR)
 #endif
