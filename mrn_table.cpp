@@ -344,59 +344,59 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 
     {
       std::string params_string(params_string_value, params_string_length);
-    sprit_ptr[0] = const_cast<char *>(params_string.c_str());
-    while (sprit_ptr[0])
-    {
-      if ((sprit_ptr[1] = strchr(sprit_ptr[0], ',')))
+      sprit_ptr[0] = const_cast<char *>(params_string.c_str());
+      while (sprit_ptr[0])
       {
-        *sprit_ptr[1] = '\0';
-        sprit_ptr[1]++;
-      }
-      tmp_ptr = sprit_ptr[0];
-      sprit_ptr[0] = sprit_ptr[1];
-      while (*tmp_ptr == ' ' || *tmp_ptr == '\r' ||
-        *tmp_ptr == '\n' || *tmp_ptr == '\t')
-        tmp_ptr++;
+        if ((sprit_ptr[1] = strchr(sprit_ptr[0], ',')))
+        {
+          *sprit_ptr[1] = '\0';
+          sprit_ptr[1]++;
+        }
+        tmp_ptr = sprit_ptr[0];
+        sprit_ptr[0] = sprit_ptr[1];
+        while (*tmp_ptr == ' ' || *tmp_ptr == '\r' ||
+               *tmp_ptr == '\n' || *tmp_ptr == '\t')
+          tmp_ptr++;
 
-      if (*tmp_ptr == '\0')
-        continue;
+        if (*tmp_ptr == '\0')
+          continue;
 
-      DBUG_PRINT("info", ("mroonga title_str=%s", tmp_ptr));
-      title_length = 0;
-      start_ptr = tmp_ptr;
-      while (*start_ptr != ' ' && *start_ptr != '\'' &&
-        *start_ptr != '"' && *start_ptr != '\0' &&
-        *start_ptr != '\r' && *start_ptr != '\n' &&
-        *start_ptr != '\t')
-      {
-        title_length++;
-        start_ptr++;
-      }
-      DBUG_PRINT("info", ("mroonga title_length=%u", title_length));
+        DBUG_PRINT("info", ("mroonga title_str=%s", tmp_ptr));
+        title_length = 0;
+        start_ptr = tmp_ptr;
+        while (*start_ptr != ' ' && *start_ptr != '\'' &&
+               *start_ptr != '"' && *start_ptr != '\0' &&
+               *start_ptr != '\r' && *start_ptr != '\n' &&
+               *start_ptr != '\t')
+        {
+          title_length++;
+          start_ptr++;
+        }
+        DBUG_PRINT("info", ("mroonga title_length=%u", title_length));
 
-      switch (title_length)
-      {
+        switch (title_length)
+        {
         case 0:
           continue;
         case 6:
           MRN_PARAM_STR("engine", engine);
           error = ER_MRN_INVALID_TABLE_PARAM_NUM;
           my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-            MYF(0), tmp_ptr);
+                          MYF(0), tmp_ptr);
           goto error;
         case 17:
           MRN_PARAM_STR("default_tokenizer", default_tokenizer);
           error = ER_MRN_INVALID_TABLE_PARAM_NUM;
           my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-            MYF(0), tmp_ptr);
+                          MYF(0), tmp_ptr);
           goto error;
         default:
           error = ER_MRN_INVALID_TABLE_PARAM_NUM;
           my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-            MYF(0), tmp_ptr);
+                          MYF(0), tmp_ptr);
           goto error;
+        }
       }
-    }
     }
   }
 
