@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS Tags, Bugs;
+CREATE TABLE Tags (
+name VARCHAR(64) PRIMARY KEY
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+CREATE TABLE Bugs (
+id INT UNSIGNED PRIMARY KEY,
+tag VARCHAR(64) COMMENT 'type "Tags"'
+) DEFAULT CHARSET=utf8;
+SELECT mroonga_command("dump");
+mroonga_command("dump")
+table_create Tags TABLE_PAT_KEY ShortText
+column_create Tags name COLUMN_SCALAR ShortText
+table_create Bugs TABLE_PAT_KEY UInt32
+column_create Bugs id COLUMN_SCALAR UInt32
+column_create Bugs tag COLUMN_SCALAR Tags
+DROP TABLE Tags, Bugs;

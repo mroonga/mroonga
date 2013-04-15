@@ -3338,7 +3338,11 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
     grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
-    col_type = grn_ctx_at(ctx, gtype);
+    if (tmp_share->col_type[i]) {
+      col_type = grn_ctx_get(ctx, tmp_share->col_type[i], -1);
+    } else {
+      col_type = grn_ctx_at(ctx, gtype);
+    }
     char *col_path = NULL; // we don't specify path
 
     grn_column_create(ctx, table_obj, column_name, column_name_size,
