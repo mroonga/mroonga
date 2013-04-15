@@ -124,7 +124,6 @@ struct st_mrn_slot_data
   table->key_info = file->base_key_info; \
   table->s = share->table_share;
 
-char *mrn_get_string_between_quote(char *ptr);
 #ifdef WITH_PARTITION_STORAGE_ENGINE
 void mrn_get_partition_info(const char *table_name, uint table_name_length,
                             const TABLE *table, partition_element **part_elem,

@@ -57,7 +57,7 @@ extern handlerton *mrn_hton_ptr;
 extern HASH mrn_allocated_thds;
 extern pthread_mutex_t mrn_allocated_thds_mutex;
 
-char *mrn_get_string_between_quote(char *ptr)
+static char *mrn_get_string_between_quote(char *ptr)
 {
   char *start_ptr, *end_ptr, *tmp_ptr, *esc_ptr;
   bool find_flg = FALSE, esc_flg = FALSE;
