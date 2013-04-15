@@ -360,7 +360,6 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
       {
         if ((sprit_ptr[1] = strchr(sprit_ptr[0], ',')))
         {
-          *sprit_ptr[1] = '\0';
           sprit_ptr[1]++;
         }
         tmp_ptr = sprit_ptr[0];
@@ -378,7 +377,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         while (*start_ptr != ' ' && *start_ptr != '\'' &&
                *start_ptr != '"' && *start_ptr != '\0' &&
                *start_ptr != '\r' && *start_ptr != '\n' &&
-               *start_ptr != '\t')
+               *start_ptr != '\t' && *start_ptr != ',')
         {
           title_length++;
           start_ptr++;
