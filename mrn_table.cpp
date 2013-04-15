@@ -57,9 +57,9 @@ extern handlerton *mrn_hton_ptr;
 extern HASH mrn_allocated_thds;
 extern pthread_mutex_t mrn_allocated_thds_mutex;
 
-static char *mrn_get_string_between_quote(char *ptr)
+static char *mrn_get_string_between_quote(const char *ptr)
 {
-  char *start_ptr, *end_ptr, *tmp_ptr, *esc_ptr;
+  const char *start_ptr, *end_ptr, *tmp_ptr, *esc_ptr;
   bool find_flg = FALSE, esc_flg = FALSE;
   MRN_DBUG_ENTER_FUNCTION();
 
@@ -121,7 +121,7 @@ static char *mrn_get_string_between_quote(char *ptr)
   char *extracted_string = (char *)my_malloc(length + 1, MYF(MY_WME));
   if (esc_flg) {
     size_t extracted_index = 0;
-    char *current_ptr = start_ptr;
+    const char *current_ptr = start_ptr;
     while (current_ptr < end_ptr) {
       if (*current_ptr != '\\') {
         extracted_string[extracted_index] = *current_ptr;
