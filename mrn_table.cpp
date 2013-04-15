@@ -59,7 +59,7 @@ char *mrn_get_string_between_quote(char *ptr, bool alloc)
 {
   char *start_ptr, *end_ptr, *tmp_ptr, *esc_ptr;
   bool find_flg = FALSE, esc_flg = FALSE;
-  DBUG_ENTER("mrn_get_string_between_quote");
+  MRN_DBUG_ENTER_FUNCTION();
 
   start_ptr = strchr(ptr, '\'');
   end_ptr = strchr(ptr, '"');
@@ -163,7 +163,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
   partition_info *part_info = table->part_info;
   partition_element *tmp_part_elem = NULL, *tmp_sub_elem = NULL;
   bool tmp_flg = FALSE, tmp_find_flg = FALSE;
-  DBUG_ENTER("mrn_get_partition_info");
+  MRN_DBUG_ENTER_FUNCTION();
   *part_elem = NULL;
   *sub_elem = NULL;
   if (!part_info)
@@ -285,7 +285,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
   partition_element *part_elem;
   partition_element *sub_elem;
 #endif
-  DBUG_ENTER("mrn_parse_table_param");
+  MRN_DBUG_ENTER_FUNCTION();
 #ifdef WITH_PARTITION_STORAGE_ENGINE
   mrn_get_partition_info(share->table_name, share->table_name_length, table,
     &part_elem, &sub_elem);
@@ -484,7 +484,7 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
   char *sprit_ptr[2];
   char *tmp_ptr, *start_ptr;
 #endif
-  DBUG_ENTER("mrn_add_index_param");
+  MRN_DBUG_ENTER_FUNCTION();
 
 #if MYSQL_VERSION_ID >= 50500
   if (key_info->comment.length == 0)
@@ -584,7 +584,7 @@ error_alloc_param_string:
 int mrn_parse_index_param(MRN_SHARE *share, TABLE *table)
 {
   int error;
-  DBUG_ENTER("mrn_parse_index_param");
+  MRN_DBUG_ENTER_FUNCTION();
   for (uint i = 0; i < table->s->keys; i++)
   {
     KEY *key_info = &table->s->key_info[i];
@@ -609,7 +609,7 @@ int mrn_add_column_param(MRN_SHARE *share, Field *field, int i)
   int title_length;
   char *sprit_ptr[2];
   char *tmp_ptr, *start_ptr;
-  DBUG_ENTER("mrn_add_column_param");
+  MRN_DBUG_ENTER_FUNCTION();
 
   DBUG_PRINT("info", ("mroonga create comment string"));
   if (
@@ -688,7 +688,7 @@ error_alloc_param_string:
 int mrn_parse_column_param(MRN_SHARE *share, TABLE *table)
 {
   int error;
-  DBUG_ENTER("mrn_parse_column_param");
+  MRN_DBUG_ENTER_FUNCTION();
   for (uint i = 0; i < table->s->fields; i++)
   {
     Field *field = table->s->field[i];
@@ -710,7 +710,7 @@ int mrn_free_share_alloc(
   MRN_SHARE *share
 ) {
   uint i;
-  DBUG_ENTER("mrn_free_share_alloc");
+  MRN_DBUG_ENTER_FUNCTION();
   if (share->engine)
     my_free(share->engine, MYF(0));
   for (i = 0; i < share->table_share->keys; i++)
@@ -736,7 +736,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     *col_type_length, i, j;
   KEY *wrap_key_info;
   TABLE_SHARE *wrap_table_share;
-  DBUG_ENTER("mrn_get_share");
+  MRN_DBUG_ENTER_FUNCTION();
   length = (uint) strlen(table_name);
   pthread_mutex_lock(&mrn_open_tables_mutex);
   if (!(share = (MRN_SHARE*) my_hash_search(&mrn_open_tables,
@@ -850,7 +850,7 @@ error_alloc_share:
 
 int mrn_free_share(MRN_SHARE *share)
 {
-  DBUG_ENTER("mrn_free_share");
+  MRN_DBUG_ENTER_FUNCTION();
   pthread_mutex_lock(&mrn_open_tables_mutex);
   if (!--share->use_count)
   {
@@ -874,7 +874,7 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   my_hash_value_type hash_value;
 #endif
   THD *thd = current_thd;
-  DBUG_ENTER("mrn_get_table_share");
+  MRN_DBUG_ENTER_FUNCTION();
 #if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
   const char *key;
   key_length = get_table_def_key(table_list, &key);
@@ -939,7 +939,7 @@ KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
 {
   uint *wrap_key_nr = share->wrap_key_nr, i, j;
   KEY *wrap_key_info;
-  DBUG_ENTER("mrn_create_key_info_for_table");
+  MRN_DBUG_ENTER_FUNCTION();
   if (share->wrap_keys)
   {
     if (!(wrap_key_info = (KEY *)
@@ -968,7 +968,7 @@ KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
 {
   uint i;
-  DBUG_ENTER("mrn_set_bitmap_by_key");
+  MRN_DBUG_ENTER_FUNCTION();
   for (i = 0; i < KEY_N_KEY_PARTS(key_info); i++)
   {
     Field *field = key_info->key_part[i].field;
@@ -979,7 +979,7 @@ void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
 
 st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
 {
-  DBUG_ENTER("mrn_get_slot_data");
+  MRN_DBUG_ENTER_FUNCTION();
   st_mrn_slot_data *slot_data =
     (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
   if (slot_data == NULL) {
@@ -1005,7 +1005,7 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
 
 void mrn_clear_alter_share(THD *thd)
 {
-  DBUG_ENTER("mrn_clear_alter_share");
+  MRN_DBUG_ENTER_FUNCTION();
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
   if (slot_data) {
     if (slot_data->first_alter_share) {
