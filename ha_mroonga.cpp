@@ -3300,6 +3300,17 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
           grn_obj_unlink(ctx, normalizer);
         }
       }
+      if (tmp_share->default_tokenizer) {
+        grn_obj *default_tokenizer =
+          grn_ctx_get(ctx,
+                      tmp_share->default_tokenizer,
+                      tmp_share->default_tokenizer_length);
+        if (default_tokenizer) {
+          grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+          grn_obj_set_info(ctx, table_obj, info_type, default_tokenizer);
+          grn_obj_unlink(ctx, default_tokenizer);
+        }
+      }
     }
   }
 

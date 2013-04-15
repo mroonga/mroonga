@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -39,6 +39,8 @@ typedef struct st_mroonga_share
 
   char               *engine;
   int                engine_length;
+  char               *default_tokenizer;
+  int                default_tokenizer_length;
   plugin_ref         plugin;
   handlerton         *hton;
   char               **key_parser;

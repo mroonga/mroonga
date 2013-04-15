@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS Tags;
+CREATE TABLE Tags (
+name VARCHAR(64) PRIMARY KEY
+) DEFAULT CHARSET=utf8
+COLLATE=utf8_bin
+COMMENT='default_tokenizer "TokenDelimit"';
+SELECT mroonga_command("dump");
+mroonga_command("dump")
+table_create Tags TABLE_PAT_KEY ShortText --default_tokenizer TokenDelimit
+column_create Tags name COLUMN_SCALAR ShortText
+DROP TABLE Tags;
