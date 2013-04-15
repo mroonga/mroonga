@@ -18,6 +18,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <string>
+
 #include "mrn_mysql.h"
 
 #if MYSQL_VERSION_ID >= 50500
@@ -273,7 +275,6 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 {
   int i, error;
   int title_length;
-  char *param_string = NULL;
   char *sprit_ptr[2];
   char *tmp_ptr, *start_ptr;
 #ifdef WITH_PARTITION_STORAGE_ENGINE
@@ -291,11 +292,8 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
   for (i = 2; i > 0; i--)
 #endif
   {
-    if (param_string)
-    {
-      my_free(param_string, MYF(0));
-      param_string = NULL;
-    }
+    const char *params_string_value;
+    uint params_string_length;
     switch (i)
     {
 #ifdef WITH_PARTITION_STORAGE_ENGINE
@@ -303,58 +301,50 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         if (!sub_elem || !sub_elem->part_comment)
           continue;
         DBUG_PRINT("info", ("mroonga create sub comment string"));
-        if (
-          !(param_string = my_strdup(sub_elem->part_comment, MYF(MY_WME)))
-        ) {
-          error = HA_ERR_OUT_OF_MEM;
-          goto error_alloc_param_string;
-        }
-        DBUG_PRINT("info", ("mroonga sub comment string=%s", param_string));
+        params_string_value = sub_elem->part_comment;
+        params_string_length = strlen(params_string_value);
+        DBUG_PRINT("info",
+                   ("mroonga sub comment string=%s", params_string_value));
         break;
       case 3:
         if (!part_elem || !part_elem->part_comment)
           continue;
         DBUG_PRINT("info", ("mroonga create part comment string"));
-        if (
-          !(param_string = my_strdup(part_elem->part_comment, MYF(MY_WME)))
-        ) {
-          error = HA_ERR_OUT_OF_MEM;
-          goto error_alloc_param_string;
-        }
-        DBUG_PRINT("info", ("mroonga part comment string=%s", param_string));
+        params_string_value = part_elem->part_comment;
+        params_string_length = strlen(params_string_value);
+        DBUG_PRINT("info",
+                   ("mroonga part comment string=%s", params_string_value));
         break;
 #endif
       case 2:
         if (LEX_STRING_IS_EMPTY(table->s->comment))
           continue;
         DBUG_PRINT("info", ("mroonga create comment string"));
-        if (
-          !(param_string = my_strndup(table->s->comment.str,
-                                      table->s->comment.length,
-                                      MYF(MY_WME)))
-        ) {
-          error = HA_ERR_OUT_OF_MEM;
-          goto error_alloc_param_string;
-        }
-        DBUG_PRINT("info", ("mroonga comment string=%s", param_string));
+        params_string_value = table->s->comment.str;
+        params_string_length = table->s->comment.length;
+        DBUG_PRINT("info",
+                   ("mroonga comment string=%.*s",
+                    params_string_length, params_string_value));
         break;
       default:
         if (LEX_STRING_IS_EMPTY(table->s->connect_string))
           continue;
         DBUG_PRINT("info", ("mroonga create connect_string string"));
-        if (
-          !(param_string = my_strndup(table->s->connect_string.str,
-                                      table->s->connect_string.length,
-                                      MYF(MY_WME)))
-        ) {
-          error = HA_ERR_OUT_OF_MEM;
-          goto error_alloc_param_string;
-        }
-        DBUG_PRINT("info", ("mroonga connect_string=%s", param_string));
+        params_string_value = table->s->connect_string.str;
+        params_string_length = table->s->connect_string.length;
+        DBUG_PRINT("info",
+                   ("mroonga connect_string=%.*s",
+                    params_string_length, params_string_value));
         break;
     }
 
-    sprit_ptr[0] = param_string;
+    if (!params_string_value) {
+      continue;
+    }
+
+    {
+      std::string params_string(params_string_value, params_string_length);
+    sprit_ptr[0] = const_cast<char *>(params_string.c_str());
     while (sprit_ptr[0])
     {
       if ((sprit_ptr[1] = strchr(sprit_ptr[0], ',')))
@@ -407,6 +397,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           goto error;
       }
     }
+    }
   }
 
   if (!share->engine && mrn_default_wrapper_engine)
@@ -452,14 +443,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
     }
   }
 
-  if (param_string)
-    my_free(param_string, MYF(0));
   DBUG_RETURN(0);
 
 error:
-  if (param_string)
-    my_free(param_string, MYF(0));
-error_alloc_param_string:
   DBUG_RETURN(error);
 }
 
