@@ -117,38 +117,49 @@ static char *mrn_get_string_between_quote(char *ptr)
   } else
     DBUG_RETURN(NULL);
 
-  *end_ptr = '\0';
-  if (esc_flg)
-  {
-    esc_ptr = start_ptr;
-    while (TRUE)
-    {
-      esc_ptr = strchr(esc_ptr, '\\');
-      if (!esc_ptr)
-        break;
-      switch(*(esc_ptr + 1))
-      {
-        case 'b':
-          *esc_ptr = '\b';
-          break;
-        case 'n':
-          *esc_ptr = '\n';
-          break;
-        case 'r':
-          *esc_ptr = '\r';
-          break;
-        case 't':
-          *esc_ptr = '\t';
-          break;
-        default:
-          *esc_ptr = *(esc_ptr + 1);
-          break;
+  size_t length = end_ptr - start_ptr;
+  char *extracted_string = (char *)my_malloc(length + 1, MYF(MY_WME));
+  if (esc_flg) {
+    size_t extracted_index = 0;
+    char *current_ptr = start_ptr;
+    while (current_ptr < end_ptr) {
+      if (*current_ptr != '\\') {
+        extracted_string[extracted_index] = *current_ptr;
+        ++extracted_index;
+        current_ptr++;
+        continue;
       }
-      esc_ptr++;
-      strcpy(esc_ptr, esc_ptr + 1);
+
+      if (current_ptr + 1 == end_ptr) {
+        break;
+      }
+
+      switch (*(current_ptr + 1))
+      {
+      case 'b':
+        extracted_string[extracted_index] = '\b';
+        break;
+      case 'n':
+        extracted_string[extracted_index] = '\n';
+        break;
+      case 'r':
+        extracted_string[extracted_index] = '\r';
+        break;
+      case 't':
+        extracted_string[extracted_index] = '\t';
+        break;
+      default:
+        extracted_string[extracted_index] = *(current_ptr + 1);
+        break;
+      }
+      ++extracted_index;
     }
+  } else {
+    memcpy(extracted_string, start_ptr, length);
+    extracted_string[length] = '\0';
   }
-  DBUG_RETURN(my_strdup(start_ptr, MYF(MY_WME)));
+
+  DBUG_RETURN(extracted_string);
 }
 
 #ifdef WITH_PARTITION_STORAGE_ENGINE
