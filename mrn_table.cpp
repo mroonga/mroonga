@@ -535,6 +535,12 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
     {
       case 0:
         continue;
+      case 5:
+        MRN_PARAM_STR_LIST("table", index_table, i);
+        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
+        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
+          MYF(0), tmp_ptr);
+        goto error;
       case 6:
         MRN_PARAM_STR_LIST("parser", key_parser, i);
         error = ER_MRN_INVALID_TABLE_PARAM_NUM;
@@ -706,6 +712,8 @@ int mrn_free_share_alloc(
     my_free(share->engine, MYF(0));
   for (i = 0; i < share->table_share->keys; i++)
   {
+    if (share->index_table && share->index_table[i])
+      my_free(share->index_table[i], MYF(0));
     if (share->key_parser[i])
       my_free(share->key_parser[i], MYF(0));
   }
@@ -722,9 +730,9 @@ int mrn_free_share_alloc(
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
   MRN_SHARE *share;
-  char *tmp_name, **key_parser, **col_flags, **col_type;
-  uint length, *wrap_key_nr, *key_parser_length, *col_flags_length,
-    *col_type_length, i, j;
+  char *tmp_name, **index_table, **key_parser, **col_flags, **col_type;
+  uint length, *wrap_key_nr, *index_table_length;
+  uint *key_parser_length, *col_flags_length, *col_type_length, i, j;
   KEY *wrap_key_info;
   TABLE_SHARE *wrap_table_share;
   MRN_DBUG_ENTER_FUNCTION();
@@ -737,6 +745,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &share, sizeof(*share),
         &tmp_name, length + 1,
+        &index_table, sizeof(char *) * table->s->keys,
+        &index_table_length, sizeof(uint) * table->s->keys,
         &key_parser, sizeof(char *) * table->s->keys,
         &key_parser_length, sizeof(uint) * table->s->keys,
         &col_flags, sizeof(char *) * table->s->fields,
@@ -754,6 +764,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     share->use_count = 0;
     share->table_name_length = length;
     share->table_name = tmp_name;
+    share->index_table = index_table;
+    share->index_table_length = index_table_length;
     share->key_parser = key_parser;
     share->key_parser_length = key_parser_length;
     share->col_flags = col_flags;

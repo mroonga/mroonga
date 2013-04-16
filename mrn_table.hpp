@@ -43,9 +43,11 @@ typedef struct st_mroonga_share
   int                default_tokenizer_length;
   plugin_ref         plugin;
   handlerton         *hton;
+  char               **index_table;
   char               **key_parser;
   char               **col_flags;
   char               **col_type;
+  uint               *index_table_length;
   uint               *key_parser_length;
   uint               *col_flags_length;
   uint               *col_type_length;

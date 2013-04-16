@@ -3675,6 +3675,15 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
   bool is_multiple_column_index = KEY_N_KEY_PARTS(key_info) > 1;
 
+  if (tmp_share->index_table && tmp_share->index_table[i]) {
+    index_table = grn_ctx_get(ctx,
+                              tmp_share->index_table[i],
+                              tmp_share->index_table_length[i]);
+    // TODO: add error check
+    index_tables[i] = index_table;
+    DBUG_RETURN(error);
+  }
+
   if (is_multiple_column_index) {
     index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
   } else {
@@ -4451,10 +4460,19 @@ int ha_mroonga::storage_open_indexes(const char *name)
       }
     }
 
-    mrn::IndexTableName index_table_name(mapper.table_name(), key_info.name);
-    grn_index_tables[i] = grn_ctx_get(ctx,
-                                      index_table_name.c_str(),
-                                      index_table_name.length());
+    MRN_SHARE *tmp_share;
+    tmp_share = mrn_get_share(name, table, &error);
+    if (tmp_share->index_table[i]) {
+      grn_index_tables[i] = grn_ctx_get(ctx,
+                                        tmp_share->index_table[i],
+                                        tmp_share->index_table_length[i]);
+    } else {
+      mrn::IndexTableName index_table_name(mapper.table_name(), key_info.name);
+      grn_index_tables[i] = grn_ctx_get(ctx,
+                                        index_table_name.c_str(),
+                                        index_table_name.length());
+    }
+    mrn_free_share(tmp_share);
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -12879,6 +12897,8 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   }
   tmp_share->engine = NULL;
   tmp_share->table_share = &tmp_table_share;
+  tmp_share->index_table = NULL;
+  tmp_share->index_table_length = NULL;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
   bitmap_clear_all(table->read_set);
@@ -13033,6 +13053,8 @@ bool ha_mroonga::storage_inplace_alter_table(
   }
   tmp_share->engine = NULL;
   tmp_share->table_share = &tmp_table_share;
+  tmp_share->index_table = NULL;
+  tmp_share->index_table_length = NULL;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
   bitmap_clear_all(table->read_set);
@@ -13278,6 +13300,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   }
   tmp_share->engine = NULL;
   tmp_share->table_share = &tmp_table_share;
+  tmp_share->index_table = NULL;
+  tmp_share->index_table_length = NULL;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
   tmp_share->col_flags = NULL;
@@ -13408,6 +13432,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   }
   tmp_share->engine = NULL;
   tmp_share->table_share = &tmp_table_share;
+  tmp_share->index_table = NULL;
+  tmp_share->index_table_length = NULL;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
   tmp_share->col_flags = NULL;
