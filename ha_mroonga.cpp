@@ -10030,7 +10030,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         if (GRN_TABLE_HASH_KEY <= range->header.type &&
             range->header.type <= GRN_DB) {
           // TODO: extract as a method
-          if (((range->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
+          if (((grn_columns[i]->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
                GRN_OBJ_COLUMN_VECTOR)) {
             // TODO: Check whether reference type or not
             grn_obj unvectored_value;
