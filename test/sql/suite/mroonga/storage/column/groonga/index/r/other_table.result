@@ -9,7 +9,7 @@ COMMENT='default_tokenizer "TokenDelimit"';
 CREATE TABLE Bugs (
 id INT UNSIGNED PRIMARY KEY,
 tags TEXT COMMENT 'flags "COLUMN_VECTOR", type "Tags"',
-FULLTEXT INDEX tags_index (tags) COMMENT 'table "Tags"'
+FULLTEXT INDEX bugs_tags_index (tags) COMMENT 'table "Tags"'
 ) DEFAULT CHARSET=utf8;
 INSERT INTO Bugs (id, tags) VALUES (1, "Linux MySQL groonga");
 SELECT mroonga_command("dump");
@@ -19,7 +19,7 @@ column_create Tags name COLUMN_SCALAR ShortText
 table_create Bugs TABLE_PAT_KEY UInt32
 column_create Bugs id COLUMN_SCALAR UInt32
 column_create Bugs tags COLUMN_VECTOR Tags
-column_create Tags index COLUMN_INDEX|WITH_POSITION Bugs tags
+column_create Tags bugs_tags_index COLUMN_INDEX|WITH_POSITION Bugs tags
 load --table Tags
 [
 ["_key","name"],

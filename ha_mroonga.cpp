@@ -3796,10 +3796,16 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   }
 
   index_table = index_tables[i];
+  const char *index_column_name;
+  if (tmp_share->index_table && tmp_share->index_table[i]) {
+    index_column_name = key_info->name;
+  } else {
+    index_column_name = INDEX_COLUMN_NAME;
+  }
   index_column = grn_column_create(ctx,
                                    index_table,
-                                   INDEX_COLUMN_NAME,
-                                   strlen(INDEX_COLUMN_NAME),
+                                   index_column_name,
+                                   strlen(index_column_name),
                                    NULL,
                                    index_column_flags,
                                    grn_table);
@@ -4466,29 +4472,36 @@ int ha_mroonga::storage_open_indexes(const char *name)
       grn_index_tables[i] = grn_ctx_get(ctx,
                                         tmp_share->index_table[i],
                                         tmp_share->index_table_length[i]);
+      if (ctx->rc == GRN_SUCCESS) {
+        grn_index_columns[i] = grn_obj_column(ctx,
+                                              grn_index_tables[i],
+                                              key_info.name,
+                                              strlen(key_info.name));
+      }
     } else {
       mrn::IndexTableName index_table_name(mapper.table_name(), key_info.name);
       grn_index_tables[i] = grn_ctx_get(ctx,
                                         index_table_name.c_str(),
                                         index_table_name.length());
+      if (ctx->rc == GRN_SUCCESS) {
+        grn_index_columns[i] = grn_obj_column(ctx,
+                                              grn_index_tables[i],
+                                              INDEX_COLUMN_NAME,
+                                              strlen(INDEX_COLUMN_NAME));
+        if (!grn_index_columns[i]) {
+          /* just for backward compatibility before 1.0. */
+          Field *field = key_info.key_part[0].field;
+          grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
+                                                field->field_name,
+                                                strlen(field->field_name));
+        }
+      }
     }
     mrn_free_share(tmp_share);
     if (ctx->rc) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       goto error;
-    }
-
-    grn_index_columns[i] = grn_obj_column(ctx,
-                                          grn_index_tables[i],
-                                          INDEX_COLUMN_NAME,
-                                          strlen(INDEX_COLUMN_NAME));
-    if (!grn_index_columns[i]) {
-      /* just for backward compatibility before 1.0. */
-      Field *field = key_info.key_part[0].field;
-      grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
-                                            field->field_name,
-                                            strlen(field->field_name));
     }
 
     if (ctx->rc) {

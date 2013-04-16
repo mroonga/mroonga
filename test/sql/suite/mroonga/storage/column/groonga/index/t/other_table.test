@@ -33,7 +33,7 @@ CREATE TABLE Tags (
 CREATE TABLE Bugs (
   id INT UNSIGNED PRIMARY KEY,
   tags TEXT COMMENT 'flags "COLUMN_VECTOR", type "Tags"',
-  FULLTEXT INDEX tags_index (tags) COMMENT 'table "Tags"'
+  FULLTEXT INDEX bugs_tags_index (tags) COMMENT 'table "Tags"'
 ) DEFAULT CHARSET=utf8;
 
 INSERT INTO Bugs (id, tags) VALUES (1, "Linux MySQL groonga");
