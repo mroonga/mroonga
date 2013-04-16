@@ -1,0 +1,44 @@
+DROP DATABASE IF EXISTS mroonga;
+CREATE DATABASE mroonga;
+USE mroonga;
+CREATE TABLE Priorities (
+id INT PRIMARY KEY
+) DEFAULT CHARSET=utf8
+COLLATE=utf8_bin;
+CREATE TABLE Bugs (
+id INT UNSIGNED PRIMARY KEY,
+priority INT COMMENT 'type "Priorities"',
+INDEX bugs_priority_index (priority) COMMENT 'table "Priorities"'
+) DEFAULT CHARSET=utf8;
+INSERT INTO Bugs (id, priority) VALUES (1, 10);
+INSERT INTO Bugs (id, priority) VALUES (2, 3);
+INSERT INTO Bugs (id, priority) VALUES (3, -2);
+SELECT mroonga_command("dump");
+mroonga_command("dump")
+table_create Priorities TABLE_PAT_KEY Int32
+column_create Priorities id COLUMN_SCALAR Int32
+table_create Bugs TABLE_PAT_KEY UInt32
+column_create Bugs id COLUMN_SCALAR UInt32
+column_create Bugs priority COLUMN_SCALAR Priorities
+column_create Priorities bugs_priority_index COLUMN_INDEX|WITH_POSITION Bugs priority
+load --table Priorities
+[
+["_key","id"],
+[-2,0],
+[3,0],
+[10,0]
+]
+load --table Bugs
+[
+["_key","id","priority"],
+[1,1,10],
+[2,2,3],
+[3,3,-2]
+]
+SELECT *
+FROM Bugs
+WHERE priority = 3;
+id	priority
+2	3
+DROP TABLE Priorities, Bugs;
+DROP DATABASE mroonga;

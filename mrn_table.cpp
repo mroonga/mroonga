@@ -585,9 +585,12 @@ int mrn_parse_index_param(MRN_SHARE *share, TABLE *table)
   for (uint i = 0; i < table->s->keys; i++)
   {
     KEY *key_info = &table->s->key_info[i];
+    bool is_wrapper_mode = share->engine != NULL;
 
-    if (!(key_info->flags & HA_FULLTEXT) && !mrn_is_geo_key(key_info)) {
-      continue;
+    if (is_wrapper_mode) {
+      if (!(key_info->flags & HA_FULLTEXT) && !mrn_is_geo_key(key_info)) {
+        continue;
+      }
     }
 
     if ((error = mrn_add_index_param(share, key_info, i)))

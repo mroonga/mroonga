@@ -10061,9 +10061,19 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
             key_length = grn_table_get_key(ctx, range, id,
                                            &key, GRN_TABLE_MAX_KEY_SIZE);
             storage_store_field(field, key, key_length);
-            // TODO: support not blob type
-            Field_blob *blob = (Field_blob *)field;
-            blob->copy();
+            switch (field->real_type()) {
+            case MYSQL_TYPE_TINY_BLOB:
+            case MYSQL_TYPE_MEDIUM_BLOB:
+            case MYSQL_TYPE_LONG_BLOB:
+            case MYSQL_TYPE_BLOB:
+              {
+                Field_blob *blob = (Field_blob *)field;
+                blob->copy();
+              }
+              break;
+            default:
+              break;
+            }
           }
         } else {
           storage_store_field(field, value, value_length);
