@@ -3660,43 +3660,29 @@ int ha_mroonga::storage_create_validate_index(TABLE *table)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
-                                     grn_obj *grn_table, MRN_SHARE *tmp_share,
-                                     KEY *key_info, grn_obj **index_tables,
-                                     grn_obj **index_columns, uint i)
+int ha_mroonga::storage_create_index_table(TABLE *table,
+                                           const char *grn_table_name,
+                                           grn_obj *grn_table,
+                                           MRN_SHARE *tmp_share,
+                                           KEY *key_info,
+                                           grn_obj **index_tables,
+                                           uint i)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  grn_obj *index_table, *index_column;
-  grn_obj *column = NULL;
-  grn_obj *index_type = NULL;
-
-  error = mrn_change_encoding(ctx, system_charset_info);
-  if (error)
-    DBUG_RETURN(error);
-
-  mrn::IndexTableName index_table_name(grn_table_name, key_info->name);
-  bool is_multiple_column_index = KEY_N_KEY_PARTS(key_info) > 1;
+  grn_obj *index_type;
+  grn_obj *index_table;
   grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
-  grn_obj_flags index_column_flags =
-    GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
+  bool is_multiple_column_index = KEY_N_KEY_PARTS(key_info) > 1;
+
   if (is_multiple_column_index) {
     index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
-    index_column_flags |= GRN_OBJ_WITH_SECTION;
   } else {
     Field *field = key_info->key_part[0].field;
-    const char *column_name = field->field_name;
-    int column_name_size = strlen(column_name);
-
-    if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
-      // skipping _id virtual column
-      DBUG_RETURN(0);
-    }
-
-    column = grn_obj_column(ctx, grn_table, column_name, column_name_size);
     grn_builtin_type groonga_type = mrn_grn_type_from_field(ctx, field, true);
     index_type = grn_ctx_at(ctx, groonga_type);
   }
+  // TODO: Add NULL check for index_type
 
   int key_alg = key_info->algorithm;
   if (key_info->flags & HA_FULLTEXT) {
@@ -3712,14 +3698,18 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
   }
 
-  index_table = grn_table_create(ctx,
-                                 index_table_name.c_str(),
-                                 index_table_name.length(),
-                                 NULL,
-                                 index_table_flags,
-                                 index_type,
-                                 NULL);
+  {
+    mrn::IndexTableName index_table_name(grn_table_name, key_info->name);
+    index_table = grn_table_create(ctx,
+                                   index_table_name.c_str(),
+                                   index_table_name.length(),
+                                   NULL,
+                                   index_table_flags,
+                                   index_type,
+                                   NULL);
+  }
   if (ctx->rc) {
+    grn_obj_unlink(ctx, index_type);
     grn_obj_remove(ctx, grn_table);
     error = ER_CANT_CREATE_TABLE;
     my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
@@ -3753,6 +3743,53 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     }
   }
 
+  if (error)
+    DBUG_RETURN(error);
+
+  index_tables[i] = index_table;
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
+                                     grn_obj *grn_table, MRN_SHARE *tmp_share,
+                                     KEY *key_info, grn_obj **index_tables,
+                                     grn_obj **index_columns, uint i)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  grn_obj *index_table, *index_column;
+  const char *column_name = NULL;
+  int column_name_size = 0;
+
+  bool is_multiple_column_index = KEY_N_KEY_PARTS(key_info) > 1;
+  if (!is_multiple_column_index) {
+    Field *field = key_info->key_part[0].field;
+    column_name = field->field_name;
+    column_name_size = strlen(column_name);
+    if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
+      // skipping _id virtual column
+      DBUG_RETURN(0);
+    }
+  }
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
+  error = storage_create_index_table(table, grn_table_name,
+                                     grn_table, tmp_share,
+                                     key_info, index_tables, i);
+  if (error)
+    DBUG_RETURN(error);
+
+  grn_obj_flags index_column_flags =
+    GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
+  if (is_multiple_column_index) {
+    index_column_flags |= GRN_OBJ_WITH_SECTION;
+  }
+
+  index_table = index_tables[i];
   index_column = grn_column_create(ctx,
                                    index_table,
                                    INDEX_COLUMN_NAME,
@@ -3790,6 +3827,8 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
       grn_obj_unlink(ctx, &source_ids);
     }
   } else {
+    grn_obj *column;
+    column = grn_obj_column(ctx, grn_table, column_name, column_name_size);
     if (column) {
       grn_obj source_ids;
       grn_id source_id = grn_obj_id(ctx, column);
@@ -3798,16 +3837,15 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
       mrn_change_encoding(ctx, key_info->key_part->field->charset());
       grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
       grn_obj_unlink(ctx, &source_ids);
+      grn_obj_unlink(ctx, column);
     }
   }
   mrn_change_encoding(ctx, system_charset_info);
 
-  index_tables[i] = index_table;
-  if (index_columns)
+  if (index_columns) {
     index_columns[i] = index_column;
-  if (column) {
-    grn_obj_unlink(ctx, column);
   }
+
   DBUG_RETURN(error);
 }
 
