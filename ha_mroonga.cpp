@@ -3743,9 +3743,6 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
     }
   }
 
-  if (error)
-    DBUG_RETURN(error);
-
   index_tables[i] = index_table;
 
   DBUG_RETURN(error);
