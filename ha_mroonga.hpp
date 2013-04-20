@@ -73,6 +73,9 @@ extern "C" {
 
 #ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
+#  if MYSQL_VERSION_ID >= 50611
+#    define MRN_HANDLER_HAVE_HA_INDEX_READ_LAST_MAP
+#  endif
 #endif
 
 #if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302)

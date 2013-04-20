@@ -7150,7 +7150,11 @@ int ha_mroonga::wrapper_index_read_last_map(uchar *buf, const uchar *key,
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
     set_pk_bitmap();
+#  ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_LAST_MAP
+  error = wrap_handler->ha_index_read_last_map(buf, key, keypart_map);
+#  else
   error = wrap_handler->index_read_last_map(buf, key, keypart_map);
+#  endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
