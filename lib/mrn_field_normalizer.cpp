@@ -26,7 +26,7 @@ namespace mrn {
   FieldNormalizer::FieldNormalizer(grn_ctx *ctx, THD *thread, Field *field)
     : ctx_(ctx),
       thread_(thread),
-      field_(field){
+      field_(field) {
   }
 
   FieldNormalizer::~FieldNormalizer() {
