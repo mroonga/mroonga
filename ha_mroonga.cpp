@@ -71,6 +71,7 @@
 #include <mrn_external_lock.hpp>
 #include <mrn_match_escalation_threshold_scope.hpp>
 #include <mrn_multiple_column_key_codec.hpp>
+#include <mrn_field_normalizer.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -2406,7 +2407,6 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    grn_column_ranges(NULL),
    grn_index_tables(NULL),
    grn_index_columns(NULL),
-   normalizer_finder(ctx, ha_thd()),
 
    grn_source_column_geo(NULL),
    cursor_geo(NULL),
@@ -8550,7 +8550,8 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
 grn_obj *ha_mroonga::find_normalizer(Field *field)
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_obj *normalizer = normalizer_finder.find(field);
+  mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
+  grn_obj *normalizer = field_normalizer.find_grn_normalizer();
   DBUG_RETURN(normalizer);
 }
 

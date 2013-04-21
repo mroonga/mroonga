@@ -34,8 +34,6 @@ extern "C" {
 #include "mrn_sys.hpp"
 #include "mrn_mysql_compat.h"
 
-#include <mrn_normalizer_finder.hpp>
-
 #if (MYSQL_VERSION_ID >= 50603) || \
     (MYSQL_VERSION_ID >= 50513 && MYSQL_VERSION_ID < 50600) || \
     (MYSQL_VERSION_ID >= 50158 && MYSQL_VERSION_ID < 50500)
@@ -261,7 +259,6 @@ private:
   grn_obj **grn_column_ranges;
   grn_obj **grn_index_tables;
   grn_obj **grn_index_columns;
-  mrn::NormalizerFinder normalizer_finder;
 
   // buffers
   grn_obj  encoded_key_buffer;

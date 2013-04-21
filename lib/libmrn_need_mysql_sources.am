@@ -11,5 +11,5 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_external_lock.hpp			\
 	mrn_multiple_column_key_codec.cpp	\
 	mrn_multiple_column_key_codec.hpp	\
-	mrn_normalizer_finder.cpp		\
-	mrn_normalizer_finder.hpp
+	mrn_field_normalizer.cpp		\
+	mrn_field_normalizer.hpp

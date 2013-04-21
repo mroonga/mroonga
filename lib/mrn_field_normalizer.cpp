@@ -17,24 +17,25 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "mrn_normalizer_finder.hpp"
+#include "mrn_field_normalizer.hpp"
 
 // for debug
-#define MRN_CLASS_NAME "mrn::NormalizerFinder"
+#define MRN_CLASS_NAME "mrn::FieldNormalizer"
 
 namespace mrn {
-  NormalizerFinder::NormalizerFinder(grn_ctx *ctx, THD *thread)
+  FieldNormalizer::FieldNormalizer(grn_ctx *ctx, THD *thread, Field *field)
     : ctx_(ctx),
-      thread_(thread) {
+      thread_(thread),
+      field_(field){
   }
 
-  NormalizerFinder::~NormalizerFinder() {
+  FieldNormalizer::~FieldNormalizer() {
   }
 
-  grn_obj *NormalizerFinder::find(Field *field) {
+  grn_obj *FieldNormalizer::find_grn_normalizer() {
     MRN_DBUG_ENTER_METHOD();
 
-    const CHARSET_INFO *charset_info = field->charset();
+    const CHARSET_INFO *charset_info = field_->charset();
     const char *normalizer_name = NULL;
     const char *default_normalizer_name = "NormalizerAuto";
     if ((strcmp(charset_info->name, "utf8_general_ci") == 0) ||
