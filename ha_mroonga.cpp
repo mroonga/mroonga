@@ -72,6 +72,7 @@
 #include <mrn_match_escalation_threshold_scope.hpp>
 #include <mrn_multiple_column_key_codec.hpp>
 #include <mrn_field_normalizer.hpp>
+#include <mrn_encoding.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -151,18 +152,6 @@ static grn_ctx mrn_ctx;
 static grn_obj *mrn_db;
 static grn_hash *mrn_hash;
 
-static CHARSET_INFO *mrn_charset_utf8 = NULL;
-static CHARSET_INFO *mrn_charset_utf8mb4 = NULL;
-static CHARSET_INFO *mrn_charset_binary = NULL;
-static CHARSET_INFO *mrn_charset_ascii = NULL;
-static CHARSET_INFO *mrn_charset_latin1_1 = NULL;
-static CHARSET_INFO *mrn_charset_latin1_2 = NULL;
-static CHARSET_INFO *mrn_charset_cp932 = NULL;
-static CHARSET_INFO *mrn_charset_sjis = NULL;
-static CHARSET_INFO *mrn_charset_eucjpms = NULL;
-static CHARSET_INFO *mrn_charset_ujis = NULL;
-static CHARSET_INFO *mrn_charset_koi8r = NULL;
-
 #ifdef WIN32
 static inline double round(double x)
 {
@@ -172,191 +161,12 @@ static inline double round(double x)
 
 static void mrn_init_encoding_map()
 {
-  CHARSET_INFO **cs;
-  MRN_DBUG_ENTER_FUNCTION();
-  for (cs = all_charsets; cs < all_charsets + MY_ALL_CHARSETS_SIZE; cs++)
-  {
-    if (!cs[0])
-      continue;
-    if (!strcmp(cs[0]->csname, "utf8"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_utf8)
-        mrn_charset_utf8 = cs[0];
-      else if (mrn_charset_utf8->cset != cs[0]->cset)
-        DBUG_ASSERT(0);
-      continue;
-    }
-    if (!strcmp(cs[0]->csname, "utf8mb4"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_utf8mb4)
-        mrn_charset_utf8mb4 = cs[0];
-      else if (mrn_charset_utf8mb4->cset != cs[0]->cset)
-        DBUG_ASSERT(0);
-      continue;
-    }
-    if (!strcmp(cs[0]->csname, "binary"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_binary)
-        mrn_charset_binary = cs[0];
-      else if (mrn_charset_binary->cset != cs[0]->cset)
-        DBUG_ASSERT(0);
-      continue;
-    }
-    if (!strcmp(cs[0]->csname, "ascii"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_ascii)
-        mrn_charset_ascii = cs[0];
-      else if (mrn_charset_ascii->cset != cs[0]->cset)
-        DBUG_ASSERT(0);
-      continue;
-    }
-    if (!strcmp(cs[0]->csname, "latin1"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_latin1_1)
-        mrn_charset_latin1_1 = cs[0];
-      else if (mrn_charset_latin1_1->cset != cs[0]->cset)
-      {
-        if (!mrn_charset_latin1_2)
-          mrn_charset_latin1_2 = cs[0];
-        else if (mrn_charset_latin1_2->cset != cs[0]->cset)
-          DBUG_ASSERT(0);
-      }
-      continue;
-    }
-    if (!strcmp(cs[0]->csname, "cp932"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_cp932)
-        mrn_charset_cp932 = cs[0];
-      else if (mrn_charset_cp932->cset != cs[0]->cset)
-        DBUG_ASSERT(0);
-      continue;
-    }
-    if (!strcmp(cs[0]->csname, "sjis"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_sjis)
-        mrn_charset_sjis = cs[0];
-      else if (mrn_charset_sjis->cset != cs[0]->cset)
-        DBUG_ASSERT(0);
-      continue;
-    }
-    if (!strcmp(cs[0]->csname, "eucjpms"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_eucjpms)
-        mrn_charset_eucjpms = cs[0];
-      else if (mrn_charset_eucjpms->cset != cs[0]->cset)
-        DBUG_ASSERT(0);
-      continue;
-    }
-    if (!strcmp(cs[0]->csname, "ujis"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_ujis)
-        mrn_charset_ujis = cs[0];
-      else if (mrn_charset_ujis->cset != cs[0]->cset)
-        DBUG_ASSERT(0);
-      continue;
-    }
-    if (!strcmp(cs[0]->csname, "koi8r"))
-    {
-      DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                          cs[0]->name, cs[0]->csname, cs[0]->cset));
-      if (!mrn_charset_koi8r)
-        mrn_charset_koi8r = cs[0];
-      else if (mrn_charset_koi8r->cset != cs[0]->cset)
-        DBUG_ASSERT(0);
-      continue;
-    }
-    DBUG_PRINT("info", ("mroonga: %s[%s][%p] is not supported",
-                        cs[0]->name, cs[0]->csname, cs[0]->cset));
-  }
-  DBUG_VOID_RETURN;
+  mrn::encoding::init();
 }
 
 static int mrn_change_encoding(grn_ctx *ctx, const CHARSET_INFO *charset)
 {
-  MRN_DBUG_ENTER_FUNCTION();
-  if (!charset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_utf8->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
-    DBUG_RETURN(0);
-  }
-  if (mrn_charset_utf8mb4 && charset->cset == mrn_charset_utf8mb4->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_cp932->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_SJIS);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_eucjpms->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_EUC_JP);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_latin1_1->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_LATIN1);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_latin1_2->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_LATIN1);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_koi8r->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_KOI8R);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_binary->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_ascii->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_sjis->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_SJIS);
-    DBUG_RETURN(0);
-  }
-  if (charset->cset == mrn_charset_ujis->cset)
-  {
-    GRN_CTX_SET_ENCODING(ctx, GRN_ENC_EUC_JP);
-    DBUG_RETURN(0);
-  }
-  GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
-  my_printf_error(ER_MRN_CHARSET_NOT_SUPPORT_NUM,
-    ER_MRN_CHARSET_NOT_SUPPORT_STR,
-    MYF(0), charset->name, charset->csname);
-  DBUG_RETURN(ER_MRN_CHARSET_NOT_SUPPORT_NUM);
+  return mrn::encoding::set(ctx, charset);
 }
 
 #if !defined(DBUG_OFF) && !defined(_lint)
