@@ -22,20 +22,22 @@ DROP TABLE IF EXISTS ids;
 --enable_warnings
 
 CREATE TABLE ids (
-  id VARCHAR(10),
+  id VARCHAR(5),
   value VARCHAR(10),
   KEY (id, value)
-);
+) DEFAULT CHARSET=utf8 COLLATE utf8_bin;
 
-INSERT INTO ids VALUES ("1", "2");
-INSERT INTO ids SELECT id + "1",  value + "2"  FROM ids;
-INSERT INTO ids SELECT id + "2",  value + "4"  FROM ids;
-INSERT INTO ids SELECT id + "4",  value + "8"  FROM ids;
-INSERT INTO ids SELECT id + "8",  value + "16" FROM ids;
-INSERT INTO ids SELECT id + "16", value + "32" FROM ids;
+INSERT INTO ids VALUES ("abc", "Abc");
+INSERT INTO ids VALUES ("acd", "aBc");
+INSERT INTO ids VALUES ("ade", "abC");
+INSERT INTO ids VALUES ("aef", "abc");
+INSERT INTO ids VALUES ("ABC", "aBC");
+INSERT INTO ids VALUES ("ACD", "AbC");
+INSERT INTO ids VALUES ("ADE", "ABc");
+INSERT INTO ids VALUES ("AEF", "ABC");
 
 SELECT * FROM ids;
-SELECT * FROM ids WHERE id BETWEEN "10" AND "16";
+SELECT * FROM ids WHERE id BETWEEN "ab" AND "ad";
 
 DROP TABLE ids;
 

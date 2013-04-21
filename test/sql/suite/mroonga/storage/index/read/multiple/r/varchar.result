@@ -1,56 +1,29 @@
 DROP TABLE IF EXISTS ids;
 CREATE TABLE ids (
-id VARCHAR(10),
+id VARCHAR(5),
 value VARCHAR(10),
 KEY (id, value)
-);
-INSERT INTO ids VALUES ("1", "2");
-INSERT INTO ids SELECT id + "1",  value + "2"  FROM ids;
-INSERT INTO ids SELECT id + "2",  value + "4"  FROM ids;
-INSERT INTO ids SELECT id + "4",  value + "8"  FROM ids;
-INSERT INTO ids SELECT id + "8",  value + "16" FROM ids;
-INSERT INTO ids SELECT id + "16", value + "32" FROM ids;
+) DEFAULT CHARSET=utf8 COLLATE utf8_bin;
+INSERT INTO ids VALUES ("abc", "Abc");
+INSERT INTO ids VALUES ("acd", "aBc");
+INSERT INTO ids VALUES ("ade", "abC");
+INSERT INTO ids VALUES ("aef", "abc");
+INSERT INTO ids VALUES ("ABC", "aBC");
+INSERT INTO ids VALUES ("ACD", "AbC");
+INSERT INTO ids VALUES ("ADE", "ABc");
+INSERT INTO ids VALUES ("AEF", "ABC");
 SELECT * FROM ids;
 id	value
-1	2
-10	20
-11	22
-12	24
-13	26
-14	28
-15	30
-16	32
-17	34
-18	36
-19	38
-2	4
-20	40
-21	42
-22	44
-23	46
-24	48
-25	50
-26	52
-27	54
-28	56
-29	58
-3	6
-30	60
-31	62
-32	64
-4	8
-5	10
-6	12
-7	14
-8	16
-9	18
-SELECT * FROM ids WHERE id BETWEEN "10" AND "16";
+ABC	aBC
+ACD	AbC
+ADE	ABc
+AEF	ABC
+abc	Abc
+acd	aBc
+ade	abC
+aef	abc
+SELECT * FROM ids WHERE id BETWEEN "ab" AND "ad";
 id	value
-10	20
-11	22
-12	24
-13	26
-14	28
-15	30
-16	32
+abc	Abc
+acd	aBc
 DROP TABLE ids;
