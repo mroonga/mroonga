@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kentoku SHIBA
 
   This library is free software; you can redistribute it and/or
@@ -52,13 +52,13 @@ namespace mrn {
   }
 
   int MultipleColumnKeyCodec::encode(const uchar *key, uint key_length,
-                                     uchar *buffer, uint *encoded_length,
+                                     uchar *encoded, uint *encoded_length,
                                      bool decode) {
     MRN_DBUG_ENTER_METHOD();
     int error = 0;
     const uchar *current_key = key;
     const uchar *key_end = key + key_length;
-    uchar *current_buffer = buffer;
+    uchar *current_encoded = encoded;
 
     int n_key_parts = KEY_N_KEY_PARTS(key_info_);
     DBUG_PRINT("info", ("mroonga: n_key_parts=%d", n_key_parts));
@@ -70,9 +70,9 @@ namespace mrn {
 
       if (field->null_bit) {
         DBUG_PRINT("info", ("mroonga: field has null bit"));
-        *current_buffer = 0;
+        *current_encoded = 0;
         current_key += 1;
-        current_buffer += 1;
+        current_encoded += 1;
         (*encoded_length)++;
       }
 
@@ -99,10 +99,10 @@ namespace mrn {
           }
           if (decode)
             *((uint8 *)(&long_long_value)) ^= 0x80;
-          mrn_byte_order_host_to_network(current_buffer, &long_long_value,
+          mrn_byte_order_host_to_network(current_encoded, &long_long_value,
                                          data_size);
           if (!decode)
-            *((uint8 *)(current_buffer)) ^= 0x80;
+            *((uint8 *)(current_encoded)) ^= 0x80;
         }
         break;
       case TYPE_NUMBER:
@@ -113,12 +113,12 @@ namespace mrn {
             *((uint8 *)(current_key)) ^= 0x80;
           }
         }
-        mrn_byte_order_host_to_network(current_buffer, current_key, data_size);
+        mrn_byte_order_host_to_network(current_encoded, current_key, data_size);
         if (!decode)
         {
           Field_num *number_field = (Field_num *)field;
           if (!number_field->unsigned_flag) {
-            *((uint8 *)(current_buffer)) ^= 0x80;
+            *((uint8 *)(current_encoded)) ^= 0x80;
           }
         }
         break;
@@ -126,29 +126,29 @@ namespace mrn {
         {
           float value;
           float4get(value, current_key);
-          encode_float(value, data_size, current_buffer, decode);
+          encode_float(value, data_size, current_encoded, decode);
         }
         break;
       case TYPE_DOUBLE:
         {
           double value;
           float8get(value, current_key);
-          encode_double(value, data_size, current_buffer, decode);
+          encode_double(value, data_size, current_encoded, decode);
         }
         break;
       case TYPE_BYTE_SEQUENCE:
-        memcpy(current_buffer, current_key, data_size);
+        memcpy(current_encoded, current_key, data_size);
         break;
       case TYPE_BYTE_REVERSE:
-        encode_reverse(current_key, data_size, current_buffer);
+        encode_reverse(current_key, data_size, current_encoded);
         break;
       case TYPE_BYTE_BLOB:
         if (decode) {
-          memcpy(current_buffer, current_key + data_size, HA_KEY_BLOB_LENGTH);
-          memcpy(current_buffer + HA_KEY_BLOB_LENGTH, current_key, data_size);
+          memcpy(current_encoded, current_key + data_size, HA_KEY_BLOB_LENGTH);
+          memcpy(current_encoded + HA_KEY_BLOB_LENGTH, current_key, data_size);
         } else {
-          memcpy(current_buffer + data_size, current_key, HA_KEY_BLOB_LENGTH);
-          memcpy(current_buffer, current_key + HA_KEY_BLOB_LENGTH, data_size);
+          memcpy(current_encoded + data_size, current_key, HA_KEY_BLOB_LENGTH);
+          memcpy(current_encoded, current_key + HA_KEY_BLOB_LENGTH, data_size);
         }
         data_size += HA_KEY_BLOB_LENGTH;
         break;
@@ -159,7 +159,7 @@ namespace mrn {
       }
 
       current_key += data_size;
-      current_buffer += data_size;
+      current_encoded += data_size;
       *encoded_length += data_size;
     }
 
@@ -340,34 +340,34 @@ namespace mrn {
   }
 
   void MultipleColumnKeyCodec::encode_float(volatile float value, uint data_size,
-                                            uchar *buffer, bool decode) {
+                                            uchar *encoded, bool decode) {
     MRN_DBUG_ENTER_METHOD();
     int n_bits = (data_size * 8 - 1);
     volatile int *int_value_pointer = (int *)(&value);
     int int_value = *int_value_pointer;
     if (!decode)
       int_value ^= ((int_value >> n_bits) | (1 << n_bits));
-    mrn_byte_order_host_to_network(buffer, &int_value, data_size);
+    mrn_byte_order_host_to_network(encoded, &int_value, data_size);
     if (decode) {
-      int_value = *((int *)buffer);
-      *((int *)buffer) = int_value ^ (((int_value ^ (1 << n_bits)) >> n_bits) |
+      int_value = *((int *)encoded);
+      *((int *)encoded) = int_value ^ (((int_value ^ (1 << n_bits)) >> n_bits) |
                                       (1 << n_bits));
     }
     DBUG_VOID_RETURN;
   }
 
   void MultipleColumnKeyCodec::encode_double(volatile double value, uint data_size,
-                                             uchar *buffer, bool decode) {
+                                             uchar *encoded, bool decode) {
     MRN_DBUG_ENTER_METHOD();
     int n_bits = (data_size * 8 - 1);
     volatile long long int *long_long_value_pointer = (long long int *)(&value);
     volatile long long int long_long_value = *long_long_value_pointer;
     if (!decode)
       long_long_value ^= ((long_long_value >> n_bits) | (1LL << n_bits));
-    mrn_byte_order_host_to_network(buffer, &long_long_value, data_size);
+    mrn_byte_order_host_to_network(encoded, &long_long_value, data_size);
     if (decode) {
-      long_long_value = *((long long int *)buffer);
-      *((long long int *)buffer) =
+      long_long_value = *((long long int *)encoded);
+      *((long long int *)encoded) =
         long_long_value ^ (((long_long_value ^ (1LL << n_bits)) >> n_bits) |
                            (1LL << n_bits));
     }
@@ -375,10 +375,10 @@ namespace mrn {
   }
 
   void MultipleColumnKeyCodec::encode_reverse(const uchar *key, uint data_size,
-                                              uchar *buffer) {
+                                              uchar *encoded) {
     MRN_DBUG_ENTER_METHOD();
     for (uint i = 0; i < data_size; i++) {
-      buffer[i] = key[data_size - i - 1];
+      encoded[i] = key[data_size - i - 1];
     }
     DBUG_VOID_RETURN;
   }

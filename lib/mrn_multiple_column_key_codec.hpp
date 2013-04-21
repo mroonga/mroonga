@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@ namespace mrn {
     ~MultipleColumnKeyCodec();
 
     int encode(const uchar *key, uint key_length,
-               uchar *buffer, uint *encoded_length,
+               uchar *encoded, uint *encoded_length,
                bool decode);
     uint size();
 
@@ -52,10 +52,10 @@ namespace mrn {
                       DataType *data_type, uint *data_size);
 
     void encode_float(volatile float value, uint data_size,
-                      uchar *buffer, bool decode);
+                      uchar *encoded, bool decode);
     void encode_double(volatile double value, uint data_size,
-                       uchar *buffer, bool decode);
-    void encode_reverse(const uchar *key, uint data_size, uchar *buffer);
+                       uchar *encoded, bool decode);
+    void encode_reverse(const uchar *key, uint data_size, uchar *encoded);
   };
 }
 
