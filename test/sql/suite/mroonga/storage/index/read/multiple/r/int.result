@@ -4,53 +4,35 @@ id INT,
 value INT,
 KEY (id, value)
 );
-INSERT INTO ids VALUES (1, 2);
-INSERT INTO ids SELECT id + 1,  value + 2  FROM ids;
-INSERT INTO ids SELECT id + 2,  value + 4  FROM ids;
-INSERT INTO ids SELECT id + 4,  value + 8  FROM ids;
-INSERT INTO ids SELECT id + 8,  value + 16 FROM ids;
-INSERT INTO ids SELECT id + 16, value + 32 FROM ids;
+INSERT INTO ids VALUES ( -1,  16);
+INSERT INTO ids VALUES ( -2,   8);
+INSERT INTO ids VALUES ( -4,   4);
+INSERT INTO ids VALUES ( -8,   2);
+INSERT INTO ids VALUES (-16,   1);
+INSERT INTO ids VALUES ( 16,  -1);
+INSERT INTO ids VALUES (  8,  -2);
+INSERT INTO ids VALUES (  4,  -4);
+INSERT INTO ids VALUES (  2,  -8);
+INSERT INTO ids VALUES (  1, -16);
 SELECT * FROM ids;
 id	value
-1	2
-2	4
-3	6
-4	8
-5	10
-6	12
-7	14
-8	16
-9	18
-10	20
-11	22
-12	24
-13	26
-14	28
-15	30
-16	32
-17	34
-18	36
-19	38
-20	40
-21	42
-22	44
-23	46
-24	48
-25	50
-26	52
-27	54
-28	56
-29	58
-30	60
-31	62
-32	64
-SELECT * FROM ids WHERE id BETWEEN 10 AND 16;
+-16	1
+-8	2
+-4	4
+-2	8
+-1	16
+1	-16
+2	-8
+4	-4
+8	-2
+16	-1
+SELECT * FROM ids WHERE id BETWEEN -4 AND 8;
 id	value
-10	20
-11	22
-12	24
-13	26
-14	28
-15	30
-16	32
+-4	4
+-2	8
+-1	16
+1	-16
+2	-8
+4	-4
+8	-2
 DROP TABLE ids;
