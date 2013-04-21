@@ -2406,9 +2406,10 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    grn_column_ranges(NULL),
    grn_index_tables(NULL),
    grn_index_columns(NULL),
+   normalizer_finder(ctx, ha_thd()),
+
    grn_source_column_geo(NULL),
    cursor_geo(NULL),
-
    cursor(NULL),
    index_table_cursor(NULL),
    id_accessor(NULL),
@@ -8549,39 +8550,7 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
 grn_obj *ha_mroonga::find_normalizer(Field *field)
 {
   MRN_DBUG_ENTER_METHOD();
-
-  const CHARSET_INFO *charset_info = field->charset();
-  const char *normalizer_name = NULL;
-  const char *default_normalizer_name = "NormalizerAuto";
-  if ((strcmp(charset_info->name, "utf8_general_ci") == 0) ||
-      (strcmp(charset_info->name, "utf8mb4_general_ci") == 0)) {
-    normalizer_name = "NormalizerMySQLGeneralCI";
-  } else if ((strcmp(charset_info->name, "utf8_unicode_ci") == 0) ||
-             (strcmp(charset_info->name, "utf8mb4_unicode_ci") == 0)) {
-    normalizer_name = "NormalizerMySQLUnicodeCI";
-  }
-
-  grn_obj *normalizer = NULL;
-  if (normalizer_name) {
-    normalizer = grn_ctx_get(ctx, normalizer_name, -1);
-    if (!normalizer) {
-      char error_message[MRN_MESSAGE_BUFFER_SIZE];
-      snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-               "%s normalizer isn't found for %s. "
-               "Install groonga-normalizer-mysql normalizer. "
-               "%s is used as fallback.",
-               normalizer_name,
-               charset_info->name,
-               default_normalizer_name);
-      push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
-                   HA_ERR_UNSUPPORTED, error_message);
-    }
-  }
-
-  if (!normalizer) {
-    normalizer = grn_ctx_get(ctx, default_normalizer_name, -1);
-  }
-
+  grn_obj *normalizer = normalizer_finder.find(field);
   DBUG_RETURN(normalizer);
 }
 
