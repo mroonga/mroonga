@@ -29,7 +29,7 @@ namespace mrn {
     MultipleColumnKeyCodec(KEY *key_info);
     ~MultipleColumnKeyCodec();
 
-    int encode(const uchar *key, uint key_length,
+    int encode(const uchar *mysql_key, uint mysql_key_length,
                uchar *encoded, uint *encoded_length,
                bool decode);
     uint size();
@@ -55,7 +55,7 @@ namespace mrn {
                       uchar *encoded, bool decode);
     void encode_double(volatile double value, uint data_size,
                        uchar *encoded, bool decode);
-    void encode_reverse(const uchar *key, uint data_size, uchar *encoded);
+    void encode_reverse(const uchar *mysql_key, uint data_size, uchar *encoded);
   };
 }
 

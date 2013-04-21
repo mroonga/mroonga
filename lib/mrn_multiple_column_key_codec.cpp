@@ -51,19 +51,19 @@ namespace mrn {
   MultipleColumnKeyCodec::~MultipleColumnKeyCodec() {
   }
 
-  int MultipleColumnKeyCodec::encode(const uchar *key, uint key_length,
+  int MultipleColumnKeyCodec::encode(const uchar *mysql_key, uint mysql_key_length,
                                      uchar *encoded, uint *encoded_length,
                                      bool decode) {
     MRN_DBUG_ENTER_METHOD();
     int error = 0;
-    const uchar *current_key = key;
-    const uchar *key_end = key + key_length;
+    const uchar *current_mysql_key = mysql_key;
+    const uchar *mysql_key_end = mysql_key + mysql_key_length;
     uchar *current_encoded = encoded;
 
     int n_key_parts = KEY_N_KEY_PARTS(key_info_);
     DBUG_PRINT("info", ("mroonga: n_key_parts=%d", n_key_parts));
     *encoded_length = 0;
-    for (int i = 0; i < n_key_parts && current_key < key_end; i++) {
+    for (int i = 0; i < n_key_parts && current_mysql_key < mysql_key_end; i++) {
       KEY_PART_INFO *key_part = &(key_info_->key_part[i]);
       Field *field = key_part->field;
       DBUG_PRINT("info", ("mroonga: key_part->length=%u", key_part->length));
@@ -71,7 +71,7 @@ namespace mrn {
       if (field->null_bit) {
         DBUG_PRINT("info", ("mroonga: field has null bit"));
         *current_encoded = 0;
-        current_key += 1;
+        current_mysql_key += 1;
         current_encoded += 1;
         (*encoded_length)++;
       }
@@ -91,10 +91,10 @@ namespace mrn {
           long long int long_long_value = 0;
           switch (data_size) {
           case 3:
-            long_long_value = (long long int)sint3korr(current_key);
+            long_long_value = (long long int)sint3korr(current_mysql_key);
             break;
           case 8:
-            long_long_value = (long long int)sint8korr(current_key);
+            long_long_value = (long long int)sint8korr(current_mysql_key);
             break;
           }
           if (decode)
@@ -110,10 +110,10 @@ namespace mrn {
         {
           Field_num *number_field = (Field_num *)field;
           if (!number_field->unsigned_flag) {
-            *((uint8 *)(current_key)) ^= 0x80;
+            *((uint8 *)(current_mysql_key)) ^= 0x80;
           }
         }
-        mrn_byte_order_host_to_network(current_encoded, current_key, data_size);
+        mrn_byte_order_host_to_network(current_encoded, current_mysql_key, data_size);
         if (!decode)
         {
           Field_num *number_field = (Field_num *)field;
@@ -125,30 +125,30 @@ namespace mrn {
       case TYPE_FLOAT:
         {
           float value;
-          float4get(value, current_key);
+          float4get(value, current_mysql_key);
           encode_float(value, data_size, current_encoded, decode);
         }
         break;
       case TYPE_DOUBLE:
         {
           double value;
-          float8get(value, current_key);
+          float8get(value, current_mysql_key);
           encode_double(value, data_size, current_encoded, decode);
         }
         break;
       case TYPE_BYTE_SEQUENCE:
-        memcpy(current_encoded, current_key, data_size);
+        memcpy(current_encoded, current_mysql_key, data_size);
         break;
       case TYPE_BYTE_REVERSE:
-        encode_reverse(current_key, data_size, current_encoded);
+        encode_reverse(current_mysql_key, data_size, current_encoded);
         break;
       case TYPE_BYTE_BLOB:
         if (decode) {
-          memcpy(current_encoded, current_key + data_size, HA_KEY_BLOB_LENGTH);
-          memcpy(current_encoded + HA_KEY_BLOB_LENGTH, current_key, data_size);
+          memcpy(current_encoded, current_mysql_key + data_size, HA_KEY_BLOB_LENGTH);
+          memcpy(current_encoded + HA_KEY_BLOB_LENGTH, current_mysql_key, data_size);
         } else {
-          memcpy(current_encoded + data_size, current_key, HA_KEY_BLOB_LENGTH);
-          memcpy(current_encoded, current_key + HA_KEY_BLOB_LENGTH, data_size);
+          memcpy(current_encoded + data_size, current_mysql_key, HA_KEY_BLOB_LENGTH);
+          memcpy(current_encoded, current_mysql_key + HA_KEY_BLOB_LENGTH, data_size);
         }
         data_size += HA_KEY_BLOB_LENGTH;
         break;
@@ -158,7 +158,7 @@ namespace mrn {
         break;
       }
 
-      current_key += data_size;
+      current_mysql_key += data_size;
       current_encoded += data_size;
       *encoded_length += data_size;
     }
@@ -374,11 +374,11 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::encode_reverse(const uchar *key, uint data_size,
+  void MultipleColumnKeyCodec::encode_reverse(const uchar *mysql_key, uint data_size,
                                               uchar *encoded) {
     MRN_DBUG_ENTER_METHOD();
     for (uint i = 0; i < data_size; i++) {
-      encoded[i] = key[data_size - i - 1];
+      encoded[i] = mysql_key[data_size - i - 1];
     }
     DBUG_VOID_RETURN;
   }
