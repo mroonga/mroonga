@@ -5633,8 +5633,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
       pkey = GRN_TEXT_VALUE(&key_buffer);
       storage_encode_multiple_column_key(&key_info,
                                          key, key_info.key_length,
-                                         (uchar *)pkey, (uint *)&pkey_size,
-                                         false);
+                                         (uchar *)pkey, (uint *)&pkey_size);
     }
   }
 
@@ -5764,7 +5763,7 @@ int ha_mroonga::storage_write_row_multiple_column_index(uchar *buf,
                                      (uchar *)(GRN_TEXT_VALUE(&key_buffer)),
                                      key_info->key_length,
                                      (uchar *)(GRN_TEXT_VALUE(&encoded_key_buffer)),
-                                     &encoded_key_length, false);
+                                     &encoded_key_length);
   DBUG_PRINT("info", ("mroonga: key_length=%u", key_info->key_length));
   DBUG_PRINT("info", ("mroonga: encoded_key_length=%u", encoded_key_length));
   DBUG_ASSERT(key_info->key_length >= encoded_key_length);
@@ -5845,8 +5844,7 @@ int ha_mroonga::storage_write_row_unique_index(uchar *buf, grn_id record_id,
     ukey = GRN_TEXT_VALUE(&key_buffer);
     storage_encode_multiple_column_key(key_info,
                                        key, key_info->key_length,
-                                       (uchar *)(ukey), (uint *)&ukey_size,
-                                       false);
+                                       (uchar *)(ukey), (uint *)&ukey_size);
   }
 
   int added;
@@ -6284,8 +6282,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
                                        (uchar *)(GRN_TEXT_VALUE(&old_key)),
                                        key_info.key_length,
                                        (uchar *)(GRN_TEXT_VALUE(&old_encoded_key)),
-                                       &old_encoded_key_length,
-                                       false);
+                                       &old_encoded_key_length);
 
     GRN_BULK_REWIND(&new_key);
     grn_bulk_space(ctx, &new_key, key_info.key_length);
@@ -6300,8 +6297,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
                                        (uchar *)(GRN_TEXT_VALUE(&new_key)),
                                        key_info.key_length,
                                        (uchar *)(GRN_TEXT_VALUE(&new_encoded_key)),
-                                       &new_encoded_key_length,
-                                       false);
+                                       &new_encoded_key_length);
 
     grn_obj *index_column = grn_index_columns[i];
     grn_rc rc;
@@ -6555,8 +6551,7 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
                                        (uchar *)(GRN_TEXT_VALUE(&key)),
                                        key_info.key_length,
                                        (uchar *)(GRN_TEXT_VALUE(&encoded_key)),
-                                       &encoded_key_length,
-                                       false);
+                                       &encoded_key_length);
 
     grn_obj *index_column = grn_index_columns[i];
     grn_rc rc;
@@ -6634,8 +6629,7 @@ int ha_mroonga::storage_prepare_delete_row_unique_index(const uchar *buf,
     ukey = GRN_TEXT_VALUE(&key_buffer);
     storage_encode_multiple_column_key(key_info,
                                        key, key_info->key_length,
-                                       (uchar *)ukey, (uint *)&ukey_size,
-                                       false);
+                                       (uchar *)ukey, (uint *)&ukey_size);
   }
   *del_key_id = grn_table_get(ctx, index_table, ukey, ukey_size);
   DBUG_RETURN(0);
@@ -6761,8 +6755,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
       key_min = key_min_entity;
       storage_encode_multiple_column_key(&key_info,
                                          range_min->key, range_min->length,
-                                         key_min, &size_min,
-                                         false);
+                                         key_min, &size_min);
     } else {
       key_min = key_min_entity;
       key_max = key_max_entity;
@@ -7027,8 +7020,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
     key_min = key_min_entity;
     storage_encode_multiple_column_key(&key_info,
                                        key, key_length,
-                                       key_min, &size_min,
-                                       false);
+                                       key_min, &size_min);
   } else if (mrn_is_geo_key(&key_info)) {
     error = mrn_change_encoding(ctx, key_info.key_part->field->charset());
     if (error)
@@ -7182,8 +7174,7 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
     key_min = key_min_entity;
     storage_encode_multiple_column_key(&key_info,
                                        key, key_length,
-                                       key_min, &size_min,
-                                       false);
+                                       key_min, &size_min);
   } else {
     KEY_PART_INFO key_part = key_info.key_part[0];
     Field *field = key_part.field;
@@ -7554,8 +7545,7 @@ int ha_mroonga::storage_read_range_first(const key_range *start_key,
       key_min = key_min_entity;
       storage_encode_multiple_column_key(&key_info,
                                          start_key->key, start_key->length,
-                                         key_min, &size_min,
-                                         false);
+                                         key_min, &size_min);
     } else {
       key_min = key_min_entity;
       key_max = key_max_entity;
@@ -10625,12 +10615,11 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
                                                    const uchar *key,
                                                    uint key_length,
                                                    uchar *buffer,
-                                                   uint *encoded_length,
-                                                   bool decode)
+                                                   uint *encoded_length)
 {
   MRN_DBUG_ENTER_METHOD();
   mrn::MultipleColumnKeyCodec codec(key_info);
-  int error = codec.encode(key, key_length, buffer, encoded_length, decode);
+  int error = codec.encode(key, key_length, buffer, encoded_length);
   DBUG_RETURN(error);
 }
 
@@ -10649,16 +10638,14 @@ int ha_mroonga::storage_encode_multiple_column_key_range(KEY *key_info,
   if (start) {
     memset(min_buffer, 0, encoded_key_size);
     error = codec.encode(start->key, start->length,
-                         min_buffer, min_encoded_size,
-                         false);
+                         min_buffer, min_encoded_size);
     // TODO: handle error?
     *min_encoded_size = encoded_key_size;
   }
   if (end) {
     memset(max_buffer, 0xff, encoded_key_size);
     error = codec.encode(end->key, end->length,
-                         max_buffer, max_encoded_size,
-                         false);
+                         max_buffer, max_encoded_size);
     // TODO: handle error?
     *max_encoded_size = encoded_key_size;
   }

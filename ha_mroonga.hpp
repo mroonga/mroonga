@@ -659,8 +659,7 @@ private:
   int storage_encode_key(Field *field, const uchar *key, uchar *buf, uint *size);
   int storage_encode_multiple_column_key(KEY *key_info,
                                          const uchar *key, uint key_length,
-                                         uchar *buffer, uint *encoded_length,
-                                         bool decode);
+                                         uchar *buffer, uint *encoded_length);
   int storage_encode_multiple_column_key_range(KEY *key_info,
                                                const key_range *start,
                                                const key_range *end,
