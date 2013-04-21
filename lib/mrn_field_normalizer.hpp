@@ -32,6 +32,7 @@ namespace mrn {
     ~FieldNormalizer();
 
     bool is_need_normalize();
+    grn_obj *normalize(const char *string, unsigned int string_length);
     grn_obj *find_grn_normalizer();
 
   private:
