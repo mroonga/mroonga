@@ -8778,29 +8778,8 @@ bool ha_mroonga::is_enable_optimization()
 bool ha_mroonga::is_need_normalize(Field *field) const
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_PRINT("info",
-             ("mroonga: result_type = %u", field->result_type()));
-  DBUG_PRINT("info",
-             ("mroonga: charset->name = %s", field->charset()->name));
-  DBUG_PRINT("info",
-             ("mroonga: charset->csname = %s", field->charset()->csname));
-  DBUG_PRINT("info",
-             ("mroonga: charset->state = %u", field->charset()->state));
-  bool need_normalize_p = false;
-  if (field->charset()->state & (MY_CS_BINSORT | MY_CS_CSSORT)) {
-    need_normalize_p = false;
-    DBUG_PRINT("info", ("mroonga: is_need_normalize: false: sort is required"));
-  } else {
-    grn_builtin_type grn_type;
-    grn_type = mrn_grn_type_from_field(ctx, field, true);
-    if (GRN_DB_SHORT_TEXT <= grn_type && grn_type <= GRN_DB_LONG_TEXT) {
-      need_normalize_p = true;
-      DBUG_PRINT("info", ("mroonga: is_need_normalize: true: text type"));
-    } else {
-      need_normalize_p = false;
-      DBUG_PRINT("info", ("mroonga: is_need_normalize: false: no text type"));
-    }
-  }
+  mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
+  bool need_normalize_p = field_normalizer.is_need_normalize();
   DBUG_RETURN(need_normalize_p);
 }
 

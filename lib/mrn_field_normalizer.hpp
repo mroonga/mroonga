@@ -31,12 +31,15 @@ namespace mrn {
     FieldNormalizer(grn_ctx *ctx, THD *thread, Field *field);
     ~FieldNormalizer();
 
+    bool is_need_normalize();
     grn_obj *find_grn_normalizer();
 
   private:
     grn_ctx *ctx_;
     THD *thread_;
     Field *field_;
+
+    bool is_text_type();
   };
 }
 
