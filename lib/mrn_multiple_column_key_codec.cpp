@@ -21,6 +21,7 @@
 #include <mrn_mysql.h>
 
 #include "mrn_multiple_column_key_codec.hpp"
+#include "mrn_field_normalizer.hpp"
 
 // for debug
 #define MRN_CLASS_NAME "mrn::MultipleColumnKeyCodec"
@@ -44,8 +45,12 @@
 #endif /* WORDS_BIGENDIAN */
 
 namespace mrn {
-  MultipleColumnKeyCodec::MultipleColumnKeyCodec(KEY *key_info)
-    : key_info_(key_info) {
+  MultipleColumnKeyCodec::MultipleColumnKeyCodec(grn_ctx *ctx,
+                                                 THD *thread,
+                                                 KEY *key_info)
+    : ctx_(ctx),
+      thread_(thread),
+      key_info_(key_info) {
   }
 
   MultipleColumnKeyCodec::~MultipleColumnKeyCodec() {
@@ -133,9 +138,7 @@ namespace mrn {
         encode_reverse(current_mysql_key, data_size, current_grn_key);
         break;
       case TYPE_BYTE_BLOB:
-        memcpy(current_grn_key + data_size, current_mysql_key, HA_KEY_BLOB_LENGTH);
-        memcpy(current_grn_key, current_mysql_key + HA_KEY_BLOB_LENGTH, data_size);
-        data_size += HA_KEY_BLOB_LENGTH;
+        encode_blob(field, current_mysql_key, current_grn_key, &data_size);
         break;
       }
 
@@ -488,5 +491,47 @@ namespace mrn {
       mysql_key[i] = grn_key[data_size - i - 1];
     }
     DBUG_VOID_RETURN;
+  }
+
+  void MultipleColumnKeyCodec::encode_blob(Field *field,
+                                           const uchar *mysql_key,
+                                           uchar *grn_key,
+                                           uint *data_size) {
+    FieldNormalizer normalizer(ctx_, thread_, field);
+    if (normalizer.is_need_normalize()) {
+#if HA_KEY_BLOB_LENGTH != 2
+#  error "TODO: support HA_KEY_BLOB_LENGTH != 2 case if it is needed"
+#endif
+      const char *blob_data =
+        reinterpret_cast<const char *>(mysql_key + HA_KEY_BLOB_LENGTH);
+      uint16 blob_data_length = *((uint16 *)(mysql_key));
+      grn_obj *grn_string = normalizer.normalize(blob_data,
+                                                 blob_data_length);
+      const char *normalized;
+      unsigned int normalized_length;
+      grn_string_get_normalized(ctx_, grn_string,
+                                &normalized, &normalized_length, NULL);
+      uint16 new_blob_data_length;
+      if (normalized_length <= UINT_MAX16) {
+        memcpy(grn_key, normalized, normalized_length);
+        if (normalized_length < *data_size) {
+          memset(grn_key + normalized_length,
+                 '0', *data_size - normalized_length);
+        }
+        new_blob_data_length = normalized_length;
+      } else {
+        push_warning(thread_,
+                     Sql_condition::WARN_LEVEL_WARN,
+                     WARN_DATA_TRUNCATED,
+                     "normalized data truncated for multiple column index");
+        memcpy(grn_key, normalized, blob_data_length);
+        new_blob_data_length = blob_data_length;
+      }
+      memcpy(grn_key + *data_size, &new_blob_data_length, HA_KEY_BLOB_LENGTH);
+    } else {
+      memcpy(grn_key + *data_size, mysql_key, HA_KEY_BLOB_LENGTH);
+      memcpy(grn_key, mysql_key + HA_KEY_BLOB_LENGTH, *data_size);
+    }
+    *data_size += HA_KEY_BLOB_LENGTH;
   }
 }

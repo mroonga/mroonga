@@ -7,9 +7,9 @@ INSERT INTO users VALUES ("Alice");
 INSERT INTO users VALUES ("Bob");
 SELECT * FROM users;
 name
-ALICE
-BOB
+Alice
+Bob
 SELECT * FROM users WHERE name = "aLiCe";
 name
-ALICE
+Alice
 DROP TABLE users;

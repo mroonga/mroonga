@@ -2598,8 +2598,16 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
   ulong flags;
   KEY key = table_share->key_info[idx];
   if (key.algorithm == HA_KEY_ALG_BTREE || key.algorithm == HA_KEY_ALG_UNDEF) {
-    flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE | HA_KEYREAD_ONLY;
-    if (KEY_N_KEY_PARTS(&key) > 1 || !is_need_normalize(&key.key_part->field[0])) {
+    flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE;
+    bool need_normalize_p = false;
+    Field *field = &key.key_part[part].field[0];
+    if (field && is_need_normalize(field)) {
+      need_normalize_p = true;
+    }
+    if (!need_normalize_p) {
+      flags |= HA_KEYREAD_ONLY;
+    }
+    if (KEY_N_KEY_PARTS(&key) > 1 || !need_normalize_p) {
       flags |= HA_READ_ORDER;
     }
   } else {
@@ -9931,7 +9939,7 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
   } else {
     uchar enc_buf[MAX_KEY_LENGTH];
     uint enc_len;
-    mrn::MultipleColumnKeyCodec codec(key_info);
+    mrn::MultipleColumnKeyCodec codec(ctx, ha_thd(), key_info);
     codec.decode(static_cast<uchar *>(key), key_length, enc_buf, &enc_len);
     key_restore(buf, enc_buf, key_info, enc_len);
   }
@@ -10377,7 +10385,7 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
                                                    uint *encoded_length)
 {
   MRN_DBUG_ENTER_METHOD();
-  mrn::MultipleColumnKeyCodec codec(key_info);
+  mrn::MultipleColumnKeyCodec codec(ctx, ha_thd(), key_info);
   int error = codec.encode(key, key_length, buffer, encoded_length);
   DBUG_RETURN(error);
 }
@@ -10392,7 +10400,7 @@ int ha_mroonga::storage_encode_multiple_column_key_range(KEY *key_info,
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  mrn::MultipleColumnKeyCodec codec(key_info);
+  mrn::MultipleColumnKeyCodec codec(ctx, ha_thd(), key_info);
   uint encoded_key_size = codec.size();
   if (start) {
     memset(min_buffer, 0, encoded_key_size);

@@ -20,13 +20,15 @@
 #ifndef MRN_MULTIPLE_COLUMN_KEY_CODEC_HPP_
 #define MRN_MULTIPLE_COLUMN_KEY_CODEC_HPP_
 
+#include <groonga.h>
+
 #include <mrn_mysql.h>
 #include <mrn_mysql_compat.h>
 
 namespace mrn {
   class MultipleColumnKeyCodec {
   public:
-    MultipleColumnKeyCodec(KEY *key_info);
+    MultipleColumnKeyCodec(grn_ctx *ctx, THD *thread, KEY *key_info);
     ~MultipleColumnKeyCodec();
 
     int encode(const uchar *mysql_key, uint mysql_key_length,
@@ -47,6 +49,8 @@ namespace mrn {
       TYPE_BYTE_BLOB
     };
 
+    grn_ctx *ctx_;
+    THD *thread_;
     KEY *key_info_;
 
     void get_key_info(KEY_PART_INFO *key_part,
@@ -58,6 +62,8 @@ namespace mrn {
     void decode_double(const uchar *grn_key, uchar *mysql_key, uint data_size);
     void encode_reverse(const uchar *mysql_key, uint data_size, uchar *grn_key);
     void decode_reverse(const uchar *grn_key, uchar *mysql_key, uint data_size);
+    void encode_blob(Field *field,
+                     const uchar *mysql_key, uchar *grn_key, uint *data_size);
   };
 }
 
