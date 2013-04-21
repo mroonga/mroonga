@@ -10182,10 +10182,8 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
   } else {
     uchar enc_buf[MAX_KEY_LENGTH];
     uint enc_len;
-    storage_encode_multiple_column_key(key_info,
-                                       (uchar *)key, key_length,
-                                       enc_buf, &enc_len,
-                                       true);
+    mrn::MultipleColumnKeyCodec codec(key_info);
+    codec.decode(static_cast<uchar *>(key), key_length, enc_buf, &enc_len);
     key_restore(buf, enc_buf, key_info, enc_len);
   }
   DBUG_VOID_RETURN;

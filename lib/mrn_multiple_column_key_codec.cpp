@@ -168,6 +168,105 @@ namespace mrn {
     DBUG_RETURN(error);
   }
 
+  int MultipleColumnKeyCodec::decode(const uchar *grn_key,
+                                     uint grn_key_length,
+                                     uchar *mysql_key,
+                                     uint *mysql_key_length) {
+    MRN_DBUG_ENTER_METHOD();
+    int error = 0;
+    const uchar *current_grn_key = grn_key;
+    const uchar *grn_key_end = grn_key + grn_key_length;
+    uchar *current_mysql_key = mysql_key;
+
+    int n_key_parts = KEY_N_KEY_PARTS(key_info_);
+    DBUG_PRINT("info", ("mroonga: n_key_parts=%d", n_key_parts));
+    *mysql_key_length = 0;
+    for (int i = 0; i < n_key_parts && current_grn_key < grn_key_end; i++) {
+      KEY_PART_INFO *key_part = &(key_info_->key_part[i]);
+      Field *field = key_part->field;
+      DBUG_PRINT("info", ("mroonga: key_part->length=%u", key_part->length));
+
+      if (field->null_bit) {
+        DBUG_PRINT("info", ("mroonga: field has null bit"));
+        *current_mysql_key = 0;
+        current_grn_key += 1;
+        current_mysql_key += 1;
+        (*mysql_key_length)++;
+      }
+
+      DataType data_type = TYPE_UNKNOWN;
+      uint data_size = 0;
+      get_key_info(key_part, &data_type, &data_size);
+
+      switch (data_type) {
+      case TYPE_UNKNOWN:
+        // TODO: This will not be happen. This is just for
+        // suppressing warnings by gcc -O2. :<
+        error = HA_ERR_UNSUPPORTED;
+        break;
+      case TYPE_LONG_LONG_NUMBER:
+        {
+          long long int long_long_value = 0;
+          switch (data_size) {
+          case 3:
+            long_long_value = (long long int)sint3korr(current_grn_key);
+            break;
+          case 8:
+            long_long_value = (long long int)sint8korr(current_grn_key);
+            break;
+          }
+          *((uint8 *)(&long_long_value)) ^= 0x80;
+          mrn_byte_order_host_to_network(current_mysql_key, &long_long_value,
+                                         data_size);
+        }
+        break;
+      case TYPE_NUMBER:
+        {
+          uchar buffer[8];
+          memcpy(buffer, current_grn_key, data_size);
+          Field_num *number_field = (Field_num *)field;
+          if (!number_field->unsigned_flag) {
+            buffer[0] ^= 0x80;
+          }
+          mrn_byte_order_host_to_network(current_mysql_key, buffer,
+                                         data_size);
+        }
+        break;
+      case TYPE_FLOAT:
+        decode_float(current_grn_key, current_mysql_key, data_size);
+        break;
+      case TYPE_DOUBLE:
+        decode_double(current_grn_key, current_mysql_key, data_size);
+        break;
+      case TYPE_BYTE_SEQUENCE:
+        memcpy(current_mysql_key, current_grn_key, data_size);
+        break;
+      case TYPE_BYTE_REVERSE:
+        decode_reverse(current_grn_key, current_mysql_key, data_size);
+        break;
+      case TYPE_BYTE_BLOB:
+        memcpy(current_mysql_key,
+               current_grn_key + data_size,
+               HA_KEY_BLOB_LENGTH);
+        memcpy(current_mysql_key + HA_KEY_BLOB_LENGTH,
+               current_grn_key,
+               data_size);
+        data_size += HA_KEY_BLOB_LENGTH;
+        break;
+      }
+
+      if (error) {
+        break;
+      }
+
+      current_grn_key += data_size;
+      current_mysql_key += data_size;
+      *mysql_key_length += data_size;
+    }
+
+    DBUG_RETURN(error);
+  }
+
   uint MultipleColumnKeyCodec::size() {
     MRN_DBUG_ENTER_METHOD();
 
@@ -358,6 +457,19 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
+  void MultipleColumnKeyCodec::decode_float(const uchar *grn_key,
+                                            uchar *mysql_key,
+                                            uint data_size) {
+    MRN_DBUG_ENTER_METHOD();
+    int int_value;
+    mrn_byte_order_host_to_network(&int_value, grn_key, data_size);
+    int max_bit = (data_size * 8 - 1);
+    *((int *)mysql_key) =
+      int_value ^ (((int_value ^ (1 << max_bit)) >> max_bit) |
+                   (1 << max_bit));
+    DBUG_VOID_RETURN;
+  }
+
   void MultipleColumnKeyCodec::encode_double(volatile double value, uint data_size,
                                              uchar *grn_key, bool decode) {
     MRN_DBUG_ENTER_METHOD();
@@ -376,11 +488,34 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
+  void MultipleColumnKeyCodec::decode_double(const uchar *grn_key,
+                                             uchar *mysql_key,
+                                             uint data_size) {
+    MRN_DBUG_ENTER_METHOD();
+    long long int long_long_value;
+    mrn_byte_order_host_to_network(&long_long_value, grn_key, data_size);
+    int max_bit = (data_size * 8 - 1);
+    *((long long int *)mysql_key) =
+      long_long_value ^ (((long_long_value ^ (1LL << max_bit)) >> max_bit) |
+                         (1LL << max_bit));
+    DBUG_VOID_RETURN;
+  }
+
   void MultipleColumnKeyCodec::encode_reverse(const uchar *mysql_key, uint data_size,
                                               uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
     for (uint i = 0; i < data_size; i++) {
       grn_key[i] = mysql_key[data_size - i - 1];
+    }
+    DBUG_VOID_RETURN;
+  }
+
+  void MultipleColumnKeyCodec::decode_reverse(const uchar *grn_key,
+                                              uchar *mysql_key,
+                                              uint data_size) {
+    MRN_DBUG_ENTER_METHOD();
+    for (uint i = 0; i < data_size; i++) {
+      mysql_key[i] = grn_key[data_size - i - 1];
     }
     DBUG_VOID_RETURN;
   }

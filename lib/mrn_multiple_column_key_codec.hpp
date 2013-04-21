@@ -32,6 +32,8 @@ namespace mrn {
     int encode(const uchar *mysql_key, uint mysql_key_length,
                uchar *grn_key, uint *grn_key_length,
                bool decode);
+    int decode(const uchar *grn_key, uint grn_key_length,
+               uchar *mysql_key, uint *mysql_key_length);
     uint size();
 
   private:
@@ -53,9 +55,12 @@ namespace mrn {
 
     void encode_float(volatile float value, uint data_size,
                       uchar *grn_key, bool decode);
+    void decode_float(const uchar *grn_key, uchar *mysql_key, uint data_size);
     void encode_double(volatile double value, uint data_size,
                        uchar *grn_key, bool decode);
+    void decode_double(const uchar *grn_key, uchar *mysql_key, uint data_size);
     void encode_reverse(const uchar *mysql_key, uint data_size, uchar *grn_key);
+    void decode_reverse(const uchar *grn_key, uchar *mysql_key, uint data_size);
   };
 }
 
