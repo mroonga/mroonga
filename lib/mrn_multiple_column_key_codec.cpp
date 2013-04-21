@@ -51,8 +51,10 @@ namespace mrn {
   MultipleColumnKeyCodec::~MultipleColumnKeyCodec() {
   }
 
-  int MultipleColumnKeyCodec::encode(const uchar *mysql_key, uint mysql_key_length,
-                                     uchar *grn_key, uint *grn_key_length,
+  int MultipleColumnKeyCodec::encode(const uchar *mysql_key,
+                                     uint mysql_key_length,
+                                     uchar *grn_key,
+                                     uint *grn_key_length,
                                      bool decode) {
     MRN_DBUG_ENTER_METHOD();
     int error = 0;
