@@ -516,7 +516,7 @@ namespace mrn {
         memcpy(grn_key, normalized, normalized_length);
         if (normalized_length < *data_size) {
           memset(grn_key + normalized_length,
-                 '0', *data_size - normalized_length);
+                 '\0', *data_size - normalized_length);
         }
         new_blob_data_length = normalized_length;
       } else {
