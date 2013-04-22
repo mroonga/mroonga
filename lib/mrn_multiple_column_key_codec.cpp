@@ -520,10 +520,17 @@ namespace mrn {
         }
         new_blob_data_length = normalized_length;
       } else {
-        push_warning(thread_,
-                     Sql_condition::WARN_LEVEL_WARN,
-                     WARN_DATA_TRUNCATED,
-                     "normalized data truncated for multiple column index");
+        push_warning_printf(thread_,
+                            Sql_condition::WARN_LEVEL_WARN,
+                            WARN_DATA_TRUNCATED,
+                            "normalized data truncated "
+                            "for multiple column index: "
+                            "normalized-data-size: <%u> "
+                            "max-data-size: <%u> "
+                            "column-name: <%s>",
+                            normalized_length,
+                            UINT_MAX16,
+                            field->field_name);
         memcpy(grn_key, normalized, blob_data_length);
         new_blob_data_length = blob_data_length;
       }
