@@ -2864,11 +2864,13 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   grn_obj_unlink(ctx, lexicon_key_type);
   index_tables[i] = index_table;
 
-  grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
   grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
                                       tmp_share->key_parser_length[i]);
-  grn_obj_set_info(ctx, index_table, info_type, tokenizer);
-  grn_obj_unlink(ctx, tokenizer);
+  if (tokenizer) {
+    grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+    grn_obj_set_info(ctx, index_table, info_type, tokenizer);
+    grn_obj_unlink(ctx, tokenizer);
+  }
 
   if (is_need_normalize(&key_info->key_part->field[0])) {
     grn_info_type info_type = GRN_INFO_NORMALIZER;
@@ -3545,11 +3547,13 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   }
 
   if (key_info->flags & HA_FULLTEXT) {
-    grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
     grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
                                         tmp_share->key_parser_length[i]);
-    grn_obj_set_info(ctx, index_table, info_type, tokenizer);
-    grn_obj_unlink(ctx, tokenizer);
+    if (tokenizer) {
+      grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+      grn_obj_set_info(ctx, index_table, info_type, tokenizer);
+      grn_obj_unlink(ctx, tokenizer);
+    }
   }
 
   {
@@ -8338,6 +8342,11 @@ void ha_mroonga::remove_grn_obj_force(const char *name)
 grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
 {
   MRN_DBUG_ENTER_METHOD();
+
+  if (strncasecmp("off", name, name_length) == 0) {
+    DBUG_RETURN(NULL);
+  }
+
   grn_obj *tokenizer;
   mrn_change_encoding(ctx, system_charset_info);
   tokenizer = grn_ctx_get(ctx, name, name_length);
