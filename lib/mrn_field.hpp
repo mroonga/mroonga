@@ -17,8 +17,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MRN_FIELD_NORMALIZER_HPP_
-#define MRN_FIELD_NORMALIZER_HPP_
+#ifndef MRN_FIELD_HPP_
+#define MRN_FIELD_HPP_
 
 #include <groonga.h>
 
@@ -26,14 +26,13 @@
 #include <mrn_mysql_compat.h>
 
 namespace mrn {
-  class FieldNormalizer {
+  class Field {
   public:
-    FieldNormalizer(grn_ctx *ctx, THD *thread, ::Field *field);
-    ~FieldNormalizer();
+    Field(grn_ctx *ctx, THD *thread, ::Field *field);
+    ~Field();
 
     bool is_need_normalize();
-    grn_obj *normalize(const char *string, unsigned int string_length);
-    grn_obj *find_grn_normalizer();
+    bool is_text_type();
 
   private:
     grn_ctx *ctx_;
@@ -42,4 +41,4 @@ namespace mrn {
   };
 }
 
-#endif // MRN_FIELD_NORMALIZER_HPP_
+#endif // MRN_FIELD_HPP_
