@@ -206,4 +206,4 @@ configure_file(
 configure_file(
   "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result.in"
   "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result"
-  )
+  NEWLINE_STYLE LF)
