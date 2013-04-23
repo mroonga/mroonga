@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-09 15:45\n"
+"POT-Creation-Date: 2013-04-23 15:34\n"
 "PO-Revision-Date: 2013-04-14 22:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -306,11 +306,6 @@ msgstr ""
 msgid "Install::"
 msgstr "インストール::"
 
-# 9c9e33f1e6b544bc8cc8d9edb660aaae
-#: ../../../source/install.rst:411
-msgid "`mroonga/homebrew on GitHub <https://github.com/mroonga/homebrew>`_"
-msgstr ""
-
 # eb4280f85ca14d08ad5ea6857f1bf4d1
 #: ../../../source/install.rst:414
 msgid "Install from the source code"
@@ -537,7 +532,9 @@ msgstr ""
 msgid ""
 "To enable invoking groonga query from mroonga, install mroonga_command "
 "function."
-msgstr "mroongaからgroongaのクエリを実行するために、mroonga_command関数をインストールします。"
+msgstr ""
+"mroongaからgroongaのクエリを実行するために、mroonga_command関数をインストール"
+"します。"
 
 # eb4280f85ca14d08ad5ea6857f1bf4d1
 #: ../../../source/install.rst:533
