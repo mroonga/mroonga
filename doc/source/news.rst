@@ -40,7 +40,7 @@ Fixes
 * Fixed a bug that mroonga crashes when freeing internal temporary
   shared object.
 * [doc] Fixed a typo about running mode of storage engine and
-  a long ambiguous sentences. [Reported by Ichiro Suzuki]
+  a long ambiguous sentence. [Reported by Ichiro Suzuki]
 
 Thanks
 ^^^^^^
