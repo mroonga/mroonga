@@ -1,4 +1,4 @@
-# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
@@ -65,7 +65,12 @@ if(MRN_BUNDLED)
   set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR})
   set(MYSQL_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mysql_config)
 else()
-  set(MYSQL_SOURCE_DIR "PATH" CACHE PATH "MySQL source directory")
+  set(MYSQL_SOURCE_DIR "/PATH/TO/MYSQL/SOURCE/DIRECTORY/"
+    CACHE PATH "MySQL source directory")
+  if(NOT EXISTS ${MYSQL_SOURCE_DIR})
+    message(FATAL_ERROR
+      "MySQL source directory (MYSQL_SOURCE_DIR) doesn't exist: <${MYSQL_SOURCE_DIR}>")
+  endif()
   set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
   set(MYSQL_CONFIG "mysql_config" CACHE PATH "mysql-config command path")
 endif()
