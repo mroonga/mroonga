@@ -185,7 +185,7 @@ while [ $# -gt 0 ]; do
 		    ;;
 	    esac
 	    shift
-	    test_suite_name=$(echo "$test_suite_name" | sed -e "s,^${suite_dir},,")
+	    test_suite_name=$(echo "$test_suite_name" | sed -e "s,^${suite_dir}/,,")
 	    if [ -n "${test_suite_names}" ]; then
 		test_suite_names="${test_suite_names},"
 	    fi
