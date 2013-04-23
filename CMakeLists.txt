@@ -111,22 +111,19 @@ include_directories(
   "${PROJECT_SOURCE_DIR}"
   "${PROJECT_SOURCE_DIR}/lib"
   ${MYSQL_INCLUDE_DIRS}
-  ${GROONGA_INCLUDE_DIRS}
-  )
+  ${GROONGA_INCLUDE_DIRS})
 
 if(WIN32)
   set(MYSQL_LIBRARY_DIRS
     "${MYSQL_BUILD_DIR}/lib"
-    "${MYSQL_BUILD_DIR}/libmysqld"
-    )
+    "${MYSQL_BUILD_DIR}/libmysqld")
 else()
   set(MYSQL_LIBRARY_DIRS
     "${MYSQL_PLUGIN_DIR}/..")
 endif()
 link_directories(
   ${GROONGA_LIBRARY_DIRS}
-  ${MYSQL_LIBRARY_DIRS}
-  )
+  ${MYSQL_LIBRARY_DIRS})
 
 if(MRN_BUNDLED)
   mysql_add_plugin(ha_mroonga
@@ -195,13 +192,11 @@ endif()
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/mrn_version.h.in"
-  "${PROJECT_BINARY_DIR}/mrn_version.h"
-  )
+  "${PROJECT_BINARY_DIR}/mrn_version.h")
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.sh.in"
-  "${PROJECT_BINARY_DIR}/config.sh"
-  )
+  "${PROJECT_BINARY_DIR}/config.sh")
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result.in"
