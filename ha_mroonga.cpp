@@ -73,6 +73,7 @@
 #include <mrn_multiple_column_key_codec.hpp>
 #include <mrn_field_normalizer.hpp>
 #include <mrn_encoding.hpp>
+#include <mrn_parameters_parser.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -2874,7 +2875,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
 
   if (is_need_normalize(&key_info->key_part->field[0])) {
     grn_info_type info_type = GRN_INFO_NORMALIZER;
-    grn_obj *normalizer = find_normalizer(&key_info->key_part->field[0]);
+    grn_obj *normalizer = find_normalizer(key_info);
     if (normalizer) {
       grn_obj_set_info(ctx, index_table, info_type, normalizer);
       grn_obj_unlink(ctx, normalizer);
@@ -3115,7 +3116,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     if (key_parts == 1) {
       Field *field = &(key_info.key_part->field[0]);
       if (is_need_normalize(field)) {
-        grn_obj *normalizer = find_normalizer(field);
+        grn_obj *normalizer = find_normalizer(&key_info);
         if (normalizer) {
           grn_info_type info_type = GRN_INFO_NORMALIZER;
           grn_obj_set_info(ctx, table_obj, info_type, normalizer);
@@ -3561,11 +3562,11 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
     Field *field = &(key_info->key_part->field[0]);
     if (key_info->flags & HA_FULLTEXT) {
       if (is_need_normalize(field)) {
-        normalizer = find_normalizer(field);
+        normalizer = find_normalizer(key_info);
       }
     } else if (key_alg != HA_KEY_ALG_HASH) {
       if (!is_multiple_column_index && is_need_normalize(field)) {
-        normalizer = find_normalizer(field);
+        normalizer = find_normalizer(key_info);
       }
     }
     if (normalizer) {
@@ -8374,11 +8375,26 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
   DBUG_RETURN(tokenizer);
 }
 
-grn_obj *ha_mroonga::find_normalizer(Field *field)
+grn_obj *ha_mroonga::find_normalizer(KEY *key_info)
 {
   MRN_DBUG_ENTER_METHOD();
-  mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
-  grn_obj *normalizer = field_normalizer.find_grn_normalizer();
+  grn_obj *normalizer = NULL;
+#if MYSQL_VERSION_ID >= 50500
+  if (key_info->comment.length > 0) {
+    mrn::ParametersParser parser(key_info->comment.str,
+                                 key_info->comment.length);
+    parser.parse();
+    const char *normalizer_name = parser["normalizer"];
+    if (normalizer_name) {
+      normalizer = grn_ctx_get(ctx, normalizer_name, -1);
+    }
+  }
+#endif
+  if (!normalizer) {
+    Field *field = key_info->key_part[0].field;
+    mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
+    normalizer = field_normalizer.find_grn_normalizer();
+  }
   DBUG_RETURN(normalizer);
 }
 

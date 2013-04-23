@@ -545,7 +545,7 @@ private:
   void remove_related_files(const char *base_path);
   void remove_grn_obj_force(const char *name);
   grn_obj *find_tokenizer(const char *name, int name_length);
-  grn_obj *find_normalizer(Field *field);
+  grn_obj *find_normalizer(KEY *key_info);
   int wrapper_get_next_record(uchar *buf);
   int storage_get_next_record(uchar *buf);
   void geo_store_rectangle(const uchar *rectangle);

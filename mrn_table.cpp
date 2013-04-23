@@ -547,6 +547,15 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
         my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
           MYF(0), tmp_ptr);
         goto error;
+      case 10:
+        if (strncasecmp("normalizer", tmp_ptr, title_length) == 0) {
+          break;
+        } else {
+          error = ER_MRN_INVALID_TABLE_PARAM_NUM;
+          my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
+            MYF(0), tmp_ptr);
+          goto error;
+        }
       default:
         error = ER_MRN_INVALID_TABLE_PARAM_NUM;
         my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
