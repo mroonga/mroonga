@@ -3,6 +3,54 @@
 News
 ====
 
+.. _release-3-03:
+
+Release 3.03 - 2013/4/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [windows] Improved MariaDB bundled build process. [#1691]
+* [doc] Added documentation about table limitations. [groonga-dev,01281]
+  [Reported by Kazuhiro Isobe]
+* [doc] Added ``mroonga_command`` documentation.
+* Supported ``default_tokenizer`` as table parameter in comment.
+* Supported using existing table as lexicon not only "FULLTEXT INDEX",
+  but also normal "INDEX".
+  This change improves compatibility to groonga.
+* Supported MySQL 5.6.11.
+* Supported collation in multiple column index. [groonga-dev,01302]
+  [Reported by Kouhei Tanabe]
+* Supported no parser fulltext index for predictive search by "XXX*"
+  in groonga query syntax.
+* [cmake] Dropped MySQL 5.5.x build support.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that stored value can't be searched because of
+  unexpected cast for integer. [#1696] [groonga-dev,01266]
+  [Reported by smztks]
+* [wrapper] Fixed a bug that multiple match against returns
+  invalid aggregated count. [#1702] [groonga-dev,01279]
+  [Reported by Masahiro Furuta]
+* Fixed a bug that ``mrn_log_level`` is ignored. [groonga-dev,01290]
+  [Reported by Kazuhiro Isobe]
+* Fixed a bug that mroonga crashes when freeing internal temporary
+  shared object.
+* [doc] Fixed a typo about running mode of storage engine and
+  a long ambiguous sentences. [Reported by Ichiro Suzuki]
+
+Thanks
+^^^^^^
+
+* smztks
+* Masahiro Furuta
+* Kazuhiro Isobe
+* Kouhei Tanabe
+* Ichiro Suzuki
+
 .. _release-3-02:
 
 
