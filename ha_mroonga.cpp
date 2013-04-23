@@ -71,6 +71,7 @@
 #include <mrn_external_lock.hpp>
 #include <mrn_match_escalation_threshold_scope.hpp>
 #include <mrn_multiple_column_key_codec.hpp>
+#include <mrn_field.hpp>
 #include <mrn_field_normalizer.hpp>
 #include <mrn_encoding.hpp>
 
@@ -8605,8 +8606,8 @@ bool ha_mroonga::is_enable_optimization()
 bool ha_mroonga::is_need_normalize(Field *field) const
 {
   MRN_DBUG_ENTER_METHOD();
-  mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
-  bool need_normalize_p = field_normalizer.is_need_normalize();
+  mrn::Field mrn_field(ctx, ha_thd(), field);
+  bool need_normalize_p = mrn_field.is_need_normalize();
   DBUG_RETURN(need_normalize_p);
 }
 
