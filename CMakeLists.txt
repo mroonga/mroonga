@@ -40,6 +40,13 @@ file(READ ${MRN_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
 file(READ ${MRN_SOURCE_DIR}/required_groonga_version REQUIRED_GROONGA_VERSION)
 string(STRIP "${REQUIRED_GROONGA_VERSION}" REQUIRED_GROONGA_VERSION)
 
+file(READ
+  ${MRN_SOURCE_DIR}/required_groonga_normalizer_mysql_version
+  REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION)
+string(STRIP
+  "${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}"
+  REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION)
+
 set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
 include(${MRN_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
@@ -104,7 +111,8 @@ endif()
 
 include(FindPkgConfig)
 pkg_check_modules(GROONGA REQUIRED "groonga >= ${REQUIRED_GROONGA_VERSION}")
-pkg_check_modules(GROONGA_NORMALIZER_MYSQL "groonga-normalizer-mysql >= 1.0.1")
+pkg_check_modules(GROONGA_NORMALIZER_MYSQL
+  "groonga-normalizer-mysql >= ${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}")
 
 include_directories(
   "${PROJECT_BINARY_DIR}"

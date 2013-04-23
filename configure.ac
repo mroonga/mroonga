@@ -185,9 +185,12 @@ AC_DEFUN([CONFIG_OPTION_GROONGA],[
   AC_SUBST(GROONGA_VERSION)
 ])
 
+m4_define([mrn_required_groonga_normalizer_mysql_version],
+          m4_include(required_groonga_normalizer_mysql_version))
+REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION=mrn_required_groonga_normalizer_mysql_version
 AC_DEFUN([CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL], [
   AC_MSG_CHECKING([for groonga-normalizer-mysql])
-  PKG_CHECK_EXISTS([groonga-normalizer-mysql >= 1.0.1],
+  PKG_CHECK_EXISTS([groonga-normalizer-mysql >= ${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}],
                    [WITH_GROONGA_NORMALIZER_MYSQL=yes],
                    [WITH_GROONGA_NORMALIZER_MYSQL=no])
   AC_MSG_RESULT($WITH_GROONGA_NORMALIZER_MYSQL)
