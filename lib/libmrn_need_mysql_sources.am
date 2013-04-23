@@ -14,6 +14,4 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_field_normalizer.cpp		\
 	mrn_field_normalizer.hpp		\
 	mrn_encoding.cpp			\
-	mrn_encoding.hpp			\
-	mrn_field.cpp				\
-	mrn_field.hpp
+	mrn_encoding.hpp

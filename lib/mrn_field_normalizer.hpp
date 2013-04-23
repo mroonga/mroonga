@@ -28,7 +28,7 @@
 namespace mrn {
   class FieldNormalizer {
   public:
-    FieldNormalizer(grn_ctx *ctx, THD *thread, ::Field *field);
+    FieldNormalizer(grn_ctx *ctx, THD *thread, Field *field);
     ~FieldNormalizer();
 
     bool is_need_normalize();
@@ -38,7 +38,9 @@ namespace mrn {
   private:
     grn_ctx *ctx_;
     THD *thread_;
-    ::Field *field_;
+    Field *field_;
+
+    bool is_text_type();
   };
 }
 
