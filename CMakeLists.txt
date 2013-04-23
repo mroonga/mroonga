@@ -119,6 +119,9 @@ if(WIN32)
     "${MYSQL_BUILD_DIR}/lib"
     "${MYSQL_BUILD_DIR}/libmysqld"
     )
+else()
+  set(MYSQL_LIBRARY_DIRS
+    "${MYSQL_PLUGIN_DIR}/..")
 endif()
 link_directories(
   ${GROONGA_LIBRARY_DIRS}
@@ -163,7 +166,8 @@ set_property(TARGET ha_mroonga APPEND PROPERTY
   COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
 if(MRN_BUNDLED)
 else()
-  target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES})
+  set(MYSQL_LIBRARIES "mysqlservices")
+  target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES} ${MYSQL_LIBRARIES})
 
   option(WITH_DEBUG "Enable debug options" OFF)
   if(WITH_DEBUG)
