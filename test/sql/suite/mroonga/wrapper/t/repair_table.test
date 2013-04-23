@@ -41,11 +41,11 @@ INSERT INTO diaries (title, body) VALUES ("groonga (2)", "started groonga.");
 
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
---remove_file $MYSQLD_DATADIR/repair_test.mrn.0000103
+--remove_file $MYSQLD_DATADIR/repair_test.mrn.0000104
 
 FLUSH TABLES;
 
-# Error ER_CANT_OPEN_FILE syscall error 'repair_test.mrn.0000103' (No such file or directory)
+# Error ER_CANT_OPEN_FILE syscall error 'repair_test.mrn.0000104' (No such file or directory)
 --error ER_CANT_OPEN_FILE
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
