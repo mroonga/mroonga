@@ -9976,6 +9976,34 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
   DBUG_VOID_RETURN;
 }
 
+int ha_mroonga::storage_encode_key_normalize_min_sort_chars(Field *field,
+                                                            uchar *buf,
+                                                            uint size)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+
+  if (size == 0) {
+    DBUG_RETURN(0);
+  }
+  if (!field->has_charset()) {
+    DBUG_RETURN(0);
+  }
+
+  uint16 raw_min_sort_char = field->sort_charset()->min_sort_char;
+  if (raw_min_sort_char <= UINT_MAX8) {
+    uchar min_sort_char = static_cast<uint16>(raw_min_sort_char);
+    for (uint i = size - 1; i > 0; --i) {
+      if (buf[i] != min_sort_char) {
+        break;
+      }
+      buf[i] = '\0';
+    }
+  }
+
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::storage_encode_key_fixed_size_string(Field *field,
                                                      const uchar *key,
                                                      uchar *buf, uint *size)
@@ -9995,6 +10023,7 @@ int ha_mroonga::storage_encode_key_variable_size_string(Field *field,
   int error = 0;
   *size = uint2korr(key);
   memcpy(buf, key + HA_KEY_BLOB_LENGTH, *size);
+  storage_encode_key_normalize_min_sort_chars(field, buf, *size);
   DBUG_RETURN(error);
 }
 
