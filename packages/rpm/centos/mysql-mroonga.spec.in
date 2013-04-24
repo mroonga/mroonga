@@ -29,7 +29,7 @@ Summary:	A fast fulltext searchable storage engine for MySQL.
 
 Group:		Applications/Databases
 License:	LGPLv2.1
-URL:		http://mroonga.github.com/
+URL:		http://mroonga.org/
 Source0:	http://github.com/downloads/mroonga/mroonga/mroonga-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)

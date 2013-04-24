@@ -9,7 +9,7 @@ Build-Depends:
 	libmysqlclient-dev,
 	libssl-dev
 Standards-Version: 3.9.1
-Homepage: http://mroonga.github.com/
+Homepage: http://mroonga.org/
 
 Package: mysql-server-mroonga
 Section: database
