@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-06 11:34\n"
+"POT-Creation-Date: 2013-04-24 18:49\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -228,8 +228,8 @@ msgstr "Create binary packages"
 
 # 4c97936c9fab49ba8b7beb8fbdce8f45
 #: ../../../source/developer.rst:81
-msgid "Update documents on http://mroonga.github.com"
-msgstr "Update documents on http://mroonga.github.com"
+msgid "Update documents on http://mroonga.org"
+msgstr ""
 
 # c20d9428a2dc410da53c61d34814b59f
 #: ../../../source/developer.rst:82
@@ -553,17 +553,12 @@ msgstr ""
 # ffdd8fbe63b84efb94b3a4892dcd35f4
 #: ../../../source/developer.rst:173
 msgid ""
-"Documents are published in http://mroonga.github.com . Since we are using "
-"github's web site feature, they will be updated each time when HTML files "
-"are pushed to http://github.com/mroonga/mroonga.github.com repository. We "
-"push to mroonga.github.com repository after confirming the consistency "
-"between documents and current released version."
+"Documents are published in http://mroonga.org . Since we are using github's "
+"web site feature, they will be updated each time when HTML files are pushed "
+"to http://github.com/mroonga/mroonga.github.com repository. We push to "
+"mroonga.github.com repository after confirming the consistency between "
+"documents and current released version."
 msgstr ""
-"Documents are published in http://mroonga.github.com . Since we are using "
-"github's web site feature, they will be updated each time when HTML files "
-"are pushed to http://github.com/mroonga/mroonga.github.com repository. We "
-"push to mroonga.github.com repository after confirming the consistency "
-"between documents and current released version."
 
 # 76d7e6f417464b708c7a4d4c0c51cdce
 #: ../../../source/developer.rst:175

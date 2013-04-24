@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-23 15:28\n"
+"POT-Creation-Date: 2013-04-24 18:49\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -436,13 +436,10 @@ msgstr "Let's try. ::"
 #: ../../../source/userguide/storage.rst:69
 #: ../../../source/userguide/wrapper.rst:79
 msgid ""
-"The result having the search word ``晴れ`` more, i.e. ``id = 3`` message "
+"The result having the search word ``fine`` more, i.e. ``id = 3`` message "
 "having the higher search score, is displayed first. And you also get search "
 "score by using MATCH AGAINST in SELECT phrase."
 msgstr ""
-"The result having the search word ``晴れ`` more, i.e. ``id = 3`` message "
-"having the higher search score, is displayed first. And you also get search "
-"score by using MATCH AGAINST in SELECT phrase."
 
 # 73f06b7ef59944f589b9841fb779950f
 # bd8694d5664247d59ce8e958a948a602
@@ -770,14 +767,13 @@ msgstr "It tokenise by splitting with a white space."
 msgid "TokenDelimit"
 msgstr ""
 
-# 029ddb59f9824733823b80fd8ce0e11e
-# 8871ecea8d31424e99d861da278faa88
+# b0234f22496b4cc1a5e7592c069a79c2
+# a0e75201a9e34f86bd536a28eebce4b9
 #: ../../../source/userguide/storage.rst:146
 #: ../../../source/userguide/wrapper.rst:156
 msgid ""
-"\"映画 ホラー 話題\" will be tokenised as \"映画\", \"ホラー\", \"話題\"."
+"\"movie horror topic\" will be tokenised as \"movie\", \"horror\", \"topic\"."
 msgstr ""
-"\"映画 ホラー 話題\" will be tokenised as \"映画\", \"ホラー\", \"話題\"."
 
 # 667ec4423d3e403db2444c027888b5ce
 # 913eefbef9554acea268d6af99542a2d
@@ -793,16 +789,14 @@ msgstr "It tokenise by splitting with a null character (\\\\0)."
 msgid "TokenDelimitNull"
 msgstr ""
 
-# f11342aa2753459fb40017ba11835d72
-# 04fdca00ce744601afa7a357fa6c7cf2
+# b0234f22496b4cc1a5e7592c069a79c2
+# a0e75201a9e34f86bd536a28eebce4b9
 #: ../../../source/userguide/storage.rst:151
 #: ../../../source/userguide/wrapper.rst:161
 msgid ""
-"\"映画\\\\0ホラー\\\\0話題\" will be tokenised as \"映画\", \"ホラー\", \"話"
-"題\"."
+"\"movie\\\\0horror\\\\0topic\" will be tokenised as \"movie\", \"horror\", "
+"\"topic\"."
 msgstr ""
-"\"映画\\\\0ホラー\\\\0話題\" will be tokenised as \"映画\", \"ホラー\", \"話"
-"題\"."
 
 # 3571b6c01dfc4c91b55bd32b35877124
 # 19f35147abbb415ba8fdcfa82c1a5eb6
