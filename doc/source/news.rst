@@ -25,6 +25,10 @@ Improvements
 * Supported no parser fulltext index for predictive search by "XXX*"
   in groonga query syntax.
 * [cmake] Dropped MySQL 5.5.x build support.
+* Supported custom normalizer for FULLTEXT INDEX.
+  Use can specify custom normalizer as a comment.
+  Supported syntax is ``FULLTEXT INDEX (column) COMMENT 'normalizer "NormalizerXXX"'``.
+  [groonga-dev:01303] [Suggested by Kouhei Tanabe]
 
 Fixes
 ^^^^^
@@ -41,6 +45,8 @@ Fixes
   shared object.
 * [doc] Fixed a typo about running mode of storage engine and
   a long ambiguous sentence. [Reported by Ichiro Suzuki]
+* [mysql55] Fixed a bug that inplace anonymous index recreation cause a crash.
+  [groonga-dev,01319] [Reported by Kouhei Tanabe]
 
 Thanks
 ^^^^^^
