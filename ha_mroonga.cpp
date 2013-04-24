@@ -2602,7 +2602,7 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
     flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE;
     bool need_normalize_p = false;
     Field *field = &key.key_part[part].field[0];
-    if (field && is_need_normalize(field)) {
+    if (field && should_normalize(field)) {
       need_normalize_p = true;
     }
     if (!need_normalize_p) {
@@ -2873,7 +2873,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
     grn_obj_unlink(ctx, tokenizer);
   }
 
-  if (is_need_normalize(&key_info->key_part->field[0])) {
+  if (should_normalize(&key_info->key_part->field[0])) {
     grn_info_type info_type = GRN_INFO_NORMALIZER;
     grn_obj *normalizer = find_normalizer(key_info);
     if (normalizer) {
@@ -3115,7 +3115,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     int key_parts = KEY_N_KEY_PARTS(&key_info);
     if (key_parts == 1) {
       Field *field = &(key_info.key_part->field[0]);
-      if (is_need_normalize(field)) {
+      if (should_normalize(field)) {
         grn_obj *normalizer = find_normalizer(&key_info);
         if (normalizer) {
           grn_info_type info_type = GRN_INFO_NORMALIZER;
@@ -3561,11 +3561,11 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
     grn_obj *normalizer = NULL;
     Field *field = &(key_info->key_part->field[0]);
     if (key_info->flags & HA_FULLTEXT) {
-      if (is_need_normalize(field)) {
+      if (should_normalize(field)) {
         normalizer = find_normalizer(key_info);
       }
     } else if (key_alg != HA_KEY_ALG_HASH) {
-      if (!is_multiple_column_index && is_need_normalize(field)) {
+      if (!is_multiple_column_index && should_normalize(field)) {
         normalizer = find_normalizer(key_info);
       }
     }
@@ -8618,11 +8618,11 @@ bool ha_mroonga::is_enable_optimization()
   DBUG_RETURN(enable_optimization_p);
 }
 
-bool ha_mroonga::is_need_normalize(Field *field) const
+bool ha_mroonga::should_normalize(Field *field) const
 {
   MRN_DBUG_ENTER_METHOD();
   mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
-  bool need_normalize_p = field_normalizer.is_need_normalize();
+  bool need_normalize_p = field_normalizer.should_normalize();
   DBUG_RETURN(need_normalize_p);
 }
 
@@ -8941,7 +8941,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         const char *column_name = field->field_name;
         int column_name_size = strlen(column_name);
 
-        if (is_need_normalize(field))
+        if (should_normalize(field))
         {
           DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
                               "sort by collated value isn't supported yet."));

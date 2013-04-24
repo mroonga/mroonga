@@ -31,7 +31,7 @@ namespace mrn {
     FieldNormalizer(grn_ctx *ctx, THD *thread, Field *field);
     ~FieldNormalizer();
 
-    bool is_need_normalize();
+    bool should_normalize();
     grn_obj *normalize(const char *string, unsigned int string_length);
     grn_obj *find_grn_normalizer();
 

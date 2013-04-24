@@ -33,7 +33,7 @@ namespace mrn {
   FieldNormalizer::~FieldNormalizer() {
   }
 
-  bool FieldNormalizer::is_need_normalize() {
+  bool FieldNormalizer::should_normalize() {
     MRN_DBUG_ENTER_METHOD();
 
     DBUG_PRINT("info",
@@ -48,14 +48,14 @@ namespace mrn {
     if (field_->charset()->state & (MY_CS_BINSORT | MY_CS_CSSORT)) {
       need_normalize_p = false;
       DBUG_PRINT("info",
-                 ("mroonga: is_need_normalize: false: sort is required"));
+                 ("mroonga: should_normalize: false: sort is required"));
     } else {
       if (is_text_type()) {
         need_normalize_p = true;
-        DBUG_PRINT("info", ("mroonga: is_need_normalize: true: text type"));
+        DBUG_PRINT("info", ("mroonga: should_normalize: true: text type"));
       } else {
         need_normalize_p = false;
-        DBUG_PRINT("info", ("mroonga: is_need_normalize: false: no text type"));
+        DBUG_PRINT("info", ("mroonga: should_normalize: false: no text type"));
       }
     }
 

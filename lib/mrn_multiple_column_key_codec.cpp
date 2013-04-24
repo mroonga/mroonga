@@ -498,7 +498,7 @@ namespace mrn {
                                            uchar *grn_key,
                                            uint *data_size) {
     FieldNormalizer normalizer(ctx_, thread_, field);
-    if (normalizer.is_need_normalize()) {
+    if (normalizer.should_normalize()) {
 #if HA_KEY_BLOB_LENGTH != 2
 #  error "TODO: support HA_KEY_BLOB_LENGTH != 2 case if it is needed"
 #endif
