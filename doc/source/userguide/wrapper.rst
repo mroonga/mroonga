@@ -33,19 +33,19 @@ After confirming the installation, let's create a table. The important point is 
 
 We put data by INSERT. ::
 
-  mysql> INSERT INTO diaries (content) VALUES ("明日の天気は晴れでしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("It'll be fine tomorrow.");
   Query OK, 1 row affected (0.01 sec)
 
-  mysql> INSERT INTO diaries (content) VALUES ("明日の天気は雨でしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("It'll rain tomorrow");
   Query OK, 1 row affected (0.00 sec)
 
 Try full text search. ::
 
-  mysql> SELECT * FROM diaries WHERE MATCH(content) AGAINST("晴れ");
+  mysql> SELECT * FROM diaries WHERE MATCH(content) AGAINST("fine");
   +----+-----------------------------------------+
   | id | content                                 |
   +----+-----------------------------------------+
-  |  1 | 明日の天気は晴れでしょう。 |
+  |  1 | It'll be fine tomorrow. |
   +----+-----------------------------------------+
   1 row in set (0.00 sec)
 
@@ -60,33 +60,33 @@ We can get search score by MySQL's standard way [#score]_, i.e. we use MATCH...A
 
 Let's try. ::
 
-  mysql> INSERT INTO diaries (content) VALUES ("今日は晴れました。明日も晴れるでしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("It's fine today. It'll be fine tomorrow as well.");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO diaries (content) VALUES ("今日は晴れましたが、明日は雨でしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("It's fine today. But it'll rain tomorrow.");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> SELECT *, MATCH (content) AGAINST ("晴れ") FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
+  mysql> SELECT *, MATCH (content) AGAINST ("fine") FROM diaries WHERE MATCH (content) AGAINST ("fine") ORDER BY MATCH (content) AGAINST ("fine") DESC;
   +----+--------------------------------------------------------------+------------------------------------+
-  | id | content                                                      | MATCH (content) AGAINST ("晴れ") |
+  | id | content                                                      | MATCH (content) AGAINST ("fine") |
   +----+--------------------------------------------------------------+------------------------------------+
-  |  3 | 今日は晴れました。明日も晴れるでしょう。 |                                  2 |
-  |  1 | 明日の天気は晴れでしょう。                      |                                  1 |
-  |  4 | 今日は晴れましたが、明日は雨でしょう。    |                                  1 |
+  |  3 | It's fine today. It'll be fine tomorrow as well. |                                  2 |
+  |  1 | It'll be fine tomorrow.                      |                                  1 |
+  |  4 | It's fine today. But it'll rain tomorrow.    |                                  1 |
   +----+--------------------------------------------------------------+------------------------------------+
   3 rows in set (0.00 sec)
 
-The result having the search word ``晴れ`` more, i.e. ``id = 3`` message having the higher search score, is displayed first. And you also get search score by using MATCH AGAINST in SELECT phrase.
+The result having the search word ``fine`` more, i.e. ``id = 3`` message having the higher search score, is displayed first. And you also get search score by using MATCH AGAINST in SELECT phrase.
 
 You can use ``AS`` to change the attribute name. ::
 
-  mysql> SELECT *, MATCH (content) AGAINST ("晴れ") AS score FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
+  mysql> SELECT *, MATCH (content) AGAINST ("fine") AS score FROM diaries WHERE MATCH (content) AGAINST ("fine") ORDER BY MATCH (content) AGAINST ("fine") DESC;
   +----+--------------------------------------------------------------+-------+
   | id | content                                                      | score |
   +----+--------------------------------------------------------------+-------+
-  |  3 | 今日は晴れました。明日も晴れるでしょう。 |     2 |
-  |  1 | 明日の天気は晴れでしょう。                      |     1 |
-  |  4 | 今日は晴れましたが、明日は雨でしょう。    |     1 |
+  |  3 | It's fine today. It'll be fine tomorrow as well. |     2 |
+  |  1 | It'll be fine tomorrow.                      |     1 |
+  |  4 | It's fine today. But it'll rain tomorrow.    |     1 |
   +----+--------------------------------------------------------------+-------+
   3 rows in set (0.00 sec)
 
@@ -153,12 +153,12 @@ TokenBigramIgnoreBlankSplitSymbolAlphaDigit
 TokenDelimit
   It tokenise by splitting with a white space.
 
-  "映画 ホラー 話題" will be tokenised as "映画", "ホラー", "話題".
+  "movie horror topic" will be tokenised as "movie", "horror", "topic".
 
 TokenDelimitNull
   It tokenise by splitting with a null character (\\0).
 
-  "映画\\0ホラー\\0話題" will be tokenised as "映画", "ホラー", "話題".
+  "movie\\0horror\\0topic" will be tokenised as "movie", "horror", "topic".
 
 TokenUnigram
   It tokenises in unigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 2 letters or more. It is to reduce noises.

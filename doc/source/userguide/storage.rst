@@ -19,19 +19,19 @@ After confirming the installation, let's create a table. The important point is 
 
 We put data by INSERT. ::
 
-  mysql> INSERT INTO diaries (content) VALUES ("明日の天気は晴れでしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("It'll be fine tomorrow.");
   Query OK, 1 row affected (0.01 sec)
 
-  mysql> INSERT INTO diaries (content) VALUES ("明日の天気は雨でしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("It'll rain tomorrow");
   Query OK, 1 row affected (0.00 sec)
 
 Try full text search. ::
 
-  mysql> SELECT * FROM diaries WHERE MATCH(content) AGAINST("晴れ");
+  mysql> SELECT * FROM diaries WHERE MATCH(content) AGAINST("fine");
   +----+-----------------------------------------+
   | id | content                                 |
   +----+-----------------------------------------+
-  |  1 | 明日の天気は晴れでしょう。 |
+  |  1 | It'll be fine tomorrow. |
   +----+-----------------------------------------+
   1 row in set (0.00 sec)
 
@@ -50,33 +50,33 @@ We can get search score by MySQL's standard way [#score]_, i.e. we use MATCH...A
 
 Let's try. ::
 
-  mysql> INSERT INTO diaries (content) VALUES ("今日は晴れました。明日も晴れるでしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("It's fine today. It'll be fine tomorrow as well.");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO diaries (content) VALUES ("今日は晴れましたが、明日は雨でしょう。");
+  mysql> INSERT INTO diaries (content) VALUES ("It's fine today. But it'll rain tomorrow.");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> SELECT *, MATCH (content) AGAINST ("晴れ") FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
+  mysql> SELECT *, MATCH (content) AGAINST ("fine") FROM diaries WHERE MATCH (content) AGAINST ("fine") ORDER BY MATCH (content) AGAINST ("fine") DESC;
   +----+--------------------------------------------------------------+------------------------------------+
-  | id | content                                                      | MATCH (content) AGAINST ("晴れ") |
+  | id | content                                                      | MATCH (content) AGAINST ("fine") |
   +----+--------------------------------------------------------------+------------------------------------+
-  |  3 | 今日は晴れました。明日も晴れるでしょう。 |                                  2 |
-  |  1 | 明日の天気は晴れでしょう。                      |                                  1 |
-  |  4 | 今日は晴れましたが、明日は雨でしょう。    |                                  1 |
+  |  3 | It's fine today. It'll be fine tomorrow as well. |                                  2 |
+  |  1 | It'll be fine tomorrow.                      |                                  1 |
+  |  4 | It's fine today. But it'll rain tomorrow.    |                                  1 |
   +----+--------------------------------------------------------------+------------------------------------+
   3 rows in set (0.00 sec)
 
-The result having the search word ``晴れ`` more, i.e. ``id = 3`` message having the higher search score, is displayed first. And you also get search score by using MATCH AGAINST in SELECT phrase.
+The result having the search word ``fine`` more, i.e. ``id = 3`` message having the higher search score, is displayed first. And you also get search score by using MATCH AGAINST in SELECT phrase.
 
 You can use ``AS`` to change the attribute name. ::
 
-  mysql> SELECT *, MATCH (content) AGAINST ("晴れ") AS score FROM diaries WHERE MATCH (content) AGAINST ("晴れ") ORDER BY MATCH (content) AGAINST ("晴れ") DESC;
+  mysql> SELECT *, MATCH (content) AGAINST ("fine") AS score FROM diaries WHERE MATCH (content) AGAINST ("fine") ORDER BY MATCH (content) AGAINST ("fine") DESC;
   +----+--------------------------------------------------------------+-------+
   | id | content                                                      | score |
   +----+--------------------------------------------------------------+-------+
-  |  3 | 今日は晴れました。明日も晴れるでしょう。 |     2 |
-  |  1 | 明日の天気は晴れでしょう。                      |     1 |
-  |  4 | 今日は晴れましたが、明日は雨でしょう。    |     1 |
+  |  3 | It's fine today. It'll be fine tomorrow as well. |     2 |
+  |  1 | It'll be fine tomorrow.                      |     1 |
+  |  4 | It's fine today. But it'll rain tomorrow.    |     1 |
   +----+--------------------------------------------------------------+-------+
   3 rows in set (0.00 sec)
 
@@ -143,12 +143,12 @@ TokenBigramIgnoreBlankSplitSymbolAlphaDigit
 TokenDelimit
   It tokenise by splitting with a white space.
 
-  "映画 ホラー 話題" will be tokenised as "映画", "ホラー", "話題".
+  "movie horror topic" will be tokenised as "movie", "horror", "topic".
 
 TokenDelimitNull
   It tokenise by splitting with a null character (\\0).
 
-  "映画\\0ホラー\\0話題" will be tokenised as "映画", "ホラー", "話題".
+  "movie\\0horror\\0topic" will be tokenised as "movie", "horror", "topic".
 
 TokenUnigram
   It tokenises in unigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 2 letters or more. It is to reduce noises.
@@ -189,13 +189,13 @@ For the table definition for geolocation search, you need to define a POINT type
 
 To store data, you create POINT type data by using geomFromText() function like in MyISAM. ::
 
-  mysql> INSERT INTO shops VALUES (null, '根津のたいやき', GeomFromText('POINT(139.762573 35.720253)'));
+  mysql> INSERT INTO shops VALUES (null, 'Nezu\'s Taiyaki', GeomFromText('POINT(139.762573 35.720253)'));
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO shops VALUES (null, '浪花家', GeomFromText('POINT(139.796234 35.730061)'));
+  mysql> INSERT INTO shops VALUES (null, 'Naniwaya', GeomFromText('POINT(139.796234 35.730061)'));
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO shops VALUES (null, '柳屋 たい焼き', GeomFromText('POINT(139.783981 35.685341)'));
+  mysql> INSERT INTO shops VALUES (null, 'Yanagiya Taiyaki', GeomFromText('POINT(139.783981 35.685341)'));
   Query OK, 1 row affected (0.00 sec)
 
 If you want to find shops within the rectangle where Ikebukuro station (139.7101 35.7292) is the top-left point and Tokyo Station (139.7662 35.6815) is the bottom-right point, SELECT phrase is like the following. ::
@@ -204,7 +204,7 @@ If you want to find shops within the rectangle where Ikebukuro station (139.7101
   +----+-----------------------+------------------------------------------+
   | id | name                  | AsText(location)                         |
   +----+-----------------------+------------------------------------------+
-  |  1 | 根津のたいやき | POINT(139.762572777778 35.7202527777778) |
+  |  1 | Nezu's Taiyaki | POINT(139.762572777778 35.7202527777778) |
   +----+-----------------------+------------------------------------------+
   1 row in set (0.00 sec)
 
@@ -233,16 +233,16 @@ You can create an index for _id column, but it should be HASH type.
 Let's add records in the table by INSERT. Since _id column is implemented as a virtual column and its value is assigned by groonga, you cannot specify the value when updating.
 So you need to exclude it from setting columns, or you need to use ``null`` as its value. ::
 
-  mysql> INSERT INTO memos VALUES (null, "今夜はさんま。");
+  mysql> INSERT INTO memos VALUES (null, "Saury for today's dinner.");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO memos VALUES (null, "明日はmroongaをアップデート。");
+  mysql> INSERT INTO memos VALUES (null, "Update mroonga tomorrow.");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO memos VALUES (null, "帰りにおだんご。");
+  mysql> INSERT INTO memos VALUES (null, "Buy some dumpling on the way home.");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> INSERT INTO memos VALUES (null, "金曜日は肉の日。");
+  mysql> INSERT INTO memos VALUES (null, "Thank God It's meat day.");
   Query OK, 1 row affected (0.00 sec)
 
 To get the record ID, you invoke SELECT with _id column. ::
@@ -251,16 +251,16 @@ To get the record ID, you invoke SELECT with _id column. ::
   +------+------------------------------------------+
   | _id  | content                                  |
   +------+------------------------------------------+
-  |    1 | 今夜はさんま。                    |
-  |    2 | 明日はmroongaをアップデート。 |
-  |    3 | 帰りにおだんご。                 |
-  |    4 | 金曜日は肉の日。                 |
+  |    1 | Saury for today's dinner.                    |
+  |    2 | Update mroonga tomorrow. |
+  |    3 | Buy some dumpling on the way home.                 |
+  |    4 | Thank God It's meat day.                 |
   +------+------------------------------------------+
   4 rows in set (0.00 sec)
 
 By using last_insert_grn_id function, you can also get the record ID that is assigned by the last INSERT. ::
 
-  mysql> INSERT INTO memos VALUES (null, "冷蔵庫に牛乳が残り1本。");
+  mysql> INSERT INTO memos VALUES (null, "Just one bottle of milk in the fridge.");
   Query OK, 1 row affected (0.00 sec)
 
   mysql> SELECT last_insert_grn_id();
@@ -277,7 +277,7 @@ last_insert_grn_id function is included in mroonga as a User-Defined Function (U
 
 As you can see in the example above, you can get the record ID by _id column or last_insert_grn_id function. It will be useful to use this value in the ensuing SQL queries like UPDATE. ::
 
-  mysql> UPDATE memos SET content = "冷蔵庫に牛乳はまだたくさんある。" WHERE _id = last_insert_grn_id();
+  mysql> UPDATE memos SET content = "So much milk in the fridge." WHERE _id = last_insert_grn_id();
   Query OK, 1 row affected (0.00 sec)
   Rows matched: 1  Changed: 1  Warnings: 0
 
