@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-06 11:39\n"
+"POT-Creation-Date: 2013-04-24 18:55\n"
 "PO-Revision-Date: 2011-11-28 00:00+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -233,8 +233,8 @@ msgstr "バイナリパッケージ作成"
 
 # da95ac6cc730482f9ee28be390b39387
 #: ../../../source/developer.rst:81
-msgid "Update documents on http://mroonga.github.com"
-msgstr "ドキュメント(http://mroonga.github.com)のアップデート"
+msgid "Update documents on http://mroonga.org"
+msgstr "ドキュメント(http://mroonga.org)のアップデート"
 
 # 5a7984f28f794033a71b45dbed01f131
 #: ../../../source/developer.rst:82
@@ -558,13 +558,13 @@ msgstr ""
 # 03077955ee6f44ba8e06234facbe3a07
 #: ../../../source/developer.rst:173
 msgid ""
-"Documents are published in http://mroonga.github.com . Since we are using "
-"github's web site feature, they will be updated each time when HTML files "
-"are pushed to http://github.com/mroonga/mroonga.github.com repository. We "
-"push to mroonga.github.com repository after confirming the consistency "
-"between documents and current released version."
+"Documents are published in http://mroonga.org . Since we are using github's "
+"web site feature, they will be updated each time when HTML files are pushed "
+"to http://github.com/mroonga/mroonga.github.com repository. We push to "
+"mroonga.github.com repository after confirming the consistency between "
+"documents and current released version."
 msgstr ""
-"ドキュメントの実際の公開場所は http://mroonga.github.com で、これはgithubのサ"
+"ドキュメントの実際の公開場所は http://mroonga.org で、これはgithubのサ"
 "イト機能を使用しているため http://github.com/mroonga/mroonga.github.com レポ"
 "ジトリに最新のHTML出力ファイルをpushすることで更新が行われる仕組みとなってい"
 "ますが、mroonga.github.comレポジトリへのpushは現リリースバージョンとの整合性"
