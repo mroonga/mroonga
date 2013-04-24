@@ -136,10 +136,10 @@ Red Hat 系
 メッセージ内容のテンプレートを以下に示します。 ::
 
  ドキュメント(インストールガイド含む)
-   http://mroonga.github.com/
+   http://mroonga.org/
 
  ダウンロード
-   http://github.com/mroonga/mroonga/downloads
+   http://packages.groonga.org/source/mroonga
 
  mroongaとは、全文検索エンジンであるgroongaをベースとした
  MySQLのストレージエンジンです。Tritonnの後継プロジェクトとな

@@ -78,7 +78,7 @@ We do the following to release.
 
 * Create source packages
 * Create binary packages
-* Update documents on http://mroonga.github.com
+* Update documents on http://mroonga.org
 * Announce the release
 
 (This section will be moved to :doc:`developer/release`).
@@ -170,7 +170,7 @@ The source files of documents are files having .rst extension in "doc/ja/source"
 
 When you add or modify them, please try to build by "make html" etc. and confirm that no syntax error happens.
 
-Documents are published in http://mroonga.github.com . Since we are using github's web site feature, they will be updated each time when HTML files are pushed to http://github.com/mroonga/mroonga.github.com repository. We push to mroonga.github.com repository after confirming the consistency between documents and current released version.
+Documents are published in http://mroonga.org . Since we are using github's web site feature, they will be updated each time when HTML files are pushed to http://github.com/mroonga/mroonga.github.com repository. We push to mroonga.github.com repository after confirming the consistency between documents and current released version.
 
 So you can just push to mroonga repository to push documents for each ticket.
 
