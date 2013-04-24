@@ -508,7 +508,7 @@ namespace mrn {
       grn_obj *grn_string = normalizer.normalize(blob_data,
                                                  blob_data_length);
       const char *normalized;
-      unsigned int normalized_length;
+      unsigned int normalized_length = 0;
       grn_string_get_normalized(ctx_, grn_string,
                                 &normalized, &normalized_length, NULL);
       uint16 new_blob_data_length;
