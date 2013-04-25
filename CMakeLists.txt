@@ -24,6 +24,15 @@ else()
   set(MRN_BUNDLED TRUE)
 endif()
 
+set(MRN_BUNDLED_GROONGA_RELATIVE_DIR "vendor/groonga")
+set(MRN_BUNDLED_GROONGA_DIR
+  "${CMAKE_CURRENT_SOURCE_DIR}/${MRN_BUNDLED_GROONGA_RELATIVE_DIR}")
+if(EXISTS "${MRN_BUNDLED_GROONGA_DIR}")
+  set(MRN_GROONGA_BUNDLED TRUE)
+else()
+  set(MRN_GROONGA_BUNDLED FALSE)
+endif()
+
 if(MRN_BUNDLED)
   set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR}/storage/mroonga)
 else()
@@ -37,15 +46,19 @@ file(READ ${MRN_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
 file(READ ${MRN_SOURCE_DIR}/version_in_hex MRN_VERSION_IN_HEX)
 file(READ ${MRN_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
 
-file(READ ${MRN_SOURCE_DIR}/required_groonga_version REQUIRED_GROONGA_VERSION)
-string(STRIP "${REQUIRED_GROONGA_VERSION}" REQUIRED_GROONGA_VERSION)
+if(MRN_GROONGA_BUNDLED)
+  add_subdirectory("${MRN_BUNDLED_GROONGA_RELATIVE_DIR}")
+else()
+  file(READ ${MRN_SOURCE_DIR}/required_groonga_version REQUIRED_GROONGA_VERSION)
+  string(STRIP "${REQUIRED_GROONGA_VERSION}" REQUIRED_GROONGA_VERSION)
 
-file(READ
-  ${MRN_SOURCE_DIR}/required_groonga_normalizer_mysql_version
-  REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION)
-string(STRIP
-  "${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}"
-  REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION)
+  file(READ
+    ${MRN_SOURCE_DIR}/required_groonga_normalizer_mysql_version
+    REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION)
+  string(STRIP
+    "${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}"
+    REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION)
+endif()
 
 set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
@@ -109,10 +122,20 @@ else()
   set_mysql_config_value("--version" MYSQL_VERSION)
 endif()
 
-include(FindPkgConfig)
-pkg_check_modules(GROONGA REQUIRED "groonga >= ${REQUIRED_GROONGA_VERSION}")
-pkg_check_modules(GROONGA_NORMALIZER_MYSQL
-  "groonga-normalizer-mysql >= ${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}")
+if(MRN_GROONGA_BUNDLED)
+  set(GROONGA_INCLUDE_DIRS "${MRN_BUNDLED_GROONGA_DIR}/include")
+  set(GROONGA_LIBRARY_DIRS "${MRN_BUNDLED_GROONGA_DIR}/lib")
+  if(EXISTS "${MRN_BUNDLED_GROONGA_DIR}/vendor/plugins/groonga-normalizer-mysql")
+    set(GROONGA_NORMALIZER_MYSQL_FOUND, TRUE)
+  else()
+    set(GROONGA_NORMALIZER_MYSQL_FOUND, FALSE)
+  endif()
+else()
+  include(FindPkgConfig)
+  pkg_check_modules(GROONGA REQUIRED "groonga >= ${REQUIRED_GROONGA_VERSION}")
+  pkg_check_modules(GROONGA_NORMALIZER_MYSQL
+    "groonga-normalizer-mysql >= ${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}")
+endif()
 
 include_directories(
   "${PROJECT_BINARY_DIR}"
@@ -127,6 +150,7 @@ if(WIN32)
     "${MYSQL_BUILD_DIR}/libmysqld")
 else()
   set(MYSQL_LIBRARY_DIRS
+    "${MYSQL_BUILD_DIR}/libservices"
     "${MYSQL_PLUGIN_DIR}/..")
 endif()
 link_directories(
