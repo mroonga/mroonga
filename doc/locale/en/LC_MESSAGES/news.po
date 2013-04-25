@@ -106,6 +106,7 @@ msgstr ""
 # b48d53cb285d4d45baef3eb00a77db3d
 #: ../../../source/news.rst:32
 msgid "Supported Ubuntu 13.04 Raring Ringtail."
+msgstr ""
 
 # 52963dbb41db4a1f8990a3e08b9a46b7
 #: ../../../source/news.rst:35 ../../../source/news.rst:77
