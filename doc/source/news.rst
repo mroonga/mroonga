@@ -11,7 +11,6 @@ Release 3.03 - 2013/4/29
 Improvements
 ^^^^^^^^^^^^
 
-* [windows] Improved MariaDB bundled build process. [#1691]
 * [doc] Added documentation about table limitations. [groonga-dev,01281]
   [Reported by Kazuhiro Isobe]
 * [doc] Added ``mroonga_command`` documentation.
