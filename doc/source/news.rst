@@ -29,6 +29,7 @@ Improvements
   Use can specify custom normalizer as a comment.
   Supported syntax is ``FULLTEXT INDEX (column) COMMENT 'normalizer "NormalizerXXX"'``.
   [groonga-dev:01303] [Suggested by Kouhei Tanabe]
+* Supported Ubuntu 13.04 Raring Ringtail.
 
 Fixes
 ^^^^^
