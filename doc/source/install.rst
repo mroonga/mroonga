@@ -293,6 +293,50 @@ Install groonga-normalizer-mysql package::
    If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
    MySQL incompatible COLLATION which is implemented in groonga.
 
+Ubuntu 13.04 Raring Ringtail
+----------------------------
+
+.. note::
+
+   You need to enable the universe section in Ubuntu's software sources.
+
+.. note::
+
+   You need to enable the security update repository.
+
+/etc/apt/sources.list.d/groonga.list::
+
+  deb http://packages.groonga.org/ubuntu/ raring universe
+  deb-src http://packages.groonga.org/ubuntu/ raring universe
+
+Install ::
+
+  % sudo apt-get update
+  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
+  % sudo apt-get update
+  % sudo apt-get -y install mysql-server-mroonga
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo apt-get -y install groonga-tokenizer-mecab
+
+If you want to use MySQL compatible COLLATION such as 'utf8_general_ci' or 'utf8mb4_general_ci', please install groonga-normalizer-mysql package.
+
+Install groonga-normalizer-mysql package::
+
+  % sudo apt-get -y install groonga-normalizer-mysql
+
+.. note::
+
+   'utf8_unicode_ci' or 'utf8mb4_unicode_ci' will be supported in the future release.
+
+.. note::
+
+   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   MySQL incompatible COLLATION which is implemented in groonga.
+
 CentOS 5
 --------
 
