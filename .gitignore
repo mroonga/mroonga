@@ -61,3 +61,4 @@ CTestTestfile.cmake
 /packages/apt/tmp/
 /packages/yum/tmp/
 /install_manifest.txt
+/vendor/
