@@ -42,7 +42,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 Debian GNU/Linux wheezy
@@ -78,7 +78,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 Debian GNU/Linux sid
@@ -114,7 +114,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 Ubuntu 10.04 LTS Lucid Lynx
@@ -158,7 +158,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 Ubuntu 11.10 Oneiric Ocelot
@@ -202,7 +202,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 Ubuntu 12.04 Precise Pangolin
@@ -246,7 +246,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 Ubuntu 12.10 Quantal Quetzal
@@ -290,7 +290,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 Ubuntu 13.04 Raring Ringtail
@@ -334,7 +334,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 CentOS 5
@@ -373,7 +373,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 CentOS 6
@@ -408,7 +408,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 Fedora 18
@@ -442,7 +442,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified not 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga use
+   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', mroonga uses
    MySQL incompatible COLLATION which is implemented in groonga.
 
 Mac OS X
