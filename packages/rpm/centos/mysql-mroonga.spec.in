@@ -1,10 +1,10 @@
 %{!?use_system_mysql:%define use_system_mysql 0}
 
 %if %{use_system_mysql}
-%define mysql_version_default 5.1.67
+%define mysql_version_default 5.1.69
 %define mysql_release_default 1
-%define mysql_dist_default    el6_3
-%define mysql_download_base_url_default http://vault.centos.org/6.3/updates/Source/SPackages
+%define mysql_dist_default    el6_4
+%define mysql_download_base_url_default http://vault.centos.org/6.4/updates/Source/SPackages
 %define mysql_spec_file_default mysql.spec
 %else
 %define mysql_version_default 5.6.11
