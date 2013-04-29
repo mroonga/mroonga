@@ -38,8 +38,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Debian GNU/Linux wheezy
 -----------------------
@@ -70,8 +70,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Debian GNU/Linux sid
 --------------------
@@ -106,8 +106,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Ubuntu 10.04 LTS Lucid Lynx
 ---------------------------
@@ -146,8 +146,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Ubuntu 11.10 Oneiric Ocelot
 ---------------------------
@@ -186,8 +186,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Ubuntu 12.04 Precise Pangolin
 -----------------------------
@@ -226,8 +226,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Ubuntu 12.10 Quantal Quetzal
 ----------------------------
@@ -266,8 +266,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Ubuntu 13.04 Raring Ringtail
 ----------------------------
@@ -306,8 +306,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 CentOS 5
 --------
@@ -341,8 +341,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 CentOS 6
 --------
@@ -372,8 +372,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Fedora 18
 ---------
@@ -402,8 +402,8 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you specified neither 'utf8_general_ci' nor 'utf8mb4_general_ci', nor 'utf8_unicode_ci', nor 'utf8mb4_unicode_ci', mroonga uses
-   MySQL incompatible COLLATION which is implemented in groonga.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Mac OS X
 --------
