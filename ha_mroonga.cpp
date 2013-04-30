@@ -7722,6 +7722,10 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
   info->key_info = &(table->key_info[key_nr]);
   info->primary_key_info = &(table->key_info[table_share->primary_key]);
 
+  if (key->length() == 0) {
+    DBUG_RETURN(info);
+  }
+
   grn_obj *index_column = grn_index_columns[key_nr];
   grn_obj *match_columns, *match_columns_variable;
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table, match_columns,
