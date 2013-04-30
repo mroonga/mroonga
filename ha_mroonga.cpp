@@ -10167,9 +10167,15 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
 #endif
   {
     long long int encoded_datetime = sint8korr(key);
+#if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
+    uint32 part1 = (uint32)(encoded_datetime / 1000000LL);
+    uint32 part2 = (uint32)(encoded_datetime -
+                            (unsigned long long int)part1 * 1000000LL);
+#else
     uint32 part1 = (uint32)(encoded_datetime / LL(1000000));
     uint32 part2 = (uint32)(encoded_datetime -
                             (unsigned long long int)part1 * LL(1000000));
+#endif
     struct tm date;
     memset(&date, 0, sizeof(struct tm));
     date.tm_year = part1 / 10000 - TM_YEAR_BASE;
