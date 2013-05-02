@@ -166,7 +166,8 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_MAJOR_MINOR_VERSION=["$(echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)$/\1.\2/')"]
   case "$MYSQL_MAJOR_MINOR_VERSION" in
   5.6*)
-      MYSQL_LIBS="-L$plugindir/.. -lmysqlservices"
+      pkglibdir="$($ac_mysql_config --variable=pkglibdir)"
+      MYSQL_LIBDIRMYSQL_LIBS="-L$pkglibdir -lmysqlservices"
       ;;
   *)
       MYSQL_LIBS=""
