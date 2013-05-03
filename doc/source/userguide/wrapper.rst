@@ -107,6 +107,9 @@ To use this syntax, you need to register all parsers in MySQL beforehand. On the
 
 You can specify one of following values as the parser.
 
+off
+  It does not tokenize at all. Use "off" if you want to treat ``content`` as is. For example, this value is used for prefix search.
+
 TokenBigram
   It tokenises in bigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 3 letters or more. It is to reduce noises.
 
