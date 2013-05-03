@@ -39,5 +39,5 @@ id	year	month	day	title	content
 4	2011	11	11	帰り道	今日は天気がよくてよかった。
 SHOW STATUS LIKE 'mroonga_fast_order_limit';
 Variable_name	Value
-mroonga_fast_order_limit	1
+Mroonga_fast_order_limit	1
 DROP TABLE diaries;

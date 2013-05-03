@@ -8,7 +8,7 @@ insert into t1 values(4,40,"ta ti tu te to");
 insert into t1 values(5,50,"aa ii uu ee oo");
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	0
+Mroonga_count_skip	0
 select * from t1;
 c1	c2	c3
 1	10	aa ii uu ee oo
@@ -18,13 +18,13 @@ c1	c2	c3
 5	50	aa ii uu ee oo
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	0
+Mroonga_count_skip	0
 select count(*) from t1;
 count(*)
 5
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	0
+Mroonga_count_skip	0
 select * from t1 force index(primary) where c1 between 2 and 4;
 c1	c2	c3
 2	20	ka ki ku ke ko
@@ -32,63 +32,63 @@ c1	c2	c3
 4	40	ta ti tu te to
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	0
+Mroonga_count_skip	0
 select count(*) from t1 force index(primary) where c1 between 2 and 4;
 count(*)
 3
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	1
+Mroonga_count_skip	1
 select c1 from t1 force index(primary) where c1 < 3;
 c1
 1
 2
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	1
+Mroonga_count_skip	1
 select count(c1) from t1 force index(primary) where c1 < 3;
 count(c1)
 2
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	1
+Mroonga_count_skip	1
 select 1 from t1 force index(primary) where c1 > 3;
 1
 1
 1
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	1
+Mroonga_count_skip	1
 select count(1) from t1 force index(primary) where c1 > 3;
 count(1)
 2
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	2
+Mroonga_count_skip	2
 select * from t1 where match(c3) against("su");
 c1	c2	c3
 3	30	sa si su se so
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	2
+Mroonga_count_skip	2
 select count(*) from t1 where match(c3) against("su");
 count(*)
 1
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	3
+Mroonga_count_skip	3
 select * from t1 where match(c3) against("+su" in boolean mode);
 c1	c2	c3
 3	30	sa si su se so
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	3
+Mroonga_count_skip	3
 select count(*) from t1 where match(c3) against("+su" in boolean mode);
 count(*)
 1
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	4
+Mroonga_count_skip	4
 select * from t1 force index(idx1) where c2 between 20 and 40;
 c1	c2	c3
 2	20	ka ki ku ke ko
@@ -96,11 +96,11 @@ c1	c2	c3
 4	40	ta ti tu te to
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	4
+Mroonga_count_skip	4
 select count(*) from t1 force index(idx1) where c2 between 20 and 40;
 count(*)
 3
 show status like 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	5
+Mroonga_count_skip	5
 drop table t1;

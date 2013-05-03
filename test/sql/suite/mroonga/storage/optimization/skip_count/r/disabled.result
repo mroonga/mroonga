@@ -27,6 +27,6 @@ COUNT(*)
 4
 SHOW STATUS LIKE 'mroonga_count_skip';
 Variable_name	Value
-mroonga_count_skip	0
+Mroonga_count_skip	0
 SET mroonga_enable_optimization=TRUE;
 DROP TABLE diaries;
