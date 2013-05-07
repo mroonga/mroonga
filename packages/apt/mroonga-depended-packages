@@ -7,4 +7,4 @@ mecab-utils
 libmysqlclient-dev
 libmysqld-dev
 libssl-dev
-groonga-normalizer-mysql-devel
+groonga-normalizer-mysql
