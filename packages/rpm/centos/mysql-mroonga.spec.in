@@ -34,6 +34,7 @@ Source0:	http://github.com/downloads/mroonga/mroonga/mroonga-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	groonga-devel >= %{groonga_required_version}
+BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	wget
 %if %{use_system_mysql}
 BuildRequires:	mysql-devel
