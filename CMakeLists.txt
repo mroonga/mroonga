@@ -168,33 +168,7 @@ else()
     ${MROONGA_SOURCES}
     ${LIBMRN_NO_MYSQL_SOURCES}
     ${LIBMRN_NEED_MYSQL_SOURCES})
-  if(CMAKE_COMPILER_IS_GNUCXX)
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
-  endif()
-  set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
-    COMPILE_FLAGS "${MYSQL_CFLAGS}")
-  set_source_files_properties(${LIBMRN_NEED_MYSQL_SOURCES} PROPERTIES
-    COMPILE_FLAGS "${MYSQL_CFLAGS}")
-  set_target_properties(ha_mroonga PROPERTIES
-    COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN"
-    PREFIX ""
-    OUTPUT_NAME "ha_mroonga")
-endif()
 
-if(GROONGA_NORMALIZER_MYSQL_FOUND)
-  set(WITH_GROONGA_NORMALIZER_MYSQL 1)
-  set_property(TARGET ha_mroonga APPEND PROPERTY
-    COMPILE_DEFINITIONS "WITH_GROONGA_NORMALIZER_MYSQL=1")
-  set(GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME \"normalizers/mysql\")
-  set_property(TARGET ha_mroonga APPEND PROPERTY
-    COMPILE_DEFINITIONS "GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME=\"normalizers/mysql\"")
-endif()
-
-set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
-set_property(TARGET ha_mroonga APPEND PROPERTY
-  COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
-if(MRN_BUNDLED)
-else()
   set(MYSQL_LIBRARIES "mysqlservices")
   target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES} ${MYSQL_LIBRARIES})
 
@@ -219,8 +193,33 @@ else()
       COMPILE_DEFINITIONS "FORCE_FAST_MUTEX_DISABLED=1")
   endif()
 
+  if(CMAKE_COMPILER_IS_GNUCXX)
+    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
+  endif()
+  set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
+    COMPILE_FLAGS "${MYSQL_CFLAGS}")
+  set_source_files_properties(${LIBMRN_NEED_MYSQL_SOURCES} PROPERTIES
+    COMPILE_FLAGS "${MYSQL_CFLAGS}")
+  set_target_properties(ha_mroonga PROPERTIES
+    COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN"
+    PREFIX ""
+    OUTPUT_NAME "ha_mroonga")
+
   install(TARGETS ha_mroonga DESTINATION "${MYSQL_PLUGIN_DIR}")
 endif()
+
+if(GROONGA_NORMALIZER_MYSQL_FOUND)
+  set(WITH_GROONGA_NORMALIZER_MYSQL 1)
+  set_property(TARGET ha_mroonga APPEND PROPERTY
+    COMPILE_DEFINITIONS "WITH_GROONGA_NORMALIZER_MYSQL=1")
+  set(GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME \"normalizers/mysql\")
+  set_property(TARGET ha_mroonga APPEND PROPERTY
+    COMPILE_DEFINITIONS "GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME=\"normalizers/mysql\"")
+endif()
+
+set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
+set_property(TARGET ha_mroonga APPEND PROPERTY
+  COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/mrn_version.h.in"
