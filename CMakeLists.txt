@@ -176,6 +176,9 @@ else()
   if(WITH_DEBUG)
     set_property(TARGET ha_mroonga APPEND PROPERTY
       COMPILE_DEFINITIONS "SAFE_MUTEX")
+    if(CMAKE_COMPILER_IS_GNUCXX)
+      set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -ggdb3 -O0")
+    endif()
   else()
     set_property(TARGET ha_mroonga APPEND PROPERTY
       COMPILE_DEFINITIONS "DBUG_OFF")
