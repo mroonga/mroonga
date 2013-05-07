@@ -107,11 +107,7 @@ extern MYSQL_PLUGIN_IMPORT pthread_mutex_t LOCK_open;
 #define MRN_STRINGIFY(macro_or_string)  MRN_STRINGIFY_ARG(macro_or_string)
 #define MRN_STRINGIFY_ARG(contents)     #contents
 
-#ifdef MRN_USE_DEPRECATED_NAME
-#  define MRN_PLUGIN_NAME groonga
-#else
-#  define MRN_PLUGIN_NAME mroonga
-#endif
+#define MRN_PLUGIN_NAME mroonga
 #define MRN_PLUGIN_NAME_STRING MRN_STRINGIFY(MRN_PLUGIN_NAME)
 
 #ifdef MRN_MARIADB_P

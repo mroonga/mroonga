@@ -22,13 +22,6 @@ ha_mroonga_la_CFLAGS   = $(dynamic_plugin_cflags)
 ha_mroonga_la_SOURCES  = $(sources)
 ha_mroonga_la_LIBADD   = $(libraries)
 
-plugin_LTLIBRARIES    += ha_groonga.la
-ha_groonga_la_LDFLAGS  = $(dynamic_plugin_ldflags)
-ha_groonga_la_CXXFLAGS = $(dynamic_plugin_cxxflags) -DMRN_USE_DEPRECATED_NAME
-ha_groonga_la_CFLAGS   = $(dynamic_plugin_cflags) -DMRN_USE_DEPRECATED_NAME
-ha_groonga_la_SOURCES  = $(sources)
-ha_groonga_la_LIBADD   = $(libraries)
-
 SUBDIRS =					\
 	build					\
 	lib					\
