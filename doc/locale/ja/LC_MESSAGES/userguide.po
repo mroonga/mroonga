@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-02 13:04\n"
-"PO-Revision-Date: 2013-04-22 15:27+0900\n"
+"PO-Revision-Date: 2013-05-07 19:09+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1531,10 +1531,10 @@ msgstr ""
 # 62d888995ebd4115b5a021aee5ca04f1
 #: ../../../source/userguide/storage.rst:516
 msgid ""
-"Each time the optimisation for counting rows works, ``mroonga_count_skip`` "
+"Each time the optimisation for counting rows works, ``Mroonga_count_skip`` "
 "status variable value is increased."
 msgstr ""
-"行カウント高速化の処理が行われる度に ``mroonga_count_skip`` ステータス変数が"
+"行カウント高速化の処理が行われる度に ``Mroonga_count_skip`` ステータス変数が"
 "インクリメントされます。"
 
 # b42fb67a425b4c6d9a7bc5ec35dbfcfa
@@ -1620,9 +1620,9 @@ msgstr ""
 #: ../../../source/userguide/wrapper.rst:286
 msgid ""
 "Each time the optimisation for counting rows works, "
-"``mroonga_fast_order_limit`` status variable value is increased."
+"``Mroonga_fast_order_limit`` status variable value is increased."
 msgstr ""
-"ORDER BY LIMIT 高速化の処理が行われる度に ``mroonga_fast_order_limit`` ステー"
+"ORDER BY LIMIT 高速化の処理が行われる度に ``Mroonga_fast_order_limit`` ステー"
 "タス変数がインクリメントされます。"
 
 # 78d58e956c26402e822868c1992fdf3f

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-02 13:04\n"
-"PO-Revision-Date: 2012-05-28 14:10+0900\n"
+"PO-Revision-Date: 2013-05-07 19:09+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1119,7 +1119,7 @@ msgstr "独自に追加されたステータス変数を説明します。"
 
 # 0afc389c9a5b4651bd86962657c0034b
 #: ../../../source/reference.rst:426
-msgid "mroonga_count_skip"
+msgid "Mroonga_count_skip"
 msgstr ""
 
 # 267f1b18714740dc979e8b4b67752812
@@ -1140,7 +1140,7 @@ msgstr "確認例です::"
 
 # 3f5fb8dfbc954a2c99f47e0c08dff40a
 #: ../../../source/reference.rst:442
-msgid "mroonga_fast_order_limit"
+msgid "Mroonga_fast_order_limit"
 msgstr ""
 
 # f07b04cb491d4edfa20546deee8bf2e4

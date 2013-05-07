@@ -505,15 +505,15 @@ In the following SELECT, for example, needless read of columns are skipped and y
 
 You can check if this optimisation works or not by the status variable. ::
 
-  mysql> SHOW STATUS LIKE 'mroonga_count_skip';
+  mysql> SHOW STATUS LIKE 'Mroonga_count_skip';
   +--------------------+-------+
   | Variable_name      | Value |
   +--------------------+-------+
-  | mroonga_count_skip | 1     |
+  | Mroonga_count_skip | 1     |
   +--------------------+-------+
   1 row in set (0.00 sec)
 
-Each time the optimisation for counting rows works, ``mroonga_count_skip`` status variable value is increased.
+Each time the optimisation for counting rows works, ``Mroonga_count_skip`` status variable value is increased.
 
 Note : This optimisation is implemented by using the index. It only works in the case where we records can be specified only by the index.
 
@@ -534,15 +534,15 @@ In the SELECT example below, ORDER BY LIMIT is processed in groonga only and the
 
 You can check if this optimisation works or not by the status variable. ::
 
-  mysql> SHOW STATUS LIKE 'mroonga_fast_order_limit';
+  mysql> SHOW STATUS LIKE 'Mroonga_fast_order_limit';
   +--------------------------+-------+
   | Variable_name            | Value |
   +--------------------------+-------+
-  | mroonga_fast_order_limit | 1     |
+  | Mroonga_fast_order_limit | 1     |
   +--------------------------+-------+
   1 row in set (0.00 sec)
 
-Each time the optimisation for counting rows works, ``mroonga_fast_order_limit`` status variable value is increased.
+Each time the optimisation for counting rows works, ``Mroonga_fast_order_limit`` status variable value is increased.
 
 Note : This optimisation is targeting queries like "select ... match against order by _score desc limit X, Y" only, and it works if all of the following conditions are right.
 

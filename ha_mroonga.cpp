@@ -109,6 +109,7 @@ extern MYSQL_PLUGIN_IMPORT pthread_mutex_t LOCK_open;
 
 #define MRN_PLUGIN_NAME mroonga
 #define MRN_PLUGIN_NAME_STRING MRN_STRINGIFY(MRN_PLUGIN_NAME)
+#define MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "Mroonga"
 
 #ifdef MRN_MARIADB_P
 #  define st_mysql_plugin          st_maria_plugin
@@ -464,9 +465,9 @@ static struct st_mysql_storage_engine storage_engine_structure =
 
 static struct st_mysql_show_var mrn_status_variables[] =
 {
-  {MRN_PLUGIN_NAME_STRING "_count_skip",
+  {MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_count_skip",
    (char *)&mrn_count_skip, SHOW_LONG},
-  {MRN_PLUGIN_NAME_STRING "_fast_order_limit",
+  {MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_fast_order_limit",
    (char *)&mrn_fast_order_limit, SHOW_LONG},
   {NullS, NullS, SHOW_LONG}
 };
@@ -1175,7 +1176,7 @@ struct st_mysql_plugin i_s_mrn_stats =
 {
   MYSQL_INFORMATION_SCHEMA_PLUGIN,
   &i_s_info,
-  MRN_PLUGIN_NAME_STRING "_stats",
+  MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_stats",
   MRN_PLUGIN_AUTHOR,
   "Statistics for " MRN_PLUGIN_NAME_STRING,
   PLUGIN_LICENSE_GPL,
