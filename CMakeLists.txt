@@ -106,7 +106,7 @@ set(MYSQL_INCLUDE_DIRS
 
 if(MRN_BUNDLED)
   set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
-  set(MYSQL_PKG_LIB_DIR "${INSTALL_LIBDIR}")
+  set(MYSQL_SERVICES_LIB_DIR "${MYSQL_BUILD_DIR}/libservices")
   set(MYSQL_CFLAGS "${CMAKE_C_FLAGS}")
   set(MYSQL_VERSION "${MYSQL_BASE_VERSION}")
 else()
@@ -120,6 +120,7 @@ else()
 
   set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
   set_mysql_config_value("--variable=pkglibdir" MYSQL_PKG_LIB_DIR)
+  set(MYSQL_SERVICES_LIB_DIR, "${MYSQL_PKG_LIB_DIR}")
   set_mysql_config_value("--cflags" MYSQL_CFLAGS)
   set_mysql_config_value("--version" MYSQL_VERSION)
 endif()
@@ -152,8 +153,7 @@ if(WIN32)
     "${MYSQL_BUILD_DIR}/libmysqld")
 else()
   set(MYSQL_LIBRARY_DIRS
-    "${MYSQL_BUILD_DIR}/libservices"
-    "${MYSQL_PKG_LIB_DIR}")
+    "${MYSQL_SERVICES_LIB_DIR}")
 endif()
 link_directories(
   ${GROONGA_LIBRARY_DIRS}
