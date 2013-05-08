@@ -1,3 +1,5 @@
+# -*- indent-tabs-mode: nil -*-
+#
 # Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2013 Kentoku SHIBA
 #
@@ -113,7 +115,7 @@ else()
   macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
     if(NOT ${VARIABLE})
       execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
-        OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
+       OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
       string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
     endif()
   endmacro()
