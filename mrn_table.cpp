@@ -892,22 +892,22 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   key_length = get_table_def_key(table_list, &key);
 #else
   char key[MAX_DBKEY_LENGTH];
-#if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
+#  if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
   key_length = create_table_def_key(key, table_list->db, table_list->table_name);
-#else
+#  else
   key_length = create_table_def_key(thd, key, table_list, FALSE);
-#endif
+#  endif
 #endif
 #if MYSQL_VERSION_ID >= 50500
   my_hash_value_type hash_value;
   hash_value = my_calc_hash(&table_def_cache, (uchar*) key, key_length);
-#if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
+#  if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
   share = get_table_share(thd, table_list->db, table_list->table_name, key,
                           key_length, 0, hash_value);
-#else
+#  else
   share = get_table_share(thd, table_list, key, key_length, 0, error,
                           hash_value);
-#endif
+#  endif
 #else
   share = get_table_share(thd, table_list, key, key_length, 0, error);
 #endif
