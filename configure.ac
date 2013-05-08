@@ -167,7 +167,13 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   case "$MYSQL_MAJOR_MINOR_VERSION" in
   5.6*)
       pkglibdir="$($ac_mysql_config --variable=pkglibdir)"
-      MYSQL_LIBS="$MYSQL_LIBS -L$pkglibdir -lmysqlservices"
+      mysql_build_libservices_dir="${MYSQL_BUILD_DIR}/libservices"
+      if test -f "${mysql_build_libservices_dir}/libmysqlservices.a"; then
+        mysql_services_lib_dir="${mysql_build_libservices_dir}"
+      else
+        mysql_services_lib_dir="${pkglibdir}"
+      fi
+      MYSQL_LIBS="$MYSQL_LIBS -L\"$mysql_services_lib_dir\" -lmysqlservices"
       ;;
   *)
       MYSQL_LIBS=""
