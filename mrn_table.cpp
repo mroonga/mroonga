@@ -936,11 +936,12 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
   key_length = create_table_def_key(thd, key, table_list, FALSE);
 #endif
 #if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
-  if (!(share = alloc_table_share(table_list->db, table_list->table_name, key,
-                                  key_length)))
+  share = alloc_table_share(table_list->db, table_list->table_name, key,
+                            key_length);
 #else
-  if (!(share = alloc_table_share(table_list, key, key_length)))
+  share = alloc_table_share(table_list, key, key_length);
 #endif
+  if (!share)
   {
     *error = ER_CANT_OPEN_FILE;
     DBUG_RETURN(NULL);
