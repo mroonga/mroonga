@@ -41,7 +41,7 @@ The procedure from cloning repository to build is the following. ::
   % git clone git@github.com:mroonga/mroonga.git
   % cd mroonga
   % ./autogen.sh
-  % ./configure CFLAGS="-ggdb3 -O0" CXXFLAGS="-ggdb3 -O0" --with-debug --prefix=/tmp/local --with-mysql-source=$HOME/work/mysql-5.5.13 --with-mysql-config=$HOME/work/mysql-5.5.13/scripts/mysql_config
+  % ./configure CFLAGS="-g3 -O0" CXXFLAGS="-g3 -O0" --with-debug --prefix=/tmp/local --with-mysql-source=$HOME/work/mysql-5.5.13 --with-mysql-config=$HOME/work/mysql-5.5.13/scripts/mysql_config
   % make
 
 When you successfully build both, please invoke tests like the following.
