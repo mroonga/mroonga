@@ -74,4 +74,8 @@
 #  define init_alloc_root(PTR, SZ1, SZ2, FLAG) init_alloc_root(PTR, SZ1, SZ2)
 #endif
 
+#if MYSQL_VERSION_ID < 100002 || !defined(MRN_MARIADB_P)
+#  define GTS_TABLE 0
+#endif
+
 #endif /* _mrn_mysql_compat_h */

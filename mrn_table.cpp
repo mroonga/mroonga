@@ -952,11 +952,7 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
   share->path.length = strlen(path);
   share->normalized_path.str = share->path.str;
   share->normalized_path.length = share->path.length;
-#if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
   if (open_table_def(thd, share, GTS_TABLE))
-#else
-  if (open_table_def(thd, share, 0))
-#endif
   {
     *error = ER_CANT_OPEN_FILE;
     DBUG_RETURN(NULL);
