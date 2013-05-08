@@ -885,9 +885,6 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
 {
   uint key_length;
   TABLE_SHARE *share;
-#if MYSQL_VERSION_ID >= 50500
-  my_hash_value_type hash_value;
-#endif
   THD *thd = current_thd;
   MRN_DBUG_ENTER_FUNCTION();
 #if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
@@ -902,6 +899,7 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
 #endif
 #endif
 #if MYSQL_VERSION_ID >= 50500
+  my_hash_value_type hash_value;
   hash_value = my_calc_hash(&table_def_cache, (uchar*) key, key_length);
 #if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
   share = get_table_share(thd, table_list->db, table_list->table_name, key,
