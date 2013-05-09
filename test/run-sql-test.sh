@@ -44,6 +44,12 @@ fi
 
 . "${top_dir}/config.sh"
 
+bundled_groonga_normalizer_mysql_dir="${top_dir}/vendor/groonga/vendor/plugins/groonga-normalizer-mysql"
+if [ -d "${bundled_groonga_normalizer_mysql_dir}" ]; then
+    GRN_PLUGINS_DIR="${bundled_groonga_normalizer_mysql_dir}"
+    export GRN_PLUGINS_DIR
+fi
+
 source_mysql_test_dir="${MYSQL_SOURCE_DIR}/mysql-test"
 build_mysql_test_dir="${MYSQL_BUILD_DIR}/mysql-test"
 source_test_suites_dir="${source_mysql_test_dir}/suite"
