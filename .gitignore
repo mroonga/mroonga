@@ -37,6 +37,7 @@ CTestTestfile.cmake
 /packages/apt/repositories/
 /packages/yum/repositories/
 /packages/source/files/
+/packages/source/tmp/
 /doc/locale/*/doctrees/
 /doc/locale/*/html/
 /doc/locale/*/man/
