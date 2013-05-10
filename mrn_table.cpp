@@ -666,25 +666,14 @@ int mrn_add_column_param(MRN_SHARE *share, Field *field, int i)
 
     switch (title_length)
     {
-      case 0:
-        continue;
       case 4:
         MRN_PARAM_STR_LIST("type", col_type, i);
-        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-          MYF(0), tmp_ptr);
-        goto error;
+        break;
       case 5:
         MRN_PARAM_STR_LIST("flags", col_flags, i);
-        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-          MYF(0), tmp_ptr);
-        goto error;
+        break;
       default:
-        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-          MYF(0), tmp_ptr);
-        goto error;
+        break;
     }
   }
 
