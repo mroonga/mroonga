@@ -618,7 +618,12 @@ int mrn_add_column_param(MRN_SHARE *share, Field *field, int i)
   int title_length;
   char *sprit_ptr[2];
   char *tmp_ptr, *start_ptr;
+
   MRN_DBUG_ENTER_FUNCTION();
+
+  if (share->wrapper_mode) {
+    DBUG_RETURN(0);
+  }
 
   DBUG_PRINT("info", ("mroonga create comment string"));
   if (

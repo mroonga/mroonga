@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS Bugs;
+CREATE TABLE Bugs (
+id INT UNSIGNED PRIMARY KEY,
+tag VARCHAR(64) COMMENT 'It must consist of only alphabet and number.'
+) DEFAULT CHARSET=utf8 COMMENT='engine "InnoDB"';
+SHOW CREATE TABLE Bugs;
+Table	Create Table
+Bugs	CREATE TABLE `Bugs` (
+  `id` int(10) unsigned NOT NULL,
+  `tag` varchar(64) DEFAULT NULL COMMENT 'It must consist of only alphabet and number.',
+  PRIMARY KEY (`id`)
+) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='engine "InnoDB"'
+DROP TABLE Bugs;
