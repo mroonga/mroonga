@@ -13,7 +13,7 @@ Summary:	A fast fulltext searchable storage engine for MySQL.
 Group:		Applications/Databases
 License:	LGPLv2.1
 URL:		http://mroonga.org/
-Source0:	http://github.com/downloads/mroonga/mroonga/mroonga-%{version}.tar.gz
+Source0:	http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
 BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
