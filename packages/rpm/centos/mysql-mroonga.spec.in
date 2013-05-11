@@ -116,7 +116,6 @@ make %{?_smp_mflags}
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*groonga*
 mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 
 %clean
