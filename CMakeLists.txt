@@ -213,8 +213,9 @@ else()
     COMPILE_FLAGS "${MYSQL_CFLAGS}")
   set_source_files_properties(${LIBMRN_NEED_MYSQL_SOURCES} PROPERTIES
     COMPILE_FLAGS "${MYSQL_CFLAGS}")
+  set_property(TARGET ha_mroonga APPEND PROPERTY
+    COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN")
   set_target_properties(ha_mroonga PROPERTIES
-    COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN"
     PREFIX ""
     OUTPUT_NAME "ha_mroonga")
 
