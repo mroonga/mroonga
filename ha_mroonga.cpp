@@ -4556,7 +4556,7 @@ int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
     grn_obj *index_table = grn_ctx_get(ctx,
                                        index_table_name.c_str(),
                                        index_table_name.length());
-    if (index_table != NULL) {
+    if (index_table) {
       grn_obj_remove(ctx, index_table);
     }
   }
@@ -4593,7 +4593,7 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
     grn_obj *idx_table_obj = grn_ctx_get(ctx,
                                          index_table_name.c_str(),
                                          index_table_name.length());
-    if (idx_table_obj != NULL) {
+    if (idx_table_obj) {
       grn_obj_remove(ctx, idx_table_obj);
     }
   }
@@ -11452,7 +11452,7 @@ int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
     index_table = grn_ctx_get(ctx,
                               from_index_table_name.c_str(),
                               from_index_table_name.length());
-    if (index_table != NULL) {
+    if (index_table) {
       rc = grn_table_rename(ctx, index_table,
                             to_index_table_name.c_str(),
                             to_index_table_name.length());
@@ -11508,7 +11508,7 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
     index_table = grn_ctx_get(ctx,
                               from_index_table_name.c_str(),
                               from_index_table_name.length());
-    if (index_table != NULL) {
+    if (index_table) {
       rc = grn_table_rename(ctx, index_table,
                             to_index_table_name.c_str(),
                             to_index_table_name.length());
@@ -11788,7 +11788,7 @@ int ha_mroonga::wrapper_disable_indexes(uint mode)
         grn_obj *index_table = grn_ctx_get(ctx,
                                            index_table_name.c_str(),
                                            index_table_name.length());
-        if (index_table != NULL) {
+        if (index_table) {
           grn_obj_remove(ctx, index_table);
         }
         grn_index_tables[i] = NULL;
@@ -11831,7 +11831,7 @@ int ha_mroonga::storage_disable_indexes(uint mode)
       grn_obj *index_table = grn_ctx_get(ctx,
                                          index_table_name.c_str(),
                                          index_table_name.length());
-      if (index_table != NULL) {
+      if (index_table) {
         grn_obj_remove(ctx, index_table);
       }
       grn_index_tables[i] = NULL;
@@ -12714,7 +12714,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
     grn_obj *index_table = grn_ctx_get(ctx,
                                        index_table_name.c_str(),
                                        index_table_name.length());
-    if (index_table != NULL) {
+    if (index_table) {
       grn_obj_remove(ctx, index_table);
     }
     grn_index_tables[j] = NULL;
@@ -12870,7 +12870,7 @@ bool ha_mroonga::storage_inplace_alter_table(
     grn_obj *index_table = grn_ctx_get(ctx,
                                        index_table_name.c_str(),
                                        index_table_name.length());
-    if (index_table != NULL) {
+    if (index_table) {
       grn_obj_remove(ctx, index_table);
     }
     grn_index_tables[j] = NULL;
@@ -13452,7 +13452,7 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
     grn_obj *index_table = grn_ctx_get(ctx,
                                        index_table_name.c_str(),
                                        index_table_name.length());
-    if (index_table != NULL) {
+    if (index_table) {
       grn_obj_remove(ctx, index_table);
     }
     grn_index_tables[key_num[i]] = NULL;
@@ -13488,7 +13488,7 @@ int ha_mroonga::storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
     grn_obj *index_table = grn_ctx_get(ctx,
                                        index_table_name.c_str(),
                                        index_table_name.length());
-    if (index_table != NULL) {
+    if (index_table) {
       grn_obj_remove(ctx, index_table);
     }
     grn_index_tables[key_num[i]] = NULL;
