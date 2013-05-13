@@ -1682,6 +1682,7 @@ static int mrn_init(void *p)
     goto err_log_mutex_init;
   }
 
+  mrn_logger.max_level = static_cast<grn_log_level>(mrn_log_level);
   grn_logger_set(ctx, &mrn_logger);
   if (!(mrn_log_file = fopen(mrn_log_file_path, "a"))) {
     goto err_log_file_open;
