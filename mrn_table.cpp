@@ -716,6 +716,8 @@ int mrn_free_share_alloc(
   MRN_DBUG_ENTER_FUNCTION();
   if (share->engine)
     my_free(share->engine, MYF(0));
+  if (share->default_tokenizer)
+    my_free(share->default_tokenizer, MYF(0));
   for (i = 0; i < share->table_share->keys; i++)
   {
     if (share->index_table && share->index_table[i])
