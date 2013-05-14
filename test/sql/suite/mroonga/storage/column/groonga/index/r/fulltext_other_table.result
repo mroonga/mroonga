@@ -37,5 +37,6 @@ FROM Bugs
 WHERE MATCH (tags) AGAINST ("MySQL" IN BOOLEAN MODE);
 id	tags	score
 1	Linux MySQL groonga	1
-DROP TABLE Tags, Bugs;
+DROP TABLE Bugs;
+DROP TABLE Tags;
 DROP DATABASE mroonga;
