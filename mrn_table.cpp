@@ -386,25 +386,14 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 
         switch (title_length)
         {
-        case 0:
-          continue;
         case 6:
           MRN_PARAM_STR("engine", engine);
-          error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-          my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-                          MYF(0), tmp_ptr);
-          goto error;
+          break;
         case 17:
           MRN_PARAM_STR("default_tokenizer", default_tokenizer);
-          error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-          my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-                          MYF(0), tmp_ptr);
-          goto error;
+          break;
         default:
-          error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-          my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-                          MYF(0), tmp_ptr);
-          goto error;
+          break;
         }
       }
     }

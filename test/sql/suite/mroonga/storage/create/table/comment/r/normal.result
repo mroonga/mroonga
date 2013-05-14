@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS Bugs;
+CREATE TABLE Bugs (
+id INT UNSIGNED
+) DEFAULT CHARSET=utf8
+COMMENT='Free style normal comment';
+SHOW CREATE TABLE Bugs;
+Table	Create Table
+Bugs	CREATE TABLE `Bugs` (
+  `id` int(10) unsigned DEFAULT NULL
+) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='Free style normal comment'
+DROP TABLE Bugs;
