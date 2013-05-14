@@ -522,34 +522,14 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 
     switch (title_length)
     {
-      case 0:
-        continue;
       case 5:
         MRN_PARAM_STR_LIST("table", index_table, i);
-        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-          MYF(0), tmp_ptr);
-        goto error;
+        break;
       case 6:
         MRN_PARAM_STR_LIST("parser", key_parser, i);
-        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-          MYF(0), tmp_ptr);
-        goto error;
-      case 10:
-        if (strncasecmp("normalizer", tmp_ptr, title_length) == 0) {
-          break;
-        } else {
-          error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-          my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-            MYF(0), tmp_ptr);
-          goto error;
-        }
+        break;
       default:
-        error = ER_MRN_INVALID_TABLE_PARAM_NUM;
-        my_printf_error(error, ER_MRN_INVALID_TABLE_PARAM_STR,
-          MYF(0), tmp_ptr);
-        goto error;
+        break;
     }
   }
 #endif
