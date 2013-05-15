@@ -7693,6 +7693,98 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
   DBUG_VOID_RETURN;
 }
 
+grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
+  struct st_mrn_ft_info *info,
+  String *key,
+  grn_obj *index_column,
+  grn_obj *match_columns,
+  grn_obj *expression)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_rc rc = GRN_SUCCESS;
+
+  const char *keyword, *keyword_original;
+  uint keyword_length, keyword_length_original;
+  grn_operator default_operator = GRN_OP_OR;
+  keyword = keyword_original = key->ptr();
+  keyword_length = keyword_length_original = key->length();
+  // WORKAROUND: support only '*D+', '*D-' and '*DOR' pragma.
+  if (keyword_length > 0) {
+    if (keyword[0] == '*' && keyword_length > 1) {
+      switch (keyword[1]) {
+      case 'D':
+        if (keyword_length > 2 && keyword[2] == '+') {
+          default_operator = GRN_OP_AND;
+          keyword += 3;
+          keyword_length -= 3;
+        } else if (keyword_length > 2 && keyword[2] == '-') {
+          default_operator = GRN_OP_OR;
+          keyword += 3;
+          keyword_length -= 3;
+        } else if (keyword_length > 3 && memcmp(keyword + 2, "OR", 2) == 0) {
+          default_operator = GRN_OP_OR;
+          keyword += 4;
+          keyword_length -= 4;
+        }
+        break;
+      default:
+        break;
+      }
+    }
+  }
+  // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
+  while (keyword_length > 0 && keyword[0] == ' ') {
+    keyword++;
+    keyword_length--;
+  }
+  if (keyword_length > 0 && keyword[0] == '+') {
+    keyword++;
+    keyword_length--;
+  }
+  grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
+  grn_expr_flags expression_flags =
+    GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
+  rc = grn_expr_parse(info->ctx, expression,
+                      keyword, keyword_length,
+                      match_columns, GRN_OP_MATCH, default_operator,
+                      expression_flags);
+  if (rc) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to parse fulltext search keyword: <%.*s>: <%s>",
+             keyword_length_original, keyword_original,
+             info->ctx->errbuf);
+    my_message(ER_PARSE_ERROR, error_message, MYF(0));
+    GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
+  }
+
+  DBUG_RETURN(rc);
+}
+
+grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_normal_mode(
+  struct st_mrn_ft_info *info,
+  String *key,
+  grn_obj *index_column,
+  grn_obj *match_columns,
+  grn_obj *expression)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_rc rc = GRN_SUCCESS;
+
+  grn_obj query;
+  GRN_TEXT_INIT(&query, GRN_OBJ_DO_SHALLOW_COPY);
+  GRN_TEXT_SET(info->ctx, &query, key->ptr(), key->length());
+  grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
+  grn_expr_append_obj(info->ctx, expression, match_columns, GRN_OP_PUSH, 1);
+  grn_expr_append_const(info->ctx, expression, &query, GRN_OP_PUSH, 1);
+  grn_expr_append_op(info->ctx, expression, GRN_OP_SIMILAR, 2);
+  grn_obj_unlink(info->ctx, &query);
+
+  DBUG_RETURN(rc);
+}
+
 struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
                                                               uint key_nr,
                                                               String *key)
@@ -7728,7 +7820,6 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
   grn_obj *match_columns, *match_columns_variable;
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table, match_columns,
                             match_columns_variable);
-  grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
 
   grn_obj *expression, *expression_variable;
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table,
@@ -7736,67 +7827,17 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
 
   grn_rc rc = GRN_SUCCESS;
   if (flags & FT_BOOL) {
-    const char *keyword, *keyword_original;
-    uint keyword_length, keyword_length_original;
-    grn_operator default_operator = GRN_OP_OR;
-    keyword = keyword_original = key->ptr();
-    keyword_length = keyword_length_original = key->length();
-    // WORKAROUND: support only '*D+', '*D-' and '*DOR' pragma.
-    if (keyword_length > 0) {
-      if (keyword[0] == '*' && keyword_length > 1) {
-        switch (keyword[1]) {
-        case 'D':
-          if (keyword_length > 2 && keyword[2] == '+') {
-            default_operator = GRN_OP_AND;
-            keyword += 3;
-            keyword_length -= 3;
-          } else if (keyword_length > 2 && keyword[2] == '-') {
-            default_operator = GRN_OP_OR;
-            keyword += 3;
-            keyword_length -= 3;
-          } else if (keyword_length > 3 && memcmp(keyword + 2, "OR", 2) == 0) {
-            default_operator = GRN_OP_OR;
-            keyword += 4;
-            keyword_length -= 4;
-          }
-          break;
-        default:
-          break;
-        }
-      }
-    }
-    // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
-    while (keyword_length > 0 && keyword[0] == ' ') {
-      keyword++;
-      keyword_length--;
-    }
-    if (keyword_length > 0 && keyword[0] == '+') {
-      keyword++;
-      keyword_length--;
-    }
-    grn_expr_flags expression_flags =
-      GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
-    rc = grn_expr_parse(info->ctx, expression,
-                        keyword, keyword_length,
-                        match_columns, GRN_OP_MATCH, default_operator,
-                        expression_flags);
-    if (rc) {
-      char error_message[MRN_MESSAGE_BUFFER_SIZE];
-      snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-               "failed to parse fulltext search keyword: <%.*s>: <%s>",
-               keyword_length_original, keyword_original,
-               info->ctx->errbuf);
-      my_message(ER_PARSE_ERROR, error_message, MYF(0));
-      GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
-    }
+    rc = generic_ft_init_ext_prepare_expression_in_boolean_mode(info,
+                                                                key,
+                                                                index_column,
+                                                                match_columns,
+                                                                expression);
   } else {
-    grn_obj query;
-    GRN_TEXT_INIT(&query, GRN_OBJ_DO_SHALLOW_COPY);
-    GRN_TEXT_SET(info->ctx, &query, key->ptr(), key->length());
-    grn_expr_append_obj(info->ctx, expression, match_columns, GRN_OP_PUSH, 1);
-    grn_expr_append_const(info->ctx, expression, &query, GRN_OP_PUSH, 1);
-    grn_expr_append_op(info->ctx, expression, GRN_OP_SIMILAR, 2);
-    grn_obj_unlink(info->ctx, &query);
+    rc = generic_ft_init_ext_prepare_expression_in_normal_mode(info,
+                                                               key,
+                                                               index_column,
+                                                               match_columns,
+                                                               expression);
   }
 
   if (rc == GRN_SUCCESS) {
