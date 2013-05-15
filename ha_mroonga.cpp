@@ -7693,6 +7693,30 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
   DBUG_VOID_RETURN;
 }
 
+bool ha_mroonga::generic_ft_init_ext_parse_pragma_d(const char *keyword,
+                                                    uint keyword_length,
+                                                    grn_operator *default_operator,
+                                                    uint *consumed_keyword_length)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_bool succeeded = true;
+  if (keyword_length >= 1 && keyword[0] == '+') {
+    *default_operator = GRN_OP_AND;
+    *consumed_keyword_length = 1;
+  } else if (keyword_length >= 1 && keyword[0] == '-') {
+    *default_operator = GRN_OP_OR;
+    *consumed_keyword_length = 1;
+  } else if (keyword_length >= 2 && memcmp(keyword, "OR", 2) == 0) {
+    *default_operator = GRN_OP_OR;
+    *consumed_keyword_length = 2;
+  } else {
+    succeeded = false;
+  }
+
+  DBUG_RETURN(succeeded);
+}
+
 grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   struct st_mrn_ft_info *info,
   String *key,
@@ -7712,20 +7736,16 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   // WORKAROUND: support only '*D+', '*D-' and '*DOR' pragma.
   if (keyword_length > 0) {
     if (keyword[0] == '*' && keyword_length > 1) {
+      uint consumed_keyword_length = 0;
       switch (keyword[1]) {
       case 'D':
-        if (keyword_length > 2 && keyword[2] == '+') {
-          default_operator = GRN_OP_AND;
-          keyword += 3;
-          keyword_length -= 3;
-        } else if (keyword_length > 2 && keyword[2] == '-') {
-          default_operator = GRN_OP_OR;
-          keyword += 3;
-          keyword_length -= 3;
-        } else if (keyword_length > 3 && memcmp(keyword + 2, "OR", 2) == 0) {
-          default_operator = GRN_OP_OR;
-          keyword += 4;
-          keyword_length -= 4;
+        if (generic_ft_init_ext_parse_pragma_d(keyword + 2,
+                                               keyword_length - 2,
+                                               &default_operator,
+                                               &consumed_keyword_length)) {
+          consumed_keyword_length += 2;
+          keyword += consumed_keyword_length;
+          keyword_length -= consumed_keyword_length;
         }
         break;
       default:

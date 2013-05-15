@@ -859,6 +859,10 @@ private:
   FT_INFO *storage_ft_init_ext(uint flags, uint key_nr, String *key);
   void generic_ft_init_ext_add_conditions_fast_order_limit(
       struct st_mrn_ft_info *info, grn_obj *expression);
+  bool generic_ft_init_ext_parse_pragma_d(const char *keyword,
+                                          uint keyword_length,
+                                          grn_operator *default_operator,
+                                          uint *consumed_keyword_length);
   grn_rc generic_ft_init_ext_prepare_expression_in_boolean_mode(
     struct st_mrn_ft_info *info,
     String *key,
