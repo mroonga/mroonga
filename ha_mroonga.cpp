@@ -7734,8 +7734,7 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   keyword = keyword_original = key->ptr();
   keyword_length = keyword_length_original = key->length();
   // WORKAROUND: support only '*D+', '*D-' and '*DOR' pragma.
-  if (keyword_length > 1) {
-    if (keyword[0] == '*') {
+  if (keyword_length > 1 && keyword[0] == '*') {
       uint consumed_keyword_length = 0;
       switch (keyword[1]) {
       case 'D':
@@ -7751,7 +7750,6 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
       default:
         break;
       }
-    }
   }
   // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
   while (keyword_length > 0 && keyword[0] == ' ') {
