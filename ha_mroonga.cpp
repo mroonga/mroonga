@@ -137,6 +137,7 @@ extern "C" {
 
 /* groonga's internal functions */
 const char *grn_obj_get_value_(grn_ctx *ctx, grn_obj *obj, grn_id id, uint32 *size);
+int grn_atoi(const char *nptr, const char *end, const char **rest);
 
 /* global variables */
 static pthread_mutex_t mrn_db_mutex;
@@ -7693,7 +7694,8 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
   DBUG_VOID_RETURN;
 }
 
-bool ha_mroonga::generic_ft_init_ext_parse_pragma_d(const char *keyword,
+bool ha_mroonga::generic_ft_init_ext_parse_pragma_d(struct st_mrn_ft_info *info,
+                                                    const char *keyword,
                                                     uint keyword_length,
                                                     grn_operator *default_operator,
                                                     uint *consumed_keyword_length)
@@ -7717,12 +7719,128 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_d(const char *keyword,
   DBUG_RETURN(succeeded);
 }
 
+bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
+                                                    const char *keyword,
+                                                    uint keyword_length,
+                                                    grn_obj *index_column,
+                                                    grn_obj *match_columns,
+                                                    uint *consumed_keyword_length,
+                                                    grn_obj *tmp_objects)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  *consumed_keyword_length = 0;
+
+  grn_obj source_ids_buffer;
+  GRN_TEXT_INIT(&source_ids_buffer, GRN_OBJ_DO_SHALLOW_COPY);
+  grn_obj_get_info(info->ctx, index_column, GRN_INFO_SOURCE,
+                   &source_ids_buffer);
+
+  grn_id *source_ids =
+    reinterpret_cast<grn_id *>(GRN_BULK_HEAD(&source_ids_buffer));
+  int n_source_ids = GRN_BULK_VSIZE(&source_ids_buffer) / sizeof(grn_id);
+
+  uint n_weights = 0;
+  while (keyword_length >= 1) {
+    uint n_used_keyword_length = 0;
+    if (n_weights >= 1) {
+      if (keyword[0] != ',') {
+        break;
+      }
+      n_used_keyword_length = 1;
+      keyword += n_used_keyword_length;
+      keyword_length -= n_used_keyword_length;
+      if (keyword_length == 0) {
+        break;
+      }
+    }
+
+    int section = 0;
+    if ('0' <= keyword[0] && keyword[0] <= ('0' + n_source_ids)) {
+      section = keyword[0] - '0';
+    } else {
+      break;
+    }
+
+    int weight = 1;
+    if (keyword_length >= 2 && keyword[1] == ':') {
+      const char *weight_start = keyword + 2;
+      const char *keyword_end = keyword + keyword_length;
+      const char *keyword_rest;
+      weight = grn_atoi(weight_start, keyword_end, &keyword_rest);
+      if (weight_start == keyword_rest) {
+        break;
+      }
+      n_used_keyword_length += keyword_rest - keyword;
+    } else {
+      n_used_keyword_length += 1;
+    }
+    *consumed_keyword_length += n_used_keyword_length;
+    keyword_length -= n_used_keyword_length;
+    keyword += n_used_keyword_length;
+
+    n_weights++;
+
+    grn_obj section_accessor_name;
+    GRN_TEXT_INIT(&section_accessor_name, 0);
+    {
+      char index_name[GRN_TABLE_MAX_KEY_SIZE];
+      int index_name_size;
+      index_name_size = grn_column_name(info->ctx, index_column, index_name,
+                                        GRN_TABLE_MAX_KEY_SIZE - 1);
+      GRN_TEXT_PUT(info->ctx, &section_accessor_name,
+                   index_name, index_name_size);
+    }
+    GRN_TEXT_PUTC(info->ctx, &section_accessor_name,
+                  '.');
+    {
+      grn_obj *source;
+      source = grn_ctx_at(info->ctx, source_ids[section]);
+      char section_name[GRN_TABLE_MAX_KEY_SIZE];
+      int section_name_size;
+      section_name_size = grn_column_name(info->ctx, source, section_name,
+                                          GRN_TABLE_MAX_KEY_SIZE - 1);
+      GRN_TEXT_PUT(info->ctx, &section_accessor_name,
+                   section_name, section_name_size);
+      grn_obj_unlink(info->ctx, source);
+    }
+
+    {
+      grn_obj *table;
+      table = grn_ctx_at(info->ctx, index_column->header.domain);
+      grn_obj *section_accessor;
+      section_accessor = grn_obj_column(info->ctx, table,
+                                        GRN_TEXT_VALUE(&section_accessor_name),
+                                        GRN_TEXT_LEN(&section_accessor_name));
+      GRN_PTR_PUT(info->ctx, tmp_objects, section_accessor);
+      grn_expr_append_obj(info->ctx, match_columns, section_accessor,
+                          GRN_OP_PUSH, 1);
+      grn_obj_unlink(info->ctx, table);
+    }
+    GRN_OBJ_FIN(info->ctx, &section_accessor_name);
+
+    if (weight != 1) {
+      grn_expr_append_const_int(info->ctx, match_columns, weight,
+                                GRN_OP_PUSH, 1);
+      grn_expr_append_op(info->ctx, match_columns, GRN_OP_STAR, 2);
+    }
+
+    if (n_weights >= 2) {
+      grn_expr_append_op(info->ctx, match_columns, GRN_OP_OR, 2);
+    }
+  }
+  GRN_OBJ_FIN(info->ctx, &source_ids_buffer);
+
+  DBUG_RETURN(n_weights > 0);
+}
+
 grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   struct st_mrn_ft_info *info,
   String *key,
   grn_obj *index_column,
   grn_obj *match_columns,
-  grn_obj *expression)
+  grn_obj *expression,
+  grn_obj *tmp_objects)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -7731,25 +7849,58 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   const char *keyword, *keyword_original;
   uint keyword_length, keyword_length_original;
   grn_operator default_operator = GRN_OP_OR;
+  grn_bool weight_specified = false;
   keyword = keyword_original = key->ptr();
   keyword_length = keyword_length_original = key->length();
-  // WORKAROUND: support only '*D+', '*D-' and '*DOR' pragma.
-  if (keyword_length > 1 && keyword[0] == '*') {
+  // WORKAROUND: support only "D" and "W" pragmas.
+  if (keyword_length >= 2 && keyword[0] == '*') {
+    bool parsed = false;
+    bool done = false;
+    keyword++;
+    keyword_length++;
+    while (!done) {
       uint consumed_keyword_length = 0;
-      switch (keyword[1]) {
+      switch (keyword[0]) {
       case 'D':
-        if (generic_ft_init_ext_parse_pragma_d(keyword + 2,
-                                               keyword_length - 2,
+        if (generic_ft_init_ext_parse_pragma_d(info,
+                                               keyword + 1,
+                                               keyword_length - 1,
                                                &default_operator,
                                                &consumed_keyword_length)) {
-          consumed_keyword_length += 2;
+          parsed = true;
+          consumed_keyword_length += 1;
           keyword += consumed_keyword_length;
           keyword_length -= consumed_keyword_length;
+        } else {
+          done = true;
+        }
+        break;
+      case 'W':
+        if (generic_ft_init_ext_parse_pragma_w(info,
+                                               keyword + 1,
+                                               keyword_length - 1,
+                                               index_column,
+                                               match_columns,
+                                               &consumed_keyword_length,
+                                               tmp_objects)) {
+          parsed = true;
+          weight_specified = true;
+          consumed_keyword_length += 1;
+          keyword += consumed_keyword_length;
+          keyword_length -= consumed_keyword_length;
+        } else {
+          done = true;
         }
         break;
       default:
+        done = true;
         break;
       }
+    }
+    if (!parsed) {
+      keyword = keyword_original;
+      keyword_length = keyword_length_original;
+    }
   }
   // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
   while (keyword_length > 0 && keyword[0] == ' ') {
@@ -7760,7 +7911,9 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
     keyword++;
     keyword_length--;
   }
-  grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
+  if (!weight_specified) {
+    grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
+  }
   grn_expr_flags expression_flags =
     GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
   rc = grn_expr_parse(info->ctx, expression,
@@ -7785,7 +7938,8 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_normal_mode(
   String *key,
   grn_obj *index_column,
   grn_obj *match_columns,
-  grn_obj *expression)
+  grn_obj *expression,
+  grn_obj *tmp_objects)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -7842,6 +7996,8 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
   grn_obj *expression, *expression_variable;
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table,
                             expression, expression_variable);
+  grn_obj tmp_objects;
+  GRN_PTR_INIT(&tmp_objects, GRN_OBJ_VECTOR, GRN_ID_NIL);
 
   grn_rc rc = GRN_SUCCESS;
   if (flags & FT_BOOL) {
@@ -7849,13 +8005,15 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
                                                                 key,
                                                                 index_column,
                                                                 match_columns,
-                                                                expression);
+                                                                expression,
+                                                                &tmp_objects);
   } else {
     rc = generic_ft_init_ext_prepare_expression_in_normal_mode(info,
                                                                key,
                                                                index_column,
                                                                match_columns,
-                                                               expression);
+                                                               expression,
+                                                               &tmp_objects);
   }
 
   if (rc == GRN_SUCCESS) {
@@ -7870,6 +8028,12 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
 
   grn_obj_unlink(info->ctx, expression);
   grn_obj_unlink(info->ctx, match_columns);
+
+  uint n_tmp_objects = GRN_BULK_VSIZE(&tmp_objects) / sizeof(grn_obj *);
+  for (uint i = 0; i < n_tmp_objects; ++i) {
+    grn_obj_unlink(info->ctx, GRN_PTR_VALUE_AT(&tmp_objects, i));
+  }
+  grn_obj_unlink(info->ctx, &tmp_objects);
 
   DBUG_RETURN(info);
 }

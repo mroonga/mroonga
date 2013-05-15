@@ -859,22 +859,32 @@ private:
   FT_INFO *storage_ft_init_ext(uint flags, uint key_nr, String *key);
   void generic_ft_init_ext_add_conditions_fast_order_limit(
       struct st_mrn_ft_info *info, grn_obj *expression);
-  bool generic_ft_init_ext_parse_pragma_d(const char *keyword,
+  bool generic_ft_init_ext_parse_pragma_d(struct st_mrn_ft_info *info,
+                                          const char *keyword,
                                           uint keyword_length,
                                           grn_operator *default_operator,
                                           uint *consumed_keyword_length);
+  bool generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
+                                          const char *keyword,
+                                          uint keyword_length,
+                                          grn_obj *index_column,
+                                          grn_obj *match_columns,
+                                          uint *consumed_keyword_length,
+                                          grn_obj *tmp_objects);
   grn_rc generic_ft_init_ext_prepare_expression_in_boolean_mode(
     struct st_mrn_ft_info *info,
     String *key,
     grn_obj *index_column,
     grn_obj *match_columns,
-    grn_obj *expression);
+    grn_obj *expression,
+    grn_obj *tmp_objects);
   grn_rc generic_ft_init_ext_prepare_expression_in_normal_mode(
     struct st_mrn_ft_info *info,
     String *key,
     grn_obj *index_column,
     grn_obj *match_columns,
-    grn_obj *expression);
+    grn_obj *expression,
+    grn_obj *tmp_objects);
   struct st_mrn_ft_info *generic_ft_init_ext_select(uint flags,
                                                     uint key_nr,
                                                     String *key);
