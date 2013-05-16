@@ -7731,14 +7731,7 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
 
   *consumed_keyword_length = 0;
 
-  grn_obj source_ids_buffer;
-  GRN_TEXT_INIT(&source_ids_buffer, GRN_OBJ_DO_SHALLOW_COPY);
-  grn_obj_get_info(info->ctx, index_column, GRN_INFO_SOURCE,
-                   &source_ids_buffer);
-
-  grn_id *source_ids =
-    reinterpret_cast<grn_id *>(GRN_BULK_HEAD(&source_ids_buffer));
-  int n_source_ids = GRN_BULK_VSIZE(&source_ids_buffer) / sizeof(grn_id);
+  int n_sections = info->key_info->key_parts;
 
   uint n_weights = 0;
   while (keyword_length >= 1) {
@@ -7756,7 +7749,7 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
     }
 
     int section = 0;
-    if ('0' <= keyword[0] && keyword[0] < ('0' + n_source_ids)) {
+    if ('0' <= keyword[0] && keyword[0] < ('0' + n_sections)) {
       section = keyword[0] - '0';
     } else {
       break;
@@ -7781,43 +7774,15 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
 
     n_weights++;
 
-    grn_obj section_accessor_name;
-    GRN_TEXT_INIT(&section_accessor_name, 0);
+    grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
     {
-      char index_name[GRN_TABLE_MAX_KEY_SIZE];
-      int index_name_size;
-      index_name_size = grn_column_name(info->ctx, index_column, index_name,
-                                        GRN_TABLE_MAX_KEY_SIZE - 1);
-      GRN_TEXT_PUT(info->ctx, &section_accessor_name,
-                   index_name, index_name_size);
+      grn_obj section_value;
+      GRN_UINT32_INIT(&section_value, 0);
+      GRN_UINT32_SET(info->ctx, &section_value, section);
+      grn_expr_append_const(info->ctx, match_columns, &section_value,
+                            GRN_OP_PUSH, 1);
+      grn_expr_append_op(info->ctx, match_columns, GRN_OP_GET_MEMBER, 2);
     }
-    GRN_TEXT_PUTC(info->ctx, &section_accessor_name,
-                  '.');
-    {
-      grn_obj *source;
-      source = grn_ctx_at(info->ctx, source_ids[section]);
-      char section_name[GRN_TABLE_MAX_KEY_SIZE];
-      int section_name_size;
-      section_name_size = grn_column_name(info->ctx, source, section_name,
-                                          GRN_TABLE_MAX_KEY_SIZE - 1);
-      GRN_TEXT_PUT(info->ctx, &section_accessor_name,
-                   section_name, section_name_size);
-      grn_obj_unlink(info->ctx, source);
-    }
-
-    {
-      grn_obj *table;
-      table = grn_ctx_at(info->ctx, index_column->header.domain);
-      grn_obj *section_accessor;
-      section_accessor = grn_obj_column(info->ctx, table,
-                                        GRN_TEXT_VALUE(&section_accessor_name),
-                                        GRN_TEXT_LEN(&section_accessor_name));
-      GRN_PTR_PUT(info->ctx, tmp_objects, section_accessor);
-      grn_expr_append_obj(info->ctx, match_columns, section_accessor,
-                          GRN_OP_PUSH, 1);
-      grn_obj_unlink(info->ctx, table);
-    }
-    GRN_OBJ_FIN(info->ctx, &section_accessor_name);
 
     if (weight != 1) {
       grn_expr_append_const_int(info->ctx, match_columns, weight,
@@ -7829,7 +7794,6 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
       grn_expr_append_op(info->ctx, match_columns, GRN_OP_OR, 2);
     }
   }
-  GRN_OBJ_FIN(info->ctx, &source_ids_buffer);
 
   DBUG_RETURN(n_weights > 0);
 }
