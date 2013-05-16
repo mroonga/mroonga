@@ -7756,7 +7756,7 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
     }
 
     int section = 0;
-    if ('0' <= keyword[0] && keyword[0] <= ('0' + n_source_ids)) {
+    if ('0' <= keyword[0] && keyword[0] < ('0' + n_source_ids)) {
       section = keyword[0] - '0';
     } else {
       break;
