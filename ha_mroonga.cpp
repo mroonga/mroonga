@@ -7731,7 +7731,7 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
 
   *consumed_keyword_length = 0;
 
-  int n_sections = info->key_info->key_parts;
+  int n_sections = KEY_N_KEY_PARTS(info->key_info);
 
   uint n_weights = 0;
   while (keyword_length >= 1) {
