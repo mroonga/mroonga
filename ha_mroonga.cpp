@@ -992,9 +992,6 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
                                      char *message)
 {
   CommandInfo *info = NULL;
-  THD *thd = current_thd;
-  // TODO: check thd->db
-  mrn::PathMapper mapper(thd->db, mrn_database_path_prefix);
 
   initid->ptr = NULL;
   if (args->arg_count != 1) {
@@ -1019,9 +1016,25 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
   }
 
   grn_ctx_init(&(info->ctx), 0);
-  // TODO: use cached opened database.
-  grn_db_open(&(info->ctx), mapper.db_path());
-  // TODO: check ctx->rc.
+  {
+    const char *current_db_path = current_thd->db;
+    const char *action;
+    if (current_db_path) {
+      action = "open database";
+      mrn::PathMapper mapper(current_db_path, mrn_database_path_prefix);
+      grn_db_open(&(info->ctx), mapper.db_path());
+    } else {
+      action = "create anonymous database";
+      grn_db_create(&(info->ctx), NULL, NULL);
+    }
+    if (info->ctx.rc != GRN_SUCCESS) {
+      sprintf(message,
+              "mroonga_command(): failed to %s: %s",
+              action,
+              info->ctx.errbuf);
+      goto error;
+    }
+  }
 
   initid->ptr = (char *)info;
 
