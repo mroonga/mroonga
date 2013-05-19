@@ -22,6 +22,7 @@
 #define MRN_PARAMETERS_PARSER_HPP_
 
 #include <mrn_mysql.h>
+#include <mrn_mysql_compat.h>
 #include <my_list.h>
 
 namespace mrn {

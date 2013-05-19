@@ -28,12 +28,16 @@ namespace mrn {
 
     Parameter(const char *key, unsigned int key_length,
               const char *value, unsigned int value_length)
-      : key_(strndup(key, key_length)),
-        value_(strndup(value, value_length)) {
+      : key_(my_strndup(key, key_length, MYF(0))),
+        value_(my_strndup(value, value_length, MYF(0))) {
     };
     ~Parameter() {
-      delete key_;
-      delete value_;
+      if (key_) {
+        my_free(key_, MYF(0));
+      }
+      if (value_) {
+        my_free(value_, MYF(0));
+      }
     };
   };
 
