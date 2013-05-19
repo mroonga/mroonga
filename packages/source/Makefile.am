@@ -16,7 +16,7 @@ MARIADB_BASE = mariadb-$(MARIADB_VERSION)
 MARIADB_TAR_GZ = $(MARIADB_BASE).tar.gz
 
 MARIADB_WITH_MROONGA_BASE = $(MARIADB_BASE)-with-$(MROONGA_BASE)
-
+MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE = $(MARIADB_WITH_MROONGA_BASE)-for-windows
 
 GROONGA_PROJECT_DOWNLOAD_BASE = http://packages.groonga.org/source
 GROONGA_DOWNLOAD_BASE = $(GROONGA_PROJECT_DOWNLOAD_BASE)/groonga
@@ -29,7 +29,7 @@ CURL = curl --fail
 
 all:
 
-release: upload
+release: archive upload
 
 ensure-rsync-path:
 	@if test -z "$(RSYNC_PATH)"; then				\
@@ -40,12 +40,14 @@ ensure-rsync-path:
 download: ensure-rsync-path
 	rsync -avz --progress $(RSYNC_PATH)/source/mroonga/ files
 
-ARCHIVES =						\
-	files/$(MROONGA_TAR_GZ)				\
-	files/$(MARIADB_WITH_MROONGA_BASE).tar.gz	\
-	files/$(MARIADB_WITH_MROONGA_BASE).zip
+ARCHIVES =							\
+	files/$(MROONGA_TAR_GZ)					\
+	files/$(MARIADB_WITH_MROONGA_BASE).tar.gz		\
+	files/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE).zip
 
-upload: ensure-rsync-path $(ARCHIVES)
+archive: $(ARCHIVES)
+
+upload: ensure-rsync-path
 	rsync -avz --progress --delete files/ $(RSYNC_PATH)/source/mroonga
 
 files/$(MROONGA_TAR_GZ): $(top_builddir)/$(MROONGA_TAR_GZ)
@@ -98,6 +100,21 @@ files/$(MARIADB_WITH_MROONGA_BASE).tar.gz: tmp/$(MARIADB_WITH_MROONGA_BASE).stam
 	mkdir -p files/
 	(cd tmp && tar czf ../$@ $(MARIADB_WITH_MROONGA_BASE))
 
-files/$(MARIADB_WITH_MROONGA_BASE).zip: tmp/$(MARIADB_WITH_MROONGA_BASE).stamp
+PATCHES =						\
+	patches/mariadb-10.0.2-windows-build.diff
+
+tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE).stamp: tmp/$(MARIADB_WITH_MROONGA_BASE).stamp $(PATCHES)
+	rm -rf tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE)
+	cp -a						\
+	  tmp/$(MARIADB_WITH_MROONGA_BASE)		\
+	  tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE)
+	for patch in $(PATCHES); do				\
+	  (cd tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE) &&	\
+	    patch -p1 < ../../$${patch});			\
+	done
+
+	touch $@
+
+files/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE).zip: tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE).stamp
 	mkdir -p files/
-	(cd tmp && zip -q -r ../$@ $(MARIADB_WITH_MROONGA_BASE))
+	(cd tmp && zip -q -r ../$@ $(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE))
