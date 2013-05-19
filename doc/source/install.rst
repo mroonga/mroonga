@@ -415,7 +415,7 @@ Install::
 .. seealso:: `mroonga/homebrew on GitHub <https://github.com/mroonga/homebrew>`_
 
 Install from the source code
-------------------------------
+----------------------------
 
 Here we explain how to install from the source code. If your environment is not listed above, you need to do so.
 
