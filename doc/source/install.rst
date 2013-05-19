@@ -534,7 +534,7 @@ Invoke CREATE FUNCTION like the following. ::
 
 
 Install from the source code with MariaDB
--------------------------------------------
+-----------------------------------------
 
 Here we explain how to install from the source code with MariaDB. If your environment is not listed above, you need to do so.
 
