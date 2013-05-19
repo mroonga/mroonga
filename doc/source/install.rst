@@ -415,7 +415,7 @@ Install::
 .. seealso:: `mroonga/homebrew on GitHub <https://github.com/mroonga/homebrew>`_
 
 Install from the source code
-------------------------------
+----------------------------
 
 Here we explain how to install from the source code. If your environment is not listed above, you need to do so.
 
@@ -449,9 +449,9 @@ Download the latest MySQL 5.5 source code, then build and install it.
 
 http://dev.mysql.com/downloads/mysql/
 
-Here we assume that we use mysql-5.5.22 and its source code is extracted in the following directory. ::
+Here we assume that we use mysql-5.5.31 and its source code is extracted in the following directory. ::
 
- /usr/local/src/mysql-5.5.22
+ /usr/local/src/mysql-5.5.31
 
 And we assume that MySQL is installed in the following directory. ::
 
@@ -472,14 +472,14 @@ Build mroonga
 Run configure script by specifying the location of MySQL source code with ``--with-mysql-source`` and the path of mysql_config command with ``--with-mysql-config``. ::
 
  ./configure \
-   --with-mysql-source=/usr/local/src/mysql-5.5.22 \
+   --with-mysql-source=/usr/local/src/mysql-5.5.31 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 If groonga is not installed in the standard location like /usr/lib, you need to specify its location by PKG_CONFIG_PATH. For example, if groonga is installed with ``--prefix=$HOME/local``, do like the following ::
 
  ./configure \
    PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
-   --with-mysql-source=/usr/local/src/mysql-5.5.22 \
+   --with-mysql-source=/usr/local/src/mysql-5.5.31 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 Then invoke "make". ::
@@ -534,7 +534,7 @@ Invoke CREATE FUNCTION like the following. ::
 
 
 Install from the source code with MariaDB
--------------------------------------------
+-----------------------------------------
 
 Here we explain how to install from the source code with MariaDB. If your environment is not listed above, you need to do so.
 
@@ -569,16 +569,16 @@ Build mroonga with MariaDB
 
 Uncompress MariaDB tarball. ::
 
- tar xvfz ./mariadb-10.0.1.tar.gz
+ tar xvfz mariadb-10.0.2.tar.gz
 
 Uncompress mroonga tarball then move into storage directory. ::
 
- tar xvfz ./mroonga-3.02.tar.gz
- mv ./mroonga-3.02 ./mariadb-10.0.1/storage/
+ tar xvfz mroonga-3.03.tar.gz
+ mv mroonga-3.03 mariadb-10.0.2/storage/mroonga/
 
 Run "cmake". ::
 
- cd mariadb-10.0.1
+ cd mariadb-10.0.2
  cmake .
 
 Then invoke "make". ::
