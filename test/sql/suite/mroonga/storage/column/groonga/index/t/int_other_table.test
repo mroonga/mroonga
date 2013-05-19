@@ -45,7 +45,8 @@ SELECT *
        FROM Bugs
        WHERE priority = 3;
 
-DROP TABLE Priorities, Bugs;
+DROP TABLE Bugs;
+DROP TABLE Priorities;
 
 DROP DATABASE mroonga;
 
