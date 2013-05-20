@@ -36,7 +36,7 @@ if [ "${MRN_BUNDLED}" = "yes" ]; then
     mv .mroonga/tools ./
     sudo apt-get -qq -y build-dep mysql-server
     # Support MariaDB for now.
-    download_base=http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/${MYSQL_VERSION}
+    download_base=http://ftp.osuosl.org/pub/mariadb/${MYSQL_VERSION}
     tar_gz=${MYSQL_VERSION}.tar.gz
     curl -O ${download_base}/kvm-tarbake-jaunty-x86/${tar_gz}
     tar xzf $tar_gz
