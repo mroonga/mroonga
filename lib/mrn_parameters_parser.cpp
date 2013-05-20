@@ -20,6 +20,8 @@
 
 #include "mrn_parameters_parser.hpp"
 
+#include <mrn_mysql_compat.h>
+
 namespace mrn {
   class Parameter {
   public:
