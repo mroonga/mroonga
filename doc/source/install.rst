@@ -414,6 +414,82 @@ Install::
 
 .. seealso:: `mroonga/homebrew on GitHub <https://github.com/mroonga/homebrew>`_
 
+
+Windows
+-------
+
+Mroonga binary for Windows is provided with MariaDB binary because
+`some changes
+<https://github.com/mroonga/mroonga/tree/master/packages/source/patches>`_
+are needed for building mroonga for Windows.
+
+Installer
+^^^^^^^^^
+
+For 32-bit environment, download
+`mariadb-10.0.2-mroonga-3.04-winx86.msi
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx86.msi>`_
+and run it.
+
+For 64-bit environment, download
+`mariadb-10.0.2-mroonga-3.04-winx64.msi
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx64.msi>`_
+and run it.
+
+Zip
+^^^
+
+For 32-bit environment, download `mariadb-10.0.2-mroonga-3.04-winx86.msi
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx86.msi>`_
+and extract it.
+
+For 64-bit environment, download `mariadb-10.0.2-mroonga-3.04-winx64.msi
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx64.msi>`_
+and extract it.
+
+Install mroonga
+^^^^^^^^^^^^^^^
+
+Start mysqld, connect to it by mysql client, and install it by "INSTALL PLUGIN" command. ::
+
+ mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
+
+If "mroonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
+
+ mysql> SHOW ENGINES;
+ +------------+---------+------------------------------------------------------------+--------------+------+------------+
+ | Engine     | Support | Comment                                                    | Transactions | XA   | Savepoints |
+ +------------+---------+------------------------------------------------------------+--------------+------+------------+
+ | mroonga    | YES     | Fulltext search, column base                               | NO           | NO   | NO         |
+ | MRG_MYISAM | YES     | Collection of identical MyISAM tables                      | NO           | NO   | NO         |
+ | CSV        | YES     | CSV storage engine                                         | NO           | NO   | NO         |
+ | MyISAM     | DEFAULT | Default engine as of MySQL 3.23 with great performance     | NO           | NO   | NO         |
+ | InnoDB     | YES     | Supports transactions, row-level locking, and foreign keys | YES          | YES  | YES        |
+ | MEMORY     | YES     | Hash based, stored in memory, useful for temporary tables  | NO           | NO   | NO         |
+ +------------+---------+------------------------------------------------------------+--------------+------+------------+
+ 6 rows in set (0.00 sec)
+
+Next install UDF (User-Defined Function).
+
+To get the record ID assigned by groonga in INSERT, install last_insert_grn_id function.
+
+Invoke CREATE FUNCTION like the following. ::
+
+ mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga.so';
+
+To enable snippet (keyword in context) UDF, install mroonga_snippet function.
+
+Invoke CREATE FUNCTION like the following. ::
+
+ mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
+
+To enable invoking groonga query from mroonga, install mroonga_command function.
+
+Invoke CREATE FUNCTION like the following. ::
+
+ mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
+
+
 Install from the source code
 ----------------------------
 
