@@ -8387,7 +8387,7 @@ void ha_mroonga::mkdir_p(const char *directory)
           DBUG_PRINT("info",
                      ("mroonga: created directory: <%s>", sub_directory));
           GRN_LOG(ctx, GRN_LOG_INFO, "created directory: <%s>", sub_directory);
-        } else{
+        } else {
           DBUG_PRINT("error",
                      ("mroonga: failed to create directory: <%s>: <%s>",
                       sub_directory, strerror(errno)));
