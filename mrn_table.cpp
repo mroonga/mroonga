@@ -51,7 +51,6 @@ extern "C" {
 
 extern HASH mrn_open_tables;
 extern pthread_mutex_t mrn_open_tables_mutex;
-extern HASH mrn_long_term_share;
 extern char *mrn_default_parser;
 extern char *mrn_default_wrapper_engine;
 extern handlerton *mrn_hton_ptr;
@@ -705,61 +704,6 @@ int mrn_free_share_alloc(
   DBUG_RETURN(0);
 }
 
-void mrn_free_long_term_share(MRN_LONG_TERM_SHARE *long_term_share)
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  my_hash_delete(&mrn_long_term_share, (uchar*) long_term_share);
-  pthread_mutex_destroy(&long_term_share->auto_inc_mutex);
-  my_free(long_term_share, MYF(0));
-  DBUG_VOID_RETURN;
-}
-
-MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
-                                             uint table_name_length,
-                                             int *error)
-{
-  MRN_LONG_TERM_SHARE *long_term_share;
-  char *tmp_name;
-  MRN_DBUG_ENTER_FUNCTION();
-  DBUG_PRINT("info", ("mroonga: table_name=%s", table_name));
-  if (!(long_term_share = (MRN_LONG_TERM_SHARE*)
-    my_hash_search(&mrn_long_term_share, (uchar*) table_name,
-                   table_name_length)))
-  {
-    if (!(long_term_share = (MRN_LONG_TERM_SHARE *)
-      my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
-        &long_term_share, sizeof(*long_term_share),
-        &tmp_name, table_name_length + 1,
-        NullS))
-    ) {
-      *error = HA_ERR_OUT_OF_MEM;
-      goto error_alloc_long_term_share;
-    }
-    long_term_share->table_name = tmp_name;
-    long_term_share->table_name_length = table_name_length;
-    memcpy(long_term_share->table_name, table_name, table_name_length);
-    if (pthread_mutex_init(&long_term_share->auto_inc_mutex,
-                           MY_MUTEX_INIT_FAST))
-    {
-      *error = HA_ERR_OUT_OF_MEM;
-      goto error_init_auto_inc_mutex;
-    }
-    if (my_hash_insert(&mrn_long_term_share, (uchar*) long_term_share))
-    {
-      *error = HA_ERR_OUT_OF_MEM;
-      goto error_hash_insert;
-    }
-  }
-  DBUG_RETURN(long_term_share);
-
-error_hash_insert:
-  pthread_mutex_destroy(&long_term_share->auto_inc_mutex);
-error_init_auto_inc_mutex:
-  my_free(long_term_share, MYF(0));
-error_alloc_long_term_share:
-  DBUG_RETURN(NULL);
-}
-
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
   MRN_SHARE *share;
@@ -863,11 +807,6 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       goto error_init_mutex;
     }
     thr_lock_init(&share->lock);
-    if (!(share->long_term_share = mrn_get_long_term_share(table_name, length,
-                                                           error)))
-    {
-      goto error_get_long_term_share;
-    }
     if (my_hash_insert(&mrn_open_tables, (uchar*) share))
     {
       *error = HA_ERR_OUT_OF_MEM;
@@ -879,7 +818,6 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
   DBUG_RETURN(share);
 
 error_hash_insert:
-error_get_long_term_share:
   pthread_mutex_destroy(&share->mutex);
 error_init_mutex:
 error_parse_table_param:

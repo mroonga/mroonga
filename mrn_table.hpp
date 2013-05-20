@@ -27,51 +27,39 @@ extern "C" {
 
 #include <groonga.h>
 
-typedef struct st_mroonga_long_term_share
-{
-  char                *table_name;
-  uint                table_name_length;
-
-  // for auto_increment (storage mode only)
-  pthread_mutex_t     auto_inc_mutex;
-  bool                auto_inc_inited;
-  ulonglong           auto_inc_value;
-} MRN_LONG_TERM_SHARE;
-
 typedef struct st_mroonga_share
 {
-  char                *table_name;
-  uint                table_name_length;
-  uint                use_count;
-  pthread_mutex_t     mutex;
-  THR_LOCK            lock;
-  TABLE_SHARE         *table_share;
-  TABLE_SHARE         *wrap_table_share;
-  MRN_LONG_TERM_SHARE *long_term_share;
+  char               *table_name;
+  uint               table_name_length;
+  uint               use_count;
+  pthread_mutex_t    mutex;
+  THR_LOCK           lock;
+  TABLE_SHARE        *table_share;
+  TABLE_SHARE        *wrap_table_share;
 
-  char                *engine;
-  int                 engine_length;
-  char                *default_tokenizer;
-  int                 default_tokenizer_length;
-  plugin_ref          plugin;
-  handlerton          *hton;
-  char                **index_table;
-  char                **key_parser;
-  char                **col_flags;
-  char                **col_type;
-  uint                *index_table_length;
-  uint                *key_parser_length;
-  uint                *col_flags_length;
-  uint                *col_type_length;
-  uint                *wrap_key_nr;
-  uint                wrap_keys;
-  uint                base_keys;
-  KEY                 *wrap_key_info;
-  KEY                 *base_key_info;
-  uint                wrap_primary_key;
-  uint                base_primary_key;
-  bool                wrapper_mode;
-  bool                disable_keys;
+  char               *engine;
+  int                engine_length;
+  char               *default_tokenizer;
+  int                default_tokenizer_length;
+  plugin_ref         plugin;
+  handlerton         *hton;
+  char               **index_table;
+  char               **key_parser;
+  char               **col_flags;
+  char               **col_type;
+  uint               *index_table_length;
+  uint               *key_parser_length;
+  uint               *col_flags_length;
+  uint               *col_type_length;
+  uint               *wrap_key_nr;
+  uint               wrap_keys;
+  uint               base_keys;
+  KEY                *wrap_key_info;
+  KEY                *base_key_info;
+  uint               wrap_primary_key;
+  uint               base_primary_key;
+  bool               wrapper_mode;
+  bool               disable_keys;
 } MRN_SHARE;
 
 struct st_mrn_alter_share
@@ -152,10 +140,6 @@ int mrn_parse_column_param(MRN_SHARE *share, TABLE *table);
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error);
 int mrn_free_share_alloc(MRN_SHARE *share);
 int mrn_free_share(MRN_SHARE *share);
-MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
-                                             uint table_name_length,
-                                             int *error);
-void mrn_free_long_term_share(MRN_LONG_TERM_SHARE *long_term_share);
 TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error);
 TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path,
                                         int *error);
