@@ -9,7 +9,7 @@ ensure-rsync-path:
 	fi
 
 download: ensure-rsync-path
-	rsync -avz --progress $(RSYNC_PATH)/windows/groonga/ files
+	rsync -avz --progress $(RSYNC_PATH)/windows/mroonga/ files
 
 upload: ensure-rsync-path
-	rsync -avz --progress --delete files/ $(RSYNC_PATH)/windows/groonga
+	rsync -avz --progress --delete files/ $(RSYNC_PATH)/windows/mroonga
