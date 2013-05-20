@@ -48,7 +48,9 @@ packages/sourceディレクトリへと移動し、make downloadでアップス�
 パッケージの作成
 ----------------
 
-Linux 用にパッケージを作成する必要があります。パッケージは以下の 2 種類に分けることが可能です。
+Linux と Windows 用にパッケージを作成する必要があります。
+
+Linux 用のパッケージは以下の 2 種類に分けることが可能です。
 
 1. Debian 系
 2. Red Hat 系
@@ -108,6 +110,88 @@ Red Hat 系
  $ make sign
  $ make update
  $ make upload
+
+Windows
+^^^^^^^
+
+MariaDB 本体を `多少変更しないといけない
+<https://github.com/mroonga/mroonga/tree/master/packages/source/patches>`_
+ため、Windows 版は MariaDB に mroonga/groonga/groonga-normalizer-mysql
+をバンドルしたパッケージとして作成します。
+
+まず、 Linux 上で Windows 用のソースを作成します。::
+
+ $ cd packages/source
+ $ make archive
+
+これで、
+``packages/source/files/mariadb-10.0.2-with-mroonga-3.04.zip`` というよ
+うなファイルができます。これを Windows にコピーします。
+
+ここからは Windows 上での作業です。
+
+まず、 `Windows Installer XML (WiX) <http://wix.codeplex.com/>`_ をイン
+ストールします。これは MSI 形式のインストーラーを作るために必要です。
+
+WiX をインストールしたらビルドします。
+
+まずは、 Linux からコピーしてきた zip を展開します。 Windows 標準の
+zip 展開機能はとても遅いので 7-zip などを使いましょう。展開時間が数 10
+倍違います。 zip を展開すると ``mariadb-10.0.2-with-mroonga-3.04`` とい
+うようなフォルダがでてきます。これを ``source`` に名前を変更します。::
+
+ > move mariadb-10.0.2-with-mroonga-3.04 source
+
+ソースを準備したらビルドします。ビルド方法は `バッチファイル
+<https://github.com/mroonga/mroonga/tree/master/packages/windows>`_ 書
+かれています。抜粋すると以下の通りです。32bit用と64bit用の両方作成して
+いるので似たような手順が2回でていることに注意してください。::
+
+ > mkdir build-32
+ > cd build-32
+ > cmake ..\source -G "Visual Studio 10" > config.log
+ > cmake --build . --config RelWithDebInfo > build.log
+ > cmake --build . --config RelWithDebInfo --target msi > msi.log
+ > move *.msi ..\
+ > cmake --build . --config RelWithDebInfo --target package > zip.log
+ > move *.zip ..\
+ > cd ..
+ > mkdir build-64
+ > cd build-64
+ > cmake ..\source -G "Visual Studio 10 Win64" > config.log
+ > cmake --build . --config RelWithDebInfo > build.log
+ > cmake --build . --config RelWithDebInfo --target msi > msi.log
+ > move *.msi ..\
+ > cmake --build . --config RelWithDebInfo --target package > zip.log
+ > move *.zip ..\
+ > cd ..
+
+それぞれ30分くらいずつかかります。そのため、合計で1時間くらいかかります。
+
+完了するとカレントディレクトリに以下のようなファイルができます。
+
+* mariadb-10.0.2-win32.msi
+* mariadb-10.0.2-win32.zip
+* mariadb-10.0.2-winx64.msi
+* mariadb-10.0.2-winx64.zip
+
+これを Linux にコピーします。例えば、 Ruby で HTTP サーバーを立てて
+Linux 側からダウンロードする場合は以下のようにします。::
+
+ > ruby -run -e httpd -- --do-not-reverse-lookup --port 10080 .
+
+Linux 側でファイル名を変更します。これだと mroonga のバージョンがわかり
+づらいからです。（TODO: 自動化したい。 zip 内のフォルダ名も変えたい。）::
+
+ $ mv mariadb-10.0.2-win32.msi \
+     packages/windows/files/mroonga/mariadb-10.0.2-with-mroonga-3.04-win32.msi
+ $ mv mariadb-10.0.2-win32.zip \
+     packages/windows/files/mroonga/mariadb-10.0.2-with-mroonga-3.04-win32.zip
+ $ mv mariadb-10.0.2-winx64.msi \
+     packages/windows/files/mroonga/mariadb-10.0.2-with-mroonga-3.04-winx64.msi
+ $ mv mariadb-10.0.2-winx64.zip \
+     packages/windows/files/mroonga/mariadb-10.0.2-with-mroonga-3.04-winx64.zip
+
 
 タグを打つ
 ----------
