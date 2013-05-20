@@ -3824,7 +3824,10 @@ void ha_mroonga::ensure_database_directory()
   if (!mrn_database_path_prefix)
     DBUG_VOID_RETURN;
 
-  const char *last_path_separator = strrchr(mrn_database_path_prefix, '/');
+  const char *last_path_separator;
+  last_path_separator = strrchr(mrn_database_path_prefix, FN_LIBCHAR);
+  if (!last_path_separator)
+    last_path_separator = strrchr(mrn_database_path_prefix, FN_LIBCHAR2);
   if (!last_path_separator)
     DBUG_VOID_RETURN;
   if (mrn_database_path_prefix == last_path_separator)
@@ -3861,7 +3864,8 @@ int ha_mroonga::ensure_database_create(const char *name)
       // creating new database
       GRN_LOG(ctx, GRN_LOG_INFO,
               "database not found. creating...(%s)", mapper.db_path());
-      if (strncmp(name, "./", 2) == 0) {
+      if (name[0] == FN_CURLIB &&
+          (name[1] == FN_LIBCHAR || name[1] == FN_LIBCHAR2)) {
         ensure_database_directory();
       }
       db = grn_db_create(&mrn_ctx, mapper.db_path(), NULL);
@@ -8377,7 +8381,9 @@ void ha_mroonga::mkdir_p(const char *directory)
   char sub_directory[MRN_MAX_PATH_SIZE];
   sub_directory[0] = '\0';
   while (true) {
-    if (directory[i] == '/' || directory[i] == '\0') {
+    if (directory[i] == FN_LIBCHAR ||
+        directory[i] == FN_LIBCHAR2 ||
+        directory[i] == '\0') {
       sub_directory[i] = '\0';
       struct stat directory_status;
       if (stat(sub_directory, &directory_status) != 0) {
