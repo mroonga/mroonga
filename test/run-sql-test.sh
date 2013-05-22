@@ -174,7 +174,7 @@ test_suite_names=""
 test_names=""
 while [ $# -gt 0 ]; do
     case "$1" in
-	--manual-gdb)
+	--manual-gdb|--debug)
 	    n_processors=1
 	    break
 	    ;;
