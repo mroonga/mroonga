@@ -1013,6 +1013,7 @@ private:
   int storage_optimize(THD* thd, HA_CHECK_OPT* check_opt);
   bool wrapper_is_fatal_error(int error_num, uint flags);
   bool storage_is_fatal_error(int error_num, uint flags);
+  bool wrapper_is_comment_changed(TABLE *table1, TABLE *table2);
   bool wrapper_check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                           uint table_changes);
   bool storage_check_if_incompatible_data(HA_CREATE_INFO *create_info,

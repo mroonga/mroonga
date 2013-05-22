@@ -12682,6 +12682,23 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
 }
 
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
+bool ha_mroonga::wrapper_is_comment_changed(TABLE *table1, TABLE *table2)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  if (table1->s->comment.length != table2->s->comment.length) {
+    DBUG_RETURN(true);
+  }
+
+  if (strncmp(table1->s->comment.str,
+              table2->s->comment.str,
+              table1->s->comment.length) == 0) {
+    DBUG_RETURN(false);
+  } else {
+    DBUG_RETURN(true);
+  }
+}
+
 enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info)
@@ -12691,6 +12708,10 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   uint i;
   enum_alter_inplace_result result_mroonga = HA_ALTER_INPLACE_NO_LOCK;
   DBUG_PRINT("info", ("mroonga: handler_flags=%lu", ha_alter_info->handler_flags));
+
+  if (wrapper_is_comment_changed(table, altered_table)) {
+    DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
+  }
   if (
     (ha_alter_info->handler_flags & Alter_inplace_info::ADD_INDEX) &&
     (ha_alter_info->handler_flags &
