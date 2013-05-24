@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-02 12:56\n"
+"POT-Creation-Date: 2013-05-24 15:30\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -495,11 +495,12 @@ msgstr ""
 msgid "You can specify one of following values as the parser."
 msgstr "You can specify one of following values as the parser."
 
-# 9214384687aa405eb46ae8c8b015cd62
+# c794f6e8203e4489a14fb7810332de47
 #: ../../../source/userguide/storage.rst:101
+#: ../../../source/userguide/wrapper.rst:111
 msgid ""
 "It does not tokenize at all. Use \"off\" if you want to treat ``content`` as "
-"is."
+"is. For example, this value is used for prefix search."
 msgstr ""
 
 # fa216b185e984d7c900ffea84f0b5cc3
@@ -1400,10 +1401,10 @@ msgid ""
 msgstr ""
 "You can check if this optimisation works or not by the status variable. ::"
 
-# b1cdb1201d204330b6e4ed282f14c6ee
+# b94afbce37f24256b7c3bc795d9cf55b
 #: ../../../source/userguide/storage.rst:516
 msgid ""
-"Each time the optimisation for counting rows works, ``mroonga_count_skip`` "
+"Each time the optimisation for counting rows works, ``Mroonga_count_skip`` "
 "status variable value is increased."
 msgstr ""
 
@@ -1485,13 +1486,11 @@ msgstr ""
 "In the SELECT example below, ORDER BY LIMIT is processed in groonga only and "
 "the minimal records are passed to MySQL. ::"
 
-# ea0ac4ae9150459b96f8f0060518f51b
-# 655751d615a445b297c7eb2068086c6d
+# 7397f40d6f3e40959d999132d3fa582d
 #: ../../../source/userguide/storage.rst:545
-#: ../../../source/userguide/wrapper.rst:286
 msgid ""
 "Each time the optimisation for counting rows works, "
-"``mroonga_fast_order_limit`` status variable value is increased."
+"``Mroonga_fast_order_limit`` status variable value is increased."
 msgstr ""
 
 # 40837c2fbcec427db5e898c6eacec629
@@ -1607,13 +1606,6 @@ msgstr ""
 "Wrapper mode supports the followings, that are not supported in storage mode "
 "for now. * null value"
 
-# c794f6e8203e4489a14fb7810332de47
-#: ../../../source/userguide/wrapper.rst:111
-msgid ""
-"It does not tokenize at all. Use \"off\" if you want to treat ``content`` as "
-"is. For example, this value is used for prefix search."
-msgstr ""
-
 # 6328d27e015448dd8ecf36efd8208f23
 # bd4f25db45634e568ba34b1f54e9c752
 #: ../../../source/userguide/wrapper.rst:172
@@ -1628,4 +1620,12 @@ msgstr ""
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and "
 "the minimal records are passed to MySQL. ::"
+msgstr ""
+
+# ea0ac4ae9150459b96f8f0060518f51b
+# 655751d615a445b297c7eb2068086c6d
+#: ../../../source/userguide/wrapper.rst:286
+msgid ""
+"Each time the optimisation for counting rows works, "
+"``mroonga_fast_order_limit`` status variable value is increased."
 msgstr ""
