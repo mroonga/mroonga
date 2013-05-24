@@ -78,4 +78,9 @@
 #  define GTS_TABLE 0
 #endif
 
+/* For MySQL 5.1. MySQL 5.1 doesn't have FN_LIBCHAR2. */
+#ifndef FN_LIBCHAR2
+#  define FN_LIBCHAR2 '/'
+#endif
+
 #endif /* _mrn_mysql_compat_h */
