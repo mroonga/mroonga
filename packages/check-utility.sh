@@ -80,7 +80,7 @@ setup_rpm_architectures ()
 setup_codes ()
 {
     if [ -z "$CODES" ]; then
-	CODES="squeeze wheezy unstable lucid oneiric precise quantal raring"
+	CODES="squeeze wheezy unstable lucid precise quantal raring"
     fi
 }
 setup_deb_architectures ()
