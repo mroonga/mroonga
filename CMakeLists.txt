@@ -252,4 +252,4 @@ configure_file(
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/data/install.sql.in"
-  "${PROJECT_BInARY_DIR}/data/install.sql")
+  "${PROJECT_BINARY_DIR}/data/install.sql")
