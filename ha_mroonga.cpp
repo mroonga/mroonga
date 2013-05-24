@@ -3790,8 +3790,12 @@ void ha_mroonga::ensure_database_directory()
 
   const char *last_path_separator;
   last_path_separator = strrchr(mrn_database_path_prefix, FN_LIBCHAR);
+  // For MySQL 5.1. MySQL 5.1 doesn't have FN_LIBCHAR2.
+  // We will remove this ifdef check after we drop MySQL 5.1 support!!!
+#ifdef FN_LIBCHAR2
   if (!last_path_separator)
     last_path_separator = strrchr(mrn_database_path_prefix, FN_LIBCHAR2);
+#endif
   if (!last_path_separator)
     DBUG_VOID_RETURN;
   if (mrn_database_path_prefix == last_path_separator)
