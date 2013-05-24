@@ -3,6 +3,57 @@
 News
 ====
 
+.. _release-3-04:
+
+Release 3.04 - 2013/5/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Improved MariaDB 10.0.2 support. [#1729]
+* [doc] Updated supported SQL command list. [Reported by Y.Kentaro]
+* Dropped Ubuntu 11.10 (Oneiric Ocelot) support.
+* Supported mroonga buidled MariaDB package. [#1691]
+* [wrapper] Stopped to parse column comment. [Reported by Y.Kentaro]
+* Stopped to validate normal column comment. [Reported by Y.Kentaro]
+* Improved the way to detect directory which contains libmysqlservices.a.
+  [Reported by Y.Kentaro]
+* Improved to accept free style normal comment in table/index comment.
+  [Suggested by Y.Kentaro]
+* Supported "W" pragma. This feature is derived from
+  `Tritonn <http://qwik.jp/senna/query.html>`_.
+* Supported ``mroonga_command()`` without the current database.
+  [Reported by Y.Kentaro]
+* Improved to use ``auto_increment`` value for creating table. [#1741]
+* Improved to keep the value of ``auto_increment`` even though latest record is
+  deleted. [#1738]
+* [doc] Added documentation how to install mroonga on Windows.
+
+Fixes
+^^^^^
+
+* Fixed a bug that empty query search causes SEGV.
+  [groonga-dev,01346] [Reported by Nakai Kanako]
+* Fixed a package build error depend on directory existence.
+  [groonga-dev,01335] [Reported by WING] [Patch by yoku ts]
+* Fixed a missing build dependency to ``groonga-normalizer-mysql`` package.
+  [Patch by Y.Kentaro]
+* Fixed a bug that the value of ``Mroonga_log_level`` can't be set in my.cnf.
+  [groonga-dev,01379] [Reported by Kazuhiro Isobe]
+* Fixed a memory leak that default tokenizer is not correctly freed.
+* [wrapper] Fixed a bug that comment is changed for alter table without
+  engine name causes a missing table. [Reported by Y.Kentaro]
+
+Thanks
+^^^^^^
+
+* Y.Kentaro
+* Nakai Kanako
+* WING
+* yoku ts
+* Kazuhiro Isobe
+
 .. _release-3-03:
 
 Release 3.03 - 2013/4/29
