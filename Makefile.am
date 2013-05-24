@@ -28,7 +28,8 @@ SUBDIRS =					\
 	test					\
 	doc					\
 	tools					\
-	packages
+	packages				\
+	data
 
 EXTRA_DIST =					\
 	AUTHORS					\

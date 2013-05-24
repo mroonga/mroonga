@@ -35,6 +35,8 @@ else()
   set(MRN_GROONGA_BUNDLED FALSE)
 endif()
 
+set(MRN_PLUGIN_SUFFIX ${CMAKE_SHARED_LIBRARY_SUFFIX})
+
 if(MRN_BUNDLED)
   set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR}/storage/mroonga)
 else()
@@ -247,3 +249,7 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result.in"
   "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result"
   NEWLINE_STYLE LF)
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/data/install.sql.in"
+  "${PROJECT_BInARY_DIR}/data/install.sql")

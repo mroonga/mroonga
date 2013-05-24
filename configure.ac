@@ -84,6 +84,16 @@ if test "$GCC" = "yes"; then
   CHECK_BUILD_FLAG([-Wno-deprecated])
 fi
 
+AC_MSG_CHECKING(for the suffix of plugin shared libraries)
+shrext_cmds=$(./libtool --config | grep '^shrext_cmds=')
+eval $shrext_cmds
+module=yes eval MRN_PLUGIN_SUFFIX="$shrext_cmds"
+AC_MSG_RESULT($MRN_PLUGIN_SUFFIX)
+if test -z "$MRN_PLUGIN_SUFFIX"; then
+  AC_MSG_ERROR([can't detect plugin suffix])
+fi
+AC_SUBST(MRN_PLUGIN_SUFFIX)
+
 AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_MSG_CHECKING([mysql source])
 
@@ -419,6 +429,7 @@ AC_CONFIG_FILES([
   doc/locale/en/LC_MESSAGES/Makefile
   doc/locale/ja/Makefile
   doc/locale/ja/LC_MESSAGES/Makefile
+  data/Makefile
 ])
 AC_OUTPUT([
   config.sh
@@ -428,4 +439,5 @@ AC_OUTPUT([
   packages/debian/control
   packages/rpm/centos/mysql-mroonga.spec
   packages/rpm/fedora/mysql-mroonga.spec
+  data/install.sql
 ])
