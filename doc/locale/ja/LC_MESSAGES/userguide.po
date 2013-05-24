@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-02 13:04\n"
+"POT-Creation-Date: 2013-05-24 16:06\n"
 "PO-Revision-Date: 2013-05-07 19:09+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -1617,7 +1617,6 @@ msgstr ""
 # 896eb0c6e2e44639acdfdce395a01156
 # 8433d9941d7d432ea3ddd33f78cf49e8
 #: ../../../source/userguide/storage.rst:545
-#: ../../../source/userguide/wrapper.rst:286
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``Mroonga_fast_order_limit`` status variable value is increased."
@@ -1759,3 +1758,13 @@ msgid ""
 msgstr ""
 "例えば以下のSELECT文では ORDER BY LIMIT は、mroonga内で処理され、必要最小限の"
 "レコードだけをMySQLに返却しています。 ::"
+
+# 896eb0c6e2e44639acdfdce395a01156
+# 8433d9941d7d432ea3ddd33f78cf49e8
+#: ../../../source/userguide/wrapper.rst:286
+msgid ""
+"Each time the optimisation for counting rows works, "
+"``mroonga_fast_order_limit`` status variable value is increased."
+msgstr ""
+"ORDER BY LIMIT 高速化の処理が行われる度に ``Mroonga_fast_order_limit`` ステー"
+"タス変数がインクリメントされます。"
