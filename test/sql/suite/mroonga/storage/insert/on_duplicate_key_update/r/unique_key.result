@@ -26,5 +26,5 @@ ON DUPLICATE KEY UPDATE title = "cloudy day (duplicated)";
 SELECT * FROM diaries;
 id	day	title
 1	2012-02-14	rainy day (duplicated)
-2	2012-02-15	cloudy day
+3	2012-02-15	cloudy day
 DROP TABLE diaries;

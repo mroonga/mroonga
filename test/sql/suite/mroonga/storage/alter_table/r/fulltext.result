@@ -48,5 +48,5 @@ diaries	CREATE TABLE `diaries` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title_index` (`title`),
   FULLTEXT KEY `body_index` (`body`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
 DROP TABLE diaries;
