@@ -116,6 +116,7 @@ List of available SQL commands
 * ``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST("*D+ word ..." IN BOOLEAN MODE)``
 * ``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST("*D- word ..." IN BOOLEAN MODE)``
 * ``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST("*DOR word ..." IN BOOLEAN MODE)``
+* ``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST("*W word ..." IN BOOLEAN MODE)``
 * ``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST("+word ..." IN BOOLEAN MODE)``
 * ``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST("..." IN BOOLEAN MODE)``
 * ``SELECT * FROM table_name WHERE MATCH(column_name, ...) AGAINST("..." IN BOOLEAN MODE)``
