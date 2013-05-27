@@ -14,7 +14,7 @@ Improvements
 * Improved MariaDB 10.0.2 support. [#1729]
 * [doc] Updated supported SQL command list. [Reported by Y.Kentaro]
 * Dropped Ubuntu 11.10 (Oneiric Ocelot) support.
-* Supported mroonga buidled MariaDB package. [#1691]
+* Supported mroonga bundled MariaDB package. [#1691]
 * [wrapper] Stopped to parse column comment. [Reported by Y.Kentaro]
 * Stopped to validate normal column comment. [Reported by Y.Kentaro]
 * Improved the way to detect directory which contains libmysqlservices.a.
@@ -29,6 +29,8 @@ Improvements
 * Improved to keep the value of ``auto_increment`` even though latest record is
   deleted. [#1738]
 * [doc] Added documentation how to install mroonga on Windows.
+* Added install SQL for initial setup. [groonga-dev,01434]
+  [Suggested by Kazuhiko]
 
 Fixes
 ^^^^^
@@ -53,6 +55,7 @@ Thanks
 * WING
 * yoku ts
 * Kazuhiro Isobe
+* Kazuhiko
 
 .. _release-3-03:
 
