@@ -431,12 +431,12 @@ and run it.
 Zip
 ^^^
 
-For 32-bit environment, download `mariadb-10.0.2-mroonga-3.04-win32.msi
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-win32.msi>`_
+For 32-bit environment, download `mariadb-10.0.2-mroonga-3.04-win32.zip
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-win32.zip>`_
 and extract it.
 
-For 64-bit environment, download `mariadb-10.0.2-mroonga-3.04-winx64.msi
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx64.msi>`_
+For 64-bit environment, download `mariadb-10.0.2-mroonga-3.04-winx64.zip
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx64.zip>`_
 and extract it.
 
 Install mroonga
