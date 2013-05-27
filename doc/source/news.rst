@@ -31,6 +31,7 @@ Improvements
 * [doc] Added documentation how to install mroonga on Windows.
 * Added install SQL for initial setup. [groonga-dev,01434]
   [Suggested by Kazuhiko]
+* Supported Debian 8.0 (jessie)
 
 Fixes
 ^^^^^
