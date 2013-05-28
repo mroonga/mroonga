@@ -17,6 +17,10 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/news.rst \
 	$(top_srcdir)/doc/source/news/0.x.rst \
 	$(top_srcdir)/doc/source/reference.rst \
+	$(top_srcdir)/doc/source/reference/limitations.rst \
+	$(top_srcdir)/doc/source/reference/server_variables.rst \
+	$(top_srcdir)/doc/source/reference/sql_commands.rst \
+	$(top_srcdir)/doc/source/reference/status_variables.rst \
 	$(top_srcdir)/doc/source/userguide.rst \
 	$(top_srcdir)/doc/source/userguide/mroonga_snippet_example.inc \
 	$(top_srcdir)/doc/source/userguide/mroonga_snippet_syntax.inc \
@@ -54,6 +58,10 @@ source_files_relative_from_doc_dir = \
 	source/news.rst \
 	source/news/0.x.rst \
 	source/reference.rst \
+	source/reference/limitations.rst \
+	source/reference/server_variables.rst \
+	source/reference/sql_commands.rst \
+	source/reference/status_variables.rst \
 	source/userguide.rst \
 	source/userguide/mroonga_snippet_example.inc \
 	source/userguide/mroonga_snippet_syntax.inc \
@@ -135,6 +143,10 @@ html_files_relative_from_locale_dir = \
 	html/_sources/news.txt \
 	html/_sources/news/0.x.txt \
 	html/_sources/reference.txt \
+	html/_sources/reference/limitations.txt \
+	html/_sources/reference/server_variables.txt \
+	html/_sources/reference/sql_commands.txt \
+	html/_sources/reference/status_variables.txt \
 	html/_sources/userguide.txt \
 	html/_sources/userguide/storage.txt \
 	html/_sources/userguide/wrapper.txt \
@@ -175,6 +187,10 @@ html_files_relative_from_locale_dir = \
 	html/news/0.x.html \
 	html/objects.inv \
 	html/reference.html \
+	html/reference/limitations.html \
+	html/reference/server_variables.html \
+	html/reference/sql_commands.html \
+	html/reference/status_variables.html \
 	html/search.html \
 	html/searchindex.js \
 	html/userguide.html \
