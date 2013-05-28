@@ -24,7 +24,7 @@
 
 Name:		mysql-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	0%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL.
 
 Group:		Applications/Databases
