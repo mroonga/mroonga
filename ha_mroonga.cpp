@@ -7850,14 +7850,14 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
 
   uint n_weights = 0;
   while (keyword_length >= 1) {
-    uint n_used_keyword_length = 0;
     if (n_weights >= 1) {
       if (keyword[0] != ',') {
         break;
       }
-      n_used_keyword_length = 1;
-      keyword += n_used_keyword_length;
+      uint n_used_keyword_length = 1;
+      *consumed_keyword_length += n_used_keyword_length;
       keyword_length -= n_used_keyword_length;
+      keyword += n_used_keyword_length;
       if (keyword_length == 0) {
         break;
       }
@@ -7871,6 +7871,7 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
     }
 
     int weight = 1;
+    uint n_used_keyword_length = 0;
     if (keyword_length >= 2 && keyword[1] == ':') {
       const char *weight_start = keyword + 2;
       const char *keyword_end = keyword + keyword_length;
@@ -7879,9 +7880,9 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
       if (weight_start == keyword_rest) {
         break;
       }
-      n_used_keyword_length += keyword_rest - keyword;
+      n_used_keyword_length = keyword_rest - keyword;
     } else {
-      n_used_keyword_length += 1;
+      n_used_keyword_length = 1;
     }
     *consumed_keyword_length += n_used_keyword_length;
     keyword_length -= n_used_keyword_length;
