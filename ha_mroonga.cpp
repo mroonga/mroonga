@@ -1510,7 +1510,7 @@ static time_t get_timegm(struct tm *time)
   DBUG_RETURN(sec_t + mrn_utc_diff_in_seconds);
 }
 
-static long long int mrn_tm_to_grn_time(struct tm *time, int usec)
+static long long int mrn_tm_to_grn_time(struct tm *time, int usec, int *truncated)
 {
   MRN_DBUG_ENTER_FUNCTION();
   long long int grn_time;
@@ -1519,13 +1519,14 @@ static long long int mrn_tm_to_grn_time(struct tm *time, int usec)
   DBUG_PRINT("info", ("mroonga: usec=%d", usec));
   if (sec == -1) {
     grn_time = 0;
+    *truncated = 1;
   } else {
     grn_time = GRN_TIME_PACK(sec, usec);
   }
   DBUG_RETURN(grn_time);
 }
 
-static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
+static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time, int *truncated)
 {
   MRN_DBUG_ENTER_FUNCTION();
   int usec = mysql_time->second_part;
@@ -1537,12 +1538,22 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
       struct tm date;
       memset(&date, 0, sizeof(struct tm));
       date.tm_year = mysql_time->year - TM_YEAR_BASE;
-      date.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
-      date.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
+      if (mysql_time->month > 0) {
+        date.tm_mon = mysql_time->month - 1;
+      } else {
+        date.tm_mon = 0;
+        *truncated = 1;
+      }
+      if (mysql_time->day > 0) {
+        date.tm_mday = mysql_time->day;
+      } else {
+        date.tm_mday = 1;
+        *truncated = 1;
+      }
       DBUG_PRINT("info", ("mroonga: tm_year=%d", date.tm_year));
       DBUG_PRINT("info", ("mroonga: tm_mon=%d", date.tm_mon));
       DBUG_PRINT("info", ("mroonga: tm_mday=%d", date.tm_mday));
-      grn_time = mrn_tm_to_grn_time(&date, usec);
+      grn_time = mrn_tm_to_grn_time(&date, usec, truncated);
     }
     break;
   case MYSQL_TIMESTAMP_DATETIME:
@@ -1551,8 +1562,18 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
       struct tm datetime;
       memset(&datetime, 0, sizeof(struct tm));
       datetime.tm_year = mysql_time->year - TM_YEAR_BASE;
-      datetime.tm_mon = mysql_time->month > 0 ? mysql_time->month - 1 : 0;
-      datetime.tm_mday = mysql_time->day > 0 ? mysql_time->day : 1;
+      if (mysql_time->month > 0) {
+        datetime.tm_mon = mysql_time->month - 1;
+      } else {
+        datetime.tm_mon = 0;
+        *truncated = 1;
+      }
+      if (mysql_time->day > 0) {
+        datetime.tm_mday = mysql_time->day;
+      } else {
+        datetime.tm_mday = 1;
+        *truncated = 1;
+      }
       datetime.tm_hour = mysql_time->hour;
       datetime.tm_min = mysql_time->minute;
       datetime.tm_sec = mysql_time->second;
@@ -1562,7 +1583,7 @@ static long long int mrn_mysql_time_to_grn_time(MYSQL_TIME *mysql_time)
       DBUG_PRINT("info", ("mroonga: tm_hour=%d", datetime.tm_hour));
       DBUG_PRINT("info", ("mroonga: tm_min=%d", datetime.tm_min));
       DBUG_PRINT("info", ("mroonga: tm_sec=%d", datetime.tm_sec));
-      grn_time = mrn_tm_to_grn_time(&datetime, usec);
+      grn_time = mrn_tm_to_grn_time(&datetime, usec, truncated);
     }
     break;
   case MYSQL_TIMESTAMP_TIME:
@@ -9492,7 +9513,7 @@ int ha_mroonga::generic_store_bulk_timestamp(Field *field, grn_obj *buf)
 int ha_mroonga::generic_store_bulk_date(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
   long long int date_value = field->val_int();
   struct tm date;
   memset(&date, 0, sizeof(struct tm));
@@ -9500,7 +9521,11 @@ int ha_mroonga::generic_store_bulk_date(Field *field, grn_obj *buf)
   date.tm_mon = date_value / 100 % 100 - 1;
   date.tm_mday = date_value % 100;
   int usec = 0;
-  long long int time = mrn_tm_to_grn_time(&date, usec);
+  long long int time = mrn_tm_to_grn_time(&date, usec, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -9509,11 +9534,15 @@ int ha_mroonga::generic_store_bulk_date(Field *field, grn_obj *buf)
 int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
   Field_time *time_field = (Field_time *)field;
   MYSQL_TIME mysql_time;
   time_field->get_time(&mysql_time);
-  long long int time = mrn_mysql_time_to_grn_time(&mysql_time);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -9522,11 +9551,15 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
 int ha_mroonga::generic_store_bulk_datetime(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
   Field_datetime *datetime_field = (Field_datetime *)field;
   MYSQL_TIME mysql_time;
   datetime_field->get_time(&mysql_time);
-  long long int time = mrn_mysql_time_to_grn_time(&mysql_time);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -9535,7 +9568,7 @@ int ha_mroonga::generic_store_bulk_datetime(Field *field, grn_obj *buf)
 int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
 
   int year;
   if (field->field_length == 2) {
@@ -9552,7 +9585,11 @@ int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
   date.tm_mday = 1;
 
   int usec = 0;
-  long long int time = mrn_tm_to_grn_time(&date, usec);
+  long long int time = mrn_tm_to_grn_time(&date, usec, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -9562,11 +9599,15 @@ int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
 int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
   Field_datetimef *datetimef_field = (Field_datetimef *)field;
   MYSQL_TIME mysql_time;
   datetimef_field->get_time(&mysql_time);
-  long long int time = mrn_mysql_time_to_grn_time(&mysql_time);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -9577,10 +9618,14 @@ int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
 int ha_mroonga::generic_store_bulk_time2(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
   MYSQL_TIME mysql_time;
   field->get_time(&mysql_time);
-  long long int time = mrn_mysql_time_to_grn_time(&mysql_time);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -9590,11 +9635,15 @@ int ha_mroonga::generic_store_bulk_time2(Field *field, grn_obj *buf)
 int ha_mroonga::generic_store_bulk_new_date(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
   Field_newdate *newdate_field = (Field_newdate *)field;
   MYSQL_TIME mysql_date;
   newdate_field->get_time(&mysql_date);
-  long long int time = mrn_mysql_time_to_grn_time(&mysql_date);
+  long long int time = mrn_mysql_time_to_grn_time(&mysql_date, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
@@ -10338,7 +10387,7 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
                                              uchar *buf, uint *size)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
   long long int time;
   MYSQL_TIME mysql_time;
 #ifdef MRN_MARIADB_P
@@ -10366,7 +10415,11 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
   my_time_t my_time = uint4korr(key);
   my_tz_UTC->gmt_sec_to_TIME(&mysql_time, my_time);
 #endif
-  time = mrn_mysql_time_to_grn_time(&mysql_time);
+  time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   memcpy(buf, &time, 8);
   *size = 8;
   DBUG_RETURN(error);
@@ -10380,6 +10433,7 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
   long long int time;
 #ifdef MRN_MARIADB_P
   MYSQL_TIME mysql_time;
+  int truncated = 0;
   if (field->decimals() == 0) {
     long long int packed_time = sint3korr(key);
     mysql_time.neg = false;
@@ -10410,7 +10464,11 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
     uint fuzzy_date = 0;
     unpacker.get_date(&mysql_time, fuzzy_date);
   }
-  time = mrn_mysql_time_to_grn_time(&mysql_time);
+  time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
 #else
   int mysql_time = (int)sint3korr(key);
   int sec =
@@ -10429,7 +10487,7 @@ int ha_mroonga::storage_encode_key_year(Field *field, const uchar *key,
                                         uchar *buf, uint *size)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
   int year = (int)key[0];
 
   struct tm datetime;
@@ -10438,7 +10496,11 @@ int ha_mroonga::storage_encode_key_year(Field *field, const uchar *key,
   datetime.tm_mon = 0;
   datetime.tm_mday = 1;
   int usec = 0;
-  long long int time = mrn_tm_to_grn_time(&datetime, usec);
+  long long int time = mrn_tm_to_grn_time(&datetime, usec, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   memcpy(buf, &time, 8);
   *size = 8;
   DBUG_RETURN(error);
@@ -10448,7 +10510,7 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
                                             uchar *buf, uint *size)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
   long long int time;
 #ifdef MRN_MARIADB_P
   if (field->decimals() > 0) {
@@ -10465,7 +10527,7 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
     MYSQL_TIME mysql_time;
     uint fuzzy_date = 0;
     unpacker.get_date(&mysql_time, fuzzy_date);
-    time = mrn_mysql_time_to_grn_time(&mysql_time);
+    time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   } else
 #endif
   {
@@ -10482,7 +10544,11 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
     date.tm_min = part2 / 100 % 100;
     date.tm_sec = part2 % 100;
     int usec = 0;
-    time = mrn_tm_to_grn_time(&date, usec);
+    time = mrn_tm_to_grn_time(&date, usec, &truncated);
+  }
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &time, 8);
   *size = 8;
@@ -10494,14 +10560,18 @@ int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
                                               uchar *buf, uint *size)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
 
   Field_timestampf *timestamp2_field = (Field_timestampf *)field;
   struct timeval tm;
   my_timestamp_from_binary(&tm, key, timestamp2_field->decimals());
   MYSQL_TIME mysql_time;
   my_tz_UTC->gmt_sec_to_TIME(&mysql_time, tm);
-  long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time);
+  long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   memcpy(buf, &grn_time, 8);
   *size = 8;
 
@@ -10514,14 +10584,18 @@ int ha_mroonga::storage_encode_key_datetime2(Field *field, const uchar *key,
                                              uchar *buf, uint *size)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
 
   Field_datetimef *datetime2_field = (Field_datetimef *)field;
   longlong packed_time =
     my_datetime_packed_from_binary(key, datetime2_field->decimals());
   MYSQL_TIME mysql_time;
   TIME_from_longlong_datetime_packed(&mysql_time, packed_time);
-  long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time);
+  long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   memcpy(buf, &grn_time, 8);
   *size = 8;
 
@@ -10534,14 +10608,18 @@ int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
                                          uchar *buf, uint *size)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error = 0;
+  int error = 0, truncated = 0;
 
   Field_timef *time2_field = (Field_timef *)field;
   longlong packed_time =
     my_time_packed_from_binary(key, time2_field->decimals());
   MYSQL_TIME mysql_time;
   TIME_from_longlong_time_packed(&mysql_time, packed_time);
-  long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time);
+  long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
+  if (truncated) {
+    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                       WARN_DATA_TRUNCATED, 1);
+  }
   memcpy(buf, &grn_time, 8);
   *size = 8;
 
@@ -10621,7 +10699,7 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
                                    uchar *buf, uint *size)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error;
+  int error, truncated = 0;
   const uchar *ptr = key;
 
   error = mrn_change_encoding(ctx, field->charset());
@@ -10704,7 +10782,11 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       date.tm_mon = encoded_date / 32 % 16 - 1;
       date.tm_mday = encoded_date % 32;
       int usec = 0;
-      long long int time = mrn_tm_to_grn_time(&date, usec);
+      long long int time = mrn_tm_to_grn_time(&date, usec, &truncated);
+      if (truncated) {
+        field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+                           WARN_DATA_TRUNCATED, 1);
+      }
       memcpy(buf, &time, 8);
       *size = 8;
       break;
