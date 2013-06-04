@@ -9523,7 +9523,7 @@ int ha_mroonga::generic_store_bulk_date(Field *field, grn_obj *buf)
   int usec = 0;
   long long int time = mrn_tm_to_grn_time(&date, usec, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9540,7 +9540,7 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
   time_field->get_time(&mysql_time);
   long long int time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9557,7 +9557,7 @@ int ha_mroonga::generic_store_bulk_datetime(Field *field, grn_obj *buf)
   datetime_field->get_time(&mysql_time);
   long long int time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9587,7 +9587,7 @@ int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
   int usec = 0;
   long long int time = mrn_tm_to_grn_time(&date, usec, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9605,7 +9605,7 @@ int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
   datetimef_field->get_time(&mysql_time);
   long long int time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9623,7 +9623,7 @@ int ha_mroonga::generic_store_bulk_time2(Field *field, grn_obj *buf)
   field->get_time(&mysql_time);
   long long int time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9641,7 +9641,7 @@ int ha_mroonga::generic_store_bulk_new_date(Field *field, grn_obj *buf)
   newdate_field->get_time(&mysql_date);
   long long int time = mrn_mysql_time_to_grn_time(&mysql_date, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -10417,7 +10417,7 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
 #endif
   time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &time, 8);
@@ -10466,7 +10466,7 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
   }
   time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
 #else
@@ -10498,7 +10498,7 @@ int ha_mroonga::storage_encode_key_year(Field *field, const uchar *key,
   int usec = 0;
   long long int time = mrn_tm_to_grn_time(&datetime, usec, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &time, 8);
@@ -10547,7 +10547,7 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
     time = mrn_tm_to_grn_time(&date, usec, &truncated);
   }
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &time, 8);
@@ -10569,7 +10569,7 @@ int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
   my_tz_UTC->gmt_sec_to_TIME(&mysql_time, tm);
   long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &grn_time, 8);
@@ -10593,7 +10593,7 @@ int ha_mroonga::storage_encode_key_datetime2(Field *field, const uchar *key,
   TIME_from_longlong_datetime_packed(&mysql_time, packed_time);
   long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &grn_time, 8);
@@ -10617,7 +10617,7 @@ int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
   TIME_from_longlong_time_packed(&mysql_time, packed_time);
   long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &grn_time, 8);
@@ -10784,7 +10784,7 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       int usec = 0;
       long long int time = mrn_tm_to_grn_time(&date, usec, &truncated);
       if (truncated) {
-        field->set_warning(MYSQL_ERROR::WARN_LEVEL_WARN,
+        field->set_warning(Sql_condition::WARN_LEVEL_WARN,
                            WARN_DATA_TRUNCATED, 1);
       }
       memcpy(buf, &time, 8);
