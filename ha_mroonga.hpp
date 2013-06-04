@@ -174,6 +174,10 @@ extern "C" {
 #  endif
 #endif
 
+#if MYSQL_VERSION_ID >= 50612 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_POINT_XY
+#endif
+
 #if defined(_WIN32) || defined(_WIN64)
 #  define MRN_API __declspec(dllexport)
 #else

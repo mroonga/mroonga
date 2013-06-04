@@ -1463,7 +1463,14 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
     {
       Gis_point *point = (Gis_point *)geometry;
       double latitude = 0.0, longitude = 0.0;
+#ifdef MRN_HAVE_POINT_XY
+      point_xy xy;
+      point->get_xy(&xy);
+      longitude = xy.x;
+      latitude = xy.y;
+#else
       point->get_xy(&longitude, &latitude);
+#endif
       grn_obj_reinit(ctx, buf, GRN_DB_WGS84_GEO_POINT, 0);
       GRN_GEO_POINT_SET(ctx, buf,
                         GRN_GEO_DEGREE2MSEC(latitude),
