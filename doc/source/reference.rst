@@ -11,3 +11,4 @@ Reference
    reference/server_variables
    reference/status_variables
    reference/limitations
+   reference/troubleshooting
