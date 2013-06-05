@@ -25,7 +25,15 @@ To check whether maximum number of mappings are exceeded, you can investigate th
 
 If this issue is fixed by modifying the value of ``vm.max_map_count``, it's exactly the reason.
 
-You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm.max_map_count=LARGER VALUE``.
+As groonga allocates memory chunks each 256KB, you can estimate the size of database you can handle by following formula::
+
+  (database size) = vm.max_map_count * (memory chunks)
+
+If you want to handle over 16GB groonga database, you must specify at least 65536 as the value of ``vm.max_map_count``::
+
+  database size (16GB) = vm.max_map_count (65536) * memory chunks (256KB)
+
+You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm.max_map_count=65536``.
 
 Then save the configuration value to ``/etc/sysctl.conf`` or ``/etc/sysctl.d/*.conf``.
 

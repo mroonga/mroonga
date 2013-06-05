@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-05 05:42+0000\n"
+"POT-Creation-Date: 2013-06-05 07:10+0000\n"
 "PO-Revision-Date: 2013-05-07 19:09+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -1342,35 +1342,60 @@ msgstr "マッピング最大数を超過していないか?"
 # c7b159431f2141e4939d201550a8060f
 #: ../../../source/reference/troubleshooting.rst:22
 msgid "To check there are enough free memory, you can use ``vmstat`` command."
-msgstr "十分な空きメモリがあるかを調べるために、``vmstat`` コマンドを使うことができます。"
+msgstr ""
+"十分な空きメモリがあるかを調べるために、``vmstat`` コマンドを使うことができま"
+"す。"
 
 # e511a9aec856486c939cffa529a50bce
 #: ../../../source/reference/troubleshooting.rst:24
 msgid ""
 "To check whether maximum number of mappings are exceeded, you can "
 "investigate the value of ``vm.max_map_count``."
-msgstr "最大マッピング数を超過しているかどうかを確認するために、"
-" ``vm.max_map_count`` の値を調べることができます。"
+msgstr ""
+"最大マッピング数を超過しているかどうかを確認するために、 ``vm."
+"max_map_count`` の値を調べることができます。"
 
 # f6dc1f1fab1e407cb06220688b204d84
 #: ../../../source/reference/troubleshooting.rst:26
 msgid ""
 "If this issue is fixed by modifying the value of ``vm.max_map_count``, it's "
 "exactly the reason."
-msgstr "もしこの問題が ``vm.max_map_count`` の値を調整することで解決するなら、これが原因です。"
+msgstr ""
+"もしこの問題が ``vm.max_map_count`` の値を調整することで解決するなら、これが"
+"原因です。"
 
-# 09425fdf5e29416dbc2784c8cbcfb54e
+# f38eb39bbee24fdf8f9d61bd8def53c3
 #: ../../../source/reference/troubleshooting.rst:28
 msgid ""
-"You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm."
-"max_map_count=LARGER VALUE``."
+"As groonga allocates memory chunks each 256KB, you can estimate the size of "
+"database you can handle by following formula::"
 msgstr ""
-"``sudo sysctl -w vm.max_map_count=大きめの値`` を実行して"
-"一時的に ``vm.max_map_count`` を調整することができます。"
+"groongaはメモリを256KBごとに確保するので、扱えるデータベースのサイズを以下の式で見積ることができます::"
+
+# 29334292995747adb9c881d9916641f7
+#: ../../../source/reference/troubleshooting.rst:32
+msgid ""
+"If you want to handle over 16GB groonga database, you must specify at least "
+"65536 as the value of ``vm.max_map_count``::"
+msgstr ""
+"16GBを超えるデータベースを扱うには、少くとも65536を ``vm.max_map_count`` の"
+"値として設定しないといけません。"
+
+
+# 09425fdf5e29416dbc2784c8cbcfb54e
+#: ../../../source/reference/troubleshooting.rst:36
+msgid ""
+"You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm."
+"max_map_count=65536``."
+msgstr ""
+"``sudo sysctl -w vm.max_map_count=65536`` で一時的に ``vm."
+"max_map_count`` を調整することができます。"
 
 # 3c990562958040a2a9f011b2858b46ae
-#: ../../../source/reference/troubleshooting.rst:30
+#: ../../../source/reference/troubleshooting.rst:38
 msgid ""
 "Then save the configuration value to ``/etc/sysctl.conf`` or ``/etc/sysctl.d/"
 "*.conf``."
-msgstr "その後、設定値を  ``/etc/sysctl.conf`` もしくは ``/etc/sysctl.d/""*.conf`` へと保存します。"
+msgstr ""
+"その後、設定値を  ``/etc/sysctl.conf`` もしくは ``/etc/sysctl.d/*.conf`` へと"
+"保存します。"

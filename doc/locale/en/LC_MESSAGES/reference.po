@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-05 05:42+0000\n"
+"POT-Creation-Date: 2013-06-05 07:07+0000\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -1318,15 +1318,29 @@ msgid ""
 "exactly the reason."
 msgstr ""
 
-# c8614da779e942fda0fc6fcf5aac22cd
+# 8ec317a6aedc40fc988971f947d745c1
 #: ../../../source/reference/troubleshooting.rst:28
 msgid ""
+"As groonga allocates memory chunks each 256KB, you can estimate the size of "
+"database you can handle by following formula::"
+msgstr ""
+
+# 3307bc3626674ca1bcf78f35a9336489
+#: ../../../source/reference/troubleshooting.rst:32
+msgid ""
+"If you want to handle over 16GB groonga database, you must specify at least "
+"65536 as the value of ``vm.max_map_count``::"
+msgstr ""
+
+# c8614da779e942fda0fc6fcf5aac22cd
+#: ../../../source/reference/troubleshooting.rst:36
+msgid ""
 "You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm."
-"max_map_count=LARGER VALUE``."
+"max_map_count=65536``."
 msgstr ""
 
 # cc41c94a206f4bfd8cce3d17346a32d4
-#: ../../../source/reference/troubleshooting.rst:30
+#: ../../../source/reference/troubleshooting.rst:38
 msgid ""
 "Then save the configuration value to ``/etc/sysctl.conf`` or ``/etc/sysctl.d/"
 "*.conf``."
