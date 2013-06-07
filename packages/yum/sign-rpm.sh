@@ -21,7 +21,8 @@ run()
     fi
 }
 
-get_unsigned_rpm() {
+get_unsigned_rpm()
+{
 	files=$(rpm --checksig $1 | grep -v 'gpg OK' | cut -d":" -f1)
 	echo $files
 }
