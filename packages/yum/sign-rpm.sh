@@ -23,8 +23,8 @@ run()
 
 get_unsigned_rpm()
 {
-	files=$(rpm --checksig $1 | grep -v 'gpg OK' | cut -d":" -f1)
-	echo $files
+    files=$(rpm --checksig $1 | grep -v 'gpg OK' | cut -d":" -f1)
+    echo $files
 }
 export -f get_unsigned_rpm
 
