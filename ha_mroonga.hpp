@@ -715,6 +715,7 @@ private:
                              grn_obj *grn_table, MRN_SHARE *tmp_share);
   int close_databases();
   void ensure_database_directory();
+  int ensure_normalizers_register();
   int ensure_database_create(const char *name);
   int ensure_database_open(const char *name);
   int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,

@@ -3874,6 +3874,26 @@ void ha_mroonga::ensure_database_directory()
   DBUG_VOID_RETURN;
 }
 
+int ha_mroonga::ensure_normalizers_register()
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+#ifdef WITH_GROONGA_NORMALIZER_MYSQL
+  {
+    grn_obj *mysql_normalizer;
+    mysql_normalizer = grn_ctx_get(ctx, "NormalizerMySQLGeneralCI", -1);
+    if (mysql_normalizer) {
+      grn_obj_unlink(ctx, mysql_normalizer);
+    } else {
+      grn_plugin_register(ctx, GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME);
+    }
+  }
+#endif
+
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::ensure_database_create(const char *name)
 {
   int error;
@@ -3919,17 +3939,7 @@ int ha_mroonga::ensure_database_create(const char *name)
   }
   pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db);
-#ifdef WITH_GROONGA_NORMALIZER_MYSQL
-  {
-    grn_obj *mysql_normalizer;
-    mysql_normalizer = grn_ctx_get(ctx, "NormalizerMySQLGeneralCI", -1);
-    if (mysql_normalizer) {
-      grn_obj_unlink(ctx, mysql_normalizer);
-    } else {
-      grn_plugin_register(ctx, GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME);
-    }
-  }
-#endif
+  error = ensure_normalizers_register();
 
   DBUG_RETURN(error);
 }
@@ -3959,9 +3969,7 @@ int ha_mroonga::ensure_database_open(const char *name)
   }
   pthread_mutex_unlock(&mrn_db_mutex);
   grn_ctx_use(ctx, db);
-#ifdef WITH_GROONGA_NORMALIZER_MYSQL
-  grn_plugin_register(ctx, GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME);
-#endif
+  error = ensure_normalizers_register();
 
   DBUG_RETURN(error);
 }
