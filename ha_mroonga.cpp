@@ -6001,6 +6001,10 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     }
 
     grn_obj *index_column = grn_index_columns[i];
+    if (!index_column) {
+      /* disable keys */
+      continue;
+    }
 
     uint j;
     for (j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
@@ -6248,6 +6252,12 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
       continue;
     }
 
+    grn_obj *index_column = grn_index_columns[i];
+    if (!index_column) {
+      /* disable keys */
+      continue;
+    }
+
     GRN_BULK_REWIND(&old_key);
     grn_bulk_space(ctx, &old_key, key_info.key_length);
     for (uint j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
@@ -6286,7 +6296,6 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data, uchar *new_data)
                                        (uchar *)(GRN_TEXT_VALUE(&new_encoded_key)),
                                        &new_encoded_key_length);
 
-    grn_obj *index_column = grn_index_columns[i];
     grn_rc rc;
     rc = grn_column_index_update(ctx, index_column, record_id, 1,
                                  &old_encoded_key, &new_encoded_key);
@@ -6440,6 +6449,10 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
     }
 
     grn_obj *index_column = grn_index_columns[i];
+    if (!index_column) {
+      /* disable keys */
+      continue;
+    }
 
     uint j;
     for (j = 0; j < KEY_N_KEY_PARTS(&key_info); j++) {
@@ -6525,6 +6538,12 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
       continue;
     }
 
+    grn_obj *index_column = grn_index_columns[i];
+    if (!index_column) {
+      /* disable keys */
+      continue;
+    }
+
     GRN_BULK_REWIND(&key);
     grn_bulk_space(ctx, &key, key_info.key_length);
     key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
@@ -6540,7 +6559,6 @@ int ha_mroonga::storage_delete_row_index(const uchar *buf)
                                        (uchar *)(GRN_TEXT_VALUE(&encoded_key)),
                                        &encoded_key_length);
 
-    grn_obj *index_column = grn_index_columns[i];
     grn_rc rc;
     rc = grn_column_index_update(ctx, index_column, record_id, 1,
                                  &encoded_key, NULL);
@@ -11522,6 +11540,11 @@ int ha_mroonga::wrapper_truncate_index()
       continue;
     }
 
+    if (!grn_index_tables[i]) {
+      /* disable keys */
+      continue;
+    }
+
     rc = grn_table_truncate(ctx, grn_index_tables[i]);
     if (rc) {
       error = ER_ERROR_ON_WRITE;
@@ -11593,6 +11616,11 @@ int ha_mroonga::storage_truncate_index()
       !(key_info.flags & HA_NOSAME) &&
       (KEY_N_KEY_PARTS(&key_info) == 1 || (key_info.flags & HA_FULLTEXT))
     ) {
+      continue;
+    }
+
+    if (!grn_index_tables[i]) {
+      /* disable keys */
       continue;
     }
 
