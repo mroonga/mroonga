@@ -1464,7 +1464,7 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
       Gis_point *point = (Gis_point *)geometry;
       double latitude = 0.0, longitude = 0.0;
 #ifdef MRN_HAVE_POINT_XY
-      point_xy xy;
+      point_xy xy(0.0, 0.0);
       point->get_xy(&xy);
       longitude = xy.x;
       latitude = xy.y;
