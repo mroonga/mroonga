@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-24 16:06\n"
-"PO-Revision-Date: 2013-05-07 19:09+0900\n"
+"PO-Revision-Date: 2013-06-10 17:34+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1524,9 +1524,7 @@ msgstr ""
 #: ../../../source/userguide/wrapper.rst:276
 msgid ""
 "You can check if this optimisation works or not by the status variable. ::"
-msgstr ""
-"行カウント高速化の処理が行われたかどうかはステータス変数で確認することもでき"
-"ます。::"
+msgstr "この最適化処理が行われたかどうかはステータス変数で確認することもできます。::"
 
 # 62d888995ebd4115b5a021aee5ca04f1
 #: ../../../source/userguide/storage.rst:516
