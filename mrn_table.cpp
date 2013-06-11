@@ -53,6 +53,7 @@ extern "C" {
 extern HASH mrn_open_tables;
 extern pthread_mutex_t mrn_open_tables_mutex;
 extern HASH mrn_long_term_share;
+extern pthread_mutex_t mrn_long_term_share_mutex;
 extern char *mrn_default_parser;
 extern char *mrn_default_wrapper_engine;
 extern handlerton *mrn_hton_ptr;
@@ -709,7 +710,10 @@ int mrn_free_share_alloc(
 void mrn_free_long_term_share(MRN_LONG_TERM_SHARE *long_term_share)
 {
   MRN_DBUG_ENTER_FUNCTION();
+  {
+    mrn::Lock lock(&mrn_long_term_share_mutex);
   my_hash_delete(&mrn_long_term_share, (uchar*) long_term_share);
+  }
   pthread_mutex_destroy(&long_term_share->auto_inc_mutex);
   my_free(long_term_share, MYF(0));
   DBUG_VOID_RETURN;
@@ -723,6 +727,7 @@ MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
   char *tmp_name;
   MRN_DBUG_ENTER_FUNCTION();
   DBUG_PRINT("info", ("mroonga: table_name=%s", table_name));
+  mrn::Lock lock(&mrn_long_term_share_mutex);
   if (!(long_term_share = (MRN_LONG_TERM_SHARE*)
     my_hash_search(&mrn_long_term_share, (uchar*) table_name,
                    table_name_length)))

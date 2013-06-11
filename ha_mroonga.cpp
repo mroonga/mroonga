@@ -147,6 +147,7 @@ handlerton *mrn_hton_ptr;
 HASH mrn_open_tables;
 pthread_mutex_t mrn_open_tables_mutex;
 HASH mrn_long_term_share;
+pthread_mutex_t mrn_long_term_share_mutex;
 
 /* internal variables */
 static grn_ctx mrn_ctx;
@@ -1779,6 +1780,9 @@ static int mrn_init(void *p)
                    mrn_open_tables_get_key, 0, 0)) {
     goto error_allocated_open_tables_hash_init;
   }
+  if ((pthread_mutex_init(&mrn_long_term_share_mutex, NULL) != 0)) {
+    goto error_allocated_long_term_share_mutex_init;
+  }
   if (my_hash_init(&mrn_long_term_share, system_charset_info, 32, 0, 0,
                    mrn_long_term_share_get_key, 0, 0)) {
     goto error_allocated_long_term_share_hash_init;
@@ -1787,6 +1791,8 @@ static int mrn_init(void *p)
   return 0;
 
 error_allocated_long_term_share_hash_init:
+  pthread_mutex_destroy(&mrn_long_term_share_mutex);
+error_allocated_long_term_share_mutex_init:
   my_hash_free(&mrn_open_tables);
 error_allocated_open_tables_hash_init:
   pthread_mutex_destroy(&mrn_open_tables_mutex);
@@ -1846,6 +1852,7 @@ static int mrn_deinit(void *p)
   }
 
   my_hash_free(&mrn_long_term_share);
+  pthread_mutex_destroy(&mrn_long_term_share_mutex);
   my_hash_free(&mrn_open_tables);
   pthread_mutex_destroy(&mrn_open_tables_mutex);
   my_hash_free(&mrn_allocated_thds);
