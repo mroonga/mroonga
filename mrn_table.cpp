@@ -1051,7 +1051,6 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
       mrn::Lock lock(&mrn_allocated_thds_mutex);
     if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
     {
-      pthread_mutex_unlock(&mrn_allocated_thds_mutex);
       free(slot_data);
       DBUG_RETURN(NULL);
     }
