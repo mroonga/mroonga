@@ -712,7 +712,7 @@ void mrn_free_long_term_share(MRN_LONG_TERM_SHARE *long_term_share)
   MRN_DBUG_ENTER_FUNCTION();
   {
     mrn::Lock lock(&mrn_long_term_share_mutex);
-  my_hash_delete(&mrn_long_term_share, (uchar*) long_term_share);
+    my_hash_delete(&mrn_long_term_share, (uchar*) long_term_share);
   }
   pthread_mutex_destroy(&long_term_share->auto_inc_mutex);
   my_free(long_term_share, MYF(0));
