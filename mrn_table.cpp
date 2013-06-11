@@ -30,6 +30,7 @@
 #include "mrn_sys.hpp"
 #include "mrn_table.hpp"
 #include "mrn_mysql_compat.h"
+#include <mrn_lock.hpp>
 
 #if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
 #  define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), TRUE)
@@ -770,7 +771,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
   TABLE_SHARE *wrap_table_share;
   MRN_DBUG_ENTER_FUNCTION();
   length = (uint) strlen(table_name);
-  pthread_mutex_lock(&mrn_open_tables_mutex);
+  mrn::Lock lock(&mrn_open_tables_mutex);
   if (!(share = (MRN_SHARE*) my_hash_search(&mrn_open_tables,
     (uchar*) table_name, length)))
   {
@@ -875,7 +876,6 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     }
   }
   share->use_count++;
-  pthread_mutex_unlock(&mrn_open_tables_mutex);
   DBUG_RETURN(share);
 
 error_hash_insert:
@@ -886,14 +886,13 @@ error_parse_table_param:
   mrn_free_share_alloc(share);
   my_free(share, MYF(0));
 error_alloc_share:
-  pthread_mutex_unlock(&mrn_open_tables_mutex);
   DBUG_RETURN(NULL);
 }
 
 int mrn_free_share(MRN_SHARE *share)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  pthread_mutex_lock(&mrn_open_tables_mutex);
+  mrn::Lock lock(&mrn_open_tables_mutex);
   if (!--share->use_count)
   {
     my_hash_delete(&mrn_open_tables, (uchar*) share);
@@ -904,7 +903,6 @@ int mrn_free_share(MRN_SHARE *share)
     pthread_mutex_destroy(&share->mutex);
     my_free(share, MYF(0));
   }
-  pthread_mutex_unlock(&mrn_open_tables_mutex);
   DBUG_RETURN(0);
 }
 
@@ -1049,14 +1047,15 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
     slot_data->alter_connect_string = NULL;
     slot_data->alter_comment = NULL;
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
-    pthread_mutex_lock(&mrn_allocated_thds_mutex);
+    {
+      mrn::Lock lock(&mrn_allocated_thds_mutex);
     if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
     {
       pthread_mutex_unlock(&mrn_allocated_thds_mutex);
       free(slot_data);
       DBUG_RETURN(NULL);
     }
-    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
+    }
   }
   DBUG_RETURN(slot_data);
 }
