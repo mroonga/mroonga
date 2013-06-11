@@ -546,17 +546,17 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
     int log_file_open_errno = 0;
     {
       mrn::Lock lock(&mrn_log_mutex);
-    FILE *new_log_file;
-    new_log_file = fopen(new_value, "a");
-    if (new_log_file) {
-      if (mrn_log_file_opened) {
-        fclose(mrn_log_file);
+      FILE *new_log_file;
+      new_log_file = fopen(new_value, "a");
+      if (new_log_file) {
+        if (mrn_log_file_opened) {
+          fclose(mrn_log_file);
+        }
+        mrn_log_file = new_log_file;
+        mrn_log_file_opened = true;
+      } else {
+        log_file_open_errno = errno;
       }
-      mrn_log_file = new_log_file;
-      mrn_log_file_opened = true;
-    } else {
-      log_file_open_errno = errno;
-    }
     }
 
     if (log_file_open_errno == 0) {
@@ -1262,7 +1262,7 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) NULL;
     {
       mrn::Lock lock(&mrn_allocated_thds_mutex);
-    my_hash_delete(&mrn_allocated_thds, (uchar*) thd);
+      my_hash_delete(&mrn_allocated_thds, (uchar*) thd);
     }
   }
   DBUG_RETURN(0);
@@ -1838,11 +1838,11 @@ static int mrn_deinit(void *p)
 
   {
     mrn::Lock lock(&mrn_open_tables_mutex);
-  while ((long_term_share = (MRN_LONG_TERM_SHARE *)
-    my_hash_element(&mrn_long_term_share, 0)))
-  {
-    mrn_free_long_term_share(long_term_share);
-  }
+    while ((long_term_share = (MRN_LONG_TERM_SHARE *)
+      my_hash_element(&mrn_long_term_share, 0)))
+    {
+      mrn_free_long_term_share(long_term_share);
+    }
   }
 
   my_hash_free(&mrn_long_term_share);
@@ -3908,34 +3908,34 @@ int ha_mroonga::ensure_database_create(const char *name)
   mrn::PathMapper mapper(name, mrn_database_path_prefix);
   {
     mrn::Lock lock(&mrn_db_mutex);
-  if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
-    if (stat(mapper.db_path(), &db_stat)) {
-      // creating new database
-      GRN_LOG(ctx, GRN_LOG_INFO,
-              "database not found. creating...(%s)", mapper.db_path());
-      if (name[0] == FN_CURLIB &&
-          (name[1] == FN_LIBCHAR || name[1] == FN_LIBCHAR2)) {
-        ensure_database_directory();
+    if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
+      if (stat(mapper.db_path(), &db_stat)) {
+        // creating new database
+        GRN_LOG(ctx, GRN_LOG_INFO,
+                "database not found. creating...(%s)", mapper.db_path());
+        if (name[0] == FN_CURLIB &&
+            (name[1] == FN_LIBCHAR || name[1] == FN_LIBCHAR2)) {
+          ensure_database_directory();
+        }
+        db = grn_db_create(&mrn_ctx, mapper.db_path(), NULL);
+        if (mrn_ctx.rc) {
+          pthread_mutex_unlock(&mrn_db_mutex);
+          error = ER_CANT_CREATE_TABLE;
+          my_message(error, mrn_ctx.errbuf, MYF(0));
+          DBUG_RETURN(error);
+        }
+      } else {
+        // opening existing database
+        db = grn_db_open(&mrn_ctx, mapper.db_path());
+        if (mrn_ctx.rc) {
+          pthread_mutex_unlock(&mrn_db_mutex);
+          error = ER_CANT_OPEN_FILE;
+          my_message(error, mrn_ctx.errbuf, MYF(0));
+          DBUG_RETURN(error);
+        }
       }
-      db = grn_db_create(&mrn_ctx, mapper.db_path(), NULL);
-      if (mrn_ctx.rc) {
-        pthread_mutex_unlock(&mrn_db_mutex);
-        error = ER_CANT_CREATE_TABLE;
-        my_message(error, mrn_ctx.errbuf, MYF(0));
-        DBUG_RETURN(error);
-      }
-    } else {
-      // opening existing database
-      db = grn_db_open(&mrn_ctx, mapper.db_path());
-      if (mrn_ctx.rc) {
-        pthread_mutex_unlock(&mrn_db_mutex);
-        error = ER_CANT_OPEN_FILE;
-        my_message(error, mrn_ctx.errbuf, MYF(0));
-        DBUG_RETURN(error);
-      }
+      mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
     }
-    mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
-  }
   }
   grn_ctx_use(ctx, db);
   error = ensure_normalizers_register();
@@ -3957,16 +3957,16 @@ int ha_mroonga::ensure_database_open(const char *name)
   mrn::PathMapper mapper(name, mrn_database_path_prefix);
   {
     mrn::Lock lock(&mrn_db_mutex);
-  if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
-    db = grn_db_open(&mrn_ctx, mapper.db_path());
-    if (ctx->rc) {
-      pthread_mutex_unlock(&mrn_db_mutex);
-      error = ER_CANT_OPEN_FILE;
-      my_message(error, ctx->errbuf, MYF(0));
-      DBUG_RETURN(error);
+    if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
+      db = grn_db_open(&mrn_ctx, mapper.db_path());
+      if (ctx->rc) {
+        pthread_mutex_unlock(&mrn_db_mutex);
+        error = ER_CANT_OPEN_FILE;
+        my_message(error, ctx->errbuf, MYF(0));
+        DBUG_RETURN(error);
+      }
+      mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
     }
-    mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
-  }
   }
   grn_ctx_use(ctx, db);
   error = ensure_normalizers_register();
@@ -4910,10 +4910,10 @@ int ha_mroonga::storage_info(uint flag)
     MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
     {
       mrn::Lock lock(&long_term_share->auto_inc_mutex);
-    storage_get_auto_increment(variables->auto_increment_offset,
-                               variables->auto_increment_increment, 1,
-                               &stats.auto_increment_value,
-                               &nb_reserved_values);
+      storage_get_auto_increment(variables->auto_increment_offset,
+                                 variables->auto_increment_increment, 1,
+                                 &stats.auto_increment_value,
+                                 &nb_reserved_values);
     }
     if (next_number_field_is_null) {
       table->next_number_field = NULL;
@@ -5673,11 +5673,11 @@ int ha_mroonga::storage_write_row(uchar *buf)
       }
       {
         mrn::Lock lock(&long_term_share->auto_inc_mutex);
-      if (long_term_share->auto_inc_value <= nr) {
-        long_term_share->auto_inc_value = nr + 1;
-        DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
-          long_term_share->auto_inc_value));
-      }
+        if (long_term_share->auto_inc_value <= nr) {
+          long_term_share->auto_inc_value = nr + 1;
+          DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
+            long_term_share->auto_inc_value));
+        }
       }
     }
   }
@@ -6192,11 +6192,11 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       }
       {
         mrn::Lock lock(&long_term_share->auto_inc_mutex);
-      if (long_term_share->auto_inc_value <= nr) {
-        long_term_share->auto_inc_value = nr + 1;
-        DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
-          long_term_share->auto_inc_value));
-      }
+        if (long_term_share->auto_inc_value <= nr) {
+          long_term_share->auto_inc_value = nr + 1;
+          DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
+            long_term_share->auto_inc_value));
+        }
       }
     }
   }
