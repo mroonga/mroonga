@@ -1049,11 +1049,11 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
     {
       mrn::Lock lock(&mrn_allocated_thds_mutex);
-    if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
-    {
-      free(slot_data);
-      DBUG_RETURN(NULL);
-    }
+      if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
+      {
+        free(slot_data);
+        DBUG_RETURN(NULL);
+      }
     }
   }
   DBUG_RETURN(slot_data);
