@@ -543,9 +543,10 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
             "log file is changed: <%s> -> <%s>",
             *old_value_ptr, new_value);
 
-    pthread_mutex_lock(&mrn_log_mutex);
-    FILE *new_log_file;
     int log_file_open_errno = 0;
+    {
+      mrn::Lock lock(&mrn_log_mutex);
+    FILE *new_log_file;
     new_log_file = fopen(new_value, "a");
     if (new_log_file) {
       if (mrn_log_file_opened) {
@@ -556,7 +557,7 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
     } else {
       log_file_open_errno = errno;
     }
-    pthread_mutex_unlock(&mrn_log_mutex);
+    }
 
     if (log_file_open_errno == 0) {
       GRN_LOG(&ctx, GRN_LOG_NOTICE,
@@ -1226,7 +1227,7 @@ static void mrn_drop_db(const char *path)
 {
   MRN_DBUG_ENTER_FUNCTION();
   mrn::PathMapper mapper(path, mrn_database_path_prefix);
-  pthread_mutex_lock(&mrn_db_mutex);
+  mrn::Lock lock(&mrn_db_mutex);
   grn_obj *db = NULL;
   if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
     struct stat dummy;
@@ -1241,7 +1242,6 @@ static void mrn_drop_db(const char *path)
     }
   }
   mrn_hash_remove(&mrn_ctx, mrn_hash, mapper.db_name());
-  pthread_mutex_unlock(&mrn_db_mutex);
   DBUG_VOID_RETURN;
 }
 
@@ -1260,9 +1260,10 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
     mrn_clear_alter_share(thd);
     free(p);
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) NULL;
-    pthread_mutex_lock(&mrn_allocated_thds_mutex);
+    {
+      mrn::Lock lock(&mrn_allocated_thds_mutex);
     my_hash_delete(&mrn_allocated_thds, (uchar*) thd);
-    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
+    }
   }
   DBUG_RETURN(0);
 }
@@ -1272,10 +1273,9 @@ static bool mrn_flush_logs(handlerton *hton)
   MRN_DBUG_ENTER_FUNCTION();
   bool result = 0;
   if (mrn_log_file_opened) {
-    pthread_mutex_lock(&mrn_log_mutex);
+    mrn::Lock lock(&mrn_log_mutex);
     fclose(mrn_log_file);
     mrn_log_file = fopen(mrn_log_file_path, "a");
-    pthread_mutex_unlock(&mrn_log_mutex);
   }
   DBUG_RETURN(result);
 }
@@ -1825,7 +1825,7 @@ static int mrn_deinit(void *p)
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
 
   if (thd && thd_sql_command(thd) == SQLCOM_UNINSTALL_PLUGIN) {
-    pthread_mutex_lock(&mrn_allocated_thds_mutex);
+    mrn::Lock lock(&mrn_allocated_thds_mutex);
     while ((tmp_thd = (THD *) my_hash_element(&mrn_allocated_thds, 0)))
     {
       mrn_clear_alter_share(tmp_thd);
@@ -1834,16 +1834,16 @@ static int mrn_deinit(void *p)
       *thd_ha_data(tmp_thd, mrn_hton_ptr) = (void *) NULL;
       my_hash_delete(&mrn_allocated_thds, (uchar *) tmp_thd);
     }
-    pthread_mutex_unlock(&mrn_allocated_thds_mutex);
   }
 
-  pthread_mutex_lock(&mrn_open_tables_mutex);
+  {
+    mrn::Lock lock(&mrn_open_tables_mutex);
   while ((long_term_share = (MRN_LONG_TERM_SHARE *)
     my_hash_element(&mrn_long_term_share, 0)))
   {
     mrn_free_long_term_share(long_term_share);
   }
-  pthread_mutex_unlock(&mrn_open_tables_mutex);
+  }
 
   my_hash_free(&mrn_long_term_share);
   my_hash_free(&mrn_open_tables);
@@ -3112,12 +3112,11 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   MRN_DBUG_ENTER_METHOD();
 
   if (info->auto_increment_value) {
-    pthread_mutex_lock(&long_term_share->auto_inc_mutex);
+    mrn::Lock lock(&long_term_share->auto_inc_mutex);
     long_term_share->auto_inc_value = info->auto_increment_value;
     DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
       long_term_share->auto_inc_value));
     long_term_share->auto_inc_inited = TRUE;
-    pthread_mutex_unlock(&long_term_share->auto_inc_mutex);
   }
 
   error = storage_create_validate_pseudo_column(table);
@@ -3811,7 +3810,7 @@ int ha_mroonga::close_databases()
   MRN_DBUG_ENTER_METHOD();
 
   int error = 0;
-  pthread_mutex_lock(&mrn_db_mutex);
+  mrn::Lock lock(&mrn_db_mutex);
 
   grn_hash_cursor *hash_cursor;
   hash_cursor = grn_hash_cursor_open(&mrn_ctx, mrn_hash,
@@ -3843,7 +3842,6 @@ int ha_mroonga::close_databases()
   }
   grn_hash_cursor_close(&mrn_ctx, hash_cursor);
 
-  pthread_mutex_unlock(&mrn_db_mutex);
   DBUG_RETURN(error);
 }
 
@@ -3908,7 +3906,8 @@ int ha_mroonga::ensure_database_create(const char *name)
     DBUG_RETURN(error);
 
   mrn::PathMapper mapper(name, mrn_database_path_prefix);
-  pthread_mutex_lock(&mrn_db_mutex);
+  {
+    mrn::Lock lock(&mrn_db_mutex);
   if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
     if (stat(mapper.db_path(), &db_stat)) {
       // creating new database
@@ -3937,7 +3936,7 @@ int ha_mroonga::ensure_database_create(const char *name)
     }
     mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
   }
-  pthread_mutex_unlock(&mrn_db_mutex);
+  }
   grn_ctx_use(ctx, db);
   error = ensure_normalizers_register();
 
@@ -3956,7 +3955,8 @@ int ha_mroonga::ensure_database_open(const char *name)
     DBUG_RETURN(error);
 
   mrn::PathMapper mapper(name, mrn_database_path_prefix);
-  pthread_mutex_lock(&mrn_db_mutex);
+  {
+    mrn::Lock lock(&mrn_db_mutex);
   if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
     db = grn_db_open(&mrn_ctx, mapper.db_path());
     if (ctx->rc) {
@@ -3967,7 +3967,7 @@ int ha_mroonga::ensure_database_open(const char *name)
     }
     mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
   }
-  pthread_mutex_unlock(&mrn_db_mutex);
+  }
   grn_ctx_use(ctx, db);
   error = ensure_normalizers_register();
 
@@ -4596,14 +4596,13 @@ int ha_mroonga::close()
     (thd->lex->type & REFRESH_TABLES)
   ) {
     /* flush tables */
-    pthread_mutex_lock(&mrn_open_tables_mutex);
+    mrn::Lock lock(&mrn_open_tables_mutex);
     if (!mrn_open_tables.records)
     {
       int tmp_error = close_databases();
       if (tmp_error)
         error = tmp_error;
     }
-    pthread_mutex_unlock(&mrn_open_tables_mutex);
   }
   DBUG_RETURN(error);
 }
@@ -4909,12 +4908,13 @@ int ha_mroonga::storage_info(uint flag)
       table->next_number_field = table->found_next_number_field;
     }
     MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
-    pthread_mutex_lock(&long_term_share->auto_inc_mutex);
+    {
+      mrn::Lock lock(&long_term_share->auto_inc_mutex);
     storage_get_auto_increment(variables->auto_increment_offset,
                                variables->auto_increment_increment, 1,
                                &stats.auto_increment_value,
                                &nb_reserved_values);
-    pthread_mutex_unlock(&long_term_share->auto_inc_mutex);
+    }
     if (next_number_field_is_null) {
       table->next_number_field = NULL;
     }
@@ -5671,13 +5671,14 @@ int ha_mroonga::storage_write_row(uchar *buf)
       if (!long_term_share->auto_inc_inited) {
         storage_info(HA_STATUS_AUTO);
       }
-      pthread_mutex_lock(&long_term_share->auto_inc_mutex);
+      {
+        mrn::Lock lock(&long_term_share->auto_inc_mutex);
       if (long_term_share->auto_inc_value <= nr) {
         long_term_share->auto_inc_value = nr + 1;
         DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
           long_term_share->auto_inc_value));
       }
-      pthread_mutex_unlock(&long_term_share->auto_inc_mutex);
+      }
     }
   }
   DBUG_RETURN(0);
@@ -6189,13 +6190,14 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       if (!long_term_share->auto_inc_inited) {
         storage_info(HA_STATUS_AUTO);
       }
-      pthread_mutex_lock(&long_term_share->auto_inc_mutex);
+      {
+        mrn::Lock lock(&long_term_share->auto_inc_mutex);
       if (long_term_share->auto_inc_value <= nr) {
         long_term_share->auto_inc_value = nr + 1;
         DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
           long_term_share->auto_inc_value));
       }
-      pthread_mutex_unlock(&long_term_share->auto_inc_mutex);
+      }
     }
   }
   DBUG_RETURN(0);
@@ -6213,12 +6215,11 @@ err:
 
   if (!error && thd_sql_command(ha_thd()) == SQLCOM_TRUNCATE) {
     MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
-    pthread_mutex_lock(&long_term_share->auto_inc_mutex);
+    mrn::Lock lock(&long_term_share->auto_inc_mutex);
     long_term_share->auto_inc_value = 0;
     DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
       long_term_share->auto_inc_value));
     long_term_share->auto_inc_inited = FALSE;
-    pthread_mutex_unlock(&long_term_share->auto_inc_mutex);
   }
 
   DBUG_RETURN(error);
@@ -11582,12 +11583,11 @@ int ha_mroonga::storage_truncate()
 
   if (!error && thd_sql_command(ha_thd()) == SQLCOM_TRUNCATE) {
     MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
-    pthread_mutex_lock(&long_term_share->auto_inc_mutex);
+    mrn::Lock lock(&long_term_share->auto_inc_mutex);
     long_term_share->auto_inc_value = 0;
     DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
       long_term_share->auto_inc_value));
     long_term_share->auto_inc_inited = FALSE;
-    pthread_mutex_unlock(&long_term_share->auto_inc_mutex);
   }
 
   DBUG_RETURN(error);
@@ -14163,13 +14163,12 @@ void ha_mroonga::get_auto_increment(ulonglong offset, ulonglong increment,
                                first_value, nb_reserved_values);
   } else {
     MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
-    pthread_mutex_lock(&long_term_share->auto_inc_mutex);
+    mrn::Lock lock(&long_term_share->auto_inc_mutex);
     storage_get_auto_increment(offset, increment, nb_desired_values,
                                first_value, nb_reserved_values);
     long_term_share->auto_inc_value += nb_desired_values * increment;
     DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
       long_term_share->auto_inc_value));
-    pthread_mutex_unlock(&long_term_share->auto_inc_mutex);
   }
   DBUG_VOID_RETURN;
 }
@@ -14300,12 +14299,11 @@ int ha_mroonga::storage_reset_auto_increment(ulonglong value)
 {
   MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
   MRN_DBUG_ENTER_METHOD();
-  pthread_mutex_lock(&long_term_share->auto_inc_mutex);
+  mrn::Lock lock(&long_term_share->auto_inc_mutex);
   long_term_share->auto_inc_value = value;
   DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
     long_term_share->auto_inc_value));
   long_term_share->auto_inc_inited = TRUE;
-  pthread_mutex_unlock(&long_term_share->auto_inc_mutex);
   DBUG_RETURN(0);
 }
 
