@@ -1,4 +1,5 @@
 # Copyright(C) 2013 Kentoku SHIBA
+# Copyright(C) 2013 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,25 +18,28 @@
 --source include/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS t1;
+DROP TABLE IF EXISTS users;
 --enable_warnings
 
-CREATE TABLE t1 (
-  c1 int NOT NULL,
-  c2 text NOT NULL,
-  c3 int NOT NULL,
-  c4 int NOT NULL,
-  PRIMARY KEY(c1),
-  KEY idx1(c3,c4),
-  FULLTEXT KEY ft1(c2)
+SET NAMES utf8;
+
+CREATE TABLE users (
+  first_name VARCHAR(32) NOT NULL,
+  last_name  VARCHAR(32) NOT NULL,
+  KEY (first_name, last_name)
 );
-INSERT INTO t1 VALUES(1, 'test1', 1, 1);
-INSERT INTO t1 VALUES(2, 'test2', 2, 2);
-INSERT INTO t1 VALUES(3, 'test3', 1, 3);
-ALTER TABLE t1 DISABLE KEYS;
-DELETE FROM t1 WHERE c1 = 2;
-UPDATE t1 SET c4 = 4 WHERE c1 = 1;
-INSERT INTO t1 VALUES(4, 'test4', 2, 4);
-DROP TABLE t1;
+
+INSERT INTO users VALUES("Taro",   "Yamada");
+INSERT INTO users VALUES("Hanako", "Tanaka");
+INSERT INTO users VALUES("Joe",    "Honda");
+
+SELECT * FROM users;
+
+ALTER TABLE users DISABLE KEYS;
+TRUNCATE users;
+
+SELECT * FROM users;
+
+DROP TABLE users;
 
 --source include/have_mroonga_deinit.inc
