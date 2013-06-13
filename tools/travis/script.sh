@@ -56,7 +56,7 @@ prepare_mysql_test_dir()
     fi
     sudo chown -R $(id -u):$(id -g) ${mysql_test_dir}/
 
-    cp -a ${mroonga_dir}/test/sql/include/*.inc ${mysql_test_dir}/include/
+    cp -a ${mroonga_dir}/test/sql/include/mroonga/ ${mysql_test_dir}/include/
     cp -a ${mroonga_dir}/test/sql/suite/mroonga/ ${mysql_test_dir}/suite/
 }
 
