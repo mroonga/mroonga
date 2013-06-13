@@ -254,9 +254,13 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/config.sh.in"
   "${PROJECT_BINARY_DIR}/config.sh")
 
+set(MRN_TEST_SUITE_DIR "${CMAKE_SOURCE_DIR}/mysql-test/suite/mroonga")
+if(NOT EXISTS "${MRN_TEST_SUITE_DIR}")
+  set(MRN_TEST_SUITE_DIR "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga")
+endif()
 configure_file(
   "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result.in"
-  "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result"
+  "${MRN_TEST_SUITE_DIR}/storage/information_schema/r/plugins.result"
   NEWLINE_STYLE LF)
 
 configure_file(
