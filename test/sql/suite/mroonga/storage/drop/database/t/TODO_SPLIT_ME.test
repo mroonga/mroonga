@@ -15,7 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/not_embedded.inc
---source include/have_mroonga.inc
+--source include/mroonga/have_mroonga.inc
 
 --disable_warnings
 drop database if exists groonga;
@@ -37,4 +37,4 @@ create table t2 (c1 int primary key, c2 varchar(255)) default charset utf8;
 drop table t1, t2;
 drop database groonga;
 
---source include/have_mroonga_deinit.inc
+--source include/mroonga/have_mroonga_deinit.inc

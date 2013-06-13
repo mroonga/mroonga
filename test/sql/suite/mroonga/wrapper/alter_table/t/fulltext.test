@@ -16,7 +16,7 @@
 
 --source include/have_innodb.inc
 --source include/not_embedded.inc
---source include/have_mroonga.inc
+--source include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -54,4 +54,4 @@ SHOW CREATE TABLE diaries;
 
 DROP TABLE diaries;
 
---source include/have_mroonga_deinit.inc
+--source include/mroonga/have_mroonga_deinit.inc

@@ -15,7 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/not_embedded.inc
---source include/have_mroonga.inc
+--source include/mroonga/have_mroonga.inc
 
 --disable_warnings
 drop table if exists t1, t2, t3;
@@ -99,4 +99,4 @@ insert into t1 values(1,200);
 select * from t1;
 drop table t1;
 
---source include/have_mroonga_deinit.inc
+--source include/mroonga/have_mroonga_deinit.inc

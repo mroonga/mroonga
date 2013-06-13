@@ -16,8 +16,8 @@
 
 --source include/have_innodb.inc
 --source include/not_embedded.inc
---source include/have_mroonga.inc
---source include/have_mroonga_helper.inc
+--source include/mroonga/have_mroonga.inc
+--source include/mroonga/have_mroonga_helper.inc
 
 --disable_warnings
 DROP DATABASE IF EXISTS repair_test;
@@ -60,4 +60,4 @@ DROP TABLE diaries;
 DROP DATABASE repair_test;
 USE test;
 
---source include/have_mroonga_deinit.inc
+--source include/mroonga/have_mroonga_deinit.inc

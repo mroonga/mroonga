@@ -14,19 +14,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/check_mariadb.inc
---source include/check_version.inc
+--source include/mroonga/check_version.inc
 
-if ($mariadb) {
-  let $fractional_seconds = 1;
-}
-
-if (!$mariadb) {
-  if ($version_56) {
-    let $fractional_seconds = `SELECT @@global.version >= '5.6'`;
-  }
-}
-
-if (!$fractional_seconds) {
-  skip fractional seconds in time values are available in MySQL version 5.6 or later or MariaDB;
+if (!$version_56)
+{
+  skip This test is for MySQL version 5.6.x;
 }

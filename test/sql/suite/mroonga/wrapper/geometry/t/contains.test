@@ -16,7 +16,7 @@
 
 --source include/have_innodb.inc
 --source include/have_geometry.inc
---source include/have_mroonga.inc
+--source include/mroonga/have_mroonga.inc
 
 --disable_warnings
 drop table if exists shops;
@@ -142,4 +142,4 @@ select id, name, AsText(location) as location_text from shops
   where MBRContains(GeomFromText('LineString(139.7727 35.6684, 139.7038 35.7121)'), location);
 drop table shops;
 
---source include/have_mroonga_deinit.inc
+--source include/mroonga/have_mroonga_deinit.inc

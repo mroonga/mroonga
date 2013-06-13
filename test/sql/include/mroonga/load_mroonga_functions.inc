@@ -1,4 +1,4 @@
-# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,9 +14,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/check_version.inc
+--source include/mroonga/check_ha_mroonga_so.inc
 
-if (!$version_56)
-{
-  skip This test is for MySQL version 5.6.x;
-}
+--disable_query_log
+eval CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME $ha_mroonga_so;
+eval CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME $ha_mroonga_so;
+eval CREATE FUNCTION mroonga_command RETURNS STRING SONAME $ha_mroonga_so;
+--enable_query_log

@@ -16,7 +16,7 @@
 
 --source include/have_innodb.inc
 --source include/have_geometry.inc
---source include/have_mroonga.inc
+--source include/mroonga/have_mroonga.inc
 
 --disable_warnings
 drop table if exists shops;
@@ -47,4 +47,4 @@ select id, name, AsText(location) as location_text from shops
 
 drop table shops;
 
---source include/have_mroonga_deinit.inc
+--source include/mroonga/have_mroonga_deinit.inc

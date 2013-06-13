@@ -1,4 +1,4 @@
-# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,12 +14,15 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/check_version.inc
+--source include/mroonga/check_windows.inc
 
-if ($version_55_or_later) {
-  let $fulltext_index_comment = `SELECT @@global.version >= '5.5'`;
+--disable_query_log
+if ($VERSION_COMPILE_OS_WIN)
+{
+  let ha_mroonga_so='ha_mroonga.dll';
 }
-
-if (!$fulltext_index_comment) {
-  skip Fulltext index comment is available in version 5.5 or later;
+if (!$VERSION_COMPILE_OS_WIN)
+{
+  let ha_mroonga_so='ha_mroonga.so';
 }
+--enable_query_log

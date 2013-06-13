@@ -97,17 +97,11 @@ same_link_p()
     fi
 }
 
-local_mroonga_mysql_test_include_dir="${BASE_DIR}/sql/include"
-for test_include_name in $(ls $local_mroonga_mysql_test_include_dir | grep '\.inc$'); do
-    local_mroonga_mysql_test_include="${local_mroonga_mysql_test_include_dir}/${test_include_name}"
-    mroonga_mysql_test_include="${build_test_include_dir}/${test_include_name}"
-    if ! same_link_p "${local_mroonga_mysql_test_include}" \
-			"${mroonga_mysql_test_include}"; then
-	rm -f "${mroonga_mysql_test_include}"
-        ln -s "${local_mroonga_mysql_test_include}" \
-	    "${mroonga_mysql_test_include}"
-    fi
-done
+mroonga_mysql_test_include_dir="${build_test_include_dir}/mroonga"
+if ! same_link_p "${mroonga_mysql_test_include_dir}"; then
+    rm -f "${mroonga_mysql_test_include_dir}"
+    ln -s "${BASE_DIR}/sql/include/mroonga" "${mroonga_mysql_test_include_dir}"
+fi
 
 for test_suite_name in mroonga; do
     local_mroonga_mysql_test_suite_dir="${BASE_DIR}/sql/suite/${test_suite_name}"
@@ -144,7 +138,7 @@ if [ ! -d "${mroonga_wrapper_innodb_test_suite_dir}" ]; then
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test \
 	${mroonga_wrapper_innodb_test_suite_dir}/include/*.inc
     sed -i'' \
-	-e '1 i --source include/have_mroonga.inc' \
+	-e '1 i --source include/mroonga/have_mroonga.inc' \
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test
 fi
 

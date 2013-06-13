@@ -15,7 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_innodb.inc
---source include/have_mroonga.inc
+--source include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS memos;
@@ -42,4 +42,4 @@ SELECT * FROM memos WHERE MATCH(content) AGAINST("start" IN BOOLEAN MODE);
 
 DROP TABLE memos;
 
---source include/have_mroonga_deinit.inc
+--source include/mroonga/have_mroonga_deinit.inc
