@@ -259,7 +259,7 @@ if(NOT EXISTS "${MRN_TEST_SUITE_DIR}")
   set(MRN_TEST_SUITE_DIR "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga")
 endif()
 configure_file(
-  "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga/storage/information_schema/r/plugins.result.in"
+  "${MRN_TEST_SUITE_DIR}/storage/information_schema/r/plugins.result.in"
   "${MRN_TEST_SUITE_DIR}/storage/information_schema/r/plugins.result"
   NEWLINE_STYLE LF)
 
