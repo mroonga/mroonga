@@ -98,5 +98,5 @@ run_sql_test()
 }
 
 build
-run_unit_test
+# run_unit_test
 run_sql_test
