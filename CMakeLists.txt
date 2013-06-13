@@ -262,6 +262,10 @@ configure_file(
   "${MRN_TEST_SUITE_DIR}/storage/information_schema/r/plugins.result.in"
   "${MRN_TEST_SUITE_DIR}/storage/information_schema/r/plugins.result"
   NEWLINE_STYLE LF)
+configure_file(
+  "${MRN_TEST_SUITE_DIR}/storage/variable/r/version.result.in"
+  "${MRN_TEST_SUITE_DIR}/storage/variable/r/version.result"
+  NEWLINE_STYLE LF)
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/data/install.sql.in"
