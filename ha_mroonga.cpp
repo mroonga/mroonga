@@ -2591,7 +2591,7 @@ ulonglong ha_mroonga::wrapper_table_flags() const
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
   table_flags |= HA_CAN_FULLTEXT | HA_PRIMARY_KEY_REQUIRED_FOR_DELETE |
-    HA_CAN_RTREEKEYS;
+    HA_CAN_RTREEKEYS | HA_REC_NOT_IN_SEQ;
 #ifdef HA_CAN_REPAIR
   table_flags |= HA_CAN_REPAIR;
 #endif
