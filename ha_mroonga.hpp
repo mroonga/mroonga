@@ -184,6 +184,10 @@ extern "C" {
 #  define MRN_API
 #endif
 
+#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000)
+#  define MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -422,7 +426,11 @@ public:
                              HANDLER_BUFFER *buffer);
   int read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
 #endif // MRN_HANDLER_HAVE_MULTI_RANGE_READ
+#ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+  void start_bulk_insert(ha_rows rows, uint flags);
+#else
   void start_bulk_insert(ha_rows rows);
+#endif
   int end_bulk_insert();
   int delete_all_rows();
 #ifdef MRN_HANDLER_HAVE_TRUNCATE
@@ -748,8 +756,13 @@ private:
                                      enum thr_lock_type lock_type);
   int wrapper_external_lock(THD *thd, int lock_type);
   int storage_external_lock(THD *thd, int lock_type);
+#ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+  void wrapper_start_bulk_insert(ha_rows rows, uint flags);
+  void storage_start_bulk_insert(ha_rows rows, uint flags);
+#else
   void wrapper_start_bulk_insert(ha_rows rows);
   void storage_start_bulk_insert(ha_rows rows);
+#endif
   int wrapper_end_bulk_insert();
   int storage_end_bulk_insert();
   bool wrapper_is_target_index(KEY *key_info);

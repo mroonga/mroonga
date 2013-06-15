@@ -11410,30 +11410,55 @@ int ha_mroonga::read_multi_range_next(KEY_MULTI_RANGE **found_range_p)
 }
 #endif // MRN_HANDLER_HAVE_MULTI_RANGE_READ
 
+#ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+void ha_mroonga::wrapper_start_bulk_insert(ha_rows rows, uint flags)
+#else
 void ha_mroonga::wrapper_start_bulk_insert(ha_rows rows)
+#endif
 {
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+  wrap_handler->ha_start_bulk_insert(rows, flags);
+#else
   wrap_handler->ha_start_bulk_insert(rows);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+void ha_mroonga::storage_start_bulk_insert(ha_rows rows, uint flags)
+#else
 void ha_mroonga::storage_start_bulk_insert(ha_rows rows)
+#endif
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+void ha_mroonga::start_bulk_insert(ha_rows rows, uint flags)
+#else
 void ha_mroonga::start_bulk_insert(ha_rows rows)
+#endif
 {
   MRN_DBUG_ENTER_METHOD();
-  if (share->wrapper_mode)
+  if (share->wrapper_mode) {
+#ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+    wrapper_start_bulk_insert(rows, flags);
+#else
     wrapper_start_bulk_insert(rows);
-  else
+#endif
+  } else {
+#ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+    storage_start_bulk_insert(rows, flags);
+#else
     storage_start_bulk_insert(rows);
+#endif
+  }
   DBUG_VOID_RETURN;
 }
 
