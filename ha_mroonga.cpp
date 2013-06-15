@@ -7822,7 +7822,7 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
 
   Item *where = table->pos_in_table_list->select_lex->where;
 
-  if (where->type() != Item::COND_ITEM) {
+  if (!where || where->type() != Item::COND_ITEM) {
     DBUG_VOID_RETURN;
   }
 
@@ -9299,7 +9299,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         fast_order_limit = false;
         DBUG_VOID_RETURN;
       }
-    } else {
+    } else if (where) {
       if (!is_fulltext_search_item(where)) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: not fulltext search"));
@@ -9336,7 +9336,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
 
         (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
                                              column_name, column_name_size);
-      } else if (match_against->eq(item, true)) {
+      } else if (!match_against || match_against->eq(item, true)) {
         (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
                                              MRN_COLUMN_NAME_SCORE,
                                              strlen(MRN_COLUMN_NAME_SCORE));
