@@ -99,6 +99,10 @@ extern MYSQL_PLUGIN_IMPORT pthread_mutex_t LOCK_open;
 #  define mrn_open_mutex_unlock()
 #endif
 
+#if MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)
+#  define MRN_NEED_M_LOCK_TYPE_CHECK_FOR_WRAPPER_EXTERNAL_LOCK
+#endif
+
 #if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
 #  define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER::ORDER_ASC)
 #else
@@ -12580,10 +12584,17 @@ int ha_mroonga::wrapper_fill_indexes(THD *thd, KEY *key_info,
   int error = 0;
   KEY *p_key_info = &table->key_info[table_share->primary_key];
   KEY *tmp_key_info;
+#ifdef MRN_NEED_M_LOCK_TYPE_CHECK_FOR_WRAPPER_EXTERNAL_LOCK
+  int wrapper_lock_type_backup = wrap_handler->get_lock_type();
+#endif
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: n_keys=%u", n_keys));
   if (
-    mrn_lock_type != F_UNLCK || !(error = wrapper_external_lock(thd, F_WRLCK))
+    mrn_lock_type != F_UNLCK ||
+#ifdef MRN_NEED_M_LOCK_TYPE_CHECK_FOR_WRAPPER_EXTERNAL_LOCK
+    wrapper_lock_type_backup != F_UNLCK ||
+#endif
+    !(error = wrapper_external_lock(thd, F_WRLCK))
   ) {
     if (
       !(error = wrapper_start_stmt(thd, thr_lock_data.type)) &&
@@ -12668,7 +12679,12 @@ int ha_mroonga::wrapper_fill_indexes(THD *thd, KEY *key_info,
       else
         error = wrapper_rnd_end();
     }
-    if (mrn_lock_type == F_UNLCK)
+    if (
+#ifdef MRN_NEED_M_LOCK_TYPE_CHECK_FOR_WRAPPER_EXTERNAL_LOCK
+      wrapper_lock_type_backup == F_UNLCK &&
+#endif
+      mrn_lock_type == F_UNLCK
+    )
       wrapper_external_lock(thd, F_UNLCK);
   }
   DBUG_RETURN(error);
