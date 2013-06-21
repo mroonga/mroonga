@@ -7,13 +7,9 @@ CREATE TABLE Bugs (
 id INT UNSIGNED PRIMARY KEY,
 tag TEXT COMMENT 'It references to Tags.name, type "Tags"'
 ) DEFAULT CHARSET=utf8;
-SHOW CREATE TABLE Bugs;
-Table	Create Table
-Bugs	CREATE TABLE `Bugs` (
-  `id` int(10) unsigned NOT NULL,
-  `tag` text COMMENT 'It references to Tags.name, type "Tags"',
-  PRIMARY KEY (`id`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+SHOW FULL COLUMNS FROM Bugs LIKE 'tag';
+Field	Type	Collation	Null	Key	Default	Extra	Privileges	Comment
+tag	text	utf8_general_ci	YES		NULL		select,insert,update,references	It references to Tags.name, type "Tags"
 INSERT INTO Bugs (id, tag) VALUES (1, "Linux");
 INSERT INTO Bugs (id, tag) VALUES (2, "MySQL");
 INSERT INTO Bugs (id, tag) VALUES (3, "groonga");

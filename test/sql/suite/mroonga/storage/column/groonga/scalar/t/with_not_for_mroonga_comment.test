@@ -31,7 +31,7 @@ CREATE TABLE Bugs (
   tag TEXT COMMENT 'It references to Tags.name, type "Tags"'
 ) DEFAULT CHARSET=utf8;
 
-SHOW CREATE TABLE Bugs;
+SHOW FULL COLUMNS FROM Bugs LIKE 'tag';
 
 INSERT INTO Bugs (id, tag) VALUES (1, "Linux");
 INSERT INTO Bugs (id, tag) VALUES (2, "MySQL");
