@@ -12589,13 +12589,20 @@ int ha_mroonga::wrapper_fill_indexes(THD *thd, KEY *key_info,
 #endif
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: n_keys=%u", n_keys));
-  if (
-    mrn_lock_type != F_UNLCK ||
+
+  grn_bool need_lock = true;
+  if (mrn_lock_type != F_UNLCK) {
+    need_lock = false;
+  }
 #ifdef MRN_NEED_M_LOCK_TYPE_CHECK_FOR_WRAPPER_EXTERNAL_LOCK
-    wrapper_lock_type_backup != F_UNLCK ||
+  if (wrapper_lock_type_backup != F_UNLCK) {
+    need_lock = false;
+  }
 #endif
-    !(error = wrapper_external_lock(thd, F_WRLCK))
-  ) {
+  if (need_lock) {
+    error = wrapper_external_lock(thd, F_WRLCK);
+  }
+  if (!error) {
     if (
       !(error = wrapper_start_stmt(thd, thr_lock_data.type)) &&
       !(error = wrapper_rnd_init(true))
@@ -12679,13 +12686,9 @@ int ha_mroonga::wrapper_fill_indexes(THD *thd, KEY *key_info,
       else
         error = wrapper_rnd_end();
     }
-    if (
-#ifdef MRN_NEED_M_LOCK_TYPE_CHECK_FOR_WRAPPER_EXTERNAL_LOCK
-      wrapper_lock_type_backup == F_UNLCK &&
-#endif
-      mrn_lock_type == F_UNLCK
-    )
+    if (need_lock) {
       wrapper_external_lock(thd, F_UNLCK);
+    }
   }
   DBUG_RETURN(error);
 }
