@@ -217,6 +217,12 @@ else()
       COMPILE_DEFINITIONS "FORCE_FAST_MUTEX_DISABLED=1")
   endif()
 
+  option(WITH_FAST_MUTEXES "Enable fast mutex" OFF)
+  if(WITH_FAST_MUTEXES)
+    set_property(TARGET ha_mroonga APPEND PROPERTY
+      COMPILE_DEFINITIONS "MY_PTHREAD_FASTMUTEX")
+  endif()
+
   if(CMAKE_COMPILER_IS_GNUCXX)
     set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
   endif()

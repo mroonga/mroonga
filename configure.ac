@@ -299,6 +299,9 @@ AC_ARG_ENABLE(fast_mutexes,
 if test "$enable_fast_mutexes" = "no"; then
    AC_DEFINE(FORCE_FAST_MUTEX_DISABLED, [1],
              [Define to 1 if force fast mutext disabled])
+elif test "$enable_fast_mutexes" = "yes"; then
+   AC_DEFINE(MY_PTHREAD_FASTMUTEX, [1],
+             [Define to 1 if fast mutext enabled])
 fi
 
 AC_ARG_ENABLE(dtrace,
