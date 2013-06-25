@@ -3,6 +3,43 @@
 News
 ====
 
+.. _release-3-05:
+
+Release 3.05 - 2013/6/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Added warnings for truncated date data. [#1768] [Suggested by Y.Kentaro]
+* Supported MySQL 5.6.12. [Reported by WING]
+* Added documentation about troubleshooting.
+* Supported to enable fast mutexes option by build configuration.
+  [#1760] [Reported by WING]
+* Supported MySQL 5.6.12.
+
+Fixes
+^^^^^
+
+* Fixed a bug that three or more sections in W pragma doesn't work.
+  [#1770] [Reported by shizuin]
+* Fixed build error with "-O2". [Reported by Y.Kentaro]
+* Fixed a memory leak by re-registration of ``normalizers/mysql``.
+* Fixed a crush bug when updating with ``DISABLE KEYS``. [#1759]
+* [doc] Fixed a wrong translation about status variable of optimization
+  in wrapper mode. [Reported by YOSHIDA Mitsuo]
+* Fixed a crush bug when no where clause with ``ORDER BY ... LIMIT``
+  is specified. [Reported by @memorycraft]
+* Fixed a bug that data is hidden when ``LOCK TABLES`` and ``ENABLE KEYS``
+  are used same time. [#1778] [Reported by Y.Kentaro]
+
+Thanks
+^^^^^^
+
+* Y.Kentaro
+* WING
+* @memorycraft
+
 .. _release-3-04:
 
 Release 3.04 - 2013/5/29
