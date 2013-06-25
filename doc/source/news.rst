@@ -37,6 +37,8 @@ Thanks
 
 * Y.Kentaro
 * WING
+* shizuin
+* YOSHIDA Mitsuo
 * @memorycraft
 
 .. _release-3-04:
