@@ -24,84 +24,230 @@ msgstr "お知らせ"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:9
-msgid "Release 3.04 - 2013/5/29"
-msgstr "3.04リリース - 2013/5/29"
+msgid "Release 3.05 - 2013/6/29"
+msgstr "3.05リリース - 2013/6/29"
 
 # 056232ecba044abab1ea54c34b9ce282
-#: ../../../source/news.rst:12 ../../../source/news.rst:63
-#: ../../../source/news.rst:118 ../../../source/news.rst:150
-#: ../../../source/news.rst:175 ../../../source/news.rst:200
-#: ../../../source/news.rst:258 ../../../source/news.rst:302
-#: ../../../source/news.rst:339 ../../../source/news.rst:370
-#: ../../../source/news.rst:448 ../../../source/news.rst:464
-#: ../../../source/news.rst:503 ../../../source/news.rst:573
-#: ../../../source/news.rst:627 ../../../source/news.rst:744
-#: ../../../source/news.rst:873 ../../../source/news.rst:917
-#: ../../../source/news.rst:961 ../../../source/news.rst:1006
+#: ../../../source/news.rst:12 ../../../source/news.rst:50
+#: ../../../source/news.rst:105 ../../../source/news.rst:160
+#: ../../../source/news.rst:192 ../../../source/news.rst:217
+#: ../../../source/news.rst:242 ../../../source/news.rst:300
+#: ../../../source/news.rst:344 ../../../source/news.rst:381
+#: ../../../source/news.rst:412 ../../../source/news.rst:490
+#: ../../../source/news.rst:506 ../../../source/news.rst:545
+#: ../../../source/news.rst:615 ../../../source/news.rst:669
+#: ../../../source/news.rst:786 ../../../source/news.rst:915
+#: ../../../source/news.rst:959 ../../../source/news.rst:1003
+#: ../../../source/news.rst:1048
 msgid "Improvements"
 msgstr "改良"
 
-# ea8ee445fdee4da9aa8254826941351c
+# e042c3a2dbcd4f1f8e91dc02f899bac8
 #: ../../../source/news.rst:14
+msgid ""
+"Added warnings for truncated date data. [#1768] [Suggested by Y.Kentaro]"
+msgstr ""
+"切り詰められた日付データに対する警告を表示するようにしました。 [#1768] [Y.Kentaro"
+"さんが提案]"
+
+# 3b00d891c01c48a98c1c01704efcbacd
+#: ../../../source/news.rst:15
+msgid "Supported MySQL 5.6.12. [Reported by WING]"
+msgstr "MySQL 5.6.12に対応しました。 [WINGさんが報告]"
+
+# 0e6983f751dc4ca682105bd1a9c3fe36
+#: ../../../source/news.rst:16
+msgid "Added documentation about troubleshooting."
+msgstr "[doc] トラブルシューティングのためのドキュメントを追加しました。"
+
+# 0fafaa5a2f684d6a9acef288085baf88
+#: ../../../source/news.rst:17
+msgid ""
+"Supported to enable fast mutexes option by build configuration. [#1760] "
+"[Reported by WING]"
+msgstr ""
+"fast mutexesオプションをビルド設定で有効にできるようにしました。 [#1760][WING"
+"さんが報告]"
+
+# 08e3d478781f474c8a19fd0acb16a2bf
+#: ../../../source/news.rst:21 ../../../source/news.rst:75
+#: ../../../source/news.rst:127 ../../../source/news.rst:169
+#: ../../../source/news.rst:199 ../../../source/news.rst:226
+#: ../../../source/news.rst:253 ../../../source/news.rst:307
+#: ../../../source/news.rst:353 ../../../source/news.rst:387
+#: ../../../source/news.rst:417 ../../../source/news.rst:511
+#: ../../../source/news.rst:560 ../../../source/news.rst:640
+#: ../../../source/news.rst:705 ../../../source/news.rst:821
+#: ../../../source/news.rst:937 ../../../source/news.rst:974
+#: ../../../source/news.rst:1025 ../../../source/news.rst:1066
+msgid "Fixes"
+msgstr "修正"
+
+# 1f1506b8114445d8a38c52505044b0c1
+#: ../../../source/news.rst:23
+msgid ""
+"Fixed a bug that three or more sections in W pragma doesn't work. [#1770] "
+"[Reported by shizuin]"
+msgstr ""
+"3カラム以上のセクションに対するWプラグマが動作しない不具合を修正しました。 "
+"[#1770] [shizuinさんが報告]"
+
+# a05ced9078f844498a8fd267dcdb336d
+#: ../../../source/news.rst:25
+msgid "Fixed build error with \"-O2\". [Reported by Y.Kentaro]"
+msgstr ""
+"\"-O2\" 指定ありだとビルドエラーになる問題を修正しました。 [Y.Kentaroさんが報"
+"告]"
+
+# 1f1506b8114445d8a38c52505044b0c1
+#: ../../../source/news.rst:26
+msgid "Fixed a memory leak by re-registration of ``normalizers/mysql``."
+msgstr ""
+"``normalizers/mysql`` を再登録しようとするとメモリリークする問題を修正しまし"
+"た。"
+
+# 1a6be4b809984ac3a5287268a9e0e47e
+#: ../../../source/news.rst:27
+msgid "Fixed a crush bug when updating with ``DISABLE KEYS``. [#1759]"
+msgstr ""
+"``DISABLE KEYS`` 有効時に更新するとクラッシュする問題を修正しました。 [#1759]"
+
+# 0e6983f751dc4ca682105bd1a9c3fe36
+#: ../../../source/news.rst:28
+msgid ""
+"[doc] Fixed a wrong translation about status variable of optimization in "
+"wrapper mode. [Reported by YOSHIDA Mitsuo]"
+msgstr ""
+"[doc] ラッパーモードで最適化の状態に関する翻訳誤りを修正しました。 [YOSHIDA "
+"Mitsuoさんが報告]"
+
+# 8bb6e7264b5d4fd6b6b089cf48397881
+#: ../../../source/news.rst:30
+msgid ""
+"Fixed a crush bug when no where clause with ``ORDER BY ... LIMIT`` is "
+"specified. [Reported by @memorycraft]"
+msgstr ""
+"where句なしで ``ORDER BY ... LIMIT`` を指定するとクラッシュする不具合を修正し"
+"ました。[@memorycraftさんが報告]"
+
+# f5b54eacaa2d49d29a78df5297208c08
+#: ../../../source/news.rst:32
+msgid ""
+"Fixed a bug that data is hidden when ``LOCK TABLES`` and ``ENABLE KEYS`` are "
+"used same time. [#1778] [Reported by Y.Kentaro]"
+msgstr ""
+"``LOCK TABLES`` と ``ENABLE KEYS`` を同時に使うと検索データとしてヒットしない"
+"不具合を修正しました。"
+
+# 2371feae1d1549e59cd05415194e5dcf
+#: ../../../source/news.rst:36 ../../../source/news.rst:90
+#: ../../../source/news.rst:145 ../../../source/news.rst:179
+#: ../../../source/news.rst:206 ../../../source/news.rst:232
+#: ../../../source/news.rst:260 ../../../source/news.rst:321
+#: ../../../source/news.rst:366 ../../../source/news.rst:394
+#: ../../../source/news.rst:426 ../../../source/news.rst:523
+#: ../../../source/news.rst:574 ../../../source/news.rst:653
+#: ../../../source/news.rst:721 ../../../source/news.rst:827
+#: ../../../source/news.rst:945 ../../../source/news.rst:984
+#: ../../../source/news.rst:1033 ../../../source/news.rst:1074
+msgid "Thanks"
+msgstr "感謝"
+
+# b3d5a0549df84a96bf447c1549edf9a2
+#: ../../../source/news.rst:38 ../../../source/news.rst:92
+msgid "Y.Kentaro"
+msgstr "Y.Kentaroさん"
+
+# d14d5ad2ce2144038468850ae873b7e1
+#: ../../../source/news.rst:39 ../../../source/news.rst:94
+msgid "WING"
+msgstr "WINGさん"
+
+# 7029aa99202747ff8ec2473499554dd1
+#: ../../../source/news.rst:40
+msgid "shizuin"
+msgstr "shizuinさん"
+
+# de908a578382412d8fca6b316f8ed7a1
+#: ../../../source/news.rst:41
+msgid "YOSHIDA Mitsuo"
+msgstr "YOSHIDA Mitsuoさん"
+
+# 4c0ab47d98d246fe9b9cddac38e928de
+#: ../../../source/news.rst:42
+msgid "@memorycraft"
+msgstr "@memorycraftさん"
+
+# f9a0af18e31849ac94867b7745d42030
+#: ../../../source/news.rst:47
+msgid "Release 3.04 - 2013/5/29"
+msgstr "3.04リリース - 2013/5/29"
+
+# ea8ee445fdee4da9aa8254826941351c
+#: ../../../source/news.rst:52
 msgid "Improved MariaDB 10.0.2 support. [#1729]"
 msgstr "MariaDB 10.0.2のサポートを改善しました。 [#1729]"
 
 # 3754145a2bb74e9da532cb818bf851b6
-#: ../../../source/news.rst:15
+#: ../../../source/news.rst:53
 msgid "[doc] Updated supported SQL command list. [Reported by Y.Kentaro]"
 msgstr ""
-"[doc] サポートしているSQLコマンドのリストを更新しました。 [Y.Kentaroさんが報告]"
+"[doc] サポートしているSQLコマンドのリストを更新しました。 [Y.Kentaroさんが報"
+"告]"
 
 # 38e09f4e78b348369c7ceb5cf2b688a2
-#: ../../../source/news.rst:16
+#: ../../../source/news.rst:54
 msgid "Dropped Ubuntu 11.10 (Oneiric Ocelot) support."
 msgstr "Ubuntu 11.10 (Oneiric Ocelot)のサポートをやめました。"
 
 # 5bd5771ce4da4ac997187bfc052bfecd
-#: ../../../source/news.rst:17
-msgid "Supported mroonga buidled MariaDB package. [#1691]"
-msgstr ""
-"MariaDBパッケージへのmroonga組み込みをサポートしました。 [#1691]"
+#: ../../../source/news.rst:55
+msgid "Supported mroonga bundled MariaDB package. [#1691]"
+msgstr "MariaDBパッケージへのmroonga組み込みをサポートしました。 [#1691]"
 
 # 977b2c57e1a6440cad69ec2f9892bdaa
-#: ../../../source/news.rst:18
+#: ../../../source/news.rst:56
 msgid "[wrapper] Stopped to parse column comment. [Reported by Y.Kentaro]"
 msgstr ""
-"[ラッパーモード] カラムコメントをパースするのをやめました。 [Y.Kentaroさんが報告]"
+"[ラッパーモード] カラムコメントをパースするのをやめました。 [Y.Kentaroさんが"
+"報告]"
 
 # a05ced9078f844498a8fd267dcdb336d
-#: ../../../source/news.rst:19
+#: ../../../source/news.rst:57
 msgid "Stopped to validate normal column comment. [Reported by Y.Kentaro]"
 msgstr ""
-"通常のカラムコメントのバリデーションをしないようにしました。 [Y.Kentaroさんが報告]"
+"通常のカラムコメントのバリデーションをしないようにしました。 [Y.Kentaroさんが"
+"報告]"
 
 # 281218d659f6407699ae659f2a4531b8
-#: ../../../source/news.rst:20
+#: ../../../source/news.rst:58
 msgid ""
 "Improved the way to detect directory which contains libmysqlservices.a. "
 "[Reported by Y.Kentaro]"
 msgstr ""
-"libmysqlservices.aを含むディレクトリの検出方法を改善しました。 [Y.Kentaroさんが報告]"
+"libmysqlservices.aを含むディレクトリの検出方法を改善しました。 [Y.Kentaroさん"
+"が報告]"
 
 # 70aa50e97fea4889b9ddc9332918d220
-#: ../../../source/news.rst:22
+#: ../../../source/news.rst:60
 msgid ""
 "Improved to accept free style normal comment in table/index comment. "
 "[Suggested by Y.Kentaro]"
 msgstr ""
-"テーブル/インデックスコメントをフリースタイルで書けるように改善しました。"
-"[Y.Kentaroさんが提案]"
+"テーブル/インデックスコメントをフリースタイルで書けるように改善しました。[Y."
+"Kentaroさんが提案]"
 
 # fd1f96c28c764039a04b6b97e2dea108
-#: ../../../source/news.rst:24
+#: ../../../source/news.rst:62
 msgid ""
 "Supported \"W\" pragma. This feature is derived from `Tritonn <http://qwik."
 "jp/senna/query.html>`_."
 msgstr ""
-"\"W\"プラグマをサポートしました。この機能は `Tritonn <http://qwik.jp/senna/query.html>`_ に由来します。"
+"\"W\"プラグマをサポートしました。この機能は `Tritonn <http://qwik.jp/senna/"
+"query.html>`_ に由来します。"
 
 # 9878ce4806cc47c0b80818225280f3b7
-#: ../../../source/news.rst:26
+#: ../../../source/news.rst:64
 msgid ""
 "Supported ``mroonga_command()`` without the current database. [Reported by Y."
 "Kentaro]"
