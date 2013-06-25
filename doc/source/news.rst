@@ -13,7 +13,7 @@ Improvements
 
 * Added warnings for truncated date data. [#1768] [Suggested by Y.Kentaro]
 * Supported MySQL 5.6.12. [Reported by WING]
-* Added documentation about troubleshooting.
+* Added documentation about :doc:`/reference/troubleshooting`.
 * Supported to enable fast mutexes option by build configuration.
   [#1760] [Reported by WING]
 
