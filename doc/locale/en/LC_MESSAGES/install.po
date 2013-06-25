@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-27 16:19\n"
+"POT-Creation-Date: 2013-06-25 14:16+0900\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -359,17 +359,17 @@ msgstr ""
 # fd01f33608c14934a2ce186e0c1ca498
 #: ../../../source/install.rst:434
 msgid ""
-"For 32-bit environment, download `mariadb-10.0.2-mroonga-3.04-win32.msi "
+"For 32-bit environment, download `mariadb-10.0.2-mroonga-3.04-win32.zip "
 "<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-"
-"win32.msi>`_ and extract it."
+"win32.zip>`_ and extract it."
 msgstr ""
 
 # cc98cc88820648b98ee0526495bc72e5
 #: ../../../source/install.rst:438
 msgid ""
-"For 64-bit environment, download `mariadb-10.0.2-mroonga-3.04-winx64.msi "
+"For 64-bit environment, download `mariadb-10.0.2-mroonga-3.04-winx64.zip "
 "<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-"
-"winx64.msi>`_ and extract it."
+"winx64.zip>`_ and extract it."
 msgstr ""
 
 # eeea59a4f0ad49f8b98ba64fe2145ba8
