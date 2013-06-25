@@ -16,7 +16,6 @@ Improvements
 * Added documentation about troubleshooting.
 * Supported to enable fast mutexes option by build configuration.
   [#1760] [Reported by WING]
-* Supported MySQL 5.6.12.
 
 Fixes
 ^^^^^
