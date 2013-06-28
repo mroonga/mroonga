@@ -418,25 +418,27 @@ are needed for building mroonga for Windows.
 Installer
 ^^^^^^^^^
 
-For 32-bit environment, download
-`mariadb-10.0.2-mroonga-3.04-win32.msi
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-win32.msi>`_
-and run it.
+None for now.
 
-For 64-bit environment, download
-`mariadb-10.0.2-mroonga-3.04-winx64.msi
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx64.msi>`_
-and run it.
+.. For 32-bit environment, download
+.. `mariadb-10.0.2-mroonga-3.04-win32.msi
+.. <http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-win32.msi>`_
+.. and run it.
+.. 
+.. For 64-bit environment, download
+.. `mariadb-10.0.2-mroonga-3.04-winx64.msi
+.. <http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx64.msi>`_
+.. and run it.
 
 Zip
 ^^^
 
-For 32-bit environment, download `mariadb-10.0.2-mroonga-3.04-win32.zip
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-win32.zip>`_
+For 32-bit environment, download `mariadb-10.0.3-mroonga-3.05-win32.zip
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-win32.zip>`_
 and extract it.
 
-For 64-bit environment, download `mariadb-10.0.2-mroonga-3.04-winx64.zip
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx64.zip>`_
+For 64-bit environment, download `mariadb-10.0.3-mroonga-3.05-winx64.zip
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-winx64.zip>`_
 and extract it.
 
 Install mroonga
@@ -444,7 +446,7 @@ Install mroonga
 
 Start mysqld, connect to it by mysql client, and install it by "INSTALL PLUGIN" command. ::
 
- mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
+ mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga';
 
 If "mroonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
 
@@ -467,19 +469,19 @@ To get the record ID assigned by groonga in INSERT, install last_insert_grn_id f
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga.so';
+ mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga';
 
 To enable snippet (keyword in context) UDF, install mroonga_snippet function.
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
+ mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga';
 
 To enable invoking groonga query from mroonga, install mroonga_command function.
 
 Invoke CREATE FUNCTION like the following. ::
 
- mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
+ mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga';
 
 
 Install from the source code
