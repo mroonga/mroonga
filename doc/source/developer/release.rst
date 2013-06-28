@@ -184,13 +184,13 @@ Linux 側でファイル名を変更します。これだと mroonga のバー�
 づらいからです。（TODO: 自動化したい。 zip 内のフォルダ名も変えたい。）::
 
  $ mv mariadb-10.0.2-win32.msi \
-     packages/windows/files/mroonga/mariadb-10.0.2-with-mroonga-3.04-win32.msi
+     packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-win32.msi
  $ mv mariadb-10.0.2-win32.zip \
-     packages/windows/files/mroonga/mariadb-10.0.2-with-mroonga-3.04-win32.zip
+     packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-win32.zip
  $ mv mariadb-10.0.2-winx64.msi \
-     packages/windows/files/mroonga/mariadb-10.0.2-with-mroonga-3.04-winx64.msi
+     packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-winx64.msi
  $ mv mariadb-10.0.2-winx64.zip \
-     packages/windows/files/mroonga/mariadb-10.0.2-with-mroonga-3.04-winx64.zip
+     packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-winx64.zip
 
 
 タグを打つ
