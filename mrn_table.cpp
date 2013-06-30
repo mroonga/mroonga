@@ -46,6 +46,10 @@
 #define MRN_GROONGA_STR "GROONGA"
 #define MRN_GROONGA_LEN (sizeof(MRN_GROONGA_STR) - 1)
 
+#if MYSQL_VERSION_ID >= 50500
+extern HASH *mrn_table_def_cache;
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -930,7 +934,7 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
 #endif
 #if MYSQL_VERSION_ID >= 50500
   my_hash_value_type hash_value;
-  hash_value = my_calc_hash(&table_def_cache, (uchar*) key, key_length);
+  hash_value = my_calc_hash(mrn_table_def_cache, (uchar*) key, key_length);
 #  if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
   share = get_table_share(thd, table_list->db, table_list->table_name, key,
                           key_length, 0, hash_value);

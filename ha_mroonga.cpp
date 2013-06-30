@@ -30,6 +30,7 @@
 #  include <sql_show.h>
 #  include <key.h>
 #  include <tztime.h>
+#  include <sql_base.h>
 #endif
 
 #include <sql_select.h>
@@ -88,13 +89,11 @@
 #define MRN_LONG_TEXT_SIZE  (1 << 31) //  2Gbytes
 
 #if MYSQL_VERSION_ID >= 50500
-#ifdef DBUG_OFF
-extern MYSQL_PLUGIN_IMPORT mysql_mutex_t LOCK_open;
-#endif
-#  define mrn_open_mutex_lock() mysql_mutex_lock(&LOCK_open)
-#  define mrn_open_mutex_unlock() mysql_mutex_unlock(&LOCK_open)
+mysql_mutex_t *mrn_LOCK_open;
+#  define mrn_open_mutex_lock() mysql_mutex_lock(mrn_LOCK_open)
+#  define mrn_open_mutex_unlock() mysql_mutex_unlock(mrn_LOCK_open)
 #else
-extern MYSQL_PLUGIN_IMPORT pthread_mutex_t LOCK_open;
+pthread_mutex_t *mrn_LOCK_open;
 #  define mrn_open_mutex_lock()
 #  define mrn_open_mutex_unlock()
 #endif
@@ -129,6 +128,12 @@ extern MYSQL_PLUGIN_IMPORT pthread_mutex_t LOCK_open;
 #  else
 #    define MRN_PLUGIN_LAST_VALUES NULL
 #  endif
+#endif
+
+Rpl_filter *mrn_binlog_filter;
+Time_zone *mrn_my_tz_UTC;
+#if MYSQL_VERSION_ID >= 50500
+HASH *mrn_table_def_cache;
 #endif
 
 static const char *INDEX_COLUMN_NAME = "index";
@@ -1724,6 +1729,45 @@ static int mrn_init(void *p)
   hton->flush_logs = mrn_flush_logs;
   hton->alter_table_flags = mrn_alter_table_flags;
   mrn_hton_ptr = hton;
+
+#ifdef _WIN32
+  HMODULE current_module = GetModuleHandle(NULL);
+  mrn_binlog_filter =
+#if MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)
+    *((Rpl_filter **) GetProcAddress(current_module,
+      "?binlog_filter@@3PEAVRpl_filter@@EA"));
+#else
+    *((Rpl_filter **) GetProcAddress(current_module,
+      "?binlog_filter@@3PAVRpl_filter@@A"));
+#endif
+  mrn_my_tz_UTC =
+#if MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)
+    *((Time_zone **) GetProcAddress(current_module,
+      "?my_tz_UTC@@3PEAVTime_zone@@EA"));
+#else
+    *((Time_zone **) GetProcAddress(current_module,
+      "?my_tz_UTC@@3PAVTime_zone@@A"));
+#endif
+#if MYSQL_VERSION_ID >= 50500
+  mrn_table_def_cache = (HASH *) GetProcAddress(current_module,
+    "?table_def_cache@@3Ust_hash@@A");
+#endif
+  mrn_LOCK_open =
+#if MYSQL_VERSION_ID >= 50500
+    (mysql_mutex_t *) GetProcAddress(current_module,
+      "?LOCK_open@@3Ust_mysql_mutex@@A");
+#else
+    (pthread_mutex_t *) GetProcAddress(current_module,
+      "?LOCK_open@@3U_RTL_CRITICAL_SECTION@@A");
+#endif
+#else
+  mrn_binlog_filter = binlog_filter;
+  mrn_my_tz_UTC = my_tz_UTC;
+#if MYSQL_VERSION_ID >= 50500
+  mrn_table_def_cache = &table_def_cache;
+#endif
+  mrn_LOCK_open = &LOCK_open;
+#endif
 
   // init groonga
   if (grn_init() != GRN_SUCCESS) {
@@ -10446,27 +10490,23 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
 #ifdef MRN_MARIADB_P
   if (field->decimals() == 0) {
     my_time_t my_time = sint4korr(key);
-    my_tz_UTC->gmt_sec_to_TIME(&mysql_time, my_time);
+    mrn_my_tz_UTC->gmt_sec_to_TIME(&mysql_time, my_time);
     mysql_time.second_part = 0;
   } else {
-    // TODO: remove me when MariaDB becomes based on MySQL 5.6.
-    // This implementation may be costful.
     Field_timestamp_hires *timestamp_hires_field =
       (Field_timestamp_hires *)field;
-    Field_timestamp_hires unpacker((uchar *)key,
-                                   (uchar *)(key - 1),
-                                   timestamp_hires_field->null_bit,
-                                   timestamp_hires_field->unireg_check,
-                                   timestamp_hires_field->field_name,
-                                   table->s,
-                                   timestamp_hires_field->decimals(),
-                                   timestamp_hires_field->charset());
     uint fuzzy_date = 0;
-    unpacker.get_date(&mysql_time, fuzzy_date);
+    uchar *ptr_backup = field->ptr;
+    uchar *null_ptr_backup = field->null_ptr;
+    field->ptr = (uchar *)key;
+    field->null_ptr = (uchar *)(key - 1);
+    timestamp_hires_field->get_date(&mysql_time, fuzzy_date);
+    field->ptr = ptr_backup;
+    field->null_ptr = null_ptr_backup;
   }
 #else
   my_time_t my_time = uint4korr(key);
-  my_tz_UTC->gmt_sec_to_TIME(&mysql_time, my_time);
+  mrn_my_tz_UTC->gmt_sec_to_TIME(&mysql_time, my_time);
 #endif
   time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
@@ -10504,18 +10544,15 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
     mysql_time.second_part = 0;
     mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
   } else {
-    // TODO: remove me when MariaDB becomes based on MySQL 5.6.
-    // This implementation may be costful.
     Field_time_hires *time_hires_field = (Field_time_hires *)field;
-    Field_time_hires unpacker((uchar *)key,
-                              (uchar *)(key - 1),
-                              time_hires_field->null_bit,
-                              time_hires_field->unireg_check,
-                              time_hires_field->field_name,
-                              time_hires_field->decimals(),
-                              time_hires_field->charset());
     uint fuzzy_date = 0;
-    unpacker.get_date(&mysql_time, fuzzy_date);
+    uchar *ptr_backup = field->ptr;
+    uchar *null_ptr_backup = field->null_ptr;
+    field->ptr = (uchar *)key;
+    field->null_ptr = (uchar *)(key - 1);
+    time_hires_field->get_date(&mysql_time, fuzzy_date);
+    field->ptr = ptr_backup;
+    field->null_ptr = null_ptr_backup;
   }
   time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
@@ -10567,19 +10604,16 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
   long long int time;
 #ifdef MRN_MARIADB_P
   if (field->decimals() > 0) {
-    // TODO: remove me when MariaDB becomes based on MySQL 5.6.
-    // This implementation may be costful.
     Field_datetime_hires *datetime_hires_field = (Field_datetime_hires *)field;
-    Field_datetime_hires unpacker((uchar *)key,
-                                  (uchar *)(key - 1),
-                                  datetime_hires_field->null_bit,
-                                  datetime_hires_field->unireg_check,
-                                  datetime_hires_field->field_name,
-                                  datetime_hires_field->decimals(),
-                                  datetime_hires_field->charset());
     MYSQL_TIME mysql_time;
     uint fuzzy_date = 0;
-    unpacker.get_date(&mysql_time, fuzzy_date);
+    uchar *ptr_backup = field->ptr;
+    uchar *null_ptr_backup = field->null_ptr;
+    field->ptr = (uchar *)key;
+    field->null_ptr = (uchar *)(key - 1);
+    datetime_hires_field->get_date(&mysql_time, fuzzy_date);
+    field->ptr = ptr_backup;
+    field->null_ptr = null_ptr_backup;
     time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   } else
 #endif
@@ -10619,7 +10653,7 @@ int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
   struct timeval tm;
   my_timestamp_from_binary(&tm, key, timestamp2_field->decimals());
   MYSQL_TIME mysql_time;
-  my_tz_UTC->gmt_sec_to_TIME(&mysql_time, tm);
+  mrn_my_tz_UTC->gmt_sec_to_TIME(&mysql_time, tm);
   long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
     field->set_warning(Sql_condition::WARN_LEVEL_WARN,
@@ -15129,7 +15163,7 @@ bool ha_mroonga::check_written_by_row_based_binlog()
     DBUG_RETURN(false);
   }
 
-  if (!binlog_filter->db_ok(table->s->db.str)) {
+  if (!mrn_binlog_filter->db_ok(table->s->db.str)) {
     DBUG_RETURN(false);
   }
 
