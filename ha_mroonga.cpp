@@ -89,18 +89,18 @@
 #define MRN_LONG_TEXT_SIZE  (1 << 31) //  2Gbytes
 
 #if MYSQL_VERSION_ID >= 50500
-#ifdef DBUG_OFF
-#ifndef _WIN32
+#  ifdef DBUG_OFF
+#    ifndef _WIN32
 extern mysql_mutex_t LOCK_open;
-#endif
-#endif
+#    endif
+#  endif
 mysql_mutex_t *mrn_LOCK_open;
 #  define mrn_open_mutex_lock() mysql_mutex_lock(mrn_LOCK_open)
 #  define mrn_open_mutex_unlock() mysql_mutex_unlock(mrn_LOCK_open)
 #else
-#ifndef _WIN32
+#  ifndef _WIN32
 extern pthread_mutex_t LOCK_open;
-#endif
+#  endif
 pthread_mutex_t *mrn_LOCK_open;
 #  define mrn_open_mutex_lock()
 #  define mrn_open_mutex_unlock()
