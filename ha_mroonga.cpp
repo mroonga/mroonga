@@ -451,6 +451,26 @@ static char *mrn_database_path_prefix = NULL;
 static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
 static char *mrn_version = const_cast<char *>(MRN_VERSION);
 
+typedef enum {
+  MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT,
+  MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT_AND_LOG,
+  MRN_ACTION_ON_ERROR_IGNORE_AND_LOG,
+  MRN_ACTION_ON_ERROR_IGNORE,
+} mrn_action_on_error;
+
+static const char *mrn_action_on_error_names[] = {
+  "NOTIFY_TO_CLIENT",
+  "NOTIFY_TO_CLIENT_AND_LOG",
+  "IGNORE_AND_LOG",
+  "IGNORE",
+  NullS,
+};
+
+static mrn_action_on_error mrn_action_on_fulltext_query_error_default =
+  MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT;
+static ulong mrn_action_on_fulltext_query_error =
+  mrn_action_on_fulltext_query_error_default;
+
 static void mrn_logger_log(grn_ctx *ctx, grn_log_level level,
                            const char *timestamp, const char *title,
                            const char *message, const char *location,
@@ -690,6 +710,22 @@ static MYSQL_SYSVAR_STR(default_wrapper_engine, mrn_default_wrapper_engine,
                         NULL,
                         NULL);
 
+static TYPELIB mrn_action_on_error_typelib =
+{
+  array_elements(mrn_action_on_error_names) - 1,
+  "mrn_action_on_error_typelib",
+  mrn_action_on_error_names,
+  NULL
+};
+
+static MYSQL_THDVAR_ENUM(action_on_fulltext_query_error,
+                         PLUGIN_VAR_RQCMDARG,
+                         "action on fulltext query error",
+                         NULL,
+                         NULL,
+                         mrn_action_on_fulltext_query_error_default,
+                         &mrn_action_on_error_typelib);
+
 static MYSQL_SYSVAR_STR(libgroonga_version, mrn_libgroonga_version,
                         PLUGIN_VAR_NOCMDOPT | PLUGIN_VAR_READONLY,
                         "The version of libgroonga",
@@ -714,6 +750,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(match_escalation_threshold),
   MYSQL_SYSVAR(database_path_prefix),
   MYSQL_SYSVAR(default_wrapper_engine),
+  MYSQL_SYSVAR(action_on_fulltext_query_error),
   MYSQL_SYSVAR(libgroonga_version),
   MYSQL_SYSVAR(version),
   NULL
@@ -8133,8 +8170,14 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
              "failed to parse fulltext search keyword: <%.*s>: <%s>",
              keyword_length_original, keyword_original,
              info->ctx->errbuf);
-    my_message(ER_PARSE_ERROR, error_message, MYF(0));
-    GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
+    ulong action = THDVAR(ha_thd(), action_on_fulltext_query_error);
+    switch (static_cast<mrn_action_on_error>(action)) {
+    case MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT:
+      my_message(ER_PARSE_ERROR, error_message, MYF(0));
+      break;
+    default:
+      break;
+    }
   }
 
   DBUG_RETURN(rc);
