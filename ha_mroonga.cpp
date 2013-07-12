@@ -452,22 +452,22 @@ static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
 static char *mrn_version = const_cast<char *>(MRN_VERSION);
 
 typedef enum {
-  MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT,
-  MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT_AND_LOG,
+  MRN_ACTION_ON_ERROR_ERROR,
+  MRN_ACTION_ON_ERROR_ERROR_AND_LOG,
   MRN_ACTION_ON_ERROR_IGNORE,
   MRN_ACTION_ON_ERROR_IGNORE_AND_LOG,
 } mrn_action_on_error;
 
 static const char *mrn_action_on_error_names[] = {
-  "NOTIFY_TO_CLIENT",
-  "NOTIFY_TO_CLIENT_AND_LOG",
+  "ERROR",
+  "ERROR_AND_LOG",
   "IGNORE",
   "IGNORE_AND_LOG",
   NullS,
 };
 
 static mrn_action_on_error mrn_action_on_fulltext_query_error_default =
-  MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT_AND_LOG;
+  MRN_ACTION_ON_ERROR_ERROR_AND_LOG;
 static ulong mrn_action_on_fulltext_query_error =
   mrn_action_on_fulltext_query_error_default;
 
@@ -8172,10 +8172,10 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
              info->ctx->errbuf);
     ulong action = THDVAR(ha_thd(), action_on_fulltext_query_error);
     switch (static_cast<mrn_action_on_error>(action)) {
-    case MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT:
+    case MRN_ACTION_ON_ERROR_ERROR:
       my_message(ER_PARSE_ERROR, error_message, MYF(0));
       break;
-    case MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT_AND_LOG:
+    case MRN_ACTION_ON_ERROR_ERROR_AND_LOG:
       my_message(ER_PARSE_ERROR, error_message, MYF(0));
       GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
       break;

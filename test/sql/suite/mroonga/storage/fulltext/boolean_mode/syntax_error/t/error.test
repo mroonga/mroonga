@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS memos;
 --enable_warnings
 
 SET GLOBAL mroonga_default_parser = TokenDelimit;
-SET mroonga_action_on_fulltext_query_error = NOTIFY_TO_CLIENT_AND_LOG;
+SET mroonga_action_on_fulltext_query_error = ERROR;
 
 SET NAMES UTF8;
 CREATE TABLE memos (
