@@ -444,6 +444,7 @@ static FILE *mrn_log_file = NULL;
 static bool mrn_log_file_opened = false;
 static grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 static ulong mrn_log_level = mrn_log_level_default;
+
 char *mrn_default_parser = NULL;
 char *mrn_default_wrapper_engine = NULL;
 static char *mrn_database_path_prefix = NULL;
