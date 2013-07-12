@@ -454,15 +454,15 @@ static char *mrn_version = const_cast<char *>(MRN_VERSION);
 typedef enum {
   MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT,
   MRN_ACTION_ON_ERROR_NOTIFY_TO_CLIENT_AND_LOG,
-  MRN_ACTION_ON_ERROR_IGNORE_AND_LOG,
   MRN_ACTION_ON_ERROR_IGNORE,
+  MRN_ACTION_ON_ERROR_IGNORE_AND_LOG,
 } mrn_action_on_error;
 
 static const char *mrn_action_on_error_names[] = {
   "NOTIFY_TO_CLIENT",
   "NOTIFY_TO_CLIENT_AND_LOG",
-  "IGNORE_AND_LOG",
   "IGNORE",
+  "IGNORE_AND_LOG",
   NullS,
 };
 
