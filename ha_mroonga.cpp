@@ -8179,6 +8179,8 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
       my_message(ER_PARSE_ERROR, error_message, MYF(0));
       GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
       break;
+    case MRN_ACTION_ON_ERROR_IGNORE:
+      break;
     default:
       break;
     }
