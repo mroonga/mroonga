@@ -8923,6 +8923,16 @@ int ha_mroonga::wrapper_get_next_record(uchar *buf)
         key_length = grn_table_cursor_get_key(ctx, cursor, &key);
         GRN_TEXT_SET(ctx, &key_buffer, key, key_length);
       }
+      if (count_skip) {
+        DBUG_PRINT("info", ("mroonga: count_skip: TRUE"));
+        if (record_id == GRN_ID_NIL) {
+          record_id = found_record_id;
+        } else {
+          error = 0;
+          table->status = 0;
+          break;
+        }
+      }
     } else {
       error = HA_ERR_END_OF_FILE;
       break;
@@ -9186,9 +9196,19 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
         count_skip = false;
         DBUG_VOID_RETURN;
       }
+      if (share->wrapper_mode &&
+          !(wrap_handler->ha_table_flags() & HA_NO_TRANSACTIONS)) {
+        DBUG_PRINT("info", ("mroonga: count skip: transactional wrapper mode"));
+        count_skip = false;
+        DBUG_VOID_RETURN;
+      }
       DBUG_PRINT("info", ("mroonga: count skip: skip enabled"));
       count_skip = true;
       mrn_count_skip++;
+      DBUG_VOID_RETURN;
+    } else if (share->wrapper_mode) {
+      DBUG_PRINT("info", ("mroonga: count skip: wrapper mode"));
+      count_skip = false;
       DBUG_VOID_RETURN;
     } else {
       DBUG_PRINT("info", ("mroonga: count skip: without fulltext"));
