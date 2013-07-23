@@ -48,7 +48,7 @@ fi
 %build
 if [ ! -d ../mysql-%{mysql_version} ]; then
     rpmbuild -bp --define 'runselftest 0' --define 'optflags -O0' \
-        ../../SPECS/mysql.spec
+        ../../SPECS/community-mysql.spec
 fi
 %configure CPPFLAGS="-DDISABLE_DTRACE" \
     --disable-static \
