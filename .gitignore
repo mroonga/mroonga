@@ -60,8 +60,13 @@ CTestTestfile.cmake
 /CMakeCache.txt
 /CMakeFiles/
 /INSTALL
-/packages/apt/tmp/
-/packages/yum/tmp/
+/packages/tmp/*
+/packages/apt/*.log
+/packages/apt/*/*.log
+/packages/apt/tmp/*
+/packages/yum/*.log
+/packages/yum/*/*.log
+/packages/yum/tmp/*
 /install_manifest.txt
 /vendor/
 /data/install.sql
