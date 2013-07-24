@@ -5,6 +5,7 @@ CHROOT_BASE = /var/lib/chroot
 HAVE_DEVELOPMENT_BRANCH = no
 USE_RPMFORGE = no
 USE_ATRPMS = no
+PACKAGES = mysql-mroonga mariadb-mroonga
 
 all:
 
@@ -44,6 +45,7 @@ upload: ensure-rsync-path
 build: build-in-chroot
 
 build-in-chroot: source
+	for package in $(PACKAGES); do		\
 	./build-in-chroot.sh			\
 	  mysql-mroonga				\
 	  $(VERSION)				\
@@ -55,7 +57,8 @@ build-in-chroot: source
 	  '$(DISTRIBUTIONS)'			\
 	  '$(HAVE_DEVELOPMENT_BRANCH)'		\
 	  '$(USE_RPMFORGE)'			\
-	  '$(USE_ATRPMS)'
+	  '$(USE_ATRPMS)';			\
+	done
 
 source: ../$(PACKAGE)-$(VERSION).tar.gz
 
