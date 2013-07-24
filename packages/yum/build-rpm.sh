@@ -89,7 +89,13 @@ rpmbuild_options="${BUILD_OPTIONS}"
 
 case $distribution in
     fedora)
-	DEPENDED_PACKAGES="$DEPENDED_PACKAGES community-mysql-devel"
+	if [ $PACKAGE = "mysql-mroonga" ]; then
+		run yum remove mariadb -y
+		DEPENDED_PACKAGES="$DEPENDED_PACKAGES community-mysql-devel"
+	else
+		run yum remove community-mysql -y
+		DEPENDED_PACKAGES="$DEPENDED_PACKAGES mariadb-devel"
+	fi
 	DEPENDED_PACKAGES="$DEPENDED_PACKAGES cmake libaio-devel systemtap-sdt-devel"
 	;;
     centos)
