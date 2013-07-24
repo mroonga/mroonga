@@ -161,6 +161,9 @@ for architecture in $ARCHITECTURES; do
 		distribution_versions="19"
 		;;
 	    centos)
+		if [ "$PACKAGE" = "mariadb-mroonga" ]; then
+			continue
+		fi
 		if [ -n "$CENTOS_VERSIONS" ]; then
 		    distribution_versions="$CENTOS_VERSIONS"
 		else
