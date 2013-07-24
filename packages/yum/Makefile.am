@@ -47,7 +47,7 @@ build: build-in-chroot
 build-in-chroot: source
 	for package in $(PACKAGES); do		\
 	  ./build-in-chroot.sh			\
-	    mysql-mroonga			\
+	    $${package}				\
 	    $(VERSION)				\
 	    $(top_builddir)/$(PACKAGE)		\
 	    ../rpm				\
