@@ -46,18 +46,18 @@ build: build-in-chroot
 
 build-in-chroot: source
 	for package in $(PACKAGES); do		\
-	./build-in-chroot.sh			\
-	  mysql-mroonga				\
-	  $(VERSION)				\
-	  $(top_builddir)/$(PACKAGE)		\
-	  ../rpm				\
-	  $(REPOSITORIES_PATH)/			\
-	  $(CHROOT_BASE)			\
-	  '$(ARCHITECTURES)'			\
-	  '$(DISTRIBUTIONS)'			\
-	  '$(HAVE_DEVELOPMENT_BRANCH)'		\
-	  '$(USE_RPMFORGE)'			\
-	  '$(USE_ATRPMS)';			\
+	  ./build-in-chroot.sh			\
+	    mysql-mroonga			\
+	    $(VERSION)				\
+	    $(top_builddir)/$(PACKAGE)		\
+	    ../rpm				\
+	    $(REPOSITORIES_PATH)/		\
+	    $(CHROOT_BASE)			\
+	    '$(ARCHITECTURES)'			\
+	    '$(DISTRIBUTIONS)'			\
+	    '$(HAVE_DEVELOPMENT_BRANCH)'	\
+	    '$(USE_RPMFORGE)'			\
+	    '$(USE_ATRPMS)';			\
 	done
 
 source: ../$(PACKAGE)-$(VERSION).tar.gz
