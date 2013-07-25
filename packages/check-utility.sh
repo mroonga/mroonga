@@ -14,6 +14,7 @@ CHECK_INSTALL=0
 CHECK_INSTALL_PACKAGE=mysql-server-mroonga
 CHECK_BUILD=0
 CHECK_DEPENDS=0
+CHECK_PROVIDES=0
 ENABLE_REPOSITORY=0
 DISABLE_REPOSITORY=0
 INSTALL_SCRIPT=0
@@ -197,6 +198,63 @@ check_depends_rpm_packages ()
 	    DEPENDS=`rpm -qp --requires $pkg | grep -i "mysql" | tr -t '\n' ' '`
 	    printf "%9s %6s %s => %s\n" $dist$ver $arch $RPM_NAME "$DEPENDS"
 	done
+    fi
+}
+
+check_provided_mysql_packages ()
+{
+    common_deb_procedure "check_provided_mysql_deb_packages"
+    common_rpm_procedure "check_provided_mysql_rpm_packages"
+    for code in $CODES; do
+	echo $code
+	cat tmp/$code-amd64-mysql-server.txt
+    done
+    for dist in $DISTRIBUTIONS; do
+	echo $dist
+	cat tmp/$dist-x86_64-mysql-server.txt
+    done
+}
+
+check_provided_mysql_deb_packages ()
+{
+    code=$1
+    arch=$2
+    root_dir=$3
+    cat > tmp/check-provided-mysql.sh <<EOF
+#!/bin/sh
+apt-get update > /dev/null
+apt-cache show mysql-server | grep "Version" | head -1 > /tmp/$code-$arch-mysql-server.txt
+EOF
+    if [ -d $root_dir ]; then
+	CHECK_SCRIPT=check-provided-mysql.sh
+	echo "copy check script $CHECK_SCRIPT to $root_dir/tmp"
+	sudo rm -f $root_dir/tmp/$CHECK_SCRIPT
+	cp tmp/$CHECK_SCRIPT $root_dir/tmp
+	sudo chmod 755 $root_dir/tmp/$CHECK_SCRIPT
+	sudo chname $code-$arch chroot $root_dir /tmp/$CHECK_SCRIPT
+	cp $root_dir/tmp/$code-$arch-mysql-server.txt tmp
+    fi
+}
+
+check_provided_mysql_rpm_packages ()
+{
+    dist=$1
+    arch=$2
+    ver=$3
+    root_dir=$4
+    cat > tmp/check-provided-mysql.sh <<EOF
+#!/bin/sh
+yum update > /dev/null
+yum info mysql-server | grep "Version" > /tmp/$code-$arch-mysql-server.txt
+EOF
+    if [ -d $root_dir ]; then
+	CHECK_SCRIPT=check-provided-mysql.sh
+	echo "copy check script $CHECK_SCRIPT to $root_dir/tmp"
+	sudo rm -f $root_dir/tmp/$CHECK_SCRIPT
+	cp tmp/$CHECK_SCRIPT $root_dir/tmp
+	sudo chmod 755 $root_dir/tmp/$CHECK_SCRIPT
+	sudo chname $code-$arch chroot $root_dir /tmp/$CHECK_SCRIPT
+	cp $root_dir/tmp/$code-$arch-mysql-server.txt tmp
     fi
 }
 
@@ -507,6 +565,10 @@ while [ $# -ne 0 ]; do
 	    CHECK_DEPENDS=1
 	    shift
 	    ;;
+	--check-provides)
+	    CHECK_PROVIDES=1
+	    shift
+	    ;;
 	--check-build)
 	    CHECK_BUILD=1
 	    shift
@@ -584,6 +646,9 @@ if [ $CHECK_BUILD -ne 0 ]; then
 fi
 if [ $CHECK_DEPENDS -ne 0 ]; then
     check_depends_packages
+fi
+if [ $CHECK_PROVIDES -ne 0 ]; then
+    check_provided_mysql_packages
 fi
 if [ $ENABLE_REPOSITORY -ne 0 ]; then
     enable_temporaly_mroonga_repository
