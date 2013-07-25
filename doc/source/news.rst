@@ -11,13 +11,11 @@ Release 3.06 - 2013/7/29
 Improvements
 ^^^^^^^^^^^^
 
-* Improved to resolve symbols without patch for windows. [#1729]
-  This affects the simplicity of MariaDB bundled build.
 * Added :ref:`mroonga_action_on_fulltext_query_error` session variable.
   This affects how to report errors about invalid escape.
   [groonga-dev,01529] [Reported by Kouhei Tanabe]
 * Supported count skip optimization for wrapper mode even though
-  MySQL 5.5 or MariaDB 10.x. [#1841]
+  MySQL 5.5 or MariaDB 10.x. [#1841] [groonga-dev,01523] [Reported by Naoya Murakami]
   This optimization does not work if you use wrapper mode with
   storage engine which supports transaction.
 * Supported Fedora 19.
@@ -27,6 +25,7 @@ Thanks
 ^^^^^^
 
 * Kouhei Tanabe
+* Naoya Murakami
 
 .. _release-3-05:
 
