@@ -5,6 +5,40 @@ Server variables
 
 Here are the explanations of server variables that are introduced by mroonga.
 
+.. _mroonga_action_on_fulltext_query_error:
+
+mroonga_action_on_fulltext_query_error
+--------------------------------------
+
+The default behavior of fulltext query error.
+
+The default value of ``mroonga_action_on_fulltext_query_error`` is ``ERROR_AND_LOG``.
+This is the conventional behavior which is equal to old version of mroonga.
+
+Here is the list of ``mroonga_action_on_fulltext_query_error`` which you can use.
+
++----------------+--------------------------------------------------------------------------------+
+| Action         | Description                                                                    |
++================+================================================================================+
+| ERROR          | Report an error. Logging is disabled.                                          |
++----------------+--------------------------------------------------------------------------------+
+| ERROR_AND_LOG  | Report an error. Logging is enabled. (This is the default)                     |
++----------------+--------------------------------------------------------------------------------+
+| IGNORE         | Just ignore an error. Logging is disabled.                                     |
++----------------+--------------------------------------------------------------------------------+
+| IGNORE_AND_LOG | Ignore an error, but logging is enabled. (Similar to InnoDB behavior)          |
++----------------+--------------------------------------------------------------------------------+
+
+Here is an example SQL to confirm the value of ``mroonga_action_on_fulltext_query_error``::
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_action_on_fulltext_query_error';
+  +----------------------------------------+---------------+
+  | Variable_name                          | Value         |
+  +----------------------------------------+---------------+
+  | mroonga_action_on_fulltext_query_error | ERROR_AND_LOG |
+  +----------------------------------------+---------------+
+  1 row in set (0.00 sec)
+
 mroonga_default_parser
 ----------------------
 
