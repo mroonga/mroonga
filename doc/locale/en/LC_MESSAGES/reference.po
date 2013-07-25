@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-25 15:43+0900\n"
+"POT-Creation-Date: 2013-07-25 17:04+0900\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -173,72 +173,72 @@ msgid ""
 "use."
 msgstr ""
 
-# 2469c5acdee04a339406007ccf51a0df
-#: ../../../source/reference/server_variables.rst:21
-msgid "Action"
+# 6861cb2997d44b7fa6986cafe3555314
+#: ../../../source/reference/server_variables.rst:23
+msgid "Value"
 msgstr ""
 
 # 14abca7033d14aa0a250688e65f1563b
-#: ../../../source/reference/server_variables.rst:21
-#: ../../../source/reference/server_variables.rst:112
+#: ../../../source/reference/server_variables.rst:24
+#: ../../../source/reference/server_variables.rst:114
 msgid "Description"
 msgstr ""
 
 # a0fcfa921d25438e904f912579b4b6ea
-#: ../../../source/reference/server_variables.rst:23
-#: ../../../source/reference/server_variables.rst:122
+#: ../../../source/reference/server_variables.rst:25
+#: ../../../source/reference/server_variables.rst:124
 msgid "ERROR"
 msgstr ""
 
 # 4298f3d110ab40f1b8d4363a415ef249
-#: ../../../source/reference/server_variables.rst:23
+#: ../../../source/reference/server_variables.rst:26
 msgid "Report an error. Logging is disabled."
 msgstr ""
 
 # effc9f4ed8b04d748954e2042f45c052
-#: ../../../source/reference/server_variables.rst:25
+#: ../../../source/reference/server_variables.rst:27
 msgid "ERROR_AND_LOG"
 msgstr ""
 
 # 980b1b2c3b784a799ca526de8e86e886
-#: ../../../source/reference/server_variables.rst:25
+#: ../../../source/reference/server_variables.rst:28
 msgid "Report an error. Logging is enabled. (This is the default)"
 msgstr ""
 
 # f3877f277a904905944acd19557681ad
-#: ../../../source/reference/server_variables.rst:27
+#: ../../../source/reference/server_variables.rst:29
 msgid "IGNORE"
 msgstr ""
 
 # a62724f5027447e6997f523c3d712cb2
-#: ../../../source/reference/server_variables.rst:27
+#: ../../../source/reference/server_variables.rst:30
 msgid "Just ignore an error. Logging is disabled."
 msgstr ""
 
 # 7f382e613af44e56b8288553613c3ffa
-#: ../../../source/reference/server_variables.rst:29
+#: ../../../source/reference/server_variables.rst:31
 msgid "IGNORE_AND_LOG"
 msgstr ""
 
 # 5ab402c966fe4ef5bd9a13de09a0b924
-#: ../../../source/reference/server_variables.rst:29
+#: ../../../source/reference/server_variables.rst:32
 msgid "Ignore an error, but logging is enabled. (Similar to InnoDB behavior)"
 msgstr ""
 
 # 33eb68236bda4c6d8469333d659e142b
-#: ../../../source/reference/server_variables.rst:32
+#: ../../../source/reference/server_variables.rst:34
 msgid ""
 "Here is an example SQL to confirm the value of "
 "``mroonga_action_on_fulltext_query_error``::"
 msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference/server_variables.rst:43
+#: ../../../source/reference/server_variables.rst:45
 msgid "mroonga_default_parser"
 msgstr ""
 
 # 597fc102127842ab80166cb87684cd66
-#: ../../../source/reference/server_variables.rst:45
+#: ../../../source/reference/server_variables.rst:47
 msgid ""
 "The default parser of the full text search. The default value can be "
 "specified by ``--with-default-parser=PARSER`` configure argument, whose "
@@ -246,190 +246,190 @@ msgid ""
 msgstr ""
 
 # 1c0ee125f1704835b0d40b9691385897
-#: ../../../source/reference/server_variables.rst:48
+#: ../../../source/reference/server_variables.rst:50
 msgid ""
 "Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
 "search parser. It is used by ``body_index`` fulltext index."
 msgstr ""
 
 # 34c4eb348536490591dae8d0cd98e7f3
-#: ../../../source/reference/server_variables.rst:62
+#: ../../../source/reference/server_variables.rst:64
 msgid "mroonga_libgroonga_version"
 msgstr ""
 
 # 5b05ddcf181c4d30bd68b5f774f6a185
-#: ../../../source/reference/server_variables.rst:64
+#: ../../../source/reference/server_variables.rst:66
 msgid "The version string of the groonga library."
 msgstr ""
 
 # e4f9f9cffbe54b978e4062cd0e005f50
-#: ../../../source/reference/server_variables.rst:66
+#: ../../../source/reference/server_variables.rst:68
 msgid "Here is an example SQL to confirm the using groonga library version::"
 msgstr ""
 
 # 9f986358d0e24f628d8354dee8ce6d09
-#: ../../../source/reference/server_variables.rst:77
+#: ../../../source/reference/server_variables.rst:79
 msgid "mroonga_log_file"
 msgstr ""
 
 # eb81c839e63641c9ac6ead777681c0ae
-#: ../../../source/reference/server_variables.rst:79
+#: ../../../source/reference/server_variables.rst:81
 msgid ""
 "The path of the log file of mroonga. The default value is ``groonga.log``."
 msgstr ""
 
 # f05044e929c6453cbe06c3a9ea9968d8
-#: ../../../source/reference/server_variables.rst:81
+#: ../../../source/reference/server_variables.rst:83
 msgid ""
 "Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
 msgstr ""
 
 # 5d537f02eb434090ab886218ab972313
-#: ../../../source/reference/server_variables.rst:105
+#: ../../../source/reference/server_variables.rst:107
 msgid "mroonga_log_level"
 msgstr ""
 
 # 734cd9fdf1c7415d892b2ab22d30dc2f
-#: ../../../source/reference/server_variables.rst:107
+#: ../../../source/reference/server_variables.rst:109
 msgid "The output level of mroonga log file. The default value is ``NOTICE``."
 msgstr ""
 
 # f86725ac8c9c4e6a913f3002a4d80a32
-#: ../../../source/reference/server_variables.rst:109
+#: ../../../source/reference/server_variables.rst:111
 msgid "Here is the list of ``mroonga_log_level`` which you can use."
 msgstr ""
 
 # cefceb982c6446698a3bf822c760250a
-#: ../../../source/reference/server_variables.rst:112
+#: ../../../source/reference/server_variables.rst:114
 msgid "Log level"
 msgstr ""
 
 # 5958a7621fe04a1c81704c3dc9c20737
-#: ../../../source/reference/server_variables.rst:114
+#: ../../../source/reference/server_variables.rst:116
 msgid "NONE"
 msgstr ""
 
 # b98cfc807eeb4220845d544328322558
-#: ../../../source/reference/server_variables.rst:114
+#: ../../../source/reference/server_variables.rst:116
 msgid "No logging output."
 msgstr ""
 
 # 81fc3c527261449cba32fc8b2785de0d
-#: ../../../source/reference/server_variables.rst:116
+#: ../../../source/reference/server_variables.rst:118
 msgid "EMERG"
 msgstr ""
 
 # fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:116
+#: ../../../source/reference/server_variables.rst:118
 msgid "Logging emergency messages such as database corruption."
 msgstr ""
 
 # 97854b9eee444dd79d6898e07b9b13dc
-#: ../../../source/reference/server_variables.rst:118
+#: ../../../source/reference/server_variables.rst:120
 msgid "ALERT"
 msgstr ""
 
 # fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:118
+#: ../../../source/reference/server_variables.rst:120
 msgid "Logging alert messages such as internal error."
 msgstr ""
 
 # ea999e2e11d648fcabc40a9c6188eb0b
-#: ../../../source/reference/server_variables.rst:120
+#: ../../../source/reference/server_variables.rst:122
 msgid "CRIT"
 msgstr ""
 
 # b1c0fbb5d0684fe4a8d21e642a17c45e
-#: ../../../source/reference/server_variables.rst:120
+#: ../../../source/reference/server_variables.rst:122
 msgid "Logging critical messasge such as deadlock."
 msgstr ""
 
 # fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:122
+#: ../../../source/reference/server_variables.rst:124
 msgid "Logging error messages such as API error which mroonga use."
 msgstr ""
 
 # fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:124
+#: ../../../source/reference/server_variables.rst:126
 msgid "Logging warning messages such as invalid argument."
 msgstr ""
 
 # 50ac5d3e013a4fdab5972f5937331f53
-#: ../../../source/reference/server_variables.rst:124
+#: ../../../source/reference/server_variables.rst:126
 msgid "WARNING"
 msgstr ""
 
 # fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:126
+#: ../../../source/reference/server_variables.rst:128
 msgid "Logging notice messages such as configuration or status changed."
 msgstr ""
 
 # 80ab5291a9da4cb5a2a82797a324dda4
-#: ../../../source/reference/server_variables.rst:126
+#: ../../../source/reference/server_variables.rst:128
 msgid "NOTICE"
 msgstr ""
 
 # 5863e684674c4fb68302924ca66f39fd
-#: ../../../source/reference/server_variables.rst:128
+#: ../../../source/reference/server_variables.rst:130
 msgid "INFO"
 msgstr ""
 
 # 3632fd1b768d4e15bb50d1c61f0ed102
-#: ../../../source/reference/server_variables.rst:128
+#: ../../../source/reference/server_variables.rst:130
 msgid "Logging informative messages such as file system operation."
 msgstr ""
 
 # a62a192464644e39bf1650a66ce87118
-#: ../../../source/reference/server_variables.rst:130
+#: ../../../source/reference/server_variables.rst:132
 msgid "DEBUG"
 msgstr ""
 
 # fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:130
+#: ../../../source/reference/server_variables.rst:132
 msgid ""
 "Logging debug messages. Recommend to use for mroonga developer or bug "
 "reporter."
 msgstr ""
 
 # 61c5f9f19b71498789e2022a4e0ae695
-#: ../../../source/reference/server_variables.rst:133
+#: ../../../source/reference/server_variables.rst:135
 msgid "DUMP"
 msgstr ""
 
 # 72729a3fdba345cdb9b60f44aba93d35
-#: ../../../source/reference/server_variables.rst:133
+#: ../../../source/reference/server_variables.rst:135
 msgid "Logging dump messages."
 msgstr ""
 
 # 14d9ca2399ef4d2e8c552c6558bb44ef
-#: ../../../source/reference/server_variables.rst:136
+#: ../../../source/reference/server_variables.rst:138
 msgid ""
 "Here is an example transcript to change log level to ``DEBUG`` that logs "
 "many messages for debugging::"
 msgstr ""
 
 # 2344911c007541ec8521b01b20e65228
-#: ../../../source/reference/server_variables.rst:158
+#: ../../../source/reference/server_variables.rst:160
 msgid "mroonga_version"
 msgstr ""
 
 # 8faefebf66ce4409aa34d482fa4b3172
-#: ../../../source/reference/server_variables.rst:160
+#: ../../../source/reference/server_variables.rst:162
 msgid "The version string of mroonga."
 msgstr ""
 
 # d6161a998b614d92a7b5441de8fe2fa6
-#: ../../../source/reference/server_variables.rst:162
+#: ../../../source/reference/server_variables.rst:164
 msgid "Here is an example SQL to confirm the running mroonga version::"
 msgstr ""
 
 # 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference/server_variables.rst:173
+#: ../../../source/reference/server_variables.rst:175
 msgid "mroonga_dry_write"
 msgstr ""
 
 # 662d6ddf9b7248cba67f48c09902b1cf
-#: ../../../source/reference/server_variables.rst:175
+#: ../../../source/reference/server_variables.rst:177
 msgid ""
 "Whether really write data to groonga database or not. The default value is "
 "``OFF`` that means data are really written to groonga database. Usually we "
@@ -439,17 +439,17 @@ msgid ""
 msgstr ""
 
 # 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference/server_variables.rst:182
+#: ../../../source/reference/server_variables.rst:184
 msgid "Here is an example SQL to disable writing data to groonga database::"
 msgstr ""
 
 # d9f67e26e6bc4883affa4c663cd3d120
-#: ../../../source/reference/server_variables.rst:205
+#: ../../../source/reference/server_variables.rst:207
 msgid "mroonga_enable_optimization"
 msgstr ""
 
 # 53f18a9714d145d2a32b452e68be0dfa
-#: ../../../source/reference/server_variables.rst:207
+#: ../../../source/reference/server_variables.rst:209
 msgid ""
 "Whether enable optimization or not. The default value is ``ON`` that means "
 "optimization is enabled. Usually we don't need to change the value of this "
@@ -457,17 +457,17 @@ msgid ""
 msgstr ""
 
 # ccf6f86f8e4e4772902db8fd12751b1c
-#: ../../../source/reference/server_variables.rst:212
+#: ../../../source/reference/server_variables.rst:214
 msgid "Here is an example SQL to disable optimization::"
 msgstr ""
 
 # 15ee150a65fa41839a0aba95515d5138
-#: ../../../source/reference/server_variables.rst:236
+#: ../../../source/reference/server_variables.rst:238
 msgid "mroonga_match_escalation_threshold"
 msgstr ""
 
 # 6713a39526c8497eaee1250509b6b6ac
-#: ../../../source/reference/server_variables.rst:238
+#: ../../../source/reference/server_variables.rst:240
 msgid ""
 "The threshold to determin whether match method is escalated. See `search "
 "specification for groonga <http://groonga.org/docs/spec/search.html>`_ about "
@@ -475,7 +475,7 @@ msgid ""
 msgstr ""
 
 # 7aff1a3ab66945bcbe486da9fb4ca5d0
-#: ../../../source/reference/server_variables.rst:243
+#: ../../../source/reference/server_variables.rst:245
 msgid ""
 "The default value is the same as groonga's default value. It's 0 for the "
 "default installation. The dafault value can be configured in my.cnf or by "
@@ -484,14 +484,14 @@ msgid ""
 msgstr ""
 
 # aeb0d450bd6943cea8a607bfd7039a03
-#: ../../../source/reference/server_variables.rst:249
+#: ../../../source/reference/server_variables.rst:251
 msgid ""
 "Here is an example to use -1 as a threshold to determin whether match method "
 "is escalated. -1 means that never escalated."
 msgstr ""
 
 # 4ef63d1019614da3a29580b42060f249
-#: ../../../source/reference/server_variables.rst:257
+#: ../../../source/reference/server_variables.rst:259
 msgid ""
 "Here is an another example to show behavior change by the variable value."
 msgstr ""
