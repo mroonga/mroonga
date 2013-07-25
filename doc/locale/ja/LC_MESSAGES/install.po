@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-29 00:31+0900\n"
+"POT-Creation-Date: 2013-07-25 16:34+0900\n"
 "PO-Revision-Date: 2013-04-14 22:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -297,7 +297,7 @@ msgstr ""
 
 # 8cf9e090258c4e009607b0d1d84ca3c3
 #: ../../../source/install.rst:371
-msgid "Fedora 18"
+msgid "Fedora 19"
 msgstr ""
 
 # 86f5d7b63ff0455a99e2feb1e5c25a49
@@ -335,10 +335,9 @@ msgid ""
 "changes <https://github.com/mroonga/mroonga/tree/master/packages/source/"
 "patches>`_ are needed for building mroonga for Windows."
 msgstr ""
-"mroongaのWindowsバイナリはMariaDBのバイナリと一緒に提供されます。"
-"これは、mroongaのWindows版をビルドするのに `いくつかの変更が"
-" <https://github.com/mroonga/mroonga/tree/master/packages/source/"
-"patches>`_ 必要だからです。"
+"mroongaのWindowsバイナリはMariaDBのバイナリと一緒に提供されます。これは、"
+"mroongaのWindows版をビルドするのに `いくつかの変更が <https://github.com/"
+"mroonga/mroonga/tree/master/packages/source/patches>`_ 必要だからです。"
 
 # cef648a1e27d48da8271f1de24200dcb
 # 96e0bf2ecef84211939a5f50e14debcf
@@ -365,25 +364,27 @@ msgstr ""
 
 # d6932ffc20ae4d02877bf705a41708dc
 #: ../../../source/install.rst:436
+#, fuzzy
 msgid ""
-"For 32-bit environment, download `mariadb-10.0.3-mroonga-3.05-win32.zip "
-"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-"
+"For 32-bit environment, download `mariadb-10.0.3-mroonga-3.06-win32.zip "
+"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.06-"
 "win32.zip>`_ and extract it."
 msgstr ""
-"32bit環境では `mariadb-10.0.3-mroonga-3.05-win32.zip "
-"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-"
-"win32.zip>`_ をダウンロードして展開します。"
+"32bit環境では `mariadb-10.0.3-mroonga-3.05-win32.zip <http://packages."
+"groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-win32.zip>`_ をダウン"
+"ロードして展開します。"
 
 # 339444287f8d42cea403c15db04b65e3
 #: ../../../source/install.rst:440
+#, fuzzy
 msgid ""
-"For 64-bit environment, download `mariadb-10.0.3-mroonga-3.05-winx64.zip "
-"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-"
+"For 64-bit environment, download `mariadb-10.0.3-mroonga-3.06-winx64.zip "
+"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.06-"
 "winx64.zip>`_ and extract it."
 msgstr ""
-"64bit環境では `mariadb-10.0.3-mroonga-3.05-winx64.zip "
-"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-"
-"winx64.zip>`_ をダウンロードして展開します。"
+"64bit環境では `mariadb-10.0.3-mroonga-3.05-winx64.zip <http://packages."
+"groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-winx64.zip>`_ をダウ"
+"ンロードして展開します。"
 
 # 96faa87e06744aba901adba70eef342c
 #: ../../../source/install.rst:445 ../../../source/install.rst:560

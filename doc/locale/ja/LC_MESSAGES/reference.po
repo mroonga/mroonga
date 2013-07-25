@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-05 07:10+0000\n"
+"POT-Creation-Date: 2013-07-25 17:03+0900\n"
 "PO-Revision-Date: 2013-05-07 19:09+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -153,13 +153,101 @@ msgid ""
 "Here are the explanations of server variables that are introduced by mroonga."
 msgstr "独自に追加されたサーバ変数を説明します。"
 
+# 0d20add40e994b6cabaf3db8245006bb
+#: ../../../source/reference/server_variables.rst:11
+msgid "mroonga_action_on_fulltext_query_error"
+msgstr ""
+
+# e5b27ecc3abe4723849764d752d6ad68
+#: ../../../source/reference/server_variables.rst:13
+msgid "The default behavior of fulltext query error."
+msgstr ""
+"全文検索クエリエラーの振舞いです。"
+
+# 9ade67b2faa9486a83ac9138b88d9c91
+#: ../../../source/reference/server_variables.rst:15
+msgid ""
+"The default value of ``mroonga_action_on_fulltext_query_error`` is "
+"``ERROR_AND_LOG``. This is the conventional behavior which is equal to old "
+"version of mroonga."
+msgstr ""
+"``mroonga_action_on_fulltext_query_error`` のデフォルト値は "
+"``ERROR_AND_LOG`` です。これは従来のmroongaと同等に振舞います。"
+
+# 0887399d570741bf9cbf86eb9970a428
+#: ../../../source/reference/server_variables.rst:18
+msgid ""
+"Here is the list of ``mroonga_action_on_fulltext_query_error`` which you can "
+"use."
+msgstr "使用可能な ``mroonga_action_on_fulltext_query_error`` のリストです。"
+
+# addd67193d19457baaaec5ebe0682e02
+#: ../../../source/reference/server_variables.rst:23
+msgid "Value"
+msgstr "値"
+
+# e92214c930c34bd1b3e047bd7f127af9
+#: ../../../source/reference/server_variables.rst:24
+#: ../../../source/reference/server_variables.rst:114
+msgid "Description"
+msgstr "説明"
+
+# ed67330e2fda48978904a9cc95935cff
+#: ../../../source/reference/server_variables.rst:25
+#: ../../../source/reference/server_variables.rst:124
+msgid "ERROR"
+msgstr ""
+
+# 0272c9a21ad741a3bc1136532a669c26
+#: ../../../source/reference/server_variables.rst:26
+msgid "Report an error. Logging is disabled."
+msgstr "エラーを報告する。ログは無効です。"
+
+# 8b40fdae8e26494ba931fccb65e0f794
+#: ../../../source/reference/server_variables.rst:27
+msgid "ERROR_AND_LOG"
+msgstr ""
+
+# f1d914923f704a409deed56aa115affb
+#: ../../../source/reference/server_variables.rst:28
+msgid "Report an error. Logging is enabled. (This is the default)"
+msgstr "エラーを報告する。ログは有効です。(これがデフォルトです)"
+
+# c91187979c5642e1914d0c793c7e6d3b
+#: ../../../source/reference/server_variables.rst:29
+msgid "IGNORE"
+msgstr ""
+
+# 918f4dc56f5a4c0c8bb69dfc07e31489
+#: ../../../source/reference/server_variables.rst:30
+msgid "Just ignore an error. Logging is disabled."
+msgstr "エラーを無視する。ログは無効です。"
+
+# 67aecd6b076f4bcfbe88f0fca8dd0e64
+#: ../../../source/reference/server_variables.rst:31
+msgid "IGNORE_AND_LOG"
+msgstr ""
+
+# 842af21eac7f4699baa0bb4bd283d684
+#: ../../../source/reference/server_variables.rst:32
+msgid "Ignore an error, but logging is enabled. (Similar to InnoDB behavior)"
+msgstr "エラーを無視するが、ログは有効です。 (InnoDBと似た振舞です)"
+
+# fd16998818f44f5da06767458a00d329
+#: ../../../source/reference/server_variables.rst:34
+msgid ""
+"Here is an example SQL to confirm the value of "
+"``mroonga_action_on_fulltext_query_error``::"
+msgstr ""
+"``mroonga_action_on_fulltext_query_error`` を確認するためのSQL例です::"
+
 # 3f5fb8dfbc954a2c99f47e0c08dff40a
-#: ../../../source/reference/server_variables.rst:9
+#: ../../../source/reference/server_variables.rst:45
 msgid "mroonga_default_parser"
 msgstr ""
 
 # e12a4104fc9741cda25bae8ebfc902ca
-#: ../../../source/reference/server_variables.rst:11
+#: ../../../source/reference/server_variables.rst:47
 msgid ""
 "The default parser of the full text search. The default value can be "
 "specified by ``--with-default-parser=PARSER`` configure argument, whose "
@@ -169,7 +257,7 @@ msgstr ""
 "parser`` オプションで指定できます（無指定時は ``TokenBigram`` ）。"
 
 # 1776914c7a7342a2a86670c27a2a8e08
-#: ../../../source/reference/server_variables.rst:14
+#: ../../../source/reference/server_variables.rst:50
 msgid ""
 "Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
 "search parser. It is used by ``body_index`` fulltext index."
@@ -179,149 +267,139 @@ msgstr ""
 "``TokenBigramSplitSymbolAlphaDigit`` を使います。"
 
 # 3f5fb8dfbc954a2c99f47e0c08dff40a
-#: ../../../source/reference/server_variables.rst:28
+#: ../../../source/reference/server_variables.rst:64
 msgid "mroonga_libgroonga_version"
 msgstr ""
 
 # 16c600e1ea5f4c98abdedf73f42a156d
-#: ../../../source/reference/server_variables.rst:30
+#: ../../../source/reference/server_variables.rst:66
 msgid "The version string of the groonga library."
 msgstr "groongaライブラリのバージョン"
 
 # 87036fe433074be28ebe4e0f096c4409
-#: ../../../source/reference/server_variables.rst:32
+#: ../../../source/reference/server_variables.rst:68
 msgid "Here is an example SQL to confirm the using groonga library version::"
 msgstr "groongaライブラリのバージョンを確認するためのSQL例です::"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference/server_variables.rst:43
+#: ../../../source/reference/server_variables.rst:79
 msgid "mroonga_log_file"
 msgstr ""
 
 # f8193ef7958543a4ad432bc0f502af33
-#: ../../../source/reference/server_variables.rst:45
+#: ../../../source/reference/server_variables.rst:81
 msgid ""
 "The path of the log file of mroonga. The default value is ``groonga.log``."
 msgstr "mroongaのログファイル名。デフォルト値は ``groonga.log`` 。"
 
 # 71d4f510b297491abbb1ce3ca68db73c
-#: ../../../source/reference/server_variables.rst:47
+#: ../../../source/reference/server_variables.rst:83
 msgid ""
 "Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
 msgstr "ログファイルを ``/tmp/mroonga.log`` に変更する例です::"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference/server_variables.rst:71
+#: ../../../source/reference/server_variables.rst:107
 msgid "mroonga_log_level"
 msgstr ""
 
 # 834d5940c3844cf4a109cd5ba7d0f5c4
-#: ../../../source/reference/server_variables.rst:73
+#: ../../../source/reference/server_variables.rst:109
 msgid "The output level of mroonga log file. The default value is ``NOTICE``."
 msgstr "mroongaのログの出力レベル。デフォルト値は ``NOTICE`` 。"
 
 # 0887399d570741bf9cbf86eb9970a428
-#: ../../../source/reference/server_variables.rst:75
+#: ../../../source/reference/server_variables.rst:111
 msgid "Here is the list of ``mroonga_log_level`` which you can use."
 msgstr "使用可能な ``mroonga_log_level`` のリストです。"
 
-# e92214c930c34bd1b3e047bd7f127af9
-#: ../../../source/reference/server_variables.rst:78
-msgid "Description"
-msgstr "説明"
-
 # b536826e52fd4b788468545b75f4266a
-#: ../../../source/reference/server_variables.rst:78
+#: ../../../source/reference/server_variables.rst:114
 msgid "Log level"
 msgstr "ログレベル"
 
 # 454a33f99ba74bce82b1b56409997148
-#: ../../../source/reference/server_variables.rst:80
+#: ../../../source/reference/server_variables.rst:116
 msgid "NONE"
 msgstr ""
 
 # 8c026dc6d9794af5801363ae577ea6d8
-#: ../../../source/reference/server_variables.rst:80
+#: ../../../source/reference/server_variables.rst:116
 msgid "No logging output."
 msgstr "ログ出力なし。"
 
 # 2ac35583cf384b04a7a5c8a323c8ac5f
-#: ../../../source/reference/server_variables.rst:82
+#: ../../../source/reference/server_variables.rst:118
 msgid "EMERG"
 msgstr ""
 
 # 73d91abce9f64060aebf21d2e1e08359
-#: ../../../source/reference/server_variables.rst:82
+#: ../../../source/reference/server_variables.rst:118
 msgid "Logging emergency messages such as database corruption."
 msgstr "データベースの破損などの緊急に対処が必要なログメッセージを出力する。"
 
 # 6c3a1436519b4b6cbbad63837df2031d
-#: ../../../source/reference/server_variables.rst:84
+#: ../../../source/reference/server_variables.rst:120
 msgid "ALERT"
 msgstr ""
 
 # 73d91abce9f64060aebf21d2e1e08359
-#: ../../../source/reference/server_variables.rst:84
+#: ../../../source/reference/server_variables.rst:120
 msgid "Logging alert messages such as internal error."
 msgstr "内部的なエラーを示すログを出力する。"
 
 # 2d37f46dda7a4ca3aee19803fe093a4a
-#: ../../../source/reference/server_variables.rst:86
+#: ../../../source/reference/server_variables.rst:122
 msgid "CRIT"
 msgstr ""
 
 # e5e3cd326741487b83dcdc9f29a760bb
-#: ../../../source/reference/server_variables.rst:86
+#: ../../../source/reference/server_variables.rst:122
 msgid "Logging critical messasge such as deadlock."
 msgstr "デッドロックの発生など致命的なログメッセージを出力する。"
 
-# ed67330e2fda48978904a9cc95935cff
-#: ../../../source/reference/server_variables.rst:88
-msgid "ERROR"
-msgstr ""
-
 # 73d91abce9f64060aebf21d2e1e08359
-#: ../../../source/reference/server_variables.rst:88
+#: ../../../source/reference/server_variables.rst:124
 msgid "Logging error messages such as API error which mroonga use."
 msgstr "mroongaが使用しているAPIのエラーログメッセージを出力する。"
 
 # 73d91abce9f64060aebf21d2e1e08359
-#: ../../../source/reference/server_variables.rst:90
+#: ../../../source/reference/server_variables.rst:126
 msgid "Logging warning messages such as invalid argument."
 msgstr "引数の誤りなどの警告ログメッセージを出力する。"
 
 # 2049c9b8daaf4794b50448aa2de1a459
-#: ../../../source/reference/server_variables.rst:90
+#: ../../../source/reference/server_variables.rst:126
 msgid "WARNING"
 msgstr ""
 
 # 73d91abce9f64060aebf21d2e1e08359
-#: ../../../source/reference/server_variables.rst:92
+#: ../../../source/reference/server_variables.rst:128
 msgid "Logging notice messages such as configuration or status changed."
 msgstr "設定や状態の変化を示すログメッセージを出力する。"
 
 # 3e94e148364b4015a4acf56cc35efc8e
-#: ../../../source/reference/server_variables.rst:92
+#: ../../../source/reference/server_variables.rst:128
 msgid "NOTICE"
 msgstr ""
 
 # 8843939417ac4be3ae9a5b89c5a20667
-#: ../../../source/reference/server_variables.rst:94
+#: ../../../source/reference/server_variables.rst:130
 msgid "INFO"
 msgstr ""
 
 # cd02f092324847a38b275ccf3a4889fc
-#: ../../../source/reference/server_variables.rst:94
+#: ../../../source/reference/server_variables.rst:130
 msgid "Logging informative messages such as file system operation."
 msgstr "ファイル操作などの情報をログメッセージとして出力する。"
 
 # 6e833ff062f647b795e61722a94e2975
-#: ../../../source/reference/server_variables.rst:96
+#: ../../../source/reference/server_variables.rst:132
 msgid "DEBUG"
 msgstr ""
 
 # 73d91abce9f64060aebf21d2e1e08359
-#: ../../../source/reference/server_variables.rst:96
+#: ../../../source/reference/server_variables.rst:132
 msgid ""
 "Logging debug messages. Recommend to use for mroonga developer or bug "
 "reporter."
@@ -329,17 +407,17 @@ msgstr ""
 "デバッグメッセージを出力する。mroonga開発者やバグレポートの際にお勧めします。"
 
 # 346133d311844f71b2292d0ceb0ccb6b
-#: ../../../source/reference/server_variables.rst:99
+#: ../../../source/reference/server_variables.rst:135
 msgid "DUMP"
 msgstr ""
 
 # 9912af361be94a8bafa8d46e43f3c7fa
-#: ../../../source/reference/server_variables.rst:99
+#: ../../../source/reference/server_variables.rst:135
 msgid "Logging dump messages."
 msgstr "テストツール向けのダンプログメッセージを出力します。"
 
 # a79415e7cef840b98a955e797f77b8a2
-#: ../../../source/reference/server_variables.rst:102
+#: ../../../source/reference/server_variables.rst:138
 msgid ""
 "Here is an example transcript to change log level to ``DEBUG`` that logs "
 "many messages for debugging::"
@@ -348,27 +426,27 @@ msgstr ""
 "のたくさんのメッセージがログに出力されます::"
 
 # 0afc389c9a5b4651bd86962657c0034b
-#: ../../../source/reference/server_variables.rst:124
+#: ../../../source/reference/server_variables.rst:160
 msgid "mroonga_version"
 msgstr ""
 
 # 16c600e1ea5f4c98abdedf73f42a156d
-#: ../../../source/reference/server_variables.rst:126
+#: ../../../source/reference/server_variables.rst:162
 msgid "The version string of mroonga."
 msgstr "mroongaのバージョン"
 
 # fd16998818f44f5da06767458a00d329
-#: ../../../source/reference/server_variables.rst:128
+#: ../../../source/reference/server_variables.rst:164
 msgid "Here is an example SQL to confirm the running mroonga version::"
 msgstr "実行中のmroongaのバージョンを確認するためのSQL例です::"
 
 # e84afdfd558e4abdb81cb8d681bbeb4a
-#: ../../../source/reference/server_variables.rst:139
+#: ../../../source/reference/server_variables.rst:175
 msgid "mroonga_dry_write"
 msgstr ""
 
 # a21ce3ce10fb4fd4946db0ec63d293ae
-#: ../../../source/reference/server_variables.rst:141
+#: ../../../source/reference/server_variables.rst:177
 msgid ""
 "Whether really write data to groonga database or not. The default value is "
 "``OFF`` that means data are really written to groonga database. Usually we "
@@ -383,17 +461,17 @@ msgstr ""
 "時間にgroongaの処理時間は含まれません。"
 
 # fd16998818f44f5da06767458a00d329
-#: ../../../source/reference/server_variables.rst:148
+#: ../../../source/reference/server_variables.rst:184
 msgid "Here is an example SQL to disable writing data to groonga database::"
 msgstr "groongaデータベースに値を書き込まないようにするSQLの例です::"
 
 # 18afece537e5420b80cfda6b5a78f234
-#: ../../../source/reference/server_variables.rst:171
+#: ../../../source/reference/server_variables.rst:207
 msgid "mroonga_enable_optimization"
 msgstr ""
 
 # 318a50da3b1e4e5391e159c49e053348
-#: ../../../source/reference/server_variables.rst:173
+#: ../../../source/reference/server_variables.rst:209
 msgid ""
 "Whether enable optimization or not. The default value is ``ON`` that means "
 "optimization is enabled. Usually we don't need to change the value of this "
@@ -404,17 +482,17 @@ msgstr ""
 "ク時に便利です。"
 
 # fd16998818f44f5da06767458a00d329
-#: ../../../source/reference/server_variables.rst:178
+#: ../../../source/reference/server_variables.rst:214
 msgid "Here is an example SQL to disable optimization::"
 msgstr "最適化を無効にするSQLの例です::"
 
 # 35b05552724e47eeb94e464809f6576a
-#: ../../../source/reference/server_variables.rst:202
+#: ../../../source/reference/server_variables.rst:238
 msgid "mroonga_match_escalation_threshold"
 msgstr ""
 
 # f4f99e7e5bf34ce1bfd3b220d53b1e44
-#: ../../../source/reference/server_variables.rst:204
+#: ../../../source/reference/server_variables.rst:240
 msgid ""
 "The threshold to determin whether match method is escalated. See `search "
 "specification for groonga <http://groonga.org/docs/spec/search.html>`_ about "
@@ -425,7 +503,7 @@ msgstr ""
 "してください。"
 
 # a3f559165602416ab08ab47755132017
-#: ../../../source/reference/server_variables.rst:209
+#: ../../../source/reference/server_variables.rst:245
 msgid ""
 "The default value is the same as groonga's default value. It's 0 for the "
 "default installation. The dafault value can be configured in my.cnf or by "
@@ -438,7 +516,7 @@ msgstr ""
 "THRESHOLD;`` でデフォルト値を設定できます。"
 
 # 1d2e6e246f654b57b1276c9a64fc09b5
-#: ../../../source/reference/server_variables.rst:215
+#: ../../../source/reference/server_variables.rst:251
 msgid ""
 "Here is an example to use -1 as a threshold to determin whether match method "
 "is escalated. -1 means that never escalated."
@@ -447,7 +525,7 @@ msgstr ""
 "す。-1は絶対エスカレーションしないという意味です。"
 
 # 08b07f5a18bf41738ab639ad2e2017a8
-#: ../../../source/reference/server_variables.rst:223
+#: ../../../source/reference/server_variables.rst:259
 msgid ""
 "Here is an another example to show behavior change by the variable value."
 msgstr "この変数の値による挙動の変化を示す別の例です。"
@@ -1370,7 +1448,8 @@ msgid ""
 "As groonga allocates memory chunks each 256KB, you can estimate the size of "
 "database you can handle by following formula::"
 msgstr ""
-"groongaはメモリを256KBごとに確保するので、扱えるデータベースのサイズを以下の式で見積ることができます::"
+"groongaはメモリを256KBごとに確保するので、扱えるデータベースのサイズを以下の"
+"式で見積ることができます::"
 
 # 29334292995747adb9c881d9916641f7
 #: ../../../source/reference/troubleshooting.rst:32
@@ -1378,9 +1457,8 @@ msgid ""
 "If you want to handle over 16GB groonga database, you must specify at least "
 "65536 as the value of ``vm.max_map_count``::"
 msgstr ""
-"16GBを超えるデータベースを扱うには、少くとも65536を ``vm.max_map_count`` の"
-"値として設定しないといけません。"
-
+"16GBを超えるデータベースを扱うには、少くとも65536を ``vm.max_map_count`` の値"
+"として設定しないといけません。"
 
 # 09425fdf5e29416dbc2784c8cbcfb54e
 #: ../../../source/reference/troubleshooting.rst:36
@@ -1388,8 +1466,8 @@ msgid ""
 "You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm."
 "max_map_count=65536``."
 msgstr ""
-"``sudo sysctl -w vm.max_map_count=65536`` で一時的に ``vm."
-"max_map_count`` を調整することができます。"
+"``sudo sysctl -w vm.max_map_count=65536`` で一時的に ``vm.max_map_count`` を"
+"調整することができます。"
 
 # 3c990562958040a2a9f011b2858b46ae
 #: ../../../source/reference/troubleshooting.rst:38
