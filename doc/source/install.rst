@@ -367,7 +367,7 @@ Install groonga-normalizer-mysql package::
    If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
-Fedora 18
+Fedora 19
 ---------
 
 Install ::
