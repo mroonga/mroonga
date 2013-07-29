@@ -208,6 +208,22 @@ Linux 側でファイル名を変更します。これだと mroonga のバー�
 2. clone済みmroongaディレクトリ内でmake update-documentを実行し、clone したドキュメントアップロード用のリポジトリへ反映する
 3. mroonga.github.com へコミットを行い GitHub へ push
 
+Homebrewの更新
+--------------------------
+
+OS Xでのパッケージ管理方法として `Homebrew <http://brew.sh/>`_ があります。
+
+groongaの場合はHomebrewへpull requestを送りますが、mroongaの場合は別途用意してあるhomebrewリポジトリを更新します。
+
+  https://github.com/mroonga/homebrew
+
+mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを実行します。update.shの引数にはリリース時のバージョンを指定します。例えば、3.06のリリースのときは以下を実行しました。
+
+  $ ./update.sh 3.06
+
+実行すると、FormulaのソースアーカイブのURLとsha256チェックサムを更新します。
+あとは、変更内容をコミットすればHomebrewの更新作業は完了です。
+
 リリースメールの送信
 --------------------
 
