@@ -53,7 +53,7 @@ fi
 %configure CPPFLAGS="-DDISABLE_DTRACE" \
     --disable-static \
     --with-mysql-source=../mariadb-%{mariadb_version} \
-    --enable-fast-mutexes
+    --enable-fast-mutexes \
     %{?mroonga_configure_options}
 make %{?_smp_mflags}
 
