@@ -53,7 +53,7 @@ fi
 %configure CPPFLAGS="-DDISABLE_DTRACE" \
     --disable-static \
     --with-mysql-source=../mariadb-%{mariadb_version} \
-    --disable-fast-mutexes
+    --enable-fast-mutexes
 make %{?_smp_mflags}
 
 
