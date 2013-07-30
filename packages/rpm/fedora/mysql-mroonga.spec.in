@@ -54,6 +54,7 @@ fi
     --disable-static \
     --with-mysql-source=../mysql-%{mysql_version} \
     --disable-fast-mutexes
+    %{?mroonga_configure_options}
 make %{?_smp_mflags}
 
 

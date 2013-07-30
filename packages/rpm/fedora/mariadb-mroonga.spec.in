@@ -54,6 +54,7 @@ fi
     --disable-static \
     --with-mysql-source=../mariadb-%{mariadb_version} \
     --enable-fast-mutexes
+    %{?mroonga_configure_options}
 make %{?_smp_mflags}
 
 
