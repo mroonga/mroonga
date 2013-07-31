@@ -1779,7 +1779,7 @@ static int mrn_init(void *p)
 #ifdef _WIN32
   HMODULE current_module = GetModuleHandle(NULL);
   mrn_binlog_filter =
-#if MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 50600
     *((Rpl_filter **) GetProcAddress(current_module,
       "?binlog_filter@@3PEAVRpl_filter@@EA"));
 #else
@@ -1787,7 +1787,7 @@ static int mrn_init(void *p)
       "?binlog_filter@@3PAVRpl_filter@@A"));
 #endif
   mrn_my_tz_UTC =
-#if MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 50600
     *((Time_zone **) GetProcAddress(current_module,
       "?my_tz_UTC@@3PEAVTime_zone@@EA"));
 #else
