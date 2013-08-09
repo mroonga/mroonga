@@ -178,12 +178,6 @@ extern "C" {
 #  define MRN_HAVE_POINT_XY
 #endif
 
-#if defined(_WIN32) || defined(_WIN64)
-#  define MRN_API __declspec(dllexport)
-#else
-#  define MRN_API
-#endif
-
 #if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000)
 #  define MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
 #endif
