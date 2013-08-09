@@ -18,8 +18,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_table_hpp
-#define _mrn_table_hpp
+#ifndef MRN_TABLE_HPP_
+#define MRN_TABLE_HPP_
 
 #ifdef __cplusplus
 extern "C" {
@@ -169,4 +169,4 @@ void mrn_clear_alter_share(THD *thd);
 }
 #endif
 
-#endif /* _mrn_table_hpp */
+#endif /* MRN_TABLE_HPP_ */

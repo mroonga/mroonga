@@ -17,8 +17,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_mysql_h
-#define _mrn_mysql_h
+#ifndef MRN_MYSQL_H_
+#define MRN_MYSQL_H_
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -80,4 +80,4 @@
 #  define MRN_DBUG_ENTER_METHOD() MRN_DBUG_ENTER_FUNCTION()
 #endif
 
-#endif /* _mrn_mysql_h */
+#endif /* MRN_MYSQL_H_ */

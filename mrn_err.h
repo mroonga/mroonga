@@ -15,8 +15,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_err_h
-#define _mrn_err_h
+#ifndef MRN_ERR_H_
+#define MRN_ERR_H_
 
 #define ER_MRN_INVALID_TABLE_PARAM_NUM 16501
 #define ER_MRN_INVALID_TABLE_PARAM_STR "The table parameter '%-.64s' is invalid"
@@ -29,4 +29,4 @@
 #define ER_MRN_INVALID_NULL_VALUE_NUM 16505
 #define ER_MRN_INVALID_NULL_VALUE_STR "NULL value can't be used for %s"
 
-#endif /* _mrn_err_h */
+#endif /* MRN_ERR_H_ */

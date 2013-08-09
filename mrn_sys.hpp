@@ -18,8 +18,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_sys_hpp
-#define _mrn_sys_hpp
+#ifndef MRN_SYS_HPP_
+#define MRN_SYS_HPP_
 
 #include <groonga.h>
 #include "mrn_macro.hpp"
@@ -33,4 +33,4 @@ bool mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key);
 
 MRN_END_DECLS
 
-#endif /* _mrn_sys_hpp */
+#endif /* MRN_SYS_HPP_ */

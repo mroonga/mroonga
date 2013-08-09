@@ -19,8 +19,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _ha_mroonga_hpp
-#define _ha_mroonga_hpp
+#ifndef HA_MROONGA_HPP_
+#define HA_MROONGA_HPP_
 
 #ifdef USE_PRAGMA_INTERFACE
 #pragma interface
@@ -1161,4 +1161,4 @@ private:
 }
 #endif
 
-#endif /* _ha_mroonga_hpp */
+#endif /* HA_MROONGA_HPP_ */

@@ -17,8 +17,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_mysql_compat_h
-#define _mrn_mysql_compat_h
+#ifndef MRN_MYSQL_COMPAT_H_
+#define MRN_MYSQL_COMPAT_H_
 
 #include "mrn_mysql.h"
 
@@ -83,4 +83,4 @@
 #  define FN_LIBCHAR2 FN_LIBCHAR
 #endif
 
-#endif /* _mrn_mysql_compat_h */
+#endif /* MRN_MYSQL_COMPAT_H_ */

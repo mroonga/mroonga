@@ -16,8 +16,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _mrn_version_h
-#define _mrn_version_h
+#ifndef MRN_VERSION_H_
+#define MRN_VERSION_H_
 
 /* Define mroonga version in string */
 #define MRN_VERSION "@MRN_VERSION@"
@@ -37,4 +37,4 @@
 /* Define to the full name and version of this package. */
 #define MRN_PACKAGE_STRING "@MRN_PACKAGE_STRING@"
 
-#endif /* _mrn_version_h */
+#endif /* MRN_VERSION_H_ */
