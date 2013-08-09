@@ -36,8 +36,8 @@ struct st_mrn_snip_info
   String result_str;
 };
 
-my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
-                            char *message, grn_snip **snippet)
+static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
+                                   char *message, grn_snip **snippet)
 {
   unsigned int i;
   CHARSET_INFO *cs;
