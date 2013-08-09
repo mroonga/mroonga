@@ -22,8 +22,9 @@
 #include <mrn_mysql.h>
 #include <mrn_windows.hpp>
 #include <mrn_table.hpp>
+#include <mrn_macro.hpp>
 
-extern "C" {
+MRN_BEGIN_DECLS
 
 MRN_API my_bool last_insert_grn_id_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
 {
@@ -50,4 +51,4 @@ MRN_API void last_insert_grn_id_deinit(UDF_INIT *initid)
 {
 }
 
-}
+MRN_END_DECLS
