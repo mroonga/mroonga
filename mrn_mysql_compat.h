@@ -83,4 +83,14 @@
 #  define FN_LIBCHAR2 FN_LIBCHAR
 #endif
 
+#if MYSQL_VERSION_ID >= 50607
+#  define MRN_GET_ERROR_MESSAGE current_thd->get_stmt_da()->message()
+#else
+#  if MYSQL_VERSION_ID >= 50500
+#    define MRN_GET_ERROR_MESSAGE current_thd->stmt_da->message()
+#  else
+#    define MRN_GET_ERROR_MESSAGE current_thd->main_da.message()
+#  endif
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

@@ -164,16 +164,6 @@ extern "C" {
 #  define MRN_HAVE_HA_REBIND_PSI
 #endif
 
-#if MYSQL_VERSION_ID >= 50607
-#  define MRN_GET_ERROR_MESSAGE current_thd->get_stmt_da()->message()
-#else
-#  if MYSQL_VERSION_ID >= 50500
-#    define MRN_GET_ERROR_MESSAGE current_thd->stmt_da->message()
-#  else
-#    define MRN_GET_ERROR_MESSAGE current_thd->main_da.message()
-#  endif
-#endif
-
 #if MYSQL_VERSION_ID >= 50612 && !defined(MRN_MARIADB_P)
 #  define MRN_HAVE_POINT_XY
 #endif
