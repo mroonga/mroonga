@@ -30,6 +30,8 @@
 #include <mrn_mysql.h>
 
 namespace mrn {
+  char *PathMapper::default_path_prefix = NULL;
+
   PathMapper::PathMapper(const char *mysql_path, const char *path_prefix)
     : mysql_path_(mysql_path),
       path_prefix_(path_prefix) {

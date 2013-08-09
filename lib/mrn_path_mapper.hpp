@@ -27,7 +27,10 @@
 namespace mrn {
   class PathMapper {
   public:
-    PathMapper(const char *mysql_path, const char *path_prefix);
+    static char *default_path_prefix;
+
+    PathMapper(const char *mysql_path,
+               const char *path_prefix=default_path_prefix);
     const char *db_path();
     const char *db_name();
     const char *table_name();
