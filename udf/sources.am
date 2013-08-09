@@ -1,3 +1,4 @@
 libmrn_udf_la_SOURCES =				\
 	mrn_udf_last_insert_grn_id.cpp		\
-	mrn_udf_snippet.cpp
+	mrn_udf_snippet.cpp			\
+	mrn_udf_command.cpp
