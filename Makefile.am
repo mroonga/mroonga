@@ -8,6 +8,7 @@ ACLOCAL_AMFLAGS = $$ACLOCAL_ARGS
 include sources.am
 
 libraries =					\
+	$(top_builddir)/udf/libmrn_udf.la	\
 	$(top_builddir)/lib/libmrn_no_mysql.la	\
 	$(top_builddir)/lib/libmrn_need_mysql.la
 
@@ -25,6 +26,7 @@ ha_mroonga_la_LIBADD   = $(libraries)
 SUBDIRS =					\
 	build					\
 	lib					\
+	udf					\
 	test					\
 	doc					\
 	tools					\

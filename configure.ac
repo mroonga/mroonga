@@ -416,6 +416,7 @@ AC_CONFIG_FILES([
   build/Makefile
   build/cmake_modules/Makefile
   lib/Makefile
+  udf/Makefile
   test/Makefile
   test/unit/Makefile
   test/sql/Makefile

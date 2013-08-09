@@ -1,0 +1,2 @@
+libmrn_udf_la_SOURCES =				\
+	mrn_udf_last_insert_grn_id.cpp
