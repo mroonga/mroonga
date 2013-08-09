@@ -10,3 +10,6 @@ EXPORTS
   mroonga_command
   mroonga_command_init
   mroonga_command_deinit
+  mroonga_escape
+  mroonga_escape_init
+  mroonga_escape_deinit

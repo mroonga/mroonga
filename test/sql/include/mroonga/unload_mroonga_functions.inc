@@ -18,4 +18,5 @@
 DROP FUNCTION last_insert_grn_id;
 DROP FUNCTION mroonga_snippet;
 DROP FUNCTION mroonga_command;
+DROP FUNCTION mroonga_escape;
 --enable_query_log
