@@ -38,7 +38,8 @@ INSERT INTO Bugs (id, tag) VALUES (3, "groonga");
 SELECT * FROM Bugs;
 SELECT * FROM Tags;
 
-DROP TABLE Tags, Bugs;
+DROP TABLE Bugs;
+DROP TABLE Tags;
 
 --source include/mroonga/unload_mroonga_functions.inc
 --source include/mroonga/have_mroonga_deinit.inc

@@ -17,4 +17,5 @@ name
 Linux
 MySQL
 groonga
-DROP TABLE Tags, Bugs;
+DROP TABLE Bugs;
+DROP TABLE Tags;

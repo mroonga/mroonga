@@ -13,4 +13,5 @@ column_create Tags name COLUMN_SCALAR ShortText
 table_create Bugs TABLE_PAT_KEY UInt32
 column_create Bugs id COLUMN_SCALAR UInt32
 column_create Bugs tag COLUMN_SCALAR Tags
-DROP TABLE Tags, Bugs;
+DROP TABLE Bugs;
+DROP TABLE Tags;

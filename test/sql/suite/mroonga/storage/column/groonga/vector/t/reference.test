@@ -37,7 +37,8 @@ INSERT INTO Bugs (id, tags) VALUES (1, "Linux MySQL groonga");
 SELECT * FROM Bugs;
 SELECT * FROM Tags;
 
-DROP TABLE Tags, Bugs;
+DROP TABLE Bugs;
+DROP TABLE Tags;
 
 --source include/mroonga/unload_mroonga_functions.inc
 --source include/mroonga/have_mroonga_deinit.inc
