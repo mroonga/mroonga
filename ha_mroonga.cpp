@@ -76,7 +76,6 @@
 #include <mrn_encoding.hpp>
 #include <mrn_parameters_parser.hpp>
 #include <mrn_lock.hpp>
-#include <mrn_windows.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
