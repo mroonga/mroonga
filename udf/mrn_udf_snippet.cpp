@@ -66,7 +66,7 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
       goto error;
     }
   }
-if (mrn::encoding::set(ctx, cs)) {
+  if (mrn::encoding::set(ctx, cs)) {
     goto error;
   }
 
