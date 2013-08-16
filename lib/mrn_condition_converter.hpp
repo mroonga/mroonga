@@ -36,6 +36,8 @@ namespace mrn {
     grn_obj value_;
 
     void convert_equal(const Item_func *func_item, grn_obj *expression);
+    void append_field_value(const Item_field *field_item,
+                            grn_obj *expression);
   };
 }
 

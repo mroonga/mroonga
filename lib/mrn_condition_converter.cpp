@@ -76,17 +76,8 @@ namespace mrn {
     Item *left_item = arguments[0];
     Item *right_item = arguments[1];
     if (left_item->type() == Item::FIELD_ITEM) {
-      GRN_BULK_REWIND(&column_name_);
-#ifdef MRN_ITEM_HAVE_ITEM_NAME
-      Item_name_string *name = &(left_item->item_name);
-      GRN_TEXT_PUT(ctx_, &column_name_,
-                   name->ptr(), name->length());
-#else
-      GRN_TEXT_PUTS(ctx_, &column_name_, left_item->name);
-#endif
-      grn_expr_append_const(ctx_, expression, &column_name_,
-                            GRN_OP_PUSH, 1);
-      grn_expr_append_op(ctx_, expression, GRN_OP_GET_VALUE, 1);
+      const Item_field *field_item = static_cast<const Item_field *>(left_item);
+      append_field_value(field_item, expression);
       grn_obj_reinit(ctx_, &value_, GRN_DB_INT64, 0);
       GRN_INT64_SET(ctx_, &value_, right_item->val_int());
       grn_expr_append_const(ctx_, expression, &value_,
@@ -94,5 +85,24 @@ namespace mrn {
       grn_expr_append_op(ctx_, expression, GRN_OP_EQUAL, 2);
       grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
     }
+  }
+
+  void ConditionConverter::append_field_value(const Item_field *field_item,
+                                              grn_obj *expression) {
+    MRN_DBUG_ENTER_METHOD();
+
+    GRN_BULK_REWIND(&column_name_);
+#ifdef MRN_ITEM_HAVE_ITEM_NAME
+    Item_name_string *name = &(field_item->item_name);
+    GRN_TEXT_PUT(ctx_, &column_name_,
+                 name->ptr(), name->length());
+#else
+    GRN_TEXT_PUTS(ctx_, &column_name_, field_item->name);
+#endif
+    grn_expr_append_const(ctx_, expression, &column_name_,
+                          GRN_OP_PUSH, 1);
+    grn_expr_append_op(ctx_, expression, GRN_OP_GET_VALUE, 1);
+
+    DBUG_VOID_RETURN;
   }
 }
