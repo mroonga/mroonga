@@ -129,17 +129,15 @@ namespace mrn {
         const Item_func *func_item = (const Item_func *)item;
         switch (func_item->functype()) {
         case Item_func::EQ_FUNC:
-          {
+          if (is_storage_mode_) {
             Item **arguments = func_item->arguments();
             Item *left_item = arguments[0];
             Item *right_item = arguments[1];
-            if (is_storage_mode_) {
               if (left_item->type() == Item::FIELD_ITEM &&
                   right_item->basic_const_item() &&
                   right_item->type() == Item::INT_ITEM) {
                 convertable = true;
               }
-            }
           }
           break;
         case Item_func::FT_FUNC:
