@@ -7488,9 +7488,8 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
 
   Item *where = table->pos_in_table_list->select_lex->where;
 
-  bool is_storage_mode = !(share->wrapper_mode);
-  mrn::ConditionConverter converter(is_storage_mode, where);
-  converter.convert(info->ctx, expression);
+  mrn::ConditionConverter converter(info->ctx);
+  converter.convert(where, expression);
 
   DBUG_VOID_RETURN;
 }

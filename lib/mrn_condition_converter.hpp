@@ -26,16 +26,16 @@
 namespace mrn {
   class ConditionConverter {
   public:
-    ConditionConverter(bool is_storage_mode, const Item *where);
-    void convert(grn_ctx *ctx, grn_obj *expression);
+    ConditionConverter(grn_ctx *ctx);
+    ~ConditionConverter();
+    void convert(const Item *where, grn_obj *expression);
 
   private:
-    bool is_storage_mode_;
-    const Item *where_;
+    grn_ctx *ctx_;
+    grn_obj column_name_;
+    grn_obj value_;
 
-    void convert_equal(grn_ctx *ctx, grn_obj *expression,
-                       const Item_func *func_item,
-                       grn_obj *column_name, grn_obj *value);
+    void convert_equal(const Item_func *func_item, grn_obj *expression);
   };
 }
 
