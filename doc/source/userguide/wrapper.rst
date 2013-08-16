@@ -290,7 +290,7 @@ Note : This optimisation is targeting queries like "select ... match against ord
 * WHERE phrase has "match...against" only
 * no JOIN
 * with LIMIT
-* ORDER BY phrase has columns (including _id) or "match...against" that is used in WHERE phrase only
+* ORDER BY phrase has _id column or "match...against" that is used in WHERE phrase only
 
 .. rubric:: Footnotes
 
