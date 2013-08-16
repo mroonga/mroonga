@@ -28,6 +28,9 @@ namespace mrn {
   public:
     ConditionConverter(grn_ctx *ctx);
     ~ConditionConverter();
+    // caller must check "where" can be convertable by
+    // mrn::Condition::is_comvertable(). This method doesn't validate
+    // "where".
     void convert(const Item *where, grn_obj *expression);
 
   private:
@@ -38,6 +41,7 @@ namespace mrn {
     void convert_equal(const Item_func *func_item, grn_obj *expression);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
+    void append_const_item(Item *const_item, grn_obj *expression);
   };
 }
 

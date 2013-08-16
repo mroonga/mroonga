@@ -78,10 +78,7 @@ namespace mrn {
     if (left_item->type() == Item::FIELD_ITEM) {
       const Item_field *field_item = static_cast<const Item_field *>(left_item);
       append_field_value(field_item, expression);
-      grn_obj_reinit(ctx_, &value_, GRN_DB_INT64, 0);
-      GRN_INT64_SET(ctx_, &value_, right_item->val_int());
-      grn_expr_append_const(ctx_, expression, &value_,
-                            GRN_OP_PUSH, 1);
+      append_const_item(right_item, expression);
       grn_expr_append_op(ctx_, expression, GRN_OP_EQUAL, 2);
       grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
     }
@@ -102,6 +99,23 @@ namespace mrn {
     grn_expr_append_const(ctx_, expression, &column_name_,
                           GRN_OP_PUSH, 1);
     grn_expr_append_op(ctx_, expression, GRN_OP_GET_VALUE, 1);
+
+    DBUG_VOID_RETURN;
+  }
+
+  void ConditionConverter::append_const_item(Item *const_item,
+                                             grn_obj *expression) {
+    MRN_DBUG_ENTER_METHOD();
+
+    switch (const_item->type()) {
+    case Item::INT_ITEM:
+      grn_obj_reinit(ctx_, &value_, GRN_DB_INT64, 0);
+      GRN_INT64_SET(ctx_, &value_, const_item->val_int());
+      break;
+    default:
+      break;
+    }
+    grn_expr_append_const(ctx_, expression, &value_, GRN_OP_PUSH, 1);
 
     DBUG_VOID_RETURN;
   }
