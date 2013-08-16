@@ -147,10 +147,6 @@ extern "C" {
 #  define MRN_JOIN_TAB_HAVE_CONDITION
 #endif
 
-#if MYSQL_VERSION_ID >= 50607 && !defined(MRN_MARIADB_P)
-#  define MRN_ITEM_HAVE_ITEM_NAME
-#endif
-
 #if MYSQL_VERSION_ID < 50600
 #  define MRN_RBR_UPDATE_NEED_ALL_COLUMNS
 #endif
@@ -556,9 +552,6 @@ private:
   bool is_temporary_table_name(const char *name) const;
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
-  bool is_groonga_layer_condition(const Item *item,
-                                  const Item_func **match_against=NULL);
-  bool is_fulltext_search_item(const Item *item);
   bool is_grn_zero_column_value(grn_obj *column, grn_obj *value);
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit);

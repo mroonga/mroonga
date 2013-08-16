@@ -76,6 +76,7 @@
 #include <mrn_encoding.hpp>
 #include <mrn_parameters_parser.hpp>
 #include <mrn_lock.hpp>
+#include <mrn_condition_converter.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -7486,59 +7487,9 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
 
   Item *where = table->pos_in_table_list->select_lex->where;
 
-  if (!where || where->type() != Item::COND_ITEM) {
-    DBUG_VOID_RETURN;
-  }
-
-  grn_obj column_name, value;
-  GRN_TEXT_INIT(&column_name, 0);
-  GRN_VOID_INIT(&value);
-  Item_cond *cond_item = (Item_cond *)where;
-  List_iterator<Item> iterator(*((cond_item)->argument_list()));
-  const Item *sub_item;
-  while ((sub_item = iterator++)) {
-    switch (sub_item->type()) {
-    case Item::FUNC_ITEM:
-      {
-        const Item_func *func_item = (const Item_func *)sub_item;
-        switch (func_item->functype()) {
-        case Item_func::EQ_FUNC:
-          {
-            Item **arguments = func_item->arguments();
-            Item *left_item = arguments[0];
-            Item *right_item = arguments[1];
-            if (left_item->type() == Item::FIELD_ITEM) {
-              GRN_BULK_REWIND(&column_name);
-#ifdef MRN_ITEM_HAVE_ITEM_NAME
-              Item_name_string *name = &(left_item->item_name);
-              GRN_TEXT_PUT(info->ctx, &column_name,
-                           name->ptr(), name->length());
-#else
-              GRN_TEXT_PUTS(info->ctx, &column_name, left_item->name);
-#endif
-              grn_expr_append_const(info->ctx, expression, &column_name,
-                                    GRN_OP_PUSH, 1);
-              grn_expr_append_op(info->ctx, expression, GRN_OP_GET_VALUE, 1);
-              grn_obj_reinit(info->ctx, &value, GRN_DB_INT64, 0);
-              GRN_INT64_SET(info->ctx, &value, right_item->val_int());
-              grn_expr_append_const(info->ctx, expression, &value,
-                                    GRN_OP_PUSH, 1);
-              grn_expr_append_op(info->ctx, expression, GRN_OP_EQUAL, 2);
-              grn_expr_append_op(info->ctx, expression, GRN_OP_AND, 2);
-            }
-          }
-          break;
-        default:
-          break;
-        }
-      }
-      break;
-    default:
-      break;
-    }
-  }
-  grn_obj_unlink(info->ctx, &column_name);
-  grn_obj_unlink(info->ctx, &value);
+  bool is_storage_mode = !(share->wrapper_mode);
+  mrn::ConditionConverter converter(is_storage_mode, where);
+  converter.convert(info->ctx, expression);
 
   DBUG_VOID_RETURN;
 }
@@ -8055,8 +8006,11 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
 {
   MRN_DBUG_ENTER_METHOD();
   const Item *reminder_cond = cond;
-  if (!pushed_cond && is_groonga_layer_condition(cond)) {
-    reminder_cond = NULL;
+  if (!pushed_cond) {
+    mrn::ConditionConverter converter(true, cond);
+    if (converter.is_convertable()) {
+      reminder_cond = NULL;
+    }
   }
   DBUG_RETURN(reminder_cond);
 }
@@ -8823,85 +8777,6 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
   DBUG_VOID_RETURN;
 }
 
-bool ha_mroonga::is_groonga_layer_condition(const Item *item,
-                                            const Item_func **match_against)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  if (!item) {
-    DBUG_RETURN(false);
-  }
-
-  bool groonga_layer_condition = false;
-  switch (item->type()) {
-  case Item::COND_ITEM:
-    if (grn_columns) {
-      Item_cond *cond_item = (Item_cond *)item;
-      if (cond_item->functype() == Item_func::COND_AND_FUNC) {
-        List_iterator<Item> iterator(*((cond_item)->argument_list()));
-        const Item *sub_item;
-        groonga_layer_condition = true;
-        while ((sub_item = iterator++)) {
-          if (!is_groonga_layer_condition(sub_item, match_against)) {
-            groonga_layer_condition = false;
-            break;
-          }
-        }
-      }
-    }
-    break;
-  case Item::FUNC_ITEM:
-    {
-      const Item_func *func_item = (const Item_func *)item;
-      switch (func_item->functype()) {
-      case Item_func::EQ_FUNC:
-        {
-          Item **arguments = func_item->arguments();
-          Item *left_item = arguments[0];
-          Item *right_item = arguments[1];
-          if (grn_columns) {
-            if (left_item->type() == Item::FIELD_ITEM &&
-                right_item->basic_const_item() &&
-                right_item->type() == Item::INT_ITEM) {
-              groonga_layer_condition = true;
-            }
-          }
-        }
-        break;
-      case Item_func::FT_FUNC:
-        groonga_layer_condition = true;
-        if (match_against) {
-          *match_against = func_item;
-        }
-        break;
-      default:
-        break;
-      }
-    }
-    break;
-  default:
-    break;
-  }
-
-  DBUG_RETURN(groonga_layer_condition);
-}
-
-bool ha_mroonga::is_fulltext_search_item(const Item *item)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  if (item->type() != Item::FUNC_ITEM) {
-    DBUG_RETURN(false);
-  }
-
-  const Item_func *func_item = (const Item_func *)item;
-  if (func_item->functype() != Item_func::FT_FUNC) {
-    DBUG_RETURN(false);
-  }
-
-  DBUG_RETURN(true);
-}
-
 bool ha_mroonga::is_grn_zero_column_value(grn_obj *column, grn_obj *value)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -8981,14 +8856,17 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     }
     Item *where = select_lex->where;
     const Item_func *match_against = NULL;
-    if (pushed_cond) {
-      if (!is_groonga_layer_condition(where, &match_against)) {
+    {
+      bool is_storage_mode = !(share->wrapper_mode);
+      mrn::ConditionConverter converter(is_storage_mode, where);
+      if (!converter.is_convertable()) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "
                     "not groonga layer condition search"));
         fast_order_limit = false;
         DBUG_VOID_RETURN;
       }
+      match_against = converter.find_match_against();
       if (!match_against) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "
@@ -8996,14 +8874,6 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         fast_order_limit = false;
         DBUG_VOID_RETURN;
       }
-    } else if (where) {
-      if (!is_fulltext_search_item(where)) {
-        DBUG_PRINT("info",
-                   ("mroonga: fast_order_limit = false: not fulltext search"));
-        fast_order_limit = false;
-        DBUG_VOID_RETURN;
-      }
-      match_against = (const Item_func *)where;
     }
     *n_sort_keys = select_lex->order_list.elements;
     *sort_keys = (grn_table_sort_key *)malloc(sizeof(grn_table_sort_key) *

@@ -18,4 +18,6 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_parameters_parser.cpp		\
 	mrn_parameters_parser.hpp		\
 	mrn_lock.cpp				\
-	mrn_lock.hpp
+	mrn_lock.hpp				\
+	mrn_condition_converter.cpp		\
+	mrn_condition_converter.hpp

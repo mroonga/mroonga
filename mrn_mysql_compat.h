@@ -93,4 +93,8 @@
 #  endif
 #endif
 
+#if MYSQL_VERSION_ID >= 50607 && !defined(MRN_MARIADB_P)
+#  define MRN_ITEM_HAVE_ITEM_NAME
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
