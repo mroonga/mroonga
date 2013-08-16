@@ -31,6 +31,9 @@ namespace mrn {
 
   private:
     bool is_storage_mode_;
+
+    bool is_convertable(const Item_cond *cond_item);
+    bool is_convertable(const Item_func *func_item);
   };
 }
 

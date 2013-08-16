@@ -38,54 +38,90 @@ namespace mrn {
       DBUG_RETURN(false);
     }
 
-    bool convertable = false;
     switch (item->type()) {
     case Item::COND_ITEM:
-      if (is_storage_mode_) {
-        Item_cond *cond_item = (Item_cond *)item;
-        if (cond_item->functype() == Item_func::COND_AND_FUNC) {
-          List_iterator<Item> iterator(*((cond_item)->argument_list()));
-          const Item *sub_item;
-          convertable = true;
-          while ((sub_item = iterator++)) {
-            if (!is_convertable(sub_item)) {
-              convertable = false;
-              break;
-            }
-          }
-        }
+      {
+        const Item_cond *cond_item = reinterpret_cast<const Item_cond *>(item);
+        bool convertable = is_convertable(cond_item);
+        DBUG_RETURN(convertable);
       }
       break;
     case Item::FUNC_ITEM:
       {
-        const Item_func *func_item = (const Item_func *)item;
-        switch (func_item->functype()) {
-        case Item_func::EQ_FUNC:
-          if (is_storage_mode_) {
-            Item **arguments = func_item->arguments();
-            Item *left_item = arguments[0];
-            Item *right_item = arguments[1];
-            if (left_item->type() == Item::FIELD_ITEM &&
-                right_item->basic_const_item() &&
-                (right_item->type() == Item::STRING_ITEM ||
-                 right_item->type() == Item::INT_ITEM)) {
-              convertable = true;
-            }
-          }
-          break;
-        case Item_func::FT_FUNC:
-          convertable = true;
-          break;
-        default:
-          break;
-        }
+        const Item_func *func_item = reinterpret_cast<const Item_func *>(item);
+        bool convertable = is_convertable(func_item);
+        DBUG_RETURN(convertable);
       }
       break;
     default:
+      DBUG_RETURN(false);
       break;
     }
 
-    DBUG_RETURN(convertable);
+    DBUG_RETURN(false);
+  }
+
+  bool Condition::is_convertable(const Item_cond *cond_item) {
+    MRN_DBUG_ENTER_METHOD();
+
+    if (!is_storage_mode_) {
+      DBUG_RETURN(false);
+    }
+
+    if (cond_item->functype() != Item_func::COND_AND_FUNC) {
+      DBUG_RETURN(false);
+    }
+
+    List<Item> *argument_list =
+      const_cast<Item_cond *>(cond_item)->argument_list();
+    List_iterator<Item> iterator(*argument_list);
+    const Item *sub_item;
+    while ((sub_item = iterator++)) {
+      if (!is_convertable(sub_item)) {
+        DBUG_RETURN(false);
+      }
+    }
+
+    DBUG_RETURN(true);
+  }
+
+  bool Condition::is_convertable(const Item_func *func_item) {
+    MRN_DBUG_ENTER_METHOD();
+
+    switch (func_item->functype()) {
+    case Item_func::EQ_FUNC:
+      if (!is_storage_mode_) {
+        DBUG_RETURN(false);
+      }
+      {
+        Item **arguments = func_item->arguments();
+        Item *left_item = arguments[0];
+        Item *right_item = arguments[1];
+        if (left_item->type() != Item::FIELD_ITEM) {
+          DBUG_RETURN(false);
+        }
+        if (!right_item->basic_const_item()) {
+          DBUG_RETURN(false);
+        }
+
+        switch (right_item->type()) {
+        case Item::STRING_ITEM:
+        case Item::INT_ITEM:
+          DBUG_RETURN(true);
+        default:
+          DBUG_RETURN(false);
+        }
+      }
+      break;
+    case Item_func::FT_FUNC:
+      DBUG_RETURN(true);
+      break;
+    default:
+      DBUG_RETURN(false);
+      break;
+    }
+
+    DBUG_RETURN(true);
   }
 
   const Item_func *Condition::find_match_against(const Item *item) {
