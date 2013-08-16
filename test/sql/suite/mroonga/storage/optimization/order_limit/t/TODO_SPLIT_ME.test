@@ -30,12 +30,6 @@ insert into t1 values(5,50,"aa ii uu ii oo",null);
 
 show status like 'mroonga_fast_order_limit';
 
-select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c1 desc limit 1;
-show status like 'mroonga_fast_order_limit';
-
-select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c1;
-show status like 'mroonga_fast_order_limit';
-
 select *, match(c3) against("ii") from t1 where match(c3) against("ii") order by c1 limit 1;
 show status like 'mroonga_fast_order_limit';
 
