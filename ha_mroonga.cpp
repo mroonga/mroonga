@@ -76,6 +76,7 @@
 #include <mrn_encoding.hpp>
 #include <mrn_parameters_parser.hpp>
 #include <mrn_lock.hpp>
+#include <mrn_condition.hpp>
 #include <mrn_condition_converter.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
@@ -8007,8 +8008,8 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
   MRN_DBUG_ENTER_METHOD();
   const Item *reminder_cond = cond;
   if (!pushed_cond) {
-    mrn::ConditionConverter converter(true, cond);
-    if (converter.is_convertable()) {
+    mrn::Condition condition(true);
+    if (condition.is_convertable(cond)) {
       reminder_cond = NULL;
     }
   }
@@ -8858,15 +8859,15 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     const Item_func *match_against = NULL;
     if (where) {
       bool is_storage_mode = !(share->wrapper_mode);
-      mrn::ConditionConverter converter(is_storage_mode, where);
-      if (!converter.is_convertable()) {
+      mrn::Condition condition(is_storage_mode);
+      if (!condition.is_convertable(where)) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "
                     "not groonga layer condition search"));
         fast_order_limit = false;
         DBUG_VOID_RETURN;
       }
-      match_against = converter.find_match_against();
+      match_against = condition.find_match_against(where);
       if (!match_against) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "

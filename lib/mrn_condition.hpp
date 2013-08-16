@@ -17,26 +17,21 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MRN_CONDITION_CONVERTER_HPP_
-#define MRN_CONDITION_CONVERTER_HPP_
+#ifndef MRN_CONDITION_HPP_
+#define MRN_CONDITION_HPP_
 
-#include <groonga.h>
 #include <mrn_mysql_compat.h>
 
 namespace mrn {
-  class ConditionConverter {
+  class Condition {
   public:
-    ConditionConverter(bool is_storage_mode, const Item *where);
-    void convert(grn_ctx *ctx, grn_obj *expression);
+    Condition(bool is_storage_mode);
+    bool is_convertable(const Item *item);
+    const Item_func *find_match_against(const Item *item);
 
   private:
     bool is_storage_mode_;
-    const Item *where_;
-
-    void convert_equal(grn_ctx *ctx, grn_obj *expression,
-                       const Item_func *func_item,
-                       grn_obj *column_name, grn_obj *value);
   };
 }
 
-#endif /* MRN_CONDITION_CONVERTER_HPP_ */
+#endif /* MRN_CONDITION_HPP_ */
