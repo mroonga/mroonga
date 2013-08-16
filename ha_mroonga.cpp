@@ -8856,7 +8856,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     }
     Item *where = select_lex->where;
     const Item_func *match_against = NULL;
-    {
+    if (where) {
       bool is_storage_mode = !(share->wrapper_mode);
       mrn::ConditionConverter converter(is_storage_mode, where);
       if (!converter.is_convertable()) {
