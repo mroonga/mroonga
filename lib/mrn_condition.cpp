@@ -67,7 +67,8 @@ namespace mrn {
             Item *right_item = arguments[1];
             if (left_item->type() == Item::FIELD_ITEM &&
                 right_item->basic_const_item() &&
-                right_item->type() == Item::INT_ITEM) {
+                (right_item->type() == Item::STRING_ITEM ||
+                 right_item->type() == Item::INT_ITEM)) {
               convertable = true;
             }
           }

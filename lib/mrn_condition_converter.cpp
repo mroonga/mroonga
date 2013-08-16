@@ -108,6 +108,14 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
 
     switch (const_item->type()) {
+    case Item::STRING_ITEM:
+      grn_obj_reinit(ctx_, &value_, GRN_DB_TEXT, 0);
+      {
+        String *string;
+        string = const_item->val_str(NULL);
+        GRN_TEXT_SET(ctx_, &value_, string->ptr(), string->length());
+      }
+      break;
     case Item::INT_ITEM:
       grn_obj_reinit(ctx_, &value_, GRN_DB_INT64, 0);
       GRN_INT64_SET(ctx_, &value_, const_item->val_int());
