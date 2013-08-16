@@ -35,6 +35,9 @@ namespace mrn {
     bool is_storage_mode_;
     const Item *where_;
 
+    void convert_equal(grn_ctx *ctx, grn_obj *expression,
+                       const Item_func *func_item,
+                       grn_obj *column_name, grn_obj *value);
     bool is_convertable_recursive(const Item *item);
     const Item_func *find_match_against_recursive(const Item *item);
   };
