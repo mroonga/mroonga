@@ -76,7 +76,6 @@
 #include <mrn_encoding.hpp>
 #include <mrn_parameters_parser.hpp>
 #include <mrn_lock.hpp>
-#include <mrn_condition.hpp>
 #include <mrn_condition_converter.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
@@ -7488,7 +7487,8 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
 
   Item *where = table->pos_in_table_list->select_lex->where;
 
-  mrn::ConditionConverter converter(info->ctx);
+  bool is_storage_mode = !(share->wrapper_mode);
+  mrn::ConditionConverter converter(info->ctx, grn_table, is_storage_mode);
   converter.convert(where, expression);
 
   DBUG_VOID_RETURN;
@@ -8007,8 +8007,8 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
   MRN_DBUG_ENTER_METHOD();
   const Item *reminder_cond = cond;
   if (!pushed_cond) {
-    mrn::Condition condition(ctx, grn_table, true);
-    if (condition.is_convertable(cond)) {
+    mrn::ConditionConverter converter(ctx, grn_table, true);
+    if (converter.is_convertable(cond)) {
       reminder_cond = NULL;
     }
   }
@@ -8858,15 +8858,15 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     const Item_func *match_against = NULL;
     if (where) {
       bool is_storage_mode = !(share->wrapper_mode);
-      mrn::Condition condition(ctx, grn_table, is_storage_mode);
-      if (!condition.is_convertable(where)) {
+      mrn::ConditionConverter converter(ctx, grn_table, is_storage_mode);
+      if (!converter.is_convertable(where)) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "
                     "not groonga layer condition search"));
         fast_order_limit = false;
         DBUG_VOID_RETURN;
       }
-      match_against = condition.find_match_against(where);
+      match_against = converter.find_match_against(where);
       if (!match_against) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "

@@ -26,17 +26,26 @@
 namespace mrn {
   class ConditionConverter {
   public:
-    ConditionConverter(grn_ctx *ctx);
+    ConditionConverter(grn_ctx *ctx, grn_obj *table, bool is_storage_mode);
     ~ConditionConverter();
+
+    bool is_convertable(const Item *item);
+    const Item_func *find_match_against(const Item *item);
     // caller must check "where" can be convertable by
-    // mrn::Condition::is_comvertable(). This method doesn't validate
-    // "where".
+    // is_comvertable(). This method doesn't validate "where".
     void convert(const Item *where, grn_obj *expression);
 
   private:
     grn_ctx *ctx_;
+    grn_obj *table_;
+    bool is_storage_mode_;
     grn_obj column_name_;
     grn_obj value_;
+
+    bool is_convertable(const Item_cond *cond_item);
+    bool is_convertable(const Item_func *func_item);
+    bool is_convertable_string(const Item_field *field_item,
+                               const Item *string_item);
 
     void convert_equal(const Item_func *func_item, grn_obj *expression);
     void append_field_value(const Item_field *field_item,
