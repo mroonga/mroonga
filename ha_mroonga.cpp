@@ -8007,7 +8007,7 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
   MRN_DBUG_ENTER_METHOD();
   const Item *reminder_cond = cond;
   if (!pushed_cond) {
-    mrn::Condition condition(true);
+    mrn::Condition condition(ctx, grn_table, true);
     if (condition.is_convertable(cond)) {
       reminder_cond = NULL;
     }
@@ -8858,7 +8858,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     const Item_func *match_against = NULL;
     if (where) {
       bool is_storage_mode = !(share->wrapper_mode);
-      mrn::Condition condition(is_storage_mode);
+      mrn::Condition condition(ctx, grn_table, is_storage_mode);
       if (!condition.is_convertable(where)) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "

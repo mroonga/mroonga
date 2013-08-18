@@ -27,8 +27,10 @@
 #define MRN_CLASS_NAME "mrn::Condition"
 
 namespace mrn {
-  Condition::Condition(bool is_storage_mode)
-    : is_storage_mode_(is_storage_mode) {
+  Condition::Condition(grn_ctx *ctx, grn_obj *table, bool is_storage_mode)
+    : ctx_(ctx),
+      table_(table),
+      is_storage_mode_(is_storage_mode) {
   }
 
   bool Condition::is_convertable(const Item *item) {
@@ -104,13 +106,22 @@ namespace mrn {
           DBUG_RETURN(false);
         }
 
+        bool convertable;
         switch (right_item->type()) {
         case Item::STRING_ITEM:
+          {
+            Item_field *field_item = static_cast<Item_field *>(left_item);
+            convertable = is_convertable_string(field_item, right_item);
+          }
+          break;
         case Item::INT_ITEM:
-          DBUG_RETURN(true);
+          convertable = true;
+          break;
         default:
-          DBUG_RETURN(false);
+          convertable = false;
+          break;
         }
+        DBUG_RETURN(convertable);
       }
       break;
     case Item_func::FT_FUNC:
@@ -122,6 +133,30 @@ namespace mrn {
     }
 
     DBUG_RETURN(true);
+  }
+
+  bool Condition::is_convertable_string(const Item_field *field_item,
+                                        const Item *string_item) {
+    MRN_DBUG_ENTER_METHOD();
+
+    grn_obj *column;
+#ifdef MRN_ITEM_HAVE_ITEM_NAME
+    Item_field *field_item = static_cast<Item_field *>(left_item);
+    Item_name_string *name = &(field_item->item_name);
+    column = grn_obj_column(ctx_, table_, name->ptr(), name->length());
+#else
+    column = grn_obj_column(ctx_, table_,
+                            field_item->name, strlen(field_item->name));
+#endif
+    if (!column) {
+      DBUG_RETURN(false);
+    }
+
+    int n_indexes = grn_column_index(ctx_, column, GRN_OP_EQUAL, NULL, 0, NULL);
+    bool convertable = (n_indexes > 0);
+    grn_obj_unlink(ctx_, column);
+
+    DBUG_RETURN(convertable);
   }
 
   const Item_func *Condition::find_match_against(const Item *item) {

@@ -20,20 +20,25 @@
 #ifndef MRN_CONDITION_HPP_
 #define MRN_CONDITION_HPP_
 
+#include <groonga.h>
 #include <mrn_mysql_compat.h>
 
 namespace mrn {
   class Condition {
   public:
-    Condition(bool is_storage_mode);
+    Condition(grn_ctx *ctx, grn_obj *table, bool is_storage_mode);
     bool is_convertable(const Item *item);
     const Item_func *find_match_against(const Item *item);
 
   private:
+    grn_ctx *ctx_;
+    grn_obj *table_;
     bool is_storage_mode_;
 
     bool is_convertable(const Item_cond *cond_item);
     bool is_convertable(const Item_func *func_item);
+    bool is_convertable_string(const Item_field *field_item,
+                               const Item *string_item);
   };
 }
 
