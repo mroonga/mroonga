@@ -2371,6 +2371,9 @@ ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
   if (key.algorithm == HA_KEY_ALG_FULLTEXT) {
     DBUG_RETURN(HA_ONLY_WHOLE_INDEX | HA_KEY_SCAN_NOT_ROR);
   }
+  if (mrn_is_geo_key(&key)) {
+    DBUG_RETURN(HA_ONLY_WHOLE_INDEX | HA_KEY_SCAN_NOT_ROR);
+  }
 
   int error = 0;
   if (wrap_handler && share && share->wrapper_mode)
