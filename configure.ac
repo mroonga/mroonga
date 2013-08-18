@@ -408,8 +408,8 @@ DOCUMENT_VERSION_FULL="$DOCUMENT_VERSION"
 AC_SUBST(DOCUMENT_VERSION)
 AC_SUBST(DOCUMENT_VERSION_FULL)
 
-CFLAGS="$CFLAGS -Werror"
-CXXFLAGS="$CXXFLAGS -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
+CFLAGS="$CFLAGS"
+CXXFLAGS="$CXXFLAGS -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
 
 AC_CONFIG_FILES([
   Makefile

@@ -228,7 +228,7 @@ else()
   endif()
 
   if(CMAKE_COMPILER_IS_GNUCXX)
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Werror -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
+    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors")
   endif()
   set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
     COMPILE_FLAGS "${MYSQL_CFLAGS}")
