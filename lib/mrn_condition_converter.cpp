@@ -26,6 +26,14 @@
 // for debug
 #define MRN_CLASS_NAME "mrn::ConditionConverter"
 
+#ifdef MRN_ITEM_HAVE_ITEM_NAME
+#  define MRN_ITEM_FIELD_GET_NAME(item)        ((item)->item_name.ptr())
+#  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item) ((item)->item_name.length())
+#else
+#  define MRN_ITEM_FIELD_GET_NAME(item)        ((item)->name)
+#  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item) ((item)->name_length)
+#endif
+
 namespace mrn {
   ConditionConverter::ConditionConverter(grn_ctx *ctx, grn_obj *table,
                                          bool is_storage_mode)
@@ -148,14 +156,9 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
 
     grn_obj *column;
-#ifdef MRN_ITEM_HAVE_ITEM_NAME
-    Item_field *field_item = static_cast<Item_field *>(left_item);
-    Item_name_string *name = &(field_item->item_name);
-    column = grn_obj_column(ctx_, table_, name->ptr(), name->length());
-#else
     column = grn_obj_column(ctx_, table_,
-                            field_item->name, strlen(field_item->name));
-#endif
+                            MRN_ITEM_FIELD_GET_NAME(field_item),
+                            MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item));
     if (!column) {
       DBUG_RETURN(false);
     }
@@ -260,13 +263,9 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
 
     GRN_BULK_REWIND(&column_name_);
-#ifdef MRN_ITEM_HAVE_ITEM_NAME
-    Item_name_string *name = &(field_item->item_name);
     GRN_TEXT_PUT(ctx_, &column_name_,
-                 name->ptr(), name->length());
-#else
-    GRN_TEXT_PUTS(ctx_, &column_name_, field_item->name);
-#endif
+                 MRN_ITEM_FIELD_GET_NAME(field_item),
+                 MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item));
     grn_expr_append_const(ctx_, expression, &column_name_,
                           GRN_OP_PUSH, 1);
     grn_expr_append_op(ctx_, expression, GRN_OP_GET_VALUE, 1);
