@@ -8008,7 +8008,7 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
   const Item *reminder_cond = cond;
   if (!pushed_cond) {
     mrn::ConditionConverter converter(ctx, grn_table, true);
-    if (converter.is_convertable(cond)) {
+    if (converter.is_convertable(cond) && converter.find_match_against(cond)) {
       reminder_cond = NULL;
     }
   }
