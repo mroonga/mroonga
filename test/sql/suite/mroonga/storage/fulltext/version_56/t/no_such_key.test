@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,6 +14,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+--source include/mroonga/have_version_56.inc
 --source include/mroonga/have_mroonga.inc
 
 --disable_warnings
@@ -33,6 +34,7 @@ INSERT INTO diaries (title, body) VALUES ("survey", "will start groonga!");
 INSERT INTO diaries (title, body) VALUES ("groonga (1)", "starting groonga...");
 INSERT INTO diaries (title, body) VALUES ("groonga (2)", "started groonga.");
 
+-- error ER_FT_MATCHING_KEY_NOT_FOUND
 SELECT * FROM diaries FORCE INDEX(primary)
   WHERE MATCH(title) AGAINST("survey" IN BOOLEAN MODE);
 
