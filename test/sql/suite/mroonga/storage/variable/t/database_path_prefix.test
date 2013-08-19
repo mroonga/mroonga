@@ -17,19 +17,21 @@
 --source include/mroonga/have_mroonga.inc
 --source include/mroonga/have_mroonga_helper.inc
 
-SET GLOBAL mroonga_database_path_prefix = "mroonga.data/";
+SET GLOBAL mroonga_database_path_prefix = "test/mroonga.data/";
 SHOW GLOBAL VARIABLES LIKE 'mroonga_database_path_prefix';
 
 CREATE TABLE counts (
   id INT PRIMARY KEY AUTO_INCREMENT
 );
 
---file_exists $MYSQLD_DATADIR/mroonga.data/test.mrn
+--file_exists $MYSQLD_DATADIR/test/mroonga.data/test.mrn
 
 INSERT INTO counts VALUES (NULL);
 
 SELECT * FROM counts;
 
 DROP TABLE counts;
+
+SET GLOBAL mroonga_database_path_prefix = NULL;
 
 --source include/mroonga/have_mroonga_deinit.inc
