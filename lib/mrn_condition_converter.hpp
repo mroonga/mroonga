@@ -32,7 +32,7 @@ namespace mrn {
     bool is_convertable(const Item *item);
     const Item_func *find_match_against(const Item *item);
     // caller must check "where" can be convertable by
-    // is_comvertable(). This method doesn't validate "where".
+    // is_convertable(). This method doesn't validate "where".
     void convert(const Item *where, grn_obj *expression);
 
   private:
