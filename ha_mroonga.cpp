@@ -10020,11 +10020,14 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
     uint fuzzy_date = 0;
     uchar *ptr_backup = field->ptr;
     uchar *null_ptr_backup = field->null_ptr;
+    TABLE *table_backup = field->table;
     field->ptr = (uchar *)key;
     field->null_ptr = (uchar *)(key - 1);
+    field->table = table;
     timestamp_hires_field->get_date(&mysql_time, fuzzy_date);
     field->ptr = ptr_backup;
     field->null_ptr = null_ptr_backup;
+    field->table = table_backup;
   }
 #else
   my_time_t my_time = uint4korr(key);
