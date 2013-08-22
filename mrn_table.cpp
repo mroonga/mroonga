@@ -46,7 +46,7 @@
 #define MRN_GROONGA_STR "GROONGA"
 #define MRN_GROONGA_LEN (sizeof(MRN_GROONGA_STR) - 1)
 
-#if MYSQL_VERSION_ID >= 50500
+#if MYSQL_VERSION_ID >= 50500 && !(MYSQL_VERSION_ID >= 100004 && defined(MRN_MARIADB_P))
 extern HASH *mrn_table_def_cache;
 #endif
 
@@ -921,27 +921,21 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   TABLE_SHARE *share;
   THD *thd = current_thd;
   MRN_DBUG_ENTER_FUNCTION();
-#if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 50603
   const char *key;
   key_length = get_table_def_key(table_list, &key);
 #else
   char key[MAX_DBKEY_LENGTH];
-#  if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
-  key_length = create_table_def_key(key, table_list->db, table_list->table_name);
-#  else
   key_length = create_table_def_key(thd, key, table_list, FALSE);
-#  endif
 #endif
-#if MYSQL_VERSION_ID >= 50500
+#if MYSQL_VERSION_ID >= 100004 && defined(MRN_MARIADB_P)
+  share = tdc_acquire_share(thd, table_list->db, table_list->table_name, key,
+                          key_length, GTS_TABLE, NULL);
+#elif MYSQL_VERSION_ID >= 50500
   my_hash_value_type hash_value;
   hash_value = my_calc_hash(mrn_table_def_cache, (uchar*) key, key_length);
-#  if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
-  share = get_table_share(thd, table_list->db, table_list->table_name, key,
-                          key_length, 0, hash_value);
-#  else
   share = get_table_share(thd, table_list, key, key_length, 0, error,
                           hash_value);
-#  endif
 #else
   share = get_table_share(thd, table_list, key, key_length, 0, error);
 #endif
@@ -954,18 +948,15 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
   uint key_length;
   TABLE_SHARE *share;
   THD *thd = current_thd;
-#if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 50603
   const char *key;
 #else
   char key[MAX_DBKEY_LENGTH];
 #endif
 
   MRN_DBUG_ENTER_FUNCTION();
-#if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 50603
   key_length = get_table_def_key(table_list, &key);
-#elif MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
-  key_length = create_table_def_key(key, table_list->db,
-                                    table_list->table_name);
 #else
   key_length = create_table_def_key(thd, key, table_list, FALSE);
 #endif

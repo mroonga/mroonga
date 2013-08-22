@@ -141,7 +141,7 @@ pthread_mutex_t *mrn_LOCK_open;
 
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
-#if MYSQL_VERSION_ID >= 50500
+#if MYSQL_VERSION_ID >= 50500 && !(MYSQL_VERSION_ID >= 100004 && defined(MRN_MARIADB_P))
 HASH *mrn_table_def_cache;
 #endif
 
@@ -1310,8 +1310,15 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
 static uint mrn_alter_table_flags(uint flags) {
   uint ret_flags = 0;
 #ifdef HA_INPLACE_ADD_INDEX_NO_READ_WRITE
+#if defined(MRN_MARIADB_P)
+  if (((flags & Alter_info::ALTER_ADD_INDEX) &&
+      (flags & Alter_info::ALTER_DROP_INDEX)) ||
+      (flags & Alter_info::ALTER_CHANGE_COLUMN))
+#else
   if (((flags & ALTER_ADD_INDEX) && (flags & ALTER_DROP_INDEX)) ||
-      (flags & ALTER_CHANGE_COLUMN)) {
+      (flags & ALTER_CHANGE_COLUMN))
+#endif
+  {
     // Adding/dropping an index at once and changing an index aren't supported.
     ret_flags |= 0;
   } else {
@@ -1366,7 +1373,7 @@ static int mrn_init(void *p)
     *((Time_zone **) GetProcAddress(current_module,
       "?my_tz_UTC@@3PAVTime_zone@@A"));
 #endif
-#if MYSQL_VERSION_ID >= 50500
+#if MYSQL_VERSION_ID >= 50500 && !(MYSQL_VERSION_ID >= 100004 && defined(MRN_MARIADB_P))
   mrn_table_def_cache = (HASH *) GetProcAddress(current_module,
     "?table_def_cache@@3Ust_hash@@A");
 #endif
@@ -1381,7 +1388,7 @@ static int mrn_init(void *p)
 #else
   mrn_binlog_filter = binlog_filter;
   mrn_my_tz_UTC = my_tz_UTC;
-#if MYSQL_VERSION_ID >= 50500
+#if MYSQL_VERSION_ID >= 50500 && !(MYSQL_VERSION_ID >= 100004 && defined(MRN_MARIADB_P))
   mrn_table_def_cache = &table_def_cache;
 #endif
   mrn_LOCK_open = &LOCK_open;

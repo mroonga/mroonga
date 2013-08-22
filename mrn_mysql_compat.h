@@ -60,7 +60,7 @@
   typedef char *range_id_t;
 #endif
 
-#if MYSQL_VERSION_ID >= 50609 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 50609
 #  define MRN_KEY_HAS_USER_DEFINED_KEYPARTS
 #endif
 
