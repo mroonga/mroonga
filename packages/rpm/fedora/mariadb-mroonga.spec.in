@@ -124,6 +124,9 @@ fi
 %doc mariadb-mroonga-doc/*
 
 %changelog
+* Thu Aug 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.07-1
+- new upstream release.
+
 * Mon Jul 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.06-1
 - new upstream release.
 - initial packaging for mariadb on Fedora 19.

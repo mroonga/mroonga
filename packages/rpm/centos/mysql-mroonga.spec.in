@@ -177,6 +177,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Aug 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.07-1
+- new upstream release.
+
 * Mon Jul 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.06-1
 - new upstream release.
 - use MySQL 5.6.12-2 on CentOS 5.
