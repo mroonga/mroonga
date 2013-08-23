@@ -64,6 +64,7 @@ update-latest-release: misc
 	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
 	  $(VERSION) $(NEW_RELEASE_DATE)		\
 	  packages/rpm/fedora/mysql-mroonga.spec.in	\
+	  packages/rpm/fedora/mariadb-mroonga.spec.in	\
 	  packages/rpm/centos/mysql-mroonga.spec.in	\
 	  packages/debian/changelog			\
 	  doc/source/install.rst			\
