@@ -107,7 +107,7 @@ pthread_mutex_t *mrn_LOCK_open;
 #  define mrn_open_mutex_unlock()
 #endif
 
-#if MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 50600
 #  define MRN_NEED_M_LOCK_TYPE_CHECK_FOR_WRAPPER_EXTERNAL_LOCK
 #endif
 
@@ -696,12 +696,32 @@ static MYSQL_THDVAR_LONGLONG(match_escalation_threshold,
                              LONGLONG_MAX,
                              0);
 
+static void mrn_database_path_prefix_update(THD *thd,
+                                            struct st_mysql_sys_var *var,
+                                            void *var_ptr, const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const char *new_value = *((const char **)save);
+  char **old_value_ptr = (char **)var_ptr;
+#ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
+  if (*old_value_ptr)
+    my_free(*old_value_ptr, MYF(0));
+  if (new_value)
+    *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+  else
+    *old_value_ptr = NULL;
+#else
+  *old_value_ptr = (char *)new_value;
+#endif
+  DBUG_VOID_RETURN;
+}
+
 static MYSQL_SYSVAR_STR(database_path_prefix,
                         mrn::PathMapper::default_path_prefix,
                         PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
                         "The database path prefix",
                         NULL,
-                        NULL,
+                        &mrn_database_path_prefix_update,
                         NULL);
 
 static MYSQL_SYSVAR_STR(default_wrapper_engine, mrn_default_wrapper_engine,
