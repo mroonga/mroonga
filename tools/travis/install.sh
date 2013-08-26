@@ -86,7 +86,7 @@ deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
 EOF
 	    sudo apt-get -qq update
 	    sudo apt-get -qq -y build-dep mariadb-server
-	    sudo apt-get -qq -y install mariadb-server mariadb-testsuite
+	    sudo apt-get -qq -y install mariadb-server mariadb-test
 	    apt-get -qq source mariadb-server
 	    ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
 	    ;;
