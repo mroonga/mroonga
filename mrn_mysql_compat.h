@@ -110,4 +110,8 @@
 #  define MRN_HAVE_ALTER_INFO
 #endif
 
+#if MYSQL_VERSION_ID >= 50603
+#  define MRN_HAVE_GET_TABLE_DEF_KEY
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

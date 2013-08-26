@@ -921,7 +921,7 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   TABLE_SHARE *share;
   THD *thd = current_thd;
   MRN_DBUG_ENTER_FUNCTION();
-#if MYSQL_VERSION_ID >= 50603
+#ifdef MRN_HAVE_GET_TABLE_DEF_KEY
   const char *key;
   key_length = get_table_def_key(table_list, &key);
 #else
@@ -948,16 +948,13 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
   uint key_length;
   TABLE_SHARE *share;
   THD *thd = current_thd;
-#if MYSQL_VERSION_ID >= 50603
-  const char *key;
-#else
-  char key[MAX_DBKEY_LENGTH];
-#endif
 
   MRN_DBUG_ENTER_FUNCTION();
-#if MYSQL_VERSION_ID >= 50603
+#ifdef MRN_HAVE_GET_TABLE_DEF_KEY
+  const char *key;
   key_length = get_table_def_key(table_list, &key);
 #else
+  char key[MAX_DBKEY_LENGTH];
   key_length = create_table_def_key(thd, key, table_list, FALSE);
 #endif
 #if MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
