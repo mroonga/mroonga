@@ -22,7 +22,7 @@ run()
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
 
-run apt-get update -V
+run apt-get update
 run apt-get install -V -y lsb-release
 distribution=$(lsb_release --id --short)
 code_name=$(lsb_release --codename --short)
@@ -46,7 +46,7 @@ EOF
     run apt-get -V -y --allow-unauthenticated install groonga-keyring
 fi
 
-run apt-get update -V
+run apt-get update
 run apt-get upgrade -V -y
 
 security_list=/etc/apt/sources.list.d/security.list
@@ -87,7 +87,7 @@ if [ ! -f "$universe_list}" ]; then
 fi
 
 run apt-get install -V -y devscripts ${DEPENDED_PACKAGES}
-run apt-get build-dep -V -y ${mysql_server_package}
+run apt-get build-dep -y ${mysql_server_package}
 run apt-get clean
 
 if ! id $USER_NAME >/dev/null 2>&1; then
