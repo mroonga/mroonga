@@ -3,6 +3,39 @@
 News
 ====
 
+.. _release-3-07:
+
+Release 3.07 - 2013/8/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Added :doc:`/reference/udf/mroonga_escape` UDF which escapes special characters in query
+  for BOOLEAN MODE. [groonga-dev,01576] [Suggested by Kouhei Tanabe]
+* Supported VARCHAR equal expression in WHERE clause for ORDER BY LIMIT optimization.
+* Supported MariaDB 5.5.32 timestamp.
+* Supported MariaDB 10.0.4.
+
+Fixes
+^^^^^
+
+* [mariadb] Fixed a crash bug when installing plugin on Windows.
+* [storage][mysql55] Fixed a bug that changing column that has index fails.
+  [groonga-talk] [Reported by Chang]
+  This bug affects the case that ``FULLTEXT INDEX (column1)`` is changed by ``ALTER TABLE
+  table1 CHANGE column1 column1 new_column_definition`` for example.
+* [doc][wrapper] Fixed incorrect description about condition of ORDER BY LIMIT optimization.
+* [storage] Disabled ORDER BY LIMIT optimization for not indexed VARCHAR condition.
+  It should be indexed to handle COLLATION properly.
+* Fixed a bug that missing internal flag causes crash on MySQL 5.6.13.
+
+Thanks
+^^^^^^
+
+* Kouhei Tanabe
+* Chang
+
 .. _release-3-06:
 
 Release 3.06 - 2013/7/29
