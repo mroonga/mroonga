@@ -46,7 +46,7 @@
 #define MRN_GROONGA_STR "GROONGA"
 #define MRN_GROONGA_LEN (sizeof(MRN_GROONGA_STR) - 1)
 
-#if MYSQL_VERSION_ID >= 50500 && !(MYSQL_VERSION_ID >= 100004 && defined(MRN_MARIADB_P))
+#ifdef MRN_HAVE_TABLE_DEF_CACHE
 extern HASH *mrn_table_def_cache;
 #endif
 
@@ -928,14 +928,14 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   char key[MAX_DBKEY_LENGTH];
   key_length = create_table_def_key(thd, key, table_list, FALSE);
 #endif
-#if MYSQL_VERSION_ID >= 100004 && defined(MRN_MARIADB_P)
-  share = tdc_acquire_share(thd, table_list->db, table_list->table_name, key,
-                          key_length, GTS_TABLE, NULL);
-#elif MYSQL_VERSION_ID >= 50500
+#ifdef MRN_HAVE_TABLE_DEF_CACHE
   my_hash_value_type hash_value;
   hash_value = my_calc_hash(mrn_table_def_cache, (uchar*) key, key_length);
   share = get_table_share(thd, table_list, key, key_length, 0, error,
                           hash_value);
+#elif MYSQL_VERSION_ID >= 100004 && defined(MRN_MARIADB_P)
+  share = tdc_acquire_share(thd, table_list->db, table_list->table_name, key,
+                          key_length, GTS_TABLE, NULL);
 #else
   share = get_table_share(thd, table_list, key, key_length, 0, error);
 #endif

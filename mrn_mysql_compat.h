@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -95,6 +95,11 @@
 
 #if MYSQL_VERSION_ID >= 50607 && !defined(MRN_MARIADB_P)
 #  define MRN_ITEM_HAVE_ITEM_NAME
+#endif
+
+#if MYSQL_VERSION_ID >= 50500 && \
+  !(defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100004)
+#  define MRN_HAVE_TABLE_DEF_CACHE
 #endif
 
 #endif /* MRN_MYSQL_COMPAT_H_ */
