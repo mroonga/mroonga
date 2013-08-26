@@ -106,4 +106,8 @@
 #  define MRN_HAVE_TDC_ACQUIRE_SHARE
 #endif
 
+#if MYSQL_VERSION_ID >= 50613
+#  define MRN_HAVE_ALTER_INFO
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
