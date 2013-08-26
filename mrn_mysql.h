@@ -52,7 +52,7 @@
 #  include <probes_mysql.h>
 #  include <sql_partition.h>
 #endif
-#include "rpl_filter.h"
+#include <rpl_filter.h>
 
 #ifdef MARIADB_BASE_VERSION
 #  define MRN_MARIADB_P 1
