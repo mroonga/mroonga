@@ -1,8 +1,9 @@
 AM_CPPFLAGS =					\
+	-I$(top_builddir)			\
+	-I$(top_srcdir)				\
 	$(MYSQL_INCLUDES)			\
 	$(GROONGA_CFLAGS)			\
-	$(MYSQL_VERSION_CFLAGS)			\
-	-I$(top_srcdir)
+	$(MYSQL_VERSION_CFLAGS)
 
 libmrn_need_mysql_la_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
 
