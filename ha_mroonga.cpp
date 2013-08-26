@@ -1328,7 +1328,7 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
 }
 
 static uint mrn_alter_table_flags(uint flags) {
-  uint ret_flags = 0;
+  uint alter_flags = 0;
 #ifdef HA_INPLACE_ADD_INDEX_NO_READ_WRITE
 #ifdef MRN_HAVE_ALTER_INFO
   if (((flags & Alter_info::ALTER_ADD_INDEX) &&
@@ -1340,9 +1340,9 @@ static uint mrn_alter_table_flags(uint flags) {
 #endif
   {
     // Adding/dropping an index at once and changing an index aren't supported.
-    ret_flags |= 0;
+    alter_flags |= 0;
   } else {
-    ret_flags |=
+    alter_flags |=
       HA_INPLACE_ADD_INDEX_NO_READ_WRITE |
       HA_INPLACE_DROP_INDEX_NO_READ_WRITE |
       HA_INPLACE_ADD_UNIQUE_INDEX_NO_READ_WRITE |
@@ -1357,7 +1357,7 @@ static uint mrn_alter_table_flags(uint flags) {
       HA_INPLACE_DROP_PK_INDEX_NO_WRITE;
   }
 #endif
-  return ret_flags;
+  return alter_flags;
 }
 
 static int mrn_init(void *p)
