@@ -933,7 +933,7 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   hash_value = my_calc_hash(mrn_table_def_cache, (uchar*) key, key_length);
   share = get_table_share(thd, table_list, key, key_length, 0, error,
                           hash_value);
-#elif MYSQL_VERSION_ID >= 100004 && defined(MRN_MARIADB_P)
+#elif defined(MRN_HAVE_TDC_ACQUIRE_SHARE)
   share = tdc_acquire_share(thd, table_list->db, table_list->table_name, key,
                           key_length, GTS_TABLE, NULL);
 #else

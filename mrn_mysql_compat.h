@@ -102,4 +102,8 @@
 #  define MRN_HAVE_TABLE_DEF_CACHE
 #endif
 
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100004
+#  define MRN_HAVE_TDC_ACQUIRE_SHARE
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
