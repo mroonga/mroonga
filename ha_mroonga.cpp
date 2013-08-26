@@ -1340,10 +1340,7 @@ static uint mrn_alter_table_flags(uint flags) {
                       (flags & ALTER_DROP_INDEX)) ||
                      (flags & ALTER_CHANGE_COLUMN));
 #  endif
-  if (is_change_index) {
-    // Adding/dropping an index at once and changing an index aren't supported.
-    alter_flags |= 0;
-  } else {
+  if (!is_change_index) {
     alter_flags |=
       HA_INPLACE_ADD_INDEX_NO_READ_WRITE |
       HA_INPLACE_DROP_INDEX_NO_READ_WRITE |
