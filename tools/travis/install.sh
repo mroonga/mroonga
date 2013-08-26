@@ -76,7 +76,7 @@ else
 	    fi
 	    ;;
 	mariadb-*)
-	    sudo apt-get -qq -y remove mysql-common
+	    sudo apt-get -qq -y remove --purge mysql-common
 
 	    distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
 	    code_name=$(lsb_release --short --codename)
