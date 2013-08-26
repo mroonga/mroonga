@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@
 #define MRN_MYSQL_H_
 
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+#  include <config.h>
 /* We need to undefine them because my_config.h defines them. :< */
 #  undef VERSION
 #  undef PACKAGE
@@ -32,7 +32,7 @@
 #  undef PACKAGE_VERSION
 #endif
 
-#include "mrn_version.h"
+#include <mrn_version.h>
 
 #ifdef FORCE_FAST_MUTEX_DISABLED
 #  ifdef MY_PTHREAD_FASTMUTEX
