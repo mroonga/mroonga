@@ -85,9 +85,9 @@ deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
 deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
 EOF
 	    sudo apt-get -qq update
-	    sudo apt-get -qq -y build-dep mysql-server
-	    sudo apt-get -qq -y install mysql-server mysql-testsuite
-	    apt-get -qq source mysql-server
+	    sudo apt-get -qq -y build-dep mariadb-server
+	    sudo apt-get -qq -y install mariadb-server mariadb-testsuite
+	    apt-get -qq source mariadb-server
 	    ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
 	    ;;
     esac
