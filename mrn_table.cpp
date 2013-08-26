@@ -935,7 +935,7 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
                           hash_value);
 #elif defined(MRN_HAVE_TDC_ACQUIRE_SHARE)
   share = tdc_acquire_share(thd, table_list->db, table_list->table_name, key,
-                          key_length, GTS_TABLE, NULL);
+                            key_length, GTS_TABLE, NULL);
 #else
   share = get_table_share(thd, table_list, key, key_length, 0, error);
 #endif
