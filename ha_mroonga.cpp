@@ -1330,15 +1330,17 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
 static uint mrn_alter_table_flags(uint flags) {
   uint alter_flags = 0;
 #ifdef HA_INPLACE_ADD_INDEX_NO_READ_WRITE
+  bool is_change_index;
 #  ifdef MRN_HAVE_ALTER_INFO
-  if (((flags & Alter_info::ALTER_ADD_INDEX) &&
-      (flags & Alter_info::ALTER_DROP_INDEX)) ||
-      (flags & Alter_info::ALTER_CHANGE_COLUMN))
+  is_change_index = (((flags & Alter_info::ALTER_ADD_INDEX) &&
+                      (flags & Alter_info::ALTER_DROP_INDEX)) ||
+                     (flags & Alter_info::ALTER_CHANGE_COLUMN));
 #  else
-  if (((flags & ALTER_ADD_INDEX) && (flags & ALTER_DROP_INDEX)) ||
-      (flags & ALTER_CHANGE_COLUMN))
+  is_change_index = (((flags & ALTER_ADD_INDEX) &&
+                      (flags & ALTER_DROP_INDEX)) ||
+                     (flags & ALTER_CHANGE_COLUMN));
 #  endif
-  {
+  if (is_change_index) {
     // Adding/dropping an index at once and changing an index aren't supported.
     alter_flags |= 0;
   } else {
