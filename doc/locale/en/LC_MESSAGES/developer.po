@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-24 15:30\n"
+"POT-Creation-Date: 2013-08-27 18:40+0900\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -1908,43 +1908,87 @@ msgstr ""
 msgid "mroonga.github.com へコミットを行い GitHub へ push"
 msgstr "mroonga.github.com へコミットを行い GitHub へ push"
 
-# 664c69048ff7429fad53e24f2e0e49f0
+# 4b04b1f68ee3406e86f062881cf5c8ca
 #: ../../../source/developer/release.rst:212
+msgid "Homebrewの更新"
+msgstr ""
+
+# d40ba3424a6b4b52828d2e7395652365
+#: ../../../source/developer/release.rst:214
+msgid ""
+"OS Xでのパッケージ管理方法として `Homebrew <http://brew.sh/>`_ があります。"
+msgstr ""
+
+# 970b9cbf93484017bc51307093da7d03
+#: ../../../source/developer/release.rst:216
+msgid ""
+"groongaの場合はHomebrewへpull requestを送りますが、mroongaの場合は別途用意し"
+"てあるhomebrewリポジトリを更新します。"
+msgstr ""
+
+# 5a94bb7fdc294aa599799034fa776b59
+#: ../../../source/developer/release.rst:218
+#, fuzzy
+msgid "https://github.com/mroonga/homebrew"
+msgstr "http://github.com/mroonga/mroonga"
+
+# 6562ac3313a14cd5b8302969fa7faa79
+#: ../../../source/developer/release.rst:220
+msgid ""
+"mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを実行します。"
+"update.shの引数にはリリース時のバージョンを指定します。例えば、3.06のリリース"
+"のときは以下を実行しました。"
+msgstr ""
+
+# 6fbe6dfc0179490d8fa5082faae1766a
+#: ../../../source/developer/release.rst:222
+msgid "$ ./update.sh 3.06"
+msgstr ""
+
+# 456cf2c51a7a410b9302556edfcc0194
+#: ../../../source/developer/release.rst:224
+msgid ""
+"実行すると、FormulaのソースアーカイブのURLとsha256チェックサムを更新します。 "
+"あとは、変更内容をコミットすればHomebrewの更新作業は完了です。"
+msgstr ""
+
+# 664c69048ff7429fad53e24f2e0e49f0
+#: ../../../source/developer/release.rst:228
 msgid "リリースメールの送信"
 msgstr "リリースメールの送信"
 
 # d9942158a7c0464596ce4237c1f85408
-#: ../../../source/developer/release.rst:214
+#: ../../../source/developer/release.rst:230
 msgid "各種メーリングリストにリリースメールを流します。"
 msgstr ""
 
 # dd99d2a206534168b8ee02ad52a5f310
-#: ../../../source/developer/release.rst:216
+#: ../../../source/developer/release.rst:232
 msgid "ml@mysql.gr.jp 日本語アナウンス"
 msgstr ""
 
 # 93311ece15004f76821d7a67b8cf4586
-#: ../../../source/developer/release.rst:217
+#: ../../../source/developer/release.rst:233
 msgid "groonga-dev@lists.sourceforge.jp 日本語アナウンス"
 msgstr ""
 
 # ccb63e5b202c42d7803e63b08041e40c
-#: ../../../source/developer/release.rst:218
+#: ../../../source/developer/release.rst:234
 msgid "groonga-talk@lists.sourceforge.net 英語アナウンス"
 msgstr ""
 
 # 27451ccdccf041639fd971a6a64f0b7a
-#: ../../../source/developer/release.rst:220
+#: ../../../source/developer/release.rst:236
 msgid "メッセージ内容のテンプレートを以下に示します。 ::"
 msgstr ""
 
 # 4b19f197e59c4d24ad82385b1507d6f9
-#: ../../../source/developer/release.rst:299
+#: ../../../source/developer/release.rst:315
 msgid "Twitterでリリースアナウンスをする"
 msgstr ""
 
 # 26501cd896ed4f4cb3b7b1e15402dbec
-#: ../../../source/developer/release.rst:301
+#: ../../../source/developer/release.rst:317
 msgid ""
 "mroongaブログのリリースエントリには「リンクをあなたのフォロワーに共有する」た"
 "めのツイートボタンがあるので、そのボタンを使ってリリースアナウンスします。(画"
@@ -1952,64 +1996,64 @@ msgid ""
 msgstr ""
 
 # cf8e80fee6f04af09e9d73d7153fa7cc
-#: ../../../source/developer/release.rst:303
+#: ../../../source/developer/release.rst:319
 msgid ""
 "このボタンを経由する場合、ツイート内容に自動的にリリースタイトル(「mroonga "
 "2.08リリース」など)とmroongaブログのリリースエントリのURLが挿入されます。"
 msgstr ""
 
 # 2adfa5ba8605428bbb315597f333a48f
-#: ../../../source/developer/release.rst:305
+#: ../../../source/developer/release.rst:321
 msgid ""
 "この作業はmroongaブログの英語版、日本語版それぞれで行います。 あらかじめ"
 "groongaアカウントでログインしておくとアナウンスを円滑に行うことができます。"
 msgstr ""
 
 # c4b7c2c16dfd4d0e90e1b35b73e88de4
-#: ../../../source/developer/release.rst:309
+#: ../../../source/developer/release.rst:325
 msgid "freecode.comへリリース情報を登録"
 msgstr ""
 
 # 6436b5db89f5439bbab22fbe81a1a263
-#: ../../../source/developer/release.rst:311
+#: ../../../source/developer/release.rst:327
 msgid "mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。"
 msgstr ""
 
 # 106c59e47a9f42318c2d33e9dc1b94fc
-#: ../../../source/developer/release.rst:313
+#: ../../../source/developer/release.rst:329
 msgid "freecode.comのプロジェクトページは以下の通りです。"
 msgstr ""
 
 # eaba967b2877443aa5e7d91ac5c5a8d1
-#: ../../../source/developer/release.rst:315
+#: ../../../source/developer/release.rst:331
 msgid "https://freecode.com/projects/mroonga"
 msgstr ""
 
 # 0d476160029e44e3ac446ea25385e37a
-#: ../../../source/developer/release.rst:317
+#: ../../../source/developer/release.rst:333
 msgid ""
 "プロジェクトの管理メニューから「Submit a release」をクリックし、 新規リリース"
 "情報を登録します。"
 msgstr ""
 
 # 2320106c54314cb1a695794852fbff1e
-#: ../../../source/developer/release.rst:320
+#: ../../../source/developer/release.rst:336
 msgid "https://freecode.com/projects/mroonga/releases/new"
 msgstr ""
 
 # 824c98831b1648548cfb162435088f82
-#: ../../../source/developer/release.rst:323
+#: ../../../source/developer/release.rst:339
 msgid ""
 "投稿した内容に対するレビューが運営側で実施されるので、反映されるまでしばらく"
 "時間がかかります。"
 msgstr ""
 
 # 664c69048ff7429fad53e24f2e0e49f0
-#: ../../../source/developer/release.rst:326
+#: ../../../source/developer/release.rst:342
 msgid "リリース後にやること"
 msgstr ""
 
 # d5e35c782932415c945257e7b11ebb52
-#: ../../../source/developer/release.rst:328
+#: ../../../source/developer/release.rst:344
 msgid "リリースバージョンを以下のようにして更新します。::"
 msgstr ""

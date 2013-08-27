@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-24 16:06\n"
+"POT-Creation-Date: 2013-08-27 18:49+0900\n"
 "PO-Revision-Date: 2013-06-10 17:34+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -1524,7 +1524,8 @@ msgstr ""
 #: ../../../source/userguide/wrapper.rst:276
 msgid ""
 "You can check if this optimisation works or not by the status variable. ::"
-msgstr "この最適化処理が行われたかどうかはステータス変数で確認することもできます。::"
+msgstr ""
+"この最適化処理が行われたかどうかはステータス変数で確認することもできます。::"
 
 # 62d888995ebd4115b5a021aee5ca04f1
 #: ../../../source/userguide/storage.rst:516
@@ -1659,7 +1660,6 @@ msgstr "limitの指定がある"
 # a329b256ff4a4c87a0adedb9caa9e635
 # 3df296cb0cec4ead9f6572c37544e498
 #: ../../../source/userguide/storage.rst:552
-#: ../../../source/userguide/wrapper.rst:293
 msgid ""
 "ORDER BY phrase has columns (including _id) or \"match...against\" that is "
 "used in WHERE phrase only"
@@ -1766,3 +1766,12 @@ msgid ""
 msgstr ""
 "ORDER BY LIMIT 高速化の処理が行われる度に ``Mroonga_fast_order_limit`` ステー"
 "タス変数がインクリメントされます。"
+
+# a329b256ff4a4c87a0adedb9caa9e635
+# 3df296cb0cec4ead9f6572c37544e498
+#: ../../../source/userguide/wrapper.rst:293
+msgid ""
+"ORDER BY phrase has _id column or \"match...against\" that is used in WHERE "
+"phrase only"
+msgstr ""
+"order byの指定がカラム(_id含む)またはwhere句に指定したmatch...againstである"

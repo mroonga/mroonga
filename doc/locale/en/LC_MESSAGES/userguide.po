@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-24 15:30\n"
+"POT-Creation-Date: 2013-08-27 18:40+0900\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -1530,7 +1530,6 @@ msgstr "with LIMIT"
 # 1b134292155440b08dec17f409b4e921
 # b6e9199585964acc9b60093b0b8c91e3
 #: ../../../source/userguide/storage.rst:552
-#: ../../../source/userguide/wrapper.rst:293
 msgid ""
 "ORDER BY phrase has columns (including _id) or \"match...against\" that is "
 "used in WHERE phrase only"
@@ -1628,4 +1627,12 @@ msgstr ""
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``mroonga_fast_order_limit`` status variable value is increased."
+msgstr ""
+
+# 1b134292155440b08dec17f409b4e921
+# b6e9199585964acc9b60093b0b8c91e3
+#: ../../../source/userguide/wrapper.rst:293
+msgid ""
+"ORDER BY phrase has _id column or \"match...against\" that is used in WHERE "
+"phrase only"
 msgstr ""
