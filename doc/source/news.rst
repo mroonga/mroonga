@@ -36,7 +36,7 @@ Thanks
 * Kouhei Tanabe
 * Chang
 * WING
-* Reported by yoku ts
+* yoku ts
 
 .. _release-3-06:
 
