@@ -15,7 +15,7 @@ Improvements
   for BOOLEAN MODE. [groonga-dev,01576] [Suggested by Kouhei Tanabe]
 * Supported VARCHAR equal expression in WHERE clause for ORDER BY LIMIT optimization.
 * Supported MariaDB 5.5.32 timestamp.
-* Supported MariaDB 10.0.4.
+* Supported MariaDB 10.0.4. [Reported by WING] [Reported by yoku ts]
 
 Fixes
 ^^^^^
@@ -35,6 +35,8 @@ Thanks
 
 * Kouhei Tanabe
 * Chang
+* WING
+* Reported by yoku ts
 
 .. _release-3-06:
 
