@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-27 18:49+0900\n"
+"POT-Creation-Date: 2013-08-28 08:03+0900\n"
 "PO-Revision-Date: 2013-04-14 22:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -397,22 +397,20 @@ msgstr ""
 
 # d6932ffc20ae4d02877bf705a41708dc
 #: ../../../source/install.rst:450
-#, fuzzy
 msgid ""
 "For 32-bit environment, download `mariadb-10.0.3-mroonga-3.06-win32.zip "
 "<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.06-"
 "win32.zip>`_ and extract it."
 msgstr ""
-"32bit環境では `mariadb-10.0.3-mroonga-3.05-win32.zip <http://packages."
-"groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-win32.zip>`_ をダウン"
+"32bit環境では `mariadb-10.0.3-mroonga-3.06-win32.zip <http://packages."
+"groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.06-win32.zip>`_ をダウン"
 "ロードして展開します。"
 
 # 339444287f8d42cea403c15db04b65e3
 #: ../../../source/install.rst:454
-#, fuzzy
 msgid ""
-"For 64-bit environment, download `mariadb-10.0.3-mroonga-3.06-winx64.zip "
-"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.06-"
+"For 64-bit environment, download `mariadb-10.0.4-mroonga-3.07-winx64.zip "
+"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.07-"
 "winx64.zip>`_ and extract it."
 msgstr ""
 "64bit環境では `mariadb-10.0.3-mroonga-3.05-winx64.zip <http://packages."
@@ -579,12 +577,11 @@ msgstr ""
 
 # ffc421e920ac4c479be6a13c90ff6da6
 #: ../../../source/install.rst:536
-#, fuzzy
 msgid ""
 "Here we assume that we use mysql-5.5.31 and its source code is extracted in "
 "the following directory. ::"
 msgstr ""
-"mysql-5.5.22を使用し、以下にソースディレクトリが展開されているものと仮定しま"
+"mysql-5.5.31を使用し、以下にソースディレクトリが展開されているものと仮定しま"
 "す。 ::"
 
 # aa0cbc7b42594bb9a095979846735541
