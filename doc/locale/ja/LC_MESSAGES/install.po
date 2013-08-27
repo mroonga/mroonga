@@ -413,8 +413,8 @@ msgid ""
 "<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.07-"
 "winx64.zip>`_ and extract it."
 msgstr ""
-"64bit環境では `mariadb-10.0.3-mroonga-3.05-winx64.zip <http://packages."
-"groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.05-winx64.zip>`_ をダウ"
+"64bit環境では `mariadb-10.0.4-mroonga-3.07-winx64.zip <http://packages."
+"groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.07-winx64.zip>`_ をダウ"
 "ンロードして展開します。"
 
 # 96faa87e06744aba901adba70eef342c
