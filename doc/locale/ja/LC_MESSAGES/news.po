@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-27 18:49+0900\n"
+"POT-Creation-Date: 2013-08-28 07:55+0900\n"
 "PO-Revision-Date: 2012-05-29 16:31+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -50,9 +50,8 @@ msgid ""
 "characters in query for BOOLEAN MODE. [groonga-dev,01576] [Suggested by "
 "Kouhei Tanabe]"
 msgstr ""
-"BOOLEAN MODEのクエリで特別な文字をエスケープする "
-" :doc:`/reference/udf/mroonga_escape` を追加しました。 [groonga-dev,01576] "
-" [田辺さんが提案]"
+"BOOLEAN MODEのクエリで特別な文字をエスケープする  :doc:`/reference/udf/"
+"mroonga_escape` を追加しました。 [groonga-dev,01576]  [田辺さんが提案]"
 
 # 7eab9d3d1c7949c593b7f72952959f0e
 #: ../../../source/news.rst:16
@@ -60,7 +59,8 @@ msgid ""
 "Supported VARCHAR equal expression in WHERE clause for ORDER BY LIMIT "
 "optimization."
 msgstr ""
-"ORDER BY LIMIT の最適化でWHERE句にVARCHARの等価比較がある場合をサポートしました。"
+"ORDER BY LIMIT の最適化でWHERE句にVARCHARの等価比較がある場合をサポートしまし"
+"た。"
 
 # 3754145a2bb74e9da532cb818bf851b6
 #: ../../../source/news.rst:17
@@ -70,8 +70,7 @@ msgstr "MariaDB 5.5.32 timestampをサポートしました。"
 # 3754145a2bb74e9da532cb818bf851b6
 #: ../../../source/news.rst:18
 msgid "Supported MariaDB 10.0.4. [Reported by WING] [Reported by yoku ts]"
-msgstr ""
-"MariaDB 10.0.4をサポートしました。[WINGさんが報告] [yoku tsさんが報告]"
+msgstr "MariaDB 10.0.4をサポートしました。[WINGさんが報告] [yoku tsさんが報告]"
 
 # 08e3d478781f474c8a19fd0acb16a2bf
 #: ../../../source/news.rst:21 ../../../source/news.rst:80
@@ -92,19 +91,20 @@ msgstr "修正"
 #: ../../../source/news.rst:23
 msgid "[mariadb] Fixed a crash bug when installing plugin on Windows."
 msgstr ""
-"[mariadb] Windowsでプラグインをインストールするときにクラッシュする不具合を修正しました。"
+"[mariadb] Windowsでプラグインをインストールするときにクラッシュする不具合を修"
+"正しました。"
 
 # e4266c552a4c41e0815738359b63debe
 #: ../../../source/news.rst:24
 msgid ""
-"[ストレージモード][mysql55] Fixed a bug that changing column that has index fails. "
+"[storage][mysql55] Fixed a bug that changing column that has index fails. "
 "[groonga-talk] [Reported by Chang] This bug affects the case that ``FULLTEXT "
 "INDEX (column1)`` is changed by ``ALTER TABLE table1 CHANGE column1 column1 "
 "new_column_definition`` for example."
 msgstr ""
-"[storage][mysql55] インデックスを含むカラムの変更に失敗する不具合を修"
-"正しました。[groonga-talk] [Changさんが報告] この不具合は例えば ``FULLTEXT"
-"INDEX (column1)`` が ``ALTER TABLE table1 CHANGE column1 column1 "
+"[ストレージモード][mysql55] インデックスを含むカラムの変更に失敗する不具合を修正しまし"
+"た。[groonga-talk] [Changさんが報告] この不具合は例えば ``FULLTEXTINDEX "
+"(column1)`` が ``ALTER TABLE table1 CHANGE column1 column1 "
 "new_column_definition`` などとして変更された場合に影響します。"
 
 # 24e1d5d6d1884a55a484796cc26d6bd1
@@ -113,8 +113,8 @@ msgid ""
 "[doc][wrapper] Fixed incorrect description about condition of ORDER BY LIMIT "
 "optimization."
 msgstr ""
-"[doc][ラッパーモード] ORDER BY LIMITの最適化の説明が不正確だったのを"
-"修正しました。"
+"[doc][ラッパーモード] ORDER BY LIMITの最適化の説明が不正確だったのを修正しま"
+"した。"
 
 # fefe3705b6c84e06bbee4d10489cc4e4
 #: ../../../source/news.rst:29
@@ -122,16 +122,15 @@ msgid ""
 "[storage] Disabled ORDER BY LIMIT optimization for not indexed VARCHAR "
 "condition. It should be indexed to handle COLLATION properly."
 msgstr ""
-"[ストレージモード] インデックス化されていないVARCHARに対しては ORDER"
-"BY LIMITを無効にしました。インデックスがないとCOLLATIONを正しく扱えな"
-"いためです。"
+"[ストレージモード] インデックス化されていないVARCHARに対しては ORDERBY LIMIT"
+"を無効にしました。インデックスがないとCOLLATIONを正しく扱えないためです。"
 
 # 174406690c1042f5b06c5019db0ede5d
 #: ../../../source/news.rst:31
 msgid "Fixed a bug that missing internal flag causes crash on MySQL 5.6.13."
 msgstr ""
-"MySQL 5.6.13で内部的に使っているフラグが未設定なことによりクラッシュする不具合"
-"を修正しました。"
+"MySQL 5.6.13で内部的に使っているフラグが未設定なことによりクラッシュする不具"
+"合を修正しました。"
 
 # 2371feae1d1549e59cd05415194e5dcf
 #: ../../../source/news.rst:34 ../../../source/news.rst:60
@@ -165,10 +164,10 @@ msgstr "Changさん"
 msgid "WING"
 msgstr "WINGさん"
 
-# df5aad5d6bc34e5d8039f11fc9b81a78
-#: ../../../source/news.rst:39
-msgid "Reported by yoku ts"
-msgstr "yoku tsさんが報告"
+# 8106a26d4add4fd9993ad7efcfc1a45a
+#: ../../../source/news.rst:39 ../../../source/news.rst:154
+msgid "yoku ts"
+msgstr "yoku tsさん"
 
 # f9a0af18e31849ac94867b7745d42030
 #: ../../../source/news.rst:44
@@ -490,11 +489,6 @@ msgstr ""
 #: ../../../source/news.rst:152
 msgid "Nakai Kanako"
 msgstr "中井さん"
-
-# 8106a26d4add4fd9993ad7efcfc1a45a
-#: ../../../source/news.rst:154
-msgid "yoku ts"
-msgstr "yoku tsさん"
 
 # fea7719a822846df81706447d8eb4e29
 #: ../../../source/news.rst:155 ../../../source/news.rst:208
@@ -3223,3 +3217,4 @@ msgstr ""
 #: ../../../source/news/0.x.rst:179
 msgid "初回テストリリース"
 msgstr ""
+
