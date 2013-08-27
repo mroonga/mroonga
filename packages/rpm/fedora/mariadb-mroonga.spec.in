@@ -77,7 +77,7 @@ if [ "$1" = 2 ] ; then
     UNINSTALL PLUGIN mroonga;
     FLUSH TABLES;
     "
-    command="/usr/bin/mysql -u root -e \"$sql\""
+    command="/usr/bin/mysql -u root -p -e \"$sql\""
     echo $command
     eval $command || \
           (echo "run the following command to unregister mroonga:"; \
@@ -92,7 +92,7 @@ CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
 CREATE FUNCTION mroonga_escape RETURNS STRING SONAME 'ha_mroonga.so';
 
 "
-command="/usr/bin/mysql -u root -e \"$sql\""
+command="/usr/bin/mysql -u root -p -e \"$sql\""
 echo $command
 eval $command || \
 	(echo "run the following command to register mroonga:"; \
@@ -108,7 +108,7 @@ if [ "$1" = 0 ]; then
     UNINSTALL PLUGIN mroonga;
     FLUSH TABLES;
     "
-    command="/usr/bin/mysql -u root -e \"$sql\""
+    command="/usr/bin/mysql -u root -p -e \"$sql\""
     echo $command
     eval $command || \
           (echo "run the following command to unregister mroonga:"; \
