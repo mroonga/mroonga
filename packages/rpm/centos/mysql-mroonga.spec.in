@@ -127,6 +127,7 @@ if [ "$1" = 2 ] ; then
     DROP FUNCTION mroonga_snippet;
     DROP FUNCTION last_insert_grn_id;
     DROP FUNCTION mroonga_command;
+    DROP FUNCTION mroonga_escape;
     UNINSTALL PLUGIN mroonga;
     FLUSH TABLES;
     "
@@ -142,6 +143,7 @@ INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
 CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga.so';
 CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
 CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
+CREATE FUNCTION mroonga_escape RETURNS STRING SONAME 'ha_mroonga.so';
 "
 command="/usr/bin/mysql -u root -e \"$sql\""
 echo $command
@@ -155,6 +157,7 @@ if [ "$1" = 0 ]; then
     DROP FUNCTION mroonga_snippet;
     DROP FUNCTION last_insert_grn_id;
     DROP FUNCTION mroonga_command;
+    DROP FUNCTION mroonga_escape;
     UNINSTALL PLUGIN mroonga;
     FLUSH TABLES;
     "
