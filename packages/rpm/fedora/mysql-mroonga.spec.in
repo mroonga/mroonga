@@ -11,7 +11,7 @@ Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL.
 
 Group:		Applications/Databases
-License:	LGPLv2.1
+License:	LGPLv2
 URL:		http://mroonga.org/
 Source0:	http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
