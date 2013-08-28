@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-28 08:03+0900\n"
+"POT-Creation-Date: 2013-08-28 15:06+0900\n"
 "PO-Revision-Date: 2013-04-14 22:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -742,3 +742,93 @@ msgid ""
 msgstr ""
 "その後、mysqldを起動し、MariaDBクライアントで接続して\"INSTALL PLUGIN\"コマン"
 "ドでインストールします。 ::"
+
+# a48f257ac67a489c91ba2c01570773d5
+#: ../../../source/install.rst:722
+msgid "Upgrade Guide"
+msgstr "アップグレードガイド"
+
+# 4b763780a70a4474bc9025bf71c172bf
+#: ../../../source/install.rst:724
+msgid ""
+"There is a case that incompatible change is introduced at new release. It is "
+"announced by release announce if new release contains such a incompatible "
+"change."
+msgstr ""
+"非互換な変更が新しいリリースでもたらされることがあります。"
+"もし、そういった非互換がはいる場合にはリリースアナウンスでアナウンスします。"
+
+
+# 01466211bf49474ab33eec67edcabfbf
+#: ../../../source/install.rst:727
+msgid ""
+"Here is the list of recommended way of upgrading mroonga from old release."
+msgstr ""
+"古いバージョンからmroongaをアップグレードする推奨方法のリストがこちらです。"
+
+# 0bd62e0a983747bf8be88ac392c785ee
+#: ../../../source/install.rst:729
+msgid "See following URL about upgrade sequence if you use previous version."
+msgstr ""
+"以前のバージョンをお使いなら、アップグレード手順について次のURLを参照してください。"
+
+# c7222aa82a03447495526e8b97da5f38
+#: ../../../source/install.rst:731
+msgid "If you upgrade prior to 1.20, refer to :ref:`release-1-20`"
+msgstr ""
+"1.20以前からアップグレードするなら、 :ref:`release-1-20` を参照してください。"
+
+# 8d30e7bcb0b142c0a2322e37f6532752
+#: ../../../source/install.rst:733
+msgid "If you upgrade from 1.20, refer to :ref:`release-2-00`"
+msgstr ""
+"1.20からアップグレードするなら、 :ref:`release-2-00` を参照してください。"
+
+# c6d6f0db12d74a4ea8e9c1021cd690d4
+#: ../../../source/install.rst:735
+msgid "If you upgrade from 2.00 or 2.01, refer to :ref:`release-2-02`"
+msgstr ""
+"2.00もしくは2.01からアップグレードするなら、 :ref:`release-2-02` を参照してください。"
+
+# a4bf54d24ac04cb4895196a8aa820031
+#: ../../../source/install.rst:737
+msgid ""
+"If you upgrade from 2.00 or later and using multiple column indexes on "
+"storage mode, refer to :ref:`release-2-03`"
+msgstr ""
+"もし2.00以降でマルチカラムインデックスをストレージモードで使用してい"
+"るなら、 :ref:`release-2-03` を参照してください。"
+
+# 425c19b992654d589e8975eb001e0803
+#: ../../../source/install.rst:739
+msgid ""
+"If you upgrade from 2.04 or later and using SET column or ENUM that has the "
+"number of elements < 256 in Storage mode, refer to :ref:`release-2-05`"
+msgstr ""
+"もし2.04以降で256マルチカラムインデックスをストレージモードで使用してい"
+"るなら、 :ref:`release-2-03` を参照してください。"
+"2.04以降でストレージモードにてSETカラムもしくは要素数が256より"
+"少ないENUMを使用している場合は、 :ref:`release-2-05` を参照してくださ"
+"い。"
+
+# e433e647d8f4411fb2c6cd4a4fdb5660
+#: ../../../source/install.rst:741
+msgid ""
+"If you upgrade from 2.05 or later and using multiple column indexes against "
+"VARCHAR or CHAR, refer to :ref:`release-2-08`"
+msgstr ""
+"2.05以降でマルチカラムインデックスをVARCHARやCHAR型に対して使っている"
+"場合は、 :ref:`release-2-08` を参照してください。"
+
+# 5bc7f98e8ddf478388167f7e3ef55978
+#: ../../../source/install.rst:743
+msgid ""
+"If you upgrade from 2.08 or later and using TIMESTAMP column, please "
+"recreate database. If you upgrade from 2.08 or later and using CHAR(N) as "
+"primary key, please recreate index. Refer to :ref:`release-2-09` for each "
+"case:"
+msgstr ""
+"2.08以降でTIMESTAMP型のカラムを使っているテーブルがあれば、"
+"データベースを再作成してください。"
+"CHAR(N)を主キーとしているテーブルがあれば、インデックスを再作成してく"
+"ださい。 それぞれについては :ref:`release-2-09` を参照してください。"

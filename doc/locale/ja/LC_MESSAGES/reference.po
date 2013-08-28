@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-25 17:03+0900\n"
+"POT-Creation-Date: 2013-08-28 15:06+0900\n"
 "PO-Revision-Date: 2013-05-07 19:09+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -161,8 +161,7 @@ msgstr ""
 # e5b27ecc3abe4723849764d752d6ad68
 #: ../../../source/reference/server_variables.rst:13
 msgid "The default behavior of fulltext query error."
-msgstr ""
-"全文検索クエリエラーの振舞いです。"
+msgstr "全文検索クエリエラーの振舞いです。"
 
 # 9ade67b2faa9486a83ac9138b88d9c91
 #: ../../../source/reference/server_variables.rst:15
@@ -238,8 +237,7 @@ msgstr "エラーを無視するが、ログは有効です。 (InnoDBと似た�
 msgid ""
 "Here is an example SQL to confirm the value of "
 "``mroonga_action_on_fulltext_query_error``::"
-msgstr ""
-"``mroonga_action_on_fulltext_query_error`` を確認するためのSQL例です::"
+msgstr "``mroonga_action_on_fulltext_query_error`` を確認するためのSQL例です::"
 
 # 3f5fb8dfbc954a2c99f47e0c08dff40a
 #: ../../../source/reference/server_variables.rst:45
@@ -1477,3 +1475,111 @@ msgid ""
 msgstr ""
 "その後、設定値を  ``/etc/sysctl.conf`` もしくは ``/etc/sysctl.d/*.conf`` へと"
 "保存します。"
+
+# abd4d5638e57451a97f9c1f528b7b7f3
+#: ../../../source/reference/udf.rst:4
+msgid "UDF (User Defined Functions)"
+msgstr "UDF (ユーザ定義関数)"
+
+# bb41cda5abf446519e1ef791a5dfc426
+#: ../../../source/reference/udf.rst:6
+msgid ""
+"mroonga provides some useful functionality as UDF (User Defined Functions)."
+msgstr ""
+"mroongaではいくつか便利な機能をUDF (ユーザ定義関数)として提供していま"
+"す。"
+
+# 24b2537bf0164629b33cfaa9304ee28d
+#: ../../../source/reference/udf/mroonga_escape.rst:4
+msgid "mroonga_escape"
+msgstr ""
+
+# a7c24478b5fa426f97fb72633c7815c4
+#: ../../../source/reference/udf/mroonga_escape.rst:7
+msgid "Summary"
+msgstr "概要"
+
+# 22d0b6e6328d465d9e8727db773fd4b7
+#: ../../../source/reference/udf/mroonga_escape.rst:9
+msgid ""
+"``mroonga_escape`` UDF provides functionality to escape given string. It "
+"also accepts parameter what character should be escaped."
+msgstr ""
+"``mroonga_escape`` UDF は与えられた文字列をエスケープする機能を提供し"
+"ます。そしてまたエスケープすべき文字を引数として受け取ります。"
+
+# 37137e602e71421ea9f12c67566253e5
+#: ../../../source/reference/udf/mroonga_escape.rst:13
+msgid "Syntax"
+msgstr "構文"
+
+# 90956befa1014ecfbdf487c4391bfeb0
+#: ../../../source/reference/udf/mroonga_escape.rst:15
+msgid "mroonga_escape has required parameter and optional parameter::"
+msgstr ""
+"mroonga_escapeには必須引数と省略可能引数とがあります。::"
+
+# 2be3c50c2dea4935a535b24af65d920b
+#: ../../../source/reference/udf/mroonga_escape.rst:21
+msgid "Usage"
+msgstr "使いかた"
+
+# 62f7364ad58b48f4972ddac675dbd8a4
+#: ../../../source/reference/udf/mroonga_escape.rst:23
+msgid "TODO"
+msgstr ""
+
+# cc7a7f707ed74fb78af265be09ae8637
+#: ../../../source/reference/udf/mroonga_escape.rst:26
+msgid "Parameters"
+msgstr "引数"
+
+# c78fe47a38b94c40bd85fc3d3b1fc72f
+#: ../../../source/reference/udf/mroonga_escape.rst:29
+msgid "Required parameters"
+msgstr "必須引数"
+
+# c0afa486a47a4adc86a66e0331301b21
+#: ../../../source/reference/udf/mroonga_escape.rst:31
+msgid "There is one required parameter, ``string``."
+msgstr "必須引数は ``string`` です。"
+
+# 72b2134932d747df84b9f2e339ac6163
+#: ../../../source/reference/udf/mroonga_escape.rst:34
+msgid "``string``"
+msgstr ""
+
+# 1d47c704d0cc4b7eb3b98a3ce3582be4
+#: ../../../source/reference/udf/mroonga_escape.rst:36
+msgid "It specifies text which you want to escape."
+msgstr "エスケープしたいテキストを指定します。"
+
+# 4b211f2ffc174a80a86390ea3a0ea6e4
+#: ../../../source/reference/udf/mroonga_escape.rst:39
+msgid "Optional parameters"
+msgstr "省略可能引数"
+
+# 5901a4c37fea44519b194dc5cbdffa63
+#: ../../../source/reference/udf/mroonga_escape.rst:41
+msgid "There is one optional parameter, ``special_characters``."
+msgstr "``special_characters`` は省略可能な引数です。"
+
+# 0f36040158d1436fb8f784c5d83f6e70
+#: ../../../source/reference/udf/mroonga_escape.rst:44
+msgid "``special_characters``"
+msgstr ""
+
+# 159c681ff26d42fa9aeed42b68eb87b3
+#: ../../../source/reference/udf/mroonga_escape.rst:46
+msgid "It specifies characters to escape."
+msgstr "エスケープする文字を指定します。"
+
+# 7eaf493e9ab048e0bd1ddb1781266f10
+#: ../../../source/reference/udf/mroonga_escape.rst:49
+msgid "Return value"
+msgstr "返り値"
+
+# b4eb05b330ce42e7bd2655d83719eb54
+#: ../../../source/reference/udf/mroonga_escape.rst:51
+msgid "It returns escaped string."
+msgstr "エスケープされた文字列を返します。"
