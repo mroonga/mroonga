@@ -716,3 +716,45 @@ To enable invoking groonga query from mroonga, install mroonga_command function.
 Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
+
+
+Upgrade Guide
+-------------
+
+There is a case that incompatible change is introduced at new release.
+It is announced by release announce if new release contains such a incompatible change.
+
+Here is the list of recommended way of upgrading mroonga from old release.
+
+See following URL about upgrade sequence if you use previous version.
+
+If you upgrade prior to 1.20, refer to following document:
+  http://mroonga.org/docs/news.html#release-1-20
+
+If you upgrade from 1.20, refer to following document:
+  http://mroonga.org/docs/news.html#release-2-00
+
+If you upgrade from 2.00 or 2.01, refer to following document:
+  http://mroonga.org/docs/news.html#release-2-02
+
+If you upgrade from 2.00 or later and using multiple column indexes
+on storage mode, refer to following document:
+  http://mroonga.org/docs/news.html#release-2-03
+
+If you upgrade from 2.04 or later and using SET column or
+ ENUM that has the number of elements < 256 in Storage mode:
+  http://mroonga.org/docs/news.html#release-2-05
+
+If you upgrade from 2.05 or later and using multiple column 
+indexes against VARCHAR or CHAR, refer to following document:
+
+  http://mroonga.org/docs/news.html#release-2-08
+
+If you upgrade from 2.08 or later and using TIMESTAMP column,
+please recreate database.
+If you upgrade from 2.08 or later and using CHAR(N) as primary key,
+please recreate index.
+Refer to following documentation for each case:
+
+  http://mroonga.org/docs/news.html#release-2-09
+
