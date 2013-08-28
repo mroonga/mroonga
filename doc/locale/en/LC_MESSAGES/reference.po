@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-25 17:04+0900\n"
+"POT-Creation-Date: 2013-08-28 15:03+0900\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -1418,4 +1418,107 @@ msgstr ""
 msgid ""
 "Then save the configuration value to ``/etc/sysctl.conf`` or ``/etc/sysctl.d/"
 "*.conf``."
+msgstr ""
+
+# 5946a28aa93340ee9a289c52679bd434
+#: ../../../source/reference/udf.rst:4
+msgid "UDF (User Defined Functions)"
+msgstr ""
+
+# 23ad64d3c5c543a4885798de7494c425
+#: ../../../source/reference/udf.rst:6
+msgid ""
+"mroonga provides some useful functionality as UDF (User Defined Functions)."
+msgstr ""
+
+# 0ecdbb3231bc4d1fbd38decb8fddf851
+#: ../../../source/reference/udf/mroonga_escape.rst:4
+msgid "mroonga_escape"
+msgstr ""
+
+# 1b1d45eed72b4a819c19f9db668f6f43
+#: ../../../source/reference/udf/mroonga_escape.rst:7
+msgid "Summary"
+msgstr ""
+
+# e36c3c66cef948299e1c9e0b9b226d97
+#: ../../../source/reference/udf/mroonga_escape.rst:9
+msgid ""
+"``mroonga_escape`` UDF provides functionality to escape given string. It "
+"also accepts parameter what character should be escaped."
+msgstr ""
+
+# b4c0038975dc41049c6fad2ef569481c
+#: ../../../source/reference/udf/mroonga_escape.rst:13
+msgid "Syntax"
+msgstr ""
+
+# f3c65ee518da42fb95b81481c2257b36
+#: ../../../source/reference/udf/mroonga_escape.rst:15
+msgid "mroonga_escape has required parameter and optional parameter::"
+msgstr ""
+
+# 2e9a7a8ecdf543fb8fcab327809acc02
+#: ../../../source/reference/udf/mroonga_escape.rst:21
+msgid "Usage"
+msgstr ""
+
+# c7014ffe43cc47f58cb21da90fc36c62
+#: ../../../source/reference/udf/mroonga_escape.rst:23
+msgid "TODO"
+msgstr ""
+
+# 03fa8b7845534cf1b493bed3510a16c2
+#: ../../../source/reference/udf/mroonga_escape.rst:26
+msgid "Parameters"
+msgstr ""
+
+# 1f8e22ad3fcc40309eeee8083f54f2d3
+#: ../../../source/reference/udf/mroonga_escape.rst:29
+msgid "Required parameters"
+msgstr ""
+
+# 878e5d4b90e846a891ea42856e6eb2fd
+#: ../../../source/reference/udf/mroonga_escape.rst:31
+msgid "There is one required parameter, ``string``."
+msgstr ""
+
+# 5815f775187a444c8bce00e78d5fda0e
+#: ../../../source/reference/udf/mroonga_escape.rst:34
+msgid "``string``"
+msgstr ""
+
+# 77c3c3b0d7fb4ca383a52442d11340a3
+#: ../../../source/reference/udf/mroonga_escape.rst:36
+msgid "It specifies text which you want to escape."
+msgstr ""
+
+# 60133be2466040feb3b66d8f9348a458
+#: ../../../source/reference/udf/mroonga_escape.rst:39
+msgid "Optional parameters"
+msgstr ""
+
+# bcba930a6791498abade8fdc74aec9f6
+#: ../../../source/reference/udf/mroonga_escape.rst:41
+msgid "There is one optional parameter, ``special_characters``."
+msgstr ""
+
+# 8cc1d49f35a8427488c66ccb0a23ef5b
+#: ../../../source/reference/udf/mroonga_escape.rst:44
+msgid "``special_characters``"
+msgstr ""
+
+# 0c2289db8f70450ea9acae5af6c0b968
+#: ../../../source/reference/udf/mroonga_escape.rst:46
+msgid "It specifies characters to escape."
+msgstr ""
+
+# 9b54ccd05eb64ed79f819c3680d4f3cf
+#: ../../../source/reference/udf/mroonga_escape.rst:49
+msgid "Return value"
+msgstr ""
+
+# 78d935f8df464ad08df322bc870a617f
+#: ../../../source/reference/udf/mroonga_escape.rst:51
+msgid "It returns escaped string."
 msgstr ""

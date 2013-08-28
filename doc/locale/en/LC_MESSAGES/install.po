@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-27 18:40+0900\n"
+"POT-Creation-Date: 2013-08-28 15:03+0900\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -385,8 +385,8 @@ msgstr ""
 # cc98cc88820648b98ee0526495bc72e5
 #: ../../../source/install.rst:454
 msgid ""
-"For 64-bit environment, download `mariadb-10.0.3-mroonga-3.06-winx64.zip "
-"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.06-"
+"For 64-bit environment, download `mariadb-10.0.4-mroonga-3.07-winx64.zip "
+"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.07-"
 "winx64.zip>`_ and extract it."
 msgstr ""
 
@@ -693,3 +693,72 @@ msgid ""
 msgstr ""
 "Then start mysqld, connect to it by MariaDB client, and install it by "
 "\"INSTALL PLUGIN\" command. ::"
+
+# 5f730cddd1ab476ba7a247fd279605ea
+#: ../../../source/install.rst:722
+msgid "Upgrade Guide"
+msgstr ""
+
+# ab50edebb98c427797c16654b0ef5e2c
+#: ../../../source/install.rst:724
+msgid ""
+"There is a case that incompatible change is introduced at new release. It is "
+"announced by release announce if new release contains such a incompatible "
+"change."
+msgstr ""
+
+# 4927a9f8aa124370bd24b4407f3a88f4
+#: ../../../source/install.rst:727
+msgid ""
+"Here is the list of recommended way of upgrading mroonga from old release."
+msgstr ""
+
+# 22ec1d0cfe0d44d98acc691861fd533f
+#: ../../../source/install.rst:729
+msgid "See following URL about upgrade sequence if you use previous version."
+msgstr ""
+
+# a0952bf4d2484885a51aa0396f510511
+#: ../../../source/install.rst:731
+msgid "If you upgrade prior to 1.20, refer to :ref:`release-1-20`"
+msgstr ""
+
+# ce86b0a9dca347ba80518d3c68a96072
+#: ../../../source/install.rst:733
+msgid "If you upgrade from 1.20, refer to :ref:`release-2-00`"
+msgstr ""
+
+# a81ba1acef054aed95791ef18c61f78b
+#: ../../../source/install.rst:735
+msgid "If you upgrade from 2.00 or 2.01, refer to :ref:`release-2-02`"
+msgstr ""
+
+# b57b715fdaad4e1d9176fbe94131b58f
+#: ../../../source/install.rst:737
+msgid ""
+"If you upgrade from 2.00 or later and using multiple column indexes on "
+"storage mode, refer to :ref:`release-2-03`"
+msgstr ""
+
+# 0fd282d7b1d741a3977fc35dfe5c09e8
+#: ../../../source/install.rst:739
+msgid ""
+"If you upgrade from 2.04 or later and using SET column or ENUM that has the "
+"number of elements < 256 in Storage mode, refer to :ref:`release-2-05`"
+msgstr ""
+
+# 670bc82318b14404af5e32b70a733a7b
+#: ../../../source/install.rst:741
+msgid ""
+"If you upgrade from 2.05 or later and using multiple column indexes against "
+"VARCHAR or CHAR, refer to :ref:`release-2-08`"
+msgstr ""
+
+# adb669f30a3e4f8bba69bc0f2388846d
+#: ../../../source/install.rst:743
+msgid ""
+"If you upgrade from 2.08 or later and using TIMESTAMP column, please "
+"recreate database. If you upgrade from 2.08 or later and using CHAR(N) as "
+"primary key, please recreate index. Refer to :ref:`release-2-09` for each "
+"case:"
+msgstr ""
