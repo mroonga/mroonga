@@ -22,6 +22,8 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/reference/sql_commands.rst \
 	$(top_srcdir)/doc/source/reference/status_variables.rst \
 	$(top_srcdir)/doc/source/reference/troubleshooting.rst \
+	$(top_srcdir)/doc/source/reference/udf.rst \
+	$(top_srcdir)/doc/source/reference/udf/mroonga_escape.rst \
 	$(top_srcdir)/doc/source/userguide.rst \
 	$(top_srcdir)/doc/source/userguide/mroonga_snippet_example.inc \
 	$(top_srcdir)/doc/source/userguide/mroonga_snippet_syntax.inc \
@@ -64,6 +66,8 @@ source_files_relative_from_doc_dir = \
 	source/reference/sql_commands.rst \
 	source/reference/status_variables.rst \
 	source/reference/troubleshooting.rst \
+	source/reference/udf.rst \
+	source/reference/udf/mroonga_escape.rst \
 	source/userguide.rst \
 	source/userguide/mroonga_snippet_example.inc \
 	source/userguide/mroonga_snippet_syntax.inc \
@@ -150,6 +154,8 @@ html_files_relative_from_locale_dir = \
 	html/_sources/reference/sql_commands.txt \
 	html/_sources/reference/status_variables.txt \
 	html/_sources/reference/troubleshooting.txt \
+	html/_sources/reference/udf.txt \
+	html/_sources/reference/udf/mroonga_escape.txt \
 	html/_sources/userguide.txt \
 	html/_sources/userguide/storage.txt \
 	html/_sources/userguide/wrapper.txt \
@@ -195,6 +201,8 @@ html_files_relative_from_locale_dir = \
 	html/reference/sql_commands.html \
 	html/reference/status_variables.html \
 	html/reference/troubleshooting.html \
+	html/reference/udf.html \
+	html/reference/udf/mroonga_escape.html \
 	html/search.html \
 	html/searchindex.js \
 	html/userguide.html \
