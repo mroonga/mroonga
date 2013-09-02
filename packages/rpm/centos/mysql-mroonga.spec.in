@@ -124,10 +124,10 @@ rm -rf $RPM_BUILD_ROOT
 %post
 if [ "$1" = 2 ] ; then
     sql="
-    DROP FUNCTION mroonga_snippet;
-    DROP FUNCTION last_insert_grn_id;
-    DROP FUNCTION mroonga_command;
-    DROP FUNCTION mroonga_escape;
+    DROP FUNCTION IF EXISTS mroonga_snippet;
+    DROP FUNCTION IF EXISTS last_insert_grn_id;
+    DROP FUNCTION IF EXISTS mroonga_command;
+    DROP FUNCTION IF EXISTS mroonga_escape;
     UNINSTALL PLUGIN mroonga;
     FLUSH TABLES;
     "
@@ -154,10 +154,10 @@ eval $command || \
 %preun
 if [ "$1" = 0 ]; then
     sql="
-    DROP FUNCTION mroonga_snippet;
-    DROP FUNCTION last_insert_grn_id;
-    DROP FUNCTION mroonga_command;
-    DROP FUNCTION mroonga_escape;
+    DROP FUNCTION IF EXISTS mroonga_snippet;
+    DROP FUNCTION IF EXISTS last_insert_grn_id;
+    DROP FUNCTION IF EXISTS mroonga_command;
+    DROP FUNCTION IF EXISTS mroonga_escape;
     UNINSTALL PLUGIN mroonga;
     FLUSH TABLES;
     "
