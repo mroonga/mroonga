@@ -70,6 +70,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 if [ "$1" = 2 ] ; then
     sql="
+    USE mysql;
     DROP FUNCTION IF EXISTS mroonga_snippet;
     DROP FUNCTION IF EXISTS last_insert_grn_id;
     DROP FUNCTION IF EXISTS mroonga_command;
@@ -101,6 +102,7 @@ eval $command || \
 %preun
 if [ "$1" = 0 ]; then
     sql="
+    USE mysql;
     DROP FUNCTION IF EXISTS mroonga_snippet;
     DROP FUNCTION IF EXISTS last_insert_grn_id;
     DROP FUNCTION IF EXISTS mroonga_command;
