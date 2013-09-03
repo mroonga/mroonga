@@ -73,6 +73,32 @@ mysql -u root -e "quit"
 if [ $? -ne 0 ]; then
     password_option="-p"
 fi
+version=`mysql -e "show variables like '%libgroonga%'" | \
+    grep mroonga | cut -f 2 | sed -e 's/\.//g'`
+current_version=`expr $version`
+version=`echo %{groonga_required_version} | sed -e 's/\.//g'`
+required_version=`expr $version`
+if [ $current_version -lt $required_version ]; then
+    sql="
+    USE mysql;
+    DROP FUNCTION IF EXISTS mroonga_snippet;
+    DROP FUNCTION IF EXISTS last_insert_grn_id;
+    DROP FUNCTION IF EXISTS mroonga_command;
+    DROP FUNCTION IF EXISTS mroonga_escape;
+    UNINSTALL PLUGIN mroonga;
+    FLUSH TABLES;
+    DELETE IGNORE FROM mysql.plugin WHERE name = 'mroonga';
+    INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
+    CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga.so';
+    CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
+    CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
+    CREATE FUNCTION mroonga_escape RETURNS STRING SONAME 'ha_mroonga.so';
+    "
+    command="/usr/bin/mysql -u root $password_option -e \"$sql\""
+    echo "run the following command after restarting mariadb server:";
+    echo "  $command"
+    exit 0
+fi
 if [ "$1" = 2 ] ; then
     sql="
     USE mysql;
