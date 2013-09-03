@@ -6,7 +6,7 @@
 
 Name:		mariadb-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB.
 
 Group:		Applications/Databases
@@ -165,6 +165,10 @@ fi
 %doc mariadb-mroonga-doc/*
 
 %changelog
+* Wed Sep 4 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.07-2
+- fix a bug that mroonga is removed accidentally on upgrade #1918.
+  Reported by @ceekz. Thanks!!!
+
 * Thu Aug 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.07-1
 - new upstream release.
 
