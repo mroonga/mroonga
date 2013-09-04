@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-27 18:49+0900\n"
+"POT-Creation-Date: 2013-09-04 13:24+0900\n"
 "PO-Revision-Date: 2013-06-10 17:34+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -384,14 +384,14 @@ msgstr "ここでは mroonga におけるストレージモードの利用方法
 # 009e40d9ac12435bbe803dd945407327
 # cef3ca2bca824198b5e16607d053e99e
 #: ../../../source/userguide/storage.rst:9
-#: ../../../source/userguide/wrapper.rst:23
+#: ../../../source/userguide/wrapper.rst:25
 msgid "How to use full text search"
 msgstr "全文検索の利用方法"
 
 # bda9437511184e36b37aeee34092e464
 # a265b3b4283a4717a4ca69ead5a5273c
 #: ../../../source/userguide/storage.rst:11
-#: ../../../source/userguide/wrapper.rst:25
+#: ../../../source/userguide/wrapper.rst:27
 msgid ""
 "After confirming the installation, let's create a table. The important point "
 "is to specify mroonga by ``ENGINE = mroonga``. ::"
@@ -402,28 +402,28 @@ msgstr ""
 # 66a1958036764bf4bb2575d0f5d5bf67
 # b5a4fbc3d59145989d77e88d10e43369
 #: ../../../source/userguide/storage.rst:20
-#: ../../../source/userguide/wrapper.rst:34
+#: ../../../source/userguide/wrapper.rst:36
 msgid "We put data by INSERT. ::"
 msgstr "INSERTでデータを投入してみましょう。 ::"
 
 # 68262b84d08147b4b2bd21b9efccde1e
 # a53f8a16f5f8419d9f33f0ac6b2faf62
 #: ../../../source/userguide/storage.rst:28
-#: ../../../source/userguide/wrapper.rst:42
+#: ../../../source/userguide/wrapper.rst:44
 msgid "Try full text search. ::"
 msgstr "全文検索を実行してみます。 ::"
 
 # 4d6d39398f3e422e807445972adf8c55
 # 38d196558a6747cc9eacf7f7a3d46d3f
 #: ../../../source/userguide/storage.rst:38
-#: ../../../source/userguide/wrapper.rst:52
+#: ../../../source/userguide/wrapper.rst:54
 msgid "Yes, full text search works."
 msgstr "おぉぉー。検索できましたね。"
 
 # b4ee05b9494e414a98950dbad51afd35
 # 457a451e8b02494683afb7a45b18a5d7
 #: ../../../source/userguide/storage.rst:41
-#: ../../../source/userguide/wrapper.rst:55
+#: ../../../source/userguide/wrapper.rst:57
 msgid "How to get search score"
 msgstr "検索スコアの取得方法"
 
@@ -441,7 +441,7 @@ msgstr ""
 # 5b531348c40447bda830c2ac223402c9
 # 800d3b365d5d49518986667eed622995
 #: ../../../source/userguide/storage.rst:47
-#: ../../../source/userguide/wrapper.rst:57
+#: ../../../source/userguide/wrapper.rst:59
 msgid ""
 "We often want to display more relevant results first in full text search. We "
 "use search score in such case."
@@ -452,7 +452,7 @@ msgstr ""
 # 1f49676ec5364d6db5d99df5da6db4d3
 # 9bfa6423d4af46939c1447d30b4ab67e
 #: ../../../source/userguide/storage.rst:49
-#: ../../../source/userguide/wrapper.rst:59
+#: ../../../source/userguide/wrapper.rst:61
 msgid ""
 "We can get search score by MySQL's standard way [#score]_, i.e. we use "
 "MATCH...AGAINST in one of columns in SELECT or ORDER BY."
@@ -464,14 +464,14 @@ msgstr ""
 # f3426ef97c11451c97b06ab6f2fd0e76
 # 1018f25fa12a42b481801255270cd75a
 #: ../../../source/userguide/storage.rst:51
-#: ../../../source/userguide/wrapper.rst:61
+#: ../../../source/userguide/wrapper.rst:63
 msgid "Let's try. ::"
 msgstr "それでは実際にやってみましょう。::"
 
 # 32c2d5723166462c8017d3475d10734e
 # 78424892085c4a47b4825aaf30556f72
 #: ../../../source/userguide/storage.rst:69
-#: ../../../source/userguide/wrapper.rst:79
+#: ../../../source/userguide/wrapper.rst:81
 msgid ""
 "The result having the search word ``fine`` more, i.e. ``id = 3`` message "
 "having the higher search score, is displayed first. And you also get search "
@@ -484,21 +484,21 @@ msgstr ""
 # 40c4d29f3ccf4312916efe4271813832
 # 5a17b07b0ade45fc859fc2be5d47a17d
 #: ../../../source/userguide/storage.rst:71
-#: ../../../source/userguide/wrapper.rst:81
+#: ../../../source/userguide/wrapper.rst:83
 msgid "You can use ``AS`` to change the attribute name. ::"
 msgstr "属性名を変更したい場合は ``AS`` を使って下さい。 ::"
 
 # 0856c9615b044c9b9de7eafe5c154860
 # 5d1b1a5f13784f75bfcd6993674f2454
 #: ../../../source/userguide/storage.rst:84
-#: ../../../source/userguide/wrapper.rst:94
+#: ../../../source/userguide/wrapper.rst:96
 msgid "How to specify the parser for full text search"
 msgstr "全文検索用パーサの変更"
 
 # 51f94be89e804eb2bbdec1360b85966f
 # 8192193993594728a0e1f19de9ca2160
 #: ../../../source/userguide/storage.rst:86
-#: ../../../source/userguide/wrapper.rst:96
+#: ../../../source/userguide/wrapper.rst:98
 msgid ""
 "MySQL has the following syntax to specify the parser [#parser]_ for full "
 "text search. ::"
@@ -509,7 +509,7 @@ msgstr ""
 # edc91033ff67438cb24d037dbbfb9c9d
 # e738873cf77646218b2d98794bcbc8c6
 #: ../../../source/userguide/storage.rst:90
-#: ../../../source/userguide/wrapper.rst:100
+#: ../../../source/userguide/wrapper.rst:102
 msgid ""
 "To use this syntax, you need to register all parsers in MySQL beforehand. On "
 "the other hand, groonga can dynamically add a tokeniser, that is a parser in "
@@ -529,7 +529,7 @@ msgstr ""
 # a587fba35f384a7bba3bf45412659169
 # 7a84d191d0b4436bb0a83115bfaa5c1b
 #: ../../../source/userguide/storage.rst:96
-#: ../../../source/userguide/wrapper.rst:106
+#: ../../../source/userguide/wrapper.rst:108
 msgid ""
 "``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If "
 "you use MySQL 5.1, use ``mroonga_default_parser`` variable described below."
@@ -541,14 +541,14 @@ msgstr ""
 # 0b25b84897b9493e8bd3aa5259ca1659
 # 022abb028d384449841b0104f2b51092
 #: ../../../source/userguide/storage.rst:98
-#: ../../../source/userguide/wrapper.rst:108
+#: ../../../source/userguide/wrapper.rst:110
 msgid "You can specify one of following values as the parser."
 msgstr "パーサに指定できるのは以下の値です。"
 
 # 4e70118bb6ba4d4b8b60176be671393d
 # 56222e40554a49ee80dbddaae00f56e2
 #: ../../../source/userguide/storage.rst:101
-#: ../../../source/userguide/wrapper.rst:111
+#: ../../../source/userguide/wrapper.rst:113
 msgid ""
 "It does not tokenize at all. Use \"off\" if you want to treat ``content`` as "
 "is. For example, this value is used for prefix search."
@@ -559,14 +559,14 @@ msgstr ""
 # 0d2a1a93e862494aabe77d7aa7f1b56c
 # 7b5012aa534d4785befae912e8ac1dd4
 #: ../../../source/userguide/storage.rst:101
-#: ../../../source/userguide/wrapper.rst:111
+#: ../../../source/userguide/wrapper.rst:113
 msgid "off"
 msgstr ""
 
 # 8c62217928584b579f6792515e9687f8
 # 6d3b824f2ebc469dbfce2270f719d3e2
 #: ../../../source/userguide/storage.rst:104
-#: ../../../source/userguide/wrapper.rst:114
+#: ../../../source/userguide/wrapper.rst:116
 msgid ""
 "It tokenises in bigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 3 letters or more. It is "
@@ -579,21 +579,21 @@ msgstr ""
 # f47bfe66481c4e6ea15df8f72d711908
 # e1dedf981b70485a8a60b75384fdbb3f
 #: ../../../source/userguide/storage.rst:106
-#: ../../../source/userguide/wrapper.rst:116
+#: ../../../source/userguide/wrapper.rst:118
 msgid "This is the default value."
 msgstr "デフォルト値。"
 
 # e349214d088146d19e76a130c52a1762
 # b69a9931f4074d728e611ccab8373480
 #: ../../../source/userguide/storage.rst:106
-#: ../../../source/userguide/wrapper.rst:116
+#: ../../../source/userguide/wrapper.rst:118
 msgid "TokenBigram"
 msgstr ""
 
 # e44aefcff5ff4356975abccd65afa13c
 # c521b1541ccd470bbde43465b22701be
 #: ../../../source/userguide/storage.rst:109
-#: ../../../source/userguide/wrapper.rst:119
+#: ../../../source/userguide/wrapper.rst:121
 msgid "It tokenises using MeCab. Groonga should be built with MeCab support."
 msgstr ""
 "MeCabを用いてトークナイズする。groongaがMeCabサポート付きでビルドされている必"
@@ -602,14 +602,14 @@ msgstr ""
 # b11d1f14c73745eda35a40865ecd3643
 # d0f9efc211d44c55bf543230120ed563
 #: ../../../source/userguide/storage.rst:109
-#: ../../../source/userguide/wrapper.rst:119
+#: ../../../source/userguide/wrapper.rst:121
 msgid "TokenMecab"
 msgstr ""
 
 # 073bd59d06d743d281edc5e5b26aab4c
 # a7bd25e18c604961b3261cbaff332256
 #: ../../../source/userguide/storage.rst:112
-#: ../../../source/userguide/wrapper.rst:122
+#: ../../../source/userguide/wrapper.rst:124
 msgid ""
 "It tokenises in bigram. Unlike TokenBigram, continuous symbols are not "
 "treated as a token, but tokenised in bigram."
@@ -620,14 +620,14 @@ msgstr ""
 # b513db9bd18c4eb7b330ddca6bbbab42
 # 7ccb0e6d4f484c81a7412a996149564e
 #: ../../../source/userguide/storage.rst:114
-#: ../../../source/userguide/wrapper.rst:124
+#: ../../../source/userguide/wrapper.rst:126
 msgid "TokenBigramSplitSymbol"
 msgstr ""
 
 # 6336234f685242a698e31059a9924d0e
 # c332b47b0c5f483f82233c4359db16c7
 #: ../../../source/userguide/storage.rst:114
-#: ../../../source/userguide/wrapper.rst:124
+#: ../../../source/userguide/wrapper.rst:126
 msgid ""
 "When you use TokenBigramSplitSymbol instead of TokenBigram, \"!?\" can match "
 "\"!?!?!?\" in \"Is it really!?!?!?\". But when you use TokenBigram, only "
@@ -640,7 +640,7 @@ msgstr ""
 # e4d3eaee409144d5a47f2de2ba28b936
 # 4322bcf184d944b2ab1273613bd4968e
 #: ../../../source/userguide/storage.rst:117
-#: ../../../source/userguide/wrapper.rst:127
+#: ../../../source/userguide/wrapper.rst:129
 msgid ""
 "It tokenise in bigram. In addition to TokenBigramSplitSymbol, continuous "
 "alphabets are not treated as a token either, but tokenised in bigram."
@@ -651,14 +651,14 @@ msgstr ""
 # 3e759447f59f471a9786cb82be67cec7
 # 47ee223d4e7441d59b13c2a554aa0429
 #: ../../../source/userguide/storage.rst:119
-#: ../../../source/userguide/wrapper.rst:129
+#: ../../../source/userguide/wrapper.rst:131
 msgid "TokenBigramSplitSymbolAlpha"
 msgstr ""
 
 # c16a64b75b9344d59f5b9835cbd1c6c9
 # 4eef12c357b34c54b74d7f5005a9e690
 #: ../../../source/userguide/storage.rst:119
-#: ../../../source/userguide/wrapper.rst:129
+#: ../../../source/userguide/wrapper.rst:131
 msgid ""
 "When you use TokenBigramSplitSymbolAlpha instead of TokenBigram, \"real\" "
 "can match \"Is it really?\". But when you use TokenBigram, only \"really\" "
@@ -670,7 +670,7 @@ msgstr ""
 # 76738450c7a54b2e8c73563b88bc3760
 # 2c65f67d4a8e499f8e75e51f4c1d9e8b
 #: ../../../source/userguide/storage.rst:122
-#: ../../../source/userguide/wrapper.rst:132
+#: ../../../source/userguide/wrapper.rst:134
 msgid ""
 "It tokenise in bigram. In addition to TokenBigramSplitSymbolAlpha, "
 "continuous numbers are not treated as a token either, but tokenised in "
@@ -683,14 +683,14 @@ msgstr ""
 # 1742746e758b4447852f9c949307ac9e
 # a7a3a882fa2b4bdebff032804987c35f
 #: ../../../source/userguide/storage.rst:124
-#: ../../../source/userguide/wrapper.rst:134
+#: ../../../source/userguide/wrapper.rst:136
 msgid "TokenBigramSplitSymbolAlphaDigit"
 msgstr ""
 
 # 7ee790a07af14f03ad9ef746636e7b41
 # 7fa78a40f3b7405081a3a45de8685236
 #: ../../../source/userguide/storage.rst:124
-#: ../../../source/userguide/wrapper.rst:134
+#: ../../../source/userguide/wrapper.rst:136
 msgid ""
 "When you use TokenBigramSplitSymbolAlphaDigit instead of TokenBigram, "
 "\"567\" can match \"090-0123-4567\". But when you use TokenBigram, only "
@@ -703,7 +703,7 @@ msgstr ""
 # 6b61f8c17f604427b7a560d009a800d3
 # 758ab7755e0a4dc395243599be52f13c
 #: ../../../source/userguide/storage.rst:127
-#: ../../../source/userguide/wrapper.rst:137
+#: ../../../source/userguide/wrapper.rst:139
 msgid "It tokenise in bigram. Unlike TokenBigram, it ignores white spaces."
 msgstr ""
 "バイグラムでトークナイズする。TokenBigramと異なり、空白を無視して処理する。"
@@ -711,14 +711,14 @@ msgstr ""
 # 74d51335d54b4b8cb2ac02860d9999e8
 # 035835ae3dab4fee94ba7f938c745850
 #: ../../../source/userguide/storage.rst:129
-#: ../../../source/userguide/wrapper.rst:139
+#: ../../../source/userguide/wrapper.rst:141
 msgid "TokenBigramIgnoreBlank"
 msgstr ""
 
 # 54f7c484bfd0467e83d347d5c600e79c
 # 42bcbf84fe6f41d398a72b97bf80e05b
 #: ../../../source/userguide/storage.rst:129
-#: ../../../source/userguide/wrapper.rst:139
+#: ../../../source/userguide/wrapper.rst:141
 msgid ""
 "When you use TokenBigramIgnoreBlank instead of TokenBigram, \"みなさん\" can "
 "match \"み な さ ん 注 目\". But when you use TokenBigram, only \"み な さ ん"
@@ -731,7 +731,7 @@ msgstr ""
 # 272137e8c42e450c8f34746be7649b44
 # 5938135a959149ce8e1f7ef9b1ae76f4
 #: ../../../source/userguide/storage.rst:132
-#: ../../../source/userguide/wrapper.rst:142
+#: ../../../source/userguide/wrapper.rst:144
 msgid ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbol, it ignores white "
 "spaces."
@@ -742,14 +742,14 @@ msgstr ""
 # 16e5ab2f701f4d66b3062cb343df22ef
 # 4f1f21df3ab8409b814b7bc25b2ba185
 #: ../../../source/userguide/storage.rst:134
-#: ../../../source/userguide/wrapper.rst:144
+#: ../../../source/userguide/wrapper.rst:146
 msgid "TokenBigramIgnoreBlankSplitSymbol"
 msgstr ""
 
 # d298e1bfb9c94dbd8c74434810f4b4f5
 # 72770a7f3bcb4fdaaef39dae42e6c26c
 #: ../../../source/userguide/storage.rst:134
-#: ../../../source/userguide/wrapper.rst:144
+#: ../../../source/userguide/wrapper.rst:146
 msgid ""
 "When you use TokenBigramIgnoreBlankSplitSymbol instead of "
 "TokenBigramSplitSymbol, \"???\" can match \"! ? ???\". But when you use "
@@ -762,7 +762,7 @@ msgstr ""
 # 377fd64220564a9e80d4bd6c76c0c8c2
 # 42d58569bbdf420497673c216bb20454
 #: ../../../source/userguide/storage.rst:137
-#: ../../../source/userguide/wrapper.rst:147
+#: ../../../source/userguide/wrapper.rst:149
 msgid ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbolAlpha, it ignores white "
 "spaces."
@@ -773,14 +773,14 @@ msgstr ""
 # 627088b086314812ac0265eaf1ba65b1
 # f45cb691144840cf8e2487d2ec18e20c
 #: ../../../source/userguide/storage.rst:139
-#: ../../../source/userguide/wrapper.rst:149
+#: ../../../source/userguide/wrapper.rst:151
 msgid "TokenBigramIgnoreBlankSplitSymbolAlpha"
 msgstr ""
 
 # 455a7e59158a44b988e353f36d41ce4b
 # 1364d06ee78748d6b3b1bdb5478c448a
 #: ../../../source/userguide/storage.rst:139
-#: ../../../source/userguide/wrapper.rst:149
+#: ../../../source/userguide/wrapper.rst:151
 msgid ""
 "When you use TokenBigramIgnoreBlankSplitSymbolAlpha instead of "
 "TokenBigramSplitSymbolAlpha, \"ama\" can match \"I am a pen.\". But when you "
@@ -793,7 +793,7 @@ msgstr ""
 # d3c109853fa445079561bf9c2e5bd101
 # 33d753c63a23426faee5bccc6ab03e78
 #: ../../../source/userguide/storage.rst:142
-#: ../../../source/userguide/wrapper.rst:152
+#: ../../../source/userguide/wrapper.rst:154
 msgid ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbolAlphaDigit, it ignores "
 "white spaces."
@@ -804,14 +804,14 @@ msgstr ""
 # 95077dae78f248d890acfb9346b32140
 # ca9936bedf104bf5841eae62763709e6
 #: ../../../source/userguide/storage.rst:144
-#: ../../../source/userguide/wrapper.rst:154
+#: ../../../source/userguide/wrapper.rst:156
 msgid "TokenBigramIgnoreBlankSplitSymbolAlphaDigit"
 msgstr ""
 
 # 3664ea8ff96f45ce929bd4ccb417c637
 # d9970c030dee49019fd9e4a2dacc7d12
 #: ../../../source/userguide/storage.rst:144
-#: ../../../source/userguide/wrapper.rst:154
+#: ../../../source/userguide/wrapper.rst:156
 msgid ""
 "When you use TokenBigramIgnoreBlankSplitSymbolAlphaDigit instead of "
 "TokenBigramSplitSymbolAlphaDigit, \"9001\" can match \"090 0123 4567\". But "
@@ -826,14 +826,14 @@ msgstr ""
 # 0e6848a206714a5a86252e2a3697bbba
 # b3b2cf6c85cd4753be5cbb5982f4e7f7
 #: ../../../source/userguide/storage.rst:147
-#: ../../../source/userguide/wrapper.rst:157
+#: ../../../source/userguide/wrapper.rst:159
 msgid "It tokenise by splitting with a white space."
 msgstr "空白区切りでトークナイズする。"
 
 # 9f7599bb751640859f5d191f653c7083
 # 904bf1b724dc45adaa1f4ff318fcbb81
 #: ../../../source/userguide/storage.rst:149
-#: ../../../source/userguide/wrapper.rst:159
+#: ../../../source/userguide/wrapper.rst:161
 msgid ""
 "\"movie horror topic\" will be tokenised as \"movie\", \"horror\", \"topic\"."
 msgstr ""
@@ -841,21 +841,21 @@ msgstr ""
 # e571d74120b544809bdd330e6f7dc7a7
 # 2cd5130adb4a496f9fdc43bbcc43ad4b
 #: ../../../source/userguide/storage.rst:149
-#: ../../../source/userguide/wrapper.rst:159
+#: ../../../source/userguide/wrapper.rst:161
 msgid "TokenDelimit"
 msgstr ""
 
 # 4198b03d6185442ebda6987d74309836
 # 1b3ba1c20e4e4e1ab5cb6567c6434721
 #: ../../../source/userguide/storage.rst:152
-#: ../../../source/userguide/wrapper.rst:162
+#: ../../../source/userguide/wrapper.rst:164
 msgid "It tokenise by splitting with a null character (\\\\0)."
 msgstr "null文字（\\\\0）区切りでトークナイズする。"
 
 # 9f7599bb751640859f5d191f653c7083
 # 904bf1b724dc45adaa1f4ff318fcbb81
 #: ../../../source/userguide/storage.rst:154
-#: ../../../source/userguide/wrapper.rst:164
+#: ../../../source/userguide/wrapper.rst:166
 msgid ""
 "\"movie\\\\0horror\\\\0topic\" will be tokenised as \"movie\", \"horror\", "
 "\"topic\"."
@@ -864,14 +864,14 @@ msgstr ""
 # 48ff4c007b134fedab448cf14818af60
 # 03fef33f64304b98b53e973e40cc0f17
 #: ../../../source/userguide/storage.rst:154
-#: ../../../source/userguide/wrapper.rst:164
+#: ../../../source/userguide/wrapper.rst:166
 msgid "TokenDelimitNull"
 msgstr ""
 
 # 0e5a7a10cb104377a15b5fc6f2aadfc3
 # 50607e367cf44f019ded45f9892f197e
 #: ../../../source/userguide/storage.rst:157
-#: ../../../source/userguide/wrapper.rst:167
+#: ../../../source/userguide/wrapper.rst:169
 msgid ""
 "It tokenises in unigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 2 letters or more. It is "
@@ -884,14 +884,14 @@ msgstr ""
 # 5291bb76ad91414a97237e73f7c47fb1
 # cf79d13783bf47dab210255961286a82
 #: ../../../source/userguide/storage.rst:157
-#: ../../../source/userguide/wrapper.rst:167
+#: ../../../source/userguide/wrapper.rst:169
 msgid "TokenUnigram"
 msgstr ""
 
 # 3e8ea92c2cab46b2b8fd9fc15054f573
 # 007cc4a9b065467ca55ee1656be3e7fb
 #: ../../../source/userguide/storage.rst:160
-#: ../../../source/userguide/wrapper.rst:170
+#: ../../../source/userguide/wrapper.rst:172
 msgid ""
 "It tokenises in trigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 4 letters or more. It is "
@@ -904,7 +904,7 @@ msgstr ""
 # 4648aa0b684146539cb5ddd99ee95645
 # b4353988284448e7a23b0d06b733e625
 #: ../../../source/userguide/storage.rst:160
-#: ../../../source/userguide/wrapper.rst:170
+#: ../../../source/userguide/wrapper.rst:172
 msgid "TokenTrigram"
 msgstr ""
 
@@ -921,7 +921,7 @@ msgstr ""
 # f83202df96fa4774b3ad120ea6c66e07
 # 08aa23875b1f454eb547715e8ece11c0
 #: ../../../source/userguide/storage.rst:166
-#: ../../../source/userguide/wrapper.rst:176
+#: ../../../source/userguide/wrapper.rst:178
 msgid ""
 "Or you can set ``mroonga_default_parser`` variable in my.cnf or by SQL. If "
 "you specify it in my.cnf, the change will not be lost after restarting "
@@ -937,14 +937,14 @@ msgstr ""
 # 3b2cf0a1eb4b4111bbabadaeceaeb875
 # 378b897e13fe49bc837b345dc7cb3eca
 #: ../../../source/userguide/storage.rst:168
-#: ../../../source/userguide/wrapper.rst:178
+#: ../../../source/userguide/wrapper.rst:180
 msgid "my.cnf::"
 msgstr ""
 
 # daa09e682bd043c9ac8d0c2031c8068e
 # 72f78c946f6e4ed789c293492d3c6cf6
 #: ../../../source/userguide/storage.rst:173
-#: ../../../source/userguide/wrapper.rst:183
+#: ../../../source/userguide/wrapper.rst:185
 msgid "SQL::"
 msgstr ""
 
@@ -1099,14 +1099,14 @@ msgstr ""
 
 # 68156303a7674f3b956b0edc851b3fcb
 #: ../../../source/userguide/storage.rst:288
-#: ../../../source/userguide/wrapper.rst:189
+#: ../../../source/userguide/wrapper.rst:191
 msgid "How to get snippet (Keyword in context)"
 msgstr "スニペットの取得方法 (文脈付き索引)"
 
 # 04c40f102bfe4b93b280562ef2c662a5
 #: ../../../source/userguide/storage.rst:292
 #: ../../../source/userguide/storage.rst:338
-#: ../../../source/userguide/wrapper.rst:194
+#: ../../../source/userguide/wrapper.rst:196
 msgid "Here is the schema definition for execution examples::"
 msgstr "実行例で使用するスキーマ定義はこちら::"
 
@@ -1244,21 +1244,21 @@ msgstr ""
 # 427be2122c8147b6b295098426dd1385
 # d5bf046f8c2a42fe8c04e36ca2b44a5e
 #: ../../../source/userguide/storage.rst:412
-#: ../../../source/userguide/wrapper.rst:206
+#: ../../../source/userguide/wrapper.rst:208
 msgid "Logging"
 msgstr "ログ出力"
 
 # 8e3eec5bb14b43c88a4c3d3db52cd749
 # 34f55704cbe6413f8737215aa6af6a71
 #: ../../../source/userguide/storage.rst:414
-#: ../../../source/userguide/wrapper.rst:208
+#: ../../../source/userguide/wrapper.rst:210
 msgid "Mroonga outputs the logs by default."
 msgstr "mroongaではデフォルトでログの出力を行うようになっています。"
 
 # 98ea9b435e65427fa39f4d299b0752be
 # 98bf2131e26448ae9f9ec3f919607ac7
 #: ../../../source/userguide/storage.rst:416
-#: ../../../source/userguide/wrapper.rst:210
+#: ../../../source/userguide/wrapper.rst:212
 msgid ""
 "Log files are located in MySQL's data directory with the filename  ``groonga."
 "log``."
@@ -1269,14 +1269,14 @@ msgstr ""
 # f8a8f6bac6ba44e79a2f06f04d7f1828
 # 2f7246d538d04e59959c92837c9bc61f
 #: ../../../source/userguide/storage.rst:418
-#: ../../../source/userguide/wrapper.rst:212
+#: ../../../source/userguide/wrapper.rst:214
 msgid "Here is the example of the log. ::"
 msgstr "以下はログの出力例です。 ::"
 
 # 436bd531e4fc46aa8de567cbd37a53ed
 # 930df4473aab4c1f88270642478cb7e5
 #: ../../../source/userguide/storage.rst:424
-#: ../../../source/userguide/wrapper.rst:218
+#: ../../../source/userguide/wrapper.rst:220
 msgid ""
 "The default log level is NOTICE, i.e. we have important information only and "
 "we don't have debug information etc.)."
@@ -1287,7 +1287,7 @@ msgstr ""
 # f5507e06f74b4973a6cfa0c7c096aca4
 # 9ab91e6b23bb4c9ea452f7fe0dd5884c
 #: ../../../source/userguide/storage.rst:426
-#: ../../../source/userguide/wrapper.rst:220
+#: ../../../source/userguide/wrapper.rst:222
 msgid ""
 "You can get the log level by ``mroonga_log_level`` system variable, that is "
 "a global variable. You can also modify it dynamically by using SET phrase. ::"
@@ -1299,90 +1299,90 @@ msgstr ""
 # e3e9b3ddfa5940618c0501d5bb6b5bde
 # c66255ea046e4c2c89f18dc31c35ab49
 #: ../../../source/userguide/storage.rst:447
-#: ../../../source/userguide/wrapper.rst:241
+#: ../../../source/userguide/wrapper.rst:243
 msgid "Available log levels are the followings."
 msgstr "設定可能なログレベルは以下の通りです。"
 
 # d813775357bf433c87f17b91422614e7
 # b9d3353d764649beb30f03af36e5c92e
 #: ../../../source/userguide/storage.rst:449
-#: ../../../source/userguide/wrapper.rst:243
+#: ../../../source/userguide/wrapper.rst:245
 msgid "NONE"
 msgstr ""
 
 # 375ecb426bbd464b808a58a4fc8d88d6
 # 6b7cbda0d1554e6b9ce1440faecccc76
 #: ../../../source/userguide/storage.rst:450
-#: ../../../source/userguide/wrapper.rst:244
+#: ../../../source/userguide/wrapper.rst:246
 msgid "EMERG"
 msgstr ""
 
 # aa8cd6108b5d42368f5afe21a57b7f35
 # 205d0a56511c4b118a2994a753768ba9
 #: ../../../source/userguide/storage.rst:451
-#: ../../../source/userguide/wrapper.rst:245
+#: ../../../source/userguide/wrapper.rst:247
 msgid "ALERT"
 msgstr ""
 
 # d486d520881e4e8087f9552aca1985e0
 # 1b6d848a3e8a4845bbc68b85cd4d0508
 #: ../../../source/userguide/storage.rst:452
-#: ../../../source/userguide/wrapper.rst:246
+#: ../../../source/userguide/wrapper.rst:248
 msgid "CRIT"
 msgstr ""
 
 # 48b7c19dc8954ec98e53a47b8d58c77f
 # 582c04556e6349199ce471c2cbccba41
 #: ../../../source/userguide/storage.rst:453
-#: ../../../source/userguide/wrapper.rst:247
+#: ../../../source/userguide/wrapper.rst:249
 msgid "ERROR"
 msgstr ""
 
 # 17401a7cf5e543988bdaa2ee7dd4166e
 # e17410e94de84b41b4e87e4fb1197bd3
 #: ../../../source/userguide/storage.rst:454
-#: ../../../source/userguide/wrapper.rst:248
+#: ../../../source/userguide/wrapper.rst:250
 msgid "WARNING"
 msgstr ""
 
 # 3e95bc9a79fd4c64aa9f22b2ee91f8fd
 # 351f6813a8264a2196ebde93db9285f4
 #: ../../../source/userguide/storage.rst:455
-#: ../../../source/userguide/wrapper.rst:249
+#: ../../../source/userguide/wrapper.rst:251
 msgid "NOTICE"
 msgstr ""
 
 # eed35c97b9324ba5aefd5a6c939bb0e9
 # 0597f719e675405f80d1a59d7e0e097d
 #: ../../../source/userguide/storage.rst:456
-#: ../../../source/userguide/wrapper.rst:250
+#: ../../../source/userguide/wrapper.rst:252
 msgid "INFO"
 msgstr ""
 
 # fb03bdf4720c4aa1962243e607f4f9e3
 # ae2000e98e69422c977dd72e558b4545
 #: ../../../source/userguide/storage.rst:457
-#: ../../../source/userguide/wrapper.rst:251
+#: ../../../source/userguide/wrapper.rst:253
 msgid "DEBUG"
 msgstr ""
 
 # 6001042cea4a4684ab0071626c610df9
 # 3969739cea5a4915b01dfb4719381732
 #: ../../../source/userguide/storage.rst:458
-#: ../../../source/userguide/wrapper.rst:252
+#: ../../../source/userguide/wrapper.rst:254
 msgid "DUMP"
 msgstr ""
 
 # 86d1b59e3a984c729c7615aaabd360a7
 #: ../../../source/userguide/storage.rst:460
-#: ../../../source/userguide/wrapper.rst:254
+#: ../../../source/userguide/wrapper.rst:256
 msgid "See :ref:`mroonga_log_level` about details."
 msgstr "詳細は :ref:`mroonga_log_level` を参照してください。"
 
 # 1a2e97698f17417d9e953fd8cbcedf46
 # 3d7b381b1ea549928d77907fcfd26f99
 #: ../../../source/userguide/storage.rst:462
-#: ../../../source/userguide/wrapper.rst:256
+#: ../../../source/userguide/wrapper.rst:258
 msgid ""
 "You can reopen the log file by FLUSH LOGS. If you want to rotate the log "
 "file without stopping MySQL server, you can do in the following procedure."
@@ -1394,7 +1394,7 @@ msgstr ""
 # f08a21d8ee4e42068bc507367654aef2
 # c56b2c0a2b1b4c1caa1c6bf9fdecee13
 #: ../../../source/userguide/storage.rst:464
-#: ../../../source/userguide/wrapper.rst:258
+#: ../../../source/userguide/wrapper.rst:260
 msgid ""
 "change the file name of ``groonga.log`` (by using OS's mv command etc.)."
 msgstr "``groonga.log`` ファイルの名前を変更（OSコマンドのmvなどで）"
@@ -1402,7 +1402,7 @@ msgstr "``groonga.log`` ファイルの名前を変更（OSコマンドのmvな�
 # ee3362f80c284f1d9fba9ec05c78a8d2
 # 50cb10bbde814869982d774d6edbcb36
 #: ../../../source/userguide/storage.rst:465
-#: ../../../source/userguide/wrapper.rst:259
+#: ../../../source/userguide/wrapper.rst:261
 msgid ""
 "invoke \"FLUSH LOGS\" in MySQL server (by mysql command or mysqladmin "
 "command)."
@@ -1521,7 +1521,7 @@ msgstr ""
 # 17f19cecd41e4a22a1c12463729d8386
 #: ../../../source/userguide/storage.rst:506
 #: ../../../source/userguide/storage.rst:535
-#: ../../../source/userguide/wrapper.rst:276
+#: ../../../source/userguide/wrapper.rst:278
 msgid ""
 "You can check if this optimisation works or not by the status variable. ::"
 msgstr ""
@@ -1548,14 +1548,14 @@ msgstr ""
 # bf3a9a3bec954a65a21a1c38fcb9cc61
 # 6d3a5194d9084abd8f61ad13460e9641
 #: ../../../source/userguide/storage.rst:521
-#: ../../../source/userguide/wrapper.rst:262
+#: ../../../source/userguide/wrapper.rst:264
 msgid "Optimisation for ORDER BY LIMIT in full text search"
 msgstr "全文検索時の ORDER BY LIMIT 高速化"
 
 # c8fd2da996424bc98075fd37ce228d5c
 # 430c403ab8c44a0a95bfbf1a23026bd1
 #: ../../../source/userguide/storage.rst:523
-#: ../../../source/userguide/wrapper.rst:264
+#: ../../../source/userguide/wrapper.rst:266
 msgid ""
 "Generally speaking, MySQL can process \"ORDER BY\" query with almost no cost "
 "if we can get records by index, and can process \"LIMIT\" with low cost by "
@@ -1569,7 +1569,7 @@ msgstr ""
 # 643bb74ce65e4124a0ae373040e4bb70
 # cbac85285efe446fb9d356f814a6d7c5
 #: ../../../source/userguide/storage.rst:525
-#: ../../../source/userguide/wrapper.rst:266
+#: ../../../source/userguide/wrapper.rst:268
 msgid ""
 "But for the query where \"ORDER BY\" cannot use index, like sort full text "
 "search result by the score and use LIMIT, the processing cost is "
@@ -1584,7 +1584,7 @@ msgstr ""
 # 3ce90ca097ee40f5b1fce355dd758914
 # 31e0f5d8116a436faa7fd31d7c7085a2
 #: ../../../source/userguide/storage.rst:527
-#: ../../../source/userguide/wrapper.rst:268
+#: ../../../source/userguide/wrapper.rst:270
 msgid ""
 "Tritonn took no specific countermeasure for this issue, but it introduced a "
 "workaround in the latest repository so that it sorted Senna result in "
@@ -1599,7 +1599,7 @@ msgstr ""
 # 435f00fded8343b7b7f663466ecafeb6
 # 0342c41172f64335af021a6b77533d31
 #: ../../../source/userguide/storage.rst:529
-#: ../../../source/userguide/wrapper.rst:270
+#: ../../../source/userguide/wrapper.rst:272
 msgid "Mroonga also has the optimisation for ORDER BY LIMIT."
 msgstr "mroongaでも ORDER BY LIMIT を高速化するための仕組みを実装しています。"
 
@@ -1626,7 +1626,7 @@ msgstr ""
 # 78d58e956c26402e822868c1992fdf3f
 # 7ee448e536f44a91b1bef6be303c7539
 #: ../../../source/userguide/storage.rst:547
-#: ../../../source/userguide/wrapper.rst:288
+#: ../../../source/userguide/wrapper.rst:290
 msgid ""
 "Note : This optimisation is targeting queries like \"select ... match "
 "against order by _score desc limit X, Y\" only, and it works if all of the "
@@ -1639,21 +1639,21 @@ msgstr ""
 # dbf52ca197ad41ba924d2305c96b1201
 # 3c3dc16d1fb74c0fb69a55406b732030
 #: ../../../source/userguide/storage.rst:549
-#: ../../../source/userguide/wrapper.rst:290
+#: ../../../source/userguide/wrapper.rst:292
 msgid "WHERE phrase has \"match...against\" only"
 msgstr "where句がmatch...againstのみ"
 
 # e7ae9971fba24ac5b3c8e00d7a3833a9
 # 3afeb867da064862914d92e059f3e3cb
 #: ../../../source/userguide/storage.rst:550
-#: ../../../source/userguide/wrapper.rst:291
+#: ../../../source/userguide/wrapper.rst:293
 msgid "no JOIN"
 msgstr "joinしていない"
 
 # 20020fd58cd946a59677c422e59c8d69
 # 89750861c7af4749859c39627082de6b
 #: ../../../source/userguide/storage.rst:551
-#: ../../../source/userguide/wrapper.rst:292
+#: ../../../source/userguide/wrapper.rst:294
 msgid "with LIMIT"
 msgstr "limitの指定がある"
 
@@ -1669,14 +1669,14 @@ msgstr ""
 # f8fbb2e109bd4217a284393f1aeb65cd
 # 58aafef808b44298b192f0766fd16b32
 #: ../../../source/userguide/storage.rst:555
-#: ../../../source/userguide/wrapper.rst:296
+#: ../../../source/userguide/wrapper.rst:298
 msgid "Footnotes"
 msgstr "脚注"
 
 # 7db653a06e4340e488fa46470b7e92ce
 # f86f6f2d6dce41a09a1a61689c035a9b
 #: ../../../source/userguide/storage.rst:556
-#: ../../../source/userguide/wrapper.rst:297
+#: ../../../source/userguide/wrapper.rst:299
 msgid ""
 "`MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text "
 "Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search."
@@ -1688,7 +1688,7 @@ msgstr ""
 # ff9857fc8b1b473fab83dbea4e7fb6f9
 # 5f541a375e814c49ba633b7d82051e0a
 #: ../../../source/userguide/storage.rst:557
-#: ../../../source/userguide/wrapper.rst:298
+#: ../../../source/userguide/wrapper.rst:300
 msgid "In groonga, we call it a 'tokeniser'."
 msgstr "groongaではトークナイザーと呼んでいる。"
 
@@ -1732,14 +1732,30 @@ msgstr ""
 #: ../../../source/userguide/wrapper.rst:19
 msgid ""
 "Wrapper mode supports the followings, that are not supported in storage mode "
-"for now. * null value"
+"for now."
 msgstr ""
 "ラッパーモードでは現在ストレージモードでサポートされていない、以下をサポート"
 "しています。"
 
+# e37730a154814c8fa9ffb8d424cb5ee7
+#: ../../../source/userguide/wrapper.rst:21
+msgid "null value"
+msgstr "null値"
+
+# 1e158b81a2fa4d6eb119245d55e4a165
+#: ../../../source/userguide/wrapper.rst:22
+msgid ""
+"transaction (if storage engine supports. Note that rollback causes mismatch "
+"of indexes, it may affects search results, so recreate index of mroonga in "
+"such a case.)"
+msgstr ""
+"トランザクション (ストレージエンジンがサポートしている場合。"
+"ロールバックするとインデックスの不整合が発生します。インデックスを使っ"
+"た検索に影響するので、その場合にはmroongaのインデックスを再作成します。"
+
 # f447ce7358434894aad105e4b8e449fc
 # ade45ca3ded545b180131981c60d1e29
-#: ../../../source/userguide/wrapper.rst:172
+#: ../../../source/userguide/wrapper.rst:174
 msgid ""
 "You can specify the default parser by passing ``--with-default-parser`` "
 "option in ``configure`` when you build mroonga. ::"
@@ -1749,7 +1765,7 @@ msgstr ""
 
 # c361095559384f5f89d9b8cda98e4bf4
 # d9eb55ee8dbe4e139c345f31f304a131
-#: ../../../source/userguide/wrapper.rst:272
+#: ../../../source/userguide/wrapper.rst:274
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and "
 "the minimal records are passed to MySQL. ::"
@@ -1759,7 +1775,7 @@ msgstr ""
 
 # 896eb0c6e2e44639acdfdce395a01156
 # 8433d9941d7d432ea3ddd33f78cf49e8
-#: ../../../source/userguide/wrapper.rst:286
+#: ../../../source/userguide/wrapper.rst:288
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``mroonga_fast_order_limit`` status variable value is increased."
@@ -1769,7 +1785,7 @@ msgstr ""
 
 # a329b256ff4a4c87a0adedb9caa9e635
 # 3df296cb0cec4ead9f6572c37544e498
-#: ../../../source/userguide/wrapper.rst:293
+#: ../../../source/userguide/wrapper.rst:295
 msgid ""
 "ORDER BY phrase has _id column or \"match...against\" that is used in WHERE "
 "phrase only"
