@@ -17,7 +17,9 @@ In wrapper mode, mroonga works in wrapping an existing storage engine. To specif
 .. note::
 
    Wrapper mode supports the followings, that are not supported in storage mode for now.
+   
    * null value
+   * transaction (if storage engine supports. Note that rollback causes mismatch of indexes, it may affects search results, so recreate index of mroonga in such a case.)
 
 How to use full text search
 ---------------------------
