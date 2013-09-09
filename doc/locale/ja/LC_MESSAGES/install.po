@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-28 15:06+0900\n"
-"PO-Revision-Date: 2013-04-14 22:57+0900\n"
+"PO-Revision-Date: 2013-09-10 00:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -383,7 +383,7 @@ msgstr ""
 # 731c30d45aca4f49a379f8b2dd7d939f
 #: ../../../source/install.rst:433
 msgid "Installer"
-msgstr "インストール::"
+msgstr "インストーラー"
 
 # 3a410dd72624402f82ba99d2b023bd7e
 #: ../../../source/install.rst:435
