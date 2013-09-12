@@ -30,6 +30,7 @@ struct EscapeInfo
   grn_ctx ctx;
   grn_obj target_characters;
   grn_obj escaped_query;
+  bool processed;
 };
 
 MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
@@ -71,6 +72,7 @@ MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
   grn_ctx_init(&(info->ctx), 0);
   GRN_TEXT_INIT(&(info->target_characters), 0);
   GRN_TEXT_INIT(&(info->escaped_query), 0);
+  info->processed = false;
 
   initid->ptr = (char *)info;
 
@@ -84,28 +86,15 @@ error:
   return TRUE;
 }
 
-MRN_API char *mroonga_escape(UDF_INIT *initid, UDF_ARGS *args, char *result,
-                             unsigned long *length, char *is_null, char *error)
+static void escape(EscapeInfo *info, UDF_ARGS *args)
 {
-  EscapeInfo *info = (EscapeInfo *)initid->ptr;
   grn_ctx *ctx = &(info->ctx);
-  char *query;
-  unsigned int query_length;
-  char *target_characters;
-  unsigned int target_characters_length;
-
-  if (!args->args[0]) {
-    *is_null = 1;
-    return NULL;
-  }
-
-  *is_null = 0;
-  query = args->args[0];
-  query_length = args->lengths[0];
+  char *query = args->args[0];
+  unsigned int query_length = args->lengths[0];
 
   if (args->arg_count == 2) {
-    target_characters = args->args[1];
-    target_characters_length = args->lengths[1];
+    char *target_characters = args->args[1];
+    unsigned int target_characters_length = args->lengths[1];
     GRN_TEXT_PUT(ctx, &(info->target_characters),
                  target_characters,
                  target_characters_length);
@@ -117,6 +106,25 @@ MRN_API char *mroonga_escape(UDF_INIT *initid, UDF_ARGS *args, char *result,
   } else {
     grn_expr_syntax_escape_query(ctx, query, query_length,
                                  &(info->escaped_query));
+  }
+}
+
+MRN_API char *mroonga_escape(UDF_INIT *initid, UDF_ARGS *args, char *result,
+                             unsigned long *length, char *is_null, char *error)
+{
+  EscapeInfo *info = (EscapeInfo *)initid->ptr;
+  grn_ctx *ctx = &(info->ctx);
+
+  if (!args->args[0]) {
+    *is_null = 1;
+    return NULL;
+  }
+
+  *is_null = 0;
+
+  if (!info->processed) {
+    escape(info, args);
+    info->processed = true;
   }
 
   if (ctx->rc) {
