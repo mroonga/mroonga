@@ -52,6 +52,13 @@
 #  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
     type *variable_name = (type *)_malloca(sizeof(type) * (variable_size))
 #  define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) _freea(variable_name)
+#  ifdef _WIN64
+#    define MRN_BINLOG_FILTER_PROC "?binlog_filter@@3PEAVRpl_filter@@EA"
+#    define MRN_MY_TZ_UTC_PROC "?my_tz_UTC@@3PEAVTime_zone@@EA"
+#  else
+#    define MRN_BINLOG_FILTER_PROC "?binlog_filter@@3PAVRpl_filter@@A"
+#    define MRN_MY_TZ_UTC_PROC "?my_tz_UTC@@3PAVTime_zone@@A"
+#  endif
 #else
 #  include <dirent.h>
 #  include <unistd.h>
@@ -1377,21 +1384,9 @@ static int mrn_init(void *p)
 #ifdef _WIN32
   HMODULE current_module = GetModuleHandle(NULL);
   mrn_binlog_filter =
-#if MYSQL_VERSION_ID >= 50600
-    *((Rpl_filter **) GetProcAddress(current_module,
-      "?binlog_filter@@3PEAVRpl_filter@@EA"));
-#else
-    *((Rpl_filter **) GetProcAddress(current_module,
-      "?binlog_filter@@3PAVRpl_filter@@A"));
-#endif
+    *((Rpl_filter **) GetProcAddress(current_module, MRN_BINLOG_FILTER_PROC));
   mrn_my_tz_UTC =
-#if MYSQL_VERSION_ID >= 50600
-    *((Time_zone **) GetProcAddress(current_module,
-      "?my_tz_UTC@@3PEAVTime_zone@@EA"));
-#else
-    *((Time_zone **) GetProcAddress(current_module,
-      "?my_tz_UTC@@3PAVTime_zone@@A"));
-#endif
+    *((Time_zone **) GetProcAddress(current_module, MRN_MY_TZ_UTC_PROC));
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
   mrn_table_def_cache = (HASH *) GetProcAddress(current_module,
     "?table_def_cache@@3Ust_hash@@A");
