@@ -3,6 +3,35 @@
 News
 ====
 
+.. _release-3-08:
+
+Release 3.08 - 2013/9/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [doc] Added missing description about wrapper mode specific issue.
+  [groonga-dev,01747] [Reported by Kazuhiro Isobe]
+* [mroonga_escape] Supported to call mroonga_escape as an argument of UDF.
+  [#1923] [Reported by Tomoatsu Shimada]
+* [doc] Added language annotation to "Show Source" label.
+  [groonga-dev,01747] [Reported by Kazuhiro Isobe]
+
+Fixes
+^^^^^
+
+* Fixed a bug that mroonga is accidentally removed on upgrade. [#1918]
+  [Reported by @ceekz]
+* Fixed a bug that mysqld 32bit executable binary crashes when install plugin on Windows.
+
+Thanks
+^^^^^^
+
+* Kazuhiro Isobe
+* Tomoatsu Shimada
+* @ceekz
+
 .. _release-3-07:
 
 Release 3.07 - 2013/8/29
