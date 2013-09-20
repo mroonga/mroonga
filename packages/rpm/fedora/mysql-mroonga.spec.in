@@ -1,5 +1,5 @@
-%define mysql_version 5.5.32
-%define mysql_release 2%{?dist}
+%define mysql_version 5.5.33
+%define mysql_release 1%{?dist}
 # %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/releases/16/Everything/source/SRPMS
 %define mysql_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/19/SRPMS
 
@@ -167,6 +167,7 @@ fi
 %changelog
 * Sun Sep 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.08-1
 - new upstream release.
+- use MySQL 5.5.33 on Fedora 19.
 
 * Wed Sep 4 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.07-2
 - fix a bug that mroonga is removed accidentally on upgrade #1918.
