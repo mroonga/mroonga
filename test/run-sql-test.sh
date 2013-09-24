@@ -193,6 +193,9 @@ while [ $# -gt 0 ]; do
 	    esac
 	    shift
 	    test_suite_name=$(echo "$test_suite_name" | sed -e "s,^${suite_dir}/,,")
+	    if echo "${test_suite_names}" | grep --quiet "${test_suite_name}"; then
+		continue
+	    fi
 	    if [ -n "${test_suite_names}" ]; then
 		test_suite_names="${test_suite_names},"
 	    fi
