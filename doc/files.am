@@ -135,7 +135,6 @@ mo_files_relative_from_locale_dir = \
 	$(NULL)
 
 html_files_relative_from_locale_dir = \
-	html/.buildinfo \
 	html/_images/storage-mode.png \
 	html/_images/wrapper-mode.png \
 	html/_sources/characteristic.txt \

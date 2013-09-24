@@ -62,5 +62,5 @@ find "themes" -type f | \
 
 # output files
 ## HTML file path list relative from locale/$LANG/ dir.
-(cd locale/en; find html -type f) | \
+(cd locale/en; find html -type f -not -name '.buildinfo') | \
     list_paths "html_files_relative_from_locale_dir"
