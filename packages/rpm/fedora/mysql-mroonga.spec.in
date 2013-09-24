@@ -8,7 +8,7 @@
 Name:		mysql-mroonga
 Version:	@VERSION@
 Release:	1%{?dist}
-Summary:	A fast fulltext searchable storage engine for MySQL.
+Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
 License:	LGPLv2
