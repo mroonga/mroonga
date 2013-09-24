@@ -32,7 +32,7 @@ column store. Groonga is good at real-time update.
 %package doc
 Summary:	Documentation for mroonga
 Group:		Documentation
-License:	LGPLv2.1
+License:	LGPLv2
 
 %description doc
 Documentation for mroonga
