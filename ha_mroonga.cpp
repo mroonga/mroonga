@@ -3663,10 +3663,10 @@ int ha_mroonga::ensure_database_open(const char *name)
     mrn::Lock lock(&mrn_db_mutex);
     if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
       db = grn_db_open(&mrn_ctx, mapper.db_path());
-      if (ctx->rc) {
+      if (mrn_ctx.rc) {
         pthread_mutex_unlock(&mrn_db_mutex);
         error = ER_CANT_OPEN_FILE;
-        my_message(error, ctx->errbuf, MYF(0));
+        my_message(error, mrn_ctx.errbuf, MYF(0));
         DBUG_RETURN(error);
       }
       mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
