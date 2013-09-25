@@ -3623,7 +3623,6 @@ int ha_mroonga::ensure_database_create(const char *name)
         }
         db = grn_db_create(&mrn_ctx, mapper.db_path(), NULL);
         if (mrn_ctx.rc) {
-          pthread_mutex_unlock(&mrn_db_mutex);
           error = ER_CANT_CREATE_TABLE;
           my_message(error, mrn_ctx.errbuf, MYF(0));
           DBUG_RETURN(error);
@@ -3632,7 +3631,6 @@ int ha_mroonga::ensure_database_create(const char *name)
         // opening existing database
         db = grn_db_open(&mrn_ctx, mapper.db_path());
         if (mrn_ctx.rc) {
-          pthread_mutex_unlock(&mrn_db_mutex);
           error = ER_CANT_OPEN_FILE;
           my_message(error, mrn_ctx.errbuf, MYF(0));
           DBUG_RETURN(error);
@@ -3664,7 +3662,6 @@ int ha_mroonga::ensure_database_open(const char *name)
     if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
       db = grn_db_open(&mrn_ctx, mapper.db_path());
       if (mrn_ctx.rc) {
-        pthread_mutex_unlock(&mrn_db_mutex);
         error = ER_CANT_OPEN_FILE;
         my_message(error, mrn_ctx.errbuf, MYF(0));
         DBUG_RETURN(error);
