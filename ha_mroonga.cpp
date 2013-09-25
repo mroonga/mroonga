@@ -629,7 +629,7 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
     *old_value_ptr = my_strdup(new_log_file_name, MYF(MY_WME));
     my_free(old_log_file_name, MYF(0));
 #else
-    *old_value_ptr = new_log_file_name;
+    *old_value_ptr = const_cast<char *>(new_log_file_name);
 #endif
   }
   grn_ctx_fin(&ctx);
