@@ -711,7 +711,7 @@ private:
   int storage_delete_table(const char *name, MRN_SHARE *tmp_share,
                            const char *table_name);
   int wrapper_open(const char *name, int mode, uint test_if_locked);
-  int wrapper_open_indexes(const char *name, bool ignore_open_error);
+  int wrapper_open_indexes(const char *name);
   int storage_open(const char *name, int mode, uint test_if_locked);
   int open_table(const char *name);
   int storage_open_columns(void);

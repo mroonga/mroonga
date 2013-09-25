@@ -3754,7 +3754,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
     if (error)
       DBUG_RETURN(error);
 
-    error = wrapper_open_indexes(name, false);
+    error = wrapper_open_indexes(name);
     if (error) {
       grn_obj_unlink(ctx, grn_table);
       grn_table = NULL;
@@ -3836,7 +3836,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_open_indexes(const char *name, bool ignore_open_error)
+int ha_mroonga::wrapper_open_indexes(const char *name)
 {
   int error;
 
@@ -3880,12 +3880,6 @@ int ha_mroonga::wrapper_open_indexes(const char *name, bool ignore_open_error)
     if (ctx->rc) {
       DBUG_PRINT("info",
                  ("mroonga: sql_command=%u", thd_sql_command(ha_thd())));
-      if (ignore_open_error)
-      {
-        DBUG_PRINT("info", ("mroonga: continue"));
-        grn_index_tables[i] = NULL;
-        continue;
-      }
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       goto error;
@@ -3905,12 +3899,6 @@ int ha_mroonga::wrapper_open_indexes(const char *name, bool ignore_open_error)
     if (ctx->rc) {
       DBUG_PRINT("info",
         ("mroonga: sql_command=%u", thd_sql_command(ha_thd())));
-      if (ignore_open_error)
-      {
-        DBUG_PRINT("info", ("mroonga: continue"));
-        grn_index_columns[i] = NULL;
-        continue;
-      }
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
       grn_obj_unlink(ctx, grn_index_tables[i]);
@@ -12344,7 +12332,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
                                NULL, share, mapper.table_name());
   if (error)
     DBUG_RETURN(error);
-  error = wrapper_open_indexes(table_share->normalized_path.str, false);
+  error = wrapper_open_indexes(table_share->normalized_path.str);
   if (error)
     DBUG_RETURN(error);
   error = wrapper_fill_indexes(thd, key_info, grn_index_columns, n_keys);
