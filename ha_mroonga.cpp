@@ -605,11 +605,12 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
       }
     }
 
+    const char *new_log_file_name;
     if (log_file_open_errno == 0) {
       GRN_LOG(&ctx, GRN_LOG_NOTICE,
               "log file is changed: <%s> -> <%s>",
               *old_value_ptr, new_value);
-      *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+      new_log_file_name = new_value;
     } else {
       if (mrn_log_file) {
         GRN_LOG(&ctx, GRN_LOG_ERROR,
@@ -621,8 +622,15 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
                 "log file can't be opened: <%s>: <%s>",
                 new_value, strerror(log_file_open_errno));
       }
-      *old_value_ptr = my_strdup(*old_value_ptr, MYF(MY_WME));
+      new_log_file_name = *old_value_ptr;
     }
+#ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
+    char *old_log_file_name = *old_value_ptr;
+    *old_value_ptr = my_strdup(new_log_file_name, MYF(MY_WME));
+    my_free(old_log_file_name, MYF(0));
+#else
+    *old_value_ptr = new_log_file_name;
+#endif
   }
   grn_ctx_fin(&ctx);
 
