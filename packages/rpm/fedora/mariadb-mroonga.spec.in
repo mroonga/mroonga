@@ -73,7 +73,7 @@ mysql -u root -e "quit"
 if [ $? -ne 0 ]; then
     password_option="-p"
 fi
-version=`mysql -e "show variables like '%libgroonga%'" | \
+version=`mysql -e "show variables like 'mroonga_libgroonga_version'" | \
     grep mroonga | cut -f 2 | sed -e 's/\.//g'`
 current_version=`expr $version`
 version=`echo %{groonga_required_version} | sed -e 's/\.//g'`
