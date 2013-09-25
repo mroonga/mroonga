@@ -3675,6 +3675,30 @@ int ha_mroonga::ensure_database_open(const char *name)
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::ensure_database_remove(const char *name)
+{
+  int error;
+
+  MRN_DBUG_ENTER_METHOD();
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
+  mrn::PathMapper mapper(name);
+  {
+    mrn::Lock lock(&mrn_db_mutex);
+    grn_obj *db;
+    if (mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
+      mrn_hash_remove(&mrn_ctx, mrn_hash, mapper.db_name());
+      grn_obj_close(&mrn_ctx, db);
+    }
+  }
+  remove_related_files(mapper.db_path());
+
+  DBUG_RETURN(error);
+}
+
 
 int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
 {
@@ -3711,19 +3735,31 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
 
-  error = ensure_database_open(name);
-  if (error)
-    DBUG_RETURN(error);
-
-  error = open_table(name);
-  if (error)
-    DBUG_RETURN(error);
-
-  error = wrapper_open_indexes(name, thd_sql_command(ha_thd()) == SQLCOM_REPAIR);
-  if (error) {
-    grn_obj_unlink(ctx, grn_table);
+  if (thd_sql_command(ha_thd()) == SQLCOM_REPAIR) {
+    error = ensure_database_remove(name);
+    if (error)
+      DBUG_RETURN(error);
+    error = ensure_database_create(name);
+    if (error)
+      DBUG_RETURN(error);
     grn_table = NULL;
-    DBUG_RETURN(error);
+    grn_index_tables = NULL;
+    grn_index_columns = NULL;
+  } else {
+    error = ensure_database_open(name);
+    if (error)
+      DBUG_RETURN(error);
+
+    error = open_table(name);
+    if (error)
+      DBUG_RETURN(error);
+
+    error = wrapper_open_indexes(name, false);
+    if (error) {
+      grn_obj_unlink(ctx, grn_table);
+      grn_table = NULL;
+      DBUG_RETURN(error);
+    }
   }
 
   init_alloc_root(&mem_root, 1024, 0, MYF(0));
@@ -4514,7 +4550,7 @@ void ha_mroonga::wrapper_set_keys_in_use()
         share->disable_keys = TRUE;
       }
     } else {
-      if (!grn_index_tables[i]) {
+      if (grn_index_tables && !grn_index_tables[i]) {
         /* disabled */
         table_share->keys_in_use.clear_bit(i);
         share->disable_keys = TRUE;

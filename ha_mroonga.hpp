@@ -703,6 +703,7 @@ private:
   int ensure_normalizers_register();
   int ensure_database_create(const char *name);
   int ensure_database_open(const char *name);
+  int ensure_database_remove(const char *name);
   int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,
                            const char *table_name);
   int wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
