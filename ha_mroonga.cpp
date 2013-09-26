@@ -4538,7 +4538,7 @@ void ha_mroonga::wrapper_set_keys_in_use()
         share->disable_keys = TRUE;
       }
     } else {
-      if (grn_index_tables && !grn_index_tables[i]) {
+      if (!grn_index_tables || !grn_index_tables[i]) {
         /* disabled */
         table_share->keys_in_use.clear_bit(i);
         share->disable_keys = TRUE;
