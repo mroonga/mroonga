@@ -18,6 +18,8 @@ Improvements
   [#1923] [Reported by Tomoatsu Shimada]
 * [doc] Added language annotation to "Show Source" label.
   [groonga-dev,01747] [Reported by Kazuhiro Isobe]
+* [wrapper] Supported REPAIR TABLE for broken groonga database.
+  [groonga-dev,01540] [Suggested by Naoya Murakami]
 
 Fixes
 ^^^^^
@@ -25,6 +27,8 @@ Fixes
 * Fixed a bug that mroonga is accidentally removed on upgrade. [#1918]
   [Reported by @ceekz]
 * Fixed a bug that mysqld 32bit executable binary crashes when install plugin on Windows.
+* [storage][mariadb] Fixed a memory for mroonga_log_file.
+  This memory leak occurs when log file name is changed.
 
 Thanks
 ^^^^^^
