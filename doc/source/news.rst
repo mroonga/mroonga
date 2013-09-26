@@ -1,6 +1,5 @@
 .. highlightlang:: none
 
-====
 News
 ====
 
