@@ -35,6 +35,7 @@ Thanks
 * Kazuhiro Isobe
 * Tomoatsu Shimada
 * @ceekz
+* Naoya Murakami
 
 .. _release-3-07:
 
