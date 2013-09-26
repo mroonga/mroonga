@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-28 15:06+0900\n"
+"POT-Creation-Date: 2013-09-20 19:40+0900\n"
 "PO-Revision-Date: 2013-09-10 00:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -398,19 +398,20 @@ msgstr ""
 # d6932ffc20ae4d02877bf705a41708dc
 #: ../../../source/install.rst:450
 msgid ""
-"For 32-bit environment, download `mariadb-10.0.3-mroonga-3.06-win32.zip "
-"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.06-"
+"For 32-bit environment, download `mariadb-10.0.4-mroonga-3.08-win32.zip "
+"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.08-"
 "win32.zip>`_ and extract it."
 msgstr ""
-"32bit環境では `mariadb-10.0.3-mroonga-3.06-win32.zip <http://packages."
-"groonga.org/windows/mroonga/mariadb-10.0.3-mroonga-3.06-win32.zip>`_ をダウン"
+"32bit環境では `mariadb-10.0.4-mroonga-3.08-win32.zip <http://packages."
+"groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.08-win32.zip>`_ をダウン"
 "ロードして展開します。"
 
 # 339444287f8d42cea403c15db04b65e3
 #: ../../../source/install.rst:454
+#, fuzzy
 msgid ""
-"For 64-bit environment, download `mariadb-10.0.4-mroonga-3.07-winx64.zip "
-"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.07-"
+"For 64-bit environment, download `mariadb-10.0.4-mroonga-3.08-winx64.zip "
+"<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.08-"
 "winx64.zip>`_ and extract it."
 msgstr ""
 "64bit環境では `mariadb-10.0.4-mroonga-3.07-winx64.zip <http://packages."
@@ -755,9 +756,8 @@ msgid ""
 "announced by release announce if new release contains such a incompatible "
 "change."
 msgstr ""
-"非互換な変更が新しいリリースでもたらされることがあります。"
-"もし、そういった非互換がはいる場合にはリリースアナウンスでアナウンスします。"
-
+"非互換な変更が新しいリリースでもたらされることがあります。もし、そういった非"
+"互換がはいる場合にはリリースアナウンスでアナウンスします。"
 
 # 01466211bf49474ab33eec67edcabfbf
 #: ../../../source/install.rst:727
@@ -770,25 +770,27 @@ msgstr ""
 #: ../../../source/install.rst:729
 msgid "See following URL about upgrade sequence if you use previous version."
 msgstr ""
-"以前のバージョンをお使いなら、アップグレード手順について次のURLを参照してください。"
+"以前のバージョンをお使いなら、アップグレード手順について次のURLを参照してくだ"
+"さい。"
 
 # c7222aa82a03447495526e8b97da5f38
 #: ../../../source/install.rst:731
 msgid "If you upgrade prior to 1.20, refer to :ref:`release-1-20`"
 msgstr ""
-"1.20以前からアップグレードするなら、 :ref:`release-1-20` を参照してください。"
+"1.20以前からアップグレードするなら、 :ref:`1.20 リリース <release-1-20>` を参照してください。"
 
 # 8d30e7bcb0b142c0a2322e37f6532752
 #: ../../../source/install.rst:733
 msgid "If you upgrade from 1.20, refer to :ref:`release-2-00`"
 msgstr ""
-"1.20からアップグレードするなら、 :ref:`release-2-00` を参照してください。"
+"1.20からアップグレードするなら、 :ref:`2.00 リリース <release-2-00>` を参照してください。"
 
 # c6d6f0db12d74a4ea8e9c1021cd690d4
 #: ../../../source/install.rst:735
 msgid "If you upgrade from 2.00 or 2.01, refer to :ref:`release-2-02`"
 msgstr ""
-"2.00もしくは2.01からアップグレードするなら、 :ref:`release-2-02` を参照してください。"
+"2.00もしくは2.01からアップグレードするなら、 :ref:`2.02 リリース <release-2-02>` を参照してく"
+"ださい。"
 
 # a4bf54d24ac04cb4895196a8aa820031
 #: ../../../source/install.rst:737
@@ -796,8 +798,8 @@ msgid ""
 "If you upgrade from 2.00 or later and using multiple column indexes on "
 "storage mode, refer to :ref:`release-2-03`"
 msgstr ""
-"もし2.00以降でマルチカラムインデックスをストレージモードで使用してい"
-"るなら、 :ref:`release-2-03` を参照してください。"
+"もし2.00以降でマルチカラムインデックスをストレージモードで使用しているな"
+"ら、 :ref:`2.03 リリース <release-2-03>` を参照してください。"
 
 # 425c19b992654d589e8975eb001e0803
 #: ../../../source/install.rst:739
@@ -805,11 +807,10 @@ msgid ""
 "If you upgrade from 2.04 or later and using SET column or ENUM that has the "
 "number of elements < 256 in Storage mode, refer to :ref:`release-2-05`"
 msgstr ""
-"もし2.04以降で256マルチカラムインデックスをストレージモードで使用してい"
-"るなら、 :ref:`release-2-03` を参照してください。"
-"2.04以降でストレージモードにてSETカラムもしくは要素数が256より"
-"少ないENUMを使用している場合は、 :ref:`release-2-05` を参照してくださ"
-"い。"
+"もし2.04以降で256マルチカラムインデックスをストレージモードで使用しているな"
+"ら、 :ref:`2.03 リリース <release-2-03>` を参照してください。2.04以降でストレージモードにて"
+"SETカラムもしくは要素数が256より少ないENUMを使用している場合は、 :ref:"
+"`2.05 リリース <release-2-05>` を参照してください。"
 
 # e433e647d8f4411fb2c6cd4a4fdb5660
 #: ../../../source/install.rst:741
@@ -817,8 +818,8 @@ msgid ""
 "If you upgrade from 2.05 or later and using multiple column indexes against "
 "VARCHAR or CHAR, refer to :ref:`release-2-08`"
 msgstr ""
-"2.05以降でマルチカラムインデックスをVARCHARやCHAR型に対して使っている"
-"場合は、 :ref:`release-2-08` を参照してください。"
+"2.05以降でマルチカラムインデックスをVARCHARやCHAR型に対して使っている場合"
+"は、 :ref:`2.08 リリース <release-2-08>` を参照してください。"
 
 # 5bc7f98e8ddf478388167f7e3ef55978
 #: ../../../source/install.rst:743
@@ -828,7 +829,6 @@ msgid ""
 "primary key, please recreate index. Refer to :ref:`release-2-09` for each "
 "case:"
 msgstr ""
-"2.08以降でTIMESTAMP型のカラムを使っているテーブルがあれば、"
-"データベースを再作成してください。"
-"CHAR(N)を主キーとしているテーブルがあれば、インデックスを再作成してく"
-"ださい。 それぞれについては :ref:`release-2-09` を参照してください。"
+"2.08以降でTIMESTAMP型のカラムを使っているテーブルがあれば、データベースを再作"
+"成してください。CHAR(N)を主キーとしているテーブルがあれば、インデックスを再作"
+"成してください。 それぞれについては :ref:`2.09 リリース <release-2-09>` を参照してください。"
