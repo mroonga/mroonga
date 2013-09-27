@@ -19,6 +19,8 @@ Improvements
   [groonga-dev,01747] [Reported by Kazuhiro Isobe]
 * [wrapper] Supported REPAIR TABLE for broken groonga database.
   [groonga-dev,01540] [Suggested by Naoya Murakami]
+* Supported MariaDB 10.x build with configure [groonga-dev,01727]
+  [Reported by WING]
 
 Fixes
 ^^^^^
@@ -36,6 +38,7 @@ Thanks
 * Tomoatsu Shimada
 * @ceekz
 * Naoya Murakami
+* WING
 
 .. _release-3-07:
 
