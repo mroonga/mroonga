@@ -176,7 +176,10 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_MAJOR_MINOR_VERSION=["$(echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)$/\1.\2/')"]
   case "$MYSQL_MAJOR_MINOR_VERSION" in
-  5.6*)
+  5.1.*|5.5.*)
+      MYSQL_LIBS=""
+      ;;
+  *)
       AC_MSG_CHECKING([for libmysqlservices.a directory])
       pkglibdir="$($ac_mysql_config --variable=pkglibdir)"
       mysql_build_libservices_dir="${MYSQL_BUILD_DIR}/libservices"
@@ -193,9 +196,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
       fi
       AC_MSG_RESULT([$mysql_services_lib_dir])
       MYSQL_LIBS="$MYSQL_LIBS -L\"$mysql_services_lib_dir\" -lmysqlservices"
-      ;;
-  *)
-      MYSQL_LIBS=""
       ;;
   esac
   AC_SUBST(MYSQL_LIBS)
