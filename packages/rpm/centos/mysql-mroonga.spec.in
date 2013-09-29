@@ -127,12 +127,18 @@ mysql -u root -e "quit"
 if [ $? -ne 0 ]; then
     password_option="-p"
 fi
-version=`mysql -e "show variables like 'mroonga_libgroonga_version'" | \
-    grep mroonga | cut -f 2 | sed -e 's/\.//g'`
-current_version=`expr $version`
+current_version=0
 version=`echo %{groonga_required_version} | sed -e 's/\.//g'`
 required_version=`expr $version`
-if [ $current_version -lt $required_version ]; then
+version=`mysql -e "show variables like 'mroonga_libgroonga_version'" | \
+    grep mroonga | cut -f 2 | sed -e 's/\.//g'`
+if [ -n "$version" ]; then
+    current_version=`expr $version`
+fi
+if [ "$1" = 2 ] ; then
+if [ $current_version -eq 0 ]; then
+    :
+elif [ $current_version -lt $required_version ]; then
     sql="
     USE mysql;
     DROP FUNCTION IF EXISTS mroonga_snippet;
@@ -152,8 +158,7 @@ if [ $current_version -lt $required_version ]; then
     echo "run the following command after restarting mysql server:";
     echo "  $command"
     exit 0
-fi
-if [ "$1" = 2 ] ; then
+else
     sql="
     USE mysql;
     DROP FUNCTION IF EXISTS mroonga_snippet;
@@ -168,6 +173,7 @@ if [ "$1" = 2 ] ; then
     eval $command || \
           (echo "run the following command to unregister mroonga:"; \
            echo "  $command")
+fi
 fi
 sql="
 DELETE IGNORE FROM mysql.plugin WHERE name = 'mroonga';
