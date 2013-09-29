@@ -153,12 +153,8 @@ CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
 CREATE FUNCTION mroonga_escape RETURNS STRING SONAME 'ha_mroonga.so';
 "
 if [ "$1" = 2 ] ; then
-    if [ $current_version -eq 0 ]; then
-	:
-    elif [ $current_version -lt $required_version ]; then
-	sql="$drop_sql
-$install_sql
-"
+    if [ $current_version -lt $required_version ]; then
+	sql="$drop_sql$install_sql"
     	command="/usr/bin/mysql -u root $password_option -e \"$sql\""
 	echo "run the following command after restarting mysql server:";
 	echo "  $command"
