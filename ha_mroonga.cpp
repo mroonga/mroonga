@@ -1392,19 +1392,19 @@ static int mrn_init(void *p)
 #ifdef _WIN32
   HMODULE current_module = GetModuleHandle(NULL);
   mrn_binlog_filter =
-    *((Rpl_filter **) GetProcAddress(current_module, MRN_BINLOG_FILTER_PROC));
+    *((Rpl_filter **)GetProcAddress(current_module, MRN_BINLOG_FILTER_PROC));
   mrn_my_tz_UTC =
-    *((Time_zone **) GetProcAddress(current_module, MRN_MY_TZ_UTC_PROC));
+    *((Time_zone **)GetProcAddress(current_module, MRN_MY_TZ_UTC_PROC));
 #  ifdef MRN_HAVE_TABLE_DEF_CACHE
-  mrn_table_def_cache = (HASH *) GetProcAddress(current_module,
+  mrn_table_def_cache = (HASH *)GetProcAddress(current_module,
     "?table_def_cache@@3Ust_hash@@A");
 #  endif
   mrn_LOCK_open =
 #  if MYSQL_VERSION_ID >= 50500
-    (mysql_mutex_t *) GetProcAddress(current_module,
+    (mysql_mutex_t *)GetProcAddress(current_module,
       "?LOCK_open@@3Ust_mysql_mutex@@A");
 #  else
-    (pthread_mutex_t *) GetProcAddress(current_module,
+    (pthread_mutex_t *)GetProcAddress(current_module,
       "?LOCK_open@@3U_RTL_CRITICAL_SECTION@@A");
 #  endif
 #else
