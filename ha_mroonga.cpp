@@ -1395,24 +1395,24 @@ static int mrn_init(void *p)
     *((Rpl_filter **) GetProcAddress(current_module, MRN_BINLOG_FILTER_PROC));
   mrn_my_tz_UTC =
     *((Time_zone **) GetProcAddress(current_module, MRN_MY_TZ_UTC_PROC));
-#ifdef MRN_HAVE_TABLE_DEF_CACHE
+#  ifdef MRN_HAVE_TABLE_DEF_CACHE
   mrn_table_def_cache = (HASH *) GetProcAddress(current_module,
     "?table_def_cache@@3Ust_hash@@A");
-#endif
+#  endif
   mrn_LOCK_open =
-#if MYSQL_VERSION_ID >= 50500
+#  if MYSQL_VERSION_ID >= 50500
     (mysql_mutex_t *) GetProcAddress(current_module,
       "?LOCK_open@@3Ust_mysql_mutex@@A");
-#else
+#  else
     (pthread_mutex_t *) GetProcAddress(current_module,
       "?LOCK_open@@3U_RTL_CRITICAL_SECTION@@A");
-#endif
+#  endif
 #else
   mrn_binlog_filter = binlog_filter;
   mrn_my_tz_UTC = my_tz_UTC;
-#ifdef MRN_HAVE_TABLE_DEF_CACHE
+#  ifdef MRN_HAVE_TABLE_DEF_CACHE
   mrn_table_def_cache = &table_def_cache;
-#endif
+#  endif
   mrn_LOCK_open = &LOCK_open;
 #endif
 
