@@ -1599,7 +1599,6 @@ static void mrn_generic_ft_close_search(FT_INFO *handler)
   grn_obj_unlink(info->ctx, info->score_column);
   grn_obj_unlink(info->ctx, &(info->key));
   grn_obj_unlink(info->ctx, &(info->score));
-  grn_ctx_fin(info->ctx);
   delete info;
   DBUG_VOID_RETURN;
 }
@@ -7796,8 +7795,7 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
 
   struct st_mrn_ft_info *info = new st_mrn_ft_info();
   info->mroonga = this;
-  info->ctx = grn_ctx_open(0);
-  grn_ctx_use(info->ctx, grn_ctx_db(ctx));
+  info->ctx = ctx;
   mrn_change_encoding(info->ctx,
                       table->key_info[key_nr].key_part->field->charset());
   info->encoding = GRN_CTX_GET_ENCODING(info->ctx);
