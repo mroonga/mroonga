@@ -17,7 +17,7 @@
 --source include/mroonga/check_version.inc
 
 if ($version_55_or_later) {
-  let $fulltext_index_comment = `SELECT @@global.version >= '5.5'`;
+  let $fulltext_index_comment = 1;
 }
 
 if (!$fulltext_index_comment) {
