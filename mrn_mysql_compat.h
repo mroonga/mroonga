@@ -31,7 +31,7 @@
 #  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
 #endif
 
-#if MYSQL_VERSION_ID >= 50604 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 50604
 #  define MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
 #  define MRN_HAVE_MYSQL_TYPE_DATETIME2
 #  define MRN_HAVE_MYSQL_TYPE_TIME2
