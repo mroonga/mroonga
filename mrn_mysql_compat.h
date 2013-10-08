@@ -114,4 +114,8 @@
 #  define MRN_HAVE_GET_TABLE_DEF_KEY
 #endif
 
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100004
+#  define MRN_TABLE_SHARE_HAVE_LOCK_SHARE
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
