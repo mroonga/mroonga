@@ -864,6 +864,10 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       wrap_table_share->primary_key = share->wrap_primary_key;
       wrap_table_share->keys_in_use.init(share->wrap_keys);
       wrap_table_share->keys_for_keyread.init(share->wrap_keys);
+      mysql_mutex_init(key_TABLE_SHARE_LOCK_share,
+                       &(wrap_table_share->LOCK_share), MY_MUTEX_INIT_SLOW);
+      mysql_mutex_init(key_TABLE_SHARE_LOCK_ha_data,
+                       &(wrap_table_share->LOCK_ha_data), MY_MUTEX_INIT_FAST);
       share->wrap_table_share = wrap_table_share;
     }
 
@@ -910,6 +914,10 @@ int mrn_free_share(MRN_SHARE *share)
     mrn_free_share_alloc(share);
     thr_lock_delete(&share->lock);
     pthread_mutex_destroy(&share->mutex);
+    if (share->wrapper_mode) {
+      mysql_mutex_destroy(&(share->wrap_table_share->LOCK_share));
+      mysql_mutex_destroy(&(share->wrap_table_share->LOCK_ha_data));
+    }
     my_free(share, MYF(0));
   }
   DBUG_RETURN(0);
