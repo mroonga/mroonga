@@ -192,6 +192,14 @@ while [ $# -gt 0 ]; do
 		    ;;
 	    esac
 	    shift
+
+	    if [ -n "${test_name}" ]; then
+		if [ -n "${test_names}" ]; then
+		    test_names="${test_names}|"
+		fi
+		test_names="${test_names}.*${test_name}"
+	    fi
+
 	    test_suite_name=$(echo "$test_suite_name" | sed -e "s,^${suite_dir}/,,")
 	    if echo "${test_suite_names}" | grep --quiet "${test_suite_name}"; then
 		continue
@@ -200,12 +208,6 @@ while [ $# -gt 0 ]; do
 		test_suite_names="${test_suite_names},"
 	    fi
 	    test_suite_names="${test_suite_names}${test_suite_name}"
-	    if [ -n "${test_name}" ]; then
-		if [ -n "${test_names}" ]; then
-		    test_names="${test_names},"
-		fi
-		test_names="${test_names}${test_name}"
-	    fi
 	    ;;
     esac
 done
