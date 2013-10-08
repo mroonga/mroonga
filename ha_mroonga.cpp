@@ -10226,7 +10226,8 @@ int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
   struct timeval tm;
   my_timestamp_from_binary(&tm, key, timestamp2_field->decimals());
   MYSQL_TIME mysql_time;
-  mrn_my_tz_UTC->gmt_sec_to_TIME(&mysql_time, tm);
+  mrn_my_tz_UTC->gmt_sec_to_TIME(&mysql_time, (my_time_t)tm.tv_sec);
+  mysql_time.second_part = tm.tv_usec;
   long long int grn_time = mrn_mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
     field->set_warning(Sql_condition::WARN_LEVEL_WARN,
