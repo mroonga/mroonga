@@ -20,6 +20,7 @@
 
 export BASE_DIR="$(cd $(dirname $0); pwd)"
 top_dir="$BASE_DIR/.."
+mroonga_test_dir="${top_dir}/mysql-test/mroonga"
 
 n_processors=1
 case `uname` in
@@ -98,14 +99,21 @@ same_link_p()
 }
 
 mroonga_mysql_test_include_dir="${build_test_include_dir}/mroonga"
-if ! same_link_p "${mroonga_mysql_test_include_dir}"; then
+if ! same_link_p "${mroonga_test_dir}/include/mroonga" \
+    "${mroonga_mysql_test_include_dir}"; then
     rm -f "${mroonga_mysql_test_include_dir}"
-    ln -s "${BASE_DIR}/sql/include/mroonga" "${mroonga_mysql_test_include_dir}"
+    ln -s "${mroonga_test_dir}/include/mroonga" \
+	"${mroonga_mysql_test_include_dir}"
 fi
 
-for test_suite_name in mroonga; do
-    local_mroonga_mysql_test_suite_dir="${BASE_DIR}/sql/suite/${test_suite_name}"
-    mroonga_mysql_test_suite_dir="${build_test_suites_dir}/${test_suite_name}"
+for test_suite_name in storage wrapper; do
+    local_mroonga_mysql_test_suite_dir="${mroonga_test_dir}/${test_suite_name}"
+    mroonga_mysql_test_suite_base_dir="${build_test_suites_dir}/mroonga"
+    mroonga_mysql_test_suite_dir="${mroonga_mysql_test_suite_base_dir}/${test_suite_name}"
+    if [ ! -d "${mroonga_mysql_test_suite_base_dir}" ]; then
+	rm -rf "${mroonga_mysql_test_suite_base_dir}"
+	mkdir -p "${mroonga_mysql_test_suite_base_dir}"
+    fi
     if ! same_link_p "${local_mroonga_mysql_test_suite_dir}" \
 			"${mroonga_mysql_test_suite_dir}"; then
 	rm -f "${mroonga_mysql_test_suite_dir}"
@@ -143,9 +151,13 @@ if [ ! -d "${mroonga_wrapper_innodb_test_suite_dir}" ]; then
 fi
 
 all_test_suite_names=""
-suite_dir="${BASE_DIR}/sql/suite"
+suite_dir="${mroonga_test_dir}/.."
 cd "${suite_dir}"
-for test_suite_name in $(find mroonga -type d '!' -name '[tr]'); do
+for test_suite_name in \
+      $(find mroonga -type d -name 'include' '!' -prune -o \
+                     -type d '!' -name 'mroonga' \
+                             '!' -name 'include' \
+                             '!' -name '[tr]'); do
     if [ -n "${all_test_suite_names}" ]; then
 	all_test_suite_names="${all_test_suite_names},"
     fi

@@ -274,7 +274,7 @@ configure_file(
 
 set(MRN_TEST_SUITE_DIR "${CMAKE_SOURCE_DIR}/mysql-test/suite/mroonga")
 if(NOT EXISTS "${MRN_TEST_SUITE_DIR}")
-  set(MRN_TEST_SUITE_DIR "${PROJECT_SOURCE_DIR}/test/sql/suite/mroonga")
+  set(MRN_TEST_SUITE_DIR "${PROJECT_SOURCE_DIR}/mysql-test/mroonga")
 endif()
 configure_file(
   "${MRN_TEST_SUITE_DIR}/storage/information_schema/r/plugins.result.in"

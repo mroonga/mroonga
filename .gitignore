@@ -50,8 +50,8 @@ CTestTestfile.cmake
 /doc/sphinx/
 /misc/
 /tmp-doc/
-/test/sql/suite/mroonga/storage/information_schema/r/plugins.result
-/test/sql/suite/mroonga/storage/variable/r/version.result
+/mysql-test/mroonga/storage/information_schema/r/plugins.result
+/mysql-test/mroonga/storage/variable/r/version.result
 /mrn_version.h
 /mroonga-*.tar.gz
 /packages/mroonga-*.tar.gz

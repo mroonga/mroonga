@@ -440,8 +440,8 @@ AC_CONFIG_FILES([
 AC_OUTPUT([
   config.sh
   mrn_version.h
-  test/sql/suite/mroonga/storage/information_schema/r/plugins.result
-  test/sql/suite/mroonga/storage/variable/r/version.result
+  mysql-test/mroonga/storage/information_schema/r/plugins.result
+  mysql-test/mroonga/storage/variable/r/version.result
   packages/debian/control
   packages/rpm/centos/mysql-mroonga.spec
   packages/rpm/fedora/mysql-mroonga.spec
