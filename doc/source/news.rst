@@ -3,6 +3,31 @@
 News
 ====
 
+.. _release-3-09:
+
+Release 3.09 - 2013/10/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported Ubuntu 13.10 (Saucy Salamander).
+* [rpm][centos] Supported rpm packages for MySQL 5.5 on CentOS 5.
+  It provides mysql55-mroonga to support mysql55-mysql packages.
+  [groonga-dev,01860] [Reported by WING]
+
+Fixes
+^^^^^
+
+* [wrapper] Fixed a memory leak. It occurs when wrapper
+  handler doesn't destroy mutexes properly. MyISAM is known
+  as effected storage engine.
+
+Thanks
+^^^^^^
+
+* WING
+
 .. _release-3-08:
 
 Release 3.08 - 2013/9/29
