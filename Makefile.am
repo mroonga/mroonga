@@ -118,12 +118,21 @@ update-version:
 	@echo -n $(NEW_VERSION_MICRO) > $(srcdir)/version_micro
 	@echo -n $(NEW_VERSION_MAJOR).$(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) \
 	  > $(srcdir)/version
-	@printf "0x%02x%02x" \
-	  $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) \
-	  > $(srcdir)/version_in_hex
-	@printf "%d.%d" \
-	  $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) \
-	  > $(srcdir)/plugin_version
+	@if test $(NEW_VERSION_MINOR) -eq 0 ; then				\
+	  printf "0x%02x%02x"							\
+	    $(NEW_VERSION_MAJOR) $(NEW_VERSION_MICRO)				\
+	    > $(srcdir)/version_in_hex;						\
+	  printf "%d.%d"							\
+	    $(NEW_VERSION_MAJOR) $(NEW_VERSION_MICRO)				\
+	    > $(srcdir)/plugin_version;						\
+	else									\
+	  printf "0x%02x%02x"							\
+	    $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO)	\
+	    > $(srcdir)/version_in_hex;						\
+	  printf "%d.%d" 							\
+	    $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) 	\
+	    > $(srcdir)/plugin_version;						\
+	fi
 
 upload-to-github:
 	ruby $(srcdir)/tools/upload-to-github.rb \
