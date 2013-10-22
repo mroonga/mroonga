@@ -69,6 +69,7 @@ CTestTestfile.cmake
 /packages/yum/*.log
 /packages/yum/*/*.log
 /packages/yum/tmp/*
+/packages/windows/files/*
 /install_manifest.txt
 /vendor/
 /data/install.sql
