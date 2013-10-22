@@ -31,6 +31,8 @@ CTestTestfile.cmake
 /ltmain.sh
 /missing
 /stamp-h1
+/compile
+/test-driver
 /src/scratch
 /libmroonga.a
 /packages/debian/control
