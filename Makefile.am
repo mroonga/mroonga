@@ -28,6 +28,7 @@ SUBDIRS =					\
 	lib					\
 	udf					\
 	test					\
+	mysql-test				\
 	doc					\
 	tools					\
 	packages				\

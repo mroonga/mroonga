@@ -1,4 +1,4 @@
-SUBDIRS = unit sql
+SUBDIRS = unit
 
 TESTS = run-sql-test.sh
 TESTS_ENVIRONMENT =				\

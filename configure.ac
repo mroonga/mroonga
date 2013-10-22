@@ -419,7 +419,7 @@ AC_CONFIG_FILES([
   udf/Makefile
   test/Makefile
   test/unit/Makefile
-  test/sql/Makefile
+  mysql-test/Makefile
   packages/Makefile
   packages/rpm/Makefile
   packages/rpm/centos/Makefile
