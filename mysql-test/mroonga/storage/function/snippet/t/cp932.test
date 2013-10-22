@@ -16,8 +16,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_cp932.inc
---source include/mroonga/have_mroonga.inc
---source include/mroonga/load_mroonga_functions.inc
+--source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
 drop table if exists t1, t2, t3;
@@ -38,5 +38,5 @@ select c1, c2, mroonga_snippet(c3, 10, 2, 'cp932_japanese_ci', 1, 0, '...', '...
 select c1, c2, mroonga_snippet(c3, 10, 2, 'cp932_bin', 1, 0, '...', '...\n', '‚Q‚X“ú', '(w1)[', ']', '“V‹C', '(w2)[', ']', '•xŽmŽR', '(w3)[', ']') from t1;
 drop table t1;
 
---source include/mroonga/unload_mroonga_functions.inc
---source include/mroonga/have_mroonga_deinit.inc
+--source ../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc

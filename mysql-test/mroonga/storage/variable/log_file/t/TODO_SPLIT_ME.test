@@ -14,7 +14,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/have_mroonga.inc
 
 SET GLOBAL mroonga_log_file = "new-mroonga.log";
 SHOW GLOBAL VARIABLES LIKE 'mroonga_log_file';
@@ -22,4 +22,4 @@ SHOW GLOBAL VARIABLES LIKE 'mroonga_log_file';
 SET GLOBAL mroonga_log_file = "nonexistent/mroonga.log";
 SHOW GLOBAL VARIABLES LIKE 'mroonga_log_file';
 
---source include/mroonga/have_mroonga_deinit.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc

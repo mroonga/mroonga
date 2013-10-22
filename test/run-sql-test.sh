@@ -98,29 +98,11 @@ same_link_p()
     fi
 }
 
-mroonga_mysql_test_include_dir="${build_test_include_dir}/mroonga"
-if ! same_link_p "${mroonga_test_dir}/include/mroonga" \
-    "${mroonga_mysql_test_include_dir}"; then
-    rm -f "${mroonga_mysql_test_include_dir}"
-    ln -s "${mroonga_test_dir}/include/mroonga" \
-	"${mroonga_mysql_test_include_dir}"
+mroonga_mysql_test_suite_dir="${build_test_suites_dir}/mroonga"
+if ! same_link_p "${mroonga_test_dir}" "${mroonga_mysql_test_suite_dir}"; then
+    rm -rf "${mroonga_mysql_test_suite_dir}"
+    ln -s "${mroonga_test_dir}" "${mroonga_mysql_test_suite_dir}"
 fi
-
-for test_suite_name in storage wrapper; do
-    local_mroonga_mysql_test_suite_dir="${mroonga_test_dir}/${test_suite_name}"
-    mroonga_mysql_test_suite_base_dir="${build_test_suites_dir}/mroonga"
-    mroonga_mysql_test_suite_dir="${mroonga_mysql_test_suite_base_dir}/${test_suite_name}"
-    if [ ! -d "${mroonga_mysql_test_suite_base_dir}" ]; then
-	rm -rf "${mroonga_mysql_test_suite_base_dir}"
-	mkdir -p "${mroonga_mysql_test_suite_base_dir}"
-    fi
-    if ! same_link_p "${local_mroonga_mysql_test_suite_dir}" \
-			"${mroonga_mysql_test_suite_dir}"; then
-	rm -f "${mroonga_mysql_test_suite_dir}"
-	ln -s "${local_mroonga_mysql_test_suite_dir}" \
-	    "${mroonga_mysql_test_suite_dir}"
-    fi
-done
 
 innodb_test_suite_dir="${build_test_suites_dir}/innodb"
 mroonga_wrapper_innodb_test_suite_name="mroonga_wrapper_innodb"
@@ -146,13 +128,14 @@ if [ ! -d "${mroonga_wrapper_innodb_test_suite_dir}" ]; then
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test \
 	${mroonga_wrapper_innodb_test_suite_dir}/include/*.inc
     sed -i'' \
-	-e '1 i --source include/mroonga/have_mroonga.inc' \
+	-e '1 i --source ../mroonga/include/mroonga/have_mroonga.inc' \
 	${mroonga_wrapper_innodb_test_suite_dir}/t/*.test
 fi
 
 all_test_suite_names=""
 suite_dir="${mroonga_test_dir}/.."
 cd "${suite_dir}"
+suite_dir="$(pwd)"
 for test_suite_name in \
       $(find mroonga -type d -name 'include' '!' -prune -o \
                      -type d '!' -name 'mroonga' \

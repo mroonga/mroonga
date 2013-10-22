@@ -14,7 +14,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/mroonga/check_version.inc
+--source ../../include/mroonga/check_version.inc
 
 if ($version_55_or_later) {
   let $fulltext_index_comment = 1;

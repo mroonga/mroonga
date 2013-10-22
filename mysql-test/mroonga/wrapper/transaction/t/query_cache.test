@@ -15,7 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_innodb.inc
---source include/mroonga/have_mroonga.inc
+--source ../../../include/mroonga/have_mroonga.inc
 
 SET @tmp_query_cache_size = @@query_cache_size;
 SET GLOBAL query_cache_size = 1048576;
@@ -50,4 +50,4 @@ DISCONNECT second_connection;
 
 SET GLOBAL query_cache_size = @tmp_query_cache_size;
 
---source include/mroonga/have_mroonga_deinit.inc
+--source ../../../include/mroonga/have_mroonga_deinit.inc

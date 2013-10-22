@@ -14,7 +14,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 drop table if exists listing;
@@ -38,4 +38,4 @@ select * from listing where last_name = "Taro" and first_name = "Suzuki";
 select * from listing where last_name = "Taro" and (first_name >= "S" and first_name <= "Y");
 drop table listing;
 
---source include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc

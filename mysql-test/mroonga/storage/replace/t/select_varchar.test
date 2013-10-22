@@ -17,7 +17,7 @@
 # Based on #910.
 
 --source include/have_innodb.inc
---source include/mroonga/have_mroonga.inc
+--source ../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS videos_master, videos_groonga;
@@ -61,4 +61,4 @@ SELECT *, MATCH(description) AGAINST("my") FROM videos_groonga
 
 DROP TABLE videos_master, videos_groonga;
 
---source include/mroonga/have_mroonga_deinit.inc
+--source ../../../include/mroonga/have_mroonga_deinit.inc

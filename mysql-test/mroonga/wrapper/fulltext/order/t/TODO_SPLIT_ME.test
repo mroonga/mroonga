@@ -15,7 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_innodb.inc
---source include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -48,4 +48,4 @@ SELECT a, b, c, MATCH(b) AGAINST('bbbbb' IN BOOLEAN MODE), MATCH(c) AGAINST('bbb
 
 DROP TABLE ft;
 
---source include/mroonga/have_mroonga_deinit.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc
