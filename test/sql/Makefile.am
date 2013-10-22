@@ -5,5 +5,4 @@ dist-hook:
 	fi
 
 EXTRA_DIST =					\
-	include					\
 	suite
