@@ -5,7 +5,7 @@ CHROOT_BASE = /var/lib/chroot
 HAVE_DEVELOPMENT_BRANCH = no
 USE_RPMFORGE = no
 USE_ATRPMS = no
-PACKAGES = mysql-mroonga mariadb-mroonga
+PACKAGES = mysql-mroonga mariadb-mroonga mysql55-mroonga
 
 all:
 

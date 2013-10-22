@@ -158,6 +158,9 @@ for architecture in $ARCHITECTURES; do
     for distribution in $DISTRIBUTIONS; do
 	case $distribution in
 	    fedora)
+		if [ "$PACKAGE" = "mysql55-mroonga" ]; then
+			continue
+		fi
 		distribution_versions="19"
 		;;
 	    centos)
@@ -172,6 +175,11 @@ for architecture in $ARCHITECTURES; do
 		;;
 	esac
 	for distribution_version in $distribution_versions; do
+	    if [ $distribution_versions -eq 6 ]; then
+		if [ "$PACKAGE" = "mysql55-mroonga" ]; then
+		    continue
+		fi
+	    fi
 	    if test "$parallel" = "yes"; then
 		build $architecture $distribution $distribution_version &
 	    else
