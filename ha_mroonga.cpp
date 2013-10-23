@@ -11330,16 +11330,24 @@ double ha_mroonga::wrapper_read_time(uint index, uint ranges, ha_rows rows)
 {
   double res;
   MRN_DBUG_ENTER_METHOD();
-  KEY key_info = table->key_info[index];
-  if (mrn_is_geo_key(&key_info)) {
-    res = handler::read_time(index, ranges, rows);
-    DBUG_RETURN(res);
+  if (index < MAX_KEY) {
+    KEY key_info = table->key_info[index];
+    if (mrn_is_geo_key(&key_info)) {
+      res = handler::read_time(index, ranges, rows);
+      DBUG_RETURN(res);
+    }
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->read_time(share->wrap_key_nr[index], ranges, rows);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->read_time(index, ranges, rows);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
   }
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->read_time(share->wrap_key_nr[index], ranges, rows);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(res);
 }
 
