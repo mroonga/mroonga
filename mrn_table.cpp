@@ -868,8 +868,10 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       mysql_mutex_init(key_TABLE_SHARE_LOCK_share,
                        &(wrap_table_share->LOCK_share), MY_MUTEX_INIT_SLOW);
 #endif
+#ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
       mysql_mutex_init(key_TABLE_SHARE_LOCK_ha_data,
                        &(wrap_table_share->LOCK_ha_data), MY_MUTEX_INIT_FAST);
+#endif
       share->wrap_table_share = wrap_table_share;
     }
 
@@ -920,7 +922,9 @@ int mrn_free_share(MRN_SHARE *share)
 #ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_share));
 #endif
+#ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_ha_data));
+#endif
     }
     my_free(share, MYF(0));
   }
