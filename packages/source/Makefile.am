@@ -38,7 +38,7 @@ ensure-rsync-path:
 	fi
 
 download: ensure-rsync-path
-	rsync -avz --progress $(RSYNC_PATH)/source/mroonga/ files
+	rsync -avz --progress --delete $(RSYNC_PATH)/source/mroonga/ files
 
 ARCHIVES =							\
 	files/$(MROONGA_TAR_GZ)					\
