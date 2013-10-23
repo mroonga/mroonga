@@ -17,7 +17,7 @@ Debian GNU/Linux squeeze
   deb http://packages.groonga.org/debian/ squeeze main
   deb-src http://packages.groonga.org/debian/ squeeze main
 
-Install ::
+Install::
 
   % sudo aptitude update
   % sudo aptitude -V -D -y --allow-untrusted install groonga-keyring
@@ -49,7 +49,7 @@ Debian GNU/Linux wheezy
   deb http://packages.groonga.org/debian/ wheezy main
   deb-src http://packages.groonga.org/debian/ wheezy main
 
-Install ::
+Install::
 
   % sudo apt-get update
   % sudo apt-get -y --allow-unauthenticated install groonga-keyring
@@ -81,7 +81,7 @@ Debian GNU/Linux jessie
   deb http://packages.groonga.org/debian/ jessie main
   deb-src http://packages.groonga.org/debian/ jessie main
 
-Install ::
+Install::
 
   % sudo apt-get update
   % sudo apt-get -y --allow-unauthenticated install groonga-keyring
@@ -113,7 +113,7 @@ Debian GNU/Linux sid
   deb http://packages.groonga.org/debian/ unstable main
   deb-src http://packages.groonga.org/debian/ unstable main
 
-Install ::
+Install::
 
   % sudo aptitude update
   % sudo aptitude -V -D -y --allow-untrusted install groonga-keyring
@@ -157,7 +157,7 @@ Ubuntu 10.04 LTS Lucid Lynx
   deb http://packages.groonga.org/ubuntu/ lucid universe
   deb-src http://packages.groonga.org/ubuntu/ lucid universe
 
-Install ::
+Install::
 
   % sudo apt-get update
   % sudo apt-get -y --allow-unauthenticated install groonga-keyring
@@ -197,7 +197,7 @@ Ubuntu 12.04 Precise Pangolin
   deb http://packages.groonga.org/ubuntu/ precise universe
   deb-src http://packages.groonga.org/ubuntu/ precise universe
 
-Install ::
+Install::
 
   % sudo apt-get update
   % sudo apt-get -y --allow-unauthenticated install groonga-keyring
@@ -237,7 +237,7 @@ Ubuntu 12.10 Quantal Quetzal
   deb http://packages.groonga.org/ubuntu/ quantal universe
   deb-src http://packages.groonga.org/ubuntu/ quantal universe
 
-Install ::
+Install::
 
   % sudo apt-get update
   % sudo apt-get -y --allow-unauthenticated install groonga-keyring
@@ -277,7 +277,7 @@ Ubuntu 13.04 Raring Ringtail
   deb http://packages.groonga.org/ubuntu/ raring universe
   deb-src http://packages.groonga.org/ubuntu/ raring universe
 
-Install ::
+Install::
 
   % sudo apt-get update
   % sudo apt-get -y --allow-unauthenticated install groonga-keyring
@@ -317,7 +317,7 @@ Ubuntu 13.10 Saucy Salamander
   deb http://packages.groonga.org/ubuntu/ saucy universe
   deb-src http://packages.groonga.org/ubuntu/ saucy universe
 
-Install ::
+Install::
 
   % sudo apt-get update
   % sudo apt-get -y --allow-unauthenticated install groonga-keyring
@@ -350,7 +350,7 @@ Remove existing MySQL packages ::
 
   % sudo yum remove 'mysql*'
 
-Install ::
+Install::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
@@ -381,7 +381,7 @@ CentOS 6
 
 In CentOS 6, unlike in CentOS 5, we use CentOS's MySQL packages (version 5.1.x). So you don't need to remove CentOS's MySQL packages.
 
-Install ::
+Install::
 
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
