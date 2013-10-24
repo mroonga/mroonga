@@ -44,7 +44,7 @@ Documentation for Mroonga
 %setup -q -n mroonga-%{version}
 
 mysql_full_version=%{mysql_version}-%{mysql_release}.%{mysql_dist}
-srpm=mysql-${mysql_full_version}.src.rpm
+srpm=mysql55-mysql-${mysql_full_version}.src.rpm
 if [ ! -f ../../SRPMS/$srpm ]; then
     wget --continue -O ../../SRPMS/$srpm %{mysql_download_base_url}/$srpm
     rpm -Uvh ../../SRPMS/$srpm
