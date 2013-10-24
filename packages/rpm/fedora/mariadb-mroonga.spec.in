@@ -1,5 +1,5 @@
-%define mariadb_version 5.5.32
-%define mariadb_release 8%{?dist}
+%define mariadb_version 5.5.33a
+%define mariadb_release 1%{?dist}
 %define mariadb_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/19/SRPMS
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
@@ -158,6 +158,7 @@ fi
 %changelog
 * Tue Oct 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.09-1
 - new upstream release.
+- use MariaDB 5.5.33a on Fedora 19.
 
 * Sun Sep 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.08-1
 - new upstream release.
