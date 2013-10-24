@@ -1,7 +1,7 @@
 %define mysql_version 5.5.32
 %define mysql_release 3
 %define mysql_dist    el5
-%define mysql_download_base_url_default http://vault.centos.org/5.10/updates/Source/SPackages
+%define mysql_download_base_url http://vault.centos.org/5.10/os/SRPMS
 %define mysql_spec_file mysql55-mroonga.spec
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
