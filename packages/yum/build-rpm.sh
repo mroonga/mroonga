@@ -100,6 +100,13 @@ case $distribution in
 	;;
     centos)
 	case $distribution_version in
+	    5.*)
+		if [ $PACKAGE = "mysql55-mroonga" ]; then
+		    run yum remove MySQL-devel -y
+		else
+		    run yum remove mysql55-mysql-devel -y
+		fi
+		;;
 	    6.*)
 		DEPENDED_PACKAGES="$DEPENDED_PACKAGES mysql-devel"
 		DEPENDED_PACKAGES="$DEPENDED_PACKAGES perl-Time-HiRes"
