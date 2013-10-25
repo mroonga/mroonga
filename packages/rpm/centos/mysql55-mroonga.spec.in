@@ -1,3 +1,6 @@
+%{?scl:%scl_package mroonga}
+%{!?scl:%global pkg_name %{name}}
+
 %define mysql_version 5.5.32
 %define mysql_release 3
 %define mysql_dist    el5
@@ -6,7 +9,7 @@
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
-Name:		mysql55-mroonga
+Name:		%{?scl_prefix}mroonga
 Version:	@VERSION@
 Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
@@ -25,6 +28,7 @@ Requires:	mysql55-mysql-server = %{mysql_version}-%{mysql_release}.%{mysql_dist}
 Requires:	mysql55 = %{mysql_version}-%{mysql_release}.%{mysql_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
+%{?scl:Requires: %scl_runtime}
 
 %description
 Mroonga is a fast fulltext searchable storage plugin for MySQL.
@@ -41,7 +45,7 @@ Documentation for Mroonga
 
 
 %prep
-%setup -q -n mroonga-%{version}
+%setup -q -n %{pkg_name}-%{version}
 
 mysql_full_version=%{mysql_version}-%{mysql_release}.%{mysql_dist}
 srpm=mysql55-mysql-${mysql_full_version}.src.rpm
