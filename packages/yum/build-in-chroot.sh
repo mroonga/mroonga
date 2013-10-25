@@ -137,11 +137,11 @@ build()
     if [ $distribution = "centos" -a $distribution_version -eq 5 ]; then
        if [ ${PACKAGE} = "mysql-mroonga" ]; then
 	   mysql_version=$(grep '%define mysql_version_default' \
-           ${CHROOT_BASE}/$target/tmp/${PACKAGE}.spec | \
-           sed -e 's/%define mysql_version_default //g' | \
-           tail -1)
-       run cp -p $rpm_dir/MySQL-*-${mysql_version}* $binary_pool_dir
-       run cp -p $srpm_dir/MySQL-${mysql_version}* $source_pool_dir
+               ${CHROOT_BASE}/$target/tmp/${PACKAGE}.spec | \
+               sed -e 's/%define mysql_version_default //g' | \
+               tail -1)
+	   run cp -p $rpm_dir/MySQL-*-${mysql_version}* $binary_pool_dir
+	   run cp -p $srpm_dir/MySQL-${mysql_version}* $source_pool_dir
        fi
     fi
 
