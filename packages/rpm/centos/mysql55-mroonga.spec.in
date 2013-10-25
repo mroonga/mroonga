@@ -64,6 +64,7 @@ if [ ! -d ${mysql_source} ]; then
 	../../SPECS/%{mysql_spec_file}
 fi
 %configure --disable-static --with-mysql-source=${mysql_source} \
+    --with-mysql-config=`scl enable mysql55 'which mysql_config'` \
     %{?mroonga_configure_options}
 make %{?_smp_mflags}
 
