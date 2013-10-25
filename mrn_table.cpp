@@ -50,6 +50,13 @@
 extern HASH *mrn_table_def_cache;
 #endif
 
+#ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
+extern PSI_mutex_key *mrn_table_share_lock_share;
+#endif
+#ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
+extern PSI_mutex_key *mrn_table_share_lock_ha_data;
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -865,12 +872,22 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       wrap_table_share->keys_in_use.init(share->wrap_keys);
       wrap_table_share->keys_for_keyread.init(share->wrap_keys);
 #ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
+#  ifdef WIN32
+      mysql_mutex_init(*mrn_table_share_lock_share,
+                       &(wrap_table_share->LOCK_share), MY_MUTEX_INIT_SLOW);
+#  else
       mysql_mutex_init(key_TABLE_SHARE_LOCK_share,
                        &(wrap_table_share->LOCK_share), MY_MUTEX_INIT_SLOW);
+#  endif
 #endif
 #ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
+#  ifdef WIN32
+      mysql_mutex_init(*mrn_table_share_lock_ha_data,
+                       &(wrap_table_share->LOCK_ha_data), MY_MUTEX_INIT_FAST);
+#  else
       mysql_mutex_init(key_TABLE_SHARE_LOCK_ha_data,
                        &(wrap_table_share->LOCK_ha_data), MY_MUTEX_INIT_FAST);
+#  endif
 #endif
       share->wrap_table_share = wrap_table_share;
     }

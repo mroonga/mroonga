@@ -52,6 +52,8 @@
 #  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
     type *variable_name = (type *)_malloca(sizeof(type) * (variable_size))
 #  define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) _freea(variable_name)
+#  define MRN_TABLE_SHARE_LOCK_SHARE_PROC "?key_TABLE_SHARE_LOCK_share@@3IA"
+#  define MRN_TABLE_SHARE_LOCK_HA_DATA_PROC "?key_TABLE_SHARE_LOCK_ha_data@@3IA"
 #  ifdef _WIN64
 #    define MRN_BINLOG_FILTER_PROC "?binlog_filter@@3PEAVRpl_filter@@EA"
 #    define MRN_MY_TZ_UTC_PROC "?my_tz_UTC@@3PEAVTime_zone@@EA"
@@ -143,6 +145,15 @@ pthread_mutex_t *mrn_LOCK_open;
 #    define MRN_PLUGIN_LAST_VALUES NULL, 0
 #  else
 #    define MRN_PLUGIN_LAST_VALUES NULL
+#  endif
+#endif
+
+#ifdef WIN32
+#  ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
+     PSI_mutex_key *mrn_table_share_lock_share;
+#  endif
+#  ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
+     PSI_mutex_key *mrn_table_share_lock_ha_data;
 #  endif
 #endif
 
@@ -1406,6 +1417,14 @@ static int mrn_init(void *p)
 #  else
     (pthread_mutex_t *)GetProcAddress(current_module,
       "?LOCK_open@@3U_RTL_CRITICAL_SECTION@@A");
+#  endif
+#  ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
+     mrn_table_share_lock_share =
+       (PSI_mutex_key *)GetProcAddress(current_module, MRN_TABLE_SHARE_LOCK_SHARE_PROC);
+#  endif
+#  ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
+     mrn_table_share_lock_ha_data =
+       (PSI_mutex_key *)GetProcAddress(current_module, MRN_TABLE_SHARE_LOCK_HA_DATA_PROC);
 #  endif
 #else
   mrn_binlog_filter = binlog_filter;
