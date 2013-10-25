@@ -22,6 +22,8 @@ Fixes
 * [wrapper] Fixed a memory leak. It occurs when wrapper
   handler doesn't destroy mutexes properly. MyISAM is known
   as effected storage engine.
+* [wrapper] Fixed a bug that force index causes crush for MySQL 5.6.
+  [#2015] [groonga-dev,01867] [Reported by Ichiro Yasuda]
 
 Thanks
 ^^^^^^
