@@ -29,6 +29,7 @@ Thanks
 ^^^^^^
 
 * WING
+* Ichiro Yasuda
 
 .. _release-3-08:
 
