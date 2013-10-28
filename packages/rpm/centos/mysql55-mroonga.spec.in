@@ -24,6 +24,7 @@ BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	wget
 BuildRequires:	mysql55-mysql-devel
+BuildRequires:	mysql55-build
 Requires:	mysql55-mysql-server = %{mysql_version}-%{mysql_release}.%{mysql_dist}
 Requires:	mysql55 = %{mysql_version}-%{mysql_release}.%{mysql_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
