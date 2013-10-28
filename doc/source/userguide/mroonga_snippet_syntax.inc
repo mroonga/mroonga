@@ -33,7 +33,7 @@ max_count
 encoding
   The encoding of document is required.
   You can specify the value of encoding such as 'ascii_general_ci',
-  'cp932_japanese_ci', 'eucjpms_japanese_ci', 'utf8_japanese_ci' and so on.
+  'cp932_japanese_ci', 'eucjpms_japanese_ci' and so on.
 
 skip_leading_spaces
   Specify whether skip leading spaces or not.
