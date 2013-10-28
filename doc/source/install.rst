@@ -351,9 +351,9 @@ Install::
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql55-mysql-server
-  % sudo service mysqld start
+  % sudo /etc/init.d/mysql55-mysqld start
   % sudo yum install -y mysql55-mroonga
-  (% /usr/bin/mysqladmin -u root password 'new-password')
+  (% sudo scl enable mysql55 mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
 
@@ -506,12 +506,12 @@ None for now.
 Zip
 ^^^
 
-For 32-bit environment, download `mariadb-10.0.4-mroonga-3.08-win32.zip
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.08-win32.zip>`_
+For 32-bit environment, download `mariadb-10.0.4-mroonga-3.09-win32.zip
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.09-win32.zip>`_
 and extract it.
 
-For 64-bit environment, download `mariadb-10.0.4-mroonga-3.08-winx64.zip
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.08-winx64.zip>`_
+For 64-bit environment, download `mariadb-10.0.4-mroonga-3.09-winx64.zip
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.09-winx64.zip>`_
 and extract it.
 
 Install mroonga
