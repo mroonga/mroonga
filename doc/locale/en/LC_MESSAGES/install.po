@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-23 17:31+0900\n"
+"POT-Creation-Date: 2013-10-24 14:22+0900\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -76,9 +76,9 @@ msgstr "/etc/apt/sources.list.d/groonga.list::"
 #: ../../../source/install.rst:160 ../../../source/install.rst:200
 #: ../../../source/install.rst:240 ../../../source/install.rst:280
 #: ../../../source/install.rst:320 ../../../source/install.rst:353
-#: ../../../source/install.rst:384
-msgid "Install ::"
-msgstr "Install ::"
+#: ../../../source/install.rst:384 ../../../source/install.rst:457
+msgid "Install::"
+msgstr ""
 
 # a36644cb3db24e73b53858c198d64bbf
 # a36644cb3db24e73b53858c198d64bbf
@@ -328,19 +328,6 @@ msgstr ""
 # 6c2be73040b54b8481f3e90dcc866b96
 #: ../../../source/install.rst:455
 msgid "Mac OS X"
-msgstr ""
-
-# 87bb405d8f4c42c68b00618d817971fc
-# 7a64464337a042c1bd89b3c226d1604c
-# 1a00be0657de4d1483350eb268e09943
-# cad67ba2e41f471e8503391cbc1dbbe4
-# 1a952665210e403a86606cffd92fcd81
-# 487defbbdbb149479d6a8e1f7941c5c8
-# 54f84e76d2e04874b0162513f453d1c3
-# 588545f0fe0d481fa9ca1e190a89e2ef
-# e96f98dd6bcb4e86a0c9501c66767f72
-#: ../../../source/install.rst:457
-msgid "Install::"
 msgstr ""
 
 # 909d23cd7e5f4892bc9b678f5112ddec
@@ -772,3 +759,15 @@ msgid ""
 "primary key, please recreate index. Refer to :ref:`release-2-09` for each "
 "case:"
 msgstr ""
+
+# 87bb405d8f4c42c68b00618d817971fc
+# 7a64464337a042c1bd89b3c226d1604c
+# 1a00be0657de4d1483350eb268e09943
+# cad67ba2e41f471e8503391cbc1dbbe4
+# 1a952665210e403a86606cffd92fcd81
+# 487defbbdbb149479d6a8e1f7941c5c8
+# 54f84e76d2e04874b0162513f453d1c3
+# 588545f0fe0d481fa9ca1e190a89e2ef
+# e96f98dd6bcb4e86a0c9501c66767f72
+#~ msgid "Install ::"
+#~ msgstr "Install ::"
