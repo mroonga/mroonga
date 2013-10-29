@@ -41,7 +41,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'mroonga'
+project = u'Mroonga'
 copyright = u'2009-' + unicode(datetime.today().year) + u', mroonga project'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -205,8 +205,8 @@ htmlhelp_basename = 'mroongadoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'mroonga.tex', u'mroonga Documentation',
-   u'mroonga project', 'manual'),
+  ('index', 'mroonga.tex', u'Mroonga Documentation',
+   u'Mroonga Project', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -238,6 +238,6 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'mroonga', u'mroonga Documentation',
-     [u'mroonga project'], 1)
+    ('index', 'Mroonga', u'Mroonga Documentation',
+     [u'Mroonga Project'], 1)
 ]

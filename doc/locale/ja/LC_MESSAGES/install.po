@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-20 19:40+0900\n"
-"PO-Revision-Date: 2013-09-10 00:42+0900\n"
+"POT-Creation-Date: 2013-10-28 15:10+0900\n"
+"PO-Revision-Date: 2013-10-28 15:34+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -64,6 +64,7 @@ msgstr ""
 #: ../../../source/install.rst:79 ../../../source/install.rst:111
 #: ../../../source/install.rst:155 ../../../source/install.rst:195
 #: ../../../source/install.rst:235 ../../../source/install.rst:275
+#: ../../../source/install.rst:315
 msgid "/etc/apt/sources.list.d/groonga.list::"
 msgstr ""
 
@@ -80,8 +81,10 @@ msgstr ""
 #: ../../../source/install.rst:84 ../../../source/install.rst:116
 #: ../../../source/install.rst:160 ../../../source/install.rst:200
 #: ../../../source/install.rst:240 ../../../source/install.rst:280
-#: ../../../source/install.rst:313 ../../../source/install.rst:344
-msgid "Install ::"
+#: ../../../source/install.rst:320 ../../../source/install.rst:349
+#: ../../../source/install.rst:389 ../../../source/install.rst:403
+#: ../../../source/install.rst:476
+msgid "Install::"
 msgstr "インストール::"
 
 # 7fe8965d726a46aab52f8e7369a42053
@@ -97,8 +100,8 @@ msgstr "インストール::"
 #: ../../../source/install.rst:91 ../../../source/install.rst:123
 #: ../../../source/install.rst:167 ../../../source/install.rst:207
 #: ../../../source/install.rst:247 ../../../source/install.rst:287
-#: ../../../source/install.rst:322 ../../../source/install.rst:353
-#: ../../../source/install.rst:393
+#: ../../../source/install.rst:327 ../../../source/install.rst:358
+#: ../../../source/install.rst:412 ../../../source/install.rst:452
 msgid ""
 "If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. "
 "please install groonga-tokenizer-mecab package."
@@ -119,8 +122,9 @@ msgstr ""
 #: ../../../source/install.rst:93 ../../../source/install.rst:125
 #: ../../../source/install.rst:169 ../../../source/install.rst:209
 #: ../../../source/install.rst:249 ../../../source/install.rst:289
-#: ../../../source/install.rst:324 ../../../source/install.rst:355
-#: ../../../source/install.rst:395 ../../../source/install.rst:399
+#: ../../../source/install.rst:329 ../../../source/install.rst:360
+#: ../../../source/install.rst:414 ../../../source/install.rst:454
+#: ../../../source/install.rst:458
 msgid "Install groonga-tokenizer-mecab package::"
 msgstr "groonga-tokenizer-mecabをインストール::"
 
@@ -138,8 +142,8 @@ msgstr "groonga-tokenizer-mecabをインストール::"
 #: ../../../source/install.rst:97 ../../../source/install.rst:129
 #: ../../../source/install.rst:173 ../../../source/install.rst:213
 #: ../../../source/install.rst:253 ../../../source/install.rst:293
-#: ../../../source/install.rst:328 ../../../source/install.rst:359
-#: ../../../source/install.rst:403
+#: ../../../source/install.rst:333 ../../../source/install.rst:364
+#: ../../../source/install.rst:418 ../../../source/install.rst:462
 msgid ""
 "If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', "
 "'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please "
@@ -162,8 +166,8 @@ msgstr ""
 #: ../../../source/install.rst:99 ../../../source/install.rst:131
 #: ../../../source/install.rst:175 ../../../source/install.rst:215
 #: ../../../source/install.rst:255 ../../../source/install.rst:295
-#: ../../../source/install.rst:330 ../../../source/install.rst:361
-#: ../../../source/install.rst:405
+#: ../../../source/install.rst:335 ../../../source/install.rst:366
+#: ../../../source/install.rst:420 ../../../source/install.rst:464
 msgid "Install groonga-normalizer-mysql package::"
 msgstr "groonga-normalizer-mysqlをインストール::"
 
@@ -181,8 +185,8 @@ msgstr "groonga-normalizer-mysqlをインストール::"
 #: ../../../source/install.rst:105 ../../../source/install.rst:141
 #: ../../../source/install.rst:181 ../../../source/install.rst:221
 #: ../../../source/install.rst:261 ../../../source/install.rst:301
-#: ../../../source/install.rst:336 ../../../source/install.rst:367
-#: ../../../source/install.rst:411
+#: ../../../source/install.rst:341 ../../../source/install.rst:372
+#: ../../../source/install.rst:426 ../../../source/install.rst:470
 msgid ""
 "If you don't specify MySQL compatible case insensitive COLLATION, MySQL "
 "incompatible COLLATION of groonga is used. MySQL compatible case insensitive "
@@ -236,6 +240,7 @@ msgstr ""
 # 778c627ec52a43b09a398439cb165ffe
 #: ../../../source/install.rst:149 ../../../source/install.rst:189
 #: ../../../source/install.rst:229 ../../../source/install.rst:269
+#: ../../../source/install.rst:309
 msgid "You need to enable the universe section in Ubuntu's software sources."
 msgstr "Ubuntu本家のuniverseセクションもインストール対象としておくこと"
 
@@ -244,6 +249,7 @@ msgstr "Ubuntu本家のuniverseセクションもインストール対象とし�
 # 778c627ec52a43b09a398439cb165ffe
 #: ../../../source/install.rst:153 ../../../source/install.rst:193
 #: ../../../source/install.rst:233 ../../../source/install.rst:273
+#: ../../../source/install.rst:313
 msgid "You need to enable the security update repository."
 msgstr "セキュリティアップデートリポジトリもインストール対象としておくこと"
 
@@ -262,30 +268,56 @@ msgstr ""
 msgid "Ubuntu 13.04 Raring Ringtail"
 msgstr ""
 
-# 88ebbe3d6bc14c6d9964866297353a66
+# b8b95540749f45bfaa7d0f8a6b7f3e0a
 #: ../../../source/install.rst:305
+msgid "Ubuntu 13.10 Saucy Salamander"
+msgstr ""
+
+# 88ebbe3d6bc14c6d9964866297353a66
+#: ../../../source/install.rst:345
 msgid "CentOS 5"
 msgstr ""
 
+# b8ccdea50d3d42a0b198de73c1b68a30
+#: ../../../source/install.rst:347
+msgid ""
+"In CentOS 5, we use CentOS's MySQL packages (version 5.5.x) since Mroonga "
+"3.09 release."
+msgstr "CentOS 5では、Mroonga 3.09のリリースからディストリビューション由来のMySQLパッケージ（MySQL 5.5系）を利用します。"
+
+# c00987515ee0413abea12b3c24695304
+#: ../../../source/install.rst:377
+msgid "CentOS 5 (Deprecated)"
+msgstr "CentOS 5 (非推奨)"
+
+# 12ef301adffc441bae23a16cb62e0b7f
+#: ../../../source/install.rst:379
+msgid ""
+"The old version of Mroonga had also provided MySQL 5.6 packages as "
+"exceptional case. This is obsolete and not recommended way. The mysql-"
+"mroonga package is deprecated on CentOS 5 since Mroonga 3.09. We recommend "
+"to use mysql55-mroonga pakcages on CentOS 5."
+msgstr ""
+
 # b0b2bf8e29c248f7b9bd74e7c27f2f68
-#: ../../../source/install.rst:307
+#: ../../../source/install.rst:383
 msgid "CentOS 5's MySQL packages should be removed beforehand if installed."
 msgstr ""
 "既にディストリビューション由来のMySQLパッケージがインストール済みの場合には事"
 "前に削除する必要があります。"
 
 # 8f51f5ab5c0e430d9278f423cf8e0d43
-#: ../../../source/install.rst:309
+#: ../../../source/install.rst:385
 msgid "Remove existing MySQL packages ::"
 msgstr "既存のMySQLパッケージを削除::"
 
 # a74bf38bece449748ce88a4f5bccaacd
-#: ../../../source/install.rst:340
+#: ../../../source/install.rst:399
 msgid "CentOS 6"
 msgstr ""
 
 # b8ccdea50d3d42a0b198de73c1b68a30
-#: ../../../source/install.rst:342
+#: ../../../source/install.rst:401
 msgid ""
 "In CentOS 6, unlike in CentOS 5, we use CentOS's MySQL packages (version 5.1."
 "x). So you don't need to remove CentOS's MySQL packages."
@@ -295,17 +327,17 @@ msgstr ""
 "ション由来のMySQLを削除する必要はありません。"
 
 # 8cf9e090258c4e009607b0d1d84ca3c3
-#: ../../../source/install.rst:371
+#: ../../../source/install.rst:430
 msgid "Fedora 19"
 msgstr ""
 
 # d06e2fce2f994ba496ecdd9aebb56e64
-#: ../../../source/install.rst:373
+#: ../../../source/install.rst:432
 msgid "Since Fedora 19, MariaDB is the default implementation of MySQL."
 msgstr "Fedora 19からはMariaDBがMySQLのデフォルト実装となります。"
 
 # e1457ee42bf94286a9d8d07c8727fb97
-#: ../../../source/install.rst:375
+#: ../../../source/install.rst:434
 msgid ""
 "So there are two selections for mroonga. One is using with MariaDB, the "
 "other is using with MySQL (community-mysql)."
@@ -314,17 +346,17 @@ msgstr ""
 "MySQL (community-mysql)と一緒に使うことです。"
 
 # b9f3eeb2f75c415fa68ea2c497c06e79
-#: ../../../source/install.rst:377
+#: ../../../source/install.rst:436
 msgid "Install mroonga for MySQL (community-mysql)::"
 msgstr "MySQL (community-mysql)向けにmroongaをインストール::"
 
 # 96faa87e06744aba901adba70eef342c
-#: ../../../source/install.rst:383
+#: ../../../source/install.rst:442
 msgid "Install mroonga for MariaDB::"
 msgstr "MariDB向けにmroongaをインストール::"
 
 # cef1aca98d4a435aaf3e2976bcf95c71
-#: ../../../source/install.rst:391
+#: ../../../source/install.rst:450
 msgid ""
 "MariaDB and MySQL (community-mysql) package are exclusive. For example, if "
 "you want to use mysql-mroonga, you need to remove conflicted mariadb "
@@ -334,35 +366,22 @@ msgstr ""
 "を使うには競合している mariadb パッケージをまず削除する必要があります。"
 
 # 86f5d7b63ff0455a99e2feb1e5c25a49
-#: ../../../source/install.rst:415
+#: ../../../source/install.rst:474
 msgid "Mac OS X"
 msgstr ""
 
-# cef648a1e27d48da8271f1de24200dcb
-# 96e0bf2ecef84211939a5f50e14debcf
-# 31149233b05d47ef90c44bf675605e9d
-# 098afb980ee64efb8f959f98e0277ef7
-# 3ba14b9e630c443691c1c754548086f0
-# 13c0fb38a1af48af9b9d1a8978170ace
-# 660da6b129d84e5d89eebfca02b94af5
-# 12396de2bcb84c9e9b3db93af61a8788
-# 731c30d45aca4f49a379f8b2dd7d939f
-#: ../../../source/install.rst:417
-msgid "Install::"
-msgstr "インストール::"
-
 # 8754d1c95f394bf990d7f67ead64d2bc
-#: ../../../source/install.rst:421
+#: ../../../source/install.rst:480
 msgid "`mroonga/homebrew on GitHub <https://github.com/mroonga/homebrew>`_"
 msgstr ""
 
 # ad3b659d9cd94f3bbd14d9e022db65eb
-#: ../../../source/install.rst:425
+#: ../../../source/install.rst:484
 msgid "Windows"
 msgstr ""
 
 # a13650b8426b42139f7b9ac4d620ca6b
-#: ../../../source/install.rst:427
+#: ../../../source/install.rst:486
 msgid ""
 "Mroonga binary for Windows is provided with MariaDB binary because `some "
 "changes <https://github.com/mroonga/mroonga/tree/master/packages/source/"
@@ -381,22 +400,22 @@ msgstr ""
 # 660da6b129d84e5d89eebfca02b94af5
 # 12396de2bcb84c9e9b3db93af61a8788
 # 731c30d45aca4f49a379f8b2dd7d939f
-#: ../../../source/install.rst:433
+#: ../../../source/install.rst:492
 msgid "Installer"
 msgstr "インストーラー"
 
 # 3a410dd72624402f82ba99d2b023bd7e
-#: ../../../source/install.rst:435
+#: ../../../source/install.rst:494
 msgid "None for now."
 msgstr "準備中"
 
 # 3481991a0a4248a3830bab35114a39bd
-#: ../../../source/install.rst:448
+#: ../../../source/install.rst:507
 msgid "Zip"
 msgstr ""
 
 # d6932ffc20ae4d02877bf705a41708dc
-#: ../../../source/install.rst:450
+#: ../../../source/install.rst:509
 msgid ""
 "For 32-bit environment, download `mariadb-10.0.4-mroonga-3.08-win32.zip "
 "<http://packages.groonga.org/windows/mroonga/mariadb-10.0.4-mroonga-3.08-"
@@ -407,7 +426,7 @@ msgstr ""
 "ロードして展開します。"
 
 # 339444287f8d42cea403c15db04b65e3
-#: ../../../source/install.rst:454
+#: ../../../source/install.rst:513
 #, fuzzy
 msgid ""
 "For 64-bit environment, download `mariadb-10.0.4-mroonga-3.08-winx64.zip "
@@ -419,12 +438,12 @@ msgstr ""
 "ンロードして展開します。"
 
 # 96faa87e06744aba901adba70eef342c
-#: ../../../source/install.rst:459 ../../../source/install.rst:574
+#: ../../../source/install.rst:518 ../../../source/install.rst:633
 msgid "Install mroonga"
 msgstr "mroongaのインストール"
 
 # 425b0856bf4d48308a0a810794d33007
-#: ../../../source/install.rst:461
+#: ../../../source/install.rst:520
 msgid ""
 "Start mysqld, connect to it by mysql client, and install it by \"INSTALL "
 "PLUGIN\" command. ::"
@@ -433,8 +452,8 @@ msgstr ""
 "でインストールします。 ::"
 
 # 31909deb45384ecfa3bdb1b56246e1a7
-#: ../../../source/install.rst:465 ../../../source/install.rst:584
-#: ../../../source/install.rst:683
+#: ../../../source/install.rst:524 ../../../source/install.rst:643
+#: ../../../source/install.rst:742
 msgid ""
 "If \"mroonga\" is displayed in \"SHOW ENGINES\" command result like below, "
 "mroonga is well installed. ::"
@@ -443,14 +462,14 @@ msgstr ""
 "ストールは完了です。 ::"
 
 # 42345ab063fc4290b4b136b1cbbf50b8
-#: ../../../source/install.rst:480 ../../../source/install.rst:599
-#: ../../../source/install.rst:700
+#: ../../../source/install.rst:539 ../../../source/install.rst:658
+#: ../../../source/install.rst:759
 msgid "Next install UDF (User-Defined Function)."
 msgstr "続いてUDF(ユーザ定義関数)をインストールします。"
 
 # 22a7c9d8c50649ad9cc2dd307ed5adbf
-#: ../../../source/install.rst:482 ../../../source/install.rst:601
-#: ../../../source/install.rst:702
+#: ../../../source/install.rst:541 ../../../source/install.rst:660
+#: ../../../source/install.rst:761
 msgid ""
 "To get the record ID assigned by groonga in INSERT, install "
 "last_insert_grn_id function."
@@ -459,17 +478,17 @@ msgstr ""
 "last_insert_grn_id関数をインストールします。"
 
 # bca520b75e934ca4a195a154dff6a1fb
-#: ../../../source/install.rst:484 ../../../source/install.rst:490
-#: ../../../source/install.rst:496 ../../../source/install.rst:603
-#: ../../../source/install.rst:609 ../../../source/install.rst:615
-#: ../../../source/install.rst:704 ../../../source/install.rst:710
-#: ../../../source/install.rst:716
+#: ../../../source/install.rst:543 ../../../source/install.rst:549
+#: ../../../source/install.rst:555 ../../../source/install.rst:662
+#: ../../../source/install.rst:668 ../../../source/install.rst:674
+#: ../../../source/install.rst:763 ../../../source/install.rst:769
+#: ../../../source/install.rst:775
 msgid "Invoke CREATE FUNCTION like the following. ::"
 msgstr "以下のようにCREATE FUNCTIONを実行します。 ::"
 
 # 8228e7d62609485ebc8f2efd64669684
-#: ../../../source/install.rst:488 ../../../source/install.rst:607
-#: ../../../source/install.rst:708
+#: ../../../source/install.rst:547 ../../../source/install.rst:666
+#: ../../../source/install.rst:767
 msgid ""
 "To enable snippet (keyword in context) UDF, install mroonga_snippet function."
 msgstr ""
@@ -477,8 +496,8 @@ msgstr ""
 "ンストールします。"
 
 # 8228e7d62609485ebc8f2efd64669684
-#: ../../../source/install.rst:494 ../../../source/install.rst:613
-#: ../../../source/install.rst:714
+#: ../../../source/install.rst:553 ../../../source/install.rst:672
+#: ../../../source/install.rst:773
 msgid ""
 "To enable invoking groonga query from mroonga, install mroonga_command "
 "function."
@@ -487,12 +506,12 @@ msgstr ""
 "します。"
 
 # eb4280f85ca14d08ad5ea6857f1bf4d1
-#: ../../../source/install.rst:502
+#: ../../../source/install.rst:561
 msgid "Install from the source code"
 msgstr "ソースコードからのインストール"
 
 # 55aafca095344a3db2c5a63c24daabf2
-#: ../../../source/install.rst:504
+#: ../../../source/install.rst:563
 msgid ""
 "Here we explain how to install from the source code. If your environment is "
 "not listed above, you need to do so."
@@ -501,12 +520,12 @@ msgstr ""
 "ソースコードからインストールすることになります。"
 
 # 0b4fe010015b445e8611b2e1705fa6cc
-#: ../../../source/install.rst:507 ../../../source/install.rst:626
+#: ../../../source/install.rst:566 ../../../source/install.rst:685
 msgid "Japanese morphological analysis system (MeCab)"
 msgstr "形態素解析(MeCab)について"
 
 # 3b50cd9745f54693abb064d6e6e4952b
-#: ../../../source/install.rst:509 ../../../source/install.rst:628
+#: ../../../source/install.rst:568 ../../../source/install.rst:687
 msgid ""
 "If you want to use indexes of tokenizing of each morpheme for full text "
 "search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing "
@@ -517,12 +536,12 @@ msgstr ""
 "い。"
 
 # 933b523f65cb43389934af2f564efeb8
-#: ../../../source/install.rst:512 ../../../source/install.rst:631
+#: ../../../source/install.rst:571 ../../../source/install.rst:690
 msgid "Download"
 msgstr "ダウンロード"
 
 # 1a3637100ab344d0b956e72597eff2fc
-#: ../../../source/install.rst:514
+#: ../../../source/install.rst:573
 msgid ""
 "To install the released version, download the tarball from `packages.groonga."
 "org <http://packages.groonga.org/source/mroonga>`_ ."
@@ -532,7 +551,7 @@ msgstr ""
 "い。"
 
 # ea789102f4e24e4b949454212d0be502
-#: ../../../source/install.rst:516
+#: ../../../source/install.rst:575
 msgid ""
 "To install the latest source code, clone the code from `GitHub <https://"
 "github.com/mroonga/mroonga/>`_ and invoke `./autogen.sh` (GNU Autotools are "
@@ -545,39 +564,39 @@ msgstr ""
 "ことをお勧めします。::"
 
 # 5285082af7bf47c5bdf817e169038f9a
-#: ../../../source/install.rst:523 ../../../source/install.rst:638
+#: ../../../source/install.rst:582 ../../../source/install.rst:697
 msgid "Requirements"
 msgstr "前提条件"
 
 # ae84916b53b34dec8129116c58cded35
-#: ../../../source/install.rst:525
+#: ../../../source/install.rst:584
 msgid "MySQL and groonga should be already installed."
 msgstr "MySQLおよびgroongaが既にインストールされている必要があります。"
 
 # 9c13fe14534f450ea2acac74443bf8d6
-#: ../../../source/install.rst:527
+#: ../../../source/install.rst:586
 msgid "And MySQL's source code is also required to build mroonga."
 msgstr "またmroongaをビルドするためにはMySQLのソースコードも必要です。"
 
 # f9f82fc66af84864b5dc1acc1ab1013d
-#: ../../../source/install.rst:530
+#: ../../../source/install.rst:589
 msgid "Install MySQL"
 msgstr "MySQLのインストール"
 
 # e59b18960978411096e85c3db30345de
-#: ../../../source/install.rst:532
+#: ../../../source/install.rst:591
 msgid "Download the latest MySQL 5.5 source code, then build and install it."
 msgstr ""
 "MySQL 5.5最新版のソースコードをダウンロードし、ビルド＆インストールして下さ"
 "い。"
 
 # 896a70ffc7004576b2220a9186fec8f8
-#: ../../../source/install.rst:534
+#: ../../../source/install.rst:593
 msgid "http://dev.mysql.com/downloads/mysql/"
 msgstr ""
 
 # ffc421e920ac4c479be6a13c90ff6da6
-#: ../../../source/install.rst:536
+#: ../../../source/install.rst:595
 msgid ""
 "Here we assume that we use mysql-5.5.31 and its source code is extracted in "
 "the following directory. ::"
@@ -586,27 +605,27 @@ msgstr ""
 "す。 ::"
 
 # aa0cbc7b42594bb9a095979846735541
-#: ../../../source/install.rst:540
+#: ../../../source/install.rst:599
 msgid "And we assume that MySQL is installed in the following directory. ::"
 msgstr "MySQLのバイナリが以下にインストールされているものと仮定します。 ::"
 
 # 96faa87e06744aba901adba70eef342c
-#: ../../../source/install.rst:545 ../../../source/install.rst:643
+#: ../../../source/install.rst:604 ../../../source/install.rst:702
 msgid "Install groonga"
 msgstr "groongaのインストール"
 
 # 6771d3ea2eba486f8eba6979cd8afc18
-#: ../../../source/install.rst:547 ../../../source/install.rst:645
+#: ../../../source/install.rst:606 ../../../source/install.rst:704
 msgid "Build and install the latest groonga."
 msgstr "groongaの最新版をビルド＆インストールして下さい。"
 
 # af58908797054cb7ae5069cd064f20f4
-#: ../../../source/install.rst:549 ../../../source/install.rst:647
+#: ../../../source/install.rst:608 ../../../source/install.rst:706
 msgid "http://groonga.org/docs/"
 msgstr "http://groonga.org/ja/docs/"
 
 # d4ffd94e45c2420d86aea88f8e491e3c
-#: ../../../source/install.rst:551 ../../../source/install.rst:649
+#: ../../../source/install.rst:610 ../../../source/install.rst:708
 msgid ""
 "Here we assume that libgroonga is installed in the standard location like /"
 "usr/lib etc."
@@ -615,12 +634,12 @@ msgstr ""
 "します。"
 
 # 14ba828334054674b9645fca03854e45
-#: ../../../source/install.rst:554
+#: ../../../source/install.rst:613
 msgid "Build mroonga"
 msgstr "mroongaのビルド"
 
 # 527d0a85c7b945a18ab69dc223aec11c
-#: ../../../source/install.rst:556
+#: ../../../source/install.rst:615
 msgid ""
 "Run configure script by specifying the location of MySQL source code with "
 "``--with-mysql-source`` and the path of mysql_config command with ``--with-"
@@ -631,7 +650,7 @@ msgstr ""
 "す。 ::"
 
 # ab65988d487640da94c8554c6f71a66d
-#: ../../../source/install.rst:562
+#: ../../../source/install.rst:621
 msgid ""
 "If groonga is not installed in the standard location like /usr/lib, you need "
 "to specify its location by PKG_CONFIG_PATH. For example, if groonga is "
@@ -642,12 +661,12 @@ msgstr ""
 "た場合は以下のようにします。::"
 
 # a8476870a0f940368386c4eebe428920
-#: ../../../source/install.rst:569 ../../../source/install.rst:668
+#: ../../../source/install.rst:628 ../../../source/install.rst:727
 msgid "Then invoke \"make\". ::"
 msgstr "その後、\"make\"を実行します。 ::"
 
 # e02a752f95954d1280465c2ad245da73
-#: ../../../source/install.rst:576
+#: ../../../source/install.rst:635
 msgid ""
 "By invoking \"make install\", ha_mroonga.so will be installed in MySQL's "
 "plugin directory. ::"
@@ -656,7 +675,7 @@ msgstr ""
 "配置されます。 ::"
 
 # 425b0856bf4d48308a0a810794d33007
-#: ../../../source/install.rst:580
+#: ../../../source/install.rst:639
 msgid ""
 "Then start mysqld, connect to it by mysql client, and install it by "
 "\"INSTALL PLUGIN\" command. ::"
@@ -665,12 +684,12 @@ msgstr ""
 "でインストールします。 ::"
 
 # eb4280f85ca14d08ad5ea6857f1bf4d1
-#: ../../../source/install.rst:621
+#: ../../../source/install.rst:680
 msgid "Install from the source code with MariaDB"
 msgstr "MariaDBにバンドルしたソースコードからのインストール"
 
 # 55aafca095344a3db2c5a63c24daabf2
-#: ../../../source/install.rst:623
+#: ../../../source/install.rst:682
 msgid ""
 "Here we explain how to install from the source code with MariaDB. If your "
 "environment is not listed above, you need to do so."
@@ -679,7 +698,7 @@ msgstr ""
 "ケージがない環境ではソースコードからインストールすることになります。"
 
 # 1a3637100ab344d0b956e72597eff2fc
-#: ../../../source/install.rst:633
+#: ../../../source/install.rst:692
 msgid ""
 "Download mroonga tarball from `packages.groonga.org <http://packages.groonga."
 "org/source/mroonga>`_ ."
@@ -688,7 +707,7 @@ msgstr ""
 "mroongaのtarballをダウンロードしてください。"
 
 # ddcdb873230b45cc9be24551aabcc61a
-#: ../../../source/install.rst:635
+#: ../../../source/install.rst:694
 msgid ""
 "Download MariaDB tarball from `downloads.mariadb.org <https://downloads."
 "mariadb.org/>`_ ."
@@ -697,37 +716,37 @@ msgstr ""
 "tarballをダウンロードしてください。"
 
 # ae84916b53b34dec8129116c58cded35
-#: ../../../source/install.rst:640
+#: ../../../source/install.rst:699
 msgid "Groonga should be already installed."
 msgstr "groongaが既にインストールされている必要があります。"
 
 # 14ba828334054674b9645fca03854e45
-#: ../../../source/install.rst:652
+#: ../../../source/install.rst:711
 msgid "Build mroonga with MariaDB"
 msgstr "MariaDBとmroongaのビルド"
 
 # ec9cd73b234e4b40b3c07824d12c2a09
-#: ../../../source/install.rst:654
+#: ../../../source/install.rst:713
 msgid "Uncompress MariaDB tarball. ::"
 msgstr "MariaDBのtarballの解凍。 ::"
 
 # 4c5f54e9246a438887009729a11d72ee
-#: ../../../source/install.rst:658
+#: ../../../source/install.rst:717
 msgid "Uncompress mroonga tarball then move into storage directory. ::"
 msgstr "mroongaのtarballの解凍後、storageディレクトリへ移動。 ::"
 
 # a8476870a0f940368386c4eebe428920
-#: ../../../source/install.rst:663
+#: ../../../source/install.rst:722
 msgid "Run \"cmake\". ::"
 msgstr "\"cmake\"を実行します。 ::"
 
 # 96faa87e06744aba901adba70eef342c
-#: ../../../source/install.rst:673
+#: ../../../source/install.rst:732
 msgid "Install mroonga with MariaDB"
 msgstr "MariDBとmroongaのインストール"
 
 # e02a752f95954d1280465c2ad245da73
-#: ../../../source/install.rst:675
+#: ../../../source/install.rst:734
 msgid ""
 "By invoking \"make install\", MariaDB and mroonga will be installed in \"/"
 "usr/local/mysql\" directory. ::"
@@ -736,7 +755,7 @@ msgstr ""
 "が配置されます。 ::"
 
 # 425b0856bf4d48308a0a810794d33007
-#: ../../../source/install.rst:679
+#: ../../../source/install.rst:738
 msgid ""
 "Then start mysqld, connect to it by MariaDB client, and install it by "
 "\"INSTALL PLUGIN\" command. ::"
@@ -745,12 +764,12 @@ msgstr ""
 "ドでインストールします。 ::"
 
 # a48f257ac67a489c91ba2c01570773d5
-#: ../../../source/install.rst:722
+#: ../../../source/install.rst:781
 msgid "Upgrade Guide"
 msgstr "アップグレードガイド"
 
 # 4b763780a70a4474bc9025bf71c172bf
-#: ../../../source/install.rst:724
+#: ../../../source/install.rst:783
 msgid ""
 "There is a case that incompatible change is introduced at new release. It is "
 "announced by release announce if new release contains such a incompatible "
@@ -760,40 +779,42 @@ msgstr ""
 "互換がはいる場合にはリリースアナウンスでアナウンスします。"
 
 # 01466211bf49474ab33eec67edcabfbf
-#: ../../../source/install.rst:727
+#: ../../../source/install.rst:786
 msgid ""
 "Here is the list of recommended way of upgrading mroonga from old release."
 msgstr ""
 "古いバージョンからmroongaをアップグレードする推奨方法のリストがこちらです。"
 
 # 0bd62e0a983747bf8be88ac392c785ee
-#: ../../../source/install.rst:729
+#: ../../../source/install.rst:788
 msgid "See following URL about upgrade sequence if you use previous version."
 msgstr ""
 "以前のバージョンをお使いなら、アップグレード手順について次のURLを参照してくだ"
 "さい。"
 
 # c7222aa82a03447495526e8b97da5f38
-#: ../../../source/install.rst:731
+#: ../../../source/install.rst:790
 msgid "If you upgrade prior to 1.20, refer to :ref:`release-1-20`"
 msgstr ""
-"1.20以前からアップグレードするなら、 :ref:`1.20 リリース <release-1-20>` を参照してください。"
+"1.20以前からアップグレードするなら、 :ref:`release-1-20` :ref:`1.20 リリース "
+"<release-1-20>` を参照してください。"
 
 # 8d30e7bcb0b142c0a2322e37f6532752
-#: ../../../source/install.rst:733
+#: ../../../source/install.rst:792
 msgid "If you upgrade from 1.20, refer to :ref:`release-2-00`"
 msgstr ""
-"1.20からアップグレードするなら、 :ref:`2.00 リリース <release-2-00>` を参照してください。"
+"1.20からアップグレードするなら、 :ref:`2.00 リリース <release-2-00>` を参照し"
+"てください。"
 
 # c6d6f0db12d74a4ea8e9c1021cd690d4
-#: ../../../source/install.rst:735
+#: ../../../source/install.rst:794
 msgid "If you upgrade from 2.00 or 2.01, refer to :ref:`release-2-02`"
 msgstr ""
-"2.00もしくは2.01からアップグレードするなら、 :ref:`2.02 リリース <release-2-02>` を参照してく"
-"ださい。"
+"2.00もしくは2.01からアップグレードするなら、 :ref:`2.02 リリース "
+"<release-2-02>` を参照してください。"
 
 # a4bf54d24ac04cb4895196a8aa820031
-#: ../../../source/install.rst:737
+#: ../../../source/install.rst:796
 msgid ""
 "If you upgrade from 2.00 or later and using multiple column indexes on "
 "storage mode, refer to :ref:`release-2-03`"
@@ -802,18 +823,18 @@ msgstr ""
 "ら、 :ref:`2.03 リリース <release-2-03>` を参照してください。"
 
 # 425c19b992654d589e8975eb001e0803
-#: ../../../source/install.rst:739
+#: ../../../source/install.rst:798
 msgid ""
 "If you upgrade from 2.04 or later and using SET column or ENUM that has the "
 "number of elements < 256 in Storage mode, refer to :ref:`release-2-05`"
 msgstr ""
 "もし2.04以降で256マルチカラムインデックスをストレージモードで使用しているな"
-"ら、 :ref:`2.03 リリース <release-2-03>` を参照してください。2.04以降でストレージモードにて"
-"SETカラムもしくは要素数が256より少ないENUMを使用している場合は、 :ref:"
-"`2.05 リリース <release-2-05>` を参照してください。"
+"ら、 :ref:`2.03 リリース <release-2-03>` を参照してください。2.04以降でスト"
+"レージモードにてSETカラムもしくは要素数が256より少ないENUMを使用している場合"
+"は、 :ref:`2.05 リリース <release-2-05>` を参照してください。"
 
 # e433e647d8f4411fb2c6cd4a4fdb5660
-#: ../../../source/install.rst:741
+#: ../../../source/install.rst:800
 msgid ""
 "If you upgrade from 2.05 or later and using multiple column indexes against "
 "VARCHAR or CHAR, refer to :ref:`release-2-08`"
@@ -822,7 +843,7 @@ msgstr ""
 "は、 :ref:`2.08 リリース <release-2-08>` を参照してください。"
 
 # 5bc7f98e8ddf478388167f7e3ef55978
-#: ../../../source/install.rst:743
+#: ../../../source/install.rst:802
 msgid ""
 "If you upgrade from 2.08 or later and using TIMESTAMP column, please "
 "recreate database. If you upgrade from 2.08 or later and using CHAR(N) as "
@@ -831,4 +852,17 @@ msgid ""
 msgstr ""
 "2.08以降でTIMESTAMP型のカラムを使っているテーブルがあれば、データベースを再作"
 "成してください。CHAR(N)を主キーとしているテーブルがあれば、インデックスを再作"
-"成してください。 それぞれについては :ref:`2.09 リリース <release-2-09>` を参照してください。"
+"成してください。 それぞれについては :ref:`2.09 リリース <release-2-09>` を参"
+"照してください。"
+
+# cef648a1e27d48da8271f1de24200dcb
+# 96e0bf2ecef84211939a5f50e14debcf
+# 31149233b05d47ef90c44bf675605e9d
+# 098afb980ee64efb8f959f98e0277ef7
+# 3ba14b9e630c443691c1c754548086f0
+# 13c0fb38a1af48af9b9d1a8978170ace
+# 660da6b129d84e5d89eebfca02b94af5
+# 12396de2bcb84c9e9b3db93af61a8788
+# 731c30d45aca4f49a379f8b2dd7d939f
+#~ msgid "Install ::"
+#~ msgstr "インストール::"
