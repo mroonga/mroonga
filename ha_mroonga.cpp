@@ -9394,7 +9394,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     error = generic_store_bulk_float(field, buf);
     break;
   case MYSQL_TYPE_NULL:
-    error = generic_store_bulk_integer(field, buf);
+    error = generic_store_bulk_unsigned_integer(field, buf);
     break;
   case MYSQL_TYPE_TIMESTAMP:
     error = generic_store_bulk_timestamp(field, buf);
@@ -9422,7 +9422,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     error = generic_store_bulk_variable_size_string(field, buf);
     break;
   case MYSQL_TYPE_BIT:
-    error = generic_store_bulk_integer(field, buf);
+    error = generic_store_bulk_unsigned_integer(field, buf);
     break;
 #ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:
@@ -9443,7 +9443,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     error = generic_store_bulk_new_decimal(field, buf);
     break;
   case MYSQL_TYPE_ENUM:
-    error = generic_store_bulk_integer(field, buf);
+    error = generic_store_bulk_unsigned_integer(field, buf);
     break;
   case MYSQL_TYPE_SET:
     error = generic_store_bulk_unsigned_integer(field, buf);
@@ -9536,6 +9536,58 @@ void ha_mroonga::storage_store_field_integer(Field *field,
         field_value = *((long long int *)value);
         field->store(field_value, is_unsigned);
       }
+      break;
+    }
+  default:
+    {
+      // Why!?
+      char error_message[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+               "unknown integer value size: <%d>: "
+               "available sizes: [1, 2, 4, 8]",
+               value_length);
+      push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+                   HA_ERR_UNSUPPORTED, error_message);
+      storage_store_field_string(field, value, value_length);
+      break;
+    }
+  }
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_store_field_unsigned_integer(Field *field,
+                                                      const char *value,
+                                                      uint value_length)
+{
+  MRN_DBUG_ENTER_METHOD();
+  switch (value_length) {
+  case 1:
+    {
+      unsigned char field_value;
+      field_value = *((unsigned char *)value);
+      field->store(field_value, TRUE);
+      break;
+    }
+  case 2:
+    {
+      unsigned short field_value;
+      field_value = *((unsigned short *)value);
+      field->store(field_value, TRUE);
+      break;
+    }
+  case 4:
+    {
+      unsigned int field_value;
+      field_value = *((unsigned int *)value);
+      field->store(field_value, TRUE);
+      break;
+    }
+  case 8:
+    {
+      unsigned long long int field_value;
+      field_value = *((unsigned long long int *)value);
+      DBUG_PRINT("info", ("mroonga: field_value=%llu", field_value));
+      field->store(field_value, TRUE);
       break;
     }
   default:
@@ -9754,7 +9806,7 @@ void ha_mroonga::storage_store_field(Field *field,
     storage_store_field_float(field, value, value_length);
     break;
   case MYSQL_TYPE_NULL:
-    storage_store_field_integer(field, value, value_length);
+    storage_store_field_unsigned_integer(field, value, value_length);
     break;
   case MYSQL_TYPE_TIMESTAMP:
     storage_store_field_timestamp(field, value, value_length);
@@ -9782,7 +9834,7 @@ void ha_mroonga::storage_store_field(Field *field,
     storage_store_field_string(field, value, value_length);
     break;
   case MYSQL_TYPE_BIT:
-    storage_store_field_integer(field, value, value_length);
+    storage_store_field_unsigned_integer(field, value, value_length);
     break;
 #ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:
@@ -9804,7 +9856,7 @@ void ha_mroonga::storage_store_field(Field *field,
     break;
   case MYSQL_TYPE_ENUM:
   case MYSQL_TYPE_SET:
-    storage_store_field_integer(field, value, value_length);
+    storage_store_field_unsigned_integer(field, value, value_length);
     break;
   case MYSQL_TYPE_TINY_BLOB:
   case MYSQL_TYPE_MEDIUM_BLOB:

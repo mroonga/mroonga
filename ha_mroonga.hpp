@@ -584,6 +584,9 @@ private:
                                   const char *value, uint value_length);
   void storage_store_field_integer(Field *field,
                                    const char *value, uint value_length);
+  void storage_store_field_unsigned_integer(Field *field,
+                                            const char *value,
+                                            uint value_length);
   void storage_store_field_float(Field *field,
                                  const char *value, uint value_length);
   void storage_store_field_timestamp(Field *field,
