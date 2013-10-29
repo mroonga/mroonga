@@ -1,4 +1,4 @@
-# Copyright(C) 2013  Kenji Maruyama <mmmaru777@gmail.com>
+# Copyright(C) 2013 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,30 +14,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../include/mroonga/have_version_56_or_later.inc
---source include/have_innodb.inc
---source ../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
 
---disable_warnings
-DROP TABLE IF EXISTS many_records;
---enable_warnings
-
-SET optimizer_switch='mrr_cost_based=off';
-
-CREATE TABLE many_records (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  value INT,
-  KEY (value)
-) COMMENT='engine "InnoDB"';
-
-INSERT INTO many_records (value) VALUES (0), (1), (2), (3);
-
-EXPLAIN SELECT * FROM many_records
-                 WHERE value IN (0, 2);
-
-SELECT * FROM many_records
-         WHERE value IN (0, 2);
-
-DROP TABLE many_records;
-
---source ../../../include/mroonga/have_mroonga_deinit.inc
+if (!$version_56_or_later)
+{
+  skip This test is for MySQL version 5.6.x or later;
+}
