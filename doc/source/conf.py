@@ -42,7 +42,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Mroonga'
-copyright = u'2009-' + unicode(datetime.today().year) + u', mroonga project'
+copyright = u'2009-' + unicode(datetime.today().year) + u', Mroonga Project'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
