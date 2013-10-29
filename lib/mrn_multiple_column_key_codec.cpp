@@ -537,6 +537,7 @@ namespace mrn {
         new_blob_data_length = blob_data_length;
       }
       memcpy(grn_key + *data_size, &new_blob_data_length, HA_KEY_BLOB_LENGTH);
+      grn_obj_unlink(ctx_, grn_string);
     } else {
       memcpy(grn_key + *data_size, mysql_key, HA_KEY_BLOB_LENGTH);
       memcpy(grn_key, mysql_key + HA_KEY_BLOB_LENGTH, *data_size);
