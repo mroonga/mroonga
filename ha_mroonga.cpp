@@ -12970,6 +12970,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   memset(index_columns, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   tmp_table_share.keys = ha_alter_info->key_count;
+  tmp_table_share.fields = 0;
   if (!(tmp_share = (MRN_SHARE *)
     my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
@@ -13126,6 +13127,7 @@ bool ha_mroonga::storage_inplace_alter_table(
   memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   memset(index_columns, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   tmp_table_share.keys = ha_alter_info->key_count;
+  tmp_table_share.fields = 0;
   if (!(tmp_share = (MRN_SHARE *)
     my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
