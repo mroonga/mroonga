@@ -10,7 +10,7 @@ m4_define([mrn_plugin_version], m4_include(plugin_version))
 AC_INIT([mroonga], [mrn_version], [groonga-talk@lists.sourceforge.net])
 AC_CONFIG_HEADERS([config.h])
 
-AM_INIT_AUTOMAKE([tar-pax subdir-objects])
+AM_INIT_AUTOMAKE([tar-pax foreign subdir-objects])
 
 MRN_VERSION=mrn_version
 MRN_VERSION_MAJOR=mrn_version_major
