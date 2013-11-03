@@ -269,6 +269,7 @@ private:
   grn_obj *key_accessor;
   grn_obj *sorted_result;
   grn_obj *matched_record_keys;
+  String  *geometry_buffers;
 
   // for error report
   uint dup_key;

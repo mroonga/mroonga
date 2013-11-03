@@ -2021,6 +2021,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 
    sorted_result(NULL),
    matched_record_keys(NULL),
+   geometry_buffers(NULL),
 
    dup_key(0),
 
@@ -2062,6 +2063,10 @@ ha_mroonga::~ha_mroonga()
     }
     mrn_free_share_alloc(&share_for_create);
     free_root(&mem_root_for_create, MYF(0));
+  }
+  if (geometry_buffers)
+  {
+    delete [] geometry_buffers;
   }
   grn_obj_unlink(ctx, &top_left_point);
   grn_obj_unlink(ctx, &bottom_right_point);
@@ -4067,13 +4072,27 @@ int ha_mroonga::storage_open_columns(void)
   int n_columns = table->s->fields;
   grn_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
   grn_column_ranges = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
+  if (table_share->blob_fields)
+  {
+    if (geometry_buffers)
+    {
+      delete [] geometry_buffers;
+    }
+    if (!(geometry_buffers = new String[n_columns]))
+    {
+      DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+    }
+  }
 
   int i;
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
-
+    if (table_share->blob_fields)
+    {
+      geometry_buffers[i].set_charset(field->charset());
+    }
     if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
       grn_columns[i] = NULL;
       grn_column_ranges[i] = NULL;
@@ -9781,9 +9800,13 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
               longitude_in_degree);
   float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
               latitude_in_degree);
-  field->store((const char *)wkb,
-               (uint)(sizeof(wkb) / sizeof(*wkb)),
-               field->charset());
+  String *geometry_buffer = &geometry_buffers[field->field_index];
+  geometry_buffer->length(0);
+  uint wkb_length = sizeof(wkb) / sizeof(*wkb);
+  Field_geom *geometry = (Field_geom *)field;
+  geometry_buffer->reserve(wkb_length);
+  geometry_buffer->q_append((const char *) wkb, wkb_length);
+  geometry->set_ptr((uint32) wkb_length, (uchar *) geometry_buffer->ptr());
 #endif
   DBUG_VOID_RETURN;
 }
