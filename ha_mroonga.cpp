@@ -1341,7 +1341,7 @@ static void mrn_grn_time_to_mysql_time(long long int grn_time,
       mysql_time->neg = true;
       sec = -sec;
     }
-    mysql_time->hour = sec / 60 / 60;
+    mysql_time->hour = static_cast<unsigned int>(sec / 60 / 60);
     mysql_time->minute = sec / 60 % 60;
     mysql_time->second = sec % 60;
     mysql_time->second_part = usec;
@@ -4721,7 +4721,7 @@ void ha_mroonga::storage_info_variable_data_file_length()
   grn_hash *columns = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
                                       GRN_OBJ_TABLE_HASH_KEY);
   grn_table_columns(ctx, grn_table, NULL, 0, (grn_obj *)columns);
-  grn_id id __attribute__((unused));
+  /* grn_id id __attribute__((unused)); */
   grn_id *column_id;
   GRN_HASH_EACH(ctx, columns, id, &column_id, NULL, NULL, {
     grn_obj *column = grn_ctx_at(ctx, *column_id);
@@ -7946,8 +7946,8 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
                                      0, NULL,
                                      GRN_OBJ_TABLE_NO_KEY, NULL,
                                      matched_record_keys);
-    grn_table_sort(ctx, matched_record_keys, 0, limit, sorted_result,
-                   sort_keys, n_sort_keys);
+    grn_table_sort(ctx, matched_record_keys, 0, static_cast<int>(limit),
+                   sorted_result, sort_keys, n_sort_keys);
   }
   if (sort_keys) {
     for (int i = 0; i < n_sort_keys; i++) {
@@ -9277,9 +9277,9 @@ int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
 
   int year;
   if (field->field_length == 2) {
-    year = field->val_int() + 2000;
+    year = static_cast<int>(field->val_int() + 2000);
   } else {
-    year = field->val_int();
+    year = static_cast<int>(field->val_int());
   }
 
   DBUG_PRINT("info", ("mroonga: year=%d", year));
@@ -9646,9 +9646,10 @@ void ha_mroonga::storage_store_field_timestamp(Field *field,
   GRN_TIME_UNPACK(time, time_value.tv_sec, time_value.tv_usec);
   timestamp_field->store_timestamp(&time_value);
 #elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
-  int32 sec, usec;
+  long long int sec, usec;
   GRN_TIME_UNPACK(time, sec, usec);
-  timestamp_field->store_TIME(sec, usec);
+  timestamp_field->store_TIME(static_cast<int32>(sec),
+                              static_cast<int32>(usec));
 #else
   int32 sec, usec __attribute__((unused));
   GRN_TIME_UNPACK(time, sec, usec);
@@ -9661,10 +9662,10 @@ void ha_mroonga::storage_store_field_date(Field *field,
                                           uint value_length)
 {
   long long int time = *((long long int *)value);
-  int32 sec, usec __attribute__((unused));
+  long long int sec, usec __attribute__((unused));
   GRN_TIME_UNPACK(time, sec, usec);
   struct tm date;
-  time_t sec_t = sec;
+  time_t sec_t = static_cast<int32>(sec);
   gmtime_r(&sec_t, &date);
   long long int date_in_mysql =
     (date.tm_year + TM_YEAR_BASE) * 10000 +
@@ -10107,9 +10108,10 @@ int ha_mroonga::storage_encode_key_normalize_min_sort_chars(Field *field,
     DBUG_RETURN(0);
   }
 
-  uint16 raw_min_sort_char = field->sort_charset()->min_sort_char;
+  uint16 raw_min_sort_char =
+    static_cast<uint16>(field->sort_charset()->min_sort_char);
   if (raw_min_sort_char <= UINT_MAX8) {
-    uchar min_sort_char = static_cast<uint16>(raw_min_sort_char);
+    uchar min_sort_char = static_cast<uchar>(raw_min_sort_char);
     for (uint i = size - 1; i > 0; --i) {
       if (buf[i] != min_sort_char) {
         break;
@@ -13003,7 +13005,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   ) {
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
-    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+    DBUG_RETURN(TRUE);
   }
   tmp_share->engine = NULL;
   tmp_share->table_share = &tmp_table_share;
@@ -13160,7 +13162,7 @@ bool ha_mroonga::storage_inplace_alter_table(
   ) {
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
-    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+    DBUG_RETURN(TRUE);
   }
   tmp_share->engine = NULL;
   tmp_share->table_share = &tmp_table_share;
