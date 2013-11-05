@@ -61,7 +61,8 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
       goto error;
     }
   } else {
-    if (!(cs = get_charset(*((long long *) args->args[3]), MYF(0)))) {
+    if (!(cs = get_charset(static_cast<uint>(*((long long *) args->args[3])),
+                           MYF(0)))) {
       my_error(ER_UNKNOWN_COLLATION, MYF(0), "");
       goto error;
     }
@@ -84,7 +85,8 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
     mapping = (grn_snip_mapping *) -1;
   }
 
-  *snippet = grn_snip_open(ctx, flags, snip_max_len, snip_max_num,
+  *snippet = grn_snip_open(ctx, flags, static_cast<unsigned int>(snip_max_len),
+                           static_cast<unsigned int>(snip_max_num),
                            "", 0, "", 0, mapping);
   if (ctx->rc) {
     my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
