@@ -2021,7 +2021,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 
    sorted_result(NULL),
    matched_record_keys(NULL),
-   geometry_buffers(NULL),
+   blob_buffers(NULL),
 
    dup_key(0),
 
@@ -2064,9 +2064,9 @@ ha_mroonga::~ha_mroonga()
     mrn_free_share_alloc(&share_for_create);
     free_root(&mem_root_for_create, MYF(0));
   }
-  if (geometry_buffers)
+  if (blob_buffers)
   {
-    delete [] geometry_buffers;
+    delete [] blob_buffers;
   }
   grn_obj_unlink(ctx, &top_left_point);
   grn_obj_unlink(ctx, &bottom_right_point);
@@ -4074,11 +4074,11 @@ int ha_mroonga::storage_open_columns(void)
   grn_column_ranges = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
   if (table_share->blob_fields)
   {
-    if (geometry_buffers)
+    if (blob_buffers)
     {
-      delete [] geometry_buffers;
+      delete [] blob_buffers;
     }
-    if (!(geometry_buffers = new String[n_columns]))
+    if (!(blob_buffers = new String[n_columns]))
     {
       DBUG_RETURN(HA_ERR_OUT_OF_MEM);
     }
@@ -4091,7 +4091,7 @@ int ha_mroonga::storage_open_columns(void)
     int column_name_size = strlen(column_name);
     if (table_share->blob_fields)
     {
-      geometry_buffers[i].set_charset(field->charset());
+      blob_buffers[i].set_charset(field->charset());
     }
     if (strncmp(MRN_COLUMN_NAME_ID, column_name, column_name_size) == 0) {
       grn_columns[i] = NULL;
@@ -9493,7 +9493,9 @@ void ha_mroonga::storage_store_field_string(Field *field,
                                             const char *value,
                                             uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   field->store(value, value_length, field->charset());
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field_integer(Field *field,
@@ -9630,15 +9632,18 @@ void ha_mroonga::storage_store_field_float(Field *field,
                                            const char *value,
                                            uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   double field_value;
   field_value = *((double *)value);
   field->store(field_value);
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field_timestamp(Field *field,
                                                const char *value,
                                                uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int *)value);
   Field_timestamp *timestamp_field = (Field_timestamp *)field;
 #ifdef MRN_TIMESTAMP_USE_TIMEVAL
@@ -9655,12 +9660,14 @@ void ha_mroonga::storage_store_field_timestamp(Field *field,
   GRN_TIME_UNPACK(time, sec, usec);
   timestamp_field->store_timestamp(sec);
 #endif
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field_date(Field *field,
                                           const char *value,
                                           uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int *)value);
   long long int sec, usec __attribute__((unused));
   GRN_TIME_UNPACK(time, sec, usec);
@@ -9672,12 +9679,14 @@ void ha_mroonga::storage_store_field_date(Field *field,
     (date.tm_mon + 1) * 100 +
     date.tm_mday;
   field->store(date_in_mysql, FALSE);
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field_time(Field *field,
                                           const char *value,
                                           uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int *)value);
   MYSQL_TIME mysql_time;
   memset(&mysql_time, 0, sizeof(MYSQL_TIME));
@@ -9689,12 +9698,14 @@ void ha_mroonga::storage_store_field_time(Field *field,
 #else
   field->store_time(&mysql_time);
 #endif
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field_datetime(Field *field,
                                               const char *value,
                                               uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int *)value);
   MYSQL_TIME mysql_datetime;
   memset(&mysql_datetime, 0, sizeof(MYSQL_TIME));
@@ -9706,6 +9717,7 @@ void ha_mroonga::storage_store_field_datetime(Field *field,
 #else
   field->store_time(&mysql_datetime);
 #endif
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field_year(Field *field,
@@ -9727,6 +9739,7 @@ void ha_mroonga::storage_store_field_new_date(Field *field,
                                               const char *value,
                                               uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int *)value);
   MYSQL_TIME mysql_date;
   memset(&mysql_date, 0, sizeof(MYSQL_TIME));
@@ -9738,6 +9751,7 @@ void ha_mroonga::storage_store_field_new_date(Field *field,
 #else
   field->store_time(&mysql_date);
 #endif
+  DBUG_VOID_RETURN;
 }
 
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
@@ -9745,12 +9759,14 @@ void ha_mroonga::storage_store_field_datetime2(Field *field,
                                                const char *value,
                                                uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int *)value);
   MYSQL_TIME mysql_datetime;
   memset(&mysql_datetime, 0, sizeof(MYSQL_TIME));
   mysql_datetime.time_type = MYSQL_TIMESTAMP_DATETIME;
   mrn_grn_time_to_mysql_time(time, &mysql_datetime);
   field->store_time(&mysql_datetime);
+  DBUG_VOID_RETURN;
 }
 #endif
 
@@ -9759,6 +9775,7 @@ void ha_mroonga::storage_store_field_time2(Field *field,
                                            const char *value,
                                            uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int *)value);
 
   MYSQL_TIME mysql_time;
@@ -9766,6 +9783,7 @@ void ha_mroonga::storage_store_field_time2(Field *field,
   mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
   mrn_grn_time_to_mysql_time(time, &mysql_time);
   field->store_time(&mysql_time);
+  DBUG_VOID_RETURN;
 }
 #endif
 
@@ -9773,8 +9791,14 @@ void ha_mroonga::storage_store_field_blob(Field *field,
                                           const char *value,
                                           uint value_length)
 {
+  MRN_DBUG_ENTER_METHOD();
   Field_blob *blob = (Field_blob *)field;
-  blob->set_ptr((uchar *)&value_length, (uchar *)value);
+  String *blob_buffer = &blob_buffers[field->field_index];
+  blob_buffer->length(0);
+  blob_buffer->reserve(value_length);
+  blob_buffer->q_append(value, value_length);
+  blob->set_ptr((uint32) value_length, (uchar *) blob_buffer->ptr());
+  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_store_field_geometry(Field *field,
@@ -9801,7 +9825,7 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
               longitude_in_degree);
   float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
               latitude_in_degree);
-  String *geometry_buffer = &geometry_buffers[field->field_index];
+  String *geometry_buffer = &blob_buffers[field->field_index];
   geometry_buffer->length(0);
   uint wkb_length = sizeof(wkb) / sizeof(*wkb);
   Field_geom *geometry = (Field_geom *)field;
@@ -9959,19 +9983,6 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
             storage_store_field(field,
                                 GRN_TEXT_VALUE(&unvectored_value),
                                 GRN_TEXT_LEN(&unvectored_value));
-            switch (field->real_type()) {
-            case MYSQL_TYPE_TINY_BLOB:
-            case MYSQL_TYPE_MEDIUM_BLOB:
-            case MYSQL_TYPE_LONG_BLOB:
-            case MYSQL_TYPE_BLOB:
-              {
-                Field_blob *blob = (Field_blob *)field;
-                blob->copy();
-              }
-              break;
-            default:
-              break;
-            }
             GRN_OBJ_FIN(ctx, &unvectored_value);
           } else {
             grn_id id = *((grn_id *)value);
@@ -9980,19 +9991,6 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
             key_length = grn_table_get_key(ctx, range, id,
                                            &key, GRN_TABLE_MAX_KEY_SIZE);
             storage_store_field(field, key, key_length);
-            switch (field->real_type()) {
-            case MYSQL_TYPE_TINY_BLOB:
-            case MYSQL_TYPE_MEDIUM_BLOB:
-            case MYSQL_TYPE_LONG_BLOB:
-            case MYSQL_TYPE_BLOB:
-              {
-                Field_blob *blob = (Field_blob *)field;
-                blob->copy();
-              }
-              break;
-            default:
-              break;
-            }
           }
         } else {
           storage_store_field(field, value, value_length);
