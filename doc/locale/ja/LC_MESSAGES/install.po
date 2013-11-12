@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-28 15:10+0900\n"
-"PO-Revision-Date: 2013-10-28 15:34+0900\n"
+"PO-Revision-Date: 2013-11-12 18:25+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -353,7 +353,7 @@ msgstr "MySQL (community-mysql)向けにmroongaをインストール::"
 # 96faa87e06744aba901adba70eef342c
 #: ../../../source/install.rst:442
 msgid "Install mroonga for MariaDB::"
-msgstr "MariDB向けにmroongaをインストール::"
+msgstr "MariaDB向けにmroongaをインストール::"
 
 # cef1aca98d4a435aaf3e2976bcf95c71
 #: ../../../source/install.rst:450
