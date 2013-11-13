@@ -103,11 +103,17 @@ else()
 endif()
 find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
 
+if(EXISTS "${MYSQL_SOURCE_DIR}/pcre")
+  set(MYSQL_REGEX_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/pcre")
+else()
+  set(MYSQL_REGEX_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/regex")
+endif()
+
 set(MYSQL_INCLUDE_DIRS
   "${MYSQL_BUILD_DIR}/include"
   "${MYSQL_SOURCE_DIR}/sql"
   "${MYSQL_SOURCE_DIR}/include"
-  "${MYSQL_SOURCE_DIR}/regex"
+  "${MYSQL_REGEX_INCLUDE_DIR}"
   "${MYSQL_SOURCE_DIR}"
   CACHE INTERNAL "MySQL include directories")
 

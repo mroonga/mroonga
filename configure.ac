@@ -166,7 +166,12 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_build_dir/include"
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/sql"
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/include"
-  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/regex"
+  if test -d "$ac_mysql_source_dir/pcre"; then
+    mysql_regex_include_dir="$ac_mysql_source_dir/pcre"
+  else
+    mysql_regex_include_dir="$ac_mysql_source_dir/regex"
+  fi
+  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_regex_include_dir"
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir"
   MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
   AC_SUBST(MYSQL_INCLUDES)
