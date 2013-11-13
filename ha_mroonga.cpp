@@ -3809,6 +3809,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
       DBUG_RETURN(HA_ERR_OUT_OF_MEM);
     }
     wrap_handler->init();
+    wrap_handler->set_ha_share_ref(&table->s->ha_share);
     error = wrap_handler->ha_open(table, name, mode, test_if_locked);
   } else {
 #ifdef MRN_HANDLER_CLONE_NEED_NAME
@@ -6702,7 +6703,7 @@ int ha_mroonga::wrapper_index_end()
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_index_end();
+  error = wrap_handler->ha_index_or_rnd_end();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
