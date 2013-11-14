@@ -3809,9 +3809,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
       DBUG_RETURN(HA_ERR_OUT_OF_MEM);
     }
     wrap_handler->init();
-#if MYSQL_VERSION_ID >= 50600
     wrap_handler->set_ha_share_ref(&table->s->ha_share);
-#endif
     error = wrap_handler->ha_open(table, name, mode, test_if_locked);
   } else {
 #ifdef MRN_HANDLER_CLONE_NEED_NAME
