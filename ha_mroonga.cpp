@@ -2496,7 +2496,7 @@ int ha_mroonga::create_share_for_create() const
   share_for_create.table_share = &table_share_for_create;
   table_for_create.s = &table_share_for_create;
 #ifdef WITH_PARTITION_STORAGE_ENGINE
-  table_for_create.part_info = thd->work_part_info;
+  table_for_create.part_info = NULL;
 #endif
   if ((error = mrn_parse_table_param(&share_for_create, &table_for_create)))
     goto error;
