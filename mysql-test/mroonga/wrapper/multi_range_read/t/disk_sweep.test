@@ -1,4 +1,5 @@
 # Copyright(C) 2013  Kenji Maruyama <mmmaru777@gmail.com>
+# Copyright(C) 2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,25 +20,25 @@
 --source ../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS many_records;
+DROP TABLE IF EXISTS integers;
 --enable_warnings
 
 SET optimizer_switch='mrr_cost_based=off';
 
-CREATE TABLE many_records (
+CREATE TABLE integers (
   id INT PRIMARY KEY AUTO_INCREMENT,
   value INT,
   KEY (value)
 ) COMMENT='engine "InnoDB"';
 
-INSERT INTO many_records (value) VALUES (0), (1), (2), (3);
+INSERT INTO integers (value) VALUES (0), (1), (2), (3);
 
-EXPLAIN SELECT * FROM many_records
+EXPLAIN SELECT * FROM integers
                  WHERE value IN (0, 2);
 
-SELECT * FROM many_records
+SELECT * FROM integers
          WHERE value IN (0, 2);
 
-DROP TABLE many_records;
+DROP TABLE integers;
 
 --source ../../../include/mroonga/have_mroonga_deinit.inc
