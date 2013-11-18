@@ -48,7 +48,7 @@ else
     cd vendor
 
     version=$(echo "$MYSQL_VERSION" | sed -e 's/^\(mysql\|mariadb\)-//')
-    series=$(echo "$version" | sed -e 's/\.[0-9]*\(-[a-z]*\)\?$//g')
+    series=$(echo "$version" | sed -e 's/\.[0-9]*\(-\?[a-z]*\)\?$//g')
     case "$MYSQL_VERSION" in
 	mysql-*)
 	    sudo apt-get -qq update
