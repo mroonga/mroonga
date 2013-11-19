@@ -57,13 +57,15 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
 
   if (args->arg_type[3] == STRING_RESULT) {
     if (!(cs = get_charset_by_name(args->args[3], MYF(0)))) {
-      my_error(ER_UNKNOWN_COLLATION, MYF(0), args->args[3]);
+      snprintf(message, MYSQL_ERRMSG_SIZE,
+               "Unknown charset: <%s>", args->args[3]);
       goto error;
     }
   } else {
-    if (!(cs = get_charset(static_cast<uint>(*((long long *) args->args[3])),
-                           MYF(0)))) {
-      my_error(ER_UNKNOWN_COLLATION, MYF(0), "");
+    uint charset_id = static_cast<uint>(*((long long *) args->args[3]));
+    if (!(cs = get_charset(charset_id, MYF(0)))) {
+      snprintf(message, MYSQL_ERRMSG_SIZE,
+               "Unknown charset ID: <%u>", charset_id);
       goto error;
     }
   }
@@ -89,8 +91,8 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
                            static_cast<unsigned int>(snip_max_num),
                            "", 0, "", 0, mapping);
   if (ctx->rc) {
-    my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
-                    ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+    snprintf(message, MYSQL_ERRMSG_SIZE,
+             "Failed to open grn_snip: <%s>", ctx->errbuf);
     goto error;
   }
 
@@ -100,8 +102,8 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
                            args->args[i + 1], args->lengths[i + 1],
                            args->args[i + 2], args->lengths[i + 2]);
     if (rc) {
-      my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
-                      ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+      snprintf(message, MYSQL_ERRMSG_SIZE,
+               "Failed to add a condition to grn_snip: <%s>", ctx->errbuf);
       goto error;
     }
   }
@@ -112,9 +114,6 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
 error:
   if (*snippet) {
     grn_snip_close(ctx, *snippet);
-  }
-  if (message) {
-    strcpy(message, MRN_GET_ERROR_MESSAGE);
   }
   return TRUE;
 }

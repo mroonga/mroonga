@@ -19,7 +19,7 @@
 
 SET NAMES UTF8;
 
---error ER_UNKNOWN_COLLATION
+--error ER_CANT_INITIALIZE_UDF
 SELECT mroonga_snippet("Invalid charset test", 10, 2, "nonexistent_charset",
                        1, 0, "...", "...", "charset", "<", ">");
 
