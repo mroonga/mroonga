@@ -4370,7 +4370,7 @@ int ha_mroonga::close()
   if (
     thd &&
     thd->lex &&
-    thd->lex->sql_command == SQLCOM_FLUSH &&
+    thd_sql_command(thd) == SQLCOM_FLUSH &&
     (thd->lex->type & REFRESH_TABLES)
   ) {
     /* flush tables */
