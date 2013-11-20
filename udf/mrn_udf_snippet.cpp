@@ -69,15 +69,9 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
       goto error;
     }
   }
-  if (mrn::encoding::set(ctx, cs)) {
-    if (args->arg_type[3] == STRING_RESULT) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
-               "Charset: <%s> is not supported", args->args[3]);
-    } else {
-      uint charset_id = static_cast<uint>(*((long long *) args->args[3]));
-      snprintf(message, MYSQL_ERRMSG_SIZE,
-               "Charset ID: <%u> is not supported", charset_id);
-    }
+  if (!mrn::encoding::set(ctx, cs)) {
+    snprintf(message, MYSQL_ERRMSG_SIZE,
+             "Unsupported charset: <%s>", cs->name);
     goto error;
   }
 

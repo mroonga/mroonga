@@ -153,73 +153,70 @@ namespace mrn {
       DBUG_VOID_RETURN;
     }
 
-    int set(grn_ctx *ctx, const CHARSET_INFO *charset) {
+    bool set(grn_ctx *ctx, const CHARSET_INFO *charset) {
       MRN_DBUG_ENTER_FUNCTION();
       if (!charset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_utf8->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (mrn_charset_utf8mb4 && charset->cset == mrn_charset_utf8mb4->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_cp932->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_SJIS);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_eucjpms->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_EUC_JP);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_latin1_1->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_LATIN1);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_latin1_2->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_LATIN1);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_koi8r->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_KOI8R);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_binary->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_ascii->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_sjis->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_SJIS);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       if (charset->cset == mrn_charset_ujis->cset)
       {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_EUC_JP);
-        DBUG_RETURN(0);
+        DBUG_RETURN(true);
       }
       GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
-      my_printf_error(ER_MRN_CHARSET_NOT_SUPPORT_NUM,
-        ER_MRN_CHARSET_NOT_SUPPORT_STR,
-        MYF(0), charset->name, charset->csname);
-      DBUG_RETURN(ER_MRN_CHARSET_NOT_SUPPORT_NUM);
+      DBUG_RETURN(false);
     }
   }
 }

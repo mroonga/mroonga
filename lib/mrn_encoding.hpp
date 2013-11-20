@@ -28,7 +28,7 @@
 namespace mrn {
   namespace encoding {
     void init(void);
-    int set(grn_ctx *ctx, const CHARSET_INFO *charset);
+    bool set(grn_ctx *ctx, const CHARSET_INFO *charset);
   }
 }
 
