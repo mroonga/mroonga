@@ -19,6 +19,8 @@
 # set -x
 set -e
 
+mariadb_download_base=http://mirror.jmu.edu/pub/mariadb
+
 # export GROONGA_MASTER=yes
 # export GROONGA_NORMALIZER_MYSQL_MASTER=yes
 
@@ -36,7 +38,7 @@ if [ "${MRN_BUNDLED}" = "yes" ]; then
     mv .mroonga/tools ./
     sudo apt-get -qq -y build-dep mysql-server
     # Support MariaDB for now.
-    download_base=http://ftp.osuosl.org/pub/mariadb/${MYSQL_VERSION}
+    download_base=${mariadb_download_base}/${MYSQL_VERSION}
     tar_gz=${MYSQL_VERSION}.tar.gz
     curl -O ${download_base}/kvm-tarbake-jaunty-x86/${tar_gz}
     tar xzf $tar_gz
@@ -81,7 +83,7 @@ else
 	    distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
 	    code_name=$(lsb_release --short --codename)
 	    component=main
-	    apt_url_base="http://ftp.osuosl.org/pub/mariadb/repo/${series}"
+	    apt_url_base="${mariadb_download_base}/repo/${series}"
 	    cat <<EOF | sudo tee /etc/apt/sources.list.d/mariadb.list
 deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
 deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
