@@ -13411,7 +13411,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   char **key_parser;
   uint *key_parser_length;
   MRN_DBUG_ENTER_METHOD();
-  KEY *wrap_key_info = (KEY *) thd->alloc(sizeof(KEY) * num_of_keys);
+  KEY *wrap_key_info = (KEY *) thd_alloc(thd, sizeof(KEY) * num_of_keys);
   KEY *p_key_info = &table->key_info[table_share->primary_key], *tmp_key_info;
   tmp_table_share.keys = n_keys + num_of_keys;
   if (!(tmp_share = (MRN_SHARE *)
