@@ -14852,11 +14852,6 @@ bool ha_mroonga::check_written_by_row_based_binlog()
     DBUG_RETURN(false);
   }
 
-#ifdef _WIN32
-  unsigned __int64 option_bits;
-#else
-  uint64 option_bits;
-#endif
   if (!thd_test_options(thd, OPTION_BIN_LOG)) {
     DBUG_RETURN(false);
   }
