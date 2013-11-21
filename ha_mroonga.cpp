@@ -3417,6 +3417,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   if (!is_multiple_column_index) {
     Field *field = key_info->key_part[0].field;
     column_name = field->field_name;
+    column_name_size = strlen(column_name);
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
       // skipping _id virtual column
       DBUG_RETURN(0);
