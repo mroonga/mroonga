@@ -181,7 +181,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_MAJOR_MINOR_VERSION=["$(echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*[a-z]*\)$/\1.\2/')"]
   case "$MYSQL_MAJOR_MINOR_VERSION" in
-  5.1|5.5)
+  5.1)
       MYSQL_LIBS=""
       ;;
   *)
