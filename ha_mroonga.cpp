@@ -4369,9 +4369,7 @@ int ha_mroonga::close()
   is_clone = false;
   if (
     thd &&
-    thd->lex &&
-    thd_sql_command(thd) == SQLCOM_FLUSH &&
-    (thd->lex->type & REFRESH_TABLES)
+    thd_sql_command(thd) == SQLCOM_FLUSH
   ) {
     /* flush tables */
     mrn::Lock lock(&mrn_open_tables_mutex);
