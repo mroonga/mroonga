@@ -14866,12 +14866,7 @@ bool ha_mroonga::check_written_by_row_based_binlog()
 #else
   uint64 option_bits;
 #endif
-#ifdef MRN_OPTION_BITS_IS_UNDER_VARIABLES
-  option_bits = thd->variables.option_bits;
-#else
-  option_bits = thd->options;
-#endif
-  if (!(option_bits & OPTION_BIN_LOG)) {
+  if (!thd_test_options(thd, OPTION_BIN_LOG)) {
     DBUG_RETURN(false);
   }
 
