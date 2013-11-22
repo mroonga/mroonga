@@ -3035,7 +3035,6 @@ int ha_mroonga::storage_create_validate_pseudo_column(TABLE *table)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->s->field[i];
     const char *column_name = field->field_name;
-    int column_name_size = strlen(column_name);
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
       switch (field->type()) {
       case MYSQL_TYPE_TINY :
@@ -3048,17 +3047,6 @@ int ha_mroonga::storage_create_validate_pseudo_column(TABLE *table)
         GRN_LOG(ctx, GRN_LOG_ERROR, "_id must be numeric data type");
         error = ER_CANT_CREATE_TABLE;
         my_message(error, "_id must be numeric data type", MYF(0));
-        DBUG_RETURN(error);
-      }
-    } else if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-      switch (field->type()) {
-      case MYSQL_TYPE_FLOAT :
-      case MYSQL_TYPE_DOUBLE :
-        break;
-      default:
-        GRN_LOG(ctx, GRN_LOG_ERROR, "_score must be float or double");
-        error = ER_CANT_CREATE_TABLE;
-        my_message(error, "_score must be float or double", MYF(0));
         DBUG_RETURN(error);
       }
     }
@@ -4108,11 +4096,6 @@ int ha_mroonga::storage_open_columns(void)
       blob_buffers[i].set_charset(field->charset());
     }
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-      grn_columns[i] = NULL;
-      grn_column_ranges[i] = NULL;
-      continue;
-    }
-    if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
       grn_columns[i] = NULL;
       grn_column_ranges[i] = NULL;
       continue;
@@ -5307,16 +5290,11 @@ int ha_mroonga::storage_write_row(uchar *buf)
     for (i = 0; i < n_columns; i++) {
       Field *field = table->field[i];
       const char *column_name = field->field_name;
-      int column_name_size = strlen(column_name);
 
       if (field->is_null()) continue;
 
       if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
         my_message(ER_DATA_TOO_LONG, "cannot insert value to _id column", MYF(0));
-        DBUG_RETURN(ER_DATA_TOO_LONG);
-      }
-      if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-        my_message(ER_DATA_TOO_LONG, "cannot insert value to _score column", MYF(0));
         DBUG_RETURN(ER_DATA_TOO_LONG);
       }
     }
@@ -5379,19 +5357,12 @@ int ha_mroonga::storage_write_row(uchar *buf)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     const char *column_name = field->field_name;
-    int column_name_size = strlen(column_name);
 
     if (field->is_null()) continue;
 
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
       push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
                    "data truncated for _id column");
-      continue;
-    }
-
-    if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-      push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
-                   "data truncated for _score column");
       continue;
     }
 
@@ -5847,16 +5818,11 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
     for (i = 0; i < n_columns; i++) {
       Field *field = table->field[i];
       const char *column_name = field->field_name;
-      int column_name_size = strlen(column_name);
 
       if (bitmap_is_set(table->write_set, field->field_index)) {
         if (field->is_null()) continue;
         if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
           my_message(ER_DATA_TOO_LONG, "cannot update value to _id column", MYF(0));
-          DBUG_RETURN(ER_DATA_TOO_LONG);
-        }
-        if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-          my_message(ER_DATA_TOO_LONG, "cannot update value to _score column", MYF(0));
           DBUG_RETURN(ER_DATA_TOO_LONG);
         }
       }
@@ -5884,7 +5850,6 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     const char *column_name = field->field_name;
-    int column_name_size = strlen(column_name);
     if (bitmap_is_set(table->write_set, field->field_index)) {
       mrn::DebugColumnAccess debug_column_access(table, table->read_set);
       DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,field->field_index));
@@ -5897,11 +5862,6 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
         continue;
       }
 
-      if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-        push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
-                     "data truncated for _score column");
-        continue;
-      }
       error = mrn_change_encoding(ctx, field->charset());
       if (error)
         goto err;
@@ -11788,9 +11748,6 @@ int ha_mroonga::storage_rename_foreign_key(MRN_SHARE *tmp_share,
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
       continue;
     }
-    if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-      continue;
-    }
 
     column = grn_obj_column(ctx, grn_table,
                             column_name, column_name_size);
@@ -14357,9 +14314,6 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
       continue;
     }
-    if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
-      continue;
-    }
 
     column = grn_obj_column(ctx, grn_table,
                             column_name, column_name_size);
@@ -14571,9 +14525,6 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
     uint column_name_size = strlen(column_name);
 
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-      continue;
-    }
-    if (strncmp(MRN_COLUMN_NAME_SCORE, column_name, column_name_size) == 0) {
       continue;
     }
 
