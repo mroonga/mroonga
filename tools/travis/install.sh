@@ -56,7 +56,8 @@ else
 	    sudo apt-get -qq update
 	    sudo apt-get -qq -y build-dep mysql-server
 	    if [ "$version" = "system" ]; then
-		sudo apt-get -qq -y install mysql-server mysql-testsuite
+		sudo apt-get -qq -y install \
+		    mysql-server mysql-testsuite libmysqld-dev
 		apt-get -qq source mysql-server
 		ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
 	    else
