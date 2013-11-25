@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-04 13:27+0900\n"
+"POT-Creation-Date: 2013-11-25 13:44+0900\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -225,12 +225,13 @@ msgstr ""
 msgid "max_count"
 msgstr ""
 
-# e09280ca92e341d39ff24bd8c2979b68
+# 9eef394545f04dfc8dacf8e13eba71cb
+# 18564ee2213c45bdaf36475d48704599
 #: ../../../source/userguide/mroonga_snippet_syntax.inc:34
 msgid ""
 "The encoding of document is required. You can specify the value of encoding "
-"such as 'ascii_general_ci', 'cp932_japanese_ci', 'eucjpms_japanese_ci', "
-"'utf8_japanese_ci' and so on."
+"such as 'ascii_general_ci', 'cp932_japanese_ci', 'eucjpms_japanese_ci' and "
+"so on."
 msgstr ""
 
 # 937a07168a514f5092b23392f28de482
