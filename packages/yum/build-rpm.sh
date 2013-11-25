@@ -104,7 +104,7 @@ case $distribution in
 		if [ $PACKAGE = "mysql55-mroonga" ]; then
 		    run yum remove MySQL-devel -y
 		else
-		    run yum remove mysql55-mysql-devel -y
+		    run yum remove mysql55-* -y
 		fi
 		;;
 	    6.*)
