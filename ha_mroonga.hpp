@@ -239,6 +239,8 @@ private:
   KEY         *wrap_altered_table_key_info;
   TABLE_SHARE *wrap_altered_table_share;
   KEY         *wrap_altered_table_share_key_info;
+#else
+  KEY         *wrap_alter_key_info;
 #endif
   int mrn_lock_type;
 

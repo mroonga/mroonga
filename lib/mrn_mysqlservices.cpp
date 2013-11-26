@@ -24,7 +24,9 @@
 #include <mrn_mysql.h>
 #include <mrn_mysql_compat.h>
 
+/*
 void *thd_alloc(MYSQL_THD thd, unsigned int size)
 {
   return thd->alloc(size);
 }
+*/

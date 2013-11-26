@@ -2014,6 +2014,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 #endif
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
    alter_key_info_buffer(NULL),
+#else
+   wrap_alter_key_info(NULL),
 #endif
    mrn_lock_type(F_UNLCK),
 
@@ -10604,6 +10606,11 @@ int ha_mroonga::wrapper_reset()
     my_free(alter_key_info_buffer, MYF(0));
     alter_key_info_buffer = NULL;
   }
+#else
+  if (wrap_alter_key_info) {
+    my_free(wrap_alter_key_info, MYF(0));
+    wrap_alter_key_info = NULL;
+  }
 #endif
   wrap_ft_init_count = 0;
   DBUG_RETURN(error);
@@ -13360,7 +13367,12 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   char **key_parser;
   uint *key_parser_length;
   MRN_DBUG_ENTER_METHOD();
-  KEY *wrap_key_info = (KEY *) thd_alloc(thd, sizeof(KEY) * num_of_keys);
+  if (!(wrap_alter_key_info = (KEY *) my_malloc(sizeof(KEY) * num_of_keys,
+                                                MYF(MY_WME)))) {
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
+    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
+    DBUG_RETURN(HA_ERR_OUT_OF_MEM);
+  }
   KEY *p_key_info = &table->key_info[table_share->primary_key], *tmp_key_info;
   tmp_table_share.keys = n_keys + num_of_keys;
   if (!(tmp_share = (MRN_SHARE *)
@@ -13390,7 +13402,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   mrn::PathMapper mapper(share->table_name);
   for (i = 0, j = 0; i < num_of_keys; i++) {
     if (!(key_info[i].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[i])) {
-      wrap_key_info[j] = key_info[i];
+      wrap_alter_key_info[j] = key_info[i];
       j++;
       continue;
     }
@@ -13442,9 +13454,10 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
-    error = wrap_handler->add_index(table_arg, wrap_key_info, j, &hnd_add_index);
+    error = wrap_handler->add_index(table_arg, wrap_alter_key_info, j,
+                                    &hnd_add_index);
 #else
-    error = wrap_handler->add_index(table_arg, wrap_key_info, j);
+    error = wrap_handler->add_index(table_arg, wrap_alter_key_info, j);
 #endif
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
