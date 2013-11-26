@@ -3,6 +3,38 @@
 News
 ====
 
+.. _release-3-10:
+
+Release 3.10 - 2013/11/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MariaDB 10.0.6.
+* [plugin][mroonga_snippet] Improved to report not supported charset in error message.
+
+Fixes
+^^^^^
+
+* Fixed multi range read disk sweep issue. [groonga-dev,01715] [#1959]
+  The problem that query which has "WHERE IN (...)" clause causes an error is fixed. [Reported by Kimura]
+* Fixed SEGV issue with trunk version of MariaDB [#1958]
+* Fixed a bug that geometry column is not properly updated by
+  'REPLACE INTO' or 'INSERT ON DUPLICATE KEY UPDATE' query. [#2057]
+* Fixed compiler warnings on Windows. [#1964]
+* Fixed the issue that vector column is no properly updated by
+  'REPLACE INTO' query. [#2064]
+* [mariadb10.0.5] Fixed build error which is derived from changed directory structure. [#2066]
+* Fixed a bug that shorter column name such as "_i" is treated as "_id" which is
+  special column. [#2085] [Reported by Alexander Barkov]
+
+Thanks
+^^^^^^
+
+* Kimura
+* Alexander Barkov
+
 .. _release-3-09:
 
 Release 3.09 - 2013/10/29
