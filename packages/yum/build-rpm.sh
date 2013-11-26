@@ -123,6 +123,8 @@ run yum clean ${yum_options} packages
 # for debug
 # rpmbuild_options="$rpmbuild_options --define 'optflags -O0 -ggdb3'"
 
+rpmbuild_options="$rpmbuild_options --define 'mroonga_configure_options --with-libmysqlservices-compat'"
+
 cat <<EOF > $BUILD_SCRIPT
 #!/bin/sh
 
