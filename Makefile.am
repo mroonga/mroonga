@@ -11,6 +11,9 @@ libraries =					\
 	$(top_builddir)/udf/libmrn_udf.la	\
 	$(top_builddir)/lib/libmrn_no_mysql.la	\
 	$(top_builddir)/lib/libmrn_need_mysql.la
+if WITH_LIBMYSQLSERVICES_COMPAT
+libraries += $(top_builddir)/lib/libmysqlservices.la
+endif
 
 dynamic_plugin_ldflags  = -module $(GROONGA_LIBS) $(MYSQL_LIBS)
 dynamic_plugin_cxxflags = $(AM_CXXFLAGS) $(MYSQL_CFLAGS) -DMYSQL_DYNAMIC_PLUGIN

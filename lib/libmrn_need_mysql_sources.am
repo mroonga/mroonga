@@ -21,3 +21,6 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_lock.hpp				\
 	mrn_condition_converter.cpp		\
 	mrn_condition_converter.hpp
+
+libmysqlservices_la_SOURCES =			\
+	mrn_mysqlservices.cpp

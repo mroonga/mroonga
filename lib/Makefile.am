@@ -7,7 +7,12 @@ AM_CPPFLAGS =					\
 
 libmrn_need_mysql_la_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
 
+if WITH_LIBMYSQLSERVICES_COMPAT
+LIBMYSQLSERVICES_COMPAT = libmysqlservices.la
+endif
+
 noinst_LTLIBRARIES =				\
+	$(LIBMYSQLSERVICES_COMPAT)		\
 	libmrn_no_mysql.la			\
 	libmrn_need_mysql.la
 

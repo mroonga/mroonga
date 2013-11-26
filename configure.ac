@@ -95,6 +95,14 @@ if test -z "$MRN_PLUGIN_SUFFIX"; then
 fi
 AC_SUBST(MRN_PLUGIN_SUFFIX)
 
+AC_ARG_WITH(libmysqlservices-compat,
+  [AS_HELP_STRING([--with-libmysqlservices-compat],
+                  [Use libmysqlservices compatible library for missing libmysqlservices.a])
+  ],
+  [with_libmysqlservices_compat=$withval],
+  [with_libmysqlservices_compat=no])
+AM_CONDITIONAL([WITH_LIBMYSQLSERVICES_COMPAT], [test "${with_libmysqlservices_compat}" != "no"])
+
 AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_MSG_CHECKING([mysql source])
 
@@ -196,11 +204,15 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
         elif test -f "${pkglibdir}/mysql/libmysqlservices.a"; then
           mysql_services_lib_dir="${pkglibdir}/mysql"
         else
-          AC_MSG_ERROR([libmysqlservices.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
+          if test "${with_libmysqlservices_compat}" = "no"; then
+	    AC_MSG_ERROR([libmysqlservices.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
+          fi
         fi
       fi
       AC_MSG_RESULT([$mysql_services_lib_dir])
-      MYSQL_LIBS="$MYSQL_LIBS -L\"$mysql_services_lib_dir\" -lmysqlservices"
+      if test "${with_libmysqlservices_compat}" = "no"; then
+        MYSQL_LIBS="$MYSQL_LIBS -L\"$mysql_services_lib_dir\" -lmysqlservices"
+      fi
       ;;
   esac
   AC_SUBST(MYSQL_LIBS)
