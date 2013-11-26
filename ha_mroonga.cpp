@@ -13375,6 +13375,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   }
   KEY *p_key_info = &table->key_info[table_share->primary_key], *tmp_key_info;
   tmp_table_share.keys = n_keys + num_of_keys;
+  tmp_table_share.fields = 0;
   if (!(tmp_share = (MRN_SHARE *)
     my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
@@ -13508,6 +13509,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
 
   MRN_DBUG_ENTER_METHOD();
   tmp_table_share.keys = n_keys + num_of_keys;
+  tmp_table_share.fields = 0;
   if (!(tmp_share = (MRN_SHARE *)
     my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
