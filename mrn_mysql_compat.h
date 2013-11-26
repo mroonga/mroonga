@@ -85,11 +85,14 @@
 
 #if MYSQL_VERSION_ID >= 50607
 #  define MRN_GET_ERROR_MESSAGE current_thd->get_stmt_da()->message()
+#  define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd->get_stmt_da()->current_row_for_warning()
 #else
 #  if MYSQL_VERSION_ID >= 50500
 #    define MRN_GET_ERROR_MESSAGE current_thd->stmt_da->message()
+#    define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd->warning_info->current_row_for_warning()
 #  else
 #    define MRN_GET_ERROR_MESSAGE current_thd->main_da.message()
+#    define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd->row_count
 #  endif
 #endif
 

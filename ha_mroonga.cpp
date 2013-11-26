@@ -134,18 +134,20 @@ pthread_mutex_t *mrn_LOCK_open;
 #define MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "Mroonga"
 
 #ifdef MRN_MARIADB_P
-#  define st_mysql_plugin          st_maria_plugin
-#  define mrn_declare_plugin(NAME) maria_declare_plugin(NAME)
-#  define mrn_declare_plugin_end   maria_declare_plugin_end
-#  define MRN_PLUGIN_LAST_VALUES   MRN_VERSION, MariaDB_PLUGIN_MATURITY_STABLE
+#  define st_mysql_plugin           st_maria_plugin
+#  define mrn_declare_plugin(NAME)  maria_declare_plugin(NAME)
+#  define mrn_declare_plugin_end    maria_declare_plugin_end
+#  define MRN_PLUGIN_LAST_VALUES    MRN_VERSION, MariaDB_PLUGIN_MATURITY_STABLE
+#  define MRN_ABORT_ON_WARNING(thd) thd_kill_level(thd)
 #else
-#  define mrn_declare_plugin(NAME) mysql_declare_plugin(NAME)
-#  define mrn_declare_plugin_end   mysql_declare_plugin_end
+#  define mrn_declare_plugin(NAME)  mysql_declare_plugin(NAME)
+#  define mrn_declare_plugin_end    mysql_declare_plugin_end
 #  ifdef MRN_PLUGIN_HAVE_FLAGS
-#    define MRN_PLUGIN_LAST_VALUES NULL, 0
+#    define MRN_PLUGIN_LAST_VALUES  NULL, 0
 #  else
-#    define MRN_PLUGIN_LAST_VALUES NULL
+#    define MRN_PLUGIN_LAST_VALUES  NULL
 #  endif
+#  define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
 #endif
 
 #ifdef WIN32
@@ -5288,15 +5290,18 @@ int ha_mroonga::storage_write_row(uchar *buf)
   }
 
   mrn::DebugColumnAccess debug_column_access(table, table->read_set);
-  if (thd->abort_on_warning) {
-    for (i = 0; i < n_columns; i++) {
-      Field *field = table->field[i];
-      const char *column_name = field->field_name;
+  for (i = 0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    const char *column_name = field->field_name;
 
-      if (field->is_null()) continue;
+    if (field->is_null()) continue;
 
-      if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-        my_message(ER_DATA_TOO_LONG, "cannot insert value to _id column", MYF(0));
+    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+      push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+                          WARN_DATA_TRUNCATED, ER(WARN_DATA_TRUNCATED),
+                          MRN_COLUMN_NAME_ID,
+                          MRN_GET_CURRENT_ROW_FOR_WARNING(thd));
+      if (MRN_ABORT_ON_WARNING(thd)) {
         DBUG_RETURN(ER_DATA_TOO_LONG);
       }
     }
@@ -5363,8 +5368,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
     if (field->is_null()) continue;
 
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-      push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
-                   "data truncated for _id column");
       continue;
     }
 
@@ -5816,15 +5819,18 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   int n_columns = table->s->fields;
   THD *thd = ha_thd();
 
-  if (thd->abort_on_warning) {
-    for (i = 0; i < n_columns; i++) {
-      Field *field = table->field[i];
-      const char *column_name = field->field_name;
+  for (i = 0; i < n_columns; i++) {
+    Field *field = table->field[i];
+    const char *column_name = field->field_name;
 
-      if (bitmap_is_set(table->write_set, field->field_index)) {
-        if (field->is_null()) continue;
-        if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-          my_message(ER_DATA_TOO_LONG, "cannot update value to _id column", MYF(0));
+    if (bitmap_is_set(table->write_set, field->field_index)) {
+      if (field->is_null()) continue;
+      if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+        push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+                            WARN_DATA_TRUNCATED, ER(WARN_DATA_TRUNCATED),
+                            MRN_COLUMN_NAME_ID,
+                            MRN_GET_CURRENT_ROW_FOR_WARNING(thd));
+        if (MRN_ABORT_ON_WARNING(thd)) {
           DBUG_RETURN(ER_DATA_TOO_LONG);
         }
       }
@@ -5859,8 +5865,6 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       if (field->is_null()) continue;
 
       if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-        push_warning(thd, Sql_condition::WARN_LEVEL_WARN, WARN_DATA_TRUNCATED,
-                     "data truncated for _id column");
         continue;
       }
 
