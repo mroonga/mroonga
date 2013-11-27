@@ -205,7 +205,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
           elif test -f "${pkglibdir}/mysql/libmysqlservices.a"; then
             mysql_services_lib_dir="${pkglibdir}/mysql"
           else
-  	  AC_MSG_ERROR([libmysqlservices.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
+            AC_MSG_ERROR([libmysqlservices.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
           fi
         fi
         AC_MSG_RESULT([$mysql_services_lib_dir])
