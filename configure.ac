@@ -187,6 +187,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_VERSION="$($ac_mysql_config --version)"
   AC_SUBST(MYSQL_VERSION)
 
+  if test "${with_libmysqlservices_compat}" = "no"; then
   MYSQL_MAJOR_MINOR_VERSION=["$(echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*[a-z]*\)$/\1.\2/')"]
   case "$MYSQL_MAJOR_MINOR_VERSION" in
   5.1)
@@ -204,18 +205,15 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
         elif test -f "${pkglibdir}/mysql/libmysqlservices.a"; then
           mysql_services_lib_dir="${pkglibdir}/mysql"
         else
-          if test "${with_libmysqlservices_compat}" = "no"; then
-	    AC_MSG_ERROR([libmysqlservices.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
-          fi
+	  AC_MSG_ERROR([libmysqlservices.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
         fi
       fi
       AC_MSG_RESULT([$mysql_services_lib_dir])
-      if test "${with_libmysqlservices_compat}" = "no"; then
-        MYSQL_LIBS="$MYSQL_LIBS -L\"$mysql_services_lib_dir\" -lmysqlservices"
-      fi
+      MYSQL_LIBS="$MYSQL_LIBS -L\"$mysql_services_lib_dir\" -lmysqlservices"
       ;;
   esac
   AC_SUBST(MYSQL_LIBS)
+  fi
 ])
 
 m4_define([mrn_required_groonga_version], m4_include(required_groonga_version))
