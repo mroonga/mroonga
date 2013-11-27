@@ -287,18 +287,11 @@ As you can see in the example above, you can get the record ID by _id column or 
 How to get snippet (Keyword in context)
 ---------------------------------------
 
-.. include:: mroonga_snippet_syntax.inc
+Mroonga provides functionality to get keyword in context.
+It is implemented as 'mroonga_snippet' UDF.
 
-Here is the schema definition for execution examples::
+See :doc:`/reference/udf/mroonga_snippet` about details.
 
-  CREATE TABLE `snippet_test` (
-    `id` int(11) NOT NULL,
-    `text` text,
-    PRIMARY KEY (`id`),
-    FULLTEXT KEY `text` (`text`)
-  ) ENGINE=mroonga DEFAULT CHARSET=utf8
-
-.. include:: mroonga_snippet_example.inc
 
 How to run groonga command
 --------------------------

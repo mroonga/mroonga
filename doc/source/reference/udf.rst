@@ -10,4 +10,5 @@ mroonga provides some useful functionality as UDF (User Defined Functions).
    :numbered:
 
    udf/mroonga_escape
+   udf/mroonga_snippet
 
