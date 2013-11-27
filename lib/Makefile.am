@@ -18,3 +18,6 @@ noinst_LTLIBRARIES =				\
 
 include libmrn_no_mysql_sources.am
 include libmrn_need_mysql_sources.am
+if WITH_LIBMYSQLSERVICES_COMPAT
+include libmysqlservices_compat_sources.am
+endif
