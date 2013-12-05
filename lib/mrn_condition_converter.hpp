@@ -47,9 +47,9 @@ namespace mrn {
     bool is_convertable_string(const Item_field *field_item,
                                const Item *string_item);
 
-    void convert_equal(const Item_func *func_item, grn_obj *expression);
-    void convert_greater_than(const Item_func *func_item, grn_obj *expression);
-    void convert_less_than(const Item_func *func_item, grn_obj *expression);
+    void convert_binary_operation(const Item_func *func_item,
+                                  grn_obj *expression,
+                                  grn_operator _operator);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
     void append_const_item(Item *const_item, grn_obj *expression);

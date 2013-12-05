@@ -230,13 +230,13 @@ namespace mrn {
           const Item_func *func_item = (const Item_func *)sub_item;
           switch (func_item->functype()) {
           case Item_func::EQ_FUNC:
-            convert_equal(func_item, expression);
+            convert_binary_operation(func_item, expression, GRN_OP_EQUAL);
             break;
           case Item_func::LT_FUNC:
-            convert_less_than(func_item, expression);
+            convert_binary_operation(func_item, expression, GRN_OP_LESS);
             break;
           case Item_func::GT_FUNC:
-            convert_greater_than(func_item, expression);
+            convert_binary_operation(func_item, expression, GRN_OP_GREATER);
             break;
           default:
             break;
@@ -251,8 +251,9 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void ConditionConverter::convert_equal(const Item_func *func_item,
-                                         grn_obj *expression) {
+  void ConditionConverter::convert_binary_operation(const Item_func *func_item,
+                                                    grn_obj *expression,
+                                                    grn_operator _operator) {
     Item **arguments = func_item->arguments();
     Item *left_item = arguments[0];
     Item *right_item = arguments[1];
@@ -260,35 +261,7 @@ namespace mrn {
       const Item_field *field_item = static_cast<const Item_field *>(left_item);
       append_field_value(field_item, expression);
       append_const_item(right_item, expression);
-      grn_expr_append_op(ctx_, expression, GRN_OP_EQUAL, 2);
-      grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
-    }
-  }
-
-  void ConditionConverter::convert_less_than(const Item_func *func_item,
-                                             grn_obj *expression) {
-    Item **arguments = func_item->arguments();
-    Item *left_item = arguments[0];
-    Item *right_item = arguments[1];
-    if (left_item->type() == Item::FIELD_ITEM) {
-      const Item_field *field_item = static_cast<const Item_field *>(left_item);
-      append_field_value(field_item, expression);
-      append_const_item(right_item, expression);
-      grn_expr_append_op(ctx_, expression, GRN_OP_LESS, 2);
-      grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
-    }
-  }
-
-  void ConditionConverter::convert_greater_than(const Item_func *func_item,
-                                                grn_obj *expression) {
-    Item **arguments = func_item->arguments();
-    Item *left_item = arguments[0];
-    Item *right_item = arguments[1];
-    if (left_item->type() == Item::FIELD_ITEM) {
-      const Item_field *field_item = static_cast<const Item_field *>(left_item);
-      append_field_value(field_item, expression);
-      append_const_item(right_item, expression);
-      grn_expr_append_op(ctx_, expression, GRN_OP_GREATER, 2);
+      grn_expr_append_op(ctx_, expression, _operator, 2);
       grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
     }
   }
