@@ -109,6 +109,7 @@ namespace mrn {
     switch (func_item->functype()) {
     case Item_func::EQ_FUNC:
     case Item_func::LT_FUNC:
+    case Item_func::LE_FUNC:
     case Item_func::GE_FUNC:
     case Item_func::GT_FUNC:
       if (!is_storage_mode_) {
@@ -235,6 +236,9 @@ namespace mrn {
             break;
           case Item_func::LT_FUNC:
             convert_binary_operation(func_item, expression, GRN_OP_LESS);
+            break;
+          case Item_func::LE_FUNC:
+            convert_binary_operation(func_item, expression, GRN_OP_LESS_EQUAL);
             break;
           case Item_func::GE_FUNC:
             convert_binary_operation(func_item, expression,
