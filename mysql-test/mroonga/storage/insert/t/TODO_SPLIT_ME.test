@@ -81,7 +81,7 @@ drop table t1;
 # for virtual columns
 create table t1 (c1 int, _id int);
 set sql_mode="";
-# warning 1265
+# warning WARN_DATA_TRUNCATED
 insert into t1 (c1,_id) values (1,1);
 set sql_mode="strict_all_tables";
 --error WARN_DATA_TRUNCATED
