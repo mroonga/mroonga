@@ -32,7 +32,10 @@ set sql_mode="";
 update t1 set _id = 10 where c1 = 1;
 select * from t1;
 set sql_mode="strict_all_tables";
---error WARN_DATA_TRUNCATED
+# We can't use WARN_DATA_TRUNCATED here because "WXXX" isn't supported
+# MySQL 5.5, 5.6 and MariaDB 5.6. MariaDB 10.0 only supports it.
+# We share this test with all MySQL servers. So we use number here.
+--error 1265
 update t1 set _id = 11 where c1 = 1;
 select * from t1;
 drop table t1;
