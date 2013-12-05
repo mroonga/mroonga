@@ -48,6 +48,7 @@ namespace mrn {
                                const Item *string_item);
 
     void convert_equal(const Item_func *func_item, grn_obj *expression);
+    void convert_greater_than(const Item_func *func_item, grn_obj *expression);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
     void append_const_item(Item *const_item, grn_obj *expression);
