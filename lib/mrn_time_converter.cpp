@@ -34,8 +34,7 @@ namespace mrn {
   TimeConverter::~TimeConverter() {
   }
 
-  time_t TimeConverter::tm_to_time_gm(struct tm *time)
-  {
+  time_t TimeConverter::tm_to_time_gm(struct tm *time) {
     MRN_DBUG_ENTER_METHOD();
     struct tm gmdate;
     time_t sec_t = mktime(time);
@@ -63,8 +62,7 @@ namespace mrn {
   }
 
   long long int TimeConverter::tm_to_grn_time(struct tm *time, int usec,
-                                              bool *truncated)
-  {
+                                              bool *truncated) {
     MRN_DBUG_ENTER_METHOD();
 
     long long int grn_time;
@@ -85,8 +83,7 @@ namespace mrn {
   }
 
   long long int TimeConverter::mysql_time_to_grn_time(MYSQL_TIME *mysql_time,
-                                                      bool *truncated)
-  {
+                                                      bool *truncated) {
     MRN_DBUG_ENTER_METHOD();
 
     int usec = mysql_time->second_part;
@@ -180,8 +177,7 @@ namespace mrn {
   }
 
   void TimeConverter::grn_time_to_mysql_time(long long int grn_time,
-                                             MYSQL_TIME *mysql_time)
-  {
+                                             MYSQL_TIME *mysql_time) {
     MRN_DBUG_ENTER_METHOD();
     long long int sec;
     int usec;
