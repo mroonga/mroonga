@@ -22,6 +22,7 @@
 #endif
 
 #include "mrn_condition_converter.hpp"
+#include "mrn_time_converter.hpp"
 
 // for debug
 #define MRN_CLASS_NAME "mrn::ConditionConverter"
@@ -146,7 +147,7 @@ namespace mrn {
 
   bool ConditionConverter::is_convertable_binary_operation(
     const Item_field *field_item,
-    const Item *value_item,
+    Item *value_item,
     Item_func::Functype func_type) {
     MRN_DBUG_ENTER_METHOD();
 
@@ -164,11 +165,41 @@ namespace mrn {
     case INT_TYPE:
       convertable = value_item->type() == Item::INT_ITEM;
       break;
+    case TIME_TYPE:
+      if (is_valid_time_value(field_item, value_item)) {
+        convertable = have_index(field_item, func_type);
+      }
+      break;
     case UNSUPPORTED_TYPE:
       break;
     }
 
     DBUG_RETURN(convertable);
+  }
+
+  bool ConditionConverter::is_valid_time_value(const Item_field *field_item,
+                                               Item *value_item) {
+    MRN_DBUG_ENTER_METHOD();
+
+    MYSQL_TIME mysql_time;
+    bool error = get_time_value(field_item, value_item, &mysql_time);
+
+    DBUG_RETURN(!error);
+  }
+
+  bool ConditionConverter::get_time_value(const Item_field *field_item,
+                                          Item *value_item,
+                                          MYSQL_TIME *mysql_time) {
+    MRN_DBUG_ENTER_METHOD();
+
+    bool error;
+    if (field_item->field_type() == MYSQL_TYPE_TIME) {
+      error = value_item->get_time(mysql_time);
+    } else {
+      error = value_item->get_date(mysql_time, TIME_FUZZY_DATE);
+    }
+
+    DBUG_RETURN(error);
   }
 
   ConditionConverter::NormalizedType
@@ -194,7 +225,7 @@ namespace mrn {
       type = UNSUPPORTED_TYPE;
       break;
     case MYSQL_TYPE_TIMESTAMP:
-      type = UNSUPPORTED_TYPE;
+      type = TIME_TYPE;
       break;
     case MYSQL_TYPE_LONGLONG:
     case MYSQL_TYPE_INT24:
@@ -205,7 +236,7 @@ namespace mrn {
     case MYSQL_TYPE_DATETIME:
     case MYSQL_TYPE_YEAR:
     case MYSQL_TYPE_NEWDATE:
-      type = UNSUPPORTED_TYPE;
+      type = TIME_TYPE;
       break;
     case MYSQL_TYPE_VARCHAR:
       type = STRING_TYPE;
@@ -215,17 +246,17 @@ namespace mrn {
       break;
 #ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
     case MYSQL_TYPE_TIMESTAMP2:
-      type = UNSUPPORTED_TYPE;
+      type = TIME_TYPE;
       break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
     case MYSQL_TYPE_DATETIME2:
-      type = UNSUPPORTED_TYPE;
+      type = TIME_TYPE;
       break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_TIME2
     case MYSQL_TYPE_TIME2:
-      type = UNSUPPORTED_TYPE;
+      type = TIME_TYPE;
       break;
 #endif
     case MYSQL_TYPE_NEWDECIMAL:
@@ -270,6 +301,34 @@ namespace mrn {
     grn_obj_unlink(ctx_, column);
 
     DBUG_RETURN(convertable);
+  }
+
+  bool ConditionConverter::have_index(const Item_field *field_item,
+                                      Item_func::Functype func_type) {
+    MRN_DBUG_ENTER_METHOD();
+
+    bool have = false;
+    switch (func_type) {
+    case Item_func::EQ_FUNC:
+      have = have_index(field_item, GRN_OP_EQUAL);
+      break;
+    case Item_func::LT_FUNC:
+      have = have_index(field_item, GRN_OP_LESS);
+      break;
+    case Item_func::LE_FUNC:
+      have = have_index(field_item, GRN_OP_LESS_EQUAL);
+      break;
+    case Item_func::GE_FUNC:
+      have = have_index(field_item, GRN_OP_GREATER_EQUAL);
+      break;
+    case Item_func::GT_FUNC:
+      have = have_index(field_item, GRN_OP_GREATER);
+      break;
+    default:
+      break;
+    }
+
+    DBUG_RETURN(have);
   }
 
   const Item_func *ConditionConverter::find_match_against(const Item *item) {
@@ -368,7 +427,7 @@ namespace mrn {
     if (left_item->type() == Item::FIELD_ITEM) {
       const Item_field *field_item = static_cast<const Item_field *>(left_item);
       append_field_value(field_item, expression);
-      append_const_item(right_item, expression);
+      append_const_item(field_item, right_item, expression);
       grn_expr_append_op(ctx_, expression, _operator, 2);
       grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
     }
@@ -389,12 +448,16 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void ConditionConverter::append_const_item(Item *const_item,
+  void ConditionConverter::append_const_item(const Item_field *field_item,
+                                             Item *const_item,
                                              grn_obj *expression) {
     MRN_DBUG_ENTER_METHOD();
 
-    switch (const_item->type()) {
-    case Item::STRING_ITEM:
+    enum_field_types field_type = field_item->field_type();
+    NormalizedType normalized_type = normalize_field_type(field_type);
+
+    switch (normalized_type) {
+    case STRING_TYPE:
       grn_obj_reinit(ctx_, &value_, GRN_DB_TEXT, 0);
       {
         String *string;
@@ -402,11 +465,29 @@ namespace mrn {
         GRN_TEXT_SET(ctx_, &value_, string->ptr(), string->length());
       }
       break;
-    case Item::INT_ITEM:
+    case INT_TYPE:
       grn_obj_reinit(ctx_, &value_, GRN_DB_INT64, 0);
       GRN_INT64_SET(ctx_, &value_, const_item->val_int());
       break;
-    default:
+    case TIME_TYPE:
+      grn_obj_reinit(ctx_, &value_, GRN_DB_TIME, 0);
+      {
+        MYSQL_TIME mysql_time;
+        get_time_value(field_item, const_item, &mysql_time);
+        bool truncated = false;
+        TimeConverter time_converter;
+        long long int time =
+          time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
+        GRN_TIME_SET(ctx_, &value_, time);
+      }
+      break;
+    case UNSUPPORTED_TYPE:
+      // Should not be occurred.
+      DBUG_PRINT("error",
+                 ("mroonga: append_const_item: unsupported type: <%d> "
+                  "This case should not be occurred.",
+                  field_type));
+      grn_obj_reinit(ctx_, &value_, GRN_DB_VOID, 0);
       break;
     }
     grn_expr_append_const(ctx_, expression, &value_, GRN_OP_PUSH, 1);

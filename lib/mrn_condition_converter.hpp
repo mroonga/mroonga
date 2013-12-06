@@ -39,6 +39,7 @@ namespace mrn {
     enum NormalizedType {
       STRING_TYPE,
       INT_TYPE,
+      TIME_TYPE,
       UNSUPPORTED_TYPE,
     };
 
@@ -51,9 +52,15 @@ namespace mrn {
     bool is_convertable(const Item_cond *cond_item);
     bool is_convertable(const Item_func *func_item);
     bool is_convertable_binary_operation(const Item_field *field_item,
-                                         const Item *value_item,
+                                         Item *value_item,
                                          Item_func::Functype func_type);
+    bool is_valid_time_value(const Item_field *field_item,
+                             Item *value_item);
+    bool get_time_value(const Item_field *field_item,
+                        Item *value_item,
+                        MYSQL_TIME *mysql_time);
     bool have_index(const Item_field *field_item, grn_operator _operator);
+    bool have_index(const Item_field *field_item, Item_func::Functype func_type);
 
     NormalizedType normalize_field_type(enum_field_types field_type);
 
@@ -62,7 +69,9 @@ namespace mrn {
                                   grn_operator _operator);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
-    void append_const_item(Item *const_item, grn_obj *expression);
+    void append_const_item(const Item_field *field_item,
+                           Item *const_item,
+                           grn_obj *expression);
   };
 }
 
