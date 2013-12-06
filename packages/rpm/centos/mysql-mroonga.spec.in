@@ -1,10 +1,10 @@
 %{!?use_system_mysql:%define use_system_mysql 0}
 
 %if %{use_system_mysql}
-%define mysql_version_default 5.1.69
+%define mysql_version_default 5.1.71
 %define mysql_release_default 1
-%define mysql_dist_default    el6_4
-%define mysql_download_base_url_default http://vault.centos.org/6.4/updates/Source/SPackages
+%define mysql_dist_default    el6
+%define mysql_download_base_url_default http://vault.centos.org/6.5/os/Source/SPackages
 %define mysql_spec_file_default mysql.spec
 %else
 %define mysql_version_default 5.6.14
@@ -24,7 +24,7 @@
 
 Name:		mysql-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL.
 
 Group:		Applications/Databases
@@ -210,6 +210,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sat Dec 7 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.10-2
+- use MySQL 5.1.79-1 on CentOS 6.
+
 * Fri Nov 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.10-1
 - new upstream release.
 
