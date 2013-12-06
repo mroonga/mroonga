@@ -151,20 +151,106 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
 
     bool convertable = false;
-    switch (value_item->type()) {
-    case Item::STRING_ITEM:
-      if (func_type == Item_func::EQ_FUNC) {
+
+    enum_field_types field_type = field_item->field_type();
+    NormalizedType normalized_type = normalize_field_type(field_type);
+    switch (normalized_type) {
+    case STRING_TYPE:
+      if (value_item->type() == Item::STRING_ITEM &&
+          func_type == Item_func::EQ_FUNC) {
         convertable = is_convertable_string(field_item, value_item);
       }
       break;
-    case Item::INT_ITEM:
-      convertable = true;
+    case INT_TYPE:
+      convertable = value_item->type() == Item::INT_ITEM;
       break;
-    default:
+    case UNSUPPORTED_TYPE:
       break;
     }
 
     DBUG_RETURN(convertable);
+  }
+
+  ConditionConverter::NormalizedType
+  ConditionConverter::normalize_field_type(enum_field_types field_type) {
+    MRN_DBUG_ENTER_METHOD();
+
+    NormalizedType type = UNSUPPORTED_TYPE;
+
+    switch (field_type) {
+    case MYSQL_TYPE_DECIMAL:
+      type = STRING_TYPE;
+      break;
+    case MYSQL_TYPE_TINY:
+    case MYSQL_TYPE_SHORT:
+    case MYSQL_TYPE_LONG:
+      type = INT_TYPE;
+      break;
+    case MYSQL_TYPE_FLOAT:
+    case MYSQL_TYPE_DOUBLE:
+      type = UNSUPPORTED_TYPE;
+      break;
+    case MYSQL_TYPE_NULL:
+      type = UNSUPPORTED_TYPE;
+      break;
+    case MYSQL_TYPE_TIMESTAMP:
+      type = UNSUPPORTED_TYPE;
+      break;
+    case MYSQL_TYPE_LONGLONG:
+    case MYSQL_TYPE_INT24:
+      type = INT_TYPE;
+      break;
+    case MYSQL_TYPE_DATE:
+    case MYSQL_TYPE_TIME:
+    case MYSQL_TYPE_DATETIME:
+    case MYSQL_TYPE_YEAR:
+    case MYSQL_TYPE_NEWDATE:
+      type = UNSUPPORTED_TYPE;
+      break;
+    case MYSQL_TYPE_VARCHAR:
+      type = STRING_TYPE;
+      break;
+    case MYSQL_TYPE_BIT:
+      type = INT_TYPE;
+      break;
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+    case MYSQL_TYPE_TIMESTAMP2:
+      type = UNSUPPORTED_TYPE;
+      break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+    case MYSQL_TYPE_DATETIME2:
+      type = UNSUPPORTED_TYPE;
+      break;
+#endif
+#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
+    case MYSQL_TYPE_TIME2:
+      type = UNSUPPORTED_TYPE;
+      break;
+#endif
+    case MYSQL_TYPE_NEWDECIMAL:
+      type = STRING_TYPE;
+      break;
+    case MYSQL_TYPE_ENUM:
+      type = INT_TYPE;
+      break;
+    case MYSQL_TYPE_SET:
+      type = INT_TYPE;
+      break;
+    case MYSQL_TYPE_TINY_BLOB:
+    case MYSQL_TYPE_MEDIUM_BLOB:
+    case MYSQL_TYPE_LONG_BLOB:
+    case MYSQL_TYPE_BLOB:
+    case MYSQL_TYPE_VAR_STRING:
+    case MYSQL_TYPE_STRING:
+      type = STRING_TYPE;
+      break;
+    case MYSQL_TYPE_GEOMETRY:
+      type = UNSUPPORTED_TYPE;
+      break;
+    }
+
+    DBUG_RETURN(type);
   }
 
   bool ConditionConverter::is_convertable_string(const Item_field *field_item,

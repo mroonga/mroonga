@@ -36,6 +36,12 @@ namespace mrn {
     void convert(const Item *where, grn_obj *expression);
 
   private:
+    enum NormalizedType {
+      STRING_TYPE,
+      INT_TYPE,
+      UNSUPPORTED_TYPE,
+    };
+
     grn_ctx *ctx_;
     grn_obj *table_;
     bool is_storage_mode_;
@@ -49,6 +55,8 @@ namespace mrn {
                                          Item_func::Functype func_type);
     bool is_convertable_string(const Item_field *field_item,
                                const Item *string_item);
+
+    NormalizedType normalize_field_type(enum_field_types field_type);
 
     void convert_binary_operation(const Item_func *func_item,
                                   grn_obj *expression,
