@@ -11,6 +11,7 @@ USE_RPMFORGE=$(cat /tmp/build-use-rpmforge)
 USE_ATRPMS=$(cat /tmp/build-use-atrpms)
 BUILD_OPTIONS=$(cat /tmp/build-options)
 BUILD_SCRIPT=/tmp/build-${PACKAGE}.sh
+USE_MYSQLSERVICES_COMPAT=no
 
 run()
 {
@@ -103,6 +104,7 @@ case $distribution in
 	    5.*)
 		if [ $PACKAGE = "mysql55-mroonga" ]; then
 		    run yum remove MySQL-devel -y
+		    USE_MYSQLSERVICES_COMPAT=yes
 		else
 		    run yum remove mysql55-* -y
 		fi
@@ -111,6 +113,7 @@ case $distribution in
 		DEPENDED_PACKAGES="$DEPENDED_PACKAGES mysql-devel"
 		DEPENDED_PACKAGES="$DEPENDED_PACKAGES perl-Time-HiRes"
 		rpmbuild_options="$rpmbuild_options --define 'use_system_mysql 1'"
+		USE_MYSQLSERVICES_COMPAT=yes
 		;;
 	esac
 	;;
@@ -123,7 +126,9 @@ run yum clean ${yum_options} packages
 # for debug
 # rpmbuild_options="$rpmbuild_options --define 'optflags -O0 -ggdb3'"
 
-rpmbuild_options="$rpmbuild_options --define 'mroonga_configure_options --with-libmysqlservices-compat'"
+if [ "${USE_MYSQLSERVICES_COMPAT}" = "yes" ]; then
+    rpmbuild_options="$rpmbuild_options --define 'mroonga_configure_options --with-libmysqlservices-compat'"
+fi
 
 cat <<EOF > $BUILD_SCRIPT
 #!/bin/sh
