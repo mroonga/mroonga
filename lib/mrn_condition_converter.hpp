@@ -44,6 +44,9 @@ namespace mrn {
 
     bool is_convertable(const Item_cond *cond_item);
     bool is_convertable(const Item_func *func_item);
+    bool is_convertable_binary_operation(const Item_field *field_item,
+                                         const Item *value_item,
+                                         Item_func::Functype func_type);
     bool is_convertable_string(const Item_field *field_item,
                                const Item *string_item);
 

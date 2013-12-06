@@ -126,20 +126,10 @@ namespace mrn {
           DBUG_RETURN(false);
         }
 
-        bool convertable = false;
-        switch (right_item->type()) {
-        case Item::STRING_ITEM:
-          if (func_item->functype() == Item_func::EQ_FUNC) {
-            Item_field *field_item = static_cast<Item_field *>(left_item);
-            convertable = is_convertable_string(field_item, right_item);
-          }
-          break;
-        case Item::INT_ITEM:
-          convertable = true;
-          break;
-        default:
-          break;
-        }
+        bool convertable =
+          is_convertable_binary_operation(static_cast<Item_field *>(left_item),
+                                          right_item,
+                                          func_item->functype());
         DBUG_RETURN(convertable);
       }
       break;
@@ -152,6 +142,29 @@ namespace mrn {
     }
 
     DBUG_RETURN(true);
+  }
+
+  bool ConditionConverter::is_convertable_binary_operation(
+    const Item_field *field_item,
+    const Item *value_item,
+    Item_func::Functype func_type) {
+    MRN_DBUG_ENTER_METHOD();
+
+    bool convertable = false;
+    switch (value_item->type()) {
+    case Item::STRING_ITEM:
+      if (func_type == Item_func::EQ_FUNC) {
+        convertable = is_convertable_string(field_item, value_item);
+      }
+      break;
+    case Item::INT_ITEM:
+      convertable = true;
+      break;
+    default:
+      break;
+    }
+
+    DBUG_RETURN(convertable);
   }
 
   bool ConditionConverter::is_convertable_string(const Item_field *field_item,
