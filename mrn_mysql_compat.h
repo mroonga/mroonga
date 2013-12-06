@@ -125,4 +125,11 @@
 #  define MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
 #endif
 
+#ifndef TIME_FUZZY_DATE
+/* For MariaDB 10. */
+#  ifdef TIME_FUZZY_DATES
+#    define TIME_FUZZY_DATE TIME_FUZZY_DATES
+#  endif
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
