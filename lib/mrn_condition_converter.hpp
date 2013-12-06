@@ -53,8 +53,7 @@ namespace mrn {
     bool is_convertable_binary_operation(const Item_field *field_item,
                                          const Item *value_item,
                                          Item_func::Functype func_type);
-    bool is_convertable_string(const Item_field *field_item,
-                               const Item *string_item);
+    bool have_index(const Item_field *field_item, grn_operator _operator);
 
     NormalizedType normalize_field_type(enum_field_types field_type);
 

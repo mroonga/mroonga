@@ -158,7 +158,7 @@ namespace mrn {
     case STRING_TYPE:
       if (value_item->type() == Item::STRING_ITEM &&
           func_type == Item_func::EQ_FUNC) {
-        convertable = is_convertable_string(field_item, value_item);
+        convertable = have_index(field_item, GRN_OP_EQUAL);
       }
       break;
     case INT_TYPE:
@@ -253,8 +253,8 @@ namespace mrn {
     DBUG_RETURN(type);
   }
 
-  bool ConditionConverter::is_convertable_string(const Item_field *field_item,
-                                                 const Item *string_item) {
+  bool ConditionConverter::have_index(const Item_field *field_item,
+                                      grn_operator _operator) {
     MRN_DBUG_ENTER_METHOD();
 
     grn_obj *column;
@@ -265,7 +265,7 @@ namespace mrn {
       DBUG_RETURN(false);
     }
 
-    int n_indexes = grn_column_index(ctx_, column, GRN_OP_EQUAL, NULL, 0, NULL);
+    int n_indexes = grn_column_index(ctx_, column, _operator, NULL, 0, NULL);
     bool convertable = (n_indexes > 0);
     grn_obj_unlink(ctx_, column);
 
