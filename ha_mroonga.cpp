@@ -4606,7 +4606,7 @@ THR_LOCK_DATA **ha_mroonga::storage_store_lock(THD *thd, THR_LOCK_DATA **to,
       lock_type = TL_READ;
     } else if (lock_type >= TL_WRITE_CONCURRENT_INSERT &&
                lock_type <= TL_WRITE && !thd_tablespace_op(thd) &&
-	       !thd_in_lock_tables(thd)) {
+               !thd_in_lock_tables(thd)) {
       lock_type = TL_WRITE_ALLOW_WRITE;
     }
 
