@@ -25,9 +25,9 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/reference/udf/mroonga_escape.rst \
 	$(top_srcdir)/doc/source/reference/udf/mroonga_snippet.rst \
 	$(top_srcdir)/doc/source/reference/udf.rst \
-	$(top_srcdir)/doc/source/userguide.rst \
-	$(top_srcdir)/doc/source/userguide/storage.rst \
-	$(top_srcdir)/doc/source/userguide/wrapper.rst \
+	$(top_srcdir)/doc/source/tutorial.rst \
+	$(top_srcdir)/doc/source/tutorial/storage.rst \
+	$(top_srcdir)/doc/source/tutorial/wrapper.rst \
 	$(NULL)
 
 absolute_theme_files = \
@@ -68,9 +68,9 @@ source_files_relative_from_doc_dir = \
 	source/reference/udf/mroonga_escape.rst \
 	source/reference/udf/mroonga_snippet.rst \
 	source/reference/udf.rst \
-	source/userguide.rst \
-	source/userguide/storage.rst \
-	source/userguide/wrapper.rst \
+	source/tutorial.rst \
+	source/tutorial/storage.rst \
+	source/tutorial/wrapper.rst \
 	$(NULL)
 
 theme_files_relative_from_doc_dir = \
@@ -93,7 +93,7 @@ po_files = \
 	install.po \
 	news.po \
 	reference.po \
-	userguide.po \
+	tutorial.po \
 	$(NULL)
 
 po_files_relative_from_locale_dir = \
@@ -105,7 +105,7 @@ po_files_relative_from_locale_dir = \
 	LC_MESSAGES/install.po \
 	LC_MESSAGES/news.po \
 	LC_MESSAGES/reference.po \
-	LC_MESSAGES/userguide.po \
+	LC_MESSAGES/tutorial.po \
 	$(NULL)
 
 mo_files = \
@@ -117,7 +117,7 @@ mo_files = \
 	install.mo \
 	news.mo \
 	reference.mo \
-	userguide.mo \
+	tutorial.mo \
 	$(NULL)
 
 mo_files_relative_from_locale_dir = \
@@ -129,7 +129,7 @@ mo_files_relative_from_locale_dir = \
 	LC_MESSAGES/install.mo \
 	LC_MESSAGES/news.mo \
 	LC_MESSAGES/reference.mo \
-	LC_MESSAGES/userguide.mo \
+	LC_MESSAGES/tutorial.mo \
 	$(NULL)
 
 html_files_relative_from_locale_dir = \
@@ -177,9 +177,9 @@ html_files_relative_from_locale_dir = \
 	html/_sources/reference/udf/mroonga_escape.txt \
 	html/_sources/reference/udf/mroonga_snippet.txt \
 	html/_sources/reference/udf.txt \
-	html/_sources/userguide/storage.txt \
-	html/_sources/userguide.txt \
-	html/_sources/userguide/wrapper.txt \
+	html/_sources/tutorial/storage.txt \
+	html/_sources/tutorial.txt \
+	html/_sources/tutorial/wrapper.txt \
 	html/_static/ajax-loader.gif \
 	html/_static/basic.css \
 	html/_static/comment-bright.png \
@@ -204,8 +204,8 @@ html_files_relative_from_locale_dir = \
 	html/_static/up-pressed.png \
 	html/_static/us.png \
 	html/_static/websupport.js \
-	html/userguide.html \
-	html/userguide/storage.html \
-	html/userguide/wrapper.html \
+	html/tutorial.html \
+	html/tutorial/storage.html \
+	html/tutorial/wrapper.html \
 	$(NULL)
 

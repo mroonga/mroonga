@@ -14,7 +14,7 @@ For the release history: :doc:`news`
 
    characteristic
    install
-   userguide
+   tutorial
    reference
    community
    developer
