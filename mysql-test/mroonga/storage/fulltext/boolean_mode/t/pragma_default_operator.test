@@ -38,8 +38,6 @@ insert into diaries values(5, "富士山", "今日も天気がよくてきれい
 
 select * from diaries where match(content) against("今日 天気" in boolean mode);
 
-select * from diaries where match(content) against("*D+ 今日 天気" in boolean mode);
-
 select * from diaries where match(content) against("*D- 今日 天気" in boolean mode);
 select * from diaries where match(content) against("*D- +今日 +天気" in boolean mode);
 select * from diaries where match(content) against("*D- 今日 +富士山 天気" in boolean mode);
