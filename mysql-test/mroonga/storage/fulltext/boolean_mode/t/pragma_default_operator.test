@@ -42,9 +42,6 @@ select * from diaries where match(content) against("*D- 今日 天気" in boolea
 select * from diaries where match(content) against("*D- +今日 +天気" in boolean mode);
 select * from diaries where match(content) against("*D- 今日 +富士山 天気" in boolean mode);
 
-select * from diaries where match(content) against("*DOR 今日 天気" in boolean mode);
-select * from diaries where match(content) against("*DOR +今日 +天気" in boolean mode);
-
 drop table diaries;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
