@@ -16,6 +16,7 @@ For the release history: :doc:`news`
    install
    tutorial
    reference
+   faq
    community
    developer
 
