@@ -1,12 +1,15 @@
 .. highlightlang:: none
 
-Trouble Shooting
-================
+How to avoid "mmap Cannot allocate memory" error?
+=================================================
 
-There are some frequently asked questions in mroonga storage engine.
+Short answer
+------------
 
-How to avoid mmap Cannot allocate memory error
-----------------------------------------------
+Increase ``vm.max_map_count`` Linux kernel parameter value.
+
+Long answer
+-----------
 
 There is a case following mmap error in log file::
 
