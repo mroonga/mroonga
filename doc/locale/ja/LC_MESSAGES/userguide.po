@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-27 16:07+0900\n"
-"PO-Revision-Date: 2013-11-25 15:19+0900\n"
+"PO-Revision-Date: 2013-12-13 15:09+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -882,7 +882,7 @@ msgstr ""
 #: ../../../source/userguide/storage.rst:288
 #: ../../../source/userguide/wrapper.rst:191
 msgid "How to get snippet (Keyword in context)"
-msgstr "スニペットの取得方法 (文脈付き索引)"
+msgstr "スニペット（キーワード周辺のテキスト）の取得方法"
 
 # aa70f8771edb4511a930dd8c07bbc1f0
 # 308af39fa13042249b39faecaf98a186
