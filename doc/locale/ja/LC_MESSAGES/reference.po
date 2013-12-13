@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-27 16:07+0900\n"
-"PO-Revision-Date: 2013-11-27 17:11+0900\n"
+"POT-Creation-Date: 2013-12-13 15:45+0900\n"
+"PO-Revision-Date: 2013-12-13 15:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -627,8 +627,8 @@ msgstr ""
 # 7891bcccfcd94e108e56084df9321e30
 #: ../../../source/reference/sql_commands.rst:25
 msgid ""
-"``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name, ...))"
-"``"
+"``CREATE TABLE table_name (... FULLTEXT INDEX index_name "
+"(column_name, ...))``"
 msgstr ""
 
 # 8787aeafbc354f0bbdecce025353ea1f
@@ -916,8 +916,8 @@ msgstr ""
 # 94c7a0b5dc38425885302bbfdfaaf830
 #: ../../../source/reference/sql_commands.rst:82
 msgid ""
-"``CREATE TABLE table_name (column_name DATETIME"
-"(fractional_seconds_precision) PRIMARY KEY)``"
+"``CREATE TABLE table_name (column_name "
+"DATETIME(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 # a4a20915e33f48e9963afe0821ec142d
@@ -952,8 +952,8 @@ msgstr ""
 # 94c7a0b5dc38425885302bbfdfaaf830
 #: ../../../source/reference/sql_commands.rst:88
 msgid ""
-"``CREATE TABLE table_name (column_name TIMESTAMP"
-"(fractional_seconds_precision) PRIMARY KEY)``"
+"``CREATE TABLE table_name (column_name "
+"TIMESTAMP(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 # 87bac0cd3473410782c6a5a1c8f44636
@@ -1171,8 +1171,8 @@ msgstr ""
 # ed74a1850256410383f26246246ae57e
 #: ../../../source/reference/sql_commands.rst:125
 msgid ""
-"``SELECT * FROM table_name WHERE MBRContains(GeomFromText('LineString"
-"(...)'), geometry_column_name)``"
+"``SELECT * FROM table_name WHERE "
+"MBRContains(GeomFromText('LineString(...)'), geometry_column_name)``"
 msgstr ""
 
 # 5d34d62df3634f95b729c10f12fa27e3
@@ -1281,8 +1281,8 @@ msgstr "``CREATE TABLE (...) CHARSET 上記にないキャラクタセット``"
 # 706dbc7090e64a99a6c8ec87dba93c45
 #: ../../../source/reference/sql_commands.rst:148
 msgid ""
-"``INSERT INTO (geometry_column_name) VALUES (GeomFromText('LineString(...)'))"
-"``"
+"``INSERT INTO (geometry_column_name) VALUES "
+"(GeomFromText('LineString(...)'))``"
 msgstr ""
 
 # e2a259cff1ec42af8864816e3087abb5
@@ -1373,109 +1373,6 @@ msgstr ""
 "チューニングを行って ORDER BY LIMIT 高速化機能を利用できるようにした際の動作"
 "確認に利用できます。"
 
-# 31a03264d21f4b4fb757c240fdf8b8c7
-#: ../../../source/reference/troubleshooting.rst:4
-msgid "Trouble Shooting"
-msgstr ""
-
-# a7184caf914f42f1846aaefcd3fade87
-#: ../../../source/reference/troubleshooting.rst:6
-msgid "There are some frequently asked questions in mroonga storage engine."
-msgstr "mroongaストレージエンジンにはいくつかFAQがあります。"
-
-# 4af58b8104a9428c9c7c614af73bb6c9
-#: ../../../source/reference/troubleshooting.rst:9
-msgid "How to avoid mmap Cannot allocate memory error"
-msgstr "mmap Cannot allocate memoryエラーを回避するには"
-
-# ad103865569f40458b7bbced5b1f50b1
-#: ../../../source/reference/troubleshooting.rst:11
-msgid "There is a case following mmap error in log file::"
-msgstr "ログファイルに以下のようなmmapエラーが存在する場合があります。::"
-
-# 227431c71a1947bc82c36497b7ede6f3
-#: ../../../source/reference/troubleshooting.rst:15
-msgid ""
-"Note that ``<13036498944>`` means total size of mmap (almost 12GB) in this "
-"case."
-msgstr "``<13036498944>`` はこの場合mmapの合計サイズ(約12GB)です。"
-
-# 7cc1b10e1f084f31b9128c3fdcedb1e1
-#: ../../../source/reference/troubleshooting.rst:17
-msgid "So you need to confirm following point of views."
-msgstr "以下の観点を確認する必要があります。"
-
-# 31735085f47847ffbf49958ac6ace552
-#: ../../../source/reference/troubleshooting.rst:19
-msgid "Are there enough free memory?"
-msgstr "十分なメモリの空きが存在するか?"
-
-# 92bc985b051d4a03869d9127fde0a0d5
-#: ../../../source/reference/troubleshooting.rst:20
-msgid "Are maximum number of mappings exceeded?"
-msgstr "マッピング最大数を超過していないか?"
-
-# c7b159431f2141e4939d201550a8060f
-#: ../../../source/reference/troubleshooting.rst:22
-msgid "To check there are enough free memory, you can use ``vmstat`` command."
-msgstr ""
-"十分な空きメモリがあるかを調べるために、``vmstat`` コマンドを使うことができま"
-"す。"
-
-# e511a9aec856486c939cffa529a50bce
-#: ../../../source/reference/troubleshooting.rst:24
-msgid ""
-"To check whether maximum number of mappings are exceeded, you can "
-"investigate the value of ``vm.max_map_count``."
-msgstr ""
-"最大マッピング数を超過しているかどうかを確認するために、 ``vm."
-"max_map_count`` の値を調べることができます。"
-
-# f6dc1f1fab1e407cb06220688b204d84
-#: ../../../source/reference/troubleshooting.rst:26
-msgid ""
-"If this issue is fixed by modifying the value of ``vm.max_map_count``, it's "
-"exactly the reason."
-msgstr ""
-"もしこの問題が ``vm.max_map_count`` の値を調整することで解決するなら、これが"
-"原因です。"
-
-# f38eb39bbee24fdf8f9d61bd8def53c3
-#: ../../../source/reference/troubleshooting.rst:28
-msgid ""
-"As groonga allocates memory chunks each 256KB, you can estimate the size of "
-"database you can handle by following formula::"
-msgstr ""
-"groongaはメモリを256KBごとに確保するので、扱えるデータベースのサイズを以下の"
-"式で見積ることができます::"
-
-# 29334292995747adb9c881d9916641f7
-#: ../../../source/reference/troubleshooting.rst:32
-msgid ""
-"If you want to handle over 16GB groonga database, you must specify at least "
-"65536 as the value of ``vm.max_map_count``::"
-msgstr ""
-"16GBを超えるデータベースを扱うには、少くとも65536を ``vm.max_map_count`` の値"
-"として設定しないといけません。"
-
-# 09425fdf5e29416dbc2784c8cbcfb54e
-#: ../../../source/reference/troubleshooting.rst:36
-msgid ""
-"You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm."
-"max_map_count=65536``."
-msgstr ""
-"``sudo sysctl -w vm.max_map_count=65536`` で一時的に ``vm.max_map_count`` を"
-"調整することができます。"
-
-# 3c990562958040a2a9f011b2858b46ae
-#: ../../../source/reference/troubleshooting.rst:38
-msgid ""
-"Then save the configuration value to ``/etc/sysctl.conf`` or ``/etc/sysctl.d/"
-"*.conf``."
-msgstr ""
-"その後、設定値を  ``/etc/sysctl.conf`` もしくは ``/etc/sysctl.d/*.conf`` へと"
-"保存します。"
-
 # abd4d5638e57451a97f9c1f528b7b7f3
 #: ../../../source/reference/udf.rst:4
 msgid "UDF (User Defined Functions)"
@@ -1532,13 +1429,13 @@ msgstr ""
 
 # cc7a7f707ed74fb78af265be09ae8637
 #: ../../../source/reference/udf/mroonga_escape.rst:26
-#: ../../../source/reference/udf/mroonga_snippet.rst:81
+#: ../../../source/reference/udf/mroonga_snippet.rst:111
 msgid "Parameters"
 msgstr "引数"
 
 # c78fe47a38b94c40bd85fc3d3b1fc72f
 #: ../../../source/reference/udf/mroonga_escape.rst:29
-#: ../../../source/reference/udf/mroonga_snippet.rst:84
+#: ../../../source/reference/udf/mroonga_snippet.rst:114
 msgid "Required parameters"
 msgstr "必須引数"
 
@@ -1559,7 +1456,7 @@ msgstr "エスケープしたいテキストを指定します。"
 
 # 4b211f2ffc174a80a86390ea3a0ea6e4
 #: ../../../source/reference/udf/mroonga_escape.rst:39
-#: ../../../source/reference/udf/mroonga_snippet.rst:134
+#: ../../../source/reference/udf/mroonga_snippet.rst:164
 msgid "Optional parameters"
 msgstr "省略可能引数"
 
@@ -1580,7 +1477,7 @@ msgstr "エスケープする文字を指定します。"
 
 # 7eaf493e9ab048e0bd1ddb1781266f10
 #: ../../../source/reference/udf/mroonga_escape.rst:49
-#: ../../../source/reference/udf/mroonga_snippet.rst:155
+#: ../../../source/reference/udf/mroonga_snippet.rst:185
 msgid "Return value"
 msgstr "返り値"
 
@@ -1605,7 +1502,8 @@ msgstr "``mroonga_snippet`` UDFは文脈付き索引を取得する機能を提�
 msgid ""
 "This feature is in experimental stage. So, the required arguments or value "
 "is changed without notice in the future."
-msgstr "この機能は実験的です。引数や引数の値が予告なく変更される可能性があります。"
+msgstr ""
+"この機能は実験的です。引数や引数の値が予告なく変更される可能性があります。"
 
 # 90956befa1014ecfbdf487c4391bfeb0
 #: ../../../source/reference/udf/mroonga_snippet.rst:21
@@ -1624,14 +1522,17 @@ msgstr "キーワードと周辺のテキストを検索結果として取得し
 msgid ""
 "Snippet means 'keyword and surrounding text'. It is called 'Keyword in "
 "context'."
-msgstr "スニペットは'キーワードと関連するテキスト'を意味します。文脈付き索引ともいいます。"
+msgstr ""
+"スニペットは'キーワードと関連するテキスト'を意味します。文脈付き索引ともいい"
+"ます。"
 
 # d95b0ccc2c2f48b192ee64f73077cf6c
 #: ../../../source/reference/udf/mroonga_snippet.rst:44
 msgid ""
 "``mroonga_snippet`` function provides the way to get snippet from search "
 "results."
-msgstr "``mroonga_snippet`` 関数は検索結果からスニペットを取得する方法を提供します。"
+msgstr ""
+"``mroonga_snippet`` 関数は検索結果からスニペットを取得する方法を提供します。"
 
 # acba3bd29acc44e7a6b02af4b9b8d0d2
 #: ../../../source/reference/udf/mroonga_snippet.rst:46
@@ -1646,14 +1547,19 @@ msgid ""
 "``mroonga_snippet`` function is included in mroonga as a User-Defined "
 "Function (UDF), but if you have not yet register it in MySQL by CREATE "
 "FUNCTION, you need to invoke the following SQL for defining a function. ::"
-msgstr "``mroonga_snippet`` 関数はユーザ定義関数(UDF)としてMroongaに含まれていますが、インストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関数定義DDLを実行しておく必要があります。"
+msgstr ""
+"``mroonga_snippet`` 関数はユーザ定義関数(UDF)としてMroongaに含まれています"
+"が、インストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関"
+"数定義DDLを実行しておく必要があります。"
 
 # bdc5c2e830744b0da3738fe9989a928f
 #: ../../../source/reference/udf/mroonga_snippet.rst:52
 msgid ""
 "``mroonga_snippet`` function is useful for searching the text which contains "
 "keyword and associated one by using MATCH .. AGAINST syntax."
-msgstr "``mroonga_snippet`` 関数は MATCH ... AGAINST構文とともに使用して、テキストに含まれるキーワードとその関連語句を検索するのに便利です。"
+msgstr ""
+"``mroonga_snippet`` 関数は MATCH ... AGAINST構文とともに使用して、テキストに"
+"含まれるキーワードとその関連語句を検索するのに便利です。"
 
 # 49ff74546cde415e9da29cbc91a4d227
 #: ../../../source/reference/udf/mroonga_snippet.rst:55
@@ -1661,7 +1567,9 @@ msgid ""
 "Imagine searching the document which contains 'fulltext' as a keyword. "
 "Assume that some keyword such as 'MySQL' and 'search' are associated with "
 "'fulltext'."
-msgstr "'fulltext'というキーワードと'MySQL'と'search'という関連語を含む文書の検索をしてみましょう。"
+msgstr ""
+"'fulltext'というキーワードと'MySQL'と'search'という関連語を含む文書の検索をし"
+"てみましょう。"
 
 # 2e5363acd21249c1837669153605e105
 #: ../../../source/reference/udf/mroonga_snippet.rst:58
@@ -1678,48 +1586,67 @@ msgstr "実行例のスキーマ定義(ストレージモード)はこちらで�
 msgid "Here is the schema definition for execution examples(wrapper mode)::"
 msgstr "実行例(ラッパーモード)のスキーマ定義はこちらです。::"
 
-# c0afa486a47a4adc86a66e0331301b21
+# 382273e01cd948e4bb5d6f9d5754944d
+#: ../../../source/reference/udf/mroonga_snippet.rst:80
+#, fuzzy
+msgid "Here is the sample data for execution examples::"
+msgstr "実行結果はこちらです。::"
+
+# 382273e01cd948e4bb5d6f9d5754944d
 #: ../../../source/reference/udf/mroonga_snippet.rst:86
+#, fuzzy
+msgid "Here is the results of execution examples::"
+msgstr "実行結果はこちらです。::"
+
+# e9f38d8da7f24848baef1691dfa0c330
+#: ../../../source/reference/udf/mroonga_snippet.rst:108
+msgid ""
+"The keyword 'fulltext' and associated keyword 'MySQL' and 'search' has been "
+"extracted."
+msgstr ""
+
+# c0afa486a47a4adc86a66e0331301b21
+#: ../../../source/reference/udf/mroonga_snippet.rst:116
 msgid "There are many required parameters."
 msgstr "多くの必須引数があります。"
 
 # b6909086956c40c8a70eb4c403599061
-#: ../../../source/reference/udf/mroonga_snippet.rst:90
+#: ../../../source/reference/udf/mroonga_snippet.rst:120
 msgid "``document``"
 msgstr ""
 
 # dd69aab5ad344ad998ab172c9955b2f2
-#: ../../../source/reference/udf/mroonga_snippet.rst:91
+#: ../../../source/reference/udf/mroonga_snippet.rst:121
 msgid "The column name or string value is required."
 msgstr "カラム名もしくは文字列が必要です。"
 
 # fea39b14843641fc9bbd00f22ea9cbdd
-#: ../../../source/reference/udf/mroonga_snippet.rst:94
+#: ../../../source/reference/udf/mroonga_snippet.rst:124
 msgid "``max_length``"
 msgstr ""
 
 # fe7200f7c753413493cbef2c34b00379
-#: ../../../source/reference/udf/mroonga_snippet.rst:96
+#: ../../../source/reference/udf/mroonga_snippet.rst:126
 msgid "The max length of snippet (bytes) is required."
 msgstr "スニペットの最大長(バイト単位)が必要です。"
 
 # ed438738637245eba52f58b5f231a5e7
-#: ../../../source/reference/udf/mroonga_snippet.rst:99
+#: ../../../source/reference/udf/mroonga_snippet.rst:129
 msgid "``max_count``"
 msgstr ""
 
 # 4119bde06e7240208ad08b3b389d2502
-#: ../../../source/reference/udf/mroonga_snippet.rst:101
+#: ../../../source/reference/udf/mroonga_snippet.rst:131
 msgid "The max elements of snippets (N word) is required."
 msgstr "スニペットの最大要素数Nが必要です。"
 
 # 03aac677f93247848444b8c53f0307ce
-#: ../../../source/reference/udf/mroonga_snippet.rst:104
+#: ../../../source/reference/udf/mroonga_snippet.rst:134
 msgid "``encoding``"
 msgstr ""
 
 # ee0557322f3c4e55ace5b6a8160059f8
-#: ../../../source/reference/udf/mroonga_snippet.rst:106
+#: ../../../source/reference/udf/mroonga_snippet.rst:136
 msgid ""
 "The encoding of document is required. You can specify the value of encoding "
 "such as 'ascii_general_ci', 'cp932_japanese_ci', 'eucjpms_japanese_ci' and "
@@ -1730,24 +1657,24 @@ msgstr ""
 "定できます。"
 
 # e26237753e7742478a649ddc71329831
-#: ../../../source/reference/udf/mroonga_snippet.rst:111
+#: ../../../source/reference/udf/mroonga_snippet.rst:141
 msgid "``skip_leading_spaces``"
 msgstr ""
 
 # 92471394cdc74c11bd59ddd0493cb079
-#: ../../../source/reference/udf/mroonga_snippet.rst:113
+#: ../../../source/reference/udf/mroonga_snippet.rst:143
 msgid ""
 "Specify whether skip leading spaces or not. Specify the value 1 for skipping "
 "leading spaces, 0 for not."
 msgstr "先頭の空白を無視するかを指定します。1なら無視し、0なら無視しません。"
 
 # 1e6b74599cf348c3b2e205a387bfabf9
-#: ../../../source/reference/udf/mroonga_snippet.rst:117
+#: ../../../source/reference/udf/mroonga_snippet.rst:147
 msgid "``html_escape``"
 msgstr ""
 
 # 9e8d9d6b06b24730be9cebba852a7eed
-#: ../../../source/reference/udf/mroonga_snippet.rst:119
+#: ../../../source/reference/udf/mroonga_snippet.rst:149
 msgid ""
 "HTML escape is enabled or not. Specify the value 1 for enabling HTML escape, "
 "0 for not."
@@ -1756,62 +1683,64 @@ msgstr ""
 "出力します。"
 
 # aae10e8a9c1048e688c592e4a1131cdf
-#: ../../../source/reference/udf/mroonga_snippet.rst:123
+#: ../../../source/reference/udf/mroonga_snippet.rst:153
 msgid "``prefix``"
 msgstr ""
 
 # fba61efe2c754c78abf15fb1079813ea
-#: ../../../source/reference/udf/mroonga_snippet.rst:125
+#: ../../../source/reference/udf/mroonga_snippet.rst:155
 msgid "The start text of snippet."
 msgstr "スニペットの開始テキストを指定します。"
 
 # 5370451c46524515b8e59943c7a4ad24
-#: ../../../source/reference/udf/mroonga_snippet.rst:128
+#: ../../../source/reference/udf/mroonga_snippet.rst:158
 msgid "``suffix``"
 msgstr ""
 
 # 5cd259c4666445a5882b707518f78073
-#: ../../../source/reference/udf/mroonga_snippet.rst:130
+#: ../../../source/reference/udf/mroonga_snippet.rst:160
 msgid "The end text of snippet."
 msgstr "スニペットの終了テキストを指定します。"
 
 # 5901a4c37fea44519b194dc5cbdffa63
-#: ../../../source/reference/udf/mroonga_snippet.rst:136
+#: ../../../source/reference/udf/mroonga_snippet.rst:166
 msgid ""
 "There is one optional group parameter, ``wordN`` related prefix and suffix."
-msgstr "省略可能な引数として ``wordN`` と開始テキスト、終了テキストがあります。"
+msgstr ""
+"省略可能な引数として ``wordN`` と開始テキスト、終了テキストがあります。"
 
 # f5f1afc09b40471ebde3235f6bb11b4e
-#: ../../../source/reference/udf/mroonga_snippet.rst:139
+#: ../../../source/reference/udf/mroonga_snippet.rst:169
 msgid "``wordN``"
 msgstr ""
 
 # 4be8937ef37d44548676a33446d069df
-#: ../../../source/reference/udf/mroonga_snippet.rst:141
+#: ../../../source/reference/udf/mroonga_snippet.rst:171
 msgid "Specify any word."
 msgstr "任意の単語指定します。"
 
 # 3960d5f3ae7d49b78b345ed5380a6f4a
-#: ../../../source/reference/udf/mroonga_snippet.rst:144
+#: ../../../source/reference/udf/mroonga_snippet.rst:174
 msgid "``wordN_prefix``"
 msgstr ""
 
 # f13981f76e7f4adf97d30f87c4b32968
-#: ../../../source/reference/udf/mroonga_snippet.rst:146
+#: ../../../source/reference/udf/mroonga_snippet.rst:176
 msgid "It is the start text of wordN."
 msgstr "N番目の単語の開始テキストを指定します。"
 
 # 4773d26a70da4bdc8f353d4bdd5953a7
-#: ../../../source/reference/udf/mroonga_snippet.rst:149
+#: ../../../source/reference/udf/mroonga_snippet.rst:179
 msgid "``wordN_suffix``"
 msgstr ""
 
 # cef423012f3942d489c891d2e12ab2af
-#: ../../../source/reference/udf/mroonga_snippet.rst:151
+#: ../../../source/reference/udf/mroonga_snippet.rst:181
 msgid "It is the end text of wordN."
 msgstr "N番目の単語の終了テキストを指定します。"
 
 # b4eb05b330ce42e7bd2655d83719eb54
-#: ../../../source/reference/udf/mroonga_snippet.rst:157
+#: ../../../source/reference/udf/mroonga_snippet.rst:187
 msgid "It returns snippet string."
 msgstr "スニペット文字列を返します。"
+

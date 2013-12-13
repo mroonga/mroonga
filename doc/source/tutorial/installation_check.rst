@@ -4,7 +4,7 @@ Installation check
 ==================
 
 It is better that you check Mroonga installation before you use
-Mroonga. If Mroonga installation is failed, the SQLs in this tutorials
+Mroonga. If Mroonga installation is failed, the SQLs in this tutorial
 will fail.
 
 The way to start or stop MySQL server is just same as the normal MySQL.
