@@ -1,4 +1,5 @@
 # Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013  Kenji Maruyama <mmmaru777@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -30,8 +31,10 @@ create table diaries (
 show create table diaries;
 
 insert into diaries values(1, "Hello", "今日からはじめました。");
-insert into diaries values(2, "天気", "明日の富士山の天気について");
-insert into diaries values(3, "富士山", "今日も天気がよくてきれいに見える。");
+insert into diaries values(2, "今日の天気", "今日の富士山の天気について");
+insert into diaries values(3, "今日の富士山", "今日の富士山について");
+insert into diaries values(4, "明日の天気", "明日の富士山の天気について");
+insert into diaries values(5, "富士山", "今日も天気がよくてきれいに見える。");
 
 select * from diaries where match(content) against("今日 天気" in boolean mode);
 
@@ -39,6 +42,7 @@ select * from diaries where match(content) against("*D+ 今日 天気" in boolea
 
 select * from diaries where match(content) against("*D- 今日 天気" in boolean mode);
 select * from diaries where match(content) against("*D- +今日 +天気" in boolean mode);
+select * from diaries where match(content) against("*D- 今日 +富士山 天気" in boolean mode);
 
 select * from diaries where match(content) against("*DOR 今日 天気" in boolean mode);
 select * from diaries where match(content) against("*DOR +今日 +天気" in boolean mode);
