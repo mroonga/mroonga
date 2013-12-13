@@ -7,6 +7,7 @@ There are some frequently asked questions for Mroonga. This section
 describes about them.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :glob:
 
-   faq/*.rst
+   faq/*
