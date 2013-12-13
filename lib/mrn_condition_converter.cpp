@@ -193,10 +193,11 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
 
     bool error;
+    Item *real_value_item = value_item->real_item();
     if (field_item->field_type() == MYSQL_TYPE_TIME) {
-      error = value_item->get_time(mysql_time);
+      error = real_value_item->get_time(mysql_time);
     } else {
-      error = value_item->get_date(mysql_time, TIME_FUZZY_DATE);
+      error = real_value_item->get_date(mysql_time, TIME_FUZZY_DATE);
     }
 
     DBUG_RETURN(error);
