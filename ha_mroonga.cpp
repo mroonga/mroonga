@@ -3,6 +3,7 @@
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -7381,7 +7382,7 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_d(struct st_mrn_ft_info *info,
     *default_operator = GRN_OP_AND;
     *consumed_keyword_length = 1;
   } else if (keyword_length >= 1 && keyword[0] == '-') {
-    *default_operator = GRN_OP_OR;
+    *default_operator = GRN_OP_AND_NOT;
     *consumed_keyword_length = 1;
   } else if (keyword_length >= 2 && memcmp(keyword, "OR", 2) == 0) {
     *default_operator = GRN_OP_OR;
