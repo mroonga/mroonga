@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-29 10:51\n"
+"POT-Creation-Date: 2013-12-13 16:06+0900\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -28,22 +28,22 @@ msgid "For the release history: :doc:`news`"
 msgstr "For the release history: :doc:`news`"
 
 # aa69a49827d4431c906268421a533eb4
-#: ../../../source/index.rst:23
+#: ../../../source/index.rst:24
 msgid "Indices"
 msgstr "Indices"
 
 # fb0515ba1f61445ba7e88c4783e0b228
-#: ../../../source/index.rst:25
+#: ../../../source/index.rst:26
 msgid ":ref:`genindex`"
 msgstr ":ref:`genindex`"
 
 # ffb77a7d19ac40e18b7b06c3b421d274
-#: ../../../source/index.rst:26
+#: ../../../source/index.rst:27
 msgid ":ref:`modindex`"
 msgstr ":ref:`modindex`"
 
 # cd30b405c98b40d3987f10de7dc2966f
-#: ../../../source/index.rst:27
+#: ../../../source/index.rst:28
 msgid ":ref:`search`"
 msgstr ":ref:`search`"
 

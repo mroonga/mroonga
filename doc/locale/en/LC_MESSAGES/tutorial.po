@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-27 16:05+0900\n"
+"POT-Creation-Date: 2013-12-13 16:08+0900\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -17,29 +17,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# b8ad7182363a4b8e92846b2ef15f686d
-#: ../../../source/userguide.rst:4
-msgid "User's guide"
-msgstr "User's guide"
+# a245be37fc7d4610b7c11d5b18ebede9
+#: ../../../source/tutorial.rst:4
+msgid "Tutorial"
+msgstr ""
 
-# ece8f2b65efe4f40a1b88882ebc517ea
-#: ../../../source/userguide.rst:6
-msgid "Please read the following to see how to install : :doc:`install`"
-msgstr "Please read the following to see how to install : :doc:`install`"
+# 3c9026d4115d4318b6b6998f814690bf
+#: ../../../source/tutorial.rst:6
+msgid ""
+"If you don't install Mroonga yet, see :doc:`install`. It describes how to "
+"install Mroonga."
+msgstr ""
 
-# d3f025a5877041c6a89ab03b9fafb135
-#: ../../../source/userguide.rst:9
-msgid "How to check the installation"
-msgstr "How to check the installation"
+# fb271efadfec4f9ba886c91ef4887a39
+#: ../../../source/tutorial.rst:9
+msgid ""
+"Try the following tutorials after you install Mroonga. You will understand "
+"how to use Mroonga."
+msgstr ""
+
+# 86359516333b45f89005573fb8e97688
+#: ../../../source/tutorial/installation_check.rst:4
+msgid "Installation check"
+msgstr ""
+
+# ac81b7f3fa964698b8e2090c67899e09
+#: ../../../source/tutorial/installation_check.rst:6
+msgid ""
+"It is better that you check Mroonga installation before you use Mroonga. If "
+"Mroonga installation is failed, the SQLs in this tutorial will fail."
+msgstr ""
 
 # 684eef3ab57149129c207e5eef58ef99
-#: ../../../source/userguide.rst:11
+#: ../../../source/tutorial/installation_check.rst:10
 msgid "The way to start or stop MySQL server is just same as the normal MySQL."
 msgstr ""
 "The way to start or stop MySQL server is just same as the normal MySQL."
 
 # 6a0480f3b7c946108c16ddf520009961
-#: ../../../source/userguide.rst:13
+#: ../../../source/tutorial/installation_check.rst:12
 msgid ""
 "After invoking the MySQL server, connect to it by mysql command. If you set "
 "password, you need to add '-p' option. ::"
@@ -48,45 +64,45 @@ msgstr ""
 "password, you need to add '-p' option. ::"
 
 # 9f56ebdaa9ca482ca782015a0329afb0
-#: ../../../source/userguide.rst:17
+#: ../../../source/tutorial/installation_check.rst:16
 msgid ""
 "By using SHOW ENGINES command, you can check if mroonga is installed. ::"
 msgstr ""
 
 # a3916eb35b5d4de7b86fc75e40d3ff69
-#: ../../../source/userguide.rst:32
+#: ../../../source/tutorial/installation_check.rst:31
 msgid ""
 "If you see \"mroonga\" storage engine like above, the installation is well "
 "done."
 msgstr ""
 
 # 2bf62b09b4f840a985478c928fdfc4f4
-#: ../../../source/userguide.rst:34
+#: ../../../source/tutorial/installation_check.rst:33
 msgid "If not installed, invoke INSTALL PLUGIN command like below. ::"
 msgstr "If not installed, invoke INSTALL PLUGIN command like below. ::"
 
-# e9008292f076438a9ec5afd076d48f03
-#: ../../../source/userguide.rst:39
-msgid "Running modes"
-msgstr "Running modes"
+# 693ba7f443a046b98c5124172dee4458
+#: ../../../source/tutorial/mode.rst:4
+msgid "Mode"
+msgstr ""
 
-# 853830b3a97249238cbfa572b9577f0d
-#: ../../../source/userguide.rst:41
-msgid "Mroonga can run in the following two modes."
+# a4cfebce14464ffcb0232b73e25ec4b9
+#: ../../../source/tutorial/mode.rst:6
+msgid "Mroonga has the following two modes."
 msgstr ""
 
 # b3aae35eac024581987777aa13eef34e
-#: ../../../source/userguide.rst:43
+#: ../../../source/tutorial/mode.rst:8
 msgid "storage mode"
 msgstr "storage mode"
 
 # d33ff5c26712472da49c425e05e0d1a6
-#: ../../../source/userguide.rst:44
+#: ../../../source/tutorial/mode.rst:9
 msgid "wrapper mode"
 msgstr "wrapper mode"
 
 # 6dc7ac450ac64f05b3ace39aacd14124
-#: ../../../source/userguide.rst:46
+#: ../../../source/tutorial/mode.rst:11
 msgid ""
 "With the storage mode, we use groonga for both of the full text search "
 "function and the data storage. Since all functions of storage engine are "
@@ -99,7 +115,7 @@ msgstr ""
 "advantages, and you can manage the database directly by ``groonga`` command."
 
 # a4200292c1054cbfb6cdbf17a6500fbd
-#: ../../../source/userguide.rst:49
+#: ../../../source/tutorial/mode.rst:14
 msgid ""
 "The structure of the storage mode is the following. You use it instead of "
 "existing storage engines like MyISAM or InnoDB"
@@ -108,7 +124,7 @@ msgstr ""
 "existing storage engines like MyISAM or InnoDB"
 
 # 6d1811ce32cc4b06b03ee4e00ac2d90e
-#: ../../../source/userguide.rst:55
+#: ../../../source/tutorial/mode.rst:20
 msgid ""
 "With the wrapper mode, groonga is used for full text search function only, "
 "and another existing storage engine like InnoDB is used for storing data. By "
@@ -118,7 +134,7 @@ msgid ""
 msgstr ""
 
 # 1f4ee5444fb64a5bb92428b849a87333
-#: ../../../source/userguide.rst:58
+#: ../../../source/tutorial/mode.rst:23
 msgid ""
 "The structure of the wrapper mode is the following. Full text search related "
 "operations are done by mroonga, and other operations are done by existing "
@@ -128,37 +144,27 @@ msgid ""
 "transparently."
 msgstr ""
 
-# 512331dc17c641f69634833a5ea52f73
-#: ../../../source/userguide.rst:67
-msgid "Usage of each mode"
-msgstr "Usage of each mode"
-
-# a5736f3a5cc4411a89519c0bdc8cd95d
-#: ../../../source/userguide.rst:69
-msgid "Please see the following pages for the usage of each mode."
-msgstr "Please see the following pages for the usage of each mode."
-
 # 80aadc996a794b5396fc631dde3e92fc
-#: ../../../source/userguide/storage.rst:4
+#: ../../../source/tutorial/storage.rst:4
 msgid "Storage mode"
 msgstr "Storage mode"
 
 # 3c88b5e9dfff4b78b8c698f7482a46e2
-#: ../../../source/userguide/storage.rst:6
+#: ../../../source/tutorial/storage.rst:6
 msgid "Here we explain how to use storage mode of mroonga"
 msgstr ""
 
 # fef2130e47cd4370aa8efd813bf4da62
 # 0e5c7f350f434a8794719b73369f130c
-#: ../../../source/userguide/storage.rst:9
-#: ../../../source/userguide/wrapper.rst:25
+#: ../../../source/tutorial/storage.rst:9
+#: ../../../source/tutorial/wrapper.rst:25
 msgid "How to use full text search"
 msgstr "How to use full text search"
 
 # 52b4f7e956e84c86a809cbf9ec2074d4
 # 985babbbe59a42d19ca7be384ebc70a2
-#: ../../../source/userguide/storage.rst:11
-#: ../../../source/userguide/wrapper.rst:27
+#: ../../../source/tutorial/storage.rst:11
+#: ../../../source/tutorial/wrapper.rst:27
 msgid ""
 "After confirming the installation, let's create a table. The important point "
 "is to specify mroonga by ``ENGINE = mroonga``. ::"
@@ -166,34 +172,34 @@ msgstr ""
 
 # 5ee8b6c56f064f4894d656856b0c81a4
 # eda0fb5176a04bc7aab38959dec4b69e
-#: ../../../source/userguide/storage.rst:20
-#: ../../../source/userguide/wrapper.rst:36
+#: ../../../source/tutorial/storage.rst:20
+#: ../../../source/tutorial/wrapper.rst:36
 msgid "We put data by INSERT. ::"
 msgstr "We put data by INSERT. ::"
 
 # 1938640710524acb9e9dd9e95477cdc0
 # 2dcf9a69f9414f0a8ee31afb3f5e57ec
-#: ../../../source/userguide/storage.rst:28
-#: ../../../source/userguide/wrapper.rst:44
+#: ../../../source/tutorial/storage.rst:28
+#: ../../../source/tutorial/wrapper.rst:44
 msgid "Try full text search. ::"
 msgstr "Try full text search. ::"
 
 # 2185a81888b74a42ab67f3453667b241
 # 8600592605bb4ec3abfac6bad2192e5b
-#: ../../../source/userguide/storage.rst:38
-#: ../../../source/userguide/wrapper.rst:54
+#: ../../../source/tutorial/storage.rst:38
+#: ../../../source/tutorial/wrapper.rst:54
 msgid "Yes, full text search works."
 msgstr "Yes, full text search works."
 
 # ec66262a713e4d688657ef9b9f6a9e31
 # e6cdfcc8bfe54052ba75833f264fe291
-#: ../../../source/userguide/storage.rst:41
-#: ../../../source/userguide/wrapper.rst:57
+#: ../../../source/tutorial/storage.rst:41
+#: ../../../source/tutorial/wrapper.rst:57
 msgid "How to get search score"
 msgstr "How to get search score"
 
 # feeb2f0a3c0948ad971d5971781ae424
-#: ../../../source/userguide/storage.rst:45
+#: ../../../source/tutorial/storage.rst:45
 msgid ""
 "In version 1.0.0 or before, mroonga used a special column named ``_score`` "
 "to get search score. From version 1.0.0, it follows MySQL's standard way to "
@@ -202,8 +208,8 @@ msgstr ""
 
 # 0d20615f6dff4275967170e489f8545a
 # cb74d92e9c204e97a31c253e5477cf10
-#: ../../../source/userguide/storage.rst:47
-#: ../../../source/userguide/wrapper.rst:59
+#: ../../../source/tutorial/storage.rst:47
+#: ../../../source/tutorial/wrapper.rst:59
 msgid ""
 "We often want to display more relevant results first in full text search. We "
 "use search score in such case."
@@ -213,8 +219,8 @@ msgstr ""
 
 # e20fb72f38534a3cb9a4c46065a90d8a
 # 03cedb8d6c7c4b26bf5954b1f8dc5d70
-#: ../../../source/userguide/storage.rst:49
-#: ../../../source/userguide/wrapper.rst:61
+#: ../../../source/tutorial/storage.rst:49
+#: ../../../source/tutorial/wrapper.rst:61
 msgid ""
 "We can get search score by MySQL's standard way [#score]_, i.e. we use "
 "MATCH...AGAINST in one of columns in SELECT or ORDER BY."
@@ -224,15 +230,15 @@ msgstr ""
 
 # a833b37853c8479a904c52f44eb36af7
 # b01509c5a1b24119914fadafda0477ca
-#: ../../../source/userguide/storage.rst:51
-#: ../../../source/userguide/wrapper.rst:63
+#: ../../../source/tutorial/storage.rst:51
+#: ../../../source/tutorial/wrapper.rst:63
 msgid "Let's try. ::"
 msgstr "Let's try. ::"
 
 # b16fc88f1da84ae9be344998ad1b72df
 # 9f7c961dd4f840f983763fa82a1f011a
-#: ../../../source/userguide/storage.rst:69
-#: ../../../source/userguide/wrapper.rst:81
+#: ../../../source/tutorial/storage.rst:69
+#: ../../../source/tutorial/wrapper.rst:81
 msgid ""
 "The result having the search word ``fine`` more, i.e. ``id = 3`` message "
 "having the higher search score, is displayed first. And you also get search "
@@ -241,22 +247,22 @@ msgstr ""
 
 # 73f06b7ef59944f589b9841fb779950f
 # bd8694d5664247d59ce8e958a948a602
-#: ../../../source/userguide/storage.rst:71
-#: ../../../source/userguide/wrapper.rst:83
+#: ../../../source/tutorial/storage.rst:71
+#: ../../../source/tutorial/wrapper.rst:83
 msgid "You can use ``AS`` to change the attribute name. ::"
 msgstr "You can use ``AS`` to change the attribute name. ::"
 
 # 706755d3514e47ca92145896efbc4083
 # 97c17b733ba34b759890387d36271dae
-#: ../../../source/userguide/storage.rst:84
-#: ../../../source/userguide/wrapper.rst:96
+#: ../../../source/tutorial/storage.rst:84
+#: ../../../source/tutorial/wrapper.rst:96
 msgid "How to specify the parser for full text search"
 msgstr "How to specify the parser for full text search"
 
 # 1ec38587fad14082b5c2e0b2faaa0f62
 # b529d886cf714d6392dec11fab974c30
-#: ../../../source/userguide/storage.rst:86
-#: ../../../source/userguide/wrapper.rst:98
+#: ../../../source/tutorial/storage.rst:86
+#: ../../../source/tutorial/wrapper.rst:98
 msgid ""
 "MySQL has the following syntax to specify the parser [#parser]_ for full "
 "text search. ::"
@@ -266,8 +272,8 @@ msgstr ""
 
 # ef8d0ca9e5fd43aba600bd1ae9d0b041
 # 8cfaae0c4c3c408fb39ba418d868f83e
-#: ../../../source/userguide/storage.rst:90
-#: ../../../source/userguide/wrapper.rst:102
+#: ../../../source/tutorial/storage.rst:90
+#: ../../../source/tutorial/wrapper.rst:102
 msgid ""
 "To use this syntax, you need to register all parsers in MySQL beforehand. On "
 "the other hand, groonga can dynamically add a tokeniser, that is a parser in "
@@ -279,8 +285,8 @@ msgstr ""
 
 # 1ad51f525ef240fb907f5ce88235d062
 # b706bbb56dbf42a488a1a47fe81ce809
-#: ../../../source/userguide/storage.rst:96
-#: ../../../source/userguide/wrapper.rst:108
+#: ../../../source/tutorial/storage.rst:96
+#: ../../../source/tutorial/wrapper.rst:108
 msgid ""
 "``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If "
 "you use MySQL 5.1, use ``mroonga_default_parser`` variable described below."
@@ -288,14 +294,14 @@ msgstr ""
 
 # 0b196e3e246846fd9094b3c830ea588d
 # 95fafbd509774ff3a40052588a9fe247
-#: ../../../source/userguide/storage.rst:98
-#: ../../../source/userguide/wrapper.rst:110
+#: ../../../source/tutorial/storage.rst:98
+#: ../../../source/tutorial/wrapper.rst:110
 msgid "You can specify one of following values as the parser."
 msgstr "You can specify one of following values as the parser."
 
 # c794f6e8203e4489a14fb7810332de47
-#: ../../../source/userguide/storage.rst:101
-#: ../../../source/userguide/wrapper.rst:113
+#: ../../../source/tutorial/storage.rst:101
+#: ../../../source/tutorial/wrapper.rst:113
 msgid ""
 "It does not tokenize at all. Use \"off\" if you want to treat ``content`` as "
 "is. For example, this value is used for prefix search."
@@ -303,15 +309,15 @@ msgstr ""
 
 # fa216b185e984d7c900ffea84f0b5cc3
 # 839dfda8224a440588c58d1add8eac7c
-#: ../../../source/userguide/storage.rst:101
-#: ../../../source/userguide/wrapper.rst:113
+#: ../../../source/tutorial/storage.rst:101
+#: ../../../source/tutorial/wrapper.rst:113
 msgid "off"
 msgstr ""
 
 # 60e668ae05b34d5482cf4312ec0f1fbd
 # 07ce2cd2ef7d4ccfaf6586a5333774ed
-#: ../../../source/userguide/storage.rst:104
-#: ../../../source/userguide/wrapper.rst:116
+#: ../../../source/tutorial/storage.rst:104
+#: ../../../source/tutorial/wrapper.rst:116
 msgid ""
 "It tokenises in bigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 3 letters or more. It is "
@@ -323,36 +329,36 @@ msgstr ""
 
 # 14b2dcc6c93d4c8fa2a4dd7c253fa51b
 # f3748d0487734ce29f0687bce9ac25a9
-#: ../../../source/userguide/storage.rst:106
-#: ../../../source/userguide/wrapper.rst:118
+#: ../../../source/tutorial/storage.rst:106
+#: ../../../source/tutorial/wrapper.rst:118
 msgid "This is the default value."
 msgstr "This is the default value."
 
 # 81c965dc92ef4e66bfac97b5a3fb961b
 # f3947e5bf49f40fb8527919a65abcd79
-#: ../../../source/userguide/storage.rst:106
-#: ../../../source/userguide/wrapper.rst:118
+#: ../../../source/tutorial/storage.rst:106
+#: ../../../source/tutorial/wrapper.rst:118
 msgid "TokenBigram"
 msgstr ""
 
 # 44df86cd28954625be68570a294a4c00
 # 08301e25861b43cb854a0e2943da34fa
-#: ../../../source/userguide/storage.rst:109
-#: ../../../source/userguide/wrapper.rst:121
+#: ../../../source/tutorial/storage.rst:109
+#: ../../../source/tutorial/wrapper.rst:121
 msgid "It tokenises using MeCab. Groonga should be built with MeCab support."
 msgstr "It tokenises using MeCab. Groonga should be built with MeCab support."
 
 # 286cc0f836e4466f89dbc79d021cbaf1
 # 4058d20f5a0c4d36b8a4b4d4e1949330
-#: ../../../source/userguide/storage.rst:109
-#: ../../../source/userguide/wrapper.rst:121
+#: ../../../source/tutorial/storage.rst:109
+#: ../../../source/tutorial/wrapper.rst:121
 msgid "TokenMecab"
 msgstr ""
 
 # 00c80bf605f74b6b8e0efe0e6f446211
 # 062940357cce4109a08ff8f7e01c7710
-#: ../../../source/userguide/storage.rst:112
-#: ../../../source/userguide/wrapper.rst:124
+#: ../../../source/tutorial/storage.rst:112
+#: ../../../source/tutorial/wrapper.rst:124
 msgid ""
 "It tokenises in bigram. Unlike TokenBigram, continuous symbols are not "
 "treated as a token, but tokenised in bigram."
@@ -362,15 +368,15 @@ msgstr ""
 
 # 8b73f9c1b71c4c7e91d22fc7c6264e39
 # 430585ec818e4cc3a8a89100a549b9fa
-#: ../../../source/userguide/storage.rst:114
-#: ../../../source/userguide/wrapper.rst:126
+#: ../../../source/tutorial/storage.rst:114
+#: ../../../source/tutorial/wrapper.rst:126
 msgid "TokenBigramSplitSymbol"
 msgstr ""
 
 # 4c744fa34b894b9c902324f47ce169d1
 # 2cb6e51f8998490bb6dbd341efad76e2
-#: ../../../source/userguide/storage.rst:114
-#: ../../../source/userguide/wrapper.rst:126
+#: ../../../source/tutorial/storage.rst:114
+#: ../../../source/tutorial/wrapper.rst:126
 msgid ""
 "When you use TokenBigramSplitSymbol instead of TokenBigram, \"!?\" can match "
 "\"!?!?!?\" in \"Is it really!?!?!?\". But when you use TokenBigram, only "
@@ -382,8 +388,8 @@ msgstr ""
 
 # 3b120797d7294b93b8677c2a3aa749c4
 # 9c2fa654ce534a9f94ee9429fdebda40
-#: ../../../source/userguide/storage.rst:117
-#: ../../../source/userguide/wrapper.rst:129
+#: ../../../source/tutorial/storage.rst:117
+#: ../../../source/tutorial/wrapper.rst:129
 msgid ""
 "It tokenise in bigram. In addition to TokenBigramSplitSymbol, continuous "
 "alphabets are not treated as a token either, but tokenised in bigram."
@@ -393,15 +399,15 @@ msgstr ""
 
 # fc4162abe9164625b1d8d6a85f4af7b3
 # 9dae3053cb674a1eb5799f2b65ce5bc7
-#: ../../../source/userguide/storage.rst:119
-#: ../../../source/userguide/wrapper.rst:131
+#: ../../../source/tutorial/storage.rst:119
+#: ../../../source/tutorial/wrapper.rst:131
 msgid "TokenBigramSplitSymbolAlpha"
 msgstr ""
 
 # a8155152862a440fad981c902e21d563
 # 68870984558f44d8b2b470bc9810a231
-#: ../../../source/userguide/storage.rst:119
-#: ../../../source/userguide/wrapper.rst:131
+#: ../../../source/tutorial/storage.rst:119
+#: ../../../source/tutorial/wrapper.rst:131
 msgid ""
 "When you use TokenBigramSplitSymbolAlpha instead of TokenBigram, \"real\" "
 "can match \"Is it really?\". But when you use TokenBigram, only \"really\" "
@@ -413,8 +419,8 @@ msgstr ""
 
 # 3fe85076510e408384c84875d58452f8
 # 98d834b5561a42d9ab224ff18799e48a
-#: ../../../source/userguide/storage.rst:122
-#: ../../../source/userguide/wrapper.rst:134
+#: ../../../source/tutorial/storage.rst:122
+#: ../../../source/tutorial/wrapper.rst:134
 msgid ""
 "It tokenise in bigram. In addition to TokenBigramSplitSymbolAlpha, "
 "continuous numbers are not treated as a token either, but tokenised in "
@@ -426,15 +432,15 @@ msgstr ""
 
 # 23cde3cd611b47608b6c611229d72bef
 # 3e08e368383c4aa682672c73cc024c33
-#: ../../../source/userguide/storage.rst:124
-#: ../../../source/userguide/wrapper.rst:136
+#: ../../../source/tutorial/storage.rst:124
+#: ../../../source/tutorial/wrapper.rst:136
 msgid "TokenBigramSplitSymbolAlphaDigit"
 msgstr ""
 
 # a30ca135ec754bac9a208d3354180bd9
 # 6398b19a796340bc91b2a44e60bfac03
-#: ../../../source/userguide/storage.rst:124
-#: ../../../source/userguide/wrapper.rst:136
+#: ../../../source/tutorial/storage.rst:124
+#: ../../../source/tutorial/wrapper.rst:136
 msgid ""
 "When you use TokenBigramSplitSymbolAlphaDigit instead of TokenBigram, "
 "\"567\" can match \"090-0123-4567\". But when you use TokenBigram, only "
@@ -446,22 +452,22 @@ msgstr ""
 
 # cadd7ce573454a0e9253d611c2e5a06c
 # cf390a7a16bf4abeaa7d66590e5517f2
-#: ../../../source/userguide/storage.rst:127
-#: ../../../source/userguide/wrapper.rst:139
+#: ../../../source/tutorial/storage.rst:127
+#: ../../../source/tutorial/wrapper.rst:139
 msgid "It tokenise in bigram. Unlike TokenBigram, it ignores white spaces."
 msgstr "It tokenise in bigram. Unlike TokenBigram, it ignores white spaces."
 
 # 9a7cabfeaeed435da820e04468f142b8
 # 8fa031884571406fb825b7d6e29f0ac0
-#: ../../../source/userguide/storage.rst:129
-#: ../../../source/userguide/wrapper.rst:141
+#: ../../../source/tutorial/storage.rst:129
+#: ../../../source/tutorial/wrapper.rst:141
 msgid "TokenBigramIgnoreBlank"
 msgstr ""
 
 # a2d864bc1edc4d39b28f8f3a3df3153c
 # e4ada083d8fa4c719e26d7d18fddc619
-#: ../../../source/userguide/storage.rst:129
-#: ../../../source/userguide/wrapper.rst:141
+#: ../../../source/tutorial/storage.rst:129
+#: ../../../source/tutorial/wrapper.rst:141
 msgid ""
 "When you use TokenBigramIgnoreBlank instead of TokenBigram, \"みなさん\" can "
 "match \"み な さ ん 注 目\". But when you use TokenBigram, only \"み な さ ん"
@@ -473,8 +479,8 @@ msgstr ""
 
 # 3d3065c5412d43cb885b5c409ce31ebd
 # 1da2281f49144deb80f24357b3716a60
-#: ../../../source/userguide/storage.rst:132
-#: ../../../source/userguide/wrapper.rst:144
+#: ../../../source/tutorial/storage.rst:132
+#: ../../../source/tutorial/wrapper.rst:144
 msgid ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbol, it ignores white "
 "spaces."
@@ -484,15 +490,15 @@ msgstr ""
 
 # bfd64336eb6a42dd80c6c84147138180
 # 8f436abbf03c4f76a63ffdcea56757cd
-#: ../../../source/userguide/storage.rst:134
-#: ../../../source/userguide/wrapper.rst:146
+#: ../../../source/tutorial/storage.rst:134
+#: ../../../source/tutorial/wrapper.rst:146
 msgid "TokenBigramIgnoreBlankSplitSymbol"
 msgstr ""
 
 # ceb4d9fdb2dc412ab0c52902995177fc
 # 5e692b29f3304a90a53b43387f3fc646
-#: ../../../source/userguide/storage.rst:134
-#: ../../../source/userguide/wrapper.rst:146
+#: ../../../source/tutorial/storage.rst:134
+#: ../../../source/tutorial/wrapper.rst:146
 msgid ""
 "When you use TokenBigramIgnoreBlankSplitSymbol instead of "
 "TokenBigramSplitSymbol, \"???\" can match \"! ? ???\". But when you use "
@@ -504,8 +510,8 @@ msgstr ""
 
 # 06e3e040a24a45259c3a00aedaaa9411
 # f207e332d6534aaca912ad82894d0f8a
-#: ../../../source/userguide/storage.rst:137
-#: ../../../source/userguide/wrapper.rst:149
+#: ../../../source/tutorial/storage.rst:137
+#: ../../../source/tutorial/wrapper.rst:149
 msgid ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbolAlpha, it ignores white "
 "spaces."
@@ -515,15 +521,15 @@ msgstr ""
 
 # 464d1efdcd5b472c9aa292a1e7190d26
 # 05af191b81524aa4be2333a90d7c6505
-#: ../../../source/userguide/storage.rst:139
-#: ../../../source/userguide/wrapper.rst:151
+#: ../../../source/tutorial/storage.rst:139
+#: ../../../source/tutorial/wrapper.rst:151
 msgid "TokenBigramIgnoreBlankSplitSymbolAlpha"
 msgstr ""
 
 # 30351ebbcfed446eb7237cae5abff33e
 # c72216f3d0184bc28c97314f81d3da62
-#: ../../../source/userguide/storage.rst:139
-#: ../../../source/userguide/wrapper.rst:151
+#: ../../../source/tutorial/storage.rst:139
+#: ../../../source/tutorial/wrapper.rst:151
 msgid ""
 "When you use TokenBigramIgnoreBlankSplitSymbolAlpha instead of "
 "TokenBigramSplitSymbolAlpha, \"ama\" can match \"I am a pen.\". But when you "
@@ -535,8 +541,8 @@ msgstr ""
 
 # 3d7ebc5897ba440897a453469de4f1d7
 # cfdbbd02683a4a11b677bd5ba2c323f4
-#: ../../../source/userguide/storage.rst:142
-#: ../../../source/userguide/wrapper.rst:154
+#: ../../../source/tutorial/storage.rst:142
+#: ../../../source/tutorial/wrapper.rst:154
 msgid ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbolAlphaDigit, it ignores "
 "white spaces."
@@ -546,15 +552,15 @@ msgstr ""
 
 # e56c7504c874427cba3c4c1b6531af11
 # 0ad0adcd0d234f95857f5bcdba9e6cca
-#: ../../../source/userguide/storage.rst:144
-#: ../../../source/userguide/wrapper.rst:156
+#: ../../../source/tutorial/storage.rst:144
+#: ../../../source/tutorial/wrapper.rst:156
 msgid "TokenBigramIgnoreBlankSplitSymbolAlphaDigit"
 msgstr ""
 
 # b619b3859a2e4f7da9b150c2f6f8504a
 # bc0193dc45fb467ead99293003b2a157
-#: ../../../source/userguide/storage.rst:144
-#: ../../../source/userguide/wrapper.rst:156
+#: ../../../source/tutorial/storage.rst:144
+#: ../../../source/tutorial/wrapper.rst:156
 msgid ""
 "When you use TokenBigramIgnoreBlankSplitSymbolAlphaDigit instead of "
 "TokenBigramSplitSymbolAlphaDigit, \"9001\" can match \"090 0123 4567\". But "
@@ -568,37 +574,37 @@ msgstr ""
 
 # 84306633f39a4cf2bafb853d3b6d2b88
 # 5bfa324686e44ace92f6257c597f66c9
-#: ../../../source/userguide/storage.rst:147
-#: ../../../source/userguide/wrapper.rst:159
+#: ../../../source/tutorial/storage.rst:147
+#: ../../../source/tutorial/wrapper.rst:159
 msgid "It tokenise by splitting with a white space."
 msgstr "It tokenise by splitting with a white space."
 
 # b0234f22496b4cc1a5e7592c069a79c2
 # a0e75201a9e34f86bd536a28eebce4b9
-#: ../../../source/userguide/storage.rst:149
-#: ../../../source/userguide/wrapper.rst:161
+#: ../../../source/tutorial/storage.rst:149
+#: ../../../source/tutorial/wrapper.rst:161
 msgid ""
 "\"movie horror topic\" will be tokenised as \"movie\", \"horror\", \"topic\"."
 msgstr ""
 
 # edb67293295d4d3aa9a3ed5d75b7f146
 # 2c65f7b9c8244036af562a1353ba6825
-#: ../../../source/userguide/storage.rst:149
-#: ../../../source/userguide/wrapper.rst:161
+#: ../../../source/tutorial/storage.rst:149
+#: ../../../source/tutorial/wrapper.rst:161
 msgid "TokenDelimit"
 msgstr ""
 
 # 667ec4423d3e403db2444c027888b5ce
 # 913eefbef9554acea268d6af99542a2d
-#: ../../../source/userguide/storage.rst:152
-#: ../../../source/userguide/wrapper.rst:164
+#: ../../../source/tutorial/storage.rst:152
+#: ../../../source/tutorial/wrapper.rst:164
 msgid "It tokenise by splitting with a null character (\\\\0)."
 msgstr "It tokenise by splitting with a null character (\\\\0)."
 
 # b0234f22496b4cc1a5e7592c069a79c2
 # a0e75201a9e34f86bd536a28eebce4b9
-#: ../../../source/userguide/storage.rst:154
-#: ../../../source/userguide/wrapper.rst:166
+#: ../../../source/tutorial/storage.rst:154
+#: ../../../source/tutorial/wrapper.rst:166
 msgid ""
 "\"movie\\\\0horror\\\\0topic\" will be tokenised as \"movie\", \"horror\", "
 "\"topic\"."
@@ -606,15 +612,15 @@ msgstr ""
 
 # 37cd2b992de049d387888a4183488ab3
 # 65d0a4cd703d47678eeabbb164694114
-#: ../../../source/userguide/storage.rst:154
-#: ../../../source/userguide/wrapper.rst:166
+#: ../../../source/tutorial/storage.rst:154
+#: ../../../source/tutorial/wrapper.rst:166
 msgid "TokenDelimitNull"
 msgstr ""
 
 # 12c15c9dd71d416b84ae465e9e594248
 # e37db6a859d74f059e053b19c7d6b8f9
-#: ../../../source/userguide/storage.rst:157
-#: ../../../source/userguide/wrapper.rst:169
+#: ../../../source/tutorial/storage.rst:157
+#: ../../../source/tutorial/wrapper.rst:169
 msgid ""
 "It tokenises in unigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 2 letters or more. It is "
@@ -626,15 +632,15 @@ msgstr ""
 
 # 3571b6c01dfc4c91b55bd32b35877124
 # 19f35147abbb415ba8fdcfa82c1a5eb6
-#: ../../../source/userguide/storage.rst:157
-#: ../../../source/userguide/wrapper.rst:169
+#: ../../../source/tutorial/storage.rst:157
+#: ../../../source/tutorial/wrapper.rst:169
 msgid "TokenUnigram"
 msgstr ""
 
 # a4cec4a394944032bfcb56a3fe86ba58
 # 4e0d80bb9509440ca5e2c22563ae09b4
-#: ../../../source/userguide/storage.rst:160
-#: ../../../source/userguide/wrapper.rst:172
+#: ../../../source/tutorial/storage.rst:160
+#: ../../../source/tutorial/wrapper.rst:172
 msgid ""
 "It tokenises in trigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 4 letters or more. It is "
@@ -646,14 +652,14 @@ msgstr ""
 
 # 6f452ab5bf254cf3865b7f11a1760a86
 # 9880cde389834bf4847b32736eb063e3
-#: ../../../source/userguide/storage.rst:160
-#: ../../../source/userguide/wrapper.rst:172
+#: ../../../source/tutorial/storage.rst:160
+#: ../../../source/tutorial/wrapper.rst:172
 msgid "TokenTrigram"
 msgstr ""
 
 # 6328d27e015448dd8ecf36efd8208f23
 # bd4f25db45634e568ba34b1f54e9c752
-#: ../../../source/userguide/storage.rst:162
+#: ../../../source/tutorial/storage.rst:162
 msgid ""
 "You can specify the default parser by passing ``--with-default-parser`` "
 "option in ``configure`` when you build mroonga ::"
@@ -661,8 +667,8 @@ msgstr ""
 
 # 166c792f98ea4a99b8eff480712aa8a1
 # 43df8447a7044b05b62043ef436a0820
-#: ../../../source/userguide/storage.rst:166
-#: ../../../source/userguide/wrapper.rst:178
+#: ../../../source/tutorial/storage.rst:166
+#: ../../../source/tutorial/wrapper.rst:178
 msgid ""
 "Or you can set ``mroonga_default_parser`` variable in my.cnf or by SQL. If "
 "you specify it in my.cnf, the change will not be lost after restarting "
@@ -673,25 +679,25 @@ msgstr ""
 
 # b8d262367c95467b9b3b35a449928eae
 # af95cd4dba404307adf25a83ea18a2a0
-#: ../../../source/userguide/storage.rst:168
-#: ../../../source/userguide/wrapper.rst:180
+#: ../../../source/tutorial/storage.rst:168
+#: ../../../source/tutorial/wrapper.rst:180
 msgid "my.cnf::"
 msgstr "my.cnf::"
 
 # 9d1a2f2e86124206bc2e81546b45912f
 # 2d5621eebaf240fe931673ebe0f89553
-#: ../../../source/userguide/storage.rst:173
-#: ../../../source/userguide/wrapper.rst:185
+#: ../../../source/tutorial/storage.rst:173
+#: ../../../source/tutorial/wrapper.rst:185
 msgid "SQL::"
 msgstr "SQL::"
 
 # 8f7b6cc3ae674dffb8bc2815de0f1d6d
-#: ../../../source/userguide/storage.rst:179
+#: ../../../source/tutorial/storage.rst:179
 msgid "How to use geolocation search"
 msgstr "How to use geolocation search"
 
 # 40ec6b98fd334564895056e6aaf75bcb
-#: ../../../source/userguide/storage.rst:181
+#: ../../../source/tutorial/storage.rst:181
 msgid ""
 "In storage mode, you can use fast geolocation search in addition to full "
 "text search. But unlike MyISAM, you can only store POINT type data. You "
@@ -704,7 +710,7 @@ msgstr ""
 "supports MBRContains. It does not support MBRDisjoint."
 
 # d6a714d911b74877bede2a1490afb4cd
-#: ../../../source/userguide/storage.rst:183
+#: ../../../source/tutorial/storage.rst:183
 msgid ""
 "For the table definition for geolocation search, you need to define a POINT "
 "type column like in MyISAM and define SPATIAL INDEX for it. ::"
@@ -713,7 +719,7 @@ msgstr ""
 "type column like in MyISAM and define SPATIAL INDEX for it. ::"
 
 # 742af2508f954b2d942717c7510e262a
-#: ../../../source/userguide/storage.rst:193
+#: ../../../source/tutorial/storage.rst:193
 msgid ""
 "To store data, you create POINT type data by using geomFromText() function "
 "like in MyISAM. ::"
@@ -722,7 +728,7 @@ msgstr ""
 "like in MyISAM. ::"
 
 # 85d74c42628047fba5d7a17db0eb51a5
-#: ../../../source/userguide/storage.rst:204
+#: ../../../source/tutorial/storage.rst:204
 msgid ""
 "If you want to find shops within the rectangle where Ikebukuro station "
 "(139.7101 35.7292) is the top-left point and Tokyo Station (139.7662 "
@@ -733,31 +739,31 @@ msgstr ""
 "35.6815) is the bottom-right point, SELECT phrase is like the following. ::"
 
 # 51b6957cd65a4c839e26fd9366d6d007
-#: ../../../source/userguide/storage.rst:214
+#: ../../../source/tutorial/storage.rst:214
 msgid "Here you can search by geolocation!"
 msgstr "Here you can search by geolocation!"
 
 # 7768e19c7d594c11acae75148bbda8d2
-#: ../../../source/userguide/storage.rst:217
+#: ../../../source/tutorial/storage.rst:217
 msgid "How to get the record ID"
 msgstr "How to get the record ID"
 
 # fb91834b29884d808f2e9d01cdc12f2d
-#: ../../../source/userguide/storage.rst:219
+#: ../../../source/tutorial/storage.rst:219
 msgid ""
 "Groonga assigns a unique number to identify the record when a record is "
 "added in the table."
 msgstr ""
 
 # 025e7a3d10d0461889d893ecbef3be62
-#: ../../../source/userguide/storage.rst:221
+#: ../../../source/tutorial/storage.rst:221
 msgid ""
 "To make the development of applications easier, you can get this record ID "
 "by SQL in mroonga"
 msgstr ""
 
 # ec7a6034bd2140e68e64c1db0443238e
-#: ../../../source/userguide/storage.rst:223
+#: ../../../source/tutorial/storage.rst:223
 msgid ""
 "To get the record ID, you need to create a column named ``_id`` when you "
 "create a table. ::"
@@ -766,7 +772,7 @@ msgstr ""
 "create a table. ::"
 
 # b4af700acf8a40c5a08e5b0a3aa74cd5
-#: ../../../source/userguide/storage.rst:232
+#: ../../../source/tutorial/storage.rst:232
 msgid ""
 "Tye typo of _id column should be integer one (TINYINT, SMALLINT, MEDIUMINT, "
 "INT or BIGINT)."
@@ -775,12 +781,12 @@ msgstr ""
 "INT or BIGINT)."
 
 # 8ac40a19a908426487162f5ee04ac41f
-#: ../../../source/userguide/storage.rst:234
+#: ../../../source/tutorial/storage.rst:234
 msgid "You can create an index for _id column, but it should be HASH type."
 msgstr "You can create an index for _id column, but it should be HASH type."
 
 # 62e74b90c07348df89b95fe9876bd8a5
-#: ../../../source/userguide/storage.rst:236
+#: ../../../source/tutorial/storage.rst:236
 msgid ""
 "Let's add records in the table by INSERT. Since _id column is implemented as "
 "a virtual column and its value is assigned by groonga, you cannot specify "
@@ -793,12 +799,12 @@ msgstr ""
 "you need to use ``null`` as its value. ::"
 
 # a433f6abba8b48c79beb233cba3dd03a
-#: ../../../source/userguide/storage.rst:251
+#: ../../../source/tutorial/storage.rst:251
 msgid "To get the record ID, you invoke SELECT with _id column. ::"
 msgstr "To get the record ID, you invoke SELECT with _id column. ::"
 
 # bf8d5c9c05e54c2d915c3d21b332563b
-#: ../../../source/userguide/storage.rst:264
+#: ../../../source/tutorial/storage.rst:264
 msgid ""
 "By using last_insert_grn_id function, you can also get the record ID that is "
 "assigned by the last INSERT. ::"
@@ -807,7 +813,7 @@ msgstr ""
 "assigned by the last INSERT. ::"
 
 # aec8646c909440dbb9c7f09f64d8b1d4
-#: ../../../source/userguide/storage.rst:277
+#: ../../../source/tutorial/storage.rst:277
 msgid ""
 "last_insert_grn_id function is included in mroonga as a User-Defined "
 "Function (UDF), but if you have not yet register it in MySQL by CREATE "
@@ -815,7 +821,7 @@ msgid ""
 msgstr ""
 
 # c39fbe48314c4ee287c759acf23ef4d2
-#: ../../../source/userguide/storage.rst:281
+#: ../../../source/tutorial/storage.rst:281
 msgid ""
 "As you can see in the example above, you can get the record ID by _id column "
 "or last_insert_grn_id function. It will be useful to use this value in the "
@@ -826,15 +832,15 @@ msgstr ""
 "ensuing SQL queries like UPDATE. ::"
 
 # dcad6572d114437dad8213326b415707
-#: ../../../source/userguide/storage.rst:288
-#: ../../../source/userguide/wrapper.rst:191
+#: ../../../source/tutorial/storage.rst:288
+#: ../../../source/tutorial/wrapper.rst:191
 msgid "How to get snippet (Keyword in context)"
 msgstr ""
 
 # 9772fc1905f34d74964505c7ee048ad1
 # b5e0562e1993494d877648f2e3c91556
-#: ../../../source/userguide/storage.rst:290
-#: ../../../source/userguide/wrapper.rst:193
+#: ../../../source/tutorial/storage.rst:290
+#: ../../../source/tutorial/wrapper.rst:193
 msgid ""
 "Mroonga provides functionality to get keyword in context. It is implemented "
 "as 'mroonga_snippet' UDF."
@@ -842,18 +848,18 @@ msgstr ""
 
 # af19e5601cf04eb49cd65221bfc117b2
 # 7ba26c20c1154c879d7fe5c008e22df3
-#: ../../../source/userguide/storage.rst:293
-#: ../../../source/userguide/wrapper.rst:196
+#: ../../../source/tutorial/storage.rst:293
+#: ../../../source/tutorial/wrapper.rst:196
 msgid "See :doc:`/reference/udf/mroonga_snippet` about details."
 msgstr ""
 
 # 79e74f8e2b5c46a48a970556998ebcc7
-#: ../../../source/userguide/storage.rst:297
+#: ../../../source/tutorial/storage.rst:297
 msgid "How to run groonga command"
 msgstr ""
 
 # ea304e51559c4f26b6349be254ccfc3e
-#: ../../../source/userguide/storage.rst:299
+#: ../../../source/tutorial/storage.rst:299
 msgid ""
 "In storage mode, mroonga stores all your data into groonga database. You can "
 "access groonga database by SQL with mroonga. SQL is very powerful but it is "
@@ -861,7 +867,7 @@ msgid ""
 msgstr ""
 
 # 76059b2ea44d4017b6ccb0f71b3b1710
-#: ../../../source/userguide/storage.rst:304
+#: ../../../source/tutorial/storage.rst:304
 msgid ""
 "Faceted search is popular recently. Many online shopping sites such as "
 "amazon.com and ebay.com support faceted search. Faceted search refines the "
@@ -871,21 +877,21 @@ msgid ""
 msgstr ""
 
 # 2c1e0131c7d44f12b6f5768c0783ff1c
-#: ../../../source/userguide/storage.rst:310
+#: ../../../source/tutorial/storage.rst:310
 msgid ""
 "Users don't need to think about how to refine their search. Users just "
 "select a showed refined search."
 msgstr ""
 
 # 7d020dce60dd4e948bfeb6d6daec766b
-#: ../../../source/userguide/storage.rst:312
+#: ../../../source/tutorial/storage.rst:312
 msgid ""
 "Users don't get boared \"not match\" page. Faceted search showes only "
 "refined searches that has one or more matched items."
 msgstr ""
 
 # 6cd1487be95c41ab9f8a244340da7d16
-#: ../../../source/userguide/storage.rst:315
+#: ../../../source/tutorial/storage.rst:315
 msgid ""
 "Faceted search needs multiple `GROUP BY` operations against searched result "
 "set. To do faceted search by SQL, multiple `SELECT` requests are needed. It "
@@ -893,7 +899,7 @@ msgid ""
 msgstr ""
 
 # 49f7bc2f6a644041a90ed4dfb48dd428
-#: ../../../source/userguide/storage.rst:319
+#: ../../../source/tutorial/storage.rst:319
 msgid ""
 "Groonga can do faceted search by only one groonga command. It is effective. "
 "Groonga has the `select` command that can search records with faceted "
@@ -903,7 +909,7 @@ msgid ""
 msgstr ""
 
 # 5449f35bd8e74e6881d2cb100b2c4f2e
-#: ../../../source/userguide/storage.rst:326
+#: ../../../source/tutorial/storage.rst:326
 msgid ""
 "Mroonga provides `mroonga_command()` function. You can run groonga command "
 "in SQL by the function. But you should use only `select` command. Other "
@@ -911,18 +917,18 @@ msgid ""
 msgstr ""
 
 # 560a69c50a9a4e289cfdd3a57b8ccac1
-#: ../../../source/userguide/storage.rst:331
+#: ../../../source/tutorial/storage.rst:331
 msgid "Here is the schema definition for execution examples::"
 msgstr ""
 
 # 26553ebd60a145caa617d4d894b0f9a1
 # 2b5a915e3dac4eaea37a7630fd424cf1
-#: ../../../source/userguide/storage.rst:343
+#: ../../../source/tutorial/storage.rst:343
 msgid "Here is the sample data for execution examples::"
 msgstr ""
 
 # 1c07260ad37f45a7b1d43f14dbe5a792
-#: ../../../source/userguide/storage.rst:364
+#: ../../../source/tutorial/storage.rst:364
 msgid ""
 "Each record has `groonga` or `MySQL` as `tag`. Each record also has `year` "
 "and `year_month`. You can use `tag`, `year` and `year_month` as faceted "
@@ -930,7 +936,7 @@ msgid ""
 msgstr ""
 
 # 9a5787adb947404f824388bb90cd8589
-#: ../../../source/userguide/storage.rst:368
+#: ../../../source/tutorial/storage.rst:368
 msgid ""
 "Groonga calls faceted search as drilldown. So parameter key in groonga is `--"
 "drilldown`. Groonga returns search result as JSON. So `mroonga_command()` "
@@ -939,14 +945,14 @@ msgid ""
 msgstr ""
 
 # d6c81731037543f58693e2a7b98ac903
-#: ../../../source/userguide/storage.rst:373
+#: ../../../source/tutorial/storage.rst:373
 msgid ""
 "Here is the example of faceted search by all available faceted search keys "
 "(result JSON is pretty printted)::"
 msgstr ""
 
 # b4c39802453149718b8349cdc8c9067f
-#: ../../../source/userguide/storage.rst:400
+#: ../../../source/tutorial/storage.rst:400
 msgid ""
 "See `groonga's select command document <http://groonga.org/docs/reference/"
 "commands/select.html>`_ for more details."
@@ -954,22 +960,22 @@ msgstr ""
 
 # 168635880de344e88973b99615520170
 # bf6f60f28e394fc6a0205d211059fb02
-#: ../../../source/userguide/storage.rst:405
-#: ../../../source/userguide/wrapper.rst:199
+#: ../../../source/tutorial/storage.rst:405
+#: ../../../source/tutorial/wrapper.rst:199
 msgid "Logging"
 msgstr "Logging"
 
 # cfb14e95f12642b48a35cd343d3f8305
 # ed63bbea39d446d1b815f34748066707
-#: ../../../source/userguide/storage.rst:407
-#: ../../../source/userguide/wrapper.rst:201
+#: ../../../source/tutorial/storage.rst:407
+#: ../../../source/tutorial/wrapper.rst:201
 msgid "Mroonga outputs the logs by default."
 msgstr ""
 
 # 236544b4815e433a9b7901a8620ec7f3
 # 8c39046aa899458cac9035b9fd947db1
-#: ../../../source/userguide/storage.rst:409
-#: ../../../source/userguide/wrapper.rst:203
+#: ../../../source/tutorial/storage.rst:409
+#: ../../../source/tutorial/wrapper.rst:203
 msgid ""
 "Log files are located in MySQL's data directory with the filename  ``groonga."
 "log``."
@@ -979,15 +985,15 @@ msgstr ""
 
 # 26553ebd60a145caa617d4d894b0f9a1
 # 2b5a915e3dac4eaea37a7630fd424cf1
-#: ../../../source/userguide/storage.rst:411
-#: ../../../source/userguide/wrapper.rst:205
+#: ../../../source/tutorial/storage.rst:411
+#: ../../../source/tutorial/wrapper.rst:205
 msgid "Here is the example of the log. ::"
 msgstr "Here is the example of the log. ::"
 
 # 9b04aa62a58b4d09bf2220b5c130b230
 # 0e7ff9ff5a034f87a5f6f6bf15337c71
-#: ../../../source/userguide/storage.rst:417
-#: ../../../source/userguide/wrapper.rst:211
+#: ../../../source/tutorial/storage.rst:417
+#: ../../../source/tutorial/wrapper.rst:211
 msgid ""
 "The default log level is NOTICE, i.e. we have important information only and "
 "we don't have debug information etc.)."
@@ -997,8 +1003,8 @@ msgstr ""
 
 # a469949db3844b96b386c973d1cbd899
 # 0254a17c99d94fd99bd921974c05ef39
-#: ../../../source/userguide/storage.rst:419
-#: ../../../source/userguide/wrapper.rst:213
+#: ../../../source/tutorial/storage.rst:419
+#: ../../../source/tutorial/wrapper.rst:213
 msgid ""
 "You can get the log level by ``mroonga_log_level`` system variable, that is "
 "a global variable. You can also modify it dynamically by using SET phrase. ::"
@@ -1006,91 +1012,91 @@ msgstr ""
 
 # 30beef7058a44d94865b8b3d084b9999
 # 49666ac1388443c0965e41452a44ba9e
-#: ../../../source/userguide/storage.rst:440
-#: ../../../source/userguide/wrapper.rst:234
+#: ../../../source/tutorial/storage.rst:440
+#: ../../../source/tutorial/wrapper.rst:234
 msgid "Available log levels are the followings."
 msgstr "Available log levels are the followings."
 
 # 84c28c94598043f981d379e4728ff8de
 # 8a36e3c522c6434b84ab578b248c0456
-#: ../../../source/userguide/storage.rst:442
-#: ../../../source/userguide/wrapper.rst:236
+#: ../../../source/tutorial/storage.rst:442
+#: ../../../source/tutorial/wrapper.rst:236
 msgid "NONE"
 msgstr "NONE"
 
 # 72f99e799e6e467daeb72772b9c5c7d0
 # 4436ccb186df4f9ba3d5ccdf4787a507
-#: ../../../source/userguide/storage.rst:443
-#: ../../../source/userguide/wrapper.rst:237
+#: ../../../source/tutorial/storage.rst:443
+#: ../../../source/tutorial/wrapper.rst:237
 msgid "EMERG"
 msgstr "EMERG"
 
 # 8630e4838f834be2a378ac54f9eaf899
 # 40f5617e207f430395f4873e390ebd2a
-#: ../../../source/userguide/storage.rst:444
-#: ../../../source/userguide/wrapper.rst:238
+#: ../../../source/tutorial/storage.rst:444
+#: ../../../source/tutorial/wrapper.rst:238
 msgid "ALERT"
 msgstr "ALERT"
 
 # f41d496df3e340b99b12d9b9826995bf
 # 772c21f3c57e49a3bf324d48b9419912
-#: ../../../source/userguide/storage.rst:445
-#: ../../../source/userguide/wrapper.rst:239
+#: ../../../source/tutorial/storage.rst:445
+#: ../../../source/tutorial/wrapper.rst:239
 msgid "CRIT"
 msgstr "CRIT"
 
 # e00bffd888cf44c6afbad467665460ce
 # b28f8b6389c348259b4d12bcb0e8c693
-#: ../../../source/userguide/storage.rst:446
-#: ../../../source/userguide/wrapper.rst:240
+#: ../../../source/tutorial/storage.rst:446
+#: ../../../source/tutorial/wrapper.rst:240
 msgid "ERROR"
 msgstr "ERROR"
 
 # e245eee39007493f8e842d03a0e77d91
 # 0a511de57b0040748c59b5b0363fa6d8
-#: ../../../source/userguide/storage.rst:447
-#: ../../../source/userguide/wrapper.rst:241
+#: ../../../source/tutorial/storage.rst:447
+#: ../../../source/tutorial/wrapper.rst:241
 msgid "WARNING"
 msgstr "WARNING"
 
 # a578607c1c3944b78961c7415a5a95cd
 # b017ee614cad4dfda1d2078d22e49af1
-#: ../../../source/userguide/storage.rst:448
-#: ../../../source/userguide/wrapper.rst:242
+#: ../../../source/tutorial/storage.rst:448
+#: ../../../source/tutorial/wrapper.rst:242
 msgid "NOTICE"
 msgstr "NOTICE"
 
 # 10fa09571ae84492bf10008ceca23d29
 # ce3d4176bef44c0da25fb1962953da57
-#: ../../../source/userguide/storage.rst:449
-#: ../../../source/userguide/wrapper.rst:243
+#: ../../../source/tutorial/storage.rst:449
+#: ../../../source/tutorial/wrapper.rst:243
 msgid "INFO"
 msgstr "INFO"
 
 # 44eaeff5fa3843178083bb53bafa4d4c
 # e0bcb08b334f43efb76bec1325d0a7f8
-#: ../../../source/userguide/storage.rst:450
-#: ../../../source/userguide/wrapper.rst:244
+#: ../../../source/tutorial/storage.rst:450
+#: ../../../source/tutorial/wrapper.rst:244
 msgid "DEBUG"
 msgstr "DEBUG"
 
 # c9aead6a40da4fe9b34beb1374a17183
 # 851d0aa947234a588e7ef57777be79d7
-#: ../../../source/userguide/storage.rst:451
-#: ../../../source/userguide/wrapper.rst:245
+#: ../../../source/tutorial/storage.rst:451
+#: ../../../source/tutorial/wrapper.rst:245
 msgid "DUMP"
 msgstr "DUMP"
 
 # abf5a15085724c038e2fda013543299e
-#: ../../../source/userguide/storage.rst:453
-#: ../../../source/userguide/wrapper.rst:247
+#: ../../../source/tutorial/storage.rst:453
+#: ../../../source/tutorial/wrapper.rst:247
 msgid "See :ref:`mroonga_log_level` about details."
 msgstr ""
 
 # 0b0ad0c51cc54de78ff4f5c494fdb4aa
 # 17ac16799fae4800a0885302ec534755
-#: ../../../source/userguide/storage.rst:455
-#: ../../../source/userguide/wrapper.rst:249
+#: ../../../source/tutorial/storage.rst:455
+#: ../../../source/tutorial/wrapper.rst:249
 msgid ""
 "You can reopen the log file by FLUSH LOGS. If you want to rotate the log "
 "file without stopping MySQL server, you can do in the following procedure."
@@ -1100,8 +1106,8 @@ msgstr ""
 
 # 93a775c4fcd94a6a821c152178833042
 # ee93d296d4424a08802ab0a60d6ca96a
-#: ../../../source/userguide/storage.rst:457
-#: ../../../source/userguide/wrapper.rst:251
+#: ../../../source/tutorial/storage.rst:457
+#: ../../../source/tutorial/wrapper.rst:251
 msgid ""
 "change the file name of ``groonga.log`` (by using OS's mv command etc.)."
 msgstr ""
@@ -1109,8 +1115,8 @@ msgstr ""
 
 # 58e0b7fdf1354ae199a90157c31f69af
 # cb23fadea00f4705a3f33e0344794439
-#: ../../../source/userguide/storage.rst:458
-#: ../../../source/userguide/wrapper.rst:252
+#: ../../../source/tutorial/storage.rst:458
+#: ../../../source/tutorial/wrapper.rst:252
 msgid ""
 "invoke \"FLUSH LOGS\" in MySQL server (by mysql command or mysqladmin "
 "command)."
@@ -1119,31 +1125,31 @@ msgstr ""
 "command)."
 
 # 3591e7f3c5b141e5bf37371cce0f06a5
-#: ../../../source/userguide/storage.rst:461
+#: ../../../source/tutorial/storage.rst:461
 msgid "Choosing appropriate columns"
 msgstr "Choosing appropriate columns"
 
 # 79b267705e364bbe88c73d71368be1c1
-#: ../../../source/userguide/storage.rst:463
+#: ../../../source/tutorial/storage.rst:463
 msgid ""
 "Groonga uses one file per column to store data, and mroonga accesses needed "
 "columns only when accessing a table to utilise this characteristic."
 msgstr ""
 
 # 542c4fcf517c436d9e35ce64ea015e14
-#: ../../../source/userguide/storage.rst:465
+#: ../../../source/tutorial/storage.rst:465
 msgid ""
 "This optimisation is done automatically in mroonga internal, you don't need "
 "any specific configuration."
 msgstr ""
 
 # 354dd5e9f98b4460913fdb838039d104
-#: ../../../source/userguide/storage.rst:467
+#: ../../../source/tutorial/storage.rst:467
 msgid "Imagine that we have a table with 20 columns like below. ::"
 msgstr "Imagine that we have a table with 20 columns like below. ::"
 
 # 18e085ff88c44a91858c999dda65a98c
-#: ../../../source/userguide/storage.rst:480
+#: ../../../source/tutorial/storage.rst:480
 msgid ""
 "When we run SELECT phrase like the following, mroonga reads data from "
 "columns that are referred by SELECT phrase and WHERE phrase only (and it "
@@ -1151,12 +1157,12 @@ msgid ""
 msgstr ""
 
 # d02732b24c9f40c59702cba710102206
-#: ../../../source/userguide/storage.rst:482
+#: ../../../source/tutorial/storage.rst:482
 msgid "SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = \"XXX\";"
 msgstr "SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = \"XXX\";"
 
 # de10f144bf574ad79db9b7fd76192438
-#: ../../../source/userguide/storage.rst:484
+#: ../../../source/tutorial/storage.rst:484
 msgid ""
 "In this case above, only columns c1, c2, c11 and c12 are accessed, and we "
 "can process the SQL rapidly."
@@ -1165,12 +1171,12 @@ msgstr ""
 "can process the SQL rapidly."
 
 # cf41beed7ef347948ae6c1840f5abcdb
-#: ../../../source/userguide/storage.rst:487
+#: ../../../source/tutorial/storage.rst:487
 msgid "Optimisation for counting rows"
 msgstr "Optimisation for counting rows"
 
 # 3a6776d61a9441e6a55319b9e7df19b2
-#: ../../../source/userguide/storage.rst:489
+#: ../../../source/tutorial/storage.rst:489
 msgid ""
 "In MySQL's storage engine interface, there is no difference between counting "
 "rows like COUNT(\\*) and normal data retrieving by SELECT. So access to data "
@@ -1183,19 +1189,19 @@ msgstr ""
 "count rows."
 
 # fb356c31621449e79862cd77433b6f2d
-#: ../../../source/userguide/storage.rst:491
+#: ../../../source/tutorial/storage.rst:491
 msgid ""
 "Tritonn (MySQL + Senna), that is mroonga's predecessor, introduced \"2ind "
 "patch\" to skip needless access to data and solved this performance issue."
 msgstr ""
 
 # 8e0c9ebe908d44e98c948ee5b8c67897
-#: ../../../source/userguide/storage.rst:493
+#: ../../../source/tutorial/storage.rst:493
 msgid "Mroonga also has the optimisation for counting rows."
 msgstr ""
 
 # e7b548b8992c47609f72d239f228103a
-#: ../../../source/userguide/storage.rst:495
+#: ../../../source/tutorial/storage.rst:495
 msgid ""
 "In the following SELECT, for example, needless read of columns are skipped "
 "and you can get the result of counting rows with the minimal cost."
@@ -1204,30 +1210,30 @@ msgstr ""
 "and you can get the result of counting rows with the minimal cost."
 
 # 060341b763e646db8fc525b5434939b7
-#: ../../../source/userguide/storage.rst:497
+#: ../../../source/tutorial/storage.rst:497
 msgid "SELECT COUNT(*) FROM t1 WHERE MATCH(c2) AGAINST(\"hoge\");"
 msgstr "SELECT COUNT(*) FROM t1 WHERE MATCH(c2) AGAINST(\"hoge\");"
 
 # d8ad63d5f8924162927af389e57e7db4
 # d8ad63d5f8924162927af389e57e7db4
 # 2d684ba7a0ff4f3d8451710794884180
-#: ../../../source/userguide/storage.rst:499
-#: ../../../source/userguide/storage.rst:528
-#: ../../../source/userguide/wrapper.rst:269
+#: ../../../source/tutorial/storage.rst:499
+#: ../../../source/tutorial/storage.rst:528
+#: ../../../source/tutorial/wrapper.rst:269
 msgid ""
 "You can check if this optimisation works or not by the status variable. ::"
 msgstr ""
 "You can check if this optimisation works or not by the status variable. ::"
 
 # b94afbce37f24256b7c3bc795d9cf55b
-#: ../../../source/userguide/storage.rst:509
+#: ../../../source/tutorial/storage.rst:509
 msgid ""
 "Each time the optimisation for counting rows works, ``Mroonga_count_skip`` "
 "status variable value is increased."
 msgstr ""
 
 # 9ea47d5029304dc4a7e9261a3d989546
-#: ../../../source/userguide/storage.rst:511
+#: ../../../source/tutorial/storage.rst:511
 msgid ""
 "Note : This optimisation is implemented by using the index. It only works in "
 "the case where we records can be specified only by the index."
@@ -1237,15 +1243,15 @@ msgstr ""
 
 # 3a038f61068f49f4a7ccb769f16fae4b
 # e49b3542f61b430d82f18ce272c79d9b
-#: ../../../source/userguide/storage.rst:514
-#: ../../../source/userguide/wrapper.rst:255
+#: ../../../source/tutorial/storage.rst:514
+#: ../../../source/tutorial/wrapper.rst:255
 msgid "Optimisation for ORDER BY LIMIT in full text search"
 msgstr "Optimisation for ORDER BY LIMIT in full text search"
 
 # 53d2e34b1e9d48adb78f206a5458d1ec
 # 3a9f40d827ef45918827c87f1bad5b59
-#: ../../../source/userguide/storage.rst:516
-#: ../../../source/userguide/wrapper.rst:257
+#: ../../../source/tutorial/storage.rst:516
+#: ../../../source/tutorial/wrapper.rst:257
 msgid ""
 "Generally speaking, MySQL can process \"ORDER BY\" query with almost no cost "
 "if we can get records by index, and can process \"LIMIT\" with low cost by "
@@ -1259,8 +1265,8 @@ msgstr ""
 
 # 581900abc23f49b7b0fddda5be2057c6
 # fe8b753ca719496ca7b5ce08934ad3b9
-#: ../../../source/userguide/storage.rst:518
-#: ../../../source/userguide/wrapper.rst:259
+#: ../../../source/tutorial/storage.rst:518
+#: ../../../source/tutorial/wrapper.rst:259
 msgid ""
 "But for the query where \"ORDER BY\" cannot use index, like sort full text "
 "search result by the score and use LIMIT, the processing cost is "
@@ -1274,8 +1280,8 @@ msgstr ""
 
 # a1c12526cfec489ba08f22f0a83a8186
 # 46f88354df4a4708b4d8782c51f796c2
-#: ../../../source/userguide/storage.rst:520
-#: ../../../source/userguide/wrapper.rst:261
+#: ../../../source/tutorial/storage.rst:520
+#: ../../../source/tutorial/wrapper.rst:261
 msgid ""
 "Tritonn took no specific countermeasure for this issue, but it introduced a "
 "workaround in the latest repository so that it sorted Senna result in "
@@ -1289,14 +1295,14 @@ msgstr ""
 
 # 8cf402e1dc5b43a39df23ccd2d8914ab
 # 927db709fbfc48eb84e04ac88328e3be
-#: ../../../source/userguide/storage.rst:522
-#: ../../../source/userguide/wrapper.rst:263
+#: ../../../source/tutorial/storage.rst:522
+#: ../../../source/tutorial/wrapper.rst:263
 msgid "Mroonga also has the optimisation for ORDER BY LIMIT."
 msgstr ""
 
 # 0bf3c72114ee45959ea9be4b5f162ce8
 # 6c31e461eb9443c1988f337f41f6e2fb
-#: ../../../source/userguide/storage.rst:524
+#: ../../../source/tutorial/storage.rst:524
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in groonga only and "
 "the minimal records are passed to MySQL. ::"
@@ -1305,7 +1311,7 @@ msgstr ""
 "the minimal records are passed to MySQL. ::"
 
 # 7397f40d6f3e40959d999132d3fa582d
-#: ../../../source/userguide/storage.rst:538
+#: ../../../source/tutorial/storage.rst:538
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``Mroonga_fast_order_limit`` status variable value is increased."
@@ -1313,8 +1319,8 @@ msgstr ""
 
 # 40837c2fbcec427db5e898c6eacec629
 # e977c18423794c639b57ffcbbb89caee
-#: ../../../source/userguide/storage.rst:540
-#: ../../../source/userguide/wrapper.rst:281
+#: ../../../source/tutorial/storage.rst:540
+#: ../../../source/tutorial/wrapper.rst:281
 msgid ""
 "Note : This optimisation is targeting queries like \"select ... match "
 "against order by _score desc limit X, Y\" only, and it works if all of the "
@@ -1326,28 +1332,28 @@ msgstr ""
 
 # 85d9a896698c4fdbbf7bd705dc182fcb
 # cd8bfad8f3cf4d80af5c6eda3b16aecd
-#: ../../../source/userguide/storage.rst:542
-#: ../../../source/userguide/wrapper.rst:283
+#: ../../../source/tutorial/storage.rst:542
+#: ../../../source/tutorial/wrapper.rst:283
 msgid "WHERE phrase has \"match...against\" only"
 msgstr "WHERE phrase has \"match...against\" only"
 
 # 19513e734d384ca2b3cd91fba2350587
 # 4911b6863b7b4b1f90cf454ec3fe6c65
-#: ../../../source/userguide/storage.rst:543
-#: ../../../source/userguide/wrapper.rst:284
+#: ../../../source/tutorial/storage.rst:543
+#: ../../../source/tutorial/wrapper.rst:284
 msgid "no JOIN"
 msgstr "no JOIN"
 
 # 2759021c9d4e43439e94eca3a8d4f657
 # 4ff19330c30946679667e95f97e011df
-#: ../../../source/userguide/storage.rst:544
-#: ../../../source/userguide/wrapper.rst:285
+#: ../../../source/tutorial/storage.rst:544
+#: ../../../source/tutorial/wrapper.rst:285
 msgid "with LIMIT"
 msgstr "with LIMIT"
 
 # 1b134292155440b08dec17f409b4e921
 # b6e9199585964acc9b60093b0b8c91e3
-#: ../../../source/userguide/storage.rst:545
+#: ../../../source/tutorial/storage.rst:545
 msgid ""
 "ORDER BY phrase has columns (including _id) or \"match...against\" that is "
 "used in WHERE phrase only"
@@ -1357,15 +1363,15 @@ msgstr ""
 
 # 21e513319fb4443c8d8b8889b5d44c5e
 # 91398666e3b54178bf04653658f15f26
-#: ../../../source/userguide/storage.rst:548
-#: ../../../source/userguide/wrapper.rst:289
+#: ../../../source/tutorial/storage.rst:548
+#: ../../../source/tutorial/wrapper.rst:289
 msgid "Footnotes"
 msgstr "Footnotes"
 
 # 49a4bdd6356b496d986b733227c3f471
 # 715f5447f2fa46f8a50ce2be8ad0a8aa
-#: ../../../source/userguide/storage.rst:549
-#: ../../../source/userguide/wrapper.rst:290
+#: ../../../source/tutorial/storage.rst:549
+#: ../../../source/tutorial/wrapper.rst:290
 msgid ""
 "`MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text "
 "Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search."
@@ -1377,28 +1383,28 @@ msgstr ""
 
 # 7a0ef89a05f94383871537ddefa5b629
 # 8d241533c8644930920bb9badd6ea5fd
-#: ../../../source/userguide/storage.rst:550
-#: ../../../source/userguide/wrapper.rst:291
+#: ../../../source/tutorial/storage.rst:550
+#: ../../../source/tutorial/wrapper.rst:291
 msgid "In groonga, we call it a 'tokeniser'."
 msgstr "In groonga, we call it a 'tokeniser'."
 
 # 49f565257a6d42b0b90d50ca33005e3b
-#: ../../../source/userguide/wrapper.rst:4
+#: ../../../source/tutorial/wrapper.rst:4
 msgid "Wrapper mode"
 msgstr "Wrapper mode"
 
 # 22c1c7e780964b9f916b629ec9b01db7
-#: ../../../source/userguide/wrapper.rst:6
+#: ../../../source/tutorial/wrapper.rst:6
 msgid "Here we explain how to use wrapper mode of mroonga"
 msgstr ""
 
 # 5209a48ed7714ca0aeaebd988b635d4a
-#: ../../../source/userguide/wrapper.rst:9
+#: ../../../source/tutorial/wrapper.rst:9
 msgid "How to use wrapper mode"
 msgstr "How to use wrapper mode"
 
 # f4a4cf1553ec45f5802bdc88f6a40050
-#: ../../../source/userguide/wrapper.rst:11
+#: ../../../source/tutorial/wrapper.rst:11
 msgid ""
 "In wrapper mode, mroonga works in wrapping an existing storage engine. To "
 "specify the wrapped storage engine, we use SQL comment like ``COMMENT = "
@@ -1406,7 +1412,7 @@ msgid ""
 msgstr ""
 
 # aec3b48251204c0695a651ce23a064ab
-#: ../../../source/userguide/wrapper.rst:15
+#: ../../../source/tutorial/wrapper.rst:15
 msgid ""
 "For now, a primary key is mandatory in wrapper mode. That is not the case "
 "with storage mode."
@@ -1415,7 +1421,7 @@ msgstr ""
 "with storage mode."
 
 # cd02652b0bd046689e1331bef1e2f34c
-#: ../../../source/userguide/wrapper.rst:19
+#: ../../../source/tutorial/wrapper.rst:19
 #, fuzzy
 msgid ""
 "Wrapper mode supports the followings, that are not supported in storage mode "
@@ -1425,12 +1431,12 @@ msgstr ""
 "for now. * null value"
 
 # 06aa3ef662744bcb84a3c66f85d50e85
-#: ../../../source/userguide/wrapper.rst:21
+#: ../../../source/tutorial/wrapper.rst:21
 msgid "null value"
 msgstr ""
 
 # cd65cd2656044e2fa68258adb805b631
-#: ../../../source/userguide/wrapper.rst:22
+#: ../../../source/tutorial/wrapper.rst:22
 msgid ""
 "transaction (if storage engine supports. Note that rollback causes mismatch "
 "of indexes, it may affects search results, so recreate index of mroonga in "
@@ -1439,7 +1445,7 @@ msgstr ""
 
 # 6328d27e015448dd8ecf36efd8208f23
 # bd4f25db45634e568ba34b1f54e9c752
-#: ../../../source/userguide/wrapper.rst:174
+#: ../../../source/tutorial/wrapper.rst:174
 msgid ""
 "You can specify the default parser by passing ``--with-default-parser`` "
 "option in ``configure`` when you build mroonga. ::"
@@ -1447,7 +1453,7 @@ msgstr ""
 
 # 0bf3c72114ee45959ea9be4b5f162ce8
 # 6c31e461eb9443c1988f337f41f6e2fb
-#: ../../../source/userguide/wrapper.rst:265
+#: ../../../source/tutorial/wrapper.rst:265
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and "
 "the minimal records are passed to MySQL. ::"
@@ -1455,7 +1461,7 @@ msgstr ""
 
 # ea0ac4ae9150459b96f8f0060518f51b
 # 655751d615a445b297c7eb2068086c6d
-#: ../../../source/userguide/wrapper.rst:279
+#: ../../../source/tutorial/wrapper.rst:279
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``mroonga_fast_order_limit`` status variable value is increased."
@@ -1463,8 +1469,32 @@ msgstr ""
 
 # 1b134292155440b08dec17f409b4e921
 # b6e9199585964acc9b60093b0b8c91e3
-#: ../../../source/userguide/wrapper.rst:286
+#: ../../../source/tutorial/wrapper.rst:286
 msgid ""
 "ORDER BY phrase has _id column or \"match...against\" that is used in WHERE "
 "phrase only"
 msgstr ""
+
+# b8ad7182363a4b8e92846b2ef15f686d
+#~ msgid "User's guide"
+#~ msgstr "User's guide"
+
+# ece8f2b65efe4f40a1b88882ebc517ea
+#~ msgid "Please read the following to see how to install : :doc:`install`"
+#~ msgstr "Please read the following to see how to install : :doc:`install`"
+
+# d3f025a5877041c6a89ab03b9fafb135
+#~ msgid "How to check the installation"
+#~ msgstr "How to check the installation"
+
+# e9008292f076438a9ec5afd076d48f03
+#~ msgid "Running modes"
+#~ msgstr "Running modes"
+
+# 512331dc17c641f69634833a5ea52f73
+#~ msgid "Usage of each mode"
+#~ msgstr "Usage of each mode"
+
+# a5736f3a5cc4411a89519c0bdc8cd95d
+#~ msgid "Please see the following pages for the usage of each mode."
+#~ msgstr "Please see the following pages for the usage of each mode."
