@@ -6,7 +6,7 @@ INDEX (content)
 ) DEFAULT CHARSET=utf8;
 INSERT INTO terms VALUES ('track');
 INSERT INTO terms VALUES ('trackback');
-SELECT * FROM  terms WHERE content LIKE 'TRACK%';
+SELECT * FROM terms WHERE content LIKE 'TRACK%';
 content
 track
 trackback

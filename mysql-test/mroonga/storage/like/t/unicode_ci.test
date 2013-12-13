@@ -30,7 +30,7 @@ CREATE TABLE terms (
 INSERT INTO terms VALUES ('track');
 INSERT INTO terms VALUES ('trackback');
 
-SELECT * FROM  terms WHERE content LIKE 'TRACK%';
+SELECT * FROM terms WHERE content LIKE 'TRACK%';
 
 DROP TABLE terms;
 
