@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-25 15:12+0900\n"
-"PO-Revision-Date: 2013-11-25 15:18+0900\n"
+"PO-Revision-Date: 2013-12-13 15:04+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -738,7 +738,7 @@ msgstr "\"cmake\"を実行します。 ::"
 # 96faa87e06744aba901adba70eef342c
 #: ../../../source/install.rst:732
 msgid "Install mroonga with MariaDB"
-msgstr "MariDBとmroongaのインストール"
+msgstr "MariaDBとmroongaのインストール"
 
 # e02a752f95954d1280465c2ad245da73
 #: ../../../source/install.rst:734
