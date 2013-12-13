@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-27 16:05+0900\n"
+"POT-Creation-Date: 2013-12-13 16:06+0900\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -595,8 +595,8 @@ msgstr ""
 # 4b7d6468bc8b458c8f5e61ed84b15c43
 #: ../../../source/reference/sql_commands.rst:25
 msgid ""
-"``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name, ...))"
-"``"
+"``CREATE TABLE table_name (... FULLTEXT INDEX index_name "
+"(column_name, ...))``"
 msgstr ""
 
 # 9286b659a8aa47a09a74f57a5dc47d63
@@ -884,8 +884,8 @@ msgstr ""
 # 7c3a1068e3ae4e7d93e7000350988666
 #: ../../../source/reference/sql_commands.rst:82
 msgid ""
-"``CREATE TABLE table_name (column_name DATETIME"
-"(fractional_seconds_precision) PRIMARY KEY)``"
+"``CREATE TABLE table_name (column_name "
+"DATETIME(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 # 11838c8f2cb74bd0a6550a512e748220
@@ -920,8 +920,8 @@ msgstr ""
 # b6cac615904c4bb7adb71b70946c2674
 #: ../../../source/reference/sql_commands.rst:88
 msgid ""
-"``CREATE TABLE table_name (column_name TIMESTAMP"
-"(fractional_seconds_precision) PRIMARY KEY)``"
+"``CREATE TABLE table_name (column_name "
+"TIMESTAMP(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 # 87840845f1b94ca3b73d46c8993d01b5
@@ -1139,8 +1139,8 @@ msgstr ""
 # 1fc98641c232410e92cdf63b48cb1ec2
 #: ../../../source/reference/sql_commands.rst:125
 msgid ""
-"``SELECT * FROM table_name WHERE MBRContains(GeomFromText('LineString"
-"(...)'), geometry_column_name)``"
+"``SELECT * FROM table_name WHERE "
+"MBRContains(GeomFromText('LineString(...)'), geometry_column_name)``"
 msgstr ""
 
 # c282e435cc244d4ba86619e5040a30f1
@@ -1249,8 +1249,8 @@ msgstr ""
 # 6857c598caab4c0588c28d380dc5e9f2
 #: ../../../source/reference/sql_commands.rst:148
 msgid ""
-"``INSERT INTO (geometry_column_name) VALUES (GeomFromText('LineString(...)'))"
-"``"
+"``INSERT INTO (geometry_column_name) VALUES "
+"(GeomFromText('LineString(...)'))``"
 msgstr ""
 
 # 6669ecac6be34402bd6cbe0b169f6d6e
@@ -1331,95 +1331,6 @@ msgstr ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
 
-# bd2456c2cc8c48a19d6e086bfa62a122
-#: ../../../source/reference/troubleshooting.rst:4
-msgid "Trouble Shooting"
-msgstr ""
-
-# a8d632a2096141bc8a74051d04c89013
-#: ../../../source/reference/troubleshooting.rst:6
-msgid "There are some frequently asked questions in mroonga storage engine."
-msgstr ""
-
-# 1957b0bafd6d43efa227265347b77cd8
-#: ../../../source/reference/troubleshooting.rst:9
-msgid "How to avoid mmap Cannot allocate memory error"
-msgstr ""
-
-# 31731a7967424792abde660ed68a4c0c
-#: ../../../source/reference/troubleshooting.rst:11
-msgid "There is a case following mmap error in log file::"
-msgstr ""
-
-# cc635d9b26284bd88bb2bbdc230c0ae9
-#: ../../../source/reference/troubleshooting.rst:15
-msgid ""
-"Note that ``<13036498944>`` means total size of mmap (almost 12GB) in this "
-"case."
-msgstr ""
-
-# 88e08b8d8c9c40828ea41d53321d2d9b
-#: ../../../source/reference/troubleshooting.rst:17
-msgid "So you need to confirm following point of views."
-msgstr ""
-
-# d1355467338342058a0366bf9c385ecc
-#: ../../../source/reference/troubleshooting.rst:19
-msgid "Are there enough free memory?"
-msgstr ""
-
-# 59c5b6a2ee064d0aa856ef50451afdc1
-#: ../../../source/reference/troubleshooting.rst:20
-msgid "Are maximum number of mappings exceeded?"
-msgstr ""
-
-# 4cbb2ee6424a4cd8ba4fcd32bb5963dd
-#: ../../../source/reference/troubleshooting.rst:22
-msgid "To check there are enough free memory, you can use ``vmstat`` command."
-msgstr ""
-
-# f63d2e1cde0240dbb5060d277cd247c4
-#: ../../../source/reference/troubleshooting.rst:24
-msgid ""
-"To check whether maximum number of mappings are exceeded, you can "
-"investigate the value of ``vm.max_map_count``."
-msgstr ""
-
-# f19ebe05427249c0b658706df8b7d0d9
-#: ../../../source/reference/troubleshooting.rst:26
-msgid ""
-"If this issue is fixed by modifying the value of ``vm.max_map_count``, it's "
-"exactly the reason."
-msgstr ""
-
-# 8ec317a6aedc40fc988971f947d745c1
-#: ../../../source/reference/troubleshooting.rst:28
-msgid ""
-"As groonga allocates memory chunks each 256KB, you can estimate the size of "
-"database you can handle by following formula::"
-msgstr ""
-
-# 3307bc3626674ca1bcf78f35a9336489
-#: ../../../source/reference/troubleshooting.rst:32
-msgid ""
-"If you want to handle over 16GB groonga database, you must specify at least "
-"65536 as the value of ``vm.max_map_count``::"
-msgstr ""
-
-# c8614da779e942fda0fc6fcf5aac22cd
-#: ../../../source/reference/troubleshooting.rst:36
-msgid ""
-"You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm."
-"max_map_count=65536``."
-msgstr ""
-
-# cc41c94a206f4bfd8cce3d17346a32d4
-#: ../../../source/reference/troubleshooting.rst:38
-msgid ""
-"Then save the configuration value to ``/etc/sysctl.conf`` or ``/etc/sysctl.d/"
-"*.conf``."
-msgstr ""
-
 # 5946a28aa93340ee9a289c52679bd434
 #: ../../../source/reference/udf.rst:4
 msgid "UDF (User Defined Functions)"
@@ -1473,13 +1384,13 @@ msgstr ""
 
 # 03fa8b7845534cf1b493bed3510a16c2
 #: ../../../source/reference/udf/mroonga_escape.rst:26
-#: ../../../source/reference/udf/mroonga_snippet.rst:81
+#: ../../../source/reference/udf/mroonga_snippet.rst:111
 msgid "Parameters"
 msgstr ""
 
 # 1f8e22ad3fcc40309eeee8083f54f2d3
 #: ../../../source/reference/udf/mroonga_escape.rst:29
-#: ../../../source/reference/udf/mroonga_snippet.rst:84
+#: ../../../source/reference/udf/mroonga_snippet.rst:114
 msgid "Required parameters"
 msgstr ""
 
@@ -1500,7 +1411,7 @@ msgstr ""
 
 # 60133be2466040feb3b66d8f9348a458
 #: ../../../source/reference/udf/mroonga_escape.rst:39
-#: ../../../source/reference/udf/mroonga_snippet.rst:134
+#: ../../../source/reference/udf/mroonga_snippet.rst:164
 msgid "Optional parameters"
 msgstr ""
 
@@ -1521,7 +1432,7 @@ msgstr ""
 
 # 9b54ccd05eb64ed79f819c3680d4f3cf
 #: ../../../source/reference/udf/mroonga_escape.rst:49
-#: ../../../source/reference/udf/mroonga_snippet.rst:155
+#: ../../../source/reference/udf/mroonga_snippet.rst:185
 msgid "Return value"
 msgstr ""
 
@@ -1617,48 +1528,65 @@ msgstr ""
 msgid "Here is the schema definition for execution examples(wrapper mode)::"
 msgstr ""
 
-# 0978950fdc4b480bb39a76f2922de635
+# 1c5cb1f20c72455f92652b66ed13067a
+#: ../../../source/reference/udf/mroonga_snippet.rst:80
+msgid "Here is the sample data for execution examples::"
+msgstr ""
+
+# 4c836e2ff42045e2b9d8160506b65a05
 #: ../../../source/reference/udf/mroonga_snippet.rst:86
+msgid "Here is the results of execution examples::"
+msgstr ""
+
+# 61b4a628c2484329956ea6c98af531ac
+#: ../../../source/reference/udf/mroonga_snippet.rst:108
+msgid ""
+"The keyword 'fulltext' and associated keyword 'MySQL' and 'search' has been "
+"extracted."
+msgstr ""
+
+# 0978950fdc4b480bb39a76f2922de635
+#: ../../../source/reference/udf/mroonga_snippet.rst:116
 msgid "There are many required parameters."
 msgstr ""
 
 # f14592a45bea403585acd63189e559f1
-#: ../../../source/reference/udf/mroonga_snippet.rst:90
+#: ../../../source/reference/udf/mroonga_snippet.rst:120
 msgid "``document``"
 msgstr ""
 
 # 4980363c216344cb8711632eb97e57c8
-#: ../../../source/reference/udf/mroonga_snippet.rst:91
+#: ../../../source/reference/udf/mroonga_snippet.rst:121
 msgid "The column name or string value is required."
 msgstr ""
 
 # d7667e1058f54405a25c232d7162b92e
-#: ../../../source/reference/udf/mroonga_snippet.rst:94
+#: ../../../source/reference/udf/mroonga_snippet.rst:124
 msgid "``max_length``"
 msgstr ""
 
 # 010e14047c9546bb8ade2e47ccc316f5
-#: ../../../source/reference/udf/mroonga_snippet.rst:96
+#: ../../../source/reference/udf/mroonga_snippet.rst:126
 msgid "The max length of snippet (bytes) is required."
 msgstr ""
 
 # 67a2619087fe456c9f98d2d5c2f1ac20
-#: ../../../source/reference/udf/mroonga_snippet.rst:99
+#: ../../../source/reference/udf/mroonga_snippet.rst:129
 msgid "``max_count``"
 msgstr ""
 
 # 5e14c6b9a9f941e9bc6368d97d608b1a
-#: ../../../source/reference/udf/mroonga_snippet.rst:101
+#: ../../../source/reference/udf/mroonga_snippet.rst:131
 msgid "The max elements of snippets (N word) is required."
 msgstr ""
 
 # 94bdef3012c540f6bcef5305d6c3b186
-#: ../../../source/reference/udf/mroonga_snippet.rst:104
+#: ../../../source/reference/udf/mroonga_snippet.rst:134
 msgid "``encoding``"
 msgstr ""
 
 # 3638b34dceda4e5bbad0e11208201d02
-#: ../../../source/reference/udf/mroonga_snippet.rst:106
+#: ../../../source/reference/udf/mroonga_snippet.rst:136
 msgid ""
 "The encoding of document is required. You can specify the value of encoding "
 "such as 'ascii_general_ci', 'cp932_japanese_ci', 'eucjpms_japanese_ci' and "
@@ -1666,86 +1594,86 @@ msgid ""
 msgstr ""
 
 # 7c0d45f029704219acc2a83a1a78e3ff
-#: ../../../source/reference/udf/mroonga_snippet.rst:111
+#: ../../../source/reference/udf/mroonga_snippet.rst:141
 msgid "``skip_leading_spaces``"
 msgstr ""
 
 # 07a88932f94b4d47bcc19acaa98fb922
-#: ../../../source/reference/udf/mroonga_snippet.rst:113
+#: ../../../source/reference/udf/mroonga_snippet.rst:143
 msgid ""
 "Specify whether skip leading spaces or not. Specify the value 1 for skipping "
 "leading spaces, 0 for not."
 msgstr ""
 
 # 7b1f91adb50d4b64addf9a0dd2ef2174
-#: ../../../source/reference/udf/mroonga_snippet.rst:117
+#: ../../../source/reference/udf/mroonga_snippet.rst:147
 msgid "``html_escape``"
 msgstr ""
 
 # da50a0dfdbeb46b2bf2fe9c4f5c3d9fd
-#: ../../../source/reference/udf/mroonga_snippet.rst:119
+#: ../../../source/reference/udf/mroonga_snippet.rst:149
 msgid ""
 "HTML escape is enabled or not. Specify the value 1 for enabling HTML escape, "
 "0 for not."
 msgstr ""
 
 # d969e06c5e7b41a796ac01a3f4892d12
-#: ../../../source/reference/udf/mroonga_snippet.rst:123
+#: ../../../source/reference/udf/mroonga_snippet.rst:153
 msgid "``prefix``"
 msgstr ""
 
 # 2073f8a1535a4d2cb038ba3f6c00cd72
-#: ../../../source/reference/udf/mroonga_snippet.rst:125
+#: ../../../source/reference/udf/mroonga_snippet.rst:155
 msgid "The start text of snippet."
 msgstr ""
 
 # dbaf1ee0f33e48f58fdc1e9e82ed55c9
-#: ../../../source/reference/udf/mroonga_snippet.rst:128
+#: ../../../source/reference/udf/mroonga_snippet.rst:158
 msgid "``suffix``"
 msgstr ""
 
 # 5642aebdb4f5472fa4f8074d6ce9744f
-#: ../../../source/reference/udf/mroonga_snippet.rst:130
+#: ../../../source/reference/udf/mroonga_snippet.rst:160
 msgid "The end text of snippet."
 msgstr ""
 
 # 73632565843f4e8a889572a881f2cc3c
-#: ../../../source/reference/udf/mroonga_snippet.rst:136
+#: ../../../source/reference/udf/mroonga_snippet.rst:166
 msgid ""
 "There is one optional group parameter, ``wordN`` related prefix and suffix."
 msgstr ""
 
 # 672d8096c3b347aea56e5865118d97a8
-#: ../../../source/reference/udf/mroonga_snippet.rst:139
+#: ../../../source/reference/udf/mroonga_snippet.rst:169
 msgid "``wordN``"
 msgstr ""
 
 # a0d6d89038fc459483e25ca7b65774f4
-#: ../../../source/reference/udf/mroonga_snippet.rst:141
+#: ../../../source/reference/udf/mroonga_snippet.rst:171
 msgid "Specify any word."
 msgstr ""
 
 # 47e61660661f4b3c8d23376be0426756
-#: ../../../source/reference/udf/mroonga_snippet.rst:144
+#: ../../../source/reference/udf/mroonga_snippet.rst:174
 msgid "``wordN_prefix``"
 msgstr ""
 
 # 76a5e8461e434496b24cb1add618e879
-#: ../../../source/reference/udf/mroonga_snippet.rst:146
+#: ../../../source/reference/udf/mroonga_snippet.rst:176
 msgid "It is the start text of wordN."
 msgstr ""
 
 # 543e5ff50d72422592b015e315f7f7f2
-#: ../../../source/reference/udf/mroonga_snippet.rst:149
+#: ../../../source/reference/udf/mroonga_snippet.rst:179
 msgid "``wordN_suffix``"
 msgstr ""
 
 # ae1fe2e3f9ed4dde9a004edab3c39ebf
-#: ../../../source/reference/udf/mroonga_snippet.rst:151
+#: ../../../source/reference/udf/mroonga_snippet.rst:181
 msgid "It is the end text of wordN."
 msgstr ""
 
 # 5a7cc7af6f4e460f828fe3bdd7ed50da
-#: ../../../source/reference/udf/mroonga_snippet.rst:157
+#: ../../../source/reference/udf/mroonga_snippet.rst:187
 msgid "It returns snippet string."
 msgstr ""
