@@ -16,6 +16,7 @@
 
 --source ../../../../../../include/mroonga/have_64bit.inc
 --source ../../../../../../include/mroonga/have_version_55.inc
+--source ../../../../../../include/mroonga/have_mysql.inc
 --source ../../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
