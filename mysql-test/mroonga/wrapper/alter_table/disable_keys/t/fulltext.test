@@ -14,9 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../../include/mroonga/have_version_56.inc
 --source include/have_innodb.inc
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -26,40 +25,26 @@ SET NAMES utf8;
 CREATE TABLE diaries (
   id int PRIMARY KEY,
   title varchar(255),
-  created_at datetime,
-  KEY title_and_created_at_index (title, created_at)
+  FULLTEXT KEY title_index (title)
 ) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
 
-INSERT INTO diaries VALUES (1, "Hello", "2012-04-30 20:00:00");
-INSERT INTO diaries VALUES (2, "天気" , "2012-04-30 23:00:00");
-INSERT INTO diaries VALUES (3, "富士山", "2012-04-30 19:00:00");
+INSERT INTO diaries VALUES (1, "Hello");
+INSERT INTO diaries VALUES (2, "天気");
+INSERT INTO diaries VALUES (3, "富士山");
 
-EXPLAIN
 SELECT *
        FROM diaries
-       FORCE INDEX (title_and_created_at_index)
-       WHERE title = "天気" AND
-             created_at = "2012-04-30 23:00:00";
-SELECT *
-       FROM diaries
-       FORCE INDEX (title_and_created_at_index)
-       WHERE title = "天気" AND
-             created_at = "2012-04-30 23:00:00";
+       FORCE INDEX (title_index)
+       WHERE MATCH (title) AGAINST ("富士山");
 
 ALTER TABLE diaries DISABLE KEYS;
 
-EXPLAIN
+--error ER_FT_MATCHING_KEY_NOT_FOUND
 SELECT *
        FROM diaries
-       FORCE INDEX (title_and_created_at_index)
-       WHERE title = "天気" AND
-             created_at = "2012-04-30 23:00:00";
-SELECT *
-       FROM diaries
-       FORCE INDEX (title_and_created_at_index)
-       WHERE title = "天気" AND
-             created_at = "2012-04-30 23:00:00";
+       FORCE INDEX (title_index)
+       WHERE MATCH (title) AGAINST ("富士山");
 
 DROP TABLE diaries;
 
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc
