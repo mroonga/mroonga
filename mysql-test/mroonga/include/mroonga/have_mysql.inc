@@ -16,7 +16,6 @@
 
 --source ../../include/mroonga/check_mariadb.inc
 
-if ($mariadb)
-{
+if ($mariadb) {
   skip This test is for MySQL;
 }

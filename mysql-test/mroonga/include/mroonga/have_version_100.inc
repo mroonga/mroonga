@@ -16,7 +16,6 @@
 
 --source ../../include/mroonga/check_version.inc
 
-if (!$version_100)
-{
+if (!$version_100) {
   skip This test is for MariaDB version 10.0.x;
 }

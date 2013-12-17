@@ -17,12 +17,10 @@
 --source ../../include/mroonga/check_windows.inc
 
 --disable_query_log
-if ($VERSION_COMPILE_OS_WIN)
-{
+if ($VERSION_COMPILE_OS_WIN) {
   let ha_mroonga_so='ha_mroonga.dll';
 }
-if (!$VERSION_COMPILE_OS_WIN)
-{
+if (!$VERSION_COMPILE_OS_WIN) {
   let ha_mroonga_so='ha_mroonga.so';
 }
 --enable_query_log

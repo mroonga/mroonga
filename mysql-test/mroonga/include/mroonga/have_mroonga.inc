@@ -19,25 +19,21 @@
 
 disable_query_log;
 
-if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`)
-{
+if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`) {
   eval INSTALL PLUGIN mroonga SONAME $ha_mroonga_so;
   eval INSTALL PLUGIN mroonga_stats SONAME $ha_mroonga_so;
 }
 
 let have_default_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_storage_engine"`;
-if ($have_default_storage_engine_variable)
-{
+if ($have_default_storage_engine_variable) {
   set default_storage_engine=mroonga;
 }
-if (!$have_default_storage_engine_variable)
-{
+if (!$have_default_storage_engine_variable) {
   set storage_engine=mroonga;
 }
 
 let have_default_tmp_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_tmp_storage_engine"`;
-if ($have_default_tmp_storage_engine_variable)
-{
+if ($have_default_tmp_storage_engine_variable) {
   set default_tmp_storage_engine=mroonga;
 }
 
