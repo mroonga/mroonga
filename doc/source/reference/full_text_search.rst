@@ -4,7 +4,7 @@ Search and Scoring in Mroonga
 =============================
 
 Mroonga Scoring in natural language mode
-----------------
+----------------------------------------
 
 The search score of Mroonga in natural language mode is a similarity score between query and document. Mroonga's scoring algorithm is as follows:
 
@@ -48,7 +48,8 @@ Now, let us explain how to make the result score "131073".
 
 
 Splitting a query into tokens
-^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 The default tokenizer splits up the query "fine today" into two tokens as follows:
 
@@ -56,7 +57,7 @@ The default tokenizer splits up the query "fine today" into two tokens as follow
 * today
 
 Removing not matched tokens
-^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We have nothing to do in this case because the tokens exist in documents.
 
@@ -64,7 +65,7 @@ We have nothing to do in this case because the tokens exist in documents.
 * today: include in document id=3,4
 
 Calculating weight per token
-^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * fine: 116508(= 1048576 / 9)
 * today: 131072(= 1048576 / 8)
@@ -86,7 +87,7 @@ The retrieval result of the above query is as follows: ::
   [[[2],[["_key","ShortText"],["index","diaries"]],["FINE",9],["TODAY",8]]]
 
 Getting the top N weight tokens
-^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The formula for the N is "the number of occurrence of token in document / 8 + 1"
 
@@ -100,7 +101,7 @@ The sorted tokens are as follows:
 N = 1, then we get "today: 131072(= 1048576 / 8)".
 
 Summing up the weight per token which exists in a document, and is one of the top N weight tokens
-^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * today: include in document id=3,4
 
