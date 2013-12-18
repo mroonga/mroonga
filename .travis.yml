@@ -7,6 +7,7 @@ env:
   - MYSQL_VERSION=mysql-5.5.35
   - MYSQL_VERSION=mysql-5.6.15
   - MYSQL_VERSION=mariadb-5.5.34
+  - MYSQL_VERSION=mariadb-10.0.6
   - MYSQL_VERSION=mariadb-10.0.6 MRN_BUNDLED=yes
 # matrix:
 #   allow_failures:
