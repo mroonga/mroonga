@@ -137,6 +137,31 @@ namespace mrn {
     case Item_func::FT_FUNC:
       DBUG_RETURN(true);
       break;
+    case Item_func::BETWEEN:
+      if (!is_storage_mode_) {
+        DBUG_RETURN(false);
+      }
+      {
+        Item **arguments = func_item->arguments();
+        Item *target_item = arguments[0];
+        Item *min_item = arguments[1];
+        Item *max_item = arguments[2];
+        if (target_item->type() != Item::FIELD_ITEM) {
+          DBUG_RETURN(false);
+        }
+        if (!min_item->basic_const_item()) {
+          DBUG_RETURN(false);
+        }
+        if (!max_item->basic_const_item()) {
+          DBUG_RETURN(false);
+        }
+
+        bool convertable =
+          is_convertable_between(static_cast<Item_field *>(target_item),
+                                 min_item,
+                                 max_item);
+        DBUG_RETURN(convertable);
+      }
     default:
       DBUG_RETURN(false);
       break;
@@ -168,6 +193,41 @@ namespace mrn {
     case TIME_TYPE:
       if (is_valid_time_value(field_item, value_item)) {
         convertable = have_index(field_item, func_type);
+      }
+      break;
+    case UNSUPPORTED_TYPE:
+      break;
+    }
+
+    DBUG_RETURN(convertable);
+  }
+
+  bool ConditionConverter::is_convertable_between(const Item_field *field_item,
+                                                  Item *min_item,
+                                                  Item *max_item) {
+    MRN_DBUG_ENTER_METHOD();
+
+    bool convertable = false;
+
+    enum_field_types field_type = field_item->field_type();
+    NormalizedType normalized_type = normalize_field_type(field_type);
+    switch (normalized_type) {
+    case STRING_TYPE:
+      if (min_item->type() == Item::STRING_ITEM &&
+          max_item->type() == Item::STRING_ITEM) {
+        convertable = have_index(field_item, GRN_OP_LESS);
+      }
+      break;
+    case INT_TYPE:
+      if (min_item->type() == Item::INT_ITEM &&
+          max_item->type() == Item::INT_ITEM) {
+        convertable = have_index(field_item, GRN_OP_LESS);
+      }
+      break;
+    case TIME_TYPE:
+      if (is_valid_time_value(field_item, min_item) &&
+          is_valid_time_value(field_item, max_item)) {
+        convertable = have_index(field_item, GRN_OP_LESS);
       }
       break;
     case UNSUPPORTED_TYPE:
@@ -406,6 +466,9 @@ namespace mrn {
           case Item_func::GT_FUNC:
             convert_binary_operation(func_item, expression, GRN_OP_GREATER);
             break;
+          case Item_func::BETWEEN:
+            convert_between(func_item, expression);
+            break;
           default:
             break;
           }
@@ -432,6 +495,37 @@ namespace mrn {
       grn_expr_append_op(ctx_, expression, _operator, 2);
       grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
     }
+  }
+
+  void ConditionConverter::convert_between(const Item_func *func_item,
+                                           grn_obj *expression) {
+    MRN_DBUG_ENTER_METHOD();
+
+    Item **arguments = func_item->arguments();
+    Item *target_item = arguments[0];
+    Item *min_item = arguments[1];
+    Item *max_item = arguments[2];
+
+    grn_obj *between_func = grn_ctx_get(ctx_, "between", strlen("between"));
+    grn_expr_append_obj(ctx_, expression, between_func, GRN_OP_PUSH, 1);
+
+    const Item_field *field_item = static_cast<const Item_field *>(target_item);
+    append_field_value(field_item, expression);
+
+    grn_obj include;
+    GRN_TEXT_INIT(&include, 0);
+    GRN_TEXT_PUTS(ctx_, &include, "include");
+    append_const_item(field_item, min_item, expression);
+    grn_expr_append_const(ctx_, expression, &include, GRN_OP_PUSH, 1);
+    append_const_item(field_item, max_item, expression);
+    grn_expr_append_const(ctx_, expression, &include, GRN_OP_PUSH, 1);
+    grn_obj_unlink(ctx_, &include);
+
+    grn_expr_append_op(ctx_, expression, GRN_OP_CALL, 5);
+
+    grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
+
+    DBUG_VOID_RETURN;
   }
 
   void ConditionConverter::append_field_value(const Item_field *field_item,

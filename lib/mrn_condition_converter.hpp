@@ -54,6 +54,9 @@ namespace mrn {
     bool is_convertable_binary_operation(const Item_field *field_item,
                                          Item *value_item,
                                          Item_func::Functype func_type);
+    bool is_convertable_between(const Item_field *field_item,
+                                Item *min_item,
+                                Item *max_item);
     bool is_valid_time_value(const Item_field *field_item,
                              Item *value_item);
     bool get_time_value(const Item_field *field_item,
@@ -67,6 +70,7 @@ namespace mrn {
     void convert_binary_operation(const Item_func *func_item,
                                   grn_obj *expression,
                                   grn_operator _operator);
+    void convert_between(const Item_func *func_item, grn_obj *expression);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
     void append_const_item(const Item_field *field_item,
