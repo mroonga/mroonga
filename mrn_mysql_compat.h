@@ -84,8 +84,13 @@
 #endif
 
 #if MYSQL_VERSION_ID >= 50607
-#  define MRN_GET_ERROR_MESSAGE current_thd->get_stmt_da()->message()
-#  define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd->get_stmt_da()->current_row_for_warning()
+#  if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
+#    define MRN_GET_ERROR_MESSAGE thd_get_error_message(current_thd)
+#    define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd_get_error_row(thd)
+#  else
+#    define MRN_GET_ERROR_MESSAGE current_thd->get_stmt_da()->message()
+#    define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd->get_stmt_da()->current_row_for_warning()
+#  endif
 #else
 #  if MYSQL_VERSION_ID >= 50500
 #    define MRN_GET_ERROR_MESSAGE current_thd->stmt_da->message()

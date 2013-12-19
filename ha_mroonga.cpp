@@ -161,6 +161,16 @@ pthread_mutex_t *mrn_LOCK_open;
 #  endif
 #endif
 
+#if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
+#  define MRN_THD_GET_AUTOINC(thd, off, inc) thd_get_autoinc(thd, off, inc)
+#else
+#  define MRN_THD_GET_AUTOINC(thd, off, inc) \
+     { \
+        *(off) = thd->variables.auto_increment_offset; \
+        *(inc) = thd->variables.auto_increment_increment; \
+     }
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -4465,7 +4475,6 @@ int ha_mroonga::storage_info(uint flag)
 
   if ((flag & HA_STATUS_AUTO) && table->found_next_number_field) {
     THD *thd = ha_thd();
-    struct system_variables *variables = &thd->variables;
     ulonglong nb_reserved_values;
     bool next_number_field_is_null = !table->next_number_field;
     mrn::ExternalLock mrn_external_lock(ha_thd(), this,
@@ -4480,8 +4489,11 @@ int ha_mroonga::storage_info(uint flag)
     MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
     {
       mrn::Lock lock(&long_term_share->auto_inc_mutex);
-      storage_get_auto_increment(variables->auto_increment_offset,
-                                 variables->auto_increment_increment, 1,
+      unsigned long auto_increment_offset, auto_increment_increment;
+      MRN_THD_GET_AUTOINC(thd, &auto_increment_offset,
+                          &auto_increment_increment);
+      storage_get_auto_increment(auto_increment_offset,
+                                 auto_increment_increment, 1,
                                  &stats.auto_increment_value,
                                  &nb_reserved_values);
     }
