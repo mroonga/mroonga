@@ -20,6 +20,13 @@
 cmake_minimum_required(VERSION 2.6)
 project(mroonga)
 
+if(MSVC)
+  if(MSVC_VERSION LESS 1600)
+    message(STATUS "Mroonga supports from MSVC 2010")
+    return()
+  endif()
+endif()
+
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
   set(MRN_BUNDLED FALSE)
 else()
