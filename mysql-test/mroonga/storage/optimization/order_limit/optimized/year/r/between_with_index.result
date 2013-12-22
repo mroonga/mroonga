@@ -6,8 +6,6 @@ release_year YEAR,
 KEY (release_year),
 FULLTEXT KEY (release_title)
 ) DEFAULT CHARSET UTF8;
-Warnings:
-Warning	138	NormalizerMySQLGeneralCI normalizer isn't found for utf8_general_ci. Install groonga-normalizer-mysql normalizer. NormalizerAuto is used as fallback.
 SHOW CREATE TABLE mroonga_releases;
 Table	Create Table
 mroonga_releases	CREATE TABLE `mroonga_releases` (
