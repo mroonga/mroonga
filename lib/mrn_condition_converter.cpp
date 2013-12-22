@@ -256,6 +256,8 @@ namespace mrn {
     Item *real_value_item = value_item->real_item();
     if (field_item->field_type() == MYSQL_TYPE_TIME) {
       error = real_value_item->get_time(mysql_time);
+    } else if (field_item->field_type() == MYSQL_TYPE_YEAR) {
+      DBUG_RETURN(true);
     } else {
       error = real_value_item->get_date(mysql_time, TIME_FUZZY_DATE);
     }
