@@ -7343,17 +7343,24 @@ int ha_mroonga::ft_init()
   DBUG_RETURN(error);
 }
 
+void ha_mroonga::generic_ft_end()
+{
+  MRN_DBUG_ENTER_METHOD();
+  clear_cursor();
+  DBUG_VOID_RETURN;
+}
+
 void ha_mroonga::wrapper_ft_end()
 {
   MRN_DBUG_ENTER_METHOD();
-  handler::ft_end();
+  generic_ft_end();
   DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_ft_end()
 {
   MRN_DBUG_ENTER_METHOD();
-  handler::ft_end();
+  generic_ft_end();
   DBUG_VOID_RETURN;
 }
 
@@ -7894,7 +7901,7 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
   const Item *reminder_cond = cond;
   if (!pushed_cond) {
     mrn::ConditionConverter converter(ctx, grn_table, true);
-    if (converter.is_convertable(cond) && converter.find_match_against(cond)) {
+    if (converter.find_match_against(cond) && converter.is_convertable(cond)) {
       reminder_cond = NULL;
     }
   }
