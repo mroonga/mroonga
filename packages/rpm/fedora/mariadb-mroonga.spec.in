@@ -18,6 +18,8 @@ BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	mariadb-devel
 BuildRequires:	perl(Test::More)
+BuildRequires:	perl(Env)
+BuildRequires:	pam-devel
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	mariadb-server = 1:%{mariadb_version}-%{mariadb_release}
 Requires:	mariadb = 1:%{mariadb_version}-%{mariadb_release}
