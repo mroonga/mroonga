@@ -15,3 +15,5 @@ pkgconfig
 tar
 groonga-normalizer-mysql-devel
 perl-Test-Base
+perl(Env)
+pam-devel
