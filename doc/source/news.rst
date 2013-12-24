@@ -3,6 +3,48 @@
 News
 ====
 
+.. _release-3-11:
+
+Release 3.11 - 2013/12/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [deb] Dropped Debian 6.0 (squeeze) support.
+* [deb] Dropped Ubuntu 10.04 (lucid) support.
+* [storage] Supported optimization for "MATCH AGAINST AND INT_COLUMN OPERATOR XXX ORDER BY
+  LIMIT" query. The OPERATOR in this query supports '<', '>', '<=' and '>='. [groonga-dev,01940]
+  [Reported by Horikoshi Yuki]
+* [storage] Supported optimization for "MATCH AGAINST AND DATETIME_COLUMN OPERATOR XXX ORDER BY
+  LIMIT" query. The OPERATOR in this query supports '<', '>', '<=' and '>='. [groonga-dev,01943]
+  [Suggested by yoku]
+* [storage] Supported optimization for "MATCH AGAINST AND TIME_COLUMN OPERATOR XXX ORDER BY
+  LIMIT" query. The OPERATOR in this query supports '<', '>', '<=' and '>='.
+* [doc] Renamed documentation from 'UserGuide' to 'Tutorial'.
+* [doc] Added 'FAQ' section for documentation.
+* [doc] Added independant section for 'Full text search'.
+* [storage] Supported 'BETWEEN' for INT_COLUMN, DATETIME_COLUMN and TIME_COLUMN.
+  Note that it requres Groonga 3.1.1 or later. [groonga-dev,01943] [Suggested by yoku]
+* Supported MariaDB 10.0.7 (it doesn't released yet.) [#1964]
+* Dropped support for Microsoft Visual Studio 2008 or previous versions.
+* Dropped Fedora 19 support.
+* Supported Fedora 20.
+* Dropped mysql-mroonga package on CentOS 5. Use mysql55-mroonga package instead.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that MySQL crashes on 'LOCK TABLE .. READ' when dumping/restoring. [#2098]
+* Fixed wrong implementation for "*D-" pragma. [#2099]
+* Fixed a memory leak on full text search. It affects such as "MATCH AGAINST ... ORDER BY LIMIT ...". [#2144]
+
+Thanks
+^^^^^^
+
+* Horikoshi Yuki
+* yoku
+
 .. _release-3-10:
 
 Release 3.10 - 2013/11/29
