@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS mroonga_releases;
+FLUSH STATUS;
 CREATE TABLE mroonga_releases (
 id INT PRIMARY KEY AUTO_INCREMENT,
 release_title TEXT,
