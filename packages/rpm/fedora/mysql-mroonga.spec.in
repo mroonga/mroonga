@@ -156,6 +156,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sun Dec 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.11-1
+- new upstream release.
+
 * Fri Nov 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.10-1
 - new upstream release.
 - use MySQL 5.5.34 on Fedora 19.
