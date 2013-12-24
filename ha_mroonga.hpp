@@ -190,6 +190,9 @@ struct st_mrn_ft_info
   uint active_index;
   KEY *key_info;
   KEY *primary_key_info;
+  grn_obj *cursor;
+  grn_obj *id_accessor;
+  grn_obj *key_accessor;
   ha_mroonga *mroonga;
 };
 
@@ -270,8 +273,6 @@ private:
   grn_obj *cursor_geo;
   grn_table_cursor *cursor;
   grn_table_cursor *index_table_cursor;
-  grn_obj *id_accessor;
-  grn_obj *key_accessor;
   grn_obj *sorted_result;
   grn_obj *matched_record_keys;
   String  *blob_buffers;
@@ -544,7 +545,8 @@ private:
   void remove_grn_obj_force(const char *name);
   grn_obj *find_tokenizer(const char *name, int name_length);
   grn_obj *find_normalizer(KEY *key_info);
-  int wrapper_get_next_record(uchar *buf);
+  int wrapper_get_record(uchar *buf, const uchar *key);
+  int wrapper_get_next_geo_record(uchar *buf);
   int storage_get_next_record(uchar *buf);
   void geo_store_rectangle(const uchar *rectangle);
   int generic_geo_open_cursor(const uchar *key, enum ha_rkey_function find_flag);

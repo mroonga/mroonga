@@ -1448,6 +1448,15 @@ static void mrn_generic_ft_close_search(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  if (info->cursor) {
+    grn_obj_unlink(info->ctx, info->cursor);
+  }
+  if (info->id_accessor) {
+    grn_obj_unlink(info->ctx, info->id_accessor);
+  }
+  if (info->key_accessor) {
+    grn_obj_unlink(info->ctx, info->key_accessor);
+  }
   grn_obj_unlink(info->ctx, info->result);
   grn_obj_unlink(info->ctx, info->score_column);
   grn_obj_unlink(info->ctx, &(info->key));
@@ -1852,8 +1861,6 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    cursor_geo(NULL),
    cursor(NULL),
    index_table_cursor(NULL),
-   id_accessor(NULL),
-   key_accessor(NULL),
 
    sorted_result(NULL),
    matched_record_keys(NULL),
@@ -6540,7 +6547,7 @@ int ha_mroonga::wrapper_index_read_map(uchar *buf, const uchar *key,
     clear_cursor_geo();
     error = generic_geo_open_cursor(key, find_flag);
     if (!error) {
-      error = wrapper_get_next_record(buf);
+      error = wrapper_get_next_geo_record(buf);
     }
     DBUG_RETURN(error);
   } else {
@@ -6803,7 +6810,7 @@ int ha_mroonga::wrapper_index_next(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   KEY key_info = table->key_info[active_index];
   if (mrn_is_geo_key(&key_info)) {
-    error = wrapper_get_next_record(buf);
+    error = wrapper_get_next_geo_record(buf);
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
@@ -6846,7 +6853,7 @@ int ha_mroonga::wrapper_index_prev(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   KEY key_info = table->key_info[active_index];
   if (mrn_is_geo_key(&key_info)) {
-    error = wrapper_get_next_record(buf);
+    error = wrapper_get_next_geo_record(buf);
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
@@ -7020,7 +7027,7 @@ int ha_mroonga::wrapper_index_next_same(uchar *buf, const uchar *key,
   int error = 0;
   KEY key_info = table->s->key_info[active_index];
   if (mrn_is_geo_key(&key_info)) {
-    error = wrapper_get_next_record(buf);
+    error = wrapper_get_next_geo_record(buf);
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
@@ -7070,7 +7077,7 @@ int ha_mroonga::wrapper_read_range_first(const key_range *start_key,
     clear_cursor_geo();
     error = generic_geo_open_cursor(start_key->key, start_key->flag);
     if (!error) {
-      error = wrapper_get_next_record(table->record[0]);
+      error = wrapper_get_next_geo_record(table->record[0]);
     }
     DBUG_RETURN(error);
   }
@@ -7238,7 +7245,7 @@ int ha_mroonga::wrapper_read_range_next()
   MRN_DBUG_ENTER_METHOD();
   KEY key_info = table->key_info[active_index];
   if (mrn_is_geo_key(&key_info)) {
-    error = wrapper_get_next_record(table->record[0]);
+    error = wrapper_get_next_geo_record(table->record[0]);
     DBUG_RETURN(error);
   }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
@@ -7285,12 +7292,13 @@ int ha_mroonga::generic_ft_init()
 
   int error = 0;
   if (sorted_result) {
-    cursor = grn_table_cursor_open(ctx, sorted_result,
-                                   NULL, 0, NULL, 0,
-                                   0, -1, 0);
+    mrn_ft_info->cursor = grn_table_cursor_open(ctx, sorted_result,
+                                                NULL, 0, NULL, 0,
+                                                0, -1, 0);
   } else {
-    cursor = grn_table_cursor_open(ctx, mrn_ft_info->result, NULL, 0, NULL, 0, 0,
-                                   -1, 0);
+    mrn_ft_info->cursor = grn_table_cursor_open(ctx, mrn_ft_info->result,
+                                                NULL, 0, NULL, 0,
+                                                0, -1, 0);
   }
   if (ctx->rc) {
     error = ER_ERROR_ON_READ;
@@ -7298,18 +7306,18 @@ int ha_mroonga::generic_ft_init()
   } else {
     if (sorted_result) {
       if (grn_table->header.type == GRN_TABLE_NO_KEY) {
-        id_accessor = grn_obj_column(ctx, sorted_result,
-                                     MRN_COLUMN_NAME_ID,
-                                     strlen(MRN_COLUMN_NAME_ID));
+        mrn_ft_info->id_accessor = grn_obj_column(ctx, sorted_result,
+                                                  MRN_COLUMN_NAME_ID,
+                                                  strlen(MRN_COLUMN_NAME_ID));
       } else {
-        key_accessor = grn_obj_column(ctx, sorted_result,
-                                      MRN_COLUMN_NAME_KEY,
-                                      strlen(MRN_COLUMN_NAME_KEY));
+        mrn_ft_info->key_accessor = grn_obj_column(ctx, sorted_result,
+                                                   MRN_COLUMN_NAME_KEY,
+                                                   strlen(MRN_COLUMN_NAME_KEY));
       }
     } else {
-      key_accessor = grn_obj_column(ctx, mrn_ft_info->result,
-                                    MRN_COLUMN_NAME_KEY,
-                                    strlen(MRN_COLUMN_NAME_KEY));
+      mrn_ft_info->key_accessor = grn_obj_column(ctx, mrn_ft_info->result,
+                                                 MRN_COLUMN_NAME_KEY,
+                                                 strlen(MRN_COLUMN_NAME_KEY));
     }
   }
   DBUG_RETURN(error);
@@ -7341,38 +7349,6 @@ int ha_mroonga::ft_init()
     error = storage_ft_init();
   }
   DBUG_RETURN(error);
-}
-
-void ha_mroonga::generic_ft_end()
-{
-  MRN_DBUG_ENTER_METHOD();
-  handler::ft_end();
-  clear_cursor();
-  DBUG_VOID_RETURN;
-}
-
-void ha_mroonga::wrapper_ft_end()
-{
-  MRN_DBUG_ENTER_METHOD();
-  generic_ft_end();
-  DBUG_VOID_RETURN;
-}
-
-void ha_mroonga::storage_ft_end()
-{
-  MRN_DBUG_ENTER_METHOD();
-  generic_ft_end();
-  DBUG_VOID_RETURN;
-}
-
-void ha_mroonga::ft_end()
-{
-  MRN_DBUG_ENTER_METHOD();
-  if (share->wrapper_mode)
-    wrapper_ft_end();
-  else
-    storage_ft_end();
-  DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
@@ -7655,6 +7631,9 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
   info->active_index = key_nr;
   info->key_info = &(table->key_info[key_nr]);
   info->primary_key_info = &(table->key_info[table_share->primary_key]);
+  info->cursor = NULL;
+  info->id_accessor = NULL;
+  info->key_accessor = NULL;
 
   if (key->length() == 0) {
     DBUG_RETURN(info);
@@ -7715,8 +7694,6 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   MRN_DBUG_ENTER_METHOD();
 
   check_count_skip(0, 0, true);
-
-  clear_cursor();
 
   mrn_change_encoding(ctx, system_charset_info);
   grn_operator operation = GRN_OP_AND;
@@ -7817,7 +7794,32 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
   MRN_DBUG_ENTER_METHOD();
   if (wrap_ft_init_count)
     set_pk_bitmap();
-  int error = wrapper_get_next_record(buf);
+
+  struct st_mrn_ft_info *mrn_ft_info =
+    reinterpret_cast<struct st_mrn_ft_info *>(ft_handler);
+  GRN_CTX_SET_ENCODING(ctx, mrn_ft_info->encoding);
+
+  int error = 0;
+  do {
+    grn_id found_record_id;
+    found_record_id = grn_table_cursor_next(ctx, mrn_ft_info->cursor);
+    if (found_record_id == GRN_ID_NIL) {
+      error = HA_ERR_END_OF_FILE;
+      break;
+    }
+
+    GRN_BULK_REWIND(&key_buffer);
+    if (mrn_ft_info->key_accessor) {
+      grn_obj_get_value(ctx, mrn_ft_info->key_accessor,
+                        found_record_id, &key_buffer);
+    } else {
+      void *key;
+      int key_length;
+      key_length = grn_table_cursor_get_key(ctx, mrn_ft_info->cursor, &key);
+      GRN_TEXT_SET(ctx, &key_buffer, key, key_length);
+    }
+    error = wrapper_get_record(buf, (const uchar *)GRN_TEXT_VALUE(&key_buffer));
+  } while (error == HA_ERR_END_OF_FILE || error == HA_ERR_KEY_NOT_FOUND);
   DBUG_RETURN(error);
 }
 
@@ -7829,7 +7831,7 @@ int ha_mroonga::storage_ft_read(uchar *buf)
   GRN_CTX_SET_ENCODING(ctx, mrn_ft_info->encoding);
 
   grn_id found_record_id;
-  found_record_id = grn_table_cursor_next(ctx, cursor);
+  found_record_id = grn_table_cursor_next(ctx, mrn_ft_info->cursor);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
@@ -7846,19 +7848,21 @@ int ha_mroonga::storage_ft_read(uchar *buf)
   }
 
   GRN_BULK_REWIND(&key_buffer);
-  if (id_accessor) {
+  if (mrn_ft_info->id_accessor) {
     grn_obj id_buffer;
     GRN_RECORD_INIT(&id_buffer, 0, grn_obj_id(ctx, grn_table));
-    grn_obj_get_value(ctx, id_accessor, found_record_id, &id_buffer);
+    grn_obj_get_value(ctx, mrn_ft_info->id_accessor,
+                      found_record_id, &id_buffer);
     record_id = GRN_RECORD_VALUE(&id_buffer);
-  } else if (key_accessor) {
-    grn_obj_get_value(ctx, key_accessor, found_record_id, &key_buffer);
+  } else if (mrn_ft_info->key_accessor) {
+    grn_obj_get_value(ctx, mrn_ft_info->key_accessor,
+                      found_record_id, &key_buffer);
     record_id = grn_table_get(ctx, grn_table,
                               GRN_TEXT_VALUE(&key_buffer),
                               GRN_TEXT_LEN(&key_buffer));
   } else {
     void *key;
-    grn_table_cursor_get_key(ctx, cursor, &key);
+    grn_table_cursor_get_key(ctx, mrn_ft_info->cursor, &key);
     if (ctx->rc) {
       record_id = GRN_ID_NIL;
       my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -8063,14 +8067,6 @@ void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_func
 void ha_mroonga::clear_cursor()
 {
   MRN_DBUG_ENTER_METHOD();
-  if (id_accessor) {
-    grn_obj_unlink(ctx, id_accessor);
-    id_accessor = NULL;
-  }
-  if (key_accessor) {
-    grn_obj_unlink(ctx, key_accessor);
-    key_accessor = NULL;
-  }
   if (cursor) {
     grn_obj_unlink(ctx, cursor);
     cursor = NULL;
@@ -8305,93 +8301,66 @@ grn_obj *ha_mroonga::find_normalizer(KEY *key_info)
   DBUG_RETURN(normalizer);
 }
 
-int ha_mroonga::wrapper_get_next_record(uchar *buf)
+int ha_mroonga::wrapper_get_record(uchar *buf, const uchar *key)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  if (wrap_handler->inited == NONE) {
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_IDX_MAP
+    error = wrap_handler->ha_index_read_idx_map(buf,
+                                                share->wrap_primary_key,
+                                                key,
+                                                pk_keypart_map,
+                                                HA_READ_KEY_EXACT);
+#else
+    error = wrap_handler->index_read_idx_map(buf,
+                                             share->wrap_primary_key,
+                                             key,
+                                             pk_keypart_map,
+                                             HA_READ_KEY_EXACT);
+#endif
+  } else {
+#ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_MAP
+    error = wrap_handler->ha_index_read_map(buf,
+                                            key,
+                                            pk_keypart_map,
+                                            HA_READ_KEY_EXACT);
+#else
+    error = wrap_handler->index_read_map(buf,
+                                         key,
+                                         pk_keypart_map,
+                                         HA_READ_KEY_EXACT);
+#endif
+  }
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::wrapper_get_next_geo_record(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   mrn_change_encoding(ctx, NULL);
   do {
     GRN_BULK_REWIND(&key_buffer);
-    if (cursor_geo) {
-      grn_id found_record_id;
-      grn_posting *posting;
-      posting = grn_geo_cursor_next(ctx, cursor_geo);
-      if (!posting) {
-        error = HA_ERR_END_OF_FILE;
-        clear_cursor_geo();
-        break;
-      }
-      found_record_id = posting->rid;
-      grn_table_get_key(ctx, grn_table, found_record_id,
-                        GRN_TEXT_VALUE(&key_buffer),
-                        table->key_info->key_length);
-    } else if (cursor) {
-      grn_id found_record_id;
-      found_record_id = grn_table_cursor_next(ctx, cursor);
-      if (found_record_id == GRN_ID_NIL) {
-        error = HA_ERR_END_OF_FILE;
-        clear_cursor();
-        break;
-      }
-      if (key_accessor) {
-        grn_obj_get_value(ctx, key_accessor, found_record_id, &key_buffer);
-      } else {
-        void *key;
-        int key_length;
-        key_length = grn_table_cursor_get_key(ctx, cursor, &key);
-        GRN_TEXT_SET(ctx, &key_buffer, key, key_length);
-      }
-      if (count_skip) {
-        DBUG_PRINT("info", ("mroonga: count_skip: TRUE"));
-        if (record_id == GRN_ID_NIL) {
-          record_id = found_record_id;
-        } else {
-          error = 0;
-          table->status = 0;
-          break;
-        }
-      }
-    } else {
+    grn_id found_record_id;
+    grn_posting *posting;
+    posting = grn_geo_cursor_next(ctx, cursor_geo);
+    if (!posting) {
       error = HA_ERR_END_OF_FILE;
+      clear_cursor_geo();
       break;
     }
-
-    MRN_SET_WRAP_SHARE_KEY(share, table->s);
-    MRN_SET_WRAP_TABLE_KEY(this, table);
-    if (wrap_handler->inited == NONE)
-    {
-#ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_IDX_MAP
-      error = wrap_handler->ha_index_read_idx_map(buf,
-                                                  share->wrap_primary_key,
-                                                  (uchar *)GRN_TEXT_VALUE(
-                                                    &key_buffer),
-                                                  pk_keypart_map,
-                                                  HA_READ_KEY_EXACT);
-#else
-      error = wrap_handler->index_read_idx_map(buf,
-                                               share->wrap_primary_key,
-                                               (uchar *)GRN_TEXT_VALUE(
-                                                 &key_buffer),
-                                               pk_keypart_map,
-                                               HA_READ_KEY_EXACT);
-#endif
-    } else {
-#ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_MAP
-      error = wrap_handler->ha_index_read_map(buf,
-                                              (uchar *)GRN_TEXT_VALUE(
-                                                &key_buffer),
-                                              pk_keypart_map,
-                                              HA_READ_KEY_EXACT);
-#else
-      error = wrap_handler->index_read_map(buf,
-                                           (uchar *)GRN_TEXT_VALUE(
-                                             &key_buffer),
-                                           pk_keypart_map,
-                                           HA_READ_KEY_EXACT);
-#endif
-    }
-    MRN_SET_BASE_SHARE_KEY(share, table->s);
-    MRN_SET_BASE_TABLE_KEY(this, table);
+    found_record_id = posting->rid;
+    grn_table_get_key(ctx, grn_table, found_record_id,
+                      GRN_TEXT_VALUE(&key_buffer),
+                      table->key_info->key_length);
+    error = wrapper_get_record(buf, (const uchar *)GRN_TEXT_VALUE(&key_buffer));
   } while (error == HA_ERR_END_OF_FILE || error == HA_ERR_KEY_NOT_FOUND);
   DBUG_RETURN(error);
 }
