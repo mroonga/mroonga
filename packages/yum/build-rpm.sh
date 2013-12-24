@@ -125,7 +125,7 @@ run yum install ${yum_options} -y rpm-build rpmdevtools tar ${DEPENDED_PACKAGES}
 run yum clean ${yum_options} packages
 
 # for debug
-# rpmbuild_options="$rpmbuild_options --define 'optflags -O0 -ggdb3'"
+# rpmbuild_options="$rpmbuild_options --define 'optflags -O0 -g3'"
 
 if [ "${USE_MYSQLSERVICES_COMPAT}" = "yes" ]; then
     rpmbuild_options="$rpmbuild_options --define 'mroonga_configure_options --with-libmysqlservices-compat'"
