@@ -6,16 +6,6 @@ release_year YEAR,
 KEY (release_year),
 FULLTEXT KEY (release_title)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE mroonga_releases;
-Table	Create Table
-mroonga_releases	CREATE TABLE `mroonga_releases` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `release_title` text,
-  `release_year` year(4) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `release_year` (`release_year`),
-  FULLTEXT KEY `release_title` (`release_title`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
 INSERT INTO mroonga_releases (release_title, release_year)
 VALUES ("Groonga storage engine 0.1 has been released", "10");
 INSERT INTO mroonga_releases (release_title, release_year)
@@ -26,13 +16,6 @@ INSERT INTO mroonga_releases (release_title, release_year)
 VALUES ("Mroonga 3.0 has been released", "13");
 INSERT INTO mroonga_releases (release_title, release_year)
 VALUES ("Mroonga 4.0 will be released", "2014");
-SELECT * FROM mroonga_releases;
-id	release_title	release_year
-1	Groonga storage engine 0.1 has been released	2010
-2	Rename Groonga storage engine to Mroonga	2011
-3	Mroonga 2.0 has been released	2012
-4	Mroonga 3.0 has been released	2013
-5	Mroonga 4.0 will be released	2014
 SELECT * FROM mroonga_releases
 WHERE release_year BETWEEN "11" AND "2013" AND
 MATCH(release_title) AGAINST("Mroonga" IN BOOLEAN MODE)

@@ -27,7 +27,6 @@ CREATE TABLE mroonga_releases (
   KEY (release_year),
   FULLTEXT KEY (release_title)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE mroonga_releases;
 
 INSERT INTO mroonga_releases (release_title, release_year)
        VALUES ("Groonga storage engine 0.1 has been released", "10");
@@ -39,8 +38,6 @@ INSERT INTO mroonga_releases (release_title, release_year)
        VALUES ("Mroonga 3.0 has been released", "13");
 INSERT INTO mroonga_releases (release_title, release_year)
        VALUES ("Mroonga 4.0 will be released", "2014");
-
-SELECT * FROM mroonga_releases;
 
 SELECT * FROM mroonga_releases
          WHERE release_year BETWEEN "11" AND "2013" AND
