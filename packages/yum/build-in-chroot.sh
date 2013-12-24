@@ -163,7 +163,7 @@ for architecture in $ARCHITECTURES; do
 		if [ "$PACKAGE" = "mysql55-mroonga" ]; then
 			continue
 		fi
-		distribution_versions="19"
+		distribution_versions="20"
 		;;
 	    centos)
 		if [ "$PACKAGE" = "mariadb-mroonga" ]; then
