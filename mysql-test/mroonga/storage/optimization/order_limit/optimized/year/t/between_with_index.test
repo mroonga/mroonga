@@ -30,7 +30,7 @@ CREATE TABLE mroonga_releases (
 SHOW CREATE TABLE mroonga_releases;
 
 INSERT INTO mroonga_releases (release_title, release_year)
-       VALUES ("Groonga storage engine 1.0 has been released", "11");
+       VALUES ("Groonga storage engine 0.1 has been released", "10");
 INSERT INTO mroonga_releases (release_title, release_year)
        VALUES ("Rename Groonga storage engine to Mroonga", "2011");
 INSERT INTO mroonga_releases (release_title, release_year)
@@ -43,9 +43,9 @@ INSERT INTO mroonga_releases (release_title, release_year)
 SELECT * FROM mroonga_releases;
 
 SELECT * FROM mroonga_releases
-         WHERE release_year BETWEEN "12" AND "2013" AND
+         WHERE release_year BETWEEN "11" AND "2013" AND
                MATCH(release_title) AGAINST("Mroonga" IN BOOLEAN MODE)
-         ORDER BY id DESC LIMIT 10;
+         ORDER BY id DESC LIMIT 1,2;
 
 SHOW STATUS LIKE 'mroonga_fast_order_limit';
 

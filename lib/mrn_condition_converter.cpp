@@ -254,12 +254,25 @@ namespace mrn {
 
     bool error;
     Item *real_value_item = value_item->real_item();
-    if (field_item->field_type() == MYSQL_TYPE_TIME) {
+    switch (field_item->field_type()) {
+    case MYSQL_TYPE_TIME:
       error = real_value_item->get_time(mysql_time);
-    } else if (field_item->field_type() == MYSQL_TYPE_YEAR) {
-      DBUG_RETURN(true);
-    } else {
+      break;
+    case MYSQL_TYPE_YEAR:
+      mysql_time->year        = static_cast<int>(value_item->val_int());
+      mysql_time->month       = 1;
+      mysql_time->day         = 1;
+      mysql_time->hour        = 0;
+      mysql_time->hour        = 0;
+      mysql_time->minute      = 0;
+      mysql_time->second_part = 0;
+      mysql_time->neg         = false;
+      mysql_time->time_type   = MYSQL_TIMESTAMP_DATE;
+      error = false;
+      break;
+    default:
       error = real_value_item->get_date(mysql_time, TIME_FUZZY_DATE);
+      break;
     }
 
     DBUG_RETURN(error);

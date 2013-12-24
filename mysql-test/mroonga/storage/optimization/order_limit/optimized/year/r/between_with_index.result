@@ -17,7 +17,7 @@ mroonga_releases	CREATE TABLE `mroonga_releases` (
   FULLTEXT KEY `release_title` (`release_title`)
 ) ENGINE=mroonga DEFAULT CHARSET=utf8
 INSERT INTO mroonga_releases (release_title, release_year)
-VALUES ("Groonga storage engine 1.0 has been released", "11");
+VALUES ("Groonga storage engine 0.1 has been released", "10");
 INSERT INTO mroonga_releases (release_title, release_year)
 VALUES ("Rename Groonga storage engine to Mroonga", "2011");
 INSERT INTO mroonga_releases (release_title, release_year)
@@ -28,19 +28,19 @@ INSERT INTO mroonga_releases (release_title, release_year)
 VALUES ("Mroonga 4.0 will be released", "2014");
 SELECT * FROM mroonga_releases;
 id	release_title	release_year
-1	Groonga storage engine 1.0 has been released	2011
+1	Groonga storage engine 0.1 has been released	2010
 2	Rename Groonga storage engine to Mroonga	2011
 3	Mroonga 2.0 has been released	2012
 4	Mroonga 3.0 has been released	2013
 5	Mroonga 4.0 will be released	2014
 SELECT * FROM mroonga_releases
-WHERE release_year BETWEEN "12" AND "2013" AND
+WHERE release_year BETWEEN "11" AND "2013" AND
 MATCH(release_title) AGAINST("Mroonga" IN BOOLEAN MODE)
-ORDER BY id DESC LIMIT 10;
+ORDER BY id DESC LIMIT 1,2;
 id	release_title	release_year
-4	Mroonga 3.0 has been released	2013
 3	Mroonga 2.0 has been released	2012
+2	Rename Groonga storage engine to Mroonga	2011
 SHOW STATUS LIKE 'mroonga_fast_order_limit';
 Variable_name	Value
-Mroonga_fast_order_limit	0
+Mroonga_fast_order_limit	1
 DROP TABLE mroonga_releases;
