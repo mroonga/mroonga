@@ -7346,6 +7346,7 @@ int ha_mroonga::ft_init()
 void ha_mroonga::generic_ft_end()
 {
   MRN_DBUG_ENTER_METHOD();
+  handler::ft_end();
   clear_cursor();
   DBUG_VOID_RETURN;
 }
