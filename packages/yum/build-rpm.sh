@@ -97,6 +97,7 @@ case $distribution in
 		run yum remove community-mysql -y
 		DEPENDED_PACKAGES="$DEPENDED_PACKAGES mariadb-devel"
 	fi
+	USE_MYSQLSERVICES_COMPAT=yes
 	DEPENDED_PACKAGES="$DEPENDED_PACKAGES cmake libaio-devel systemtap-sdt-devel"
 	;;
     centos)
