@@ -1,6 +1,6 @@
 %define mariadb_version 5.5.33a
 %define mariadb_release 1%{?dist}
-%define mariadb_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/19/SRPMS
+%define mariadb_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/20/SRPMS
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
@@ -158,6 +158,7 @@ fi
 %changelog
 * Sun Dec 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.11-1
 - new upstream release.
+- support Fedora 20.
 
 * Fri Nov 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.10-1
 - new upstream release.
