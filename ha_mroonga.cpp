@@ -6543,7 +6543,6 @@ int ha_mroonga::wrapper_index_read_map(uchar *buf, const uchar *key,
   MRN_DBUG_ENTER_METHOD();
   KEY key_info = table->key_info[active_index];
   if (mrn_is_geo_key(&key_info)) {
-    clear_cursor();
     clear_cursor_geo();
     error = generic_geo_open_cursor(key, find_flag);
     if (!error) {
@@ -7073,7 +7072,6 @@ int ha_mroonga::wrapper_read_range_first(const key_range *start_key,
   MRN_DBUG_ENTER_METHOD();
   KEY key_info = table->key_info[active_index];
   if (mrn_is_geo_key(&key_info)) {
-    clear_cursor();
     clear_cursor_geo();
     error = generic_geo_open_cursor(start_key->key, start_key->flag);
     if (!error) {
