@@ -1,9 +1,10 @@
 .. highlightlang:: none
+.. Mroonga Project
 
 Installation Guide
 ==================
 
-If you use binary packages, MySQL related packages will be also installed when you install mroonga package.
+If you use binary packages, MySQL related packages will be also installed when you install Mroonga package.
 
 We distribute packages for both 32-bit and 64-bit but we recommend that you should use 64-bit package for server. You should use 32-bit package just only for test or development. You will get no memory error with 32-bit package even if you just process medium size data.
 
@@ -431,15 +432,15 @@ Fedora 19
 
 Since Fedora 19, MariaDB is the default implementation of MySQL.
 
-So there are two selections for mroonga. One is using with MariaDB, the other is using with MySQL (community-mysql).
+So there are two selections for Mroonga. One is using with MariaDB, the other is using with MySQL (community-mysql).
 
-Install mroonga for MySQL (community-mysql)::
+Install Mroonga for MySQL (community-mysql)::
 
   % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql-mroonga
 
-Install mroonga for MariaDB::
+Install Mroonga for MariaDB::
 
   % sudo rpm -ivh http://packages.groonga.org/fedora/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
@@ -514,14 +515,14 @@ For 64-bit environment, download `mariadb-10.0.6-mroonga-3.10-winx64.zip
 <http://packages.groonga.org/windows/mroonga/mariadb-10.0.6-mroonga-3.10-winx64.zip>`_
 and extract it.
 
-Install mroonga
+Install Mroonga
 ^^^^^^^^^^^^^^^
 
 Start mysqld, connect to it by mysql client, and install it by "INSTALL PLUGIN" command. ::
 
  mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga';
 
-If "mroonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
+If "mroonga" is displayed in "SHOW ENGINES" command result like below, Mroonga is well installed. ::
 
  mysql> SHOW ENGINES;
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
@@ -550,7 +551,7 @@ Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga';
 
-To enable invoking groonga query from mroonga, install mroonga_command function.
+To enable invoking groonga query from Mroonga, install mroonga_command function.
 
 Invoke CREATE FUNCTION like the following. ::
 
@@ -583,7 +584,7 @@ Requirements
 
 MySQL and groonga should be already installed.
 
-And MySQL's source code is also required to build mroonga.
+And MySQL's source code is also required to build Mroonga.
 
 Install MySQL
 ^^^^^^^^^^^^^
@@ -609,7 +610,7 @@ http://groonga.org/docs/
 
 Here we assume that libgroonga is installed in the standard location like /usr/lib etc.
 
-Build mroonga
+Build Mroonga
 ^^^^^^^^^^^^^
 
 Run configure script by specifying the location of MySQL source code with ``--with-mysql-source`` and the path of mysql_config command with ``--with-mysql-config``. ::
@@ -629,7 +630,7 @@ Then invoke "make". ::
 
  make
 
-Install mroonga
+Install Mroonga
 ^^^^^^^^^^^^^^^
 
 By invoking "make install", ha_mroonga.so will be installed in MySQL's plugin directory. ::
@@ -640,7 +641,7 @@ Then start mysqld, connect to it by mysql client, and install it by "INSTALL PLU
 
  mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
 
-If "mroonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
+If "mroonga" is displayed in "SHOW ENGINES" command result like below, Mroonga is well installed. ::
 
  mysql> SHOW ENGINES;
  +------------+---------+------------------------------------------------------------+--------------+------+------------+
@@ -669,7 +670,7 @@ Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
 
-To enable invoking groonga query from mroonga, install mroonga_command function.
+To enable invoking groonga query from Mroonga, install mroonga_command function.
 
 Invoke CREATE FUNCTION like the following. ::
 
@@ -689,7 +690,7 @@ If you want to use indexes of tokenizing of each morpheme for full text search, 
 Download
 ^^^^^^^^
 
-Download mroonga tarball from `packages.groonga.org <http://packages.groonga.org/source/mroonga>`_ .
+Download Mroonga tarball from `packages.groonga.org <http://packages.groonga.org/source/mroonga>`_ .
 
 Download MariaDB tarball from `downloads.mariadb.org <https://downloads.mariadb.org/>`_ .
 
@@ -707,14 +708,14 @@ http://groonga.org/docs/
 
 Here we assume that libgroonga is installed in the standard location like /usr/lib etc.
 
-Build mroonga with MariaDB
+Build Mroonga with MariaDB
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Uncompress MariaDB tarball. ::
 
  tar xvfz mariadb-10.0.2.tar.gz
 
-Uncompress mroonga tarball then move into storage directory. ::
+Uncompress Mroonga tarball then move into storage directory. ::
 
  tar xvfz mroonga-3.03.tar.gz
  mv mroonga-3.03 mariadb-10.0.2/storage/mroonga/
@@ -728,10 +729,10 @@ Then invoke "make". ::
 
  make
 
-Install mroonga with MariaDB
+Install Mroonga with MariaDB
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-By invoking "make install", MariaDB and mroonga will be installed in "/usr/local/mysql" directory. ::
+By invoking "make install", MariaDB and Mroonga will be installed in "/usr/local/mysql" directory. ::
 
  make install
 
@@ -739,7 +740,7 @@ Then start mysqld, connect to it by MariaDB client, and install it by "INSTALL P
 
  mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
 
-If "mroonga" is displayed in "SHOW ENGINES" command result like below, mroonga is well installed. ::
+If "mroonga" is displayed in "SHOW ENGINES" command result like below, Mroonga is well installed. ::
 
  mysql> SHOW ENGINES;
  +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
@@ -770,7 +771,7 @@ Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
 
-To enable invoking groonga query from mroonga, install mroonga_command function.
+To enable invoking groonga query from Mroonga, install mroonga_command function.
 
 Invoke CREATE FUNCTION like the following. ::
 
@@ -783,7 +784,7 @@ Upgrade Guide
 There is a case that incompatible change is introduced at new release.
 It is announced by release announce if new release contains such a incompatible change.
 
-Here is the list of recommended way of upgrading mroonga from old release.
+Here is the list of recommended way of upgrading Mroonga from old release.
 
 See following URL about upgrade sequence if you use previous version.
 
