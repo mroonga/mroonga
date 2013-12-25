@@ -2,7 +2,7 @@ REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = debian ubuntu
 CHROOT_BASE = /var/lib/chroot
 ARCHITECTURES = i386 amd64
-CODES = wheezy jessie unstable lucid precise quantal raring saucy
+CODES = wheezy jessie unstable precise quantal raring saucy
 
 all:
 
