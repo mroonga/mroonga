@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-13 16:08+0900\n"
+"POT-Creation-Date: 2013-12-26 14:03+0900\n"
 "PO-Revision-Date: 2011-11-03 17:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -1475,26 +1475,3 @@ msgid ""
 "phrase only"
 msgstr ""
 
-# b8ad7182363a4b8e92846b2ef15f686d
-#~ msgid "User's guide"
-#~ msgstr "User's guide"
-
-# ece8f2b65efe4f40a1b88882ebc517ea
-#~ msgid "Please read the following to see how to install : :doc:`install`"
-#~ msgstr "Please read the following to see how to install : :doc:`install`"
-
-# d3f025a5877041c6a89ab03b9fafb135
-#~ msgid "How to check the installation"
-#~ msgstr "How to check the installation"
-
-# e9008292f076438a9ec5afd076d48f03
-#~ msgid "Running modes"
-#~ msgstr "Running modes"
-
-# 512331dc17c641f69634833a5ea52f73
-#~ msgid "Usage of each mode"
-#~ msgstr "Usage of each mode"
-
-# a5736f3a5cc4411a89519c0bdc8cd95d
-#~ msgid "Please see the following pages for the usage of each mode."
-#~ msgstr "Please see the following pages for the usage of each mode."

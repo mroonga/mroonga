@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-25 18:11+0900\n"
+"POT-Creation-Date: 2013-12-26 14:03+0900\n"
 "PO-Revision-Date: 2013-12-25 19:30+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -520,9 +520,9 @@ msgstr ""
 msgid "Supported MySQL 5.6.12. [Reported by WING]"
 msgstr ""
 
-# 69e00c408d84406fac146194bcc20868
+# ee38363d00f149459f4e9a7cdcc8c4b3
 #: ../../../source/news.rst:214
-msgid "Added documentation about :doc:`/reference/troubleshooting`."
+msgid "Added documentation about troubleshooting."
 msgstr ""
 
 # 58ca22841d2249ec81beacc7ac58f2cf
@@ -1335,12 +1335,12 @@ msgstr ""
 msgid "Release 2.05 - 2012/07/29"
 msgstr "Release 2.05 - 2012/07/29"
 
-# 829ee50bd7ef4782af43ac3fc083058b
+# e34d9c734a8a47069e65fd629214cf39
 #: ../../../source/news.rst:637
 msgid ""
 "This release has a backward incompatible change against SET column and ENUM. "
 "If you use SET column or ENUM that has the number of elements < 256 in :doc:"
-"`/userguide/storage`, please recreate (dump and restore) database."
+"`/tutorial/storage`, please recreate (dump and restore) database."
 msgstr ""
 
 # 4eb35385e7de433d834d96b3855cca75
@@ -1472,11 +1472,11 @@ msgstr ""
 msgid "Release 2.03 - 2012/05/29"
 msgstr "Release 2.03 - 2012/05/29"
 
-# d5b11e96d15846ad97ecb0c71ddf1a5a
+# 2a51aeb5e9864b6aaa7931e7808986f5
 #: ../../../source/news.rst:733
 msgid ""
 "This release has a backward incompatible change against multiple column "
-"index. If you have any tables that uses :doc:`/userguide/storage` and any "
+"index. If you have any tables that uses :doc:`/tutorial/storage` and any "
 "multiple comlumn indexes, please recreate those indexes by ``ALTER TABLE "
 "DISABLE KEYS`` and ``ALTER TABLE ENBALE KEYS``::"
 msgstr ""
@@ -2884,10 +2884,10 @@ msgstr "[ラッパーモード] MyISAM対応。 #1033"
 msgid "0.7 リリース - 2011/06/29"
 msgstr "0.7 リリース - 2011/06/29"
 
-# 8cd9aa31d4fc44e98071b7a3f32d08e3
+# 167477b21afc4c1db635ea747a5b1f59
 #: ../../../source/news/0.x.rst:38
 msgid ""
-"既存のストレージエンジンに全文検索機能を追加する :doc:`/userguide/wrapper` の"
+"既存のストレージエンジンに全文検索機能を追加する :doc:`/tutorial/wrapper` の"
 "追加。"
 msgstr ""
 

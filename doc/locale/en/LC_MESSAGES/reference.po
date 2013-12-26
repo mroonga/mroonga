@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-13 16:06+0900\n"
+"POT-Creation-Date: 2013-12-25 18:11+0900\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -21,6 +21,225 @@ msgstr ""
 #: ../../../source/reference.rst:4
 msgid "Reference"
 msgstr "Reference"
+
+# 6bb63f72d0a440a8a995ce78255b14fe
+#: ../../../source/reference/full_text_search.rst:4
+msgid "Search and Scoring in Mroonga"
+msgstr ""
+
+# b01a16ef3ddf408aba3e2cc4248eea5c
+#: ../../../source/reference/full_text_search.rst:7
+msgid "Mroonga Scoring in natural language mode"
+msgstr ""
+
+# fd11e8a9d92b4607bb77ef4613f7b5e0
+#: ../../../source/reference/full_text_search.rst:9
+msgid ""
+"The search score of Mroonga in natural language mode is a similarity score "
+"between query and document. Mroonga's scoring algorithm is as follows:"
+msgstr ""
+
+# 9455295e2c03457ca66841ccfa8f556a
+#: ../../../source/reference/full_text_search.rst:11
+msgid "Splitting a query into tokens."
+msgstr ""
+
+# 1ec5b4cfc05f40c5b371abc1294c9f2c
+#: ../../../source/reference/full_text_search.rst:12
+msgid "Removing not matched tokens."
+msgstr ""
+
+# 3d65eb4986234232a81990f7a365b056
+#: ../../../source/reference/full_text_search.rst:13
+msgid "Calculating weight per token."
+msgstr ""
+
+# b0828fda0ac84d68abcb7de9bc7bd343
+#: ../../../source/reference/full_text_search.rst:14
+msgid "Getting the top N weight tokens."
+msgstr ""
+
+# 0f0128ee3a444d3d9a0524e2c5497a30
+#: ../../../source/reference/full_text_search.rst:15
+msgid ""
+"Summing up the weight per token which exists in a document, and is one of "
+"the top N weight tokens. The total weight is the similarity score for the "
+"document and the query."
+msgstr ""
+
+# 14933394241c44e29258d357e3c3f80e
+#: ../../../source/reference/full_text_search.rst:17
+msgid ""
+"We are showing by example. The first thing we create a table and insert data "
+"as follows: ::"
+msgstr ""
+
+# efd766ba93804fc29f34b48cfaeee186
+#: ../../../source/reference/full_text_search.rst:32
+msgid ""
+"We use a query \"fine today\" to search. The search result is as follows: ::"
+msgstr ""
+
+# 4f39d2b359b840508d98e59afb35f6c3
+#: ../../../source/reference/full_text_search.rst:47
+msgid "Now, let us explain how to make the result score \"131073\"."
+msgstr ""
+
+# 2953cd8e918247aca610437d0c46e088
+#: ../../../source/reference/full_text_search.rst:51
+msgid "Splitting a query into tokens"
+msgstr ""
+
+# 7f0efbd6717e4289bf3cfee534eed769
+#: ../../../source/reference/full_text_search.rst:54
+msgid ""
+"The default tokenizer splits up the query \"fine today\" into two tokens as "
+"follows:"
+msgstr ""
+
+# a04fe8de45d942a093ab9490022d964e
+#: ../../../source/reference/full_text_search.rst:56
+msgid "fine"
+msgstr ""
+
+# dc0c75abb41c4cd1a6281887c34fc044
+#: ../../../source/reference/full_text_search.rst:57
+msgid "today"
+msgstr ""
+
+# d94aefeef0d341d8a3c397d005b7ce27
+#: ../../../source/reference/full_text_search.rst:60
+msgid "Removing not matched tokens"
+msgstr ""
+
+# 550ad1ecb713466ea33372d0413ee466
+#: ../../../source/reference/full_text_search.rst:62
+msgid ""
+"We have nothing to do in this case because the tokens exist in documents."
+msgstr ""
+
+# f3408b106bcf45b6b14b03de68d0d34a
+#: ../../../source/reference/full_text_search.rst:64
+msgid "fine: include in document id=1,3,4"
+msgstr ""
+
+# db15bf039cf34c008f0dd1934adf612a
+# 3adc67ab01394ceab7d58e96eef7238b
+#: ../../../source/reference/full_text_search.rst:65
+#: ../../../source/reference/full_text_search.rst:106
+msgid "today: include in document id=3,4"
+msgstr ""
+
+# e9a0913eeda9435b89b3a63b3288845c
+#: ../../../source/reference/full_text_search.rst:68
+msgid "Calculating weight per token"
+msgstr ""
+
+# 9db73d0873fa49c997aa1405ac97afbc
+# ac7a52553122436683b18f3461566f3f
+#: ../../../source/reference/full_text_search.rst:70
+#: ../../../source/reference/full_text_search.rst:99
+msgid "fine: 116508(= 1048576 / 9)"
+msgstr ""
+
+# 2b20c75ef69e4bfa9d567c31bbb19ba7
+# 88f148be4b3c426ab4e4f45d577def11
+#: ../../../source/reference/full_text_search.rst:71
+#: ../../../source/reference/full_text_search.rst:98
+msgid "today: 131072(= 1048576 / 8)"
+msgstr ""
+
+# d764e46bf3e844bcae23132336a00fb5
+#: ../../../source/reference/full_text_search.rst:73
+msgid ""
+"1048576(= 2 ** 20) denotes the number of tokens in all documents. We should "
+"get the number from the table, but as a matter of fact, the fixed value is "
+"used for simplicity."
+msgstr ""
+
+# e1b3c6ce7f284c69a969ea0409c0e763
+#: ../../../source/reference/full_text_search.rst:75
+msgid ""
+"In the fraction 1048576 / 8,  the denominator \"8\" indicates that the "
+"number of document which contains token \"today\"."
+msgstr ""
+
+# 098d4242d79c4e80bc4441dea1f6306c
+#: ../../../source/reference/full_text_search.rst:77
+msgid ""
+"In the fraction 1048576 / 9,  the denominator \"9\" means the number of "
+"document which contains token \"fine\"."
+msgstr ""
+
+# cae84ba5fc63471781d0174b25e76e25
+#: ../../../source/reference/full_text_search.rst:79
+msgid ""
+"The denominator \"8\" and \"9\" are approximate number, strictly speaking, "
+"\"2\" is the correct answer for the number of document that contains \"today"
+"\", \"3\" is the correct answer for the number of document that contains "
+"\"fine\"."
+msgstr ""
+
+# cf77592d8eec4239aad2e72ae479a23a
+#: ../../../source/reference/full_text_search.rst:81
+msgid ""
+"You can check the approximate number of token by using the following "
+"query. ::"
+msgstr ""
+
+# d99f31b9b8564763a9aced2f353f7995
+#: ../../../source/reference/full_text_search.rst:85
+msgid "The retrieval result of the above query is as follows: ::"
+msgstr ""
+
+# 7b8cea2cd1af4fb7942e1103e2fe2447
+#: ../../../source/reference/full_text_search.rst:90
+msgid "Getting the top N weight tokens"
+msgstr ""
+
+# 89b14ffa756c49aa80220af52f2099bc
+#: ../../../source/reference/full_text_search.rst:92
+msgid ""
+"The formula for the N is \"the number of occurrence of token in document / 8 "
+"+ 1\""
+msgstr ""
+
+# f6cb50e5fe464b6fb18c74faad66b34d
+#: ../../../source/reference/full_text_search.rst:94
+msgid "In this case, N = 2 / 8 + 1 ≒ 1"
+msgstr ""
+
+# 0452a0a5e0ee4b73a3894b10ac5029f3
+#: ../../../source/reference/full_text_search.rst:96
+msgid "The sorted tokens are as follows:"
+msgstr ""
+
+# 4b14d1c05e064eb9b86ad91ddbbfa1c1
+#: ../../../source/reference/full_text_search.rst:101
+msgid "N = 1, then we get \"today: 131072(= 1048576 / 8)\"."
+msgstr ""
+
+# 3cf8113e9c1d479d93e5e033d0a0cc13
+#: ../../../source/reference/full_text_search.rst:104
+msgid ""
+"Summing up the weight per token which exists in a document, and is one of "
+"the top N weight tokens"
+msgstr ""
+
+# 0f5131f01e874dd2881591d34e446325
+#: ../../../source/reference/full_text_search.rst:108
+msgid ""
+"Finally document id 3,4 are hit, the similarity score between query and "
+"document(id=3) is 131072 + 1 = 131073 (\"1\" is the number of occurrence of "
+"token \"today\" in document)."
+msgstr ""
+
+# 3902ed8a07c042de97be3f2350e59a43
+#: ../../../source/reference/full_text_search.rst:110
+msgid ""
+"The similarity score between query and document(id=4) is the same as the "
+"score between query and document(id=3)."
+msgstr ""
 
 # 47b07cd2bb7d44c98a8c3ea8bd47e37b
 #: ../../../source/reference/limitations.rst:4
@@ -595,8 +814,8 @@ msgstr ""
 # 4b7d6468bc8b458c8f5e61ed84b15c43
 #: ../../../source/reference/sql_commands.rst:25
 msgid ""
-"``CREATE TABLE table_name (... FULLTEXT INDEX index_name "
-"(column_name, ...))``"
+"``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name, ...))"
+"``"
 msgstr ""
 
 # 9286b659a8aa47a09a74f57a5dc47d63
@@ -884,8 +1103,8 @@ msgstr ""
 # 7c3a1068e3ae4e7d93e7000350988666
 #: ../../../source/reference/sql_commands.rst:82
 msgid ""
-"``CREATE TABLE table_name (column_name "
-"DATETIME(fractional_seconds_precision) PRIMARY KEY)``"
+"``CREATE TABLE table_name (column_name DATETIME"
+"(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 # 11838c8f2cb74bd0a6550a512e748220
@@ -920,8 +1139,8 @@ msgstr ""
 # b6cac615904c4bb7adb71b70946c2674
 #: ../../../source/reference/sql_commands.rst:88
 msgid ""
-"``CREATE TABLE table_name (column_name "
-"TIMESTAMP(fractional_seconds_precision) PRIMARY KEY)``"
+"``CREATE TABLE table_name (column_name TIMESTAMP"
+"(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 # 87840845f1b94ca3b73d46c8993d01b5
@@ -1139,8 +1358,8 @@ msgstr ""
 # 1fc98641c232410e92cdf63b48cb1ec2
 #: ../../../source/reference/sql_commands.rst:125
 msgid ""
-"``SELECT * FROM table_name WHERE "
-"MBRContains(GeomFromText('LineString(...)'), geometry_column_name)``"
+"``SELECT * FROM table_name WHERE MBRContains(GeomFromText('LineString"
+"(...)'), geometry_column_name)``"
 msgstr ""
 
 # c282e435cc244d4ba86619e5040a30f1
@@ -1249,8 +1468,8 @@ msgstr ""
 # 6857c598caab4c0588c28d380dc5e9f2
 #: ../../../source/reference/sql_commands.rst:148
 msgid ""
-"``INSERT INTO (geometry_column_name) VALUES "
-"(GeomFromText('LineString(...)'))``"
+"``INSERT INTO (geometry_column_name) VALUES (GeomFromText('LineString(...)'))"
+"``"
 msgstr ""
 
 # 6669ecac6be34402bd6cbe0b169f6d6e
