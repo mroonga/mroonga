@@ -211,7 +211,7 @@ Improvements
 
 * Added warnings for truncated date data. [#1768] [Suggested by Y.Kentaro]
 * Supported MySQL 5.6.12. [Reported by WING]
-* Added documentation about :doc:`/reference/troubleshooting`.
+* Added documentation about troubleshooting.
 * Supported to enable fast mutexes option by build configuration.
   [#1760] [Reported by WING]
 
@@ -637,7 +637,7 @@ Release 2.05 - 2012/07/29
    This release has a backward incompatible change against SET column
    and ENUM.
    If you use SET column or ENUM that has the number of elements < 256
-   in :doc:`/userguide/storage`, please recreate (dump and restore)
+   in :doc:`/tutorial/storage`, please recreate (dump and restore)
    database.
 
 Here is upgrade sequence.
@@ -732,7 +732,7 @@ Release 2.03 - 2012/05/29
 
    This release has a backward incompatible change against multiple
    column index. If you have any tables that uses
-   :doc:`/userguide/storage` and any multiple comlumn indexes, please
+   :doc:`/tutorial/storage` and any multiple comlumn indexes, please
    recreate those indexes by ``ALTER TABLE DISABLE KEYS`` and ``ALTER
    TABLE ENBALE KEYS``::
 
