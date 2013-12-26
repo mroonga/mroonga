@@ -36,7 +36,7 @@ Fixes
 ^^^^^
 
 * [storage] Fixed a bug that MySQL crashes on 'LOCK TABLE .. READ' when dumping/restoring. [#2098]
-* Fixed wrong implementation for "*D-" pragma. [#2099]
+* Fixed wrong implementation for "\*D-" pragma. [#2099]
 * Fixed a memory leak on full text search. It affects such as "MATCH AGAINST ... ORDER BY LIMIT ...". [#2144]
 
 Thanks
