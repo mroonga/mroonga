@@ -24,4 +24,4 @@ Report a bug to the mailing list
 --------------------------------
 
 Mroonga project has :doc:`/community` for discussing about Mroonga.
-Please send a Email that describes a bug.
+Please send an Email that describes a bug.
