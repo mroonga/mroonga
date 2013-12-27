@@ -23,3 +23,4 @@ As a developer: Bug report, development and documentation
    :maxdepth: 3
 
    contribution/report
+   contribution/documentation
