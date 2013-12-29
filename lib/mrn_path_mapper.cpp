@@ -64,7 +64,27 @@ namespace mrn {
       }
       db_path_[j] = '\0';
     } else {
-      strcpy(db_path_, mysql_path_);
+#ifdef MRN_USE_MYSQL_DATA_HOME
+      int len = strlen(mysql_path_);
+      int mysql_data_home_len = strlen(mysql_data_home);
+      if (len > mysql_data_home_len &&
+          !strncmp(mysql_path_, mysql_data_home, mysql_data_home_len)) {
+        int i = mysql_data_home_len, j = mysql_data_home_len;
+        memcpy(db_path_, mysql_data_home, mysql_data_home_len);
+        while (mysql_path_[i] != FN_LIBCHAR && i < len) {
+          db_path_[j++] = mysql_path_[i++];
+        }
+        if (i == len) {
+          memcpy(db_path_, mysql_path_, len);
+        } else {
+          db_path_[j] = '\0';
+        }
+      } else {
+#endif
+        strcpy(db_path_, mysql_path_);
+#ifdef MRN_USE_MYSQL_DATA_HOME
+      }
+#endif
     }
     strcat(db_path_, MRN_DB_FILE_SUFFIX);
     return db_path_;
@@ -89,7 +109,26 @@ namespace mrn {
       }
       db_name_[j] = '\0';
     } else {
-      strcpy(db_name_, mysql_path_);
+#ifdef MRN_USE_MYSQL_DATA_HOME
+      int len = strlen(mysql_path_);
+      int mysql_data_home_len = strlen(mysql_data_home);
+      if (len > mysql_data_home_len &&
+          !strncmp(mysql_path_, mysql_data_home, mysql_data_home_len)) {
+        int i = mysql_data_home_len, j = 0;
+        while (mysql_path_[i] != FN_LIBCHAR && i < len) {
+          db_name_[j++] = mysql_path_[i++];
+        }
+        if (i == len) {
+          memcpy(db_name_, mysql_path_, len);
+        } else {
+          db_name_[j] = '\0';
+        }
+      } else {
+#endif
+        strcpy(db_name_, mysql_path_);
+#ifdef MRN_USE_MYSQL_DATA_HOME
+      }
+#endif
     }
     return db_name_;
   }

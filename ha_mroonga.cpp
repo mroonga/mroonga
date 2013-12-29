@@ -8514,7 +8514,19 @@ bool ha_mroonga::is_temporary_table_name(const char *name) const
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: table name = %s", name));
+#ifdef MRN_USE_MYSQL_DATA_HOME
+  bool temporary_table_name_p = FALSE;
+  if (name[0] != '.') {
+    int len = strlen(name);
+    int mysql_data_home_len = strlen(mysql_data_home);
+    if (len < mysql_data_home_len ||
+      strncmp(name, mysql_data_home, mysql_data_home_len)) {
+      temporary_table_name_p = TRUE;
+    }
+  }
+#else
   bool temporary_table_name_p = (name[0] != '.');
+#endif
   DBUG_RETURN(temporary_table_name_p);
 }
 

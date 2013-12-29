@@ -23,6 +23,11 @@
 #define MRN_PATH_MAPPER_HPP_
 
 #include <mrn_constants.hpp>
+#include <mrn_mysql.h>
+
+#if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
+#  define MRN_USE_MYSQL_DATA_HOME
+#endif
 
 namespace mrn {
   class PathMapper {
