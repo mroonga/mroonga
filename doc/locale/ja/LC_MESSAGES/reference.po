@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-25 18:07+0900\n"
-"PO-Revision-Date: 2013-12-13 15:57+0900\n"
+"PO-Revision-Date: 2013-12-29 13:24+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -25,39 +25,39 @@ msgstr "リファレンス"
 # f58b463bedb44118a3cbe8b1a2f1f331
 #: ../../../source/reference/full_text_search.rst:4
 msgid "Search and Scoring in Mroonga"
-msgstr ""
+msgstr "Mroongaにおける検索スコア"
 
 # 19d73073efdc4c77a5be7160eab6981d
 #: ../../../source/reference/full_text_search.rst:7
 msgid "Mroonga Scoring in natural language mode"
-msgstr ""
+msgstr "IN NATURAL LANGUAGE MODEにおける検索スコアの算出方法"
 
 # a1f519f2d38d45e5a2ee7b7507fa51f9
 #: ../../../source/reference/full_text_search.rst:9
 msgid ""
 "The search score of Mroonga in natural language mode is a similarity score "
 "between query and document. Mroonga's scoring algorithm is as follows:"
-msgstr ""
+msgstr "IN NATURAL LANGUAGE MODEでの検索スコアはクエリと文書の類似度になります。スコアは以下の手順に従って算出されます。::"
 
 # 2ca9c6bf418d4f779749caeda1c82098
 #: ../../../source/reference/full_text_search.rst:11
 msgid "Splitting a query into tokens."
-msgstr ""
+msgstr "クエリをトークンに分割する"
 
 # 64b3efcc3e4d4a49b05d4be2496016f1
 #: ../../../source/reference/full_text_search.rst:12
 msgid "Removing not matched tokens."
-msgstr ""
+msgstr "マッチしないトークンを除去する"
 
 # 05568cc012874c15b367e0a1755ee9af
 #: ../../../source/reference/full_text_search.rst:13
 msgid "Calculating weight per token."
-msgstr ""
+msgstr "トークン毎の重みを計算する"
 
 # 0198a6698c054e19830d686dbea8dbe5
 #: ../../../source/reference/full_text_search.rst:14
 msgid "Getting the top N weight tokens."
-msgstr ""
+msgstr "重みが大きい上位N個のトークンを取り出す"
 
 # 0dbbd0fa02364f818268c9b8d15fb76a
 #: ../../../source/reference/full_text_search.rst:15
@@ -65,37 +65,37 @@ msgid ""
 "Summing up the weight per token which exists in a document, and is one of "
 "the top N weight tokens. The total weight is the similarity score for the "
 "document and the query."
-msgstr ""
+msgstr "上位N個のトークンについて、トークンが出現する文書に重みを足し、すべての重みを足したものがクエリと文書の類似度となる"
 
 # 74c835704f68453693d98c80c0822bb5
 #: ../../../source/reference/full_text_search.rst:17
 msgid ""
 "We are showing by example. The first thing we create a table and insert data "
 "as follows: ::"
-msgstr ""
+msgstr "具体例を使って説明します。以下のテーブルとデータを用意します。::"
 
 # a67c93219ac4425c95011d92009c0380
 #: ../../../source/reference/full_text_search.rst:32
 msgid ""
 "We use a query \"fine today\" to search. The search result is as follows: ::"
-msgstr ""
+msgstr "このとき、以下のように「fine today」で類似文書検索したとします。検索の結果は以下となります。::"
 
 # 5b698de8c62d43d88757c8b29329092b
 #: ../../../source/reference/full_text_search.rst:47
 msgid "Now, let us explain how to make the result score \"131073\"."
-msgstr ""
+msgstr "このときのスコア\"131073\"の算出の具体的な挙動は以下となります。"
 
 # ef2acd39e8274c8296a22607304e6fea
 #: ../../../source/reference/full_text_search.rst:51
 msgid "Splitting a query into tokens"
-msgstr ""
+msgstr "クエリをトークンに分割する"
 
 # e960b359dcf947189090aeed9d3acd34
 #: ../../../source/reference/full_text_search.rst:54
 msgid ""
 "The default tokenizer splits up the query \"fine today\" into two tokens as "
 "follows:"
-msgstr ""
+msgstr "クエリ「fine today」をトークンに分割します。デフォルトトークナイザーは以下の二つのトークンにします。"
 
 # 4c1b128982864ba29f9919576a6c8c41
 #: ../../../source/reference/full_text_search.rst:56
@@ -110,30 +110,30 @@ msgstr ""
 # b9f03a840c4d40cca340c1e3f6bc3027
 #: ../../../source/reference/full_text_search.rst:60
 msgid "Removing not matched tokens"
-msgstr ""
+msgstr "マッチしないトークンを除去する"
 
 # dd4ab1c59e214a1c8253233cb1dfe4ab
 #: ../../../source/reference/full_text_search.rst:62
 msgid ""
 "We have nothing to do in this case because the tokens exist in documents."
-msgstr ""
+msgstr "今回はすべてのトークンがどれかの文書に含まれているのでここでは取り除かれません。"
 
 # e962d54ae96042999d9069512af4f6ed
 #: ../../../source/reference/full_text_search.rst:64
 msgid "fine: include in document id=1,3,4"
-msgstr ""
+msgstr "fine: 文書id = 1,3,4"
 
 # 6893b700a6ae484fa58566abaf9ffab9
 # 2b93ec067b1a425885aa5f9cfdfcfb5a
 #: ../../../source/reference/full_text_search.rst:65
 #: ../../../source/reference/full_text_search.rst:106
 msgid "today: include in document id=3,4"
-msgstr ""
+msgstr "today: 文書id = 3,4"
 
 # 98c565e4549e4d4b8f09cbad3f29d6c5
 #: ../../../source/reference/full_text_search.rst:68
 msgid "Calculating weight per token"
-msgstr ""
+msgstr "トークン毎の重みを計算する"
 
 # 6baf247b29ca4d9c8ffed61190467516
 # 7735dda7bc4d4a309f29ddcf634f3a9e
@@ -155,21 +155,21 @@ msgid ""
 "1048576(= 2 ** 20) denotes the number of tokens in all documents. We should "
 "get the number from the table, but as a matter of fact, the fixed value is "
 "used for simplicity."
-msgstr ""
+msgstr "(= ...)が重みの計算式です。 \"1048576\"（= 2 ** 20）は文書全体に含まれるトークン数を表しています。 本当はテーブルなどから情報を取得してくるなどして正しい値を使いたいところですが、今のところ固定値になっています。"
 
 # 4697659930fa4dc9aaf775bac0eb64ab
 #: ../../../source/reference/full_text_search.rst:75
 msgid ""
 "In the fraction 1048576 / 8,  the denominator \"8\" indicates that the "
 "number of document which contains token \"today\"."
-msgstr ""
+msgstr "\"1048576 / 8\"の分母の\"8\"はトークン「today」を含む文書数になります。"
 
 # 776c6adcc84a4457934a12725168bafe
 #: ../../../source/reference/full_text_search.rst:77
 msgid ""
 "In the fraction 1048576 / 9,  the denominator \"9\" means the number of "
 "document which contains token \"fine\"."
-msgstr ""
+msgstr "\"1048576 / 9\"の分母の\"9\"はトークン「fine」を含む文書数になります。"
 
 # 54ae3b1d09184820b159f550330a872b
 #: ../../../source/reference/full_text_search.rst:79
@@ -178,14 +178,14 @@ msgid ""
 "\"2\" is the correct answer for the number of document that contains \"today"
 "\", \"3\" is the correct answer for the number of document that contains "
 "\"fine\"."
-msgstr ""
+msgstr "\"8\"と\"9\"はトークンを含む文書がいくつあるかの概算値です。本当は「today」を含む文書数は\"2\",「fine」を含む文書数は\"3\"ですが、概算値なのでずれています。"
 
 # 887e7394f26a4028b5f7e1955e5f7e20
 #: ../../../source/reference/full_text_search.rst:81
 msgid ""
 "You can check the approximate number of token by using the following "
 "query. ::"
-msgstr ""
+msgstr "概算値は以下のように確認できます。"
 
 # 8fb538ebf86c418ab657ea8d011f2587
 #: ../../../source/reference/full_text_search.rst:85
@@ -195,36 +195,36 @@ msgstr ""
 # 4b182f25716e49c3b5db71ddcd0bd090
 #: ../../../source/reference/full_text_search.rst:90
 msgid "Getting the top N weight tokens"
-msgstr ""
+msgstr "重みが大きい上位N個のトークンを取り出す"
 
 # 0f9b02fe235a48d6a9cdd437d2a0fcda
 #: ../../../source/reference/full_text_search.rst:92
 msgid ""
 "The formula for the N is \"the number of occurrence of token in document / 8 "
 "+ 1\""
-msgstr ""
+msgstr "Nは以下の式で求めています。N = マッチしたトークン数 / 8 + 1"
 
 # 919c786f0dd94a4ba426c98c4829e480
 #: ../../../source/reference/full_text_search.rst:94
 msgid "In this case, N = 2 / 8 + 1 ≒ 1"
-msgstr ""
+msgstr "今回は「マッチしたトークン数」が2なので「2 / 8 + 1 = 1」で N = 1です。"
 
 # df27729580254fe5be5a3a40ea12f2cc
 #: ../../../source/reference/full_text_search.rst:96
 msgid "The sorted tokens are as follows:"
-msgstr ""
+msgstr "マッチしたトークンを重み順に並び替えると以下の通りです。"
 
 # 6212c5c9be2c4a33a88e64736e80f8d7
 #: ../../../source/reference/full_text_search.rst:101
 msgid "N = 1, then we get \"today: 131072(= 1048576 / 8)\"."
-msgstr ""
+msgstr "このうち上位1件なのでtoday: 131072(= 1048576 / 8)だけが残ります。"
 
 # e337a26c0fa24b8086601549a17f19e5
 #: ../../../source/reference/full_text_search.rst:104
 msgid ""
 "Summing up the weight per token which exists in a document, and is one of "
 "the top N weight tokens"
-msgstr ""
+msgstr "上位N個のトークンについて、トークンが出現する文書に重みを足す"
 
 # 3483bc9fcb2e4255bf423b52f1199de9
 #: ../../../source/reference/full_text_search.rst:108
