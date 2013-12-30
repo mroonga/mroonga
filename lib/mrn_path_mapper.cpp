@@ -69,8 +69,25 @@ namespace mrn {
       int mysql_data_home_len = strlen(mysql_data_home);
       if (len > mysql_data_home_len &&
           !strncmp(mysql_path_, mysql_data_home, mysql_data_home_len)) {
-        int i = mysql_data_home_len, j = mysql_data_home_len;
-        memcpy(db_path_, mysql_data_home, mysql_data_home_len);
+        int i = mysql_data_home_len, j;
+        if (path_prefix_ && path_prefix_[0] == FN_LIBCHAR) {
+          strcpy(db_path_, path_prefix_);
+          j = strlen(db_path_);
+        } else {
+          memcpy(db_path_, mysql_data_home, mysql_data_home_len);
+          if (path_prefix_) {
+            if (path_prefix_[0] == FN_CURLIB &&
+                path_prefix_[1] == FN_LIBCHAR) {
+              strcpy(&db_path_[mysql_data_home_len], &path_prefix_[2]);
+            } else {
+              strcpy(&db_path_[mysql_data_home_len], path_prefix_);
+            }
+            j = strlen(db_path_);
+          } else {
+            j = mysql_data_home_len;
+          }
+        }
+
         while (mysql_path_[i] != FN_LIBCHAR && i < len) {
           db_path_[j++] = mysql_path_[i++];
         }
