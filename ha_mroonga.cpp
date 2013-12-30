@@ -163,12 +163,14 @@ pthread_mutex_t *mrn_LOCK_open;
 
 #if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
 #  define MRN_THD_GET_AUTOINC(thd, off, inc) thd_get_autoinc(thd, off, inc)
+#  define MRN_GET_ERR_MSG(code) my_get_err_msg(code)
 #else
 #  define MRN_THD_GET_AUTOINC(thd, off, inc) \
      { \
         *(off) = thd->variables.auto_increment_offset; \
         *(inc) = thd->variables.auto_increment_increment; \
      }
+#  define MRN_GET_ERR_MSG(code) ER(code)
 #endif
 
 Rpl_filter *mrn_binlog_filter;
@@ -2377,7 +2379,8 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
 
   if (table_share->primary_key == MAX_KEY)
   {
-    my_message(ER_REQUIRES_PRIMARY_KEY, ER(ER_REQUIRES_PRIMARY_KEY), MYF(0));
+    my_message(ER_REQUIRES_PRIMARY_KEY,
+               MRN_GET_ERR_MSG(ER_REQUIRES_PRIMARY_KEY), MYF(0));
     DBUG_RETURN(ER_REQUIRES_PRIMARY_KEY);
   }
 
@@ -5127,7 +5130,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
       push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
-                          WARN_DATA_TRUNCATED, ER(WARN_DATA_TRUNCATED),
+                          WARN_DATA_TRUNCATED, MRN_GET_ERR_MSG(WARN_DATA_TRUNCATED),
                           MRN_COLUMN_NAME_ID,
                           MRN_GET_CURRENT_ROW_FOR_WARNING(thd));
       if (MRN_ABORT_ON_WARNING(thd)) {
@@ -5656,7 +5659,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       if (field->is_null()) continue;
       if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
         push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
-                            WARN_DATA_TRUNCATED, ER(WARN_DATA_TRUNCATED),
+                            WARN_DATA_TRUNCATED, MRN_GET_ERR_MSG(WARN_DATA_TRUNCATED),
                             MRN_COLUMN_NAME_ID,
                             MRN_GET_CURRENT_ROW_FOR_WARNING(thd));
         if (MRN_ABORT_ON_WARNING(thd)) {
