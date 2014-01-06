@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
 #
@@ -88,13 +88,19 @@ prepare_sql_test()
 
 run_sql_test()
 {
+    test_args=()
+    if [ "${MRN_TEST_EMBEDDED}" = "yes" ]; then
+	test_args=("${test_args[@]}" "--embedded-server")
+    fi
+
     if [ "${MRN_BUNDLED}" = "TRUE" ]; then
-	${mroonga_dir}/test/run-sql-test.sh
+	${mroonga_dir}/test/run-sql-test.sh "${test_args[@]}"
     else
 	prepare_sql_test
 
 	cd ${mysql_test_dir}/
 	./mysql-test-run.pl \
+	    "${test_args[@]}" \
 	    --no-check-testcases \
 	    --parallel="${n_processors}" \
 	    --retry=1 \
