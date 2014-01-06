@@ -1446,10 +1446,14 @@ mrn_declare_plugin(MRN_PLUGIN_NAME)
 i_s_mrn_stats
 mrn_declare_plugin_end;
 
-static void mrn_generic_ft_close_search(FT_INFO *handler)
+static void mrn_generic_ft_clear(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  if (!info->ctx) {
+    DBUG_VOID_RETURN;
+  }
+
   if (info->cursor) {
     grn_obj_unlink(info->ctx, info->cursor);
   }
@@ -1463,6 +1467,17 @@ static void mrn_generic_ft_close_search(FT_INFO *handler)
   grn_obj_unlink(info->ctx, info->score_column);
   grn_obj_unlink(info->ctx, &(info->key));
   grn_obj_unlink(info->ctx, &(info->score));
+
+  info->ctx = NULL;
+
+  DBUG_VOID_RETURN;
+}
+
+static void mrn_generic_ft_close_search(FT_INFO *handler)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  mrn_generic_ft_clear(handler);
   delete info;
   DBUG_VOID_RETURN;
 }
@@ -10455,10 +10470,27 @@ int ha_mroonga::storage_encode_multiple_column_key_range(KEY *key_info,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::generic_reset()
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  if (thd_sql_command(ha_thd()) == SQLCOM_SELECT) {
+    st_select_lex *select_lex = table->pos_in_table_list->select_lex;
+    List_iterator<Item_func_match> iterator(*(select_lex->ftfunc_list));
+    Item_func_match *item;
+    while ((item = iterator++)) {
+      if (item->ft_handler) {
+        mrn_generic_ft_clear(item->ft_handler);
+      }
+    }
+  }
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::wrapper_reset()
 {
-  int error = 0;
   MRN_DBUG_ENTER_METHOD();
+  int error = 0;
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   error = wrap_handler->ha_reset();
@@ -10476,13 +10508,19 @@ int ha_mroonga::wrapper_reset()
   }
 #endif
   wrap_ft_init_count = 0;
+  int generic_error = generic_reset();
+  if (error == 0) {
+    error = generic_error;
+  }
   DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_reset()
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(0);
+  int error;
+  error = generic_reset();
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::reset()

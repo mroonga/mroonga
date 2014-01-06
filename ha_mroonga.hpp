@@ -735,6 +735,7 @@ private:
   int storage_extra(enum ha_extra_function operation);
   int wrapper_extra_opt(enum ha_extra_function operation, ulong cache_size);
   int storage_extra_opt(enum ha_extra_function operation, ulong cache_size);
+  int generic_reset();
   int wrapper_reset();
   int storage_reset();
   uint wrapper_lock_count() const;
