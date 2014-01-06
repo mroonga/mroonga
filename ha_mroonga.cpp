@@ -8539,7 +8539,7 @@ bool ha_mroonga::is_temporary_table_name(const char *name) const
     int mysql_data_home_len = strlen(mysql_data_home);
     if (len < mysql_data_home_len ||
         strncmp(name, mysql_data_home, mysql_data_home_len) ||
-        !strrchr(&name[mysql_data_home_len], FN_LIBCHAR)) {
+        !strchr(&name[mysql_data_home_len], FN_LIBCHAR)) {
       temporary_table_name_p = TRUE;
     }
   }
