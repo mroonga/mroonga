@@ -22,7 +22,7 @@ SHOW GLOBAL VARIABLES LIKE "mroonga_lock_timeout";
 
 
 disable_query_log;
-SET GLOBAL mroonga_lock_timeout = 1000000;
+SET GLOBAL mroonga_lock_timeout = 10000000;
 enable_query_log;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
