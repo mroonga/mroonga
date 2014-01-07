@@ -180,7 +180,7 @@ HASH *mrn_table_def_cache;
 #endif
 
 static const char *INDEX_COLUMN_NAME = "index";
-static const char *MRN_PLUGIN_AUTHOR = "The mroonga project";
+static const char *MRN_PLUGIN_AUTHOR = "The Mroonga project";
 
 #ifdef __cplusplus
 extern "C" {
