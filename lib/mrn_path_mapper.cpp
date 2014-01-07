@@ -31,10 +31,14 @@
 
 namespace mrn {
   char *PathMapper::default_path_prefix = NULL;
+  char *PathMapper::default_mysql_data_home_path = NULL;
 
-  PathMapper::PathMapper(const char *mysql_path, const char *path_prefix)
+  PathMapper::PathMapper(const char *mysql_path,
+                         const char *path_prefix,
+                         const char *mysql_data_home_path)
     : mysql_path_(mysql_path),
-      path_prefix_(path_prefix) {
+      path_prefix_(path_prefix),
+      mysql_data_home_path_(mysql_data_home_path) {
     db_path_[0] = '\0';
     db_name_[0] = '\0';
     table_name_[0] = '\0';
@@ -63,18 +67,17 @@ namespace mrn {
         db_path_[j++] = mysql_path_[i++];
       }
       db_path_[j] = '\0';
-    } else {
-#ifdef MRN_USE_MYSQL_DATA_HOME
+    } else if (mysql_data_home_path_) {
       int len = strlen(mysql_path_);
-      int mysql_data_home_len = strlen(mysql_data_home);
+      int mysql_data_home_len = strlen(mysql_data_home_path_);
       if (len > mysql_data_home_len &&
-          !strncmp(mysql_path_, mysql_data_home, mysql_data_home_len)) {
+          !strncmp(mysql_path_, mysql_data_home_path_, mysql_data_home_len)) {
         int i = mysql_data_home_len, j;
         if (path_prefix_ && path_prefix_[0] == FN_LIBCHAR) {
           strcpy(db_path_, path_prefix_);
           j = strlen(db_path_);
         } else {
-          memcpy(db_path_, mysql_data_home, mysql_data_home_len);
+          memcpy(db_path_, mysql_data_home_path_, mysql_data_home_len);
           if (path_prefix_) {
             if (path_prefix_[0] == FN_CURLIB &&
                 path_prefix_[1] == FN_LIBCHAR) {
@@ -97,11 +100,10 @@ namespace mrn {
           db_path_[j] = '\0';
         }
       } else {
-#endif
         strcpy(db_path_, mysql_path_);
-#ifdef MRN_USE_MYSQL_DATA_HOME
       }
-#endif
+    } else {
+      strcpy(db_path_, mysql_path_);
     }
     strcat(db_path_, MRN_DB_FILE_SUFFIX);
     return db_path_;
@@ -125,12 +127,11 @@ namespace mrn {
         db_name_[j++] = mysql_path_[i++];
       }
       db_name_[j] = '\0';
-    } else {
-#ifdef MRN_USE_MYSQL_DATA_HOME
+    } else if (mysql_data_home_path_) {
       int len = strlen(mysql_path_);
-      int mysql_data_home_len = strlen(mysql_data_home);
+      int mysql_data_home_len = strlen(mysql_data_home_path_);
       if (len > mysql_data_home_len &&
-          !strncmp(mysql_path_, mysql_data_home, mysql_data_home_len)) {
+          !strncmp(mysql_path_, mysql_data_home_path_, mysql_data_home_len)) {
         int i = mysql_data_home_len, j = 0;
         while (mysql_path_[i] != FN_LIBCHAR && i < len) {
           db_name_[j++] = mysql_path_[i++];
@@ -141,11 +142,10 @@ namespace mrn {
           db_name_[j] = '\0';
         }
       } else {
-#endif
         strcpy(db_name_, mysql_path_);
-#ifdef MRN_USE_MYSQL_DATA_HOME
       }
-#endif
+    } else {
+      strcpy(db_name_, mysql_path_);
     }
     return db_name_;
   }

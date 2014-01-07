@@ -23,19 +23,16 @@
 #define MRN_PATH_MAPPER_HPP_
 
 #include <mrn_constants.hpp>
-#include <mrn_mysql.h>
-
-#if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
-#  define MRN_USE_MYSQL_DATA_HOME
-#endif
 
 namespace mrn {
   class PathMapper {
   public:
     static char *default_path_prefix;
+    static char *default_mysql_data_home_path;
 
     PathMapper(const char *mysql_path,
-               const char *path_prefix=default_path_prefix);
+               const char *path_prefix=default_path_prefix,
+               const char *mysql_data_home_path=default_mysql_data_home_path);
     const char *db_path();
     const char *db_name();
     const char *table_name();
@@ -43,6 +40,7 @@ namespace mrn {
   private:
     const char *mysql_path_;
     const char *path_prefix_;
+    const char *mysql_data_home_path_;
     char db_path_[MRN_MAX_PATH_SIZE];
     char db_name_[MRN_MAX_PATH_SIZE];
     char table_name_[MRN_MAX_PATH_SIZE];

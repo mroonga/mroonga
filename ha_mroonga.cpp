@@ -1338,6 +1338,10 @@ static int mrn_init(void *p)
     goto error_allocated_long_term_share_hash_init;
   }
 
+#ifdef MRN_USE_MYSQL_DATA_HOME
+  mrn::PathMapper::default_mysql_data_home_path = mysql_data_home;
+#endif
+
   return 0;
 
 error_allocated_long_term_share_hash_init:

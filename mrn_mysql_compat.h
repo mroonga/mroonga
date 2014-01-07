@@ -137,4 +137,8 @@
 #  endif
 #endif
 
+#if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
+#  define MRN_USE_MYSQL_DATA_HOME
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

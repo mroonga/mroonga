@@ -22,6 +22,4 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_condition_converter.cpp		\
 	mrn_condition_converter.hpp		\
 	mrn_time_converter.cpp			\
-	mrn_time_converter.hpp			\
-	mrn_path_mapper.cpp			\
-	mrn_path_mapper.hpp
+	mrn_time_converter.hpp
