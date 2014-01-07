@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -493,6 +493,7 @@ static ulong mrn_log_level = mrn_log_level_default;
 
 char *mrn_default_parser = NULL;
 char *mrn_default_wrapper_engine = NULL;
+static int mrn_lock_timeout = grn_get_lock_timeout();
 static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
 static char *mrn_version = const_cast<char *>(MRN_VERSION);
 
@@ -800,6 +801,30 @@ static MYSQL_THDVAR_ENUM(action_on_fulltext_query_error,
                          mrn_action_on_fulltext_query_error_default,
                          &mrn_action_on_error_typelib);
 
+static void mrn_lock_timeout_update(THD *thd, struct st_mysql_sys_var *var,
+                                    void *var_ptr, const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const int new_value = *static_cast<const int *>(save);
+  int *old_value_ptr = static_cast<int *>(var_ptr);
+
+  *old_value_ptr = new_value;
+  grn_set_lock_timeout(new_value);
+
+  DBUG_VOID_RETURN;
+}
+
+static MYSQL_SYSVAR_INT(lock_timeout,
+                        mrn_lock_timeout,
+                        PLUGIN_VAR_RQCMDARG,
+                        "lock timeout used in Groonga",
+                        NULL,
+                        mrn_lock_timeout_update,
+                        grn_get_lock_timeout(),
+                        -1,
+                        INT_MAX,
+                        1);
+
 static MYSQL_SYSVAR_STR(libgroonga_version, mrn_libgroonga_version,
                         PLUGIN_VAR_NOCMDOPT | PLUGIN_VAR_READONLY,
                         "The version of libgroonga",
@@ -825,6 +850,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(database_path_prefix),
   MYSQL_SYSVAR(default_wrapper_engine),
   MYSQL_SYSVAR(action_on_fulltext_query_error),
+  MYSQL_SYSVAR(lock_timeout),
   MYSQL_SYSVAR(libgroonga_version),
   MYSQL_SYSVAR(version),
   NULL
