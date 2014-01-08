@@ -34,10 +34,10 @@ INSERT INTO diaries VALUES(2, "天気予報",  "天気", "明日の富士山の�
 INSERT INTO diaries VALUES(3, "富士山", "天気", "今日も天気がよくてきれいに見える。");
 
 SELECT *, MATCH(title, category, content)
-          AGAINST("*W0:2,1:10,2:1 +天気" in BOOLEAN MODE) AS score
+          AGAINST("*W1:2,2:10,3:1 +天気" in BOOLEAN MODE) AS score
        FROM diaries
        WHERE MATCH(title, category, content)
-             AGAINST("*W0:2,1:10,2:1 +天気" in BOOLEAN MODE);
+             AGAINST("*W1:2,2:10,3:1 +天気" in BOOLEAN MODE);
 
 DROP TABLE diaries;
 
