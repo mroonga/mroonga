@@ -6404,10 +6404,16 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     if (range_min) {
       key_min = key_min_entity;
       storage_encode_key(field, range_min->key, key_min, &size_min);
+      if (size_min == 0) {
+        DBUG_RETURN(HA_POS_ERROR);
+      }
     }
     if (range_max) {
       key_max = key_max_entity;
       storage_encode_key(field, range_max->key, key_max, &size_max);
+      if (size_max == 0) {
+        DBUG_RETURN(HA_POS_ERROR);
+      }
     }
   }
 
