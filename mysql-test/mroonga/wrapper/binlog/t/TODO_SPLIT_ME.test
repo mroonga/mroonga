@@ -52,4 +52,4 @@ commit;
 select * from t1;
 drop table t1;
 
-source ../../../include/mroonga/have_mroonga_deinit.inc;
+--source ../../../include/mroonga/have_mroonga_deinit.inc;
