@@ -46,6 +46,7 @@ CTestTestfile.cmake
 /doc/locale/*/man/
 /doc/locale/*/*-build-stamp
 /doc/locale/*/LC_MESSAGES/*.pot
+/doc/locale/*/LC_MESSAGES/*.edit
 /doc/locale/*/LC_MESSAGES/*.mo
 /doc/locale/*/LC_MESSAGES/doctrees/
 /doc/locale/*/LC_MESSAGES/*-build-stamp
