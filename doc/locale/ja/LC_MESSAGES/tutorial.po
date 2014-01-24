@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-13 15:45+0900\n"
+"POT-Creation-Date: 2014-01-24 11:47+0900\n"
 "PO-Revision-Date: 2013-12-13 16:02+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -17,44 +17,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-# 9079246a707a4a30af9d500b1a688099
-#: ../../../source/tutorial.rst:4
 msgid "Tutorial"
 msgstr "チュートリアル"
 
-# 9e07c767ac4145f6a0673dbe17e63021
-#: ../../../source/tutorial.rst:6
 msgid ""
 "If you don't install Mroonga yet, see :doc:`install`. It describes how to "
 "install Mroonga."
-msgstr "まだMroongaをインストールしていない場合は :doc:`install` を参照してください。そのドキュメントでMroongaのインストール方法を説明しています。"
+msgstr ""
+"まだMroongaをインストールしていない場合は :doc:`install` を参照してください。"
+"そのドキュメントでMroongaのインストール方法を説明しています。"
 
-# a1503ec6c13b4528b5e9d731cac6420b
-#: ../../../source/tutorial.rst:9
 msgid ""
 "Try the following tutorials after you install Mroonga. You will understand "
 "how to use Mroonga."
-msgstr "Mroongaをインストールしたら次のチュートリアルを試してください。Mroongaの使い方がわかります。"
+msgstr ""
+"Mroongaをインストールしたら次のチュートリアルを試してください。Mroongaの使い"
+"方がわかります。"
 
-# fbbbb3de6bdb4690845496f6b745d5f2
-#: ../../../source/tutorial/installation_check.rst:4
 msgid "Installation check"
 msgstr "インストールチェック"
 
-# 11927631d5774572b8eaff6e2699de6b
-#: ../../../source/tutorial/installation_check.rst:6
 msgid ""
 "It is better that you check Mroonga installation before you use Mroonga. If "
 "Mroonga installation is failed, the SQLs in this tutorial will fail."
-msgstr "Mroongaを使う前にMroongaのインストールチェックをした方がよいです。もし、Mroongaのインストールに失敗していると、このチュートリアルででてくるSQLが失敗してしまいます。"
+msgstr ""
+"Mroongaを使う前にMroongaのインストールチェックをした方がよいです。もし、"
+"Mroongaのインストールに失敗していると、このチュートリアルででてくるSQLが失敗"
+"してしまいます。"
 
-# 9bd7aab3ecc643a8afd7ab92277f9a64
-#: ../../../source/tutorial/installation_check.rst:10
 msgid "The way to start or stop MySQL server is just same as the normal MySQL."
 msgstr "MySQLサーバの起動停止方法は通常のMySQLと同じです。"
 
-# ca3e99a4398648fba077b020b4116035
-#: ../../../source/tutorial/installation_check.rst:12
 msgid ""
 "After invoking the MySQL server, connect to it by mysql command. If you set "
 "password, you need to add '-p' option. ::"
@@ -62,15 +55,11 @@ msgstr ""
 "MySQLサーバを起動した上でmysqlコマンドで接続します。パスワードを設定済みの場"
 "合は ``-p`` オプションでパスワードを指定して下さい。 ::"
 
-# d9c945563e814dd284adffe1163e657f
-#: ../../../source/tutorial/installation_check.rst:16
 msgid ""
 "By using SHOW ENGINES command, you can check if mroonga is installed. ::"
 msgstr ""
 "SHOW ENGINESコマンドでmroongaがインストールされているかどうかを確認します。::"
 
-# a0bf62ab86a443d9ab882ebc2629eb78
-#: ../../../source/tutorial/installation_check.rst:31
 msgid ""
 "If you see \"mroonga\" storage engine like above, the installation is well "
 "done."
@@ -78,35 +67,23 @@ msgstr ""
 "上記のように\"mroonga\"ストレージエンジンが見えていればインストールは無事完了"
 "しています。"
 
-# 4f7f7801bc014d8c8d5287442fcc6a79
-#: ../../../source/tutorial/installation_check.rst:33
 msgid "If not installed, invoke INSTALL PLUGIN command like below. ::"
 msgstr ""
 "インストールされていなければ以下のようにINSTALL PLUGINコマンドを実行して下さ"
 "い。 ::"
 
-# 10974f71a4e84d9aba2a2976eb4d84c8
-#: ../../../source/tutorial/mode.rst:4
 msgid "Mode"
 msgstr "モード"
 
-# e270404d2da246c683a0b15d4c3c3649
-#: ../../../source/tutorial/mode.rst:6
 msgid "Mroonga has the following two modes."
 msgstr "mroongaには以下の2つのモードがあります。"
 
-# 5b07a1b9a653436db239758db019ad3f
-#: ../../../source/tutorial/mode.rst:8
 msgid "storage mode"
 msgstr "ストレージモード"
 
-# ea57b6d5e55142c2876b5142347a3318
-#: ../../../source/tutorial/mode.rst:9
 msgid "wrapper mode"
 msgstr "ラッパーモード"
 
-# 3cfe9823b2c74975a4affccab05bb804
-#: ../../../source/tutorial/mode.rst:11
 msgid ""
 "With the storage mode, we use groonga for both of the full text search "
 "function and the data storage. Since all functions of storage engine are "
@@ -118,8 +95,6 @@ msgstr ""
 "groongaが得意としている集計操作が高速です。また、 ``groonga`` コマンドで直接"
 "データベースを操作できるという特長もあります。"
 
-# e0b3ce30b36844aca9249a0d652a3200
-#: ../../../source/tutorial/mode.rst:14
 msgid ""
 "The structure of the storage mode is the following. You use it instead of "
 "existing storage engines like MyISAM or InnoDB"
@@ -127,8 +102,6 @@ msgstr ""
 "ストレージモードの構成を図で表すと以下のようになります。MyISAMやInnoDBなど既"
 "存のストレージエンジンの代わりに利用します。"
 
-# af165f29bd7a4b81a147ca60c18a97bc
-#: ../../../source/tutorial/mode.rst:20
 msgid ""
 "With the wrapper mode, groonga is used for full text search function only, "
 "and another existing storage engine like InnoDB is used for storing data. By "
@@ -142,8 +115,6 @@ msgstr ""
 "て実績のあるmroongaを組み合わせて、高速な全文検索機能付きの信頼性のあるデータ"
 "ベースとして利用できるという特長があります。"
 
-# 050eea325d7f4f23bce1f0ea217576e0
-#: ../../../source/tutorial/mode.rst:23
 msgid ""
 "The structure of the wrapper mode is the following. Full text search related "
 "operations are done by mroonga, and other operations are done by existing "
@@ -158,27 +129,15 @@ msgstr ""
 "ため、すべてのデータが一度mroongaを通ることになります。これを利用して、全文検"
 "索用のインデックス作成などを透過的に行います。"
 
-# 1b46af265bbf4379982237591e50fac3
-#: ../../../source/tutorial/storage.rst:4
 msgid "Storage mode"
 msgstr "ストレージモード"
 
-# c112d17f5e0143408f212937a2531d22
-#: ../../../source/tutorial/storage.rst:6
 msgid "Here we explain how to use storage mode of mroonga"
 msgstr "ここでは mroonga におけるストレージモードの利用方法を説明します。"
 
-# 009e40d9ac12435bbe803dd945407327
-# cef3ca2bca824198b5e16607d053e99e
-#: ../../../source/tutorial/storage.rst:9
-#: ../../../source/tutorial/wrapper.rst:25
 msgid "How to use full text search"
 msgstr "全文検索の利用方法"
 
-# bda9437511184e36b37aeee34092e464
-# a265b3b4283a4717a4ca69ead5a5273c
-#: ../../../source/tutorial/storage.rst:11
-#: ../../../source/tutorial/wrapper.rst:27
 msgid ""
 "After confirming the installation, let's create a table. The important point "
 "is to specify mroonga by ``ENGINE = mroonga``. ::"
@@ -186,36 +145,18 @@ msgstr ""
 "インストールが確認できたら、テーブルを1つ作成してみましょう。 ``ENGINE = "
 "mroonga`` とmroongaを指定するところがポイントです。::"
 
-# 66a1958036764bf4bb2575d0f5d5bf67
-# b5a4fbc3d59145989d77e88d10e43369
-#: ../../../source/tutorial/storage.rst:20
-#: ../../../source/tutorial/wrapper.rst:36
 msgid "We put data by INSERT. ::"
 msgstr "INSERTでデータを投入してみましょう。 ::"
 
-# 68262b84d08147b4b2bd21b9efccde1e
-# a53f8a16f5f8419d9f33f0ac6b2faf62
-#: ../../../source/tutorial/storage.rst:28
-#: ../../../source/tutorial/wrapper.rst:44
 msgid "Try full text search. ::"
 msgstr "全文検索を実行してみます。 ::"
 
-# 4d6d39398f3e422e807445972adf8c55
-# 38d196558a6747cc9eacf7f7a3d46d3f
-#: ../../../source/tutorial/storage.rst:38
-#: ../../../source/tutorial/wrapper.rst:54
 msgid "Yes, full text search works."
 msgstr "おぉぉー。検索できましたね。"
 
-# b4ee05b9494e414a98950dbad51afd35
-# 457a451e8b02494683afb7a45b18a5d7
-#: ../../../source/tutorial/storage.rst:41
-#: ../../../source/tutorial/wrapper.rst:57
 msgid "How to get search score"
 msgstr "検索スコアの取得方法"
 
-# 9ca016aa8fdd4d86b1adf9bbcc48043f
-#: ../../../source/tutorial/storage.rst:45
 msgid ""
 "In version 1.0.0 or before, mroonga used a special column named ``_score`` "
 "to get search score. From version 1.0.0, it follows MySQL's standard way to "
@@ -225,10 +166,6 @@ msgstr ""
 "``_score`` という専用のカラムを作成するという独自の方法でした。1.0.0からは"
 "MySQLの標準的な取得方法になっています。"
 
-# 5b531348c40447bda830c2ac223402c9
-# 800d3b365d5d49518986667eed622995
-#: ../../../source/tutorial/storage.rst:47
-#: ../../../source/tutorial/wrapper.rst:59
 msgid ""
 "We often want to display more relevant results first in full text search. We "
 "use search score in such case."
@@ -236,10 +173,6 @@ msgstr ""
 "全文検索を行う際、指定したキーワードにより内容が一致するレコードを上位に表示"
 "したいというような場合があります。そうしたケースでは検索スコアを利用します。"
 
-# 1f49676ec5364d6db5d99df5da6db4d3
-# 9bfa6423d4af46939c1447d30b4ab67e
-#: ../../../source/tutorial/storage.rst:49
-#: ../../../source/tutorial/wrapper.rst:61
 msgid ""
 "We can get search score by MySQL's standard way [#score]_, i.e. we use "
 "MATCH...AGAINST in one of columns in SELECT or ORDER BY."
@@ -248,17 +181,9 @@ msgstr ""
 "得するカラム名を指定するところやORDER BYのところにMATCH...AGAINSTを指定しま"
 "す。"
 
-# f3426ef97c11451c97b06ab6f2fd0e76
-# 1018f25fa12a42b481801255270cd75a
-#: ../../../source/tutorial/storage.rst:51
-#: ../../../source/tutorial/wrapper.rst:63
 msgid "Let's try. ::"
 msgstr "それでは実際にやってみましょう。::"
 
-# 32c2d5723166462c8017d3475d10734e
-# 78424892085c4a47b4825aaf30556f72
-#: ../../../source/tutorial/storage.rst:69
-#: ../../../source/tutorial/wrapper.rst:81
 msgid ""
 "The result having the search word ``fine`` more, i.e. ``id = 3`` message "
 "having the higher search score, is displayed first. And you also get search "
@@ -268,24 +193,12 @@ msgstr ""
 "3`` のメッセージが上に来ていることが確認できます。また、SELECT句にMATCH "
 "AGAINSTを記述しているため、検索スコアも取得できています。"
 
-# 40c4d29f3ccf4312916efe4271813832
-# 5a17b07b0ade45fc859fc2be5d47a17d
-#: ../../../source/tutorial/storage.rst:71
-#: ../../../source/tutorial/wrapper.rst:83
 msgid "You can use ``AS`` to change the attribute name. ::"
 msgstr "属性名を変更したい場合は ``AS`` を使って下さい。 ::"
 
-# 0856c9615b044c9b9de7eafe5c154860
-# 5d1b1a5f13784f75bfcd6993674f2454
-#: ../../../source/tutorial/storage.rst:84
-#: ../../../source/tutorial/wrapper.rst:96
 msgid "How to specify the parser for full text search"
 msgstr "全文検索用パーサの変更"
 
-# 51f94be89e804eb2bbdec1360b85966f
-# 8192193993594728a0e1f19de9ca2160
-#: ../../../source/tutorial/storage.rst:86
-#: ../../../source/tutorial/wrapper.rst:98
 msgid ""
 "MySQL has the following syntax to specify the parser [#parser]_ for full "
 "text search. ::"
@@ -293,10 +206,6 @@ msgstr ""
 "MySQLは全文検索用のパーサ [#parser]_ を指定する以下のような構文を持っていま"
 "す。::"
 
-# edc91033ff67438cb24d037dbbfb9c9d
-# e738873cf77646218b2d98794bcbc8c6
-#: ../../../source/tutorial/storage.rst:90
-#: ../../../source/tutorial/wrapper.rst:102
 msgid ""
 "To use this syntax, you need to register all parsers in MySQL beforehand. On "
 "the other hand, groonga can dynamically add a tokeniser, that is a parser in "
@@ -313,10 +222,6 @@ msgstr ""
 "は利便性を損なうと判断し、以下のようなコメントを用いた独自の構文を採用するこ"
 "とにしました。::"
 
-# a587fba35f384a7bba3bf45412659169
-# 7a84d191d0b4436bb0a83115bfaa5c1b
-#: ../../../source/tutorial/storage.rst:96
-#: ../../../source/tutorial/wrapper.rst:108
 msgid ""
 "``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If "
 "you use MySQL 5.1, use ``mroonga_default_parser`` variable described below."
@@ -325,17 +230,9 @@ msgstr ""
 "MySQL 5.1を利用している場合は後述の ``mroonga_default_parser`` 変数を利用して"
 "ください。"
 
-# 0b25b84897b9493e8bd3aa5259ca1659
-# 022abb028d384449841b0104f2b51092
-#: ../../../source/tutorial/storage.rst:98
-#: ../../../source/tutorial/wrapper.rst:110
 msgid "You can specify one of following values as the parser."
 msgstr "パーサに指定できるのは以下の値です。"
 
-# 4e70118bb6ba4d4b8b60176be671393d
-# 56222e40554a49ee80dbddaae00f56e2
-#: ../../../source/tutorial/storage.rst:101
-#: ../../../source/tutorial/wrapper.rst:113
 msgid ""
 "It does not tokenize at all. Use \"off\" if you want to treat ``content`` as "
 "is. For example, this value is used for prefix search."
@@ -343,17 +240,9 @@ msgstr ""
 "トークナイズしません。\"off\"は``content``をそのまま扱いたい場合に使います。"
 "例えば、この値は前方一致検索のために指定します。"
 
-# 0d2a1a93e862494aabe77d7aa7f1b56c
-# 7b5012aa534d4785befae912e8ac1dd4
-#: ../../../source/tutorial/storage.rst:101
-#: ../../../source/tutorial/wrapper.rst:113
 msgid "off"
 msgstr ""
 
-# 8c62217928584b579f6792515e9687f8
-# 6d3b824f2ebc469dbfce2270f719d3e2
-#: ../../../source/tutorial/storage.rst:104
-#: ../../../source/tutorial/wrapper.rst:116
 msgid ""
 "It tokenises in bigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 3 letters or more. It is "
@@ -363,40 +252,20 @@ msgstr ""
 "連続した記号はそれぞれ1つのトークンとして扱う。そのため、3文字以上のトークン"
 "も存在する。これはノイズを減らすためである。"
 
-# f47bfe66481c4e6ea15df8f72d711908
-# e1dedf981b70485a8a60b75384fdbb3f
-#: ../../../source/tutorial/storage.rst:106
-#: ../../../source/tutorial/wrapper.rst:118
 msgid "This is the default value."
 msgstr "デフォルト値。"
 
-# e349214d088146d19e76a130c52a1762
-# b69a9931f4074d728e611ccab8373480
-#: ../../../source/tutorial/storage.rst:106
-#: ../../../source/tutorial/wrapper.rst:118
 msgid "TokenBigram"
 msgstr ""
 
-# e44aefcff5ff4356975abccd65afa13c
-# c521b1541ccd470bbde43465b22701be
-#: ../../../source/tutorial/storage.rst:109
-#: ../../../source/tutorial/wrapper.rst:121
 msgid "It tokenises using MeCab. Groonga should be built with MeCab support."
 msgstr ""
 "MeCabを用いてトークナイズする。groongaがMeCabサポート付きでビルドされている必"
 "要がある。"
 
-# b11d1f14c73745eda35a40865ecd3643
-# d0f9efc211d44c55bf543230120ed563
-#: ../../../source/tutorial/storage.rst:109
-#: ../../../source/tutorial/wrapper.rst:121
 msgid "TokenMecab"
 msgstr ""
 
-# 073bd59d06d743d281edc5e5b26aab4c
-# a7bd25e18c604961b3261cbaff332256
-#: ../../../source/tutorial/storage.rst:112
-#: ../../../source/tutorial/wrapper.rst:124
 msgid ""
 "It tokenises in bigram. Unlike TokenBigram, continuous symbols are not "
 "treated as a token, but tokenised in bigram."
@@ -404,17 +273,9 @@ msgstr ""
 "バイグラムでトークナイズする。TokenBigramと異なり、記号が連続していても特別扱"
 "いして1つのトークンとして扱わず通常のバイグラムの処理を行う。"
 
-# b513db9bd18c4eb7b330ddca6bbbab42
-# 7ccb0e6d4f484c81a7412a996149564e
-#: ../../../source/tutorial/storage.rst:114
-#: ../../../source/tutorial/wrapper.rst:126
 msgid "TokenBigramSplitSymbol"
 msgstr ""
 
-# 6336234f685242a698e31059a9924d0e
-# c332b47b0c5f483f82233c4359db16c7
-#: ../../../source/tutorial/storage.rst:114
-#: ../../../source/tutorial/wrapper.rst:126
 msgid ""
 "When you use TokenBigramSplitSymbol instead of TokenBigram, \"!?\" can match "
 "\"!?!?!?\" in \"Is it really!?!?!?\". But when you use TokenBigram, only "
@@ -424,10 +285,6 @@ msgstr ""
 "「!?!?!?」の部分に「!?」でマッチする。TokenBigramの場合は「!?!?!?」でないと"
 "マッチしない。"
 
-# e4d3eaee409144d5a47f2de2ba28b936
-# 4322bcf184d944b2ab1273613bd4968e
-#: ../../../source/tutorial/storage.rst:117
-#: ../../../source/tutorial/wrapper.rst:129
 msgid ""
 "It tokenise in bigram. In addition to TokenBigramSplitSymbol, continuous "
 "alphabets are not treated as a token either, but tokenised in bigram."
@@ -435,17 +292,9 @@ msgstr ""
 "バイグラムでトークナイズする。TokenBigramSplitSymbolに加えて、連続したアル"
 "ファベットも特別扱いせずに通常のバイグラムの処理を行う。"
 
-# 3e759447f59f471a9786cb82be67cec7
-# 47ee223d4e7441d59b13c2a554aa0429
-#: ../../../source/tutorial/storage.rst:119
-#: ../../../source/tutorial/wrapper.rst:131
 msgid "TokenBigramSplitSymbolAlpha"
 msgstr ""
 
-# c16a64b75b9344d59f5b9835cbd1c6c9
-# 4eef12c357b34c54b74d7f5005a9e690
-#: ../../../source/tutorial/storage.rst:119
-#: ../../../source/tutorial/wrapper.rst:131
 msgid ""
 "When you use TokenBigramSplitSymbolAlpha instead of TokenBigram, \"real\" "
 "can match \"Is it really?\". But when you use TokenBigram, only \"really\" "
@@ -454,10 +303,6 @@ msgstr ""
 "TokenBigramではなくTokenBigramSplitSymbolAlphaを利用すると「Is it really?」に"
 "「real」でマッチする。TokenBigramの場合は「really」でないとマッチしない。"
 
-# 76738450c7a54b2e8c73563b88bc3760
-# 2c65f67d4a8e499f8e75e51f4c1d9e8b
-#: ../../../source/tutorial/storage.rst:122
-#: ../../../source/tutorial/wrapper.rst:134
 msgid ""
 "It tokenise in bigram. In addition to TokenBigramSplitSymbolAlpha, "
 "continuous numbers are not treated as a token either, but tokenised in "
@@ -467,17 +312,9 @@ msgstr ""
 "字も特別扱いせずに通常のバイグラムの処理を行う。つまり、すべての字種を特別扱"
 "いせずにバイグラムの処理を行う。"
 
-# 1742746e758b4447852f9c949307ac9e
-# a7a3a882fa2b4bdebff032804987c35f
-#: ../../../source/tutorial/storage.rst:124
-#: ../../../source/tutorial/wrapper.rst:136
 msgid "TokenBigramSplitSymbolAlphaDigit"
 msgstr ""
 
-# 7ee790a07af14f03ad9ef746636e7b41
-# 7fa78a40f3b7405081a3a45de8685236
-#: ../../../source/tutorial/storage.rst:124
-#: ../../../source/tutorial/wrapper.rst:136
 msgid ""
 "When you use TokenBigramSplitSymbolAlphaDigit instead of TokenBigram, "
 "\"567\" can match \"090-0123-4567\". But when you use TokenBigram, only "
@@ -487,25 +324,13 @@ msgstr ""
 "「090-0123-4567」に「567」でマッチする。TokenBigramの場合は「4567」でないと"
 "マッチしない。"
 
-# 6b61f8c17f604427b7a560d009a800d3
-# 758ab7755e0a4dc395243599be52f13c
-#: ../../../source/tutorial/storage.rst:127
-#: ../../../source/tutorial/wrapper.rst:139
 msgid "It tokenise in bigram. Unlike TokenBigram, it ignores white spaces."
 msgstr ""
 "バイグラムでトークナイズする。TokenBigramと異なり、空白を無視して処理する。"
 
-# 74d51335d54b4b8cb2ac02860d9999e8
-# 035835ae3dab4fee94ba7f938c745850
-#: ../../../source/tutorial/storage.rst:129
-#: ../../../source/tutorial/wrapper.rst:141
 msgid "TokenBigramIgnoreBlank"
 msgstr ""
 
-# 54f7c484bfd0467e83d347d5c600e79c
-# 42bcbf84fe6f41d398a72b97bf80e05b
-#: ../../../source/tutorial/storage.rst:129
-#: ../../../source/tutorial/wrapper.rst:141
 msgid ""
 "When you use TokenBigramIgnoreBlank instead of TokenBigram, \"みなさん\" can "
 "match \"み な さ ん 注 目\". But when you use TokenBigram, only \"み な さ ん"
@@ -515,10 +340,6 @@ msgstr ""
 "「みなさん」でマッチする。TokenBigramの場合は「み な さ ん」でないとマッチし"
 "ない。"
 
-# 272137e8c42e450c8f34746be7649b44
-# 5938135a959149ce8e1f7ef9b1ae76f4
-#: ../../../source/tutorial/storage.rst:132
-#: ../../../source/tutorial/wrapper.rst:144
 msgid ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbol, it ignores white "
 "spaces."
@@ -526,17 +347,9 @@ msgstr ""
 "バイグラムでトークナイズする。TokenBigramSplitSymbolと異なり、空白を無視して"
 "処理する。"
 
-# 16e5ab2f701f4d66b3062cb343df22ef
-# 4f1f21df3ab8409b814b7bc25b2ba185
-#: ../../../source/tutorial/storage.rst:134
-#: ../../../source/tutorial/wrapper.rst:146
 msgid "TokenBigramIgnoreBlankSplitSymbol"
 msgstr ""
 
-# d298e1bfb9c94dbd8c74434810f4b4f5
-# 72770a7f3bcb4fdaaef39dae42e6c26c
-#: ../../../source/tutorial/storage.rst:134
-#: ../../../source/tutorial/wrapper.rst:146
 msgid ""
 "When you use TokenBigramIgnoreBlankSplitSymbol instead of "
 "TokenBigramSplitSymbol, \"???\" can match \"! ? ???\". But when you use "
@@ -546,10 +359,6 @@ msgstr ""
 "「! !? ??」に「???」でマッチする。TokenBigramSplitSymbolの場合は「? ??」でな"
 "いとマッチしない。"
 
-# 377fd64220564a9e80d4bd6c76c0c8c2
-# 42d58569bbdf420497673c216bb20454
-#: ../../../source/tutorial/storage.rst:137
-#: ../../../source/tutorial/wrapper.rst:149
 msgid ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbolAlpha, it ignores white "
 "spaces."
@@ -557,17 +366,9 @@ msgstr ""
 "バイグラムでトークナイズする。TokenBigramSplitSymbolAlphaと異なり、空白を無視"
 "して処理する。"
 
-# 627088b086314812ac0265eaf1ba65b1
-# f45cb691144840cf8e2487d2ec18e20c
-#: ../../../source/tutorial/storage.rst:139
-#: ../../../source/tutorial/wrapper.rst:151
 msgid "TokenBigramIgnoreBlankSplitSymbolAlpha"
 msgstr ""
 
-# 455a7e59158a44b988e353f36d41ce4b
-# 1364d06ee78748d6b3b1bdb5478c448a
-#: ../../../source/tutorial/storage.rst:139
-#: ../../../source/tutorial/wrapper.rst:151
 msgid ""
 "When you use TokenBigramIgnoreBlankSplitSymbolAlpha instead of "
 "TokenBigramSplitSymbolAlpha, \"ama\" can match \"I am a pen.\". But when you "
@@ -577,10 +378,6 @@ msgstr ""
 "用すると「I am a pen.」に「ama」でマッチする。TokenBigramSplitSymbolAlphaの場"
 "合は「am a」でないとマッチしない。"
 
-# d3c109853fa445079561bf9c2e5bd101
-# 33d753c63a23426faee5bccc6ab03e78
-#: ../../../source/tutorial/storage.rst:142
-#: ../../../source/tutorial/wrapper.rst:154
 msgid ""
 "It tokenise in bigram. Unlike TokenBigramSplitSymbolAlphaDigit, it ignores "
 "white spaces."
@@ -588,17 +385,9 @@ msgstr ""
 "バイグラムでトークナイズする。TokenBigramSplitSymbolAlphaDigitと異なり、空白"
 "を無視して処理する。"
 
-# 95077dae78f248d890acfb9346b32140
-# ca9936bedf104bf5841eae62763709e6
-#: ../../../source/tutorial/storage.rst:144
-#: ../../../source/tutorial/wrapper.rst:156
 msgid "TokenBigramIgnoreBlankSplitSymbolAlphaDigit"
 msgstr ""
 
-# 3664ea8ff96f45ce929bd4ccb417c637
-# d9970c030dee49019fd9e4a2dacc7d12
-#: ../../../source/tutorial/storage.rst:144
-#: ../../../source/tutorial/wrapper.rst:156
 msgid ""
 "When you use TokenBigramIgnoreBlankSplitSymbolAlphaDigit instead of "
 "TokenBigramSplitSymbolAlphaDigit, \"9001\" can match \"090 0123 4567\". But "
@@ -610,55 +399,31 @@ msgstr ""
 "「9001」でマッチする。TokenBigramSplitSymbolAlphaDigitの場合は「90 01」でない"
 "とマッチしない。"
 
-# 0e6848a206714a5a86252e2a3697bbba
-# b3b2cf6c85cd4753be5cbb5982f4e7f7
-#: ../../../source/tutorial/storage.rst:147
-#: ../../../source/tutorial/wrapper.rst:159
 msgid "It tokenise by splitting with a white space."
 msgstr "空白区切りでトークナイズする。"
 
-# 9f7599bb751640859f5d191f653c7083
-# 904bf1b724dc45adaa1f4ff318fcbb81
-#: ../../../source/tutorial/storage.rst:149
-#: ../../../source/tutorial/wrapper.rst:161
 msgid ""
 "\"movie horror topic\" will be tokenised as \"movie\", \"horror\", \"topic\"."
-msgstr "「movie horror topic」をトークナイズすると「movie」、「horror」、「topic」になります。"
+msgstr ""
+"「movie horror topic」をトークナイズすると「movie」、「horror」、「topic」に"
+"なります。"
 
-# e571d74120b544809bdd330e6f7dc7a7
-# 2cd5130adb4a496f9fdc43bbcc43ad4b
-#: ../../../source/tutorial/storage.rst:149
-#: ../../../source/tutorial/wrapper.rst:161
 msgid "TokenDelimit"
 msgstr ""
 
-# 4198b03d6185442ebda6987d74309836
-# 1b3ba1c20e4e4e1ab5cb6567c6434721
-#: ../../../source/tutorial/storage.rst:152
-#: ../../../source/tutorial/wrapper.rst:164
 msgid "It tokenise by splitting with a null character (\\\\0)."
 msgstr "null文字（\\\\0）区切りでトークナイズする。"
 
-# 9f7599bb751640859f5d191f653c7083
-# 904bf1b724dc45adaa1f4ff318fcbb81
-#: ../../../source/tutorial/storage.rst:154
-#: ../../../source/tutorial/wrapper.rst:166
 msgid ""
 "\"movie\\\\0horror\\\\0topic\" will be tokenised as \"movie\", \"horror\", "
 "\"topic\"."
-msgstr "「movie\\\\0horror\\\\0topic」をトークナイズすると「movie」、「horror」、「topic」になります。"
+msgstr ""
+"「movie\\\\0horror\\\\0topic」をトークナイズすると「movie」、「horror」、"
+"「topic」になります。"
 
-# 48ff4c007b134fedab448cf14818af60
-# 03fef33f64304b98b53e973e40cc0f17
-#: ../../../source/tutorial/storage.rst:154
-#: ../../../source/tutorial/wrapper.rst:166
 msgid "TokenDelimitNull"
 msgstr ""
 
-# 0e5a7a10cb104377a15b5fc6f2aadfc3
-# 50607e367cf44f019ded45f9892f197e
-#: ../../../source/tutorial/storage.rst:157
-#: ../../../source/tutorial/wrapper.rst:169
 msgid ""
 "It tokenises in unigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 2 letters or more. It is "
@@ -668,17 +433,9 @@ msgstr ""
 "連続した記号はそれぞれ1つのトークンとして扱う。そのため、2文字以上のトークン"
 "も存在する。これはノイズを減らすためである。"
 
-# 5291bb76ad91414a97237e73f7c47fb1
-# cf79d13783bf47dab210255961286a82
-#: ../../../source/tutorial/storage.rst:157
-#: ../../../source/tutorial/wrapper.rst:169
 msgid "TokenUnigram"
 msgstr ""
 
-# 3e8ea92c2cab46b2b8fd9fc15054f573
-# 007cc4a9b065467ca55ee1656be3e7fb
-#: ../../../source/tutorial/storage.rst:160
-#: ../../../source/tutorial/wrapper.rst:172
 msgid ""
 "It tokenises in trigram. But continuous alphabets, numbers or symbols are "
 "treated as a token. So there can exist tokes with 4 letters or more. It is "
@@ -688,16 +445,9 @@ msgstr ""
 "連続した記号はそれぞれ1つのトークンとして扱う。そのため、4文字以上のトークン"
 "も存在する。これはノイズを減らすためである。"
 
-# 4648aa0b684146539cb5ddd99ee95645
-# b4353988284448e7a23b0d06b733e625
-#: ../../../source/tutorial/storage.rst:160
-#: ../../../source/tutorial/wrapper.rst:172
 msgid "TokenTrigram"
 msgstr ""
 
-# f447ce7358434894aad105e4b8e449fc
-# ade45ca3ded545b180131981c60d1e29
-#: ../../../source/tutorial/storage.rst:162
 msgid ""
 "You can specify the default parser by passing ``--with-default-parser`` "
 "option in ``configure`` when you build mroonga ::"
@@ -705,10 +455,6 @@ msgstr ""
 "デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションで"
 "ビルド時に指定することができます。::"
 
-# f83202df96fa4774b3ad120ea6c66e07
-# 08aa23875b1f454eb547715e8ece11c0
-#: ../../../source/tutorial/storage.rst:166
-#: ../../../source/tutorial/wrapper.rst:178
 msgid ""
 "Or you can set ``mroonga_default_parser`` variable in my.cnf or by SQL. If "
 "you specify it in my.cnf, the change will not be lost after restarting "
@@ -721,27 +467,15 @@ msgstr ""
 "映させるために再起動しなければいけません。一方、SQLで指定した場合はすぐに設定"
 "が反映されますが、MySQLが再起動すると設定は失われます。"
 
-# 3b2cf0a1eb4b4111bbabadaeceaeb875
-# 378b897e13fe49bc837b345dc7cb3eca
-#: ../../../source/tutorial/storage.rst:168
-#: ../../../source/tutorial/wrapper.rst:180
 msgid "my.cnf::"
 msgstr ""
 
-# daa09e682bd043c9ac8d0c2031c8068e
-# 72f78c946f6e4ed789c293492d3c6cf6
-#: ../../../source/tutorial/storage.rst:173
-#: ../../../source/tutorial/wrapper.rst:185
 msgid "SQL::"
 msgstr ""
 
-# a4af63de50aa4375a6f793cd930dedfb
-#: ../../../source/tutorial/storage.rst:179
 msgid "How to use geolocation search"
 msgstr "位置情報検索の利用方法"
 
-# 90223a0f82304edd9187a893337debaa
-#: ../../../source/tutorial/storage.rst:181
 msgid ""
 "In storage mode, you can use fast geolocation search in addition to full "
 "text search. But unlike MyISAM, you can only store POINT type data. You "
@@ -753,8 +487,6 @@ msgstr ""
 "のデータ型は保存できません。また、インデックスを用いた高速な検索に対応してい"
 "るのはMBRContainsだけです。MBRDisjointなどには対応していません。"
 
-# e4a005b091ea465a89f7a06beddb3bfd
-#: ../../../source/tutorial/storage.rst:183
 msgid ""
 "For the table definition for geolocation search, you need to define a POINT "
 "type column like in MyISAM and define SPATIAL INDEX for it. ::"
@@ -762,8 +494,6 @@ msgstr ""
 "位置情報検索を利用する場合のテーブル定義はMyISAMと同様にPOINT型のカラムを定義"
 "し、そのカラムに対してSPATIAL INDEXを指定します。::"
 
-# 549f9fb355084231a248cd0e6877a2b1
-#: ../../../source/tutorial/storage.rst:193
 msgid ""
 "To store data, you create POINT type data by using geomFromText() function "
 "like in MyISAM. ::"
@@ -771,8 +501,6 @@ msgstr ""
 "データの登録方法もMyISAMのときと同様にGeomFromText()関数を使って文字列から"
 "POINT型の値を作成します。::"
 
-# f377f0a4760141bab6999225069b2a99
-#: ../../../source/tutorial/storage.rst:204
 msgid ""
 "If you want to find shops within the rectangle where Ikebukuro station "
 "(139.7101 35.7292) is the top-left point and Tokyo Station (139.7662 "
@@ -781,18 +509,12 @@ msgstr ""
 "池袋駅（139.7101 35.7292）が左上の点、東京駅（139.7662 35.6815）が右下の点と"
 "なるような長方形内にあるお店を探す場合は以下のようなSELECTになります。::"
 
-# 68ba537d54864e3eb8baf7e50577588a
-#: ../../../source/tutorial/storage.rst:214
 msgid "Here you can search by geolocation!"
 msgstr "位置情報で検索できていますね！"
 
-# 5814a8cacefa41a3bcc035e92dc8372c
-#: ../../../source/tutorial/storage.rst:217
 msgid "How to get the record ID"
 msgstr "レコードIDの取得方法"
 
-# 2ef4bd2e86024ebd8f6d23a2b8bb2327
-#: ../../../source/tutorial/storage.rst:219
 msgid ""
 "Groonga assigns a unique number to identify the record when a record is "
 "added in the table."
@@ -800,8 +522,6 @@ msgstr ""
 "groongaではテーブルにレコードを追加した際にレコードを一意に識別するための番号"
 "が割当てられます。"
 
-# 5a06c0fa595d45a48d5263e6d04bbf16
-#: ../../../source/tutorial/storage.rst:221
 msgid ""
 "To make the development of applications easier, you can get this record ID "
 "by SQL in mroonga"
@@ -809,8 +529,6 @@ msgstr ""
 "mroongaではアプリケーションの開発を容易にするため、このレコードIDをSQLで取得"
 "できるようになっています。"
 
-# 7aa11369321440f8a07ea42e52bc241b
-#: ../../../source/tutorial/storage.rst:223
 msgid ""
 "To get the record ID, you need to create a column named ``_id`` when you "
 "create a table. ::"
@@ -818,8 +536,6 @@ msgstr ""
 "レコードIDを取得するためには、テーブル定義時に ``_id`` という名前のカラムを作"
 "成して下さい。 ::"
 
-# 79ecaad98b484cea9b00981f7d76a24c
-#: ../../../source/tutorial/storage.rst:232
 msgid ""
 "Tye typo of _id column should be integer one (TINYINT, SMALLINT, MEDIUMINT, "
 "INT or BIGINT)."
@@ -827,15 +543,11 @@ msgstr ""
 "_idカラムのデータ型は整数型(TINYINT、SMALLINT、MEDIUMINT、INT、BIGINT)である"
 "必要があります。"
 
-# 76bdf08cc8d34445912463bcfd1b57a4
-#: ../../../source/tutorial/storage.rst:234
 msgid "You can create an index for _id column, but it should be HASH type."
 msgstr ""
 "また_idカラムにはインデックスを作成することが可能ですが、HASH形式である必要が"
 "あります。"
 
-# 31d4a1b79faa4c97853dbf948a81bff3
-#: ../../../source/tutorial/storage.rst:236
 msgid ""
 "Let's add records in the table by INSERT. Since _id column is implemented as "
 "a virtual column and its value is assigned by groonga, you cannot specify "
@@ -847,14 +559,10 @@ msgstr ""
 "による更新時に値を指定することはできません。更新対象から外すか、値に "
 "``null`` を使用する必要があります。 ::"
 
-# 13b1a10c1ce749baa31b1628bf213c1a
-#: ../../../source/tutorial/storage.rst:251
 msgid "To get the record ID, you invoke SELECT with _id column. ::"
 msgstr ""
 "レコードIDを取得するには、_idカラムを含むようにしてSELECTを行います。 ::"
 
-# f8f40766ed2848e49b07d5a3ce13160f
-#: ../../../source/tutorial/storage.rst:264
 msgid ""
 "By using last_insert_grn_id function, you can also get the record ID that is "
 "assigned by the last INSERT. ::"
@@ -862,8 +570,6 @@ msgstr ""
 "また直前のINSERTにより割当てられたレコードIDについては、last_insert_grn_id関"
 "数により取得することもできます。 ::"
 
-# e9d47bfe3afb41909e8e9718da34a057
-#: ../../../source/tutorial/storage.rst:277
 msgid ""
 "last_insert_grn_id function is included in mroonga as a User-Defined "
 "Function (UDF), but if you have not yet register it in MySQL by CREATE "
@@ -873,8 +579,6 @@ msgstr ""
 "インストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関数定"
 "義DDLを実行しておく必要があります。 ::"
 
-# 204c2129edb8471bbf696ec0d3a19f24
-#: ../../../source/tutorial/storage.rst:281
 msgid ""
 "As you can see in the example above, you can get the record ID by _id column "
 "or last_insert_grn_id function. It will be useful to use this value in the "
@@ -884,34 +588,20 @@ msgstr ""
 "ができました。ここで取得したレコードIDは後続のUPDATEなどのSQL文で利用すると便"
 "利です。 ::"
 
-# 68156303a7674f3b956b0edc851b3fcb
-#: ../../../source/tutorial/storage.rst:288
-#: ../../../source/tutorial/wrapper.rst:191
 msgid "How to get snippet (Keyword in context)"
 msgstr "スニペット（キーワード周辺のテキスト）の取得方法"
 
-# aa70f8771edb4511a930dd8c07bbc1f0
-# 308af39fa13042249b39faecaf98a186
-#: ../../../source/tutorial/storage.rst:290
-#: ../../../source/tutorial/wrapper.rst:193
 msgid ""
 "Mroonga provides functionality to get keyword in context. It is implemented "
 "as 'mroonga_snippet' UDF."
 msgstr ""
 
-# 86d1b59e3a984c729c7615aaabd360a7
-#: ../../../source/tutorial/storage.rst:293
-#: ../../../source/tutorial/wrapper.rst:196
 msgid "See :doc:`/reference/udf/mroonga_snippet` about details."
 msgstr "詳細は :doc:`/reference/udf/mroonga_snippet` を参照してください。"
 
-# 96274d47708b4dc5bdd840150b0f8bc7
-#: ../../../source/tutorial/storage.rst:297
 msgid "How to run groonga command"
 msgstr "groongaコマンドの実行方法"
 
-# d2e2ce5e55554abab59d2b7ef93f95db
-#: ../../../source/tutorial/storage.rst:299
 msgid ""
 "In storage mode, mroonga stores all your data into groonga database. You can "
 "access groonga database by SQL with mroonga. SQL is very powerful but it is "
@@ -922,8 +612,6 @@ msgstr ""
 "す。SQLはとても強力ですが、ファセット検索などのようないくつかの操作が得意では"
 "ありません。"
 
-# cd7295a27efe46b3851954ad79a9f942
-#: ../../../source/tutorial/storage.rst:304
 msgid ""
 "Faceted search is popular recently. Many online shopping sites such as "
 "amazon.com and ebay.com support faceted search. Faceted search refines the "
@@ -937,8 +625,6 @@ msgstr ""
 "検索の結果を表示します。ユーザは絞りこまれた結果から自分が探しているものを選"
 "ぶだけです。ファセット検索を使うとユーザは以下のようなメリットがあります。"
 
-# e0b55bdefff04b33b6e2451ffb9d8c00
-#: ../../../source/tutorial/storage.rst:310
 msgid ""
 "Users don't need to think about how to refine their search. Users just "
 "select a showed refined search."
@@ -946,8 +632,6 @@ msgstr ""
 "ユーザはどうやって検索結果を絞り込むかを考える必要はありません。単に表示され"
 "た絞り込み結果から選ぶだけです。"
 
-# 2b1526a00ecd4473a15bef8dd993a6a8
-#: ../../../source/tutorial/storage.rst:312
 msgid ""
 "Users don't get boared \"not match\" page. Faceted search showes only "
 "refined searches that has one or more matched items."
@@ -955,8 +639,6 @@ msgstr ""
 "ユーザは「見つかりませんでした」ページを見ることがありません。ファセット検索"
 "では絞り込んだ結果のうち、ヒットする項目がある結果だけを表示します。"
 
-# b86b332677844293b14bb44084d6b3c1
-#: ../../../source/tutorial/storage.rst:315
 msgid ""
 "Faceted search needs multiple `GROUP BY` operations against searched result "
 "set. To do faceted search by SQL, multiple `SELECT` requests are needed. It "
@@ -966,8 +648,6 @@ msgstr ""
 "す。SQLでファセット検索をやろうとすると、複数の `SELECT` リクエストが必要にな"
 "ります。これは効率的ではありません。"
 
-# 9d12326acea64282a90802c4ebc01339
-#: ../../../source/tutorial/storage.rst:319
 msgid ""
 "Groonga can do faceted search by only one groonga command. It is effective. "
 "Groonga has the `select` command that can search records with faceted "
@@ -982,8 +662,6 @@ msgstr ""
 "<http://groonga.org/ja/docs/reference/commands/select.html>`_ を参照してくだ"
 "さい。"
 
-# f179f8865051493b8d58cd2d1eaeb762
-#: ../../../source/tutorial/storage.rst:326
 msgid ""
 "Mroonga provides `mroonga_command()` function. You can run groonga command "
 "in SQL by the function. But you should use only `select` command. Other "
@@ -994,19 +672,12 @@ msgstr ""
 "しておくべきです。スキーマやデータを変更するコマンドを使うと一貫性が壊れてし"
 "まうかもしれません。"
 
-# 04c40f102bfe4b93b280562ef2c662a5
-#: ../../../source/tutorial/storage.rst:331
 msgid "Here is the schema definition for execution examples::"
 msgstr "実行例で使用するスキーマ定義はこちら::"
 
-# f8a8f6bac6ba44e79a2f06f04d7f1828
-# 2f7246d538d04e59959c92837c9bc61f
-#: ../../../source/tutorial/storage.rst:343
 msgid "Here is the sample data for execution examples::"
 msgstr "実行例で使用するサンプルデータはこちら::"
 
-# c933c46a68434179ad9da557b13882e3
-#: ../../../source/tutorial/storage.rst:364
 msgid ""
 "Each record has `groonga` or `MySQL` as `tag`. Each record also has `year` "
 "and `year_month`. You can use `tag`, `year` and `year_month` as faceted "
@@ -1016,8 +687,6 @@ msgstr ""
 "`year` と `year_month` も持っています。ファセット検索のキーとして `tag` 、 "
 "`year` 、 `year_month` を使えます。"
 
-# 1dbf0c3cdc1e45578163b8a90236b17b
-#: ../../../source/tutorial/storage.rst:368
 msgid ""
 "Groonga calls faceted search as drilldown. So parameter key in groonga is `--"
 "drilldown`. Groonga returns search result as JSON. So `mroonga_command()` "
@@ -1029,8 +698,6 @@ msgstr ""
 "します。そのため、 `mroonga_command()` も検索結果をJSONで返します。これはSQL"
 "らしくありません。JSON形式の検索結果は自分でパースしないといけません。"
 
-# 84db40bca99c4e6db1b319adf5ca4eed
-#: ../../../source/tutorial/storage.rst:373
 msgid ""
 "Here is the example of faceted search by all available faceted search keys "
 "(result JSON is pretty printted)::"
@@ -1038,8 +705,6 @@ msgstr ""
 "以下は利用可能なファセット検索キーをすべて使った例です。（結果のJSONは整形済"
 "み）::"
 
-# cb13b0e089e047a0b2446f95d74a1539
-#: ../../../source/tutorial/storage.rst:400
 msgid ""
 "See `groonga's select command document <http://groonga.org/docs/reference/"
 "commands/select.html>`_ for more details."
@@ -1047,24 +712,12 @@ msgstr ""
 "詳細は `groongaのselectコマンドのドキュメント <http://groonga.org/ja/docs/"
 "reference/commands/select.html>`_ を確認してください。"
 
-# 427be2122c8147b6b295098426dd1385
-# d5bf046f8c2a42fe8c04e36ca2b44a5e
-#: ../../../source/tutorial/storage.rst:405
-#: ../../../source/tutorial/wrapper.rst:199
 msgid "Logging"
 msgstr "ログ出力"
 
-# 8e3eec5bb14b43c88a4c3d3db52cd749
-# 34f55704cbe6413f8737215aa6af6a71
-#: ../../../source/tutorial/storage.rst:407
-#: ../../../source/tutorial/wrapper.rst:201
 msgid "Mroonga outputs the logs by default."
 msgstr "mroongaではデフォルトでログの出力を行うようになっています。"
 
-# 98ea9b435e65427fa39f4d299b0752be
-# 98bf2131e26448ae9f9ec3f919607ac7
-#: ../../../source/tutorial/storage.rst:409
-#: ../../../source/tutorial/wrapper.rst:203
 msgid ""
 "Log files are located in MySQL's data directory with the filename  ``groonga."
 "log``."
@@ -1072,17 +725,9 @@ msgstr ""
 "ログファイルはMySQLのデータディレクトリ直下に ``groonga.log`` というファイル"
 "名で出力されます。"
 
-# f8a8f6bac6ba44e79a2f06f04d7f1828
-# 2f7246d538d04e59959c92837c9bc61f
-#: ../../../source/tutorial/storage.rst:411
-#: ../../../source/tutorial/wrapper.rst:205
 msgid "Here is the example of the log. ::"
 msgstr "以下はログの出力例です。 ::"
 
-# 436bd531e4fc46aa8de567cbd37a53ed
-# 930df4473aab4c1f88270642478cb7e5
-#: ../../../source/tutorial/storage.rst:417
-#: ../../../source/tutorial/wrapper.rst:211
 msgid ""
 "The default log level is NOTICE, i.e. we have important information only and "
 "we don't have debug information etc.)."
@@ -1090,10 +735,6 @@ msgstr ""
 "ログのデフォルトの出力レベルはNOTICE（必要な情報のみ出力。デバッグ情報などは"
 "出力しない）となっております。"
 
-# f5507e06f74b4973a6cfa0c7c096aca4
-# 9ab91e6b23bb4c9ea452f7fe0dd5884c
-#: ../../../source/tutorial/storage.rst:419
-#: ../../../source/tutorial/wrapper.rst:213
 msgid ""
 "You can get the log level by ``mroonga_log_level`` system variable, that is "
 "a global variable. You can also modify it dynamically by using SET phrase. ::"
@@ -1102,93 +743,42 @@ msgstr ""
 "きます（グローバル変数）。またSET文で動的に出力レベルを変更することもできま"
 "す。 ::"
 
-# e3e9b3ddfa5940618c0501d5bb6b5bde
-# c66255ea046e4c2c89f18dc31c35ab49
-#: ../../../source/tutorial/storage.rst:440
-#: ../../../source/tutorial/wrapper.rst:234
 msgid "Available log levels are the followings."
 msgstr "設定可能なログレベルは以下の通りです。"
 
-# d813775357bf433c87f17b91422614e7
-# b9d3353d764649beb30f03af36e5c92e
-#: ../../../source/tutorial/storage.rst:442
-#: ../../../source/tutorial/wrapper.rst:236
 msgid "NONE"
 msgstr ""
 
-# 375ecb426bbd464b808a58a4fc8d88d6
-# 6b7cbda0d1554e6b9ce1440faecccc76
-#: ../../../source/tutorial/storage.rst:443
-#: ../../../source/tutorial/wrapper.rst:237
 msgid "EMERG"
 msgstr ""
 
-# aa8cd6108b5d42368f5afe21a57b7f35
-# 205d0a56511c4b118a2994a753768ba9
-#: ../../../source/tutorial/storage.rst:444
-#: ../../../source/tutorial/wrapper.rst:238
 msgid "ALERT"
 msgstr ""
 
-# d486d520881e4e8087f9552aca1985e0
-# 1b6d848a3e8a4845bbc68b85cd4d0508
-#: ../../../source/tutorial/storage.rst:445
-#: ../../../source/tutorial/wrapper.rst:239
 msgid "CRIT"
 msgstr ""
 
-# 48b7c19dc8954ec98e53a47b8d58c77f
-# 582c04556e6349199ce471c2cbccba41
-#: ../../../source/tutorial/storage.rst:446
-#: ../../../source/tutorial/wrapper.rst:240
 msgid "ERROR"
 msgstr ""
 
-# 17401a7cf5e543988bdaa2ee7dd4166e
-# e17410e94de84b41b4e87e4fb1197bd3
-#: ../../../source/tutorial/storage.rst:447
-#: ../../../source/tutorial/wrapper.rst:241
 msgid "WARNING"
 msgstr ""
 
-# 3e95bc9a79fd4c64aa9f22b2ee91f8fd
-# 351f6813a8264a2196ebde93db9285f4
-#: ../../../source/tutorial/storage.rst:448
-#: ../../../source/tutorial/wrapper.rst:242
 msgid "NOTICE"
 msgstr ""
 
-# eed35c97b9324ba5aefd5a6c939bb0e9
-# 0597f719e675405f80d1a59d7e0e097d
-#: ../../../source/tutorial/storage.rst:449
-#: ../../../source/tutorial/wrapper.rst:243
 msgid "INFO"
 msgstr ""
 
-# fb03bdf4720c4aa1962243e607f4f9e3
-# ae2000e98e69422c977dd72e558b4545
-#: ../../../source/tutorial/storage.rst:450
-#: ../../../source/tutorial/wrapper.rst:244
 msgid "DEBUG"
 msgstr ""
 
-# 6001042cea4a4684ab0071626c610df9
-# 3969739cea5a4915b01dfb4719381732
-#: ../../../source/tutorial/storage.rst:451
-#: ../../../source/tutorial/wrapper.rst:245
 msgid "DUMP"
 msgstr ""
 
-# 86d1b59e3a984c729c7615aaabd360a7
-#: ../../../source/tutorial/storage.rst:453
-#: ../../../source/tutorial/wrapper.rst:247
 msgid "See :ref:`mroonga_log_level` about details."
 msgstr "詳細は :ref:`mroonga_log_level` を参照してください。"
 
-# 1a2e97698f17417d9e953fd8cbcedf46
-# 3d7b381b1ea549928d77907fcfd26f99
-#: ../../../source/tutorial/storage.rst:455
-#: ../../../source/tutorial/wrapper.rst:249
 msgid ""
 "You can reopen the log file by FLUSH LOGS. If you want to rotate the log "
 "file without stopping MySQL server, you can do in the following procedure."
@@ -1197,18 +787,10 @@ msgstr ""
 "ログのローテートを行いたいような場合には、以下の手順で実行すると良いでしょ"
 "う。"
 
-# f08a21d8ee4e42068bc507367654aef2
-# c56b2c0a2b1b4c1caa1c6bf9fdecee13
-#: ../../../source/tutorial/storage.rst:457
-#: ../../../source/tutorial/wrapper.rst:251
 msgid ""
 "change the file name of ``groonga.log`` (by using OS's mv command etc.)."
 msgstr "``groonga.log`` ファイルの名前を変更（OSコマンドのmvなどで）"
 
-# ee3362f80c284f1d9fba9ec05c78a8d2
-# 50cb10bbde814869982d774d6edbcb36
-#: ../../../source/tutorial/storage.rst:458
-#: ../../../source/tutorial/wrapper.rst:252
 msgid ""
 "invoke \"FLUSH LOGS\" in MySQL server (by mysql command or mysqladmin "
 "command)."
@@ -1216,13 +798,9 @@ msgstr ""
 "MySQLサーバに対して\"FLUSH LOGS\"を実行（mysqlコマンドあるいはmysqladminコマ"
 "ンドにて）"
 
-# 3e5723beeed6441c89c8c41c9882008c
-#: ../../../source/tutorial/storage.rst:461
 msgid "Choosing appropriate columns"
 msgstr "カラムの刈り込み"
 
-# e9ae9bb8074d4f20b12b8ba8b3f55612
-#: ../../../source/tutorial/storage.rst:463
 msgid ""
 "Groonga uses one file per column to store data, and mroonga accesses needed "
 "columns only when accessing a table to utilise this characteristic."
@@ -1231,8 +809,6 @@ msgstr ""
 "が採用されており、mroongaではこの特性を活かすためにテーブルアクセス時に必要な"
 "カラムに対してのみアクセスを行う実装を行っています。"
 
-# 0907f98e7c6a4e16b2d5d7228e950148
-#: ../../../source/tutorial/storage.rst:465
 msgid ""
 "This optimisation is done automatically in mroonga internal, you don't need "
 "any specific configuration."
@@ -1240,15 +816,11 @@ msgstr ""
 "この高速化の仕組みはmroonga内部で自動的に行われるため、特に設定などを行う必要"
 "はありません。"
 
-# 96d05aed70184389b95dd1e825209b01
-#: ../../../source/tutorial/storage.rst:467
 msgid "Imagine that we have a table with 20 columns like below. ::"
 msgstr ""
 "例えば以下のようにカラムが20個定義されているテーブルが存在するものと仮定しま"
 "す。 ::"
 
-# 1bdfa57092df4ae8bb98919aa0d016ad
-#: ../../../source/tutorial/storage.rst:480
 msgid ""
 "When we run SELECT phrase like the following, mroonga reads data from "
 "columns that are referred by SELECT phrase and WHERE phrase only (and it "
@@ -1258,13 +830,9 @@ msgstr ""
 "句で参照しているカラムに対してのみデータの読み取りを行ってSQL文を処理します"
 "（内部的に不要なカラムに対してはアクセスしません）。 ::"
 
-# 742927067935426f89fbc0fed4c82fbc
-#: ../../../source/tutorial/storage.rst:482
 msgid "SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = \"XXX\";"
 msgstr ""
 
-# d0dafd04db6145d7827862de70ff58c5
-#: ../../../source/tutorial/storage.rst:484
 msgid ""
 "In this case above, only columns c1, c2, c11 and c12 are accessed, and we "
 "can process the SQL rapidly."
@@ -1272,13 +840,9 @@ msgstr ""
 "このケースではc1,c2,c11,c12に対してのみアクセスが行われ、SQL文が高速に処理さ"
 "れることになります。"
 
-# e73cf0d540c14dacafcaac61e9443100
-#: ../../../source/tutorial/storage.rst:487
 msgid "Optimisation for counting rows"
 msgstr "行カウント高速化"
 
-# 4f3965396d6747a6a5acabf21de233ed
-#: ../../../source/tutorial/storage.rst:489
 msgid ""
 "In MySQL's storage engine interface, there is no difference between counting "
 "rows like COUNT(\\*) and normal data retrieving by SELECT. So access to data "
@@ -1291,8 +855,6 @@ msgstr ""
 "けで良いような場合にもレコードアクセス（SELECTの結果には含まれないデータへの"
 "アクセス）が行われる問題があります。"
 
-# 6a21a050675d424788de2f2b64e4b6ac
-#: ../../../source/tutorial/storage.rst:491
 msgid ""
 "Tritonn (MySQL + Senna), that is mroonga's predecessor, introduced \"2ind "
 "patch\" to skip needless access to data and solved this performance issue."
@@ -1301,15 +863,11 @@ msgstr ""
 "う不要なレコードアクセスを省略する仕組みを独自に実装してこの性能問題を回避し"
 "ていました。"
 
-# 5beea7322ea84e3d915c770facc1c37f
-#: ../../../source/tutorial/storage.rst:493
 msgid "Mroonga also has the optimisation for counting rows."
 msgstr ""
 "これに引き続き、mroongaでも行カウントを高速化するための仕組みを実装していま"
 "す。"
 
-# 6145e4e8989f46de92a8b32da86cfdf0
-#: ../../../source/tutorial/storage.rst:495
 msgid ""
 "In the following SELECT, for example, needless read of columns are skipped "
 "and you can get the result of counting rows with the minimal cost."
@@ -1317,24 +875,14 @@ msgstr ""
 "例えば以下のSELECT文では不要なカラムデータの読み取りは省略され、必要最小限の"
 "コストで行カウントの結果を返すことができます。 ::"
 
-# 90191fde86ef44289c83b1bf70972e47
-#: ../../../source/tutorial/storage.rst:497
 msgid "SELECT COUNT(*) FROM t1 WHERE MATCH(c2) AGAINST(\"hoge\");"
 msgstr ""
 
-# 255bc9623f3c4b32a2de941908bd0ad9
-# a7b5b102e43b408f99098a1ec05b3180
-# 17f19cecd41e4a22a1c12463729d8386
-#: ../../../source/tutorial/storage.rst:499
-#: ../../../source/tutorial/storage.rst:528
-#: ../../../source/tutorial/wrapper.rst:269
 msgid ""
 "You can check if this optimisation works or not by the status variable. ::"
 msgstr ""
 "この最適化処理が行われたかどうかはステータス変数で確認することもできます。::"
 
-# 62d888995ebd4115b5a021aee5ca04f1
-#: ../../../source/tutorial/storage.rst:509
 msgid ""
 "Each time the optimisation for counting rows works, ``Mroonga_count_skip`` "
 "status variable value is increased."
@@ -1342,8 +890,6 @@ msgstr ""
 "行カウント高速化の処理が行われる度に ``Mroonga_count_skip`` ステータス変数が"
 "インクリメントされます。"
 
-# b42fb67a425b4c6d9a7bc5ec35dbfcfa
-#: ../../../source/tutorial/storage.rst:511
 msgid ""
 "Note : This optimisation is implemented by using the index. It only works in "
 "the case where we records can be specified only by the index."
@@ -1351,17 +897,9 @@ msgstr ""
 "備考：この高速化機能はインデックスを用いて実装されています。現在のところイン"
 "デックスアクセスのみでレコードが特定できるパタンでのみ有効に機能します。"
 
-# bf3a9a3bec954a65a21a1c38fcb9cc61
-# 6d3a5194d9084abd8f61ad13460e9641
-#: ../../../source/tutorial/storage.rst:514
-#: ../../../source/tutorial/wrapper.rst:255
 msgid "Optimisation for ORDER BY LIMIT in full text search"
 msgstr "全文検索時の ORDER BY LIMIT 高速化"
 
-# c8fd2da996424bc98075fd37ce228d5c
-# 430c403ab8c44a0a95bfbf1a23026bd1
-#: ../../../source/tutorial/storage.rst:516
-#: ../../../source/tutorial/wrapper.rst:257
 msgid ""
 "Generally speaking, MySQL can process \"ORDER BY\" query with almost no cost "
 "if we can get records by index, and can process \"LIMIT\" with low cost by "
@@ -1372,10 +910,6 @@ msgstr ""
 "ノーコストで処理可能であり、\"LIMIT\"は検索結果が大量にヒットする場合でも処理"
 "対象を限定することでコストを一定に抑える効果があります。"
 
-# 643bb74ce65e4124a0ae373040e4bb70
-# cbac85285efe446fb9d356f814a6d7c5
-#: ../../../source/tutorial/storage.rst:518
-#: ../../../source/tutorial/wrapper.rst:259
 msgid ""
 "But for the query where \"ORDER BY\" cannot use index, like sort full text "
 "search result by the score and use LIMIT, the processing cost is "
@@ -1387,10 +921,6 @@ msgstr ""
 "うため、特に大量の検索がヒットするようなキーワード検索においてクエリ処理に極"
 "端に時間がかかってしまうケースがあります。"
 
-# 3ce90ca097ee40f5b1fce355dd758914
-# 31e0f5d8116a436faa7fd31d7c7085a2
-#: ../../../source/tutorial/storage.rst:520
-#: ../../../source/tutorial/wrapper.rst:261
 msgid ""
 "Tritonn took no specific countermeasure for this issue, but it introduced a "
 "workaround in the latest repository so that it sorted Senna result in "
@@ -1402,16 +932,9 @@ msgstr ""
 "ことでSQLクエリからORDER BY句を取り除く(※スコア降順を指定していたケースに対し"
 "てのみ有効)回避方法を導入しました。"
 
-# 435f00fded8343b7b7f663466ecafeb6
-# 0342c41172f64335af021a6b77533d31
-#: ../../../source/tutorial/storage.rst:522
-#: ../../../source/tutorial/wrapper.rst:263
 msgid "Mroonga also has the optimisation for ORDER BY LIMIT."
 msgstr "mroongaでも ORDER BY LIMIT を高速化するための仕組みを実装しています。"
 
-# c361095559384f5f89d9b8cda98e4bf4
-# d9eb55ee8dbe4e139c345f31f304a131
-#: ../../../source/tutorial/storage.rst:524
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in groonga only and "
 "the minimal records are passed to MySQL. ::"
@@ -1419,9 +942,6 @@ msgstr ""
 "例えば以下のSELECT文では ORDER BY LIMIT は、groonga内で処理され、必要最小限の"
 "レコードだけをMySQLに返却しています。 ::"
 
-# 896eb0c6e2e44639acdfdce395a01156
-# 8433d9941d7d432ea3ddd33f78cf49e8
-#: ../../../source/tutorial/storage.rst:538
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``Mroonga_fast_order_limit`` status variable value is increased."
@@ -1429,10 +949,6 @@ msgstr ""
 "ORDER BY LIMIT 高速化の処理が行われる度に ``Mroonga_fast_order_limit`` ステー"
 "タス変数がインクリメントされます。"
 
-# 78d58e956c26402e822868c1992fdf3f
-# 7ee448e536f44a91b1bef6be303c7539
-#: ../../../source/tutorial/storage.rst:540
-#: ../../../source/tutorial/wrapper.rst:281
 msgid ""
 "Note : This optimisation is targeting queries like \"select ... match "
 "against order by _score desc limit X, Y\" only, and it works if all of the "
@@ -1442,47 +958,24 @@ msgstr ""
 "limit X, Y」を狙い撃ちした高速化で、現在のところ以下の条件が成立した場合に機"
 "能します。"
 
-# dbf52ca197ad41ba924d2305c96b1201
-# 3c3dc16d1fb74c0fb69a55406b732030
-#: ../../../source/tutorial/storage.rst:542
-#: ../../../source/tutorial/wrapper.rst:283
 msgid "WHERE phrase has \"match...against\" only"
 msgstr "where句がmatch...againstのみ"
 
-# e7ae9971fba24ac5b3c8e00d7a3833a9
-# 3afeb867da064862914d92e059f3e3cb
-#: ../../../source/tutorial/storage.rst:543
-#: ../../../source/tutorial/wrapper.rst:284
 msgid "no JOIN"
 msgstr "joinしていない"
 
-# 20020fd58cd946a59677c422e59c8d69
-# 89750861c7af4749859c39627082de6b
-#: ../../../source/tutorial/storage.rst:544
-#: ../../../source/tutorial/wrapper.rst:285
 msgid "with LIMIT"
 msgstr "limitの指定がある"
 
-# a329b256ff4a4c87a0adedb9caa9e635
-# 3df296cb0cec4ead9f6572c37544e498
-#: ../../../source/tutorial/storage.rst:545
 msgid ""
 "ORDER BY phrase has columns (including _id) or \"match...against\" that is "
 "used in WHERE phrase only"
 msgstr ""
 "order byの指定がカラム(_id含む)またはwhere句に指定したmatch...againstである"
 
-# f8fbb2e109bd4217a284393f1aeb65cd
-# 58aafef808b44298b192f0766fd16b32
-#: ../../../source/tutorial/storage.rst:548
-#: ../../../source/tutorial/wrapper.rst:289
 msgid "Footnotes"
 msgstr "脚注"
 
-# 7db653a06e4340e488fa46470b7e92ce
-# f86f6f2d6dce41a09a1a61689c035a9b
-#: ../../../source/tutorial/storage.rst:549
-#: ../../../source/tutorial/wrapper.rst:290
 msgid ""
 "`MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text "
 "Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search."
@@ -1491,30 +984,18 @@ msgstr ""
 "`MySQL 5.1 リファレンスマニュアル :: 11 関数と演算子 :: 11.7 全文検索関数 "
 "<http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search.html>`_"
 
-# ff9857fc8b1b473fab83dbea4e7fb6f9
-# 5f541a375e814c49ba633b7d82051e0a
-#: ../../../source/tutorial/storage.rst:550
-#: ../../../source/tutorial/wrapper.rst:291
 msgid "In groonga, we call it a 'tokeniser'."
 msgstr "groongaではトークナイザーと呼んでいる。"
 
-# 74bacf39a9f84cd8b3ebabfab04b56c9
-#: ../../../source/tutorial/wrapper.rst:4
 msgid "Wrapper mode"
 msgstr "ラッパーモード"
 
-# 9541898ed2b84956a70770a749efeec2
-#: ../../../source/tutorial/wrapper.rst:6
 msgid "Here we explain how to use wrapper mode of mroonga"
 msgstr "ここでは mroonga におけるラッパーモードの利用方法を説明します。"
 
-# e1eaf98f29a74e1890617dca607d5dc7
-#: ../../../source/tutorial/wrapper.rst:9
 msgid "How to use wrapper mode"
 msgstr "ラッパーモードの利用方法"
 
-# 59c53abcc6424959b8d47a2d43fe038c
-#: ../../../source/tutorial/wrapper.rst:11
 msgid ""
 "In wrapper mode, mroonga works in wrapping an existing storage engine. To "
 "specify the wrapped storage engine, we use SQL comment like ``COMMENT = "
@@ -1525,8 +1006,6 @@ msgstr ""
 "トを利用して ``COMMENT = 'engine \"innodb\"'`` のように指定するようになってい"
 "ます。"
 
-# 542e9fd42fd1436db2e6d35c5c1f18dd
-#: ../../../source/tutorial/wrapper.rst:15
 msgid ""
 "For now, a primary key is mandatory in wrapper mode. That is not the case "
 "with storage mode."
@@ -1534,8 +1013,6 @@ msgstr ""
 "現在のところ、ラッパーモードではテーブルに必ずプライマリーキーを設定する必要"
 "があります。ストレージモードはこの限りではありません。"
 
-# 7f8431445d6a41fdbe04821d9959dc61
-#: ../../../source/tutorial/wrapper.rst:19
 msgid ""
 "Wrapper mode supports the followings, that are not supported in storage mode "
 "for now."
@@ -1543,13 +1020,9 @@ msgstr ""
 "ラッパーモードでは現在ストレージモードでサポートされていない、以下をサポート"
 "しています。"
 
-# e37730a154814c8fa9ffb8d424cb5ee7
-#: ../../../source/tutorial/wrapper.rst:21
 msgid "null value"
 msgstr "null値"
 
-# 1e158b81a2fa4d6eb119245d55e4a165
-#: ../../../source/tutorial/wrapper.rst:22
 msgid ""
 "transaction (if storage engine supports. Note that rollback causes mismatch "
 "of indexes, it may affects search results, so recreate index of mroonga in "
@@ -1559,9 +1032,6 @@ msgstr ""
 "とインデックスの不整合が発生します。インデックスを使った検索に影響するので、"
 "その場合にはmroongaのインデックスを再作成します。"
 
-# f447ce7358434894aad105e4b8e449fc
-# ade45ca3ded545b180131981c60d1e29
-#: ../../../source/tutorial/wrapper.rst:174
 msgid ""
 "You can specify the default parser by passing ``--with-default-parser`` "
 "option in ``configure`` when you build mroonga. ::"
@@ -1569,9 +1039,6 @@ msgstr ""
 "デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションで"
 "ビルド時に指定することができます。::"
 
-# c361095559384f5f89d9b8cda98e4bf4
-# d9eb55ee8dbe4e139c345f31f304a131
-#: ../../../source/tutorial/wrapper.rst:265
 msgid ""
 "In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and "
 "the minimal records are passed to MySQL. ::"
@@ -1579,9 +1046,6 @@ msgstr ""
 "例えば以下のSELECT文では ORDER BY LIMIT は、mroonga内で処理され、必要最小限の"
 "レコードだけをMySQLに返却しています。 ::"
 
-# 896eb0c6e2e44639acdfdce395a01156
-# 8433d9941d7d432ea3ddd33f78cf49e8
-#: ../../../source/tutorial/wrapper.rst:279
 msgid ""
 "Each time the optimisation for counting rows works, "
 "``mroonga_fast_order_limit`` status variable value is increased."
@@ -1589,9 +1053,6 @@ msgstr ""
 "ORDER BY LIMIT 高速化の処理が行われる度に ``Mroonga_fast_order_limit`` ステー"
 "タス変数がインクリメントされます。"
 
-# a329b256ff4a4c87a0adedb9caa9e635
-# 3df296cb0cec4ead9f6572c37544e498
-#: ../../../source/tutorial/wrapper.rst:286
 msgid ""
 "ORDER BY phrase has _id column or \"match...against\" that is used in WHERE "
 "phrase only"

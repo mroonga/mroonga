@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-27 18:49+0900\n"
+"POT-Creation-Date: 2014-01-24 11:47+0900\n"
 "PO-Revision-Date: 2011-11-28 00:00+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -17,18 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-# afaf0f450e9544a8acc5116afdcace63
-#: ../../../source/developer.rst:4
 msgid "Developer's guide"
 msgstr "開発者向け情報"
 
-# 5f722661ba45485aa0135c1354d9a109
-#: ../../../source/developer.rst:13
 msgid "How we are developing"
 msgstr "開発手法について"
 
-# a7afa1788a554be8a81dee99596432e8
-#: ../../../source/developer.rst:15
 msgid ""
 "We, the mroonga development project, are doing Ticket Driven Development by "
 "using a BTS named Redmine."
@@ -36,33 +30,21 @@ msgstr ""
 "mroonga開発プロジェクトではBTSの1つであるRedmineを用いたチケット駆動開発を実"
 "施しています。"
 
-# ff145db4f3d54e2f866f02b0617e117f
-#: ../../../source/developer.rst:17
 msgid "The location of our Redmine site is the following."
 msgstr "Redmineは以下のサイトで運用されています。"
 
-# 7a1f4cbb271d4c34941334a31c3559ef
-#: ../../../source/developer.rst:19
 msgid "http://redmine.groonga.org/projects/show/mroonga"
 msgstr ""
 
-# 52088113370a4c1d8c71608abeb057bc
-#: ../../../source/developer.rst:21
 msgid "Developments are done per ticket."
 msgstr "開発の作業はチケット単位で行っています。"
 
-# 014270beec31410fbc6320c48ef08ede
-#: ../../../source/developer.rst:23
 msgid "We would like to ask developers to register on the site above."
 msgstr "開発者の方は上記サイトへのアカウント登録をお願いします。"
 
-# 7002e08ec34543a2966ec0a2a8afb813
-#: ../../../source/developer.rst:26
 msgid "Roadmaps"
 msgstr "ロードマップについて"
 
-# 7b9b77119ee2407291dbdfd6693a5a9b
-#: ../../../source/developer.rst:28
 msgid ""
 "You can see our roadmaps in the following page. Generally speaking, we "
 "develop based on the roadmap."
@@ -70,105 +52,67 @@ msgstr ""
 "ロードマップは以下のページで確認できます。基本的に開発はロードマップに沿って"
 "行います。"
 
-# 1b70877aad744ce3b2ce18854f7e5ead
-#: ../../../source/developer.rst:30
 msgid "http://redmine.groonga.org/projects/mroonga/roadmap"
 msgstr ""
 
-# 16b0e978811949c99440c9719345ede3
-#: ../../../source/developer.rst:32
 msgid "We decide our roadmaps by discussing in off-line or on-line meetings."
 msgstr ""
 "ロードマップはオフラインあるいはオンラインでの開発会議で検討を行った上で決定"
 "されます。"
 
-# a532e54a7fa44268a80e00945c2c2f16
-#: ../../../source/developer.rst:34
 msgid "Roadmaps specify the list of adding features in each version."
 msgstr ""
 "ロードマップは各バージョンごとに追加する機能の一覧として構成されています。"
 
-# 0a3aab2dee264380984bb6ee20254287
-#: ../../../source/developer.rst:37
 msgid "Source code management"
 msgstr "ソースコード管理について"
 
-# 0accfb13d6bf41d6a15a191b998cf874
-#: ../../../source/developer.rst:39
 msgid "We manage the source code using git on github."
 msgstr "githubを使用したgitによるソースコード管理を行っています。"
 
-# 8fb909af4b094ab7a4055a4c4ce93f19
-#: ../../../source/developer.rst:41
 msgid "http://github.com/mroonga/mroonga"
 msgstr ""
 
-# 797974dfe67047f1aeaa646d1e76e407
-#: ../../../source/developer.rst:43
 msgid ""
 "If you want to contribute, please make clone in read/write mode, and then "
 "commit and push please."
 msgstr ""
 "上記レポジトリに対してread/writeでcloneを作成し、commitおよびpushして下さい。"
 
-# 42343a42c6f44ec7a69675d5f2995992
-#: ../../../source/developer.rst:45
 msgid "If you still do not have your account on github.com, please register."
 msgstr ""
 "アカウントを作成していない開発者の方はgithub.comへの登録をお願いします。"
 
-# c0d640acbc8a48c897b25d81b738a08b
-#: ../../../source/developer.rst:48
 msgid "Process of development"
 msgstr "開発の流れについて"
 
-# 508b90a96bce49558baf4238ffbe7a5b
-#: ../../../source/developer.rst:50
 msgid "We would like to develop in the following procedure."
 msgstr "開発は以下の流れで行いたいと考えています。"
 
-# 9ee264cc6051443d90887269a84e0f9b
-#: ../../../source/developer.rst:52
 msgid "Create a new ticket and add a description"
 msgstr "チケットの新規作成と内容の記述"
 
-# c99b460513b249199139c45f5f8fe9fd
-#: ../../../source/developer.rst:53
 msgid "Discuss in the development meeting and update roadmaps"
 msgstr "開発会議での検討(ロードマップへの反映)"
 
-# 76aa7529d00d4a909fa9badce1ee0230
-#: ../../../source/developer.rst:54
 msgid "Assign the ticket, and the assignee starts development"
 msgstr "チケットの割り当て(担当者作業開始)"
 
-# ff60d54f2d104a5aba35d39ffb7d97e2
-#: ../../../source/developer.rst:55
 msgid "Implement features or fix bugs, then push to the repository if needed"
 msgstr "機能実装あるいはバグの修正作業、必要に応じてレポジトリへのpush"
 
-# 75361499ca3f42c4957f6bcc54afc8a1
-#: ../../../source/developer.rst:56
 msgid "Add and run test codes, then push to the repository"
 msgstr "テストコードの追加と実行、レポジトリへのpush"
 
-# cc48495c84f548bea912949765080529
-#: ../../../source/developer.rst:57
 msgid "Review the implementation and tests, and go back to 4. if needed"
 msgstr "実装/テスト内容に対するレビュー(必要に応じて4へ戻る)"
 
-# 025f5c8c1e86417e974238c1e40e34af
-#: ../../../source/developer.rst:58
 msgid "Add or update documents, then push to the repository"
 msgstr "ドキュメントの追加/変更、 レポジトリへのpush"
 
-# 96c62f8de5ef48ff8a3215a7e4f19ff5
-#: ../../../source/developer.rst:59
 msgid "Close the ticket"
 msgstr "チケットの完了"
 
-# fcb2ea0481fd4d33aaea0090b6d5a85a
-#: ../../../source/developer.rst:61
 msgid ""
 "We welcome your ideas about new features or changes of specifications. "
 "Please create a ticket first and describe your idea there."
@@ -176,14 +120,10 @@ msgstr ""
 "機能追加や仕様変更などについても積極的にアイデアを募集します。まずはチケット"
 "を新規作成して内容を記述して下さい。"
 
-# 4fa69f1d4dd84f9292bd4741fa2cb5de
-#: ../../../source/developer.rst:64
 msgid "For adding and running test codes, please refer the description below."
 msgstr ""
 "テストコードの追加と実行については後述しますのでそちらを参照して下さい。"
 
-# f6e8dceb2b41446c8f8b420e3216a94f
-#: ../../../source/developer.rst:66
 msgid ""
 "Generally speaking, we want to ask the assignee to handle whole the process, "
 "like design, implementation, test and documentations."
@@ -191,8 +131,6 @@ msgstr ""
 "基本的にチケットを担当されている方が設計、実装、テスト、ドキュメントまで一通"
 "りお願いしたいと考えています。"
 
-# 3d30eae8f4e44d90b25743194a5ef4a1
-#: ../../../source/developer.rst:68
 msgid ""
 "Then you ask other developers to review (especially in case of adding new "
 "features), and when it passes you add or update documents and the ticket can "
@@ -201,103 +139,63 @@ msgstr ""
 "他の開発者にレビューを依頼し(特に機能追加の場合)、無事パスしたら最後にドキュ"
 "メントを追加/変更してチケット完了となります。"
 
-# 2b3fed08c22e48afafba797308d038fe
-#: ../../../source/developer.rst:70
 msgid "For adding and updating documents, please refer the description below."
 msgstr "ドキュメントの追加/変更方法についても詳しくは後述します。"
 
-# 042640664ac8410d80a21fe02a77aaea
-#: ../../../source/developer.rst:73
 msgid "Release"
 msgstr "リリースについて"
 
-# c02f010b7ef448d2b306cfcde9aab569
-#: ../../../source/developer.rst:75
 msgid "We release the software when all tickets of the roadmap are closed."
 msgstr "リリースはロードマップ上のチケットが全て完了となった段階で行います。"
 
-# 6513eaa6d07d487bacf2c993b5624405
-#: ../../../source/developer.rst:77
 msgid "We do the following to release."
 msgstr "リリースにあたっては以下の作業を行っています。"
 
-# d4883cd1cd55478e838ca7f29b617753
-#: ../../../source/developer.rst:79
 msgid "Create source packages"
 msgstr "ソースパッケージ作成"
 
-# f3278389a1594fd29877dbe1f6b2b8c1
-#: ../../../source/developer.rst:80
 msgid "Create binary packages"
 msgstr "バイナリパッケージ作成"
 
-# da95ac6cc730482f9ee28be390b39387
-#: ../../../source/developer.rst:81
 msgid "Update documents on http://mroonga.org"
 msgstr "ドキュメント(http://mroonga.org)のアップデート"
 
-# 5a7984f28f794033a71b45dbed01f131
-#: ../../../source/developer.rst:82
 msgid "Announce the release"
 msgstr "リリースの告知"
 
-# 6c19524725bf49968af87a7a573e72bd
-#: ../../../source/developer.rst:84
 msgid "(This section will be moved to :doc:`developer/release`)."
 msgstr ":doc:`developer/release` へ移動予定。"
 
-# 694ef1a52a934a53af014cc09f1542d8
-#: ../../../source/developer.rst:87
 msgid "Development environment"
 msgstr "開発環境"
 
-# 9c8fee05a65945c9828ca1e4b3b1a150
-#: ../../../source/developer.rst:89
 msgid "Currently we are assuming the following development environments."
 msgstr "現在、以下のような開発環境を想定しています。"
 
-# 8e24af164d144329afd9f5147de18a8d
-#: ../../../source/developer.rst:91
 msgid "Linux x86_64"
 msgstr ""
 
-# 1ebdda6273ea403dacbd51240150f075
-#: ../../../source/developer.rst:92
 msgid "glibc 2.5"
 msgstr ""
 
-# 3837288aa7454ccba6aa8d0bc2484d31
-#: ../../../source/developer.rst:93
 msgid "MySQL 5.5"
 msgstr ""
 
-# 03e8855e5c744c04942eba3a8825db7e
-#: ../../../source/developer.rst:94
 msgid "groonga 1.2.8"
 msgstr ""
 
-# 53a8cc36a8d248bd8ba97126d3c06f19
-#: ../../../source/developer.rst:95
 msgid "Cutter 1.1 (for C/C++ unit tests)"
 msgstr "Cutter 1.1 (C/C++単体テスト用)"
 
-# 65985f526b1144b0a4a74ddb20fea41b
-#: ../../../source/developer.rst:96
 msgid "Sphinx 1.1 (for documents)"
 msgstr "Sphinx 1.1 (ドキュメント用)"
 
-# 62cff737088e4863882fa3970446e981
-#: ../../../source/developer.rst:98
 msgid "glibc 2.5 is used in Red Hat Enterprise Linux 5."
 msgstr "glibc 2.5はRed Hat Enterprise Linux 5に相当します。"
 
-# a90d7a700fc1444a9230867ec172aa87
-#: ../../../source/developer.rst:101
 msgid "Contents of the source tree"
 msgstr "ソースディレクトリ解説"
 
-# 996446e967484e15a8e07c4e7db5f09b
-#: ../../../source/developer.rst:103
 msgid ""
 "There are just a few source files for now, and we would like to keep it "
 "simple as possible."
@@ -305,59 +203,36 @@ msgstr ""
 "今のところソースファイルの数はごくわずかです。なるべくシンプルな状態を維持し"
 "たいと考えています。"
 
-# 6d8a04dcc41d4bc4b78488795e9c5d28
-#: ../../../source/developer.rst:106
 msgid "The header file of mroonga."
 msgstr "mroongaのヘッダファイル"
 
-# d0d6a242f72544d3bed765e0d8883628
-#: ../../../source/developer.rst:106
-#: ../../../source/developer/coding_style.rst:71
 msgid "ha_mroonga.h"
 msgstr ""
 
-# de68c17cdf2a46958c805a6d7d4de0be
-#: ../../../source/developer.rst:109
 msgid "The implementation of mroonga."
 msgstr "mroongaの実装コード"
 
-# f2ee50ba37af49919552ab98ef7dbd82
-#: ../../../source/developer.rst:109
 msgid "ha_mroonga.cc"
 msgstr ""
 
-# 148c322ddf594efcb6896c5108eabe42
-#: ../../../source/developer.rst:112
 msgid "The header file of utility functions"
 msgstr "ユーティリティ関数のヘッダファイル"
 
-# 0a94cde23b3a468e8c6e1db3f3fe106e
-#: ../../../source/developer.rst:112
 msgid "mrnsys.h"
 msgstr ""
 
-# df8d1f60bd2b44e9ac83567f67e6303d
-#: ../../../source/developer.rst:115
 msgid "The implementation of utility functions"
 msgstr "ユーティリティ関数の実装コード"
 
-# fadb96b9669740dabbe2e86139efb695
-#: ../../../source/developer.rst:115
 msgid "mrnsys.c"
 msgstr ""
 
-# 336604c0ba9e460a84cef792b0a1e1a4
-#: ../../../source/developer.rst:118
 msgid "The directory for tests by SQL"
 msgstr "SQLによるテストコード用ディレクトリ"
 
-# 00830176491348c59b25df9a76c729bd
-#: ../../../source/developer.rst:118
 msgid "test/sql/"
 msgstr ""
 
-# 3e8df8b433f54644a788e4a79d946cd2
-#: ../../../source/developer.rst:121
 msgid ""
 "SQL test scripts, that are also the definition of currently available SQL "
 "statements"
@@ -365,55 +240,35 @@ msgstr ""
 "SQLによるテストコード用ディレクトリSQLテストスクリプト（現在実行可能なSQL文の"
 "定義も兼ねる）"
 
-# 523c5383f5af4de68a19a3ebe761c4fb
-#: ../../../source/developer.rst:121
 msgid "test/sql/t/"
 msgstr ""
 
-# f374dac564f24c8581d3cd83bf63bf3a
-#: ../../../source/developer.rst:124
 msgid ""
 "The expected results of SQL tests, that are also the definition of the "
 "current specification of supported SQL"
 msgstr "SQLテスト想定実行結果（SQL動作仕様定義も兼ねる）"
 
-# d99e1b846c9644d3a20a286a7033082a
-#: ../../../source/developer.rst:124
 msgid "test/sql/r/"
 msgstr ""
 
-# 4114c2bfb1294078be0cf96a8cb9250a
-#: ../../../source/developer.rst:127
 msgid "The directory for per-function unit tests by C/C++"
 msgstr "C/C++関数単体でのテストコード用ディレクトリ"
 
-# 2b4ad9bf93ee459ab391cf2a55f03c4d
-#: ../../../source/developer.rst:127
 msgid "test/unit/"
 msgstr ""
 
-# 3ece773863174cd5b8a6672fccbba677
-#: ../../../source/developer.rst:130
 msgid "English documents in Sphinx format"
 msgstr "Sphinx形式の英語ドキュメント一式"
 
-# 1c80e5a0448c4e34b613f4b9fd83dc83
-#: ../../../source/developer.rst:130
 msgid "doc/en/"
 msgstr ""
 
-# e193154e20cc40d486389f6971849227
-#: ../../../source/developer.rst:133
 msgid "Japanese documents in Sphinx format"
 msgstr "Sphinx形式の日本語ドキュメント一式"
 
-# 261208bfcdeb4af68b2f250c8cb6f7d2
-#: ../../../source/developer.rst:133
 msgid "doc/ja/"
 msgstr ""
 
-# 653093e39c04421998e77a6a61ff1dd7
-#: ../../../source/developer.rst:135
 msgid ""
 "Since we are still in the early stage of the development of mroonga, we will "
 "not make the documents of the specification of SQL queries for now."
@@ -421,8 +276,6 @@ msgstr ""
 "mroongaはまだ開発の立ち上げ段階であるため、SQL実行に関する仕様のドキュメント"
 "化は当面行いません。"
 
-# 4ebf965b5a544c95945b6aa0d049a565
-#: ../../../source/developer.rst:137
 msgid ""
 "Alternatively we consider our SQL tests and its expected results as the list "
 "of features and the definition of their specifications."
@@ -430,24 +283,16 @@ msgstr ""
 "その代わりとしてSQLテストスクリプトとその想定実行結果を機能一覧/仕様定義とし"
 "て見なしています。"
 
-# 3184e93c00e94a75bdea2c4c28d3678a
-#: ../../../source/developer.rst:140
 msgid "Adding and running tests"
 msgstr "テストコードの追加と実行について"
 
-# b9520d1b90ca4887a8ec5a1351052b39
-#: ../../../source/developer.rst:142
 msgid "We use two kinds of regression tests to manage the quality of mroonga."
 msgstr ""
 "mroongaではプログラムの品質管理のため、2種類の回帰テストを用いています。"
 
-# 3629935c50844ff88537020ebf56fad2
-#: ../../../source/developer.rst:145
 msgid "SQL tests"
 msgstr ""
 
-# 372c85c0fc1b48b0a743cd653e581874
-#: ../../../source/developer.rst:145
 msgid ""
 "When you add features or fix bugs that can be confirmed by SQL queries, "
 "please always add SQL tests. You might think that performance improvements "
@@ -459,13 +304,9 @@ msgstr ""
 "える場合もありますが、ステータス変数やinformation_schemaプラグインなどを使用"
 "することで上手くテストできるものもあります。"
 
-# 53a8cc36a8d248bd8ba97126d3c06f19
-#: ../../../source/developer.rst:148
 msgid "C/C++ unit tests"
 msgstr "C/C++単体テスト"
 
-# dcbf580c584041faa453704b4f776318
-#: ../../../source/developer.rst:148
 msgid ""
 "They are function level regression tests using Cutter. When you add features "
 "that cannot differ SQL queries' results, like utility functions, please add "
@@ -475,8 +316,6 @@ msgstr ""
 "果による動作の差異を確認できないような実装を追加した場合にはこちらにテストを"
 "追加して下さい。"
 
-# f95ee022da53467d890c4c80e5d63ccc
-#: ../../../source/developer.rst:150
 msgid ""
 "Before pushing to the repository, please always run the regression tests and "
 "confirm that you don't introduce any degradation."
@@ -484,13 +323,9 @@ msgstr ""
 "ソースコードレポジトリへのpushを行う前に必ず回帰テストを実行し、デグレードが"
 "発生していないことを確認して下さい。"
 
-# 57f6a163715942b190aeca7eaddd4b64
-#: ../../../source/developer.rst:152
 msgid "You can invoke these two kinds of tests by \"make check\"."
 msgstr "上記の回帰テストは\"make check\"で双方とも呼び出されます。"
 
-# d9878df7fd7346db94a9209e06504db3
-#: ../../../source/developer.rst:154
 msgid ""
 "SQL tests are implemented as \"sub test suite\" for \"mysql-test\" in "
 "MySQL's regression tests. For the detail about how to add test cases or how "
@@ -500,36 +335,24 @@ msgstr ""
 "して実装しています。テストケースの追加や想定結果ファイルの改変方法などの詳細"
 "情報は以下のMySQLのドキュメントを参照して下さい。"
 
-# 548244c966de485d97fe370ac379eb16
-#: ../../../source/developer.rst:156
 msgid "http://dev.mysql.com/doc/mysqltest/2.0/en/index.html"
 msgstr ""
 
-# 99dc5edabd834a9a8e255d165fbc9cdf
-#: ../../../source/developer.rst:158
 msgid ""
 "For the detail about C/C++ unit tests, please refer the following cutter "
 "document."
 msgstr ""
 "C/C++単体テストの書き方についてはcutterのドキュメントを参照して下さい。"
 
-# dd3242a1915c4e84b029c4019c89c0c7
-#: ../../../source/developer.rst:160
 msgid "http://cutter.sourceforge.net/"
 msgstr "http://cutter.sourceforge.net/index.html.ja"
 
-# 1d8904b6d713496dbb57587d37fb5a4a
-#: ../../../source/developer.rst:163
 msgid "Adding and updating documents"
 msgstr "ドキュメントの追加と変更について"
 
-# b43c6611d0b648d8a1d4be1854bf9db3
-#: ../../../source/developer.rst:165
 msgid "We use Sphinx for the documentation of mroonga."
 msgstr "mroongaではドキュメント作成にSphinxを使用しています。"
 
-# f79df5fb8e974aaf959a87c658b94e1e
-#: ../../../source/developer.rst:167
 msgid ""
 "We write documents in ReStructuredText format and we convert them to HTML "
 "etc."
@@ -537,8 +360,6 @@ msgstr ""
 "ドキュメントはReStructuredText形式でソースファイルを書き、HTML形式などにビル"
 "ドしています。"
 
-# 6c48cd729c504ef08c02066659c280de
-#: ../../../source/developer.rst:169
 msgid ""
 "The source files of documents are files having .rst extension in \"doc/ja/"
 "source\" directory."
@@ -546,8 +367,6 @@ msgstr ""
 "ドキュメントのソースファイルは\"doc/ja/source\"ディレクトリにある拡張子が.rst"
 "のファイルです。"
 
-# 9517405540304fd7bad94079183710bf
-#: ../../../source/developer.rst:171
 msgid ""
 "When you add or modify them, please try to build by \"make html\" etc. and "
 "confirm that no syntax error happens."
@@ -555,8 +374,6 @@ msgstr ""
 "加筆修正を行ったら\"make html\"等でビルドして構文エラーが起きないことを確認し"
 "て下さい。"
 
-# 03077955ee6f44ba8e06234facbe3a07
-#: ../../../source/developer.rst:173
 msgid ""
 "Documents are published in http://mroonga.org . Since we are using github's "
 "web site feature, they will be updated each time when HTML files are pushed "
@@ -570,16 +387,12 @@ msgstr ""
 "が、mroonga.github.comレポジトリへのpushは現リリースバージョンとの整合性など"
 "を確認した上で別のタイミングでpushします。"
 
-# c71271c745e94e8db638b9d5cec9795e
-#: ../../../source/developer.rst:175
 msgid ""
 "So you can just push to mroonga repository to push documents for each ticket."
 msgstr ""
 "従って、各チケットに対するドキュメントのpushはmroongaレポジトリに対するpushの"
 "みで構いません。"
 
-# 5a34ae4798ed4abf8aedf119cd867279
-#: ../../../source/developer.rst:177
 msgid ""
 "To avoid the issue that directory names of sphinx's output cannot be used in "
 "github, we prepare sphinx2github.sh script in \"doc/en/source\" directory. "
@@ -591,18 +404,12 @@ msgstr ""
 "す。mroonga.github.comにcommitする場合にはこのスクリプトを実行してsphinxの生"
 "成したファイルを修正して置きましょう。"
 
-# e259bd64bfc0498ba98102570dab6b2c
-#: ../../../source/developer/coding_style.rst:3
 msgid "TODO: Translate."
 msgstr ""
 
-# 1932e40a97234459bda92ce224e7cb85
-#: ../../../source/developer/coding_style.rst:6
 msgid "コーディングスタイル"
 msgstr ""
 
-# 37541e4ae78e415493a9bf7d110f9c70
-#: ../../../source/developer/coding_style.rst:8
 msgid ""
 "一般的に1つのコードベースに複数のスタイルがまざっているとソースコードが読みづ"
 "らくなります。たとえ、それぞれのスタイル単独では読みやすいスタイルあっても、"
@@ -610,573 +417,331 @@ msgid ""
 "て、読みやすいソースコードになるようにします。"
 msgstr ""
 
-# 19c12f1de72b412c86c499659a317a44
-#: ../../../source/developer/coding_style.rst:10
 msgid "読みやすいソースコードにする理由は以下の通りです。"
 msgstr ""
 
-# 8a164e538bc54484afe4781deb3fb7f4
-#: ../../../source/developer/coding_style.rst:12
 msgid "機能を拡張するときのコストを下げる。"
 msgstr ""
 
-# 5fd6cd5510334f48abb70240b28ae4e9
-#: ../../../source/developer/coding_style.rst:13
 msgid "問題を修正するときのコストを下げる。"
 msgstr ""
 
-# b288f09d5375410881bb19093d0ae135
-#: ../../../source/developer/coding_style.rst:15
 msgid ""
 "どちらの場合も周辺のソースコードを読んで、それをベースにコードを追加・変更し"
 "ます。このとき、ソースコードが読みやすい状態だと周辺のソースコードの把握をス"
 "ムーズに行うことができ、スムーズにその後の作業に移れます。"
 msgstr ""
 
-# 3a4e862a3c4946d7939c8818d2dbb20d
-#: ../../../source/developer/coding_style.rst:17
 msgid ""
 "TODO: 読みやすさの他にデバッグのしやすさ（gdbでの追いやすさ）も考慮に入れたほ"
 "うがよさそうだがどうしよう。"
 msgstr ""
 
-# ad9c40fd395a48e28f23aed9bc5061e3
-#: ../../../source/developer/coding_style.rst:20
 msgid "言語"
 msgstr ""
 
-# 830891b461d646d3971d363ac43647ba
-#: ../../../source/developer/coding_style.rst:22
 msgid "基本的にすべてC++で記述します。よほどのことがない限りCは使いません。"
 msgstr ""
 
-# b671555dbe95410583bcf19be1a5e950
-# 714051bac55e47a49efe782a26536bfa
-# 2a3018a8af614160b122a32eb6ada585
-# d958618cea7f4a5396811342800fd13f
-# 3c7866bc54274b3fa8b897a4055a9637
-# fc6cfa3be77344de8d1aa8ce377e1fa2
-# 4733c3e5344a45138ba0f062c5b160de
-# 87c1a6f29e9e4ba996d62d04012af5e2
-# 4a84e70c34a24f959fb09aba609e7933
-# 525f141de8dd413089f0eaf18948ec94
-# baeacaf2007146d682ebb17276bb47a3
-# b671555dbe95410583bcf19be1a5e950
-# e6d646e9ea8b42f4bcd85375b3131448
-# eed1014f4e674e25add14c2c72dfdbb3
-# baeacaf2007146d682ebb17276bb47a3
-# 782bcf52aae4462dbc94fdde8b90ee03
-# 782bcf52aae4462dbc94fdde8b90ee03
-# 3c7866bc54274b3fa8b897a4055a9637
-# e6d646e9ea8b42f4bcd85375b3131448
-# e6d646e9ea8b42f4bcd85375b3131448
-# 72dff8e33e1a43b99f32bce1e2f52020
-# 949e5db59b324f19bfdf91b95b768947
-# 27904b472bf44672a1dd771a0fcc40ab
-# baeacaf2007146d682ebb17276bb47a3
-# 2a3018a8af614160b122a32eb6ada585
-# 714051bac55e47a49efe782a26536bfa
-# 3dcfe6c5a47b48c59f1e71b0220e6229
-# baeacaf2007146d682ebb17276bb47a3
-#: ../../../source/developer/coding_style.rst:24
-#: ../../../source/developer/coding_style.rst:37
-#: ../../../source/developer/coding_style.rst:55
-#: ../../../source/developer/coding_style.rst:65
-#: ../../../source/developer/coding_style.rst:78
-#: ../../../source/developer/coding_style.rst:98
-#: ../../../source/developer/coding_style.rst:127
-#: ../../../source/developer/coding_style.rst:160
-#: ../../../source/developer/coding_style.rst:171
-#: ../../../source/developer/coding_style.rst:194
-#: ../../../source/developer/coding_style.rst:208
-#: ../../../source/developer/coding_style.rst:225
-#: ../../../source/developer/coding_style.rst:251
-#: ../../../source/developer/coding_style.rst:280
-#: ../../../source/developer/coding_style.rst:322
-#: ../../../source/developer/coding_style.rst:356
-#: ../../../source/developer/coding_style.rst:390
-#: ../../../source/developer/coding_style.rst:417
-#: ../../../source/developer/coding_style.rst:446
-#: ../../../source/developer/coding_style.rst:462
-#: ../../../source/developer/coding_style.rst:475
-#: ../../../source/developer/coding_style.rst:491
-#: ../../../source/developer/coding_style.rst:506
-#: ../../../source/developer/coding_style.rst:523
-#: ../../../source/developer/coding_style.rst:543
-#: ../../../source/developer/coding_style.rst:574
-#: ../../../source/developer/coding_style.rst:656
-#: ../../../source/developer/coding_style.rst:660
 msgid "よい例::"
 msgstr ""
 
-# 35b3c0c225ea4c339c29235c4606c2da
-#: ../../../source/developer/coding_style.rst:28
 msgid "悪い例（C言語を使っている）::"
 msgstr ""
 
-# 0aa920deb3334531855abb4b76c729f1
-#: ../../../source/developer/coding_style.rst:33
 msgid "ファイル名"
 msgstr ""
 
-# 8ade7873101340eb92e660fd101586fe
-#: ../../../source/developer/coding_style.rst:35
 msgid ""
 "ソースコードのファイル名は全て小文字にします。また、単語ごとに\"_\"で区切りま"
 "す。"
 msgstr ""
 
-# e2f7d719625e4c0cb9e6220ff2eeea16
-#: ../../../source/developer/coding_style.rst:41
 msgid "悪い例（大文字を使っている）::"
 msgstr ""
 
-# 9fb93ac7530244d7a850c3e8987b5a1e
-#: ../../../source/developer/coding_style.rst:45
 msgid "悪い例（単語を\"_\"で区切らずにくっつけている）::"
 msgstr ""
 
-# 0b3a2a73c0d34aa2a091d38845130b81
-#: ../../../source/developer/coding_style.rst:49
 msgid "悪い例（単語を\"-\"で区切っている）::"
 msgstr ""
 
-# 0a87338763df405cab5eaba397511951
-#: ../../../source/developer/coding_style.rst:53
 msgid "ソースコードの拡張子 ``.cpp`` にします。"
 msgstr ""
 
-# f6108592b11f436ca8b4a1d84f263166
-#: ../../../source/developer/coding_style.rst:59
 msgid "悪い例（ ``.cc`` を使っている）::"
 msgstr ""
 
-# 0e3804ac0e194a61a8d55f3fe5360616
-#: ../../../source/developer/coding_style.rst:63
 msgid "ヘッダーファイルの拡張子は ``.hpp`` にします。"
 msgstr ""
 
-# d6f545fed6c2431bbb4daeb2af6696a4
-#: ../../../source/developer/coding_style.rst:69
 msgid "悪い例（ ``.h`` を使っている）:"
 msgstr ""
 
-# 1dcfa6c6fb1d4362a29d0d5ca338ed0a
-#: ../../../source/developer/coding_style.rst:74
 msgid "名前空間"
 msgstr ""
 
-# 3b7dda10d79b4d0a86c6a9b7cdd13434
-#: ../../../source/developer/coding_style.rst:76
 msgid ""
 "ヘッダーファイルでは ``using namespace`` を使わない。ソースコードでは "
 "``using namespace std`` であれば使ってもよい。他の名前空間は使ってはいけな"
 "い。"
 msgstr ""
 
-# 6b21ca1ccf9b46909939dd7d9dcddb51
-#: ../../../source/developer/coding_style.rst:83
 msgid "悪い例（ヘッダーファイル内で ``using namespace`` を使っている）::"
 msgstr ""
 
-# dfbeace8ce56489cb2a1e58b0a9459fe
-#: ../../../source/developer/coding_style.rst:88
 msgid ""
 "悪い例（ ``std`` 以外の名前空間に対して ``using namespace`` を使っている）::"
 msgstr ""
 
-# 388524737e074fa4a805365148da3977
-#: ../../../source/developer/coding_style.rst:94
 msgid "``include`` ガード"
 msgstr ""
 
-# 18bcc806b10d42299d0118d3f73cb244
-#: ../../../source/developer/coding_style.rst:96
 msgid ""
 "2重 ``include`` を防ぐためのマクロは、ヘッダーファイルの名前をすべて大文字に"
 "し、単語の区切りをアンダースコアにしたものにし、最後にアンダースコアをつけて "
 "``HEADER_FILE_NAME_HPP_`` という名前にする。"
 msgstr ""
 
-# ec3446401f22450e93eec5384d27e930
-#: ../../../source/developer/coding_style.rst:106
 msgid "悪い例（小文字になっている）::"
 msgstr ""
 
-# 77043f7cadf74dc885805da0a8a3df9e
-#: ../../../source/developer/coding_style.rst:114
 msgid "悪い例（アンダースコアが最後ではなく先頭についている）::"
 msgstr ""
 
-# 60cc265fff9a4b8e905756333992ee01
-#: ../../../source/developer/coding_style.rst:123
 msgid "代入"
 msgstr ""
 
-# 18a8c4e9d143463fb2c497c1e1ff93d0
-#: ../../../source/developer/coding_style.rst:125
 msgid "``=`` の前後に1つスペースを入れる。"
 msgstr ""
 
-# c0483a0255fd404ebe0947b57de09245
-#: ../../../source/developer/coding_style.rst:131
 msgid "悪い例（スペースが入っていない）::"
 msgstr ""
 
-# 4ba7bb2b3b824d69bfeb37ff94cde987
-#: ../../../source/developer/coding_style.rst:135
 msgid "悪い例（2つスペースが入っている）::"
 msgstr ""
 
-# 124934a6d139486984ae55ed99153bef
-#: ../../../source/developer/coding_style.rst:140
 msgid "文字列"
 msgstr ""
 
-# b074a27520924d42b63f9e968d038890
-#: ../../../source/developer/coding_style.rst:142
 msgid "文字列はポインタと長さで表現する。 ``\\0`` での終端を仮定しない。"
 msgstr ""
 
-# 01b4599ff62543b2ac83d8a0bacb12a1
-#: ../../../source/developer/coding_style.rst:144
 msgid "よい例（本当はもっとすっきりした例がよいけど。。。）::"
 msgstr ""
 
-# 11158e9dca464b51abda8fdbdd4650df
-#: ../../../source/developer/coding_style.rst:152
 msgid "悪い例（無理やり ``\\0`` 終端にしている）::"
 msgstr ""
 
-# e9609281a24141dea4ac7f1ebb951d8c
-#: ../../../source/developer/coding_style.rst:158
 msgid ""
 "ただし、ファイル名など ``\\0`` が前提であるものに関しては ``\\0`` 終端を仮定"
 "してよい。"
 msgstr ""
 
-# ff5a7ef7c5e74bf39ab89d3a9e129ddf
-#: ../../../source/developer/coding_style.rst:164
 msgid "悪い例（ ``\\0`` 終端を仮定せず、長さも管理している）::"
 msgstr ""
 
-# 006a6406ae9c4906890481681bae082b
-#: ../../../source/developer/coding_style.rst:169
 msgid "``std::string`` は内部でメモリ確保などの処理が発生するので多用しない。"
 msgstr ""
 
-# 760915e0f2a74eaba1bc96d2243309c3
-#: ../../../source/developer/coding_style.rst:175
 msgid "悪い例（最大サイズがわかっているのに ``std::string`` を使っている）::"
 msgstr ""
 
-# e66a0b7f29704f24b1d171ba2852def0
-#: ../../../source/developer/coding_style.rst:180
 msgid "バッファ"
 msgstr ""
 
-# fd5e1b3b82df4d49a70ac7374ace7321
-#: ../../../source/developer/coding_style.rst:182
 msgid "TODO: ちゃんと考える。"
 msgstr ""
 
-# 0e95cdcd71254409a92817acc8386aec
-#: ../../../source/developer/coding_style.rst:184
 msgid ""
 "何度も繰り返し使う領域（バッファ）が必要な場合は ``GRN_BULK`` を使う。例え"
 "ば、カラムの値を取得する領域などである。"
 msgstr ""
 
-# 03c17bbeba6c4d7882086eccc9330c05
-#: ../../../source/developer/coding_style.rst:187
 msgid "命名規則"
 msgstr ""
 
-# bae146cf45424db5b682631fffb87f01
-#: ../../../source/developer/coding_style.rst:190
 msgid "クラス名"
 msgstr ""
 
-# bc96eb22e1724ca3918c897e0901a3f2
-#: ../../../source/developer/coding_style.rst:192
 msgid "クラスの名前は ``UpperCamelCase`` とする。"
 msgstr ""
 
-# 8277b41f07ef4f0a92ef529ae9d6c8e3
-#: ../../../source/developer/coding_style.rst:200
 msgid "悪い例（ ``snail_case`` である）::"
 msgstr ""
 
-# dccfc5d568ea4af2b190cd222aadb2c9
-#: ../../../source/developer/coding_style.rst:206
 msgid ""
 "ただし、 ``ha_mroonga`` などMySQLとのインターフェイスとなるクラスでかつ他の類"
 "似のモジュールに命名規則がある場合はそれに従う。"
 msgstr ""
 
-# ef48bb68f4ff43b29fa8c4005d5de6f7
-#: ../../../source/developer/coding_style.rst:214
 msgid "悪い例（ ``UpperCamelCase`` になっている）::"
 msgstr ""
 
-# b84a2b6c777644698ccf136ce28c2a75
-#: ../../../source/developer/coding_style.rst:221
 msgid "メンバー変数名"
 msgstr ""
 
-# 9e371d2931a2499ba38aaf460ab4793c
-#: ../../../source/developer/coding_style.rst:223
 msgid ""
 "メンバー変数名は ``snail_case`` とし、末尾にアンダースコア（ ``_`` ）を付け"
 "る。"
 msgstr ""
 
-# 5f1e931d0aa643d699fdae273a8b06a7
-#: ../../../source/developer/coding_style.rst:232
 msgid "悪い例（ ``UpperCamelCase`` である）::"
 msgstr ""
 
-# b822a3d5fa804896bfadbd45b15337c3
-#: ../../../source/developer/coding_style.rst:239
 msgid "悪い例（末尾にアンダースコアがない）::"
 msgstr ""
 
-# e04a8ba11391467db5b590432958d344
-#: ../../../source/developer/coding_style.rst:247
 msgid "読み込み用アクセサ名"
 msgstr ""
 
-# 4d0221873c5f41c98e00bdf3c6b57edf
-#: ../../../source/developer/coding_style.rst:249
 msgid ""
 "メンバー変数の値を読み込むメソッドの名前はメンバー変数名の末尾のアンダースコ"
 "アを除いたものにする。"
 msgstr ""
 
-# 1e46a875835c46cab5b21c36b2dfbb82
-# 1e46a875835c46cab5b21c36b2dfbb82
-#: ../../../source/developer/coding_style.rst:259
-#: ../../../source/developer/coding_style.rst:291
 msgid "悪い例（末尾にアンダースコアが残っている）::"
 msgstr ""
 
-# 7f08b01e363745b88dab042718b51659
-#: ../../../source/developer/coding_style.rst:267
 msgid "悪い例（先頭に ``get_`` を付けている）::"
 msgstr ""
 
-# a15b97cfe6a6434abf5457649c1ea480
-#: ../../../source/developer/coding_style.rst:276
 msgid "書き込み用アクセサ名"
 msgstr ""
 
-# 49e92ddf0a984af6b9c43fc280b74120
-#: ../../../source/developer/coding_style.rst:278
 msgid ""
 "メンバー変数の値を設定するメソッドの名前は、メンバー変数名の末尾のアンダース"
 "コアを除き、先頭に ``set_`` を加えたものにする。"
 msgstr ""
 
-# f0013b6c5820484c9822d3c4d4d5a8ab
-#: ../../../source/developer/coding_style.rst:302
 msgid "悪い例（先頭に ``set_`` ではなく ``update_`` を付けている）::"
 msgstr ""
 
-# 878ad37c1a3e4072b29aa2f514f07d2f
-#: ../../../source/developer/coding_style.rst:314
 msgid "コピーコンストラクター"
 msgstr ""
 
-# d02531fafd6441ba9b0d4ca6b544152a
-#: ../../../source/developer/coding_style.rst:316
 msgid ""
 "基本的にコピーコンストラクターの使用を禁止する。よほどのことがなければ使用し"
 "ないこと。"
 msgstr ""
 
-# 99d5e8a860c443a8a2179d15296bfd07
-#: ../../../source/developer/coding_style.rst:318
 msgid ""
 "コピーコンストラクターは暗黙的に無駄なコピーが発生する可能性があるためパ"
 "フォーマンス上の問題がある。コピーではなくポインターやリファレンスを用いるこ"
 "と。"
 msgstr ""
 
-# addcce35bf3a451fa6cd200e75ddabbc
-#: ../../../source/developer/coding_style.rst:320
 msgid ""
 "また、デフォルトのコピーコンストラクター実装はメンバー変数のポインターの値を"
 "そのままコピーするため、デコンストラクターで二重に解放してしまう危険性があ"
 "る。そのため、明示的にコピーコンストラクターを定義しない場合は無効にする。"
 msgstr ""
 
-# b8e25c4484374e868b70c9a438f24812
-#: ../../../source/developer/coding_style.rst:330
 msgid "悪い例（コピーコンストラクターを禁止していない）::"
 msgstr ""
 
-# 6e60a78873e0436287688f01250e6a72
-#: ../../../source/developer/coding_style.rst:336
 msgid "悪い例（カスタムコピーコンストラクターを使っている）::"
 msgstr ""
 
-# 52784b0b38ad49aabaefe09e6aec0a27
-#: ../../../source/developer/coding_style.rst:348
 msgid "クラスの代入"
 msgstr ""
 
-# e4ce908e7d8f4996b37d027080d97ff6
-#: ../../../source/developer/coding_style.rst:350
 msgid ""
 "基本的に定義したクラスの代入を禁止する。よほどのことがなければ使用しないこ"
 "と。"
 msgstr ""
 
-# 3fd7e3d153c542399901d1ff07b5f723
-#: ../../../source/developer/coding_style.rst:352
 msgid ""
 "代入演算子は暗黙的に無駄なコピーが発生する可能性があるためパフォーマンス上の"
 "問題がある。コピーではなくポインターやリファレンスを用いること。"
 msgstr ""
 
-# 3b17e0e02f974786b0f56f5bd6cb6ada
-#: ../../../source/developer/coding_style.rst:354
 msgid ""
 "また、デフォルトの代入演算子の実装はメンバー変数のポインターの値をそのままコ"
 "ピーするため、デコンストラクターで二重に解放してしまう危険性がある。そのた"
 "め、明示的に代入演算子を定義しない場合は無効にする。"
 msgstr ""
 
-# eeb3b06c19f04e929161bb112d85d0fe
-#: ../../../source/developer/coding_style.rst:364
 msgid "悪い例（代入を禁止していない）::"
 msgstr ""
 
-# 82cd99674a4441e6b1248cfcade31d38
-#: ../../../source/developer/coding_style.rst:370
 msgid "悪い例（代入を使っている）::"
 msgstr ""
 
-# 39327dae6dc648fe8b57152c565902d5
-#: ../../../source/developer/coding_style.rst:383
 msgid "引数"
 msgstr ""
 
-# cd308075db4a452183b7847b7787107c
-#: ../../../source/developer/coding_style.rst:386
 msgid "voidを省略"
 msgstr ""
 
-# 6c3b2ed5c927456d8666de8a083a82df
-#: ../../../source/developer/coding_style.rst:388
 msgid "引数がない場合は ``void`` を省略する。"
 msgstr ""
 
-# 807111ba0bd648d1aa2ef3730e7a6c65
-#: ../../../source/developer/coding_style.rst:401
 msgid "悪い例（ ``void`` を省略していない）::"
 msgstr ""
 
-# f692563042f24012b3a2a0d3a1bc1249
-#: ../../../source/developer/coding_style.rst:413
 msgid "入力用引数にはconstを付ける"
 msgstr ""
 
-# 0d96782b81dd4ad08d0a226271091b2f
-#: ../../../source/developer/coding_style.rst:415
 msgid ""
 "入力のみに用いる引数には ``const`` を付ける。これは、入力のみに用いる引数であ"
 "る事を明示するためと、間違って引数を変更してしまわないためである。"
 msgstr ""
 
-# a6a5aa29d11a401dafcf8ba9e6b7f656
-#: ../../../source/developer/coding_style.rst:429
 msgid "悪い例（入力のみに用いているのに ``const`` が付いていない）::"
 msgstr ""
 
-# a2ae48739aaf4f3290b0785ec2b27e63
-#: ../../../source/developer/coding_style.rst:442
 msgid "定数"
 msgstr ""
 
-# 79c76a1202064bcdad4e4410d73f4b17
-#: ../../../source/developer/coding_style.rst:444
 msgid ""
 "フラグやサイズなどを示す定数には ``const`` オブジェクトを用いる。これはデバッ"
 "ガー上でプログラムを走らせているときに名前で値を参照できるようにするためであ"
 "る。"
 msgstr ""
 
-# 1de305263dc442ed9e0617c26cc8cbf2
-#: ../../../source/developer/coding_style.rst:450
 msgid "悪い例（ ``#define`` を用いている）::"
 msgstr ""
 
-# 85a49ff869ef4c6da74a026b8b3abeae
-#: ../../../source/developer/coding_style.rst:455
 msgid "真偽値"
 msgstr ""
 
-# 4b325853db0540728a8fe489d385076d
-#: ../../../source/developer/coding_style.rst:458
 msgid "bool型を用いる"
 msgstr ""
 
-# 4b879451ebd74d8fbd3ad1cd9f15590b
-#: ../../../source/developer/coding_style.rst:460
 msgid "真偽値には ``bool`` 型を用いる。"
 msgstr ""
 
-# e5631b388c8e47eda1a7a22bb9cedfcf
-#: ../../../source/developer/coding_style.rst:466
 msgid "悪い例（ ``int`` 型を用いている）::"
 msgstr ""
 
-# b9cdae4d862e47f4892fd0d5f74395bb
-#: ../../../source/developer/coding_style.rst:471
 msgid "真偽値のリテラルには ``true`` または ``false`` を用いる"
 msgstr ""
 
-# 8adcb3a381bf4e8dac69e27866ec5eab
-#: ../../../source/developer/coding_style.rst:473
 msgid "真偽値の値として ``true`` と ``false`` はより完結で説明的だからである。"
 msgstr ""
 
-# b0a4661888af40c0a2765b9b480df69d
-#: ../../../source/developer/coding_style.rst:479
 msgid "悪い例（ ``0`` 以外の値を真の値として用いている）::"
 msgstr ""
 
-# dfd2b03729c1452cb0c979cc2fa5abbd
-#: ../../../source/developer/coding_style.rst:484
 msgid "条件式"
 msgstr ""
 
-# c4a367bf10ca4d95a76c485fe4a7c3ef
-#: ../../../source/developer/coding_style.rst:487
 msgid "真偽値は比較しない"
 msgstr ""
 
-# 370cd8aba22d44a4b361837317a407d6
-#: ../../../source/developer/coding_style.rst:489
 msgid ""
 "真偽値の値は ``boolean_value == true`` などとせず、 ``boolean_value`` として"
 "条件式に使用する。すでに真偽値の値を真偽値のリテラルと比較することは重複した"
 "コードだからである。"
 msgstr ""
 
-# cd926848f0b440aa96fbbce65c8faacc
-#: ../../../source/developer/coding_style.rst:496
 msgid "悪い例（真偽値のリテラルと比較している）::"
 msgstr ""
 
-# b0a1dbbd6c77432fa1b3336af7f85516
-#: ../../../source/developer/coding_style.rst:502
 msgid "``NULL`` と比較しない"
 msgstr ""
 
-# 32f8b2ebef7b4db1b25a8dbca45f3b08
-#: ../../../source/developer/coding_style.rst:504
 msgid ""
 "``NULL`` かどうかを条件式に使う場合は ``value == NULL`` ではなく ``!value`` "
 "というように書く。多くの言語で ``NULL`` に相当する値（たとえばLispの "
@@ -1184,25 +749,17 @@ msgid ""
 "である。"
 msgstr ""
 
-# f1e4331a65b64721887a14617ae942e5
-#: ../../../source/developer/coding_style.rst:511
 msgid "悪い例（ ``NULL`` と比較している）::"
 msgstr ""
 
-# b3db28d10b01480e8dd753c2f6f8b2a3
-#: ../../../source/developer/coding_style.rst:517
 msgid "数値は比較する"
 msgstr ""
 
-# 5e95a3e767a24adfb6971135b042089d
-#: ../../../source/developer/coding_style.rst:519
 msgid ""
 "CやC++では ``0`` は偽、 ``0`` 以外は真の値となるが、条件式に数値を使う場合は "
 "``strcmp(...) == 0`` などというように明示的に比較する。"
 msgstr ""
 
-# 0883c8a04f334fcba6c8fb9cee88cba7
-#: ../../../source/developer/coding_style.rst:521
 msgid ""
 "C++では真偽値に ``bool`` を使うためこのような状況は発生しないが、C言語由来の"
 "APIでは ``int`` で真偽値を表現している場合が多い。しかし、 ``int`` だけでは真"
@@ -1210,95 +767,63 @@ msgid ""
 "``int`` のときはすべて数値として扱う。"
 msgstr ""
 
-# 0ec99887631c45d4aae9c6b8acf4610a
-#: ../../../source/developer/coding_style.rst:529
 msgid "悪い例（ ``0`` を偽の値として扱っている）::"
 msgstr ""
 
-# 6abf769bdfd844a2aa4a218a15e4ee75
-#: ../../../source/developer/coding_style.rst:536
 msgid "初期化"
 msgstr ""
 
-# 52b3a67d6ae54e8db16862512b9b10f6
-#: ../../../source/developer/coding_style.rst:539
 msgid "メンバー変数の初期化には初期化リストを用いる"
 msgstr ""
 
-# 2b8b41cb754a4c14aec56214754c5fba
-#: ../../../source/developer/coding_style.rst:541
 msgid ""
 "無駄な処理を省くためにコンストラクターでのメンバー変数の初期化には初期化リス"
 "トを用いる。初期化リストを用いないとコンストラクターの処理とコピーコンストラ"
 "クター・代入処理が行われたりなど非効率である。（後述）"
 msgstr ""
 
-# f1990947bcec4513b45d8bc9ce5fe127
-#: ../../../source/developer/coding_style.rst:556
 msgid ""
 "悪い例（ ``std::string(name)`` のところでコンストラクターが動き、 ``name_ "
 "= ...`` のところで代入演算子が動いて2回初期化している）::"
 msgstr ""
 
-# 41db0c14a80a4494ab571259dbf6b623
-#: ../../../source/developer/coding_style.rst:570
 msgid "変数宣言と同時に初期化する"
 msgstr ""
 
-# ad7a850afb9341f28a7779ce91821b4a
-#: ../../../source/developer/coding_style.rst:572
 msgid ""
 "変数を宣言したときに同時に初期化する。宣言時に初期化せずに代入して初期化する"
 "と、無駄な処理が発生する可能性があるため非効率である。（後述）"
 msgstr ""
 
-# 708942440b514f139e7d6dfdbb01c3de
-#: ../../../source/developer/coding_style.rst:578
 msgid ""
 "悪い例（ ``std::string()`` のところでコンストラクターが動き、 ``name = ...`` "
 "のところで代入演算子が動いて2回初期化している）::"
 msgstr ""
 
-# a667b247c96840ac812183b20a95e4a1
-#: ../../../source/developer/coding_style.rst:584
 msgid "インクリメント・デクリメント"
 msgstr ""
 
-# a2f0eb65241442198fbccf046ae28fe5
-#: ../../../source/developer/coding_style.rst:587
 msgid "前置形式を用いる"
 msgstr ""
 
-# 40cf229b620b4945bd544edaabe30537
-#: ../../../source/developer/coding_style.rst:589
 msgid ""
 "後置形式ではオブジェクトのコピーをしなければいけないため非効率である。そのた"
 "め、できるだけ前置形式を用いる。"
 msgstr ""
 
-# 84bc957c54ed40db9289162153d864ff
-#: ../../../source/developer/coding_style.rst:591
 msgid ""
 "よい例（ ``int`` だと効率は変わらないので本当はあんまりよい例ではない）::"
 msgstr ""
 
-# 8f00bf0aea0343f9a8d18a060be9ca2e
-#: ../../../source/developer/coding_style.rst:596
 msgid "悪い例（後置形式を用いている）::"
 msgstr ""
 
-# a377a7cf922449118636213cf82bede9
-#: ../../../source/developer/coding_style.rst:602
 msgid "キャスト"
 msgstr ""
 
-# 818477b560404f4a9584f019244c721d
-#: ../../../source/developer/coding_style.rst:605
 msgid "C++のスタイルを用いる"
 msgstr ""
 
-# 200764df4dee4044891c667dcad2b6d8
-#: ../../../source/developer/coding_style.rst:607
 msgid ""
 "Cスタイルのキャストはなんでもキャストできてしまうため、意図しないキャストにも"
 "気付かない可能性がある。例えば、単に ``const`` を外したいだけなのに、間違って"
@@ -1308,78 +833,50 @@ msgid ""
 "付ける。 ``reinterpret_cast`` はどうしても必要なときのみ注意して使う。"
 msgstr ""
 
-# 1d819c9d5a604610ba64ff197a8697f8
-#: ../../../source/developer/coding_style.rst:609
 msgid "よい例（ ``const_cast`` を使っている）::"
 msgstr ""
 
-# c323e9351f824c338fd8bfa2f32dd6e5
-#: ../../../source/developer/coding_style.rst:617
 msgid "よい例（ ``static_cast`` を使っている）::"
 msgstr ""
 
-# c507ac5fc03e4ece8631a0adf52b6b64
-#: ../../../source/developer/coding_style.rst:623
 msgid ""
 "よい例（ ``static_cast`` では無理なので ``reinterpret_cast`` を使っている）::"
 msgstr ""
 
-# 1d9122d644194116a759038bd1a78281
-#: ../../../source/developer/coding_style.rst:628
 msgid "悪い例（Cスタイルのキャストを使っている）::"
 msgstr ""
 
-# 58ea4f160b944a808c31b0dfec258f1e
-#: ../../../source/developer/coding_style.rst:634
 msgid ""
 "悪い例（ ``static_cast`` で十分なのに ``reinterpret_cast`` を使っている）::"
 msgstr ""
 
-# f08ecd304cb3441d8614cb70af9cb149
-#: ../../../source/developer/coding_style.rst:641
 msgid "変数宣言"
 msgstr ""
 
-# 6468ce8c9ff04d259458ddb90c8555e1
-#: ../../../source/developer/coding_style.rst:644
 msgid "ポインタ型を示す ``*`` とリファレンス型を示す ``&`` は変数名に寄せる"
 msgstr ""
 
-# 542b678ceb7c4271a4ca5abbef5fa10e
-#: ../../../source/developer/coding_style.rst:646
 msgid ""
 "Cと同様にポインタ型を示す ``*`` は型名ではなく変数名に寄せる。これは、以下の"
 "ように複数の変数を一度に宣言したときに一貫性がなくなるためである。2つめ以降の"
 "変数は近くに型名がないため ``*`` を寄せる場所がない。"
 msgstr ""
 
-# ef6d1a8023e04af799610da44f973436
-#: ../../../source/developer/coding_style.rst:648
 msgid "例::"
 msgstr ""
 
-# 9eee62c8b180413d90df93ee12c97bee
-#: ../../../source/developer/coding_style.rst:652
 msgid "同様に、リファレンス型を示す ``&`` も変数名に寄せる。"
 msgstr ""
 
-# 1991cfb95f214208acf1449963f517e4
-#: ../../../source/developer/coding_style.rst:654
 msgid "なお、 ``*`` や ``&`` と型名の間にはスペースを入れない。"
 msgstr ""
 
-# 7eef68318ed3418791c30fa8f5e8e1fd
-#: ../../../source/developer/coding_style.rst:664
 msgid "悪い例（型名に寄せている）::"
 msgstr ""
 
-# 6231837c1b98405a8718668bed89ae20
-#: ../../../source/developer/coding_style.rst:669
 msgid "その他"
 msgstr ""
 
-# 82fe004f66e045e294b3fc92872ab9e6
-#: ../../../source/developer/coding_style.rst:671
 msgid ""
 "ここに書いていないものについては特にスタイルを定めないが、 プロジェクト内で常"
 "に一貫性のあるスタイルを使用すること。 同じような事をするときは同じような書き"
@@ -1387,85 +884,55 @@ msgid ""
 "わせること。"
 msgstr ""
 
-# 2851692195574eb8beab1df3ea82b355
-#: ../../../source/developer/coding_style.rst:676
 msgid "以下、具体例が必要。"
 msgstr ""
 
-# 8eea28f23e15423f97a0de03882a5330
-#: ../../../source/developer/coding_style.rst:678
 msgid "ビルド時にできることを実行時に延ばさない(静的チェックを活用)"
 msgstr ""
 
-# df85fda4f16c4fc5a52b70c4d3a982d7
-#: ../../../source/developer/coding_style.rst:679
 msgid "なるべく局所的に変数を定義し、同時に初期化する"
 msgstr ""
 
-# b7498afc74fb4903a519c59bf8207d29
-#: ../../../source/developer/coding_style.rst:680
 msgid ""
 "長い関数や深いブロックのネストを避ける * 2つに分けた方がよさそう。あと目安が"
 "あるといいかも。"
 msgstr ""
 
-# 00ab53c74d364ab5a112631b93773003
-#: ../../../source/developer/coding_style.rst:682
 msgid "100行以上は長いよねーとか3段以上はデンジャーとか。"
 msgstr ""
 
-# 184a7f855fbc417aa1cb85c562a53460
-#: ../../../source/developer/coding_style.rst:683
 msgid "必要以上にオブジェクトを複製しない"
 msgstr ""
 
-# 8b1b829057a840778437960115f3ed15
-#: ../../../source/developer/coding_style.rst:684
 msgid "暗黙の型変換はなるべく避ける"
 msgstr ""
 
-# fa1302660c0840fc8796745a1ead7249
-#: ../../../source/developer/coding_style.rst:685
 msgid "assertを積極的に使う"
 msgstr ""
 
-# 75ccf15a7da145ad9d874effee7f9668
-#: ../../../source/developer/coding_style.rst:688
 msgid "メモ"
 msgstr ""
 
-# 3ca46d6ed88f461bb004c3914ca0dc5a
-#: ../../../source/developer/coding_style.rst:690
 msgid ""
 "動的テンプレートを使わない。（要追加情報。implicit template instantiationのこ"
 "とであれば、これはふつうに使わ れているものなので特に禁止しないんでいいんじゃ"
 "ない説？）"
 msgstr ""
 
-# ee79023d775548e8bc70a7a871d810bf
-#: ../../../source/developer/coding_style.rst:693
 msgid "typeidを使わない。"
 msgstr ""
 
-# da20d99e9bb74722968354d3b9ae43ad
-#: ../../../source/developer/coding_style.rst:694
 msgid ""
 "例外はMySQLで問題がないようであればOK。mroongaから外の世 界（MySQLの世界）に"
 "はださないようにする。"
 msgstr ""
 
-# ff7118e7e369451cafd5d4dd6fa7f04f
-#: ../../../source/developer/debug.rst:4
 msgid "How to debug"
 msgstr "デバッグ方法"
 
-# 81fef6be76e24d56bfee57ea27d79f82
-#: ../../../source/developer/debug.rst:7
 msgid "Building for debugging"
 msgstr "デバッグ用ビルド方法"
 
-# 13082f32a78346e1a81353ae9b4d0c29
-#: ../../../source/developer/debug.rst:9
 msgid ""
 "When you build software for debugging, you can get more information like "
 "symbol resolutions in gdb. So we build both MySQL and mroonga for debugging "
@@ -1475,8 +942,6 @@ msgstr ""
 "報が多くなります。そのため、開発時はデバッグ用にMySQLとmroongaをビルドしま"
 "す。"
 
-# 92983731565345c79f9e1e8ca791a88e
-#: ../../../source/developer/debug.rst:14
 msgid ""
 "If you build one of them for debugging, the size of structures etc. might be "
 "different, and you might not be able to load mroonga, or assertions don't "
@@ -1486,13 +951,9 @@ msgstr ""
 "mroongaがロードできなかったり、実行時にassertに引っかかったりしてうまく動作し"
 "ません。"
 
-# b5164744f0954e729ac51260910bf550
-#: ../../../source/developer/debug.rst:17
 msgid "How to build MySQL for debugging"
 msgstr "MySQLのデバッグ用ビルド方法"
 
-# f6c650034cb542b5980e8f07d7abc6de
-#: ../../../source/developer/debug.rst:19
 msgid ""
 "As you can see in `MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing "
 "MySQL from a Standard Source Distribution`_, you can build MySQL for "
@@ -1503,18 +964,12 @@ msgstr ""
 "DWITH_DEBUG=yes`` オプションを渡すことでデバッグ用にビルドすることができま"
 "す。"
 
-# 86a74c7c4d52466192f89756fe1d5a7c
-#: ../../../source/developer/debug.rst:21
 msgid "The procedure from download to build is the following. ::"
 msgstr "ダウンロードからビルドまでの流れは以下の通りです。::"
 
-# b5164744f0954e729ac51260910bf550
-#: ../../../source/developer/debug.rst:34
 msgid "How tom build mroonga for debugging"
 msgstr "mroongaのデバッグ用ビルド方法"
 
-# ad85b3bc74c045e0893d1cc709a34899
-#: ../../../source/developer/debug.rst:36
 msgid ""
 "You can build mroonga for debugging by passing ``--with-debug`` in configure "
 "options."
@@ -1522,13 +977,9 @@ msgstr ""
 "mroongaはconfigureのオプションに ``--with-debug`` を渡すことでデバッグ用にビ"
 "ルドすることができます。"
 
-# cb7104cec08c47f7825f45739bc2182f
-#: ../../../source/developer/debug.rst:38
 msgid "The procedure from cloning repository to build is the following. ::"
 msgstr "リポジトリのcloneからビルドまでの流れは以下の通りです。::"
 
-# a537403671e041a3bf4ce1a63338a35e
-#: ../../../source/developer/debug.rst:47
 msgid ""
 "When you successfully build both, please invoke tests like the following. If "
 "you get ``[pass]`` for all tests, you succeeded to build for debugging. ::"
@@ -1536,13 +987,9 @@ msgstr ""
 "無事にビルドができたら以下のようにテストを実行してください。すべてのテストが "
 "``[pass]`` になればデバッグ用ビルドは成功しています。::"
 
-# f012a97be12840b3a0bbb77e0ce1a507
-#: ../../../source/developer/debug.rst:53
 msgid "More about run-sql-test.sh"
 msgstr "run-sql-test.sh を使いこなす"
 
-# c68ae2e0e4c648daa332e231c1cf6a58
-#: ../../../source/developer/debug.rst:55
 msgid ""
 "run-sql-test.sh is our friend for debugging. Here we show some examples of "
 "its usage."
@@ -1550,13 +997,9 @@ msgstr ""
 "run-sql-test.sh はデバッグの友。ここでは、その便利な使い方の一例をご紹介しま"
 "す。"
 
-# 441d495b3de54d35bc3375af923bc28f
-#: ../../../source/developer/debug.rst:59
 msgid "Run the specified test only"
 msgstr "指定したテストを実行する"
 
-# 902b1950751d492f81dd149cf56941b3
-#: ../../../source/developer/debug.rst:61
 msgid ""
 "When you invoke run-sql-test.sh without any option, all tests under ``test/"
 "sql/t/`` will be invoked."
@@ -1564,8 +1007,6 @@ msgstr ""
 "何もオプションを渡さずに run-sql-test.sh を実行すると ``test/sql/t/`` 以下に"
 "ある全てのテスト (``*.test``) が実行されてしまいます。"
 
-# 370909df14c9452e9b845127fb34cbe2
-#: ../../../source/developer/debug.rst:63
 msgid ""
 "So if you want to run certain tests only, you can specify the test name in --"
 "do-test option. ::"
@@ -1573,13 +1014,9 @@ msgstr ""
 "特定のテストだけを実行したい、という場合は次のようにしてテスト名を --do-test "
 "オプションに渡します。 ::"
 
-# 2ac54c3522a543c4865d706a0c5e8404
-#: ../../../source/developer/debug.rst:68
 msgid "See the trace"
 msgstr "トレースを見る"
 
-# 6b18045f94454eec842d23c521f330f7
-#: ../../../source/developer/debug.rst:70
 msgid ""
 "When you run tests by adding ``--debug`` option like the following, function "
 "calls information is recorded. This information is stored in ``${MySQL's "
@@ -1589,8 +1026,6 @@ msgstr ""
 "しなどが記録されます。この呼び出しは ``${MySQLの作業ディレクトリ}/${MySQLの"
 "バージョン}/mysql-test/var/log/mysqld.1.trace`` に格納されます。"
 
-# 0281c4b9b3b743cb908ef0a96e872997
-#: ../../../source/developer/debug.rst:73
 msgid ""
 "When you add a new function, it would be a good idea to put it in the "
 "beginning of MRN_DBUG_ENTER_FUNCTION function and record its calls."
@@ -1598,224 +1033,144 @@ msgstr ""
 "新しく関数を作成した場合は MRN_DBUG_ENTER_FUNCTION 関数の先頭に配置し、関数の"
 "呼び出しを記録するようにすると良いでしょう。"
 
-# 0b8de0247d414b3bbeab49cb7a204534
-#: ../../../source/developer/debug.rst:76
 msgid "Invoking GDB"
 msgstr "GDB を立ち上げる"
 
-# 4cd451c0c87349da949f43b912ba79d5
-#: ../../../source/developer/debug.rst:78
 msgid ""
 "By adding ``--gdb`` option, you can debug with GDB when you run tests. ::"
 msgstr ""
 "``--gdb`` オプションを指定することで、テストを実行する際に GDB を用いてデバッ"
 "グを行うことができます。 ::"
 
-# bec96b3a4da24349a7f6e2f94b549001
-#: ../../../source/developer/release.rst:4
 msgid "Release procedure (XXX not yet translated)"
 msgstr "リリース手順"
 
-# 19b46912051241d181e21a0c9d412454
-#: ../../../source/developer/release.rst:7
 msgid "変更点の記述"
 msgstr ""
 
-# fa21360db456429681924422c94c150c
-#: ../../../source/developer/release.rst:9
 msgid "まず ``doc/ja/source/news.rst`` に変更点をまとめます。"
 msgstr ""
 
-# a3abaf62ecf445b7afa72180bfaa8a34
-#: ../../../source/developer/release.rst:11
 msgid "次に、バージョンを確かめます。"
 msgstr ""
 
-# 7e22b918257a4046a8eb0802c8c920dc
-#: ../../../source/developer/release.rst:13
 msgid "例えば ``git tag`` の結果が次のようになっていたとき ::"
 msgstr ""
 
-# d2d690645cbc43e59ea2acadf5d41b07
-#: ../../../source/developer/release.rst:24
 msgid "次のようにすると、タグ ``v0.6`` 以降のコミットを閲覧できます。 ::"
 msgstr ""
 
-# 218cfdc2a6114be5b130acd36193b800
-#: ../../../source/developer/release.rst:29
 msgid "配布用ファイルのアップロード"
 msgstr ""
 
-# 4933679c80d649f28eecd1d8d26fa975
-#: ../../../source/developer/release.rst:31
 msgid "次に、配布用の ``tar.gz`` ファイルを作成します。 ::"
 msgstr ""
 
-# acb4dc8ee3f846d3afa3d024ae72bdf3
-#: ../../../source/developer/release.rst:37
 msgid ""
 "以前はGitHubのアーカイブ機能でtar.gzを配布していましたが、その機能が廃止"
 "( https://github.com/blog/1302-goodbye-uploads )されるため、2012年12月のリ"
 "リースよりpackages.groonga.orgでの配布に切り替えました。"
 msgstr ""
 
-# 9d5276b423644b159d0a33d0618be032
-#: ../../../source/developer/release.rst:39
 msgid ""
 "packages/sourceディレクトリへと移動し、make downloadでアップストリームと同期"
 "した後にmake uploadでアーカイブをアップロードを実行します。::"
 msgstr ""
 
-# 0f6384082e664351b1ec89a1dc25673e
-#: ../../../source/developer/release.rst:45
 msgid ""
 "これで、 http://packages.groonga.org/source/mroonga/ から ``tar.gz`` のダウン"
 "ロードが行えるようになります。"
 msgstr ""
 
-# 54b79204ca4f46dc8337a401137cc5e5
-#: ../../../source/developer/release.rst:49
 msgid "パッケージの作成"
 msgstr ""
 
-# e51f928fff844200a82810df5903a459
-#: ../../../source/developer/release.rst:51
 msgid "Linux と Windows 用にパッケージを作成する必要があります。"
 msgstr ""
 
-# df4ec1553b1e4a97a6ffa7da5c34de92
-#: ../../../source/developer/release.rst:53
 msgid "Linux 用のパッケージは以下の 2 種類に分けることが可能です。"
 msgstr ""
 
-# f3b5f70dc52c405fb09ebdd6fcdcac9f
-# a1c95dd7397e44228cc641a503a45a07
-#: ../../../source/developer/release.rst:55
-#: ../../../source/developer/release.rst:63
 msgid "Debian 系"
 msgstr ""
 
-# 9a1edaab0e8e4b958a8a34e5b485c358
-# 04d268f8cdbf4624b50e2de16464e9d0
-#: ../../../source/developer/release.rst:56
-#: ../../../source/developer/release.rst:93
 msgid "Red Hat 系"
 msgstr ""
 
-# 19ac15b8a1004339a9d254836bdb83a6
-#: ../../../source/developer/release.rst:60
 msgid ""
 "現在のところ、パッケージの作成は Debian GNU/Linux (Ubuntu も可) でしか行えま"
 "せん。"
 msgstr ""
 
-# f6717b49646c4ae7927239ef55a17414
-# d517b3a422b344b8bcb291ec38a7bc7b
-#: ../../../source/developer/release.rst:67
-#: ../../../source/developer/release.rst:97
 msgid ""
 "以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
 "ケージ作成に必要なソフトウェアをインストールします。::"
 msgstr ""
 
-# d5268274cacd449cb8ceba52925f9f01
-#: ../../../source/developer/release.rst:71
 msgid "まず apt ディレクトリに移動します。 ::"
 msgstr ""
 
-# 0f2537bfa45249279c68eed020d70127
-#: ../../../source/developer/release.rst:75
 msgid ""
 "その後、次のようにすれば一連のリリース作業（build update sign upload）が行わ"
 "れますが、途中で失敗することもあります。 ::"
 msgstr ""
 
-# 6b7b395bf2c847439402c42df10107df
-# 0b8fe3681d104b7eb6386c4f88de09bb
-#: ../../../source/developer/release.rst:79
-#: ../../../source/developer/release.rst:107
 msgid ""
 "そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行ってい"
 "くほうが良いこともあります。 ::"
 msgstr ""
 
-# de548dbcc37f40ee960545bcc37972a7
-#: ../../../source/developer/release.rst:86
 msgid ""
 "make build に PARALLEL=yes とするとビルドが並列に走り、作業がより高速に行えま"
 "す。"
 msgstr ""
 
-# 6fd0e6c4a86f484fa90286d4dbd58ef9
-#: ../../../source/developer/release.rst:88
 msgid ""
 "また make build CODES=lucid などとすると、ビルド対象を指定することができま"
 "す。"
 msgstr ""
 
-# f30af69967ca4c35990cb81f7b1b5721
-#: ../../../source/developer/release.rst:90
 msgid ""
 "このように Makefile.am を書き換えずにコマンドライン引数でビルドの挙動を変更す"
 "る方法は、知っておいて損はないでしょう。"
 msgstr ""
 
-# 090a27233fcc41e4b0911975891cbc75
-#: ../../../source/developer/release.rst:101
 msgid "まず yum ディレクトリに移動する。"
 msgstr ""
 
-# 42503247c2bb4fecbb32d5dddf230d15
-#: ../../../source/developer/release.rst:103
 msgid ""
 "その後、次のようにすれば一連のリリース作業（build sign update upload）が行わ"
 "れますが、途中で失敗することもあります。 ::"
 msgstr ""
 
-# 2554102edfca429b9d948610e140019d
-#: ../../../source/developer/release.rst:115
 msgid "Windows"
 msgstr ""
 
-# e460d1f549a64424a1b153c9a18e7e6a
-#: ../../../source/developer/release.rst:117
 msgid ""
 "MariaDB 本体を `多少変更しないといけない <https://github.com/mroonga/mroonga/"
 "tree/master/packages/source/patches>`_ ため、Windows 版は MariaDB に mroonga/"
 "groonga/groonga-normalizer-mysql をバンドルしたパッケージとして作成します。"
 msgstr ""
 
-# d17f238a70a946fca2f4c3e90559f523
-#: ../../../source/developer/release.rst:122
 msgid "まず、 Linux 上で Windows 用のソースを作成します。::"
 msgstr ""
 
-# 44996a10801f461d8e5aafac7a8ab2d0
-#: ../../../source/developer/release.rst:127
 msgid ""
 "これで、 ``packages/source/files/mariadb-10.0.2-with-mroonga-3.04.zip`` とい"
 "うよ うなファイルができます。これを Windows にコピーします。"
 msgstr ""
 
-# e652c053a7064fec808e13d3481a315f
-#: ../../../source/developer/release.rst:131
 msgid "ここからは Windows 上での作業です。"
 msgstr ""
 
-# 645e400212b74bd3a54437dcab0e5320
-#: ../../../source/developer/release.rst:133
 msgid ""
 "まず、 `Windows Installer XML (WiX) <http://wix.codeplex.com/>`_ をイン ス"
 "トールします。これは MSI 形式のインストーラーを作るために必要です。"
 msgstr ""
 
-# e9caca45179c4cfa98656d8b9a4a3598
-#: ../../../source/developer/release.rst:136
 msgid "WiX をインストールしたらビルドします。"
 msgstr ""
 
-# 4faf1d9f36684ac09ce0df7136db9dd3
-#: ../../../source/developer/release.rst:138
 msgid ""
 "まずは、 Linux からコピーしてきた zip を展開します。 Windows 標準の zip 展開"
 "機能はとても遅いので 7-zip などを使いましょう。展開時間が数 10 倍違います。 "
@@ -1823,8 +1178,6 @@ msgid ""
 "でてきます。これを ``source`` に名前を変更します。::"
 msgstr ""
 
-# 03a250aad9ac432c973eb0c0807ad9ef
-#: ../../../source/developer/release.rst:145
 msgid ""
 "ソースを準備したらビルドします。ビルド方法は `バッチファイル <https://github."
 "com/mroonga/mroonga/tree/master/packages/windows>`_ 書 かれています。抜粋する"
@@ -1832,234 +1185,153 @@ msgid ""
 "でていることに注意してください。::"
 msgstr ""
 
-# 29dc94548e2b4be3bd09d86ac404580f
-#: ../../../source/developer/release.rst:169
 msgid ""
 "それぞれ30分くらいずつかかります。そのため、合計で1時間くらいかかります。"
 msgstr ""
 
-# a1ed13047e0a46beb768a539db62aa4a
-#: ../../../source/developer/release.rst:171
 msgid "完了するとカレントディレクトリに以下のようなファイルができます。"
 msgstr ""
 
-# aae03d8af0354dd0b092b97679ce8f97
-#: ../../../source/developer/release.rst:173
 msgid "mariadb-10.0.2-win32.msi"
 msgstr ""
 
-# 580b32fe0cc44b4f9c12d831c4fd66e5
-#: ../../../source/developer/release.rst:174
 msgid "mariadb-10.0.2-win32.zip"
 msgstr ""
 
-# 49ed5824ee0143b5bf316644dedb6bd1
-#: ../../../source/developer/release.rst:175
 msgid "mariadb-10.0.2-winx64.msi"
 msgstr ""
 
-# 0b3ed579bbc847b7920892fe4e6300ba
-#: ../../../source/developer/release.rst:176
 msgid "mariadb-10.0.2-winx64.zip"
 msgstr ""
 
-# 32554bba8b604fd4879e1caf613aa17b
-#: ../../../source/developer/release.rst:178
 msgid ""
 "これを Linux にコピーします。例えば、 Ruby で HTTP サーバーを立てて Linux 側"
 "からダウンロードする場合は以下のようにします。::"
 msgstr ""
 
-# c0b216bb506e43ea99fa73745ea7c23e
-#: ../../../source/developer/release.rst:183
 msgid ""
 "Linux 側でファイル名を変更します。これだと mroonga のバージョンがわかり づら"
 "いからです。（TODO: 自動化したい。 zip 内のフォルダ名も変えたい。）::"
 msgstr ""
 
-# a76f70dc81b94f30a4b230714f3ed41d
-#: ../../../source/developer/release.rst:197
 msgid "タグを打つ"
 msgstr ""
 
-# 027bc496b49746348c2c61ff7bc5538e
-#: ../../../source/developer/release.rst:199
 msgid "``make tag`` とするとタグが打たれます。 ::"
 msgstr ""
 
-# c4ce971ecbb842bbb313100272f50f49
-#: ../../../source/developer/release.rst:205
 msgid "ドキュメントのアップロード"
 msgstr ""
 
-# b9114d1ec379492ca73c070d39db99ae
-#: ../../../source/developer/release.rst:207
 msgid ""
 "GitHub からドキュメントアップロード用のリポジトリ (mroonga.github.com) を "
 "clone"
 msgstr ""
 
-# 5c92a439d5644f0f9f9d89179d4d7c90
-#: ../../../source/developer/release.rst:208
 msgid ""
 "clone済みmroongaディレクトリ内でmake update-documentを実行し、clone したド"
 "キュメントアップロード用のリポジトリへ反映する"
 msgstr ""
 
-# 5e4a403434664faea7a3687a7d31fe17
-#: ../../../source/developer/release.rst:209
 msgid "mroonga.github.com へコミットを行い GitHub へ push"
 msgstr ""
 
-# 63a03e2d7e0842879a1afdf160745fb9
-#: ../../../source/developer/release.rst:212
 msgid "Homebrewの更新"
 msgstr ""
 
-# 2d50f444cb604993a4ef2412bbbbc49b
-#: ../../../source/developer/release.rst:214
 msgid ""
 "OS Xでのパッケージ管理方法として `Homebrew <http://brew.sh/>`_ があります。"
 msgstr ""
 
-# 62c0e6e2404c48afa3aec2190b332426
-#: ../../../source/developer/release.rst:216
 msgid ""
 "groongaの場合はHomebrewへpull requestを送りますが、mroongaの場合は別途用意し"
 "てあるhomebrewリポジトリを更新します。"
 msgstr ""
 
-# 0dfe9b0cf958411cb6f6e2fe135bfacc
-#: ../../../source/developer/release.rst:218
 msgid "https://github.com/mroonga/homebrew"
 msgstr ""
 
-# efc3a9ee8e1a443d8a33dff9b67c82ea
-#: ../../../source/developer/release.rst:220
 msgid ""
 "mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを実行します。"
 "update.shの引数にはリリース時のバージョンを指定します。例えば、3.06のリリース"
 "のときは以下を実行しました。"
 msgstr ""
 
-# 431c18c09050470ca83f18cd47d2b3b2
-#: ../../../source/developer/release.rst:222
 msgid "$ ./update.sh 3.06"
 msgstr ""
 
-# d4a9c1f8813f423f844020bb016f2097
-#: ../../../source/developer/release.rst:224
 msgid ""
 "実行すると、FormulaのソースアーカイブのURLとsha256チェックサムを更新します。 "
 "あとは、変更内容をコミットすればHomebrewの更新作業は完了です。"
 msgstr ""
 
-# 9687d4ae39f0404abc8b7870e36ae7e9
-#: ../../../source/developer/release.rst:228
 msgid "リリースメールの送信"
 msgstr ""
 
-# 0cf6ee0710ab4cc1abb33a9ea09b0523
-#: ../../../source/developer/release.rst:230
 msgid "各種メーリングリストにリリースメールを流します。"
 msgstr ""
 
-# 02cc6fddaf29415eab167e97217a77c6
-#: ../../../source/developer/release.rst:232
 msgid "ml@mysql.gr.jp 日本語アナウンス"
 msgstr ""
 
-# b3303b3025c5420693a516a9d378fef8
-#: ../../../source/developer/release.rst:233
 msgid "groonga-dev@lists.sourceforge.jp 日本語アナウンス"
 msgstr ""
 
-# b0255dd8919549768bb0bff21727df01
-#: ../../../source/developer/release.rst:234
 msgid "groonga-talk@lists.sourceforge.net 英語アナウンス"
 msgstr ""
 
-# 8ffd8e30b1104ec59376afe1f7f0eadf
-#: ../../../source/developer/release.rst:236
 msgid "メッセージ内容のテンプレートを以下に示します。 ::"
 msgstr ""
 
-# 5a9ef4dd4e294fbdb895b8833c09ef65
-#: ../../../source/developer/release.rst:315
 msgid "Twitterでリリースアナウンスをする"
 msgstr ""
 
-# 6d903125d2604dacbf11469113877b35
-#: ../../../source/developer/release.rst:317
 msgid ""
 "mroongaブログのリリースエントリには「リンクをあなたのフォロワーに共有する」た"
 "めのツイートボタンがあるので、そのボタンを使ってリリースアナウンスします。(画"
 "面下部に配置されている)"
 msgstr ""
 
-# 04fdc27c754841fd8e4b54ea84b07904
-#: ../../../source/developer/release.rst:319
 msgid ""
 "このボタンを経由する場合、ツイート内容に自動的にリリースタイトル(「mroonga "
 "2.08リリース」など)とmroongaブログのリリースエントリのURLが挿入されます。"
 msgstr ""
 
-# ddf1559d68ec470b910e89923290a3c5
-#: ../../../source/developer/release.rst:321
 msgid ""
 "この作業はmroongaブログの英語版、日本語版それぞれで行います。 あらかじめ"
 "groongaアカウントでログインしておくとアナウンスを円滑に行うことができます。"
 msgstr ""
 
-# 3be6b739902748269e46cd8d2f59e2d1
-#: ../../../source/developer/release.rst:325
 msgid "freecode.comへリリース情報を登録"
 msgstr ""
 
-# 31b8862408604d1ba6c013c2af27ff2e
-#: ../../../source/developer/release.rst:327
 msgid "mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。"
 msgstr ""
 
-# 341c2410cce240b2997af60fb70c7cd8
-#: ../../../source/developer/release.rst:329
 msgid "freecode.comのプロジェクトページは以下の通りです。"
 msgstr ""
 
-# a8f93246795b4562b179cf462effe01a
-#: ../../../source/developer/release.rst:331
 msgid "https://freecode.com/projects/mroonga"
 msgstr ""
 
-# 9bfda42dda234bc2ae834deb1ca3c35c
-#: ../../../source/developer/release.rst:333
 msgid ""
 "プロジェクトの管理メニューから「Submit a release」をクリックし、 新規リリース"
 "情報を登録します。"
 msgstr ""
 
-# f3ba8374e820461a98747c794e46b45c
-#: ../../../source/developer/release.rst:336
 msgid "https://freecode.com/projects/mroonga/releases/new"
 msgstr ""
 
-# cb6243e256c54db8a26883a046ea269c
-#: ../../../source/developer/release.rst:339
 msgid ""
 "投稿した内容に対するレビューが運営側で実施されるので、反映されるまでしばらく"
 "時間がかかります。"
 msgstr ""
 
-# 61ff6f790dd74e55a98576d02bb1aeaf
-#: ../../../source/developer/release.rst:342
 msgid "リリース後にやること"
 msgstr ""
 
-# a052a17161124a6e906b1221eeb389d8
-#: ../../../source/developer/release.rst:344
 msgid "リリースバージョンを以下のようにして更新します。::"
 msgstr ""
 
-# 2f4a3ea0ee2e4b4b822ecbc8d573ecd5
 #~ msgid "How tom build groonga storage engine for debugging"
 #~ msgstr "groongaストレージエンジンのデバッグ用ビルド方法"

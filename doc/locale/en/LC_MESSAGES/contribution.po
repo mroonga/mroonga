@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-26 15:32+0900\n"
+"POT-Creation-Date: 2014-01-24 11:53+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-# ee9eefa86bf349b09412d22827bead2b
-#: ../../../source/contribution.rst:7
 msgid "How to contribute to Mroonga"
 msgstr ""
 
-# 983218d9018c44cabd1536fdd928c9e0
-#: ../../../source/contribution.rst:9
 msgid ""
 "We welcome your contributions to the Mroonga Project. There are many ways to "
 "contribute, such as using Mroonga, introduction to others, etc. For example, "
@@ -32,197 +28,121 @@ msgid ""
 "projects."
 msgstr ""
 
-# 094ae1bc694745fba8c3a8c6a73c4dd3
-#: ../../../source/contribution.rst:15
 msgid "As a user:"
 msgstr ""
 
-# 3bf6cba4953845ac83598f2b20d44bbe
-#: ../../../source/contribution.rst:16
 msgid "If you are interested in Mroonga, please read this document and try it."
 msgstr ""
 
-# 0d67afce4a674d9983cd757703388ee3
-#: ../../../source/contribution.rst:17
 msgid "As a spokesman:"
 msgstr ""
 
-# 4b6c28f483f24f038d32fa98f7d71644
-#: ../../../source/contribution.rst:18
 msgid "Please introduce Mroonga to your friends and colleagues."
 msgstr ""
 
-# 167a77f0e45b4d8f80e2639b1104bd07
-#: ../../../source/contribution.rst:20
 msgid "As a developer: Bug report, development and documentation"
 msgstr ""
 
-# 368f662617bb485d968e3b0966f44bd2
-#: ../../../source/contribution.rst:20
 msgid "This section describes the details."
 msgstr ""
 
-# 15042cd3a2304ccda51d28ad0168dc9c
-#: ../../../source/contribution/documentation.rst:6
 msgid "How to contribute in documentation topics"
 msgstr ""
 
-# 741ea97436994a7db34e5d01dda47543
-#: ../../../source/contribution/documentation.rst:8
-msgid "We use Sphinx_ for documentation tool."
+msgid "We use Sphinx for documentation tool."
 msgstr ""
 
-# 0fd88c2f80794b658a30393439e99441
-#: ../../../source/contribution/documentation.rst:10
 msgid ""
 "具体的にどんなことをやればいいのかを説明します。基本的にはドキュメントのソー"
 "スファイルごとにpull requestを送ってもらうと進めやすいです。"
 msgstr ""
 
-# 978e153a0b5e448982ad01ceddfc980e
-#: ../../../source/contribution/documentation.rst:12
 msgid ""
 "対象となるファイルはdoc/sourceディレクトリ以下の拡張子が「.rst」となっている"
 "ファイルです。"
 msgstr ""
 
-# 87bf5a51945f4cc0938a35a9564dd443
-#: ../../../source/contribution/documentation.rst:14
 msgid ""
 "あまりGitHubでの作業に慣れていなくてもできるように、「最初にやること」と「作"
 "業ごとにやること」、「ファイルごとにやること」に分けて順に説明します。"
 msgstr ""
 
-# 704bce5703d4462c8d7938181d964c83
-# 51b51510c1e3415e9ad4bd1eb8926656
-#: ../../../source/contribution/documentation.rst:16
-#: ../../../source/contribution/documentation.rst:21
 msgid "The things you must do at first"
 msgstr ""
 
-# e2025d1719d94c2e9222a599ef1b8739
-# d903a6ed754940078a48cbeae24d8184
-#: ../../../source/contribution/documentation.rst:17
-#: ../../../source/contribution/documentation.rst:68
 msgid "The things you need to do every tasks"
 msgstr ""
 
-# dd92a13bd2e24203bcab32302a33d0b4
-# f383381b078a4df8bf1ceba53cfc68d8
-#: ../../../source/contribution/documentation.rst:18
-#: ../../../source/contribution/documentation.rst:85
 msgid "The things you need to do every files"
 msgstr ""
 
-# ac3be10d106a499b9167eab1d8c1eddb
-#: ../../../source/contribution/documentation.rst:23
 msgid "以下では、最初に一度だけ実施しておけば良いことを説明します。"
 msgstr ""
 
-# 6b0bebb82f544102bec18ed4886b2c74
-#: ../../../source/contribution/documentation.rst:26
 msgid "Required softwares"
 msgstr ""
 
-# 6dbdb959519843baabb43134c39d558f
-#: ../../../source/contribution/documentation.rst:30
+msgid "TODO"
+msgstr ""
+
 msgid "Git configuration"
 msgstr ""
 
-# b7d982b543d24d38a9c4729397a2ab95
-#: ../../../source/contribution/documentation.rst:32
 msgid ""
 "まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定"
 "はすでに完了しているかも知れません。その場合には飛ばして構いません。::"
 msgstr ""
 
-# a8abe0fddb3c4f30937cf4af1a2b250b
-#: ../../../source/contribution/documentation.rst:37
 msgid ""
 "上記はコミットログに使われます。公開しても差し支えないユーザ名もしくはメール"
 "アドレスを設定します。"
 msgstr ""
 
-# 8cfd6ddfc5604de196a9bc8bf8cdb6b9
-#: ../../../source/contribution/documentation.rst:40
 msgid "Fork on GitHub"
 msgstr ""
 
-# a5dbcf9fcd4a468bb704a027ce90eb29
-#: ../../../source/contribution/documentation.rst:42
 msgid ""
-"GitHubにアカウントがなければ用意してください。アカウントが用意できたら、ログ"
-"インした状態で以下のURLにアクセスします。"
+"First, create GitHub account. If your GitHub account is ready, login to "
+"GitHub and access following URL."
 msgstr ""
 
-# b0a10abe754a465888c1471bdd289694
-#: ../../../source/contribution/documentation.rst:44
-msgid "\"Mroongaリポジトリをforkする\":https://github.com/mroonga/mroonga/fork"
+msgid ""
+"`Fork the Mroonga repository <https://github.com/mroonga/mroonga/fork>`_"
 msgstr ""
 
-# f04ed946689f4bd5aa05bc31f8d90bb2
-#: ../../../source/contribution/documentation.rst:46
-msgid "リポジトリ選択画面でご自分のリポジトリへとforkしてください。"
+msgid "Fork リポジトリ選択画面でご自分のリポジトリへとforkしてください。"
 msgstr ""
 
-# b1fc91b1f2f44f8eb78237fe5cd04837
-#: ../../../source/contribution/documentation.rst:49
 msgid "Initial configuration for working repository"
 msgstr ""
 
-# d3c280f26cdc4ccdb438693871fbedca
-#: ../../../source/contribution/documentation.rst:51
 msgid ""
-"次は作業用にforkしたリポジトリを手元にcloneします。このとき、本家の変更に追従"
-"するための設定を行います。::"
+"Clone Mroonga repository to working directory. Don't forget to do \"Git "
+"configuration\".::"
 msgstr ""
 
-# e18757f3f0d940cfbb71aff1e5658b69
-#: ../../../source/contribution/documentation.rst:58
 msgid "Initial configuration for building documentation"
 msgstr ""
 
-# d1f0f6ec35f6436c8f7ccd228a1267d4
-#: ../../../source/contribution/documentation.rst:60
-msgid "ドキュメントを生成するために以下を実行します。::"
-msgstr ""
-
-# d808b179412746419797b128be204fd4
-#: ../../../source/contribution/documentation.rst:65
 msgid ""
-"ここまでで、「最初にやること」は完了です。次は「作業ごとにやること」へと進み"
-"ます。"
+"Execute following commands to prepare for generating Mroonga documentation::"
 msgstr ""
 
-# 2de0ca262db64b5bb5e30dcaa6cb17eb
-#: ../../../source/contribution/documentation.rst:70
+msgid "Next step is \"The things you need to do every tasks\"."
+msgstr ""
+
 msgid "以下では作業ごとにやることを説明します。"
 msgstr ""
 
-# bbb18ad117f74953a080dab4014f5f27
-#: ../../../source/contribution/documentation.rst:72
-msgid "h5. Mroonga本家に追従する"
+msgid "Follow the upstream"
 msgstr ""
 
-# 892e5476542040f2a7dfff9753ddfe67
-#: ../../../source/contribution/documentation.rst:74
-msgid "Mroonga本家の最新状態に追従して、作業がかぶらないようにします。"
+msgid "Mroonga本家の最新状態に追従して、作業がかぶらないようにします。::"
 msgstr ""
 
-# d19b880cdc9c4bde9201139b033886ea
-#: ../../../source/contribution/documentation.rst:76
-msgid ""
-"<pre> % git fetch --all % git checkout master % git rebase upstream/master </"
-"pre>"
-msgstr ""
-
-# 7a9e61d35ff7498da55c960fe9fa9fc3
-#: ../../../source/contribution/documentation.rst:82
 msgid "最新の状態に追従できたら、「ファイルごとにやること」へと進みます。"
 msgstr ""
 
-# 290e16f5b2ad4e88951a835963ddbaa8
-#: ../../../source/contribution/documentation.rst:87
 msgid ""
 "以下では、例えば http://mroonga.org/docs/characteristic.html を更新する場合で"
 "説明します。作業対象となるファイルは、リポジトリのdoc/source/ディレクトリ以下"
@@ -230,186 +150,54 @@ msgid ""
 "する例で説明します。"
 msgstr ""
 
-# 89e19d8d598e4434a31abc946ca5feb3
-#: ../../../source/contribution/documentation.rst:89
-msgid ""
-"もうすでに統一作業が完了しているファイルについてはファイルの先頭に次のマーク"
-"アップがしてあります。 実際の作業をするときには、まだそのマークアップがされて"
-"いないファイルを選んでください。"
+msgid "Create working branch"
 msgstr ""
 
-# 2dcbc29a3c1d45fab84d115033e71bf4
-#: ../../../source/contribution/documentation.rst:92
-msgid "<pre> .. -*- rst -*- .. Mroonga Project </pre>"
+msgid "Create a working branch. Use meaningful branch name."
 msgstr ""
 
-# 9b5889ee0f8f4c58894280eedc8988b4
-#: ../../../source/contribution/documentation.rst:97
-msgid "h5. 作業用のブランチを作成"
+msgid "% git checkout -b use-capitalized-notation-characteristic"
 msgstr ""
 
-# ecd60919ca4146e1b214ab72ef252316
-#: ../../../source/contribution/documentation.rst:99
-msgid ""
-"作業対象のブランチを作成します。characteristic.rstを変更するので、 ブランチ名"
-"を @use-capitalized-notation-characteristic@ とします。"
+msgid "Editing text"
 msgstr ""
 
-# f438b664382c4110b7bb5ed3d5656dd1
-#: ../../../source/contribution/documentation.rst:101
-msgid "<pre> % git checkout -b use-capitalized-notation-characteristic </pre>"
+msgid "Fix typos, styles or write a new document for Mroonga."
 msgstr ""
 
-# b298b40ed42b4911b874c3ee4cf4ae0c
-#: ../../../source/contribution/documentation.rst:105
-msgid "h5. 編集作業"
+msgid "Confirm generated document"
 msgstr ""
 
-# 494b4d45fd6b42dd9d00c51f7cbe1cee
-#: ../../../source/contribution/documentation.rst:107
-msgid "ドキュメントの「mroonga」という表記を「Mroonga」へと変更します。"
-msgstr ""
-
-# 53d1e2d6bde04f6dab94c9a05dfd3745
-#: ../../../source/contribution/documentation.rst:109
-msgid ""
-"文章だけでなく実行例も含むので単純に一括で置換するのは問題があります。 そこで"
-"「変更する箇所」と「変更しない箇所」について説明します。"
-msgstr ""
-
-# c694661e4e864c2d9dd2f4a25bc385b4
-#: ../../../source/contribution/documentation.rst:112
-msgid "変更する箇所:"
-msgstr ""
-
-# 4355796d05184ca0ac10186a26fe692e
-#: ../../../source/contribution/documentation.rst:114
-msgid "mroongaという単語をMroongaに置き換える"
-msgstr ""
-
-# 220ea37b601c419fa52fb21b99b93336
-#: ../../../source/contribution/documentation.rst:116
-msgid "変更しない箇所:"
-msgstr ""
-
-# 53f2ee28016642939a2703881768b91f
-#: ../../../source/contribution/documentation.rst:118
-msgid "mroongaをURLの一部として使っている箇所"
-msgstr ""
-
-# 28c72634d050474f8b70939720b33875
-#: ../../../source/contribution/documentation.rst:119
-msgid "mroongaをパッケージ名として使っている箇所"
-msgstr ""
-
-# 0dbfa2f55853488091c1bacc85f39a84
-#: ../../../source/contribution/documentation.rst:120
-msgid "ヘッダーファイルやソースコードのファイル名としてmroongaを使っている箇所"
-msgstr ""
-
-# 24541a2ee1704c8bad5605715b7eb055
-#: ../../../source/contribution/documentation.rst:121
-msgid ""
-"mroongaを実行例として使っている箇所 * 行末が::で終わっている箇所の次のブロッ"
-"クは実行例となります。"
-msgstr ""
-
-# c671bcf721b8448bb4785de1ceeba67a
-#: ../../../source/contribution/documentation.rst:124
-msgid "例:"
-msgstr ""
-
-# cf8ffb936df246fb90f3f4e957353037
-#: ../../../source/contribution/documentation.rst:126
-msgid "<pre> Here is an example how to check it::"
-msgstr ""
-
-# c652197f3c9b4796bddad5ce6a88a610
-#: ../../../source/contribution/documentation.rst:136
-msgid "</pre>"
-msgstr ""
-
-# e1c5df70dcb24124830ba3c14c304528
-#: ../../../source/contribution/documentation.rst:138
-msgid "h4. ドキュメントの確認"
-msgstr ""
-
-# 6c495f0077ff4181a4078b6aa61d895c
-#: ../../../source/contribution/documentation.rst:140
 msgid ""
 "マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマン"
-"ドを実行します。"
+"ドを実行します。::"
 msgstr ""
 
-# 8e3db5de647f4cd790ed6f28a157f450
-#: ../../../source/contribution/documentation.rst:142
-msgid "<pre> % cd doc/locale/en % make html </pre>"
-msgstr ""
-
-# 5e7ceac8d6514521909e22174470d29c
-#: ../../../source/contribution/documentation.rst:147
 msgid ""
 "いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されてい"
-"ればOKです。"
+"ればOKです。::"
 msgstr ""
 
-# b76b523117d0456183402211e0e55679
-#: ../../../source/contribution/documentation.rst:149
-msgid "<pre> % firefox html/characteristic.html </pre>"
+msgid "Commit"
 msgstr ""
 
-# c5370b5d8406406f80146c40cb826d10
-#: ../../../source/contribution/documentation.rst:154
-msgid "h4. コミット"
+msgid "HTMLに問題がないことを確認できたら、コミットします。::"
 msgstr ""
 
-# baecdd563f6e4b4b9d021f34e763335b
-#: ../../../source/contribution/documentation.rst:156
-msgid "HTMLに問題がないことを確認できたら、コミットします。"
+msgid "コミットするときのメッセージについては、例えば以下のようにします。::"
 msgstr ""
 
-# 09cb5cf409bd4ef790701fb1d0498246
-#: ../../../source/contribution/documentation.rst:158
+msgid "Push and pull request"
+msgstr ""
+
+msgid "Publish your changes to your own GitHub repository::"
+msgstr ""
+
 msgid ""
-"<pre> % cd ${cloneしたディレクトリーのトップディレクトリー} % git add doc/"
-"source/characteristic.rst % git commit </pre>"
+"Note that ``use-capitalized-notation-characteristic`` is already created "
+"branch in advance."
 msgstr ""
 
-# 75db37d7ac9c4401b374e2852c8fc906
-#: ../../../source/contribution/documentation.rst:164
-msgid "コミットするときのメッセージについては、例えば以下のようにします。"
-msgstr ""
-
-# e97d04c70a0d42f9819028e34ffa2645
-#: ../../../source/contribution/documentation.rst:166
-msgid "<pre> doc: use \"Mroonga\" notation </pre>"
-msgstr ""
-
-# 303faeb42d3243549a1f260ad87fc760
-#: ../../../source/contribution/documentation.rst:170
-msgid "h4. pushとpull request"
-msgstr ""
-
-# d64dae2ba4a241ec85ea51f5c8c68449
-#: ../../../source/contribution/documentation.rst:172
-msgid "ご自分のリポジトリにpushして変更点をとりこめるように公開します。"
-msgstr ""
-
-# 672240222e314118b39f58f0f5a38b74
-#: ../../../source/contribution/documentation.rst:174
-msgid ""
-"<pre> % git push -u origin use-capitalized-notation-characteristic </pre>"
-msgstr ""
-
-# 9606dce5aed04ed4b4dc3e4c7b0a93ba
-#: ../../../source/contribution/documentation.rst:178
-msgid ""
-"ここで @use-capitalized-notation-characteristic@ は前の方の作業で作ったブラン"
-"チ名です。"
-msgstr ""
-
-# 2bba67f733a14be08f9a29b773f8ca46
-#: ../../../source/contribution/documentation.rst:180
 msgid ""
 "ブラウザで https://github.com/(GitHubのアカウント)/mroonga を開くと「 @use-"
 "capitalized-notation-characteristic@ 」ブランチをpull requestする！みたいなUI"
@@ -418,57 +206,36 @@ msgid ""
 "てOKです！"
 msgstr ""
 
-# 4ffb4d03fdea4d24a6dcb60c9a604217
-#: ../../../source/contribution/documentation.rst:182
 msgid "これで、ひととおりの作業は完了しました。"
 msgstr ""
 
-# f607a53e59cf47ff905954d23837530a
-#: ../../../source/contribution/documentation.rst:184
-msgid ""
-"まだまだできるよ!という人は 「作業ごとにやること」の「Mroonga本家に追従」に"
-"戻って繰り返します。"
-msgstr ""
-
-# 675aef1dd22b47388d76c7d034f6be3a
-#: ../../../source/contribution/report.rst:7
 msgid "How to report a bug"
 msgstr ""
 
-# 739949d4fb51497f88db6920245843dc
-#: ../../../source/contribution/report.rst:9
 msgid "There are two ways to report a bug:"
 msgstr ""
 
-# 0165776552e74002a032846ce3e5664e
-# 0165776552e74002a032846ce3e5664e
-#: ../../../source/contribution/report.rst:11
-#: ../../../source/contribution/report.rst:17
 msgid "Submit a bug to the issue tracker"
 msgstr ""
 
-# 8631868a6a054466aca747a3d12a4f56
-# 8631868a6a054466aca747a3d12a4f56
-#: ../../../source/contribution/report.rst:12
-#: ../../../source/contribution/report.rst:24
 msgid "Report a bug to the mailing list"
 msgstr ""
 
-# 19723c011dfc490f9a5e78de9bf2ea9f
-#: ../../../source/contribution/report.rst:14
 msgid "You can use either way It makes no difference to us."
 msgstr ""
 
-# ae20e10cafba41fb99e86805e3d2d536
-#: ../../../source/contribution/report.rst:19
 msgid ""
-"Mroonga project has the issue tracking system, `Redmine <http://redmine."
-"groonga.org/projects/mroonga/issues>`_ is for Japanese and English."
+"Mroonga project has two issue tracking systems, `Redmine <http://redmine."
+"groonga.org/projects/mroonga/issues>`_ and `GitHub issue tracker <https://"
+"github.com/mroonga/mroonga/issues>`_."
 msgstr ""
 
-# 1536c9c86f3a4742bce7ba3bd6154305
-#: ../../../source/contribution/report.rst:26
+msgid ""
+"Redmine is for Japanese and GitHub issue tracker is for English. You can use "
+"one of them to report a bug."
+msgstr ""
+
 msgid ""
 "Mroonga project has :doc:`/community` for discussing about Mroonga. Please "
-"send a mail that describes a bug."
+"send an Email that describes a bug."
 msgstr ""

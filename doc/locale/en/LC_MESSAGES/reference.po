@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-25 18:11+0900\n"
+"POT-Creation-Date: 2014-01-24 11:53+0900\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -17,162 +17,102 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# 29f4554134d74d4b8007993b043b290b
-#: ../../../source/reference.rst:4
 msgid "Reference"
 msgstr "Reference"
 
-# 6bb63f72d0a440a8a995ce78255b14fe
-#: ../../../source/reference/full_text_search.rst:4
 msgid "Search and Scoring in Mroonga"
 msgstr ""
 
-# b01a16ef3ddf408aba3e2cc4248eea5c
-#: ../../../source/reference/full_text_search.rst:7
 msgid "Mroonga Scoring in natural language mode"
 msgstr ""
 
-# fd11e8a9d92b4607bb77ef4613f7b5e0
-#: ../../../source/reference/full_text_search.rst:9
 msgid ""
 "The search score of Mroonga in natural language mode is a similarity score "
 "between query and document. Mroonga's scoring algorithm is as follows:"
 msgstr ""
 
-# 9455295e2c03457ca66841ccfa8f556a
-#: ../../../source/reference/full_text_search.rst:11
 msgid "Splitting a query into tokens."
 msgstr ""
 
-# 1ec5b4cfc05f40c5b371abc1294c9f2c
-#: ../../../source/reference/full_text_search.rst:12
 msgid "Removing not matched tokens."
 msgstr ""
 
-# 3d65eb4986234232a81990f7a365b056
-#: ../../../source/reference/full_text_search.rst:13
 msgid "Calculating weight per token."
 msgstr ""
 
-# b0828fda0ac84d68abcb7de9bc7bd343
-#: ../../../source/reference/full_text_search.rst:14
 msgid "Getting the top N weight tokens."
 msgstr ""
 
-# 0f0128ee3a444d3d9a0524e2c5497a30
-#: ../../../source/reference/full_text_search.rst:15
 msgid ""
 "Summing up the weight per token which exists in a document, and is one of "
 "the top N weight tokens. The total weight is the similarity score for the "
 "document and the query."
 msgstr ""
 
-# 14933394241c44e29258d357e3c3f80e
-#: ../../../source/reference/full_text_search.rst:17
 msgid ""
 "We are showing by example. The first thing we create a table and insert data "
 "as follows: ::"
 msgstr ""
 
-# efd766ba93804fc29f34b48cfaeee186
-#: ../../../source/reference/full_text_search.rst:32
 msgid ""
 "We use a query \"fine today\" to search. The search result is as follows: ::"
 msgstr ""
 
-# 4f39d2b359b840508d98e59afb35f6c3
-#: ../../../source/reference/full_text_search.rst:47
 msgid "Now, let us explain how to make the result score \"131073\"."
 msgstr ""
 
-# 2953cd8e918247aca610437d0c46e088
-#: ../../../source/reference/full_text_search.rst:51
 msgid "Splitting a query into tokens"
 msgstr ""
 
-# 7f0efbd6717e4289bf3cfee534eed769
-#: ../../../source/reference/full_text_search.rst:54
 msgid ""
 "The default tokenizer splits up the query \"fine today\" into two tokens as "
 "follows:"
 msgstr ""
 
-# a04fe8de45d942a093ab9490022d964e
-#: ../../../source/reference/full_text_search.rst:56
 msgid "fine"
 msgstr ""
 
-# dc0c75abb41c4cd1a6281887c34fc044
-#: ../../../source/reference/full_text_search.rst:57
 msgid "today"
 msgstr ""
 
-# d94aefeef0d341d8a3c397d005b7ce27
-#: ../../../source/reference/full_text_search.rst:60
 msgid "Removing not matched tokens"
 msgstr ""
 
-# 550ad1ecb713466ea33372d0413ee466
-#: ../../../source/reference/full_text_search.rst:62
 msgid ""
 "We have nothing to do in this case because the tokens exist in documents."
 msgstr ""
 
-# f3408b106bcf45b6b14b03de68d0d34a
-#: ../../../source/reference/full_text_search.rst:64
 msgid "fine: include in document id=1,3,4"
 msgstr ""
 
-# db15bf039cf34c008f0dd1934adf612a
-# 3adc67ab01394ceab7d58e96eef7238b
-#: ../../../source/reference/full_text_search.rst:65
-#: ../../../source/reference/full_text_search.rst:106
 msgid "today: include in document id=3,4"
 msgstr ""
 
-# e9a0913eeda9435b89b3a63b3288845c
-#: ../../../source/reference/full_text_search.rst:68
 msgid "Calculating weight per token"
 msgstr ""
 
-# 9db73d0873fa49c997aa1405ac97afbc
-# ac7a52553122436683b18f3461566f3f
-#: ../../../source/reference/full_text_search.rst:70
-#: ../../../source/reference/full_text_search.rst:99
 msgid "fine: 116508(= 1048576 / 9)"
 msgstr ""
 
-# 2b20c75ef69e4bfa9d567c31bbb19ba7
-# 88f148be4b3c426ab4e4f45d577def11
-#: ../../../source/reference/full_text_search.rst:71
-#: ../../../source/reference/full_text_search.rst:98
 msgid "today: 131072(= 1048576 / 8)"
 msgstr ""
 
-# d764e46bf3e844bcae23132336a00fb5
-#: ../../../source/reference/full_text_search.rst:73
 msgid ""
 "1048576(= 2 ** 20) denotes the number of tokens in all documents. We should "
 "get the number from the table, but as a matter of fact, the fixed value is "
 "used for simplicity."
 msgstr ""
 
-# e1b3c6ce7f284c69a969ea0409c0e763
-#: ../../../source/reference/full_text_search.rst:75
 msgid ""
 "In the fraction 1048576 / 8,  the denominator \"8\" indicates that the "
 "number of document which contains token \"today\"."
 msgstr ""
 
-# 098d4242d79c4e80bc4441dea1f6306c
-#: ../../../source/reference/full_text_search.rst:77
 msgid ""
 "In the fraction 1048576 / 9,  the denominator \"9\" means the number of "
 "document which contains token \"fine\"."
 msgstr ""
 
-# cae84ba5fc63471781d0174b25e76e25
-#: ../../../source/reference/full_text_search.rst:79
 msgid ""
 "The denominator \"8\" and \"9\" are approximate number, strictly speaking, "
 "\"2\" is the correct answer for the number of document that contains \"today"
@@ -180,475 +120,301 @@ msgid ""
 "\"fine\"."
 msgstr ""
 
-# cf77592d8eec4239aad2e72ae479a23a
-#: ../../../source/reference/full_text_search.rst:81
 msgid ""
 "You can check the approximate number of token by using the following "
 "query. ::"
 msgstr ""
 
-# d99f31b9b8564763a9aced2f353f7995
-#: ../../../source/reference/full_text_search.rst:85
 msgid "The retrieval result of the above query is as follows: ::"
 msgstr ""
 
-# 7b8cea2cd1af4fb7942e1103e2fe2447
-#: ../../../source/reference/full_text_search.rst:90
 msgid "Getting the top N weight tokens"
 msgstr ""
 
-# 89b14ffa756c49aa80220af52f2099bc
-#: ../../../source/reference/full_text_search.rst:92
 msgid ""
 "The formula for the N is \"the number of occurrence of token in document / 8 "
 "+ 1\""
 msgstr ""
 
-# f6cb50e5fe464b6fb18c74faad66b34d
-#: ../../../source/reference/full_text_search.rst:94
 msgid "In this case, N = 2 / 8 + 1 ≒ 1"
 msgstr ""
 
-# 0452a0a5e0ee4b73a3894b10ac5029f3
-#: ../../../source/reference/full_text_search.rst:96
 msgid "The sorted tokens are as follows:"
 msgstr ""
 
-# 4b14d1c05e064eb9b86ad91ddbbfa1c1
-#: ../../../source/reference/full_text_search.rst:101
 msgid "N = 1, then we get \"today: 131072(= 1048576 / 8)\"."
 msgstr ""
 
-# 3cf8113e9c1d479d93e5e033d0a0cc13
-#: ../../../source/reference/full_text_search.rst:104
 msgid ""
 "Summing up the weight per token which exists in a document, and is one of "
 "the top N weight tokens"
 msgstr ""
 
-# 0f5131f01e874dd2881591d34e446325
-#: ../../../source/reference/full_text_search.rst:108
 msgid ""
 "Finally document id 3,4 are hit, the similarity score between query and "
 "document(id=3) is 131072 + 1 = 131073 (\"1\" is the number of occurrence of "
 "token \"today\" in document)."
 msgstr ""
 
-# 3902ed8a07c042de97be3f2350e59a43
-#: ../../../source/reference/full_text_search.rst:110
 msgid ""
 "The similarity score between query and document(id=4) is the same as the "
 "score between query and document(id=3)."
 msgstr ""
 
-# 47b07cd2bb7d44c98a8c3ea8bd47e37b
-#: ../../../source/reference/limitations.rst:4
 msgid "Limitations"
 msgstr ""
 
-# 5bf56a4d5df24b33ae8b6d972fcf2a7f
-#: ../../../source/reference/limitations.rst:6
 msgid "There are some limitations in mroonga storage engine."
 msgstr ""
 
-# 98d32e761e394d3b8a47225eb82e188e
-#: ../../../source/reference/limitations.rst:9
 msgid "Limitations of table"
 msgstr ""
 
-# cd587bbdc41e4bec99991bf1b23fd9b6
-#: ../../../source/reference/limitations.rst:11
 msgid ""
 "A table has the following limitations. This limitation is derived from "
 "groonga."
 msgstr ""
 
-# 735364908c9940d19c30a3c88f9e8a7e
-#: ../../../source/reference/limitations.rst:14
 msgid "The maximum one key size: 4096Bytes"
 msgstr ""
 
-# 081ca34cabc34dab95a6320893253836
-#: ../../../source/reference/limitations.rst:15
 msgid "The maximum total size of keys: 4GBytes"
 msgstr ""
 
-# 7702a62d91504eaaa9326a2b25e015c8
-# aa24de6ee9d74c5193d443d59a0d32d9
-#: ../../../source/reference/limitations.rst:17
-#: ../../../source/reference/limitations.rst:29
 msgid "Keep in mind that these limitations may vary depending on conditions."
 msgstr ""
 
-# 98d32e761e394d3b8a47225eb82e188e
-#: ../../../source/reference/limitations.rst:20
 msgid "Limitations of indexing"
 msgstr ""
 
-# 423ae5ceb0334d079538b8276201b1d2
-#: ../../../source/reference/limitations.rst:22
 msgid ""
 "A full-text index has the following limitations. This limitation is derived "
 "from groonga and applied to each table."
 msgstr ""
 
-# 5ad82b57f44d46dcbe6831262570482c
-#: ../../../source/reference/limitations.rst:25
 msgid "The maximum number of records: 268,435,455 (more than 268 million)"
 msgstr ""
 
-# 0f6a1b1802334b38858dc62f480e0253
-#: ../../../source/reference/limitations.rst:26
 msgid ""
 "The maximum number of distinct terms: 268,435,455 (more than 268 million)"
 msgstr ""
 
-# 78e07f9a2c9e4a0080d5b3ba75614f7b
-#: ../../../source/reference/limitations.rst:27
 msgid "The maximum index size: 256GBytes"
 msgstr ""
 
-# 2de3b1cb8c1f492bbf8ecf2832a66924
-#: ../../../source/reference/limitations.rst:31
 msgid ""
 "Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your "
 "table data matches to this limitations."
 msgstr ""
 
-# 5da669841908480d9071c98823fddf08
-#: ../../../source/reference/limitations.rst:35
 msgid "Limitations about the value of columns"
 msgstr ""
 
-# bf33f1ba0a3441149c9c7aae10ab7c00
-#: ../../../source/reference/limitations.rst:37
 msgid "There is a limitation about DATE, DATETIME column in storage mode."
 msgstr ""
 
-# 49133a6b106b4d028daabbdf784d5044
-#: ../../../source/reference/limitations.rst:39
 msgid ""
 "mroonga storage engine automatically convert 0 into 1 as the value of month "
 "or date."
 msgstr ""
 
-# 95b13e6ab35541e3a286f029f6f77555
-#: ../../../source/reference/limitations.rst:41
 msgid ""
 "Thus, the value 0 is treated as the 1st month (January) of the year or the "
 "1st date of the month."
 msgstr ""
 
-# ba510e03144642b3bcad7ff9499c13cd
-#: ../../../source/reference/limitations.rst:44
 msgid ""
 "And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
 "00:00:00)."
 msgstr ""
 
-# eda122b1b17c4e08b10677d5e2c5275c
-#: ../../../source/reference/limitations.rst:46
 msgid "Here is an example to show behavior described above."
 msgstr ""
 
-# 88bdd5c373c54e11b4ede629c17ffffc
-#: ../../../source/reference/limitations.rst:70
 msgid "Here is the results of execution example::"
 msgstr ""
 
-# 8ff1c074e74941daac4c8ab4c78c249f
-#: ../../../source/reference/server_variables.rst:4
 msgid "Server variables"
 msgstr ""
 
-# 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference/server_variables.rst:6
 msgid ""
 "Here are the explanations of server variables that are introduced by mroonga."
 msgstr ""
 
-# 9a540b7ece0749a796bc82d36002d355
-#: ../../../source/reference/server_variables.rst:11
 msgid "mroonga_action_on_fulltext_query_error"
 msgstr ""
 
-# 48409850a73644ba8af9080f3103550d
-#: ../../../source/reference/server_variables.rst:13
 msgid "The default behavior of fulltext query error."
 msgstr ""
 
-# f2d19f44f57849e5ad86af57d41aa945
-#: ../../../source/reference/server_variables.rst:15
 msgid ""
 "The default value of ``mroonga_action_on_fulltext_query_error`` is "
 "``ERROR_AND_LOG``. This is the conventional behavior which is equal to old "
 "version of mroonga."
 msgstr ""
 
-# 926cf7a896134e6da73923540ceb4cbe
-#: ../../../source/reference/server_variables.rst:18
 msgid ""
 "Here is the list of ``mroonga_action_on_fulltext_query_error`` which you can "
 "use."
 msgstr ""
 
-# 6861cb2997d44b7fa6986cafe3555314
-#: ../../../source/reference/server_variables.rst:23
 msgid "Value"
 msgstr ""
 
-# 14abca7033d14aa0a250688e65f1563b
-#: ../../../source/reference/server_variables.rst:24
-#: ../../../source/reference/server_variables.rst:114
 msgid "Description"
 msgstr ""
 
-# a0fcfa921d25438e904f912579b4b6ea
-#: ../../../source/reference/server_variables.rst:25
-#: ../../../source/reference/server_variables.rst:124
 msgid "ERROR"
 msgstr ""
 
-# 4298f3d110ab40f1b8d4363a415ef249
-#: ../../../source/reference/server_variables.rst:26
 msgid "Report an error. Logging is disabled."
 msgstr ""
 
-# effc9f4ed8b04d748954e2042f45c052
-#: ../../../source/reference/server_variables.rst:27
 msgid "ERROR_AND_LOG"
 msgstr ""
 
-# 980b1b2c3b784a799ca526de8e86e886
-#: ../../../source/reference/server_variables.rst:28
 msgid "Report an error. Logging is enabled. (This is the default)"
 msgstr ""
 
-# f3877f277a904905944acd19557681ad
-#: ../../../source/reference/server_variables.rst:29
 msgid "IGNORE"
 msgstr ""
 
-# a62724f5027447e6997f523c3d712cb2
-#: ../../../source/reference/server_variables.rst:30
 msgid "Just ignore an error. Logging is disabled."
 msgstr ""
 
-# 7f382e613af44e56b8288553613c3ffa
-#: ../../../source/reference/server_variables.rst:31
 msgid "IGNORE_AND_LOG"
 msgstr ""
 
-# 5ab402c966fe4ef5bd9a13de09a0b924
-#: ../../../source/reference/server_variables.rst:32
 msgid "Ignore an error, but logging is enabled. (Similar to InnoDB behavior)"
 msgstr ""
 
-# 33eb68236bda4c6d8469333d659e142b
-#: ../../../source/reference/server_variables.rst:34
 msgid ""
 "Here is an example SQL to confirm the value of "
 "``mroonga_action_on_fulltext_query_error``::"
 msgstr ""
 
-# 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference/server_variables.rst:45
 msgid "mroonga_default_parser"
 msgstr ""
 
-# 597fc102127842ab80166cb87684cd66
-#: ../../../source/reference/server_variables.rst:47
 msgid ""
 "The default parser of the full text search. The default value can be "
 "specified by ``--with-default-parser=PARSER`` configure argument, whose "
 "default value is ``TokenBigram``."
 msgstr ""
 
-# 1c0ee125f1704835b0d40b9691385897
-#: ../../../source/reference/server_variables.rst:50
 msgid ""
 "Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
 "search parser. It is used by ``body_index`` fulltext index."
 msgstr ""
 
-# 34c4eb348536490591dae8d0cd98e7f3
-#: ../../../source/reference/server_variables.rst:64
 msgid "mroonga_libgroonga_version"
 msgstr ""
 
-# 5b05ddcf181c4d30bd68b5f774f6a185
-#: ../../../source/reference/server_variables.rst:66
 msgid "The version string of the groonga library."
 msgstr ""
 
-# e4f9f9cffbe54b978e4062cd0e005f50
-#: ../../../source/reference/server_variables.rst:68
 msgid "Here is an example SQL to confirm the using groonga library version::"
 msgstr ""
 
-# 9f986358d0e24f628d8354dee8ce6d09
-#: ../../../source/reference/server_variables.rst:79
 msgid "mroonga_log_file"
 msgstr ""
 
-# eb81c839e63641c9ac6ead777681c0ae
-#: ../../../source/reference/server_variables.rst:81
 msgid ""
 "The path of the log file of mroonga. The default value is ``groonga.log``."
 msgstr ""
 
-# f05044e929c6453cbe06c3a9ea9968d8
-#: ../../../source/reference/server_variables.rst:83
 msgid ""
 "Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
 msgstr ""
 
-# 5d537f02eb434090ab886218ab972313
-#: ../../../source/reference/server_variables.rst:107
 msgid "mroonga_log_level"
 msgstr ""
 
-# 734cd9fdf1c7415d892b2ab22d30dc2f
-#: ../../../source/reference/server_variables.rst:109
 msgid "The output level of mroonga log file. The default value is ``NOTICE``."
 msgstr ""
 
-# f86725ac8c9c4e6a913f3002a4d80a32
-#: ../../../source/reference/server_variables.rst:111
 msgid "Here is the list of ``mroonga_log_level`` which you can use."
 msgstr ""
 
-# cefceb982c6446698a3bf822c760250a
-#: ../../../source/reference/server_variables.rst:114
 msgid "Log level"
 msgstr ""
 
-# 5958a7621fe04a1c81704c3dc9c20737
-#: ../../../source/reference/server_variables.rst:116
 msgid "NONE"
 msgstr ""
 
-# b98cfc807eeb4220845d544328322558
-#: ../../../source/reference/server_variables.rst:116
 msgid "No logging output."
 msgstr ""
 
-# 81fc3c527261449cba32fc8b2785de0d
-#: ../../../source/reference/server_variables.rst:118
 msgid "EMERG"
 msgstr ""
 
-# fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:118
 msgid "Logging emergency messages such as database corruption."
 msgstr ""
 
-# 97854b9eee444dd79d6898e07b9b13dc
-#: ../../../source/reference/server_variables.rst:120
 msgid "ALERT"
 msgstr ""
 
-# fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:120
 msgid "Logging alert messages such as internal error."
 msgstr ""
 
-# ea999e2e11d648fcabc40a9c6188eb0b
-#: ../../../source/reference/server_variables.rst:122
 msgid "CRIT"
 msgstr ""
 
-# b1c0fbb5d0684fe4a8d21e642a17c45e
-#: ../../../source/reference/server_variables.rst:122
 msgid "Logging critical messasge such as deadlock."
 msgstr ""
 
-# fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:124
 msgid "Logging error messages such as API error which mroonga use."
 msgstr ""
 
-# fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:126
 msgid "Logging warning messages such as invalid argument."
 msgstr ""
 
-# 50ac5d3e013a4fdab5972f5937331f53
-#: ../../../source/reference/server_variables.rst:126
 msgid "WARNING"
 msgstr ""
 
-# fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:128
 msgid "Logging notice messages such as configuration or status changed."
 msgstr ""
 
-# 80ab5291a9da4cb5a2a82797a324dda4
-#: ../../../source/reference/server_variables.rst:128
 msgid "NOTICE"
 msgstr ""
 
-# 5863e684674c4fb68302924ca66f39fd
-#: ../../../source/reference/server_variables.rst:130
 msgid "INFO"
 msgstr ""
 
-# 3632fd1b768d4e15bb50d1c61f0ed102
-#: ../../../source/reference/server_variables.rst:130
 msgid "Logging informative messages such as file system operation."
 msgstr ""
 
-# a62a192464644e39bf1650a66ce87118
-#: ../../../source/reference/server_variables.rst:132
 msgid "DEBUG"
 msgstr ""
 
-# fca6ba1c33344302980f505e2683c934
-#: ../../../source/reference/server_variables.rst:132
 msgid ""
 "Logging debug messages. Recommend to use for mroonga developer or bug "
 "reporter."
 msgstr ""
 
-# 61c5f9f19b71498789e2022a4e0ae695
-#: ../../../source/reference/server_variables.rst:135
 msgid "DUMP"
 msgstr ""
 
-# 72729a3fdba345cdb9b60f44aba93d35
-#: ../../../source/reference/server_variables.rst:135
 msgid "Logging dump messages."
 msgstr ""
 
-# 14d9ca2399ef4d2e8c552c6558bb44ef
-#: ../../../source/reference/server_variables.rst:138
 msgid ""
 "Here is an example transcript to change log level to ``DEBUG`` that logs "
 "many messages for debugging::"
 msgstr ""
 
-# 2344911c007541ec8521b01b20e65228
-#: ../../../source/reference/server_variables.rst:160
 msgid "mroonga_version"
 msgstr ""
 
-# 8faefebf66ce4409aa34d482fa4b3172
-#: ../../../source/reference/server_variables.rst:162
 msgid "The version string of mroonga."
 msgstr ""
 
-# d6161a998b614d92a7b5441de8fe2fa6
-#: ../../../source/reference/server_variables.rst:164
 msgid "Here is an example SQL to confirm the running mroonga version::"
 msgstr ""
 
-# 1b226eec312f4a5b9ab146d5e1e1c4ac
-#: ../../../source/reference/server_variables.rst:175
 msgid "mroonga_dry_write"
 msgstr ""
 
-# 662d6ddf9b7248cba67f48c09902b1cf
-#: ../../../source/reference/server_variables.rst:177
 msgid ""
 "Whether really write data to groonga database or not. The default value is "
 "``OFF`` that means data are really written to groonga database. Usually we "
@@ -657,44 +423,30 @@ msgid ""
 "doesn't include groonga's processing time."
 msgstr ""
 
-# 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference/server_variables.rst:184
 msgid "Here is an example SQL to disable writing data to groonga database::"
 msgstr ""
 
-# d9f67e26e6bc4883affa4c663cd3d120
-#: ../../../source/reference/server_variables.rst:207
 msgid "mroonga_enable_optimization"
 msgstr ""
 
-# 53f18a9714d145d2a32b452e68be0dfa
-#: ../../../source/reference/server_variables.rst:209
 msgid ""
 "Whether enable optimization or not. The default value is ``ON`` that means "
 "optimization is enabled. Usually we don't need to change the value of this "
 "variable. This variable is useful for benchmark."
 msgstr ""
 
-# ccf6f86f8e4e4772902db8fd12751b1c
-#: ../../../source/reference/server_variables.rst:214
 msgid "Here is an example SQL to disable optimization::"
 msgstr ""
 
-# 15ee150a65fa41839a0aba95515d5138
-#: ../../../source/reference/server_variables.rst:238
 msgid "mroonga_match_escalation_threshold"
 msgstr ""
 
-# 6713a39526c8497eaee1250509b6b6ac
-#: ../../../source/reference/server_variables.rst:240
 msgid ""
 "The threshold to determin whether match method is escalated. See `search "
 "specification for groonga <http://groonga.org/docs/spec/search.html>`_ about "
 "match method escalation."
 msgstr ""
 
-# 7aff1a3ab66945bcbe486da9fb4ca5d0
-#: ../../../source/reference/server_variables.rst:245
 msgid ""
 "The default value is the same as groonga's default value. It's 0 for the "
 "default installation. The dafault value can be configured in my.cnf or by "
@@ -702,800 +454,510 @@ msgid ""
 "variable's scope is both global and session."
 msgstr ""
 
-# aeb0d450bd6943cea8a607bfd7039a03
-#: ../../../source/reference/server_variables.rst:251
 msgid ""
 "Here is an example to use -1 as a threshold to determin whether match method "
 "is escalated. -1 means that never escalated."
 msgstr ""
 
-# 4ef63d1019614da3a29580b42060f249
-#: ../../../source/reference/server_variables.rst:259
 msgid ""
 "Here is an another example to show behavior change by the variable value."
 msgstr ""
 
-# 218182e28d854db9bca47096833fc01f
-#: ../../../source/reference/sql_commands.rst:4
 msgid "SQL commands"
 msgstr ""
 
-# af8da3e760ce4541800948f66a2f86bf
-#: ../../../source/reference/sql_commands.rst:6
 msgid ""
 "This section describes avaiable SQL commands and unavailable SQL commands."
 msgstr ""
 
-# b089c40304aa4805a4fca045ed8b3a2c
-#: ../../../source/reference/sql_commands.rst:9
 msgid "List of available SQL commands"
 msgstr "List of available SQL commands"
 
-# e52976b22e304d4791d4fc59b70eb274
-#: ../../../source/reference/sql_commands.rst:11
 msgid "``ALTER TABLE table_name ADD COLUMN column_name TEXT``"
 msgstr ""
 
-# abb3f775cb864abdbc4f9239c2bee1cd
-#: ../../../source/reference/sql_commands.rst:12
 msgid "``ALTER TABLE table_name ADD FULLTEXT INDEX index_name (column_name)``"
 msgstr ""
 
-# 8090735a363b4ca88649fff1891dd1e7
-#: ../../../source/reference/sql_commands.rst:13
 msgid ""
 "``ALTER TABLE table_name ADD SPATIAL KEY index_name (geometry_column_name)``"
 msgstr ""
 
-# 90bececad609405eb1363100405b3f44
-#: ../../../source/reference/sql_commands.rst:14
 msgid "``ALTER TABLE table_name ENGINE = mroonga``"
 msgstr ""
 
-# 09552cddc1b645a28ed9861f85b0a6e4
-#: ../../../source/reference/sql_commands.rst:15
 msgid "``ALTER TABLE table_name RENAME new_table_name``"
 msgstr ""
 
-# c72d9f4df7524689af6404e2c84f9830
-#: ../../../source/reference/sql_commands.rst:16
 msgid "``COMMIT``"
 msgstr ""
 
-# 30b27b9c99594a21ad49234088361ec6
-#: ../../../source/reference/sql_commands.rst:17
 msgid "``CREATE FULLTEXT INDEX index_name ON table_name(column_name)``"
 msgstr ""
 
-# 7fac83a4555f48af86d9bb8bf9e5bacd
-#: ../../../source/reference/sql_commands.rst:18
 msgid "``CREATE FULLTEXT INDEX index_name ON table_name(column_name, ...)``"
 msgstr ""
 
-# 7f01f2deabff4b17812969b41a8ba90b
-#: ../../../source/reference/sql_commands.rst:19
 msgid "``CREATE TABLE IF NOT EXISTS table_name (...)``"
 msgstr ""
 
-# 06bccb9096f14bf4b7e3398bd1393c26
-#: ../../../source/reference/sql_commands.rst:20
 msgid "``CREATE TABLE \\`table-name-with-hyphen\\` (...)``"
 msgstr ""
 
-# b84ca5f09adb44ec86e1d2dff024ace2
-#: ../../../source/reference/sql_commands.rst:21
 msgid ""
 "``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) "
 "COMMENT 'parser \"TokenMecab\"')``"
 msgstr ""
 
-# 10d5c55e2f1e4bc2bb08db36bc49a972
-#: ../../../source/reference/sql_commands.rst:22
 msgid ""
 "``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) "
 "COMMENT 'normalizer "
 "\"NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark\"')``"
 msgstr ""
 
-# 5829024a678d48f5b48277545676bf05
-#: ../../../source/reference/sql_commands.rst:23
 msgid ""
 "``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) "
 "COMMENT 'parser \"TokenDelimit\", normalizer "
 "\"NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark\"')``"
 msgstr ""
 
-# d44a965b1b1d473483a14adb7e2f6616
-#: ../../../source/reference/sql_commands.rst:24
 msgid ""
 "``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name))``"
 msgstr ""
 
-# 4b7d6468bc8b458c8f5e61ed84b15c43
-#: ../../../source/reference/sql_commands.rst:25
 msgid ""
 "``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name, ...))"
 "``"
 msgstr ""
 
-# 9286b659a8aa47a09a74f57a5dc47d63
-#: ../../../source/reference/sql_commands.rst:26
 msgid "``CREATE TABLE table_name (... INDEX (column_name))``"
 msgstr ""
 
-# 2deec92c6a754a988c2a70a2c19c7bf8
-#: ../../../source/reference/sql_commands.rst:27
 msgid "``CREATE TABLE table_name (... INDEX (column_name, ...))``"
 msgstr ""
 
-# 56498ce4cacf4310a4d60a0d1c07dc30
-#: ../../../source/reference/sql_commands.rst:28
 msgid "``CREATE TABLE table_name (... INDEX USING BTREE (column_name))``"
 msgstr ""
 
-# 19dea98e4ec344d6a3ae3389b3aea4d8
-#: ../../../source/reference/sql_commands.rst:29
 msgid "``CREATE TABLE table_name (... PRIMARY KEY (column_name))``"
 msgstr ""
 
-# f4dbc545191f413f9fdc6dcf502d7a61
-#: ../../../source/reference/sql_commands.rst:30
 msgid "``CREATE TABLE table_name (...) CHARSET ASCII``"
 msgstr ""
 
-# f4dbc545191f413f9fdc6dcf502d7a61
-#: ../../../source/reference/sql_commands.rst:31
 msgid "``CREATE TABLE table_name (...) CHARSET BINARY``"
 msgstr ""
 
-# f4dbc545191f413f9fdc6dcf502d7a61
-#: ../../../source/reference/sql_commands.rst:32
 msgid "``CREATE TABLE table_name (...) CHARSET CP932``"
 msgstr ""
 
-# f4dbc545191f413f9fdc6dcf502d7a61
-#: ../../../source/reference/sql_commands.rst:33
 msgid "``CREATE TABLE table_name (...) CHARSET EUCJPMS``"
 msgstr ""
 
-# 71a7439036d445c3b55fa9a9ecc2ab19
-#: ../../../source/reference/sql_commands.rst:34
 msgid "``CREATE TABLE table_name (...) CHARSET KOI8R``"
 msgstr ""
 
-# 71a7439036d445c3b55fa9a9ecc2ab19
-#: ../../../source/reference/sql_commands.rst:35
 msgid "``CREATE TABLE table_name (...) CHARSET LATIN1``"
 msgstr ""
 
-# 71a7439036d445c3b55fa9a9ecc2ab19
-#: ../../../source/reference/sql_commands.rst:36
 msgid "``CREATE TABLE table_name (...) CHARSET SJIS``"
 msgstr ""
 
-# f4dbc545191f413f9fdc6dcf502d7a61
-#: ../../../source/reference/sql_commands.rst:37
 msgid "``CREATE TABLE table_name (...) CHARSET UJIS``"
 msgstr ""
 
-# 71a7439036d445c3b55fa9a9ecc2ab19
-#: ../../../source/reference/sql_commands.rst:38
 msgid "``CREATE TABLE table_name (...) CHARSET UTF8``"
 msgstr ""
 
-# 71a7439036d445c3b55fa9a9ecc2ab19
-#: ../../../source/reference/sql_commands.rst:39
 msgid "``CREATE TABLE table_name (...) CHARSET UTF8MB4``"
 msgstr ""
 
-# efe59f4a2fc446659523b43a4e7c1ceb
-#: ../../../source/reference/sql_commands.rst:40
 msgid ""
 "``CREATE TABLE table_name (...) ENGINE=mroonga COMMENT = 'ENGINE \"InnoDB"
 "\"'``"
 msgstr ""
 
-# fdf11d64b9d7469784fd6789080fc11d
-#: ../../../source/reference/sql_commands.rst:41
 msgid "``CREATE TABLE table_name (...) ENGINE=mroonga``"
 msgstr ""
 
-# 5153a2628be04fb2bf9da1185c9fa09a
-#: ../../../source/reference/sql_commands.rst:42
 msgid "``CREATE TABLE table_name (\\`_id\\` INT)``"
 msgstr ""
 
-# e2aa8b9b73de400f8dfbf2e1adedd1c2
-#: ../../../source/reference/sql_commands.rst:43
 msgid "``CREATE TABLE table_name (\\`_id\\` INT, KEY(_id) USING HASH)``"
 msgstr ""
 
-# 456142b80ed74272b7d617a0e24da7ad
-#: ../../../source/reference/sql_commands.rst:44
 msgid "``CREATE TABLE table_name (column_name BIGINT UNSIGNED)``"
 msgstr ""
 
-# b364b85688a2473780d8f52d18288ca7
-#: ../../../source/reference/sql_commands.rst:45
 msgid "``CREATE TABLE table_name (column_name BIGINT)``"
 msgstr ""
 
-# d5ef607db3854afcac11cc619f33f90c
-#: ../../../source/reference/sql_commands.rst:46
 msgid "``CREATE TABLE table_name (column_name BINARY(...))``"
 msgstr ""
 
-# 1721e8ade2114c278a2db5b1828cac6a
-#: ../../../source/reference/sql_commands.rst:47
 msgid "``CREATE TABLE table_name (column_name BIT)``"
 msgstr ""
 
-# d73376ac08d141b3a7c7be4ab5db34b4
-#: ../../../source/reference/sql_commands.rst:48
 msgid "``CREATE TABLE table_name (column_name BLOB)``"
 msgstr ""
 
-# 6d50a690b69c47a0ba00218c8977979a
-#: ../../../source/reference/sql_commands.rst:49
 msgid "``CREATE TABLE table_name (column_name CHAR(...))``"
 msgstr ""
 
-# 540a6042ef7d4f49a0b18260fce3a3f9
-#: ../../../source/reference/sql_commands.rst:50
 msgid "``CREATE TABLE table_name (column_name DATE)``"
 msgstr ""
 
-# 546d86916f3a407aa7eb1f45e619c209
-#: ../../../source/reference/sql_commands.rst:51
 msgid "``CREATE TABLE table_name (column_name DATETIME)``"
 msgstr ""
 
-# 5d75a8ed6c5c4b7f8f73176e89499d43
-#: ../../../source/reference/sql_commands.rst:52
 msgid "``CREATE TABLE table_name (column_name DECIMAL)``"
 msgstr ""
 
-# 307719e9a4644e0eaedc4eec2562a83b
-#: ../../../source/reference/sql_commands.rst:53
 msgid "``CREATE TABLE table_name (column_name DOUBLE)``"
 msgstr ""
 
-# a6f829bf28534f85af06f42ac10c8dfb
-#: ../../../source/reference/sql_commands.rst:54
 msgid "``CREATE TABLE table_name (column_name ENUM(...))``"
 msgstr ""
 
-# ab5ce541e12d49fe8fa308aafbbaf135
-#: ../../../source/reference/sql_commands.rst:55
 msgid "``CREATE TABLE table_name (column_name FLOAT)``"
 msgstr ""
 
-# f925d091e1cc437698168714c1107ec2
-#: ../../../source/reference/sql_commands.rst:56
 msgid "``CREATE TABLE table_name (column_name GEOMETRY NOT NULL)``"
 msgstr ""
 
-# a3f2d983b3b04f9bbda0b2dda35b82a9
-#: ../../../source/reference/sql_commands.rst:57
 msgid "``CREATE TABLE table_name (column_name INT UNSIGNED)``"
 msgstr ""
 
-# 370a0ebd514f4055828323935f7aadc2
-#: ../../../source/reference/sql_commands.rst:58
 msgid "``CREATE TABLE table_name (column_name INT)``"
 msgstr ""
 
-# b77cae91dd354786aa96f476f1e4cb54
-#: ../../../source/reference/sql_commands.rst:59
 msgid "``CREATE TABLE table_name (column_name LONGBLOB)``"
 msgstr ""
 
-# e1bf0eb622c04d609a3c916640224fae
-#: ../../../source/reference/sql_commands.rst:60
 msgid "``CREATE TABLE table_name (column_name LONGTEXT)``"
 msgstr ""
 
-# 898793ee1321458c91206c5e481f0731
-#: ../../../source/reference/sql_commands.rst:61
 msgid "``CREATE TABLE table_name (column_name MEDIUMBLOB)``"
 msgstr ""
 
-# d0ebd43291794c789f132ad16bfada14
-#: ../../../source/reference/sql_commands.rst:62
 msgid "``CREATE TABLE table_name (column_name MEDIUMINT UNSIGNED)``"
 msgstr ""
 
-# dc3d15547d414a8c8532574d197214f0
-#: ../../../source/reference/sql_commands.rst:63
 msgid "``CREATE TABLE table_name (column_name MEDIUMINT)``"
 msgstr ""
 
-# affafcb0dbe641df92f33a16b19c557f
-#: ../../../source/reference/sql_commands.rst:64
 msgid "``CREATE TABLE table_name (column_name MEDIUMTEXT)``"
 msgstr ""
 
-# 845af4095c664c839572d0aea87a80d5
-#: ../../../source/reference/sql_commands.rst:65
 msgid "``CREATE TABLE table_name (column_name SET(...))``"
 msgstr ""
 
-# 3c33c17a065241e88f828e2024ca03e3
-#: ../../../source/reference/sql_commands.rst:66
 msgid "``CREATE TABLE table_name (column_name SMALLINT UNSIGNED)``"
 msgstr ""
 
-# dbae046996204901a26d486893e2f59c
-#: ../../../source/reference/sql_commands.rst:67
 msgid "``CREATE TABLE table_name (column_name SMALLINT)``"
 msgstr ""
 
-# b2e4cfd8bd4c43ef8a83866d1e393e8a
-#: ../../../source/reference/sql_commands.rst:68
 msgid "``CREATE TABLE table_name (column_name TEXT)``"
 msgstr ""
 
-# f44b7441a94f4762ba8286449cbafcd3
-#: ../../../source/reference/sql_commands.rst:69
 msgid "``CREATE TABLE table_name (column_name TIME)``"
 msgstr ""
 
-# a2d68efa1b404843bc990973483c7bf8
-#: ../../../source/reference/sql_commands.rst:70
 msgid "``CREATE TABLE table_name (column_name TIMESTAMP)``"
 msgstr ""
 
-# 8ee6b7c404514af9a8a474627042f3c8
-#: ../../../source/reference/sql_commands.rst:71
 msgid "``CREATE TABLE table_name (column_name TINYBLOB)``"
 msgstr ""
 
-# 719045d3f60d4699a31a21aefc6378dd
-#: ../../../source/reference/sql_commands.rst:72
 msgid "``CREATE TABLE table_name (column_name TINYINT UNSIGNED)``"
 msgstr ""
 
-# 77c8afe0cf6745039daa545da8299ee6
-#: ../../../source/reference/sql_commands.rst:73
 msgid "``CREATE TABLE table_name (column_name TINYINT)``"
 msgstr ""
 
-# f868f0458f6d44e28f6699eb92dfee8b
-#: ../../../source/reference/sql_commands.rst:74
 msgid "``CREATE TABLE table_name (column_name TINYTEXT)``"
 msgstr ""
 
-# 799d9e40959641009032b3dd63622d39
-#: ../../../source/reference/sql_commands.rst:75
 msgid "``CREATE TABLE table_name (column_name VARBINARY(...))``"
 msgstr ""
 
-# 05703ba15274479281b6f75edd6ec0f7
-#: ../../../source/reference/sql_commands.rst:76
 msgid "``CREATE TABLE table_name (column_name VARCHAR(...))``"
 msgstr ""
 
-# 47db6197de48433eb83a113f88f383d9
-#: ../../../source/reference/sql_commands.rst:77
 msgid "``CREATE TABLE table_name (column_name YEAR)``"
 msgstr ""
 
-# 6f9cb37a0a5341499b5907534dd61a11
-#: ../../../source/reference/sql_commands.rst:78
 msgid "``CREATE TABLE table_name (column_name INT AUTO_INCREMENT)``"
 msgstr ""
 
-# 6f63794d163d4a8b8ef972f03ed846d6
-#: ../../../source/reference/sql_commands.rst:79
 msgid "``CREATE TABLE table_name (column_name INT PRIMARY KEY)``"
 msgstr ""
 
-# 625c15f5f33846abaa81cb6fa1f8cbf1
-#: ../../../source/reference/sql_commands.rst:80
 msgid "``CREATE TABLE table_name (column_name DATE PRIMARY KEY)``"
 msgstr ""
 
-# 8411e5944e3744a7a9e02cfb35699c99
-#: ../../../source/reference/sql_commands.rst:81
 msgid "``CREATE TABLE table_name (column_name DATETIME PRIMARY KEY)``"
 msgstr ""
 
-# 7c3a1068e3ae4e7d93e7000350988666
-#: ../../../source/reference/sql_commands.rst:82
 msgid ""
 "``CREATE TABLE table_name (column_name DATETIME"
 "(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
-# 11838c8f2cb74bd0a6550a512e748220
-#: ../../../source/reference/sql_commands.rst:83
 msgid "``CREATE TABLE table_name (column_name DECIMAL PRIMARY KEY)``"
 msgstr ""
 
-# 8cb6eb5b070d4862a577650046962287
-#: ../../../source/reference/sql_commands.rst:84
 msgid ""
 "``CREATE TABLE table_name (column_name DECIMAL(maximum_number_digits, "
 "fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
-# debef4b9c22d45eeafe4bb17d5bdef29
-#: ../../../source/reference/sql_commands.rst:85
 msgid "``CREATE TABLE table_name (column_name TIME PRIMARY KEY)``"
 msgstr ""
 
-# 9695eea381454fe9bf316ecf8ae0376e
-#: ../../../source/reference/sql_commands.rst:86
 msgid ""
 "``CREATE TABLE table_name (column_name TIME(fractional_seconds_precision) "
 "PRIMARY KEY)``"
 msgstr ""
 
-# c4f3281e9077493cafd9c02b78e11a70
-#: ../../../source/reference/sql_commands.rst:87
 msgid "``CREATE TABLE table_name (column_name TIMESTAMP PRIMARY KEY)``"
 msgstr ""
 
-# b6cac615904c4bb7adb71b70946c2674
-#: ../../../source/reference/sql_commands.rst:88
 msgid ""
 "``CREATE TABLE table_name (column_name TIMESTAMP"
 "(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
-# 87840845f1b94ca3b73d46c8993d01b5
-#: ../../../source/reference/sql_commands.rst:89
 msgid "``CREATE TABLE table_name (column_name YEAR PRIMARY KEY)``"
 msgstr ""
 
-# a3c05d0f52844a54a0da4a5ecbf8b876
-#: ../../../source/reference/sql_commands.rst:90
 msgid ""
 "``CREATE TABLE table_name (column_name1 INT, column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
-# f815b3f832fe497caa7afd482b3da88e
-#: ../../../source/reference/sql_commands.rst:91
 msgid ""
 "``CREATE TABLE table_name (column_name1 DOUBLE, column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
-# dd073f8eba6e4fcb89e5146324d5cab4
-#: ../../../source/reference/sql_commands.rst:92
 msgid ""
 "``CREATE TABLE table_name (column_name1 FLOAT, column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
-# 45ef046ba79f4f61bd6401e6e6e3dac4
-#: ../../../source/reference/sql_commands.rst:93
 msgid ""
 "``CREATE TABLE table_name (column_name1 CHAR(...), column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
-# 373f0b9fe9084b56aed124cd4993401f
-#: ../../../source/reference/sql_commands.rst:94
 msgid ""
 "``CREATE TABLE table_name (column_name1 VARCHAR(...), column_name2 ..., KEY "
 "(column_name1, column_name2))``"
 msgstr ""
 
-# 59baa9e7e9924ee0b599f056a940d94c
-#: ../../../source/reference/sql_commands.rst:95
 msgid "``CREATE TEMPORARY TABLE table_name (...)``"
 msgstr ""
 
-# cb7641b0c8e341e584134e3d9660dacc
-#: ../../../source/reference/sql_commands.rst:96
 msgid "``DELETE FROM table_name WHERE ...``"
 msgstr ""
 
-# 92f4fa05424d47b1b62e8e1eb5c8e9e8
-#: ../../../source/reference/sql_commands.rst:97
 msgid "``DROP INDEX column_name ON table_name``"
 msgstr ""
 
-# 28b7e0ab67184c2ca79e61008fc19a55
-#: ../../../source/reference/sql_commands.rst:98
 msgid "``DROP TABLE IF EXISTS table_name, ...``"
 msgstr ""
 
-# b69165cbb40143a9a6d0a0b7173e20b2
-#: ../../../source/reference/sql_commands.rst:99
 msgid "``DROP TABLE \\`table-name-with-hyphen\\`, ...``"
 msgstr ""
 
-# 0c710398a55543768edc0a4716cd0ae0
-#: ../../../source/reference/sql_commands.rst:100
 msgid "``DROP TABLE table_name, ...``"
 msgstr ""
 
-# 83ca6a0c9f72445ca82874b0f9fd358e
-#: ../../../source/reference/sql_commands.rst:101
 msgid "``DROP TEMPORARY TABLE table_name``"
 msgstr ""
 
-# 9f549d865fba466391c36f20ce3d6c66
-#: ../../../source/reference/sql_commands.rst:102
 msgid "``FLUSH LOGS``"
 msgstr ""
 
-# a4cf401c675541d2b1a904debe64bd6c
-#: ../../../source/reference/sql_commands.rst:103
 msgid "``FLUSH TABLES``"
 msgstr ""
 
-# 62996b9fbf5348fa92da9db1549f8327
-#: ../../../source/reference/sql_commands.rst:104
 msgid ""
 "``INSERT INTO (geometry_column_name) VALUES (GeomFromText('POINT(...)'))``"
 msgstr ""
 
-# fb667c464f6b4d4a82627b67006b6782
-#: ../../../source/reference/sql_commands.rst:105
 msgid "``INSERT INTO ... VALUES ...``"
 msgstr ""
 
-# 435f7105de9e4b4eba17263776f702c0
-#: ../../../source/reference/sql_commands.rst:106
 msgid ""
 "``INSERT INTO ... VALUES ... ON DUPLICATE KEY UPDATE ...`` (for ``PRIMARY "
 "KEY``)"
 msgstr ""
 
-# 67208c11d6dd41c8816cab822f5635ca
-#: ../../../source/reference/sql_commands.rst:107
 msgid ""
 "``INSERT INTO ... VALUES ... ON DUPLICATE KEY UPDATE ...`` (for ``UNIQUE "
 "KEY``)"
 msgstr ""
 
-# 3fa46f4303b84af1bdc12f01e27af973
-#: ../../../source/reference/sql_commands.rst:108
 msgid ""
 "``INSERT INTO table_name (column_name, ...) SELECT ... FROM "
 "other_table_name``"
 msgstr ""
 
-# dcedb7d5350c45fcafb7face9f224bee
-#: ../../../source/reference/sql_commands.rst:109
 msgid "``REPLACE INTO table_name SELECT ... FROM other_table_name ...``"
 msgstr ""
 
-# 74a4962a41df4a11b659d6c58c519d17
-#: ../../../source/reference/sql_commands.rst:110
 msgid ""
 "``SELECT * FROM information_schema.plugins WHERE plugin_name = \"mroonga\"``"
 msgstr ""
 
-# b54e4aba504c42b792b33401a8c65cc3
-#: ../../../source/reference/sql_commands.rst:111
 msgid "``SELECT * FROM table_name``"
 msgstr ""
 
-# 76bcb028fdbc41e09f431134989927e5
-#: ../../../source/reference/sql_commands.rst:112
 msgid "``SELECT * FROM table_name FORCE INDEX(index_name) WHERE ...``"
 msgstr ""
 
-# 36c1986dc7bc4cce9fa7343a1da0e5be
-#: ../../../source/reference/sql_commands.rst:113
 msgid "``SELECT * FROM table_name ORDER BY column_name ASC LIMIT ...``"
 msgstr ""
 
-# f16fc4c6dba74d4993a873d60e0e823f
-#: ../../../source/reference/sql_commands.rst:114
 msgid "``SELECT * FROM table_name ORDER BY column_name ASC``"
 msgstr ""
 
-# db6189ed3cc04b4b9dc2ccb23d81615e
-#: ../../../source/reference/sql_commands.rst:115
 msgid "``SELECT * FROM table_name ORDER BY column_name DESC LIMIT ...``"
 msgstr ""
 
-# eaf68547caba4966af9c9ff9c2be30b4
-#: ../../../source/reference/sql_commands.rst:116
 msgid "``SELECT * FROM table_name ORDER BY column_name DESC``"
 msgstr ""
 
-# e05cee46607f4660a081a58b20dc69bd
-#: ../../../source/reference/sql_commands.rst:117
 msgid "``SELECT * FROM table_name ORDER BY column_name``"
 msgstr ""
 
-# 3a2c58c6c0a947e88608a383355ccdc3
-#: ../../../source/reference/sql_commands.rst:118
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*D+ word ...\" "
 "IN BOOLEAN MODE)``"
 msgstr ""
 
-# 249b2571dbb247559445fcddfffed94c
-#: ../../../source/reference/sql_commands.rst:119
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*D- word ...\" "
 "IN BOOLEAN MODE)``"
 msgstr ""
 
-# 3ea838c67d7e47f2b56391fe5599a09d
-#: ../../../source/reference/sql_commands.rst:120
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*DOR word ..."
 "\" IN BOOLEAN MODE)``"
 msgstr ""
 
-# e058b7e3155d49108b504739ffe720ee
-#: ../../../source/reference/sql_commands.rst:121
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*W word ...\" "
 "IN BOOLEAN MODE)``"
 msgstr ""
 
-# 08094a3506ca4735bd36e09d6500fcbb
-#: ../../../source/reference/sql_commands.rst:122
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"+word ...\" IN "
 "BOOLEAN MODE)``"
 msgstr ""
 
-# 8dfedf8477554319a4913f502ce185bc
-#: ../../../source/reference/sql_commands.rst:123
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"...\" IN "
 "BOOLEAN MODE)``"
 msgstr ""
 
-# 3bf2d7c52d334e8e9416e773c7c36150
-#: ../../../source/reference/sql_commands.rst:124
 msgid ""
 "``SELECT * FROM table_name WHERE MATCH(column_name, ...) AGAINST(\"...\" IN "
 "BOOLEAN MODE)``"
 msgstr ""
 
-# 1fc98641c232410e92cdf63b48cb1ec2
-#: ../../../source/reference/sql_commands.rst:125
 msgid ""
 "``SELECT * FROM table_name WHERE MBRContains(GeomFromText('LineString"
 "(...)'), geometry_column_name)``"
 msgstr ""
 
-# c282e435cc244d4ba86619e5040a30f1
-#: ../../../source/reference/sql_commands.rst:126
 msgid ""
 "``SELECT * FROM table_name WHERE NOT MATCH(column_name) AGAINST(\"...\" IN "
 "BOOLEAN MODE)``"
 msgstr ""
 
-# a2c34958fe5644f7bcdd7a02649a43a2
-#: ../../../source/reference/sql_commands.rst:127
 msgid "``SELECT * FROM table_name WHERE column_name < ...``"
 msgstr ""
 
-# d36c4f28d64e46ecab353dc8ea9ac892
-#: ../../../source/reference/sql_commands.rst:128
 msgid "``SELECT * FROM table_name WHERE column_name <= ...``"
 msgstr ""
 
-# a165991a94c145d4a2262dce478772cb
-#: ../../../source/reference/sql_commands.rst:129
 msgid "``SELECT * FROM table_name WHERE column_name = ...``"
 msgstr ""
 
-# 04e9c0d93c0a417db37fa3ab8644cffb
-#: ../../../source/reference/sql_commands.rst:130
 msgid "``SELECT * FROM table_name WHERE column_name > ...``"
 msgstr ""
 
-# 0184738eacab4b008b2650b8b552852b
-#: ../../../source/reference/sql_commands.rst:131
 msgid "``SELECT * FROM table_name WHERE column_name >= ...``"
 msgstr ""
 
-# f83294e246814b06abc0c14ed3dc17d2
-#: ../../../source/reference/sql_commands.rst:132
 msgid "``SELECT * FROM table_name WHERE column_name BETWEEN ... AND ...``"
 msgstr ""
 
-# c9c8fdf805a44846aa3df7194b4c8831
-#: ../../../source/reference/sql_commands.rst:133
 msgid ""
 "``SELECT * FROM table_name WHERE column_name IN (SELECT sub_column_name FROM "
 "sub_table_name WHERE MATCH(sub_text_column_name) AGAINST(\"...\"))``"
 msgstr ""
 
-# 63e7f9a8ac524276ad2399c8cdca6392
-#: ../../../source/reference/sql_commands.rst:134
 msgid ""
 "``SELECT *, MATCH(column_name) AGAINST(\"...\" IN BOOLEAN MODE) FROM "
 "table_name WHERE MATCH(column_name) AGAINST(\"...\" IN BOOLEAN MODE)``"
 msgstr ""
 
-# 8f3c1da579f842df9de6bac1b8cd914d
-#: ../../../source/reference/sql_commands.rst:135
 msgid "``SELECT FOUND_ROWS()``"
 msgstr ""
 
-# 552ded43ee5c4bc88891a3c832cb7755
-#: ../../../source/reference/sql_commands.rst:136
 msgid ""
 "``SELECT SQL_CALC_FOUND_ROWS * FROM table_name WHERE MATCH(...) AGAINST(\"..."
 "\" IN BOOLEAN MODE) ORDER BY column_name LIMIT start,n_records``"
 msgstr ""
 
-# da4a4c21291e444b85405fc57a4e20e7
-#: ../../../source/reference/sql_commands.rst:137
 msgid "``SELECT last_insert_grn_id()``"
 msgstr ""
 
-# 39f1b0be04a84034b02c47dd88feef94
-#: ../../../source/reference/sql_commands.rst:138
 msgid "``SET binlog_format=\"MIXED\"``"
 msgstr ""
 
-# b41fac6d8f8c4bb8910136add61431f4
-#: ../../../source/reference/sql_commands.rst:139
 msgid "``SET binlog_format=\"ROW\"``"
 msgstr ""
 
-# c677876f21484830aed4986182be8707
-#: ../../../source/reference/sql_commands.rst:140
 msgid "``SET binlog_format=\"STATEMENT\"``"
 msgstr ""
 
-# 468656877d8b41ce8e10aebcfbbf0b61
-#: ../../../source/reference/sql_commands.rst:141
 msgid "``TRUNCATE TABLE table_name``"
 msgstr ""
 
-# 8400d1e7d8514e3b82b77b18cad0eb87
-#: ../../../source/reference/sql_commands.rst:142
 msgid "``UPDATE table_name SET column_name = ...``"
 msgstr ""
 
-# b089c40304aa4805a4fca045ed8b3a2c
-#: ../../../source/reference/sql_commands.rst:145
 msgid "List of unavailable SQL commands"
 msgstr ""
 
-# 6adc617fbec0459da5d6cd5f577aa399
-#: ../../../source/reference/sql_commands.rst:147
 msgid "``CREATE TABLE (...) CHARSET not_listed_charset_above``"
 msgstr ""
 
-# 6857c598caab4c0588c28d380dc5e9f2
-#: ../../../source/reference/sql_commands.rst:148
 msgid ""
 "``INSERT INTO (geometry_column_name) VALUES (GeomFromText('LineString(...)'))"
 "``"
 msgstr ""
 
-# 6669ecac6be34402bd6cbe0b169f6d6e
-#: ../../../source/reference/sql_commands.rst:149
 msgid "``INSERT INTO (...) VALUES (null)``"
 msgstr ""
 
-# 12b10c3b5cbc4b11bdc201d6ecd3a9e0
-#: ../../../source/reference/sql_commands.rst:150
 msgid "``START TRANSACTION``"
 msgstr ""
 
-# 560c35288ed942369cc2291c429c2cdc
-#: ../../../source/reference/sql_commands.rst:152
 msgid ""
 "Basically, The character set which groonga supports (EUC-JP/UTF-8/SJIS/"
 "LATIN1/KOI8R) is also supported in mroonga."
 msgstr ""
 
-# 092e509502e240dea3ee4f872b6dd0e3
-#: ../../../source/reference/sql_commands.rst:155
 msgid "I found an unlisted SQL command"
 msgstr ""
 
-# 65f62f6ca0c3446a99ff4db23eb76186
-#: ../../../source/reference/sql_commands.rst:157
 msgid ""
 "If you find unlisted SQL command and confirm whether the SQL command works "
 "well or not, we want to list it. Please mail it to `us <http://groonga.org/"
@@ -1504,24 +966,16 @@ msgid ""
 "request system on GitHub."
 msgstr ""
 
-# 6f57bcd862b3492b9828d7d4ec559909
-#: ../../../source/reference/status_variables.rst:4
 msgid "Status variables"
 msgstr ""
 
-# 74f8ebbd34854d6f8bfed223beac1b84
-#: ../../../source/reference/status_variables.rst:6
 msgid ""
 "Here are the explanations of status variables that are introduced by mroonga."
 msgstr ""
 
-# 34788151b7ff433c9926e8e51c3d5ae3
-#: ../../../source/reference/status_variables.rst:9
 msgid "Mroonga_count_skip"
 msgstr ""
 
-# f66bd47adc1f4141ae9432c72e8bf6a7
-#: ../../../source/reference/status_variables.rst:11
 msgid ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
@@ -1529,20 +983,12 @@ msgstr ""
 "This value is increased when 'fast line count feature' is used. You can use "
 "this value to check if the feature is working when you enable it."
 
-# c376c0400a38426e833beae3faabbc28
-# 14a1b5c728a747ab9c8167c4165387ea
-#: ../../../source/reference/status_variables.rst:14
-#: ../../../source/reference/status_variables.rst:30
 msgid "Here is an example how to check it::"
 msgstr ""
 
-# 374a138fe5c6484a8e8745ec4814f9de
-#: ../../../source/reference/status_variables.rst:25
 msgid "Mroonga_fast_order_limit"
 msgstr ""
 
-# 052f5e42b1d84e8d919523fb99c8e5d5
-#: ../../../source/reference/status_variables.rst:27
 msgid ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
@@ -1550,349 +996,218 @@ msgstr ""
 "This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
 "use this value to check if the feature is working when you enable it."
 
-# 5946a28aa93340ee9a289c52679bd434
-#: ../../../source/reference/udf.rst:4
 msgid "UDF (User Defined Functions)"
 msgstr ""
 
-# 23ad64d3c5c543a4885798de7494c425
-#: ../../../source/reference/udf.rst:6
 msgid ""
 "mroonga provides some useful functionality as UDF (User Defined Functions)."
 msgstr ""
 
-# 0ecdbb3231bc4d1fbd38decb8fddf851
-#: ../../../source/reference/udf/mroonga_escape.rst:4
 msgid "mroonga_escape"
 msgstr ""
 
-# 1b1d45eed72b4a819c19f9db668f6f43
-#: ../../../source/reference/udf/mroonga_escape.rst:7
-#: ../../../source/reference/udf/mroonga_snippet.rst:7
 msgid "Summary"
 msgstr ""
 
-# e36c3c66cef948299e1c9e0b9b226d97
-#: ../../../source/reference/udf/mroonga_escape.rst:9
 msgid ""
 "``mroonga_escape`` UDF provides functionality to escape given string. It "
 "also accepts parameter what character should be escaped."
 msgstr ""
 
-# b4c0038975dc41049c6fad2ef569481c
-#: ../../../source/reference/udf/mroonga_escape.rst:13
-#: ../../../source/reference/udf/mroonga_snippet.rst:19
 msgid "Syntax"
 msgstr ""
 
-# f3c65ee518da42fb95b81481c2257b36
-#: ../../../source/reference/udf/mroonga_escape.rst:15
 msgid "mroonga_escape has required parameter and optional parameter::"
 msgstr ""
 
-# 2e9a7a8ecdf543fb8fcab327809acc02
-#: ../../../source/reference/udf/mroonga_escape.rst:21
-#: ../../../source/reference/udf/mroonga_snippet.rst:36
 msgid "Usage"
 msgstr ""
 
-# c7014ffe43cc47f58cb21da90fc36c62
-#: ../../../source/reference/udf/mroonga_escape.rst:23
 msgid "TODO"
 msgstr ""
 
-# 03fa8b7845534cf1b493bed3510a16c2
-#: ../../../source/reference/udf/mroonga_escape.rst:26
-#: ../../../source/reference/udf/mroonga_snippet.rst:111
 msgid "Parameters"
 msgstr ""
 
-# 1f8e22ad3fcc40309eeee8083f54f2d3
-#: ../../../source/reference/udf/mroonga_escape.rst:29
-#: ../../../source/reference/udf/mroonga_snippet.rst:114
 msgid "Required parameters"
 msgstr ""
 
-# 878e5d4b90e846a891ea42856e6eb2fd
-#: ../../../source/reference/udf/mroonga_escape.rst:31
 msgid "There is one required parameter, ``string``."
 msgstr ""
 
-# 5815f775187a444c8bce00e78d5fda0e
-#: ../../../source/reference/udf/mroonga_escape.rst:34
 msgid "``string``"
 msgstr ""
 
-# 77c3c3b0d7fb4ca383a52442d11340a3
-#: ../../../source/reference/udf/mroonga_escape.rst:36
 msgid "It specifies text which you want to escape."
 msgstr ""
 
-# 60133be2466040feb3b66d8f9348a458
-#: ../../../source/reference/udf/mroonga_escape.rst:39
-#: ../../../source/reference/udf/mroonga_snippet.rst:164
 msgid "Optional parameters"
 msgstr ""
 
-# bcba930a6791498abade8fdc74aec9f6
-#: ../../../source/reference/udf/mroonga_escape.rst:41
 msgid "There is one optional parameter, ``special_characters``."
 msgstr ""
 
-# 8cc1d49f35a8427488c66ccb0a23ef5b
-#: ../../../source/reference/udf/mroonga_escape.rst:44
 msgid "``special_characters``"
 msgstr ""
 
-# 0c2289db8f70450ea9acae5af6c0b968
-#: ../../../source/reference/udf/mroonga_escape.rst:46
 msgid "It specifies characters to escape."
 msgstr ""
 
-# 9b54ccd05eb64ed79f819c3680d4f3cf
-#: ../../../source/reference/udf/mroonga_escape.rst:49
-#: ../../../source/reference/udf/mroonga_snippet.rst:185
 msgid "Return value"
 msgstr ""
 
-# 78d935f8df464ad08df322bc870a617f
-#: ../../../source/reference/udf/mroonga_escape.rst:51
 msgid "It returns escaped string."
 msgstr ""
 
-# d56d2115b9194a94a75db306ad141f06
-#: ../../../source/reference/udf/mroonga_snippet.rst:4
 msgid "mroonga_snippet"
 msgstr ""
 
-# 687fc159c857416086805363c7ebaeb8
-#: ../../../source/reference/udf/mroonga_snippet.rst:9
 msgid ""
 "``mroonga_snippet`` UDF provides functionality to get keyword in context."
 msgstr ""
 
-# 6d7a2af0de414d7b868d73776f119003
-#: ../../../source/reference/udf/mroonga_snippet.rst:14
 msgid ""
 "This feature is in experimental stage. So, the required arguments or value "
 "is changed without notice in the future."
 msgstr ""
 
-# 703303a9868f4f968400aa96e472d24d
-#: ../../../source/reference/udf/mroonga_snippet.rst:21
 msgid "mroonga_snippet has required parameter and optional parameter::"
 msgstr ""
 
-# 40ec742f0f3f46cb9f94d083f692e86d
-#: ../../../source/reference/udf/mroonga_snippet.rst:39
 msgid ""
 "There is a case that you want to extract keyword and surrounding text as a "
 "search results."
 msgstr ""
 
-# c41614bcd34844eb92d8e0ba4c0013dc
-#: ../../../source/reference/udf/mroonga_snippet.rst:42
 msgid ""
 "Snippet means 'keyword and surrounding text'. It is called 'Keyword in "
 "context'."
 msgstr ""
 
-# ec2bb4d1ed6a4d0db8bf473b9e4cb3f4
-#: ../../../source/reference/udf/mroonga_snippet.rst:44
 msgid ""
 "``mroonga_snippet`` function provides the way to get snippet from search "
 "results."
 msgstr ""
 
-# 7fb81bed6da94139a5872eb9971789df
-#: ../../../source/reference/udf/mroonga_snippet.rst:46
 msgid "You can use ``mroonga_snippet`` UDF in storage mode and wrapper mode."
 msgstr ""
 
-# b5eab9cfe74e43e083456ac6fd2fc51d
-#: ../../../source/reference/udf/mroonga_snippet.rst:48
 msgid ""
 "``mroonga_snippet`` function is included in mroonga as a User-Defined "
 "Function (UDF), but if you have not yet register it in MySQL by CREATE "
 "FUNCTION, you need to invoke the following SQL for defining a function. ::"
 msgstr ""
 
-# 9d47d4c5802c444c8475afbab2412f13
-#: ../../../source/reference/udf/mroonga_snippet.rst:52
 msgid ""
 "``mroonga_snippet`` function is useful for searching the text which contains "
 "keyword and associated one by using MATCH .. AGAINST syntax."
 msgstr ""
 
-# c3975060354a4390a1379277e56bf452
-#: ../../../source/reference/udf/mroonga_snippet.rst:55
 msgid ""
 "Imagine searching the document which contains 'fulltext' as a keyword. "
 "Assume that some keyword such as 'MySQL' and 'search' are associated with "
 "'fulltext'."
 msgstr ""
 
-# 6ceb308ba02c46eba999048b4424f687
-#: ../../../source/reference/udf/mroonga_snippet.rst:58
 msgid "``mroonga_snippet`` function meets above."
 msgstr ""
 
-# 7417bdef7949487792fb29c98bb2bd36
-#: ../../../source/reference/udf/mroonga_snippet.rst:60
 msgid "Here is the schema definition for execution examples(storage mode)::"
 msgstr ""
 
-# 90a7b79e041c44349b1a15abe96ffbf1
-#: ../../../source/reference/udf/mroonga_snippet.rst:70
 msgid "Here is the schema definition for execution examples(wrapper mode)::"
 msgstr ""
 
-# 1c5cb1f20c72455f92652b66ed13067a
-#: ../../../source/reference/udf/mroonga_snippet.rst:80
 msgid "Here is the sample data for execution examples::"
 msgstr ""
 
-# 4c836e2ff42045e2b9d8160506b65a05
-#: ../../../source/reference/udf/mroonga_snippet.rst:86
 msgid "Here is the results of execution examples::"
 msgstr ""
 
-# 61b4a628c2484329956ea6c98af531ac
-#: ../../../source/reference/udf/mroonga_snippet.rst:108
 msgid ""
 "The keyword 'fulltext' and associated keyword 'MySQL' and 'search' has been "
 "extracted."
 msgstr ""
 
-# 0978950fdc4b480bb39a76f2922de635
-#: ../../../source/reference/udf/mroonga_snippet.rst:116
 msgid "There are many required parameters."
 msgstr ""
 
-# f14592a45bea403585acd63189e559f1
-#: ../../../source/reference/udf/mroonga_snippet.rst:120
 msgid "``document``"
 msgstr ""
 
-# 4980363c216344cb8711632eb97e57c8
-#: ../../../source/reference/udf/mroonga_snippet.rst:121
 msgid "The column name or string value is required."
 msgstr ""
 
-# d7667e1058f54405a25c232d7162b92e
-#: ../../../source/reference/udf/mroonga_snippet.rst:124
 msgid "``max_length``"
 msgstr ""
 
-# 010e14047c9546bb8ade2e47ccc316f5
-#: ../../../source/reference/udf/mroonga_snippet.rst:126
 msgid "The max length of snippet (bytes) is required."
 msgstr ""
 
-# 67a2619087fe456c9f98d2d5c2f1ac20
-#: ../../../source/reference/udf/mroonga_snippet.rst:129
 msgid "``max_count``"
 msgstr ""
 
-# 5e14c6b9a9f941e9bc6368d97d608b1a
-#: ../../../source/reference/udf/mroonga_snippet.rst:131
 msgid "The max elements of snippets (N word) is required."
 msgstr ""
 
-# 94bdef3012c540f6bcef5305d6c3b186
-#: ../../../source/reference/udf/mroonga_snippet.rst:134
 msgid "``encoding``"
 msgstr ""
 
-# 3638b34dceda4e5bbad0e11208201d02
-#: ../../../source/reference/udf/mroonga_snippet.rst:136
 msgid ""
 "The encoding of document is required. You can specify the value of encoding "
 "such as 'ascii_general_ci', 'cp932_japanese_ci', 'eucjpms_japanese_ci' and "
 "so on."
 msgstr ""
 
-# 7c0d45f029704219acc2a83a1a78e3ff
-#: ../../../source/reference/udf/mroonga_snippet.rst:141
 msgid "``skip_leading_spaces``"
 msgstr ""
 
-# 07a88932f94b4d47bcc19acaa98fb922
-#: ../../../source/reference/udf/mroonga_snippet.rst:143
 msgid ""
 "Specify whether skip leading spaces or not. Specify the value 1 for skipping "
 "leading spaces, 0 for not."
 msgstr ""
 
-# 7b1f91adb50d4b64addf9a0dd2ef2174
-#: ../../../source/reference/udf/mroonga_snippet.rst:147
 msgid "``html_escape``"
 msgstr ""
 
-# da50a0dfdbeb46b2bf2fe9c4f5c3d9fd
-#: ../../../source/reference/udf/mroonga_snippet.rst:149
 msgid ""
 "HTML escape is enabled or not. Specify the value 1 for enabling HTML escape, "
 "0 for not."
 msgstr ""
 
-# d969e06c5e7b41a796ac01a3f4892d12
-#: ../../../source/reference/udf/mroonga_snippet.rst:153
 msgid "``prefix``"
 msgstr ""
 
-# 2073f8a1535a4d2cb038ba3f6c00cd72
-#: ../../../source/reference/udf/mroonga_snippet.rst:155
 msgid "The start text of snippet."
 msgstr ""
 
-# dbaf1ee0f33e48f58fdc1e9e82ed55c9
-#: ../../../source/reference/udf/mroonga_snippet.rst:158
 msgid "``suffix``"
 msgstr ""
 
-# 5642aebdb4f5472fa4f8074d6ce9744f
-#: ../../../source/reference/udf/mroonga_snippet.rst:160
 msgid "The end text of snippet."
 msgstr ""
 
-# 73632565843f4e8a889572a881f2cc3c
-#: ../../../source/reference/udf/mroonga_snippet.rst:166
 msgid ""
 "There is one optional group parameter, ``wordN`` related prefix and suffix."
 msgstr ""
 
-# 672d8096c3b347aea56e5865118d97a8
-#: ../../../source/reference/udf/mroonga_snippet.rst:169
 msgid "``wordN``"
 msgstr ""
 
-# a0d6d89038fc459483e25ca7b65774f4
-#: ../../../source/reference/udf/mroonga_snippet.rst:171
 msgid "Specify any word."
 msgstr ""
 
-# 47e61660661f4b3c8d23376be0426756
-#: ../../../source/reference/udf/mroonga_snippet.rst:174
 msgid "``wordN_prefix``"
 msgstr ""
 
-# 76a5e8461e434496b24cb1add618e879
-#: ../../../source/reference/udf/mroonga_snippet.rst:176
 msgid "It is the start text of wordN."
 msgstr ""
 
-# 543e5ff50d72422592b015e315f7f7f2
-#: ../../../source/reference/udf/mroonga_snippet.rst:179
 msgid "``wordN_suffix``"
 msgstr ""
 
-# ae1fe2e3f9ed4dde9a004edab3c39ebf
-#: ../../../source/reference/udf/mroonga_snippet.rst:181
 msgid "It is the end text of wordN."
 msgstr ""
 
-# 5a7cc7af6f4e460f828fe3bdd7ed50da
-#: ../../../source/reference/udf/mroonga_snippet.rst:187
 msgid "It returns snippet string."
 msgstr ""

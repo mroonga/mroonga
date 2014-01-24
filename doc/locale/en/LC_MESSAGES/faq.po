@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-25 18:11+0900\n"
+"POT-Creation-Date: 2014-01-24 11:53+0900\n"
 "PO-Revision-Date: 2013-12-13 16:08+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -17,13 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# ffaf4b6581d946059def03b8d04d2db7
-#: ../../../source/faq.rst:4
 msgid "FAQ"
 msgstr "FAQ"
 
-# d4af7f67a405470aa6281edb3aa68e6e
-#: ../../../source/faq.rst:6
 msgid ""
 "There are some frequently asked questions for Mroonga. This section "
 "describes about them."
@@ -31,33 +27,21 @@ msgstr ""
 "There are some frequently asked questions for Mroonga. This section "
 "describes about them."
 
-# 29ab0eee5d8646c397123b91be45d833
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:4
 msgid "How to avoid \"mmap Cannot allocate memory\" error?"
 msgstr "How to avoid \"mmap Cannot allocate memory\" error?"
 
-# a01296c5a41b4e7db80ebdd1f4e709ee
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:7
 msgid "Short answer"
 msgstr "Short answer"
 
-# d379d075e4a840e8bc256da485c5dabf
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:9
 msgid "Increase ``vm.max_map_count`` Linux kernel parameter value."
 msgstr "Increase ``vm.max_map_count`` Linux kernel parameter value."
 
-# 613271fcb9dd4f51b909c00f3796a151
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:12
 msgid "Long answer"
 msgstr "Long answer"
 
-# 8ecc5a0457c743efb7de5c41e19bfb2f
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:14
 msgid "There is a case following mmap error in log file::"
 msgstr "There is a case following mmap error in log file::"
 
-# c644e8341545420f9eaa8e9829143081
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:18
 msgid ""
 "Note that ``<13036498944>`` means total size of mmap (almost 12GB) in this "
 "case."
@@ -65,28 +49,18 @@ msgstr ""
 "Note that ``<13036498944>`` means total size of mmap (almost 12GB) in this "
 "case."
 
-# 4cbd98ff79dd4c1689ade0b63653f069
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:20
 msgid "So you need to confirm following point of views."
 msgstr "So you need to confirm following point of views."
 
-# 8aa76ef2c8a2485ab0ae710c4f8dde59
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:22
 msgid "Are there enough free memory?"
 msgstr "Are there enough free memory?"
 
-# b9741cb10eac43509085a5c7d42ac0e9
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:23
 msgid "Are maximum number of mappings exceeded?"
 msgstr "Are maximum number of mappings exceeded?"
 
-# 63930bbb037440c1903725724ff4f4df
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:25
 msgid "To check there are enough free memory, you can use ``vmstat`` command."
 msgstr "To check there are enough free memory, you can use ``vmstat`` command."
 
-# 535515d594e74b519dd1ca662c871db1
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:27
 msgid ""
 "To check whether maximum number of mappings are exceeded, you can "
 "investigate the value of ``vm.max_map_count``."
@@ -94,8 +68,6 @@ msgstr ""
 "To check whether maximum number of mappings are exceeded, you can "
 "investigate the value of ``vm.max_map_count``."
 
-# 3898a101c6bd4c2f9c0ef66eab6cf4ad
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:29
 msgid ""
 "If this issue is fixed by modifying the value of ``vm.max_map_count``, it's "
 "exactly the reason."
@@ -103,8 +75,6 @@ msgstr ""
 "If this issue is fixed by modifying the value of ``vm.max_map_count``, it's "
 "exactly the reason."
 
-# 6a033204cb044363bfff04e870a007c9
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:31
 msgid ""
 "As groonga allocates memory chunks each 256KB, you can estimate the size of "
 "database you can handle by following formula::"
@@ -112,8 +82,6 @@ msgstr ""
 "As groonga allocates memory chunks each 256KB, you can estimate the size of "
 "database you can handle by following formula::"
 
-# 7180d2c6d2e246c4871ff5bdae6f42b8
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:35
 msgid ""
 "If you want to handle over 16GB groonga database, you must specify at least "
 "65536 as the value of ``vm.max_map_count``::"
@@ -121,8 +89,6 @@ msgstr ""
 "If you want to handle over 16GB groonga database, you must specify at least "
 "65536 as the value of ``vm.max_map_count``::"
 
-# 1d3bee94ecd449c29c1d0ce2e323f97b
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:39
 msgid ""
 "You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm."
 "max_map_count=65536``."
@@ -130,8 +96,6 @@ msgstr ""
 "You can modify ``vm.max_map_count`` temporary by ``sudo sysctl -w vm."
 "max_map_count=65536``."
 
-# 3778c76b717c4f6487423fc4c193e944
-#: ../../../source/faq/mmap_cannot_allocate_memory.rst:41
 msgid ""
 "Then save the configuration value to ``/etc/sysctl.conf`` or ``/etc/sysctl.d/"
 "*.conf``."

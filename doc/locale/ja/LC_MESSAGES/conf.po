@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga-storage-engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 21:56+0900\n"
+"POT-Creation-Date: 2014-01-24 11:47+0900\n"
 "PO-Revision-Date: 2011-10-29 21:56+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -17,7 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../../../source/conf.py:131
 #, python-format
 msgid "%(project)s v%(release)s documentation"
 msgstr ""
