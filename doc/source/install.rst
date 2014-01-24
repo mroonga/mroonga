@@ -435,55 +435,42 @@ None for now.
 Zip
 ^^^
 
-For 32-bit environment, download `mariadb-10.0.6-with-mroonga-3.11-win32.zip
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.6-with-mroonga-3.11-win32.zip>`_
+For 32-bit environment, download `mariadb-10.0.7-with-mroonga-3.12-win32.zip
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.7-with-mroonga-3.12-win32.zip>`_
 and extract it.
 
-For 64-bit environment, download `mariadb-10.0.6-with-mroonga-3.11-winx64.zip
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.6-with-mroonga-3.11-winx64.zip>`_
+For 64-bit environment, download `mariadb-10.0.7-with-mroonga-3.12-winx64.zip
+<http://packages.groonga.org/windows/mroonga/mariadb-10.0.7-with-mroonga-3.12-winx64.zip>`_
 and extract it.
 
 Install Mroonga
 ^^^^^^^^^^^^^^^
 
-Start mysqld, connect to it by mysql client, and install it by "INSTALL PLUGIN" command. ::
+Zip packages are pre-configured for easy to use, so no need to execute "INSTALL PLUGIN" and install UDF.
 
- mysql> INSTALL PLUGIN mroonga SONAME 'ha_mroonga';
+Just start mysqld by following command.::
 
-If "mroonga" is displayed in "SHOW ENGINES" command result like below, Mroonga is well installed. ::
+  > mysqld.exe --defautls-file=.\MY-PREFERRED-INI.ini --console
 
- mysql> SHOW ENGINES;
- +------------+---------+------------------------------------------------------------+--------------+------+------------+
- | Engine     | Support | Comment                                                    | Transactions | XA   | Savepoints |
- +------------+---------+------------------------------------------------------------+--------------+------+------------+
- | mroonga    | YES     | Fulltext search, column base                               | NO           | NO   | NO         |
- | MRG_MYISAM | YES     | Collection of identical MyISAM tables                      | NO           | NO   | NO         |
- | CSV        | YES     | CSV storage engine                                         | NO           | NO   | NO         |
- | MyISAM     | DEFAULT | Default engine as of MySQL 3.23 with great performance     | NO           | NO   | NO         |
- | InnoDB     | YES     | Supports transactions, row-level locking, and foreign keys | YES          | YES  | YES        |
- | MEMORY     | YES     | Hash based, stored in memory, useful for temporary tables  | NO           | NO   | NO         |
- +------------+---------+------------------------------------------------------------+--------------+------+------------+
- 6 rows in set (0.00 sec)
+Each zip package contains ini files (my-small.ini, my-medium.ini, my-large.ini and so on), choose preferred ini file which meets on your demand.
 
-Next install UDF (User-Defined Function).
+Next connect to MariaDB by following command.::
 
-To get the record ID assigned by groonga in INSERT, install last_insert_grn_id function.
-
-Invoke CREATE FUNCTION like the following. ::
-
- mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga';
-
-To enable snippet (keyword in context) UDF, install mroonga_snippet function.
-
-Invoke CREATE FUNCTION like the following. ::
-
- mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga';
-
-To enable invoking groonga query from Mroonga, install mroonga_command function.
-
-Invoke CREATE FUNCTION like the following. ::
-
- mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga';
+  > mysql.exe
+  MariaDB [(none)]> SHOW ENGINES;
+  +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
+  | Engine             | Support | Comment                                                    | Transactions | XA   | Savepoints |
+  +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
+  | CSV                | YES     | CSV storage engine                                         | NO           | NO   | NO         |
+  | PERFORMANCE_SCHEMA | YES     | Performance Schema                                         | NO           | NO   | NO         |
+  | MEMORY             | YES     | Hash based, stored in memory, useful for temporary tables  | NO           | NO   | NO         |
+  | MyISAM             | YES     | MyISAM storage engine                                      | NO           | NO   | NO         |
+  | MRG_MyISAM         | YES     | Collection of identical MyISAM tables                      | NO           | NO   | NO         |
+  | InnoDB             | DEFAULT | Supports transactions, row-level locking, and foreign keys | YES          | YES  | YES        |
+  | mroonga            | YES     | CJK-ready fulltext search, column store                    | NO           | NO   | NO         |
+  | Aria               | YES     | Crash-safe tables with MyISAM heritage                     | NO           | NO   | NO         |
+  +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
+  8 rows in set (0.00 sec)
 
 
 Install from the source code
