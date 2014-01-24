@@ -155,6 +155,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Wed Jan 29 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 3.12-1
+- new upstream release.
+
 * Sun Dec 29 2013 HAYASHI Kentaro <hayashi@clear-code.com> - 3.11-1
 - new upstream release.
 - support Fedora 20.
