@@ -126,6 +126,34 @@ po_files_relative_from_locale_dir = \
 	LC_MESSAGES/tutorial.po \
 	$(NULL)
 
+edit_po_files = \
+	characteristic.edit \
+	community.edit \
+	conf.edit \
+	contribution.edit \
+	developer.edit \
+	faq.edit \
+	index.edit \
+	install.edit \
+	news.edit \
+	reference.edit \
+	tutorial.edit \
+	$(NULL)
+
+edit_po_files_relative_from_locale_dir = \
+	LC_MESSAGES/characteristic.edit \
+	LC_MESSAGES/community.edit \
+	LC_MESSAGES/conf.edit \
+	LC_MESSAGES/contribution.edit \
+	LC_MESSAGES/developer.edit \
+	LC_MESSAGES/faq.edit \
+	LC_MESSAGES/index.edit \
+	LC_MESSAGES/install.edit \
+	LC_MESSAGES/news.edit \
+	LC_MESSAGES/reference.edit \
+	LC_MESSAGES/tutorial.edit \
+	$(NULL)
+
 mo_files = \
 	characteristic.mo \
 	community.mo \
