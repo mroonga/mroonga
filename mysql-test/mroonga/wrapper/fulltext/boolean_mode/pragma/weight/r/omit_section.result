@@ -15,5 +15,6 @@ FROM diaries
 WHERE MATCH(title, content)
 AGAINST("*W1:2 +天気" in BOOLEAN MODE);
 id	title	content	score
-2	天気	明日の富士山の天気について	2
+2	天気	明日の富士山の天気について	3
+3	富士山	今日も天気がよくてきれいに見える。	1
 DROP TABLE diaries;

@@ -7442,6 +7442,36 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_d(struct st_mrn_ft_info *info,
   DBUG_RETURN(succeeded);
 }
 
+void ha_mroonga::generic_ft_init_ext_parse_pragma_w_append_section(
+  struct st_mrn_ft_info *info,
+  grn_obj *index_column,
+  grn_obj *match_columns,
+  uint section,
+  grn_obj *section_value_buffer,
+  int weight,
+  uint n_weights)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
+  GRN_UINT32_SET(info->ctx, section_value_buffer, section);
+  grn_expr_append_const(info->ctx, match_columns, section_value_buffer,
+                        GRN_OP_PUSH, 1);
+  grn_expr_append_op(info->ctx, match_columns, GRN_OP_GET_MEMBER, 2);
+
+  if (weight != 1) {
+    grn_expr_append_const_int(info->ctx, match_columns, weight,
+                              GRN_OP_PUSH, 1);
+    grn_expr_append_op(info->ctx, match_columns, GRN_OP_STAR, 2);
+  }
+
+  if (n_weights >= 2) {
+    grn_expr_append_op(info->ctx, match_columns, GRN_OP_OR, 2);
+  }
+
+  DBUG_VOID_RETURN;
+}
+
 bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
                                                     const char *keyword,
                                                     uint keyword_length,
@@ -7454,7 +7484,15 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
 
   *consumed_keyword_length = 0;
 
-  int n_sections = KEY_N_KEY_PARTS(info->key_info);
+  uint n_sections = KEY_N_KEY_PARTS(info->key_info);
+
+  grn_obj section_value_buffer;
+  GRN_UINT32_INIT(&section_value_buffer, 0);
+
+  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(bool, specified_sections, n_sections);
+  for (uint i = 0; i < n_sections; ++i) {
+    specified_sections[i] = false;
+  }
 
   uint n_weights = 0;
   while (keyword_length >= 1) {
@@ -7472,8 +7510,9 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
     }
 
     int section = 0;
-    if ('1' <= keyword[0] && keyword[0] < ('1' + n_sections)) {
+    if ('1' <= keyword[0] && keyword[0] < static_cast<char>('1' + n_sections)) {
       section = keyword[0] - '1';
+      specified_sections[section] = true;
     } else {
       break;
     }
@@ -7498,26 +7537,34 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
 
     n_weights++;
 
-    grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
-    {
-      grn_obj section_value;
-      GRN_UINT32_INIT(&section_value, 0);
-      GRN_UINT32_SET(info->ctx, &section_value, section);
-      grn_expr_append_const(info->ctx, match_columns, &section_value,
-                            GRN_OP_PUSH, 1);
-      grn_expr_append_op(info->ctx, match_columns, GRN_OP_GET_MEMBER, 2);
-    }
-
-    if (weight != 1) {
-      grn_expr_append_const_int(info->ctx, match_columns, weight,
-                                GRN_OP_PUSH, 1);
-      grn_expr_append_op(info->ctx, match_columns, GRN_OP_STAR, 2);
-    }
-
-    if (n_weights >= 2) {
-      grn_expr_append_op(info->ctx, match_columns, GRN_OP_OR, 2);
-    }
+    generic_ft_init_ext_parse_pragma_w_append_section(info,
+                                                      index_column,
+                                                      match_columns,
+                                                      section,
+                                                      &section_value_buffer,
+                                                      weight,
+                                                      n_weights);
   }
+
+  for (uint section = 0; section < n_sections; ++section) {
+    if (specified_sections[section]) {
+      continue;
+    }
+
+    ++n_weights;
+
+    int default_weight = 1;
+    generic_ft_init_ext_parse_pragma_w_append_section(info,
+                                                      index_column,
+                                                      match_columns,
+                                                      section,
+                                                      &section_value_buffer,
+                                                      default_weight,
+                                                      n_weights);
+  }
+  MRN_FREE_VARIABLE_LENGTH_ARRAYS(specified_sections);
+
+  GRN_OBJ_FIN(info->ctx, &section_value_buffer);
 
   DBUG_RETURN(n_weights > 0);
 }

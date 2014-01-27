@@ -873,6 +873,14 @@ private:
                                           uint keyword_length,
                                           grn_operator *default_operator,
                                           uint *consumed_keyword_length);
+  void generic_ft_init_ext_parse_pragma_w_append_section(
+    struct st_mrn_ft_info *info,
+    grn_obj *index_column,
+    grn_obj *match_columns,
+    uint section,
+    grn_obj *section_value_buffer,
+    int weight,
+    uint n_weights);
   bool generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
                                           const char *keyword,
                                           uint keyword_length,
