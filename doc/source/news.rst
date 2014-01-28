@@ -13,6 +13,10 @@ Improvements
 
 * Added a new system variable :ref:`mroonga_lock_timeout`. By changing this global variable,
   You can customize Groonga's lock timeout dynamically.
+* Improved compatibility with Tritonn 'W' pragma's behaviour.
+  In the previous versions, Mroonga used omitted section as weight 0. By this change,
+  Mroonga uses omitted section as weight 1. This behaviour is same as Tritonn.
+  [#2152] [Patch by Kenji Maruyama]
 
 Fixes
 ^^^^^
