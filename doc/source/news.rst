@@ -23,7 +23,8 @@ Fixes
 
 * Fixed a crash bug on FLUSH TABLES during SELECT MATCH AGAINST ... [#2137] [Reported by yoku]
 * Fixed wrong implementation for "W" pragma. It was changed to 1-origin. [#2151]
-  In the previous versions, "W" pragma is implemented as 0-origin, but it should be 0-origin.
+  In the previous versions, "W" pragma is implemented as 0-origin, but it is not compatible
+  with Tritonn.
   This is incompatible change, please check existing query which use "W" pragma.
 * Fixed a bug that searching empty records with "NOT" query returns duplicated results. [#2215]
   [groonga-dev,02052] [Reported by Naoya Murakami]
