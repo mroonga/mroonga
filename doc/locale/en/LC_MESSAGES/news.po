@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-24 11:53+0900\n"
-"PO-Revision-Date: 2013-12-25 19:30+0900\n"
+"POT-Creation-Date: 2014-01-28 15:49+0900\n"
+"PO-Revision-Date: 2014-01-28 15:50+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,11 +20,55 @@ msgstr ""
 msgid "News"
 msgstr "News"
 
-msgid "Release 3.11 - 2013/12/29"
+msgid "Release 3.12 - 2014/01/29"
 msgstr ""
 
 msgid "Improvements"
 msgstr "Improvements"
+
+msgid ""
+"Added a new system variable :ref:`mroonga_lock_timeout`. By changing this "
+"global variable, You can customize Groonga's lock timeout dynamically."
+msgstr ""
+
+msgid ""
+"Improved compatibility with Tritonn 'W' pragma's behaviour. In the previous "
+"versions, Mroonga used omitted section as weight 0. By this change, Mroonga "
+"uses omitted section as weight 1. This behaviour is same as Tritonn. [#2152] "
+"[Patch by Kenji Maruyama]"
+msgstr ""
+
+msgid "Fixes"
+msgstr "Fixes"
+
+msgid ""
+"Fixed a crash bug on FLUSH TABLES during SELECT MATCH AGAINST ... [#2137] "
+"[Reported by yoku]"
+msgstr ""
+
+msgid ""
+"Fixed wrong implementation for \"W\" pragma. It was changed to 1-origin. "
+"[#2151] In the previous versions, \"W\" pragma is implemented as 0-origin, "
+"but it is not compatible with Tritonn. This is incompatible change, please "
+"check existing query which use \"W\" pragma."
+msgstr ""
+
+msgid ""
+"Fixed a bug that searching empty records with \"NOT\" query returns "
+"duplicated results. [#2215] [groonga-dev,02052] [Reported by Naoya Murakami]"
+msgstr ""
+
+msgid "Thanks"
+msgstr "Thanks"
+
+msgid "yoku"
+msgstr ""
+
+msgid "Naoya Murakami"
+msgstr ""
+
+msgid "Release 3.11 - 2013/12/29"
+msgstr ""
 
 msgid "[deb] Dropped Debian 6.0 (squeeze) support."
 msgstr ""
@@ -82,9 +126,6 @@ msgid ""
 "instead."
 msgstr ""
 
-msgid "Fixes"
-msgstr "Fixes"
-
 msgid ""
 "[storage] Fixed a bug that MySQL crashes on 'LOCK TABLE .. READ' when "
 "dumping/restoring. [#2098]"
@@ -98,13 +139,7 @@ msgid ""
 "AGAINST ... ORDER BY LIMIT ...\". [#2144]"
 msgstr ""
 
-msgid "Thanks"
-msgstr "Thanks"
-
 msgid "Horikoshi Yuki"
-msgstr ""
-
-msgid "yoku"
 msgstr ""
 
 msgid "Release 3.10 - 2013/11/29"
@@ -234,9 +269,6 @@ msgid "Tomoatsu Shimada"
 msgstr ""
 
 msgid "@ceekz"
-msgstr ""
-
-msgid "Naoya Murakami"
 msgstr ""
 
 msgid "Release 3.07 - 2013/8/29"
