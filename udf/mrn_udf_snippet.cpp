@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -32,12 +32,12 @@ MRN_BEGIN_DECLS
 struct st_mrn_snip_info
 {
   grn_ctx ctx;
-  grn_snip *snippet;
+  grn_obj *snippet;
   String result_str;
 };
 
 static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
-                                   char *message, grn_snip **snippet)
+                                   char *message, grn_obj **snippet)
 {
   unsigned int i;
   CHARSET_INFO *cs;
@@ -115,7 +115,7 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
 
 error:
   if (*snippet) {
-    grn_snip_close(ctx, *snippet);
+    grn_obj_close(ctx, *snippet);
   }
   return TRUE;
 }
@@ -211,7 +211,7 @@ MRN_API char *mroonga_snippet(UDF_INIT *initid, UDF_ARGS *args, char *result,
   String *result_str = &snip_info->result_str;
   char *target;
   unsigned int target_length;
-  grn_snip *snippet = NULL;
+  grn_obj *snippet = NULL;
   grn_rc rc;
   unsigned int i, n_results, max_tagged_length, result_length;
 
@@ -269,7 +269,7 @@ MRN_API char *mroonga_snippet(UDF_INIT *initid, UDF_ARGS *args, char *result,
   }
 
   if (!snip_info->snippet) {
-    rc = grn_snip_close(ctx, snippet);
+    rc = grn_obj_close(ctx, snippet);
     if (rc) {
       my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
                       ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
@@ -290,7 +290,7 @@ MRN_API void mroonga_snippet_deinit(UDF_INIT *initid)
   st_mrn_snip_info *snip_info = (st_mrn_snip_info *) initid->ptr;
   if (snip_info) {
     if (snip_info->snippet) {
-      grn_snip_close(&snip_info->ctx, snip_info->snippet);
+      grn_obj_close(&snip_info->ctx, snip_info->snippet);
     }
     snip_info->result_str.free();
     grn_obj_close(&snip_info->ctx, grn_ctx_db(&snip_info->ctx));
