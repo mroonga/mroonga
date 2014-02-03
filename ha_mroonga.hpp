@@ -273,6 +273,8 @@ private:
   grn_obj *cursor_geo;
   grn_table_cursor *cursor;
   grn_table_cursor *index_table_cursor;
+  grn_obj *empty_value_records;
+  grn_table_cursor *empty_value_records_cursor;
   grn_obj *sorted_result;
   grn_obj *matched_record_keys;
   String  *blob_buffers;
@@ -537,6 +539,7 @@ private:
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
   void clear_cursor();
   void clear_cursor_geo();
+  void clear_empty_value_records();
   void clear_search_result();
   void clear_search_result_geo();
   void clear_indexes();

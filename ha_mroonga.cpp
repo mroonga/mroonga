@@ -1908,6 +1908,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    cursor_geo(NULL),
    cursor(NULL),
    index_table_cursor(NULL),
+   empty_value_records(NULL),
+   empty_value_records_cursor(NULL),
 
    sorted_result(NULL),
    matched_record_keys(NULL),
@@ -6638,6 +6640,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
 
   clear_cursor();
   clear_cursor_geo();
+  clear_empty_value_records();
 
   bool is_multiple_column_index = KEY_N_KEY_PARTS(&key_info) > 1;
   if (is_multiple_column_index) {
@@ -6721,18 +6724,50 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
                                    key_max, size_max,
                                    0, -1, flags);
   } else {
+    bool is_empty_value_records_search = false;
     if (is_multiple_column_index) {
       DBUG_PRINT("info", ("mroonga: use multiple column key%u", key_nr));
+    } else if (flags == 0 && size_min == 0 && size_max == 0) {
+      is_empty_value_records_search = true;
+      DBUG_PRINT("info",
+                 ("mroonga: use table scan for searching empty value records"));
     } else {
       DBUG_PRINT("info", ("mroonga: use key%u", key_nr));
     }
-    index_table_cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
-                                               key_min, size_min,
-                                               key_max, size_max,
-                                               0, -1, flags);
-    cursor = grn_index_cursor_open(ctx, index_table_cursor,
-                                   grn_index_columns[key_nr],
-                                   0, GRN_ID_MAX, 0);
+    if (is_empty_value_records_search) {
+      grn_obj *expression, *expression_variable;
+      GRN_EXPR_CREATE_FOR_QUERY(ctx, grn_table,
+                                expression, expression_variable);
+      grn_obj *target_column =
+        grn_columns[key_info.key_part->field->field_index];
+      grn_expr_append_const(ctx, expression, target_column, GRN_OP_GET_VALUE, 1);
+      grn_obj empty_value;
+      GRN_TEXT_INIT(&empty_value, 0);
+      grn_expr_append_obj(ctx, expression, &empty_value, GRN_OP_PUSH, 1);
+      grn_expr_append_op(ctx, expression, GRN_OP_EQUAL, 2);
+
+      empty_value_records =
+        grn_table_create(ctx, NULL, 0, NULL,
+                         GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                         grn_table, 0);
+      grn_table_select(ctx, grn_table, expression, empty_value_records,
+                       GRN_OP_OR);
+      grn_obj_unlink(ctx, expression);
+      grn_obj_unlink(ctx, &empty_value);
+
+      empty_value_records_cursor =
+        grn_table_cursor_open(ctx, empty_value_records,
+                              NULL, 0, NULL, 0,
+                              0, -1, flags);
+    } else {
+      index_table_cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
+                                                 key_min, size_min,
+                                                 key_max, size_max,
+                                                 0, -1, flags);
+      cursor = grn_index_cursor_open(ctx, index_table_cursor,
+                                     grn_index_columns[key_nr],
+                                     0, GRN_ID_MAX, 0);
+    }
   }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
@@ -8187,6 +8222,20 @@ void ha_mroonga::clear_cursor_geo()
   DBUG_VOID_RETURN;
 }
 
+void ha_mroonga::clear_empty_value_records()
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (empty_value_records_cursor) {
+    grn_table_cursor_close(ctx, empty_value_records_cursor);
+    empty_value_records_cursor = NULL;
+  }
+  if (empty_value_records) {
+    grn_obj_unlink(ctx, empty_value_records);
+    empty_value_records = NULL;
+  }
+  DBUG_VOID_RETURN;
+}
+
 void ha_mroonga::clear_search_result()
 {
   MRN_DBUG_ENTER_METHOD();
@@ -8477,6 +8526,16 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
     }
   } else if (cursor) {
     record_id = grn_table_cursor_next(ctx, cursor);
+  } else if (empty_value_records_cursor) {
+    grn_id empty_value_record_id;
+    empty_value_record_id =
+      grn_table_cursor_next(ctx, empty_value_records_cursor);
+    if (empty_value_record_id == GRN_ID_NIL) {
+      record_id = GRN_ID_NIL;
+    } else {
+      grn_table_get_key(ctx, empty_value_records, empty_value_record_id,
+                        &record_id, sizeof(grn_id));
+    }
   } else {
     record_id = GRN_ID_NIL;
   }
@@ -10612,6 +10671,7 @@ int ha_mroonga::reset()
   THD *thd = ha_thd();
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: this=%p", this));
+  clear_empty_value_records();
   clear_search_result();
   clear_search_result_geo();
   if (share->wrapper_mode)
