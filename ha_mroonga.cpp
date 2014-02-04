@@ -1185,7 +1185,7 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 
   geometry = Geometry::construct(&buffer, wkb, wkb_size);
   if (!geometry) {
-    return -1;
+    return ER_CANT_CREATE_GEOMETRY_OBJECT;
   }
   switch (geometry->get_class_info()->m_type_id) {
   case Geometry::wkb_point:
