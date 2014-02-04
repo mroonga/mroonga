@@ -7,9 +7,11 @@ return "No Mroonga engine" unless $ENV{HA_MROONGA_SO} or
 
 sub is_default { 1 }
 
-if (-d "../sql")
+my $groonga_normalizer_mysql_dir=$::basedir . '/storage/mroonga/vendor/groonga/vendor/plugins/groonga-normalizer-mysql';
+
+if (-d $groonga_normalizer_mysql_dir)
 {
-  $ENV{GRN_PLUGINS_DIR}=$::basedir . '/storage/mroonga/vendor/groonga/vendor/plugins/groonga-normalizer-mysql';
+  $ENV{GRN_PLUGINS_DIR}=$groonga_normalizer_mysql_dir;
 }
 
 bless { };
