@@ -5247,7 +5247,17 @@ int ha_mroonga::storage_write_row(uchar *buf)
     Field *field = table->field[i];
     const char *column_name = field->field_name;
 
-    if (field->is_null()) continue;
+    if (field->is_null())
+      continue;
+
+#ifdef HAVE_SPATIAL
+    bool is_null_geometry_value =
+      field->real_type() == MYSQL_TYPE_GEOMETRY &&
+      static_cast<Field_geom *>(field)->get_length() == 0;
+    if (is_null_geometry_value) {
+      continue;
+    }
+#endif
 
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
       continue;
@@ -5258,7 +5268,11 @@ int ha_mroonga::storage_write_row(uchar *buf)
       grn_obj_unlink(ctx, &colbuf);
       goto err2;
     }
-    generic_store_bulk(field, &colbuf);
+    error = generic_store_bulk(field, &colbuf);
+    if (error) {
+      grn_obj_unlink(ctx, &colbuf);
+      goto err2;
+    }
     if (added && is_grn_zero_column_value(grn_columns[i], &colbuf)) {
       // WORKAROUND: groonga can't index newly added '0' value for
       // fix size column. So we add non-'0' value first then add
