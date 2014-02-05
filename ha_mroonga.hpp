@@ -768,16 +768,16 @@ private:
                                               KEY *key_info,
                                               grn_obj *index_column);
   int storage_write_row_multiple_column_indexes(uchar *buf, grn_id record_id);
-  int storage_write_row_unique_index(uchar *buf, grn_id record_id,
+  int storage_write_row_unique_index(uchar *buf,
                                      KEY *key_info, grn_obj *index_table,
                                      grn_id *key_id);
-  int storage_write_row_unique_indexes(uchar *buf, grn_id record_id);
+  int storage_write_row_unique_indexes(uchar *buf);
   int wrapper_get_record_id(uchar *data, grn_id *record_id, const char *context);
   int wrapper_update_row(const uchar *old_data, uchar *new_data);
   int wrapper_update_row_index(const uchar *old_data, uchar *new_data);
   int storage_update_row(const uchar *old_data, uchar *new_data);
   int storage_update_row_index(const uchar *old_data, uchar *new_data);
-  int storage_update_row_unique_indexes(uchar *new_data, grn_id record_id);
+  int storage_update_row_unique_indexes(uchar *new_data);
   int wrapper_delete_row(const uchar *buf);
   int wrapper_delete_row_index(const uchar *buf);
   int storage_delete_row(const uchar *buf);

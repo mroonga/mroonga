@@ -5189,11 +5189,21 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
   }
 
-  char *pkey = NULL;
-  int pkey_size = 0;
-  uint pkey_nr = table->s->primary_key;
+  st_mrn_slot_data *slot_data;
+  if ((error = storage_write_row_unique_indexes(buf)))
+  {
+    goto err1;
+  }
+
+  char *pkey;
+  int pkey_size;
+  uint pkey_nr;
+  pkey_nr = table->s->primary_key;
   GRN_BULK_REWIND(&key_buffer);
-  if (pkey_nr != MAX_INDEXES) {
+  if (pkey_nr == MAX_INDEXES) {
+    pkey = NULL;
+    pkey_size = 0;
+  } else {
     KEY key_info = table->key_info[pkey_nr];
     if (KEY_N_KEY_PARTS(&key_info) == 1) {
       Field *pkey_field = key_info.key_part[0].field;
@@ -5233,12 +5243,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
               pkey_size, pkey);
     }
     DBUG_RETURN(error);
-  }
-
-  st_mrn_slot_data *slot_data;
-  if ((error = storage_write_row_unique_indexes(buf, record_id)))
-  {
-    goto err1;
   }
 
   grn_obj colbuf;
@@ -5339,8 +5343,8 @@ err2:
       grn_table_delete_by_id(ctx, grn_index_tables[j], key_id[j]);
     }
   }
-err1:
   grn_table_delete_by_id(ctx, grn_table, record_id);
+err1:
   DBUG_RETURN(error);
 }
 
@@ -5421,7 +5425,7 @@ err:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_write_row_unique_index(uchar *buf, grn_id record_id,
+int ha_mroonga::storage_write_row_unique_index(uchar *buf,
                                                KEY *key_info,
                                                grn_obj *index_table,
                                                grn_id *key_id)
@@ -5470,7 +5474,7 @@ int ha_mroonga::storage_write_row_unique_index(uchar *buf, grn_id record_id,
   DBUG_RETURN(0);
 }
 
-int ha_mroonga::storage_write_row_unique_indexes(uchar *buf, grn_id record_id)
+int ha_mroonga::storage_write_row_unique_indexes(uchar *buf)
 {
   int error = 0;
   uint i;
@@ -5493,7 +5497,7 @@ int ha_mroonga::storage_write_row_unique_indexes(uchar *buf, grn_id record_id)
       continue;
     }
 
-    if ((error = storage_write_row_unique_index(buf, record_id, key_info,
+    if ((error = storage_write_row_unique_index(buf, key_info,
                                                 index_table, &key_id[i])))
     {
       if (error == HA_ERR_FOUND_DUPP_KEY)
@@ -5741,7 +5745,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
                                                            record_id))) {
       DBUG_RETURN(error);
     }
-    if ((error = storage_update_row_unique_indexes(new_data, record_id)))
+    if ((error = storage_update_row_unique_indexes(new_data)))
     {
       DBUG_RETURN(error);
     }
@@ -5951,8 +5955,7 @@ err:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_update_row_unique_indexes(uchar *new_data,
-                                                  grn_id record_id)
+int ha_mroonga::storage_update_row_unique_indexes(uchar *new_data)
 {
   int error;
   uint i;
@@ -5987,7 +5990,7 @@ int ha_mroonga::storage_update_row_unique_indexes(uchar *new_data,
       continue;
     }
 
-    if ((error = storage_write_row_unique_index(new_data, record_id, key_info,
+    if ((error = storage_write_row_unique_index(new_data, key_info,
                                                 index_table, &key_id[i])))
     {
       if (error == HA_ERR_FOUND_DUPP_KEY)
@@ -12713,7 +12716,6 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
         if (key_info[i].flags & HA_NOSAME) {
           grn_id key_id;
           if ((error = storage_write_row_unique_index(table->record[0],
-                                                      record_id,
                                                       current_key_info,
                                                       index_tables[i],
                                                       &key_id)))
