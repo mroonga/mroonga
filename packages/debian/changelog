@@ -1,3 +1,9 @@
+mroonga (4.00-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- HAYASHI Kentaro <hayashi@clear-code.com>  Sun, 09 Feb 2014 00:00:00 +0900
+
 mroonga (3.12-2) unstable; urgency=low
 
   * Built for mysql-server updates on Ubuntu 12.04,12.10, and 13.10.
