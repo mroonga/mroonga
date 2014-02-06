@@ -3,6 +3,36 @@
 News
 ====
 
+.. _release-4-00:
+
+Release 4.00 - 2014/02/09
+-------------------------
+
+* Bump version to 4.00! We recommend to upgrade because crash bug and updating issue are fixed now!
+
+Improvements
+^^^^^^^^^^^^
+
+* Dropped Ubuntu 13.04 (Raring Ringtail) support.
+* [storage] Supported to search with empty string.
+  [#2214] [groonga-dev,02052] [Reported by Naoya Murakami]
+
+Fixes
+^^^^^
+
+* Fixed a crash bug that bulk inserting null value into geometry column which has NOT NULL constraint.
+  [#2281] [groonga-dev,02095] [Reported by yoku]
+* [storage] Fixed a bug that existing records may be unexectedlly removed by ON DUPLICATE KEY
+  UPDATE. In the previous versions, such a query can't update the value of column correctly.
+  [#2263] [Reported Masahiro Nagano]
+
+Thanks
+^^^^^^
+
+* yoku
+* Naoya Murakami
+* Masahiro Nagano
+
 .. _release-3-12:
 
 Release 3.12 - 2014/01/29
