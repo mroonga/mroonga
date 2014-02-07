@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-24 11:53+0900\n"
+"POT-Creation-Date: 2014-02-07 11:43+0900\n"
 "PO-Revision-Date: 2012-01-31 11:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
@@ -19,6 +19,251 @@ msgstr ""
 
 msgid "Reference"
 msgstr "Reference"
+
+msgid "Full text Search"
+msgstr ""
+
+msgid "Mroonga full text Search in Boolean mode"
+msgstr ""
+
+msgid ""
+"Mroonga can perform boolean full-text searches using the \"IN BOOLEAN MODE\" "
+"modifier."
+msgstr ""
+
+msgid ""
+"When building a boolean search query, Mroonga supports the use of qualifiers "
+"which MySQL support, and original pragmas."
+msgstr ""
+
+msgid ""
+"These qualifiers and pragmas can change the relative rank of search results."
+msgstr ""
+
+msgid ""
+"In the case of a search string not using neither a qualifier nor a pragma, "
+"the search results that contain the search string will be rated higher. Edit"
+msgstr ""
+
+msgid "Mroonga supports the following qualifiers"
+msgstr ""
+
+msgid "Modifier"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "＋"
+msgstr ""
+
+msgid ""
+"A leading plus sign indicates that this word must be present in each row "
+"that is returned."
+msgstr ""
+
+msgid "ー"
+msgstr ""
+
+msgid ""
+"A leading minus sign indicates that this word must not be present in any of "
+"the rows that are returned."
+msgstr ""
+
+msgid "＊"
+msgstr ""
+
+msgid "The asterisk serves as the truncation (or wildcard) operator."
+msgstr ""
+
+msgid "\""
+msgstr ""
+
+msgid ""
+"A phrase that is enclosed within double quote (“\"”) characters matches only "
+"rows that contain the phrase literally, as it was typed."
+msgstr ""
+
+msgid "( )"
+msgstr ""
+
+msgid "Parentheses group words into subexpressions."
+msgstr ""
+
+msgid "Pragma"
+msgstr ""
+
+msgid ""
+"You can embed pragma at the head of query for specifying how to execute."
+msgstr ""
+
+msgid ""
+"The pragma must exist in the beginning of a query. (Don't put a blank into a "
+"head of the query)"
+msgstr ""
+
+msgid "D pragma"
+msgstr ""
+
+msgid ""
+"D pragma is a form for specifying which operation should be execute when an "
+"individual operator is omitted."
+msgstr ""
+
+msgid ""
+"The syntax of D pragma is as follows. You can choose one of the three "
+"operators, either \"OR\", \"+\", or \"-\". ::"
+msgstr ""
+
+msgid "W pragma"
+msgstr ""
+
+msgid ""
+"W pragma is a form for specifying target section and its weight when using "
+"multiple-column index."
+msgstr ""
+
+msgid ""
+"You can specify the multiple of the weight for every section. The default "
+"value of the weight is set to 1."
+msgstr ""
+
+msgid "The weight is omissible, and a negative value is allowed."
+msgstr ""
+
+msgid ""
+"The syntax of W pragma is as follows. A section number is begun not from 0 "
+"but from 1. ::"
+msgstr ""
+
+msgid "Examples"
+msgstr ""
+
+msgid ""
+"We show you how to rank in boolean mode using the following schema and "
+"data. ::"
+msgstr ""
+
+msgid "(no operator and pragma)"
+msgstr ""
+
+msgid "We use a query \"Groonga Mroonga\" to search.::"
+msgstr ""
+
+msgid "Rows that contain even one word will be ranked higher."
+msgstr ""
+
+msgid "A row score is set to 1 when the row contains a single word."
+msgstr ""
+
+msgid "A row score is set to 2 when the row contains both words."
+msgstr ""
+
+msgid "Here is the search result::"
+msgstr ""
+
+msgid "We use a query \"+Groonga +Mroonga\" to search.::"
+msgstr ""
+
+msgid ""
+"The search result is a row that contains both words. The row score is as "
+"follows::"
+msgstr ""
+
+msgid "We use a query \"-Groonga -Mroonga\" to search.::"
+msgstr ""
+
+msgid ""
+"The search result is a row that does not contain both words. The row score "
+"is as follows::"
+msgstr ""
+
+msgid "We use a query \"M*\" to search.::"
+msgstr ""
+
+msgid ""
+"The search result is a row that contains \"MySQL\" or \"Mroonga\". The row "
+"score is as follows::"
+msgstr ""
+
+msgid "We use a query '\"Groonga Mroonga\"' to search.::"
+msgstr ""
+
+msgid ""
+"The search result is a row that contains a phrase that matches \"Groonga "
+"Mroonga\". The row score is as follows::"
+msgstr ""
+
+msgid "()"
+msgstr ""
+
+msgid "We use a query \"+MySQL +(Groonga Mroonga)\" to search.::"
+msgstr ""
+
+msgid ""
+"The search result is a row that contains \"MySQL\" and \"Groonga\", or "
+"\"MySQL\" and \"Mroonga\", or \"MySQL\" and \"Groonga\" and \"Mroonga\"."
+msgstr ""
+
+msgid "The row score is as follows::"
+msgstr ""
+
+msgid "'\\*D+'"
+msgstr ""
+
+msgid "We use a query \"\\*D+ Groonga Mroonga\" to search.::"
+msgstr ""
+
+msgid ""
+"The search result is a row that contains \"Groonga\" and \"Mroonga\". The "
+"row score is as follows::"
+msgstr ""
+
+msgid "'\\*D-'"
+msgstr ""
+
+msgid "We use a query \"'\\*D- Groonga Mroonga\" to search.::"
+msgstr ""
+
+msgid ""
+"The search result is a row that contains \"Groonga\", and does not contain "
+"\"Mroonga\". The row score is as follows::"
+msgstr ""
+
+msgid "'\\*DOR'"
+msgstr ""
+
+msgid "We use \"\\*DOR Groonga Mroonga\" to search.::"
+msgstr ""
+
+msgid ""
+"The search result is a row that contains \"Groonga\" or \"Mroonga\". The row "
+"score is as follows::"
+msgstr ""
+
+msgid ""
+"We show you how to rank in multiple-column index using the following schema "
+"and data.::"
+msgstr ""
+
+msgid ""
+"Consider the case that 10 weight is given to ‘title’ column, and 1 weight is "
+"given to ‘comment’ column, and use \"Groonga\" to search."
+msgstr ""
+
+msgid "Here is the query such a case::"
+msgstr ""
+
+msgid ""
+"The search result is a row that contains \"Groonga\". The row score is as "
+"follows::"
+msgstr ""
+
+msgid ""
+"The row score is set to 11 that the 'title' and 'comment\" column contain "
+"\"Groonga\", and the row score is set to 10 that only 'title' column "
+"contains \"Groonga\"."
+msgstr ""
 
 msgid "Search and Scoring in Mroonga"
 msgstr ""
@@ -259,9 +504,6 @@ msgid ""
 msgstr ""
 
 msgid "Value"
-msgstr ""
-
-msgid "Description"
 msgstr ""
 
 msgid "ERROR"

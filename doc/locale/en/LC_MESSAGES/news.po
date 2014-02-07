@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-28 15:49+0900\n"
-"PO-Revision-Date: 2014-01-28 15:50+0900\n"
+"POT-Creation-Date: 2014-02-07 11:43+0900\n"
+"PO-Revision-Date: 2014-02-07 11:51+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,11 +20,53 @@ msgstr ""
 msgid "News"
 msgstr "News"
 
-msgid "Release 3.12 - 2014/01/29"
+msgid "Release 4.00 - 2014/02/09"
+msgstr ""
+
+msgid ""
+"Bump version to 4.00! We recommend to upgrade because crash bug and updating "
+"issue are fixed now!"
 msgstr ""
 
 msgid "Improvements"
 msgstr "Improvements"
+
+msgid "Dropped Ubuntu 13.04 (Raring Ringtail) support."
+msgstr ""
+
+msgid ""
+"[storage] Supported to search with empty string. [#2214] [groonga-dev,02052] "
+"[Reported by Naoya Murakami]"
+msgstr ""
+
+msgid "Fixes"
+msgstr "Fixes"
+
+msgid ""
+"Fixed a crash bug that bulk inserting null value into geometry column which "
+"has NOT NULL constraint. [#2281] [groonga-dev,02095] [Reported by yoku]"
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that existing records may be unexectedlly removed by "
+"ON DUPLICATE KEY UPDATE. In the previous versions, such a query can't update "
+"the value of column correctly. [#2263] [Reported Masahiro Nagano]"
+msgstr ""
+
+msgid "Thanks"
+msgstr "Thanks"
+
+msgid "yoku"
+msgstr ""
+
+msgid "Naoya Murakami"
+msgstr ""
+
+msgid "Masahiro Nagano"
+msgstr ""
+
+msgid "Release 3.12 - 2014/01/29"
+msgstr ""
 
 msgid ""
 "Added a new system variable :ref:`mroonga_lock_timeout`. By changing this "
@@ -37,9 +79,6 @@ msgid ""
 "uses omitted section as weight 1. This behaviour is same as Tritonn. [#2152] "
 "[Patch by Kenji Maruyama]"
 msgstr ""
-
-msgid "Fixes"
-msgstr "Fixes"
 
 msgid ""
 "Fixed a crash bug on FLUSH TABLES during SELECT MATCH AGAINST ... [#2137] "
@@ -56,15 +95,6 @@ msgstr ""
 msgid ""
 "Fixed a bug that searching empty records with \"NOT\" query returns "
 "duplicated results. [#2215] [groonga-dev,02052] [Reported by Naoya Murakami]"
-msgstr ""
-
-msgid "Thanks"
-msgstr "Thanks"
-
-msgid "yoku"
-msgstr ""
-
-msgid "Naoya Murakami"
 msgstr ""
 
 msgid "Release 3.11 - 2013/12/29"
