@@ -121,7 +121,8 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_PREPARE_FOR_FORCED_CLOSE
 #endif
 
-#if MYSQL_VERSION_ID >= 50607
+#if MYSQL_VERSION_ID >= 50607 && \
+    (!defined(MRN_MARIADB_P) || MYSQL_VERSION_ID < 100008)
 #  define MRN_HAVE_HA_EXTRA_EXPORT
 #endif
 
