@@ -514,8 +514,6 @@ static const char *mrn_action_on_error_names[] = {
 
 static mrn_action_on_error mrn_action_on_fulltext_query_error_default =
   MRN_ACTION_ON_ERROR_ERROR_AND_LOG;
-static ulong mrn_action_on_fulltext_query_error =
-  mrn_action_on_fulltext_query_error_default;
 
 static void mrn_logger_log(grn_ctx *ctx, grn_log_level level,
                            const char *timestamp, const char *title,
