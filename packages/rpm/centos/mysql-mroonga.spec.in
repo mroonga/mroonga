@@ -1,8 +1,8 @@
 %{!?use_system_mysql:%define use_system_mysql 0}
 
 %if %{use_system_mysql}
-%define mysql_version_default 5.1.71
-%define mysql_release_default 1
+%define mysql_version_default 5.1.73
+%define mysql_release_default 3
 %define mysql_dist_default    el6
 %define mysql_download_base_url_default http://vault.centos.org/6.5/os/Source/SPackages
 %define mysql_spec_file_default mysql.spec
@@ -210,6 +210,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Feb 13 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.00-2
+- use MySQL 5.1.73-3 on CentOS 6.
+
 * Sun Feb 09 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.00-1
 - new upstream release.
 
