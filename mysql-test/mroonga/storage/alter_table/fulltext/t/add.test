@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,39 +18,23 @@
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS diaries;
+DROP TABLE IF EXISTS memos;
 --enable_warnings
 
-CREATE TABLE diaries (
+CREATE TABLE memos (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  title TEXT,
-  FULLTEXT INDEX title_index (title)
-) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
+  content TEXT
+) DEFAULT CHARSET="utf8";
 
-INSERT INTO diaries (title) VALUES ("survey");
-SELECT * FROM diaries;
+INSERT INTO memos (content) values ("Starting Groonga...");
+INSERT INTO memos (content) values ("Started Groonga.");
+INSERT INTO memos (content) values ("Starting Mroonga...");
 
-ALTER TABLE diaries ADD COLUMN body TEXT;
-UPDATE diaries SET body = "will start groonga!";
-SELECT * FROM diaries;
+ALTER TABLE memos ADD FULLTEXT INDEX content_index (content);
+SHOW CREATE TABLE memos;
 
-INSERT INTO diaries (title, body) values ("groonga (1)", "starting groonga...");
-INSERT INTO diaries (title, body) values ("groonga (2)", "started groonga.");
-SELECT * FROM diaries;
+SELECT * FROM memos WHERE MATCH(content) AGAINST("groonga");
 
-ALTER TABLE diaries ADD FULLTEXT INDEX body_index (body);
-
-SELECT * FROM diaries
-  WHERE MATCH(title) AGAINST("survey") AND
-        MATCH(body) AGAINST("groonga");
-
-SELECT * FROM diaries
-  WHERE MATCH(title) AGAINST("groonga") AND
-        MATCH(body) AGAINST("starting");
-
-SHOW CREATE TABLE diaries;
-
-DROP TABLE diaries;
+DROP TABLE memos;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

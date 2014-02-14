@@ -1,52 +1,22 @@
-DROP TABLE IF EXISTS diaries;
-CREATE TABLE diaries (
+DROP TABLE IF EXISTS memos;
+CREATE TABLE memos (
 id INT PRIMARY KEY AUTO_INCREMENT,
-title TEXT,
-FULLTEXT INDEX title_index (title)
-) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
+content TEXT
+) DEFAULT CHARSET="utf8";
+INSERT INTO memos (content) values ("Starting Groonga...");
+INSERT INTO memos (content) values ("Started Groonga.");
+INSERT INTO memos (content) values ("Starting Mroonga...");
+ALTER TABLE memos ADD FULLTEXT INDEX content_index (content);
+SHOW CREATE TABLE memos;
 Table	Create Table
-diaries	CREATE TABLE `diaries` (
+memos	CREATE TABLE `memos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` text,
+  `content` text,
   PRIMARY KEY (`id`),
-  FULLTEXT KEY `title_index` (`title`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
-INSERT INTO diaries (title) VALUES ("survey");
-SELECT * FROM diaries;
-id	title
-1	survey
-ALTER TABLE diaries ADD COLUMN body TEXT;
-UPDATE diaries SET body = "will start groonga!";
-SELECT * FROM diaries;
-id	title	body
-1	survey	will start groonga!
-INSERT INTO diaries (title, body) values ("groonga (1)", "starting groonga...");
-INSERT INTO diaries (title, body) values ("groonga (2)", "started groonga.");
-SELECT * FROM diaries;
-id	title	body
-1	survey	will start groonga!
-2	groonga (1)	starting groonga...
-3	groonga (2)	started groonga.
-ALTER TABLE diaries ADD FULLTEXT INDEX body_index (body);
-SELECT * FROM diaries
-WHERE MATCH(title) AGAINST("survey") AND
-MATCH(body) AGAINST("groonga");
-id	title	body
-1	survey	will start groonga!
-SELECT * FROM diaries
-WHERE MATCH(title) AGAINST("groonga") AND
-MATCH(body) AGAINST("starting");
-id	title	body
-2	groonga (1)	starting groonga...
-SHOW CREATE TABLE diaries;
-Table	Create Table
-diaries	CREATE TABLE `diaries` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` text,
-  `body` text,
-  PRIMARY KEY (`id`),
-  FULLTEXT KEY `title_index` (`title`),
-  FULLTEXT KEY `body_index` (`body`)
+  FULLTEXT KEY `content_index` (`content`)
 ) ENGINE=mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
-DROP TABLE diaries;
+SELECT * FROM memos WHERE MATCH(content) AGAINST("groonga");
+id	content
+1	Starting Groonga...
+2	Started Groonga.
+DROP TABLE memos;
