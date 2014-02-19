@@ -189,6 +189,7 @@ extern "C" {
 /* groonga's internal functions */
 const char *grn_obj_get_value_(grn_ctx *ctx, grn_obj *obj, grn_id id, uint32 *size);
 int grn_atoi(const char *nptr, const char *end, const char **rest);
+uint grn_atoui(const char *nptr, const char *end, const char **rest);
 
 /* global variables */
 static pthread_mutex_t mrn_db_mutex;
@@ -7562,31 +7563,42 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
       }
     }
 
-    int section = 0;
-    if ('1' <= keyword[0] && keyword[0] < static_cast<char>('1' + n_sections)) {
-      section = keyword[0] - '1';
+    uint section = 0;
+    if ('1' <= keyword[0] && keyword[0] <= '9') {
+      const char *section_start = keyword;
+      const char *keyword_end = keyword + keyword_length;
+      const char *keyword_rest;
+      section = grn_atoui(section_start, keyword_end, &keyword_rest);
+      if (section_start == keyword_rest) {
+        break;
+      }
+      if (!(0 < section && section <= n_sections)) {
+        break;
+      }
+      section -= 1;
       specified_sections[section] = true;
+      uint n_used_keyword_length = keyword_rest - keyword;
+      *consumed_keyword_length += n_used_keyword_length;
+      keyword_length -= n_used_keyword_length;
+      keyword += n_used_keyword_length;
     } else {
       break;
     }
 
     int weight = 1;
-    uint n_used_keyword_length = 0;
-    if (keyword_length >= 2 && keyword[1] == ':') {
-      const char *weight_start = keyword + 2;
+    if (keyword_length >= 2 && keyword[0] == ':') {
+      const char *weight_start = keyword + 1;
       const char *keyword_end = keyword + keyword_length;
       const char *keyword_rest;
       weight = grn_atoi(weight_start, keyword_end, &keyword_rest);
       if (weight_start == keyword_rest) {
         break;
       }
-      n_used_keyword_length = keyword_rest - keyword;
-    } else {
-      n_used_keyword_length = 1;
+      uint n_used_keyword_length = keyword_rest - keyword;
+      *consumed_keyword_length += n_used_keyword_length;
+      keyword_length -= n_used_keyword_length;
+      keyword += n_used_keyword_length;
     }
-    *consumed_keyword_length += n_used_keyword_length;
-    keyword_length -= n_used_keyword_length;
-    keyword += n_used_keyword_length;
 
     n_weights++;
 
