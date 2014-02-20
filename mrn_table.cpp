@@ -278,7 +278,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
   if (!strncasecmp(tmp_ptr, title_name, title_length)) \
   { \
     DBUG_PRINT("info", ("mroonga "title_name" start")); \
-    if (!share->param_name[param_pos]) \
+    if (share->param_name && !share->param_name[param_pos]) \
     { \
       if ((share->param_name[param_pos] = mrn_get_string_between_quote( \
         start_ptr))) \

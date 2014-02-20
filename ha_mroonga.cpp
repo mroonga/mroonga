@@ -13190,6 +13190,8 @@ bool ha_mroonga::storage_inplace_alter_table(
   TABLE_SHARE tmp_table_share;
   char **key_parser;
   uint *key_parser_length;
+  char **index_table;
+  uint *index_table_length;
   KEY *p_key_info = &table->key_info[table_share->primary_key];
   bool have_multiple_column_index = false;
   memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
@@ -13199,6 +13201,8 @@ bool ha_mroonga::storage_inplace_alter_table(
   if (!(tmp_share = (MRN_SHARE *)
     my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
+      &index_table, sizeof(char *) *(tmp_table_share.keys),
+      &index_table_length, sizeof(uint) *(tmp_table_share.keys),
       &key_parser, sizeof(char *) * (tmp_table_share.keys),
       &key_parser_length, sizeof(uint) * (tmp_table_share.keys),
       NullS))
@@ -13209,8 +13213,8 @@ bool ha_mroonga::storage_inplace_alter_table(
   }
   tmp_share->engine = NULL;
   tmp_share->table_share = &tmp_table_share;
-  tmp_share->index_table = NULL;
-  tmp_share->index_table_length = NULL;
+  tmp_share->index_table = index_table;
+  tmp_share->index_table_length = index_table_length;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
   bitmap_clear_all(table->read_set);
