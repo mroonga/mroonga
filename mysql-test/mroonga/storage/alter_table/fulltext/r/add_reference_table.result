@@ -25,12 +25,12 @@ bugs	CREATE TABLE `bugs` (
 ) ENGINE=mroonga DEFAULT CHARSET=utf8
 SELECT * FROM bugs;
 id	tags
-1	groonga mroonga
+1	GROONGA MROONGA
 ALTER TABLE bugs ADD FULLTEXT INDEX bugs_tags_index (tags) COMMENT 'table "tags"';
 SELECT * FROM bugs
 WHERE MATCH(tags) AGAINST("Groonga");
 id	tags
-1	groonga mroonga
+1	GROONGA MROONGA
 SHOW CREATE TABLE tags;
 Table	Create Table
 tags	CREATE TABLE `tags` (
