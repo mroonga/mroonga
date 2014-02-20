@@ -13188,10 +13188,8 @@ bool ha_mroonga::storage_inplace_alter_table(
                                       ha_alter_info->key_count);
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **key_parser;
-  uint *key_parser_length;
-  char **index_table;
-  uint *index_table_length;
+  char **index_table, **key_parser, **col_flags, **col_type;
+  uint *index_table_length, *key_parser_length, *col_flags_length, *col_type_length;
   KEY *p_key_info = &table->key_info[table_share->primary_key];
   bool have_multiple_column_index = false;
   memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
@@ -13201,10 +13199,14 @@ bool ha_mroonga::storage_inplace_alter_table(
   if (!(tmp_share = (MRN_SHARE *)
     my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
-      &index_table, sizeof(char *) *(tmp_table_share.keys),
-      &index_table_length, sizeof(uint) *(tmp_table_share.keys),
-      &key_parser, sizeof(char *) * (tmp_table_share.keys),
-      &key_parser_length, sizeof(uint) * (tmp_table_share.keys),
+      &index_table, sizeof(char *) * tmp_table_share.keys,
+      &index_table_length, sizeof(uint) * tmp_table_share.keys,
+      &key_parser, sizeof(char *) * tmp_table_share.keys,
+      &key_parser_length, sizeof(uint) * tmp_table_share.keys,
+      &col_flags, sizeof(char *) * tmp_table_share.fields,
+      &col_flags_length, sizeof(uint) * tmp_table_share.fields,
+      &col_type, sizeof(char *) * tmp_table_share.fields,
+      &col_type_length, sizeof(uint) * tmp_table_share.fields,
       NullS))
   ) {
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
@@ -13217,6 +13219,10 @@ bool ha_mroonga::storage_inplace_alter_table(
   tmp_share->index_table_length = index_table_length;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
+  tmp_share->col_flags = col_flags;
+  tmp_share->col_flags_length = col_flags_length;
+  tmp_share->col_type = col_type;
+  tmp_share->col_type_length = col_type_length;
   bitmap_clear_all(table->read_set);
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
   n_keys = ha_alter_info->index_add_count;
