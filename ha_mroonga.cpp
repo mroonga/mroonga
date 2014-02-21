@@ -13586,8 +13586,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_columns, num_of_keys + n_keys);
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **key_parser;
-  uint *key_parser_length;
+  char **index_table, **key_parser, **col_flags, **col_type;
+  uint *index_table_length, *key_parser_length, *col_flags_length, *col_type_length;
   bool have_multiple_column_index = false;
 
   MRN_DBUG_ENTER_METHOD();
@@ -13596,8 +13596,14 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   if (!(tmp_share = (MRN_SHARE *)
     my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
-      &key_parser, sizeof(char *) * (n_keys + num_of_keys),
-      &key_parser_length, sizeof(uint) * (n_keys + num_of_keys),
+      &index_table, sizeof(char*) *  tmp_table_share.keys,
+      &index_table_length, sizeof(uint) * tmp_table_share.keys,
+      &key_parser, sizeof(char *) * tmp_table_share.keys,
+      &key_parser_length, sizeof(uint) * tmp_table_share.keys,
+      &col_flags, sizeof(char *) * tmp_table_share.fields,
+      &col_flags_length, sizeof(uint) * tmp_table_share.fields,
+      &col_type, sizeof(char *) * tmp_table_share.fields,
+      &col_type_length, sizeof(uint) * tmp_table_share.fields,
       NullS))
   ) {
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
@@ -13606,12 +13612,14 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   }
   tmp_share->engine = NULL;
   tmp_share->table_share = &tmp_table_share;
-  tmp_share->index_table = NULL;
-  tmp_share->index_table_length = NULL;
+  tmp_share->index_table = index_table;
+  tmp_share->index_table_length = index_table_length;
   tmp_share->key_parser = key_parser;
   tmp_share->key_parser_length = key_parser_length;
-  tmp_share->col_flags = NULL;
-  tmp_share->col_type = NULL;
+  tmp_share->col_flags = col_flags;
+  tmp_share->col_flags_length = col_flags_length;
+  tmp_share->col_type = col_type;
+  tmp_share->col_type_length = col_type_length;
   bitmap_clear_all(table->read_set);
   mrn::PathMapper mapper(share->table_name);
   for (i = 0; i < num_of_keys; i++) {
