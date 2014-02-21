@@ -34,18 +34,12 @@ CREATE TABLE bugs (
 INSERT INTO tags (name) VALUES ("Groonga");
 INSERT INTO bugs (id, tags) VALUES (1, "Groonga Mroonga");
 
-SHOW CREATE TABLE tags;
-SHOW CREATE TABLE bugs;
-
 SELECT * FROM bugs;
 
 ALTER TABLE bugs ADD FULLTEXT INDEX bugs_tags_index (tags) COMMENT 'table "tags"';
 
 SELECT * FROM bugs
   WHERE MATCH(tags) AGAINST("Groonga");
-
-SHOW CREATE TABLE tags;
-SHOW CREATE TABLE bugs;
 
 DROP TABLE bugs;
 DROP TABLE tags;

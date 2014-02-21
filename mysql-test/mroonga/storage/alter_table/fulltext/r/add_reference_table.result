@@ -9,20 +9,6 @@ tags VARCHAR(40) COMMENT 'type "tags"'
 ) DEFAULT CHARSET=utf8;
 INSERT INTO tags (name) VALUES ("Groonga");
 INSERT INTO bugs (id, tags) VALUES (1, "Groonga Mroonga");
-SHOW CREATE TABLE tags;
-Table	Create Table
-tags	CREATE TABLE `tags` (
-  `name` varchar(64) NOT NULL,
-  PRIMARY KEY (`name`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='default_tokenizer "TokenDelimit"'
-SHOW CREATE TABLE bugs;
-Table	Create Table
-bugs	CREATE TABLE `bugs` (
-  `id` int(10) unsigned NOT NULL,
-  `tags` varchar(40) DEFAULT NULL COMMENT 'type "tags"',
-  PRIMARY KEY (`id`),
-  CONSTRAINT `tags` FOREIGN KEY (`tags`) REFERENCES `test`.`tags` (`name`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=mroonga DEFAULT CHARSET=utf8
 SELECT * FROM bugs;
 id	tags
 1	GROONGA MROONGA
@@ -31,20 +17,5 @@ SELECT * FROM bugs
 WHERE MATCH(tags) AGAINST("Groonga");
 id	tags
 1	GROONGA MROONGA
-SHOW CREATE TABLE tags;
-Table	Create Table
-tags	CREATE TABLE `tags` (
-  `name` varchar(64) NOT NULL,
-  PRIMARY KEY (`name`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='default_tokenizer "TokenDelimit"'
-SHOW CREATE TABLE bugs;
-Table	Create Table
-bugs	CREATE TABLE `bugs` (
-  `id` int(10) unsigned NOT NULL,
-  `tags` varchar(40) DEFAULT NULL COMMENT 'type "tags"',
-  PRIMARY KEY (`id`),
-  FULLTEXT KEY `bugs_tags_index` (`tags`) COMMENT 'table "tags"',
-  CONSTRAINT `tags` FOREIGN KEY (`tags`) REFERENCES `test`.`tags` (`name`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=mroonga DEFAULT CHARSET=utf8
 DROP TABLE bugs;
 DROP TABLE tags;
