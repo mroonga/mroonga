@@ -15,7 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/not_embedded.inc
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS tags;
@@ -44,4 +44,4 @@ SELECT * FROM bugs
 DROP TABLE bugs;
 DROP TABLE tags;
 
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc
