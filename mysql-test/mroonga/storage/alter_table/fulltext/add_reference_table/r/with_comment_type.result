@@ -12,7 +12,7 @@ INSERT INTO bugs (id, tags) VALUES (1, "Groonga Mroonga");
 SELECT * FROM bugs;
 id	tags
 1	GROONGA MROONGA
-ALTER TABLE bugs ADD FULLTEXT INDEX bugs_tags_index (tags) COMMENT 'table "tags"';
+ALTER TABLE bugs ADD FULLTEXT INDEX bugs_tags_index (tags) COMMENT 'type "tags", table "tags"';
 SELECT * FROM bugs
 WHERE MATCH(tags) AGAINST("Groonga");
 id	tags
