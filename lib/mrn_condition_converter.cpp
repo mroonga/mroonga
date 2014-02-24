@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013-2014 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@
 
 #include "mrn_condition_converter.hpp"
 #include "mrn_time_converter.hpp"
+#include "mrn_smart_grn_obj.hpp"
 
 // for debug
 #define MRN_CLASS_NAME "mrn::ConditionConverter"
@@ -371,10 +372,10 @@ namespace mrn {
     if (!column) {
       DBUG_RETURN(false);
     }
+    mrn::SmartGrnObj smart_column(ctx_, column);
 
     int n_indexes = grn_column_index(ctx_, column, _operator, NULL, 0, NULL);
     bool convertable = (n_indexes > 0);
-    grn_obj_unlink(ctx_, column);
 
     DBUG_RETURN(convertable);
   }
@@ -528,13 +529,13 @@ namespace mrn {
     append_field_value(field_item, expression);
 
     grn_obj include;
+    mrn::SmartGrnObj smart_include(ctx_, &include);
     GRN_TEXT_INIT(&include, 0);
     GRN_TEXT_PUTS(ctx_, &include, "include");
     append_const_item(field_item, min_item, expression);
     grn_expr_append_const(ctx_, expression, &include, GRN_OP_PUSH, 1);
     append_const_item(field_item, max_item, expression);
     grn_expr_append_const(ctx_, expression, &include, GRN_OP_PUSH, 1);
-    grn_obj_unlink(ctx_, &include);
 
     grn_expr_append_op(ctx_, expression, GRN_OP_CALL, 5);
 

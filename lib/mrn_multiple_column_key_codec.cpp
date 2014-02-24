@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2012-2014 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kentoku SHIBA
 
   This library is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@
 
 #include "mrn_multiple_column_key_codec.hpp"
 #include "mrn_field_normalizer.hpp"
+#include "mrn_smart_grn_obj.hpp"
 
 // for debug
 #define MRN_CLASS_NAME "mrn::MultipleColumnKeyCodec"
@@ -507,6 +508,7 @@ namespace mrn {
       uint16 blob_data_length = *((uint16 *)(mysql_key));
       grn_obj *grn_string = normalizer.normalize(blob_data,
                                                  blob_data_length);
+      mrn::SmartGrnObj smart_grn_string(ctx_, grn_string);
       const char *normalized;
       unsigned int normalized_length = 0;
       grn_string_get_normalized(ctx_, grn_string,
@@ -537,7 +539,6 @@ namespace mrn {
         new_blob_data_length = blob_data_length;
       }
       memcpy(grn_key + *data_size, &new_blob_data_length, HA_KEY_BLOB_LENGTH);
-      grn_obj_unlink(ctx_, grn_string);
     } else {
       memcpy(grn_key + *data_size, mysql_key, HA_KEY_BLOB_LENGTH);
       memcpy(grn_key, mysql_key + HA_KEY_BLOB_LENGTH, *data_size);
