@@ -13,7 +13,7 @@ env:
 matrix:
   allow_failures:
 #    - env: MYSQL_VERSION=mysql-system
-#     - env: MYSQL_VERSION=mariadb-5.5.35
+#    - env: MYSQL_VERSION=mariadb-5.5.35
 install:
   - tools/travis/install.sh
 before_script:
