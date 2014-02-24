@@ -88,6 +88,7 @@
 #include <mrn_lock.hpp>
 #include <mrn_condition_converter.hpp>
 #include <mrn_time_converter.hpp>
+#include <mrn_smart_grn_obj.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -2539,10 +2540,9 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
     index_column_flags |= GRN_OBJ_WITH_SECTION;
   }
 
-  grn_obj *lexicon_key_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+  mrn::SmartGrnObj lexicon_key_type(ctx, GRN_DB_SHORT_TEXT);
   error = mrn_change_encoding(ctx, key_info->key_part->field->charset());
   if (error) {
-    grn_obj_unlink(ctx, lexicon_key_type);
     DBUG_RETURN(error);
   }
   mrn::IndexTableName index_table_name(grn_table_name, key_info->name);
@@ -2550,15 +2550,15 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
                                  index_table_name.c_str(),
                                  index_table_name.length(),
                                  NULL,
-                                 index_table_flags, lexicon_key_type, 0);
+                                 index_table_flags,
+                                 lexicon_key_type.get(),
+                                 0);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
-    grn_obj_unlink(ctx, lexicon_key_type);
     DBUG_RETURN(error);
   }
   mrn_change_encoding(ctx, system_charset_info);
-  grn_obj_unlink(ctx, lexicon_key_type);
   index_tables[i] = index_table;
 
   grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
