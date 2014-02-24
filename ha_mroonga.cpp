@@ -181,6 +181,7 @@ HASH *mrn_table_def_cache;
 #endif
 
 static const char *INDEX_COLUMN_NAME = "index";
+static const char *DUMMY_SOURCE_COLUMN_NAME = "dummy_source";
 static const char *MRN_PLUGIN_AUTHOR = "The Mroonga project";
 
 #ifdef __cplusplus
@@ -1902,6 +1903,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    ctx_entity_(),
    ctx(&ctx_entity_),
    grn_table(NULL),
+   grn_dummy_source_column(NULL),
    grn_columns(NULL),
    grn_column_ranges(NULL),
    grn_index_tables(NULL),
@@ -2483,6 +2485,58 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::wrapper_ensure_dummy_source_created(grn_obj *table)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  if (grn_dummy_source_column) {
+    DBUG_RETURN(0);
+  }
+
+  grn_dummy_source_column = grn_obj_column(ctx,
+                                           table,
+                                           DUMMY_SOURCE_COLUMN_NAME,
+                                           strlen(DUMMY_SOURCE_COLUMN_NAME));
+  if (grn_dummy_source_column) {
+    DBUG_RETURN(0);
+  }
+
+  mrn::SmartGrnObj dummy_source_column_type(ctx, GRN_DB_SHORT_TEXT);
+  grn_dummy_source_column =
+    grn_column_create(ctx,
+                      table,
+                      DUMMY_SOURCE_COLUMN_NAME,
+                      strlen(DUMMY_SOURCE_COLUMN_NAME),
+                      NULL,
+                      GRN_OBJ_PERSISTENT | GRN_OBJ_COLUMN_SCALAR,
+                      dummy_source_column_type.get());
+  if (!grn_dummy_source_column)  {
+    int error = ER_CANT_CREATE_TABLE;
+    my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+
+  DBUG_RETURN(0);
+}
+
+int ha_mroonga::wrapper_ensure_dummy_source_set(grn_obj *index_column)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_obj source_ids;
+  mrn::SmartGrnObj smart_source_ids(ctx, &source_ids);
+  GRN_RECORD_INIT(&source_ids, GRN_OBJ_VECTOR, GRN_ID_NIL);
+  grn_obj_get_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
+  if (GRN_BULK_VSIZE(&source_ids) > 0) {
+    DBUG_RETURN(0);
+  }
+
+  GRN_RECORD_PUT(ctx, &source_ids, grn_obj_id(ctx, grn_dummy_source_column));
+  grn_obj_set_info(ctx, index_column, GRN_INFO_SOURCE, &source_ids);
+
+  DBUG_RETURN(0);
+}
+
 int ha_mroonga::wrapper_create_index_fulltext_validate(KEY *key_info)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -2589,6 +2643,11 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
+  error = wrapper_ensure_dummy_source_set(index_column);
+  if (error) {
+    grn_obj_unlink(ctx, index_column);
+    DBUG_RETURN(error);
+  }
   if (index_columns) {
     index_columns[i] = index_column;
   } else {
@@ -2648,6 +2707,11 @@ int ha_mroonga::wrapper_create_index_geo(const char *grn_table_name,
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
+  error = wrapper_ensure_dummy_source_set(index_column);
+  if (error) {
+    grn_obj_unlink(ctx, index_column);
+    DBUG_RETURN(error);
+  }
   if (index_columns) {
     index_columns[i] = index_column;
   } else {
@@ -2685,6 +2749,11 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
+    DBUG_RETURN(error);
+  }
+  error = wrapper_ensure_dummy_source_created(grn_index_table);
+  if (error) {
+    grn_obj_remove(ctx, grn_index_table);
     DBUG_RETURN(error);
   }
   if (grn_table) {
@@ -3645,6 +3714,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
     if (error)
       DBUG_RETURN(error);
     grn_table = NULL;
+    grn_dummy_source_column = NULL;
     grn_index_tables = NULL;
     grn_index_columns = NULL;
   } else {
@@ -3656,10 +3726,19 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
     if (error)
       DBUG_RETURN(error);
 
+    error = wrapper_ensure_dummy_source_created(grn_table);
+    if (error) {
+      grn_obj_unlink(ctx, grn_table);
+      grn_table = NULL;
+      DBUG_RETURN(error);
+    }
+
     error = wrapper_open_indexes(name);
     if (error) {
       grn_obj_unlink(ctx, grn_table);
       grn_table = NULL;
+      grn_obj_unlink(ctx, grn_dummy_source_column);
+      grn_dummy_source_column = NULL;
       DBUG_RETURN(error);
     }
   }
@@ -3799,6 +3878,11 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
       grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
                                             field->field_name,
                                             strlen(field->field_name));
+    }
+
+    error = wrapper_ensure_dummy_source_set(grn_index_columns[i]);
+    if (error) {
+      goto error;
     }
 
     if (ctx->rc) {
