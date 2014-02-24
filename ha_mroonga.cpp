@@ -2712,11 +2712,9 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
     }
   }
 
-  if (error)
-  {
+  if (error) {
     for (uint j = 0; j < i; j++) {
-      if (index_tables[j])
-      {
+      if (index_tables[j]) {
         grn_obj_remove(ctx, index_tables[j]);
       }
     }
