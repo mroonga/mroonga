@@ -4961,8 +4961,7 @@ int ha_mroonga::extra(enum ha_extra_function operation)
   DBUG_PRINT("info",
              ("mroonga: this=%p; extra-operation=%s",
               this, mrn_inspect_extra_function(operation)));
-  if (share->wrapper_mode)
-  {
+  if (share->wrapper_mode) {
     if ((error = wrapper_extra(operation)))
       DBUG_RETURN(error);
   } else {
