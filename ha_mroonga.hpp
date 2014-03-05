@@ -252,7 +252,6 @@ private:
   grn_ctx ctx_entity_;
   grn_ctx *ctx;
   grn_obj *grn_table;
-  grn_obj *grn_dummy_source_column;
   grn_obj **grn_columns;
   grn_obj **grn_column_ranges;
   grn_obj **grn_index_tables;
@@ -682,8 +681,6 @@ private:
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
   int storage_create(const char *name, TABLE *table,
                      HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
-  int wrapper_ensure_dummy_source_created(grn_obj *table);
-  int wrapper_ensure_dummy_source_set(grn_obj *index_column);
   int wrapper_create_index_fulltext_validate(KEY *key_info);
   int wrapper_create_index_fulltext(const char *grn_table_name,
                                     int i,

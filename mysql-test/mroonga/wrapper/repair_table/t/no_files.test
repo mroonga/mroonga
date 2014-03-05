@@ -47,8 +47,7 @@ SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 --remove_file $MYSQLD_DATADIR/repair_test.mrn.0000103
 --remove_file $MYSQLD_DATADIR/repair_test.mrn.0000104
 --remove_file $MYSQLD_DATADIR/repair_test.mrn.0000105
---remove_file $MYSQLD_DATADIR/repair_test.mrn.0000106
---remove_file $MYSQLD_DATADIR/repair_test.mrn.0000106.c
+--remove_file $MYSQLD_DATADIR/repair_test.mrn.0000105.c
 
 FLUSH TABLES;
 
