@@ -241,3 +241,5 @@ man_pages = [
     ('index', 'mroonga', u'Mroonga Documentation',
      [u'Mroonga Project'], 1)
 ]
+# -- Options for gettext output --------------------------------------------
+gettext_uuid = False
