@@ -1,17 +1,17 @@
 %{?scl:%scl_package mroonga}
 %{!?scl:%global pkg_name %{name}}
 
-%define mysql_version 5.5.32
-%define mysql_release 3
+%define mysql_version 5.5.36
+%define mysql_release 2
 %define mysql_dist    el5
-%define mysql_download_base_url http://vault.centos.org/5.10/os/SRPMS
+%define mysql_download_base_url http://vault.centos.org/5.10/updates/SRPMS
 %define mysql_spec_file mysql.spec
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
 Name:		%{?scl_prefix}mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -170,6 +170,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Mar 06 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.00-2
+- use MySQL 5.5.36 on CentOS 5.
+
 * Sun Feb 09 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.00-1
 - new upstream release.
 
