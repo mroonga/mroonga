@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 #
-# Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2014 Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
@@ -73,7 +73,39 @@ endif()
 
 set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
 
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
 include(${MRN_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
+
+set(MRN_C_COMPILE_FLAGS "")
+set(MRN_CXX_COMPILE_FLAGS "")
+
+macro(mrn_check_cflag flag)
+  set(checking_message "checking for C flag '${flag}'")
+  check_c_compiler_flag(${flag} is_available)
+  if(${is_available})
+    message(STATUS "${checking_message} - available")
+    set(MRN_C_COMPILE_FLAGS "${MRN_C_COMPILE_FLAGS} ${flag}")
+  else()
+    message(STATUS "${checking_message} - not available")
+  endif()
+endmacro()
+
+macro(mrn_check_cxxflag flag)
+  set(checking_message "checking for CXX flag '${flag}'")
+  check_cxx_compiler_flag(${flag} is_available)
+  if(${is_available})
+    message(STATUS "${checking_message} - available")
+    set(MRN_CXX_COMPILE_FLAGS "${MRN_CXX_COMPILE_FLAGS} ${flag}")
+  else()
+    message(STATUS "${checking_message} - not available")
+  endif()
+endmacro()
+
+macro(mrn_build_flag flag)
+  mrn_check_cflag(${flag})
+  mrn_check_cxxflag(${flag})
+endmacro()
 
 if(MRN_BUNDLED)
   set(MRN_RELATIVE_DIR_PREFIX "${MRN_SOURCE_DIR}/")
@@ -210,13 +242,13 @@ else()
   set(MYSQL_LIBRARIES "mysqlservices")
   target_link_libraries(ha_mroonga ${GROONGA_LIBRARIES} ${MYSQL_LIBRARIES})
 
-  set(MRN_CFLAGS "")
   option(WITH_DEBUG "Enable debug options" OFF)
   if(WITH_DEBUG)
     set_property(TARGET ha_mroonga APPEND PROPERTY
       COMPILE_DEFINITIONS "SAFE_MUTEX")
     if(CMAKE_COMPILER_IS_GNUCXX)
-      set(MRN_CFLAGS "${MRN_CFLAGS} -g3 -O0")
+      set(MRN_C_COMPILE_FLAGS "${MRN_C_COMPILE_FLAGS} -g3 -O0")
+      set(MRN_CXX_COMPILE_FLAGS "${MRN_CXX_COMPILE_FLAGS} -g3 -O0")
     endif()
   else()
     set_property(TARGET ha_mroonga APPEND PROPERTY
@@ -242,24 +274,24 @@ else()
   endif()
 
   if(CMAKE_COMPILER_IS_GNUCXX)
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -fno-implicit-templates")
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -fno-exceptions")
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -fno-rtti")
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -felide-constructors")
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Wall")
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Wextra")
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Wno-unused-parameter")
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Wno-strict-aliasing")
-    set(MYSQL_CFLAGS "${MYSQL_CFLAGS} -Wno-deprecated")
+    mrn_build_flag("-Wall")
+    mrn_build_flag("-Wextra")
+    mrn_build_flag("-Wno-unused-parameter")
+    mrn_build_flag("-Wno-strict-aliasing")
+    mrn_build_flag("-Wno-deprecated")
+    mrn_check_cxxflag("-fno-implicit-templates")
+    mrn_check_cxxflag("-fno-exceptions")
+    mrn_check_cxxflag("-fno-rtti")
+    mrn_check_cxxflag("-felide-constructors")
   endif()
   set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
-    COMPILE_FLAGS "${MYSQL_CFLAGS} ${MRN_CFLAGS}")
+    COMPILE_FLAGS "${MYSQL_CFLAGS} ${MRN_CXX_COMPILE_FLAGS}")
   set_source_files_properties(${LIBMRN_NEED_MYSQL_SOURCES} PROPERTIES
-    COMPILE_FLAGS "${MYSQL_CFLAGS} ${MRN_CFLAGS}")
+    COMPILE_FLAGS "${MYSQL_CFLAGS} ${MRN_CXX_COMPILE_FLAGS}")
   set_source_files_properties(${MRN_UDF_SOURCES} PROPERTIES
-    COMPILE_FLAGS "${MRN_CFLAGS}")
+    COMPILE_FLAGS "${MRN_C_COMPILE_FLAGS}")
   set_source_files_properties(${LIBMRN_NO_MYSQL_SOURCES} PROPERTIES
-    COMPILE_FLAGS "${MRN_CFLAGS}")
+    COMPILE_FLAGS "${MRN_C_COMPILE_FLAGS}")
   set_property(TARGET ha_mroonga APPEND PROPERTY
     COMPILE_DEFINITIONS "MYSQL_DYNAMIC_PLUGIN")
   set_target_properties(ha_mroonga PROPERTIES
