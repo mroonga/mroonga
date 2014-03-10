@@ -50,11 +50,13 @@
 extern HASH *mrn_table_def_cache;
 #endif
 
-#ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
+#ifdef WIN32
+#  ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
 extern PSI_mutex_key *mrn_table_share_lock_share;
-#endif
-#ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
+#  endif
+#  ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
 extern PSI_mutex_key *mrn_table_share_lock_ha_data;
+#  endif
 #endif
 
 #ifdef __cplusplus
