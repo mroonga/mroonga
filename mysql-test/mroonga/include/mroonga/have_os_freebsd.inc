@@ -14,12 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-disable_query_log;
-disable_warnings;
-let $VERSION_COMPILE_OS_FREEBSD=
-  `SELECT IF(@@version_compile_os like 'FREEBSD%', 1, 0);`;
-enable_warnings;
-enable_query_log;
+--source ../../include/mroonga/check_freebsd.inc
+
 if (!$VERSION_COMPILE_OS_FREEBSD) {
   skip Need OS FreeBSD;
 }
