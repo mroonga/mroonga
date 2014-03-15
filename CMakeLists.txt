@@ -22,7 +22,7 @@ project(mroonga)
 
 if(MSVC)
   if(MSVC_VERSION LESS 1600)
-    message(STATUS "Mroonga supports from MSVC 2010")
+    message(STATUS "Mroonga supports only MSVC 2010 or later")
     return()
   endif()
 endif()
