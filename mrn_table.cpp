@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -970,7 +970,9 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
                           hash_value);
 #elif defined(MRN_HAVE_TDC_ACQUIRE_SHARE)
   share = tdc_acquire_share(thd, table_list->db, table_list->table_name, key,
-                            key_length, GTS_TABLE, NULL);
+                            key_length,
+                            table_list->mdl_request.key.tc_hash_value(),
+                            GTS_TABLE, NULL);
 #else
   share = get_table_share(thd, table_list, key, key_length, 0, error);
 #endif
