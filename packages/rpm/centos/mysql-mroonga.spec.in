@@ -24,7 +24,7 @@
 
 Name:		mysql-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL.
 
 Group:		Applications/Databases
@@ -210,6 +210,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sat Mar 29 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.01-1
+- new upstream release.
+
 * Thu Feb 13 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.00-2
 - use MySQL 5.1.73-3 on CentOS 6.
 

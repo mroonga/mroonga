@@ -155,6 +155,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sat Mar 29 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.01-1
+- new upstream release.
+
 * Sun Feb 09 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.00-1
 - new upstream release.
 
