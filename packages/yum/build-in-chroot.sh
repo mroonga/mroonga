@@ -182,11 +182,6 @@ for architecture in $ARCHITECTURES; do
 		;;
 	esac
 	for distribution_version in $distribution_versions; do
-	    if [ $distribution_version -eq 6 ]; then
-		if [ "$PACKAGE" = "mysql55-mroonga" ]; then
-		    continue
-		fi
-	    fi
 	    if [ $distribution_version -eq 5 ]; then
 		if [ "$PACKAGE" = "mysql-mroonga" ]; then
 		    continue
