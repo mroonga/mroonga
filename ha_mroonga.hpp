@@ -377,7 +377,6 @@ public:
   int read_range_next();
 
   int ft_init();
-  void ft_end();
   FT_INFO *ft_init_ext(uint flags, uint inx, String *key);
   int ft_read(uchar *buf);
 
@@ -865,9 +864,6 @@ private:
   int generic_ft_init();
   int wrapper_ft_init();
   int storage_ft_init();
-  void generic_ft_end();
-  void wrapper_ft_end();
-  void storage_ft_end();
   FT_INFO *wrapper_ft_init_ext(uint flags, uint key_nr, String *key);
   FT_INFO *storage_ft_init_ext(uint flags, uint key_nr, String *key);
   void generic_ft_init_ext_add_conditions_fast_order_limit(
