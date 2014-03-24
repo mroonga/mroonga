@@ -1,11 +1,26 @@
 %{?scl:%scl_package mroonga}
 %{!?scl:%global pkg_name %{name}}
+%{!?centos_ver:%define centos_ver 5}
 
-%define mysql_version 5.5.36
-%define mysql_release 2
-%define mysql_dist    el5
-%define mysql_download_base_url http://vault.centos.org/5.10/updates/SRPMS
-%define mysql_spec_file mysql.spec
+%if %{centos_ver} == 6
+%define mysql_version_default 5.5.36
+%define mysql_release_default 1.1
+%define mysql_dist_default    el6
+%define mysql_download_base_url_default http://vault.centos.org/6.5/SCL/Source/SPackages
+%define mysql_spec_file_default mysql.spec
+%else
+%define mysql_version_default 5.5.36
+%define mysql_release_default 2
+%define mysql_dist_default    el5
+%define mysql_download_base_url_default http://vault.centos.org/5.10/updates/SRPMS
+%define mysql_spec_file_default mysql.spec
+%endif
+
+%{!?mysql_version:%define mysql_version %{mysql_version_default}}
+%{!?mysql_release:%define mysql_release %{mysql_release_default}}
+%{!?mysql_dist:%define mysql_dist %{mysql_dist_default}}
+%{!?mysql_download_base_url:%define mysql_download_base_url %{mysql_download_base_url_default}}
+%{!?mysql_spec_file:%define mysql_spec_file %{mysql_spec_file_default}}
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
