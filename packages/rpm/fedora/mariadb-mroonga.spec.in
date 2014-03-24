@@ -1,4 +1,4 @@
-%define mariadb_version 5.5.34
+%define mariadb_version 5.5.35
 %define mariadb_release 3%{?dist}
 %define mariadb_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/20/SRPMS
 
@@ -160,6 +160,7 @@ fi
 %changelog
 * Sat Mar 29 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.01-1
 - new upstream release.
+- use MariaDB 5.5.35-3 on Fedora 20.
 
 * Sun Feb 09 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.00-1
 - new upstream release.
