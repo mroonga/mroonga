@@ -3,6 +3,36 @@
 News
 ====
 
+.. _release-4-01:
+
+Release 4.01 - 2014/03/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MariaDB 10.0.9 [#2387] [Reported by Kazuhiko Shiozaki]
+* Supported ten or more sections in W pragma [#2348] [groonga-dev,02138]
+  [Reported by yoku0825]
+* [rpm][centos] Supported SCL MySQL package on CentOS 6.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that ALTER TABLE with fulltext index which refer to table causes mysqld crash.
+  [#2327] [groonga-dev,02130] [Reported by Naoya Murakami]
+* [storage] Fixed a bug that ALTER TABLE with fulltext index which refer to table causes returning
+  empty results on MySQL 5.5 or MariaDB 5.5. [#2327]
+* [doc] Fixed to use Mroonga/Groonga (capitalized notation) in characteristics document.
+  [GitHub#5] [Patch by Naoya Murakami]
+
+Thanks
+^^^^^^
+
+* yoku0825
+* Naoya Murakami
+* Kazuhiko Shiozaki
+
 .. _release-4-00:
 
 Release 4.00 - 2014/02/09
