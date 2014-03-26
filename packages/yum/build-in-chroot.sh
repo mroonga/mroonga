@@ -196,6 +196,13 @@ for architecture in $ARCHITECTURES; do
 		    continue
 		fi
 	    fi
+	    if [ $distribution_version -eq 6 ]; then
+		if [ "$PACKAGE" = "mysql55-mroonga" ]; then
+		    if [ "$architecture" = "i386" ]; then
+			continue
+		    fi
+		fi
+	    fi
 	    if test "$parallel" = "yes"; then
 		build $architecture $distribution $distribution_version &
 	    else
