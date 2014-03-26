@@ -111,10 +111,17 @@ case $distribution in
 		fi
 		;;
 	    6.*)
-		DEPENDED_PACKAGES="$DEPENDED_PACKAGES mysql-devel"
-		DEPENDED_PACKAGES="$DEPENDED_PACKAGES perl-Time-HiRes"
-		rpmbuild_options="$rpmbuild_options --define 'use_system_mysql 1'"
 		USE_MYSQLSERVICES_COMPAT=yes
+		if [ $PACKAGE = "mysql55-mroonga" ]; then
+		    run yum remove mysql-devel -y
+		    DEPENDED_PACKAGES="$DEPENDED_PACKAGES mysql55-mysql-devel"
+		    DEPENDED_PACKAGES="$DEPENDED_PACKAGES mysql55-build"
+		else
+		    run yum remove mysql55-* -y
+		    DEPENDED_PACKAGES="$DEPENDED_PACKAGES mysql-devel"
+		    DEPENDED_PACKAGES="$DEPENDED_PACKAGES perl-Time-HiRes"
+		    rpmbuild_options="$rpmbuild_options --define 'use_system_mysql 1'"
+		fi
 		;;
 	esac
 	;;
