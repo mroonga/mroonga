@@ -591,6 +591,11 @@ Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
 
+To enable escaping given string properly, install mroonga_escape function.
+
+Invoke CREATE FUNCTION like the following. ::
+
+ mysql> CREATE FUNCTION mroonga_escape RETURNS STRING SONAME 'ha_mroonga.so';
 
 Install from the source code with MariaDB
 -----------------------------------------
@@ -692,6 +697,11 @@ Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
 
+To enable escaping given string properly, install mroonga_escape function.
+
+Invoke CREATE FUNCTION like the following. ::
+
+ mysql> CREATE FUNCTION mroonga_escape RETURNS STRING SONAME 'ha_mroonga.so';
 
 Upgrade Guide
 -------------
