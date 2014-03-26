@@ -94,11 +94,20 @@ build()
     build_user_dir=${base_dir}/home/${build_user}
     rpm_base_dir=${build_user_dir}/rpmbuild
     rpm_dir=${rpm_base_dir}/RPMS/${architecture}
-    if [ $distribution = "fedora" ]; then
-	if [ $architecture = "i386" ]; then
-	    rpm_dir=${rpm_base_dir}/RPMS/i686
-	fi
-    fi
+    case $distribution in
+	"fedora")
+	    if [ $architecture = "i386" ]; then
+		rpm_dir=${rpm_base_dir}/RPMS/i686
+	    fi
+	    ;;
+	"centos")
+	    if [ $distribution_version = "6" ]; then
+		if [ $architecture = "i386" ]; then
+		    rpm_dir=${rpm_base_dir}/RPMS/i686
+		fi
+	    fi
+	    ;;
+    esac
     srpm_dir=${rpm_base_dir}/SRPMS
     pool_base_dir=${DESTINATION}${distribution}/${distribution_version}
     if test "${HAVE_DEVELOPMENT_BRANCH}" = "yes"; then
