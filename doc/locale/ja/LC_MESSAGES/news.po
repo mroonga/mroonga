@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-09 17:32+0900\n"
-"PO-Revision-Date: 2014-02-10 12:42+0900\n"
+"POT-Creation-Date: 2014-03-27 14:48+0900\n"
+"PO-Revision-Date: 2014-03-27 16:14+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,6 +20,61 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+msgid "Release 4.01 - 2014/03/29"
+msgstr "4.01リリース - 2014/03/29"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid "Supported MariaDB 10.0.9 [#2387] [Reported by Kazuhiko Shiozaki]"
+msgstr "MariaDB 10.0.9に対応しました。 [#2387] [かずひこさんが報告]"
+
+msgid ""
+"Supported ten or more sections in W pragma [#2348] [groonga-dev,02138] "
+"[Reported by yoku0825]"
+msgstr ""
+"10以上のセクションをWプラグマで扱えるようにしました。[#2348] [groonga-"
+"dev,02138] [yoku0825さんが報告]"
+
+msgid "[rpm][centos] Supported SCL MySQL package on CentOS 6."
+msgstr "[rpm][centos] CentOS 6にてSCLのMySQLパッケージに対応しました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[storage] Fixed a bug that ALTER TABLE with fulltext index which refer to "
+"table causes mysqld crash. [#2327] [groonga-dev,02130] [Reported by Naoya "
+"Murakami]"
+msgstr ""
+"[ストレージモード] テーブル参照型のフルテキストインデックスをALTER TABLEしよ"
+"うとするとmysqldがクラッシュする問題を修正しました。 [#2327] [groonga-"
+"dev,02130] [村上さんが報告]"
+
+msgid ""
+"[storage] Fixed a bug that ALTER TABLE with fulltext index which refer to "
+"table causes returning empty results on MySQL 5.5 or MariaDB 5.5. [#2327]"
+msgstr ""
+
+msgid ""
+"[doc] Fixed to use Mroonga/Groonga (capitalized notation) in characteristics "
+"document. [GitHub#5] [Patch by Naoya Murakami]"
+msgstr ""
+"[doc] \"Mroongaの特徴\"でMroonga/Groongaを大文字表記するようにしました。"
+"[GitHub#5] [村上さんがパッチ提供]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "yoku0825"
+msgstr "yokuさん"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Kazuhiko Shiozaki"
+msgstr "かずひこさん"
+
 msgid "Release 4.00 - 2014/02/09"
 msgstr "4.00リリース - 2014/02/29"
 
@@ -30,9 +85,6 @@ msgstr ""
 "バージョン4.00になりました。クラッシュする不具合や更新時の不具合が修正された"
 "のでアップグレードをおすすめします。"
 
-msgid "Improvements"
-msgstr "改良"
-
 msgid "Dropped Ubuntu 13.04 (Raring Ringtail) support."
 msgstr "Ubuntu 13.04 Raring Ringtailのサポートをやめました。"
 
@@ -42,9 +94,6 @@ msgid ""
 msgstr ""
 "[ストレージモード] 空の文字列でも検索できるようにしました。 [#2214] [groonga-"
 "dev,02052] [村上さんが報告]"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a crash bug that bulk inserting null value into geometry column which "
@@ -63,14 +112,8 @@ msgstr ""
 "除される不具合を修正しました。以前のバージョンではカラムの値を正しく更新でき"
 "ていませんでした。 [#2263] [長野雅広さんが報告]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "yoku"
 msgstr "yokuさん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Masahiro Nagano"
 msgstr "長野雅広さん"
@@ -1494,9 +1537,6 @@ msgstr "河野隆志さん"
 
 msgid "@boss_sato"
 msgstr "@boss_satoさん"
-
-msgid "Kazuhiko Shiozaki"
-msgstr "かずひこさん"
 
 msgid "Ryo Onodera"
 msgstr "Ryo Onoderaさん"
