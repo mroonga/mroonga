@@ -327,7 +327,43 @@ Install::
 CentOS 6
 --------
 
+In CentOS 6, we use CentOS's SCL MySQL packages (version 5.5.x) since Mroonga 4.01 release.
+
+Install::
+
+  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+  % sudo yum makecache
+  % sudo yum install -y mysql55-mysql-server
+  % sudo /etc/init.d/mysql55-mysqld start
+  % sudo yum install -y mysql55-mroonga
+  (% sudo scl enable mysql55 mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
+
+If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
+
+Install groonga-normalizer-mysql package::
+
+  % sudo yum install -y install groonga-normalizer-mysql
+
+.. note::
+
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
+   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
+
+
+CentOS 6 (Deprecated)
+---------------------
+
 In CentOS 6, unlike in CentOS 5, we use CentOS's MySQL packages (version 5.1.x). So you don't need to remove CentOS's MySQL packages.
+
+.. note::
+
+   Since Mroonga 4.01 release, mysql-mroonga package is marked as deprecated. Please use mysql55-mroonga package instead.
 
 Install::
 
