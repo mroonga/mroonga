@@ -331,6 +331,7 @@ In CentOS 6, we use CentOS's SCL MySQL packages (version 5.5.x) since Mroonga 4.
 
 Install::
 
+  % sudo yum install centos-release-SCL
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql55-mysql-server
