@@ -43,7 +43,7 @@ There is one optional parameter, ``special_characters``.
 ``special_characters``
 """"""""""""""""""""""
 
-It specifies characters to escape.
+It specifies characters to escape. The default value of ``special_characters`` are '+-<>~*()":'.
 
 Return value
 ------------
