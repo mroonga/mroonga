@@ -20,7 +20,15 @@ mroonga_escape has required parameter and optional parameter::
 Usage
 -----
 
-TODO
+Here is the example query which use special characters to be escaped::
+
+  SELECT * FROM `symbols` WHERE MATCH(`content`) AGAINST(mroonga_escape("+hello_world()", "()") IN BOOLEAN MODE);
+
+Here is the example about special characters which is escaped::
+
+  SELECT mroonga_escape("+-<>~*()\"\:");
+  '\\+\\-\\<\\>\\~\\*\\(\\)\\"\\:
+
 
 Parameters
 ----------
