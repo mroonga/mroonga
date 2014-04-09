@@ -172,6 +172,10 @@ extern "C" {
 #  define MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
 #endif
 
+#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100010)
+#  define MRN_HAVE_TDC_LOCK_TABLE_SHARE
+#endif
+
 class ha_mroonga;
 
 /* structs */

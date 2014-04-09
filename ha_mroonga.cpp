@@ -101,22 +101,38 @@
 #define MRN_TEXT_SIZE       (1 << 16) // 64Kbytes
 #define MRN_LONG_TEXT_SIZE  (1 << 31) //  2Gbytes
 
-#if MYSQL_VERSION_ID >= 50500
-#  ifdef DBUG_OFF
-#    ifndef _WIN32
-extern mysql_mutex_t LOCK_open;
-#    endif
-#  endif
-static mysql_mutex_t *mrn_LOCK_open;
-#  define mrn_open_mutex_lock() mysql_mutex_lock(mrn_LOCK_open)
-#  define mrn_open_mutex_unlock() mysql_mutex_unlock(mrn_LOCK_open)
+#ifdef MRN_HAVE_TDC_LOCK_TABLE_SHARE
+#  define mrn_open_mutex(share) &((share)->tdc.LOCK_table_share)
+#  define mrn_open_mutex_lock(share) do {       \
+  TABLE_SHARE *share_ = share;                  \
+  if (share_) {                                 \
+    mysql_mutex_lock(mrn_open_mutex(share_));   \
+  }                                             \
+} while (0)
+#  define mrn_open_mutex_unlock(share) do {     \
+  TABLE_SHARE *share_ = share;                  \
+  if (share_) {                                 \
+    mysql_mutex_unlock(mrn_open_mutex(share_)); \
+  }                                             \
+} while (0)
 #else
-#  ifndef _WIN32
+#  if MYSQL_VERSION_ID >= 50500
+#    ifdef DBUG_OFF
+#      ifndef _WIN32
+extern mysql_mutex_t LOCK_open;
+#      endif
+#    endif
+static mysql_mutex_t *mrn_LOCK_open;
+#    define mrn_open_mutex_lock(share) mysql_mutex_lock(mrn_LOCK_open)
+#    define mrn_open_mutex_unlock(share) mysql_mutex_unlock(mrn_LOCK_open)
+#  else
+#    ifndef _WIN32
 extern pthread_mutex_t LOCK_open;
-#  endif
+#    endif
 static pthread_mutex_t *mrn_LOCK_open;
-#  define mrn_open_mutex_lock()
-#  define mrn_open_mutex_unlock()
+#    define mrn_open_mutex_lock(share)
+#    define mrn_open_mutex_unlock(share)
+#  endif
 #endif
 
 #if MYSQL_VERSION_ID >= 50600
@@ -1275,13 +1291,15 @@ static int mrn_init(void *p)
   mrn_table_def_cache = (HASH *)GetProcAddress(current_module,
     "?table_def_cache@@3Ust_hash@@A");
 #  endif
+#  ifndef MRN_HAVE_TDC_LOCK_TABLE_SHARE
   mrn_LOCK_open =
-#  if MYSQL_VERSION_ID >= 50500
+#    if MYSQL_VERSION_ID >= 50500
     (mysql_mutex_t *)GetProcAddress(current_module,
       "?LOCK_open@@3Ust_mysql_mutex@@A");
-#  else
+#    else
     (pthread_mutex_t *)GetProcAddress(current_module,
       "?LOCK_open@@3U_RTL_CRITICAL_SECTION@@A");
+#    endif
 #  endif
 #  ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
      mrn_table_share_lock_share =
@@ -1297,7 +1315,9 @@ static int mrn_init(void *p)
 #  ifdef MRN_HAVE_TABLE_DEF_CACHE
   mrn_table_def_cache = &table_def_cache;
 #  endif
+#  ifndef MRN_HAVE_TDC_LOCK_TABLE_SHARE
   mrn_LOCK_open = &LOCK_open;
+#  endif
 #endif
 
   // init groonga
@@ -3033,10 +3053,10 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
                               mapper.mysql_table_name(),
                               TL_WRITE);
 #endif
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(table->s);
     tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(table->s);
     if (!tmp_ref_table_share) {
       grn_obj_unlink(ctx, grn_table_ref);
       error = ER_CANT_CREATE_TABLE;
@@ -3048,9 +3068,9 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     }
     uint ref_pkey_nr = tmp_ref_table_share->primary_key;
     if (ref_pkey_nr == MAX_KEY) {
-      mrn_open_mutex_lock();
+      mrn_open_mutex_lock(table->s);
       mrn_free_tmp_table_share(tmp_ref_table_share);
-      mrn_open_mutex_unlock();
+      mrn_open_mutex_unlock(table->s);
       grn_obj_unlink(ctx, grn_table_ref);
       error = ER_CANT_CREATE_TABLE;
       char err_msg[MRN_BUFFER_SIZE];
@@ -3062,9 +3082,9 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     KEY *ref_key_info = &tmp_ref_table_share->key_info[ref_pkey_nr];
     uint ref_key_parts = KEY_N_KEY_PARTS(ref_key_info);
     if (ref_key_parts > 1) {
-      mrn_open_mutex_lock();
+      mrn_open_mutex_lock(table->s);
       mrn_free_tmp_table_share(tmp_ref_table_share);
-      mrn_open_mutex_unlock();
+      mrn_open_mutex_unlock(table->s);
       grn_obj_unlink(ctx, grn_table_ref);
       error = ER_CANT_CREATE_TABLE;
       char err_msg[MRN_BUFFER_SIZE];
@@ -3076,9 +3096,9 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     }
     Field *ref_field = &ref_key_info->key_part->field[0];
     if (strcmp(ref_field->field_name, ref_field_name.str)) {
-      mrn_open_mutex_lock();
+      mrn_open_mutex_lock(table->s);
       mrn_free_tmp_table_share(tmp_ref_table_share);
-      mrn_open_mutex_unlock();
+      mrn_open_mutex_unlock(table->s);
       grn_obj_unlink(ctx, grn_table_ref);
       error = ER_CANT_CREATE_TABLE;
       char err_msg[MRN_BUFFER_SIZE];
@@ -3088,9 +3108,9 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       my_message(error, err_msg, MYF(0));
       DBUG_RETURN(false);
     }
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(table->s);
     mrn_free_tmp_table_share(tmp_ref_table_share);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(table->s);
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
     column = grn_column_create(ctx, table_obj, field->field_name,
                                strlen(field->field_name),
@@ -4210,18 +4230,18 @@ int ha_mroonga::close()
     table_list.init_one_table(mapper.db_name(), mapper.mysql_table_name(),
                               TL_WRITE);
 #endif
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(NULL);
     tmp_table_share =
       mrn_create_tmp_table_share(&table_list, share->table_name, &tmp_error);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(NULL);
     if (!tmp_table_share) {
       error = tmp_error;
     } else if ((tmp_error = alter_share_add(share->table_name,
                                             tmp_table_share))) {
       error = tmp_error;
-      mrn_open_mutex_lock();
+      mrn_open_mutex_lock(NULL);
       mrn_free_tmp_table_share(tmp_table_share);
-      mrn_open_mutex_unlock();
+      mrn_open_mutex_unlock(NULL);
     }
   }
   bitmap_free(&multiple_column_key_bitmap);
@@ -4394,9 +4414,9 @@ int ha_mroonga::delete_table(const char *name)
     table_list.init_one_table(mapper.db_name(), mapper.mysql_table_name(),
                               TL_WRITE);
 #endif
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(NULL);
     tmp_table_share = mrn_create_tmp_table_share(&table_list, name, &error);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(NULL);
     if (!tmp_table_share) {
       DBUG_RETURN(error);
     }
@@ -4407,9 +4427,9 @@ int ha_mroonga::delete_table(const char *name)
 #endif
   if (!(tmp_share = mrn_get_share(name, &tmp_table, &error)))
   {
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(NULL);
     mrn_free_tmp_table_share(tmp_table_share);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(NULL);
     DBUG_RETURN(error);
   }
 
@@ -4425,9 +4445,9 @@ int ha_mroonga::delete_table(const char *name)
     tmp_share->long_term_share = NULL;
   }
   mrn_free_share(tmp_share);
-  mrn_open_mutex_lock();
+  mrn_open_mutex_lock(NULL);
   mrn_free_tmp_table_share(tmp_table_share);
-  mrn_open_mutex_unlock();
+  mrn_open_mutex_unlock(NULL);
   if (is_temporary_table_name(name)) {
     mrn_drop_db(name);
   }
@@ -11885,9 +11905,9 @@ int ha_mroonga::rename_table(const char *from, const char *to)
                             from_mapper.mysql_table_name(),
                             TL_WRITE);
 #endif
-  mrn_open_mutex_lock();
+  mrn_open_mutex_lock(NULL);
   tmp_table_share = mrn_create_tmp_table_share(&table_list, from, &error);
-  mrn_open_mutex_unlock();
+  mrn_open_mutex_unlock(NULL);
   if (!tmp_table_share) {
     DBUG_RETURN(error);
   }
@@ -11897,9 +11917,9 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 #endif
   if (!(tmp_share = mrn_get_share(from, &tmp_table, &error)))
   {
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(NULL);
     mrn_free_tmp_table_share(tmp_table_share);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(NULL);
     DBUG_RETURN(error);
   }
 
@@ -11925,9 +11945,9 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   } else if (error && from_mapper.table_name()[0] == '#') {
     alter_share_add(from, tmp_table_share);
   } else {
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(NULL);
     mrn_free_tmp_table_share(tmp_table_share);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(NULL);
   }
   DBUG_RETURN(error);
 }
@@ -14482,10 +14502,10 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
                               ref_table_buff,
                               TL_WRITE);
 #endif
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(table_share);
     tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(table_share);
     if (!tmp_ref_table_share) {
       DBUG_RETURN(NULL);
     }
@@ -14494,9 +14514,9 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     Field *ref_field = &ref_key_info->key_part->field[0];
     append_identifier(ha_thd(), &create_info_str, ref_field->field_name,
                       strlen(ref_field->field_name));
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(table_share);
     mrn_free_tmp_table_share(tmp_ref_table_share);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(table_share);
     if (create_info_str.reserve(39)) {
       DBUG_RETURN(NULL);
     }
@@ -14694,10 +14714,10 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
                               ref_table_buff,
                               TL_WRITE);
 #endif
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(table_share);
     tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(table_share);
     if (!tmp_ref_table_share) {
       DBUG_RETURN(error);
     }
@@ -14709,9 +14729,9 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
                                                    strlen(ref_field->field_name),
                                                    TRUE);
     f_key_info.referenced_fields.push_back(ref_col_name);
-    mrn_open_mutex_lock();
+    mrn_open_mutex_lock(table_share);
     mrn_free_tmp_table_share(tmp_ref_table_share);
-    mrn_open_mutex_unlock();
+    mrn_open_mutex_unlock(table_share);
     FOREIGN_KEY_INFO *p_f_key_info =
       (FOREIGN_KEY_INFO *) thd_memdup(thd, &f_key_info,
                                       sizeof(FOREIGN_KEY_INFO));
