@@ -107,14 +107,14 @@
 extern mysql_mutex_t LOCK_open;
 #    endif
 #  endif
-mysql_mutex_t *mrn_LOCK_open;
+static mysql_mutex_t *mrn_LOCK_open;
 #  define mrn_open_mutex_lock() mysql_mutex_lock(mrn_LOCK_open)
 #  define mrn_open_mutex_unlock() mysql_mutex_unlock(mrn_LOCK_open)
 #else
 #  ifndef _WIN32
 extern pthread_mutex_t LOCK_open;
 #  endif
-pthread_mutex_t *mrn_LOCK_open;
+static pthread_mutex_t *mrn_LOCK_open;
 #  define mrn_open_mutex_lock()
 #  define mrn_open_mutex_unlock()
 #endif
