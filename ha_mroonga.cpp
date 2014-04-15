@@ -11285,7 +11285,23 @@ int ha_mroonga::wrapper_delete_all_rows()
 int ha_mroonga::storage_delete_all_rows()
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(storage_truncate());
+  int error = 0;
+  grn_table_cursor *cursor;
+  cursor = grn_table_cursor_open(ctx, grn_table,
+                                 NULL, 0,
+                                 NULL, 0,
+                                 0, -1,
+                                 0);
+  if (cursor) {
+    while (grn_table_cursor_next(ctx, cursor) != GRN_ID_NIL) {
+      grn_table_cursor_delete(ctx, cursor);
+    }
+    grn_table_cursor_close(ctx, cursor);
+  } else {
+    error = ER_ERROR_ON_WRITE;
+    my_message(error, ctx->errbuf, MYF(0));
+  }
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::delete_all_rows()
