@@ -13228,7 +13228,6 @@ bool ha_mroonga::storage_inplace_alter_table(
   TABLE_SHARE tmp_table_share;
   char **index_table, **key_parser, **col_flags, **col_type;
   uint *index_table_length, *key_parser_length, *col_flags_length, *col_type_length;
-  KEY *p_key_info = &table->key_info[table_share->primary_key];
   bool have_multiple_column_index = false;
   memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   memset(index_columns, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
@@ -13262,7 +13261,10 @@ bool ha_mroonga::storage_inplace_alter_table(
   tmp_share->col_type = col_type;
   tmp_share->col_type_length = col_type_length;
   bitmap_clear_all(table->read_set);
-  mrn_set_bitmap_by_key(table->read_set, p_key_info);
+  if (table_share->primary_key != MAX_KEY) {
+    KEY *p_key_info = &table->key_info[table_share->primary_key];
+    mrn_set_bitmap_by_key(table->read_set, p_key_info);
+  }
   n_keys = ha_alter_info->index_add_count;
   for (i = 0; i < n_keys; ++i) {
     uint key_pos = ha_alter_info->index_add_buffer[i];
