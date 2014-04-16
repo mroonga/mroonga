@@ -156,6 +156,7 @@ if [ -n "${plugins_dir}" ]; then
 	    plugindir=${plugins_dir} > /dev/null || \
 	    exit 1
     else
+	mkdir -p "${plugins_dir}"
 	cp "${top_dir}/ha_mroonga.so" "${plugins_dir}" || exit 1
     fi
 fi
