@@ -462,6 +462,11 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = "HA_EXTRA_EXPORT";
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_SECONDARY_SORT_ROWID
+  case HA_EXTRA_SECONDARY_SORT_ROWID:
+    inspected = "HA_EXTRA_SECONDARY_SORT_ROWID";
+    break;
+#endif
 #ifdef MRN_HAVE_HA_EXTRA_DETACH_CHILD
   case HA_EXTRA_DETACH_CHILD:
     inspected = "HA_EXTRA_DETACH_CHILD";

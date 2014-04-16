@@ -126,6 +126,10 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_EXPORT
 #endif
 
+#if MYSQL_VERSION_ID >= 50617 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_HA_EXTRA_SECONDARY_SORT_ROWID
+#endif
+
 #if MYSQL_VERSION_ID >= 50604 && !defined(MRN_MARIADB_P)
 #  define MRN_TIMESTAMP_USE_TIMEVAL
 #elif defined(MRN_MARIADB_P)
