@@ -54,6 +54,7 @@ fi
 source_mysql_test_dir="${MYSQL_SOURCE_DIR}/mysql-test"
 build_mysql_test_dir="${MYSQL_BUILD_DIR}/mysql-test"
 source_test_suites_dir="${source_mysql_test_dir}/suite"
+source_test_include_dir="${source_mysql_test_dir}/include"
 build_test_suites_dir="${build_mysql_test_dir}/suite"
 build_test_include_dir="${build_mysql_test_dir}/include"
 case "${MYSQL_VERSION}" in
@@ -114,7 +115,7 @@ fi
 if [ ! -d "${mroonga_wrapper_innodb_test_suite_dir}" ]; then
     cp -rp "${innodb_test_suite_dir}" "${mroonga_wrapper_innodb_test_suite_dir}"
     mkdir -p "${mroonga_wrapper_innodb_include_dir}"
-    cp -rp "${build_test_include_dir}"/innodb[-_]*.inc \
+    cp -rp "${source_test_include_dir}"/innodb[-_]*.inc \
 	"${mroonga_wrapper_innodb_include_dir}"
     ruby -i'' \
 	-pe "\$_.gsub!(/\\bengine\\s*=\\s*innodb\\b([^;\\n]*)/i,
