@@ -9948,7 +9948,15 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: stored record ID: %d", record_id));
+
   my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(buf, table->record[0]);
+
+  Field *primary_key_field = NULL;
+  if (table->s->primary_key != MAX_INDEXES) {
+    KEY *key_info = &(table->s->key_info[table->s->primary_key]);
+    primary_key_field = key_info->key_part[0].field;
+  }
+
   int i;
   int n_columns = table->s->fields;
   for (i = 0; i < n_columns; i++) {
@@ -9972,6 +9980,14 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         // for _id column
         field->set_notnull();
         field->store((int)record_id);
+      } else if (primary_key_field &&
+                 strcmp(primary_key_field->field_name, column_name) == 0) {
+        // for primary key column
+        char key[GRN_TABLE_MAX_KEY_SIZE];
+        int key_length;
+        key_length = grn_table_get_key(ctx, grn_table, record_id,
+                                       &key, GRN_TABLE_MAX_KEY_SIZE);
+        storage_store_field(field, key, key_length);
       } else {
         // actual column
         const char *value;
