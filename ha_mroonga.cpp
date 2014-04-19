@@ -635,10 +635,15 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
   char **old_value_ptr = (char **)var_ptr;
+  const char *new_log_file_name;
+
   grn_ctx ctx;
 
   grn_ctx_init(&ctx, 0);
   mrn_change_encoding(&ctx, system_charset_info);
+  
+  new_log_file_name = *old_value_ptr;
+
   if (strcmp(*old_value_ptr, new_value) == 0) {
     GRN_LOG(&ctx, GRN_LOG_NOTICE,
             "log file isn't changed "
@@ -665,7 +670,6 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
       }
     }
 
-    const char *new_log_file_name;
     if (log_file_open_errno == 0) {
       GRN_LOG(&ctx, GRN_LOG_NOTICE,
               "log file is changed: <%s> -> <%s>",
@@ -682,8 +686,9 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
                 "log file can't be opened: <%s>: <%s>",
                 new_value, strerror(log_file_open_errno));
       }
-      new_log_file_name = *old_value_ptr;
     }
+  }
+
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
     char *old_log_file_name = *old_value_ptr;
     *old_value_ptr = my_strdup(new_log_file_name, MYF(MY_WME));
@@ -691,7 +696,7 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
 #else
     *old_value_ptr = my_strdup(new_log_file_name, MYF(MY_WME));
 #endif
-  }
+
   grn_ctx_fin(&ctx);
 
   DBUG_VOID_RETURN;
@@ -723,6 +728,7 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
     GRN_LOG(&ctx, GRN_LOG_NOTICE,
             "default fulltext parser is changed: <%s> -> <%s>",
             *old_value_ptr, new_value);
+  }
 
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
     my_free(*old_value_ptr, MYF(0));
@@ -730,7 +736,7 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
 #else
     *old_value_ptr = (char *)new_value;
 #endif
-  }
+
   grn_ctx_fin(&ctx);
 
   DBUG_VOID_RETURN;
