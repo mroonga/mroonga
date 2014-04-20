@@ -16,9 +16,6 @@
 
 --source ../../../../include/mroonga/have_mroonga.inc
 
-SET GLOBAL mroonga_log_file = "new-mroonga.log";
-SHOW GLOBAL VARIABLES LIKE 'mroonga_log_file';
-
 SET GLOBAL mroonga_log_file = "nonexistent/mroonga.log";
 SHOW GLOBAL VARIABLES LIKE 'mroonga_log_file';
 
