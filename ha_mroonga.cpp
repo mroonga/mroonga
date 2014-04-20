@@ -635,13 +635,12 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
   char **old_value_ptr = (char **)var_ptr;
-  const char *new_log_file_name;
 
   grn_ctx ctx;
-
   grn_ctx_init(&ctx, 0);
   mrn_change_encoding(&ctx, system_charset_info);
-  
+
+  const char *new_log_file_name;
   new_log_file_name = *old_value_ptr;
 
   if (strcmp(*old_value_ptr, new_value) == 0) {
