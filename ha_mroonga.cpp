@@ -9961,7 +9961,9 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
   Field *primary_key_field = NULL;
   if (table->s->primary_key != MAX_INDEXES) {
     KEY *key_info = &(table->s->key_info[table->s->primary_key]);
-    primary_key_field = key_info->key_part[0].field;
+    if (!(key_info->flags & HA_NOSAME)) {
+      primary_key_field = key_info->key_part[0].field;
+    }
   }
 
   int i;
