@@ -1938,6 +1938,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    grn_column_ranges(NULL),
    grn_index_tables(NULL),
    grn_index_columns(NULL),
+   grn_table_is_referenced(false),
 
    grn_source_column_geo(NULL),
    cursor_geo(NULL),
@@ -3945,6 +3946,55 @@ int ha_mroonga::storage_open(const char *name, int mode, uint test_if_locked)
   DBUG_RETURN(0);
 }
 
+void ha_mroonga::update_grn_table_is_referenced()
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_table_is_referenced = false;
+
+  grn_table_cursor *cursor;
+  int flags = GRN_CURSOR_BY_ID | GRN_CURSOR_ASCENDING;;
+  cursor = grn_table_cursor_open(ctx, grn_ctx_db(ctx),
+                                 NULL, 0,
+                                 NULL, 0,
+                                 0, -1, flags);
+  if (cursor) {
+    grn_id id;
+    grn_id grn_table_id;
+
+    grn_table_id = grn_obj_id(ctx, grn_table);
+    while ((id = grn_table_cursor_next(ctx, cursor)) != GRN_ID_NIL) {
+      grn_obj *object;
+      grn_id range = GRN_ID_NIL;
+
+      object = grn_ctx_at(ctx, id);
+      if (!object) {
+        ctx->rc = GRN_SUCCESS;
+        continue;
+      }
+
+      switch (object->header.type) {
+      case GRN_COLUMN_FIX_SIZE:
+      case GRN_COLUMN_VAR_SIZE:
+        range = grn_obj_get_range(ctx, object);
+        break;
+      default:
+        break;
+      }
+      grn_obj_unlink(ctx, object);
+
+      if (range == grn_table_id) {
+        grn_table_is_referenced = true;
+        break;
+      }
+    }
+
+    grn_table_cursor_close(ctx, cursor);
+  }
+
+  DBUG_VOID_RETURN;
+}
+
 int ha_mroonga::open_table(const char *name)
 {
   int error;
@@ -3970,6 +4020,8 @@ int ha_mroonga::open_table(const char *name)
     my_message(error, error_message, MYF(0));
     DBUG_RETURN(error);
   }
+
+  update_grn_table_is_referenced();
 
   DBUG_RETURN(0);
 }
@@ -9959,7 +10011,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
   my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(buf, table->record[0]);
 
   Field *primary_key_field = NULL;
-  if (table->s->primary_key != MAX_INDEXES) {
+  if (grn_table_is_referenced && table->s->primary_key != MAX_INDEXES) {
     KEY *key_info = &(table->s->key_info[table->s->primary_key]);
     primary_key_field = key_info->key_part[0].field;
   }

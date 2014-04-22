@@ -264,6 +264,7 @@ private:
   grn_obj **grn_column_ranges;
   grn_obj **grn_index_tables;
   grn_obj **grn_index_columns;
+  bool grn_table_is_referenced;
 
   // buffers
   grn_obj  encoded_key_buffer;
@@ -735,6 +736,7 @@ private:
   int wrapper_open(const char *name, int mode, uint test_if_locked);
   int wrapper_open_indexes(const char *name);
   int storage_open(const char *name, int mode, uint test_if_locked);
+  void update_grn_table_is_referenced();
   int open_table(const char *name);
   int storage_open_columns(void);
   int storage_open_indexes(const char *name);
