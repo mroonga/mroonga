@@ -1396,6 +1396,7 @@ static int mrn_init(void *p)
                    mrn_long_term_share_get_key, 0, 0)) {
     goto error_allocated_long_term_share_hash_init;
   }
+  grn_set_lock_timeout(mrn_lock_timeout);
 
 #ifdef MRN_USE_MYSQL_DATA_HOME
   mrn::PathMapper::default_mysql_data_home_path = mysql_data_home;
