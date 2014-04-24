@@ -110,7 +110,7 @@ tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE).stamp: tmp/$(MARIADB_WITH_MROONGA_B
 	  tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE)
 	for patch in $(PATCHES); do				\
 	  (cd tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE) &&	\
-	    patch -p1 < ../../$${patch});			\
+	    patch -p1 < $(abs_srcdir)/$${patch});		\
 	done
 
 	touch $@
