@@ -25,7 +25,7 @@ GROONGA_NORMALIZER_MYSQL_DOWNLOAD_BASE = \
 MARIADB_DOWNLOAD_BASE = http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb
 
 
-CURL = curl --fail
+CURL = curl --fail --silent --show-error
 
 all:
 
