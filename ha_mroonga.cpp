@@ -6386,8 +6386,11 @@ int ha_mroonga::storage_prepare_delete_row_unique_indexes(const uchar *buf,
 
     grn_obj *index_column;
     if (KEY_N_KEY_PARTS(key_info) == 1) {
-      index_column = grn_columns[key_info->key_part[0].field->field_index];
+      Field *field = key_info->key_part[0].field;
+      mrn_change_encoding(ctx, field->charset());
+      index_column = grn_columns[field->field_index];
     } else {
+      mrn_change_encoding(ctx, NULL);
       index_column = grn_index_columns[i];
     }
     if ((tmp_error = storage_prepare_delete_row_unique_index(buf, record_id,
