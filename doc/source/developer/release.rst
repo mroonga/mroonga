@@ -143,9 +143,9 @@ zip 展開機能はとても遅いので 7-zip などを使いましょう。展
  > move mariadb-10.0.2-with-mroonga-3.04 source
 
 ソースを準備したらビルドします。ビルド方法は `バッチファイル
-<https://github.com/mroonga/mroonga/tree/master/packages/windows>`_ 書
-かれています。抜粋すると以下の通りです。32bit用と64bit用の両方作成して
-いるので似たような手順が2回でていることに注意してください。::
+<https://github.com/mroonga/mroonga/tree/master/packages/windows>`_ に
+書かれています。抜粋すると以下の通りです。32bit用と64bit用の両方作成し
+ているので似たような手順が2回でていることに注意してください。::
 
  > mkdir build-32
  > cd build-32
