@@ -303,19 +303,19 @@ msgstr "またMroongaをビルドするためにはMySQLのソースコードも
 msgid "Install MySQL"
 msgstr "MySQLのインストール"
 
-msgid "Download the latest MySQL 5.5 source code, then build and install it."
+msgid "Download the latest MySQL 5.6 source code, then build and install it."
 msgstr ""
-"MySQL 5.5最新版のソースコードをダウンロードし、ビルド＆インストールして下さ"
+"MySQL 5.6最新版のソースコードをダウンロードし、ビルド＆インストールして下さ"
 "い。"
 
 msgid "http://dev.mysql.com/downloads/mysql/"
 msgstr ""
 
 msgid ""
-"Here we assume that we use mysql-5.5.31 and its source code is extracted in "
+"Here we assume that we use mysql-5.6.17 and its source code is extracted in "
 "the following directory. ::"
 msgstr ""
-"mysql-5.5.31を使用し、以下にソースディレクトリが展開されているものと仮定しま"
+"mysql-5.6.17を使用し、以下にソースディレクトリが展開されているものと仮定しま"
 "す。 ::"
 
 msgid "And we assume that MySQL is installed in the following directory. ::"
