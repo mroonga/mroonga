@@ -1,5 +1,5 @@
 REPOSITORIES_PATH = repositories
-DISTRIBUTIONS = fedora centos
+DISTRIBUTIONS = centos
 ARCHITECTURES = i386 x86_64
 CHROOT_BASE = /var/lib/chroot
 HAVE_DEVELOPMENT_BRANCH = no
