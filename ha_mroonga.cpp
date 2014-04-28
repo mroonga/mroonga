@@ -11348,29 +11348,25 @@ int ha_mroonga::end_bulk_insert()
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_delete_all_rows()
+int ha_mroonga::generic_delete_all_rows(grn_obj *target_grn_table,
+                                        const char *function_name)
 {
-  int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_delete_all_rows();
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
 
-  if (!error && wrapper_have_target_index()) {
-    error = wrapper_truncate_index();
+  int error = 0;
+
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
+  if (is_dry_write()) {
+    DBUG_PRINT("info",
+               ("mroonga: dry write: %s::%s", MRN_CLASS_NAME, function_name));
+    DBUG_RETURN(error);
   }
 
-  DBUG_RETURN(error);
-}
-
-int ha_mroonga::storage_delete_all_rows()
-{
-  MRN_DBUG_ENTER_METHOD();
-  int error = 0;
   grn_table_cursor *cursor;
-  cursor = grn_table_cursor_open(ctx, grn_table,
+  cursor = grn_table_cursor_open(ctx, target_grn_table,
                                  NULL, 0,
                                  NULL, 0,
                                  0, -1,
@@ -11384,6 +11380,60 @@ int ha_mroonga::storage_delete_all_rows()
     error = ER_ERROR_ON_WRITE;
     my_message(error, ctx->errbuf, MYF(0));
   }
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::wrapper_delete_all_rows()
+{
+  int error = 0;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  error = wrap_handler->ha_delete_all_rows();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+
+  if (error) {
+    DBUG_RETURN(error);
+  }
+
+  if (!wrapper_have_target_index()) {
+    DBUG_RETURN(error);
+  }
+
+  uint i;
+  uint n_keys = table->s->keys;
+  for (i = 0; i < n_keys; i++) {
+    KEY key_info = table->key_info[i];
+
+    if (!(wrapper_is_target_index(&key_info))) {
+      continue;
+    }
+
+    if (!grn_index_tables[i]) {
+      /* disable keys */
+      continue;
+    }
+
+    error = generic_delete_all_rows(grn_index_tables[i], __FUNCTION__);
+    if (error) {
+      break;
+    }
+  }
+
+  int grn_table_error;
+  grn_table_error = generic_delete_all_rows(grn_table, __FUNCTION__);
+  if (!error) {
+    error = grn_table_error;
+  }
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_delete_all_rows()
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = generic_delete_all_rows(grn_table, __FUNCTION__);
   DBUG_RETURN(error);
 }
 
@@ -11430,7 +11480,8 @@ int ha_mroonga::wrapper_truncate_index()
     DBUG_RETURN(error);
 
   if (is_dry_write()) {
-    DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
+    DBUG_PRINT("info",
+               ("mroonga: dry write: %s::%s", MRN_CLASS_NAME, __FUNCTION__));
     DBUG_RETURN(error);
   }
 

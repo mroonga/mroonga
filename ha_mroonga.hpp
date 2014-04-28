@@ -982,6 +982,8 @@ private:
   int wrapper_read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
   int storage_read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
 #endif // MRN_HANDLER_HAVE_MULTI_RANGE_READ
+  int generic_delete_all_rows(grn_obj *target_grn_table,
+                              const char *function_name);
   int wrapper_delete_all_rows();
   int storage_delete_all_rows();
 #ifdef MRN_HANDLER_HAVE_TRUNCATE
