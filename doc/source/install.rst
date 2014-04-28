@@ -383,28 +383,26 @@ are needed for building mroonga for Windows.
 Installer
 ^^^^^^^^^
 
-None for now.
+Download MSI file and execute it. You need to choose a MSI for your
+environment.
 
-.. For 32-bit environment, download
-.. `mariadb-10.0.2-mroonga-3.04-win32.msi
-.. <http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-win32.msi>`_
-.. and run it.
-.. 
-.. For 64-bit environment, download
-.. `mariadb-10.0.2-mroonga-3.04-winx64.msi
-.. <http://packages.groonga.org/windows/mroonga/mariadb-10.0.2-mroonga-3.04-winx64.msi>`_
-.. and run it.
+Choose ``win32`` version for 32-bit environment, ``winx64`` version
+for 64-bit environment:
+
+  * `mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.msi <https://github.com/mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.msi>`_
+  * `mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.msi <https://github.com/mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.msi>`_
 
 Zip
 ^^^
 
-For 32-bit environment, download `mariadb-10.0.9-with-mroonga-4.01-win32.zip
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.9-with-mroonga-4.01-win32.zip>`_
-and extract it.
+Download zip file and extract it. You need to choose a zip for your
+environment.
 
-For 64-bit environment, download `mariadb-10.0.9-with-mroonga-4.01-winx64.zip
-<http://packages.groonga.org/windows/mroonga/mariadb-10.0.9-with-mroonga-4.01-winx64.zip>`_
-and extract it.
+Choose ``win32`` version for 32-bit environment, ``winx64`` version
+for 64-bit environment:
+
+  * `mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.zip <https://github.com/mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.zip>`_
+  * `mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.zip <https://github.com/mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.zip>`_
 
 Install Mroonga
 ^^^^^^^^^^^^^^^
