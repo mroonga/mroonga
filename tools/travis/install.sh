@@ -24,10 +24,9 @@ mariadb_download_base=http://mirror.jmu.edu/pub/mariadb
 # export GROONGA_MASTER=yes
 # export GROONGA_NORMALIZER_MYSQL_MASTER=yes
 
-curl https://raw.github.com/groonga/groonga/master/data/travis/setup.sh
-curl https://raw.github.com/groonga/groonga/master/data/travis/setup.sh | sh
-curl https://raw.github.com/groonga/groonga-normalizer-mysql/master/data/travis/setup.sh | sh
-# curl https://raw.github.com/clear-code/cutter/master/data/travis/setup.sh | sh
+curl --silent --location https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
+curl --silent --location https://github.com/groonga/groonga-normalizer-mysql/raw/master/data/travis/setup.sh | sh
+# curl --silent --location https://github.com/clear-code/cutter/raw/master/data/travis/setup.sh | sh
 
 if [ ! -f /usr/lib/groonga/plugins/tokenizers/mecab.so ]; then
     sudo apt-get -qq -y install groonga-tokenizer-mecab
