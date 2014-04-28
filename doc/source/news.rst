@@ -23,6 +23,7 @@ Fixes
 
 * [storage] Stopped to use truncate for ``DELETE FROM table``.
   [groonga-dev,02222] [Reported by GMO Media, Inc.]
+* [wrapper] Stopped to use truncate for ``DELETE FROM table``.
 * [storage] Fixed a bug that inplace alter table with no primary key
   crashes. [groonga-dev,02227] [Reported by GMO Media, Inc.]
 * [storage] Fixed a bug that ``ORDER BY function(vector_reference_column)``
