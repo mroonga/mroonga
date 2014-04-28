@@ -25,7 +25,7 @@ Install::
   % sudo apt-get update
   % sudo apt-get -y install mysql-server-mroonga
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
@@ -39,7 +39,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Debian GNU/Linux jessie
@@ -57,7 +57,7 @@ Install::
   % sudo apt-get update
   % sudo apt-get -y install mysql-server-mroonga
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
@@ -71,7 +71,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Debian GNU/Linux sid
@@ -89,7 +89,7 @@ Install::
   % sudo aptitude update
   % sudo aptitude -V -D -y install mysql-server-mroonga
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
@@ -107,7 +107,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Ubuntu 12.04 Precise Pangolin
@@ -133,7 +133,7 @@ Install::
   % sudo apt-get update
   % sudo apt-get -y install mysql-server-mroonga
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
@@ -147,7 +147,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Ubuntu 13.10 Saucy Salamander
@@ -173,7 +173,7 @@ Install::
   % sudo apt-get update
   % sudo apt-get -y install mysql-server-mroonga
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
@@ -187,7 +187,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 CentOS 5
@@ -204,7 +204,7 @@ Install::
   % sudo yum install -y mysql55-mroonga
   (% sudo scl enable mysql55 mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
@@ -218,7 +218,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 
@@ -259,7 +259,7 @@ Install::
   % sudo yum install -y mysql55-mroonga
   (% sudo scl enable mysql55 mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
@@ -295,7 +295,7 @@ Install::
   % sudo yum install -y mysql-mroonga
   (% /usr/bin/mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
@@ -309,7 +309,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Fedora 20
@@ -335,7 +335,7 @@ Install Mroonga for MariaDB::
 
    MariaDB and MySQL (community-mysql) package are exclusive. For example, if you want to use mysql-mroonga, you need to remove conflicted mariadb packages at first.
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
@@ -353,7 +353,7 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of groonga is used.
+   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Mac OS X
@@ -363,7 +363,7 @@ Install::
 
   % brew install https://raw.github.com/mroonga/homebrew/master/mroonga.rb --use-homebrew-mysql
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer. please add '--with-mecab' option to install Groonga with MeCab support.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install with ``--with-mecab`` option.
 
 Install with MeCab support::
 
@@ -444,7 +444,7 @@ Here we explain how to install from the source code. If your environment is not 
 Japanese morphological analysis system (MeCab)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you want to use indexes of tokenizing of each morpheme for full text search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing groonga.
+If you want to use indexes of tokenizing of each morpheme for full text search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing Groonga.
 
 Download
 ^^^^^^^^
@@ -460,7 +460,7 @@ To install the latest source code, clone the code from `GitHub <https://github.c
 Requirements
 ^^^^^^^^^^^^
 
-MySQL and groonga should be already installed.
+MySQL and Groonga should be already installed.
 
 And MySQL's source code is also required to build Mroonga.
 
@@ -479,10 +479,10 @@ And we assume that MySQL is installed in the following directory. ::
 
  /usr/local/mysql
 
-Install groonga
+Install Groonga
 ^^^^^^^^^^^^^^^
 
-Build and install the latest groonga.
+Build and install the latest Groonga.
 
 http://groonga.org/docs/
 
@@ -497,7 +497,7 @@ Run configure script by specifying the location of MySQL source code with ``--wi
    --with-mysql-source=/usr/local/src/mysql-5.6.17 \
    --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
-If groonga is not installed in the standard location like /usr/lib, you need to specify its location by PKG_CONFIG_PATH. For example, if groonga is installed with ``--prefix=$HOME/local``, do like the following ::
+If Groonga is not installed in the standard location like /usr/lib, you need to specify its location by PKG_CONFIG_PATH. For example, if Groonga is installed with ``--prefix=$HOME/local``, do like the following ::
 
  ./configure \
    PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
@@ -536,7 +536,7 @@ If "mroonga" is displayed in "SHOW ENGINES" command result like below, Mroonga i
 
 Next install UDF (User-Defined Function).
 
-To get the record ID assigned by groonga in INSERT, install last_insert_grn_id function.
+To get the record ID assigned by Groonga in INSERT, install last_insert_grn_id function.
 
 Invoke CREATE FUNCTION like the following. ::
 
@@ -548,13 +548,13 @@ Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
 
-To enable invoking groonga query from Mroonga, install mroonga_command function.
+To enable invoking Groonga query from Mroonga, install mroonga_command function.
 
 Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
 
-To enable escaping given string properly, install mroonga_escape function.
+To escape an user input query properly, install mroonga_escape function.
 
 Invoke CREATE FUNCTION like the following. ::
 
@@ -568,7 +568,7 @@ Here we explain how to install from the source code with MariaDB. If your enviro
 Japanese morphological analysis system (MeCab)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you want to use indexes of tokenizing of each morpheme for full text search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing groonga.
+If you want to use indexes of tokenizing of each morpheme for full text search, install `MeCab <http://mecab.sourceforge.net/>`_ before installing Groonga.
 
 Download
 ^^^^^^^^
@@ -582,10 +582,10 @@ Requirements
 
 Groonga should be already installed.
 
-Install groonga
+Install Groonga
 ^^^^^^^^^^^^^^^
 
-Build and install the latest groonga.
+Build and install the latest Groonga.
 
 http://groonga.org/docs/
 
@@ -642,7 +642,7 @@ If "mroonga" is displayed in "SHOW ENGINES" command result like below, Mroonga i
 
 Next install UDF (User-Defined Function).
 
-To get the record ID assigned by groonga in INSERT, install last_insert_grn_id function.
+To get the record ID assigned by Groonga in INSERT, install last_insert_grn_id function.
 
 Invoke CREATE FUNCTION like the following. ::
 
@@ -654,13 +654,13 @@ Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
 
-To enable invoking groonga query from Mroonga, install mroonga_command function.
+To enable invoking Groonga query from Mroonga, install mroonga_command function.
 
 Invoke CREATE FUNCTION like the following. ::
 
  mysql> CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
 
-To enable escaping given string properly, install mroonga_escape function.
+To escape an user input query properly, install mroonga_escape function.
 
 Invoke CREATE FUNCTION like the following. ::
 
