@@ -5,8 +5,11 @@ Maintainer: Kouhei Sutou <kou@clear-code.com>
 Build-Depends:
 	debhelper (>= 7.0.50),
 	autotools-dev,
+	pkg-config,
 	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
+	groonga-normalizer-mysql,
 	libmysqlclient-dev,
+	libmysqld-dev,
 	libssl-dev
 Standards-Version: 3.9.1
 Homepage: http://mroonga.org/
