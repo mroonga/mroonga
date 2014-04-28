@@ -36,7 +36,7 @@ Fixes
   is ignored.
   [GitHub#7] [Patch by GMO Media, Inc.]
 * Fixed a bug that deleting by primary key doesn't update unique index.
-  [groonga-dev,02244] [Reported by Akihiro Tusk]
+  [groonga-dev,02244] [Reported by Akihiro Tsukui]
 
 Thanks
 ^^^^^^

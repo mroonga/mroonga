@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 14:48+0900\n"
-"PO-Revision-Date: 2014-03-27 16:14+0900\n"
+"POT-Creation-Date: 2014-04-28 23:32\n"
+"PO-Revision-Date: 2014-04-28 23:34+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,11 +20,117 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 4.01 - 2014/03/29"
-msgstr "4.01リリース - 2014/03/29"
+msgid "Release 4.02 - 2014/04/29"
+msgstr "4.02リリース - 2014/04/29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Supported MariaDB 10.0.10 [#2460] [Reported by Kazuhiko Shiozaki]"
+msgstr "MariaDB 10.0.10に対応しました。 [#2460] [かずひこさんが報告]"
+
+msgid "Supported MySQL 5.6.17."
+msgstr "MySQL 5.6.17に対応しました。"
+
+msgid "Supported Ubuntu 14.04 LTS Trusty Tahr."
+msgstr "Ubuntu 14.04 LTS Trusty Tahrに対応しました。"
+
+# e263d3fcc2a0480ca0555bfd3ae50666
+msgid "Enabled MariaDB bundled build."
+msgstr "MariaDBにバンドルした状態でビルドできるようにしました。"
+
+msgid "Dropped Ubuntu 12.10 Quantal Quetzal support."
+msgstr "Ubuntu 12.10 Quantal Quetzalの対応をやめました。"
+
+# ec63a4d13b2d4142a5a3adf97c655e8b
+msgid "[doc] Updated MySQL version. [GitHub#8] [Patch by cosmo0920]"
+msgstr ""
+"[doc] MySQLのバージョンを更新しました。 [GitHub#8] [cosmo0920さんがパッチ提"
+"供]"
+
+msgid "Fixes"
+msgstr "修正"
+
+# 039ac26d70124f408431a222bd6a344f
+msgid ""
+"[storage] Stopped to use truncate for ``DELETE FROM table``. [groonga-"
+"dev,02222] [Reported by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード] ``DELETE FROM table`` のときにtruncateを使わないようにしま"
+"した。 [groonga-dev,02222] [GMOメディア株式会社さんが報告]"
+
+# 76c1ceb69dc2430d93a80383ee3f2ecf
+msgid "[wrapper] Stopped to use truncate for ``DELETE FROM table``."
+msgstr ""
+"[ラッパーモード] ``DELETE FROM table`` のときにtruncateを使わないようにしまし"
+"た。"
+
+msgid ""
+"[storage] Fixed a bug that inplace alter table with no primary key crashes. "
+"[groonga-dev,02227] [Reported by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード] プライマリーキーがないテーブルをinplate alter tableすると"
+"クラッシュする問題を修正しました。 [groonga-dev,02227] [GMOメディア株式会社さ"
+"んが報告]"
+
+msgid ""
+"[storage] Fixed a bug that ``ORDER BY function(vector_reference_column)`` "
+"doesn't work. [groonga-dev,02234] [Reported by Naoya Murakami]"
+msgstr ""
+"[ストレージモード] ``ORDER BY function(vector_reference_column)`` が動かない"
+"問題を修正しました。 [groonga-dev,02234] [村上さんが報告]"
+
+# e4cc783f9b624548954e8881c0df6f52
+msgid ""
+"Fixed a bug that setting the current value to ``mroonga_default_parser`` or "
+"``mroonga_log_file`` crash. [GitHub#6] [Patch by Satoshi MITANI]"
+msgstr ""
+"``mroonga_default_parser`` あるいは ``mroonga_log_file`` に現在の値と同じ値を"
+"設定するとクラッシュする問題を修正しました。 [GitHub#6] [Satoshi MITANIさんが"
+"パッチ提供]"
+
+# 90e7e3f2277049ecbd4b6315455d7d03
+msgid ""
+"Fixed a bug that ``mroonga_lock_timeout`` in my.cnf or command line option "
+"is ignored. [GitHub#7] [Patch by GMO Media, Inc.]"
+msgstr ""
+"my.cnfやコマンドラインオプションで ``mroonga_lock_timeout`` を指定しても無視"
+"される問題を修正しました。 [GitHub#7] [GMOメディア株式会社さんがパッチ提供]"
+
+msgid ""
+"Fixed a bug that deleting by primary key doesn't update unique index. "
+"[groonga-dev,02244] [Reported by Akihiro Tsukui]"
+msgstr ""
+"プライマリーキーを指定してレコードを削除するとユニークインデックスが更新され"
+"ない問題を修正しました。 [groonga-dev,02244] [津久井玲宏さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Kazuhiko Shiozaki"
+msgstr "かずひこさん"
+
+# d8986144d4454b8dbfd7cf12c8877b8c
+msgid "GMO Media, Inc."
+msgstr ""
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+# 0683aa1c35d44a35b1b31601d00fbd9a
+msgid "Satoshi MITANI"
+msgstr ""
+
+# 0683aa1c35d44a35b1b31601d00fbd9a
+msgid "Akihiro Tsukui"
+msgstr ""
+
+# d5a1476d11a34a9cb63ba48497653e81
+msgid "cosmo0920"
+msgstr ""
+
+msgid "Release 4.01 - 2014/03/29"
+msgstr "4.01リリース - 2014/03/29"
 
 msgid "Supported MariaDB 10.0.9 [#2387] [Reported by Kazuhiko Shiozaki]"
 msgstr "MariaDB 10.0.9に対応しました。 [#2387] [かずひこさんが報告]"
@@ -39,9 +145,6 @@ msgstr ""
 msgid "[rpm][centos] Supported SCL MySQL package on CentOS 6."
 msgstr "[rpm][centos] CentOS 6にてSCLのMySQLパッケージに対応しました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[storage] Fixed a bug that ALTER TABLE with fulltext index which refer to "
 "table causes mysqld crash. [#2327] [groonga-dev,02130] [Reported by Naoya "
@@ -52,28 +155,14 @@ msgstr ""
 "dev,02130] [村上さんが報告]"
 
 msgid ""
-"[storage] Fixed a bug that ALTER TABLE with fulltext index which refer to "
-"table causes returning empty results on MySQL 5.5 or MariaDB 5.5. [#2327]"
-msgstr ""
-
-msgid ""
 "[doc] Fixed to use Mroonga/Groonga (capitalized notation) in characteristics "
 "document. [GitHub#5] [Patch by Naoya Murakami]"
 msgstr ""
 "[doc] \"Mroongaの特徴\"でMroonga/Groongaを大文字表記するようにしました。"
 "[GitHub#5] [村上さんがパッチ提供]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "yoku0825"
 msgstr "yokuさん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
-
-msgid "Kazuhiko Shiozaki"
-msgstr "かずひこさん"
 
 msgid "Release 4.00 - 2014/02/09"
 msgstr "4.00リリース - 2014/02/29"
@@ -540,10 +629,8 @@ msgstr ""
 msgid "Supported MySQL 5.6.12. [Reported by WING]"
 msgstr "MySQL 5.6.12に対応しました。 [WINGさんが報告]"
 
-#, fuzzy
 msgid "Added documentation about troubleshooting."
-msgstr ""
-"[doc] :doc:`/reference/troubleshooting` のためのドキュメントを追加しました。"
+msgstr "トラブルシューティングのためのドキュメントを追加しました。"
 
 msgid ""
 "Supported to enable fast mutexes option by build configuration. [#1760] "
@@ -994,8 +1081,8 @@ msgid ""
 "This release has backward incompatible changes against ``TIMESTAMP`` value "
 "and primary indexed char(N)."
 msgstr ""
-"今回のリリースには後方互換性のない変更が ``TIMESTAMP`` 型の値と 主キーにchar"
-"(N)を使った場合にあります。"
+"今回のリリースには後方互換性のない変更が ``TIMESTAMP`` 型の値と 主キーに"
+"char(N)を使った場合にあります。"
 
 msgid ""
 "``TIMESTAMP`` value is changed to store as UTC timezone. If you have any "
@@ -1225,14 +1312,13 @@ msgstr "@nabebebさん"
 msgid "Release 2.05 - 2012/07/29"
 msgstr "2.05リリース - 2012/07/29"
 
-#, fuzzy
 msgid ""
 "This release has a backward incompatible change against SET column and ENUM. "
 "If you use SET column or ENUM that has the number of elements < 256 in :doc:"
 "`/tutorial/storage`, please recreate (dump and restore) database."
 msgstr ""
 "このリリースにはSETカラムとENUMに関して後方互換性のない変更があります。もし :"
-"doc:`/userguide/storage` にてSETカラムもしくは要素数が256より少ないENUMを使用"
+"doc:`/tutorial/storage` にてSETカラムもしくは要素数が256より少ないENUMを使用"
 "しているなら、データベースを再作成してください。"
 
 msgid "Here is upgrade sequence."
@@ -1332,7 +1418,6 @@ msgstr ""
 msgid "Release 2.03 - 2012/05/29"
 msgstr "2.03リリース - 2012/05/29"
 
-#, fuzzy
 msgid ""
 "This release has a backward incompatible change against multiple column "
 "index. If you have any tables that uses :doc:`/tutorial/storage` and any "
@@ -1340,7 +1425,7 @@ msgid ""
 "DISABLE KEYS`` and ``ALTER TABLE ENBALE KEYS``::"
 msgstr ""
 "このリリースにはマルチカラムインデックスに関する後方互換性のない変更が1つあり"
-"ます。もし、 :doc:`/userguide/storage` でマルチカラムインデックスをつかってい"
+"ます。もし、 :doc:`/tutorial/storage` でマルチカラムインデックスをつかってい"
 "る場合は  ``ALTER TABLE DISABLE KEYS`` と ``ALTER TABLE ENBALE KEYS`` を使っ"
 "てインデックスを作り直してください::"
 
