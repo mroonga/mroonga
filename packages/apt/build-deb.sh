@@ -42,7 +42,7 @@ if [ ! -f "${groonga_list}" ]; then
 deb http://packages.groonga.org/${downcased_distribtion}/ ${code_name} ${component}
 deb-src http://packages.groonga.org/${downcased_distribtion}/ ${code_name} ${component}
 EOF
-    apt-get update -V
+    apt-get update
     run apt-get -V -y --allow-unauthenticated install groonga-keyring
 fi
 
@@ -72,7 +72,7 @@ EOF
 	    ;;
     esac
 
-    run apt-get update -V
+    run apt-get update
     run apt-get upgrade -V -y
 fi
 
@@ -81,7 +81,7 @@ if [ ! -f "$universe_list}" ]; then
     case ${distribution} in
 	Ubuntu)
 	    sed -e 's/main/universe/' /etc/apt/sources.list > ${universe_list}
-	    run apt-get update -V
+	    run apt-get update
 	    ;;
     esac
 fi
