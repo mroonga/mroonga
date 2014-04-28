@@ -134,8 +134,8 @@ update-version:
 	  printf "0x%02x%02x"							\
 	    $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO)	\
 	    > $(srcdir)/version_in_hex;						\
-	  printf "%d.%d" 							\
-	    $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) 	\
+	  printf "%d.%d"							\
+	    $(NEW_VERSION_MAJOR) $(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO)	\
 	    > $(srcdir)/plugin_version;						\
 	fi
 
