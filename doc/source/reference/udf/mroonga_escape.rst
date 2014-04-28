@@ -51,7 +51,9 @@ There is one optional parameter, ``special_characters``.
 ``special_characters``
 """"""""""""""""""""""
 
-It specifies characters to escape. The default value of ``special_characters`` are '+-<>~*()":'.
+It specifies characters to escape.
+
+The default value is ``+-<>~*()":``.
 
 Return value
 ------------
