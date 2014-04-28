@@ -3,6 +3,50 @@
 News
 ====
 
+.. _release-4-02:
+
+Release 4.02 - 2014/04/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MariaDB 10.0.10 [#2460] [Reported by Kazuhiko Shiozaki]
+* Supported MySQL 5.6.17.
+* Supported Ubuntu 14.04 LTS Trusty Tahr.
+* Enabled MariaDB bundled build.
+* Dropped Ubuntu 12.10 Quantal Quetzal support.
+* [doc] Updated MySQL version. [GitHub#8] [Patch by cosmo0920]
+
+Fixes
+^^^^^
+
+* [storage] Stopped to use truncate for ``DELETE FROM table``.
+  [groonga-dev,02222] [Reported by GMO Media, Inc.]
+* [storage] Fixed a bug that inplace alter table with no primary key
+  crashes. [groonga-dev,02227] [Reported by GMO Media, Inc.]
+* [storage] Fixed a bug that ``ORDER BY function(vector_reference_column)``
+  doesn't work.
+  [groonga-dev,02234] [Reported by Naoya Murakami]
+* Fixed a bug that setting the current value to ``mroonga_default_parser``
+  or ``mroonga_log_file`` crash.
+  [GitHub#6] [Patch by Satoshi MITANI]
+* Fixed a bug that ``mroonga_lock_timeout`` in my.cnf or command line option
+  is ignored.
+  [GitHub#7] [Patch by GMO Media, Inc.]
+* Fixed a bug that deleting by primary key doesn't update unique index.
+  [groonga-dev,02244] [Reported by Akihiro Tusk]
+
+Thanks
+^^^^^^
+
+* Kazuhiko Shiozaki
+* GMO Media, Inc.
+* Naoya Murakami
+* Satoshi MITANI
+* Akihiro Tsukui
+* cosmo0920
+
 .. _release-4-01:
 
 Release 4.01 - 2014/03/29
