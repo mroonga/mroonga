@@ -389,8 +389,8 @@ environment.
 Choose ``win32`` version for 32-bit environment, ``winx64`` version
 for 64-bit environment:
 
-  * `mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.msi <https://github.com/mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.msi>`_
-  * `mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.msi <https://github.com/mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.msi>`_
+  * `mariadb-10.0.10-with-mroonga-4.02-win32.msi <https://github.com/mroonga/mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-win32.msi>`_
+  * `mariadb-10.0.10-with-mroonga-4.02-winx64.msi <https://github.com/mroonga/mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-winx64.msi>`_
 
 Zip
 ^^^
@@ -401,8 +401,8 @@ environment.
 Choose ``win32`` version for 32-bit environment, ``winx64`` version
 for 64-bit environment:
 
-  * `mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.zip <https://github.com/mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.zip>`_
-  * `mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.zip <https://github.com/mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.zip>`_
+  * `mariadb-10.0.10-with-mroonga-4.02-win32.zip <https://github.com/mroonga/mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-win32.zip>`_
+  * `mariadb-10.0.10-with-mroonga-4.02-winx64.zip <https://github.com/mroonga/mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-winx64.zip>`_
 
 Install Mroonga
 ^^^^^^^^^^^^^^^
