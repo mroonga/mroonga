@@ -1,7 +1,7 @@
-rmdir /S /Q build-zip-32
-mkdir build-zip-32
-cd build-zip-32
-cmake ..\source -G "Visual Studio 10" > config.log
+rmdir /S /Q build-vc2013-zip-32
+mkdir build-vc2013-zip-32
+cd build-vc2013-zip-32
+cmake ..\source -G "Visual Studio 12" > config.log
 cmake --build . --config RelWithDebInfo > build.log
 cmake --build . --config RelWithDebInfo --target package > zip.log
 move *.zip ..\
