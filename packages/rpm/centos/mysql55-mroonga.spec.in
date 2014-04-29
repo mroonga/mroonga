@@ -38,6 +38,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	wget
+BuildRequires:	which
 BuildRequires:	mysql55-mysql-devel
 BuildRequires:	mysql55-build
 Requires:	mysql55-mysql-server = %{mysql_version}-%{mysql_release}.%{mysql_dist}
