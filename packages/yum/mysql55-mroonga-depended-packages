@@ -19,4 +19,4 @@ cmake
 libaio-devel
 systemtap-sdt-devel
 mysql55-build
-scl-utils
+scl-utils-build
