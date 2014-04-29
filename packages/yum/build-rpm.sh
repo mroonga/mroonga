@@ -111,6 +111,7 @@ case $distribution in
 		fi
 		;;
 	    6.*)
+		run yum install -y centos-release-SCL
 		USE_MYSQLSERVICES_COMPAT=yes
 		if [ $PACKAGE = "mysql55-mroonga" ]; then
 		    run yum remove mysql-devel -y
