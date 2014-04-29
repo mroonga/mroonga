@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-28 23:32\n"
-"PO-Revision-Date: 2014-04-28 23:34+0900\n"
+"POT-Creation-Date: 2014-04-28 23:45\n"
+"PO-Revision-Date: 2014-04-29 13:48+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -112,22 +112,22 @@ msgstr "かずひこさん"
 
 # d8986144d4454b8dbfd7cf12c8877b8c
 msgid "GMO Media, Inc."
-msgstr ""
+msgstr "GMOメディア株式会社さん"
 
 msgid "Naoya Murakami"
 msgstr "村上さん"
 
 # 0683aa1c35d44a35b1b31601d00fbd9a
 msgid "Satoshi MITANI"
-msgstr ""
+msgstr "Satoshi MITANIさん"
 
 # 0683aa1c35d44a35b1b31601d00fbd9a
 msgid "Akihiro Tsukui"
-msgstr ""
+msgstr "津久井玲宏さん"
 
 # d5a1476d11a34a9cb63ba48497653e81
 msgid "cosmo0920"
-msgstr ""
+msgstr "cosmo0920さん"
 
 msgid "Release 4.01 - 2014/03/29"
 msgstr "4.01リリース - 2014/03/29"
