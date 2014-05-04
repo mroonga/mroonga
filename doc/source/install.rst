@@ -594,16 +594,16 @@ Build Mroonga with MariaDB
 
 Uncompress MariaDB tarball. ::
 
- tar xvfz mariadb-10.0.2.tar.gz
+ tar xvfz mariadb-10.0.10.tar.gz
 
 Uncompress Mroonga tarball then move into storage directory. ::
 
  tar xvfz mroonga-3.03.tar.gz
- mv mroonga-3.03 mariadb-10.0.2/storage/mroonga/
+ mv mroonga-3.03 mariadb-10.0.10/storage/mroonga/
 
 Run "cmake". ::
 
- cd mariadb-10.0.2
+ cd mariadb-10.0.10
  cmake .
 
 Then invoke "make". ::
