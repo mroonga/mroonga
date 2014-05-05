@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-28 23:45\n"
-"PO-Revision-Date: 2014-04-28 23:48+0900\n"
+"POT-Creation-Date: 2014-05-05 11:11+0900\n"
+"PO-Revision-Date: 2014-05-05 11:20+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -107,6 +107,9 @@ msgstr "セキュリティアップデートリポジトリもインストール
 msgid "Ubuntu 13.10 Saucy Salamander"
 msgstr ""
 
+msgid "Ubuntu 14.04 Trusty Tahr"
+msgstr ""
+
 msgid "CentOS 5"
 msgstr ""
 
@@ -126,6 +129,9 @@ msgid ""
 "mroonga package is deprecated on CentOS 5 since Mroonga 3.09. We recommend "
 "to use mysql55-mroonga pakcages on CentOS 5."
 msgstr ""
+"以前のMroongaは例外的にMySQL 5.6のパッケージも提供していました。このMySQL 5.6"
+"のパッケージは廃止しました。Mroonga 3.09からCentOS 5のmysql-mroongaは非推奨に"
+"なっています。CentOS 5ではmysql55-mroongaパッケージを使うことを推奨します。"
 
 msgid "CentOS 5's MySQL packages should be removed beforehand if installed."
 msgstr ""
@@ -205,6 +211,9 @@ msgstr ""
 msgid "Install with MeCab support::"
 msgstr "MeCabサポート付きでインストール::"
 
+msgid "`mroonga/homebrew on GitHub <https://github.com/mroonga/homebrew>`_"
+msgstr "`GitHubにあるmroonga/homebrew <https://github.com/mroonga/homebrew>`_"
+
 msgid "Windows"
 msgstr ""
 
@@ -237,18 +246,16 @@ msgstr ""
 "32-bit環境なら ``win32`` バージョンを選んでください。64-bit環境なら "
 "``winx64`` を選んでください。"
 
-# 3e5aa5a1ad024b40b1ae55ca10748546
 msgid ""
-"`mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.msi <https://github.com/"
-"mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-win32-with-"
-"mroonga-4.01.2014.04.25.msi>`_"
+"`mariadb-10.0.10-with-mroonga-4.02-win32.msi <https://github.com/mroonga/"
+"mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-win32."
+"msi>`_"
 msgstr ""
 
-# 3e5aa5a1ad024b40b1ae55ca10748546
 msgid ""
-"`mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.msi <https://github.com/"
-"mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-winx64-with-"
-"mroonga-4.01.2014.04.25.msi>`_"
+"`mariadb-10.0.10-with-mroonga-4.02-winx64.msi <https://github.com/mroonga/"
+"mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-winx64."
+"msi>`_"
 msgstr ""
 
 msgid "Zip"
@@ -262,18 +269,16 @@ msgstr ""
 "zipファイルをダウンロードして展開してください。環境に合わせてzipファイルを選"
 "ぶ必要があります"
 
-# 3e5aa5a1ad024b40b1ae55ca10748546
 msgid ""
-"`mariadb-10.0.10-win32-with-mroonga-4.01.2014.04.25.zip <https://github.com/"
-"mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-win32-with-"
-"mroonga-4.01.2014.04.25.zip>`_"
+"`mariadb-10.0.10-with-mroonga-4.02-win32.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-win32."
+"zip>`_"
 msgstr ""
 
-# 3e5aa5a1ad024b40b1ae55ca10748546
 msgid ""
-"`mariadb-10.0.10-winx64-with-mroonga-4.01.2014.04.25.zip <https://github.com/"
-"mroonga/mroonga/releases/download/v4.01/mariadb-10.0.10-winx64-with-"
-"mroonga-4.01.2014.04.25.zip>`_"
+"`mariadb-10.0.10-with-mroonga-4.02-winx64.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-winx64."
+"zip>`_"
 msgstr ""
 
 msgid "Install Mroonga"
