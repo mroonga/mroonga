@@ -425,8 +425,8 @@ Installer
 
 .. caution::
 
-   The following MSI files that don't work yet. Please use zip files
-   below or help us to creating MSI files that work well.
+   The following MSI files don't work yet. Please use zip files below
+   or help us to creating MSI files that work well.
 
 Download MSI file and execute it. You need to choose a MSI for your
 environment.
