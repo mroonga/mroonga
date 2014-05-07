@@ -191,7 +191,7 @@ Install groonga-normalizer-mysql package::
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Ubuntu 14.04 Trusty Tahr
------------------------------
+------------------------
 
 .. note::
 
