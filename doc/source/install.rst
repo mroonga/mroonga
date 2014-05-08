@@ -294,7 +294,7 @@ Install::
   % sudo yum install centos-release-SCL
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
-  % sudo yum install -y mysql mysql55-mysql-server
+  % sudo yum install -y mysql55-mysql-server
   % sudo /etc/init.d/mysql55-mysqld start
   % sudo yum install -y mysql55-mroonga
   (% sudo scl enable mysql55 mysqladmin -u root password 'new-password')
