@@ -32,7 +32,7 @@ if [ "$1" = "purge" ]; then
     rmdir /etc/apparmor.d/local 2>/dev/null || true
 
     if aa-status --enabled 2>/dev/null; then
-        apparmor_parser -r -T -W "${mysql_apparmor_profile}" || true
+	apparmor_parser -r -T -W "${mysql_apparmor_profile}" || true
     fi
 fi
 
