@@ -1,3 +1,5 @@
+DELETE IGNORE FROM mysql.plugin WHERE name = 'mroonga';
+
 INSTALL PLUGIN mroonga SONAME 'ha_mroonga@MRN_PLUGIN_SUFFIX@';
 
 DROP FUNCTION IF EXISTS last_insert_grn_id;
