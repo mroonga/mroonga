@@ -27,7 +27,7 @@ install_apparmor() {
 	if test -f "${mysql_abstraction_apparmor_profile}" && \
 	    ! grep -q "${mysql_plugin_dir}" \
 	      "${mysql_abstraction_apparmor_profile}"; then
-            # For Lucid.
+	    # For Lucid.
 	    cat <<EOF >> "${mysql_abstraction_apparmor_profile}"
 
 # ${apparmor_profile_name}: START
@@ -58,15 +58,15 @@ EOF
 case "$1" in
     configure)
 	install_apparmor
-        install_plugin
-        ;;
+	install_plugin
+	;;
     abort-upgrade|abort-deconfigure|abort-remove)
-        :
-        ;;
+	:
+	;;
     *)
-        echo "Called with unknown argument $1, bailing out."
-        exit 1
-        ;;
+	echo "Called with unknown argument $1, bailing out."
+	exit 1
+	;;
 esac
 
 #DEBHELPER#
