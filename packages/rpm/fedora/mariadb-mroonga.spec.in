@@ -78,7 +78,7 @@ fi
 current_version=0
 version=`echo %{groonga_required_version} | sed -e 's/\.//g'`
 required_version=`expr $version`
-version=`mysql -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
+version=`/usr/bin/mysql -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
     grep mroonga | cut -f 2 | sed -e 's/\.//g'`
 if [ -n "$version" ]; then
     current_version=`expr $version`
