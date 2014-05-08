@@ -73,23 +73,6 @@ mysql -u root -e "quit"
 if [ $? -ne 0 ]; then
     password_option="-p"
 fi
-drop_sql="
-USE mysql;
-DROP FUNCTION IF EXISTS mroonga_snippet;
-DROP FUNCTION IF EXISTS last_insert_grn_id;
-DROP FUNCTION IF EXISTS mroonga_command;
-DROP FUNCTION IF EXISTS mroonga_escape;
-UNINSTALL PLUGIN mroonga;
-FLUSH TABLES;
-"
-install_sql="
-DELETE IGNORE FROM mysql.plugin WHERE name = 'mroonga';
-INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';
-CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga.so';
-CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
-CREATE FUNCTION mroonga_command RETURNS STRING SONAME 'ha_mroonga.so';
-CREATE FUNCTION mroonga_escape RETURNS STRING SONAME 'ha_mroonga.so';
-"
 current_version=0
 version=`echo %{groonga_required_version} | sed -e 's/\.//g'`
 required_version=`expr $version`
@@ -98,55 +81,49 @@ version=`mysql -e "show variables like 'mroonga_libgroonga_version'" | \
 if [ -n "$version" ]; then
     current_version=`expr $version`
 fi
+install_sql=%{_datadir}/mroonga/install.sql
+uninstall_sql=%{_datadir}/mroonga/uninstall.sql
+
 if [ "$1" = 2 ] ; then
     if [ $current_version -lt $required_version ]; then
-	sql="$drop_sql$install_sql"
-	command="/usr/bin/mysql -u root $password_option -e \"$sql\""
-	echo "run the following command after restarting mysql server:";
-	echo "  $command"
+	command="/usr/bin/mysql -u root $password_option"
+	echo "run the following command after restarting MySQL server:";
+	echo "  $command < ${uninstall_sql}"
+	echo "  $command < ${install_sql}"
 	exit 0
     else
-	sql="$drop_sql"
-	command="/usr/bin/mysql -u root $password_option -e \"$sql\""
+	command="/usr/bin/mysql -u root $password_option < ${uninstall_sql}"
 	echo $command
 	eval $command || \
-	    (echo "run the following command to unregister mroonga:"; \
+	    (echo "run the following command to unregister Mroonga:"; \
 	     echo "  $command")
     fi
 fi
-sql="$install_sql"
-command="/usr/bin/mysql -u root $password_option -e \"$sql\""
+command="/usr/bin/mysql -u root $password_option < ${install_sql}"
 echo $command
 eval $command || \
-	(echo "run the following command to register mroonga:"; \
+	(echo "run the following command to register Mroonga:"; \
 	 echo "  $command")
 
 %preun
+uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 password_option=""
 mysql -u root -e "quit"
 if [ $? -ne 0 ]; then
     password_option="-p"
 fi
 if [ "$1" = 0 ]; then
-    sql="
-    USE mysql;
-    DROP FUNCTION IF EXISTS mroonga_snippet;
-    DROP FUNCTION IF EXISTS last_insert_grn_id;
-    DROP FUNCTION IF EXISTS mroonga_command;
-    DROP FUNCTION IF EXISTS mroonga_escape;
-    UNINSTALL PLUGIN mroonga;
-    FLUSH TABLES;
-    "
-    command="/usr/bin/mysql -u root $password_option -e \"$sql\""
+    command="/usr/bin/mysql -u root $password_option < ${uninstall_sql}"
     echo $command
     eval $command || \
-	(echo "run the following command to unregister mroonga:"; \
+	(echo "run the following command to unregister Mroonga:"; \
 	 echo "  $command")
 fi
 
 %files
 %defattr(-,root,root,-)
 %{_libdir}/mysql/plugin/
+%{_datadir}/mroonga/*
 %{_datadir}/man/man1/*
 %{_datadir}/man/*/man1/*
 
