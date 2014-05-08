@@ -122,9 +122,9 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
-password_option=""
-mysql -u root -e "quit"
-if [ $? -ne 0 ]; then
+if /usr/bin/mysql -u root -e "quit"; then
+    password_option=""
+else
     password_option="-p"
 fi
 current_version=0
