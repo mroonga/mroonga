@@ -48,7 +48,7 @@ fi
 %build
 if [ ! -d ../mysql-%{mysql_version} ]; then
     rpmbuild -bp --define 'runselftest 0' --define 'optflags -O0' \
-        ../../SPECS/community-mysql.spec
+	../../SPECS/community-mysql.spec
 fi
 %configure CPPFLAGS="-DDISABLE_DTRACE" \
     --disable-static \
@@ -110,8 +110,8 @@ if [ "$1" = 2 ] ; then
 	command="/usr/bin/mysql -u root $password_option -e \"$sql\""
 	echo $command
 	eval $command || \
-            (echo "run the following command to unregister mroonga:"; \
-            echo "  $command")
+	    (echo "run the following command to unregister mroonga:"; \
+	     echo "  $command")
     fi
 fi
 sql="$install_sql"
@@ -140,8 +140,8 @@ if [ "$1" = 0 ]; then
     command="/usr/bin/mysql -u root $password_option -e \"$sql\""
     echo $command
     eval $command || \
-          (echo "run the following command to unregister mroonga:"; \
-           echo "  $command")
+	(echo "run the following command to unregister mroonga:"; \
+	 echo "  $command")
 fi
 
 %files

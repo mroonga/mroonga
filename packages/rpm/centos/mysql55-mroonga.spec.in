@@ -77,7 +77,7 @@ if [ ! -d ${mysql_source} ]; then
     specs_dir=
     MYSQL_RPMBUILD_TEST=no rpmbuild -bp \
 	--define 'runselftest 0' \
-        --define 'optflags -O0' \
+	--define 'optflags -O0' \
 	../../SPECS/%{mysql_spec_file}
 fi
 %configure --disable-static --with-mysql-source=${mysql_source} \
@@ -130,17 +130,17 @@ CREATE FUNCTION mroonga_escape RETURNS STRING SONAME 'ha_mroonga.so';
 if [ "$1" = 2 ] ; then
     if [ $current_version -lt $required_version ]; then
 	sql="$drop_sql$install_sql"
-    	command="$mysql_command -u root $password_option -e \"$sql\""
+	command="$mysql_command -u root $password_option -e \"$sql\""
 	echo "run the following command after restarting mysql server:";
 	echo "  $command"
 	exit 0
     else
 	sql="$drop_sql"
-    	command="$mysql_command -u root $password_option -e \"$sql\""
+	command="$mysql_command -u root $password_option -e \"$sql\""
 	echo $command
 	eval $command || \
-            (echo "run the following command to unregister mroonga:"; \
-            echo "  $command")
+	    (echo "run the following command to unregister mroonga:"; \
+	     echo "  $command")
     fi
 fi
 sql="$install_sql"
@@ -170,8 +170,8 @@ if [ "$1" = 0 ]; then
     command="$mysql_command -u root $password_option -e \"$sql\""
     echo $command
     eval $command || \
-          (echo "run the following command to unregister mroonga:"; \
-           echo "  $command")
+	(echo "run the following command to unregister mroonga:"; \
+	 echo "  $command")
 fi
 
 %files

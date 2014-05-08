@@ -78,10 +78,10 @@ if [ ! -f ../../SRPMS/$srpm ]; then
     wget --continue -O ../../SRPMS/$srpm %{mysql_download_base_url}/$srpm
     rpm -Uvh ../../SRPMS/$srpm
     for package in client devel embedded server shared test; do
-        rpm=MySQL-${package}-${mysql_full_version}.%{_arch}.rpm
+	rpm=MySQL-${package}-${mysql_full_version}.%{_arch}.rpm
 	mkdir -p ../../RPMS/%{_arch}
 	if [ ! -f ../../RPMS/%{_arch}/$rpm ]; then
-            wget --continue -O ../../RPMS/%{_arch}/$rpm \
+	    wget --continue -O ../../RPMS/%{_arch}/$rpm \
 		%{mysql_download_base_url}/$rpm
 	fi
     done
@@ -104,7 +104,7 @@ if [ ! -d ${mysql_source} ]; then
     specs_dir=
     MYSQL_RPMBUILD_TEST=no rpmbuild -bp \
 	--define 'runselftest 0' \
-        --define 'optflags -O0' \
+	--define 'optflags -O0' \
 	../../SPECS/%{mysql_spec_file}
 fi
 %configure --disable-static --with-mysql-source=${mysql_source} \
@@ -155,17 +155,17 @@ CREATE FUNCTION mroonga_escape RETURNS STRING SONAME 'ha_mroonga.so';
 if [ "$1" = 2 ] ; then
     if [ $current_version -lt $required_version ]; then
 	sql="$drop_sql$install_sql"
-    	command="/usr/bin/mysql -u root $password_option -e \"$sql\""
+	command="/usr/bin/mysql -u root $password_option -e \"$sql\""
 	echo "run the following command after restarting mysql server:";
 	echo "  $command"
 	exit 0
     else
 	sql="$drop_sql"
-    	command="/usr/bin/mysql -u root $password_option -e \"$sql\""
+	command="/usr/bin/mysql -u root $password_option -e \"$sql\""
 	echo $command
 	eval $command || \
-            (echo "run the following command to unregister mroonga:"; \
-            echo "  $command")
+	    (echo "run the following command to unregister mroonga:"; \
+	     echo "  $command")
     fi
 fi
 sql="$install_sql"
@@ -194,8 +194,8 @@ if [ "$1" = 0 ]; then
     command="/usr/bin/mysql -u root $password_option -e \"$sql\""
     echo $command
     eval $command || \
-          (echo "run the following command to unregister mroonga:"; \
-           echo "  $command")
+	(echo "run the following command to unregister mroonga:"; \
+	 echo "  $command")
 fi
 
 %files
