@@ -37,6 +37,7 @@ namespace mrn {
   time_t TimeConverter::tm_to_time_gm(struct tm *time) {
     MRN_DBUG_ENTER_METHOD();
     struct tm gmdate;
+    time->tm_isdst = -1;
     time_t sec_t = mktime(time);
     if (sec_t == -1)
       DBUG_RETURN(sec_t);
