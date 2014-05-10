@@ -149,7 +149,7 @@ List of unavailable SQL commands
 * ``INSERT INTO (...) VALUES (null)``
 * ``START TRANSACTION``
 
-Basically, The character set which groonga supports (EUC-JP/UTF-8/SJIS/LATIN1/KOI8R) is also supported in mroonga.
+Basically, The character set which Groonga supports (EUC-JP/UTF-8/SJIS/LATIN1/KOI8R) is also supported in Mroonga.
 
 I found an unlisted SQL command
 -------------------------------

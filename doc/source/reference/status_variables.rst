@@ -3,7 +3,7 @@
 Status variables
 ================
 
-Here are the explanations of status variables that are introduced by mroonga.
+Here are the explanations of status variables that are introduced by Mroonga.
 
 Mroonga_count_skip
 ------------------

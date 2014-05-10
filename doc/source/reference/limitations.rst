@@ -3,13 +3,13 @@
 Limitations
 ===========
 
-There are some limitations in mroonga storage engine.
+There are some limitations in Mroonga storage engine.
 
 Limitations of table
 --------------------
 
 A table has the following limitations.
-This limitation is derived from groonga.
+This limitation is derived from Groonga.
 
 * The maximum one key size: 4096Bytes
 * The maximum total size of keys: 4GBytes

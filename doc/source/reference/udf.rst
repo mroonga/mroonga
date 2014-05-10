@@ -3,7 +3,7 @@
 UDF (User Defined Functions)
 ============================
 
-mroonga provides some useful functionality as UDF (User Defined Functions).
+Mroonga provides some useful functionality as UDF (User Defined Functions).
 
 .. toctree::
    :maxdepth: 3

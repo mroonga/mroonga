@@ -3,7 +3,7 @@
 Server variables
 ================
 
-Here are the explanations of server variables that are introduced by mroonga.
+Here are the explanations of server variables that are introduced by Mroonga.
 
 .. _mroonga_action_on_fulltext_query_error:
 
@@ -78,7 +78,7 @@ Here is an example SQL to confirm the using groonga library version::
 mroonga_log_file
 ----------------
 
-The path of the log file of mroonga. The default value is ``groonga.log``.
+The path of the log file of Mroonga. The default value is ``groonga.log``.
 
 Here is an example transcript to change log file to ``/tmp/mroonga.log``::
 
@@ -106,7 +106,7 @@ Here is an example transcript to change log file to ``/tmp/mroonga.log``::
 mroonga_log_level
 -----------------
 
-The output level of mroonga log file. The default value is ``NOTICE``.
+The output level of Mroonga log file. The default value is ``NOTICE``.
 
 Here is the list of ``mroonga_log_level`` which you can use.
 
@@ -159,7 +159,7 @@ Here is an example transcript to change log level to ``DEBUG`` that logs many me
 mroonga_version
 ---------------
 
-The version string of mroonga.
+The version string of Mroonga.
 
 Here is an example SQL to confirm the running mroonga version::
 
@@ -174,14 +174,14 @@ Here is an example SQL to confirm the running mroonga version::
 mroonga_dry_write
 -----------------
 
-Whether really write data to groonga database or not. The
+Whether really write data to Groonga database or not. The
 default value is ``OFF`` that means data are really written
-to groonga database. Usually we don't need to change the
+to Groonga database. Usually we don't need to change the
 value of this variable. This variable is useful for
 benchmark because we can measure processing time MySQL and
-mroonga. It doesn't include groonga's processing time.
+Mroonga. It doesn't include Groonga's processing time.
 
-Here is an example SQL to disable writing data to groonga
+Here is an example SQL to disable writing data to Groonga
 database::
 
   mysql> SHOW VARIABLES LIKE 'mroonga_dry_write';
@@ -238,11 +238,11 @@ mroonga_match_escalation_threshold
 ----------------------------------
 
 The threshold to determin whether match method is escalated. See
-`search specification for groonga
+`search specification for Groonga
 <http://groonga.org/docs/spec/search.html>`_ about match method
 escalation.
 
-The default value is the same as groonga's default value. It's 0 for
+The default value is the same as Groonga's default value. It's 0 for
 the default installation. The dafault value can be configured in
 my.cnf or by ``SET GLOBAL mroonga_match_escalation_threshold =
 THRESHOLD;``. Because this variable's scope is both global and
