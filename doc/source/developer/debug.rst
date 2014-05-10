@@ -7,7 +7,7 @@ Building for debugging
 ----------------------
 
 When you build software for debugging, you can get more information like symbol resolutions in gdb.
-So we build both MySQL and mroonga for debugging in development.
+So we build both MySQL and Mroonga for debugging in development.
 
 .. note::
 

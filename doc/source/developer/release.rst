@@ -213,7 +213,7 @@ Homebrewの更新
 
 OS Xでのパッケージ管理方法として `Homebrew <http://brew.sh/>`_ があります。
 
-groongaの場合はHomebrewへpull requestを送りますが、mroongaの場合は別途用意してあるhomebrewリポジトリを更新します。
+Groongaの場合はHomebrewへpull requestを送りますが、Mroongaの場合は別途用意してあるhomebrewリポジトリを更新します。
 
   https://github.com/mroonga/homebrew
 
@@ -241,7 +241,7 @@ mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを�
  ダウンロード
    http://packages.groonga.org/source/mroonga
 
- mroongaとは、全文検索エンジンであるgroongaをベースとした
+ Mroongaとは、全文検索エンジンであるGroongaをベースとした
  MySQLのストレージエンジンです。Tritonnの後継プロジェクトとな
  ります。
 
@@ -251,7 +251,7 @@ mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを�
 
  # <<<ユーモアを交えて最近のトピックスを>>>
 
- 先月開催されたMySQL Conference 2011でmroongaについて発表して
+ 先月開催されたMySQL Conference 2011でMroongaについて発表して
  きました。（私じゃなくて開発チームのみなさんが。）英語ですが、
  以下の発表資料があるので興味がある方はご覧ください。
 
@@ -272,9 +272,9 @@ mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを�
  ようなので、試していただける方は注意してください。
    http://redmine.groonga.org/issues/910
 
- 今日リリースしたgroonga 1.2.2でマルチスレッド・マルチプロセ
+ 今日リリースしたGroonga 1.2.2でマルチスレッド・マルチプロセ
  ス時にデータ破損してしまう問題を修正しているので、最新の
- groongaと組み合わせると問題が解決しているかもしれません。
+ Groongaと組み合わせると問題が解決しているかもしれません。
 
  使ってみて、なにか問題があったら報告してもらえると助かります。
 
@@ -314,17 +314,17 @@ mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを�
 Twitterでリリースアナウンスをする
 ---------------------------------
 
-mroongaブログのリリースエントリには「リンクをあなたのフォロワーに共有する」ためのツイートボタンがあるので、そのボタンを使ってリリースアナウンスします。(画面下部に配置されている)
+Mroongaブログのリリースエントリには「リンクをあなたのフォロワーに共有する」ためのツイートボタンがあるので、そのボタンを使ってリリースアナウンスします。(画面下部に配置されている)
 
-このボタンを経由する場合、ツイート内容に自動的にリリースタイトル(「mroonga 2.08リリース」など)とmroongaブログのリリースエントリのURLが挿入されます。
+このボタンを経由する場合、ツイート内容に自動的にリリースタイトル(「Mroonga 2.08リリース」など)とMroongaブログのリリースエントリのURLが挿入されます。
 
-この作業はmroongaブログの英語版、日本語版それぞれで行います。
+この作業はMroongaブログの英語版、日本語版それぞれで行います。
 あらかじめgroongaアカウントでログインしておくとアナウンスを円滑に行うことができます。
 
 freecode.comへリリース情報を登録
 --------------------------------
 
-mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。
+Mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。
 
 freecode.comのプロジェクトページは以下の通りです。
 

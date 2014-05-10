@@ -12,7 +12,7 @@ Developer's guide
 How we are developing
 ---------------------
 
-We, the mroonga development project, are doing Ticket Driven Development by using a BTS named Redmine.
+We, the Mroonga development project, are doing Ticket Driven Development by using a BTS named Redmine.
 
 The location of our Redmine site is the following.
 
@@ -139,7 +139,7 @@ Alternatively we consider our SQL tests and its expected results as the list of 
 Adding and running tests
 ------------------------
 
-We use two kinds of regression tests to manage the quality of mroonga.
+We use two kinds of regression tests to manage the quality of Mroonga.
 
 SQL tests
  When you add features or fix bugs that can be confirmed by SQL queries, please always add SQL tests. You might think that performance improvements cannot be confirmed with SQL, but some can be still well tested by using status variables or information_schema plugin etc.
@@ -162,7 +162,7 @@ http://cutter.sourceforge.net/
 Adding and updating documents
 -----------------------------
 
-We use Sphinx for the documentation of mroonga.
+We use Sphinx for the documentation of Mroonga.
 
 We write documents in ReStructuredText format and we convert them to HTML etc.
 
