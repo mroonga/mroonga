@@ -3,12 +3,12 @@
 Wrapper mode
 ============
 
-Here we explain how to use wrapper mode of mroonga
+Here we explain how to use wrapper mode of Mroonga
 
 How to use wrapper mode
 -----------------------
 
-In wrapper mode, mroonga works in wrapping an existing storage engine. To specify the wrapped storage engine, we use SQL comment like ``COMMENT = 'engine "innodb"'`` for now.
+In wrapper mode, Mroonga works in wrapping an existing storage engine. To specify the wrapped storage engine, we use SQL comment like ``COMMENT = 'engine "innodb"'`` for now.
 
 .. note::
 
@@ -19,12 +19,12 @@ In wrapper mode, mroonga works in wrapping an existing storage engine. To specif
    Wrapper mode supports the followings, that are not supported in storage mode for now.
    
    * null value
-   * transaction (if storage engine supports. Note that rollback causes mismatch of indexes, it may affects search results, so recreate index of mroonga in such a case.)
+   * transaction (if storage engine supports. Note that rollback causes mismatch of indexes, it may affects search results, so recreate index of Mroonga in such a case.)
 
 How to use full text search
 ---------------------------
 
-After confirming the installation, let's create a table. The important point is to specify mroonga by ``ENGINE = mroonga``. ::
+After confirming the installation, let's create a table. The important point is to specify Mroonga by ``ENGINE = mroonga``. ::
 
   mysql> CREATE TABLE diaries (
       ->   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -99,7 +99,7 @@ MySQL has the following syntax to specify the parser [#parser]_ for full text se
 
   FULLTEXT INDEX (content) WITH PARSER parser_name
 
-To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in mroonga, tokenisers that are added in groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
+To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, Groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in Mroonga, tokenisers that are added in Groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
 
   FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
 
@@ -171,7 +171,7 @@ TokenUnigram
 TokenTrigram
   It tokenises in trigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 4 letters or more. It is to reduce noises.
 
-You can specify the default parser by passing ``--with-default-parser`` option in ``configure`` when you build mroonga. ::
+You can specify the default parser by passing ``--with-default-parser`` option in ``configure`` when you build Mroonga. ::
 
   ./configure --with-default-parser TokenMecab ...
 
@@ -262,7 +262,7 @@ Tritonn took no specific countermeasure for this issue, but it introduced a work
 
 Mroonga also has the optimisation for ORDER BY LIMIT.
 
-In the SELECT example below, ORDER BY LIMIT is processed in mroonga only and the minimal records are passed to MySQL. ::
+In the SELECT example below, ORDER BY LIMIT is processed in Mroonga only and the minimal records are passed to MySQL. ::
 
   SELECT * FROM t1 WHERE MATCH(c2) AGAINST("hoge") ORDER BY c1 LIMIT 1;
 
@@ -288,4 +288,4 @@ Note : This optimisation is targeting queries like "select ... match against ord
 .. rubric:: Footnotes
 
 .. [#score] `MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search.html>`_
-.. [#parser] In groonga, we call it a 'tokeniser'.
+.. [#parser] In Groonga, we call it a 'tokeniser'.

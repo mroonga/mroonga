@@ -3,7 +3,7 @@
 Storage mode
 ============
 
-Here we explain how to use storage mode of mroonga
+Here we explain how to use storage mode of Mroonga
 
 How to use full text search
 ---------------------------
@@ -42,7 +42,7 @@ How to get search score
 
 .. note::
 
-   In version 1.0.0 or before, mroonga used a special column named ``_score`` to get search score. From version 1.0.0, it follows MySQL's standard way to get search score.
+   In version 1.0.0 or before, Mroonga used a special column named ``_score`` to get search score. From version 1.0.0, it follows MySQL's standard way to get search score.
 
 We often want to display more relevant results first in full text search. We use search score in such case.
 
@@ -87,7 +87,7 @@ MySQL has the following syntax to specify the parser [#parser]_ for full text se
 
   FULLTEXT INDEX (content) WITH PARSER parser_name
 
-To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in mroonga, tokenisers that are added in groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
+To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, Groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in Mroonga, tokenisers that are added in Groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
 
   FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
 
@@ -218,7 +218,7 @@ How to get the record ID
 
 Groonga assigns a unique number to identify the record when a record is added in the table.
 
-To make the development of applications easier, you can get this record ID by SQL in mroonga
+To make the development of applications easier, you can get this record ID by SQL in Mroonga
 
 To get the record ID, you need to create a column named ``_id`` when you create a table. ::
 
@@ -233,7 +233,7 @@ Tye typo of _id column should be integer one (TINYINT, SMALLINT, MEDIUMINT, INT 
 
 You can create an index for _id column, but it should be HASH type.
 
-Let's add records in the table by INSERT. Since _id column is implemented as a virtual column and its value is assigned by groonga, you cannot specify the value when updating.
+Let's add records in the table by INSERT. Since _id column is implemented as a virtual column and its value is assigned by Groonga, you cannot specify the value when updating.
 So you need to exclude it from setting columns, or you need to use ``null`` as its value. ::
 
   mysql> INSERT INTO memos VALUES (null, "Saury for today's dinner.");
@@ -274,7 +274,7 @@ By using last_insert_grn_id function, you can also get the record ID that is ass
   +----------------------+
   1 row in set (0.00 sec)
 
-last_insert_grn_id function is included in mroonga as a User-Defined Function (UDF), but if you have not yet register it in MySQL by CREATE FUNCTION, you need to invoke the following SQL for defining a function. ::
+last_insert_grn_id function is included in Mroonga as a User-Defined Function (UDF), but if you have not yet register it in MySQL by CREATE FUNCTION, you need to invoke the following SQL for defining a function. ::
 
   mysql> CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME 'ha_mroonga.so';
 
@@ -296,8 +296,8 @@ See :doc:`/reference/udf/mroonga_snippet` about details.
 How to run groonga command
 --------------------------
 
-In storage mode, mroonga stores all your data into groonga
-database. You can access groonga database by SQL with mroonga. SQL is
+In storage mode, mroonga stores all your data into Groonga
+database. You can access Groonga database by SQL with Mroonga. SQL is
 very powerful but it is not good for some operations such as faceted
 search.
 
@@ -319,9 +319,9 @@ are needed. It is not effective.
 Groonga can do faceted search by only one groonga command. It is
 effective. Groonga has the `select` command that can search records
 with faceted search. Faceted search is called as `drilldown` in
-groonga. See `groonga's document
+Groonga. See `Groonga's document
 <http://groonga.org/docs/reference/commands/select.html>`_ about
-groonga's `select` command.
+Groonga's `select` command.
 
 Mroonga provides `mroonga_command()` function. You can run groonga
 command in SQL by the function. But you should use only `select`
@@ -365,7 +365,7 @@ Each record has `groonga` or `MySQL` as `tag`. Each record also has
 `year` and `year_month`. You can use `tag`, `year` and `year_month` as
 faceted search keys.
 
-Groonga calls faceted search as drilldown. So parameter key in groonga
+Groonga calls faceted search as drilldown. So parameter key in Groonga
 is `--drilldown`. Groonga returns search result as JSON. So
 `mroonga_command()` also returns search result as JSON. It is not SQL
 friendly. You need to parse search result JSON by yourself.
@@ -397,7 +397,7 @@ keys (result JSON is pretty printted)::
   +-----------------------------+
   1 row in set (0.00 sec)
 
-See `groonga's select command document
+See `Groonga's select command document
 <http://groonga.org/docs/reference/commands/select.html>`_ for more
 details.
 
@@ -460,9 +460,9 @@ You can reopen the log file by FLUSH LOGS. If you want to rotate the log file wi
 Choosing appropriate columns
 ----------------------------
 
-Groonga uses one file per column to store data, and mroonga accesses needed columns only when accessing a table to utilise this characteristic.
+Groonga uses one file per column to store data, and Mroonga accesses needed columns only when accessing a table to utilise this characteristic.
 
-This optimisation is done automatically in mroonga internal, you don't need any specific configuration.
+This optimisation is done automatically in Mroonga internal, you don't need any specific configuration.
 
 Imagine that we have a table with 20 columns like below. ::
 
@@ -488,7 +488,7 @@ Optimisation for counting rows
 
 In MySQL's storage engine interface, there is no difference between counting rows like COUNT(\*) and normal data retrieving by SELECT. So access to data that is not included in SELECT result can happen even if you just want to count rows.
 
-Tritonn (MySQL + Senna), that is mroonga's predecessor, introduced "2ind patch" to skip needless access to data and solved this performance issue.
+Tritonn (MySQL + Senna), that is Mroonga's predecessor, introduced "2ind patch" to skip needless access to data and solved this performance issue.
 
 Mroonga also has the optimisation for counting rows.
 
