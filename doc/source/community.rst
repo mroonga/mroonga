@@ -3,12 +3,12 @@
 Community
 =========
 
-There are some places for sharing groonga and mroonga information. We welcome you to join our community.
+There are some places for sharing Groonga and Mroonga information. We welcome you to join our community.
 
 Mailing List
 ------------
 
-There are mailing lists for discussion about groonga and mroonga.
+There are mailing lists for discussion about Groonga and Mroonga.
 
 For English speaker
   `groonga-talk@lists.sourceforge.net <http://lists.sourceforge.net/mailman/listinfo/groonga-talk>`_

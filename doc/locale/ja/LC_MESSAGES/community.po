@@ -21,17 +21,17 @@ msgid "Community"
 msgstr "コミュニティ"
 
 msgid ""
-"There are some places for sharing groonga and mroonga information. We "
+"There are some places for sharing Groonga and Mroonga information. We "
 "welcome you to join our community."
 msgstr ""
-"groongaとmroongaの情報を共有する場所がいくつかあります。これらのコミュニティ"
+"GroongaとMroongaの情報を共有する場所がいくつかあります。これらのコミュニティ"
 "にぜひ参加してください。"
 
 msgid "Mailing List"
 msgstr "メーリングリスト"
 
-msgid "There are mailing lists for discussion about groonga and mroonga."
-msgstr "groongaとmroongaに関する話題を扱うメーリングリストがあります。"
+msgid "There are mailing lists for discussion about Groonga and Mroonga."
+msgstr "GroongaとMroongaに関する話題を扱うメーリングリストがあります。"
 
 msgid "For English speaker"
 msgstr "英語で話題を扱う場合"
