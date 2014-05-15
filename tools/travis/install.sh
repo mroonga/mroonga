@@ -40,7 +40,7 @@ if [ "${MRN_BUNDLED}" = "yes" ]; then
     # Support MariaDB for now.
     download_base=${mariadb_download_base}/${MYSQL_VERSION}
     tar_gz=${MYSQL_VERSION}.tar.gz
-    curl -O ${download_base}/kvm-tarbake-jaunty-x86/${tar_gz}
+    curl -O ${download_base}/source/${tar_gz}
     tar xzf $tar_gz
     mv ${MYSQL_VERSION}/* ./
     mv .mroonga storage/mroonga
