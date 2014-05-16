@@ -182,8 +182,8 @@ else()
   set_mysql_config_value("--version" MYSQL_VERSION)
 endif()
 
-if((${MYSQL_VERSION} VERSION_GREATER "10.0.0") AND
-    (${MYSQL_VERSION} VERSION_LESS "10.0.9"))
+if(${MYSQL_VERSION} VERSION_GREATER "10.0.0" AND
+   ${MYSQL_VERSION} VERSION_LESS "10.0.9")
   message(FATAL_ERROR
     "Mroonga doesn't supports MariaDB 10.0.0-10.0.8: <${MYSQL_VERSION}>")
   return()
