@@ -345,3 +345,9 @@ configure_file(
 configure_file(
   "${PROJECT_SOURCE_DIR}/data/install.sql.in"
   "${PROJECT_BINARY_DIR}/data/install.sql")
+
+set(MRN_DATA_DIR "share/${PROJECT_NAME}")
+install(FILES
+  "${PROJECT_BINARY_DIR}/data/install.sql"
+  "${PROJECT_SOURCE_DIR}/data/uninstall.sql"
+  DESTINATION "${MRN_DATA_DIR}/")
