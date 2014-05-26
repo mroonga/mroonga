@@ -352,6 +352,13 @@ AC_ARG_WITH(rsync-path,
             [RSYNC_PATH="packages@packages.groonga.org:public"])
 AC_SUBST(RSYNC_PATH)
 
+AC_ARG_WITH(launchpad-uploader-pgp-key,
+            [AS_HELP_STRING([--with-launchpad-uploader-pgp-key=KEY],
+            [specify PGP key UID to upload Groonga packages to Launchpad.])],
+            [LAUNCHPAD_UPLOADER_PGP_KEY="$withval"],
+            [LAUNCHPAD_UPLOADER_PGP_KEY=""])
+AC_SUBST(LAUNCHPAD_UPLOADER_PGP_KEY)
+
 GPG_UID=m4_include(gpg_uid)
 AC_SUBST(GPG_UID)
 
@@ -442,6 +449,7 @@ AC_CONFIG_FILES([
   packages/yum/Makefile
   packages/apt/Makefile
   packages/source/Makefile
+  packages/ubuntu/Makefile
   packages/windows/Makefile
   tools/Makefile
   doc/Makefile
