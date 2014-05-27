@@ -1,4 +1,4 @@
 sqldir = $(pkgdatadir)
-sql_DATA =					\
+dist_sql_DATA =					\
 	install.sql				\
 	uninstall.sql
