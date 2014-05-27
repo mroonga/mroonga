@@ -1,4 +1,5 @@
 # Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2014 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -20,6 +21,7 @@
 drop table if exists diaries;
 --enable_warnings
 
+set @mroonga_default_parser_backup=@@mroonga_default_parser;
 set global mroonga_default_parser=TokenBigramSplitSymbolAlphaDigit;
 create table diaries (
   id int primary key auto_increment,
@@ -34,5 +36,6 @@ insert into diaries (body) values ("finished groonga.");
 select * from diaries;
 select * from diaries where match(body) against("start");
 drop table diaries;
+set global mroonga_default_parser=@mroonga_default_parser_backup;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

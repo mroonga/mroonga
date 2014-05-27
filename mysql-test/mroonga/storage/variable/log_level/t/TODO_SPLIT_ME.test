@@ -1,4 +1,5 @@
 # Copyright(C) 2010 Tetsuro IKEDA
+# Copyright(C) 2014 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,6 +17,7 @@
 
 --source ../../../../include/mroonga/have_mroonga.inc
 
+set @mroonga_log_level_backup=@@mroonga_log_level;
 show global variables like 'mroonga_log_level';
 
 set global mroonga_log_level=NONE;
@@ -53,5 +55,7 @@ set global mroonga_log_level=dummy;
 
 --error ER_GLOBAL_VARIABLE
 set session mroonga_log_level=NOTICE;
+
+set global mroonga_log_level=@mroonga_log_level_backup;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
