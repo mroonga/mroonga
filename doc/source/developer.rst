@@ -72,7 +72,7 @@ For adding and updating documents, please refer the description below.
 Release
 -------
 
-We release the software when all tickets of the roadmap are closed. 
+We release the software when all tickets of the roadmap are closed.
 
 We do the following to release.
 
@@ -166,7 +166,7 @@ We use Sphinx for the documentation of Mroonga.
 
 We write documents in ReStructuredText format and we convert them to HTML etc.
 
-The source files of documents are files having .rst extension in "doc/ja/source" directory.
+The source files of documents are files having .rst extension in "doc/source" directory.
 
 When you add or modify them, please try to build by "make html" etc. and confirm that no syntax error happens.
 
@@ -174,4 +174,41 @@ Documents are published in http://mroonga.org . Since we are using github's web 
 
 So you can just push to mroonga repository to push documents for each ticket.
 
-To avoid the issue that directory names of sphinx's output cannot be used in github, we prepare sphinx2github.sh script in "doc/en/source" directory. When you commit to mroonga.github.com repository, please modify sphinx's output files by using this script beforehand.
+The details are as follows.
+
+Installing Sphinx
+^^^^^^^^^^^^^^^^^
+
+You don't need to install Sphinx by yourself because Mroonga clones the latest Sphinx from Sphinx repository automatically. You just need to install Mercurial.
+
+Build Mroonga
+^^^^^^^^^^^^^
+
+In order to enables documentation generation, you should run configure script with "--enable-document" option as follows. ::
+
+  % ./configure --enable-document --with-mysql-source=(your mysql source directory)
+  % make
+  % make install
+
+Adding a document
+^^^^^^^^^^^^^^^^^
+
+Write a document in ReStructuredText format, and save the document with .rst extension in "doc/source" directory.
+
+See reStructuredText (reST) `concepts and syntax <http://sphinx-doc.org/latest/rest.html>`_ about how to
+write a document in ReStructuredText format.
+
+Confirm generated document
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can generate HTML files by the following command. ::
+
+  % cd doc/locale/en
+  % make html
+
+You can confirm generated HTML document in web browser, after generating HTML files.
+
+Here we show an example of using Firefox. ::
+
+  % firefox html/characteristic.html
+
