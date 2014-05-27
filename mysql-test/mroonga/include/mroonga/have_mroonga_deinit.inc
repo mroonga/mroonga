@@ -1,4 +1,4 @@
-# Copyright(C) 2010 Kentoku SHIBA
+# Copyright(C) 2010-2014 Kentoku SHIBA
 # Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -28,7 +28,9 @@ if ($have_default_tmp_storage_engine_variable) {
   set default_tmp_storage_engine=MyISAM;
 }
 
-UNINSTALL PLUGIN mroonga_stats;
-UNINSTALL PLUGIN mroonga;
+if (!$have_mroonga_storage_engine) {
+  UNINSTALL PLUGIN mroonga_stats;
+  UNINSTALL PLUGIN mroonga;
+}
 
 enable_query_log;

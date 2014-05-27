@@ -1,5 +1,5 @@
 # Copyright(C) 2010 Tetsuro IKEDA
-# Copyright(C) 2013 Kentoku SHIBA
+# Copyright(C) 2013-2014 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,8 @@
 
 disable_query_log;
 
-if (!`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`) {
+let have_mroonga_storage_engine=`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`;
+if (!$have_mroonga_storage_engine) {
   eval INSTALL PLUGIN mroonga SONAME $ha_mroonga_so;
   eval INSTALL PLUGIN mroonga_stats SONAME $ha_mroonga_so;
 }
