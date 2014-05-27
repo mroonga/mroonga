@@ -135,7 +135,6 @@ allow_unsigned_uploads = 0
           run_command("pbuilder-dist", code_name, "build",
                       "../#{@package}_#{deb_version}.dsc")
         else
-          exit
           run_command("dput", @dput_configuration_name,
                       "../#{@package}_#{deb_version}_source.changes")
         end
