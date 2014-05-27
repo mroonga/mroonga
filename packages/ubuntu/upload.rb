@@ -120,6 +120,8 @@ allow_unsigned_uploads = 0
       directory_name = "#{@package}-#{@version}"
       Dir.chdir(directory_name) do
         FileUtils.cp_r(@debian_directory.to_s, "debian")
+        FileUtils.cp("#{@debian_directory.to_s}/rules.ppa",
+                     "debian/rules")
         deb_version = "#{current_deb_version.succ}~#{code_name}1"
         run_command("dch",
                     "--distribution", code_name,
