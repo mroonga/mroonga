@@ -37,7 +37,6 @@ class Uploader
 
     @code_names.each do |code_name|
       upload(code_name)
-      exit
     end
   end
 
