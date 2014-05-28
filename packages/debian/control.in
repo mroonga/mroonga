@@ -10,7 +10,8 @@ Build-Depends:
 	groonga-normalizer-mysql,
 	libmysqlclient-dev,
 	libmysqld-dev,
-	libssl-dev
+	libssl-dev,
+	wget
 Standards-Version: 3.9.1
 Homepage: http://mroonga.org/
 
