@@ -1,1 +1,1 @@
---plugin-load-add=$HA_MROONGA_SO --plugin-mroonga=ON
+--loose-plugin-load-add=$HA_MROONGA_SO --loose-plugin-mroonga=ON
