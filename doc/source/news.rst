@@ -3,6 +3,30 @@
 News
 ====
 
+.. _release-4-03:
+
+Release 4.03 - 2014/05/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [doc] Updated MariaDB version. [Patch by cosmo0920]
+* Supported daylight saving time. [#2385]
+* Migrated Ubuntu package distribution site to PPA on Launchpad.
+  See :doc:`/install` for details.
+
+Fixes
+^^^^^
+
+* [doc] Fixed command line in :doc:`/install`. [Reported by YOSHIDA Mitsuo]
+
+Thanks
+^^^^^^
+
+* cosmo0920
+* YOSHIDA Mitsuo
+
 .. _release-4-02:
 
 Release 4.02 - 2014/04/29
