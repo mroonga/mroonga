@@ -21,21 +21,21 @@ Debian GNU/Linux wheezy
 Install::
 
   % sudo apt-get update
-  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
+  % sudo apt-get install -y --allow-unauthenticated groonga-keyring
   % sudo apt-get update
-  % sudo apt-get -y install mysql-server-mroonga
+  % sudo apt-get install -y -V groonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo apt-get -y install groonga-tokenizer-mecab
+  % sudo apt-get install -y -V groonga-tokenizer-mecab
 
 If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
 
 Install groonga-normalizer-mysql package::
 
-  % sudo apt-get -y install groonga-normalizer-mysql
+  % sudo apt-get install -y -V groonga-normalizer-mysql
 
 .. note::
 
@@ -53,21 +53,21 @@ Debian GNU/Linux jessie
 Install::
 
   % sudo apt-get update
-  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
+  % sudo apt-get install -y --allow-unauthenticated groonga-keyring
   % sudo apt-get update
-  % sudo apt-get -y install mysql-server-mroonga
+  % sudo apt-get install -y -V groonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo apt-get -y install groonga-tokenizer-mecab
+  % sudo apt-get install -y -V groonga-tokenizer-mecab
 
 If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
 
 Install groonga-normalizer-mysql package::
 
-  % sudo apt-get -y install groonga-normalizer-mysql
+  % sudo apt-get install -y -V groonga-normalizer-mysql
 
 .. note::
 
@@ -84,22 +84,22 @@ Debian GNU/Linux sid
 
 Install::
 
-  % sudo aptitude update
-  % sudo aptitude -V -D -y --allow-untrusted install groonga-keyring
-  % sudo aptitude update
-  % sudo aptitude -V -D -y install mysql-server-mroonga
+  % sudo apt-get update
+  % sudo apt-get install -y --allow-unauthenticated groonga-keyring
+  % sudo apt-get update
+  % sudo apt-get install -y -V groonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo aptitude -V -D -y install groonga-tokenizer-mecab
+  % sudo apt-get install -y -V groonga-tokenizer-mecab
 
 If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
 
 Install groonga-normalizer-mysql package::
 
-  % sudo aptitude -V -D -y install groonga-normalizer-mysql
+  % sudo apt-get install -y -V groonga-normalizer-mysql
 
 .. note::
 
@@ -110,120 +110,45 @@ Install groonga-normalizer-mysql package::
    If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
-Ubuntu 12.04 Precise Pangolin
------------------------------
+Ubuntu
+------
 
-.. note::
+The Mroonga APT repository for Ubuntu uses PPA (Personal Package
+Archive) on Launchpad. You can install Mroonga by APT from the PPA.
 
-   You need to enable the universe section in Ubuntu's software sources.
+Here are supported Ubuntu versions:
 
-.. note::
+  * 12.04 LTS Precise Pangolin
+  * 13.10 Saucy Salamander
+  * 14.04 LTS Trusty Tahr
 
-   You need to enable the security update repository.
+Enable the universe repository and the security update repository to
+install Mroonga::
 
-/etc/apt/sources.list.d/groonga.list::
+  % sudo apt-get install -y -V software-properties-common lsb-release
+  % sudo add-apt-repository -y universe
+  % sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
 
-  deb http://packages.groonga.org/ubuntu/ precise universe
-  deb-src http://packages.groonga.org/ubuntu/ precise universe
+Add the ``ppa:groonga/ppa`` PPA to your system::
+
+  % sudo add-apt-repository -y ppa:groonga/ppa
+  % sudo apt-get update
 
 Install::
 
-  % sudo apt-get update
-  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
-  % sudo apt-get update
-  % sudo apt-get -y install mysql-server-mroonga
+  % sudo apt-get install -y -V mysql-server-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo apt-get -y install groonga-tokenizer-mecab
+  % sudo apt-get install -y -V groonga-tokenizer-mecab
 
 If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
 
 Install groonga-normalizer-mysql package::
 
-  % sudo apt-get -y install groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
-
-Ubuntu 13.10 Saucy Salamander
------------------------------
-
-.. note::
-
-   You need to enable the universe section in Ubuntu's software sources.
-
-.. note::
-
-   You need to enable the security update repository.
-
-/etc/apt/sources.list.d/groonga.list::
-
-  deb http://packages.groonga.org/ubuntu/ saucy universe
-  deb-src http://packages.groonga.org/ubuntu/ saucy universe
-
-Install::
-
-  % sudo apt-get update
-  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
-  % sudo apt-get update
-  % sudo apt-get -y install mysql-server-mroonga
-
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
-
-Install groonga-tokenizer-mecab package::
-
-  % sudo apt-get -y install groonga-tokenizer-mecab
-
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo apt-get -y install groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
-
-Ubuntu 14.04 Trusty Tahr
-------------------------
-
-.. note::
-
-   You need to enable the universe section in Ubuntu's software sources.
-
-.. note::
-
-   You need to enable the security update repository.
-
-/etc/apt/sources.list.d/groonga.list::
-
-  deb http://packages.groonga.org/ubuntu/ trusty universe
-  deb-src http://packages.groonga.org/ubuntu/ trusty universe
-
-Install::
-
-  % sudo apt-get update
-  % sudo apt-get -y --allow-unauthenticated install groonga-keyring
-  % sudo apt-get update
-  % sudo apt-get -y install mysql-server-mroonga
-
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
-
-Install groonga-tokenizer-mecab package::
-
-  % sudo apt-get -y install groonga-tokenizer-mecab
-
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo apt-get -y install groonga-normalizer-mysql
+  % sudo apt-get install -y -V groonga-normalizer-mysql
 
 .. note::
 
