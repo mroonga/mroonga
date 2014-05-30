@@ -8,13 +8,13 @@ Here we explain how to use storage mode of Mroonga
 How to use full text search
 ---------------------------
 
-After confirming the installation, let's create a table. The important point is to specify mroonga by ``ENGINE = mroonga``. ::
+After confirming the installation, let's create a table. The important point is to specify Mroonga by ``ENGINE = Mroonga``. ::
 
   mysql> CREATE TABLE diaries (
       ->   id INT PRIMARY KEY AUTO_INCREMENT,
       ->   content VARCHAR(255),
       ->   FULLTEXT INDEX (content)
-      -> ) ENGINE = mroonga DEFAULT CHARSET utf8;
+      -> ) ENGINE = Mroonga DEFAULT CHARSET utf8;
   Query OK, 0 rows affected (0.10 sec)
 
 We put data by INSERT. ::
@@ -187,7 +187,7 @@ For the table definition for geolocation search, you need to define a POINT type
       ->   name VARCHAR(255),
       ->   location POINT NOT NULL,
       ->   SPATIAL INDEX (location)
-      -> ) ENGINE = mroonga;
+      -> ) ENGINE = Mroonga;
   Query OK, 0 rows affected (0.06 sec)
 
 To store data, you create POINT type data by using geomFromText() function like in MyISAM. ::
@@ -226,7 +226,7 @@ To get the record ID, you need to create a column named ``_id`` when you create 
       ->   _id INT,
        >   content VARCHAR(255),
       ->   UNIQUE KEY (_id) USING HASH
-      -> ) ENGINE = mroonga;
+      -> ) ENGINE = Mroonga;
   Query OK, 0 rows affected (0.04 sec)
 
 Tye typo of _id column should be integer one (TINYINT, SMALLINT, MEDIUMINT, INT or BIGINT).
@@ -293,10 +293,10 @@ It is implemented as 'mroonga_snippet' UDF.
 See :doc:`/reference/udf/mroonga_snippet` about details.
 
 
-How to run groonga command
+How to run Groonga command
 --------------------------
 
-In storage mode, mroonga stores all your data into Groonga
+In storage mode, Mroonga stores all your data into Groonga
 database. You can access Groonga database by SQL with Mroonga. SQL is
 very powerful but it is not good for some operations such as faceted
 search.
@@ -338,7 +338,7 @@ Here is the schema definition for execution examples::
     `year_month` VARCHAR(9),
     tag VARCHAR(32),
     FULLTEXT INDEX (content)
-  ) ENGINE = mroonga DEFAULT CHARSET utf8;
+  ) ENGINE = Mroonga DEFAULT CHARSET utf8;
 
 Here is the sample data for execution examples::
 
@@ -475,9 +475,9 @@ Imagine that we have a table with 20 columns like below. ::
     c12 VARCHAR(20),
     ...
     c20 DATETIME
-  ) ENGINE = mroonga DEFAULT CHARSET utf8;
+  ) ENGINE = Mroonga DEFAULT CHARSET utf8;
 
-When we run SELECT phrase like the following, mroonga reads data from columns that are referred by SELECT phrase and WHERE phrase only (and it does not access columns that not required internally).
+When we run SELECT phrase like the following, Mroonga reads data from columns that are referred by SELECT phrase and WHERE phrase only (and it does not access columns that not required internally).
 
   SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = "XXX";
 
