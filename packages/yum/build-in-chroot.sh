@@ -197,6 +197,9 @@ for architecture in $ARCHITECTURES; do
 		fi
 	    fi
 	    if [ $distribution_version -eq 6 ]; then
+		if [ "$PACKAGE" = "mysql-mroonga" ]; then
+		    continue
+		fi
 		if [ "$PACKAGE" = "mysql55-mroonga" ]; then
 		    if [ "$architecture" = "i386" ]; then
 			continue
