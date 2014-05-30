@@ -193,7 +193,7 @@ In order to enables documentation generation, you should run configure script wi
 Adding a document
 ^^^^^^^^^^^^^^^^^
 
-Write a document in ReStructuredText format, and save the document with .rst extension in "doc/source" directory.
+Write a document in reStructuredText format, and save the document with .rst extension in "doc/source" directory.
 
 See reStructuredText (reST) `concepts and syntax <http://sphinx-doc.org/latest/rest.html>`_ about how to
 write a document in ReStructuredText format.
