@@ -12,7 +12,12 @@ export MYSQL_VERSION := $(shell apt-cache show mysql-server-5.5 | grep Version |
 	dh $@
 
 override_dh_auto_configure:
-	wget http://archive.ubuntu.com/ubuntu/pool/main/m/mysql-5.5/mysql-5.5_$(MYSQL_VERSION).orig.tar.gz
+	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then	\
+	  base_url=http://archive.ubuntu.com/ubuntu;		\
+	else							\
+	  base_url=http://ftp.debian.org/debian;		\
+	fi;							\
+	wget $${base_url}/pool/main/m/mysql-5.5/mysql-5.5_$(MYSQL_VERSION).orig.tar.gz
 	tar xf mysql-5.5_$(MYSQL_VERSION).orig.tar.gz
 	dh_auto_configure -- --with-mysql-source=./mysql-$(MYSQL_VERSION)
 
