@@ -371,8 +371,8 @@ environment.
 Choose ``win32`` version for 32-bit environment, ``winx64`` version
 for 64-bit environment:
 
-  * `mariadb-10.0.10-with-mroonga-4.02-win32.zip <https://github.com/mroonga/mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-win32.zip>`_
-  * `mariadb-10.0.10-with-mroonga-4.02-winx64.zip <https://github.com/mroonga/mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-winx64.zip>`_
+  * `mariadb-10.0.11-with-mroonga-4.03-win32.zip <https://github.com/mroonga/mroonga/releases/download/v4.03/mariadb-10.0.11-with-mroonga-4.03-win32.zip>`_
+  * `mariadb-10.0.11-with-mroonga-4.03-winx64.zip <https://github.com/mroonga/mroonga/releases/download/v4.03/mariadb-10.0.11-with-mroonga-4.03-winx64.zip>`_
 
 Install Mroonga
 ^^^^^^^^^^^^^^^
