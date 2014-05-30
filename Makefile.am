@@ -48,7 +48,7 @@ installcheck-local: install
 
 tag:
 	cd $(top_srcdir) && \
-	  git tag v$(VERSION) -a -m 'mroonga $(VERSION)!!!'
+	  git tag v$(VERSION) -a -m 'Mroonga $(VERSION)!!!'
 
 update-latest-release: misc
 	@if test -z "$(OLD_RELEASE)"; then	\
