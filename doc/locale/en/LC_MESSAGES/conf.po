@@ -1,14 +1,14 @@
-# English translations for groonga-storage-engine package.
-# Copyright (C) 2011 THE groonga-storage-engine'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the groonga-storage-engine package.
-# Kouhei Sutou <kou@clear-code.com>, 2011.
+# English translations for mroonga package.
+# Copyright (C) 2014 THE mroonga'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the mroonga package.
+# Kouhei Sutou <kou@clear-code.com>, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: groonga-storage-engine 1.0.2\n"
+"Project-Id-Version: mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-24 11:54+0900\n"
-"PO-Revision-Date: 2011-11-03 17:57+0900\n"
+"POT-Creation-Date: 2014-05-30 13:00+0900\n"
+"PO-Revision-Date: 2014-05-30 13:01+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"

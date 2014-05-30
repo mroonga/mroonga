@@ -1,24 +1,24 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2009-2013, Mroonga Project
+# English translations for Mroonga package.
+# Copyright (C) 2009-2014, Mroonga Project
 # This file is distributed under the same license as the Mroonga package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Kouhei Sutou <kou@clear-code.com>, 2014.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Mroonga 3.11\n"
+"Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-24 11:53+0900\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2014-05-30 13:00+0900\n"
+"PO-Revision-Date: 2014-05-30 13:01+0900\n"
+"Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
+"Language-Team: English\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "How to contribute to Mroonga"
-msgstr ""
+msgstr "How to contribute to Mroonga"
 
 msgid ""
 "We welcome your contributions to the Mroonga Project. There are many ways to "
@@ -27,121 +27,143 @@ msgid ""
 "Coding and documentation are also welcome for Mroonga and its related "
 "projects."
 msgstr ""
+"We welcome your contributions to the Mroonga Project. There are many ways to "
+"contribute, such as using Mroonga, introduction to others, etc. For example, "
+"if you find a bug when using Mroonga, you are welcome to report the bug. "
+"Coding and documentation are also welcome for Mroonga and its related "
+"projects."
 
 msgid "As a user:"
-msgstr ""
+msgstr "As a user:"
 
 msgid "If you are interested in Mroonga, please read this document and try it."
 msgstr ""
+"If you are interested in Mroonga, please read this document and try it."
 
 msgid "As a spokesman:"
-msgstr ""
+msgstr "As a spokesman:"
 
 msgid "Please introduce Mroonga to your friends and colleagues."
-msgstr ""
+msgstr "Please introduce Mroonga to your friends and colleagues."
 
 msgid "As a developer: Bug report, development and documentation"
-msgstr ""
+msgstr "As a developer: Bug report, development and documentation"
 
 msgid "This section describes the details."
-msgstr ""
+msgstr "This section describes the details."
 
 msgid "How to contribute in documentation topics"
-msgstr ""
+msgstr "How to contribute in documentation topics"
 
 msgid "We use Sphinx for documentation tool."
-msgstr ""
+msgstr "We use Sphinx for documentation tool."
 
 msgid ""
 "具体的にどんなことをやればいいのかを説明します。基本的にはドキュメントのソー"
 "スファイルごとにpull requestを送ってもらうと進めやすいです。"
 msgstr ""
+"具体的にどんなことをやればいいのかを説明します。基本的にはドキュメントのソー"
+"スファイルごとにpull requestを送ってもらうと進めやすいです。"
 
 msgid ""
 "対象となるファイルはdoc/sourceディレクトリ以下の拡張子が「.rst」となっている"
 "ファイルです。"
 msgstr ""
+"対象となるファイルはdoc/sourceディレクトリ以下の拡張子が「.rst」となっている"
+"ファイルです。"
 
 msgid ""
 "あまりGitHubでの作業に慣れていなくてもできるように、「最初にやること」と「作"
 "業ごとにやること」、「ファイルごとにやること」に分けて順に説明します。"
 msgstr ""
+"あまりGitHubでの作業に慣れていなくてもできるように、「最初にやること」と「作"
+"業ごとにやること」、「ファイルごとにやること」に分けて順に説明します。"
 
 msgid "The things you must do at first"
-msgstr ""
+msgstr "The things you must do at first"
 
 msgid "The things you need to do every tasks"
-msgstr ""
+msgstr "The things you need to do every tasks"
 
 msgid "The things you need to do every files"
-msgstr ""
+msgstr "The things you need to do every files"
 
 msgid "以下では、最初に一度だけ実施しておけば良いことを説明します。"
-msgstr ""
+msgstr "以下では、最初に一度だけ実施しておけば良いことを説明します。"
 
 msgid "Required softwares"
-msgstr ""
+msgstr "Required softwares"
 
 msgid "TODO"
-msgstr ""
+msgstr "TODO"
 
 msgid "Git configuration"
-msgstr ""
+msgstr "Git configuration"
 
 msgid ""
 "まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定"
 "はすでに完了しているかも知れません。その場合には飛ばして構いません。::"
 msgstr ""
+"まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定"
+"はすでに完了しているかも知れません。その場合には飛ばして構いません。::"
 
 msgid ""
 "上記はコミットログに使われます。公開しても差し支えないユーザ名もしくはメール"
 "アドレスを設定します。"
 msgstr ""
+"上記はコミットログに使われます。公開しても差し支えないユーザ名もしくはメール"
+"アドレスを設定します。"
 
 msgid "Fork on GitHub"
-msgstr ""
+msgstr "Fork on GitHub"
 
 msgid ""
 "First, create GitHub account. If your GitHub account is ready, login to "
 "GitHub and access following URL."
 msgstr ""
+"First, create GitHub account. If your GitHub account is ready, login to "
+"GitHub and access following URL."
 
 msgid ""
 "`Fork the Mroonga repository <https://github.com/mroonga/mroonga/fork>`_"
 msgstr ""
+"`Fork the Mroonga repository <https://github.com/mroonga/mroonga/fork>`_"
 
 msgid "Fork リポジトリ選択画面でご自分のリポジトリへとforkしてください。"
-msgstr ""
+msgstr "Fork リポジトリ選択画面でご自分のリポジトリへとforkしてください。"
 
 msgid "Initial configuration for working repository"
-msgstr ""
+msgstr "Initial configuration for working repository"
 
 msgid ""
 "Clone Mroonga repository to working directory. Don't forget to do \"Git "
 "configuration\".::"
 msgstr ""
+"Clone Mroonga repository to working directory. Don't forget to do \"Git "
+"configuration\".::"
 
 msgid "Initial configuration for building documentation"
-msgstr ""
+msgstr "Initial configuration for building documentation"
 
 msgid ""
 "Execute following commands to prepare for generating Mroonga documentation::"
 msgstr ""
+"Execute following commands to prepare for generating Mroonga documentation::"
 
 msgid "Next step is \"The things you need to do every tasks\"."
-msgstr ""
+msgstr "Next step is \"The things you need to do every tasks\"."
 
 msgid "以下では作業ごとにやることを説明します。"
-msgstr ""
+msgstr "以下では作業ごとにやることを説明します。"
 
 msgid "Follow the upstream"
-msgstr ""
+msgstr "Follow the upstream"
 
 msgid "Mroonga本家の最新状態に追従して、作業がかぶらないようにします。::"
-msgstr ""
+msgstr "Mroonga本家の最新状態に追従して、作業がかぶらないようにします。::"
 
 msgid "最新の状態に追従できたら、「ファイルごとにやること」へと進みます。"
-msgstr ""
+msgstr "最新の状態に追従できたら、「ファイルごとにやること」へと進みます。"
 
 msgid ""
 "以下では、例えば http://mroonga.org/docs/characteristic.html を更新する場合で"
@@ -149,54 +171,64 @@ msgid ""
 "にあり拡張子が.rstなファイルです。今回は、doc/source/characteristic.rstを変更"
 "する例で説明します。"
 msgstr ""
+"以下では、例えば http://mroonga.org/docs/characteristic.html を更新する場合で"
+"説明します。作業対象となるファイルは、リポジトリのdoc/source/ディレクトリ以下"
+"にあり拡張子が.rstなファイルです。今回は、doc/source/characteristic.rstを変更"
+"する例で説明します。"
 
 msgid "Create working branch"
-msgstr ""
+msgstr "Create working branch"
 
 msgid "Create a working branch. Use meaningful branch name."
-msgstr ""
+msgstr "Create a working branch. Use meaningful branch name."
 
 msgid "% git checkout -b use-capitalized-notation-characteristic"
-msgstr ""
+msgstr "% git checkout -b use-capitalized-notation-characteristic"
 
 msgid "Editing text"
-msgstr ""
+msgstr "Editing text"
 
 msgid "Fix typos, styles or write a new document for Mroonga."
-msgstr ""
+msgstr "Fix typos, styles or write a new document for Mroonga."
 
 msgid "Confirm generated document"
-msgstr ""
+msgstr "Confirm generated document"
 
 msgid ""
 "マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマン"
 "ドを実行します。::"
 msgstr ""
+"マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマン"
+"ドを実行します。::"
 
 msgid ""
 "いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されてい"
 "ればOKです。::"
 msgstr ""
+"いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されてい"
+"ればOKです。::"
 
 msgid "Commit"
-msgstr ""
+msgstr "Commit"
 
 msgid "HTMLに問題がないことを確認できたら、コミットします。::"
-msgstr ""
+msgstr "HTMLに問題がないことを確認できたら、コミットします。::"
 
 msgid "コミットするときのメッセージについては、例えば以下のようにします。::"
-msgstr ""
+msgstr "コミットするときのメッセージについては、例えば以下のようにします。::"
 
 msgid "Push and pull request"
-msgstr ""
+msgstr "Push and pull request"
 
 msgid "Publish your changes to your own GitHub repository::"
-msgstr ""
+msgstr "Publish your changes to your own GitHub repository::"
 
 msgid ""
 "Note that ``use-capitalized-notation-characteristic`` is already created "
 "branch in advance."
 msgstr ""
+"Note that ``use-capitalized-notation-characteristic`` is already created "
+"branch in advance."
 
 msgid ""
 "ブラウザで https://github.com/(GitHubのアカウント)/mroonga を開くと「 @use-"
@@ -205,37 +237,49 @@ msgid ""
 "がでてきますが、コミットしたときメッセージで十分なのでそのままpull requestし"
 "てOKです！"
 msgstr ""
+"ブラウザで https://github.com/(GitHubのアカウント)/mroonga を開くと「 @use-"
+"capitalized-notation-characteristic@ 」ブランチをpull requestする！みたいなUI"
+"ができているので、そこのボタンを押してpull requestしてください。入力フォーム"
+"がでてきますが、コミットしたときメッセージで十分なのでそのままpull requestし"
+"てOKです！"
 
 msgid "これで、ひととおりの作業は完了しました。"
-msgstr ""
+msgstr "これで、ひととおりの作業は完了しました。"
 
 msgid "How to report a bug"
-msgstr ""
+msgstr "How to report a bug"
 
 msgid "There are two ways to report a bug:"
-msgstr ""
+msgstr "There are two ways to report a bug:"
 
 msgid "Submit a bug to the issue tracker"
-msgstr ""
+msgstr "Submit a bug to the issue tracker"
 
 msgid "Report a bug to the mailing list"
-msgstr ""
+msgstr "Report a bug to the mailing list"
 
 msgid "You can use either way It makes no difference to us."
-msgstr ""
+msgstr "You can use either way It makes no difference to us."
 
 msgid ""
 "Mroonga project has two issue tracking systems, `Redmine <http://redmine."
 "groonga.org/projects/mroonga/issues>`_ and `GitHub issue tracker <https://"
 "github.com/mroonga/mroonga/issues>`_."
 msgstr ""
+"Mroonga project has two issue tracking systems, `Redmine <http://redmine."
+"groonga.org/projects/mroonga/issues>`_ and `GitHub issue tracker <https://"
+"github.com/mroonga/mroonga/issues>`_."
 
 msgid ""
 "Redmine is for Japanese and GitHub issue tracker is for English. You can use "
 "one of them to report a bug."
 msgstr ""
+"Redmine is for Japanese and GitHub issue tracker is for English. You can use "
+"one of them to report a bug."
 
 msgid ""
 "Mroonga project has :doc:`/community` for discussing about Mroonga. Please "
 "send an Email that describes a bug."
 msgstr ""
+"Mroonga project has :doc:`/community` for discussing about Mroonga. Please "
+"send an Email that describes a bug."
