@@ -3,14 +3,14 @@
 %{!?centos_ver:%define centos_ver 5}
 
 %if %{centos_ver} == 6
-%define mysql_version_default 5.5.36
-%define mysql_release_default 1.1
+%define mysql_version_default 5.5.37
+%define mysql_release_default 1.2
 %define mysql_dist_default    el6.centos.alt
 %define mysql_download_base_url_default http://vault.centos.org/6.5/SCL/Source/SPackages
 %define mysql_spec_file_default mysql.spec
 %else
-%define mysql_version_default 5.5.36
-%define mysql_release_default 2
+%define mysql_version_default 5.5.37
+%define mysql_release_default 1
 %define mysql_dist_default    el5
 %define mysql_download_base_url_default http://vault.centos.org/5.10/updates/SRPMS
 %define mysql_spec_file_default mysql.spec
@@ -26,7 +26,7 @@
 
 Name:		%{?scl_prefix}mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -163,6 +163,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu May 29 2014 Kouhei Sutou <kou@clear-code.com> - 4.03-2
+- build against MySQL 5.6.37. Reported by YOSHIDA Mitsuo. Thanks!!!
+
 * Thu May 29 2014 Kouhei Sutou <kou@clear-code.com> - 4.03-1
 - new upstream release.
 
