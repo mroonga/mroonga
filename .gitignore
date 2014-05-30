@@ -71,6 +71,7 @@ CTestTestfile.cmake
 /packages/yum/*/*.log
 /packages/yum/tmp/*
 /packages/windows/files/*
+/packages/ubunti/tmp/
 /install_manifest.txt
 /vendor/
 /data/install.sql
