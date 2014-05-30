@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-28 23:45\n"
-"PO-Revision-Date: 2014-04-29 13:48+0900\n"
+"POT-Creation-Date: 2014-05-30 15:10+0900\n"
+"PO-Revision-Date: 2014-05-30 15:43+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,11 +20,47 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 4.02 - 2014/04/29"
-msgstr "4.02リリース - 2014/04/29"
+msgid "Release 4.03 - 2014/05/29"
+msgstr "4.03リリース - 2014/05/29"
 
 msgid "Improvements"
 msgstr "改良"
+
+# ec63a4d13b2d4142a5a3adf97c655e8b
+msgid "[doc] Updated MariaDB version. [Patch by cosmo0920]"
+msgstr "[doc] MariaDBのバージョンを更新しました。 [cosmo0920さんがパッチ提供]"
+
+msgid "Supported daylight saving time. [#2385]"
+msgstr "夏時間をサポートしました。 [#2385]"
+
+msgid ""
+"Migrated Ubuntu package distribution site to PPA on Launchpad. See :doc:`/"
+"install` for details."
+msgstr ""
+"Ubuntuパッケージの配布サイトをLaunchpadのPPAに移行しました。詳細は :doc:`/"
+"install` を参照してください。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[doc] Fixed command line in :doc:`/install`. [Reported by YOSHIDA Mitsuo]"
+msgstr ""
+"[doc] :doc:`/install` の間違ったコマンドラインを修正しました。 [吉田光男さん"
+"が報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+# d5a1476d11a34a9cb63ba48497653e81
+msgid "cosmo0920"
+msgstr "cosmo0920さん"
+
+msgid "YOSHIDA Mitsuo"
+msgstr "吉田光男さん"
+
+msgid "Release 4.02 - 2014/04/29"
+msgstr "4.02リリース - 2014/04/29"
 
 msgid "Supported MariaDB 10.0.10 [#2460] [Reported by Kazuhiko Shiozaki]"
 msgstr "MariaDB 10.0.10に対応しました。 [#2460] [かずひこさんが報告]"
@@ -47,9 +83,6 @@ msgid "[doc] Updated MySQL version. [GitHub#8] [Patch by cosmo0920]"
 msgstr ""
 "[doc] MySQLのバージョンを更新しました。 [GitHub#8] [cosmo0920さんがパッチ提"
 "供]"
-
-msgid "Fixes"
-msgstr "修正"
 
 # 039ac26d70124f408431a222bd6a344f
 msgid ""
@@ -104,9 +137,6 @@ msgstr ""
 "プライマリーキーを指定してレコードを削除するとユニークインデックスが更新され"
 "ない問題を修正しました。 [groonga-dev,02244] [津久井玲宏さんが報告]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "Kazuhiko Shiozaki"
 msgstr "かずひこさん"
 
@@ -124,10 +154,6 @@ msgstr "Satoshi MITANIさん"
 # 0683aa1c35d44a35b1b31601d00fbd9a
 msgid "Akihiro Tsukui"
 msgstr "津久井玲宏さん"
-
-# d5a1476d11a34a9cb63ba48497653e81
-msgid "cosmo0920"
-msgstr "cosmo0920さん"
 
 msgid "Release 4.01 - 2014/03/29"
 msgstr "4.01リリース - 2014/03/29"
@@ -686,9 +712,6 @@ msgstr "Y.Kentaroさん"
 
 msgid "shizuin"
 msgstr "shizuinさん"
-
-msgid "YOSHIDA Mitsuo"
-msgstr "YOSHIDA Mitsuoさん"
 
 msgid "@memorycraft"
 msgstr "@memorycraftさん"
