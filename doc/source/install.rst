@@ -568,8 +568,8 @@ Uncompress MariaDB tarball. ::
 
 Uncompress Mroonga tarball then move into storage directory. ::
 
- tar xvfz mroonga-4.02.tar.gz
- mv mroonga-4.02 mariadb-10.0.10/storage/mroonga/
+ tar xvfz mroonga-4.03.tar.gz
+ mv mroonga-4.03 mariadb-10.0.10/storage/mroonga/
 
 Run "cmake". ::
 
