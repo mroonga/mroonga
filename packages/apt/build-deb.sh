@@ -32,6 +32,9 @@ if [ ! -f "${groonga_list}" ]; then
     case ${distribution} in
 	Debian)
 	    component=main
+	    if [ "$code_name" = "sid" ]; then
+		code_name=unstable
+	    fi
 	    ;;
 	Ubuntu)
 	    component=universe
