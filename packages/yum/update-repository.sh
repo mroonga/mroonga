@@ -22,6 +22,8 @@ run()
 
 for distribution in ${DISTRIBUTIONS}; do
     for dir in ${DESTINATION}${distribution}/*/*; do
-	test -d $dir &&	run createrepo $dir
+	# "--checksum sha" is for CentOS 5. If we drop CentOS 5 support,
+	# we can remove the option.
+	test -d $dir &&	run createrepo --checksum sha $dir
     done;
 done
