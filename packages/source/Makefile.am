@@ -64,7 +64,7 @@ tmp/$(GROONGA_NORMALIZER_MYSQL_TAR_GZ):
 
 tmp/$(MARIADB_TAR_GZ):
 	mkdir -p tmp
-	$(CURL) --output $@ $(MARIADB_DOWNLOAD_BASE)/mariadb-$(MARIADB_VERSION)/kvm-tarbake-jaunty-x86/$(MARIADB_TAR_GZ)
+	$(CURL) --output $@ $(MARIADB_DOWNLOAD_BASE)/mariadb-$(MARIADB_VERSION)/source/$(MARIADB_TAR_GZ)
 
 MARIADB_WITH_MROONGA_ARCHIVES =			\
 	tmp/$(GROONGA_TAR_GZ)			\
