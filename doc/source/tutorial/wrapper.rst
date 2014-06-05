@@ -8,7 +8,7 @@ Here we explain how to use wrapper mode of Mroonga
 How to use wrapper mode
 -----------------------
 
-In wrapper mode, Mroonga works in wrapping an existing storage engine. To specify the wrapped storage engine, we use SQL comment like ``COMMENT = 'engine "innodb"'`` for now.
+In wrapper mode, Mroonga works in wrapping an existing storage engine. To specify the wrapped storage engine, we use SQL comment like ``COMMENT = 'engine "InnoDB"'`` for now.
 
 .. note::
 
@@ -24,13 +24,13 @@ In wrapper mode, Mroonga works in wrapping an existing storage engine. To specif
 How to use full text search
 ---------------------------
 
-After confirming the installation, let's create a table. The important point is to specify Mroonga by ``ENGINE = mroonga``. ::
+After confirming the installation, let's create a table. The important point is to specify Mroonga by ``ENGINE = Mroonga``. ::
 
   mysql> CREATE TABLE diaries (
       ->   id INT PRIMARY KEY AUTO_INCREMENT,
       ->   content VARCHAR(255),
       ->   FULLTEXT INDEX (content)
-      -> ) ENGINE = mroonga COMMENT = 'engine "innodb"' DEFAULT CHARSET utf8;
+      -> ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET utf8;
   Query OK, 0 rows affected (0.52 sec)
 
 We put data by INSERT. ::
