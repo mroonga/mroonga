@@ -12,45 +12,45 @@ Developer's guide
 How we are developing
 ---------------------
 
-We, the Mroonga development project, are doing Ticket Driven Development by using a BTS named Redmine.
+The Mroonga project uses Redmine for Ticket Driven Development.
 
 The location of our Redmine site is the following.
 
-http://redmine.groonga.org/projects/show/mroonga
+http://redmine.groonga.org/projects/mroonga
 
 Developments are done per ticket.
 
 We would like to ask developers to register on the site above.
 
-Roadmaps
+Roadmap
 --------------------
 
-You can see our roadmaps in the following page. Generally speaking, we develop based on the roadmap.
+We develop based on the roadmap, and you can see our roadmap in the following page.
 
 http://redmine.groonga.org/projects/mroonga/roadmap
 
-We decide our roadmaps by discussing in off-line or on-line meetings.
+We draw up our roadmap by discussing in off-line or on-line meetings.
 
-Roadmaps specify the list of adding features in each version.
+The roadmap specifies the list of adding features in each version.
 
 Source code management
 ----------------------
 
-We manage the source code using git on github.
+We manage the source code using Git on Github.
 
 http://github.com/mroonga/mroonga
 
-If you want to contribute, please make clone in read/write mode, and then commit and push please.
+If you want to contribute, please make clone in read/write mode, and then commit and push.
 
 If you still do not have your account on github.com, please register.
 
-Process of development
+Development process
 ----------------------
 
-We would like to develop in the following procedure.
+We develop Mroonga using the following procedures.
 
 1. Create a new ticket and add a description
-2. Discuss in the development meeting and update roadmaps
+2. Discuss in the development meeting and update roadmap
 3. Assign the ticket, and the assignee starts development
 4. Implement features or fix bugs, then push to the repository if needed
 5. Add and run test codes, then push to the repository
@@ -63,7 +63,7 @@ Please create a ticket first and describe your idea there.
 
 For adding and running test codes, please refer the description below.
 
-Generally speaking, we want to ask the assignee to handle whole the process, like design, implementation, test and documentations.
+We want to ask the assignee to handle whole the process, like design, implementation, test and documentations.
 
 Then you ask other developers to review (especially in case of adding new features), and when it passes you add or update documents and the ticket can be closed.
 
@@ -89,50 +89,43 @@ Development environment
 Currently we are assuming the following development environments.
 
 * Linux x86_64
-* glibc 2.5
-* MySQL 5.5
-* groonga 1.2.8
-* Cutter 1.1 (for C/C++ unit tests)
-* Sphinx 1.1 (for documents)
-
-glibc 2.5 is used in Red Hat Enterprise Linux 5.
+* glibc
+* `MySQL <http://www.mysql.com/>`_
+* `Groonga <http://groonga.org/>`_
+* `Cutter <http://cutter.sourceforge.net/>`_ (for C/C++ unit tests)
+* `Sphinx <http://sphinx-doc.org/>`_ (for documents)
 
 Contents of the source tree
 ---------------------------
 
 There are just a few source files for now, and we would like to keep it simple as possible.
 
-ha_mroonga.h
- The header file of mroonga.
+ha_mroonga.hpp
+ The header file of Mroonga.
 
-ha_mroonga.cc
- The implementation of mroonga.
+ha_mroonga.cpp
+ The implementation of Mroonga.
 
-mrnsys.h
+mrnsys.hpp
  The header file of utility functions
 
-mrnsys.c
+mrnsys.cpp
  The implementation of utility functions
 
-test/sql/
+mysql-test/
  The directory for tests by SQL
 
-test/sql/t/
- SQL test scripts, that are also the definition of currently available SQL statements
+ SQL test scripts are included in each test case 't/' directory, that are also the definition of currently available SQL statements.
 
-test/sql/r/
- The expected results of SQL tests, that are also the definition of the current specification of supported SQL
+ The expected results of SQL tests are included in each test case 'r/' directory , that are also the definition of the current specification of supported SQL.
 
 test/unit/
  The directory for per-function unit tests by C/C++
 
-doc/en/
+doc/source/
  English documents in Sphinx format
 
-doc/ja/
- Japanese documents in Sphinx format
-
-Since we are still in the early stage of the development of mroonga, we will not make the documents of the specification of SQL queries for now.
+Since we are still in the early stage of the development of Mroonga, we will not make the documents of the specification of SQL queries for now.
 
 Alternatively we consider our SQL tests and its expected results as the list of features and the definition of their specifications.
 
@@ -155,7 +148,7 @@ SQL tests are implemented as "sub test suite" for "mysql-test" in MySQL's regres
 
 http://dev.mysql.com/doc/mysqltest/2.0/en/index.html
 
-For the detail about C/C++ unit tests, please refer the following cutter document.
+For the detail about C/C++ unit tests, please refer the following Cutter document.
 
 http://cutter.sourceforge.net/
 
@@ -164,15 +157,21 @@ Adding and updating documents
 
 We use Sphinx for the documentation of Mroonga.
 
-We write documents in ReStructuredText format and we convert them to HTML etc.
+Sphinx is a documentation generator which uses reStructuredText as its markup language, and converts reStructuredText files into HTML files.
 
-The source files of documents are files having .rst extension in "doc/source" directory.
+reStructuredText uses .rst filename extensions.
 
-When you add or modify them, please try to build by "make html" etc. and confirm that no syntax error happens.
+We write documents in the reStructuredText format and convert them to HTML.
 
-Documents are published in http://mroonga.org . Since we are using github's web site feature, they will be updated each time when HTML files are pushed to http://github.com/mroonga/mroonga.github.com repository. We push to mroonga.github.com repository after confirming the consistency between documents and current released version.
+The source files of documents have .rst extension in the "doc/source" directory of the Mroonga repository.
 
-So you can just push to mroonga repository to push documents for each ticket.
+When you add or update them, please try "make html" to confirm that there are no syntax errors.
+
+Documents are published in http://mroonga.org. Since we are using GitHub Project Pages, the web site is updated when HTML files are pushed to the http://github.com/mroonga/mroonga.github.com repository.
+
+We push added or updated HTML files to the repository after confirming the consistency between the documents and the current release version.
+
+So you can just push to Mroonga repository to push documents for each ticket.
 
 The details are as follows.
 
@@ -195,8 +194,7 @@ Adding a document
 
 Write a document in reStructuredText format, and save the document with .rst extension in "doc/source" directory.
 
-See reStructuredText (reST) `concepts and syntax <http://sphinx-doc.org/latest/rest.html>`_ about how to
-write a document in ReStructuredText format.
+See reStructuredText (reST) `concepts and syntax <http://sphinx-doc.org/latest/rest.html>`_ about how to write a document in reStructuredText format.
 
 Confirm generated document
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -211,4 +209,3 @@ You can confirm generated HTML document in web browser, after generating HTML fi
 Here we show an example of using Firefox. ::
 
   % firefox html/characteristic.html
-
