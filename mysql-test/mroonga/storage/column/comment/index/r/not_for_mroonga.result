@@ -1,12 +1,12 @@
-DROP TABLE IF EXISTS Bugs;
-CREATE TABLE Bugs (
+DROP TABLE IF EXISTS bugs;
+CREATE TABLE bugs (
 id INT UNSIGNED,
 INDEX (id) COMMENT 'ID search is required.'
 ) DEFAULT CHARSET=utf8;
-SHOW CREATE TABLE Bugs;
+SHOW CREATE TABLE bugs;
 Table	Create Table
-Bugs	CREATE TABLE `Bugs` (
+bugs	CREATE TABLE `bugs` (
   `id` int(10) unsigned DEFAULT NULL,
   KEY `id` (`id`) COMMENT 'ID search is required.'
 ) ENGINE=mroonga DEFAULT CHARSET=utf8
-DROP TABLE Bugs;
+DROP TABLE bugs;

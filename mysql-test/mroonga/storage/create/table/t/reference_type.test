@@ -24,19 +24,19 @@ CREATE DATABASE test;
 USE test;
 --enable_query_log
 
-CREATE TABLE Tags (
+CREATE TABLE tags (
   name VARCHAR(64) PRIMARY KEY
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE Bugs (
+CREATE TABLE bugs (
   id INT UNSIGNED PRIMARY KEY,
-  tag VARCHAR(64) COMMENT 'type "Tags"'
+  tag VARCHAR(64) COMMENT 'type "tags"'
 ) DEFAULT CHARSET=utf8;
 
 SELECT mroonga_command("dump");
 
-DROP TABLE Bugs;
-DROP TABLE Tags;
+DROP TABLE bugs;
+DROP TABLE tags;
 
 --source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

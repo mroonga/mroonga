@@ -19,10 +19,10 @@
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS Tags;
+DROP TABLE IF EXISTS tags;
 --enable_warnings
 
-CREATE TABLE Tags (
+CREATE TABLE tags (
   name VARCHAR(64) PRIMARY KEY
 ) DEFAULT CHARSET=utf8
   COLLATE=utf8_bin
@@ -30,7 +30,7 @@ CREATE TABLE Tags (
 
 SELECT mroonga_command("dump");
 
-DROP TABLE Tags;
+DROP TABLE tags;
 
 --source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

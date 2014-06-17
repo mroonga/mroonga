@@ -19,17 +19,17 @@
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS Bugs;
+DROP TABLE IF EXISTS bugs;
 --enable_warnings
 
-CREATE TABLE Bugs (
+CREATE TABLE bugs (
   id INT UNSIGNED PRIMARY KEY,
   tags TEXT COMMENT 'flags "COLUMN_VECTOR"'
 ) DEFAULT CHARSET=utf8;
 
 SELECT mroonga_command("dump");
 
-DROP TABLE Bugs;
+DROP TABLE bugs;
 
 --source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

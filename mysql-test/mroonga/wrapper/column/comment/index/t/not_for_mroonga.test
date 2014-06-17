@@ -19,19 +19,19 @@
 --source ../../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS Bugs;
+DROP TABLE IF EXISTS bugs;
 --enable_warnings
 
-CREATE TABLE Bugs (
+CREATE TABLE bugs (
   id INT UNSIGNED PRIMARY KEY,
   tag VARCHAR(64),
   INDEX (tag) COMMENT 'Tag search is required.'
 ) DEFAULT CHARSET=utf8
   COMMENT='engine "InnoDB"';
 
-SHOW CREATE TABLE Bugs;
+SHOW CREATE TABLE bugs;
 
-DROP TABLE Bugs;
+DROP TABLE bugs;
 
 --source ../../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../../include/mroonga/have_mroonga_deinit.inc

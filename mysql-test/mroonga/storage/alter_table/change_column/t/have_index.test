@@ -17,19 +17,19 @@
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS Bugs;
+DROP TABLE IF EXISTS bugs;
 --enable_warnings
 
-CREATE TABLE Bugs (
+CREATE TABLE bugs (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(32),
   FULLTEXT KEY (title)
 ) DEFAULT CHARSET=utf8;
 
-ALTER TABLE Bugs CHANGE COLUMN title title VARCHAR(64);
+ALTER TABLE bugs CHANGE COLUMN title title VARCHAR(64);
 
-SHOW CREATE TABLE Bugs;
+SHOW CREATE TABLE bugs;
 
-DROP TABLE Bugs;
+DROP TABLE bugs;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
