@@ -36,9 +36,11 @@ namespace mrn {
                                          bool *truncated);
 
     long long int tm_to_grn_time(struct tm *time, int usec, bool *truncated);
-    time_t tm_to_time_gm(struct tm *time);
 
     void grn_time_to_mysql_time(long long int grn_time, MYSQL_TIME *mysql_time);
+
+  private:
+    time_t tm_to_time_gm(struct tm *time, bool *truncated);
   };
 }
 

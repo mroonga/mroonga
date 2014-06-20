@@ -22,6 +22,8 @@
 #  include <config.h>
 #endif
 
+#include <limits>
+
 #include "mrn_time_converter.hpp"
 
 // for debug
@@ -34,15 +36,19 @@ namespace mrn {
   TimeConverter::~TimeConverter() {
   }
 
-  time_t TimeConverter::tm_to_time_gm(struct tm *time) {
+  time_t TimeConverter::tm_to_time_gm(struct tm *time, bool *truncated) {
     MRN_DBUG_ENTER_METHOD();
+    *truncated = true;
     struct tm gmdate;
     time->tm_yday = -1;
     time->tm_isdst = -1;
     time_t sec_t = mktime(time);
-    if (time->tm_yday == -1)
-      DBUG_RETURN(sec_t);
-    gmtime_r(&sec_t, &gmdate);
+    if (time->tm_yday == -1) {
+      DBUG_RETURN(-1);
+    }
+    if (!gmtime_r(&sec_t, &gmdate)) {
+      DBUG_RETURN(-1);
+    }
     int32 mrn_utc_diff_in_seconds =
       (
         time->tm_mday > 25 && gmdate.tm_mday == 1 ? -1 :
@@ -60,6 +66,16 @@ namespace mrn {
     DBUG_PRINT("info", ("mroonga: time->tm_sec=%d", time->tm_sec));
     DBUG_PRINT("info", ("mroonga: mrn_utc_diff_in_seconds=%d",
                         mrn_utc_diff_in_seconds));
+    if (mrn_utc_diff_in_seconds > 0) {
+      if (sec_t > std::numeric_limits<time_t>::max() - mrn_utc_diff_in_seconds) {
+        DBUG_RETURN(-1);
+      }
+    } else {
+      if (sec_t < std::numeric_limits<time_t>::min() - mrn_utc_diff_in_seconds) {
+        DBUG_RETURN(-1);
+      }
+    }
+    *truncated = false;
     DBUG_RETURN(sec_t + mrn_utc_diff_in_seconds);
   }
 
@@ -67,19 +83,12 @@ namespace mrn {
                                               bool *truncated) {
     MRN_DBUG_ENTER_METHOD();
 
-    long long int grn_time;
-    long long int sec = tm_to_time_gm(time);
+    long long int sec = tm_to_time_gm(time, truncated);
 
     DBUG_PRINT("info", ("mroonga: sec=%lld", sec));
     DBUG_PRINT("info", ("mroonga: usec=%d", usec));
 
-    *truncated = false;
-    if (sec == -1) {
-      grn_time = 0;
-      *truncated = true;
-    } else {
-      grn_time = GRN_TIME_PACK(sec, usec);
-    }
+    long long int grn_time = *truncated ? 0 : GRN_TIME_PACK(sec, usec);
 
     DBUG_RETURN(grn_time);
   }
