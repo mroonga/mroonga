@@ -27,10 +27,10 @@
 #include "mrn_time_converter.hpp"
 
 #ifdef min
-#  define undef min
+#  undef min
 #endif
 #ifdef max
-#  define undef max
+#  undef max
 #endif
 
 // for debug
