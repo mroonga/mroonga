@@ -26,6 +26,13 @@
 
 #include "mrn_time_converter.hpp"
 
+#ifdef min
+#  define undef min
+#endif
+#ifdef max
+#  define undef max
+#endif
+
 // for debug
 #define MRN_CLASS_NAME "mrn::TimeConverter"
 
