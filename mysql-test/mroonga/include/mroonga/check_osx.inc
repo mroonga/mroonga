@@ -1,4 +1,3 @@
-# Copyright(C) 2013 Kentoku SHIBA
 # Copyright(C) 2014 Toshihisa Tashiro
 #
 # This library is free software; you can redistribute it and/or
@@ -15,14 +14,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../include/mroonga/skip_osx.inc
-
-disable_query_log;
-disable_warnings;
-let $VERSION_COMPILE_64BIT=
-  `SELECT IF(@@version_compile_machine like '%64%', 1, 0)`;
-enable_warnings;
-enable_query_log;
-if ($VERSION_COMPILE_64BIT) {
-  skip Need a 32 bit machine/binary;
-}
+--disable_query_log
+let $VERSION_COMPILE_OS_OSX=`SELECT IF(@@version_compile_os like 'osx%', 1, 0);`;
+--enable_query_log
