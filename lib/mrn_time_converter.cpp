@@ -22,9 +22,9 @@
 #  include <config.h>
 #endif
 
-#include <limits>
-
 #include "mrn_time_converter.hpp"
+
+#include <limits>
 
 #ifdef min
 #  undef min
