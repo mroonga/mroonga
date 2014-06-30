@@ -20,18 +20,22 @@
 
 SET GLOBAL mroonga_database_path_prefix = "test/mroonga.data/";
 SHOW GLOBAL VARIABLES LIKE 'mroonga_database_path_prefix';
+CREATE DATABASE clean_test;
+USE clean_test;
 
 CREATE TABLE counts (
   id INT PRIMARY KEY AUTO_INCREMENT
 );
 
---file_exists $MYSQLD_DATADIR/test/mroonga.data/test.mrn
+--file_exists $MYSQLD_DATADIR/test/mroonga.data/clean_test.mrn
 
 INSERT INTO counts VALUES (NULL);
 
 SELECT * FROM counts;
 
 DROP TABLE counts;
+DROP DATABASE clean_test;
+USE test;
 
 SET GLOBAL mroonga_database_path_prefix = NULL;
 
