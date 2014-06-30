@@ -24,14 +24,14 @@
 
 #include "mrn_time_converter.hpp"
 
-#include <limits>
-
 #ifdef min
 #  undef min
 #endif
 #ifdef max
 #  undef max
 #endif
+
+#include <limits>
 
 // for debug
 #define MRN_CLASS_NAME "mrn::TimeConverter"
