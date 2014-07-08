@@ -103,10 +103,6 @@ Install groonga-normalizer-mysql package::
 
 .. note::
 
-   'utf8_unicode_ci' or 'utf8mb4_unicode_ci' will be supported in the future release.
-
-.. note::
-
    If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
    MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
