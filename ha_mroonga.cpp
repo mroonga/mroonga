@@ -13082,7 +13082,8 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
     Alter_inplace_info::ADD_PK_INDEX |
     Alter_inplace_info::DROP_PK_INDEX |
     Alter_inplace_info::ADD_COLUMN |
-    Alter_inplace_info::DROP_COLUMN;
+    Alter_inplace_info::DROP_COLUMN |
+    Alter_inplace_info::ALTER_COLUMN_ORDER;
   if (ha_alter_info->handler_flags & supported_flags) {
     DBUG_RETURN(HA_ALTER_INPLACE_EXCLUSIVE_LOCK);
   } else {
@@ -13638,7 +13639,8 @@ bool ha_mroonga::storage_inplace_alter_table(
     Alter_inplace_info::ADD_PK_INDEX |
     Alter_inplace_info::DROP_PK_INDEX;
   Alter_inplace_info::HA_ALTER_FLAGS add_column_related_flags =
-    Alter_inplace_info::ADD_COLUMN; 
+    Alter_inplace_info::ADD_COLUMN |
+    Alter_inplace_info::ALTER_COLUMN_ORDER;
   Alter_inplace_info::HA_ALTER_FLAGS drop_column_related_flags =
     Alter_inplace_info::DROP_COLUMN;
   if (ha_alter_info->handler_flags & index_related_flags) {
