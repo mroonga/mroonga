@@ -13083,7 +13083,8 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
     Alter_inplace_info::DROP_PK_INDEX |
     Alter_inplace_info::ADD_COLUMN |
     Alter_inplace_info::DROP_COLUMN |
-    Alter_inplace_info::ALTER_COLUMN_ORDER;
+    Alter_inplace_info::ALTER_COLUMN_ORDER |
+    Alter_inplace_info::ALTER_COLUMN_NAME;
   if (ha_alter_info->handler_flags & supported_flags) {
     DBUG_RETURN(HA_ALTER_INPLACE_EXCLUSIVE_LOCK);
   } else {
@@ -13617,6 +13618,51 @@ bool ha_mroonga::storage_inplace_alter_table_drop_column(
   DBUG_RETURN(have_error);
 }
 
+bool ha_mroonga::storage_inplace_alter_table_rename_column(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  bool have_error = false;
+  int error = 0;
+  uint i = 0;
+  mrn::PathMapper mapper(share->table_name);
+
+  grn_obj *table_obj, *column_obj;
+  table_obj = grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
+  uint n_columns = table->s->fields;
+
+  for (i = 0; i < n_columns; i++) {
+    Field *altered_field = altered_table->s->field[i];
+    const char *altered_column_name = altered_field->field_name;
+    int altered_column_name_size = strlen(altered_column_name);
+
+    if (strcmp(MRN_COLUMN_NAME_ID, altered_column_name) == 0) {
+      continue;
+    }
+    if (have_same_column(table, altered_column_name) == true) {
+      continue;
+    }
+
+    Field *field = table->s->field[i];
+    const char *column_name = field->field_name;
+    int column_name_size = strlen(column_name);
+    column_obj = grn_obj_column(ctx, table_obj, column_name, column_name_size);
+    if (column_obj) {
+      grn_column_rename(ctx, column_obj, altered_column_name, altered_column_name_size);
+    }
+    if (ctx->rc) {
+      error = ER_WRONG_COLUMN_NAME;
+      my_message(error, ctx->errbuf, MYF(0));
+      have_error = true;
+      break;
+    }
+  }
+
+  DBUG_RETURN(have_error);
+}
+
 bool ha_mroonga::storage_inplace_alter_table(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info)
@@ -13643,12 +13689,16 @@ bool ha_mroonga::storage_inplace_alter_table(
     Alter_inplace_info::ALTER_COLUMN_ORDER;
   Alter_inplace_info::HA_ALTER_FLAGS drop_column_related_flags =
     Alter_inplace_info::DROP_COLUMN;
+  Alter_inplace_info::HA_ALTER_FLAGS rename_column_related_flags =
+    Alter_inplace_info::ALTER_COLUMN_NAME;
   if (ha_alter_info->handler_flags & index_related_flags) {
     have_error = storage_inplace_alter_table_index(altered_table, ha_alter_info);
   } else if (ha_alter_info->handler_flags & add_column_related_flags) {
     have_error = storage_inplace_alter_table_add_column(altered_table, ha_alter_info);
   } else if (ha_alter_info->handler_flags & drop_column_related_flags) {
     have_error = storage_inplace_alter_table_drop_column(altered_table, ha_alter_info);
+  } else if (ha_alter_info->handler_flags & rename_column_related_flags) {
+    have_error = storage_inplace_alter_table_rename_column(altered_table, ha_alter_info);
   } else {
     have_error = true;
   }
