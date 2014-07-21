@@ -18,14 +18,14 @@
 disable_query_log;
 
 if ($have_default_storage_engine_variable) {
-  set default_storage_engine=MyISAM;
+  eval set default_storage_engine=$original_default_storage_engine;
 }
 if (!$have_default_storage_engine_variable) {
-  set storage_engine=MyISAM;
+  eval set storage_engine=$original_storage_engine;
 }
 
 if ($have_default_tmp_storage_engine_variable) {
-  set default_tmp_storage_engine=MyISAM;
+  eval set default_tmp_storage_engine=$original_default_tmp_storage_engine;
 }
 
 if (!$have_mroonga_storage_engine) {

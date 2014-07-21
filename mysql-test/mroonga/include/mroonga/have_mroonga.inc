@@ -27,15 +27,18 @@ if (!$have_mroonga_storage_engine) {
 
 let have_default_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_storage_engine"`;
 if ($have_default_storage_engine_variable) {
-  set default_storage_engine=mroonga;
+  let original_default_storage_engine=`SELECT variable_value FROM information_schema.global_variables WHERE variable_name = "default_storage_engine"`;
+  set default_storage_engine=Mroonga;
 }
 if (!$have_default_storage_engine_variable) {
-  set storage_engine=mroonga;
+  let original_storage_engine=`SELECT variable_value FROM information_schema.global_variables WHERE variable_name = "storage_engine"`;
+  set storage_engine=Mroonga;
 }
 
 let have_default_tmp_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_tmp_storage_engine"`;
 if ($have_default_tmp_storage_engine_variable) {
-  set default_tmp_storage_engine=mroonga;
+  let original_default_tmp_storage_engine=`SELECT variable_value FROM information_schema.global_variables WHERE variable_name = "default_tmp_storage_engine"`;
+  set default_tmp_storage_engine=Mroonga;
 }
 
 enable_query_log;
