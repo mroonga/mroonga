@@ -13074,27 +13074,18 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
   Alter_inplace_info *ha_alter_info)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (
-    (ha_alter_info->handler_flags &
-      (
-        Alter_inplace_info::ADD_COLUMN |
-        Alter_inplace_info::DROP_COLUMN |
-        Alter_inplace_info::ALTER_COLUMN_NAME |
-        Alter_inplace_info::ALTER_COLUMN_TYPE |
-        Alter_inplace_info::ALTER_COLUMN_ORDER |
-        Alter_inplace_info::ALTER_COLUMN_NULLABLE |
-        Alter_inplace_info::ALTER_COLUMN_NOT_NULLABLE |
-        Alter_inplace_info::ALTER_RENAME |
-        Alter_inplace_info::ALTER_COLUMN_STORAGE_TYPE |
-        Alter_inplace_info::ALTER_COLUMN_COLUMN_FORMAT |
-        Alter_inplace_info::ADD_FOREIGN_KEY |
-        Alter_inplace_info::DROP_FOREIGN_KEY
-      )
-    )
-  ) {
+  Alter_inplace_info::HA_ALTER_FLAGS supported_flags =
+    Alter_inplace_info::ADD_INDEX |
+    Alter_inplace_info::DROP_INDEX |
+    Alter_inplace_info::ADD_UNIQUE_INDEX |
+    Alter_inplace_info::DROP_UNIQUE_INDEX |
+    Alter_inplace_info::ADD_PK_INDEX |
+    Alter_inplace_info::DROP_PK_INDEX;
+  if (ha_alter_info->handler_flags & supported_flags) {
+    DBUG_RETURN(HA_ALTER_INPLACE_EXCLUSIVE_LOCK);
+  } else {
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
   }
-  DBUG_RETURN(HA_ALTER_INPLACE_EXCLUSIVE_LOCK);
 }
 
 enum_alter_inplace_result ha_mroonga::check_if_supported_inplace_alter(
