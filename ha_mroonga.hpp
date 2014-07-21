@@ -1064,6 +1064,8 @@ private:
                                            Alter_inplace_info *ha_alter_info);
   bool wrapper_inplace_alter_table(TABLE *altered_table,
                                    Alter_inplace_info *ha_alter_info);
+  bool storage_inplace_alter_table_index(TABLE *altered_table,
+                                         Alter_inplace_info *ha_alter_info);
   bool storage_inplace_alter_table(TABLE *altered_table,
                                    Alter_inplace_info *ha_alter_info);
   bool wrapper_commit_inplace_alter_table(TABLE *altered_table,

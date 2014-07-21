@@ -13308,20 +13308,17 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   DBUG_RETURN(result);
 }
 
-bool ha_mroonga::storage_inplace_alter_table(
+bool ha_mroonga::storage_inplace_alter_table_index(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info)
 {
-  int error;
-  bool result = false;
+  MRN_DBUG_ENTER_METHOD();
+
+  bool have_error = false;
+  int error = 0;
   uint n_keys;
   uint i, j = 0;
   KEY *key_info = table_share->key_info;
-  MRN_DBUG_ENTER_METHOD();
-  error = mrn_change_encoding(ctx, system_charset_info);
-  if (error)
-    DBUG_RETURN(true);
-
   mrn::PathMapper mapper(share->table_name);
   n_keys = ha_alter_info->index_drop_count;
   for (i = 0; i < n_keys; ++i) {
@@ -13456,13 +13453,44 @@ bool ha_mroonga::storage_inplace_alter_table(
         grn_obj_remove(ctx, index_tables[key_pos]);
       }
     }
-    result = true;
+    have_error = true;
   }
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
-  DBUG_RETURN(result);
+
+  DBUG_RETURN(have_error);
+}
+
+bool ha_mroonga::storage_inplace_alter_table(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  bool have_error = false;
+
+  int error = mrn_change_encoding(ctx, system_charset_info);
+  if (error) {
+    have_error = true;
+    DBUG_RETURN(have_error);
+  }
+
+  Alter_inplace_info::HA_ALTER_FLAGS index_related_flags =
+    Alter_inplace_info::ADD_INDEX |
+    Alter_inplace_info::DROP_INDEX |
+    Alter_inplace_info::ADD_UNIQUE_INDEX |
+    Alter_inplace_info::DROP_UNIQUE_INDEX |
+    Alter_inplace_info::ADD_PK_INDEX |
+    Alter_inplace_info::DROP_PK_INDEX;
+  if (ha_alter_info->handler_flags & index_related_flags) {
+    have_error = storage_inplace_alter_table_index(altered_table, ha_alter_info);
+  } else {
+    have_error = true;
+  }
+
+  DBUG_RETURN(have_error);
 }
 
 bool ha_mroonga::inplace_alter_table(
