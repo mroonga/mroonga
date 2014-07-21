@@ -214,6 +214,7 @@ if [ -z "$test_suite_names" ]; then
 fi
 
 mysql_test_run_args=""
+mysql_test_run_args="${mysql_test_run_args} --mem"
 mysql_test_run_args="${mysql_test_run_args} --no-check-testcases"
 mysql_test_run_args="${mysql_test_run_args} --parallel=${n_processors}"
 mysql_test_run_args="${mysql_test_run_args} --retry=1"
