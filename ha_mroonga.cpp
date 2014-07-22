@@ -13486,32 +13486,28 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
   MRN_DBUG_ENTER_METHOD();
 
   bool have_error = false;
-  int error = 0;
-  uint i = 0;
-  mrn::PathMapper mapper(share->table_name);
-  grn_obj *table_obj;
-  table_obj = grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
-  uint n_columns = altered_table->s->fields;
+
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
   char **index_table, **key_parser, **col_flags, **col_type;
   uint *index_table_length, *key_parser_length, *col_flags_length, *col_type_length;
   tmp_table_share.keys = 0;
-  tmp_table_share.fields = n_columns;
-  if (!(tmp_share = (MRN_SHARE *)
-    my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
-      &tmp_share, sizeof(*tmp_share),
-      &index_table, sizeof(char *) * tmp_table_share.keys,
-      &index_table_length, sizeof(uint) * tmp_table_share.keys,
-      &key_parser, sizeof(char *) * tmp_table_share.keys,
-      &key_parser_length, sizeof(uint) * tmp_table_share.keys,
-      &col_flags, sizeof(char *) * tmp_table_share.fields,
-      &col_flags_length, sizeof(uint) * tmp_table_share.fields,
-      &col_type, sizeof(char *) * tmp_table_share.fields,
-      &col_type_length, sizeof(uint) * tmp_table_share.fields,
-      NullS))
-  ) {
-    DBUG_RETURN(true);
+  tmp_table_share.fields = altered_table->s->fields;
+  tmp_share = (MRN_SHARE *)my_multi_malloc(
+    MYF(MY_WME | MY_ZEROFILL),
+    &tmp_share, sizeof(*tmp_share),
+    &index_table, sizeof(char *) * tmp_table_share.keys,
+    &index_table_length, sizeof(uint) * tmp_table_share.keys,
+    &key_parser, sizeof(char *) * tmp_table_share.keys,
+    &key_parser_length, sizeof(uint) * tmp_table_share.keys,
+    &col_flags, sizeof(char *) * tmp_table_share.fields,
+    &col_flags_length, sizeof(uint) * tmp_table_share.fields,
+    &col_type, sizeof(char *) * tmp_table_share.fields,
+    &col_type_length, sizeof(uint) * tmp_table_share.fields,
+    NullS);
+  if (!tmp_share) {
+    have_error = true;
+    DBUG_RETURN(have_error);
   }
   tmp_share->engine = NULL;
   tmp_share->table_share = &tmp_table_share;
@@ -13524,22 +13520,28 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
   tmp_share->col_type = col_type;
   tmp_share->col_type_length = col_type_length;
 
-  for (i = 0; i < n_columns; i++) {
+  mrn::PathMapper mapper(share->table_name);
+  grn_obj *table_obj;
+  table_obj = grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
+
+  Alter_info *alter_info = ha_alter_info->alter_info;
+  List_iterator_fast<Create_field> create_fields(alter_info->create_list);
+  for (uint i = 0; Create_field *create_field = create_fields++; i++) {
+    if (create_field->field) {
+      continue;
+    }
+
     grn_obj *col_type;
-    Field *altered_field = altered_table->s->field[i];
-    const char *altered_column_name = altered_field->field_name;
-    int altered_column_name_size = strlen(altered_column_name);
+    Field *field = altered_table->s->field[i];
+    const char *column_name = field->field_name;
+    int column_name_size = strlen(column_name);
 
-    if (strcmp(MRN_COLUMN_NAME_ID, altered_column_name) == 0) {
-      continue;
-    }
-    if (have_same_column(table, altered_column_name) == true) {
-      continue;
-    }
-
-    if ((error = mrn_add_column_param(tmp_share, altered_field, i))) {
+    int error = mrn_add_column_param(tmp_share, field, i);
+    if (error) {
+      have_error = true;
       break;
     }
+
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
     if (tmp_share->col_flags[i]) {
       // TODO: parse flags
@@ -13552,7 +13554,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
 
-    grn_builtin_type gtype = mrn_grn_type_from_field(ctx, altered_field, false);
+    grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
     if (tmp_share->col_type[i]) {
       col_type = grn_ctx_get(ctx, tmp_share->col_type[i], -1);
     } else {
@@ -13560,15 +13562,25 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
     }
     char *col_path = NULL; // we don't specify path
 
-    grn_column_create(ctx, table_obj, altered_column_name, altered_column_name_size,
-                      col_path, col_flags, col_type);
+    grn_obj *column_obj =
+      grn_column_create(ctx, table_obj, column_name, column_name_size,
+                        col_path, col_flags, col_type);
     if (ctx->rc) {
       error = ER_WRONG_COLUMN_NAME;
       my_message(error, ctx->errbuf, MYF(0));
       have_error = true;
+    }
+    if (column_obj) {
+      grn_obj_unlink(ctx, column_obj);
+    }
+
+    if (have_error) {
       break;
     }
   }
+
+  grn_obj_unlink(ctx, table_obj);
+
   mrn_free_share_alloc(tmp_share);
   my_free(tmp_share, MYF(0));
 
