@@ -13080,7 +13080,11 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
     Alter_inplace_info::ADD_UNIQUE_INDEX |
     Alter_inplace_info::DROP_UNIQUE_INDEX |
     Alter_inplace_info::ADD_PK_INDEX |
-    Alter_inplace_info::DROP_PK_INDEX;
+    Alter_inplace_info::DROP_PK_INDEX |
+    Alter_inplace_info::ADD_COLUMN |
+    Alter_inplace_info::DROP_COLUMN |
+    Alter_inplace_info::ALTER_COLUMN_ORDER |
+    Alter_inplace_info::ALTER_COLUMN_NAME;
   if (ha_alter_info->handler_flags & supported_flags) {
     DBUG_RETURN(HA_ALTER_INPLACE_EXCLUSIVE_LOCK);
   } else {
@@ -13463,6 +13467,202 @@ bool ha_mroonga::storage_inplace_alter_table_index(
   DBUG_RETURN(have_error);
 }
 
+static bool have_same_column(TABLE *table, const char *target_column_name)
+{
+  uint n_columns = table->s->fields;
+  for (uint i = 0; i < n_columns; i++) {
+    Field *field = table->s->field[i];
+    const char *column_name = field->field_name;
+    if (strcmp(column_name, target_column_name) == 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool ha_mroonga::storage_inplace_alter_table_add_column(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  bool have_error = false;
+  int error = 0;
+  uint i = 0;
+  mrn::PathMapper mapper(share->table_name);
+  grn_obj *table_obj;
+  table_obj = grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
+  uint n_columns = altered_table->s->fields;
+  MRN_SHARE *tmp_share;
+  TABLE_SHARE tmp_table_share;
+  char **index_table, **key_parser, **col_flags, **col_type;
+  uint *index_table_length, *key_parser_length, *col_flags_length, *col_type_length;
+  tmp_table_share.keys = 0;
+  tmp_table_share.fields = n_columns;
+  if (!(tmp_share = (MRN_SHARE *)
+    my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+      &tmp_share, sizeof(*tmp_share),
+      &index_table, sizeof(char *) * tmp_table_share.keys,
+      &index_table_length, sizeof(uint) * tmp_table_share.keys,
+      &key_parser, sizeof(char *) * tmp_table_share.keys,
+      &key_parser_length, sizeof(uint) * tmp_table_share.keys,
+      &col_flags, sizeof(char *) * tmp_table_share.fields,
+      &col_flags_length, sizeof(uint) * tmp_table_share.fields,
+      &col_type, sizeof(char *) * tmp_table_share.fields,
+      &col_type_length, sizeof(uint) * tmp_table_share.fields,
+      NullS))
+  ) {
+    DBUG_RETURN(true);
+  }
+  tmp_share->engine = NULL;
+  tmp_share->table_share = &tmp_table_share;
+  tmp_share->index_table = index_table;
+  tmp_share->index_table_length = index_table_length;
+  tmp_share->key_parser = key_parser;
+  tmp_share->key_parser_length = key_parser_length;
+  tmp_share->col_flags = col_flags;
+  tmp_share->col_flags_length = col_flags_length;
+  tmp_share->col_type = col_type;
+  tmp_share->col_type_length = col_type_length;
+
+  for (i = 0; i < n_columns; i++) {
+    grn_obj *col_type;
+    Field *altered_field = altered_table->s->field[i];
+    const char *altered_column_name = altered_field->field_name;
+    int altered_column_name_size = strlen(altered_column_name);
+
+    if (strcmp(MRN_COLUMN_NAME_ID, altered_column_name) == 0) {
+      continue;
+    }
+    if (have_same_column(table, altered_column_name) == true) {
+      continue;
+    }
+
+    if ((error = mrn_add_column_param(tmp_share, altered_field, i))) {
+      break;
+    }
+    grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
+    if (tmp_share->col_flags[i]) {
+      // TODO: parse flags
+      if (strcmp(tmp_share->col_flags[i], "COLUMN_VECTOR") == 0) {
+        col_flags |= GRN_OBJ_COLUMN_VECTOR;
+      } else {
+        col_flags |= GRN_OBJ_COLUMN_SCALAR;
+      }
+    } else {
+      col_flags |= GRN_OBJ_COLUMN_SCALAR;
+    }
+
+    grn_builtin_type gtype = mrn_grn_type_from_field(ctx, altered_field, false);
+    if (tmp_share->col_type[i]) {
+      col_type = grn_ctx_get(ctx, tmp_share->col_type[i], -1);
+    } else {
+      col_type = grn_ctx_at(ctx, gtype);
+    }
+    char *col_path = NULL; // we don't specify path
+
+    grn_column_create(ctx, table_obj, altered_column_name, altered_column_name_size,
+                      col_path, col_flags, col_type);
+    if (ctx->rc) {
+      error = ER_WRONG_COLUMN_NAME;
+      my_message(error, ctx->errbuf, MYF(0));
+      have_error = true;
+      break;
+    }
+  }
+  mrn_free_share_alloc(tmp_share);
+  my_free(tmp_share, MYF(0));
+
+  DBUG_RETURN(have_error);
+}
+
+bool ha_mroonga::storage_inplace_alter_table_drop_column(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  bool have_error = false;
+  int error = 0;
+  uint i = 0;
+  mrn::PathMapper mapper(share->table_name);
+
+  grn_obj *table_obj, *column_obj;
+  table_obj = grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
+  uint n_columns = table->s->fields;
+
+  for (i = 0; i < n_columns; i++) {
+    Field *field = table->s->field[i];
+    const char *column_name = field->field_name;
+    int column_name_size = strlen(column_name);
+
+    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+      continue;
+    }
+    if (have_same_column(altered_table, column_name) == true) {
+      continue;
+    }
+
+    column_obj = grn_obj_column(ctx, table_obj, column_name, column_name_size);
+    if (column_obj) {
+      grn_obj_remove(ctx, column_obj);
+    }
+    if (ctx->rc) {
+      error = ER_WRONG_COLUMN_NAME;
+      my_message(error, ctx->errbuf, MYF(0));
+      have_error = true;
+      break;
+    }
+  }
+
+  DBUG_RETURN(have_error);
+}
+
+bool ha_mroonga::storage_inplace_alter_table_rename_column(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  bool have_error = false;
+  int error = 0;
+  uint i = 0;
+  mrn::PathMapper mapper(share->table_name);
+
+  grn_obj *table_obj, *column_obj;
+  table_obj = grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
+  uint n_columns = table->s->fields;
+
+  for (i = 0; i < n_columns; i++) {
+    Field *altered_field = altered_table->s->field[i];
+    const char *altered_column_name = altered_field->field_name;
+    int altered_column_name_size = strlen(altered_column_name);
+
+    if (strcmp(MRN_COLUMN_NAME_ID, altered_column_name) == 0) {
+      continue;
+    }
+    if (have_same_column(table, altered_column_name) == true) {
+      continue;
+    }
+
+    Field *field = table->s->field[i];
+    const char *column_name = field->field_name;
+    int column_name_size = strlen(column_name);
+    column_obj = grn_obj_column(ctx, table_obj, column_name, column_name_size);
+    if (column_obj) {
+      grn_column_rename(ctx, column_obj, altered_column_name, altered_column_name_size);
+    }
+    if (ctx->rc) {
+      error = ER_WRONG_COLUMN_NAME;
+      my_message(error, ctx->errbuf, MYF(0));
+      have_error = true;
+      break;
+    }
+  }
+
+  DBUG_RETURN(have_error);
+}
+
 bool ha_mroonga::storage_inplace_alter_table(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info)
@@ -13484,8 +13684,21 @@ bool ha_mroonga::storage_inplace_alter_table(
     Alter_inplace_info::DROP_UNIQUE_INDEX |
     Alter_inplace_info::ADD_PK_INDEX |
     Alter_inplace_info::DROP_PK_INDEX;
+  Alter_inplace_info::HA_ALTER_FLAGS add_column_related_flags =
+    Alter_inplace_info::ADD_COLUMN |
+    Alter_inplace_info::ALTER_COLUMN_ORDER;
+  Alter_inplace_info::HA_ALTER_FLAGS drop_column_related_flags =
+    Alter_inplace_info::DROP_COLUMN;
+  Alter_inplace_info::HA_ALTER_FLAGS rename_column_related_flags =
+    Alter_inplace_info::ALTER_COLUMN_NAME;
   if (ha_alter_info->handler_flags & index_related_flags) {
     have_error = storage_inplace_alter_table_index(altered_table, ha_alter_info);
+  } else if (ha_alter_info->handler_flags & add_column_related_flags) {
+    have_error = storage_inplace_alter_table_add_column(altered_table, ha_alter_info);
+  } else if (ha_alter_info->handler_flags & drop_column_related_flags) {
+    have_error = storage_inplace_alter_table_drop_column(altered_table, ha_alter_info);
+  } else if (ha_alter_info->handler_flags & rename_column_related_flags) {
+    have_error = storage_inplace_alter_table_rename_column(altered_table, ha_alter_info);
   } else {
     have_error = true;
   }
