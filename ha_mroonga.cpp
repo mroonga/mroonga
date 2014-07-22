@@ -13466,19 +13466,6 @@ bool ha_mroonga::storage_inplace_alter_table_index(
   DBUG_RETURN(have_error);
 }
 
-static bool have_same_column(TABLE *table, const char *target_column_name)
-{
-  uint n_columns = table->s->fields;
-  for (uint i = 0; i < n_columns; i++) {
-    Field *field = table->s->field[i];
-    const char *column_name = field->field_name;
-    if (strcmp(column_name, target_column_name) == 0) {
-      return true;
-    }
-  }
-  return false;
-}
-
 bool ha_mroonga::storage_inplace_alter_table_add_column(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info)
@@ -13594,37 +13581,45 @@ bool ha_mroonga::storage_inplace_alter_table_drop_column(
   MRN_DBUG_ENTER_METHOD();
 
   bool have_error = false;
-  int error = 0;
-  uint i = 0;
+
   mrn::PathMapper mapper(share->table_name);
-
-  grn_obj *table_obj, *column_obj;
+  grn_obj *table_obj;
   table_obj = grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
-  uint n_columns = table->s->fields;
 
-  for (i = 0; i < n_columns; i++) {
-    Field *field = table->s->field[i];
+  Alter_info *alter_info = ha_alter_info->alter_info;
+
+  uint n_fields = table->s->fields;
+  for (uint i = 0; i < n_fields; i++) {
+    Field *field = table->field[i];
+
+    bool dropped = true;
+    List_iterator_fast<Create_field> create_fields(alter_info->create_list);
+    while (Create_field *create_field = create_fields++) {
+      if (create_field->field == field) {
+        dropped = false;
+        break;
+      }
+    }
+    if (!dropped) {
+      continue;
+    }
+
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
 
-    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-      continue;
-    }
-    if (have_same_column(altered_table, column_name) == true) {
-      continue;
-    }
-
+    grn_obj *column_obj;
     column_obj = grn_obj_column(ctx, table_obj, column_name, column_name_size);
     if (column_obj) {
       grn_obj_remove(ctx, column_obj);
     }
     if (ctx->rc) {
-      error = ER_WRONG_COLUMN_NAME;
+      int error = ER_WRONG_COLUMN_NAME;
       my_message(error, ctx->errbuf, MYF(0));
       have_error = true;
       break;
     }
   }
+  grn_obj_unlink(ctx, table_obj);
 
   DBUG_RETURN(have_error);
 }
