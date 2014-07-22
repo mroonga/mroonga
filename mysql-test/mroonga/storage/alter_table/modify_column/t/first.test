@@ -15,7 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/not_embedded.inc
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -31,7 +31,7 @@ SHOW CREATE TABLE diaries;
 INSERT INTO diaries (title, body) values ("groonga (1)", "starting groonga.");
 SELECT * FROM diaries;
 
-ALTER TABLE diaries MODIFY body TEXT AFTER id;
+ALTER TABLE diaries MODIFY body TEXT FIRST;
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, body) values ("groonga (2)", "started groonga.");
@@ -39,4 +39,4 @@ SELECT * FROM diaries;
 
 DROP TABLE diaries;
 
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc
