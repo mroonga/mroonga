@@ -13685,8 +13685,7 @@ bool ha_mroonga::storage_inplace_alter_table(
     Alter_inplace_info::ADD_PK_INDEX |
     Alter_inplace_info::DROP_PK_INDEX;
   Alter_inplace_info::HA_ALTER_FLAGS add_column_related_flags =
-    Alter_inplace_info::ADD_COLUMN |
-    Alter_inplace_info::ALTER_COLUMN_ORDER;
+    Alter_inplace_info::ADD_COLUMN;
   Alter_inplace_info::HA_ALTER_FLAGS drop_column_related_flags =
     Alter_inplace_info::DROP_COLUMN;
   Alter_inplace_info::HA_ALTER_FLAGS rename_column_related_flags =
