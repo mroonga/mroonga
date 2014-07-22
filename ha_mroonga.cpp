@@ -13691,7 +13691,6 @@ bool ha_mroonga::storage_inplace_alter_table(
   int error = mrn_change_encoding(ctx, system_charset_info);
   if (error) {
     have_error = true;
-    DBUG_RETURN(have_error);
   }
 
   Alter_inplace_info::HA_ALTER_FLAGS index_related_flags =
@@ -13701,25 +13700,29 @@ bool ha_mroonga::storage_inplace_alter_table(
     Alter_inplace_info::DROP_UNIQUE_INDEX |
     Alter_inplace_info::ADD_PK_INDEX |
     Alter_inplace_info::DROP_PK_INDEX;
-  if (ha_alter_info->handler_flags & index_related_flags) {
+  if (!have_error &&
+      (ha_alter_info->handler_flags & index_related_flags)) {
     have_error = storage_inplace_alter_table_index(altered_table, ha_alter_info);
   }
 
   Alter_inplace_info::HA_ALTER_FLAGS add_column_related_flags =
     Alter_inplace_info::ADD_COLUMN;
-  if (!have_error && ha_alter_info->handler_flags & add_column_related_flags) {
+  if (!have_error &&
+      (ha_alter_info->handler_flags & add_column_related_flags)) {
     have_error = storage_inplace_alter_table_add_column(altered_table, ha_alter_info);
   }
 
   Alter_inplace_info::HA_ALTER_FLAGS drop_column_related_flags =
     Alter_inplace_info::DROP_COLUMN;
-  if (!have_error && ha_alter_info->handler_flags & drop_column_related_flags) {
+  if (!have_error &&
+      (ha_alter_info->handler_flags & drop_column_related_flags)) {
     have_error = storage_inplace_alter_table_drop_column(altered_table, ha_alter_info);
   }
 
   Alter_inplace_info::HA_ALTER_FLAGS rename_column_related_flags =
     Alter_inplace_info::ALTER_COLUMN_NAME;
-  if (!have_error && ha_alter_info->handler_flags & rename_column_related_flags) {
+  if (!have_error &&
+      (ha_alter_info->handler_flags & rename_column_related_flags)) {
     have_error = storage_inplace_alter_table_rename_column(altered_table, ha_alter_info);
   }
 
