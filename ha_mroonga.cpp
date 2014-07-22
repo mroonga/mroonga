@@ -13083,7 +13083,6 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
     Alter_inplace_info::DROP_PK_INDEX |
     Alter_inplace_info::ADD_COLUMN |
     Alter_inplace_info::DROP_COLUMN |
-    Alter_inplace_info::ALTER_COLUMN_ORDER |
     Alter_inplace_info::ALTER_COLUMN_NAME;
   if (ha_alter_info->handler_flags & supported_flags) {
     DBUG_RETURN(HA_ALTER_INPLACE_EXCLUSIVE_LOCK);
