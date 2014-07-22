@@ -13719,7 +13719,7 @@ bool ha_mroonga::storage_inplace_alter_table(
 
   Alter_inplace_info::HA_ALTER_FLAGS rename_column_related_flags =
     Alter_inplace_info::ALTER_COLUMN_NAME;
-  if (!have_error & ha_alter_info->handler_flags & rename_column_related_flags) {
+  if (!have_error && ha_alter_info->handler_flags & rename_column_related_flags) {
     have_error = storage_inplace_alter_table_rename_column(altered_table, ha_alter_info);
   }
 
