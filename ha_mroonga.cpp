@@ -12827,16 +12827,14 @@ bool ha_mroonga::storage_check_if_incompatible_data(
   HA_CREATE_INFO *create_info, uint table_changes)
 {
   MRN_DBUG_ENTER_METHOD();
-  bool is_incompatible = COMPATIBLE_DATA_YES;
   uint n = table_share->fields;
   for (uint i = 0; i < n; i++) {
     Field *field = table->field[i];
     if (field->flags & FIELD_IS_RENAMED) {
-      is_incompatible = COMPATIBLE_DATA_NO;
-      break;
+      return COMPATIBLE_DATA_NO;
     }
   }
-  DBUG_RETURN(is_incompatible);
+  DBUG_RETURN(COMPATIBLE_DATA_YES);
 }
 
 bool ha_mroonga::check_if_incompatible_data(
