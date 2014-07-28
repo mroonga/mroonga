@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 15:10+0900\n"
-"PO-Revision-Date: 2014-05-30 15:43+0900\n"
+"POT-Creation-Date: 2014-07-28 16:09+0900\n"
+"PO-Revision-Date: 2014-07-28 16:37+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,11 +20,95 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 4.03 - 2014/05/29"
-msgstr "4.03リリース - 2014/05/29"
+msgid "Release 4.04 - 2014/07/29"
+msgstr "4.04リリース - 2014/07/29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"Removed Groonga and groonga-normalizer-mysql specific test files for MariaDB "
+"bundled version on Windows. There is too long file name issue. [groonga-"
+"dev,02391] [Reported by Masafumi Yokoyama]"
+msgstr ""
+"Groongaとgroonga-normalizer-mysql特有のテストファイルをMariaDBバンドル版には"
+"含めないようにしました。これはファイル名が長すぎる問題があるためです。 "
+"[groonga-dev,02391] [横山昌史さんが報告]"
+
+msgid "[doc] Updated :doc:`/deveoper`."
+msgstr "[doc] :doc:`developer` を更新しました。"
+
+msgid ""
+"Added overflow/underflow check whether valid time to find errors on 32-bit "
+"environment. [Patch by Toshihisa Tashiro]"
+msgstr ""
+"妥当な日時であるかのチェックを32-bit環境で追加しました。[Tashiroさんがパッチ"
+"提供]"
+
+msgid ""
+"[storage] Supproted INPLACE ALTER TABLE for adding/dropping columns. [#2277] "
+"[GitHub#12] [Patch by Naoya Murakami]"
+msgstr ""
+"[ストレージモード] INPLACE ALTER TABLEでカラムを追加削除できるようになりまし"
+"た。[#2277] [GitHub#12] [村上さんがパッチ提供]"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[rpm][centos] Built with MySQL 5.6.37 on CentOS. [Reported by YOSHIDA Mitsuo]"
+msgstr ""
+"[rpm][centos] CentOSでMySQL 5.6.37でビルドするようにしました。[吉田さんが報"
+"告]"
+
+msgid ""
+"Fixed to use lowercase for table name to avoid  lower/upper-case specific "
+"issue on Mac OS. [Patch by Toshihisa Tashiro]"
+msgstr ""
+"Mac OSでの大文字/小文字特有の問題を回避するためにテストのテーブル名は小文字を"
+"使うようにしました。[Tashiroさんがパッチ提供]"
+
+# ec63a4d13b2d4142a5a3adf97c655e8b
+msgid "Fixed build error for VC++ 2013 [GitHub#10] [Patch by cosmo0920]"
+msgstr ""
+"VC++ 2013でのビルドエラーを修正しました。[GitHub#10] [cosmo0920さんがパッチ提"
+"供]"
+
+msgid ""
+"[doc] Added missing quote for install procedure on CentOS6 SCL. [GitHub#11] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+"[doc] CentOS6 SCLでのインストール手順で二重引用符が抜けているのを修正しまし"
+"た。[GitHub#11] [村上さんがパッチ提供]"
+
+msgid ""
+"[storage] Fixed a bug that renaming column by ALTER TABLE CHANGE causes "
+"crash. [#2637]"
+msgstr ""
+"[ストレージモード] ALTER TABLE CHANGEでカラムを変更しようとするとクラッシュす"
+"る問題を修正しました。[#2637]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "YOSHIDA Mitsuo"
+msgstr "吉田光男さん"
+
+msgid "Masafumi Yokoyama"
+msgstr "横山昌史さん"
+
+msgid "Toshihisa Tashiro"
+msgstr "Toshihisa Tashiroさん"
+
+# d5a1476d11a34a9cb63ba48497653e81
+msgid "cosmo0920"
+msgstr "cosmo0920さん"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Release 4.03 - 2014/05/29"
+msgstr "4.03リリース - 2014/05/29"
 
 # ec63a4d13b2d4142a5a3adf97c655e8b
 msgid "[doc] Updated MariaDB version. [Patch by cosmo0920]"
@@ -40,24 +124,11 @@ msgstr ""
 "Ubuntuパッケージの配布サイトをLaunchpadのPPAに移行しました。詳細は :doc:`/"
 "install` を参照してください。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[doc] Fixed command line in :doc:`/install`. [Reported by YOSHIDA Mitsuo]"
 msgstr ""
 "[doc] :doc:`/install` の間違ったコマンドラインを修正しました。 [吉田光男さん"
 "が報告]"
-
-msgid "Thanks"
-msgstr "感謝"
-
-# d5a1476d11a34a9cb63ba48497653e81
-msgid "cosmo0920"
-msgstr "cosmo0920さん"
-
-msgid "YOSHIDA Mitsuo"
-msgstr "吉田光男さん"
 
 msgid "Release 4.02 - 2014/04/29"
 msgstr "4.02リリース - 2014/04/29"
@@ -143,9 +214,6 @@ msgstr "かずひこさん"
 # d8986144d4454b8dbfd7cf12c8877b8c
 msgid "GMO Media, Inc."
 msgstr "GMOメディア株式会社さん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 # 0683aa1c35d44a35b1b31601d00fbd9a
 msgid "Satoshi MITANI"
