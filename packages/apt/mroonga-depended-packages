@@ -8,3 +8,4 @@ libmysqlclient-dev
 libmysqld-dev
 libssl-dev
 groonga-normalizer-mysql
+wget
