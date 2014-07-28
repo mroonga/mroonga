@@ -5,6 +5,45 @@
 News
 ====
 
+.. _release-4-04:
+
+Release 4.04 - 2014/07/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Removed Groonga and groonga-normalizer-mysql specific test files for
+  MariaDB bundled version on Windows. There is too long file name issue.
+  [groonga-dev,02391] [Reported by Masafumi Yokoyama]
+* [doc] Updated :doc:`/deveoper`.
+* Added overflow/underflow check whether valid time to find errors on 32-bit
+  environment. [Patch by Toshihisa Tashiro]
+* [storage] Supproted INPLACE ALTER TABLE for adding/dropping columns.
+  [#2277] [GitHub#12] [Patch by Naoya Murakami]
+
+Fixes
+^^^^^
+
+* [rpm][centos] Built with MySQL 5.6.37 on CentOS.
+  [Reported by YOSHIDA Mitsuo]
+* Fixed to use lowercase for table name to avoid  lower/upper-case specific
+  issue on Mac OS. [Patch by Toshihisa Tashiro]
+* Fixed build error for VC++ 2013 [GitHub#10] [Patch by cosmo0920]
+* [doc] Added missing quote for install procedure on CentOS6 SCL.
+  [GitHub#11] [Patch by Naoya Murakami]
+* [storage] Fixed a bug that renaming column by ALTER TABLE CHANGE
+  causes crash. [#2637]
+
+Thanks
+^^^^^^
+
+* YOSHIDA Mitsuo
+* Masafumi Yokoyama
+* Toshihisa Tashiro
+* cosmo0920
+* Naoya Murakami
+
 .. _release-4-03:
 
 Release 4.03 - 2014/05/29
