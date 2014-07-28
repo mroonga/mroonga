@@ -2,9 +2,6 @@
 
 set -e
 
-cat /usr/share/mroonga/uninstall.sql | \
-    mysql --defaults-file=/etc/mysql/debian.cnf || true
-
 if [ "$1" = "purge" ]; then
     mysql_apparmor_profile_name=usr.sbin.mysqld
     mysql_apparmor_profile=/etc/apparmor.d/${mysql_apparmor_profile_name}
