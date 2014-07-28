@@ -367,8 +367,8 @@ environment.
 Choose ``win32`` version for 32-bit environment, ``winx64`` version
 for 64-bit environment:
 
-  * `mariadb-10.0.11-with-mroonga-4.03-win32.zip <https://github.com/mroonga/mroonga/releases/download/v4.03/mariadb-10.0.11-with-mroonga-4.03-win32.zip>`_
-  * `mariadb-10.0.11-with-mroonga-4.03-winx64.zip <https://github.com/mroonga/mroonga/releases/download/v4.03/mariadb-10.0.11-with-mroonga-4.03-winx64.zip>`_
+  * `mariadb-10.0.12-with-mroonga-4.04-win32.zip <https://github.com/mroonga/mroonga/releases/download/v4.04/mariadb-10.0.12-with-mroonga-4.04-win32.zip>`_
+  * `mariadb-10.0.12-with-mroonga-4.04-winx64.zip <https://github.com/mroonga/mroonga/releases/download/v4.04/mariadb-10.0.12-with-mroonga-4.04-winx64.zip>`_
 
 Install Mroonga
 ^^^^^^^^^^^^^^^
@@ -564,8 +564,8 @@ Uncompress MariaDB tarball. ::
 
 Uncompress Mroonga tarball then move into storage directory. ::
 
- tar xvfz mroonga-4.03.tar.gz
- mv mroonga-4.03 mariadb-10.0.11/storage/mroonga/
+ tar xvfz mroonga-4.04.tar.gz
+ mv mroonga-4.04 mariadb-10.0.11/storage/mroonga/
 
 Run "cmake". ::
 

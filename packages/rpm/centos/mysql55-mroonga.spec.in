@@ -26,7 +26,7 @@
 
 Name:		%{?scl_prefix}mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -163,6 +163,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Tue Jul 29 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.04-1
+- new upstream release.
+
 * Thu May 29 2014 Kouhei Sutou <kou@clear-code.com> - 4.03-2
 - build against MySQL 5.6.37. Reported by YOSHIDA Mitsuo. Thanks!!!
 
