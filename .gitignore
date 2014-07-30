@@ -13,6 +13,7 @@ Makefile.in
 cscope.out
 cmake_install.cmake
 CTestTestfile.cmake
+/.dirstamp
 /aclocal.m4
 /packages/apt/debian/
 /packages/apt/ubuntu/
