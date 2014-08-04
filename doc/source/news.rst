@@ -25,7 +25,7 @@ Improvements
 Fixes
 ^^^^^
 
-* [rpm][centos] Built with MySQL 5.6.37 on CentOS.
+* [rpm][centos] Built with MySQL 5.5.37 on CentOS.
   [Reported by YOSHIDA Mitsuo]
 * Fixed to use lowercase for table name to avoid  lower/upper-case specific
   issue on Mac OS. [Patch by Toshihisa Tashiro]
