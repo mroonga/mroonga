@@ -519,6 +519,7 @@ char *mrn_default_wrapper_engine = NULL;
 static int mrn_lock_timeout = grn_get_lock_timeout();
 static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
 static char *mrn_version = const_cast<char *>(MRN_VERSION);
+static char *mrn_vector_column_delimiter = NULL;
 
 typedef enum {
   MRN_ACTION_ON_ERROR_ERROR,
@@ -776,6 +777,30 @@ static MYSQL_THDVAR_LONGLONG(match_escalation_threshold,
                              LONGLONG_MAX,
                              0);
 
+static void mrn_vector_column_delimiter_update(THD *thd, struct st_mysql_sys_var *var,
+                                               void *var_ptr, const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const char *new_value = *((const char **)save);
+  char **old_value_ptr = (char **)var_ptr;
+
+#ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
+  my_free(*old_value_ptr, MYF(0));
+  *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+#else
+  *old_value_ptr = (char *)new_value;
+#endif
+
+  DBUG_VOID_RETURN;
+}
+
+static MYSQL_SYSVAR_STR(vector_column_delimiter, mrn_vector_column_delimiter,
+                        PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
+                        "The vector column delimiter",
+                        NULL,
+                        &mrn_vector_column_delimiter_update,
+                        " ");
+
 static void mrn_database_path_prefix_update(THD *thd,
                                             struct st_mysql_sys_var *var,
                                             void *var_ptr, const void *save)
@@ -879,6 +904,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(lock_timeout),
   MYSQL_SYSVAR(libgroonga_version),
   MYSQL_SYSVAR(version),
+  MYSQL_SYSVAR(vector_column_delimiter),
   NULL
 };
 
@@ -10071,7 +10097,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
             for (int i = 0; i * sizeof(grn_id) < value_length; i++) {
               grn_id id = ids[i];
               if (i > 0) {
-                GRN_TEXT_PUTC(ctx, &unvectored_value, ' ');
+                GRN_TEXT_PUTS(ctx, &unvectored_value, mrn_vector_column_delimiter);
               }
               char key[GRN_TABLE_MAX_KEY_SIZE];
               int key_length;
