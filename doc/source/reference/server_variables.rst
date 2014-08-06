@@ -300,3 +300,30 @@ value.
    SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
    -- id	title	tags
    -- 1	Hello groonga!	groonga install
+
+mroonga_vector_column_delimiter
+-------------------------------
+
+The delimiter when outputting a vector column.  The default value is a white space.
+
+Here is an example SQL to change the delimiter to a semicolon from a white space::
+
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_vector_column_delimiter';
+  +---------------------------------+-------+
+  | Variable_name                   | Value |
+  +---------------------------------+-------+
+  | mroonga_vector_column_delimiter |       |
+  +---------------------------------+-------+
+  1 row in set (0.00 sec)
+
+
+  mysql> SET GLOBAL mroonga_vector_column_delimiter = ';';
+  Query OK, 0 rows affected (0.00 sec)
+
+  mysql> SHOW GLOBAL VARIABLES LIKE 'mroonga_vector_column_delimiter';
+  +---------------------------------+-------+
+  | Variable_name                   | Value |
+  +---------------------------------+-------+
+  | mroonga_vector_column_delimiter | ;     |
+  +---------------------------------+-------+

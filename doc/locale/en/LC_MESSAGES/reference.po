@@ -1700,3 +1700,13 @@ msgstr "It is the end text of wordN."
 
 msgid "It returns snippet string."
 msgstr "It returns snippet string."
+
+msgid ""
+"The delimiter when outputting a vector column.  The default value is a white space."
+msgstr ""
+"The delimiter when outputting a vector column.  The default value is a white space."
+
+msgid ""
+"Here is an example SQL to change the delimiter to a semicolon from a white space::"
+msgstr ""
+"Here is an example SQL to change the delimiter to a semicolon from a white space::"
