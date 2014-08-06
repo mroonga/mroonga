@@ -1540,3 +1540,13 @@ msgstr "N番目の単語の終了テキストを指定します。"
 
 msgid "It returns snippet string."
 msgstr "スニペット文字列を返します。"
+
+msgid ""
+"The delimiter when outputting a vector column.  The default value is a white space."
+msgstr ""
+"ベクターカラムを出力する際の区切り文字。デフォルト値は空白です。"
+
+msgid ""
+"Here is an example SQL to change the delimiter to a semicolon from a white space::"
+msgstr ""
+"区切り文字を空白からセミコロンに変更するSQL例です::"
