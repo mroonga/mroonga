@@ -27,8 +27,8 @@ BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	wget
 BuildRequires:	mariadb-devel
-Requires:	mariadb-server = %{mysql_version}-%{mysql_release}.%{mysql_dist}
-Requires:	mariadb = %{mysql_version}-%{mysql_release}.%{mysql_dist}
+Requires:	mariadb-server = %{mariadb_version}-%{mariadb_release}%{mariadb_dist}
+Requires:	mariadb = %{mariadb_version}-%{mariadb_release}%{mariadb_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
 
@@ -50,7 +50,7 @@ Documentation for Mroonga
 %setup -q -n mroonga-%{version}
 
 mariadb_full_version=%{mariadb_version}-%{mariadb_release}.%{mariadb_dist}
-srpm=mariadb-${mysql_full_version}.src.rpm
+srpm=mariadb-${mariadb_full_version}.src.rpm
 if [ ! -f ../../SRPMS/$srpm ]; then
   wget --continue -O ../../SRPMS/$srpm %{mariadb_download_base_url}/$srpm
   rpm -Uvh ../../SRPMS/$srpm
