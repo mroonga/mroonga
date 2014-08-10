@@ -315,10 +315,10 @@ fi
 * Sun May 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.6-0
 - new upstream release.
 
-* Thu May 17 2011 Kouhei Sutou <kou@clear-code.com> - 0.5-2
+* Tue May 17 2011 Kouhei Sutou <kou@clear-code.com> - 0.5-2
 - use MySQL 5.5.12.
 
-* Thu Mar 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.5-1
+* Sun Mar 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.5-1
 - new upstream release.
 
 * Sat Jan 29 2011 Kouhei Sutou <kou@clear-code.com> - 0.4-4
@@ -348,7 +348,7 @@ fi
 * Wed Sep 29 2010 Kouhei Sutou <kou@clear-code.com> - 0.2-1
 - new upstream release.
 
-* Wed Sep 12 2010 Kouhei Sutou <kou@clear-code.com> - 0.1-3
+* Sun Sep 12 2010 Kouhei Sutou <kou@clear-code.com> - 0.1-3
 - require MySQL-client-community.
 
 * Fri Sep 10 2010 Kouhei Sutou <kou@clear-code.com> - 0.1-2
