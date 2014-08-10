@@ -2,7 +2,7 @@
 %define mariadb_release_default 3
 %define mariadb_dist_default    .el7
 %define mariadb_download_base_url_default http://vault.centos.org/7.0.1406/os/Source/SPackages
-%define mariadb_spec_file_default mariadb.%{mariadb_version_default}.spec
+%define mariadb_spec_file_default mariadb.spec
 
 %{!?mariadb_version:%define mariadb_version %{mariadb_version_default}}
 %{!?mariadb_release:%define mariadb_release %{mariadb_release_default}}
