@@ -49,7 +49,7 @@ Documentation for Mroonga
 %prep
 %setup -q -n mroonga-%{version}
 
-mariadb_full_version=%{mariadb_version}-%{mariadb_release}.%{mariadb_dist}
+mariadb_full_version=%{mariadb_version}-%{mariadb_release}%{mariadb_dist}
 srpm=mariadb-${mariadb_full_version}.src.rpm
 if [ ! -f ../../SRPMS/$srpm ]; then
   wget --continue -O ../../SRPMS/$srpm %{mariadb_download_base_url}/$srpm
