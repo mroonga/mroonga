@@ -1,15 +1,12 @@
 REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = centos
 ARCHITECTURES = i386 x86_64
-CHROOT_BASE = /var/lib/chroot
-HAVE_DEVELOPMENT_BRANCH = no
-USE_RPMFORGE = no
-USE_ATRPMS = no
-PACKAGES = mysql-mroonga mariadb-mroonga mysql55-mroonga mysql56-community-mroonga
+MYSQL_VARIANTS = mysql55 mysql56-community mariadb
+SPEC_DIR = $(builddir)/../rpm/centos
 
 all:
 
-release: build sign-packages update-repository upload
+release: download build sign-packages update-repository upload
 
 remove-existing-packages:
 	for distribution in $(DISTRIBUTIONS); do	\
@@ -22,13 +19,6 @@ ensure-rsync-path:
 	  false;							\
 	fi
 
-download: ensure-rsync-path
-	mkdir -p $(REPOSITORIES_PATH)
-	for distribution in $(DISTRIBUTIONS); do			\
-	  rsync -avz --progress --delete				\
-	    $(RSYNC_PATH)/$${distribution} $(REPOSITORIES_PATH)/;	\
-	done
-
 sign-packages:
 	./sign-rpm.sh '$(GPG_UID)' '$(REPOSITORIES_PATH)/' '$(DISTRIBUTIONS)'
 
@@ -37,30 +27,37 @@ update-repository:
 
 upload: ensure-rsync-path
 	for distribution in $(DISTRIBUTIONS); do		\
-	  rsync -avz --progress --exclude .gitignore --delete	\
+	  rsync -avz --progress --delete --exclude .gitignore	\
 	    $(REPOSITORIES_PATH)/$${distribution}/		\
 	    $(RSYNC_PATH)/$${distribution};			\
 	done
 
-build: build-in-chroot
-
-build-in-chroot: source
-	for package in $(PACKAGES); do		\
-	  ./build-in-chroot.sh			\
-	    $${package}				\
-	    $(VERSION)				\
-	    $(top_builddir)/$(PACKAGE)		\
-	    ../rpm				\
-	    $(REPOSITORIES_PATH)/		\
-	    $(CHROOT_BASE)			\
-	    '$(ARCHITECTURES)'			\
-	    '$(DISTRIBUTIONS)'			\
-	    '$(HAVE_DEVELOPMENT_BRANCH)'	\
-	    '$(USE_RPMFORGE)'			\
-	    '$(USE_ATRPMS)';			\
+download: ensure-rsync-path
+	mkdir -p $(REPOSITORIES_PATH)
+	for distribution in $(DISTRIBUTIONS); do	\
+	  rsync -avz --progress --delete		\
+	    $(RSYNC_PATH)/$${distribution}/		\
+	    $(REPOSITORIES_PATH)/$${distribution};	\
 	done
 
-source: ../$(PACKAGE)-$(VERSION).tar.gz
+build: build-in-vm
 
-../$(PACKAGE)-$(VERSION).tar.gz:
-	ln -s $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz ../
+build-in-vm: source specs env.sh
+	./build-in-vm.sh			\
+	  "$(PACKAGE)"				\
+	  "$(SPEC_DIR)"				\
+	  "$(MYSQL_VARIANTS)"			\
+	  "$(ARCHITECTURES)"
+
+source: tmp/$(PACKAGE)-$(VERSION).tar.gz
+
+tmp/$(PACKAGE)-$(VERSION).tar.gz: $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz
+	mkdir -p tmp/
+	cp $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz tmp/
+
+$(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz:
+	cd $(abs_top_builddir) && $(MAKE) dist
+
+specs: $(SPEC_DIR)/mysql55-$(PACKAGE).spec
+specs: $(SPEC_DIR)/mysql56-community-$(PACKAGE).spec
+specs: $(SPEC_DIR)/mariadb-$(PACKAGE).spec

@@ -39,6 +39,8 @@ CTestTestfile.cmake
 /packages/debian/control
 /packages/rpm/*/*.spec
 /packages/apt/repositories/
+/packages/yum/env.sh
+/packages/yum/.vagrant/
 /packages/yum/repositories/
 /packages/source/files/
 /packages/source/tmp/
