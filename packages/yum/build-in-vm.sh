@@ -31,7 +31,6 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
   case ${mysql_variant} in
     mysql55)
       centos_versions="5 6"
-      architectures="$(echo ${architectures} | sed -e 's/i386//')"
       ;;
     mysql56-community)
       centos_versions="6 7"
@@ -43,6 +42,9 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
 
   for architecture in ${architectures}; do
     for centos_version in ${centos_versions}; do
+      if [ ${mysql_variant} = mysql55 -a ${centos_version} = 6 -a ${architecture} = i386 ]; then
+        continue
+      fi
       if [ ${centos_version} = 7 -a ${architecture} = i386 ]; then
         continue
       fi
