@@ -54,6 +54,7 @@ srpm=mariadb-${mariadb_full_version}.src.rpm
 if [ ! -f ../../SRPMS/$srpm ]; then
   wget --continue -O ../../SRPMS/$srpm %{mariadb_download_base_url}/$srpm
   rpm -Uvh ../../SRPMS/$srpm
+  rm ../../SRPMS/$srpm
 fi
 
 %build
