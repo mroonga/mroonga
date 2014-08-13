@@ -1,14 +1,18 @@
+%define mariadb_epoch_default   1
 %define mariadb_version_default 5.5.37
 %define mariadb_release_default 1
 %define mariadb_dist_default    .el7_0
 %define mariadb_download_base_url_default http://vault.centos.org/7.0.1406/updates/Source/SPackages
 %define mariadb_spec_file_default mariadb.spec
 
+%{!?mariadb_epoch:%define mariadb_epoch %{mariadb_epoch_default}}
 %{!?mariadb_version:%define mariadb_version %{mariadb_version_default}}
 %{!?mariadb_release:%define mariadb_release %{mariadb_release_default}}
 %{!?mariadb_dist:%define mariadb_dist %{mariadb_dist_default}}
 %{!?mariadb_download_base_url:%define mariadb_download_base_url %{mariadb_download_base_url_default}}
 %{!?mariadb_spec_file:%define mariadb_spec_file %{mariadb_spec_file_default}}
+
+%define mariadb_package_version %{mariadb_epoch}:%{mariadb_version}-%{mariadb_release}%{mariadb_dist}
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
@@ -27,8 +31,8 @@ BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	wget
 BuildRequires:	mariadb-devel
-Requires:	mariadb-server = %{mariadb_version}-%{mariadb_release}%{mariadb_dist}
-Requires:	mariadb = %{mariadb_version}-%{mariadb_release}%{mariadb_dist}
+Requires:	mariadb-server = %{mariadb_package_version}
+Requires:	mariadb = %{mariadb_package_version}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
 
