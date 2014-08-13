@@ -150,7 +150,7 @@ fi
 
 %changelog
 * Sun Aug 10 2014 Kouhei Sutou <kou@clear-code.com> - 4.04-1
-- initial packaging for CentOS 7 based on mysql-mroogna package
+- initial packaging for CentOS 7 based on mysql-mroogna package.
 
 * Tue Jul 29 2014 HAYASHI Kentaro <hayashi@clear-code.com> - 4.04-1
 - new upstream release.
