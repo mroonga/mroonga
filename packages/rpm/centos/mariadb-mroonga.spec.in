@@ -18,7 +18,7 @@
 
 Name:		mariadb-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
@@ -154,6 +154,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Aug 14 2014 Kouhei Sutou <kou@clear-code.com> - 4.04-3
+- support epoch in MariaDB.
+
 * Wed Aug 13 2014 Kouhei Sutou <kou@clear-code.com> - 4.04-2
 - build against mariadb-5.5.37-1.el7_0.
 
