@@ -22,7 +22,7 @@ SUFFIXES += .pot .po .mo .edit
 all:
 
 .pot.edit:
-	if test -f $@.po; then						\
+	if test -f $*.po; then						\
 	  msgmerge --quiet --sort-by-file --output-file=$@ $*.po $<;	\
 	else								\
 	  msginit							\
