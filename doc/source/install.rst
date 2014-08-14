@@ -31,17 +31,6 @@ Install groonga-tokenizer-mecab package::
 
   % sudo apt-get install -y -V groonga-tokenizer-mecab
 
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo apt-get install -y -V groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
-
 Debian GNU/Linux jessie
 -----------------------
 
@@ -63,17 +52,6 @@ Install groonga-tokenizer-mecab package::
 
   % sudo apt-get install -y -V groonga-tokenizer-mecab
 
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo apt-get install -y -V groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
-
 Debian GNU/Linux sid
 --------------------
 
@@ -94,17 +72,6 @@ If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, inst
 Install groonga-tokenizer-mecab package::
 
   % sudo apt-get install -y -V groonga-tokenizer-mecab
-
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo apt-get install -y -V groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Ubuntu
 ------
@@ -140,17 +107,6 @@ Install groonga-tokenizer-mecab package::
 
   % sudo apt-get install -y -V groonga-tokenizer-mecab
 
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo apt-get install -y -V groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
-
 CentOS 5
 --------
 
@@ -170,18 +126,6 @@ If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, inst
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
-
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo yum install -y install groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
-
 
 CentOS 5 (Deprecated)
 ---------------------
@@ -226,18 +170,6 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo yum install -y install groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
-
-
 CentOS 6 (Deprecated)
 ---------------------
 
@@ -261,17 +193,6 @@ If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, inst
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
-
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo yum install -y install groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Fedora 20
 ---------
@@ -305,17 +226,6 @@ Install groonga-tokenizer-mecab package::
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
-
-If you want to use MySQL compatible COLLATION such as 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' or 'utf8mb4_unicode_ci', please install groonga-normalizer-mysql package.
-
-Install groonga-normalizer-mysql package::
-
-  % sudo yum install -y install groonga-normalizer-mysql
-
-.. note::
-
-   If you don't specify MySQL compatible case insensitive COLLATION, MySQL incompatible COLLATION of Groonga is used.
-   MySQL compatible case insensitive COLLATION are 'utf8_general_ci', 'utf8mb4_general_ci', 'utf8_unicode_ci' and 'utf8mb4_unicode_ci'.
 
 Mac OS X
 --------
