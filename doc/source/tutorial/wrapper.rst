@@ -99,7 +99,7 @@ MySQL has the following syntax to specify the parser [#parser]_ for full text se
 
   FULLTEXT INDEX (content) WITH PARSER parser_name
 
-To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, Groonga can dynamically add a tokeniser, that is a parser in MySQL. So if use this syntax in Mroonga, tokenisers that are added in Groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
+To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, Groonga can dynamically add a tokenizer, that is a parser in MySQL. So if use this syntax in Mroonga, tokenizers that are added in Groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
 
   FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
 
@@ -288,4 +288,4 @@ Note : This optimisation is targeting queries like "select ... match against ord
 .. rubric:: Footnotes
 
 .. [#score] `MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search.html>`_
-.. [#parser] In Groonga, we call it a 'tokeniser'.
+.. [#parser] In Groonga, we call it a 'tokenizer'.
