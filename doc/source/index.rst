@@ -15,6 +15,7 @@ For the release history: :doc:`news`
 
    characteristic
    install
+   upgrade
    tutorial
    reference
    faq

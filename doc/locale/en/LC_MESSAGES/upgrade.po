@@ -1,0 +1,79 @@
+# English translations for Mroonga package.
+# Copyright (C) 2009-2014, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga 4.04\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-08-14 17:31+0900\n"
+"PO-Revision-Date: 2014-08-14 17:31+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Upgrade"
+msgstr "Upgrade"
+
+msgid ""
+"There is a case that incompatible change is introduced at new release. It is "
+"announced by release announce if new release contains such a incompatible "
+"change."
+msgstr ""
+"There is a case that incompatible change is introduced at new release. It is "
+"announced by release announce if new release contains such a incompatible "
+"change."
+
+msgid ""
+"Here is the list of recommended way of upgrading Mroonga from old release."
+msgstr ""
+"Here is the list of recommended way of upgrading Mroonga from old release."
+
+msgid "See following URL about upgrade sequence if you use previous version."
+msgstr "See following URL about upgrade sequence if you use previous version."
+
+msgid "If you upgrade prior to 1.20, refer to :ref:`release-1-20`"
+msgstr "If you upgrade prior to 1.20, refer to :ref:`release-1-20`"
+
+msgid "If you upgrade from 1.20, refer to :ref:`release-2-00`"
+msgstr "If you upgrade from 1.20, refer to :ref:`release-2-00`"
+
+msgid "If you upgrade from 2.00 or 2.01, refer to :ref:`release-2-02`"
+msgstr "If you upgrade from 2.00 or 2.01, refer to :ref:`release-2-02`"
+
+msgid ""
+"If you upgrade from 2.00 or later and using multiple column indexes on "
+"storage mode, refer to :ref:`release-2-03`"
+msgstr ""
+"If you upgrade from 2.00 or later and using multiple column indexes on "
+"storage mode, refer to :ref:`release-2-03`"
+
+msgid ""
+"If you upgrade from 2.04 or later and using SET column or ENUM that has the "
+"number of elements < 256 in Storage mode, refer to :ref:`release-2-05`"
+msgstr ""
+"If you upgrade from 2.04 or later and using SET column or ENUM that has the "
+"number of elements < 256 in Storage mode, refer to :ref:`release-2-05`"
+
+msgid ""
+"If you upgrade from 2.05 or later and using multiple column indexes against "
+"VARCHAR or CHAR, refer to :ref:`release-2-08`"
+msgstr ""
+"If you upgrade from 2.05 or later and using multiple column indexes against "
+"VARCHAR or CHAR, refer to :ref:`release-2-08`"
+
+msgid ""
+"If you upgrade from 2.08 or later and using TIMESTAMP column, please "
+"recreate database. If you upgrade from 2.08 or later and using CHAR(N) as "
+"primary key, please recreate index. Refer to :ref:`release-2-09` for each "
+"case."
+msgstr ""
+"If you upgrade from 2.08 or later and using TIMESTAMP column, please "
+"recreate database. If you upgrade from 2.08 or later and using CHAR(N) as "
+"primary key, please recreate index. Refer to :ref:`release-2-09` for each "
+"case."
