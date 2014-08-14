@@ -21,7 +21,16 @@ SUFFIXES += .pot .po .mo .edit
 all:
 
 .pot.edit:
-	msgmerge --quiet --sort-by-file --output-file=$@ $*.po $<
+	if test -f $@.po; then						\
+	  msgmerge --quiet --sort-by-file --output-file=$@ $*.po $<;	\
+	else								\
+	  msginit							\
+	    --input=$<							\
+	    --output-file=$@						\
+	    --locale=$(LOCALE)						\
+	    --no-translator;						\
+	fi
+
 .edit.po:
 	msgcat --no-location --output $@ $*.edit
 .po.mo:
@@ -52,17 +61,6 @@ init: gettext
 	  :;										\
 	done
 
-edit:
-	for pot in *.pot; do								\
-	  edit_po=`basename $${pot} | sed -e 's,pot$$,edit,g'`;				\
-	  po=`basename $${pot} | sed -e 's,pot$$,po,g'`;				\
-	  test ! -f $${edit_po} && test -f $${po} &&					\
-	    msgmerge --quiet --sort-by-file --output-file=$${edit_po} $${po} $${pot};	\
-	  test ! -f $${edit_po} && test ! -f $${po} &&					\
-	    msginit --input=$${pot} --output-file=$${edit_po} --locale=$(LOCALE);	\
-	  :;										\
-	done
-
 reinit:
 	$(MAKE) FORCE_INIT=yes init
 
@@ -71,5 +69,5 @@ pot-build-stamp: $(absolute_source_files)
 	@touch $@
 
 edit-po-build-stamp: $(absolute_source_files)
-	$(MAKE) edit
+	$(MAKE) $(edit_po_files)
 	@touch $@
