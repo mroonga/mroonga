@@ -33,7 +33,7 @@ all:
 	fi
 
 .edit.po:
-	msgcat --no-location --output $@ $*.edit
+	msgcat --no-location --output $@ $<
 .po.mo:
 	msgfmt -o $@ $<
 
