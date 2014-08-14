@@ -149,7 +149,7 @@ static pthread_mutex_t *mrn_LOCK_open;
 #define MRN_STRINGIFY_ARG(contents)     #contents
 
 #define MRN_PLUGIN_NAME mroonga
-#define MRN_PLUGIN_NAME_STRING MRN_STRINGIFY(MRN_PLUGIN_NAME)
+#define MRN_PLUGIN_NAME_STRING "Mroonga"
 #define MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "Mroonga"
 
 #ifdef MRN_MARIADB_P
