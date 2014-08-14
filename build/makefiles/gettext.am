@@ -11,6 +11,7 @@ endif
 
 if DOCUMENT_BUILDABLE
 BUILT_SOURCES +=				\
+	pot-build-stamp				\
 	$(mo_files)
 endif
 
