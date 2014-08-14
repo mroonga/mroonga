@@ -54,17 +54,6 @@ gettext:
 	$(SPHINX_BUILD_COMMAND) -d doctrees -b gettext $(ALLSPHINXOPTS) .
 	xgettext --language Python --output conf.pot ../../../source/conf.py
 
-init: gettext
-	for pot in *.pot; do								\
-	  edit_po=`basename $${pot} | sed -e 's,pot$$,edit,g'`;				\
-	  test "$(FORCE_INIT)" = "yes" -o ! -f $${edit_po} &&				\
-	    msginit --input=$${pot} --output-file=$${edit_po} --locale=$(LOCALE);	\
-	  :;										\
-	done
-
-reinit:
-	$(MAKE) FORCE_INIT=yes init
-
 pot-build-stamp: $(absolute_source_files)
 	$(MAKE) gettext
 	@touch $@
