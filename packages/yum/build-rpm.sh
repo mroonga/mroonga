@@ -85,7 +85,6 @@ case ${distribution} in
         run yum -y install mysql-community-devel
         ;;
       mariadb-${PACKAGE})
-	USE_MYSQLSERVICES_COMPAT=yes
         run yum -y install mariadb-devel
 	;;
     esac
