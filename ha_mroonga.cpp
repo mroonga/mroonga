@@ -5347,7 +5347,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
   if ((error = storage_write_row_unique_indexes(buf)))
   {
-    goto err2;
+    goto err;
   }
 
   grn_obj colbuf;
@@ -5375,12 +5375,12 @@ int ha_mroonga::storage_write_row(uchar *buf)
     error = mrn_change_encoding(ctx, field->charset());
     if (error) {
       grn_obj_unlink(ctx, &colbuf);
-      goto err2;
+      goto err;
     }
     error = generic_store_bulk(field, &colbuf);
     if (error) {
       grn_obj_unlink(ctx, &colbuf);
-      goto err2;
+      goto err;
     }
     if (added && is_grn_zero_column_value(grn_columns[i], &colbuf)) {
       // WORKAROUND: groonga can't index newly added '0' value for
@@ -5397,14 +5397,14 @@ int ha_mroonga::storage_write_row(uchar *buf)
       grn_obj_unlink(ctx, &colbuf);
       my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
       error = ER_ERROR_ON_WRITE;
-      goto err2;
+      goto err;
     }
   }
   grn_obj_unlink(ctx, &colbuf);
 
   error = storage_write_row_multiple_column_indexes(buf, record_id);
   if (error) {
-    goto err2;
+    goto err;
   }
 
   // for UDF last_insert_grn_id()
@@ -5412,7 +5412,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
   slot_data = mrn_get_slot_data(thd, true);
   if (slot_data == NULL) {
     error = HA_ERR_OUT_OF_MEM;
-    goto err2;
+    goto err;
   }
   slot_data->last_insert_record_id = record_id;
 
@@ -5439,7 +5439,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
   }
   DBUG_RETURN(0);
 
-err2:
+err:
   for (j = 0; j < table->s->keys; j++) {
     if (j == pkey_nr) {
       continue;
@@ -12856,7 +12856,7 @@ bool ha_mroonga::storage_check_if_incompatible_data(
   for (uint i = 0; i < n; i++) {
     Field *field = table->field[i];
     if (field->flags & FIELD_IS_RENAMED) {
-      return COMPATIBLE_DATA_NO;
+      DBUG_RETURN(COMPATIBLE_DATA_NO);
     }
   }
   DBUG_RETURN(COMPATIBLE_DATA_YES);
