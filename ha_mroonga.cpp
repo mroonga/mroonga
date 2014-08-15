@@ -5295,11 +5295,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
   }
 
-  if ((error = storage_write_row_unique_indexes(buf)))
-  {
-    goto err1;
-  }
-
   char *pkey;
   int pkey_size;
   uint pkey_nr;
@@ -5348,6 +5343,11 @@ int ha_mroonga::storage_write_row(uchar *buf)
               pkey_size, pkey);
     }
     DBUG_RETURN(error);
+  }
+
+  if ((error = storage_write_row_unique_indexes(buf)))
+  {
+    goto err2;
   }
 
   grn_obj colbuf;
@@ -5450,7 +5450,6 @@ err2:
     }
   }
   grn_table_delete_by_id(ctx, grn_table, record_id);
-err1:
   DBUG_RETURN(error);
 }
 
