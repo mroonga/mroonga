@@ -5295,7 +5295,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
   }
 
-  st_mrn_slot_data *slot_data;
   if ((error = storage_write_row_unique_indexes(buf)))
   {
     goto err1;
@@ -5409,6 +5408,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
   }
 
   // for UDF last_insert_grn_id()
+  st_mrn_slot_data *slot_data;
   slot_data = mrn_get_slot_data(thd, true);
   if (slot_data == NULL) {
     error = HA_ERR_OUT_OF_MEM;
