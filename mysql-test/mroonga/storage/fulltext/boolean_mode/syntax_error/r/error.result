@@ -11,7 +11,7 @@ INSERT INTO memos VALUES(1, "(groonga) Installed!");
 INSERT INTO memos VALUES(2, "(mroonga) Installed!");
 INSERT INTO memos VALUES(3, "(groonga) Upgraded!");
 SELECT * FROM memos
-WHERE MATCH(content) AGAINST("(groonga)*" IN BOOLEAN MODE);
-ERROR 42000: failed to parse fulltext search keyword: <(groonga)*>: <Syntax error: <(groonga)|*|>>
+WHERE MATCH(content) AGAINST("(groonga" IN BOOLEAN MODE);
+ERROR 42000: failed to parse fulltext search keyword: <(groonga>: <Syntax error: <(groonga||>>
 DROP TABLE memos;
 SET GLOBAL mroonga_default_parser = TokenBigram;

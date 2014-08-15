@@ -35,7 +35,7 @@ INSERT INTO memos VALUES(2, "(mroonga) Installed!");
 INSERT INTO memos VALUES(3, "(groonga) Upgraded!");
 
 SELECT * FROM memos
-  WHERE MATCH(content) AGAINST("(groonga)*" IN BOOLEAN MODE);
+  WHERE MATCH(content) AGAINST("(groonga" IN BOOLEAN MODE);
 
 DROP TABLE memos;
 
