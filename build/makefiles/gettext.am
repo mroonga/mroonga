@@ -12,35 +12,42 @@ endif
 if DOCUMENT_BUILDABLE
 BUILT_SOURCES +=				\
 	pot-build-stamp				\
+	edit-po-build-stamp			\
 	$(mo_files)
 endif
 
 SUFFIXES += .pot .po .mo .edit
 
-.PHONY: gettext update build
-
-all:
+.PHONY: gettext build
 
 .pot.edit:
-	if test -f $*.po; then						\
-	  msgmerge --quiet --sort-by-file --output-file=$@ $*.po $<;	\
-	else								\
-	  msginit							\
-	    --input=$<							\
-	    --output-file=$@						\
-	    --locale=$(LOCALE)						\
-	    --no-translator;						\
+	if test -f $*.po; then			\
+	  msgmerge				\
+	    --quiet				\
+	    --sort-by-file			\
+	    --output-file=$@.tmp		\
+	    $*.po				\
+	    $<;					\
+	else					\
+	  msginit				\
+	    --input=$<				\
+	    --output-file=$@.tmp		\
+	    --locale=$(LOCALE)			\
+	    --no-translator;			\
 	fi
+	(echo "# -*- po -*-";					\
+	 GREP_OPTIONS= grep -v '^# -\*- po -\*-' $@.tmp |	\
+	 GREP_OPTIONS= grep -v '^"POT-Creation-Date:') > $@
+	rm $@.tmp
 
 .edit.po:
 	msgcat --no-location --output $@ $<
+
 .po.mo:
 	msgfmt -o $@ $<
 
-update: pot-build-stamp edit-po-build-stamp $(edit_po_files) $(po_files)
-
 if DOCUMENT_BUILDABLE
-build: $(mo_files)
+build: pot-build-stamp edit-po-build-stamp $(mo_files)
 else
 build:
 endif
@@ -52,7 +59,8 @@ pdf: build
 gettext:
 	rm *.pot || true
 	$(SPHINX_BUILD_COMMAND) -d doctrees -b gettext $(ALLSPHINXOPTS) .
-	xgettext --language Python --output conf.pot ../../../source/conf.py
+	xgettext --language Python --output conf.pot \
+	  $(top_srcdir)/doc/source/conf.py
 
 pot-build-stamp: $(absolute_source_files)
 	$(MAKE) gettext
