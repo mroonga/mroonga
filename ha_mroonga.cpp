@@ -4408,12 +4408,14 @@ int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
   }
 
   grn_obj *table = grn_ctx_get(ctx, table_name, strlen(table_name));
+  if (!ctx->rc) {
+    grn_obj_remove(ctx, table);
+  }
   if (ctx->rc) {
     error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
-  error = grn_obj_remove(ctx, table);
   DBUG_RETURN(error);
 }
 
@@ -4441,12 +4443,14 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
   }
 
   grn_obj *table_obj = grn_ctx_get(ctx, table_name, strlen(table_name));
+  if (!ctx->rc) {
+    grn_obj_remove(ctx, table_obj);
+  }
   if (ctx->rc) {
     error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
-  error = grn_obj_remove(ctx, table_obj);
   DBUG_RETURN(error);
 }
 
