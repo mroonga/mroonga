@@ -8535,7 +8535,7 @@ int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
   int target_name_length;
 
   KEY *key_info = target_share->table_share->key_info;
-  if (target_share->index_table && target_share->index_table[key_index]) {
+  if (!target_share->wrapper_mode && target_share->index_table[key_index]) {
     const char *table_name = target_share->index_table[key_index];
     snprintf(target_name, GRN_TABLE_MAX_KEY_SIZE,
              "%s.%s", table_name, key_info[key_index].name);
@@ -13247,13 +13247,9 @@ bool ha_mroonga::wrapper_inplace_alter_table(
       ++j;
     }
     DBUG_PRINT("info", ("mroonga: key_name=%s", key->name));
-    mrn::IndexTableName index_table_name(mapper.table_name(), key->name);
-    grn_obj *index_table = grn_ctx_get(ctx,
-                                       index_table_name.c_str(),
-                                       index_table_name.length());
-    if (index_table) {
-      grn_obj_remove(ctx, index_table);
-    }
+    error = drop_index(share, j);
+    if (error)
+      DBUG_RETURN(true);
     grn_index_tables[j] = NULL;
     grn_index_columns[j] = NULL;
   }
