@@ -13401,13 +13401,9 @@ bool ha_mroonga::storage_inplace_alter_table_index(
     while (strcmp(key_info[j].name, key->name)) {
       ++j;
     }
-    mrn::IndexTableName index_table_name(mapper.table_name(), key->name);
-    grn_obj *index_table = grn_ctx_get(ctx,
-                                       index_table_name.c_str(),
-                                       index_table_name.length());
-    if (index_table) {
-      grn_obj_remove(ctx, index_table);
-    }
+    error = drop_index(share, j);
+    if (error)
+      DBUG_RETURN(true);
     grn_index_tables[j] = NULL;
     grn_index_columns[j] = NULL;
   }
