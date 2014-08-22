@@ -555,6 +555,7 @@ private:
   int alter_share_add(const char *path, TABLE_SHARE *table_share);
   void remove_related_files(const char *base_path);
   void remove_grn_obj_force(const char *name);
+  int drop_index(MRN_SHARE *target_share, uint key_index);
   grn_obj *find_tokenizer(const char *name, int name_length);
   grn_obj *find_normalizer(KEY *key_info);
   int wrapper_get_record(uchar *buf, const uchar *key);

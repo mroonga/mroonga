@@ -4401,13 +4401,9 @@ int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
 
   uint i;
   for (i = 0; i < tmp_table_share->keys; i++) {
-    mrn::IndexTableName index_table_name(table_name,
-                                         tmp_table_share->key_info[i].name);
-    grn_obj *index_table = grn_ctx_get(ctx,
-                                       index_table_name.c_str(),
-                                       index_table_name.length());
-    if (index_table) {
-      grn_obj_remove(ctx, index_table);
+    error = drop_index(tmp_share, i);
+    if (error) {
+      DBUG_RETURN(error);
     }
   }
 
@@ -4438,13 +4434,9 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
 
   uint i;
   for (i = 0; i < tmp_table_share->keys; i++) {
-    mrn::IndexTableName index_table_name(table_name,
-                                         tmp_table_share->key_info[i].name);
-    grn_obj *idx_table_obj = grn_ctx_get(ctx,
-                                         index_table_name.c_str(),
-                                         index_table_name.length());
-    if (idx_table_obj) {
-      grn_obj_remove(ctx, idx_table_obj);
+    error = drop_index(tmp_share, i);
+    if (error) {
+      DBUG_RETURN(error);
     }
   }
 
@@ -8528,6 +8520,50 @@ void ha_mroonga::remove_grn_obj_force(const char *name)
   }
 
   DBUG_VOID_RETURN;
+}
+
+int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  grn_rc rc = GRN_SUCCESS;
+  char target_name[GRN_TABLE_MAX_KEY_SIZE];
+  int target_name_length;
+
+  KEY *key_info = target_share->table_share->key_info;
+  if (target_share->index_table[key_index]) {
+    const char *table_name = target_share->index_table[key_index];
+    snprintf(target_name, GRN_TABLE_MAX_KEY_SIZE,
+             "%s.%s", table_name, key_info[key_index].name);
+    grn_obj *index_column = grn_ctx_get(ctx, target_name, strlen(target_name));
+    if (index_column) {
+      rc = grn_obj_remove(ctx, index_column);
+    }
+  } else {
+    mrn::PathMapper mapper(target_share->table_name);
+    mrn::IndexTableName index_table_name(mapper.table_name(),
+                                         key_info[key_index].name);
+    grn_obj *index_table = grn_ctx_get(ctx,
+                                       index_table_name.c_str(),
+                                       index_table_name.length());
+    if (index_table) {
+      target_name_length = grn_obj_name(ctx, index_table,
+                                        target_name, GRN_TABLE_MAX_KEY_SIZE);
+      rc = grn_obj_remove(ctx, index_table);
+    }
+  }
+
+  if (rc != GRN_SUCCESS) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to drop index: <%.*s>: <%s>",
+             target_name_length, target_name,
+             ctx->errbuf);
+    my_message(ER_ERROR_ON_WRITE, error_message, MYF(0));
+    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+  }
+
+  DBUG_RETURN(error);
 }
 
 grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
@@ -14226,25 +14262,20 @@ int ha_mroonga::wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
     DBUG_RETURN(res);
 
   MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(uint, wrap_key_num, num_of_keys);
-  mrn::PathMapper mapper(share->table_name);
   for (i = 0, j = 0; i < num_of_keys; i++) {
-    if (!(key_info[key_num[i]].flags & HA_FULLTEXT) &&
-      !mrn_is_geo_key(&key_info[key_num[i]])) {
-      wrap_key_num[j] = share->wrap_key_nr[key_num[i]];
+    uint key_index = key_num[i];
+    if (!(key_info[key_index].flags & HA_FULLTEXT) &&
+        !mrn_is_geo_key(&key_info[key_index])) {
+      wrap_key_num[j] = share->wrap_key_nr[key_index];
       j++;
       continue;
     }
 
-    mrn::IndexTableName index_table_name(mapper.table_name(),
-                                         key_info[key_num[i]].name);
-    grn_obj *index_table = grn_ctx_get(ctx,
-                                       index_table_name.c_str(),
-                                       index_table_name.length());
-    if (index_table) {
-      grn_obj_remove(ctx, index_table);
-    }
-    grn_index_tables[key_num[i]] = NULL;
-    grn_index_columns[key_num[i]] = NULL;
+    res = drop_index(share, key_index);
+    if (res)
+      DBUG_RETURN(res);
+    grn_index_tables[key_index] = NULL;
+    grn_index_columns[key_index] = NULL;
   }
   if (j)
   {
@@ -14263,26 +14294,20 @@ int ha_mroonga::storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
 {
   int error;
   uint i;
-  KEY *key_info = table_share->key_info;
   MRN_DBUG_ENTER_METHOD();
   error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
     DBUG_RETURN(error);
 
-  mrn::PathMapper mapper(share->table_name);
   for (i = 0; i < num_of_keys; i++) {
-    mrn::IndexTableName index_table_name(mapper.table_name(),
-                                         key_info[key_num[i]].name);
-    grn_obj *index_table = grn_ctx_get(ctx,
-                                       index_table_name.c_str(),
-                                       index_table_name.length());
-    if (index_table) {
-      grn_obj_remove(ctx, index_table);
-    }
-    grn_index_tables[key_num[i]] = NULL;
-    grn_index_columns[key_num[i]] = NULL;
+    uint key_index = key_num[i];
+    error = drop_index(share, key_index);
+    if (error)
+      break;
+    grn_index_tables[key_index] = NULL;
+    grn_index_columns[key_index] = NULL;
   }
-  DBUG_RETURN(0);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::prepare_drop_index(TABLE *table_arg, uint *key_num,
