@@ -12,7 +12,7 @@ diaries	CREATE TABLE `diaries` (
   `title` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title` (`title`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='engine "innodb"'
+) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='engine "innodb"'
 set autocommit=0;
 insert into diaries values(0, "2011-07-14");
 insert into diaries values(1, "2011-07-15");

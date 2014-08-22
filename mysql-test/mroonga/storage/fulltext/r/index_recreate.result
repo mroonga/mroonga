@@ -14,7 +14,7 @@ diaries	CREATE TABLE `diaries` (
   `content` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title` (`title`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 insert into diaries values(1, "Hello", "はじめました。");
 insert into diaries values(2, "天気", "明日の富士山の天気について");
 insert into diaries values(3, "富士山", "今日もきれい。");

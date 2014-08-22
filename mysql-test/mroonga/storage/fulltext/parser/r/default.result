@@ -13,7 +13,7 @@ diaries	CREATE TABLE `diaries` (
   `body` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `body_index` (`body`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 insert into diaries (body) values ("will start groonga!");
 insert into diaries (body) values ("starting groonga...");
 insert into diaries (body) values ("started groonga.");

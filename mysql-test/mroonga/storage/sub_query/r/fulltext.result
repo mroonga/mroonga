@@ -17,7 +17,7 @@ diaries	CREATE TABLE `diaries` (
   `title` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title` (`title`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO users (name) VALUES ("alice");
 INSERT INTO users (name) VALUES ("bob");
 INSERT INTO users (name) VALUES ("carlos");

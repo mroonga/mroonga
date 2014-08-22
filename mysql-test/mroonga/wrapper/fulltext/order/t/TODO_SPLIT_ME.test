@@ -29,7 +29,7 @@ CREATE TABLE ft(
   PRIMARY KEY(a),
   FULLTEXT KEY ftx1(b),
   FULLTEXT KEY ftx2(c)
-)ENGINE=mroonga DEFAULT CHARSET=UTF8 COMMENT = 'engine "innodb"';
+)ENGINE=Mroonga DEFAULT CHARSET=UTF8 COMMENT = 'engine "innodb"';
 SHOW CREATE TABLE ft;
 
 INSERT INTO ft VALUES(1,'aaaaa','abcde');

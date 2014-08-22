@@ -14,7 +14,7 @@ memos	CREATE TABLE `memos` (
   `content` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `content_index` (`content`)
-) ENGINE=mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
+) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
 SELECT * FROM memos WHERE MATCH(content) AGAINST("groonga");
 id	content
 1	Starting Groonga...

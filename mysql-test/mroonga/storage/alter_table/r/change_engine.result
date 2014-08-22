@@ -33,7 +33,7 @@ diaries	CREATE TABLE `diaries` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title_index` (`title`),
   FULLTEXT KEY `body_index` (`body`)
-) ENGINE=mroonga AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
+) ENGINE=Mroonga AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
 SELECT * FROM diaries
 WHERE MATCH(title) AGAINST("survey" IN BOOLEAN MODE) AND
 MATCH(body) AGAINST("groonga" IN BOOLEAN MODE);

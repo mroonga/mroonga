@@ -34,5 +34,5 @@ diaries	CREATE TABLE `diaries` (
   `title` text,
   `temperature` decimal(6,3) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
+) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
 DROP TABLE diaries;

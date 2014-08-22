@@ -8,5 +8,5 @@ Table	Create Table
 bugs	CREATE TABLE `bugs` (
   `id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='Free style normal comment, engine "InnoDB"'
+) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='Free style normal comment, engine "InnoDB"'
 DROP TABLE bugs;

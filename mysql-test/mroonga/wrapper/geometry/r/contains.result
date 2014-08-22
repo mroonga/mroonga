@@ -13,7 +13,7 @@ shops	CREATE TABLE `shops` (
   `location` geometry NOT NULL,
   PRIMARY KEY (`id`),
   SPATIAL KEY `location_index` (`location`)
-) ENGINE=mroonga DEFAULT CHARSET=latin1 COMMENT='engine "innodb"'
+) ENGINE=Mroonga DEFAULT CHARSET=latin1 COMMENT='engine "innodb"'
 insert into shops (name, location)
 values ('nezu-no-taiyaki',
 GeomFromText('POINT(139.762573 35.720253)'));

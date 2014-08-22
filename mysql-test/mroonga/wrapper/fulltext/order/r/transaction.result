@@ -15,7 +15,7 @@ diaries	CREATE TABLE `diaries` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title_index` (`title`),
   FULLTEXT KEY `body_index` (`body`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"'
+) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"'
 START TRANSACTION;
 INSERT INTO diaries (title, body) VALUES ("survey", "will start groonga!");
 INSERT INTO diaries (title, body) VALUES ("groonga (1)", "starting groonga...");

@@ -9,7 +9,7 @@ diaries	CREATE TEMPORARY TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` text,
   PRIMARY KEY (`id`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO diaries (title) VALUES ("clear day");
 INSERT INTO diaries (title) VALUES ("rainy day");
 INSERT INTO diaries (title) VALUES ("cloudy day");

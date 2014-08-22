@@ -15,7 +15,7 @@ running_records	CREATE TABLE `running_records` (
   `max` time DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `average` (`average`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO running_records (title, average, max)
 VALUES ("normal condition", "01:00:00", "01:05:00");
 INSERT INTO running_records (title, average, max)

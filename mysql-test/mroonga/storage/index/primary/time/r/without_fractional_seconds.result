@@ -9,7 +9,7 @@ running_records	CREATE TABLE `running_records` (
   `time` time NOT NULL,
   `title` text,
   PRIMARY KEY (`time`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO running_records (time, title)
 VALUES ("01:00:00", "normal condition");
 INSERT INTO running_records (time, title)

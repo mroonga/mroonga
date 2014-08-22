@@ -14,7 +14,7 @@ memos	CREATE TABLE `memos` (
   `content` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `content` (`content`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='engine "InnoDB"'
+) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='engine "InnoDB"'
 INSERT INTO memos (title, content) VALUES ("Hello", "I start to write memos!");
 INSERT INTO memos (title, content) VALUES ("groonga", "I start to use groonga!");
 INSERT INTO memos (title, content) VALUES ("mroonga", "I use mroonga too!");
@@ -27,7 +27,7 @@ memos	CREATE TABLE `memos` (
   `content` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `content` (`content`)
-) ENGINE=mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='engine "MyISAM"'
+) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='engine "MyISAM"'
 SELECT * FROM memos;
 id	title	content
 1	Hello	I start to write memos!

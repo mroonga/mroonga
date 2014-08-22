@@ -13,7 +13,7 @@ diaries	CREATE TABLE `diaries` (
   `title` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `day` (`day`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO diaries (day, title)
 VALUES ("2012-02-14", "clear day")
 ON DUPLICATE KEY UPDATE title = "clear day (duplicated)";

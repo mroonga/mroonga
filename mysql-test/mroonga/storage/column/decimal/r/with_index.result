@@ -13,7 +13,7 @@ diaries	CREATE TABLE `diaries` (
   `temperature` decimal(10,0) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `temperature` (`temperature`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO diaries (title, temperature) VALUES ("clear day", 21);
 INSERT INTO diaries (title, temperature) VALUES ("rainy day", 14);
 INSERT INTO diaries (title, temperature) VALUES ("cloudy day", 17);

@@ -11,7 +11,7 @@ diaries	CREATE TABLE `diaries` (
   `title` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title_index` (`title`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"'
+) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"'
 INSERT INTO diaries (title) VALUES ("survey");
 SELECT * FROM diaries;
 id	title
@@ -48,5 +48,5 @@ diaries	CREATE TABLE `diaries` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title_index` (`title`),
   FULLTEXT KEY `body_index` (`body`)
-) ENGINE=mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"'
+) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"'
 DROP TABLE diaries;

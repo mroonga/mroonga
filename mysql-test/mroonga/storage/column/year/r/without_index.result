@@ -11,7 +11,7 @@ aniversary_memos	CREATE TABLE `aniversary_memos` (
   `title` text,
   `party_year` year(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO aniversary_memos (title, party_year)
 VALUES ("We need a big cake!", "11");
 INSERT INTO aniversary_memos (title, party_year)

@@ -9,7 +9,7 @@ timestamps	CREATE TABLE `timestamps` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `create_dt` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO timestamps (create_dt) VALUES ("2012-00-01");
 Warnings:
 Warning	1265	Data truncated for column 'create_dt' at row 1

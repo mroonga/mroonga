@@ -9,7 +9,7 @@ diaries	CREATE TABLE `diaries` (
   `time` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   `title` text,
   PRIMARY KEY (`time`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO diaries (time, title)
 VALUES ("2012-01-29 21:51:01.111111", "clear day");
 INSERT INTO diaries (time, title)

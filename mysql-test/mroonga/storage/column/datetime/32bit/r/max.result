@@ -11,7 +11,7 @@ diaries	CREATE TABLE `diaries` (
   `title` text,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO diaries (title, created_at)
 VALUES ('9999-12-31 23:59:59', '9999-12-31 23:59:59');
 Warnings:

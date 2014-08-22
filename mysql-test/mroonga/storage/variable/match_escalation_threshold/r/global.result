@@ -14,7 +14,7 @@ diaries	CREATE TABLE `diaries` (
   `tags` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `tags_index` (`tags`) COMMENT 'parser "TokenDelimit"'
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO diaries (title, tags) VALUES ("Hello groonga!", "groonga install");
 INSERT INTO diaries (title, tags) VALUES ("Hello mroonga!", "mroonga install");
 SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("install" IN BOOLEAN MODE);

@@ -11,7 +11,7 @@ diaries	CREATE TABLE `diaries` (
   `title` text,
   `body` text,
   PRIMARY KEY (`id`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO diaries (title, body) VALUES ("survey", "will start groonga!");
 SELECT * FROM diaries;
 id	title	body
@@ -24,7 +24,7 @@ Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=mroonga AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
+) ENGINE=Mroonga AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
 SELECT * FROM diaries;
 id
 1

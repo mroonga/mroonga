@@ -24,7 +24,7 @@ CREATE TABLE items (
   name VARCHAR(255),
   size ENUM("small", "medium", "large"),
   INDEX (size)
-) ENGINE=mroonga DEFAULT CHARSET=utf8;
+) ENGINE=Mroonga DEFAULT CHARSET=utf8;
 SHOW CREATE TABLE items;
 
 INSERT INTO items VALUES ("t-shart for child", "small");

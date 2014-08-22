@@ -15,7 +15,7 @@ diaries	CREATE TABLE `diaries` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `updated_at` (`updated_at`)
-) ENGINE=mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO diaries (title, created_at, updated_at)
 VALUES ("clear day", "2012-01-29 21:51:01", "2012-01-29 21:51:02");
 INSERT INTO diaries (title, created_at, updated_at)
