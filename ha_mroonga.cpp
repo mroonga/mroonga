@@ -8535,7 +8535,7 @@ int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
   int target_name_length;
 
   KEY *key_info = target_share->table_share->key_info;
-  if (target_share->index_table[key_index]) {
+  if (target_share->index_table && target_share->index_table[key_index]) {
     const char *table_name = target_share->index_table[key_index];
     snprintf(target_name, GRN_TABLE_MAX_KEY_SIZE,
              "%s.%s", table_name, key_info[key_index].name);
