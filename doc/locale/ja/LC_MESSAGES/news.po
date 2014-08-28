@@ -1,3 +1,4 @@
+# -*- po -*-
 # Japanese translations for groonga storage engine package.
 # Copyright (C) 2009-2011, groonga project
 # This file is distributed under the same license as the groonga storage engine package.
@@ -7,8 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-28 16:09+0900\n"
-"PO-Revision-Date: 2014-08-04 22:09+0900\n"
+"PO-Revision-Date: 2014-08-28 16:19+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,11 +20,105 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 4.04 - 2014/07/29"
-msgstr "4.04リリース - 2014/07/29"
+msgid "Release 4.05 - 2014/08/29"
+msgstr "4.05リリース - 2014/08/29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Dropped Ubuntu 13.10 Saucy Salamander support."
+msgstr "Ubuntu 13.10 (Saucy Salamander)のサポートをやめました。"
+
+msgid ""
+"Added new variable :ref:`mroonga_vector_column_delimiter`. It is used to "
+"change delimiter of vector column. [GitHub#16] [GitHub#16] [Patch by Naoya "
+"Murakami]"
+msgstr ""
+"サーバー変数として :ref:`mroonga_vector_column_delimiter` を追加しました。ベ"
+"クターカラムのデリミタを変更するのに使います。[GitHub#16] [GitHub#16] [村上さ"
+"んがパッチ提供]"
+
+msgid ""
+"[rpm][centos] Supported MySQL 5.6 official repository packages on CentOS "
+"6/7. Use mysql56-community-mroonga package. [Patch by miko]"
+msgstr ""
+"[rpm][centos] CentOS 6/7にて公式リポジトリにあるMySQL 5.6をサポートしました。"
+"mysql56-community-mroongaパッケージを使ってください。[mikoさんがパッチ提供]"
+
+msgid ""
+"[doc] Moved document about upgrading which is included in install document. "
+"Now, you can refer it as :doc:`/upgrade`."
+msgstr ""
+"[doc] インストール手順に含めていたアップグレードガイドを移動しました。:doc:`/"
+"upgrade` として参照できます。"
+
+msgid "Supported MariaDB 10.0.13."
+msgstr "MariaDB 10.0.13に対応しました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[doc] Fixed wrong MySQL version about news of Mroonga 4.04. [Reported by "
+"_so4]"
+msgstr ""
+"[doc] Mroonga 4.04のリリースエントリでMySQLのバージョンが間違っていたのを酒精"
+"しました。[_so4さんが報告]"
+
+msgid ""
+"[doc] Removed needless explicit install procedure for groonga-normalizer-"
+"mysql package."
+msgstr ""
+"[doc] インストール手順で明示的にインストールする必要のなくなったgroonga-"
+"normalizer-mysqlパッケージについて削除しました。"
+
+msgid ""
+"[storage] Fixed a bug that value remains in unique index on duplicated "
+"primary key error. [groonga-dev,02633] [Reported by 6elz]"
+msgstr ""
+"[ストレージモード] uniqueインデックスが残ったままで、プライマリーキーの"
+"duplicateエラーが発生する不具合を修正しました。[groonga-dev,02633] [6elzさん"
+"が報告]"
+
+msgid ""
+"[doc] Fixed a bug that building document in other directory fails. [groonga-"
+"dev,02652] [Reported by cosmo0920]"
+msgstr ""
+"[doc] 別のディレクトリでドキュメントをビルドできない不具合を修正しました。"
+"[groonga-dev,02652] [cosmo0920さんが報告]"
+
+msgid "Changed to use \"Mroonga\" form for engine name."
+msgstr "ストレージエンジンの表記に\"Mroonga\"を使うようにしました。"
+
+msgid ""
+"[storage] Fixed a bug that table specified index (``COMMENT 'table \"XXX"
+"\"'``) can't be removed. [groonga-dev,02677] [Reported by Naoya Murakami]"
+msgstr ""
+"[ストレージモード] テーブルを参照するインデックスがコメントで指定(``COMMENT "
+"'table \"XXX\"``)されていると削除できない不具合を修正しました。[groonga-"
+"dev,02677] [村上さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "_so4"
+msgstr "_so4さん"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "miko"
+msgstr "mikoさん"
+
+msgid "6elz"
+msgstr "6elzさん"
+
+# d5a1476d11a34a9cb63ba48497653e81
+msgid "cosmo0920"
+msgstr "cosmo0920さん"
+
+msgid "Release 4.04 - 2014/07/29"
+msgstr "4.04リリース - 2014/07/29"
 
 msgid ""
 "Removed Groonga and groonga-normalizer-mysql specific test files for MariaDB "
@@ -51,9 +145,6 @@ msgid ""
 msgstr ""
 "[ストレージモード] INPLACE ALTER TABLEでカラムを追加削除できるようになりまし"
 "た。[#2277] [GitHub#12] [村上さんがパッチ提供]"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[rpm][centos] Built with MySQL 5.5.37 on CentOS. [Reported by YOSHIDA Mitsuo]"
@@ -88,9 +179,6 @@ msgstr ""
 "[ストレージモード] ALTER TABLE CHANGEでカラムを変更しようとするとクラッシュす"
 "る問題を修正しました。[#2637]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "YOSHIDA Mitsuo"
 msgstr "吉田光男さん"
 
@@ -99,13 +187,6 @@ msgstr "横山昌史さん"
 
 msgid "Toshihisa Tashiro"
 msgstr "Toshihisa Tashiroさん"
-
-# d5a1476d11a34a9cb63ba48497653e81
-msgid "cosmo0920"
-msgstr "cosmo0920さん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Release 4.03 - 2014/05/29"
 msgstr "4.03リリース - 2014/05/29"
