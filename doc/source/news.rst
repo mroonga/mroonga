@@ -20,7 +20,7 @@ Improvements
 * [rpm][centos] Supported MySQL 5.6 official repository packages on CentOS 6/7.
   Use mysql56-community-mroonga package. [Patch by miko]
 * [doc] Moved document about upgrading which is included in install document.
-  Now, you can refer it as :doc:`/reference/upgrade`.
+  Now, you can refer it as :doc:`/upgrade`.
 * Supported MariaDB 10.0.13.
 
 Fixes
