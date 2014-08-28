@@ -1,3 +1,4 @@
+# -*- po -*-
 # Japanese translations for groonga storage engine package.
 # Copyright (C) 2009-2011, groonga project
 # This file is distributed under the same license as the groonga storage engine package.
@@ -7,7 +8,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-05 11:36+0900\n"
 "PO-Revision-Date: 2014-06-05 11:37+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"

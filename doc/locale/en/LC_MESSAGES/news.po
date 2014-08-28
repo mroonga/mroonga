@@ -42,7 +42,7 @@ msgstr ""
 
 msgid ""
 "[doc] Moved document about upgrading which is included in install document. "
-"Now, you can refer it as :doc:`/reference/upgrade`."
+"Now, you can refer it as :doc:`/upgrade`."
 msgstr ""
 
 msgid "Supported MariaDB 10.0.13."
