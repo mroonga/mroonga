@@ -1,3 +1,4 @@
+# -*- po -*-
 # English translations for Mroonga package.
 # Copyright (C) 2009-2014, Mroonga Project
 # This file is distributed under the same license as the Mroonga package.
@@ -7,14 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 13:00+0900\n"
-"PO-Revision-Date: 2014-05-30 13:01+0900\n"
+"PO-Revision-Date: 2014-08-28 15:45+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Developer's guide"
@@ -23,18 +23,14 @@ msgstr "Developer's guide"
 msgid "How we are developing"
 msgstr "How we are developing"
 
-msgid ""
-"We, the Mroonga development project, are doing Ticket Driven Development by "
-"using a BTS named Redmine."
+msgid "The Mroonga project uses Redmine for Ticket Driven Development."
 msgstr ""
-"We, the Mroonga development project, are doing Ticket Driven Development by "
-"using a BTS named Redmine."
 
 msgid "The location of our Redmine site is the following."
 msgstr "The location of our Redmine site is the following."
 
-msgid "http://redmine.groonga.org/projects/show/mroonga"
-msgstr "http://redmine.groonga.org/projects/show/mroonga"
+msgid "http://redmine.groonga.org/projects/mroonga"
+msgstr ""
 
 msgid "Developments are done per ticket."
 msgstr "Developments are done per ticket."
@@ -42,55 +38,51 @@ msgstr "Developments are done per ticket."
 msgid "We would like to ask developers to register on the site above."
 msgstr "We would like to ask developers to register on the site above."
 
-msgid "Roadmaps"
-msgstr "Roadmaps"
+msgid "Roadmap"
+msgstr ""
 
 msgid ""
-"You can see our roadmaps in the following page. Generally speaking, we "
-"develop based on the roadmap."
+"We develop based on the roadmap, and you can see our roadmap in the "
+"following page."
 msgstr ""
-"You can see our roadmaps in the following page. Generally speaking, we "
-"develop based on the roadmap."
 
 msgid "http://redmine.groonga.org/projects/mroonga/roadmap"
 msgstr "http://redmine.groonga.org/projects/mroonga/roadmap"
 
-msgid "We decide our roadmaps by discussing in off-line or on-line meetings."
-msgstr "We decide our roadmaps by discussing in off-line or on-line meetings."
+msgid "We draw up our roadmap by discussing in off-line or on-line meetings."
+msgstr ""
 
-msgid "Roadmaps specify the list of adding features in each version."
-msgstr "Roadmaps specify the list of adding features in each version."
+msgid "The roadmap specifies the list of adding features in each version."
+msgstr ""
 
 msgid "Source code management"
 msgstr "Source code management"
 
-msgid "We manage the source code using git on github."
-msgstr "We manage the source code using git on github."
+msgid "We manage the source code using Git on Github."
+msgstr ""
 
 msgid "http://github.com/mroonga/mroonga"
 msgstr "http://github.com/mroonga/mroonga"
 
 msgid ""
 "If you want to contribute, please make clone in read/write mode, and then "
-"commit and push please."
+"commit and push."
 msgstr ""
-"If you want to contribute, please make clone in read/write mode, and then "
-"commit and push please."
 
 msgid "If you still do not have your account on github.com, please register."
 msgstr "If you still do not have your account on github.com, please register."
 
-msgid "Process of development"
-msgstr "Process of development"
+msgid "Development process"
+msgstr ""
 
-msgid "We would like to develop in the following procedure."
-msgstr "We would like to develop in the following procedure."
+msgid "We develop Mroonga using the following procedures."
+msgstr ""
 
 msgid "Create a new ticket and add a description"
 msgstr "Create a new ticket and add a description"
 
-msgid "Discuss in the development meeting and update roadmaps"
-msgstr "Discuss in the development meeting and update roadmaps"
+msgid "Discuss in the development meeting and update roadmap"
+msgstr ""
 
 msgid "Assign the ticket, and the assignee starts development"
 msgstr "Assign the ticket, and the assignee starts development"
@@ -121,11 +113,9 @@ msgid "For adding and running test codes, please refer the description below."
 msgstr "For adding and running test codes, please refer the description below."
 
 msgid ""
-"Generally speaking, we want to ask the assignee to handle whole the process, "
-"like design, implementation, test and documentations."
+"We want to ask the assignee to handle whole the process, like design, "
+"implementation, test and documentations."
 msgstr ""
-"Generally speaking, we want to ask the assignee to handle whole the process, "
-"like design, implementation, test and documentations."
 
 msgid ""
 "Then you ask other developers to review (especially in case of adding new "
@@ -172,23 +162,20 @@ msgstr "Currently we are assuming the following development environments."
 msgid "Linux x86_64"
 msgstr "Linux x86_64"
 
-msgid "glibc 2.5"
-msgstr "glibc 2.5"
+msgid "glibc"
+msgstr ""
 
-msgid "MySQL 5.5"
-msgstr "MySQL 5.5"
+msgid "`MySQL <http://www.mysql.com/>`_"
+msgstr ""
 
-msgid "groonga 1.2.8"
-msgstr "groonga 1.2.8"
+msgid "`Groonga <http://groonga.org/>`_"
+msgstr ""
 
-msgid "Cutter 1.1 (for C/C++ unit tests)"
-msgstr "Cutter 1.1 (for C/C++ unit tests)"
+msgid "`Cutter <http://cutter.sourceforge.net/>`_ (for C/C++ unit tests)"
+msgstr ""
 
-msgid "Sphinx 1.1 (for documents)"
-msgstr "Sphinx 1.1 (for documents)"
-
-msgid "glibc 2.5 is used in Red Hat Enterprise Linux 5."
-msgstr "glibc 2.5 is used in Red Hat Enterprise Linux 5."
+msgid "`Sphinx <http://sphinx-doc.org/>`_ (for documents)"
+msgstr ""
 
 msgid "Contents of the source tree"
 msgstr "Contents of the source tree"
@@ -200,80 +187,63 @@ msgstr ""
 "There are just a few source files for now, and we would like to keep it "
 "simple as possible."
 
-msgid "ha_mroonga.h"
-msgstr "ha_mroonga.h"
+msgid "The header file of Mroonga."
+msgstr ""
 
-msgid "The header file of mroonga."
-msgstr "The header file of mroonga."
+msgid "ha_mroonga.hpp"
+msgstr ""
 
-msgid "ha_mroonga.cc"
-msgstr "ha_mroonga.cc"
+msgid "The implementation of Mroonga."
+msgstr ""
 
-msgid "The implementation of mroonga."
-msgstr "The implementation of mroonga."
-
-msgid "mrnsys.h"
-msgstr "mrnsys.h"
+msgid "ha_mroonga.cpp"
+msgstr ""
 
 msgid "The header file of utility functions"
 msgstr "The header file of utility functions"
 
-msgid "mrnsys.c"
-msgstr "mrnsys.c"
+msgid "mrnsys.hpp"
+msgstr ""
 
 msgid "The implementation of utility functions"
 msgstr "The implementation of utility functions"
 
-msgid "test/sql/"
-msgstr "test/sql/"
+msgid "mrnsys.cpp"
+msgstr ""
 
 msgid "The directory for tests by SQL"
 msgstr "The directory for tests by SQL"
 
-msgid "test/sql/t/"
-msgstr "test/sql/t/"
+msgid ""
+"SQL test scripts are included in each test case 't/' directory, that are "
+"also the definition of currently available SQL statements."
+msgstr ""
 
 msgid ""
-"SQL test scripts, that are also the definition of currently available SQL "
-"statements"
+"The expected results of SQL tests are included in each test case 'r/' "
+"directory , that are also the definition of the current specification of "
+"supported SQL."
 msgstr ""
-"SQL test scripts, that are also the definition of currently available SQL "
-"statements"
 
-msgid "test/sql/r/"
-msgstr "test/sql/r/"
-
-msgid ""
-"The expected results of SQL tests, that are also the definition of the "
-"current specification of supported SQL"
+msgid "mysql-test/"
 msgstr ""
-"The expected results of SQL tests, that are also the definition of the "
-"current specification of supported SQL"
-
-msgid "test/unit/"
-msgstr "test/unit/"
 
 msgid "The directory for per-function unit tests by C/C++"
 msgstr "The directory for per-function unit tests by C/C++"
 
-msgid "doc/en/"
-msgstr "doc/en/"
+msgid "test/unit/"
+msgstr "test/unit/"
 
 msgid "English documents in Sphinx format"
 msgstr "English documents in Sphinx format"
 
-msgid "doc/ja/"
-msgstr "doc/ja/"
-
-msgid "Japanese documents in Sphinx format"
-msgstr "Japanese documents in Sphinx format"
+msgid "doc/source/"
+msgstr ""
 
 msgid ""
-"Since we are still in the early stage of the development of mroonga, we will "
+"Since we are still in the early stage of the development of Mroonga, we will "
 "not make the documents of the specification of SQL queries for now."
 msgstr ""
-"Since we are still in the early stage of the development of mroonga, we will "
-"not make the documents of the specification of SQL queries for now."
 
 msgid ""
 "Alternatively we consider our SQL tests and its expected results as the list "
@@ -337,11 +307,9 @@ msgid "http://dev.mysql.com/doc/mysqltest/2.0/en/index.html"
 msgstr "http://dev.mysql.com/doc/mysqltest/2.0/en/index.html"
 
 msgid ""
-"For the detail about C/C++ unit tests, please refer the following cutter "
+"For the detail about C/C++ unit tests, please refer the following Cutter "
 "document."
 msgstr ""
-"For the detail about C/C++ unit tests, please refer the following cutter "
-"document."
 
 msgid "http://cutter.sourceforge.net/"
 msgstr "http://cutter.sourceforge.net/"
@@ -353,43 +321,41 @@ msgid "We use Sphinx for the documentation of Mroonga."
 msgstr "We use Sphinx for the documentation of Mroonga."
 
 msgid ""
-"We write documents in ReStructuredText format and we convert them to HTML "
-"etc."
+"Sphinx is a documentation generator which uses reStructuredText as its "
+"markup language, and converts reStructuredText files into HTML files."
 msgstr ""
-"We write documents in ReStructuredText format and we convert them to HTML "
-"etc."
+
+msgid "reStructuredText uses .rst filename extensions."
+msgstr ""
 
 msgid ""
-"The source files of documents are files having .rst extension in \"doc/source"
-"\" directory."
+"We write documents in the reStructuredText format and convert them to HTML."
 msgstr ""
-"The source files of documents are files having .rst extension in \"doc/source"
-"\" directory."
 
 msgid ""
-"When you add or modify them, please try to build by \"make html\" etc. and "
-"confirm that no syntax error happens."
+"The source files of documents have .rst extension in the \"doc/source\" "
+"directory of the Mroonga repository."
 msgstr ""
-"When you add or modify them, please try to build by \"make html\" etc. and "
-"confirm that no syntax error happens."
 
 msgid ""
-"Documents are published in http://mroonga.org . Since we are using github's "
-"web site feature, they will be updated each time when HTML files are pushed "
-"to http://github.com/mroonga/mroonga.github.com repository. We push to "
-"mroonga.github.com repository after confirming the consistency between "
-"documents and current released version."
+"When you add or update them, please try \"make html\" to confirm that there "
+"are no syntax errors."
 msgstr ""
-"Documents are published in http://mroonga.org . Since we are using github's "
-"web site feature, they will be updated each time when HTML files are pushed "
-"to http://github.com/mroonga/mroonga.github.com repository. We push to "
-"mroonga.github.com repository after confirming the consistency between "
-"documents and current released version."
 
 msgid ""
-"So you can just push to mroonga repository to push documents for each ticket."
+"Documents are published in http://mroonga.org. Since we are using GitHub "
+"Project Pages, the web site is updated when HTML files are pushed to the "
+"http://github.com/mroonga/mroonga.github.com repository."
 msgstr ""
-"So you can just push to mroonga repository to push documents for each ticket."
+
+msgid ""
+"We push added or updated HTML files to the repository after confirming the "
+"consistency between the documents and the current release version."
+msgstr ""
+
+msgid ""
+"So you can just push to Mroonga repository to push documents for each ticket."
+msgstr ""
 
 msgid "The details are as follows."
 msgstr "The details are as follows."
@@ -420,18 +386,14 @@ msgid "Adding a document"
 msgstr "Adding a document"
 
 msgid ""
-"Write a document in ReStructuredText format, and save the document with .rst "
+"Write a document in reStructuredText format, and save the document with .rst "
 "extension in \"doc/source\" directory."
 msgstr ""
-"Write a document in ReStructuredText format, and save the document with .rst "
-"extension in \"doc/source\" directory."
 
 msgid ""
 "See reStructuredText (reST) `concepts and syntax <http://sphinx-doc.org/"
-"latest/rest.html>`_ about how to write a document in ReStructuredText format."
+"latest/rest.html>`_ about how to write a document in reStructuredText format."
 msgstr ""
-"See reStructuredText (reST) `concepts and syntax <http://sphinx-doc.org/"
-"latest/rest.html>`_ about how to write a document in ReStructuredText format."
 
 msgid "Confirm generated document"
 msgstr "Confirm generated document"
@@ -533,6 +495,9 @@ msgstr "ヘッダーファイルの拡張子は ``.hpp`` にします。"
 
 msgid "悪い例（ ``.h`` を使っている）:"
 msgstr "悪い例（ ``.h`` を使っている）:"
+
+msgid "ha_mroonga.h"
+msgstr "ha_mroonga.h"
 
 msgid "名前空間"
 msgstr "名前空間"
@@ -1539,3 +1504,37 @@ msgstr "リリース後にやること"
 
 msgid "リリースバージョンを以下のようにして更新します。::"
 msgstr "リリースバージョンを以下のようにして更新します。::"
+
+#~ msgid "Japanese documents in Sphinx format"
+#~ msgstr "Japanese documents in Sphinx format"
+
+#~ msgid "doc/ja/"
+#~ msgstr "doc/ja/"
+
+#~ msgid "test/sql/r/"
+#~ msgstr "test/sql/r/"
+
+#~ msgid "test/sql/t/"
+#~ msgstr "test/sql/t/"
+
+#~ msgid "test/sql/"
+#~ msgstr "test/sql/"
+
+#~ msgid "glibc 2.5 is used in Red Hat Enterprise Linux 5."
+#~ msgstr "glibc 2.5 is used in Red Hat Enterprise Linux 5."
+
+#~ msgid "groonga 1.2.8"
+#~ msgstr "groonga 1.2.8"
+
+#~ msgid "MySQL 5.5"
+#~ msgstr "MySQL 5.5"
+
+#~ msgid "Process of development"
+#~ msgstr "Process of development"
+
+#~ msgid ""
+#~ "You can see our roadmaps in the following page. Generally speaking, we "
+#~ "develop based on the roadmap."
+#~ msgstr ""
+#~ "You can see our roadmaps in the following page. Generally speaking, we "
+#~ "develop based on the roadmap."
