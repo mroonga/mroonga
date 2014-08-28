@@ -301,6 +301,9 @@ value.
    -- id	title	tags
    -- 1	Hello groonga!	groonga install
 
+
+.. _mroonga_vector_column_delimiter:
+
 mroonga_vector_column_delimiter
 -------------------------------
 

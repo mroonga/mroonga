@@ -1,3 +1,4 @@
+# -*- po -*-
 # Japanese translations for groonga storage engine package.
 # Copyright (C) 2009-2011, groonga project
 # This file is distributed under the same license as the groonga storage engine package.
@@ -7,7 +8,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 15:10+0900\n"
 "PO-Revision-Date: 2014-05-30 15:48+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -753,6 +753,19 @@ msgstr ""
 msgid ""
 "Here is an another example to show behavior change by the variable value."
 msgstr "この変数の値による挙動の変化を示す別の例です。"
+
+msgid "mroonga_vector_column_delimiter"
+msgstr ""
+
+msgid ""
+"The delimiter when outputting a vector column.  The default value is a white "
+"space."
+msgstr "ベクターカラムを出力する際の区切り文字。デフォルト値は空白です。"
+
+msgid ""
+"Here is an example SQL to change the delimiter to a semicolon from a white "
+"space::"
+msgstr "区切り文字を空白からセミコロンに変更するSQL例です::"
 
 msgid "SQL commands"
 msgstr ""
@@ -1540,13 +1553,3 @@ msgstr "N番目の単語の終了テキストを指定します。"
 
 msgid "It returns snippet string."
 msgstr "スニペット文字列を返します。"
-
-msgid ""
-"The delimiter when outputting a vector column.  The default value is a white space."
-msgstr ""
-"ベクターカラムを出力する際の区切り文字。デフォルト値は空白です。"
-
-msgid ""
-"Here is an example SQL to change the delimiter to a semicolon from a white space::"
-msgstr ""
-"区切り文字を空白からセミコロンに変更するSQL例です::"

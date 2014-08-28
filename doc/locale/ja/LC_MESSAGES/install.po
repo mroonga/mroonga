@@ -1,3 +1,4 @@
+# -*- po -*-
 # Japanese translations for groonga storage engine package.
 # Copyright (C) 2009-2011, groonga project
 # This file is distributed under the same license as the groonga storage engine package.
@@ -7,7 +8,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-14 19:41+0900\n"
 "PO-Revision-Date: 2014-08-14 20:12+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -261,6 +261,13 @@ msgid "``make`` (GNU make is supported but other make like BSD make will work)"
 msgstr ""
 "``make`` （GNU makeがサポート対象だが、BSD makeなど他のmakeでもたぶん大丈夫）"
 
+msgid ""
+"`pkg-config <http://www.freedesktop.org/wiki/Software/pkg-config>`_ for "
+"detecting libraries"
+msgstr ""
+"`pkg-config <http://www.freedesktop.org/wiki/Software/pkg-config>`_ （ライブ"
+"ラリを検出するため）"
+
 msgid "You must get them ready."
 msgstr "これらを用意してください。<"
 
@@ -274,20 +281,10 @@ msgstr ""
 msgid "Here are optional tools:"
 msgstr "あるとよいツール:"
 
-msgid ""
-"`pkg-config <http://www.freedesktop.org/wiki/Software/pkg-config>`_ for "
-"detecting libraries"
-msgstr ""
-"`pkg-config <http://www.freedesktop.org/wiki/Software/pkg-config>`_ （ライブ"
-"ラリを検出するため）"
-
 msgid "`sudo <http://www.gratisoft.us/sudo/>`_ for installing built Mroonga."
 msgstr ""
 "`sudo <http://www.gratisoft.us/sudo/>`_ （ビルドしたGroongaをインストールする"
 "ため）"
-
-msgid "You must get them ready if you want to use optional libraries."
-msgstr ""
 
 msgid "Libraries"
 msgstr "ライブラリー"
