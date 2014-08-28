@@ -5,6 +5,47 @@
 News
 ====
 
+.. _release-4-05:
+
+Release 4.05 - 2014/08/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Dropped Ubuntu 13.10 Saucy Salamander support.
+* Added new variable :ref:`mroonga_vector_column_delimiter`.
+  It is used to change delimiter of vector column.
+  [GitHub#16] [GitHub#16] [Patch by Naoya Murakami]
+* [rpm][centos] Supported MySQL 5.6 official repository packages on CentOS 6/7.
+  Use mysql56-community-mroonga package. [Patch by miko]
+* [doc] Moved document about upgrading which is included in install document.
+  Now, you can refer it as :doc:`/reference/upgrade`.
+* Supported MariaDB 10.0.13.
+
+Fixes
+^^^^^
+
+* [doc] Fixed wrong MySQL version about news of Mroonga 4.04. [Reported by _so4]
+* [doc] Removed needless explicit install procedure for groonga-normalizer-mysql package.
+* [storage] Fixed a bug that value remains in unique index on duplicated primary key error.
+  [groonga-dev,02633] [Reported by 6elz]
+* [doc] Fixed a bug that building document in other directory fails.
+  [groonga-dev,02652] [Reported by cosmo0920]
+* Changed to use "Mroonga" form for engine name.
+* [storage] Fixed a bug that table specified index (``COMMENT 'table "XXX"'``)
+  can't be removed. [groonga-dev,02677] [Reported by Naoya Murakami]
+
+
+Thanks
+^^^^^^
+
+* _so4
+* Naoya Murakami
+* miko
+* 6elz
+* cosmo0920
+
 .. _release-4-04:
 
 Release 4.04 - 2014/07/29
