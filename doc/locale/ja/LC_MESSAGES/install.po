@@ -129,7 +129,9 @@ msgid "CentOS 7"
 msgstr ""
 
 msgid "In CentOS 7, we use CentOS's MariaDB packages (version 5.5.x)."
-msgstr "CentOS 7では、ディストリビューション由来のMariaDBパッケージ（MariaDB 5.5系）を利用します。"
+msgstr ""
+"CentOS 7では、ディストリビューション由来のMariaDBパッケージ（MariaDB 5.5系）"
+"を利用します。"
 
 msgid "Debian GNU/Linux"
 msgstr ""

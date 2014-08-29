@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-08-29 16:11+0900\n"
+"PO-Revision-Date: 2014-08-29 16:27+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -54,6 +54,11 @@ msgstr ""
 
 msgid "Supported MariaDB 10.0.13."
 msgstr "MariaDB 10.0.13に対応しました。"
+
+msgid ""
+"[rpm][centos] Supported CentOS 7 as mariadb-mroonga package. It uses the "
+"bundled MariaDB. [groonga-dev,02604] [Tested by Miyawaki][Tested by Kawada]"
+msgstr "[rpm][centos] CentOS 7をサポートしました。mariadb-mroongaパッケージを提供しています。このパッケージはバンドルされているMariaDBを使います。 [groonga-dev,02604] [宮脇さんがテスト協力][河田さんがテスト協力]"
 
 msgid "Fixes"
 msgstr "修正"
@@ -116,6 +121,12 @@ msgstr "6elzさん"
 # d5a1476d11a34a9cb63ba48497653e81
 msgid "cosmo0920"
 msgstr "cosmo0920さん"
+
+msgid "Miyawaki"
+msgstr "宮脇さん"
+
+msgid "Kawada"
+msgstr "河田さん"
 
 msgid "Release 4.04 - 2014/07/29"
 msgstr "4.04リリース - 2014/07/29"
