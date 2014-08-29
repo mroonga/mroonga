@@ -4,7 +4,7 @@
 
 %if %{centos_ver} == 6
 %define mysql_version_default 5.5.37
-%define mysql_release_default 1.2
+%define mysql_release_default 5
 %define mysql_dist_default    el6.centos.alt
 %define mysql_download_base_url_default http://vault.centos.org/6.5/SCL/Source/SPackages
 %define mysql_spec_file_default mysql.spec
