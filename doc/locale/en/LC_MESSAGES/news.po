@@ -48,6 +48,11 @@ msgstr ""
 msgid "Supported MariaDB 10.0.13."
 msgstr ""
 
+msgid ""
+"[rpm][centos] Supported CentOS 7 as mariadb-mroonga package. It uses the "
+"bundled MariaDB. [groonga-dev,02604] [Tested by Miyawaki][Tested by Kawada]"
+msgstr ""
+
 msgid "Fixes"
 msgstr "Fixes"
 
@@ -96,6 +101,12 @@ msgstr ""
 
 msgid "cosmo0920"
 msgstr "cosmo0920"
+
+msgid "Miyawaki"
+msgstr ""
+
+msgid "Kawada"
+msgstr ""
 
 msgid "Release 4.04 - 2014/07/29"
 msgstr ""

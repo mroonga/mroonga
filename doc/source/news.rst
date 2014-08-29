@@ -16,7 +16,7 @@ Improvements
 * Dropped Ubuntu 13.10 Saucy Salamander support.
 * Added new variable :ref:`mroonga_vector_column_delimiter`.
   It is used to change delimiter of vector column.
-  [GitHub#16] [GitHub#16] [Patch by Naoya Murakami]
+  [GitHub#16] [Patch by Naoya Murakami]
 * [rpm][centos] Supported MySQL 5.6 official repository packages on CentOS 6/7.
   Use mysql56-community-mroonga package. [Patch by miko]
 * [doc] Moved document about upgrading which is included in install document.
@@ -62,7 +62,7 @@ Improvements
 * Removed Groonga and groonga-normalizer-mysql specific test files for
   MariaDB bundled version on Windows. There is too long file name issue.
   [groonga-dev,02391] [Reported by Masafumi Yokoyama]
-* [doc] Updated :doc:`/deveoper`.
+* [doc] Updated :doc:`/developer`.
 * Added overflow/underflow check whether valid time to find errors on 32-bit
   environment. [Patch by Toshihisa Tashiro]
 * [storage] Supproted INPLACE ALTER TABLE for adding/dropping columns.
