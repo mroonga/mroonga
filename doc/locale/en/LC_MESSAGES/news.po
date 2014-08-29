@@ -31,8 +31,7 @@ msgstr ""
 
 msgid ""
 "Added new variable :ref:`mroonga_vector_column_delimiter`. It is used to "
-"change delimiter of vector column. [GitHub#16] [GitHub#16] [Patch by Naoya "
-"Murakami]"
+"change delimiter of vector column. [GitHub#16] [Patch by Naoya Murakami]"
 msgstr ""
 
 msgid ""
@@ -117,7 +116,7 @@ msgid ""
 "dev,02391] [Reported by Masafumi Yokoyama]"
 msgstr ""
 
-msgid "[doc] Updated :doc:`/deveoper`."
+msgid "[doc] Updated :doc:`/developer`."
 msgstr ""
 
 msgid ""
