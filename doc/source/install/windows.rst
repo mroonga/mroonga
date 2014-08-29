@@ -39,8 +39,8 @@ environment.
 Choose ``win32`` version for 32-bit environment, ``winx64`` version
 for 64-bit environment:
 
-  * `mariadb-10.0.13-with-mroonga-4.05-win32.zip <https://github.com/mroonga/mroonga/releases/download/v4.05/mariadb-10.0.12-with-mroonga-4.05-win32.zip>`_
-  * `mariadb-10.0.13-with-mroonga-4.05-winx64.zip <https://github.com/mroonga/mroonga/releases/download/v4.05/mariadb-10.0.12-with-mroonga-4.05-winx64.zip>`_
+  * `mariadb-10.0.13-with-mroonga-4.05-win32.zip <https://github.com/mroonga/mroonga/releases/download/v4.05/mariadb-10.0.13-with-mroonga-4.05-win32.zip>`_
+  * `mariadb-10.0.13-with-mroonga-4.05-winx64.zip <https://github.com/mroonga/mroonga/releases/download/v4.05/mariadb-10.0.13-with-mroonga-4.05-winx64.zip>`_
 
 Zip packages are pre-configured for easy to use, so no need to execute
 ``INSTALL PLUGIN`` and ``CREATE FUNCTION``.
