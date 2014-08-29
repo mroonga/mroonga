@@ -22,6 +22,9 @@ Improvements
 * [doc] Moved document about upgrading which is included in install document.
   Now, you can refer it as :doc:`/upgrade`.
 * Supported MariaDB 10.0.13.
+* [rpm][centos] Supported CentOS 7 as mariadb-mroonga package. It uses
+  the bundled MariaDB.
+  [groonga-dev,02604] [Tested by Miyawaki][Tested by Kawada]
 
 Fixes
 ^^^^^
@@ -45,6 +48,8 @@ Thanks
 * miko
 * 6elz
 * cosmo0920
+* Miyawaki
+* Kawada
 
 .. _release-4-04:
 
