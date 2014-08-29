@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-08-28 15:45+0900\n"
+"PO-Revision-Date: 2014-08-29 16:39+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -1504,37 +1504,3 @@ msgstr "リリース後にやること"
 
 msgid "リリースバージョンを以下のようにして更新します。::"
 msgstr "リリースバージョンを以下のようにして更新します。::"
-
-#~ msgid "Japanese documents in Sphinx format"
-#~ msgstr "Japanese documents in Sphinx format"
-
-#~ msgid "doc/ja/"
-#~ msgstr "doc/ja/"
-
-#~ msgid "test/sql/r/"
-#~ msgstr "test/sql/r/"
-
-#~ msgid "test/sql/t/"
-#~ msgstr "test/sql/t/"
-
-#~ msgid "test/sql/"
-#~ msgstr "test/sql/"
-
-#~ msgid "glibc 2.5 is used in Red Hat Enterprise Linux 5."
-#~ msgstr "glibc 2.5 is used in Red Hat Enterprise Linux 5."
-
-#~ msgid "groonga 1.2.8"
-#~ msgstr "groonga 1.2.8"
-
-#~ msgid "MySQL 5.5"
-#~ msgstr "MySQL 5.5"
-
-#~ msgid "Process of development"
-#~ msgstr "Process of development"
-
-#~ msgid ""
-#~ "You can see our roadmaps in the following page. Generally speaking, we "
-#~ "develop based on the roadmap."
-#~ msgstr ""
-#~ "You can see our roadmaps in the following page. Generally speaking, we "
-#~ "develop based on the roadmap."
