@@ -1,5 +1,5 @@
-%define mariadb_version 5.5.37
-%define mariadb_release 1%{?dist}
+%define mariadb_version 5.5.38
+%define mariadb_release 3%{?dist}
 #%define mariadb_download_base_url http://ftp.iij.ad.jp/pub/linux/fedora/updates/20/SRPMS
 %define mariadb_download_base_url http://ftp.riken.jp/Linux/fedora/updates/20/SRPMS
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
