@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-07-28 16:51+0900\n"
+"PO-Revision-Date: 2014-08-29 16:17+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1365,19 +1365,3 @@ msgstr ""
 
 msgid "リリースバージョンを以下のようにして更新します。::"
 msgstr ""
-
-#~ msgid "Japanese documents in Sphinx format"
-#~ msgstr "Sphinx形式の日本語ドキュメント一式"
-
-#~ msgid "glibc 2.5 is used in Red Hat Enterprise Linux 5."
-#~ msgstr "glibc 2.5はRed Hat Enterprise Linux 5に相当します。"
-
-#~ msgid "Process of development"
-#~ msgstr "開発の流れについて"
-
-#~ msgid ""
-#~ "You can see our roadmaps in the following page. Generally speaking, we "
-#~ "develop based on the roadmap."
-#~ msgstr ""
-#~ "ロードマップは以下のページで確認できます。基本的に開発はロードマップに沿っ"
-#~ "て行います。"
