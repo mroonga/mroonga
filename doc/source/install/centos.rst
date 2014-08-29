@@ -98,7 +98,7 @@ Install groonga-tokenizer-mecab package::
 CentOS 7
 --------
 
-In CentOS 7, we use CentOS's MariaDB packages (version 5.5.x) since Mroonga 4.05 release.
+In CentOS 7, we use CentOS's MariaDB packages (version 5.5.x).
 
 Install::
 
