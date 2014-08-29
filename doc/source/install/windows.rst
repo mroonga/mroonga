@@ -66,7 +66,7 @@ Next connect to MariaDB by following command::
   | MyISAM             | YES     | MyISAM storage engine                                      | NO           | NO   | NO         |
   | MRG_MyISAM         | YES     | Collection of identical MyISAM tables                      | NO           | NO   | NO         |
   | InnoDB             | DEFAULT | Supports transactions, row-level locking, and foreign keys | YES          | YES  | YES        |
-  | mroonga            | YES     | CJK-ready fulltext search, column store                    | NO           | NO   | NO         |
+  | Mroonga            | YES     | CJK-ready fulltext search, column store                    | NO           | NO   | NO         |
   | Aria               | YES     | Crash-safe tables with MyISAM heritage                     | NO           | NO   | NO         |
   +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
   8 rows in set (0.00 sec)
