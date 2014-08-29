@@ -19,6 +19,14 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/images/wrapper-mode.svg \
 	$(top_srcdir)/doc/source/index.rst \
 	$(top_srcdir)/doc/source/install.rst \
+	$(top_srcdir)/doc/source/install/32bit-note.inc \
+	$(top_srcdir)/doc/source/install/centos.rst \
+	$(top_srcdir)/doc/source/install/debian.rst \
+	$(top_srcdir)/doc/source/install/fedora.rst \
+	$(top_srcdir)/doc/source/install/os_x.rst \
+	$(top_srcdir)/doc/source/install/others.rst \
+	$(top_srcdir)/doc/source/install/ubuntu.rst \
+	$(top_srcdir)/doc/source/install/windows.rst \
 	$(top_srcdir)/doc/source/news.rst \
 	$(top_srcdir)/doc/source/news/0.x.rst \
 	$(top_srcdir)/doc/source/reference.rst \
@@ -72,6 +80,14 @@ source_files_relative_from_doc_dir = \
 	source/images/wrapper-mode.svg \
 	source/index.rst \
 	source/install.rst \
+	source/install/32bit-note.inc \
+	source/install/centos.rst \
+	source/install/debian.rst \
+	source/install/fedora.rst \
+	source/install/os_x.rst \
+	source/install/others.rst \
+	source/install/ubuntu.rst \
+	source/install/windows.rst \
 	source/news.rst \
 	source/news/0.x.rst \
 	source/reference.rst \
@@ -210,6 +226,13 @@ html_files_relative_from_locale_dir = \
 	html/_sources/faq/mmap_cannot_allocate_memory.txt \
 	html/_sources/index.txt \
 	html/_sources/install.txt \
+	html/_sources/install/centos.txt \
+	html/_sources/install/debian.txt \
+	html/_sources/install/fedora.txt \
+	html/_sources/install/os_x.txt \
+	html/_sources/install/others.txt \
+	html/_sources/install/ubuntu.txt \
+	html/_sources/install/windows.txt \
 	html/_sources/news.txt \
 	html/_sources/news/0.x.txt \
 	html/_sources/reference.txt \
@@ -267,6 +290,13 @@ html_files_relative_from_locale_dir = \
 	html/genindex.html \
 	html/index.html \
 	html/install.html \
+	html/install/centos.html \
+	html/install/debian.html \
+	html/install/fedora.html \
+	html/install/os_x.html \
+	html/install/others.html \
+	html/install/ubuntu.html \
+	html/install/windows.html \
 	html/news.html \
 	html/news/0.x.html \
 	html/objects.inv \
