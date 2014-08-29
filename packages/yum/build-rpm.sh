@@ -89,7 +89,7 @@ case ${distribution} in
 	;;
     esac
 
-    release_rpm=groonga-release-1.1.0-0.noarch.rpm
+    release_rpm=groonga-release-1.1.0-1.noarch.rpm
     wget http://packages.groonga.org/${distribution}/${release_rpm}
     run rpm -U ${release_rpm}
     rm -f ${release_rpm}
