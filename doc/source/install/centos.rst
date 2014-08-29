@@ -94,3 +94,24 @@ If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, inst
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
+
+CentOS 7
+--------
+
+In CentOS 7, we use CentOS's MariaDB packages (version 5.5.x) since Mroonga 4.05 release.
+
+Install::
+
+  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+  % sudo yum makecache
+  % sudo yum install -y mariadb-server
+  % sudo systemctl start mariadb
+  % sudo yum install -y mariadb-mroonga
+  (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
+
