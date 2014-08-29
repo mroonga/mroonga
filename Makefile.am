@@ -74,6 +74,7 @@ update-latest-release: misc
 	  packages/rpm/centos/mysql56-community-mroonga.spec.in	\
 	  packages/debian/changelog			\
 	  doc/source/install/*.rst			\
+	  doc/locale/*/LC_MESSAGES/install.po		\
 	  $(MROONGA_GITHUB_COM_PATH)/index.html		\
 	  $(MROONGA_GITHUB_COM_PATH)/ja/index.html
 
