@@ -78,7 +78,7 @@ The denominator "8" and "9" are approximate number, strictly speaking, "2" is th
 
 You can check the approximate number of token by using the following query. ::
 
-  SELECT mroonga_command("select diaries-content --query '_key:fine OR _key:today'--output_columns _key, index --limit -1") AS groonga_response;
+  SELECT mroonga_command("select diaries-content --query '_key:fine OR _key:today' --output_columns _key, index --limit -1") AS groonga_response;
 
 The retrieval result of the above query is as follows: ::
 
