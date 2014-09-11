@@ -6769,12 +6769,32 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   bool is_multiple_column_index = KEY_N_KEY_PARTS(&key_info) > 1;
   if (is_multiple_column_index) {
     mrn_change_encoding(ctx, NULL);
-    flags |= GRN_CURSOR_PREFIX;
     uint key_length = calculate_key_len(table, active_index, key, keypart_map);
-    key_min = key_min_entity;
-    storage_encode_multiple_column_key(&key_info,
-                                       key, key_length,
-                                       key_min, &size_min);
+    DBUG_PRINT("info",
+               ("mroonga: multiple column index: "
+                "search key length=<%u>, "
+                "multiple column index key length=<%u>",
+                key_length, key_info.key_length));
+    if (key_length == key_info.key_length) {
+      if (find_flag == HA_READ_BEFORE_KEY ||
+          find_flag == HA_READ_PREFIX_LAST_OR_PREV) {
+        key_max = key_max_entity;
+        storage_encode_multiple_column_key(&key_info,
+                                           key, key_length,
+                                           key_max, &size_max);
+      } else {
+        key_min = key_min_entity;
+        storage_encode_multiple_column_key(&key_info,
+                                           key, key_length,
+                                           key_min, &size_min);
+      }
+    } else {
+      flags |= GRN_CURSOR_PREFIX;
+      key_min = key_min_entity;
+      storage_encode_multiple_column_key(&key_info,
+                                         key, key_length,
+                                         key_min, &size_min);
+    }
   } else if (mrn_is_geo_key(&key_info)) {
     error = mrn_change_encoding(ctx, key_info.key_part->field->charset());
     if (error)
