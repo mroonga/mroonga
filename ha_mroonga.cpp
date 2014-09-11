@@ -6811,10 +6811,8 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
           DBUG_RETURN(HA_ERR_END_OF_FILE);
         }
       }
-    } else if (
-      find_flag == HA_READ_BEFORE_KEY ||
-      find_flag == HA_READ_PREFIX_LAST_OR_PREV
-      ) {
+    } else if (find_flag == HA_READ_BEFORE_KEY ||
+               find_flag == HA_READ_PREFIX_LAST_OR_PREV) {
       key_max = key_max_entity;
       storage_encode_key(field, key, key_max_entity, &size_max);
     } else {
