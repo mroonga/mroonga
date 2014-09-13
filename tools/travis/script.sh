@@ -31,7 +31,7 @@ else
     . "${top_dir}/config.sh"
 fi
 
-if [ "${MRN_BUNDLED}" = "TRUE" ]; then
+if [ "${MRN_BUNDLED}" = "yes" ]; then
     n_processors=1
 else
     n_processors="$(grep '^processor' /proc/cpuinfo | wc -l)"
@@ -48,7 +48,7 @@ build()
 
 run_unit_test()
 {
-    if [ "${MRN_BUNDLED}" != "TRUE" ]; then
+    if [ "${MRN_BUNDLED}" != "yes" ]; then
 	NO_MAKE=yes ${mroonga_dir}/test/run-unit-test.sh
     fi
 }
@@ -97,7 +97,7 @@ run_sql_test()
 	test_args=("${test_args[@]}" "--embedded-server")
     fi
 
-    if [ "${MRN_BUNDLED}" = "TRUE" ]; then
+    if [ "${MRN_BUNDLED}" = "yes" ]; then
 	${mroonga_dir}/test/run-sql-test.sh "${test_args[@]}"
     else
 	prepare_sql_test
