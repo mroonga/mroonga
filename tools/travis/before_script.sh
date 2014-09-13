@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2014 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,7 @@
 set -e
 
 if [ "$MRN_BUNDLED" = "yes" ]; then
-    cmake . -DWITH_DEBUG=1
+    cmake . -DCMAKE_BUILD_TYPE=Debug
 else
     ./autogen.sh
 
