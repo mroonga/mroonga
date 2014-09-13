@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2014 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# set -x
+set -x
 set -e
 
 base_dir="$(cd $(dirname $0); pwd)"
@@ -93,16 +93,20 @@ run_sql_test()
 	test_args=("${test_args[@]}" "--embedded-server")
     fi
 
-    prepare_sql_test
+    if [ "${MRN_BUNDLED}" = "yes" ]; then
+	${mroonga_dir}/test/run-sql-test.sh "${test_args[@]}"
+    else
+	prepare_sql_test
 
-    cd ${mysql_test_dir}/
-    ./mysql-test-run.pl \
-	"${test_args[@]}" \
-	--no-check-testcases \
-	--parallel="${n_processors}" \
-	--retry=1 \
-	--suite="${test_suite_names}" \
-	--force
+	cd ${mysql_test_dir}/
+	./mysql-test-run.pl \
+	    "${test_args[@]}" \
+	    --no-check-testcases \
+	    --parallel="${n_processors}" \
+	    --retry=1 \
+	    --suite="${test_suite_names}" \
+	    --force
+    fi
 }
 
 build
