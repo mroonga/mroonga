@@ -93,21 +93,16 @@ run_sql_test()
 	test_args=("${test_args[@]}" "--embedded-server")
     fi
 
-    if [ "${MRN_BUNDLED}" = "yes" ]; then
-	sudo make install > /dev/null
-	${mroonga_dir}/test/run-sql-test.sh "${test_args[@]}"
-    else
-	prepare_sql_test
+    prepare_sql_test
 
-	cd ${mysql_test_dir}/
-	./mysql-test-run.pl \
-	    "${test_args[@]}" \
-	    --no-check-testcases \
-	    --parallel="${n_processors}" \
-	    --retry=1 \
-	    --suite="${test_suite_names}" \
-	    --force
-    fi
+    cd ${mysql_test_dir}/
+    ./mysql-test-run.pl \
+	"${test_args[@]}" \
+	--no-check-testcases \
+	--parallel="${n_processors}" \
+	--retry=1 \
+	--suite="${test_suite_names}" \
+	--force
 }
 
 build
