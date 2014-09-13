@@ -94,6 +94,7 @@ run_sql_test()
     fi
 
     if [ "${MRN_BUNDLED}" = "yes" ]; then
+	sudo make install > /dev/null
 	${mroonga_dir}/test/run-sql-test.sh "${test_args[@]}"
     else
 	prepare_sql_test
