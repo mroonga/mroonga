@@ -10,9 +10,9 @@ env:
   - MYSQL_VERSION=mariadb-10.0.13
   - MYSQL_VERSION=mariadb-10.0.13 MRN_BUNDLED=yes
 #  - MYSQL_VERSION=mariadb-10.0.13 MRN_BUNDLED=yes MRN_TEST_EMBEDDED=yes
-matrix:
-  allow_failures:
-    - env: MYSQL_VERSION=mysql-system
+# matrix:
+#   allow_failures:
+#     - env: MYSQL_VERSION=mysql-system
 install:
   - tools/travis/install.sh
 before_script:
