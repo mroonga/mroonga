@@ -44,8 +44,11 @@ Libraries
 
 Here are required libraries:
 
-  * `Groonga <http://groonga.org/>`_.
-  * `groonga-normalizer-mysql <https://github.com/groonga/groonga-normalizer-mysql>`_.
+  * `Groonga <http://groonga.org/>`_. (If you use package, install
+    development package such as ``libgroonga-dev`` for deb or
+    ``groonga-devel`` for RPM.)
+  * `groonga-normalizer-mysql
+    <https://github.com/groonga/groonga-normalizer-mysql>`_.
 
 Here are optional libraries:
 
