@@ -354,6 +354,13 @@ msgstr ""
 "mysql-5.6.32を使用し、以下にソースディレクトリが展開されているものと仮定しま"
 "す::"
 
+#, fuzzy
+msgid "Then build in the following directory::"
+msgstr "MySQLのバイナリが以下にインストールされているものと仮定します::"
+
+msgid "Here are command lines to build and install MySQL::"
+msgstr ""
+
 msgid "And we assume that MySQL is installed in the following directory::"
 msgstr "MySQLのバイナリが以下にインストールされているものと仮定します::"
 

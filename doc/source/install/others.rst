@@ -74,6 +74,17 @@ extracted in the following directory::
 
   /usr/local/src/mysql-5.6.32
 
+Then build in the following directory::
+
+  /usr/local/build/mysql-5.6.32
+
+Here are command lines to build and install MySQL::
+
+  % cd /usr/local/build/mysql-5.6.32
+  % cmake /usr/local/src/mysql-5.6.32
+  % make
+  % sudo make install
+
 And we assume that MySQL is installed in the following directory::
 
   /usr/local/mysql
@@ -89,6 +100,7 @@ steps::
   % cd mroonga-4.05
   % ./configure \
       --with-mysql-source=/usr/local/src/mysql-5.6.32 \
+      --with-mysql-build=/usr/local/build/mysql-5.6.32 \
       --with-mysql-config=/usr/local/mysql/bin/mysql_config
   % make
   % sudo make install
