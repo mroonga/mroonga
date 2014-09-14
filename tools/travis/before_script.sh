@@ -19,7 +19,7 @@
 # set -x
 set -e
 
-if [ "$MRN_BUNDLED" = "yes" ]; then
+if [ "${MROONGA_BUNDLED}" = "yes" ]; then
     cmake . -DCMAKE_BUILD_TYPE=Debug
 else
     ./autogen.sh

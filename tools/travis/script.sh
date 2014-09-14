@@ -44,7 +44,7 @@ build()
 
 run_unit_test()
 {
-    if [ "${MRN_BUNDLED}" != "yes" ]; then
+    if [ "${MROONGA_BUNDLED}" != "yes" ]; then
 	NO_MAKE=yes ${mroonga_dir}/test/run-unit-test.sh
     fi
 }
@@ -89,11 +89,11 @@ prepare_sql_test()
 run_sql_test()
 {
     test_args=()
-    if [ "${MRN_TEST_EMBEDDED}" = "yes" ]; then
+    if [ "${MROONGA_TEST_EMBEDDED}" = "yes" ]; then
 	test_args=("${test_args[@]}" "--embedded-server")
     fi
 
-    if [ "${MRN_BUNDLED}" = "yes" ]; then
+    if [ "${MROONGA_BUNDLED}" = "yes" ]; then
 	${mroonga_dir}/test/run-sql-test.sh "${test_args[@]}"
     else
 	prepare_sql_test
