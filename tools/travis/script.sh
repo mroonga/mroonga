@@ -31,10 +31,14 @@ else
     . "${top_dir}/config.sh"
 fi
 
-n_processors="$(grep '^processor' /proc/cpuinfo | wc -l)"
-max_n_processors=8
-if (( $n_processors > $max_n_processors )); then
-    n_processors=$max_n_processors
+if [ "${MROONGA_BUNDLED}" = "yes" ]; then
+    n_processors=1
+else
+    n_processors="$(grep '^processor' /proc/cpuinfo | wc -l)"
+    max_n_processors=8
+    if (( $n_processors > $max_n_processors )); then
+	n_processors=$max_n_processors
+    fi
 fi
 
 build()
