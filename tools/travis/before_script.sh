@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Copyright(C) 2012-2014 Kouhei Sutou <kou@clear-code.com>
 #
@@ -20,7 +20,11 @@
 set -e
 
 if [ "${MROONGA_BUNDLED}" = "yes" ]; then
-    cmake . -DCMAKE_BUILD_TYPE=Debug
+    cmake_args=(-DCMAKE_BUILD_TYPE=Debug)
+    if [ "${MROONGA_TEST_EMBEDDED}" = "yes" ]; then
+	cmake_args=("${cmake_args[@]}" "-DWITH_EMBEDDED_SERVER=TRUE")
+    fi
+    cmake . "${cmake_args[@]}"
 else
     ./autogen.sh
 
