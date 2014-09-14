@@ -31,19 +31,19 @@ else
     . "${top_dir}/config.sh"
 fi
 
-if [ "${MROONGA_BUNDLED}" = "yes" ]; then
-    n_processors=1
-else
-    n_processors="$(grep '^processor' /proc/cpuinfo | wc -l)"
-    max_n_processors=8
-    if (( $n_processors > $max_n_processors )); then
-	n_processors=$max_n_processors
-    fi
+n_processors="$(grep '^processor' /proc/cpuinfo | wc -l)"
+max_n_processors=8
+if (( $n_processors > $max_n_processors )); then
+    n_processors=$max_n_processors
 fi
 
 build()
 {
-    make -j${n_processors} > /dev/null
+    if [ "${MROONGA_BUNDLED}" = "yes" ]; then
+	make > /dev/null
+    else
+	make -j${n_processors} > /dev/null
+    fi
 }
 
 run_unit_test()
@@ -98,7 +98,9 @@ run_sql_test()
     fi
 
     if [ "${MROONGA_BUNDLED}" = "yes" ]; then
-	${mroonga_dir}/test/run-sql-test.sh "${test_args[@]}"
+	${mroonga_dir}/test/run-sql-test.sh \
+	  "${test_args[@]}" \
+	  --parallel="${n_processors}"
     else
 	prepare_sql_test
 
