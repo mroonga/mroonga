@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-08-28 15:52+0900\n"
+"PO-Revision-Date: 2014-09-26 14:27+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,11 +20,40 @@ msgstr ""
 msgid "News"
 msgstr "News"
 
-msgid "Release 4.05 - 2014/08/29"
+msgid "Release 4.06 - 2014/09/29"
 msgstr ""
 
 msgid "Improvements"
 msgstr "Improvements"
+
+msgid "[doc] Added more details about Groonga's development package."
+msgstr ""
+
+msgid "[doc] Changed to recommend GitHub issue tracker."
+msgstr ""
+
+msgid "Fixes"
+msgstr "Fixes"
+
+msgid ""
+"[storage] Fixed a bug that no record returns with multiple column index. "
+"This bug occurs when it meets two conditions. First, columns indexed by "
+"multiple column index are used in order and WHERE clause. Second, a column "
+"indexed by multiple column index but it's no the first column is used in "
+"ORDER by clause. [#2651] [Reported by foamcentime, Naoya Murakami]"
+msgstr ""
+
+msgid "Thanks"
+msgstr "Thanks"
+
+msgid "foamcentime"
+msgstr ""
+
+msgid "Naoya Murakami"
+msgstr "Naoya Murakami"
+
+msgid "Release 4.05 - 2014/08/29"
+msgstr ""
 
 msgid "Dropped Ubuntu 13.10 Saucy Salamander support."
 msgstr ""
@@ -51,9 +80,6 @@ msgid ""
 "[rpm][centos] Supported CentOS 7 as mariadb-mroonga package. It uses the "
 "bundled MariaDB. [groonga-dev,02604] [Tested by Miyawaki][Tested by Kawada]"
 msgstr ""
-
-msgid "Fixes"
-msgstr "Fixes"
 
 msgid ""
 "[doc] Fixed wrong MySQL version about news of Mroonga 4.04. [Reported by "
@@ -83,14 +109,8 @@ msgid ""
 "\"'``) can't be removed. [groonga-dev,02677] [Reported by Naoya Murakami]"
 msgstr ""
 
-msgid "Thanks"
-msgstr "Thanks"
-
 msgid "_so4"
 msgstr ""
-
-msgid "Naoya Murakami"
-msgstr "Naoya Murakami"
 
 msgid "miko"
 msgstr ""

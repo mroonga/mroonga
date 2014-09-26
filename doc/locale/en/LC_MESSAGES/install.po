@@ -262,7 +262,9 @@ msgstr ""
 msgid "Here are required libraries:"
 msgstr ""
 
-msgid "`Groonga <http://groonga.org/>`_."
+msgid ""
+"`Groonga <http://groonga.org/>`_. (If you use package, install development "
+"package such as ``libgroonga-dev`` for deb or ``groonga-devel`` for RPM.)"
 msgstr ""
 
 msgid ""
@@ -304,6 +306,12 @@ msgstr ""
 msgid ""
 "Here we assume that you use mysql-5.6.32 and its source code is extracted in "
 "the following directory::"
+msgstr ""
+
+msgid "Then build in the following directory::"
+msgstr ""
+
+msgid "Here are command lines to build and install MySQL::"
 msgstr ""
 
 msgid "And we assume that MySQL is installed in the following directory::"
