@@ -5,6 +5,33 @@
 News
 ====
 
+.. _release-4-06:
+
+Release 4.06 - 2014/09/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [doc] Added more details about Groonga's development package.
+* [doc] Changed to recommend GitHub issue tracker.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that no record returns with multiple column index.
+  This bug occurs when it meets two conditions. First, columns indexed by
+  multiple column index are used in order and WHERE clause. Second,
+  a column indexed by multiple column index but it's no the first column is
+  used in ORDER by clause.
+  [#2651] [Reported by foamcentime, Naoya Murakami]
+
+Thanks
+^^^^^^
+
+* foamcentime
+* Naoya Murakami
+
 .. _release-4-05:
 
 Release 4.05 - 2014/08/29
