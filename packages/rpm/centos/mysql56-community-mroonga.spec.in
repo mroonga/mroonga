@@ -158,6 +158,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sat Sep 27 2014 Eiichi Sato <miko@cafelounge.net> - 4.05-2
+- build against MySQL 5.6.21-2 on MySQL yum repository.
+
 * Fri Aug 29 2014 Kouhei Sutou <kou@clear-code.com> - 4.05-1
 - new upstream release.
 
