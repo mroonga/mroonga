@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-08-29 16:38+0900\n"
+"PO-Revision-Date: 2014-09-26 14:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,11 +20,46 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 4.05 - 2014/08/29"
-msgstr "4.05リリース - 2014/08/29"
+msgid "Release 4.06 - 2014/09/29"
+msgstr "4.06リリース - 2014/09/29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[doc] Added more details about Groonga's development package."
+msgstr "[doc] Groongaの開発パッケージについて説明を追加しました。"
+
+msgid "[doc] Changed to recommend GitHub issue tracker."
+msgstr "[doc] GitHub issue trackerの使用を推奨するようにしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[storage] Fixed a bug that no record returns with multiple column index. "
+"This bug occurs when it meets two conditions. First, columns indexed by "
+"multiple column index are used in order and WHERE clause. Second, a column "
+"indexed by multiple column index but it's no the first column is used in "
+"ORDER by clause. [#2651] [Reported by foamcentime, Naoya Murakami]"
+msgstr ""
+"[ストレージモード] マルチカラムインデックスを使った検索で空のレコードが返って"
+"くる不具合を修正しました。この不具合は次の2つの条件を満たすと発生します。1つ"
+"めは、カラムがマルチカラムインデックスによってインデックスが作成されており、"
+"ORDERとWHERE句に指定されていること。2つめが、マルチカラムインデックスに指定し"
+"た最初のカラムがORDERで使われていないことです。[#2651] [foamcentime, 村上さん"
+"が報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "foamcentime"
+msgstr "foamcentimeさん"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Release 4.05 - 2014/08/29"
+msgstr "4.05リリース - 2014/08/29"
 
 msgid "Dropped Ubuntu 13.10 Saucy Salamander support."
 msgstr "Ubuntu 13.10 (Saucy Salamander)のサポートをやめました。"
@@ -61,9 +96,6 @@ msgstr ""
 "[rpm][centos] CentOS 7をサポートしました。mariadb-mroongaパッケージを提供して"
 "います。このパッケージはバンドルされているMariaDBを使います。 [groonga-"
 "dev,02604] [宮脇さんがテスト協力][河田さんがテスト協力]"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[doc] Fixed wrong MySQL version about news of Mroonga 4.04. [Reported by "
@@ -105,14 +137,8 @@ msgstr ""
 "'table \"XXX\"'``)されていると削除できない不具合を修正しました。[groonga-"
 "dev,02677] [村上さんが報告]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "_so4"
 msgstr "_so4さん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "miko"
 msgstr "mikoさん"
