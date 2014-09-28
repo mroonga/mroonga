@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-09-26 14:42+0900\n"
+"PO-Revision-Date: 2014-09-28 18:54+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -31,6 +31,9 @@ msgstr "[doc] Groongaの開発パッケージについて説明を追加しま�
 
 msgid "[doc] Changed to recommend GitHub issue tracker."
 msgstr "[doc] GitHub issue trackerの使用を推奨するようにしました。"
+
+msgid "[deb] Dropped Debian jessie and sid support."
+msgstr "[deb] Debian jessieとsidのサポートを終了しました。"
 
 msgid "Fixes"
 msgstr "修正"
