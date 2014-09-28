@@ -15,8 +15,6 @@ cmake_install.cmake
 CTestTestfile.cmake
 /.dirstamp
 /aclocal.m4
-/packages/apt/debian/
-/packages/apt/ubuntu/
 /autom4te.cache
 /config.guess
 /config.h
@@ -38,6 +36,8 @@ CTestTestfile.cmake
 /libmroonga.a
 /packages/debian/control
 /packages/rpm/*/*.spec
+/packages/apt/env.sh
+/packages/apt/.vagrant/
 /packages/apt/repositories/
 /packages/yum/env.sh
 /packages/yum/.vagrant/
