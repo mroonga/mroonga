@@ -15,6 +15,7 @@ Improvements
 
 * [doc] Added more details about Groonga's development package.
 * [doc] Changed to recommend GitHub issue tracker.
+* [debian] Dropped Debian jessie and sid support.
 
 Fixes
 ^^^^^
