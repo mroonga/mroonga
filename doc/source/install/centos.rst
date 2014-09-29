@@ -11,7 +11,8 @@ CentOS. You can install them by ``yum``.
 CentOS 5
 --------
 
-In CentOS 5, we use CentOS's MySQL packages (version 5.5.x) since Mroonga 3.09 release.
+We use CentOS's MySQL packages (version 5.5.x) on CentOS 5 since
+Mroonga 3.09 release.
 
 Install::
 
@@ -22,21 +23,23 @@ Install::
   % sudo yum install -y mysql55-mroonga
   (% sudo scl enable mysql55 mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
-CentOS 6
---------
+CentOS 6 (with the official MySQL package)
+------------------------------------------
 
-In CentOS 6, we use CentOS's SCL MySQL packages (version 5.5.x) since Mroonga 4.01 release.
+We can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6
+since Mroonga 4.01 release.
 
 Install::
 
-  % sudo yum install centos-release-SCL
-  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+  % sudo yum install -y centos-release-SCL
+  % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql55-mysql-server
   % sudo /etc/init.d/mysql55-mysqld start
@@ -49,23 +52,68 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
-CentOS 7
---------
+CentOS 6 (with the Oracle MySQL package)
+----------------------------------------
 
-In CentOS 7, we use CentOS's MariaDB packages (version 5.5.x).
+We can use Oracle's MySQL packages (version 5.6.x) on on CentOS 6
+since Mroonga 4.04 release.
 
 Install::
 
-  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+  % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+  % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
+  % sudo yum makecache
+  % sudo yum install -y mysql-community-server
+  % sudo service mysqld start
+  % sudo yum install -y mysql-community-mroonga
+  (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
+
+CentOS 7 (with the official MariaDB package)
+--------------------------------------------
+
+We can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7.
+
+Install::
+
+  % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mariadb-server
   % sudo systemctl start mariadb
   % sudo yum install -y mariadb-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
+CentOS 7 (with the Oracle MySQL package)
+----------------------------------------
+
+We can use Oracle's MySQL packages (version 5.6.x) on CentOS 7.
+
+Install::
+
+  % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+  % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+  % sudo yum makecache
+  % sudo yum install -y mysql-community-server
+  % sudo service mysqld start
+  % sudo yum install -y mysql-community-mroonga
+  (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
