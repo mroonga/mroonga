@@ -27,7 +27,7 @@ CREATE TABLE ids (
 
 INSERT INTO ids (id) values (1), (1);
 
---error ER_DUP_ENTRY
+--error ER_DUP_UNIQUE
 ALTER TABLE ids ADD UNIQUE INDEX (id);
 SHOW CREATE TABLE ids;
 

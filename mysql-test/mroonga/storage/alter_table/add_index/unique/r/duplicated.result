@@ -4,7 +4,7 @@ id INT
 ) DEFAULT CHARSET UTF8;
 INSERT INTO ids (id) values (1), (1);
 ALTER TABLE ids ADD UNIQUE INDEX (id);
-ERROR 23000: Duplicate entry '*UNKNOWN*' for key 'id'
+ERROR 23000: Can't write, because of unique constraint, to table 'ids'
 SHOW CREATE TABLE ids;
 Table	Create Table
 ids	CREATE TABLE `ids` (
