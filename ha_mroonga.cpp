@@ -103,17 +103,17 @@
 
 #ifdef MRN_HAVE_TDC_LOCK_TABLE_SHARE
 #  define mrn_open_mutex(share) &((share)->tdc.LOCK_table_share)
-#  define mrn_open_mutex_lock(share) do {       \
-  TABLE_SHARE *share_ = share;                  \
-  if (share_ && share_->tmp_table == NO_TMP_TABLE) {\
-    mysql_mutex_lock(mrn_open_mutex(share_));   \
-  }                                             \
+#  define mrn_open_mutex_lock(share) do {               \
+  TABLE_SHARE *share_ = share;                          \
+  if (share_ && share_->tmp_table == NO_TMP_TABLE) {    \
+    mysql_mutex_lock(mrn_open_mutex(share_));           \
+  }                                                     \
 } while (0)
-#  define mrn_open_mutex_unlock(share) do {     \
-  TABLE_SHARE *share_ = share;                  \
-  if (share_ && share_->tmp_table == NO_TMP_TABLE) {\
-    mysql_mutex_unlock(mrn_open_mutex(share_)); \
-  }                                             \
+#  define mrn_open_mutex_unlock(share) do {             \
+  TABLE_SHARE *share_ = share;                          \
+  if (share_ && share_->tmp_table == NO_TMP_TABLE) {    \
+    mysql_mutex_unlock(mrn_open_mutex(share_));         \
+  }                                                     \
 } while (0)
 #else
 #  if MYSQL_VERSION_ID >= 50500
