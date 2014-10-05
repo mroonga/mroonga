@@ -13492,6 +13492,8 @@ bool ha_mroonga::storage_inplace_alter_table_index(
         grn_table_size(ctx, index_tables[key_pos])
     ) {
       error = HA_ERR_FOUND_DUPP_UNIQUE;
+      my_printf_error(ER_DUP_ENTRY, ER(ER_DUP_ENTRY_WITH_KEY_NAME), MYF(0),
+                      "*UNKNOWN*", key->name);
       ++i;
       break;
     }
