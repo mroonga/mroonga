@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS ids;
+CREATE TABLE ids (
+id INT PRIMARY KEY
+) DEFAULT CHARSET=UTF8;
+LOCK TABLES ids READ;
+SET lock_wait_timeout=1;
+INSERT DELAYED INTO ids (id) VALUES (1);
+ERROR HY000: DELAYED option not supported for table 'ids'
+SELECT * FROM ids;
+id
+UNLOCK TABLES;
+DROP TABLE ids;

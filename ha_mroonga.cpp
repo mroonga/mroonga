@@ -2284,7 +2284,6 @@ ulonglong ha_mroonga::storage_table_flags() const
     HA_CAN_INDEX_BLOBS |
     HA_STATS_RECORDS_IS_EXACT |
     HA_CAN_FULLTEXT |
-    HA_CAN_INSERT_DELAYED |
     HA_BINLOG_FLAGS |
     HA_CAN_BIT_FIELD |
     HA_DUPLICATE_POS |
