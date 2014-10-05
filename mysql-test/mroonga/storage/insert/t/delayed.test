@@ -24,17 +24,10 @@ CREATE TABLE ids (
   id INT PRIMARY KEY
 ) DEFAULT CHARSET=UTF8;
 
-LOCK TABLES ids READ;
-
-CONNECT(insert_delayed_connection, localhost, root);
-SET lock_wait_timeout=1;
 --error ER_DELAYED_NOT_SUPPORTED
 INSERT DELAYED INTO ids (id) VALUES (1);
 
-CONNECTION default;
 SELECT * FROM ids;
-
-UNLOCK TABLES;
 
 DROP TABLE ids;
 
