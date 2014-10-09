@@ -321,9 +321,9 @@ if(GROONGA_NORMALIZER_MYSQL_FOUND)
     COMPILE_DEFINITIONS "GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME=\"normalizers/mysql\"")
 endif()
 
-set(DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
+set(MRN_DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
 set_property(TARGET ha_mroonga APPEND PROPERTY
-  COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${DEFAULT_PARSER}\"")
+  COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${MRN_DEFAULT_PARSER}\"")
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/mrn_version.h.in"
