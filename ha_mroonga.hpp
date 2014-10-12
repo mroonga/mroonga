@@ -558,12 +558,12 @@ private:
   grn_obj *find_tokenizer(const char *name, int name_length);
   grn_obj *find_normalizer(KEY *key_info);
   bool find_token_filters(KEY *key_info, grn_obj *token_filters);
-  bool set_token_filters_put(grn_obj *token_filters,
-                             const char *token_filter_name,
-                             int token_filter_name_length);
-  bool set_token_filters_fill(grn_obj *token_filters,
-                              const char *token_filter_names,
+  bool find_token_filters_put(grn_obj *token_filters,
+                              const char *token_filter_name,
                               int token_filter_name_length);
+  bool find_token_filters_fill(grn_obj *token_filters,
+                               const char *token_filter_names,
+                               int token_filter_name_length);
   int wrapper_get_record(uchar *buf, const uchar *key);
   int wrapper_get_next_geo_record(uchar *buf);
   int storage_get_next_record(uchar *buf);

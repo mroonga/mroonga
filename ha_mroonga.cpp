@@ -2856,9 +2856,9 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
       if (tmp_share->token_filters) {
         grn_obj token_filters;
         GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
-        if (set_token_filters_fill(&token_filters,
-                                   tmp_share->token_filters,
-                                   tmp_share->token_filters_length)) {
+        if (find_token_filters_fill(&token_filters,
+                                    tmp_share->token_filters,
+                                    tmp_share->token_filters_length)) {
           grn_obj_set_info(ctx, table_obj,
                            GRN_INFO_TOKEN_FILTERS, &token_filters);
         }
@@ -8438,16 +8438,16 @@ bool ha_mroonga::find_token_filters(KEY *key_info, grn_obj *token_filters)
     parser.parse();
     const char *names = parser["token_filters"];
     if (names) {
-      found = set_token_filters_fill(token_filters, names, strlen(names));
+      found = find_token_filters_fill(token_filters, names, strlen(names));
     }
   }
 #endif
   DBUG_RETURN(found);
 }
 
-bool ha_mroonga::set_token_filters_put(grn_obj *token_filters,
-                                       const char *token_filter_name,
-                                       int token_filter_name_length)
+bool ha_mroonga::find_token_filters_put(grn_obj *token_filters,
+                                        const char *token_filter_name,
+                                        int token_filter_name_length)
 {
   grn_obj *token_filter;
 
@@ -8469,9 +8469,9 @@ bool ha_mroonga::set_token_filters_put(grn_obj *token_filters,
   }
 }
 
-bool ha_mroonga::set_token_filters_fill(grn_obj *token_filters,
-                                        const char *token_filter_names,
-                                        int token_filter_names_length)
+bool ha_mroonga::find_token_filters_fill(grn_obj *token_filters,
+                                         const char *token_filter_names,
+                                         int token_filter_names_length)
 {
   const char *start, *current, *end;
   const char *name_start, *name_end;
@@ -8497,9 +8497,9 @@ bool ha_mroonga::set_token_filters_fill(grn_obj *token_filters,
       if (!name_end) {
         name_end = current;
       }
-      set_token_filters_put(token_filters,
-                            name_start,
-                            name_end - name_start);
+      find_token_filters_put(token_filters,
+                             name_start,
+                             name_end - name_start);
       last_name_end = name_end + 1;
       name_start = NULL;
       name_end = NULL;
@@ -8531,9 +8531,9 @@ break_loop:
   if (!name_end) {
     name_end = current;
   }
-  set_token_filters_put(token_filters,
-                        name_start,
-                        name_end - name_start);
+  find_token_filters_put(token_filters,
+                         name_start,
+                         name_end - name_start);
 
   return true;
 }
