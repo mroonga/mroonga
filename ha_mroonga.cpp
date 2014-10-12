@@ -2627,6 +2627,23 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
     grn_obj_unlink(ctx, tokenizer);
   }
 
+  {
+    grn_obj token_filter_names;
+    GRN_TEXT_INIT(&token_filter_names, 0);
+    find_token_filter_names(key_info, &token_filter_names);
+
+    if (GRN_TEXT_LEN(&token_filter_names)) {
+      grn_obj token_filters;
+      GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
+      if (set_token_filters_fill(&token_filters,
+                                 &token_filter_names)) {
+        grn_obj_set_info(ctx, index_table, GRN_INFO_TOKEN_FILTERS, &token_filters);
+      }
+      grn_obj_unlink(ctx, &token_filters);
+    }
+    grn_obj_unlink(ctx, &token_filter_names);
+  }
+
   if (should_normalize(&key_info->key_part->field[0])) {
     grn_info_type info_type = GRN_INFO_NORMALIZER;
     grn_obj *normalizer = find_normalizer(key_info);
