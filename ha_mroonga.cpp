@@ -3302,6 +3302,23 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
       grn_obj_set_info(ctx, index_table, info_type, tokenizer);
       grn_obj_unlink(ctx, tokenizer);
     }
+
+    {
+      grn_obj token_filter_names;
+      GRN_TEXT_INIT(&token_filter_names, 0);
+      find_token_filter_names(key_info, &token_filter_names);
+
+      if (GRN_TEXT_LEN(&token_filter_names)) {
+        grn_obj token_filters;
+        GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
+        if (set_token_filters_fill(&token_filters,
+                                   &token_filter_names)) {
+          grn_obj_set_info(ctx, index_table, GRN_INFO_TOKEN_FILTERS, &token_filters);
+        }
+        grn_obj_unlink(ctx, &token_filters);
+      }
+      grn_obj_unlink(ctx, &token_filter_names);
+    }
   }
 
   {
@@ -8643,6 +8660,115 @@ grn_obj *ha_mroonga::find_normalizer(KEY *key_info)
     normalizer = field_normalizer.find_grn_normalizer();
   }
   DBUG_RETURN(normalizer);
+}
+
+grn_obj *ha_mroonga::find_token_filter_names(KEY *key_info, grn_obj *token_filter_names)
+{
+  MRN_DBUG_ENTER_METHOD();
+#if MYSQL_VERSION_ID >= 50500
+  if (key_info->comment.length > 0) {
+    mrn::ParametersParser parser(key_info->comment.str,
+                                 key_info->comment.length);
+    parser.parse();
+    const char *names = parser["token_filters"];
+    if (names) {
+      GRN_TEXT_PUTS(ctx, token_filter_names, names);
+    }
+  }
+#endif
+  DBUG_RETURN(token_filter_names);
+}
+
+grn_bool ha_mroonga::set_token_filters_put(grn_obj *token_filters,
+                                           const char *token_filter_name,
+                                           int token_filter_name_length)
+{
+  grn_obj *token_filter;
+
+  token_filter = grn_ctx_get(ctx,
+                             token_filter_name,
+                             token_filter_name_length);
+  if (token_filter) {
+    GRN_PTR_PUT(ctx, token_filters, token_filter);
+    return GRN_TRUE;
+  } else {
+    char message[MRN_BUFFER_SIZE];
+    sprintf(message,
+            "nonexistent token filter: <%.*s>",
+            token_filter_name_length, token_filter_name);
+    push_warning(ha_thd(),
+                 Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 message);
+    return GRN_FALSE;
+  }
+}
+
+grn_bool ha_mroonga::set_token_filters_fill(grn_obj *token_filters,
+                                            grn_obj *token_filter_names)
+{
+  const char *start, *current, *end;
+  const char *name_start, *name_end;
+  const char *last_name_end;
+
+  start = GRN_TEXT_VALUE(token_filter_names);
+  end = start + GRN_TEXT_LEN(token_filter_names);
+  current = start;
+  name_start = NULL;
+  name_end = NULL;
+  last_name_end = start;
+  while (current < end) {
+    switch (current[0]) {
+    case ' ' :
+      if (name_start && !name_end) {
+        name_end = current;
+      }
+      break;
+    case ',' :
+      if (!name_start) {
+        goto break_loop;
+      }
+      if (!name_end) {
+        name_end = current;
+      }
+      set_token_filters_put(token_filters,
+                            name_start,
+                            name_end - name_start);
+      last_name_end = name_end + 1;
+      name_start = NULL;
+      name_end = NULL;
+      break;
+    default :
+      if (!name_start) {
+        name_start = current;
+      }
+      break;
+    }
+    current++;
+  }
+
+break_loop:
+  if (!name_start) {
+    char message[MRN_BUFFER_SIZE];
+    sprintf(message,
+            "empty token filter name: "
+            "<%.*s|%.*s|%.*s>",
+            (int)(last_name_end - start), start,
+            (int)(current - last_name_end), last_name_end,
+            (int)(end - current), current);
+    push_warning(ha_thd(),
+                 Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 message);
+    return GRN_FALSE;
+  }
+
+  if (!name_end) {
+    name_end = current;
+  }
+  set_token_filters_put(token_filters,
+                        name_start,
+                        name_end - name_start);
+
+  return GRN_TRUE;
 }
 
 int ha_mroonga::wrapper_get_record(uchar *buf, const uchar *key)
