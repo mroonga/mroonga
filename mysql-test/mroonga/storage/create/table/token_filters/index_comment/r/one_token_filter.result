@@ -1,0 +1,21 @@
+DROP TABLE IF EXISTS Dummy;
+CREATE TABLE Dummy (
+id INT NOT NULL
+) DEFAULT CHARSET=utf8;
+DROP TABLE Dummy;
+SELECT mroonga_command("register token_filters/stop_word");
+mroonga_command("register token_filters/stop_word")
+true
+DROP TABLE IF EXISTS Memos;
+SET NAMES utf8;
+CREATE TABLE Memos (
+content VARCHAR(64) NOT NULL,
+FULLTEXT INDEX (content) COMMENT 'token_filters "TokenFilterStopWord"'
+) DEFAULT CHARSET=utf8;
+SELECT mroonga_command("dump");
+mroonga_command("dump")
+table_create Memos TABLE_NO_KEY
+column_create Memos content COLUMN_SCALAR ShortText
+table_create Memos-content TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerMySQLGeneralCI --token_filters TokenFilterStopWord
+column_create Memos-content index COLUMN_INDEX|WITH_POSITION Memos content
+DROP TABLE Memos;

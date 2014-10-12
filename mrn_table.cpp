@@ -405,6 +405,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         case 6:
           MRN_PARAM_STR("engine", engine);
           break;
+        case 13:
+          MRN_PARAM_STR("token_filters", token_filters);
+          break;
         case 17:
           MRN_PARAM_STR("default_tokenizer", default_tokenizer);
           break;
@@ -703,6 +706,8 @@ int mrn_free_share_alloc(
     my_free(share->engine, MYF(0));
   if (share->default_tokenizer)
     my_free(share->default_tokenizer, MYF(0));
+  if (share->token_filters)
+    my_free(share->token_filters, MYF(0));
   for (i = 0; i < share->table_share->keys; i++)
   {
     if (share->index_table && share->index_table[i])
