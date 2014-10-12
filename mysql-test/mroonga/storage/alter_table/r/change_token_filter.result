@@ -1,13 +1,9 @@
-DROP TABLE IF EXISTS Dummy;
-CREATE TABLE Dummy (
-id INT NOT NULL
-) DEFAULT CHARSET=utf8;
-DROP TABLE Dummy;
+DROP DATABASE test;
+CREATE DATABASE test;
+USE test;
 SELECT mroonga_command("register token_filters/stop_word");
 mroonga_command("register token_filters/stop_word")
 true
-DROP TABLE IF EXISTS memos;
-DROP TABLE IF EXISTS terms;
 CREATE TABLE terms (
 term VARCHAR(64) NOT NULL PRIMARY KEY,
 is_stop_word BOOL NOT NULL
