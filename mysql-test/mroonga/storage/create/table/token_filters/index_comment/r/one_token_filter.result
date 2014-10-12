@@ -1,12 +1,7 @@
-DROP TABLE IF EXISTS Dummy;
-CREATE TABLE Dummy (
-id INT NOT NULL
-) DEFAULT CHARSET=utf8;
-DROP TABLE Dummy;
+DROP TABLE IF EXISTS Memos;
 SELECT mroonga_command("register token_filters/stop_word");
 mroonga_command("register token_filters/stop_word")
 true
-DROP TABLE IF EXISTS Memos;
 SET NAMES utf8;
 CREATE TABLE Memos (
 content VARCHAR(64) NOT NULL,

@@ -18,21 +18,11 @@
 --source ../../../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS Dummy;
---enable_warnings
-
-CREATE TABLE Dummy (
-  id INT NOT NULL
-) DEFAULT CHARSET=utf8;
-
-DROP TABLE Dummy;
-
-SELECT mroonga_command("register token_filters/stop_word");
-
---disable_warnings
 DROP TABLE IF EXISTS Memos;
 DROP TABLE IF EXISTS Terms;
 --enable_warnings
+
+SELECT mroonga_command("register token_filters/stop_word");
 
 CREATE TABLE Terms (
   term VARCHAR(64) NOT NULL PRIMARY KEY,
