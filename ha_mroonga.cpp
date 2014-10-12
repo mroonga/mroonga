@@ -2911,6 +2911,25 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
           grn_obj_unlink(ctx, default_tokenizer);
         }
       }
+      if (tmp_share->token_filters) {
+        grn_obj token_filter_names;
+        GRN_TEXT_INIT(&token_filter_names, 0);
+        GRN_TEXT_SET(ctx, &token_filter_names,
+                     tmp_share->token_filters,
+                     tmp_share->token_filters_length);
+        find_token_filter_names(&key_info, &token_filter_names);
+
+        if (GRN_TEXT_LEN(&token_filter_names)) {
+          grn_obj token_filters;
+          GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
+          if (set_token_filters_fill(&token_filters,
+                                     &token_filter_names)) {
+            grn_obj_set_info(ctx, table_obj, GRN_INFO_TOKEN_FILTERS, &token_filters);
+          }
+          grn_obj_unlink(ctx, &token_filters);
+        }
+        grn_obj_unlink(ctx, &token_filter_names);
+      }
     }
   }
 
