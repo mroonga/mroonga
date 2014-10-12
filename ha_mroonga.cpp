@@ -2580,16 +2580,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
     grn_obj token_filter_names;
     GRN_TEXT_INIT(&token_filter_names, 0);
     find_token_filter_names(key_info, &token_filter_names);
-
-    if (GRN_TEXT_LEN(&token_filter_names)) {
-      grn_obj token_filters;
-      GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
-      if (set_token_filters_fill(&token_filters,
-                                 &token_filter_names)) {
-        grn_obj_set_info(ctx, index_table, GRN_INFO_TOKEN_FILTERS, &token_filters);
-      }
-      grn_obj_unlink(ctx, &token_filters);
-    }
+    set_token_filters(index_table, &token_filter_names);
     grn_obj_unlink(ctx, &token_filter_names);
   }
 
@@ -2867,16 +2858,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
                      tmp_share->token_filters,
                      tmp_share->token_filters_length);
         find_token_filter_names(&key_info, &token_filter_names);
-
-        if (GRN_TEXT_LEN(&token_filter_names)) {
-          grn_obj token_filters;
-          GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
-          if (set_token_filters_fill(&token_filters,
-                                     &token_filter_names)) {
-            grn_obj_set_info(ctx, table_obj, GRN_INFO_TOKEN_FILTERS, &token_filters);
-          }
-          grn_obj_unlink(ctx, &token_filters);
-        }
+        set_token_filters(table_obj, &token_filter_names);
         grn_obj_unlink(ctx, &token_filter_names);
       }
     }
@@ -3292,16 +3274,7 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
       grn_obj token_filter_names;
       GRN_TEXT_INIT(&token_filter_names, 0);
       find_token_filter_names(key_info, &token_filter_names);
-
-      if (GRN_TEXT_LEN(&token_filter_names)) {
-        grn_obj token_filters;
-        GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
-        if (set_token_filters_fill(&token_filters,
-                                   &token_filter_names)) {
-          grn_obj_set_info(ctx, index_table, GRN_INFO_TOKEN_FILTERS, &token_filters);
-        }
-        grn_obj_unlink(ctx, &token_filters);
-      }
+      set_token_filters(index_table, &token_filter_names);
       grn_obj_unlink(ctx, &token_filter_names);
     }
   }
@@ -8556,6 +8529,24 @@ break_loop:
                         name_end - name_start);
 
   return GRN_TRUE;
+}
+
+void ha_mroonga::set_token_filters(grn_obj *table, grn_obj *token_filter_names)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  if (GRN_TEXT_LEN(token_filter_names) == 0) {
+    DBUG_VOID_RETURN;
+  }
+
+  grn_obj token_filters;
+  GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
+  if (set_token_filters_fill(&token_filters, token_filter_names)) {
+    grn_obj_set_info(ctx, table, GRN_INFO_TOKEN_FILTERS, &token_filters);
+  }
+  grn_obj_unlink(ctx, &token_filters);
+
+  DBUG_VOID_RETURN;
 }
 
 int ha_mroonga::wrapper_get_record(uchar *buf, const uchar *key)

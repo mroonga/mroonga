@@ -563,6 +563,7 @@ private:
                                  int token_filter_name_length);
   grn_bool set_token_filters_fill(grn_obj *token_filters,
                                   grn_obj *token_filter_names);
+  void set_token_filters(grn_obj *table, grn_obj *token_filter_names);
   int wrapper_get_record(uchar *buf, const uchar *key);
   int wrapper_get_next_geo_record(uchar *buf);
   int storage_get_next_record(uchar *buf);
