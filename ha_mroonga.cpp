@@ -2833,14 +2833,21 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     KEY key_info = table->s->key_info[pkey_nr];
     int key_parts = KEY_N_KEY_PARTS(&key_info);
     if (key_parts == 1) {
-      Field *field = &(key_info.key_part->field[0]);
-      if (should_normalize(field)) {
-        grn_obj *normalizer = find_normalizer(&key_info);
-        if (normalizer) {
-          grn_info_type info_type = GRN_INFO_NORMALIZER;
-          grn_obj_set_info(ctx, table_obj, info_type, normalizer);
-          grn_obj_unlink(ctx, normalizer);
+      grn_obj *normalizer = NULL;
+      if (tmp_share->normalizer) {
+        normalizer =  grn_ctx_get(ctx,
+                                  tmp_share->normalizer,
+                                  tmp_share->normalizer_length);
+      } else {
+        Field *field = &(key_info.key_part->field[0]);
+        if (should_normalize(field)) {
+          normalizer = find_normalizer(&key_info);
         }
+      }
+      if (normalizer) {
+        grn_info_type info_type = GRN_INFO_NORMALIZER;
+        grn_obj_set_info(ctx, table_obj, info_type, normalizer);
+        grn_obj_unlink(ctx, normalizer);
       }
       if (tmp_share->default_tokenizer) {
         grn_obj *default_tokenizer =

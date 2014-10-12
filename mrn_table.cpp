@@ -404,6 +404,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         case 6:
           MRN_PARAM_STR("engine", engine);
           break;
+        case 10:
+          MRN_PARAM_STR("normalizer", normalizer);
+          break;
         case 13:
           MRN_PARAM_STR("token_filters", token_filters);
           break;
