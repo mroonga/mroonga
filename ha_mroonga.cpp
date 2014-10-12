@@ -8439,9 +8439,9 @@ grn_obj *ha_mroonga::find_token_filter_names(KEY *key_info, grn_obj *token_filte
   DBUG_RETURN(token_filter_names);
 }
 
-grn_bool ha_mroonga::set_token_filters_put(grn_obj *token_filters,
-                                           const char *token_filter_name,
-                                           int token_filter_name_length)
+bool ha_mroonga::set_token_filters_put(grn_obj *token_filters,
+                                       const char *token_filter_name,
+                                       int token_filter_name_length)
 {
   grn_obj *token_filter;
 
@@ -8450,7 +8450,7 @@ grn_bool ha_mroonga::set_token_filters_put(grn_obj *token_filters,
                              token_filter_name_length);
   if (token_filter) {
     GRN_PTR_PUT(ctx, token_filters, token_filter);
-    return GRN_TRUE;
+    return true;
   } else {
     char message[MRN_BUFFER_SIZE];
     sprintf(message,
@@ -8459,12 +8459,12 @@ grn_bool ha_mroonga::set_token_filters_put(grn_obj *token_filters,
     push_warning(ha_thd(),
                  Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
                  message);
-    return GRN_FALSE;
+    return false;
   }
 }
 
-grn_bool ha_mroonga::set_token_filters_fill(grn_obj *token_filters,
-                                            grn_obj *token_filter_names)
+bool ha_mroonga::set_token_filters_fill(grn_obj *token_filters,
+                                        grn_obj *token_filter_names)
 {
   const char *start, *current, *end;
   const char *name_start, *name_end;
@@ -8518,7 +8518,7 @@ break_loop:
     push_warning(ha_thd(),
                  Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
                  message);
-    return GRN_FALSE;
+    return false;
   }
 
   if (!name_end) {
@@ -8528,7 +8528,7 @@ break_loop:
                         name_start,
                         name_end - name_start);
 
-  return GRN_TRUE;
+  return true;
 }
 
 void ha_mroonga::set_token_filters(grn_obj *table, grn_obj *token_filter_names)
