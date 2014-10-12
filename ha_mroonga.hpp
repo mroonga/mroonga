@@ -31,7 +31,6 @@ extern "C" {
 #endif
 
 #include <groonga.h>
-#include "mrn_sys.hpp"
 #include "mrn_mysql_compat.h"
 
 #if (MYSQL_VERSION_ID >= 50603) || \
@@ -729,9 +728,6 @@ private:
   int storage_create_indexes(TABLE *table, const char *grn_table_name,
                              grn_obj *grn_table, MRN_SHARE *tmp_share);
   int close_databases();
-  void ensure_database_directory();
-  int ensure_normalizers_register();
-  int ensure_database_create(const char *name);
   int ensure_database_open(const char *name);
   int ensure_database_remove(const char *name);
   int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,

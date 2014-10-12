@@ -1,7 +1,8 @@
+/* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2011 Kentoku SHIBA
-  Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2010-2013 Kentoku SHIBA
+  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,19 +19,32 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_SYS_HPP_
-#define MRN_SYS_HPP_
+#ifndef MRN_DATABASE_MANAGER_HPP_
+#define MRN_DATABASE_MANAGER_HPP_
 
 #include <groonga.h>
-#include "mrn_macro.hpp"
 
-MRN_BEGIN_DECLS
+namespace mrn {
+  class DatabaseManager {
+  public:
+    DatabaseManager(grn_ctx *ctx);
+    ~DatabaseManager(void);
+    bool init(void);
+    int open(const char *path, grn_obj **db);
+    void close(const char *path);
+    bool drop(const char *path);
+    int clear(void);
 
-/* functions */
-bool mrn_hash_put(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj *value);
-bool mrn_hash_get(grn_ctx *ctx, grn_hash *hash, const char *key, grn_obj **value);
-bool mrn_hash_remove(grn_ctx *ctx, grn_hash *hash, const char *key);
+  private:
+    grn_ctx *ctx_;
+    grn_hash *cache_;
+    pthread_mutex_t mutex_;
+    bool mutex_initialized_;
 
-MRN_END_DECLS
+    void mkdir_p(const char *directory);
+    void ensure_database_directory(void);
+    int ensure_normalizers_registered(grn_obj *db);
+  };
+}
 
-#endif /* MRN_SYS_HPP_ */
+#endif /* MRN_DATABASE_MANAGER_HPP_ */

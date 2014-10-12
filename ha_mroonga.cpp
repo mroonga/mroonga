@@ -49,7 +49,6 @@
 #ifdef WIN32
 #  include <math.h>
 #  include <direct.h>
-#  define MRN_MKDIR(pathname, mode) _mkdir((pathname))
 #  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
     type *variable_name = (type *)_malloca(sizeof(type) * (variable_size))
 #  define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) _freea(variable_name)
@@ -65,7 +64,6 @@
 #else
 #  include <dirent.h>
 #  include <unistd.h>
-#  define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
 #  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
     type variable_name[variable_size]
 #  define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name)
@@ -89,6 +87,7 @@
 #include <mrn_condition_converter.hpp>
 #include <mrn_time_converter.hpp>
 #include <mrn_smart_grn_obj.hpp>
+#include <mrn_database_manager.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -209,7 +208,6 @@ int grn_atoi(const char *nptr, const char *end, const char **rest);
 uint grn_atoui(const char *nptr, const char *end, const char **rest);
 
 /* global variables */
-static pthread_mutex_t mrn_db_mutex;
 static pthread_mutex_t mrn_log_mutex;
 handlerton *mrn_hton_ptr;
 HASH mrn_open_tables;
@@ -220,7 +218,8 @@ pthread_mutex_t mrn_long_term_share_mutex;
 /* internal variables */
 static grn_ctx mrn_ctx;
 static grn_obj *mrn_db;
-static grn_hash *mrn_hash;
+static grn_ctx mrn_db_manager_ctx;
+mrn::DatabaseManager *mrn_db_manager = NULL;
 
 #ifdef WIN32
 static inline double round(double x)
@@ -988,32 +987,10 @@ static handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROO
   DBUG_RETURN(new_handler);
 }
 
-static void mrn_drop_db(const char *path)
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  mrn::PathMapper mapper(path);
-  mrn::Lock lock(&mrn_db_mutex);
-  grn_obj *db = NULL;
-  if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
-    struct stat dummy;
-    if (stat(mapper.db_path(), &dummy) == 0) {
-      db = grn_db_open(&mrn_ctx, mapper.db_path());
-    }
-  }
-  if (db) {
-    if (grn_obj_remove(&mrn_ctx, db)) {
-      GRN_LOG(&mrn_ctx, GRN_LOG_ERROR,
-              "cannot drop database (%s)", mapper.db_path());
-    }
-  }
-  mrn_hash_remove(&mrn_ctx, mrn_hash, mapper.db_name());
-  DBUG_VOID_RETURN;
-}
-
 static void mrn_drop_database(handlerton *hton, char *path)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  mrn_drop_db(path);
+  mrn_db_manager->drop(path);
   DBUG_VOID_RETURN;
 }
 
@@ -1378,17 +1355,11 @@ static int mrn_init(void *p)
   }
   grn_ctx_use(ctx, mrn_db);
 
-  // init hash
-  if (!(mrn_hash = grn_hash_create(ctx, NULL,
-                                   MRN_MAX_KEY_SIZE, sizeof(grn_obj *),
-                                   GRN_OBJ_KEY_VAR_SIZE))) {
-    GRN_LOG(ctx, GRN_LOG_ERROR, "cannot init hash, exiting");
-    goto err_hash_create;
-  }
-
-  // init lock
-  if ((pthread_mutex_init(&mrn_db_mutex, NULL) != 0)) {
-    goto err_db_mutex_init;
+  grn_ctx_init(&mrn_db_manager_ctx, 0);
+  grn_logger_set(&mrn_db_manager_ctx, &mrn_logger);
+  mrn_db_manager = new mrn::DatabaseManager(&mrn_db_manager_ctx);
+  if (!mrn_db_manager->init()) {
+    goto err_db_manager_init;
   }
   if ((pthread_mutex_init(&mrn_allocated_thds_mutex, NULL) != 0)) {
     goto err_allocated_thds_mutex_init;
@@ -1429,11 +1400,9 @@ err_allocated_open_tables_mutex_init:
 error_allocated_thds_hash_init:
   pthread_mutex_destroy(&mrn_allocated_thds_mutex);
 err_allocated_thds_mutex_init:
-  pthread_mutex_destroy(&mrn_db_mutex);
-err_db_mutex_init:
-  grn_hash_close(ctx, mrn_hash);
-err_hash_create:
-  grn_obj_unlink(ctx, mrn_db);
+err_db_manager_init:
+  delete mrn_db_manager;
+  grn_ctx_fin(&mrn_db_manager_ctx);
 err_db_create:
   if (mrn_log_file_opened) {
     fclose(mrn_log_file);
@@ -1453,7 +1422,6 @@ static int mrn_deinit(void *p)
 {
   THD *thd = current_thd, *tmp_thd;
   grn_ctx *ctx = &mrn_ctx;
-  void *value;
   MRN_LONG_TERM_SHARE *long_term_share;
 
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
@@ -1485,14 +1453,8 @@ static int mrn_deinit(void *p)
   pthread_mutex_destroy(&mrn_open_tables_mutex);
   my_hash_free(&mrn_allocated_thds);
   pthread_mutex_destroy(&mrn_allocated_thds_mutex);
-  pthread_mutex_destroy(&mrn_db_mutex);
-  GRN_HASH_EACH(ctx, mrn_hash, id, NULL, 0, &value, {
-    grn_obj *db;
-    memcpy(&db, value, sizeof(grn_obj *));
-    grn_obj_unlink(ctx, db);
-  });
-  grn_hash_close(ctx, mrn_hash);
-  grn_obj_unlink(ctx, mrn_db);
+  delete mrn_db_manager;
+  grn_ctx_fin(&mrn_db_manager_ctx);
 
   grn_ctx_fin(ctx);
   grn_fin();
@@ -2727,7 +2689,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   MRN_DBUG_ENTER_METHOD();
 
   int error = 0;
-  error = ensure_database_create(name);
+  error = ensure_database_open(name);
   if (error)
     DBUG_RETURN(error);
 
@@ -2810,7 +2772,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   if (error)
     DBUG_RETURN(error);
 
-  error = ensure_database_create(name);
+  error = ensure_database_open(name);
   if (error)
     DBUG_RETURN(error);
 
@@ -3510,167 +3472,18 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::close_databases()
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  int error = 0;
-  mrn::Lock lock(&mrn_db_mutex);
-
-  grn_hash_cursor *hash_cursor;
-  hash_cursor = grn_hash_cursor_open(&mrn_ctx, mrn_hash,
-                                     NULL, 0, NULL, 0,
-                                     0, -1, 0);
-  if (mrn_ctx.rc) {
-    my_message(ER_ERROR_ON_READ, mrn_ctx.errbuf, MYF(0));
-    DBUG_RETURN(ER_ERROR_ON_READ);
-  }
-
-  while (grn_hash_cursor_next(&mrn_ctx, hash_cursor) != GRN_ID_NIL) {
-    if (mrn_ctx.rc) {
-      error = ER_ERROR_ON_READ;
-      my_message(error, mrn_ctx.errbuf, MYF(0));
-      break;
-    }
-    void *value;
-    grn_obj *db;
-    grn_hash_cursor_get_value(&mrn_ctx, hash_cursor, &value);
-    memcpy(&db, value, sizeof(grn_obj *));
-    grn_rc rc = grn_hash_cursor_delete(&mrn_ctx, hash_cursor, NULL);
-    if (rc)
-    {
-      error = ER_ERROR_ON_READ;
-      my_message(error, mrn_ctx.errbuf, MYF(0));
-      break;
-    }
-    grn_obj_close(&mrn_ctx, db);
-  }
-  grn_hash_cursor_close(&mrn_ctx, hash_cursor);
-
-  DBUG_RETURN(error);
-}
-
-void ha_mroonga::ensure_database_directory()
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  const char *path_prefix = mrn::PathMapper::default_path_prefix;
-  if (!path_prefix)
-    DBUG_VOID_RETURN;
-
-  const char *last_path_separator;
-  last_path_separator = strrchr(path_prefix, FN_LIBCHAR);
-  if (!last_path_separator)
-    last_path_separator = strrchr(path_prefix, FN_LIBCHAR2);
-  if (!last_path_separator)
-    DBUG_VOID_RETURN;
-  if (path_prefix == last_path_separator)
-    DBUG_VOID_RETURN;
-
-  char database_directory[MRN_MAX_PATH_SIZE];
-  size_t database_directory_length = last_path_separator - path_prefix;
-  strncpy(database_directory, path_prefix, database_directory_length);
-  database_directory[database_directory_length] = '\0';
-  mkdir_p(database_directory);
-
-  DBUG_VOID_RETURN;
-}
-
-int ha_mroonga::ensure_normalizers_register()
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  int error = 0;
-#ifdef WITH_GROONGA_NORMALIZER_MYSQL
-  {
-    grn_obj *mysql_normalizer;
-    mysql_normalizer = grn_ctx_get(ctx, "NormalizerMySQLGeneralCI", -1);
-    if (mysql_normalizer) {
-      grn_obj_unlink(ctx, mysql_normalizer);
-    } else {
-      grn_plugin_register(ctx, GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME);
-    }
-  }
-#endif
-
-  DBUG_RETURN(error);
-}
-
-int ha_mroonga::ensure_database_create(const char *name)
-{
-  int error;
-
-  MRN_DBUG_ENTER_METHOD();
-  /* before creating table, we must check if database is alreadly opened, created */
-  grn_obj *db;
-  struct stat db_stat;
-
-  error = mrn_change_encoding(ctx, system_charset_info);
-  if (error)
-    DBUG_RETURN(error);
-
-  mrn::PathMapper mapper(name);
-  {
-    mrn::Lock lock(&mrn_db_mutex);
-    if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
-      if (stat(mapper.db_path(), &db_stat)) {
-        // creating new database
-        GRN_LOG(ctx, GRN_LOG_INFO,
-                "database not found. creating...(%s)", mapper.db_path());
-        if (name[0] == FN_CURLIB &&
-            (name[1] == FN_LIBCHAR || name[1] == FN_LIBCHAR2)) {
-          ensure_database_directory();
-        }
-        db = grn_db_create(&mrn_ctx, mapper.db_path(), NULL);
-        if (mrn_ctx.rc) {
-          error = ER_CANT_CREATE_TABLE;
-          my_message(error, mrn_ctx.errbuf, MYF(0));
-          DBUG_RETURN(error);
-        }
-      } else {
-        // opening existing database
-        db = grn_db_open(&mrn_ctx, mapper.db_path());
-        if (mrn_ctx.rc) {
-          error = ER_CANT_OPEN_FILE;
-          my_message(error, mrn_ctx.errbuf, MYF(0));
-          DBUG_RETURN(error);
-        }
-      }
-      mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
-    }
-  }
-  grn_ctx_use(ctx, db);
-  error = ensure_normalizers_register();
-
-  DBUG_RETURN(error);
-}
-
 int ha_mroonga::ensure_database_open(const char *name)
 {
   int error;
 
   MRN_DBUG_ENTER_METHOD();
-  grn_obj *db;
 
-  error = mrn_change_encoding(ctx, system_charset_info);
+  grn_obj *db;
+  error = mrn_db_manager->open(name, &db);
   if (error)
     DBUG_RETURN(error);
 
-  mrn::PathMapper mapper(name);
-  {
-    mrn::Lock lock(&mrn_db_mutex);
-    if (!mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
-      db = grn_db_open(&mrn_ctx, mapper.db_path());
-      if (mrn_ctx.rc) {
-        error = ER_CANT_OPEN_FILE;
-        my_message(error, mrn_ctx.errbuf, MYF(0));
-        DBUG_RETURN(error);
-      }
-      mrn_hash_put(&mrn_ctx, mrn_hash, mapper.db_name(), db);
-    }
-  }
   grn_ctx_use(ctx, db);
-  error = ensure_normalizers_register();
 
   DBUG_RETURN(error);
 }
@@ -3685,15 +3498,9 @@ int ha_mroonga::ensure_database_remove(const char *name)
   if (error)
     DBUG_RETURN(error);
 
+  mrn_db_manager->close(name);
+
   mrn::PathMapper mapper(name);
-  {
-    mrn::Lock lock(&mrn_db_mutex);
-    grn_obj *db;
-    if (mrn_hash_get(&mrn_ctx, mrn_hash, mapper.db_name(), &db)) {
-      mrn_hash_remove(&mrn_ctx, mrn_hash, mapper.db_name());
-      grn_obj_close(&mrn_ctx, db);
-    }
-  }
   remove_related_files(mapper.db_path());
 
   DBUG_RETURN(error);
@@ -3739,7 +3546,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
     error = ensure_database_remove(name);
     if (error)
       DBUG_RETURN(error);
-    error = ensure_database_create(name);
+    error = ensure_database_open(name);
     if (error)
       DBUG_RETURN(error);
     grn_table = NULL;
@@ -4385,7 +4192,7 @@ int ha_mroonga::close()
     mrn::Lock lock(&mrn_open_tables_mutex);
     if (!mrn_open_tables.records)
     {
-      int tmp_error = close_databases();
+      int tmp_error = mrn_db_manager->clear();
       if (tmp_error)
         error = tmp_error;
     }
@@ -4574,7 +4381,7 @@ int ha_mroonga::delete_table(const char *name)
   mrn_free_tmp_table_share(tmp_table_share);
   mrn_open_mutex_unlock(NULL);
   if (is_temporary_table_name(name)) {
-    mrn_drop_db(name);
+    mrn_db_manager->drop(name);
   }
   DBUG_RETURN(error);
 }
@@ -8311,49 +8118,6 @@ bool ha_mroonga::get_error_message(int error, String *buf)
     temporary_error = storage_get_error_message(error, buf);
   }
   DBUG_RETURN(temporary_error);
-}
-
-void ha_mroonga::mkdir_p(const char *directory)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  int i = 0;
-  char sub_directory[MRN_MAX_PATH_SIZE];
-  sub_directory[0] = '\0';
-  while (true) {
-    if (directory[i] == FN_LIBCHAR ||
-        directory[i] == FN_LIBCHAR2 ||
-        directory[i] == '\0') {
-      sub_directory[i] = '\0';
-      struct stat directory_status;
-      if (stat(sub_directory, &directory_status) != 0) {
-        DBUG_PRINT("info", ("mroonga: creating directory: <%s>", sub_directory));
-        GRN_LOG(ctx, GRN_LOG_INFO, "creating directory: <%s>", sub_directory);
-        if (MRN_MKDIR(sub_directory, S_IRWXU) == 0) {
-          DBUG_PRINT("info",
-                     ("mroonga: created directory: <%s>", sub_directory));
-          GRN_LOG(ctx, GRN_LOG_INFO, "created directory: <%s>", sub_directory);
-        } else {
-          DBUG_PRINT("error",
-                     ("mroonga: failed to create directory: <%s>: <%s>",
-                      sub_directory, strerror(errno)));
-          GRN_LOG(ctx, GRN_LOG_ERROR,
-                  "failed to create directory: <%s>: <%s>",
-                  sub_directory, strerror(errno));
-          DBUG_VOID_RETURN;
-        }
-      }
-    }
-
-    if (directory[i] == '\0') {
-      break;
-    }
-
-    sub_directory[i] = directory[i];
-    ++i;
-  }
-
-  DBUG_VOID_RETURN;
 }
 
 ulonglong ha_mroonga::file_size(const char *path)
