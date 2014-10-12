@@ -236,20 +236,7 @@ static void mrn_init_encoding_map()
 
 static int mrn_change_encoding(grn_ctx *ctx, const CHARSET_INFO *charset)
 {
-  int error = 0;
-  if (!mrn::encoding::set(ctx, charset)) {
-    const char *name = "<null>";
-    const char *csname = "<null>";
-    if (charset) {
-      name = charset->name;
-      csname = charset->csname;
-    }
-    error = ER_MRN_CHARSET_NOT_SUPPORT_NUM;
-    my_printf_error(error,
-                    ER_MRN_CHARSET_NOT_SUPPORT_STR,
-                    MYF(0), name, csname);
-  }
-  return error;
+  return mrn::encoding::set(ctx, charset);
 }
 
 #if !defined(DBUG_OFF) && !defined(_lint)
