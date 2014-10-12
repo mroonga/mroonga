@@ -18,34 +18,34 @@
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS Memos;
-DROP TABLE IF EXISTS Terms;
+DROP TABLE IF EXISTS memos;
+DROP TABLE IF EXISTS terms;
 --enable_warnings
 
 SELECT mroonga_command("register token_filters/stop_word");
 
-CREATE TABLE Terms (
+CREATE TABLE terms (
   term VARCHAR(64) NOT NULL PRIMARY KEY,
   is_stop_word BOOL NOT NULL
 ) COMMENT='default_tokenizer "TokenBigram", token_filters "TokenFilterStopWord"' DEFAULT CHARSET=utf8;
 
-CREATE TABLE Memos (
+CREATE TABLE memos (
   id INT NOT NULL PRIMARY KEY,
   content TEXT NOT NULL,
-  FULLTEXT INDEX (content) COMMENT 'table "Terms"'
+  FULLTEXT INDEX (content) COMMENT 'table "terms"'
 ) DEFAULT CHARSET=utf8;
 
-INSERT INTO Terms VALUES ("and", true);
+INSERT INTO terms VALUES ("and", true);
 
-INSERT INTO Memos VALUES (1, "Hello");
-INSERT INTO Memos VALUES (2, "Hello and Good-bye");
-INSERT INTO Memos VALUES (3, "Good-bye");
+INSERT INTO memos VALUES (1, "Hello");
+INSERT INTO memos VALUES (2, "Hello and Good-bye");
+INSERT INTO memos VALUES (3, "Good-bye");
 
-SELECT * FROM Memos
+SELECT * FROM memos
   WHERE MATCH (content) AGAINST ("+\"Hello and\"" IN BOOLEAN MODE);
 
-DROP TABLE Memos;
-DROP TABLE Terms;
+DROP TABLE memos;
+DROP TABLE terms;
 
 --source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

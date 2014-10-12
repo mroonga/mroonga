@@ -30,28 +30,28 @@ DROP TABLE Dummy;
 SELECT mroonga_command("register token_filters/stop_word");
 
 --disable_warnings
-DROP TABLE IF EXISTS Memos;
-DROP TABLE IF EXISTS Terms;
+DROP TABLE IF EXISTS memos;
+DROP TABLE IF EXISTS terms;
 --enable_warnings
 
-CREATE TABLE Terms (
+CREATE TABLE terms (
   term VARCHAR(64) NOT NULL PRIMARY KEY,
   is_stop_word BOOL NOT NULL
 ) COMMENT='default_tokenizer "TokenBigram"' DEFAULT CHARSET=utf8;
 
-CREATE TABLE Memos (
+CREATE TABLE memos (
   id INT NOT NULL PRIMARY KEY,
   content TEXT NOT NULL,
-  FULLTEXT INDEX (content) COMMENT 'table "Terms"'
+  FULLTEXT INDEX (content) COMMENT 'table "terms"'
 ) DEFAULT CHARSET=utf8;
 
 SELECT mroonga_command("dump");
 
-ALTER TABLE Terms COMMENT='default_tokenizer "TokenBigram", token_filters "TokenFilterStopWord"';
+ALTER TABLE terms COMMENT='default_tokenizer "TokenBigram", token_filters "TokenFilterStopWord"';
 
 SELECT mroonga_command("dump");
 
-DROP TABLE Memos;
+DROP TABLE memos;
 
 --source ../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../include/mroonga/have_mroonga_deinit.inc

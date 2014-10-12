@@ -18,24 +18,24 @@
 --source ../../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS Memos;
+DROP TABLE IF EXISTS memos;
 --enable_warnings
 
 SELECT mroonga_command("register token_filters/stop_word");
 
 SET NAMES utf8;
 
-CREATE TABLE Memos (
+CREATE TABLE memos (
   content VARCHAR(64) NOT NULL
 ) DEFAULT CHARSET=utf8;
 
 SELECT mroonga_command("dump");
 
-ALTER TABLE Memos ADD FULLTEXT INDEX (content) COMMENT 'token_filters "TokenFilterStopWord"';
+ALTER TABLE memos ADD FULLTEXT INDEX (content) COMMENT 'token_filters "TokenFilterStopWord"';
 
 SELECT mroonga_command("dump");
 
-DROP TABLE Memos;
+DROP TABLE memos;
 
 --source ../../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../../include/mroonga/have_mroonga_deinit.inc
