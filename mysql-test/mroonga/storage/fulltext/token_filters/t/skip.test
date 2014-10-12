@@ -55,6 +55,7 @@ SELECT * FROM Memos
   WHERE MATCH (content) AGAINST ("+\"Hello and\"" IN BOOLEAN MODE);
 
 DROP TABLE Memos;
+DROP TABLE Terms;
 
 --source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

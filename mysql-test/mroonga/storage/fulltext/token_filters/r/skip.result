@@ -27,3 +27,4 @@ id	content
 1	Hello
 2	Hello and Good-bye
 DROP TABLE Memos;
+DROP TABLE Terms;

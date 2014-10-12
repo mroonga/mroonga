@@ -22,3 +22,4 @@ column_create Memos content COLUMN_SCALAR LongText
 column_create Memos id COLUMN_SCALAR Int32
 column_create Terms content COLUMN_INDEX|WITH_POSITION Memos content
 DROP TABLE Memos;
+DROP TABLE Terms;
