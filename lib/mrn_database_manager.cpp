@@ -210,9 +210,6 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
 
     int error = 0;
-    if (!mutex_initialized_) {
-      DBUG_RETURN(error);
-    }
 
     mrn::Lock lock(&mutex_);
 
