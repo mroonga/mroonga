@@ -43,6 +43,7 @@ ALTER TABLE terms COMMENT='default_tokenizer "TokenBigram", token_filters "Token
 SELECT mroonga_command("dump");
 
 DROP TABLE memos;
+DROP TABLE terms;
 
 --source ../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../include/mroonga/have_mroonga_deinit.inc
