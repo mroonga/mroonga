@@ -29,3 +29,4 @@ table_create terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --nor
 column_create terms is_stop_word COLUMN_SCALAR Int8
 column_create terms term COLUMN_SCALAR ShortText
 DROP TABLE memos;
+DROP TABLE terms;
