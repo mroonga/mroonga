@@ -18,8 +18,6 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <string>
-
 #include "mrn_mysql.h"
 
 #if MYSQL_VERSION_ID >= 50500
@@ -299,10 +297,11 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
 
 int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 {
-  int i, error;
+  int i, error = 0;
   int title_length;
   const char *sprit_ptr[2];
   const char *tmp_ptr, *start_ptr;
+  char *params_string = NULL;
 #ifdef WITH_PARTITION_STORAGE_ENGINE
   partition_element *part_elem;
   partition_element *sub_elem;
@@ -369,8 +368,15 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
     }
 
     {
-      std::string params_string(params_string_value, params_string_length);
-      sprit_ptr[0] = params_string.c_str();
+      params_string = my_strndup(params_string_value,
+                                 params_string_length,
+                                 MYF(MY_WME));
+      if (!params_string) {
+        error = HA_ERR_OUT_OF_MEM;
+        goto error;
+      }
+
+      sprit_ptr[0] = params_string;
       while (sprit_ptr[0])
       {
         if ((sprit_ptr[1] = strchr(sprit_ptr[0], ',')))
@@ -414,6 +420,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           break;
         }
       }
+
+      my_free(params_string, MYF(0));
+      params_string = NULL;
     }
   }
 
@@ -460,9 +469,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
     }
   }
 
-  DBUG_RETURN(0);
-
 error:
+  if (params_string)
+    my_free(params_string, MYF(0));
   DBUG_RETURN(error);
 }
 
