@@ -6,7 +6,7 @@ env:
   - MYSQL_VERSION=mysql-system
   - MYSQL_VERSION=mysql-5.5.40
   - MYSQL_VERSION=mysql-5.6.21
-  - MYSQL_VERSION=mariadb-5.5.39
+  - MYSQL_VERSION=mariadb-5.5.40
   - MYSQL_VERSION=mariadb-10.0.14
   - MYSQL_VERSION=mariadb-10.0.14 MROONGA_BUNDLED=yes
   - MYSQL_VERSION=mariadb-10.0.14 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
