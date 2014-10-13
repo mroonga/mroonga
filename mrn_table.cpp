@@ -717,6 +717,8 @@ int mrn_free_share_alloc(
     my_free(share->engine, MYF(0));
   if (share->default_tokenizer)
     my_free(share->default_tokenizer, MYF(0));
+  if (share->normalizer)
+    my_free(share->normalizer, MYF(0));
   if (share->token_filters)
     my_free(share->token_filters, MYF(0));
   for (i = 0; i < share->table_share->keys; i++)
