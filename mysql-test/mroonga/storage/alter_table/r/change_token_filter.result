@@ -1,6 +1,3 @@
-DROP DATABASE test;
-CREATE DATABASE test;
-USE test;
 SELECT mroonga_command("register token_filters/stop_word");
 mroonga_command("register token_filters/stop_word")
 true
