@@ -1233,7 +1233,8 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 }
 #endif
 
-static uint mrn_alter_table_flags(uint flags) {
+static uint mrn_alter_table_flags(uint flags)
+{
   uint alter_flags = 0;
 #ifdef HA_INPLACE_ADD_INDEX_NO_READ_WRITE
   bool is_inplace_index_change;
