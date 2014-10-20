@@ -9573,8 +9573,8 @@ void ha_mroonga::storage_store_field_integer(Field *field,
         field_value = *((unsigned char *)value);
         field->store(field_value, is_unsigned);
       } else {
-        char field_value;
-        field_value = *((char *)value);
+        signed char field_value;
+        field_value = *((signed char *)value);
         field->store(field_value, is_unsigned);
       }
       break;
