@@ -88,6 +88,7 @@
 #include <mrn_time_converter.hpp>
 #include <mrn_smart_grn_obj.hpp>
 #include <mrn_database_manager.hpp>
+#include <mrn_grn.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -9991,6 +9992,60 @@ void ha_mroonga::storage_store_field(Field *field,
   }
 }
 
+void ha_mroonga::storage_store_field_column(Field *field,
+                                            int nth_column, grn_id record_id)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_obj *column = grn_columns[nth_column];
+  grn_id range_id = grn_obj_get_range(ctx, column);
+  grn_obj *range = grn_column_ranges[nth_column];
+  grn_obj *value = &new_value_buffer;
+
+  if (mrn::grn::is_table(range)) {
+    if (mrn::grn::is_vector_column(column)) {
+      grn_obj_reinit(ctx, value, range_id, GRN_OBJ_VECTOR);
+      grn_obj_get_value(ctx, column, record_id, value);
+
+      // TODO: Check whether reference type or not
+      grn_obj unvectored_value;
+      GRN_TEXT_INIT(&unvectored_value, 0);
+      int n_ids = GRN_BULK_VSIZE(value) / sizeof(grn_id);
+      for (int i = 0; i < n_ids; i++) {
+        grn_id id = GRN_RECORD_VALUE_AT(value, i);
+        if (i > 0) {
+          GRN_TEXT_PUTS(ctx, &unvectored_value, mrn_vector_column_delimiter);
+        }
+        char key[GRN_TABLE_MAX_KEY_SIZE];
+        int key_length;
+        key_length = grn_table_get_key(ctx, range, id,
+                                       &key, GRN_TABLE_MAX_KEY_SIZE);
+        GRN_TEXT_PUT(ctx, &unvectored_value, key, key_length);
+      }
+      storage_store_field(field,
+                          GRN_TEXT_VALUE(&unvectored_value),
+                          GRN_TEXT_LEN(&unvectored_value));
+      GRN_OBJ_FIN(ctx, &unvectored_value);
+    } else {
+      grn_obj_reinit(ctx, value, range_id, 0);
+      grn_obj_get_value(ctx, column, record_id, value);
+
+      grn_id id = GRN_RECORD_VALUE(value);
+      char key[GRN_TABLE_MAX_KEY_SIZE];
+      int key_length;
+      key_length = grn_table_get_key(ctx, range, id,
+                                     &key, GRN_TABLE_MAX_KEY_SIZE);
+      storage_store_field(field, key, key_length);
+    }
+  } else {
+    grn_obj_reinit(ctx, value, range_id, 0);
+    grn_obj_get_value(ctx, column, record_id, value);
+    storage_store_field(field, GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
+  }
+
+  DBUG_VOID_RETURN;
+}
+
 void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -10036,51 +10091,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
                                        &key, GRN_TABLE_MAX_KEY_SIZE);
         storage_store_field(field, key, key_length);
       } else {
-        // actual column
-        grn_obj *range = grn_column_ranges[i];
-        grn_obj value;
-        GRN_OBJ_INIT(&value, GRN_BULK, 0, grn_obj_get_range(ctx, grn_columns[i]));
-        grn_obj_get_value(ctx, grn_columns[i], record_id, &value);
-        DBUG_PRINT("info", ("mroonga: value_length=%ld", GRN_TEXT_LEN(&value)));
-        // TODO: create mrn::is_grn_table() and use it.
-        if (GRN_TABLE_HASH_KEY <= range->header.type &&
-            range->header.type <= GRN_DB) {
-          // TODO: extract as a method
-          if (((grn_columns[i]->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
-               GRN_OBJ_COLUMN_VECTOR)) {
-            // TODO: Check whether reference type or not
-            grn_obj unvectored_value;
-            GRN_TEXT_INIT(&unvectored_value, 0);
-            grn_id *ids = (grn_id *)GRN_BULK_HEAD(&value);
-            int n_ids = GRN_BULK_VSIZE(&value) / sizeof(grn_id);
-            for (int i = 0; i < n_ids; i++) {
-              grn_id id = ids[i];
-              if (i > 0) {
-                GRN_TEXT_PUTS(ctx, &unvectored_value, mrn_vector_column_delimiter);
-              }
-              char key[GRN_TABLE_MAX_KEY_SIZE];
-              int key_length;
-              key_length = grn_table_get_key(ctx, range, id,
-                                             &key, GRN_TABLE_MAX_KEY_SIZE);
-              GRN_TEXT_PUT(ctx, &unvectored_value, key, key_length);
-            }
-            storage_store_field(field,
-                                GRN_TEXT_VALUE(&unvectored_value),
-                                GRN_TEXT_LEN(&unvectored_value));
-            GRN_OBJ_FIN(ctx, &unvectored_value);
-          } else {
-            grn_id id = GRN_RECORD_VALUE(&value);
-            char key[GRN_TABLE_MAX_KEY_SIZE];
-            int key_length;
-            key_length = grn_table_get_key(ctx, range, id,
-                                           &key, GRN_TABLE_MAX_KEY_SIZE);
-            storage_store_field(field, key, key_length);
-          }
-        } else {
-          storage_store_field(field,
-                              GRN_BULK_HEAD(&value), GRN_BULK_VSIZE(&value));
-        }
-        GRN_OBJ_FIN(ctx, &value);
+        storage_store_field_column(field, i ,record_id);
       }
       field->move_field_offset(-ptr_diff);
     }

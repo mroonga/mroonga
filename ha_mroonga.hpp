@@ -641,6 +641,8 @@ private:
   void storage_store_field_geometry(Field *field,
                                     const char *value, uint value_length);
   void storage_store_field(Field *field, const char *value, uint value_length);
+  void storage_store_field_column(Field *field,
+                                  int nth_column, grn_id record_id);
   void storage_store_fields(uchar *buf, grn_id record_id);
   void storage_store_fields_for_prep_update(const uchar *old_data,
                                             uchar *new_data,
