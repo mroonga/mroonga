@@ -1404,6 +1404,7 @@ err_allocated_thds_mutex_init:
 err_db_manager_init:
   delete mrn_db_manager;
   grn_ctx_fin(&mrn_db_manager_ctx);
+  grn_obj_unlink(ctx, mrn_db);
 err_db_create:
   if (mrn_log_file_opened) {
     fclose(mrn_log_file);
@@ -1457,6 +1458,7 @@ static int mrn_deinit(void *p)
   delete mrn_db_manager;
   grn_ctx_fin(&mrn_db_manager_ctx);
 
+  grn_obj_unlink(ctx, mrn_db);
   grn_ctx_fin(ctx);
   grn_fin();
 
