@@ -203,7 +203,6 @@ extern "C" {
 #endif
 
 /* groonga's internal functions */
-const char *grn_obj_get_value_(grn_ctx *ctx, grn_obj *obj, grn_id id, uint32 *size);
 int grn_atoi(const char *nptr, const char *end, const char **rest);
 uint grn_atoui(const char *nptr, const char *end, const char **rest);
 
@@ -6197,7 +6196,10 @@ int ha_mroonga::storage_prepare_delete_row_unique_index(const uchar *buf,
   uint32 ukey_size = 0;
   MRN_DBUG_ENTER_METHOD();
   if (KEY_N_KEY_PARTS(key_info) == 1) {
-    ukey = grn_obj_get_value_(ctx, index_column, record_id, &ukey_size);
+    GRN_BULK_REWIND(&key_buffer);
+    grn_obj_get_value(ctx, index_column, record_id, &key_buffer);
+    ukey = GRN_TEXT_VALUE(&key_buffer);
+    ukey_size = GRN_TEXT_LEN(&key_buffer);
   } else {
     mrn_change_encoding(ctx, NULL);
     uchar key[MRN_MAX_KEY_SIZE];
@@ -10034,12 +10036,11 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         storage_store_field(field, key, key_length);
       } else {
         // actual column
-        const char *value;
-        uint32 value_length;
-        value = grn_obj_get_value_(ctx, grn_columns[i], record_id,
-                                   &value_length);
-        DBUG_PRINT("info", ("mroonga: value_length=%u",value_length));
         grn_obj *range = grn_column_ranges[i];
+        grn_obj value;
+        GRN_OBJ_INIT(&value, GRN_BULK, 0, grn_obj_get_range(ctx, grn_columns[i]));
+        grn_obj_get_value(ctx, grn_columns[i], record_id, &value);
+        DBUG_PRINT("info", ("mroonga: value_length=%ld", GRN_TEXT_LEN(&value)));
         // TODO: create mrn::is_grn_table() and use it.
         if (GRN_TABLE_HASH_KEY <= range->header.type &&
             range->header.type <= GRN_DB) {
@@ -10049,8 +10050,9 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
             // TODO: Check whether reference type or not
             grn_obj unvectored_value;
             GRN_TEXT_INIT(&unvectored_value, 0);
-            grn_id *ids = (grn_id *)value;
-            for (int i = 0; i * sizeof(grn_id) < value_length; i++) {
+            grn_id *ids = (grn_id *)GRN_BULK_HEAD(&value);
+            int n_ids = GRN_BULK_VSIZE(&value) / sizeof(grn_id);
+            for (int i = 0; i < n_ids; i++) {
               grn_id id = ids[i];
               if (i > 0) {
                 GRN_TEXT_PUTS(ctx, &unvectored_value, mrn_vector_column_delimiter);
@@ -10066,7 +10068,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
                                 GRN_TEXT_LEN(&unvectored_value));
             GRN_OBJ_FIN(ctx, &unvectored_value);
           } else {
-            grn_id id = *((grn_id *)value);
+            grn_id id = GRN_RECORD_VALUE(&value);
             char key[GRN_TABLE_MAX_KEY_SIZE];
             int key_length;
             key_length = grn_table_get_key(ctx, range, id,
@@ -10074,8 +10076,10 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
             storage_store_field(field, key, key_length);
           }
         } else {
-          storage_store_field(field, value, value_length);
+          storage_store_field(field,
+                              GRN_BULK_HEAD(&value), GRN_BULK_VSIZE(&value));
         }
+        GRN_OBJ_FIN(ctx, &value);
       }
       field->move_field_offset(-ptr_diff);
     }
@@ -10125,20 +10129,20 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
     ) {
       mrn::DebugColumnAccess debug_column_access(table, table->write_set);
       DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));
-      const char *value;
-      uint32 value_length;
-      value = grn_obj_get_value_(ctx, grn_columns[i], record_id,
-                                 &value_length);
+      grn_obj value;
+      GRN_OBJ_INIT(&value, GRN_BULK, 0, grn_obj_get_range(ctx, grn_columns[i]));
+      grn_obj_get_value(ctx, grn_columns[i], record_id, &value);
       // old column
       field->move_field_offset(ptr_diff_old);
-      storage_store_field(field, value, value_length);
+      storage_store_field(field, GRN_BULK_HEAD(&value), GRN_BULK_VSIZE(&value));
       field->move_field_offset(-ptr_diff_old);
       if (new_data) {
         // new column
         field->move_field_offset(ptr_diff_new);
-        storage_store_field(field, value, value_length);
+        storage_store_field(field, GRN_BULK_HEAD(&value), GRN_BULK_VSIZE(&value));
         field->move_field_offset(-ptr_diff_new);
       }
+      GRN_OBJ_FIN(ctx, &value);
     }
   }
 
