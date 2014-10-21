@@ -58,6 +58,7 @@ else
 	    if [ "$version" = "system" ]; then
 		sudo apt-get -qq -y install \
 		    mysql-server mysql-testsuite libmysqld-dev
+                dpkg -l | grep mysql
 		apt-get -qq source mysql-server
 		ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
 	    else
