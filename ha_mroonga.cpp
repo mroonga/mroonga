@@ -1246,10 +1246,16 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
       }
       flag_names += 12;
     } else {
-      GRN_LOG(ctx, GRN_LOG_WARNING,
-              "invalid flags option: <%.*s>. "
-              "<COLUMN_SCALAR> flag is used instead.",
-              flag_names_length, flag_names);
+      char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(invalid_flag_name, MRN_MESSAGE_BUFFER_SIZE,
+               "%.*s",
+               static_cast<int>(rest_length),
+               flag_names);
+      push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+                          ER_MRN_INVALID_COLUMN_FLAG_NUM,
+                          ER_MRN_INVALID_COLUMN_FLAG_STR,
+                          invalid_flag_name,
+                          "COLUMN_SCALAR");
       flags |= GRN_OBJ_COLUMN_SCALAR;
       break;
     }
