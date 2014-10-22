@@ -1191,7 +1191,8 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   return type;
 }
 
-grn_obj_flags mrn_parse_grn_column_create_flags(grn_ctx *ctx,
+grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
+                                                grn_ctx *ctx,
                                                 const char *flag_names,
                                                 uint flag_names_length)
 {
@@ -1228,18 +1229,20 @@ grn_obj_flags mrn_parse_grn_column_create_flags(grn_ctx *ctx,
       if (is_zlib_support) {
         flags |= GRN_OBJ_COMPRESS_ZLIB;
       } else {
-        GRN_LOG(ctx, GRN_LOG_WARNING,
-                "libgroonga isn't supported <COMPRESS_ZLIB> flag. "
-                "<COMPRESS_ZLIB> flag is ignored.");
+        push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+                            ER_MRN_INVALID_COLUMN_FLAG_NUM,
+                            ER_MRN_INVALID_COLUMN_FLAG_STR,
+                            "COMPRESS_ZLIB");
       }
       flag_names += 13;
     } else if (rest_length >= 12 && !memcmp(flag_names, "COMPRESS_LZ4", 12)) {
       if (is_lz4_support) {
         flags |= GRN_OBJ_COMPRESS_LZ4;
       } else {
-        GRN_LOG(ctx, GRN_LOG_WARNING,
-                "libgroonga isn't supported <COMPRESS_LZ4> flag. "
-                "<COMPRESS_LZ4> flag is ignored.");
+        push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+                            ER_MRN_INVALID_COLUMN_FLAG_NUM,
+                            ER_MRN_INVALID_COLUMN_FLAG_STR,
+                            "COMPRESS_LZ4");
       }
       flag_names += 12;
     } else {
@@ -2965,7 +2968,8 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
 
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
     if (tmp_share->col_flags[i]) {
-      col_flags |= mrn_parse_grn_column_create_flags(ctx,
+      col_flags |= mrn_parse_grn_column_create_flags(ha_thd(),
+                                                     ctx,
                                                      tmp_share->col_flags[i],
                                                      tmp_share->col_flags_length[i]);
     } else {
@@ -13592,7 +13596,8 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
 
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
     if (tmp_share->col_flags[i]) {
-      col_flags |= mrn_parse_grn_column_create_flags(ctx,
+      col_flags |= mrn_parse_grn_column_create_flags(ha_thd(),
+                                                     ctx,
                                                      tmp_share->col_flags[i],
                                                      tmp_share->col_flags_length[i]);
     } else {
