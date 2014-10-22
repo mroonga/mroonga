@@ -1230,8 +1230,8 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
         flags |= GRN_OBJ_COMPRESS_ZLIB;
       } else {
         push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
-                            ER_MRN_INVALID_COLUMN_FLAG_NUM,
-                            ER_MRN_INVALID_COLUMN_FLAG_STR,
+                            ER_MRN_UNSUPPORTED_COLUMN_FLAG_NUM,
+                            ER_MRN_UNSUPPORTED_COLUMN_FLAG_STR,
                             "COMPRESS_ZLIB");
       }
       flag_names += 13;
@@ -1240,8 +1240,8 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
         flags |= GRN_OBJ_COMPRESS_LZ4;
       } else {
         push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
-                            ER_MRN_INVALID_COLUMN_FLAG_NUM,
-                            ER_MRN_INVALID_COLUMN_FLAG_STR,
+                            ER_MRN_UNSUPPORTED_COLUMN_FLAG_NUM,
+                            ER_MRN_UNSUPPORTED_COLUMN_FLAG_STR,
                             "COMPRESS_LZ4");
       }
       flag_names += 12;
