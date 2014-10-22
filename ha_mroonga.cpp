@@ -1191,6 +1191,67 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   return type;
 }
 
+grn_obj_flags mrn_parse_grn_column_create_flags(grn_ctx *ctx,
+                                                const char *flag_names,
+                                                uint flag_names_length)
+{
+  grn_obj_flags flags = 0;
+  const char *flag_names_end = flag_names + flag_names_length;
+  bool is_zlib_support = false;
+  bool is_lz4_support = false;
+
+  {
+    grn_obj grn_support_p;
+    GRN_BOOL_INIT(&grn_support_p, 0);
+    grn_obj_get_info(ctx, NULL, GRN_INFO_SUPPORT_ZLIB, &grn_support_p);
+    is_zlib_support = GRN_BOOL_VALUE(&grn_support_p);
+    GRN_BULK_REWIND(&grn_support_p);
+    grn_obj_get_info(ctx, NULL, GRN_INFO_SUPPORT_LZ4, &grn_support_p);
+    is_lz4_support = GRN_BOOL_VALUE(&grn_support_p);
+    grn_obj_unlink(ctx, &grn_support_p);
+  }
+
+  while (flag_names < flag_names_end) {
+    if (*flag_names == '|' || *flag_names == ' ') {
+      flag_names += 1;
+      continue;
+    }
+    if (!memcmp(flag_names, "COLUMN_SCALAR", 13)) {
+      flags |= GRN_OBJ_COLUMN_SCALAR;
+      flag_names += 13;
+    } else if (!memcmp(flag_names, "COLUMN_VECTOR", 13)) {
+      flags |= GRN_OBJ_COLUMN_VECTOR;
+      flag_names += 13;
+    } else if (!memcmp(flag_names, "COMPRESS_ZLIB", 13)) {
+      if (is_zlib_support) {
+        flags |= GRN_OBJ_COMPRESS_ZLIB;
+      } else {
+        GRN_LOG(ctx, GRN_LOG_WARNING,
+                "libgroonga isn't supported <COMPRESS_ZLIB> flag. "
+                "<COMPRESS_ZLIB> flag is ignored.");
+      }
+      flag_names += 13;
+    } else if (!memcmp(flag_names, "COMPRESS_LZ4", 12)) {
+      if (is_lz4_support) {
+        flags |= GRN_OBJ_COMPRESS_LZ4;
+      } else {
+        GRN_LOG(ctx, GRN_LOG_WARNING,
+                "libgroonga isn't supported <COMPRESS_LZ4> flag. "
+                "<COMPRESS_LZ4> flag is ignored.");
+      }
+      flag_names += 12;
+    } else {
+      GRN_LOG(ctx, GRN_LOG_WARNING,
+              "invalid flags option: <%.*s>. "
+              "<COLUMN_SCALAR> flag is used instead.",
+              flag_names_length, flag_names);
+      flags |= GRN_OBJ_COLUMN_SCALAR;
+      break;
+    }
+  }
+  return flags;
+}
+
 #ifdef HAVE_SPATIAL
 static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
                             const char *wkb, uint wkb_size)
@@ -2902,12 +2963,9 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
 
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
     if (tmp_share->col_flags[i]) {
-      // TODO: parse flags
-      if (strcmp(tmp_share->col_flags[i], "COLUMN_VECTOR") == 0) {
-        col_flags |= GRN_OBJ_COLUMN_VECTOR;
-      } else {
-        col_flags |= GRN_OBJ_COLUMN_SCALAR;
-      }
+      col_flags |= mrn_parse_grn_column_create_flags(ctx,
+                                                     tmp_share->col_flags[i],
+                                                     tmp_share->col_flags_length[i]);
     } else {
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
@@ -13532,12 +13590,9 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
 
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
     if (tmp_share->col_flags[i]) {
-      // TODO: parse flags
-      if (strcmp(tmp_share->col_flags[i], "COLUMN_VECTOR") == 0) {
-        col_flags |= GRN_OBJ_COLUMN_VECTOR;
-      } else {
-        col_flags |= GRN_OBJ_COLUMN_SCALAR;
-      }
+      col_flags |= mrn_parse_grn_column_create_flags(ctx,
+                                                     tmp_share->col_flags[i],
+                                                     tmp_share->col_flags_length[i]);
     } else {
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
