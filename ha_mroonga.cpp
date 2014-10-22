@@ -2126,7 +2126,7 @@ uint ha_mroonga::wrapper_max_supported_key_length() const
 uint ha_mroonga::storage_max_supported_key_length() const
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(HA_MAX_REC_LENGTH);
+  DBUG_RETURN(GRN_TABLE_MAX_KEY_SIZE);
 }
 
 uint ha_mroonga::max_supported_key_length() const
@@ -2173,7 +2173,7 @@ uint ha_mroonga::wrapper_max_supported_key_part_length() const
 uint ha_mroonga::storage_max_supported_key_part_length() const
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(HA_MAX_REC_LENGTH);
+  DBUG_RETURN(GRN_TABLE_MAX_KEY_SIZE);
 }
 
 uint ha_mroonga::max_supported_key_part_length() const
