@@ -30,6 +30,6 @@
 #define ER_MRN_INVALID_NULL_VALUE_STR "NULL value can't be used for %s"
 #define ER_MRN_UNSUPPORTED_COLUMN_FLAG_NUM 16506
 #define ER_MRN_UNSUPPORTED_COLUMN_FLAG_STR \
-  "The column flag '%-.64s' is unsupported. It is ignored."
+  "The column flag '%-.64s' is unsupported. It is ignored"
 
 #endif /* MRN_ERR_H_ */
