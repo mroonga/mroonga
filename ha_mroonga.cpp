@@ -1212,17 +1212,19 @@ grn_obj_flags mrn_parse_grn_column_create_flags(grn_ctx *ctx,
   }
 
   while (flag_names < flag_names_end) {
+    uint rest_length = flag_names_end - flag_names;
+
     if (*flag_names == '|' || *flag_names == ' ') {
       flag_names += 1;
       continue;
     }
-    if (!memcmp(flag_names, "COLUMN_SCALAR", 13)) {
+    if (rest_length >= 13 && !memcmp(flag_names, "COLUMN_SCALAR", 13)) {
       flags |= GRN_OBJ_COLUMN_SCALAR;
       flag_names += 13;
-    } else if (!memcmp(flag_names, "COLUMN_VECTOR", 13)) {
+    } else if (rest_length >= 13 && !memcmp(flag_names, "COLUMN_VECTOR", 13)) {
       flags |= GRN_OBJ_COLUMN_VECTOR;
       flag_names += 13;
-    } else if (!memcmp(flag_names, "COMPRESS_ZLIB", 13)) {
+    } else if (rest_length >= 13 && !memcmp(flag_names, "COMPRESS_ZLIB", 13)) {
       if (is_zlib_support) {
         flags |= GRN_OBJ_COMPRESS_ZLIB;
       } else {
@@ -1231,7 +1233,7 @@ grn_obj_flags mrn_parse_grn_column_create_flags(grn_ctx *ctx,
                 "<COMPRESS_ZLIB> flag is ignored.");
       }
       flag_names += 13;
-    } else if (!memcmp(flag_names, "COMPRESS_LZ4", 12)) {
+    } else if (rest_length >= 12 && !memcmp(flag_names, "COMPRESS_LZ4", 12)) {
       if (is_lz4_support) {
         flags |= GRN_OBJ_COMPRESS_LZ4;
       } else {
