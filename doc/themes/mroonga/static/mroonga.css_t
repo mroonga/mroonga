@@ -196,16 +196,6 @@ div.body h3
     border-bottom: 1px solid #EEE;
 }
 
-div.body h4
-{
-    font-size: 120%;
-}
-
-div.body h5
-{
-    font-size: 110%;
-}
-
 div.body p, div.body dd,
 div.body li
 {
