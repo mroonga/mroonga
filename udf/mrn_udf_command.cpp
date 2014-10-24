@@ -26,9 +26,9 @@
 #include <mrn_macro.hpp>
 #include <mrn_database_manager.hpp>
 
-extern mrn::DatabaseManager *mrn_db_manager;
-
 MRN_BEGIN_DECLS
+
+extern mrn::DatabaseManager *mrn_db_manager;
 
 struct CommandInfo
 {
