@@ -8,7 +8,6 @@ When building a boolean search query, Mroonga supports the use of qualifiers whi
 These qualifiers and pragmas can change the relative rank of search results.
 
 In the case of a search string not using neither a qualifier nor a pragma, the search results that contain the search string will be rated higher.
-Edit
 
 Mroonga supports the following qualifiers
 -----------------------------------------
