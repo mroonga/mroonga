@@ -116,14 +116,14 @@
   }                                                     \
 } while (0)
 #else
-#    ifdef DBUG_OFF
-#      ifndef _WIN32
+#  ifdef DBUG_OFF
+#    ifndef _WIN32
 extern mysql_mutex_t LOCK_open;
-#      endif
 #    endif
+#  endif
 static mysql_mutex_t *mrn_LOCK_open;
-#    define mrn_open_mutex_lock(share) mysql_mutex_lock(mrn_LOCK_open)
-#    define mrn_open_mutex_unlock(share) mysql_mutex_unlock(mrn_LOCK_open)
+#  define mrn_open_mutex_lock(share) mysql_mutex_lock(mrn_LOCK_open)
+#  define mrn_open_mutex_unlock(share) mysql_mutex_unlock(mrn_LOCK_open)
 #endif
 
 #if MYSQL_VERSION_ID >= 50600
