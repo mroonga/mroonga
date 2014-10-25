@@ -767,6 +767,22 @@ msgid ""
 "space::"
 msgstr "区切り文字を空白からセミコロンに変更するSQL例です::"
 
+msgid ""
+"The status of libgroonga supports zlib."
+msgstr "Groongaライブラリーのzlibサポート状況"
+
+msgid ""
+"Here is an example SQL to confirm the status of libgroonga supports zlib::"
+msgstr "Groongaライブラリーがzlibをサポートしているかを確認するためのSQL例です::"
+
+msgid ""
+"The status of libgroonga supports LZ4."
+msgstr "GroongaライブラリーのLZ4サポート状況"
+
+msgid ""
+"Here is an example SQL to confirm the status of libgroonga supports LZ4::"
+msgstr "GroongaライブラリーがLZ4をサポートしているかを確認するためのSQL例です::"
+
 msgid "SQL commands"
 msgstr ""
 

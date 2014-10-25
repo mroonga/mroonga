@@ -330,3 +330,35 @@ Here is an example SQL to change the delimiter to a semicolon from a white space
   +---------------------------------+-------+
   | mroonga_vector_column_delimiter | ;     |
   +---------------------------------+-------+
+
+.. mroonga_libgroonga_support_zlib:
+
+mroonga_libgroonga_support_zlib
+-------------------------------
+
+The status of libgroonga supports zlib.
+
+Here is an example SQL to confirm the status of libgroonga supports zlib::
+
+  mysql> SHOW GLOBAL VARIABLES LIKE 'mroonga_libgroonga_support_zlib';
+  +---------------------------------+-------+
+  | Variable_name                   | Value |
+  +---------------------------------+-------+
+  | mroonga_libgroonga_support_zlib | ON    |
+  +---------------------------------+-------+
+
+.. mroonga_libgroonga_support_lz4:
+
+mroonga_libgroonga_support_lz4
+------------------------------
+
+The status of libgroonga supports LZ4.
+
+Here is an example SQL to confirm the status of libgroonga supports LZ4::
+
+  mysql> SHOW GLOBAL VARIABLES LIKE 'mroonga_libgroonga_support_lz4';
+  +--------------------------------+-------+
+  | Variable_name                  | Value |
+  +--------------------------------+-------+
+  | mroonga_libgroonga_support_lz4 | ON    |
+  +--------------------------------+-------+
