@@ -14,8 +14,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-skip "TODO: Add system variable to show lz4 is supported in libgroonga and skip this test if it's not supported";
-
+--source ../../../../../include/mroonga/unsupport_libgroonga_zlib.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 --source ../../../../../include/mroonga/load_mroonga_functions.inc
 
@@ -25,7 +24,7 @@ DROP TABLE IF EXISTS entries;
 
 CREATE TABLE entries (
   id INT UNSIGNED PRIMARY KEY,
-  content TEXT COMMENT 'flags "COLUMN_SCALAR|COMPRESS_LZ4"'
+  content TEXT COMMENT 'flags "COLUMN_SCALAR|COMPRESS_ZLIB"'
 ) DEFAULT CHARSET=utf8;
 
 INSERT INTO entries (id, content) VALUES (1, "I found Mroonga that is a MySQL storage engine to use Groonga!");
