@@ -100,7 +100,7 @@ error:
       grn_obj_close(&(info->ctx), info->db);
     }
     grn_ctx_fin(&(info->ctx));
-    my_free(info, MYF(0));
+    my_free(info);
   }
   return TRUE;
 }
@@ -164,7 +164,7 @@ MRN_API void mroonga_command_deinit(UDF_INIT *initid)
     }
     grn_ctx_fin(&(info->ctx));
     info->result.free();
-    my_free(info, MYF(0));
+    my_free(info);
   }
 }
 

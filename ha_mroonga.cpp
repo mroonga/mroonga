@@ -680,7 +680,7 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
   char *old_log_file_name = *old_value_ptr;
   *old_value_ptr = my_strdup(new_log_file_name, MYF(MY_WME));
-  my_free(old_log_file_name, MYF(0));
+  my_free(old_log_file_name);
 #else
   *old_value_ptr = my_strdup(new_log_file_name, MYF(MY_WME));
 #endif
@@ -719,7 +719,7 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
   }
 
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
-  my_free(*old_value_ptr, MYF(0));
+  my_free(*old_value_ptr);
   *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
 #else
   *old_value_ptr = (char *)new_value;
@@ -773,7 +773,7 @@ static void mrn_vector_column_delimiter_update(THD *thd, struct st_mysql_sys_var
   char **old_value_ptr = (char **)var_ptr;
 
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
-  my_free(*old_value_ptr, MYF(0));
+  my_free(*old_value_ptr);
   *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
 #else
   *old_value_ptr = (char *)new_value;
@@ -798,7 +798,7 @@ static void mrn_database_path_prefix_update(THD *thd,
   char **old_value_ptr = (char **)var_ptr;
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
   if (*old_value_ptr)
-    my_free(*old_value_ptr, MYF(0));
+    my_free(*old_value_ptr);
   if (new_value)
     *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
   else
@@ -2570,7 +2570,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     share = NULL;
     if (wrap_key_info)
     {
-      my_free(wrap_key_info, MYF(0));
+      my_free(wrap_key_info);
       wrap_key_info = NULL;
     }
     base_key_info = NULL;
@@ -2589,7 +2589,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
 
   if (wrap_key_info)
   {
-    my_free(wrap_key_info, MYF(0));
+    my_free(wrap_key_info);
     wrap_key_info = NULL;
   }
   base_key_info = NULL;
@@ -3675,7 +3675,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
       MRN_SET_BASE_TABLE_KEY(this, table);
       if (wrap_key_info)
       {
-        my_free(wrap_key_info, MYF(0));
+        my_free(wrap_key_info);
         wrap_key_info = NULL;
       }
       base_key_info = NULL;
@@ -3699,7 +3699,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
       MRN_SET_BASE_TABLE_KEY(this, table);
       if (wrap_key_info)
       {
-        my_free(wrap_key_info, MYF(0));
+        my_free(wrap_key_info);
         wrap_key_info = NULL;
       }
       base_key_info = NULL;
@@ -3727,7 +3727,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
     wrap_handler = NULL;
     if (wrap_key_info)
     {
-      my_free(wrap_key_info, MYF(0));
+      my_free(wrap_key_info);
       wrap_key_info = NULL;
     }
     base_key_info = NULL;
@@ -4205,7 +4205,7 @@ int ha_mroonga::wrapper_close()
   wrap_handler = NULL;
   if (wrap_key_info)
   {
-    my_free(wrap_key_info, MYF(0));
+    my_free(wrap_key_info);
     wrap_key_info = NULL;
   }
   base_key_info = NULL;
@@ -10871,12 +10871,12 @@ int ha_mroonga::wrapper_reset()
   MRN_SET_BASE_TABLE_KEY(this, table);
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   if (alter_key_info_buffer) {
-    my_free(alter_key_info_buffer, MYF(0));
+    my_free(alter_key_info_buffer);
     alter_key_info_buffer = NULL;
   }
 #else
   if (wrap_alter_key_info) {
-    my_free(wrap_alter_key_info, MYF(0));
+    my_free(wrap_alter_key_info);
     wrap_alter_key_info = NULL;
   }
 #endif
@@ -11888,7 +11888,7 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
   if (slot_data) {
     slot_data->alter_create_info = create_info;
     if (slot_data->alter_connect_string) {
-      my_free(slot_data->alter_connect_string, MYF(0));
+      my_free(slot_data->alter_connect_string);
       slot_data->alter_connect_string = NULL;
     }
     if (create_info->connect_string.str) {
@@ -11898,7 +11898,7 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
                    MYF(MY_WME));
     }
     if (slot_data->alter_comment) {
-      my_free(slot_data->alter_comment, MYF(0));
+      my_free(slot_data->alter_comment);
       slot_data->alter_comment = NULL;
     }
     if (create_info->comment.str) {
@@ -13409,7 +13409,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
     result = true;
   }
   mrn_free_share_alloc(tmp_share);
-  my_free(tmp_share, MYF(0));
+  my_free(tmp_share);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   DBUG_RETURN(result);
@@ -13561,7 +13561,7 @@ bool ha_mroonga::storage_inplace_alter_table_index(
     have_error = true;
   }
   mrn_free_share_alloc(tmp_share);
-  my_free(tmp_share, MYF(0));
+  my_free(tmp_share);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
 
@@ -13669,7 +13669,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
   grn_obj_unlink(ctx, table_obj);
 
   mrn_free_share_alloc(tmp_share);
-  my_free(tmp_share, MYF(0));
+  my_free(tmp_share);
 
   DBUG_RETURN(have_error);
 }
@@ -13851,7 +13851,7 @@ bool ha_mroonga::wrapper_commit_inplace_alter_table(
   bool result;
   MRN_DBUG_ENTER_METHOD();
   if (!alter_handler_flags) {
-    my_free(alter_key_info_buffer, MYF(0));
+    my_free(alter_key_info_buffer);
     alter_key_info_buffer = NULL;
     DBUG_RETURN(false);
   }
@@ -13864,7 +13864,7 @@ bool ha_mroonga::wrapper_commit_inplace_alter_table(
   MRN_SET_BASE_ALTER_KEY(this, ha_alter_info);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  my_free(alter_key_info_buffer, MYF(0));
+  my_free(alter_key_info_buffer);
   alter_key_info_buffer = NULL;
   DBUG_RETURN(result);
 }
@@ -14089,7 +14089,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   }
 #endif
   mrn_free_share_alloc(tmp_share);
-  my_free(tmp_share, MYF(0));
+  my_free(tmp_share);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   DBUG_RETURN(error);
@@ -14203,7 +14203,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   }
 #endif
   mrn_free_share_alloc(tmp_share);
-  my_free(tmp_share, MYF(0));
+  my_free(tmp_share);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   DBUG_RETURN(error);
@@ -15376,7 +15376,7 @@ void ha_mroonga::wrapper_free_foreign_key_create_info(char* str)
 void ha_mroonga::storage_free_foreign_key_create_info(char* str)
 {
   MRN_DBUG_ENTER_METHOD();
-  my_free(str, MYF(0));
+  my_free(str);
   DBUG_VOID_RETURN;
 }
 #else
