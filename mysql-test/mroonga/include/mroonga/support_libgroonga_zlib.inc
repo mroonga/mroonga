@@ -17,5 +17,6 @@
 --source ../../include/mroonga/check_libgroonga_support_zlib.inc
 
 if (!$libgroonga_support_zlib) {
+  --source ../../include/mroonga/have_mroonga_deinit.inc
   skip "This test is for libgroonga supports zlib";
 }

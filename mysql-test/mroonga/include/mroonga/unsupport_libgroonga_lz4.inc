@@ -17,5 +17,6 @@
 --source ../../include/mroonga/check_libgroonga_support_lz4.inc
 
 if ($libgroonga_support_lz4) {
+  --source ../../include/mroonga/have_mroonga_deinit.inc
   skip "This test is for libgroonga doesn't support lz4";
 }
