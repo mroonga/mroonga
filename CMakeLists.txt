@@ -152,11 +152,18 @@ else()
   set(MYSQL_REGEX_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/regex")
 endif()
 
+if(EXISTS "${MYSQL_SOURCE_DIR}/extra/rapidjson")
+  set(MYSQL_RAPIDJSON_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/extra/rapidjson/include")
+else()
+  set(MYSQL_RAPIDJSON_INCLUDE_DIR)
+endif()
+
 set(MYSQL_INCLUDE_DIRS
   "${MYSQL_BUILD_DIR}/include"
   "${MYSQL_SOURCE_DIR}/sql"
   "${MYSQL_SOURCE_DIR}/include"
   "${MYSQL_REGEX_INCLUDE_DIR}"
+  "${MYSQL_RAPIDJSON_INCLUDE_DIR}"
   "${MYSQL_SOURCE_DIR}")
 
 if(MRN_BUNDLED)
