@@ -199,8 +199,6 @@ int grn_atoi(const char *nptr, const char *end, const char **rest);
 uint grn_atoui(const char *nptr, const char *end, const char **rest);
 
 /* global variables */
-static mysql_mutex_t mrn_log_mutex;
-static PSI_mutex_key mrn_log_mutex_key;
 handlerton *mrn_hton_ptr;
 HASH mrn_open_tables;
 mysql_mutex_t mrn_open_tables_mutex;
@@ -218,6 +216,8 @@ PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
 
 /* internal variables */
 static grn_ctx mrn_ctx;
+static mysql_mutex_t mrn_log_mutex;
+static PSI_mutex_key mrn_log_mutex_key;
 static grn_obj *mrn_db;
 static grn_ctx mrn_db_manager_ctx;
 static mysql_mutex_t mrn_db_manager_mutex;
@@ -226,13 +226,13 @@ mrn::DatabaseManager *mrn_db_manager = NULL;
 
 static PSI_mutex_info mrn_mutexes[] =
 {
-  {&mrn_log_mutex_key,             "log",             PSI_FLAG_GLOBAL},
   {&mrn_open_tables_mutex_key,     "open_tables",     PSI_FLAG_GLOBAL},
   {&mrn_long_term_share_mutex_key, "long_term_share", PSI_FLAG_GLOBAL},
   {&mrn_allocated_thds_mutex_key,  "allocated_thds",  PSI_FLAG_GLOBAL},
   {&mrn_share_mutex_key,           "share",           0},
   {&mrn_long_term_share_auto_inc_mutex_key,
    "long_term_share::auto_inc", 0},
+  {&mrn_log_mutex_key,             "log",             PSI_FLAG_GLOBAL},
   {&mrn_db_manager_mutex_key,      "DatabaseManager", PSI_FLAG_GLOBAL}
 };
 
