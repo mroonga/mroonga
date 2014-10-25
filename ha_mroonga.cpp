@@ -506,6 +506,8 @@ static int mrn_lock_timeout = grn_get_lock_timeout();
 static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
 static char *mrn_version = const_cast<char *>(MRN_VERSION);
 static char *mrn_vector_column_delimiter = NULL;
+static my_bool mrn_libgroonga_support_zlib = FALSE;
+static my_bool mrn_libgroonga_support_lz4 = FALSE;
 
 typedef enum {
   MRN_ACTION_ON_ERROR_ERROR,
@@ -876,6 +878,46 @@ static MYSQL_SYSVAR_STR(version, mrn_version,
                         NULL,
                         MRN_VERSION);
 
+static my_bool grn_check_zlib_support()
+{
+  bool is_zlib_support = false;
+  grn_obj grn_support_p;
+
+  GRN_BOOL_INIT(&grn_support_p, 0);
+  grn_obj_get_info(&mrn_ctx, NULL, GRN_INFO_SUPPORT_ZLIB, &grn_support_p);
+  is_zlib_support = (GRN_BOOL_VALUE(&grn_support_p));
+  grn_obj_unlink(&mrn_ctx, &grn_support_p);
+
+  return is_zlib_support;
+}
+
+static my_bool grn_check_lz4_support()
+{
+  bool is_lz4_support = false;
+  grn_obj grn_support_p;
+
+  GRN_BOOL_INIT(&grn_support_p, 0);
+  grn_obj_get_info(&mrn_ctx, NULL, GRN_INFO_SUPPORT_LZ4, &grn_support_p);
+  is_lz4_support = (GRN_BOOL_VALUE(&grn_support_p));
+  grn_obj_unlink(&mrn_ctx, &grn_support_p);
+
+  return is_lz4_support;
+}
+
+static MYSQL_SYSVAR_BOOL(libgroonga_support_zlib, mrn_libgroonga_support_zlib,
+                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
+                         "The status of libgroonga supports zlib",
+                         NULL,
+                         NULL,
+                         grn_check_zlib_support());
+
+static MYSQL_SYSVAR_BOOL(libgroonga_support_lz4, mrn_libgroonga_support_lz4,
+                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
+                         "The status of libgroonga supports LZ4",
+                         NULL,
+                         NULL,
+                         grn_check_lz4_support());
+
 static struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
@@ -891,6 +933,8 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(libgroonga_version),
   MYSQL_SYSVAR(version),
   MYSQL_SYSVAR(vector_column_delimiter),
+  MYSQL_SYSVAR(libgroonga_support_zlib),
+  MYSQL_SYSVAR(libgroonga_support_lz4),
   NULL
 };
 
@@ -1198,19 +1242,6 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
 {
   grn_obj_flags flags = 0;
   const char *flag_names_end = flag_names + flag_names_length;
-  bool is_zlib_support = false;
-  bool is_lz4_support = false;
-
-  {
-    grn_obj grn_support_p;
-    GRN_BOOL_INIT(&grn_support_p, 0);
-    grn_obj_get_info(ctx, NULL, GRN_INFO_SUPPORT_ZLIB, &grn_support_p);
-    is_zlib_support = GRN_BOOL_VALUE(&grn_support_p);
-    GRN_BULK_REWIND(&grn_support_p);
-    grn_obj_get_info(ctx, NULL, GRN_INFO_SUPPORT_LZ4, &grn_support_p);
-    is_lz4_support = GRN_BOOL_VALUE(&grn_support_p);
-    grn_obj_unlink(ctx, &grn_support_p);
-  }
 
   while (flag_names < flag_names_end) {
     uint rest_length = flag_names_end - flag_names;
@@ -1226,7 +1257,7 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
       flags |= GRN_OBJ_COLUMN_VECTOR;
       flag_names += 13;
     } else if (rest_length >= 13 && !memcmp(flag_names, "COMPRESS_ZLIB", 13)) {
-      if (is_zlib_support) {
+      if (mrn_libgroonga_support_zlib) {
         flags |= GRN_OBJ_COMPRESS_ZLIB;
       } else {
         push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
@@ -1236,7 +1267,7 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
       }
       flag_names += 13;
     } else if (rest_length >= 12 && !memcmp(flag_names, "COMPRESS_LZ4", 12)) {
-      if (is_lz4_support) {
+      if (mrn_libgroonga_support_lz4) {
         flags |= GRN_OBJ_COMPRESS_LZ4;
       } else {
         push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
