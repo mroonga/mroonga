@@ -39,18 +39,13 @@
 #endif
 
 namespace mrn {
-  DatabaseManager::DatabaseManager(grn_ctx *ctx)
+  DatabaseManager::DatabaseManager(grn_ctx *ctx, mysql_mutex_t *mutex)
     : ctx_(ctx),
       cache_(NULL),
-      mutex_(),
-      mutex_initialized_(false) {
+      mutex_(mutex) {
   }
 
   DatabaseManager::~DatabaseManager(void) {
-    if (mutex_initialized_) {
-      pthread_mutex_destroy(&mutex_);
-    }
-
     if (cache_) {
       void *db_address;
       GRN_HASH_EACH(ctx_, cache_, id, NULL, 0, &db_address, {
@@ -75,13 +70,6 @@ namespace mrn {
       DBUG_RETURN(false);
     }
 
-    if (pthread_mutex_init(&mutex_, NULL) != 0) {
-      GRN_LOG(ctx_, GRN_LOG_ERROR,
-              "failed to initialize mutex for opened database cache hash table");
-      DBUG_RETURN(false);
-    }
-
-    mutex_initialized_ = true;
     DBUG_RETURN(true);
   }
 
@@ -92,7 +80,7 @@ namespace mrn {
     *db = NULL;
 
     mrn::PathMapper mapper(path);
-    mrn::Lock lock(&mutex_);
+    mrn::Lock lock(mutex_);
 
     error = mrn::encoding::set(ctx_, system_charset_info);
     if (error) {
@@ -145,7 +133,7 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
 
     mrn::PathMapper mapper(path);
-    mrn::Lock lock(&mutex_);
+    mrn::Lock lock(mutex_);
 
     grn_id id;
     void *db_address;
@@ -171,7 +159,7 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
 
     mrn::PathMapper mapper(path);
-    mrn::Lock lock(&mutex_);
+    mrn::Lock lock(mutex_);
 
     grn_id id;
     void *db_address;
@@ -211,7 +199,7 @@ namespace mrn {
 
     int error = 0;
 
-    mrn::Lock lock(&mutex_);
+    mrn::Lock lock(mutex_);
 
     grn_hash_cursor *cursor;
     cursor = grn_hash_cursor_open(ctx_, cache_,

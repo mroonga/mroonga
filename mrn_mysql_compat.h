@@ -22,11 +22,6 @@
 
 #include "mrn_mysql.h"
 
-#if MYSQL_VERSION_ID < 50500
-#  define mysql_mutex_lock(mutex) pthread_mutex_lock(mutex)
-#  define mysql_mutex_unlock(mutex) pthread_mutex_unlock(mutex)
-#endif
-
 #if MYSQL_VERSION_ID >= 50604
 #  define MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
 #  define MRN_HAVE_MYSQL_TYPE_DATETIME2

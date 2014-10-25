@@ -116,7 +116,6 @@
   }                                                     \
 } while (0)
 #else
-#  if MYSQL_VERSION_ID >= 50500
 #    ifdef DBUG_OFF
 #      ifndef _WIN32
 extern mysql_mutex_t LOCK_open;
@@ -125,14 +124,6 @@ extern mysql_mutex_t LOCK_open;
 static mysql_mutex_t *mrn_LOCK_open;
 #    define mrn_open_mutex_lock(share) mysql_mutex_lock(mrn_LOCK_open)
 #    define mrn_open_mutex_unlock(share) mysql_mutex_unlock(mrn_LOCK_open)
-#  else
-#    ifndef _WIN32
-extern pthread_mutex_t LOCK_open;
-#    endif
-static pthread_mutex_t *mrn_LOCK_open;
-#    define mrn_open_mutex_lock(share)
-#    define mrn_open_mutex_unlock(share)
-#  endif
 #endif
 
 #if MYSQL_VERSION_ID >= 50600
@@ -208,18 +199,43 @@ int grn_atoi(const char *nptr, const char *end, const char **rest);
 uint grn_atoui(const char *nptr, const char *end, const char **rest);
 
 /* global variables */
-static pthread_mutex_t mrn_log_mutex;
+static mysql_mutex_t mrn_log_mutex;
+static PSI_mutex_key mrn_log_mutex_key;
 handlerton *mrn_hton_ptr;
 HASH mrn_open_tables;
-pthread_mutex_t mrn_open_tables_mutex;
+mysql_mutex_t mrn_open_tables_mutex;
+static PSI_mutex_key mrn_open_tables_mutex_key;
 HASH mrn_long_term_share;
-pthread_mutex_t mrn_long_term_share_mutex;
+mysql_mutex_t mrn_long_term_share_mutex;
+static PSI_mutex_key mrn_long_term_share_mutex_key;
+
+HASH mrn_allocated_thds;
+mysql_mutex_t mrn_allocated_thds_mutex;
+PSI_mutex_key mrn_allocated_thds_mutex_key;
+
+PSI_mutex_key mrn_share_mutex_key;
+PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
 
 /* internal variables */
 static grn_ctx mrn_ctx;
 static grn_obj *mrn_db;
 static grn_ctx mrn_db_manager_ctx;
+static mysql_mutex_t mrn_db_manager_mutex;
+static PSI_mutex_key mrn_db_manager_mutex_key;
 mrn::DatabaseManager *mrn_db_manager = NULL;
+
+static PSI_mutex_info mrn_mutexes[] =
+{
+  {&mrn_log_mutex_key,             "log",             PSI_FLAG_GLOBAL},
+  {&mrn_open_tables_mutex_key,     "open_tables",     PSI_FLAG_GLOBAL},
+  {&mrn_long_term_share_mutex_key, "long_term_share", PSI_FLAG_GLOBAL},
+  {&mrn_allocated_thds_mutex_key,  "allocated_thds",  PSI_FLAG_GLOBAL},
+  {&mrn_share_mutex_key,           "share",           0},
+  {&mrn_long_term_share_auto_inc_mutex_key,
+   "long_term_share::auto_inc", 0},
+  {&mrn_db_manager_mutex_key,      "DatabaseManager", PSI_FLAG_GLOBAL}
+};
+
 
 #ifdef WIN32
 static inline double round(double x)
@@ -554,9 +570,6 @@ static grn_logger mrn_logger = {
   NULL
 };
 
-/* global hashes and mutexes */
-HASH mrn_allocated_thds;
-pthread_mutex_t mrn_allocated_thds_mutex;
 static uchar *mrn_allocated_thds_get_key(const uchar *record,
                                          size_t *length,
                                          my_bool not_used __attribute__ ((unused)))
@@ -1397,13 +1410,8 @@ static int mrn_init(void *p)
 #  endif
 #  ifndef MRN_HAVE_TDC_LOCK_TABLE_SHARE
   mrn_LOCK_open =
-#    if MYSQL_VERSION_ID >= 50500
     (mysql_mutex_t *)GetProcAddress(current_module,
       "?LOCK_open@@3Ust_mysql_mutex@@A");
-#    else
-    (pthread_mutex_t *)GetProcAddress(current_module,
-      "?LOCK_open@@3U_RTL_CRITICAL_SECTION@@A");
-#    endif
 #  endif
 #  ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
      mrn_table_share_lock_share =
@@ -1424,6 +1432,12 @@ static int mrn_init(void *p)
 #  endif
 #endif
 
+  if (PSI_server) {
+    const char *category = "mroonga";
+    int n_mutexes = array_elements(mrn_mutexes);
+    PSI_server->register_mutex(category, mrn_mutexes, n_mutexes);
+  }
+
   // init groonga
   if (grn_init() != GRN_SUCCESS) {
     goto err_grn_init;
@@ -1438,7 +1452,9 @@ static int mrn_init(void *p)
   if (mrn_change_encoding(ctx, system_charset_info))
     goto err_mrn_change_encoding;
 
-  if (pthread_mutex_init(&mrn_log_mutex, NULL) != 0) {
+  if (mysql_mutex_init(mrn_log_mutex_key,
+                       &mrn_log_mutex,
+                       MY_MUTEX_INIT_FAST) != 0) {
     goto err_log_mutex_init;
   }
 
@@ -1461,25 +1477,39 @@ static int mrn_init(void *p)
 
   grn_ctx_init(&mrn_db_manager_ctx, 0);
   grn_logger_set(&mrn_db_manager_ctx, &mrn_logger);
-  mrn_db_manager = new mrn::DatabaseManager(&mrn_db_manager_ctx);
+  if (mysql_mutex_init(mrn_db_manager_mutex_key,
+                       &mrn_db_manager_mutex,
+                       MY_MUTEX_INIT_FAST) != 0) {
+    GRN_LOG(&mrn_db_manager_ctx, GRN_LOG_ERROR,
+            "failed to initialize mutex for database manager");
+    goto err_db_manager_mutex_init;
+  }
+  mrn_db_manager = new mrn::DatabaseManager(&mrn_db_manager_ctx,
+                                            &mrn_db_manager_mutex);
   if (!mrn_db_manager->init()) {
     goto err_db_manager_init;
   }
-  if ((pthread_mutex_init(&mrn_allocated_thds_mutex, NULL) != 0)) {
+  if ((mysql_mutex_init(mrn_allocated_thds_mutex_key,
+                        &mrn_allocated_thds_mutex,
+                        MY_MUTEX_INIT_FAST) != 0)) {
     goto err_allocated_thds_mutex_init;
   }
   if (my_hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
                    mrn_allocated_thds_get_key, 0, 0)) {
     goto error_allocated_thds_hash_init;
   }
-  if ((pthread_mutex_init(&mrn_open_tables_mutex, NULL) != 0)) {
+  if ((mysql_mutex_init(mrn_open_tables_mutex_key,
+                        &mrn_open_tables_mutex,
+                        MY_MUTEX_INIT_FAST) != 0)) {
     goto err_allocated_open_tables_mutex_init;
   }
   if (my_hash_init(&mrn_open_tables, system_charset_info, 32, 0, 0,
                    mrn_open_tables_get_key, 0, 0)) {
     goto error_allocated_open_tables_hash_init;
   }
-  if ((pthread_mutex_init(&mrn_long_term_share_mutex, NULL) != 0)) {
+  if ((mysql_mutex_init(mrn_long_term_share_mutex_key,
+                        &mrn_long_term_share_mutex,
+                        MY_MUTEX_INIT_FAST) != 0)) {
     goto error_allocated_long_term_share_mutex_init;
   }
   if (my_hash_init(&mrn_long_term_share, system_charset_info, 32, 0, 0,
@@ -1494,18 +1524,20 @@ static int mrn_init(void *p)
   return 0;
 
 error_allocated_long_term_share_hash_init:
-  pthread_mutex_destroy(&mrn_long_term_share_mutex);
+  mysql_mutex_destroy(&mrn_long_term_share_mutex);
 error_allocated_long_term_share_mutex_init:
   my_hash_free(&mrn_open_tables);
 error_allocated_open_tables_hash_init:
-  pthread_mutex_destroy(&mrn_open_tables_mutex);
+  mysql_mutex_destroy(&mrn_open_tables_mutex);
 err_allocated_open_tables_mutex_init:
   my_hash_free(&mrn_allocated_thds);
 error_allocated_thds_hash_init:
-  pthread_mutex_destroy(&mrn_allocated_thds_mutex);
+  mysql_mutex_destroy(&mrn_allocated_thds_mutex);
 err_allocated_thds_mutex_init:
 err_db_manager_init:
   delete mrn_db_manager;
+  mysql_mutex_destroy(&mrn_db_manager_mutex);
+err_db_manager_mutex_init:
   grn_ctx_fin(&mrn_db_manager_ctx);
   grn_obj_unlink(ctx, mrn_db);
 err_db_create:
@@ -1514,7 +1546,7 @@ err_db_create:
     mrn_log_file_opened = false;
   }
 err_log_file_open:
-  pthread_mutex_destroy(&mrn_log_mutex);
+  mysql_mutex_destroy(&mrn_log_mutex);
 err_log_mutex_init:
 err_mrn_change_encoding:
   grn_ctx_fin(ctx);
@@ -1553,12 +1585,13 @@ static int mrn_deinit(void *p)
   }
 
   my_hash_free(&mrn_long_term_share);
-  pthread_mutex_destroy(&mrn_long_term_share_mutex);
+  mysql_mutex_destroy(&mrn_long_term_share_mutex);
   my_hash_free(&mrn_open_tables);
-  pthread_mutex_destroy(&mrn_open_tables_mutex);
+  mysql_mutex_destroy(&mrn_open_tables_mutex);
   my_hash_free(&mrn_allocated_thds);
-  pthread_mutex_destroy(&mrn_allocated_thds_mutex);
+  mysql_mutex_destroy(&mrn_allocated_thds_mutex);
   delete mrn_db_manager;
+  mysql_mutex_destroy(&mrn_db_manager_mutex);
   grn_ctx_fin(&mrn_db_manager_ctx);
 
   grn_obj_unlink(ctx, mrn_db);
@@ -1569,7 +1602,7 @@ static int mrn_deinit(void *p)
     fclose(mrn_log_file);
     mrn_log_file_opened = false;
   }
-  pthread_mutex_destroy(&mrn_log_mutex);
+  mysql_mutex_destroy(&mrn_log_mutex);
 
   return 0;
 }

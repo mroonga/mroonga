@@ -61,14 +61,16 @@ extern "C" {
 #endif
 
 extern HASH mrn_open_tables;
-extern pthread_mutex_t mrn_open_tables_mutex;
+extern mysql_mutex_t mrn_open_tables_mutex;
 extern HASH mrn_long_term_share;
-extern pthread_mutex_t mrn_long_term_share_mutex;
+extern mysql_mutex_t mrn_long_term_share_mutex;
 extern char *mrn_default_parser;
 extern char *mrn_default_wrapper_engine;
 extern handlerton *mrn_hton_ptr;
 extern HASH mrn_allocated_thds;
-extern pthread_mutex_t mrn_allocated_thds_mutex;
+extern mysql_mutex_t mrn_allocated_thds_mutex;
+extern PSI_mutex_key mrn_share_mutex_key;
+extern PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
 
 static char *mrn_get_string_between_quote(const char *ptr)
 {
@@ -745,7 +747,7 @@ void mrn_free_long_term_share(MRN_LONG_TERM_SHARE *long_term_share)
     mrn::Lock lock(&mrn_long_term_share_mutex);
     my_hash_delete(&mrn_long_term_share, (uchar*) long_term_share);
   }
-  pthread_mutex_destroy(&long_term_share->auto_inc_mutex);
+  mysql_mutex_destroy(&long_term_share->auto_inc_mutex);
   my_free(long_term_share);
   DBUG_VOID_RETURN;
 }
@@ -775,8 +777,9 @@ MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
     long_term_share->table_name = tmp_name;
     long_term_share->table_name_length = table_name_length;
     memcpy(long_term_share->table_name, table_name, table_name_length);
-    if (pthread_mutex_init(&long_term_share->auto_inc_mutex,
-                           MY_MUTEX_INIT_FAST))
+    if (mysql_mutex_init(mrn_long_term_share_auto_inc_mutex_key,
+                         &long_term_share->auto_inc_mutex,
+                         MY_MUTEX_INIT_FAST) != 0)
     {
       *error = HA_ERR_OUT_OF_MEM;
       goto error_init_auto_inc_mutex;
@@ -790,7 +793,7 @@ MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
   DBUG_RETURN(long_term_share);
 
 error_hash_insert:
-  pthread_mutex_destroy(&long_term_share->auto_inc_mutex);
+  mysql_mutex_destroy(&long_term_share->auto_inc_mutex);
 error_init_auto_inc_mutex:
   my_free(long_term_share);
 error_alloc_long_term_share:
@@ -912,7 +915,9 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       share->wrap_table_share = wrap_table_share;
     }
 
-    if (pthread_mutex_init(&share->mutex, MY_MUTEX_INIT_FAST))
+    if (mysql_mutex_init(mrn_share_mutex_key,
+                         &share->mutex,
+                         MY_MUTEX_INIT_FAST) != 0)
     {
       *error = HA_ERR_OUT_OF_MEM;
       goto error_init_mutex;
@@ -934,7 +939,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 
 error_hash_insert:
 error_get_long_term_share:
-  pthread_mutex_destroy(&share->mutex);
+  mysql_mutex_destroy(&share->mutex);
 error_init_mutex:
 error_parse_table_param:
   mrn_free_share_alloc(share);
@@ -954,7 +959,7 @@ int mrn_free_share(MRN_SHARE *share)
       plugin_unlock(NULL, share->plugin);
     mrn_free_share_alloc(share);
     thr_lock_delete(&share->lock);
-    pthread_mutex_destroy(&share->mutex);
+    mysql_mutex_destroy(&share->mutex);
     if (share->wrapper_mode) {
 #ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_share));
