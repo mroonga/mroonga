@@ -512,6 +512,28 @@ msgstr ""
 msgid "Here is an example that uses ``NormalizerAuto`` normalizer::"
 msgstr "Here is an example that uses ``NormalizerAuto`` normalizer::"
 
+msgid "How to specify the token filters"
+msgstr "How to specify the token filters"
+
+msgid "Mroonga has the following syntax to specify Groonga's token filters.::"
+msgstr "Mroonga has the following syntax to specify Groonga's token filters.::"
+
+msgid "Here is an example that uses ``TokenFilterStem`` token filter.::"
+msgstr "Here is an example that uses ``TokenFilterStem`` token filter.::"
+
+msgid ""
+"See `Groonga's document <http://groonga.org/docs/reference/token_filters."
+"html>`_ document about Groonga's token filter."
+msgstr ""
+"See `Groonga's document <http://groonga.org/docs/reference/token_filters."
+"html>`_ document about Groonga's token filter."
+
+msgid "Here is an example that uses ``TokenFilterStopWord`` token filter.::"
+msgstr "Here is an example that uses ``TokenFilterStopWord`` token filter.::"
+
+msgid "It's used that specifying the lexicon table for fulltext search."
+msgstr "It's used that specifying the lexicon table for fulltext search."
+
 msgid "How to use geolocation search"
 msgstr "How to use geolocation search"
 

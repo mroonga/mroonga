@@ -523,6 +523,31 @@ msgstr ""
 msgid "Here is an example that uses ``NormalizerAuto`` normalizer::"
 msgstr "以下は、``NormalizerAuto`` のノーマライザーを使用する例です。::"
 
+msgid "How to specify the token filters"
+msgstr "トークンフィルターの指定方法"
+
+msgid "Mroonga has the following syntax to specify Groonga's token filters.::"
+msgstr ""
+"Mroongaは、Groongaのトークンフィルターを指定する以下のような構文を持っていま"
+"す。::"
+
+msgid "Here is an example that uses ``TokenFilterStem`` token filter.::"
+msgstr "以下は、``TokenFilterStem`` のトークンフィルターを使用する例です。::"
+
+msgid ""
+"See `Groonga's document <http://groonga.org/docs/reference/token_filters."
+"html>`_ document about Groonga's token filter."
+msgstr ""
+"Groongaのトークンフィルターの詳細については `Groongaのドキュメント <http://"
+"groonga.org/ja/docs/reference/token_filters.html>`_ を参照してください。"
+
+msgid "Here is an example that uses ``TokenFilterStopWord`` token filter.::"
+msgstr ""
+"以下は、``TokenFilterStopWord`` のトークンフィルターを使用する例です。::"
+
+msgid "It's used that specifying the lexicon table for fulltext search."
+msgstr "これは、全文検索用の語彙表テーブルを指定する方法を使用しています。"
+
 msgid "How to use geolocation search"
 msgstr "位置情報検索の利用方法"
 

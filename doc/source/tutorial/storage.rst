@@ -256,6 +256,100 @@ Here is an example that uses ``NormalizerAuto`` normalizer::
   +------------+-----------------------------------------+
   1 row in set (0.00 sec)
 
+How to specify the token filters
+--------------------------------
+
+Mroonga has the following syntax to specify Groonga's token filters.::
+
+  FULLTEXT INDEX (content) COMMENT 'token_filters "TokenFilterStem"'
+
+Here is an example that uses ``TokenFilterStem`` token filter.::
+
+  mysql> SELECT mroonga_command('register token_filters/stem');
+  +------------------------------------------------+
+  | mroonga_command('register token_filters/stem') |
+  +------------------------------------------------+
+  | true                                           |
+  +------------------------------------------------+
+  1 row in set (0.00 sec)
+
+  mysql> CREATE TABLE memos (
+      -> id INT NOT NULL PRIMARY KEY,
+      -> content TEXT NOT NULL,
+      -> FULLTEXT INDEX (content) COMMENT 'normalizer "NormalizerAuto", token_filters "TokenFilterStem"'
+      -> ) Engine=Mroonga DEFAULT CHARSET=utf8;
+  Query OK, 0 rows affected (0.18 sec)
+
+  mysql> INSERT INTO memos VALUES (1, "I develop Groonga");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> INSERT INTO memos VALUES (2, "I'm developing Groonga");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> INSERT INTO memos VALUES (3, "I developed Groonga");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> SELECT * FROM memos
+      -> WHERE MATCH (content) AGAINST ("+develops" IN BOOLEAN MODE);
+  +----+------------------------+
+  | id | content                |
+  +----+------------------------+
+  |  1 | I develop Groonga      |
+  |  2 | I'm developing Groonga |
+  |  3 | I developed Groonga    |
+  +----+------------------------+
+  3 rows in set (0.01 sec)
+
+See `Groonga's document <http://groonga.org/docs/reference/token_filters.html>`_ document about Groonga's token filter.
+
+Here is an example that uses ``TokenFilterStopWord`` token filter.::
+
+  mysql> SELECT mroonga_command("register token_filters/stop_word");
+  +-----------------------------------------------------+
+  | mroonga_command("register token_filters/stop_word") |
+  +-----------------------------------------------------+
+  | true                                                |
+  +-----------------------------------------------------+
+  1 row in set (0.00 sec)
+
+  mysql> CREATE TABLE terms (
+      ->   term VARCHAR(64) NOT NULL PRIMARY KEY,
+      ->   is_stop_word BOOL NOT NULL
+      -> ) Engine=Mroonga COMMENT='default_tokenizer "TokenBigram", token_filters "TokenFilterStopWord"' DEFAULT CHARSET=utf8;
+  Query OK, 0 rows affected (0.12 sec)
+
+  mysql> CREATE TABLE memos (
+      ->   id INT NOT NULL PRIMARY KEY,
+      ->   content TEXT NOT NULL,
+      ->   FULLTEXT INDEX (content) COMMENT 'table "terms"'
+      -> ) Engine=Mroonga DEFAULT CHARSET=utf8;
+  Query OK, 0 rows affected (0.17 sec)
+
+  mysql>
+  mysql> INSERT INTO terms VALUES ("and", true);
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> INSERT INTO memos VALUES (1, "Hello");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> INSERT INTO memos VALUES (2, "Hello and Good-bye");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> INSERT INTO memos VALUES (3, "Good-bye");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> SELECT * FROM memos
+      ->   WHERE MATCH (content) AGAINST ("+\"Hello and\"" IN BOOLEAN MODE);
+  +----+--------------------+
+  | id | content            |
+  +----+--------------------+
+  |  1 | Hello              |
+  |  2 | Hello and Good-bye |
+  +----+--------------------+
+  2 rows in set (0.01 sec)
+
+It's used that specifying the lexicon table for fulltext search.
+
 How to use geolocation search
 -----------------------------
 
