@@ -465,6 +465,91 @@ msgstr "my.cnf::"
 msgid "SQL::"
 msgstr "SQL::"
 
+msgid "How to specify the normalizer"
+msgstr "How to specify the normalizer"
+
+msgid ""
+"Mroonga uses normalizer corresponding to the encoding of document. It is "
+"used when tokenizing text and storing table key."
+msgstr ""
+"Mroonga uses normalizer corresponding to the encoding of document. It is "
+"used when tokenizing text and storing table key."
+
+msgid ""
+"It is used ``NormalizerMySQLGeneralCI`` normalizer when the encoding is "
+"``utf8_general_ci`` or ``utf8mb4_general_ci``."
+msgstr ""
+"It is used ``NormalizerMySQLGeneralCI`` normalizer when the encoding is "
+"``utf8_general_ci`` or ``utf8mb4_general_ci``."
+
+msgid ""
+"It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is "
+"``utf8_unicode_ci`` or ``utf8mb4_unicode_ci``."
+msgstr ""
+"It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is "
+"``utf8_unicode_ci`` or ``utf8mb4_unicode_ci``."
+
+msgid "It isn't used normalizer when the encoding is ``utf8_bin``."
+msgstr "It isn't used normalizer when the encoding is ``utf8_bin``."
+
+msgid ""
+"Here is an example that uses ``NormalizerMySQLUnicodeCI`` normalizer by "
+"specifying ``utf8_unicode_ci``.::"
+msgstr ""
+"Here is an example that uses ``NormalizerMySQLUnicodeCI`` normalizer by "
+"specifying ``utf8_unicode_ci``.::"
+
+msgid "Mroonga has the following syntax to specify Groonga's normalizer::"
+msgstr "Mroonga has the following syntax to specify Groonga's normalizer::"
+
+msgid ""
+"See `Groonga's document <http://groonga.org/docs/reference/normalizers."
+"html>`_ document about Groonga's normalizer."
+msgstr ""
+"See `Groonga's document <http://groonga.org/docs/reference/normalizers."
+"html>`_ document about Groonga's normalizer."
+
+msgid "Here is an example that uses ``NormalizerAuto`` normalizer::"
+msgstr "Here is an example that uses ``NormalizerAuto`` normalizer::"
+
+msgid "How to specify the token filters"
+msgstr "How to specify the token filters"
+
+msgid "Mroonga has the following syntax to specify Groonga's token filters.::"
+msgstr "Mroonga has the following syntax to specify Groonga's token filters.::"
+
+msgid "Here is an example that uses ``TokenFilterStem`` token filter.::"
+msgstr "Here is an example that uses ``TokenFilterStem`` token filter.::"
+
+msgid ""
+"See `Groonga's document <http://groonga.org/docs/reference/token_filters."
+"html>`_ document about Groonga's token filter."
+msgstr ""
+"See `Groonga's document <http://groonga.org/docs/reference/token_filters."
+"html>`_ document about Groonga's token filter."
+
+msgid "Here is an example that uses ``TokenFilterStopWord`` token filter.::"
+msgstr "Here is an example that uses ``TokenFilterStopWord`` token filter.::"
+
+msgid "It's used that specifying the lexicon table for fulltext search."
+msgstr "It's used that specifying the lexicon table for fulltext search."
+
+msgid "How to specify Groonga's column flags"
+msgstr "How to specify Groonga's column flags"
+
+msgid "Mroonga has the following syntax to specify Groonga's column flags::"
+msgstr "Mroonga has the following syntax to specify Groonga's column flags::"
+
+msgid "Here is an example that uses ``COMPRESS_ZLIB`` flag.::"
+msgstr "Here is an example that uses ``COMPRESS_ZLIB`` flag.::"
+
+msgid ""
+"See `Groonga's document <http://groonga.org/docs/reference/commands/"
+"column_create.html#parameters>`_ document about Groonga's column flags."
+msgstr ""
+"See `Groonga's document <http://groonga.org/docs/reference/commands/"
+"column_create.html#parameters>`_ document about Groonga's column flags."
+
 msgid "How to use geolocation search"
 msgstr "How to use geolocation search"
 
