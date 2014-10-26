@@ -858,6 +858,22 @@ msgstr ""
 "Here is an example SQL to change the delimiter to a semicolon from a white "
 "space::"
 
+msgid ""
+"The status of libgroonga supports zlib."
+msgstr "The status of libgroonga supports zlib."
+
+msgid ""
+"Here is an example SQL to confirm the status of libgroonga supports zlib::"
+msgstr "Here is an example SQL to confirm the status of libgroonga supports zlib::"
+
+msgid ""
+"The status of libgroonga supports LZ4."
+msgstr "The status of libgroonga supports LZ4."
+
+msgid ""
+"Here is an example SQL to confirm the status of libgroonga supports LZ4::"
+msgstr "Here is an example SQL to confirm the status of libgroonga supports LZ4::"
+
 msgid "SQL commands"
 msgstr "SQL commands"
 
