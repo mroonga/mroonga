@@ -350,6 +350,23 @@ Here is an example that uses ``TokenFilterStopWord`` token filter.::
 
 It's used that specifying the lexicon table for fulltext search.
 
+How to specify Groonga's column flags
+-------------------------------------
+
+Mroonga has the following syntax to specify Groonga's column flags::
+
+  content TEXT COMMENT 'flags "COLUMN_SCALAR|COMPRESS_ZLIB"'
+
+Here is an example that uses ``COMPRESS_ZLIB`` flag.::
+
+  mysql> CREATE TABLE entries (
+      ->   id INT UNSIGNED PRIMARY KEY,
+      ->   content TEXT COMMENT 'flags "COLUMN_SCALAR|COMPRESS_ZLIB"'
+      -> ) Engine=Mroonga DEFAULT CHARSET=utf8;
+  Query OK, 0 rows affected (0.12 sec)
+
+See `Groonga's document <http://groonga.org/docs/reference/commands/column_create.html#parameters>`_ document about Groonga's column flags.
+
 How to use geolocation search
 -----------------------------
 

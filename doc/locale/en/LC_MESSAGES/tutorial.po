@@ -534,6 +534,22 @@ msgstr "Here is an example that uses ``TokenFilterStopWord`` token filter.::"
 msgid "It's used that specifying the lexicon table for fulltext search."
 msgstr "It's used that specifying the lexicon table for fulltext search."
 
+msgid "How to specify Groonga's column flags"
+msgstr "How to specify Groonga's column flags"
+
+msgid "Mroonga has the following syntax to specify Groonga's column flags::"
+msgstr "Mroonga has the following syntax to specify Groonga's column flags::"
+
+msgid "Here is an example that uses ``COMPRESS_ZLIB`` flag.::"
+msgstr "Here is an example that uses ``COMPRESS_ZLIB`` flag.::"
+
+msgid ""
+"See `Groonga's document <http://groonga.org/docs/reference/commands/"
+"column_create.html#parameters>`_ document about Groonga's column flags."
+msgstr ""
+"See `Groonga's document <http://groonga.org/docs/reference/commands/"
+"column_create.html#parameters>`_ document about Groonga's column flags."
+
 msgid "How to use geolocation search"
 msgstr "How to use geolocation search"
 
