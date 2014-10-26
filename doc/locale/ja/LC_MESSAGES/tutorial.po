@@ -473,6 +473,56 @@ msgstr ""
 msgid "SQL::"
 msgstr ""
 
+msgid "How to specify the normalizer"
+msgstr "ノーマライザーの指定方法"
+
+msgid ""
+"Mroonga uses normalizer corresponding to the encoding of document. It is "
+"used when tokenizing text and storing table key."
+msgstr ""
+"Mroongaは、文書のエンコーディング(照合順序)に応じたノーマライザーを使用しま"
+"す。これはテキストをトークナイズするときとテーブルのキーを保存するときに使わ"
+"れます。"
+
+msgid ""
+"It is used ``NormalizerMySQLGeneralCI`` normalizer when the encoding is "
+"``utf8_general_ci`` or ``utf8mb4_general_ci``."
+msgstr ""
+"``utf8_general_ci`` または ``utf8mb4_general_ci`` の場合、"
+"``NormalizerMySQLGeneralCI`` ノーマライザーが使用されます。
+
+msgid ""
+"It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is "
+"``utf8_unicode_ci`` or ``utf8mb4_unicode_ci``."
+msgstr ""
+"``utf8_unicode_ci`` または ``utf8mb4_unicode_ci`` の場合、"
+"``NormalizerMySQLUnicodeCI`` ノーマライザーが使用されます。"
+
+msgid "It isn't used normalizer when the encoding is ``utf8_bin``."
+msgstr "``utf8_bin`` の場合、ノーマライザーは使用されません。"
+
+msgid ""
+"Here is an example that uses ``NormalizerMySQLUnicodeCI`` normalizer by "
+"specifying ``utf8_unicode_ci``.::"
+msgstr ""
+"以下は、 ``utf8_unicode_ci`` の照合順序を指定して "
+"``NormalizerMySQLUnicodeCI`` ノーマライザーを使用する例です。::"
+
+msgid "Mroonga has the following syntax to specify Groonga's normalizer::"
+msgstr ""
+"Mroongaは、Groongaのノーマライザーを指定する以下のような構文を持っていま"
+"す。::"
+
+msgid ""
+"See `Groonga's document <http://groonga.org/docs/reference/normalizers."
+"html>`_ document about Groonga's normalizer."
+msgstr ""
+"Groongaのノーマライザーの詳細については `Groongaのドキュメント <http://"
+"groonga.org/ja/docs/reference/normalizers.html>`_ を参照してください。"
+
+msgid "Here is an example that uses ``NormalizerAuto`` normalizer::"
+msgstr "以下は、``NormalizerAuto`` のノーマライザーを使用する例です。::"
+
 msgid "How to use geolocation search"
 msgstr "位置情報検索の利用方法"
 

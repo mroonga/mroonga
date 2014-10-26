@@ -175,6 +175,87 @@ SQL::
   mysql> SET GLOBAL mroonga_default_parser = TokenMecab;
   Query OK, 0 rows affected (0.00 sec)
 
+How to specify the normalizer
+-----------------------------
+
+Mroonga uses normalizer corresponding to the encoding of document.
+It is used when tokenizing text and storing table key.
+
+It is used ``NormalizerMySQLGeneralCI`` normalizer when the encoding is ``utf8_general_ci`` or ``utf8mb4_gener
+al_ci``.
+
+It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is ``utf8_unicode_ci`` or ``utf8mb4_unico
+de_ci``.
+
+It isn't used normalizer when the encoding is ``utf8_bin``.
+
+Here is an example that uses ``NormalizerMySQLUnicodeCI`` normalizer by specifying ``utf8_unicode_ci``.::
+
+  mysql> SET NAMES utf8;
+  Query OK, 0 rows affected (0.00 sec)
+
+  mysql> CREATE TABLE diaries (
+      ->   day DATE PRIMARY KEY,
+      ->   content VARCHAR(64) NOT NULL,
+      ->   FULLTEXT INDEX (content)
+      -> ) Engine=Mroonga DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  Query OK, 0 rows affected (0.18 sec)
+
+  mysql> INSERT INTO diaries VALUES ("2013-04-23", "ブラックコーヒーを飲んだ。");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> SELECT * FROM diaries
+      ->        WHERE MATCH (content) AGAINST ("+ふらつく" IN BOOLEAN MODE);
+  +------------+-----------------------------------------+
+  | day        | content                                 |
+  +------------+-----------------------------------------+
+  | 2013-04-23 | ブラックコーヒーを飲んだ。 |
+  +------------+-----------------------------------------+
+  1 row in set (0.00 sec)
+
+  mysql> SELECT * FROM diaries
+      ->        WHERE MATCH (content) AGAINST ("+ﾌﾞﾗｯｸ" IN BOOLEAN MODE);
+  +------------+-----------------------------------------+
+  | day        | content                                 |
+  +------------+-----------------------------------------+
+  | 2013-04-23 | ブラックコーヒーを飲んだ。 |
+  +------------+-----------------------------------------+
+  1 row in set (0.00 sec)
+
+Mroonga has the following syntax to specify Groonga's normalizer::
+
+  FULLTEXT INDEX (content) COMMENT 'normalizer "NormalizerAuto"'
+
+See `Groonga's document <http://groonga.org/docs/reference/normalizers.html>`_ document about Groonga's normalizer.
+
+Here is an example that uses ``NormalizerAuto`` normalizer::
+
+  mysql> SET NAMES utf8;
+  Query OK, 0 rows affected (0.00 sec)
+
+  mysql> CREATE TABLE diaries (
+      ->   day DATE PRIMARY KEY,
+      ->   content VARCHAR(64) NOT NULL,
+      ->   FULLTEXT INDEX (content) COMMENT 'normalizer "NormalizerAuto"'
+      -> ) Engine=Mroonga DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  Query OK, 0 rows affected (0.19 sec)
+
+  mysql> INSERT INTO diaries VALUES ("2013-04-23", "ブラックコーヒーを飲んだ。");
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> SELECT * FROM diaries
+      ->        WHERE MATCH (content) AGAINST ("+ふらつく" IN BOOLEAN MODE);
+  Empty set (0.00 sec)
+
+  mysql> SELECT * FROM diaries
+      ->        WHERE MATCH (content) AGAINST ("+ﾌﾞﾗｯｸ" IN BOOLEAN MODE);
+  +------------+-----------------------------------------+
+  | day        | content                                 |
+  +------------+-----------------------------------------+
+  | 2013-04-23 | ブラックコーヒーを飲んだ。 |
+  +------------+-----------------------------------------+
+  1 row in set (0.00 sec)
+
 How to use geolocation search
 -----------------------------
 

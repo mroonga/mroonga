@@ -465,6 +465,72 @@ msgstr "my.cnf::"
 msgid "SQL::"
 msgstr "SQL::"
 
+msgid "How to specify the normalizer"
+msgstr "How to specify the normalizer"
+
+msgid ""
+"Mroonga uses normalizer corresponding to the encoding of document. It is "
+"used when tokenizing text and storing table key."
+msgstr ""
+"Mroonga uses normalizer corresponding to the encoding of document. It is "
+"used when tokenizing text and storing table key."
+
+msgid ""
+"It is used ``NormalizerMySQLGeneralCI`` normalizer when the encoding is "
+"``utf8_general_ci`` or ``utf8mb4_general_ci``."
+msgstr ""
+"It is used ``NormalizerMySQLGeneralCI`` normalizer when the encoding is "
+"``utf8_general_ci`` or ``utf8mb4_general_ci``."
+
+msgid ""
+"It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is "
+"``utf8_unicode_ci`` or ``utf8mb4_unicode_ci``."
+msgstr ""
+"It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is "
+"``utf8_unicode_ci`` or ``utf8mb4_unicode_ci``."
+
+msgid "It isn't used normalizer when the encoding is ``utf8_bin``."
+msgstr "It isn't used normalizer when the encoding is ``utf8_bin``."
+
+msgid ""
+"Here is an example that uses ``NormalizerMySQLUnicodeCI`` normalizer by "
+"specifying ``utf8_unicode_ci``.::"
+msgstr ""
+"Here is an example that uses ``NormalizerMySQLUnicodeCI`` normalizer by "
+"specifying ``utf8_unicode_ci``.::"
+
+msgid "Mroonga has the following syntax to specify Groonga's normalizer::"
+msgstr "Mroonga has the following syntax to specify Groonga's normalizer::"
+
+msgid ""
+"See `Groonga's document <http://groonga.org/docs/reference/normalizers."
+"html>`_ document about Groonga's normalizer."
+msgstr ""
+"See `Groonga's document <http://groonga.org/docs/reference/normalizers."
+"html>`_ document about Groonga's normalizer."
+
+msgid "Here is an example that uses ``NormalizerAuto`` normalizer::"
+msgstr "Here is an example that uses ``NormalizerAuto`` normalizer::"
+
+msgid "How to use geolocation search"
+msgstr "How to use geolocation search"
+
+msgid ""
+"In storage mode, you can use fast geolocation search in addition to full "
+"text search. But unlike MyISAM, you can only store POINT type data. You "
+"cannot store other types data like LINE. And fast search using index only "
+"supports MBRContains. It does not support MBRDisjoint."
+msgstr ""
+"In storage mode, you can use fast geolocation search in addition to full "
+"text search. But unlike MyISAM, you can only store POINT type data. You "
+"cannot store other types data like LINE. And fast search using index only "
+"supports MBRContains. It does not support MBRDisjoint."
+"Groongaのノーマライザーの詳細については `Groongaのドキュメント <http://"
+"groonga.org/ja/docs/reference/normalizers.html>`_ を参照してください。"
+
+msgid "Here is an example that uses ``NormalizerAuto`` normalizer::"
+msgstr "以下は、``NormalizerAuto`` のノーマライザーを使用する例です。::"
+
 msgid "How to use geolocation search"
 msgstr "How to use geolocation search"
 
