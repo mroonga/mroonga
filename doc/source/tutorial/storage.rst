@@ -181,11 +181,11 @@ How to specify the normalizer
 Mroonga uses normalizer corresponding to the encoding of document.
 It is used when tokenizing text and storing table key.
 
-It is used ``NormalizerMySQLGeneralCI`` normalizer when the encoding is ``utf8_general_ci`` or ``utf8mb4_gener
-al_ci``.
+It is used ``NormalizerMySQLGeneralCI`` normalizer when the encoding is
+``utf8_general_ci`` or ``utf8mb4_general_ci``.
 
-It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is ``utf8_unicode_ci`` or ``utf8mb4_unico
-de_ci``.
+It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is
+``utf8_unicode_ci`` or ``utf8mb4_unicode_ci``.
 
 It isn't used normalizer when the encoding is ``utf8_bin``.
 
