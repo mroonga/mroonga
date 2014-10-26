@@ -489,7 +489,7 @@ msgid ""
 "``utf8_general_ci`` or ``utf8mb4_general_ci``."
 msgstr ""
 "``utf8_general_ci`` または ``utf8mb4_general_ci`` の場合、"
-"``NormalizerMySQLGeneralCI`` ノーマライザーが使用されます。
+"``NormalizerMySQLGeneralCI`` ノーマライザーが使用されます。"
 
 msgid ""
 "It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is "
