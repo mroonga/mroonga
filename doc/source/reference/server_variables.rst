@@ -331,7 +331,7 @@ Here is an example SQL to change the delimiter to a semicolon from a white space
   | mroonga_vector_column_delimiter | ;     |
   +---------------------------------+-------+
 
-.. mroonga_libgroonga_support_zlib:
+.. _mroonga_libgroonga_support_zlib:
 
 mroonga_libgroonga_support_zlib
 -------------------------------
@@ -347,7 +347,7 @@ Here is an example SQL to confirm the status of libgroonga supports zlib::
   | mroonga_libgroonga_support_zlib | ON    |
   +---------------------------------+-------+
 
-.. mroonga_libgroonga_support_lz4:
+.. _mroonga_libgroonga_support_lz4:
 
 mroonga_libgroonga_support_lz4
 ------------------------------
