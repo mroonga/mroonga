@@ -22,7 +22,7 @@ Improvements
 * [mroonga_command] Improved to create Groonga database automatically if it doesn't exist.
 * [storage] Supported to specify normalizer in table comment.
   [GitHub#27] [Patch by Naoya Murakami]
-* [storage] Supported column compression flag (COMPRESS_LZ4,COMPRESS_ZLIB).
+* [storage] Supported column compression flag (``COMPRESS_LZ4``,``COMPRESS_ZLIB``).
   [GitHub#32] [Patch by Naoya Murakami]
 * [cmake] Changed plugin name as ``mroonga`` instead of ``ha_mroonga``. [GitHub#30]
 * Added :ref:`mroonga_libgroonga_support_lz4` and :ref:`mroonga_libgroonga_support_zlib`
