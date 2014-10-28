@@ -19,7 +19,8 @@ Improvements
 * [cmake] Removed needless status message for compiler flag checks [GitHub#22]
 * Supported token filter in table/index comment for wrapper/storage mode.
   [GitHub#25] [Patch by Naoya Murakami]
-* [mroonga_command] Improved to create Groonga database automatically if it doesn't exist.
+* [mroonga_command] Improved to need not to know whether Groonga database already exists
+  before executing mroonga_command. In the previous versions, you must prepare table which use Mroonga.
 * [storage] Supported to specify normalizer in table comment.
   [GitHub#27] [Patch by Naoya Murakami]
 * [storage] Supported column compression flag (``COMPRESS_LZ4``,``COMPRESS_ZLIB``).
