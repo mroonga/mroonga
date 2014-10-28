@@ -5,6 +5,48 @@
 News
 ====
 
+.. _release-4-07:
+
+Release 4.07 - 2014/10/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage] Drop suppport ``INSERT DELAYED`` explicitly. [GitHub#20] [MDEV#6837] [Reported by Elena Stepanova]
+* [storage][mariadb10] Added proper error message for duplicated entries on adding an unique index.
+  [GitHub#19] [Reported by Elena Stepanova]
+* [cmake] Removed needless status message for compiler flag checks [GitHub#22]
+* Supported token filter in table/index comment for wrapper/storage mode.
+  [GitHub#25] [Patch by Naoya Murakami]
+* [mroonga_command] Improved to create Groonga database automatically if it doesn't exist.
+* [storage] Supported to specify normalizer in table comment.
+  [GitHub#27] [Patch by Naoya Murakami]
+* [storage] Supported column compression flag (COMPRESS_LZ4,COMPRESS_ZLIB).
+  [GitHub#32] [Patch by Naoya Murakami]
+* Changed to log invalid column flags error as MySQL warning.
+* [cmake] Changed plugin name as ``mroonga`` instead of ``ha_mroonga``. [GitHub#30]
+* Added :ref:`mroonga_libgroonga_support_lz4` and :ref:`mroonga_libgroonga_support_zlib`
+  system variables. [GitHub#33,#34,#35] [Patch by Naoya Murakami]
+* Dropped MySQL 5.1 support.
+
+Fixes
+^^^^^
+
+* [storage][mariadb10] Fixed a crash bug that it doesn't properly locked.
+  [GitHub#18] [Reported by Elena Stepanova]
+* [storage] Fixed overflow about signed tinyint.
+  The negative values are replaced with 127. [GitHub#29]
+* Fixed a memory leak at initializing Mroonga.
+* [doc] Fixed invalid line breaks about description of normalizer.
+  [GitHub#32] [Patch by Naoya Murakami]
+
+Thanks
+^^^^^^
+
+* Elena Stepanova
+* Naoya Murakami
+
 .. _release-4-06:
 
 Release 4.06 - 2014/09/29
