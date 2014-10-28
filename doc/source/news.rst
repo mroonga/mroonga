@@ -13,7 +13,7 @@ Release 4.07 - 2014/10/29
 Improvements
 ^^^^^^^^^^^^
 
-* [storage] Drop suppport ``INSERT DELAYED`` explicitly. [GitHub#20] [MDEV#6837] [Reported by Elena Stepanova]
+* [storage] Changed to treat deprecated ``INSERT DELAYED`` as error. [GitHub#20] [MDEV#6837] [Reported by Elena Stepanova]
 * [storage][mariadb10] Added proper error message for duplicated entries on adding an unique index.
   [GitHub#19] [Reported by Elena Stepanova]
 * [cmake] Removed needless status message for compiler flag checks [GitHub#22]
