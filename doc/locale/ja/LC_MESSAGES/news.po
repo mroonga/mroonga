@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-09-28 18:54+0900\n"
+"PO-Revision-Date: 2014-10-29 08:13+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,11 +20,121 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 4.06 - 2014/09/29"
-msgstr "4.06リリース - 2014/09/29"
+msgid "Release 4.07 - 2014/10/29"
+msgstr "4.07リリース - 2014/10/29"
 
 msgid "Improvements"
 msgstr "改良"
+
+# 5d200c1c668246b5a109032cccef7054
+msgid ""
+"[storage] Changed to treat deprecated ``INSERT DELAYED`` as error. "
+"[GitHub#20] [MDEV#6837] [Reported by Elena Stepanova]"
+msgstr ""
+"[ストレージ] 非推奨である ``INSERT DELAYED`` をエラーとして扱うようにしまし"
+"た。 [GitHub#20] [MDEV#6837] [Elena Stepanovaさんが報告]"
+
+# 7afcd2dbc12d4876be38f5676e249eda
+msgid ""
+"[storage][mariadb10] Added proper error message for duplicated entries on "
+"adding an unique index. [GitHub#19] [Reported by Elena Stepanova]"
+msgstr ""
+"[ストレージ][mariadb10] ユニークインデックスを追加するときに重複がある場合、"
+"適切なエラーメッセージを表示するようにしました。 [GitHub#19] [Elena Stepanova"
+"さんが報告]"
+
+# 9a6aa947940e4e65b47b0812a431d776
+msgid ""
+"[cmake] Removed needless status message for compiler flag checks [GitHub#22]"
+msgstr ""
+"[cmake] 不要なコンパイラフラグのチェックメッセージを表示しないようにしまし"
+"た。 [GitHub#22]"
+
+# 6de47e09490f4f2d8481a2f865ff6aa5
+msgid ""
+"Supported token filter in table/index comment for wrapper/storage mode. "
+"[GitHub#25] [Patch by Naoya Murakami]"
+msgstr ""
+"トークンフィルターをテーブルもしくはインデックスのコメントに指定できるように"
+"しました。 [GitHub#25] [村上さんがパッチ提供]"
+
+# 2f8527099f0e4ecea32ee795af02fd7f
+msgid ""
+"[mroonga_command] Improved to need not to know whether Groonga database "
+"already exists before executing mroonga_command. In the previous versions, "
+"you must prepare table which use Mroonga."
+msgstr ""
+"[mroonga_command] mroonga_commandを使うときにすでにGroongaのデータベースの有"
+"無を気にしなくてもよくなりました。以前はMroongaを使ったテーブルが存在している"
+"必要がありました。"
+
+msgid ""
+"[storage] Supported to specify normalizer in table comment. [GitHub#27] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+"[storage] テーブルのコメントにノーマライザーを指定できるようにしました。 "
+"[GitHub#27] [村上さんがパッチ提供]"
+
+# 0cca5ec6871b4c40b89dfb548289f913
+msgid ""
+"[storage] Supported column compression flag (``COMPRESS_LZ4``, "
+"``COMPRESS_ZLIB``). [GitHub#32] [Patch by Naoya Murakami]"
+msgstr ""
+"[ストレージ] カラムの圧縮フラグをサポートしました。 (``COMPRESS_LZ4``, "
+"``COMPRESS_ZLIB``) [GitHub#32] [村上さんがパッチ提供]"
+
+# c2f193ff56e24d088e4f9ff62a1a6c63
+msgid ""
+"Added :ref:`mroonga_libgroonga_support_lz4` and :ref:"
+"`mroonga_libgroonga_support_zlib` system variables. [GitHub#33,#34,#35] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+":ref:`mroonga_libgroonga_support_lz4` と :ref:"
+"`mroonga_libgroonga_support_zlib`  システム変数を追加しました。 [GitHub#33,"
+"#34,#35] [村上さんがパッチ提供]"
+
+msgid "Dropped MySQL 5.1 support."
+msgstr "MySQL 5.1対応をやめました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+# 8b349af0517248819e1ebb81f4e3326b
+msgid ""
+"[storage][mariadb10] Fixed a crash bug that it doesn't properly locked. "
+"[GitHub#18] [Reported by Elena Stepanova]"
+msgstr ""
+"[ストレージ][mariadb10] 不適切なロックのせいでクラッシュする不具合を修正しま"
+"した。 [GitHub#18] [Elena Stepanovaさんが報告]"
+
+# 625b32025d074d95a5101df9520e359b
+msgid "[storage] Fixed overflow about signed tinyint. [GitHub#29]"
+msgstr ""
+"[ストレージ] signed tinyintでオーバーフローしていた問題を修正しました。 "
+"[GitHub#29]"
+
+# 473882459c7b47e0a8e0b5fff010878c
+msgid "Fixed a memory leak at initializing Mroonga."
+msgstr ""
+
+msgid ""
+"[doc] Fixed markups about normalizer. [GitHub#32] [Patch by Naoya Murakami]"
+msgstr ""
+"[doc] ノーマライザーに関するマークアップを修正しました。 [GitHub#32] [村上さ"
+"んがパッチ提供]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+# 256875cb4d8340a5b75754690347bfe2
+msgid "Elena Stepanova"
+msgstr "Elena Stepanovaさん"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Release 4.06 - 2014/09/29"
+msgstr "4.06リリース - 2014/09/29"
 
 msgid "[doc] Added more details about Groonga's development package."
 msgstr "[doc] Groongaの開発パッケージについて説明を追加しました。"
@@ -34,9 +144,6 @@ msgstr "[doc] GitHub issue trackerの使用を推奨するようにしました�
 
 msgid "[deb] Dropped Debian jessie and sid support."
 msgstr "[deb] Debian jessieとsidのサポートを終了しました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[storage] Fixed a bug that no record returns with multiple column index. "
@@ -52,14 +159,8 @@ msgstr ""
 "た最初のカラムがORDERで使われていないことです。[#2651] [foamcentime, 村上さん"
 "が報告]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "foamcentime"
 msgstr "foamcentimeさん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Release 4.05 - 2014/08/29"
 msgstr "4.05リリース - 2014/08/29"
