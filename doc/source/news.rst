@@ -23,7 +23,7 @@ Improvements
   before executing mroonga_command. In the previous versions, you must prepare table which use Mroonga.
 * [storage] Supported to specify normalizer in table comment.
   [GitHub#27] [Patch by Naoya Murakami]
-* [storage] Supported column compression flag (``COMPRESS_LZ4``,``COMPRESS_ZLIB``).
+* [storage] Supported column compression flag (``COMPRESS_LZ4``, ``COMPRESS_ZLIB``).
   [GitHub#32] [Patch by Naoya Murakami]
 * Added :ref:`mroonga_libgroonga_support_lz4` and :ref:`mroonga_libgroonga_support_zlib`
   system variables. [GitHub#33,#34,#35] [Patch by Naoya Murakami]
