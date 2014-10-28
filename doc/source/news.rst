@@ -24,7 +24,6 @@ Improvements
   [GitHub#27] [Patch by Naoya Murakami]
 * [storage] Supported column compression flag (COMPRESS_LZ4,COMPRESS_ZLIB).
   [GitHub#32] [Patch by Naoya Murakami]
-* Changed to log invalid column flags error as MySQL warning.
 * [cmake] Changed plugin name as ``mroonga`` instead of ``ha_mroonga``. [GitHub#30]
 * Added :ref:`mroonga_libgroonga_support_lz4` and :ref:`mroonga_libgroonga_support_zlib`
   system variables. [GitHub#33,#34,#35] [Patch by Naoya Murakami]
