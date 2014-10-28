@@ -34,11 +34,9 @@ Fixes
 
 * [storage][mariadb10] Fixed a crash bug that it doesn't properly locked.
   [GitHub#18] [Reported by Elena Stepanova]
-* [storage] Fixed overflow about signed tinyint.
-  The negative values are replaced with 127. [GitHub#29]
+* [storage] Fixed overflow about signed tinyint. [GitHub#29]
 * Fixed a memory leak at initializing Mroonga.
-* [doc] Fixed invalid line breaks about description of normalizer.
-  [GitHub#32] [Patch by Naoya Murakami]
+* [doc] Fixed markups about normalizer. [GitHub#32] [Patch by Naoya Murakami]
 
 Thanks
 ^^^^^^
