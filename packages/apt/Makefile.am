@@ -1,6 +1,5 @@
 REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = debian
-CHROOT_BASE = /var/lib/chroot
 ARCHITECTURES = i386 amd64
 CODE_NAMES = wheezy
 
