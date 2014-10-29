@@ -577,14 +577,14 @@ msgstr ""
 "environment."
 
 msgid ""
-"`mariadb-10.0.14-with-mroonga-4.06-win32.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v4.06/mariadb-10.0.14-with-mroonga-4.06-win32."
+"`mariadb-10.0.14-with-mroonga-4.07-win32.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v4.07/mariadb-10.0.14-with-mroonga-4.07-win32."
 "zip>`_"
 msgstr ""
 
 msgid ""
-"`mariadb-10.0.14-with-mroonga-4.06-winx64.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v4.06/mariadb-10.0.14-with-mroonga-4.06-winx64."
+"`mariadb-10.0.14-with-mroonga-4.07-winx64.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v4.07/mariadb-10.0.14-with-mroonga-4.07-winx64."
 "zip>`_"
 msgstr ""
 

@@ -98,9 +98,9 @@ Build from source
 Mroonga uses GNU build system. So the following is the simplest build
 steps::
 
-  % wget http://packages.groonga.org/source/mroonga/mroonga-4.06.tar.gz
-  % tar xvzf mroonga-4.06.tar.gz
-  % cd mroonga-4.06
+  % wget http://packages.groonga.org/source/mroonga/mroonga-4.07.tar.gz
+  % tar xvzf mroonga-4.07.tar.gz
+  % cd mroonga-4.07
   % ./configure \
       --with-mysql-source=/usr/local/src/mysql-5.6.32 \
       --with-mysql-build=/usr/local/build/mysql-5.6.32 \
