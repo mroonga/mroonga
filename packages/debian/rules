@@ -12,7 +12,7 @@ export MYSQL_VERSION := $(shell apt-cache show mysql-server-5.5 | grep Version |
 	dh $@
 
 override_dh_auto_configure:
-	path=main/m/mysql-5.5/mysql-5.5_$(MYSQL_VERSION).orig.tar.gz	\
+	path=main/m/mysql-5.5/mysql-5.5_$(MYSQL_VERSION).orig.tar.gz;	\
 	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
 	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
 	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
