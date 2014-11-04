@@ -62,9 +62,9 @@ Here are optional libraries:
 MySQL
 ^^^^^
 
-Mroonga needs not only installed MySQL but also MySQL source. You
-can't use MySQL package. It doesn't provide MySQL source. You need
-MySQL source!
+Mroonga needs not only installed MySQL but also MySQL source and build
+directory. You can't use MySQL package. It doesn't provide MySQL
+source and build directory. You need MySQL source and build directory!
 
 If you use MariaDB instead of MySQL, you need MariaDB source.
 
@@ -109,9 +109,11 @@ steps::
   % sudo make install
   % /usr/local/mysql/bin/mysql -u root < /usr/local/share/mroonga/install.sql
 
-You need to specify the location of MySQL source code with
-``--with-mysql-source`` and the path of ``mysql_config`` command with
-``--with-mysql-config`` on ``configure``.
+You need to specify the following on ``configure``:
+
+  * The location of MySQL source code with ``--with-mysql-source``.
+  * The location of MySQL build directory with ``--with-mysql-build``.
+  * The path of ``mysql_config`` command with ``--with-mysql-config``.
 
 You can confirm Mroonga is installed successfully by ``SHOW ENGINES``
 SQL. If you can find ``Mroonga`` row, Mroonga is installed
