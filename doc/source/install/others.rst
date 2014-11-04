@@ -72,19 +72,19 @@ Download the latest MySQL 5.6 source code, then build and install it.
 
 .. seealso:: `Download MySQL Community Server <http://dev.mysql.com/downloads/mysql/>`_
 
-Here we assume that you use mysql-5.6.32 and its source code is
+Here we assume that you use mysql-5.6.21 and its source code is
 extracted in the following directory::
 
-  /usr/local/src/mysql-5.6.32
+  /usr/local/src/mysql-5.6.21
 
 Then build in the following directory::
 
-  /usr/local/build/mysql-5.6.32
+  /usr/local/build/mysql-5.6.21
 
 Here are command lines to build and install MySQL::
 
-  % cd /usr/local/build/mysql-5.6.32
-  % cmake /usr/local/src/mysql-5.6.32
+  % cd /usr/local/build/mysql-5.6.21
+  % cmake /usr/local/src/mysql-5.6.21
   % make
   % sudo make install
 
@@ -102,8 +102,8 @@ steps::
   % tar xvzf mroonga-4.07.tar.gz
   % cd mroonga-4.07
   % ./configure \
-      --with-mysql-source=/usr/local/src/mysql-5.6.32 \
-      --with-mysql-build=/usr/local/build/mysql-5.6.32 \
+      --with-mysql-source=/usr/local/src/mysql-5.6.21 \
+      --with-mysql-build=/usr/local/build/mysql-5.6.21 \
       --with-mysql-config=/usr/local/mysql/bin/mysql_config
   % make
   % sudo make install
@@ -148,7 +148,7 @@ Specifies the location of MySQL source code.
 This is required parameter::
 
   % ./configure \
-      --with-mysql-source=/usr/local/src/mysql-5.6.32 \
+      --with-mysql-source=/usr/local/src/mysql-5.6.21 \
       --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 ``--with-mysql-build=PATH``
@@ -161,11 +161,11 @@ specify this parameter. If you build MySQL in other directory, you
 need to specify this parameter.
 
 Here is an example when you build MySQL in
-``/usr/local/build/mysql-5.6.32``::
+``/usr/local/build/mysql-5.6.21``::
 
   % ./configure \
-      --with-mysql-source=/usr/local/src/mysql-5.6.32 \
-      --with-mysql-build=/usr/local/build/mysql-5.6.32 \
+      --with-mysql-source=/usr/local/src/mysql-5.6.21 \
+      --with-mysql-build=/usr/local/build/mysql-5.6.21 \
       --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 ``--with-mysql-config=PATH``
@@ -179,7 +179,7 @@ command exists at ``/usr/bin/mysql_config``, you don't need to specify
 this parameter::
 
   % ./configure \
-      --with-mysql-source=/usr/local/src/mysql-5.6.32
+      --with-mysql-source=/usr/local/src/mysql-5.6.21
 
 ``--with-default-parser=PARSER``
 ++++++++++++++++++++++++++++++++
@@ -192,7 +192,7 @@ The default is ``TokenBigram``.
 Here is an example to use ``TokenMecab`` as the default parser::
 
   % ./configure \
-      --with-mysql-source=/usr/local/src/mysql-5.6.32 \
+      --with-mysql-source=/usr/local/src/mysql-5.6.21 \
       --with-mysql-config=/usr/local/mysql/bin/mysql_config \
       --with-default-parser=TokenMecab
 
@@ -213,7 +213,7 @@ use instead of system wide use::
 
   % ./configure \
       --prefix=$HOME/local \
-      --with-mysql-source=$HOME/local/src/mysql-5.6.32 \
+      --with-mysql-source=$HOME/local/src/mysql-5.6.21 \
       --with-mysql-config=$HOME/local/mysql/bin/mysql_config
 
 ``PKG_CONFIG_PATH=PATH``
@@ -229,7 +229,7 @@ If Groonga is not installed in the standard location like
 
   ./configure \
     PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
-    --with-mysql-source=/usr/local/src/mysql-5.6.32 \
+    --with-mysql-source=/usr/local/src/mysql-5.6.21 \
     --with-mysql-config=/usr/local/mysql/bin/mysql_config
 
 ``make``
