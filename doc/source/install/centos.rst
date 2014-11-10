@@ -21,7 +21,7 @@ Install::
   % sudo yum install -y mysql55-mysql-server
   % sudo /etc/init.d/mysql55-mysqld start
   % sudo yum install -y mysql55-mroonga
-  (% sudo scl enable mysql55 mysqladmin -u root password 'new-password')
+  (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
