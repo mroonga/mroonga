@@ -107,7 +107,7 @@ Install::
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql-community-server
-  % sudo service mysqld start
+  % sudo systemctl start mysqld
   % sudo yum install -y mysql-community-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
