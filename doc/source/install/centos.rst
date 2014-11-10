@@ -19,7 +19,7 @@ Install::
   % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql55-mysql-server
-  % sudo /etc/init.d/mysql55-mysqld start
+  % sudo /sbin/service mysql55-mysqld start
   % sudo yum install -y mysql55-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
@@ -42,7 +42,7 @@ Install::
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql55-mysql-server
-  % sudo /etc/init.d/mysql55-mysqld start
+  % sudo /sbin/service mysql55-mysqld start
   % sudo yum install -y mysql55-mroonga
   (% sudo scl enable mysql55 "mysqladmin -u root password 'new-password'")
 
@@ -64,7 +64,7 @@ Install::
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql-community-server
-  % sudo service mysqld start
+  % sudo /sbin/service mysqld start
   % sudo yum install -y mysql-community-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
