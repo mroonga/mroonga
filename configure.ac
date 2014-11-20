@@ -465,7 +465,6 @@ AC_CONFIG_FILES([
   packages/Makefile
   packages/rpm/Makefile
   packages/rpm/centos/Makefile
-  packages/rpm/fedora/Makefile
   packages/yum/Makefile
   packages/apt/Makefile
   packages/source/Makefile
@@ -490,8 +489,6 @@ AC_OUTPUT([
   packages/rpm/centos/mysql55-mroonga.spec
   packages/rpm/centos/mysql56-community-mroonga.spec
   packages/rpm/centos/mariadb-mroonga.spec
-  packages/rpm/fedora/mysql-mroonga.spec
-  packages/rpm/fedora/mariadb-mroonga.spec
   packages/yum/env.sh
   data/install.sql
 ])
