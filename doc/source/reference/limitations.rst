@@ -86,4 +86,10 @@ Here is the results of execution example::
   |  2 | 1970-00-00 00:00:00 | 1970-01-01 00:00:00 |
   +----+---------------------+---------------------+
   2 rows in set (0.00 sec)
-  
+
+Limitations of column size
+--------------------------
+
+A column has the following limitation.
+
+* The maximum stored data size of each column: 256GiB
