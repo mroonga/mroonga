@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-05-30 15:48+0900\n"
+"PO-Revision-Date: 2014-11-21 13:21+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -40,21 +40,26 @@ msgid ""
 "These qualifiers and pragmas can change the relative rank of search results."
 msgstr ""
 
+# c797e652db7c4f12bb345564b592a999
 msgid ""
 "In the case of a search string not using neither a qualifier nor a pragma, "
-"the search results that contain the search string will be rated higher. Edit"
+"the search results that contain the search string will be rated higher."
 msgstr ""
 
 msgid "Mroonga supports the following qualifiers"
 msgstr ""
 
-msgid "Modifier"
+# 71ca20d077b348898500f27958dfba2c
+# db3f7a6140cd4736a108c1a2c42f4764
+msgid "Qualifier"
 msgstr ""
 
 msgid "Description"
 msgstr "説明"
 
-msgid "＋"
+# 14a3e8138a9e4d9a90b35afc38bc61fc
+# 72a04d6a14f64d459fa4d771b44b6908
+msgid "``+``"
 msgstr ""
 
 msgid ""
@@ -62,7 +67,9 @@ msgid ""
 "that is returned."
 msgstr ""
 
-msgid "ー"
+# 22666477efac49edaa38de51e17070fa
+# c069c945cd584230be6640d3b5f83eaf
+msgid "``-``"
 msgstr ""
 
 msgid ""
@@ -70,24 +77,39 @@ msgid ""
 "the rows that are returned."
 msgstr ""
 
-msgid "＊"
+# 3bd877dfc0914eb7aa3ae28c9d3001ec
+# 178f505c03bc40f0a0b5ad9b0b522f56
+msgid "``*``"
 msgstr ""
 
 msgid "The asterisk serves as the truncation (or wildcard) operator."
 msgstr ""
 
-msgid "\""
+# d9bb6d54019e4e2f846903f62aaaa39f
+# fec3174da1b1450496ea1b1f366476f7
+msgid "``\"``"
 msgstr ""
 
+# 3126fa1b71a9453fbee8fbfdcf0e2449
 msgid ""
-"A phrase that is enclosed within double quote (“\"”) characters matches only "
-"rows that contain the phrase literally, as it was typed."
+"A phrase that is enclosed within double quote ( ``\"`` ) characters matches "
+"only rows that contain the phrase literally, as it was typed."
 msgstr ""
 
-msgid "( )"
+# a10bb2101ec041bf83f0dba0ab4b0791
+# 2b2e8d392c8b4340b16efa2fd8c90f27
+msgid "``()``"
 msgstr ""
 
 msgid "Parentheses group words into subexpressions."
+msgstr ""
+
+msgid "Examples"
+msgstr ""
+
+msgid ""
+"We show you how to rank in boolean mode using the following schema and "
+"data. ::"
 msgstr ""
 
 msgid "Pragma"
@@ -110,9 +132,52 @@ msgid ""
 "individual operator is omitted."
 msgstr ""
 
+# 683675d50f5f403488e29f26700f6b48
 msgid ""
 "The syntax of D pragma is as follows. You can choose one of the three "
-"operators, either \"OR\", \"+\", or \"-\". ::"
+"operators, either ``OR``, ``+``, or ``-``. ::"
+msgstr ""
+
+# 3eb7a0dc196a485fb980feedc457cb3a
+msgid "``*DOR``"
+msgstr ""
+
+# d77e4a7766e84cb5bb21e5b4589bdc32
+msgid "We use ``*DOR Groonga Mroonga`` to search.::"
+msgstr ""
+
+# 4c9a00f4b6954e74bb0a638fa8464ae3
+msgid ""
+"The search result is a row that contains ``Groonga`` or ``Mroonga``. The row "
+"score is as follows::"
+msgstr ""
+
+# 08a7d26d8e354613a8ea7516556b0049
+msgid "``*D+``"
+msgstr ""
+
+# 41e54d40b6d74b6984d9a918a5280534
+msgid "We use a query ``*D+ Groonga Mroonga`` to search.::"
+msgstr ""
+
+# 2020b007becc4fa2bec3c0c4301e0cd9
+msgid ""
+"The search result is a row that contains ``Groonga`` and ``Mroonga``. The "
+"row score is as follows::"
+msgstr ""
+
+# 617564cd6142410bb1021ace3e2790fa
+msgid "``*D-``"
+msgstr ""
+
+# 0922c7b9944c4c9bb1f4c83392ac469c
+msgid "We use a query ``*D- Groonga Mroonga`` to search.::"
+msgstr ""
+
+# 7226b871b7ed4b27982691a29c44e465
+msgid ""
+"The search result is a row that contains ``Groonga``, and does not contain "
+"``Mroonga``. The row score is as follows::"
 msgstr ""
 
 msgid "W pragma"
@@ -136,18 +201,38 @@ msgid ""
 "but from 1. ::"
 msgstr ""
 
-msgid "Examples"
+msgid ""
+"We show you how to rank in multiple-column index using the following schema "
+"and data.::"
+msgstr ""
+
+# d10085e3b31749d796ab277a6001f0a1
+msgid ""
+"Consider the case that 10 weight is given to ``title`` column, and 1 weight "
+"is given to ``comment`` column, and use ``Groonga`` to search."
+msgstr ""
+
+msgid "Here is the query such a case::"
 msgstr ""
 
 msgid ""
-"We show you how to rank in boolean mode using the following schema and "
-"data. ::"
+"The search result is a row that contains \"Groonga\". The row score is as "
+"follows::"
 msgstr ""
 
-msgid "(no operator and pragma)"
+# fc9161e4f45c461ebd4898259d17b651
+msgid ""
+"The row score is set to 11 that the ``title`` and ``comment`` column contain "
+"``Groonga``, and the row score is set to 10 that only ``title`` column "
+"contains ``Groonga``."
 msgstr ""
 
-msgid "We use a query \"Groonga Mroonga\" to search.::"
+# 66bc92429b5f4b07965f5b58be76f44e
+msgid "(no operator)"
+msgstr ""
+
+# 7b32c651551c4cd7a5e0950c25dcb3a6
+msgid "We use a query ``Groonga Mroonga`` to search.::"
 msgstr ""
 
 msgid "Rows that contain even one word will be ranked higher."
@@ -162,7 +247,8 @@ msgstr ""
 msgid "Here is the search result::"
 msgstr ""
 
-msgid "We use a query \"+Groonga +Mroonga\" to search.::"
+# d381e64840b04711a8e068364b4caf82
+msgid "We use a query ``+Groonga +Mroonga`` to search.::"
 msgstr ""
 
 msgid ""
@@ -170,7 +256,8 @@ msgid ""
 "follows::"
 msgstr ""
 
-msgid "We use a query \"-Groonga -Mroonga\" to search.::"
+# 8a41ba2908d748b18679d9927fbff7eb
+msgid "We use a query ``-Groonga -Mroonga`` to search.::"
 msgstr ""
 
 msgid ""
@@ -178,91 +265,37 @@ msgid ""
 "is as follows::"
 msgstr ""
 
-msgid "We use a query \"M*\" to search.::"
+# 166c8f379304422b8a62cbc03232ceec
+msgid "We use a query ``M*`` to search.::"
 msgstr ""
 
+# 23df3fdb177144d5a6abf9ed026f9675
 msgid ""
-"The search result is a row that contains \"MySQL\" or \"Mroonga\". The row "
+"The search result is a row that contains ``MySQL`` or ``Mroonga``. The row "
 "score is as follows::"
 msgstr ""
 
-msgid "We use a query '\"Groonga Mroonga\"' to search.::"
+# b8bcedade1dd408b9379c5c8d4188a2c
+msgid "We use a query ``\"Groonga Mroonga\"`` to search.::"
 msgstr ""
 
+# 42660b0f81fe4fd7beeb7bae5296eae3
 msgid ""
-"The search result is a row that contains a phrase that matches \"Groonga "
-"Mroonga\". The row score is as follows::"
+"The search result is a row that contains a phrase that matches ``Groonga "
+"Mroonga``. The row score is as follows::"
 msgstr ""
 
-msgid "()"
+# 92256cdf75b64842ad64cc90d1d57774
+msgid "We use a query ``+MySQL +(Groonga Mroonga)`` to search.::"
 msgstr ""
 
-msgid "We use a query \"+MySQL +(Groonga Mroonga)\" to search.::"
-msgstr ""
-
+# fc24117e14fa4e3ca6acc6fed6c2a0f1
 msgid ""
-"The search result is a row that contains \"MySQL\" and \"Groonga\", or "
-"\"MySQL\" and \"Mroonga\", or \"MySQL\" and \"Groonga\" and \"Mroonga\"."
+"The search result is a row that contains ``MySQL`` and ``Groonga``, or "
+"``MySQL`` and ``Mroonga``, or ``MySQL`` and ``Groonga`` and ``Mroonga``."
 msgstr ""
 
 msgid "The row score is as follows::"
-msgstr ""
-
-msgid "'\\*D+'"
-msgstr ""
-
-msgid "We use a query \"\\*D+ Groonga Mroonga\" to search.::"
-msgstr ""
-
-msgid ""
-"The search result is a row that contains \"Groonga\" and \"Mroonga\". The "
-"row score is as follows::"
-msgstr ""
-
-msgid "'\\*D-'"
-msgstr ""
-
-msgid "We use a query \"'\\*D- Groonga Mroonga\" to search.::"
-msgstr ""
-
-msgid ""
-"The search result is a row that contains \"Groonga\", and does not contain "
-"\"Mroonga\". The row score is as follows::"
-msgstr ""
-
-msgid "'\\*DOR'"
-msgstr ""
-
-msgid "We use \"\\*DOR Groonga Mroonga\" to search.::"
-msgstr ""
-
-msgid ""
-"The search result is a row that contains \"Groonga\" or \"Mroonga\". The row "
-"score is as follows::"
-msgstr ""
-
-msgid ""
-"We show you how to rank in multiple-column index using the following schema "
-"and data.::"
-msgstr ""
-
-msgid ""
-"Consider the case that 10 weight is given to ‘title’ column, and 1 weight is "
-"given to ‘comment’ column, and use \"Groonga\" to search."
-msgstr ""
-
-msgid "Here is the query such a case::"
-msgstr ""
-
-msgid ""
-"The search result is a row that contains \"Groonga\". The row score is as "
-"follows::"
-msgstr ""
-
-msgid ""
-"The row score is set to 11 that the 'title' and 'comment\" column contain "
-"\"Groonga\", and the row score is set to 10 that only 'title' column "
-"contains \"Groonga\"."
 msgstr ""
 
 msgid "Search and Scoring in Mroonga"
@@ -437,11 +470,11 @@ msgid ""
 "Groonga."
 msgstr "テーブルには以下の制限があります。この制限はGroongaに由来します。"
 
-msgid "The maximum one key size: 4096Bytes"
-msgstr "1つのキーの最大サイズ: 4096Bytes"
+msgid "The maximum one key size: 4KiB"
+msgstr "1つのキーの最大サイズ: 4KiB"
 
-msgid "The maximum total size of keys: 4GBytes"
-msgstr "キーのサイズを合計した上限値: 4GBytes"
+msgid "The maximum total size of keys: 4GiB"
+msgstr "キーのサイズを合計した上限値: 4GiB"
 
 msgid "Keep in mind that these limitations may vary depending on conditions."
 msgstr "実際には他の諸条件の制約により上記の値まで到達しない場合もあります。"
@@ -463,8 +496,8 @@ msgid ""
 "The maximum number of distinct terms: 268,435,455 (more than 268 million)"
 msgstr "最大語彙数: 268,435,455 (約2億6千万)"
 
-msgid "The maximum index size: 256GBytes"
-msgstr "最大インデックスサイズ: 256GByte"
+msgid "The maximum index size: 256GiB"
+msgstr "最大インデックスサイズ: 256GiB"
 
 msgid ""
 "Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your "
@@ -500,6 +533,16 @@ msgstr "上記挙動を示す例はこちらです。"
 
 msgid "Here is the results of execution example::"
 msgstr "実行結果はこちらです。::"
+
+msgid "Limitations of column size"
+msgstr "カラムサイズの制限事項"
+
+# 6e9f19caddb6415780b33abd1d596ade
+msgid "A column has the following limitation."
+msgstr "1つのカラムにつき、次の制限があります。"
+
+msgid "The maximum stored data size of a column: 256GiB"
+msgstr "カラムに格納した値の合計サイズの上限値: 256GiB"
 
 msgid "Server variables"
 msgstr "サーバ変数の一覧"
@@ -767,21 +810,28 @@ msgid ""
 "space::"
 msgstr "区切り文字を空白からセミコロンに変更するSQL例です::"
 
-msgid ""
-"The status of libgroonga supports zlib."
+msgid "mroonga_libgroonga_support_zlib"
+msgstr ""
+
+msgid "The status of libgroonga supports zlib."
 msgstr "Groongaライブラリーのzlibサポート状況"
 
 msgid ""
 "Here is an example SQL to confirm the status of libgroonga supports zlib::"
-msgstr "Groongaライブラリーがzlibをサポートしているかを確認するためのSQL例です::"
+msgstr ""
+"Groongaライブラリーがzlibをサポートしているかを確認するためのSQL例です::"
 
-msgid ""
-"The status of libgroonga supports LZ4."
+# 3b595284100948ce92400a0e86eb91ae
+msgid "mroonga_libgroonga_support_lz4"
+msgstr ""
+
+msgid "The status of libgroonga supports LZ4."
 msgstr "GroongaライブラリーのLZ4サポート状況"
 
 msgid ""
 "Here is an example SQL to confirm the status of libgroonga supports LZ4::"
-msgstr "GroongaライブラリーがLZ4をサポートしているかを確認するためのSQL例です::"
+msgstr ""
+"GroongaライブラリーがLZ4をサポートしているかを確認するためのSQL例です::"
 
 msgid "SQL commands"
 msgstr ""

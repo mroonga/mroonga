@@ -583,6 +583,10 @@ msgstr ""
 msgid "14.04 LTS Trusty Tahr"
 msgstr ""
 
+# 0779d17906444b348212148a883e05c9
+msgid "14.10 Utopic Unicorn"
+msgstr ""
+
 msgid ""
 "Enable the universe repository and the security update repository to install "
 "Mroonga::"

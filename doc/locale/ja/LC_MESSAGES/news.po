@@ -113,10 +113,6 @@ msgstr ""
 "[ストレージ] signed tinyintでオーバーフローしていた問題を修正しました。 "
 "[GitHub#29]"
 
-# 473882459c7b47e0a8e0b5fff010878c
-msgid "Fixed a memory leak at initializing Mroonga."
-msgstr ""
-
 msgid ""
 "[doc] Fixed markups about normalizer. [GitHub#32] [Patch by Naoya Murakami]"
 msgstr ""
