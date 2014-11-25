@@ -5290,6 +5290,11 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
   }
 
+  if (pkey_size == 0) {
+    my_message(ER_ERROR_ON_WRITE, "primary key is empty", MYF(0));
+    DBUG_RETURN(ER_ERROR_ON_WRITE);
+  }
+
   int added;
   record_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
   if (ctx->rc) {
