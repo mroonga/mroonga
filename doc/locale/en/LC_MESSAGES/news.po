@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-09-26 14:27+0900\n"
+"PO-Revision-Date: 2014-11-27 18:23+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,11 +20,132 @@ msgstr ""
 msgid "News"
 msgstr "News"
 
-msgid "Release 4.06 - 2014/09/29"
+msgid "Release 4.08 - 2014/11/29"
 msgstr ""
 
 msgid "Improvements"
 msgstr "Improvements"
+
+msgid "[deb] Supported Ubuntu 12.04 again."
+msgstr ""
+
+msgid "[deb] Supported Ubuntu 14.04 (Utopic Unicorn)."
+msgstr ""
+
+msgid ""
+"[test] Added script which checks performance schema. [Patch by Elena "
+"Stepanova]"
+msgstr ""
+
+msgid ""
+"[rpm] Supported MySQL 5.5.40 on CentOS 6 and 7. [groonga-dev,02955] "
+"[Reported Noboru Nishiyama]"
+msgstr ""
+
+msgid "[doc] Added :doc:`/reference/limitations` about column size."
+msgstr ""
+
+msgid ""
+"[storage] Added missing empty primary key check. [groonga-dev,02963] "
+"[Reported by kashihara]"
+msgstr ""
+
+msgid "Fixes"
+msgstr "Fixes"
+
+msgid ""
+"[doc] Fixed nonexistent MySQL version. [groonga-dev,02899] [Reported by GMO "
+"Media, Inc.]"
+msgstr ""
+
+msgid "[doc] Removed needless SCL related install description for CentOS 5."
+msgstr ""
+
+msgid "[doc] Use service command to start MySQL on CentOS 5 and 6."
+msgstr ""
+
+msgid "[doc] Use systemctl command to start MySQL on CentOS 7."
+msgstr ""
+
+msgid "Thanks"
+msgstr "Thanks"
+
+msgid "GMO Media, Inc."
+msgstr "GMO Media, Inc."
+
+msgid "Elena Stepanova"
+msgstr ""
+
+msgid "Noboru Nishiyama"
+msgstr ""
+
+msgid "kashihara"
+msgstr ""
+
+msgid "Release 4.07 - 2014/10/29"
+msgstr ""
+
+msgid ""
+"[storage] Changed to treat deprecated ``INSERT DELAYED`` as error. "
+"[GitHub#20] [MDEV#6837] [Reported by Elena Stepanova]"
+msgstr ""
+
+msgid ""
+"[storage][mariadb10] Added proper error message for duplicated entries on "
+"adding an unique index. [GitHub#19] [Reported by Elena Stepanova]"
+msgstr ""
+
+msgid ""
+"[cmake] Removed needless status message for compiler flag checks [GitHub#22]"
+msgstr ""
+
+msgid ""
+"Supported token filter in table/index comment for wrapper/storage mode. "
+"[GitHub#25] [Patch by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"[mroonga_command] Improved to need not to know whether Groonga database "
+"already exists before executing mroonga_command. In the previous versions, "
+"you must prepare table which use Mroonga."
+msgstr ""
+
+msgid ""
+"[storage] Supported to specify normalizer in table comment. [GitHub#27] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"[storage] Supported column compression flag (``COMPRESS_LZ4``, "
+"``COMPRESS_ZLIB``). [GitHub#32] [Patch by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"Added :ref:`mroonga_libgroonga_support_lz4` and :ref:"
+"`mroonga_libgroonga_support_zlib` system variables. [GitHub#33,#34,#35] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+
+msgid "Dropped MySQL 5.1 support."
+msgstr ""
+
+msgid ""
+"[storage][mariadb10] Fixed a crash bug that it doesn't properly locked. "
+"[GitHub#18] [Reported by Elena Stepanova]"
+msgstr ""
+
+msgid "[storage] Fixed overflow about signed tinyint. [GitHub#29]"
+msgstr ""
+
+msgid ""
+"[doc] Fixed markups about normalizer. [GitHub#32] [Patch by Naoya Murakami]"
+msgstr ""
+
+msgid "Naoya Murakami"
+msgstr "Naoya Murakami"
+
+msgid "Release 4.06 - 2014/09/29"
+msgstr ""
 
 msgid "[doc] Added more details about Groonga's development package."
 msgstr ""
@@ -32,8 +153,8 @@ msgstr ""
 msgid "[doc] Changed to recommend GitHub issue tracker."
 msgstr ""
 
-msgid "Fixes"
-msgstr "Fixes"
+msgid "[deb] Dropped Debian jessie and sid support."
+msgstr ""
 
 msgid ""
 "[storage] Fixed a bug that no record returns with multiple column index. "
@@ -43,14 +164,8 @@ msgid ""
 "ORDER by clause. [#2651] [Reported by foamcentime, Naoya Murakami]"
 msgstr ""
 
-msgid "Thanks"
-msgstr "Thanks"
-
 msgid "foamcentime"
 msgstr ""
-
-msgid "Naoya Murakami"
-msgstr "Naoya Murakami"
 
 msgid "Release 4.05 - 2014/08/29"
 msgstr ""
@@ -269,9 +384,6 @@ msgstr ""
 
 msgid "Kazuhiko Shiozaki"
 msgstr "Kazuhiko Shiozaki"
-
-msgid "GMO Media, Inc."
-msgstr "GMO Media, Inc."
 
 msgid "Satoshi MITANI"
 msgstr "Satoshi MITANI"
