@@ -5,6 +5,41 @@
 News
 ====
 
+.. _release-4-08:
+
+Release 4.08 - 2014/11/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [deb] Supported Ubuntu 12.04 again.
+* [deb] Supported Ubuntu 14.04 (Utopic Unicorn).
+* [test] Added script which checks performance schema.
+  [Patch by Elena Stepanova]
+* [rpm] Supported MySQL 5.5.40 on CentOS 6 and 7.
+  [groonga-dev,02955] [Reported Noboru Nishiyama]
+* [doc] Added :doc:`/reference/limitations` about column size.
+* [storage] Added missing empty primary key check.
+  [groonga-dev,02963] [Reported by kashihara]
+
+Fixes
+^^^^^
+
+* [doc] Fixed nonexistent MySQL version. [groonga-dev,02899]
+  [Reported by GMO Media, Inc.]
+* [doc] Removed needless SCL related install description for CentOS 5.
+* [doc] Use service command to start MySQL on CentOS 5 and 6.
+* [doc] Use systemctl command to start MySQL on CentOS 7.
+
+Thanks
+^^^^^^
+
+* GMO Media, Inc.
+* Elena Stepanova
+* Noboru Nishiyama
+* kashihara
+
 .. _release-4-07:
 
 Release 4.07 - 2014/10/29
