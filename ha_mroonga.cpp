@@ -5290,7 +5290,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
   }
 
-  if (pkey_size == 0) {
+  if (grn_table->header.type != GRN_TABLE_NO_KEY && pkey_size == 0) {
     my_message(ER_ERROR_ON_WRITE, "primary key is empty", MYF(0));
     DBUG_RETURN(ER_ERROR_ON_WRITE);
   }
