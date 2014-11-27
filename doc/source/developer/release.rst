@@ -321,23 +321,6 @@ Mroongaブログのリリースエントリには「リンクをあなたのフ�
 この作業はMroongaブログの英語版、日本語版それぞれで行います。
 あらかじめgroongaアカウントでログインしておくとアナウンスを円滑に行うことができます。
 
-freecode.comへリリース情報を登録
---------------------------------
-
-Mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。
-
-freecode.comのプロジェクトページは以下の通りです。
-
-  https://freecode.com/projects/mroonga
-
-プロジェクトの管理メニューから「Submit a release」をクリックし、
-新規リリース情報を登録します。
-
-  https://freecode.com/projects/mroonga/releases/new
-
-.. note::
-   投稿した内容に対するレビューが運営側で実施されるので、反映されるまでしばらく時間がかかります。
-
 リリース後にやること
 ---------------------
 
