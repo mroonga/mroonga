@@ -3,11 +3,6 @@
 Fedora
 ======
 
-This section describes how to install Mroonga related RPM packages on
-Fedora. You can install them by ``yum``.
-
-.. include:: 32bit-note.inc
-
 Fedora 20
 ---------
 
