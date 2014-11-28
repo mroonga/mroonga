@@ -29,9 +29,6 @@ msgstr "Improvements"
 msgid "[deb] Supported Ubuntu 12.04 again."
 msgstr ""
 
-msgid "[deb] Supported Ubuntu 14.04 (Utopic Unicorn)."
-msgstr ""
-
 msgid ""
 "[test] Added script which checks performance schema. [Patch by Elena "
 "Stepanova]"
