@@ -13,13 +13,14 @@ Release 4.08 - 2014/11/29
 Improvements
 ^^^^^^^^^^^^
 
-* [deb] Supported Ubuntu 12.04 again.
+* [deb] Supported Ubuntu 12.04 again for Travis-CI.
 * [test] Added script which checks performance schema.
   [Patch by Elena Stepanova]
 * [rpm] Supported MySQL 5.5.40 on CentOS 6 and 7.
   [groonga-dev,02955] [Reported Noboru Nishiyama]
 * [doc] Added :doc:`/reference/limitations` about column size.
-* [storage] Added missing empty primary key check.
+* [storage] Added missing primary key check when primary key
+  is required to specify.
   [groonga-dev,02963] [Reported by kashihara]
 
 Fixes
