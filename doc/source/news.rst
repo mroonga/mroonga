@@ -14,7 +14,6 @@ Improvements
 ^^^^^^^^^^^^
 
 * [deb] Supported Ubuntu 12.04 again.
-* [deb] Supported Ubuntu 14.04 (Utopic Unicorn).
 * [test] Added script which checks performance schema.
   [Patch by Elena Stepanova]
 * [rpm] Supported MySQL 5.5.40 on CentOS 6 and 7.
