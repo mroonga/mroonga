@@ -28,8 +28,8 @@ Fixes
 * [doc] Fixed nonexistent MySQL version. [groonga-dev,02899]
   [Reported by GMO Media, Inc.]
 * [doc] Removed needless SCL related install description for CentOS 5.
-* [doc] Use service command to start MySQL on CentOS 5 and 6.
-* [doc] Use systemctl command to start MySQL on CentOS 7.
+* [doc] Use ``service`` command to start MySQL on CentOS 5 and 6.
+* [doc] Use ``systemctl`` command to start MySQL on CentOS 7.
 
 Thanks
 ^^^^^^
