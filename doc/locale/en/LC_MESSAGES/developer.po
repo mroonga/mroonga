@@ -1470,37 +1470,9 @@ msgstr ""
 "この作業はMroongaブログの英語版、日本語版それぞれで行います。 あらかじめ"
 "groongaアカウントでログインしておくとアナウンスを円滑に行うことができます。"
 
-msgid "freecode.comへリリース情報を登録"
-msgstr "freecode.comへリリース情報を登録"
-
-msgid "Mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。"
-msgstr "Mroongaプロジェクトではfreecode.comでもリリース情報を発信しています。"
-
-msgid "freecode.comのプロジェクトページは以下の通りです。"
-msgstr "freecode.comのプロジェクトページは以下の通りです。"
-
-msgid "https://freecode.com/projects/mroonga"
-msgstr "https://freecode.com/projects/mroonga"
-
-msgid ""
-"プロジェクトの管理メニューから「Submit a release」をクリックし、 新規リリース"
-"情報を登録します。"
-msgstr ""
-"プロジェクトの管理メニューから「Submit a release」をクリックし、 新規リリース"
-"情報を登録します。"
-
-msgid "https://freecode.com/projects/mroonga/releases/new"
-msgstr "https://freecode.com/projects/mroonga/releases/new"
-
-msgid ""
-"投稿した内容に対するレビューが運営側で実施されるので、反映されるまでしばらく"
-"時間がかかります。"
-msgstr ""
-"投稿した内容に対するレビューが運営側で実施されるので、反映されるまでしばらく"
-"時間がかかります。"
-
 msgid "リリース後にやること"
 msgstr "リリース後にやること"
 
 msgid "リリースバージョンを以下のようにして更新します。::"
 msgstr "リリースバージョンを以下のようにして更新します。::"
+

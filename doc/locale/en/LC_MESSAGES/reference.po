@@ -1723,35 +1723,3 @@ msgstr "It is the end text of wordN."
 msgid "It returns snippet string."
 msgstr "It returns snippet string."
 
-#~ msgid "Modifier"
-#~ msgstr "Modifier"
-
-#~ msgid "＋"
-#~ msgstr "＋"
-
-#~ msgid "ー"
-#~ msgstr "ー"
-
-#~ msgid "＊"
-#~ msgstr "＊"
-
-#~ msgid "\""
-#~ msgstr "\""
-
-#~ msgid "( )"
-#~ msgstr "( )"
-
-#~ msgid "We use a query '\"Groonga Mroonga\"' to search.::"
-#~ msgstr "We use a query '\"Groonga Mroonga\"' to search.::"
-
-#~ msgid "()"
-#~ msgstr "()"
-
-#~ msgid "'\\*D+'"
-#~ msgstr "'\\*D+'"
-
-#~ msgid "'\\*D-'"
-#~ msgstr "'\\*D-'"
-
-#~ msgid "'\\*DOR'"
-#~ msgstr "'\\*DOR'"
