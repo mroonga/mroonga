@@ -7,7 +7,7 @@
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/7/SRPMS
 %define mysql_spec_file_default mysql.spec
 %else
-%define mysql_version_default 5.6.21
+%define mysql_version_default 5.6.22
 %define mysql_release_default 2
 %define mysql_dist_default    el6
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/6/SRPMS
@@ -24,7 +24,7 @@
 
 Name:		mysql-community-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
