@@ -42,9 +42,7 @@ if [ "${MROONGA_BUNDLED}" = "yes" ]; then
     tar_gz=${MYSQL_VERSION}.tar.gz
     curl -O ${download_base}/source/${tar_gz}
     tar xzf $tar_gz
-    if [ -d ${MYSQL_VERSION}/storage/mroonga ]; then
-        rm -rf ${MYSQL_VERSION}/storage/mroonga
-    fi
+    rm -rf ${MYSQL_VERSION}/storage/mroonga
     mv ${MYSQL_VERSION}/* ./
     mv .mroonga storage/mroonga
     rm -rf ${MYSQL_VERSION}
