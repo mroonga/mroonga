@@ -13,6 +13,7 @@ This limitation is derived from Groonga.
 
 * The maximum one key size: 4KiB
 * The maximum total size of keys: 4GiB
+* The maximum number of records: 268,435,455 (more than 268 million)
 
 Keep in mind that these limitations may vary depending on conditions.
 
@@ -22,7 +23,6 @@ Limitations of indexing
 A full-text index has the following limitations.
 This limitation is derived from groonga and applied to each table.
 
-* The maximum number of records: 268,435,455 (more than 268 million)
 * The maximum number of distinct terms: 268,435,455 (more than 268 million)
 * The maximum index size: 256GiB
 
