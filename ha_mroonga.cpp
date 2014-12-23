@@ -616,10 +616,19 @@ static struct st_mysql_show_var mrn_status_variables[] =
   {NullS, NullS, SHOW_LONG}
 };
 
-static const char *mrn_log_level_type_names[] = { "NONE", "EMERG", "ALERT",
-                                                  "CRIT", "ERROR", "WARNING",
-                                                  "NOTICE", "INFO", "DEBUG",
-                                                  "DUMP", NullS };
+static const char *mrn_log_level_type_names[] = {
+  "NONE",
+  "EMERG",
+  "ALERT",
+  "CRIT",
+  "ERROR",
+  "WARNING",
+  "NOTICE",
+  "INFO",
+  "DEBUG",
+  "DUMP",
+  NullS
+};
 static TYPELIB mrn_log_level_typelib =
 {
   array_elements(mrn_log_level_type_names)-1,
