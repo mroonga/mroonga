@@ -629,8 +629,7 @@ static const char *mrn_log_level_type_names[] = {
   "DUMP",
   NullS
 };
-static TYPELIB mrn_log_level_typelib =
-{
+static TYPELIB mrn_log_level_typelib = {
   array_elements(mrn_log_level_type_names)-1,
   "mrn_log_level_typelib",
   mrn_log_level_type_names,
