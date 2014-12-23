@@ -8629,6 +8629,7 @@ grn_obj *ha_mroonga::find_normalizer(KEY *key_info)
 {
   MRN_DBUG_ENTER_METHOD();
   grn_obj *normalizer = NULL;
+  bool use_normalizer = true;
 #if MYSQL_VERSION_ID >= 50500
   if (key_info->comment.length > 0) {
     mrn::ParametersParser parser(key_info->comment.str,
@@ -8636,11 +8637,15 @@ grn_obj *ha_mroonga::find_normalizer(KEY *key_info)
     parser.parse();
     const char *normalizer_name = parser["normalizer"];
     if (normalizer_name) {
-      normalizer = grn_ctx_get(ctx, normalizer_name, -1);
+      if (strcmp(normalizer_name, "none") == 0) {
+        use_normalizer = false;
+      } else {
+        normalizer = grn_ctx_get(ctx, normalizer_name, -1);
+      }
     }
   }
 #endif
-  if (!normalizer) {
+  if (use_normalizer && !normalizer) {
     Field *field = key_info->key_part[0].field;
     mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
     normalizer = field_normalizer.find_grn_normalizer();
