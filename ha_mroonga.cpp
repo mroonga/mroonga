@@ -1438,7 +1438,6 @@ static int mrn_init(void *p)
     PSI_server->register_mutex(category, mrn_mutexes, n_mutexes);
   }
 
-  // init groonga
   if (grn_init() != GRN_SUCCESS) {
     goto err_grn_init;
   }
