@@ -904,6 +904,7 @@ private:
                                           grn_obj *match_columns,
                                           uint *consumed_keyword_length,
                                           grn_obj *tmp_objects);
+  grn_expr_flags expr_flags_in_boolean_mode();
   grn_rc generic_ft_init_ext_prepare_expression_in_boolean_mode(
     struct st_mrn_ft_info *info,
     String *key,

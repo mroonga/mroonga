@@ -524,6 +524,29 @@ static char *mrn_version = const_cast<char *>(MRN_VERSION);
 static char *mrn_vector_column_delimiter = NULL;
 static my_bool mrn_libgroonga_support_zlib = FALSE;
 static my_bool mrn_libgroonga_support_lz4 = FALSE;
+typedef enum {
+  MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT           = (1 << 0),
+  MRN_BOOLEAN_MODE_SYNTAX_FLAG_SYNTAX_QUERY      = (1 << 1),
+  MRN_BOOLEAN_MODE_SYNTAX_FLAG_SYNTAX_SCRIPT     = (1 << 2),
+  MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_COLUMN      = (1 << 3),
+  MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_UPDATE      = (1 << 4),
+  MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_LEADING_NOT = (1 << 5)
+} mrn_boolean_mode_syntax_flag;
+static const char *mrn_boolean_mode_sytnax_flag_names[] = {
+  "DEFAULT",
+  "SYNTAX_QUERY",
+  "SYNTAX_SCRIPT",
+  "ALLOW_COLUMN",
+  "ALLOW_UPDATE",
+  "ALLOW_LEADING_NOT",
+  NullS
+};
+static TYPELIB mrn_boolean_mode_syntax_flags_typelib = {
+  array_elements(mrn_boolean_mode_sytnax_flag_names) - 1,
+  "",
+  mrn_boolean_mode_sytnax_flag_names,
+  NULL
+};
 
 typedef enum {
   MRN_ACTION_ON_ERROR_ERROR,
@@ -931,6 +954,18 @@ static MYSQL_SYSVAR_BOOL(libgroonga_support_lz4, mrn_libgroonga_support_lz4,
                          NULL,
                          grn_check_lz4_support());
 
+static MYSQL_THDVAR_SET(boolean_mode_syntax_flags,
+                        PLUGIN_VAR_RQCMDARG,
+                        "The flags to custom syntax in BOOLEAN MODE. "
+                        "Available flags: "
+                        "DEFAULT(=SYNTAX_QUERY,ALLOW_LEADING_NOT), "
+                        "SYNTAX_QUERY, SYNTAX_SCRIPT, "
+                        "ALLOW_COLUMN, ALLOW_UPDATE and ALLOW_LEADING_NOT",
+                        NULL,
+                        NULL,
+                        MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT,
+                        &mrn_boolean_mode_syntax_flags_typelib);
+
 static struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
@@ -948,6 +983,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(vector_column_delimiter),
   MYSQL_SYSVAR(libgroonga_support_zlib),
   MYSQL_SYSVAR(libgroonga_support_lz4),
+  MYSQL_SYSVAR(boolean_mode_syntax_flags),
   NULL
 };
 
@@ -7732,6 +7768,34 @@ bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
   DBUG_RETURN(n_weights > 0);
 }
 
+grn_expr_flags ha_mroonga::expr_flags_in_boolean_mode()
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  ulonglong syntax_flags = THDVAR(ha_thd(), boolean_mode_syntax_flags);
+  grn_expr_flags expression_flags = 0;
+  if (syntax_flags == MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT) {
+    expression_flags = GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
+  } else {
+    if (syntax_flags & MRN_BOOLEAN_MODE_SYNTAX_FLAG_SYNTAX_SCRIPT) {
+      expression_flags |= GRN_EXPR_SYNTAX_SCRIPT;
+    } else {
+      expression_flags |= GRN_EXPR_SYNTAX_QUERY;
+    }
+    if (syntax_flags & MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_COLUMN) {
+      expression_flags |= GRN_EXPR_ALLOW_COLUMN;
+    }
+    if (syntax_flags & MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_UPDATE) {
+      expression_flags |= GRN_EXPR_ALLOW_UPDATE;
+    }
+    if (syntax_flags & MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_LEADING_NOT) {
+      expression_flags |= GRN_EXPR_ALLOW_LEADING_NOT;
+    }
+  }
+
+  DBUG_RETURN(expression_flags);
+}
+
 grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   struct st_mrn_ft_info *info,
   String *key,
@@ -7812,12 +7876,10 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   if (!weight_specified) {
     grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
   }
-  grn_expr_flags expression_flags =
-    GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
   rc = grn_expr_parse(info->ctx, expression,
                       keyword, keyword_length,
                       match_columns, GRN_OP_MATCH, default_operator,
-                      expression_flags);
+                      expr_flags_in_boolean_mode());
   if (rc) {
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
