@@ -1018,7 +1018,7 @@ static ST_FIELD_INFO i_s_mrn_stats_fields_info[] =
     MYSQL_TYPE_LONG,
     0,
     0,
-    "Rows written to groonga",
+    "Rows written to Groonga",
     SKIP_OPEN_TABLE
   },
   {
@@ -1027,7 +1027,7 @@ static ST_FIELD_INFO i_s_mrn_stats_fields_info[] =
     MYSQL_TYPE_LONG,
     0,
     0,
-    "Rows read from groonga",
+    "Rows read from Groonga",
     SKIP_OPEN_TABLE
   }
 };
