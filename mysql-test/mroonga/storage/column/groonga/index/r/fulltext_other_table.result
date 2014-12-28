@@ -32,9 +32,9 @@ load --table bugs
 ["_key","id","tags"],
 [1,1,["Linux","MySQL","groonga"]]
 ]
-SELECT *, MATCH (tags) AGAINST ("MySQL" IN BOOLEAN MODE) AS score
+SELECT *, MATCH (tags) AGAINST ("+MySQL" IN BOOLEAN MODE) AS score
 FROM bugs
-WHERE MATCH (tags) AGAINST ("MySQL" IN BOOLEAN MODE);
+WHERE MATCH (tags) AGAINST ("+MySQL" IN BOOLEAN MODE);
 id	tags	score
 1	Linux MySQL groonga	1
 DROP TABLE bugs;

@@ -41,9 +41,9 @@ INSERT INTO bugs (id, tags) VALUES (1, "Linux MySQL groonga");
 
 SELECT mroonga_command("dump");
 
-SELECT *, MATCH (tags) AGAINST ("MySQL" IN BOOLEAN MODE) AS score
+SELECT *, MATCH (tags) AGAINST ("+MySQL" IN BOOLEAN MODE) AS score
        FROM bugs
-       WHERE MATCH (tags) AGAINST ("MySQL" IN BOOLEAN MODE);
+       WHERE MATCH (tags) AGAINST ("+MySQL" IN BOOLEAN MODE);
 
 DROP TABLE bugs;
 DROP TABLE tags;
