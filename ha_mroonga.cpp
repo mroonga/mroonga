@@ -2095,7 +2095,6 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    grn_column_ranges(NULL),
    grn_index_tables(NULL),
    grn_index_columns(NULL),
-   grn_table_is_referenced(false),
 
    grn_source_column_geo(NULL),
    cursor_geo(NULL),
@@ -3983,55 +3982,6 @@ int ha_mroonga::storage_open(const char *name, int mode, uint test_if_locked)
   DBUG_RETURN(0);
 }
 
-void ha_mroonga::update_grn_table_is_referenced()
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  grn_table_is_referenced = false;
-
-  grn_table_cursor *cursor;
-  int flags = GRN_CURSOR_BY_ID | GRN_CURSOR_ASCENDING;;
-  cursor = grn_table_cursor_open(ctx, grn_ctx_db(ctx),
-                                 NULL, 0,
-                                 NULL, 0,
-                                 0, -1, flags);
-  if (cursor) {
-    grn_id id;
-    grn_id grn_table_id;
-
-    grn_table_id = grn_obj_id(ctx, grn_table);
-    while ((id = grn_table_cursor_next(ctx, cursor)) != GRN_ID_NIL) {
-      grn_obj *object;
-      grn_id range = GRN_ID_NIL;
-
-      object = grn_ctx_at(ctx, id);
-      if (!object) {
-        ctx->rc = GRN_SUCCESS;
-        continue;
-      }
-
-      switch (object->header.type) {
-      case GRN_COLUMN_FIX_SIZE:
-      case GRN_COLUMN_VAR_SIZE:
-        range = grn_obj_get_range(ctx, object);
-        break;
-      default:
-        break;
-      }
-      grn_obj_unlink(ctx, object);
-
-      if (range == grn_table_id) {
-        grn_table_is_referenced = true;
-        break;
-      }
-    }
-
-    grn_table_cursor_close(ctx, cursor);
-  }
-
-  DBUG_VOID_RETURN;
-}
-
 int ha_mroonga::open_table(const char *name)
 {
   int error;
@@ -4057,8 +4007,6 @@ int ha_mroonga::open_table(const char *name)
     my_message(error, error_message, MYF(0));
     DBUG_RETURN(error);
   }
-
-  update_grn_table_is_referenced();
 
   DBUG_RETURN(0);
 }
@@ -10207,7 +10155,7 @@ void ha_mroonga::storage_store_field(Field *field,
   }
 }
 
-void ha_mroonga::storage_store_field_column(Field *field,
+void ha_mroonga::storage_store_field_column(Field *field, bool is_primary_key,
                                             int nth_column, grn_id record_id)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -10254,7 +10202,15 @@ void ha_mroonga::storage_store_field_column(Field *field,
   } else {
     grn_obj_reinit(ctx, value, range_id, 0);
     grn_obj_get_value(ctx, column, record_id, value);
-    storage_store_field(field, GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
+    if (is_primary_key && GRN_BULK_VSIZE(value) == 0) {
+      char key[GRN_TABLE_MAX_KEY_SIZE];
+      int key_length;
+      key_length = grn_table_get_key(ctx, grn_table, record_id,
+                                     &key, GRN_TABLE_MAX_KEY_SIZE);
+      storage_store_field(field, key, key_length);
+    } else {
+      storage_store_field(field, GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
+    }
   }
 
   DBUG_VOID_RETURN;
@@ -10268,9 +10224,11 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
   my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(buf, table->record[0]);
 
   Field *primary_key_field = NULL;
-  if (grn_table_is_referenced && table->s->primary_key != MAX_INDEXES) {
+  if (table->s->primary_key != MAX_INDEXES) {
     KEY *key_info = &(table->s->key_info[table->s->primary_key]);
-    primary_key_field = key_info->key_part[0].field;
+    if (key_info->key_parts == 1) {
+      primary_key_field = key_info->key_part[0].field;
+    }
   }
 
   int i;
@@ -10299,13 +10257,9 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
       } else if (primary_key_field &&
                  strcmp(primary_key_field->field_name, column_name) == 0) {
         // for primary key column
-        char key[GRN_TABLE_MAX_KEY_SIZE];
-        int key_length;
-        key_length = grn_table_get_key(ctx, grn_table, record_id,
-                                       &key, GRN_TABLE_MAX_KEY_SIZE);
-        storage_store_field(field, key, key_length);
+        storage_store_field_column(field, true, i, record_id);
       } else {
-        storage_store_field_column(field, i, record_id);
+        storage_store_field_column(field, false, i, record_id);
       }
       field->move_field_offset(-ptr_diff);
     }

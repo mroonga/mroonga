@@ -263,7 +263,6 @@ private:
   grn_obj **grn_column_ranges;
   grn_obj **grn_index_tables;
   grn_obj **grn_index_columns;
-  bool grn_table_is_referenced;
 
   // buffers
   grn_obj  encoded_key_buffer;
@@ -641,7 +640,7 @@ private:
   void storage_store_field_geometry(Field *field,
                                     const char *value, uint value_length);
   void storage_store_field(Field *field, const char *value, uint value_length);
-  void storage_store_field_column(Field *field,
+  void storage_store_field_column(Field *field, bool is_primary_key,
                                   int nth_column, grn_id record_id);
   void storage_store_fields(uchar *buf, grn_id record_id);
   void storage_store_fields_for_prep_update(const uchar *old_data,
@@ -742,7 +741,6 @@ private:
   int wrapper_open(const char *name, int mode, uint test_if_locked);
   int wrapper_open_indexes(const char *name);
   int storage_open(const char *name, int mode, uint test_if_locked);
-  void update_grn_table_is_referenced();
   int open_table(const char *name);
   int storage_open_columns(void);
   int storage_open_indexes(const char *name);
