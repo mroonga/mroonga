@@ -10222,7 +10222,6 @@ void ha_mroonga::storage_store_field_column(Field *field,
       grn_obj_reinit(ctx, value, range_id, GRN_OBJ_VECTOR);
       grn_obj_get_value(ctx, column, record_id, value);
 
-      // TODO: Check whether reference type or not
       grn_obj unvectored_value;
       GRN_TEXT_INIT(&unvectored_value, 0);
       int n_ids = GRN_BULK_VSIZE(value) / sizeof(grn_id);
