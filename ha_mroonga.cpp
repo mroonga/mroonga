@@ -10305,7 +10305,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
                                        &key, GRN_TABLE_MAX_KEY_SIZE);
         storage_store_field(field, key, key_length);
       } else {
-        storage_store_field_column(field, i ,record_id);
+        storage_store_field_column(field, i, record_id);
       }
       field->move_field_offset(-ptr_diff);
     }
