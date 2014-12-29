@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-11-27 18:25+0900\n"
+"PO-Revision-Date: 2014-12-29 19:57+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,11 +20,11 @@ msgstr ""
 msgid "Reference"
 msgstr "Reference"
 
-msgid "Full text Search"
-msgstr "Full text Search"
+msgid "Full text search"
+msgstr ""
 
-msgid "Mroonga full text Search in Boolean mode"
-msgstr "Mroonga full text Search in Boolean mode"
+msgid "Mroonga full text search in boolean mode"
+msgstr ""
 
 msgid ""
 "Mroonga can perform boolean full-text searches using the \"IN BOOLEAN MODE\" "
@@ -488,6 +488,9 @@ msgstr ""
 msgid "The maximum total size of keys: 4GiB"
 msgstr ""
 
+msgid "The maximum number of records: 268,435,455 (more than 268 million)"
+msgstr "The maximum number of records: 268,435,455 (more than 268 million)"
+
 msgid "Keep in mind that these limitations may vary depending on conditions."
 msgstr "Keep in mind that these limitations may vary depending on conditions."
 
@@ -500,9 +503,6 @@ msgid ""
 msgstr ""
 "A full-text index has the following limitations. This limitation is derived "
 "from groonga and applied to each table."
-
-msgid "The maximum number of records: 268,435,455 (more than 268 million)"
-msgstr "The maximum number of records: 268,435,455 (more than 268 million)"
 
 msgid ""
 "The maximum number of distinct terms: 268,435,455 (more than 268 million)"
@@ -569,8 +569,8 @@ msgid ""
 msgstr ""
 "Here are the explanations of server variables that are introduced by Mroonga."
 
-msgid "mroonga_action_on_fulltext_query_error"
-msgstr "mroonga_action_on_fulltext_query_error"
+msgid "``mroonga_action_on_fulltext_query_error``"
+msgstr ""
 
 msgid "The default behavior of fulltext query error."
 msgstr "The default behavior of fulltext query error."
@@ -625,8 +625,8 @@ msgstr ""
 "Here is an example SQL to confirm the value of "
 "``mroonga_action_on_fulltext_query_error``::"
 
-msgid "mroonga_default_parser"
-msgstr "mroonga_default_parser"
+msgid "``mroonga_default_parser``"
+msgstr ""
 
 msgid ""
 "The default parser of the full text search. The default value can be "
@@ -644,8 +644,8 @@ msgstr ""
 "Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
 "search parser. It is used by ``body_index`` fulltext index."
 
-msgid "mroonga_libgroonga_version"
-msgstr "mroonga_libgroonga_version"
+msgid "``mroonga_libgroonga_version``"
+msgstr ""
 
 msgid "The version string of the groonga library."
 msgstr "The version string of the groonga library."
@@ -653,8 +653,8 @@ msgstr "The version string of the groonga library."
 msgid "Here is an example SQL to confirm the using groonga library version::"
 msgstr "Here is an example SQL to confirm the using groonga library version::"
 
-msgid "mroonga_log_file"
-msgstr "mroonga_log_file"
+msgid "``mroonga_log_file``"
+msgstr ""
 
 msgid ""
 "The path of the log file of Mroonga. The default value is ``groonga.log``."
@@ -666,8 +666,8 @@ msgid ""
 msgstr ""
 "Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
 
-msgid "mroonga_log_level"
-msgstr "mroonga_log_level"
+msgid "``mroonga_log_level``"
+msgstr ""
 
 msgid "The output level of Mroonga log file. The default value is ``NOTICE``."
 msgstr "The output level of Mroonga log file. The default value is ``NOTICE``."
@@ -678,63 +678,65 @@ msgstr "Here is the list of ``mroonga_log_level`` which you can use."
 msgid "Log level"
 msgstr "Log level"
 
-msgid "NONE"
-msgstr "NONE"
+msgid "``NONE``"
+msgstr ""
 
 msgid "No logging output."
 msgstr "No logging output."
 
-msgid "EMERG"
-msgstr "EMERG"
+msgid "``EMERG``"
+msgstr ""
 
 msgid "Logging emergency messages such as database corruption."
 msgstr "Logging emergency messages such as database corruption."
 
-msgid "ALERT"
-msgstr "ALERT"
+msgid "``ALERT``"
+msgstr ""
 
 msgid "Logging alert messages such as internal error."
 msgstr "Logging alert messages such as internal error."
 
-msgid "CRIT"
-msgstr "CRIT"
+msgid "``CRIT``"
+msgstr ""
 
-msgid "Logging critical messasge such as deadlock."
-msgstr "Logging critical messasge such as deadlock."
+msgid "Logging critical message such as deadlock."
+msgstr ""
 
-msgid "Logging error messages such as API error which mroonga use."
-msgstr "Logging error messages such as API error which mroonga use."
+msgid "``ERROR``"
+msgstr ""
+
+msgid "Logging error messages such as API error which Mroonga use."
+msgstr ""
+
+msgid "``WARNING``"
+msgstr ""
 
 msgid "Logging warning messages such as invalid argument."
 msgstr "Logging warning messages such as invalid argument."
 
-msgid "WARNING"
-msgstr "WARNING"
+msgid "``NOTICE``"
+msgstr ""
 
 msgid "Logging notice messages such as configuration or status changed."
 msgstr "Logging notice messages such as configuration or status changed."
 
-msgid "NOTICE"
-msgstr "NOTICE"
-
-msgid "INFO"
-msgstr "INFO"
+msgid "``INFO``"
+msgstr ""
 
 msgid "Logging informative messages such as file system operation."
 msgstr "Logging informative messages such as file system operation."
 
-msgid "DEBUG"
-msgstr "DEBUG"
-
-msgid ""
-"Logging debug messages. Recommend to use for mroonga developer or bug "
-"reporter."
+msgid "``DEBUG``"
 msgstr ""
-"Logging debug messages. Recommend to use for mroonga developer or bug "
-"reporter."
 
-msgid "DUMP"
-msgstr "DUMP"
+msgid "Logging debug messages."
+msgstr ""
+
+msgid "Recommend to use for Mroonga developer or bug reporter."
+msgstr ""
+
+msgid "``DUMP``"
+msgstr ""
 
 msgid "Logging dump messages."
 msgstr "Logging dump messages."
@@ -755,8 +757,8 @@ msgstr "The version string of Mroonga."
 msgid "Here is an example SQL to confirm the running mroonga version::"
 msgstr "Here is an example SQL to confirm the running mroonga version::"
 
-msgid "mroonga_dry_write"
-msgstr "mroonga_dry_write"
+msgid "``mroonga_dry_write``"
+msgstr ""
 
 msgid ""
 "Whether really write data to Groonga database or not. The default value is "
@@ -774,8 +776,8 @@ msgstr ""
 msgid "Here is an example SQL to disable writing data to Groonga database::"
 msgstr "Here is an example SQL to disable writing data to Groonga database::"
 
-msgid "mroonga_enable_optimization"
-msgstr "mroonga_enable_optimization"
+msgid "``mroonga_enable_optimization``"
+msgstr ""
 
 msgid ""
 "Whether enable optimization or not. The default value is ``ON`` that means "
@@ -789,8 +791,8 @@ msgstr ""
 msgid "Here is an example SQL to disable optimization::"
 msgstr "Here is an example SQL to disable optimization::"
 
-msgid "mroonga_match_escalation_threshold"
-msgstr "mroonga_match_escalation_threshold"
+msgid "``mroonga_match_escalation_threshold``"
+msgstr ""
 
 msgid ""
 "The threshold to determin whether match method is escalated. See `search "
@@ -824,7 +826,7 @@ msgid ""
 msgstr ""
 "Here is an another example to show behavior change by the variable value."
 
-msgid "mroonga_vector_column_delimiter"
+msgid "``mroonga_vector_column_delimiter``"
 msgstr ""
 
 msgid ""
@@ -841,7 +843,7 @@ msgstr ""
 "Here is an example SQL to change the delimiter to a semicolon from a white "
 "space::"
 
-msgid "mroonga_libgroonga_support_zlib"
+msgid "``mroonga_libgroonga_support_zlib``"
 msgstr ""
 
 msgid "The status of libgroonga supports zlib."
@@ -852,7 +854,7 @@ msgid ""
 msgstr ""
 "Here is an example SQL to confirm the status of libgroonga supports zlib::"
 
-msgid "mroonga_libgroonga_support_lz4"
+msgid "``mroonga_libgroonga_support_lz4``"
 msgstr ""
 
 msgid "The status of libgroonga supports LZ4."
@@ -862,6 +864,110 @@ msgid ""
 "Here is an example SQL to confirm the status of libgroonga supports LZ4::"
 msgstr ""
 "Here is an example SQL to confirm the status of libgroonga supports LZ4::"
+
+msgid "``mroonga_boolean_mode_syntax_flags``"
+msgstr ""
+
+msgid ""
+"The flags to custom syntax in ``MATCH () AGAINST ('...' IN BOOLEAN MODE)``."
+msgstr ""
+
+msgid "This variable is system and session variable."
+msgstr ""
+
+msgid "Here are available flags:"
+msgstr ""
+
+msgid "Flag"
+msgstr ""
+
+msgid "``DEFAULT``"
+msgstr ""
+
+msgid "Equals to ``SYNTAX_QUERY,ALLOW_LEADING_NOT``."
+msgstr ""
+
+msgid "``SYNTAX_QUERY``"
+msgstr ""
+
+msgid ""
+"Uses `query syntax in Groonga <http://groonga.org/docs/reference/grn_expr/"
+"query_syntax.html>`_. Query syntax in Groonga is a compatible syntax with "
+"MySQL's BOOLEAM MODE syntax."
+msgstr ""
+
+msgid ""
+"If neither ``SYNTAX_QUERY`` nor ``SYNTAX_SCRIPT`` aren't specified, "
+"``SYNTAX_QUERY`` is used."
+msgstr ""
+
+msgid "``SYNTAX_SCRIPT``"
+msgstr ""
+
+msgid ""
+"Uses `script syntax in Groonga <http://groonga.org/docs/reference/grn_expr/"
+"script_syntax.html>`_."
+msgstr ""
+
+msgid ""
+"It's JavaScript like syntax. You can use full Groonga features with this "
+"syntax."
+msgstr ""
+
+msgid ""
+"If both ``SYNTAX_QUERY`` and ``SYNTAX_SCRIPT`` are specified, "
+"``SYNTAX_SCRIPT`` is used."
+msgstr ""
+
+msgid "``ALLOW_COLUMN``"
+msgstr ""
+
+msgid ""
+"Allows ``COLUMN:...`` syntax in query syntax. It's not compatible with "
+"MySQL's BOOLEAM MODE syntax."
+msgstr ""
+
+msgid ""
+"You can use multiple indexes in one ``MATCH () AGAINST ()`` with this "
+"syntax. MySQL can use only one index in a query. You can avoid the "
+"restriction by this syntax."
+msgstr ""
+
+msgid ""
+"You can use not only full-text search operation but also other more "
+"operations such as equal operation and prefix search operation with this "
+"syntax."
+msgstr ""
+
+msgid ""
+"See `query syntax in Groonga <http://groonga.org/docs/reference/grn_expr/"
+"query_syntax.html>`_ for details."
+msgstr ""
+
+msgid "``ALLOW_UPDATE``"
+msgstr ""
+
+msgid "Allows updating value by ``COLUMN:=NEW_VALUE`` syntax in query syntax."
+msgstr ""
+
+msgid "``ALLOW_LEADING_NOT``"
+msgstr ""
+
+msgid "Allows ``-NOT_INCLUDED_KEYWORD ...`` syntax in query syntax."
+msgstr ""
+
+msgid ""
+"The default flags is ``DEFAULT``. It is MySQL's BOOLEAN MODE compatible "
+"syntax."
+msgstr ""
+
+msgid ""
+"You can combine flags by separated by comma such as ``SYNTAX_QUERY,"
+"ALLOW_LEADING_NOT``."
+msgstr ""
+
+msgid "Here is an example SQL to use script syntax in Groonga::"
+msgstr ""
 
 msgid "SQL commands"
 msgstr "SQL commands"
@@ -1723,3 +1829,5 @@ msgstr "It is the end text of wordN."
 msgid "It returns snippet string."
 msgstr "It returns snippet string."
 
+#~ msgid "CRIT"
+#~ msgstr "CRIT"

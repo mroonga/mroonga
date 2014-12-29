@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-11-28 18:18+0900\n"
+"PO-Revision-Date: 2014-12-29 19:58+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,11 +20,36 @@ msgstr ""
 msgid "News"
 msgstr "News"
 
-msgid "Release 4.08 - 2014/11/29"
+msgid "Release 4.09 - 2014-12-29"
 msgstr ""
 
 msgid "Improvements"
 msgstr "Improvements"
+
+msgid "[rpm] Supported MySQL 5.6.22 on CentOS 6. [Reported by @oreradio]"
+msgstr ""
+
+msgid ""
+"Added :ref:`mroonga_boolean_mode_syntax_flags` that custom syntax in ``MATCH "
+"() AGAINST ('...' IN BOOLEAN MODE)``."
+msgstr ""
+
+msgid ""
+"Supported no normalizer ``FULLTEXT INDEX`` by specifying ``none`` as "
+"normalizer such as ``FULLTEXT INDEX (...) COMMENT 'normalizer \"none\"'``."
+msgstr ""
+
+msgid "Supported referencing primary key value of auto created records."
+msgstr ""
+
+msgid "Thanks"
+msgstr "Thanks"
+
+msgid "@oreradio"
+msgstr ""
+
+msgid "Release 4.08 - 2014/11/29"
+msgstr ""
 
 msgid "[deb] Supported Ubuntu 12.04 again for Travis-CI."
 msgstr ""
@@ -63,9 +88,6 @@ msgstr ""
 
 msgid "[doc] Use ``systemctl`` command to start MySQL on CentOS 7."
 msgstr ""
-
-msgid "Thanks"
-msgstr "Thanks"
 
 msgid "GMO Media, Inc."
 msgstr "GMO Media, Inc."
