@@ -110,30 +110,32 @@ The output level of Mroonga log file. The default value is ``NOTICE``.
 
 Here is the list of ``mroonga_log_level`` which you can use.
 
-+-----------+--------------------------------------------------------------------------------+
-| Log level | Description                                                                    |
-+===========+================================================================================+
-| NONE      | No logging output.                                                             |
-+-----------+--------------------------------------------------------------------------------+
-| EMERG     | Logging emergency messages such as database corruption.                        |
-+-----------+--------------------------------------------------------------------------------+
-| ALERT     | Logging alert messages such as internal error.                                 |
-+-----------+--------------------------------------------------------------------------------+
-| CRIT      | Logging critical messasge such as deadlock.                                    |
-+-----------+--------------------------------------------------------------------------------+
-| ERROR     | Logging error messages such as API error which mroonga use.                    |
-+-----------+--------------------------------------------------------------------------------+
-| WARNING   | Logging warning messages such as invalid argument.                             |
-+-----------+--------------------------------------------------------------------------------+
-| NOTICE    | Logging notice messages such as configuration or status changed.               |
-+-----------+--------------------------------------------------------------------------------+
-| INFO      | Logging informative messages such as file system operation.                    |
-+-----------+--------------------------------------------------------------------------------+
-| DEBUG     | Logging debug messages.                                                        |
-|           | Recommend to use for mroonga developer or bug reporter.                        |
-+-----------+--------------------------------------------------------------------------------+
-| DUMP      | Logging dump messages.                                                         |
-+-----------+--------------------------------------------------------------------------------+
+.. list-table::
+  :header-rows: 1
+
+  * - Log level
+    - Description
+  * - ``NONE``
+    - No logging output.
+  * - ``EMERG``
+    - Logging emergency messages such as database corruption.
+  * - ``ALERT``
+    - Logging alert messages such as internal error.
+  * - ``CRIT``
+    - Logging critical message such as deadlock.
+  * - ``ERROR``
+    - Logging error messages such as API error which Mroonga use.
+  * - ``WARNING``
+    - Logging warning messages such as invalid argument.
+  * - ``NOTICE``
+    - Logging notice messages such as configuration or status changed.
+  * - ``INFO``
+    - Logging informative messages such as file system operation.
+  * - ``DEBUG``
+    - Logging debug messages.
+      Recommend to use for Mroonga developer or bug reporter.
+  * - ``DUMP``
+    - Logging dump messages.
 
 Here is an example transcript to change log level to ``DEBUG`` that logs many messages for debugging::
 
