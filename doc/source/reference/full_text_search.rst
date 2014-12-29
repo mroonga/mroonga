@@ -1,6 +1,6 @@
 .. highlightlang:: none
 
-Full text Search
+Full text search
 ================
 
 .. toctree::
