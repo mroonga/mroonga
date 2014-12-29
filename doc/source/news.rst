@@ -5,6 +5,28 @@
 News
 ====
 
+.. _release-4-09:
+
+Release 4.09 - 2014-12-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm] Supported MySQL 5.6.22 on CentOS 6.
+  [Reported by @oreradio]
+* Added :ref:`mroonga_boolean_mode_syntax_flags` that custom syntax in
+  ``MATCH () AGAINST ('...' IN BOOLEAN MODE)``.
+* Supported no normalizer ``FULLTEXT INDEX`` by specifying ``none`` as
+  normalizer such as ``FULLTEXT INDEX (...) COMMENT 'normalizer
+  "none"'``.
+* Supported referencing primary key value of auto created records.
+
+Thanks
+^^^^^^
+
+* @oreradio
+
 .. _release-4-08:
 
 Release 4.08 - 2014/11/29
