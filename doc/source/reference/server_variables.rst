@@ -387,7 +387,7 @@ Here are available flags:
     - Equals to ``SYNTAX_QUERY,ALLOW_LEADING_NOT``.
   * - ``SYNTAX_QUERY``
     - Uses `query syntax in Groonga
-      <http://groonga.org/docs/reference/grn_expr/query_syntax.html>_`. Query
+      <http://groonga.org/docs/reference/grn_expr/query_syntax.html>`_. Query
       syntax in Groonga is a compatible syntax with MySQL's BOOLEAM
       MODE syntax.
 
@@ -395,7 +395,7 @@ Here are available flags:
       specified, ``SYNTAX_QUERY`` is used.
   * - ``SYNTAX_SCRIPT``
     - Uses `script syntax in Groonga
-      <http://groonga.org/docs/reference/grn_expr/script_syntax.html>_`.
+      <http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_.
 
       It's JavaScript like syntax. You can use full Groonga features
       with this syntax.
@@ -415,7 +415,7 @@ Here are available flags:
       operation with this syntax.
 
       See `query syntax in Groonga
-      <http://groonga.org/docs/reference/grn_expr/query_syntax.html>_`
+      <http://groonga.org/docs/reference/grn_expr/query_syntax.html>`_
       for details.
   * - ``ALLOW_UPDATE``
     -  Allows updating value by ``COLUMN:=NEW_VALUE`` syntax
