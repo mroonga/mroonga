@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-11-28 18:21+0900\n"
+"PO-Revision-Date: 2014-12-29 19:53+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,11 +20,44 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 4.08 - 2014/11/29"
-msgstr "4.08リリース - 2014/11/29"
+msgid "Release 4.09 - 2014-12-29"
+msgstr "4.09リリース - 2014-12-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[rpm] Supported MySQL 5.6.22 on CentOS 6. [Reported by @oreradio]"
+msgstr ""
+"[rpm] CentOS 6用のパッケージがMySQL 5.6.22に対応しました。 [@oreradioさんが報"
+"告]"
+
+msgid ""
+"Added :ref:`mroonga_boolean_mode_syntax_flags` that custom syntax in ``MATCH "
+"() AGAINST ('...' IN BOOLEAN MODE)``."
+msgstr ""
+"``MATCH () AGAINST ('...' IN BOOLEAN MODE)`` の構文をカスタマイズする :ref:"
+"`mroonga_boolean_mode_syntax_flags` を追加しました。"
+
+msgid ""
+"Supported no normalizer ``FULLTEXT INDEX`` by specifying ``none`` as "
+"normalizer such as ``FULLTEXT INDEX (...) COMMENT 'normalizer \"none\"'``."
+msgstr ""
+"``FULLTEXT INDEX (...) COMMENT 'normalizer \"none\"'`` というようにノーマライ"
+"ザーとして ``none`` を指定することでノーマライザーなしの ``FULLTEXT INDEX`` "
+"を作れるようにしました。"
+
+msgid "Supported referencing primary key value of auto created records."
+msgstr ""
+"自動で作られたレコードでもプライマリーキーの値を参照できるようになりました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "@oreradio"
+msgstr "@oreradioさん"
+
+msgid "Release 4.08 - 2014/11/29"
+msgstr "4.08リリース - 2014/11/29"
 
 msgid "[deb] Supported Ubuntu 12.04 again for Travis-CI."
 msgstr "[deb] Ubuntu 12.04をTravis-CI向けに再度サポートしました。"
@@ -74,9 +107,6 @@ msgstr ""
 msgid "[doc] Use ``systemctl`` command to start MySQL on CentOS 7."
 msgstr ""
 "[doc] CentOS 7では ``systemctl`` コマンドをMySQLの起動に使うようにしました。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 # d8986144d4454b8dbfd7cf12c8877b8c
 msgid "GMO Media, Inc."
