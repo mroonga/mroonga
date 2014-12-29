@@ -7,8 +7,8 @@ Here are the explanations of server variables that are introduced by Mroonga.
 
 .. _mroonga_action_on_fulltext_query_error:
 
-mroonga_action_on_fulltext_query_error
---------------------------------------
+``mroonga_action_on_fulltext_query_error``
+------------------------------------------
 
 The default behavior of fulltext query error.
 
@@ -41,8 +41,8 @@ Here is an example SQL to confirm the value of ``mroonga_action_on_fulltext_quer
   +----------------------------------------+---------------+
   1 row in set (0.00 sec)
 
-mroonga_default_parser
-----------------------
+``mroonga_default_parser``
+--------------------------
 
 The default parser of the full text search.
 The default value can be specified by ``--with-default-parser=PARSER`` configure argument, whose default value is ``TokenBigram``.
@@ -60,8 +60,8 @@ Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext sea
    ) DEFAULT CHARSET UTF8;
 
 
-mroonga_libgroonga_version
---------------------------
+``mroonga_libgroonga_version``
+------------------------------
 
 The version string of the groonga library.
 
@@ -75,8 +75,8 @@ Here is an example SQL to confirm the using groonga library version::
   +----------------------------+------------------+
   1 row in set (0.00 sec)
 
-mroonga_log_file
-----------------
+``mroonga_log_file``
+--------------------
 
 The path of the log file of Mroonga. The default value is ``groonga.log``.
 
@@ -103,8 +103,8 @@ Here is an example transcript to change log file to ``/tmp/mroonga.log``::
 
 .. _mroonga_log_level:
 
-mroonga_log_level
------------------
+``mroonga_log_level``
+---------------------
 
 The output level of Mroonga log file. The default value is ``NOTICE``.
 
@@ -171,8 +171,8 @@ Here is an example SQL to confirm the running mroonga version::
   +-----------------+-------+
   1 row in set (0.00 sec)
 
-mroonga_dry_write
------------------
+``mroonga_dry_write``
+---------------------
 
 Whether really write data to Groonga database or not. The
 default value is ``OFF`` that means data are really written
@@ -203,8 +203,8 @@ database::
   +-------------------+-------+
   1 row in set (0.00 sec)
 
-mroonga_enable_optimization
----------------------------
+``mroonga_enable_optimization``
+-------------------------------
 
 Whether enable optimization or not. The default value is
 ``ON`` that means optimization is enabled. Usually we don't
@@ -234,8 +234,8 @@ Here is an example SQL to disable optimization::
 
 .. _mroonga_match_escalation_threshold:
 
-mroonga_match_escalation_threshold
-----------------------------------
+``mroonga_match_escalation_threshold``
+--------------------------------------
 
 The threshold to determin whether match method is escalated. See
 `search specification for Groonga
@@ -304,8 +304,8 @@ value.
 
 .. _mroonga_vector_column_delimiter:
 
-mroonga_vector_column_delimiter
--------------------------------
+``mroonga_vector_column_delimiter``
+-----------------------------------
 
 The delimiter when outputting a vector column.  The default value is a white space.
 
@@ -333,8 +333,8 @@ Here is an example SQL to change the delimiter to a semicolon from a white space
 
 .. _mroonga_libgroonga_support_zlib:
 
-mroonga_libgroonga_support_zlib
--------------------------------
+``mroonga_libgroonga_support_zlib``
+-----------------------------------
 
 The status of libgroonga supports zlib.
 
@@ -349,8 +349,8 @@ Here is an example SQL to confirm the status of libgroonga supports zlib::
 
 .. _mroonga_libgroonga_support_lz4:
 
-mroonga_libgroonga_support_lz4
-------------------------------
+``mroonga_libgroonga_support_lz4``
+----------------------------------
 
 The status of libgroonga supports LZ4.
 
