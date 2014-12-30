@@ -12351,6 +12351,44 @@ bool ha_mroonga::auto_repair() const
   DBUG_RETURN(crashed);
 }
 
+int ha_mroonga::generic_disable_index(int i, KEY *key_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+  if (share->index_table[i]) {
+    char index_column_name[GRN_TABLE_MAX_KEY_SIZE];
+    snprintf(index_column_name, GRN_TABLE_MAX_KEY_SIZE - 1,
+             "%s.%s", share->index_table[i], key_info[i].name);
+    grn_obj *index_column = grn_ctx_get(ctx,
+                                        index_column_name,
+                                        strlen(index_column_name));
+    if (index_column) {
+      grn_obj_remove(ctx, index_column);
+    }
+  } else {
+    mrn::PathMapper mapper(share->table_name);
+    mrn::IndexTableName index_table_name(mapper.table_name(),
+                                         key_info[i].name);
+    grn_obj *index_table = grn_ctx_get(ctx,
+                                       index_table_name.c_str(),
+                                       index_table_name.length());
+    if (index_table) {
+      grn_obj_remove(ctx, index_table);
+    }
+  }
+  if (ctx->rc == GRN_SUCCESS) {
+    grn_index_tables[i] = NULL;
+    grn_index_columns[i] = NULL;
+  } else {
+    // TODO: Implement ctx->rc to error converter and use it.
+    error = ER_ERROR_ON_WRITE;
+    my_message(error, ctx->errbuf, MYF(0));
+  }
+
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::wrapper_disable_indexes(uint mode)
 {
   int error = 0;
@@ -12379,23 +12417,16 @@ int ha_mroonga::wrapper_disable_indexes(uint mode)
         }
       }
       KEY *key_info = table_share->key_info;
-      mrn::PathMapper mapper(share->table_name);
       for (i = 0; i < table_share->keys; i++) {
         if (!(key_info[i].flags & HA_FULLTEXT) &&
           !mrn_is_geo_key(&key_info[i])) {
           continue;
         }
 
-        mrn::IndexTableName index_table_name(mapper.table_name(),
-                                             key_info[i].name);
-        grn_obj *index_table = grn_ctx_get(ctx,
-                                           index_table_name.c_str(),
-                                           index_table_name.length());
-        if (index_table) {
-          grn_obj_remove(ctx, index_table);
+        int sub_error = generic_disable_index(i, key_info);
+        if (error != 0 && sub_error != 0) {
+          error = sub_error;
         }
-        grn_index_tables[i] = NULL;
-        grn_index_columns[i] = NULL;
       }
     } else {
       error = HA_ERR_WRONG_COMMAND;
@@ -12406,6 +12437,7 @@ int ha_mroonga::wrapper_disable_indexes(uint mode)
 
 int ha_mroonga::storage_disable_indexes(uint mode)
 {
+  int error = 0;
   MRN_DBUG_ENTER_METHOD();
   if (mode == HA_KEY_SWITCH_NONUNIQ_SAVE || mode == HA_KEY_SWITCH_ALL) {
     uint i;
@@ -12419,7 +12451,6 @@ int ha_mroonga::storage_disable_indexes(uint mode)
       }
     }
     KEY *key_info = table_share->key_info;
-    mrn::PathMapper mapper(share->table_name);
     for (i = 0; i < table_share->keys; i++) {
       if (i == table->s->primary_key) {
         continue;
@@ -12429,21 +12460,15 @@ int ha_mroonga::storage_disable_indexes(uint mode)
         continue;
       }
 
-      mrn::IndexTableName index_table_name(mapper.table_name(),
-                                           key_info[i].name);
-      grn_obj *index_table = grn_ctx_get(ctx,
-                                         index_table_name.c_str(),
-                                         index_table_name.length());
-      if (index_table) {
-        grn_obj_remove(ctx, index_table);
+      int sub_error = generic_disable_index(i, key_info);
+      if (error != 0 && sub_error != 0) {
+        error = sub_error;
       }
-      grn_index_tables[i] = NULL;
-      grn_index_columns[i] = NULL;
     }
   } else {
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
   }
-  DBUG_RETURN(0);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::disable_indexes(uint mode)
@@ -12472,7 +12497,7 @@ int ha_mroonga::wrapper_enable_indexes(uint mode)
       if (share->wrap_key_nr[i] < MAX_KEY) {
         continue;
       }
-      if (!grn_index_tables[i]) {
+      if (!grn_index_columns[i]) {
         break;
       }
     }
@@ -12501,7 +12526,7 @@ int ha_mroonga::wrapper_enable_indexes(uint mode)
       }
       index_tables[i] = NULL;
       index_columns[i] = NULL;
-      if (!grn_index_tables[i]) {
+      if (!grn_index_columns[i]) {
         if (
           (key_info[i].flags & HA_FULLTEXT) &&
           (error = wrapper_create_index_fulltext(mapper.table_name(),
@@ -12561,7 +12586,7 @@ int ha_mroonga::storage_enable_indexes(uint mode)
       if (i == table->s->primary_key) {
         continue;
       }
-      if (!grn_index_tables[i]) {
+      if (!grn_index_columns[i]) {
         break;
       }
     }
@@ -12587,7 +12612,7 @@ int ha_mroonga::storage_enable_indexes(uint mode)
         break;
       }
       index_tables[i] = NULL;
-      if (!grn_index_tables[i]) {
+      if (!grn_index_columns[i]) {
         if ((error = storage_create_index(table, mapper.table_name(), grn_table,
                                           share, &key_info[i], index_tables,
                                           index_columns, i)))
@@ -12601,6 +12626,8 @@ int ha_mroonga::storage_enable_indexes(uint mode)
           mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
           have_multiple_column_index = true;
         }
+        grn_index_tables[i] = index_tables[i];
+        grn_index_columns[i] = index_columns[i];
       } else {
         index_columns[i] = NULL;
       }
