@@ -3624,7 +3624,8 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
   }
   if (error) {
     while (true) {
-      if (index_tables[i]) {
+      if (index_tables[i] &&
+          !(tmp_share->index_table && tmp_share->index_table[i])) {
         grn_obj_remove(ctx, index_tables[i]);
       }
       if (!i)
