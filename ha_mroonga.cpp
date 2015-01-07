@@ -9600,9 +9600,9 @@ int ha_mroonga::generic_store_bulk_blob(Field *field, grn_obj *buf)
   int error = 0;
   String buffer;
   Field_blob *blob = (Field_blob *)field;
-  const char *value = blob->val_str(0, &buffer)->ptr();
+  String *value = blob->val_str(0, &buffer);
   grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
-  GRN_TEXT_SET(ctx, buf, value, blob->get_length());
+  GRN_TEXT_SET(ctx, buf, value->ptr(), value->length());
   DBUG_RETURN(error);
 }
 
@@ -9613,8 +9613,9 @@ int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf)
 #ifdef HAVE_SPATIAL
   String buffer;
   Field_geom *geometry = (Field_geom *)field;
-  const char *wkb = geometry->val_str(0, &buffer)->ptr();
-  int len = geometry->get_length();
+  String *value = geometry->val_str(0, &buffer);
+  const char *wkb = value->ptr();
+  int len = value->length();
   error = mrn_set_geometry(ctx, buf, wkb, len);
 #endif
   DBUG_RETURN(error);
