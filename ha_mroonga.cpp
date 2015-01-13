@@ -5216,6 +5216,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+  uint rollback_max_key = 0;
 
   if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
@@ -5224,7 +5225,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
   THD *thd = ha_thd();
   int i;
-  uint j;
   int n_columns = table->s->fields;
 
   if (table->next_number_field && buf == table->record[0])
@@ -5306,8 +5306,12 @@ int ha_mroonga::storage_write_row(uchar *buf)
     DBUG_RETURN(error);
   }
 
+  rollback_max_key = table->s->keys - 1;
   if ((error = storage_write_row_unique_indexes(buf)))
   {
+    if (error == HA_ERR_FOUND_DUPP_KEY) {
+      rollback_max_key = dup_key - 1;
+    }
     goto err;
   }
 
@@ -5401,7 +5405,8 @@ int ha_mroonga::storage_write_row(uchar *buf)
   DBUG_RETURN(0);
 
 err:
-  for (j = 0; j < table->s->keys; j++) {
+  uint j;
+  for (j = 0; j < rollback_max_key; j++) {
     if (j == pkey_nr) {
       continue;
     }
@@ -5580,7 +5585,16 @@ err:
     mrn_change_encoding(ctx, NULL);
     do {
       i--;
+
+      if (i == table->s->primary_key) {
+        continue;
+      }
+
       KEY *key_info = &table->key_info[i];
+      if (!(key_info->flags & HA_NOSAME)) {
+        continue;
+      }
+
       if (key_info->flags & HA_NOSAME) {
         grn_table_delete_by_id(ctx, grn_index_tables[i], key_id[i]);
       }
