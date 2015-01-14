@@ -783,7 +783,9 @@ private:
                                               grn_obj *index_column);
   int storage_write_row_multiple_column_indexes(uchar *buf, grn_id record_id);
   int storage_write_row_unique_index(uchar *buf,
-                                     KEY *key_info, grn_obj *index_table,
+                                     KEY *key_info,
+                                     grn_obj *index_table,
+                                     grn_obj *index_column,
                                      grn_id *key_id);
   int storage_write_row_unique_indexes(uchar *buf);
   int wrapper_get_record_id(uchar *data, grn_id *record_id, const char *context);

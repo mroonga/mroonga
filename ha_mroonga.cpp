@@ -5216,7 +5216,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  uint rollback_max_key = 0;
+  bool unique_indexes_are_processed = false;
 
   if (is_dry_write()) {
     DBUG_PRINT("info", ("mroonga: dry write: ha_mroonga::%s", __FUNCTION__));
@@ -5306,14 +5306,11 @@ int ha_mroonga::storage_write_row(uchar *buf)
     DBUG_RETURN(error);
   }
 
-  rollback_max_key = table->s->keys - 1;
   if ((error = storage_write_row_unique_indexes(buf)))
   {
-    if (error == HA_ERR_FOUND_DUPP_KEY) {
-      rollback_max_key = dup_key - 1;
-    }
     goto err;
   }
+  unique_indexes_are_processed = true;
 
   grn_obj colbuf;
   GRN_VOID_INIT(&colbuf);
@@ -5405,14 +5402,16 @@ int ha_mroonga::storage_write_row(uchar *buf)
   DBUG_RETURN(0);
 
 err:
-  uint j;
-  for (j = 0; j < rollback_max_key; j++) {
-    if (j == pkey_nr) {
-      continue;
-    }
-    KEY *key_info = &table->key_info[j];
-    if (key_info->flags & HA_NOSAME) {
-      grn_table_delete_by_id(ctx, grn_index_tables[j], key_id[j]);
+  if (unique_indexes_are_processed) {
+    uint j;
+    for (j = 0; j < table->s->keys; j++) {
+      if (j == pkey_nr) {
+        continue;
+      }
+      KEY *key_info = &table->key_info[j];
+      if (key_info->flags & HA_NOSAME) {
+        grn_table_delete_by_id(ctx, grn_index_tables[j], key_id[j]);
+      }
     }
   }
   grn_table_delete_by_id(ctx, grn_table, record_id);
@@ -5499,6 +5498,7 @@ err:
 int ha_mroonga::storage_write_row_unique_index(uchar *buf,
                                                KEY *key_info,
                                                grn_obj *index_table,
+                                               grn_obj *index_column,
                                                grn_id *key_id)
 {
   char *ukey = NULL;
@@ -5534,7 +5534,29 @@ int ha_mroonga::storage_write_row_unique_index(uchar *buf,
   if (!added) {
     // duplicated error
     error = HA_ERR_FOUND_DUPP_KEY;
-    memcpy(dup_ref, key_id, sizeof(grn_id));
+    grn_id duplicated_record_id = GRN_ID_NIL;
+    {
+      grn_table_cursor *table_cursor;
+      table_cursor = grn_table_cursor_open(ctx, index_table,
+                                           ukey, ukey_size,
+                                           ukey, ukey_size,
+                                           0, -1, 0);
+      if (table_cursor) {
+        grn_obj *index_cursor;
+        index_cursor = grn_index_cursor_open(ctx, table_cursor, index_column,
+                                             GRN_ID_NIL, GRN_ID_MAX, 0);
+        if (index_cursor) {
+          grn_posting *posting;
+          posting = grn_index_cursor_next(ctx, index_cursor, NULL);
+          if (posting) {
+            duplicated_record_id = posting->rid;
+          }
+        }
+        grn_obj_unlink(ctx, index_cursor);
+      }
+      grn_table_cursor_close(ctx, table_cursor);
+    }
+    memcpy(dup_ref, &duplicated_record_id, sizeof(grn_id));
     if (!ignoring_duplicated_key) {
       GRN_LOG(ctx, GRN_LOG_ERROR,
               "duplicated id on insert: update unique index: <%.*s>",
@@ -5567,9 +5589,14 @@ int ha_mroonga::storage_write_row_unique_indexes(uchar *buf)
     if (!index_table) {
       continue;
     }
+    grn_obj *index_column = grn_index_columns[i];
+    if (!index_column) {
+      continue;
+    }
 
     if ((error = storage_write_row_unique_index(buf, key_info,
-                                                index_table, &key_id[i])))
+                                                index_table, index_column,
+                                                &key_id[i])))
     {
       if (error == HA_ERR_FOUND_DUPP_KEY)
       {
@@ -6059,6 +6086,13 @@ int ha_mroonga::storage_update_row_unique_indexes(uchar *new_data)
       continue;
     }
 
+    grn_obj *index_column = grn_index_columns[i];
+    if (!index_column) {
+      key_id[i] = GRN_ID_NIL;
+      del_key_id[i] = GRN_ID_NIL;
+      continue;
+    }
+
     if (
       KEY_N_KEY_PARTS(key_info) == 1 &&
       !bitmap_is_set(table->write_set,
@@ -6071,7 +6105,8 @@ int ha_mroonga::storage_update_row_unique_indexes(uchar *new_data)
     }
 
     if ((error = storage_write_row_unique_index(new_data, key_info,
-                                                index_table, &key_id[i])))
+                                                index_table, index_column,
+                                                &key_id[i])))
     {
       if (error == HA_ERR_FOUND_DUPP_KEY)
       {
@@ -13111,6 +13146,7 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
           if ((error = storage_write_row_unique_index(table->record[0],
                                                       current_key_info,
                                                       index_tables[i],
+                                                      index_columns[i],
                                                       &key_id)))
           {
             if (error == HA_ERR_FOUND_DUPP_KEY)
