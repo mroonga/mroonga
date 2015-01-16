@@ -13679,6 +13679,12 @@ bool ha_mroonga::storage_inplace_alter_table_index(
                                                ha_alter_info->key_count,
                                                index_tables,
                                                index_columns, false);
+    if (error == HA_ERR_FOUND_DUPP_UNIQUE) {
+      my_printf_error(ER_DUP_UNIQUE, ER(ER_DUP_UNIQUE), MYF(0),
+                      table_share->table_name);
+    } else {
+      my_message(error, "failed to create multiple column index", MYF(0));
+    }
     for (i = 0; i < n_columns; ++i) {
       Field *field = altered_table->field[i];
       field->move_field_offset(-ptr_diff);
