@@ -5,6 +5,42 @@
 News
 ====
 
+.. _release-4-10:
+
+Release 4.10 - 2015-01-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage] Supported static index construction in FULLTEXT
+  INDEX comment with 'table "XXX"'. ``DISABLE KEYS`` supports it.
+  [Reported by Naoya Murakami]
+* [rpm][centos] Built with MySQL 5.6.22 on CentOS 7.
+  [groonga-dev,03047] [Reported by Hiroshi Kagami]
+* [rpm][centos] Built with MariaDB 5.5.40-2 on CentOS 7.
+* [storage][mysql56] Supported to report duplicated error
+  for ``ADD UNIQUE INDEX``.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that referenced table is accidentally
+  removed on error. This means if index creation is failed such
+  as ``FULLTEXT INDEX (...)`` against "terms" table, "terms"
+  table can be removed on error.
+* [storage] Fixed a bug that duplicated entry is removed in unique index
+  when duplicated error is occurred. [Reported by kazeburo]
+* [storage] Fixed a bug that ``INSERT ON DUPLICATE KEY UPDATE`` is
+  broken. This bug may change existing other records.
+
+Thanks
+^^^^^^
+
+* Naoya Murakami
+* Hiroshi Kagami
+* kazeburo
+
 .. _release-4-09:
 
 Release 4.09 - 2014-12-29
