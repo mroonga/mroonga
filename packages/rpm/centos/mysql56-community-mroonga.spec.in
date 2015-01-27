@@ -158,6 +158,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Jan 29 2015 HAYASHI Kentaro <hayashi@clear-code.com> - 4.10-1
+- new upstream release.
+
 * Mon Dec 29 2014 Kouhei Sutou <kou@cozmixng.org> - 4.09-1
 - new upstream release.
 
