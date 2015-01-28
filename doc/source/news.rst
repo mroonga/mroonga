@@ -15,7 +15,7 @@ Improvements
 
 * [storage] Supported static index construction in FULLTEXT
   INDEX comment with ``'table "XXX"'``. Execute ``DISABLE KEYS``, then
-  ``DISABLE KEYS`` for static index construction.
+  ``ENABLE KEYS`` for static index construction.
   [Reported by Naoya Murakami]
 * [rpm][centos] Built with MySQL 5.6.22 on CentOS 7.
   [groonga-dev,03047] [Reported by Hiroshi Kagami]
