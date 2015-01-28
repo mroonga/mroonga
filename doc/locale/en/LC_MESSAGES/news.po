@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-12-29 19:58+0900\n"
+"PO-Revision-Date: 2015-01-28 14:41+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,11 +20,63 @@ msgstr ""
 msgid "News"
 msgstr "News"
 
-msgid "Release 4.09 - 2014-12-29"
+msgid "Release 4.10 - 2015-01-29"
 msgstr ""
 
 msgid "Improvements"
 msgstr "Improvements"
+
+msgid ""
+"[storage] Supported static index construction in FULLTEXT INDEX comment with "
+"'table \"XXX\"'. ``DISABLE KEYS`` supports it. [Reported by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"[rpm][centos] Built with MySQL 5.6.22 on CentOS 7. [groonga-dev,03047] "
+"[Reported by Hiroshi Kagami]"
+msgstr ""
+
+msgid "[rpm][centos] Built with MariaDB 5.5.40-2 on CentOS 7."
+msgstr ""
+
+msgid ""
+"[storage][mysql56] Supported to report duplicated error for ``ADD UNIQUE "
+"INDEX``."
+msgstr ""
+
+msgid "Fixes"
+msgstr "Fixes"
+
+msgid ""
+"[storage] Fixed a bug that referenced table is accidentally removed on "
+"error. This means if index creation is failed such as ``FULLTEXT INDEX "
+"(...)`` against \"terms\" table, \"terms\" table can be removed on error."
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that duplicated entry is removed in unique index when "
+"duplicated error is occurred. [Reported by kazeburo]"
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that ``INSERT ON DUPLICATE KEY UPDATE`` is broken. "
+"This bug may change existing other records."
+msgstr ""
+
+msgid "Thanks"
+msgstr "Thanks"
+
+msgid "Naoya Murakami"
+msgstr "Naoya Murakami"
+
+msgid "Hiroshi Kagami"
+msgstr ""
+
+msgid "kazeburo"
+msgstr ""
+
+msgid "Release 4.09 - 2014-12-29"
+msgstr ""
 
 msgid "[rpm] Supported MySQL 5.6.22 on CentOS 6. [Reported by @oreradio]"
 msgstr ""
@@ -41,9 +93,6 @@ msgstr ""
 
 msgid "Supported referencing primary key value of auto created records."
 msgstr ""
-
-msgid "Thanks"
-msgstr "Thanks"
 
 msgid "@oreradio"
 msgstr ""
@@ -71,9 +120,6 @@ msgid ""
 "[storage] Added missing primary key check when primary key is required to "
 "specify. [groonga-dev,02963] [Reported by kashihara]"
 msgstr ""
-
-msgid "Fixes"
-msgstr "Fixes"
 
 msgid ""
 "[doc] Fixed nonexistent MySQL version. [groonga-dev,02899] [Reported by GMO "
@@ -159,9 +205,6 @@ msgstr ""
 msgid ""
 "[doc] Fixed markups about normalizer. [GitHub#32] [Patch by Naoya Murakami]"
 msgstr ""
-
-msgid "Naoya Murakami"
-msgstr "Naoya Murakami"
 
 msgid "Release 4.06 - 2014/09/29"
 msgstr ""
