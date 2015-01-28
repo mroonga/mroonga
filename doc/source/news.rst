@@ -14,25 +14,28 @@ Improvements
 ^^^^^^^^^^^^
 
 * [storage] Supported static index construction in FULLTEXT
-  INDEX comment with 'table "XXX"'. ``DISABLE KEYS`` supports it.
+  INDEX comment with ``'table "XXX"'``. Execute ``DISABLE KEYS``, then
+  ``DISABLE KEYS`` for static index construction.
   [Reported by Naoya Murakami]
 * [rpm][centos] Built with MySQL 5.6.22 on CentOS 7.
   [groonga-dev,03047] [Reported by Hiroshi Kagami]
 * [rpm][centos] Built with MariaDB 5.5.40-2 on CentOS 7.
 * [storage][mysql56] Supported to report duplicated error
-  for ``ADD UNIQUE INDEX``.
+  for ``ADD UNIQUE INDEX``. [Reported by kazeburo]
 
 Fixes
 ^^^^^
 
 * [storage] Fixed a bug that referenced table is accidentally
-  removed on error. This means if index creation is failed such
-  as ``FULLTEXT INDEX (...)`` against "terms" table, "terms"
+  removed on error. This means that index creation is failed for
+  FULLTEXT INDEX comment with ``'table "terms"'``, "terms"
   table can be removed on error.
 * [storage] Fixed a bug that duplicated entry is removed in unique index
-  when duplicated error is occurred. [Reported by kazeburo]
+  when duplicated error is occurred. This bug makes consistency of indexes broken,
+  so recommended to recreate existing indexes again after upgrading Mroonga. [Reported by kazeburo]
 * [storage] Fixed a bug that ``INSERT ON DUPLICATE KEY UPDATE`` is
-  broken. This bug may change existing other records.
+  broken. This bug may change existing other records by executing update fallback when
+  insert error occurred. [Reported by kazeburo]
 
 Thanks
 ^^^^^^
