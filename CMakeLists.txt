@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 #
-# Copyright(C) 2012-2014 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2015 Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
@@ -124,7 +124,7 @@ else()
   set(MRN_RELATIVE_DIR_PREFIX "")
 endif()
 
-read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/sources.am MROONGA_SOURCES)
+read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/sources.am MRN_SOURCES)
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_no_mysql_sources.am
   LIBMRN_NO_MYSQL_SOURCES)
 string(REGEX REPLACE "([^;]+)" "${MRN_RELATIVE_DIR_PREFIX}lib/\\1"
@@ -255,12 +255,12 @@ link_directories(
 if(MRN_BUNDLED)
   if(GROONGA_NORMALIZER_MYSQL_FOUND)
     mysql_add_plugin(mroonga
-      "${MROONGA_SOURCES};${MRN_UDF_SOURCES};${MRN_GRN_NORMALIZER_MYSQL_SOURCES};${LIBMRN_NEED_MYSQL_SOURCES};${LIBMRN_NO_MYSQL_SOURCES}"
+      "${MRN_SOURCES};${MRN_UDF_SOURCES};${MRN_GRN_NORMALIZER_MYSQL_SOURCES};${LIBMRN_NEED_MYSQL_SOURCES};${LIBMRN_NO_MYSQL_SOURCES}"
       STORAGE_ENGINE MODULE_ONLY
       LINK_LIBRARIES ${GROONGA_LIBRARIES})
   else()
     mysql_add_plugin(mroonga
-      "${MROONGA_SOURCES};${MRN_UDF_SOURCES};${LIBMRN_NEED_MYSQL_SOURCES};${LIBMRN_NO_MYSQL_SOURCES}"
+      "${MRN_SOURCES};${MRN_UDF_SOURCES};${LIBMRN_NEED_MYSQL_SOURCES};${LIBMRN_NO_MYSQL_SOURCES}"
       STORAGE_ENGINE MODULE_ONLY
       LINK_LIBRARIES ${GROONGA_LIBRARIES})
   endif()
@@ -275,7 +275,7 @@ if(MRN_BUNDLED)
   endif()
 else()
   add_library(mroonga MODULE
-    ${MROONGA_SOURCES}
+    ${MRN_SOURCES}
     ${MRN_UDF_SOURCES}
     ${LIBMRN_NO_MYSQL_SOURCES}
     ${LIBMRN_NEED_MYSQL_SOURCES})
@@ -325,7 +325,7 @@ else()
     mrn_check_cxxflag("-fno-rtti")
     mrn_check_cxxflag("-felide-constructors")
   endif()
-  set_source_files_properties(${MROONGA_SOURCES} PROPERTIES
+  set_source_files_properties(${MRN_SOURCES} PROPERTIES
     COMPILE_FLAGS "${MYSQL_CFLAGS} ${MRN_CXX_COMPILE_FLAGS}")
   set_source_files_properties(${LIBMRN_NEED_MYSQL_SOURCES} PROPERTIES
     COMPILE_FLAGS "${MYSQL_CFLAGS} ${MRN_CXX_COMPILE_FLAGS}")
