@@ -221,11 +221,6 @@ if(MRN_GROONGA_BUNDLED)
   else()
     set(GROONGA_NORMALIZER_MYSQL_FOUND FALSE)
   endif()
-  if(GROONGA_NORMALIZER_MYSQL_FOUND)
-    read_file_list(${MRN_BUNDLED_GROONGA_DIR}/vendor/plugins/groonga-normalizer-mysql/normalizers/mysql_sources.am MRN_GRN_NORMALIZER_MYSQL_SOURCES)
-    string(REGEX REPLACE "([^;]+)" "${MRN_BUNDLED_GROONGA_DIR}/vendor/plugins/groonga-normalizer-mysql/normalizers/\\1"
-      MRN_GRN_NORMALIZER_MYSQL_SOURCES "${MRN_GRN_NORMALIZER_MYSQL_SOURCES}")
-  endif()
 else()
   include(FindPkgConfig)
   pkg_check_modules(GROONGA REQUIRED "groonga >= ${REQUIRED_GROONGA_VERSION}")
@@ -254,6 +249,9 @@ link_directories(
 
 if(MRN_BUNDLED)
   if(GROONGA_NORMALIZER_MYSQL_FOUND)
+    read_file_list(${MRN_BUNDLED_GROONGA_DIR}/vendor/plugins/groonga-normalizer-mysql/normalizers/mysql_sources.am MRN_GRN_NORMALIZER_MYSQL_SOURCES)
+    string(REGEX REPLACE "([^;]+)" "${MRN_BUNDLED_GROONGA_DIR}/vendor/plugins/groonga-normalizer-mysql/normalizers/\\1"
+      MRN_GRN_NORMALIZER_MYSQL_SOURCES "${MRN_GRN_NORMALIZER_MYSQL_SOURCES}")
     mysql_add_plugin(mroonga
       "${MRN_SOURCES};${MRN_UDF_SOURCES};${MRN_GRN_NORMALIZER_MYSQL_SOURCES};${LIBMRN_NEED_MYSQL_SOURCES};${LIBMRN_NO_MYSQL_SOURCES}"
       STORAGE_ENGINE MODULE_ONLY
