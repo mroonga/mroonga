@@ -3016,9 +3016,9 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     if (key_parts == 1) {
       grn_obj *normalizer = NULL;
       if (tmp_share->normalizer) {
-        normalizer =  grn_ctx_get(ctx,
-                                  tmp_share->normalizer,
-                                  tmp_share->normalizer_length);
+        normalizer = grn_ctx_get(ctx,
+                                 tmp_share->normalizer,
+                                 tmp_share->normalizer_length);
       } else {
         Field *field = &(key_info.key_part->field[0]);
         if (should_normalize(field)) {
