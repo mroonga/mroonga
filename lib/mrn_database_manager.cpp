@@ -26,6 +26,8 @@
 #include "mrn_lock.hpp"
 #include "mrn_path_mapper.hpp"
 
+#include <groonga/plugin.h>
+
 // for debug
 #define MRN_CLASS_NAME "mrn::DatabaseManager"
 
@@ -37,6 +39,11 @@
 #  include <unistd.h>
 #  define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
 #endif
+
+extern "C" {
+  grn_rc GRN_PLUGIN_IMPL_NAME_TAGGED(init, normalizers_mysql)(grn_ctx *ctx);
+  grn_rc GRN_PLUGIN_IMPL_NAME_TAGGED(register, normalizers_mysql)(grn_ctx *ctx);
+}
 
 namespace mrn {
   DatabaseManager::DatabaseManager(grn_ctx *ctx, mysql_mutex_t *mutex)
@@ -311,7 +318,12 @@ namespace mrn {
       if (mysql_normalizer) {
         grn_obj_unlink(ctx_, mysql_normalizer);
       } else {
+#  ifdef MRN_GROONGA_NORMALIZER_MYSQL_EMBED
+        GRN_PLUGIN_IMPL_NAME_TAGGED(init, normalizers_mysql)(ctx_);
+        GRN_PLUGIN_IMPL_NAME_TAGGED(register, normalizers_mysql)(ctx_);
+#  else
         grn_plugin_register(ctx_, GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME);
+#  endif
       }
     }
 #endif
