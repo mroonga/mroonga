@@ -10,6 +10,28 @@ News
 Release 4.10 - 2015-01-29
 -------------------------
 
+This release has a bug fix for unique index. If you're using unique
+index in storage mode, your data may be broken. If you're using unique
+index in storage mode, we recommend to upgrade to this version and
+re-create your unique indexes.
+
+Here are SQL statements to re-create your indexes including unique
+indexes::
+
+    ALTER TABLE ${YOUR_TABLE} DISABLE KEYS;
+    ALTER TABLE ${YOUR_TABLE} ENABLE KEYS;
+
+You may get "duplicated record" error on ``ENABLE KEYS``. If you get
+the error, please confirm your data carefully and fix the duplication.
+
+Here are broken data scenario:
+
+  * An unique index is created.
+  * Insert data.
+  * Insert duplicated data. It's reported as an error.
+  * Insert duplicated data again. It can be inserted. It breaks unique
+    consistency.
+
 Improvements
 ^^^^^^^^^^^^
 

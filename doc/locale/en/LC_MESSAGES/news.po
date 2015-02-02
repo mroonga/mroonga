@@ -23,6 +23,47 @@ msgstr "News"
 msgid "Release 4.10 - 2015-01-29"
 msgstr ""
 
+# d356c113c9aa4e9c950b6519f9dec20b
+msgid ""
+"This release has a bug fix for unique index. If you're using unique index in "
+"storage mode, your data may be broken. If you're using unique index in "
+"storage mode, we recommend to upgrade to this version and re-create your "
+"unique indexes."
+msgstr ""
+
+# 6b64f288f348417e968261c0c2710738
+msgid ""
+"Here are SQL statements to re-create your indexes including unique indexes::"
+msgstr ""
+
+# f2663787cdb741fba10e10200ccd0d00
+msgid ""
+"You may get \"duplicated record\" error on ``ENABLE KEYS``. If you get the "
+"error, please confirm your data carefully and fix the duplication."
+msgstr ""
+
+# 7ada7b924e7c4131ad7a9118ea62b7fc
+msgid "Here are broken data scenario:"
+msgstr ""
+
+# 4e07a0d45a944206abaf6703297d93b4
+msgid "An unique index is created."
+msgstr ""
+
+# 9d3acfe18ad8417db2421c85aa40f85f
+msgid "Insert data."
+msgstr ""
+
+# d6538dfbb2394f2a8b1c0467bd6933ff
+msgid "Insert duplicated data. It's reported as an error."
+msgstr ""
+
+# c700ead0b21341bea84875cc05c676bc
+msgid ""
+"Insert duplicated data again. It can be inserted. It breaks unique "
+"consistency."
+msgstr ""
+
 msgid "Improvements"
 msgstr "Improvements"
 

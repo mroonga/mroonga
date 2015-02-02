@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-01-28 18:08+0900\n"
+"PO-Revision-Date: 2015-02-02 18:33+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -22,6 +22,58 @@ msgstr "お知らせ"
 
 msgid "Release 4.10 - 2015-01-29"
 msgstr "4.10リリース - 2015-01-29"
+
+# acdc379a48eb4d6182cb255d35ed399b
+msgid ""
+"This release has a bug fix for unique index. If you're using unique index in "
+"storage mode, your data may be broken. If you're using unique index in "
+"storage mode, we recommend to upgrade to this version and re-create your "
+"unique indexes."
+msgstr ""
+"このリリースにはユニークインデックスのバグ修正が含まれています。もし、スト"
+"レージモードでユニークインデックスを使っている場合はデータが壊れている可能性"
+"があります。ストレージモードでユニークインデックスを使っている場合はこのバー"
+"ジョンへアップグレードし、アップグレード後にユニークインデックスを再構築する"
+"ことをオススメします。"
+
+# dfa63413fca0441aac503ffde3787aae
+msgid ""
+"Here are SQL statements to re-create your indexes including unique indexes::"
+msgstr ""
+"ユニークインデックスを含むすべてのインデックスを再構築するSQL文は次の通りで"
+"す。::"
+
+# fc46e889fb8e46228e37f4b7b36f268b
+msgid ""
+"You may get \"duplicated record\" error on ``ENABLE KEYS``. If you get the "
+"error, please confirm your data carefully and fix the duplication."
+msgstr ""
+"``ENABLE KEYS`` をしたときに「レコードが重複している」というエラーがでるかも"
+"しれません。もし、このエラーがでた場合は、データを確認の上、重複を解消してく"
+"ださい。"
+
+# 6892213321104bd4aa075b3109cf9fe3
+msgid "Here are broken data scenario:"
+msgstr "次のようなケースがあった場合、前述のようにデータが壊れます。"
+
+# f574aa5f69b9481dbc1a9a7574b5ec09
+msgid "An unique index is created."
+msgstr "ユニークインデックスを作成する。"
+
+# 4a472fcf0ec14d2abe1df257356fb7ff
+msgid "Insert data."
+msgstr "データを挿入する。"
+
+# 7fb1fb760d5a425a94647262174ff838
+msgid "Insert duplicated data. It's reported as an error."
+msgstr "重複したデータを挿入する。エラーが報告される。"
+
+# 08a6196a61f949b79a3d8c10b3fec155
+msgid ""
+"Insert duplicated data again. It can be inserted. It breaks unique "
+"consistency."
+msgstr ""
+"再度重複したデータを挿入する。エラーなく重複したデータが挿入できてしまう。"
 
 msgid "Improvements"
 msgstr "改良"
