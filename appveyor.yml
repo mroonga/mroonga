@@ -7,7 +7,7 @@ install:
   - 7z x mariadb-10.0.16.tar.gz
   - 7z x mariadb-10.0.16.tar
   - cd mariadb-10.0.16
-  - del /Q storage\mroonga
+  - del /Q storage\mroonga\
   - dir storage
   - dir storage\mroonga
   - copy ..\mroonga storage\mroonga
