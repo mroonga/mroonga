@@ -11,6 +11,7 @@ install:
   - move ..\mroonga storage\mroonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga.git ..\groonga
   - rmdir /S /Q ..\groonga\test\
+  - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
 build_script:
