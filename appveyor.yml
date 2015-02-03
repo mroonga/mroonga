@@ -8,7 +8,8 @@ install:
   - dir C:\
   - dir "C:\Program Files"
   - dir "C:\Program Files (x86)"
-  - peazip -ext2here mariadb-10.0.16.tar.gz
+  - dir "C:\Program Files\PeaZip"
+  - '"C:\Program Files\PeaZip\peazip.exe" -ext2here mariadb-10.0.16.tar.gz'
   - cd mariadb-10.0.16
   - del storage\mroonga
   - move ..\mroonga storage
