@@ -8,9 +8,7 @@ install:
   - 7z x mariadb-10.0.16.tar
   - cd mariadb-10.0.16
   - rmdir /S /Q storage\mroonga\
-  - dir storage
-  - dir storage\mroonga
-  - copy ..\mroonga storage\mroonga
+  - move ..\mroonga storage\mroonga
   - git clone --depth 1 https://github.com/groonga/groonga.git storage\mroonga\vendor\groonga
   - git clone --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
 build_script:
