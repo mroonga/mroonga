@@ -2,14 +2,9 @@ version: "{build}"
 clone_depth: 1
 install:
   - cd ..
-  - choco install curl peazip
+  - choco install curl 7z.commandline
   - curl -O http://mirror.jmu.edu/pub/mariadb/mariadb-10.0.16/source/mariadb-10.0.16.tar.gz
-  - set PATH="C:\Program Files\PeaZip;%PATH%"
-  - dir C:\
-  - dir "C:\Program Files"
-  - dir "C:\Program Files (x86)"
-  - dir "C:\Program Files\PeaZip"
-  - '"C:\Program Files\PeaZip\peazip.exe" -ext2here mariadb-10.0.16.tar.gz'
+  - 7z x mariadb-10.0.16.tar.gz
   - cd mariadb-10.0.16
   - del storage\mroonga
   - move ..\mroonga storage
