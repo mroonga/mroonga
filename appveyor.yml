@@ -9,8 +9,11 @@ install:
   - cd mariadb-10.0.16
   - rmdir /S /Q storage\mroonga\
   - move ..\mroonga storage\mroonga
-  - git clone --depth 1 https://github.com/groonga/groonga.git storage\mroonga\vendor\groonga
-  - git clone --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
+  - git clone --depth 1 https://github.com/groonga/groonga.git ..\
+  - rmdir /S /A ..\groonga\test\
+  - move ..\groonga storage\mroonga\vendor\
+  - git clone --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git ..\
+  - move ..\groonga-normalizer-mysql storage\mroonga\vendor\groonga\vendor\plugins\
 build_script:
   - cmake . -G "Visual Studio 12"
   - cmake --build . --config RelWithDebInfo
