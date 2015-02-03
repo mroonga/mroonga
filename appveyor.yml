@@ -5,6 +5,7 @@ install:
   - choco install curl 7zip.commandline
   - curl -O http://mirror.jmu.edu/pub/mariadb/mariadb-10.0.16/source/mariadb-10.0.16.tar.gz
   - 7z x mariadb-10.0.16.tar.gz
+  - 7z x mariadb-10.0.16.tar
   - cd mariadb-10.0.16
   - del storage\mroonga
   - move ..\mroonga storage
