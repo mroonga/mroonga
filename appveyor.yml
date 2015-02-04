@@ -15,7 +15,7 @@ install:
   - move ..\groonga storage\mroonga\vendor\groonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
 build_script:
-  - "type # > win\\packaging\\CMakeLists.txt"
+  - "echo # > win\\packaging\\CMakeLists.txt"
   - cmake . -G "Visual Studio 12 Win64"
   - cmake --build . --config RelWithDebInfo
 
