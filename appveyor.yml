@@ -17,6 +17,7 @@ install:
 build_script:
   - "echo # > win\\packaging\\CMakeLists.txt"
   - cmake . -G "Visual Studio 12 Win64"
+      -DCMAKE_BUILD_TYPE=Debug
       -DWITHOUT_ARCHIVE=ON
       -DWITHOUT_BLACKHOLE=ON
       -DWITHOUT_CASSANDRA=ON
@@ -38,7 +39,7 @@ build_script:
       -DWITHOUT_TOKUDB=ON
       -DWITHOUT_XTRADB=ON
       -DWITH_UNIT_TESTS=OFF
-  - cmake --build . --config RelWithDebInfo
+  - cmake --build . --config Debug
 
 notifications:
   - provider: Email
