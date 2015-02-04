@@ -17,6 +17,26 @@ install:
 build_script:
   - "echo # > win\\packaging\\CMakeLists.txt"
   - cmake . -G "Visual Studio 12 Win64"
+      -DWITHOUT_ARCHIVE=1
+      -DWITHOUT_BLACKHOLE=1
+      -DWITHOUT_CASSANDRA=1
+      -DWITHOUT_CONNECT=1
+      -DWITHOUT_CSV=1
+      -DWITHOUT_EXAMPLE=1
+      -DWITHOUT_FEDERATED=1
+      -DWITHOUT_FEDERATEDX=1
+      -DWITHOUT_HEAP=1
+      -DWITHOUT_MYISAM=1
+      -DWITHOUT_MYISAMMRG=1
+      -DWITHOUT_NDB=1
+      -DWITHOUT_OPGRAPH=1
+      -DWITHOUT_PERFSCHEMA=1
+      -DWITHOUT_SEQUENCE=1
+      -DWITHOUT_SPHINX=1
+      -DWITHOUT_SPIDER=1
+      -DWITHOUT_TEST_SQL_DISCOVERY=1
+      -DWITHOUT_TOKUDB=1
+      -DWITHOUT_XTRADB=1
   - cmake --build . --config RelWithDebInfo
 
 notifications:
