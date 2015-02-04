@@ -1,7 +1,5 @@
 version: "{build}"
 clone_depth: 1
-environment:
-  VisualStudio: 10.0
 install:
   - cd ..
   - choco install curl 7zip.commandline
@@ -17,7 +15,8 @@ install:
   - move ..\groonga storage\mroonga\vendor\groonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
 build_script:
-  - cmake . -G "Visual Studio 10 Win64"
+  - "type # > win\\packaging\\CMakeLists.txt"
+  - cmake . -G "Visual Studio 12 Win64"
   - cmake --build . --config RelWithDebInfo
 
 notifications:
