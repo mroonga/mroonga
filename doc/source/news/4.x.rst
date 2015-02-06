@@ -1,0 +1,397 @@
+.. highlightlang:: none
+
+.. _release-4-10:
+
+Release 4.10 - 2015-01-29
+-------------------------
+
+This release has a bug fix for unique index. If you're using unique
+index in storage mode, your data may be broken. If you're using unique
+index in storage mode, we recommend to upgrade to this version and
+re-create your unique indexes.
+
+Here are SQL statements to re-create your indexes including unique
+indexes::
+
+    ALTER TABLE ${YOUR_TABLE} DISABLE KEYS;
+    ALTER TABLE ${YOUR_TABLE} ENABLE KEYS;
+
+You may get "duplicated record" error on ``ENABLE KEYS``. If you get
+the error, please confirm your data carefully and fix the duplication.
+
+Here are broken data scenario:
+
+  * An unique index is created.
+  * Insert data.
+  * Insert duplicated data. It's reported as an error.
+  * Insert duplicated data again. It can be inserted. It breaks unique
+    consistency.
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage] Supported static index construction in FULLTEXT
+  INDEX comment with ``'table "XXX"'``. Execute ``DISABLE KEYS``, then
+  ``ENABLE KEYS`` for static index construction.
+  [Reported by Naoya Murakami]
+* [rpm][centos] Built with MySQL 5.6.22 on CentOS 7.
+  [groonga-dev,03047] [Reported by Hiroshi Kagami]
+* [rpm][centos] Built with MariaDB 5.5.40-2 on CentOS 7.
+* [storage][mysql56] Supported to report duplicated error
+  for ``ADD UNIQUE INDEX``. [Reported by kazeburo]
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that referenced table is accidentally
+  removed on error. This means that index creation is failed for
+  FULLTEXT INDEX comment with ``'table "terms"'``, "terms"
+  table can be removed on error.
+* [storage] Fixed a bug that duplicated entry is removed in unique index
+  when duplicated error is occurred. This bug makes consistency of indexes broken,
+  so recommended to recreate existing indexes again after upgrading Mroonga. [Reported by kazeburo]
+* [storage] Fixed a bug that ``INSERT ON DUPLICATE KEY UPDATE`` is
+  broken. This bug may change existing other records by executing update fallback when
+  insert error occurred. [Reported by kazeburo]
+
+Thanks
+^^^^^^
+
+* Naoya Murakami
+* Hiroshi Kagami
+* kazeburo
+
+.. _release-4-09:
+
+Release 4.09 - 2014-12-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm] Supported MySQL 5.6.22 on CentOS 6.
+  [Reported by @oreradio]
+* Added :ref:`mroonga_boolean_mode_syntax_flags` that custom syntax in
+  ``MATCH () AGAINST ('...' IN BOOLEAN MODE)``.
+* Supported no normalizer ``FULLTEXT INDEX`` by specifying ``none`` as
+  normalizer such as ``FULLTEXT INDEX (...) COMMENT 'normalizer
+  "none"'``.
+* Supported referencing primary key value of auto created records.
+
+Thanks
+^^^^^^
+
+* @oreradio
+
+.. _release-4-08:
+
+Release 4.08 - 2014/11/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [deb] Supported Ubuntu 12.04 again for Travis-CI.
+* [test] Added script which checks performance schema.
+  [Patch by Elena Stepanova]
+* [rpm] Supported MySQL 5.5.40 on CentOS 6 and 7.
+  [groonga-dev,02955] [Reported Noboru Nishiyama]
+* [doc] Added :doc:`/reference/limitations` about column size.
+* [storage] Added missing primary key check when primary key
+  is required to specify.
+  [groonga-dev,02963] [Reported by kashihara]
+
+Fixes
+^^^^^
+
+* [doc] Fixed nonexistent MySQL version. [groonga-dev,02899]
+  [Reported by GMO Media, Inc.]
+* [doc] Removed needless SCL related install description for CentOS 5.
+* [doc] Use ``service`` command to start MySQL on CentOS 5 and 6.
+* [doc] Use ``systemctl`` command to start MySQL on CentOS 7.
+
+Thanks
+^^^^^^
+
+* GMO Media, Inc.
+* Elena Stepanova
+* Noboru Nishiyama
+* kashihara
+
+.. _release-4-07:
+
+Release 4.07 - 2014/10/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage] Changed to treat deprecated ``INSERT DELAYED`` as error. [GitHub#20] [MDEV#6837] [Reported by Elena Stepanova]
+* [storage][mariadb10] Added proper error message for duplicated entries on adding an unique index.
+  [GitHub#19] [Reported by Elena Stepanova]
+* [cmake] Removed needless status message for compiler flag checks [GitHub#22]
+* Supported token filter in table/index comment for wrapper/storage mode.
+  [GitHub#25] [Patch by Naoya Murakami]
+* [mroonga_command] Improved to need not to know whether Groonga database already exists
+  before executing mroonga_command. In the previous versions, you must prepare table which use Mroonga.
+* [storage] Supported to specify normalizer in table comment.
+  [GitHub#27] [Patch by Naoya Murakami]
+* [storage] Supported column compression flag (``COMPRESS_LZ4``, ``COMPRESS_ZLIB``).
+  [GitHub#32] [Patch by Naoya Murakami]
+* Added :ref:`mroonga_libgroonga_support_lz4` and :ref:`mroonga_libgroonga_support_zlib`
+  system variables. [GitHub#33,#34,#35] [Patch by Naoya Murakami]
+* Dropped MySQL 5.1 support.
+
+Fixes
+^^^^^
+
+* [storage][mariadb10] Fixed a crash bug that it doesn't properly locked.
+  [GitHub#18] [Reported by Elena Stepanova]
+* [storage] Fixed overflow about signed tinyint. [GitHub#29]
+* [doc] Fixed markups about normalizer. [GitHub#32] [Patch by Naoya Murakami]
+
+Thanks
+^^^^^^
+
+* Elena Stepanova
+* Naoya Murakami
+
+.. _release-4-06:
+
+Release 4.06 - 2014/09/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [doc] Added more details about Groonga's development package.
+* [doc] Changed to recommend GitHub issue tracker.
+* [deb] Dropped Debian jessie and sid support.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that no record returns with multiple column index.
+  This bug occurs when it meets two conditions. First, columns indexed by
+  multiple column index are used in order and WHERE clause. Second,
+  a column indexed by multiple column index but it's no the first column is
+  used in ORDER by clause.
+  [#2651] [Reported by foamcentime, Naoya Murakami]
+
+Thanks
+^^^^^^
+
+* foamcentime
+* Naoya Murakami
+
+.. _release-4-05:
+
+Release 4.05 - 2014/08/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Dropped Ubuntu 13.10 Saucy Salamander support.
+* Added new variable :ref:`mroonga_vector_column_delimiter`.
+  It is used to change delimiter of vector column.
+  [GitHub#16] [Patch by Naoya Murakami]
+* [rpm][centos] Supported MySQL 5.6 official repository packages on CentOS 6/7.
+  Use mysql56-community-mroonga package. [Patch by miko]
+* [doc] Moved document about upgrading which is included in install document.
+  Now, you can refer it as :doc:`/upgrade`.
+* Supported MariaDB 10.0.13.
+* [rpm][centos] Supported CentOS 7 as mariadb-mroonga package. It uses
+  the bundled MariaDB.
+  [groonga-dev,02604] [Tested by Miyawaki][Tested by Kawada]
+
+Fixes
+^^^^^
+
+* [doc] Fixed wrong MySQL version about news of Mroonga 4.04. [Reported by _so4]
+* [doc] Removed needless explicit install procedure for groonga-normalizer-mysql package.
+* [storage] Fixed a bug that value remains in unique index on duplicated primary key error.
+  [groonga-dev,02633] [Reported by 6elz]
+* [doc] Fixed a bug that building document in other directory fails.
+  [groonga-dev,02652] [Reported by cosmo0920]
+* Changed to use "Mroonga" form for engine name.
+* [storage] Fixed a bug that table specified index (``COMMENT 'table "XXX"'``)
+  can't be removed. [groonga-dev,02677] [Reported by Naoya Murakami]
+
+
+Thanks
+^^^^^^
+
+* _so4
+* Naoya Murakami
+* miko
+* 6elz
+* cosmo0920
+* Miyawaki
+* Kawada
+
+.. _release-4-04:
+
+Release 4.04 - 2014/07/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Removed Groonga and groonga-normalizer-mysql specific test files for
+  MariaDB bundled version on Windows. There is too long file name issue.
+  [groonga-dev,02391] [Reported by Masafumi Yokoyama]
+* [doc] Updated :doc:`/developer`.
+* Added overflow/underflow check whether valid time to find errors on 32-bit
+  environment. [Patch by Toshihisa Tashiro]
+* [storage] Supproted INPLACE ALTER TABLE for adding/dropping columns.
+  [#2277] [GitHub#12] [Patch by Naoya Murakami]
+
+Fixes
+^^^^^
+
+* [rpm][centos] Built with MySQL 5.5.37 on CentOS.
+  [Reported by YOSHIDA Mitsuo]
+* Fixed to use lowercase for table name to avoid  lower/upper-case specific
+  issue on Mac OS. [Patch by Toshihisa Tashiro]
+* Fixed build error for VC++ 2013 [GitHub#10] [Patch by cosmo0920]
+* [doc] Added missing quote for install procedure on CentOS6 SCL.
+  [GitHub#11] [Patch by Naoya Murakami]
+* [storage] Fixed a bug that renaming column by ALTER TABLE CHANGE
+  causes crash. [#2637]
+
+Thanks
+^^^^^^
+
+* YOSHIDA Mitsuo
+* Masafumi Yokoyama
+* Toshihisa Tashiro
+* cosmo0920
+* Naoya Murakami
+
+.. _release-4-03:
+
+Release 4.03 - 2014/05/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [doc] Updated MariaDB version. [Patch by cosmo0920]
+* Supported daylight saving time. [#2385]
+* Migrated Ubuntu package distribution site to PPA on Launchpad.
+  See :doc:`/install` for details.
+
+Fixes
+^^^^^
+
+* [doc] Fixed command line in :doc:`/install`. [Reported by YOSHIDA Mitsuo]
+
+Thanks
+^^^^^^
+
+* cosmo0920
+* YOSHIDA Mitsuo
+
+.. _release-4-02:
+
+Release 4.02 - 2014/04/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MariaDB 10.0.10 [#2460] [Reported by Kazuhiko Shiozaki]
+* Supported MySQL 5.6.17.
+* Supported Ubuntu 14.04 LTS Trusty Tahr.
+* Enabled MariaDB bundled build.
+* Dropped Ubuntu 12.10 Quantal Quetzal support.
+* [doc] Updated MySQL version. [GitHub#8] [Patch by cosmo0920]
+
+Fixes
+^^^^^
+
+* [storage] Stopped to use truncate for ``DELETE FROM table``.
+  [groonga-dev,02222] [Reported by GMO Media, Inc.]
+* [wrapper] Stopped to use truncate for ``DELETE FROM table``.
+* [storage] Fixed a bug that inplace alter table with no primary key
+  crashes. [groonga-dev,02227] [Reported by GMO Media, Inc.]
+* [storage] Fixed a bug that ``ORDER BY function(vector_reference_column)``
+  doesn't work.
+  [groonga-dev,02234] [Reported by Naoya Murakami]
+* Fixed a bug that setting the current value to ``mroonga_default_parser``
+  or ``mroonga_log_file`` crash.
+  [GitHub#6] [Patch by Satoshi MITANI]
+* Fixed a bug that ``mroonga_lock_timeout`` in my.cnf or command line option
+  is ignored.
+  [GitHub#7] [Patch by GMO Media, Inc.]
+* Fixed a bug that deleting by primary key doesn't update unique index.
+  [groonga-dev,02244] [Reported by Akihiro Tsukui]
+
+Thanks
+^^^^^^
+
+* Kazuhiko Shiozaki
+* GMO Media, Inc.
+* Naoya Murakami
+* Satoshi MITANI
+* Akihiro Tsukui
+* cosmo0920
+
+.. _release-4-01:
+
+Release 4.01 - 2014/03/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MariaDB 10.0.9 [#2387] [Reported by Kazuhiko Shiozaki]
+* Supported ten or more sections in W pragma [#2348] [groonga-dev,02138]
+  [Reported by yoku0825]
+* [rpm][centos] Supported SCL MySQL package on CentOS 6.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that ALTER TABLE with fulltext index which refer to table causes mysqld crash.
+  [#2327] [groonga-dev,02130] [Reported by Naoya Murakami]
+* [doc] Fixed to use Mroonga/Groonga (capitalized notation) in characteristics document.
+  [GitHub#5] [Patch by Naoya Murakami]
+
+Thanks
+^^^^^^
+
+* yoku0825
+* Naoya Murakami
+* Kazuhiko Shiozaki
+
+.. _release-4-00:
+
+Release 4.00 - 2014/02/09
+-------------------------
+
+* Bump version to 4.00! We recommend to upgrade because crash bug and updating issue are fixed now!
+
+Improvements
+^^^^^^^^^^^^
+
+* Dropped Ubuntu 13.04 (Raring Ringtail) support.
+* [storage] Supported to search with empty string.
+  [#2214] [groonga-dev,02052] [Reported by Naoya Murakami]
+
+Fixes
+^^^^^
+
+* Fixed a crash bug that bulk inserting null value into geometry column which has NOT NULL constraint.
+  [#2281] [groonga-dev,02095] [Reported by yoku]
+* [storage] Fixed a bug that existing records may be unexectedlly removed by ON DUPLICATE KEY
+  UPDATE. In the previous versions, such a query can't update the value of column correctly.
+  [#2263] [Reported Masahiro Nagano]
+
+Thanks
+^^^^^^
+
+* yoku
+* Naoya Murakami
+* Masahiro Nagano
