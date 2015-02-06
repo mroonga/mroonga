@@ -1,0 +1,599 @@
+.. highlightlang:: none
+
+.. _release-2-10:
+
+Release 2.10 - 2012/12/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported to use ENABLE KEYS/DISABLE KEYS against table whose charset is
+  different from system charset. [Reported by @kokoronavi]
+* Improved to show the value of duplicated key on error message.
+* Supported MySQL 5.6.9-rc. [#1547] [#1548] [Reported by wing]
+* [storage] Supported to use ``GROUP BY`` with index.
+  This change improves search speed against ``GROUP BY``.
+* Dropped Ubuntu 11.04 (Natty Narwhal) support.
+
+Fixes
+^^^^^
+
+* [rpm][centos] Fixed to use MySQL 5.1.66-2 on CentOS 6. [Reported by @wakisuke.ua]
+* Fixed a bug that ``MATCH AGAINST`` with ``INNER JOIN`` syntax causes an error.
+  [Reported by ooshiro]
+
+Thanks
+^^^^^^
+
+* @kokoronavi
+* @wakisuke.ua
+* wing
+* ooshiro
+
+.. _release-2-09:
+
+Release 2.09 - 2012/11/29
+-------------------------
+
+.. caution::
+
+   This release has backward incompatible changes against ``TIMESTAMP``
+   value and primary indexed char(N).
+
+   ``TIMESTAMP`` value is changed to store as UTC timezone.
+   If you have any table that uses ``TIMESTAMP`` column with no UTC timezone,
+   please recreate (dump and restore) database.
+
+   If you have any table that uses char(N) as primary key,
+   please recreate index.
+
+   Here is a procedure how to recreate database or recreate index.
+
+Dump a database that uses mroonga::
+
+  % mysqldump MY_MROONGA_DATABASE > database-mroonga.dump
+
+Restore a database by modified dump file::
+
+  % mysql -u root MY_MROONGA_DATABASE < database-mroonga.dump
+
+Recreate a index::
+
+   mysql> ALTER TABLE table_name DROP PRIMARY KEY;
+   mysql> ALTER TABLE table_name ADD PRIMARY KEY(column_name);
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm][centos] Supported MySQL 5.5.28 on CentOS 5.
+* [rpm][centos] Supported MySQL 5.1.61 on CentOS 6.
+* [wrapper mode] Supported last_insert_id() [#1540] [Reported by @soundkitchen]
+
+Fixes
+^^^^^
+
+* [mysql51] Fixed crash bug by checking existence of utf8mb4.
+  MySQL 5.1 doesn't have utf8mb4. [groonga-dev,01069] [Reported by wakisuke]
+* [storage mode] Fixed impossible deleting problem that matched records.
+  [#1533] [Reported by @HANZUBON]
+* Fixed a bug that primary indexed char(N) can't be searched.
+  This bug affects if any value of char(N) has M-length (M < N) string or
+  it has one more spaces at the last and require index recreation.
+* Fixed a bug that content after NULL character is ignored for char(N)
+* Fixed to store ``TIMESTAMP`` value as UTC timezone.
+  This is backward incompatible change.
+
+Thanks
+^^^^^^
+
+* @soundkitchen
+* wakisuke
+* @HANZUBON
+
+.. _release-2-08:
+
+Release 2.08 - 2012/10/29
+-------------------------
+
+.. caution::
+
+   This release has a backward incompatible change against multiple
+   column index. If you have any tables that uses
+   any multiple comlumn indexes against VARCHAR or CHAR,
+   please recreate those indexes by ``ALTER TABLE DISABLE KEYS``
+   and ``ALTER TABLE ENBALE KEYS``::
+
+     mysql> ALTER TABLE table_name DISABLE KEYS;
+     mysql> ALTER TABLE table_name ENABLE KEYS;
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage mode] Supported ``INFORMATION_SCHEMA.TABLES.DATA_LENGTH``.
+  [Suggested by @9m]
+* Supported utf8mb4. [groonga-dev,01049] [Reported by warp kawada]
+* Supported Ubuntu 12.10 (Quantal Quetzal)
+* [rpm][fedora] Supported MySQL 5.5.28.
+
+Fixes
+^^^^^
+
+* [storage mode] Fixed unique judge problem of multiple column unique index
+  with date column. [groonga-dev,01041] [#1495] [Reported by jd fonc]
+* Fixed a bug that ``WHERE index < XXX ORDER BY DESC`` doesn't sort by descending.
+  [Reported by @taro252]
+* [rpm] Fixed missing ``DROP FUNCTION mroonga_snippet``.
+  [Reported by @tokuhy]
+* Fixed range search by multi column index by int.
+* [doc] Fixed wrong command line operation during build process.
+  [groonga-dev,01061] [Reported by Kazuhiro Isobe]
+
+Thanks
+^^^^^^
+
+* @9m
+* warp kawada
+* jd fonc
+* @taro252
+* @tokuhy
+* Kazuhiro Isobe
+
+.. _release-2-07:
+
+Release 2.07 - 2012/09/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [deb] Enabled AppArmor configuration for MeCab. [Reported by @Qurage]
+* [storage mode][experimental] Added mroonga_snippet() function. [#1442]
+
+Fixes
+^^^^^
+
+* [rpm] Fixed ``groonga_required_version``. [groonga-dev,01033] [Reported by wing]
+* Fixed datetime out of range problems. [groonga-dev,01035] [#1476]
+  [Reported by Nakatani Munetaka]
+
+Thanks
+^^^^^^
+
+* @Qurage
+* wing
+* Nakatani Munetaka
+
+.. _release-2-06:
+
+Release 2.06 - 2012/08/29
+-------------------------
+
+.. caution::
+
+   This release has a backward compatibility about a database.
+   But this release depends on new functionality introduced at groonga 2.0.6.
+   Note that you must use mroonga 2.06 with groonga 2.0.6.
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported "-WORD" syntax in BOOLEAN MODE.
+
+Fixes
+^^^^^
+
+* Fixed nallowing records by "order by" clause with fulltext condition.
+  [groonga-dev,00977] [#1422] [Reported by Nakatani Munetaka]
+* Removed needless build flags. [#1453] [Reported by @nabebeb]
+* [rpm][centos] Fixed missing mysql-devel BuildRequires. 
+  [groonga-dev,01009] [Reported by wing]
+
+Thanks
+^^^^^^
+
+* @nabebeb
+* wing
+* Nakatani Munetaka
+
+.. _release-2-05:
+
+Release 2.05 - 2012/07/29
+-------------------------
+
+.. caution::
+
+   This release has a backward incompatible change against SET column
+   and ENUM.
+   If you use SET column or ENUM that has the number of elements < 256
+   in :doc:`/tutorial/storage`, please recreate (dump and restore)
+   database.
+
+Here is upgrade sequence.
+
+Dump a database that uses mroonga::
+
+  % mysqldump MY_MROONGA_DATABASE > database-mroonga.dump
+
+Drop the existing database::
+
+  % mysql -u root -e 'DROP DATABASE MY_MROONGA_DATABASE'
+
+You must upgrade to "mroonga" storage engine. Use
+``apt-get`` on Debian GNU/Linux or Ubuntu and ``yum`` on
+CentOS or Fedora.
+
+apt-get::
+
+  % sudo apt-get install -y mysql-server-mroonga
+
+yum (upgrade from mroonga release prior to v2.02)::
+
+  % sudo yum remove -y mysql-mroonga
+  % sudo yum install -y mysql-mroonga
+
+yum (upgrade from mroonga release v2.03 or later)::
+
+  % sudo yum install -y mysql-mroonga
+
+.. caution::
+
+   Don't forget to run ``yum remove`` before ``yum
+   install`` if you upgrade mroonga prior to v2.02 release.
+   If you forget to run ``yum remove``, we will break
+   a MySQL's system table.
+
+Recreate a database::
+
+  % mysql -u root -e 'CREATE DATABASE MY_MROONGA_DATABASE'
+
+Restore a database by modified dump file::
+
+  % mysql -u root MY_MROONGA_DATABASE < database-mroonga.dump
+
+Now, we can use mroonga 2.05.
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage mode] Supported index for SET column.
+* [rpm] Supported MySQL 5.5.25a.
+* Supported Fedora 17.
+* Dropped Fedora 16 support.
+* [storage mode] Supported TINYINT UNSIGNED/SMALLINT UNSIGNED/
+  MEDIUMINT UNSIGNED/INT UNSIGNED/BIGINT UNSIGNED type.
+* [storage mode] Reduced storage size for ENUM.
+
+.. _release-2-04:
+
+Release 2.04 - 2012/06/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [wrapper mode] Supported disable/enable keys in bulk insert. [#1311]
+
+Fixes
+^^^^^
+
+* Fixed to disable query cache with transaction. [#1384]
+* Disabled partition explicitly. [#1391]
+* [rpm][deb] Fixed to ensure deleting mroonga plugin from ``mysql.plugin`` table
+  before install. [groonga-dev,00948] [Suggested by Kazuhiro Isobe]
+* Fixed a crash bug by setting nonexistent path to ``mroonga_log_file``
+  variable. [#1404] [Reported by @nabebeb]
+* [experimental] Supported mroonga related data path change.
+  [groonga-dev,00914] [#1392] [Suggested by Kazuhiro Isobe]
+
+Thanks
+^^^^^^
+
+* Kazuhiro Isobe
+* @nabebeb
+
+.. _release-2-03:
+
+Release 2.03 - 2012/05/29
+-------------------------
+
+.. caution::
+
+   This release has a backward incompatible change against multiple
+   column index. If you have any tables that uses
+   :doc:`/tutorial/storage` and any multiple comlumn indexes, please
+   recreate those indexes by ``ALTER TABLE DISABLE KEYS`` and ``ALTER
+   TABLE ENBALE KEYS``::
+
+     mysql> ALTER TABLE table_name DISABLE KEYS;
+     mysql> ALTER TABLE table_name ENABLE KEYS;
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage mode] Supported disable/enable keys in bulk insert.
+  [#1310]
+* [rpm][centos] Supported MySQL 5.5.24.
+* [rpm][fedora] Supported MySQL 5.5.23.
+* Added :ref:`mroonga_match_escalation_threshold` system variable.
+* Required groonga 2.0.3 or later.
+* [yum] Changed RPM package name that provides yum repository from
+  groonga-repository to groonga-release to follow RPM package name
+  convension such as centos-release and fedora-release.
+* [mac os x] Supported installing by Homebrew.
+  See :doc:`/install` about details.
+
+Fixes
+^^^^^
+
+* Fixed build failure on Mac OS X.
+* [wrapper mode] Fixed a bug that searching in transaction reports not
+  found error.
+  [#1322][groonga-dev,00746] [Reported by Takken Ishibashi]
+* [rpm] Fixed a bug that mroonga plugin is unregistered when upgrading.
+  [groonga-dev,00810]
+  [Reported by Takken Ishibashi] [Patch by Iwai, Masaharu]
+* Fixed a bug that row based replication transfers wrong data on MySQL
+  5.5 or earlier.
+  [#1379][groonga-dev,00902] [Reported by Kenji Doi]
+
+Thanks
+^^^^^^
+
+* Takken Ishibashi
+* Iwai, Masaharu
+* Kenji Doi
+
+.. _release-2-02:
+
+Release 2.02 - 2012/04/29
+-------------------------
+
+.. caution::
+
+   The package sign key is changed since this release. Import the new
+   package sign key before updating groogna packages.
+
+   Debian/Ubuntu::
+
+     % sudo apt-get update
+     % sudo apt-get -y --allow-unauthenticated install groonga-keyring
+
+   CentOS/Fedora::
+
+     % sudo yum update
+     % sudo yum install --nogpgcheck -y groonga-repository
+
+.. caution::
+
+   This release breaks a backward compatibility for ``ENUM`` type. If
+   you have ``ENUM`` type and it has 256 or more values, you need to
+   dump your table before upgrade and restore your table after
+   upgrade.
+
+.. caution::
+
+   This release breaks a backward compatibility for ``SET`` type. If
+   you have ``SET`` type and it has 32 or more values, you need to
+   dump your table before upgrade and restore your table after
+   upgrade.
+
+Improvements
+^^^^^^^^^^^^
+
+* Added workaround for build for GCC 4.7 and MySQL 5.5.22.
+  The combination makes build error with ``-Wdeprecated`` gcc
+  option. [#1337] [Reported by Kazuhiko Shiozaki]
+* [mariadb] Supported MariaDB 5.5.23.
+  [#1339] [Reported by Kazuhiko Shiozaki] [Reported by Ryo Onodera]
+* [storage mode] Stopped needless primary key truncated warning on
+  ``REPLACE``.
+* [storage mode] Supported search ``ENUM`` values by index. [#1336]
+  [Suggested by @104yuki_n]
+* [incompatible] Changed groonga type for ``ENUM`` to unsigned 2bytes
+  integer type from signed 2bytes integer type. ``ENUM`` column
+  recreation is needed.
+* [incompatible] Changed groonga type for ``SET`` to unsigned 8bytes
+  integer type from signed 8bytes integer type. ``SET`` column
+  recreation is needed.
+* Supported MySQL 5.5.23.
+* Required groonga 2.0.2 or later.
+* [incompatible][experimental] Changed to use similar search instead
+  of phrase search for ``MATCH AGAINST IN NATURAL LANGUAGE MODE``.
+* [apt][yum] Changed package sign key.
+* Supported Ubuntu 12.04 Precise Pangolin.
+
+Fixes
+^^^^^
+
+* [storage mode] Fixed wrong key length is used.
+* Fixed a crash bug that is caused when searching with updaging very large
+  inverted index. [#1321]
+  [groonga-dev,00743] [Reported by Takashi Kawano]
+  [groonga-dev,00746] [Reported by Takken Ishibashi]
+* Fixed a bug that truncated table has invalid tokenizer and encoding.
+  [#1335] [Reported by @boss_sato]
+* Fixed a bug that the first insert is failed with Spider and mroonga
+  combination. [#1319] [groonga-dev,00736] [Reported by Takayuki Honda]
+
+Thanks
+^^^^^^
+
+* Takashi Kawano
+* @boss_sato
+* Kazuhiko Shiozaki
+* Ryo Onodera
+* @104yuki_n
+* Takayuki Honda
+* Takken Ishibashi
+
+.. _release-2-01:
+
+Release 2.01 - 2012/03/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MySQL 5.5.22.
+* Supported MySQL 5.1.62.
+* Required groonga 2.0.1 or later.
+* [rpm] Improved plugin uninstall on upgrade.
+* [rpm] Improved plugin uninstall on upgrade.
+* [wrapper mode] Supported ``INSERT ON DUPLICATE KEY ERROR``
+  with MyISAM. [#1300] [Reported by @104yuki_n]
+* [wrapper mode] Used wrapped table's ``table_flags()``
+  correctly. [#1304]
+* Added ``--with-valgrind`` configure option for MySQL that
+  enables Valgrind support.
+* [mariadb] Supported ``DATETIME`` type with fraction
+  seconds.
+* Supported building without geometry support.
+  [#1313] [Reported by Kazuhiko]
+* [storage mode] Supported multiple column index with
+  optimization build flags on i386 environment.
+  [Reported by Kazuhiko]
+* [wrapper mode] Confirmed InnoDB tests are passed with
+  wrapper mode.
+* [solaris] Supported build on Solaris 11. [Reported by Kazuhiko]
+* [mariadb55] Supported ``mroonga_default_parser`` with
+  MariaDB 5.5. [#1314] [Reported by Kazuhiko]
+* [mariadb55] Supported ``ORDER LIMIT`` optimization with
+  MariaDB 5.5. [#1315] [Reported by Kazuhiko]
+* [doc] Added about MeCab.
+* [storage mode] Supported index search for 0 value.
+  [Reported by @104yuki_n]
+* [storage mode] Supported Ubuntu Hardy with optimize
+  build flags. [Reported by Kazuhiko]
+* Added `logos <http://mroonga.github.com/logo/>`_ .
+* Updated HTML design.
+
+Fixes
+^^^^^
+
+* [storage mode] Fixed a memory leak.
+* [storage mode] Fixed a bug that search by multi column
+  index may not return some found records.
+  [#1300] [Reported by @ytaka5]
+* [storage mode] Fixed a bug that ``COUNT (*)`` isn't effective.
+  [groonga-dev,00717] [Reported by Takayuki Honda]
+* Fixed a memory leak on ``DROP DATABASE``.
+* [storage mode] Fixed a bug that ``last_insert_grn_id()``
+  may return broken value on 32bit environment.
+  [Reported by Kazuhiko]
+* [storage mode] Fixed a bug that ``COUNT (*)`` may
+  return 0. [groonga-dev,00736] [Reported by Takayuki Honda]
+
+Thanks
+^^^^^^
+
+* @ytaka5
+* @104yuki_n
+* Takayuki Honda
+* Kazuhiko
+
+.. _release-2-00:
+
+Release 2.00 - 2012/02/29
+-------------------------
+
+.. caution::
+
+   This release breaks backward compatibility. We need to
+   dump and restore our database for upgrading.
+
+In this release, mroonga has two changes that requires
+database recreation:
+
+1. Supported all characters for database, table and column
+   names.
+2. Groonga's native time data type is used for ``YEAR`` type
+   in MySQL.
+
+Here are upgrade sequence.
+
+We dump a database that uses mroonga::
+
+  % mysqldump MY_MROONGA_DATABASE > database-mroonga.dump
+
+We drop the existing database::
+
+  % mysql -u root -e 'DROP DATABASE MY_MROONGA_DATABASE'
+
+We upgrade to "mroonga" storage engine. We will use
+``apt-get`` on Debian GNU/Linux or Ubuntu and ``yum`` on
+CentOS or Fedora.
+
+apt-get::
+
+  % sudo apt-get install -y mysql-server-mroonga
+
+yum::
+
+  % sudo yum remove -y mysql-mroonga
+  % sudo yum install -y mysql-mroonga
+
+.. caution::
+
+   We don't forget to run ``yum remove`` before ``yum
+   install``. If we forget to run ``yum remove``, we will break
+   a MySQL's system table.
+
+We recreate a database::
+
+  % mysql -u root -e 'CREATE DATABASE MY_MROONGA_DATABASE'
+
+We restore a database by modified dump file::
+
+  % mysql -u root MY_MROONGA_DATABASE < database-mroonga.dump
+
+Now, we can use mroonga 2.00.
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MySQL 5.5.21.
+* Required groonga 2.0.0 or later.
+* Supported TIMESTAMP with fractional seconds on MySQL 5.6 and MariaDB.
+* [storage mode] Supported ``ORDER LIMIT`` optimization on no primary key.
+* [storage mode] Supported ``ORDER LIMIT`` optimization with
+  fulltext search and ``COLUMN = INT_VALUE``.
+* [storage mode] Supported fulltext search in sub query.
+  [Reported by @camyuy]
+* [incompatible] Mapped ``YEAR`` in MySQL to ``Time`` in
+  groonga to improve groonga integration.
+* [storage mode] Removed a needless write lock on update.
+  [#1271] [Reported by Takahiro Nagai]
+* Added ``mroonga_enable_optimization`` system variable to
+  on/off optimization. It's useful for benchmark.
+* [wrapper mode] Supported temporary table. [#1267]
+* [incompatible] Supported ``/`` in database name. [#1281]
+* Suppressed needless messages on ``INSERT ... ON DUPLICATE
+  KEY UPDATE``.
+* Supported ``INSERT ... ON DUPLICATE KEY UPDATE`` with
+  ``UNIQUE KEY``. [#1283] [Reported by @104yuki_n]
+* Supported ``DATETIME``, ``DATE``, ``TIMESTAMP``, ``TIME``,
+  ``DECIMAL``, ``YEAR`` for primary key.
+* [incompatible] Supported all characters for database, table and
+  column names. [#1284]
+* [wrapper mode] Supported 255 bytes over index. [#1282]
+* [wrapper mode] Supported updating primary key. [#1195]
+* [wrapper mode] Supported error handling on ``ALTER TABLE``. [#1195]
+* [wrapper mode] Improved error message on unsupported
+  geometry type like ``LineString``. [#1195]
+* [wrapper mode] Supported
+  ``INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS``. [#1195]
+
+Fixes
+^^^^^
+
+* [rpm] Changed to ensure re-install plugin.
+* [doc] Fixed wrong storage engine name. [Reported by Tomoatsu Shimada]
+
+Thanks
+^^^^^^
+
+* @camyuy
+* Takahiro Nagai
+* Tomoatsu Shimada
+* @104yuki_n
