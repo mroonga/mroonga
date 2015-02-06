@@ -1,0 +1,464 @@
+.. highlightlang:: none
+
+.. _release-3-12:
+
+Release 3.12 - 2014/01/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Added a new system variable :ref:`mroonga_lock_timeout`. By changing this global variable,
+  You can customize Groonga's lock timeout dynamically.
+* Improved compatibility with Tritonn 'W' pragma's behaviour.
+  In the previous versions, Mroonga used omitted section as weight 0. By this change,
+  Mroonga uses omitted section as weight 1. This behaviour is same as Tritonn.
+  [#2152] [Patch by Kenji Maruyama]
+
+Fixes
+^^^^^
+
+* Fixed a crash bug on FLUSH TABLES during SELECT MATCH AGAINST ... [#2137] [Reported by yoku]
+* Fixed wrong implementation for "W" pragma. It was changed to 1-origin. [#2151]
+  In the previous versions, "W" pragma is implemented as 0-origin, but it is not compatible
+  with Tritonn.
+  This is incompatible change, please check existing query which use "W" pragma.
+* Fixed a bug that searching empty records with "NOT" query returns duplicated results. [#2215]
+  [groonga-dev,02052] [Reported by Naoya Murakami]
+
+
+Thanks
+^^^^^^
+
+* yoku
+* Naoya Murakami
+
+.. _release-3-11:
+
+Release 3.11 - 2013/12/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [deb] Dropped Debian 6.0 (squeeze) support.
+* [deb] Dropped Ubuntu 10.04 (lucid) support.
+* [storage] Supported optimization for "MATCH AGAINST AND INT_COLUMN OPERATOR XXX ORDER BY
+  LIMIT" query. The OPERATOR in this query supports '<', '>', '<=' and '>='. [groonga-dev,01940]
+  [Reported by Horikoshi Yuki]
+* [storage] Supported optimization for "MATCH AGAINST AND DATETIME_COLUMN OPERATOR XXX ORDER BY
+  LIMIT" query. The OPERATOR in this query supports '<', '>', '<=' and '>='. [groonga-dev,01943]
+  [Suggested by yoku]
+* [storage] Supported optimization for "MATCH AGAINST AND TIME_COLUMN OPERATOR XXX ORDER BY
+  LIMIT" query. The OPERATOR in this query supports '<', '>', '<=' and '>='.
+* [doc] Renamed documentation from 'UserGuide' to 'Tutorial'.
+* [doc] Added 'FAQ' section for documentation.
+* [doc] Added independant section for 'Full text search'.
+* [storage] Supported 'BETWEEN' for INT_COLUMN, DATETIME_COLUMN and TIME_COLUMN.
+  Note that it requres Groonga 3.1.1 or later. [groonga-dev,01943] [Suggested by yoku]
+* Supported MariaDB 10.0.7 (it doesn't released yet.) [#1964]
+* Dropped support for Microsoft Visual Studio 2008 or previous versions.
+* Dropped Fedora 19 support.
+* Supported Fedora 20.
+* Dropped mysql-mroonga package on CentOS 5. Use mysql55-mroonga package instead.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that MySQL crashes on 'LOCK TABLE .. READ' when dumping/restoring. [#2098]
+* Fixed wrong implementation for "\*D-" pragma. [#2099]
+* Fixed a memory leak on full text search. It affects such as "MATCH AGAINST ... ORDER BY LIMIT ...". [#2144]
+
+Thanks
+^^^^^^
+
+* Horikoshi Yuki
+* yoku
+
+.. _release-3-10:
+
+Release 3.10 - 2013/11/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MariaDB 10.0.6.
+* [plugin][mroonga_snippet] Improved to report not supported charset in error message.
+
+Fixes
+^^^^^
+
+* Fixed multi range read disk sweep issue. [groonga-dev,01715] [#1959]
+  The problem that query which has "WHERE IN (...)" clause causes an error is fixed. [Reported by Kimura]
+* Fixed SEGV issue with trunk version of MariaDB [#1958]
+* Fixed a bug that geometry column is not properly updated by
+  'REPLACE INTO' or 'INSERT ON DUPLICATE KEY UPDATE' query. [#2057]
+* Fixed compiler warnings on Windows. [#1964]
+* Fixed the issue that vector column is no properly updated by
+  'REPLACE INTO' query. [#2064]
+* [mariadb10.0.5] Fixed build error which is derived from changed directory structure. [#2066]
+* Fixed a bug that shorter column name such as "_i" is treated as "_id" which is
+  special column. [#2085] [Reported by Alexander Barkov]
+
+Thanks
+^^^^^^
+
+* Kimura
+* Alexander Barkov
+
+.. _release-3-09:
+
+Release 3.09 - 2013/10/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported Ubuntu 13.10 (Saucy Salamander).
+* [rpm][centos] Supported rpm packages for MySQL 5.5 on CentOS 5.
+  It provides mysql55-mroonga to support mysql55-mysql packages.
+  [groonga-dev,01860] [Reported by WING]
+
+Fixes
+^^^^^
+
+* [wrapper] Fixed a memory leak. It occurs when wrapper
+  handler doesn't destroy mutexes properly. MyISAM is known
+  as effected storage engine.
+* [wrapper] Fixed a bug that force index causes crush for MySQL 5.6.
+  [#2015] [groonga-dev,01867] [Reported by Ichiro Yasuda]
+
+Thanks
+^^^^^^
+
+* WING
+* Ichiro Yasuda
+
+.. _release-3-08:
+
+Release 3.08 - 2013/9/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [doc] Added missing description about wrapper mode specific issue.
+  [groonga-dev,01747] [Reported by Kazuhiro Isobe]
+* [mroonga_escape] Supported to call mroonga_escape as an argument of UDF.
+  [#1923] [Reported by Tomoatsu Shimada]
+* [doc] Added language annotation to "Show Source" label.
+  [groonga-dev,01747] [Reported by Kazuhiro Isobe]
+* [wrapper] Supported REPAIR TABLE for broken groonga database.
+  [groonga-dev,01540] [Suggested by Naoya Murakami]
+* Supported MariaDB 10.x build with configure [groonga-dev,01727]
+  [Reported by WING]
+
+Fixes
+^^^^^
+
+* Fixed a bug that mroonga is accidentally removed on upgrade. [#1918]
+  [Reported by @ceekz]
+* Fixed a bug that mysqld 32bit executable binary crashes when install plugin on Windows.
+* [storage][mariadb] Fixed a memory for mroonga_log_file.
+  This memory leak occurs when log file name is changed.
+
+Thanks
+^^^^^^
+
+* Kazuhiro Isobe
+* Tomoatsu Shimada
+* @ceekz
+* Naoya Murakami
+* WING
+
+.. _release-3-07:
+
+Release 3.07 - 2013/8/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Added :doc:`/reference/udf/mroonga_escape` UDF which escapes special characters in query
+  for BOOLEAN MODE. [groonga-dev,01576] [Suggested by Kouhei Tanabe]
+* Supported VARCHAR equal expression in WHERE clause for ORDER BY LIMIT optimization.
+* Supported MariaDB 5.5.32 timestamp.
+* Supported MariaDB 10.0.4. [Reported by WING] [Reported by yoku ts]
+
+Fixes
+^^^^^
+
+* [mariadb] Fixed a crash bug when installing plugin on Windows.
+* [storage][mysql55] Fixed a bug that changing column that has index fails.
+  [groonga-talk] [Reported by Chang]
+  This bug affects the case that ``FULLTEXT INDEX (column1)`` is changed by ``ALTER TABLE
+  table1 CHANGE column1 column1 new_column_definition`` for example.
+* [doc][wrapper] Fixed incorrect description about condition of ORDER BY LIMIT optimization.
+* [storage] Disabled ORDER BY LIMIT optimization for not indexed VARCHAR condition.
+  It should be indexed to handle COLLATION properly.
+* Fixed a bug that missing internal flag causes crash on MySQL 5.6.13.
+
+Thanks
+^^^^^^
+
+* Kouhei Tanabe
+* Chang
+* WING
+* yoku ts
+
+.. _release-3-06:
+
+Release 3.06 - 2013/7/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Added :ref:`mroonga_action_on_fulltext_query_error` session variable.
+  This affects how to report errors about invalid escape.
+  [groonga-dev,01529] [Reported by Kouhei Tanabe]
+* Supported count skip optimization for wrapper mode even though
+  MySQL 5.5 or MariaDB 10.x. [#1841] [groonga-dev,01523] [Reported by Naoya Murakami]
+  This optimization does not work if you use wrapper mode with
+  storage engine which supports transaction.
+* Supported Fedora 19.
+* Dropped Fedora 18 support.
+
+Thanks
+^^^^^^
+
+* Kouhei Tanabe
+* Naoya Murakami
+
+.. _release-3-05:
+
+Release 3.05 - 2013/6/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Added warnings for truncated date data. [#1768] [Suggested by Y.Kentaro]
+* Supported MySQL 5.6.12. [Reported by WING]
+* Added documentation about troubleshooting.
+* Supported to enable fast mutexes option by build configuration.
+  [#1760] [Reported by WING]
+
+Fixes
+^^^^^
+
+* Fixed a bug that three or more sections in W pragma doesn't work.
+  [#1770] [Reported by shizuin]
+* Fixed build error with "-O2". [Reported by Y.Kentaro]
+* Fixed a memory leak by re-registration of ``normalizers/mysql``.
+* Fixed a crush bug when updating with ``DISABLE KEYS``. [#1759]
+* [doc] Fixed a wrong translation about status variable of optimization
+  in wrapper mode. [Reported by YOSHIDA Mitsuo]
+* Fixed a crush bug when no where clause with ``ORDER BY ... LIMIT``
+  is specified. [Reported by @memorycraft]
+* Fixed a bug that data is hidden when ``LOCK TABLES`` and ``ENABLE KEYS``
+  are used same time. [#1778] [Reported by Y.Kentaro]
+
+Thanks
+^^^^^^
+
+* Y.Kentaro
+* WING
+* shizuin
+* YOSHIDA Mitsuo
+* @memorycraft
+
+.. _release-3-04:
+
+Release 3.04 - 2013/5/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Improved MariaDB 10.0.2 support. [#1729]
+* [doc] Updated supported SQL command list. [Reported by Y.Kentaro]
+* Dropped Ubuntu 11.10 (Oneiric Ocelot) support.
+* Supported mroonga bundled MariaDB package. [#1691]
+* [wrapper] Stopped to parse column comment. [Reported by Y.Kentaro]
+* Stopped to validate normal column comment. [Reported by Y.Kentaro]
+* Improved the way to detect directory which contains libmysqlservices.a.
+  [Reported by Y.Kentaro]
+* Improved to accept free style normal comment in table/index comment.
+  [Suggested by Y.Kentaro]
+* Supported "W" pragma. This feature is derived from
+  `Tritonn <http://qwik.jp/senna/query.html>`_.
+* Supported ``mroonga_command()`` without the current database.
+  [Reported by Y.Kentaro]
+* Improved to use ``auto_increment`` value for creating table. [#1741]
+* Improved to keep the value of ``auto_increment`` even though latest record is
+  deleted. [#1738]
+* [doc] Added documentation how to install mroonga on Windows.
+* Added install SQL for initial setup. [groonga-dev,01434]
+  [Suggested by Kazuhiko]
+* Supported Debian 8.0 (jessie)
+
+Fixes
+^^^^^
+
+* Fixed a bug that empty query search causes SEGV.
+  [groonga-dev,01346] [Reported by Nakai Kanako]
+* Fixed a package build error depend on directory existence.
+  [groonga-dev,01335] [Reported by WING] [Patch by yoku ts]
+* Fixed a missing build dependency to ``groonga-normalizer-mysql`` package.
+  [Patch by Y.Kentaro]
+* Fixed a bug that the value of ``Mroonga_log_level`` can't be set in my.cnf.
+  [groonga-dev,01379] [Reported by Kazuhiro Isobe]
+* Fixed a memory leak that default tokenizer is not correctly freed.
+* [wrapper] Fixed a bug that comment is changed for alter table without
+  engine name causes a missing table. [Reported by Y.Kentaro]
+
+Thanks
+^^^^^^
+
+* Y.Kentaro
+* Nakai Kanako
+* WING
+* yoku ts
+* Kazuhiro Isobe
+* Kazuhiko
+
+.. _release-3-03:
+
+Release 3.03 - 2013/4/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [doc] Added documentation about table limitations. [groonga-dev,01281]
+  [Reported by Kazuhiro Isobe]
+* [doc] Added ``mroonga_command`` documentation.
+* Supported ``default_tokenizer`` as table parameter in comment.
+* Supported using existing table as lexicon not only "FULLTEXT INDEX",
+  but also normal "INDEX".
+  This change improves compatibility to groonga.
+* Supported MySQL 5.6.11.
+* Supported collation in multiple column index. [groonga-dev,01302]
+  [Reported by Kouhei Tanabe]
+* Supported no parser fulltext index for predictive search by "XXX*"
+  in groonga query syntax.
+* [cmake] Dropped MySQL 5.5.x build support.
+* Supported custom normalizer for FULLTEXT INDEX.
+  Use can specify custom normalizer as a comment.
+  Supported syntax is ``FULLTEXT INDEX (column) COMMENT 'normalizer "NormalizerXXX"'``.
+  [groonga-dev:01303] [Suggested by Kouhei Tanabe]
+* Supported Ubuntu 13.04 Raring Ringtail.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that stored value can't be searched because of
+  unexpected cast for integer. [#1696] [groonga-dev,01266]
+  [Reported by smztks]
+* [wrapper] Fixed a bug that multiple match against returns
+  invalid aggregated count. [#1702] [groonga-dev,01279]
+  [Reported by Masahiro Furuta]
+* Fixed a bug that ``mrn_log_level`` is ignored. [groonga-dev,01290]
+  [Reported by Kazuhiro Isobe]
+* Fixed a bug that mroonga crashes when freeing internal temporary
+  shared object.
+* [doc] Fixed a typo about running mode of storage engine and
+  a long ambiguous sentence. [Reported by Ichiro Suzuki]
+* [mysql55] Fixed a bug that inplace anonymous index recreation cause a crash.
+  [groonga-dev,01319] [Reported by Kouhei Tanabe]
+
+Thanks
+^^^^^^
+
+* smztks
+* Masahiro Furuta
+* Kazuhiro Isobe
+* Kouhei Tanabe
+* Ichiro Suzuki
+
+.. _release-3-02:
+
+
+Release 3.02 - 2013/3/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Improved bundling to MariaDB 10.0 for Linux. [#1644]
+* Added the value of list documentation about ``mroonga_log_level``
+  in reference manual. [groonga-dev,01255] [Reported by Kazuhiro Isobe]
+* [experimental] Added ``mroonga_command`` UDF. [#1643]
+  This UDF supports to send query directly to ``groonga``.
+
+Fixes
+^^^^^
+
+* Fixed a bug that less than conditional expression on WHERE clause doesn't work
+  for multiple nullable column index. [groonga-dev,01253] [#1670]
+  [Reported by Horikoshi Yuki]
+* [wrapper] Fixed the invalid timing to free ``key`` object too early.
+  This bug may occurs when recreating indexes by DISABLE KEYS/ENABLE KEYS. [#1671]
+  [Reported by keigo ito]
+
+Thanks
+^^^^^^
+
+* Kazuhiro Isobe
+* Horikoshi Yuki
+* keigo ito
+
+.. _release-3-01:
+
+
+Release 3.01 - 2013/2/28
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported ``utf8_unicode_ci`` and ``utf8mb4_unicode_ci``.
+  Note that ``groonga-normalizer-mysql`` >= 1.0.1 is required.
+* [experimental] Supported foreign key for storage mode. [#1612]
+
+Fixes
+^^^^^
+
+* Fixed groonga derived bug that the records in specific range returns 0 records
+  unexpectedly. [groonga-dev,01192] [Reported by b senboku]
+* Fixed to disable DTrace by default for Mac OS X.
+
+Thanks
+^^^^^^
+
+* b senboku
+
+
+.. _release-3-00:
+
+Release 3.00 - 2013/2/9
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported Fedora 18.
+* Dropped Fedora 17 support.
+* Supported ``utf8_general_ci`` and ``utf8mb4_generic_ci``
+  compatible normalizer.
+* [rpm][centos] Supported MySQL 5.6.10 on CentOS 5.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a groonga derived bug that unique key doesn't
+  match mixed case keyword. [groonga-dev,01187] [Reported by Kouhei Tanabe]
+
+Thanks
+^^^^^^
+
+* Kouhei Tanabe
+
+
