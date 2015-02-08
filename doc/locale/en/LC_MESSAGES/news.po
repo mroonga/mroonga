@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-01-28 14:41+0900\n"
+"PO-Revision-Date: 2015-02-09 05:27+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,1342 +20,841 @@ msgstr ""
 msgid "News"
 msgstr "News"
 
-msgid "Release 4.10 - 2015-01-29"
+msgid "Release 5.00 - 2015/02/09"
 msgstr ""
 
-# d356c113c9aa4e9c950b6519f9dec20b
-msgid ""
-"This release has a bug fix for unique index. If you're using unique index in "
-"storage mode, your data may be broken. If you're using unique index in "
-"storage mode, we recommend to upgrade to this version and re-create your "
-"unique indexes."
-msgstr ""
-
-# 6b64f288f348417e968261c0c2710738
-msgid ""
-"Here are SQL statements to re-create your indexes including unique indexes::"
-msgstr ""
-
-# f2663787cdb741fba10e10200ccd0d00
-msgid ""
-"You may get \"duplicated record\" error on ``ENABLE KEYS``. If you get the "
-"error, please confirm your data carefully and fix the duplication."
-msgstr ""
-
-# 7ada7b924e7c4131ad7a9118ea62b7fc
-msgid "Here are broken data scenario:"
-msgstr ""
-
-# 4e07a0d45a944206abaf6703297d93b4
-msgid "An unique index is created."
-msgstr ""
-
-# 9d3acfe18ad8417db2421c85aa40f85f
-msgid "Insert data."
-msgstr ""
-
-# d6538dfbb2394f2a8b1c0467bd6933ff
-msgid "Insert duplicated data. It's reported as an error."
-msgstr ""
-
-# c700ead0b21341bea84875cc05c676bc
-msgid ""
-"Insert duplicated data again. It can be inserted. It breaks unique "
-"consistency."
+msgid "Bump version to 5.00!"
 msgstr ""
 
 msgid "Improvements"
 msgstr "Improvements"
 
 msgid ""
-"[storage] Supported static index construction in FULLTEXT INDEX comment with "
-"``'table \"XXX\"'``. Execute ``DISABLE KEYS``, then ``ENABLE KEYS`` for "
-"static index construction. [Reported by Naoya Murakami]"
+"[appveyor] Supported Windows CI on `AppVeyor <http://www.appveyor.com/>`_. "
+"We can get notification about build failure on Windows at once. Subscribe to "
+"groonga-mysql-commit@lists.sourceforge.jp if you want build status."
 msgstr ""
 
 msgid ""
-"[rpm][centos] Built with MySQL 5.6.22 on CentOS 7. [groonga-dev,03047] "
-"[Reported by Hiroshi Kagami]"
-msgstr ""
-
-msgid "[rpm][centos] Built with MariaDB 5.5.40-2 on CentOS 7."
-msgstr ""
-
-msgid ""
-"[storage][mysql56] Supported to report duplicated error for ``ADD UNIQUE "
-"INDEX``. [Reported by kazeburo]"
+"[rpm][centos] Build against MySQL 5.6.23-2 on MySQL yum repository. [groonga-"
+"dev,03083][Reported by Kohei Aochi]"
 msgstr ""
 
 msgid "Fixes"
 msgstr "Fixes"
 
-msgid ""
-"[storage] Fixed a bug that referenced table is accidentally removed on "
-"error. This means that index creation is failed for FULLTEXT INDEX comment "
-"with ``'table \"terms\"'``, \"terms\" table can be removed on error."
-msgstr ""
-
-msgid ""
-"[storage] Fixed a bug that duplicated entry is removed in unique index when "
-"duplicated error is occurred. This bug makes consistency of indexes broken, "
-"so recommended to recreate existing indexes again after upgrading Mroonga. "
-"[Reported by kazeburo]"
-msgstr ""
-
-msgid ""
-"[storage] Fixed a bug that ``INSERT ON DUPLICATE KEY UPDATE`` is broken. "
-"This bug may change existing other records by executing update fallback when "
-"insert error occurred. [Reported by kazeburo]"
+msgid "[cmake] Disabled big endian support explicitly."
 msgstr ""
 
 msgid "Thanks"
 msgstr "Thanks"
 
-msgid "Naoya Murakami"
-msgstr "Naoya Murakami"
-
-msgid "Hiroshi Kagami"
+msgid "Kohei Aochi"
 msgstr ""
 
-msgid "kazeburo"
-msgstr ""
+msgid "Past releases"
+msgstr "Past releases"
 
-msgid "Release 4.09 - 2014-12-29"
-msgstr ""
+msgid "バージョン0.xのお知らせ"
+msgstr "バージョン0.xのお知らせ"
 
-msgid "[rpm] Supported MySQL 5.6.22 on CentOS 6. [Reported by @oreradio]"
-msgstr ""
+msgid "0.9 リリース - 2011/08/29"
+msgstr "0.9 リリース - 2011/08/29"
 
-msgid ""
-"Added :ref:`mroonga_boolean_mode_syntax_flags` that custom syntax in ``MATCH "
-"() AGAINST ('...' IN BOOLEAN MODE)``."
-msgstr ""
+msgid "改良"
+msgstr "改良"
 
-msgid ""
-"Supported no normalizer ``FULLTEXT INDEX`` by specifying ``none`` as "
-"normalizer such as ``FULLTEXT INDEX (...) COMMENT 'normalizer \"none\"'``."
-msgstr ""
+msgid "MySQL 5.1.58に対応。"
+msgstr "MySQL 5.1.58に対応。"
 
-msgid "Supported referencing primary key value of auto created records."
-msgstr ""
+msgid "MySQL 5.6.3に対応。"
+msgstr "MySQL 5.6.3に対応。"
 
-msgid "@oreradio"
-msgstr ""
+msgid "0.8 リリース - 2011/07/29"
+msgstr "0.8 リリース - 2011/07/29"
 
-msgid "Release 4.08 - 2014/11/29"
-msgstr ""
+msgid "[deb] プラグインインストール時のエラーを無視するようにした。"
+msgstr "[deb] プラグインインストール時のエラーを無視するようにした。"
 
-msgid "[deb] Supported Ubuntu 12.04 again for Travis-CI."
-msgstr ""
+msgid "[ラッパーモード] マルチカラムインデックスのサポート。 #1031"
+msgstr "[ラッパーモード] マルチカラムインデックスのサポート。 #1031"
 
-msgid ""
-"[test] Added script which checks performance schema. [Patch by Elena "
-"Stepanova]"
-msgstr ""
+msgid "[ラッパーモード] 大量レコードの全文検索に対応。 #1032"
+msgstr "[ラッパーモード] 大量レコードの全文検索に対応。 #1032"
+
+msgid "[ラッパーモード] MyISAM対応。 #1033"
+msgstr "[ラッパーモード] MyISAM対応。 #1033"
+
+msgid "0.7 リリース - 2011/06/29"
+msgstr "0.7 リリース - 2011/06/29"
 
 msgid ""
-"[rpm] Supported MySQL 5.5.40 on CentOS 6 and 7. [groonga-dev,02955] "
-"[Reported Noboru Nishiyama]"
+"既存のストレージエンジンに全文検索機能を追加する :doc:`/tutorial/wrapper` の"
+"追加。"
 msgstr ""
+"既存のストレージエンジンに全文検索機能を追加する :doc:`/tutorial/wrapper` の"
+"追加。"
 
-msgid "[doc] Added :doc:`/reference/limitations` about column size."
+msgid "MySQL 5.5.13サポートの追加。 #984"
+msgstr "MySQL 5.5.13サポートの追加。 #984"
+
+msgid "安定してきたので、groongaのデフォルトログレベルをDUMPからNOTICEに変更。"
 msgstr ""
+"安定してきたので、groongaのデフォルトログレベルをDUMPからNOTICEに変更。"
 
-msgid ""
-"[storage] Added missing primary key check when primary key is required to "
-"specify. [groonga-dev,02963] [Reported by kashihara]"
-msgstr ""
+msgid "Mac OS Xでのビルドをサポート。（@issmさんが報告）"
+msgstr "Mac OS Xでのビルドをサポート。（@issmさんが報告）"
 
-msgid ""
-"[doc] Fixed nonexistent MySQL version. [groonga-dev,02899] [Reported by GMO "
-"Media, Inc.]"
-msgstr ""
+msgid "修正"
+msgstr "修正"
 
-msgid "[doc] Removed needless SCL related install description for CentOS 5."
-msgstr ""
+msgid "常にデバッグモードでビルドされる問題を修正。（@supistarさんが報告）"
+msgstr "常にデバッグモードでビルドされる問題を修正。（@supistarさんが報告）"
 
-msgid "[doc] Use ``service`` command to start MySQL on CentOS 5 and 6."
-msgstr ""
+msgid "感謝"
+msgstr "感謝"
 
-msgid "[doc] Use ``systemctl`` command to start MySQL on CentOS 7."
-msgstr ""
+msgid "@issmさん"
+msgstr "@issmさん"
 
-msgid "GMO Media, Inc."
-msgstr "GMO Media, Inc."
+msgid "@supistarさん"
+msgstr "@supistarさん"
 
-msgid "Elena Stepanova"
-msgstr ""
+msgid "0.6 リリース - 2011/05/29"
+msgstr "0.6 リリース - 2011/05/29"
 
-msgid "Noboru Nishiyama"
-msgstr ""
-
-msgid "kashihara"
-msgstr ""
-
-msgid "Release 4.07 - 2014/10/29"
-msgstr ""
+msgid "auto_increment機能の追加。#670"
+msgstr "auto_increment機能の追加。#670"
 
 msgid ""
-"[storage] Changed to treat deprecated ``INSERT DELAYED`` as error. "
-"[GitHub#20] [MDEV#6837] [Reported by Elena Stepanova]"
+"不必要な\"duplicated _id on insert\"というエラーメッセージを 抑制。 #910（←は"
+"未修正）"
 msgstr ""
+"不必要な\"duplicated _id on insert\"というエラーメッセージを 抑制。 #910（←は"
+"未修正）"
 
 msgid ""
-"[storage][mariadb10] Added proper error message for duplicated entries on "
-"adding an unique index. [GitHub#19] [Reported by Elena Stepanova]"
+"CentOSで利用しているMySQLのバージョンを5.5.10から5.5.12へ アップデート。"
 msgstr ""
+"CentOSで利用しているMySQLのバージョンを5.5.10から5.5.12へ アップデート。"
+
+msgid "Ubuntu 11.04 Natty Narwhalサポートの追加。"
+msgstr "Ubuntu 11.04 Natty Narwhalサポートの追加。"
+
+msgid "Ubuntu 10.10 Maverick Meerkatサポートの削除。"
+msgstr "Ubuntu 10.10 Maverick Meerkatサポートの削除。"
+
+msgid "Fedora 15サポートの追加。"
+msgstr "Fedora 15サポートの追加。"
+
+msgid "Fedora 14サポートの削除。"
+msgstr "Fedora 14サポートの削除。"
+
+msgid "ORDER BY LIMITの高速化が機能しないケースがある問題の修正。#845"
+msgstr "ORDER BY LIMITの高速化が機能しないケースがある問題の修正。#845"
+
+msgid "デバッグビルド時のメモリリークを修正。"
+msgstr "デバッグビルド時のメモリリークを修正。"
 
 msgid ""
-"[cmake] Removed needless status message for compiler flag checks [GitHub#22]"
+"提供しているCentOS用パッケージをOracle提供MySQLパッケージ と一緒に使うとク"
+"ラッシュする問題を修正。"
 msgstr ""
+"提供しているCentOS用パッケージをOracle提供MySQLパッケージ と一緒に使うとク"
+"ラッシュする問題を修正。"
+
+msgid "Mitsuhiro Shibuyaさん"
+msgstr "Mitsuhiro Shibuyaさん"
+
+msgid "Hiroki Minetaさん"
+msgstr "Hiroki Minetaさん"
+
+msgid "@kodakaさん"
+msgstr "@kodakaさん"
+
+msgid "0.5 リリース - 2011/03/29"
+msgstr "0.5 リリース - 2011/03/29"
+
+msgid "\"uninstall plugin\"対応 #741"
+msgstr "\"uninstall plugin\"対応 #741"
+
+msgid "MariaDB対応 （かずひこさんが提案）"
+msgstr "MariaDB対応 （かずひこさんが提案）"
+
+msgid "不要なデバッグシンボルを削除"
+msgstr "不要なデバッグシンボルを削除"
+
+msgid "MySQL 5.5への対応強化。"
+msgstr "MySQL 5.5への対応強化。"
+
+msgid "エラーメッセージの改良"
+msgstr "エラーメッセージの改良"
+
+msgid "かずひこさん"
+msgstr "かずひこさん"
+
+msgid "0.4 リリース - 2010/11/29"
+msgstr "0.4 リリース - 2010/11/29"
+
+msgid "全文検索のスコア取得機能の追加。"
+msgstr "全文検索のスコア取得機能の追加。"
+
+msgid "レコードIDへのアクセス機能の追加。"
+msgstr "レコードIDへのアクセス機能の追加。"
+
+msgid "直近のレコードIDを参照するためのUDFの追加。"
+msgstr "直近のレコードIDを参照するためのUDFの追加。"
+
+msgid "インデックスによる範囲検索機能の追加。"
+msgstr "インデックスによる範囲検索機能の追加。"
+
+msgid "全文検索におけるORDER BY LIMITパタンの高速化。"
+msgstr "全文検索におけるORDER BY LIMITパタンの高速化。"
+
+msgid "``groonga_fast_order_limit`` ステータス変数の追加。"
+msgstr "``groonga_fast_order_limit`` ステータス変数の追加。"
+
+msgid "ログ出力機能の設定強化。"
+msgstr "ログ出力機能の設定強化。"
+
+msgid "``groonga_log_level`` システム変数の追加。"
+msgstr "``groonga_log_level`` システム変数の追加。"
+
+msgid "全文検索機能の強化(NOT MATCH AGAINST対応)。"
+msgstr "全文検索機能の強化(NOT MATCH AGAINST対応)。"
+
+msgid "MySQL 5.5への対応。"
+msgstr "MySQL 5.5への対応。"
+
+msgid "とみたまさひろさん"
+msgstr "とみたまさひろさん"
+
+msgid "0.3 リリース - 2010/10/29"
+msgstr "0.3 リリース - 2010/10/29"
+
+msgid "エラーメッセージの出力を実装。"
+msgstr "エラーメッセージの出力を実装。"
+
+msgid "カラムの刈り込みの実装を強化。"
+msgstr "カラムの刈り込みの実装を強化。"
+
+msgid "行カウント高速化機能の実装。"
+msgstr "行カウント高速化機能の実装。"
+
+msgid "``groonga_count_skip`` ステータス変数の追加。"
+msgstr "``groonga_count_skip`` ステータス変数の追加。"
+
+msgid "ユーザガイドドキュメントの追加。"
+msgstr "ユーザガイドドキュメントの追加。"
+
+msgid "変更"
+msgstr "変更"
+
+msgid "インデックス作成時にNORMALIZEフラグを付与。"
+msgstr "インデックス作成時にNORMALIZEフラグを付与。"
+
+msgid "LIMITなどを用いた場合にカーソルが正しくクローズされない問題の修正。"
+msgstr "LIMITなどを用いた場合にカーソルが正しくクローズされない問題の修正。"
+
+msgid "0.2 リリース - 2010/09/29"
+msgstr "0.2 リリース - 2010/09/29"
 
 msgid ""
-"Supported token filter in table/index comment for wrapper/storage mode. "
-"[GitHub#25] [Patch by Naoya Murakami]"
+"packages.groonga.orgでのバイナリパッケージ配布開始。aptitude/yumによるインス"
+"トールが可能に。"
 msgstr ""
+"packages.groonga.orgでのバイナリパッケージ配布開始。aptitude/yumによるインス"
+"トールが可能に。"
+
+msgid "バイナリログの出力に対応。"
+msgstr "バイナリログの出力に対応。"
 
 msgid ""
-"[mroonga_command] Improved to need not to know whether Groonga database "
-"already exists before executing mroonga_command. In the previous versions, "
-"you must prepare table which use Mroonga."
+"共有ライブラリの名前を\"libgroonga_storage_engine.so\"から\"ha_groonga.so\"に"
+"変更。"
 msgstr ""
+"共有ライブラリの名前を\"libgroonga_storage_engine.so\"から\"ha_groonga.so\"に"
+"変更。"
+
+msgid "configureオプションの ``--with-mysql`` および ``--libdir`` を削除。"
+msgstr "configureオプションの ``--with-mysql`` および ``--libdir`` を削除。"
 
 msgid ""
-"[storage] Supported to specify normalizer in table comment. [GitHub#27] "
-"[Patch by Naoya Murakami]"
+"configureオプションの ``--with-mysql-source`` および ``--with-mysql-config`` "
+"を追加。"
 msgstr ""
+"configureオプションの ``--with-mysql-source`` および ``--with-mysql-config`` "
+"を追加。"
+
+msgid "ヘッダファイルのincludeパスを修正。"
+msgstr "ヘッダファイルのincludeパスを修正。"
+
+msgid "\"SHOW CREATE TABLE\"に出力されるENGINE名を修正。"
+msgstr "\"SHOW CREATE TABLE\"に出力されるENGINE名を修正。"
+
+msgid "0.1 リリース - 2010/08/19"
+msgstr "0.1 リリース - 2010/08/19"
+
+msgid "初回テストリリース"
+msgstr "初回テストリリース"
+
+msgid "Release 1.20 - 2012/01/29"
+msgstr "Release 1.20 - 2012/01/29"
 
 msgid ""
-"[storage] Supported column compression flag (``COMPRESS_LZ4``, "
-"``COMPRESS_ZLIB``). [GitHub#32] [Patch by Naoya Murakami]"
+"This release breaks backward compatibility. We need to dump and restore our "
+"database for upgrading."
 msgstr ""
+"This release breaks backward compatibility. We need to dump and restore our "
+"database for upgrading."
 
 msgid ""
-"Added :ref:`mroonga_libgroonga_support_lz4` and :ref:"
-"`mroonga_libgroonga_support_zlib` system variables. [GitHub#33,#34,#35] "
-"[Patch by Naoya Murakami]"
+"In this release, mroonga has two changes that requires database recreation:"
 msgstr ""
+"In this release, mroonga has two changes that requires database recreation:"
 
-msgid "Dropped MySQL 5.1 support."
-msgstr ""
+msgid "Storage engine name is changed to \"mroonga\" from \"groonga\"."
+msgstr "Storage engine name is changed to \"mroonga\" from \"groonga\"."
 
 msgid ""
-"[storage][mariadb10] Fixed a crash bug that it doesn't properly locked. "
-"[GitHub#18] [Reported by Elena Stepanova]"
+"Groonga's native time data type is used for DATE, DATETIME and TIMESTAMP "
+"type in MySQL."
 msgstr ""
-
-msgid "[storage] Fixed overflow about signed tinyint. [GitHub#29]"
-msgstr ""
+"Groonga's native time data type is used for DATE, DATETIME and TIMESTAMP "
+"type in MySQL."
 
 msgid ""
-"[doc] Fixed markups about normalizer. [GitHub#32] [Patch by Naoya Murakami]"
+"We need to modify dumped database to change \"ENGINE=groonga\" in \"CREATE "
+"TABLE\" SQL. Here are upgrade sequence."
 msgstr ""
+"We need to modify dumped database to change \"ENGINE=groonga\" in \"CREATE "
+"TABLE\" SQL. Here are upgrade sequence."
 
-msgid "Release 4.06 - 2014/09/29"
-msgstr ""
+msgid "We dump a database that uses mroonga::"
+msgstr "We dump a database that uses mroonga::"
 
-msgid "[doc] Added more details about Groonga's development package."
-msgstr ""
-
-msgid "[doc] Changed to recommend GitHub issue tracker."
-msgstr ""
-
-msgid "[deb] Dropped Debian jessie and sid support."
-msgstr ""
+msgid "We convert storage engine in dump file::"
+msgstr "We convert storage engine in dump file::"
 
 msgid ""
-"[storage] Fixed a bug that no record returns with multiple column index. "
-"This bug occurs when it meets two conditions. First, columns indexed by "
-"multiple column index are used in order and WHERE clause. Second, a column "
-"indexed by multiple column index but it's no the first column is used in "
-"ORDER by clause. [#2651] [Reported by foamcentime, Naoya Murakami]"
+"We confirm that ``ENGINE=groonga`` only in ``CREATE TABLE`` is replaced with "
+"``ENGINE=mroonga``. We need to check ``@@ ... @@`` line includes ``CREATE "
+"TABLE``. If the line includes ``CREATE TABLE``, the hunk will be a change "
+"for ``CREATE TABLE``::"
 msgstr ""
+"We confirm that ``ENGINE=groonga`` only in ``CREATE TABLE`` is replaced with "
+"``ENGINE=mroonga``. We need to check ``@@ ... @@`` line includes ``CREATE "
+"TABLE``. If the line includes ``CREATE TABLE``, the hunk will be a change "
+"for ``CREATE TABLE``::"
 
-msgid "foamcentime"
-msgstr ""
-
-msgid "Release 4.05 - 2014/08/29"
-msgstr ""
-
-msgid "Dropped Ubuntu 13.10 Saucy Salamander support."
-msgstr ""
+msgid "We drop the existing database::"
+msgstr "We drop the existing database::"
 
 msgid ""
-"Added new variable :ref:`mroonga_vector_column_delimiter`. It is used to "
-"change delimiter of vector column. [GitHub#16] [Patch by Naoya Murakami]"
+"We upgrade to \"mroonga\" storage engine. We will use ``apt-get`` on Debian "
+"GNU/Linux or Ubuntu and ``yum`` on CentOS or Fedora."
 msgstr ""
+"We upgrade to \"mroonga\" storage engine. We will use ``apt-get`` on Debian "
+"GNU/Linux or Ubuntu and ``yum`` on CentOS or Fedora."
+
+msgid "apt-get::"
+msgstr "apt-get::"
+
+msgid "yum::"
+msgstr "yum::"
 
 msgid ""
-"[rpm][centos] Supported MySQL 5.6 official repository packages on CentOS "
-"6/7. Use mysql56-community-mroonga package. [Patch by miko]"
+"We don't forget to run ``yum remove`` before ``yum install``. If we forget "
+"to run ``yum remove``, we will break a MySQL's system table."
 msgstr ""
+"We don't forget to run ``yum remove`` before ``yum install``. If we forget "
+"to run ``yum remove``, we will break a MySQL's system table."
+
+msgid "We recreate a database::"
+msgstr "We recreate a database::"
+
+msgid "We restore a database by modified dump file::"
+msgstr "We restore a database by modified dump file::"
+
+msgid "Now, we can use mroonga 1.20."
+msgstr "Now, we can use mroonga 1.20."
+
+msgid "Supported MySQL 5.5.20."
+msgstr "Supported MySQL 5.5.20."
+
+msgid "Supported MySQL 5.1.61."
+msgstr "Supported MySQL 5.1.61."
+
+msgid "Required groonga 1.3.0 or later."
+msgstr "Required groonga 1.3.0 or later."
 
 msgid ""
-"[doc] Moved document about upgrading which is included in install document. "
-"Now, you can refer it as :doc:`/upgrade`."
+"[incompatible] Changed storage engine name to \"mroonga\" from \"groonga\"."
 msgstr ""
+"[incompatible] Changed storage engine name to \"mroonga\" from \"groonga\"."
 
-msgid "Supported MariaDB 10.0.13."
-msgstr ""
+msgid "Supported UTF8_BIN collate. [#1150]"
+msgstr "Supported UTF8_BIN collate. [#1150]"
+
+msgid "Disabled strict-aliasing warnings. [Reported by @issm]"
+msgstr "Disabled strict-aliasing warnings. [Reported by @issm]"
+
+msgid "Supported decimal. [#1249] [Reported by @Kiske]"
+msgstr "Supported decimal. [#1249] [Reported by @Kiske]"
 
 msgid ""
-"[rpm][centos] Supported CentOS 7 as mariadb-mroonga package. It uses the "
-"bundled MariaDB. [groonga-dev,02604] [Tested by Miyawaki][Tested by Kawada]"
+"[storage mode] Supported HA_KEYREAD_ONLY. It will improve column value "
+"access in index. [#1212]"
 msgstr ""
+"[storage mode] Supported HA_KEYREAD_ONLY. It will improve column value "
+"access in index. [#1212]"
+
+msgid "[storage mode] Supported float value in multiple column index."
+msgstr "[storage mode] Supported float value in multiple column index."
+
+msgid "[storage mode] Supported double value in multiple column index."
+msgstr "[storage mode] Supported double value in multiple column index."
 
 msgid ""
-"[doc] Fixed wrong MySQL version about news of Mroonga 4.04. [Reported by "
-"_so4]"
+"[storage mode] Mapped enum and set types to more suitable groonga data types."
 msgstr ""
+"[storage mode] Mapped enum and set types to more suitable groonga data types."
+
+msgid "[wrapper mode] Supported REPAIR TABLE."
+msgstr "[wrapper mode] Supported REPAIR TABLE."
 
 msgid ""
-"[doc] Removed needless explicit install procedure for groonga-normalizer-"
-"mysql package."
+"[storage mode] Supported ``count(*)`` on view. [#1255] [Reported by Takahiro "
+"Nagai]"
 msgstr ""
+"[storage mode] Supported ``count(*)`` on view. [#1255] [Reported by Takahiro "
+"Nagai]"
 
 msgid ""
-"[storage] Fixed a bug that value remains in unique index on duplicated "
-"primary key error. [groonga-dev,02633] [Reported by 6elz]"
+"[incompatible] Groonga's native time value is used for DATE, DATETIME and "
+"TIMESTAMP type values."
 msgstr ""
+"[incompatible] Groonga's native time value is used for DATE, DATETIME and "
+"TIMESTAMP type values."
 
 msgid ""
-"[doc] Fixed a bug that building document in other directory fails. [groonga-"
-"dev,02652] [Reported by cosmo0920]"
+"[debian] Fixed wrong mysql-server-groonga version in replaces and breaks. "
+"[Reported by @ytaka5]"
 msgstr ""
+"[debian] Fixed wrong mysql-server-groonga version in replaces and breaks. "
+"[Reported by @ytaka5]"
 
-msgid "Changed to use \"Mroonga\" form for engine name."
-msgstr ""
+msgid "[doc] Fixed wrong execution result. [Reported by Hidekazu Tanaka]"
+msgstr "[doc] Fixed wrong execution result. [Reported by Hidekazu Tanaka]"
+
+msgid "[wrapper mode] Fixed a memory leak. [Reported by montywi]"
+msgstr "[wrapper mode] Fixed a memory leak. [Reported by montywi]"
+
+msgid "@ytaka5"
+msgstr "@ytaka5"
+
+msgid "Hidekazu Tanaka"
+msgstr "Hidekazu Tanaka"
+
+msgid "@issm"
+msgstr "@issm"
+
+msgid "montywi"
+msgstr "montywi"
+
+msgid "@Kiske"
+msgstr "@Kiske"
+
+msgid "Release 1.11 - 2011/12/29"
+msgstr "Release 1.11 - 2011/12/29"
+
+msgid "Supported MySQL 5.5.19."
+msgstr "Supported MySQL 5.5.19."
+
+msgid "Supported MySQL 5.6.4."
+msgstr "Supported MySQL 5.6.4."
+
+msgid "Dropped MySQL 5.6.3 support."
+msgstr "Dropped MySQL 5.6.3 support."
+
+msgid "Supported Fedora 16."
+msgstr "Supported Fedora 16."
+
+msgid "Dropped Fedora 15 support."
+msgstr "Dropped Fedora 15 support."
 
 msgid ""
-"[storage] Fixed a bug that table specified index (``COMMENT 'table \"XXX"
-"\"'``) can't be removed. [groonga-dev,02677] [Reported by Naoya Murakami]"
+"Suppress strict-aliasing warnings. [groonga-dev,00659] [Reported by Kazuhiko "
+"Shiozaki]"
 msgstr ""
-
-msgid "_so4"
-msgstr ""
-
-msgid "miko"
-msgstr ""
-
-msgid "6elz"
-msgstr ""
-
-msgid "cosmo0920"
-msgstr "cosmo0920"
-
-msgid "Miyawaki"
-msgstr ""
-
-msgid "Kawada"
-msgstr ""
-
-msgid "Release 4.04 - 2014/07/29"
-msgstr ""
+"Suppress strict-aliasing warnings. [groonga-dev,00659] [Reported by Kazuhiko "
+"Shiozaki]"
 
 msgid ""
-"Removed Groonga and groonga-normalizer-mysql specific test files for MariaDB "
-"bundled version on Windows. There is too long file name issue. [groonga-"
-"dev,02391] [Reported by Masafumi Yokoyama]"
+"Supported utf8, binary, ascii, latin1, cp932, sjis, eucjpms, ujis and koi8r "
+"charset. [#1160] [Reported by nobody]"
 msgstr ""
-
-msgid "[doc] Updated :doc:`/developer`."
-msgstr ""
+"Supported utf8, binary, ascii, latin1, cp932, sjis, eucjpms, ujis and koi8r "
+"charset. [#1160] [Reported by nobody]"
 
 msgid ""
-"Added overflow/underflow check whether valid time to find errors on 32-bit "
-"environment. [Patch by Toshihisa Tashiro]"
+"[wrapper mode] Improved rollback handling on delete. [#1224] [Reported by "
+"Koichi Shishikura]"
 msgstr ""
+"[wrapper mode] Improved rollback handling on delete. [#1224] [Reported by "
+"Koichi Shishikura]"
 
 msgid ""
-"[storage] Supproted INPLACE ALTER TABLE for adding/dropping columns. [#2277] "
-"[GitHub#12] [Patch by Naoya Murakami]"
+"[storage mode] Fixed a bug that full text search on a table without primary "
+"key returns empty results. [#1193] [Reported by Kazuhiko Shiozaki]"
 msgstr ""
+"[storage mode] Fixed a bug that full text search on a table without primary "
+"key returns empty results. [#1193] [Reported by Kazuhiko Shiozaki]"
+
+msgid "Fixed -Wno- compiler flag detection. [Patch by Arnaud Fontaine]"
+msgstr "Fixed -Wno- compiler flag detection. [Patch by Arnaud Fontaine]"
 
 msgid ""
-"[rpm][centos] Built with MySQL 5.5.37 on CentOS. [Reported by YOSHIDA Mitsuo]"
+"[wrapper mode] Fixed a problem that index isn't used for full count. [#1196]"
+"[groonga-dev,0653] [Reported by Kaneoka]"
 msgstr ""
-
-msgid ""
-"Fixed to use lowercase for table name to avoid  lower/upper-case specific "
-"issue on Mac OS. [Patch by Toshihisa Tashiro]"
-msgstr ""
-
-msgid "Fixed build error for VC++ 2013 [GitHub#10] [Patch by cosmo0920]"
-msgstr ""
-
-msgid ""
-"[doc] Added missing quote for install procedure on CentOS6 SCL. [GitHub#11] "
-"[Patch by Naoya Murakami]"
-msgstr ""
-
-msgid ""
-"[storage] Fixed a bug that renaming column by ALTER TABLE CHANGE causes "
-"crash. [#2637]"
-msgstr ""
-
-msgid "YOSHIDA Mitsuo"
-msgstr "YOSHIDA Mitsuo"
-
-msgid "Masafumi Yokoyama"
-msgstr ""
-
-msgid "Toshihisa Tashiro"
-msgstr ""
-
-msgid "Release 4.03 - 2014/05/29"
-msgstr "Release 4.03 - 2014/05/29"
-
-msgid "[doc] Updated MariaDB version. [Patch by cosmo0920]"
-msgstr "[doc] Updated MariaDB version. [Patch by cosmo0920]"
-
-msgid "Supported daylight saving time. [#2385]"
-msgstr "Supported daylight saving time. [#2385]"
-
-msgid ""
-"Migrated Ubuntu package distribution site to PPA on Launchpad. See :doc:`/"
-"install` for details."
-msgstr ""
-"Migrated Ubuntu package distribution site to PPA on Launchpad. See :doc:`/"
-"install` for details."
-
-msgid ""
-"[doc] Fixed command line in :doc:`/install`. [Reported by YOSHIDA Mitsuo]"
-msgstr ""
-"[doc] Fixed command line in :doc:`/install`. [Reported by YOSHIDA Mitsuo]"
-
-msgid "Release 4.02 - 2014/04/29"
-msgstr "Release 4.02 - 2014/04/29"
-
-msgid "Supported MariaDB 10.0.10 [#2460] [Reported by Kazuhiko Shiozaki]"
-msgstr "Supported MariaDB 10.0.10 [#2460] [Reported by Kazuhiko Shiozaki]"
-
-msgid "Supported MySQL 5.6.17."
-msgstr "Supported MySQL 5.6.17."
-
-msgid "Supported Ubuntu 14.04 LTS Trusty Tahr."
-msgstr "Supported Ubuntu 14.04 LTS Trusty Tahr."
-
-msgid "Enabled MariaDB bundled build."
-msgstr "Enabled MariaDB bundled build."
-
-msgid "Dropped Ubuntu 12.10 Quantal Quetzal support."
-msgstr "Dropped Ubuntu 12.10 Quantal Quetzal support."
-
-msgid "[doc] Updated MySQL version. [GitHub#8] [Patch by cosmo0920]"
-msgstr "[doc] Updated MySQL version. [GitHub#8] [Patch by cosmo0920]"
-
-msgid ""
-"[storage] Stopped to use truncate for ``DELETE FROM table``. [groonga-"
-"dev,02222] [Reported by GMO Media, Inc.]"
-msgstr ""
-"[storage] Stopped to use truncate for ``DELETE FROM table``. [groonga-"
-"dev,02222] [Reported by GMO Media, Inc.]"
-
-msgid "[wrapper] Stopped to use truncate for ``DELETE FROM table``."
-msgstr "[wrapper] Stopped to use truncate for ``DELETE FROM table``."
-
-msgid ""
-"[storage] Fixed a bug that inplace alter table with no primary key crashes. "
-"[groonga-dev,02227] [Reported by GMO Media, Inc.]"
-msgstr ""
-"[storage] Fixed a bug that inplace alter table with no primary key crashes. "
-"[groonga-dev,02227] [Reported by GMO Media, Inc.]"
-
-msgid ""
-"[storage] Fixed a bug that ``ORDER BY function(vector_reference_column)`` "
-"doesn't work. [groonga-dev,02234] [Reported by Naoya Murakami]"
-msgstr ""
-"[storage] Fixed a bug that ``ORDER BY function(vector_reference_column)`` "
-"doesn't work. [groonga-dev,02234] [Reported by Naoya Murakami]"
-
-msgid ""
-"Fixed a bug that setting the current value to ``mroonga_default_parser`` or "
-"``mroonga_log_file`` crash. [GitHub#6] [Patch by Satoshi MITANI]"
-msgstr ""
-"Fixed a bug that setting the current value to ``mroonga_default_parser`` or "
-"``mroonga_log_file`` crash. [GitHub#6] [Patch by Satoshi MITANI]"
-
-msgid ""
-"Fixed a bug that ``mroonga_lock_timeout`` in my.cnf or command line option "
-"is ignored. [GitHub#7] [Patch by GMO Media, Inc.]"
-msgstr ""
-"Fixed a bug that ``mroonga_lock_timeout`` in my.cnf or command line option "
-"is ignored. [GitHub#7] [Patch by GMO Media, Inc.]"
-
-msgid ""
-"Fixed a bug that deleting by primary key doesn't update unique index. "
-"[groonga-dev,02244] [Reported by Akihiro Tsukui]"
-msgstr ""
-"Fixed a bug that deleting by primary key doesn't update unique index. "
-"[groonga-dev,02244] [Reported by Akihiro Tsukui]"
+"[wrapper mode] Fixed a problem that index isn't used for full count. [#1196]"
+"[groonga-dev,0653] [Reported by Kaneoka]"
 
 msgid "Kazuhiko Shiozaki"
 msgstr "Kazuhiko Shiozaki"
 
-msgid "Satoshi MITANI"
-msgstr "Satoshi MITANI"
+msgid "Arnaud Fontaine"
+msgstr "Arnaud Fontaine"
 
-msgid "Akihiro Tsukui"
-msgstr "Akihiro Tsukui"
+msgid "Kaneoka"
+msgstr "Kaneoka"
 
-msgid "Release 4.01 - 2014/03/29"
-msgstr "Release 4.01 - 2014/03/29"
+msgid "nobody"
+msgstr "nobody"
 
-msgid "Supported MariaDB 10.0.9 [#2387] [Reported by Kazuhiko Shiozaki]"
-msgstr "Supported MariaDB 10.0.9 [#2387] [Reported by Kazuhiko Shiozaki]"
+msgid "Koichi Shishikura"
+msgstr "Koichi Shishikura"
 
-msgid ""
-"Supported ten or more sections in W pragma [#2348] [groonga-dev,02138] "
-"[Reported by yoku0825]"
-msgstr ""
-"Supported ten or more sections in W pragma [#2348] [groonga-dev,02138] "
-"[Reported by yoku0825]"
-
-msgid "[rpm][centos] Supported SCL MySQL package on CentOS 6."
-msgstr "[rpm][centos] Supported SCL MySQL package on CentOS 6."
+msgid "Release 1.10 - 2011/11/29"
+msgstr "Release 1.10 - 2011/11/29"
 
 msgid ""
-"[storage] Fixed a bug that ALTER TABLE with fulltext index which refer to "
-"table causes mysqld crash. [#2327] [groonga-dev,02130] [Reported by Naoya "
-"Murakami]"
+"Since this release, this project and product is called \"mroonga\" instead "
+"of \"groonga storage engine\"."
 msgstr ""
-"[storage] Fixed a bug that ALTER TABLE with fulltext index which refer to "
-"table causes mysqld crash. [#2327] [groonga-dev,02130] [Reported by Naoya "
-"Murakami]"
+"Since this release, this project and product is called \"mroonga\" instead "
+"of \"groonga storage engine\"."
+
+msgid "This release introduces MariaDB support and fixes several bugs."
+msgstr "This release introduces MariaDB support and fixes several bugs."
+
+msgid "rename to \"mroonga\" from \"groonga storage engine\". #1170"
+msgstr "rename to \"mroonga\" from \"groonga storage engine\". #1170"
+
+msgid "add groonga_libgroonga_version and groonga_version variables. #1158"
+msgstr "add groonga_libgroonga_version and groonga_version variables. #1158"
 
 msgid ""
-"[doc] Fixed to use Mroonga/Groonga (capitalized notation) in characteristics "
-"document. [GitHub#5] [Patch by Naoya Murakami]"
+"information_schema.plugins.plugin_version returns mroonga's version. #1157"
 msgstr ""
-"[doc] Fixed to use Mroonga/Groonga (capitalized notation) in characteristics "
-"document. [GitHub#5] [Patch by Naoya Murakami]"
+"information_schema.plugins.plugin_version returns mroonga's version. #1157"
 
-msgid "yoku0825"
-msgstr "yoku0825"
-
-msgid "Release 4.00 - 2014/02/09"
-msgstr "Release 4.00 - 2014/02/09"
+msgid "add groonga_log_file variable. #1178 [Suggested by nobody]"
+msgstr "add groonga_log_file variable. #1178 [Suggested by nobody]"
 
 msgid ""
-"Bump version to 4.00! We recommend to upgrade because crash bug and updating "
-"issue are fixed now!"
+"FLUSH STATUS flushes groonga_* status variables. #1166 [Reported by Kazuhiko]"
 msgstr ""
-"Bump version to 4.00! We recommend to upgrade because crash bug and updating "
-"issue are fixed now!"
+"FLUSH STATUS flushes groonga_* status variables. #1166 [Reported by Kazuhiko]"
 
-msgid "Dropped Ubuntu 13.04 (Raring Ringtail) support."
-msgstr "Dropped Ubuntu 13.04 (Raring Ringtail) support."
+msgid "support TRUNCATE TABLE #1151. [Suggested by Takahiro Nagai]"
+msgstr "support TRUNCATE TABLE #1151. [Suggested by Takahiro Nagai]"
+
+msgid "support ALTER TABLE #1168."
+msgstr "support ALTER TABLE #1168."
+
+msgid "support MariaDB 5.2.9. #1152 [Reported by Kazuhiko]"
+msgstr "support MariaDB 5.2.9. #1152 [Reported by Kazuhiko]"
+
+msgid "support MariaDB 5.3.2-beta. #1152 [Reported by Kazuhiko]"
+msgstr "support MariaDB 5.3.2-beta. #1152 [Reported by Kazuhiko]"
+
+msgid "[rpm] split document package."
+msgstr "[rpm] split document package."
+
+msgid "improve memory allocation for string system variables."
+msgstr "improve memory allocation for string system variables."
+
+msgid "use PLUGIN_LICENSE_GPL. [Suggested by Kazuhiko]"
+msgstr "use PLUGIN_LICENSE_GPL. [Suggested by Kazuhiko]"
+
+msgid "remove needless MeCab related configurations."
+msgstr "remove needless MeCab related configurations."
 
 msgid ""
-"[storage] Supported to search with empty string. [#2214] [groonga-dev,02052] "
-"[Reported by Naoya Murakami]"
+"support FOUND_ROWS() and SQL_CALC_FOUND_ROWS. #1163 [Reported by Horikoshi "
+"Yuki]"
 msgstr ""
-"[storage] Supported to search with empty string. [#2214] [groonga-dev,02052] "
-"[Reported by Naoya Murakami]"
+"support FOUND_ROWS() and SQL_CALC_FOUND_ROWS. #1163 [Reported by Horikoshi "
+"Yuki]"
+
+msgid "support table name that contains '-'. #1165 [Reported by nobody]"
+msgstr "support table name that contains '-'. #1165 [Reported by nobody]"
+
+msgid "support inplace index change on MySQL 5.1."
+msgstr "support inplace index change on MySQL 5.1."
+
+msgid "[deb] support i386."
+msgstr "[deb] support i386."
+
+msgid "[rpm] support i386."
+msgstr "[rpm] support i386."
 
 msgid ""
-"Fixed a crash bug that bulk inserting null value into geometry column which "
-"has NOT NULL constraint. [#2281] [groonga-dev,02095] [Reported by yoku]"
+"[storage mode] fix a bug that REPLACE INTO with TEXT column does not work. "
+"#1153 [Reported by Kazuhiko]"
 msgstr ""
-"Fixed a crash bug that bulk inserting null value into geometry column which "
-"has NOT NULL constraint. [#2281] [groonga-dev,02095] [Reported by yoku]"
+"[storage mode] fix a bug that REPLACE INTO with TEXT column does not work. "
+"#1153 [Reported by Kazuhiko]"
 
 msgid ""
-"[storage] Fixed a bug that existing records may be unexectedlly removed by "
-"ON DUPLICATE KEY UPDATE. In the previous versions, such a query can't update "
-"the value of column correctly. [#2263] [Reported Masahiro Nagano]"
+"[wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with "
+"InnoDB. #1154 [Reported by Kazuhiko]"
 msgstr ""
-"[storage] Fixed a bug that existing records may be unexectedlly removed by "
-"ON DUPLICATE KEY UPDATE. In the previous versions, such a query can't update "
-"the value of column correctly. [#2263] [Reported Masahiro Nagano]"
-
-msgid "yoku"
-msgstr "yoku"
-
-msgid "Masahiro Nagano"
-msgstr "Masahiro Nagano"
-
-msgid "Release 3.12 - 2014/01/29"
-msgstr "Release 3.12 - 2014/01/29"
+"[wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with "
+"InnoDB. #1154 [Reported by Kazuhiko]"
 
 msgid ""
-"Added a new system variable :ref:`mroonga_lock_timeout`. By changing this "
-"global variable, You can customize Groonga's lock timeout dynamically."
+"fix a bug that using ORDER and LIMIT returns a wrong result. #1161 [Reported "
+"by Horikoshi Yuki]"
 msgstr ""
-"Added a new system variable :ref:`mroonga_lock_timeout`. By changing this "
-"global variable, You can customize Groonga's lock timeout dynamically."
+"fix a bug that using ORDER and LIMIT returns a wrong result. #1161 [Reported "
+"by Horikoshi Yuki]"
 
 msgid ""
-"Improved compatibility with Tritonn 'W' pragma's behaviour. In the previous "
-"versions, Mroonga used omitted section as weight 0. By this change, Mroonga "
-"uses omitted section as weight 1. This behaviour is same as Tritonn. [#2152] "
-"[Patch by Kenji Maruyama]"
+"fix a crash bug when FORCE INDEX with unknown key is used. #1181 [Reported "
+"by Takahiro Nagai]"
 msgstr ""
-"Improved compatibility with Tritonn 'W' pragma's behaviour. In the previous "
-"versions, Mroonga used omitted section as weight 0. By this change, Mroonga "
-"uses omitted section as weight 1. This behaviour is same as Tritonn. [#2152] "
-"[Patch by Kenji Maruyama]"
-
-msgid ""
-"Fixed a crash bug on FLUSH TABLES during SELECT MATCH AGAINST ... [#2137] "
-"[Reported by yoku]"
-msgstr ""
-"Fixed a crash bug on FLUSH TABLES during SELECT MATCH AGAINST ... [#2137] "
-"[Reported by yoku]"
-
-msgid ""
-"Fixed wrong implementation for \"W\" pragma. It was changed to 1-origin. "
-"[#2151] In the previous versions, \"W\" pragma is implemented as 0-origin, "
-"but it is not compatible with Tritonn. This is incompatible change, please "
-"check existing query which use \"W\" pragma."
-msgstr ""
-"Fixed wrong implementation for \"W\" pragma. It was changed to 1-origin. "
-"[#2151] In the previous versions, \"W\" pragma is implemented as 0-origin, "
-"but it is not compatible with Tritonn. This is incompatible change, please "
-"check existing query which use \"W\" pragma."
-
-msgid ""
-"Fixed a bug that searching empty records with \"NOT\" query returns "
-"duplicated results. [#2215] [groonga-dev,02052] [Reported by Naoya Murakami]"
-msgstr ""
-"Fixed a bug that searching empty records with \"NOT\" query returns "
-"duplicated results. [#2215] [groonga-dev,02052] [Reported by Naoya Murakami]"
-
-msgid "Release 3.11 - 2013/12/29"
-msgstr "Release 3.11 - 2013/12/29"
-
-msgid "[deb] Dropped Debian 6.0 (squeeze) support."
-msgstr "[deb] Dropped Debian 6.0 (squeeze) support."
-
-msgid "[deb] Dropped Ubuntu 10.04 (lucid) support."
-msgstr "[deb] Dropped Ubuntu 10.04 (lucid) support."
-
-msgid ""
-"[storage] Supported optimization for \"MATCH AGAINST AND INT_COLUMN OPERATOR "
-"XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports '<', '>', "
-"'<=' and '>='. [groonga-dev,01940] [Reported by Horikoshi Yuki]"
-msgstr ""
-"[storage] Supported optimization for \"MATCH AGAINST AND INT_COLUMN OPERATOR "
-"XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports '<', '>', "
-"'<=' and '>='. [groonga-dev,01940] [Reported by Horikoshi Yuki]"
-
-msgid ""
-"[storage] Supported optimization for \"MATCH AGAINST AND DATETIME_COLUMN "
-"OPERATOR XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports "
-"'<', '>', '<=' and '>='. [groonga-dev,01943] [Suggested by yoku]"
-msgstr ""
-"[storage] Supported optimization for \"MATCH AGAINST AND DATETIME_COLUMN "
-"OPERATOR XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports "
-"'<', '>', '<=' and '>='. [groonga-dev,01943] [Suggested by yoku]"
-
-msgid ""
-"[storage] Supported optimization for \"MATCH AGAINST AND TIME_COLUMN "
-"OPERATOR XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports "
-"'<', '>', '<=' and '>='."
-msgstr ""
-"[storage] Supported optimization for \"MATCH AGAINST AND TIME_COLUMN "
-"OPERATOR XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports "
-"'<', '>', '<=' and '>='."
-
-msgid "[doc] Renamed documentation from 'UserGuide' to 'Tutorial'."
-msgstr "[doc] Renamed documentation from 'UserGuide' to 'Tutorial'."
-
-msgid "[doc] Added 'FAQ' section for documentation."
-msgstr "[doc] Added 'FAQ' section for documentation."
-
-msgid "[doc] Added independant section for 'Full text search'."
-msgstr "[doc] Added independant section for 'Full text search'."
-
-msgid ""
-"[storage] Supported 'BETWEEN' for INT_COLUMN, DATETIME_COLUMN and "
-"TIME_COLUMN. Note that it requres Groonga 3.1.1 or later. [groonga-"
-"dev,01943] [Suggested by yoku]"
-msgstr ""
-"[storage] Supported 'BETWEEN' for INT_COLUMN, DATETIME_COLUMN and "
-"TIME_COLUMN. Note that it requres Groonga 3.1.1 or later. [groonga-"
-"dev,01943] [Suggested by yoku]"
-
-msgid "Supported MariaDB 10.0.7 (it doesn't released yet.) [#1964]"
-msgstr "Supported MariaDB 10.0.7 (it doesn't released yet.) [#1964]"
-
-msgid "Dropped support for Microsoft Visual Studio 2008 or previous versions."
-msgstr "Dropped support for Microsoft Visual Studio 2008 or previous versions."
-
-msgid "Dropped Fedora 19 support."
-msgstr "Dropped Fedora 19 support."
-
-msgid "Supported Fedora 20."
-msgstr "Supported Fedora 20."
-
-msgid ""
-"Dropped mysql-mroonga package on CentOS 5. Use mysql55-mroonga package "
-"instead."
-msgstr ""
-"Dropped mysql-mroonga package on CentOS 5. Use mysql55-mroonga package "
-"instead."
-
-msgid ""
-"[storage] Fixed a bug that MySQL crashes on 'LOCK TABLE .. READ' when "
-"dumping/restoring. [#2098]"
-msgstr ""
-"[storage] Fixed a bug that MySQL crashes on 'LOCK TABLE .. READ' when "
-"dumping/restoring. [#2098]"
-
-msgid "Fixed wrong implementation for \"\\*D-\" pragma. [#2099]"
-msgstr "Fixed wrong implementation for \"\\*D-\" pragma. [#2099]"
-
-msgid ""
-"Fixed a memory leak on full text search. It affects such as \"MATCH "
-"AGAINST ... ORDER BY LIMIT ...\". [#2144]"
-msgstr ""
-"Fixed a memory leak on full text search. It affects such as \"MATCH "
-"AGAINST ... ORDER BY LIMIT ...\". [#2144]"
-
-msgid "Horikoshi Yuki"
-msgstr "Horikoshi Yuki"
-
-msgid "Release 3.10 - 2013/11/29"
-msgstr "Release 3.10 - 2013/11/29"
-
-msgid "Supported MariaDB 10.0.6."
-msgstr "Supported MariaDB 10.0.6."
-
-msgid ""
-"[plugin][mroonga_snippet] Improved to report not supported charset in error "
-"message."
-msgstr ""
-"[plugin][mroonga_snippet] Improved to report not supported charset in error "
-"message."
-
-msgid ""
-"Fixed multi range read disk sweep issue. [groonga-dev,01715] [#1959] The "
-"problem that query which has \"WHERE IN (...)\" clause causes an error is "
-"fixed. [Reported by Kimura]"
-msgstr ""
-"Fixed multi range read disk sweep issue. [groonga-dev,01715] [#1959] The "
-"problem that query which has \"WHERE IN (...)\" clause causes an error is "
-"fixed. [Reported by Kimura]"
-
-msgid "Fixed SEGV issue with trunk version of MariaDB [#1958]"
-msgstr "Fixed SEGV issue with trunk version of MariaDB [#1958]"
-
-msgid ""
-"Fixed a bug that geometry column is not properly updated by 'REPLACE INTO' "
-"or 'INSERT ON DUPLICATE KEY UPDATE' query. [#2057]"
-msgstr ""
-"Fixed a bug that geometry column is not properly updated by 'REPLACE INTO' "
-"or 'INSERT ON DUPLICATE KEY UPDATE' query. [#2057]"
-
-msgid "Fixed compiler warnings on Windows. [#1964]"
-msgstr "Fixed compiler warnings on Windows. [#1964]"
-
-msgid ""
-"Fixed the issue that vector column is no properly updated by 'REPLACE INTO' "
-"query. [#2064]"
-msgstr ""
-"Fixed the issue that vector column is no properly updated by 'REPLACE INTO' "
-"query. [#2064]"
-
-msgid ""
-"[mariadb10.0.5] Fixed build error which is derived from changed directory "
-"structure. [#2066]"
-msgstr ""
-"[mariadb10.0.5] Fixed build error which is derived from changed directory "
-"structure. [#2066]"
-
-msgid ""
-"Fixed a bug that shorter column name such as \"_i\" is treated as \"_id\" "
-"which is special column. [#2085] [Reported by Alexander Barkov]"
-msgstr ""
-"Fixed a bug that shorter column name such as \"_i\" is treated as \"_id\" "
-"which is special column. [#2085] [Reported by Alexander Barkov]"
-
-msgid "Kimura"
-msgstr "Kimura"
-
-msgid "Alexander Barkov"
-msgstr "Alexander Barkov"
-
-msgid "Release 3.09 - 2013/10/29"
-msgstr "Release 3.09 - 2013/10/29"
-
-msgid "Supported Ubuntu 13.10 (Saucy Salamander)."
-msgstr "Supported Ubuntu 13.10 (Saucy Salamander)."
-
-msgid ""
-"[rpm][centos] Supported rpm packages for MySQL 5.5 on CentOS 5. It provides "
-"mysql55-mroonga to support mysql55-mysql packages. [groonga-dev,01860] "
-"[Reported by WING]"
-msgstr ""
-"[rpm][centos] Supported rpm packages for MySQL 5.5 on CentOS 5. It provides "
-"mysql55-mroonga to support mysql55-mysql packages. [groonga-dev,01860] "
-"[Reported by WING]"
-
-msgid ""
-"[wrapper] Fixed a memory leak. It occurs when wrapper handler doesn't "
-"destroy mutexes properly. MyISAM is known as effected storage engine."
-msgstr ""
-"[wrapper] Fixed a memory leak. It occurs when wrapper handler doesn't "
-"destroy mutexes properly. MyISAM is known as effected storage engine."
-
-msgid ""
-"[wrapper] Fixed a bug that force index causes crush for MySQL 5.6. [#2015] "
-"[groonga-dev,01867] [Reported by Ichiro Yasuda]"
-msgstr ""
-"[wrapper] Fixed a bug that force index causes crush for MySQL 5.6. [#2015] "
-"[groonga-dev,01867] [Reported by Ichiro Yasuda]"
-
-msgid "WING"
-msgstr "WING"
-
-msgid "Ichiro Yasuda"
-msgstr "Ichiro Yasuda"
-
-msgid "Release 3.08 - 2013/9/29"
-msgstr "Release 3.08 - 2013/9/29"
-
-msgid ""
-"[doc] Added missing description about wrapper mode specific issue. [groonga-"
-"dev,01747] [Reported by Kazuhiro Isobe]"
-msgstr ""
-"[doc] Added missing description about wrapper mode specific issue. [groonga-"
-"dev,01747] [Reported by Kazuhiro Isobe]"
-
-msgid ""
-"[mroonga_escape] Supported to call mroonga_escape as an argument of UDF. "
-"[#1923] [Reported by Tomoatsu Shimada]"
-msgstr ""
-"[mroonga_escape] Supported to call mroonga_escape as an argument of UDF. "
-"[#1923] [Reported by Tomoatsu Shimada]"
-
-msgid ""
-"[doc] Added language annotation to \"Show Source\" label. [groonga-"
-"dev,01747] [Reported by Kazuhiro Isobe]"
-msgstr ""
-"[doc] Added language annotation to \"Show Source\" label. [groonga-"
-"dev,01747] [Reported by Kazuhiro Isobe]"
-
-msgid ""
-"[wrapper] Supported REPAIR TABLE for broken groonga database. [groonga-"
-"dev,01540] [Suggested by Naoya Murakami]"
-msgstr ""
-"[wrapper] Supported REPAIR TABLE for broken groonga database. [groonga-"
-"dev,01540] [Suggested by Naoya Murakami]"
-
-msgid ""
-"Supported MariaDB 10.x build with configure [groonga-dev,01727] [Reported by "
-"WING]"
-msgstr ""
-"Supported MariaDB 10.x build with configure [groonga-dev,01727] [Reported by "
-"WING]"
-
-msgid ""
-"Fixed a bug that mroonga is accidentally removed on upgrade. [#1918] "
-"[Reported by @ceekz]"
-msgstr ""
-"Fixed a bug that mroonga is accidentally removed on upgrade. [#1918] "
-"[Reported by @ceekz]"
-
-msgid ""
-"Fixed a bug that mysqld 32bit executable binary crashes when install plugin "
-"on Windows."
-msgstr ""
-"Fixed a bug that mysqld 32bit executable binary crashes when install plugin "
-"on Windows."
-
-msgid ""
-"[storage][mariadb] Fixed a memory for mroonga_log_file. This memory leak "
-"occurs when log file name is changed."
-msgstr ""
-"[storage][mariadb] Fixed a memory for mroonga_log_file. This memory leak "
-"occurs when log file name is changed."
-
-msgid "Kazuhiro Isobe"
-msgstr "Kazuhiro Isobe"
-
-msgid "Tomoatsu Shimada"
-msgstr "Tomoatsu Shimada"
-
-msgid "@ceekz"
-msgstr "@ceekz"
-
-msgid "Release 3.07 - 2013/8/29"
-msgstr "Release 3.07 - 2013/8/29"
-
-msgid ""
-"Added :doc:`/reference/udf/mroonga_escape` UDF which escapes special "
-"characters in query for BOOLEAN MODE. [groonga-dev,01576] [Suggested by "
-"Kouhei Tanabe]"
-msgstr ""
-"Added :doc:`/reference/udf/mroonga_escape` UDF which escapes special "
-"characters in query for BOOLEAN MODE. [groonga-dev,01576] [Suggested by "
-"Kouhei Tanabe]"
-
-msgid ""
-"Supported VARCHAR equal expression in WHERE clause for ORDER BY LIMIT "
-"optimization."
-msgstr ""
-"Supported VARCHAR equal expression in WHERE clause for ORDER BY LIMIT "
-"optimization."
-
-msgid "Supported MariaDB 5.5.32 timestamp."
-msgstr "Supported MariaDB 5.5.32 timestamp."
-
-msgid "Supported MariaDB 10.0.4. [Reported by WING] [Reported by yoku ts]"
-msgstr "Supported MariaDB 10.0.4. [Reported by WING] [Reported by yoku ts]"
-
-msgid "[mariadb] Fixed a crash bug when installing plugin on Windows."
-msgstr "[mariadb] Fixed a crash bug when installing plugin on Windows."
-
-msgid ""
-"[storage][mysql55] Fixed a bug that changing column that has index fails. "
-"[groonga-talk] [Reported by Chang] This bug affects the case that ``FULLTEXT "
-"INDEX (column1)`` is changed by ``ALTER TABLE table1 CHANGE column1 column1 "
-"new_column_definition`` for example."
-msgstr ""
-"[storage][mysql55] Fixed a bug that changing column that has index fails. "
-"[groonga-talk] [Reported by Chang] This bug affects the case that ``FULLTEXT "
-"INDEX (column1)`` is changed by ``ALTER TABLE table1 CHANGE column1 column1 "
-"new_column_definition`` for example."
-
-msgid ""
-"[doc][wrapper] Fixed incorrect description about condition of ORDER BY LIMIT "
-"optimization."
-msgstr ""
-"[doc][wrapper] Fixed incorrect description about condition of ORDER BY LIMIT "
-"optimization."
-
-msgid ""
-"[storage] Disabled ORDER BY LIMIT optimization for not indexed VARCHAR "
-"condition. It should be indexed to handle COLLATION properly."
-msgstr ""
-"[storage] Disabled ORDER BY LIMIT optimization for not indexed VARCHAR "
-"condition. It should be indexed to handle COLLATION properly."
-
-msgid "Fixed a bug that missing internal flag causes crash on MySQL 5.6.13."
-msgstr "Fixed a bug that missing internal flag causes crash on MySQL 5.6.13."
-
-msgid "Kouhei Tanabe"
-msgstr "Kouhei Tanabe"
-
-msgid "Chang"
-msgstr "Chang"
-
-msgid "yoku ts"
-msgstr "yoku ts"
-
-msgid "Release 3.06 - 2013/7/29"
-msgstr "Release 3.06 - 2013/7/29"
-
-msgid ""
-"Added :ref:`mroonga_action_on_fulltext_query_error` session variable. This "
-"affects how to report errors about invalid escape. [groonga-dev,01529] "
-"[Reported by Kouhei Tanabe]"
-msgstr ""
-"Added :ref:`mroonga_action_on_fulltext_query_error` session variable. This "
-"affects how to report errors about invalid escape. [groonga-dev,01529] "
-"[Reported by Kouhei Tanabe]"
-
-msgid ""
-"Supported count skip optimization for wrapper mode even though MySQL 5.5 or "
-"MariaDB 10.x. [#1841] [groonga-dev,01523] [Reported by Naoya Murakami] This "
-"optimization does not work if you use wrapper mode with storage engine which "
-"supports transaction."
-msgstr ""
-"Supported count skip optimization for wrapper mode even though MySQL 5.5 or "
-"MariaDB 10.x. [#1841] [groonga-dev,01523] [Reported by Naoya Murakami] This "
-"optimization does not work if you use wrapper mode with storage engine which "
-"supports transaction."
-
-msgid "Supported Fedora 19."
-msgstr "Supported Fedora 19."
-
-msgid "Dropped Fedora 18 support."
-msgstr "Dropped Fedora 18 support."
-
-msgid "Release 3.05 - 2013/6/29"
-msgstr "Release 3.05 - 2013/6/29"
-
-msgid ""
-"Added warnings for truncated date data. [#1768] [Suggested by Y.Kentaro]"
-msgstr ""
-"Added warnings for truncated date data. [#1768] [Suggested by Y.Kentaro]"
-
-msgid "Supported MySQL 5.6.12. [Reported by WING]"
-msgstr "Supported MySQL 5.6.12. [Reported by WING]"
-
-msgid "Added documentation about troubleshooting."
-msgstr "Added documentation about troubleshooting."
-
-msgid ""
-"Supported to enable fast mutexes option by build configuration. [#1760] "
-"[Reported by WING]"
-msgstr ""
-"Supported to enable fast mutexes option by build configuration. [#1760] "
-"[Reported by WING]"
-
-msgid ""
-"Fixed a bug that three or more sections in W pragma doesn't work. [#1770] "
-"[Reported by shizuin]"
-msgstr ""
-"Fixed a bug that three or more sections in W pragma doesn't work. [#1770] "
-"[Reported by shizuin]"
-
-msgid "Fixed build error with \"-O2\". [Reported by Y.Kentaro]"
-msgstr "Fixed build error with \"-O2\". [Reported by Y.Kentaro]"
-
-msgid "Fixed a memory leak by re-registration of ``normalizers/mysql``."
-msgstr "Fixed a memory leak by re-registration of ``normalizers/mysql``."
-
-msgid "Fixed a crush bug when updating with ``DISABLE KEYS``. [#1759]"
-msgstr "Fixed a crush bug when updating with ``DISABLE KEYS``. [#1759]"
-
-msgid ""
-"[doc] Fixed a wrong translation about status variable of optimization in "
-"wrapper mode. [Reported by YOSHIDA Mitsuo]"
-msgstr ""
-"[doc] Fixed a wrong translation about status variable of optimization in "
-"wrapper mode. [Reported by YOSHIDA Mitsuo]"
-
-msgid ""
-"Fixed a crush bug when no where clause with ``ORDER BY ... LIMIT`` is "
-"specified. [Reported by @memorycraft]"
-msgstr ""
-"Fixed a crush bug when no where clause with ``ORDER BY ... LIMIT`` is "
-"specified. [Reported by @memorycraft]"
-
-msgid ""
-"Fixed a bug that data is hidden when ``LOCK TABLES`` and ``ENABLE KEYS`` are "
-"used same time. [#1778] [Reported by Y.Kentaro]"
-msgstr ""
-"Fixed a bug that data is hidden when ``LOCK TABLES`` and ``ENABLE KEYS`` are "
-"used same time. [#1778] [Reported by Y.Kentaro]"
-
-msgid "Y.Kentaro"
-msgstr "Y.Kentaro"
-
-msgid "shizuin"
-msgstr "shizuin"
-
-msgid "@memorycraft"
-msgstr "@memorycraft"
-
-msgid "Release 3.04 - 2013/5/29"
-msgstr "Release 3.04 - 2013/5/29"
-
-msgid "Improved MariaDB 10.0.2 support. [#1729]"
-msgstr "Improved MariaDB 10.0.2 support. [#1729]"
-
-msgid "[doc] Updated supported SQL command list. [Reported by Y.Kentaro]"
-msgstr "[doc] Updated supported SQL command list. [Reported by Y.Kentaro]"
-
-msgid "Dropped Ubuntu 11.10 (Oneiric Ocelot) support."
-msgstr "Dropped Ubuntu 11.10 (Oneiric Ocelot) support."
-
-msgid "Supported mroonga bundled MariaDB package. [#1691]"
-msgstr "Supported mroonga bundled MariaDB package. [#1691]"
-
-msgid "[wrapper] Stopped to parse column comment. [Reported by Y.Kentaro]"
-msgstr "[wrapper] Stopped to parse column comment. [Reported by Y.Kentaro]"
-
-msgid "Stopped to validate normal column comment. [Reported by Y.Kentaro]"
-msgstr "Stopped to validate normal column comment. [Reported by Y.Kentaro]"
-
-msgid ""
-"Improved the way to detect directory which contains libmysqlservices.a. "
-"[Reported by Y.Kentaro]"
-msgstr ""
-"Improved the way to detect directory which contains libmysqlservices.a. "
-"[Reported by Y.Kentaro]"
-
-msgid ""
-"Improved to accept free style normal comment in table/index comment. "
-"[Suggested by Y.Kentaro]"
-msgstr ""
-"Improved to accept free style normal comment in table/index comment. "
-"[Suggested by Y.Kentaro]"
-
-msgid ""
-"Supported \"W\" pragma. This feature is derived from `Tritonn <http://qwik."
-"jp/senna/query.html>`_."
-msgstr ""
-"Supported \"W\" pragma. This feature is derived from `Tritonn <http://qwik."
-"jp/senna/query.html>`_."
-
-msgid ""
-"Supported ``mroonga_command()`` without the current database. [Reported by Y."
-"Kentaro]"
-msgstr ""
-"Supported ``mroonga_command()`` without the current database. [Reported by Y."
-"Kentaro]"
-
-msgid "Improved to use ``auto_increment`` value for creating table. [#1741]"
-msgstr "Improved to use ``auto_increment`` value for creating table. [#1741]"
-
-msgid ""
-"Improved to keep the value of ``auto_increment`` even though latest record "
-"is deleted. [#1738]"
-msgstr ""
-"Improved to keep the value of ``auto_increment`` even though latest record "
-"is deleted. [#1738]"
-
-msgid "[doc] Added documentation how to install mroonga on Windows."
-msgstr "[doc] Added documentation how to install mroonga on Windows."
-
-msgid ""
-"Added install SQL for initial setup. [groonga-dev,01434] [Suggested by "
-"Kazuhiko]"
-msgstr ""
-"Added install SQL for initial setup. [groonga-dev,01434] [Suggested by "
-"Kazuhiko]"
-
-msgid "Supported Debian 8.0 (jessie)"
-msgstr "Supported Debian 8.0 (jessie)"
-
-msgid ""
-"Fixed a bug that empty query search causes SEGV. [groonga-dev,01346] "
-"[Reported by Nakai Kanako]"
-msgstr ""
-"Fixed a bug that empty query search causes SEGV. [groonga-dev,01346] "
-"[Reported by Nakai Kanako]"
-
-msgid ""
-"Fixed a package build error depend on directory existence. [groonga-"
-"dev,01335] [Reported by WING] [Patch by yoku ts]"
-msgstr ""
-"Fixed a package build error depend on directory existence. [groonga-"
-"dev,01335] [Reported by WING] [Patch by yoku ts]"
-
-msgid ""
-"Fixed a missing build dependency to ``groonga-normalizer-mysql`` package. "
-"[Patch by Y.Kentaro]"
-msgstr ""
-"Fixed a missing build dependency to ``groonga-normalizer-mysql`` package. "
-"[Patch by Y.Kentaro]"
-
-msgid ""
-"Fixed a bug that the value of ``Mroonga_log_level`` can't be set in my.cnf. "
-"[groonga-dev,01379] [Reported by Kazuhiro Isobe]"
-msgstr ""
-"Fixed a bug that the value of ``Mroonga_log_level`` can't be set in my.cnf. "
-"[groonga-dev,01379] [Reported by Kazuhiro Isobe]"
-
-msgid "Fixed a memory leak that default tokenizer is not correctly freed."
-msgstr "Fixed a memory leak that default tokenizer is not correctly freed."
-
-msgid ""
-"[wrapper] Fixed a bug that comment is changed for alter table without engine "
-"name causes a missing table. [Reported by Y.Kentaro]"
-msgstr ""
-"[wrapper] Fixed a bug that comment is changed for alter table without engine "
-"name causes a missing table. [Reported by Y.Kentaro]"
-
-msgid "Nakai Kanako"
-msgstr "Nakai Kanako"
+"fix a crash bug when FORCE INDEX with unknown key is used. #1181 [Reported "
+"by Takahiro Nagai]"
 
 msgid "Kazuhiko"
 msgstr "Kazuhiko"
 
-msgid "Release 3.03 - 2013/4/29"
-msgstr "Release 3.03 - 2013/4/29"
+msgid "Horikoshi Yuki"
+msgstr "Horikoshi Yuki"
+
+msgid "Takahiro Nagai"
+msgstr "Takahiro Nagai"
+
+msgid "Release 1.0.1 - 2011/10/29"
+msgstr "Release 1.0.1 - 2011/10/29"
 
 msgid ""
-"[doc] Added documentation about table limitations. [groonga-dev,01281] "
-"[Reported by Kazuhiro Isobe]"
+"The important changes in this release are the enhancement of geolocation "
+"search and the improvement of dynamic index modification in storage mode."
 msgstr ""
-"[doc] Added documentation about table limitations. [groonga-dev,01281] "
-"[Reported by Kazuhiro Isobe]"
-
-msgid "[doc] Added ``mroonga_command`` documentation."
-msgstr "[doc] Added ``mroonga_command`` documentation."
-
-msgid "Supported ``default_tokenizer`` as table parameter in comment."
-msgstr "Supported ``default_tokenizer`` as table parameter in comment."
+"The important changes in this release are the enhancement of geolocation "
+"search and the improvement of dynamic index modification in storage mode."
 
 msgid ""
-"Supported using existing table as lexicon not only \"FULLTEXT INDEX\", but "
-"also normal \"INDEX\". This change improves compatibility to groonga."
+"[storage mode][wrapper mode] support reopening a database by `flush tables`."
 msgstr ""
-"Supported using existing table as lexicon not only \"FULLTEXT INDEX\", but "
-"also normal \"INDEX\". This change improves compatibility to groonga."
-
-msgid "Supported MySQL 5.6.11."
-msgstr "Supported MySQL 5.6.11."
+"[storage mode][wrapper mode] support reopening a database by `flush tables`."
 
 msgid ""
-"Supported collation in multiple column index. [groonga-dev,01302] [Reported "
-"by Kouhei Tanabe]"
+"[wrapper mode] support geolocation index. (Only Point type can be stored in "
+"a column. Search using index is only available for MBRContains)."
 msgstr ""
-"Supported collation in multiple column index. [groonga-dev,01302] [Reported "
-"by Kouhei Tanabe]"
+"[wrapper mode] support geolocation index. (Only Point type can be stored in "
+"a column. Search using index is only available for MBRContains)."
 
 msgid ""
-"Supported no parser fulltext index for predictive search by \"XXX*\" in "
-"groonga query syntax."
+"[benchmark] add `groonga_dry_write` variable to specify not to write to "
+"groonga database, that is useful to check bottle necks in benchmarks."
 msgstr ""
-"Supported no parser fulltext index for predictive search by \"XXX*\" in "
-"groonga query syntax."
-
-msgid "[cmake] Dropped MySQL 5.5.x build support."
-msgstr "[cmake] Dropped MySQL 5.5.x build support."
+"[benchmark] add `groonga_dry_write` variable to specify not to write to "
+"groonga database, that is useful to check bottle necks in benchmarks."
 
 msgid ""
-"Supported custom normalizer for FULLTEXT INDEX. Use can specify custom "
-"normalizer as a comment. Supported syntax is ``FULLTEXT INDEX (column) "
-"COMMENT 'normalizer \"NormalizerXXX\"'``. [groonga-dev:01303] [Suggested by "
-"Kouhei Tanabe]"
+"mention MySQL version in the installation guide for CentOS 6. [proposed by "
+"@yoshi_ken]"
 msgstr ""
-"Supported custom normalizer for FULLTEXT INDEX. Use can specify custom "
-"normalizer as a comment. Supported syntax is ``FULLTEXT INDEX (column) "
-"COMMENT 'normalizer \"NormalizerXXX\"'``. [groonga-dev:01303] [Suggested by "
-"Kouhei Tanabe]"
+"mention MySQL version in the installation guide for CentOS 6. [proposed by "
+"@yoshi_ken]"
 
-msgid "Supported Ubuntu 13.04 Raring Ringtail."
-msgstr "Supported Ubuntu 13.04 Raring Ringtail."
+msgid "[geolocation] improve performance by skip needless processes."
+msgstr "[geolocation] improve performance by skip needless processes."
 
 msgid ""
-"[storage] Fixed a bug that stored value can't be searched because of "
-"unexpected cast for integer. [#1696] [groonga-dev,01266] [Reported by smztks]"
+"add  `--disable-fast-mutexes` configure option to ignore fast mutexes even "
+"if mysql_config says it is enabled."
 msgstr ""
-"[storage] Fixed a bug that stored value can't be searched because of "
-"unexpected cast for integer. [#1696] [groonga-dev,01266] [Reported by smztks]"
+"add  `--disable-fast-mutexes` configure option to ignore fast mutexes even "
+"if mysql_config says it is enabled."
+
+msgid "[storage mode] support `create index`."
+msgstr "[storage mode] support `create index`."
+
+msgid "[storage mode] support `drop index`."
+msgstr "[storage mode] support `drop index`."
+
+msgid "[storage mode] support multi columns index for full text search."
+msgstr "[storage mode] support multi columns index for full text search."
+
+msgid "support `D` pragma."
+msgstr "support `D` pragma."
+
+msgid "support MySQL 5.5.17."
+msgstr "support MySQL 5.5.17."
+
+msgid "support MySQL 5.6.3-m6."
+msgstr "support MySQL 5.6.3-m6."
+
+msgid "support groonga 1.2.7. (1.2.6 or below are no longer supported)."
+msgstr "support groonga 1.2.7. (1.2.6 or below are no longer supported)."
+
+msgid "support Ubuntu 11.10 Oneiric Ocelot."
+msgstr "support Ubuntu 11.10 Oneiric Ocelot."
 
 msgid ""
-"[wrapper] Fixed a bug that multiple match against returns invalid aggregated "
-"count. [#1702] [groonga-dev,01279] [Reported by Masahiro Furuta]"
+"fix a bug that we have no results if we specify '+' at the beginning of the "
+"query in boolean mode. [reported by Hajime Nishiyama]"
 msgstr ""
-"[wrapper] Fixed a bug that multiple match against returns invalid aggregated "
-"count. [#1702] [groonga-dev,01279] [Reported by Masahiro Furuta]"
+"fix a bug that we have no results if we specify '+' at the beginning of the "
+"query in boolean mode. [reported by Hajime Nishiyama]"
+
+msgid "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
+msgstr "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
 
 msgid ""
-"Fixed a bug that ``mrn_log_level`` is ignored. [groonga-dev,01290] [Reported "
-"by Kazuhiro Isobe]"
+"[Fedora] fix a problem that we get undefined symbol error when the plugin is "
+"loaded. [reported by Takahiro Nagai]"
 msgstr ""
-"Fixed a bug that ``mrn_log_level`` is ignored. [groonga-dev,01290] [Reported "
-"by Kazuhiro Isobe]"
+"[Fedora] fix a problem that we get undefined symbol error when the plugin is "
+"loaded. [reported by Takahiro Nagai]"
 
 msgid ""
-"Fixed a bug that mroonga crashes when freeing internal temporary shared "
-"object."
+"[storage mode] fix a bug that index will not be correctly created if "
+"`varchar` is used in a multi-column index. #1143 [reported by Takahiro Nagai]"
 msgstr ""
-"Fixed a bug that mroonga crashes when freeing internal temporary shared "
-"object."
+"[storage mode] fix a bug that index will not be correctly created if "
+"`varchar` is used in a multi-column index. #1143 [reported by Takahiro Nagai]"
+
+msgid "@yoshi_ken"
+msgstr "@yoshi_ken"
+
+msgid "Hajime Nishiyama"
+msgstr "Hajime Nishiyama"
+
+msgid "1.0.0 リリース - 2011/09/29"
+msgstr "1.0.0 リリース - 2011/09/29"
+
+msgid "初回リリースから約1年経って、初のメジャーリリース！"
+msgstr "初回リリースから約1年経って、初のメジャーリリース！"
+
+msgid "[ラッパーモード] drop index対応。 #1040"
+msgstr "[ラッパーモード] drop index対応。 #1040"
 
 msgid ""
-"[doc] Fixed a typo about running mode of storage engine and a long ambiguous "
-"sentence. [Reported by Ichiro Suzuki]"
+"[ストレージモード] GEOMETRY対応。（ただし、カラムに保存できる型はPointのみ対"
+"応。インデックスを利用した位置検索はMBRContainsのみ対応。） #1041"
 msgstr ""
-"[doc] Fixed a typo about running mode of storage engine and a long ambiguous "
-"sentence. [Reported by Ichiro Suzuki]"
+"[ストレージモード] GEOMETRY対応。（ただし、カラムに保存できる型はPointのみ対"
+"応。インデックスを利用した位置検索はMBRContainsのみ対応。） #1041"
+
+msgid "[ストレージモード] マルチカラムインデックスに対応。 #455"
+msgstr "[ストレージモード] マルチカラムインデックスに対応。 #455"
 
 msgid ""
-"[mysql55] Fixed a bug that inplace anonymous index recreation cause a crash. "
-"[groonga-dev,01319] [Reported by Kouhei Tanabe]"
+"[ストレージモード][ラッパーモード] 全文検索用パーサー（トークナイザー）のカス"
+"タマイズに対応。 #592"
 msgstr ""
-"[mysql55] Fixed a bug that inplace anonymous index recreation cause a crash. "
-"[groonga-dev,01319] [Reported by Kouhei Tanabe]"
-
-msgid "smztks"
-msgstr "smztks"
-
-msgid "Masahiro Furuta"
-msgstr "Masahiro Furuta"
-
-msgid "Ichiro Suzuki"
-msgstr "Ichiro Suzuki"
-
-msgid "Release 3.02 - 2013/3/29"
-msgstr "Release 3.02 - 2013/3/29"
-
-msgid "Improved bundling to MariaDB 10.0 for Linux. [#1644]"
-msgstr "Improved bundling to MariaDB 10.0 for Linux. [#1644]"
+"[ストレージモード][ラッパーモード] 全文検索用パーサー（トークナイザー）のカス"
+"タマイズに対応。 #592"
 
 msgid ""
-"Added the value of list documentation about ``mroonga_log_level`` in "
-"reference manual. [groonga-dev,01255] [Reported by Kazuhiro Isobe]"
+"configureにデフォルトの全文検索用パーサーを指定する `--with-default-parser` "
+"オプションを追加。"
 msgstr ""
-"Added the value of list documentation about ``mroonga_log_level`` in "
-"reference manual. [groonga-dev,01255] [Reported by Kazuhiro Isobe]"
+"configureにデフォルトの全文検索用パーサーを指定する `--with-default-parser` "
+"オプションを追加。"
 
 msgid ""
-"[experimental] Added ``mroonga_command`` UDF. [#1643] This UDF supports to "
-"send query directly to ``groonga``."
+"実行時にデフォルトの全文検索用パーサーを指定する `groonga_default_parser` 変"
+"数を追加。"
 msgstr ""
-"[experimental] Added ``mroonga_command`` UDF. [#1643] This UDF supports to "
-"send query directly to ``groonga``."
+"実行時にデフォルトの全文検索用パーサーを指定する `groonga_default_parser` 変"
+"数を追加。"
 
 msgid ""
-"Fixed a bug that less than conditional expression on WHERE clause doesn't "
-"work for multiple nullable column index. [groonga-dev,01253] [#1670] "
-"[Reported by Horikoshi Yuki]"
+"[ラッパーモード] ストレージモードで実装している `order` と `limit` が指定され"
+"た場合に必要のないレコードを返さないようにする高速化に対応。"
 msgstr ""
-"Fixed a bug that less than conditional expression on WHERE clause doesn't "
-"work for multiple nullable column index. [groonga-dev,01253] [#1670] "
-"[Reported by Horikoshi Yuki]"
+"[ラッパーモード] ストレージモードで実装している `order` と `limit` が指定され"
+"た場合に必要のないレコードを返さないようにする高速化に対応。"
 
 msgid ""
-"[wrapper] Fixed the invalid timing to free ``key`` object too early. This "
-"bug may occurs when recreating indexes by DISABLE KEYS/ENABLE KEYS. [#1671] "
-"[Reported by keigo ito]"
+"[ストレージモード] 1つの `select` 中での複数の `match against` 指定に対応。"
 msgstr ""
-"[wrapper] Fixed the invalid timing to free ``key`` object too early. This "
-"bug may occurs when recreating indexes by DISABLE KEYS/ENABLE KEYS. [#1671] "
-"[Reported by keigo ito]"
-
-msgid "keigo ito"
-msgstr "keigo ito"
-
-msgid "Release 3.01 - 2013/2/28"
-msgstr "Release 3.01 - 2013/2/28"
+"[ストレージモード] 1つの `select` 中での複数の `match against` 指定に対応。"
 
 msgid ""
-"Supported ``utf8_unicode_ci`` and ``utf8mb4_unicode_ci``. Note that "
-"``groonga-normalizer-mysql`` >= 1.0.1 is required."
+"[非互換][ストレージモード] `_score` カラムの削除。代わりにMySQL標準の書き方で"
+"ある `match against` を使ってください。"
 msgstr ""
-"Supported ``utf8_unicode_ci`` and ``utf8mb4_unicode_ci``. Note that "
-"``groonga-normalizer-mysql`` >= 1.0.1 is required."
+"[非互換][ストレージモード] `_score` カラムの削除。代わりにMySQL標準の書き方で"
+"ある `match against` を使ってください。"
 
-msgid "[experimental] Supported foreign key for storage mode. [#1612]"
-msgstr "[experimental] Supported foreign key for storage mode. [#1612]"
+msgid "[ラッパーモード] プライマリキーの更新に対応。"
+msgstr "[ラッパーモード] プライマリキーの更新に対応。"
+
+msgid "MySQL 5.5.16に対応。"
+msgstr "MySQL 5.5.16に対応。"
+
+msgid "CentOS 6に対応。"
+msgstr "CentOS 6に対応。"
+
+msgid "groonga 1.2.6に対応。（1.2.5以下のサポートを削除。）"
+msgstr "groonga 1.2.6に対応。（1.2.5以下のサポートを削除。）"
 
 msgid ""
-"Fixed groonga derived bug that the records in specific range returns 0 "
-"records unexpectedly. [groonga-dev,01192] [Reported by b senboku]"
+"[Ubuntu] Lucid上でインストールエラーが発生する問題を修正。 （Isao Sugimotoさ"
+"んが報告）"
 msgstr ""
-"Fixed groonga derived bug that the records in specific range returns 0 "
-"records unexpectedly. [groonga-dev,01192] [Reported by b senboku]"
-
-msgid "Fixed to disable DTrace by default for Mac OS X."
-msgstr "Fixed to disable DTrace by default for Mac OS X."
-
-msgid "b senboku"
-msgstr "b senboku"
-
-msgid "Release 3.00 - 2013/2/9"
-msgstr "Release 3.00 - 2013/2/9"
-
-msgid "Supported Fedora 18."
-msgstr "Supported Fedora 18."
-
-msgid "Dropped Fedora 17 support."
-msgstr "Dropped Fedora 17 support."
+"[Ubuntu] Lucid上でインストールエラーが発生する問題を修正。 （Isao Sugimotoさ"
+"んが報告）"
 
 msgid ""
-"Supported ``utf8_general_ci`` and ``utf8mb4_generic_ci`` compatible "
-"normalizer."
+"auto_incrementを使った場合にテキストデータが壊れる問題を修正。 "
+"（@zaubermaerchenさんが報告） #1072"
 msgstr ""
-"Supported ``utf8_general_ci`` and ``utf8mb4_generic_ci`` compatible "
-"normalizer."
-
-msgid "[rpm][centos] Supported MySQL 5.6.10 on CentOS 5."
-msgstr "[rpm][centos] Supported MySQL 5.6.10 on CentOS 5."
+"auto_incrementを使った場合にテキストデータが壊れる問題を修正。 "
+"（@zaubermaerchenさんが報告） #1072"
 
 msgid ""
-"[storage] Fixed a groonga derived bug that unique key doesn't match mixed "
-"case keyword. [groonga-dev,01187] [Reported by Kouhei Tanabe]"
+"[Ubuntu] Lucid上でテーブルを削除するとクラッシュする問題を修正。 #1063 "
+"（Isao Sugimotoさんが報告）"
 msgstr ""
-"[storage] Fixed a groonga derived bug that unique key doesn't match mixed "
-"case keyword. [groonga-dev,01187] [Reported by Kouhei Tanabe]"
+"[Ubuntu] Lucid上でテーブルを削除するとクラッシュする問題を修正。 #1063 "
+"（Isao Sugimotoさんが報告）"
+
+msgid ""
+"MySQLと同じビルドオプションを使っていなかった問題を修正。 GitHub#4 (groongaの"
+"GitHubのIssues) （Tomohiro MITSUMUNEさんが報告）"
+msgstr ""
+"MySQLと同じビルドオプションを使っていなかった問題を修正。 GitHub#4 (groongaの"
+"GitHubのIssues) （Tomohiro MITSUMUNEさんが報告）"
+
+msgid "Isao Sugimotoさん"
+msgstr "Isao Sugimotoさん"
+
+msgid "@zaubermaerchenさん"
+msgstr "@zaubermaerchenさん"
+
+msgid "Tomohiro MITSUMUNEさん"
+msgstr "Tomohiro MITSUMUNEさん"
 
 msgid "Release 2.10 - 2012/12/29"
 msgstr "Release 2.10 - 2012/12/29"
@@ -1574,6 +1073,9 @@ msgstr "@taro252"
 msgid "@tokuhy"
 msgstr "@tokuhy"
 
+msgid "Kazuhiro Isobe"
+msgstr "Kazuhiro Isobe"
+
 msgid "Release 2.07 - 2012/09/29"
 msgstr "Release 2.07 - 2012/09/29"
 
@@ -1662,9 +1164,6 @@ msgid ""
 msgstr ""
 "You must upgrade to \"mroonga\" storage engine. Use ``apt-get`` on Debian "
 "GNU/Linux or Ubuntu and ``yum`` on CentOS or Fedora."
-
-msgid "apt-get::"
-msgstr "apt-get::"
 
 msgid "yum (upgrade from mroonga release prior to v2.02)::"
 msgstr "yum (upgrade from mroonga release prior to v2.02)::"
@@ -2080,23 +1579,8 @@ msgstr ""
 "[storage mode] Fixed a bug that ``COUNT (*)`` may return 0. [groonga-"
 "dev,00736] [Reported by Takayuki Honda]"
 
-msgid "@ytaka5"
-msgstr "@ytaka5"
-
 msgid "Release 2.00 - 2012/02/29"
 msgstr "Release 2.00 - 2012/02/29"
-
-msgid ""
-"This release breaks backward compatibility. We need to dump and restore our "
-"database for upgrading."
-msgstr ""
-"This release breaks backward compatibility. We need to dump and restore our "
-"database for upgrading."
-
-msgid ""
-"In this release, mroonga has two changes that requires database recreation:"
-msgstr ""
-"In this release, mroonga has two changes that requires database recreation:"
 
 msgid "Supported all characters for database, table and column names."
 msgstr "Supported all characters for database, table and column names."
@@ -2106,35 +1590,6 @@ msgstr "Groonga's native time data type is used for ``YEAR`` type in MySQL."
 
 msgid "Here are upgrade sequence."
 msgstr "Here are upgrade sequence."
-
-msgid "We dump a database that uses mroonga::"
-msgstr "We dump a database that uses mroonga::"
-
-msgid "We drop the existing database::"
-msgstr "We drop the existing database::"
-
-msgid ""
-"We upgrade to \"mroonga\" storage engine. We will use ``apt-get`` on Debian "
-"GNU/Linux or Ubuntu and ``yum`` on CentOS or Fedora."
-msgstr ""
-"We upgrade to \"mroonga\" storage engine. We will use ``apt-get`` on Debian "
-"GNU/Linux or Ubuntu and ``yum`` on CentOS or Fedora."
-
-msgid "yum::"
-msgstr "yum::"
-
-msgid ""
-"We don't forget to run ``yum remove`` before ``yum install``. If we forget "
-"to run ``yum remove``, we will break a MySQL's system table."
-msgstr ""
-"We don't forget to run ``yum remove`` before ``yum install``. If we forget "
-"to run ``yum remove``, we will break a MySQL's system table."
-
-msgid "We recreate a database::"
-msgstr "We recreate a database::"
-
-msgid "We restore a database by modified dump file::"
-msgstr "We restore a database by modified dump file::"
 
 msgid "Now, we can use mroonga 2.00."
 msgstr "Now, we can use mroonga 2.00."
@@ -2249,750 +1704,1318 @@ msgstr "[doc] Fixed wrong storage engine name. [Reported by Tomoatsu Shimada]"
 msgid "@camyuy"
 msgstr "@camyuy"
 
-msgid "Takahiro Nagai"
-msgstr "Takahiro Nagai"
+msgid "Tomoatsu Shimada"
+msgstr "Tomoatsu Shimada"
 
-msgid "Release 1.20 - 2012/01/29"
-msgstr "Release 1.20 - 2012/01/29"
-
-msgid "Storage engine name is changed to \"mroonga\" from \"groonga\"."
-msgstr "Storage engine name is changed to \"mroonga\" from \"groonga\"."
+msgid "Release 3.12 - 2014/01/29"
+msgstr "Release 3.12 - 2014/01/29"
 
 msgid ""
-"Groonga's native time data type is used for DATE, DATETIME and TIMESTAMP "
-"type in MySQL."
+"Added a new system variable :ref:`mroonga_lock_timeout`. By changing this "
+"global variable, You can customize Groonga's lock timeout dynamically."
 msgstr ""
-"Groonga's native time data type is used for DATE, DATETIME and TIMESTAMP "
-"type in MySQL."
+"Added a new system variable :ref:`mroonga_lock_timeout`. By changing this "
+"global variable, You can customize Groonga's lock timeout dynamically."
 
 msgid ""
-"We need to modify dumped database to change \"ENGINE=groonga\" in \"CREATE "
-"TABLE\" SQL. Here are upgrade sequence."
+"Improved compatibility with Tritonn 'W' pragma's behaviour. In the previous "
+"versions, Mroonga used omitted section as weight 0. By this change, Mroonga "
+"uses omitted section as weight 1. This behaviour is same as Tritonn. [#2152] "
+"[Patch by Kenji Maruyama]"
 msgstr ""
-"We need to modify dumped database to change \"ENGINE=groonga\" in \"CREATE "
-"TABLE\" SQL. Here are upgrade sequence."
-
-msgid "We convert storage engine in dump file::"
-msgstr "We convert storage engine in dump file::"
+"Improved compatibility with Tritonn 'W' pragma's behaviour. In the previous "
+"versions, Mroonga used omitted section as weight 0. By this change, Mroonga "
+"uses omitted section as weight 1. This behaviour is same as Tritonn. [#2152] "
+"[Patch by Kenji Maruyama]"
 
 msgid ""
-"We confirm that ``ENGINE=groonga`` only in ``CREATE TABLE`` is replaced with "
-"``ENGINE=mroonga``. We need to check ``@@ ... @@`` line includes ``CREATE "
-"TABLE``. If the line includes ``CREATE TABLE``, the hunk will be a change "
-"for ``CREATE TABLE``::"
+"Fixed a crash bug on FLUSH TABLES during SELECT MATCH AGAINST ... [#2137] "
+"[Reported by yoku]"
 msgstr ""
-"We confirm that ``ENGINE=groonga`` only in ``CREATE TABLE`` is replaced with "
-"``ENGINE=mroonga``. We need to check ``@@ ... @@`` line includes ``CREATE "
-"TABLE``. If the line includes ``CREATE TABLE``, the hunk will be a change "
-"for ``CREATE TABLE``::"
-
-msgid "Now, we can use mroonga 1.20."
-msgstr "Now, we can use mroonga 1.20."
-
-msgid "Supported MySQL 5.5.20."
-msgstr "Supported MySQL 5.5.20."
-
-msgid "Supported MySQL 5.1.61."
-msgstr "Supported MySQL 5.1.61."
-
-msgid "Required groonga 1.3.0 or later."
-msgstr "Required groonga 1.3.0 or later."
+"Fixed a crash bug on FLUSH TABLES during SELECT MATCH AGAINST ... [#2137] "
+"[Reported by yoku]"
 
 msgid ""
-"[incompatible] Changed storage engine name to \"mroonga\" from \"groonga\"."
+"Fixed wrong implementation for \"W\" pragma. It was changed to 1-origin. "
+"[#2151] In the previous versions, \"W\" pragma is implemented as 0-origin, "
+"but it is not compatible with Tritonn. This is incompatible change, please "
+"check existing query which use \"W\" pragma."
 msgstr ""
-"[incompatible] Changed storage engine name to \"mroonga\" from \"groonga\"."
-
-msgid "Supported UTF8_BIN collate. [#1150]"
-msgstr "Supported UTF8_BIN collate. [#1150]"
-
-msgid "Disabled strict-aliasing warnings. [Reported by @issm]"
-msgstr "Disabled strict-aliasing warnings. [Reported by @issm]"
-
-msgid "Supported decimal. [#1249] [Reported by @Kiske]"
-msgstr "Supported decimal. [#1249] [Reported by @Kiske]"
+"Fixed wrong implementation for \"W\" pragma. It was changed to 1-origin. "
+"[#2151] In the previous versions, \"W\" pragma is implemented as 0-origin, "
+"but it is not compatible with Tritonn. This is incompatible change, please "
+"check existing query which use \"W\" pragma."
 
 msgid ""
-"[storage mode] Supported HA_KEYREAD_ONLY. It will improve column value "
-"access in index. [#1212]"
+"Fixed a bug that searching empty records with \"NOT\" query returns "
+"duplicated results. [#2215] [groonga-dev,02052] [Reported by Naoya Murakami]"
 msgstr ""
-"[storage mode] Supported HA_KEYREAD_ONLY. It will improve column value "
-"access in index. [#1212]"
+"Fixed a bug that searching empty records with \"NOT\" query returns "
+"duplicated results. [#2215] [groonga-dev,02052] [Reported by Naoya Murakami]"
 
-msgid "[storage mode] Supported float value in multiple column index."
-msgstr "[storage mode] Supported float value in multiple column index."
+msgid "yoku"
+msgstr "yoku"
 
-msgid "[storage mode] Supported double value in multiple column index."
-msgstr "[storage mode] Supported double value in multiple column index."
+msgid "Naoya Murakami"
+msgstr "Naoya Murakami"
+
+msgid "Release 3.11 - 2013/12/29"
+msgstr "Release 3.11 - 2013/12/29"
+
+msgid "[deb] Dropped Debian 6.0 (squeeze) support."
+msgstr "[deb] Dropped Debian 6.0 (squeeze) support."
+
+msgid "[deb] Dropped Ubuntu 10.04 (lucid) support."
+msgstr "[deb] Dropped Ubuntu 10.04 (lucid) support."
 
 msgid ""
-"[storage mode] Mapped enum and set types to more suitable groonga data types."
+"[storage] Supported optimization for \"MATCH AGAINST AND INT_COLUMN OPERATOR "
+"XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports '<', '>', "
+"'<=' and '>='. [groonga-dev,01940] [Reported by Horikoshi Yuki]"
 msgstr ""
-"[storage mode] Mapped enum and set types to more suitable groonga data types."
-
-msgid "[wrapper mode] Supported REPAIR TABLE."
-msgstr "[wrapper mode] Supported REPAIR TABLE."
+"[storage] Supported optimization for \"MATCH AGAINST AND INT_COLUMN OPERATOR "
+"XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports '<', '>', "
+"'<=' and '>='. [groonga-dev,01940] [Reported by Horikoshi Yuki]"
 
 msgid ""
-"[storage mode] Supported ``count(*)`` on view. [#1255] [Reported by Takahiro "
-"Nagai]"
+"[storage] Supported optimization for \"MATCH AGAINST AND DATETIME_COLUMN "
+"OPERATOR XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports "
+"'<', '>', '<=' and '>='. [groonga-dev,01943] [Suggested by yoku]"
 msgstr ""
-"[storage mode] Supported ``count(*)`` on view. [#1255] [Reported by Takahiro "
-"Nagai]"
+"[storage] Supported optimization for \"MATCH AGAINST AND DATETIME_COLUMN "
+"OPERATOR XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports "
+"'<', '>', '<=' and '>='. [groonga-dev,01943] [Suggested by yoku]"
 
 msgid ""
-"[incompatible] Groonga's native time value is used for DATE, DATETIME and "
-"TIMESTAMP type values."
+"[storage] Supported optimization for \"MATCH AGAINST AND TIME_COLUMN "
+"OPERATOR XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports "
+"'<', '>', '<=' and '>='."
 msgstr ""
-"[incompatible] Groonga's native time value is used for DATE, DATETIME and "
-"TIMESTAMP type values."
+"[storage] Supported optimization for \"MATCH AGAINST AND TIME_COLUMN "
+"OPERATOR XXX ORDER BY LIMIT\" query. The OPERATOR in this query supports "
+"'<', '>', '<=' and '>='."
+
+msgid "[doc] Renamed documentation from 'UserGuide' to 'Tutorial'."
+msgstr "[doc] Renamed documentation from 'UserGuide' to 'Tutorial'."
+
+msgid "[doc] Added 'FAQ' section for documentation."
+msgstr "[doc] Added 'FAQ' section for documentation."
+
+msgid "[doc] Added independant section for 'Full text search'."
+msgstr "[doc] Added independant section for 'Full text search'."
 
 msgid ""
-"[debian] Fixed wrong mysql-server-groonga version in replaces and breaks. "
-"[Reported by @ytaka5]"
+"[storage] Supported 'BETWEEN' for INT_COLUMN, DATETIME_COLUMN and "
+"TIME_COLUMN. Note that it requres Groonga 3.1.1 or later. [groonga-"
+"dev,01943] [Suggested by yoku]"
 msgstr ""
-"[debian] Fixed wrong mysql-server-groonga version in replaces and breaks. "
-"[Reported by @ytaka5]"
+"[storage] Supported 'BETWEEN' for INT_COLUMN, DATETIME_COLUMN and "
+"TIME_COLUMN. Note that it requres Groonga 3.1.1 or later. [groonga-"
+"dev,01943] [Suggested by yoku]"
 
-msgid "[doc] Fixed wrong execution result. [Reported by Hidekazu Tanaka]"
-msgstr "[doc] Fixed wrong execution result. [Reported by Hidekazu Tanaka]"
+msgid "Supported MariaDB 10.0.7 (it doesn't released yet.) [#1964]"
+msgstr "Supported MariaDB 10.0.7 (it doesn't released yet.) [#1964]"
 
-msgid "[wrapper mode] Fixed a memory leak. [Reported by montywi]"
-msgstr "[wrapper mode] Fixed a memory leak. [Reported by montywi]"
+msgid "Dropped support for Microsoft Visual Studio 2008 or previous versions."
+msgstr "Dropped support for Microsoft Visual Studio 2008 or previous versions."
 
-msgid "Hidekazu Tanaka"
-msgstr "Hidekazu Tanaka"
+msgid "Dropped Fedora 19 support."
+msgstr "Dropped Fedora 19 support."
 
-msgid "@issm"
-msgstr "@issm"
-
-msgid "montywi"
-msgstr "montywi"
-
-msgid "@Kiske"
-msgstr "@Kiske"
-
-msgid "Release 1.11 - 2011/12/29"
-msgstr "Release 1.11 - 2011/12/29"
-
-msgid "Supported MySQL 5.5.19."
-msgstr "Supported MySQL 5.5.19."
-
-msgid "Supported MySQL 5.6.4."
-msgstr "Supported MySQL 5.6.4."
-
-msgid "Dropped MySQL 5.6.3 support."
-msgstr "Dropped MySQL 5.6.3 support."
-
-msgid "Supported Fedora 16."
-msgstr "Supported Fedora 16."
-
-msgid "Dropped Fedora 15 support."
-msgstr "Dropped Fedora 15 support."
+msgid "Supported Fedora 20."
+msgstr "Supported Fedora 20."
 
 msgid ""
-"Suppress strict-aliasing warnings. [groonga-dev,00659] [Reported by Kazuhiko "
-"Shiozaki]"
+"Dropped mysql-mroonga package on CentOS 5. Use mysql55-mroonga package "
+"instead."
 msgstr ""
-"Suppress strict-aliasing warnings. [groonga-dev,00659] [Reported by Kazuhiko "
-"Shiozaki]"
+"Dropped mysql-mroonga package on CentOS 5. Use mysql55-mroonga package "
+"instead."
 
 msgid ""
-"Supported utf8, binary, ascii, latin1, cp932, sjis, eucjpms, ujis and koi8r "
-"charset. [#1160] [Reported by nobody]"
+"[storage] Fixed a bug that MySQL crashes on 'LOCK TABLE .. READ' when "
+"dumping/restoring. [#2098]"
 msgstr ""
-"Supported utf8, binary, ascii, latin1, cp932, sjis, eucjpms, ujis and koi8r "
-"charset. [#1160] [Reported by nobody]"
+"[storage] Fixed a bug that MySQL crashes on 'LOCK TABLE .. READ' when "
+"dumping/restoring. [#2098]"
+
+msgid "Fixed wrong implementation for \"\\*D-\" pragma. [#2099]"
+msgstr "Fixed wrong implementation for \"\\*D-\" pragma. [#2099]"
 
 msgid ""
-"[wrapper mode] Improved rollback handling on delete. [#1224] [Reported by "
-"Koichi Shishikura]"
+"Fixed a memory leak on full text search. It affects such as \"MATCH "
+"AGAINST ... ORDER BY LIMIT ...\". [#2144]"
 msgstr ""
-"[wrapper mode] Improved rollback handling on delete. [#1224] [Reported by "
-"Koichi Shishikura]"
+"Fixed a memory leak on full text search. It affects such as \"MATCH "
+"AGAINST ... ORDER BY LIMIT ...\". [#2144]"
+
+msgid "Release 3.10 - 2013/11/29"
+msgstr "Release 3.10 - 2013/11/29"
+
+msgid "Supported MariaDB 10.0.6."
+msgstr "Supported MariaDB 10.0.6."
 
 msgid ""
-"[storage mode] Fixed a bug that full text search on a table without primary "
-"key returns empty results. [#1193] [Reported by Kazuhiko Shiozaki]"
+"[plugin][mroonga_snippet] Improved to report not supported charset in error "
+"message."
 msgstr ""
-"[storage mode] Fixed a bug that full text search on a table without primary "
-"key returns empty results. [#1193] [Reported by Kazuhiko Shiozaki]"
-
-msgid "Fixed -Wno- compiler flag detection. [Patch by Arnaud Fontaine]"
-msgstr "Fixed -Wno- compiler flag detection. [Patch by Arnaud Fontaine]"
+"[plugin][mroonga_snippet] Improved to report not supported charset in error "
+"message."
 
 msgid ""
-"[wrapper mode] Fixed a problem that index isn't used for full count. [#1196]"
-"[groonga-dev,0653] [Reported by Kaneoka]"
+"Fixed multi range read disk sweep issue. [groonga-dev,01715] [#1959] The "
+"problem that query which has \"WHERE IN (...)\" clause causes an error is "
+"fixed. [Reported by Kimura]"
 msgstr ""
-"[wrapper mode] Fixed a problem that index isn't used for full count. [#1196]"
-"[groonga-dev,0653] [Reported by Kaneoka]"
+"Fixed multi range read disk sweep issue. [groonga-dev,01715] [#1959] The "
+"problem that query which has \"WHERE IN (...)\" clause causes an error is "
+"fixed. [Reported by Kimura]"
 
-msgid "Arnaud Fontaine"
-msgstr "Arnaud Fontaine"
-
-msgid "Kaneoka"
-msgstr "Kaneoka"
-
-msgid "nobody"
-msgstr "nobody"
-
-msgid "Koichi Shishikura"
-msgstr "Koichi Shishikura"
-
-msgid "Release 1.10 - 2011/11/29"
-msgstr "Release 1.10 - 2011/11/29"
+msgid "Fixed SEGV issue with trunk version of MariaDB [#1958]"
+msgstr "Fixed SEGV issue with trunk version of MariaDB [#1958]"
 
 msgid ""
-"Since this release, this project and product is called \"mroonga\" instead "
-"of \"groonga storage engine\"."
+"Fixed a bug that geometry column is not properly updated by 'REPLACE INTO' "
+"or 'INSERT ON DUPLICATE KEY UPDATE' query. [#2057]"
 msgstr ""
-"Since this release, this project and product is called \"mroonga\" instead "
-"of \"groonga storage engine\"."
+"Fixed a bug that geometry column is not properly updated by 'REPLACE INTO' "
+"or 'INSERT ON DUPLICATE KEY UPDATE' query. [#2057]"
 
-msgid "This release introduces MariaDB support and fixes several bugs."
-msgstr "This release introduces MariaDB support and fixes several bugs."
-
-msgid "rename to \"mroonga\" from \"groonga storage engine\". #1170"
-msgstr "rename to \"mroonga\" from \"groonga storage engine\". #1170"
-
-msgid "add groonga_libgroonga_version and groonga_version variables. #1158"
-msgstr "add groonga_libgroonga_version and groonga_version variables. #1158"
+msgid "Fixed compiler warnings on Windows. [#1964]"
+msgstr "Fixed compiler warnings on Windows. [#1964]"
 
 msgid ""
-"information_schema.plugins.plugin_version returns mroonga's version. #1157"
+"Fixed the issue that vector column is no properly updated by 'REPLACE INTO' "
+"query. [#2064]"
 msgstr ""
-"information_schema.plugins.plugin_version returns mroonga's version. #1157"
-
-msgid "add groonga_log_file variable. #1178 [Suggested by nobody]"
-msgstr "add groonga_log_file variable. #1178 [Suggested by nobody]"
+"Fixed the issue that vector column is no properly updated by 'REPLACE INTO' "
+"query. [#2064]"
 
 msgid ""
-"FLUSH STATUS flushes groonga_* status variables. #1166 [Reported by Kazuhiko]"
+"[mariadb10.0.5] Fixed build error which is derived from changed directory "
+"structure. [#2066]"
 msgstr ""
-"FLUSH STATUS flushes groonga_* status variables. #1166 [Reported by Kazuhiko]"
-
-msgid "support TRUNCATE TABLE #1151. [Suggested by Takahiro Nagai]"
-msgstr "support TRUNCATE TABLE #1151. [Suggested by Takahiro Nagai]"
-
-msgid "support ALTER TABLE #1168."
-msgstr "support ALTER TABLE #1168."
-
-msgid "support MariaDB 5.2.9. #1152 [Reported by Kazuhiko]"
-msgstr "support MariaDB 5.2.9. #1152 [Reported by Kazuhiko]"
-
-msgid "support MariaDB 5.3.2-beta. #1152 [Reported by Kazuhiko]"
-msgstr "support MariaDB 5.3.2-beta. #1152 [Reported by Kazuhiko]"
-
-msgid "[rpm] split document package."
-msgstr "[rpm] split document package."
-
-msgid "improve memory allocation for string system variables."
-msgstr "improve memory allocation for string system variables."
-
-msgid "use PLUGIN_LICENSE_GPL. [Suggested by Kazuhiko]"
-msgstr "use PLUGIN_LICENSE_GPL. [Suggested by Kazuhiko]"
-
-msgid "remove needless MeCab related configurations."
-msgstr "remove needless MeCab related configurations."
+"[mariadb10.0.5] Fixed build error which is derived from changed directory "
+"structure. [#2066]"
 
 msgid ""
-"support FOUND_ROWS() and SQL_CALC_FOUND_ROWS. #1163 [Reported by Horikoshi "
-"Yuki]"
+"Fixed a bug that shorter column name such as \"_i\" is treated as \"_id\" "
+"which is special column. [#2085] [Reported by Alexander Barkov]"
 msgstr ""
-"support FOUND_ROWS() and SQL_CALC_FOUND_ROWS. #1163 [Reported by Horikoshi "
-"Yuki]"
+"Fixed a bug that shorter column name such as \"_i\" is treated as \"_id\" "
+"which is special column. [#2085] [Reported by Alexander Barkov]"
 
-msgid "support table name that contains '-'. #1165 [Reported by nobody]"
-msgstr "support table name that contains '-'. #1165 [Reported by nobody]"
+msgid "Kimura"
+msgstr "Kimura"
 
-msgid "support inplace index change on MySQL 5.1."
-msgstr "support inplace index change on MySQL 5.1."
+msgid "Alexander Barkov"
+msgstr "Alexander Barkov"
 
-msgid "[deb] support i386."
-msgstr "[deb] support i386."
+msgid "Release 3.09 - 2013/10/29"
+msgstr "Release 3.09 - 2013/10/29"
 
-msgid "[rpm] support i386."
-msgstr "[rpm] support i386."
+msgid "Supported Ubuntu 13.10 (Saucy Salamander)."
+msgstr "Supported Ubuntu 13.10 (Saucy Salamander)."
 
 msgid ""
-"[storage mode] fix a bug that REPLACE INTO with TEXT column does not work. "
-"#1153 [Reported by Kazuhiko]"
+"[rpm][centos] Supported rpm packages for MySQL 5.5 on CentOS 5. It provides "
+"mysql55-mroonga to support mysql55-mysql packages. [groonga-dev,01860] "
+"[Reported by WING]"
 msgstr ""
-"[storage mode] fix a bug that REPLACE INTO with TEXT column does not work. "
-"#1153 [Reported by Kazuhiko]"
+"[rpm][centos] Supported rpm packages for MySQL 5.5 on CentOS 5. It provides "
+"mysql55-mroonga to support mysql55-mysql packages. [groonga-dev,01860] "
+"[Reported by WING]"
 
 msgid ""
-"[wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with "
-"InnoDB. #1154 [Reported by Kazuhiko]"
+"[wrapper] Fixed a memory leak. It occurs when wrapper handler doesn't "
+"destroy mutexes properly. MyISAM is known as effected storage engine."
 msgstr ""
-"[wrapper mode] fix a bug that INSERT inside LOCK TABLE does not work with "
-"InnoDB. #1154 [Reported by Kazuhiko]"
+"[wrapper] Fixed a memory leak. It occurs when wrapper handler doesn't "
+"destroy mutexes properly. MyISAM is known as effected storage engine."
 
 msgid ""
-"fix a bug that using ORDER and LIMIT returns a wrong result. #1161 [Reported "
-"by Horikoshi Yuki]"
+"[wrapper] Fixed a bug that force index causes crush for MySQL 5.6. [#2015] "
+"[groonga-dev,01867] [Reported by Ichiro Yasuda]"
 msgstr ""
-"fix a bug that using ORDER and LIMIT returns a wrong result. #1161 [Reported "
-"by Horikoshi Yuki]"
+"[wrapper] Fixed a bug that force index causes crush for MySQL 5.6. [#2015] "
+"[groonga-dev,01867] [Reported by Ichiro Yasuda]"
+
+msgid "WING"
+msgstr "WING"
+
+msgid "Ichiro Yasuda"
+msgstr "Ichiro Yasuda"
+
+msgid "Release 3.08 - 2013/9/29"
+msgstr "Release 3.08 - 2013/9/29"
 
 msgid ""
-"fix a crash bug when FORCE INDEX with unknown key is used. #1181 [Reported "
-"by Takahiro Nagai]"
+"[doc] Added missing description about wrapper mode specific issue. [groonga-"
+"dev,01747] [Reported by Kazuhiro Isobe]"
 msgstr ""
-"fix a crash bug when FORCE INDEX with unknown key is used. #1181 [Reported "
-"by Takahiro Nagai]"
-
-msgid "Release 1.0.1 - 2011/10/29"
-msgstr "Release 1.0.1 - 2011/10/29"
+"[doc] Added missing description about wrapper mode specific issue. [groonga-"
+"dev,01747] [Reported by Kazuhiro Isobe]"
 
 msgid ""
-"The important changes in this release are the enhancement of geolocation "
-"search and the improvement of dynamic index modification in storage mode."
+"[mroonga_escape] Supported to call mroonga_escape as an argument of UDF. "
+"[#1923] [Reported by Tomoatsu Shimada]"
 msgstr ""
-"The important changes in this release are the enhancement of geolocation "
-"search and the improvement of dynamic index modification in storage mode."
+"[mroonga_escape] Supported to call mroonga_escape as an argument of UDF. "
+"[#1923] [Reported by Tomoatsu Shimada]"
 
 msgid ""
-"[storage mode][wrapper mode] support reopening a database by `flush tables`."
+"[doc] Added language annotation to \"Show Source\" label. [groonga-"
+"dev,01747] [Reported by Kazuhiro Isobe]"
 msgstr ""
-"[storage mode][wrapper mode] support reopening a database by `flush tables`."
+"[doc] Added language annotation to \"Show Source\" label. [groonga-"
+"dev,01747] [Reported by Kazuhiro Isobe]"
 
 msgid ""
-"[wrapper mode] support geolocation index. (Only Point type can be stored in "
-"a column. Search using index is only available for MBRContains)."
+"[wrapper] Supported REPAIR TABLE for broken groonga database. [groonga-"
+"dev,01540] [Suggested by Naoya Murakami]"
 msgstr ""
-"[wrapper mode] support geolocation index. (Only Point type can be stored in "
-"a column. Search using index is only available for MBRContains)."
+"[wrapper] Supported REPAIR TABLE for broken groonga database. [groonga-"
+"dev,01540] [Suggested by Naoya Murakami]"
 
 msgid ""
-"[benchmark] add `groonga_dry_write` variable to specify not to write to "
-"groonga database, that is useful to check bottle necks in benchmarks."
+"Supported MariaDB 10.x build with configure [groonga-dev,01727] [Reported by "
+"WING]"
 msgstr ""
-"[benchmark] add `groonga_dry_write` variable to specify not to write to "
-"groonga database, that is useful to check bottle necks in benchmarks."
+"Supported MariaDB 10.x build with configure [groonga-dev,01727] [Reported by "
+"WING]"
 
 msgid ""
-"mention MySQL version in the installation guide for CentOS 6. [proposed by "
-"@yoshi_ken]"
+"Fixed a bug that mroonga is accidentally removed on upgrade. [#1918] "
+"[Reported by @ceekz]"
 msgstr ""
-"mention MySQL version in the installation guide for CentOS 6. [proposed by "
-"@yoshi_ken]"
-
-msgid "[geolocation] improve performance by skip needless processes."
-msgstr "[geolocation] improve performance by skip needless processes."
+"Fixed a bug that mroonga is accidentally removed on upgrade. [#1918] "
+"[Reported by @ceekz]"
 
 msgid ""
-"add  `--disable-fast-mutexes` configure option to ignore fast mutexes even "
-"if mysql_config says it is enabled."
+"Fixed a bug that mysqld 32bit executable binary crashes when install plugin "
+"on Windows."
 msgstr ""
-"add  `--disable-fast-mutexes` configure option to ignore fast mutexes even "
-"if mysql_config says it is enabled."
-
-msgid "[storage mode] support `create index`."
-msgstr "[storage mode] support `create index`."
-
-msgid "[storage mode] support `drop index`."
-msgstr "[storage mode] support `drop index`."
-
-msgid "[storage mode] support multi columns index for full text search."
-msgstr "[storage mode] support multi columns index for full text search."
-
-msgid "support `D` pragma."
-msgstr "support `D` pragma."
-
-msgid "support MySQL 5.5.17."
-msgstr "support MySQL 5.5.17."
-
-msgid "support MySQL 5.6.3-m6."
-msgstr "support MySQL 5.6.3-m6."
-
-msgid "support groonga 1.2.7. (1.2.6 or below are no longer supported)."
-msgstr "support groonga 1.2.7. (1.2.6 or below are no longer supported)."
-
-msgid "support Ubuntu 11.10 Oneiric Ocelot."
-msgstr "support Ubuntu 11.10 Oneiric Ocelot."
+"Fixed a bug that mysqld 32bit executable binary crashes when install plugin "
+"on Windows."
 
 msgid ""
-"fix a bug that we have no results if we specify '+' at the beginning of the "
-"query in boolean mode. [reported by Hajime Nishiyama]"
+"[storage][mariadb] Fixed a memory for mroonga_log_file. This memory leak "
+"occurs when log file name is changed."
 msgstr ""
-"fix a bug that we have no results if we specify '+' at the beginning of the "
-"query in boolean mode. [reported by Hajime Nishiyama]"
+"[storage][mariadb] Fixed a memory for mroonga_log_file. This memory leak "
+"occurs when log file name is changed."
 
-msgid "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
-msgstr "[Fedora] fix package dependencies. [reported by Takahiro Nagai]"
+msgid "@ceekz"
+msgstr "@ceekz"
+
+msgid "Release 3.07 - 2013/8/29"
+msgstr "Release 3.07 - 2013/8/29"
 
 msgid ""
-"[Fedora] fix a problem that we get undefined symbol error when the plugin is "
-"loaded. [reported by Takahiro Nagai]"
+"Added :doc:`/reference/udf/mroonga_escape` UDF which escapes special "
+"characters in query for BOOLEAN MODE. [groonga-dev,01576] [Suggested by "
+"Kouhei Tanabe]"
 msgstr ""
-"[Fedora] fix a problem that we get undefined symbol error when the plugin is "
-"loaded. [reported by Takahiro Nagai]"
+"Added :doc:`/reference/udf/mroonga_escape` UDF which escapes special "
+"characters in query for BOOLEAN MODE. [groonga-dev,01576] [Suggested by "
+"Kouhei Tanabe]"
 
 msgid ""
-"[storage mode] fix a bug that index will not be correctly created if "
-"`varchar` is used in a multi-column index. #1143 [reported by Takahiro Nagai]"
+"Supported VARCHAR equal expression in WHERE clause for ORDER BY LIMIT "
+"optimization."
 msgstr ""
-"[storage mode] fix a bug that index will not be correctly created if "
-"`varchar` is used in a multi-column index. #1143 [reported by Takahiro Nagai]"
+"Supported VARCHAR equal expression in WHERE clause for ORDER BY LIMIT "
+"optimization."
 
-msgid "@yoshi_ken"
-msgstr "@yoshi_ken"
+msgid "Supported MariaDB 5.5.32 timestamp."
+msgstr "Supported MariaDB 5.5.32 timestamp."
 
-msgid "Hajime Nishiyama"
-msgstr "Hajime Nishiyama"
+msgid "Supported MariaDB 10.0.4. [Reported by WING] [Reported by yoku ts]"
+msgstr "Supported MariaDB 10.0.4. [Reported by WING] [Reported by yoku ts]"
 
-msgid "1.0.0 リリース - 2011/09/29"
-msgstr "1.0.0 リリース - 2011/09/29"
-
-msgid "初回リリースから約1年経って、初のメジャーリリース！"
-msgstr "初回リリースから約1年経って、初のメジャーリリース！"
-
-msgid "改良"
-msgstr "改良"
-
-msgid "[ラッパーモード] drop index対応。 #1040"
-msgstr "[ラッパーモード] drop index対応。 #1040"
+msgid "[mariadb] Fixed a crash bug when installing plugin on Windows."
+msgstr "[mariadb] Fixed a crash bug when installing plugin on Windows."
 
 msgid ""
-"[ストレージモード] GEOMETRY対応。（ただし、カラムに保存できる型はPointのみ対"
-"応。インデックスを利用した位置検索はMBRContainsのみ対応。） #1041"
+"[storage][mysql55] Fixed a bug that changing column that has index fails. "
+"[groonga-talk] [Reported by Chang] This bug affects the case that ``FULLTEXT "
+"INDEX (column1)`` is changed by ``ALTER TABLE table1 CHANGE column1 column1 "
+"new_column_definition`` for example."
 msgstr ""
-"[ストレージモード] GEOMETRY対応。（ただし、カラムに保存できる型はPointのみ対"
-"応。インデックスを利用した位置検索はMBRContainsのみ対応。） #1041"
-
-msgid "[ストレージモード] マルチカラムインデックスに対応。 #455"
-msgstr "[ストレージモード] マルチカラムインデックスに対応。 #455"
+"[storage][mysql55] Fixed a bug that changing column that has index fails. "
+"[groonga-talk] [Reported by Chang] This bug affects the case that ``FULLTEXT "
+"INDEX (column1)`` is changed by ``ALTER TABLE table1 CHANGE column1 column1 "
+"new_column_definition`` for example."
 
 msgid ""
-"[ストレージモード][ラッパーモード] 全文検索用パーサー（トークナイザー）のカス"
-"タマイズに対応。 #592"
+"[doc][wrapper] Fixed incorrect description about condition of ORDER BY LIMIT "
+"optimization."
 msgstr ""
-"[ストレージモード][ラッパーモード] 全文検索用パーサー（トークナイザー）のカス"
-"タマイズに対応。 #592"
+"[doc][wrapper] Fixed incorrect description about condition of ORDER BY LIMIT "
+"optimization."
 
 msgid ""
-"configureにデフォルトの全文検索用パーサーを指定する `--with-default-parser` "
-"オプションを追加。"
+"[storage] Disabled ORDER BY LIMIT optimization for not indexed VARCHAR "
+"condition. It should be indexed to handle COLLATION properly."
 msgstr ""
-"configureにデフォルトの全文検索用パーサーを指定する `--with-default-parser` "
-"オプションを追加。"
+"[storage] Disabled ORDER BY LIMIT optimization for not indexed VARCHAR "
+"condition. It should be indexed to handle COLLATION properly."
+
+msgid "Fixed a bug that missing internal flag causes crash on MySQL 5.6.13."
+msgstr "Fixed a bug that missing internal flag causes crash on MySQL 5.6.13."
+
+msgid "Kouhei Tanabe"
+msgstr "Kouhei Tanabe"
+
+msgid "Chang"
+msgstr "Chang"
+
+msgid "yoku ts"
+msgstr "yoku ts"
+
+msgid "Release 3.06 - 2013/7/29"
+msgstr "Release 3.06 - 2013/7/29"
 
 msgid ""
-"実行時にデフォルトの全文検索用パーサーを指定する `groonga_default_parser` 変"
-"数を追加。"
+"Added :ref:`mroonga_action_on_fulltext_query_error` session variable. This "
+"affects how to report errors about invalid escape. [groonga-dev,01529] "
+"[Reported by Kouhei Tanabe]"
 msgstr ""
-"実行時にデフォルトの全文検索用パーサーを指定する `groonga_default_parser` 変"
-"数を追加。"
+"Added :ref:`mroonga_action_on_fulltext_query_error` session variable. This "
+"affects how to report errors about invalid escape. [groonga-dev,01529] "
+"[Reported by Kouhei Tanabe]"
 
 msgid ""
-"[ラッパーモード] ストレージモードで実装している `order` と `limit` が指定され"
-"た場合に必要のないレコードを返さないようにする高速化に対応。"
+"Supported count skip optimization for wrapper mode even though MySQL 5.5 or "
+"MariaDB 10.x. [#1841] [groonga-dev,01523] [Reported by Naoya Murakami] This "
+"optimization does not work if you use wrapper mode with storage engine which "
+"supports transaction."
 msgstr ""
-"[ラッパーモード] ストレージモードで実装している `order` と `limit` が指定され"
-"た場合に必要のないレコードを返さないようにする高速化に対応。"
+"Supported count skip optimization for wrapper mode even though MySQL 5.5 or "
+"MariaDB 10.x. [#1841] [groonga-dev,01523] [Reported by Naoya Murakami] This "
+"optimization does not work if you use wrapper mode with storage engine which "
+"supports transaction."
+
+msgid "Supported Fedora 19."
+msgstr "Supported Fedora 19."
+
+msgid "Dropped Fedora 18 support."
+msgstr "Dropped Fedora 18 support."
+
+msgid "Release 3.05 - 2013/6/29"
+msgstr "Release 3.05 - 2013/6/29"
 
 msgid ""
-"[ストレージモード] 1つの `select` 中での複数の `match against` 指定に対応。"
+"Added warnings for truncated date data. [#1768] [Suggested by Y.Kentaro]"
 msgstr ""
-"[ストレージモード] 1つの `select` 中での複数の `match against` 指定に対応。"
+"Added warnings for truncated date data. [#1768] [Suggested by Y.Kentaro]"
+
+msgid "Supported MySQL 5.6.12. [Reported by WING]"
+msgstr "Supported MySQL 5.6.12. [Reported by WING]"
+
+msgid "Added documentation about troubleshooting."
+msgstr "Added documentation about troubleshooting."
 
 msgid ""
-"[非互換][ストレージモード] `_score` カラムの削除。代わりにMySQL標準の書き方で"
-"ある `match against` を使ってください。"
+"Supported to enable fast mutexes option by build configuration. [#1760] "
+"[Reported by WING]"
 msgstr ""
-"[非互換][ストレージモード] `_score` カラムの削除。代わりにMySQL標準の書き方で"
-"ある `match against` を使ってください。"
-
-msgid "[ラッパーモード] プライマリキーの更新に対応。"
-msgstr "[ラッパーモード] プライマリキーの更新に対応。"
-
-msgid "MySQL 5.5.16に対応。"
-msgstr "MySQL 5.5.16に対応。"
-
-msgid "CentOS 6に対応。"
-msgstr "CentOS 6に対応。"
-
-msgid "groonga 1.2.6に対応。（1.2.5以下のサポートを削除。）"
-msgstr "groonga 1.2.6に対応。（1.2.5以下のサポートを削除。）"
-
-msgid "修正"
-msgstr "修正"
+"Supported to enable fast mutexes option by build configuration. [#1760] "
+"[Reported by WING]"
 
 msgid ""
-"[Ubuntu] Lucid上でインストールエラーが発生する問題を修正。 （Isao Sugimotoさ"
-"んが報告）"
+"Fixed a bug that three or more sections in W pragma doesn't work. [#1770] "
+"[Reported by shizuin]"
 msgstr ""
-"[Ubuntu] Lucid上でインストールエラーが発生する問題を修正。 （Isao Sugimotoさ"
-"んが報告）"
+"Fixed a bug that three or more sections in W pragma doesn't work. [#1770] "
+"[Reported by shizuin]"
+
+msgid "Fixed build error with \"-O2\". [Reported by Y.Kentaro]"
+msgstr "Fixed build error with \"-O2\". [Reported by Y.Kentaro]"
+
+msgid "Fixed a memory leak by re-registration of ``normalizers/mysql``."
+msgstr "Fixed a memory leak by re-registration of ``normalizers/mysql``."
+
+msgid "Fixed a crush bug when updating with ``DISABLE KEYS``. [#1759]"
+msgstr "Fixed a crush bug when updating with ``DISABLE KEYS``. [#1759]"
 
 msgid ""
-"auto_incrementを使った場合にテキストデータが壊れる問題を修正。 "
-"（@zaubermaerchenさんが報告） #1072"
+"[doc] Fixed a wrong translation about status variable of optimization in "
+"wrapper mode. [Reported by YOSHIDA Mitsuo]"
 msgstr ""
-"auto_incrementを使った場合にテキストデータが壊れる問題を修正。 "
-"（@zaubermaerchenさんが報告） #1072"
+"[doc] Fixed a wrong translation about status variable of optimization in "
+"wrapper mode. [Reported by YOSHIDA Mitsuo]"
 
 msgid ""
-"[Ubuntu] Lucid上でテーブルを削除するとクラッシュする問題を修正。 #1063 "
-"（Isao Sugimotoさんが報告）"
+"Fixed a crush bug when no where clause with ``ORDER BY ... LIMIT`` is "
+"specified. [Reported by @memorycraft]"
 msgstr ""
-"[Ubuntu] Lucid上でテーブルを削除するとクラッシュする問題を修正。 #1063 "
-"（Isao Sugimotoさんが報告）"
+"Fixed a crush bug when no where clause with ``ORDER BY ... LIMIT`` is "
+"specified. [Reported by @memorycraft]"
 
 msgid ""
-"MySQLと同じビルドオプションを使っていなかった問題を修正。 GitHub#4 (groongaの"
-"GitHubのIssues) （Tomohiro MITSUMUNEさんが報告）"
+"Fixed a bug that data is hidden when ``LOCK TABLES`` and ``ENABLE KEYS`` are "
+"used same time. [#1778] [Reported by Y.Kentaro]"
 msgstr ""
-"MySQLと同じビルドオプションを使っていなかった問題を修正。 GitHub#4 (groongaの"
-"GitHubのIssues) （Tomohiro MITSUMUNEさんが報告）"
+"Fixed a bug that data is hidden when ``LOCK TABLES`` and ``ENABLE KEYS`` are "
+"used same time. [#1778] [Reported by Y.Kentaro]"
 
-msgid "感謝"
-msgstr "感謝"
+msgid "Y.Kentaro"
+msgstr "Y.Kentaro"
 
-msgid "Isao Sugimotoさん"
-msgstr "Isao Sugimotoさん"
+msgid "shizuin"
+msgstr "shizuin"
 
-msgid "@zaubermaerchenさん"
-msgstr "@zaubermaerchenさん"
+msgid "YOSHIDA Mitsuo"
+msgstr "YOSHIDA Mitsuo"
 
-msgid "Tomohiro MITSUMUNEさん"
-msgstr "Tomohiro MITSUMUNEさん"
+msgid "@memorycraft"
+msgstr "@memorycraft"
 
-msgid "Past releases"
-msgstr "Past releases"
+msgid "Release 3.04 - 2013/5/29"
+msgstr "Release 3.04 - 2013/5/29"
 
-msgid "バージョン0.xのお知らせ"
-msgstr "バージョン0.xのお知らせ"
+msgid "Improved MariaDB 10.0.2 support. [#1729]"
+msgstr "Improved MariaDB 10.0.2 support. [#1729]"
 
-msgid "0.9 リリース - 2011/08/29"
-msgstr "0.9 リリース - 2011/08/29"
+msgid "[doc] Updated supported SQL command list. [Reported by Y.Kentaro]"
+msgstr "[doc] Updated supported SQL command list. [Reported by Y.Kentaro]"
 
-msgid "MySQL 5.1.58に対応。"
-msgstr "MySQL 5.1.58に対応。"
+msgid "Dropped Ubuntu 11.10 (Oneiric Ocelot) support."
+msgstr "Dropped Ubuntu 11.10 (Oneiric Ocelot) support."
 
-msgid "MySQL 5.6.3に対応。"
-msgstr "MySQL 5.6.3に対応。"
+msgid "Supported mroonga bundled MariaDB package. [#1691]"
+msgstr "Supported mroonga bundled MariaDB package. [#1691]"
 
-msgid "0.8 リリース - 2011/07/29"
-msgstr "0.8 リリース - 2011/07/29"
+msgid "[wrapper] Stopped to parse column comment. [Reported by Y.Kentaro]"
+msgstr "[wrapper] Stopped to parse column comment. [Reported by Y.Kentaro]"
 
-msgid "[deb] プラグインインストール時のエラーを無視するようにした。"
-msgstr "[deb] プラグインインストール時のエラーを無視するようにした。"
-
-msgid "[ラッパーモード] マルチカラムインデックスのサポート。 #1031"
-msgstr "[ラッパーモード] マルチカラムインデックスのサポート。 #1031"
-
-msgid "[ラッパーモード] 大量レコードの全文検索に対応。 #1032"
-msgstr "[ラッパーモード] 大量レコードの全文検索に対応。 #1032"
-
-msgid "[ラッパーモード] MyISAM対応。 #1033"
-msgstr "[ラッパーモード] MyISAM対応。 #1033"
-
-msgid "0.7 リリース - 2011/06/29"
-msgstr "0.7 リリース - 2011/06/29"
+msgid "Stopped to validate normal column comment. [Reported by Y.Kentaro]"
+msgstr "Stopped to validate normal column comment. [Reported by Y.Kentaro]"
 
 msgid ""
-"既存のストレージエンジンに全文検索機能を追加する :doc:`/tutorial/wrapper` の"
-"追加。"
+"Improved the way to detect directory which contains libmysqlservices.a. "
+"[Reported by Y.Kentaro]"
 msgstr ""
-"既存のストレージエンジンに全文検索機能を追加する :doc:`/tutorial/wrapper` の"
-"追加。"
-
-msgid "MySQL 5.5.13サポートの追加。 #984"
-msgstr "MySQL 5.5.13サポートの追加。 #984"
-
-msgid "安定してきたので、groongaのデフォルトログレベルをDUMPからNOTICEに変更。"
-msgstr ""
-"安定してきたので、groongaのデフォルトログレベルをDUMPからNOTICEに変更。"
-
-msgid "Mac OS Xでのビルドをサポート。（@issmさんが報告）"
-msgstr "Mac OS Xでのビルドをサポート。（@issmさんが報告）"
-
-msgid "常にデバッグモードでビルドされる問題を修正。（@supistarさんが報告）"
-msgstr "常にデバッグモードでビルドされる問題を修正。（@supistarさんが報告）"
-
-msgid "@issmさん"
-msgstr "@issmさん"
-
-msgid "@supistarさん"
-msgstr "@supistarさん"
-
-msgid "0.6 リリース - 2011/05/29"
-msgstr "0.6 リリース - 2011/05/29"
-
-msgid "auto_increment機能の追加。#670"
-msgstr "auto_increment機能の追加。#670"
+"Improved the way to detect directory which contains libmysqlservices.a. "
+"[Reported by Y.Kentaro]"
 
 msgid ""
-"不必要な\"duplicated _id on insert\"というエラーメッセージを 抑制。 #910（←は"
-"未修正）"
+"Improved to accept free style normal comment in table/index comment. "
+"[Suggested by Y.Kentaro]"
 msgstr ""
-"不必要な\"duplicated _id on insert\"というエラーメッセージを 抑制。 #910（←は"
-"未修正）"
+"Improved to accept free style normal comment in table/index comment. "
+"[Suggested by Y.Kentaro]"
 
 msgid ""
-"CentOSで利用しているMySQLのバージョンを5.5.10から5.5.12へ アップデート。"
+"Supported \"W\" pragma. This feature is derived from `Tritonn <http://qwik."
+"jp/senna/query.html>`_."
 msgstr ""
-"CentOSで利用しているMySQLのバージョンを5.5.10から5.5.12へ アップデート。"
-
-msgid "Ubuntu 11.04 Natty Narwhalサポートの追加。"
-msgstr "Ubuntu 11.04 Natty Narwhalサポートの追加。"
-
-msgid "Ubuntu 10.10 Maverick Meerkatサポートの削除。"
-msgstr "Ubuntu 10.10 Maverick Meerkatサポートの削除。"
-
-msgid "Fedora 15サポートの追加。"
-msgstr "Fedora 15サポートの追加。"
-
-msgid "Fedora 14サポートの削除。"
-msgstr "Fedora 14サポートの削除。"
-
-msgid "ORDER BY LIMITの高速化が機能しないケースがある問題の修正。#845"
-msgstr "ORDER BY LIMITの高速化が機能しないケースがある問題の修正。#845"
-
-msgid "デバッグビルド時のメモリリークを修正。"
-msgstr "デバッグビルド時のメモリリークを修正。"
+"Supported \"W\" pragma. This feature is derived from `Tritonn <http://qwik."
+"jp/senna/query.html>`_."
 
 msgid ""
-"提供しているCentOS用パッケージをOracle提供MySQLパッケージ と一緒に使うとク"
-"ラッシュする問題を修正。"
+"Supported ``mroonga_command()`` without the current database. [Reported by Y."
+"Kentaro]"
 msgstr ""
-"提供しているCentOS用パッケージをOracle提供MySQLパッケージ と一緒に使うとク"
-"ラッシュする問題を修正。"
+"Supported ``mroonga_command()`` without the current database. [Reported by Y."
+"Kentaro]"
 
-msgid "Mitsuhiro Shibuyaさん"
-msgstr "Mitsuhiro Shibuyaさん"
-
-msgid "Hiroki Minetaさん"
-msgstr "Hiroki Minetaさん"
-
-msgid "@kodakaさん"
-msgstr "@kodakaさん"
-
-msgid "0.5 リリース - 2011/03/29"
-msgstr "0.5 リリース - 2011/03/29"
-
-msgid "\"uninstall plugin\"対応 #741"
-msgstr "\"uninstall plugin\"対応 #741"
-
-msgid "MariaDB対応 （かずひこさんが提案）"
-msgstr "MariaDB対応 （かずひこさんが提案）"
-
-msgid "不要なデバッグシンボルを削除"
-msgstr "不要なデバッグシンボルを削除"
-
-msgid "MySQL 5.5への対応強化。"
-msgstr "MySQL 5.5への対応強化。"
-
-msgid "エラーメッセージの改良"
-msgstr "エラーメッセージの改良"
-
-msgid "かずひこさん"
-msgstr "かずひこさん"
-
-msgid "0.4 リリース - 2010/11/29"
-msgstr "0.4 リリース - 2010/11/29"
-
-msgid "全文検索のスコア取得機能の追加。"
-msgstr "全文検索のスコア取得機能の追加。"
-
-msgid "レコードIDへのアクセス機能の追加。"
-msgstr "レコードIDへのアクセス機能の追加。"
-
-msgid "直近のレコードIDを参照するためのUDFの追加。"
-msgstr "直近のレコードIDを参照するためのUDFの追加。"
-
-msgid "インデックスによる範囲検索機能の追加。"
-msgstr "インデックスによる範囲検索機能の追加。"
-
-msgid "全文検索におけるORDER BY LIMITパタンの高速化。"
-msgstr "全文検索におけるORDER BY LIMITパタンの高速化。"
-
-msgid "``groonga_fast_order_limit`` ステータス変数の追加。"
-msgstr "``groonga_fast_order_limit`` ステータス変数の追加。"
-
-msgid "ログ出力機能の設定強化。"
-msgstr "ログ出力機能の設定強化。"
-
-msgid "``groonga_log_level`` システム変数の追加。"
-msgstr "``groonga_log_level`` システム変数の追加。"
-
-msgid "全文検索機能の強化(NOT MATCH AGAINST対応)。"
-msgstr "全文検索機能の強化(NOT MATCH AGAINST対応)。"
-
-msgid "MySQL 5.5への対応。"
-msgstr "MySQL 5.5への対応。"
-
-msgid "とみたまさひろさん"
-msgstr "とみたまさひろさん"
-
-msgid "0.3 リリース - 2010/10/29"
-msgstr "0.3 リリース - 2010/10/29"
-
-msgid "エラーメッセージの出力を実装。"
-msgstr "エラーメッセージの出力を実装。"
-
-msgid "カラムの刈り込みの実装を強化。"
-msgstr "カラムの刈り込みの実装を強化。"
-
-msgid "行カウント高速化機能の実装。"
-msgstr "行カウント高速化機能の実装。"
-
-msgid "``groonga_count_skip`` ステータス変数の追加。"
-msgstr "``groonga_count_skip`` ステータス変数の追加。"
-
-msgid "ユーザガイドドキュメントの追加。"
-msgstr "ユーザガイドドキュメントの追加。"
-
-msgid "変更"
-msgstr "変更"
-
-msgid "インデックス作成時にNORMALIZEフラグを付与。"
-msgstr "インデックス作成時にNORMALIZEフラグを付与。"
-
-msgid "LIMITなどを用いた場合にカーソルが正しくクローズされない問題の修正。"
-msgstr "LIMITなどを用いた場合にカーソルが正しくクローズされない問題の修正。"
-
-msgid "0.2 リリース - 2010/09/29"
-msgstr "0.2 リリース - 2010/09/29"
+msgid "Improved to use ``auto_increment`` value for creating table. [#1741]"
+msgstr "Improved to use ``auto_increment`` value for creating table. [#1741]"
 
 msgid ""
-"packages.groonga.orgでのバイナリパッケージ配布開始。aptitude/yumによるインス"
-"トールが可能に。"
+"Improved to keep the value of ``auto_increment`` even though latest record "
+"is deleted. [#1738]"
 msgstr ""
-"packages.groonga.orgでのバイナリパッケージ配布開始。aptitude/yumによるインス"
-"トールが可能に。"
+"Improved to keep the value of ``auto_increment`` even though latest record "
+"is deleted. [#1738]"
 
-msgid "バイナリログの出力に対応。"
-msgstr "バイナリログの出力に対応。"
+msgid "[doc] Added documentation how to install mroonga on Windows."
+msgstr "[doc] Added documentation how to install mroonga on Windows."
 
 msgid ""
-"共有ライブラリの名前を\"libgroonga_storage_engine.so\"から\"ha_groonga.so\"に"
-"変更。"
+"Added install SQL for initial setup. [groonga-dev,01434] [Suggested by "
+"Kazuhiko]"
 msgstr ""
-"共有ライブラリの名前を\"libgroonga_storage_engine.so\"から\"ha_groonga.so\"に"
-"変更。"
+"Added install SQL for initial setup. [groonga-dev,01434] [Suggested by "
+"Kazuhiko]"
 
-msgid "configureオプションの ``--with-mysql`` および ``--libdir`` を削除。"
-msgstr "configureオプションの ``--with-mysql`` および ``--libdir`` を削除。"
+msgid "Supported Debian 8.0 (jessie)"
+msgstr "Supported Debian 8.0 (jessie)"
 
 msgid ""
-"configureオプションの ``--with-mysql-source`` および ``--with-mysql-config`` "
-"を追加。"
+"Fixed a bug that empty query search causes SEGV. [groonga-dev,01346] "
+"[Reported by Nakai Kanako]"
 msgstr ""
-"configureオプションの ``--with-mysql-source`` および ``--with-mysql-config`` "
-"を追加。"
+"Fixed a bug that empty query search causes SEGV. [groonga-dev,01346] "
+"[Reported by Nakai Kanako]"
 
-msgid "ヘッダファイルのincludeパスを修正。"
-msgstr "ヘッダファイルのincludeパスを修正。"
+msgid ""
+"Fixed a package build error depend on directory existence. [groonga-"
+"dev,01335] [Reported by WING] [Patch by yoku ts]"
+msgstr ""
+"Fixed a package build error depend on directory existence. [groonga-"
+"dev,01335] [Reported by WING] [Patch by yoku ts]"
 
-msgid "\"SHOW CREATE TABLE\"に出力されるENGINE名を修正。"
-msgstr "\"SHOW CREATE TABLE\"に出力されるENGINE名を修正。"
+msgid ""
+"Fixed a missing build dependency to ``groonga-normalizer-mysql`` package. "
+"[Patch by Y.Kentaro]"
+msgstr ""
+"Fixed a missing build dependency to ``groonga-normalizer-mysql`` package. "
+"[Patch by Y.Kentaro]"
 
-msgid "0.1 リリース - 2010/08/19"
-msgstr "0.1 リリース - 2010/08/19"
+msgid ""
+"Fixed a bug that the value of ``Mroonga_log_level`` can't be set in my.cnf. "
+"[groonga-dev,01379] [Reported by Kazuhiro Isobe]"
+msgstr ""
+"Fixed a bug that the value of ``Mroonga_log_level`` can't be set in my.cnf. "
+"[groonga-dev,01379] [Reported by Kazuhiro Isobe]"
 
-msgid "初回テストリリース"
-msgstr "初回テストリリース"
+msgid "Fixed a memory leak that default tokenizer is not correctly freed."
+msgstr "Fixed a memory leak that default tokenizer is not correctly freed."
+
+msgid ""
+"[wrapper] Fixed a bug that comment is changed for alter table without engine "
+"name causes a missing table. [Reported by Y.Kentaro]"
+msgstr ""
+"[wrapper] Fixed a bug that comment is changed for alter table without engine "
+"name causes a missing table. [Reported by Y.Kentaro]"
+
+msgid "Nakai Kanako"
+msgstr "Nakai Kanako"
+
+msgid "Release 3.03 - 2013/4/29"
+msgstr "Release 3.03 - 2013/4/29"
+
+msgid ""
+"[doc] Added documentation about table limitations. [groonga-dev,01281] "
+"[Reported by Kazuhiro Isobe]"
+msgstr ""
+"[doc] Added documentation about table limitations. [groonga-dev,01281] "
+"[Reported by Kazuhiro Isobe]"
+
+msgid "[doc] Added ``mroonga_command`` documentation."
+msgstr "[doc] Added ``mroonga_command`` documentation."
+
+msgid "Supported ``default_tokenizer`` as table parameter in comment."
+msgstr "Supported ``default_tokenizer`` as table parameter in comment."
+
+msgid ""
+"Supported using existing table as lexicon not only \"FULLTEXT INDEX\", but "
+"also normal \"INDEX\". This change improves compatibility to groonga."
+msgstr ""
+"Supported using existing table as lexicon not only \"FULLTEXT INDEX\", but "
+"also normal \"INDEX\". This change improves compatibility to groonga."
+
+msgid "Supported MySQL 5.6.11."
+msgstr "Supported MySQL 5.6.11."
+
+msgid ""
+"Supported collation in multiple column index. [groonga-dev,01302] [Reported "
+"by Kouhei Tanabe]"
+msgstr ""
+"Supported collation in multiple column index. [groonga-dev,01302] [Reported "
+"by Kouhei Tanabe]"
+
+msgid ""
+"Supported no parser fulltext index for predictive search by \"XXX*\" in "
+"groonga query syntax."
+msgstr ""
+"Supported no parser fulltext index for predictive search by \"XXX*\" in "
+"groonga query syntax."
+
+msgid "[cmake] Dropped MySQL 5.5.x build support."
+msgstr "[cmake] Dropped MySQL 5.5.x build support."
+
+msgid ""
+"Supported custom normalizer for FULLTEXT INDEX. Use can specify custom "
+"normalizer as a comment. Supported syntax is ``FULLTEXT INDEX (column) "
+"COMMENT 'normalizer \"NormalizerXXX\"'``. [groonga-dev:01303] [Suggested by "
+"Kouhei Tanabe]"
+msgstr ""
+"Supported custom normalizer for FULLTEXT INDEX. Use can specify custom "
+"normalizer as a comment. Supported syntax is ``FULLTEXT INDEX (column) "
+"COMMENT 'normalizer \"NormalizerXXX\"'``. [groonga-dev:01303] [Suggested by "
+"Kouhei Tanabe]"
+
+msgid "Supported Ubuntu 13.04 Raring Ringtail."
+msgstr "Supported Ubuntu 13.04 Raring Ringtail."
+
+msgid ""
+"[storage] Fixed a bug that stored value can't be searched because of "
+"unexpected cast for integer. [#1696] [groonga-dev,01266] [Reported by smztks]"
+msgstr ""
+"[storage] Fixed a bug that stored value can't be searched because of "
+"unexpected cast for integer. [#1696] [groonga-dev,01266] [Reported by smztks]"
+
+msgid ""
+"[wrapper] Fixed a bug that multiple match against returns invalid aggregated "
+"count. [#1702] [groonga-dev,01279] [Reported by Masahiro Furuta]"
+msgstr ""
+"[wrapper] Fixed a bug that multiple match against returns invalid aggregated "
+"count. [#1702] [groonga-dev,01279] [Reported by Masahiro Furuta]"
+
+msgid ""
+"Fixed a bug that ``mrn_log_level`` is ignored. [groonga-dev,01290] [Reported "
+"by Kazuhiro Isobe]"
+msgstr ""
+"Fixed a bug that ``mrn_log_level`` is ignored. [groonga-dev,01290] [Reported "
+"by Kazuhiro Isobe]"
+
+msgid ""
+"Fixed a bug that mroonga crashes when freeing internal temporary shared "
+"object."
+msgstr ""
+"Fixed a bug that mroonga crashes when freeing internal temporary shared "
+"object."
+
+msgid ""
+"[doc] Fixed a typo about running mode of storage engine and a long ambiguous "
+"sentence. [Reported by Ichiro Suzuki]"
+msgstr ""
+"[doc] Fixed a typo about running mode of storage engine and a long ambiguous "
+"sentence. [Reported by Ichiro Suzuki]"
+
+msgid ""
+"[mysql55] Fixed a bug that inplace anonymous index recreation cause a crash. "
+"[groonga-dev,01319] [Reported by Kouhei Tanabe]"
+msgstr ""
+"[mysql55] Fixed a bug that inplace anonymous index recreation cause a crash. "
+"[groonga-dev,01319] [Reported by Kouhei Tanabe]"
+
+msgid "smztks"
+msgstr "smztks"
+
+msgid "Masahiro Furuta"
+msgstr "Masahiro Furuta"
+
+msgid "Ichiro Suzuki"
+msgstr "Ichiro Suzuki"
+
+msgid "Release 3.02 - 2013/3/29"
+msgstr "Release 3.02 - 2013/3/29"
+
+msgid "Improved bundling to MariaDB 10.0 for Linux. [#1644]"
+msgstr "Improved bundling to MariaDB 10.0 for Linux. [#1644]"
+
+msgid ""
+"Added the value of list documentation about ``mroonga_log_level`` in "
+"reference manual. [groonga-dev,01255] [Reported by Kazuhiro Isobe]"
+msgstr ""
+"Added the value of list documentation about ``mroonga_log_level`` in "
+"reference manual. [groonga-dev,01255] [Reported by Kazuhiro Isobe]"
+
+msgid ""
+"[experimental] Added ``mroonga_command`` UDF. [#1643] This UDF supports to "
+"send query directly to ``groonga``."
+msgstr ""
+"[experimental] Added ``mroonga_command`` UDF. [#1643] This UDF supports to "
+"send query directly to ``groonga``."
+
+msgid ""
+"Fixed a bug that less than conditional expression on WHERE clause doesn't "
+"work for multiple nullable column index. [groonga-dev,01253] [#1670] "
+"[Reported by Horikoshi Yuki]"
+msgstr ""
+"Fixed a bug that less than conditional expression on WHERE clause doesn't "
+"work for multiple nullable column index. [groonga-dev,01253] [#1670] "
+"[Reported by Horikoshi Yuki]"
+
+msgid ""
+"[wrapper] Fixed the invalid timing to free ``key`` object too early. This "
+"bug may occurs when recreating indexes by DISABLE KEYS/ENABLE KEYS. [#1671] "
+"[Reported by keigo ito]"
+msgstr ""
+"[wrapper] Fixed the invalid timing to free ``key`` object too early. This "
+"bug may occurs when recreating indexes by DISABLE KEYS/ENABLE KEYS. [#1671] "
+"[Reported by keigo ito]"
+
+msgid "keigo ito"
+msgstr "keigo ito"
+
+msgid "Release 3.01 - 2013/2/28"
+msgstr "Release 3.01 - 2013/2/28"
+
+msgid ""
+"Supported ``utf8_unicode_ci`` and ``utf8mb4_unicode_ci``. Note that "
+"``groonga-normalizer-mysql`` >= 1.0.1 is required."
+msgstr ""
+"Supported ``utf8_unicode_ci`` and ``utf8mb4_unicode_ci``. Note that "
+"``groonga-normalizer-mysql`` >= 1.0.1 is required."
+
+msgid "[experimental] Supported foreign key for storage mode. [#1612]"
+msgstr "[experimental] Supported foreign key for storage mode. [#1612]"
+
+msgid ""
+"Fixed groonga derived bug that the records in specific range returns 0 "
+"records unexpectedly. [groonga-dev,01192] [Reported by b senboku]"
+msgstr ""
+"Fixed groonga derived bug that the records in specific range returns 0 "
+"records unexpectedly. [groonga-dev,01192] [Reported by b senboku]"
+
+msgid "Fixed to disable DTrace by default for Mac OS X."
+msgstr "Fixed to disable DTrace by default for Mac OS X."
+
+msgid "b senboku"
+msgstr "b senboku"
+
+msgid "Release 3.00 - 2013/2/9"
+msgstr "Release 3.00 - 2013/2/9"
+
+msgid "Supported Fedora 18."
+msgstr "Supported Fedora 18."
+
+msgid "Dropped Fedora 17 support."
+msgstr "Dropped Fedora 17 support."
+
+msgid ""
+"Supported ``utf8_general_ci`` and ``utf8mb4_generic_ci`` compatible "
+"normalizer."
+msgstr ""
+"Supported ``utf8_general_ci`` and ``utf8mb4_generic_ci`` compatible "
+"normalizer."
+
+msgid "[rpm][centos] Supported MySQL 5.6.10 on CentOS 5."
+msgstr "[rpm][centos] Supported MySQL 5.6.10 on CentOS 5."
+
+msgid ""
+"[storage] Fixed a groonga derived bug that unique key doesn't match mixed "
+"case keyword. [groonga-dev,01187] [Reported by Kouhei Tanabe]"
+msgstr ""
+"[storage] Fixed a groonga derived bug that unique key doesn't match mixed "
+"case keyword. [groonga-dev,01187] [Reported by Kouhei Tanabe]"
+
+msgid "Release 4.10 - 2015-01-29"
+msgstr ""
+
+# d356c113c9aa4e9c950b6519f9dec20b
+msgid ""
+"This release has a bug fix for unique index. If you're using unique index in "
+"storage mode, your data may be broken. If you're using unique index in "
+"storage mode, we recommend to upgrade to this version and re-create your "
+"unique indexes."
+msgstr ""
+
+# 6b64f288f348417e968261c0c2710738
+msgid ""
+"Here are SQL statements to re-create your indexes including unique indexes::"
+msgstr ""
+
+# f2663787cdb741fba10e10200ccd0d00
+msgid ""
+"You may get \"duplicated record\" error on ``ENABLE KEYS``. If you get the "
+"error, please confirm your data carefully and fix the duplication."
+msgstr ""
+
+# 7ada7b924e7c4131ad7a9118ea62b7fc
+msgid "Here are broken data scenario:"
+msgstr ""
+
+# 4e07a0d45a944206abaf6703297d93b4
+msgid "An unique index is created."
+msgstr ""
+
+# 9d3acfe18ad8417db2421c85aa40f85f
+msgid "Insert data."
+msgstr ""
+
+# d6538dfbb2394f2a8b1c0467bd6933ff
+msgid "Insert duplicated data. It's reported as an error."
+msgstr ""
+
+# c700ead0b21341bea84875cc05c676bc
+msgid ""
+"Insert duplicated data again. It can be inserted. It breaks unique "
+"consistency."
+msgstr ""
+
+msgid ""
+"[storage] Supported static index construction in FULLTEXT INDEX comment with "
+"``'table \"XXX\"'``. Execute ``DISABLE KEYS``, then ``ENABLE KEYS`` for "
+"static index construction. [Reported by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"[rpm][centos] Built with MySQL 5.6.22 on CentOS 7. [groonga-dev,03047] "
+"[Reported by Hiroshi Kagami]"
+msgstr ""
+
+msgid "[rpm][centos] Built with MariaDB 5.5.40-2 on CentOS 7."
+msgstr ""
+
+msgid ""
+"[storage][mysql56] Supported to report duplicated error for ``ADD UNIQUE "
+"INDEX``. [Reported by kazeburo]"
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that referenced table is accidentally removed on "
+"error. This means that index creation is failed for FULLTEXT INDEX comment "
+"with ``'table \"terms\"'``, \"terms\" table can be removed on error."
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that duplicated entry is removed in unique index when "
+"duplicated error is occurred. This bug makes consistency of indexes broken, "
+"so recommended to recreate existing indexes again after upgrading Mroonga. "
+"[Reported by kazeburo]"
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that ``INSERT ON DUPLICATE KEY UPDATE`` is broken. "
+"This bug may change existing other records by executing update fallback when "
+"insert error occurred. [Reported by kazeburo]"
+msgstr ""
+
+msgid "Hiroshi Kagami"
+msgstr ""
+
+msgid "kazeburo"
+msgstr ""
+
+msgid "Release 4.09 - 2014-12-29"
+msgstr ""
+
+msgid "[rpm] Supported MySQL 5.6.22 on CentOS 6. [Reported by @oreradio]"
+msgstr ""
+
+msgid ""
+"Added :ref:`mroonga_boolean_mode_syntax_flags` that custom syntax in ``MATCH "
+"() AGAINST ('...' IN BOOLEAN MODE)``."
+msgstr ""
+
+msgid ""
+"Supported no normalizer ``FULLTEXT INDEX`` by specifying ``none`` as "
+"normalizer such as ``FULLTEXT INDEX (...) COMMENT 'normalizer \"none\"'``."
+msgstr ""
+
+msgid "Supported referencing primary key value of auto created records."
+msgstr ""
+
+msgid "@oreradio"
+msgstr ""
+
+msgid "Release 4.08 - 2014/11/29"
+msgstr ""
+
+msgid "[deb] Supported Ubuntu 12.04 again for Travis-CI."
+msgstr ""
+
+msgid ""
+"[test] Added script which checks performance schema. [Patch by Elena "
+"Stepanova]"
+msgstr ""
+
+msgid ""
+"[rpm] Supported MySQL 5.5.40 on CentOS 6 and 7. [groonga-dev,02955] "
+"[Reported Noboru Nishiyama]"
+msgstr ""
+
+msgid "[doc] Added :doc:`/reference/limitations` about column size."
+msgstr ""
+
+msgid ""
+"[storage] Added missing primary key check when primary key is required to "
+"specify. [groonga-dev,02963] [Reported by kashihara]"
+msgstr ""
+
+msgid ""
+"[doc] Fixed nonexistent MySQL version. [groonga-dev,02899] [Reported by GMO "
+"Media, Inc.]"
+msgstr ""
+
+msgid "[doc] Removed needless SCL related install description for CentOS 5."
+msgstr ""
+
+msgid "[doc] Use ``service`` command to start MySQL on CentOS 5 and 6."
+msgstr ""
+
+msgid "[doc] Use ``systemctl`` command to start MySQL on CentOS 7."
+msgstr ""
+
+msgid "GMO Media, Inc."
+msgstr "GMO Media, Inc."
+
+msgid "Elena Stepanova"
+msgstr ""
+
+msgid "Noboru Nishiyama"
+msgstr ""
+
+msgid "kashihara"
+msgstr ""
+
+msgid "Release 4.07 - 2014/10/29"
+msgstr ""
+
+msgid ""
+"[storage] Changed to treat deprecated ``INSERT DELAYED`` as error. "
+"[GitHub#20] [MDEV#6837] [Reported by Elena Stepanova]"
+msgstr ""
+
+msgid ""
+"[storage][mariadb10] Added proper error message for duplicated entries on "
+"adding an unique index. [GitHub#19] [Reported by Elena Stepanova]"
+msgstr ""
+
+msgid ""
+"[cmake] Removed needless status message for compiler flag checks [GitHub#22]"
+msgstr ""
+
+msgid ""
+"Supported token filter in table/index comment for wrapper/storage mode. "
+"[GitHub#25] [Patch by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"[mroonga_command] Improved to need not to know whether Groonga database "
+"already exists before executing mroonga_command. In the previous versions, "
+"you must prepare table which use Mroonga."
+msgstr ""
+
+msgid ""
+"[storage] Supported to specify normalizer in table comment. [GitHub#27] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"[storage] Supported column compression flag (``COMPRESS_LZ4``, "
+"``COMPRESS_ZLIB``). [GitHub#32] [Patch by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"Added :ref:`mroonga_libgroonga_support_lz4` and :ref:"
+"`mroonga_libgroonga_support_zlib` system variables. [GitHub#33,#34,#35] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+
+msgid "Dropped MySQL 5.1 support."
+msgstr ""
+
+msgid ""
+"[storage][mariadb10] Fixed a crash bug that it doesn't properly locked. "
+"[GitHub#18] [Reported by Elena Stepanova]"
+msgstr ""
+
+msgid "[storage] Fixed overflow about signed tinyint. [GitHub#29]"
+msgstr ""
+
+msgid ""
+"[doc] Fixed markups about normalizer. [GitHub#32] [Patch by Naoya Murakami]"
+msgstr ""
+
+msgid "Release 4.06 - 2014/09/29"
+msgstr ""
+
+msgid "[doc] Added more details about Groonga's development package."
+msgstr ""
+
+msgid "[doc] Changed to recommend GitHub issue tracker."
+msgstr ""
+
+msgid "[deb] Dropped Debian jessie and sid support."
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that no record returns with multiple column index. "
+"This bug occurs when it meets two conditions. First, columns indexed by "
+"multiple column index are used in order and WHERE clause. Second, a column "
+"indexed by multiple column index but it's no the first column is used in "
+"ORDER by clause. [#2651] [Reported by foamcentime, Naoya Murakami]"
+msgstr ""
+
+msgid "foamcentime"
+msgstr ""
+
+msgid "Release 4.05 - 2014/08/29"
+msgstr ""
+
+msgid "Dropped Ubuntu 13.10 Saucy Salamander support."
+msgstr ""
+
+msgid ""
+"Added new variable :ref:`mroonga_vector_column_delimiter`. It is used to "
+"change delimiter of vector column. [GitHub#16] [Patch by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"[rpm][centos] Supported MySQL 5.6 official repository packages on CentOS "
+"6/7. Use mysql56-community-mroonga package. [Patch by miko]"
+msgstr ""
+
+msgid ""
+"[doc] Moved document about upgrading which is included in install document. "
+"Now, you can refer it as :doc:`/upgrade`."
+msgstr ""
+
+msgid "Supported MariaDB 10.0.13."
+msgstr ""
+
+msgid ""
+"[rpm][centos] Supported CentOS 7 as mariadb-mroonga package. It uses the "
+"bundled MariaDB. [groonga-dev,02604] [Tested by Miyawaki][Tested by Kawada]"
+msgstr ""
+
+msgid ""
+"[doc] Fixed wrong MySQL version about news of Mroonga 4.04. [Reported by "
+"_so4]"
+msgstr ""
+
+msgid ""
+"[doc] Removed needless explicit install procedure for groonga-normalizer-"
+"mysql package."
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that value remains in unique index on duplicated "
+"primary key error. [groonga-dev,02633] [Reported by 6elz]"
+msgstr ""
+
+msgid ""
+"[doc] Fixed a bug that building document in other directory fails. [groonga-"
+"dev,02652] [Reported by cosmo0920]"
+msgstr ""
+
+msgid "Changed to use \"Mroonga\" form for engine name."
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that table specified index (``COMMENT 'table \"XXX"
+"\"'``) can't be removed. [groonga-dev,02677] [Reported by Naoya Murakami]"
+msgstr ""
+
+msgid "_so4"
+msgstr ""
+
+msgid "miko"
+msgstr ""
+
+msgid "6elz"
+msgstr ""
+
+msgid "cosmo0920"
+msgstr "cosmo0920"
+
+msgid "Miyawaki"
+msgstr ""
+
+msgid "Kawada"
+msgstr ""
+
+msgid "Release 4.04 - 2014/07/29"
+msgstr ""
+
+msgid ""
+"Removed Groonga and groonga-normalizer-mysql specific test files for MariaDB "
+"bundled version on Windows. There is too long file name issue. [groonga-"
+"dev,02391] [Reported by Masafumi Yokoyama]"
+msgstr ""
+
+msgid "[doc] Updated :doc:`/developer`."
+msgstr ""
+
+msgid ""
+"Added overflow/underflow check whether valid time to find errors on 32-bit "
+"environment. [Patch by Toshihisa Tashiro]"
+msgstr ""
+
+msgid ""
+"[storage] Supproted INPLACE ALTER TABLE for adding/dropping columns. [#2277] "
+"[GitHub#12] [Patch by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"[rpm][centos] Built with MySQL 5.5.37 on CentOS. [Reported by YOSHIDA Mitsuo]"
+msgstr ""
+
+msgid ""
+"Fixed to use lowercase for table name to avoid  lower/upper-case specific "
+"issue on Mac OS. [Patch by Toshihisa Tashiro]"
+msgstr ""
+
+msgid "Fixed build error for VC++ 2013 [GitHub#10] [Patch by cosmo0920]"
+msgstr ""
+
+msgid ""
+"[doc] Added missing quote for install procedure on CentOS6 SCL. [GitHub#11] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that renaming column by ALTER TABLE CHANGE causes "
+"crash. [#2637]"
+msgstr ""
+
+msgid "Masafumi Yokoyama"
+msgstr ""
+
+msgid "Toshihisa Tashiro"
+msgstr ""
+
+msgid "Release 4.03 - 2014/05/29"
+msgstr "Release 4.03 - 2014/05/29"
+
+msgid "[doc] Updated MariaDB version. [Patch by cosmo0920]"
+msgstr "[doc] Updated MariaDB version. [Patch by cosmo0920]"
+
+msgid "Supported daylight saving time. [#2385]"
+msgstr "Supported daylight saving time. [#2385]"
+
+msgid ""
+"Migrated Ubuntu package distribution site to PPA on Launchpad. See :doc:`/"
+"install` for details."
+msgstr ""
+"Migrated Ubuntu package distribution site to PPA on Launchpad. See :doc:`/"
+"install` for details."
+
+msgid ""
+"[doc] Fixed command line in :doc:`/install`. [Reported by YOSHIDA Mitsuo]"
+msgstr ""
+"[doc] Fixed command line in :doc:`/install`. [Reported by YOSHIDA Mitsuo]"
+
+msgid "Release 4.02 - 2014/04/29"
+msgstr "Release 4.02 - 2014/04/29"
+
+msgid "Supported MariaDB 10.0.10 [#2460] [Reported by Kazuhiko Shiozaki]"
+msgstr "Supported MariaDB 10.0.10 [#2460] [Reported by Kazuhiko Shiozaki]"
+
+msgid "Supported MySQL 5.6.17."
+msgstr "Supported MySQL 5.6.17."
+
+msgid "Supported Ubuntu 14.04 LTS Trusty Tahr."
+msgstr "Supported Ubuntu 14.04 LTS Trusty Tahr."
+
+msgid "Enabled MariaDB bundled build."
+msgstr "Enabled MariaDB bundled build."
+
+msgid "Dropped Ubuntu 12.10 Quantal Quetzal support."
+msgstr "Dropped Ubuntu 12.10 Quantal Quetzal support."
+
+msgid "[doc] Updated MySQL version. [GitHub#8] [Patch by cosmo0920]"
+msgstr "[doc] Updated MySQL version. [GitHub#8] [Patch by cosmo0920]"
+
+msgid ""
+"[storage] Stopped to use truncate for ``DELETE FROM table``. [groonga-"
+"dev,02222] [Reported by GMO Media, Inc.]"
+msgstr ""
+"[storage] Stopped to use truncate for ``DELETE FROM table``. [groonga-"
+"dev,02222] [Reported by GMO Media, Inc.]"
+
+msgid "[wrapper] Stopped to use truncate for ``DELETE FROM table``."
+msgstr "[wrapper] Stopped to use truncate for ``DELETE FROM table``."
+
+msgid ""
+"[storage] Fixed a bug that inplace alter table with no primary key crashes. "
+"[groonga-dev,02227] [Reported by GMO Media, Inc.]"
+msgstr ""
+"[storage] Fixed a bug that inplace alter table with no primary key crashes. "
+"[groonga-dev,02227] [Reported by GMO Media, Inc.]"
+
+msgid ""
+"[storage] Fixed a bug that ``ORDER BY function(vector_reference_column)`` "
+"doesn't work. [groonga-dev,02234] [Reported by Naoya Murakami]"
+msgstr ""
+"[storage] Fixed a bug that ``ORDER BY function(vector_reference_column)`` "
+"doesn't work. [groonga-dev,02234] [Reported by Naoya Murakami]"
+
+msgid ""
+"Fixed a bug that setting the current value to ``mroonga_default_parser`` or "
+"``mroonga_log_file`` crash. [GitHub#6] [Patch by Satoshi MITANI]"
+msgstr ""
+"Fixed a bug that setting the current value to ``mroonga_default_parser`` or "
+"``mroonga_log_file`` crash. [GitHub#6] [Patch by Satoshi MITANI]"
+
+msgid ""
+"Fixed a bug that ``mroonga_lock_timeout`` in my.cnf or command line option "
+"is ignored. [GitHub#7] [Patch by GMO Media, Inc.]"
+msgstr ""
+"Fixed a bug that ``mroonga_lock_timeout`` in my.cnf or command line option "
+"is ignored. [GitHub#7] [Patch by GMO Media, Inc.]"
+
+msgid ""
+"Fixed a bug that deleting by primary key doesn't update unique index. "
+"[groonga-dev,02244] [Reported by Akihiro Tsukui]"
+msgstr ""
+"Fixed a bug that deleting by primary key doesn't update unique index. "
+"[groonga-dev,02244] [Reported by Akihiro Tsukui]"
+
+msgid "Satoshi MITANI"
+msgstr "Satoshi MITANI"
+
+msgid "Akihiro Tsukui"
+msgstr "Akihiro Tsukui"
+
+msgid "Release 4.01 - 2014/03/29"
+msgstr "Release 4.01 - 2014/03/29"
+
+msgid "Supported MariaDB 10.0.9 [#2387] [Reported by Kazuhiko Shiozaki]"
+msgstr "Supported MariaDB 10.0.9 [#2387] [Reported by Kazuhiko Shiozaki]"
+
+msgid ""
+"Supported ten or more sections in W pragma [#2348] [groonga-dev,02138] "
+"[Reported by yoku0825]"
+msgstr ""
+"Supported ten or more sections in W pragma [#2348] [groonga-dev,02138] "
+"[Reported by yoku0825]"
+
+msgid "[rpm][centos] Supported SCL MySQL package on CentOS 6."
+msgstr "[rpm][centos] Supported SCL MySQL package on CentOS 6."
+
+msgid ""
+"[storage] Fixed a bug that ALTER TABLE with fulltext index which refer to "
+"table causes mysqld crash. [#2327] [groonga-dev,02130] [Reported by Naoya "
+"Murakami]"
+msgstr ""
+"[storage] Fixed a bug that ALTER TABLE with fulltext index which refer to "
+"table causes mysqld crash. [#2327] [groonga-dev,02130] [Reported by Naoya "
+"Murakami]"
+
+msgid ""
+"[doc] Fixed to use Mroonga/Groonga (capitalized notation) in characteristics "
+"document. [GitHub#5] [Patch by Naoya Murakami]"
+msgstr ""
+"[doc] Fixed to use Mroonga/Groonga (capitalized notation) in characteristics "
+"document. [GitHub#5] [Patch by Naoya Murakami]"
+
+msgid "yoku0825"
+msgstr "yoku0825"
+
+msgid "Release 4.00 - 2014/02/09"
+msgstr "Release 4.00 - 2014/02/09"
+
+msgid ""
+"Bump version to 4.00! We recommend to upgrade because crash bug and updating "
+"issue are fixed now!"
+msgstr ""
+"Bump version to 4.00! We recommend to upgrade because crash bug and updating "
+"issue are fixed now!"
+
+msgid "Dropped Ubuntu 13.04 (Raring Ringtail) support."
+msgstr "Dropped Ubuntu 13.04 (Raring Ringtail) support."
+
+msgid ""
+"[storage] Supported to search with empty string. [#2214] [groonga-dev,02052] "
+"[Reported by Naoya Murakami]"
+msgstr ""
+"[storage] Supported to search with empty string. [#2214] [groonga-dev,02052] "
+"[Reported by Naoya Murakami]"
+
+msgid ""
+"Fixed a crash bug that bulk inserting null value into geometry column which "
+"has NOT NULL constraint. [#2281] [groonga-dev,02095] [Reported by yoku]"
+msgstr ""
+"Fixed a crash bug that bulk inserting null value into geometry column which "
+"has NOT NULL constraint. [#2281] [groonga-dev,02095] [Reported by yoku]"
+
+msgid ""
+"[storage] Fixed a bug that existing records may be unexectedlly removed by "
+"ON DUPLICATE KEY UPDATE. In the previous versions, such a query can't update "
+"the value of column correctly. [#2263] [Reported Masahiro Nagano]"
+msgstr ""
+"[storage] Fixed a bug that existing records may be unexectedlly removed by "
+"ON DUPLICATE KEY UPDATE. In the previous versions, such a query can't update "
+"the value of column correctly. [#2263] [Reported Masahiro Nagano]"
+
+msgid "Masahiro Nagano"
+msgstr "Masahiro Nagano"
