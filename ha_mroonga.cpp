@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -8557,7 +8557,8 @@ int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
     const char *table_name = target_share->index_table[key_index];
     snprintf(target_name, GRN_TABLE_MAX_KEY_SIZE,
              "%s.%s", table_name, key_info[key_index].name);
-    grn_obj *index_column = grn_ctx_get(ctx, target_name, strlen(target_name));
+    target_name_length = strlen(target_name);
+    grn_obj *index_column = grn_ctx_get(ctx, target_name, target_name_length);
     if (index_column) {
       rc = grn_obj_remove(ctx, index_column);
     }
@@ -8572,6 +8573,8 @@ int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
       target_name_length = grn_obj_name(ctx, index_table,
                                         target_name, GRN_TABLE_MAX_KEY_SIZE);
       rc = grn_obj_remove(ctx, index_table);
+    } else {
+      target_name_length = 0;
     }
   }
 
