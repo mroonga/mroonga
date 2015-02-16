@@ -1,5 +1,5 @@
 version: "{build}"
-clone_depth: 1
+clone_depth: 10
 install:
   - cd ..
   - choco install curl 7zip.commandline
