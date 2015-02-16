@@ -1030,9 +1030,9 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
   }
   share->tmp_table = INTERNAL_TMP_TABLE; // TODO: is this right?
   share->path.str = (char *) path;
-  share->path.length = strlen(path);
-  share->normalized_path.str = share->path.str;
-  share->normalized_path.length = share->path.length;
+  share->path.length = strlen(share->path.str);
+  share->normalized_path.str = my_strdup(path, MYF(MY_WME));
+  share->normalized_path.length = strlen(share->normalized_path.str);
   if (open_table_def(thd, share, GTS_TABLE))
   {
     *error = ER_CANT_OPEN_FILE;
@@ -1044,7 +1044,9 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
 void mrn_free_tmp_table_share(TABLE_SHARE *tmp_table_share)
 {
   MRN_DBUG_ENTER_FUNCTION();
+  char *normalized_path = tmp_table_share->normalized_path.str;
   free_table_share(tmp_table_share);
+  my_free(normalized_path);
   DBUG_VOID_RETURN;
 }
 
