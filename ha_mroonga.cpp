@@ -4461,7 +4461,6 @@ int ha_mroonga::delete_table(const char *name)
   }
   if (!tmp_table_share)
   {
-    mrn::PathMapper mapper(name);
 #ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
     table_list.init_one_table(mapper.db_name(), strlen(mapper.db_name()),
                               mapper.mysql_table_name(),
