@@ -1668,6 +1668,18 @@ mrn_declare_plugin(MRN_PLUGIN_NAME)
 i_s_mrn_stats
 mrn_declare_plugin_end;
 
+static double mrn_get_score_value(grn_obj *score)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  double score_value;
+  if (score->header.domain == GRN_DB_FLOAT) {
+    score_value = GRN_FLOAT_VALUE(score);
+  } else {
+    score_value = (double)GRN_INT32_VALUE(score);
+  }
+  DBUG_RETURN(score_value);
+}
+
 static void mrn_generic_ft_clear(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
@@ -1734,7 +1746,7 @@ static float mrn_wrapper_ft_find_relevance(FT_INFO *handler, uchar *record,
       GRN_BULK_REWIND(&(info->score));
       grn_obj_get_value(info->ctx, info->score_column,
                         result_record_id, &(info->score));
-      score = (float)GRN_INT32_VALUE(&(info->score));
+      score = mrn_get_score_value(&(info->score));
     }
   }
 
@@ -1772,7 +1784,7 @@ static float mrn_wrapper_ft_get_relevance(FT_INFO *handler)
       GRN_BULK_REWIND(&(info->score));
       grn_obj_get_value(info->ctx, info->score_column,
                         result_record_id, &(info->score));
-      score = (float)GRN_INT32_VALUE(&(info->score));
+      score = mrn_get_score_value(&(info->score));
     }
   }
 
@@ -1819,7 +1831,7 @@ static float mrn_storage_ft_find_relevance(FT_INFO *handler, uchar *record,
       GRN_BULK_REWIND(&(info->score));
       grn_obj_get_value(info->ctx, info->score_column,
                         result_record_id, &(info->score));
-      score = (float)GRN_INT32_VALUE(&(info->score));
+      score = mrn_get_score_value(&(info->score));
     }
   }
   DBUG_PRINT("info", ("mroonga: record_id=%d score=%g",
@@ -1851,7 +1863,7 @@ static float mrn_storage_ft_get_relevance(FT_INFO *handler)
       GRN_BULK_REWIND(&(info->score));
       grn_obj_get_value(info->ctx, info->score_column,
                         result_record_id, &(info->score));
-      score = (float)GRN_INT32_VALUE(&(info->score));
+      score = mrn_get_score_value(&(info->score));
     }
   }
   DBUG_PRINT("info",
