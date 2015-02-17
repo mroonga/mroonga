@@ -252,6 +252,9 @@ else()
   pkg_check_modules(GROONGA REQUIRED "groonga >= ${REQUIRED_GROONGA_VERSION}")
   pkg_check_modules(GROONGA_NORMALIZER_MYSQL
     "groonga-normalizer-mysql >= ${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}")
+  set(MRN_LIBRARY_DIRS
+    ${MRN_LIBRARY_DIRS}
+    ${GROONGA_LIBRARY_DIRS})
 endif()
 
 include_directories(
