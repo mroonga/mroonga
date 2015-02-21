@@ -182,7 +182,7 @@ extern "C" {
 #ifdef MRN_MARIADB_P
 #  if MYSQL_VERSION_ID >= 50542 && MYSQL_VERSION < 100000
 #    define MRN_SUPPORT_THDVAR_SET
-#  elsif MYSQL_VERSION_ID >= 100017
+#  elif MYSQL_VERSION_ID >= 100017
 #    define MRN_SUPPORT_THDVAR_SET
 #  endif
 #else
