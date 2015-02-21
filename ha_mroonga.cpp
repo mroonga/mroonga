@@ -1442,6 +1442,9 @@ static int mrn_init(void *p)
   hton->state = SHOW_OPTION_YES;
   hton->create = mrn_handler_create;
   hton->flags = HTON_NO_FLAGS;
+#ifndef MRN_SUPPORT_PARTITION
+  hton->flags |= HTON_NO_PARTITION;
+#endif
   hton->drop_database = mrn_drop_database;
   hton->close_connection = mrn_close_connection;
   hton->flush_logs = mrn_flush_logs;

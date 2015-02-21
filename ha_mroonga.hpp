@@ -189,6 +189,14 @@ extern "C" {
 #  define MRN_SUPPORT_THDVAR_SET
 #endif
 
+#ifdef MRN_MARIADB_P
+#  if MYSQL_VERSION_ID < 100000
+#    define MRN_SUPPORT_PARTITION
+#  endif
+#else
+#  define MRN_SUPPORT_PARTITION
+#endif
+
 class ha_mroonga;
 
 /* structs */
