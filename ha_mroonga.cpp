@@ -532,6 +532,7 @@ typedef enum {
   MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_UPDATE      = (1 << 4),
   MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_LEADING_NOT = (1 << 5)
 } mrn_boolean_mode_syntax_flag;
+#ifdef MRN_SUPPORT_THDVAR_SET
 static const char *mrn_boolean_mode_sytnax_flag_names[] = {
   "DEFAULT",
   "SYNTAX_QUERY",
@@ -547,6 +548,7 @@ static TYPELIB mrn_boolean_mode_syntax_flags_typelib = {
   mrn_boolean_mode_sytnax_flag_names,
   NULL
 };
+#endif
 
 typedef enum {
   MRN_ACTION_ON_ERROR_ERROR,
@@ -962,6 +964,7 @@ static MYSQL_SYSVAR_BOOL(libgroonga_support_lz4, mrn_libgroonga_support_lz4,
                          NULL,
                          grn_check_lz4_support());
 
+#ifdef MRN_SUPPORT_THDVAR_SET
 static MYSQL_THDVAR_SET(boolean_mode_syntax_flags,
                         PLUGIN_VAR_RQCMDARG,
                         "The flags to custom syntax in BOOLEAN MODE. "
@@ -973,6 +976,7 @@ static MYSQL_THDVAR_SET(boolean_mode_syntax_flags,
                         NULL,
                         MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT,
                         &mrn_boolean_mode_syntax_flags_typelib);
+#endif
 
 static struct st_mysql_sys_var *mrn_system_variables[] =
 {
@@ -991,7 +995,9 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(vector_column_delimiter),
   MYSQL_SYSVAR(libgroonga_support_zlib),
   MYSQL_SYSVAR(libgroonga_support_lz4),
+#ifdef MRN_SUPPORT_THDVAR_SET
   MYSQL_SYSVAR(boolean_mode_syntax_flags),
+#endif
   NULL
 };
 
@@ -7789,7 +7795,10 @@ grn_expr_flags ha_mroonga::expr_flags_in_boolean_mode()
 {
   MRN_DBUG_ENTER_METHOD();
 
-  ulonglong syntax_flags = THDVAR(ha_thd(), boolean_mode_syntax_flags);
+  ulonglong syntax_flags = MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT;
+#ifdef MRN_SUPPORT_THDVAR_SET
+  syntax_flags = THDVAR(ha_thd(), boolean_mode_syntax_flags);
+#endif
   grn_expr_flags expression_flags = 0;
   if (syntax_flags == MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT) {
     expression_flags = GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
