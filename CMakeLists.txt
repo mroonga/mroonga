@@ -20,6 +20,12 @@
 cmake_minimum_required(VERSION 2.6)
 project(mroonga)
 
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+  set(MRN_BUNDLED FALSE)
+else()
+  set(MRN_BUNDLED TRUE)
+endif()
+
 include(TestBigEndian)
 test_big_endian(BIG_ENDIAN)
 if(BIG_ENDIAN)
@@ -32,12 +38,6 @@ if(MSVC)
     message(STATUS "Mroonga supports only MSVC 2013 or later")
     return()
   endif()
-endif()
-
-if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
-  set(MRN_BUNDLED FALSE)
-else()
-  set(MRN_BUNDLED TRUE)
 endif()
 
 if(MRN_BUNDLED)
