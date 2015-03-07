@@ -3027,7 +3027,8 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     DBUG_RETURN(error);
   }
 
-  if (table_flags == (GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_PAT_KEY)) {
+  if (table_flags == (GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_PAT_KEY) ||
+      table_flags == (GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_HASH_KEY)) {
     KEY key_info = table->s->key_info[pkey_nr];
     int key_parts = KEY_N_KEY_PARTS(&key_info);
     if (key_parts == 1) {
