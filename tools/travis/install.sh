@@ -93,36 +93,7 @@ deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
 EOF
       sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
       sudo apt-get -qq update
-      if ! sudo apt-get -qq -y build-dep mariadb-server; then
-        # MariaDB 10.0 or later doesn't provide .dsc file for old Ubuntu. :<
-        sudo apt-get -qq -y install \
-             libtool \
-             procps \
-             debhelper \
-             file \
-             libncurses5-dev \
-             perl \
-             libwrap0-dev \
-             zlib1g-dev \
-             libreadline-gplv2-dev \
-             libssl-dev \
-             libpam0g-dev \
-             psmisc \
-             po-debconf \
-             chrpath \
-             automake1.9 \
-             doxygen \
-             texlive-latex-base \
-             ghostscript \
-             dpatch \
-             gawk \
-             bison \
-             lsb-release \
-             hardening-wrapper \
-             cmake \
-             libaio-dev \
-             libjemalloc-dev
-      fi
+      sudo apt-get -qq -y build-dep mariadb-server
       sudo apt-get -qq -y install \
            mariadb-server libmariadbclient-dev mariadb-test
       apt-get -qq source mariadb-server
