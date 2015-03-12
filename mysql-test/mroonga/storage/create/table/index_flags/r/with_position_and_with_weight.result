@@ -1,12 +1,12 @@
 SET NAMES utf8;
 CREATE TABLE memos (
 content VARCHAR(64) NOT NULL,
-FULLTEXT INDEX (content) COMMENT 'flags "COLUMN_INDEX"'
+FULLTEXT INDEX (content) COMMENT 'index_flags "WITH_POSITION|WITH_WEIGHT"'
 ) DEFAULT CHARSET=utf8;
 SELECT mroonga_command("dump");
 mroonga_command("dump")
 table_create memos TABLE_NO_KEY
 column_create memos content COLUMN_SCALAR ShortText
 table_create memos-content TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerMySQLGeneralCI
-column_create memos-content index COLUMN_INDEX memos content
+column_create memos-content index COLUMN_INDEX|WITH_WEIGHT|WITH_POSITION memos content
 DROP TABLE memos;
