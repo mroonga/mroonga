@@ -12,7 +12,7 @@ install:
   - git clone --quiet --depth 1 https://github.com/groonga/groonga.git ..\groonga
   - cd ..\groonga
   - git submodule update --init
-  - cd ..
+  - cd ..\mariadb-10.0.16
   - rmdir /S /Q ..\groonga\test\
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
