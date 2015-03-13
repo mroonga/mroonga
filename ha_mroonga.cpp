@@ -1394,7 +1394,7 @@ bool mrn_parse_grn_index_column_flags(THD *thd,
                "%.*s",
                static_cast<int>(rest_length),
                flag_names);
-      push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+      push_warning_printf(thd, MRN_SEVERITY_WARNING,
                           ER_MRN_INVALID_INDEX_FLAG_NUM,
                           ER_MRN_INVALID_INDEX_FLAG_STR,
                           invalid_flag_name);
