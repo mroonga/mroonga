@@ -131,4 +131,10 @@
 #  define MRN_USE_MYSQL_DATA_HOME
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_SEVERITY_WARNING Sql_condition::SL_WARNING
+#else
+#  define MRN_SEVERITY_WARNING Sql_condition::WARN_LEVEL_WARN
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

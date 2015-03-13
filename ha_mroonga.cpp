@@ -1323,7 +1323,7 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
       if (mrn_libgroonga_support_zlib) {
         flags |= GRN_OBJ_COMPRESS_ZLIB;
       } else {
-        push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+        push_warning_printf(thd, MRN_SEVERITY_WARNING,
                             ER_MRN_UNSUPPORTED_COLUMN_FLAG_NUM,
                             ER_MRN_UNSUPPORTED_COLUMN_FLAG_STR,
                             "COMPRESS_ZLIB");
@@ -1333,7 +1333,7 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
       if (mrn_libgroonga_support_lz4) {
         flags |= GRN_OBJ_COMPRESS_LZ4;
       } else {
-        push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+        push_warning_printf(thd, MRN_SEVERITY_WARNING,
                             ER_MRN_UNSUPPORTED_COLUMN_FLAG_NUM,
                             ER_MRN_UNSUPPORTED_COLUMN_FLAG_STR,
                             "COMPRESS_LZ4");
@@ -1345,7 +1345,7 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
                "%.*s",
                static_cast<int>(rest_length),
                flag_names);
-      push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+      push_warning_printf(thd, MRN_SEVERITY_WARNING,
                           ER_MRN_INVALID_COLUMN_FLAG_NUM,
                           ER_MRN_INVALID_COLUMN_FLAG_STR,
                           invalid_flag_name,
@@ -5175,7 +5175,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
              (int)GRN_TEXT_LEN(&key_buffer),
              GRN_TEXT_VALUE(&key_buffer));
     error = ER_ERROR_ON_WRITE;
-    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN, error,
+    push_warning(ha_thd(), MRN_SEVERITY_WARNING, error,
                  error_message);
     DBUG_RETURN(0);
   }
@@ -5258,7 +5258,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
     if (field->is_null()) continue;
 
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-      push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+      push_warning_printf(thd, MRN_SEVERITY_WARNING,
                           WARN_DATA_TRUNCATED, MRN_GET_ERR_MSG(WARN_DATA_TRUNCATED),
                           MRN_COLUMN_NAME_ID,
                           MRN_GET_CURRENT_ROW_FOR_WARNING(thd));
@@ -5686,7 +5686,7 @@ int ha_mroonga::wrapper_get_record_id(uchar *data, grn_id *record_id,
              "%s: key=<%.*s>",
              context, (int)GRN_TEXT_LEN(&key), GRN_TEXT_VALUE(&key));
     error = ER_ERROR_ON_WRITE;
-    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN, error,
+    push_warning(ha_thd(), MRN_SEVERITY_WARNING, error,
                  error_message);
   }
   grn_obj_unlink(ctx, &key);
@@ -5850,7 +5850,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
     if (bitmap_is_set(table->write_set, field->field_index)) {
       if (field->is_null()) continue;
       if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-        push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+        push_warning_printf(thd, MRN_SEVERITY_WARNING,
                             WARN_DATA_TRUNCATED, MRN_GET_ERR_MSG(WARN_DATA_TRUNCATED),
                             MRN_COLUMN_NAME_ID,
                             MRN_GET_CURRENT_ROW_FOR_WARNING(thd));
@@ -5908,7 +5908,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
               snprintf(message, MRN_BUFFER_SIZE,
                        "data truncated for primary key column: <%s>",
                        column_name);
-              push_warning(thd, Sql_condition::WARN_LEVEL_WARN,
+              push_warning(thd, MRN_SEVERITY_WARNING,
                            WARN_DATA_TRUNCATED, message);
             }
             have_pkey = true;
@@ -8364,7 +8364,7 @@ void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_func
     sprintf(search_name, "unknown: %d", flag);
   }
   push_warning_printf(ha_thd(),
-                      Sql_condition::WARN_LEVEL_WARN,
+                      MRN_SEVERITY_WARNING,
                       ER_UNSUPPORTED_EXTENSION,
                       "spatial index search "
                       "except MBRContains aren't supported: <%s>",
@@ -8630,7 +8630,7 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
             name_length, name,
             MRN_PARSER_DEFAULT);
     push_warning(ha_thd(),
-                 Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
                  message);
     tokenizer = grn_ctx_get(ctx,
                             MRN_PARSER_DEFAULT,
@@ -8638,7 +8638,7 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
   }
   if (!tokenizer) {
     push_warning(ha_thd(),
-                 Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
                  "couldn't find fulltext parser. "
                  "Bigram fulltext parser is used instead.");
     tokenizer = grn_ctx_at(ctx, GRN_DB_BIGRAM);
@@ -8710,7 +8710,7 @@ bool ha_mroonga::find_token_filters_put(grn_obj *token_filters,
             "nonexistent token filter: <%.*s>",
             token_filter_name_length, token_filter_name);
     push_warning(ha_thd(),
-                 Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
                  message);
     return false;
   }
@@ -8770,7 +8770,7 @@ break_loop:
             (int)(current - last_name_end), last_name_end,
             (int)(end - current), current);
     push_warning(ha_thd(),
-                 Sql_condition::WARN_LEVEL_WARN, ER_UNSUPPORTED_EXTENSION,
+                 MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
                  message);
     return false;
   }
@@ -9384,7 +9384,7 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf)
              "unknown integer value size: <%u>: "
              "available sizes: [1, 2, 3, 4, 8]",
              size);
-    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+    push_warning(ha_thd(), MRN_SEVERITY_WARNING,
                  error, error_message);
     break;
   }
@@ -9424,7 +9424,7 @@ int ha_mroonga::generic_store_bulk_unsigned_integer(Field *field, grn_obj *buf)
              "unknown unsigned integer value size: <%u>: "
              "available sizes: [1, 2, 3, 4, 8]",
              size);
-    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+    push_warning(ha_thd(), MRN_SEVERITY_WARNING,
                  error, error_message);
     break;
   }
@@ -9451,7 +9451,7 @@ int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf)
              "unknown float value size: <%u>: "
              "available sizes: [4, 8]",
              size);
-    push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+    push_warning(ha_thd(), MRN_SEVERITY_WARNING,
                  error, error_message);
     break;
   }
@@ -9511,7 +9511,7 @@ int ha_mroonga::generic_store_bulk_date(Field *field, grn_obj *buf)
   mrn::TimeConverter time_converter;
   long long int time = time_converter.tm_to_grn_time(&date, usec, &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9531,7 +9531,7 @@ int ha_mroonga::generic_store_bulk_time(Field *field, grn_obj *buf)
   long long int time = time_converter.mysql_time_to_grn_time(&mysql_time,
                                                              &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9551,7 +9551,7 @@ int ha_mroonga::generic_store_bulk_datetime(Field *field, grn_obj *buf)
   long long int time = time_converter.mysql_time_to_grn_time(&mysql_time,
                                                              &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9583,7 +9583,7 @@ int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
   mrn::TimeConverter time_converter;
   long long int time = time_converter.tm_to_grn_time(&date, usec, &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9604,7 +9604,7 @@ int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
   long long int time = time_converter.mysql_time_to_grn_time(&mysql_time,
                                                              &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9625,7 +9625,7 @@ int ha_mroonga::generic_store_bulk_time2(Field *field, grn_obj *buf)
   long long int time = time_converter.mysql_time_to_grn_time(&mysql_time,
                                                              &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9646,7 +9646,7 @@ int ha_mroonga::generic_store_bulk_new_date(Field *field, grn_obj *buf)
   long long int time = time_converter.mysql_time_to_grn_time(&mysql_date,
                                                              &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
@@ -9868,7 +9868,7 @@ void ha_mroonga::storage_store_field_integer(Field *field,
                "unknown integer value size: <%d>: "
                "available sizes: [1, 2, 4, 8]",
                value_length);
-      push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+      push_warning(ha_thd(), MRN_SEVERITY_WARNING,
                    HA_ERR_UNSUPPORTED, error_message);
       storage_store_field_string(field, value, value_length);
       break;
@@ -9920,7 +9920,7 @@ void ha_mroonga::storage_store_field_unsigned_integer(Field *field,
                "unknown integer value size: <%d>: "
                "available sizes: [1, 2, 4, 8]",
                value_length);
-      push_warning(ha_thd(), Sql_condition::WARN_LEVEL_WARN,
+      push_warning(ha_thd(), MRN_SEVERITY_WARNING,
                    HA_ERR_UNSUPPORTED, error_message);
       storage_store_field_string(field, value, value_length);
       break;
@@ -10518,7 +10518,7 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
   mrn::TimeConverter time_converter;
   time = time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &time, 8);
@@ -10565,7 +10565,7 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
   mrn::TimeConverter time_converter;
   time = time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
 #else
@@ -10600,7 +10600,7 @@ int ha_mroonga::storage_encode_key_year(Field *field, const uchar *key,
   long long int time = time_converter.tm_to_grn_time(&datetime, usec,
                                                      &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &time, 8);
@@ -10649,7 +10649,7 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
     time = time_converter.tm_to_grn_time(&date, usec, &truncated);
   }
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &time, 8);
@@ -10675,7 +10675,7 @@ int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
   long long int grn_time = time_converter.mysql_time_to_grn_time(&mysql_time,
                                                                  &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &grn_time, 8);
@@ -10702,7 +10702,7 @@ int ha_mroonga::storage_encode_key_datetime2(Field *field, const uchar *key,
   long long int grn_time = time_converter.mysql_time_to_grn_time(&mysql_time,
                                                                  &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &grn_time, 8);
@@ -10729,7 +10729,7 @@ int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
   long long int grn_time = time_converter.mysql_time_to_grn_time(&mysql_time,
                                                                  &truncated);
   if (truncated) {
-    field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+    field->set_warning(MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, 1);
   }
   memcpy(buf, &grn_time, 8);
@@ -10899,7 +10899,7 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
       long long int time = time_converter.tm_to_grn_time(&date, usec,
                                                          &truncated);
       if (truncated) {
-        field->set_warning(Sql_condition::WARN_LEVEL_WARN,
+        field->set_warning(MRN_SEVERITY_WARNING,
                            WARN_DATA_TRUNCATED, 1);
       }
       memcpy(buf, &time, 8);

@@ -128,7 +128,7 @@ namespace mrn {
                  normalizer_name,
                  charset_info->name,
                  default_normalizer_name);
-        push_warning(thread_, Sql_condition::WARN_LEVEL_WARN,
+        push_warning(thread_, MRN_SEVERITY_WARNING,
                      HA_ERR_UNSUPPORTED, error_message);
       }
     }

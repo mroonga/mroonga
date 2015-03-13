@@ -524,7 +524,7 @@ namespace mrn {
         new_blob_data_length = normalized_length;
       } else {
         push_warning_printf(thread_,
-                            Sql_condition::WARN_LEVEL_WARN,
+                            MRN_SEVERITY_WARNING,
                             WARN_DATA_TRUNCATED,
                             "normalized data truncated "
                             "for multiple column index: "
