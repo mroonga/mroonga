@@ -1,6 +1,7 @@
 version: "{build}"
 clone_depth: 10
 install:
+  - git submodule update --init
   - cd ..
   - choco install curl 7zip.commandline
   - curl -O http://mirror.jmu.edu/pub/mariadb/mariadb-10.0.16/source/mariadb-10.0.16.tar.gz
