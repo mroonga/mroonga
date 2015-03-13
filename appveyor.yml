@@ -1,7 +1,6 @@
 version: "{build}"
 clone_depth: 10
 install:
-  - git submodule update --init
   - cd ..
   - choco install -y curl 7zip.commandline
   - curl -O http://mirror.jmu.edu/pub/mariadb/mariadb-10.0.16/source/mariadb-10.0.16.tar.gz
@@ -11,6 +10,9 @@ install:
   - rmdir /S /Q storage\mroonga\
   - move ..\mroonga storage\mroonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga.git ..\groonga
+  - cd ..\groonga
+  - git submodule update --init
+  - cd ..
   - rmdir /S /Q ..\groonga\test\
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
