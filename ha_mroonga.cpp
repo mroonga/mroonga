@@ -1357,6 +1357,52 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
   return flags;
 }
 
+bool mrn_parse_grn_index_column_flags(THD *thd,
+                                      grn_ctx *ctx,
+                                      const char *flag_names,
+                                      uint flag_names_length,
+                                      grn_obj_flags *index_column_flags)
+{
+  const char *flag_names_end = flag_names + flag_names_length;
+  bool found = false;
+
+  while (flag_names < flag_names_end) {
+    uint rest_length = flag_names_end - flag_names;
+
+    if (*flag_names == '|' || *flag_names == ' ') {
+      flag_names += 1;
+      continue;
+    }
+    if (rest_length >= 4 && !memcmp(flag_names, "NONE", 4)) {
+      flag_names += 4;
+      found = true;
+    } else if (rest_length >= 13 && !memcmp(flag_names, "WITH_POSITION", 13)) {
+      *index_column_flags |= GRN_OBJ_WITH_POSITION;
+      flag_names += 13;
+      found = true;
+    } else if (rest_length >= 12 && !memcmp(flag_names, "WITH_SECTION", 12)) {
+      *index_column_flags |= GRN_OBJ_WITH_SECTION;
+      flag_names += 12;
+      found = true;
+    } else if (rest_length >= 11 && !memcmp(flag_names, "WITH_WEIGHT", 11)) {
+      *index_column_flags |= GRN_OBJ_WITH_WEIGHT;
+      flag_names += 11;
+      found = true;
+    } else {
+      char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(invalid_flag_name, MRN_MESSAGE_BUFFER_SIZE,
+               "%.*s",
+               static_cast<int>(rest_length),
+               flag_names);
+      push_warning_printf(thd, Sql_condition::WARN_LEVEL_WARN,
+                          ER_MRN_INVALID_INDEX_FLAG_NUM,
+                          ER_MRN_INVALID_INDEX_FLAG_STR,
+                          invalid_flag_name);
+    }
+  }
+  return found;
+}
+
 #ifdef HAVE_SPATIAL
 static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
                             const char *wkb, uint wkb_size)
@@ -2739,10 +2785,13 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
     GRN_OBJ_PERSISTENT;
   grn_obj *index_table;
 
-  grn_obj_flags index_column_flags =
-    GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
-  if (KEY_N_KEY_PARTS(key_info) > 1) {
-    index_column_flags |= GRN_OBJ_WITH_SECTION;
+  grn_obj_flags index_column_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
+
+  if (!find_index_column_flags(key_info, &index_column_flags)) {
+    index_column_flags |= GRN_OBJ_WITH_POSITION;
+    if (KEY_N_KEY_PARTS(key_info) > 1) {
+      index_column_flags |= GRN_OBJ_WITH_SECTION;
+    }
   }
 
   mrn::SmartGrnObj lexicon_key_type(ctx, GRN_DB_SHORT_TEXT);
@@ -3544,10 +3593,13 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   if (error)
     DBUG_RETURN(error);
 
-  grn_obj_flags index_column_flags =
-    GRN_OBJ_COLUMN_INDEX | GRN_OBJ_WITH_POSITION | GRN_OBJ_PERSISTENT;
-  if (is_multiple_column_index) {
-    index_column_flags |= GRN_OBJ_WITH_SECTION;
+  grn_obj_flags index_column_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
+
+  if (!find_index_column_flags(key_info, &index_column_flags)) {
+    index_column_flags |= GRN_OBJ_WITH_POSITION;
+    if (is_multiple_column_index) {
+      index_column_flags |= GRN_OBJ_WITH_SECTION;
+    }
   }
 
   index_table = index_tables[i];
@@ -8672,6 +8724,28 @@ grn_obj *ha_mroonga::find_normalizer(KEY *key_info)
     normalizer = field_normalizer.find_grn_normalizer();
   }
   DBUG_RETURN(normalizer);
+}
+
+bool ha_mroonga::find_index_column_flags(KEY *key_info, grn_obj_flags *index_column_flags)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool found = false;
+#if MYSQL_VERSION_ID >= 50500
+  if (key_info->comment.length > 0) {
+    mrn::ParametersParser parser(key_info->comment.str,
+                                 key_info->comment.length);
+    parser.parse();
+    const char *names = parser["index_flags"];
+    if (names) {
+      found = mrn_parse_grn_index_column_flags(ha_thd(),
+                                               ctx,
+                                               names,
+                                               strlen(names),
+                                               index_column_flags);
+    }
+  }
+#endif
+  DBUG_RETURN(found);
 }
 
 bool ha_mroonga::find_token_filters(KEY *key_info, grn_obj *token_filters)

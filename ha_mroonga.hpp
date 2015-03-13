@@ -574,6 +574,7 @@ private:
   int drop_index(MRN_SHARE *target_share, uint key_index);
   grn_obj *find_tokenizer(const char *name, int name_length);
   grn_obj *find_normalizer(KEY *key_info);
+  bool find_index_column_flags(KEY *key_info, grn_obj_flags *index_column_flags);
   bool find_token_filters(KEY *key_info, grn_obj *token_filters);
   bool find_token_filters_put(grn_obj *token_filters,
                               const char *token_filter_name,
