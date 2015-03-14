@@ -25,6 +25,7 @@
 #include <mrn_windows.hpp>
 #include <mrn_macro.hpp>
 #include <mrn_database_manager.hpp>
+#include <mrn_variables.hpp>
 
 MRN_BEGIN_DECLS
 
@@ -163,7 +164,7 @@ MRN_API void mroonga_command_deinit(UDF_INIT *initid)
       grn_obj_close(&(info->ctx), info->db);
     }
     grn_ctx_fin(&(info->ctx));
-    info->result.free();
+    MRN_STRING_FREE(info->result);
     my_free(info);
   }
 }

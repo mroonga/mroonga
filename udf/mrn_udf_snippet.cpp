@@ -293,7 +293,7 @@ MRN_API void mroonga_snippet_deinit(UDF_INIT *initid)
     if (snip_info->snippet) {
       grn_obj_close(&snip_info->ctx, snip_info->snippet);
     }
-    snip_info->result_str.free();
+    MRN_STRING_FREE(snip_info->result_str);
     grn_obj_close(&snip_info->ctx, grn_ctx_db(&snip_info->ctx));
     grn_ctx_fin(&snip_info->ctx);
     my_free(snip_info);

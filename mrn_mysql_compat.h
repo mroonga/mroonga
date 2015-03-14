@@ -152,4 +152,10 @@
 #  define mrn_my_malloc(size, flags) my_malloc(size, flags)
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_STRING_FREE(string) string.mem_free();
+#else
+#  define MRN_STRING_FREE(string) string.free();
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
