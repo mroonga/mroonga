@@ -167,4 +167,8 @@
 #  define MRN_THD_DB_PATH(thd) ((thd)->db)
 #endif
 
+#ifndef INT_MAX64
+#  define INT_MAX64 LONGLONG_MAX
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

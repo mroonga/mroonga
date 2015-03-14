@@ -836,7 +836,7 @@ static MYSQL_THDVAR_LONGLONG(match_escalation_threshold,
                              NULL,
                              grn_get_default_match_escalation_threshold(),
                              -1,
-                             LONGLONG_MAX,
+                             INT_MAX64,
                              0);
 
 static void mrn_vector_column_delimiter_update(THD *thd, struct st_mysql_sys_var *var,
