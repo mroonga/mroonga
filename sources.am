@@ -7,5 +7,5 @@ sources =					\
 	mrn_table.hpp				\
 	mrn_err.h				\
 	mrn_mysql.h				\
-	mrn_mysql_compat.h				\
+	mrn_mysql_compat.h			\
 	ha_mroonga.def
