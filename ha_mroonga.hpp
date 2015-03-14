@@ -205,6 +205,10 @@ extern "C" {
 #  define MRN_SUPPORT_PARTITION
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_FLUSH_LOGS_HAVE_BINLOG_GROUP_FLUSH
+#endif
+
 class ha_mroonga;
 
 /* structs */

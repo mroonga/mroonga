@@ -1145,7 +1145,11 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
   DBUG_RETURN(0);
 }
 
+#ifdef MRN_FLUSH_LOGS_HAVE_BINLOG_GROUP_FLUSH
+static bool mrn_flush_logs(handlerton *hton, bool binlog_group_flush)
+#else
 static bool mrn_flush_logs(handlerton *hton)
+#endif
 {
   MRN_DBUG_ENTER_FUNCTION();
   bool result = 0;
