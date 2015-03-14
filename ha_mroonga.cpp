@@ -187,6 +187,15 @@ Time_zone *mrn_my_tz_UTC;
 HASH *mrn_table_def_cache;
 #endif
 
+#ifdef MRN_HAVE_PSI_MEMORY_KEY
+PSI_memory_key mrn_memory_key;
+
+static PSI_memory_info mrn_all_memory_keys[]=
+{
+  {&mrn_memory_key, "Mroonga", 0}
+};
+#endif
+
 static const char *INDEX_COLUMN_NAME = "index";
 static const char *MRN_PLUGIN_AUTHOR = "The Mroonga project";
 
@@ -1545,6 +1554,15 @@ static int mrn_init(void *p)
   ctx = &mrn_ctx;
   if (mrn_change_encoding(ctx, system_charset_info))
     goto err_mrn_change_encoding;
+
+  count= array_elements(all_client_memory);
+#ifdef MRN_HAVE_PSI_MEMORY_KEY
+  {
+    const char *category = "ha_mroonga";
+    int n_keys = array_elements(mrn_all_memory_keys);
+    mysql_memory_register(category, mrn_all_memory_keys, n_keys);
+  }
+#endif
 
   if (mysql_mutex_init(mrn_log_mutex_key,
                        &mrn_log_mutex,
@@ -12106,9 +12124,9 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
     }
     if (create_info->connect_string.str) {
       slot_data->alter_connect_string =
-        my_strndup(create_info->connect_string.str,
-                   create_info->connect_string.length,
-                   MYF(MY_WME));
+        mrn_my_strndup(create_info->connect_string.str,
+                       create_info->connect_string.length,
+                       MYF(MY_WME));
     }
     if (slot_data->alter_comment) {
       my_free(slot_data->alter_comment);
@@ -12116,9 +12134,9 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
     }
     if (create_info->comment.str) {
       slot_data->alter_comment =
-        my_strndup(create_info->comment.str,
-                   create_info->comment.length,
-                   MYF(MY_WME));
+        mrn_my_strndup(create_info->comment.str,
+                       create_info->comment.length,
+                       MYF(MY_WME));
     }
     if (share && share->disable_keys) {
       slot_data->disable_keys_create_info = create_info;

@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -27,6 +27,7 @@
 #include "mrn_err.h"
 #include "mrn_table.hpp"
 #include "mrn_mysql_compat.h"
+#include "mrn_variables.hpp"
 #include <mrn_lock.hpp>
 
 #if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
@@ -370,9 +371,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
     }
 
     {
-      params_string = my_strndup(params_string_value,
-                                 params_string_length,
-                                 MYF(MY_WME));
+      params_string = mrn_my_strndup(params_string_value,
+                                     params_string_length,
+                                     MYF(MY_WME));
       if (!params_string) {
         error = HA_ERR_OUT_OF_MEM;
         goto error;
@@ -435,9 +436,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
   {
     share->engine_length = strlen(mrn_default_wrapper_engine);
     if (
-      !(share->engine = my_strndup(mrn_default_wrapper_engine,
-                                   share->engine_length,
-                                   MYF(MY_WME)))
+      !(share->engine = mrn_my_strndup(mrn_default_wrapper_engine,
+                                       share->engine_length,
+                                       MYF(MY_WME)))
     ) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
@@ -515,9 +516,9 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
   }
   DBUG_PRINT("info", ("mroonga create comment string"));
   if (
-    !(param_string = my_strndup(key_info->comment.str,
-                                key_info->comment.length,
-                                MYF(MY_WME)))
+    !(param_string = mrn_my_strndup(key_info->comment.str,
+                                    key_info->comment.length,
+                                    MYF(MY_WME)))
   ) {
     error = HA_ERR_OUT_OF_MEM;
     goto error_alloc_param_string;
@@ -628,9 +629,9 @@ int mrn_add_column_param(MRN_SHARE *share, Field *field, int i)
 
   DBUG_PRINT("info", ("mroonga create comment string"));
   if (
-    !(param_string = my_strndup(field->comment.str,
-                                field->comment.length,
-                                MYF(MY_WME)))
+    !(param_string = mrn_my_strndup(field->comment.str,
+                                    field->comment.length,
+                                    MYF(MY_WME)))
   ) {
     error = HA_ERR_OUT_OF_MEM;
     goto error_alloc_param_string;

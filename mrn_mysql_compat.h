@@ -137,4 +137,16 @@
 #  define MRN_SEVERITY_WARNING Sql_condition::WARN_LEVEL_WARN
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_PSI_MEMORY_KEY
+#endif
+
+#ifdef MRN_HAVE_PSI_MEMORY_KEY
+#  define mrn_my_strndup(string, size, flags) \
+  my_strndup(mrn_memory_key, string, size, flags)
+#else
+#  define mrn_my_strndup(string, size, flags) \
+  my_strndup(string, size, flags)
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
