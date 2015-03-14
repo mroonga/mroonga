@@ -142,14 +142,14 @@
 #endif
 
 #ifdef MRN_HAVE_PSI_MEMORY_KEY
-#  define mrn_my_strndup(string, size, flags) \
-  my_strndup(mrn_memory_key, string, size, flags)
 #  define mrn_my_malloc(size, flags) \
   my_malloc(mrn_memory_key, size, flags)
+#  define mrn_my_strndup(string, size, flags) \
+  my_strndup(mrn_memory_key, string, size, flags)
 #else
+#  define mrn_my_malloc(size, flags) my_malloc(size, flags)
 #  define mrn_my_strndup(string, size, flags) \
   my_strndup(string, size, flags)
-#  define mrn_my_malloc(size, flags) my_malloc(size, flags)
 #endif
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
