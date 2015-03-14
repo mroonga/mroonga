@@ -150,7 +150,7 @@
   my_strndup(mrn_memory_key, string, size, flags)
 #else
 #  define mrn_my_malloc(size, flags) my_malloc(size, flags)
-#  define mrn_my_stndup(string, flags) my_strdup(string, flags)
+#  define mrn_my_strdup(string, flags) my_strdup(string, flags)
 #  define mrn_my_strndup(string, size, flags) \
   my_strndup(string, size, flags)
 #endif
