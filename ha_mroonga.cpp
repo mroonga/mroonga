@@ -625,13 +625,25 @@ static uchar *mrn_allocated_thds_get_key(const uchar *record,
 static struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_STATUS_VARIABLE_ENTRY(name, value, type, scope) \
+  {name, value, type, scope}
+#else
+#  define MRN_STATUS_VARIABLE_ENTRY(name, value, type, scope) \
+  {name, value, type}
+#endif
+
 static struct st_mysql_show_var mrn_status_variables[] =
 {
-  {MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_count_skip",
-   (char *)&mrn_count_skip, SHOW_LONG},
-  {MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_fast_order_limit",
-   (char *)&mrn_fast_order_limit, SHOW_LONG},
-  {NullS, NullS, SHOW_LONG}
+  MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_count_skip",
+                            (char *)&mrn_count_skip,
+                            SHOW_LONG,
+                            SHOW_SCOPE_GLOBAL),
+  MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_fast_order_limit",
+                            (char *)&mrn_fast_order_limit,
+                            SHOW_LONG,
+                            SHOW_SCOPE_GLOBAL),
+  MRN_STATUS_VARIABLE_ENTRY(NullS, NullS, SHOW_LONG, SHOW_SCOPE_GLOBAL)
 };
 
 static const char *mrn_log_level_type_names[] = {
