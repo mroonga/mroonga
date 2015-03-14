@@ -753,10 +753,10 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
 
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
   char *old_log_file_name = *old_value_ptr;
-  *old_value_ptr = my_strdup(new_log_file_name, MYF(MY_WME));
+  *old_value_ptr = mrn_my_strdup(new_log_file_name, MYF(MY_WME));
   my_free(old_log_file_name);
 #else
-  *old_value_ptr = my_strdup(new_log_file_name, MYF(MY_WME));
+  *old_value_ptr = mrn_my_strdup(new_log_file_name, MYF(MY_WME));
 #endif
 
   grn_ctx_fin(&ctx);
@@ -794,7 +794,7 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
 
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
   my_free(*old_value_ptr);
-  *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+  *old_value_ptr = mrn_my_strdup(new_value, MYF(MY_WME));
 #else
   *old_value_ptr = (char *)new_value;
 #endif
@@ -848,7 +848,7 @@ static void mrn_vector_column_delimiter_update(THD *thd, struct st_mysql_sys_var
 
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
   my_free(*old_value_ptr);
-  *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+  *old_value_ptr = mrn_my_strdup(new_value, MYF(MY_WME));
 #else
   *old_value_ptr = (char *)new_value;
 #endif
@@ -874,7 +874,7 @@ static void mrn_database_path_prefix_update(THD *thd,
   if (*old_value_ptr)
     my_free(*old_value_ptr);
   if (new_value)
-    *old_value_ptr = my_strdup(new_value, MYF(MY_WME));
+    *old_value_ptr = mrn_my_strdup(new_value, MYF(MY_WME));
   else
     *old_value_ptr = NULL;
 #else
