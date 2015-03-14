@@ -455,7 +455,7 @@ AC_SUBST(DOCUMENT_VERSION)
 AC_SUBST(DOCUMENT_VERSION_FULL)
 
 CFLAGS="$CFLAGS"
-CXXFLAGS="$CXXFLAGS -fno-implicit-templates -fno-exceptions -fno-rtti -felide-constructors"
+CXXFLAGS="$CXXFLAGS -fno-implicit-templates -fno-exceptions -felide-constructors"
 
 AC_CONFIG_FILES([
   Makefile
