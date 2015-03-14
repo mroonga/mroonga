@@ -1578,7 +1578,6 @@ static int mrn_init(void *p)
   if (mrn_change_encoding(ctx, system_charset_info))
     goto err_mrn_change_encoding;
 
-  count= array_elements(all_client_memory);
 #ifdef MRN_HAVE_PSI_MEMORY_KEY
   {
     const char *category = "ha_mroonga";
