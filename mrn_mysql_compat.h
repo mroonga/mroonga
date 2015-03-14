@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -156,6 +156,12 @@
 #  define MRN_STRING_FREE(string) string.mem_free();
 #else
 #  define MRN_STRING_FREE(string) string.free();
+#endif
+
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_THD_DB_PATH(thd) ((thd)->db().str)
+#else
+#  define MRN_THD_DB_PATH(thd) ((thd)->db)
 #endif
 
 #endif /* MRN_MYSQL_COMPAT_H_ */

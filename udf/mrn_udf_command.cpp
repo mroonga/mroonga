@@ -68,7 +68,7 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
 
   grn_ctx_init(&(info->ctx), 0);
   {
-    const char *current_db_path = current_thd->db;
+    const char *current_db_path = MRN_THD_DB_PATH(current_thd);
     const char *action;
     if (current_db_path) {
       action = "open database";
