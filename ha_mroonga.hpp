@@ -145,6 +145,14 @@ extern "C" {
 #  define MRN_HAVE_TL_WRITE_ALLOW_READ
 #endif
 
+#if MYSQL_VERSION_ID < 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_TL_WRITE_DELAYED
+#endif
+
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_TL_WRITE_CONCURRENT_DEFAULT
+#endif
+
 #if (defined(MRN_MARIADB_P) && \
      ((MYSQL_VERSION_ID >= 50306 && MYSQL_VERSION_ID < 50500) || \
       MYSQL_VERSION_ID >= 50523))

@@ -297,12 +297,19 @@ static const char *mrn_inspect_thr_lock_type(enum thr_lock_type lock_type)
     inspected = "TL_WRITE_ALLOW_READ";
     break;
 #endif
+#ifdef MRN_HAVE_TL_WRITE_CONCURRENT_DEFAULT
+  case TL_WRITE_CONCURRENT_DEFAULT:
+    inspected = "TL_WRITE_CONCURRENT_DEFAULT";
+    break;
+#endif
   case TL_WRITE_CONCURRENT_INSERT:
     inspected = "TL_WRITE_CONCURRENT_INSERT";
     break;
+#ifdef MRN_HAVE_TL_WRITE_DELAYED
   case TL_WRITE_DELAYED:
     inspected = "TL_WRITE_DELAYED";
     break;
+#endif
   case TL_WRITE_DEFAULT:
     inspected = "TL_WRITE_DEFAULT";
     break;
