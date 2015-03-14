@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013-2015 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@
 #include <mrn_path_mapper.hpp>
 #include <mrn_windows.hpp>
 #include <mrn_macro.hpp>
+#include <mrn_variables.hpp>
 
 MRN_BEGIN_DECLS
 
