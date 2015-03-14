@@ -14237,8 +14237,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   char **key_parser;
   uint *key_parser_length;
   MRN_DBUG_ENTER_METHOD();
-  if (!(wrap_alter_key_info = (KEY *) my_malloc(sizeof(KEY) * num_of_keys,
-                                                MYF(MY_WME)))) {
+  if (!(wrap_alter_key_info = (KEY *) mrn_my_malloc(sizeof(KEY) * num_of_keys,
+                                                    MYF(MY_WME)))) {
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
@@ -15281,8 +15281,8 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     }
     create_info_str.q_append(") ON DELETE RESTRICT ON UPDATE RESTRICT", 39);
   }
-  if (!(create_info = (char *) my_malloc(create_info_str.length() + 1,
-                                         MYF(MY_WME)))) {
+  if (!(create_info = (char *) mrn_my_malloc(create_info_str.length() + 1,
+                                             MYF(MY_WME)))) {
     DBUG_RETURN(NULL);
   }
   memcpy(create_info, create_info_str.ptr(), create_info_str.length());

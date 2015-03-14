@@ -58,8 +58,8 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
   initid->maybe_null = 1;
   initid->const_item = 1;
 
-  info = (CommandInfo *)my_malloc(sizeof(CommandInfo),
-                                  MYF(MY_WME | MY_ZEROFILL));
+  info = (CommandInfo *)mrn_my_malloc(sizeof(CommandInfo),
+                                      MYF(MY_WME | MY_ZEROFILL));
   if (!info) {
     strcpy(message, "mroonga_command(): out of memory");
     goto error;

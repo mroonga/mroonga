@@ -134,7 +134,7 @@ static char *mrn_get_string_between_quote(const char *ptr)
     DBUG_RETURN(NULL);
 
   size_t length = end_ptr - start_ptr;
-  char *extracted_string = (char *)my_malloc(length + 1, MYF(MY_WME));
+  char *extracted_string = (char *)mrn_my_malloc(length + 1, MYF(MY_WME));
   if (esc_flg) {
     size_t extracted_index = 0;
     const char *current_ptr = start_ptr;

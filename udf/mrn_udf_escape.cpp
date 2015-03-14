@@ -62,8 +62,8 @@ MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
   initid->maybe_null = 1;
   initid->const_item = 1;
 
-  info = (EscapeInfo *)my_malloc(sizeof(EscapeInfo),
-                                  MYF(MY_WME | MY_ZEROFILL));
+  info = (EscapeInfo *)mrn_my_malloc(sizeof(EscapeInfo),
+                                     MYF(MY_WME | MY_ZEROFILL));
   if (!info) {
     strcpy(message, "mroonga_escape(): out of memory");
     goto error;
