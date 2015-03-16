@@ -2258,6 +2258,9 @@ ha_mroonga::~ha_mroonga()
     if (share_for_create.wrapper_mode) {
       plugin_unlock(NULL, share_for_create.plugin);
     }
+    if (share_for_create.table_name) {
+      my_free(share_for_create.table_name);
+    }
     mrn_free_share_alloc(&share_for_create);
     free_root(&mem_root_for_create, MYF(0));
   }
@@ -2686,7 +2689,9 @@ int ha_mroonga::create_share_for_create() const
   mrn_init_alloc_root(&mem_root_for_create, 1024, 0, MYF(0));
   analyzed_for_create = true;
   if (table_list) {
-    share_for_create.table_name = table_list->table_name;
+    share_for_create.table_name = mrn_my_strndup(table_list->table_name,
+                                                 table_list->table_name_length,
+                                                 MYF(MY_WME));
     share_for_create.table_name_length = table_list->table_name_length;
   }
   share_for_create.table_share = &table_share_for_create;
