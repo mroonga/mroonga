@@ -195,6 +195,8 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_VERSION="$($ac_mysql_config --version)"
   AC_SUBST(MYSQL_VERSION)
 
+  MYSQL_MAJOR_MINOR_VERSION=["$(echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*[a-z]*\)[.0-9a-z-]*$/\1.\2/')"]
+
   MYSQL_CXXFLAGS="-fno-implicit-templates -felide-constructors"
   case "$MYSQL_MAJOR_MINOR_VERSION" in
   5.7)
@@ -206,7 +208,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   esac
 
   if test "${with_libmysqlservices_compat}" = "no"; then
-    MYSQL_MAJOR_MINOR_VERSION=["$(echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*[a-z]*\)$/\1.\2/')"]
     case "$MYSQL_MAJOR_MINOR_VERSION" in
     5.1)
         MYSQL_LIBS=""
