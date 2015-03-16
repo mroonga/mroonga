@@ -61,8 +61,15 @@
 #  define KEY_N_KEY_PARTS(key) (key)->key_parts
 #endif
 
-#if MYSQL_VERSION_ID < 100000 || !defined(MRN_MARIADB_P)
-#  define init_alloc_root(PTR, SZ1, SZ2, FLAG) init_alloc_root(PTR, SZ1, SZ2)
+#ifdef MRN_MARIADB_P
+#  define mrn_init_alloc_root(PTR, SZ1, SZ2, FLAG) \
+  init_alloc_root(PTR, SZ1, SZ2, FLAG)
+#elif MYSQL_VERSION_ID >= 50706
+#  define mrn_init_alloc_root(PTR, SZ1, SZ2, FLAG) \
+  init_alloc_root(mrn_memory_key, PTR, SZ1, SZ2)
+#else
+#  define mrn_init_alloc_root(PTR, SZ1, SZ2, FLAG) \
+  init_alloc_root(PTR, SZ1, SZ2, FLAG)
 #endif
 
 #if MYSQL_VERSION_ID < 100002 || !defined(MRN_MARIADB_P)
