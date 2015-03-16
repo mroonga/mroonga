@@ -197,6 +197,14 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_KEYTYPE_FOREIGN Key::FOREIGN_KEY
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define mrn_calculate_key_len(table, key_index, buffer, keypart_map) \
+  calculate_key_len(table, key_index, keypart_map)
+#else
+#  define mrn_calculate_key_len(table, key_index, buffer, keypart_map) \
+  calculate_key_len(table, key_index, buffer, keypart_map)
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -6928,7 +6936,8 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   bool is_multiple_column_index = KEY_N_KEY_PARTS(&key_info) > 1;
   if (is_multiple_column_index) {
     mrn_change_encoding(ctx, NULL);
-    uint key_length = calculate_key_len(table, active_index, key, keypart_map);
+    uint key_length =
+      mrn_calculate_key_len(table, active_index, key, keypart_map);
     DBUG_PRINT("info",
                ("mroonga: multiple column index: "
                 "search key length=<%u>, "
@@ -7132,7 +7141,8 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
   if (is_multiple_column_index) {
     mrn_change_encoding(ctx, NULL);
     flags |= GRN_CURSOR_PREFIX;
-    uint key_length = calculate_key_len(table, active_index, key, keypart_map);
+    uint key_length =
+      mrn_calculate_key_len(table, active_index, key, keypart_map);
     key_min = key_min_entity;
     storage_encode_multiple_column_key(&key_info,
                                        key, key_length,
