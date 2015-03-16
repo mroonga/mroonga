@@ -157,7 +157,11 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  else
 #    define MRN_PLUGIN_LAST_VALUES  NULL
 #  endif
-#  define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
+#  if MYSQL_VERSION_ID >= 50706
+#    define MRN_ABORT_ON_WARNING(thd) false
+#  else
+#    define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
+#  endif
 #endif
 
 #ifdef WIN32
