@@ -213,6 +213,10 @@ extern "C" {
 #  define MRN_HAVE_HTON_ALTER_TABLE_FLAGS
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_FOREIGN_KEY_USE_CONST_STRING
+#endif
+
 class ha_mroonga;
 
 /* structs */

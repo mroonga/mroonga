@@ -3316,7 +3316,11 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     Key_part_spec *key_part_ref_col = key_part_ref_col_iterator++;
     LEX_STRING ref_field_name = key_part_ref_col->field_name;
     DBUG_PRINT("info", ("mroonga: ref_field_name=%s", ref_field_name.str));
+#ifdef MRN_FOREIGN_KEY_USE_CONST_STRING
+    LEX_CSTRING ref_db_name = fk->ref_db;
+#else
     LEX_STRING ref_db_name = fk->ref_db;
+#endif
     DBUG_PRINT("info", ("mroonga: ref_db_name=%s", ref_db_name.str));
     if (ref_db_name.str && lower_case_table_names) {
       strmake(ref_db_buff, ref_db_name.str, sizeof(ref_db_buff) - 1);
@@ -3324,7 +3328,11 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       ref_db_name.str = ref_db_buff;
       DBUG_PRINT("info", ("mroonga: casedn ref_db_name=%s", ref_db_name.str));
     }
+#ifdef MRN_FOREIGN_KEY_USE_CONST_STRING
+    LEX_CSTRING ref_table_name = fk->ref_table;
+#else
     LEX_STRING ref_table_name = fk->ref_table;
+#endif
     DBUG_PRINT("info", ("mroonga: ref_table_name=%s", ref_table_name.str));
     if (ref_table_name.str && lower_case_table_names) {
       strmake(ref_table_buff, ref_table_name.str, sizeof(ref_table_buff) - 1);
