@@ -69,7 +69,7 @@
   init_alloc_root(mrn_memory_key, PTR, SZ1, SZ2)
 #else
 #  define mrn_init_alloc_root(PTR, SZ1, SZ2, FLAG) \
-  init_alloc_root(PTR, SZ1, SZ2, FLAG)
+  init_alloc_root(PTR, SZ1, SZ2)
 #endif
 
 #if MYSQL_VERSION_ID < 100002 || !defined(MRN_MARIADB_P)
