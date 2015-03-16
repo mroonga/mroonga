@@ -1478,6 +1478,7 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 }
 #endif
 
+#ifdef MRN_HAVE_HTON_ALTER_TABLE_FLAGS
 static uint mrn_alter_table_flags(uint flags)
 {
   uint alter_flags = 0;
@@ -1506,6 +1507,7 @@ static uint mrn_alter_table_flags(uint flags)
 #endif
   return alter_flags;
 }
+#endif
 
 static int mrn_init(void *p)
 {
@@ -1522,7 +1524,9 @@ static int mrn_init(void *p)
   hton->drop_database = mrn_drop_database;
   hton->close_connection = mrn_close_connection;
   hton->flush_logs = mrn_flush_logs;
+#ifdef MRN_HAVE_HTON_ALTER_TABLE_FLAGS
   hton->alter_table_flags = mrn_alter_table_flags;
+#endif
   mrn_hton_ptr = hton;
 
 #ifdef _WIN32
