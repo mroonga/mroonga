@@ -98,7 +98,13 @@ extern "C" {
 #  define MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
 #endif
 
-#ifdef BIG_TABLES
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_BIG_TABLES
+#elif defined(BIG_TABLES)
+#  define MRN_BIG_TABLES
+#endif
+
+#ifdef MRN_BIG_TABLES
 #  define MRN_HA_ROWS_FORMAT "llu"
 #else
 #  define MRN_HA_ROWS_FORMAT "lu"
