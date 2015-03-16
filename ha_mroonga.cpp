@@ -181,6 +181,12 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_GET_ERR_MSG(code) ER(code)
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex->table_list.first
+#else
+#  define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex.table_list.first
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -2633,7 +2639,7 @@ int ha_mroonga::create_share_for_create() const
   THD *thd = ha_thd();
   LEX *lex = thd->lex;
   HA_CREATE_INFO *create_info = &lex->create_info;
-  TABLE_LIST *table_list = lex->select_lex.table_list.first;
+  TABLE_LIST *table_list = MRN_LEX_GET_TABLE_LIST(lex);
   MRN_DBUG_ENTER_METHOD();
   wrap_handler_for_create = NULL;
   memset(&table_for_create, 0, sizeof(TABLE));
