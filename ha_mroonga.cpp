@@ -205,6 +205,14 @@ static mysql_mutex_t *mrn_LOCK_open;
   calculate_key_len(table, key_index, buffer, keypart_map)
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
+  (select_lex)->where_cond()
+#else
+#  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
+  (select_lex)->where
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -7754,7 +7762,8 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
 {
   MRN_DBUG_ENTER_METHOD();
 
-  Item *where = table->pos_in_table_list->select_lex->where;
+  Item *where =
+    MRN_SELECT_LEX_GET_WHERE_COND(table->pos_in_table_list->select_lex);
 
   bool is_storage_mode = !(share->wrapper_mode);
   mrn::ConditionConverter converter(info->ctx, grn_table, is_storage_mode);
