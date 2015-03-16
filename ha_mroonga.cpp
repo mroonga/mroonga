@@ -207,10 +207,14 @@ static mysql_mutex_t *mrn_LOCK_open;
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
-  (select_lex)->where_cond()
+  ((select_lex)->where_cond())
+#  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
+  ((select_lex)->having_cond())
 #else
 #  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
-  (select_lex)->where
+  ((select_lex)->where)
+#  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
+  ((select_lex)->having)
 #endif
 
 Rpl_filter *mrn_binlog_filter;
@@ -9210,7 +9214,7 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
     thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
     !select_lex->non_agg_fields.elements &&
     !select_lex->group_list.elements &&
-    !select_lex->having &&
+    !MRN_SELECT_LEX_GET_HAVING_COND(select_lex) &&
     select_lex->table_list.elements == 1
   ) {
     Item *info = (Item *) select_lex->item_list.first_node()->info;
