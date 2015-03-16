@@ -187,6 +187,12 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex.table_list.first
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_KEYTYPE_FOREIGN KEYTYPE_FOREIGN
+#else
+#  define MRN_KEYTYPE_FOREIGN Key::FOREIGN_KEY
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -3285,7 +3291,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
   char ref_db_buff[NAME_LEN + 1], ref_table_buff[NAME_LEN + 1];
   while ((key = key_iterator++))
   {
-    if (key->type != Key::FOREIGN_KEY)
+    if (key->type != MRN_KEYTYPE_FOREIGN)
     {
       continue;
     }
