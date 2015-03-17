@@ -227,6 +227,9 @@ extern "C" {
 #  define MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
 #endif
 
+#if MYSQL_VERSION_ID < 50706 || defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
+#endif
 
 class ha_mroonga;
 
@@ -523,7 +526,9 @@ public:
   void restore_auto_increment(ulonglong prev_insert_id);
   void release_auto_increment();
   int check_for_upgrade(HA_CHECK_OPT *check_opt);
+#ifdef MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
   int reset_auto_increment(ulonglong value);
+#endif
   bool was_semi_consistent_read();
   void try_semi_consistent_read(bool yes);
   void unlock_row();
@@ -1181,8 +1186,10 @@ private:
   void storage_release_auto_increment();
   int wrapper_check_for_upgrade(HA_CHECK_OPT *check_opt);
   int storage_check_for_upgrade(HA_CHECK_OPT *check_opt);
+#ifdef MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
   int wrapper_reset_auto_increment(ulonglong value);
   int storage_reset_auto_increment(ulonglong value);
+#endif
   bool wrapper_was_semi_consistent_read();
   bool storage_was_semi_consistent_read();
   void wrapper_try_semi_consistent_read(bool yes);

@@ -14994,6 +14994,7 @@ int ha_mroonga::check_for_upgrade(HA_CHECK_OPT *check_opt)
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
 int ha_mroonga::wrapper_reset_auto_increment(ulonglong value)
 {
   int res;
@@ -15030,6 +15031,7 @@ int ha_mroonga::reset_auto_increment(ulonglong value)
   }
   DBUG_RETURN(res);
 }
+#endif
 
 void ha_mroonga::set_pk_bitmap()
 {
