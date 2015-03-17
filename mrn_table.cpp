@@ -27,6 +27,7 @@
 #ifdef WITH_PARTITION_STORAGE_ENGINE
 #  include <partition_info.h>
 #endif
+#include <sql_plugin.h>
 
 #include "mrn_err.h"
 #include "mrn_table.hpp"
