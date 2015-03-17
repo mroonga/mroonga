@@ -516,7 +516,7 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
       my_free(share->key_parser[i]);
     }
     if (
-      !(share->key_parser[i] = my_strdup(mrn_default_parser, MYF(MY_WME)))
+      !(share->key_parser[i] = mrn_my_strdup(mrn_default_parser, MYF(MY_WME)))
     ) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
@@ -578,7 +578,7 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 #endif
   if (!share->key_parser[i]) {
     if (
-      !(share->key_parser[i] = my_strdup(mrn_default_parser, MYF(MY_WME)))
+      !(share->key_parser[i] = mrn_my_strdup(mrn_default_parser, MYF(MY_WME)))
     ) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
@@ -1042,7 +1042,7 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
   share->tmp_table = INTERNAL_TMP_TABLE; // TODO: is this right?
   share->path.str = (char *) path;
   share->path.length = strlen(share->path.str);
-  share->normalized_path.str = my_strdup(path, MYF(MY_WME));
+  share->normalized_path.str = mrn_my_strdup(path, MYF(MY_WME));
   share->normalized_path.length = strlen(share->normalized_path.str);
   if (open_table_def(thd, share, GTS_TABLE))
   {
