@@ -24,6 +24,10 @@
 #  include <sql_servers.h>
 #  include <sql_base.h>
 #endif
+#ifdef WITH_PARTITION_STORAGE_ENGINE
+#  include <partition_info.h>
+#endif
+
 #include "mrn_err.h"
 #include "mrn_table.hpp"
 #include "mrn_mysql_compat.h"
