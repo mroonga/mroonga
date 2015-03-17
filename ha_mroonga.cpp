@@ -13452,7 +13452,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   alter_index_add_count = 0;
   alter_handler_flags = ha_alter_info->handler_flags;
   if (!(alter_key_info_buffer = (KEY *)
-    my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+    mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &alter_key_info_buffer, sizeof(KEY) * ha_alter_info->key_count,
       &alter_index_drop_buffer, sizeof(KEY) * ha_alter_info->index_drop_count,
       &alter_index_add_buffer, sizeof(uint) * ha_alter_info->index_add_count,
@@ -13663,7 +13663,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   tmp_table_share.keys = ha_alter_info->key_count;
   tmp_table_share.fields = 0;
   if (!(tmp_share = (MRN_SHARE *)
-    my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+    mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
       &key_parser, sizeof(char *) * (tmp_table_share.keys),
       &key_parser_length, sizeof(uint) * (tmp_table_share.keys),
@@ -13812,7 +13812,7 @@ bool ha_mroonga::storage_inplace_alter_table_index(
   tmp_table_share.keys = ha_alter_info->key_count;
   tmp_table_share.fields = 0;
   if (!(tmp_share = (MRN_SHARE *)
-    my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+    mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
       &index_table, sizeof(char *) * tmp_table_share.keys,
       &index_table_length, sizeof(uint) * tmp_table_share.keys,
@@ -13946,7 +13946,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
   uint *index_table_length, *key_parser_length, *col_flags_length, *col_type_length;
   tmp_table_share.keys = 0;
   tmp_table_share.fields = altered_table->s->fields;
-  tmp_share = (MRN_SHARE *)my_multi_malloc(
+  tmp_share = (MRN_SHARE *)mrn_my_multi_malloc(
     MYF(MY_WME | MY_ZEROFILL),
     &tmp_share, sizeof(*tmp_share),
     &index_table, sizeof(char *) * tmp_table_share.keys,
@@ -14348,7 +14348,7 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   tmp_table_share.keys = n_keys + num_of_keys;
   tmp_table_share.fields = 0;
   if (!(tmp_share = (MRN_SHARE *)
-    my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+    mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
       &key_parser, sizeof(char *) * (n_keys + num_of_keys),
       &key_parser_length, sizeof(uint) * (n_keys + num_of_keys),
@@ -14482,7 +14482,7 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   tmp_table_share.keys = n_keys + num_of_keys;
   tmp_table_share.fields = 0;
   if (!(tmp_share = (MRN_SHARE *)
-    my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+    mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
       &index_table, sizeof(char*) *  tmp_table_share.keys,
       &index_table_length, sizeof(uint) * tmp_table_share.keys,
