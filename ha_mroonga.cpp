@@ -9240,7 +9240,7 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
     Item *where;
     if (fulltext) {
       DBUG_PRINT("info", ("mroonga: count skip: fulltext"));
-      where = select_lex->where;
+      where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
       if (!where ||
           where->type() != Item::FUNC_ITEM ||
           ((Item_func *)where)->functype() != Item_func::FT_FUNC) {
@@ -9284,7 +9284,9 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
       uint key_nr = active_index;
       KEY key_info = table->key_info[key_nr];
       KEY_PART_INFO *key_part = key_info.key_part;
-      for (where = select_lex->where; where; where = where->next) {
+      for (where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
+           where;
+           where = where->next) {
         if (where->type() == Item::FIELD_ITEM)
         {
           Field *field = ((Item_field *)where)->field;
@@ -9399,7 +9401,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       fast_order_limit = false;
       DBUG_VOID_RETURN;
     }
-    Item *where = select_lex->where;
+    Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
     const Item_func *match_against = NULL;
     if (where) {
       bool is_storage_mode = !(share->wrapper_mode);
