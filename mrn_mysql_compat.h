@@ -184,4 +184,10 @@
 #  define INT_MAX64 LONGLONG_MAX
 #endif
 
+#ifdef UINT_MAX
+#  define UINT_MAX64 UINT_MAX
+#else
+#  define UINT_MAX64 LONGLONG_MAX
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

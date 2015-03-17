@@ -14827,7 +14827,7 @@ void ha_mroonga::storage_get_auto_increment(ulonglong offset,
       *first_value = long_term_share->auto_inc_value;
       DBUG_PRINT("info", ("mroonga: *first_value(auto_inc_value)=%llu",
         *first_value));
-      *nb_reserved_values = ULONGLONG_MAX;
+      *nb_reserved_values = UINT_MAX64;
     } else {
       handler::get_auto_increment(offset, increment, nb_desired_values,
                                   first_value, nb_reserved_values);
