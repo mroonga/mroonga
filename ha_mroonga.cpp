@@ -35,6 +35,7 @@
 #endif
 
 #include <sql_select.h>
+#include <item_sum.h>
 
 #ifdef MRN_HAVE_SQL_OPTIMIZER_H
 #  include <sql_optimizer.h>
