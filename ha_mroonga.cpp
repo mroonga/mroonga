@@ -13234,7 +13234,11 @@ bool ha_mroonga::wrapper_is_fatal_error(int error_num, uint flags)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
   res = wrap_handler->is_fatal_error(error_num, flags);
+#else
+  res = wrap_handler->is_fatal_error(error_num);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(res);
@@ -13243,7 +13247,11 @@ bool ha_mroonga::wrapper_is_fatal_error(int error_num, uint flags)
 bool ha_mroonga::storage_is_fatal_error(int error_num, uint flags)
 {
   MRN_DBUG_ENTER_METHOD();
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
   bool is_fatal_error = handler::is_fatal_error(error_num, flags);
+#else
+  bool is_fatal_error = handler::is_fatal_error(error_num);
+#endif
   DBUG_RETURN(is_fatal_error);
 }
 

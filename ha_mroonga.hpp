@@ -223,6 +223,11 @@ extern "C" {
 #  define MRN_FOREIGN_KEY_USE_CONST_STRING
 #endif
 
+#if MYSQL_VERSION_ID < 50706 || defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+#endif
+
+
 class ha_mroonga;
 
 /* structs */
@@ -492,7 +497,7 @@ public:
   bool check_and_repair(THD *thd);
   int analyze(THD* thd, HA_CHECK_OPT* check_opt);
   int optimize(THD* thd, HA_CHECK_OPT* check_opt);
-  bool is_fatal_error(int error_num, uint flags);
+  bool is_fatal_error(int error_num, uint flags=0);
   bool check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                   uint table_changes);
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
