@@ -22,42 +22,12 @@
 
 #include <mrn_mysql.h>
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_DEST_IS_POINTER
-#endif
-
 namespace mrn {
   namespace value_decoder {
-    void decode(uint16 *dest, const uchar *source) {
-#ifdef MRN_DEST_IS_POINTER
-      ushortget(dest, source);
-#else
-      uint16 value;
-      ushortget(value, source);
-      *dest = value;
-#endif
-    };
-
-    void decode(float *dest, const uchar *source) {
-#ifdef MRN_DEST_IS_POINTER
-      float4get(dest, source);
-#else
-      float value;
-      float4get(value, source);
-      *dest = value;
-#endif
-    };
-
-    void decode(double *dest, const uchar *source) {
-#ifdef MRN_DEST_IS_POINTER
-      float8get(dest, source);
-#else
-      double value;
-      float8get(value, source);
-      *dest = value;
-#endif
-    };
-  };
+    void decode(uint16 *dest, const uchar *source);
+    void decode(float *dest, const uchar *source);
+    void decode(double *dest, const uchar *source);
+  }
 }
 
 #endif // MRN_VALUE_DECODER_HPP_
