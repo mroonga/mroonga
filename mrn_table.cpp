@@ -40,6 +40,12 @@
 #  define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_PLUGIN_DATA(plugin, type) plugin_data<type>(plugin)
+#else
+#  define MRN_PLUGIN_DATA(plugin, type) plugin_data(plugin, type)
+#endif
+
 #define LEX_STRING_IS_EMPTY(string)                                     \
   ((string).length == 0 || !(string).str || (string).str[0] == '\0')
 
@@ -474,7 +480,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         error = ER_UNKNOWN_STORAGE_ENGINE;
         goto error;
       }
-      share->hton = plugin_data(share->plugin, handlerton *);
+      share->hton = MRN_PLUGIN_DATA(share->plugin, handlerton *);
       share->wrapper_mode = TRUE;
     }
   }
