@@ -213,6 +213,8 @@ static mysql_mutex_t *mrn_LOCK_open;
   ((select_lex)->having_cond())
 #  define MRN_SELECT_LEX_IS_AGG_FUNC_USED(select_lex) \
   ((select_lex)->agg_func_used())
+#  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
+  ((select_lex)->active_options())
 #else
 #  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
   ((select_lex)->where)
@@ -220,6 +222,8 @@ static mysql_mutex_t *mrn_LOCK_open;
   ((select_lex)->having)
 #  define MRN_SELECT_LEX_IS_AGG_FUNC_USED(select_lex) \
   ((select_lex)->non_agg_fields.elements)
+#  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
+  ((select_lex)->options)
 #endif
 
 Rpl_filter *mrn_binlog_filter;
@@ -9367,7 +9371,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   }
   DBUG_PRINT("info",
     ("mroonga: first_select_lex->options=%llu",
-      first_select_lex ? first_select_lex->options : 0));
+     first_select_lex ? MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(first_select_lex) : 0));
 
   if (
     thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
@@ -9394,7 +9398,8 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       fast_order_limit = false;
       DBUG_VOID_RETURN;
     }
-    if (first_select_lex && (first_select_lex->options & OPTION_FOUND_ROWS)) {
+    if (first_select_lex &&
+        (MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(first_select_lex) & OPTION_FOUND_ROWS)) {
       DBUG_PRINT("info",
                  ("mroonga: fast_order_limit = false: "
                   "SQL_CALC_FOUND_ROWS is specified"));
