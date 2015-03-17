@@ -13417,7 +13417,9 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   uint n_keys;
   uint i;
   enum_alter_inplace_result result_mroonga = HA_ALTER_INPLACE_NO_LOCK;
-  DBUG_PRINT("info", ("mroonga: handler_flags=%lu", ha_alter_info->handler_flags));
+  DBUG_PRINT("info",
+             ("mroonga: handler_flags=%lu",
+              static_cast<ulong>(ha_alter_info->handler_flags)));
 
   if (wrapper_is_comment_changed(table, altered_table)) {
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
