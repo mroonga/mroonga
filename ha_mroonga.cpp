@@ -9503,7 +9503,7 @@ int ha_mroonga::generic_store_bulk_variable_size_string(Field *field,
   String value;
   field->val_str(NULL, &value);
   grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
-  DBUG_PRINT("info", ("mroonga: length=%u", value.length()));
+  DBUG_PRINT("info", ("mroonga: length=%zu", value.length()));
   DBUG_PRINT("info", ("mroonga: value=%s", value.c_ptr_safe()));
   GRN_TEXT_SET(ctx, buf, value.ptr(), value.length());
   DBUG_RETURN(error);
