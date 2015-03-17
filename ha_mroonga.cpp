@@ -9377,7 +9377,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
     !select_lex->with_sum_func &&
     !select_lex->group_list.elements &&
-    !select_lex->having &&
+    !MRN_SELECT_LEX_GET_HAVING_COND(select_lex) &&
     select_lex->table_list.elements == 1 &&
     select_lex->order_list.elements &&
     select_lex->explicit_limit &&
