@@ -90,6 +90,7 @@
 #include <mrn_smart_grn_obj.hpp>
 #include <mrn_database_manager.hpp>
 #include <mrn_grn.hpp>
+#include <mrn_value_decoder.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -10933,7 +10934,7 @@ int ha_mroonga::storage_encode_key_enum(Field *field, const uchar *key,
     memcpy(buf, &value, *size);
   } else {
     uint16 value;
-    shortget(value, key);
+    mrn::value_decoder::decode(&value, key);
     *size = 2;
     memcpy(buf, &value, *size);
   }
@@ -11045,7 +11046,7 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
     {
       float float_value;
       double double_value;
-      float4get(float_value, ptr);
+      mrn::value_decoder::decode(&float_value, ptr);
       double_value = float_value;
       memcpy(buf, &double_value, 8);
       *size = 8;
@@ -11054,7 +11055,7 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
   case MYSQL_TYPE_DOUBLE:
     {
       double val;
-      float8get(val, ptr);
+      mrn::value_decoder::decode(&val, ptr);
       memcpy(buf, &val, 8);
       *size = 8;
       break;

@@ -28,6 +28,16 @@
 
 namespace mrn {
   namespace value_decoder {
+    void decode(uint16 *dest, const uchar *source) {
+#ifdef MRN_DEST_IS_POINTER
+      ushortget(dest, source);
+#else
+      uint16 value;
+      ushortget(value, source);
+      *dest = value;
+#endif
+    };
+
     void decode(float *dest, const uchar *source) {
 #ifdef MRN_DEST_IS_POINTER
       float4get(dest, source);
