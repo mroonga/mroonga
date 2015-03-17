@@ -11170,16 +11170,29 @@ int ha_mroonga::generic_reset()
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  if (thd_sql_command(ha_thd()) == SQLCOM_SELECT) {
-    st_select_lex *select_lex = table->pos_in_table_list->select_lex;
-    List_iterator<Item_func_match> iterator(*(select_lex->ftfunc_list));
-    Item_func_match *item;
-    while ((item = iterator++)) {
-      if (item->ft_handler) {
-        mrn_generic_ft_clear(item->ft_handler);
-      }
+
+  if (thd_sql_command(ha_thd()) != SQLCOM_SELECT) {
+    DBUG_RETURN(error);
+  }
+
+  TABLE_LIST *table_list = table->pos_in_table_list;
+  if (!table_list) {
+    DBUG_RETURN(error);
+  }
+
+  st_select_lex *select_lex = table_list->select_lex;
+  if (!select_lex) {
+    DBUG_RETURN(error);
+  }
+
+  List_iterator<Item_func_match> iterator(*(select_lex->ftfunc_list));
+  Item_func_match *item;
+  while ((item = iterator++)) {
+    if (item->ft_handler) {
+      mrn_generic_ft_clear(item->ft_handler);
     }
   }
+
   DBUG_RETURN(error);
 }
 
