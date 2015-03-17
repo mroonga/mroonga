@@ -777,7 +777,7 @@ MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
                    table_name_length)))
   {
     if (!(long_term_share = (MRN_LONG_TERM_SHARE *)
-      my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+      mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &long_term_share, sizeof(*long_term_share),
         &tmp_name, table_name_length + 1,
         NullS))
@@ -826,7 +826,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     (uchar*) table_name, length)))
   {
     if (!(share = (MRN_SHARE *)
-      my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+      mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &share, sizeof(*share),
         &tmp_name, length + 1,
         &index_table, sizeof(char *) * table->s->keys,
@@ -1069,7 +1069,7 @@ KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
   if (share->wrap_keys)
   {
     if (!(wrap_key_info = (KEY *)
-      my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+      mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &wrap_key_info, sizeof(*wrap_key_info) * share->wrap_keys,
         NullS))
     ) {
