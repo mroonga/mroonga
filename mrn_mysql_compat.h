@@ -194,4 +194,10 @@
 #  define UINT_MAX64 LONGLONG_MAX
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define mrn_my_stpmov(dst, src) my_stpmov(dst, src)
+#else
+#  define mrn_my_stpmov(dst, src) strmov(dst, src)
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

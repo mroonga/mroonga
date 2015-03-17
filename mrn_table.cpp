@@ -856,7 +856,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     share->col_flags_length = col_flags_length;
     share->col_type = col_type;
     share->col_type_length = col_type_length;
-    strmov(share->table_name, table_name);
+    mrn_my_stpmov(share->table_name, table_name);
     share->table_share = table->s;
 
     if (
