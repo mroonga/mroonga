@@ -217,8 +217,6 @@ static mysql_mutex_t *mrn_LOCK_open;
   ((select_lex)->where_cond())
 #  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
   ((select_lex)->having_cond())
-#  define MRN_SELECT_LEX_IS_AGG_FUNC_USED(select_lex) \
-  ((select_lex)->agg_func_used())
 #  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
   ((select_lex)->active_options())
 #else
@@ -226,8 +224,6 @@ static mysql_mutex_t *mrn_LOCK_open;
   ((select_lex)->where)
 #  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
   ((select_lex)->having)
-#  define MRN_SELECT_LEX_IS_AGG_FUNC_USED(select_lex) \
-  ((select_lex)->non_agg_fields.elements)
 #  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
   ((select_lex)->options)
 #endif
@@ -9239,7 +9235,7 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
 
   if (
     thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
-    !MRN_SELECT_LEX_IS_AGG_FUNC_USED(select_lex) &&
+    select_lex->item_list.elements == 1 &&
     !select_lex->group_list.elements &&
     !MRN_SELECT_LEX_GET_HAVING_COND(select_lex) &&
     select_lex->table_list.elements == 1
