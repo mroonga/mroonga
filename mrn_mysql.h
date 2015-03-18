@@ -58,12 +58,6 @@
 #  define MRN_MARIADB_P 1
 #endif
 
-#if MYSQL_VERSION_ID >= 50607
-#  if !defined(MRN_MARIADB_P)
-#    define MRN_HAVE_SQL_OPTIMIZER_H
-#  endif
-#endif
-
 #define MRN_MESSAGE_BUFFER_SIZE 1024
 
 #define MRN_DBUG_ENTER_FUNCTION() DBUG_ENTER(__FUNCTION__)

@@ -200,6 +200,12 @@
 #  define mrn_my_stpmov(dst, src) strmov(dst, src)
 #endif
 
+#if MYSQL_VERSION_ID >= 50607
+#  if !defined(MRN_MARIADB_P)
+#    define MRN_HAVE_SQL_OPTIMIZER_H
+#  endif
+#endif
+
 #if MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)
 #  define MRN_HAVE_BINGLOG_H
 #endif
