@@ -27,7 +27,7 @@ CREATE TABLE shops (
 
 INSERT INTO shops VALUES (NULL), (NULL);
 
-SELECT AsText(location) FROM shops;
+SELECT ST_AsText(location) FROM shops;
 
 DROP TABLE shops;
 

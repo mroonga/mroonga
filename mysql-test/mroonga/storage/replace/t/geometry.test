@@ -26,13 +26,13 @@ CREATE TABLE geo_replace (
   PRIMARY KEY(id)
 ) DEFAULT CHARSET=utf8;
 INSERT INTO geo_replace VALUES(1, POINT(100,100));
-SELECT id, ASTEXT(geo) FROM geo_replace;
+SELECT id, ST_AsText(geo) FROM geo_replace;
 REPLACE INTO geo_replace VALUES(1, POINT(100,200));
-SELECT id, ASTEXT(geo) FROM geo_replace;
+SELECT id, ST_AsText(geo) FROM geo_replace;
 INSERT INTO geo_replace VALUES(1, POINT(200,200)) ON DUPLICATE KEY UPDATE geo = POINT(200,200);
-SELECT id, ASTEXT(geo) FROM geo_replace;
+SELECT id, ST_AsText(geo) FROM geo_replace;
 UPDATE geo_replace SET geo = POINT(200,300);
-SELECT id, ASTEXT(geo) FROM geo_replace;
+SELECT id, ST_AsText(geo) FROM geo_replace;
 
 DROP TABLE geo_replace;
 
