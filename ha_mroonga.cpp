@@ -9266,20 +9266,10 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
         count_skip = false;
         DBUG_VOID_RETURN;
       }
-      where = where->next;
-      if (!where ||
-          where->type() != Item::STRING_ITEM) {
-        DBUG_PRINT("info", ("mroonga: count skip: string item is not match"));
-        count_skip = false;
-        DBUG_VOID_RETURN;
-      }
-      for (where = where->next; where; where = where->next) {
-        if (where->type() != Item::FIELD_ITEM)
-          break;
-        DBUG_PRINT("info", ("mroonga: count skip: FIELD_ITEM=%p", where));
-      }
-      if (where != info) {
-        DBUG_PRINT("info", ("mroonga: count skip: where clause is not match"));
+      if (select_lex->select_n_where_fields != 1) {
+        DBUG_PRINT("info",
+                   ("mroonga: count skip: "
+                    "where clause is not fulltext search only"));
         count_skip = false;
         DBUG_VOID_RETURN;
       }
@@ -9305,9 +9295,23 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
       for (where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
            where;
            where = where->next) {
-        if (where->type() == Item::FIELD_ITEM)
+        Item *target = where;
+
+        if (where->type() == Item::FUNC_ITEM) {
+          Item_func *func_item = static_cast<Item_func *>(where);
+          target = func_item->key_item();
+          where = where->next;
+          if (func_item->arguments()[0] == where) {
+            uint n_args = func_item->arg_count;
+            for (; n_args > 0; --n_args) {
+              where = where->next;
+            }
+          }
+        }
+
+        if (target->type() == Item::FIELD_ITEM)
         {
-          Field *field = ((Item_field *)where)->field;
+          Field *field = ((Item_field *)target)->field;
           if (!field)
             break;
           if (field->table != table)
