@@ -238,6 +238,12 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_TABLE_LIST_GET_DERIVED(table_list) (table_list)->derived
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_GEOMETRY_FREE(geometry)
+#else
+#  define MRN_GEOMETRY_FREE(geometry) delete (geometry)
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -1529,7 +1535,7 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
     error = ER_MRN_GEOMETRY_NOT_SUPPORT_NUM;
     break;
   }
-  delete geometry;
+  MRN_GEOMETRY_FREE(geometry);
 
   return error;
 }
