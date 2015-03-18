@@ -36,7 +36,10 @@
 
 #include <sql_select.h>
 #include <item_sum.h>
-#include <binlog.h>
+
+#ifdef MRN_HAVE_BINLOG_H
+#  include <binlog.h>
+#endif
 
 #ifdef MRN_HAVE_SQL_OPTIMIZER_H
 #  include <sql_optimizer.h>
