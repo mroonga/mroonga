@@ -207,7 +207,7 @@
 #endif
 
 #if MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)
-#  define MRN_HAVE_BINGLOG_H
+#  define MRN_HAVE_BINLOG_H
 #endif
 
 #endif /* MRN_MYSQL_COMPAT_H_ */
