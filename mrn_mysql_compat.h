@@ -210,4 +210,10 @@
 #  define MRN_HAVE_BINLOG_H
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_SPATIAL
+#elif defined(HAVE_SPATIAL)
+#  define MRN_HAVE_SPATIAL
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

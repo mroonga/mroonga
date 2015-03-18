@@ -1492,7 +1492,7 @@ bool mrn_parse_grn_index_column_flags(THD *thd,
   return found;
 }
 
-#ifdef HAVE_SPATIAL
+#ifdef MRN_HAVE_SPATIAL
 static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
                             const char *wkb, uint wkb_size)
 {
@@ -5504,7 +5504,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
     if (field->is_null())
       continue;
 
-#ifdef HAVE_SPATIAL
+#ifdef MRN_HAVE_SPATIAL
     bool is_null_geometry_value =
       field->real_type() == MYSQL_TYPE_GEOMETRY &&
       static_cast<Field_geom *>(field)->get_length() == 0;
@@ -9876,7 +9876,7 @@ int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-#ifdef HAVE_SPATIAL
+#ifdef MRN_HAVE_SPATIAL
   String buffer;
   Field_geom *geometry = (Field_geom *)field;
   String *value = geometry->val_str(0, &buffer);
@@ -10307,7 +10307,7 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
                                               uint value_length)
 {
   MRN_DBUG_ENTER_METHOD();
-#ifdef HAVE_SPATIAL
+#ifdef MRN_HAVE_SPATIAL
   uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
   grn_geo_point *field_value = (grn_geo_point *)value;
   int latitude, longitude;
