@@ -232,6 +232,12 @@ static mysql_mutex_t *mrn_LOCK_open;
   ((select_lex)->options)
 #endif
 
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_TABLE_LIST_GET_DERIVED(table_list) NULL
+#else
+#  define MRN_TABLE_LIST_GET_DERIVED(table_list) (table_list)->derived
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -9367,7 +9373,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
 
   TABLE_LIST *table_list = table->pos_in_table_list;
   st_select_lex *select_lex = table_list->select_lex;
-  SELECT_LEX_UNIT *unit = NULL;// table_list->derived;
+  SELECT_LEX_UNIT *unit = MRN_TABLE_LIST_GET_DERIVED(table_list);
   st_select_lex *first_select_lex;
   if (unit)
   {
