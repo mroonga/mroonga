@@ -21,6 +21,7 @@
 */
 
 #include "mrn_mysql.h"
+#include "mrn_mysql_compat.h"
 
 #ifdef USE_PRAGMA_IMPLEMENTATION
 #pragma implementation
@@ -9366,7 +9367,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
 
   TABLE_LIST *table_list = table->pos_in_table_list;
   st_select_lex *select_lex = table_list->select_lex;
-  SELECT_LEX_UNIT *unit = table_list->derived;
+  SELECT_LEX_UNIT *unit = NULL;// table_list->derived;
   st_select_lex *first_select_lex;
   if (unit)
   {
