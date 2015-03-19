@@ -87,6 +87,12 @@ case ${distribution} in
       mariadb-${PACKAGE})
         run yum -y install mariadb-devel
 	;;
+      percona-server-56-${PACKAGE})
+        release_rpm_version=0.1-3
+        release_rpm=percona-release-${release_rpm_version}.noarch.rpm
+        run yum -y install http://www.percona.com/downloads/percona-release/redhat/${release_rpm_version}/${release_rpm}
+        run yum -y install Percona-Server-devel-56
+        ;;
     esac
 
     release_rpm=groonga-release-1.1.0-1.noarch.rpm
