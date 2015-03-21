@@ -151,7 +151,7 @@ extern "C" {
 #  define MRN_HAVE_TL_WRITE_ALLOW_READ
 #endif
 
-#if MYSQL_VERSION_ID < 50706 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID < 50706 || defined(MRN_MARIADB_P)
 #  define MRN_HAVE_TL_WRITE_DELAYED
 #endif
 
