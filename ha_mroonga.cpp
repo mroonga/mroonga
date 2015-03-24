@@ -55,9 +55,6 @@
 #ifdef WIN32
 #  include <math.h>
 #  include <direct.h>
-#  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
-    type *variable_name = (type *)_malloca(sizeof(type) * (variable_size))
-#  define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) _freea(variable_name)
 #  define MRN_TABLE_SHARE_LOCK_SHARE_PROC "?key_TABLE_SHARE_LOCK_share@@3IA"
 #  define MRN_TABLE_SHARE_LOCK_HA_DATA_PROC "?key_TABLE_SHARE_LOCK_ha_data@@3IA"
 #  ifdef _WIN64
@@ -70,10 +67,13 @@
 #else
 #  include <dirent.h>
 #  include <unistd.h>
-#  define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
-    type variable_name[variable_size]
-#  define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name)
 #endif
+
+#define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
+  type *variable_name =                                                 \
+    (type *)mrn_my_malloc(sizeof(type) * (variable_size), MYF(MY_WME))
+#define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) \
+  my_free(variable_name)
 
 #include "mrn_err.h"
 #include "mrn_table.hpp"
