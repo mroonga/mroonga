@@ -9306,6 +9306,9 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
 
         if (where->type() == Item::FUNC_ITEM) {
           Item_func *func_item = static_cast<Item_func *>(where);
+          if (func_item->arg_count == 0) {
+            break;
+          }
           target = func_item->key_item();
           where = where->next;
           if (func_item->arguments()[0] == where) {
