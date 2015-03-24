@@ -55,7 +55,7 @@ Install groonga-tokenizer-mecab package::
 CentOS 6 (with the Oracle MySQL package)
 ----------------------------------------
 
-We can use Oracle's MySQL packages (version 5.6.x) on on CentOS 6
+We can use Oracle's MySQL packages (version 5.6.x) on CentOS 6
 since Mroonga 4.04 release.
 
 Install::
