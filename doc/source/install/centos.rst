@@ -75,6 +75,29 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
+CentOS 6 (with Percona Server package)
+--------------------------------------
+
+You can use Percona Server packages (version 5.6.x) on CentOS 6
+since Mroonga 5.01 release.
+
+Install::
+
+  % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+  $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+  % sudo yum makecache
+  % sudo yum install -y Percona-Server-server-56
+  % sudo /sbin/service mysqld start
+  % sudo yum install -y percona-server-56-mroonga
+  (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
+
 CentOS 7 (with the official MariaDB package)
 --------------------------------------------
 
@@ -109,6 +132,29 @@ Install::
   % sudo yum install -y mysql-community-server
   % sudo systemctl start mysqld
   % sudo yum install -y mysql-community-mroonga
+  (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
+
+CentOS 7 (with Percona Server package)
+--------------------------------------
+
+You can use Percona Server packages (version 5.6.x) on CentOS 7
+since Mroonga 5.01 release.
+
+Install::
+
+  % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+  $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+  % sudo yum makecache
+  % sudo yum install -y Percona-Server-server-56
+  % sudo /sbin/service mysqld start
+  % sudo yum install -y percona-server-56-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
