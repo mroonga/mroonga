@@ -11,7 +11,7 @@ CentOS. You can install them by ``yum``.
 CentOS 5
 --------
 
-We use CentOS's MySQL packages (version 5.5.x) on CentOS 5 since
+You use CentOS's MySQL packages (version 5.5.x) on CentOS 5 since
 Mroonga 3.09 release.
 
 Install::
@@ -33,7 +33,7 @@ Install groonga-tokenizer-mecab package::
 CentOS 6 (with the official MySQL package)
 ------------------------------------------
 
-We can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6
+You can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6
 since Mroonga 4.01 release.
 
 Install::
@@ -55,7 +55,7 @@ Install groonga-tokenizer-mecab package::
 CentOS 6 (with the Oracle MySQL package)
 ----------------------------------------
 
-We can use Oracle's MySQL packages (version 5.6.x) on CentOS 6
+You can use Oracle's MySQL packages (version 5.6.x) on CentOS 6
 since Mroonga 4.04 release.
 
 Install::
@@ -78,7 +78,7 @@ Install groonga-tokenizer-mecab package::
 CentOS 7 (with the official MariaDB package)
 --------------------------------------------
 
-We can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7.
+You can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7.
 
 Install::
 
@@ -99,7 +99,7 @@ Install groonga-tokenizer-mecab package::
 CentOS 7 (with the Oracle MySQL package)
 ----------------------------------------
 
-We can use Oracle's MySQL packages (version 5.6.x) on CentOS 7.
+You can use Oracle's MySQL packages (version 5.6.x) on CentOS 7.
 
 Install::
 
