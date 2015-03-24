@@ -45,8 +45,9 @@ msgstr ""
 msgid "CentOS 5"
 msgstr "CentOS 5"
 
+# 88821a7eedcb45aabf5c0622560f742b
 msgid ""
-"We use CentOS's MySQL packages (version 5.5.x) on CentOS 5 since Mroonga "
+"You use CentOS's MySQL packages (version 5.5.x) on CentOS 5 since Mroonga "
 "3.09 release."
 msgstr ""
 
@@ -66,29 +67,53 @@ msgstr "Install groonga-tokenizer-mecab package::"
 msgid "CentOS 6 (with the official MySQL package)"
 msgstr ""
 
+# 08472e351d7e425abfa8c6b18f888fe0
 msgid ""
-"We can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6 since "
+"You can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6 since "
 "Mroonga 4.01 release."
 msgstr ""
 
 msgid "CentOS 6 (with the Oracle MySQL package)"
 msgstr ""
 
+# d5b442bd3d8147e0a0a83af597398850
 msgid ""
-"We can use Oracle's MySQL packages (version 5.6.x) on on CentOS 6 since "
+"You can use Oracle's MySQL packages (version 5.6.x) on CentOS 6 since "
 "Mroonga 4.04 release."
+msgstr ""
+
+# 35a78cd8d77d49edb818afc205b1ed2b
+msgid "CentOS 6 (with Percona Server package)"
+msgstr ""
+
+# c0092138f7cd4a2bb7ae363972d4c83b
+msgid ""
+"You can use Percona Server packages (version 5.6.x) on CentOS 6 since "
+"Mroonga 5.01 release."
 msgstr ""
 
 msgid "CentOS 7 (with the official MariaDB package)"
 msgstr ""
 
-msgid "We can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7."
+# 6af9b706988d40f69272cab95ffbe760
+msgid "You can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7."
 msgstr ""
 
 msgid "CentOS 7 (with the Oracle MySQL package)"
 msgstr ""
 
-msgid "We can use Oracle's MySQL packages (version 5.6.x) on CentOS 7."
+# 580dc01ec0b746d2a7c7ba0d3bf7bf2b
+msgid "You can use Oracle's MySQL packages (version 5.6.x) on CentOS 7."
+msgstr ""
+
+# db18c96ea8114592926909ebdbdaf86b
+msgid "CentOS 7 (with Percona Server package)"
+msgstr ""
+
+# e746d15b5d74454a88852e911e5f9ba3
+msgid ""
+"You can use Percona Server packages (version 5.6.x) on CentOS 7 since "
+"Mroonga 5.01 release."
 msgstr ""
 
 msgid "Debian GNU/Linux"

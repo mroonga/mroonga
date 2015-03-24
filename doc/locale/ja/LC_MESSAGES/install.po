@@ -55,8 +55,9 @@ msgstr ""
 msgid "CentOS 5"
 msgstr ""
 
+#, fuzzy
 msgid ""
-"We use CentOS's MySQL packages (version 5.5.x) on CentOS 5 since Mroonga "
+"You use CentOS's MySQL packages (version 5.5.x) on CentOS 5 since Mroonga "
 "3.09 release."
 msgstr ""
 "CentOS 5では、Mroonga 3.09のリリースからディストリビューション由来のMySQLパッ"
@@ -79,8 +80,9 @@ msgstr "groonga-tokenizer-mecabをインストール::"
 msgid "CentOS 6 (with the official MySQL package)"
 msgstr "CentOS 6（公式のMySQLパッケージを利用）"
 
+#, fuzzy
 msgid ""
-"We can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6 since "
+"You can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6 since "
 "Mroonga 4.01 release."
 msgstr ""
 "CentOS 6では、Mroonga 4.01からCentOSのSCLを使ったMySQLパッケージ（MySQL 5.5"
@@ -90,9 +92,23 @@ msgstr ""
 msgid "CentOS 6 (with the Oracle MySQL package)"
 msgstr "CentOS 6（OracleのMySQLパッケージを利用）"
 
+#, fuzzy
 msgid ""
-"We can use Oracle's MySQL packages (version 5.6.x) on on CentOS 6 since "
+"You can use Oracle's MySQL packages (version 5.6.x) on CentOS 6 since "
 "Mroonga 4.04 release."
+msgstr ""
+"CentOS 6では、Mroonga 4.04からOracleのMySQLパッケージ（MySQL 5.6系）を利用で"
+"きます。"
+
+# 5e3232071ae84bdfbce77f4bee3e0ae4
+#, fuzzy
+msgid "CentOS 6 (with Percona Server package)"
+msgstr "CentOS 6（OracleのMySQLパッケージを利用）"
+
+#, fuzzy
+msgid ""
+"You can use Percona Server packages (version 5.6.x) on CentOS 6 since "
+"Mroonga 5.01 release."
 msgstr ""
 "CentOS 6では、Mroonga 4.04からOracleのMySQLパッケージ（MySQL 5.6系）を利用で"
 "きます。"
@@ -101,7 +117,8 @@ msgstr ""
 msgid "CentOS 7 (with the official MariaDB package)"
 msgstr "CentOS 7（公式のMariaDBパッケージを利用）"
 
-msgid "We can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7."
+#, fuzzy
+msgid "You can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7."
 msgstr ""
 "CentOS 7では、ディストリビューション由来のMariaDBパッケージ（MariaDB 5.5系）"
 "を利用できます。"
@@ -110,8 +127,22 @@ msgstr ""
 msgid "CentOS 7 (with the Oracle MySQL package)"
 msgstr "CentOS 7（OracleのMySQLパッケージを利用）"
 
-msgid "We can use Oracle's MySQL packages (version 5.6.x) on CentOS 7."
+#, fuzzy
+msgid "You can use Oracle's MySQL packages (version 5.6.x) on CentOS 7."
 msgstr "CentOS 7では、OracleのMySQLパッケージ（MySQL 5.6系）を利用できます。"
+
+# 57c1a2711fd448d79504e0f0df8d44e0
+#, fuzzy
+msgid "CentOS 7 (with Percona Server package)"
+msgstr "CentOS 7（OracleのMySQLパッケージを利用）"
+
+#, fuzzy
+msgid ""
+"You can use Percona Server packages (version 5.6.x) on CentOS 7 since "
+"Mroonga 5.01 release."
+msgstr ""
+"CentOS 6では、Mroonga 4.04からOracleのMySQLパッケージ（MySQL 5.6系）を利用で"
+"きます。"
 
 msgid "Debian GNU/Linux"
 msgstr ""
