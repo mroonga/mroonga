@@ -268,7 +268,7 @@ PSI_mutex_key *mrn_table_share_lock_ha_data;
 #  endif
 static PSI_mutex_key mrn_open_tables_mutex_key;
 static PSI_mutex_key mrn_long_term_share_mutex_key;
-PSI_mutex_key mrn_allocated_thds_mutex_key;
+static PSI_mutex_key mrn_allocated_thds_mutex_key;
 PSI_mutex_key mrn_share_mutex_key;
 PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
 static PSI_mutex_key mrn_log_mutex_key;
