@@ -1,4 +1,4 @@
-# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2015 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,11 +14,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../include/mroonga/have_version_56_or_later.inc
 --source include/have_innodb.inc
 --source include/not_embedded.inc
 --source include/have_perfschema.inc
---source ../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -35,8 +34,8 @@ SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (content) VALUES ("Tommorow will be shiny day!");
 
-SHOW TABLES FROM performance_schema;
+SHOW TABLES FROM performance_schema LIKE 'threads';
 
 DROP TABLE diaries;
 
---source ../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../include/mroonga/have_mroonga_deinit.inc
