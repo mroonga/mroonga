@@ -19,13 +19,8 @@
 --source ../../../include/mroonga/have_mroonga.inc
 --source ../../../include/mroonga/have_mroonga_helper.inc
 
---disable_warnings
-DROP DATABASE IF EXISTS repair_test;
 CREATE DATABASE repair_test;
 USE repair_test;
-
-DROP TABLE IF EXISTS diaries;
---enable_warnings
 
 CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
