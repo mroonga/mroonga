@@ -5,7 +5,8 @@ content varchar(256) COLLATE utf8mb4_unicode_520_ci,
 FULLTEXT INDEX (content)
 ) DEFAULT CHARSET=utf8mb4;
 INSERT INTO diaries VALUES ("ひらがなとカタカナを覚えました。");
-SELECT * FROM diaries WHERE MATCH (content) AGAINST ("+かたかな" IN BOOLEAN MODE);
+SELECT * FROM diaries
+WHERE MATCH (content) AGAINST ("+かたかな" IN BOOLEAN MODE);
 content
 ひらがなとカタカナを覚えました。
 DROP TABLE diaries;
