@@ -20,6 +20,7 @@ SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
 id	title	tags
 1	Hello groonga!	groonga install
 SET GLOBAL mroonga_match_escalation_threshold = -1;
+USE test;
 SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
 id	title	tags
 SET GLOBAL mroonga_match_escalation_threshold = DEFAULT;
