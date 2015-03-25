@@ -1,4 +1,5 @@
 # Copyright(C) 2014 Kenji Maruyama <mmmaru777@gmail.com>
+# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,8 +16,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_geometry.inc
---source ../../../include/mroonga/have_version_56_or_later.inc
---source ../../../include/mroonga/skip_mysql_57.inc
+--source ../../../include/mroonga/have_version_57.inc
 --source ../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
@@ -27,7 +27,9 @@ CREATE TABLE shops (
   location GEOMETRY NOT NULL
 );
 
+SET SESSION sql_mode = '';
 INSERT INTO shops VALUES (NULL), (NULL);
+SET SESSION sql_mode = default;
 
 SELECT ST_AsText(location) FROM shops;
 
