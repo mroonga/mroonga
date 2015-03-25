@@ -7013,6 +7013,10 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
         storage_encode_multiple_column_key(&key_info,
                                            key, key_length,
                                            key_min, &size_min);
+        if (find_flag == HA_READ_KEY_EXACT) {
+          key_max = key_min;
+          size_max = size_min;
+        }
       }
     } else {
       flags |= GRN_CURSOR_PREFIX;
