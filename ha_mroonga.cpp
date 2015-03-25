@@ -155,7 +155,11 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define mrn_declare_plugin(NAME)  maria_declare_plugin(NAME)
 #  define mrn_declare_plugin_end    maria_declare_plugin_end
 #  define MRN_PLUGIN_LAST_VALUES    MRN_VERSION, MariaDB_PLUGIN_MATURITY_STABLE
-#  define MRN_ABORT_ON_WARNING(thd) thd_kill_level(thd)
+#  if MYSQL_VERSION_ID >= 100000
+#    define MRN_ABORT_ON_WARNING(thd) thd_kill_level(thd)
+#  else
+#    define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
+#  endif
 #else
 #  define mrn_declare_plugin(NAME)  mysql_declare_plugin(NAME)
 #  define mrn_declare_plugin_end    mysql_declare_plugin_end
