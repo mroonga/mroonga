@@ -17,7 +17,7 @@ Improvements
   This limitation is derived from MariaDB 10 architecture about removing .par file.
 * [mysql56] Disabled in-place ``ALTER TABLE`` for ``PRIMARY KEY``. This change is derived from Groonga's limitation because Groonga doesn't support to change table key type. [Reported by Hiromitsu KATO]
 * Dropped Visual Studio 2010 and Visual Studio 2012 support. Use Visual Studio 2013 or later to build Mroonga. [GitHub#45]
-* [windows] Added VS 2015 build support.
+* [windows] Added Visual Studio 2015 build support.
 * Supported to specify options by table comment when primary key is using hash by ``PRIMARY KEY (...) USING HASH``.
   [GitHub#46] [Patch by Naoya Murakami]
 * Supported index column flags by index comment. Use ``FULLTEXT INDEX (...) COMMENT 'index_flags "COLUMN_INDEX"'`` for example. [GitHub#47] [Patch by Naoya Murakami]
