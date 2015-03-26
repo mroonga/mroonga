@@ -16,7 +16,7 @@ Improvements
 * [storage] Supported ``PARTITION BY RANGE``. Note that this feature is not supported on MariaDB 10.
   This limitation is derived from MariaDB 10 architecture about removing .par file.
 * [mysql56] Disabled in-place ``ALTER TABLE`` for ``PRIMARY KEY``. This change is derived from Groonga's limitation because Groonga doesn't support to change table key type. [Reported by Hiromitsu KATO]
-* Dropped VS 2010 and VS 2012 support. Use VS 2013 or later to build Mroonga. [GitHub#45]
+* Dropped Visual Studio 2010 and Visual Studio 2012 support. Use Visual Studio 2013 or later to build Mroonga. [GitHub#45]
 * [windows] Added VS 2015 build support.
 * Supported to specify options by table comment when primary key is using hash by ``PRIMARY KEY (...) USING HASH``.
   [GitHub#46] [Patch by Naoya Murakami]
