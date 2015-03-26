@@ -5,6 +5,43 @@
 News
 ====
 
+.. _release-5-01:
+
+Release 5.01 - 2015/03/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage] Supported ``PARTITION BY RANGE``. Note that this feature is not supported on MariaDB 10.
+  This limitation is derived from MariaDB 10 architecture about removing .par file.
+* [mysql56] Disabled in-place ``ALTER TABLE`` for ``PRIMARY KEY``. This change is derived from Groonga's limitation because Groonga doesn't support to change table key type. [Reported by Hiromitsu KATO]
+* Dropped VS 2010 and VS 2012 support. Use VS 2013 or later to build Mroonga. [GitHub#45]
+* [windows] Added VS 2015 build support.
+* Supported to specify options by table comment when primary key is using hash by ``PRIMARY KEY (...) USING HASH``.
+  [GitHub#46] [Patch by Naoya Murakami]
+* Supported index column flags by index comment. Use ``FULLTEXT INDEX (...) COMMENT 'index_flags "COLUMN_INDEX"'`` for example. [GitHub#47] [Patch by Naoya Murakami]
+* Supported MySQL 5.7.
+* [rpm][centos] Supported Percona Server 5.6.x on CentOS 6/7. [Tested on CentOS 6 by Yoshino]
+* Supported ``utf8_unicode_520_ci`` and ``utf8mb4_unicode_520_ci``. Note that it requires ``groonga-normalizer-mysql`` 1.0.9.
+
+Fixes
+^^^^^
+
+* Changed to store score in float. This backward incompatible change is derived from the Groonga DB API change in Groonga 5.0.1. There may be a case the value of score is different.
+* Added missing error check when failed to create multiple column index in in-place ``ALTER TABLE``.
+* [mariadb] Fixed crash bug when ``SET`` variable is used. This bug depends on MariaDB version. (<= 5.5.41 and <= 10.0.16)
+* [rpm][centos] Fixed release number for CentOS 7. [GitHub#44] [Reported by CharAz]
+* [mariadb55] Fixed install failure after installing and uninstalling Mroonga.
+
+Thanks
+^^^^^^
+
+* Hiromitsu KATO
+* Naoya Murakami
+* Yoshino
+* CharAz
+
 .. _release-5-00:
 
 Release 5.00 - 2015/02/09
