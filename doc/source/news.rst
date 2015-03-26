@@ -23,7 +23,7 @@ Improvements
 * Supported index column flags by index comment. Use ``FULLTEXT INDEX (...) COMMENT 'index_flags "COLUMN_INDEX"'`` for example. [GitHub#47] [Patch by Naoya Murakami]
 * Supported to build with MySQL 5.7.
 * [rpm][centos] Supported Percona Server 5.6.x on CentOS 6/7. [Tested on CentOS 6 by Yoshino]
-* Supported ``utf8_unicode_520_ci`` and ``utf8mb4_unicode_520_ci``. To support these collations, Mroonga now requires ``groonga-normalizer-mysql`` 1.0.9.
+* Supported ``utf8_unicode_520_ci`` and ``utf8mb4_unicode_520_ci``. To support these collations, Mroonga now requires `groonga-normalizer-mysql <https://github.com/groonga/groonga-normalizer-mysql>`_ 1.0.9.
 
 Fixes
 ^^^^^
