@@ -20,7 +20,7 @@ Improvements
 * [windows] Added Visual Studio 2015 build support.
 * Supported to specify options by table comment when primary key is using hash by ``PRIMARY KEY (...) USING HASH``.
   [GitHub#46] [Patch by Naoya Murakami]
-* Supported index column flags by index comment. Use ``FULLTEXT INDEX (...) COMMENT 'index_flags "COLUMN_INDEX"'`` for example. [GitHub#47] [Patch by Naoya Murakami]
+* Supported index column flags by index comment. You can specify ``NONE``, ``WITH_POSITION``, ``WITH_SECTION`` and ``WITH_WEIGHT`` as index column flags. Use ``FULLTEXT INDEX (...) COMMENT 'index_flags "WITH_POSITION|WITH_SECTION"'`` for example. [GitHub#47] [Patch by Naoya Murakami]
 * Supported to build with MySQL 5.7.
 * [rpm][centos] Supported Percona Server 5.6.x on CentOS 6/7. [Tested on CentOS 6 by Yoshino]
 * Supported ``utf8_unicode_520_ci`` and ``utf8mb4_unicode_520_ci``. To support these collations, Mroonga now requires `groonga-normalizer-mysql <https://github.com/groonga/groonga-normalizer-mysql>`_ 1.0.9.
