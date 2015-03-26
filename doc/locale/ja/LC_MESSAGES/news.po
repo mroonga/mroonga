@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-02-09 05:13+0900\n"
+"PO-Revision-Date: 2015-03-26 18:26+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,14 +20,148 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+msgid "Release 5.01 - 2015/03/29"
+msgstr "5.01リリース - 2015/03/29"
+
+msgid "Improvements"
+msgstr "改良"
+
+# ac8dde922cd54fb3ac7face4314ceb45
+msgid ""
+"[storage] Supported ``PARTITION BY RANGE``. Note that this feature is not "
+"supported on MariaDB 10. This limitation is derived from MariaDB 10 "
+"architecture about removing .par file."
+msgstr ""
+"[ストレージモード] ``PARTITION BY RANGE`` をサポートしました。この機能は "
+"MariaDB 10.xではサポートしていません。これはMariaDB 10.xが.parファイルを削除"
+"する仕様に由来する制限です。"
+
+# 14260e9af0984345823317a7fba6384a
+msgid ""
+"[mysql56] Disabled in-place ``ALTER TABLE`` for ``PRIMARY KEY``. This change "
+"is derived from Groonga's limitation because Groonga doesn't support to "
+"change table key type. [Reported by Hiromitsu KATO]"
+msgstr ""
+"[mysql56] ``PRIMARY KEY`` に対してコピーせずに ``ALTER TABLE`` できなくしまし"
+"た。この変更はGroongaの制限によるものです。Groongaではテーブルのキーの変更を"
+"サポートしていません。 [加藤さんが報告]"
+
+# d4f551037b4644a3ac10f18940f4a154
+msgid ""
+"Dropped Visual Studio 2010 and Visual Studio 2012 support. Use Visual Studio "
+"2013 or later to build Mroonga. [GitHub#45]"
+msgstr ""
+"Visual Studio 2010 と Visual Studio 2012 のサポートをやめました。Visual "
+"Studio 2013 以降をMroongaのビルドに使ってください。 [GitHub#45]"
+
+msgid "[windows] Added Visual Studio 2015 build support."
+msgstr "[windows] Visual Studio 2015でビルドできるようにしました。"
+
+msgid ""
+"Supported to specify options by table comment when primary key is using hash "
+"by ``PRIMARY KEY (...) USING HASH``. [GitHub#46] [Patch by Naoya Murakami]"
+msgstr ""
+"プライマリーキーに ``PRIMARY KEY (...) USING HASH`` を指定しているときに、そ"
+"のテーブルのコメントにオプションを指定できるようにしました。[GitHub#46] [村上"
+"さんがパッチ提供]"
+
+# 39e127f6d7984ea3ac2945bce3f92a19
+msgid ""
+"Supported index column flags by index comment. You can specify ``NONE``, "
+"``WITH_POSITION``, ``WITH_SECTION`` and ``WITH_WEIGHT`` as index column "
+"flags. Use ``FULLTEXT INDEX (...) COMMENT 'index_flags \"WITH_POSITION|"
+"WITH_SECTION\"'`` for example. [GitHub#47] [Patch by Naoya Murakami]"
+msgstr ""
+"インデックスカラムのフラグをインデックスのコメントに指定できるようにしまし"
+"た。 ``NONE`` や ``WITH_POSITION`` 、 ``WITH_SECTION``  や ``WITH_WEIGHT`` が"
+"インデックスカラムのフラグとして使えます。[GitHub#47] [村上さんがパッチ提供]"
+
+msgid "Supported to build with MySQL 5.7."
+msgstr "MySQL 5.7でビルドできるようになりました。"
+
+msgid ""
+"[rpm][centos] Supported Percona Server 5.6.x on CentOS 6/7. [Tested on "
+"CentOS 6 by Yoshino]"
+msgstr ""
+"[rpm][centos] CentOS 6とCentOS 7でPercona Server 5.6.xをサポートしました。[吉"
+"野さんがCentOS 6でテスト]"
+
+msgid ""
+"Supported ``utf8_unicode_520_ci`` and ``utf8mb4_unicode_520_ci``. To support "
+"these collations, Mroonga now requires `groonga-normalizer-mysql <https://"
+"github.com/groonga/groonga-normalizer-mysql>`_ 1.0.9."
+msgstr ""
+"``utf8_unicode_520_ci`` と ``utf8mb4_unicode_520_ci`` をサポートしました。こ"
+"れらの照合順序をサポートするために、Mroongaは `groonga-normalizer-mysql "
+"<https://github.com/groonga/groonga-normalizer-mysql>`_ 1.0.9 以降を必要とす"
+"るようになりました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+# cbf8032b2f594b88b3d90bc39b2f66d7
+msgid ""
+"Changed to store score in float. This backward incompatible change is "
+"derived from the Groonga DB API change in Groonga 5.0.1. There may be a case "
+"the value of score is different."
+msgstr ""
+"スコアを浮動小数点で保持するように変更しました。この変更は非互換な変更で、"
+"GroongaのDB APIがGroonga 5.0.1で変更されたことに伴います。スコアの値がこれま"
+"でと違ってしまうことがあるかも知れません。"
+
+# d2ea943bd3b440aca9b764e72da6dca5
+msgid ""
+"Added missing error check when failed to create multiple column index in in-"
+"place ``ALTER TABLE``."
+msgstr ""
+"``ALTER TABLE`` で複数のカラムインデックスを作成するのに失敗したときのエラー"
+"チェックがなかったので追加しました。"
+
+# 13a79e73841a470c878bb4db86f86d32
+msgid ""
+"[mariadb] Fixed crash bug when ``SET`` variable is used. This bug depends on "
+"MariaDB version. (<= 5.5.41 and <= 10.0.16)"
+msgstr ""
+"[mariadb] ``SET`` variableしたときにクラッシュする不具合を修正しました。この"
+"不具合はMariaDBのバージョンに依存します。 (<= 5.5.41 \n"
+"と <= 10.0.16)"
+
+msgid ""
+"[rpm][centos] Fixed release number for CentOS 7. [GitHub#44] [Reported by "
+"CharAz]"
+msgstr ""
+"[rpm][centos] CentOS 7でパッケージのリリースバージョンを修正しました。"
+"[GitHub#44] [CharAzさんが報告]"
+
+# ce3075441bac49428b06d1dc0034a4ed
+msgid ""
+"[mariadb55] Fixed install failure after installing and uninstalling Mroonga."
+msgstr ""
+"[mariadb55] インストール、アンインストールしてから再度インストールしようとす"
+"ると失敗するのを修正しました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+# 7147a76b729a4fc78fef8c2ad92aa41d
+msgid "Hiromitsu KATO"
+msgstr "加藤さん"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Yoshino"
+msgstr "吉野さん"
+
+# e709fda4a2834d7b9c51d55d092ba7dd
+msgid "CharAz"
+msgstr "CharAzさん"
+
 msgid "Release 5.00 - 2015/02/09"
 msgstr "5.00リリース - 2015/02/09"
 
 msgid "Bump version to 5.00!"
 msgstr "5.00になりました！"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid ""
 "[appveyor] Supported Windows CI on `AppVeyor <http://www.appveyor.com/>`_. "
@@ -46,14 +180,8 @@ msgstr ""
 "[rpm][centos] CentOS 7でMySQL 5.6.23向けにビルドするようにしました。[groonga-"
 "dev,03083] [青地さんが報告]"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid "[cmake] Disabled big endian support explicitly."
 msgstr "[cmake] ビッグエンディアンのサポートを明示的に無効にしました。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Kohei Aochi"
 msgstr "青地さん"
@@ -1753,9 +1881,6 @@ msgstr ""
 
 msgid "yoku"
 msgstr "yokuさん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Release 3.11 - 2013/12/29"
 msgstr "3.11リリース - 2013/12/29"

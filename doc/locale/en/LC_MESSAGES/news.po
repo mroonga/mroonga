@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-02-09 05:27+0900\n"
+"PO-Revision-Date: 2015-03-26 17:20+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,14 +20,118 @@ msgstr ""
 msgid "News"
 msgstr "News"
 
+msgid "Release 5.01 - 2015/03/29"
+msgstr ""
+
+msgid "Improvements"
+msgstr "Improvements"
+
+# 576e4090a9104467803e9caa2158bf65
+msgid ""
+"[storage] Supported ``PARTITION BY RANGE``. Note that this feature is not "
+"supported on MariaDB 10. This limitation is derived from MariaDB 10 "
+"architecture about removing .par file."
+msgstr ""
+
+# 0360d7eb416a49b0b169a5efc3d5c5b9
+msgid ""
+"[mysql56] Disabled in-place ``ALTER TABLE`` for ``PRIMARY KEY``. This change "
+"is derived from Groonga's limitation because Groonga doesn't support to "
+"change table key type. [Reported by Hiromitsu KATO]"
+msgstr ""
+
+# b124845c7c25468cbee16e21f282072c
+msgid ""
+"Dropped Visual Studio 2010 and Visual Studio 2012 support. Use Visual Studio "
+"2013 or later to build Mroonga. [GitHub#45]"
+msgstr ""
+
+# a86a10ac0f514c48b68f73ed25be2a84
+msgid "[windows] Added Visual Studio 2015 build support."
+msgstr ""
+
+# 1b44cdfa6dcb46c88158b691215b89cc
+msgid ""
+"Supported to specify options by table comment when primary key is using hash "
+"by ``PRIMARY KEY (...) USING HASH``. [GitHub#46] [Patch by Naoya Murakami]"
+msgstr ""
+
+# 4226f2ef7a9f48ee82f63601f27cf2d8
+msgid ""
+"Supported index column flags by index comment. You can specify ``NONE``, "
+"``WITH_POSITION``, ``WITH_SECTION`` and ``WITH_WEIGHT`` as index column "
+"flags. Use ``FULLTEXT INDEX (...) COMMENT 'index_flags \"WITH_POSITION|"
+"WITH_SECTION\"'`` for example. [GitHub#47] [Patch by Naoya Murakami]"
+msgstr ""
+
+msgid "Supported to build with MySQL 5.7."
+msgstr ""
+
+msgid ""
+"[rpm][centos] Supported Percona Server 5.6.x on CentOS 6/7. [Tested on "
+"CentOS 6 by Yoshino]"
+msgstr ""
+
+msgid ""
+"Supported ``utf8_unicode_520_ci`` and ``utf8mb4_unicode_520_ci``. To support "
+"these collations, Mroonga now requires `groonga-normalizer-mysql <https://"
+"github.com/groonga/groonga-normalizer-mysql>`_ 1.0.9."
+msgstr ""
+
+msgid "Fixes"
+msgstr "Fixes"
+
+# e8f22f09c06c4e48aa45e8173cc5cc9a
+msgid ""
+"Changed to store score in float. This backward incompatible change is "
+"derived from the Groonga DB API change in Groonga 5.0.1. There may be a case "
+"the value of score is different."
+msgstr ""
+
+# d93fc9fbf0f4427c913fed2f30f5873e
+msgid ""
+"Added missing error check when failed to create multiple column index in in-"
+"place ``ALTER TABLE``."
+msgstr ""
+
+# 3c815a024c74410d8c1325e902fc2464
+msgid ""
+"[mariadb] Fixed crash bug when ``SET`` variable is used. This bug depends on "
+"MariaDB version. (<= 5.5.41 and <= 10.0.16)"
+msgstr ""
+
+msgid ""
+"[rpm][centos] Fixed release number for CentOS 7. [GitHub#44] [Reported by "
+"CharAz]"
+msgstr ""
+
+# 418116d011cf4b2d9d3bd13a6cade6be
+msgid ""
+"[mariadb55] Fixed install failure after installing and uninstalling Mroonga."
+msgstr ""
+
+msgid "Thanks"
+msgstr "Thanks"
+
+# 55075c1799604d9495803382d5a211f6
+msgid "Hiromitsu KATO"
+msgstr ""
+
+msgid "Naoya Murakami"
+msgstr "Naoya Murakami"
+
+msgid "Yoshino"
+msgstr ""
+
+# d85ca2e554704c2082efe00ca55e0ac3
+msgid "CharAz"
+msgstr ""
+
 msgid "Release 5.00 - 2015/02/09"
 msgstr ""
 
 msgid "Bump version to 5.00!"
 msgstr ""
-
-msgid "Improvements"
-msgstr "Improvements"
 
 msgid ""
 "[appveyor] Supported Windows CI on `AppVeyor <http://www.appveyor.com/>`_. "
@@ -40,14 +144,8 @@ msgid ""
 "dev,03083][Reported by Kohei Aochi]"
 msgstr ""
 
-msgid "Fixes"
-msgstr "Fixes"
-
 msgid "[cmake] Disabled big endian support explicitly."
 msgstr ""
-
-msgid "Thanks"
-msgstr "Thanks"
 
 msgid "Kohei Aochi"
 msgstr ""
@@ -1755,9 +1853,6 @@ msgstr ""
 
 msgid "yoku"
 msgstr "yoku"
-
-msgid "Naoya Murakami"
-msgstr "Naoya Murakami"
 
 msgid "Release 3.11 - 2013/12/29"
 msgstr "Release 3.11 - 2013/12/29"
