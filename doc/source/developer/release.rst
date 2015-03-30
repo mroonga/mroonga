@@ -6,7 +6,7 @@ Release procedure (XXX not yet translated)
 変更点の記述
 ------------
 
-まず ``doc/ja/source/news.rst`` に変更点をまとめます。
+まず ``doc/source/news.rst`` に変更点をまとめます。
 
 次に、バージョンを確かめます。
 
