@@ -67,6 +67,18 @@ Makefileを生成するためにconfigureスクリプトを実行します。
 ログインできない場合、SSHの公開鍵を登録してもらってください。
 
 
+make update-latest-releaseの実行
+--------------------------------
+
+make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリリースの日付を、NEW_RELEASE_DATEに次回リリースの日付を指定します。
+
+5.01のリリースを行った際は以下のコマンドを実行しました。::
+
+    % make update-latest-release OLD_RELEASE=5.00 OLD_RELEASE_DATE=2015-02-09 NEW_RELEASE_DATE=2015-03-29
+
+これにより、clone済みのGroongaのWebサイトのトップページのソース(index.html,ja/index.html)やRPMパッケージのspecファイルのバージョン表記などが更新されます。
+
+
 配布用ファイルのアップロード
 ----------------------------
 
