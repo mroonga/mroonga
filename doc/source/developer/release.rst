@@ -76,7 +76,7 @@ make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリ�
 
     % make update-latest-release OLD_RELEASE=5.00 OLD_RELEASE_DATE=2015-02-09 NEW_RELEASE_DATE=2015-03-29
 
-これにより、clone済みのGroongaのWebサイトのトップページのソース(index.html,ja/index.html)やRPMパッケージのspecファイルのバージョン表記などが更新されます。
+これにより、clone済みのMroongaのWebサイトのトップページのソース(index.html,ja/index.html)やRPMパッケージのspecファイルのバージョン表記などが更新されます。
 
 
 配布用ファイルのアップロード
