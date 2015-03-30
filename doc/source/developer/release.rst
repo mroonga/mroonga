@@ -55,8 +55,8 @@ Makefileを生成するためにconfigureスクリプトを実行します。
 --with-mysql-sourceなどのオプションについては、イントールドキュメントの :doc:`/install/others` を参照してください。
 
 
-packages.groonga.orgへのログインの確認
---------------------------------------
+アップロード権限の確認
+----------------------
 
 あらかじめpackagesユーザでpackages.groonga.orgにsshログインできることを確認しておいてください。
 
