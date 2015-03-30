@@ -25,6 +25,38 @@ Release procedure (XXX not yet translated)
 
  $ git log -p --reverse v0.6..
 
+
+configureスクリプトの生成
+-------------------------
+
+Mroongaのソースコードをcloneした時点ではconfigureスクリプトが含まれておらず、そのままmakeコマンドにてビルドすることができません。
+
+Mroongaをcloneしたディレクトリでautogen.shを以下のように実行します。::
+
+    % sh autogen.sh
+
+このコマンドの実行により、configureスクリプトが生成されます。
+
+
+configureスクリプトの実行
+-------------------------
+
+Makefileを生成するためにconfigureスクリプトを実行します。
+
+リリース用にビルドするためには以下のオプションを指定してconfigureを実行します。::
+
+    % ./configure \
+        --enable-document \
+        --prefix=/tmp/local \
+        --with-rsync-path="packages@packages.groonga.org:public" \
+        --with-launchpad-uploader-pgp-key=(Launchpadに登録したkeyID) \
+        --with-mysql-source=(MySQLのソースコードがあるディレクトリー) \
+        --with-mysql-build=(MySQLのソースコードをビルドしたディレクトリー) \
+        --with-mysql-config=(mysql_configコマンドのパス)
+
+--with-mysql-sourceなどのオプションについては、イントールドキュメントの :doc:`/install/others` を参照してください。
+
+
 配布用ファイルのアップロード
 ----------------------------
 
