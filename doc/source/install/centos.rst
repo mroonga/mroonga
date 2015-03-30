@@ -87,7 +87,7 @@ Install::
   $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y Percona-Server-server-56
-  % sudo /sbin/service mysqld start
+  % sudo /sbin/service mysql start
   % sudo yum install -y percona-server-56-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
