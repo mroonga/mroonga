@@ -3,6 +3,23 @@
 Release procedure (XXX not yet translated)
 ==========================================
 
+前提条件
+--------
+
+リリース手順の前提条件は以下の通りです。
+
+* ビルド環境は Debian GNU/Linux (sid)
+* コマンドラインの実行例はzsh
+
+作業ディレクトリ例は以下を使用します。
+
+* MROONGA_DIR=$HOME/work/mroonga
+* MROONGA_CLONE_DIR=$HOME/work/mroonga/mroonga.clean
+* MROONGA_GITHUB_COM_PATH=$HOME/work/mroonga/mroonga.github.com
+* CUTTER_DIR=$HOME/work/cutter
+* CUTTER_SOURCE_PATH=$HOME/work/cutter/cutter
+
+
 変更点の記述
 ------------
 
