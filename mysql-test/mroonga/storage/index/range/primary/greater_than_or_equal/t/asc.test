@@ -14,7 +14,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS ids;
@@ -32,8 +32,8 @@ INSERT INTO ids VALUES();
 INSERT INTO ids VALUES();
 INSERT INTO ids VALUES();
 
-SELECT * FROM ids WHERE ids.id >= 3 ORDER BY ids.id DESC LIMIT 3;
+SELECT * FROM ids WHERE ids.id >= 2 ORDER BY ids.id ASC LIMIT 3;
 
 DROP TABLE ids;
 
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../../include/mroonga/have_mroonga_deinit.inc
