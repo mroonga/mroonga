@@ -360,8 +360,9 @@ else()
     mrn_build_flag("-Wno-strict-aliasing")
     mrn_build_flag("-Wno-deprecated")
     mrn_check_cxxflag("-fno-implicit-templates")
-    if("${MYSQL_VARIANT}" STREQUAL "MySQL" AND
-        ${MYSQL_VERSION} VERSION_LESS "5.7.0")
+    if(("${MYSQL_VARIANT}" STREQUAL "MariaDB") OR
+        ("${MYSQL_VARIANT}" STREQUAL "MySQL" AND
+         ${MYSQL_VERSION} VERSION_LESS "5.7.0"))
       mrn_check_cxxflag("-fno-exceptions")
       mrn_check_cxxflag("-fno-rtti")
     endif()
