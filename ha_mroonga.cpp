@@ -1070,6 +1070,19 @@ static MYSQL_THDVAR_SET(boolean_mode_syntax_flags,
                         &mrn_boolean_mode_syntax_flags_typelib);
 #endif
 
+static const int MRN_MAX_N_RECORDS_FOR_ESTIMATE_DEFAULT = 1000;
+
+static MYSQL_THDVAR_INT(max_n_records_for_estimate,
+                        PLUGIN_VAR_RQCMDARG,
+                        "The max number of records to "
+                        "estimate the number of matched records",
+                        NULL,
+                        NULL,
+                        MRN_MAX_N_RECORDS_FOR_ESTIMATE_DEFAULT,
+                        -1,
+                        INT_MAX,
+                        0);
+
 static struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
@@ -1090,6 +1103,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
 #ifdef MRN_SUPPORT_THDVAR_SET
   MYSQL_SYSVAR(boolean_mode_syntax_flags),
 #endif
+  MYSQL_SYSVAR(max_n_records_for_estimate),
   NULL
 };
 
@@ -6781,6 +6795,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     }
   }
 
+  int cursor_limit = THDVAR(ha_thd(), max_n_records_for_estimate);
   uint pkey_nr = table->s->primary_key;
   if (key_nr == pkey_nr) {
     DBUG_PRINT("info", ("mroonga: use primary key"));
@@ -6788,7 +6803,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     cursor = grn_table_cursor_open(ctx, grn_table,
                                    key_min, size_min,
                                    key_max, size_max,
-                                   0, -1, flags);
+                                   0, cursor_limit, flags);
     while (grn_table_cursor_next(ctx, cursor) != GRN_ID_NIL) {
       row_count++;
     }
@@ -6804,7 +6819,7 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
                                    key_min, size_min,
                                    key_max, size_max,
-                                   0, -1, flags);
+                                   0, cursor_limit, flags);
     grn_obj *index_column = grn_index_columns[key_nr];
     grn_ii *ii = reinterpret_cast<grn_ii *>(index_column);
     row_count = grn_ii_estimate_size_for_lexicon_cursor(ctx, ii, cursor);
