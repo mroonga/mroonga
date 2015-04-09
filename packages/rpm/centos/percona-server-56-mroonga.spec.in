@@ -31,7 +31,7 @@ BuildRequires:	wget
 BuildRequires:	which
 BuildRequires:	gcc
 BuildRequires:	gcc-c++
-BuildRequires:	Percona-Server-devel-56
+BuildRequires:	Percona-Server-devel-56 = %{mysql_version}-%{mysql_release}%{mysql_dist}
 BuildRequires:	selinux-policy-devel
 Requires:	Percona-Server-server-56 = %{mysql_version}-%{mysql_release}%{mysql_dist}
 Requires:	Percona-Server-client-56 = %{mysql_version}-%{mysql_release}%{mysql_dist}
