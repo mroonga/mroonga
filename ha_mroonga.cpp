@@ -6801,18 +6801,13 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     }
 
     grn_table_cursor *cursor;
-    grn_table_cursor *index_cursor;
     cursor = grn_table_cursor_open(ctx, grn_index_tables[key_nr],
                                    key_min, size_min,
                                    key_max, size_max,
                                    0, -1, flags);
-    index_cursor = grn_index_cursor_open(ctx, cursor,
-                                         grn_index_columns[key_nr],
-                                         0, GRN_ID_MAX, 0);
-    while (grn_table_cursor_next(ctx, index_cursor) != GRN_ID_NIL) {
-      row_count++;
-    }
-    grn_obj_unlink(ctx, index_cursor);
+    grn_obj *index_column = grn_index_columns[key_nr];
+    grn_ii *ii = reinterpret_cast<grn_ii *>(index_column);
+    row_count = grn_ii_estimate_size_for_lexicon_cursor(ctx, ii, cursor);
     grn_table_cursor_close(ctx, cursor);
   }
   DBUG_RETURN(row_count);
