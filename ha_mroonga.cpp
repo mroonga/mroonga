@@ -9485,9 +9485,10 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         DBUG_VOID_RETURN;
       }
     }
-    *n_sort_keys = select_lex->order_list.elements;
+    int n_max_sort_keys = select_lex->order_list.elements;
+    *n_sort_keys = 0;
     *sort_keys = (grn_table_sort_key *)malloc(sizeof(grn_table_sort_key) *
-                                              *n_sort_keys);
+                                              n_max_sort_keys);
     ORDER *order;
     int i;
     mrn_change_encoding(ctx, system_charset_info);
@@ -9533,6 +9534,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       } else {
         (*sort_keys)[i].flags = GRN_TABLE_SORT_DESC;
       }
+      (*n_sort_keys)++;
     }
     DBUG_PRINT("info", ("mroonga: fast_order_limit = true"));
     fast_order_limit = true;
