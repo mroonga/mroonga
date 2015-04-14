@@ -9492,7 +9492,8 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     ORDER *order;
     int i;
     mrn_change_encoding(ctx, system_charset_info);
-    for (order = (ORDER *) select_lex->order_list.first, i = 0; order;
+    for (order = (ORDER *) select_lex->order_list.first, i = 0;
+         order;
          order = order->next, i++) {
       Item *item = *order->item;
       if (grn_columns && item->type() == Item::FIELD_ITEM)
