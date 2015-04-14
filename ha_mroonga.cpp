@@ -9490,6 +9490,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     size_t sort_keys_size = sizeof(grn_table_sort_key) * n_max_sort_keys;
     *sort_keys = (grn_table_sort_key *)mrn_my_malloc(sort_keys_size,
                                                      MYF(MY_WME));
+    memset(*sort_keys, 0, sort_keys_size);
     ORDER *order;
     int i;
     mrn_change_encoding(ctx, system_charset_info);
