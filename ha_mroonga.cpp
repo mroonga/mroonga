@@ -8293,7 +8293,7 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
     for (int i = 0; i < n_sort_keys; i++) {
       grn_obj_unlink(info->ctx, sort_keys[i].key);
     }
-    free(sort_keys);
+    my_free(sort_keys);
   }
 
   DBUG_RETURN((FT_INFO *)info);
@@ -9487,8 +9487,9 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     }
     int n_max_sort_keys = select_lex->order_list.elements;
     *n_sort_keys = 0;
-    *sort_keys = (grn_table_sort_key *)malloc(sizeof(grn_table_sort_key) *
-                                              n_max_sort_keys);
+    size_t sort_keys_size = sizeof(grn_table_sort_key) * n_max_sort_keys;
+    *sort_keys = (grn_table_sort_key *)mrn_my_malloc(sort_keys_size,
+                                                     MYF(MY_WME));
     ORDER *order;
     int i;
     mrn_change_encoding(ctx, system_charset_info);
@@ -9507,7 +9508,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
           DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
                               "sort by collated value isn't supported yet."));
           fast_order_limit = false;
-          free(*sort_keys);
+          my_free(*sort_keys);
           *sort_keys = NULL;
           *n_sort_keys = 0;
           DBUG_VOID_RETURN;
@@ -9523,7 +9524,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
                             "sort by computed value isn't supported."));
         fast_order_limit = false;
-        free(*sort_keys);
+        my_free(*sort_keys);
         *sort_keys = NULL;
         *n_sort_keys = 0;
         DBUG_VOID_RETURN;
