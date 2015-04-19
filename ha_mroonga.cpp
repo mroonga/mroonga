@@ -4235,6 +4235,11 @@ int ha_mroonga::storage_open_columns(void)
   int n_columns = table->s->fields;
   grn_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
   grn_column_ranges = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
+  for (int i = 0; i < n_columns; i++) {
+      grn_columns[i] = NULL;
+      grn_column_ranges[i] = NULL;
+  }
+
   if (table_share->blob_fields)
   {
     if (blob_buffers)
@@ -4247,8 +4252,7 @@ int ha_mroonga::storage_open_columns(void)
     }
   }
 
-  int i;
-  for (i = 0; i < n_columns; i++) {
+  for (int i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
@@ -4257,24 +4261,46 @@ int ha_mroonga::storage_open_columns(void)
       blob_buffers[i].set_charset(field->charset());
     }
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
-      grn_columns[i] = NULL;
-      grn_column_ranges[i] = NULL;
       continue;
     }
 
     grn_columns[i] = grn_obj_column(ctx, grn_table,
                                     column_name, column_name_size);
+    if (!grn_columns[i]) {
+      error = ER_CANT_OPEN_FILE;
+      my_message(error, ctx->errbuf, MYF(0));
+      break;
+    }
+
     grn_id range_id = grn_obj_get_range(ctx, grn_columns[i]);
     grn_column_ranges[i] = grn_ctx_at(ctx, range_id);
-    if (ctx->rc) {
-      // TODO: free grn_columns and set NULL;
-      int error = ER_CANT_OPEN_FILE;
+    if (!grn_column_ranges[i]) {
+      error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
-      DBUG_RETURN(error);
+      break;
     }
   }
 
-  DBUG_RETURN(0);
+  if (error != 0) {
+    for (int i = 0; i < n_columns; i++) {
+      grn_obj *column = grn_columns[i];
+      if (column) {
+        grn_obj_unlink(ctx, column);
+      }
+
+      grn_obj *range = grn_column_ranges[i];
+      if (range) {
+        grn_obj_unlink(ctx, range);
+      }
+    }
+
+    free(grn_columns);
+    grn_columns = NULL;
+    free(grn_column_ranges);
+    grn_column_ranges = NULL;
+  }
+
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::storage_open_indexes(const char *name)
