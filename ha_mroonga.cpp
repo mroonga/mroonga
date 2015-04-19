@@ -12635,52 +12635,52 @@ bool ha_mroonga::is_crashed() const
 
 bool ha_mroonga::wrapper_auto_repair(int error) const
 {
-  bool crashed;
+  bool repaired;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
 #ifdef MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
-  crashed = wrap_handler->auto_repair(error);
+  repaired = wrap_handler->auto_repair(error);
 #else
-  crashed = wrap_handler->auto_repair();
+  repaired = wrap_handler->auto_repair();
 #endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(crashed);
+  DBUG_RETURN(repaired);
 }
 
 bool ha_mroonga::storage_auto_repair(int error) const
 {
   MRN_DBUG_ENTER_METHOD();
-  bool crashed;
+  bool repaired;
 #ifdef MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
-  crashed = handler::auto_repair(error);
+  repaired = handler::auto_repair(error);
 #else
-  crashed = handler::auto_repair();
+  repaired = handler::auto_repair();
 #endif
-  DBUG_RETURN(crashed);
+  DBUG_RETURN(repaired);
 }
 
 bool ha_mroonga::auto_repair(int error) const
 {
   MRN_DBUG_ENTER_METHOD();
-  bool crashed;
+  bool repaired;
   // TODO: We should consider about creating share for error =
   // ER_CANT_OPEN_FILE. The following code just ignores the error.
   if (share && share->wrapper_mode)
   {
-    crashed = wrapper_auto_repair(error);
+    repaired = wrapper_auto_repair(error);
   } else {
-    crashed = storage_auto_repair(error);
+    repaired = storage_auto_repair(error);
   }
-  DBUG_RETURN(crashed);
+  DBUG_RETURN(repaired);
 }
 
 bool ha_mroonga::auto_repair() const
 {
   MRN_DBUG_ENTER_METHOD();
-  bool crashed = auto_repair(HA_ERR_CRASHED_ON_USAGE);
-  DBUG_RETURN(crashed);
+  bool repaired = auto_repair(HA_ERR_CRASHED_ON_USAGE);
+  DBUG_RETURN(repaired);
 }
 
 int ha_mroonga::generic_disable_index(int i, KEY *key_info)
