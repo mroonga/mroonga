@@ -13217,35 +13217,34 @@ int ha_mroonga::repair(THD* thd, HA_CHECK_OPT* check_opt)
 
 bool ha_mroonga::wrapper_check_and_repair(THD *thd)
 {
-  // XXX: success is valid variable name?
-  bool success;
+  bool is_error_or_not_supported;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  success = wrap_handler->ha_check_and_repair(thd);
+  is_error_or_not_supported = wrap_handler->ha_check_and_repair(thd);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(success);
+  DBUG_RETURN(is_error_or_not_supported);
 }
 
 bool ha_mroonga::storage_check_and_repair(THD *thd)
 {
+  bool is_not_supported = true;
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(true);
+  DBUG_RETURN(is_not_supported);
 }
 
 bool ha_mroonga::check_and_repair(THD *thd)
 {
   MRN_DBUG_ENTER_METHOD();
-  // XXX: success is valid variable name?
-  bool success;
+  bool is_error_or_not_supported;
   if (share->wrapper_mode)
   {
-    success = wrapper_check_and_repair(thd);
+    is_error_or_not_supported = wrapper_check_and_repair(thd);
   } else {
-    success = storage_check_and_repair(thd);
+    is_error_or_not_supported = storage_check_and_repair(thd);
   }
-  DBUG_RETURN(success);
+  DBUG_RETURN(is_error_or_not_supported);
 }
 
 int ha_mroonga::wrapper_analyze(THD* thd, HA_CHECK_OPT* check_opt)
