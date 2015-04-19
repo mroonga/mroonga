@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-03-24 13:32+0900\n"
+"PO-Revision-Date: 2015-04-19 22:06+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -366,7 +366,7 @@ msgstr "次のことを ``configure`` で指定しなければいけません。
 
 msgid "The location of MySQL source code with ``--with-mysql-source``."
 msgstr ""
-"``-with-mysql-source`` でMySQLのソースコードがあるディレクトリーを指定しま"
+"``--with-mysql-source`` でMySQLのソースコードがあるディレクトリーを指定しま"
 "す。"
 
 # 8ac00b0751714ab8949705df48039575
