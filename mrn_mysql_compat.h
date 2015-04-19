@@ -76,11 +76,6 @@
 #  define GTS_TABLE 0
 #endif
 
-/* For MySQL 5.1. MySQL 5.1 doesn't have FN_LIBCHAR2. */
-#ifndef FN_LIBCHAR2
-#  define FN_LIBCHAR2 FN_LIBCHAR
-#endif
-
 #if MYSQL_VERSION_ID >= 50607
 #  if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
 #    define MRN_GET_ERROR_MESSAGE thd_get_error_message(current_thd)
