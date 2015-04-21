@@ -9431,6 +9431,27 @@ bool ha_mroonga::is_grn_zero_column_value(grn_obj *column, grn_obj *value)
   DBUG_RETURN(true);
 }
 
+bool ha_mroonga::is_primary_key_field(Field *field) const
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  if (table->s->primary_key == MAX_INDEXES) {
+    DBUG_RETURN(false);
+  }
+
+  KEY *key_info = &(table->s->key_info[table->s->primary_key]);
+  if (KEY_N_KEY_PARTS(key_info) != 1) {
+    DBUG_RETURN(false);
+  }
+
+  if (strcmp(field->field_name,
+             key_info->key_part[0].field->field_name) == 0) {
+    DBUG_RETURN(true);
+  } else {
+    DBUG_RETURN(false);
+  }
+}
+
 void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                         int *n_sort_keys,
                                         longlong *limit)
@@ -9490,10 +9511,10 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       fast_order_limit = false;
       DBUG_VOID_RETURN;
     }
+    bool is_storage_mode = !(share->wrapper_mode);
     Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
     const Item_func *match_against = NULL;
     if (where) {
-      bool is_storage_mode = !(share->wrapper_mode);
       mrn::ConditionConverter converter(ctx, grn_table, is_storage_mode);
       if (!converter.is_convertable(where)) {
         DBUG_PRINT("info",
@@ -9524,9 +9545,9 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
          order;
          order = order->next, i++) {
       Item *item = *order->item;
-      if (grn_columns && item->type() == Item::FIELD_ITEM)
+      if (item->type() == Item::FIELD_ITEM)
       {
-        Field *field = ((Item_field *) (*order->item))->field;
+        Field *field = static_cast<Item_field *>(item)->field;
         const char *column_name = field->field_name;
         int column_name_size = strlen(column_name);
 
@@ -9541,8 +9562,25 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
           DBUG_VOID_RETURN;
         }
 
-        (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
-                                             column_name, column_name_size);
+        if (is_storage_mode) {
+          (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
+                                               column_name, column_name_size);
+        } else {
+          if (is_primary_key_field(field)) {
+            (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
+                                                 MRN_COLUMN_NAME_KEY,
+                                                 strlen(MRN_COLUMN_NAME_KEY));
+          } else {
+            DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
+                                "sort by not primary key value "
+                                "isn't supported in wrapper mode."));
+            fast_order_limit = false;
+            my_free(*sort_keys);
+            *sort_keys = NULL;
+            *n_sort_keys = 0;
+            DBUG_VOID_RETURN;
+          }
+        }
       } else if (!match_against || match_against->eq(item, true)) {
         (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
                                              MRN_COLUMN_NAME_SCORE,
