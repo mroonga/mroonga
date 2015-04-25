@@ -79,7 +79,7 @@ CentOS 6 (with Percona Server package)
 --------------------------------------
 
 You can use Percona Server packages (version 5.6.x) on CentOS 6
-since Mroonga 5.01 release.
+since Mroonga 5.02 release.
 
 Install::
 
@@ -145,7 +145,7 @@ CentOS 7 (with Percona Server package)
 --------------------------------------
 
 You can use Percona Server packages (version 5.6.x) on CentOS 7
-since Mroonga 5.01 release.
+since Mroonga 5.02 release.
 
 Install::
 

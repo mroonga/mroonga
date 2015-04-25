@@ -89,7 +89,7 @@ msgstr ""
 # c0092138f7cd4a2bb7ae363972d4c83b
 msgid ""
 "You can use Percona Server packages (version 5.6.x) on CentOS 6 since "
-"Mroonga 5.01 release."
+"Mroonga 5.02 release."
 msgstr ""
 
 msgid "CentOS 7 (with the official MariaDB package)"
@@ -113,7 +113,7 @@ msgstr ""
 # e746d15b5d74454a88852e911e5f9ba3
 msgid ""
 "You can use Percona Server packages (version 5.6.x) on CentOS 7 since "
-"Mroonga 5.01 release."
+"Mroonga 5.02 release."
 msgstr ""
 
 msgid "Debian GNU/Linux"

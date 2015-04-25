@@ -103,9 +103,9 @@ msgstr "CentOS 6（Percona Serverパッケージを利用）"
 
 msgid ""
 "You can use Percona Server packages (version 5.6.x) on CentOS 6 since "
-"Mroonga 5.01 release."
+"Mroonga 5.02 release."
 msgstr ""
-"CentOS 6では、Mroonga 5.01からPercona Serverパッケージ（5.6系）を利用できま"
+"CentOS 6では、Mroonga 5.02からPercona Serverパッケージ（5.6系）を利用できま"
 "す。"
 
 # e1a6076f4a4a4fb2a6e1a4d8a2175cfa
@@ -130,9 +130,9 @@ msgstr "CentOS 7（Percona Serverパッケージを利用）"
 
 msgid ""
 "You can use Percona Server packages (version 5.6.x) on CentOS 7 since "
-"Mroonga 5.01 release."
+"Mroonga 5.02 release."
 msgstr ""
-"CentOS 7では、Mroonga 5.01からPercona Serverパッケージ（5.6系）を利用できま"
+"CentOS 7では、Mroonga 5.02からPercona Serverパッケージ（5.6系）を利用できま"
 "す。"
 
 msgid "Debian GNU/Linux"
