@@ -4180,15 +4180,17 @@ int ha_mroonga::storage_open(const char *name, int mode, uint test_if_locked)
     DBUG_RETURN(error);
   }
 
-  error = storage_open_indexes(name);
-  if (error) {
-    // TODO: free grn_columns and set NULL;
-    grn_obj_unlink(ctx, grn_table);
-    grn_table = NULL;
-    DBUG_RETURN(error);
-  }
+  if (!(ha_thd()->open_options & HA_OPEN_FOR_REPAIR)) {
+    error = storage_open_indexes(name);
+    if (error) {
+      // TODO: free grn_columns and set NULL;
+      grn_obj_unlink(ctx, grn_table);
+      grn_table = NULL;
+      DBUG_RETURN(error);
+    }
 
-  storage_set_keys_in_use();
+    storage_set_keys_in_use();
+  }
 
   ref_length = sizeof(grn_id);
   DBUG_RETURN(0);
@@ -4365,7 +4367,7 @@ int ha_mroonga::storage_open_indexes(const char *name)
                                               grn_index_tables[i],
                                               INDEX_COLUMN_NAME,
                                               strlen(INDEX_COLUMN_NAME));
-        if (!grn_index_columns[i]) {
+        if (!grn_index_columns[i] && ctx->rc == GRN_SUCCESS) {
           /* just for backward compatibility before 1.0. */
           Field *field = key_info.key_part[0].field;
           grn_index_columns[i] = grn_obj_column(ctx, grn_index_tables[i],
@@ -13244,6 +13246,58 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
   DBUG_RETURN(error);
 }
 
+int ha_mroonga::storage_recreate_indexes(THD *thd)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  if (share->disable_keys)
+    DBUG_RETURN(HA_ADMIN_OK);
+
+  clear_indexes();
+
+  int n_columns = table->s->fields;
+  for (int i = 0; i < n_columns; i++) {
+    grn_obj *column = grn_columns[i];
+
+    if (!column)
+      continue;
+
+    int n_hooks = grn_obj_get_nhooks(ctx, column, GRN_HOOK_SET);
+    for (int j = 0; j < n_hooks; j++) {
+      grn_obj_delete_hook(ctx, column, GRN_HOOK_SET, j);
+    }
+  }
+
+  uint n_keys = table_share->keys;
+  mrn::PathMapper mapper(table_share->normalized_path.str);
+  for (uint i = 0; i < n_keys; i++) {
+    if (share->index_table && share->index_table[i])
+      continue;
+
+    if (i == table_share->primary_key)
+      continue;
+
+    mrn::IndexTableName index_table_name(mapper.table_name(),
+                                         table_share->key_info[i].name);
+    char index_column_full_name[MRN_MAX_PATH_SIZE];
+    snprintf(index_column_full_name, MRN_MAX_PATH_SIZE,
+             "%s.%s", index_table_name.c_str(), INDEX_COLUMN_NAME);
+    remove_grn_obj_force(index_column_full_name);
+    remove_grn_obj_force(index_table_name.c_str());
+  }
+
+  int error;
+  error = storage_create_indexes(table, mapper.table_name(), grn_table, share);
+  if (error)
+    DBUG_RETURN(HA_ADMIN_FAILED);
+
+  error = storage_open_indexes(table_share->normalized_path.str);
+  if (error)
+    DBUG_RETURN(HA_ADMIN_FAILED);
+
+  DBUG_RETURN(HA_ADMIN_OK);
+}
+
 int ha_mroonga::wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt)
 {
   int error;
@@ -13262,7 +13316,8 @@ int ha_mroonga::wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt)
 int ha_mroonga::storage_repair(THD* thd, HA_CHECK_OPT* check_opt)
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(HA_ADMIN_NOT_IMPLEMENTED);
+  int error = storage_recreate_indexes(thd);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::repair(THD* thd, HA_CHECK_OPT* check_opt)

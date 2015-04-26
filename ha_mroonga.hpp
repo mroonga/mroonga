@@ -1096,6 +1096,7 @@ private:
   int wrapper_fill_indexes(THD *thd, KEY *key_info,
                            grn_obj **index_columns, uint n_keys);
   int wrapper_recreate_indexes(THD *thd);
+  int storage_recreate_indexes(THD *thd);
   int wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt);
   int storage_repair(THD* thd, HA_CHECK_OPT* check_opt);
   bool wrapper_check_and_repair(THD *thd);
