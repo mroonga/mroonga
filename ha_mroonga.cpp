@@ -12689,7 +12689,7 @@ bool ha_mroonga::storage_is_crashed() const
 bool ha_mroonga::is_crashed() const
 {
   MRN_DBUG_ENTER_METHOD();
-  int crashed;
+  bool crashed;
   if (share->wrapper_mode)
   {
     crashed = wrapper_is_crashed();
