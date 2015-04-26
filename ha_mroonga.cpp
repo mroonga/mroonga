@@ -96,6 +96,7 @@
 #include <mrn_database_manager.hpp>
 #include <mrn_grn.hpp>
 #include <mrn_value_decoder.hpp>
+#include <mrn_database_repairer.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -12682,7 +12683,8 @@ bool ha_mroonga::wrapper_is_crashed() const
 bool ha_mroonga::storage_is_crashed() const
 {
   MRN_DBUG_ENTER_METHOD();
-  bool crashed = handler::is_crashed();
+  mrn::DatabaseRepairer repairer(ctx, ha_thd());
+  bool crashed = repairer.is_crashed();
   DBUG_RETURN(crashed);
 }
 
@@ -13077,7 +13079,12 @@ int ha_mroonga::wrapper_check(THD* thd, HA_CHECK_OPT* check_opt)
 int ha_mroonga::storage_check(THD* thd, HA_CHECK_OPT* check_opt)
 {
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(HA_ADMIN_NOT_IMPLEMENTED);
+  mrn::DatabaseRepairer repairer(ctx, thd);
+  if (repairer.repair()) {
+    DBUG_RETURN(HA_ADMIN_OK);
+  } else {
+    DBUG_RETURN(HA_ADMIN_CORRUPT);
+  }
 }
 
 int ha_mroonga::check(THD* thd, HA_CHECK_OPT* check_opt)
@@ -13348,9 +13355,11 @@ bool ha_mroonga::wrapper_check_and_repair(THD *thd)
 
 bool ha_mroonga::storage_check_and_repair(THD *thd)
 {
-  bool is_not_supported = true;
   MRN_DBUG_ENTER_METHOD();
-  DBUG_RETURN(is_not_supported);
+  bool is_error = false;
+  mrn::DatabaseRepairer repairer(ctx, thd);
+  is_error = !repairer.repair();
+  DBUG_RETURN(is_error);
 }
 
 bool ha_mroonga::check_and_repair(THD *thd)
