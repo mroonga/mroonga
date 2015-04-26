@@ -120,8 +120,8 @@ namespace mrn {
       DBUG_VOID_RETURN;
     }
 
-    char db_path[PATH_MAX];
-    snprintf(db_path, PATH_MAX,
+    char db_path[MRN_MAX_PATH_SIZE];
+    snprintf(db_path, MRN_MAX_PATH_SIZE,
              "%s%c%s", base_directory_, FN_LIBCHAR, base_path);
     grn_obj *db = grn_db_open(ctx_, db_path);
     if (!db) {
