@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-03-26 18:26+0900\n"
+"PO-Revision-Date: 2015-04-27 15:10+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,11 +20,97 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 5.01 - 2015/03/29"
-msgstr "5.01リリース - 2015/03/29"
+msgid "Release 5.02 - 2015/04/29"
+msgstr "5.02リリース - 2015/04/29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[doc] Updated :doc:`/developer/release` procedure documentation"
+msgstr "[doc] :doc:`/developer/release` を更新しました。"
+
+# 7a2b466cd6de47aaac56e0e610891cdb
+msgid ""
+"[storage] Improved performance to estimate the number of records in range. "
+"In the previous versions, Mroonga counts real the number of records in "
+"range. There is a performance penalty if huge number of records exists. Note "
+"that it requires Groonga 5.0.2 or later. [groonga-dev,03150] [Reported by "
+"Masato Shimada]"
+msgstr ""
+"[ストレージ] 範囲指定のレコード数を見積もる際のパフォーマンスを改善しました。"
+"以前のバージョンでは、Mroongaは実際のレコード数をカウントします。そのため、レ"
+"コード数が増えるとパフォーマンスに影響していました。この恩恵を受けるには"
+"Groonga 5.0.2以降が必要です。 [groonga-dev,03150] [嶋田さんが報告]"
+
+# 5e3b67ea7b0b4ea8be1187a4caa200bc
+msgid ""
+"[experimental] Added :ref:`mroonga_max_n_records_for_estimate` variable to "
+"limit the max number of records to estimate. It reduces the estimation cost "
+"when there are many target records."
+msgstr ""
+"[実験的] :ref:`mroonga_max_n_records_for_estimate` サーバー変数を追加しまし"
+"た。この変数はレコード数を見積る際の最大レコード数を制限するのに使います。対"
+"象となるレコードが多いときでも、見積もる際のコストを抑えることができます。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[rpm][centos] Updated to build against the latest MySQL 5.6."
+msgstr "[rpm][centos] 最新のMySQL 5.6でビルドするようにしました。"
+
+# dc3fe9b0aa2c4b7282d4439338eee062
+msgid ""
+"[wrapper] Supported fast order by limit optimization for primary key sort. "
+"[Reported by Tsugunori Nashiro]"
+msgstr ""
+"[ラッパーモード] Mroongaの ``ORDER BY LIMIT`` 最適化で主キーのソートに対応し"
+"ました。 [Tsugunori Nashiroさんが報告]"
+
+msgid "Supported Debian 8.0 (jessie)"
+msgstr "Debian 8.0 (jessie)に対応しました。"
+
+msgid "Supported Ubuntu 15.04 (Vivid Vervet)"
+msgstr "Ubuntu 15.04 Vivid Vervetに対応しました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+# 0c5a19df6fea4b5a917430142484fafc
+msgid "[doc] Fixed old links to Windows package [Reported by METAL_GEAR_mkII]"
+msgstr ""
+"[doc] Windows版パッケージへのリンクが古いのを修正しました。 [METAL_GEAR_mkII"
+"さんが報告]"
+
+# e013e68ebb8a41f7852fbb4655fbf92a
+msgid ""
+"[storage][mysql56] Fixed a crash bug by duplicated ``ORDER BY`` columns.  "
+"It's occurred when \"fast order limit\" optimization is detected with "
+"duplicated ``ORDER BY`` columns in SQL. Note that this bug doesn't affect to "
+"MySQL 5.5. [GitHub#50] [Reported by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード][mysql56] ``ORDER BY`` のカラム指定が重複しているときにク"
+"ラッシュする問題を修正しました。 ``ORDER BY LIMIT`` の最適化を適用するケース"
+"でSQLの ``ORDER BY`` カラム指定が重複しているときに発生します。この問題は"
+"MySQL 5.5には影響しません。 [GitHub#50] [GMOメディア株式会社さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Masato Shimada"
+msgstr "嶋田さん"
+
+# 81a49c452bfa4b7285ac033083db3db3
+msgid "Tsugunori Nashiro"
+msgstr "Tsugunori Nashiroさん"
+
+# 72df334f70654c06b04965f4929b7259
+msgid "METAL_GEAR_mkII"
+msgstr "METAL_GEAR_mkIIさん"
+
+# d8986144d4454b8dbfd7cf12c8877b8c
+msgid "GMO Media, Inc."
+msgstr "GMOメディア株式会社さん"
+
+msgid "Release 5.01 - 2015/03/29"
+msgstr "5.01リリース - 2015/03/29"
 
 # ac8dde922cd54fb3ac7face4314ceb45
 msgid ""
@@ -96,9 +182,6 @@ msgstr ""
 "<https://github.com/groonga/groonga-normalizer-mysql>`_ 1.0.9 以降を必要とす"
 "るようになりました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 # cbf8032b2f594b88b3d90bc39b2f66d7
 msgid ""
 "Changed to store score in float. This backward incompatible change is "
@@ -139,9 +222,6 @@ msgid ""
 msgstr ""
 "[mariadb55] インストール、アンインストールしてから再度インストールしようとす"
 "ると失敗するのを修正しました。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 # 7147a76b729a4fc78fef8c2ad92aa41d
 msgid "Hiromitsu KATO"
@@ -2390,9 +2470,6 @@ msgstr ""
 "初期セットアップのためのインストール用SQLを追加しました。 [groonga-"
 "dev,01434] [かずひこさんが提案]"
 
-msgid "Supported Debian 8.0 (jessie)"
-msgstr "Debian 8.0 (jessie)に対応しました。"
-
 msgid ""
 "Fixed a bug that empty query search causes SEGV. [groonga-dev,01346] "
 "[Reported by Nakai Kanako]"
@@ -2835,10 +2912,6 @@ msgstr ""
 msgid "[doc] Use ``systemctl`` command to start MySQL on CentOS 7."
 msgstr ""
 "[doc] CentOS 7では ``systemctl`` コマンドをMySQLの起動に使うようにしました。"
-
-# d8986144d4454b8dbfd7cf12c8877b8c
-msgid "GMO Media, Inc."
-msgstr "GMOメディア株式会社さん"
 
 # 256875cb4d8340a5b75754690347bfe2
 msgid "Elena Stepanova"
