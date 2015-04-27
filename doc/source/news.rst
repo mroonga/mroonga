@@ -5,6 +5,46 @@
 News
 ====
 
+.. _release-5-02:
+
+Release 5.02 - 2015/04/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [doc] Updated :doc:`/developer/release` procedure documentation
+* [storage] Improved performance to estimate the number of records in range.
+  In the previous versions, Mroonga counts real the number of records in range.
+  There is a performance penalty if huge number of records exists.
+  Note that it requires Groonga 5.0.2 or later.
+  [groonga-dev,03150] [Reported by Masato Shimada]
+* [experimental] Added :ref:`mroonga_max_n_records_for_estimate` variable to
+  limit the max number of records to estimate. It reduces the estimation cost
+  when there are many target records.
+* [rpm][centos] Updated to build against the latest MySQL 5.6.
+* [wrapper] Supported fast order by limit optimization for primary key sort.
+  [Reported by Tsugunori Nashiro]
+* Supported Debian 8.0 (jessie)
+* Supported Ubuntu 15.04 (Vivid Vervet)
+
+Fixes
+^^^^^
+
+* [doc] Fixed old links to Windows package [Reported by METAL_GEAR_mkII]
+* [storage][mysql56] Fixed a crash bug by duplicated ``ORDER BY``
+  columns.  It's occurred when "fast order limit" optimization is
+  detected with duplicated ``ORDER BY`` columns in SQL. Note that this
+  bug doesn't affect to MySQL 5.5. [GitHub#50] [Reported by GMO Media, Inc.]
+
+Thanks
+^^^^^^
+
+* Masato Shimada
+* Tsugunori Nashiro
+* METAL_GEAR_mkII
+* GMO Media, Inc.
+
 .. _release-5-01:
 
 Release 5.01 - 2015/03/29
