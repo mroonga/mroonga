@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-12-29 19:57+0900\n"
+"PO-Revision-Date: 2015-04-27 14:26+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -625,246 +625,6 @@ msgstr ""
 "Here is an example SQL to confirm the value of "
 "``mroonga_action_on_fulltext_query_error``::"
 
-msgid "``mroonga_default_parser``"
-msgstr ""
-
-msgid ""
-"The default parser of the full text search. The default value can be "
-"specified by ``--with-default-parser=PARSER`` configure argument, whose "
-"default value is ``TokenBigram``."
-msgstr ""
-"The default parser of the full text search. The default value can be "
-"specified by ``--with-default-parser=PARSER`` configure argument, whose "
-"default value is ``TokenBigram``."
-
-msgid ""
-"Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
-"search parser. It is used by ``body_index`` fulltext index."
-msgstr ""
-"Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
-"search parser. It is used by ``body_index`` fulltext index."
-
-msgid "``mroonga_libgroonga_version``"
-msgstr ""
-
-msgid "The version string of the groonga library."
-msgstr "The version string of the groonga library."
-
-msgid "Here is an example SQL to confirm the using groonga library version::"
-msgstr "Here is an example SQL to confirm the using groonga library version::"
-
-msgid "``mroonga_log_file``"
-msgstr ""
-
-msgid ""
-"The path of the log file of Mroonga. The default value is ``groonga.log``."
-msgstr ""
-"The path of the log file of Mroonga. The default value is ``groonga.log``."
-
-msgid ""
-"Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
-msgstr ""
-"Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
-
-msgid "``mroonga_log_level``"
-msgstr ""
-
-msgid "The output level of Mroonga log file. The default value is ``NOTICE``."
-msgstr "The output level of Mroonga log file. The default value is ``NOTICE``."
-
-msgid "Here is the list of ``mroonga_log_level`` which you can use."
-msgstr "Here is the list of ``mroonga_log_level`` which you can use."
-
-msgid "Log level"
-msgstr "Log level"
-
-msgid "``NONE``"
-msgstr ""
-
-msgid "No logging output."
-msgstr "No logging output."
-
-msgid "``EMERG``"
-msgstr ""
-
-msgid "Logging emergency messages such as database corruption."
-msgstr "Logging emergency messages such as database corruption."
-
-msgid "``ALERT``"
-msgstr ""
-
-msgid "Logging alert messages such as internal error."
-msgstr "Logging alert messages such as internal error."
-
-msgid "``CRIT``"
-msgstr ""
-
-msgid "Logging critical message such as deadlock."
-msgstr ""
-
-msgid "``ERROR``"
-msgstr ""
-
-msgid "Logging error messages such as API error which Mroonga use."
-msgstr ""
-
-msgid "``WARNING``"
-msgstr ""
-
-msgid "Logging warning messages such as invalid argument."
-msgstr "Logging warning messages such as invalid argument."
-
-msgid "``NOTICE``"
-msgstr ""
-
-msgid "Logging notice messages such as configuration or status changed."
-msgstr "Logging notice messages such as configuration or status changed."
-
-msgid "``INFO``"
-msgstr ""
-
-msgid "Logging informative messages such as file system operation."
-msgstr "Logging informative messages such as file system operation."
-
-msgid "``DEBUG``"
-msgstr ""
-
-msgid "Logging debug messages."
-msgstr ""
-
-msgid "Recommend to use for Mroonga developer or bug reporter."
-msgstr ""
-
-msgid "``DUMP``"
-msgstr ""
-
-msgid "Logging dump messages."
-msgstr "Logging dump messages."
-
-msgid ""
-"Here is an example transcript to change log level to ``DEBUG`` that logs "
-"many messages for debugging::"
-msgstr ""
-"Here is an example transcript to change log level to ``DEBUG`` that logs "
-"many messages for debugging::"
-
-msgid "mroonga_version"
-msgstr "mroonga_version"
-
-msgid "The version string of Mroonga."
-msgstr "The version string of Mroonga."
-
-msgid "Here is an example SQL to confirm the running mroonga version::"
-msgstr "Here is an example SQL to confirm the running mroonga version::"
-
-msgid "``mroonga_dry_write``"
-msgstr ""
-
-msgid ""
-"Whether really write data to Groonga database or not. The default value is "
-"``OFF`` that means data are really written to Groonga database. Usually we "
-"don't need to change the value of this variable. This variable is useful for "
-"benchmark because we can measure processing time MySQL and Mroonga. It "
-"doesn't include Groonga's processing time."
-msgstr ""
-"Whether really write data to Groonga database or not. The default value is "
-"``OFF`` that means data are really written to Groonga database. Usually we "
-"don't need to change the value of this variable. This variable is useful for "
-"benchmark because we can measure processing time MySQL and Mroonga. It "
-"doesn't include Groonga's processing time."
-
-msgid "Here is an example SQL to disable writing data to Groonga database::"
-msgstr "Here is an example SQL to disable writing data to Groonga database::"
-
-msgid "``mroonga_enable_optimization``"
-msgstr ""
-
-msgid ""
-"Whether enable optimization or not. The default value is ``ON`` that means "
-"optimization is enabled. Usually we don't need to change the value of this "
-"variable. This variable is useful for benchmark."
-msgstr ""
-"Whether enable optimization or not. The default value is ``ON`` that means "
-"optimization is enabled. Usually we don't need to change the value of this "
-"variable. This variable is useful for benchmark."
-
-msgid "Here is an example SQL to disable optimization::"
-msgstr "Here is an example SQL to disable optimization::"
-
-msgid "``mroonga_match_escalation_threshold``"
-msgstr ""
-
-msgid ""
-"The threshold to determin whether match method is escalated. See `search "
-"specification for Groonga <http://groonga.org/docs/spec/search.html>`_ about "
-"match method escalation."
-msgstr ""
-"The threshold to determin whether match method is escalated. See `search "
-"specification for Groonga <http://groonga.org/docs/spec/search.html>`_ about "
-"match method escalation."
-
-msgid ""
-"The default value is the same as Groonga's default value. It's 0 for the "
-"default installation. The dafault value can be configured in my.cnf or by "
-"``SET GLOBAL mroonga_match_escalation_threshold = THRESHOLD;``. Because this "
-"variable's scope is both global and session."
-msgstr ""
-"The default value is the same as Groonga's default value. It's 0 for the "
-"default installation. The dafault value can be configured in my.cnf or by "
-"``SET GLOBAL mroonga_match_escalation_threshold = THRESHOLD;``. Because this "
-"variable's scope is both global and session."
-
-msgid ""
-"Here is an example to use -1 as a threshold to determin whether match method "
-"is escalated. -1 means that never escalated."
-msgstr ""
-"Here is an example to use -1 as a threshold to determin whether match method "
-"is escalated. -1 means that never escalated."
-
-msgid ""
-"Here is an another example to show behavior change by the variable value."
-msgstr ""
-"Here is an another example to show behavior change by the variable value."
-
-msgid "``mroonga_vector_column_delimiter``"
-msgstr ""
-
-msgid ""
-"The delimiter when outputting a vector column.  The default value is a white "
-"space."
-msgstr ""
-"The delimiter when outputting a vector column.  The default value is a white "
-"space."
-
-msgid ""
-"Here is an example SQL to change the delimiter to a semicolon from a white "
-"space::"
-msgstr ""
-"Here is an example SQL to change the delimiter to a semicolon from a white "
-"space::"
-
-msgid "``mroonga_libgroonga_support_zlib``"
-msgstr ""
-
-msgid "The status of libgroonga supports zlib."
-msgstr "The status of libgroonga supports zlib."
-
-msgid ""
-"Here is an example SQL to confirm the status of libgroonga supports zlib::"
-msgstr ""
-"Here is an example SQL to confirm the status of libgroonga supports zlib::"
-
-msgid "``mroonga_libgroonga_support_lz4``"
-msgstr ""
-
-msgid "The status of libgroonga supports LZ4."
-msgstr "The status of libgroonga supports LZ4."
-
-msgid ""
-"Here is an example SQL to confirm the status of libgroonga supports LZ4::"
-msgstr ""
-"Here is an example SQL to confirm the status of libgroonga supports LZ4::"
-
 msgid "``mroonga_boolean_mode_syntax_flags``"
 msgstr ""
 
@@ -968,6 +728,269 @@ msgstr ""
 
 msgid "Here is an example SQL to use script syntax in Groonga::"
 msgstr ""
+
+# f5a9f8cd6efc479e88e9afb3a89f8a58
+msgid "``mroonga_database_path_prefix``"
+msgstr ""
+
+# 8ced0568be424793990e4638379261de
+# 4af20841dc024a2aa2c0a0360e956435
+# b66af811991a42bfb2f1cfc3222287e6
+# b28231724a224c0bbd52122056b7332b
+msgid "TODO:"
+msgstr ""
+
+msgid "``mroonga_default_parser``"
+msgstr ""
+
+msgid ""
+"The default parser of the full text search. The default value can be "
+"specified by ``--with-default-parser=PARSER`` configure argument, whose "
+"default value is ``TokenBigram``."
+msgstr ""
+"The default parser of the full text search. The default value can be "
+"specified by ``--with-default-parser=PARSER`` configure argument, whose "
+"default value is ``TokenBigram``."
+
+msgid ""
+"Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
+"search parser. It is used by ``body_index`` fulltext index."
+msgstr ""
+"Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
+"search parser. It is used by ``body_index`` fulltext index."
+
+# b0cf4e90065c4d73b0f5b7fc8d6a79dd
+msgid "``mroonga_default_wrapper_engine``"
+msgstr ""
+
+msgid "``mroonga_dry_write``"
+msgstr ""
+
+msgid ""
+"Whether really write data to Groonga database or not. The default value is "
+"``OFF`` that means data are really written to Groonga database. Usually we "
+"don't need to change the value of this variable. This variable is useful for "
+"benchmark because we can measure processing time MySQL and Mroonga. It "
+"doesn't include Groonga's processing time."
+msgstr ""
+"Whether really write data to Groonga database or not. The default value is "
+"``OFF`` that means data are really written to Groonga database. Usually we "
+"don't need to change the value of this variable. This variable is useful for "
+"benchmark because we can measure processing time MySQL and Mroonga. It "
+"doesn't include Groonga's processing time."
+
+msgid "Here is an example SQL to disable writing data to Groonga database::"
+msgstr "Here is an example SQL to disable writing data to Groonga database::"
+
+msgid "``mroonga_enable_optimization``"
+msgstr ""
+
+msgid ""
+"Whether enable optimization or not. The default value is ``ON`` that means "
+"optimization is enabled. Usually we don't need to change the value of this "
+"variable. This variable is useful for benchmark."
+msgstr ""
+"Whether enable optimization or not. The default value is ``ON`` that means "
+"optimization is enabled. Usually we don't need to change the value of this "
+"variable. This variable is useful for benchmark."
+
+msgid "Here is an example SQL to disable optimization::"
+msgstr "Here is an example SQL to disable optimization::"
+
+msgid "``mroonga_libgroonga_support_lz4``"
+msgstr ""
+
+msgid "The status of libgroonga supports LZ4."
+msgstr "The status of libgroonga supports LZ4."
+
+msgid ""
+"Here is an example SQL to confirm the status of libgroonga supports LZ4::"
+msgstr ""
+"Here is an example SQL to confirm the status of libgroonga supports LZ4::"
+
+msgid "``mroonga_libgroonga_support_zlib``"
+msgstr ""
+
+msgid "The status of libgroonga supports zlib."
+msgstr "The status of libgroonga supports zlib."
+
+msgid ""
+"Here is an example SQL to confirm the status of libgroonga supports zlib::"
+msgstr ""
+"Here is an example SQL to confirm the status of libgroonga supports zlib::"
+
+msgid "``mroonga_libgroonga_version``"
+msgstr ""
+
+msgid "The version string of the groonga library."
+msgstr "The version string of the groonga library."
+
+msgid "Here is an example SQL to confirm the using groonga library version::"
+msgstr "Here is an example SQL to confirm the using groonga library version::"
+
+# 55c9137d53674cb68583f8d4870afb4c
+msgid "``mroonga_lock_timeout``"
+msgstr ""
+
+msgid "``mroonga_log_file``"
+msgstr ""
+
+msgid ""
+"The path of the log file of Mroonga. The default value is ``groonga.log``."
+msgstr ""
+"The path of the log file of Mroonga. The default value is ``groonga.log``."
+
+msgid ""
+"Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
+msgstr ""
+"Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
+
+msgid "``mroonga_log_level``"
+msgstr ""
+
+msgid "The output level of Mroonga log file. The default value is ``NOTICE``."
+msgstr "The output level of Mroonga log file. The default value is ``NOTICE``."
+
+msgid "Here is the list of ``mroonga_log_level`` which you can use."
+msgstr "Here is the list of ``mroonga_log_level`` which you can use."
+
+msgid "Log level"
+msgstr "Log level"
+
+msgid "``NONE``"
+msgstr ""
+
+msgid "No logging output."
+msgstr "No logging output."
+
+msgid "``EMERG``"
+msgstr ""
+
+msgid "Logging emergency messages such as database corruption."
+msgstr "Logging emergency messages such as database corruption."
+
+msgid "``ALERT``"
+msgstr ""
+
+msgid "Logging alert messages such as internal error."
+msgstr "Logging alert messages such as internal error."
+
+msgid "``CRIT``"
+msgstr ""
+
+msgid "Logging critical message such as deadlock."
+msgstr ""
+
+msgid "``ERROR``"
+msgstr ""
+
+msgid "Logging error messages such as API error which Mroonga use."
+msgstr ""
+
+msgid "``WARNING``"
+msgstr ""
+
+msgid "Logging warning messages such as invalid argument."
+msgstr "Logging warning messages such as invalid argument."
+
+msgid "``NOTICE``"
+msgstr ""
+
+msgid "Logging notice messages such as configuration or status changed."
+msgstr "Logging notice messages such as configuration or status changed."
+
+msgid "``INFO``"
+msgstr ""
+
+msgid "Logging informative messages such as file system operation."
+msgstr "Logging informative messages such as file system operation."
+
+msgid "``DEBUG``"
+msgstr ""
+
+msgid "Logging debug messages."
+msgstr ""
+
+msgid "Recommend to use for Mroonga developer or bug reporter."
+msgstr ""
+
+msgid "``DUMP``"
+msgstr ""
+
+msgid "Logging dump messages."
+msgstr "Logging dump messages."
+
+msgid ""
+"Here is an example transcript to change log level to ``DEBUG`` that logs "
+"many messages for debugging::"
+msgstr ""
+"Here is an example transcript to change log level to ``DEBUG`` that logs "
+"many messages for debugging::"
+
+msgid "``mroonga_match_escalation_threshold``"
+msgstr ""
+
+msgid ""
+"The threshold to determin whether match method is escalated. See `search "
+"specification for Groonga <http://groonga.org/docs/spec/search.html>`_ about "
+"match method escalation."
+msgstr ""
+"The threshold to determin whether match method is escalated. See `search "
+"specification for Groonga <http://groonga.org/docs/spec/search.html>`_ about "
+"match method escalation."
+
+msgid ""
+"The default value is the same as Groonga's default value. It's 0 for the "
+"default installation. The dafault value can be configured in my.cnf or by "
+"``SET GLOBAL mroonga_match_escalation_threshold = THRESHOLD;``. Because this "
+"variable's scope is both global and session."
+msgstr ""
+"The default value is the same as Groonga's default value. It's 0 for the "
+"default installation. The dafault value can be configured in my.cnf or by "
+"``SET GLOBAL mroonga_match_escalation_threshold = THRESHOLD;``. Because this "
+"variable's scope is both global and session."
+
+msgid ""
+"Here is an example to use -1 as a threshold to determin whether match method "
+"is escalated. -1 means that never escalated."
+msgstr ""
+"Here is an example to use -1 as a threshold to determin whether match method "
+"is escalated. -1 means that never escalated."
+
+msgid ""
+"Here is an another example to show behavior change by the variable value."
+msgstr ""
+"Here is an another example to show behavior change by the variable value."
+
+# 7d41d684403e4559b469a81f20a745e8
+msgid "``mroonga_max_n_records_for_estimate``"
+msgstr ""
+
+msgid "``mroonga_vector_column_delimiter``"
+msgstr ""
+
+msgid ""
+"The delimiter when outputting a vector column.  The default value is a white "
+"space."
+msgstr ""
+"The delimiter when outputting a vector column.  The default value is a white "
+"space."
+
+msgid ""
+"Here is an example SQL to change the delimiter to a semicolon from a white "
+"space::"
+msgstr ""
+"Here is an example SQL to change the delimiter to a semicolon from a white "
+"space::"
+
+msgid "``mroonga_version``"
+msgstr ""
+
+msgid "The version string of Mroonga."
+msgstr "The version string of Mroonga."
+
+msgid "Here is an example SQL to confirm the running mroonga version::"
+msgstr "Here is an example SQL to confirm the running mroonga version::"
 
 msgid "SQL commands"
 msgstr "SQL commands"

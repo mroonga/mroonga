@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-08-29 16:39+0900\n"
+"PO-Revision-Date: 2015-04-27 14:36+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -1151,20 +1151,159 @@ msgstr ""
 msgid "Release procedure (XXX not yet translated)"
 msgstr "Release procedure (XXX not yet translated)"
 
+# 829ada0b1a9d4b4d8350d05dd1398853
+msgid "前提条件"
+msgstr ""
+
+# 6b94f2eb6ae04041942352eee80484e5
+msgid "リリース手順の前提条件は以下の通りです。"
+msgstr ""
+
+# dfabf40feb4f4525ab25de6189b16f04
+msgid "ビルド環境は Debian GNU/Linux (sid)"
+msgstr ""
+
+# 7f0e8f60ac024ff1a89dab019008d87d
+msgid "コマンドラインの実行例はzsh"
+msgstr ""
+
+msgid "作業ディレクトリ例は以下を使用します。"
+msgstr ""
+
+# 2a242df67a414cd8aa652c076c997802
+msgid "MROONGA_DIR=$HOME/work/mroonga"
+msgstr ""
+
+# f0de2e008e554cea86185f9fc392147a
+msgid "MROONGA_CLONE_DIR=$HOME/work/mroonga/mroonga.clean"
+msgstr ""
+
+# 7ba70531dd46409988f8928e25ac93eb
+msgid "MROONGA_GITHUB_COM_PATH=$HOME/work/mroonga/mroonga.github.com"
+msgstr ""
+
+# 7b77368068a24d3ba6d31eee322b796a
+msgid "CUTTER_DIR=$HOME/work/cutter"
+msgstr ""
+
+# c08b9bd58df0466d9f76bf81712ca00e
+msgid "CUTTER_SOURCE_PATH=$HOME/work/cutter/cutter"
+msgstr ""
+
 msgid "変更点の記述"
 msgstr "変更点の記述"
 
-msgid "まず ``doc/ja/source/news.rst`` に変更点をまとめます。"
-msgstr "まず ``doc/ja/source/news.rst`` に変更点をまとめます。"
+# 04fd15ff8a684c2a967eb42f54447bd3
+msgid ""
+"前回リリース時からの変更点を``doc/source/news.txt``にまとめます。 ここでまと"
+"めた内容についてはリリースアナウンスにも使用します。"
+msgstr ""
 
-msgid "次に、バージョンを確かめます。"
-msgstr "次に、バージョンを確かめます。"
+# 74cbb19dd3ae4433a0471944f7290afb
+msgid "前回リリースからの変更履歴を参照するには以下のコマンドを実行します。::"
+msgstr ""
 
-msgid "例えば ``git tag`` の結果が次のようになっていたとき ::"
-msgstr "例えば ``git tag`` の結果が次のようになっていたとき ::"
+# 18d938dfaaf14fe5aba66fb475d17b66
+msgid ""
+"ログを^commitで検索しながら、以下の基準を目安として変更点を追記していきます。"
+msgstr ""
 
-msgid "次のようにすると、タグ ``v0.6`` 以降のコミットを閲覧できます。 ::"
-msgstr "次のようにすると、タグ ``v0.6`` 以降のコミットを閲覧できます。 ::"
+# 9859da2bdf204f03aa1fe4626e608f18
+msgid "含めるもの"
+msgstr ""
+
+# 8a70ba7c7d31476780492ba28d320c5a
+msgid "ユーザへ影響するような変更"
+msgstr ""
+
+# 6f58a6c5a6814944ba9854e94b74b310
+msgid "互換性がなくなるような変更"
+msgstr ""
+
+# 40d682bc16194586bce9462681d3c56b
+msgid "含めないもの"
+msgstr ""
+
+# d2497980f1b642eebac7f3b7155d9885
+msgid "内部的な変更(変数名の変更やらリファクタリング)"
+msgstr ""
+
+# 03691262e4064d80bad460c145b88c4d
+msgid "configureスクリプトの生成"
+msgstr ""
+
+# cd15425520504c1fab0ebddfbc2c51fd
+msgid ""
+"Mroongaのソースコードをcloneした時点ではconfigureスクリプトが含まれておらず、"
+"そのままmakeコマンドにてビルドすることができません。"
+msgstr ""
+
+# b014c105af944f0cbac3ba3928d38012
+msgid "Mroongaをcloneしたディレクトリでautogen.shを以下のように実行します。::"
+msgstr ""
+
+# 444e30bf72fc4814a924ca296787d04e
+msgid "このコマンドの実行により、configureスクリプトが生成されます。"
+msgstr ""
+
+# 1266407258744e47a8d45f67eaeb36ee
+msgid "configureスクリプトの実行"
+msgstr ""
+
+# b8455fad95b34eb58abe81ed0175d7b5
+msgid "Makefileを生成するためにconfigureスクリプトを実行します。"
+msgstr ""
+
+# 58613995519e42d199d997527cf58db2
+msgid ""
+"リリース用にビルドするためには以下のオプションを指定してconfigureを実行しま"
+"す。::"
+msgstr ""
+
+# ca4631b14e124f1b8247b91d3f21669c
+msgid ""
+"--with-mysql-sourceなどのオプションについては、イントールドキュメントの :doc:"
+"`/install/others` を参照してください。"
+msgstr ""
+
+# 06805c545e88482c9d67842d1ffd2599
+msgid "アップロード権限の確認"
+msgstr ""
+
+# 06ef05609ff24161a39d109d0ad7ff47
+msgid ""
+"あらかじめpackagesユーザでpackages.groonga.orgにsshログインできることを確認し"
+"ておいてください。"
+msgstr ""
+
+# 489e2345911e4cea9f75c6834189c6e0
+msgid "ログイン可能であるかの確認は以下のようにコマンドを実行して行います。::"
+msgstr ""
+
+# 2c23f8bf38ad4637a80af8d8ff60a6d2
+msgid "ログインできない場合、SSHの公開鍵を登録してもらってください。"
+msgstr ""
+
+# 599e9d5ca77646a09d1bce49529716de
+msgid "make update-latest-releaseの実行"
+msgstr ""
+
+# 02f562548f554b809d2ca52577ee17c0
+msgid ""
+"make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリリースの日"
+"付を、NEW_RELEASE_DATEに次回リリースの日付を指定します。"
+msgstr ""
+
+# 731af71cb74940fdab1a481bcadcf526
+msgid "5.01のリリースを行った際は以下のコマンドを実行しました。::"
+msgstr ""
+
+# 1df57b6523bc4262a8a9e592f71faad5
+msgid ""
+"これにより、clone済みのMroongaのWebサイトのトップページのソース(index.html,"
+"ja/index.html)やRPMパッケージのspecファイルのバージョン表記などが更新されま"
+"す。"
+msgstr ""
 
 msgid "配布用ファイルのアップロード"
 msgstr "配布用ファイルのアップロード"
@@ -1475,3 +1614,15 @@ msgstr "リリース後にやること"
 
 msgid "リリースバージョンを以下のようにして更新します。::"
 msgstr "リリースバージョンを以下のようにして更新します。::"
+
+#~ msgid "まず ``doc/ja/source/news.rst`` に変更点をまとめます。"
+#~ msgstr "まず ``doc/ja/source/news.rst`` に変更点をまとめます。"
+
+#~ msgid "次に、バージョンを確かめます。"
+#~ msgstr "次に、バージョンを確かめます。"
+
+#~ msgid "例えば ``git tag`` の結果が次のようになっていたとき ::"
+#~ msgstr "例えば ``git tag`` の結果が次のようになっていたとき ::"
+
+#~ msgid "次のようにすると、タグ ``v0.6`` 以降のコミットを閲覧できます。 ::"
+#~ msgstr "次のようにすると、タグ ``v0.6`` 以降のコミットを閲覧できます。 ::"

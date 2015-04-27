@@ -1078,19 +1078,159 @@ msgstr ""
 msgid "Release procedure (XXX not yet translated)"
 msgstr "リリース手順"
 
+# edfe3cc6c02c40a7a556c753bae6bdde
+msgid "前提条件"
+msgstr ""
+
+# eadb7900d572477c8f771a0a6d308f86
+msgid "リリース手順の前提条件は以下の通りです。"
+msgstr ""
+
+# 27cbedc14177471b90ec4fc4941cfa2e
+msgid "ビルド環境は Debian GNU/Linux (sid)"
+msgstr ""
+
+# 3b8a937a58f2446ebe32b897d0c3c390
+msgid "コマンドラインの実行例はzsh"
+msgstr ""
+
+# 44e05d7cf23144d3b2bc55a4465f0aff
+msgid "作業ディレクトリ例は以下を使用します。"
+msgstr ""
+
+# 57c24decccf74c9bb9d514a57fec526f
+msgid "MROONGA_DIR=$HOME/work/mroonga"
+msgstr ""
+
+# 0e5d669a4ec843f987cbab0f8fe1a343
+msgid "MROONGA_CLONE_DIR=$HOME/work/mroonga/mroonga.clean"
+msgstr ""
+
+# ec843d0394fc4bfe9343c26c8c2c7839
+msgid "MROONGA_GITHUB_COM_PATH=$HOME/work/mroonga/mroonga.github.com"
+msgstr ""
+
+# 509f37993d80456c99846d3287f28d62
+msgid "CUTTER_DIR=$HOME/work/cutter"
+msgstr ""
+
+# 930f47a2dba344a092170924069f37a8
+msgid "CUTTER_SOURCE_PATH=$HOME/work/cutter/cutter"
+msgstr ""
+
 msgid "変更点の記述"
 msgstr ""
 
-msgid "まず ``doc/ja/source/news.rst`` に変更点をまとめます。"
+# cf982b6b99be4e0bb1b6f2d033270a2e
+msgid ""
+"前回リリース時からの変更点を``doc/source/news.txt``にまとめます。 ここでまと"
+"めた内容についてはリリースアナウンスにも使用します。"
 msgstr ""
 
-msgid "次に、バージョンを確かめます。"
+# 66507f1a06b049d49b4b0ef77723f1ff
+msgid "前回リリースからの変更履歴を参照するには以下のコマンドを実行します。::"
 msgstr ""
 
-msgid "例えば ``git tag`` の結果が次のようになっていたとき ::"
+# 0c72b22802da41aa93717460eaca7380
+msgid ""
+"ログを^commitで検索しながら、以下の基準を目安として変更点を追記していきます。"
 msgstr ""
 
-msgid "次のようにすると、タグ ``v0.6`` 以降のコミットを閲覧できます。 ::"
+# e1b88cb17daa4128a745c594dcb9d82c
+msgid "含めるもの"
+msgstr ""
+
+# 489a46c60e1446c4872e80cfe80e7ed0
+msgid "ユーザへ影響するような変更"
+msgstr ""
+
+# ff637f5d80d7442ba2792e812bb3a4c4
+msgid "互換性がなくなるような変更"
+msgstr ""
+
+# 496debe15a0346d09669cfea8e2d895b
+msgid "含めないもの"
+msgstr ""
+
+# ee601eb5641a4345a6ee7679ad12206f
+msgid "内部的な変更(変数名の変更やらリファクタリング)"
+msgstr ""
+
+# 2a89714effad4e548736586719cbd158
+msgid "configureスクリプトの生成"
+msgstr ""
+
+# 7737b30c54ce4c9e9ac20a24a1b01760
+msgid ""
+"Mroongaのソースコードをcloneした時点ではconfigureスクリプトが含まれておらず、"
+"そのままmakeコマンドにてビルドすることができません。"
+msgstr ""
+
+# 5112188c283b482d9b6aa8fb44fe2b9d
+msgid "Mroongaをcloneしたディレクトリでautogen.shを以下のように実行します。::"
+msgstr ""
+
+# 5738b966eee1464d821091cc6ab8fbd8
+msgid "このコマンドの実行により、configureスクリプトが生成されます。"
+msgstr ""
+
+# a1158eeff509433d9d66a6aec187717b
+msgid "configureスクリプトの実行"
+msgstr ""
+
+# c99de121ee294a3faa10236a50026fc2
+msgid "Makefileを生成するためにconfigureスクリプトを実行します。"
+msgstr ""
+
+# 3f24cdba9ec644f18696b3cbc3beff9d
+msgid ""
+"リリース用にビルドするためには以下のオプションを指定してconfigureを実行しま"
+"す。::"
+msgstr ""
+
+# 45317224276e495c9890c2f067182656
+msgid ""
+"--with-mysql-sourceなどのオプションについては、イントールドキュメントの :doc:"
+"`/install/others` を参照してください。"
+msgstr ""
+
+# 17ae048e7ec9483bad21754ccbd004c7
+msgid "アップロード権限の確認"
+msgstr ""
+
+# 3b620cf450b74da282662800170790e5
+msgid ""
+"あらかじめpackagesユーザでpackages.groonga.orgにsshログインできることを確認し"
+"ておいてください。"
+msgstr ""
+
+# 8da563fa2e294f40b1cb4b4b09820745
+msgid "ログイン可能であるかの確認は以下のようにコマンドを実行して行います。::"
+msgstr ""
+
+# dfbf9c5ecbae4e7ab3c4196e8cc757a0
+msgid "ログインできない場合、SSHの公開鍵を登録してもらってください。"
+msgstr ""
+
+# 6a0566bc024a47478c09ec02f6f6f6f9
+msgid "make update-latest-releaseの実行"
+msgstr ""
+
+# 5c3aadb49db543f1b56b1e8493567853
+msgid ""
+"make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリリースの日"
+"付を、NEW_RELEASE_DATEに次回リリースの日付を指定します。"
+msgstr ""
+
+# d46e8803fb5346289c5696cc46ca7d91
+msgid "5.01のリリースを行った際は以下のコマンドを実行しました。::"
+msgstr ""
+
+# c0ab249d92a645699a1ff57d9903ea56
+msgid ""
+"これにより、clone済みのMroongaのWebサイトのトップページのソース(index.html,"
+"ja/index.html)やRPMパッケージのspecファイルのバージョン表記などが更新されま"
+"す。"
 msgstr ""
 
 msgid "配布用ファイルのアップロード"

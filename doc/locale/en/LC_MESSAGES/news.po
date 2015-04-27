@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-03-26 17:20+0900\n"
+"PO-Revision-Date: 2015-04-27 14:37+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -20,11 +20,82 @@ msgstr ""
 msgid "News"
 msgstr "News"
 
-msgid "Release 5.01 - 2015/03/29"
+msgid "Release 5.02 - 2015/04/29"
 msgstr ""
 
 msgid "Improvements"
 msgstr "Improvements"
+
+# cb942c6639cf45759164ba4a0e204988
+msgid "[doc] Updated :doc:`/developer/release` procedure documentation"
+msgstr ""
+
+# 289dc5a2501b40afb6fe6a5a3e42fd5c
+msgid ""
+"[storage] Improved performance to estimate the number of records in range. "
+"In the previous versions, Mroonga counts real the number of records in "
+"range. There is a performance penalty if huge number of records exists. Note "
+"that it requires Groonga 5.0.2 or later. [groonga-dev,03150] [Reported by "
+"Masato Shimada]"
+msgstr ""
+
+# 911830f3dc6c41a794252f029a5ec1b2
+msgid ""
+"[experimental] Added :ref:`mroonga_max_n_records_for_estimate` variable to "
+"limit the max number of records to estimate. It reduces the estimation cost "
+"when there are many target records."
+msgstr ""
+
+# 36343a5962634201acc2a40e7103b60f
+msgid "[rpm][centos] Updated to build against the latest MySQL 5.6."
+msgstr ""
+
+# a14d440b7b8940c7b8ba0ec76618152c
+msgid ""
+"[wrapper] Supported fast order by limit optimization for primary key sort. "
+"[Reported by Tsugunori Nashiro]"
+msgstr ""
+
+msgid "Supported Debian 8.0 (jessie)"
+msgstr "Supported Debian 8.0 (jessie)"
+
+msgid "Supported Ubuntu 15.04 (Vivid Vervet)"
+msgstr ""
+
+msgid "Fixes"
+msgstr "Fixes"
+
+# 165e40835cb0453190a6867ba561937a
+msgid "[doc] Fixed old links to Windows package [Reported by METAL_GEAR_mkII]"
+msgstr ""
+
+# 9f84a70f42324f96917e8d312be41c98
+msgid ""
+"[storage][mysql56] Fixed a crash bug by duplicated ``ORDER BY`` columns.  "
+"It's occurred when \"fast order limit\" optimization is detected with "
+"duplicated ``ORDER BY`` columns in SQL. Note that this bug doesn't affect to "
+"MySQL 5.5. [GitHub#50] [Reported by GMO Media, Inc.]"
+msgstr ""
+
+msgid "Thanks"
+msgstr "Thanks"
+
+msgid "Masato Shimada"
+msgstr ""
+
+# b41a56927b754cdcac2e85e04c65e1cc
+msgid "Tsugunori Nashiro"
+msgstr ""
+
+# 01a1d66b2f7d4531b7f9ddadb2b3a574
+msgid "METAL_GEAR_mkII"
+msgstr ""
+
+msgid "GMO Media, Inc."
+msgstr "GMO Media, Inc."
+
+msgid "Release 5.01 - 2015/03/29"
+msgstr ""
 
 # 576e4090a9104467803e9caa2158bf65
 msgid ""
@@ -78,9 +149,6 @@ msgid ""
 "github.com/groonga/groonga-normalizer-mysql>`_ 1.0.9."
 msgstr ""
 
-msgid "Fixes"
-msgstr "Fixes"
-
 # e8f22f09c06c4e48aa45e8173cc5cc9a
 msgid ""
 "Changed to store score in float. This backward incompatible change is "
@@ -109,9 +177,6 @@ msgstr ""
 msgid ""
 "[mariadb55] Fixed install failure after installing and uninstalling Mroonga."
 msgstr ""
-
-msgid "Thanks"
-msgstr "Thanks"
 
 # 55075c1799604d9495803382d5a211f6
 msgid "Hiromitsu KATO"
@@ -2336,9 +2401,6 @@ msgstr ""
 "Added install SQL for initial setup. [groonga-dev,01434] [Suggested by "
 "Kazuhiko]"
 
-msgid "Supported Debian 8.0 (jessie)"
-msgstr "Supported Debian 8.0 (jessie)"
-
 msgid ""
 "Fixed a bug that empty query search causes SEGV. [groonga-dev,01346] "
 "[Reported by Nakai Kanako]"
@@ -2728,9 +2790,6 @@ msgstr ""
 
 msgid "[doc] Use ``systemctl`` command to start MySQL on CentOS 7."
 msgstr ""
-
-msgid "GMO Media, Inc."
-msgstr "GMO Media, Inc."
 
 msgid "Elena Stepanova"
 msgstr ""

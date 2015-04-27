@@ -603,239 +603,6 @@ msgid ""
 "``mroonga_action_on_fulltext_query_error``::"
 msgstr "``mroonga_action_on_fulltext_query_error`` を確認するためのSQL例です::"
 
-msgid "``mroonga_default_parser``"
-msgstr ""
-
-msgid ""
-"The default parser of the full text search. The default value can be "
-"specified by ``--with-default-parser=PARSER`` configure argument, whose "
-"default value is ``TokenBigram``."
-msgstr ""
-"デフォルトの全文検索用パーサ。デフォルト値はconfigureの ``with-default-"
-"parser`` オプションで指定できます（無指定時は ``TokenBigram`` ）。"
-
-msgid ""
-"Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
-"search parser. It is used by ``body_index`` fulltext index."
-msgstr ""
-"全文検索パーサーとして ``TokenBigramSplitSymbolAlphaDigit`` を使う例です。こ"
-"の例では ``body_index`` 全文検索インデックスは "
-"``TokenBigramSplitSymbolAlphaDigit`` を使います。"
-
-msgid "``mroonga_libgroonga_version``"
-msgstr ""
-
-msgid "The version string of the groonga library."
-msgstr "groongaライブラリのバージョン"
-
-msgid "Here is an example SQL to confirm the using groonga library version::"
-msgstr "groongaライブラリのバージョンを確認するためのSQL例です::"
-
-msgid "``mroonga_log_file``"
-msgstr ""
-
-msgid ""
-"The path of the log file of Mroonga. The default value is ``groonga.log``."
-msgstr "Mroongaのログファイル名。デフォルト値は ``groonga.log`` 。"
-
-msgid ""
-"Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
-msgstr "ログファイルを ``/tmp/mroonga.log`` に変更する例です::"
-
-msgid "``mroonga_log_level``"
-msgstr ""
-
-msgid "The output level of Mroonga log file. The default value is ``NOTICE``."
-msgstr "Mroongaのログの出力レベル。デフォルト値は ``NOTICE`` 。"
-
-msgid "Here is the list of ``mroonga_log_level`` which you can use."
-msgstr "使用可能な ``mroonga_log_level`` のリストです。"
-
-msgid "Log level"
-msgstr "ログレベル"
-
-msgid "``NONE``"
-msgstr ""
-
-msgid "No logging output."
-msgstr "ログ出力なし。"
-
-msgid "``EMERG``"
-msgstr ""
-
-msgid "Logging emergency messages such as database corruption."
-msgstr "データベースの破損などの緊急に対処が必要なログメッセージを出力する。"
-
-msgid "``ALERT``"
-msgstr ""
-
-msgid "Logging alert messages such as internal error."
-msgstr "内部的なエラーを示すログを出力する。"
-
-msgid "``CRIT``"
-msgstr ""
-
-msgid "Logging critical message such as deadlock."
-msgstr "デッドロックの発生など致命的なログメッセージを出力する。"
-
-msgid "``ERROR``"
-msgstr ""
-
-msgid "Logging error messages such as API error which Mroonga use."
-msgstr "Mroongaが使用しているAPIのエラーログメッセージを出力する。"
-
-msgid "``WARNING``"
-msgstr ""
-
-msgid "Logging warning messages such as invalid argument."
-msgstr "引数の誤りなどの警告ログメッセージを出力する。"
-
-msgid "``NOTICE``"
-msgstr ""
-
-msgid "Logging notice messages such as configuration or status changed."
-msgstr "設定や状態の変化を示すログメッセージを出力する。"
-
-msgid "``INFO``"
-msgstr ""
-
-msgid "Logging informative messages such as file system operation."
-msgstr "ファイル操作などの情報をログメッセージとして出力する。"
-
-msgid "``DEBUG``"
-msgstr ""
-
-msgid "Logging debug messages."
-msgstr "デバッグメッセージを出力する。"
-
-msgid "Recommend to use for Mroonga developer or bug reporter."
-msgstr "Mroonga開発者やバグレポートの際にお勧めします。"
-
-msgid "``DUMP``"
-msgstr ""
-
-msgid "Logging dump messages."
-msgstr "テストツール向けのダンプログメッセージを出力します。"
-
-msgid ""
-"Here is an example transcript to change log level to ``DEBUG`` that logs "
-"many messages for debugging::"
-msgstr ""
-"ログレベルを ``DEBUG`` に変更する例です。 ``DEBUG`` レベルにするとデバッグ用"
-"のたくさんのメッセージがログに出力されます::"
-
-msgid "mroonga_version"
-msgstr ""
-
-msgid "The version string of Mroonga."
-msgstr "Mroongaのバージョン"
-
-msgid "Here is an example SQL to confirm the running mroonga version::"
-msgstr "実行中のmroongaのバージョンを確認するためのSQL例です::"
-
-msgid "``mroonga_dry_write``"
-msgstr ""
-
-msgid ""
-"Whether really write data to Groonga database or not. The default value is "
-"``OFF`` that means data are really written to Groonga database. Usually we "
-"don't need to change the value of this variable. This variable is useful for "
-"benchmark because we can measure processing time MySQL and Mroonga. It "
-"doesn't include Groonga's processing time."
-msgstr ""
-"Groongaデータベースに実際にデータを書き込むかどうかを指定します。デフォルト値"
-"は ``OFF`` で、実際にGroongaデータベースにデータを書き込みます。通常はこの値"
-"を変更する必要はありません。この変数はベンチマーク時に便利です。この値を "
-"``ON`` にすることでMySQLとMroongaだけの処理時間を計測することができます。この"
-"時間にGroongaの処理時間は含まれません。"
-
-msgid "Here is an example SQL to disable writing data to Groonga database::"
-msgstr "Groongaデータベースに値を書き込まないようにするSQLの例です::"
-
-msgid "``mroonga_enable_optimization``"
-msgstr ""
-
-msgid ""
-"Whether enable optimization or not. The default value is ``ON`` that means "
-"optimization is enabled. Usually we don't need to change the value of this "
-"variable. This variable is useful for benchmark."
-msgstr ""
-"最適化を有効にするかどうかを指定します。デフォルト値は ``ON`` で最適化は有効"
-"になっています。通常はこの値を変更する必要はありません。この変数はベンチマー"
-"ク時に便利です。"
-
-msgid "Here is an example SQL to disable optimization::"
-msgstr "最適化を無効にするSQLの例です::"
-
-msgid "``mroonga_match_escalation_threshold``"
-msgstr ""
-
-msgid ""
-"The threshold to determin whether match method is escalated. See `search "
-"specification for Groonga <http://groonga.org/docs/spec/search.html>`_ about "
-"match method escalation."
-msgstr ""
-"マッチ方法をエスカレーションするかどうかを決定する閾値です。マッチ方法につい"
-"ては `Groongaの検索の仕様 <http://groonga.org/docs/spec/search.html>`_ を確認"
-"してください。"
-
-msgid ""
-"The default value is the same as Groonga's default value. It's 0 for the "
-"default installation. The dafault value can be configured in my.cnf or by "
-"``SET GLOBAL mroonga_match_escalation_threshold = THRESHOLD;``. Because this "
-"variable's scope is both global and session."
-msgstr ""
-"デフォルト値はGroongaのデフォルト値と同じです。デフォルトの設定でインストール"
-"した場合は0になります。この変数のスコープは「グローバル」と「セッション」の両"
-"方なので、my.cnfまたは ``SET GLOBAL mroonga_match_escalation_threshold = "
-"THRESHOLD;`` でデフォルト値を設定できます。"
-
-msgid ""
-"Here is an example to use -1 as a threshold to determin whether match method "
-"is escalated. -1 means that never escalated."
-msgstr ""
-"マッチ方法がエスカレーションするかどうかを決定する閾値として-1を使った例で"
-"す。-1は絶対エスカレーションしないという意味です。"
-
-msgid ""
-"Here is an another example to show behavior change by the variable value."
-msgstr "この変数の値による挙動の変化を示す別の例です。"
-
-msgid "``mroonga_vector_column_delimiter``"
-msgstr ""
-
-msgid ""
-"The delimiter when outputting a vector column.  The default value is a white "
-"space."
-msgstr "ベクターカラムを出力する際の区切り文字。デフォルト値は空白です。"
-
-msgid ""
-"Here is an example SQL to change the delimiter to a semicolon from a white "
-"space::"
-msgstr "区切り文字を空白からセミコロンに変更するSQL例です::"
-
-msgid "``mroonga_libgroonga_support_zlib``"
-msgstr ""
-
-msgid "The status of libgroonga supports zlib."
-msgstr "Groongaライブラリーのzlibサポート状況"
-
-msgid ""
-"Here is an example SQL to confirm the status of libgroonga supports zlib::"
-msgstr ""
-"Groongaライブラリーがzlibをサポートしているかを確認するためのSQL例です::"
-
-msgid "``mroonga_libgroonga_support_lz4``"
-msgstr ""
-
-msgid "The status of libgroonga supports LZ4."
-msgstr "GroongaライブラリーのLZ4サポート状況"
-
-msgid ""
-"Here is an example SQL to confirm the status of libgroonga supports LZ4::"
-msgstr ""
-"GroongaライブラリーがLZ4をサポートしているかを確認するためのSQL例です::"
-
 msgid "``mroonga_boolean_mode_syntax_flags``"
 msgstr ""
 
@@ -968,6 +735,263 @@ msgstr ""
 
 msgid "Here is an example SQL to use script syntax in Groonga::"
 msgstr "Groongaのスクリプト構文を使うようにするSQLの例です::"
+
+# 0c57c52e93ca4f559e8362022cd62879
+msgid "``mroonga_database_path_prefix``"
+msgstr ""
+
+# 56df30ea885443298b6d5b3b968e694f
+# a358fdd183ae4bf7aff1313f198ef73d
+# 82372d0e963c4388bdedba617c51d456
+# df2d266b56e34bca959bd3da8b8e1c73
+msgid "TODO:"
+msgstr ""
+
+msgid "``mroonga_default_parser``"
+msgstr ""
+
+msgid ""
+"The default parser of the full text search. The default value can be "
+"specified by ``--with-default-parser=PARSER`` configure argument, whose "
+"default value is ``TokenBigram``."
+msgstr ""
+"デフォルトの全文検索用パーサ。デフォルト値はconfigureの ``with-default-"
+"parser`` オプションで指定できます（無指定時は ``TokenBigram`` ）。"
+
+msgid ""
+"Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
+"search parser. It is used by ``body_index`` fulltext index."
+msgstr ""
+"全文検索パーサーとして ``TokenBigramSplitSymbolAlphaDigit`` を使う例です。こ"
+"の例では ``body_index`` 全文検索インデックスは "
+"``TokenBigramSplitSymbolAlphaDigit`` を使います。"
+
+# 8e7a51278bea48a48de60d1b8cddc4d6
+msgid "``mroonga_default_wrapper_engine``"
+msgstr ""
+
+msgid "``mroonga_dry_write``"
+msgstr ""
+
+msgid ""
+"Whether really write data to Groonga database or not. The default value is "
+"``OFF`` that means data are really written to Groonga database. Usually we "
+"don't need to change the value of this variable. This variable is useful for "
+"benchmark because we can measure processing time MySQL and Mroonga. It "
+"doesn't include Groonga's processing time."
+msgstr ""
+"Groongaデータベースに実際にデータを書き込むかどうかを指定します。デフォルト値"
+"は ``OFF`` で、実際にGroongaデータベースにデータを書き込みます。通常はこの値"
+"を変更する必要はありません。この変数はベンチマーク時に便利です。この値を "
+"``ON`` にすることでMySQLとMroongaだけの処理時間を計測することができます。この"
+"時間にGroongaの処理時間は含まれません。"
+
+msgid "Here is an example SQL to disable writing data to Groonga database::"
+msgstr "Groongaデータベースに値を書き込まないようにするSQLの例です::"
+
+msgid "``mroonga_enable_optimization``"
+msgstr ""
+
+msgid ""
+"Whether enable optimization or not. The default value is ``ON`` that means "
+"optimization is enabled. Usually we don't need to change the value of this "
+"variable. This variable is useful for benchmark."
+msgstr ""
+"最適化を有効にするかどうかを指定します。デフォルト値は ``ON`` で最適化は有効"
+"になっています。通常はこの値を変更する必要はありません。この変数はベンチマー"
+"ク時に便利です。"
+
+msgid "Here is an example SQL to disable optimization::"
+msgstr "最適化を無効にするSQLの例です::"
+
+msgid "``mroonga_libgroonga_support_lz4``"
+msgstr ""
+
+msgid "The status of libgroonga supports LZ4."
+msgstr "GroongaライブラリーのLZ4サポート状況"
+
+msgid ""
+"Here is an example SQL to confirm the status of libgroonga supports LZ4::"
+msgstr ""
+"GroongaライブラリーがLZ4をサポートしているかを確認するためのSQL例です::"
+
+msgid "``mroonga_libgroonga_support_zlib``"
+msgstr ""
+
+msgid "The status of libgroonga supports zlib."
+msgstr "Groongaライブラリーのzlibサポート状況"
+
+msgid ""
+"Here is an example SQL to confirm the status of libgroonga supports zlib::"
+msgstr ""
+"Groongaライブラリーがzlibをサポートしているかを確認するためのSQL例です::"
+
+msgid "``mroonga_libgroonga_version``"
+msgstr ""
+
+msgid "The version string of the groonga library."
+msgstr "groongaライブラリのバージョン"
+
+msgid "Here is an example SQL to confirm the using groonga library version::"
+msgstr "groongaライブラリのバージョンを確認するためのSQL例です::"
+
+# fcf49b295ede4321ad3b6fc6283a6ab0
+msgid "``mroonga_lock_timeout``"
+msgstr ""
+
+msgid "``mroonga_log_file``"
+msgstr ""
+
+msgid ""
+"The path of the log file of Mroonga. The default value is ``groonga.log``."
+msgstr "Mroongaのログファイル名。デフォルト値は ``groonga.log`` 。"
+
+msgid ""
+"Here is an example transcript to change log file to ``/tmp/mroonga.log``::"
+msgstr "ログファイルを ``/tmp/mroonga.log`` に変更する例です::"
+
+msgid "``mroonga_log_level``"
+msgstr ""
+
+msgid "The output level of Mroonga log file. The default value is ``NOTICE``."
+msgstr "Mroongaのログの出力レベル。デフォルト値は ``NOTICE`` 。"
+
+msgid "Here is the list of ``mroonga_log_level`` which you can use."
+msgstr "使用可能な ``mroonga_log_level`` のリストです。"
+
+msgid "Log level"
+msgstr "ログレベル"
+
+msgid "``NONE``"
+msgstr ""
+
+msgid "No logging output."
+msgstr "ログ出力なし。"
+
+msgid "``EMERG``"
+msgstr ""
+
+msgid "Logging emergency messages such as database corruption."
+msgstr "データベースの破損などの緊急に対処が必要なログメッセージを出力する。"
+
+msgid "``ALERT``"
+msgstr ""
+
+msgid "Logging alert messages such as internal error."
+msgstr "内部的なエラーを示すログを出力する。"
+
+msgid "``CRIT``"
+msgstr ""
+
+msgid "Logging critical message such as deadlock."
+msgstr "デッドロックの発生など致命的なログメッセージを出力する。"
+
+msgid "``ERROR``"
+msgstr ""
+
+msgid "Logging error messages such as API error which Mroonga use."
+msgstr "Mroongaが使用しているAPIのエラーログメッセージを出力する。"
+
+msgid "``WARNING``"
+msgstr ""
+
+msgid "Logging warning messages such as invalid argument."
+msgstr "引数の誤りなどの警告ログメッセージを出力する。"
+
+msgid "``NOTICE``"
+msgstr ""
+
+msgid "Logging notice messages such as configuration or status changed."
+msgstr "設定や状態の変化を示すログメッセージを出力する。"
+
+msgid "``INFO``"
+msgstr ""
+
+msgid "Logging informative messages such as file system operation."
+msgstr "ファイル操作などの情報をログメッセージとして出力する。"
+
+msgid "``DEBUG``"
+msgstr ""
+
+msgid "Logging debug messages."
+msgstr "デバッグメッセージを出力する。"
+
+msgid "Recommend to use for Mroonga developer or bug reporter."
+msgstr "Mroonga開発者やバグレポートの際にお勧めします。"
+
+msgid "``DUMP``"
+msgstr ""
+
+msgid "Logging dump messages."
+msgstr "テストツール向けのダンプログメッセージを出力します。"
+
+msgid ""
+"Here is an example transcript to change log level to ``DEBUG`` that logs "
+"many messages for debugging::"
+msgstr ""
+"ログレベルを ``DEBUG`` に変更する例です。 ``DEBUG`` レベルにするとデバッグ用"
+"のたくさんのメッセージがログに出力されます::"
+
+msgid "``mroonga_match_escalation_threshold``"
+msgstr ""
+
+msgid ""
+"The threshold to determin whether match method is escalated. See `search "
+"specification for Groonga <http://groonga.org/docs/spec/search.html>`_ about "
+"match method escalation."
+msgstr ""
+"マッチ方法をエスカレーションするかどうかを決定する閾値です。マッチ方法につい"
+"ては `Groongaの検索の仕様 <http://groonga.org/docs/spec/search.html>`_ を確認"
+"してください。"
+
+msgid ""
+"The default value is the same as Groonga's default value. It's 0 for the "
+"default installation. The dafault value can be configured in my.cnf or by "
+"``SET GLOBAL mroonga_match_escalation_threshold = THRESHOLD;``. Because this "
+"variable's scope is both global and session."
+msgstr ""
+"デフォルト値はGroongaのデフォルト値と同じです。デフォルトの設定でインストール"
+"した場合は0になります。この変数のスコープは「グローバル」と「セッション」の両"
+"方なので、my.cnfまたは ``SET GLOBAL mroonga_match_escalation_threshold = "
+"THRESHOLD;`` でデフォルト値を設定できます。"
+
+msgid ""
+"Here is an example to use -1 as a threshold to determin whether match method "
+"is escalated. -1 means that never escalated."
+msgstr ""
+"マッチ方法がエスカレーションするかどうかを決定する閾値として-1を使った例で"
+"す。-1は絶対エスカレーションしないという意味です。"
+
+msgid ""
+"Here is an another example to show behavior change by the variable value."
+msgstr "この変数の値による挙動の変化を示す別の例です。"
+
+# 7551cf02ed2a4b68a4e3acb027d78110
+msgid "``mroonga_max_n_records_for_estimate``"
+msgstr ""
+
+msgid "``mroonga_vector_column_delimiter``"
+msgstr ""
+
+msgid ""
+"The delimiter when outputting a vector column.  The default value is a white "
+"space."
+msgstr "ベクターカラムを出力する際の区切り文字。デフォルト値は空白です。"
+
+msgid ""
+"Here is an example SQL to change the delimiter to a semicolon from a white "
+"space::"
+msgstr "区切り文字を空白からセミコロンに変更するSQL例です::"
+
+# f5b4502357ee4cc492b0de2ad642d495
+msgid "``mroonga_version``"
+msgstr ""
+
+msgid "The version string of Mroonga."
+msgstr "Mroongaのバージョン"
+
+msgid "Here is an example SQL to confirm the running mroonga version::"
+msgstr "実行中のmroongaのバージョンを確認するためのSQL例です::"
 
 msgid "SQL commands"
 msgstr ""
