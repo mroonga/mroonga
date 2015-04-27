@@ -21,8 +21,8 @@ set -e
 
 mariadb_download_base=http://mirror.jmu.edu/pub/mariadb
 
-# export GROONGA_MASTER=yes
-# export GROONGA_NORMALIZER_MYSQL_MASTER=yes
+export GROONGA_MASTER=yes
+export GROONGA_NORMALIZER_MYSQL_MASTER=yes
 
 if [ "${MROONGA_BUNDLED}" = "yes" ]; then
   mkdir -p .mroonga
