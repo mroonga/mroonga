@@ -432,3 +432,34 @@ You can combine flags by separated by comma such as
 Here is an example SQL to use script syntax in Groonga::
 
   mysql> SET mroonga_boolean_mode_syntax_flags = "SYNTAX_SCRIPT";
+
+.. _mroonga_database_path_prefix:
+
+``mroonga_database_path_prefix``
+--------------------------------
+
+TODO:
+
+.. _mroonga_default_wrapper_engine:
+
+``mroonga_default_wrapper_engine``
+----------------------------------
+
+TODO:
+
+.. _mroonga_lock_timeout:
+
+``mroonga_lock_timeout``
+------------------------
+
+TODO:
+
+.. _mroonga_max_n_records_for_estimate:
+
+``mroonga_max_n_records_for_estimate``
+--------------------------------------
+
+.. versionadded:: 5.02
+
+TODO:
+
