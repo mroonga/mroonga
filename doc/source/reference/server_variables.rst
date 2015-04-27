@@ -449,8 +449,8 @@ Here is an example SQL to change the delimiter to a semicolon from a white space
   | mroonga_vector_column_delimiter | ;     |
   +---------------------------------+-------+
 
-mroonga_version
----------------
+``mroonga_version``
+-------------------
 
 The version string of Mroonga.
 
