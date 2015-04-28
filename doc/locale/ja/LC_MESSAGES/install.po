@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-04-19 22:06+0900\n"
+"PO-Revision-Date: 2015-04-28 17:36+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -151,25 +151,25 @@ msgstr ""
 msgid "/etc/apt/sources.list.d/groonga.list::"
 msgstr ""
 
+# 53947b46cb3247bbb186a861a5a5cbd3
+msgid "jessie"
+msgstr ""
+
 msgid "Fedora"
 msgstr ""
 
-msgid "Fedora 20"
-msgstr ""
-
-msgid "There is no packages for Fedora 20."
-msgstr "Fedora 20のパッケージは提供していません。"
-
-msgid "Fedora 21(Comming soon)"
+# 5df752de3d50491cac58b2fc70b00359
+msgid "Fedora 21"
 msgstr ""
 
 msgid ""
 "MariaDB 10.0.x is adopted on Fedora 21. As Mroonga is now bundled with "
-"MariaDB since 10.0.15, it will be shipped with MariaDB sooner or later."
+"MariaDB since 10.0.15, you can use bundled version of Mroonga."
+msgstr "Fedora 21ではMariaDB 10.0.xが採用されました。MroongaはMariaDB 10.0.15以降バンドルされるようになったので、MariaDBをインストールすることで使えるます。"
+
+# bfe73d8261284eaf8243b4dc52daa0f3
+msgid "Note that MariaDB bundled Mroonga version is a bit old."
 msgstr ""
-"Fedora 21ではMariaDB 10.0.xが採用されました。MroongaはMariaDB 10.0.15以降バン"
-"ドルされるようになったので、いずれMariaDBをインストールすることで使えるように"
-"なるはずです。"
 
 msgid "OS X"
 msgstr ""
@@ -590,6 +590,10 @@ msgstr ""
 
 # 0779d17906444b348212148a883e05c9
 msgid "14.10 Utopic Unicorn"
+msgstr ""
+
+# 1ff5efe8264244279bdaccf46fd601cf
+msgid "15.04 Vivid Vervet"
 msgstr ""
 
 msgid ""

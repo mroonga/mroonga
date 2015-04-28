@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 4.03\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-04-27 14:37+0900\n"
+"PO-Revision-Date: 2015-04-28 17:38+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -130,21 +130,24 @@ msgstr ""
 msgid "/etc/apt/sources.list.d/groonga.list::"
 msgstr "/etc/apt/sources.list.d/groonga.list::"
 
+# f966094f2aa845939b8be672353b25ee
+msgid "jessie"
+msgstr ""
+
 msgid "Fedora"
 msgstr ""
 
-msgid "Fedora 20"
-msgstr "Fedora 20"
-
-msgid "There is no packages for Fedora 20."
+msgid "Fedora 21"
 msgstr ""
 
-msgid "Fedora 21(Comming soon)"
-msgstr ""
-
+# 2c58091aec4e4d1db98d3a8be58d7eae
 msgid ""
 "MariaDB 10.0.x is adopted on Fedora 21. As Mroonga is now bundled with "
-"MariaDB since 10.0.15, it will be shipped with MariaDB sooner or later."
+"MariaDB since 10.0.15, you can use bundled version of Mroonga."
+msgstr ""
+
+# 55230ed8f5354f17906037be71df44e0
+msgid "Note that MariaDB bundled Mroonga version is a bit old."
 msgstr ""
 
 msgid "OS X"
@@ -481,6 +484,10 @@ msgid "14.04 LTS Trusty Tahr"
 msgstr "14.04 LTS Trusty Tahr"
 
 msgid "14.10 Utopic Unicorn"
+msgstr ""
+
+# 17cc4c7086684023a3018de40b31ba2b
+msgid "15.04 Vivid Vervet"
 msgstr ""
 
 msgid ""
