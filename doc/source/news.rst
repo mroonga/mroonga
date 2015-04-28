@@ -25,7 +25,7 @@ Improvements
 * [rpm][centos] Updated to build against the latest MySQL 5.6.
 * [wrapper] Supported fast order by limit optimization for primary key sort.
   [Reported by Tsugunori Nashiro]
-* Supported Debian 8.0 (jessie)
+* Supported Debian 8.0 (Jessie)
 * Supported Ubuntu 15.04 (Vivid Vervet)
 
 Fixes
