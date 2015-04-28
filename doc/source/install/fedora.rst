@@ -3,11 +3,6 @@
 Fedora
 ======
 
-Fedora 20
----------
-
-There is no packages for Fedora 20.
-
 Fedora 21(Comming soon)
 -----------------------
 
