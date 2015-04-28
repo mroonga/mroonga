@@ -104,6 +104,11 @@ case ${distribution} in
 esac
 run yum install -y ${DEPENDED_PACKAGES}
 
+if [ "${package_name}" = "percona-server-56-${PACKAGE}" ]; then
+  if [ "${distribution_version}" = "7" ]; then
+    rpmbuild_options="$rpmbuild_options --define 'dist .el7'"
+  fi
+fi
 if [ "${USE_MYSQLSERVICES_COMPAT}" = "yes" ]; then
   rpmbuild_options="$rpmbuild_options --define 'mroonga_configure_options --with-libmysqlservices-compat'"
 fi
