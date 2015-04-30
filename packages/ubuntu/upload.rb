@@ -127,7 +127,7 @@ allow_unsigned_uploads = 0
         case code_name
         when "vivid"
           run_command("sed",
-                      "-i", "-e", "s,5\.5,5.6,g",
+                      "-i", "-e", "s,5\\.5,5.6,g",
                       "debian/rules")
         end
         run_command("sed",
