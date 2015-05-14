@@ -23,6 +23,7 @@
 #include "mrn_multiple_column_key_codec.hpp"
 #include "mrn_field_normalizer.hpp"
 #include "mrn_smart_grn_obj.hpp"
+#include "mrn_time_converter.hpp"
 #include "mrn_value_decoder.hpp"
 
 // for debug
@@ -87,6 +88,7 @@ namespace mrn {
       DataType data_type = TYPE_UNKNOWN;
       uint data_size = 0;
       get_key_info(key_part, &data_type, &data_size);
+      uint grn_key_data_size = data_size;
 
       switch (data_type) {
       case TYPE_UNKNOWN:
@@ -124,6 +126,24 @@ namespace mrn {
           encode_double(value, data_size, current_grn_key);
         }
         break;
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+      case TYPE_DATETIME2:
+        {
+          Field_datetimef *field_datetimef =
+            static_cast<Field_datetimef *>(field);
+          long long int value;
+          value = my_datetime_packed_from_binary(current_mysql_key,
+                                                 field_datetimef->decimals());
+          MYSQL_TIME mysql_time;
+          TIME_from_longlong_datetime_packed(&mysql_time, value);
+          TimeConverter time_converter;
+          bool truncated;
+          value = time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
+          grn_key_data_size = 8;
+          encode_long_long_int(value, grn_key_data_size, current_grn_key);
+        }
+        break;
+#endif
       case TYPE_BYTE_SEQUENCE:
         memcpy(current_grn_key, current_mysql_key, data_size);
         break;
@@ -132,6 +152,7 @@ namespace mrn {
         break;
       case TYPE_BYTE_BLOB:
         encode_blob(field, current_mysql_key, current_grn_key, &data_size);
+        grn_key_data_size = data_size;
         break;
       }
 
@@ -140,8 +161,8 @@ namespace mrn {
       }
 
       current_mysql_key += data_size;
-      current_grn_key += data_size;
-      *grn_key_length += data_size;
+      current_grn_key += grn_key_data_size;
+      *grn_key_length += grn_key_data_size;
     }
 
     DBUG_RETURN(error);
@@ -176,6 +197,7 @@ namespace mrn {
       DataType data_type = TYPE_UNKNOWN;
       uint data_size = 0;
       get_key_info(key_part, &data_type, &data_size);
+      uint grn_key_data_size = data_size;
 
       switch (data_type) {
       case TYPE_UNKNOWN:
@@ -208,6 +230,20 @@ namespace mrn {
       case TYPE_DOUBLE:
         decode_double(current_grn_key, current_mysql_key, data_size);
         break;
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+      case TYPE_DATETIME2:
+        {
+          Field_datetimef *field_datetimef =
+            static_cast<Field_datetimef *>(field);
+          long long int value;
+          grn_key_data_size = 8;
+          decode_long_long_int(current_grn_key, &value, grn_key_data_size);
+          my_datetime_packed_to_binary(value,
+                                       current_mysql_key,
+                                       field_datetimef->decimals());
+        }
+        break;
+#endif
       case TYPE_BYTE_SEQUENCE:
         memcpy(current_mysql_key, current_grn_key, data_size);
         break;
@@ -222,6 +258,7 @@ namespace mrn {
                current_grn_key,
                data_size);
         data_size += HA_KEY_BLOB_LENGTH;
+        grn_key_data_size = data_size;
         break;
       }
 
@@ -229,7 +266,7 @@ namespace mrn {
         break;
       }
 
-      current_grn_key += data_size;
+      current_grn_key += grn_key_data_size;
       current_mysql_key += data_size;
       *mysql_key_length += data_size;
     }
@@ -257,10 +294,19 @@ namespace mrn {
       DataType data_type = TYPE_UNKNOWN;
       uint data_size = 0;
       get_key_info(key_part, &data_type, &data_size);
-      total_size += data_size;
-      if (data_type == TYPE_BYTE_BLOB) {
-        total_size += HA_KEY_BLOB_LENGTH;
+      switch (data_type) {
+#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
+      case TYPE_DATETIME2:
+        data_size = 8;
+        break;
+#endif
+      case TYPE_BYTE_BLOB:
+        data_size += HA_KEY_BLOB_LENGTH;
+        break;
+      default:
+        break;
       }
+      total_size += data_size;
     }
 
     DBUG_RETURN(total_size);
@@ -356,7 +402,7 @@ namespace mrn {
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
     case MYSQL_TYPE_DATETIME2:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME2"));
-      *data_type = TYPE_BYTE_SEQUENCE;
+      *data_type = TYPE_DATETIME2;
       *data_size = key_part->length;
       break;
 #endif
