@@ -350,7 +350,7 @@ namespace mrn {
       break;
     case MYSQL_TYPE_TIME:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME"));
-      *data_type = TYPE_LONG_LONG_NUMBER;
+      *data_type = TYPE_NUMBER;
       *data_size = 3;
       break;
     case MYSQL_TYPE_VARCHAR:
