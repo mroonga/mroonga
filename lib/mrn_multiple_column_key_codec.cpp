@@ -97,17 +97,8 @@ namespace mrn {
       case TYPE_LONG_LONG_NUMBER:
         {
           long long int long_long_value = 0;
-          switch (data_size) {
-          case 3:
-            long_long_value = (long long int)sint3korr(current_mysql_key);
-            break;
-          case 8:
-            long_long_value = (long long int)sint8korr(current_mysql_key);
-            break;
-          }
-          mrn_byte_order_host_to_network(current_grn_key, &long_long_value,
-                                         data_size);
-          *((uint8 *)(current_grn_key)) ^= 0x80;
+          long_long_value = sint8korr(current_mysql_key);
+          encode_long_long_int(long_long_value, data_size, current_grn_key);
         }
         break;
       case TYPE_NUMBER:
@@ -194,18 +185,9 @@ namespace mrn {
         break;
       case TYPE_LONG_LONG_NUMBER:
         {
-          long long int long_long_value = 0;
-          switch (data_size) {
-          case 3:
-            long_long_value = (long long int)sint3korr(current_grn_key);
-            break;
-          case 8:
-            long_long_value = (long long int)sint8korr(current_grn_key);
-            break;
-          }
-          *((uint8 *)(&long_long_value)) ^= 0x80;
-          mrn_byte_order_host_to_network(current_mysql_key, &long_long_value,
-                                         data_size);
+          long long int value = 0;
+          decode_long_long_int(current_grn_key, &value, grn_key_data_size);
+          int8store(current_mysql_key, value);
         }
         break;
       case TYPE_NUMBER:
@@ -425,6 +407,26 @@ namespace mrn {
       *data_size = key_part->length;
       break;
     }
+    DBUG_VOID_RETURN;
+  }
+
+  void MultipleColumnKeyCodec::encode_long_long_int(volatile long long int value,
+                                                    uint data_size,
+                                                    uchar *grn_key) {
+    MRN_DBUG_ENTER_METHOD();
+    mrn_byte_order_host_to_network(grn_key, &value, data_size);
+    *((uint8 *)(grn_key)) ^= 0x80;
+    DBUG_VOID_RETURN;
+  }
+
+  void MultipleColumnKeyCodec::decode_long_long_int(const uchar *grn_key,
+                                                    long long int *value,
+                                                    uint data_size) {
+    MRN_DBUG_ENTER_METHOD();
+    uchar buffer[8];
+    memcpy(buffer, grn_key, data_size);
+    *((uint8 *)(buffer)) ^= 0x80;
+    mrn_byte_order_host_to_network(value, buffer, data_size);
     DBUG_VOID_RETURN;
   }
 

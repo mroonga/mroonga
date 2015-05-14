@@ -56,6 +56,12 @@ namespace mrn {
     void get_key_info(KEY_PART_INFO *key_part,
                       DataType *data_type, uint *data_size);
 
+    void encode_long_long_int(volatile long long int value,
+                              uint data_size,
+                              uchar *grn_key);
+    void decode_long_long_int(const uchar *grn_key,
+                              long long int *value,
+                              uint data_size);
     void encode_float(volatile float value, uint data_size, uchar *grn_key);
     void decode_float(const uchar *grn_key, uchar *mysql_key, uint data_size);
     void encode_double(volatile double value, uint data_size, uchar *grn_key);
