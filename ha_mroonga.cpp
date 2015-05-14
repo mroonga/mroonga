@@ -5683,7 +5683,6 @@ int ha_mroonga::storage_write_row_multiple_column_index(uchar *buf,
   grn_bulk_space(ctx, &encoded_key_buffer, encoded_key_length);
   DBUG_PRINT("info", ("mroonga: key_length=%u", key_info->key_length));
   DBUG_PRINT("info", ("mroonga: encoded_key_length=%u", encoded_key_length));
-  DBUG_ASSERT(key_info->key_length >= encoded_key_length);
 
   grn_rc rc;
   rc = grn_column_index_update(ctx, index_column, record_id, 1, NULL,
