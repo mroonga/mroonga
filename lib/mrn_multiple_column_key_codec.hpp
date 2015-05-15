@@ -60,6 +60,14 @@ namespace mrn {
     void get_key_info(KEY_PART_INFO *key_part,
                       DataType *data_type, uint *data_size);
 
+    void encode_number(const uchar *mysql_key,
+                       uint data_size,
+                       bool is_signed,
+                       uchar *grn_key);
+    void decode_number(const uchar *grn_key,
+                       uchar *mysql_key,
+                       uint data_size,
+                       bool is_signed);
     void encode_long_long_int(volatile long long int value,
                               uint data_size,
                               uchar *grn_key);

@@ -118,12 +118,12 @@ namespace mrn {
         }
         break;
       case TYPE_NUMBER:
-        mrn_byte_order_host_to_network(current_grn_key, current_mysql_key, data_size);
         {
-          Field_num *number_field = (Field_num *)field;
-          if (!number_field->unsigned_flag) {
-            *((uint8 *)(current_grn_key)) ^= 0x80;
-          }
+          Field_num *number_field = static_cast<Field_num *>(field);
+          encode_number(current_mysql_key,
+                        data_size,
+                        !number_field->unsigned_flag,
+                        current_grn_key);
         }
         break;
       case TYPE_FLOAT:
@@ -248,14 +248,11 @@ namespace mrn {
         break;
       case TYPE_NUMBER:
         {
-          uchar buffer[8];
-          memcpy(buffer, current_grn_key, data_size);
-          Field_num *number_field = (Field_num *)field;
-          if (!number_field->unsigned_flag) {
-            buffer[0] ^= 0x80;
-          }
-          mrn_byte_order_host_to_network(current_mysql_key, buffer,
-                                         data_size);
+          Field_num *number_field = static_cast<Field_num *>(field);
+          decode_number(current_grn_key,
+                        current_mysql_key,
+                        data_size,
+                        !number_field->unsigned_flag);
         }
         break;
       case TYPE_FLOAT:
@@ -522,6 +519,32 @@ namespace mrn {
       *data_size = key_part->length;
       break;
     }
+    DBUG_VOID_RETURN;
+  }
+
+  void MultipleColumnKeyCodec::encode_number(const uchar *mysql_key,
+                                             uint data_size,
+                                             bool is_signed,
+                                             uchar *grn_key) {
+    MRN_DBUG_ENTER_METHOD();
+    mrn_byte_order_host_to_network(grn_key, mysql_key, data_size);
+    if (is_signed) {
+      grn_key[0] ^= 0x80;
+    }
+    DBUG_VOID_RETURN;
+  }
+
+  void MultipleColumnKeyCodec::decode_number(const uchar *grn_key,
+                                             uchar *mysql_key,
+                                             uint data_size,
+                                             bool is_signed) {
+    MRN_DBUG_ENTER_METHOD();
+    uchar buffer[8];
+    memcpy(buffer, grn_key, data_size);
+    if (is_signed) {
+      buffer[0] ^= 0x80;
+    }
+    mrn_byte_order_network_to_host(mysql_key, buffer, data_size);
     DBUG_VOID_RETURN;
   }
 
