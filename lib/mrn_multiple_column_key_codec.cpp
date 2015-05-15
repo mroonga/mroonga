@@ -162,11 +162,11 @@ namespace mrn {
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       case TYPE_DATETIME2:
         {
-          Field_datetimef *field_datetimef =
+          Field_datetimef *datetimef_field =
             static_cast<Field_datetimef *>(field);
           long long int value;
           value = my_datetime_packed_from_binary(current_mysql_key,
-                                                 field_datetimef->decimals());
+                                                 datetimef_field->decimals());
           MYSQL_TIME mysql_time;
           TIME_from_longlong_datetime_packed(&mysql_time, value);
           TimeConverter time_converter;
@@ -283,14 +283,14 @@ namespace mrn {
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       case TYPE_DATETIME2:
         {
-          Field_datetimef *field_datetimef =
+          Field_datetimef *datetimef_field =
             static_cast<Field_datetimef *>(field);
           long long int value;
           grn_key_data_size = 8;
           decode_long_long_int(current_grn_key, &value, grn_key_data_size);
           my_datetime_packed_to_binary(value,
                                        current_mysql_key,
-                                       field_datetimef->decimals());
+                                       datetimef_field->decimals());
         }
         break;
 #endif
