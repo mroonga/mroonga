@@ -39,9 +39,9 @@
 }
 #define mrn_byte_order_network_to_host(buf, key, size)  \
 {                                                       \
-  uint32 size_ = (uint32_t)(size);                      \
-  uint8 *buf_ = (uint8_t *)(buf);                       \
-  uint8 *key_ = (uint8_t *)(key);                       \
+  uint32 size_ = (uint32)(size);                        \
+  uint8 *buf_ = (uint8 *)(buf);                         \
+  uint8 *key_ = (uint8 *)(key);                         \
   while (size_) { *buf_++ = *key_++; size_--; }         \
 }
 #else /* WORDS_BIGENDIAN */
