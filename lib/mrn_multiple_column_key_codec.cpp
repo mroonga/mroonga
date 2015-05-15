@@ -292,7 +292,7 @@ namespace mrn {
           TimeConverter time_converter;
           MYSQL_TIME mysql_time;
           mysql_time.time_type = MYSQL_TIMESTAMP_DATETIME;
-          time_converter.gtn_time_to_mysql_time(grn_time, &mysql_time);
+          time_converter.grn_time_to_mysql_time(grn_time, &mysql_time);
           long long int mysql_datetime_packed =
             TIME_to_longlong_datetime_packed(&mysql_time);
           my_datetime_packed_to_binary(mysql_datetime_packed,
