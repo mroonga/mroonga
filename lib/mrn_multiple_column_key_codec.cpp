@@ -164,16 +164,17 @@ namespace mrn {
         {
           Field_datetimef *datetimef_field =
             static_cast<Field_datetimef *>(field);
-          long long int value;
-          value = my_datetime_packed_from_binary(current_mysql_key,
-                                                 datetimef_field->decimals());
+          long long int mysql_datetime_packed =
+            my_datetime_packed_from_binary(current_mysql_key,
+                                           datetimef_field->decimals());
           MYSQL_TIME mysql_time;
-          TIME_from_longlong_datetime_packed(&mysql_time, value);
+          TIME_from_longlong_datetime_packed(&mysql_time, mysql_datetime_packed);
           TimeConverter time_converter;
           bool truncated;
-          value = time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
+          long long int grn_time =
+            time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
           grn_key_data_size = 8;
-          encode_long_long_int(value, grn_key_data_size, current_grn_key);
+          encode_long_long_int(grn_time, grn_key_data_size, current_grn_key);
         }
         break;
 #endif
@@ -285,10 +286,16 @@ namespace mrn {
         {
           Field_datetimef *datetimef_field =
             static_cast<Field_datetimef *>(field);
-          long long int value;
+          long long int grn_time;
           grn_key_data_size = 8;
-          decode_long_long_int(current_grn_key, &value, grn_key_data_size);
-          my_datetime_packed_to_binary(value,
+          decode_long_long_int(current_grn_key, &grn_time, grn_key_data_size);
+          TimeConverter time_converter;
+          MYSQL_TIME mysql_time;
+          mysql_time.time_type = MYSQL_TIMESTAMP_DATETIME;
+          time_converter.gtn_time_to_mysql_time(grn_time, &mysql_time);
+          long long int mysql_datetime_packed =
+            TIME_to_longlong_datetime_packed(&mysql_time);
+          my_datetime_packed_to_binary(mysql_datetime_packed,
                                        current_mysql_key,
                                        datetimef_field->decimals());
         }
