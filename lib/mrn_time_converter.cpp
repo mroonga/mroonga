@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -256,5 +256,44 @@ namespace mrn {
       break;
     }
     DBUG_VOID_RETURN;
+  }
+
+  long long int TimeConverter::mysql_datetime_to_grn_time(long long int mysql_datetime,
+                                                          bool *truncated) {
+    MRN_DBUG_ENTER_METHOD();
+
+    MYSQL_TIME mysql_time;
+    mysql_time.time_type   = MYSQL_TIMESTAMP_DATETIME;
+    mysql_time.neg         = 0;
+    mysql_time.second_part = 0;
+    mysql_time.second      = (mysql_datetime % 100);
+    mysql_time.minute      = (mysql_datetime / 100 % 100);
+    mysql_time.hour        = (mysql_datetime / 10000 % 100);
+    mysql_time.day         = (mysql_datetime / 1000000 % 100);
+    mysql_time.month       = (mysql_datetime / 100000000 % 100);
+    mysql_time.year        = (mysql_datetime / 10000000000 % 10000);
+
+    long long int grn_time = mysql_time_to_grn_time(&mysql_time, truncated);
+
+    DBUG_RETURN(grn_time);
+  }
+
+  long long int TimeConverter::grn_time_to_mysql_datetime(long long int grn_time) {
+    MRN_DBUG_ENTER_METHOD();
+
+    MYSQL_TIME mysql_time;
+    mysql_time.time_type = MYSQL_TIMESTAMP_DATETIME;
+
+    grn_time_to_mysql_time(grn_time, &mysql_time);
+
+    long long int mysql_datetime =
+      (mysql_time.second *           1) +
+      (mysql_time.minute *         100) +
+      (mysql_time.hour   *       10000) +
+      (mysql_time.day    *     1000000) +
+      (mysql_time.month  *   100000000) +
+      (mysql_time.year   * 10000000000);
+
+    DBUG_RETURN(mysql_datetime);
   }
 }

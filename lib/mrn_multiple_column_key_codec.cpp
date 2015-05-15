@@ -140,6 +140,25 @@ namespace mrn {
           encode_double(value, data_size, current_grn_key);
         }
         break;
+      case TYPE_DATETIME:
+        {
+          long long int mysql_datetime;
+#ifdef WORDS_BIGENDIAN
+          if (field->table && field->table->s->db_low_byte_first) {
+            mysql_datetime = sint8korr(current_mysql_key);
+          } else
+#endif
+          {
+            longlongget(mysql_datetime, current_mysql_key);
+          }
+          TimeConverter time_converter;
+          bool truncated;
+          long long int grn_time =
+            time_converter.mysql_datetime_to_grn_time(mysql_datetime,
+                                                      &truncated);
+          encode_long_long_int(grn_time, grn_key_data_size, current_grn_key);
+        }
+        break;
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       case TYPE_DATETIME2:
         {
@@ -243,6 +262,23 @@ namespace mrn {
         break;
       case TYPE_DOUBLE:
         decode_double(current_grn_key, current_mysql_key, data_size);
+        break;
+      case TYPE_DATETIME:
+        {
+          long long int grn_time;
+          decode_long_long_int(current_grn_key, &grn_time, grn_key_data_size);
+          TimeConverter time_converter;
+          long long int mysql_datetime =
+            time_converter.grn_time_to_mysql_datetime(grn_time);
+#ifdef WORDS_BIGENDIAN
+          if (field->table && field->table->s->db_low_byte_first) {
+            int8store(current_mysql_key, mysql_datetime);
+          } else
+#endif
+          {
+            longlongstore(current_mysql_key, mysql_datetime);
+          }
+        }
         break;
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       case TYPE_DATETIME2:
@@ -373,10 +409,22 @@ namespace mrn {
       *data_size = 1;
       break;
     case MYSQL_TYPE_TIMESTAMP:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIMESTAMP"));
+      *data_type = TYPE_BYTE_REVERSE;
+      *data_size = key_part->length;
+      break;
     case MYSQL_TYPE_DATE:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATE"));
+      *data_type = TYPE_BYTE_REVERSE;
+      *data_size = key_part->length;
+      break;
     case MYSQL_TYPE_DATETIME:
-    case MYSQL_TYPE_NEWDATE:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME"));
+      *data_type = TYPE_DATETIME;
+      *data_size = key_part->length;
+      break;
+    case MYSQL_TYPE_NEWDATE:
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_NEWDATE"));
       *data_type = TYPE_BYTE_REVERSE;
       *data_size = key_part->length;
       break;

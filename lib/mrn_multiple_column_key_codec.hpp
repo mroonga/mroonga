@@ -44,6 +44,7 @@ namespace mrn {
       TYPE_NUMBER,
       TYPE_FLOAT,
       TYPE_DOUBLE,
+      TYPE_DATETIME,
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       TYPE_DATETIME2,
 #endif
