@@ -61,27 +61,39 @@ namespace mrn {
                       DataType *data_type, uint *data_size);
 
     void encode_number(const uchar *mysql_key,
-                       uint data_size,
+                       uint mysql_key_size,
                        bool is_signed,
                        uchar *grn_key);
     void decode_number(const uchar *grn_key,
-                       uchar *mysql_key,
-                       uint data_size,
-                       bool is_signed);
+                       uint grn_key_size,
+                       bool is_signed,
+                       uchar *mysql_key);
     void encode_long_long_int(volatile long long int value,
-                              uint data_size,
                               uchar *grn_key);
     void decode_long_long_int(const uchar *grn_key,
-                              long long int *value,
-                              uint data_size);
-    void encode_float(volatile float value, uint data_size, uchar *grn_key);
-    void decode_float(const uchar *grn_key, uchar *mysql_key, uint data_size);
-    void encode_double(volatile double value, uint data_size, uchar *grn_key);
-    void decode_double(const uchar *grn_key, uchar *mysql_key, uint data_size);
-    void encode_reverse(const uchar *mysql_key, uint data_size, uchar *grn_key);
-    void decode_reverse(const uchar *grn_key, uchar *mysql_key, uint data_size);
-    void encode_blob(Field *field,
-                     const uchar *mysql_key, uchar *grn_key, uint *data_size);
+                              long long int *value);
+    void encode_float(volatile float value,
+                      uint value_size,
+                      uchar *grn_key);
+    void decode_float(const uchar *grn_key,
+                      uint grn_key_size,
+                      uchar *mysql_key);
+    void encode_double(volatile double value,
+                       uint value_size,
+                       uchar *grn_key);
+    void decode_double(const uchar *grn_key,
+                       uint grn_key_size,
+                       uchar *mysql_key);
+    void encode_reverse(const uchar *mysql_key,
+                        uint mysql_key_size,
+                        uchar *grn_key);
+    void decode_reverse(const uchar *grn_key,
+                        uint grn_key_size,
+                        uchar *mysql_key);
+    void encode_blob(const uchar *mysql_key,
+                     uint *mysql_key_size,
+                     Field *field,
+                     uchar *grn_key);
   };
 }
 
