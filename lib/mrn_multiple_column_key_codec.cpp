@@ -37,6 +37,13 @@
   uint8 *key_ = (uint8 *)(key);                         \
   while (size_--) { *buf_++ = *key_++; }                \
 }
+#define mrn_byte_order_network_to_host(buf, key, size)  \
+{                                                       \
+  uint32 size_ = (uint32_t)(size);                      \
+  uint8 *buf_ = (uint8_t *)(buf);                       \
+  uint8 *key_ = (uint8_t *)(key);                       \
+  while (size_) { *buf_++ = *key_++; size_--; }         \
+}
 #else /* WORDS_BIGENDIAN */
 #define mrn_byte_order_host_to_network(buf, key, size)  \
 {                                                       \
@@ -44,6 +51,13 @@
   uint8 *buf_ = (uint8 *)(buf);                         \
   uint8 *key_ = (uint8 *)(key) + size_;                 \
   while (size_--) { *buf_++ = *(--key_); }              \
+}
+#define mrn_byte_order_network_to_host(buf, key, size)  \
+{                                                       \
+  uint32 size_ = (uint32)(size);                        \
+  uint8 *buf_ = (uint8 *)(buf);                         \
+  uint8 *key_ = (uint8 *)(key) + size_;                 \
+  while (size_) { *buf_++ = *(--key_); size_--; }       \
 }
 #endif /* WORDS_BIGENDIAN */
 
@@ -472,7 +486,7 @@ namespace mrn {
     uchar buffer[8];
     memcpy(buffer, grn_key, data_size);
     *((uint8 *)(buffer)) ^= 0x80;
-    mrn_byte_order_host_to_network(value, buffer, data_size);
+    mrn_byte_order_network_to_host(value, buffer, data_size);
     DBUG_VOID_RETURN;
   }
 
@@ -492,7 +506,7 @@ namespace mrn {
                                             uint data_size) {
     MRN_DBUG_ENTER_METHOD();
     int int_value;
-    mrn_byte_order_host_to_network(&int_value, grn_key, data_size);
+    mrn_byte_order_network_to_host(&int_value, grn_key, data_size);
     int max_bit = (data_size * 8 - 1);
     *((int *)mysql_key) =
       int_value ^ (((int_value ^ (1 << max_bit)) >> max_bit) |
@@ -516,7 +530,7 @@ namespace mrn {
                                              uint data_size) {
     MRN_DBUG_ENTER_METHOD();
     long long int long_long_value;
-    mrn_byte_order_host_to_network(&long_long_value, grn_key, data_size);
+    mrn_byte_order_network_to_host(&long_long_value, grn_key, data_size);
     int max_bit = (data_size * 8 - 1);
     *((long long int *)mysql_key) =
       long_long_value ^ (((long_long_value ^ (1LL << max_bit)) >> max_bit) |
