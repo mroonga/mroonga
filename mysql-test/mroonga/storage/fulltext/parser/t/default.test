@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2014 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
@@ -29,12 +29,12 @@ create table diaries (
   fulltext index body_index (body)
 ) default charset utf8;
 show create table diaries;
-insert into diaries (body) values ("will start groonga!");
-insert into diaries (body) values ("starting groonga...");
-insert into diaries (body) values ("started groonga.");
-insert into diaries (body) values ("finished groonga.");
+insert into diaries (body) values ("will start Groonga!");
+insert into diaries (body) values ("starting Groonga...");
+insert into diaries (body) values ("started Groonga.");
+insert into diaries (body) values ("finished Groonga.");
 select * from diaries;
-select * from diaries where match(body) against("start");
+select * from diaries where match(body) against("+start" IN BOOLEAN MODE) order by id;
 drop table diaries;
 set global mroonga_default_parser=@mroonga_default_parser_backup;
 
