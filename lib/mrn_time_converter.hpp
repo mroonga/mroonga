@@ -21,8 +21,9 @@
 #ifndef MRN_TIME_CONVERTER_HPP_
 #define MRN_TIME_CONVERTER_HPP_
 
-#include <groonga.h>
 #include <mrn_mysql_compat.h>
+
+#include <groonga.h>
 
 namespace mrn {
   class TimeConverter {
