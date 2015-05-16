@@ -12,6 +12,7 @@ env:
   - MYSQL_VERSION=mariadb-10.0.19 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
   - MYSQL_VERSION=mariadb-10.0.19 MROONGA_BUNDLED=yes
   - MYSQL_VERSION=mariadb-10.0.19 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
+  - MYSQL_VERSION=mariadb-10.1.4
 matrix:
   allow_failures:
 #     - env: MYSQL_VERSION=mysql-system
