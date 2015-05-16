@@ -13,17 +13,17 @@ diaries	CREATE TABLE `diaries` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `body_index` (`body`) COMMENT 'parser "TokenBigramSplitSymbolAlphaDigit"'
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='engine "innodb"'
-insert into diaries (body) values ("will start groonga!");
-insert into diaries (body) values ("starting groonga...");
-insert into diaries (body) values ("started groonga.");
+insert into diaries (body) values ("will start Groonga!");
+insert into diaries (body) values ("starting Groonga...");
+insert into diaries (body) values ("started Groonga.");
 select * from diaries;
 id	body
-1	will start groonga!
-2	starting groonga...
-3	started groonga.
-select * from diaries where match(body) against("start");
+1	will start Groonga!
+2	starting Groonga...
+3	started Groonga.
+select * from diaries where match(body) against("+start" in boolean mode) order by id;
 id	body
-1	will start groonga!
-2	starting groonga...
-3	started groonga.
+1	will start Groonga!
+2	starting Groonga...
+3	started Groonga.
 drop table diaries;

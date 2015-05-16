@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -29,11 +29,11 @@ create table diaries (
     comment 'parser "TokenBigramSplitSymbolAlphaDigit"'
 ) comment = 'engine "innodb"' default charset utf8;
 show create table diaries;
-insert into diaries (body) values ("will start groonga!");
-insert into diaries (body) values ("starting groonga...");
-insert into diaries (body) values ("started groonga.");
+insert into diaries (body) values ("will start Groonga!");
+insert into diaries (body) values ("starting Groonga...");
+insert into diaries (body) values ("started Groonga.");
 select * from diaries;
-select * from diaries where match(body) against("start");
+select * from diaries where match(body) against("+start" in boolean mode) order by id;
 drop table diaries;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
