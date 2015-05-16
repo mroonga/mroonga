@@ -98,6 +98,14 @@ run_sql_test()
   fi
 
   if [ "${MROONGA_BUNDLED}" = "yes" ]; then
+    # Plugins aren't supported.
+    cd ${mroonga_dir}/mysql-test/mroonga/storage
+    rm -rf alter_table/add_index/token_filters/
+    rm -rf alter_table/t/change_token_filter.test
+    rm -rf create/table/token_filters/
+    rm -rf fulltext/token_filters/
+    cd -
+
     ${mroonga_dir}/test/run-sql-test.sh \
                   "${test_args[@]}" \
                   --parallel="${n_processors}"
