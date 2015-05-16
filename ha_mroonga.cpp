@@ -8324,6 +8324,21 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
                                      matched_record_keys);
     grn_table_sort(ctx, matched_record_keys, 0, static_cast<int>(limit),
                    sorted_result, sort_keys, n_sort_keys);
+  } else if (flags & FT_SORTED) {
+    grn_table_sort_key score_sort_key;
+    score_sort_key.key = grn_obj_column(ctx,
+                                        matched_record_keys,
+                                        MRN_COLUMN_NAME_SCORE,
+                                        strlen(MRN_COLUMN_NAME_SCORE));
+    score_sort_key.offset = 0;
+    score_sort_key.flags = GRN_TABLE_SORT_DESC;
+    sorted_result = grn_table_create(ctx, NULL,
+                                     0, NULL,
+                                     GRN_OBJ_TABLE_NO_KEY, NULL,
+                                     matched_record_keys);
+    grn_table_sort(ctx, matched_record_keys, 0, -1,
+                   sorted_result, &score_sort_key, 1);
+    grn_obj_unlink(ctx, score_sort_key.key);
   }
   if (sort_keys) {
     for (int i = 0; i < n_sort_keys; i++) {
