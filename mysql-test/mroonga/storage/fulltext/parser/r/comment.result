@@ -1,11 +1,11 @@
-drop table if exists diaries;
-create table diaries (
-id int primary key auto_increment,
+DROP TABLE IF EXISTS diaries;
+CREATE TABLE diaries (
+id int PRIMARY KEY AUTO_INCREMENT,
 body text,
-fulltext index body_index (body)
-comment 'parser "TokenBigramSplitSymbolAlphaDigit"'
-) default charset utf8;
-show create table diaries;
+FULLTEXT INDEX body_index (body)
+COMMENT 'parser "TokenBigramSplitSymbolAlphaDigit"'
+) DEFAULT CHARSET utf8;
+SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -13,19 +13,19 @@ diaries	CREATE TABLE `diaries` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `body_index` (`body`) COMMENT 'parser "TokenBigramSplitSymbolAlphaDigit"'
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8
-insert into diaries (body) values ("will start groonga!");
-insert into diaries (body) values ("starting groonga...");
-insert into diaries (body) values ("started groonga.");
-select * from diaries;
+INSERT INTO diaries (body) VALUES ("will start Groonga!");
+INSERT INTO diaries (body) VALUES ("starting Groonga...");
+INSERT INTO diaries (body) VALUES ("started Groonga.");
+SELECT * FROM diaries;
 id	body
-1	will start groonga!
-2	starting groonga...
-3	started groonga.
-select * from diaries
-where match(body) against("+start" IN BOOLEAN MODE)
+1	will start Groonga!
+2	starting Groonga...
+3	started Groonga.
+SELECT * FROM diaries
+WHERE MATCH(body) AGAINST("+start" IN BOOLEAN MODE)
 ORDER BY id;
 id	body
-1	will start groonga!
-2	starting groonga...
-3	started groonga.
-drop table diaries;
+1	will start Groonga!
+2	starting Groonga...
+3	started Groonga.
+DROP TABLE diaries;
