@@ -149,7 +149,7 @@ namespace mrn {
           } else
 #endif
           {
-            longlongget(mysql_datetime, current_mysql_key);
+            value_decoder::decode(&mysql_datetime, current_mysql_key);
           }
           TimeConverter time_converter;
           bool truncated;
