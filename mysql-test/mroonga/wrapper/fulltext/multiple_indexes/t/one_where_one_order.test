@@ -1,4 +1,5 @@
 # Copyright(C) 2012 Kentoku SHIBA
+# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,30 +19,32 @@
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS diaries;
+DROP TABLE IF EXISTS texts;
 --enable_warnings
 
 SET NAMES UTF8;
-CREATE TABLE ft(
-  a INT,
-  b TEXT,
-  c TEXT,
-  PRIMARY KEY(a),
-  FULLTEXT KEY ftx1(b),
-  FULLTEXT KEY ftx2(c)
-)ENGINE=Mroonga DEFAULT CHARSET=UTF8 COMMENT = 'engine "innodb"';
-SHOW CREATE TABLE ft;
+CREATE TABLE texts (
+  id INT PRIMARY KEY,
+  matched TEXT,
+  not_matched TEXT,
+  FULLTEXT KEY (matched),
+  FULLTEXT KEY (not_matched)
+) DEFAULT CHARSET=UTF8 COMMENT='engine "InnoDB"';
 
-INSERT INTO ft VALUES(1,'aaaaa','abcde');
-INSERT INTO ft VALUES(2,'bbbbb','bcdef');
-INSERT INTO ft VALUES(3,'ccccc','cdefg');
-INSERT INTO ft VALUES(4,'ddddd','defgh');
-INSERT INTO ft VALUES(5,'eeeee','efghi');
+INSERT INTO texts VALUES (1, 'Hello1', 'World1');
+INSERT INTO texts VALUES (2, 'Hello2', 'World2');
+INSERT INTO texts VALUES (3, 'Hello3', 'World3');
 
-SELECT a, b, c FROM ft WHERE MATCH(b) AGAINST('bbbbb' IN BOOLEAN MODE);
-SELECT a, b, c FROM ft WHERE MATCH(b) AGAINST('bbbbb' IN BOOLEAN MODE) ORDER BY MATCH(b) AGAINST('bbbbb' IN BOOLEAN MODE);
-SELECT a, b, c FROM ft WHERE MATCH(c) AGAINST('bbbbb' IN BOOLEAN MODE);
+SELECT id,
+       matched,
+       not_matched,
+       MATCH(matched) AGAINST('+Hello' IN BOOLEAN MODE),
+       MATCH(not_matched) AGAINST('+Hello' IN BOOLEAN MODE)
+     FROM texts
+    WHERE MATCH(matched) AGAINST('+Hello' IN BOOLEAN MODE)
+ ORDER BY MATCH(not_matched) AGAINST('+Hello' IN BOOLEAN MODE),
+          id;
 
-DROP TABLE ft;
+DROP TABLE texts;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
