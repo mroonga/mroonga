@@ -191,6 +191,9 @@ extern "C" {
 
 #if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100010)
 #  define MRN_HAVE_TDC_LOCK_TABLE_SHARE
+#  if MYSQL_VERSION_ID >= 100100
+#    define MRN_TABLE_SHARE_TDC_IS_POINTER
+#  endif
 #endif
 
 #ifdef MRN_MARIADB_P

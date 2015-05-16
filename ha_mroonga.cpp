@@ -110,7 +110,11 @@
 #define MRN_LONG_TEXT_SIZE  (1 << 31) //  2Gbytes
 
 #ifdef MRN_HAVE_TDC_LOCK_TABLE_SHARE
-#  define mrn_open_mutex(share) &((share)->tdc.LOCK_table_share)
+#  ifdef MRN_TABLE_SHARE_TDC_IS_POINTER
+#    define mrn_open_mutex(share) &((share)->tdc->LOCK_table_share)
+#  else
+#    define mrn_open_mutex(share) &((share)->tdc.LOCK_table_share)
+#  endif
 #  define mrn_open_mutex_lock(share) do {               \
   TABLE_SHARE *share_ = share;                          \
   if (share_ && share_->tmp_table == NO_TMP_TABLE) {    \
