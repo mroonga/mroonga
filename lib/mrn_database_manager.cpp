@@ -313,18 +313,18 @@ namespace mrn {
     int error = 0;
 #ifdef WITH_GROONGA_NORMALIZER_MYSQL
     {
+#  ifdef MRN_GROONGA_NORMALIZER_MYSQL_EMBED
+      GRN_PLUGIN_IMPL_NAME_TAGGED(init, normalizers_mysql)(ctx_);
+      GRN_PLUGIN_IMPL_NAME_TAGGED(register, normalizers_mysql)(ctx_);
+#  else
       grn_obj *mysql_normalizer;
       mysql_normalizer = grn_ctx_get(ctx_, "NormalizerMySQLGeneralCI", -1);
       if (mysql_normalizer) {
         grn_obj_unlink(ctx_, mysql_normalizer);
       } else {
-#  ifdef MRN_GROONGA_NORMALIZER_MYSQL_EMBED
-        GRN_PLUGIN_IMPL_NAME_TAGGED(init, normalizers_mysql)(ctx_);
-        GRN_PLUGIN_IMPL_NAME_TAGGED(register, normalizers_mysql)(ctx_);
-#  else
         grn_plugin_register(ctx_, GROONGA_NORMALIZER_MYSQL_PLUGIN_NAME);
-#  endif
       }
+#  endif
     }
 #endif
 
