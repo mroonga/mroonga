@@ -21,7 +21,9 @@ id	body
 1	will start groonga!
 2	starting groonga...
 3	started groonga.
-select * from diaries where match(body) against("start");
+select * from diaries
+where match(body) against("+start" IN BOOLEAN MODE)
+ORDER BY id;
 id	body
 1	will start groonga!
 2	starting groonga...

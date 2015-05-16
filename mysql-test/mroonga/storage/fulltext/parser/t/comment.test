@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,10 @@ insert into diaries (body) values ("will start groonga!");
 insert into diaries (body) values ("starting groonga...");
 insert into diaries (body) values ("started groonga.");
 select * from diaries;
-select * from diaries where match(body) against("start");
+select * from diaries
+  where match(body) against("+start" IN BOOLEAN MODE)
+  ORDER BY id;
+
 drop table diaries;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
