@@ -19,6 +19,6 @@ FROM texts
 WHERE MATCH(matched) AGAINST('+Hello' IN BOOLEAN MODE);
 id	matched	not_matched	MATCH(matched) AGAINST('+Hello' IN BOOLEAN MODE)	MATCH(not_matched) AGAINST('+Hello' IN BOOLEAN MODE)
 1	Hello1	World1	1	0
-2	Hello2	World2	1	0
 3	Hello3	World3	1	0
+2	Hello2	World2	1	0
 DROP TABLE texts;

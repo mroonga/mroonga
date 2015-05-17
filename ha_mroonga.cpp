@@ -8290,12 +8290,11 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   check_count_skip(0, 0, true);
 
   mrn_change_encoding(ctx, system_charset_info);
-  grn_operator operation = GRN_OP_AND;
+  grn_operator operation = GRN_OP_OR;
   if (!matched_record_keys) {
     matched_record_keys = grn_table_create(ctx, NULL, 0, NULL,
                                            GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                            grn_table, 0);
-    operation = GRN_OP_OR;
   }
 
   grn_table_sort_key *sort_keys = NULL;
@@ -8332,6 +8331,9 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
                                         strlen(MRN_COLUMN_NAME_SCORE));
     score_sort_key.offset = 0;
     score_sort_key.flags = GRN_TABLE_SORT_DESC;
+    if (sorted_result) {
+      grn_obj_unlink(ctx, sorted_result);
+    }
     sorted_result = grn_table_create(ctx, NULL,
                                      0, NULL,
                                      GRN_OBJ_TABLE_NO_KEY, NULL,
