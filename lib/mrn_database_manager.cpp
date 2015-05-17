@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -126,12 +126,11 @@ namespace mrn {
                    mapper.db_name(), strlen(mapper.db_name()),
                    &db_address, NULL);
       memcpy(db_address, db, sizeof(grn_obj *));
+      error = ensure_normalizers_registered(*db);
     } else {
       memcpy(db, db_address, sizeof(grn_obj *));
       grn_ctx_use(ctx_, *db);
     }
-
-    error = ensure_normalizers_registered(*db);
 
     DBUG_RETURN(error);
   }
