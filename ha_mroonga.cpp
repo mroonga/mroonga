@@ -8089,7 +8089,7 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
     bool parsed = false;
     bool done = false;
     keyword++;
-    keyword_length++;
+    keyword_length--;
     while (!done) {
       uint consumed_keyword_length = 0;
       switch (keyword[0]) {
