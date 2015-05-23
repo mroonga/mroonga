@@ -938,7 +938,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     }
 
     if (mysql_mutex_init(mrn_share_mutex_key,
-                         &share->mutex,
+                         &share->record_mutex,
                          MY_MUTEX_INIT_FAST) != 0)
     {
       *error = HA_ERR_OUT_OF_MEM;
@@ -961,7 +961,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 
 error_hash_insert:
 error_get_long_term_share:
-  mysql_mutex_destroy(&share->mutex);
+  mysql_mutex_destroy(&share->record_mutex);
 error_init_mutex:
 error_parse_table_param:
   mrn_free_share_alloc(share);
@@ -981,7 +981,7 @@ int mrn_free_share(MRN_SHARE *share)
       plugin_unlock(NULL, share->plugin);
     mrn_free_share_alloc(share);
     thr_lock_delete(&share->lock);
-    mysql_mutex_destroy(&share->mutex);
+    mysql_mutex_destroy(&share->record_mutex);
     if (share->wrapper_mode) {
 #ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_share));

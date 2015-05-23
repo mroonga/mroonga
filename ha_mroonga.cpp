@@ -5531,6 +5531,14 @@ int ha_mroonga::storage_write_row(uchar *buf)
   }
 
   int added;
+  {
+  mrn::Lock lock(&(share->record_mutex));
+  if ((error = storage_write_row_unique_indexes(buf)))
+  {
+    DBUG_RETURN(error);
+  }
+  unique_indexes_are_processed = true;
+
   record_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
   if (ctx->rc) {
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
@@ -5546,14 +5554,19 @@ int ha_mroonga::storage_write_row(uchar *buf)
               "duplicated id on insert: update primary key: <%.*s>",
               pkey_size, pkey);
     }
+    uint j;
+    for (j = 0; j < table->s->keys; j++) {
+      if (j == pkey_nr) {
+        continue;
+      }
+      KEY *key_info = &table->key_info[j];
+      if (key_info->flags & HA_NOSAME) {
+        grn_table_delete_by_id(ctx, grn_index_tables[j], key_id[j]);
+      }
+    }
     DBUG_RETURN(error);
   }
-
-  if ((error = storage_write_row_unique_indexes(buf)))
-  {
-    goto err;
   }
-  unique_indexes_are_processed = true;
 
   grn_obj colbuf;
   GRN_VOID_INIT(&colbuf);
@@ -6090,6 +6103,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   KEY *pkey_info = NULL;
   storage_store_fields_for_prep_update(old_data, new_data, record_id);
   {
+    mrn::Lock lock(&(share->record_mutex));
     mrn::DebugColumnAccess debug_column_access(table, table->read_set);
     if ((error = storage_prepare_delete_row_unique_indexes(old_data,
                                                            record_id))) {
@@ -6493,6 +6507,8 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
   }
 
   storage_store_fields_for_prep_update(buf, NULL, record_id);
+  {
+  mrn::Lock lock(&(share->record_mutex));
   if ((error = storage_prepare_delete_row_unique_indexes(buf, record_id))) {
     DBUG_RETURN(error);
   }
@@ -6507,6 +6523,7 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
     (error = storage_delete_row_unique_indexes())
   ) {
     DBUG_RETURN(error);
+  }
   }
 
   grn_db_touch(ctx, grn_ctx_db(ctx));

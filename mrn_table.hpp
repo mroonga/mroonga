@@ -43,7 +43,7 @@ typedef struct st_mroonga_share
   char                *table_name;
   uint                table_name_length;
   uint                use_count;
-  mysql_mutex_t       mutex;
+  mysql_mutex_t       record_mutex;
   THR_LOCK            lock;
   TABLE_SHARE         *table_share;
   TABLE_SHARE         *wrap_table_share;
