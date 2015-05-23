@@ -5532,40 +5532,40 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
   int added;
   {
-  mrn::Lock lock(&(share->record_mutex));
-  if ((error = storage_write_row_unique_indexes(buf)))
-  {
-    DBUG_RETURN(error);
-  }
-  unique_indexes_are_processed = true;
+    mrn::Lock lock(&(share->record_mutex));
+    if ((error = storage_write_row_unique_indexes(buf)))
+    {
+      DBUG_RETURN(error);
+    }
+    unique_indexes_are_processed = true;
 
-  record_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
-  if (ctx->rc) {
-    my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
-    DBUG_RETURN(ER_ERROR_ON_WRITE);
-  }
-  if (!added) {
-    // duplicated error
-    error = HA_ERR_FOUND_DUPP_KEY;
-    memcpy(dup_ref, &record_id, sizeof(grn_id));
-    dup_key = pkey_nr;
-    if (!ignoring_duplicated_key) {
-      GRN_LOG(ctx, GRN_LOG_ERROR,
-              "duplicated id on insert: update primary key: <%.*s>",
-              pkey_size, pkey);
+    record_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
+    if (ctx->rc) {
+      my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+      DBUG_RETURN(ER_ERROR_ON_WRITE);
     }
-    uint j;
-    for (j = 0; j < table->s->keys; j++) {
-      if (j == pkey_nr) {
-        continue;
+    if (!added) {
+      // duplicated error
+      error = HA_ERR_FOUND_DUPP_KEY;
+      memcpy(dup_ref, &record_id, sizeof(grn_id));
+      dup_key = pkey_nr;
+      if (!ignoring_duplicated_key) {
+        GRN_LOG(ctx, GRN_LOG_ERROR,
+                "duplicated id on insert: update primary key: <%.*s>",
+                pkey_size, pkey);
       }
-      KEY *key_info = &table->key_info[j];
-      if (key_info->flags & HA_NOSAME) {
-        grn_table_delete_by_id(ctx, grn_index_tables[j], key_id[j]);
+      uint j;
+      for (j = 0; j < table->s->keys; j++) {
+        if (j == pkey_nr) {
+          continue;
+        }
+        KEY *key_info = &table->key_info[j];
+        if (key_info->flags & HA_NOSAME) {
+          grn_table_delete_by_id(ctx, grn_index_tables[j], key_id[j]);
+        }
       }
+      DBUG_RETURN(error);
     }
-    DBUG_RETURN(error);
-  }
   }
 
   grn_obj colbuf;
@@ -6508,22 +6508,22 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
 
   storage_store_fields_for_prep_update(buf, NULL, record_id);
   {
-  mrn::Lock lock(&(share->record_mutex));
-  if ((error = storage_prepare_delete_row_unique_indexes(buf, record_id))) {
-    DBUG_RETURN(error);
-  }
-  mrn_change_encoding(ctx, NULL);
-  grn_table_delete_by_id(ctx, grn_table, record_id);
-  if (ctx->rc) {
-    my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
-    DBUG_RETURN(ER_ERROR_ON_WRITE);
-  }
-  if (
-    (error = storage_delete_row_index(buf)) ||
-    (error = storage_delete_row_unique_indexes())
-  ) {
-    DBUG_RETURN(error);
-  }
+    mrn::Lock lock(&(share->record_mutex));
+    if ((error = storage_prepare_delete_row_unique_indexes(buf, record_id))) {
+      DBUG_RETURN(error);
+    }
+    mrn_change_encoding(ctx, NULL);
+    grn_table_delete_by_id(ctx, grn_table, record_id);
+    if (ctx->rc) {
+      my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+      DBUG_RETURN(ER_ERROR_ON_WRITE);
+    }
+    if (
+      (error = storage_delete_row_index(buf)) ||
+      (error = storage_delete_row_unique_indexes())
+      ) {
+      DBUG_RETURN(error);
+    }
   }
 
   grn_db_touch(ctx, grn_ctx_db(ctx));
