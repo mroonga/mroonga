@@ -600,6 +600,8 @@ private:
   void mkdir_p(const char *directory);
   ulonglong file_size(const char *path);
 
+  bool have_unique_index();
+
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
   void clear_cursor();
   void clear_cursor_geo();

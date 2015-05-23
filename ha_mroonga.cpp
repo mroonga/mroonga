@@ -5498,7 +5498,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
   int added = 0;
   {
-    mrn::Lock lock(&(share->record_mutex));
+    mrn::Lock lock(&(share->record_mutex), have_unique_index());
     if ((error = storage_write_row_unique_indexes(buf)))
     {
       DBUG_RETURN(error);
@@ -6103,7 +6103,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   KEY *pkey_info = NULL;
   storage_store_fields_for_prep_update(old_data, new_data, record_id);
   {
-    mrn::Lock lock(&(share->record_mutex));
+    mrn::Lock lock(&(share->record_mutex), have_unique_index());
     mrn::DebugColumnAccess debug_column_access(table, table->read_set);
     if ((error = storage_prepare_delete_row_unique_indexes(old_data,
                                                            record_id))) {
@@ -6508,7 +6508,7 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
 
   storage_store_fields_for_prep_update(buf, NULL, record_id);
   {
-    mrn::Lock lock(&(share->record_mutex));
+    mrn::Lock lock(&(share->record_mutex), have_unique_index());
     if ((error = storage_prepare_delete_row_unique_indexes(buf, record_id))) {
       DBUG_RETURN(error);
     }
@@ -8625,6 +8625,26 @@ ulonglong ha_mroonga::file_size(const char *path)
   } else {
     DBUG_RETURN(0);
   }
+}
+
+bool ha_mroonga::have_unique_index()
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  uint n_keys = table->s->keys;
+
+  for (uint i = 0; i < n_keys; i++) {
+    if (i == table->s->primary_key) {
+      continue;
+    }
+
+    KEY *key_info = &(table->key_info[i]);
+    if (key_info->flags & HA_NOSAME) {
+      DBUG_RETURN(true);
+    }
+  }
+
+  DBUG_RETURN(false);
 }
 
 void ha_mroonga::push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag)
