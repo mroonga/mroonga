@@ -5505,39 +5505,39 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
     unique_indexes_are_processed = true;
 
-  char *pkey;
-  int pkey_size;
-  GRN_BULK_REWIND(&key_buffer);
-  if (pkey_nr == MAX_INDEXES) {
-    pkey = NULL;
-    pkey_size = 0;
-  } else {
-    KEY key_info = table->key_info[pkey_nr];
-    if (KEY_N_KEY_PARTS(&key_info) == 1) {
-      Field *pkey_field = key_info.key_part[0].field;
-      error = mrn_change_encoding(ctx, pkey_field->charset());
-      if (error) {
-        DBUG_RETURN(error);
-      }
-      generic_store_bulk(pkey_field, &key_buffer);
-      pkey = GRN_TEXT_VALUE(&key_buffer);
-      pkey_size = GRN_TEXT_LEN(&key_buffer);
+    char *pkey;
+    int pkey_size;
+    GRN_BULK_REWIND(&key_buffer);
+    if (pkey_nr == MAX_INDEXES) {
+      pkey = NULL;
+      pkey_size = 0;
     } else {
-      mrn_change_encoding(ctx, NULL);
-      uchar key[MRN_MAX_KEY_SIZE];
-      key_copy(key, buf, &key_info, key_info.key_length);
-      grn_bulk_reserve(ctx, &key_buffer, MRN_MAX_KEY_SIZE);
-      pkey = GRN_TEXT_VALUE(&key_buffer);
-      storage_encode_multiple_column_key(&key_info,
-                                         key, key_info.key_length,
-                                         (uchar *)pkey, (uint *)&pkey_size);
+      KEY key_info = table->key_info[pkey_nr];
+      if (KEY_N_KEY_PARTS(&key_info) == 1) {
+        Field *pkey_field = key_info.key_part[0].field;
+        error = mrn_change_encoding(ctx, pkey_field->charset());
+        if (error) {
+          DBUG_RETURN(error);
+        }
+        generic_store_bulk(pkey_field, &key_buffer);
+        pkey = GRN_TEXT_VALUE(&key_buffer);
+        pkey_size = GRN_TEXT_LEN(&key_buffer);
+      } else {
+        mrn_change_encoding(ctx, NULL);
+        uchar key[MRN_MAX_KEY_SIZE];
+        key_copy(key, buf, &key_info, key_info.key_length);
+        grn_bulk_reserve(ctx, &key_buffer, MRN_MAX_KEY_SIZE);
+        pkey = GRN_TEXT_VALUE(&key_buffer);
+        storage_encode_multiple_column_key(&key_info,
+                                           key, key_info.key_length,
+                                           (uchar *)pkey, (uint *)&pkey_size);
+      }
     }
-  }
 
-  if (grn_table->header.type != GRN_TABLE_NO_KEY && pkey_size == 0) {
-    my_message(ER_ERROR_ON_WRITE, "primary key is empty", MYF(0));
-    DBUG_RETURN(ER_ERROR_ON_WRITE);
-  }
+    if (grn_table->header.type != GRN_TABLE_NO_KEY && pkey_size == 0) {
+      my_message(ER_ERROR_ON_WRITE, "primary key is empty", MYF(0));
+      DBUG_RETURN(ER_ERROR_ON_WRITE);
+    }
 
     record_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
     if (ctx->rc) {
