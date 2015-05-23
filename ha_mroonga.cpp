@@ -5494,10 +5494,19 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
   }
 
+  uint pkey_nr = table->s->primary_key;
+
+  int added = 0;
+  {
+    mrn::Lock lock(&(share->record_mutex));
+    if ((error = storage_write_row_unique_indexes(buf)))
+    {
+      DBUG_RETURN(error);
+    }
+    unique_indexes_are_processed = true;
+
   char *pkey;
   int pkey_size;
-  uint pkey_nr;
-  pkey_nr = table->s->primary_key;
   GRN_BULK_REWIND(&key_buffer);
   if (pkey_nr == MAX_INDEXES) {
     pkey = NULL;
@@ -5529,15 +5538,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
     my_message(ER_ERROR_ON_WRITE, "primary key is empty", MYF(0));
     DBUG_RETURN(ER_ERROR_ON_WRITE);
   }
-
-  int added;
-  {
-    mrn::Lock lock(&(share->record_mutex));
-    if ((error = storage_write_row_unique_indexes(buf)))
-    {
-      DBUG_RETURN(error);
-    }
-    unique_indexes_are_processed = true;
 
     record_id = grn_table_add(ctx, grn_table, pkey, pkey_size, &added);
     if (ctx->rc) {
