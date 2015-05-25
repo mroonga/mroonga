@@ -5,6 +5,40 @@
 News
 ====
 
+.. _release-5-03:
+
+Release 5.03 - 2015/05/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* mariadb10.1: Followed recent API changes.
+* Supported `FT_SORTED` flag.
+* mysql57: Followed recent changes.
+* Supported `FT_FLAG` and unmatched full text search in output columns.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that unique index doesn't work for invalid datetime.
+  TODO:
+  [groonga-dev,03219] [Reported by Hiroshi Kagami]
+* [multiple column key] Fixed a potential bug that decoding value is broken. This bug may occurs
+  because proper byte order conversion between network and host is missing on decoding.
+* Fixed a bug that needless groonga-normalizer-mysql plugin search is ran
+  when it is embedded into Mroonga. [GitHub#53] [Reported by torinky]
+* Fixed wrong keyword length when query includes pragma. [GitHub#54] [Patch by Naoya Murakami]
+* [storage] Fixed a bug that unique check is ignored for multiple connections.
+  [groonga-dev,03243] [Reported by Hiroshi Kagami]
+
+Thanks
+^^^^^^
+
+* Hiroshi Kagami
+* torinky
+* Naoya Murakami
+
 .. _release-5-02:
 
 Release 5.02 - 2015/04/29
