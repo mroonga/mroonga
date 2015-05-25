@@ -14,4 +14,4 @@ For English speaker
   `groonga-talk@lists.sourceforge.net <http://lists.sourceforge.net/mailman/listinfo/groonga-talk>`_
 
 For Japanese speaker
-  `groonga-dev@lists.sourceforge.jp <http://lists.sourceforge.jp/mailman/listinfo/groonga-dev>`_
+  `groonga-dev@lists.osdn.me <http://lists.osdn.me/mailman/listinfo/groonga-dev>`_
