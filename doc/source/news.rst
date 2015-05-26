@@ -14,8 +14,9 @@ Improvements
 ^^^^^^^^^^^^
 
 * mariadb10.1: Followed recent API changes.
-* Supported `FT_SORTED` flag.
-* mysql57: Followed recent changes.
+* Supported ``FT_SORTED`` flag which is internally used in MySQL. It improves compatibility with
+  MySQL and can reduces redundant sorting in MySQL.
+* mysql57: Followed recent API changes.
 
 Fixes
 ^^^^^
