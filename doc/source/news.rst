@@ -28,7 +28,8 @@ Fixes
   because proper byte order conversion between network and host is missing on decoding.
 * [windows] Fixed a bug that needless groonga-normalizer-mysql plugin search is ran
   when it is embedded into Mroonga. [GitHub#53] [Reported by torinky]
-* Fixed wrong keyword length when query includes :ref:`pragma`. [GitHub#54] [Patch by Naoya Murakami]
+* Fixed wrong keyword length when query includes :ref:`pragma`. This bug causes that it doesn't hit
+  expected search results. [GitHub#54] [Patch by Naoya Murakami]
 * [storage] Fixed a bug that unique check is ignored for multiple connections.
   [groonga-dev,03243] [Reported by Hiroshi Kagami]
 
