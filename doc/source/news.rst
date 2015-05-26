@@ -26,7 +26,7 @@ Fixes
   [groonga-dev,03219] [Reported by Hiroshi Kagami]
 * [multiple column key] Fixed a potential bug that decoding value is broken. This bug may occurs
   because proper byte order conversion between network and host is missing on decoding.
-* Fixed a bug that needless groonga-normalizer-mysql plugin search is ran
+* [windows] Fixed a bug that needless groonga-normalizer-mysql plugin search is ran
   when it is embedded into Mroonga. [GitHub#53] [Reported by torinky]
 * Fixed wrong keyword length when query includes pragma. [GitHub#54] [Patch by Naoya Murakami]
 * [storage] Fixed a bug that unique check is ignored for multiple connections.
