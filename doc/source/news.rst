@@ -16,7 +16,6 @@ Improvements
 * mariadb10.1: Followed recent API changes.
 * Supported `FT_SORTED` flag.
 * mysql57: Followed recent changes.
-* Supported `FT_FLAG` and unmatched full text search in output columns.
 
 Fixes
 ^^^^^
