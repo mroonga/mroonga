@@ -1447,7 +1447,8 @@ msgstr ""
 msgid "ml@mysql.gr.jp 日本語アナウンス"
 msgstr ""
 
-msgid "groonga-dev@lists.sourceforge.jp 日本語アナウンス"
+# 5600b8044793460f856f1f876d1542d7
+msgid "groonga-dev@lists.osdn.me 日本語アナウンス"
 msgstr ""
 
 msgid "groonga-talk@lists.sourceforge.net 英語アナウンス"

@@ -678,17 +678,17 @@ msgstr ""
 "zipファイルをダウンロードして展開してください。環境に合わせてzipファイルを選"
 "ぶ必要があります"
 
-# 678a3398d2ff45e38ae0f296545f6ed7
+# 60a023283036462da47622ad855c6e2d
 msgid ""
-"`mariadb-10.0.17-with-mroonga-5.02-win32.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v5.02/mariadb-10.0.17-with-mroonga-5.02-win32."
+"`mariadb-10.0.17-with-mroonga-5.03-win32.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v5.03/mariadb-10.0.17-with-mroonga-5.03-win32."
 "zip>`_"
 msgstr ""
 
-# 9b606103514940729b4a8e0d2d1d9313
+# a49289913af24637a6107397be55becc
 msgid ""
-"`mariadb-10.0.17-with-mroonga-5.02-winx64.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v5.02/mariadb-10.0.17-with-mroonga-5.02-winx64."
+"`mariadb-10.0.17-with-mroonga-5.03-winx64.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v5.03/mariadb-10.0.17-with-mroonga-5.03-winx64."
 "zip>`_"
 msgstr ""
 

@@ -44,7 +44,8 @@ msgstr ""
 msgid "For Japanese speaker"
 msgstr "日本語で話題を扱う場合"
 
+# 213cf612607c436ba6303f8fd8ef446b
 msgid ""
-"`groonga-dev@lists.sourceforge.jp <http://lists.sourceforge.jp/mailman/"
-"listinfo/groonga-dev>`_"
+"`groonga-dev@lists.osdn.me <http://lists.osdn.me/mailman/listinfo/groonga-"
+"dev>`_"
 msgstr ""
