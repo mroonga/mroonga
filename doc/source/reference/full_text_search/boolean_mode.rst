@@ -52,6 +52,8 @@ We show you how to rank in boolean mode using the following schema and data. ::
     'MySQL Groonga Mroonga'
   );
 
+.. _pragma:
+
 Pragma
 ------
 
