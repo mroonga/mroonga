@@ -22,7 +22,8 @@ Fixes
 ^^^^^
 
 * [storage] Fixed a bug that unique index doesn't work for invalid datetime.
-  TODO:
+  This bug is occurred when invalid datetime is inserted. The unique index is created for invalid
+  datetime instead of actual truncated datetime.
   [groonga-dev,03219] [Reported by Hiroshi Kagami]
 * [multiple column key] Fixed a potential bug that decoding value is broken. This bug may occurs
   because proper byte order conversion between network and host is missing on decoding.
