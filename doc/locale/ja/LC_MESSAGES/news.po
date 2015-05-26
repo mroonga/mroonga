@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-04-28 17:35+0900\n"
+"PO-Revision-Date: 2015-05-26 13:17+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,11 +20,86 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 5.02 - 2015/04/29"
-msgstr "5.02リリース - 2015/04/29"
+msgid "Release 5.03 - 2015/05/29"
+msgstr "5.03リリース - 2015/05/29"
 
 msgid "Improvements"
 msgstr "改良"
+
+# a55cfca57516434d8908497c69694210
+msgid "mariadb10.1: Followed recent API changes."
+msgstr "mariadb10.1: APIの変更に追従しました。"
+
+#, fuzzy
+msgid "Supported `FT_SORTED` flag."
+msgstr "`D` プラグマに対応。"
+
+# 2077275f62ef4db2ac23e2ad3e1c9d42
+msgid "mysql57: Followed recent changes."
+msgstr "mysql57: 直近の変更に追従しました。"
+
+# efcfc635c28a4411af2930610872974d
+msgid "Supported `FT_FLAG` and unmatched full text search in output columns."
+msgstr ""
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[storage] Fixed a bug that unique index doesn't work for invalid datetime. "
+"TODO: [groonga-dev,03219] [Reported by Hiroshi Kagami]"
+msgstr ""
+"[ストレージモード] 不正なdatetimeに対してユニークインデックスが正しく機能しな"
+"い不具合を修正しました [groonga-dev,03219] [各務さんが報告]"
+
+# 6a0c3769037a45f88296c51353fbe665
+msgid ""
+"[multiple column key] Fixed a potential bug that decoding value is broken. "
+"This bug may occurs because proper byte order conversion between network and "
+"host is missing on decoding."
+msgstr ""
+"[マルチカラムキー] デコードした値が壊れるかもしれない潜在的な不具合を修正しま"
+"した。この不具合はバイトオーダーの変換をデコードのときにしていないことが起因"
+"で発生する可能性があります。"
+
+# f28793795024410cb672862f84c84754
+msgid ""
+"Fixed a bug that needless groonga-normalizer-mysql plugin search is ran when "
+"it is embedded into Mroonga. [GitHub#53] [Reported by torinky]"
+msgstr ""
+"Mroongaに groonga-normalizer-mysql が組込まれていると、不必要な groonga-"
+"normalizer-mysql プラグインの検索が実行される不具合を修正しました。 "
+"[GitHub#53] [torinkyさんが報告]"
+
+msgid ""
+"Fixed wrong keyword length when query includes pragma. [GitHub#54] [Patch by "
+"Naoya Murakami]"
+msgstr ""
+"クエリにプラグマが含まれているときに、キーワードの長さを間違えてしまい、正し"
+"く検索できない不具合を修正しました。 [GitHub#54] [村上さんがパッチ提供]"
+
+msgid ""
+"[storage] Fixed a bug that unique check is ignored for multiple connections. "
+"[groonga-dev,03243] [Reported by Hiroshi Kagami]"
+msgstr ""
+"[ストレージモード] 複数接続時にユニーク制約が無視されてしまう不具合を修正しま"
+"した。 [groonga-dev,03243] [各務さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Hiroshi Kagami"
+msgstr "各務さん"
+
+# 58c01265b23a4438bd4df2d910acf3b2
+msgid "torinky"
+msgstr "torinkyさん"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Release 5.02 - 2015/04/29"
+msgstr "5.02リリース - 2015/04/29"
 
 msgid "[doc] Updated :doc:`/developer/release` procedure documentation"
 msgstr "[doc] :doc:`/developer/release` を更新しました。"
@@ -70,9 +145,6 @@ msgstr "Debian 8.0 (Jessie)に対応しました。"
 msgid "Supported Ubuntu 15.04 (Vivid Vervet)"
 msgstr "Ubuntu 15.04 Vivid Vervetに対応しました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 # 0c5a19df6fea4b5a917430142484fafc
 msgid "[doc] Fixed old links to Windows package [Reported by METAL_GEAR_mkII]"
 msgstr ""
@@ -90,9 +162,6 @@ msgstr ""
 "ラッシュする問題を修正しました。 ``ORDER BY LIMIT`` の最適化を適用するケース"
 "でSQLの ``ORDER BY`` カラム指定が重複しているときに発生します。この問題は"
 "MySQL 5.5には影響しません。 [GitHub#50] [GMOメディア株式会社さんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Masato Shimada"
 msgstr "嶋田さん"
@@ -226,9 +295,6 @@ msgstr ""
 # 7147a76b729a4fc78fef8c2ad92aa41d
 msgid "Hiromitsu KATO"
 msgstr "加藤さん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Yoshino"
 msgstr "吉野さん"
@@ -2830,9 +2896,6 @@ msgstr ""
 "[ストレージモード] ``INSERT ON DUPLICATE KEY UPDATE`` が機能していなかった問"
 "題を修正しました。この不具合には挿入に失敗したあとの更新処理で既存の他のレ"
 "コードを変更してしまう可能性があります。[kazeburoさんが報告]"
-
-msgid "Hiroshi Kagami"
-msgstr "各務さん"
 
 msgid "kazeburo"
 msgstr "kazeburoさん"
