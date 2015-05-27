@@ -267,7 +267,7 @@ namespace mrn {
     mysql_time.hour        = (mysql_datetime / 10000 % 100);
     mysql_time.day         = (mysql_datetime / 1000000 % 100);
     mysql_time.month       = (mysql_datetime / 100000000 % 100);
-    mysql_time.year        = (mysql_datetime / 10000000000 % 10000);
+    mysql_time.year        = (mysql_datetime / 10000000000LL % 10000);
 
     long long int grn_time = mysql_time_to_grn_time(&mysql_time, truncated);
 
@@ -288,7 +288,7 @@ namespace mrn {
       (mysql_time.hour   *       10000) +
       (mysql_time.day    *     1000000) +
       (mysql_time.month  *   100000000) +
-      (mysql_time.year   * 10000000000);
+      (mysql_time.year   * 10000000000LL);
 
     DBUG_RETURN(mysql_datetime);
   }
