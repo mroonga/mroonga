@@ -27,8 +27,8 @@ case "${distribution}" in
   debian)
     component=main
     run cat <<EOF > /etc/apt/sources.list.d/groonga.list
-deb http://packages.groonga.org/debian/ wheezy main
-deb-src http://packages.groonga.org/debian/ wheezy main
+deb http://packages.groonga.org/debian/ ${code_name} main
+deb-src http://packages.groonga.org/debian/ ${code_name} main
 EOF
     if ! grep --quiet security /etc/apt/sources.list; then
       run cat <<EOF > /etc/apt/sources.list.d/security.list
