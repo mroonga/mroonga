@@ -91,6 +91,13 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
+if ! /sbin/service mysql status > /dev/null; then
+  /sbin/service mysqld start
+  stop_after_installation=1
+else
+  stop_after_installation=0
+fi
+
 mysql_command=`which mysql`
 password_option=""
 $mysql_command -u root -e "quit"
@@ -129,7 +136,18 @@ eval $command || \
 	(echo "run the following command to register Mroonga:"; \
 	 echo "  $command")
 
+if [ "$stop_after_installation" = "1" ]; then
+  /sbin/service mysqld stop
+fi
+
 %preun
+if ! /sbin/service mysqld status > /dev/null; then
+  /sbin/service mysqld start
+  stop_after_uninstallation=1
+else
+  stop_after_uninstallation=0
+fi
+
 uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 mysql_command=`which mysql`
 if $mysql_command -u root -e "quit"; then
@@ -143,6 +161,10 @@ if [ "$1" = 0 ]; then
     eval $command || \
 	(echo "run the following command to unregister Mroonga:"; \
 	 echo "  $command")
+fi
+
+if [ "$stop_after_uninstallation" = "1" ]; then
+  /sbin/service mysqld stop
 fi
 
 %files
