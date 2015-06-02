@@ -341,8 +341,8 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
   for (i = 2; i > 0; i--)
 #endif
   {
-    const char *params_string_value;
-    uint params_string_length;
+    const char *params_string_value = NULL;
+    uint params_string_length = 0;
     switch (i)
     {
 #ifdef WITH_PARTITION_STORAGE_ENGINE
