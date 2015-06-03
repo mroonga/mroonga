@@ -91,7 +91,7 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if ! /sbin/service mysql status > /dev/null; then
+if ! /sbin/service mysqld status > /dev/null; then
   /sbin/service mysqld start
   stop_after_installation=1
 else
