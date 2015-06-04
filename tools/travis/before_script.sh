@@ -31,6 +31,9 @@ else
   if [ -d /opt/mysql/ ]; then
     PATH=$(echo /opt/mysql/server-*/bin/):$PATH
   fi
-  ./configure \
-    --with-mysql-source=$PWD/vendor/mysql
+  configure_args=("--with-mysql-source=$PWD/vendor/mysql")
+  if [ "${MYSQL_VERSION}" = "mysql-5.6.25" ]; then
+    configure_args=("${configure_args[@]}" --enable-fast-mutexes)
+  fi
+  ./configure "${configure_args[@]}"
 fi
