@@ -7,7 +7,7 @@ env:
   - MYSQL_VERSION=mysql-system
   - MYSQL_VERSION=mysql-5.5.44
   - MYSQL_VERSION=mysql-5.6.25
-  - MYSQL_VERSION=mariadb-5.5.43
+  - MYSQL_VERSION=mariadb-5.5.44
   - MYSQL_VERSION=mariadb-10.0.19
   - MYSQL_VERSION=mariadb-10.0.19 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
   - MYSQL_VERSION=mariadb-10.0.19 MROONGA_BUNDLED=yes
@@ -16,7 +16,7 @@ env:
 matrix:
   allow_failures:
 #     - env: MYSQL_VERSION=mysql-system
-#    - env: MYSQL_VERSION=mariadb-5.5.43
+#    - env: MYSQL_VERSION=mariadb-5.5.44
     - env: MYSQL_VERSION=mariadb-10.0.19 MROONGA_BUNDLED=yes
     - env: MYSQL_VERSION=mariadb-10.0.19 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
     - env: MYSQL_VERSION=mariadb-10.1.4
