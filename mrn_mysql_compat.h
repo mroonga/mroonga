@@ -219,4 +219,25 @@
 #  define MRN_SUPPORT_CUSTOM_OPTIONS
 #endif
 
+#ifdef MRN_MARIADB_P
+#  if MYSQL_VERSION_ID >= 100104
+#    define mrn_init_sql_alloc(thd, mem_root)                           \
+  init_sql_alloc(mem_root,                                              \
+                 TABLE_ALLOC_BLOCK_SIZE,                                \
+                 0,                                                     \
+                 MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
+#  else
+#    define mrn_init_sql_alloc(thd, mem_root)           \
+  init_sql_alloc(mem_root,                              \
+                 TABLE_ALLOC_BLOCK_SIZE,                \
+                 0,                                     \
+                 MYF(0))
+#  endif
+#else
+#    define mrn_init_sql_alloc(thd, mem_root)           \
+  init_sql_alloc(mem_root,                              \
+                 TABLE_ALLOC_BLOCK_SIZE,                \
+                 0)
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

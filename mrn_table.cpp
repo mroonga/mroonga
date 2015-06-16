@@ -911,6 +911,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
         share->wrap_primary_key = MAX_KEY;
       }
       memcpy(wrap_table_share, table->s, sizeof(*wrap_table_share));
+      mrn_init_sql_alloc(current_thd, &(wrap_table_share->mem_root));
       wrap_table_share->keys = share->wrap_keys;
       wrap_table_share->key_info = share->wrap_key_info;
       wrap_table_share->primary_key = share->wrap_primary_key;
@@ -989,6 +990,7 @@ int mrn_free_share(MRN_SHARE *share)
 #ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_ha_data));
 #endif
+      free_root(&(share->wrap_table_share->mem_root), MYF(0));
     }
     my_free(share);
   }
