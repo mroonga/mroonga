@@ -12838,10 +12838,10 @@ int ha_mroonga::rename_table(const char *from, const char *to)
     mrn_free_long_term_share(tmp_share->long_term_share);
     tmp_share->long_term_share = NULL;
   }
+  mrn_free_share(tmp_share);
   mrn_open_mutex_lock(NULL);
   mrn_free_tmp_table_share(tmp_table_share);
   mrn_open_mutex_unlock(NULL);
-  mrn_free_share(tmp_share);
 
   DBUG_RETURN(error);
 }
