@@ -79,9 +79,11 @@
 #if MYSQL_VERSION_ID >= 50607
 #  if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
 #    define MRN_GET_ERROR_MESSAGE thd_get_error_message(current_thd)
+#    define MRN_GET_ERROR_NUMBER thd_get_error_number(current_thd)
 #    define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd_get_error_row(thd)
 #  else
 #    define MRN_GET_ERROR_MESSAGE current_thd->get_stmt_da()->message()
+#    define MRN_GET_ERROR_NUMBER current_thd->get_stmt_da()->sql_errno()
 #    if MYSQL_VERSION_ID >= 50706
 #      define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) \
   thd->get_stmt_da()->current_row_for_condition()
@@ -92,6 +94,7 @@
 #  endif
 #else
 #  define MRN_GET_ERROR_MESSAGE current_thd->stmt_da->message()
+#  define MRN_GET_ERROR_NUMBER current_thd->stmt_da->sql_errno()
 #  define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd->warning_info->current_row_for_warning()
 #endif
 
@@ -210,6 +213,10 @@
 #  define MRN_FORMAT_STRING_LENGTH "zu"
 #else
 #  define MRN_FORMAT_STRING_LENGTH "u"
+#endif
+
+#ifdef MRN_MARIADB_P
+#  define MRN_SUPPORT_CUSTOM_OPTIONS
 #endif
 
 #endif /* MRN_MYSQL_COMPAT_H_ */

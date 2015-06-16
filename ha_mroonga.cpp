@@ -102,6 +102,10 @@
 #  include <sql_table.h>
 #endif
 
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+#  include <create_options.h>
+#endif
+
 // for debug
 #define MRN_CLASS_NAME "ha_mroonga"
 
@@ -2847,6 +2851,15 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   share = tmp_share;
   MRN_SET_WRAP_SHARE_KEY(tmp_share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (parse_engine_table_options(ha_thd(), tmp_share->hton, table->s)) {
+    MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+    share = NULL;
+    error = MRN_GET_ERROR_NUMBER;
+    DBUG_RETURN(error);
+  }
+#endif
   if (!(hnd =
       tmp_share->hton->create(tmp_share->hton, table->s,
         current_thd->mem_root)))
@@ -13971,6 +13984,25 @@ bool ha_mroonga::wrapper_prepare_inplace_alter_table(
   if (!alter_handler_flags) {
     DBUG_RETURN(false);
   }
+
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  int error = 0;
+  MRN_SHARE *tmp_share;
+  tmp_share = mrn_get_share(altered_table->s->table_name.str,
+                            altered_table,
+                            &error);
+  if (error != 0) {
+    DBUG_RETURN(true);
+  }
+
+  if (parse_engine_table_options(ha_thd(),
+                                  tmp_share->hton,
+                                  wrap_altered_table->s)) {
+    mrn_free_share(tmp_share);
+    DBUG_RETURN(true);
+  }
+#endif
+
   MRN_SET_WRAP_ALTER_KEY(this, ha_alter_info);
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
@@ -13979,6 +14011,11 @@ bool ha_mroonga::wrapper_prepare_inplace_alter_table(
   MRN_SET_BASE_ALTER_KEY(this, ha_alter_info);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
+
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  mrn_free_share(tmp_share);
+#endif
+
   DBUG_RETURN(result);
 }
 
@@ -14125,14 +14162,32 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   bitmap_set_all(table->read_set);
 
   if (!error && alter_handler_flags) {
-    MRN_SET_WRAP_ALTER_KEY(this, ha_alter_info);
-    MRN_SET_WRAP_SHARE_KEY(share, table->s);
-    MRN_SET_WRAP_TABLE_KEY(this, table);
-    result = wrap_handler->ha_inplace_alter_table(wrap_altered_table,
-                                                  ha_alter_info);
-    MRN_SET_BASE_ALTER_KEY(this, ha_alter_info);
-    MRN_SET_BASE_SHARE_KEY(share, table->s);
-    MRN_SET_BASE_TABLE_KEY(this, table);
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+    {
+      MRN_SHARE *alter_tmp_share;
+      alter_tmp_share = mrn_get_share(altered_table->s->table_name.str,
+                                      altered_table,
+                                      &error);
+      if (alter_tmp_share) {
+        if (parse_engine_table_options(ha_thd(),
+                                       alter_tmp_share->hton,
+                                       wrap_altered_table->s)) {
+          error = MRN_GET_ERROR_NUMBER;
+        }
+        mrn_free_share(alter_tmp_share);
+      }
+    }
+#endif
+    if (!error) {
+      MRN_SET_WRAP_ALTER_KEY(this, ha_alter_info);
+      MRN_SET_WRAP_SHARE_KEY(share, table->s);
+      MRN_SET_WRAP_TABLE_KEY(this, table);
+      result = wrap_handler->ha_inplace_alter_table(wrap_altered_table,
+                                                    ha_alter_info);
+      MRN_SET_BASE_ALTER_KEY(this, ha_alter_info);
+      MRN_SET_BASE_SHARE_KEY(share, table->s);
+      MRN_SET_BASE_TABLE_KEY(this, table);
+    }
   }
 
   if (result || error)
