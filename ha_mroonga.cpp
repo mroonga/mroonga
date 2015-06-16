@@ -14013,8 +14013,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
     n_keys = ha_alter_info->index_add_count;
     for (i = 0; i < n_keys; ++i) {
       uint key_pos = ha_alter_info->index_add_buffer[i];
-      KEY *key =
-        &altered_table->key_info[key_pos];
+      KEY *key = &altered_table->key_info[key_pos];
       if (!(key->flags & HA_FULLTEXT || mrn_is_geo_key(key))) {
         continue;
       }
