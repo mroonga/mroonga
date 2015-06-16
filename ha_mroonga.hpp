@@ -609,7 +609,7 @@ private:
   void clear_search_result();
   void clear_search_result_geo();
   void clear_indexes();
-  int alter_share_add(const char *path, TABLE_SHARE *table_share);
+  int add_wrap_hton(const char *path, handlerton *wrap_handlerton);
   void remove_related_files(const char *base_path);
   void remove_grn_obj_force(const char *name);
   int drop_index(MRN_SHARE *target_share, uint key_index);
@@ -796,7 +796,7 @@ private:
   int close_databases();
   int ensure_database_open(const char *name);
   int ensure_database_remove(const char *name);
-  int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,
+  int wrapper_delete_table(const char *name, handlerton *wrap_handlerton,
                            const char *table_name);
   int generic_delete_table(const char *name, const char *table_name);
   int wrapper_open(const char *name, int mode, uint test_if_locked);

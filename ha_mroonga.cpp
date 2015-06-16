@@ -3915,6 +3915,8 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   if (error) {
     mrn_free_long_term_share(tmp_share->long_term_share);
     tmp_share->long_term_share = NULL;
+  } else {
+    error = add_wrap_hton(tmp_share->table_name, tmp_share->hton);
   }
   mrn_free_share(tmp_share);
   DBUG_RETURN(error);
@@ -4510,40 +4512,20 @@ int ha_mroonga::close()
     error = storage_close();
   }
 
-  if (is_temporary_table_name(share->table_name)) {
-    TABLE_LIST table_list;
-    TABLE_SHARE *tmp_table_share;
-    int tmp_error;
-    /* no need to decode */
-    mrn::PathMapper mapper(share->table_name);
-#ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
-    table_list.init_one_table(mapper.db_name(), strlen(mapper.db_name()),
-                              mapper.mysql_table_name(),
-                              strlen(mapper.mysql_table_name()),
-                              mapper.mysql_table_name(),
-                              TL_WRITE);
-#else
-    table_list.init_one_table(mapper.db_name(), mapper.mysql_table_name(),
-                              TL_WRITE);
-#endif
-    mrn_open_mutex_lock(NULL);
-    tmp_table_share =
-      mrn_create_tmp_table_share(&table_list, share->table_name, &tmp_error);
-    mrn_open_mutex_unlock(NULL);
-    if (!tmp_table_share) {
-      error = tmp_error;
-    } else if ((tmp_error = alter_share_add(share->table_name,
-                                            tmp_table_share))) {
-      error = tmp_error;
-      mrn_open_mutex_lock(NULL);
-      mrn_free_tmp_table_share(tmp_table_share);
-      mrn_open_mutex_unlock(NULL);
-    }
+  if (error != 0)
+  {
+    DBUG_RETURN(error);
   }
+
+  error = add_wrap_hton(share->table_name, share->hton);
   bitmap_free(&multiple_column_key_bitmap);
+  if (share->use_count == 1) {
+    mrn_free_long_term_share(share->long_term_share);
+  }
   mrn_free_share(share);
   share = NULL;
   is_clone = false;
+
   if (
     thd &&
     thd_sql_command(thd) == SQLCOM_FLUSH
@@ -4560,22 +4542,19 @@ int ha_mroonga::close()
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,
+int ha_mroonga::wrapper_delete_table(const char *name,
+                                     handlerton *wrap_handlerton,
                                      const char *table_name)
 {
   int error = 0;
-  handler *hnd;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(tmp_share, tmp_share->table_share);
-  if (!(hnd =
-      tmp_share->hton->create(tmp_share->hton, tmp_share->table_share,
-      current_thd->mem_root)))
+  handler *hnd = wrap_handlerton->create(wrap_handlerton, NULL,
+                                         current_thd->mem_root);
+  if (!hnd)
   {
-    MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
   hnd->init();
-  MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
 
   error = hnd->ha_delete_table(name);
   delete hnd;
@@ -4611,71 +4590,39 @@ int ha_mroonga::generic_delete_table(const char *name, const char *table_name)
 
 int ha_mroonga::delete_table(const char *name)
 {
+  MRN_DBUG_ENTER_METHOD();
+
   int error = 0;
   THD *thd = ha_thd();
-  TABLE_LIST table_list;
-  TABLE_SHARE *tmp_table_share = NULL;
-  TABLE tmp_table;
-  MRN_SHARE *tmp_share;
-  st_mrn_alter_share *alter_share, *tmp_alter_share;
-  MRN_DBUG_ENTER_METHOD();
+  handlerton *wrap_handlerton = NULL;
   mrn::PathMapper mapper(name);
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, false);
-  if (slot_data && slot_data->first_alter_share)
+  if (slot_data && slot_data->first_wrap_hton)
   {
-    tmp_alter_share = NULL;
-    alter_share = slot_data->first_alter_share;
-    while (alter_share)
+    st_mrn_wrap_hton *wrap_hton, *tmp_wrap_hton;
+    tmp_wrap_hton = NULL;
+    wrap_hton = slot_data->first_wrap_hton;
+    while (wrap_hton)
     {
-      if (!strcmp(alter_share->path, name))
+      if (!strcmp(wrap_hton->path, name))
       {
         /* found */
-        tmp_table_share = alter_share->alter_share;
-        if (tmp_alter_share)
-          tmp_alter_share->next = alter_share->next;
+        wrap_handlerton = wrap_hton->hton;
+        if (tmp_wrap_hton)
+          tmp_wrap_hton->next = wrap_hton->next;
         else
-          slot_data->first_alter_share = alter_share->next;
-        free(alter_share);
+          slot_data->first_wrap_hton = wrap_hton->next;
+        free(wrap_hton);
         break;
       }
-      tmp_alter_share = alter_share;
-      alter_share = alter_share->next;
+      tmp_wrap_hton = wrap_hton;
+      wrap_hton = wrap_hton->next;
     }
-  }
-  if (!tmp_table_share)
-  {
-#ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
-    table_list.init_one_table(mapper.db_name(), strlen(mapper.db_name()),
-                              mapper.mysql_table_name(),
-                              strlen(mapper.mysql_table_name()),
-                              mapper.mysql_table_name(),
-                              TL_WRITE);
-#else
-    table_list.init_one_table(mapper.db_name(), mapper.mysql_table_name(),
-                              TL_WRITE);
-#endif
-    mrn_open_mutex_lock(NULL);
-    tmp_table_share = mrn_create_tmp_table_share(&table_list, name, &error);
-    mrn_open_mutex_unlock(NULL);
-    if (!tmp_table_share) {
-      DBUG_RETURN(error);
-    }
-  }
-  tmp_table.s = tmp_table_share;
-#ifdef WITH_PARTITION_STORAGE_ENGINE
-  tmp_table.part_info = NULL;
-#endif
-  if (!(tmp_share = mrn_get_share(name, &tmp_table, &error)))
-  {
-    mrn_open_mutex_lock(NULL);
-    mrn_free_tmp_table_share(tmp_table_share);
-    mrn_open_mutex_unlock(NULL);
-    DBUG_RETURN(error);
   }
 
-  if (tmp_share->wrapper_mode)
+  if (wrap_handlerton)
   {
-    error = wrapper_delete_table(name, tmp_share, mapper.table_name());
+    error = wrapper_delete_table(name, wrap_handlerton, mapper.table_name());
   }
 
   if (!error)
@@ -4683,17 +4630,10 @@ int ha_mroonga::delete_table(const char *name)
     error = generic_delete_table(name, mapper.table_name());
   }
 
-  if (!error) {
-    mrn_free_long_term_share(tmp_share->long_term_share);
-    tmp_share->long_term_share = NULL;
-  }
-  mrn_free_share(tmp_share);
-  mrn_open_mutex_lock(NULL);
-  mrn_free_tmp_table_share(tmp_table_share);
-  mrn_open_mutex_unlock(NULL);
-  if (is_temporary_table_name(name)) {
+  if (!error && is_temporary_table_name(name)) {
     mrn_db_manager->drop(name);
   }
+
   DBUG_RETURN(error);
 }
 
@@ -8723,27 +8663,27 @@ void ha_mroonga::clear_indexes()
   DBUG_VOID_RETURN;
 }
 
-int ha_mroonga::alter_share_add(const char *path, TABLE_SHARE *table_share)
+int ha_mroonga::add_wrap_hton(const char *path, handlerton *wrap_handlerton)
 {
   MRN_DBUG_ENTER_METHOD();
   st_mrn_slot_data *slot_data = mrn_get_slot_data(ha_thd(), true);
   if (!slot_data)
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
-  st_mrn_alter_share *alter_share =
-    (st_mrn_alter_share *)malloc(sizeof(st_mrn_alter_share));
-  if (!alter_share)
+  st_mrn_wrap_hton *wrap_hton =
+    (st_mrn_wrap_hton *)malloc(sizeof(st_mrn_wrap_hton));
+  if (!wrap_hton)
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
-  alter_share->next = NULL;
-  strcpy(alter_share->path, path);
-  alter_share->alter_share = table_share;
-  if (slot_data->first_alter_share)
+  wrap_hton->next = NULL;
+  strcpy(wrap_hton->path, path);
+  wrap_hton->hton = wrap_handlerton;
+  if (slot_data->first_wrap_hton)
   {
-    st_mrn_alter_share *tmp_alter_share = slot_data->first_alter_share;
-    while (tmp_alter_share->next)
-      tmp_alter_share = tmp_alter_share->next;
-    tmp_alter_share->next = alter_share;
+    st_mrn_wrap_hton *tmp_wrap_hton = slot_data->first_wrap_hton;
+    while (tmp_wrap_hton->next)
+      tmp_wrap_hton = tmp_wrap_hton->next;
+    tmp_wrap_hton->next = wrap_hton;
   } else {
-    slot_data->first_alter_share = alter_share;
+    slot_data->first_wrap_hton = wrap_hton;
   }
   DBUG_RETURN(0);
 }
@@ -12889,21 +12829,20 @@ int ha_mroonga::rename_table(const char *from, const char *to)
                                  to_mapper.table_name());
   }
 
+  if (!error && to_mapper.table_name()[0] == '#') {
+    error = add_wrap_hton(to, tmp_share->hton);
+  } else if (error && from_mapper.table_name()[0] == '#') {
+    add_wrap_hton(from, tmp_share->hton);
+  }
   if (!error) {
     mrn_free_long_term_share(tmp_share->long_term_share);
     tmp_share->long_term_share = NULL;
   }
+  mrn_open_mutex_lock(NULL);
+  mrn_free_tmp_table_share(tmp_table_share);
+  mrn_open_mutex_unlock(NULL);
   mrn_free_share(tmp_share);
-  if (!error && to_mapper.table_name()[0] == '#') {
-    if ((error = alter_share_add(to, tmp_table_share)))
-      DBUG_RETURN(error);
-  } else if (error && from_mapper.table_name()[0] == '#') {
-    alter_share_add(from, tmp_table_share);
-  } else {
-    mrn_open_mutex_lock(NULL);
-    mrn_free_tmp_table_share(tmp_table_share);
-    mrn_open_mutex_unlock(NULL);
-  }
+
   DBUG_RETURN(error);
 }
 

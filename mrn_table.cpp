@@ -1122,7 +1122,7 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
   if (slot_data == NULL) {
     slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data));
     slot_data->last_insert_record_id = GRN_ID_NIL;
-    slot_data->first_alter_share = NULL;
+    slot_data->first_wrap_hton = NULL;
     slot_data->alter_create_info = NULL;
     slot_data->disable_keys_create_info = NULL;
     slot_data->alter_connect_string = NULL;
@@ -1145,17 +1145,16 @@ void mrn_clear_slot_data(THD *thd)
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
   if (slot_data) {
-    if (slot_data->first_alter_share) {
-      st_mrn_alter_share *tmp_alter_share;
-      st_mrn_alter_share *alter_share = slot_data->first_alter_share;
-      while (alter_share)
+    if (slot_data->first_wrap_hton) {
+      st_mrn_wrap_hton *tmp_wrap_hton;
+      st_mrn_wrap_hton *wrap_hton = slot_data->first_wrap_hton;
+      while (wrap_hton)
       {
-        tmp_alter_share = alter_share->next;
-        mrn_free_tmp_table_share(alter_share->alter_share);
-        free(alter_share);
-        alter_share = tmp_alter_share;
+        tmp_wrap_hton = wrap_hton->next;
+        free(wrap_hton);
+        wrap_hton = tmp_wrap_hton;
       }
-      slot_data->first_alter_share = NULL;
+      slot_data->first_wrap_hton = NULL;
     }
     slot_data->alter_create_info = NULL;
     slot_data->disable_keys_create_info = NULL;

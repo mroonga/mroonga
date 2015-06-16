@@ -78,17 +78,17 @@ typedef struct st_mroonga_share
   bool                disable_keys;
 } MRN_SHARE;
 
-struct st_mrn_alter_share
+struct st_mrn_wrap_hton
 {
   char path[FN_REFLEN + 1];
-  TABLE_SHARE *alter_share;
-  st_mrn_alter_share *next;
+  handlerton *hton;
+  st_mrn_wrap_hton *next;
 };
 
 struct st_mrn_slot_data
 {
   grn_id last_insert_record_id;
-  st_mrn_alter_share *first_alter_share;
+  st_mrn_wrap_hton *first_wrap_hton;
   HA_CREATE_INFO *alter_create_info;
   HA_CREATE_INFO *disable_keys_create_info;
   char *alter_connect_string;
