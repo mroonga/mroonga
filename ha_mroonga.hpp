@@ -798,9 +798,7 @@ private:
   int ensure_database_remove(const char *name);
   int wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,
                            const char *table_name);
-  int wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
-                           const char *table_name);
-  int storage_delete_table(const char *name, const char *table_name);
+  int generic_delete_table(const char *name, const char *table_name);
   int wrapper_open(const char *name, int mode, uint test_if_locked);
   int wrapper_open_indexes(const char *name);
   int storage_open(const char *name, int mode, uint test_if_locked);

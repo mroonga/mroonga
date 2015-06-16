@@ -2862,7 +2862,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   delete hnd;
 
   if (error) {
-    wrapper_delete_index(name, tmp_share, mapper.table_name());
+    generic_delete_table(name, mapper.table_name());
   }
 
   if (wrap_key_info)
@@ -4577,55 +4577,13 @@ int ha_mroonga::wrapper_delete_table(const char *name, MRN_SHARE *tmp_share,
   hnd->init();
   MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
 
-  if ((error = hnd->ha_delete_table(name)))
-  {
-    delete hnd;
-    DBUG_RETURN(error);
-  }
-
-  error = wrapper_delete_index(name, tmp_share, table_name);
-
+  error = hnd->ha_delete_table(name);
   delete hnd;
+
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
-                                     const char *table_name)
-{
-  int error = 0;
-  MRN_DBUG_ENTER_METHOD();
-
-  error = ensure_database_open(name);
-  if (error)
-    DBUG_RETURN(error);
-
-  error = mrn_change_encoding(ctx, system_charset_info);
-  if (error)
-    DBUG_RETURN(error);
-
-  TABLE_SHARE *tmp_table_share = tmp_share->table_share;
-
-  uint i;
-  for (i = 0; i < tmp_table_share->keys; i++) {
-    error = drop_index(tmp_share, i);
-    if (error) {
-      DBUG_RETURN(error);
-    }
-  }
-
-  grn_obj *table = grn_ctx_get(ctx, table_name, strlen(table_name));
-  if (!ctx->rc) {
-    grn_obj_remove(ctx, table);
-  }
-  if (ctx->rc) {
-    error = ER_CANT_OPEN_FILE;
-    my_message(error, ctx->errbuf, MYF(0));
-    DBUG_RETURN(error);
-  }
-  DBUG_RETURN(error);
-}
-
-int ha_mroonga::storage_delete_table(const char *name, const char *table_name)
+int ha_mroonga::generic_delete_table(const char *name, const char *table_name)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
@@ -4718,8 +4676,11 @@ int ha_mroonga::delete_table(const char *name)
   if (tmp_share->wrapper_mode)
   {
     error = wrapper_delete_table(name, tmp_share, mapper.table_name());
-  } else {
-    error = storage_delete_table(name, mapper.table_name());
+  }
+
+  if (!error)
+  {
+    error = generic_delete_table(name, mapper.table_name());
   }
 
   if (!error) {
