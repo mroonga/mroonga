@@ -613,6 +613,9 @@ private:
   void remove_related_files(const char *base_path);
   void remove_grn_obj_force(const char *name);
   int drop_index(MRN_SHARE *target_share, uint key_index);
+  int drop_indexes_normal(const char *table_name, grn_obj *table);
+  int drop_indexes_multiple(const char *table_name, grn_obj *table);
+  int drop_indexes(const char *table_name);
   grn_obj *find_tokenizer(const char *name, int name_length);
   grn_obj *find_normalizer(KEY *key_info);
   bool find_index_column_flags(KEY *key_info, grn_obj_flags *index_column_flags);
@@ -797,8 +800,7 @@ private:
                            const char *table_name);
   int wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
                            const char *table_name);
-  int storage_delete_table(const char *name, MRN_SHARE *tmp_share,
-                           const char *table_name);
+  int storage_delete_table(const char *name, const char *table_name);
   int wrapper_open(const char *name, int mode, uint test_if_locked);
   int wrapper_open_indexes(const char *name);
   int storage_open(const char *name, int mode, uint test_if_locked);

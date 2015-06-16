@@ -4625,11 +4625,9 @@ int ha_mroonga::wrapper_delete_index(const char *name, MRN_SHARE *tmp_share,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
-                                     const char *table_name)
+int ha_mroonga::storage_delete_table(const char *name, const char *table_name)
 {
   int error = 0;
-  TABLE_SHARE *tmp_table_share = tmp_share->table_share;
   MRN_DBUG_ENTER_METHOD();
 
   error = ensure_database_open(name);
@@ -4640,14 +4638,7 @@ int ha_mroonga::storage_delete_table(const char *name, MRN_SHARE *tmp_share,
   if (error)
     DBUG_RETURN(error);
 
-  uint i;
-  for (i = 0; i < tmp_table_share->keys; i++) {
-    error = drop_index(tmp_share, i);
-    if (error) {
-      DBUG_RETURN(error);
-    }
-  }
-
+  error = drop_indexes(table_name);
   grn_obj *table_obj = grn_ctx_get(ctx, table_name, strlen(table_name));
   if (!ctx->rc) {
     grn_obj_remove(ctx, table_obj);
@@ -4728,7 +4719,7 @@ int ha_mroonga::delete_table(const char *name)
   {
     error = wrapper_delete_table(name, tmp_share, mapper.table_name());
   } else {
-    error = storage_delete_table(name, tmp_share, mapper.table_name());
+    error = storage_delete_table(name, mapper.table_name());
   }
 
   if (!error) {
@@ -8902,6 +8893,234 @@ int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
              ctx->errbuf);
     my_message(ER_ERROR_ON_WRITE, error_message, MYF(0));
     GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+  }
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::drop_indexes_normal(const char *table_name, grn_obj *table)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+
+  grn_hash *columns_raw = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
+                                          GRN_OBJ_TABLE_HASH_KEY);
+  mrn::SmartGrnObj columns(ctx, reinterpret_cast<grn_obj *>(columns_raw));
+  if (!columns.get()) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to allocate columns buffer: <%s>: <%s>",
+             table_name, ctx->errbuf);
+    error = HA_ERR_OUT_OF_MEM;
+    my_message(ER_ERROR_ON_WRITE, error_message, MYF(0));
+    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+    DBUG_RETURN(error);
+  }
+
+  grn_table_columns(ctx, table, "", 0, columns.get());
+  grn_table_cursor *cursor = grn_table_cursor_open(ctx,
+                                                   columns.get(),
+                                                   NULL, 0,
+                                                   NULL, 0,
+                                                   0, -1,
+                                                   0);
+  if (!cursor) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to allocate columns cursor: <%s>: <%s>",
+             table_name, ctx->errbuf);
+    error = HA_ERR_OUT_OF_MEM;
+    my_message(ER_ERROR_ON_WRITE, error_message, MYF(0));
+    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+    DBUG_RETURN(error);
+  }
+
+  while (grn_table_cursor_next(ctx, cursor) != GRN_ID_NIL) {
+    void *key;
+    grn_table_cursor_get_key(ctx, cursor, &key);
+    grn_id *id = reinterpret_cast<grn_id *>(key);
+    mrn::SmartGrnObj column(ctx, grn_ctx_at(ctx, *id));
+    if (!column.get()) {
+      continue;
+    }
+
+    grn_operator index_operators[] = {
+      GRN_OP_EQUAL,
+      GRN_OP_MATCH,
+      GRN_OP_LESS,
+      GRN_OP_REGEXP
+    };
+    size_t n_index_operators = sizeof(index_operators) / sizeof(grn_operator);
+    for (size_t i = 0; i < n_index_operators; i++) {
+      grn_index_datum index_datum;
+      while (grn_column_find_index_data(ctx,
+                                        column.get(),
+                                        index_operators[i],
+                                        &index_datum,
+                                        1) > 0) {
+        grn_id index_table_id = index_datum.index->header.domain;
+        mrn::SmartGrnObj index_table(ctx, grn_ctx_at(ctx, index_table_id));
+        char index_table_name[GRN_TABLE_MAX_KEY_SIZE];
+        int index_table_name_length;
+        index_table_name_length = grn_obj_name(ctx, index_table.get(),
+                                               index_table_name,
+                                               GRN_TABLE_MAX_KEY_SIZE);
+        if (mrn::IndexTableName::is_custom_name(table_name,
+                                                strlen(table_name),
+                                                index_table_name,
+                                                index_table_name_length)) {
+          char index_column_name[GRN_TABLE_MAX_KEY_SIZE];
+          int index_column_name_length;
+          index_column_name_length = grn_obj_name(ctx,
+                                                  index_datum.index,
+                                                  index_column_name,
+                                                  GRN_TABLE_MAX_KEY_SIZE);
+          grn_rc rc = grn_obj_remove(ctx, index_datum.index);
+          if (rc != GRN_SUCCESS) {
+            char error_message[MRN_MESSAGE_BUFFER_SIZE];
+            snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                     "failed to drop index column: <%.*s>: <%s>",
+                     index_column_name_length, index_column_name,
+                     ctx->errbuf);
+            error = ER_ERROR_ON_WRITE;
+            my_message(error, error_message, MYF(0));
+            GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+          }
+        } else {
+          grn_rc rc = grn_obj_remove(ctx, index_table.get());
+          if (rc == GRN_SUCCESS) {
+            index_table.release();
+          } else {
+            char error_message[MRN_MESSAGE_BUFFER_SIZE];
+            snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                     "failed to drop index table: <%.*s>: <%s>",
+                     index_table_name_length, index_table_name,
+                     ctx->errbuf);
+            error = ER_ERROR_ON_WRITE;
+            my_message(error, error_message, MYF(0));
+            GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+          }
+        }
+
+        if (error != 0) {
+          break;
+        }
+      }
+
+      if (error != 0) {
+        break;
+      }
+    }
+
+    if (error != 0) {
+      break;
+    }
+  }
+
+  grn_table_cursor_close(ctx, cursor);
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::drop_indexes_multiple(const char *table_name, grn_obj *table)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  int error = 0;
+
+  char index_table_name_prefix[GRN_TABLE_MAX_KEY_SIZE];
+  snprintf(index_table_name_prefix, GRN_TABLE_MAX_KEY_SIZE,
+           "%s%s", table_name, mrn::IndexTableName::SEPARATOR);
+  grn_table_cursor *cursor =
+    grn_table_cursor_open(ctx,
+                          grn_ctx_db(ctx),
+                          index_table_name_prefix,
+                          strlen(index_table_name_prefix),
+                          NULL, 0,
+                          0, -1,
+                          GRN_CURSOR_PREFIX);
+  if (!cursor) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to allocate index tables cursor: <%s>: <%s>",
+             table_name, ctx->errbuf);
+    error = HA_ERR_OUT_OF_MEM;
+    my_message(ER_ERROR_ON_WRITE, error_message, MYF(0));
+    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+    DBUG_RETURN(error);
+  }
+
+  grn_id table_id = grn_obj_id(ctx, table);
+  grn_id id;
+  while ((id = grn_table_cursor_next(ctx, cursor)) != GRN_ID_NIL) {
+    mrn::SmartGrnObj object(ctx, grn_ctx_at(ctx, id));
+    if (!object.get()) {
+      continue;
+    }
+    if (!grn_obj_is_table(ctx, object.get())) {
+      continue;
+    }
+
+    char multiple_column_index_table_name[GRN_TABLE_MAX_KEY_SIZE];
+    int multiple_column_index_table_name_length;
+    multiple_column_index_table_name_length =
+      grn_obj_name(ctx,
+                   object.get(),
+                   multiple_column_index_table_name,
+                   GRN_TABLE_MAX_KEY_SIZE);
+
+    char multiple_column_index_name[GRN_TABLE_MAX_KEY_SIZE];
+    snprintf(multiple_column_index_name, GRN_TABLE_MAX_KEY_SIZE,
+             "%.*s.%s",
+             multiple_column_index_table_name_length,
+             multiple_column_index_table_name,
+             INDEX_COLUMN_NAME);
+    mrn::SmartGrnObj index_column(ctx, multiple_column_index_name);
+    if (!index_column.get()) {
+      continue;
+    }
+
+    if (grn_obj_get_range(ctx, index_column.get()) != table_id) {
+      continue;
+    }
+
+    grn_rc rc = grn_obj_remove(ctx, object.get());
+    if (rc == GRN_SUCCESS) {
+      object.release();
+      index_column.release();
+    } else {
+      char error_message[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+               "failed to drop multiple column index table: <%.*s>: <%s>",
+               multiple_column_index_table_name_length,
+               multiple_column_index_table_name,
+               ctx->errbuf);
+      error = ER_ERROR_ON_WRITE;
+      my_message(error, error_message, MYF(0));
+      GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+      break;
+    }
+  }
+
+  grn_table_cursor_close(ctx, cursor);
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::drop_indexes(const char *table_name)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+
+  mrn::SmartGrnObj table(ctx, table_name);
+  if (!table.get()) {
+    DBUG_RETURN(0);
+  }
+
+  error = drop_indexes_normal(table_name, table.get());
+  if (error == 0) {
+    error = drop_indexes_multiple(table_name, table.get());
   }
 
   DBUG_RETURN(error);
