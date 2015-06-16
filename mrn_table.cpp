@@ -1140,7 +1140,7 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
   DBUG_RETURN(slot_data);
 }
 
-void mrn_clear_alter_share(THD *thd)
+void mrn_clear_slot_data(THD *thd)
 {
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);

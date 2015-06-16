@@ -1217,7 +1217,7 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
   MRN_DBUG_ENTER_FUNCTION();
   void *p = *thd_ha_data(thd, mrn_hton_ptr);
   if (p) {
-    mrn_clear_alter_share(thd);
+    mrn_clear_slot_data(thd);
     free(p);
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) NULL;
     {
@@ -1794,7 +1794,7 @@ static int mrn_deinit(void *p)
     mrn::Lock lock(&mrn_allocated_thds_mutex);
     while ((tmp_thd = (THD *) my_hash_element(&mrn_allocated_thds, 0)))
     {
-      mrn_clear_alter_share(tmp_thd);
+      mrn_clear_slot_data(tmp_thd);
       void *slot_ptr = mrn_get_slot_data(tmp_thd, false);
       if (slot_ptr) free(slot_ptr);
       *thd_ha_data(tmp_thd, mrn_hton_ptr) = (void *) NULL;
@@ -11620,7 +11620,7 @@ int ha_mroonga::reset()
   replacing_ = false;
   written_by_row_based_binlog = 0;
   mrn_lock_type = F_UNLCK;
-  mrn_clear_alter_share(thd);
+  mrn_clear_slot_data(thd);
   current_ft_item = NULL;
   DBUG_RETURN(error);
 }

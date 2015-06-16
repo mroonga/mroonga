@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -167,7 +167,7 @@ void mrn_free_tmp_table_share(TABLE_SHARE *table_share);
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info);
 st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create);
-void mrn_clear_alter_share(THD *thd);
+void mrn_clear_slot_data(THD *thd);
 
 #ifdef __cplusplus
 }
