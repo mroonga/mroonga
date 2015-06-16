@@ -2683,6 +2683,14 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
       key->algorithm == HA_KEY_ALG_UNDEF) {
     flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE;
     bool need_normalize_p = false;
+    // TODO: MariaDB 10.1 passes key->user_defined_key_parts as part
+    // for ORDER BY DESC. We just it fallback to part = 0. We may use
+    // it for optimization in the future.
+    //
+    // See also: test_if_order_by_key() in sql/sql_select.cc.
+    if (KEY_N_KEY_PARTS(key) == part) {
+      part = 0;
+    }
     Field *field = &(key->key_part[part].field[0]);
     if (field && should_normalize(field)) {
       need_normalize_p = true;
