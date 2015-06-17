@@ -2866,9 +2866,8 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     DBUG_RETURN(error);
   }
 #endif
-  if (!(hnd =
-      tmp_share->hton->create(tmp_share->hton, table->s,
-        current_thd->mem_root)))
+  hnd = get_new_handler(table->s, current_thd->mem_root, tmp_share->hton);
+  if (!hnd)
   {
     MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
@@ -2881,7 +2880,6 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     base_key_info = NULL;
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
-  hnd->init();
   error = hnd->ha_create(name, table, info);
   MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -3991,8 +3989,8 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (!is_clone)
   {
-    if (!(wrap_handler =
-        share->hton->create(share->hton, table->s, &mem_root)))
+    wrap_handler = get_new_handler(table->s, &mem_root, share->hton);
+    if (!wrap_handler)
     {
       MRN_SET_BASE_SHARE_KEY(share, table->s);
       MRN_SET_BASE_TABLE_KEY(this, table);
@@ -4004,7 +4002,6 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
       base_key_info = NULL;
       DBUG_RETURN(HA_ERR_OUT_OF_MEM);
     }
-    wrap_handler->init();
 #ifdef MRN_HANDLER_HAVE_SET_HA_SHARE_REF
     wrap_handler->set_ha_share_ref(&table->s->ha_share);
 #endif
@@ -4575,13 +4572,12 @@ int ha_mroonga::wrapper_delete_table(const char *name,
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  handler *hnd = wrap_handlerton->create(wrap_handlerton, NULL,
-                                         current_thd->mem_root);
+
+  handler *hnd = get_new_handler(NULL, current_thd->mem_root, wrap_handlerton);
   if (!hnd)
   {
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
-  hnd->init();
 
   error = hnd->ha_delete_table(name);
   delete hnd;
@@ -12593,16 +12589,14 @@ int ha_mroonga::wrapper_rename_table(const char *from, const char *to,
   int error = 0;
   handler *hnd;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(tmp_share, tmp_share->table_share);
-  if (!(hnd =
-      tmp_share->hton->create(tmp_share->hton, tmp_share->table_share,
-      current_thd->mem_root)))
+
+  hnd = get_new_handler(tmp_share->table_share,
+                        current_thd->mem_root,
+                        tmp_share->hton);
+  if (!hnd)
   {
-    MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
-  hnd->init();
-  MRN_SET_BASE_SHARE_KEY(tmp_share, tmp_share->table_share);
 
   if ((error = hnd->ha_rename_table(from, to)))
   {
