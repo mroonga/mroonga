@@ -219,7 +219,7 @@
 #  define MRN_SUPPORT_CUSTOM_OPTIONS
 #endif
 
-#ifdef MRN_MARIADB_P
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
 #  if MYSQL_VERSION_ID >= 100104
 #    define mrn_init_sql_alloc(thd, mem_root)                           \
   init_sql_alloc(mem_root,                                              \
