@@ -241,11 +241,7 @@
 #endif
 
 #ifdef MRN_MARIADB_P
-#  if MYSQL_VERSION_ID >= 100000
-#    define MRN_ABORT_ON_WARNING(thd) thd_kill_level(thd)
-#  else
-#    define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
-#  endif
+#  define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
 #else
 #  if MYSQL_VERSION_ID >= 50706
 #    define MRN_ABORT_ON_WARNING(thd) false
