@@ -2856,6 +2856,12 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
     share = NULL;
+    if (wrap_key_info)
+    {
+      my_free(wrap_key_info);
+      wrap_key_info = NULL;
+    }
+    base_key_info = NULL;
     error = MRN_GET_ERROR_NUMBER;
     DBUG_RETURN(error);
   }
