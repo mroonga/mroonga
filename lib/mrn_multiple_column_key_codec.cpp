@@ -669,7 +669,7 @@ namespace mrn {
       } else {
         push_warning_printf(thread_,
                             MRN_SEVERITY_WARNING,
-                            WARN_DATA_TRUNCATED,
+                            MRN_ERROR_CODE_DATA_TRUNCATE(thread_),
                             "normalized data truncated "
                             "for multiple column index: "
                             "normalized-data-size: <%u> "

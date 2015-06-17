@@ -240,4 +240,21 @@
                  0)
 #endif
 
+#ifdef MRN_MARIADB_P
+#  if MYSQL_VERSION_ID >= 100000
+#    define MRN_ABORT_ON_WARNING(thd) thd_kill_level(thd)
+#  else
+#    define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
+#  endif
+#else
+#  if MYSQL_VERSION_ID >= 50706
+#    define MRN_ABORT_ON_WARNING(thd) false
+#  else
+#    define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
+#  endif
+#endif
+
+#define MRN_ERROR_CODE_DATA_TRUNCATE(thd)                               \
+  (MRN_ABORT_ON_WARNING(thd) ? ER_WARN_DATA_OUT_OF_RANGE : WARN_DATA_TRUNCATED)
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
