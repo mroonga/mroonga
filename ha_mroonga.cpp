@@ -5392,7 +5392,8 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
     if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
       push_warning_printf(thd, MRN_SEVERITY_WARNING,
-                          WARN_DATA_TRUNCATED, MRN_GET_ERR_MSG(WARN_DATA_TRUNCATED),
+                          WARN_DATA_TRUNCATED,
+                          MRN_GET_ERR_MSG(WARN_DATA_TRUNCATED),
                           MRN_COLUMN_NAME_ID,
                           MRN_GET_CURRENT_ROW_FOR_WARNING(thd));
       if (MRN_ABORT_ON_WARNING(thd)) {
