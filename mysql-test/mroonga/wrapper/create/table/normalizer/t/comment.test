@@ -1,4 +1,4 @@
-# Copyright(C) 2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,29 +15,27 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_innodb.inc
+--source ../../../../../include/mroonga/have_fulltext_index_comment.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS diaries;
+DROP TABLE IF EXISTS memos;
 --enable_warnings
 
 SET NAMES utf8;
 
-CREATE TABLE diaries (
-  day DATE PRIMARY KEY,
-  content VARCHAR(64) NOT NULL,
+CREATE TABLE memos (
+  id INT NOT NULL PRIMARY KEY,
+  content TEXT NOT NULL,
   FULLTEXT INDEX (content) COMMENT 'normalizer "NormalizerAuto"'
-) COMMENT='engine "InnoDB"' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
+SHOW CREATE TABLE memos;
 
-INSERT INTO diaries VALUES ("2013-04-23", "ブラックコーヒーを飲んだ。");
+INSERT INTO memos VALUES (1, "1日の消費㌍は約2000㌔㌍");
 
-SELECT * FROM diaries
-       WHERE MATCH (content) AGAINST ("+ふらつく" IN BOOLEAN MODE);
-SELECT * FROM diaries
-       WHERE MATCH (content) AGAINST ("+ﾌﾞﾗｯｸ" IN BOOLEAN MODE);
+SELECT * FROM memos
+  WHERE MATCH (content) AGAINST ("+カロリー" IN BOOLEAN MODE);
 
-DROP TABLE diaries;
+DROP TABLE memos;
 
---source ../../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../../include/mroonga/have_mroonga_deinit.inc
