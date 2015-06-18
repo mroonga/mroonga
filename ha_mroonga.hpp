@@ -259,6 +259,13 @@ struct st_mrn_ft_info
   ha_mroonga *mroonga;
 };
 
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+struct ha_index_option_struct
+{
+  const char *tokenizer;
+};
+#endif
+
 /* handler class */
 class ha_mroonga: public handler
 {
@@ -616,6 +623,7 @@ private:
   int drop_indexes_normal(const char *table_name, grn_obj *table);
   int drop_indexes_multiple(const char *table_name, grn_obj *table);
   int drop_indexes(const char *table_name);
+  grn_obj *find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i);
   grn_obj *find_tokenizer(const char *name, int name_length);
   grn_obj *find_normalizer(KEY *key_info);
   bool find_index_column_flags(KEY *key_info, grn_obj_flags *index_column_flags);

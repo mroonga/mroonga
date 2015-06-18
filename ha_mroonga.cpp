@@ -1595,6 +1595,14 @@ static uint mrn_alter_table_flags(uint flags)
 }
 #endif
 
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+static ha_create_table_option mrn_index_options[] =
+{
+  HA_IOPTION_STRING("TOKENIZER", tokenizer),
+  HA_IOPTION_END
+};
+#endif
+
 static int mrn_init(void *p)
 {
   // init handlerton
@@ -1612,6 +1620,9 @@ static int mrn_init(void *p)
   hton->flush_logs = mrn_flush_logs;
 #ifdef MRN_HAVE_HTON_ALTER_TABLE_FLAGS
   hton->alter_table_flags = mrn_alter_table_flags;
+#endif
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  hton->index_options = mrn_index_options;
 #endif
   mrn_hton_ptr = hton;
 
@@ -2979,8 +2990,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   mrn_change_encoding(ctx, system_charset_info);
   index_tables[i] = index_table;
 
-  grn_obj *tokenizer = find_tokenizer(tmp_share->key_tokenizer[i],
-                                      tmp_share->key_tokenizer_length[i]);
+  grn_obj *tokenizer = find_tokenizer(key_info, tmp_share, i);
   if (tokenizer) {
     grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
     grn_obj_set_info(ctx, index_table, info_type, tokenizer);
@@ -3690,8 +3700,7 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   }
 
   if (key_info->flags & HA_FULLTEXT) {
-    grn_obj *tokenizer = find_tokenizer(tmp_share->key_tokenizer[i],
-                                        tmp_share->key_tokenizer_length[i]);
+    grn_obj *tokenizer = find_tokenizer(key_info, tmp_share, i);
     if (tokenizer) {
       grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
       grn_obj_set_info(ctx, index_table, info_type, tokenizer);
@@ -9048,6 +9057,26 @@ int ha_mroonga::drop_indexes(const char *table_name)
   }
 
   DBUG_RETURN(error);
+}
+
+grn_obj *ha_mroonga::find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i)
+{
+  MRN_DBUG_ENTER_METHOD();
+  grn_obj *tokenizer;
+  const char *tokenizer_name = NULL;
+  uint tokenizer_name_length = 0;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (key->option_struct->tokenizer) {
+    tokenizer_name = key->option_struct->tokenizer;
+    tokenizer_name_length = strlen(tokenizer_name);
+  }
+#endif
+  if (!tokenizer_name) {
+    tokenizer_name = mrn_share->key_tokenizer[i];
+    tokenizer_name_length = mrn_share->key_tokenizer_length[i];
+  }
+  tokenizer = find_tokenizer(tokenizer_name, tokenizer_name_length);
+  DBUG_RETURN(tokenizer);
 }
 
 grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
