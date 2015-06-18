@@ -1599,6 +1599,7 @@ static uint mrn_alter_table_flags(uint flags)
 static ha_create_table_option mrn_index_options[] =
 {
   HA_IOPTION_STRING("TOKENIZER", tokenizer),
+  HA_IOPTION_STRING("NORMALIZER", normalizer),
   HA_IOPTION_END
 };
 #endif
@@ -9114,31 +9115,49 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
   DBUG_RETURN(tokenizer);
 }
 
-grn_obj *ha_mroonga::find_normalizer(KEY *key_info)
+grn_obj *ha_mroonga::find_normalizer(KEY *key)
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_obj *normalizer = NULL;
-  bool use_normalizer = true;
-#if MYSQL_VERSION_ID >= 50500
-  if (key_info->comment.length > 0) {
-    mrn::ParametersParser parser(key_info->comment.str,
-                                 key_info->comment.length);
-    parser.parse();
-    const char *normalizer_name = parser["normalizer"];
-    if (normalizer_name) {
-      if (strcmp(normalizer_name, "none") == 0) {
-        use_normalizer = false;
-      } else {
-        normalizer = grn_ctx_get(ctx, normalizer_name, -1);
-      }
-    }
+
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (key->option_struct->normalizer) {
+    grn_obj *normalizer = find_normalizer(key,
+                                          key->option_struct->normalizer);
+    DBUG_RETURN(normalizer);
   }
 #endif
+
+  if (key->comment.length > 0) {
+    mrn::ParametersParser parser(key->comment.str,
+                                 key->comment.length);
+    parser.parse();
+    grn_obj *normalizer = find_normalizer(key, parser["normalizer"]);
+    DBUG_RETURN(normalizer);
+  }
+
+  grn_obj *normalizer = find_normalizer(key, NULL);
+  DBUG_RETURN(normalizer);
+}
+
+grn_obj *ha_mroonga::find_normalizer(KEY *key, const char *name)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_obj *normalizer = NULL;
+  bool use_normalizer = true;
+  if (name) {
+    if (strcmp(name, "none") == 0) {
+      use_normalizer = false;
+    } else {
+      normalizer = grn_ctx_get(ctx, name, -1);
+    }
+  }
   if (use_normalizer && !normalizer) {
-    Field *field = key_info->key_part[0].field;
+    Field *field = key->key_part[0].field;
     mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
     normalizer = field_normalizer.find_grn_normalizer();
   }
+
   DBUG_RETURN(normalizer);
 }
 

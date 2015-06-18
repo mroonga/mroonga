@@ -263,6 +263,7 @@ struct st_mrn_ft_info
 struct ha_index_option_struct
 {
   const char *tokenizer;
+  const char *normalizer;
 };
 #endif
 
@@ -625,7 +626,8 @@ private:
   int drop_indexes(const char *table_name);
   grn_obj *find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i);
   grn_obj *find_tokenizer(const char *name, int name_length);
-  grn_obj *find_normalizer(KEY *key_info);
+  grn_obj *find_normalizer(KEY *key);
+  grn_obj *find_normalizer(KEY *key, const char *name);
   bool find_index_column_flags(KEY *key_info, grn_obj_flags *index_column_flags);
   bool find_token_filters(KEY *key_info, grn_obj *token_filters);
   bool find_token_filters_put(grn_obj *token_filters,
