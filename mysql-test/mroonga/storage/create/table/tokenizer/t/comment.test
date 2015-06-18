@@ -1,4 +1,4 @@
-# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,8 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../include/mroonga/have_mariadb.inc
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_fulltext_index_comment.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -24,7 +24,8 @@ DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
   id int PRIMARY KEY AUTO_INCREMENT,
   body text,
-  FULLTEXT INDEX body_index (body) TOKENIZER='TokenBigramSplitSymbolAlphaDigit'
+  FULLTEXT INDEX body_index (body)
+    COMMENT 'tokenizer "TokenBigramSplitSymbolAlphaDigit"'
 ) DEFAULT CHARSET utf8;
 SHOW CREATE TABLE diaries;
 
@@ -39,4 +40,4 @@ SELECT * FROM diaries
 
 DROP TABLE diaries;
 
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc
