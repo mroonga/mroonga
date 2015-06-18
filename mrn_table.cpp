@@ -88,7 +88,7 @@ extern HASH mrn_open_tables;
 extern mysql_mutex_t mrn_open_tables_mutex;
 extern HASH mrn_long_term_share;
 extern mysql_mutex_t mrn_long_term_share_mutex;
-extern char *mrn_default_parser;
+extern char *mrn_default_tokenizer;
 extern char *mrn_default_wrapper_engine;
 extern handlerton *mrn_hton_ptr;
 extern HASH mrn_allocated_thds;
@@ -523,16 +523,16 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 #if MYSQL_VERSION_ID >= 50500
   if (key_info->comment.length == 0)
   {
-    if (share->key_parser[i]) {
-      my_free(share->key_parser[i]);
+    if (share->key_tokenizer[i]) {
+      my_free(share->key_tokenizer[i]);
     }
-    if (
-      !(share->key_parser[i] = mrn_my_strdup(mrn_default_parser, MYF(MY_WME)))
-    ) {
+    share->key_tokenizer[i] = mrn_my_strdup(mrn_default_tokenizer, MYF(MY_WME));
+    if (!share->key_tokenizer[i]) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
     }
-    share->key_parser_length[i] = strlen(share->key_parser[i]);
+    share->key_tokenizer_length[i] = strlen(share->key_tokenizer[i]);
+
     DBUG_RETURN(0);
   }
   DBUG_PRINT("info", ("mroonga create comment string"));
@@ -580,21 +580,23 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
         MRN_PARAM_STR_LIST("table", index_table, i);
         break;
       case 6:
-        MRN_PARAM_STR_LIST("parser", key_parser, i);
+        MRN_PARAM_STR_LIST("parser", key_tokenizer, i);
+        break;
+      case 9:
+        MRN_PARAM_STR_LIST("tokenizer", key_tokenizer, i);
         break;
       default:
         break;
     }
   }
 #endif
-  if (!share->key_parser[i]) {
-    if (
-      !(share->key_parser[i] = mrn_my_strdup(mrn_default_parser, MYF(MY_WME)))
-    ) {
+  if (!share->key_tokenizer[i]) {
+    share->key_tokenizer[i] = mrn_my_strdup(mrn_default_tokenizer, MYF(MY_WME));
+    if (!share->key_tokenizer[i]) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
     }
-    share->key_parser_length[i] = strlen(share->key_parser[i]);
+    share->key_tokenizer_length[i] = strlen(share->key_tokenizer[i]);
   }
 
   if (param_string)
@@ -749,8 +751,8 @@ int mrn_free_share_alloc(
   {
     if (share->index_table && share->index_table[i])
       my_free(share->index_table[i]);
-    if (share->key_parser[i])
-      my_free(share->key_parser[i]);
+    if (share->key_tokenizer[i])
+      my_free(share->key_tokenizer[i]);
   }
   for (i = 0; i < share->table_share->fields; i++)
   {
@@ -825,9 +827,9 @@ error_alloc_long_term_share:
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
   MRN_SHARE *share;
-  char *tmp_name, **index_table, **key_parser, **col_flags, **col_type;
+  char *tmp_name, **index_table, **key_tokenizer, **col_flags, **col_type;
   uint length, *wrap_key_nr, *index_table_length;
-  uint *key_parser_length, *col_flags_length, *col_type_length, i, j;
+  uint *key_tokenizer_length, *col_flags_length, *col_type_length, i, j;
   KEY *wrap_key_info;
   TABLE_SHARE *wrap_table_share;
   MRN_DBUG_ENTER_FUNCTION();
@@ -842,8 +844,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
         &tmp_name, length + 1,
         &index_table, sizeof(char *) * table->s->keys,
         &index_table_length, sizeof(uint) * table->s->keys,
-        &key_parser, sizeof(char *) * table->s->keys,
-        &key_parser_length, sizeof(uint) * table->s->keys,
+        &key_tokenizer, sizeof(char *) * table->s->keys,
+        &key_tokenizer_length, sizeof(uint) * table->s->keys,
         &col_flags, sizeof(char *) * table->s->fields,
         &col_flags_length, sizeof(uint) * table->s->fields,
         &col_type, sizeof(char *) * table->s->fields,
@@ -861,8 +863,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     share->table_name = tmp_name;
     share->index_table = index_table;
     share->index_table_length = index_table_length;
-    share->key_parser = key_parser;
-    share->key_parser_length = key_parser_length;
+    share->key_tokenizer = key_tokenizer;
+    share->key_tokenizer_length = key_tokenizer_length;
     share->col_flags = col_flags;
     share->col_flags_length = col_flags_length;
     share->col_type = col_type;

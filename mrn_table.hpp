@@ -60,11 +60,11 @@ typedef struct st_mroonga_share
   plugin_ref          plugin;
   handlerton          *hton;
   char                **index_table;
-  char                **key_parser;
+  char                **key_tokenizer;
   char                **col_flags;
   char                **col_type;
   uint                *index_table_length;
-  uint                *key_parser_length;
+  uint                *key_tokenizer_length;
   uint                *col_flags_length;
   uint                *col_type_length;
   uint                *wrap_key_nr;

@@ -595,7 +595,7 @@ static bool mrn_log_file_opened = false;
 static grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 static ulong mrn_log_level = mrn_log_level_default;
 
-char *mrn_default_parser = NULL;
+char *mrn_default_tokenizer = NULL;
 char *mrn_default_wrapper_engine = NULL;
 static int mrn_lock_timeout = grn_get_lock_timeout();
 static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
@@ -834,8 +834,8 @@ static MYSQL_SYSVAR_STR(log_file, mrn_log_file_path,
                         mrn_log_file_update,
                         MRN_LOG_FILE_PATH);
 
-static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
-                                      void *var_ptr, const void *save)
+static void mrn_default_tokenizer_update(THD *thd, struct st_mysql_sys_var *var,
+                                         void *var_ptr, const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
@@ -846,12 +846,12 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
   mrn_change_encoding(&ctx, system_charset_info);
   if (strcmp(*old_value_ptr, new_value) == 0) {
     GRN_LOG(&ctx, GRN_LOG_NOTICE,
-            "default parser isn't changed "
-            "because the requested default parser isn't different: <%s>",
+            "default tokenizer for fulltext index isn't changed "
+            "because the requested default tokenizer isn't different: <%s>",
             new_value);
   } else {
     GRN_LOG(&ctx, GRN_LOG_NOTICE,
-            "default fulltext parser is changed: <%s> -> <%s>",
+            "default tokenizer for fulltext index is changed: <%s> -> <%s>",
             *old_value_ptr, new_value);
   }
 
@@ -867,12 +867,20 @@ static void mrn_default_parser_update(THD *thd, struct st_mysql_sys_var *var,
   DBUG_VOID_RETURN;
 }
 
-static MYSQL_SYSVAR_STR(default_parser, mrn_default_parser,
+static MYSQL_SYSVAR_STR(default_parser, mrn_default_tokenizer,
                         PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
-                        "default fulltext parser",
+                        "default fulltext parser "
+                        "(Deprecated. Use mroonga_default_tokenizer instead.)",
                         NULL,
-                        mrn_default_parser_update,
-                        MRN_PARSER_DEFAULT);
+                        mrn_default_tokenizer_update,
+                        MRN_DEFAULT_TOKENIZER);
+
+static MYSQL_SYSVAR_STR(default_tokenizer, mrn_default_tokenizer,
+                        PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
+                        "default tokenizer for fulltext index",
+                        NULL,
+                        mrn_default_tokenizer_update,
+                        MRN_DEFAULT_TOKENIZER);
 
 static MYSQL_THDVAR_BOOL(
   dry_write, /* name */
@@ -1087,6 +1095,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(log_level),
   MYSQL_SYSVAR(log_file),
   MYSQL_SYSVAR(default_parser),
+  MYSQL_SYSVAR(default_tokenizer),
   MYSQL_SYSVAR(dry_write),
   MYSQL_SYSVAR(enable_optimization),
   MYSQL_SYSVAR(match_escalation_threshold),
@@ -2970,8 +2979,8 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   mrn_change_encoding(ctx, system_charset_info);
   index_tables[i] = index_table;
 
-  grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
-                                      tmp_share->key_parser_length[i]);
+  grn_obj *tokenizer = find_tokenizer(tmp_share->key_tokenizer[i],
+                                      tmp_share->key_tokenizer_length[i]);
   if (tokenizer) {
     grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
     grn_obj_set_info(ctx, index_table, info_type, tokenizer);
@@ -3681,8 +3690,8 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   }
 
   if (key_info->flags & HA_FULLTEXT) {
-    grn_obj *tokenizer = find_tokenizer(tmp_share->key_parser[i],
-                                        tmp_share->key_parser_length[i]);
+    grn_obj *tokenizer = find_tokenizer(tmp_share->key_tokenizer[i],
+                                        tmp_share->key_tokenizer_length[i]);
     if (tokenizer) {
       grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
       grn_obj_set_info(ctx, index_table, info_type, tokenizer);
@@ -9055,22 +9064,22 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
   if (!tokenizer) {
     char message[MRN_BUFFER_SIZE];
     sprintf(message,
-            "specified fulltext parser <%.*s> doesn't exist. "
-            "default fulltext parser <%s> is used instead.",
+            "specified tokenizer for fulltext index <%.*s> doesn't exist. "
+            "The default tokenizer for fulltext index <%s> is used instead.",
             name_length, name,
-            MRN_PARSER_DEFAULT);
+            MRN_DEFAULT_TOKENIZER);
     push_warning(ha_thd(),
                  MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
                  message);
     tokenizer = grn_ctx_get(ctx,
-                            MRN_PARSER_DEFAULT,
-                            strlen(MRN_PARSER_DEFAULT));
+                            MRN_DEFAULT_TOKENIZER,
+                            strlen(MRN_DEFAULT_TOKENIZER));
   }
   if (!tokenizer) {
     push_warning(ha_thd(),
                  MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
-                 "couldn't find fulltext parser. "
-                 "Bigram fulltext parser is used instead.");
+                 "couldn't find tokenizer for fulltext index. "
+                 "Bigram tokenizer is used instead.");
     tokenizer = grn_ctx_at(ctx, GRN_DB_BIGRAM);
   }
   DBUG_RETURN(tokenizer);
@@ -14124,8 +14133,8 @@ bool ha_mroonga::wrapper_inplace_alter_table(
                                       ha_alter_info->key_count);
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **key_parser;
-  uint *key_parser_length;
+  char **key_tokenizer;
+  uint *key_tokenizer_length;
   KEY *p_key_info = &table->key_info[table_share->primary_key];
   bool need_fill_index = false;
   memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
@@ -14135,8 +14144,8 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   if (!(tmp_share = (MRN_SHARE *)
     mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
-      &key_parser, sizeof(char *) * (tmp_table_share.keys),
-      &key_parser_length, sizeof(uint) * (tmp_table_share.keys),
+      &key_tokenizer, sizeof(char *) * (tmp_table_share.keys),
+      &key_tokenizer_length, sizeof(uint) * (tmp_table_share.keys),
       NullS))
   ) {
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
@@ -14147,8 +14156,8 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   tmp_share->table_share = &tmp_table_share;
   tmp_share->index_table = NULL;
   tmp_share->index_table_length = NULL;
-  tmp_share->key_parser = key_parser;
-  tmp_share->key_parser_length = key_parser_length;
+  tmp_share->key_tokenizer = key_tokenizer;
+  tmp_share->key_tokenizer_length = key_tokenizer_length;
   bitmap_clear_all(table->read_set);
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
   n_keys = ha_alter_info->index_add_count;
@@ -14291,8 +14300,8 @@ bool ha_mroonga::storage_inplace_alter_table_index(
                                       ha_alter_info->key_count);
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **index_table, **key_parser, **col_flags, **col_type;
-  uint *index_table_length, *key_parser_length, *col_flags_length, *col_type_length;
+  char **index_table, **key_tokenizer, **col_flags, **col_type;
+  uint *index_table_length, *key_tokenizer_length, *col_flags_length, *col_type_length;
   bool have_multiple_column_index = false;
   memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   memset(index_columns, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
@@ -14303,8 +14312,8 @@ bool ha_mroonga::storage_inplace_alter_table_index(
       &tmp_share, sizeof(*tmp_share),
       &index_table, sizeof(char *) * tmp_table_share.keys,
       &index_table_length, sizeof(uint) * tmp_table_share.keys,
-      &key_parser, sizeof(char *) * tmp_table_share.keys,
-      &key_parser_length, sizeof(uint) * tmp_table_share.keys,
+      &key_tokenizer, sizeof(char *) * tmp_table_share.keys,
+      &key_tokenizer_length, sizeof(uint) * tmp_table_share.keys,
       &col_flags, sizeof(char *) * tmp_table_share.fields,
       &col_flags_length, sizeof(uint) * tmp_table_share.fields,
       &col_type, sizeof(char *) * tmp_table_share.fields,
@@ -14319,8 +14328,8 @@ bool ha_mroonga::storage_inplace_alter_table_index(
   tmp_share->table_share = &tmp_table_share;
   tmp_share->index_table = index_table;
   tmp_share->index_table_length = index_table_length;
-  tmp_share->key_parser = key_parser;
-  tmp_share->key_parser_length = key_parser_length;
+  tmp_share->key_tokenizer = key_tokenizer;
+  tmp_share->key_tokenizer_length = key_tokenizer_length;
   tmp_share->col_flags = col_flags;
   tmp_share->col_flags_length = col_flags_length;
   tmp_share->col_type = col_type;
@@ -14429,8 +14438,8 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
 
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **index_table, **key_parser, **col_flags, **col_type;
-  uint *index_table_length, *key_parser_length, *col_flags_length, *col_type_length;
+  char **index_table, **key_tokenizer, **col_flags, **col_type;
+  uint *index_table_length, *key_tokenizer_length, *col_flags_length, *col_type_length;
   tmp_table_share.keys = 0;
   tmp_table_share.fields = altered_table->s->fields;
   tmp_share = (MRN_SHARE *)mrn_my_multi_malloc(
@@ -14438,8 +14447,8 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
     &tmp_share, sizeof(*tmp_share),
     &index_table, sizeof(char *) * tmp_table_share.keys,
     &index_table_length, sizeof(uint) * tmp_table_share.keys,
-    &key_parser, sizeof(char *) * tmp_table_share.keys,
-    &key_parser_length, sizeof(uint) * tmp_table_share.keys,
+    &key_tokenizer, sizeof(char *) * tmp_table_share.keys,
+    &key_tokenizer_length, sizeof(uint) * tmp_table_share.keys,
     &col_flags, sizeof(char *) * tmp_table_share.fields,
     &col_flags_length, sizeof(uint) * tmp_table_share.fields,
     &col_type, sizeof(char *) * tmp_table_share.fields,
@@ -14453,8 +14462,8 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
   tmp_share->table_share = &tmp_table_share;
   tmp_share->index_table = index_table;
   tmp_share->index_table_length = index_table_length;
-  tmp_share->key_parser = key_parser;
-  tmp_share->key_parser_length = key_parser_length;
+  tmp_share->key_tokenizer = key_tokenizer;
+  tmp_share->key_tokenizer_length = key_tokenizer_length;
   tmp_share->col_flags = col_flags;
   tmp_share->col_flags_length = col_flags_length;
   tmp_share->col_type = col_type;
@@ -14824,8 +14833,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   THD *thd = ha_thd();
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **key_parser;
-  uint *key_parser_length;
+  char **key_tokenizer;
+  uint *key_tokenizer_length;
   MRN_DBUG_ENTER_METHOD();
   if (!(wrap_alter_key_info = (KEY *) mrn_my_malloc(sizeof(KEY) * num_of_keys,
                                                     MYF(MY_WME)))) {
@@ -14839,8 +14848,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   if (!(tmp_share = (MRN_SHARE *)
     mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
-      &key_parser, sizeof(char *) * (n_keys + num_of_keys),
-      &key_parser_length, sizeof(uint) * (n_keys + num_of_keys),
+      &key_tokenizer, sizeof(char *) * (n_keys + num_of_keys),
+      &key_tokenizer_length, sizeof(uint) * (n_keys + num_of_keys),
       NullS))
   ) {
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
@@ -14851,8 +14860,8 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->index_table = NULL;
   tmp_share->index_table_length = NULL;
-  tmp_share->key_parser = key_parser;
-  tmp_share->key_parser_length = key_parser_length;
+  tmp_share->key_tokenizer = key_tokenizer;
+  tmp_share->key_tokenizer_length = key_tokenizer_length;
   tmp_share->col_flags = NULL;
   tmp_share->col_type = NULL;
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
@@ -14963,8 +14972,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_columns, num_of_keys + n_keys);
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **index_table, **key_parser, **col_flags, **col_type;
-  uint *index_table_length, *key_parser_length, *col_flags_length, *col_type_length;
+  char **index_table, **key_tokenizer, **col_flags, **col_type;
+  uint *index_table_length, *key_tokenizer_length, *col_flags_length, *col_type_length;
   bool have_multiple_column_index = false;
 
   MRN_DBUG_ENTER_METHOD();
@@ -14975,8 +14984,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
       &tmp_share, sizeof(*tmp_share),
       &index_table, sizeof(char*) *  tmp_table_share.keys,
       &index_table_length, sizeof(uint) * tmp_table_share.keys,
-      &key_parser, sizeof(char *) * tmp_table_share.keys,
-      &key_parser_length, sizeof(uint) * tmp_table_share.keys,
+      &key_tokenizer, sizeof(char *) * tmp_table_share.keys,
+      &key_tokenizer_length, sizeof(uint) * tmp_table_share.keys,
       &col_flags, sizeof(char *) * tmp_table_share.fields,
       &col_flags_length, sizeof(uint) * tmp_table_share.fields,
       &col_type, sizeof(char *) * tmp_table_share.fields,
@@ -14991,8 +15000,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->index_table = index_table;
   tmp_share->index_table_length = index_table_length;
-  tmp_share->key_parser = key_parser;
-  tmp_share->key_parser_length = key_parser_length;
+  tmp_share->key_tokenizer = key_tokenizer;
+  tmp_share->key_tokenizer_length = key_tokenizer_length;
   tmp_share->col_flags = col_flags;
   tmp_share->col_flags_length = col_flags_length;
   tmp_share->col_type = col_type;

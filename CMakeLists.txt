@@ -397,9 +397,17 @@ if(GROONGA_NORMALIZER_MYSQL_FOUND)
   endif()
 endif()
 
-set(MRN_DEFAULT_PARSER "TokenBigram" CACHE STRING "The default fulltext parser")
-set_property(TARGET mroonga APPEND PROPERTY
-  COMPILE_DEFINITIONS "MRN_PARSER_DEFAULT=\"${MRN_DEFAULT_PARSER}\"")
+set(MRN_DEFAULT_PARSER "" CACHE STRING
+  "The default fulltext parser (Deprecated. Use MRN_DEFAULT_TOKENIZER instead.)")
+set(MRN_DEFAULT_TOKENIZER "" CACHE STRING
+  "The default tokenizer for fulltext index")
+if(${MRN_DEFAULT_TOKENIZER} != "")
+  set_property(TARGET mroonga APPEND PROPERTY
+    COMPILE_DEFINITIONS "MRN_DEFAULT_TOKENIZER=\"${MRN_DEFAULT_TOKENIZER}\"")
+elseif(${MRN_DEFAULT_PARSER} != "")
+  set_property(TARGET mroonga APPEND PROPERTY
+    COMPILE_DEFINITIONS "MRN_DEFAULT_TOKENIZER=\"${MRN_DEFAULT_PARSER}\"")
+endif()
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/mrn_version.h.in"
