@@ -1601,6 +1601,7 @@ static ha_create_table_option mrn_index_options[] =
   HA_IOPTION_STRING("TOKENIZER", tokenizer),
   HA_IOPTION_STRING("NORMALIZER", normalizer),
   HA_IOPTION_STRING("TOKEN_FILTERS", token_filters),
+  HA_IOPTION_STRING("INDEX_FLAGS", index_flags),
   HA_IOPTION_END
 };
 #endif
@@ -9162,13 +9163,28 @@ grn_obj *ha_mroonga::find_normalizer(KEY *key, const char *name)
   DBUG_RETURN(normalizer);
 }
 
-bool ha_mroonga::find_index_column_flags(KEY *key_info, grn_obj_flags *index_column_flags)
+bool ha_mroonga::find_index_column_flags(KEY *key, grn_obj_flags *index_column_flags)
 {
   MRN_DBUG_ENTER_METHOD();
   bool found = false;
-  if (key_info->comment.length > 0) {
-    mrn::ParametersParser parser(key_info->comment.str,
-                                 key_info->comment.length);
+
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  {
+    const char *names = key->option_struct->index_flags;
+    if (names) {
+      found = mrn_parse_grn_index_column_flags(ha_thd(),
+                                               ctx,
+                                               names,
+                                               strlen(names),
+                                               index_column_flags);
+      DBUG_RETURN(found);
+    }
+  }
+#endif
+
+  if (key->comment.length > 0) {
+    mrn::ParametersParser parser(key->comment.str,
+                                 key->comment.length);
     parser.parse();
     const char *names = parser["index_flags"];
     if (names) {
@@ -9179,6 +9195,7 @@ bool ha_mroonga::find_index_column_flags(KEY *key_info, grn_obj_flags *index_col
                                                index_column_flags);
     }
   }
+
   DBUG_RETURN(found);
 }
 

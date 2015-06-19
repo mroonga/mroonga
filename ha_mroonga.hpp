@@ -265,6 +265,7 @@ struct ha_index_option_struct
   const char *tokenizer;
   const char *normalizer;
   const char *token_filters;
+  const char *index_flags;
 };
 #endif
 
@@ -629,7 +630,7 @@ private:
   grn_obj *find_tokenizer(const char *name, int name_length);
   grn_obj *find_normalizer(KEY *key);
   grn_obj *find_normalizer(KEY *key, const char *name);
-  bool find_index_column_flags(KEY *key_info, grn_obj_flags *index_column_flags);
+  bool find_index_column_flags(KEY *key, grn_obj_flags *index_column_flags);
   bool find_token_filters(KEY *key, grn_obj *token_filters);
   bool find_token_filters_put(grn_obj *token_filters,
                               const char *token_filter_name,
