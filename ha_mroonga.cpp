@@ -9187,7 +9187,6 @@ bool ha_mroonga::find_token_filters(KEY *key_info, grn_obj *token_filters)
 {
   MRN_DBUG_ENTER_METHOD();
   bool found = false;
-#if MYSQL_VERSION_ID >= 50500
   if (key_info->comment.length > 0) {
     mrn::ParametersParser parser(key_info->comment.str,
                                  key_info->comment.length);
@@ -9197,7 +9196,6 @@ bool ha_mroonga::find_token_filters(KEY *key_info, grn_obj *token_filters)
       found = find_token_filters_fill(token_filters, names, strlen(names));
     }
   }
-#endif
   DBUG_RETURN(found);
 }
 
