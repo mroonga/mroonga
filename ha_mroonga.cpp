@@ -9165,7 +9165,6 @@ bool ha_mroonga::find_index_column_flags(KEY *key_info, grn_obj_flags *index_col
 {
   MRN_DBUG_ENTER_METHOD();
   bool found = false;
-#if MYSQL_VERSION_ID >= 50500
   if (key_info->comment.length > 0) {
     mrn::ParametersParser parser(key_info->comment.str,
                                  key_info->comment.length);
@@ -9179,7 +9178,6 @@ bool ha_mroonga::find_index_column_flags(KEY *key_info, grn_obj_flags *index_col
                                                index_column_flags);
     }
   }
-#endif
   DBUG_RETURN(found);
 }
 
