@@ -1600,6 +1600,7 @@ static ha_create_table_option mrn_index_options[] =
 {
   HA_IOPTION_STRING("TOKENIZER", tokenizer),
   HA_IOPTION_STRING("NORMALIZER", normalizer),
+  HA_IOPTION_STRING("TOKEN_FILTERS", token_filters),
   HA_IOPTION_END
 };
 #endif
@@ -9181,19 +9182,30 @@ bool ha_mroonga::find_index_column_flags(KEY *key_info, grn_obj_flags *index_col
   DBUG_RETURN(found);
 }
 
-bool ha_mroonga::find_token_filters(KEY *key_info, grn_obj *token_filters)
+bool ha_mroonga::find_token_filters(KEY *key, grn_obj *token_filters)
 {
   MRN_DBUG_ENTER_METHOD();
   bool found = false;
-  if (key_info->comment.length > 0) {
-    mrn::ParametersParser parser(key_info->comment.str,
-                                 key_info->comment.length);
+
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (key->option_struct->token_filters) {
+    found = find_token_filters_fill(token_filters,
+                                    key->option_struct->token_filters,
+                                    strlen(key->option_struct->token_filters));
+    DBUG_RETURN(found);
+  }
+#endif
+
+  if (key->comment.length > 0) {
+    mrn::ParametersParser parser(key->comment.str,
+                                 key->comment.length);
     parser.parse();
     const char *names = parser["token_filters"];
     if (names) {
       found = find_token_filters_fill(token_filters, names, strlen(names));
     }
   }
+
   DBUG_RETURN(found);
 }
 
