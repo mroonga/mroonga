@@ -1,4 +1,5 @@
 # Copyright(C) 2014  Naoya Murakami <naoya@createfield.com>
+# Copyright(C) 2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,9 +15,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+--source ../../../../../../include/mroonga/have_mariadb.inc
 --source include/have_innodb.inc
---source ../../../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../../../include/mroonga/load_mroonga_functions.inc
+--source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_query_log
 DROP DATABASE test;
@@ -31,12 +33,13 @@ SET NAMES utf8;
 CREATE TABLE memos (
   id INT NOT NULL PRIMARY KEY,
   content VARCHAR(64) NOT NULL,
-  FULLTEXT INDEX (content) COMMENT 'token_filters "TokenFilterStopWord,TokenFilterStopWord"'
-) COMMENT='engine "InnoDB"' DEFAULT CHARSET=utf8;
+  FULLTEXT INDEX (content) TOKEN_FILTERS='TokenFilterStopWord,TokenFilterStopWord'
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
+SHOW CREATE TABLE memos;
 
 SELECT mroonga_command("dump --dump_plugins no");
 
 DROP TABLE memos;
 
---source ../../../../../../../include/mroonga/unload_mroonga_functions.inc
---source ../../../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../../../include/mroonga/have_mroonga_deinit.inc
