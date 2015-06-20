@@ -1429,13 +1429,14 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   return type;
 }
 
-grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
-                                                grn_ctx *ctx,
-                                                const char *flag_names,
-                                                uint flag_names_length)
+bool mrn_parse_grn_column_create_flags(THD *thd,
+                                       grn_ctx *ctx,
+                                       const char *flag_names,
+                                       uint flag_names_length,
+                                       grn_obj_flags *column_flags)
 {
-  grn_obj_flags flags = 0;
   const char *flag_names_end = flag_names + flag_names_length;
+  bool found = false;
 
   while (flag_names < flag_names_end) {
     uint rest_length = flag_names_end - flag_names;
@@ -1445,14 +1446,17 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
       continue;
     }
     if (rest_length >= 13 && !memcmp(flag_names, "COLUMN_SCALAR", 13)) {
-      flags |= GRN_OBJ_COLUMN_SCALAR;
+      *column_flags |= GRN_OBJ_COLUMN_SCALAR;
       flag_names += 13;
+      found = true;
     } else if (rest_length >= 13 && !memcmp(flag_names, "COLUMN_VECTOR", 13)) {
-      flags |= GRN_OBJ_COLUMN_VECTOR;
+      *column_flags |= GRN_OBJ_COLUMN_VECTOR;
       flag_names += 13;
+      found = true;
     } else if (rest_length >= 13 && !memcmp(flag_names, "COMPRESS_ZLIB", 13)) {
       if (mrn_libgroonga_support_zlib) {
-        flags |= GRN_OBJ_COMPRESS_ZLIB;
+        *column_flags |= GRN_OBJ_COMPRESS_ZLIB;
+        found = true;
       } else {
         push_warning_printf(thd, MRN_SEVERITY_WARNING,
                             ER_MRN_UNSUPPORTED_COLUMN_FLAG_NUM,
@@ -1462,7 +1466,8 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
       flag_names += 13;
     } else if (rest_length >= 12 && !memcmp(flag_names, "COMPRESS_LZ4", 12)) {
       if (mrn_libgroonga_support_lz4) {
-        flags |= GRN_OBJ_COMPRESS_LZ4;
+        *column_flags |= GRN_OBJ_COMPRESS_LZ4;
+        found = true;
       } else {
         push_warning_printf(thd, MRN_SEVERITY_WARNING,
                             ER_MRN_UNSUPPORTED_COLUMN_FLAG_NUM,
@@ -1479,13 +1484,11 @@ grn_obj_flags mrn_parse_grn_column_create_flags(THD *thd,
       push_warning_printf(thd, MRN_SEVERITY_WARNING,
                           ER_MRN_INVALID_COLUMN_FLAG_NUM,
                           ER_MRN_INVALID_COLUMN_FLAG_STR,
-                          invalid_flag_name,
-                          "COLUMN_SCALAR");
-      flags |= GRN_OBJ_COLUMN_SCALAR;
+                          invalid_flag_name);
       break;
     }
   }
-  return flags;
+  return found;
 }
 
 bool mrn_parse_grn_index_column_flags(THD *thd,
@@ -1612,6 +1615,7 @@ static uint mrn_alter_table_flags(uint flags)
 static ha_create_table_option mrn_field_options[] =
 {
   HA_FOPTION_STRING("GROONGA_TYPE", groonga_type),
+  HA_FOPTION_STRING("FLAGS", flags),
   HA_FOPTION_END
 };
 
@@ -3342,12 +3346,7 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
 #endif
 
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
-    if (tmp_share->col_flags[i]) {
-      col_flags |= mrn_parse_grn_column_create_flags(ha_thd(),
-                                                     ctx,
-                                                     tmp_share->col_flags[i],
-                                                     tmp_share->col_flags_length[i]);
-    } else {
+    if (!find_column_flags(field, tmp_share, i, &col_flags)) {
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
 
@@ -9085,6 +9084,38 @@ int ha_mroonga::drop_indexes(const char *table_name)
   DBUG_RETURN(error);
 }
 
+bool ha_mroonga::find_column_flags(Field *field, MRN_SHARE *mrn_share, int i,
+                                   grn_obj_flags *column_flags)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool found = false;
+
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  {
+    const char *names = field->option_struct->flags;
+    if (names) {
+      found = mrn_parse_grn_column_create_flags(ha_thd(),
+                                                ctx,
+                                                names,
+                                                strlen(names),
+                                                column_flags);
+      DBUG_RETURN(found);
+    }
+  }
+#endif
+
+  if (mrn_share->col_flags[i]) {
+    found = mrn_parse_grn_column_create_flags(ha_thd(),
+                                              ctx,
+                                              mrn_share->col_flags[i],
+                                              mrn_share->col_flags_length[i],
+                                              column_flags);
+    DBUG_RETURN(found);
+  }
+
+  DBUG_RETURN(found);
+}
+
 grn_obj *ha_mroonga::find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
                                       int error_code)
 {
@@ -14625,12 +14656,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
     }
 
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
-    if (tmp_share->col_flags[i]) {
-      col_flags |= mrn_parse_grn_column_create_flags(ha_thd(),
-                                                     ctx,
-                                                     tmp_share->col_flags[i],
-                                                     tmp_share->col_flags_length[i]);
-    } else {
+    if (!find_column_flags(field, tmp_share, i, &col_flags)) {
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
 

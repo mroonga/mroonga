@@ -263,6 +263,7 @@ struct st_mrn_ft_info
 struct ha_field_option_struct
 {
   const char *groonga_type;
+  const char *flags;
 };
 
 struct ha_index_option_struct
@@ -631,6 +632,8 @@ private:
   int drop_indexes_normal(const char *table_name, grn_obj *table);
   int drop_indexes_multiple(const char *table_name, grn_obj *table);
   int drop_indexes(const char *table_name);
+  bool find_column_flags(Field *field, MRN_SHARE *mrn_share, int i,
+                         grn_obj_flags *column_flags);
   grn_obj *find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
                             int error_code);
   grn_obj *find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i);
