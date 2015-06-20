@@ -16,7 +16,6 @@
 
 --source ../../../../../include/mroonga/have_mariadb.inc
 --source include/have_innodb.inc
---source ../../../../../include/mroonga/have_fulltext_index_comment.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
