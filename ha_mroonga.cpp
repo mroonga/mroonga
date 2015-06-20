@@ -1609,6 +1609,12 @@ static uint mrn_alter_table_flags(uint flags)
 #endif
 
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+static ha_create_table_option mrn_field_options[] =
+{
+  HA_FOPTION_STRING("GROONGA_TYPE", groonga_type),
+  HA_FOPTION_END
+};
+
 static ha_create_table_option mrn_index_options[] =
 {
   HA_IOPTION_STRING("TOKENIZER", tokenizer),
@@ -1638,6 +1644,7 @@ static int mrn_init(void *p)
   hton->alter_table_flags = mrn_alter_table_flags;
 #endif
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  hton->field_options = mrn_field_options;
   hton->index_options = mrn_index_options;
 #endif
   mrn_hton_ptr = hton;
@@ -3344,11 +3351,31 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     } else {
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
-    grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
-    if (tmp_share->col_type[i]) {
-      col_type = grn_ctx_get(ctx, tmp_share->col_type[i], -1);
-    } else {
-      col_type = grn_ctx_at(ctx, gtype);
+    {
+      const char *grn_type_name = NULL;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+      grn_type_name = field->option_struct->groonga_type;
+#endif
+      if (!grn_type_name) {
+        grn_type_name = tmp_share->col_type[i];
+      }
+
+      if (grn_type_name) {
+        col_type = grn_ctx_get(ctx, grn_type_name, -1);
+        if (!col_type) {
+          grn_obj_remove(ctx, table_obj);
+          error = ER_CANT_CREATE_TABLE;
+          GRN_LOG(ctx, GRN_LOG_ERROR,
+                  "unknown custom Groonga type name: <%s>(%.*s)",
+                  grn_type_name,
+                  column_name_size, column_name);
+          my_message(error, ctx->errbuf, MYF(0));
+          DBUG_RETURN(error);
+        }
+      } else {
+        grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
+        col_type = grn_ctx_at(ctx, gtype);
+      }
     }
     char *col_path = NULL; // we don't specify path
 
@@ -14587,10 +14614,10 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
 
-    grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
     if (tmp_share->col_type[i]) {
       col_type = grn_ctx_get(ctx, tmp_share->col_type[i], -1);
     } else {
+      grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
       col_type = grn_ctx_at(ctx, gtype);
     }
     char *col_path = NULL; // we don't specify path

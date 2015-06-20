@@ -260,6 +260,11 @@ struct st_mrn_ft_info
 };
 
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+struct ha_field_option_struct
+{
+  const char *groonga_type;
+};
+
 struct ha_index_option_struct
 {
   const char *tokenizer;
