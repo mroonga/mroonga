@@ -32,7 +32,11 @@ else
 fi
 
 n_processors="$(grep '^processor' /proc/cpuinfo | wc -l)"
-max_n_processors=8
+if [ "${MROONGA_BUNDLED}" = "yes" ]; then
+  max_n_processors=4
+else
+  max_n_processors=8
+fi
 if (( $n_processors > $max_n_processors )); then
   n_processors=$max_n_processors
 fi
