@@ -697,6 +697,9 @@ int mrn_add_column_param(MRN_SHARE *share, Field *field, int i)
       case 5:
         MRN_PARAM_STR_LIST("flags", col_flags, i);
         break;
+      case 12:
+        MRN_PARAM_STR_LIST("groonga_type", col_type, i);
+        break;
       default:
         break;
     }
