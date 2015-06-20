@@ -312,7 +312,7 @@ namespace mrn {
     int error = 0;
 #ifdef WITH_GROONGA_NORMALIZER_MYSQL
     {
-#  ifdef MRN_GROONGA_NORMALIZER_MYSQL_EMBED
+#  ifdef MRN_GROONGA_NORMALIZER_MYSQL_EMBEDDED
       GRN_PLUGIN_IMPL_NAME_TAGGED(init, normalizers_mysql)(ctx_);
       GRN_PLUGIN_IMPL_NAME_TAGGED(register, normalizers_mysql)(ctx_);
 #  else
