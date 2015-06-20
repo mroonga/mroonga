@@ -20,7 +20,7 @@
 set -e
 
 if [ "${MROONGA_BUNDLED}" = "yes" ]; then
-  cmake_args=(-DCMAKE_BUILD_TYPE=Debug -DWITH_UNITE_TESTS=FALSE)
+  cmake_args=(-DCMAKE_BUILD_TYPE=Debug -DWITH_UNIT_TESTS=FALSE)
   cmake_args=("${cmake_args[@]}" -DWITH_EMBEDDED_SERVER=TRUE)
   cmake_args=("${cmake_args[@]}" -DWITHOUT_ARCHIVE=TRUE)
   cmake_args=("${cmake_args[@]}" -DWITHOUT_BLACKHOLE=TRUE)
