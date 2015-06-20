@@ -27,7 +27,7 @@ CREATE DATABASE test;
 USE test;
 --enable_query_log
 
-SELECT mroonga_command("register token_filters/stop_word");
+SELECT mroonga_command("plugin_register token_filters/stop_word");
 
 SET NAMES utf8;
 
