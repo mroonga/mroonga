@@ -15,7 +15,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../../include/mroonga/have_mariadb.inc
 --source include/have_innodb.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 --source ../../../../../include/mroonga/load_mroonga_functions.inc
@@ -30,9 +29,8 @@ SET NAMES utf8;
 
 CREATE TABLE memos (
   content VARCHAR(64) NOT NULL PRIMARY KEY,
-  FULLTEXT INDEX (content) INDEX_FLAGS='WITH_POSITION|WITH_WEIGHT'
-) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
-SHOW CREATE TABLE memos;
+  FULLTEXT INDEX (content) COMMENT 'flags "NONE"'
+) COMMENT='engine "InnoDB"' DEFAULT CHARSET=utf8;
 
 SELECT mroonga_command("dump --dump_plugins no --dump_schema no");
 
