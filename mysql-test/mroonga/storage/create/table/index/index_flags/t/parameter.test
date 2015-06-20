@@ -15,9 +15,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../../include/mroonga/have_mariadb.inc
---source ../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../include/mroonga/load_mroonga_functions.inc
+--source ../../../../../../include/mroonga/have_mariadb.inc
+--source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_query_log
 DROP DATABASE test;
@@ -37,5 +37,5 @@ SELECT mroonga_command("dump --dump_plugins no --dump_schema no");
 
 DROP TABLE memos;
 
---source ../../../../../include/mroonga/unload_mroonga_functions.inc
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../../../include/mroonga/have_mroonga_deinit.inc
