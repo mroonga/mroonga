@@ -3322,7 +3322,6 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   /* create columns */
   uint n_columns = table->s->fields;
   for (uint i = 0; i < n_columns; i++) {
-    grn_obj *col_type;
     Field *field = table->s->field[i];
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
@@ -3351,34 +3350,14 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     } else {
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
-    {
-      const char *grn_type_name = NULL;
-#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
-      grn_type_name = field->option_struct->groonga_type;
-#endif
-      if (!grn_type_name) {
-        grn_type_name = tmp_share->col_type[i];
-      }
 
-      if (grn_type_name) {
-        col_type = grn_ctx_get(ctx, grn_type_name, -1);
-        if (!col_type) {
-          grn_obj_remove(ctx, table_obj);
-          error = ER_CANT_CREATE_TABLE;
-          {
-            char error_message[MRN_BUFFER_SIZE];
-            snprintf(error_message, MRN_BUFFER_SIZE,
-                     "unknown custom Groonga type name for <%.*s> column: <%s>",
-                     column_name_size, column_name,
-                     grn_type_name);
-            GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
-            my_message(error, error_message, MYF(0));
-          }
-          DBUG_RETURN(error);
-        }
-      } else {
-        grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
-        col_type = grn_ctx_at(ctx, gtype);
+    grn_obj *col_type;
+    {
+      int column_type_error_code = ER_CANT_CREATE_TABLE;
+      col_type = find_column_type(field, tmp_share, i, column_type_error_code);
+      if (!col_type) {
+        grn_obj_remove(ctx, table_obj);
+        DBUG_RETURN(column_type_error_code);
       }
     }
     char *col_path = NULL; // we don't specify path
@@ -9106,6 +9085,40 @@ int ha_mroonga::drop_indexes(const char *table_name)
   DBUG_RETURN(error);
 }
 
+grn_obj *ha_mroonga::find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
+                                      int error_code)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  const char *grn_type_name = NULL;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  grn_type_name = field->option_struct->groonga_type;
+#endif
+  if (!grn_type_name) {
+    grn_type_name = mrn_share->col_type[i];
+  }
+
+  grn_obj *type = NULL;
+  if (grn_type_name) {
+    type = grn_ctx_get(ctx, grn_type_name, -1);
+    if (!type) {
+      char error_message[MRN_BUFFER_SIZE];
+      snprintf(error_message, MRN_BUFFER_SIZE,
+               "unknown custom Groonga type name for <%s> column: <%s>",
+               field->field_name, grn_type_name);
+      GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+      my_message(error_code, error_message, MYF(0));
+
+      DBUG_RETURN(NULL);
+    }
+  } else {
+    grn_builtin_type grn_type_id = mrn_grn_type_from_field(ctx, field, false);
+    type = grn_ctx_at(ctx, grn_type_id);
+  }
+
+  DBUG_RETURN(type);
+}
+
 grn_obj *ha_mroonga::find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -14601,7 +14614,6 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       continue;
     }
 
-    grn_obj *col_type;
     Field *field = altered_table->s->field[i];
     const char *column_name = field->field_name;
     int column_name_size = strlen(column_name);
@@ -14622,11 +14634,15 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
 
-    if (tmp_share->col_type[i]) {
-      col_type = grn_ctx_get(ctx, tmp_share->col_type[i], -1);
-    } else {
-      grn_builtin_type gtype = mrn_grn_type_from_field(ctx, field, false);
-      col_type = grn_ctx_at(ctx, gtype);
+    grn_obj *col_type;
+    {
+      int column_type_error_code = ER_WRONG_FIELD_SPEC;
+      col_type = find_column_type(field, tmp_share, i, column_type_error_code);
+      if (!col_type) {
+        error = column_type_error_code;
+        have_error = true;
+        break;
+      }
     }
     char *col_path = NULL; // we don't specify path
 

@@ -631,6 +631,8 @@ private:
   int drop_indexes_normal(const char *table_name, grn_obj *table);
   int drop_indexes_multiple(const char *table_name, grn_obj *table);
   int drop_indexes(const char *table_name);
+  grn_obj *find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
+                            int error_code);
   grn_obj *find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i);
   grn_obj *find_tokenizer(const char *name, int name_length);
   grn_obj *find_normalizer(KEY *key);
