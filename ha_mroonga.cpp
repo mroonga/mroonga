@@ -3365,11 +3365,15 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
         if (!col_type) {
           grn_obj_remove(ctx, table_obj);
           error = ER_CANT_CREATE_TABLE;
-          GRN_LOG(ctx, GRN_LOG_ERROR,
-                  "unknown custom Groonga type name: <%s>(%.*s)",
-                  grn_type_name,
-                  column_name_size, column_name);
-          my_message(error, ctx->errbuf, MYF(0));
+          {
+            char error_message[MRN_BUFFER_SIZE];
+            snprintf(error_message, MRN_BUFFER_SIZE,
+                     "unknown custom Groonga type name for <%.*s> column: <%s>",
+                     column_name_size, column_name,
+                     grn_type_name);
+            GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+            my_message(error, error_message, MYF(0));
+          }
           DBUG_RETURN(error);
         }
       } else {
