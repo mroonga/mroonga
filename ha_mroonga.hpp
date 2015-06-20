@@ -270,7 +270,7 @@ struct ha_index_option_struct
   const char *tokenizer;
   const char *normalizer;
   const char *token_filters;
-  const char *index_flags;
+  const char *flags;
 };
 #endif
 
