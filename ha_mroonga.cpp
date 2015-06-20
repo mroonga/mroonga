@@ -9226,7 +9226,11 @@ bool ha_mroonga::find_index_column_flags(KEY *key, grn_obj_flags *index_column_f
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
     parser.parse();
-    const char *names = parser["index_flags"];
+    const char *names = parser["flags"];
+    if (!names) {
+      // Deprecated. It's for backward compatibility.
+      names = parser["index_flags"];
+    }
     if (names) {
       found = mrn_parse_grn_index_column_flags(ha_thd(),
                                                ctx,
