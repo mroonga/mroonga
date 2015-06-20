@@ -1429,11 +1429,11 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   return type;
 }
 
-bool mrn_parse_grn_column_create_flags(THD *thd,
-                                       grn_ctx *ctx,
-                                       const char *flag_names,
-                                       uint flag_names_length,
-                                       grn_obj_flags *column_flags)
+static bool mrn_parse_grn_column_create_flags(THD *thd,
+                                              grn_ctx *ctx,
+                                              const char *flag_names,
+                                              uint flag_names_length,
+                                              grn_obj_flags *column_flags)
 {
   const char *flag_names_end = flag_names + flag_names_length;
   bool found = false;
@@ -1491,11 +1491,11 @@ bool mrn_parse_grn_column_create_flags(THD *thd,
   return found;
 }
 
-bool mrn_parse_grn_index_column_flags(THD *thd,
-                                      grn_ctx *ctx,
-                                      const char *flag_names,
-                                      uint flag_names_length,
-                                      grn_obj_flags *index_column_flags)
+static bool mrn_parse_grn_index_column_flags(THD *thd,
+                                             grn_ctx *ctx,
+                                             const char *flag_names,
+                                             uint flag_names_length,
+                                             grn_obj_flags *index_column_flags)
 {
   const char *flag_names_end = flag_names + flag_names_length;
   bool found = false;
