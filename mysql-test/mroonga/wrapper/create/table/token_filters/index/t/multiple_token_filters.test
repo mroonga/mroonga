@@ -16,6 +16,7 @@
 
 --source include/have_innodb.inc
 --source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/have_groonga_plugin_register.inc
 --source ../../../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_query_log

@@ -628,6 +628,11 @@ static TYPELIB mrn_boolean_mode_syntax_flags_typelib = {
   NULL
 };
 #endif
+#ifdef MRN_GROONGA_EMBEDDED
+static my_bool mrn_libgroonga_embedded = TRUE;
+#else
+static my_bool mrn_libgroonga_embedded = FALSE;
+#endif
 
 typedef enum {
   MRN_ACTION_ON_ERROR_ERROR,
@@ -1090,6 +1095,13 @@ static MYSQL_THDVAR_INT(max_n_records_for_estimate,
                         INT_MAX,
                         0);
 
+static MYSQL_SYSVAR_BOOL(libgroonga_embedded, mrn_libgroonga_embedded,
+                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
+                         "Whether libgroonga is embedded or not",
+                         NULL,
+                         NULL,
+                         mrn_libgroonga_embedded);
+
 static struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
@@ -1112,6 +1124,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(boolean_mode_syntax_flags),
 #endif
   MYSQL_SYSVAR(max_n_records_for_estimate),
+  MYSQL_SYSVAR(libgroonga_embedded),
   NULL
 };
 

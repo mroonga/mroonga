@@ -1,4 +1,4 @@
-# Copyright(C) 2014  Naoya Murakami <naoya@createfield.com>
+# Copyright(C) 2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,28 +14,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../../include/mroonga/have_groonga_plugin_register.inc
---source ../../../../../../include/mroonga/load_mroonga_functions.inc
-
 --disable_query_log
-DROP DATABASE test;
-CREATE DATABASE test;
-USE test;
+let $libgroonga_embedded = `SELECT @@mroonga_libgroonga_embedded;`;
 --enable_query_log
-
-SELECT mroonga_command("register token_filters/stop_word");
-
-SET NAMES utf8;
-
-CREATE TABLE memos (
-  content VARCHAR(64) NOT NULL,
-  FULLTEXT INDEX (content) COMMENT 'token_filters "TokenFilterStopWord"'
-) DEFAULT CHARSET=utf8;
-
-SELECT mroonga_command("dump --dump_plugins no");
-
-DROP TABLE memos;
-
---source ../../../../../../include/mroonga/unload_mroonga_functions.inc
---source ../../../../../../include/mroonga/have_mroonga_deinit.inc
