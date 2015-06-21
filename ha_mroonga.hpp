@@ -33,12 +33,6 @@ extern "C" {
 #include <groonga.h>
 #include "mrn_mysql_compat.h"
 
-#if (MYSQL_VERSION_ID >= 50603) || \
-    (MYSQL_VERSION_ID >= 50513 && MYSQL_VERSION_ID < 50600) || \
-    (MYSQL_VERSION_ID >= 50158 && MYSQL_VERSION_ID < 50500)
-#  define MRN_HANDLER_CLONE_NEED_NAME 1
-#endif
-
 #if (MYSQL_VERSION_ID >= 50514 && MYSQL_VERSION_ID < 50600)
 #  define MRN_HANDLER_HAVE_FINAL_ADD_INDEX 1
 #endif
@@ -465,11 +459,7 @@ public:
 
   int reset();
 
-#ifdef MRN_HANDLER_CLONE_NEED_NAME
   handler *clone(const char *name, MEM_ROOT *mem_root);
-#else
-  handler *clone(MEM_ROOT *mem_root);
-#endif
   uint8 table_cache_type();
 #ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ
   ha_rows multi_range_read_info_const(uint keyno, RANGE_SEQ_IF *seq,
@@ -1014,13 +1004,8 @@ private:
   void storage_cond_pop();
   bool wrapper_get_error_message(int error, String *buf);
   bool storage_get_error_message(int error, String *buf);
-#ifdef MRN_HANDLER_CLONE_NEED_NAME
   handler *wrapper_clone(const char *name, MEM_ROOT *mem_root);
   handler *storage_clone(const char *name, MEM_ROOT *mem_root);
-#else
-  handler *wrapper_clone(MEM_ROOT *mem_root);
-  handler *storage_clone(MEM_ROOT *mem_root);
-#endif
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
 #ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ

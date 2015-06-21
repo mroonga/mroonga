@@ -4029,13 +4029,8 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
 #endif
     error = wrap_handler->ha_open(table, name, mode, test_if_locked);
   } else {
-#ifdef MRN_HANDLER_CLONE_NEED_NAME
     if (!(wrap_handler = parent_for_clone->wrap_handler->clone(name,
       mem_root_for_clone)))
-#else
-    if (!(wrap_handler = parent_for_clone->wrap_handler->clone(
-      mem_root_for_clone)))
-#endif
     {
       MRN_SET_BASE_SHARE_KEY(share, table->s);
       MRN_SET_BASE_TABLE_KEY(this, table);
@@ -11794,7 +11789,6 @@ int ha_mroonga::reset()
   DBUG_RETURN(error);
 }
 
-#ifdef MRN_HANDLER_CLONE_NEED_NAME
 handler *ha_mroonga::wrapper_clone(const char *name, MEM_ROOT *mem_root)
 {
   handler *cloned_handler;
@@ -11834,47 +11828,6 @@ handler *ha_mroonga::clone(const char *name, MEM_ROOT *mem_root)
   }
   DBUG_RETURN(cloned_handler);
 }
-#else
-handler *ha_mroonga::wrapper_clone(MEM_ROOT *mem_root)
-{
-  handler *cloned_handler;
-  MRN_DBUG_ENTER_METHOD();
-  if (!(cloned_handler = get_new_handler(table->s, mem_root,
-                                         table->s->db_type())))
-    DBUG_RETURN(NULL);
-  ((ha_mroonga *) cloned_handler)->is_clone = true;
-  ((ha_mroonga *) cloned_handler)->parent_for_clone = this;
-  ((ha_mroonga *) cloned_handler)->mem_root_for_clone = mem_root;
-  if (cloned_handler->ha_open(table, table->s->normalized_path.str,
-                              table->db_stat, HA_OPEN_IGNORE_IF_LOCKED))
-  {
-    delete cloned_handler;
-    DBUG_RETURN(NULL);
-  }
-  DBUG_RETURN(cloned_handler);
-}
-
-handler *ha_mroonga::storage_clone(MEM_ROOT *mem_root)
-{
-  MRN_DBUG_ENTER_METHOD();
-  handler *cloned_handler;
-  cloned_handler = handler::clone(mem_root);
-  DBUG_RETURN(cloned_handler);
-}
-
-handler *ha_mroonga::clone(MEM_ROOT *mem_root)
-{
-  MRN_DBUG_ENTER_METHOD();
-  handler *cloned_handler;
-  if (share->wrapper_mode)
-  {
-    cloned_handler = wrapper_clone(mem_root);
-  } else {
-    cloned_handler = storage_clone(mem_root);
-  }
-  DBUG_RETURN(cloned_handler);
-}
-#endif
 
 uint8 ha_mroonga::wrapper_table_cache_type()
 {
