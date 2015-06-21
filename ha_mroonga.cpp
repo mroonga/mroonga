@@ -12377,7 +12377,6 @@ int ha_mroonga::delete_all_rows()
   DBUG_RETURN(error);
 }
 
-#ifdef MRN_HANDLER_HAVE_TRUNCATE
 int ha_mroonga::wrapper_truncate()
 {
   int error = 0;
@@ -12394,7 +12393,6 @@ int ha_mroonga::wrapper_truncate()
 
   DBUG_RETURN(error);
 }
-#endif
 
 int ha_mroonga::wrapper_truncate_index()
 {
@@ -12516,7 +12514,6 @@ err:
   DBUG_RETURN(error);
 }
 
-#ifdef MRN_HANDLER_HAVE_TRUNCATE
 int ha_mroonga::truncate()
 {
   MRN_DBUG_ENTER_METHOD();
@@ -12529,7 +12526,6 @@ int ha_mroonga::truncate()
   }
   DBUG_RETURN(error);
 }
-#endif
 
 double ha_mroonga::wrapper_scan_time()
 {

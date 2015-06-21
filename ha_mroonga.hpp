@@ -74,7 +74,6 @@ extern "C" {
 #endif
 
 #if MYSQL_VERSION_ID >= 50500
-#  define MRN_HANDLER_HAVE_TRUNCATE
 #  define MRN_HANDLER_HAVE_GET_PARENT_FOREIGN_KEY_LIST
 #endif
 
@@ -488,9 +487,7 @@ public:
 #endif
   int end_bulk_insert();
   int delete_all_rows();
-#ifdef MRN_HANDLER_HAVE_TRUNCATE
   int truncate();
-#endif // MRN_HANDLER_HAVE_TRUNCATE
   double scan_time();
   double read_time(uint index, uint ranges, ha_rows rows);
   const key_map *keys_to_use_for_scanning();
@@ -1059,9 +1056,7 @@ private:
                               const char *function_name);
   int wrapper_delete_all_rows();
   int storage_delete_all_rows();
-#ifdef MRN_HANDLER_HAVE_TRUNCATE
   int wrapper_truncate();
-#endif // MRN_HANDLER_HAVE_TRUNCATE
   int wrapper_truncate_index();
   int storage_truncate();
   int storage_truncate_index();
