@@ -98,7 +98,6 @@ extern "C" {
 #endif
 
 #if MYSQL_VERSION_ID >= 50500
-#  define MRN_HAVE_HA_EXTRA_ADD_CHILDREN_LIST
 #  define MRN_HAVE_HA_EXTRA_IS_ATTACHED_CHILDREN
 #endif
 

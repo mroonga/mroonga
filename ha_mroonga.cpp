@@ -513,11 +513,9 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_PREPARE_FOR_RENAME:
     inspected = "HA_EXTRA_PREPARE_FOR_RENAME";
     break;
-#ifdef MRN_HAVE_HA_EXTRA_ADD_CHILDREN_LIST
   case HA_EXTRA_ADD_CHILDREN_LIST:
     inspected = "HA_EXTRA_ADD_CHILDREN_LIST";
     break;
-#endif
   case HA_EXTRA_ATTACH_CHILDREN:
     inspected = "HA_EXTRA_ATTACH_CHILDREN";
     break;
