@@ -37,8 +37,7 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_FINAL_ADD_INDEX 1
 #endif
 
-#if (MYSQL_VERSION_ID >= 50603) || \
-    (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50209)
+#if (MYSQL_VERSION_ID >= 50603) || defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_HA_RND_NEXT 1
 #  define MRN_HANDLER_HAVE_HA_RND_POS 1
 #  define MRN_HANDLER_HAVE_HA_INDEX_READ_MAP 1
@@ -50,8 +49,7 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_HA_INDEX_NEXT_SAME 1
 #endif
 
-#if (MYSQL_VERSION_ID >= 50604) || \
-    (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302)
+#if (MYSQL_VERSION_ID >= 50604) || defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_HA_CLOSE 1
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ 1
 #endif
@@ -71,7 +69,7 @@ extern "C" {
 #  endif
 #endif
 
-#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50302)
+#ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
 #endif
 
