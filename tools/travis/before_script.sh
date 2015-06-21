@@ -53,4 +53,5 @@ else
     configure_args=("${configure_args[@]}" --enable-fast-mutexes)
   fi
   ./configure "${configure_args[@]}"
+  cat "$(mysql_config --include | sed -e 's/-I//g')/my_config.h"
 fi
