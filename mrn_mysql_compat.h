@@ -33,7 +33,7 @@
 #endif
 
 #if defined(MRN_MARIADB_P)
-#  if MYSQL_VERSION_ID >= 50302 && MYSQL_VERSION_ID < 100000
+#  if MYSQL_VERSION_ID < 100000
      typedef COST_VECT Cost_estimate;
 #  endif
 #endif
