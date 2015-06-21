@@ -127,6 +127,6 @@ run_sql_test()
   fi
 }
 
-build || (echo 'int main(void){return __ATOMIC_SEQ_CST}' > a.cpp; g++ -E a.cpp; g++ -std=gnu++0x -E a.cpp; false)
+build
 # run_unit_test
 run_sql_test
