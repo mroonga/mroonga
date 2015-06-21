@@ -127,6 +127,6 @@ run_sql_test()
   fi
 }
 
-build || (cat /var/log/messages; false)
+build || (ls -lat /var/log/; false)
 # run_unit_test
 run_sql_test
