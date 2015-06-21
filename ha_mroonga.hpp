@@ -93,9 +93,7 @@ extern "C" {
 #  define MRN_HA_ROWS_FORMAT "lu"
 #endif
 
-#if (MYSQL_VERSION_ID < 50519) || \
-    defined(MRN_MARIADB_P) || \
-    (50600 <= MYSQL_VERSION_ID && MYSQL_VERSION_ID < 50604)
+#ifdef MRN_MARIADB_P
 #  define MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
 #endif
 
