@@ -127,6 +127,6 @@ run_sql_test()
   fi
 }
 
-build || (ls -lat /var/log/; false)
+build || (ls -lat /var/log/; echo 'int main(void){return __ATOMIC_SEQ_CST}' > a.cpp; g++ -E a.cpp; false)
 # run_unit_test
 run_sql_test
