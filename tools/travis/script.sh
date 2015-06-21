@@ -44,7 +44,7 @@ fi
 build()
 {
   if [ "${MROONGA_BUNDLED}" = "yes" ]; then
-    make -j${n_processors} > /dev/null
+    make -j${n_processors} # > /dev/null
   else
     make -j${n_processors} > /dev/null
   fi
