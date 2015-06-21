@@ -519,11 +519,9 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_ATTACH_CHILDREN:
     inspected = "HA_EXTRA_ATTACH_CHILDREN";
     break;
-#ifdef MRN_HAVE_HA_EXTRA_IS_ATTACHED_CHILDREN
   case HA_EXTRA_IS_ATTACHED_CHILDREN:
     inspected = "HA_EXTRA_IS_ATTACHED_CHILDREN";
     break;
-#endif
   case HA_EXTRA_DETACH_CHILDREN:
     inspected = "HA_EXTRA_DETACH_CHILDREN";
     break;
