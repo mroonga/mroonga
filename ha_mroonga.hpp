@@ -73,10 +73,6 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
 #endif
 
-#if MYSQL_VERSION_ID >= 50500
-#  define MRN_HANDLER_HAVE_GET_PARENT_FOREIGN_KEY_LIST
-#endif
-
 #if MYSQL_VERSION_ID < 50600
 #  define MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
 #endif
@@ -571,9 +567,7 @@ protected:
 #endif
   bool can_switch_engines();
   int get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
-#ifdef MRN_HANDLER_HAVE_GET_PARENT_FOREIGN_KEY_LIST
   int get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
-#endif
   uint referenced_by_foreign_key();
   void init_table_handle_for_HANDLER();
   void free_foreign_key_create_info(char* str);
@@ -1221,10 +1215,8 @@ private:
   bool storage_can_switch_engines();
   int wrapper_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   int storage_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
-#ifdef MRN_HANDLER_HAVE_GET_PARENT_FOREIGN_KEY_LIST
   int wrapper_get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   int storage_get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
-#endif
   uint wrapper_referenced_by_foreign_key();
   uint storage_referenced_by_foreign_key();
   void wrapper_init_table_handle_for_HANDLER();
