@@ -113,10 +113,6 @@
 #  define MRN_TABLE_SHARE_HAVE_LOCK_SHARE
 #endif
 
-#if MYSQL_VERSION_ID >= 50404
-#  define MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
-#endif
-
 #ifndef TIME_FUZZY_DATE
 /* For MariaDB 10. */
 #  ifdef TIME_FUZZY_DATES

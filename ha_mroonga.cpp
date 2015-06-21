@@ -261,9 +261,7 @@ uint grn_atoui(const char *nptr, const char *end, const char **rest);
 #    ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
 PSI_mutex_key *mrn_table_share_lock_share;
 #    endif
-#    ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
 PSI_mutex_key *mrn_table_share_lock_ha_data;
-#    endif
 #  endif
 static PSI_mutex_key mrn_open_tables_mutex_key;
 static PSI_mutex_key mrn_long_term_share_mutex_key;
@@ -1670,11 +1668,9 @@ static int mrn_init(void *p)
          (PSI_mutex_key *)GetProcAddress(current_module,
                                          MRN_TABLE_SHARE_LOCK_SHARE_PROC);
 #    endif
-#    ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
-       mrn_table_share_lock_ha_data =
-         (PSI_mutex_key *)GetProcAddress(current_module,
-                                         MRN_TABLE_SHARE_LOCK_HA_DATA_PROC);
-#    endif
+     mrn_table_share_lock_ha_data =
+       (PSI_mutex_key *)GetProcAddress(current_module,
+                                       MRN_TABLE_SHARE_LOCK_HA_DATA_PROC);
 #  endif
 #else
   mrn_binlog_filter = binlog_filter;

@@ -76,9 +76,7 @@ extern "C" {
 #    ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
 extern PSI_mutex_key *mrn_table_share_lock_share;
 #    endif
-#    ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
 extern PSI_mutex_key *mrn_table_share_lock_ha_data;
-#    endif
 #  endif
 extern PSI_mutex_key mrn_share_mutex_key;
 extern PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
@@ -931,14 +929,12 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
                        &(wrap_table_share->LOCK_share), MY_MUTEX_INIT_SLOW);
 #  endif
 #endif
-#ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
-#  ifdef WIN32
+#ifdef WIN32
       mysql_mutex_init(*mrn_table_share_lock_ha_data,
                        &(wrap_table_share->LOCK_ha_data), MY_MUTEX_INIT_FAST);
-#  else
+#else
       mysql_mutex_init(key_TABLE_SHARE_LOCK_ha_data,
                        &(wrap_table_share->LOCK_ha_data), MY_MUTEX_INIT_FAST);
-#  endif
 #endif
       share->wrap_table_share = wrap_table_share;
     }
@@ -992,9 +988,7 @@ int mrn_free_share(MRN_SHARE *share)
 #ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_share));
 #endif
-#ifdef MRN_TABLE_SHARE_HAVE_LOCK_HA_DATA
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_ha_data));
-#endif
       free_root(&(share->wrap_table_share->mem_root), MYF(0));
     }
     my_free(share);
