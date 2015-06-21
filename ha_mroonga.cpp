@@ -167,11 +167,7 @@ static mysql_mutex_t *mrn_LOCK_open;
 #else
 #  define mrn_declare_plugin(NAME)  mysql_declare_plugin(NAME)
 #  define mrn_declare_plugin_end    mysql_declare_plugin_end
-#  ifdef MRN_PLUGIN_HAVE_FLAGS
-#    define MRN_PLUGIN_LAST_VALUES  NULL, 0
-#  else
-#    define MRN_PLUGIN_LAST_VALUES  NULL
-#  endif
+#  define MRN_PLUGIN_LAST_VALUES    NULL, 0
 #endif
 
 #if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)

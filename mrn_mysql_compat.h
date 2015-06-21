@@ -38,10 +38,6 @@
 #  endif
 #endif
 
-#if MYSQL_VERSION_ID >= 50516
-#  define MRN_PLUGIN_HAVE_FLAGS 1
-#endif
-
 // for MySQL < 5.5
 #ifndef MY_ALL_CHARSETS_SIZE
 #  define MY_ALL_CHARSETS_SIZE 256
