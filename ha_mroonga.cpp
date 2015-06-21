@@ -3499,17 +3499,11 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       DBUG_RETURN(false);
     }
 
-#ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
     table_list.init_one_table(mapper.db_name(),
                               strlen(mapper.db_name()),
                               mapper.mysql_table_name(),
                               strlen(mapper.mysql_table_name()),
                               mapper.mysql_table_name(), TL_WRITE);
-#else
-    table_list.init_one_table(mapper.db_name(),
-                              mapper.mysql_table_name(),
-                              TL_WRITE);
-#endif
     mrn_open_mutex_lock(table->s);
     tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);
@@ -12965,17 +12959,11 @@ int ha_mroonga::rename_table(const char *from, const char *to)
   if (strcmp(from_mapper.db_name(), to_mapper.db_name()))
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 
-#ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
   table_list.init_one_table(from_mapper.db_name(),
                             strlen(from_mapper.db_name()),
                             from_mapper.mysql_table_name(),
                             strlen(from_mapper.mysql_table_name()),
                             from_mapper.mysql_table_name(), TL_WRITE);
-#else
-  table_list.init_one_table(from_mapper.db_name(),
-                            from_mapper.mysql_table_name(),
-                            TL_WRITE);
-#endif
   mrn_open_mutex_lock(NULL);
   tmp_table_share = mrn_create_tmp_table_share(&table_list, from, &error);
   mrn_open_mutex_unlock(NULL);
@@ -15952,17 +15940,11 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     build_table_filename(ref_path, sizeof(ref_path) - 1,
                          table_share->db.str, ref_table_buff, "", 0);
     DBUG_PRINT("info", ("mroonga: ref_path=%s", ref_path));
-#ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
     table_list.init_one_table(table_share->db.str,
                               table_share->db.length,
                               ref_table_buff,
                               ref_table_name_length,
                               ref_table_buff, TL_WRITE);
-#else
-    table_list.init_one_table(table_share->db.str,
-                              ref_table_buff,
-                              TL_WRITE);
-#endif
     mrn_open_mutex_lock(table_share);
     tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);
@@ -16164,17 +16146,11 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
     build_table_filename(ref_path, sizeof(ref_path) - 1,
                          table_share->db.str, ref_table_buff, "", 0);
     DBUG_PRINT("info", ("mroonga: ref_path=%s", ref_path));
-#ifdef MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
     table_list.init_one_table(table_share->db.str,
                               table_share->db.length,
                               ref_table_buff,
                               ref_table_name_length,
                               ref_table_buff, TL_WRITE);
-#else
-    table_list.init_one_table(table_share->db.str,
-                              ref_table_buff,
-                              TL_WRITE);
-#endif
     mrn_open_mutex_lock(table_share);
     tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);

@@ -81,10 +81,6 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_SET_HA_SHARE_REF
 #endif
 
-#if MYSQL_VERSION_ID >= 50500
-#  define MRN_TABLE_LIST_INIT_REQUIRE_ALIAS
-#endif
-
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_BIG_TABLES
 #elif defined(BIG_TABLES)
