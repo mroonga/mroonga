@@ -27,14 +27,11 @@
 #pragma implementation
 #endif
 
-#if MYSQL_VERSION_ID >= 50500
-#  include <sql_plugin.h>
-#  include <sql_show.h>
-#  include <key.h>
-#  include <tztime.h>
-#  include <sql_base.h>
-#endif
-
+#include <sql_plugin.h>
+#include <sql_show.h>
+#include <key.h>
+#include <tztime.h>
+#include <sql_base.h>
 #include <sql_select.h>
 #include <item_sum.h>
 
