@@ -65,20 +65,29 @@ Improvements
 
   * It's backward incompatible change. For example::
 
-      -- Before
+      mysql> CREATE TABLE timestamps (
+          ->   id INT NOT NULL AUTO_INCREMENT,
+          ->   create_dt DATETIME
+          -> ) ENGINE = Mroonga DEFAULT CHARSET utf8;
+      Query OK, 0 rows affected (0.09 sec)
       mysql> SET sql_mode='STRICT_TRANS_TABLES';
+      Query OK, 0 rows affected (0.01 sec)
+
+      -- Before (5.03 or earlier)
       mysql> INSERT INTO timestamps (create_dt) VALUES ("0000-00-00 00:00:00");
+      ERROR 1265 (01000): Data truncated for column 'create_dt' at row 1
       mysql> SELECT * FROM timestamps;
       +----+---------------------+
       | id | create_dt           |
       +----+---------------------+
-      |  1 | 0000-00-00 00:00:00 |
+      |  1 | 0000-01-01 00:00:00 |
       +----+---------------------+
 
-      -- After
-      mysql> SET sql_mode='STRICT_TRANS_TABLES';
+      -- After (5.04 or later)
       mysql> INSERT INTO timestamps (create_dt) VALUES ("0000-00-00 00:00:00");
       ERROR 22003: Out of range value for column 'create_dt' at row 1
+      mysql> SELECT * FROM timestamps;
+      Empty set (0.02 sec)
 
 * Changed keyword to use custom tokenizer to "tokenizer" from "parser".
 
