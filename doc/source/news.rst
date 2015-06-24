@@ -5,6 +5,119 @@
 News
 ====
 
+.. _release-5-04:
+
+Release 5.04 - 2015/06/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm] Start mysqld when mysqld is not running within rpm-installation.
+  (This includes since 5.03-2) [GitHub#58] [Patch by GMO Media, Inc.]
+* [mariadb10.1] Followed recent API changes.
+* Dropped MySQL 5.4 support.
+* [mariadb][wrapper] Supported custom parameters in DDL.
+
+  * Supported "TOKENIZER" parameter for FULLTEXT IDNEX::
+
+      CREATE TABLE diaries (
+        id int PRIMARY KEY AUTO_INCREMENT,
+        body text,
+        FULLTEXT INDEX body_index (body) TOKENIZER='TokenBigramSplitSymbolAlphaDigit'
+      ) DEFAULT CHARSET utf8;
+
+  * Supported "NORMALIZER" parameter for FULLTEXT IDNEX and normal INDEX::
+
+      CREATE TABLE memos (
+        id INT NOT NULL PRIMARY KEY,
+        content TEXT NOT NULL,
+        FULLTEXT INDEX (content) NORMALIZER='NormalizerAuto'
+      ) DEFAULT CHARSET=utf8;
+
+  * Supported "TOKEN_FILTERS" parameter for FULLTEXT IDNEX::
+
+      CREATE TABLE memos (
+        content VARCHAR(64) NOT NULL,
+        FULLTEXT INDEX (content) TOKEN_FILTERS='TokenFilterStopWord,TokenFilterStopWord'
+      ) DEFAULT CHARSET=utf8;
+
+  * Supported "FLAGS" parameter for FULLTEXT INDEX and normal INDEX::
+
+      CREATE TABLE memos (
+        content VARCHAR(64) NOT NULL,
+        FULLTEXT INDEX (content) FLAGS='WITH_POSITION|WITH_WEIGHT'
+      ) DEFAULT CHARSET=utf8;
+
+  * Supported "GROONGA_TYPE" parameter for field::
+
+      CREATE TABLE tags (
+        name VARCHAR(64) PRIMARY KEY
+      ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+      CREATE TABLE bugs (
+        id INT UNSIGNED PRIMARY KEY,
+        tag VARCHAR(64) GROONGA_TYPE='tags'
+      ) DEFAULT CHARSET=utf8;
+
+* [storage] Report error for invalid datetime related value on ``STRICT_TRANS_TABLES``.
+  [groonga-dev,03299] [Suggested by GMO Media, Inc.]
+
+  * It's backward incompatible change. For example::
+
+      -- Before
+      mysql> SET sql_mode='STRICT_TRANS_TABLES';
+      mysql> INSERT INTO timestamps (create_dt) VALUES ("0000-00-00 00:00:00");
+      mysql> SELECT * FROM timestamps;
+      +----+---------------------+
+      | id | create_dt           |
+      +----+---------------------+
+      |  1 | 0000-00-00 00:00:00 |
+      +----+---------------------+
+
+      -- After
+      mysql> SET sql_mode='STRICT_TRANS_TABLES';
+      mysql> INSERT INTO timestamps (create_dt) VALUES ("0000-00-00 00:00:00");
+      ERROR 22003: Out of range value for column 'create_dt' at row 1
+
+* Changed keyword to use custom tokenizer to "tokenizer" from "parser".
+
+  * In index comment: "parser" -> "tokenizer".
+  * Server variable: "mroonga_default_parser" -> "mroonga_default_tokenizer".
+  * "parser" and "mroonga_default_parser" are deprecated but they are
+    available at least Mroonga 6.XX.
+
+* Renamed parameter name for flags of index column.
+
+  * "index_flags" -> "flags".
+  * "index_flags" is deprecated but it will be usable on Mroonga 6.XX. It
+    may be removed at Mroonga 7.00.
+
+* [storage] Show error message when nonexistent Groonga type is specified to column.
+* [storage] Supported "GROONGA_TYPE" field parameter in ALTER TABLE::
+
+    ALTER TABLE bugs ADD COLUMN name VARCHAR(64) GROONGA_TYPE='tags';
+
+* [storage] Supported "FLAGS" field parameter::
+
+    ALTER TABLE tags ADD COLUMN name VARCHAR(64) FLAGS='COLUMN_VECTOR';
+
+    CREATE TABLE bugs (
+      id INT UNSIGNED PRIMARY KEY,
+      tags TEXT FLAGS='COLUMN_VECTOR'
+    ) DEFAULT CHARSET=utf8;
+
+* [storage] Renamed parameter name for column's Groonga type.
+
+  * "type" -> "groonga_type".
+  * "type" is deprecated but it will be usable on Mroonga 6.XX. It may be
+    removed at Mroonga 7.00.
+
+Thanks
+^^^^^^
+
+* GMO Media, Inc.
+
 .. _release-5-03:
 
 Release 5.03 - 2015/05/29
