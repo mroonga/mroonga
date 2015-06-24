@@ -680,15 +680,15 @@ msgstr ""
 
 # 07050c473fc1441fb008b1822d6a1f2b
 msgid ""
-"`mariadb-10.0.19-with-mroonga-5.03-win32.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v5.03/mariadb-10.0.19-with-mroonga-5.03-win32."
+"`mariadb-10.0.19-with-mroonga-5.04-win32.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v5.04/mariadb-10.0.19-with-mroonga-5.04-win32."
 "zip>`_"
 msgstr ""
 
 # f8d1467ecf484179ae2933bdc8dad3bc
 msgid ""
-"`mariadb-10.0.19-with-mroonga-5.03-winx64.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v5.03/mariadb-10.0.19-with-mroonga-5.03-winx64."
+"`mariadb-10.0.19-with-mroonga-5.04-winx64.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v5.04/mariadb-10.0.19-with-mroonga-5.04-winx64."
 "zip>`_"
 msgstr ""
 

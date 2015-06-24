@@ -24,7 +24,7 @@
 
 Name:		mysql-community-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -183,6 +183,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Mon Jun 29 2015 Masafumi Yokoyama <myokoym@gmail.com> - 5.04-1
+- new upstream release.
+
 * Thu Jun 02 2015 Masafumi Yokoyama <yokoyama@clear-code.com> - 5.03-2
 - build against MySQL 5.6.25.
 
