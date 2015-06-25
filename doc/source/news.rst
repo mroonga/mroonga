@@ -13,7 +13,8 @@ Release 5.04 - 2015/06/29
 Improvements
 ^^^^^^^^^^^^
 
-* [rpm] Start mysqld when mysqld is not running within rpm-installation.
+* [rpm][mysql56-community-mroonga][percona-server-56-mroonga]
+  Start mysqld when mysqld is not running within rpm-installation.
   (This topic is at 5.03-2) [GitHub#58] [Patch by GMO Media, Inc.]
 * [mariadb10.1] Followed recent API changes.
 * Dropped MySQL 5.4 support.
