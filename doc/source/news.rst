@@ -26,7 +26,7 @@ Improvements
         id int PRIMARY KEY AUTO_INCREMENT,
         body text,
         FULLTEXT INDEX body_index (body) TOKENIZER='TokenBigramSplitSymbolAlphaDigit'
-      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET utf8;
+      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8;
 
   * Supported "NORMALIZER" parameter for FULLTEXT IDNEX and normal INDEX ::
 
@@ -34,33 +34,33 @@ Improvements
         id INT NOT NULL PRIMARY KEY,
         content TEXT NOT NULL,
         FULLTEXT INDEX (content) NORMALIZER='NormalizerAuto'
-      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET utf8;
+      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8;
 
   * Supported "TOKEN_FILTERS" parameter for FULLTEXT IDNEX ::
 
       CREATE TABLE memos (
         content VARCHAR(64) NOT NULL,
         FULLTEXT INDEX (content) TOKEN_FILTERS='TokenFilterStopWord,TokenFilterStopWord'
-      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET utf8;
+      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8;
 
   * Supported "FLAGS" parameter for FULLTEXT INDEX and normal INDEX ::
 
       CREATE TABLE memos (
         content VARCHAR(64) NOT NULL,
         FULLTEXT INDEX (content) FLAGS='WITH_POSITION|WITH_WEIGHT'
-      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET utf8;
+      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8;
 
 
   * Supported "GROONGA_TYPE" parameter for field ::
 
       CREATE TABLE tags (
         name VARCHAR(64) PRIMARY KEY
-      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET utf8 COLLATE utf8_bin;
+      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8 COLLATE = utf8_bin;
 
       CREATE TABLE bugs (
         id INT UNSIGNED PRIMARY KEY,
         tag VARCHAR(64) GROONGA_TYPE='tags'
-      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET utf8;
+      ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8;
 
 * [storage] Report error for invalid datetime related value on ``STRICT_TRANS_TABLES``.
   [groonga-dev,03299] [Suggested by GMO Media, Inc.]
@@ -72,7 +72,7 @@ Improvements
         mysql> CREATE TABLE timestamps (
             ->   id INT PRIMARY KEY AUTO_INCREMENT,
             ->   create_dt DATETIME
-            -> ) ENGINE = Mroonga DEFAULT CHARSET utf8;
+            -> ) ENGINE = Mroonga DEFAULT CHARSET = utf8;
         Query OK, 0 rows affected (0.09 sec)
 
         mysql> SET sql_mode='';
