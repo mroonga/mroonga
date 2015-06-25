@@ -14,7 +14,7 @@ Improvements
 ^^^^^^^^^^^^
 
 * [rpm] Start mysqld when mysqld is not running within rpm-installation.
-  (This includes since 5.03-2) [GitHub#58] [Patch by GMO Media, Inc.]
+  (This is included since 5.03-2) [GitHub#58] [Patch by GMO Media, Inc.]
 * [mariadb10.1] Followed recent API changes.
 * Dropped MySQL 5.4 support.
 * [mariadb][wrapper] Supported custom parameters in DDL.
