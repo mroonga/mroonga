@@ -19,7 +19,7 @@ Improvements
 * Dropped MySQL 5.4 support.
 * [mariadb][wrapper] Supported custom parameters in DDL.
 
-  * Supported "TOKENIZER" parameter for FULLTEXT IDNEX::
+  * Supported "TOKENIZER" parameter for FULLTEXT IDNEX ::
 
       CREATE TABLE diaries (
         id int PRIMARY KEY AUTO_INCREMENT,
@@ -27,7 +27,7 @@ Improvements
         FULLTEXT INDEX body_index (body) TOKENIZER='TokenBigramSplitSymbolAlphaDigit'
       ) DEFAULT CHARSET utf8;
 
-  * Supported "NORMALIZER" parameter for FULLTEXT IDNEX and normal INDEX::
+  * Supported "NORMALIZER" parameter for FULLTEXT IDNEX and normal INDEX ::
 
       CREATE TABLE memos (
         id INT NOT NULL PRIMARY KEY,
@@ -35,21 +35,21 @@ Improvements
         FULLTEXT INDEX (content) NORMALIZER='NormalizerAuto'
       ) DEFAULT CHARSET=utf8;
 
-  * Supported "TOKEN_FILTERS" parameter for FULLTEXT IDNEX::
+  * Supported "TOKEN_FILTERS" parameter for FULLTEXT IDNEX ::
 
       CREATE TABLE memos (
         content VARCHAR(64) NOT NULL,
         FULLTEXT INDEX (content) TOKEN_FILTERS='TokenFilterStopWord,TokenFilterStopWord'
       ) DEFAULT CHARSET=utf8;
 
-  * Supported "FLAGS" parameter for FULLTEXT INDEX and normal INDEX::
+  * Supported "FLAGS" parameter for FULLTEXT INDEX and normal INDEX ::
 
       CREATE TABLE memos (
         content VARCHAR(64) NOT NULL,
         FULLTEXT INDEX (content) FLAGS='WITH_POSITION|WITH_WEIGHT'
       ) DEFAULT CHARSET=utf8;
 
-  * Supported "GROONGA_TYPE" parameter for field::
+  * Supported "GROONGA_TYPE" parameter for field ::
 
       CREATE TABLE tags (
         name VARCHAR(64) PRIMARY KEY
@@ -63,31 +63,67 @@ Improvements
 * [storage] Report error for invalid datetime related value on ``STRICT_TRANS_TABLES``.
   [groonga-dev,03299] [Suggested by GMO Media, Inc.]
 
-  * It's backward incompatible change. For example::
+  * It's backward incompatible change. For example:
 
-      mysql> CREATE TABLE timestamps (
-          ->   id INT NOT NULL AUTO_INCREMENT,
-          ->   create_dt DATETIME
-          -> ) ENGINE = Mroonga DEFAULT CHARSET utf8;
-      Query OK, 0 rows affected (0.09 sec)
-      mysql> SET sql_mode='STRICT_TRANS_TABLES';
-      Query OK, 0 rows affected (0.01 sec)
+    * Prepare (common) ::
 
-      -- Before (5.03 or earlier)
-      mysql> INSERT INTO timestamps (create_dt) VALUES ("0000-00-00 00:00:00");
-      ERROR 1265 (01000): Data truncated for column 'create_dt' at row 1
-      mysql> SELECT * FROM timestamps;
-      +----+---------------------+
-      | id | create_dt           |
-      +----+---------------------+
-      |  1 | 0000-01-01 00:00:00 |
-      +----+---------------------+
+        mysql> CREATE TABLE timestamps (
+            ->   id INT PRIMARY KEY AUTO_INCREMENT,
+            ->   create_dt DATETIME
+            -> ) ENGINE = Mroonga DEFAULT CHARSET utf8;
+        Query OK, 0 rows affected (0.09 sec)
 
-      -- After (5.04 or later)
-      mysql> INSERT INTO timestamps (create_dt) VALUES ("0000-00-00 00:00:00");
-      ERROR 22003: Out of range value for column 'create_dt' at row 1
-      mysql> SELECT * FROM timestamps;
-      Empty set (0.02 sec)
+        mysql> SET sql_mode='';
+        Query OK, 0 rows affected (0.01 sec)
+
+        mysql> INSERT INTO timestamps (create_dt) VALUES ("2001-00-00 00:00:00");
+        Query OK, 1 row affected, 1 warning (0.00 sec)
+
+        mysql> SHOW WARNINGS;
+        +---------+------+------------------------------------------------+
+        | Level   | Code | Message                                        |
+        +---------+------+------------------------------------------------+
+        | Warning | 1265 | Data truncated for column 'create_dt' at row 1 |
+        +---------+------+------------------------------------------------+
+        1 row in set (0.00 sec)
+
+        mysql> SELECT * FROM timestamps;
+        +----+---------------------+
+        | id | create_dt           |
+        +----+---------------------+
+        |  1 | 2001-01-01 00:00:00 |
+        +----+---------------------+
+        1 row in set (0.00 sec)
+
+        mysql> SET sql_mode='STRICT_TRANS_TABLES';
+        Query OK, 0 rows affected (0.01 sec)
+
+    * Before (5.03 or earlier) ::
+
+        mysql> INSERT INTO timestamps (create_dt) VALUES ("2002-00-00 00:00:00");
+        ERROR 1265 (01000): Data truncated for column 'create_dt' at row 1
+
+        mysql> SELECT * FROM timestamps;
+        +----+---------------------+
+        | id | create_dt           |
+        +----+---------------------+
+        |  1 | 2001-01-01 00:00:00 |
+        |  2 | 2002-01-01 00:00:00 |
+        +----+---------------------+
+        2 rows in set (0.00 sec)
+
+    * After (5.04 or later) ::
+
+        mysql> INSERT INTO timestamps (create_dt) VALUES ("2002-00-00 00:00:00");
+        ERROR 22003: Out of range value for column 'create_dt' at row 1
+
+        mysql> SELECT * FROM timestamps;
+        +----+---------------------+
+        | id | create_dt           |
+        +----+---------------------+
+        |  1 | 2001-01-01 00:00:00 |
+        +----+---------------------+
+        1 row in set (0.00 sec)
 
 * Changed keyword to use custom tokenizer to "tokenizer" from "parser".
 
@@ -103,18 +139,18 @@ Improvements
     may be removed at Mroonga 7.00.
 
 * [storage] Show error message when nonexistent Groonga type is specified to column.
-* [storage] Supported "GROONGA_TYPE" field parameter in ALTER TABLE::
+* [storage] Supported "GROONGA_TYPE" field parameter in ALTER TABLE ::
 
     ALTER TABLE bugs ADD COLUMN name VARCHAR(64) GROONGA_TYPE='tags';
 
-* [storage] Supported "FLAGS" field parameter::
+* [storage] Supported "FLAGS" field parameter ::
 
     ALTER TABLE tags ADD COLUMN name VARCHAR(64) FLAGS='COLUMN_VECTOR';
 
     CREATE TABLE bugs (
       id INT UNSIGNED PRIMARY KEY,
       tags TEXT FLAGS='COLUMN_VECTOR'
-    ) DEFAULT CHARSET=utf8;
+    ) ENGINE = Mroonga DEFAULT CHARSET utf8;
 
 * [storage] Renamed parameter name for column's Groonga type.
 
