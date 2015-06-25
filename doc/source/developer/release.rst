@@ -65,6 +65,7 @@ Makefileを生成するためにconfigureスクリプトを実行します。
         --enable-document \
         --prefix=/tmp/local \
         --with-launchpad-uploader-pgp-key=(Launchpadに登録したkeyID) \
+        --with-mroonga-github-com-path=$HOME/work/mroonga/mroonga.github.com \
         --with-mysql-source=(MySQLのソースコードがあるディレクトリー) \
         --with-mysql-build=(MySQLのソースコードをビルドしたディレクトリー) \
         --with-mysql-config=(mysql_configコマンドのパス)
