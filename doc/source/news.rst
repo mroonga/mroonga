@@ -19,6 +19,7 @@ Improvements
 * [mariadb10.1] Followed recent API changes.
 * Dropped MySQL 5.4 support.
 * [mariadb] Supported custom parameters in DDL.
+  This feature can be used only with MariaDB.
 
   * Supported "TOKENIZER" parameter for FULLTEXT IDNEX ::
 
