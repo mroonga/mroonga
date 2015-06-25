@@ -17,7 +17,6 @@ Improvements
   Start mysqld when mysqld is not running within rpm-installation.
   (This topic is at 5.03-2) [GitHub#58] [Patch by GMO Media, Inc.]
 * [mariadb10.1] Followed recent API changes.
-* Dropped MySQL 5.4 support.
 * [mariadb] Supported custom parameters in DDL.
   This feature can be used only with MariaDB.
 
@@ -50,6 +49,7 @@ Improvements
         content VARCHAR(64) NOT NULL,
         FULLTEXT INDEX (content) FLAGS='WITH_POSITION|WITH_WEIGHT'
       ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET utf8;
+
 
   * Supported "GROONGA_TYPE" parameter for field ::
 
@@ -141,19 +141,6 @@ Improvements
     may be removed at Mroonga 7.00.
 
 * [storage] Show error message when nonexistent Groonga type is specified to column.
-* [storage] Supported "GROONGA_TYPE" field parameter in ALTER TABLE ::
-
-    ALTER TABLE bugs ADD COLUMN name VARCHAR(64) GROONGA_TYPE='tags';
-
-* [storage] Supported "FLAGS" field parameter ::
-
-    ALTER TABLE tags ADD COLUMN name VARCHAR(64) FLAGS='COLUMN_VECTOR';
-
-    CREATE TABLE bugs (
-      id INT UNSIGNED PRIMARY KEY,
-      tags TEXT FLAGS='COLUMN_VECTOR'
-    ) ENGINE = Mroonga DEFAULT CHARSET utf8;
-
 * [storage] Renamed parameter name for column's Groonga type.
 
   * "type" -> "groonga_type".
