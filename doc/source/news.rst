@@ -20,7 +20,7 @@ Improvements
 * [mariadb] Supported custom parameters in DDL.
   This feature can be used only with MariaDB.
 
-  * Supported "TOKENIZER" parameter for FULLTEXT IDNEX ::
+  * Supported ``TOKENIZER`` parameter for ``FULLTEXT IDNEX`` ::
 
       CREATE TABLE diaries (
         id int PRIMARY KEY AUTO_INCREMENT,
@@ -28,7 +28,7 @@ Improvements
         FULLTEXT INDEX body_index (body) TOKENIZER='TokenBigramSplitSymbolAlphaDigit'
       ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8;
 
-  * Supported "NORMALIZER" parameter for FULLTEXT IDNEX and normal INDEX ::
+  * Supported ``NORMALIZER`` parameter for ``FULLTEXT IDNEX`` and normal ``INDEX`` ::
 
       CREATE TABLE memos (
         id INT NOT NULL PRIMARY KEY,
@@ -36,14 +36,14 @@ Improvements
         FULLTEXT INDEX (content) NORMALIZER='NormalizerAuto'
       ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8;
 
-  * Supported "TOKEN_FILTERS" parameter for FULLTEXT IDNEX ::
+  * Supported ``TOKEN_FILTERS`` parameter for ``FULLTEXT IDNEX`` ::
 
       CREATE TABLE memos (
         content VARCHAR(64) NOT NULL,
         FULLTEXT INDEX (content) TOKEN_FILTERS='TokenFilterStopWord,TokenFilterStopWord'
       ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8;
 
-  * Supported "FLAGS" parameter for FULLTEXT INDEX and normal INDEX ::
+  * Supported ``FLAGS`` parameter for ``FULLTEXT INDEX`` and normal ``INDEX`` ::
 
       CREATE TABLE memos (
         content VARCHAR(64) NOT NULL,
@@ -51,7 +51,7 @@ Improvements
       ) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET = utf8;
 
 
-  * Supported "GROONGA_TYPE" parameter for field ::
+  * Supported ``GROONGA_TYPE`` parameter for field ::
 
       CREATE TABLE tags (
         name VARCHAR(64) PRIMARY KEY
@@ -127,24 +127,24 @@ Improvements
         +----+---------------------+
         1 row in set (0.00 sec)
 
-* Changed keyword to use custom tokenizer to "tokenizer" from "parser".
+* Changed keyword to use custom tokenizer to ``tokenizer`` from ``parser``.
 
-  * In index comment: "parser" -> "tokenizer".
-  * Server variable: "mroonga_default_parser" -> "mroonga_default_tokenizer".
-  * "parser" and "mroonga_default_parser" are deprecated but they are
+  * In index comment: ``parser`` -> ``tokenizer``.
+  * Server variable: ``mroonga_default_parser`` -> ``mroonga_default_tokenizer``.
+  * ``parser`` and ``mroonga_default_parser`` are deprecated but they are
     available at least Mroonga 6.XX.
 
 * Renamed parameter name for flags of index column.
 
-  * "index_flags" -> "flags".
-  * "index_flags" is deprecated but it will be usable on Mroonga 6.XX. It
+  * ``index_flags`` -> ``flags``.
+  * ``index_flags`` is deprecated but it will be usable on Mroonga 6.XX. It
     may be removed at Mroonga 7.00.
 
 * [storage] Show error message when nonexistent Groonga type is specified to column.
 * [storage] Renamed parameter name for column's Groonga type.
 
-  * "type" -> "groonga_type".
-  * "type" is deprecated but it will be usable on Mroonga 6.XX. It may be
+  * ``type`` -> ``groonga_type``.
+  * ``type`` is deprecated but it will be usable on Mroonga 6.XX. It may be
     removed at Mroonga 7.00.
 
 Thanks

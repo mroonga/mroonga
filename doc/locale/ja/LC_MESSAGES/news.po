@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-06-26 13:19+0900\n"
+"PO-Revision-Date: 2015-06-26 13:44+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -50,24 +50,26 @@ msgstr ""
 "とができます。"
 
 # 544fa1c8dd4d44dc9c7440332b15c5c1
-msgid "Supported \"TOKENIZER\" parameter for FULLTEXT IDNEX ::"
-msgstr "FULLTEXT IDNEXで \"TOKENIZER\" パラメーターをサポート::"
+msgid "Supported ``TOKENIZER`` parameter for ``FULLTEXT IDNEX`` ::"
+msgstr "``FULLTEXT IDNEX`` で ``TOKENIZER`` パラメーターをサポート::"
 
 # 59060f1065e64551a4fd4b1e85fd3ea1
-msgid "Supported \"NORMALIZER\" parameter for FULLTEXT IDNEX and normal INDEX ::"
-msgstr "FULLTEXT IDNEXと通常のINDEXで \"NORMALIZER\" パラメーターをサポート::"
+msgid ""
+"Supported ``NORMALIZER`` parameter for ``FULLTEXT IDNEX`` and normal ``INDEX`` ::"
+msgstr ""
+"``FULLTEXT IDNEX`` と通常の ``INDEX`` で ``NORMALIZER`` パラメーターをサポート::"
 
 # 46870a35c5e14276a7a3ab4deb33377a
-msgid "Supported \"TOKEN_FILTERS\" parameter for FULLTEXT IDNEX ::"
-msgstr "FULLTEXT IDNEXで \"TOKEN_FILTERS\" パラメーターをサポート::"
+msgid "Supported ``TOKEN_FILTERS`` parameter for ``FULLTEXT IDNEX`` ::"
+msgstr "``FULLTEXT IDNEX`` で ``TOKEN_FILTERS`` パラメーターをサポート::"
 
 # 257b2eee17c24286aa7b4eb7c6a60409
-msgid "Supported \"FLAGS\" parameter for FULLTEXT INDEX and normal INDEX ::"
-msgstr "FULLTEXT IDNEXと通常のINDEXで \"FLAGS\" パラメーターをサポート::"
+msgid "Supported ``FLAGS`` parameter for ``FULLTEXT INDEX`` and normal ``INDEX`` ::"
+msgstr "``FULLTEXT IDNEX`` と通常の ``INDEX`` で ``FLAGS`` パラメーターをサポート::"
 
 # f2cc14f0bf54479bb5a829e7ebfd4ec6
-msgid "Supported \"GROONGA_TYPE\" parameter for field ::"
-msgstr "フィールドで \"GROONGA_TYPE\" パラメーターをサポート::"
+msgid "Supported ``GROONGA_TYPE`` parameter for field ::"
+msgstr "フィールドで ``GROONGA_TYPE`` パラメーターをサポート::"
 
 # 039ac26d70124f408431a222bd6a344f
 msgid ""
@@ -94,25 +96,25 @@ msgid "After (5.04 or later) ::"
 msgstr "変更後（5.04以降）::"
 
 # 13f0a09d89d645f08189114affa934aa
-msgid "Changed keyword to use custom tokenizer to \"tokenizer\" from \"parser\"."
+msgid "Changed keyword to use custom tokenizer to ``tokenizer`` from ``parser``."
 msgstr ""
-"カスタムトークナイザー使用時のキーワードを \"parser\" から \"tokenizer\" へ変更しまし"
+"カスタムトークナイザー使用時のキーワードを ``parser`` から ``tokenizer`` へ変更しまし"
 "た。"
 
 # bda343b1fb8140ab9bbe77958685f59b
-msgid "In index comment: \"parser\" -> \"tokenizer\"."
-msgstr "インデックスコメント: \"parser\" -> \"tokenizer\""
+msgid "In index comment: ``parser`` -> ``tokenizer``."
+msgstr "インデックスコメント: ``parser`` -> ``tokenizer``"
 
 # 5e0b54aced09488e9475137cf7aaf6d4
-msgid "Server variable: \"mroonga_default_parser\" -> \"mroonga_default_tokenizer\"."
-msgstr "サーバー変数: \"mroonga_default_parser\" -> \"mroonga_default_tokenizer\""
+msgid "Server variable: ``mroonga_default_parser`` -> ``mroonga_default_tokenizer``."
+msgstr "サーバー変数: ``mroonga_default_parser`` -> ``mroonga_default_tokenizer``"
 
 # 1cb22ecf10ea4aa1a1c5b4313f527d4f
 msgid ""
-"\"parser\" and \"mroonga_default_parser\" are deprecated but they are available at "
+"``parser`` and ``mroonga_default_parser`` are deprecated but they are available at "
 "least Mroonga 6.XX."
 msgstr ""
-"\"parser\" と \"mroonga_default_parser\" は非推奨ですが、Mroonga 6.XXまでは使うことが"
+"``parser`` と ``mroonga_default_parser`` は非推奨ですが、Mroonga 6.XXまでは使うことが"
 "できます。"
 
 # e815afe449574c8d8fc0ceceae7043d8
@@ -120,15 +122,15 @@ msgid "Renamed parameter name for flags of index column."
 msgstr "インデックスカラムのflagsのパラメーター名を変更しました。"
 
 # 9961ff8b44e649ad85941706b779a9fe
-msgid "\"index_flags\" -> \"flags\"."
-msgstr "\"index_flags\" -> \"flags\""
+msgid "``index_flags`` -> ``flags``."
+msgstr "``index_flags`` -> ``flags``"
 
 # d3376a9479c3461ea4fbf51336669391
 msgid ""
-"\"index_flags\" is deprecated but it will be usable on Mroonga 6.XX. It may be "
+"``index_flags`` is deprecated but it will be usable on Mroonga 6.XX. It may be "
 "removed at Mroonga 7.00."
 msgstr ""
-"\"index_flags\" は非推奨ですが、Mroonga 6.XXまでは使うことができます。Mroonga 7.00で削"
+"``index_flags`` は非推奨ですが、Mroonga 6.XXまでは使うことができます。Mroonga 7.00で削"
 "除される予定です。"
 
 # 13654211d4bf4a5f9235339302439f5e
@@ -143,15 +145,15 @@ msgid "[storage] Renamed parameter name for column's Groonga type."
 msgstr "Groongaのカラムの型のパラメーター名を変更しました。"
 
 # 52a59c8ecfc740009d3c00298bb1c6b6
-msgid "\"type\" -> \"groonga_type\"."
-msgstr "\"type\" -> \"groonga_type\""
+msgid "``type`` -> ``groonga_type``."
+msgstr "``type`` -> ``groonga_type``"
 
 # fd0cda16064c42bd9d53a18386559d19
 msgid ""
-"\"type\" is deprecated but it will be usable on Mroonga 6.XX. It may be removed at "
+"``type`` is deprecated but it will be usable on Mroonga 6.XX. It may be removed at "
 "Mroonga 7.00."
 msgstr ""
-"\"type\" は非推奨ですが、Mroonga 6.XXまでは使うことができます。Mroonga 7.00で削除され"
+"``type`` は非推奨ですが、Mroonga 6.XXまでは使うことができます。Mroonga 7.00で削除され"
 "る予定です。"
 
 msgid "Thanks"
