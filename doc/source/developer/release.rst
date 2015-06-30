@@ -20,6 +20,27 @@ Release procedure (XXX not yet translated)
 * CUTTER_SOURCE_PATH=$HOME/work/cutter/cutter
 
 
+ビルド環境の準備
+----------------
+
+以下にMroongaのリリース作業を行うために事前にインストール
+しておくべきパッケージを示します。
+
+なお、ビルド環境としては Debian GNU/Linux (sid)を前提として説明しているため、その他の環境では適宜読み替えて下さい。::
+
+    % sudo apt-get install -V ruby mecab libmecab-dev gnupg2 dh-autoreconf python-sphinx bison
+
+Debian系（.deb）やRed Hat系（.rpm）パッケージのビルドには `Vagrant <https://www.vagrantup.com/>`_ を使用します。apt-getでインストールできるのは古いバージョンなので、Webサイトから最新版をダウンロードしてインストールすることをおすすめします。
+
+Vagrantで使用する仮想化ソフトウェア（VirtualBox、VMwareなど）がない場合、合わせてインストールしてください。なお、VirtualBoxはsources.listにcontribセクションを追加すればapt-getでインストールできます。::
+
+    % cat /etc/apt/sources.list
+    deb http://ftp.jp.debian.org/debian/ sid main contrib
+    deb-src http://ftp.jp.debian.org/debian/ sid main contrib
+    % sudo apt-get update
+    % sudo apt-get install virtualbox
+
+
 変更点の記述
 ------------
 
@@ -151,12 +172,6 @@ Linux 用のパッケージは以下の 2 種類に分けることが可能で�
 Debian 系
 ^^^^^^^^^
 
-.. note::
-
-   以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッケージ作成に必要なソフトウェアをインストールします。::
-
-    $ sudo apt-get install -y debootstrap
-
 まず apt ディレクトリに移動します。 ::
 
  $ cd apt
@@ -181,12 +196,6 @@ make build に PARALLEL=yes とするとビルドが並列に走り、作業が�
 
 Red Hat 系
 ^^^^^^^^^^
-
-.. note::
-
-   以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッケージ作成に必要なソフトウェアをインストールします。::
-
-    $ sudo apt-get install -y rinse createrepo rpm
 
 まず yum ディレクトリに移動する。
 
