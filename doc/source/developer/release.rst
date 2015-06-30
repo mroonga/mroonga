@@ -309,7 +309,7 @@ Linux 側でファイル名を変更します。これだと mroonga のバー�
 3. mroonga.github.com へコミットを行い GitHub へ push
 
 Homebrewの更新
---------------------------
+--------------
 
 OS Xでのパッケージ管理方法として `Homebrew <http://brew.sh/>`_ があります。
 
@@ -317,7 +317,7 @@ Groongaの場合はHomebrewへpull requestを送りますが、Mroongaの場合�
 
   https://github.com/mroonga/homebrew
 
-mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを実行します。update.shの引数にはリリース時のバージョンを指定します。例えば、3.06のリリースのときは以下を実行しました。
+mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを実行します。update.shの引数にはリリース時のバージョンを指定します。例えば、3.06のリリースのときは以下を実行しました。 ::
 
     % ./update.sh 3.06
 
