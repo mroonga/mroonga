@@ -108,10 +108,27 @@ make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリ�
 
    以前はGitHubのアーカイブ機能でtar.gzを配布していましたが、その機能が廃止( https://github.com/blog/1302-goodbye-uploads )されるため、2012年12月のリリースよりpackages.groonga.orgでの配布に切り替えました。
 
-packages/sourceディレクトリへと移動し、make downloadでアップストリームと同期した後にmake uploadでアーカイブをアップロードを実行します。::
+packages/sourceディレクトリへと移動します。 ::
 
  $ cd packages/source
+
+make downloadでアップストリームと同期します。 ::
+
  $ make download
+
+必要に応じて、アーカイブに含めるGroongaやgroonga-normalizer-mysql、MariaDBのバージョンを更新します。更新する場合、autogen.shを実行してMakefile.amの変更をMakefile.inに反映する必要があります。 ::
+
+ $ editor Makefile.am
+ $ cd ../..
+ $ sh autogen.sh
+ $ cd packages/source
+
+アーカイブを作成します。 ::
+
+ $ make archive
+
+アーカイブをアップロードします。 ::
+
  $ make upload
 
 これで、 http://packages.groonga.org/source/mroonga/ から ``tar.gz`` のダウンロードが行えるようになります。
