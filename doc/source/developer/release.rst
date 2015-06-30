@@ -173,15 +173,16 @@ Red Hat 系
 
 まず yum ディレクトリに移動する。
 
-その後、次のようにすれば一連のリリース作業（build sign update upload）が行われますが、途中で失敗することもあります。 ::
+その後、次のようにすれば一連のリリース作業（download build sign-packages update-repository upload）が行われますが、途中で失敗することもあります。 ::
 
  $ make release
 
 そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともあります。 ::
 
+ $ make download
  $ make build
- $ make sign
- $ make update
+ $ make sign-packages
+ $ make update-repository
  $ make upload
 
 Windows
