@@ -123,7 +123,7 @@ make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリ�
 
 次に、配布用の ``tar.gz`` ファイルを作成します。 ::
 
- $ make dist
+ % make dist
 
 .. note::
 
@@ -131,26 +131,26 @@ make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリ�
 
 packages/sourceディレクトリへと移動します。 ::
 
- $ cd packages/source
+ % cd packages/source
 
 make downloadでアップストリームと同期します。 ::
 
- $ make download
+ % make download
 
 必要に応じて、アーカイブに含めるGroongaやgroonga-normalizer-mysql、MariaDBのバージョンを更新します。更新する場合、autogen.shを実行してMakefile.amの変更をMakefile.inに反映する必要があります。 ::
 
- $ editor Makefile.am
- $ cd ../..
- $ sh autogen.sh
- $ cd packages/source
+ % editor Makefile.am
+ % cd ../..
+ % sh autogen.sh
+ % cd packages/source
 
 アーカイブを作成します。 ::
 
- $ make archive
+ % make archive
 
 アーカイブをアップロードします。 ::
 
- $ make upload
+ % make upload
 
 これで、 http://packages.groonga.org/source/mroonga/ から ``tar.gz`` のダウンロードが行えるようになります。
 
@@ -174,19 +174,19 @@ Debian 系
 
 まず apt ディレクトリに移動します。 ::
 
- $ cd apt
+ % cd apt
 
 その後、次のようにすれば一連のリリース作業（build sign-packages update-repository sign-repository upload）が行われますが、途中で失敗することもあります。 ::
 
- $ make release
+ % make release
 
 そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともあります。 ::
 
- $ make build
- $ make sign-packages
- $ make update-repository
- $ make sign-repository
- $ make upload
+ % make build
+ % make sign-packages
+ % make update-repository
+ % make sign-repository
+ % make upload
 
 make build に PARALLEL=yes とするとビルドが並列に走り、作業がより高速に行えます。
 
@@ -201,15 +201,15 @@ Red Hat 系
 
 その後、次のようにすれば一連のリリース作業（download build sign-packages update-repository upload）が行われますが、途中で失敗することもあります。 ::
 
- $ make release
+ % make release
 
 そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともあります。 ::
 
- $ make download
- $ make build
- $ make sign-packages
- $ make update-repository
- $ make upload
+ % make download
+ % make build
+ % make sign-packages
+ % make update-repository
+ % make upload
 
 Windows
 ^^^^^^^
@@ -221,8 +221,8 @@ MariaDB 本体を `多少変更しないといけない
 
 まず、 Linux 上で Windows 用のソースを作成します。::
 
- $ cd packages/source
- $ make archive
+ % cd packages/source
+ % make archive
 
 これで、
 ``packages/source/files/mariadb-10.0.2-with-mroonga-3.04.zip`` というよ
@@ -283,13 +283,13 @@ Linux 側からダウンロードする場合は以下のようにします。::
 Linux 側でファイル名を変更します。これだと mroonga のバージョンがわかり
 づらいからです。（TODO: 自動化したい。 zip 内のフォルダ名も変えたい。）::
 
- $ mv mariadb-10.0.2-win32.msi \
+ % mv mariadb-10.0.2-win32.msi \
      packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-win32.msi
- $ mv mariadb-10.0.2-win32.zip \
+ % mv mariadb-10.0.2-win32.zip \
      packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-win32.zip
- $ mv mariadb-10.0.2-winx64.msi \
+ % mv mariadb-10.0.2-winx64.msi \
      packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-winx64.msi
- $ mv mariadb-10.0.2-winx64.zip \
+ % mv mariadb-10.0.2-winx64.zip \
      packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-winx64.zip
 
 
@@ -298,8 +298,8 @@ Linux 側でファイル名を変更します。これだと mroonga のバー�
 
 ``make tag`` とするとタグが打たれます。 ::
 
- $ make tag
- $ git push --tags origin
+ % make tag
+ % git push --tags origin
 
 ドキュメントのアップロード
 --------------------------
@@ -319,7 +319,7 @@ Groongaの場合はHomebrewへpull requestを送りますが、Mroongaの場合�
 
 mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを実行します。update.shの引数にはリリース時のバージョンを指定します。例えば、3.06のリリースのときは以下を実行しました。
 
-  $ ./update.sh 3.06
+  % ./update.sh 3.06
 
 実行すると、FormulaのソースアーカイブのURLとsha256チェックサムを更新します。
 あとは、変更内容をコミットすればHomebrewの更新作業は完了です。
@@ -426,7 +426,7 @@ Mroongaブログのリリースエントリには「リンクをあなたのフ�
 
 リリースバージョンを以下のようにして更新します。::
 
-  $ make update-version NEW_VERSION_MAJOR=2 NEW_VERSION_MINOR=0 NEW_VERSION_MICRO=7
+  % make update-version NEW_VERSION_MAJOR=2 NEW_VERSION_MINOR=0 NEW_VERSION_MICRO=7
 
 
 
