@@ -144,15 +144,16 @@ Debian 系
 
  $ cd apt
 
-その後、次のようにすれば一連のリリース作業（build update sign upload）が行われますが、途中で失敗することもあります。 ::
+その後、次のようにすれば一連のリリース作業（build sign-packages update-repository sign-repository upload）が行われますが、途中で失敗することもあります。 ::
 
  $ make release
 
 そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともあります。 ::
 
  $ make build
- $ make update
- $ make sign
+ $ make sign-packages
+ $ make update-repository
+ $ make sign-repository
  $ make upload
 
 make build に PARALLEL=yes とするとビルドが並列に走り、作業がより高速に行えます。
