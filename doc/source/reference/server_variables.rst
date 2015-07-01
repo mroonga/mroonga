@@ -138,6 +138,28 @@ Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext sea
      FULLTEXT INDEX body_index (body)
    ) DEFAULT CHARSET UTF8;
 
+.. _mroonga_default_tokenizer:
+
+``mroonga_default_tokenizer``
+-----------------------------
+
+.. versionadded:: 5.04
+
+The default tokenizer of the full text search.
+The default value can be specified by ``--with-default-tokenizer=TOKENIZER`` configure argument, whose default value is ``TokenBigram``.
+
+Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext index tokenizer. It is used by ``body_index`` fulltext index.
+
+.. code-block:: sql
+   :linenos:
+
+   SET GLOBAL mroonga_default_tokenizer=TokenBigramSplitSymbolAlphaDigit;
+   CREATE TABLE diaries (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     body TEXT,
+     FULLTEXT INDEX body_index (body)
+   ) DEFAULT CHARSET UTF8;
+
 
 .. _mroonga_default_wrapper_engine:
 
