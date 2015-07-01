@@ -120,6 +120,9 @@ TODO:
 ``mroonga_default_parser``
 --------------------------
 
+.. deprecated:: 5.04
+   Use :ref:`mroonga_default_tokenizer` instead.
+
 The default parser of the full text search.
 The default value can be specified by ``--with-default-parser=PARSER`` configure argument, whose default value is ``TokenBigram``.
 
