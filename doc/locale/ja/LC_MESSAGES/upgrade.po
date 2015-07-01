@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-07-02 01:52+0900\n"
+"PO-Revision-Date: 2015-07-02 02:14+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -40,8 +40,7 @@ msgstr ""
 
 msgid "If you upgrade prior to 1.20, refer to :ref:`release-1-20`"
 msgstr ""
-"1.20以前からアップグレードするなら、 :ref:`release-1-20` :ref:`1.20 リリース "
-"<release-1-20>` を参照してください。"
+"1.20以前からアップグレードするなら、 :ref:`release-1-20` を参照してください。"
 
 msgid "If you upgrade from 1.20, refer to :ref:`release-2-00`"
 msgstr ""
@@ -106,4 +105,3 @@ msgstr "インデックスカラムに `index_flags` パラメータを指定し
 msgid "Using `type` parameter for Groonga's column type in storage mode"
 msgstr ""
 "ストレージモードでGroongaのカラム型の指定に `type` パラメータを指定している"
-
