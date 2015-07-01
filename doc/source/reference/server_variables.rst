@@ -115,6 +115,8 @@ Here is an example SQL to use script syntax in Groonga::
 
 TODO:
 
+.. _mroonga_default_parser:
+
 ``mroonga_default_parser``
 --------------------------
 
