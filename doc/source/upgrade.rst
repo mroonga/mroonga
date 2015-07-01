@@ -24,3 +24,5 @@ If you upgrade from 2.05 or later and using multiple column indexes against VARC
 
 If you upgrade from 2.08 or later and using TIMESTAMP column, please recreate database. If you upgrade from 2.08 or later and using CHAR(N) as primary key, please recreate index. Refer to :ref:`release-2-09` for each case.
 
+If you upgrade prior to 5.03 and using custom tokenizer in index comment, :ref:`mroonga_default_parser` as server variable, `index_flags` parameter or `type` parameter for Groonga's column type, refer to :ref:`release-5-04`
+
