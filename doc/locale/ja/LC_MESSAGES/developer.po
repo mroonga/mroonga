@@ -926,12 +926,14 @@ msgstr ""
 msgid "なるべく局所的に変数を定義し、同時に初期化する"
 msgstr ""
 
-msgid ""
-"長い関数や深いブロックのネストを避ける * 2つに分けた方がよさそう。あと目安が"
-"あるといいかも。"
+# 8174d2f0671a4d22802f6f73b7af8299
+msgid "長い関数や深いブロックのネストを避ける"
 msgstr ""
 
-msgid "100行以上は長いよねーとか3段以上はデンジャーとか。"
+# 4d5063749244465195e10bb7e4838521
+msgid ""
+"2つに分けた方がよさそう。あと目安があるといいかも。 100行以上は長いよねーとか"
+"3段以上はデンジャーとか。"
 msgstr ""
 
 msgid "必要以上にオブジェクトを複製しない"
@@ -975,9 +977,10 @@ msgstr ""
 "報が多くなります。そのため、開発時はデバッグ用にMySQLとMroongaをビルドしま"
 "す。"
 
+#, fuzzy
 msgid ""
 "If you build one of them for debugging, the size of structures etc. might be "
-"different, and you might not be able to load mroonga, or assertions don't "
+"different, and you might not be able to load Mroonga, or assertions don't "
 "work in running."
 msgstr ""
 "片方だけデバッグ用ビルドにすると構造体のサイズなどが異なってしまうため、"
@@ -1000,11 +1003,13 @@ msgstr ""
 msgid "The procedure from download to build is the following. ::"
 msgstr "ダウンロードからビルドまでの流れは以下の通りです。::"
 
-msgid "How tom build mroonga for debugging"
+#, fuzzy
+msgid "How tom build Mroonga for debugging"
 msgstr "mroongaのデバッグ用ビルド方法"
 
+#, fuzzy
 msgid ""
-"You can build mroonga for debugging by passing ``--with-debug`` in configure "
+"You can build Mroonga for debugging by passing ``--with-debug`` in configure "
 "options."
 msgstr ""
 "mroongaはconfigureのオプションに ``--with-debug`` を渡すことでデバッグ用にビ"
@@ -1116,6 +1121,37 @@ msgstr ""
 
 # 930f47a2dba344a092170924069f37a8
 msgid "CUTTER_SOURCE_PATH=$HOME/work/cutter/cutter"
+msgstr ""
+
+# 6d721a4c1e5b443fa91afd9acb4ac0d7
+msgid "ビルド環境の準備"
+msgstr ""
+
+# d6d897af05c54bf298134e8e1ffed362
+msgid ""
+"以下にMroongaのリリース作業を行うために事前にインストール しておくべきパッ"
+"ケージを示します。"
+msgstr ""
+
+# ea2858033dc8471a8852daf916c4d971
+msgid ""
+"なお、ビルド環境としては Debian GNU/Linux (sid)を前提として説明しているため、"
+"その他の環境では適宜読み替えて下さい。::"
+msgstr ""
+
+# b3bc8accb97f44fd9380abf75b96cb6f
+msgid ""
+"Debian系（.deb）やRed Hat系（.rpm）パッケージのビルドには `Vagrant <https://"
+"www.vagrantup.com/>`_ を使用します。apt-getでインストールできるのは古いバー"
+"ジョンなので、Webサイトから最新版をダウンロードしてインストールすることをおす"
+"すめします。"
+msgstr ""
+
+# 3d842e4d1c1048fc82a70ae5087159ea
+msgid ""
+"Vagrantで使用する仮想化ソフトウェア（VirtualBox、VMwareなど）がない場合、合わ"
+"せてインストールしてください。なお、VirtualBoxはsources.listにcontribセクショ"
+"ンを追加すればapt-getでインストールできます。::"
 msgstr ""
 
 msgid "変更点の記述"
@@ -1245,9 +1281,27 @@ msgid ""
 "リースよりpackages.groonga.orgでの配布に切り替えました。"
 msgstr ""
 
+# fb86fe2248404da8ac545f306dd48b86
+msgid "packages/sourceディレクトリへと移動します。 ::"
+msgstr ""
+
+# 1469c2b7dec8434b957a92c5e32f6923
+msgid "make downloadでアップストリームと同期します。 ::"
+msgstr ""
+
+# b22a8135039a44b3aa7b79a6931f3dfa
 msgid ""
-"packages/sourceディレクトリへと移動し、make downloadでアップストリームと同期"
-"した後にmake uploadでアーカイブをアップロードを実行します。::"
+"必要に応じて、アーカイブに含めるGroongaやgroonga-normalizer-mysql、MariaDBの"
+"バージョンを更新します。更新する場合、autogen.shを実行してMakefile.amの変更を"
+"Makefile.inに反映する必要があります。 ::"
+msgstr ""
+
+# 85b39b904e2d47d0be7e6246cdccafdd
+msgid "アーカイブを作成します。 ::"
+msgstr ""
+
+# f264d15488604261a87823d99879425c
+msgid "アーカイブをアップロードします。 ::"
 msgstr ""
 
 msgid ""
@@ -1275,17 +1329,14 @@ msgid ""
 "せん。"
 msgstr ""
 
-msgid ""
-"以下の作業は初回パッケージ作成時のみ必要です。初回パッケージ作成時にはパッ"
-"ケージ作成に必要なソフトウェアをインストールします。::"
-msgstr ""
-
 msgid "まず apt ディレクトリに移動します。 ::"
 msgstr ""
 
+# 567565c3bf7146318d4e3371ee28ad5e
 msgid ""
-"その後、次のようにすれば一連のリリース作業（build update sign upload）が行わ"
-"れますが、途中で失敗することもあります。 ::"
+"その後、次のようにすれば一連のリリース作業（build sign-packages update-"
+"repository sign-repository upload）が行われますが、途中で失敗することもありま"
+"す。 ::"
 msgstr ""
 
 msgid ""
@@ -1311,9 +1362,10 @@ msgstr ""
 msgid "まず yum ディレクトリに移動する。"
 msgstr ""
 
+# 2e8aac4d91b84f46993b73eabb024bc4
 msgid ""
-"その後、次のようにすれば一連のリリース作業（build sign update upload）が行わ"
-"れますが、途中で失敗することもあります。 ::"
+"その後、次のようにすれば一連のリリース作業（download build sign-packages "
+"update-repository upload）が行われますが、途中で失敗することもあります。 ::"
 msgstr ""
 
 msgid "Windows"
@@ -1424,13 +1476,11 @@ msgstr ""
 msgid "https://github.com/mroonga/homebrew"
 msgstr ""
 
+# a2006189fe3c41d2a3f8200e53cb7e5b
 msgid ""
 "mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを実行します。"
 "update.shの引数にはリリース時のバージョンを指定します。例えば、3.06のリリース"
-"のときは以下を実行しました。"
-msgstr ""
-
-msgid "$ ./update.sh 3.06"
+"のときは以下を実行しました。 ::"
 msgstr ""
 
 msgid ""
