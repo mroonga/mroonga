@@ -14,7 +14,7 @@ So we build both MySQL and Mroonga for debugging in development.
    If you build one of them for debugging, the size of structures etc. might be different, and you might not be able to load Mroonga, or assertions don't work in running.
 
 How to build MySQL for debugging
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As you can see in `MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing MySQL from a Standard Source Distribution`_, you can build MySQL for debugging by passing ``-DWITH_DEBUG=yes`` option in CMAKE options.
 
