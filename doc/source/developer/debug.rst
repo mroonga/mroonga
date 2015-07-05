@@ -11,7 +11,7 @@ So we build both MySQL and Mroonga for debugging in development.
 
 .. note::
 
-   If you build one of them for debugging, the size of structures etc. might be different, and you might not be able to load mroonga, or assertions don't work in running.
+   If you build one of them for debugging, the size of structures etc. might be different, and you might not be able to load Mroonga, or assertions don't work in running.
 
 How to build MySQL for debugging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -30,10 +30,10 @@ The procedure from download to build is the following. ::
 
 .. _`MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing MySQL from a Standard Source Distribution`: http://dev.mysql.com/doc/refman/5.5/en/installing-source-distribution.html
 
-How tom build mroonga for debugging
+How tom build Mroonga for debugging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can build mroonga for debugging by passing ``--with-debug`` in configure options.
+You can build Mroonga for debugging by passing ``--with-debug`` in configure options.
 
 The procedure from cloning repository to build is the following. ::
 
