@@ -977,14 +977,13 @@ msgstr ""
 "報が多くなります。そのため、開発時はデバッグ用にMySQLとMroongaをビルドしま"
 "す。"
 
-#, fuzzy
 msgid ""
 "If you build one of them for debugging, the size of structures etc. might be "
 "different, and you might not be able to load Mroonga, or assertions don't "
 "work in running."
 msgstr ""
 "片方だけデバッグ用ビルドにすると構造体のサイズなどが異なってしまうため、"
-"mroongaがロードできなかったり、実行時にassertに引っかかったりしてうまく動作し"
+"Mroongaがロードできなかったり、実行時にassertに引っかかったりしてうまく動作し"
 "ません。"
 
 msgid "How to build MySQL for debugging"
@@ -1003,16 +1002,14 @@ msgstr ""
 msgid "The procedure from download to build is the following. ::"
 msgstr "ダウンロードからビルドまでの流れは以下の通りです。::"
 
-#, fuzzy
 msgid "How tom build Mroonga for debugging"
-msgstr "mroongaのデバッグ用ビルド方法"
+msgstr "Mroongaのデバッグ用ビルド方法"
 
-#, fuzzy
 msgid ""
 "You can build Mroonga for debugging by passing ``--with-debug`` in configure "
 "options."
 msgstr ""
-"mroongaはconfigureのオプションに ``--with-debug`` を渡すことでデバッグ用にビ"
+"Mroongaはconfigureのオプションに ``--with-debug`` を渡すことでデバッグ用にビ"
 "ルドすることができます。"
 
 msgid "The procedure from cloning repository to build is the following. ::"
