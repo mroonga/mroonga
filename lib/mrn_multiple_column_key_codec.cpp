@@ -288,6 +288,7 @@ namespace mrn {
           decode_long_long_int(current_grn_key, &grn_time);
           TimeConverter time_converter;
           MYSQL_TIME mysql_time;
+          mysql_time.neg = FALSE;
           mysql_time.time_type = MYSQL_TIMESTAMP_DATETIME;
           time_converter.grn_time_to_mysql_time(grn_time, &mysql_time);
           long long int mysql_datetime_packed =
