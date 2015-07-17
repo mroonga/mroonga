@@ -6973,6 +6973,26 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   clear_cursor_geo();
   clear_empty_value_records();
 
+  switch (find_flag) {
+  case HA_READ_BEFORE_KEY:
+    flags |= GRN_CURSOR_LT | GRN_CURSOR_DESCENDING;
+    break;
+  case HA_READ_PREFIX_LAST_OR_PREV:
+    flags |= GRN_CURSOR_LE | GRN_CURSOR_DESCENDING;
+    break;
+  case HA_READ_AFTER_KEY:
+    flags |= GRN_CURSOR_GT | GRN_CURSOR_ASCENDING;
+    break;
+  case HA_READ_KEY_OR_NEXT:
+    flags |= GRN_CURSOR_GE | GRN_CURSOR_ASCENDING;
+    break;
+  case HA_READ_KEY_EXACT:
+    flags |= GRN_CURSOR_LE | GRN_CURSOR_GE;
+    break;
+  default:
+    break;
+  }
+
   bool is_multiple_column_index = KEY_N_KEY_PARTS(key_info) > 1;
   if (is_multiple_column_index) {
     mrn_change_encoding(ctx, NULL);
@@ -7001,11 +7021,93 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
         }
       }
     } else {
-      flags |= GRN_CURSOR_PREFIX;
-      key_min = key_min_entity;
-      storage_encode_multiple_column_key(key_info,
-                                         key, key_length,
-                                         key_min, &size_min);
+      const uchar *prev_key = NULL;
+      uint prev_key_length = 0;
+      if ((keypart_map >> 1) > 0) {
+        prev_key = key;
+        prev_key_length =
+          mrn_calculate_key_len(table, active_index, key, keypart_map >> 1);
+      }
+      switch (find_flag) {
+      case HA_READ_BEFORE_KEY:
+        if (prev_key) {
+          flags |= GRN_CURSOR_GE;
+          key_min = key_min_entity;
+          storage_encode_multiple_column_key_range(key_info,
+                                                   prev_key, prev_key_length,
+                                                   NULL, 0,
+                                                   key_min, &size_min,
+                                                   NULL, NULL);
+        }
+        key_max = key_max_entity;
+        storage_encode_multiple_column_key_range(key_info,
+                                                 key, key_length,
+                                                 NULL, 0,
+                                                 key_max, &size_max,
+                                                 NULL, NULL);
+        break;
+      case HA_READ_PREFIX_LAST_OR_PREV:
+        if (prev_key) {
+          flags |= GRN_CURSOR_GE;
+          key_min = key_min_entity;
+          storage_encode_multiple_column_key_range(key_info,
+                                                   prev_key, prev_key_length,
+                                                   NULL, 0,
+                                                   key_min, &size_min,
+                                                   NULL, NULL);
+        }
+        key_max = key_max_entity;
+        storage_encode_multiple_column_key_range(key_info,
+                                                 NULL, 0,
+                                                 key, key_length,
+                                                 NULL, NULL,
+                                                 key_max, &size_max);
+        break;
+      case HA_READ_AFTER_KEY:
+        key_min = key_min_entity;
+        storage_encode_multiple_column_key_range(key_info,
+                                                 NULL, 0,
+                                                 key, key_length,
+                                                 NULL, NULL,
+                                                 key_min, &size_min);
+        if (prev_key) {
+          flags |= GRN_CURSOR_LE;
+          key_max = key_max_entity;
+          storage_encode_multiple_column_key_range(key_info,
+                                                   NULL, 0,
+                                                   prev_key, prev_key_length,
+                                                   NULL, NULL,
+                                                   key_max, &size_max);
+        }
+        break;
+      case HA_READ_KEY_OR_NEXT:
+        key_min = key_min_entity;
+        storage_encode_multiple_column_key_range(key_info,
+                                                 key, key_length,
+                                                 NULL, 0,
+                                                 key_min, &size_min,
+                                                 NULL, NULL);
+        if (prev_key) {
+          flags |= GRN_CURSOR_LE;
+          key_max = key_max_entity;
+          storage_encode_multiple_column_key_range(key_info,
+                                                   NULL, 0,
+                                                   prev_key, prev_key_length,
+                                                   NULL, NULL,
+                                                   key_max, &size_max);
+        }
+        break;
+      case HA_READ_KEY_EXACT:
+        key_min = key_min_entity;
+        key_max = key_max_entity;
+        storage_encode_multiple_column_key_range(key_info,
+                                                 key, key_length,
+                                                 key, key_length,
+                                                 key_min, &size_min,
+                                                 key_max, &size_max);
+      default:
+        break;
+      }
     }
   } else if (mrn_is_geo_key(key_info)) {
     error = mrn_change_encoding(ctx, key_info->key_part->field->charset());
@@ -7050,23 +7152,6 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       key_min = key_min_entity;
       storage_encode_key(field, key, key_min_entity, &size_min);
     }
-  }
-
-  switch (find_flag) {
-  case HA_READ_BEFORE_KEY:
-    flags |= GRN_CURSOR_LT | GRN_CURSOR_DESCENDING;
-    break;
-  case HA_READ_PREFIX_LAST_OR_PREV:
-    flags |= GRN_CURSOR_LE | GRN_CURSOR_DESCENDING;
-    break;
-  case HA_READ_AFTER_KEY:
-    flags |= GRN_CURSOR_GT | GRN_CURSOR_ASCENDING;
-    break;
-  case HA_READ_KEY_OR_NEXT:
-    flags |= GRN_CURSOR_GE | GRN_CURSOR_ASCENDING;
-    break;
-  default:
-    break;
   }
 
   uint pkey_nr = table->s->primary_key;
@@ -11655,8 +11740,10 @@ int ha_mroonga::storage_encode_multiple_column_key(KEY *key_info,
 }
 
 int ha_mroonga::storage_encode_multiple_column_key_range(KEY *key_info,
-                                                         const key_range *start,
-                                                         const key_range *end,
+                                                         const uchar *start,
+                                                         uint start_size,
+                                                         const uchar *end,
+                                                         uint end_size,
                                                          uchar *min_buffer,
                                                          uint *min_encoded_size,
                                                          uchar *max_buffer,
@@ -11668,18 +11755,52 @@ int ha_mroonga::storage_encode_multiple_column_key_range(KEY *key_info,
   uint encoded_key_size = codec.size();
   if (start) {
     memset(min_buffer, 0, encoded_key_size);
-    error = codec.encode(start->key, start->length,
+    error = codec.encode(start, start_size,
                          min_buffer, min_encoded_size);
     // TODO: handle error?
     *min_encoded_size = encoded_key_size;
   }
   if (end) {
     memset(max_buffer, 0xff, encoded_key_size);
-    error = codec.encode(end->key, end->length,
+    error = codec.encode(end, end_size,
                          max_buffer, max_encoded_size);
     // TODO: handle error?
     *max_encoded_size = encoded_key_size;
   }
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_encode_multiple_column_key_range(KEY *key_info,
+                                                         const key_range *start,
+                                                         const key_range *end,
+                                                         uchar *min_buffer,
+                                                         uint *min_encoded_size,
+                                                         uchar *max_buffer,
+                                                         uint *max_encoded_size)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  const uchar *start_data = NULL;
+  uint start_size = 0;
+  const uchar *end_data = NULL;
+  uint end_size = 0;
+  if (start) {
+    start_data = start->key;
+    start_size = start->length;
+  }
+  if (end) {
+    end_data = end->key;
+    end_size = end->length;
+  }
+
+  int error = storage_encode_multiple_column_key_range(key_info,
+                                                       start_data, start_size,
+                                                       end_data, end_size,
+                                                       min_buffer,
+                                                       min_encoded_size,
+                                                       max_buffer,
+                                                       max_encoded_size);
+
   DBUG_RETURN(error);
 }
 
