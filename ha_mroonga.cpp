@@ -6975,6 +6975,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
 
   switch (find_flag) {
   case HA_READ_BEFORE_KEY:
+  case HA_READ_PREFIX_LAST:
     flags |= GRN_CURSOR_LT | GRN_CURSOR_DESCENDING;
     break;
   case HA_READ_PREFIX_LAST_OR_PREV:
@@ -7005,6 +7006,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
                 key_length, key_info->key_length));
     if (key_length == key_info->key_length) {
       if (find_flag == HA_READ_BEFORE_KEY ||
+          find_flag == HA_READ_PREFIX_LAST ||
           find_flag == HA_READ_PREFIX_LAST_OR_PREV) {
         key_max = key_max_entity;
         storage_encode_multiple_column_key(key_info,
@@ -7046,6 +7048,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
                                                  key_max, &size_max,
                                                  NULL, NULL);
         break;
+      case HA_READ_PREFIX_LAST:
       case HA_READ_PREFIX_LAST_OR_PREV:
         if (prev_key) {
           flags |= GRN_CURSOR_GE;
@@ -7145,6 +7148,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
         }
       }
     } else if (find_flag == HA_READ_BEFORE_KEY ||
+               find_flag == HA_READ_PREFIX_LAST ||
                find_flag == HA_READ_PREFIX_LAST_OR_PREV) {
       key_max = key_max_entity;
       storage_encode_key(field, key, key_max_entity, &size_max);
