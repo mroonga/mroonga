@@ -419,11 +419,6 @@ public:
 #endif
   int index_next_same(uchar *buf, const uchar *key, uint keylen);
 
-  int read_range_first(const key_range *start_key,
-                       const key_range *end_key,
-                       bool eq_range, bool sorted);
-  int read_range_next();
-
   int ft_init();
   FT_INFO *ft_init_ext(uint flags, uint inx, String *key);
   int ft_read(uchar *buf);
@@ -923,14 +918,6 @@ private:
   int storage_index_last(uchar *buf);
   int wrapper_index_next_same(uchar *buf, const uchar *key, uint keylen);
   int storage_index_next_same(uchar *buf, const uchar *key, uint keylen);
-  int wrapper_read_range_first(const key_range *start_key,
-                               const key_range *end_key,
-                               bool eq_range, bool sorted);
-  int storage_read_range_first(const key_range *start_key,
-                               const key_range *end_key,
-                               bool eq_range, bool sorted);
-  int wrapper_read_range_next();
-  int storage_read_range_next();
   int generic_ft_init();
   int wrapper_ft_init();
   int storage_ft_init();
