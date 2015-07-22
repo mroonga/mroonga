@@ -4218,7 +4218,7 @@ int ha_mroonga::storage_open(const char *name, int mode, uint test_if_locked)
   if (!(ha_thd()->open_options & HA_OPEN_FOR_REPAIR)) {
     error = storage_open_indexes(name);
     if (error) {
-      // TODO: free grn_columns and set NULL;
+      storage_close_columns();
       grn_obj_unlink(ctx, grn_table);
       grn_table = NULL;
       DBUG_RETURN(error);
@@ -4319,25 +4319,31 @@ int ha_mroonga::storage_open_columns(void)
   }
 
   if (error != 0) {
-    for (int i = 0; i < n_columns; i++) {
-      grn_obj *column = grn_columns[i];
-      if (column) {
-        grn_obj_unlink(ctx, column);
-      }
-
-      grn_obj *range = grn_column_ranges[i];
-      if (range) {
-        grn_obj_unlink(ctx, range);
-      }
-    }
-
-    free(grn_columns);
-    grn_columns = NULL;
-    free(grn_column_ranges);
-    grn_column_ranges = NULL;
+    storage_close_columns();
   }
 
   DBUG_RETURN(error);
+}
+
+void ha_mroonga::storage_close_columns(void)
+{
+  int n_columns = table->s->fields;
+  for (int i = 0; i < n_columns; i++) {
+    grn_obj *column = grn_columns[i];
+    if (column) {
+      grn_obj_unlink(ctx, column);
+    }
+
+    grn_obj *range = grn_column_ranges[i];
+    if (range) {
+      grn_obj_unlink(ctx, range);
+    }
+  }
+
+  free(grn_columns);
+  grn_columns = NULL;
+  free(grn_column_ranges);
+  grn_column_ranges = NULL;
 }
 
 int ha_mroonga::storage_open_indexes(const char *name)

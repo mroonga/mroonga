@@ -792,6 +792,7 @@ private:
   int storage_open(const char *name, int mode, uint test_if_locked);
   int open_table(const char *name);
   int storage_open_columns(void);
+  void storage_close_columns(void);
   int storage_open_indexes(const char *name);
   void wrapper_overwrite_index_bits();
   int wrapper_close();
