@@ -49,9 +49,14 @@ else
     PATH=$(echo /opt/mysql/server-*/bin/):$PATH
   fi
   configure_args=("--with-mysql-source=$PWD/vendor/mysql")
-  if [ "${MYSQL_VERSION}" = "mysql-5.6.25" ]; then
-    configure_args=("${configure_args[@]}" --enable-fast-mutexes)
-  fi
+  case "${MYSQL_VERSION}" in
+    mysql-5.6.*)
+      configure_args=("${configure_args[@]}" --enable-fast-mutexes)
+      ;;
+    *)
+      :
+      ;;
+  esac
   ./configure "${configure_args[@]}"
   cat "$(mysql_config --include | sed -e 's/-I//g')/my_config.h"
 fi
