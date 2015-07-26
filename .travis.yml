@@ -5,8 +5,8 @@ notifications:
 language: cpp
 env:
   - MYSQL_VERSION=mysql-system
-  - MYSQL_VERSION=mysql-5.5.44
-  - MYSQL_VERSION=mysql-5.6.25
+  - MYSQL_VERSION=mysql-5.5.45
+  - MYSQL_VERSION=mysql-5.6.26
   - MYSQL_VERSION=mariadb-5.5.44
 #  - MYSQL_VERSION=mariadb-10.0.20
 #  - MYSQL_VERSION=mariadb-10.0.20 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
@@ -16,7 +16,7 @@ env:
 matrix:
   allow_failures:
 #    - env: MYSQL_VERSION=mysql-system
-#    - env: MYSQL_VERSION=mariadb-5.5.44
+#    - env: MYSQL_VERSION=mariadb-5.5.45
 #    - env: MYSQL_VERSION=mariadb-10.0.20
 #    - env: MYSQL_VERSION=mariadb-10.0.20 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
     - env: MYSQL_VERSION=mariadb-10.0.20 MROONGA_BUNDLED=yes
