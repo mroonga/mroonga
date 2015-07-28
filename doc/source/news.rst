@@ -10,6 +10,15 @@ News
 Release 5.05 - 2015/07/29
 -------------------------
 
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 14.10 (Utopic Unicorn) support. It had been
+  End of Life on July 23, 2015.
+* [rpm][:doc:`/install/centos`] Updated to the latest MySQL 5.6 (5.6.26-2) on CentOS 6/7.
+* [rpm][:doc:`/install/centos`] Updated to the latest Percona Server 5.6 (5.6.25-rel73.1)
+  on CentOS 6.
+
 Fixes
 ^^^^^
 
