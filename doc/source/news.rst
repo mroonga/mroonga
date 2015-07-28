@@ -10,17 +10,13 @@ News
 Release 5.05 - 2015/07/29
 -------------------------
 
-Improvements
-^^^^^^^^^^^^
-
-* Supported multiple column index with range condition (e.g. ``<`` in
-  ``WHERE date < '2015-07-01'``) and ``ORDER BY DESC``.
-  [`groonga-dev,03332 <http://osdn.jp/projects/groonga/lists/archive/dev/2015-July/003334.html>`_]
-  [GitHub#65] [Reported by foamcentime]
-
 Fixes
 ^^^^^
 
+* Fixed a bug that search results are reduced for multiple column index with range
+  condition (e.g. ``<`` in ``WHERE date < '2015-07-01'``).
+  [`groonga-dev,03332 <http://osdn.jp/projects/groonga/lists/archive/dev/2015-July/003334.html>`_]
+  [GitHub#65] [Reported by foamcentime]
 * [storage] Fixed memory leaks.
   [`MDEV-8520 <https://mariadb.atlassian.net/browse/MDEV-8520>`_]
   [Report by Elena Stepanova]
