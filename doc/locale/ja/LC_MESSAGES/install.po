@@ -590,10 +590,6 @@ msgstr ""
 msgid "14.04 LTS Trusty Tahr"
 msgstr ""
 
-# 0779d17906444b348212148a883e05c9
-msgid "14.10 Utopic Unicorn"
-msgstr ""
-
 # 1ff5efe8264244279bdaccf46fd601cf
 msgid "15.04 Vivid Vervet"
 msgstr ""
