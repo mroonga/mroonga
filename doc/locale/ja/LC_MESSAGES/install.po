@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-05-28 17:48+0900\n"
+"PO-Revision-Date: 2015-07-28 16:28+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -595,7 +595,7 @@ msgid "14.10 Utopic Unicorn"
 msgstr ""
 
 # 1ff5efe8264244279bdaccf46fd601cf
-msgid "15.05 Vivid Vervet"
+msgid "15.04 Vivid Vervet"
 msgstr ""
 
 msgid ""
