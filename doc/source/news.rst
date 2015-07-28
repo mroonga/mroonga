@@ -5,6 +5,32 @@
 News
 ====
 
+.. _release-5-05:
+
+Release 5.05 - 2015/07/29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported multiple column index with range condition and ORDER BY DESC.
+  [`groonga-dev,03332 <http://osdn.jp/projects/groonga/lists/archive/dev/2015-July/003334.html>`_]
+  [GitHub#65] [Reported by foamcentime]
+
+Fixes
+^^^^^
+
+* [storage] Fixed memory leaks.
+  [`MDEV-8520 <https://mariadb.atlassian.net/browse/MDEV-8520>`_]
+  [Report by Elena Stepanova]
+
+Thanks
+^^^^^^
+
+* foamcentime
+* Elena Stepanova
+* Sergei Golubchik
+
 .. _release-5-04:
 
 Release 5.04 - 2015/06/29
