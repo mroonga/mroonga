@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-06-26 13:53+0900\n"
+"PO-Revision-Date: 2015-07-28 16:03+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,6 +20,46 @@ msgstr ""
 
 msgid "News"
 msgstr "お知らせ"
+
+msgid "Release 5.05 - 2015/07/29"
+msgstr "5.05リリース - 2015/07/29"
+
+msgid "Fixes"
+msgstr "修正"
+
+# 7a4f12591d0146f7a6e2bbe548bce7a8
+msgid ""
+"Fixed a bug that search results are reduced for multiple column index with range "
+"condition (e.g. ``<`` in ``WHERE date < '2015-07-01'``). [`groonga-dev,03332 <http://"
+"osdn.jp/projects/groonga/lists/archive/dev/2015-July/003334.html>`_] [GitHub#65] "
+"[Reported by foamcentime]"
+msgstr ""
+"マルチカラムインデックスで範囲検索（例: ``WHERE date < '2015-07-01'`` 内の ``<`` ）を"
+"使った場合に検索結果が減る場合がある不具合を修正しました。[`groonga-dev,03332 <http://"
+"osdn.jp/projects/groonga/lists/archive/dev/2015-July/003334.html>`_] [GitHub#65] "
+"[foamcentimeさんが報告]"
+
+# 775541bacaac4d9e9629a1883531a4f6
+msgid ""
+"[storage] Fixed memory leaks. [`MDEV-8520 <https://mariadb.atlassian.net/browse/"
+"MDEV-8520>`_] [Report by Elena Stepanova]"
+msgstr ""
+"[ストレージモード] メモリーリークを修正しました。[`MDEV-8520 <https://mariadb."
+"atlassian.net/browse/MDEV-8520>`_] [Elena Stepanovaさんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "foamcentime"
+msgstr "foamcentimeさん"
+
+# 256875cb4d8340a5b75754690347bfe2
+msgid "Elena Stepanova"
+msgstr "Elena Stepanovaさん"
+
+# 22607774878349e3a2ba0a9bef7a10cc
+msgid "Sergei Golubchik"
+msgstr "Sergei Golubchikさん"
 
 msgid "Release 5.04 - 2015/06/29"
 msgstr "5.04リリース - 2015/06/29"
@@ -156,9 +196,6 @@ msgstr ""
 "``type`` は非推奨ですが、Mroonga 6.XXまでは使うことができます。Mroonga 7.00で削除され"
 "る予定です。"
 
-msgid "Thanks"
-msgstr "感謝"
-
 # d8986144d4454b8dbfd7cf12c8877b8c
 msgid "GMO Media, Inc."
 msgstr "GMOメディア株式会社さん"
@@ -181,9 +218,6 @@ msgstr ""
 # 2077275f62ef4db2ac23e2ad3e1c9d42
 msgid "mysql57: Followed recent API changes."
 msgstr "mysql57: APIの変更に追従しました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[storage] Fixed a bug that unique index doesn't work for invalid datetime. This bug "
@@ -2980,10 +3014,6 @@ msgstr "[doc] CentOS 5と6では ``service`` コマンドをMySQLの起動に使
 msgid "[doc] Use ``systemctl`` command to start MySQL on CentOS 7."
 msgstr "[doc] CentOS 7では ``systemctl`` コマンドをMySQLの起動に使うようにしました。"
 
-# 256875cb4d8340a5b75754690347bfe2
-msgid "Elena Stepanova"
-msgstr "Elena Stepanovaさん"
-
 msgid "Noboru Nishiyama"
 msgstr "西山さん"
 
@@ -3101,9 +3131,6 @@ msgstr ""
 "チカラムインデックスによってインデックスが作成されており、ORDERとWHERE句に指定されてい"
 "ること。2つめが、マルチカラムインデックスに指定した最初のカラムがORDERで使われていない"
 "ことです。[#2651] [foamcentime, 村上さんが報告]"
-
-msgid "foamcentime"
-msgstr "foamcentimeさん"
 
 msgid "Release 4.05 - 2014/08/29"
 msgstr "4.05リリース - 2014/08/29"
