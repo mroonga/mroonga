@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-04-28 17:48+0900\n"
+"PO-Revision-Date: 2015-05-28 17:48+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -595,7 +595,7 @@ msgid "14.10 Utopic Unicorn"
 msgstr ""
 
 # 1ff5efe8264244279bdaccf46fd601cf
-msgid "15.04 Vivid Vervet"
+msgid "15.05 Vivid Vervet"
 msgstr ""
 
 msgid ""
@@ -680,15 +680,15 @@ msgstr ""
 
 # c24c4f187b084cb4903d81cfc95339fd
 msgid ""
-"`mariadb-10.0.20-with-mroonga-5.04-win32.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v5.04/mariadb-10.0.20-with-mroonga-5.04-win32."
+"`mariadb-10.0.20-with-mroonga-5.05-win32.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v5.05/mariadb-10.0.20-with-mroonga-5.05-win32."
 "zip>`_"
 msgstr ""
 
 # 1f08323c54ce481ea1089f1960c7957e
 msgid ""
-"`mariadb-10.0.20-with-mroonga-5.04-winx64.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v5.04/mariadb-10.0.20-with-mroonga-5.04-winx64."
+"`mariadb-10.0.20-with-mroonga-5.05-winx64.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v5.05/mariadb-10.0.20-with-mroonga-5.05-winx64."
 "zip>`_"
 msgstr ""
 

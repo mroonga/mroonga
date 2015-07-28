@@ -1,3 +1,9 @@
+mroonga (5.05-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Masafumi Yokoyama <yokoyama@clear-code.com>  Wed, 29 Jul 2015 00:00:00 +0900
+
 mroonga (5.04-1) unstable; urgency=low
 
   * New upstream release.
