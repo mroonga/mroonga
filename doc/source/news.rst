@@ -13,7 +13,8 @@ Release 5.05 - 2015/07/29
 Improvements
 ^^^^^^^^^^^^
 
-* Supported multiple column index with range condition and ORDER BY DESC.
+* Supported multiple column index with range condition (e.g. ``<`` in
+  ``WHERE date < '2015-07-01'``) and ``ORDER BY DESC``.
   [`groonga-dev,03332 <http://osdn.jp/projects/groonga/lists/archive/dev/2015-July/003334.html>`_]
   [GitHub#65] [Reported by foamcentime]
 
