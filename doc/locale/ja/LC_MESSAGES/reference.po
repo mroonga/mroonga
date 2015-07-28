@@ -750,6 +750,10 @@ msgstr ""
 msgid "``mroonga_default_parser``"
 msgstr ""
 
+# ef948dd37d6b407c9c9873776e5394d6
+msgid "Use :ref:`mroonga_default_tokenizer` instead."
+msgstr ""
+
 msgid ""
 "The default parser of the full text search. The default value can be "
 "specified by ``--with-default-parser=PARSER`` configure argument, whose "
@@ -761,6 +765,28 @@ msgstr ""
 msgid ""
 "Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
 "search parser. It is used by ``body_index`` fulltext index."
+msgstr ""
+"全文検索パーサーとして ``TokenBigramSplitSymbolAlphaDigit`` を使う例です。こ"
+"の例では ``body_index`` 全文検索インデックスは "
+"``TokenBigramSplitSymbolAlphaDigit`` を使います。"
+
+# 9ab11a7d36774de195fa0bade135e92d
+msgid "``mroonga_default_tokenizer``"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The default tokenizer of the full text search. The default value can be "
+"specified by ``--with-default-tokenizer=TOKENIZER`` configure argument, "
+"whose default value is ``TokenBigram``."
+msgstr ""
+"デフォルトの全文検索用パーサ。デフォルト値はconfigureの ``with-default-"
+"parser`` オプションで指定できます（無指定時は ``TokenBigram`` ）。"
+
+#, fuzzy
+msgid ""
+"Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext "
+"index tokenizer. It is used by ``body_index`` fulltext index."
 msgstr ""
 "全文検索パーサーとして ``TokenBigramSplitSymbolAlphaDigit`` を使う例です。こ"
 "の例では ``body_index`` 全文検索インデックスは "
