@@ -9,9 +9,7 @@ install:
   - cd mariadb-10.0.20
   - rmdir /S /Q storage\mroonga\
   - move ..\mroonga storage\mroonga
-  - git clone --quiet --depth 1 https://github.com/groonga/groonga.git ..\groonga
-  - cd ..\groonga
-  - git submodule update --init
+  - git clone ----quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
   - cd ..\mariadb-10.0.20
   - rmdir /S /Q ..\groonga\test\
   - mkdir storage\mroonga\vendor
