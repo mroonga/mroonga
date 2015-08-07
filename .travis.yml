@@ -8,19 +8,19 @@ env:
   - MYSQL_VERSION=mysql-5.5.45
   - MYSQL_VERSION=mysql-5.6.26
   - MYSQL_VERSION=mariadb-5.5.44
-#  - MYSQL_VERSION=mariadb-10.0.20
-#  - MYSQL_VERSION=mariadb-10.0.20 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
-  - MYSQL_VERSION=mariadb-10.0.20 MROONGA_BUNDLED=yes
-#  - MYSQL_VERSION=mariadb-10.0.20 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
+#  - MYSQL_VERSION=mariadb-10.0.21
+#  - MYSQL_VERSION=mariadb-10.0.21 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
+  - MYSQL_VERSION=mariadb-10.0.21 MROONGA_BUNDLED=yes
+#  - MYSQL_VERSION=mariadb-10.0.21 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
   - MYSQL_VERSION=mariadb-10.1.6
 matrix:
   allow_failures:
 #    - env: MYSQL_VERSION=mysql-system
 #    - env: MYSQL_VERSION=mariadb-5.5.45
-#    - env: MYSQL_VERSION=mariadb-10.0.20
-#    - env: MYSQL_VERSION=mariadb-10.0.20 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
-    - env: MYSQL_VERSION=mariadb-10.0.20 MROONGA_BUNDLED=yes
-#    - env: MYSQL_VERSION=mariadb-10.0.20 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
+#    - env: MYSQL_VERSION=mariadb-10.0.21
+#    - env: MYSQL_VERSION=mariadb-10.0.21 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
+    - env: MYSQL_VERSION=mariadb-10.0.21 MROONGA_BUNDLED=yes
+#    - env: MYSQL_VERSION=mariadb-10.0.21 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
     - env: MYSQL_VERSION=mariadb-10.1.6
 install:
   - tools/travis/install.sh
