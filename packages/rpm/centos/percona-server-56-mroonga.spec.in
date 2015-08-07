@@ -16,7 +16,7 @@
 
 Name:		percona-server-56-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -71,7 +71,10 @@ if [ ! -d ${mysql_source} ]; then
 	--define 'optflags -O0' \
 	../../SPECS/%{mysql_spec_file}
 fi
-%configure --disable-static --with-mysql-source=${mysql_source} \
+%configure \
+    --disable-static \
+    --with-mysql-source=${mysql_source} \
+    --enable-fast-mutexes \
     %{?mroonga_configure_options}
 make %{?_smp_mflags}
 
