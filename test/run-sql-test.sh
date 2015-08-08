@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Copyright(C) 2010  Tetsuro IKEDA
-# Copyright(C) 2010-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2010-2015  Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2011  Kazuhiko
 #
 # This library is free software; you can redistribute it and/or
@@ -165,7 +165,7 @@ test_suite_names=""
 test_names=""
 while [ $# -gt 0 ]; do
     case "$1" in
-	--manual-gdb|--debug)
+	--manual-gdb|--gdb|--debug)
 	    n_processors=1
 	    break
 	    ;;
