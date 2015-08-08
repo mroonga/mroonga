@@ -1,5 +1,10 @@
 version: "{build}"
 clone_depth: 10
+environment:
+  matrix:
+    - CMAKE_GENERATOR_NAME: "Visual Studio 12 2013"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 12 2013 Win64"
+
 install:
   - cd ..
   - choco install -y curl 7zip.commandline
@@ -17,7 +22,7 @@ install:
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
 build_script:
   - "echo # > win\\packaging\\CMakeLists.txt"
-  - cmake . -G "Visual Studio 12 Win64"
+  - cmake . -G "%CMAKE_GENERATOR_NAME%"
       -DCMAKE_BUILD_TYPE=Debug
       -DWITHOUT_ARCHIVE=ON
       -DWITHOUT_BLACKHOLE=ON
