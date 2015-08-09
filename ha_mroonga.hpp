@@ -1205,7 +1205,9 @@ private:
   void storage_free_foreign_key_create_info(char* str);
   void wrapper_set_keys_in_use();
   void storage_set_keys_in_use();
+#ifdef MRN_RBR_UPDATE_NEED_ALL_COLUMNS
   bool check_written_by_row_based_binlog();
+#endif
 #ifdef MRN_HAVE_HA_REBIND_PSI
   void wrapper_unbind_psi();
   void storage_unbind_psi();

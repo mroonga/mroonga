@@ -16261,6 +16261,7 @@ void ha_mroonga::free_foreign_key_create_info(char* str)
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_RBR_UPDATE_NEED_ALL_COLUMNS
 bool ha_mroonga::check_written_by_row_based_binlog()
 {
   MRN_DBUG_ENTER_METHOD();
@@ -16294,6 +16295,7 @@ bool ha_mroonga::check_written_by_row_based_binlog()
 
   DBUG_RETURN(true);
 }
+#endif
 
 #ifdef MRN_HAVE_HA_REBIND_PSI
 void ha_mroonga::wrapper_unbind_psi()
