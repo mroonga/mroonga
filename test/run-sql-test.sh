@@ -161,6 +161,7 @@ if [ -n "${plugins_dir}" ]; then
   fi
 fi
 
+mysql_test_run_options=""
 test_suite_names=""
 test_names=""
 while [ $# -gt 0 ]; do
@@ -169,9 +170,10 @@ while [ $# -gt 0 ]; do
   case "$arg" in
     --manual-gdb|--gdb|--debug)
       n_processors=1
+      mysql_test_run_options="${mysql_test_run_options} ${arg}"
       ;;
     --*)
-      :
+      mysql_test_run_options="${mysql_test_run_options} ${arg}"
       ;;
     *)
       case "$arg" in
@@ -229,4 +231,4 @@ fi
 (cd "$build_mysql_test_dir" && \
     ./mysql-test-run.pl \
       ${mysql_test_run_args} \
-      "$@")
+      ${mysql_test_run_options})
