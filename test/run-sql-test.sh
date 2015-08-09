@@ -164,31 +164,31 @@ fi
 test_suite_names=""
 test_names=""
 while [ $# -gt 0 ]; do
-  case "$1" in
+  arg="$1"
+  shift
+  case "$arg" in
     --manual-gdb|--gdb|--debug)
       n_processors=1
-      break
       ;;
     --*)
-      break
+      :
       ;;
     *)
-      case "$1" in
+      case "$arg" in
 	*/t/*.test)
-	  test_suite_name=$(echo "$1" | sed -e 's,/t/.*\.test,,g')
+	  test_suite_name=$(echo "$arg" | sed -e 's,/t/.*\.test,,g')
 	  test_suite_name=$(cd "$test_suite_name" && pwd)
-	  test_name=$(echo "$1" | sed -e 's,.*/t/\(.*\)\.test,\1,g')
+	  test_name=$(echo "$arg" | sed -e 's,.*/t/\(.*\)\.test,\1,g')
 	  ;;
 	*)
-	  if [ -d "$1" ]; then
-	    test_suite_name=$(cd "$1" && pwd)
+	  if [ -d "$arg" ]; then
+	    test_suite_name=$(cd "$arg" && pwd)
 	  else
-	    test_suite_name="$1"
+	    test_suite_name="$arg"
 	  fi
 	  test_name=""
 	  ;;
       esac
-      shift
 
       if [ -n "${test_name}" ]; then
 	if [ -n "${test_names}" ]; then
