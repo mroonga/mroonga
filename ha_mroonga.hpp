@@ -358,7 +358,7 @@ public:
   ulong index_flags(uint idx, uint part, bool all_parts) const;    // required
 
   int create(const char *name, TABLE *form, HA_CREATE_INFO *info); // required
-  int open(const char *name, int mode, uint test_if_locked);       // required
+  int open(const char *name, int mode, uint open_options);         // required
 #ifndef MRN_HANDLER_HAVE_HA_CLOSE
   int close();                                                     // required
 #endif
@@ -787,9 +787,9 @@ private:
   int wrapper_delete_table(const char *name, handlerton *wrap_handlerton,
                            const char *table_name);
   int generic_delete_table(const char *name, const char *table_name);
-  int wrapper_open(const char *name, int mode, uint test_if_locked);
+  int wrapper_open(const char *name, int mode, uint open_options);
   int wrapper_open_indexes(const char *name);
-  int storage_open(const char *name, int mode, uint test_if_locked);
+  int storage_open(const char *name, int mode, uint open_options);
   int open_table(const char *name);
   int storage_open_columns(void);
   void storage_close_columns(void);

@@ -3953,12 +3953,12 @@ int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
+int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
 
-  if (thd_sql_command(ha_thd()) == SQLCOM_REPAIR) {
+  if (open_options & HA_OPEN_FOR_REPAIR) {
     error = ensure_database_remove(name);
     if (error)
       DBUG_RETURN(error);
@@ -4011,7 +4011,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint test_if_locked)
 #ifdef MRN_HANDLER_HAVE_SET_HA_SHARE_REF
     wrap_handler->set_ha_share_ref(&table->s->ha_share);
 #endif
-    error = wrap_handler->ha_open(table, name, mode, test_if_locked);
+    error = wrap_handler->ha_open(table, name, mode, open_options);
   } else {
     if (!(wrap_handler = parent_for_clone->wrap_handler->clone(name,
       mem_root_for_clone)))
@@ -4194,7 +4194,7 @@ void ha_mroonga::wrapper_overwrite_index_bits()
   DBUG_VOID_RETURN;
 }
 
-int ha_mroonga::storage_open(const char *name, int mode, uint test_if_locked)
+int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
@@ -4214,7 +4214,7 @@ int ha_mroonga::storage_open(const char *name, int mode, uint test_if_locked)
     DBUG_RETURN(error);
   }
 
-  if (!(ha_thd()->open_options & HA_OPEN_FOR_REPAIR)) {
+  if (!(open_options & HA_OPEN_FOR_REPAIR)) {
     error = storage_open_indexes(name);
     if (error) {
       storage_close_columns();
@@ -4460,7 +4460,7 @@ error:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
+int ha_mroonga::open(const char *name, int mode, uint open_options)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
@@ -4478,9 +4478,9 @@ int ha_mroonga::open(const char *name, int mode, uint test_if_locked)
 
   if (share->wrapper_mode)
   {
-    error = wrapper_open(name, mode, test_if_locked);
+    error = wrapper_open(name, mode, open_options);
   } else {
-    error = storage_open(name, mode, test_if_locked);
+    error = storage_open(name, mode, open_options);
   }
 
   if (error)
