@@ -43,15 +43,10 @@
 #define MYSQL_SERVER 1
 #include <mysql_version.h>
 
-#if MYSQL_VERSION_ID < 50500
-#  include <mysql_priv.h>
-#  include <mysql/plugin.h>
-#else
 #  include <sql_const.h>
 #  include <sql_class.h>
 #  include <probes_mysql.h>
 #  include <sql_partition.h>
-#endif
 #include <rpl_filter.h>
 
 #ifdef MARIADB_BASE_VERSION
