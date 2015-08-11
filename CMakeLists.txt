@@ -387,6 +387,14 @@ else()
   install(TARGETS mroonga DESTINATION "${MYSQL_PLUGIN_DIR}")
 endif()
 
+option(MRN_BUILD_FOR_EMBEDDED_SERVER
+  "Whether to build Mroonga for embedded server or not. You can't use Mroonga built for embedded server with non embedded server."
+  OFF)
+if(MRN_BUILD_FOR_EMBEDDED_SERVER)
+  set_property(TARGET mroonga APPEND PROPERTY
+    COMPILE_DEFINITIONS "EMBEDDED_LIBRARY")
+endif()
+
 if(GROONGA_NORMALIZER_MYSQL_FOUND)
   set_property(TARGET mroonga APPEND PROPERTY
     COMPILE_DEFINITIONS "WITH_GROONGA_NORMALIZER_MYSQL=1")
