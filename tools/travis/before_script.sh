@@ -40,6 +40,7 @@ if [ "${MROONGA_BUNDLED}" = "yes" ]; then
   cmake_args=("${cmake_args[@]}" -DWITHOUT_TOKUDB=TRUE)
   if [ "${MROONGA_TEST_EMBEDDED}" = "yes" ]; then
     cmake_args=("${cmake_args[@]}" -DWITH_EMBEDDED_SERVER=TRUE)
+    cmake_args=("${cmake_args[@]}" -DMRN_BUILD_FOR_EMBEDDED_SERVER=TRUE)
   fi
   cmake . "${cmake_args[@]}"
 else
