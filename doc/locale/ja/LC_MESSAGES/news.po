@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-07-28 19:01+0900\n"
+"PO-Revision-Date: 2015-08-31 15:35+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,59 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 5.05 - 2015/07/29"
-msgstr "5.05リリース - 2015/07/29"
+msgid "Release 5.06 - 2015-08-31"
+msgstr "5.06リリース - 2015-08-31"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"Supported MariaDB 10.1 that is built as embedded server. [MDEV-8508]"
+"[GitHub#66] [Reported by Sergei Golubchik]"
+msgstr ""
+"埋め込みサーバーとしてビルドされたMariaDB 10.1にも対応しました。 [MDEV-8508]"
+"[GitHub#66] [Sergei Golubchikさんが報告]"
+
+msgid ""
+"[rpm][mysql55-mroonga] Updated build target MySQL version. [groonga-"
+"dev,03421] [Reported by Hiroshi Kagami]"
+msgstr ""
+"[rpm][mysql55-mroonga] ビルド対象のMySQLのバージョンを更新しました。 "
+"[groonga-dev,03421] [各務さんが報告]"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[rpm][percona-server-56-mroonga] Fixed a crash bug. [GitHub#70] [Patch by "
+"GMO Media, Inc.]"
+msgstr ""
+"[rpm][percona-server-56-mroonga] クラッシュバグを修正しました。 [GitHub#70] "
+"[GMOメディア株式会社さんがパッチ提供]"
+
+msgid ""
+"Fixed a crash bug when any opening table exists on shutdown. [GitHub#71] "
+"[Reported by GMO Media, Inc.]"
+msgstr ""
+"シャットダウン時に開いているテーブルがあるとクラッシュする問題を修正しまし"
+"た。 [GitHub#71] [GMOメディア株式会社さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+# d8986144d4454b8dbfd7cf12c8877b8c
+msgid "GMO Media, Inc."
+msgstr "GMOメディア株式会社さん"
+
+# 22607774878349e3a2ba0a9bef7a10cc
+msgid "Sergei Golubchik"
+msgstr "Sergei Golubchikさん"
+
+msgid "Hiroshi Kagami"
+msgstr "各務さん"
+
+msgid "Release 5.05 - 2015/07/29"
+msgstr "5.05リリース - 2015/07/29"
 
 # 04cb89376f9347f59c9bb744d03a7c73
 msgid ""
@@ -51,9 +99,6 @@ msgstr ""
 "[rpm][:doc:`/install/centos`] CentOS 6向けパッケージのPercona Server 5.6の"
 "バージョンを現在の最新版（5.6.25-rel73.1）に更新しました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 # 7a4f12591d0146f7a6e2bbe548bce7a8
 msgid ""
 "Fixed a bug that search results are reduced for multiple column index with "
@@ -74,19 +119,12 @@ msgstr ""
 "[ストレージモード] メモリーリークを修正しました。[`MDEV-8520 <https://"
 "mariadb.atlassian.net/browse/MDEV-8520>`_] [Elena Stepanovaさんが報告]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "foamcentime"
 msgstr "foamcentimeさん"
 
 # 256875cb4d8340a5b75754690347bfe2
 msgid "Elena Stepanova"
 msgstr "Elena Stepanovaさん"
-
-# 22607774878349e3a2ba0a9bef7a10cc
-msgid "Sergei Golubchik"
-msgstr "Sergei Golubchikさん"
 
 msgid "Release 5.04 - 2015/06/29"
 msgstr "5.04リリース - 2015/06/29"
@@ -228,10 +266,6 @@ msgstr ""
 "``type`` は非推奨ですが、Mroonga 6.XXまでは使うことができます。Mroonga 7.00で"
 "削除される予定です。"
 
-# d8986144d4454b8dbfd7cf12c8877b8c
-msgid "GMO Media, Inc."
-msgstr "GMOメディア株式会社さん"
-
 msgid "Release 5.03 - 2015/05/29"
 msgstr "5.03リリース - 2015/05/29"
 
@@ -297,9 +331,6 @@ msgid ""
 msgstr ""
 "[ストレージモード] 複数接続時にユニーク制約が無視されてしまう不具合を修正しま"
 "した。 [groonga-dev,03243] [各務さんが報告]"
-
-msgid "Hiroshi Kagami"
-msgstr "各務さん"
 
 # 58c01265b23a4438bd4df2d910acf3b2
 msgid "torinky"
