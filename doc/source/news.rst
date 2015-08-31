@@ -5,6 +5,34 @@
 News
 ====
 
+.. _release-5-06:
+
+Release 5.06 - 2015-08-31
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported MariaDB 10.1 that is built as embedded server.
+  [MDEV-8508][GitHub#66] [Reported by Sergei Golubchik]
+* [rpm][mysql55-mroonga] Updated build target MySQL version.
+  [groonga-dev,03421] [Reported by Hiroshi Kagami]
+
+Fixes
+^^^^^
+
+* [rpm][percona-server-56-mroonga] Fixed a crash bug.
+  [GitHub#70] [Patch by GMO Media, Inc.]
+* Fixed a crash bug when any opening table exists on shutdown.
+  [GitHub#71] [Reported by GMO Media, Inc.]
+
+Thanks
+^^^^^^
+
+* GMO Media, Inc.
+* Sergei Golubchik
+* Hiroshi Kagami
+
 .. _release-5-05:
 
 Release 5.05 - 2015/07/29
