@@ -49,7 +49,13 @@ tag:
 	cd $(top_srcdir) && \
 	  git tag v$(VERSION) -a -m 'Mroonga $(VERSION)!!!'
 
-update-latest-release: misc
+ensure-cutter-source-path:
+	@if test -z "$(CUTTER_SOURCE_PATH)"; then \
+	  echo "\$$(CUTTER_SOURCE_PATH) is missing"; \
+	  exit 1; \
+	fi
+
+update-latest-release: ensure-cutter-source-path
 	@if test -z "$(OLD_RELEASE)"; then	\
 	  echo "\$$(OLD_RELEASE) is missing";	\
 	  exit 1;				\
@@ -63,7 +69,7 @@ update-latest-release: misc
 	  exit 1;					\
 	fi
 	cd $(top_srcdir) &&				\
-	  misc/update-latest-release.rb			\
+	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"	\
 	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
 	  $(VERSION) $(NEW_RELEASE_DATE)		\
 	  packages/rpm/centos/mariadb-mroonga.spec.in	\
@@ -145,10 +151,3 @@ upload-to-github:
 
 echo-cutter:
 	echo $(CUTTER)
-
-misc:
-	@if test -z "$(CUTTER_SOURCE_PATH)"; then \
-	  echo "\$$(CUTTER_SOURCE_PATH) is missing"; \
-	  exit 1; \
-	fi
-	ln -s "$(CUTTER_SOURCE_PATH)/misc" misc
