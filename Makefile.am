@@ -69,6 +69,7 @@ update-latest-release: misc
 	  packages/rpm/centos/mariadb-mroonga.spec.in	\
 	  packages/rpm/centos/mysql55-mroonga.spec.in	\
 	  packages/rpm/centos/mysql56-community-mroonga.spec.in	\
+	  packages/rpm/centos/percona-server-56-mroonga.spec.in	\
 	  packages/debian/changelog			\
 	  doc/source/install/*.rst			\
 	  doc/locale/*/LC_MESSAGES/install.po		\
