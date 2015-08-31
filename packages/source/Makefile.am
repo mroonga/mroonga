@@ -103,8 +103,9 @@ files/$(MARIADB_WITH_MROONGA_BASE).tar.gz: tmp/$(MARIADB_WITH_MROONGA_BASE).stam
 	mkdir -p files/
 	(cd tmp && tar czf ../$@ $(MARIADB_WITH_MROONGA_BASE))
 
-PATCHES =						\
-	patches/mariadb-10.0.3-windows-build.diff
+PATCHES =								\
+	patches/mariadb-10.0.3-windows-build.diff			\
+	patches/groonga-5.0.7-windows-mariadb-bundled-build.diff
 
 tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE).stamp: tmp/$(MARIADB_WITH_MROONGA_BASE).stamp $(PATCHES)
 	rm -rf tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE)
