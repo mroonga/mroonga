@@ -6,11 +6,11 @@
 %define mysql_version_default 5.5.41
 %define mysql_release_default 2
 %define mysql_dist_default    el6.centos.alt
-%define mysql_download_base_url_default http://vault.centos.org/6.6/SCL/Source/SPackages
+%define mysql_download_base_url_default http://vault.centos.org/6.7/SCL/Source/SPackages
 %define mysql_spec_file_default mysql.spec
 %else
-%define mysql_version_default 5.5.40
-%define mysql_release_default 2
+%define mysql_version_default 5.5.45
+%define mysql_release_default 1
 %define mysql_dist_default    el5
 %define mysql_download_base_url_default http://vault.centos.org/5.11/updates/SRPMS
 %define mysql_spec_file_default mysql.spec
