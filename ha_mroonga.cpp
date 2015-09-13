@@ -270,14 +270,14 @@ static PSI_mutex_key mrn_db_manager_mutex_key;
 
 static PSI_mutex_info mrn_mutexes[] =
 {
-  {&mrn_open_tables_mutex_key,     "open_tables",     PSI_FLAG_GLOBAL},
-  {&mrn_long_term_share_mutex_key, "long_term_share", PSI_FLAG_GLOBAL},
-  {&mrn_allocated_thds_mutex_key,  "allocated_thds",  PSI_FLAG_GLOBAL},
-  {&mrn_share_mutex_key,           "share",           0},
+  {&mrn_open_tables_mutex_key,     "mrn::open_tables",     PSI_FLAG_GLOBAL},
+  {&mrn_long_term_share_mutex_key, "mrn::long_term_share", PSI_FLAG_GLOBAL},
+  {&mrn_allocated_thds_mutex_key,  "mrn::allocated_thds",  PSI_FLAG_GLOBAL},
+  {&mrn_share_mutex_key,           "mrn::share",           0},
   {&mrn_long_term_share_auto_inc_mutex_key,
-   "long_term_share::auto_inc", 0},
-  {&mrn_log_mutex_key,             "log",             PSI_FLAG_GLOBAL},
-  {&mrn_db_manager_mutex_key,      "DatabaseManager", PSI_FLAG_GLOBAL}
+   "mrn::long_term_share::auto_inc", 0},
+  {&mrn_log_mutex_key,             "mrn::log",             PSI_FLAG_GLOBAL},
+  {&mrn_db_manager_mutex_key,      "mrn::DatabaseManager", PSI_FLAG_GLOBAL}
 };
 #endif
 
