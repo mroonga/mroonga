@@ -28,4 +28,6 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_value_decoder.cpp			\
 	mrn_value_decoder.hpp			\
 	mrn_database_repairer.cpp		\
-	mrn_database_repairer.hpp
+	mrn_database_repairer.hpp		\
+	mrn_context_pool.cpp			\
+	mrn_context_pool.hpp

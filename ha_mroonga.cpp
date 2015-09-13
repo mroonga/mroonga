@@ -91,6 +91,7 @@
 #include <mrn_time_converter.hpp>
 #include <mrn_smart_grn_obj.hpp>
 #include <mrn_database_manager.hpp>
+#include <mrn_context_pool.hpp>
 #include <mrn_grn.hpp>
 #include <mrn_value_decoder.hpp>
 #include <mrn_database_repairer.hpp>
@@ -267,6 +268,7 @@ PSI_mutex_key mrn_share_mutex_key;
 PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
 static PSI_mutex_key mrn_log_mutex_key;
 static PSI_mutex_key mrn_db_manager_mutex_key;
+static PSI_mutex_key mrn_context_pool_mutex_key;
 
 static PSI_mutex_info mrn_mutexes[] =
 {
@@ -277,7 +279,8 @@ static PSI_mutex_info mrn_mutexes[] =
   {&mrn_long_term_share_auto_inc_mutex_key,
    "mrn::long_term_share::auto_inc", 0},
   {&mrn_log_mutex_key,             "mrn::log",             PSI_FLAG_GLOBAL},
-  {&mrn_db_manager_mutex_key,      "mrn::DatabaseManager", PSI_FLAG_GLOBAL}
+  {&mrn_db_manager_mutex_key,      "mrn::DatabaseManager", PSI_FLAG_GLOBAL},
+  {&mrn_context_pool_mutex_key,    "mrn::ContextPool",     PSI_FLAG_GLOBAL}
 };
 #endif
 
@@ -298,6 +301,8 @@ static grn_obj *mrn_db;
 static grn_ctx mrn_db_manager_ctx;
 static mysql_mutex_t mrn_db_manager_mutex;
 mrn::DatabaseManager *mrn_db_manager = NULL;
+static mysql_mutex_t mrn_context_pool_mutex;
+mrn::ContextPool *mrn_context_pool = NULL;
 
 
 #ifdef WIN32
@@ -1736,6 +1741,16 @@ static int mrn_init(void *p)
   if (!mrn_db_manager->init()) {
     goto err_db_manager_init;
   }
+
+  if (mysql_mutex_init(mrn_context_pool_mutex_key,
+                       &mrn_context_pool_mutex,
+                       MY_MUTEX_INIT_FAST) != 0) {
+    GRN_LOG(ctx, GRN_LOG_ERROR,
+            "failed to initialize mutex for context pool");
+    goto error_context_pool_mutex_init;
+  }
+  mrn_context_pool = new mrn::ContextPool(&mrn_context_pool_mutex);
+
   if ((mysql_mutex_init(mrn_allocated_thds_mutex_key,
                         &mrn_allocated_thds_mutex,
                         MY_MUTEX_INIT_FAST) != 0)) {
@@ -1781,6 +1796,9 @@ err_allocated_open_tables_mutex_init:
 error_allocated_thds_hash_init:
   mysql_mutex_destroy(&mrn_allocated_thds_mutex);
 err_allocated_thds_mutex_init:
+  delete mrn_context_pool;
+error_context_pool_mutex_init:
+  mysql_mutex_destroy(&mrn_context_pool_mutex);
 err_db_manager_init:
   delete mrn_db_manager;
   mysql_mutex_destroy(&mrn_db_manager_mutex);
@@ -1837,6 +1855,8 @@ static int mrn_deinit(void *p)
   mysql_mutex_destroy(&mrn_open_tables_mutex);
   my_hash_free(&mrn_allocated_thds);
   mysql_mutex_destroy(&mrn_allocated_thds_mutex);
+  delete mrn_context_pool;
+  mysql_mutex_destroy(&mrn_context_pool_mutex);
   delete mrn_db_manager;
   mysql_mutex_destroy(&mrn_db_manager_mutex);
   grn_ctx_fin(&mrn_db_manager_ctx);

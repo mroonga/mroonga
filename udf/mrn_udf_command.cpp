@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,15 +25,17 @@
 #include <mrn_windows.hpp>
 #include <mrn_macro.hpp>
 #include <mrn_database_manager.hpp>
+#include <mrn_context_pool.hpp>
 #include <mrn_variables.hpp>
 
 MRN_BEGIN_DECLS
 
 extern mrn::DatabaseManager *mrn_db_manager;
+extern mrn::ContextPool *mrn_context_pool;
 
 struct CommandInfo
 {
-  grn_ctx ctx;
+  grn_ctx *ctx;
   grn_obj *db;
   bool use_shared_db;
   String result;
@@ -66,7 +68,7 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
     goto error;
   }
 
-  grn_ctx_init(&(info->ctx), 0);
+  info->ctx = mrn_context_pool->pull();
   {
     const char *current_db_path = MRN_THD_DB_PATH(current_thd);
     const char *action;
@@ -74,19 +76,19 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
       action = "open database";
       int error = mrn_db_manager->open(current_db_path, &(info->db));
       if (error == 0) {
-        grn_ctx_use(&(info->ctx), info->db);
+        grn_ctx_use(info->ctx, info->db);
         info->use_shared_db = true;
       }
     } else {
       action = "create anonymous database";
-      info->db = grn_db_create(&(info->ctx), NULL, NULL);
+      info->db = grn_db_create(info->ctx, NULL, NULL);
       info->use_shared_db = false;
     }
     if (!info->db) {
       sprintf(message,
               "mroonga_command(): failed to %s: %s",
               action,
-              info->ctx.errbuf);
+              info->ctx->errbuf);
       goto error;
     }
   }
@@ -98,9 +100,9 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
 error:
   if (info) {
     if (!info->use_shared_db) {
-      grn_obj_close(&(info->ctx), info->db);
+      grn_obj_close(info->ctx, info->db);
     }
-    grn_ctx_fin(&(info->ctx));
+    mrn_context_pool->release(info->ctx);
     my_free(info);
   }
   return TRUE;
@@ -110,7 +112,7 @@ MRN_API char *mroonga_command(UDF_INIT *initid, UDF_ARGS *args, char *result,
                               unsigned long *length, char *is_null, char *error)
 {
   CommandInfo *info = (CommandInfo *)initid->ptr;
-  grn_ctx *ctx = &(info->ctx);
+  grn_ctx *ctx = info->ctx;
   char *command;
   unsigned int command_length;
   int flags = 0;
@@ -161,9 +163,9 @@ MRN_API void mroonga_command_deinit(UDF_INIT *initid)
   CommandInfo *info = (CommandInfo *)initid->ptr;
   if (info) {
     if (!info->use_shared_db) {
-      grn_obj_close(&(info->ctx), info->db);
+      grn_obj_close(info->ctx, info->db);
     }
-    grn_ctx_fin(&(info->ctx));
+    mrn_context_pool->release(info->ctx);
     MRN_STRING_FREE(info->result);
     my_free(info);
   }
