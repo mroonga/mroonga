@@ -226,7 +226,6 @@ MRN_API my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *mes
 
 error:
   if (snip_info) {
-    grn_obj_close(snip_info->ctx, snip_info->db);
     if (!snip_info->use_shared_db) {
       grn_obj_close(snip_info->ctx, snip_info->db);
     }
