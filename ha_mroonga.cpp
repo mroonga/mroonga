@@ -8368,7 +8368,8 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
   const Item *reminder_cond = cond;
   if (!pushed_cond) {
     mrn::ConditionConverter converter(ctx, grn_table, true);
-    if (converter.find_match_against(cond) && converter.is_convertable(cond)) {
+    if (converter.count_match_against(cond) == 1 &&
+        converter.is_convertable(cond)) {
       reminder_cond = NULL;
     }
   }
@@ -9780,11 +9781,18 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         fast_order_limit = false;
         DBUG_VOID_RETURN;
       }
-      match_against = converter.find_match_against(where);
-      if (!match_against) {
+      unsigned int n_match_againsts = converter.count_match_against(where);
+      if (n_match_againsts == 0) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "
                     "Groonga layer condition but not fulltext search"));
+        fast_order_limit = false;
+        DBUG_VOID_RETURN;
+      }
+      if (n_match_againsts > 1) {
+        DBUG_PRINT("info",
+                   ("mroonga: fast_order_limit = false: "
+                    "MATCH AGAINST must be only one"));
         fast_order_limit = false;
         DBUG_VOID_RETURN;
       }

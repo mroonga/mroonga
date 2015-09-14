@@ -404,11 +404,11 @@ namespace mrn {
     DBUG_RETURN(have);
   }
 
-  const Item_func *ConditionConverter::find_match_against(const Item *item) {
+  unsigned int ConditionConverter::count_match_against(const Item *item) {
     MRN_DBUG_ENTER_METHOD();
 
     if (!item) {
-      DBUG_RETURN(NULL);
+      DBUG_RETURN(0);
     }
 
     switch (item->type()) {
@@ -416,14 +416,13 @@ namespace mrn {
       if (is_storage_mode_) {
         Item_cond *cond_item = (Item_cond *)item;
         if (cond_item->functype() == Item_func::COND_AND_FUNC) {
+          unsigned int n_match_againsts = 0;
           List_iterator<Item> iterator(*((cond_item)->argument_list()));
           const Item *sub_item;
           while ((sub_item = iterator++)) {
-            const Item_func *match_against = find_match_against(sub_item);
-            if (match_against) {
-              DBUG_RETURN(match_against);
-            }
+            n_match_againsts += count_match_against(sub_item);
           }
+          DBUG_RETURN(n_match_againsts);
         }
       }
       break;
@@ -432,7 +431,7 @@ namespace mrn {
         const Item_func *func_item = (const Item_func *)item;
         switch (func_item->functype()) {
         case Item_func::FT_FUNC:
-          DBUG_RETURN(func_item);
+          DBUG_RETURN(1);
           break;
         default:
           break;
@@ -443,7 +442,7 @@ namespace mrn {
       break;
     }
 
-    DBUG_RETURN(NULL);
+    DBUG_RETURN(0);
   }
 
   void ConditionConverter::convert(const Item *where, grn_obj *expression) {
