@@ -9773,7 +9773,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       if (!converter.is_convertable(where)) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "
-                    "not groonga layer condition search"));
+                    "not Groonga layer condition search"));
         fast_order_limit = false;
         DBUG_VOID_RETURN;
       }
@@ -9781,7 +9781,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       if (!match_against) {
         DBUG_PRINT("info",
                    ("mroonga: fast_order_limit = false: "
-                    "groonga layer condition but not fulltext search"));
+                    "Groonga layer condition but not fulltext search"));
         fast_order_limit = false;
         DBUG_VOID_RETURN;
       }
