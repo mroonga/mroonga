@@ -8165,6 +8165,9 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
     GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
   }
   if (fast_order_limit) {
+    if (sorted_result) {
+      grn_obj_close(ctx, sorted_result);
+    }
     sorted_result = grn_table_create(ctx, NULL,
                                      0, NULL,
                                      GRN_OBJ_TABLE_NO_KEY, NULL,
