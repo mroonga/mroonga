@@ -104,6 +104,8 @@ fi
 
 set -e
 
+mkdir -p m4
+
 echo "Running libtoolize ..."
 $LIBTOOLIZE --force --copy
 echo "Running aclocal ..."
