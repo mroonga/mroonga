@@ -20,8 +20,17 @@ Improvements
 Fixes
 ^^^^^
 
-* Fixed a memory leak when fast order limit optimization with multiple ``MATCH
-  AGAINST``.
+* Fixed a memory leak when ``ORDER BY LIMIT`` is used with multiple
+  ``MATCH AGAINST``.
+  [groonga-dev,03496] [Reported by Gosuke Yasufuku]
+* Fixed a bug that ``ORDER BY LIMIT`` and multiple ``MATCH AGAINST``
+  returns wrong result.
+  [groonga-dev,03496] [Reported by Gosuke Yasufuku]
+
+Thanks
+^^^^^^
+
+* Gosuke Yasufuku
 
 .. _release-5-06:
 
