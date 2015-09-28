@@ -17,7 +17,7 @@ In wrapper mode, Mroonga works in wrapping an existing storage engine. To specif
 .. note::
 
    Wrapper mode supports the followings, that are not supported in storage mode for now.
-   
+
    * null value
    * transaction (if storage engine supports. Note that rollback causes mismatch of indexes, it may affects search results, so recreate index of Mroonga in such a case.)
 
@@ -325,7 +325,7 @@ Available log levels are the followings.
 * DEBUG
 * DUMP
 
-See :ref:`mroonga_log_level` about details.
+See :ref:`server-variable-mroonga-log-level` about details.
 
 You can reopen the log file by FLUSH LOGS. If you want to rotate the log file without stopping MySQL server, you can do in the following procedure.
 

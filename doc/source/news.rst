@@ -5,6 +5,24 @@
 News
 ====
 
+.. _release-5-08:
+
+Release 5.08 - 2015-09-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [CMake][MariaDB 10.1] Supported ``PLUGIN_MROONGA=NO``.
+* [UDF] Supported ``grn_ctx`` pool. It improves performance for
+  calling UDF.
+
+Fixes
+^^^^^
+
+* Fixed a memory leak when fast order limit optimization with multiple ``MATCH
+  AGAINST``.
+
 .. _release-5-06:
 
 Release 5.06 - 2015-08-31
@@ -262,9 +280,10 @@ Improvements
   There is a performance penalty if huge number of records exists.
   Note that it requires Groonga 5.0.2 or later.
   [groonga-dev,03150] [Reported by Masato Shimada]
-* [experimental] Added :ref:`mroonga_max_n_records_for_estimate` variable to
-  limit the max number of records to estimate. It reduces the estimation cost
-  when there are many target records.
+* [experimental] Added
+  :ref:`server-variable-mroonga-max-n-records-for-estimate` variable
+  to limit the max number of records to estimate. It reduces the
+  estimation cost when there are many target records.
 * [rpm][centos] Updated to build against the latest MySQL 5.6.
 * [wrapper] Supported fast order by limit optimization for primary key sort.
   [Reported by Tsugunori Nashiro]

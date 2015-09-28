@@ -8,8 +8,9 @@ Release 3.12 - 2014/01/29
 Improvements
 ^^^^^^^^^^^^
 
-* Added a new system variable :ref:`mroonga_lock_timeout`. By changing this global variable,
-  You can customize Groonga's lock timeout dynamically.
+* Added a new system variable
+  :ref:`server-variable-mroonga-lock-timeout`. By changing this global
+  variable, You can customize Groonga's lock timeout dynamically.
 * Improved compatibility with Tritonn 'W' pragma's behaviour.
   In the previous versions, Mroonga used omitted section as weight 0. By this change,
   Mroonga uses omitted section as weight 1. This behaviour is same as Tritonn.
@@ -215,9 +216,9 @@ Release 3.06 - 2013/7/29
 Improvements
 ^^^^^^^^^^^^
 
-* Added :ref:`mroonga_action_on_fulltext_query_error` session variable.
-  This affects how to report errors about invalid escape.
-  [groonga-dev,01529] [Reported by Kouhei Tanabe]
+* Added :ref:`server-variable-mroonga-action-on-fulltext-query-error`
+  session variable.  This affects how to report errors about invalid
+  escape.  [groonga-dev,01529] [Reported by Kouhei Tanabe]
 * Supported count skip optimization for wrapper mode even though
   MySQL 5.5 or MariaDB 10.x. [#1841] [groonga-dev,01523] [Reported by Naoya Murakami]
   This optimization does not work if you use wrapper mode with

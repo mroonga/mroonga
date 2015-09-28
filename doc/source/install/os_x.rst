@@ -6,7 +6,7 @@ OS X
 This section describes how to install Mroonga on OS X. You can install
 Mroonga by `Homebrew <http://mxcl.github.com/homebrew/>`_.
 
-.. _homebrew:
+.. _install-os-x-homebrew:
 
 Homebrew
 --------

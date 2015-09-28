@@ -27,7 +27,7 @@ If you upgrade from 2.08 or later and using TIMESTAMP column, please recreate da
 If you upgrade prior to 5.03 and satisfies following the conditions, refer to :ref:`release-5-04` and upgrade schema.
 
 * Using custom tokenizer in index comment
-* Using :ref:`mroonga_default_parser` as server variable
+* Using :ref:`server-variable-mroonga-default-parser` as server variable
 * Using `index_flags` parameter for index column
 * Using `type` parameter for Groonga's column type in storage mode
 

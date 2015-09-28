@@ -7,6 +7,7 @@ Reference
    :maxdepth: 2
    :numbered:
 
+   reference/optimizations
    reference/sql_commands
    reference/server_variables
    reference/status_variables
