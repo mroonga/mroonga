@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-07-28 16:28+0900\n"
+"PO-Revision-Date: 2015-09-28 21:44+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -676,15 +676,15 @@ msgstr ""
 
 # c24c4f187b084cb4903d81cfc95339fd
 msgid ""
-"`mariadb-10.0.20-with-mroonga-5.06-win32.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v5.06/mariadb-10.0.20-with-mroonga-5.06-win32."
+"`mariadb-10.0.20-with-mroonga-5.08-win32.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v5.08/mariadb-10.0.21-with-mroonga-5.08-win32."
 "zip>`_"
 msgstr ""
 
 # 1f08323c54ce481ea1089f1960c7957e
 msgid ""
-"`mariadb-10.0.20-with-mroonga-5.06-winx64.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v5.06/mariadb-10.0.20-with-mroonga-5.06-winx64."
+"`mariadb-10.0.21-with-mroonga-5.08-winx64.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v5.08/mariadb-10.0.21-with-mroonga-5.08-winx64."
 "zip>`_"
 msgstr ""
 
