@@ -674,9 +674,8 @@ msgstr ""
 "zipファイルをダウンロードして展開してください。環境に合わせてzipファイルを選"
 "ぶ必要があります"
 
-# c24c4f187b084cb4903d81cfc95339fd
 msgid ""
-"`mariadb-10.0.20-with-mroonga-5.08-win32.zip <https://github.com/mroonga/"
+"`mariadb-10.0.21-with-mroonga-5.08-win32.zip <https://github.com/mroonga/"
 "mroonga/releases/download/v5.08/mariadb-10.0.21-with-mroonga-5.08-win32."
 "zip>`_"
 msgstr ""
