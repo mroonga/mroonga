@@ -13,4 +13,3 @@ Reference
    reference/udf
    reference/limitations
    reference/full_text_search
-   reference/troubleshooting

@@ -5,8 +5,10 @@ Status variables
 
 Here are the explanations of status variables that are introduced by Mroonga.
 
-Mroonga_count_skip
-------------------
+.. _status-variable-mroonga-count-skip:
+
+``Mroonga_count_skip``
+----------------------
 
 This value is increased when 'fast line count feature' is used.
 You can use this value to check if the feature is working when you enable it.
@@ -21,8 +23,10 @@ Here is an example how to check it::
   +--------------------+-------+
   1 row in set (0.00 sec)
 
-Mroonga_fast_order_limit
-------------------------
+.. _status-variable-mroonga-fast-order-limit:
+
+``Mroonga_fast_order_limit``
+----------------------------
 
 This value is increased when 'fast ORDER BY LIMIT feature' is used.
 You can use this value to check if the feature is working when you enable it.

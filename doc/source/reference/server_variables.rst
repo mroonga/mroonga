@@ -5,7 +5,7 @@ Server variables
 
 Here are the explanations of server variables that are introduced by Mroonga.
 
-.. _mroonga_action_on_fulltext_query_error:
+.. _server-variable-mroonga-action-on-fulltext-query-error:
 
 ``mroonga_action_on_fulltext_query_error``
 ------------------------------------------
@@ -41,7 +41,7 @@ Here is an example SQL to confirm the value of ``mroonga_action_on_fulltext_quer
   +----------------------------------------+---------------+
   1 row in set (0.00 sec)
 
-.. _mroonga_boolean_mode_syntax_flags:
+.. _server-variable-mroonga-boolean-mode-syntax-flags:
 
 ``mroonga_boolean_mode_syntax_flags``
 -------------------------------------
@@ -108,20 +108,20 @@ Here is an example SQL to use script syntax in Groonga::
 
   mysql> SET mroonga_boolean_mode_syntax_flags = "SYNTAX_SCRIPT";
 
-.. _mroonga_database_path_prefix:
+.. _server-variable-mroonga-database-path-prefix:
 
 ``mroonga_database_path_prefix``
 --------------------------------
 
 TODO:
 
-.. _mroonga_default_parser:
+.. _server-variable-mroonga-default-parser:
 
 ``mroonga_default_parser``
 --------------------------
 
 .. deprecated:: 5.04
-   Use :ref:`mroonga_default_tokenizer` instead.
+   Use :ref:`server-variable-mroonga-default-tokenizer` instead.
 
 The default parser of the full text search.
 The default value can be specified by ``--with-default-parser=PARSER`` configure argument, whose default value is ``TokenBigram``.
@@ -138,7 +138,7 @@ Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext sea
      FULLTEXT INDEX body_index (body)
    ) DEFAULT CHARSET UTF8;
 
-.. _mroonga_default_tokenizer:
+.. _server-variable-mroonga-default-tokenizer:
 
 ``mroonga_default_tokenizer``
 -----------------------------
@@ -161,12 +161,14 @@ Here is an example to use ``TokenBigramSplitSymbolAlphaDigit`` as a fulltext ind
    ) DEFAULT CHARSET UTF8;
 
 
-.. _mroonga_default_wrapper_engine:
+.. _server-variable-mroonga-default-wrapper-engine:
 
 ``mroonga_default_wrapper_engine``
 ----------------------------------
 
 TODO:
+
+.. _server-variable-mroonga-dry-write:
 
 ``mroonga_dry_write``
 ---------------------
@@ -200,6 +202,8 @@ database::
   +-------------------+-------+
   1 row in set (0.00 sec)
 
+.. _server-variable-mroonga-enable-optimization:
+
 ``mroonga_enable_optimization``
 -------------------------------
 
@@ -229,7 +233,7 @@ Here is an example SQL to disable optimization::
   +-----------------------------+-------+
   1 row in set (0.00 sec)
 
-.. _mroonga_libgroonga_support_lz4:
+.. _server-variable-mroonga-libgroonga-support-lz4:
 
 ``mroonga_libgroonga_support_lz4``
 ----------------------------------
@@ -245,7 +249,7 @@ Here is an example SQL to confirm the status of libgroonga supports LZ4::
   | mroonga_libgroonga_support_lz4 | ON    |
   +--------------------------------+-------+
 
-.. _mroonga_libgroonga_support_zlib:
+.. _server-variable-mroonga-libgroonga-support-zlib:
 
 ``mroonga_libgroonga_support_zlib``
 -----------------------------------
@@ -260,6 +264,9 @@ Here is an example SQL to confirm the status of libgroonga supports zlib::
   +---------------------------------+-------+
   | mroonga_libgroonga_support_zlib | ON    |
   +---------------------------------+-------+
+
+.. _serer-variable-mroonga-libgroonga-version:
+
 
 ``mroonga_libgroonga_version``
 ------------------------------
@@ -276,13 +283,14 @@ Here is an example SQL to confirm the using groonga library version::
   +----------------------------+------------------+
   1 row in set (0.00 sec)
 
-.. _mroonga_lock_timeout:
+.. _server-variable-mroonga-lock-timeout:
 
 ``mroonga_lock_timeout``
 ------------------------
 
 TODO:
 
+.. _serer-variable-mroonga-log-file:
 
 ``mroonga_log_file``
 --------------------
@@ -310,7 +318,7 @@ Here is an example transcript to change log file to ``/tmp/mroonga.log``::
   +------------------+------------------+
   1 row in set (0.00 sec)
 
-.. _mroonga_log_level:
+.. _server-variable-mroonga-log-level:
 
 ``mroonga_log_level``
 ---------------------
@@ -368,7 +376,7 @@ Here is an example transcript to change log level to ``DEBUG`` that logs many me
   +-------------------+-------+
   1 row in set (0.00 sec)
 
-.. _mroonga_match_escalation_threshold:
+.. _server-variable-mroonga-match-escalation-threshold:
 
 ``mroonga_match_escalation_threshold``
 --------------------------------------
@@ -438,7 +446,7 @@ value.
    -- 1	Hello groonga!	groonga install
 
 
-.. _mroonga_max_n_records_for_estimate:
+.. _server-variable-mroonga-max-n-records-for-estimate:
 
 ``mroonga_max_n_records_for_estimate``
 --------------------------------------
@@ -447,7 +455,7 @@ value.
 
 TODO:
 
-.. _mroonga_vector_column_delimiter:
+.. _server-variable-mroonga-vector-column-delimiter:
 
 ``mroonga_vector_column_delimiter``
 -----------------------------------
@@ -475,6 +483,8 @@ Here is an example SQL to change the delimiter to a semicolon from a white space
   +---------------------------------+-------+
   | mroonga_vector_column_delimiter | ;     |
   +---------------------------------+-------+
+
+.. _server-variable-mroonga-version:
 
 ``mroonga_version``
 -------------------

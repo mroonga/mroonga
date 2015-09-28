@@ -332,39 +332,11 @@ You can reopen the log file by FLUSH LOGS. If you want to rotate the log file wi
 1. change the file name of ``groonga.log`` (by using OS's mv command etc.).
 2. invoke "FLUSH LOGS" in MySQL server (by mysql command or mysqladmin command).
 
-Optimisation for ORDER BY LIMIT in full text search
----------------------------------------------------
+Next step
+---------
 
-Generally speaking, MySQL can process "ORDER BY" query with almost no cost if we can get records by index, and can process "LIMIT" with low cost by limiting the range of processing data even if the number of query result is very big.
-
-But for the query where "ORDER BY" cannot use index, like sort full text search result by the score and use LIMIT, the processing cost is proportional to the number of query results. So it might take very long time for the keyword query that matches with many records.
-
-Tritonn took no specific countermeasure for this issue, but it introduced a workaround in the latest repository so that it sorted Senna result in descending order of the score by using sen_records_sort function so that we could remove ORDER BY from the SQL query.
-
-Mroonga also has the optimisation for ORDER BY LIMIT.
-
-In the SELECT example below, ORDER BY LIMIT is processed in Mroonga only and the minimal records are passed to MySQL. ::
-
-  SELECT * FROM t1 WHERE MATCH(c2) AGAINST("hoge") ORDER BY c1 LIMIT 1;
-
-You can check if this optimisation works or not by the status variable. ::
-
-  mysql> SHOW STATUS LIKE 'mroonga_fast_order_limit';
-  +--------------------------+-------+
-  | Variable_name            | Value |
-  +--------------------------+-------+
-  | mroonga_fast_order_limit | 1     |
-  +--------------------------+-------+
-  1 row in set (0.00 sec)
-
-Each time the optimisation for counting rows works, ``mroonga_fast_order_limit`` status variable value is increased.
-
-Note : This optimisation is targeting queries like "select ... match against order by _score desc limit X, Y" only, and it works if all of the following conditions are right.
-
-* WHERE phrase has "match...against" only
-* no JOIN
-* with LIMIT
-* ORDER BY phrase has _id column or "match...against" that is used in WHERE phrase only
+Now, you can use Mroonga as wrapper mode! If you want Mroonga to be
+faster, see also :doc:`/reference/optimizations`.
 
 .. rubric:: Footnotes
 

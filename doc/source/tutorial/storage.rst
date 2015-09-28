@@ -649,92 +649,11 @@ You can reopen the log file by FLUSH LOGS. If you want to rotate the log file wi
 1. change the file name of ``groonga.log`` (by using OS's mv command etc.).
 2. invoke "FLUSH LOGS" in MySQL server (by mysql command or mysqladmin command).
 
-Choosing appropriate columns
-----------------------------
+Next step
+---------
 
-Groonga uses one file per column to store data, and Mroonga accesses needed columns only when accessing a table to utilise this characteristic.
-
-This optimisation is done automatically in Mroonga internal, you don't need any specific configuration.
-
-Imagine that we have a table with 20 columns like below. ::
-
-  CREATE TABLE t1 (
-    c1 INT PRIMARY KEY AUTO_INCREMENT,
-    c2 INT,
-    c3 INT,
-    ...
-    c11 VARCHAR(20),
-    c12 VARCHAR(20),
-    ...
-    c20 DATETIME
-  ) ENGINE = Mroonga DEFAULT CHARSET utf8;
-
-When we run SELECT phrase like the following, Mroonga reads data from columns that are referred by SELECT phrase and WHERE phrase only (and it does not access columns that not required internally).
-
-  SELECT c1, c2, c11 FROM t1 WHERE c2 = XX AND c12 = "XXX";
-
-In this case above, only columns c1, c2, c11 and c12 are accessed, and we can process the SQL rapidly.
-
-Optimisation for counting rows
-------------------------------
-
-In MySQL's storage engine interface, there is no difference between counting rows like COUNT(\*) and normal data retrieving by SELECT. So access to data that is not included in SELECT result can happen even if you just want to count rows.
-
-Tritonn (MySQL + Senna), that is Mroonga's predecessor, introduced "2ind patch" to skip needless access to data and solved this performance issue.
-
-Mroonga also has the optimisation for counting rows.
-
-In the following SELECT, for example, needless read of columns are skipped and you can get the result of counting rows with the minimal cost.
-
-  SELECT COUNT(*) FROM t1 WHERE MATCH(c2) AGAINST("hoge");
-
-You can check if this optimisation works or not by the status variable. ::
-
-  mysql> SHOW STATUS LIKE 'Mroonga_count_skip';
-  +--------------------+-------+
-  | Variable_name      | Value |
-  +--------------------+-------+
-  | Mroonga_count_skip | 1     |
-  +--------------------+-------+
-  1 row in set (0.00 sec)
-
-Each time the optimisation for counting rows works, ``Mroonga_count_skip`` status variable value is increased.
-
-Note : This optimisation is implemented by using the index. It only works in the case where we records can be specified only by the index.
-
-Optimisation for ORDER BY LIMIT in full text search
----------------------------------------------------
-
-Generally speaking, MySQL can process "ORDER BY" query with almost no cost if we can get records by index, and can process "LIMIT" with low cost by limiting the range of processing data even if the number of query result is very big.
-
-But for the query where "ORDER BY" cannot use index, like sort full text search result by the score and use LIMIT, the processing cost is proportional to the number of query results. So it might take very long time for the keyword query that matches with many records.
-
-Tritonn took no specific countermeasure for this issue, but it introduced a workaround in the latest repository so that it sorted Senna result in descending order of the score by using sen_records_sort function so that we could remove ORDER BY from the SQL query.
-
-Mroonga also has the optimisation for ORDER BY LIMIT.
-
-In the SELECT example below, ORDER BY LIMIT is processed in groonga only and the minimal records are passed to MySQL. ::
-
-  SELECT * FROM t1 WHERE MATCH(c2) AGAINST("hoge") ORDER BY c1 LIMIT 1;
-
-You can check if this optimisation works or not by the status variable. ::
-
-  mysql> SHOW STATUS LIKE 'Mroonga_fast_order_limit';
-  +--------------------------+-------+
-  | Variable_name            | Value |
-  +--------------------------+-------+
-  | Mroonga_fast_order_limit | 1     |
-  +--------------------------+-------+
-  1 row in set (0.00 sec)
-
-Each time the optimisation for counting rows works, ``Mroonga_fast_order_limit`` status variable value is increased.
-
-Note : This optimisation is targeting queries like "select ... match against order by _score desc limit X, Y" only, and it works if all of the following conditions are right.
-
-* WHERE phrase has "match...against" only
-* no JOIN
-* with LIMIT
-* ORDER BY phrase has columns (including _id) or "match...against" that is used in WHERE phrase only
+Now, you can use Mroonga as storage mode! If you want Mroonga to be
+faster, see also :doc:`/reference/optimizations`.
 
 .. rubric:: Footnotes
 
