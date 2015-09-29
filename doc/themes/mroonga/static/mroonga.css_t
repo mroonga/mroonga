@@ -21,7 +21,7 @@ body
 
 body
 {
-    font-family: #666666;
+    font-family: sans-serif;
     font-size: 100%;
     background-color: #ffffff;
     color: #000;
@@ -257,15 +257,28 @@ p.admonition-title:after
     content: ":";
 }
 
+code,
+pre
+{
+    font-family: monospace;
+    background-color: #FAFAFA;
+    border: 1px solid #DDD;
+}
+
+code
+{
+    padding: 0 4px;
+}
+
 pre
 {
     overflow: auto;
     overflow-y: hidden;
     padding: 20px;
-    background-color: #FAFAFA;
     color: #000;
     line-height: 120%;
-    border: 1px solid #DDD;
+    white-space: pre-wrap;
+    word-wrap: normal;
 }
 
 tt
