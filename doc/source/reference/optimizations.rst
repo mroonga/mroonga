@@ -15,11 +15,11 @@ Fetching only needed columns
 This optimization can work only on :doc:`/tutorial/storage`.
 
 Groonga uses column store architecture. It means that Groonga doesn't
-need to all columns for fetching a row. Groonga can fetch only
-needed columns.
+need to fetch values of all columns for fetching a column value in a
+row. Groonga can fetch only values of needed columns.
 
-InnoDB and MyISAM use row store architecture. They need to fetch all
-columns in a row when they just need some columns in a row.
+InnoDB and MyISAM use row store architecture. They need to fetch
+values of all columns for fetching a column value in a row.
 
 If you specify only columns you needed in ``SELECT``, Mroonga just
 fetches only values of these columns. Mroonga doesn't fetch values of
@@ -151,6 +151,6 @@ true:
 * No ``SQL_CALC_FOUND_ROWS``
 * With ``LIMIT``
 * :doc:`/tutorial/storage`: ``ORDER BY`` clause has only columns or
-  ``MATCH AGAINST`` that is used in WHERE clause.
+  ``MATCH AGAINST`` that is used in ``WHERE`` clause.
 * :doc:`/tutorial/wrapper`: ``ORDER BY`` clause has only primary
-  column or ``MATCH AGAINST`` that is used in WHERE clause.
+  column or ``MATCH AGAINST`` that is used in ``WHERE`` clause.

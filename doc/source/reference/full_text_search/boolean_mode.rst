@@ -1,9 +1,12 @@
 Mroonga full text search in boolean mode
 ========================================
 
-Mroonga can perform boolean full-text searches using the "IN BOOLEAN MODE" modifier.
+Mroonga can perform boolean full text searches using the ``IN BOOLEAN
+MODE`` modifier.
 
-When building a boolean search query, Mroonga supports the use of qualifiers which MySQL support, and original pragmas.
+You can use `qualifiers which MySQL support
+<https://dev.mysql.com/doc/refman/5.6/en/fulltext-boolean.html>`_ and
+Mroonga original pragmas in boolean full text search query.
 
 These qualifiers and pragmas can change the relative rank of search results.
 
