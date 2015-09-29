@@ -15,7 +15,7 @@ Improvements
 
 * [CMake][MariaDB 10.1] Supported ``PLUGIN_MROONGA=NO``.
 * [UDF] Supported ``grn_ctx`` pool. It improves performance for
-  calling UDF.
+  calling UDF because Mroonga can reduce ``grn_ctx`` initialize cost.
 
 Fixes
 ^^^^^

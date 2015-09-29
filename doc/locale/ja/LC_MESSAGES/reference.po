@@ -750,8 +750,7 @@ msgstr ""
 msgid "``mroonga_default_parser``"
 msgstr ""
 
-# ef948dd37d6b407c9c9873776e5394d6
-msgid "Use :ref:`mroonga_default_tokenizer` instead."
+msgid "Use :ref:`server-variable-mroonga-default-tokenizer` instead."
 msgstr ""
 
 msgid ""
@@ -1537,7 +1536,7 @@ msgid ""
 "Here are the explanations of status variables that are introduced by Mroonga."
 msgstr "独自に追加されたステータス変数を説明します。"
 
-msgid "Mroonga_count_skip"
+msgid "``Mroonga_count_skip``"
 msgstr ""
 
 msgid ""
@@ -1551,7 +1550,7 @@ msgstr ""
 msgid "Here is an example how to check it::"
 msgstr "確認例です::"
 
-msgid "Mroonga_fast_order_limit"
+msgid "``Mroonga_fast_order_limit``"
 msgstr ""
 
 msgid ""

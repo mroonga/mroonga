@@ -480,10 +480,7 @@ How to get snippet (Keyword in context)
 ---------------------------------------
 
 Mroonga provides functionality to get keyword in context.
-It is implemented as 'mroonga_snippet' UDF.
-
-See :doc:`/reference/udf/mroonga_snippet` about details.
-
+It is implemented as :doc:`/reference/udf/mroonga_snippet` UDF.
 
 How to run Groonga command
 --------------------------
