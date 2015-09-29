@@ -16,7 +16,7 @@ This optimization can work only on :doc:`/tutorial/storage`.
 
 Groonga uses column store architecture. It means that Groonga doesn't
 need to fetch values of all columns for fetching a column value in a
-row. Groonga can fetch only values of needed columns.
+row. Groonga can fetch values of only needed columns.
 
 InnoDB and MyISAM use row store architecture. They need to fetch
 values of all columns for fetching a column value in a row.
@@ -58,7 +58,7 @@ Row count
 This optimization can work only on :doc:`/tutorial/storage`.
 
 MySQL requires all column values from storage engine for processing
-``COUNT(\*)`` even if ``COUNT(\*)`` doesn't need them.
+``COUNT(*)`` even if ``COUNT(*)`` doesn't need them.
 
 Mroonga doesn't fetch any column values for the case.
 
@@ -70,7 +70,7 @@ Here is a ``SELECT`` to describe this optimization::
 
   SELECT COUNT(*) FROM t1 WHERE MATCH(c2) AGAINST("+keyword" IN BOOLEAN MODE);
 
-The ``SELECT`` fetches only ``COUNT(\*)`` and condition in ``WHERE``
+The ``SELECT`` fetches only ``COUNT(*)`` and condition in ``WHERE``
 can be processed only by index. In this case, Mroonga uses this
 optimization.
 
