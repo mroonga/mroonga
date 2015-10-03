@@ -1,4 +1,4 @@
-# Copyright(C) 2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,4 +19,5 @@ DROP FUNCTION last_insert_grn_id;
 DROP FUNCTION mroonga_snippet;
 DROP FUNCTION mroonga_command;
 DROP FUNCTION mroonga_escape;
+DROP FUNCTION mroonga_snippet_html;
 --enable_query_log

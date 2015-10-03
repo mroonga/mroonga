@@ -1,4 +1,4 @@
-# Copyright(C) 2013-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,12 +14,32 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../include/mroonga/check_ha_mroonga_so.inc
+--source include/not_embedded.inc
+--source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/load_mroonga_functions.inc
+
+
+--disable_warnings
+--disable_query_log
+DROP TABLE IF EXISTS keywords;
+--enable_query_log
+--enable_warnings
+
+CREATE TABLE keywords (
+  keyword text
+);
+
+INSERT INTO keywords VALUES ('Mroonga');
+INSERT INTO keywords VALUES ('Groonga');
+
+SELECT mroonga_snippet_html('Mroonga is the Groonga based storage engine.',
+                            keyword) as snippet
+  FROM keywords;
 
 --disable_query_log
-eval CREATE FUNCTION last_insert_grn_id RETURNS INTEGER SONAME $ha_mroonga_so;
-eval CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME $ha_mroonga_so;
-eval CREATE FUNCTION mroonga_command RETURNS STRING SONAME $ha_mroonga_so;
-eval CREATE FUNCTION mroonga_escape RETURNS STRING SONAME $ha_mroonga_so;
-eval CREATE FUNCTION mroonga_snippet_html RETURNS STRING SONAME $ha_mroonga_so;
+DROP TABLE keywords;
 --enable_query_log
+
+
+--source ../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc
