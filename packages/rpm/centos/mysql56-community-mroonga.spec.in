@@ -1,13 +1,13 @@
 %{!?centos_ver:%define centos_ver 6}
 
 %if %{centos_ver} == 7
-%define mysql_version_default 5.6.26
+%define mysql_version_default 5.6.27
 %define mysql_release_default 2
 %define mysql_dist_default    el7
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/7/SRPMS
 %define mysql_spec_file_default mysql.spec
 %else
-%define mysql_version_default 5.6.26
+%define mysql_version_default 5.6.27
 %define mysql_release_default 2
 %define mysql_dist_default    el6
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/6/SRPMS
@@ -24,7 +24,7 @@
 
 Name:		mysql-community-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -38,6 +38,7 @@ BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	wget
 BuildRequires:	which
 BuildRequires:	gcc, gcc-c++
+BuildRequires:  numactl-devel
 BuildRequires:	mysql-community-devel = %{mysql_version}-%{mysql_release}.%{mysql_dist}
 Requires:	mysql-community-server = %{mysql_version}-%{mysql_release}.%{mysql_dist}
 Requires:	mysql-community-client = %{mysql_version}-%{mysql_release}.%{mysql_dist}
@@ -183,6 +184,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sat Oct 03 2015 Kouhei Sutou <kou@clear-code.com> - 5.08-2
+- build against MySQL 5.6.27. Reported by @star_orihime. Thanks!!!
+
 * Tue Sep 29 2015 Kouhei Sutou <kou@clear-code.com> - 5.08-1
 - new upstream release.
 
