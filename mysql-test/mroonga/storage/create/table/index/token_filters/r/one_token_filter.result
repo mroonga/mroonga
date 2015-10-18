@@ -8,10 +8,10 @@ FULLTEXT INDEX (content) COMMENT 'token_filters "TokenFilterStopWord"'
 ) DEFAULT CHARSET=utf8;
 SELECT mroonga_command("dump --dump_plugins no");
 mroonga_command("dump --dump_plugins no")
-table_create mrn_operations TABLE_NO_KEY
-column_create mrn_operations record COLUMN_SCALAR UInt32
-column_create mrn_operations table COLUMN_SCALAR ShortText
-column_create mrn_operations type COLUMN_SCALAR ShortText
+table_create mroonga_operations TABLE_NO_KEY
+column_create mroonga_operations record COLUMN_SCALAR UInt32
+column_create mroonga_operations table COLUMN_SCALAR ShortText
+column_create mroonga_operations type COLUMN_SCALAR ShortText
 
 table_create memos TABLE_NO_KEY
 column_create memos content COLUMN_SCALAR ShortText

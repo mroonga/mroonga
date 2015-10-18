@@ -22,7 +22,7 @@
 // for debug
 #define MRN_CLASS_NAME "mrn::Operations"
 
-#define TABLE_NAME "mrn_operations"
+#define TABLE_NAME "mroonga_operations"
 #define COLUMN_TYPE_NAME   "type"
 #define COLUMN_TABLE_NAME  "table"
 #define COLUMN_RECORD_NAME "record"
