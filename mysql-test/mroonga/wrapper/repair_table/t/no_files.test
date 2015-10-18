@@ -36,13 +36,7 @@ INSERT INTO diaries (title, body) VALUES ("groonga (2)", "started groonga.");
 
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
---remove_file $MYSQLD_DATADIR/repair_test.mrn
---remove_file $MYSQLD_DATADIR/repair_test.mrn.001
---remove_file $MYSQLD_DATADIR/repair_test.mrn.0000000
---remove_file $MYSQLD_DATADIR/repair_test.mrn.0000105
---remove_file $MYSQLD_DATADIR/repair_test.mrn.0000106
---remove_file $MYSQLD_DATADIR/repair_test.mrn.0000107
---remove_file $MYSQLD_DATADIR/repair_test.mrn.0000107.c
+--remove_files_wildcard $MYSQLD_DATADIR repair_test.mrn*
 
 FLUSH TABLES;
 
