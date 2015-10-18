@@ -35,6 +35,10 @@ namespace mrn {
     void record_target(grn_id id, grn_id target_id);
     void finish(grn_id id);
 
+    bool is_remain(const char *table_name, size_t table_name_size);
+    int repair(const char *table_name, size_t table_name_size);
+    void clear(const char *table_name, size_t table_name_size);
+
   private:
     grn_ctx *ctx_;
     grn_obj text_buffer_;

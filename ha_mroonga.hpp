@@ -1069,8 +1069,10 @@ private:
   bool wrapper_auto_repair(int error) const;
   bool storage_auto_repair(int error) const;
   int generic_disable_index(int i, KEY *key_info);
+  int wrapper_disable_indexes_mroonga(uint mode);
   int wrapper_disable_indexes(uint mode);
   int storage_disable_indexes(uint mode);
+  int wrapper_enable_indexes_mroonga(uint mode);
   int wrapper_enable_indexes(uint mode);
   int storage_enable_indexes(uint mode);
   int wrapper_check(THD* thd, HA_CHECK_OPT* check_opt);

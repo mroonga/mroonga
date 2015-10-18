@@ -17,7 +17,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <string.h>
+
 #include "mrn_operations.hpp"
+#include "mrn_smart_grn_obj.hpp"
+#include "mrn_path_mapper.hpp"
 
 // for debug
 #define MRN_CLASS_NAME "mrn::Operations"
@@ -72,10 +76,6 @@ namespace mrn {
   Operations::~Operations() {
     MRN_DBUG_ENTER_METHOD();
 
-    grn_obj_unlink(ctx_, columns_.record_);
-    grn_obj_unlink(ctx_, columns_.table_);
-    grn_obj_unlink(ctx_, columns_.type_);
-    grn_obj_unlink(ctx_, table_);
     GRN_OBJ_FIN(ctx_, &id_buffer_);
     GRN_OBJ_FIN(ctx_, &text_buffer_);
 
@@ -110,6 +110,134 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
 
     grn_table_delete_by_id(ctx_, table_, id);
+
+    DBUG_VOID_RETURN;
+  }
+
+  bool Operations::is_remain(const char *table_name, size_t table_name_size) {
+    MRN_DBUG_ENTER_METHOD();
+
+    grn_table_cursor *cursor;
+    cursor = grn_table_cursor_open(ctx_, table_, NULL, 0, NULL, 0, 0, -1, 0);
+    if (!cursor) {
+      DBUG_RETURN(false);
+    }
+
+    bool have_operation = false;
+    grn_id id;
+    while ((id = grn_table_cursor_next(ctx_, cursor))) {
+      GRN_BULK_REWIND(&text_buffer_);
+      grn_obj_get_value(ctx_, columns_.table_, id, &text_buffer_);
+      if ((static_cast<size_t>(GRN_TEXT_LEN(&text_buffer_)) ==
+           table_name_size) &&
+          memcmp(GRN_TEXT_VALUE(&text_buffer_),
+                 table_name,
+                 table_name_size) == 0) {
+        have_operation = true;
+        break;
+      }
+    }
+    grn_table_cursor_close(ctx_, cursor);
+
+    DBUG_RETURN(have_operation);
+  }
+
+  int Operations::repair(const char *table_name, size_t table_name_size) {
+    MRN_DBUG_ENTER_METHOD();
+
+    int error = 0;
+
+    grn_table_cursor *cursor;
+    cursor = grn_table_cursor_open(ctx_, table_, NULL, 0, NULL, 0, 0, -1, 0);
+    if (!cursor) {
+      error = HA_ERR_CRASHED_ON_USAGE;
+      if (ctx_->rc) {
+        my_message(error, ctx_->errbuf, MYF(0));
+      } else {
+        my_message(error,
+                   "mroonga: repair: "
+                   "failed to open cursor for operations table",
+                   MYF(0));
+      }
+      DBUG_RETURN(error);
+    }
+
+    char terminated_table_name[MRN_MAX_PATH_SIZE];
+    memcpy(terminated_table_name, table_name, table_name_size);
+    terminated_table_name[table_name_size] = '\0';
+    mrn::PathMapper mapper(terminated_table_name);
+    mrn::SmartGrnObj target_table(ctx_, mapper.table_name());
+
+    grn_id id;
+    while ((id = grn_table_cursor_next(ctx_, cursor))) {
+      GRN_BULK_REWIND(&text_buffer_);
+      grn_obj_get_value(ctx_, columns_.table_, id, &text_buffer_);
+      if (!((static_cast<size_t>(GRN_TEXT_LEN(&text_buffer_)) ==
+             table_name_size) &&
+            memcmp(GRN_TEXT_VALUE(&text_buffer_),
+                   table_name,
+                   table_name_size) == 0)) {
+        continue;
+      }
+
+      GRN_BULK_REWIND(&id_buffer_);
+      grn_obj_get_value(ctx_, columns_.record_, id, &id_buffer_);
+      grn_id record_id = GRN_UINT32_VALUE(&id_buffer_);
+      if (record_id == GRN_ID_NIL) {
+        grn_table_cursor_delete(ctx_, cursor);
+        continue;
+      }
+
+      GRN_BULK_REWIND(&text_buffer_);
+      grn_obj_get_value(ctx_, columns_.type_, id, &text_buffer_);
+      GRN_TEXT_PUTC(ctx_, &text_buffer_, '\0');
+      if (strcmp(GRN_TEXT_VALUE(&text_buffer_), "write") == 0 ||
+          strcmp(GRN_TEXT_VALUE(&text_buffer_), "delete") == 0) {
+        grn_table_delete_by_id(ctx_, target_table.get(), record_id);
+        grn_table_cursor_delete(ctx_, cursor);
+      } else if (strcmp(GRN_TEXT_VALUE(&text_buffer_), "update") == 0) {
+        error = HA_ERR_CRASHED_ON_USAGE;
+        my_message(error,
+                   "mroonga: repair: can't recover from crash while updating",
+                   MYF(0));
+        break;
+      } else {
+        error = HA_ERR_CRASHED_ON_USAGE;
+        char error_message[MRN_MESSAGE_BUFFER_SIZE];
+        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                 "mroonga: repair: unknown operation type: <%s>",
+                 GRN_TEXT_VALUE(&text_buffer_));
+        my_message(error, error_message, MYF(0));
+        break;
+      }
+    }
+    grn_table_cursor_close(ctx_, cursor);
+
+    DBUG_RETURN(error);
+  }
+
+  void Operations::clear(const char *table_name, size_t table_name_size) {
+    MRN_DBUG_ENTER_METHOD();
+
+    grn_table_cursor *cursor;
+    cursor = grn_table_cursor_open(ctx_, table_, NULL, 0, NULL, 0, 0, -1, 0);
+    if (!cursor) {
+      DBUG_VOID_RETURN;
+    }
+
+    grn_id id;
+    while ((id = grn_table_cursor_next(ctx_, cursor))) {
+      GRN_BULK_REWIND(&text_buffer_);
+      grn_obj_get_value(ctx_, columns_.table_, id, &text_buffer_);
+      if ((static_cast<size_t>(GRN_TEXT_LEN(&text_buffer_)) ==
+           table_name_size) &&
+          memcmp(GRN_TEXT_VALUE(&text_buffer_),
+                 table_name,
+                 table_name_size) == 0) {
+        grn_table_cursor_delete(ctx_, cursor);
+      }
+    }
+    grn_table_cursor_close(ctx_, cursor);
 
     DBUG_VOID_RETURN;
   }
