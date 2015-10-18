@@ -4643,7 +4643,7 @@ int ha_mroonga::generic_delete_table(const char *name, const char *table_name)
 
   error = drop_indexes(table_name);
   grn_obj *table_obj = grn_ctx_get(ctx, table_name, strlen(table_name));
-  if (!ctx->rc) {
+  if (table_obj) {
     grn_obj_remove(ctx, table_obj);
   }
   if (ctx->rc) {
