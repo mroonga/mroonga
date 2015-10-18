@@ -23,7 +23,7 @@ id	title	body
 2	Groonga (1)	starting Groonga...
 FLUSH TABLES;
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("+starting" IN BOOLEAN MODE);
-ERROR HY000: syscall error 'repair_test.mrn.000010A.c' (No such file or directory)
+ERROR HY000: syscall error 'repair_test.mrn.000010E.c' (No such file or directory)
 REPAIR TABLE diaries;
 Table	Op	Msg_type	Msg_text
 repair_test.diaries	repair	status	OK

@@ -32,6 +32,7 @@ extern "C" {
 
 #include <groonga.h>
 #include "mrn_mysql_compat.h"
+#include <mrn_operations.hpp>
 
 #if (MYSQL_VERSION_ID >= 50514 && MYSQL_VERSION_ID < 50600)
 #  define MRN_HANDLER_HAVE_FINAL_ADD_INDEX 1
@@ -346,6 +347,10 @@ private:
 
   // for ft in where clause test
   Item_func_match *current_ft_item;
+
+  struct {
+    mrn::Operations *operations_;
+  } storage_;
 
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg);

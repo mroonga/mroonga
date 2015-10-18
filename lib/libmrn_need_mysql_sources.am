@@ -30,4 +30,8 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_database_repairer.cpp		\
 	mrn_database_repairer.hpp		\
 	mrn_context_pool.cpp			\
-	mrn_context_pool.hpp
+	mrn_context_pool.hpp			\
+	mrn_operations.cpp			\
+	mrn_operations.hpp			\
+	mrn_operation.cpp			\
+	mrn_operation.hpp
