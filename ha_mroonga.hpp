@@ -348,9 +348,7 @@ private:
   // for ft in where clause test
   Item_func_match *current_ft_item;
 
-  struct {
-    mrn::Operations *operations_;
-  } storage_;
+  mrn::Operations *operations_;
 
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg);

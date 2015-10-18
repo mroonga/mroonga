@@ -2356,7 +2356,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    ignoring_no_key_columns(false),
    replacing_(false),
    written_by_row_based_binlog(0),
-   current_ft_item(NULL)
+   current_ft_item(NULL),
+   operations_(NULL)
 {
   MRN_DBUG_ENTER_METHOD();
   grn_ctx_init(ctx, 0);
@@ -2369,9 +2370,6 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   GRN_TEXT_INIT(&encoded_key_buffer, 0);
   GRN_VOID_INIT(&old_value_buffer);
   GRN_VOID_INIT(&new_value_buffer);
-
-  storage_.operations_ = NULL;
-
   DBUG_VOID_RETURN;
 }
 
@@ -2379,7 +2377,7 @@ ha_mroonga::~ha_mroonga()
 {
   MRN_DBUG_ENTER_METHOD();
 
-  delete storage_.operations_;
+  delete operations_;
 
   if (analyzed_for_create) {
     if (wrap_handler_for_create) {
@@ -3926,8 +3924,8 @@ int ha_mroonga::ensure_database_open(const char *name)
 
   grn_ctx_use(ctx, db);
 
-  delete storage_.operations_;
-  storage_.operations_ = new mrn::Operations(ctx);
+  delete operations_;
+  operations_ = new mrn::Operations(ctx);
 
   DBUG_RETURN(error);
 }
@@ -3942,8 +3940,8 @@ int ha_mroonga::ensure_database_remove(const char *name)
   if (error)
     DBUG_RETURN(error);
 
-  delete storage_.operations_;
-  storage_.operations_ = NULL;
+  delete operations_;
+  operations_ = NULL;
 
   mrn_db_manager->close(name);
 
@@ -5426,7 +5424,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
     DBUG_RETURN(error);
   }
 
-  mrn::Operation operation(storage_.operations_,
+  mrn::Operation operation(operations_,
                            "write",
                            table->s->table_name.str,
                            table->s->table_name.length);
