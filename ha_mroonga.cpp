@@ -4079,6 +4079,9 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
         error = wrapper_enable_indexes_mroonga(HA_KEY_SWITCH_ALL);
       }
     }
+    GRN_LOG(ctx, GRN_LOG_NOTICE,
+            "Auto repair is done: <%s>: %s",
+            name, error == 0 ? "success" : "failure");
   }
 
   if (error)
@@ -4276,6 +4279,9 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
         if (!error)
           error = storage_enable_indexes(HA_KEY_SWITCH_ALL);
       }
+      GRN_LOG(ctx, GRN_LOG_NOTICE,
+              "Auto repair is done: <%s>: %s",
+              name, error == 0 ? "success" : "failure");
     }
   }
 
