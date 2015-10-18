@@ -27,7 +27,7 @@ drop table if exists comments;
 --enable_warnings
 
 create table comments(
-  comment int unsigned,
+  comment int unsigned DEFAULT 0,
   content text not null,
   primary key(comment)
 );
@@ -58,7 +58,7 @@ rename table comments to comments2;
 rename table articles to articles2;
 
 create table comments(
-  comment int unsigned,
+  comment int unsigned DEFAULT 0,
   content text not null,
   primary key(comment)
 );

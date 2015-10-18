@@ -3,7 +3,7 @@ drop table if exists articles;
 drop table if exists comments2;
 drop table if exists comments;
 create table comments(
-comment int unsigned,
+comment int unsigned DEFAULT 0,
 content text not null,
 primary key(comment)
 );
@@ -47,7 +47,7 @@ def	test	comment	def	test	PRIMARY	NONE	RESTRICT	RESTRICT	articles	comments
 rename table comments to comments2;
 rename table articles to articles2;
 create table comments(
-comment int unsigned,
+comment int unsigned DEFAULT 0,
 content text not null,
 primary key(comment)
 );

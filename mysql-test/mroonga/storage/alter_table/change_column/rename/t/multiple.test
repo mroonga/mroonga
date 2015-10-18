@@ -31,7 +31,7 @@ SHOW CREATE TABLE diaries;
 ALTER TABLE diaries
   CHANGE body description TEXT FIRST,
   CHANGE title subject TEXT AFTER internal_id,
-  CHANGE id internal_id INT;
+  CHANGE id internal_id INT AUTO_INCREMENT;
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (subject, description)

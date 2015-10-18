@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS diaries;
 
 SET NAMES UTF8;
 CREATE TABLE ft(
-  a INT,
+  a INT DEFAULT 0,
   b TEXT,
   c TEXT,
   PRIMARY KEY(a),

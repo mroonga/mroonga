@@ -15,12 +15,12 @@ diaries	CREATE TABLE `diaries` (
 ALTER TABLE diaries
 CHANGE body description TEXT FIRST,
 CHANGE title subject TEXT AFTER internal_id,
-CHANGE id internal_id INT;
+CHANGE id internal_id INT AUTO_INCREMENT;
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `description` text,
-  `internal_id` int(11) NOT NULL DEFAULT '0',
+  `internal_id` int(11) NOT NULL AUTO_INCREMENT,
   `subject` text,
   PRIMARY KEY (`internal_id`)
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8
@@ -28,5 +28,5 @@ INSERT INTO diaries (subject, description)
 VALUES ("groonga (1)", "starting groonga.");
 SELECT * FROM diaries;
 description	internal_id	subject
-starting groonga.	0	groonga (1)
+starting groonga.	1	groonga (1)
 DROP TABLE diaries;
