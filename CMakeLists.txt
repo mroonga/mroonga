@@ -457,6 +457,8 @@ else()
   set(MRN_DATA_DIR "share/${PROJECT_NAME}")
 endif()
 install(FILES
+  "${PROJECT_SOURCE_DIR}/AUTHORS"
+  "${PROJECT_SOURCE_DIR}/COPYING"
   "${PROJECT_BINARY_DIR}/data/install.sql"
   "${PROJECT_SOURCE_DIR}/data/uninstall.sql"
   DESTINATION "${MRN_DATA_DIR}/")
