@@ -205,6 +205,18 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
 #endif
 
+#if MYSQL_VERSION_ID >= 50709 && !defined(MRN_MARIADB_P)
+#  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE \
+  Alter_inplace_info::ALTER_STORED_COLUMN_TYPE
+#  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_ORDER \
+  Alter_inplace_info::ALTER_STORED_COLUMN_ORDER
+#else
+#  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE \
+  Alter_inplace_info::ALTER_COLUMN_TYPE
+#  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_ORDER \
+  Alter_inplace_info::ALTER_COLUMN_ORDER
+#endif
+
 class ha_mroonga;
 
 /* structs */
