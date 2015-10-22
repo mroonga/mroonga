@@ -20,8 +20,6 @@
 #ifndef MRN_OPERATIONS_HPP_
 #define MRN_OPERATIONS_HPP_
 
-#include <mrn_mysql_compat.h>
-
 #include <groonga.h>
 
 namespace mrn {
