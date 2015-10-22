@@ -221,10 +221,18 @@
                  MYF(0))
 #  endif
 #else
+#  if MYSQL_VERSION_ID >= 50709
+#    define mrn_init_sql_alloc(thd, mem_root)           \
+  init_sql_alloc(mrn_memory_key,                        \
+                 mem_root,                              \
+                 TABLE_ALLOC_BLOCK_SIZE,                \
+                 0)
+#  else
 #    define mrn_init_sql_alloc(thd, mem_root)           \
   init_sql_alloc(mem_root,                              \
                  TABLE_ALLOC_BLOCK_SIZE,                \
                  0)
+#  endif
 #endif
 
 #ifdef MRN_MARIADB_P
