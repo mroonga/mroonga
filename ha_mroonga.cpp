@@ -1757,8 +1757,8 @@ static int mrn_init(void *p)
                         MY_MUTEX_INIT_FAST) != 0)) {
     goto err_allocated_thds_mutex_init;
   }
-  if (my_hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
-                   mrn_allocated_thds_get_key, 0, 0)) {
+  if (mrn_my_hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
+                       mrn_allocated_thds_get_key, 0, 0)) {
     goto error_allocated_thds_hash_init;
   }
   if ((mysql_mutex_init(mrn_open_tables_mutex_key,
@@ -1766,8 +1766,8 @@ static int mrn_init(void *p)
                         MY_MUTEX_INIT_FAST) != 0)) {
     goto err_allocated_open_tables_mutex_init;
   }
-  if (my_hash_init(&mrn_open_tables, system_charset_info, 32, 0, 0,
-                   mrn_open_tables_get_key, 0, 0)) {
+  if (mrn_my_hash_init(&mrn_open_tables, system_charset_info, 32, 0, 0,
+                       mrn_open_tables_get_key, 0, 0)) {
     goto error_allocated_open_tables_hash_init;
   }
   if ((mysql_mutex_init(mrn_long_term_share_mutex_key,
@@ -1775,8 +1775,8 @@ static int mrn_init(void *p)
                         MY_MUTEX_INIT_FAST) != 0)) {
     goto error_allocated_long_term_share_mutex_init;
   }
-  if (my_hash_init(&mrn_long_term_share, system_charset_info, 32, 0, 0,
-                   mrn_long_term_share_get_key, 0, 0)) {
+  if (mrn_my_hash_init(&mrn_long_term_share, system_charset_info, 32, 0, 0,
+                       mrn_long_term_share_get_key, 0, 0)) {
     goto error_allocated_long_term_share_hash_init;
   }
 
