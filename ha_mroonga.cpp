@@ -1413,6 +1413,11 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   case MYSQL_TYPE_GEOMETRY:     // case-by-case
     type = GRN_DB_WGS84_GEO_POINT; // 8bytes
     break;
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+  case MYSQL_TYPE_JSON:
+    type = GRN_DB_TEXT;
+    break;
+#endif
   }
   return type;
 }
@@ -10369,6 +10374,20 @@ int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+int ha_mroonga::generic_store_bulk_json(Field *field, grn_obj *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  String buffer;
+  Field_json *json = static_cast<Field_json *>(field);
+  String *value = json->val_str(&buffer, NULL);
+  grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
+  GRN_TEXT_SET(ctx, buf, value->ptr(), value->length());
+  DBUG_RETURN(error);
+}
+#endif
+
 int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -10459,6 +10478,11 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
   case MYSQL_TYPE_GEOMETRY:
     error = generic_store_bulk_geometry(field, buf);
     break;
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+  case MYSQL_TYPE_JSON:
+    error = generic_store_bulk_json(field, buf);
+    break;
+#endif
   default:
     error = HA_ERR_UNSUPPORTED;
     break;
@@ -10819,6 +10843,18 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+void ha_mroonga::storage_store_field_json(Field *field,
+                                          const char *value,
+                                          uint value_length)
+{
+  MRN_DBUG_ENTER_METHOD();
+  Field_json *json = static_cast<Field_json *>(field);
+  json->store(value, value_length, field->charset());
+  DBUG_VOID_RETURN;
+}
+#endif
+
 void ha_mroonga::storage_store_field(Field *field,
                                      const char *value, uint value_length)
 {
@@ -10902,6 +10938,11 @@ void ha_mroonga::storage_store_field(Field *field,
   case MYSQL_TYPE_GEOMETRY:
     storage_store_field_geometry(field, value, value_length);
     break;
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+  case MYSQL_TYPE_JSON:
+    storage_store_field_json(field, value, value_length);
+    break;
+#endif
   }
 }
 

@@ -662,6 +662,9 @@ private:
   int generic_store_bulk_new_decimal(Field *field, grn_obj *buf);
   int generic_store_bulk_blob(Field *field, grn_obj *buf);
   int generic_store_bulk_geometry(Field *field, grn_obj *buf);
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+  int generic_store_bulk_json(Field *field, grn_obj *buf);
+#endif
   int generic_store_bulk(Field *field, grn_obj *buf);
 
   void storage_store_field_string(Field *field,
@@ -697,6 +700,10 @@ private:
                                 const char *value, uint value_length);
   void storage_store_field_geometry(Field *field,
                                     const char *value, uint value_length);
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+  void storage_store_field_json(Field *field,
+                                const char *value, uint value_length);
+#endif
   void storage_store_field(Field *field, const char *value, uint value_length);
   void storage_store_field_column(Field *field, bool is_primary_key,
                                   int nth_column, grn_id record_id);

@@ -28,6 +28,10 @@
 #  define MRN_HAVE_MYSQL_TYPE_TIME2
 #endif
 
+#if MYSQL_VERSION_ID >= 50709 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_MYSQL_TYPE_JSON
+#endif
+
 #if MYSQL_VERSION_ID < 50603
   typedef MYSQL_ERROR Sql_condition;
 #endif

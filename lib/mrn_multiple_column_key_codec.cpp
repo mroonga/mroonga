@@ -519,6 +519,14 @@ namespace mrn {
       *data_type = TYPE_BYTE_SEQUENCE;
       *data_size = key_part->length;
       break;
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+    case MYSQL_TYPE_JSON:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_JSON"));
+      *data_type = TYPE_BYTE_SEQUENCE;
+      *data_size = key_part->length;
+      break;
+#endif
     }
     DBUG_VOID_RETURN;
   }

@@ -352,6 +352,11 @@ namespace mrn {
     case MYSQL_TYPE_GEOMETRY:
       type = UNSUPPORTED_TYPE;
       break;
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+    case MYSQL_TYPE_JSON:
+      type = STRING_TYPE;
+      break;
+#endif
     }
 
     DBUG_RETURN(type);
