@@ -5,6 +5,48 @@
 News
 ====
 
+.. _release-5-09:
+
+Release 5.09 - 2015-10-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm][mysql56-community-mroonga] Updated target MySQL to 5.6.27.
+  [Reported by @star_orihime]
+
+* [UDF][``mroonga_snippet_html``] Added a new UDF that returns snippet
+  for HTML output.
+
+* [Windows] Bundled MeCab.
+
+* [Windows] Updated base MariaDB to 10.1.8.
+
+* [MariaDB 10.1] Supported MariaDB 10.1.8.
+
+* Supported auto repair on crash.
+  [groonga-dev,03515][Suggested by Hiroshi Kagami]
+
+* [MySQL 5.7] Supported MySQL 5.7.9.
+
+* [MySQL 5.7] Supported JSON type.
+
+Fixes
+^^^^^
+
+* Fixed a bug that ``MRBContains()`` doesn't use index.
+  [GitHub#73] [Reported by Petri Rautiainen]
+
+Thanks
+^^^^^^
+
+* @star_orihime
+
+* Hiroshi Kagami
+
+* Petri Rautiainen
+
 .. _release-5-08:
 
 Release 5.08 - 2015-09-29
