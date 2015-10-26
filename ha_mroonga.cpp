@@ -4074,19 +4074,22 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
   pk_keypart_map = make_prev_keypart_map(
     KEY_N_KEY_PARTS(&(table->key_info[table_share->primary_key])));
 
-  if (!error &&
-      !(open_options & HA_OPEN_FOR_REPAIR) &&
-      operations_->is_remain(name, strlen(name))) {
-    operations_->clear(name, strlen(name));
-    if (!share->disable_keys) {
-      error = wrapper_disable_indexes_mroonga(HA_KEY_SWITCH_ALL);
-      if (!error) {
-        error = wrapper_enable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+  if (!error && !(open_options & HA_OPEN_FOR_REPAIR)) {
+    mrn::PathMapper mapper(name);
+    if (operations_->is_remain(mapper.table_name(),
+                               strlen(mapper.table_name()))) {
+      operations_->clear(mapper.table_name(),
+                         strlen(mapper.table_name()));
+      if (!share->disable_keys) {
+        error = wrapper_disable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+        if (!error) {
+          error = wrapper_enable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+        }
       }
+      GRN_LOG(ctx, GRN_LOG_NOTICE,
+              "Auto repair is done: <%s>: %s",
+              name, error == 0 ? "success" : "failure");
     }
-    GRN_LOG(ctx, GRN_LOG_NOTICE,
-            "Auto repair is done: <%s>: %s",
-            name, error == 0 ? "success" : "failure");
   }
 
   if (error)
@@ -4276,8 +4279,11 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
 
     storage_set_keys_in_use();
 
-    if (operations_->is_remain(name, strlen(name))) {
-      error = operations_->repair(name, strlen(name));
+    mrn::PathMapper mapper(name);
+    if (operations_->is_remain(mapper.table_name(),
+                               strlen(mapper.table_name()))) {
+      error = operations_->repair(mapper.table_name(),
+                                  strlen(mapper.table_name()));
       if (!share->disable_keys) {
         if (!error)
           error = storage_disable_indexes(HA_KEY_SWITCH_ALL);

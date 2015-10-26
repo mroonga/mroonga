@@ -22,8 +22,6 @@
 #include <string.h>
 
 #include "mrn_operations.hpp"
-#include "mrn_smart_grn_obj.hpp"
-#include "mrn_path_mapper.hpp"
 
 // for debug
 #define MRN_CLASS_NAME "mrn::Operations"
@@ -164,11 +162,12 @@ namespace mrn {
       DBUG_RETURN(error);
     }
 
-    char terminated_table_name[MRN_MAX_PATH_SIZE];
-    memcpy(terminated_table_name, table_name, table_name_size);
-    terminated_table_name[table_name_size] = '\0';
-    mrn::PathMapper mapper(terminated_table_name);
-    mrn::SmartGrnObj target_table(ctx_, mapper.table_name());
+    grn_obj *target_table = grn_ctx_get(ctx_, table_name, table_name_size);
+    if (!target_table) {
+      GRN_LOG(ctx_, GRN_LOG_WARNING,
+              "table doesn't exist for auto repair: <%.*s>",
+              static_cast<int>(table_name_size), table_name);
+    }
 
     grn_id id;
     while ((id = grn_table_cursor_next(ctx_, cursor))) {
@@ -179,6 +178,11 @@ namespace mrn {
             memcmp(GRN_TEXT_VALUE(&text_buffer_),
                    table_name,
                    table_name_size) == 0)) {
+        continue;
+      }
+
+      if (!target_table) {
+        grn_table_cursor_delete(ctx_, cursor);
         continue;
       }
 
@@ -195,7 +199,7 @@ namespace mrn {
       GRN_TEXT_PUTC(ctx_, &text_buffer_, '\0');
       if (strcmp(GRN_TEXT_VALUE(&text_buffer_), "write") == 0 ||
           strcmp(GRN_TEXT_VALUE(&text_buffer_), "delete") == 0) {
-        grn_table_delete_by_id(ctx_, target_table.get(), record_id);
+        grn_table_delete_by_id(ctx_, target_table, record_id);
         grn_table_cursor_delete(ctx_, cursor);
       } else if (strcmp(GRN_TEXT_VALUE(&text_buffer_), "update") == 0) {
         error = HA_ERR_CRASHED_ON_USAGE;
