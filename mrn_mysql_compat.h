@@ -252,7 +252,7 @@
 #define MRN_ERROR_CODE_DATA_TRUNCATE(thd)                               \
   (MRN_ABORT_ON_WARNING(thd) ? ER_WARN_DATA_OUT_OF_RANGE : WARN_DATA_TRUNCATED)
 
-#if MYSQL_VERSION_ID >= 50709 && !defined(MRN_MAIRADB_P)
+#if MYSQL_VERSION_ID >= 50709 && !defined(MRN_MARIADB_P)
 #  define mrn_my_hash_init(hash,                        \
                            charset,                     \
                            default_array_elements,      \
