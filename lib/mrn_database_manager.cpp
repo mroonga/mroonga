@@ -56,9 +56,9 @@ namespace mrn {
     if (cache_) {
       void *db_address;
       GRN_HASH_EACH(ctx_, cache_, id, NULL, 0, &db_address, {
-        grn_obj *db;
+        Database *db;
         memcpy(&db, db_address, sizeof(grn_obj *));
-        grn_obj_unlink(ctx_, db);
+        delete db;
       });
       grn_hash_close(ctx_, cache_);
     }
@@ -80,7 +80,7 @@ namespace mrn {
     DBUG_RETURN(true);
   }
 
-  int DatabaseManager::open(const char *path, grn_obj **db) {
+  int DatabaseManager::open(const char *path, Database **db) {
     MRN_DBUG_ENTER_METHOD();
 
     int error = 0;
@@ -100,6 +100,7 @@ namespace mrn {
                       mapper.db_name(), strlen(mapper.db_name()),
                       &db_address);
     if (id == GRN_ID_NIL) {
+      grn_obj *grn_db;
       struct stat db_stat;
       if (stat(mapper.db_path(), &db_stat)) {
         GRN_LOG(ctx_, GRN_LOG_INFO,
@@ -108,28 +109,29 @@ namespace mrn {
             (path[1] == FN_LIBCHAR || path[1] == FN_LIBCHAR2)) {
           ensure_database_directory();
         }
-        *db = grn_db_create(ctx_, mapper.db_path(), NULL);
+        grn_db = grn_db_create(ctx_, mapper.db_path(), NULL);
         if (ctx_->rc) {
           error = ER_CANT_CREATE_TABLE;
           my_message(error, ctx_->errbuf, MYF(0));
           DBUG_RETURN(error);
         }
       } else {
-        *db = grn_db_open(ctx_, mapper.db_path());
+        grn_db = grn_db_open(ctx_, mapper.db_path());
         if (ctx_->rc) {
           error = ER_CANT_OPEN_FILE;
           my_message(error, ctx_->errbuf, MYF(0));
           DBUG_RETURN(error);
         }
       }
+      *db = new Database(ctx_, grn_db);
       grn_hash_add(ctx_, cache_,
                    mapper.db_name(), strlen(mapper.db_name()),
                    &db_address, NULL);
-      memcpy(db_address, db, sizeof(grn_obj *));
-      error = ensure_normalizers_registered(*db);
+      memcpy(db_address, db, sizeof(Database *));
+      error = ensure_normalizers_registered((*db)->get());
     } else {
-      memcpy(db, db_address, sizeof(grn_obj *));
-      grn_ctx_use(ctx_, *db);
+      memcpy(db, db_address, sizeof(Database *));
+      grn_ctx_use(ctx_, (*db)->get());
     }
 
     DBUG_RETURN(error);
@@ -150,10 +152,10 @@ namespace mrn {
       DBUG_VOID_RETURN;
     }
 
-    grn_obj *db = NULL;
-    memcpy(&db, db_address, sizeof(grn_obj *));
+    Database *db = NULL;
+    memcpy(&db, db_address, sizeof(Database *));
     if (db) {
-      grn_obj_close(ctx_, db);
+      db->close();
     }
 
     grn_hash_delete_by_id(ctx_, cache_, id, NULL);
@@ -173,21 +175,22 @@ namespace mrn {
                       mapper.db_name(), strlen(mapper.db_name()),
                       &db_address);
 
-    grn_obj *db = NULL;
+    Database *db = NULL;
     if (id == GRN_ID_NIL) {
       struct stat dummy;
       if (stat(mapper.db_path(), &dummy) == 0) {
-        db = grn_db_open(ctx_, mapper.db_path());
+        grn_obj *grn_db = grn_db_open(ctx_, mapper.db_path());
+        db = new Database(ctx_, grn_db);
       }
     } else {
-      memcpy(&db, db_address, sizeof(grn_obj *));
+      memcpy(&db, db_address, sizeof(Database *));
     }
 
     if (!db) {
       DBUG_RETURN(false);
     }
 
-    if (grn_obj_remove(ctx_, db) == GRN_SUCCESS) {
+    if (db->remove() == GRN_SUCCESS) {
       if (id != GRN_ID_NIL) {
         grn_hash_delete_by_id(ctx_, cache_, id, NULL);
       }
@@ -223,16 +226,16 @@ namespace mrn {
         break;
       }
       void *db_address;
-      grn_obj *db;
+      Database *db;
       grn_hash_cursor_get_value(ctx_, cursor, &db_address);
-      memcpy(&db, db_address, sizeof(grn_obj *));
+      memcpy(&db, db_address, sizeof(Database *));
       grn_rc rc = grn_hash_cursor_delete(ctx_, cursor, NULL);
       if (rc) {
         error = ER_ERROR_ON_READ;
         my_message(error, ctx_->errbuf, MYF(0));
         break;
       }
-      grn_obj_close(ctx_, db);
+      db->close();
     }
     grn_hash_cursor_close(ctx_, cursor);
 

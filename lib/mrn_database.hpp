@@ -1,8 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,32 +17,25 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_DATABASE_MANAGER_HPP_
-#define MRN_DATABASE_MANAGER_HPP_
+#ifndef MRN_DATABASE_HPP_
+#define MRN_DATABASE_HPP_
 
 #include <groonga.h>
-#include "mrn_database.hpp"
 
 namespace mrn {
-  class DatabaseManager {
+  class Database {
   public:
-    DatabaseManager(grn_ctx *ctx, mysql_mutex_t *mutex);
-    ~DatabaseManager(void);
-    bool init(void);
-    int open(const char *path, Database **db);
-    void close(const char *path);
-    bool drop(const char *path);
-    int clear(void);
+    Database(grn_ctx *ctx, grn_obj *db);
+    ~Database(void);
+
+    void close();
+    grn_rc remove();
+    grn_obj *get();
 
   private:
     grn_ctx *ctx_;
-    grn_hash *cache_;
-    mysql_mutex_t *mutex_;
-
-    void mkdir_p(const char *directory);
-    void ensure_database_directory(void);
-    int ensure_normalizers_registered(grn_obj *db);
+    grn_obj *db_;
   };
 }
 
-#endif /* MRN_DATABASE_MANAGER_HPP_ */
+#endif /* MRN_DATABASE_HPP_ */

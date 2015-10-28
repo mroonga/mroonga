@@ -190,8 +190,10 @@ MRN_API my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *mes
     const char *action;
     if (current_db_path) {
       action = "open database";
-      int error = mrn_db_manager->open(current_db_path, &(snip_info->db));
+      mrn::Database *db;
+      int error = mrn_db_manager->open(current_db_path, &db);
       if (error == 0) {
+        snip_info->db = db->get();
         grn_ctx_use(snip_info->ctx, snip_info->db);
         snip_info->use_shared_db = true;
       }

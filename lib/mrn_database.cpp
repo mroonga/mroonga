@@ -1,8 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2014 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,32 +17,46 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_DATABASE_MANAGER_HPP_
-#define MRN_DATABASE_MANAGER_HPP_
+#include <mrn_mysql.h>
 
-#include <groonga.h>
 #include "mrn_database.hpp"
 
+// for debug
+#define MRN_CLASS_NAME "mrn::Database"
+
 namespace mrn {
-  class DatabaseManager {
-  public:
-    DatabaseManager(grn_ctx *ctx, mysql_mutex_t *mutex);
-    ~DatabaseManager(void);
-    bool init(void);
-    int open(const char *path, Database **db);
-    void close(const char *path);
-    bool drop(const char *path);
-    int clear(void);
+  Database::Database(grn_ctx *ctx, grn_obj *db)
+    : ctx_(ctx),
+      db_(db) {
+  }
 
-  private:
-    grn_ctx *ctx_;
-    grn_hash *cache_;
-    mysql_mutex_t *mutex_;
+  Database::~Database(void) {
+    close();
+  }
 
-    void mkdir_p(const char *directory);
-    void ensure_database_directory(void);
-    int ensure_normalizers_registered(grn_obj *db);
-  };
+  void Database::close() {
+    MRN_DBUG_ENTER_METHOD();
+    if (db_) {
+      grn_obj_close(ctx_, db_);
+      db_ = NULL;
+    }
+    DBUG_VOID_RETURN;
+  }
+
+  grn_rc Database::remove() {
+    MRN_DBUG_ENTER_METHOD();
+    grn_rc rc = GRN_SUCCESS;
+    if (db_) {
+      rc = grn_obj_remove(ctx_, db_);
+      if (rc == GRN_SUCCESS) {
+        db_ = NULL;
+      }
+    }
+    DBUG_RETURN(rc);
+  }
+
+  grn_obj *Database::get() {
+    MRN_DBUG_ENTER_METHOD();
+    DBUG_RETURN(db_);
+  }
 }
-
-#endif /* MRN_DATABASE_MANAGER_HPP_ */

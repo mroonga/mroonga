@@ -34,4 +34,6 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_operations.cpp			\
 	mrn_operations.hpp			\
 	mrn_operation.cpp			\
-	mrn_operation.hpp
+	mrn_operation.hpp			\
+	mrn_database.cpp			\
+	mrn_database.hpp

@@ -3922,12 +3922,12 @@ int ha_mroonga::ensure_database_open(const char *name)
 
   MRN_DBUG_ENTER_METHOD();
 
-  grn_obj *db;
+  mrn::Database *db;
   error = mrn_db_manager->open(name, &db);
   if (error)
     DBUG_RETURN(error);
 
-  grn_ctx_use(ctx, db);
+  grn_ctx_use(ctx, db->get());
 
   delete operations_;
   operations_ = new mrn::Operations(ctx);
