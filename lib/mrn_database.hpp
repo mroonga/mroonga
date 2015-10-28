@@ -32,9 +32,13 @@ namespace mrn {
     grn_rc remove();
     grn_obj *get();
 
+    bool is_broken_table(const char *name, size_t name_size);
+    void mark_table_repaired(const char *name, size_t name_size);
+
   private:
     grn_ctx *ctx_;
     grn_obj *db_;
+    grn_obj *broken_table_names_;
   };
 }
 

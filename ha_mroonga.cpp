@@ -270,6 +270,7 @@ PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
 static PSI_mutex_key mrn_log_mutex_key;
 static PSI_mutex_key mrn_db_manager_mutex_key;
 static PSI_mutex_key mrn_context_pool_mutex_key;
+static PSI_mutex_key mrn_operations_mutex_key;
 
 static PSI_mutex_info mrn_mutexes[] =
 {
@@ -281,7 +282,8 @@ static PSI_mutex_info mrn_mutexes[] =
    "mrn::long_term_share::auto_inc", 0},
   {&mrn_log_mutex_key,             "mrn::log",             PSI_FLAG_GLOBAL},
   {&mrn_db_manager_mutex_key,      "mrn::DatabaseManager", PSI_FLAG_GLOBAL},
-  {&mrn_context_pool_mutex_key,    "mrn::ContextPool",     PSI_FLAG_GLOBAL}
+  {&mrn_context_pool_mutex_key,    "mrn::ContextPool",     PSI_FLAG_GLOBAL},
+  {&mrn_operations_mutex_key,      "mrn::Operations",      PSI_FLAG_GLOBAL}
 };
 #endif
 
@@ -304,6 +306,7 @@ static mysql_mutex_t mrn_db_manager_mutex;
 mrn::DatabaseManager *mrn_db_manager = NULL;
 static mysql_mutex_t mrn_context_pool_mutex;
 mrn::ContextPool *mrn_context_pool = NULL;
+static mysql_mutex_t mrn_operations_mutex;
 
 
 #ifdef WIN32
@@ -1757,6 +1760,14 @@ static int mrn_init(void *p)
   }
   mrn_context_pool = new mrn::ContextPool(&mrn_context_pool_mutex);
 
+  if (mysql_mutex_init(mrn_operations_mutex_key,
+                       &mrn_operations_mutex,
+                       MY_MUTEX_INIT_FAST) != 0) {
+    GRN_LOG(ctx, GRN_LOG_ERROR,
+            "failed to initialize mutex for operations");
+    goto error_operations_mutex_init;
+  }
+
   if ((mysql_mutex_init(mrn_allocated_thds_mutex_key,
                         &mrn_allocated_thds_mutex,
                         MY_MUTEX_INIT_FAST) != 0)) {
@@ -1802,9 +1813,11 @@ err_allocated_open_tables_mutex_init:
 error_allocated_thds_hash_init:
   mysql_mutex_destroy(&mrn_allocated_thds_mutex);
 err_allocated_thds_mutex_init:
+  mysql_mutex_destroy(&mrn_operations_mutex);
+error_operations_mutex_init:
   delete mrn_context_pool;
-error_context_pool_mutex_init:
   mysql_mutex_destroy(&mrn_context_pool_mutex);
+error_context_pool_mutex_init:
 err_db_manager_init:
   delete mrn_db_manager;
   mysql_mutex_destroy(&mrn_db_manager_mutex);
@@ -3916,18 +3929,23 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::ensure_database_open(const char *name)
+int ha_mroonga::ensure_database_open(const char *name, mrn::Database **db)
 {
   int error;
 
   MRN_DBUG_ENTER_METHOD();
 
-  mrn::Database *db;
-  error = mrn_db_manager->open(name, &db);
+  if (db)
+    *db = NULL;
+
+  mrn::Database *local_db;
+  error = mrn_db_manager->open(name, &local_db);
   if (error)
     DBUG_RETURN(error);
 
-  grn_ctx_use(ctx, db->get());
+  if (db)
+    *db = local_db;
+  grn_ctx_use(ctx, local_db->get());
 
   delete operations_;
   operations_ = new mrn::Operations(ctx);
@@ -3994,6 +4012,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
 
+  mrn::Database *db = NULL;
   if (open_options & HA_OPEN_FOR_REPAIR) {
     error = ensure_database_remove(name);
     if (error)
@@ -4005,7 +4024,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
     grn_index_tables = NULL;
     grn_index_columns = NULL;
   } else {
-    error = ensure_database_open(name);
+    error = ensure_database_open(name, &db);
     if (error)
       DBUG_RETURN(error);
 
@@ -4074,12 +4093,14 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
   pk_keypart_map = make_prev_keypart_map(
     KEY_N_KEY_PARTS(&(table->key_info[table_share->primary_key])));
 
-  if (!error && !(open_options & HA_OPEN_FOR_REPAIR)) {
+  if (!error && db) {
+    mrn::Lock lock(&mrn_operations_mutex);
     mrn::PathMapper mapper(name);
-    if (operations_->is_remain(mapper.table_name(),
-                               strlen(mapper.table_name()))) {
-      operations_->clear(mapper.table_name(),
-                         strlen(mapper.table_name()));
+    const char *table_name = mapper.table_name();
+    size_t table_name_size = strlen(table_name);
+    if (db->is_broken_table(table_name, table_name_size)) {
+      operations_->clear(table_name, table_name_size);
+      db->mark_table_repaired(table_name, table_name_size);
       if (!share->disable_keys) {
         error = wrapper_disable_indexes_mroonga(HA_KEY_SWITCH_ALL);
         if (!error) {
@@ -4253,7 +4274,8 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
 
-  error = ensure_database_open(name);
+  mrn::Database *db;
+  error = ensure_database_open(name, &db);
   if (error)
     DBUG_RETURN(error);
 
@@ -4279,20 +4301,25 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
 
     storage_set_keys_in_use();
 
-    mrn::PathMapper mapper(name);
-    if (operations_->is_remain(mapper.table_name(),
-                               strlen(mapper.table_name()))) {
-      error = operations_->repair(mapper.table_name(),
-                                  strlen(mapper.table_name()));
-      if (!share->disable_keys) {
+    {
+      mrn::Lock lock(&mrn_operations_mutex);
+      mrn::PathMapper mapper(name);
+      const char *table_name = mapper.table_name();
+      size_t table_name_size = strlen(table_name);
+      if (db->is_broken_table(table_name, table_name_size)) {
+        error = operations_->repair(table_name, table_name_size);
         if (!error)
-          error = storage_disable_indexes(HA_KEY_SWITCH_ALL);
-        if (!error)
-          error = storage_enable_indexes(HA_KEY_SWITCH_ALL);
+          db->mark_table_repaired(table_name, table_name_size);
+        if (!share->disable_keys) {
+          if (!error)
+            error = storage_disable_indexes(HA_KEY_SWITCH_ALL);
+          if (!error)
+            error = storage_enable_indexes(HA_KEY_SWITCH_ALL);
+        }
+        GRN_LOG(ctx, GRN_LOG_NOTICE,
+                "Auto repair is done: <%s>: %s",
+                name, error == 0 ? "success" : "failure");
       }
-      GRN_LOG(ctx, GRN_LOG_NOTICE,
-              "Auto repair is done: <%s>: %s",
-              name, error == 0 ? "success" : "failure");
     }
   }
 

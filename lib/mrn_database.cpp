@@ -20,6 +20,7 @@
 #include <mrn_mysql.h>
 
 #include "mrn_database.hpp"
+#include "mrn_operations.hpp"
 
 // for debug
 #define MRN_CLASS_NAME "mrn::Database"
@@ -27,10 +28,14 @@
 namespace mrn {
   Database::Database(grn_ctx *ctx, grn_obj *db)
     : ctx_(ctx),
-      db_(db) {
+      db_(db),
+      broken_table_names_(NULL) {
+    Operations operations(ctx_);
+    broken_table_names_ = operations.get_processing_table_names();
   }
 
   Database::~Database(void) {
+    grn_obj_close(ctx_, broken_table_names_);
     close();
   }
 
@@ -58,5 +63,17 @@ namespace mrn {
   grn_obj *Database::get() {
     MRN_DBUG_ENTER_METHOD();
     DBUG_RETURN(db_);
+  }
+
+  bool Database::is_broken_table(const char *name, size_t name_size) {
+    MRN_DBUG_ENTER_METHOD();
+    grn_id id = grn_table_get(ctx_, broken_table_names_, name, name_size);
+    DBUG_RETURN(id != GRN_ID_NIL);
+  }
+
+  void Database::mark_table_repaired(const char *name, size_t name_size) {
+    MRN_DBUG_ENTER_METHOD();
+    grn_table_delete(ctx_, broken_table_names_, name, name_size);
+    DBUG_VOID_RETURN;
   }
 }

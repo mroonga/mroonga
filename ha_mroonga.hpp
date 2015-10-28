@@ -33,6 +33,7 @@ extern "C" {
 #include <groonga.h>
 #include "mrn_mysql_compat.h"
 #include <mrn_operations.hpp>
+#include <mrn_database.hpp>
 
 #if (MYSQL_VERSION_ID >= 50514 && MYSQL_VERSION_ID < 50600)
 #  define MRN_HANDLER_HAVE_FINAL_ADD_INDEX 1
@@ -804,7 +805,7 @@ private:
   int storage_create_indexes(TABLE *table, const char *grn_table_name,
                              grn_obj *grn_table, MRN_SHARE *tmp_share);
   int close_databases();
-  int ensure_database_open(const char *name);
+  int ensure_database_open(const char *name, mrn::Database **db=NULL);
   int ensure_database_remove(const char *name);
   int wrapper_delete_table(const char *name, handlerton *wrap_handlerton,
                            const char *table_name);
