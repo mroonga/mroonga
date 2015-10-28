@@ -1,7 +1,12 @@
 REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = centos
 ARCHITECTURES = i386 x86_64
-MYSQL_VARIANTS = mysql55 mysql56-community mariadb percona-server-56
+MYSQL_VARIANTS =				\
+	mysql55					\
+	mysql56-community			\
+	mysql57-community			\
+	mariadb					\
+	percona-server-56
 SPEC_DIR = $(builddir)/../rpm/centos
 
 all:

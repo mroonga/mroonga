@@ -79,19 +79,28 @@ case ${distribution} in
         fi
         run yum install -y mysql55-mysql-devel mysql55-build
 	;;
-      mysql56-community-${PACKAGE})
-        release_rpm=mysql-community-release-el${distribution_version}-5.noarch.rpm
+      mysql5?-community-${PACKAGE})
+        release_rpm=mysql-community-release-el${distribution_version}-7.noarch.rpm
         run yum -y install http://repo.mysql.com/${release_rpm}
-        run yum -y install mysql-community-devel
+        if [ "${package_name}" = "mysql57-community-${PACKAGE}" ]; then
+          run yum install -y yum-utils
+          run yum-config-manager --disable mysql56-community
+          run yum-config-manager --enable mysql57-community
+          if [ ${distribution_version} = 6 ]; then
+            run yum install -y epel-release
+            run yum install -y cmake28
+          fi
+        fi
+        run yum install -y mysql-community-devel
         ;;
       mariadb-${PACKAGE})
-        run yum -y install mariadb-devel
+        run yum install -y mariadb-devel
 	;;
       percona-server-56-${PACKAGE})
         release_rpm_version=0.1-3
         release_rpm=percona-release-${release_rpm_version}.noarch.rpm
-        run yum -y install http://www.percona.com/downloads/percona-release/redhat/${release_rpm_version}/${release_rpm}
-        run yum -y install Percona-Server-devel-56
+        run yum install -y http://www.percona.com/downloads/percona-release/redhat/${release_rpm_version}/${release_rpm}
+        run yum install -y Percona-Server-devel-56
         ;;
     esac
 
