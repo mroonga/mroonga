@@ -1,4 +1,4 @@
-CODE_NAMES = precise,trusty,vivid
+CODE_NAMES = precise,trusty,vivid,wily
 SOURCE = ../$(PACKAGE)-$(VERSION).tar.gz
 
 all:
