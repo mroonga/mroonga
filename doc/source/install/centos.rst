@@ -52,21 +52,50 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
-CentOS 6 (with the Oracle MySQL package)
-----------------------------------------
+CentOS 6 (with the Oracle MySQL 5.6 package)
+--------------------------------------------
 
-You can use Oracle's MySQL packages (version 5.6.x) on CentOS 6
-since Mroonga 4.04 release.
+You can use Oracle's MySQL packages version 5.6 on CentOS 6 since
+Mroonga 4.04 release.
 
 Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-  % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
+  % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql-community-server
   % sudo /sbin/service mysqld start
   % sudo yum install -y mysql-community-mroonga
   (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y groonga-tokenizer-mecab
+
+CentOS 6 (with the Oracle MySQL 5.7 package)
+--------------------------------------------
+
+You can use Oracle's MySQL packages version 5.7 on CentOS 6 since
+Mroonga 5.09 release.
+
+Install::
+
+  % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+  % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
+  % sudo yum install -y yum-utils
+  % sudo yum-config-manager --disable mysql56-community
+  % sudo yum-config-manager --enable mysql57-community
+  % sudo yum makecache
+  % sudo yum install -y mysql-community-server
+  % sudo /sbin/service mysqld start
+  % tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //')
+  % sudo mysqladmin -u root --password="${tmp_password}" password 'New-Password1!'
+  % sudo yum install -y mysql57-community-mroonga
+  (Type 'New-Password1!' as password)
+  (% sudo mysqladmin -u root --password="New-Password1!" password 'your-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.

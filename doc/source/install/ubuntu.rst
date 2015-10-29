@@ -19,6 +19,7 @@ Here are supported Ubuntu versions:
   * 12.04 LTS Precise Pangolin
   * 14.04 LTS Trusty Tahr
   * 15.04 Vivid Vervet
+  * 15.10 Wily Werewolf
 
 Enable the universe repository and the security update repository to
 install Mroonga::

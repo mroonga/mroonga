@@ -32,6 +32,10 @@ Improvements
 
 * [MySQL 5.7] Supported JSON type.
 
+* [:doc:`/install/ubuntu`] Added Ubuntu 15.10 Wily Werewolf support.
+
+* [:doc:`/install/centos`] Added MySQL 5.7 package provided by Oracle support on CentOS 6.
+
 Fixes
 ^^^^^
 
