@@ -155,7 +155,7 @@ namespace mrn {
     Database *db = NULL;
     memcpy(&db, db_address, sizeof(Database *));
     if (db) {
-      db->close();
+      delete db;
     }
 
     grn_hash_delete_by_id(ctx_, cache_, id, NULL);
@@ -194,11 +194,16 @@ namespace mrn {
       if (id != GRN_ID_NIL) {
         grn_hash_delete_by_id(ctx_, cache_, id, NULL);
       }
+      delete db;
+      GRN_LOG(ctx_, GRN_LOG_ERROR,
       DBUG_RETURN(true);
     } else {
       GRN_LOG(ctx_, GRN_LOG_ERROR,
               "failed to drop database: <%s>: <%s>",
               mapper.db_path(), ctx_->errbuf);
+      if (id == GRN_ID_NIL) {
+        delete db;
+      }
       DBUG_RETURN(false);
     }
   }
@@ -235,7 +240,7 @@ namespace mrn {
         my_message(error, ctx_->errbuf, MYF(0));
         break;
       }
-      db->close();
+      delete db;
     }
     grn_hash_cursor_close(ctx_, cursor);
 
