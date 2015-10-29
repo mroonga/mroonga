@@ -168,7 +168,7 @@ while [ $# -gt 0 ]; do
   arg="$1"
   shift
   case "$arg" in
-    --manual-gdb|--gdb|--debug)
+    --manual-gdb|--gdb|--debug|--valgrind)
       n_processors=1
       mysql_test_run_options="${mysql_test_run_options} ${arg}"
       ;;
