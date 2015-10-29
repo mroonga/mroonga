@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-09-28 21:44+0900\n"
+"PO-Revision-Date: 2015-10-29 14:16+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -87,15 +87,24 @@ msgstr ""
 "系）を利用できます。"
 
 # 5e3232071ae84bdfbce77f4bee3e0ae4
-msgid "CentOS 6 (with the Oracle MySQL package)"
-msgstr "CentOS 6（OracleのMySQLパッケージを利用）"
+msgid "CentOS 6 (with the Oracle MySQL 5.6 package)"
+msgstr "CentOS 6（OracleのMySQL 5.6パッケージを利用）"
 
 msgid ""
-"You can use Oracle's MySQL packages (version 5.6.x) on CentOS 6 since "
-"Mroonga 4.04 release."
+"You can use Oracle's MySQL packages version 5.6 on CentOS 6 since Mroonga "
+"4.04 release."
 msgstr ""
-"CentOS 6では、Mroonga 4.04からOracleのMySQLパッケージ（MySQL 5.6系）を利用で"
-"きます。"
+"CentOS 6では、Mroonga 4.04からOracleのMySQL 5.6パッケージを利用できます。"
+
+# 5e3232071ae84bdfbce77f4bee3e0ae4
+msgid "CentOS 6 (with the Oracle MySQL 5.7 package)"
+msgstr "CentOS 6（OracleのMySQL 5.7パッケージを利用）"
+
+msgid ""
+"You can use Oracle's MySQL packages version 5.7 on CentOS 6 since Mroonga "
+"5.09 release."
+msgstr ""
+"CentOS 6では、Mroonga 5.09からOracleのMySQL 5.7パッケージを利用できます。"
 
 # 5e3232071ae84bdfbce77f4bee3e0ae4
 msgid "CentOS 6 (with Percona Server package)"
@@ -592,6 +601,9 @@ msgstr ""
 
 # 1ff5efe8264244279bdaccf46fd601cf
 msgid "15.04 Vivid Vervet"
+msgstr ""
+
+msgid "15.10 Wily Werewolf"
 msgstr ""
 
 msgid ""

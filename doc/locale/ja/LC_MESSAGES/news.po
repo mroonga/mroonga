@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-09-29 11:34+0900\n"
+"PO-Revision-Date: 2015-10-29 14:19+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,84 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 5.08 - 2015-09-29"
-msgstr "5.08リリース - 2015-09-29"
+msgid "Release 5.09 - 2015-10-29"
+msgstr "5.09リリース - 2015-10-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[rpm][mysql56-community-mroonga] Updated target MySQL to 5.6.27. [Reported "
+"by @star_orihime]"
+msgstr ""
+"[rpm][mysql56-community-mroonga] ビルド対象のMySQLを5.6.27に更新しました。 "
+"[@star_orihimeさんが報告]"
+
+msgid ""
+"[UDF][``mroonga_snippet_html``] Added a new UDF that returns snippet for "
+"HTML output."
+msgstr ""
+"[UDF][``mroonga_snippet_html``] HTML出力用のスニペットを返す新しいUDFを追加し"
+"ました。"
+
+msgid "[Windows] Bundled MeCab."
+msgstr "[Windows] MeCabをバンドルしました。"
+
+msgid "[Windows] Updated base MariaDB to 10.1.8."
+msgstr "[Windows] ベースにしているMariaDBを10.1.8にアップデートしました。"
+
+msgid "[MariaDB 10.1] Supported MariaDB 10.1.8."
+msgstr "[MariaDB 10.1] MariaDB 10.1.8に対応しました。"
+
+msgid ""
+"Supported auto repair on crash. [groonga-dev,03515][Suggested by Hiroshi "
+"Kagami]"
+msgstr ""
+"クラッシュ時に自動で復旧する機能を追加しました。 [groonga-dev,03515][各務さん"
+"が提案]"
+
+msgid "[MySQL 5.7] Supported MySQL 5.7.9."
+msgstr "[MySQL 5.7] MySQL 5.7.9に対応しました。"
+
+msgid "[MySQL 5.7] Supported JSON type."
+msgstr "[MySQL 5.7] JSON型に対応しました。"
+
+msgid "[:doc:`/install/ubuntu`] Added Ubuntu 15.10 Wily Werewolf support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 15.10 Wily Werewolfのパッケージを追加しまし"
+"た。"
+
+msgid ""
+"[:doc:`/install/centos`] Added MySQL 5.7 package provided by Oracle support "
+"on CentOS 6."
+msgstr ""
+"[:doc:`/install/centos`] Oracle提供のMySQL 5.7用パッケージをサポートしまし"
+"た。CentOS 6向けだけです。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that ``MRBContains()`` doesn't use index. [GitHub#73] [Reported "
+"by Petri Rautiainen]"
+msgstr ""
+"``MRBContains()`` がインデックスを使わない問題を修正しました。 [GitHub#73] "
+"[Petri Rautiainenさんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "@star_orihime"
+msgstr "@star_orihimeさん"
+
+msgid "Hiroshi Kagami"
+msgstr "各務さん"
+
+msgid "Petri Rautiainen"
+msgstr "Petri Rautiainenさん"
+
+msgid "Release 5.08 - 2015-09-29"
+msgstr "5.08リリース - 2015-09-29"
 
 msgid "[CMake][MariaDB 10.1] Supported ``PLUGIN_MROONGA=NO``."
 msgstr "[CMake][MariaDB 10.1] ``PLUGIN_MROONGA=NO`` に対応しました。"
@@ -36,9 +109,6 @@ msgid ""
 msgstr ""
 "[UDF] ``grn_ctx`` プールを実装しました。 ``grn_ctx`` を毎回初期化しなくても済"
 "むようになるのでUDF呼び出しが速くなります。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a memory leak when ``ORDER BY LIMIT`` is used with multiple ``MATCH "
@@ -53,9 +123,6 @@ msgid ""
 msgstr ""
 "複数の ``MATCH AGAINST`` を使いながら ``ORDER BY LIMIT`` を指定したときに間"
 "違った結果を返す問題を修正しました。 [groonga-dev,03496] [安福剛介さんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Gosuke Yasufuku"
 msgstr "安福剛介さん"
@@ -98,9 +165,6 @@ msgstr "GMOメディア株式会社さん"
 # 22607774878349e3a2ba0a9bef7a10cc
 msgid "Sergei Golubchik"
 msgstr "Sergei Golubchikさん"
-
-msgid "Hiroshi Kagami"
-msgstr "各務さん"
 
 msgid "Release 5.05 - 2015/07/29"
 msgstr "5.05リリース - 2015/07/29"
