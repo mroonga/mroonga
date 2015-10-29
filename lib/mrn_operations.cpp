@@ -114,16 +114,12 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  grn_obj *Operations::get_processing_table_names() {
+  grn_hash *Operations::collect_processing_table_names() {
     MRN_DBUG_ENTER_METHOD();
 
-    grn_obj *table_names =
-      grn_table_create(ctx_,
-                       NULL, 0,
-                       NULL,
-                       GRN_OBJ_TABLE_HASH_KEY,
-                       grn_ctx_at(ctx_, GRN_DB_SHORT_TEXT),
-                       NULL);
+    grn_hash *table_names =
+      grn_hash_create(ctx_, NULL, GRN_TABLE_MAX_KEY_SIZE, 0,
+                      GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_KEY_VAR_SIZE);
 
     grn_table_cursor *cursor;
     cursor = grn_table_cursor_open(ctx_, table_, NULL, 0, NULL, 0, 0, -1, 0);
@@ -139,10 +135,11 @@ namespace mrn {
       GRN_BULK_REWIND(&text_buffer_);
       grn_obj_get_value(ctx_, columns_.table_, id, &text_buffer_);
       if (GRN_TEXT_LEN(&text_buffer_) > 0) {
-        grn_table_add(ctx_, table_names,
-                      GRN_TEXT_VALUE(&text_buffer_),
-                      GRN_TEXT_LEN(&text_buffer_),
-                      NULL);
+        grn_hash_add(ctx_, table_names,
+                     GRN_TEXT_VALUE(&text_buffer_),
+                     GRN_TEXT_LEN(&text_buffer_),
+                     NULL,
+                     NULL);
       }
     }
     grn_table_cursor_close(ctx_, cursor);

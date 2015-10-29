@@ -195,7 +195,6 @@ namespace mrn {
         grn_hash_delete_by_id(ctx_, cache_, id, NULL);
       }
       delete db;
-      GRN_LOG(ctx_, GRN_LOG_ERROR,
       DBUG_RETURN(true);
     } else {
       GRN_LOG(ctx_, GRN_LOG_ERROR,

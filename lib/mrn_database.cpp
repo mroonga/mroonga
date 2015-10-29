@@ -31,17 +31,18 @@ namespace mrn {
       db_(db),
       broken_table_names_(NULL) {
     Operations operations(ctx_);
-    broken_table_names_ = operations.get_processing_table_names();
+    broken_table_names_ = operations.collect_processing_table_names();
   }
 
   Database::~Database(void) {
-    grn_obj_close(ctx_, broken_table_names_);
     close();
   }
 
   void Database::close() {
     MRN_DBUG_ENTER_METHOD();
     if (db_) {
+      grn_hash_close(ctx_, broken_table_names_);
+      broken_table_names_ = NULL;
       grn_obj_close(ctx_, db_);
       db_ = NULL;
     }
@@ -52,6 +53,8 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
     grn_rc rc = GRN_SUCCESS;
     if (db_) {
+      grn_hash_close(ctx_, broken_table_names_);
+      broken_table_names_ = NULL;
       rc = grn_obj_remove(ctx_, db_);
       if (rc == GRN_SUCCESS) {
         db_ = NULL;
@@ -67,13 +70,13 @@ namespace mrn {
 
   bool Database::is_broken_table(const char *name, size_t name_size) {
     MRN_DBUG_ENTER_METHOD();
-    grn_id id = grn_table_get(ctx_, broken_table_names_, name, name_size);
+    grn_id id = grn_hash_get(ctx_, broken_table_names_, name, name_size, NULL);
     DBUG_RETURN(id != GRN_ID_NIL);
   }
 
   void Database::mark_table_repaired(const char *name, size_t name_size) {
     MRN_DBUG_ENTER_METHOD();
-    grn_table_delete(ctx_, broken_table_names_, name, name_size);
+    grn_hash_delete(ctx_, broken_table_names_, name, name_size, NULL);
     DBUG_VOID_RETURN;
   }
 }

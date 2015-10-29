@@ -38,7 +38,7 @@ namespace mrn {
   private:
     grn_ctx *ctx_;
     grn_obj *db_;
-    grn_obj *broken_table_names_;
+    grn_hash *broken_table_names_;
   };
 }
 
