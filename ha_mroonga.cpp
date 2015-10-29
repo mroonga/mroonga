@@ -4292,6 +4292,9 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
   }
 
   if (!(open_options & HA_OPEN_FOR_REPAIR)) {
+    // TODO: Reduce lock scope
+    mrn::Lock lock(&mrn_operations_mutex);
+
     error = storage_open_indexes(name);
     if (error) {
       storage_close_columns();
@@ -4303,7 +4306,6 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
     storage_set_keys_in_use();
 
     {
-      mrn::Lock lock(&mrn_operations_mutex);
       mrn::PathMapper mapper(name);
       const char *table_name = mapper.table_name();
       size_t table_name_size = strlen(table_name);
