@@ -8,6 +8,8 @@ CentOS. You can install them by ``yum``.
 
 .. include:: 32bit-note.inc
 
+.. _centos-5:
+
 CentOS 5
 --------
 
@@ -29,6 +31,8 @@ tokenizer, install groonga-tokenizer-mecab package.
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
+
+.. _centos-6-official:
 
 CentOS 6 (with the official MySQL package)
 ------------------------------------------
@@ -52,6 +56,8 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
+.. _centos-6-oracle-56:
+
 CentOS 6 (with the Oracle MySQL 5.6 package)
 --------------------------------------------
 
@@ -74,6 +80,8 @@ tokenizer, install groonga-tokenizer-mecab package.
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
+
+.. _centos-6-oracle-57:
 
 CentOS 6 (with the Oracle MySQL 5.7 package)
 --------------------------------------------
@@ -104,6 +112,8 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
+.. _centos-6-percona:
+
 CentOS 6 (with Percona Server package)
 --------------------------------------
 
@@ -127,6 +137,8 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
 
+.. _centos-7-official:
+
 CentOS 7 (with the official MariaDB package)
 --------------------------------------------
 
@@ -147,6 +159,8 @@ tokenizer, install groonga-tokenizer-mecab package.
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
+
+.. _centos-7-oracle-56:
 
 CentOS 7 (with the Oracle MySQL package)
 ----------------------------------------
@@ -169,6 +183,8 @@ tokenizer, install groonga-tokenizer-mecab package.
 Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y groonga-tokenizer-mecab
+
+.. _centos-7-percona:
 
 CentOS 7 (with Percona Server package)
 --------------------------------------
