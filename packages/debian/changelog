@@ -1,3 +1,9 @@
+mroonga (5.09-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kouhei Sutou <kou@cozmixng.org>  Thu, 29 Oct 2015 00:00:00 +0900
+
 mroonga (5.08-1) unstable; urgency=low
 
   * New upstream release.
