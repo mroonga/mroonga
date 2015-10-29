@@ -1874,6 +1874,7 @@ static int mrn_deinit(void *p)
   mysql_mutex_destroy(&mrn_open_tables_mutex);
   my_hash_free(&mrn_allocated_thds);
   mysql_mutex_destroy(&mrn_allocated_thds_mutex);
+  mysql_mutex_destroy(&mrn_operations_mutex);
   delete mrn_context_pool;
   mysql_mutex_destroy(&mrn_context_pool_mutex);
   delete mrn_db_manager;
