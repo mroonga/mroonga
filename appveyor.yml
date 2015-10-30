@@ -15,8 +15,10 @@ install:
   - rmdir /S /Q storage\mroonga\
   - move ..\mroonga storage\mroonga
   - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
-  - cd ..\mariadb-10.1.8
   - rmdir /S /Q ..\groonga\test\
+  - cd ..\groonga\vendor
+  - ruby download_mecab.rb
+  - cd ..\..\..\mariadb-10.1.8
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
@@ -45,6 +47,7 @@ build_script:
       -DWITHOUT_TOKUDB=ON
       -DWITHOUT_XTRADB=ON
       -DWITH_UNIT_TESTS=OFF
+      -DGRN_WITH_BUNDLED_MECAB=ON
   - cmake --build . --config Debug
 
 notifications:
