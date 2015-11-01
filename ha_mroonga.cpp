@@ -4100,6 +4100,9 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
     const char *table_name = mapper.table_name();
     size_t table_name_size = strlen(table_name);
     if (db->is_broken_table(table_name, table_name_size)) {
+      GRN_LOG(ctx, GRN_LOG_NOTICE,
+              "Auto repair is started: <%s>",
+              name);
       operations_->clear(table_name, table_name_size);
       db->mark_table_repaired(table_name, table_name_size);
       if (!share->disable_keys) {
@@ -4310,6 +4313,9 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
       const char *table_name = mapper.table_name();
       size_t table_name_size = strlen(table_name);
       if (db->is_broken_table(table_name, table_name_size)) {
+        GRN_LOG(ctx, GRN_LOG_NOTICE,
+                "Auto repair is started: <%s>",
+                name);
         error = operations_->repair(table_name, table_name_size);
         if (!error)
           db->mark_table_repaired(table_name, table_name_size);
