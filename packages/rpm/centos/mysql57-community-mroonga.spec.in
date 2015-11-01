@@ -149,6 +149,7 @@ if [ -n "$password_option" -a "$stop_after_installation" = "1" ]; then
   sql="ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
   command="$mysql_command -u root -p'$auto_generated_password' \
     --connect-expired-password -e \"$sql\""
+  # TODO: Remove needless "eval" use
   eval $command
   password_option="-p'$auto_generated_password'"
 fi
@@ -162,6 +163,7 @@ eval $command || \
 if [ "$stop_after_installation" = "1" ]; then
   sql="ALTER USER root@localhost PASSWORD EXPIRE"
   command="$mysql_command -u root -p'$auto_generated_password' -e \"$sql\""
+  # TODO: Remove needless "eval" use
   eval $command
   /sbin/service mysqld stop
 fi
