@@ -107,7 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 if ! /sbin/service mysqld status > /dev/null; then
   /sbin/service mysqld start
   stop_after_installation=1
-  export MYSQL_PWD=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log`
+  auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log`
 else
   stop_after_installation=0
 fi
@@ -146,8 +146,11 @@ if [ "$1" = 2 ] ; then
 fi
 
 if [ -n "$password_option" -a "$stop_after_installation" = "1" ]; then
-  $mysql_command -u root --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$MYSQL_PWD'"
-  password_option=""
+  sql="ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+  command="$mysql_command -u root -p'$auto_generated_password' \
+    --connect-expired-password -e \"$sql\""
+  eval $command
+  password_option="-p'$auto_generated_password'"
 fi
 
 command="$mysql_command -u root $password_option < ${install_sql}"
@@ -157,8 +160,9 @@ eval $command || \
 	 echo "  $command")
 
 if [ "$stop_after_installation" = "1" ]; then
-  $mysql_command -u root -e "ALTER USER root@localhost PASSWORD EXPIRE"
-  unset MYSQL_PWD
+  sql="ALTER USER root@localhost PASSWORD EXPIRE"
+  command="$mysql_command -u root -p'$auto_generated_password' -e \"$sql\""
+  eval $command
   /sbin/service mysqld stop
 fi
 
