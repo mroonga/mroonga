@@ -146,25 +146,17 @@ if [ "$1" = 2 ] ; then
 fi
 
 if [ -n "$password_option" -a "$stop_after_installation" = "1" ]; then
-  sql="ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
-  command="$mysql_command -u root -p'$auto_generated_password' \
-    --connect-expired-password -e \"$sql\""
-  # TODO: Remove needless "eval" use
-  eval $command
-  password_option="-p'$auto_generated_password'"
+  $mysql_command -u root -p"$auto_generated_password" --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
 fi
 
-command="$mysql_command -u root $password_option < ${install_sql}"
+command="$mysql_command -u root $password_option'$auto_generated_password' < ${install_sql}"
 echo $command
 eval $command || \
 	(echo "run the following command to register Mroonga:"; \
 	 echo "  $command")
 
 if [ "$stop_after_installation" = "1" ]; then
-  sql="ALTER USER root@localhost PASSWORD EXPIRE"
-  command="$mysql_command -u root -p'$auto_generated_password' -e \"$sql\""
-  # TODO: Remove needless "eval" use
-  eval $command
+  $mysql_command -u root -p"$auto_generated_password" -e "ALTER USER root@localhost PASSWORD EXPIRE"
   /sbin/service mysqld stop
 fi
 
