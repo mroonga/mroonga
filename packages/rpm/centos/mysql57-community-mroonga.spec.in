@@ -107,7 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 if ! /sbin/service mysqld status > /dev/null; then
   /sbin/service mysqld start
   stop_after_installation=1
-  auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log`
+  auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
 else
   stop_after_installation=0
 fi
