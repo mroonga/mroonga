@@ -18,6 +18,7 @@ install:
   - rmdir /S /Q ..\groonga\test\
   - cd ..\groonga\vendor
   - ruby download_mecab.rb
+  - dir
   - cd ..\..\mariadb-10.1.8
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
