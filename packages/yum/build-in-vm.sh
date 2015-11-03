@@ -36,7 +36,7 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
       centos_versions="6 7"
       ;;
     mysql57-community)
-      centos_versions="6"
+      centos_versions="6 7"
       ;;
     mariadb)
       centos_versions="7"
