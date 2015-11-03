@@ -22,7 +22,7 @@ upload: source ensure-launchpad-configuration
 	  --debian-base-directory '$(srcdir)/../' \
 	  --pgp-sign-key '$(LAUNCHPAD_UPLOADER_PGP_KEY)'
 
-source: $(SOURCE) $(SOURCE_55) $(SOURCE_56)
+source: $(SOURCE_55) $(SOURCE_56)
 
 $(SOURCE):
 	ln -s $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz $(SOURCE)
