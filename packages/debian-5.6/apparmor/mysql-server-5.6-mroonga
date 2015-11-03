@@ -2,4 +2,4 @@
 /usr/lib/groonga/plugins/** rm,
 /etc/mecabrc r,
 /var/lib/mecab/dic/** r,
-#include <local/mysql-server-mroonga>
+#include <local/mysql-server-5.6-mroonga>
