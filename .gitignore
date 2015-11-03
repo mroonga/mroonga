@@ -57,7 +57,6 @@ CTestTestfile.cmake
 /doc/locale/*/LC_MESSAGES/doctrees/
 /doc/locale/*/LC_MESSAGES/*-build-stamp
 /doc/locale/en/LC_MESSAGES/*.po
-/doc/sphinx/
 /misc/
 /tmp-doc/
 /mysql-test/mroonga/storage/information_schema/r/plugins.result
