@@ -59,11 +59,12 @@ run apt-get install -V -y build-essential devscripts ${DEPENDED_PACKAGES}
 run apt-get build-dep -y ${mysql_server_package}
 
 run mkdir -p build
-run cp /vagrant/tmp/${PACKAGE}-${VERSION}.tar.gz \
-  build/${PACKAGE}_${VERSION}.orig.tar.gz
 run cd build
-run tar xfz ${PACKAGE}_${VERSION}.orig.tar.gz
-run cd ${PACKAGE}-${VERSION}/
+run tar xfz /vagrant/tmp/${PACKAGE}-${VERSION}.tar.gz
+run mv ${PACKAGE}-${VERSION} ${PACKAGE}-5.5-${VERSION}
+run tar cfz ${PACKAGE}-5.5_${VERSION}.orig.tar.gz \
+  ${PACKAGE}-5.5-${VERSION}
+run cd ${PACKAGE}-5.5-${VERSION}/
 run cp -rp /vagrant/tmp/debian debian
 # export DEB_BUILD_OPTIONS=noopt
 MYSQL_PACKAGE_INFO=$(apt-cache show mysql-server | grep Version | sort | tail -1)

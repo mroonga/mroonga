@@ -24,6 +24,7 @@ require "open-uri"
 class Uploader
   def initialize
     @dput_configuration_name = "groonga-ppa"
+    @use_pbuilder = false
   end
 
   def run
@@ -36,7 +37,14 @@ class Uploader
     @required_groonga_version = required_groonga_version
 
     @code_names.each do |code_name|
-      upload(code_name)
+      mysql55_version = @mysql55_versions[code_name]
+      mysql56_version = @mysql56_versions[code_name]
+      if mysql55_version
+        upload(code_name, "5.5", mysql55_version)
+      end
+      if mysql56_version
+        upload(code_name, "5.6", mysql56_version)
+      end
     end
   end
 
@@ -66,18 +74,28 @@ allow_unsigned_uploads = 0
   end
 
   def ensure_mysql_version
-    @mysql_version = {}
+    @mysql_versions = {}
+    @mysql55_versions = {}
+    @mysql56_versions = {}
     @code_names.each do |code_name|
-      open("http://packages.ubuntu.com/#{code_name}/allpackages?format=txt.gz") do |file|
+      allpackages_url =
+        "http://packages.ubuntu.com/#{code_name}/allpackages?format=txt.gz"
+      open(allpackages_url) do |file|
         file.each_line do |line|
-          @mysql_version[code_name] = $1 if line =~ /\Amysql-server \((.+?)\).+/
+          case line
+          when /\Amysql-server \((.+?)\)/
+            @mysql_versions[code_name] = $1
+          when /\Amysql-server-5\.5 \((.+?)\)/
+            @mysql55_versions[code_name] = $1
+          when /\Amysql-server-5\.6 \((.+?)\)/
+            @mysql56_versions[code_name] = $1
+          end
         end
       end
     end
   end
 
   def parse_command_line!
-
     parser = OptionParser.new
     parser.on("--package=NAME",
               "The package name") do |name|
@@ -95,45 +113,73 @@ allow_unsigned_uploads = 0
               "The target code names") do |code_names|
       @code_names = code_names
     end
-    parser.on("--debian-directory=DIRECTORY",
-              "The debian/ directory") do |debian_directory|
-      @debian_directory = Pathname.new(debian_directory).expand_path
+    parser.on("--debian-base-directory=DIRECTORY",
+              "The directory that has debianXX/ directory") do |directory|
+      @debian_base_directory = Pathname.new(directory).expand_path
     end
     parser.on("--pgp-sign-key=KEY",
               "The PGP key to sign .changes and .dsc") do |pgp_sign_key|
       @pgp_sign_key = pgp_sign_key
     end
-    parser.on("--pbuilder",
-              "Use pbuilder for build check") do |pbuilder|
-      @use_pbuilder = pbuilder
+    parser.on("--[no-]pbuilder",
+              "Use pbuilder for build check") do |use_pbuilder|
+      @use_pbuilder = use_pbuilder
     end
 
     parser.parse!
   end
 
-  def upload(code_name)
+  def upload(code_name, mysql_short_version, mysql_version)
+    default_mysql_version = (@mysql_versions[code_name] == mysql_version)
+    deb_package_name = "#{@package}-#{mysql_short_version}"
     in_temporary_directory do
-      FileUtils.cp(@source_archive.to_s,
-                   "#{@package}_#{@version}.orig.tar.gz")
       run_command("tar", "xf", @source_archive.to_s)
-      directory_name = "#{@package}-#{@version}"
-      Dir.chdir(directory_name) do
-        FileUtils.cp_r(@debian_directory.to_s, "debian")
+      original_directory_name = "#{@package}-#{@version}"
+      custom_directory_name = "#{deb_package_name}-#{@version}"
+      FileUtils.mv(original_directory_name,
+                   custom_directory_name)
+      run_command("tar", "czf",
+                  "#{deb_package_name}_#{@version}.orig.tar.gz",
+                  custom_directory_name)
+      Dir.chdir(custom_directory_name) do
+        debian_directory =
+          @debian_base_directory + "debian-#{mysql_short_version}"
+        FileUtils.cp_r(debian_directory.to_s, "debian")
         deb_version = "#{current_deb_version.succ}~#{code_name}1"
         run_command("dch",
                     "--distribution", code_name,
                     "--newversion", deb_version,
                     "Build for #{code_name}.")
+        unless default_mysql_version
+          control_content = File.read("debian/control")
+          File.open("debian/control", "w") do |control|
+            in_mysql_server_mroonga = false
+            control_content.each_line do |line|
+              case line.chomp
+              when ""
+                if in_mysql_server_mroonga
+                  in_mysql_server_mroonga = false
+                else
+                  control.print(line)
+                end
+              when "Package: mysql-server-mroonga"
+                in_mysql_server_mroonga = true
+              else
+                control.print(line) unless in_mysql_server_mroonga
+              end
+            end
+          end
+        end
         run_command("sed",
-                    "-i", "-e", "s,MYSQL_VERSION,#{@mysql_version[code_name]},",
+                    "-i", "-e", "s,MYSQL_VERSION,#{mysql_version},",
                     "debian/control")
         run_command("debuild", "-S", "-sa", "-pgpg2", "-k#{@pgp_sign_key}")
         if @use_pbuilder
           run_command("pbuilder-dist", code_name, "build",
-                      "../#{@package}_#{deb_version}.dsc")
+                      "../#{deb_package_name}_#{deb_version}.dsc")
         else
           run_command("dput", @dput_configuration_name,
-                      "../#{@package}_#{deb_version}_source.changes")
+                      "../#{deb_package_name}_#{deb_version}_source.changes")
         end
       end
     end

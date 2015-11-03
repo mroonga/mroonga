@@ -35,7 +35,8 @@ CTestTestfile.cmake
 /test-driver
 /src/scratch
 /libmroonga.a
-/packages/debian/control
+/packages/debian-5.5/control
+/packages/debian-5.6/control
 /packages/rpm/*/*.spec
 /packages/apt/env.sh
 /packages/apt/.vagrant/
@@ -45,6 +46,7 @@ CTestTestfile.cmake
 /packages/yum/repositories/
 /packages/source/files/
 /packages/source/tmp/
+/packages/ubuntu/mroonga-*.orig.tar.gz
 /doc/locale/*/doctrees/
 /doc/locale/*/html/
 /doc/locale/*/man/

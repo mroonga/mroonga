@@ -1,5 +1,9 @@
 CODE_NAMES = precise,trusty,vivid,wily
 SOURCE = ../$(PACKAGE)-$(VERSION).tar.gz
+SOURCE_55_BASE = $(PACKAGE)-55
+SOURCE_55 = $(SOURCE_55_BASE)_$(VERSION).orig.tar.gz
+SOURCE_56_BASE = $(PACKAGE)-56
+SOURCE_56 = $(SOURCE_56_BASE)_$(VERSION).orig.tar.gz
 
 all:
 
@@ -15,10 +19,22 @@ upload: source ensure-launchpad-configuration
 	  --version '$(VERSION)' \
 	  --source-archive '$(SOURCE)' \
 	  --code-names '$(CODE_NAMES)' \
-	  --debian-directory '$(srcdir)/../debian/' \
+	  --debian-base-directory '$(srcdir)/../' \
 	  --pgp-sign-key '$(LAUNCHPAD_UPLOADER_PGP_KEY)'
 
-source: $(SOURCE)
+source: $(SOURCE) $(SOURCE_55) $(SOURCE_56)
 
 $(SOURCE):
 	ln -s $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz $(SOURCE)
+
+$(SOURCE_55): $(SOURCE)
+	tar xf $(SOURCE)
+	mv $(PACKAGE)-$(VERSION) $(SOURCE_55_BASE)-$(VERSION)
+	tar cfz $(SOURCE_55) $(SOURCE_55_BASE)-$(VERSION)
+	rm -r $(SOURCE_55_BASE)-$(VERSION)
+
+$(SOURCE_56): $(SOURCE)
+	tar xf $(SOURCE)
+	mv $(PACKAGE)-$(VERSION) $(SOURCE_56_BASE)-$(VERSION)
+	tar cfz $(SOURCE_56) $(SOURCE_56_BASE)-$(VERSION)
+	rm -r $(SOURCE_56_BASE)-$(VERSION)

@@ -58,7 +58,7 @@ build-package-deb: prepare-build-package-deb
 prepare-build-package-deb: source env.sh
 	cp env.sh tmp/
 	rm -rf tmp/debian
-	cp -rp $(srcdir)/../debian tmp/
+	cp -rp $(srcdir)/../debian-5.5 tmp/debian
 
 source: tmp/$(PACKAGE)-$(VERSION).tar.gz
 
