@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-10-29 14:16+0900\n"
+"PO-Revision-Date: 2015-11-03 20:27+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -126,12 +126,22 @@ msgstr ""
 "CentOS 7では、ディストリビューション由来のMariaDBパッケージ（MariaDB 5.5系）"
 "を利用できます。"
 
-# 57c1a2711fd448d79504e0f0df8d44e0
-msgid "CentOS 7 (with the Oracle MySQL package)"
-msgstr "CentOS 7（OracleのMySQLパッケージを利用）"
+# 5e3232071ae84bdfbce77f4bee3e0ae4
+msgid "CentOS 7 (with the Oracle MySQL 5.6 package)"
+msgstr "CentOS 7（OracleのMySQL 5.6パッケージを利用）"
 
-msgid "You can use Oracle's MySQL packages (version 5.6.x) on CentOS 7."
-msgstr "CentOS 7では、OracleのMySQLパッケージ（MySQL 5.6系）を利用できます。"
+msgid "You can use Oracle's MySQL packages version 5.6 on CentOS 7."
+msgstr "CentOS 7では、OracleのMySQL 5.6パッケージを利用できます。"
+
+# 5e3232071ae84bdfbce77f4bee3e0ae4
+msgid "CentOS 7 (with the Oracle MySQL 5.7 package)"
+msgstr "CentOS 7（OracleのMySQL 5.7パッケージを利用）"
+
+msgid ""
+"You can use Oracle's MySQL packages version 5.7 on CentOS 7 since Mroonga "
+"5.09 release."
+msgstr ""
+"CentOS 7では、Mroonga 5.09からOracleのMySQL 5.7パッケージを利用できます。"
 
 # 57c1a2711fd448d79504e0f0df8d44e0
 msgid "CentOS 7 (with Percona Server package)"
