@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright(C) 2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2014-2015  Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2014  HAYASHI Kentaro <hayashi@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -105,9 +105,9 @@ allow_unsigned_uploads = 0
               "The version") do |version|
       @version = version
     end
-    parser.on("--source-archive=ARCHIVE",
-              "The source archive") do |source_archive|
-      @source_archive = Pathname.new(source_archive).expand_path
+    parser.on("--source-archive-directory=DIRECTORY",
+              "The directory that has source archives") do |directory|
+      @source_archive_directory = Pathname.new(directory).expand_path
     end
     parser.on("--code-names=CODE_NAME1,CODE_NAME2,CODE_NAME3,...", Array,
               "The target code names") do |code_names|
@@ -133,15 +133,11 @@ allow_unsigned_uploads = 0
     default_mysql_version = (@mysql_versions[code_name] == mysql_version)
     deb_package_name = "#{@package}-#{mysql_short_version}"
     in_temporary_directory do
-      run_command("tar", "xf", @source_archive.to_s)
-      original_directory_name = "#{@package}-#{@version}"
-      custom_directory_name = "#{deb_package_name}-#{@version}"
-      FileUtils.mv(original_directory_name,
-                   custom_directory_name)
-      run_command("tar", "czf",
-                  "#{deb_package_name}_#{@version}.orig.tar.gz",
-                  custom_directory_name)
-      Dir.chdir(custom_directory_name) do
+      source_archive =
+        @source_archive_directory + "#{deb_package_name}_#{@version}.orig.tar.gz"
+      run_command("tar", "xf", source_archive.to_s)
+      directory_name = "#{deb_package_name}-#{@version}"
+      Dir.chdir(directory_name) do
         debian_directory =
           @debian_base_directory + "debian-#{mysql_short_version}"
         FileUtils.cp_r(debian_directory.to_s, "debian")

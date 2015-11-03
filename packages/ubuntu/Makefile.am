@@ -1,8 +1,8 @@
 CODE_NAMES = precise,trusty,vivid,wily
 SOURCE = ../$(PACKAGE)-$(VERSION).tar.gz
-SOURCE_55_BASE = $(PACKAGE)-55
+SOURCE_55_BASE = $(PACKAGE)-5.5
 SOURCE_55 = $(SOURCE_55_BASE)_$(VERSION).orig.tar.gz
-SOURCE_56_BASE = $(PACKAGE)-56
+SOURCE_56_BASE = $(PACKAGE)-5.6
 SOURCE_56 = $(SOURCE_56_BASE)_$(VERSION).orig.tar.gz
 
 all:
@@ -17,7 +17,7 @@ upload: source ensure-launchpad-configuration
 	./upload.rb \
 	  --package '$(PACKAGE)' \
 	  --version '$(VERSION)' \
-	  --source-archive '$(SOURCE)' \
+	  --source-archive-directory '$(builddir)/' \
 	  --code-names '$(CODE_NAMES)' \
 	  --debian-base-directory '$(srcdir)/../' \
 	  --pgp-sign-key '$(LAUNCHPAD_UPLOADER_PGP_KEY)'
