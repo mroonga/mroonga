@@ -82,6 +82,24 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
+  bool Operations::is_locked() {
+    MRN_DBUG_ENTER_METHOD();
+
+    if (grn_obj_is_locked(ctx_, table_) > 0)
+      DBUG_RETURN(true);
+
+    if (grn_obj_is_locked(ctx_, columns_.type_) > 0)
+      DBUG_RETURN(true);
+
+    if (grn_obj_is_locked(ctx_, columns_.table_) > 0)
+      DBUG_RETURN(true);
+
+    if (grn_obj_is_locked(ctx_, columns_.record_) > 0)
+      DBUG_RETURN(true);
+
+    DBUG_RETURN(false);
+  }
+
   grn_id Operations::start(const char *type,
                            const char *table_name, size_t table_name_size) {
     MRN_DBUG_ENTER_METHOD();

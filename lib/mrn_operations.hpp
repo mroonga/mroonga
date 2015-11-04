@@ -28,6 +28,8 @@ namespace mrn {
     Operations(grn_ctx *ctx);
     ~Operations();
 
+    bool is_locked();
+
     grn_id start(const char *type,
                  const char *table_name, size_t table_name_size);
     void record_target(grn_id id, grn_id target_id);

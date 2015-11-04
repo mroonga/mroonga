@@ -29,9 +29,11 @@ namespace mrn {
   Database::Database(grn_ctx *ctx, grn_obj *db)
     : ctx_(ctx),
       db_(db),
-      broken_table_names_(NULL) {
+      broken_table_names_(NULL),
+      is_broken_(false) {
     Operations operations(ctx_);
     broken_table_names_ = operations.collect_processing_table_names();
+    is_broken_ = operations.is_locked();
   }
 
   Database::~Database(void) {
@@ -66,6 +68,11 @@ namespace mrn {
   grn_obj *Database::get() {
     MRN_DBUG_ENTER_METHOD();
     DBUG_RETURN(db_);
+  }
+
+  bool Database::is_broken() {
+    MRN_DBUG_ENTER_METHOD();
+    DBUG_RETURN(is_broken_);
   }
 
   bool Database::is_broken_table(const char *name, size_t name_size) {

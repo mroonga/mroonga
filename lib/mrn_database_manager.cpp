@@ -129,6 +129,22 @@ namespace mrn {
                    &db_address, NULL);
       memcpy(db_address, db, sizeof(Database *));
       error = ensure_normalizers_registered((*db)->get());
+      if (!error) {
+        if ((*db)->is_broken()) {
+          error = ER_CANT_OPEN_FILE;
+          char error_message[MRN_MESSAGE_BUFFER_SIZE];
+          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                   "mroonga: database: open: "
+                   "The database maybe broken. "
+                   "We recommend you to recreate the database. "
+                   "If the database isn't broken, "
+                   "you can remove this error by running "
+                   "'groonga %s table_remove mroonga_operations' "
+                   "on server. But the latter isn't recommended.",
+                   mapper.db_path());
+          my_message(error, error_message, MYF(0));
+        }
+      }
     } else {
       memcpy(db, db_address, sizeof(Database *));
       grn_ctx_use(ctx_, (*db)->get());
