@@ -17,15 +17,10 @@ install:
   - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
   - rmdir /S /Q ..\groonga\test\
   - cd ..\groonga\vendor
-  - ruby download_mecab.rb --debug
-  - dir
-  - dir mecab-0.996
+  - ruby download_mecab.rb
   - cd ..\..\mariadb-10.1.8
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
-  - dir C:\projects\mariadb-10.1.8\storage\mroonga\vendor\groonga\vendor
-  - dir C:\projects\mariadb-10.1.8\storage\mroonga\vendor\groonga\vendor\mecab-0.996
-  - dir C:\projects\mariadb-10.1.8\storage\mroonga\vendor\groonga\vendor\mecab-0.996\src
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
 build_script:
   - "echo # > win\\packaging\\CMakeLists.txt"
