@@ -25,6 +25,7 @@ install:
   - move ..\groonga storage\mroonga\vendor\groonga
   - dir C:\projects\mariadb-10.1.8\storage\mroonga\vendor\groonga\vendor
   - dir C:\projects\mariadb-10.1.8\storage\mroonga\vendor\groonga\vendor\mecab-0.996
+  - dir C:\projects\mariadb-10.1.8\storage\mroonga\vendor\groonga\vendor\mecab-0.996\src
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
 build_script:
   - "echo # > win\\packaging\\CMakeLists.txt"
