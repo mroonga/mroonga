@@ -17,7 +17,7 @@ install:
   - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
   - rmdir /S /Q ..\groonga\test\
   - cd ..\groonga\vendor
-  - ruby download_mecab.rb
+  - ruby download_mecab.rb --debug
   - dir
   - dir mecab-0.996
   - cd ..\..\mariadb-10.1.8
