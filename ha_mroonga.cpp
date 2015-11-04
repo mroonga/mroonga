@@ -4103,12 +4103,14 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
       GRN_LOG(ctx, GRN_LOG_NOTICE,
               "Auto repair is started: <%s>",
               name);
-      operations_->clear(table_name, table_name_size);
-      db->mark_table_repaired(table_name, table_name_size);
-      if (!share->disable_keys) {
-        error = wrapper_disable_indexes_mroonga(HA_KEY_SWITCH_ALL);
-        if (!error) {
-          error = wrapper_enable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+      error = operations_->clear(table_name, table_name_size);
+      if (!error) {
+        db->mark_table_repaired(table_name, table_name_size);
+        if (!share->disable_keys) {
+          error = wrapper_disable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+          if (!error) {
+            error = wrapper_enable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+          }
         }
       }
       GRN_LOG(ctx, GRN_LOG_NOTICE,
@@ -4770,7 +4772,7 @@ int ha_mroonga::delete_table(const char *name)
   }
 
   if (!error) {
-    operations_->clear(name, strlen(name));
+    error = operations_->clear(name, strlen(name));
   }
 
   if (!error && is_temporary_table_name(name)) {

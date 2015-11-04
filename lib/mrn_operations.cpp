@@ -187,7 +187,23 @@ namespace mrn {
       }
 
       if (!target_table) {
-        grn_table_cursor_delete(ctx_, cursor);
+        grn_rc rc = grn_table_cursor_delete(ctx_, cursor);
+        if (rc != GRN_SUCCESS) {
+          GRN_BULK_REWIND(&text_buffer_);
+          grn_obj_get_value(ctx_, columns_.type_, id, &text_buffer_);
+          GRN_TEXT_PUTC(ctx_, &text_buffer_, '\0');
+          char error_message[MRN_MESSAGE_BUFFER_SIZE];
+          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                   "mroonga: repair: failed to delete an orphan operation: "
+                   "[%u]: <%.*s>[%s]: <%s>(%d)",
+                   id,
+                   static_cast<int>(table_name_size), table_name,
+                   GRN_TEXT_VALUE(&text_buffer_),
+                   ctx_->errbuf,
+                   rc);
+          my_message(error, error_message, MYF(0));
+          break;
+        }
         continue;
       }
 
@@ -195,7 +211,24 @@ namespace mrn {
       grn_obj_get_value(ctx_, columns_.record_, id, &id_buffer_);
       grn_id record_id = GRN_UINT32_VALUE(&id_buffer_);
       if (record_id == GRN_ID_NIL) {
-        grn_table_cursor_delete(ctx_, cursor);
+        grn_rc rc = grn_table_cursor_delete(ctx_, cursor);
+        if (rc != GRN_SUCCESS) {
+          GRN_BULK_REWIND(&text_buffer_);
+          grn_obj_get_value(ctx_, columns_.type_, id, &text_buffer_);
+          GRN_TEXT_PUTC(ctx_, &text_buffer_, '\0');
+          char error_message[MRN_MESSAGE_BUFFER_SIZE];
+          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                   "mroonga: repair: "
+                   "failed to delete an operation that has no related record: "
+                   "[%u]: <%.*s>[%s]: <%s>(%d)",
+                   id,
+                   static_cast<int>(table_name_size), table_name,
+                   GRN_TEXT_VALUE(&text_buffer_),
+                   ctx_->errbuf,
+                   rc);
+          my_message(error, error_message, MYF(0));
+          break;
+        }
         continue;
       }
 
@@ -204,8 +237,38 @@ namespace mrn {
       GRN_TEXT_PUTC(ctx_, &text_buffer_, '\0');
       if (strcmp(GRN_TEXT_VALUE(&text_buffer_), "write") == 0 ||
           strcmp(GRN_TEXT_VALUE(&text_buffer_), "delete") == 0) {
-        grn_table_delete_by_id(ctx_, target_table, record_id);
-        grn_table_cursor_delete(ctx_, cursor);
+        grn_rc rc = grn_table_delete_by_id(ctx_, target_table, record_id);
+        if (rc != GRN_SUCCESS) {
+          error = HA_ERR_CRASHED_ON_USAGE;
+          char error_message[MRN_MESSAGE_BUFFER_SIZE];
+          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                   "mroonga: repair: failed to delete an incomplete record: "
+                   "[%u]: <%.*s>[%u]: <%s>(%d)",
+                   id,
+                   static_cast<int>(table_name_size), table_name,
+                   record_id,
+                   ctx_->errbuf,
+                   rc);
+          my_message(error, error_message, MYF(0));
+          break;
+        }
+
+        rc = grn_table_cursor_delete(ctx_, cursor);
+        if (rc != GRN_SUCCESS) {
+          error = HA_ERR_CRASHED_ON_USAGE;
+          char error_message[MRN_MESSAGE_BUFFER_SIZE];
+          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                   "mroonga: repair: failed to delete an incomplete operation: "
+                   "[%u]: <%.*s>[%u][%s]: <%s>(%d)",
+                   id,
+                   static_cast<int>(table_name_size), table_name,
+                   record_id,
+                   GRN_TEXT_VALUE(&text_buffer_),
+                   ctx_->errbuf,
+                   rc);
+          my_message(error, error_message, MYF(0));
+          break;
+        }
       } else if (strcmp(GRN_TEXT_VALUE(&text_buffer_), "update") == 0) {
         error = HA_ERR_CRASHED_ON_USAGE;
         my_message(error,
@@ -216,7 +279,11 @@ namespace mrn {
         error = HA_ERR_CRASHED_ON_USAGE;
         char error_message[MRN_MESSAGE_BUFFER_SIZE];
         snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-                 "mroonga: repair: unknown operation type: <%s>",
+                 "mroonga: repair: unknown operation type: "
+                 "[%u]: <%.*s>[%u]: <%s>",
+                 id,
+                 static_cast<int>(table_name_size), table_name,
+                 record_id,
                  GRN_TEXT_VALUE(&text_buffer_));
         my_message(error, error_message, MYF(0));
         break;
@@ -227,13 +294,24 @@ namespace mrn {
     DBUG_RETURN(error);
   }
 
-  void Operations::clear(const char *table_name, size_t table_name_size) {
+  int Operations::clear(const char *table_name, size_t table_name_size) {
     MRN_DBUG_ENTER_METHOD();
+
+    int error = 0;
 
     grn_table_cursor *cursor;
     cursor = grn_table_cursor_open(ctx_, table_, NULL, 0, NULL, 0, 0, -1, 0);
     if (!cursor) {
-      DBUG_VOID_RETURN;
+      error = HA_ERR_CRASHED_ON_USAGE;
+      if (ctx_->rc) {
+        my_message(error, ctx_->errbuf, MYF(0));
+      } else {
+        my_message(error,
+                   "mroonga: clear: "
+                   "failed to open cursor for operations table",
+                   MYF(0));
+      }
+      DBUG_RETURN(error);
     }
 
     grn_id id;
@@ -245,11 +323,31 @@ namespace mrn {
           memcmp(GRN_TEXT_VALUE(&text_buffer_),
                  table_name,
                  table_name_size) == 0) {
-        grn_table_cursor_delete(ctx_, cursor);
+        grn_rc rc = grn_table_cursor_delete(ctx_, cursor);
+        if (rc != GRN_SUCCESS) {
+          error = HA_ERR_CRASHED_ON_USAGE;
+          GRN_BULK_REWIND(&id_buffer_);
+          grn_obj_get_value(ctx_, columns_.record_, id, &id_buffer_);
+          GRN_BULK_REWIND(&text_buffer_);
+          grn_obj_get_value(ctx_, columns_.type_, id, &text_buffer_);
+          GRN_TEXT_PUTC(ctx_, &text_buffer_, '\0');
+          char error_message[MRN_MESSAGE_BUFFER_SIZE];
+          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                   "mroonga: clear: failed to delete an operation: "
+                   "[%u]: <%.*s>[%u][%s]: <%s>(%d)",
+                   id,
+                   static_cast<int>(table_name_size), table_name,
+                   GRN_UINT32_VALUE(&id_buffer_),
+                   GRN_TEXT_VALUE(&text_buffer_),
+                   ctx_->errbuf,
+                   rc);
+          my_message(error, error_message, MYF(0));
+          break;
+        }
       }
     }
     grn_table_cursor_close(ctx_, cursor);
 
-    DBUG_VOID_RETURN;
+    DBUG_RETURN(error);
   }
 }

@@ -36,7 +36,7 @@ namespace mrn {
     grn_hash *collect_processing_table_names();
 
     int repair(const char *table_name, size_t table_name_size);
-    void clear(const char *table_name, size_t table_name_size);
+    int clear(const char *table_name, size_t table_name_size);
 
   private:
     grn_ctx *ctx_;
