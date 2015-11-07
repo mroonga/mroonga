@@ -4107,6 +4107,9 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
       if (!error) {
         db->mark_table_repaired(table_name, table_name_size);
         if (!share->disable_keys) {
+          // TODO: implemented by "reindex" instead of "remove and recreate".
+          // Because "remove and recreate" invalidates opened indexes by
+          // other threads.
           error = wrapper_disable_indexes_mroonga(HA_KEY_SWITCH_ALL);
           if (!error) {
             error = wrapper_enable_indexes_mroonga(HA_KEY_SWITCH_ALL);
@@ -4275,6 +4278,86 @@ void ha_mroonga::wrapper_overwrite_index_bits()
   DBUG_VOID_RETURN;
 }
 
+int ha_mroonga::storage_reindex()
+{
+  int error = 0;
+  MRN_DBUG_ENTER_METHOD();
+
+  uint n_keys = table_share->keys;
+  KEY *key_info = table->key_info;
+
+  bool have_multiple_column_index = false;
+  bitmap_clear_all(table->read_set);
+  for (uint i = 0; i < n_keys; ++i) {
+    if (!grn_index_columns[i])
+      continue;
+
+    grn_hash *columns = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
+                                        GRN_OBJ_TABLE_HASH_KEY);
+    grn_table_columns(ctx, grn_index_tables[i], NULL, 0,
+                      reinterpret_cast<grn_obj *>(columns));
+    unsigned int n_columns =
+      grn_table_size(ctx, reinterpret_cast<grn_obj *>(columns));
+    grn_hash_close(ctx, columns);
+
+    bool is_multiple_column_index =
+      (KEY_N_KEY_PARTS(&(key_info[i])) != 1 &&
+       !(key_info[i].flags & HA_FULLTEXT));
+
+    if (n_columns == 1 || is_multiple_column_index) {
+      grn_table_truncate(ctx, grn_index_tables[i]);
+      if (ctx->rc != GRN_SUCCESS) {
+        error = ER_ERROR_ON_WRITE;
+        char error_message[MRN_MESSAGE_BUFFER_SIZE];
+        char index_table_name[GRN_TABLE_MAX_KEY_SIZE];
+        int index_table_name_size;
+        index_table_name_size =
+          grn_obj_name(ctx, grn_index_tables[i],
+                       index_table_name, GRN_TABLE_MAX_KEY_SIZE);
+        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                 "mroonga: reindex: failed to truncate index table: "
+                 "<%.*s>: <%s>(%d)",
+                 index_table_name_size, index_table_name,
+                 ctx->errbuf, ctx->rc);
+        my_message(error, error_message, MYF(0));
+        break;
+      }
+    }
+
+    if (is_multiple_column_index) {
+      mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
+      have_multiple_column_index = true;
+    } else {
+      grn_obj_reindex(ctx, grn_index_columns[i]);
+      if (ctx->rc != GRN_SUCCESS) {
+        error = ER_ERROR_ON_WRITE;
+        char error_message[MRN_MESSAGE_BUFFER_SIZE];
+        char index_column_name[GRN_TABLE_MAX_KEY_SIZE];
+        int index_column_name_size;
+        index_column_name_size =
+          grn_obj_name(ctx, grn_index_columns[i],
+                       index_column_name, GRN_TABLE_MAX_KEY_SIZE);
+        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                 "mroonga: reindex: failed to reindex: "
+                 "<%.*s>: <%s>(%d)",
+                 index_column_name_size, index_column_name,
+                 ctx->errbuf, ctx->rc);
+        my_message(error, error_message, MYF(0));
+        break;
+      }
+    }
+  }
+
+  if (!error && have_multiple_column_index)
+    error = storage_add_index_multiple_columns(key_info, n_keys,
+                                               grn_index_tables,
+                                               grn_index_columns,
+                                               false);
+  bitmap_set_all(table->read_set);
+
+  DBUG_RETURN(error);
+}
+
 int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
 {
   int error = 0;
@@ -4297,9 +4380,6 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
   }
 
   if (!(open_options & HA_OPEN_FOR_REPAIR)) {
-    // TODO: Reduce lock scope
-    mrn::Lock lock(&mrn_operations_mutex);
-
     error = storage_open_indexes(name);
     if (error) {
       storage_close_columns();
@@ -4311,6 +4391,7 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
     storage_set_keys_in_use();
 
     {
+      mrn::Lock lock(&mrn_operations_mutex);
       mrn::PathMapper mapper(name);
       const char *table_name = mapper.table_name();
       size_t table_name_size = strlen(table_name);
@@ -4323,9 +4404,7 @@ int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
           db->mark_table_repaired(table_name, table_name_size);
         if (!share->disable_keys) {
           if (!error)
-            error = storage_disable_indexes(HA_KEY_SWITCH_ALL);
-          if (!error)
-            error = storage_enable_indexes(HA_KEY_SWITCH_ALL);
+            error = storage_reindex();
         }
         GRN_LOG(ctx, GRN_LOG_NOTICE,
                 "Auto repair is done: <%s>: %s",

@@ -812,6 +812,7 @@ private:
   int generic_delete_table(const char *name, const char *table_name);
   int wrapper_open(const char *name, int mode, uint open_options);
   int wrapper_open_indexes(const char *name);
+  int storage_reindex();
   int storage_open(const char *name, int mode, uint open_options);
   int open_table(const char *name);
   int storage_open_columns(void);
