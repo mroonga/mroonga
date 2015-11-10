@@ -41,7 +41,7 @@ namespace mrn {
 
     grn_ctx *pull(void) {
       MRN_DBUG_ENTER_METHOD();
-      grn_ctx *ctx;
+      grn_ctx *ctx = NULL;
 
       {
         time_t now;
@@ -54,14 +54,14 @@ namespace mrn {
           if ((now - last_pull_time_) >= CLEAR_THREATHOLD_IN_SECONDS) {
             clear();
           }
-          last_pull_time_ = now;
-          DBUG_RETURN(ctx);
-        } else {
-          last_pull_time_ = now;
         }
+        last_pull_time_ = now;
       }
 
-      ctx = grn_ctx_open(0);
+      if (!ctx) {
+        ctx = grn_ctx_open(0);
+      }
+
       DBUG_RETURN(ctx);
     }
 
