@@ -36,7 +36,6 @@ namespace mrn {
 
     ~Impl(void) {
       clear();
-      list_free(pool_, 0);
     }
 
     grn_ctx *pull(void) {
@@ -86,9 +85,10 @@ namespace mrn {
 
     void clear(void) {
       MRN_DBUG_ENTER_METHOD();
-      for (LIST *node = pool_; node; node = list_rest(node)) {
-        grn_ctx *ctx = static_cast<grn_ctx *>(node->data);
+      while (pool_) {
+        grn_ctx *ctx = static_cast<grn_ctx *>(pool_->data);
         grn_ctx_close(ctx);
+        list_pop(pool_);
       }
       DBUG_VOID_RETURN;
     }
