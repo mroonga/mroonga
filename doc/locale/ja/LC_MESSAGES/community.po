@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mroonga 1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2012-01-31 11:48+0900\n"
+"PO-Revision-Date: 2015-11-18 18:43+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -33,7 +33,7 @@ msgstr "メーリングリスト"
 msgid "There are mailing lists for discussion about Groonga and Mroonga."
 msgstr "GroongaとMroongaに関する話題を扱うメーリングリストがあります。"
 
-msgid "For English speaker"
+msgid "For English speakers"
 msgstr "英語で話題を扱う場合"
 
 msgid ""
@@ -41,7 +41,7 @@ msgid ""
 "listinfo/groonga-talk>`_"
 msgstr ""
 
-msgid "For Japanese speaker"
+msgid "For Japanese speakers"
 msgstr "日本語で話題を扱う場合"
 
 # 213cf612607c436ba6303f8fd8ef446b
@@ -49,3 +49,46 @@ msgid ""
 "`groonga-dev@lists.osdn.me <http://lists.osdn.me/mailman/listinfo/groonga-"
 "dev>`_"
 msgstr ""
+
+msgid "Chat room"
+msgstr "チャットルーム"
+
+msgid "There are chat rooms for discussion about Groonga and Mroonga."
+msgstr "GroongaとMroongaに関する話題を扱うチャットルームがあります。"
+
+msgid "`groonga/en chat room on Gitter <https://gitter.im/groonga/en>`_"
+msgstr "`Gitterのgroonga/enチャットルーム <https://gitter.im/groonga/en>`_"
+
+msgid "`groonga/ja chat room on Gitter <https://gitter.im/groonga/ja>`_"
+msgstr "`Gitterのgroonga/jaチャットルーム <https://gitter.im/groonga/ja>`_"
+
+msgid "Twitter"
+msgstr ""
+
+msgid ""
+"`@groonga <https://twitter.com/groonga/>`_ tweets Groonga and Mroonga "
+"related information."
+msgstr ""
+"`@groonga <https://twitter.com/groonga/>`_ はGroonga・Mroonga関連の情報をツ"
+"イートします。"
+
+msgid ""
+"Please follow the account to get the latest Groonga and Mroonga related "
+"information!"
+msgstr ""
+"最新のGroonga・Mroonga情報をゲットするためにこのアカウントをフォローしてくだ"
+"さい！"
+
+msgid "Facebook"
+msgstr ""
+
+msgid ""
+"`Mroonga page on Facebook <http://www.facebook.com/mroonga>`_ shares Mroonga "
+"related information."
+msgstr ""
+"`FacebookのMroongaページ <http://www.facebook.com/mroonga>`_ ではMroonga関連"
+"の情報をシェアしています。"
+
+msgid "Please like the page to get the latest Mroonga related information!"
+msgstr ""
+"Mroonga関連の最新情報を入手するためにこのページをいいね！してください！"
