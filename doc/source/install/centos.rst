@@ -167,7 +167,7 @@ You can use Oracle's MySQL packages version 5.6 on CentOS 7.
 Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-  % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+  % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql-community-server
   % sudo systemctl start mysqld
