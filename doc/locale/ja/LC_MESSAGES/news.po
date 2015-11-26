@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-10-29 14:19+0900\n"
+"PO-Revision-Date: 2015-11-26 18:28+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,66 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 5.09 - 2015-10-29"
-msgstr "5.09リリース - 2015-10-29"
+msgid "Release 5.10 - 2015-11-29"
+msgstr "5.10リリース - 2015-11-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+#, fuzzy
+msgid ""
+"[rpm][mysql57-community-mroonga] Supported auto Mroonga registration. "
+"[GitHub#78] [Patch by GMO Media, Inc.]"
+msgstr ""
+"[rpm][mysql57-community-mroonga] 自動でMroongaを登録するようになりました。 "
+"[GitHub#78] [GMOメディア株式会社さんがパッチ提供]"
+
+msgid "[rpm][mysql57-community-mroonga] Supported CentOS 7."
+msgstr ""
+"[rpm][mysql57-community-mroonga] CentOS 7用パッケージの提供をはじめました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[storage] Fixed a bug that auto repair may cause crash. [groonga-dev,03608] "
+"[Reported by Hiroshi Kagami]"
+msgstr ""
+"[ストレージモード] 自動復旧機能が原因でクラッシュすることがある問題を修正しま"
+"した。 [groonga-dev,03608] [各務さんが報告]"
+
+msgid ""
+"Fixed a crash bug when you use UDF concurrency. [groonga-dev,03640] "
+"[Reported by Hironori Matsubara]"
+msgstr ""
+"同時にUDFを使うとクラッシュする問題を修正しました。 [groonga-dev,03640] [松原"
+"さんが報告]"
+
+msgid ""
+"[wrapper] Fixed a bug that ``DROP TABLE`` may keep files. [groonga-"
+"dev,03673] [Reported by Tomohiro KATO]"
+msgstr ""
+"[ラッパーモード] ``DROP TABLE`` でファイルが残ってしまうかもしれない問題を修"
+"正しました。 [groonga-dev,03673] [かとうさんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+# d8986144d4454b8dbfd7cf12c8877b8c
+msgid "GMO Media, Inc."
+msgstr "GMOメディア株式会社さん"
+
+msgid "Hiroshi Kagami"
+msgstr "各務さん"
+
+msgid "Hironori Matsubara"
+msgstr "松原さん"
+
+msgid "Tomohiro KATO"
+msgstr "かとうさん"
+
+msgid "Release 5.09 - 2015-10-29"
+msgstr "5.09リリース - 2015-10-29"
 
 msgid ""
 "[rpm][mysql56-community-mroonga] Updated target MySQL to 5.6.27. [Reported "
@@ -75,9 +130,6 @@ msgstr ""
 "[:doc:`/install/centos`] Oracle提供のMySQL 5.7用パッケージをサポートしまし"
 "た。CentOS 6向けだけです。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "Fixed a bug that ``MRBContains()`` doesn't use index. [GitHub#73] [Reported "
 "by Petri Rautiainen]"
@@ -85,14 +137,8 @@ msgstr ""
 "``MRBContains()`` がインデックスを使わない問題を修正しました。 [GitHub#73] "
 "[Petri Rautiainenさんが報告]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "@star_orihime"
 msgstr "@star_orihimeさん"
-
-msgid "Hiroshi Kagami"
-msgstr "各務さん"
 
 msgid "Petri Rautiainen"
 msgstr "Petri Rautiainenさん"
@@ -157,10 +203,6 @@ msgid ""
 msgstr ""
 "シャットダウン時に開いているテーブルがあるとクラッシュする問題を修正しまし"
 "た。 [GitHub#71] [GMOメディア株式会社さんが報告]"
-
-# d8986144d4454b8dbfd7cf12c8877b8c
-msgid "GMO Media, Inc."
-msgstr "GMOメディア株式会社さん"
 
 # 22607774878349e3a2ba0a9bef7a10cc
 msgid "Sergei Golubchik"
