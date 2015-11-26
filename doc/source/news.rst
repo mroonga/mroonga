@@ -35,6 +35,7 @@ Thanks
 
 * GMO Media, Inc.
 * Hiroshi Kagami
+* Hironori Matsubara
 * Tomohiro KATO
 
 .. _release-5-09:
