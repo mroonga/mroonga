@@ -4841,12 +4841,10 @@ int ha_mroonga::delete_table(const char *name)
   }
 
   if (!wrap_handlerton) {
-    bool open_table_to_get_wrap_handlerton = true;
-#ifndef MRN_INTERNAL_TABLE_HAVE_FRM
+    bool open_table_to_get_wrap_handlerton = !mapper.is_temporary_table_name();
     if (mapper.is_internal_table_name()) {
       open_table_to_get_wrap_handlerton = false;
     }
-#endif
     if (open_table_to_get_wrap_handlerton) {
       TABLE_LIST table_list;
       table_list.init_one_table(mapper.db_name(), strlen(mapper.db_name()),

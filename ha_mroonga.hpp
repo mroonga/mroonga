@@ -218,10 +218,6 @@ extern "C" {
   Alter_inplace_info::ALTER_COLUMN_ORDER
 #endif
 
-#if !(defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100106)
-#  define MRN_INTERNAL_TABLE_HAVE_FRM
-#endif
-
 class ha_mroonga;
 
 /* structs */
