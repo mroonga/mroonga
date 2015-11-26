@@ -4840,6 +4840,42 @@ int ha_mroonga::delete_table(const char *name)
     }
   }
 
+#ifdef MRN_TEMPORARY_TABLE_HAVE_FRM
+  if (!wrap_handlerton && !mapper.is_internal_table_name()) {
+    TABLE_LIST table_list;
+    table_list.init_one_table(mapper.db_name(), strlen(mapper.db_name()),
+                              mapper.mysql_table_name(),
+                              strlen(mapper.mysql_table_name()),
+                              mapper.mysql_table_name(),
+                              TL_WRITE);
+    mrn_open_mutex_lock(NULL);
+    TABLE_SHARE *tmp_table_share =
+      mrn_create_tmp_table_share(&table_list, name, &error);
+    error = 0;
+    mrn_open_mutex_unlock(NULL);
+    if (tmp_table_share) {
+      TABLE tmp_table;
+      tmp_table.s = tmp_table_share;
+#  ifdef WITH_PARTITION_STORAGE_ENGINE
+      tmp_table.part_info = NULL;
+#  endif
+      MRN_SHARE *tmp_share = mrn_get_share(name, &tmp_table, &error);
+      if (tmp_share) {
+        wrap_handlerton = tmp_share->hton;
+        mrn_free_long_term_share(tmp_share->long_term_share);
+        tmp_share->long_term_share = NULL;
+        mrn_free_share(tmp_share);
+      }
+      mrn_open_mutex_lock(NULL);
+      mrn_free_tmp_table_share(tmp_table_share);
+      mrn_open_mutex_unlock(NULL);
+      if (error) {
+        DBUG_RETURN(error);
+      }
+    }
+  }
+#endif
+
   if (wrap_handlerton)
   {
     error = wrapper_delete_table(name, wrap_handlerton, mapper.table_name());
@@ -4854,7 +4890,7 @@ int ha_mroonga::delete_table(const char *name)
     error = operations_->clear(name, strlen(name));
   }
 
-  if (!error && is_temporary_table_name(name)) {
+  if (!error && mapper.is_temporary_table_name()) {
     mrn_db_manager->drop(name);
   }
 
@@ -9727,27 +9763,6 @@ bool ha_mroonga::should_normalize(Field *field) const
   mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
   bool need_normalize_p = field_normalizer.should_normalize();
   DBUG_RETURN(need_normalize_p);
-}
-
-bool ha_mroonga::is_temporary_table_name(const char *name) const
-{
-  MRN_DBUG_ENTER_METHOD();
-  DBUG_PRINT("info", ("mroonga: table name = %s", name));
-#ifdef MRN_USE_MYSQL_DATA_HOME
-  bool temporary_table_name_p = false;
-  if (name[0] != '.') {
-    int len = strlen(name);
-    int mysql_data_home_len = strlen(mysql_data_home);
-    if (len < mysql_data_home_len ||
-        strncmp(name, mysql_data_home, mysql_data_home_len) ||
-        !strchr(&name[mysql_data_home_len], FN_LIBCHAR)) {
-      temporary_table_name_p = true;
-    }
-  }
-#else
-  bool temporary_table_name_p = (name[0] != '.');
-#endif
-  DBUG_RETURN(temporary_table_name_p);
 }
 
 void ha_mroonga::check_count_skip(key_part_map start_key_part_map,

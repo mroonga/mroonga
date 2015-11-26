@@ -222,4 +222,36 @@ namespace mrn {
     mysql_path_[i] = '\0';
     return mysql_path_;
   }
+
+  bool PathMapper::is_internal_table_name() {
+    return mysql_table_name()[0] == '#';
+  }
+
+  bool PathMapper::is_temporary_table_name() {
+    if (!mysql_data_home_path_) {
+      return original_mysql_path_[0] != FN_CURLIB;
+    }
+
+    if (original_mysql_path_[0] == FN_CURLIB) {
+      return false;
+    }
+
+    size_t original_mysql_path_len = strlen(original_mysql_path_);
+    size_t mysql_data_home_path_len = strlen(mysql_data_home_path_);
+    if (original_mysql_path_len < mysql_data_home_path_len) {
+      return true;
+    }
+
+    if (strncmp(original_mysql_path_,
+                mysql_data_home_path_,
+                mysql_data_home_path_len) != 0) {
+      return true;
+    }
+
+    if (strchr(&original_mysql_path_[mysql_data_home_path_len], FN_LIBCHAR)) {
+      return true;
+    }
+
+    return false;
+  }
 }

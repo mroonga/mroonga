@@ -218,6 +218,10 @@ extern "C" {
   Alter_inplace_info::ALTER_COLUMN_ORDER
 #endif
 
+#if !(defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100106)
+#  define MRN_TEMPORARY_TABLE_HAVE_FRM
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -633,7 +637,6 @@ private:
   bool is_dry_write();
   bool is_enable_optimization();
   bool should_normalize(Field *field) const;
-  bool is_temporary_table_name(const char *name) const;
   void check_count_skip(key_part_map start_key_part_map,
                         key_part_map end_key_part_map, bool fulltext);
   bool is_grn_zero_column_value(grn_obj *column, grn_obj *value);
