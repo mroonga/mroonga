@@ -144,6 +144,11 @@ SELECT id, name, ST_AsText(location) AS location_text FROM shops
   WHERE MBRContains(ST_GeomFromText('LineString(139.7727 35.6684, 139.7038 35.7121)'), location)
   ORDER BY id;
 
+EXPLAIN
+SELECT id, name, ST_AsText(location) AS location_text FROM shops
+  WHERE MBRContains(ST_GeomFromText('LineString(139.7727 35.6684, 139.7038 35.7121)'), location)
+  ORDER BY id;
+
 DROP TABLE shops;
 
 --source ../../../include/mroonga/have_mroonga_deinit.inc
