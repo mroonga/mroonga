@@ -4840,41 +4840,47 @@ int ha_mroonga::delete_table(const char *name)
     }
   }
 
-#ifdef MRN_TEMPORARY_TABLE_HAVE_FRM
-  if (!wrap_handlerton && !mapper.is_internal_table_name()) {
-    TABLE_LIST table_list;
-    table_list.init_one_table(mapper.db_name(), strlen(mapper.db_name()),
-                              mapper.mysql_table_name(),
-                              strlen(mapper.mysql_table_name()),
-                              mapper.mysql_table_name(),
-                              TL_WRITE);
-    mrn_open_mutex_lock(NULL);
-    TABLE_SHARE *tmp_table_share =
-      mrn_create_tmp_table_share(&table_list, name, &error);
-    error = 0;
-    mrn_open_mutex_unlock(NULL);
-    if (tmp_table_share) {
-      TABLE tmp_table;
-      tmp_table.s = tmp_table_share;
-#  ifdef WITH_PARTITION_STORAGE_ENGINE
-      tmp_table.part_info = NULL;
-#  endif
-      MRN_SHARE *tmp_share = mrn_get_share(name, &tmp_table, &error);
-      if (tmp_share) {
-        wrap_handlerton = tmp_share->hton;
-        mrn_free_long_term_share(tmp_share->long_term_share);
-        tmp_share->long_term_share = NULL;
-        mrn_free_share(tmp_share);
-      }
+  if (!wrap_handlerton) {
+    bool open_table_to_get_wrap_handlerton = true;
+#ifndef MRN_INTERNAL_TABLE_HAVE_FRM
+    if (mapper.is_internal_table_name()) {
+      open_table_to_get_wrap_handlerton = false;
+    }
+#endif
+    if (open_table_to_get_wrap_handlerton) {
+      TABLE_LIST table_list;
+      table_list.init_one_table(mapper.db_name(), strlen(mapper.db_name()),
+                                mapper.mysql_table_name(),
+                                strlen(mapper.mysql_table_name()),
+                                mapper.mysql_table_name(),
+                                TL_WRITE);
       mrn_open_mutex_lock(NULL);
-      mrn_free_tmp_table_share(tmp_table_share);
+      TABLE_SHARE *tmp_table_share =
+        mrn_create_tmp_table_share(&table_list, name, &error);
+      error = 0;
       mrn_open_mutex_unlock(NULL);
-      if (error) {
-        DBUG_RETURN(error);
+      if (tmp_table_share) {
+        TABLE tmp_table;
+        tmp_table.s = tmp_table_share;
+#ifdef WITH_PARTITION_STORAGE_ENGINE
+        tmp_table.part_info = NULL;
+#endif
+        MRN_SHARE *tmp_share = mrn_get_share(name, &tmp_table, &error);
+        if (tmp_share) {
+          wrap_handlerton = tmp_share->hton;
+          mrn_free_long_term_share(tmp_share->long_term_share);
+          tmp_share->long_term_share = NULL;
+          mrn_free_share(tmp_share);
+        }
+        mrn_open_mutex_lock(NULL);
+        mrn_free_tmp_table_share(tmp_table_share);
+        mrn_open_mutex_unlock(NULL);
+        if (error) {
+          DBUG_RETURN(error);
+        }
       }
     }
   }
-#endif
 
   if (wrap_handlerton)
   {
