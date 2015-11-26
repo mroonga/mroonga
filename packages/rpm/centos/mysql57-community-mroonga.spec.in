@@ -171,24 +171,40 @@ fi
 if ! /sbin/service mysqld status > /dev/null; then
   /sbin/service mysqld start
   stop_after_uninstallation=1
+  auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
 else
   stop_after_uninstallation=0
+  auto_generated_password=""
 fi
 
 uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 mysql_command=`which mysql`
-if $mysql_command -u root -e "quit"; then
-    password_option=""
-else
+password_option=""
+if ! $mysql_command -u root -e "quit"; then
+  if [ -n "${auto_generated_password}" ]; then
+    password_option="-p${auto_generated_password}"
+  else
     password_option="-p"
+  fi
 fi
+
+if [ -n "$auto_generated_password" ]; then
+  $mysql_command -u root $password_option \
+                 --connect-expired-password \
+                 -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+fi
+
 if [ "$1" = 0 ]; then
-    $mysql_command -u root $password_option < ${uninstall_sql} || \
-	(echo "run the following command to unregister Mroonga:"; \
-	 echo "  $mysql_command -u root $password_option < ${uninstall_sql}")
+  $mysql_command -u root $password_option < ${uninstall_sql} || \
+    (echo "run the following command to unregister Mroonga:"; \
+     echo "  $mysql_command -u root $password_option < ${uninstall_sql}")
 fi
 
 if [ "$stop_after_uninstallation" = "1" ]; then
+  if [ -n "$auto_generated_password" ];then
+    $mysql_command -u root $password_option \
+                   -e "ALTER USER root@localhost PASSWORD EXPIRE"
+  fi
   /sbin/service mysqld stop
 fi
 
