@@ -5,6 +5,38 @@
 News
 ====
 
+.. _release-5-10:
+
+Release 5.10 - 2015-11-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm][mysql57-community-mroonga] Supported auto Mroonga registration.
+  [GitHub#78] [Patch by GMO Media, Inc.]
+
+* [rpm][mysql57-community-mroonga] Supported CentOS 7.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that auto repair may cause crash.
+  [groonga-dev,03608] [Reported by Hiroshi Kagami]
+
+* Fixed a crash bug when you use UDF concurrency.
+  [groonga-dev,03640] [Reported by Hironori Matsubara]
+
+* [wrapper] Fixed a bug that ``DROP TABLE`` may keep files.
+  [groonga-dev,03673] [Reported by Tomohiro KATO]
+
+Thanks
+^^^^^^
+
+* GMO Media, Inc.
+* Hiroshi Kagami
+* Tomohiro KATO
+
 .. _release-5-09:
 
 Release 5.09 - 2015-10-29
