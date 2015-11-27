@@ -140,7 +140,7 @@ The weight is omissible, and a negative value is allowed.
 
 The syntax of W pragma is as follows. A section number is begun not from 0 but from 1. ::
 
-  *W[number1[:weight1][,number2[:weight2]]...
+  *W[number1[:weight1]][,number2[:weight2]]...
 
 We show you how to rank in multiple-column index using the following schema and data.::
 
