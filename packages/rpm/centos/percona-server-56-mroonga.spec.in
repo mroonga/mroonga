@@ -177,6 +177,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sun Nov 29 2015 Kouhei Sutou <kou@clear-code.com> - 5.10-1
+- new upstream release.
+
 * Thu Oct 29 2015 Kouhei Sutou <kou@cozmixng.org> - 5.09-1
 - new upstream release.
 
