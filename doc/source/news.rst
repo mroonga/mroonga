@@ -18,6 +18,9 @@ Improvements
 
 * [rpm][mysql57-community-mroonga] Supported CentOS 7.
 
+* [wrapper] Supported ``CHECK TABLE FOR UPGRADE``.
+  [groonga-dev,03688] [Reported by Tomohiro KATO]
+
 Fixes
 ^^^^^
 
