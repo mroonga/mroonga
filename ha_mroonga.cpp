@@ -4013,21 +4013,11 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
   MRN_DBUG_ENTER_METHOD();
 
   mrn::Database *db = NULL;
-  if (open_options & HA_OPEN_FOR_REPAIR) {
-    error = ensure_database_remove(name);
-    if (error)
-      DBUG_RETURN(error);
-    error = ensure_database_open(name);
-    if (error)
-      DBUG_RETURN(error);
-    grn_table = NULL;
-    grn_index_tables = NULL;
-    grn_index_columns = NULL;
-  } else {
-    error = ensure_database_open(name, &db);
-    if (error)
-      DBUG_RETURN(error);
+  error = ensure_database_open(name, &db);
+  if (error)
+    DBUG_RETURN(error);
 
+  if (!(open_options & HA_OPEN_FOR_REPAIR)) {
     error = open_table(name);
     if (error)
       DBUG_RETURN(error);
@@ -4096,7 +4086,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
   if (!error) {
     if (open_options & HA_OPEN_FOR_REPAIR) {
       // TODO: How to check whether is DISABLE KEYS used or not?
-      error = wrapper_create_index(name, table, share);
+      error = wrapper_recreate_indexes(ha_thd());
     } else if (db) {
       mrn::Lock lock(&mrn_operations_mutex);
       mrn::PathMapper mapper(name);
