@@ -2897,9 +2897,11 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
     DBUG_RETURN(ER_REQUIRES_PRIMARY_KEY);
   }
 
-  mrn::PathMapper mapper(name);
-  error = wrapper_create_index(name, table, info, tmp_share,
-                               mapper.table_name());
+  error = ensure_database_open(name);
+  if (error)
+    DBUG_RETURN(error);
+
+  error = wrapper_create_index(name, table, tmp_share);
   if (error)
     DBUG_RETURN(error);
 
@@ -2947,6 +2949,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   delete hnd;
 
   if (error) {
+    mrn::PathMapper mapper(name);
     generic_delete_table(name, mapper.table_name());
   }
 
@@ -3146,22 +3149,18 @@ int ha_mroonga::wrapper_create_index_geo(const char *grn_table_name,
 }
 
 int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
-                                     HA_CREATE_INFO *info,
-                                     MRN_SHARE *tmp_share,
-                                     const char *grn_table_name)
+                                     MRN_SHARE *tmp_share)
 {
   MRN_DBUG_ENTER_METHOD();
 
   int error = 0;
-  error = ensure_database_open(name);
-  if (error)
-    DBUG_RETURN(error);
-
   error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
     DBUG_RETURN(error);
 
   grn_obj *grn_index_table;
+  mrn::PathMapper mapper(name);
+  const char *grn_table_name = mapper.table_name();
   char *grn_table_path = NULL;     // we don't specify path
   grn_obj *pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
   grn_obj *pkey_value_type = NULL; // we don't use this
@@ -4094,31 +4093,36 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
   pk_keypart_map = make_prev_keypart_map(
     KEY_N_KEY_PARTS(&(table->key_info[table_share->primary_key])));
 
-  if (!error && db) {
-    mrn::Lock lock(&mrn_operations_mutex);
-    mrn::PathMapper mapper(name);
-    const char *table_name = mapper.table_name();
-    size_t table_name_size = strlen(table_name);
-    if (db->is_broken_table(table_name, table_name_size)) {
-      GRN_LOG(ctx, GRN_LOG_NOTICE,
-              "Auto repair is started: <%s>",
-              name);
-      error = operations_->clear(table_name, table_name_size);
-      if (!error) {
-        db->mark_table_repaired(table_name, table_name_size);
-        if (!share->disable_keys) {
-          // TODO: implemented by "reindex" instead of "remove and recreate".
-          // Because "remove and recreate" invalidates opened indexes by
-          // other threads.
-          error = wrapper_disable_indexes_mroonga(HA_KEY_SWITCH_ALL);
-          if (!error) {
-            error = wrapper_enable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+  if (!error) {
+    if (open_options & HA_OPEN_FOR_REPAIR) {
+      // TODO: How to check whether is DISABLE KEYS used or not?
+      error = wrapper_create_index(name, table, share);
+    } else if (db) {
+      mrn::Lock lock(&mrn_operations_mutex);
+      mrn::PathMapper mapper(name);
+      const char *table_name = mapper.table_name();
+      size_t table_name_size = strlen(table_name);
+      if (db->is_broken_table(table_name, table_name_size)) {
+        GRN_LOG(ctx, GRN_LOG_NOTICE,
+                "Auto repair is started: <%s>",
+                name);
+        error = operations_->clear(table_name, table_name_size);
+        if (!error) {
+          db->mark_table_repaired(table_name, table_name_size);
+          if (!share->disable_keys) {
+            // TODO: implemented by "reindex" instead of "remove and recreate".
+            // Because "remove and recreate" invalidates opened indexes by
+            // other threads.
+            error = wrapper_disable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+            if (!error) {
+              error = wrapper_enable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+            }
           }
         }
+        GRN_LOG(ctx, GRN_LOG_NOTICE,
+                "Auto repair is done: <%s>: %s",
+                name, error == 0 ? "success" : "failure");
       }
-      GRN_LOG(ctx, GRN_LOG_NOTICE,
-              "Auto repair is done: <%s>: %s",
-              name, error == 0 ? "success" : "failure");
     }
   }
 
@@ -13821,8 +13825,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
     remove_grn_obj_force(index_table_name.c_str());
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
   }
-  error = wrapper_create_index(table_share->normalized_path.str, table,
-                               NULL, share, mapper.table_name());
+  error = wrapper_create_index(table_share->normalized_path.str, table, share);
   if (error)
     DBUG_RETURN(error);
   error = wrapper_open_indexes(table_share->normalized_path.str);

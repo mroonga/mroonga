@@ -784,9 +784,7 @@ private:
                                grn_obj **index_tables,
                                grn_obj **index_columns,
                                MRN_SHARE *tmp_share);
-  int wrapper_create_index(const char *name, TABLE *table,
-                           HA_CREATE_INFO *info, MRN_SHARE *tmp_share,
-                           const char *grn_table_name);
+  int wrapper_create_index(const char *name, TABLE *table, MRN_SHARE *tmp_share);
   int storage_create_validate_pseudo_column(TABLE *table);
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
   bool storage_create_foreign_key(TABLE *table, const char *grn_table_name,
