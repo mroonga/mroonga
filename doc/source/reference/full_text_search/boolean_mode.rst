@@ -1,5 +1,5 @@
-Mroonga full text search in boolean mode
-========================================
+Boolean mode
+============
 
 Mroonga can perform boolean full text searches using the ``IN BOOLEAN
 MODE`` modifier.
