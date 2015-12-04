@@ -12997,7 +12997,7 @@ int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
   for (i = 0; i < tmp_table_share->keys; i++) {
     const char *mysql_index_name = tmp_table_share->key_info[i].name;
     mrn::IndexTableName from_index_table_name(from_table_name, mysql_index_name);
-    mrn::IndexTableName  to_index_table_name(to_table_name, mysql_index_name);
+    mrn::IndexTableName to_index_table_name(to_table_name, mysql_index_name);
     grn_obj *index_table;
     index_table = grn_ctx_get(ctx,
                               from_index_table_name.c_str(),
