@@ -4175,6 +4175,11 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
     grn_index_tables[i] = grn_ctx_get(ctx,
                                       index_table_name.c_str(),
                                       index_table_name.length());
+    if (ctx->rc == GRN_SUCCESS && !grn_index_tables[i]) {
+      grn_index_tables[i] = grn_ctx_get(ctx,
+                                        index_table_name.old_c_str(),
+                                        index_table_name.old_length());
+    }
     if (ctx->rc) {
       DBUG_PRINT("info",
                  ("mroonga: sql_command=%u", thd_sql_command(ha_thd())));
@@ -4583,6 +4588,11 @@ int ha_mroonga::storage_open_indexes(const char *name)
       grn_index_tables[i] = grn_ctx_get(ctx,
                                         index_table_name.c_str(),
                                         index_table_name.length());
+      if (ctx->rc == GRN_SUCCESS && !grn_index_tables[i]) {
+        grn_index_tables[i] = grn_ctx_get(ctx,
+                                          index_table_name.old_c_str(),
+                                          index_table_name.old_length());
+      }
       if (ctx->rc == GRN_SUCCESS) {
         grn_index_columns[i] = grn_obj_column(ctx,
                                               grn_index_tables[i],
@@ -8965,6 +8975,11 @@ int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
     grn_obj *index_table = grn_ctx_get(ctx,
                                        index_table_name.c_str(),
                                        index_table_name.length());
+    if (!index_table) {
+      index_table = grn_ctx_get(ctx,
+                                index_table_name.old_c_str(),
+                                index_table_name.old_length());
+    }
     if (index_table) {
       target_name_length = grn_obj_name(ctx, index_table,
                                         target_name, GRN_TABLE_MAX_KEY_SIZE);
@@ -9112,7 +9127,9 @@ int ha_mroonga::drop_indexes_normal(const char *table_name, grn_obj *table)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::drop_indexes_multiple(const char *table_name, grn_obj *table)
+int ha_mroonga::drop_indexes_multiple(const char *table_name,
+                                      grn_obj *table,
+                                      const char *index_table_name_separator)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -9120,7 +9137,7 @@ int ha_mroonga::drop_indexes_multiple(const char *table_name, grn_obj *table)
 
   char index_table_name_prefix[GRN_TABLE_MAX_KEY_SIZE];
   snprintf(index_table_name_prefix, GRN_TABLE_MAX_KEY_SIZE,
-           "%s%s", table_name, mrn::IndexTableName::SEPARATOR);
+           "%s%s", table_name, index_table_name_separator);
   grn_table_cursor *cursor =
     grn_table_cursor_open(ctx,
                           grn_ctx_db(ctx),
@@ -9209,7 +9226,12 @@ int ha_mroonga::drop_indexes(const char *table_name)
 
   error = drop_indexes_normal(table_name, table.get());
   if (error == 0) {
-    error = drop_indexes_multiple(table_name, table.get());
+    error = drop_indexes_multiple(table_name, table.get(),
+                                  mrn::IndexTableName::SEPARATOR);
+  }
+  if (error == 0) {
+    error = drop_indexes_multiple(table_name, table.get(),
+                                  mrn::IndexTableName::OLD_SEPARATOR);
   }
 
   DBUG_RETURN(error);
@@ -13002,6 +13024,11 @@ int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
     index_table = grn_ctx_get(ctx,
                               from_index_table_name.c_str(),
                               from_index_table_name.length());
+    if (!index_table) {
+      index_table = grn_ctx_get(ctx,
+                                from_index_table_name.old_c_str(),
+                                from_index_table_name.old_length());
+    }
     if (index_table) {
       rc = grn_table_rename(ctx, index_table,
                             to_index_table_name.c_str(),
@@ -13067,6 +13094,11 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
     index_table = grn_ctx_get(ctx,
                               from_index_table_name.c_str(),
                               from_index_table_name.length());
+    if (!index_table) {
+      index_table = grn_ctx_get(ctx,
+                                from_index_table_name.old_c_str(),
+                                from_index_table_name.old_length());
+    }
     if (index_table) {
       rc = grn_table_rename(ctx, index_table,
                             to_index_table_name.c_str(),
@@ -13330,6 +13362,11 @@ int ha_mroonga::generic_disable_index(int i, KEY *key_info)
     grn_obj *index_table = grn_ctx_get(ctx,
                                        index_table_name.c_str(),
                                        index_table_name.length());
+    if (!index_table) {
+      index_table = grn_ctx_get(ctx,
+                                index_table_name.old_c_str(),
+                                index_table_name.old_length());
+    }
     if (index_table) {
       grn_obj_remove(ctx, index_table);
     }
@@ -13813,6 +13850,13 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
              "%s.%s", index_table_name.c_str(), INDEX_COLUMN_NAME);
     remove_grn_obj_force(index_column_full_name);
     remove_grn_obj_force(index_table_name.c_str());
+
+    char index_column_full_old_name[MRN_MAX_PATH_SIZE];
+    snprintf(index_column_full_old_name, MRN_MAX_PATH_SIZE,
+             "%s.%s", index_table_name.old_c_str(), INDEX_COLUMN_NAME);
+    remove_grn_obj_force(index_column_full_old_name);
+    remove_grn_obj_force(index_table_name.old_c_str());
+
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
   }
   error = wrapper_create_index(table_share->normalized_path.str, table, share);
@@ -13864,6 +13908,12 @@ int ha_mroonga::storage_recreate_indexes(THD *thd)
              "%s.%s", index_table_name.c_str(), INDEX_COLUMN_NAME);
     remove_grn_obj_force(index_column_full_name);
     remove_grn_obj_force(index_table_name.c_str());
+
+    char index_column_full_old_name[MRN_MAX_PATH_SIZE];
+    snprintf(index_column_full_old_name, MRN_MAX_PATH_SIZE,
+             "%s.%s", index_table_name.old_c_str(), INDEX_COLUMN_NAME);
+    remove_grn_obj_force(index_column_full_old_name);
+    remove_grn_obj_force(index_table_name.old_c_str());
   }
 
   int error;

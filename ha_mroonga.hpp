@@ -603,7 +603,8 @@ private:
   void remove_grn_obj_force(const char *name);
   int drop_index(MRN_SHARE *target_share, uint key_index);
   int drop_indexes_normal(const char *table_name, grn_obj *table);
-  int drop_indexes_multiple(const char *table_name, grn_obj *table);
+  int drop_indexes_multiple(const char *table_name, grn_obj *table,
+                            const char *index_table_name_separator);
   int drop_indexes(const char *table_name);
   bool find_column_flags(Field *field, MRN_SHARE *mrn_share, int i,
                          grn_obj_flags *column_flags);
