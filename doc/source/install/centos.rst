@@ -69,9 +69,8 @@ Install::
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
   % sudo yum makecache
-  % sudo yum install -y mysql-community-server
-  % sudo /sbin/service mysqld start
   % sudo yum install -y mysql-community-mroonga
+  (% sudo /sbin/service mysqld start)
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
@@ -169,9 +168,8 @@ Install::
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
   % sudo yum makecache
-  % sudo yum install -y mysql-community-server
-  % sudo systemctl start mysqld
   % sudo yum install -y mysql-community-mroonga
+  (% sudo systemctl start mysqld)
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
