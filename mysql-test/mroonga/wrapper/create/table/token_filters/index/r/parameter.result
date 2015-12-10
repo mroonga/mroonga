@@ -24,7 +24,7 @@ column_create mroonga_operations type COLUMN_SCALAR ShortText
 
 table_create memos TABLE_HASH_KEY ShortText
 
-table_create memos-content TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerMySQLGeneralCI --token_filters TokenFilterStopWord,TokenFilterStopWord
+table_create memos#content TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerMySQLGeneralCI --token_filters TokenFilterStopWord,TokenFilterStopWord
 
-column_create memos-content index COLUMN_INDEX|WITH_POSITION memos
+column_create memos#content index COLUMN_INDEX|WITH_POSITION memos
 DROP TABLE memos;
