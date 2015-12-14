@@ -20,4 +20,5 @@ DROP FUNCTION mroonga_snippet;
 DROP FUNCTION mroonga_command;
 DROP FUNCTION mroonga_escape;
 DROP FUNCTION mroonga_snippet_html;
+DROP FUNCTION mroonga_normalize;
 --enable_query_log

@@ -3,4 +3,5 @@ libmrn_udf_la_SOURCES =				\
 	mrn_udf_snippet.cpp			\
 	mrn_udf_snippet_html.cpp		\
 	mrn_udf_command.cpp			\
-	mrn_udf_escape.cpp
+	mrn_udf_escape.cpp			\
+	mrn_udf_normalize.cpp
