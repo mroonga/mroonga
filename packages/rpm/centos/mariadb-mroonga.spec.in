@@ -86,7 +86,7 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if /usr/bin/mysql -u root -e "quit"; then
+if /usr/bin/mysql -u root -e "quit" > /dev/null 2>&1; then
   password_option=""
 else
   password_option="-p"
@@ -128,7 +128,7 @@ eval $command || \
 %preun
 uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 
-if mysql -u root -e "quit"; then
+if mysql -u root -e "quit" > /dev/null 2>&1; then
   password_option=""
 else
   password_option="-p"
