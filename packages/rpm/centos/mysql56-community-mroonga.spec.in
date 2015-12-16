@@ -103,10 +103,10 @@ else
 fi
 
 mysql_command=`which mysql`
-password_option=""
-$mysql_command -u root -e "quit" > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    password_option="-p"
+if $mysql_command -u root -e "quit" > /dev/null 2>&1; then
+  password_option=""
+else
+  password_option="-p"
 fi
 current_version=0
 version=`echo %{groonga_required_version} | sed -e 's/\.//g'`
