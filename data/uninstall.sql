@@ -3,6 +3,7 @@ DROP FUNCTION IF EXISTS mroonga_snippet;
 DROP FUNCTION IF EXISTS mroonga_command;
 DROP FUNCTION IF EXISTS mroonga_escape;
 DROP FUNCTION IF EXISTS mroonga_snippet_html;
+DROP FUNCTION IF EXISTS mroonga_normalize;
 
 UNINSTALL PLUGIN Mroonga;
 
