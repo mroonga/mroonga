@@ -115,7 +115,7 @@ fi
 
 mysql_command=`which mysql`
 password_option=""
-if ! $mysql_command -u root -e "quit"; then
+if ! $mysql_command -u root -e "quit" > /dev/null 2>&1; then
   if [ -n "${auto_generated_password}" ]; then
     password_option="-p${auto_generated_password}"
   else
@@ -180,7 +180,7 @@ fi
 uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 mysql_command=`which mysql`
 password_option=""
-if ! $mysql_command -u root -e "quit"; then
+if ! $mysql_command -u root -e "quit" > /dev/null 2>&1; then
   if [ -n "${auto_generated_password}" ]; then
     password_option="-p${auto_generated_password}"
   else

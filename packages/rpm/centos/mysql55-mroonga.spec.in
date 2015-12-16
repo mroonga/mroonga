@@ -98,7 +98,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 mysql_command=`scl enable mysql55 'which mysql'`
 password_option=""
-$mysql_command -u root -e "quit"
+$mysql_command -u root -e "quit" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     password_option="-p"
 fi
@@ -137,7 +137,7 @@ eval $command || \
 %preun
 uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 mysql_command=`scl enable mysql55 'which mysql'`
-if $mysql_command -u root -e "quit"; then
+if $mysql_command -u root -e "quit" > /dev/null 2>&1; then
     password_option=""
 else
     password_option="-p"
