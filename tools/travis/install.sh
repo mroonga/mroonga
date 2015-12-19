@@ -19,16 +19,34 @@
 set -x
 set -e
 
-mariadb_download_base=http://mirror.jmu.edu/pub/mariadb
-
 # export GROONGA_MASTER=yes
 # export GROONGA_NORMALIZER_MYSQL_MASTER=yes
+
+mariadb_download_base=http://mirror.jmu.edu/pub/mariadb
+
+version=$(echo "$MYSQL_VERSION" | sed -e 's/^\(mysql\|mariadb\)-//')
+series=$(echo "$version" | sed -e 's/\.[0-9]*\(-\?[a-z]*\)\?$//g')
+
+function setup_mariadb_apt()
+{
+  distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
+  code_name=$(lsb_release --short --codename)
+  component=main
+  apt_url_base="${mariadb_download_base}/repo/${series}"
+  cat <<EOF | sudo tee /etc/apt/sources.list.d/mariadb.list
+deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
+deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
+EOF
+  sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+  sudo apt-get -qq update
+}
 
 if [ "${MROONGA_BUNDLED}" = "yes" ]; then
   mkdir -p .mroonga
   mv * .mroonga/
   mv .mroonga/tools ./
-  sudo apt-get -qq -y build-dep mysql-server
+  setup_mariadb_apt
+  sudo apt-get -qq -y build-dep mariadb-server
   # Support MariaDB for now.
   download_base=${mariadb_download_base}/${MYSQL_VERSION}
   tar_gz=${MYSQL_VERSION}.tar.gz
@@ -59,8 +77,6 @@ else
   mkdir -p vendor
   cd vendor
 
-  version=$(echo "$MYSQL_VERSION" | sed -e 's/^\(mysql\|mariadb\)-//')
-  series=$(echo "$version" | sed -e 's/\.[0-9]*\(-\?[a-z]*\)\?$//g')
   case "$MYSQL_VERSION" in
     mysql-*)
       sudo apt-get -qq update
@@ -91,17 +107,7 @@ else
       ;;
     mariadb-*)
       sudo apt-get -qq -y remove --purge mysql-common
-
-      distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
-      code_name=$(lsb_release --short --codename)
-      component=main
-      apt_url_base="${mariadb_download_base}/repo/${series}"
-      cat <<EOF | sudo tee /etc/apt/sources.list.d/mariadb.list
-deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
-deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
-EOF
-      sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-      sudo apt-get -qq update
+      setup_mariadb_apt
       sudo apt-get -qq -y build-dep mariadb-server
       sudo apt-get -qq -y install \
            mariadb-server libmariadbclient-dev mariadb-test
