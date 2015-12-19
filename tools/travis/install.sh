@@ -27,7 +27,7 @@ mariadb_download_base=http://mirror.jmu.edu/pub/mariadb
 version=$(echo "$MYSQL_VERSION" | sed -e 's/^\(mysql\|mariadb\)-//')
 series=$(echo "$version" | sed -e 's/\.[0-9]*\(-\?[a-z]*\)\?$//g')
 
-function setup_mariadb_apt()
+setup_mariadb_apt()
 {
   distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
   code_name=$(lsb_release --short --codename)
