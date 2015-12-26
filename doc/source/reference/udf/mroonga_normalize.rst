@@ -49,7 +49,7 @@ Optional parameters
 There is one optional parameter, ``normalizer_name``.
 
 ``normalizer_name``
-""""""""""""""""""""""
+"""""""""""""""""""
 
 It specifies Groonga's normalizer name to normalize.
 
