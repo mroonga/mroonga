@@ -11,4 +11,5 @@ Mroonga provides some useful functionality as UDF (User Defined Functions).
 
    udf/mroonga_escape
    udf/mroonga_snippet
+   udf/mroonga_normalize
 
