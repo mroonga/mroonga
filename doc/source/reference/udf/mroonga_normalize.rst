@@ -13,8 +13,8 @@ Syntax
 
 mroonga_normalize has required parameter and optional parameter::
 
-  mroonga_normalize  string
-                     [normalizer_name]
+  mroonga_normalize(string)
+  mroonga_normalize(string, normalizer_name)
 
 Usage
 -----
