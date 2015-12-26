@@ -11,10 +11,10 @@ msgstr ""
 "PO-Revision-Date: 2015-12-04 22:15+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
-"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Reference"
@@ -614,8 +614,8 @@ msgid "Row count"
 msgstr "行カウント"
 
 msgid ""
-"MySQL requires all column values from storage engine for processing "
-"``COUNT(*)`` even if ``COUNT(*)`` doesn't need them."
+"MySQL requires all column values from storage engine for processing ``COUNT"
+"(*)`` even if ``COUNT(*)`` doesn't need them."
 msgstr ""
 "MySQLは ``COUNT(*)`` を処理する時、カラムの値が必要ないにも関わらず、ストレー"
 "ジエンジンモジュールにすべてのカラムの値を要求します。"
@@ -1290,8 +1290,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"``CREATE TABLE table_name (... FULLTEXT INDEX index_name "
-"(column_name, ...))``"
+"``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name, ...))"
+"``"
 msgstr ""
 
 msgid "``CREATE TABLE table_name (... INDEX (column_name))``"
@@ -1465,8 +1465,8 @@ msgid "``CREATE TABLE table_name (column_name DATETIME PRIMARY KEY)``"
 msgstr ""
 
 msgid ""
-"``CREATE TABLE table_name (column_name "
-"DATETIME(fractional_seconds_precision) PRIMARY KEY)``"
+"``CREATE TABLE table_name (column_name DATETIME"
+"(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 msgid "``CREATE TABLE table_name (column_name DECIMAL PRIMARY KEY)``"
@@ -1489,8 +1489,8 @@ msgid "``CREATE TABLE table_name (column_name TIMESTAMP PRIMARY KEY)``"
 msgstr ""
 
 msgid ""
-"``CREATE TABLE table_name (column_name "
-"TIMESTAMP(fractional_seconds_precision) PRIMARY KEY)``"
+"``CREATE TABLE table_name (column_name TIMESTAMP"
+"(fractional_seconds_precision) PRIMARY KEY)``"
 msgstr ""
 
 msgid "``CREATE TABLE table_name (column_name YEAR PRIMARY KEY)``"
@@ -1634,8 +1634,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"``SELECT * FROM table_name WHERE "
-"MBRContains(GeomFromText('LineString(...)'), geometry_column_name)``"
+"``SELECT * FROM table_name WHERE MBRContains(GeomFromText('LineString"
+"(...)'), geometry_column_name)``"
 msgstr ""
 
 msgid ""
@@ -1704,8 +1704,8 @@ msgid "``CREATE TABLE (...) CHARSET not_listed_charset_above``"
 msgstr "``CREATE TABLE (...) CHARSET 上記にないキャラクタセット``"
 
 msgid ""
-"``INSERT INTO (geometry_column_name) VALUES "
-"(GeomFromText('LineString(...)'))``"
+"``INSERT INTO (geometry_column_name) VALUES (GeomFromText('LineString(...)'))"
+"``"
 msgstr ""
 
 msgid "``INSERT INTO (...) VALUES (null)``"
@@ -1840,6 +1840,48 @@ msgid "Return value"
 msgstr "返り値"
 
 msgid "It returns escaped string."
+msgstr "エスケープされた文字列を返します。"
+
+msgid "mroonga_normalize"
+msgstr ""
+
+msgid "``mroonga_normalize`` UDF normalizes text by Groonga's normalizer."
+msgstr ""
+"``mroonga_normalize`` UDFはGroongaのノーマライザーによってテキストをノーマラ"
+"イズします。"
+
+msgid "mroonga_normalize has required parameter and optional parameter::"
+msgstr "mroonga_normalizeには必須引数と省略可能引数とがあります。::"
+
+msgid ""
+"Here is the example query which use Groonga's ``NormalizerAuto`` normalizer "
+"to be normalized::"
+msgstr "Groongaの``NormalizerAuto``ノーラマイザーを使用した実行例はこちらです"
+
+msgid ""
+"Here is the example query which use Groonga's "
+"``NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark`` normalizer "
+"to be normalized::"
+msgstr ""
+"Groongaの``NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark``ノー"
+"ラマイザーを使用した実行例はこちらです"
+
+msgid "It specifies text which you want to normalize."
+msgstr "ノーマライズしたいテキストを指定します。"
+
+msgid "There is one optional parameter, ``normalizer_name``."
+msgstr "``normalizer_name`` は省略可能な引数です。"
+
+msgid "``normalizer_name``"
+msgstr ""
+
+msgid "It specifies Groonga's normalizer name to normalize."
+msgstr "Groongaのノーラマイザー名を指定します。"
+
+msgid "The default value is ``NormalizerAuto``."
+msgstr "デフォルト値は ``NormalizerAuto`` です。"
+
+msgid "It returns normalized string."
 msgstr "エスケープされた文字列を返します。"
 
 msgid "mroonga_snippet"
