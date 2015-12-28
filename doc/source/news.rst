@@ -14,24 +14,24 @@ Improvements
 ^^^^^^^^^^^^
 
 * [rpm][mysql56-community-mroonga] Updated target MySQL to 5.6.28.
-  [Reported by @stealthinu] 
+  [Reported by @stealthinu]
 
 * [rpm][mysql57-community-mroonga] Updated target MySQL to 5.7.10.
-  [Reported by @stealthinu] 
+  [Reported by @stealthinu]
 
 * Changed index table name separator to ``#`` from ``-``. It makes that
   table name that includes ``-`` can be used in script syntax.
   [groonga-dev,03714] [Reported by keizi murakami]
 
 * [rpm] Suppressed a confusing error message when root password check.
-  [GitHub#90] [Patch by Larry Kim] 
+  [GitHub#90] [Patch by Larry Kim]
 
 * [rpm][mariadb-mroonga] Rebuilt for CentOS 7.2.
-  [GitHub#91] [Reported by Larry Kim] 
+  [GitHub#91] [Reported by Larry Kim]
 
 * [UDF][:doc:`/reference/udf/mroonga_normalize`] Added a new UDF that
   can use custom Normalizer without index.
-  [GitHub#89] [Patch by Naoya Murakami] 
+  [GitHub#89] [Patch by Naoya Murakami]
 
 * [doc] Added reference for [:doc:`/reference/udf/mroonga_normalize`].
   [GitHub#92] [Patch by Naoya Murakami]
