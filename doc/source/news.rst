@@ -30,7 +30,7 @@ Improvements
   [GitHub#91] [Reported by Larry Kim]
 
 * [UDF][:doc:`/reference/udf/mroonga_normalize`] Added a new UDF that
-  can use custom Normalizer without index.
+  normalizes a string.
   [GitHub#89] [Patch by Naoya Murakami]
 
 * [doc] Added reference for [:doc:`/reference/udf/mroonga_normalize`].
