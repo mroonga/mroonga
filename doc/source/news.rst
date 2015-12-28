@@ -5,6 +5,52 @@
 News
 ====
 
+.. _release-5-11:
+
+Release 5.11 - 2015-12-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm][mysql56-community-mroonga] Updated target MySQL to 5.6.28.
+  [Reported by @stealthinu] 
+
+* [rpm][mysql57-community-mroonga] Updated target MySQL to 5.7.10.
+  [Reported by @stealthinu] 
+
+* Changed index table name separator to ``#`` from ``-``. It makes that
+  table name that includes ``-`` can be used in script syntax.
+  [groonga-dev,03714] [Reported by keizi murakami]
+
+* [rpm] Suppressed a confusing error message when root password check.
+  [GitHub#90] [Patch by Larry Kim] 
+
+* [rpm][mariadb-mroonga] Rebuilt for CentOS 7.2.
+  [GitHub#91] [Reported by Larry Kim] 
+
+* [UDF][:doc:`/reference/udf/mroonga_normalize`] Added a new UDF that
+  can use custom Normalizer without index.
+  [GitHub#89] [Patch by Naoya Murakami] 
+
+* [doc] Added reference for [:doc:`/reference/udf/mroonga_normalize`].
+  [GitHub#92] [Patch by Naoya Murakami]
+
+Fixes
+^^^^^
+
+* [wrapper] Fixed a bug that ``CHECK TABLE FOR UPGRADE`` drops other tables.
+  [groonga-dev,03699] [Reported by Tomohiro KATO]
+
+Thanks
+^^^^^^
+
+* Tomohiro KATO
+* @stealthinu
+* keizi murakami
+* Larry Kim
+* Naoya Murakami
+
 .. _release-5-10:
 
 Release 5.10 - 2015-11-29
