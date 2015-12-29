@@ -19,9 +19,15 @@ Improvements
 * [rpm][mysql57-community-mroonga] Updated target MySQL to 5.7.10.
   [Reported by @stealthinu]
 
-* Changed index table name separator to ``#`` from ``-``. It makes that
-  table name that includes ``-`` can be used in script syntax.
-  [groonga-dev,03714] [Reported by keizi murakami]
+* Stopped to use ``-`` character in internal lexicon name. Because
+  ``-`` character can't be used symbol name in query syntax in
+  Groonga. It's inconvenient in
+  :doc:`/reference/udf/mroonga_command`. ``#`` character that can be
+  used symbol name is used instead of ``-`` character since this
+  release. [groonga-dev,03714] [Reported by keizi murakami]
+
+  This change doesn't break backward compatibility. The latest Mroonga
+  can use databases created by old Mroonga without any changes.
 
 * [rpm] Suppressed a confusing error message when root password check.
   [GitHub#90] [Patch by Larry Kim]
