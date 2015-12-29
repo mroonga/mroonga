@@ -8,7 +8,7 @@
 %define mysql_spec_file_default mysql.spec
 %else
 %define mysql_version_default 5.7.10
-%define mysql_release_default 1
+%define mysql_release_default 2
 %define mysql_dist_default    el6
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.7-community/el/6/SRPMS
 %define mysql_spec_file_default mysql.spec
