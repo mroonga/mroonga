@@ -18,7 +18,7 @@
 
 Name:		mariadb-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
@@ -154,6 +154,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Tue Dec 29 2015 Kouhei Sutou <kou@clear-code.com> - 5.11-1
+- new upstream release.
+
 * Wed Dec 16 2015 Kouhei Sutou <kou@clear-code.com> - 5.10-2
 - rebuild against MariaDB on CentOS 7.2. Reported by Larry Kim. Thanks!!!
 

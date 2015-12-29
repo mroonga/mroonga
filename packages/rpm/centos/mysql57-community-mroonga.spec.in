@@ -24,7 +24,7 @@
 
 Name:		mysql57-community-mroonga
 Version:	@VERSION@
-Release:	3%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -221,6 +221,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Tue Dec 29 2015 Kouhei Sutou <kou@clear-code.com> - 5.11-1
+- new upstream release.
+
 * Wed Dec 09 2015 Kouhei Sutou <kou@clear-code.com> - 5.10-3
 - build against MySQL 5.7.10. Reported by @stealthinu. Thanks!!!
 
