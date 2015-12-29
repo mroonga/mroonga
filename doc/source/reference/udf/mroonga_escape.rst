@@ -1,7 +1,7 @@
 .. highlightlang:: none
 
-mroonga_escape
-==============
+``mroonga_escape()``
+====================
 
 Summary
 -------
@@ -12,10 +12,10 @@ It also accepts parameter what character should be escaped.
 Syntax
 ------
 
-mroonga_escape has required parameter and optional parameter::
+``mroonga_escape()`` has required parameter and optional parameter::
 
-  mroonga_escape  string
-                  [special_characters]
+  mroonga_escape(string)
+  mroonga_escape(string, special_characters)
 
 Usage
 -----

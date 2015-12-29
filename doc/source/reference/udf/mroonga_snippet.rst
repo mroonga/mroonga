@@ -1,12 +1,12 @@
 .. highlightlang:: none
 
-mroonga_snippet
-===============
+``mroonga_snippet()``
+=====================
 
 Summary
 -------
 
-``mroonga_snippet`` UDF provides functionality to get keyword
+``mroonga_snippet()`` UDF provides functionality to get keyword
 in context.
 
 .. note::
@@ -18,19 +18,19 @@ in context.
 Syntax
 ------
 
-mroonga_snippet has required parameter and optional parameter::
+``mroonga_snippet()`` has required parameter and optional parameter::
 
-  mroonga_snippet document
-                  max_length
-                  max_count
-                  encoding
-                  skip_leading_spaces
-                  html_escape
-                  snippet_prefix
-                  snippet_suffix
-                  word1 word1_prefix word1_suffix
-                  ...
-                  [wordN wordN_prefix wordN_suffix]
+  mroonga_snippet(document,
+                  max_length,
+                  max_count,
+                  encoding,
+                  skip_leading_spaces,
+                  html_escape,
+                  snippet_prefix,
+                  snippet_suffix,
+                  word1, word1_prefix, word1_suffix,
+                  ...,
+                  [wordN, wordN_prefix, wordN_suffix])
 
 Usage
 -----
@@ -41,21 +41,21 @@ search results.
 
 Snippet means 'keyword and surrounding text'. It is called 'Keyword in context'.
 
-``mroonga_snippet`` function provides the way to get snippet from search results.
+``mroonga_snippet()`` function provides the way to get snippet from search results.
 
-You can use ``mroonga_snippet`` UDF in storage mode and wrapper mode.
+You can use ``mroonga_snippet()`` UDF in storage mode and wrapper mode.
 
-``mroonga_snippet`` function is included in mroonga as a User-Defined Function (UDF), but if you have not yet register it in MySQL by CREATE FUNCTION, you need to invoke the following SQL for defining a function. ::
+``mroonga_snippet()`` function is included in Mroonga as a User-Defined Function (UDF), but if you have not yet register it in MySQL by CREATE FUNCTION, you need to invoke the following SQL for defining a function. ::
 
   mysql> CREATE FUNCTION mroonga_snippet RETURNS STRING SONAME 'ha_mroonga.so';
 
-``mroonga_snippet`` function is useful for searching the text which contains keyword and associated one
+``mroonga_snippet()`` function is useful for searching the text which contains keyword and associated one
 by using MATCH .. AGAINST syntax.
 
 Imagine searching the document which contains 'fulltext' as a keyword.
 Assume that some keyword such as 'MySQL' and 'search' are associated with 'fulltext'.
 
-``mroonga_snippet`` function meets above.
+``mroonga_snippet()`` function meets above.
 
 Here is the schema definition for execution examples(storage mode)::
 

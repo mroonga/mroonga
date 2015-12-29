@@ -1,17 +1,17 @@
 .. highlightlang:: none
 
-mroonga_normalize
-=================
+``mroonga_normalize()``
+=======================
 
 Summary
 -------
 
-``mroonga_normalize`` UDF normalizes text by Groonga's normalizer.
+``mroonga_normalize()`` UDF normalizes text by Groonga's normalizer.
 
 Syntax
 ------
 
-mroonga_normalize has required parameter and optional parameter::
+``mroonga_normalize()`` has required parameter and optional parameter::
 
   mroonga_normalize(string)
   mroonga_normalize(string, normalizer_name)
