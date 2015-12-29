@@ -36,7 +36,7 @@ Required parameters
 There is one required parameter, ``command``.
 
 ``command``
-""""""""""
+"""""""""""
 
 It specifies a Groonga command to be executed.
 
