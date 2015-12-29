@@ -31,10 +31,7 @@ Improvements
 
 * [UDF][:doc:`/reference/udf/mroonga_normalize`] Added a new UDF that
   normalizes a string.
-  [GitHub#89] [Patch by Naoya Murakami]
-
-* [doc] Added reference for [:doc:`/reference/udf/mroonga_normalize`].
-  [GitHub#92] [Patch by Naoya Murakami]
+  [GitHub#89][GitHub#92] [Patch by Naoya Murakami]
 
 Fixes
 ^^^^^
