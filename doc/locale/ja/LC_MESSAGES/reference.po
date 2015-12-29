@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-12-04 22:15+0900\n"
+"PO-Revision-Date: 2015-12-29 10:43+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1778,11 +1778,71 @@ msgid ""
 msgstr ""
 "Mroongaではいくつか便利な機能をUDF (ユーザ定義関数)として提供しています。"
 
-msgid "mroonga_escape"
+msgid "``mroonga_command()``"
 msgstr ""
 
 msgid "Summary"
 msgstr "概要"
+
+msgid ""
+"``mroonga_command()`` UDF executes the given string as a Groonga command and "
+"returns result of the Groonga command. Groonga command will be faster than "
+"MySQL query."
+msgstr ""
+
+msgid ""
+"``mroonga_command()`` is a feature for advanced users. Normally, you don't "
+"need to use this feature."
+msgstr ""
+
+msgid "Syntax"
+msgstr "構文"
+
+msgid "``mroonga_command()`` has only one required parameter::"
+msgstr "``mroonga_command()`` の引数は1つで必須の引数です。::"
+
+msgid "``command`` is a string value. It's a Groonga command to be executed."
+msgstr "``command`` は文字列型の値です。実行するGroongaコマンドを指定します。"
+
+msgid "Usage"
+msgstr "使いかた"
+
+msgid "TODO"
+msgstr ""
+
+msgid "Parameters"
+msgstr "引数"
+
+msgid "Required parameters"
+msgstr "必須引数"
+
+msgid "There is one required parameter, ``command``."
+msgstr "必須引数は1つで ``command`` です。"
+
+msgid "``command``"
+msgstr ""
+
+msgid "It specifies a Groonga command to be executed."
+msgstr "実行するGroongaコマンドを指定します。"
+
+msgid "Return value"
+msgstr "返り値"
+
+msgid ""
+"It returns an evaluated result of the given Groonga command as a string."
+msgstr "指定されたGroongaコマンドを実行した結果を文字列として返します。"
+
+msgid "See also"
+msgstr "参照"
+
+msgid ""
+"[Command](http://groonga.org/docs/reference/command.html) in Groonga document"
+msgstr ""
+"Groongaのドキュメントの中の[コマンド](http://groonga.org/ja/docs/reference/"
+"command.html)"
+
+msgid "mroonga_escape"
+msgstr ""
 
 msgid ""
 "``mroonga_escape`` UDF provides functionality to escape given string. It "
@@ -1791,26 +1851,14 @@ msgstr ""
 "``mroonga_escape`` UDF は与えられた文字列をエスケープする機能を提供します。そ"
 "してまたエスケープすべき文字を引数として受け取ります。"
 
-msgid "Syntax"
-msgstr "構文"
-
 msgid "mroonga_escape has required parameter and optional parameter::"
 msgstr "mroonga_escapeには必須引数と省略可能引数とがあります。::"
-
-msgid "Usage"
-msgstr "使いかた"
 
 msgid "Here is the example query which use special characters to be escaped::"
 msgstr ""
 
 msgid "Here is the example about special characters which is escaped::"
 msgstr ""
-
-msgid "Parameters"
-msgstr "引数"
-
-msgid "Required parameters"
-msgstr "必須引数"
 
 msgid "There is one required parameter, ``string``."
 msgstr "必須引数は ``string`` です。"
@@ -1835,9 +1883,6 @@ msgstr "エスケープする文字を指定します。"
 
 msgid "The default value is ``+-<>~*()\":``."
 msgstr ""
-
-msgid "Return value"
-msgstr "返り値"
 
 msgid "It returns escaped string."
 msgstr "エスケープされた文字列を返します。"
