@@ -64,6 +64,8 @@ You can embed pragma at the head of query for specifying how to execute.
 
 The pragma must exist in the beginning of a query. (Don't put a blank into a head of the query)
 
+.. _pragma-d:
+
 D pragma
 ^^^^^^^^
 
@@ -72,6 +74,8 @@ D pragma is a form for specifying which operation should be execute when an indi
 The syntax of D pragma is as follows. You can choose one of the three operators, either ``OR``, ``+``, or ``-``. ::
 
   *D[operator]
+
+.. _pragma-d-or:
 
 ``*DOR``
 """"""""
@@ -91,6 +95,7 @@ The search result is a row that contains ``Groonga`` or ``Mroonga``. The row sco
   +-----------------------+-------+
   3 rows in set (0.00 sec)
 
+.. _pragma-d-plus:
 
 ``*D+``
 """""""
@@ -110,6 +115,8 @@ The search result is a row that contains ``Groonga`` and ``Mroonga``. The row sc
   +-----------------------+-------+
   3 rows in set (0.01 sec)
 
+.. _pragma-d-minus:
+
 ``*D-``
 """""""
 
@@ -128,6 +135,8 @@ The search result is a row that contains ``Groonga``, and does not contain ``Mro
   | MySQL Groonga Mroonga |     0 |
   +-----------------------+-------+
   3 rows in set (0.00 sec)
+
+.. _pragma-w:
 
 W pragma
 ^^^^^^^^
@@ -183,8 +192,12 @@ The search result is a row that contains "Groonga". The row score is as follows:
 
 The row score is set to 11 that the ``title`` and ``comment`` column contain ``Groonga``, and the row score is set to 10 that only ``title`` column contains ``Groonga``.
 
+.. _qualifier:
+
 Qualifier
 ---------
+
+.. _qualifier-none:
 
 (no operator)
 ^^^^^^^^^^^^^
@@ -210,6 +223,8 @@ Here is the search result::
   +-----------------------+-------+
   3 rows in set (0.00 sec)
 
+.. _qualifier-plus:
+
 ``+``
 ^^^^^
 
@@ -228,6 +243,8 @@ The search result is a row that contains both words. The row score is as follows
   +-----------------------+-------+
   3 rows in set (0.00 sec)
 
+.. _qualifier-minus:
+
 ``-``
 ^^^^^
 
@@ -245,6 +262,8 @@ The search result is a row that does not contain both words. The row score is as
   | MySQL Groonga Mroonga |     0 |
   +-----------------------+-------+
   3 rows in set (0.01 sec)
+
+.. _qualifier-star:
 
 ``*``
 ^^^^^
@@ -265,6 +284,8 @@ The search result is a row that contains ``MySQL`` or ``Mroonga``. The row score
   3 rows in set (0.01 sec)
 
 
+.. _qualifier-double-quote:
+
 ``"``
 ^^^^^
 
@@ -282,6 +303,8 @@ The search result is a row that contains a phrase that matches ``Groonga Mroonga
   | MySQL Groonga Mroonga |     1 |
   +-----------------------+-------+
   3 rows in set (0.00 sec)
+
+.. _qualifier-parentheses:
 
 ``()``
 ^^^^^^
