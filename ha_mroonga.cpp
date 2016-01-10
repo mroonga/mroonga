@@ -7077,6 +7077,13 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     grn_ii *ii = reinterpret_cast<grn_ii *>(index_column);
     row_count = grn_ii_estimate_size_for_lexicon_cursor(ctx, ii, cursor);
     grn_table_cursor_close(ctx, cursor);
+
+    unsigned int max_n_lexicon_records =
+      grn_table_size(ctx, grn_index_tables[key_nr]);
+    if (cursor_limit >= 0 &&
+        static_cast<unsigned int>(cursor_limit) < max_n_lexicon_records) {
+      row_count++;
+    }
   }
   DBUG_RETURN(row_count);
 }
