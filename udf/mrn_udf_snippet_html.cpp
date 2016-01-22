@@ -159,7 +159,7 @@ MRN_API my_bool mroonga_snippet_html_init(UDF_INIT *init,
   }
 
   init->maybe_null = 1;
-  init->const_item = 1;
+  init->const_item = 0;
 
   info = (mrn_snippet_html_info *)mrn_my_malloc(sizeof(mrn_snippet_html_info),
                                                 MYF(MY_WME | MY_ZEROFILL));

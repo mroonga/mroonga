@@ -59,7 +59,7 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
     goto error;
   }
   initid->maybe_null = 1;
-  initid->const_item = 1;
+  initid->const_item = 0;
 
   info = (CommandInfo *)mrn_my_malloc(sizeof(CommandInfo),
                                       MYF(MY_WME | MY_ZEROFILL));
