@@ -145,7 +145,7 @@ MRN_API char *mroonga_normalize(UDF_INIT *initid, UDF_ARGS *args, char *result,
   st_mrn_normalize_info *info = (st_mrn_normalize_info *)initid->ptr;
   grn_ctx *ctx = info->ctx;
   String *result_str = &(info->result_str);
-  
+
   if (!args->args[0]) {
     *is_null = 1;
     return NULL;
