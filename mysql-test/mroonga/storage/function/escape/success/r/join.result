@@ -21,6 +21,6 @@ ORDER BY users.id;
 id	escaped_query
 1	\(a\)
 2	\(b\)
-3	\(c     \)
+3	\(c\)
 DROP TABLE queries;
 DROP TABLE users;

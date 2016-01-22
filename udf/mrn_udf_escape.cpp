@@ -31,7 +31,6 @@ struct EscapeInfo
   grn_ctx ctx;
   grn_obj target_characters;
   grn_obj escaped_query;
-  bool processed;
 };
 
 MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
@@ -61,7 +60,7 @@ MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
   }
 
   initid->maybe_null = 1;
-  initid->const_item = 1;
+  initid->const_item = 0;
 
   info = (EscapeInfo *)mrn_my_malloc(sizeof(EscapeInfo),
                                      MYF(MY_WME | MY_ZEROFILL));
@@ -73,7 +72,6 @@ MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
   grn_ctx_init(&(info->ctx), 0);
   GRN_TEXT_INIT(&(info->target_characters), 0);
   GRN_TEXT_INIT(&(info->escaped_query), 0);
-  info->processed = false;
 
   initid->ptr = (char *)info;
 
@@ -93,6 +91,7 @@ static void escape(EscapeInfo *info, UDF_ARGS *args)
   char *query = args->args[0];
   unsigned int query_length = args->lengths[0];
 
+  GRN_BULK_REWIND(&(info->escaped_query));
   if (args->arg_count == 2) {
     char *target_characters = args->args[1];
     unsigned int target_characters_length = args->lengths[1];
@@ -123,10 +122,7 @@ MRN_API char *mroonga_escape(UDF_INIT *initid, UDF_ARGS *args, char *result,
 
   *is_null = 0;
 
-  if (!info->processed) {
-    escape(info, args);
-    info->processed = true;
-  }
+  escape(info, args);
 
   if (ctx->rc) {
     my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
