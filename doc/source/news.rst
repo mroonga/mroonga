@@ -5,6 +5,28 @@
 News
 ====
 
+.. _release-5-12:
+
+Release 5.12 - 2016-01-29
+-------------------------
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that no records may be returned for range
+  search when you have many deleted or updated records.
+  [groonga-dev,03802][Reported by Hiroshi Kagami]
+
+* [:doc:`/reference/udf`] Fixed a bug that wrong value may be returned
+  on ``JOIN``. [Reported by teamsky]
+
+Thanks
+^^^^^^
+
+* Hiroshi Kagami
+
+* teamsky
+
 .. _release-5-11:
 
 Release 5.11 - 2015-12-29

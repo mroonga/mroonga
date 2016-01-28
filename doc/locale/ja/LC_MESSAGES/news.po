@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-12-29 11:02+0900\n"
+"PO-Revision-Date: 2016-01-28 23:40+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,6 +20,36 @@ msgstr ""
 
 msgid "News"
 msgstr "お知らせ"
+
+msgid "Release 5.12 - 2016-01-29"
+msgstr "5.12リリース - 2016-01-29"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[storage] Fixed a bug that no records may be returned for range search when "
+"you have many deleted or updated records. [groonga-dev,03802][Reported by "
+"Hiroshi Kagami]"
+msgstr ""
+"[ストレージモード] 大量のレコード削除・更新した後に範囲検索をすると検索結果が"
+"0件になるかもしれない問題を修正しました。 [groonga-dev,03802][各務さんが報告]"
+
+msgid ""
+"[:doc:`/reference/udf`] Fixed a bug that wrong value may be returned on "
+"``JOIN``. [Reported by teamsky]"
+msgstr ""
+"[:doc:`/reference/udf`] ``JSON`` と一緒に使ったときに間違った値を返す問題を修"
+"正しました。 [teamskyさんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Hiroshi Kagami"
+msgstr "各務さん"
+
+msgid "teamsky"
+msgstr "teamskyさん"
 
 msgid "Release 5.11 - 2015-12-29"
 msgstr "5.11リリース - 2015-12-29"
@@ -80,18 +110,12 @@ msgstr ""
 "[UDF][:doc:`/reference/udf/mroonga_normalize`] 文字列を正規化する新しいUDFを"
 "追加しました。 [GitHub#89][GitHub#92] [村上さんがパッチ提供]"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[wrapper] Fixed a bug that ``CHECK TABLE FOR UPGRADE`` drops other tables. "
 "[groonga-dev,03699] [Reported by Tomohiro KATO]"
 msgstr ""
 "[ラッパーモード] ``CHECK TABLE FOR UPGRADE`` が古いテーブルを削除する問題を修"
 "正しました。 [groonga-dev,03699] [かとうさんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Tomohiro KATO"
 msgstr "かとうさん"
@@ -153,9 +177,6 @@ msgstr ""
 # d8986144d4454b8dbfd7cf12c8877b8c
 msgid "GMO Media, Inc."
 msgstr "GMOメディア株式会社さん"
-
-msgid "Hiroshi Kagami"
-msgstr "各務さん"
 
 msgid "Hironori Matsubara"
 msgstr "松原さん"
