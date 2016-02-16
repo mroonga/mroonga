@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2016 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -8174,6 +8174,101 @@ grn_expr_flags ha_mroonga::expr_flags_in_boolean_mode()
   DBUG_RETURN(expression_flags);
 }
 
+void ha_mroonga::generic_ft_init_ext_parse_pragma(
+  struct st_mrn_ft_info *info,
+  String *key,
+  grn_obj *index_column,
+  grn_obj *match_columns,
+  const char **keyword,
+  uint *keyword_length,
+  grn_operator *default_operator,
+  grn_expr_flags *flags,
+  grn_obj *tmp_objects)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  const char *keyword_original = key->ptr();
+  uint keyword_length_original = key->length();
+
+  *keyword = keyword_original;
+  *keyword_length = keyword_length_original;
+  *default_operator = GRN_OP_OR;
+  *flags = 0;
+
+  if (*keyword_length >= 3 && memcmp(*keyword, "*SS", 3) == 0) {
+    *keyword = keyword_original + 3;
+    *keyword_length = keyword_length_original - 3;
+    *flags = GRN_EXPR_SYNTAX_SCRIPT;
+    DBUG_VOID_RETURN;
+  }
+
+  bool weight_specified = false;
+  *flags = expr_flags_in_boolean_mode();
+  if (*keyword_length >= 2 && (*keyword)[0] == '*') {
+    bool parsed = false;
+    bool done = false;
+    (*keyword)++;
+    (*keyword_length)--;
+    while (!done) {
+      uint consumed_keyword_length = 0;
+      switch ((*keyword)[0]) {
+      case 'D':
+        if (generic_ft_init_ext_parse_pragma_d(info,
+                                               (*keyword) + 1,
+                                               (*keyword_length) - 1,
+                                               default_operator,
+                                               &consumed_keyword_length)) {
+          parsed = true;
+          consumed_keyword_length += 1;
+          (*keyword) += consumed_keyword_length;
+          (*keyword_length) -= consumed_keyword_length;
+        } else {
+          done = true;
+        }
+        break;
+      case 'W':
+        if (generic_ft_init_ext_parse_pragma_w(info,
+                                               (*keyword) + 1,
+                                               (*keyword_length) - 1,
+                                               index_column,
+                                               match_columns,
+                                               &consumed_keyword_length,
+                                               tmp_objects)) {
+          parsed = true;
+          weight_specified = true;
+          consumed_keyword_length += 1;
+          (*keyword) += consumed_keyword_length;
+          (*keyword_length) -= consumed_keyword_length;
+        } else {
+          done = true;
+        }
+        break;
+      default:
+        done = true;
+        break;
+      }
+    }
+    if (!parsed) {
+      (*keyword) = keyword_original;
+      (*keyword_length) = keyword_length_original;
+    }
+  }
+  // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
+  while (*keyword_length > 0 && (*keyword)[0] == ' ') {
+    (*keyword)++;
+    (*keyword_length)--;
+  }
+  if (*keyword_length > 0 && (*keyword)[0] == '+') {
+    (*keyword)++;
+    (*keyword_length)--;
+  }
+  if (!weight_specified) {
+    grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
+  }
+
+  DBUG_VOID_RETURN;
+}
+
 grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   struct st_mrn_ft_info *info,
   String *key,
@@ -8186,100 +8281,28 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
 
   grn_rc rc = GRN_SUCCESS;
 
-  const char *keyword, *keyword_original;
-  uint keyword_length, keyword_length_original;
+  const char *keyword = NULL;
+  uint keyword_length = 0;
   grn_operator default_operator = GRN_OP_OR;
-  grn_bool weight_specified = false;
   grn_expr_flags expression_flags = 0;
-  keyword = keyword_original = key->ptr();
-  keyword_length = keyword_length_original = key->length();
-  if (keyword_length >= 3 && keyword[0] == '*') {
-    bool parsed = false;
-    keyword++;
-    keyword_length--;
-    if (keyword_length >= 2 && memcmp(keyword, "SS", 2) == 0) {
-      expression_flags |= GRN_EXPR_SYNTAX_SCRIPT;
-      keyword += 2;
-      keyword_length -= 2;
-      parsed = true;
-    }
-    if (!parsed) {
-      keyword = keyword_original;
-      keyword_length = keyword_length_original;
-    }
-  }
-  // WORKAROUND: support only "D" and "W" pragmas.
-  if (!expression_flags &&
-      keyword_length >= 2 && keyword[0] == '*') {
-    bool parsed = false;
-    bool done = false;
-    keyword++;
-    keyword_length--;
-    while (!done) {
-      uint consumed_keyword_length = 0;
-      switch (keyword[0]) {
-      case 'D':
-        if (generic_ft_init_ext_parse_pragma_d(info,
-                                               keyword + 1,
-                                               keyword_length - 1,
-                                               &default_operator,
-                                               &consumed_keyword_length)) {
-          parsed = true;
-          consumed_keyword_length += 1;
-          keyword += consumed_keyword_length;
-          keyword_length -= consumed_keyword_length;
-        } else {
-          done = true;
-        }
-        break;
-      case 'W':
-        if (generic_ft_init_ext_parse_pragma_w(info,
-                                               keyword + 1,
-                                               keyword_length - 1,
-                                               index_column,
-                                               match_columns,
-                                               &consumed_keyword_length,
-                                               tmp_objects)) {
-          parsed = true;
-          weight_specified = true;
-          consumed_keyword_length += 1;
-          keyword += consumed_keyword_length;
-          keyword_length -= consumed_keyword_length;
-        } else {
-          done = true;
-        }
-        break;
-      default:
-        done = true;
-        break;
-      }
-    }
-    if (!parsed) {
-      keyword = keyword_original;
-      keyword_length = keyword_length_original;
-    }
-  }
-  // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
-  while (keyword_length > 0 && keyword[0] == ' ') {
-    keyword++;
-    keyword_length--;
-  }
-  if (keyword_length > 0 && keyword[0] == '+') {
-    keyword++;
-    keyword_length--;
-  }
-  if (!weight_specified) {
-    grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
-  }
+  generic_ft_init_ext_parse_pragma(info,
+                                   key,
+                                   index_column,
+                                   match_columns,
+                                   &keyword,
+                                   &keyword_length,
+                                   &default_operator,
+                                   &expression_flags,
+                                   tmp_objects);
   rc = grn_expr_parse(info->ctx, expression,
                       keyword, keyword_length,
                       match_columns, GRN_OP_MATCH, default_operator,
-                      expression_flags ? expression_flags : expr_flags_in_boolean_mode());
+                      expression_flags);
   if (rc) {
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
              "failed to parse fulltext search keyword: <%.*s>: <%s>",
-             keyword_length_original, keyword_original,
+             key->length(), key->ptr(),
              info->ctx->errbuf);
     ulong action = THDVAR(ha_thd(), action_on_fulltext_query_error);
     switch (static_cast<mrn_action_on_error>(action)) {

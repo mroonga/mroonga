@@ -969,6 +969,15 @@ private:
                                           uint *consumed_keyword_length,
                                           grn_obj *tmp_objects);
   grn_expr_flags expr_flags_in_boolean_mode();
+  void generic_ft_init_ext_parse_pragma(struct st_mrn_ft_info *info,
+                                        String *key,
+                                        grn_obj *index_column,
+                                        grn_obj *match_columns,
+                                        const char **keyword,
+                                        uint *keyword_length,
+                                        grn_operator *default_operator,
+                                        grn_expr_flags *flags,
+                                        grn_obj *tmp_objects);
   grn_rc generic_ft_init_ext_prepare_expression_in_boolean_mode(
     struct st_mrn_ft_info *info,
     String *key,
