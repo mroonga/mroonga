@@ -8190,10 +8190,27 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   uint keyword_length, keyword_length_original;
   grn_operator default_operator = GRN_OP_OR;
   grn_bool weight_specified = false;
+  grn_expr_flags expression_flags = 0;
   keyword = keyword_original = key->ptr();
   keyword_length = keyword_length_original = key->length();
+  if (keyword_length >= 3 && keyword[0] == '*') {
+    bool parsed = false;
+    keyword++;
+    keyword_length--;
+    if (keyword_length >= 2 && memcmp(keyword, "SS", 2) == 0) {
+      expression_flags |= GRN_EXPR_SYNTAX_SCRIPT;
+      keyword += 2;
+      keyword_length -= 2;
+      parsed = true;
+    }
+    if (!parsed) {
+      keyword = keyword_original;
+      keyword_length = keyword_length_original;
+    }
+  }
   // WORKAROUND: support only "D" and "W" pragmas.
-  if (keyword_length >= 2 && keyword[0] == '*') {
+  if (!expression_flags &&
+      keyword_length >= 2 && keyword[0] == '*') {
     bool parsed = false;
     bool done = false;
     keyword++;
@@ -8257,7 +8274,7 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   rc = grn_expr_parse(info->ctx, expression,
                       keyword, keyword_length,
                       match_columns, GRN_OP_MATCH, default_operator,
-                      expr_flags_in_boolean_mode());
+                      expression_flags ? expression_flags : expr_flags_in_boolean_mode());
   if (rc) {
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
