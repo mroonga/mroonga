@@ -17,6 +17,7 @@ install:
   - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
   - rmdir /S /Q ..\groonga\test\
   - cd ..\groonga\vendor
+  - c:\Ruby22-x64\bin\ruby -v download_lz4.rb
   - c:\Ruby22-x64\bin\ruby -v download_mecab.rb
   - cd ..\..\mariadb-10.1.8
   - mkdir storage\mroonga\vendor
@@ -47,6 +48,7 @@ build_script:
       -DWITHOUT_TOKUDB=ON
       -DWITHOUT_XTRADB=ON
       -DWITH_UNIT_TESTS=OFF
+      -DGRN_WITH_BUNDLED_LZ4=ON
       -DGRN_WITH_BUNDLED_MECAB=ON
   - cmake --build . --config Debug
 
