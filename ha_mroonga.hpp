@@ -664,9 +664,9 @@ private:
   int generic_store_bulk_blob(Field *field, grn_obj *buf);
   int generic_store_bulk_geometry(Field *field, grn_obj *buf);
 #ifdef MRN_HAVE_MYSQL_TYPE_JSON
-  int generic_store_bulk_json(Field *field, grn_obj *buf);
+  int generic_store_bulk_json(Field *field, grn_obj *buf, int nth_column);
 #endif
-  int generic_store_bulk(Field *field, grn_obj *buf);
+  int generic_store_bulk(Field *field, grn_obj *buf, int nth_column);
 
   void storage_store_field_string(Field *field,
                                   const char *value, uint value_length);

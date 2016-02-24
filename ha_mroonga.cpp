@@ -105,6 +105,10 @@
 #  include <create_options.h>
 #endif
 
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+#  include <json_dom.h>
+#endif
+
 // for debug
 #define MRN_CLASS_NAME "ha_mroonga"
 
@@ -1471,6 +1475,10 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
                             "COMPRESS_LZ4");
       }
       flag_names += 12;
+    } else if (rest_length >= 11 && !memcmp(flag_names, "WITH_WEIGHT", 11)) {
+      *column_flags |= GRN_OBJ_WITH_WEIGHT;
+      flag_names += 11;
+      found = true;
     } else {
       char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
       snprintf(invalid_flag_name, MRN_MESSAGE_BUFFER_SIZE,
@@ -5601,7 +5609,7 @@ int ha_mroonga::wrapper_write_row_index(uchar *buf)
       error = mrn_change_encoding(ctx, field->charset());
       if (error)
         goto err;
-      error = generic_store_bulk(field, &new_value_buffer);
+      error = generic_store_bulk(field, &new_value_buffer, 0);
       if (error) {
         my_message(error,
                    "mroonga: wrapper: "
@@ -5695,7 +5703,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
         if (error) {
           DBUG_RETURN(error);
         }
-        generic_store_bulk(pkey_field, &key_buffer);
+        generic_store_bulk(pkey_field, &key_buffer, 0);
         pkey = GRN_TEXT_VALUE(&key_buffer);
         pkey_size = GRN_TEXT_LEN(&key_buffer);
       } else {
@@ -5772,7 +5780,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
       grn_obj_unlink(ctx, &colbuf);
       goto err;
     }
-    error = generic_store_bulk(field, &colbuf);
+    error = generic_store_bulk(field, &colbuf, i);
     if (error) {
       grn_obj_unlink(ctx, &colbuf);
       goto err;
@@ -5944,7 +5952,7 @@ int ha_mroonga::storage_write_row_unique_index(uchar *buf,
     if (error) {
       DBUG_RETURN(error);
     }
-    generic_store_bulk(ukey_field, &key_buffer);
+    generic_store_bulk(ukey_field, &key_buffer, 0);
     ukey = GRN_TEXT_VALUE(&key_buffer);
     ukey_size = GRN_TEXT_LEN(&key_buffer);
   } else {
@@ -6207,10 +6215,10 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data, uchar *new_data)
     for (j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {
       Field *field = key_info->key_part[j].field;
 
-      generic_store_bulk(field, &new_value_buffer);
+      generic_store_bulk(field, &new_value_buffer, 0);
 
       field->move_field_offset(ptr_diff);
-      generic_store_bulk(field, &old_value_buffer);
+      generic_store_bulk(field, &old_value_buffer, 0);
       field->move_field_offset(-ptr_diff);
 
       grn_rc rc;
@@ -6348,7 +6356,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
         }
       }
 
-      generic_store_bulk(field, &colbuf);
+      generic_store_bulk(field, &colbuf, i);
       grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
       if (ctx->rc) {
         grn_obj_unlink(ctx, &colbuf);
@@ -6670,7 +6678,7 @@ int ha_mroonga::wrapper_delete_row_index(const uchar *buf)
       if (field->is_null())
         continue;
 
-      generic_store_bulk(field, &old_value_buffer);
+      generic_store_bulk(field, &old_value_buffer, 0);
       grn_rc rc;
       rc = grn_column_index_update(ctx, index_column, record_id, j + 1,
                                    &old_value_buffer, NULL);
@@ -10580,20 +10588,101 @@ int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf)
 }
 
 #ifdef MRN_HAVE_MYSQL_TYPE_JSON
-int ha_mroonga::generic_store_bulk_json(Field *field, grn_obj *buf)
+
+static int generic_store_bulk_json_error(Field_json *json, const char *message)
+{
+  String buffer;
+  String *value = json->val_str(&buffer, NULL);
+  char error_message[MRN_MESSAGE_BUFFER_SIZE];
+  int error;
+  snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+           message,
+           (int)value->length(), value->ptr());
+  error = ER_ERROR_ON_WRITE;
+  my_message(error, error_message, MYF(0));
+  return error;
+}
+
+int ha_mroonga::generic_store_bulk_json(Field *field, grn_obj *buf, int nth_column)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  String buffer;
   Field_json *json = static_cast<Field_json *>(field);
-  String *value = json->val_str(&buffer, NULL);
-  grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
-  GRN_TEXT_SET(ctx, buf, value->ptr(), value->length());
+
+  grn_obj *column = grn_columns[nth_column];
+  grn_id range_id = grn_obj_get_range(ctx, column);
+  grn_obj *range = grn_column_ranges[nth_column];
+
+  if (!mrn::grn::is_vector_column(column)) {
+    String buffer;
+    String *value = json->val_str(&buffer, NULL);
+    grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
+    GRN_TEXT_SET(ctx, buf, value->ptr(), value->length());
+  } else {
+    Json_wrapper wrapper;
+    json->val_json(&wrapper);
+    grn_obj_reinit(ctx, buf, GRN_DB_TEXT, GRN_OBJ_VECTOR);
+    if (wrapper.depth() != 2) {
+      error = generic_store_bulk_json_error(json,
+        "object depth must be 2: <%.*s>");
+      goto exit;
+    }
+    if (mrn::grn::is_weight_column(column)) {
+      if (wrapper.type() != Json_dom::J_OBJECT) {
+        error = generic_store_bulk_json_error(json,
+          "weight vector column should be json object: <%.*s>");
+        goto exit;
+      }
+      for (Json_wrapper_object_iterator iter= wrapper.object_iterator();
+           !iter.empty(); iter.next()) {
+        const std::string &key= iter.elt().first;
+        const char *key_data= key.c_str();
+        size_t key_length= key.length();
+        const Json_wrapper &value = iter.elt().second;
+        if (value.type() == Json_dom::J_INT) {
+          grn_vector_add_element(ctx, buf, key_data, key_length, value.get_int(), GRN_DB_TEXT);
+        } else {
+          error = generic_store_bulk_json_error(json,
+            "weight vector column's value should be integer: <%.*s>");
+          goto exit;
+        }
+      }
+    } else {
+      if (wrapper.type() != Json_dom::J_ARRAY) {
+        error = generic_store_bulk_json_error(json,
+          "vector column should be json array: <%.*s>");
+      } else {
+        int array_length = wrapper.length();
+        for (int i = 0; i < array_length; i++) {
+          const Json_wrapper &element = wrapper[i];
+          if (range->header.flags & GRN_OBJ_KEY_VAR_SIZE &&
+              element.type() == Json_dom::J_STRING) {
+            grn_vector_add_element(ctx, buf, element.get_data(), element.get_data_length(),
+                                   0, GRN_DB_TEXT);
+          } else if (!mrn::grn::is_table(range) &&
+                     range->header.flags & GRN_OBJ_KEY_INT &&
+                     element.type() == Json_dom::J_INT) {
+            if (i == 0) {
+              grn_obj_reinit(ctx, buf, range_id, GRN_OBJ_VECTOR);
+            }
+            longlong int_value = element.get_int();
+            grn_vector_add_element(ctx, buf, (const char *)&int_value,
+                                   grn_type_size(ctx, range), 0, range_id);
+          } else {
+            error = generic_store_bulk_json_error(json,
+              "vector column's value support string or integer only: <%.*s>");
+            break;
+          }
+        }
+      }
+    }
+  }
+exit:
   DBUG_RETURN(error);
 }
 #endif
 
-int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
+int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf, int nth_column)
 {
   MRN_DBUG_ENTER_METHOD();
   int error;
@@ -10685,7 +10774,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     break;
 #ifdef MRN_HAVE_MYSQL_TYPE_JSON
   case MYSQL_TYPE_JSON:
-    error = generic_store_bulk_json(field, buf);
+    error = generic_store_bulk_json(field, buf, nth_column);
     break;
 #endif
   default:
@@ -11160,52 +11249,103 @@ void ha_mroonga::storage_store_field_column(Field *field, bool is_primary_key,
   grn_id range_id = grn_obj_get_range(ctx, column);
   grn_obj *range = grn_column_ranges[nth_column];
   grn_obj *value = &new_value_buffer;
+  bool is_json = false;
 
-  if (mrn::grn::is_table(range)) {
-    if (mrn::grn::is_vector_column(column)) {
-      grn_obj_reinit(ctx, value, range_id, GRN_OBJ_VECTOR);
-      grn_obj_get_value(ctx, column, record_id, value);
+#ifdef MRN_HAVE_MYSQL_TYPE_JSON
+  if (field->real_type() == MYSQL_TYPE_JSON) {
+    is_json = true;
+  }
+#endif
 
-      grn_obj unvectored_value;
-      GRN_TEXT_INIT(&unvectored_value, 0);
-      int n_ids = GRN_BULK_VSIZE(value) / sizeof(grn_id);
-      for (int i = 0; i < n_ids; i++) {
-        grn_id id = GRN_RECORD_VALUE_AT(value, i);
-        if (i > 0) {
+  if (mrn::grn::is_vector_column(column)) {
+    grn_obj_reinit(ctx, value, range_id, GRN_OBJ_VECTOR);
+    grn_obj_get_value(ctx, column, record_id, value);
+    grn_obj unvectored_value;
+    GRN_TEXT_INIT(&unvectored_value, 0);
+    if (is_json) {
+      if (mrn::grn::is_weight_column(column)) {
+        GRN_TEXT_PUTC(ctx, &unvectored_value, '{');
+      } else {
+        GRN_TEXT_PUTC(ctx, &unvectored_value, '[');
+      }
+    }
+    int n_ids = grn_vector_size(ctx, value);
+    for (int i = 0; i < n_ids; i++) {
+      unsigned int weight = 0;
+      if (range->header.flags & GRN_OBJ_KEY_VAR_SIZE) {
+        if (is_json) {
+          GRN_TEXT_PUTC(ctx, &unvectored_value, '"');
+        }
+        if (mrn::grn::is_table(range)) {
+          grn_id id = grn_uvector_get_element(ctx, value, i, &weight);
+          char key[GRN_TABLE_MAX_KEY_SIZE];
+          int key_length;
+          key_length = grn_table_get_key(ctx, range, id,
+                                         &key, GRN_TABLE_MAX_KEY_SIZE);
+          GRN_TEXT_PUT(ctx, &unvectored_value, key, key_length);
+        } else {
+          const char *vector_value;
+          unsigned int length;
+          length = grn_vector_get_element(ctx, value, i, &vector_value, &weight, NULL);
+          GRN_TEXT_PUT(ctx, &unvectored_value, vector_value, length);
+        }
+        if (is_json) {
+          GRN_TEXT_PUTC(ctx, &unvectored_value, '"');
+        }
+      } else if (range_id == GRN_DB_INT64) {
+        grn_text_lltoa(ctx, &unvectored_value, GRN_INT64_VALUE_AT(value, i));
+      } else if (range_id == GRN_DB_INT32) {
+        grn_text_itoa(ctx, &unvectored_value, GRN_INT32_VALUE_AT(value, i));
+      } else if (range_id == GRN_DB_INT16) {
+        grn_text_itoa(ctx, &unvectored_value, GRN_INT16_VALUE_AT(value, i));
+      } else if (range_id == GRN_DB_INT8) {
+        grn_text_itoa(ctx, &unvectored_value, GRN_INT8_VALUE_AT(value, i));
+      }
+      if (mrn::grn::is_weight_column(column)) {
+        GRN_TEXT_PUTS(ctx, &unvectored_value, ": ");
+        grn_text_itoa(ctx, &unvectored_value, weight);
+      }
+      if (i < n_ids - 1) {
+        if (is_json) {
+          GRN_TEXT_PUTS(ctx, &unvectored_value, ", ");
+        } else {
           GRN_TEXT_PUTS(ctx, &unvectored_value, mrn_vector_column_delimiter);
         }
-        char key[GRN_TABLE_MAX_KEY_SIZE];
-        int key_length;
-        key_length = grn_table_get_key(ctx, range, id,
-                                       &key, GRN_TABLE_MAX_KEY_SIZE);
-        GRN_TEXT_PUT(ctx, &unvectored_value, key, key_length);
       }
-      storage_store_field(field,
-                          GRN_TEXT_VALUE(&unvectored_value),
-                          GRN_TEXT_LEN(&unvectored_value));
-      GRN_OBJ_FIN(ctx, &unvectored_value);
-    } else {
+    }
+    if (is_json) {
+      if (mrn::grn::is_weight_column(column)) {
+        GRN_TEXT_PUTC(ctx, &unvectored_value, '}');
+      } else {
+        GRN_TEXT_PUTC(ctx, &unvectored_value, ']');
+      }
+    }
+    storage_store_field(field,
+                        GRN_TEXT_VALUE(&unvectored_value),
+                        GRN_TEXT_LEN(&unvectored_value));
+    GRN_OBJ_FIN(ctx, &unvectored_value);
+  } else {
+    if (mrn::grn::is_table(range)) {
       grn_obj_reinit(ctx, value, range_id, 0);
       grn_obj_get_value(ctx, column, record_id, value);
-
       grn_id id = GRN_RECORD_VALUE(value);
       char key[GRN_TABLE_MAX_KEY_SIZE];
       int key_length;
       key_length = grn_table_get_key(ctx, range, id,
                                      &key, GRN_TABLE_MAX_KEY_SIZE);
       storage_store_field(field, key, key_length);
-    }
-  } else {
-    grn_obj_reinit(ctx, value, range_id, 0);
-    grn_obj_get_value(ctx, column, record_id, value);
-    if (is_primary_key && GRN_BULK_VSIZE(value) == 0) {
-      char key[GRN_TABLE_MAX_KEY_SIZE];
-      int key_length;
-      key_length = grn_table_get_key(ctx, grn_table, record_id,
-                                     &key, GRN_TABLE_MAX_KEY_SIZE);
-      storage_store_field(field, key, key_length);
     } else {
-      storage_store_field(field, GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
+      grn_obj_reinit(ctx, value, range_id, 0);
+      grn_obj_get_value(ctx, column, record_id, value);
+      if (is_primary_key && GRN_BULK_VSIZE(value) == 0) {
+        char key[GRN_TABLE_MAX_KEY_SIZE];
+        int key_length;
+        key_length = grn_table_get_key(ctx, grn_table, record_id,
+                                       &key, GRN_TABLE_MAX_KEY_SIZE);
+        storage_store_field(field, key, key_length);
+      } else {
+        storage_store_field(field, GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
+      }
     }
   }
 
@@ -13834,7 +13974,7 @@ int ha_mroonga::wrapper_fill_indexes(THD *thd, KEY *key_info,
             if (error)
               break;
 
-            error = generic_store_bulk(field, &new_value_buffer);
+            error = generic_store_bulk(field, &new_value_buffer, 0);
             if (error) {
               my_message(error,
                          "mroonga: wrapper: "
