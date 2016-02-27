@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-02-27 22:13+0900\n"
+"PO-Revision-Date: 2016-02-28 00:56+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -26,16 +26,25 @@ msgstr "全文検索"
 msgid "Boolean mode"
 msgstr "ブーリアンモード"
 
+msgid "Summary"
+msgstr "概要"
+
 msgid ""
 "Mroonga can perform boolean full text searches using the ``IN BOOLEAN MODE`` "
-"modifier."
+"modifier for ``MATCH AGAINST``::"
 msgstr ""
-"Mroongaは ``IN BOOLEAN MODE`` 修飾子をつけることでブーリアン全文検索を実行で"
-"きます。"
+"Mroongaは ``MATCH AGAINST`` に ``IN BOOLEAN MODE`` 修飾子をつけることでブーリ"
+"アン全文検索を実行できます。::"
+
+msgid ""
+"Normally, ``IN BOOLEAN MODE`` is suitable rather than the default ``IN "
+"NATURAL LANGUAGE MODE``. Because ``IN BOOLEAN MODE`` is similar to query in "
+"Web search engine. Most people familiar with query in Web search engine."
+msgstr ""
 
 msgid ""
 "You can use `qualifiers which MySQL support <https://dev.mysql.com/doc/"
-"refman/5.6/en/fulltext-boolean.html>`_ and Mroonga original pragmas in "
+"refman/5.7/en/fulltext-boolean.html>`_ and Mroonga original pragmas in "
 "boolean full text search query."
 msgstr ""
 "ブーリアン全文検索のクエリーでは `MySQLがサポートしている修飾子 <https://dev."
@@ -52,20 +61,50 @@ msgid ""
 "the search results that contain the search string will be rated higher."
 msgstr ""
 
-msgid "Mroonga supports the following qualifiers"
-msgstr ""
+msgid "Usage"
+msgstr "使いかた"
+
+msgid "Here are schema and data to show examples::"
+msgstr "以下は例を示すためのスキーマとデータです。::"
 
 # 71ca20d077b348898500f27958dfba2c
 # db3f7a6140cd4736a108c1a2c42f4764
 msgid "Qualifier"
 msgstr ""
 
-msgid "Description"
-msgstr "説明"
+msgid "Here are supported qualifiers."
+msgstr ""
 
-# 14a3e8138a9e4d9a90b35afc38bc61fc
-# 72a04d6a14f64d459fa4d771b44b6908
-msgid "``+``"
+msgid "``KEYWORD1 KEYWORD2``"
+msgstr ""
+
+msgid ""
+"No operator between keywords such as ``KEYWORD1 KEYWORD2`` indicates that "
+"one of keywords must be present in each row that is returned."
+msgstr ""
+
+msgid ""
+"``Mroonga for`` query means that ``Mroonga`` or ``for`` must be present::"
+msgstr ""
+
+msgid "``KEYWORD1 OR KEYWORD2``"
+msgstr ""
+
+msgid ""
+"``OR`` (must be uppercase) indicates that left hand side keyword or right "
+"hand side keyword must be present in each row that is returned."
+msgstr ""
+
+msgid ""
+"``Mroonga OR for`` query means that ``Mroonga`` or ``for`` must be present::"
+msgstr ""
+
+msgid ""
+"``OR`` is the default operator. You can omit it. Both ``Mroonga OR for`` and "
+"``Mroonga for`` return the same result."
+msgstr ""
+
+msgid "``+KEYWORD``"
 msgstr ""
 
 msgid ""
@@ -73,9 +112,12 @@ msgid ""
 "that is returned."
 msgstr ""
 
-# 22666477efac49edaa38de51e17070fa
-# c069c945cd584230be6640d3b5f83eaf
-msgid "``-``"
+msgid ""
+"``+MySQL +Mroonga`` query means that both ``MySQL`` and ``Mroonga`` must be "
+"present::"
+msgstr ""
+
+msgid "``-KEYWORD``"
 msgstr ""
 
 msgid ""
@@ -83,42 +125,77 @@ msgid ""
 "the rows that are returned."
 msgstr ""
 
-# 3bd877dfc0914eb7aa3ae28c9d3001ec
-# 178f505c03bc40f0a0b5ad9b0b522f56
-msgid "``*``"
-msgstr ""
-
-msgid "The asterisk serves as the truncation (or wildcard) operator."
-msgstr ""
-
-# d9bb6d54019e4e2f846903f62aaaa39f
-# fec3174da1b1450496ea1b1f366476f7
-msgid "``\"``"
-msgstr ""
-
-# 3126fa1b71a9453fbee8fbfdcf0e2449
 msgid ""
-"A phrase that is enclosed within double quote ( ``\"`` ) characters matches "
-"only rows that contain the phrase literally, as it was typed."
+"``+MySQL -Mroonga`` query means that ``MySQL`` must be present but "
+"``Mroonga`` must not be present::"
 msgstr ""
 
-# a10bb2101ec041bf83f0dba0ab4b0791
-# 2b2e8d392c8b4340b16efa2fd8c90f27
-msgid "``()``"
-msgstr ""
-
-msgid "Parentheses group words into subexpressions."
-msgstr ""
-
-msgid "Examples"
+msgid "``PREFIX*``"
 msgstr ""
 
 msgid ""
-"We show you how to rank in boolean mode using the following schema and "
-"data. ::"
+"A following asterisk indicates that all words starting with this word must "
+"be present in any of the rows that are returned."
 msgstr ""
+
+msgid ""
+"``+M*`` query means that words starting ``M`` (``MySQL`` and ``Mroonga`` in "
+"this case) must be present::"
+msgstr ""
+
+msgid ""
+"To be precise, \"word\" may not be \"word\" you think. \"word\" in this "
+"context is \"token\". \"token\" may not be word. For example, tokens in "
+"\"It's\" are \"It\", \"'\" and \"s\"."
+msgstr ""
+
+msgid ""
+"You can confirm token by :doc:`/reference/udf/mroonga_command` and `tokenize "
+"<http://groonga.org/docs/reference/commands/tokenize.html>`_::"
+msgstr ""
+
+msgid "JSON value in the above result is formatted by hand."
+msgstr ""
+
+msgid "``\"PHRASE\"``"
+msgstr ""
+
+msgid ""
+"Quoting phrase by double quote (``\"``) indicates that the phrase must be "
+"present in any of the rows that are returned."
+msgstr ""
+
+msgid ""
+"``+\"Professional MySQL\"`` query means that ``Professional MySQL`` phrase "
+"must be present. The query doesn't match to ``MySQL for Profession``. "
+"``MySQL for Profession`` includes both ``MySQL`` and ``Professional`` words "
+"but doesn't include ``Professional MySQL`` phrase::"
+msgstr ""
+
+msgid "``(SUBEXPRESSION...)``"
+msgstr ""
+
+msgid "Parentheses groups expressions."
+msgstr ""
+
+msgid "``+(Groonga OR Mroonga) +MySQL`` query means the following:"
+msgstr ""
+
+msgid "``Groonga`` or ``Mroonga`` must be present."
+msgstr ""
+
+msgid "``MySQL`` must be present."
+msgstr ""
+
+msgid "Here is the result of the query::"
+msgstr "以下はこのクエリーの実行結果です。::"
 
 msgid "Pragma"
+msgstr ""
+
+msgid ""
+"Pragma is metadata for query. You can change how to parse query by "
+"specifying pragma."
 msgstr ""
 
 msgid ""
@@ -126,116 +203,118 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The pragma must exist in the beginning of a query. (Don't put a blank into a "
-"head of the query)"
+"Pragma must exist in the beginning of a query. Don't put a blank into a head "
+"of the query. Pragma starts with ``*``::"
 msgstr ""
+
+msgid "You can specify multiple pragmas::"
+msgstr ""
+
+msgid "Here are available pragmas."
+msgstr "以下は利用可能なプラグマの一覧です。"
 
 msgid "``D`` pragma"
 msgstr ""
 
 msgid ""
-"``D`` pragma is a form for specifying which operation should be execute when "
-"an individual operator is omitted."
+"``D`` pragma indicates the default operator. It's used when an individual "
+"operator is omitted."
 msgstr ""
 
 msgid ""
-"The syntax of ``D`` pragma is as follows. You can choose one of the three "
-"operators, either ``OR``, ``+``, or ``-``::"
+"Here is the ``D`` pragma syntax. You can choose one of ``OR``, ``+`` or ``-"
+"`` as ``${OPERATOR}``::"
 msgstr ""
 
-# 3eb7a0dc196a485fb980feedc457cb3a
-msgid "``*DOR``"
+msgid "``DOR``"
 msgstr ""
 
-# d77e4a7766e84cb5bb21e5b4589bdc32
-msgid "We use ``*DOR Groonga Mroonga`` to search.::"
+msgid "``DOR`` means that \"or\" is used as the default operator."
 msgstr ""
 
-# 4c9a00f4b6954e74bb0a638fa8464ae3
+msgid "This is the default."
+msgstr ""
+
 msgid ""
-"The search result is a row that contains ``Groonga`` or ``Mroonga``. The row "
-"score is as follows::"
+"Here is an example to use ``DOR``. ``'*DOR for Mroonga' IN BOOLEAN MODE`` "
+"returns records that includes ``for`` or ``Mroonga``::"
 msgstr ""
 
-# 08a7d26d8e354613a8ea7516556b0049
-msgid "``*D+``"
+msgid "``D+``"
 msgstr ""
 
-# 41e54d40b6d74b6984d9a918a5280534
-msgid "We use a query ``*D+ Groonga Mroonga`` to search.::"
-msgstr ""
-
-# 2020b007becc4fa2bec3c0c4301e0cd9
 msgid ""
-"The search result is a row that contains ``Groonga`` and ``Mroonga``. The "
-"row score is as follows::"
+"``D+`` means that \"and\" is used as the default operator. It's similar to "
+"query in Web search engine."
 msgstr ""
 
-# 617564cd6142410bb1021ace3e2790fa
-msgid "``*D-``"
-msgstr ""
-
-# 0922c7b9944c4c9bb1f4c83392ac469c
-msgid "We use a query ``*D- Groonga Mroonga`` to search.::"
-msgstr ""
-
-# 7226b871b7ed4b27982691a29c44e465
 msgid ""
-"The search result is a row that contains ``Groonga``, and does not contain "
-"``Mroonga``. The row score is as follows::"
+"Here is an example to use ``D+``. ``'*D+ MySQL Mroonga' IN BOOLEAN MODE`` "
+"returns records that includes ``MySQL`` and ``Mroonga``::"
+msgstr ""
+
+msgid "``D-``"
+msgstr ""
+
+msgid "``D-`` means that \"not\" is used as the default operator."
+msgstr ""
+
+msgid ""
+"Here is an example to use ``D-``. ``'*D- MySQL Mroonga' IN BOOLEAN MODE`` "
+"returns records that includes ``MySQL`` but doesn't include ``Mroonga``::"
 msgstr ""
 
 msgid "``W`` pragma"
 msgstr ""
 
 msgid ""
-"``W`` pragma is a form for specifying target section and its weight when "
-"using multiple-column index."
+"``W`` pragma indicates target section and its weight for multiple column "
+"index."
 msgstr ""
 
 msgid ""
-"You can specify the multiple of the weight for every section. The default "
-"value of the weight is set to 1."
-msgstr ""
-
-msgid "The weight is omissible, and a negative value is allowed."
+"You can specify different weight for each section. The default weight is "
+"``1``. ``1`` means that no weight."
 msgstr ""
 
 msgid ""
-"The syntax of W pragma is as follows. A section number is begun not from 0 "
-"but from 1. ::"
+"Here is the ``W`` pragma syntax. ``${SECTION}`` is a number that is begun "
+"not from 0 but from 1. ``${WEIGHT}`` is omitable::"
 msgstr ""
 
 msgid ""
-"We show you how to rank in multiple-column index using the following schema "
-"and data.::"
-msgstr ""
-
-# d10085e3b31749d796ab277a6001f0a1
-msgid ""
-"Consider the case that 10 weight is given to ``title`` column, and 1 weight "
-"is given to ``comment`` column, and use ``Groonga`` to search."
-msgstr ""
-
-msgid "Here is the query such a case::"
+"Here are schema and data to show examples. You need to create a multiple "
+"column index to use ``W`` pragma::"
 msgstr ""
 
 msgid ""
-"The search result is a row that contains \"Groonga\". The row score is as "
-"follows::"
+"Here is an example to show weight. ``title`` column has ``10`` weight and "
+"``content`` columns has ``1`` weight. It means that keyword in ``title`` "
+"column is 10 times important than keyword in ``content`` column::"
 msgstr ""
 
-# fc9161e4f45c461ebd4898259d17b651
 msgid ""
-"The row score is set to 11 that the ``title`` and ``comment`` column contain "
-"``Groonga``, and the row score is set to 10 that only ``title`` column "
-"contains ``Groonga``."
+"The score of the first record is ``0``. Because it doesn't have any "
+"``Groonga`` in both ``title`` column and ``content`` column."
+msgstr ""
+
+msgid ""
+"The score of the second record is ``11``. Because it has ``Groonga`` in both "
+"``title`` column and ``content`` column. ``Groonga`` in ``title`` column has "
+"score ``10``. ``Groonga`` in ``content`` column has score ``1``. ``11`` is "
+"sum of them."
+msgstr ""
+
+msgid ""
+"The score of the third record is ``1``. Because it has ``Groonga`` in only "
+"``content`` column. ```Groonga`` in ``content`` column has score ``1``. So "
+"the score of the record is ``1``."
 msgstr ""
 
 msgid "``S`` pragma"
 msgstr ""
 
-msgid "``S`` pragma is a form for specifying syntax."
+msgid "``S`` pragma indicates syntax of the query."
 msgstr ""
 
 msgid "Here is a syntax of ``S`` pragma::"
@@ -286,77 +365,6 @@ msgstr ""
 
 msgid "You can also use other advanced features."
 msgstr "他の上級者向け機能も使えます。"
-
-# 66bc92429b5f4b07965f5b58be76f44e
-msgid "(no operator)"
-msgstr ""
-
-# 7b32c651551c4cd7a5e0950c25dcb3a6
-msgid "We use a query ``Groonga Mroonga`` to search.::"
-msgstr ""
-
-msgid "Rows that contain even one word will be ranked higher."
-msgstr ""
-
-msgid "A row score is set to 1 when the row contains a single word."
-msgstr ""
-
-msgid "A row score is set to 2 when the row contains both words."
-msgstr ""
-
-msgid "Here is the search result::"
-msgstr ""
-
-# d381e64840b04711a8e068364b4caf82
-msgid "We use a query ``+Groonga +Mroonga`` to search.::"
-msgstr ""
-
-msgid ""
-"The search result is a row that contains both words. The row score is as "
-"follows::"
-msgstr ""
-
-# 8a41ba2908d748b18679d9927fbff7eb
-msgid "We use a query ``-Groonga -Mroonga`` to search.::"
-msgstr ""
-
-msgid ""
-"The search result is a row that does not contain both words. The row score "
-"is as follows::"
-msgstr ""
-
-# 166c8f379304422b8a62cbc03232ceec
-msgid "We use a query ``M*`` to search.::"
-msgstr ""
-
-# 23df3fdb177144d5a6abf9ed026f9675
-msgid ""
-"The search result is a row that contains ``MySQL`` or ``Mroonga``. The row "
-"score is as follows::"
-msgstr ""
-
-# b8bcedade1dd408b9379c5c8d4188a2c
-msgid "We use a query ``\"Groonga Mroonga\"`` to search.::"
-msgstr ""
-
-# 42660b0f81fe4fd7beeb7bae5296eae3
-msgid ""
-"The search result is a row that contains a phrase that matches ``Groonga "
-"Mroonga``. The row score is as follows::"
-msgstr ""
-
-# 92256cdf75b64842ad64cc90d1d57774
-msgid "We use a query ``+MySQL +(Groonga Mroonga)`` to search.::"
-msgstr ""
-
-# fc24117e14fa4e3ca6acc6fed6c2a0f1
-msgid ""
-"The search result is a row that contains ``MySQL`` and ``Groonga``, or "
-"``MySQL`` and ``Mroonga``, or ``MySQL`` and ``Groonga`` and ``Mroonga``."
-msgstr ""
-
-msgid "The row score is as follows::"
-msgstr ""
 
 msgid "Search and Scoring in Mroonga"
 msgstr "Mroongaにおける検索スコア"
@@ -837,6 +845,9 @@ msgstr "使用可能な ``mroonga_action_on_fulltext_query_error`` のリスト�
 
 msgid "Value"
 msgstr "値"
+
+msgid "Description"
+msgstr "説明"
 
 msgid "ERROR"
 msgstr ""
@@ -1835,9 +1846,6 @@ msgstr ""
 msgid "``mroonga_command()``"
 msgstr ""
 
-msgid "Summary"
-msgstr "概要"
-
 msgid ""
 "``mroonga_command()`` UDF executes the given string as a Groonga command and "
 "returns result of the Groonga command. Groonga command will be faster than "
@@ -1857,9 +1865,6 @@ msgstr "``mroonga_command()`` の引数は1つで必須の引数です。::"
 
 msgid "``command`` is a string value. It's a Groonga command to be executed."
 msgstr "``command`` は文字列型の値です。実行するGroongaコマンドを指定します。"
-
-msgid "Usage"
-msgstr "使いかた"
 
 msgid "TODO"
 msgstr ""
