@@ -8,10 +8,10 @@ environment:
 install:
   - cd ..
   - choco install -y curl 7zip.commandline
-  - curl -O http://mirror.jmu.edu/pub/mariadb/mariadb-10.1.11/source/mariadb-10.1.11.tar.gz
-  - 7z x mariadb-10.1.11.tar.gz
-  - 7z x mariadb-10.1.11.tar > nul
-  - cd mariadb-10.1.11
+  - curl -O http://mirror.jmu.edu/pub/mariadb/mariadb-10.1.12/source/mariadb-10.1.12.tar.gz
+  - 7z x mariadb-10.1.12.tar.gz
+  - 7z x mariadb-10.1.12.tar > nul
+  - cd mariadb-10.1.12
   - rmdir /S /Q storage\mroonga\
   - move ..\mroonga storage\mroonga
   - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
@@ -19,7 +19,7 @@ install:
   - cd ..\groonga\vendor
   - c:\Ruby22-x64\bin\ruby -v download_lz4.rb
   - c:\Ruby22-x64\bin\ruby -v download_mecab.rb
-  - cd ..\..\mariadb-10.1.11
+  - cd ..\..\mariadb-10.1.12
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
