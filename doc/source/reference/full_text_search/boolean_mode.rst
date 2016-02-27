@@ -1,211 +1,423 @@
 Boolean mode
 ============
 
+Summary
+-------
+
 Mroonga can perform boolean full text searches using the ``IN BOOLEAN
-MODE`` modifier.
+MODE`` modifier for ``MATCH AGAINST``::
+
+  SELECT ... WHERE MATCH(column) AGAINST ('...' IN BOOLEAN MODE);
+
+Normally, ``IN BOOLEAN MODE`` is suitable rather than the default ``IN
+NATURAL LANGUAGE MODE``. Because ``IN BOOLEAN MODE`` is similar to
+query in Web search engine. Most people familiar with query in Web
+search engine.
 
 You can use `qualifiers which MySQL support
-<https://dev.mysql.com/doc/refman/5.6/en/fulltext-boolean.html>`_ and
+<https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html>`_ and
 Mroonga original pragmas in boolean full text search query.
 
-These qualifiers and pragmas can change the relative rank of search results.
+These qualifiers and pragmas can change the relative rank of search
+results.
 
-In the case of a search string not using neither a qualifier nor a pragma, the search results that contain the search string will be rated higher.
+In the case of a search string not using neither a qualifier nor a
+pragma, the search results that contain the search string will be
+rated higher.
 
-Mroonga supports the following qualifiers
------------------------------------------
+Usage
+-----
 
-.. list-table::
-  :header-rows: 1
-
-  * - Qualifier
-    - Description
-  * - ``+``
-    - A leading plus sign indicates that this word must be present in each row that is returned.
-  * - ``-``
-    - A leading minus sign indicates that this word must not be present in any of the rows that are returned.
-  * - ``*``
-    - The asterisk serves as the truncation (or wildcard) operator.
-  * - ``"``
-    - A phrase that is enclosed within double quote ( ``"`` ) characters matches only rows that contain the phrase literally, as it was typed.
-  * - ``()``
-    - Parentheses group words into subexpressions.
-
-Examples
---------
-
-We show you how to rank in boolean mode using the following schema and data. ::
+Here are schema and data to show examples::
 
   CREATE TABLE books (
     `id` INTEGER AUTO_INCREMENT,
     `title` text,
     PRIMARY KEY(`id`),
     FULLTEXT INDEX title_index (title)
-  ) ENGINE=Mroonga default charset utf8;
+  ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
 
-  INSERT INTO books (title) VALUES ('MySQL');
-  INSERT INTO books (title) VALUES ('MySQL Groonga');
-  INSERT INTO books (title) VALUES ('MySQL Groonga Mroonga');
+  INSERT INTO books (title) VALUES ('Professional MySQL');
+  INSERT INTO books (title) VALUES ('MySQL for Professional');
+  INSERT INTO books (title) VALUES ('Mroonga = MySQL + Groonga');
 
-.. _pragma:
+.. _boolean-mode-qualifier:
+
+Qualifier
+---------
+
+Here are supported qualifiers.
+
+.. _boolean-mode-qualifier-none:
+
+``KEYWORD1 KEYWORD2``
+^^^^^^^^^^^^^^^^^^^^^
+
+No operator between keywords such as ``KEYWORD1 KEYWORD2`` indicates
+that one of keywords must be present in each row that is returned.
+
+``Mroonga for`` query means that ``Mroonga`` or ``for`` must be
+present::
+
+  SELECT title
+    FROM books
+   WHERE MATCH(title) AGAINST('Mroonga for' IN BOOLEAN MODE);
+  -- +---------------------------+
+  -- | title                     |
+  -- +---------------------------+
+  -- | Mroonga = MySQL + Groonga |
+  -- | MySQL for Professional    |
+  -- +---------------------------+
+
+.. _boolean-mode-qualifier-or:
+
+``KEYWORD1 OR KEYWORD2``
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+``OR`` (must be uppercase) indicates that left hand side keyword or
+right hand side keyword must be present in each row that is returned.
+
+``Mroonga OR for`` query means that ``Mroonga`` or ``for`` must be
+present::
+
+  SELECT title
+    FROM books
+   WHERE MATCH(title) AGAINST('Mroonga OR for' IN BOOLEAN MODE);
+  -- +---------------------------+
+  -- | title                     |
+  -- +---------------------------+
+  -- | Mroonga = MySQL + Groonga |
+  -- | MySQL for Professional    |
+  -- +---------------------------+
+
+``OR`` is the default operator. You can omit it. Both ``Mroonga OR
+for`` and ``Mroonga for`` return the same result.
+
+.. _boolean-mode-qualifier-plus:
+
+``+KEYWORD``
+^^^^^^^^^^^^
+
+A leading plus sign indicates that this word must be present in each
+row that is returned.
+
+``+MySQL +Mroonga`` query means that both ``MySQL`` and ``Mroonga``
+must be present::
+
+  SELECT title
+    FROM books
+   WHERE MATCH(title) AGAINST('+MySQL +Groonga' IN BOOLEAN MODE);
+  -- +---------------------------+
+  -- | title                     |
+  -- +---------------------------+
+  -- | Mroonga = MySQL + Groonga |
+  -- +---------------------------+
+
+.. _boolean-mode-qualifier-minus:
+
+``-KEYWORD``
+^^^^^^^^^^^^
+
+A leading minus sign indicates that this word must not be present in
+any of the rows that are returned.
+
+``+MySQL -Mroonga`` query means that ``MySQL`` must be present but
+``Mroonga`` must not be present::
+
+  SELECT title
+    FROM books
+   WHERE MATCH(title) AGAINST('+MySQL -Mroonga' IN BOOLEAN MODE);
+  -- +------------------------+
+  -- | title                  |
+  -- +------------------------+
+  -- | Professional MySQL     |
+  -- | MySQL for Professional |
+  -- +------------------------+
+
+.. _boolean-mode-qualifier-asterisk:
+
+``PREFIX*``
+^^^^^^^^^^^^
+
+A following asterisk indicates that all words starting with this word
+must be present in any of the rows that are returned.
+
+``+M*`` query means that words starting ``M`` (``MySQL`` and
+``Mroonga`` in this case) must be present::
+
+  SELECT title
+    FROM books
+   WHERE MATCH(title) AGAINST('+M*' IN BOOLEAN MODE);
+  -- +---------------------------+
+  -- | title                     |
+  -- +---------------------------+
+  -- | Mroonga = MySQL + Groonga |
+  -- | Professional MySQL        |
+  -- | MySQL for Professional    |
+  -- +---------------------------+
+
+.. note::
+
+   To be precise, "word" may not be "word" you think. "word" in this
+   context is "token". "token" may not be word. For example, tokens in
+   "It's" are "It", "'" and "s".
+
+   You can confirm token by :doc:`/reference/udf/mroonga_command` and
+   `tokenize
+   <http://groonga.org/docs/reference/commands/tokenize.html>`_::
+
+     SELECT mroonga_command('tokenize TokenBigram "It''s" NormalizerMySQLGeneralCI');
+     -- +--------------------------------------------------------------------------+
+     -- | mroonga_command('tokenize TokenBigram "It''s" NormalizerMySQLGeneralCI') |
+     -- +--------------------------------------------------------------------------+
+     -- | [                                                                        |
+     -- |   {                                                                      |
+     -- |     "value":"IT",                                                        |
+     -- |     "position":0,                                                        |
+     -- |     "force_prefix":false                                                 |
+     -- |   },                                                                     |
+     -- |   {                                                                      |
+     -- |     "value":"'",                                                         |
+     -- |     "position":1,                                                        |
+     -- |     "force_prefix":false                                                 |
+     -- |   },                                                                     |
+     -- |   {                                                                      |
+     -- |     "value":"S",                                                         |
+     -- |     "position":2,                                                        |
+     -- |     "force_prefix":false                                                 |
+     -- |   }                                                                      |
+     -- | ]                                                                        |
+     -- +--------------------------------------------------------------------------+
+
+   JSON value in the above result is formatted by hand.
+
+.. _boolean-mode-qualifier-double-quote:
+
+``"PHRASE"``
+^^^^^^^^^^^^
+
+Quoting phrase by double quote (``"``) indicates that the phrase must
+be present in any of the rows that are returned.
+
+``+"Professional MySQL"`` query means that ``Professional MySQL``
+phrase must be present. The query doesn't match to ``MySQL for
+Profession``. ``MySQL for Profession`` includes both ``MySQL`` and
+``Professional`` words but doesn't include ``Professional MySQL``
+phrase::
+
+  SELECT title
+    FROM books
+   WHERE MATCH(title) AGAINST('+"Professional MySQL"' IN BOOLEAN MODE);
+  -- +--------------------+
+  -- | title              |
+  -- +--------------------+
+  -- | Professional MySQL |
+  -- +--------------------+
+
+.. _boolean-mode-qualifier-parentheses:
+
+``(SUBEXPRESSION...)``
+^^^^^^^^^^^^^^^^^^^^^^
+
+Parentheses groups expressions.
+
+``+(Groonga OR Mroonga) +MySQL`` query means the following:
+
+  * ``Groonga`` or ``Mroonga`` must be present.
+  * ``MySQL`` must be present.
+
+Here is the result of the query::
+
+  SELECT title
+    FROM books
+   WHERE MATCH(title) AGAINST('+(Groonga OR Mroonga) +MySQL' IN BOOLEAN MODE);
+  -- +---------------------------+
+  -- | title                     |
+  -- +---------------------------+
+  -- | Mroonga = MySQL + Groonga |
+  -- +---------------------------+
+
+.. _boolean-mode-pragma:
 
 Pragma
 ------
 
-You can embed pragma at the head of query for specifying how to execute.
+Pragma is metadata for query. You can change how to parse query by
+specifying pragma.
 
-The pragma must exist in the beginning of a query. (Don't put a blank into a head of the query)
+You can embed pragma at the head of query for specifying how to
+execute.
 
-.. _pragma-d:
+Pragma must exist in the beginning of a query. Don't put a blank into
+a head of the query. Pragma starts with ``*``::
+
+  SELECT MATCH AGAINST('*PRAGMA ...' IN BOOLEAN MODE);
+
+You can specify multiple pragmas::
+
+  SELECT MATCH AGAINST('*PRAGMA1PRAGMA2 ...' IN BOOLEAN MODE);
+
+Here are available pragmas.
+
+.. _boolean-mode-pragma-d:
 
 ``D`` pragma
 ^^^^^^^^^^^^
 
-``D`` pragma is a form for specifying which operation should be
-execute when an individual operator is omitted.
+``D`` pragma indicates the default operator. It's used when an
+individual operator is omitted.
 
-The syntax of ``D`` pragma is as follows. You can choose one of the
-three operators, either ``OR``, ``+``, or ``-``::
+Here is the ``D`` pragma syntax. You can choose one of ``OR``, ``+``
+or ``-`` as ``${OPERATOR}``::
 
-  *D[operator]
+  *D${OPERATOR}
 
-.. _pragma-d-or:
+.. _boolean-mode-pragma-d-or:
 
-``*DOR``
-""""""""
-
-We use ``*DOR Groonga Mroonga`` to search.::
-
-  SELECT title, MATCH (title) AGAINST('*DOR Groonga Mroonga' IN BOOLEAN MODE) AS score FROM books;
-
-The search result is a row that contains ``Groonga`` or ``Mroonga``. The row score is as follows::
-
-  +-----------------------+-------+
-  | title                 | score |
-  +-----------------------+-------+
-  | MySQL                 |     0 |
-  | MySQL Groonga         |     1 |
-  | MySQL Groonga Mroonga |     2 |
-  +-----------------------+-------+
-  3 rows in set (0.00 sec)
-
-.. _pragma-d-plus:
-
-``*D+``
+``DOR``
 """""""
 
-We use a query ``*D+ Groonga Mroonga`` to search.::
+``DOR`` means that "or" is used as the default operator.
 
-  SELECT title, MATCH (title) AGAINST('*D+ Groonga Mroonga' IN BOOLEAN MODE) AS score FROM books;
+This is the default.
 
-The search result is a row that contains ``Groonga`` and ``Mroonga``. The row score is as follows::
+Here is an example to use ``DOR``. ``'*DOR for Mroonga' IN BOOLEAN
+MODE`` returns records that includes ``for`` or ``Mroonga``::
 
-  +-----------------------+-------+
-  | title                 | score |
-  +-----------------------+-------+
-  | MySQL                 |     0 |
-  | MySQL Groonga         |     0 |
-  | MySQL Groonga Mroonga |     2 |
-  +-----------------------+-------+
-  3 rows in set (0.01 sec)
+  SELECT title
+   FROM books
+  WHERE MATCH (title) AGAINST('*DOR for Mroonga' IN BOOLEAN MODE);
+  -- +---------------------------+
+  -- | title                     |
+  -- +---------------------------+
+  -- | MySQL for Professional    |
+  -- | Mroonga = MySQL + Groonga |
+  -- +---------------------------+
 
-.. _pragma-d-minus:
+.. _boolean-mode-pragma-d-plus:
 
-``*D-``
-"""""""
+``D+``
+""""""
 
-We use a query ``*D- Groonga Mroonga`` to search.::
+``D+`` means that "and" is used as the default operator. It's similar
+to query in Web search engine.
 
-  SELECT title, MATCH (title) AGAINST('*D- Groonga Mroonga' IN BOOLEAN MODE) AS score FROM books;
+Here is an example to use ``D+``. ``'*D+ MySQL Mroonga' IN BOOLEAN
+MODE`` returns records that includes ``MySQL`` and ``Mroonga``::
 
+  SELECT title
+   FROM books
+  WHERE MATCH (title) AGAINST('*D+ MySQL Mroonga' IN BOOLEAN MODE);
+  -- +---------------------------+
+  -- | title                     |
+  -- +---------------------------+
+  -- | Mroonga = MySQL + Groonga |
+  -- +---------------------------+
 
-The search result is a row that contains ``Groonga``, and does not contain ``Mroonga``. The row score is as follows::
+.. _boolean-mode-pragma-d-minus:
 
-  +-----------------------+-------+
-  | title                 | score |
-  +-----------------------+-------+
-  | MySQL                 |     0 |
-  | MySQL Groonga         |     1 |
-  | MySQL Groonga Mroonga |     0 |
-  +-----------------------+-------+
-  3 rows in set (0.00 sec)
+``D-``
+""""""
 
-.. _pragma-w:
+``D-`` means that "not" is used as the default operator.
+
+Here is an example to use ``D-``. ``'*D- MySQL Mroonga' IN BOOLEAN
+MODE`` returns records that includes ``MySQL`` but doesn't include
+``Mroonga``::
+
+  SELECT title
+   FROM books
+  WHERE MATCH (title) AGAINST('*D- MySQL Mroonga' IN BOOLEAN MODE);
+  -- +------------------------+
+  -- | title                  |
+  -- +------------------------+
+  -- | Professional MySQL     |
+  -- | MySQL for Professional |
+  -- +---------------------------+
+
+.. _boolean-mode-pragma-w:
 
 ``W`` pragma
 ^^^^^^^^^^^^
 
-``W`` pragma is a form for specifying target section and its weight
-when using multiple-column index.
+``W`` pragma indicates target section and its weight for multiple
+column index.
 
-You can specify the multiple of the weight for every section. The
-default value of the weight is set to 1.
+You can specify different weight for each section. The default weight
+is ``1``. ``1`` means that no weight.
 
-The weight is omissible, and a negative value is allowed.
+Here is the ``W`` pragma syntax. ``${SECTION}`` is a number that is
+begun not from 0 but from 1. ``${WEIGHT}`` is omitable::
 
-The syntax of W pragma is as follows. A section number is begun not from 0 but from 1. ::
+  *W[${SECTION1}[:${WEIGHT1}]][,${SECTION2}[:${WEIGHT2}]][,...]
 
-  *W[number1[:weight1]][,number2[:weight2]]...
+Here are schema and data to show examples. You need to create a
+multiple column index to use ``W`` pragma::
 
-We show you how to rank in multiple-column index using the following schema and data.::
-
-  CREATE TABLE books (
+  CREATE TABLE memos (
     `id` INTEGER AUTO_INCREMENT,
     `title` text,
-    `comment` text,
+    `content` text,
     PRIMARY KEY(`id`),
-    FULLTEXT INDEX content_index (title, comment)
-  ) engine=Mroonga default charset utf8;
+    FULLTEXT INDEX text_index (title, content)
+  ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
 
-  INSERT INTO books (title, comment) VALUES (
-    'MySQL', 'MySQL Introduction'
+  INSERT INTO memos (title, content) VALUES (
+    'MySQL', 'MySQL is a RDBMS.'
   );
-  INSERT INTO books (title, comment) VALUES (
-    'MySQL Groonga', 'Groonga Introduction'
+  INSERT INTO memos (title, content) VALUES (
+    'Groonga', 'Groonga is a full text search engine.'
   );
-  INSERT INTO books (title, comment) VALUES (
-    'MySQL Groonga Mroonga', 'Mroonga Introduction'
+  INSERT INTO memos (title, content) VALUES (
+    'Mroonga', 'Mroonga is a storage engine for MySQL based on Groonga.'
   );
 
-Consider the case that 10 weight is given to ``title`` column, and 1 weight is given to ``comment`` column, and use ``Groonga`` to search.
-
-Here is the query such a case::
+Here is an example to show weight. ``title`` column has ``10`` weight
+and ``content`` columns has ``1`` weight. It means that keyword in
+``title`` column is 10 times important than keyword in ``content``
+column::
 
   SELECT title,
-         comment,
-         MATCH (title,comment) AGAINST('*W1:10,2:1 +Groonga' IN BOOLEAN MODE) AS score
-    FROM books;
+         content,
+         MATCH (title, content) AGAINST('*W1:10,2:1 +Groonga' IN BOOLEAN MODE) AS score
+    FROM memos;
+  -- +---------+--------------------------------------------------------+-------+
+  -- | title   | content                                                | score |
+  -- +---------+--------------------------------------------------------+-------+
+  -- | MySQL   | MySQL is a RDBMS.                                      |     0 |
+  -- | Groonga | Groonga is a full text search engine.                  |    11 |
+  -- | Mroonga | Mroonga is a storage engine for MySQL based on Groonga |     1 |
+  -- +---------+--------------------------------------------------------+-------+
 
-The search result is a row that contains "Groonga". The row score is as follows::
+The score of the first record is ``0``. Because it doesn't have any
+``Groonga`` in both ``title`` column and ``content`` column.
 
-  +-----------------------+----------------------+-------+
-  | title                 | comment              | score |
-  +-----------------------+----------------------+-------+
-  | MySQL                 | MySQL Introduction   |     0 |
-  | MySQL Groonga         | Groonga Introduction |    11 |
-  | MySQL Groonga Mroonga | Mroonga Introduction |    10 |
-  +-----------------------+----------------------+-------+
-  3 rows in set (0.01 sec)
+The score of the second record is ``11``. Because it has ``Groonga`` in
+both ``title`` column and ``content`` column. ``Groonga`` in ``title``
+column has score ``10``. ``Groonga`` in ``content`` column has score
+``1``. ``11`` is sum of them.
 
-The row score is set to 11 that the ``title`` and ``comment`` column contain ``Groonga``, and the row score is set to 10 that only ``title`` column contains ``Groonga``.
+The score of the third record is ``1``. Because it has ``Groonga`` in
+only ``content`` column. ```Groonga`` in ``content`` column has score
+``1``. So the score of the record is ``1``.
 
-.. _pragma-s:
+.. _boolean-mode-pragma-s:
 
 ``S`` pragma
 ^^^^^^^^^^^^
 
-``S`` pragma is a form for specifying syntax.
+``S`` pragma indicates syntax of the query.
 
 Here is a syntax of ``S`` pragma::
 
-  *S[syntax]
+  *S${SYNTAX}
 
 Here is a list of available ``syntax``:
 
   * ``S``: `Script syntax
     <http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_
 
-.. _pragma-ss:
+.. _boolean-mode-pragma-ss:
 
 ``*SS``
 """""""
@@ -248,137 +460,3 @@ started ...(8 words)... very fast`` is matched but ``student also
 started ...(8 words)... very fast`` isn't matched.
 
 You can also use other advanced features.
-
-.. _qualifier:
-
-Qualifier
----------
-
-.. _qualifier-none:
-
-(no operator)
-^^^^^^^^^^^^^
-
-We use a query ``Groonga Mroonga`` to search.::
-
-  SELECT title, MATCH (title) AGAINST('Groonga Mroonga' IN BOOLEAN MODE) AS score FROM books;
-
-Rows that contain even one word will be ranked higher.
-
-A row score is set to 1 when the row contains a single word.
-
-A row score is set to 2 when the row contains both words.
-
-Here is the search result::
-
-  +-----------------------+-------+
-  | title                 | score |
-  +-----------------------+-------+
-  | MySQL                 |     0 |
-  | MySQL Groonga         |     1 |
-  | MySQL Groonga Mroonga |     2 |
-  +-----------------------+-------+
-  3 rows in set (0.00 sec)
-
-.. _qualifier-plus:
-
-``+``
-^^^^^
-
-We use a query ``+Groonga +Mroonga`` to search.::
-
-  SELECT title, MATCH (title) AGAINST('+Groonga +Mroonga' IN BOOLEAN MODE) AS score FROM books;
-
-The search result is a row that contains both words. The row score is as follows::
-
-  +-----------------------+-------+
-  | title                 | score |
-  +-----------------------+-------+
-  | MySQL                 |     0 |
-  | MySQL Groonga         |     0 |
-  | MySQL Groonga Mroonga |     2 |
-  +-----------------------+-------+
-  3 rows in set (0.00 sec)
-
-.. _qualifier-minus:
-
-``-``
-^^^^^
-
-We use a query ``-Groonga -Mroonga`` to search.::
-
-  SELECT title, MATCH (title) AGAINST('-Groonga -Mroonga' IN BOOLEAN MODE) AS score FROM books;
-
-The search result is a row that does not contain both words. The row score is as follows::
-
-  +-----------------------+-------+
-  | title                 | score |
-  +-----------------------+-------+
-  | MySQL                 |     1 |
-  | MySQL Groonga         |     0 |
-  | MySQL Groonga Mroonga |     0 |
-  +-----------------------+-------+
-  3 rows in set (0.01 sec)
-
-.. _qualifier-star:
-
-``*``
-^^^^^
-
-We use a query ``M*`` to search.::
-
-  SELECT title, MATCH (title) AGAINST('M*' IN BOOLEAN MODE) AS score FROM books;
-
-The search result is a row that contains ``MySQL`` or ``Mroonga``. The row score is as follows::
-
-  +-----------------------+-------+
-  | title                 | score |
-  +-----------------------+-------+
-  | MySQL                 |     1 |
-  | MySQL Groonga         |     1 |
-  | MySQL Groonga Mroonga |     2 |
-  +-----------------------+-------+
-  3 rows in set (0.01 sec)
-
-
-.. _qualifier-double-quote:
-
-``"``
-^^^^^
-
-We use a query ``"Groonga Mroonga"`` to search.::
-
-  SELECT title, MATCH (title) AGAINST('"Groonga Mroonga"' IN BOOLEAN MODE) AS score FROM books;
-
-The search result is a row that contains a phrase that matches ``Groonga Mroonga``. The row score is as follows::
-
-  +-----------------------+-------+
-  | title                 | score |
-  +-----------------------+-------+
-  | MySQL                 |     0 |
-  | MySQL Groonga         |     0 |
-  | MySQL Groonga Mroonga |     1 |
-  +-----------------------+-------+
-  3 rows in set (0.00 sec)
-
-.. _qualifier-parentheses:
-
-``()``
-^^^^^^
-
-We use a query ``+MySQL +(Groonga Mroonga)`` to search.::
-
-  SELECT title, MATCH (title) AGAINST('+MySQL +(Groonga Mroonga)' IN BOOLEAN MODE) AS score FROM books;
-
-The search result is a row that contains ``MySQL`` and ``Groonga``, or ``MySQL`` and ``Mroonga``, or ``MySQL`` and ``Groonga`` and ``Mroonga``.
-
-The row score is as follows::
-
-  +-----------------------+-------+
-  | title                 | score |
-  +-----------------------+-------+
-  | MySQL                 |     0 |
-  | MySQL Groonga         |     2 |
-  | MySQL Groonga Mroonga |     3 |
-  +-----------------------+-------+
-  3 rows in set (0.01 sec)

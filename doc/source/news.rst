@@ -13,7 +13,7 @@ Release 6.00 - 2016-02-29
 Improvements
 ^^^^^^^^^^^^
 
-* [:ref:`pragma-ss`] Added a pragma to use `script syntax
+* [:ref:`boolean-mode-pragma-ss`] Added a pragma to use `script syntax
   <http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_
   for search. [GitHub#95][Patch by Naoya Murakami]
 
@@ -443,7 +443,7 @@ Fixes
   because proper byte order conversion between network and host is missing on decoding.
 * [windows] Fixed a bug that needless groonga-normalizer-mysql plugin search is ran
   when it is embedded into Mroonga. [GitHub#53] [Reported by torinky]
-* Fixed wrong keyword length when query includes :ref:`pragma`. This bug causes that it doesn't hit
+* Fixed wrong keyword length when query includes :ref:`boolean-mode-pragma`. This bug causes that it doesn't hit
   expected search results. [GitHub#54] [Patch by Naoya Murakami]
 * [storage] Fixed a bug that unique check is ignored for multiple connections.
   [groonga-dev,03243] [Reported by Hiroshi Kagami]
