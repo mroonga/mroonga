@@ -5,6 +5,33 @@
 News
 ====
 
+.. _release-6-00:
+
+Release 6.00 - 2016-02-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:ref:`pragma-ss`] Added a pragma to use `script syntax
+  <http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_
+  for search. [GitHub#95][Patch by Naoya Murakami]
+
+* [Windows] Bundled LZ4.
+
+* [Windows] Updated base MariaDB to 10.1.12.
+
+Fixes
+^^^^^
+
+* [:doc:`/reference/udf/mroonga_normalize`] Add missing ``CREATE
+  FUNCTION`` to install SQL. [GitHub#94][Patch by Naoya Murakami]
+
+Thanks
+^^^^^^
+
+* Naoya Murakami
+
 .. _release-5-12:
 
 Release 5.12 - 2016-01-29
