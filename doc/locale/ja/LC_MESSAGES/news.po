@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-01-28 23:40+0900\n"
+"PO-Revision-Date: 2016-02-27 22:21+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,45 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 5.12 - 2016-01-29"
-msgstr "5.12リリース - 2016-01-29"
+msgid "Release 6.00 - 2016-02-29"
+msgstr "6.00リリース - 2016-02-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid ""
+"[:ref:`pragma-ss`] Added a pragma to use `script syntax <http://groonga.org/"
+"docs/reference/grn_expr/script_syntax.html>`_ for search. [GitHub#95][Patch "
+"by Naoya Murakami]"
+msgstr ""
+"[:ref:`pragma-ss`] 検索に `スクリプト構文 <http://groonga.org/ja/docs/"
+"reference/grn_expr/script_syntax.html>`_ を使うためのプラグマを追加しまし"
+"た。 [GitHub#95][村上さんがパッチ提供]"
+
+msgid "[Windows] Bundled LZ4."
+msgstr "[Windows] LZ4をバンドルしました。"
+
+msgid "[Windows] Updated base MariaDB to 10.1.12."
+msgstr "[Windows] ベースにしているMariaDBを10.1.12にアップデートしました。"
 
 msgid "Fixes"
 msgstr "修正"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_normalize`] Add missing ``CREATE FUNCTION`` to "
+"install SQL. [GitHub#94][Patch by Naoya Murakami]"
+msgstr ""
+"[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
+"``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Release 5.12 - 2016-01-29"
+msgstr "5.12リリース - 2016-01-29"
 
 msgid ""
 "[storage] Fixed a bug that no records may be returned for range search when "
@@ -42,9 +76,6 @@ msgstr ""
 "[:doc:`/reference/udf`] ``JSON`` と一緒に使ったときに間違った値を返す問題を修"
 "正しました。 [teamskyさんが報告]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "Hiroshi Kagami"
 msgstr "各務さん"
 
@@ -53,9 +84,6 @@ msgstr "teamskyさん"
 
 msgid "Release 5.11 - 2015-12-29"
 msgstr "5.11リリース - 2015-12-29"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid ""
 "[rpm][mysql56-community-mroonga] Updated target MySQL to 5.6.28. [Reported "
@@ -128,9 +156,6 @@ msgstr "keizi murakamiさん"
 
 msgid "Larry Kim"
 msgstr "Larry Kimさん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Release 5.10 - 2015-11-29"
 msgstr "5.10リリース - 2015-11-29"
