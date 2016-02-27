@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-01-29 16:58+0900\n"
+"PO-Revision-Date: 2016-02-27 22:13+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -130,18 +130,17 @@ msgid ""
 "head of the query)"
 msgstr ""
 
-msgid "D pragma"
+msgid "``D`` pragma"
 msgstr ""
 
 msgid ""
-"D pragma is a form for specifying which operation should be execute when an "
-"individual operator is omitted."
+"``D`` pragma is a form for specifying which operation should be execute when "
+"an individual operator is omitted."
 msgstr ""
 
-# 683675d50f5f403488e29f26700f6b48
 msgid ""
-"The syntax of D pragma is as follows. You can choose one of the three "
-"operators, either ``OR``, ``+``, or ``-``. ::"
+"The syntax of ``D`` pragma is as follows. You can choose one of the three "
+"operators, either ``OR``, ``+``, or ``-``::"
 msgstr ""
 
 # 3eb7a0dc196a485fb980feedc457cb3a
@@ -186,12 +185,12 @@ msgid ""
 "``Mroonga``. The row score is as follows::"
 msgstr ""
 
-msgid "W pragma"
+msgid "``W`` pragma"
 msgstr ""
 
 msgid ""
-"W pragma is a form for specifying target section and its weight when using "
-"multiple-column index."
+"``W`` pragma is a form for specifying target section and its weight when "
+"using multiple-column index."
 msgstr ""
 
 msgid ""
@@ -232,6 +231,61 @@ msgid ""
 "``Groonga``, and the row score is set to 10 that only ``title`` column "
 "contains ``Groonga``."
 msgstr ""
+
+msgid "``S`` pragma"
+msgstr ""
+
+msgid "``S`` pragma is a form for specifying syntax."
+msgstr ""
+
+msgid "Here is a syntax of ``S`` pragma::"
+msgstr ""
+
+msgid "Here is a list of available ``syntax``:"
+msgstr ""
+
+msgid ""
+"``S``: `Script syntax <http://groonga.org/docs/reference/grn_expr/"
+"script_syntax.html>`_"
+msgstr ""
+"``S``: `スクリプト構文 <http://groonga.org/ja/docs/reference/grn_expr/"
+"script_syntax.html>`_"
+
+msgid "``*SS``"
+msgstr ""
+
+msgid ""
+"You can use `script syntax <http://groonga.org/docs/reference/grn_expr/"
+"script_syntax.html>`_ by ``*SS`` pragma. You can use full Groonga search "
+"features in script syntax."
+msgstr ""
+"``*SS`` プラグマを使うと `スクリプト構文 <http://groonga.org/ja/docs/"
+"reference/grn_expr/script_syntax.html>`_ を使えます。スクリプト構文では"
+"Groongaのすべての検索機能を使えます。"
+
+msgid "Here are schema and data to show example of script syntax usage::"
+msgstr "以下はスクリプト構文の使い方を示す例のためのスキーマとデータです。::"
+
+msgid ""
+"Here is an example to use `near search <http://groonga.org/docs/reference/"
+"grn_expr/script_syntax.html#near-search-operator>`_ by script syntax::"
+msgstr ""
+"以下はスクリプト構文で `近傍検索 <http://groonga.org/ja/docs/reference/"
+"grn_expr/script_syntax.html#near-search-operator>`_ を使う例です。::"
+
+msgid ""
+"Near search matches only when there are 10 or less words between specified "
+"words (``student`` and ``fast`` in this case). So ``student started ...(8 "
+"words)... very fast`` is matched but ``student also started ...(8 words)... "
+"very fast`` isn't matched."
+msgstr ""
+"近傍検索は指定した単語間（今回の場合は ``student`` と ``fast`` ）に10単語以下"
+"しかない場合のみマッチします。そのため、 ``student started ...（8単語）... "
+"very fast`` はマッチしますが、 ``student also started ...（8単語）... very "
+"fast`` はマッチしません。"
+
+msgid "You can also use other advanced features."
+msgstr "他の上級者向け機能も使えます。"
 
 # 66bc92429b5f4b07965f5b58be76f44e
 msgid "(no operator)"
