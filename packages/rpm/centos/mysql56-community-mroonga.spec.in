@@ -1,13 +1,13 @@
 %{!?centos_ver:%define centos_ver 6}
 
 %if %{centos_ver} == 7
-%define mysql_version_default 5.6.28
+%define mysql_version_default 5.6.29
 %define mysql_release_default 2
 %define mysql_dist_default    el7
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/7/SRPMS
 %define mysql_spec_file_default mysql.spec
 %else
-%define mysql_version_default 5.6.28
+%define mysql_version_default 5.6.29
 %define mysql_release_default 2
 %define mysql_dist_default    el6
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/6/SRPMS
