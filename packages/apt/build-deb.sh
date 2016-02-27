@@ -18,6 +18,8 @@ run()
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
 
+run sudo sed -i'' -e 's/httpredir/ftp.jp/g' /etc/apt/sources.list
+
 run apt-get update
 run apt-get install -y lsb-release
 
