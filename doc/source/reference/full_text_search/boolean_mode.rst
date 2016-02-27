@@ -41,19 +41,11 @@ We show you how to rank in boolean mode using the following schema and data. ::
     `title` text,
     PRIMARY KEY(`id`),
     FULLTEXT INDEX title_index (title)
-  ) ENGINE=mroonga default charset utf8;
-  
-  INSERT INTO books (title) VALUES (
-    'MySQL'
-  );
-  
-  INSERT INTO books (title) VALUES (
-    'MySQL Groonga'
-  );
-  
-  INSERT INTO books (title) VALUES (
-    'MySQL Groonga Mroonga'
-  );
+  ) ENGINE=Mroonga default charset utf8;
+
+  INSERT INTO books (title) VALUES ('MySQL');
+  INSERT INTO books (title) VALUES ('MySQL Groonga');
+  INSERT INTO books (title) VALUES ('MySQL Groonga Mroonga');
 
 .. _pragma:
 
@@ -66,12 +58,14 @@ The pragma must exist in the beginning of a query. (Don't put a blank into a hea
 
 .. _pragma-d:
 
-D pragma
-^^^^^^^^
+``D`` pragma
+^^^^^^^^^^^^
 
-D pragma is a form for specifying which operation should be execute when an individual operator is omitted.
+``D`` pragma is a form for specifying which operation should be
+execute when an individual operator is omitted.
 
-The syntax of D pragma is as follows. You can choose one of the three operators, either ``OR``, ``+``, or ``-``. ::
+The syntax of ``D`` pragma is as follows. You can choose one of the
+three operators, either ``OR``, ``+``, or ``-``::
 
   *D[operator]
 
@@ -138,12 +132,14 @@ The search result is a row that contains ``Groonga``, and does not contain ``Mro
 
 .. _pragma-w:
 
-W pragma
-^^^^^^^^
+``W`` pragma
+^^^^^^^^^^^^
 
-W pragma is a form for specifying target section and its weight when using multiple-column index.
+``W`` pragma is a form for specifying target section and its weight
+when using multiple-column index.
 
-You can specify the multiple of the weight for every section. The default value of the weight is set to 1.
+You can specify the multiple of the weight for every section. The
+default value of the weight is set to 1.
 
 The weight is omissible, and a negative value is allowed.
 
@@ -159,16 +155,14 @@ We show you how to rank in multiple-column index using the following schema and 
     `comment` text,
     PRIMARY KEY(`id`),
     FULLTEXT INDEX content_index (title, comment)
-  ) engine=mroonga default charset utf8;
-  
+  ) engine=Mroonga default charset utf8;
+
   INSERT INTO books (title, comment) VALUES (
     'MySQL', 'MySQL Introduction'
   );
-  
   INSERT INTO books (title, comment) VALUES (
     'MySQL Groonga', 'Groonga Introduction'
   );
-  
   INSERT INTO books (title, comment) VALUES (
     'MySQL Groonga Mroonga', 'Mroonga Introduction'
   );
@@ -177,7 +171,10 @@ Consider the case that 10 weight is given to ``title`` column, and 1 weight is g
 
 Here is the query such a case::
 
-  SELECT title, comment, MATCH (title,comment) AGAINST('*W1:10,2:1 +Groonga' IN BOOLEAN MODE) AS score FROM books;
+  SELECT title,
+         comment,
+         MATCH (title,comment) AGAINST('*W1:10,2:1 +Groonga' IN BOOLEAN MODE) AS score
+    FROM books;
 
 The search result is a row that contains "Groonga". The row score is as follows::
 
