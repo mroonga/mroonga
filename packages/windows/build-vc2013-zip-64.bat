@@ -4,6 +4,7 @@ cd build-vc2013-zip-64
 cmake ..\source -G "Visual Studio 12 2013 Win64" ^
   -DMRN_GROONGA_EMBED=OFF ^
   -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF ^
+  -DGRN_WITH_BUNDLED_LZ4=ON ^
   -DGRN_WITH_BUNDLED_MECAB=ON ^
   > config.log
 cmake --build . --config RelWithDebInfo > build.log
