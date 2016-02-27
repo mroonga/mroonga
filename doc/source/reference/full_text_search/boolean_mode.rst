@@ -189,6 +189,66 @@ The search result is a row that contains "Groonga". The row score is as follows:
 
 The row score is set to 11 that the ``title`` and ``comment`` column contain ``Groonga``, and the row score is set to 10 that only ``title`` column contains ``Groonga``.
 
+.. _pragma-s:
+
+``S`` pragma
+^^^^^^^^^^^^
+
+``S`` pragma is a form for specifying syntax.
+
+Here is a syntax of ``S`` pragma::
+
+  *S[syntax]
+
+Here is a list of available ``syntax``:
+
+  * ``S``: `Script syntax
+    <http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_
+
+.. _pragma-ss:
+
+``*SS``
+"""""""
+
+You can use `script syntax
+<http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_ by
+``*SS`` pragma. You can use full Groonga search features in script
+syntax.
+
+Here are schema and data to show example of script syntax usage::
+
+  CREATE TABLE comments (
+    `content` text,
+    FULLTEXT INDEX content_index (content)
+  ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+
+  INSERT INTO comments VALUES (
+    'A student started to use Mroonga storage engine. It is very fast!'
+  );
+  INSERT INTO comments VALUES (
+    'Another student also started to use Mroonga storage engine. It is very fast!'
+  );
+
+Here is an example to use `near search
+<http://groonga.org/docs/reference/grn_expr/script_syntax.html#near-search-operator>`_ by script syntax::
+
+  SELECT content,
+         MATCH (content) AGAINST('*SS content *N "student fast"' IN BOOLEAN MODE) AS score
+    FROM comments;
+  -- +------------------------------------------------------------------------------+-------+
+  -- | content                                                                      | score |
+  -- +------------------------------------------------------------------------------+-------+
+  -- | A student started to use Mroonga storage engine. It is very fast!            |     1 |
+  -- | Another student also started to use Mroonga storage engine. It is very fast! |     0 |
+  -- +------------------------------------------------------------------------------+-------+
+
+Near search matches only when there are 10 or less words between
+specified words (``student`` and ``fast`` in this case). So ``student
+started ...(8 words)... very fast`` is matched but ``student also
+started ...(8 words)... very fast`` isn't matched.
+
+You can also use other advanced features.
+
 .. _qualifier:
 
 Qualifier
