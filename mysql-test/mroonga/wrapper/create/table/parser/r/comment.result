@@ -5,6 +5,8 @@ body text,
 fulltext index body_index (body)
 comment 'parser "TokenBigramSplitSymbolAlphaDigit"'
 ) comment = 'engine "innodb"' default charset utf8;
+Warnings:
+Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 show create table diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
@@ -13,6 +15,8 @@ diaries	CREATE TABLE `diaries` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `body_index` (`body`) COMMENT 'parser "TokenBigramSplitSymbolAlphaDigit"'
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='engine "innodb"'
+Warnings:
+Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 insert into diaries (body) values ("will start Groonga!");
 insert into diaries (body) values ("starting Groonga...");
 insert into diaries (body) values ("started Groonga.");

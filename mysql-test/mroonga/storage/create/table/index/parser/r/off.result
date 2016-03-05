@@ -4,6 +4,8 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 name TEXT,
 FULLTEXT INDEX (name) COMMENT 'parser "off"'
 ) DEFAULT CHARSET=utf8;
+Warnings:
+Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 SHOW CREATE TABLE variables;
 Table	Create Table
 variables	CREATE TABLE `variables` (
@@ -12,6 +14,8 @@ variables	CREATE TABLE `variables` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `name` (`name`) COMMENT 'parser "off"'
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8
+Warnings:
+Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 INSERT INTO variables (name) VALUES ("mroonga_database_path_prefix");
 INSERT INTO variables (name) VALUES ("mroonga_default_parser");
 INSERT INTO variables (name) VALUES ("mroonga_default_wrapper_engine");
@@ -40,3 +44,5 @@ id	name
 3	mroonga_default_wrapper_engine
 2	mroonga_default_parser
 DROP TABLE variables;
+Warnings:
+Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
