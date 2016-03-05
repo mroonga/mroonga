@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2013-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013-2016 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -60,7 +60,6 @@ MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
   }
 
   initid->maybe_null = 1;
-  initid->const_item = 0;
 
   info = (EscapeInfo *)mrn_my_malloc(sizeof(EscapeInfo),
                                      MYF(MY_WME | MY_ZEROFILL));
