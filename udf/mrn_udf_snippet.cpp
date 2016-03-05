@@ -176,7 +176,6 @@ MRN_API my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *mes
     }
   }
   initid->maybe_null = 1;
-  initid->const_item = 0;
 
   if (!(snip_info = (st_mrn_snip_info *) mrn_my_malloc(sizeof(st_mrn_snip_info),
                                                        MYF(MY_WME | MY_ZEROFILL))))
