@@ -25,7 +25,7 @@ CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title TEXT,
   tags TEXT,
-  FULLTEXT INDEX tags_index (tags) COMMENT 'parser "TokenDelimit"'
+  FULLTEXT INDEX tags_index (tags) COMMENT 'tokenizer "TokenDelimit"'
 ) DEFAULT CHARSET=UTF8 COMMENT='ENGINE "InnoDB"';
 SHOW CREATE TABLE diaries;
 

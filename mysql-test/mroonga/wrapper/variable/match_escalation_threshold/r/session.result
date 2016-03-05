@@ -3,7 +3,7 @@ CREATE TABLE diaries (
 id INT PRIMARY KEY AUTO_INCREMENT,
 title TEXT,
 tags TEXT,
-FULLTEXT INDEX tags_index (tags) COMMENT 'parser "TokenDelimit"'
+FULLTEXT INDEX tags_index (tags) COMMENT 'tokenizer "TokenDelimit"'
 ) DEFAULT CHARSET=UTF8 COMMENT='ENGINE "InnoDB"';
 SHOW CREATE TABLE diaries;
 Table	Create Table
@@ -12,7 +12,7 @@ diaries	CREATE TABLE `diaries` (
   `title` text,
   `tags` text,
   PRIMARY KEY (`id`),
-  FULLTEXT KEY `tags_index` (`tags`) COMMENT 'parser "TokenDelimit"'
+  FULLTEXT KEY `tags_index` (`tags`) COMMENT 'tokenizer "TokenDelimit"'
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"'
 INSERT INTO diaries (title, tags) VALUES ("Hello groonga!", "groonga install");
 INSERT INTO diaries (title, tags) VALUES ("Hello mroonga!", "mroonga install");
