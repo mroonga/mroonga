@@ -12635,6 +12635,29 @@ int ha_mroonga::storage_delete_all_rows()
 {
   MRN_DBUG_ENTER_METHOD();
   int error = generic_delete_all_rows(grn_table, __FUNCTION__);
+  if (!error) {
+    uint n_keys = table->s->keys;
+    for (uint i = 0; i < n_keys; i++) {
+      if (i == table->s->primary_key) {
+        continue;
+      }
+
+      KEY *key_info = &(table->key_info[i]);
+      if (!(key_info->flags & HA_NOSAME)) {
+        continue;
+      }
+
+      grn_obj *index_table = grn_index_tables[i];
+      if (!index_table) {
+        continue;
+      }
+
+      error = generic_delete_all_rows(index_table, __FUNCTION__);
+      if (error) {
+        break;
+      }
+    }
+  }
   DBUG_RETURN(error);
 }
 
