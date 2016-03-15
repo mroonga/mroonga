@@ -89,6 +89,7 @@ tmp/$(MARIADB_WITH_MROONGA_BASE).stamp: $(MARIADB_WITH_MROONGA_ARCHIVES)
 	tar xf tmp/$(GROONGA_TAR_GZ)
 	rm -rf $(GROONGA_BASE)/test
 	cd $(GROONGA_BASE)/vendor && ruby download_mecab.rb
+	cd $(GROONGA_BASE)/vendor && ruby download_lz4.rb
 	mv $(GROONGA_BASE) $(BUNDLED_GROONGA_PATH)
 
 	tar xf tmp/$(GROONGA_NORMALIZER_MYSQL_TAR_GZ)
