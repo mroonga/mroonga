@@ -3790,7 +3790,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  grn_obj *index_table, *index_column;
+  grn_obj *index_column;
   const char *column_name = NULL;
   int column_name_size = 0;
 
@@ -3815,16 +3815,21 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   if (error)
     DBUG_RETURN(error);
 
+  grn_obj *index_table = index_tables[i];
+
   grn_obj_flags index_column_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
 
   if (!find_index_column_flags(key_info, &index_column_flags)) {
-    index_column_flags |= GRN_OBJ_WITH_POSITION;
+    grn_obj *tokenizer = grn_obj_get_info(ctx, index_table,
+                                          GRN_INFO_DEFAULT_TOKENIZER, NULL);
+    if (tokenizer) {
+      index_column_flags |= GRN_OBJ_WITH_POSITION;
+    }
     if (is_multiple_column_index) {
       index_column_flags |= GRN_OBJ_WITH_SECTION;
     }
   }
 
-  index_table = index_tables[i];
   const char *index_column_name;
   if (tmp_share->index_table && tmp_share->index_table[i]) {
     index_column_name = key_info->name;

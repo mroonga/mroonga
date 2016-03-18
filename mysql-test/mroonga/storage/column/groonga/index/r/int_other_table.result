@@ -28,7 +28,7 @@ column_create bugs id COLUMN_SCALAR UInt32
 
 column_create bugs priority COLUMN_SCALAR priorities
 
-column_create priorities bugs_priority_index COLUMN_INDEX|WITH_POSITION bugs priority
+column_create priorities bugs_priority_index COLUMN_INDEX bugs priority
 SELECT *
 FROM bugs
 WHERE priority = 3;
