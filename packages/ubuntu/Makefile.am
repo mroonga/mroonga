@@ -1,4 +1,4 @@
-CODE_NAMES = precise,trusty,vivid,wily
+CODE_NAMES = precise,trusty,wily
 SOURCE = ../$(PACKAGE)-$(VERSION).tar.gz
 SOURCE_55_BASE = $(PACKAGE)-5.5
 SOURCE_55 = $(SOURCE_55_BASE)_$(VERSION).orig.tar.gz
