@@ -76,6 +76,6 @@ And you might have the performance bottle neck in the storage engine in updating
 Supported platforms
 -------------------
 
-We currently support the following platforms.
+Mroonga supports many of the major platforms.
 
-* Linux x86_64 (Intel64/AMD64)
+Refer to :doc:`/install` for supported platforms.
