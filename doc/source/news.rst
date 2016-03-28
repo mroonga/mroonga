@@ -19,10 +19,10 @@ Improvements
   Stopped to add ``WITH_POSITION`` to index that doesn't use tokenizer.
   Index without tokenizer doesn't need to store position information.
   Because there is only one token.
-* [:doc:`/install/windows`] Fixed URL of binary for Windows. [Reported by torinky]
+* [:doc:`/install/windows`] Fixed URLs of binaries for Windows. [Reported by torinky]
 * Added missing LZ4 source. [GitHub#100][Reported by Hiroshi Hatake]
 * [:doc:`/install/ubuntu`] Dropped Ubuntu 15.04 (Vivid Vervet) support. It had been
-  End of Life on February 4, 2016.
+  reached to End of Life on February 4, 2016.
 
 Fixes
 ^^^^^
@@ -35,7 +35,7 @@ Fixes
   * ``mroonga_snippet()``
   * ``mroonga_snippet_html()``
 
-* [storage] Fixed a bug that ``DELETE`` without condition remain unique indexes.
+* [storage] Fixed a bug that ``DELETE`` without condition remains unique indexes.
   [GitHub#99][Reported by GMO Media, Inc.]
 
 Thanks
