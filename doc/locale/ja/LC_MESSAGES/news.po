@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-03-05 18:27+0900\n"
+"PO-Revision-Date: 2016-03-28 14:43+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -16,16 +16,105 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.7.7\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"POT-Creation-Date: \n"
 
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 6.00 - 2016-02-29"
-msgstr "6.00リリース - 2016-02-29"
+msgid "Release 6.01 - 2016-03-29"
+msgstr "6.01リリース - 2016-03-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"Added a warning when deprecated keyword \"parser\" is used. [Patch by GMO "
+"Media, Inc.]"
+msgstr ""
+"非推奨のキーワード「parser」が使われた場合に警告を追加するようにしました。 "
+"[GMOメディア株式会社さんがパッチ提供]"
+
+msgid ""
+"[storage] Reduced index size when ``WITH_POSITION`` is used without "
+"tokenizer. Stopped to add ``WITH_POSITION`` to index that doesn't use "
+"tokenizer. Index without tokenizer doesn't need to store position "
+"information. Because there is only one token."
+msgstr ""
+"[ストレージモード] トークナイザーを伴わずに ``WITH_POSITION`` が使われた場"
+"合、 ``WITH_POSITION`` をインデックスに追加するのをやめてインデックスサイズを"
+"減らしました。トークナイザーを伴わないインデックスはトークンが1つしかなく、位"
+"置情報が不要なためです。"
+
+# 0c5a19df6fea4b5a917430142484fafc
+msgid ""
+"[:doc:`/install/windows`] Fixed URL of binary for Windows. [Reported by "
+"torinky]"
+msgstr ""
+"[:doc:`/install/windows`] Windows向けバイナリーのURLを修正しました。 [torinky"
+"さんが報告]"
+
+msgid "Added missing LZ4 source. [GitHub#100][Reported by Hiroshi Hatake]"
+msgstr ""
+"不足していたLZ4のソースを追加しました。 [GitHub#100][Reported by Hiroshi "
+"Hatake]"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 15.04 (Vivid Vervet) support. It had "
+"been End of Life on February 4, 2016."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 15.04（Vivid Vervet）のサポートをやめました。"
+"2016年2月4日でサポートが切れた（EOLになった）ためです。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that the following UDFs can't be used in ``MATCH AGAINST``. "
+"[groonga-dev,03964][Reported by Hironori Matsubara]"
+msgstr ""
+"以下のUDFが ``MATCH AGAINST`` 内で使えない問題を修正しました。 [groonga-"
+"dev,03964][松原さんが報告]"
+
+msgid "``mroonga_escape()``"
+msgstr ""
+
+msgid "``mroonga_normalize()``"
+msgstr ""
+
+msgid "``mroonga_snippet()``"
+msgstr ""
+
+msgid "``mroonga_snippet_html()``"
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that ``DELETE`` without condition remain unique "
+"indexes. [GitHub#99][Reported by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード] 条件なしで ``DELETE`` した場合にユニークインデックスが残っ"
+"てしまう問題を修正しました。 [GitHub#99][GMOメディア株式会社さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+# d8986144d4454b8dbfd7cf12c8877b8c
+msgid "GMO Media, Inc."
+msgstr "GMOメディア株式会社さん"
+
+msgid "Hironori Matsubara"
+msgstr "松原さん"
+
+# 58c01265b23a4438bd4df2d910acf3b2
+msgid "torinky"
+msgstr "torinkyさん"
+
+msgid "Hiroshi Hatake"
+msgstr "畑ケさん"
+
+msgid "Release 6.00 - 2016-02-29"
+msgstr "6.00リリース - 2016-02-29"
 
 msgid ""
 "[:ref:`boolean-mode-pragma-ss`] Added a pragma to use `script syntax <http://"
@@ -42,18 +131,12 @@ msgstr "[Windows] LZ4をバンドルしました。"
 msgid "[Windows] Updated base MariaDB to 10.1.12."
 msgstr "[Windows] ベースにしているMariaDBを10.1.12にアップデートしました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[:doc:`/reference/udf/mroonga_normalize`] Add missing ``CREATE FUNCTION`` to "
 "install SQL. [GitHub#94][Patch by Naoya Murakami]"
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Naoya Murakami"
 msgstr "村上さん"
@@ -198,13 +281,6 @@ msgid ""
 msgstr ""
 "[ラッパーモード] ``DROP TABLE`` でファイルが残ってしまうかもしれない問題を修"
 "正しました。 [groonga-dev,03673] [かとうさんが報告]"
-
-# d8986144d4454b8dbfd7cf12c8877b8c
-msgid "GMO Media, Inc."
-msgstr "GMOメディア株式会社さん"
-
-msgid "Hironori Matsubara"
-msgstr "松原さん"
 
 msgid "Release 5.09 - 2015-10-29"
 msgstr "5.09リリース - 2015-10-29"
@@ -594,10 +670,6 @@ msgid ""
 msgstr ""
 "[ストレージモード] 複数接続時にユニーク制約が無視されてしまう不具合を修正しま"
 "した。 [groonga-dev,03243] [各務さんが報告]"
-
-# 58c01265b23a4438bd4df2d910acf3b2
-msgid "torinky"
-msgstr "torinkyさん"
 
 msgid "Release 5.02 - 2015/04/29"
 msgstr "5.02リリース - 2015/04/29"

@@ -5,6 +5,45 @@
 News
 ====
 
+.. _release-6-01:
+
+Release 6.01 - 2016-03-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Added a warning when deprecated keyword "parser" is used.
+  [Patch by GMO Media, Inc.]
+* [storage] Reduced index size when ``WITH_POSITION`` is used without tokenizer.
+  Stopped to add ``WITH_POSITION`` to index that doesn't use tokenizer.
+  Index without tokenizer doesn't need to store position information.
+  Because there is only one token.
+* [:doc:`/install/windows`] Fixed URL of binary for Windows. [Reported by torinky]
+* Added missing LZ4 source. [GitHub#100][Reported by Hiroshi Hatake]
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 15.04 (Vivid Vervet) support. It had been
+  End of Life on February 4, 2016.
+
+Fixes
+^^^^^
+
+* Fixed a bug that the following UDFs can't be used in ``MATCH AGAINST``.
+  [groonga-dev,03964][Reported by Hironori Matsubara]
+    * ``mroonga_escape()``
+    * ``mroonga_normalize()``
+    * ``mroonga_snippet()``
+    * ``mroonga_snippet_html()``
+* [storage] Fixed a bug that ``DELETE`` without condition remain unique indexes.
+  [GitHub#99][Reported by GMO Media, Inc.]
+
+Thanks
+^^^^^^
+
+* GMO Media, Inc.
+* Hironori Matsubara
+* torinky
+* Hiroshi Hatake
+
 .. _release-6-00:
 
 Release 6.00 - 2016-02-29
