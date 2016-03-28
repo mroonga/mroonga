@@ -42,7 +42,9 @@ msgstr ""
 
 # 0c5a19df6fea4b5a917430142484fafc
 #, fuzzy
-msgid "doc: fixed URL of binary for Windows. [Reported by torinky]"
+msgid ""
+"[:doc:`/install/windows`] Fixed URL of binary for Windows. [Reported by "
+"torinky]"
 msgstr ""
 "[doc] Windows版パッケージへのリンクが古いのを修正しました。 [METAL_GEAR_mkII"
 "さんが報告]"
