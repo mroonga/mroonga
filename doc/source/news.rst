@@ -29,10 +29,12 @@ Fixes
 
 * Fixed a bug that the following UDFs can't be used in ``MATCH AGAINST``.
   [groonga-dev,03964][Reported by Hironori Matsubara]
-    * ``mroonga_escape()``
-    * ``mroonga_normalize()``
-    * ``mroonga_snippet()``
-    * ``mroonga_snippet_html()``
+
+  * ``mroonga_escape()``
+  * ``mroonga_normalize()``
+  * ``mroonga_snippet()``
+  * ``mroonga_snippet_html()``
+
 * [storage] Fixed a bug that ``DELETE`` without condition remain unique indexes.
   [GitHub#99][Reported by GMO Media, Inc.]
 
