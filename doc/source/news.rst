@@ -19,7 +19,7 @@ Improvements
   Stopped to add ``WITH_POSITION`` to index that doesn't use tokenizer.
   Index without tokenizer doesn't need to store position information.
   Because there is only one token.
-* doc: fixed URL of binary for Windows. [Reported by torinky]
+* [:doc:`/install/windows`] Fixed URL of binary for Windows. [Reported by torinky]
 * Added missing LZ4 source. [GitHub#100][Reported by Hiroshi Hatake]
 * [:doc:`/install/ubuntu`] Dropped Ubuntu 15.04 (Vivid Vervet) support. It had been
   End of Life on February 4, 2016.
