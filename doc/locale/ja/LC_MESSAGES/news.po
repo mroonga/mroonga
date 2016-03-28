@@ -21,11 +21,96 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 6.00 - 2016-02-29"
+#, fuzzy
+msgid "Release 6.01 - 2016-03-29"
 msgstr "6.00リリース - 2016-02-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"Added a warning when deprecated keyword \"parser\" is used. [Patch by GMO "
+"Media, Inc.]"
+msgstr ""
+
+msgid ""
+"[storage] Reduced index size when ``WITH_POSITION`` is used without "
+"tokenizer. Stopped to add ``WITH_POSITION`` to index that doesn't use "
+"tokenizer. Index without tokenizer doesn't need to store position "
+"information. Because there is only one token."
+msgstr ""
+
+# 0c5a19df6fea4b5a917430142484fafc
+#, fuzzy
+msgid "doc: fixed URL of binary for Windows. [Reported by torinky]"
+msgstr ""
+"[doc] Windows版パッケージへのリンクが古いのを修正しました。 [METAL_GEAR_mkII"
+"さんが報告]"
+
+msgid "Added missing LZ4 source. [GitHub#100][Reported by Hiroshi Hatake]"
+msgstr ""
+
+# 04cb89376f9347f59c9bb744d03a7c73
+#, fuzzy
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 15.04 (Vivid Vervet) support. It had "
+"been End of Life on February 4, 2016."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 14.10（Utopic Unicorn）のサポートをやめまし"
+"た。2015年7月23日でサポートが切れた（EOLになった）ためです。"
+
+msgid "Fixes"
+msgstr "修正"
+
+#, fuzzy
+msgid ""
+"Fixed a bug that the following UDFs can't be used in ``MATCH AGAINST``. "
+"[groonga-dev,03964][Reported by Hironori Matsubara]"
+msgstr ""
+"同時にUDFを使うとクラッシュする問題を修正しました。 [groonga-dev,03640] [松原"
+"さんが報告]"
+
+msgid "``mroonga_escape()``"
+msgstr ""
+
+msgid "``mroonga_normalize()``"
+msgstr ""
+
+msgid "``mroonga_snippet()``"
+msgstr ""
+
+msgid "``mroonga_snippet_html()``"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"[storage] Fixed a bug that ``DELETE`` without condition remain unique "
+"indexes. [GitHub#99][Reported by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード] プライマリーキーがないテーブルをinplate alter tableすると"
+"クラッシュする問題を修正しました。 [groonga-dev,02227] [GMOメディア株式会社さ"
+"んが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+# d8986144d4454b8dbfd7cf12c8877b8c
+msgid "GMO Media, Inc."
+msgstr "GMOメディア株式会社さん"
+
+msgid "Hironori Matsubara"
+msgstr "松原さん"
+
+# 58c01265b23a4438bd4df2d910acf3b2
+msgid "torinky"
+msgstr "torinkyさん"
+
+#, fuzzy
+msgid "Hiroshi Hatake"
+msgstr "各務さん"
+
+msgid "Release 6.00 - 2016-02-29"
+msgstr "6.00リリース - 2016-02-29"
 
 msgid ""
 "[:ref:`boolean-mode-pragma-ss`] Added a pragma to use `script syntax <http://"
@@ -42,18 +127,12 @@ msgstr "[Windows] LZ4をバンドルしました。"
 msgid "[Windows] Updated base MariaDB to 10.1.12."
 msgstr "[Windows] ベースにしているMariaDBを10.1.12にアップデートしました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[:doc:`/reference/udf/mroonga_normalize`] Add missing ``CREATE FUNCTION`` to "
 "install SQL. [GitHub#94][Patch by Naoya Murakami]"
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Naoya Murakami"
 msgstr "村上さん"
@@ -198,13 +277,6 @@ msgid ""
 msgstr ""
 "[ラッパーモード] ``DROP TABLE`` でファイルが残ってしまうかもしれない問題を修"
 "正しました。 [groonga-dev,03673] [かとうさんが報告]"
-
-# d8986144d4454b8dbfd7cf12c8877b8c
-msgid "GMO Media, Inc."
-msgstr "GMOメディア株式会社さん"
-
-msgid "Hironori Matsubara"
-msgstr "松原さん"
 
 msgid "Release 5.09 - 2015-10-29"
 msgstr "5.09リリース - 2015-10-29"
@@ -594,10 +666,6 @@ msgid ""
 msgstr ""
 "[ストレージモード] 複数接続時にユニーク制約が無視されてしまう不具合を修正しま"
 "した。 [groonga-dev,03243] [各務さんが報告]"
-
-# 58c01265b23a4438bd4df2d910acf3b2
-msgid "torinky"
-msgstr "torinkyさん"
 
 msgid "Release 5.02 - 2015/04/29"
 msgstr "5.02リリース - 2015/04/29"
