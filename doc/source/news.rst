@@ -23,6 +23,7 @@ Improvements
 * Added missing LZ4 source. [GitHub#100][Reported by Hiroshi Hatake]
 * [:doc:`/install/ubuntu`] Dropped Ubuntu 15.04 (Vivid Vervet) support. It had been
   reached to End of Life on February 4, 2016.
+* [:doc:`/install/windows`] Updated base MariaDB to 10.1.13.
 
 Fixes
 ^^^^^
