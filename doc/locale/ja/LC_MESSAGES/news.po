@@ -17,7 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.8.7.1\n"
-"POT-Creation-Date: \n"
 
 msgid "News"
 msgstr "お知らせ"
@@ -64,6 +63,10 @@ msgid ""
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 15.04（Vivid Vervet）のサポートをやめました。"
 "2016年2月4日でサポートが切れた（EOLになった）ためです。"
+
+#, fuzzy
+msgid "[:doc:`/install/windows`] Updated base MariaDB to 10.1.13."
+msgstr "[Windows] ベースにしているMariaDBを10.1.12にアップデートしました。"
 
 msgid "Fixes"
 msgstr "修正"
