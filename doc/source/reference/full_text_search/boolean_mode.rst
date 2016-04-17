@@ -372,10 +372,10 @@ multiple column index to use ``W`` pragma::
     'Mroonga', 'Mroonga is a storage engine for MySQL based on Groonga.'
   );
 
-Here is an example to show weight. ``title`` column has ``10`` weight
-and ``content`` columns has ``1`` weight. It means that keyword in
-``title`` column is 10 times important than keyword in ``content``
-column::
+Here is an example to show how to use weight. ``title`` column has
+``10`` weight and ``content`` columns has ``1`` weight. It means that
+keyword in ``title`` column is 10 times important than keyword in
+``content`` column::
 
   SELECT title,
          content,
