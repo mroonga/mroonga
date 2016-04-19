@@ -17,8 +17,7 @@ Taro Yamada	10
 Taro Yamada	29
 UPDATE scores SET name = "Taro Yamada"
   WHERE name = "Jiro Yamada" AND score = 27;
-Warnings:
-Warning	1265	data truncated for primary key column: <name>
+ERROR 01000: data truncated for primary key column: <name>
 SELECT * FROM scores
 WHERE name = "Taro Yamada" AND (score >= -12 AND score < 29);
 name	score

@@ -14,8 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../include/mroonga/skip_mysql_57_or_later.inc
+--source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/have_mysql_57_or_later.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS scores;
@@ -35,6 +35,7 @@ INSERT INTO scores (name, score) VALUES ("Taro Yamada", 10);
 
 SELECT * FROM scores;
 
+--error 1265
 UPDATE scores SET name = "Taro Yamada"
   WHERE name = "Jiro Yamada" AND score = 27;
 
@@ -43,4 +44,4 @@ SELECT * FROM scores
 
 DROP TABLE scores;
 
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../../include/mroonga/have_mroonga_deinit.inc
