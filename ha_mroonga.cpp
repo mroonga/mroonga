@@ -145,10 +145,18 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_NEED_M_LOCK_TYPE_CHECK_FOR_WRAPPER_EXTERNAL_LOCK
 #endif
 
-#if MYSQL_VERSION_ID >= 50603 && !defined(MRN_MARIADB_P)
-#  define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER::ORDER_ASC)
+#ifdef MRN_MARIADB_P
+#  if MYSQL_VERSION_ID >= 100200
+#    define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER::ORDER_ASC)
+#  else
+#    define MRN_ORDER_IS_ASC(order) ((order)->asc)
+#  endif
 #else
-#  define MRN_ORDER_IS_ASC(order) ((order)->asc)
+#  if MYSQL_VERSION_ID >= 50603
+#    define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER::ORDER_ASC)
+#  else
+#    define MRN_ORDER_IS_ASC(order) ((order)->asc)
+#  endif
 #endif
 
 #define MRN_STRINGIFY(macro_or_string)  MRN_STRINGIFY_ARG(macro_or_string)
