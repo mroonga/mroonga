@@ -1003,29 +1003,34 @@ int mrn_free_share(MRN_SHARE *share)
 
 TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
 {
-  uint key_length;
   TABLE_SHARE *share;
   THD *thd = current_thd;
   MRN_DBUG_ENTER_FUNCTION();
-#ifdef MRN_HAVE_GET_TABLE_DEF_KEY
+#if defined(MRN_HAVE_TDC_ACQUIRE_SHARE) &&      \
+  !defined(MRN_TDC_ACQUIRE_SHARE_REQUIRE_KEY)
+  share = tdc_acquire_share(thd, table_list, GTS_TABLE);
+#else
+  uint key_length;
+#  ifdef MRN_HAVE_GET_TABLE_DEF_KEY
   const char *key;
   key_length = get_table_def_key(table_list, &key);
-#else
+#  else
   char key[MAX_DBKEY_LENGTH];
   key_length = create_table_def_key(thd, key, table_list, FALSE);
-#endif
-#ifdef MRN_HAVE_TABLE_DEF_CACHE
+#  endif
+#  ifdef MRN_HAVE_TABLE_DEF_CACHE
   my_hash_value_type hash_value;
   hash_value = my_calc_hash(mrn_table_def_cache, (uchar*) key, key_length);
   share = get_table_share(thd, table_list, key, key_length, 0, error,
                           hash_value);
-#elif defined(MRN_HAVE_TDC_ACQUIRE_SHARE)
+#  elif defined(MRN_HAVE_TDC_ACQUIRE_SHARE)
   share = tdc_acquire_share(thd, table_list->db, table_list->table_name, key,
                             key_length,
                             table_list->mdl_request.key.tc_hash_value(),
                             GTS_TABLE, NULL);
-#else
+#  else
   share = get_table_share(thd, table_list, key, key_length, 0, error);
+#  endif
 #endif
   DBUG_RETURN(share);
 }
