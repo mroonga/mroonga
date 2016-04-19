@@ -14,30 +14,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../include/mroonga/have_mroonga.inc
---source ../../../../include/mroonga/skip_mysql_57_or_later.inc
+--source ../../include/mroonga/check_version.inc
 
---disable_warnings
-DROP TABLE IF EXISTS ids;
---enable_warnings
-
-CREATE TABLE ids (
-  id INT,
-  INDEX (id)
-) DEFAULT CHARSET=UTF8;
-
-INSERT INTO ids VALUES (1);
-INSERT INTO ids VALUES (2);
-INSERT INTO ids VALUES (3);
-
-DELETE FROM ids WHERE id < 2;
-
-SET mroonga_max_n_records_for_estimate = 1;
-
-EXPLAIN SELECT * FROM ids WHERE id > 0;
-
-SET mroonga_max_n_records_for_estimate = DEFAULT;
-
-DROP TABLE ids;
-
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+if (!$version_57_or_later) {
+  if (!$mariadb) {
+    skip This test is for MySQL version 5.7.x or later;
+  }
+}

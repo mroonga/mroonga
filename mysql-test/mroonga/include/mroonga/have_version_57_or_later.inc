@@ -1,4 +1,4 @@
-# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2015-2016 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,5 +17,5 @@
 --source ../../include/mroonga/check_version.inc
 
 if (!$version_57_or_later) {
-  skip This test is for MySQL version 5.7.x or later;
+  skip This test is for MySQL version 5.7.x or later or MariaDB 10.0.x or later;
 }
