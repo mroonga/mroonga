@@ -8315,7 +8315,7 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
              "failed to parse fulltext search keyword: <%.*s>: <%s>",
-             key->length(), key->ptr(),
+             static_cast<int>(key->length()), key->ptr(),
              info->ctx->errbuf);
     ulong action = THDVAR(ha_thd(), action_on_fulltext_query_error);
     switch (static_cast<mrn_action_on_error>(action)) {
