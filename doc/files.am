@@ -58,11 +58,9 @@ absolute_source_files = \
 absolute_theme_files = \
 	$(top_srcdir)/doc/themes/mroonga/layout.html \
 	$(top_srcdir)/doc/themes/mroonga/static/favicon.ico \
-	$(top_srcdir)/doc/themes/mroonga/static/jp.png \
 	$(top_srcdir)/doc/themes/mroonga/static/logo.png \
 	$(top_srcdir)/doc/themes/mroonga/static/mroonga.css_t \
 	$(top_srcdir)/doc/themes/mroonga/static/navigation-bar.png \
-	$(top_srcdir)/doc/themes/mroonga/static/us.png \
 	$(top_srcdir)/doc/themes/mroonga/theme.conf \
 	$(NULL)
 
@@ -126,11 +124,9 @@ source_files_relative_from_doc_dir = \
 theme_files_relative_from_doc_dir = \
 	themes/mroonga/layout.html \
 	themes/mroonga/static/favicon.ico \
-	themes/mroonga/static/jp.png \
 	themes/mroonga/static/logo.png \
 	themes/mroonga/static/mroonga.css_t \
 	themes/mroonga/static/navigation-bar.png \
-	themes/mroonga/static/us.png \
 	themes/mroonga/theme.conf \
 	$(NULL)
 
@@ -283,7 +279,6 @@ html_files_relative_from_locale_dir = \
 	html/_static/down.png \
 	html/_static/favicon.ico \
 	html/_static/file.png \
-	html/_static/jp.png \
 	html/_static/jquery-1.11.1.js \
 	html/_static/jquery.js \
 	html/_static/logo.png \
@@ -297,7 +292,6 @@ html_files_relative_from_locale_dir = \
 	html/_static/underscore.js \
 	html/_static/up-pressed.png \
 	html/_static/up.png \
-	html/_static/us.png \
 	html/_static/websupport.js \
 	html/characteristic.html \
 	html/community.html \
