@@ -87,7 +87,7 @@ else
              mysql-testsuite libmysqld-dev
         apt-get -qq source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
-      else
+      elif [ "$series" = "5.5" ]; then
         download_base="http://cdn.mysql.com/Downloads/MySQL-${series}/"
         if [ "$(uname -m)" = "x86_64" ]; then
           architecture=x86_64
@@ -103,6 +103,17 @@ else
         sudo dpkg -i $deb
         tar xzf $tar_gz
         ln -s mysql-${version} mysql
+      else
+        repository_deb=mysql-apt-config_0.7.2-1_all.deb
+        curl -O http://repo.mysql.com/${repository_deb}
+        sudo dpkg -i ${repository_deb}
+        sudo apt-get -qq update
+        sudo apt-get -qq -y remove --purge mysql-common
+        sudo apt-get -qq -y build-dep mysql-server
+        sudo apt-get -qq -y install \
+             mysql-server libmysqlclient-dev mysql-test
+        apt-get -qq source mysql-server
+        ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       fi
       ;;
     mariadb-*)
