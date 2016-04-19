@@ -15,7 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source ../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../include/mroonga/have_version_57_or_later.inc
+--source ../../../../../include/mroonga/have_mysql_57_or_later.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS ids;
