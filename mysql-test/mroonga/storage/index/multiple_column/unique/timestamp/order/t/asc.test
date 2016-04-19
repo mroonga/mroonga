@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS ranges;
 
 CREATE TABLE ranges (
   id int PRIMARY KEY,
-  start timestamp,
-  end timestamp,
+  start timestamp DEFAULT CURRENT_TIMESTAMP,
+  end timestamp DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY range_key(start, end)
 );
 
