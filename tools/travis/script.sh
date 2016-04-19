@@ -62,6 +62,8 @@ prepare_mysql_test_dir()
   mysql_test_dir=/usr/mysql-test
   if [ -d /usr/lib/mysql-testsuite/ ]; then
     sudo cp -a /usr/lib/mysql-testsuite/ ${mysql_test_dir}/
+  elif [ -d /usr/lib/mysql-test/ ]; then
+    sudo cp -a /usr/lib/mysql-test/ ${mysql_test_dir}/
   elif [ -d /usr/share/mysql/mysql-test/ ]; then
     sudo cp -a /usr/share/mysql/mysql-test/ ${mysql_test_dir}/
   elif [ -d /opt/mysql/ ]; then
