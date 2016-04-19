@@ -106,12 +106,16 @@ else
       else
         repository_deb=mysql-apt-config_0.7.2-1_all.deb
         curl -O http://repo.mysql.com/${repository_deb}
-        sudo dpkg -i ${repository_deb}
+        sudo env MYSQL_SERVER_VERSION=mysql-${series} \
+             dpkg -i ${repository_deb}
         sudo apt-get -qq update
         sudo apt-get -qq -y remove --purge mysql-common
         sudo apt-get -qq -y build-dep mysql-server
         sudo apt-get -qq -y install \
-             mysql-server libmysqlclient-dev mysql-test
+             mysql-server \
+             libmysqlclient-dev \
+             libmysqld-dev \
+             mysql-testsuite
         apt-get -qq source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       fi
