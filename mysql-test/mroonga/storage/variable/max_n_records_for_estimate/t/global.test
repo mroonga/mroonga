@@ -38,13 +38,17 @@ INSERT INTO ids VALUES (10);
 
 SET GLOBAL mroonga_max_n_records_for_estimate = 1;
 
+disable_query_log;
 CONNECT (new_connection, localhost, root, ,);
 CONNECTION new_connection;
+enable_query_log;
 
 EXPLAIN SELECT * FROM ids WHERE id > 5;
 
+disable_query_log;
 CONNECTION default;
 DISCONNECT new_connection;
+enable_query_log;
 
 SET GLOBAL mroonga_max_n_records_for_estimate = DEFAULT;
 

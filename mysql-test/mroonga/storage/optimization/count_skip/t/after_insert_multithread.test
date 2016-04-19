@@ -30,11 +30,17 @@ CREATE TABLE diaries (
 INSERT INTO diaries VALUES("Hello mroonga!");
 INSERT INTO diaries VALUES("It's funny.");
 
+disable_query_log;
 CONNECT (thread2, localhost, root, ,);
 CONNECTION thread2;
+enable_query_log;
+
 INSERT INTO diaries VALUES("Happy birthday!");
+
+disable_query_log;
 DISCONNECT thread2;
 CONNECTION default;
+enable_query_log;
 
 SHOW STATUS LIKE 'mroonga_count_skip';
 SELECT COUNT(*) FROM diaries WHERE MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);

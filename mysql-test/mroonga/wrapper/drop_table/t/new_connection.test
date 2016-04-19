@@ -23,11 +23,16 @@ CREATE TABLE logs (
   FULLTEXT INDEX (message)
 ) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
 
+disable_query_log;
 CONNECT(drop_connection, localhost, root);
+enable_query_log;
+
 USE test;
 DROP TABLE logs;
 
+disable_query_log;
 CONNECTION default;
+enable_query_log;
 
 CREATE TABLE logs (
   id INT PRIMARY KEY AUTO_INCREMENT,

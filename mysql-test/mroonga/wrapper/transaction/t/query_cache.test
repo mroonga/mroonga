@@ -31,22 +31,32 @@ SHOW CREATE TABLE simple_table;
 
 INSERT INTO simple_table (id) VALUES (1),(2);
 
+disable_query_log;
 CONNECT(second_connection, localhost, root);
+enable_query_log;
 USE test;
 START TRANSACTION;
 INSERT INTO simple_table (id) VALUES (3);
 
+disable_query_log;
 CONNECTION default;
+enable_query_log;
 SELECT * FROM simple_table;
 
+disable_query_log;
 CONNECTION second_connection;
+enable_query_log;
 COMMIT;
 
+disable_query_log;
 CONNECTION default;
+enable_query_log;
 SELECT * FROM simple_table;
 
 DROP TABLE simple_table;
+disable_query_log;
 DISCONNECT second_connection;
+enable_query_log;
 
 SET GLOBAL query_cache_size = @tmp_query_cache_size;
 

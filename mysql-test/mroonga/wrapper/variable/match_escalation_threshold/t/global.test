@@ -41,11 +41,17 @@ SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
 SET GLOBAL mroonga_match_escalation_threshold = -1;
 --enable_warnings
 
+disable_query_log;
 CONNECT(search_connection, localhost, root);
+enable_query_log;
 USE test;
+
 SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
+
+disable_query_log;
 DISCONNECT search_connection;
 CONNECTION default;
+enable_query_log;
 
 SET GLOBAL mroonga_match_escalation_threshold = DEFAULT;
 

@@ -39,22 +39,32 @@ SELECT * FROM diaries
   WHERE MATCH(body) AGAINST("groonga")
   ORDER BY id;
 
+disable_query_log;
 CONNECT(search_connection, localhost, root);
+enable_query_log;
 USE test;
 SELECT * FROM diaries
   WHERE MATCH(body) AGAINST("groonga")
   ORDER BY id;
 
+disable_query_log;
 CONNECTION default;
+enable_query_log;
 COMMIT;
 
+disable_query_log;
 CONNECTION search_connection;
+enable_query_log;
 SELECT * FROM diaries
   WHERE MATCH(body) AGAINST("groonga")
   ORDER BY id;
+disable_query_log;
 DISCONNECT search_connection;
+enable_query_log;
 
+disable_query_log;
 CONNECTION default;
+enable_query_log;
 SELECT * FROM diaries
   WHERE MATCH(body) AGAINST("groonga")
   ORDER BY id;
