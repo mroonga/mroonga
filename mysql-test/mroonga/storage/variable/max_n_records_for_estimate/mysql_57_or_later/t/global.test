@@ -14,8 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../include/mroonga/have_mroonga.inc
---source ../../../../include/mroonga/skip_mysql_57_or_later.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_mysql_57_or_later.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS ids;
@@ -36,12 +36,25 @@ INSERT INTO ids VALUES (8);
 INSERT INTO ids VALUES (9);
 INSERT INTO ids VALUES (10);
 
-SET mroonga_max_n_records_for_estimate = 1;
+
+SET GLOBAL mroonga_max_n_records_for_estimate = 1;
+
+disable_query_log;
+CONNECT (new_connection, localhost, root, ,);
+CONNECTION new_connection;
+enable_query_log;
 
 EXPLAIN SELECT * FROM ids WHERE id > 5;
 
-SET mroonga_max_n_records_for_estimate = DEFAULT;
+disable_query_log;
+CONNECTION default;
+DISCONNECT new_connection;
+enable_query_log;
+
+SET GLOBAL mroonga_max_n_records_for_estimate = DEFAULT;
+
 
 DROP TABLE ids;
 
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc
