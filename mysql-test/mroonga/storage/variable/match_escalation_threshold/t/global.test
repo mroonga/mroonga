@@ -37,6 +37,10 @@ SHOW CREATE TABLE diaries;
 INSERT INTO diaries (title, tags) VALUES ("Hello Groonga!", "groonga install");
 INSERT INTO diaries (title, tags) VALUES ("Hello Mroonga!", "mroonga install");
 
+disable_query_log;
+CONNECT (new_connection, localhost, root, ,);
+CONNECTION new_connection;
+enable_query_log;
 
 SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("+install" IN BOOLEAN MODE);
 
@@ -48,6 +52,10 @@ SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("+gr" IN BOOLEAN MODE);
 SET mroonga_match_escalation_threshold = 0;
 SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("+gr" IN BOOLEAN MODE);
 
+disable_query_log;
+CONNECTION default;
+DISCONNECT new_connection;
+enable_query_log;
 
 DROP TABLE diaries;
 
