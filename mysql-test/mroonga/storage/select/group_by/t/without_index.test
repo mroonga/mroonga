@@ -1,4 +1,4 @@
-# Copyright(C) 2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2016  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -30,9 +30,7 @@ INSERT INTO users VALUES ("Alice",  20);
 INSERT INTO users VALUES ("Bob",    20);
 INSERT INTO users VALUES ("Charry", 29);
 
-EXPLAIN SELECT *, COUNT(*) FROM users GROUP BY age;
-
-SELECT *, COUNT(*) FROM users GROUP BY age;
+SELECT age, COUNT(*) FROM users GROUP BY age;
 
 DROP TABLE users;
 
