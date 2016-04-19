@@ -15,19 +15,19 @@ diaries	CREATE TABLE `diaries` (
   PRIMARY KEY (`id`),
   FULLTEXT KEY `tags_index` (`tags`) COMMENT 'tokenizer "TokenDelimit"'
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8
-INSERT INTO diaries (title, tags) VALUES ("Hello groonga!", "groonga install");
-INSERT INTO diaries (title, tags) VALUES ("Hello mroonga!", "mroonga install");
-SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("install" IN BOOLEAN MODE);
+INSERT INTO diaries (title, tags) VALUES ("Hello Groonga!", "groonga install");
+INSERT INTO diaries (title, tags) VALUES ("Hello Mroonga!", "mroonga install");
+SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("+install" IN BOOLEAN MODE);
 id	title	tags
-1	Hello groonga!	groonga install
-2	Hello mroonga!	mroonga install
-SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
+1	Hello Groonga!	groonga install
+2	Hello Mroonga!	mroonga install
+SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("+gr" IN BOOLEAN MODE);
 id	title	tags
 SET GLOBAL mroonga_match_escalation_threshold = 0;
-SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
+SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("+gr" IN BOOLEAN MODE);
 id	title	tags
 SET mroonga_match_escalation_threshold = 0;
-SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);
+SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("+gr" IN BOOLEAN MODE);
 id	title	tags
-1	Hello groonga!	groonga install
+1	Hello Groonga!	groonga install
 DROP TABLE diaries;
