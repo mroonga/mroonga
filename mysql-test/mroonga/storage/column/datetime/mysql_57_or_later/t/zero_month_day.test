@@ -15,8 +15,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../include/mroonga/skip_mysql_57_or_later.inc
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_mysql_57_or_later.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS timestamps;
@@ -28,13 +28,13 @@ CREATE TABLE timestamps (
 ) DEFAULT CHARSET UTF8;
 SHOW CREATE TABLE timestamps;
 
+--error ER_TRUNCATED_WRONG_VALUE
 INSERT INTO timestamps (create_dt) VALUES ("2012-00-01 00:00:00");
+--error ER_TRUNCATED_WRONG_VALUE
 INSERT INTO timestamps (create_dt) VALUES ("2012-01-00 00:00:00");
 
 SELECT * FROM timestamps;
 
-SELECT * FROM timestamps WHERE create_dt = "2012-01-01 00:00:00";
-
 DROP TABLE timestamps;
 
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc
