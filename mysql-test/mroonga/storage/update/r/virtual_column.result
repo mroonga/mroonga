@@ -26,3 +26,4 @@ c1	_id
 2	2
 3	3
 drop table t1;
+set sql_mode=DEFAULT;

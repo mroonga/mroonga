@@ -27,11 +27,15 @@ insert into t1 values(1,null);
 insert into t1 values(2,null);
 insert into t1 values(3,null);
 select * from t1;
+--disable_warnings
 set sql_mode="";
+--enable_warnings
 # warning WARN_DATA_TRUNCATED
 update t1 set _id = 10 where c1 = 1;
 select * from t1;
+--disable_warnings
 set sql_mode="strict_all_tables";
+--enable_warnings
 # We can't use WARN_DATA_TRUNCATED here because "WXXX" isn't supported
 # MySQL 5.5, 5.6 and MariaDB 5.6. MariaDB 10.0 only supports it.
 # We share this test with all MySQL servers. So we use number here.
@@ -39,5 +43,7 @@ set sql_mode="strict_all_tables";
 update t1 set _id = 11 where c1 = 1;
 select * from t1;
 drop table t1;
+
+set sql_mode=DEFAULT;
 
 --source ../../../include/mroonga/have_mroonga_deinit.inc
