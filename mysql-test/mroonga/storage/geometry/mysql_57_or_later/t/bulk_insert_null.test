@@ -27,9 +27,8 @@ CREATE TABLE shops (
   location GEOMETRY NOT NULL
 );
 
-SET SESSION sql_mode = '';
+--error ER_BAD_NULL_ERROR
 INSERT INTO shops VALUES (NULL), (NULL);
-SET SESSION sql_mode = default;
 
 SELECT ST_AsText(location) FROM shops;
 
