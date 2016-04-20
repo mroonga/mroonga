@@ -15,8 +15,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source include/have_innodb.inc
---source ../../../include/mroonga/skip_mysql_57_or_later.inc
---source ../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/have_mysql_57_or_later.inc
+--source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_query_log
 DROP DATABASE test;
@@ -46,12 +46,12 @@ INSERT INTO diaries_mroonga (body) VALUES ("will start groonga!");
 INSERT INTO diaries_mroonga (body) VALUES ("starting groonga...");
 INSERT INTO diaries_mroonga (body) VALUES ("started groonga.");
 
--- replace_column 9 #
+-- replace_column 10 #
 EXPLAIN SELECT COUNT(*) FROM diaries_innodb;
--- replace_column 9 #
+-- replace_column 10 #
 EXPLAIN SELECT COUNT(*) FROM diaries_mroonga;
 
 DROP TABLE diaries_innodb;
 DROP TABLE diaries_mroonga;
 
---source ../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc
