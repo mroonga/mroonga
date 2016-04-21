@@ -246,7 +246,7 @@
 #  define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
 #else
 #  if MYSQL_VERSION_ID >= 50706
-#    define MRN_ABORT_ON_WARNING(thd) false
+#    define MRN_ABORT_ON_WARNING(thd) thd->is_strict_mode()
 #  else
 #    define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
 #  endif

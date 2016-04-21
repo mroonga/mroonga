@@ -12,13 +12,8 @@ INSERT INTO t1 VALUES(1,100);
 ERROR 01000: Data truncated for column '_id' at row 1
 SELECT * FROM t1;
 _id	a
-1	100
-2	100
-3	100
-4	100
 SELECT * FROM t1 WHERE _id = 2;
 _id	a
-2	100
 SELECT * FROM t1 WHERE _id = 20;
 _id	a
 DROP TABLE t1;
