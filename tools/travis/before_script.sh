@@ -62,5 +62,4 @@ else
       ;;
   esac
   ./configure "${configure_args[@]}"
-  cat "$(mysql_config --include | sed -e 's/-I//g')/my_config.h"
 fi
