@@ -54,6 +54,9 @@ else
     mysql-5.6.*)
       configure_args=("${configure_args[@]}" --enable-fast-mutexes)
       ;;
+    mysql-5.7.*)
+      (cd vendor/mysql && sudo debian/rules override_dh_auto_configure)
+      ;;
     *)
       :
       ;;
