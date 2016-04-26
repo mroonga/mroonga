@@ -164,14 +164,11 @@ msgstr ""
 "このセクションではDebian GNU/Linux上でMroonga関連のdebパッケージをインストー"
 "ルする方法を説明します。これらのパッケージは ``apt`` でインストールできます。"
 
-msgid "wheezy"
+# 53947b46cb3247bbb186a861a5a5cbd3
+msgid "jessie"
 msgstr ""
 
 msgid "/etc/apt/sources.list.d/groonga.list::"
-msgstr ""
-
-# 53947b46cb3247bbb186a861a5a5cbd3
-msgid "jessie"
 msgstr ""
 
 msgid "Fedora"
@@ -610,6 +607,9 @@ msgid "14.04 LTS Trusty Tahr"
 msgstr ""
 
 msgid "15.10 Wily Werewolf"
+msgstr ""
+
+msgid "16.04 Xenial Xerus"
 msgstr ""
 
 msgid ""
