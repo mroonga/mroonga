@@ -5,6 +5,41 @@
 News
 ====
 
+.. _release-6-02:
+
+Release 6.02 - 2016-04-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [deb] Supported multiarch. [Reported by hirobanex]
+
+* [:doc:`/developer/release`] Updated to use Visual Studio 12(2013) in building
+  instruction in Windows.
+
+* [:doc:`/reference/full_text_search/boolean_mode`] Translated documentation about boolean mode.
+
+* [experimental][mariadb10.2] Supported changed APIs.
+
+  * ``ORDER::direction``
+  * ``tdc_acquire_share()``
+
+* [:doc:`/install/debian`] Dropped Debian 7.0 (Wheezy).
+  It had been reached to End of Life on April 26, 2016.
+
+* [:doc:`/install/ubuntu`] Supported Ubuntu 16.04 (Xenial Xerus)
+
+Fixes
+^^^^^
+
+* Fixed compile error with MySQL 5.7.
+
+Thanks
+^^^^^^
+
+* hirobanex
+
 .. _release-6-01:
 
 Release 6.01 - 2016-03-29
