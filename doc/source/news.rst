@@ -20,10 +20,7 @@ Improvements
 
 * [:doc:`/reference/full_text_search/boolean_mode`] Translated documentation about boolean mode.
 
-* [experimental][mariadb10.2] Supported changed APIs.
-
-  * ``ORDER::direction``
-  * ``tdc_acquire_share()``
+* [experimental][mariadb10.2] Supported MariaDB 10.2.0.
 
 * [:doc:`/install/debian`] Dropped Debian 7.0 (Wheezy).
   It had been reached to End of Life on April 26, 2016.
