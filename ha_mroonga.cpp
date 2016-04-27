@@ -96,6 +96,7 @@
 #include <mrn_value_decoder.hpp>
 #include <mrn_database_repairer.hpp>
 #include <mrn_operation.hpp>
+#include <mrn_column_name.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -3357,10 +3358,9 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
   uint n_columns = table->s->fields;
   for (uint i = 0; i < n_columns; i++) {
     Field *field = table->s->field[i];
-    const char *column_name = field->field_name;
-    int column_name_size = strlen(column_name);
+    mrn::ColumnName column_name(field->field_name);
 
-    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+    if (strcmp(MRN_COLUMN_NAME_ID, column_name.mysql_name()) == 0) {
       continue;
     }
 
@@ -3391,7 +3391,8 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
     char *col_path = NULL; // we don't specify path
 
-    grn_column_create(ctx, table_obj, column_name, column_name_size,
+    grn_column_create(ctx, table_obj,
+                      column_name.c_str(), column_name.length(),
                       col_path, col_flags, col_type);
     if (ctx->rc) {
       grn_obj_remove(ctx, table_obj);
@@ -4489,18 +4490,19 @@ int ha_mroonga::storage_open_columns(void)
 
   for (int i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
-    const char *column_name = field->field_name;
-    int column_name_size = strlen(column_name);
+    mrn::ColumnName column_name(field->field_name);
     if (table_share->blob_fields)
     {
       blob_buffers[i].set_charset(field->charset());
     }
-    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+    if (strcmp(MRN_COLUMN_NAME_ID, column_name.mysql_name()) == 0) {
       continue;
     }
 
-    grn_columns[i] = grn_obj_column(ctx, grn_table,
-                                    column_name, column_name_size);
+    grn_columns[i] = grn_obj_column(ctx,
+                                    grn_table,
+                                    column_name.c_str(),
+                                    column_name.length());
     if (!grn_columns[i]) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
