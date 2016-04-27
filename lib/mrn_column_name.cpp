@@ -18,12 +18,14 @@
 */
 
 #include <mrn_mysql.h>
+#include <mrn_mysql_compat.h>
 
 #include "mrn_column_name.hpp"
 
 #include <strfunc.h>
 
 #define MRN_MIN_INDEX_COLUMN_NAME_LENGTH 65
+#include <string.h>
 
 // for debug
 #define MRN_CLASS_NAME "mrn::ColumnName"
@@ -49,12 +51,13 @@ namespace mrn {
   void ColumnName::encode() {
     MRN_DBUG_ENTER_METHOD();
     uint errors;
-    length_ = strconvert(system_charset_info,
-                         mysql_name_,
-                         &my_charset_filename,
-                         name_,
-                         MRN_MAX_PATH_SIZE,
-                         &errors);
+    length_ = mrn_strconvert(system_charset_info,
+                             mysql_name_,
+                             strlen(mysql_name_),
+                             &my_charset_filename,
+                             name_,
+                             MRN_MAX_PATH_SIZE,
+                             &errors);
     name_[length_] = '\0';
     DBUG_VOID_RETURN;
   }

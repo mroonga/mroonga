@@ -292,4 +292,35 @@
                flags)
 #endif
 
+#ifdef MRN_MARIADB_P
+#  define mrn_strconvert(from_cs,               \
+                         from,                  \
+                         from_length,           \
+                         to_cs,                 \
+                         to,                    \
+                         to_length,             \
+                         errors)                \
+  strconvert((from_cs),                         \
+             (from),                            \
+             (from_length),                     \
+             (to_cs),                           \
+             (to),                              \
+             (to_length),                       \
+             (errors))
+#else
+#  define mrn_strconvert(from_cs,               \
+                         from,                  \
+                         from_length,           \
+                         to_cs,                 \
+                         to,                    \
+                         to_length,             \
+                         errors)                \
+  strconvert((from_cs),                         \
+             (from),                            \
+             (to_cs),                           \
+             (to),                              \
+             (to_length),                       \
+             (errors))
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
