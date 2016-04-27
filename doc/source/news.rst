@@ -15,10 +15,11 @@ Improvements
 
 * [deb] Supported multiarch. [Reported by hirobanex]
 
-* [:doc:`/developer/release`] Updated to use Visual Studio 12(2013) in building
-  instruction in Windows.
+* [:doc:`/developer/release`] Updated to use Visual Studio 12(2013) in
+  building instruction in Windows.
 
-* [:doc:`/reference/full_text_search/boolean_mode`] Translated documentation about boolean mode.
+* [:doc:`/reference/full_text_search/boolean_mode`] Translated
+  documentation about boolean mode.
 
 * [experimental][mariadb10.2] Supported MariaDB 10.2.0.
 
