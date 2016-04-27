@@ -28,6 +28,9 @@ Improvements
 
 * [:doc:`/install/ubuntu`] Supported Ubuntu 16.04 (Xenial Xerus)
 
+* [storage] Supported mutlibyte characters in column name.
+  [Gitter:groonga/ja:570270f7d478c81e2cbcdc89][Reported by yoyoshifgs]
+
 Fixes
 ^^^^^
 
@@ -37,6 +40,7 @@ Thanks
 ^^^^^^
 
 * hirobanex
+* yoyoshifgs
 
 .. _release-6-01:
 
