@@ -24,7 +24,6 @@
 
 #include <strfunc.h>
 
-#define MRN_MIN_INDEX_COLUMN_NAME_LENGTH 65
 #include <string.h>
 
 // for debug
