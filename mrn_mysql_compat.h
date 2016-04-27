@@ -292,7 +292,7 @@
                flags)
 #endif
 
-#ifdef MRN_MARIADB_P
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
 #  define mrn_strconvert(from_cs,               \
                          from,                  \
                          from_length,           \
