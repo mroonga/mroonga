@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-03-30 08:41+0900\n"
+"PO-Revision-Date: 2016-04-27 18:31+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,69 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 6.01 - 2016-03-29"
-msgstr "6.01リリース - 2016-03-29"
+msgid "Release 6.02 - 2016-04-29"
+msgstr "6.02リリース - 2016-04-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[deb] Supported multiarch. [Reported by hirobanex]"
+msgstr "[deb] multiarchをサポートしました。[hirobanexさんが報告]"
+
+msgid ""
+"[:doc:`/developer/release`] Updated to use Visual Studio 12(2013) in "
+"building instruction in Windows."
+msgstr ""
+"[:doc:`/developer/release`] Windows版のビルドに Visual Studio 12(2013) を使う"
+"ようにしました。"
+
+msgid ""
+"[:doc:`/reference/full_text_search/boolean_mode`] Translated documentation "
+"about boolean mode."
+msgstr ""
+"[:doc:`/reference/full_text_search/boolean_mode`] ブーリアンモードのドキュメ"
+"ントを翻訳しました。"
+
+msgid "[experimental][mariadb10.2] Supported MariaDB 10.2.0."
+msgstr "[MariaDB 10.2] MariaDB 10.2.0に対応しました。"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/debian`] Dropped Debian 7.0 (Wheezy). It had been reached to "
+"End of Life on April 26, 2016."
+msgstr ""
+"[:doc:`/install/debian`] Debian 7.0 (Wheezy)のサポートをやめました。4/26にEOL"
+"となっています。"
+
+#, fuzzy
+msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 16.04 (Xenial Xerus)"
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 16.04 (Xenial Xerus)をサポートしました。"
+
+msgid ""
+"[storage] Supported mutlibyte characters in column name. [Gitter:groonga/"
+"ja:570270f7d478c81e2cbcdc89][Reported by yoyoshifgs]"
+msgstr ""
+"[ストレージモード] カラム名にマルチバイト文字を使えるようにしました。 "
+"[Gitter:groonga/ja:570270f7d478c81e2cbcdc89] [yoyoshifgsさんが報告]"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed compile error with MySQL 5.7."
+msgstr "MySQL 5.7でコンパイルエラーになる問題を修正しました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "hirobanex"
+msgstr "hirobanexさん"
+
+msgid "yoyoshifgs"
+msgstr "yoyoshifgsさん"
+
+msgid "Release 6.01 - 2016-03-29"
+msgstr "6.01リリース - 2016-03-29"
 
 msgid ""
 "Added a warning when deprecated keyword \"parser\" is used. [Patch by GMO "
@@ -69,9 +127,6 @@ msgstr ""
 "[:doc:`/install/windows`] ベースにしているMariaDBを10.1.13にアップデートしま"
 "した。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "Fixed a bug that the following UDFs can't be used in ``MATCH AGAINST``. "
 "[groonga-dev,03964][Reported by Hironori Matsubara]"
@@ -97,9 +152,6 @@ msgid ""
 msgstr ""
 "[ストレージモード] 条件なしで ``DELETE`` した場合にユニークインデックスが残っ"
 "てしまう問題を修正しました。 [GitHub#99][GMOメディア株式会社さんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 # d8986144d4454b8dbfd7cf12c8877b8c
 msgid "GMO Media, Inc."
