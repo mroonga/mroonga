@@ -21,6 +21,12 @@
 DROP TABLE IF EXISTS users;
 --enable_warnings
 
+--disable_query_log
+DROP DATABASE test;
+CREATE DATABASE test;
+USE test;
+--enable_query_log
+
 SET NAMES utf8;
 
 CREATE TABLE users (
