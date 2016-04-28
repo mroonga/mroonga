@@ -85,9 +85,9 @@ allow_unsigned_uploads = 0
           case line
           when /\Amysql-server \((.+?)\)/
             @mysql_versions[code_name] = $1
-          when /\Amysql-server-5\.5 \((.+?)\)/
+          when /\Amysql-server-5\.5 \((.+?) \[/
             @mysql55_versions[code_name] = $1
-          when /\Amysql-server-5\.6 \((.+?)\)/
+          when /\Amysql-server-5\.6 \((.+?) \[/
             @mysql56_versions[code_name] = $1
           end
         end
