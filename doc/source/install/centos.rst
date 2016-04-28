@@ -218,7 +218,7 @@ since Mroonga 5.02 release.
 Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-  $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+  % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y Percona-Server-server-56
   % sudo /sbin/service mysqld start
