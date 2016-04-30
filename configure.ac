@@ -186,6 +186,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   fi
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_regex_include_dir"
   if test -d "$ac_mysql_source_dir/libbinlogevents"; then
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_build_dir/libbinlogevents/include"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/libbinlogevents/export"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/libbinlogevents/include"
   fi

@@ -212,6 +212,7 @@ if(EXISTS "${MYSQL_SOURCE_DIR}/libbinlogevents")
   set(MYSQL_LIBBINLOGEVENTS_EXPORT_DIR
     "${MYSQL_SOURCE_DIR}/libbinlogevents/export")
   set(MYSQL_LIBBINLOGEVENTS_INCLUDE_DIR
+    "${MYSQL_BUILD_DIR}/libbinlogevents/include"
     "${MYSQL_SOURCE_DIR}/libbinlogevents/include")
 else()
   set(MYSQL_LIBBINLOGEVENTS_EXPORT_DIR)
