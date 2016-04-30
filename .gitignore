@@ -37,6 +37,7 @@ CTestTestfile.cmake
 /libmroonga.a
 /packages/debian-5.5/control
 /packages/debian-5.6/control
+/packages/debian-5.7/control
 /packages/rpm/*/*.spec
 /packages/apt/env.sh
 /packages/apt/.vagrant/

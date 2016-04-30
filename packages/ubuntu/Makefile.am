@@ -4,6 +4,8 @@ SOURCE_55_BASE = $(PACKAGE)-5.5
 SOURCE_55 = $(SOURCE_55_BASE)_$(VERSION).orig.tar.gz
 SOURCE_56_BASE = $(PACKAGE)-5.6
 SOURCE_56 = $(SOURCE_56_BASE)_$(VERSION).orig.tar.gz
+SOURCE_57_BASE = $(PACKAGE)-5.7
+SOURCE_57 = $(SOURCE_57_BASE)_$(VERSION).orig.tar.gz
 
 all:
 
@@ -22,7 +24,7 @@ upload: source ensure-launchpad-configuration
 	  --debian-base-directory '$(srcdir)/../' \
 	  --pgp-sign-key '$(LAUNCHPAD_UPLOADER_PGP_KEY)'
 
-source: $(SOURCE_55) $(SOURCE_56)
+source: $(SOURCE_55) $(SOURCE_56) $(SOURCE_57)
 
 $(SOURCE):
 	ln -s $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz $(SOURCE)
@@ -38,3 +40,9 @@ $(SOURCE_56): $(SOURCE)
 	mv $(PACKAGE)-$(VERSION) $(SOURCE_56_BASE)-$(VERSION)
 	tar cfz $(SOURCE_56) $(SOURCE_56_BASE)-$(VERSION)
 	rm -r $(SOURCE_56_BASE)-$(VERSION)
+
+$(SOURCE_57): $(SOURCE)
+	tar xf $(SOURCE)
+	mv $(PACKAGE)-$(VERSION) $(SOURCE_57_BASE)-$(VERSION)
+	tar cfz $(SOURCE_57) $(SOURCE_57_BASE)-$(VERSION)
+	rm -r $(SOURCE_57_BASE)-$(VERSION)

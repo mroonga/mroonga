@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright(C) 2014-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2014-2016  Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2014  HAYASHI Kentaro <hayashi@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -39,11 +39,15 @@ class Uploader
     @code_names.each do |code_name|
       mysql55_version = @mysql55_versions[code_name]
       mysql56_version = @mysql56_versions[code_name]
+      mysql57_version = @mysql57_versions[code_name]
       if mysql55_version
         upload(code_name, "5.5", mysql55_version)
       end
       if mysql56_version
         upload(code_name, "5.6", mysql56_version)
+      end
+      if mysql57_version
+        upload(code_name, "5.7", mysql57_version)
       end
     end
   end
@@ -77,6 +81,7 @@ allow_unsigned_uploads = 0
     @mysql_versions = {}
     @mysql55_versions = {}
     @mysql56_versions = {}
+    @mysql57_versions = {}
     @code_names.each do |code_name|
       allpackages_url =
         "http://packages.ubuntu.com/#{code_name}/allpackages?format=txt.gz"
@@ -89,6 +94,8 @@ allow_unsigned_uploads = 0
             @mysql55_versions[code_name] = $1
           when /\Amysql-server-5\.6 \((.+?) \[/
             @mysql56_versions[code_name] = $1
+          when /\Amysql-server-5\.7 \((.+?) \[/
+            @mysql57_versions[code_name] = $1
           end
         end
       end
