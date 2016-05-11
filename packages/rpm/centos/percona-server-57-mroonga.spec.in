@@ -69,7 +69,8 @@ if [ ! -f ../../SRPMS/$srpm ]; then
 fi
 
 %build
-mysql_source=../percona-server-%{_mysql_version}-%{_percona_server_version}
+mysql_source_base_name=percona-server-%{_mysql_version}-%{_percona_server_version}
+mysql_source=../${mysql_source_base_name}/${mysql_source_base_name}
 if [ ! -d ${mysql_source} ]; then
     specs_dir=
     rpmbuild -bp \
