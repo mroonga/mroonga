@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-03-27 23:02+0900\n"
+"PO-Revision-Date: 2016-05-11 15:16+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -107,15 +107,24 @@ msgstr ""
 "CentOS 6では、Mroonga 5.09からOracleのMySQL 5.7パッケージを利用できます。"
 
 # 5e3232071ae84bdfbce77f4bee3e0ae4
-msgid "CentOS 6 (with Percona Server package)"
-msgstr "CentOS 6（Percona Serverパッケージを利用）"
+msgid "CentOS 6 (with Percona Server 5.6 package)"
+msgstr "CentOS 6（Percona Server 5.6パッケージを利用）"
 
 msgid ""
-"You can use Percona Server packages (version 5.6.x) on CentOS 6 since "
-"Mroonga 5.02 release."
+"You can use Percona Server packages version 5.6 on CentOS 6 since Mroonga "
+"5.02 release."
 msgstr ""
-"CentOS 6では、Mroonga 5.02からPercona Serverパッケージ（5.6系）を利用できま"
-"す。"
+"CentOS 6では、Mroonga 5.02からPercona Server 5.6パッケージを利用できます。"
+
+# 5e3232071ae84bdfbce77f4bee3e0ae4
+msgid "CentOS 6 (with Percona Server 5.7 package)"
+msgstr "CentOS 6（Percona Server 5.7パッケージを利用）"
+
+msgid ""
+"You can use Percona Server packages version 5.7 on CentOS 6 since Mroonga "
+"6.02 release."
+msgstr ""
+"CentOS 6では、Mroonga 6.02からPercona Server 5.7パッケージを利用できます。"
 
 # e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 7 (with the official MariaDB package)"
@@ -144,15 +153,24 @@ msgstr ""
 "CentOS 7では、Mroonga 5.09からOracleのMySQL 5.7パッケージを利用できます。"
 
 # 57c1a2711fd448d79504e0f0df8d44e0
-msgid "CentOS 7 (with Percona Server package)"
-msgstr "CentOS 7（Percona Serverパッケージを利用）"
+msgid "CentOS 7 (with Percona Server 5.6 package)"
+msgstr "CentOS 7（Percona Server 5.6パッケージを利用）"
 
 msgid ""
-"You can use Percona Server packages (version 5.6.x) on CentOS 7 since "
-"Mroonga 5.02 release."
+"You can use Percona Server packages version 5.6 on CentOS 7 since Mroonga "
+"5.02 release."
 msgstr ""
-"CentOS 7では、Mroonga 5.02からPercona Serverパッケージ（5.6系）を利用できま"
-"す。"
+"CentOS 7では、Mroonga 5.02からPercona Server 5.6パッケージを利用できます。"
+
+# 57c1a2711fd448d79504e0f0df8d44e0
+msgid "CentOS 7 (with Percona Server 5.7 package)"
+msgstr "CentOS 7（Percona Server 5.7パッケージを利用）"
+
+msgid ""
+"You can use Percona Server packages version 5.7 on CentOS 7 since Mroonga "
+"6.02 release."
+msgstr ""
+"CentOS 7では、Mroonga 6.02からPercona Server 5.7パッケージを利用できます。"
 
 msgid "Debian GNU/Linux"
 msgstr ""
