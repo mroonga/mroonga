@@ -1,16 +1,20 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
 %define mysql_version_default 5.7.11
-%define mysql_release_default 4.1
+%define percona_server_version_default 4
+%define rpm_release_default 1
 %define mysql_dist_default    %{?dist}
 %define mysql_download_base_url_default http://repo.percona.com/centos/%{_centos_ver}/SRPMS
 %define mysql_spec_file_default percona-server.spec
 
 %define _mysql_version %{?mysql_version:%{mysql_version}}%{!?mysql_version:%{mysql_version_default}}
-%define _mysql_release %{?mysql_release:%{mysql_release}}%{!?mysql_release:%{mysql_release_default}}
+%define _percona_server_version %{?percona_server_version:%{percona_server_version}}%{!?percona_server_version:%{percona_server_version_default}}
+%define _rpm_release %{?rpm_release:%{rpm_release}}%{!?rpm_release:%{rpm_release_default}}
 %define _mysql_dist %{?mysql_dist:%{mysql_dist}}%{!?mysql_dist:%{mysql_dist_default}}
 %define _mysql_download_base_url %{?mysql_download_base_url:%{mysql_download_base_url}}%{!?mysql_download_base_url:%{mysql_download_base_url_default}}
 %define _mysql_spec_file %{?mysql_spec_file:%{mysql_spec_file}}%{!?mysql_spec_file:%{mysql_spec_file_default}}
+
+%define _mysql_release %{_percona_server_version}.%{_rpm_release}
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
@@ -65,7 +69,7 @@ if [ ! -f ../../SRPMS/$srpm ]; then
 fi
 
 %build
-mysql_source=../percona-server-%{_mysql_version}-$(echo %{_mysql_release} | sed -e 's/rel//')
+mysql_source=../percona-server-%{_mysql_version}-%{_percona_server_version}
 if [ ! -d ${mysql_source} ]; then
     specs_dir=
     rpmbuild -bp \
