@@ -5,12 +5,12 @@
 %define mariadb_download_base_url_default http://vault.centos.org/7.2.1511/updates/Source/SPackages
 %define mariadb_spec_file_default mariadb.spec
 
-%define _mariadb_epoch %{?mariadb_epoch:%{mariadb_epoch}}%{!?mariadb_epoch:${mariadb_epoch_default}}
-%define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:${mariadb_version_default}}
-%define _mariadb_release %{?mariadb_release:%{mariadb_release}}%{!?mariadb_release:${mariadb_release_default}}
-%define _mariadb_dist %{?mariadb_dist:%{mariadb_dist}}%{!?mariadb_dist:${mariadb_dist_default}}
-%define _mariadb_download_base_url %{?mariadb_download_base_url:%{mariadb_download_base_url}}%{!?mariadb_download_base_url:${mariadb_download_base_url_default}}
-%define _mariadb_spec_file %{?mariadb_spec_file:%{mariadb_spec_file}}%{!?mariadb_spec_file:${mariadb_spec_file_default}}
+%define _mariadb_epoch %{?mariadb_epoch:%{mariadb_epoch}}%{!?mariadb_epoch:%{mariadb_epoch_default}}
+%define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}
+%define _mariadb_release %{?mariadb_release:%{mariadb_release}}%{!?mariadb_release:%{mariadb_release_default}}
+%define _mariadb_dist %{?mariadb_dist:%{mariadb_dist}}%{!?mariadb_dist:%{mariadb_dist_default}}
+%define _mariadb_download_base_url %{?mariadb_download_base_url:%{mariadb_download_base_url}}%{!?mariadb_download_base_url:%{mariadb_download_base_url_default}}
+%define _mariadb_spec_file %{?mariadb_spec_file:%{mariadb_spec_file}}%{!?mariadb_spec_file:%{mariadb_spec_file_default}}
 
 %define mariadb_package_version %{_mariadb_epoch}:%{_mariadb_version}-%{_mariadb_release}%{_mariadb_dist}
 
