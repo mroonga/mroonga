@@ -125,17 +125,17 @@ if ! $mysql_command -u root -e "quit" > /dev/null 2>&1; then
   fi
 fi
 
+mysql="${mysql_command} -u root ${password_option}"
+
 if [ -n "$auto_generated_password" ]; then
-  $mysql_command -u root $password_option \
-                 --connect-expired-password \
-                 -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+  ${mysql} --connect-expired-password \
+           -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
 fi
 
 current_version=0
 version=`echo %{groonga_required_version} | sed -e 's/\.//g'`
 required_version=`expr $version`
-version=`$mysql_command ${password_option} \
-  -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
+version=`${mysql} -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
   grep mroonga | cut -f 2 | sed -e 's/\.//g'`
 if [ -n "$version" ]; then
     current_version=`expr $version`
@@ -145,26 +145,24 @@ uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 
 if [ "$1" = 2 ] ; then
     if [ $current_version -lt $required_version ]; then
-	command="$mysql_command -u root $password_option"
 	echo "run the following command after restarting MySQL server:";
-	echo "  $command < ${uninstall_sql}"
-	echo "  $command < ${install_sql}"
+	echo "  ${mysql} < ${uninstall_sql}"
+	echo "  ${mysql} < ${install_sql}"
 	exit 0
     else
-	$mysql_command -u root $password_option < ${uninstall_sql} || \
+	${mysql} < ${uninstall_sql} || \
 	    (echo "run the following command to unregister Mroonga:"; \
-	     echo "  $mysql_command -u root $password_option < ${uninstall_sql}")
+	     echo "  ${mysql} < ${uninstall_sql}")
     fi
 fi
 
-$mysql_command -u root $password_option < ${install_sql} || \
-	(echo "run the following command to register Mroonga:"; \
-	 echo "  $mysql_command -u root $password_option < ${install_sql}")
+${mysql} < ${install_sql} || \
+  (echo "run the following command to register Mroonga:"; \
+   echo "  ${mysql} < ${install_sql}")
 
 if [ "$stop_after_installation" = "1" ]; then
   if [ -n "$auto_generated_password" ];then
-    $mysql_command -u root $password_option \
-                   -e "ALTER USER root@localhost PASSWORD EXPIRE"
+    ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
   /sbin/service mysqld stop
 fi
@@ -190,22 +188,22 @@ if ! $mysql_command -u root -e "quit" > /dev/null 2>&1; then
   fi
 fi
 
+mysql="${mysql_command} -u root ${password_option}"
+
 if [ -n "$auto_generated_password" ]; then
-  $mysql_command -u root $password_option \
-                 --connect-expired-password \
-                 -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+  ${mysql} --connect-expired-password \
+           -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
 fi
 
 if [ "$1" = 0 ]; then
-  $mysql_command -u root $password_option < ${uninstall_sql} || \
+  ${mysql} < ${uninstall_sql} || \
     (echo "run the following command to unregister Mroonga:"; \
-     echo "  $mysql_command -u root $password_option < ${uninstall_sql}")
+     echo "  ${mysql} < ${uninstall_sql}")
 fi
 
 if [ "$stop_after_uninstallation" = "1" ]; then
   if [ -n "$auto_generated_password" ];then
-    $mysql_command -u root $password_option \
-                   -e "ALTER USER root@localhost PASSWORD EXPIRE"
+    ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
   /sbin/service mysqld stop
 fi
