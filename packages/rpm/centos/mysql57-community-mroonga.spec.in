@@ -138,7 +138,7 @@ required_version=`expr $version`
 version=`${mysql} -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
   grep mroonga | cut -f 2 | sed -e 's/\.//g'`
 if [ -n "$version" ]; then
-    current_version=`expr $version`
+  current_version=`expr $version`
 fi
 install_sql=%{_datadir}/mroonga/install.sql
 uninstall_sql=%{_datadir}/mroonga/uninstall.sql
