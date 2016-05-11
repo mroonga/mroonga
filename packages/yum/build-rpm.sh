@@ -107,6 +107,10 @@ case ${distribution} in
         release_rpm=percona-release-${release_rpm_version}.noarch.rpm
         run yum install -y http://www.percona.com/downloads/percona-release/redhat/${release_rpm_version}/${release_rpm}
         run yum install -y Percona-Server-devel-57
+        if [ ${distribution_version} = 6 ]; then
+          run yum install -y epel-release
+          run yum install -y cmake28
+        fi
         ;;
     esac
 
