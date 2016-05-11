@@ -1,16 +1,16 @@
-%{!?centos_ver:%define centos_ver 6}
+%define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
 %define mysql_version_default 5.6.29
 %define mysql_release_default rel76.2
 %define mysql_dist_default    %{?dist}
-%define mysql_download_base_url_default http://repo.percona.com/centos/%{centos_ver}/SRPMS
+%define mysql_download_base_url_default http://repo.percona.com/centos/%{_centos_ver}/SRPMS
 %define mysql_spec_file_default percona-server.spec
 
-%{!?mysql_version:%define mysql_version %{mysql_version_default}}
-%{!?mysql_release:%define mysql_release %{mysql_release_default}}
-%{!?mysql_dist:%define mysql_dist %{mysql_dist_default}}
-%{!?mysql_download_base_url:%define mysql_download_base_url %{mysql_download_base_url_default}}
-%{!?mysql_spec_file:%define mysql_spec_file %{mysql_spec_file_default}}
+%define _mysql_version %{?mysql_version:%{mysql_version}}%{!?mysql_version:${mysql_version_default}}
+%define _mysql_release %{?mysql_release:%{mysql_release}}%{!?mysql_release:${mysql_release_default}}
+%define _mysql_dist %{?mysql_dist:%{mysql_dist}}%{!?mysql_dist:${mysql_dist_default}}
+%define _mysql_download_base_url %{?mysql_download_base_url:%{mysql_download_base_url}}%{!?mysql_download_base_url:${mysql_download_base_url_default}}
+%define _mysql_spec_file %{?mysql_spec_file:%{mysql_spec_file}}%{!?mysql_spec_file:${mysql_spec_file_default}}
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
@@ -31,10 +31,10 @@ BuildRequires:	wget
 BuildRequires:	which
 BuildRequires:	gcc
 BuildRequires:	gcc-c++
-BuildRequires:	Percona-Server-devel-56 = %{mysql_version}-%{mysql_release}%{mysql_dist}
+BuildRequires:	Percona-Server-devel-56 = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 BuildRequires:	selinux-policy-devel
-Requires:	Percona-Server-server-56 = %{mysql_version}-%{mysql_release}%{mysql_dist}
-Requires:	Percona-Server-client-56 = %{mysql_version}-%{mysql_release}%{mysql_dist}
+Requires:	Percona-Server-server-56 = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
+Requires:	Percona-Server-client-56 = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
 
@@ -55,21 +55,21 @@ Documentation for Mroonga
 %prep
 %setup -q -n mroonga-%{version}
 
-mysql_full_version=%{mysql_version}-%{mysql_release}.generic
+mysql_full_version=%{_mysql_version}-%{_mysql_release}.generic
 srpm=Percona-Server-56-${mysql_full_version}.src.rpm
 if [ ! -f ../../SRPMS/$srpm ]; then
-    wget --continue -O ../../SRPMS/$srpm %{mysql_download_base_url}/$srpm
+    wget --continue -O ../../SRPMS/$srpm %{_mysql_download_base_url}/$srpm
     rpm -Uvh ../../SRPMS/$srpm
 fi
 
 %build
-mysql_source=../percona-server-%{mysql_version}-$(echo %{mysql_release} | sed -e 's/rel//')
+mysql_source=../percona-server-%{_mysql_version}-$(echo %{_mysql_release} | sed -e 's/rel//')
 if [ ! -d ${mysql_source} ]; then
     specs_dir=
     rpmbuild -bp \
 	--define 'runselftest 0' \
 	--define 'optflags -O0' \
-	../../SPECS/%{mysql_spec_file}
+	../../SPECS/%{_mysql_spec_file}
 fi
 %configure \
     --disable-static \

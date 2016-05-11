@@ -5,14 +5,14 @@
 %define mariadb_download_base_url_default http://vault.centos.org/7.2.1511/updates/Source/SPackages
 %define mariadb_spec_file_default mariadb.spec
 
-%{!?mariadb_epoch:%define mariadb_epoch %{mariadb_epoch_default}}
-%{!?mariadb_version:%define mariadb_version %{mariadb_version_default}}
-%{!?mariadb_release:%define mariadb_release %{mariadb_release_default}}
-%{!?mariadb_dist:%define mariadb_dist %{mariadb_dist_default}}
-%{!?mariadb_download_base_url:%define mariadb_download_base_url %{mariadb_download_base_url_default}}
-%{!?mariadb_spec_file:%define mariadb_spec_file %{mariadb_spec_file_default}}
+%define _mariadb_epoch %{?mariadb_epoch:%{mariadb_epoch}}%{!?mariadb_epoch:${mariadb_epoch_default}}
+%define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:${mariadb_version_default}}
+%define _mariadb_release %{?mariadb_release:%{mariadb_release}}%{!?mariadb_release:${mariadb_release_default}}
+%define _mariadb_dist %{?mariadb_dist:%{mariadb_dist}}%{!?mariadb_dist:${mariadb_dist_default}}
+%define _mariadb_download_base_url %{?mariadb_download_base_url:%{mariadb_download_base_url}}%{!?mariadb_download_base_url:${mariadb_download_base_url_default}}
+%define _mariadb_spec_file %{?mariadb_spec_file:%{mariadb_spec_file}}%{!?mariadb_spec_file:${mariadb_spec_file_default}}
 
-%define mariadb_package_version %{mariadb_epoch}:%{mariadb_version}-%{mariadb_release}%{mariadb_dist}
+%define mariadb_package_version %{_mariadb_epoch}:%{_mariadb_version}-%{_mariadb_release}%{_mariadb_dist}
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
@@ -30,9 +30,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	wget
-BuildRequires:	mariadb-devel = %{mariadb_package_version}
-Requires:	mariadb-server = %{mariadb_package_version}
-Requires:	mariadb = %{mariadb_package_version}
+BuildRequires:	mariadb-devel = %{_mariadb_package_version}
+Requires:	mariadb-server = %{_mariadb_package_version}
+Requires:	mariadb = %{_mariadb_package_version}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
 
@@ -53,21 +53,21 @@ Documentation for Mroonga
 %prep
 %setup -q -n mroonga-%{version}
 
-mariadb_full_version=%{mariadb_version}-%{mariadb_release}%{mariadb_dist}
+mariadb_full_version=%{_mariadb_version}-%{_mariadb_release}%{_mariadb_dist}
 srpm=mariadb-${mariadb_full_version}.src.rpm
 if [ ! -f ../../SRPMS/$srpm ]; then
-  wget --continue -O ../../SRPMS/$srpm %{mariadb_download_base_url}/$srpm
+  wget --continue -O ../../SRPMS/$srpm %{_mariadb_download_base_url}/$srpm
   rpm -Uvh ../../SRPMS/$srpm
   rm ../../SRPMS/$srpm
 fi
 
 %build
-mariadb_source=../mariadb-%{mariadb_version}
+mariadb_source=../mariadb-%{_mariadb_version}
 if [ ! -d ${mariadb_source} ]; then
   rpmbuild -bc                                  \
     --define 'runselftest 0'                    \
     --define 'optflags -O0'                     \
-    ../../SPECS/%{mariadb_spec_file}
+    ../../SPECS/%{_mariadb_spec_file}
 fi
 %configure                                      \
   --disable-static                              \
