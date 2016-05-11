@@ -32,6 +32,7 @@ BuildRequires:  which
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
+BuildRequires:  numactl-devel
 BuildRequires:  Percona-Server-devel-57 = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 BuildRequires:  selinux-policy-devel
 Requires:       Percona-Server-server-57 = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
