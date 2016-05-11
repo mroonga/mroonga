@@ -40,7 +40,7 @@ BuildRequires:	which
 BuildRequires:	gcc
 BuildRequires:	gcc-c++
 BuildRequires:	cmake
-BuildRequires:  numactl-devel
+BuildRequires:	numactl-devel
 BuildRequires:	mysql-community-devel = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 Requires:	mysql-community-server = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 Requires:	mysql-community-client = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
