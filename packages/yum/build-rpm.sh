@@ -102,6 +102,12 @@ case ${distribution} in
         run yum install -y http://www.percona.com/downloads/percona-release/redhat/${release_rpm_version}/${release_rpm}
         run yum install -y Percona-Server-devel-56
         ;;
+      percona-server-57-${PACKAGE})
+        release_rpm_version=0.1-3
+        release_rpm=percona-release-${release_rpm_version}.noarch.rpm
+        run yum install -y http://www.percona.com/downloads/percona-release/redhat/${release_rpm_version}/${release_rpm}
+        run yum install -y Percona-Server-devel-57
+        ;;
     esac
 
     release_rpm=groonga-release-1.1.0-1.noarch.rpm
@@ -114,6 +120,11 @@ esac
 run yum install -y ${DEPENDED_PACKAGES}
 
 if [ "${package_name}" = "percona-server-56-${PACKAGE}" ]; then
+  if [ "${distribution_version}" = "7" ]; then
+    rpmbuild_options="$rpmbuild_options --define 'dist .el7'"
+  fi
+fi
+if [ "${package_name}" = "percona-server-57-${PACKAGE}" ]; then
   if [ "${distribution_version}" = "7" ]; then
     rpmbuild_options="$rpmbuild_options --define 'dist .el7'"
   fi

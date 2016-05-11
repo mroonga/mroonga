@@ -519,6 +519,7 @@ AC_OUTPUT([
   packages/rpm/centos/mysql57-community-mroonga.spec
   packages/rpm/centos/mariadb-mroonga.spec
   packages/rpm/centos/percona-server-56-mroonga.spec
+  packages/rpm/centos/percona-server-57-mroonga.spec
   packages/yum/env.sh
   data/install.sql
 ])

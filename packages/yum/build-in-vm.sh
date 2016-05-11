@@ -44,6 +44,9 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
     percona-server-56)
       centos_versions="6 7"
       ;;
+    percona-server-57)
+      centos_versions="6 7"
+      ;;
   esac
 
   for architecture in ${architectures}; do

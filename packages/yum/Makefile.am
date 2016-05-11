@@ -6,7 +6,8 @@ MYSQL_VARIANTS =				\
 	mysql56-community			\
 	mysql57-community			\
 	mariadb					\
-	percona-server-56
+	percona-server-56			\
+	percona-server-57
 SPEC_DIR = $(builddir)/../rpm/centos
 
 all:
@@ -67,3 +68,4 @@ specs: $(SPEC_DIR)/mysql55-$(PACKAGE).spec
 specs: $(SPEC_DIR)/mysql56-community-$(PACKAGE).spec
 specs: $(SPEC_DIR)/mariadb-$(PACKAGE).spec
 specs: $(SPEC_DIR)/percona-server-56-$(PACKAGE).spec
+specs: $(SPEC_DIR)/percona-server-57-$(PACKAGE).spec
