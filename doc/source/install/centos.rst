@@ -146,10 +146,10 @@ Install::
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
   % sudo yum makecache
-  % sudo yum install -y Percona-Server-server-57
-  % sudo /sbin/service mysql start
   % sudo yum install -y percona-server-57-mroonga
-  (% sudo mysqladmin -u root password 'new-password')
+  (% sudo /sbin/service mysql start)
+  (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+  (% sudo mysqladmin -u root --password="${tmp_password}" password)
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
@@ -245,9 +245,8 @@ Install::
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
   % sudo yum makecache
-  % sudo yum install -y Percona-Server-server-56
-  % sudo /sbin/service mysqld start
   % sudo yum install -y percona-server-56-mroonga
+  (% sudo systemctl start mysqld)
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
@@ -270,10 +269,10 @@ Install::
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
   % sudo yum makecache
-  % sudo yum install -y Percona-Server-server-57
-  % sudo /sbin/service mysqld start
   % sudo yum install -y percona-server-57-mroonga
-  (% sudo mysqladmin -u root password 'new-password')
+  (% sudo systemctl start mysqld)
+  (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+  (% sudo mysqladmin -u root --password="${tmp_password}" password)
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
