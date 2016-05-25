@@ -3800,15 +3800,11 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   grn_obj *index_column;
-  const char *column_name = NULL;
-  int column_name_size = 0;
 
   bool is_multiple_column_index = KEY_N_KEY_PARTS(key_info) > 1;
   if (!is_multiple_column_index) {
     Field *field = key_info->key_part[0].field;
-    column_name = field->field_name;
-    column_name_size = strlen(column_name);
-    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+    if (strcmp(MRN_COLUMN_NAME_ID, field->field_name) == 0) {
       // skipping _id virtual column
       DBUG_RETURN(0);
     }
@@ -3869,10 +3865,11 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
       int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
       for (j = 0; j < n_key_parts; j++) {
         Field *field = key_info->key_part[j].field;
-        const char *column_name = field->field_name;
-        int column_name_size = strlen(column_name);
-        grn_obj *source_column = grn_obj_column(ctx, grn_table,
-                                                column_name, column_name_size);
+        mrn::ColumnName column_name(field->field_name);
+        grn_obj *source_column = grn_obj_column(ctx,
+                                                grn_table,
+                                                column_name.c_str(),
+                                                column_name.length());
         grn_id source_id = grn_obj_id(ctx, source_column);
         GRN_UINT32_PUT(ctx, &source_ids, source_id);
         grn_obj_unlink(ctx, source_column);
@@ -3882,8 +3879,13 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
       grn_obj_unlink(ctx, &source_ids);
     }
   } else {
+    Field *field = key_info->key_part[0].field;
+    mrn::ColumnName column_name(field->field_name);
     grn_obj *column;
-    column = grn_obj_column(ctx, grn_table, column_name, column_name_size);
+    column = grn_obj_column(ctx,
+                            grn_table,
+                            column_name.c_str(),
+                            column_name.length());
     if (column) {
       grn_obj source_ids;
       grn_id source_id = grn_obj_id(ctx, column);

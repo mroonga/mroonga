@@ -21,6 +21,7 @@ SELECT * FROM users;
 SELECT * FROM users
 WHERE MATCH (名前) AGAINST ('+たなか' IN BOOLEAN MODE);
 名前
+たなか
 SELECT mroonga_command("dump --dump_plugins no --dump_records no");
 mroonga_command("dump --dump_plugins no --dump_records no")
 table_create mroonga_operations TABLE_NO_KEY
@@ -33,5 +34,5 @@ column_create users @540d@524d COLUMN_SCALAR LongText
 
 table_create users#@540d@524d TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerMySQLGeneralCI
 
-column_create users#@540d@524d index COLUMN_INDEX|WITH_POSITION users
+column_create users#@540d@524d index COLUMN_INDEX|WITH_POSITION users @540d@524d
 DROP TABLE users;
