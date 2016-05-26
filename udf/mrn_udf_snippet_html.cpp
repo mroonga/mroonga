@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2015-2016 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -40,6 +40,11 @@ typedef struct st_mrn_snippet_html_info
   bool use_shared_db;
   grn_obj *snippet;
   String result_str;
+  struct {
+    bool used;
+    grn_obj *table;
+    grn_obj *default_column;
+  } query_mode;
 } mrn_snippet_html_info;
 
 static my_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
@@ -56,6 +61,7 @@ static my_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
   const char *open_tag = "<span class=\"keyword\">";
   const char *close_tag = "</span>";
   grn_snip_mapping *mapping = GRN_SNIP_MAPPING_HTML_ESCAPE;
+  grn_obj *expr = NULL;
   grn_rc rc;
   String *result_str = &(info->result_str);
 
@@ -80,7 +86,73 @@ static my_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
     goto error;
   }
 
-  {
+  if (info->query_mode.used) {
+    if (!info->query_mode.table) {
+      grn_obj *short_text;
+      short_text = grn_ctx_at(info->ctx, GRN_DB_SHORT_TEXT);
+      info->query_mode.table = grn_table_create(info->ctx,
+                                                NULL, 0, NULL,
+                                                GRN_TABLE_HASH_KEY,
+                                                short_text,
+                                                NULL);
+    }
+    if (!info->query_mode.default_column) {
+      info->query_mode.default_column =
+        grn_obj_column(info->ctx,
+                       info->query_mode.table,
+                       GRN_COLUMN_NAME_KEY,
+                       GRN_COLUMN_NAME_KEY_LEN);
+    }
+
+    grn_obj *record = NULL;
+    GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->query_mode.table, expr, record);
+    if (!expr) {
+      if (message) {
+        snprintf(message, MYSQL_ERRMSG_SIZE,
+                 "mroonga_snippet_html(): "
+                 "failed to create expression: <%s>",
+                 ctx->errbuf);
+      }
+      goto error;
+    }
+
+    // TODO: Use the same flags get logic in
+    // ha_mroonga::generic_ft_init_ext_parse_pragma().
+    grn_expr_flags flags = GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
+    rc = grn_expr_parse(info->ctx,
+                        expr,
+                        args->args[1],
+                        args->lengths[1],
+                        info->query_mode.default_column,
+                        GRN_OP_MATCH,
+                        GRN_OP_OR,
+                        flags);
+    if (rc != GRN_SUCCESS) {
+      if (message) {
+        snprintf(message, MYSQL_ERRMSG_SIZE,
+                 "mroonga_snippet_html(): "
+                 "failed to parse query: <%s>",
+                 ctx->errbuf);
+      }
+      goto error;
+    }
+
+    rc = grn_expr_snip_add_conditions(info->ctx,
+                                      expr,
+                                      *snippet,
+                                      0,
+                                      NULL, NULL,
+                                      NULL, NULL);
+    if (rc != GRN_SUCCESS) {
+      if (message) {
+        snprintf(message, MYSQL_ERRMSG_SIZE,
+                 "mroonga_snippet_html(): "
+                 "failed to add conditions: <%s>",
+                 ctx->errbuf);
+      }
+      goto error;
+    }
+  } else {
     unsigned int i;
     for (i = 1; i < args->arg_count; ++i) {
       if (!args->args[i]) {
@@ -106,6 +178,9 @@ static my_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
   DBUG_RETURN(FALSE);
 
 error:
+  if (expr) {
+    grn_obj_close(ctx, expr);
+  }
   if (*snippet) {
     grn_obj_close(ctx, *snippet);
   }
@@ -193,6 +268,16 @@ MRN_API my_bool mroonga_snippet_html_init(UDF_INIT *init,
               info->ctx->errbuf);
       goto error;
     }
+  }
+
+  info->query_mode.used = FALSE;
+
+  if (args->arg_count == 2 &&
+      args->attribute_lengths[1] == strlen("query") &&
+      strncmp(args->attributes[1], "query", strlen("query")) == 0) {
+    info->query_mode.used = TRUE;
+    info->query_mode.table = NULL;
+    info->query_mode.default_column = NULL;
   }
 
   {
@@ -340,6 +425,14 @@ MRN_API void mroonga_snippet_html_deinit(UDF_INIT *init)
 
   if (info->snippet) {
     grn_obj_close(info->ctx, info->snippet);
+  }
+  if (info->query_mode.used) {
+    if (info->query_mode.default_column) {
+      grn_obj_close(info->ctx, info->query_mode.default_column);
+    }
+    if (info->query_mode.table) {
+      grn_obj_close(info->ctx, info->query_mode.table);
+    }
   }
   MRN_STRING_FREE(info->result_str);
   if (!info->use_shared_db) {
