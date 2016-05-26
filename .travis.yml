@@ -10,10 +10,10 @@ env:
   - MYSQL_VERSION=mysql-5.6.30
   - MYSQL_VERSION=mysql-5.7.12
   - MYSQL_VERSION=mariadb-5.5.48
-#  - MYSQL_VERSION=mariadb-10.0.23
-#  - MYSQL_VERSION=mariadb-10.0.23 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
-  - MYSQL_VERSION=mariadb-10.0.23 MROONGA_BUNDLED=yes
-  - MYSQL_VERSION=mariadb-10.0.23 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
+#  - MYSQL_VERSION=mariadb-10.0.25
+#  - MYSQL_VERSION=mariadb-10.0.25 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
+  - MYSQL_VERSION=mariadb-10.0.25 MROONGA_BUNDLED=yes
+  - MYSQL_VERSION=mariadb-10.0.25 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
 #  - MYSQL_VERSION=mariadb-10.1.14
   - MYSQL_VERSION=mariadb-10.1.14 MROONGA_BUNDLED=yes
   - MYSQL_VERSION=mariadb-10.2.0 MROONGA_BUNDLED=yes
@@ -21,10 +21,10 @@ matrix:
   allow_failures:
 #    - env: MYSQL_VERSION=mysql-system
 #    - env: MYSQL_VERSION=mariadb-5.5.48
-#    - env: MYSQL_VERSION=mariadb-10.0.23
-#    - env: MYSQL_VERSION=mariadb-10.0.23 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
-#    - env: MYSQL_VERSION=mariadb-10.0.23 MROONGA_BUNDLED=yes
-    - env: MYSQL_VERSION=mariadb-10.0.23 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
+#    - env: MYSQL_VERSION=mariadb-10.0.25
+#    - env: MYSQL_VERSION=mariadb-10.0.25 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
+#    - env: MYSQL_VERSION=mariadb-10.0.25 MROONGA_BUNDLED=yes
+    - env: MYSQL_VERSION=mariadb-10.0.25 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
 #    - env: MYSQL_VERSION=mariadb-10.1.14
 #    - env: MYSQL_VERSION=mariadb-10.1.14 MROONGA_BUNDLED=yes
 #    - env: MYSQL_VERSION=mariadb-10.2.0 MROONGA_BUNDLED=yes
