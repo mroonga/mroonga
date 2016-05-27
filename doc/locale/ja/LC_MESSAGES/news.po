@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-04-27 18:33+0900\n"
+"PO-Revision-Date: 2016-05-27 16:04+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,46 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 6.02 - 2016-04-29"
-msgstr "6.02リリース - 2016-04-29"
+msgid "Release 6.03 - 2016-05-29"
+msgstr "6.03リリース - 2016-05-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.7 on CentOS 6/7."
+msgstr ""
+"[:doc:`/install/centos`] CentOS 6/7でPercona Server 5.7をサポートしました。"
+
+msgid "[UDF][``mroonga_snippet_html``] Supported query format as keywords::"
+msgstr "[UDF][``mroonga_snippet_html``] クエリにAS句が書けるようになりました。"
+
+msgid "``AS query`` is important in the above example."
+msgstr "上記のサンプルで大事なのは ``AS query`` のところです。"
+
+msgid "[:doc:`/install/windows`] Supported MariaDB 10.1.14 on Windows."
+msgstr ""
+"[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[storage] Fixed a bug that full text index against multibyte column doesn't "
+"work. [Gitter:groonga/ja:5745315728011d9f574b9425][Reported by yoyoshifgs]"
+msgstr ""
+"[ストレージモード] マルチバイトのカラム名に対するフルテキストインデックスが機"
+"能していない不具合を修正しました。 [Gitter:groonga/"
+"ja:5745315728011d9f574b9425] [yoyoshifgsさんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "yoyoshifgs"
+msgstr "yoyoshifgsさん"
+
+msgid "Release 6.02 - 2016-04-29"
+msgstr "6.02リリース - 2016-04-29"
 
 msgid "[deb] Supported multiarch. [Reported by hirobanex]"
 msgstr "[deb] multiarchをサポートしました。[hirobanexさんが報告]"
@@ -66,20 +101,11 @@ msgstr ""
 "[ストレージモード] カラム名にマルチバイト文字を使えるようにしました。 "
 "[Gitter:groonga/ja:570270f7d478c81e2cbcdc89] [yoyoshifgsさんが報告]"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid "Fixed compile error with MySQL 5.7."
 msgstr "MySQL 5.7でコンパイルエラーになる問題を修正しました。"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "hirobanex"
 msgstr "hirobanexさん"
-
-msgid "yoyoshifgs"
-msgstr "yoyoshifgsさん"
 
 msgid "Release 6.01 - 2016-03-29"
 msgstr "6.01リリース - 2016-03-29"
