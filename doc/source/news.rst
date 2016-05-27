@@ -5,6 +5,36 @@
 News
 ====
 
+.. _release-6-03:
+
+Release 6.03 - 2016-05-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Supported Percona Server 5.7 on CentOS 6/7.
+
+* [UDF][``mroonga_snippet_html``] Supported query format as keywords::
+
+    mroonga_snippet_html(column, '...query format...' AS query);
+
+  ``AS query`` is important in the above example.
+
+* [:doc:`/install/windows`] Supported MariaDB 10.1.14 on Windows.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that full text index against multibyte column
+  doesn't work. [Gitter:groonga/ja:5745315728011d9f574b9425][Reported
+  by yoyoshifgs]
+
+Thanks
+^^^^^^
+
+* yoyoshifgs
+
 .. _release-6-02:
 
 Release 6.02 - 2016-04-29
