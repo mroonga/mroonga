@@ -12,7 +12,7 @@
 %define _mariadb_download_base_url %{?mariadb_download_base_url:%{mariadb_download_base_url}}%{!?mariadb_download_base_url:%{mariadb_download_base_url_default}}
 %define _mariadb_spec_file %{?mariadb_spec_file:%{mariadb_spec_file}}%{!?mariadb_spec_file:%{mariadb_spec_file_default}}
 
-%define mariadb_package_version %{_mariadb_epoch}:%{_mariadb_version}-%{_mariadb_release}%{_mariadb_dist}
+%define _mariadb_package_version %{_mariadb_epoch}:%{_mariadb_version}-%{_mariadb_release}%{_mariadb_dist}
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
