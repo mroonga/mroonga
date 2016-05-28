@@ -12,7 +12,10 @@ Build-Depends:
 	libmysqld-dev,
 	libssl-dev,
 	wget,
-	lsb-release
+	lsb-release,
+	cmake,
+	libwrap0-dev,
+	libedit-dev
 Standards-Version: 3.9.1
 Homepage: http://mroonga.org/
 
