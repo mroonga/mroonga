@@ -45,8 +45,10 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/reference/udf.rst \
 	$(top_srcdir)/doc/source/reference/udf/mroonga_command.rst \
 	$(top_srcdir)/doc/source/reference/udf/mroonga_escape.rst \
+	$(top_srcdir)/doc/source/reference/udf/mroonga_last_insert_grn_id.rst \
 	$(top_srcdir)/doc/source/reference/udf/mroonga_normalize.rst \
 	$(top_srcdir)/doc/source/reference/udf/mroonga_snippet.rst \
+	$(top_srcdir)/doc/source/reference/udf/mroonga_snippet_html.rst \
 	$(top_srcdir)/doc/source/tutorial.rst \
 	$(top_srcdir)/doc/source/tutorial/installation_check.rst \
 	$(top_srcdir)/doc/source/tutorial/mode.rst \
@@ -111,8 +113,10 @@ source_files_relative_from_doc_dir = \
 	source/reference/udf.rst \
 	source/reference/udf/mroonga_command.rst \
 	source/reference/udf/mroonga_escape.rst \
+	source/reference/udf/mroonga_last_insert_grn_id.rst \
 	source/reference/udf/mroonga_normalize.rst \
 	source/reference/udf/mroonga_snippet.rst \
+	source/reference/udf/mroonga_snippet_html.rst \
 	source/tutorial.rst \
 	source/tutorial/installation_check.rst \
 	source/tutorial/mode.rst \
@@ -261,8 +265,10 @@ html_files_relative_from_locale_dir = \
 	html/_sources/reference/udf.txt \
 	html/_sources/reference/udf/mroonga_command.txt \
 	html/_sources/reference/udf/mroonga_escape.txt \
+	html/_sources/reference/udf/mroonga_last_insert_grn_id.txt \
 	html/_sources/reference/udf/mroonga_normalize.txt \
 	html/_sources/reference/udf/mroonga_snippet.txt \
+	html/_sources/reference/udf/mroonga_snippet_html.txt \
 	html/_sources/tutorial.txt \
 	html/_sources/tutorial/installation_check.txt \
 	html/_sources/tutorial/mode.txt \
@@ -333,8 +339,10 @@ html_files_relative_from_locale_dir = \
 	html/reference/udf.html \
 	html/reference/udf/mroonga_command.html \
 	html/reference/udf/mroonga_escape.html \
+	html/reference/udf/mroonga_last_insert_grn_id.html \
 	html/reference/udf/mroonga_normalize.html \
 	html/reference/udf/mroonga_snippet.html \
+	html/reference/udf/mroonga_snippet_html.html \
 	html/search.html \
 	html/searchindex.js \
 	html/tutorial.html \
