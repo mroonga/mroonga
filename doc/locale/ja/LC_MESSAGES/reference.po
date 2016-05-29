@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-04-17 23:21+0900\n"
+"PO-Revision-Date: 2016-05-29 13:36+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -2026,6 +2026,20 @@ msgstr ""
 msgid "It returns escaped string."
 msgstr "エスケープされた文字列を返します。"
 
+msgid "``mroonga_last_insert_grn_id()``"
+msgstr ""
+
+msgid ""
+"``mroonga_last_insert_grn_id()`` UDF provides functionality to get id of "
+"last inserted record."
+msgstr ""
+
+msgid "This id is unique in Groonga."
+msgstr ""
+
+msgid "It returns id of last inserted record."
+msgstr ""
+
 msgid "``mroonga_normalize()``"
 msgstr ""
 
@@ -2241,3 +2255,15 @@ msgstr "N番目の単語の終了テキストを指定します。"
 
 msgid "It returns snippet string."
 msgstr "スニペット文字列を返します。"
+
+msgid "``mroonga_snippet_html()``"
+msgstr ""
+
+msgid ""
+"``mroonga_snippet_html()`` UDF provides functionality to get highlighted "
+"keyword in context."
+msgstr ""
+
+msgid ""
+"``mroonga_snippet_html()`` has required parameter and optional parameter::"
+msgstr "``mroonga_snippet_html()`` には必須引数と省略可能引数とがあります。::"
