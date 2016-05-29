@@ -42,7 +42,7 @@ since Mroonga 4.01 release.
 
 Install::
 
-  % sudo yum install -y centos-release-SCL
+  % sudo yum install -y centos-release-scl
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql55-mysql-server
