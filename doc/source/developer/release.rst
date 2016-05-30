@@ -330,6 +330,7 @@ mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを�
 各種メーリングリストにリリースメールを流します。
 
 * ml@mysql.gr.jp 日本語アナウンス
+* mysql@lists.mysql.com 英語アナウンス (http://lists.mysql.com/mysql から登録できる)
 * groonga-dev@lists.osdn.me 日本語アナウンス
 * groonga-talk@lists.sourceforge.net 英語アナウンス
 
