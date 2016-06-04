@@ -6,9 +6,9 @@ dist: trusty
 language: cpp
 env:
   - MYSQL_VERSION=mysql-system
-  - MYSQL_VERSION=mysql-5.5.48
-  - MYSQL_VERSION=mysql-5.6.30
-  - MYSQL_VERSION=mysql-5.7.12
+  - MYSQL_VERSION=mysql-5.5.30
+  - MYSQL_VERSION=mysql-5.6.31
+  - MYSQL_VERSION=mysql-5.7.13
   - MYSQL_VERSION=mariadb-5.5.48
 #  - MYSQL_VERSION=mariadb-10.0.25
 #  - MYSQL_VERSION=mariadb-10.0.25 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
@@ -20,7 +20,7 @@ env:
 matrix:
   allow_failures:
 #    - env: MYSQL_VERSION=mysql-system
-#    - env: MYSQL_VERSION=mariadb-5.5.48
+#    - env: MYSQL_VERSION=mariadb-5.5.30
 #    - env: MYSQL_VERSION=mariadb-10.0.25
 #    - env: MYSQL_VERSION=mariadb-10.0.25 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
 #    - env: MYSQL_VERSION=mariadb-10.0.25 MROONGA_BUNDLED=yes
