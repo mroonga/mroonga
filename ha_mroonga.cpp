@@ -14728,30 +14728,11 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   DBUG_RETURN(result);
 }
 
-bool ha_mroonga::storage_inplace_alter_table_index(
+bool ha_mroonga::storage_inplace_alter_table_add_index(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info)
 {
   MRN_DBUG_ENTER_METHOD();
-
-  bool have_error = false;
-  int error = 0;
-  uint n_keys;
-  uint i, j = 0;
-  KEY *key_info = table_share->key_info;
-  mrn::PathMapper mapper(share->table_name);
-  n_keys = ha_alter_info->index_drop_count;
-  for (i = 0; i < n_keys; ++i) {
-    KEY *key = ha_alter_info->index_drop_buffer[i];
-    while (strcmp(key_info[j].name, key->name)) {
-      ++j;
-    }
-    error = drop_index(share, j);
-    if (error)
-      DBUG_RETURN(true);
-    grn_index_tables[j] = NULL;
-    grn_index_columns[j] = NULL;
-  }
 
   MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_tables,
                                       ha_alter_info->key_count);
@@ -14798,11 +14779,11 @@ bool ha_mroonga::storage_inplace_alter_table_index(
     KEY *p_key_info = &table->key_info[table_share->primary_key];
     mrn_set_bitmap_by_key(table->read_set, p_key_info);
   }
-  n_keys = ha_alter_info->index_add_count;
-  for (i = 0; i < n_keys; ++i) {
+  int error = 0;
+  uint n_keys = ha_alter_info->index_add_count;
+  for (uint i = 0; i < n_keys; ++i) {
     uint key_pos = ha_alter_info->index_add_buffer[i];
-    KEY *key =
-      &altered_table->key_info[key_pos];
+    KEY *key = &altered_table->key_info[key_pos];
     if (share->disable_keys && !(key->flags & HA_NOSAME)) {
       continue; // key is disabled
     }
@@ -14811,6 +14792,7 @@ bool ha_mroonga::storage_inplace_alter_table_index(
       break;
     }
     DBUG_PRINT("info", ("mroonga: add key pos=%u", key_pos));
+    mrn::PathMapper mapper(share->table_name);
     if ((error = storage_create_index(table, mapper.table_name(), grn_table,
                                       tmp_share, key, index_tables,
                                       index_columns, key_pos)))
@@ -14840,7 +14822,7 @@ bool ha_mroonga::storage_inplace_alter_table_index(
   if (!error && have_multiple_column_index) {
     my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
     uint n_columns = altered_table->s->fields;
-    for (i = 0; i < n_columns; ++i) {
+    for (uint i = 0; i < n_columns; ++i) {
       Field *field = altered_table->field[i];
       field->move_field_offset(ptr_diff);
     }
@@ -14854,17 +14836,18 @@ bool ha_mroonga::storage_inplace_alter_table_index(
     } else if (error) {
       my_message(error, "failed to create multiple column index", MYF(0));
     }
-    for (i = 0; i < n_columns; ++i) {
+    for (uint i = 0; i < n_columns; ++i) {
       Field *field = altered_table->field[i];
       field->move_field_offset(-ptr_diff);
     }
   }
   bitmap_set_all(table->read_set);
 
+  bool have_error = false;
   if (error)
   {
     n_keys = ha_alter_info->index_add_count;
-    for (i = 0; i < n_keys; ++i) {
+    for (uint i = 0; i < n_keys; ++i) {
       uint key_pos = ha_alter_info->index_add_buffer[i];
       KEY *key =
         &altered_table->key_info[key_pos];
@@ -14883,6 +14866,33 @@ bool ha_mroonga::storage_inplace_alter_table_index(
   my_free(tmp_share);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
+
+  DBUG_RETURN(have_error);
+}
+
+bool ha_mroonga::storage_inplace_alter_table_drop_index(
+  TABLE *altered_table,
+  Alter_inplace_info *ha_alter_info)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  bool have_error = false;
+  uint n_keys;
+  uint i, j = 0;
+  KEY *key_info = table_share->key_info;
+  mrn::PathMapper mapper(share->table_name);
+  n_keys = ha_alter_info->index_drop_count;
+  for (i = 0; i < n_keys; ++i) {
+    KEY *key = ha_alter_info->index_drop_buffer[i];
+    while (strcmp(key_info[j].name, key->name) != 0) {
+      ++j;
+    }
+    int error = drop_index(share, j);
+    if (error != 0)
+      DBUG_RETURN(true);
+    grn_index_tables[j] = NULL;
+    grn_index_columns[j] = NULL;
+  }
 
   DBUG_RETURN(have_error);
 }
@@ -14940,8 +14950,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
     }
 
     Field *field = altered_table->s->field[i];
-    const char *column_name = field->field_name;
-    int column_name_size = strlen(column_name);
+    mrn::ColumnName column_name(field->field_name);
 
     int error = mrn_add_column_param(tmp_share, field, i);
     if (error) {
@@ -14967,7 +14976,9 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
     char *col_path = NULL; // we don't specify path
 
     grn_obj *column_obj =
-      grn_column_create(ctx, table_obj, column_name, column_name_size,
+      grn_column_create(ctx, table_obj,
+                        column_name.c_str(),
+                        column_name.length(),
                         col_path, col_flags, col_type);
     if (ctx->rc) {
       error = ER_WRONG_COLUMN_NAME;
@@ -15110,16 +15121,14 @@ bool ha_mroonga::storage_inplace_alter_table(
     have_error = true;
   }
 
-  Alter_inplace_info::HA_ALTER_FLAGS index_related_flags =
-    Alter_inplace_info::ADD_INDEX |
+  Alter_inplace_info::HA_ALTER_FLAGS drop_index_related_flags =
     Alter_inplace_info::DROP_INDEX |
-    Alter_inplace_info::ADD_UNIQUE_INDEX |
     Alter_inplace_info::DROP_UNIQUE_INDEX |
-    Alter_inplace_info::ADD_PK_INDEX |
     Alter_inplace_info::DROP_PK_INDEX;
   if (!have_error &&
-      (ha_alter_info->handler_flags & index_related_flags)) {
-    have_error = storage_inplace_alter_table_index(altered_table, ha_alter_info);
+      (ha_alter_info->handler_flags & drop_index_related_flags)) {
+    have_error = storage_inplace_alter_table_drop_index(altered_table,
+                                                        ha_alter_info);
   }
 
   Alter_inplace_info::HA_ALTER_FLAGS add_column_related_flags =
@@ -15141,6 +15150,16 @@ bool ha_mroonga::storage_inplace_alter_table(
   if (!have_error &&
       (ha_alter_info->handler_flags & rename_column_related_flags)) {
     have_error = storage_inplace_alter_table_rename_column(altered_table, ha_alter_info);
+  }
+
+  Alter_inplace_info::HA_ALTER_FLAGS add_index_related_flags =
+    Alter_inplace_info::ADD_INDEX |
+    Alter_inplace_info::ADD_UNIQUE_INDEX |
+    Alter_inplace_info::ADD_PK_INDEX;
+  if (!have_error &&
+      (ha_alter_info->handler_flags & add_index_related_flags)) {
+    have_error = storage_inplace_alter_table_add_index(altered_table,
+                                                       ha_alter_info);
   }
 
   DBUG_RETURN(have_error);
