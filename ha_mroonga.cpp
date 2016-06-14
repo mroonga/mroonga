@@ -10121,8 +10121,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       if (item->type() == Item::FIELD_ITEM)
       {
         Field *field = static_cast<Item_field *>(item)->field;
-        const char *column_name = field->field_name;
-        int column_name_size = strlen(column_name);
+        mrn::ColumnName column_name(field->field_name);
 
         if (should_normalize(field))
         {
@@ -10137,7 +10136,8 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
 
         if (is_storage_mode) {
           (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
-                                               column_name, column_name_size);
+                                               column_name.c_str(),
+                                               column_name.length());
         } else {
           if (is_primary_key_field(field)) {
             (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
