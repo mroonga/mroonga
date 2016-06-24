@@ -63,6 +63,10 @@ class Uploader
     dput_cf_content.each_line do |line|
       return if line.chomp == "[#{@dput_configuration_name}]"
     end
+    parser.on("--ppa=PPA",
+              "The personal package archive name (groonga-ppa or groonga-nightly") do |ppa|
+      @dput_configuration_name = ppa
+    end
 
     dput_cf_path.open("w") do |dput_cf|
       dput_cf.puts(dput_cf_content)
