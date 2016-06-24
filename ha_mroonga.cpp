@@ -9924,14 +9924,11 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
       for (where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
            where;
            where = where->next) {
-        Item *target = where;
-
         if (where->type() == Item::FUNC_ITEM) {
           Item_func *func_item = static_cast<Item_func *>(where);
           if (func_item->argument_count() == 0) {
             break;
           }
-          target = func_item->key_item();
           where = where->next;
           if (func_item->arguments()[0] == where) {
             uint n_args = func_item->argument_count();
@@ -9939,11 +9936,8 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
               where = where->next;
             }
           }
-        }
-
-        if (target->type() == Item::FIELD_ITEM)
-        {
-          Field *field = ((Item_field *)target)->field;
+        } else if (where->type() == Item::FIELD_ITEM) {
+          Field *field = static_cast<Item_field *>(where)->field;
           if (!field)
             break;
           if (field->table != table)
