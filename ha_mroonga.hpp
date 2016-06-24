@@ -612,6 +612,7 @@ private:
                             int error_code);
   grn_obj *find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i);
   grn_obj *find_tokenizer(const char *name, int name_length);
+  bool have_custom_normalizer(KEY *key) const;
   grn_obj *find_normalizer(KEY *key);
   grn_obj *find_normalizer(KEY *key, const char *name);
   bool find_index_column_flags(KEY *key, grn_obj_flags *index_column_flags);

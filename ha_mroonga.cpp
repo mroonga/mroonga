@@ -2765,7 +2765,7 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
       part = 0;
     }
     Field *field = &(key->key_part[part].field[0]);
-    if (field && should_normalize(field)) {
+    if (field && (have_custom_normalizer(key) || should_normalize(field))) {
       need_normalize_p = true;
     }
     if (!need_normalize_p) {
@@ -3069,7 +3069,8 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
     grn_obj_unlink(ctx, &token_filters);
   }
 
-  if (should_normalize(&key_info->key_part->field[0])) {
+  if (have_custom_normalizer(key_info) ||
+      should_normalize(&key_info->key_part->field[0])) {
     grn_info_type info_type = GRN_INFO_NORMALIZER;
     grn_obj *normalizer = find_normalizer(key_info);
     if (normalizer) {
@@ -3772,11 +3773,14 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
     grn_obj *normalizer = NULL;
     Field *field = &(key_info->key_part->field[0]);
     if (key_info->flags & HA_FULLTEXT) {
-      if (should_normalize(field)) {
+      if (have_custom_normalizer(key_info) ||
+          should_normalize(field)) {
         normalizer = find_normalizer(key_info);
       }
     } else if (key_alg != HA_KEY_ALG_HASH) {
-      if (!is_multiple_column_index && should_normalize(field)) {
+      if (!is_multiple_column_index &&
+          (have_custom_normalizer(key_info) ||
+           should_normalize(field))) {
         normalizer = find_normalizer(key_info);
       }
     }
@@ -9420,6 +9424,26 @@ grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
     tokenizer = grn_ctx_at(ctx, GRN_DB_BIGRAM);
   }
   DBUG_RETURN(tokenizer);
+}
+
+bool ha_mroonga::have_custom_normalizer(KEY *key) const
+{
+  MRN_DBUG_ENTER_METHOD();
+
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (key->option_struct->normalizer) {
+    DBUG_RETURN(true);
+  }
+#endif
+
+  if (key->comment.length > 0) {
+    mrn::ParametersParser parser(key->comment.str,
+                                 key->comment.length);
+    parser.parse();
+    DBUG_RETURN(parser["normalizer"] != NULL);
+  }
+
+  DBUG_RETURN(false);
 }
 
 grn_obj *ha_mroonga::find_normalizer(KEY *key)
