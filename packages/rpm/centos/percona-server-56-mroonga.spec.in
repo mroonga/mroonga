@@ -179,6 +179,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Wed Jun 29 2016 Kentaro Hayashi <hayashi@clear-code.com> - 6.05-1
+- new upstream release.
+
 * Sun May 29 2016 Kentaro Hayashi <hayashi@clear-code.com> - 6.03-1
 - new upstream release.
 
