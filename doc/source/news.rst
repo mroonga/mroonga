@@ -5,6 +5,26 @@
 News
 ====
 
+.. _release-6-05:
+
+Release 6.05 - 2016-06-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [centos] Supported CentOS 6.8.
+* [storage] Supported multibyte column name in inplace ALTER TABLE.
+  Note that MySQL 5.6 or later can use inplace ALTER TABLE for adding
+  columns and indexes.
+* [storage] support ORDER BY LIMIT optimization for multibyte column.
+  [Gitter:groonga/ja:575e6e671cf76dd64536997c][Reported by yoyoshifgs]
+
+Thanks
+^^^^^^
+
+* yoyoshifgs
+
 .. _release-6-03:
 
 Release 6.03 - 2016-05-29
