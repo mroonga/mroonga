@@ -87,19 +87,22 @@ allow_unsigned_uploads = 0
     @mysql56_versions = {}
     @mysql57_versions = {}
     @code_names.each do |code_name|
-      allpackages_url =
-        "http://packages.ubuntu.com/#{code_name}/allpackages?format=txt.gz"
-      open(allpackages_url) do |file|
-        file.each_line do |line|
-          case line
-          when /\Amysql-server \((.+?)\)/
-            @mysql_versions[code_name] = $1
-          when /\Amysql-server-5\.5 \((.+?) \[/
-            @mysql55_versions[code_name] = $1
-          when /\Amysql-server-5\.6 \((.+?) \[/
-            @mysql56_versions[code_name] = $1
-          when /\Amysql-server-5\.7 \((.+?) \[/
-            @mysql57_versions[code_name] = $1
+      source_names = [code_name, "#{code_name}-updates"]
+      source_names.each do |source_name|
+        allpackages_url =
+          "http://packages.ubuntu.com/#{source_name}/allpackages?format=txt.gz"
+        open(allpackages_url) do |file|
+          file.each_line do |line|
+            case line
+            when /\Amysql-server \((.+?)\)/
+              @mysql_versions[code_name] = $1
+            when /\Amysql-server-5\.5 \((.+?) \[/
+              @mysql55_versions[code_name] = $1
+            when /\Amysql-server-5\.6 \((.+?) \[/
+              @mysql56_versions[code_name] = $1
+            when /\Amysql-server-5\.7 \((.+?) \[/
+              @mysql57_versions[code_name] = $1
+            end
           end
         end
       end
