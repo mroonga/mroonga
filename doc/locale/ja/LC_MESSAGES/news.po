@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-05-27 16:04+0900\n"
+"PO-Revision-Date: 2016-06-27 16:20+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,62 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 6.03 - 2016-05-29"
-msgstr "6.03リリース - 2016-05-29"
+msgid "Release 6.05 - 2016-06-29"
+msgstr "6.05リリース - 2016-06-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[centos] Supported CentOS 6.8."
+msgstr "[centos] CentOS 6.8をサポートしました。"
+
+msgid ""
+"[storage] Supported multibyte column name in inplace ALTER TABLE. Note that "
+"MySQL 5.6 or later can use inplace ALTER TABLE for adding columns and "
+"indexes."
+msgstr ""
+"[ストレージモード] マルチバイト文字を使用したカラムに対し、INPLACE ALTER "
+"TABLEに対応しました。カラムの追加やインデックスの追加でINPLACE ALTER TABLEで"
+"きるのはMySQL 5.6以降です。"
+
+msgid ""
+"[storage] support ORDER BY LIMIT optimization for multibyte column. [Gitter:"
+"groonga/ja:575e6e671cf76dd64536997c][Reported by yoyoshifgs]"
+msgstr ""
+"[ストレージモード] マルチバイト文字を使ったカラムでも ORDER BY LIMIT の最適化"
+"が有効になりました。 [Gitter:groonga/ja:575e6e671cf76dd64536997c][yoyoshifgs"
+"さんが報告]"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[storage count skip] Fixed invalid optimization which should no be applied. "
+"It affects to the result of row count. [Gitter:groonga/"
+"ja:5761ea97da1c26b045368c84][Reported by yoyoshifgs]"
+msgstr ""
+"[ストレージモード count skip] すべきでない最適化が適用されてしまう不具合を修"
+"正しました。この不具合は行カウントの結果に影響していました。 [Gitter:groonga/"
+"ja:5761ea97da1c26b045368c84][yoyoshifgsさんが報告]"
+
+msgid ""
+"Fixed to apply custom normalizer even if collation is bin family. [Gitter:"
+"groonga/ja:576d2a2d80f1c6a5257f1270][Reported by big_bridge_]"
+msgstr ""
+"照合順序が ``*_bin`` でもノーマライザーの指定が有効になるようにしました。 "
+"[Gitter:groonga/ja:576d2a2d80f1c6a5257f1270][big_bridge_さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "yoyoshifgs"
+msgstr "yoyoshifgsさん"
+
+msgid "big_bridge_"
+msgstr "big_bridge_さん"
+
+msgid "Release 6.03 - 2016-05-29"
+msgstr "6.03リリース - 2016-05-29"
 
 # 2cf79c00c0ec4896b9beffee50c10cc1
 msgid "[:doc:`/install/centos`] Supported Percona Server 5.7 on CentOS 6/7."
@@ -42,9 +93,6 @@ msgid "[:doc:`/install/windows`] Supported MariaDB 10.1.14 on Windows."
 msgstr ""
 "[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[storage] Fixed a bug that full text index against multibyte column doesn't "
 "work. [Gitter:groonga/ja:5745315728011d9f574b9425][Reported by yoyoshifgs]"
@@ -52,12 +100,6 @@ msgstr ""
 "[ストレージモード] マルチバイトのカラム名に対するフルテキストインデックスが機"
 "能していない不具合を修正しました。 [Gitter:groonga/"
 "ja:5745315728011d9f574b9425] [yoyoshifgsさんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
-
-msgid "yoyoshifgs"
-msgstr "yoyoshifgsさん"
 
 msgid "Release 6.02 - 2016-04-29"
 msgstr "6.02リリース - 2016-04-29"
