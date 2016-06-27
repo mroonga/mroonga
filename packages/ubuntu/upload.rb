@@ -94,13 +94,13 @@ allow_unsigned_uploads = 0
         open(allpackages_url) do |file|
           file.each_line do |line|
             case line
-            when /\Amysql-server \((.+?)\)/
+            when /\Amysql-server \((.+?)[\s)]/
               @mysql_versions[code_name] = $1
-            when /\Amysql-server-5\.5 \((.+?) \[/
+            when /\Amysql-server-5\.5 \((.+?)[\s)]/
               @mysql55_versions[code_name] = $1
-            when /\Amysql-server-5\.6 \((.+?) \[/
+            when /\Amysql-server-5\.6 \((.+?)[\s)]/
               @mysql56_versions[code_name] = $1
-            when /\Amysql-server-5\.7 \((.+?) \[/
+            when /\Amysql-server-5\.7 \((.+?)[\s)]/
               @mysql57_versions[code_name] = $1
             end
           end
