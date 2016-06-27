@@ -22,10 +22,22 @@ Improvements
 * [storage] support ORDER BY LIMIT optimization for multibyte column.
   [Gitter:groonga/ja:575e6e671cf76dd64536997c][Reported by yoyoshifgs]
 
+Fixes
+^^^^^
+
+* [storage count skip] Fixed invalid optimization which should no be
+  applied. It affects to the result of row count.
+  [Gitter:groonga/ja:5761ea97da1c26b045368c84][Reported by yoyoshifgs]
+
+* Fixed to apply custom normalizer even if collation is bin family.
+  [Gitter:groonga/ja:576d2a2d80f1c6a5257f1270][Reported by
+  big_bridge_]
+
 Thanks
 ^^^^^^
 
 * yoyoshifgs
+* big_bridge_
 
 .. _release-6-03:
 
