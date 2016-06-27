@@ -1494,6 +1494,11 @@ msgstr ""
 msgid "ml@mysql.gr.jp 日本語アナウンス"
 msgstr ""
 
+msgid ""
+"mysql@lists.mysql.com 英語アナウンス (http://lists.mysql.com/mysql から登録で"
+"きる)"
+msgstr ""
+
 # 5600b8044793460f856f1f876d1542d7
 msgid "groonga-dev@lists.osdn.me 日本語アナウンス"
 msgstr ""
