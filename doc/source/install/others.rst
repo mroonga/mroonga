@@ -183,20 +183,20 @@ this parameter::
   % ./configure \
       --with-mysql-source=/usr/local/src/mysql-5.6.21
 
-``--with-default-parser=PARSER``
-++++++++++++++++++++++++++++++++
+``--with-default-tokenizer=TOKENIZER``
+++++++++++++++++++++++++++++++++++++++
 
-Specifies the default parser for full text. You can custom it in
+Specifies the default tokenizer for full text. You can custom it in
 my.cnf.
 
 The default is ``TokenBigram``.
 
-Here is an example to use ``TokenMecab`` as the default parser::
+Here is an example to use ``TokenMecab`` as the default tokenizer::
 
   % ./configure \
       --with-mysql-source=/usr/local/src/mysql-5.6.21 \
       --with-mysql-config=/usr/local/mysql/bin/mysql_config \
-      --with-default-parser=TokenMecab
+      --with-default-tokenizer=TokenMecab
 
 ``--prefix=PATH``
 +++++++++++++++++
