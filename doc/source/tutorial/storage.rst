@@ -89,13 +89,13 @@ MySQL has the following syntax to specify the parser [#parser]_ for full text se
 
 To use this syntax, you need to register all parsers in MySQL beforehand. On the other hand, Groonga can dynamically add a tokenizer, that is a parser in MySQL. So if use this syntax in Mroonga, tokenizers that are added in Groonga dynamically cannot be supported. We think that this limitation decreases the convenience, and we choose our own syntax using COMMENT like the following. ::
 
-  FULLTEXT INDEX (content) COMMENT 'parser "TokenMecab"'
+  FULLTEXT INDEX (content) COMMENT 'tokenizer "TokenMecab"'
 
 .. note::
 
    ``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If you use MySQL 5.1, use ``mroonga_default_parser`` variable described below.
 
-You can specify one of following values as the parser.
+You can specify one of following values as the tokenizer.
 
 off
   It does not tokenize at all. Use "off" if you want to treat ``content`` as is. For example, this value is used for prefix search.
@@ -159,20 +159,20 @@ TokenUnigram
 TokenTrigram
   It tokenises in trigram. But continuous alphabets, numbers or symbols are treated as a token. So there can exist tokes with 4 letters or more. It is to reduce noises.
 
-You can specify the default parser by passing ``--with-default-parser`` option in ``configure`` when you build mroonga ::
+You can specify the default parser by passing ``--with-default-tokenizer`` option in ``configure`` when you build mroonga ::
 
-  ./configure --with-default-parser TokenMecab ...
+  ./configure --with-default-tokenizer TokenMecab ...
 
-Or you can set ``mroonga_default_parser`` variable in my.cnf or by SQL. If you specify it in my.cnf, the change will not be lost after restarting MySQL, but you need to restart MySQL to make it effective. On the other hand, if you set it in SQL, the change is effective immediately, but it will be lost when you restart MySQL.
+Or you can set ``mroonga_default_tokenizer`` variable in my.cnf or by SQL. If you specify it in my.cnf, the change will not be lost after restarting MySQL, but you need to restart MySQL to make it effective. On the other hand, if you set it in SQL, the change is effective immediately, but it will be lost when you restart MySQL.
 
 my.cnf::
 
   [mysqld]
-  mroonga_default_parser=TokenMecab
+  mroonga_default_tokenizer=TokenMecab
 
 SQL::
 
-  mysql> SET GLOBAL mroonga_default_parser = TokenMecab;
+  mysql> SET GLOBAL mroonga_default_tokenizer = TokenMecab;
   Query OK, 0 rows affected (0.00 sec)
 
 How to specify the normalizer
