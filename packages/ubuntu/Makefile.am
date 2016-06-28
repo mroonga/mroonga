@@ -22,6 +22,7 @@ upload: source ensure-launchpad-configuration
 	  --source-archive-directory '$(builddir)/' \
 	  --code-names '$(CODE_NAMES)' \
 	  --debian-base-directory '$(srcdir)/../' \
+	  --ppa '$(LAUNCHPAD_PPA)' \
 	  --pgp-sign-key '$(LAUNCHPAD_UPLOADER_PGP_KEY)'
 
 source: $(SOURCE_55) $(SOURCE_56) $(SOURCE_57)
