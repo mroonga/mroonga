@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-06-30 14:37+0900\n"
+"PO-Revision-Date: 2016-06-30 14:49+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -17,10 +17,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.8.8\n"
-"POT-Creation-Date: \n"
 
 msgid "News"
 msgstr "お知らせ"
+
+#, fuzzy
+msgid "Release 6.06 - 2016-06-30"
+msgstr "6.05リリース - 2016-06-29"
+
+msgid "Fixes"
+msgstr "修正"
+
+#, fuzzy
+msgid ""
+"[mariadb10] Fixed a crash bug. [Gitter:groonga/ja:57746049265214c130a655ed]"
+"[Reported by yoyoshifgs]"
+msgstr ""
+"[ストレージモード] カラム名にマルチバイト文字を使えるようにしました。 "
+"[Gitter:groonga/ja:570270f7d478c81e2cbcdc89] [yoyoshifgsさんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "yoyoshifgs"
+msgstr "yoyoshifgsさん"
 
 msgid "Release 6.05 - 2016-06-29"
 msgstr "6.05リリース - 2016-06-29"
@@ -48,9 +68,6 @@ msgstr ""
 "が有効になりました。 [Gitter:groonga/ja:575e6e671cf76dd64536997c][yoyoshifgs"
 "さんが報告]"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[storage count skip] Fixed invalid optimization which should no be applied. "
 "It affects to the result of row count. [Gitter:groonga/"
@@ -66,12 +83,6 @@ msgid ""
 msgstr ""
 "照合順序が ``*_bin`` でもノーマライザーの指定が有効になるようにしました。 "
 "[Gitter:groonga/ja:576d2a2d80f1c6a5257f1270][big_bridge_さんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
-
-msgid "yoyoshifgs"
-msgstr "yoyoshifgsさん"
 
 msgid "big_bridge_"
 msgstr "big_bridge_さん"
