@@ -478,11 +478,12 @@ msgstr ""
 "要はありません。例えば、 ``mysql_config`` が ``/usr/bin/mysql_config`` にある"
 "場合はこの引数を指定する必要はありません::"
 
-msgid "``--with-default-parser=PARSER``"
+msgid "``--with-default-tokenizer=TOKENIZER``"
 msgstr ""
 
+#, fuzzy
 msgid ""
-"Specifies the default parser for full text. You can custom it in my.cnf."
+"Specifies the default tokenizer for full text. You can custom it in my.cnf."
 msgstr ""
 "全文検索用のデフォルトのパーサーを指定します。この値はmy.cnfでもカスタマイズ"
 "できます。"
@@ -490,7 +491,8 @@ msgstr ""
 msgid "The default is ``TokenBigram``."
 msgstr "デフォルト値は ``TokenBigram`` です。"
 
-msgid "Here is an example to use ``TokenMecab`` as the default parser::"
+#, fuzzy
+msgid "Here is an example to use ``TokenMecab`` as the default tokenizer::"
 msgstr "デフォルトのパーサーとして ``TokenMecab`` を使う例です::"
 
 msgid "``--prefix=PATH``"

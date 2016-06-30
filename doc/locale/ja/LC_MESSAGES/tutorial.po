@@ -230,7 +230,8 @@ msgstr ""
 "MySQL 5.1を利用している場合は後述の ``mroonga_default_parser`` 変数を利用して"
 "ください。"
 
-msgid "You can specify one of following values as the parser."
+#, fuzzy
+msgid "You can specify one of following values as the tokenizer."
 msgstr "パーサに指定できるのは以下の値です。"
 
 msgid ""
@@ -448,16 +449,18 @@ msgstr ""
 msgid "TokenTrigram"
 msgstr ""
 
+#, fuzzy
 msgid ""
-"You can specify the default parser by passing ``--with-default-parser`` "
+"You can specify the default parser by passing ``--with-default-tokenizer`` "
 "option in ``configure`` when you build mroonga ::"
 msgstr ""
 "デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションで"
 "ビルド時に指定することができます。::"
 
+#, fuzzy
 msgid ""
-"Or you can set ``mroonga_default_parser`` variable in my.cnf or by SQL. If "
-"you specify it in my.cnf, the change will not be lost after restarting "
+"Or you can set ``mroonga_default_tokenizer`` variable in my.cnf or by SQL. "
+"If you specify it in my.cnf, the change will not be lost after restarting "
 "MySQL, but you need to restart MySQL to make it effective. On the other "
 "hand, if you set it in SQL, the change is effective immediately, but it will "
 "be lost when you restart MySQL."
@@ -959,9 +962,10 @@ msgstr ""
 "とインデックスの不整合が発生します。インデックスを使った検索に影響するので、"
 "その場合にはMroongaのインデックスを再作成します。)"
 
+#, fuzzy
 msgid ""
-"You can specify the default parser by passing ``--with-default-parser`` "
-"option in ``configure`` when you build Mroonga. ::"
+"You can specify the default tokenizer by passing ``--with-default-"
+"tokenizer`` option in ``configure`` when you build Mroonga. ::"
 msgstr ""
 "デフォルトのパーサは ``configure`` の ``--with-default-parser`` オプションで"
 "ビルド時に指定することができます。::"

@@ -39,9 +39,10 @@ msgstr ""
 "TABLEに対応しました。カラムの追加やインデックスの追加でINPLACE ALTER TABLEで"
 "きるのはMySQL 5.6以降です。"
 
+#, fuzzy
 msgid ""
-"[storage] support ORDER BY LIMIT optimization for multibyte column. [Gitter:"
-"groonga/ja:575e6e671cf76dd64536997c][Reported by yoyoshifgs]"
+"[storage] Supported ORDER BY LIMIT optimization for multibyte column. "
+"[Gitter:groonga/ja:575e6e671cf76dd64536997c][Reported by yoyoshifgs]"
 msgstr ""
 "[ストレージモード] マルチバイト文字を使ったカラムでも ORDER BY LIMIT の最適化"
 "が有効になりました。 [Gitter:groonga/ja:575e6e671cf76dd64536997c][yoyoshifgs"
