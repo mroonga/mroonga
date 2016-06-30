@@ -9431,7 +9431,7 @@ bool ha_mroonga::have_custom_normalizer(KEY *key) const
   MRN_DBUG_ENTER_METHOD();
 
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
-  if (key->option_struct->normalizer) {
+  if (key->option_struct && key->option_struct->normalizer) {
     DBUG_RETURN(true);
   }
 #endif
