@@ -5,6 +5,22 @@
 News
 ====
 
+.. _release-6-06:
+
+Release 6.06 - 2016-06-30
+-------------------------
+
+Fixes
+^^^^^
+
+* [mariadb10] Fixed a crash bug.
+  [Gitter:groonga/ja:57746049265214c130a655ed][Reported by yoyoshifgs]
+
+Thanks
+^^^^^^
+
+* yoyoshifgs
+
 .. _release-6-05:
 
 Release 6.05 - 2016-06-29
