@@ -13,7 +13,7 @@ Release 6.06 - 2016-06-30
 Fixes
 ^^^^^
 
-* [mariadb10] Fixed a crash bug.
+* [mariadb10] Fixed a crash bug on MariaDB 10.x.
   [Gitter:groonga/ja:57746049265214c130a655ed][Reported by yoyoshifgs]
 
 Thanks
