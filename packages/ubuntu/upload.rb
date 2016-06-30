@@ -63,10 +63,6 @@ class Uploader
     dput_cf_content.each_line do |line|
       return if line.chomp == "[#{@dput_configuration_name}]"
     end
-    parser.on("--ppa=PPA",
-              "The personal package archive name (groonga-ppa or groonga-nightly") do |ppa|
-      @dput_configuration_name = ppa
-    end
 
     dput_cf_path.open("w") do |dput_cf|
       dput_cf.puts(dput_cf_content)
@@ -130,6 +126,10 @@ allow_unsigned_uploads = 0
     parser.on("--debian-base-directory=DIRECTORY",
               "The directory that has debianXX/ directory") do |directory|
       @debian_base_directory = Pathname.new(directory).expand_path
+    end
+    parser.on("--ppa=PPA",
+              "The personal package archive name (groonga-ppa or groonga-nightly") do |ppa|
+      @dput_configuration_name = ppa
     end
     parser.on("--pgp-sign-key=KEY",
               "The PGP key to sign .changes and .dsc") do |pgp_sign_key|
