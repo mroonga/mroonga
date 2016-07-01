@@ -9987,6 +9987,8 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
               }
             }
             break;
+          case Item_func::MULT_EQUAL_FUNC:
+            break;
           default:
             target = NULL;
             break;
