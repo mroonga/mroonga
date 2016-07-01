@@ -9967,11 +9967,25 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
           case Item_func::LE_FUNC:
           case Item_func::GE_FUNC:
           case Item_func::GT_FUNC:
-            target = func_item->arguments()[0];
-            where = where->next->next;
-            break;
           case Item_func::BETWEEN:
-            target = func_item->arguments()[0];
+            {
+              Item **arguments = func_item->arguments();
+              target = arguments[0];
+
+              uint n_arguments = func_item->argument_count();
+              bool argument_in_where = false;
+              for (uint i = 0; i < n_arguments; i++) {
+                if (arguments[i] == where->next) {
+                  argument_in_where = true;
+                  break;
+                }
+              }
+              if (argument_in_where) {
+                for (uint i = 0; i < n_arguments; i++) {
+                  where = where->next;
+                }
+              }
+            }
             break;
           default:
             target = NULL;
