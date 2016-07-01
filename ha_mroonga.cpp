@@ -226,6 +226,14 @@ static mysql_mutex_t *mrn_LOCK_open;
   ((select_lex)->options)
 #endif
 
+#if MYSQL_VERSION_ID >= 50712 && !defined(MRN_MARIADB_P)
+#  define MRN_ITEM_IS_VALID(item)                       \
+  ((item) && ((item)->type() != Item::INVALID_ITEM))
+#else
+#  define MRN_ITEM_IS_VALID(item)                       \
+  (item)
+#endif
+
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_TABLE_LIST_GET_DERIVED(table_list) NULL
 #else
@@ -9945,7 +9953,7 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
       KEY_PART_INFO *key_part = key_info->key_part;
       uint n_fields = 0;
       for (Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
-           where && where->type() != Item::INVALID_ITEM;
+           MRN_ITEM_IS_VALID(where);
            where = where->next) {
         Item *target = where;
 
