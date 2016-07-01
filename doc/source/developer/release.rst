@@ -118,13 +118,16 @@ make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリ�
 これにより、clone済みのMroongaのWebサイトのトップページのソース(index.html,ja/index.html)やRPMパッケージのspecファイルのバージョン表記などが更新されます。
 
 
-タグを打つ
-----------
+リリースタグの設定
+------------------
 
-``make tag`` とするとタグが打たれます。 ::
+リリース用のタグを打つには以下のコマンドを実行します。::
 
     % make tag
     % git push --tags origin
+
+.. note::
+   タグを打った後にconfigureを実行することで、ドキュメント生成時のバージョン番号に反映されます。
 
 
 配布用ファイルのアップロード
