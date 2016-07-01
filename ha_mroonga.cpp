@@ -9907,11 +9907,9 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
       DBUG_VOID_RETURN;
     }
 
-    uint i = 0;
-    Item *where;
     if (fulltext) {
       DBUG_PRINT("info", ("mroonga: count skip: fulltext"));
-      where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
+      Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
       if (!where ||
           where->type() != Item::FUNC_ITEM ||
           ((Item_func *)where)->functype() != Item_func::FT_FUNC) {
@@ -9945,50 +9943,65 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
       uint key_nr = active_index;
       KEY *key_info = &(table->key_info[key_nr]);
       KEY_PART_INFO *key_part = key_info->key_part;
-      for (where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
-           where;
+      uint n_fields = 0;
+      for (Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
+           where && where->type() != Item::INVALID_ITEM;
            where = where->next) {
+        Item *target = where;
+
         if (where->type() == Item::FUNC_ITEM) {
           Item_func *func_item = static_cast<Item_func *>(where);
-          if (func_item->argument_count() == 0) {
+          switch (func_item->functype()) {
+          case Item_func::EQ_FUNC:
+          case Item_func::EQUAL_FUNC:
+          case Item_func::NE_FUNC:
+          case Item_func::LT_FUNC:
+          case Item_func::LE_FUNC:
+          case Item_func::GE_FUNC:
+          case Item_func::GT_FUNC:
+            target = func_item->arguments()[0];
+            where = where->next->next;
+            break;
+          case Item_func::BETWEEN:
+            target = func_item->arguments()[0];
+            break;
+          default:
+            target = NULL;
             break;
           }
-          where = where->next;
-          if (func_item->arguments()[0] == where) {
-            uint n_args = func_item->argument_count();
-            for (; n_args > 0; --n_args) {
-              where = where->next;
-            }
-          }
-        } else if (where->type() == Item::FIELD_ITEM) {
-          Field *field = static_cast<Item_field *>(where)->field;
+          if (!target)
+            break;
+        }
+
+        if (target->type() == Item::FIELD_ITEM) {
+          Field *field = static_cast<Item_field *>(target)->field;
           if (!field)
             break;
           if (field->table != table)
             break;
-          uint j;
-          for (j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {
-            if (key_part[j].field == field)
-            {
-              if (!(start_key_part_map >> j) && !(end_key_part_map >> j))
-                j = KEY_N_KEY_PARTS(key_info);
-              else
-                i++;
+          uint i;
+          for (i = 0; i < KEY_N_KEY_PARTS(key_info); i++) {
+            if (key_part[i].field == field) {
+              if (!(start_key_part_map >> i) && !(end_key_part_map >> i)) {
+                i = KEY_N_KEY_PARTS(key_info);
+              } else {
+                n_fields++;
+              }
               break;
             }
           }
-          if (j >= KEY_N_KEY_PARTS(key_info))
+          if (i >= KEY_N_KEY_PARTS(key_info))
             break;
         }
-        if (i >= select_lex->select_n_where_fields)
-        {
-          DBUG_PRINT("info", ("mroonga: count skip: skip enabled"));
-          count_skip = true;
-          mrn_count_skip++;
-          DBUG_VOID_RETURN;
-        }
       }
-      DBUG_PRINT("info", ("mroonga: count skip: skip disabled"));
+      if (n_fields == select_lex->select_n_where_fields) {
+        DBUG_PRINT("info", ("mroonga: count skip: skip enabled"));
+        count_skip = true;
+        mrn_count_skip++;
+        DBUG_VOID_RETURN;
+      } else {
+        DBUG_PRINT("info", ("mroonga: count skip: skip disabled"));
+      }
     }
   }
   DBUG_PRINT("info", ("mroonga: count skip: select type is not match"));
