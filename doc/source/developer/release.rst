@@ -118,6 +118,15 @@ make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリ�
 これにより、clone済みのMroongaのWebサイトのトップページのソース(index.html,ja/index.html)やRPMパッケージのspecファイルのバージョン表記などが更新されます。
 
 
+タグを打つ
+----------
+
+``make tag`` とするとタグが打たれます。 ::
+
+    % make tag
+    % git push --tags origin
+
+
 配布用ファイルのアップロード
 ----------------------------
 
@@ -292,14 +301,6 @@ Linux 側でファイル名を変更します。これだと mroonga のバー�
     % mv mariadb-10.0.2-winx64.zip \
         packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-winx64.zip
 
-
-タグを打つ
-----------
-
-``make tag`` とするとタグが打たれます。 ::
-
-    % make tag
-    % git push --tags origin
 
 ドキュメントのアップロード
 --------------------------
