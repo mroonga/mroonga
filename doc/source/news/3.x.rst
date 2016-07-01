@@ -1,5 +1,8 @@
 .. highlightlang:: none
 
+News - 3.x
+==========
+
 .. _release-3-12:
 
 Release 3.12 - 2014/01/29
