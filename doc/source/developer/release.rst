@@ -188,12 +188,13 @@ Debian 系
 
     % cd apt
 
-その後、次のようにすれば一連のリリース作業（build sign-packages update-repository sign-repository upload）が行われますが、途中で失敗することもあります。 ::
+その後、次のようにすれば一連のリリース作業（download build sign-packages update-repository sign-repository upload）が行われますが、途中で失敗することもあります。 ::
 
     % make release
 
 そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともあります。 ::
 
+    % make download
     % make build
     % make sign-packages
     % make update-repository
