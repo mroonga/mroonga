@@ -14,8 +14,8 @@ env:
 #  - MYSQL_VERSION=mariadb-10.0.26 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
   - MYSQL_VERSION=mariadb-10.0.26 MROONGA_BUNDLED=yes
   - MYSQL_VERSION=mariadb-10.0.26 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
-#  - MYSQL_VERSION=mariadb-10.1.14
-  - MYSQL_VERSION=mariadb-10.1.14 MROONGA_BUNDLED=yes
+#  - MYSQL_VERSION=mariadb-10.1.16
+  - MYSQL_VERSION=mariadb-10.1.16 MROONGA_BUNDLED=yes
   - MYSQL_VERSION=mariadb-10.2.1 MROONGA_BUNDLED=yes
 matrix:
   allow_failures:
@@ -24,8 +24,8 @@ matrix:
 #    - env: MYSQL_VERSION=mariadb-10.0.26 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
 #    - env: MYSQL_VERSION=mariadb-10.0.26 MROONGA_BUNDLED=yes
     - env: MYSQL_VERSION=mariadb-10.0.26 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
-#    - env: MYSQL_VERSION=mariadb-10.1.14
-#    - env: MYSQL_VERSION=mariadb-10.1.14 MROONGA_BUNDLED=yes
+#    - env: MYSQL_VERSION=mariadb-10.1.16
+#    - env: MYSQL_VERSION=mariadb-10.1.16 MROONGA_BUNDLED=yes
 #    - env: MYSQL_VERSION=mariadb-10.2.1 MROONGA_BUNDLED=yes
 install:
   - tools/travis/install.sh
