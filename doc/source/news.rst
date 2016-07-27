@@ -5,6 +5,29 @@
 News
 ====
 
+.. _release-6-07:
+
+Release 6.07 - 2016-07-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage mysql57] Supported ``COUNT(*)`` skip optimization for
+  ``BETWEEN`` again.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 15.10 (Wily Werewolf)
+  support. It had been reached to End of Life on July 28, 2016.
+
+* [windows] Updated bundled MariaDB to 10.1.16.
+
+Fixes
+^^^^^
+
+* [mariadb55] Fixed to disable ``COUNT(*)`` skip optimization when it
+  can't be applied correctly. For example, ``SELECT COUNT(*) FROM
+  users WHERE age = 29;`` is such a case on MariaDB 5.5.
+
 .. _release-6-06:
 
 Release 6.06 - 2016-06-30
