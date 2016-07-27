@@ -18,7 +18,6 @@ Here are supported Ubuntu versions:
 
   * 12.04 LTS Precise Pangolin
   * 14.04 LTS Trusty Tahr
-  * 15.10 Wily Werewolf
   * 16.04 Xenial Xerus
 
 Enable the universe repository and the security update repository to
