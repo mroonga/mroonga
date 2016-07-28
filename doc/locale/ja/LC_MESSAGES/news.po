@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-06-30 16:03+0900\n"
+"PO-Revision-Date: 2016-07-28 12:47+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,44 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 6.06 - 2016-06-30"
-msgstr "6.06リリース - 2016-06-30"
+msgid "Release 6.07 - 2016-07-29"
+msgstr "6.07リリース - 2016-07-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid ""
+"[storage mysql57] Supported ``COUNT(*)`` skip optimization for ``BETWEEN`` "
+"again."
+msgstr ""
+"[ストレージモード mysql57] 行カウント ``COUNT(*)`` の最適化が ``BETWEEN`` で"
+"も再び有効になるようにしました。"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 15.10 (Wily Werewolf) support. It "
+"had been reached to End of Life on July 28, 2016."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 15.10（Wily Werewolf）のサポートをやめまし"
+"た。2016年7月28日でサポートが切れた（EOLになった）ためです。"
+
+msgid "[windows] Updated bundled MariaDB to 10.1.16."
+msgstr "[Windows] ベースにしているMariaDBを10.1.16にアップデートしました。"
 
 msgid "Fixes"
 msgstr "修正"
+
+msgid ""
+"[mariadb55] Fixed to disable ``COUNT(*)`` skip optimization when it can't be "
+"applied correctly. For example, ``SELECT COUNT(*) FROM users WHERE age = 29;"
+"`` is such a case on MariaDB 5.5."
+msgstr ""
+"[mariadb55] 行カウント ``COUNT(*)`` の最適化を正しく行えない場合には、無効に"
+"するようにしました。例えば、MariaDB 5.5では ``SELECT COUNT(*) FROM users "
+"WHERE age = 29;`` というクエリが該当します。"
+
+msgid "Release 6.06 - 2016-06-30"
+msgstr "6.06リリース - 2016-06-30"
 
 msgid ""
 "[mariadb10] Fixed a crash bug on MariaDB 10.x. [Gitter:groonga/"
@@ -42,9 +75,6 @@ msgstr "yoyoshifgsさん"
 
 msgid "Release 6.05 - 2016-06-29"
 msgstr "6.05リリース - 2016-06-29"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid "[centos] Supported CentOS 6.8."
 msgstr "[centos] CentOS 6.8をサポートしました。"
