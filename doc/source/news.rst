@@ -7,7 +7,7 @@ News
 
 .. _release-6-07:
 
-Release 6.07 - 2016-07-29
+Release 6.07 - 2016-08-04
 -------------------------
 
 Improvements
