@@ -6,14 +6,6 @@ id int PRIMARY KEY
 ALTER TABLE users
 ADD COLUMN 名前 text,
 ADD FULLTEXT INDEX (名前);
-SHOW CREATE TABLE users;
-Table	Create Table
-users	CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `名前` text,
-  PRIMARY KEY (`id`),
-  FULLTEXT KEY `名前` (`名前`)
-) ENGINE=Mroonga DEFAULT CHARSET=cp932
 INSERT INTO users VALUES (1, "やまだ");
 INSERT INTO users VALUES (2, "たなか");
 INSERT INTO users VALUES (3, "すずき");

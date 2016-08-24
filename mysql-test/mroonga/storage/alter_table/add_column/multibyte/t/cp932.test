@@ -35,7 +35,6 @@ CREATE TABLE users (
 ALTER TABLE users
   ADD COLUMN –¼‘O text,
   ADD FULLTEXT INDEX (–¼‘O);
-SHOW CREATE TABLE users;
 
 INSERT INTO users VALUES (1, "‚â‚Ü‚¾");
 INSERT INTO users VALUES (2, "‚½‚È‚©");

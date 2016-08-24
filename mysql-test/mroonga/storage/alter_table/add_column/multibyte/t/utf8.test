@@ -35,7 +35,6 @@ CREATE TABLE users (
 ALTER TABLE users
   ADD COLUMN 名前 text,
   ADD FULLTEXT INDEX (名前);
-SHOW CREATE TABLE users;
 
 INSERT INTO users VALUES (1, "やまだ");
 INSERT INTO users VALUES (2, "たなか");
