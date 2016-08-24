@@ -26,7 +26,6 @@ CREATE TABLE aniversary_memos (
   party_year YEAR,
   KEY (party_year)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE aniversary_memos;
 
 INSERT INTO aniversary_memos (title, party_year)
        VALUES ("We need a big cake!", "11");
