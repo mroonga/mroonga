@@ -27,7 +27,6 @@ CREATE TABLE diaries (
   updated_at TIMESTAMP DEFAULT '2016-04-21 00:00:00',
   KEY (updated_at)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, created_at, updated_at)
        VALUES ("clear day", "2012-01-29 21:51:01", "2012-01-29 21:51:02");
