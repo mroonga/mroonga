@@ -13,7 +13,12 @@ This limitation is derived from Groonga.
 
 * The maximum one key size: 4KiB
 * The maximum total size of keys: 4GiB
-* The maximum number of records: 268,435,455 (more than 268 million)
+* The maximum number of records:
+
+  * No primary key table: 1,073,741,815 (2 :sup:`30` - 9)
+  * ``PRIMARY KEY`` or ``PRIMARY KEY USING BTREE`` table:
+    1,073,741,823 (2 :sup:`30` - 1)
+  * ``PRIMARY KEY USING HASH`` table: 536,870,912 (2 :sup:`29`)
 
 Keep in mind that these limitations may vary depending on conditions.
 
