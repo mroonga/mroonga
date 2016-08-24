@@ -27,7 +27,6 @@ CREATE TABLE running_records (
   max TIME,
   KEY (average)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE running_records;
 
 INSERT INTO running_records (title, average, max)
        VALUES ("normal condition", "01:00:00", "01:05:00");
