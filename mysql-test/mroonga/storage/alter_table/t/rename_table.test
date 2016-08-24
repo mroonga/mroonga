@@ -28,7 +28,9 @@ CREATE TABLE diaries (
   FULLTEXT INDEX title_index (title),
   FULLTEXT INDEX body_index (body)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
+SELECT table_name, engine
+  FROM information_schema.tables
+ WHERE table_name = 'diaries';
 
 INSERT INTO diaries (title, body) VALUES ("survey", "will start groonga!");
 SELECT * FROM diaries;
@@ -42,7 +44,9 @@ SELECT * FROM memos
   WHERE MATCH(title) AGAINST("groonga") AND
         MATCH(body) AGAINST("starting");
 
-SHOW CREATE TABLE memos;
+SELECT table_name, engine
+  FROM information_schema.tables
+ WHERE table_name = 'memos';
 
 DROP TABLE memos;
 
