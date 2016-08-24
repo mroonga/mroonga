@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS diaries;
 
 CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  title TEXT,
+  title VARCHAR(40),
   created_at DATE,
   KEY (created_at)
 ) DEFAULT CHARSET UTF8;
