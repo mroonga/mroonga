@@ -5,6 +5,23 @@
 News
 ====
 
+.. _release-6-08:
+
+Release 6.08 - 2016-08-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm][centos] Supported latest MariaDB 5.5.50 on CentOS 7.
+
+* [rpm][centos] Supported Percona Server 5.6/5.7 on CentOS 6/7.
+
+Fixes
+^^^^^
+
+* Fixed compile error with GCC 6.1.1.
+
 .. _release-6-07:
 
 Release 6.07 - 2016-08-04
