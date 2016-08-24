@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS shops;
 
 CREATE TABLE shops (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  name TEXT,
+  name VARCHAR(40),
   location GEOMETRY NOT NULL
 );
 
