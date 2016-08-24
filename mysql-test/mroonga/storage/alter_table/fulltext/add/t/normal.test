@@ -31,9 +31,8 @@ INSERT INTO memos (content) values ("Started Groonga.");
 INSERT INTO memos (content) values ("Starting Mroonga...");
 
 ALTER TABLE memos ADD FULLTEXT INDEX content_index (content);
-SHOW CREATE TABLE memos;
 
-SELECT * FROM memos WHERE MATCH(content) AGAINST("groonga");
+SELECT * FROM memos WHERE MATCH(content) AGAINST("+groonga" IN BOOLEAN MODE);
 
 DROP TABLE memos;
 
