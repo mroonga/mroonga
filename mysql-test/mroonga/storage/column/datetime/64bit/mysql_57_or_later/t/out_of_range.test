@@ -29,7 +29,6 @@ CREATE TABLE diaries (
   title TEXT,
   created_at DATETIME
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
 
 --error ER_TRUNCATED_WRONG_VALUE
 INSERT INTO diaries (title, created_at)

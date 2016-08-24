@@ -3,13 +3,6 @@ CREATE TABLE timestamps (
 id INT PRIMARY KEY AUTO_INCREMENT,
 create_dt DATETIME
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE timestamps;
-Table	Create Table
-timestamps	CREATE TABLE `timestamps` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `create_dt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8
 INSERT INTO timestamps (create_dt) VALUES ("0000-00-00 00:00:00");
 ERROR 22007: Incorrect datetime value: '0000-00-00 00:00:00' for column 'create_dt' at row 1
 SELECT * FROM timestamps;

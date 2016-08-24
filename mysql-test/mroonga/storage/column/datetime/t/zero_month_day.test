@@ -26,7 +26,6 @@ CREATE TABLE timestamps (
   id INT PRIMARY KEY AUTO_INCREMENT,
   create_dt DATETIME
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE timestamps;
 
 INSERT INTO timestamps (create_dt) VALUES ("2012-00-01 00:00:00");
 INSERT INTO timestamps (create_dt) VALUES ("2012-01-00 00:00:00");

@@ -25,7 +25,6 @@ CREATE TABLE diaries (
   title TEXT,
   created_at DATETIME
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, created_at)
        VALUES ('NULL', NULL);

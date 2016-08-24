@@ -26,7 +26,6 @@ CREATE TABLE diaries (
   title TEXT,
   created_at DATETIME
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, created_at)
        VALUES ('2038-01-18 03:14:07', '2038-01-18 03:14:07');
