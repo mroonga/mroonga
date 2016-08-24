@@ -23,14 +23,14 @@ DROP TABLE IF EXISTS diaries;
 
 CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  title TEXT,
-  body TEXT
+  title VARCHAR(40),
+  body VARCHAR(140)
 ) DEFAULT CHARSET UTF8;
 SHOW CREATE TABLE diaries;
 
 ALTER TABLE diaries
-  CHANGE body description TEXT FIRST,
-  CHANGE title subject TEXT AFTER internal_id,
+  CHANGE body description VARCHAR(140) FIRST,
+  CHANGE title subject VARCHAR(40) AFTER internal_id,
   CHANGE id internal_id INT AUTO_INCREMENT;
 SHOW CREATE TABLE diaries;
 
