@@ -26,7 +26,6 @@ CREATE TABLE diaries (
   temperature DECIMAL,
   KEY (temperature)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, temperature) VALUES ("clear day", 21);
 INSERT INTO diaries (title, temperature) VALUES ("rainy day", 14);
