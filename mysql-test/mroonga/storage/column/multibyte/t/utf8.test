@@ -33,7 +33,6 @@ CREATE TABLE users (
   名前 text,
   FULLTEXT INDEX (名前)
 ) DEFAULT CHARSET=utf8;
-SHOW CREATE TABLE users;
 
 INSERT INTO users VALUES ("やまだ");
 INSERT INTO users VALUES ("たなか");
