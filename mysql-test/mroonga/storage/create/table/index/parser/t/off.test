@@ -25,7 +25,6 @@ CREATE TABLE variables (
   name TEXT,
   FULLTEXT INDEX (name) COMMENT 'parser "off"'
 ) DEFAULT CHARSET=utf8;
-SHOW CREATE TABLE variables;
 
 INSERT INTO variables (name) VALUES ("mroonga_database_path_prefix");
 INSERT INTO variables (name) VALUES ("mroonga_default_parser");

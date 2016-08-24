@@ -7,17 +7,9 @@ COMMENT 'parser "TokenBigramSplitSymbolAlphaDigit"'
 ) DEFAULT CHARSET utf8;
 Warnings:
 Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
-SHOW CREATE TABLE diaries;
-Table	Create Table
-diaries	CREATE TABLE `diaries` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `body` text,
-  PRIMARY KEY (`id`),
-  FULLTEXT KEY `body_index` (`body`) COMMENT 'parser "TokenBigramSplitSymbolAlphaDigit"'
-) ENGINE=Mroonga DEFAULT CHARSET=utf8
+INSERT INTO diaries (body) VALUES ("will start Groonga!");
 Warnings:
 Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
-INSERT INTO diaries (body) VALUES ("will start Groonga!");
 INSERT INTO diaries (body) VALUES ("starting Groonga...");
 INSERT INTO diaries (body) VALUES ("started Groonga.");
 SELECT * FROM diaries;
