@@ -27,7 +27,6 @@ CREATE TABLE diaries (
   content TEXT CHARSET utf8mb4 COLLATE utf8mb4_general_ci,
   FULLTEXT INDEX (content)
 ) DEFAULT CHARSET utf8mb4;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries VALUES(1, "Alphabet", "ABCDE");
 INSERT INTO diaries VALUES(2, "Mathmatics", "𝐀𝐁𝐂𝐃𝐄 | U+1D400-U+1D405");
