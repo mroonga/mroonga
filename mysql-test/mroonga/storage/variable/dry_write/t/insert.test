@@ -25,7 +25,6 @@ create table diaries (
   body text,
   fulltext index body_index (body)
 ) default charset utf8;
-show create table diaries;
 
 insert into diaries (body) values ("will start groonga!");
 select * from diaries;

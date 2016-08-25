@@ -31,7 +31,6 @@ CREATE TABLE diaries (
   title TEXT,
   FULLTEXT INDEX (title)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO users (name) VALUES ("alice");
 INSERT INTO users (name) VALUES ("bob");

@@ -26,7 +26,6 @@ CREATE TABLE diaries (
   tags TEXT,
   FULLTEXT INDEX tags_index (tags) COMMENT 'tokenizer "TokenDelimit"'
 ) DEFAULT CHARSET=UTF8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, tags) VALUES ("Hello groonga!", "groonga install");
 INSERT INTO diaries (title, tags) VALUES ("Hello mroonga!", "mroonga install");
