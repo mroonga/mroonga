@@ -27,7 +27,6 @@ create table diaries (
   content text,
   fulltext index (content)
 ) default charset utf8 comment = 'engine "innodb"';
-show create table diaries;
 
 LOCK TABLE diaries WRITE;
 insert into diaries values(1, "今日からはじめました。");
