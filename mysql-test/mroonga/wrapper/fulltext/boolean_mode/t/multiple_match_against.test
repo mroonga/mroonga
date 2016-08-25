@@ -29,7 +29,6 @@ CREATE TABLE diaries (
   FULLTEXT INDEX (title),
   FULLTEXT INDEX (content)
 ) DEFAULT CHARSET = UTF8 COMMENT = 'ENGINE "InnoDB"';
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries VALUES(1, "富士山", "今日からはじめました。");
 INSERT INTO diaries VALUES(2, "天気 １月１日", "明日の富士山の天気について");
