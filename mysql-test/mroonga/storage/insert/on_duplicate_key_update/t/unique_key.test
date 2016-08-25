@@ -26,7 +26,6 @@ CREATE TABLE diaries (
   title TEXT,
   UNIQUE KEY day (day)
 ) DEFAULT CHARSET=UTF8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (day, title)
        VALUES ("2012-02-14", "clear day1")
