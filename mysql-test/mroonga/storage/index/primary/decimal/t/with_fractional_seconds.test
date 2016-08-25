@@ -24,7 +24,6 @@ CREATE TABLE releases (
   version DECIMAL(6, 3) PRIMARY KEY,
   message TEXT
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE releases;
 
 INSERT INTO releases (version, message) VALUES (10.000, "10th release!");
 INSERT INTO releases (version, message) VALUES (10.001, "minor fix.");

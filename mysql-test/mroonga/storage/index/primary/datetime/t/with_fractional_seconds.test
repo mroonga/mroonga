@@ -25,7 +25,6 @@ CREATE TABLE diaries (
   day DATETIME(6) PRIMARY KEY,
   title TEXT
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (day, title)
        VALUES ("2012-01-29 21:51:01.111111", "clear day");
