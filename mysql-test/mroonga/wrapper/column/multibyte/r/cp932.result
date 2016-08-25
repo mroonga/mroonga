@@ -5,14 +5,6 @@ id int unsigned PRIMARY KEY AUTO_INCREMENT,
 名前 text,
 FULLTEXT INDEX (名前)
 ) DEFAULT CHARSET=cp932 COMMENT='Engine "InnoDB"';
-SHOW CREATE TABLE users;
-Table	Create Table
-users	CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `名前` text,
-  PRIMARY KEY (`id`),
-  FULLTEXT KEY `名前` (`名前`)
-) ENGINE=Mroonga DEFAULT CHARSET=cp932 COMMENT='Engine "InnoDB"'
 INSERT INTO users (名前) VALUES ("やまだ");
 INSERT INTO users (名前) VALUES ("たなか");
 INSERT INTO users (名前) VALUES ("すずき");

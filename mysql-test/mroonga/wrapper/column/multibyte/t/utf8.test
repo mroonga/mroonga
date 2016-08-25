@@ -35,7 +35,6 @@ CREATE TABLE users (
   名前 text,
   FULLTEXT INDEX (名前)
 ) DEFAULT CHARSET=utf8 COMMENT='Engine "InnoDB"';
-SHOW CREATE TABLE users;
 
 INSERT INTO users (名前) VALUES ("やまだ");
 INSERT INTO users (名前) VALUES ("たなか");
