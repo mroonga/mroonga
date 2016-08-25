@@ -29,7 +29,6 @@ create table shops (
   location geometry NOT NULL,
   spatial key location_index (location)
 ) comment = 'engine "innodb"';
-show create table shops;
 
 insert into shops (name, location)
            values ('sazare',
