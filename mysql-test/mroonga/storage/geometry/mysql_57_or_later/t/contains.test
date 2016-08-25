@@ -27,7 +27,6 @@ CREATE TABLE shops (
   location GEOMETRY NOT NULL,
   SPATIAL KEY location_index (location)
 );
-SHOW CREATE TABLE shops;
 
 INSERT INTO shops (name, location)
            VALUES ('nezu-no-taiyaki',
