@@ -28,7 +28,6 @@ CREATE TABLE diaries (
   FULLTEXT INDEX title_index (title),
   FULLTEXT INDEX body_index (body)
 ) COMMENT = 'ENGINE "InnoDB"' DEFAULT CHARSET=UTF8;
-SHOW CREATE TABLE diaries;
 
 START TRANSACTION;
 INSERT INTO diaries (title, body) VALUES ("survey", "will start groonga!");

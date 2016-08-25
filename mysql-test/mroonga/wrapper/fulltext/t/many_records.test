@@ -27,7 +27,6 @@ create table diaries (
   title varchar(255),
   fulltext index (title)
 ) default charset utf8 COMMENT = 'engine "innodb"';
-show create table diaries;
 
 set autocommit=0;
 insert into diaries values(0, "2011-07-14");
