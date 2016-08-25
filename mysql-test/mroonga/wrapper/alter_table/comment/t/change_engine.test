@@ -28,14 +28,15 @@ CREATE TABLE memos (
   content TEXT,
   FULLTEXT INDEX(content)
 ) DEFAULT CHARSET=utf8 COMMENT='engine "InnoDB"';
-SHOW CREATE TABLE memos;
 
 INSERT INTO memos (title, content) VALUES ("Hello", "I start to write memos!");
 INSERT INTO memos (title, content) VALUES ("groonga", "I start to use groonga!");
 INSERT INTO memos (title, content) VALUES ("mroonga", "I use mroonga too!");
 
 ALTER TABLE memos COMMENT='engine "MyISAM"';
-SHOW CREATE TABLE memos;
+SELECT table_name, table_comment
+  FROM information_schema.tables
+ WHERE table_name = 'memos';
 
 SELECT * FROM memos;
 SELECT * FROM memos WHERE MATCH(content) AGAINST("start" IN BOOLEAN MODE);
