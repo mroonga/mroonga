@@ -27,7 +27,6 @@ CREATE TABLE diaries (
   title TEXT,
   FULLTEXT INDEX title_index (title)
 ) DEFAULT CHARSET UTF8 COMMENT = 'ENGINE "InnoDB"';
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title) VALUES ("survey");
 SELECT * FROM diaries;
@@ -49,8 +48,6 @@ SELECT * FROM diaries
 SELECT * FROM diaries
   WHERE MATCH(title) AGAINST("groonga") AND
         MATCH(body) AGAINST("starting");
-
-SHOW CREATE TABLE diaries;
 
 DROP TABLE diaries;
 

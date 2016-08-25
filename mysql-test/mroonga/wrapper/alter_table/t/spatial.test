@@ -144,8 +144,6 @@ ALTER TABLE shops ADD SPATIAL KEY location_index (location);
 SELECT id, name, ST_AsText(location) AS location_text FROM shops
   WHERE MBRContains(ST_GeomFromText('LineString(139.7727 35.6684, 139.7038 35.7121)'), location);
 
-SHOW CREATE TABLE shops;
-
 DROP TABLE shops;
 
 --source ../../../include/mroonga/have_mroonga_deinit.inc
