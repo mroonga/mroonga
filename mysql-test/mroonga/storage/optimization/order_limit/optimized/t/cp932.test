@@ -29,7 +29,6 @@ CREATE TABLE memos (
   FULLTEXT INDEX(内容),
   KEY(識別子)
 ) DEFAULT CHARSET CP932;
-SHOW CREATE TABLE memos;
 
 INSERT INTO memos VALUES(2, "明日は山登り。");
 INSERT INTO memos VALUES(3, "今日はサボテンをもらった。");

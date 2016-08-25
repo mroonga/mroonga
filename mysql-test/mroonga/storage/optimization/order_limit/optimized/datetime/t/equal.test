@@ -30,7 +30,6 @@ CREATE TABLE diaries (
   FULLTEXT INDEX(content),
   KEY(date)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries VALUES(1, "2011-11-11 12:23:34", "Today is fine.");
 INSERT INTO diaries VALUES(2, "2011-11-11 12:23:34", "Tomorrow will be fine.");

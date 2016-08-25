@@ -30,7 +30,6 @@ CREATE TABLE memos (
   FULLTEXT INDEX(content),
   KEY(writing_time)
 ) DEFAULT CHARSET UTF8;
-SHOW CREATE TABLE memos;
 
 INSERT INTO memos VALUES(1, "1:23:34", "Today is fine.");
 INSERT INTO memos VALUES(2, "1:23:34", "Tomorrow will be fine.");

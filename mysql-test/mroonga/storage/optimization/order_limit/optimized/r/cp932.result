@@ -7,14 +7,6 @@ CREATE TABLE memos (
 FULLTEXT INDEX(内容),
 KEY(識別子)
 ) DEFAULT CHARSET CP932;
-SHOW CREATE TABLE memos;
-Table	Create Table
-memos	CREATE TABLE `memos` (
-  `識別子` int(10) unsigned DEFAULT NULL,
-  `内容` text,
-  KEY `識別子` (`識別子`),
-  FULLTEXT KEY `内容` (`内容`)
-) ENGINE=Mroonga DEFAULT CHARSET=cp932
 INSERT INTO memos VALUES(2, "明日は山登り。");
 INSERT INTO memos VALUES(3, "今日はサボテンをもらった。");
 INSERT INTO memos VALUES(1, "今日は天気がよくてよかった。");
