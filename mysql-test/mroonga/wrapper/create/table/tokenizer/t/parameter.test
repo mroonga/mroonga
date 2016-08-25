@@ -27,7 +27,6 @@ CREATE TABLE diaries (
   body text,
   FULLTEXT INDEX body_index (body) TOKENIZER='TokenBigramSplitSymbolAlphaDigit'
 ) COMMENT = 'ENGINE "InnoDB"' DEFAULT CHARSET utf8;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (body) VALUES ("will start Groonga!");
 INSERT INTO diaries (body) VALUES ("starting Groonga...");
