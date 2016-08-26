@@ -17,6 +17,12 @@ Improvements
 
 * [rpm][centos] Supported Percona Server 5.6/5.7 on CentOS 6/7.
 
+* [:doc:`/reference/limitations`] Updated description about table
+  limitations. There is a good news that the limitation about the
+  maximum number of records are relaxed. In the past, it is described
+  as 268,435,455 records, but it turns out that actually you can store
+  more records.
+
 Fixes
 ^^^^^
 
