@@ -87,22 +87,6 @@ else
              mysql-testsuite libmysqld-dev
         apt-get -qq source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
-      elif [ "$series" = "5.5" ]; then
-        download_base="http://cdn.mysql.com/Downloads/MySQL-${series}/"
-        if [ "$(uname -m)" = "x86_64" ]; then
-          architecture=x86_64
-        else
-          architecture=i686
-        fi
-        deb=mysql-${version}-debian6.0-${architecture}.deb
-        tar_gz=mysql-${version}.tar.gz
-        curl -O ${download_base}${deb} &
-        curl -O ${download_base}${tar_gz} &
-        wait
-        sudo apt-get -qq -y install libaio1
-        sudo dpkg -i $deb
-        tar xzf $tar_gz
-        ln -s mysql-${version} mysql
       else
         repository_deb=mysql-apt-config_0.7.3-1_all.deb
         curl -O http://repo.mysql.com/${repository_deb}
