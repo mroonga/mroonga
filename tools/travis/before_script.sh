@@ -55,6 +55,10 @@ else
       configure_args=("${configure_args[@]}" --enable-fast-mutexes)
       ;;
     mysql-5.7.*)
+      boost_archive=boost_1_59_0.tar.gz
+      curl -O http://downloads.sourceforge.net/project/boost/boost/1.59.0/${boost_archive}
+      sudo mkdir -p /usr/global/share
+      sudo mv ${boost_archive} /usr/global/share/
       (cd vendor/mysql && sudo debian/rules override_dh_auto_configure)
       ;;
     mariadb-5.5.*)
