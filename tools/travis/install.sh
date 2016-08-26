@@ -104,7 +104,7 @@ else
         tar xzf $tar_gz
         ln -s mysql-${version} mysql
       else
-        repository_deb=mysql-apt-config_0.7.2-1_all.deb
+        repository_deb=mysql-apt-config_0.7.3-1_all.deb
         curl -O http://repo.mysql.com/${repository_deb}
         sudo env MYSQL_SERVER_VERSION=mysql-${series} \
              dpkg -i ${repository_deb}
