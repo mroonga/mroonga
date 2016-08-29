@@ -23,6 +23,8 @@ Improvements
   as 268,435,455 records, but it turns out that actually you can store
   more records.
 
+* Supported MariaDB 10.2.1
+
 Fixes
 ^^^^^
 
