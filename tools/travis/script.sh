@@ -43,7 +43,7 @@ fi
 
 build()
 {
-  travis_wait make -j${n_processors} > /dev/null
+  make -j${n_processors} > /dev/null
 }
 
 run_unit_test()
