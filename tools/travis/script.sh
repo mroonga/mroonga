@@ -43,11 +43,7 @@ fi
 
 build()
 {
-  if [ "${MROONGA_BUNDLED}" = "yes" ]; then
-    make -j${n_processors} > /dev/null
-  else
-    make -j${n_processors} > /dev/null
-  fi
+  travis_wait make -j${n_processors} > /dev/null
 }
 
 run_unit_test()
