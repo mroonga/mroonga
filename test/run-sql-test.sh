@@ -229,6 +229,6 @@ if [ -n "$test_names" ]; then
 fi
 
 (cd "$build_mysql_test_dir" && \
-    ./mysql-test-run.pl \
+    perl -I . ./mysql-test-run.pl \
       ${mysql_test_run_args} \
       ${mysql_test_run_options})
