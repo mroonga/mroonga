@@ -1,3 +1,9 @@
+mroonga-5.7 (6.08-2) unstable; urgency=medium
+
+  * Rebuild against mysql-server 5.7.15
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Wed, 14 Sep 2016 17:19:48 +0900
+
 mroonga-5.7 (6.08-1) unstable; urgency=low
 
   * New upstream release.
