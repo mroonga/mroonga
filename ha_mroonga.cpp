@@ -5689,11 +5689,11 @@ int ha_mroonga::storage_write_row(uchar *buf)
   mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
-    const char *column_name = field->field_name;
 
     if (field->is_null()) continue;
 
-    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+    mrn::ColumnName column_name(field->field_name);
+    if (strcmp(MRN_COLUMN_NAME_ID, column_name.c_str()) == 0) {
       push_warning_printf(thd, MRN_SEVERITY_WARNING,
                           WARN_DATA_TRUNCATED,
                           MRN_GET_ERR_MSG(WARN_DATA_TRUNCATED),
@@ -5784,10 +5784,11 @@ int ha_mroonga::storage_write_row(uchar *buf)
   GRN_VOID_INIT(&colbuf);
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
-    const char *column_name = field->field_name;
 
     if (field->is_null())
       continue;
+
+    mrn::ColumnName column_name(field->field_name);
 
 #ifdef MRN_HAVE_SPATIAL
     bool is_null_geometry_value =
@@ -5798,7 +5799,7 @@ int ha_mroonga::storage_write_row(uchar *buf)
     }
 #endif
 
-    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+    if (strcmp(MRN_COLUMN_NAME_ID, column_name.c_str()) == 0) {
       continue;
     }
 
@@ -6332,11 +6333,12 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
-    const char *column_name = field->field_name;
 
     if (bitmap_is_set(table->write_set, field->field_index)) {
       if (field->is_null()) continue;
-      if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+
+      mrn::ColumnName column_name(field->field_name);
+      if (strcmp(MRN_COLUMN_NAME_ID, column_name.c_str()) == 0) {
         push_warning_printf(thd, MRN_SEVERITY_WARNING,
                             WARN_DATA_TRUNCATED, MRN_GET_ERR_MSG(WARN_DATA_TRUNCATED),
                             MRN_COLUMN_NAME_ID,
@@ -6369,14 +6371,14 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   GRN_VOID_INIT(&colbuf);
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
-    const char *column_name = field->field_name;
     if (bitmap_is_set(table->write_set, field->field_index)) {
       mrn::DebugColumnAccess debug_column_access(table, table->read_set);
       DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,field->field_index));
 
       if (field->is_null()) continue;
 
-      if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+      mrn::ColumnName column_name(field->field_name);
+      if (strcmp(MRN_COLUMN_NAME_ID, column_name.c_str()) == 0) {
         continue;
       }
 
@@ -6390,12 +6392,12 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
         bool have_pkey = false;
         for (j = 0; j < KEY_N_KEY_PARTS(pkey_info); j++) {
           Field *pkey_field = pkey_info->key_part[j].field;
-          if (strcmp(pkey_field->field_name, column_name) == 0) {
+          if (strcmp(pkey_field->field_name, column_name.c_str()) == 0) {
             if (!replacing_) {
               char message[MRN_BUFFER_SIZE];
               snprintf(message, MRN_BUFFER_SIZE,
                        "data truncated for primary key column: <%s>",
-                       column_name);
+                       column_name.c_str());
               push_warning(thd, MRN_SEVERITY_WARNING,
                            WARN_DATA_TRUNCATED, message);
             }
