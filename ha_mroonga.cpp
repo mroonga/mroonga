@@ -5805,12 +5805,12 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
     error = mrn_change_encoding(ctx, field->charset());
     if (error) {
-      grn_obj_unlink(ctx, &colbuf);
+      GRN_OBJ_FIN(ctx, &colbuf);
       goto err;
     }
     error = generic_store_bulk(field, &colbuf);
     if (error) {
-      grn_obj_unlink(ctx, &colbuf);
+      GRN_OBJ_FIN(ctx, &colbuf);
       goto err;
     }
 
@@ -5849,13 +5849,13 @@ int ha_mroonga::storage_write_row(uchar *buf)
       grn_obj_set_value(ctx, column, record_id, &colbuf, GRN_OBJ_SET);
     }
     if (ctx->rc) {
-      grn_obj_unlink(ctx, &colbuf);
+      GRN_OBJ_FIN(ctx, &colbuf);
       my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
       error = ER_ERROR_ON_WRITE;
       goto err;
     }
   }
-  grn_obj_unlink(ctx, &colbuf);
+  GRN_OBJ_FIN(ctx, &colbuf);
 
   error = storage_write_row_multiple_column_indexes(buf, record_id);
   if (error) {
