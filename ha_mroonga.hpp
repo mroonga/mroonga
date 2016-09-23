@@ -591,6 +591,9 @@ private:
 
   bool have_unique_index();
 
+  bool is_foreign_key_field(const char *table_name,
+                            const char *field_name);
+
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
   void clear_cursor();
   void clear_cursor_geo();

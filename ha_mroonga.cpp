@@ -74,6 +74,7 @@
 
 #include "mrn_err.h"
 #include "mrn_table.hpp"
+#include <groonga/plugin.h>
 #include "ha_mroonga.hpp"
 #include <mrn_path_mapper.hpp>
 #include <mrn_index_table_name.hpp>
@@ -3820,6 +3821,11 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
       // skipping _id virtual column
       DBUG_RETURN(0);
     }
+
+    if (is_foreign_key_field(table->s->table_name.str,
+                             field->field_name)) {
+      DBUG_RETURN(0);
+    }
   }
 
   error = mrn_change_encoding(ctx, system_charset_info);
@@ -5806,17 +5812,41 @@ int ha_mroonga::storage_write_row(uchar *buf)
       grn_obj_unlink(ctx, &colbuf);
       goto err;
     }
-    if (added && is_grn_zero_column_value(grn_columns[i], &colbuf)) {
-      // WORKAROUND: groonga can't index newly added '0' value for
-      // fix size column. So we add non-'0' value first then add
-      // real '0' value again. It will be removed when groonga
-      // supports 'null' value.
-      char *bytes = GRN_BULK_HEAD(&colbuf);
-      bytes[0] = '\1';
-      grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
-      bytes[0] = '\0';
+
+    grn_obj *column = grn_columns[i];
+    if (is_foreign_key_field(table->s->table_name.str, field->field_name)) {
+      grn_obj value;
+      GRN_RECORD_INIT(&value, 0, grn_obj_get_range(ctx, column));
+      grn_rc cast_rc = grn_obj_cast(ctx, &colbuf, &value, GRN_FALSE);
+      if (cast_rc != GRN_SUCCESS) {
+        grn_obj inspected;
+        GRN_TEXT_INIT(&inspected, 0);
+        grn_inspect(ctx, &inspected, &colbuf);
+        error = HA_ERR_NO_REFERENCED_ROW;
+        GRN_PLUGIN_ERROR(ctx, GRN_INVALID_ARGUMENT,
+                         "foreign record doesn't exist: <%s>:<%.*s>",
+                         field->field_name,
+                         static_cast<int>(GRN_TEXT_LEN(&inspected)),
+                         GRN_TEXT_VALUE(&inspected));
+        GRN_OBJ_FIN(ctx, &value);
+        GRN_OBJ_FIN(ctx, &colbuf);
+        GRN_OBJ_FIN(ctx, &inspected);
+        goto err;
+      }
+      grn_obj_set_value(ctx, column, record_id, &value, GRN_OBJ_SET);
+    } else {
+      if (added && is_grn_zero_column_value(column, &colbuf)) {
+        // WORKAROUND: groonga can't index newly added '0' value for
+        // fix size column. So we add non-'0' value first then add
+        // real '0' value again. It will be removed when groonga
+        // supports 'null' value.
+        char *bytes = GRN_BULK_HEAD(&colbuf);
+        bytes[0] = '\1';
+        grn_obj_set_value(ctx, column, record_id, &colbuf, GRN_OBJ_SET);
+        bytes[0] = '\0';
+      }
+      grn_obj_set_value(ctx, column, record_id, &colbuf, GRN_OBJ_SET);
     }
-    grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
     if (ctx->rc) {
       grn_obj_unlink(ctx, &colbuf);
       my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
@@ -8806,6 +8836,47 @@ bool ha_mroonga::have_unique_index()
     if (key_info->flags & HA_NOSAME) {
       DBUG_RETURN(true);
     }
+  }
+
+  DBUG_RETURN(false);
+}
+
+bool ha_mroonga::is_foreign_key_field(const char *table_name,
+                                      const char *field_name)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  grn_obj *table = grn_ctx_get(ctx, table_name, -1);
+  if (!table) {
+    DBUG_RETURN(false);
+  }
+
+  mrn::ColumnName column_name(field_name);
+  grn_obj *column = grn_obj_column(ctx,
+                                   table,
+                                   column_name.c_str(),
+                                   column_name.length());
+  if (!column) {
+    DBUG_RETURN(false);
+  }
+
+  grn_obj *range = grn_ctx_at(ctx, grn_obj_get_range(ctx, column));
+  if (!range) {
+    DBUG_RETURN(false);
+  }
+
+  if (!mrn::grn::is_table(range)) {
+    DBUG_RETURN(false);
+  }
+
+  grn_obj *foreign_index_column;
+  mrn::IndexColumnName index_column_name(table_name, field_name);
+  foreign_index_column = grn_obj_column(ctx, range,
+                                        index_column_name.c_str(),
+                                        index_column_name.length());
+  if (foreign_index_column) {
+    grn_obj_unlink(ctx, foreign_index_column);
+    DBUG_RETURN(true);
   }
 
   DBUG_RETURN(false);
