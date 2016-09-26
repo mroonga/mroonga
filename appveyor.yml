@@ -56,7 +56,6 @@ notifications:
   - provider: Email
     to:
       - groonga-mysql-commit@lists.sourceforge.jp
-      - kou@clear-code.com
     on_build_status_changed: true
 
 test: off
