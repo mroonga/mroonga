@@ -110,7 +110,8 @@ run_sql_test()
 
     ${mroonga_dir}/test/run-sql-test.sh \
                   "${test_args[@]}" \
-                  --parallel="${n_processors}"
+                  --parallel="${n_processors}" \
+                  --retry=2
   else
     prepare_sql_test
 
@@ -119,7 +120,7 @@ run_sql_test()
       "${test_args[@]}" \
       --no-check-testcases \
       --parallel="${n_processors}" \
-      --retry=1 \
+      --retry=2 \
       --suite="${test_suite_names}" \
       --force
   fi
