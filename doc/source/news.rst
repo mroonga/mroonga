@@ -5,6 +5,23 @@
 News
 ====
 
+.. _release-6-09:
+
+Release 6.09 - 2016-09-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage] Supported nonexistent reference insert check for ``FOREIGN
+  KEY``. [Gitter:https://gitter.im/groonga/ja?at=57d629477b9f8167113efb04]
+  [Reported by mizutamazukki]
+
+Thanks
+^^^^^^
+
+* mizutamazukki
+
 .. _release-6-08:
 
 Release 6.08 - 2016-08-29
