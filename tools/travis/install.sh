@@ -24,8 +24,8 @@ set -e
 
 mariadb_download_base=http://mirror.jmu.edu/pub/mariadb
 
-version=$(echo "$MYSQL_VERSION" | sed -e 's/^\(mysql\|mariadb\|percona-server\)-//')
-series=$(echo "$version" | sed -e 's/\.[0-9]\.[0-9]*\(-\?[a-z]*\)\?$//g')
+version=$(echo "$MYSQL_VERSION" | sed -r -e 's/^(mysql|mariadb|percona-server)-//')
+series=$(echo "$version" | sed -r -e 's/^([0-9]+\.[0-9]+).*$/\1/g')
 
 setup_mariadb_apt()
 {
