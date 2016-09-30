@@ -1,6 +1,8 @@
 version: "{build}"
 clone_depth: 10
 environment:
+  global:
+    - MARIADB_VERSION: 10.1.17
   matrix:
     - CMAKE_GENERATOR_NAME: "Visual Studio 12 2013"
     - CMAKE_GENERATOR_NAME: "Visual Studio 12 2013 Win64"
@@ -8,10 +10,10 @@ environment:
 install:
   - cd ..
   - choco install -y curl 7zip.commandline
-  - curl -O http://mirror.jmu.edu/pub/mariadb/mariadb-10.1.13/source/mariadb-10.1.13.tar.gz
-  - 7z x mariadb-10.1.13.tar.gz
-  - 7z x mariadb-10.1.13.tar > nul
-  - cd mariadb-10.1.13
+  - curl -O http://mirror.jmu.edu/pub/mariadb/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
+  - 7z x mariadb-%MARIADB_VERSION%.tar.gz
+  - 7z x mariadb-%MARIADB_VERSION%.tar > nul
+  - cd mariadb-%MARIADB_VERSION%
   - rmdir /S /Q storage\mroonga\
   - move ..\mroonga storage\mroonga
   - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
@@ -19,7 +21,7 @@ install:
   - cd ..\groonga\vendor
   - c:\Ruby22-x64\bin\ruby -v download_lz4.rb
   - c:\Ruby22-x64\bin\ruby -v download_mecab.rb
-  - cd ..\..\mariadb-10.1.13
+  - cd ..\..\mariadb-%MARIADB_VERSION%
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
