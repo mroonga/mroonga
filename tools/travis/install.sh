@@ -128,7 +128,9 @@ else
       set -x
       sudo apt-get -y build-dep percona-server-server-${series}
       sudo apt-get -y install \
-           percona-server-server-${series} percona-server-test-${series}
+           percona-server-server-${series} \
+           percona-server-client-${series} \
+           percona-server-test-${series}
       apt-get source percona-server-server-${series}
       ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       ;;
