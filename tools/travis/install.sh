@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright(C) 2012-2015 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2016 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -38,6 +38,16 @@ deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
 deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
 EOF
   sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+  sudo apt-get -qq update
+}
+
+setup_percona_apt()
+{
+  code_name=$(lsb_release --short --codename)
+  release_deb_version=0.1-4
+  release_deb=percona-release_${release_deb_version}.${code_name}_all.deb
+  wget http://www.percona.com/downloads/percona-release/ubuntu/${release_deb_version}/${release_deb}
+  sudo dpkg -i ${release_deb}
   sudo apt-get -qq update
 }
 
@@ -111,6 +121,14 @@ else
       sudo apt-get -qq -y install \
            mariadb-server libmariadbclient-dev mariadb-test
       apt-get -qq source mariadb-server
+      ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
+      ;;
+    percona-server-*)
+      setup_percona_apt
+      sudo apt-get -qq -y build-dep percona-server-${series}
+      sudo apt-get -qq -y install \
+           percona-server-${series} percona-server-test-${series}
+      apt-get -qq source percona-server-${series}
       ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       ;;
   esac

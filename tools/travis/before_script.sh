@@ -51,10 +51,10 @@ else
   fi
   configure_args=("--with-mysql-source=$PWD/vendor/mysql")
   case "${MYSQL_VERSION}" in
-    mysql-5.6.*)
+    mysql-5.6|percona-server-5.6)
       configure_args=("${configure_args[@]}" --enable-fast-mutexes)
       ;;
-    mysql-5.7.*)
+    mysql-5.7|percona-server-5.7)
       boost_archive=boost_1_59_0.tar.gz
       curl -L -O http://downloads.sourceforge.net/project/boost/boost/1.59.0/${boost_archive}
       sudo mkdir -p /usr/global/share
