@@ -1,5 +1,6 @@
-DROP TABLE IF EXISTS entries;
-DROP TABLE IF EXISTS comments;
+DROP DATABASE test;
+CREATE DATABASE test;
+USE test;
 CREATE TABLE comments (
 id int unsigned PRIMARY KEY,
 content varchar(140) NOT NULL
