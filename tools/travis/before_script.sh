@@ -67,20 +67,14 @@ else
                       "--with-mysql-build=$PWD/vendor/mysql/builddir")
       ;;
     percona-server-5.6)
-      export DEB_BUILD_OPTIONS=noopt
-      (cd vendor/mysql && sudo debian/rules build)
+      (cd vendor/mysql && sudo debian/rules build) > /dev/null
       configure_args=("${configure_args[@]}"
                       "--enable-fast-mutexes"
                       "--with-mysql-build=$PWD/vendor/mysql/builddir"
                       "--with-mysql-config=$PWD/vendor/mysql/builddir/scripts/mysql_config")
       ;;
     percona-server-5.7)
-      boost_archive=boost_1_59_0.tar.gz
-      curl -L -O http://downloads.sourceforge.net/project/boost/boost/1.59.0/${boost_archive}
-      sudo mkdir -p /usr/global/share
-      sudo mv ${boost_archive} /usr/global/share/
-      export DEB_BUILD_OPTIONS=noopt
-      (cd vendor/mysql && sudo debian/rules build)
+      (cd vendor/mysql && sudo debian/rules build) > /dev/null
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/builddir"
                       "--with-mysql-config=$PWD/vendor/mysql/builddir/scripts/mysql_config")
