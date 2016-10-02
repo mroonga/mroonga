@@ -31,7 +31,7 @@ Description: A fast fulltext searchable storage engine for MySQL.
  It is based on Groonga, a fast fulltext search engine and column store.
  Groonga is good at real time update.
  .
- This package provides a storage engine MySQL 5.5 as a shared library.
+ This package provides a storage engine MySQL 5.7 as a shared library.
  This provides "Mroonga" storage engine. It means you can use
  "ENGINE = Mroonga" in "CREATE TABLE".
 
