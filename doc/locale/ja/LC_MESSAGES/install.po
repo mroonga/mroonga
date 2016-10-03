@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-09-30 14:49+0900\n"
+"PO-Revision-Date: 2016-10-04 00:31+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -625,8 +625,11 @@ msgstr ""
 msgid "14.04 LTS Trusty Tahr"
 msgstr ""
 
-msgid "16.04 Xenial Xerus"
+msgid "16.04 LTS Xenial Xerus"
 msgstr ""
+
+msgid "Here are Ubuntu versions that supports MariaDB:"
+msgstr "MariaDBをサポートしているUbuntuのバージョンは次の通りです。"
 
 msgid ""
 "Enable the universe repository and the security update repository to install "
@@ -637,6 +640,12 @@ msgstr ""
 
 msgid "Add the ``ppa:groonga/ppa`` PPA to your system::"
 msgstr "``ppa:groonga/ppa`` PPAをシステムに追加します::"
+
+msgid "Install Mroonga for MySQL::"
+msgstr "MySQL用のMroongaをインストール::"
+
+msgid "Install Mroonga for MariaDB::"
+msgstr "MariaDB用のMroongaをインストール::"
 
 msgid "Windows"
 msgstr ""
