@@ -20,6 +20,10 @@ Here are supported Ubuntu versions:
   * 14.04 LTS Trusty Tahr
   * 16.04 LTS Xenial Xerus
 
+Here are Ubuntu versions that supports MariaDB:
+
+  * 16.04 LTS Xenial Xerus
+
 Enable the universe repository and the security update repository to
 install Mroonga::
 
@@ -32,9 +36,13 @@ Add the ``ppa:groonga/ppa`` PPA to your system::
   % sudo add-apt-repository -y ppa:groonga/ppa
   % sudo apt-get update
 
-Install::
+Install Mroonga for MySQL::
 
   % sudo apt-get install -y -V mysql-server-mroonga
+
+Install Mroonga for MariaDB::
+
+  % sudo apt-get install -y -V mariadb-server-mroonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
