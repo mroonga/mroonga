@@ -40,6 +40,7 @@ class Uploader
       mysql55_version = @mysql55_versions[code_name]
       mysql56_version = @mysql56_versions[code_name]
       mysql57_version = @mysql57_versions[code_name]
+      mariadb10_0_version = @mariadb10_0_versions[code_name]
       if mysql55_version
         upload(code_name, "5.5", mysql55_version)
       end
@@ -48,6 +49,9 @@ class Uploader
       end
       if mysql57_version
         upload(code_name, "5.7", mysql57_version)
+      end
+      if mariadb10_0_version
+        upload(code_name, "mariadb-10.0", mariadb10_0_version)
       end
     end
   end
@@ -82,6 +86,7 @@ allow_unsigned_uploads = 0
     @mysql55_versions = {}
     @mysql56_versions = {}
     @mysql57_versions = {}
+    @mariadb10_0_versions = {}
     @code_names.each do |code_name|
       source_names = [code_name, "#{code_name}-updates"]
       source_names.each do |source_name|
@@ -98,6 +103,8 @@ allow_unsigned_uploads = 0
               @mysql56_versions[code_name] = $1
             when /\Amysql-server-5\.7 \((.+?)[\s)]/
               @mysql57_versions[code_name] = $1
+            when /\Amariadb-server-10\.0 \((.+?)[\s)]/
+              @mariadb10_0_versions[code_name] = $1
             end
           end
         end
@@ -160,7 +167,11 @@ allow_unsigned_uploads = 0
                     "--distribution", code_name,
                     "--newversion", deb_version,
                     "Build for #{code_name}.")
-        unless default_mysql_version
+        remove_versionless_mroonga = true
+        if default_mysql_version or mysql_short_version.start_with?("mariadb-")
+          remove_versionless_mroonga = false
+        end
+        if remove_versionless_mroonga
           control_content = File.read("debian/control")
           File.open("debian/control", "w") do |control|
             in_mysql_server_mroonga = false
@@ -175,13 +186,15 @@ allow_unsigned_uploads = 0
               when "Package: mysql-server-mroonga"
                 in_mysql_server_mroonga = true
               else
-                control.print(line) unless in_mysql_server_mroonga
+                next if in_mysql_server_mroonga
+                control.print(line)
               end
             end
           end
         end
         run_command("sed",
-                    "-i", "-e", "s,MYSQL_VERSION,#{mysql_version},",
+                    "-i", "-e",
+                    "s,MYSQL_VERSION\\|MARIADB_VERSION,#{mysql_version},",
                     "debian/control")
         run_command("debuild", "-S", "-sa", "-pgpg2", "-k#{@pgp_sign_key}")
         if @use_pbuilder

@@ -521,6 +521,7 @@ AC_OUTPUT([
   packages/debian-5.5/control
   packages/debian-5.6/control
   packages/debian-5.7/control
+  packages/debian-mariadb-10.0/control
   packages/apt/env.sh
   packages/rpm/centos/mysql55-mroonga.spec
   packages/rpm/centos/mysql56-community-mroonga.spec

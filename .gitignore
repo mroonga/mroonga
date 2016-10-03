@@ -38,6 +38,7 @@ CTestTestfile.cmake
 /packages/debian-5.5/control
 /packages/debian-5.6/control
 /packages/debian-5.7/control
+/packages/debian-mariadb-10.0/control
 /packages/rpm/*/*.spec
 /packages/apt/env.sh
 /packages/apt/.vagrant/

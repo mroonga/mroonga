@@ -1,0 +1,56 @@
+#!/usr/bin/make -f
+# -*- makefile-gmake -*-
+#
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+export MARIADB_VERSION_FULL := $(shell apt-cache show mariadb-server-10.0 | grep Version | head -n 1 | awk '{print $$2}')
+export MARIADB_VERSION := $(shell apt-cache show mariadb-server-10.0 | grep Version | head -n 1 | awk '{print $$2}' | awk -F '-' '{print $$1}')
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	archive_base=mariadb-10.0_$(MARIADB_VERSION);			\
+	archive=$${archive_base}.orig.tar.gz;				\
+	debian=mariadb-10.0_$(MARIADB_VERSION_FULL).debian.tar.xz;	\
+	source_base=mariadb-$(MARIADB_VERSION);				\
+	build_dir=$${source_base}/builddir;				\
+	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
+	  path=universe/m/mariadb-10.0;					\
+	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
+	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
+	else								\
+	  path=main/m/mariadb-10.0;					\
+	  base_url=http://ftp.debian.org/debian/pool;			\
+	  security_base_url=http://security.debian.org/pool/updates;	\
+	fi;								\
+	wget $${security_base_url}/$${path}/$${archive} ||		\
+	  wget $${base_url}/$${path}/$${archive};			\
+	wget $${security_base_url}/$${path}/$${debian} ||		\
+	  wget $${base_url}/$${path}/$${debian};			\
+	tar xf $${archive};						\
+	(cd $${source_base} &&						\
+	  tar xf ../$${debian});					\
+	dpkg-source --before-build $${source_base};			\
+	(cd $${source_base} &&						\
+	  debian/rules build);						\
+	dh_auto_configure --						\
+	  --with-mysql-source=$${source_base}				\
+	  --with-mysql-build=$${build_dir}				\
+	  --with-mysql-config=$${build_dir}/scripts/mysql_config
+
+# disable 'make check'.
+override_dh_auto_test:
+
+override_dh_install:
+	mv debian/tmp/usr/share/doc/mroonga/ \
+	  debian/tmp/usr/share/doc/mariadb-server-10.0-mroonga-doc/
+	dh_install
+#	if test -x /usr/bin/dh_apparmor; then			\
+#	  dh_apparmor						\
+#	    -pmariadb-server-10.0-mroonga				\
+#	    --profile-name=usr.lib.mariadb.plugin.ha_mroonga;	\
+#	fi
