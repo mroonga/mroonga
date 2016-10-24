@@ -77,6 +77,7 @@ update-latest-release: ensure-cutter-source-path
 	  packages/rpm/centos/mysql56-community-mroonga.spec.in	\
 	  packages/rpm/centos/mysql57-community-mroonga.spec.in	\
 	  packages/rpm/centos/percona-server-56-mroonga.spec.in	\
+	  packages/rpm/centos/percona-server-57-mroonga.spec.in	\
 	  doc/source/install/*.rst			\
 	  doc/locale/*/LC_MESSAGES/install.po		\
 	  $(MROONGA_GITHUB_COM_PATH)/index.html		\
