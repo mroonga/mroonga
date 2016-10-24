@@ -218,6 +218,10 @@ extern "C" {
   Alter_inplace_info::ALTER_COLUMN_ORDER
 #endif
 
+#if MYSQL_VERSION_ID >= 50700 && !defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_RECORDS_RETURN_ERROR
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -529,6 +533,11 @@ public:
   int start_stmt(THD *thd, thr_lock_type lock_type);
 
 protected:
+#ifdef MRN_HANDLER_RECORDS_RETURN_ERROR
+  int records(ha_rows *num_rows);
+#else
+  ha_rows records();
+#endif
 #ifdef MRN_HANDLER_HAVE_HA_RND_NEXT
   int rnd_next(uchar *buf);
 #endif
@@ -903,6 +912,13 @@ private:
   void storage_info_variable();
   void storage_info_variable_records();
   void storage_info_variable_data_file_length();
+#ifdef MRN_HANDLER_RECORDS_RETURN_ERROR
+  int wrapper_records(ha_rows *num_rows);
+  int storage_records(ha_rows *num_rows);
+#else
+  ha_rows wrapper_records();
+  ha_rows storage_records();
+#endif
   int wrapper_rnd_init(bool scan);
   int storage_rnd_init(bool scan);
   int wrapper_rnd_end();

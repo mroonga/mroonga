@@ -5307,6 +5307,70 @@ int ha_mroonga::rnd_end()
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HANDLER_RECORDS_RETURN_ERROR
+int ha_mroonga::wrapper_records(ha_rows *num_rows)
+{
+  int error = 0;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  error = wrap_handler->ha_records(num_rows);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_records(ha_rows *num_rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = handler::records(num_rows);
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::records(ha_rows *num_rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  if (share->wrapper_mode) {
+    error = wrapper_records(num_rows);
+  } else {
+    error = storage_records(num_rows);
+  }
+  DBUG_RETURN(error);
+}
+#else
+ha_rows ha_mroonga::wrapper_records()
+{
+  ha_rows num_rows;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  num_rows = wrap_handler->records();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(num_rows);
+}
+
+ha_rows ha_mroonga::storage_records()
+{
+  MRN_DBUG_ENTER_METHOD();
+  ha_rows num_rows = handler::records();
+  DBUG_RETURN(num_rows);
+}
+
+ha_rows ha_mroonga::records()
+{
+  MRN_DBUG_ENTER_METHOD();
+  ha_rows num_rows;
+  if (share->wrapper_mode) {
+    num_rows = wrapper_records();
+  } else {
+    num_rows = storage_records();
+  }
+  DBUG_RETURN(num_rows);
+}
+#endif
+
 int ha_mroonga::wrapper_rnd_next(uchar *buf)
 {
   int error = 0;
