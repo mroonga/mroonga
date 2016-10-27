@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-09-29 04:18+0900\n"
+"PO-Revision-Date: 2016-10-27 15:38+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,65 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 6.09 - 2016-09-29"
-msgstr "6.09リリース - 2016-09-29"
+msgid "Release 6.10 - 2016-10-29"
+msgstr "6.10リリース - 2016-10-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[deb][ubuntu] Supported MariaDB 10.x package for Ubuntu 16.04"
+msgstr ""
+"[deb][ubuntu] Ubuntu 16.04向けにMariaDB 10.xのパッケージをサポートしました。"
+
+msgid "[deb][ubuntu] Supported Ubuntu 16.10 (Yakkety Yak)"
+msgstr "[deb][ubuntu] Ubuntu 16.10 (Yakkety Yak)をサポートしました。"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Added document how to install Mroonga for MariaDB "
+"on Ubuntu 16.04."
+msgstr ""
+"[:doc:`/install/ubuntu`] MariaDBに対応したMroongaのインストール方法をドキュメ"
+"ントに追加しました。"
+
+msgid ""
+"[:doc:`/install`][:doc:`/tutorial`] Improved sample SQL format for easy to "
+"copy and paste."
+msgstr ""
+"[:doc:`/install`][:doc:`/tutorial`] サンプルのSQLの書式をコピー&ペーストしや"
+"すいように改善しました。"
+
+msgid ""
+"[rpm][centos] Supported latest MySQL 5.6.34, MySQL 5.7.16, Percona Server "
+"5.6.33 and Percona Server 5.7.15. [groonga-dev,04169] [Reported by Hiroshi "
+"Kagami]"
+msgstr ""
+"[rpm][centos] 最新の MySQL 5.6.34, MySQL 5.7.16, Percona Server 5.6.33 と "
+"Percona Server 5.7.15をサポートしました。 [groonga-dev,04169] [各務さんが報"
+"告]"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[mysql57][wrapper] Fixed a bug that ``COUNT(*)`` with InnoDB doesn't return "
+"correct number of records because behavior of InnoDB was changed since MySQL "
+"5.7.  [Reported by koyama_wataru_7]"
+msgstr ""
+"[mysql57][wrapper] InnoDBで ``COUNT(*)`` が正しいレコード数を返さない不具合を"
+"修正しました。これはMySQL 5.7になってからInnnoDBの挙動が変更されたためです。 "
+"[koyama_wataru_7さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Hiroshi Kagami"
+msgstr "各務さん"
+
+msgid "koyama_wataru_7"
+msgstr "koyama_wataru_7さん"
+
+msgid "Release 6.09 - 2016-09-29"
+msgstr "6.09リリース - 2016-09-29"
 
 msgid ""
 "[storage] Supported nonexistent reference insert check for ``FOREIGN KEY``. "
@@ -35,9 +89,6 @@ msgstr ""
 "[ストレージ] データ挿入時の ``FOREIGN KEY`` 制約チェックをサポートしました。"
 "[Gitter:https://gitter.im/groonga/ja?at=57d629477b9f8167113efb04] "
 "[mizutamazukkiさんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "mizutamazukki"
 msgstr "mizutamazukkiさん"
@@ -65,9 +116,6 @@ msgstr ""
 
 msgid "Supported MariaDB 10.2.1"
 msgstr "MariaDB 10.2.1に対応しました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid "Fixed compile error with GCC 6.1.1."
 msgstr "GCC 6.1.1でコンパイルエラーになる問題を修正しました。"
@@ -2925,9 +2973,6 @@ msgstr ""
 "[ストレージモード] ``INSERT ON DUPLICATE KEY UPDATE`` が機能していなかった問"
 "題を修正しました。この不具合には挿入に失敗したあとの更新処理で既存の他のレ"
 "コードを変更してしまう可能性があります。[kazeburoさんが報告]"
-
-msgid "Hiroshi Kagami"
-msgstr "各務さん"
 
 msgid "kazeburo"
 msgstr "kazeburoさん"
