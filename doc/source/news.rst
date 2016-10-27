@@ -5,6 +5,41 @@
 News
 ====
 
+.. _release-6-10:
+
+Release 6.10 - 2016-10-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [deb][ubuntu] Supported MariaDB 10.x package for Ubuntu 16.04
+
+* [deb][ubuntu] Supported Ubuntu 16.10 (Yakkety Yak)
+
+* [:doc:`/install/ubuntu`] Added document how to install Mroonga for
+  MariaDB on Ubuntu 16.04.
+
+* [:doc:`/install`][:doc:`/tutorial`] Improved sample SQL format for
+  easy to copy and paste.
+  
+* [rpm][centos] Supported latest MySQL 5.6.34, MySQL 5.7.16, Percona
+  Server 5.6.33 and Percona Server 5.7.15. [groonga-dev,04169]
+  [Reported by Hiroshi Kagami]
+
+Fixes
+^^^^^
+
+* [mysql57][wrapper] Fixed a bug that ``COUNT(*)`` with InnoDB doesn't
+  return correct number of records because behavior of InnoDB was
+  changed since MySQL 5.7.  [Reported by koyama_wataru_7]
+
+Thanks
+^^^^^^
+
+* Hiroshi Kagami
+* koyama_wataru_7
+
 .. _release-6-09:
 
 Release 6.09 - 2016-09-29
