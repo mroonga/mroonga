@@ -15,7 +15,8 @@ Build-Depends:
 	lsb-release,
 	cmake,
 	libwrap0-dev,
-	libedit-dev
+	libedit-dev,
+	liblz4-dev
 Standards-Version: 3.9.1
 Homepage: http://mroonga.org/
 
