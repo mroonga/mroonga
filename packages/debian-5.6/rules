@@ -13,7 +13,7 @@ export MYSQL_VERSION := $(shell apt-cache show mysql-server-5.6 | grep Version |
 
 override_dh_auto_configure:
 	archive=mysql-5.6_$(MYSQL_VERSION).orig.tar.gz;			\
-	path=main/m/mysql-5.6/$${archive};				\
+	path=m/mysql-5.6/$${archive};				\
 	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
 	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
 	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
@@ -21,8 +21,9 @@ override_dh_auto_configure:
 	  base_url=http://ftp.debian.org/debian/pool;			\
 	  security_base_url=http://security.debian.org/pool/updates;	\
 	fi;								\
-	wget $${security_base_url}/$${path} ||				\
-	  wget $${base_url}/$${path};					\
+	wget $${security_base_url}/main/$${path} ||			\
+	  wget $${base_url}/main/$${path}        ||			\
+	  wget $${base_url}/universe/$${path};				\
 	tar xf $${archive}
 	dh_auto_configure -- --with-mysql-source=./mysql-$(MYSQL_VERSION)
 
