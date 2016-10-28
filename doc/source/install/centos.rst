@@ -119,7 +119,7 @@ since Mroonga 5.02 release.
 Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-  $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+  $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y Percona-Server-server-56
   % sudo /sbin/service mysql start
@@ -144,7 +144,7 @@ since Mroonga 6.02 release.
 Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-  $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+  $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y percona-server-57-mroonga
   (% sudo /sbin/service mysql start)
@@ -243,7 +243,7 @@ since Mroonga 5.02 release.
 Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-  % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+  % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y percona-server-56-mroonga
   (% sudo systemctl start mysqld)
@@ -267,7 +267,7 @@ since Mroonga 6.02 release.
 Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
-  % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+  % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y percona-server-57-mroonga
   (% sudo systemctl start mysqld)
