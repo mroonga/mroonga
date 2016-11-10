@@ -2,8 +2,6 @@
 
 LANG=C
 
-mysql_server_package=mysql-server
-
 run()
 {
   "$@"
@@ -14,6 +12,19 @@ run()
 }
 
 . /vagrant/tmp/env.sh
+
+case "${MYSQL_VARIANT}" in
+  mariadb-*)
+    mysql_server_package=mariadb-server-${MYSQL_VARIANT##mariadb-}
+    DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmariadb-client-lgpl-dev"
+    DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmariadbd-dev"
+    ;;
+  *)
+    mysql_server_package=mysql-server-${MYSQL_VARIANT}
+    DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmysqlclient-dev"
+    DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmysqld-dev"
+    ;;
+esac
 
 grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list
@@ -63,15 +74,21 @@ run apt-get build-dep -y ${mysql_server_package}
 run mkdir -p build
 run cd build
 run tar xfz /vagrant/tmp/${PACKAGE}-${VERSION}.tar.gz
-run mv ${PACKAGE}-${VERSION} ${PACKAGE}-5.5-${VERSION}
-run tar cfz ${PACKAGE}-5.5_${VERSION}.orig.tar.gz \
-  ${PACKAGE}-5.5-${VERSION}
-run cd ${PACKAGE}-5.5-${VERSION}/
+run mv ${PACKAGE}-${VERSION} ${PACKAGE}-${MYSQL_VARIANT}-${VERSION}
+run tar cfz ${PACKAGE}-${MYSQL_VARIANT}_${VERSION}.orig.tar.gz \
+  ${PACKAGE}-${MYSQL_VARIANT}-${VERSION}
+run cd ${PACKAGE}-${MYSQL_VARIANT}-${VERSION}/
 run cp -rp /vagrant/tmp/debian debian
 # export DEB_BUILD_OPTIONS=noopt
-MYSQL_PACKAGE_INFO=$(apt-cache show mysql-server | grep Version | sort | tail -1)
+MYSQL_PACKAGE_INFO=$(apt-cache show ${mysql_server_package} |
+                        grep Version |
+                        sort |
+                        tail -1)
 MYSQL_PACKAGE_VERSION=${MYSQL_PACKAGE_INFO##Version: }
-sed -i "s/MYSQL_VERSION/$MYSQL_PACKAGE_VERSION/" debian/control
+sed -i'' \
+    -e "s/MYSQL_VERSION/$MYSQL_PACKAGE_VERSION/g" \
+    -e "s/MARIADB_VERSION/$MYSQL_PACKAGE_VERSION/g" \
+    debian/control
 run debuild -us -uc
 run cd -
 

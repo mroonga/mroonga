@@ -2,6 +2,7 @@ REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = debian
 ARCHITECTURES = i386 amd64
 CODE_NAMES = jessie
+MYSQL_VARIANTS = 5.5 mariadb-10.0
 
 all:
 
@@ -45,20 +46,21 @@ upload: ensure-rsync-path
 
 build: build-package-deb
 
-build-package-deb: prepare-build-package-deb
+build-package-deb: source env.sh
 	vagrant destroy --force
-	for architecture in $(ARCHITECTURES); do		\
-	  for code_name in $(CODE_NAMES); do			\
-	    id=debian-$$code_name-$$architecture;		\
-	    vagrant up $$id || exit 1;				\
-	    vagrant destroy --force $$id;			\
+	for variant in $(MYSQL_VARIANTS); do			\
+	  cp env.sh tmp/;					\
+	  echo "MYSQL_VARIANT=$${variant}" >> tmp/env.sh;	\
+	  rm -rf tmp/debian;					\
+	  cp -rp $(srcdir)/../debian-$${variant} tmp/debian;	\
+	  for architecture in $(ARCHITECTURES); do		\
+	    for code_name in $(CODE_NAMES); do			\
+	      id=debian-$$code_name-$$architecture;		\
+	      vagrant up $$id || exit 1;			\
+	      vagrant destroy --force $$id;			\
+	    done;						\
 	  done;							\
 	done
-
-prepare-build-package-deb: source env.sh
-	cp env.sh tmp/
-	rm -rf tmp/debian
-	cp -rp $(srcdir)/../debian-5.5 tmp/debian
 
 source: tmp/$(PACKAGE)-$(VERSION).tar.gz
 
