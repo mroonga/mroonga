@@ -5,6 +5,16 @@
 News
 ====
 
+.. _release-6-11:
+
+Release 6.11 - 2016-11-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [deb][debian] Supported MariaDB 10.x package for Debian jessie.
+
 .. _release-6-10:
 
 Release 6.10 - 2016-10-29
