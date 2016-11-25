@@ -88,7 +88,6 @@ case ${distribution} in
           run yum-config-manager --disable mysql56-community
           run yum-config-manager --enable mysql57-community
           if [ ${distribution_version} = 6 ]; then
-            run yum install -y epel-release
             run yum install -y cmake28
           fi
         fi
@@ -109,7 +108,6 @@ case ${distribution} in
         run yum install -y http://www.percona.com/downloads/percona-release/redhat/${release_rpm_version}/${release_rpm}
         run yum install -y Percona-Server-devel-57
         if [ ${distribution_version} = 6 ]; then
-          run yum install -y epel-release
           run yum install -y cmake28
         fi
         ;;
