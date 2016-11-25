@@ -64,6 +64,7 @@ run cp /vagrant/tmp/${distribution}/*.spec rpmbuild/SPECS/
 
 package_name=$(cd rpmbuild/SPECS; echo *.spec | sed -e 's/\.spec$//g')
 
+run yum install -y epel-release
 case ${distribution} in
   fedora)
     USE_MYSQLSERVICES_COMPAT=yes
