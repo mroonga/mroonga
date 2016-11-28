@@ -196,7 +196,12 @@ allow_unsigned_uploads = 0
                     "-i", "-e",
                     "s,MYSQL_VERSION\\|MARIADB_VERSION,#{mysql_version},",
                     "debian/control")
-        run_command("debuild", "--set-envvar=LINTIAN_PROFILE=ubuntu", "-S", "-sa", "-pgpg2", "-k#{@pgp_sign_key}")
+        run_command("debuild",
+                    "--set-envvar=LINTIAN_PROFILE=ubuntu",
+                    "-S",
+                    "-sa",
+                    "-pgpg2",
+                    "-k#{@pgp_sign_key}")
         if @use_pbuilder
           run_command("pbuilder-dist", code_name, "build",
                       "../#{deb_package_name}_#{deb_version}.dsc")
