@@ -26,8 +26,8 @@ Here is the example query which use special characters to be escaped::
 
 Here is the example about special characters which is escaped::
 
-  SELECT mroonga_escape("+-<>~*()\"\:");
-  '\\+\\-\\<\\>\\~\\*\\(\\)\\"\\:
+  SELECT mroonga_escape("+-<>~*()\"\\\:");
+  -- \+\-\<\>\~\*\(\)\"\\\:
 
 
 Parameters
@@ -53,7 +53,7 @@ There is one optional parameter, ``special_characters``.
 
 It specifies characters to escape.
 
-The default value is ``+-<>~*()":``.
+The default value is ``+-<>~*()"\\:``.
 
 Return value
 ------------
