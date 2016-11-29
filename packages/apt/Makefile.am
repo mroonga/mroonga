@@ -52,9 +52,13 @@ build-package-deb: source env.sh
 	  cp env.sh tmp/;					\
 	  echo "MYSQL_VARIANT=$${variant}" >> tmp/env.sh;	\
 	  rm -rf tmp/debian;					\
-	  cp -rp $(srcdir)/../debian-$${variant} tmp/debian;	\
 	  for architecture in $(ARCHITECTURES); do		\
 	    for code_name in $(CODE_NAMES); do			\
+	      if [ $${code_name} = "jessie" -a $${variant} = "mariadb-10.0" ]; then	\
+		cp -rp $(srcdir)/../jessie-$${variant} tmp/debian;			\
+	      else									\
+		cp -rp $(srcdir)/../debian-$${variant} tmp/debian;			\
+	      fi;						\
 	      id=debian-$$code_name-$$architecture;		\
 	      vagrant up $$id || exit 1;			\
 	      vagrant destroy --force $$id;			\
