@@ -197,7 +197,7 @@ allow_unsigned_uploads = 0
                     "s,MYSQL_VERSION\\|MARIADB_VERSION,#{mysql_version},",
                     "debian/control")
         run_command("debuild",
-                    "--set-envvar=LINTIAN_PROFILE=ubuntu",
+                    "--no-lintian",
                     "-d",
                     "-S",
                     "-sa",
