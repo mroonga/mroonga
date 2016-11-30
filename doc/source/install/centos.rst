@@ -18,7 +18,7 @@ Mroonga 3.09 release.
 
 Install::
 
-  % sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
+  % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum makecache
   % sudo yum install -y mysql55-mysql-server
   % sudo /sbin/service mysql55-mysqld start
