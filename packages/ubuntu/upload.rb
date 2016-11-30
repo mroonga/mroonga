@@ -41,12 +41,6 @@ class Uploader
       mysql56_version = @mysql56_versions[code_name]
       mysql57_version = @mysql57_versions[code_name]
       mariadb10_0_version = @mariadb10_0_versions[code_name]
-      run_command("sudo",
-                  "apt-get",
-                  "-fy",
-                  "install",
-                  "libmysqlclient-dev",
-                  "libmysqld-dev")
       if mysql55_version
         upload(code_name, "5.5", mysql55_version)
       end
@@ -57,11 +51,6 @@ class Uploader
         upload(code_name, "5.7", mysql57_version)
       end
       if mariadb10_0_version
-        run_command("sudo",
-                    "apt-get",
-                    "-fy",
-                    "install",
-                    "libmariadbd-dev")
         upload(code_name, "mariadb-10.0", mariadb10_0_version)
       end
     end
@@ -209,6 +198,7 @@ allow_unsigned_uploads = 0
                     "debian/control")
         run_command("debuild",
                     "--set-envvar=LINTIAN_PROFILE=ubuntu",
+                    "-d",
                     "-S",
                     "-sa",
                     "-pgpg2",
