@@ -19,7 +19,6 @@ Mroonga 3.09 release.
 Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
-  % sudo yum makecache
   % sudo yum install -y mysql55-mysql-server
   % sudo /sbin/service mysql55-mysqld start
   % sudo yum install -y mysql55-mroonga
@@ -44,7 +43,6 @@ Install::
 
   % sudo yum install -y centos-release-scl
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
-  % sudo yum makecache
   % sudo yum install -y mysql55-mysql-server
   % sudo /sbin/service mysql55-mysqld start
   % sudo yum install -y mysql55-mroonga
@@ -68,7 +66,6 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
-  % sudo yum makecache
   % sudo yum install -y mysql-community-mroonga
   (% sudo /sbin/service mysqld start)
   (% sudo mysqladmin -u root password 'new-password')
@@ -95,7 +92,6 @@ Install::
   % sudo yum install -y yum-utils
   % sudo yum-config-manager --disable mysql56-community
   % sudo yum-config-manager --enable mysql57-community
-  % sudo yum makecache
   % sudo yum install -y mysql57-community-mroonga
   (% sudo /sbin/service mysqld start)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
@@ -120,7 +116,6 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-  % sudo yum makecache
   % sudo yum install -y Percona-Server-server-56
   % sudo /sbin/service mysql start
   % sudo yum install -y percona-server-56-mroonga
@@ -145,7 +140,6 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-  % sudo yum makecache
   % sudo yum install -y percona-server-57-mroonga
   (% sudo /sbin/service mysql start)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
@@ -168,7 +162,6 @@ You can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7.
 Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
-  % sudo yum makecache
   % sudo yum install -y mariadb-server
   % sudo systemctl start mariadb
   % sudo yum install -y mariadb-mroonga
@@ -192,7 +185,6 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
-  % sudo yum makecache
   % sudo yum install -y mysql-community-mroonga
   (% sudo systemctl start mysqld)
   (% sudo mysqladmin -u root password 'new-password')
@@ -219,7 +211,6 @@ Install::
   % sudo yum install -y yum-utils
   % sudo yum-config-manager --disable mysql56-community
   % sudo yum-config-manager --enable mysql57-community
-  % sudo yum makecache
   % sudo yum install -y mysql57-community-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
@@ -244,7 +235,6 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-  % sudo yum makecache
   % sudo yum install -y percona-server-56-mroonga
   (% sudo systemctl start mysqld)
   (% sudo mysqladmin -u root password 'new-password')
@@ -268,7 +258,6 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-  % sudo yum makecache
   % sudo yum install -y percona-server-57-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
