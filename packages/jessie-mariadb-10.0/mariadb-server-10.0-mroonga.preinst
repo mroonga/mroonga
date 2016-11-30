@@ -1,6 +1,6 @@
 #! /bin/sh
 
-set -xe
+set -e
 
 if [ upgrade != "$1" ] || dpkg --compare-versions "$2" lt 6.11-1; then
     dpkg-divert --package mariadb-server-10.0-mroonga --add --rename \
