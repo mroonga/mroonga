@@ -47,7 +47,7 @@ Zip packages are pre-configured for easy to use, so no need to execute
 
 Just start mysqld by following command::
 
-  > mysqld.exe --defautls-file=.\MY-PREFERRED-INI.ini --console
+  > mysqld.exe --defaults-file=.\MY-PREFERRED-INI.ini --console
 
 Each zip package contains ini files (my-small.ini, my-medium.ini,
 my-large.ini and so on), choose preferred ini file which meets on your
