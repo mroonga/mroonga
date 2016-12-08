@@ -3,9 +3,8 @@ drop table if exists articles;
 drop table if exists comments2;
 drop table if exists comments;
 create table comments(
-comment int unsigned DEFAULT 0,
-content text not null,
-primary key(comment)
+comment int unsigned primary key,
+content text not null
 );
 create table articles(
 content text not null,
@@ -29,7 +28,7 @@ content	comment
 show create table comments;
 Table	Create Table
 comments	CREATE TABLE `comments` (
-  `comment` int(10) unsigned NOT NULL DEFAULT '0',
+  `comment` int(10) unsigned NOT NULL,
   `content` text NOT NULL,
   PRIMARY KEY (`comment`)
 ) ENGINE=Mroonga DEFAULT CHARSET=latin1
@@ -47,9 +46,8 @@ def	test	comment	def	test	PRIMARY	NONE	RESTRICT	RESTRICT	articles	comments
 rename table comments to comments2;
 rename table articles to articles2;
 create table comments(
-comment int unsigned DEFAULT 0,
-content text not null,
-primary key(comment)
+comment int unsigned primary key,
+content text not null
 );
 create table articles(
 content text not null,
@@ -83,7 +81,7 @@ content	comment
 show create table comments;
 Table	Create Table
 comments	CREATE TABLE `comments` (
-  `comment` int(10) unsigned NOT NULL DEFAULT '0',
+  `comment` int(10) unsigned NOT NULL,
   `content` text NOT NULL,
   PRIMARY KEY (`comment`)
 ) ENGINE=Mroonga DEFAULT CHARSET=latin1
@@ -98,7 +96,7 @@ articles	CREATE TABLE `articles` (
 show create table comments2;
 Table	Create Table
 comments2	CREATE TABLE `comments2` (
-  `comment` int(10) unsigned NOT NULL DEFAULT '0',
+  `comment` int(10) unsigned NOT NULL,
   `content` text NOT NULL,
   PRIMARY KEY (`comment`)
 ) ENGINE=Mroonga DEFAULT CHARSET=latin1
