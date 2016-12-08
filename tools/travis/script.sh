@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright(C) 2012-2015 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2016 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -97,6 +97,9 @@ run_sql_test()
   test_args=()
   if [ "${MROONGA_TEST_EMBEDDED}" = "yes" ]; then
     test_args=("${test_args[@]}" "--embedded-server")
+  fi
+  if [ "${MROONGA_TEST_PS_PROTOCOL}" = "yes" ]; then
+    test_args=("${test_args[@]}" "--ps-protocol")
   fi
 
   if [ "${MROONGA_BUNDLED}" = "yes" ]; then
