@@ -10125,6 +10125,15 @@ void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
             }
             break;
           case Item_func::MULT_EQUAL_FUNC:
+#ifdef MRN_HAVE_ITEM_EQUAL_FIELDS_ITERATOR
+            {
+              Item_equal *equal_item = static_cast<Item_equal *>(where);
+              if (equal_item->n_field_items() == 1) {
+                Item_equal_fields_iterator it(*equal_item);
+                target = it++;
+              }
+            }
+#endif
             break;
           default:
             target = NULL;

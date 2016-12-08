@@ -222,6 +222,10 @@ extern "C" {
 #  define MRN_HANDLER_RECORDS_RETURN_ERROR
 #endif
 
+#ifdef MRN_MARIADB_P
+#  define MRN_HAVE_ITEM_EQUAL_FIELDS_ITERATOR
+#endif
+
 class ha_mroonga;
 
 /* structs */
