@@ -196,7 +196,7 @@ while [ $# -gt 0 ]; do
 	if [ -n "${test_names}" ]; then
 	  test_names="${test_names}|"
 	fi
-	test_names="${test_names}.*${test_name}"
+	test_names="${test_names}${test_name}"
       fi
 
       test_suite_name=$(echo "$test_suite_name" | sed -e "s,^${suite_dir}/,,")
