@@ -15,7 +15,7 @@ env:
   - MYSQL_VERSION=mariadb-10.0.27 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
 #  - MYSQL_VERSION=mariadb-10.1.19
   - MYSQL_VERSION=mariadb-10.1.19 MROONGA_BUNDLED=yes
-  - MYSQL_VERSION=mariadb-10.2.1 MROONGA_BUNDLED=yes
+  - MYSQL_VERSION=mariadb-10.2.2 MROONGA_BUNDLED=yes
   - MYSQL_VERSION=percona-server-5.6
   - MYSQL_VERSION=percona-server-5.7
 matrix:
@@ -27,7 +27,7 @@ matrix:
     - env: MYSQL_VERSION=mariadb-10.0.27 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
 #    - env: MYSQL_VERSION=mariadb-10.1.19
 #    - env: MYSQL_VERSION=mariadb-10.1.19 MROONGA_BUNDLED=yes
-#    - env: MYSQL_VERSION=mariadb-10.2.1 MROONGA_BUNDLED=yes
+#    - env: MYSQL_VERSION=mariadb-10.2.2 MROONGA_BUNDLED=yes
 install:
   - tools/travis/install.sh
 before_script:
