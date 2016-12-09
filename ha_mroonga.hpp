@@ -222,10 +222,6 @@ extern "C" {
 #  define MRN_HANDLER_RECORDS_RETURN_ERROR
 #endif
 
-#ifdef MRN_MARIADB_P
-#  define MRN_HAVE_ITEM_EQUAL_FIELDS_ITERATOR
-#endif
-
 class ha_mroonga;
 
 /* structs */
@@ -651,8 +647,7 @@ private:
   bool is_dry_write();
   bool is_enable_optimization();
   bool should_normalize(Field *field) const;
-  void check_count_skip(key_part_map start_key_part_map,
-                        key_part_map end_key_part_map, bool fulltext);
+  void check_count_skip(key_part_map target_key_part_map);
   bool is_grn_zero_column_value(grn_obj *column, grn_obj *value);
   bool is_primary_key_field(Field *field) const;
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,

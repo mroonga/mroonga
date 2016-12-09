@@ -98,6 +98,7 @@
 #include <mrn_database_repairer.hpp>
 #include <mrn_operation.hpp>
 #include <mrn_column_name.hpp>
+#include <mrn_count_skip_checker.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -209,30 +210,6 @@ static mysql_mutex_t *mrn_LOCK_open;
 #else
 #  define mrn_calculate_key_len(table, key_index, buffer, keypart_map) \
   calculate_key_len(table, key_index, buffer, keypart_map)
-#endif
-
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
-  ((select_lex)->where_cond())
-#  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
-  ((select_lex)->having_cond())
-#  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
-  ((select_lex)->active_options())
-#else
-#  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
-  ((select_lex)->where)
-#  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
-  ((select_lex)->having)
-#  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
-  ((select_lex)->options)
-#endif
-
-#if MYSQL_VERSION_ID >= 50712 && !defined(MRN_MARIADB_P)
-#  define MRN_ITEM_IS_VALID(item)                       \
-  ((item) && ((item)->type() != Item::INVALID_ITEM))
-#else
-#  define MRN_ITEM_IS_VALID(item)                       \
-  (item)
 #endif
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
@@ -4933,7 +4910,9 @@ int ha_mroonga::delete_table(const char *name)
     error = operations_->clear(name, strlen(name));
   }
 
-  if (!error && mapper.is_temporary_table_name()) {
+  if (!error &&
+      mapper.is_temporary_table_name() &&
+      !mapper.is_internal_table_name()) {
     mrn_db_manager->drop(name);
   }
 
@@ -7370,7 +7349,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
                                        enum ha_rkey_function find_flag)
 {
   MRN_DBUG_ENTER_METHOD();
-  check_count_skip(keypart_map, 0, false);
+  check_count_skip(keypart_map);
 
   int error = 0;
 
@@ -8560,7 +8539,7 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  check_count_skip(0, 0, true);
+  check_count_skip(0);
 
   mrn_change_encoding(ctx, system_charset_info);
   grn_operator operation = GRN_OP_OR;
@@ -10018,165 +9997,48 @@ bool ha_mroonga::should_normalize(Field *field) const
   DBUG_RETURN(need_normalize_p);
 }
 
-void ha_mroonga::check_count_skip(key_part_map start_key_part_map,
-                                  key_part_map end_key_part_map, bool fulltext)
+void ha_mroonga::check_count_skip(key_part_map target_key_part_map)
 {
   MRN_DBUG_ENTER_METHOD();
 
   if (!is_enable_optimization()) {
-    DBUG_PRINT("info", ("mroonga: count skip: optimization is disabled"));
+    GRN_LOG(ctx, GRN_LOG_DEBUG,
+            "[mroonga][count-skip][false] optimization is disabled");
+    count_skip = false;
+    DBUG_VOID_RETURN;
+  }
+
+  if (thd_sql_command(ha_thd()) != SQLCOM_SELECT) {
+    GRN_LOG(ctx, GRN_LOG_DEBUG,
+            "[mroonga][count-skip][false] not SELECT");
+    count_skip = false;
+    DBUG_VOID_RETURN;
+  }
+
+  if (share->wrapper_mode &&
+      !(wrap_handler->ha_table_flags() & HA_NO_TRANSACTIONS)) {
+    GRN_LOG(ctx, GRN_LOG_DEBUG,
+            "[mroonga][count-skip][false] wrapped engine is transactional");
     count_skip = false;
     DBUG_VOID_RETURN;
   }
 
   st_select_lex *select_lex = table->pos_in_table_list->select_lex;
-
-  if (
-    thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
-    select_lex->item_list.elements == 1 &&
-    !select_lex->group_list.elements &&
-    !MRN_SELECT_LEX_GET_HAVING_COND(select_lex) &&
-    select_lex->table_list.elements == 1
-  ) {
-    Item *info = (Item *) select_lex->item_list.first_node()->info;
-    if (
-      info->type() != Item::SUM_FUNC_ITEM ||
-      ((Item_sum *) info)->sum_func() != Item_sum::COUNT_FUNC ||
-      ((Item_sum *) info)->nest_level ||
-      ((Item_sum *) info)->aggr_level ||
-      ((Item_sum *) info)->max_arg_level != -1 ||
-      ((Item_sum *) info)->max_sum_func_level != -1
-    ) {
-      DBUG_PRINT("info", ("mroonga: count skip: sum func is not match"));
-      count_skip = false;
-      DBUG_VOID_RETURN;
-    }
-
-    if (fulltext) {
-      DBUG_PRINT("info", ("mroonga: count skip: fulltext"));
-      Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
-      if (!where ||
-          where->type() != Item::FUNC_ITEM ||
-          ((Item_func *)where)->functype() != Item_func::FT_FUNC) {
-        DBUG_PRINT("info", ("mroonga: count skip: ft func is not match"));
-        count_skip = false;
-        DBUG_VOID_RETURN;
-      }
-      if (select_lex->select_n_where_fields != 1) {
-        DBUG_PRINT("info",
-                   ("mroonga: count skip: "
-                    "where clause is not fulltext search only"));
-        count_skip = false;
-        DBUG_VOID_RETURN;
-      }
-      if (share->wrapper_mode &&
-          !(wrap_handler->ha_table_flags() & HA_NO_TRANSACTIONS)) {
-        DBUG_PRINT("info", ("mroonga: count skip: transactional wrapper mode"));
-        count_skip = false;
-        DBUG_VOID_RETURN;
-      }
-      DBUG_PRINT("info", ("mroonga: count skip: skip enabled"));
-      count_skip = true;
-      mrn_count_skip++;
-      DBUG_VOID_RETURN;
-    } else if (share->wrapper_mode) {
-      DBUG_PRINT("info", ("mroonga: count skip: wrapper mode"));
-      count_skip = false;
-      DBUG_VOID_RETURN;
-    } else {
-      DBUG_PRINT("info", ("mroonga: count skip: without fulltext"));
-      uint key_nr = active_index;
-      KEY *key_info = &(table->key_info[key_nr]);
-      KEY_PART_INFO *key_part = key_info->key_part;
-      uint n_fields = 0;
-      for (Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
-           MRN_ITEM_IS_VALID(where);
-           where = where->next) {
-        Item *target = where;
-
-        if (where->type() == Item::FUNC_ITEM) {
-          Item_func *func_item = static_cast<Item_func *>(where);
-          switch (func_item->functype()) {
-          case Item_func::EQ_FUNC:
-          case Item_func::EQUAL_FUNC:
-          case Item_func::NE_FUNC:
-          case Item_func::LT_FUNC:
-          case Item_func::LE_FUNC:
-          case Item_func::GE_FUNC:
-          case Item_func::GT_FUNC:
-          case Item_func::BETWEEN:
-            {
-              Item **arguments = func_item->arguments();
-              target = arguments[0];
-
-              uint n_arguments = func_item->argument_count();
-              bool argument_in_where = false;
-              for (uint i = 0; i < n_arguments; i++) {
-                if (arguments[i] == where->next) {
-                  argument_in_where = true;
-                  break;
-                }
-              }
-              if (argument_in_where) {
-                for (uint i = 0; i < n_arguments; i++) {
-                  where = where->next;
-                }
-              }
-            }
-            break;
-          case Item_func::MULT_EQUAL_FUNC:
-#ifdef MRN_HAVE_ITEM_EQUAL_FIELDS_ITERATOR
-            {
-              Item_equal *equal_item = static_cast<Item_equal *>(where);
-              if (equal_item->n_field_items() == 1) {
-                Item_equal_fields_iterator it(*equal_item);
-                target = it++;
-              }
-            }
-#endif
-            break;
-          default:
-            target = NULL;
-            break;
-          }
-          if (!target)
-            break;
-        }
-
-        if (target->type() == Item::FIELD_ITEM) {
-          Field *field = static_cast<Item_field *>(target)->field;
-          if (!field)
-            break;
-          if (field->table != table)
-            break;
-          uint i;
-          for (i = 0; i < KEY_N_KEY_PARTS(key_info); i++) {
-            if (key_part[i].field == field) {
-              if (!(start_key_part_map >> i) && !(end_key_part_map >> i)) {
-                i = KEY_N_KEY_PARTS(key_info);
-              } else {
-                n_fields++;
-              }
-              break;
-            }
-          }
-          if (i >= KEY_N_KEY_PARTS(key_info))
-            break;
-        }
-      }
-      if (n_fields == select_lex->select_n_where_fields) {
-        DBUG_PRINT("info", ("mroonga: count skip: skip enabled"));
-        count_skip = true;
-        mrn_count_skip++;
-        DBUG_VOID_RETURN;
-      } else {
-        DBUG_PRINT("info", ("mroonga: count skip: skip disabled"));
-      }
-    }
+  KEY *key_info = &(table->key_info[active_index]);
+  mrn::CountSkipChecker checker(ctx,
+                                table,
+                                select_lex,
+                                key_info,
+                                target_key_part_map,
+                                !share->wrapper_mode);
+  if (checker.check()) {
+    count_skip = true;
+    mrn_count_skip++;
+    DBUG_VOID_RETURN;
+  } else {
+    count_skip = false;
+    DBUG_VOID_RETURN;
   }
-  DBUG_PRINT("info", ("mroonga: count skip: select type is not match"));
-  count_skip = false;
-  DBUG_VOID_RETURN;
 }
 
 bool ha_mroonga::is_grn_zero_column_value(grn_obj *column, grn_obj *value)

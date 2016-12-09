@@ -213,6 +213,26 @@
 #  define MRN_SUPPORT_CUSTOM_OPTIONS
 #endif
 
+#ifdef MRN_MARIADB_P
+#  define MRN_HAVE_ITEM_EQUAL_FIELDS_ITERATOR
+#endif
+
+#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
+  ((select_lex)->where_cond())
+#  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
+  ((select_lex)->having_cond())
+#  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
+  ((select_lex)->active_options())
+#else
+#  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
+  ((select_lex)->where)
+#  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
+  ((select_lex)->having)
+#  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
+  ((select_lex)->options)
+#endif
+
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
 #  if MYSQL_VERSION_ID >= 100104
 #    define mrn_init_sql_alloc(thd, mem_root)                           \
