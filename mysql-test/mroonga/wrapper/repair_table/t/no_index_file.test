@@ -16,6 +16,7 @@
 
 --source include/have_innodb.inc
 --source include/not_embedded.inc
+--source ../../../include/mroonga/skip_solaris.inc
 --source ../../../include/mroonga/have_mroonga.inc
 --source ../../../include/mroonga/have_mroonga_helper.inc
 
