@@ -1,5 +1,4 @@
-# Copyright(C) 2014 Toshihisa Tashiro
-# Copyright(C) 2016 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,17 +14,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---disable_query_log
-let $version_compile_os_osx=`SELECT IF(@@version_compile_os like 'osx%', 1, 0);`;
-if ($version_compile_os_osx) {
-  let $version_compile_os_osx_10_8_or_later=
-    `SELECT IF(@@version_compile_os = 'osx10.6', 0, 1);`;
-  if ($version_compile_os_osx_10_8_or_later) {
-    let $version_compile_os_osx_10_8_or_later=
-      `SELECT IF(@@version_compile_os = 'osx10.7', 0, 1);`;
-  }
-}
-if (!$version_comiple_os_osx) {
-  let $version_compile_os_osx_10_8_or_later=0;
-}
---enable_query_log
+disable_query_log;
+disable_warnings;
+let $version_compile_64bit=
+  `SELECT IF(@@version_compile_machine LIKE '%64%', 1, 0)`;
+enable_warnings;
+enable_query_log;

@@ -1,5 +1,4 @@
-# Copyright(C) 2013 Kentoku SHIBA
-# Copyright(C) 2014 Toshihisa Tashiro
+# Copyright(C) 2016  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,14 +14,15 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../include/mroonga/skip_osx.inc
+--source ../../include/mroonga/check_64bit.inc
+--source ../../include/mroonga/check_osx.inc
 
-disable_query_log;
-disable_warnings;
-let $VERSION_COMPILE_64BIT=
-  `SELECT IF(@@version_compile_machine like '%64%', 1, 0)`;
-enable_warnings;
-enable_query_log;
-if ($VERSION_COMPILE_64BIT) {
-  skip Need a 32 bit machine/binary;
+if ($version_compile_64bit) {
+  skip This test is for environment that doesn't have signed 64bit time_t;
+}
+
+if ($version_compile_os_osx) {
+  if (!$version_compile_os_osx_10_8_or_later) {
+    skip This test is not for OS X 10.7 or earlier that isn't detected signed 64bit time_t availability;
+  }
 }

@@ -1,4 +1,4 @@
-# Copyright(C) 2013 Kentoku SHIBA
+# Copyright(C) 2016  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,12 +14,15 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-disable_query_log;
-disable_warnings;
-let $VERSION_COMPILE_64BIT=
-  `SELECT IF(@@version_compile_machine like '%64%', 1, 0)`;
-enable_warnings;
-enable_query_log;
-if (!$VERSION_COMPILE_64BIT) {
-  skip Need a 64 binary;
+--source ../../include/mroonga/check_64bit.inc
+--source ../../include/mroonga/check_osx.inc
+
+if (!$version_compile_64bit) {
+  skip Need a 64 binary for signed 64bit time_t;
+}
+
+if ($version_compile_os_osx) {
+  if (!$version_compile_os_osx_10_8_or_later) {
+    skip Need OS X 10.8 or later for signed 64bit time_t;
+  }
 }
