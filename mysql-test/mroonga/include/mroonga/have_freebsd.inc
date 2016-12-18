@@ -16,6 +16,6 @@
 
 --source ../../include/mroonga/check_freebsd.inc
 
-if (!$VERSION_COMPILE_OS_FREEBSD) {
+if (!$version_compile_os_freebsd) {
   skip Need OS FreeBSD;
 }
