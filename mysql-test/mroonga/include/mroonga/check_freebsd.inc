@@ -15,5 +15,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --disable_query_log
-let $VERSION_COMPILE_OS_FREEBSD=`SELECT IF(@@version_compile_os like 'FREEBSD%', 1, 0);`;
+let $version_compile_os_freebsd=
+  `SELECT IF(@@version_compile_os LIKE '%freebsd%', 1, 0);`;
 --enable_query_log
