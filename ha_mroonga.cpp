@@ -3825,7 +3825,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
     if (tokenizer) {
       index_column_flags |= GRN_OBJ_WITH_POSITION;
     }
-    if (is_multiple_column_index) {
+    if (is_multiple_column_index && (key_info->flags & HA_FULLTEXT)) {
       index_column_flags |= GRN_OBJ_WITH_SECTION;
     }
   }
