@@ -22,6 +22,8 @@
 
 #include <mrn_mysql_compat.h>
 
+#include <item_cmpfunc.h>
+
 #include <groonga.h>
 
 namespace mrn {

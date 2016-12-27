@@ -20,6 +20,8 @@
 
 #include "mrn_count_skip_checker.hpp"
 
+#include <item_sum.h>
+
 // for debug
 #define MRN_CLASS_NAME "mrn::CountSkipChecker"
 
