@@ -106,7 +106,7 @@ namespace mrn {
         GRN_LOG(ctx_, GRN_LOG_INFO,
                 "database not found. creating...: <%s>", mapper.db_path());
         if (path[0] == FN_CURLIB &&
-            (path[1] == FN_LIBCHAR || path[1] == FN_LIBCHAR2)) {
+            mrn_is_directory_separator(path[1])) {
           ensure_database_directory();
         }
         grn_db = grn_db_create(ctx_, mapper.db_path(), NULL);
@@ -269,8 +269,7 @@ namespace mrn {
     char sub_directory[MRN_MAX_PATH_SIZE];
     sub_directory[0] = '\0';
     while (true) {
-      if (directory[i] == FN_LIBCHAR ||
-          directory[i] == FN_LIBCHAR2 ||
+      if (mrn_is_directory_separator(directory[i]) ||
           directory[i] == '\0') {
         sub_directory[i] = '\0';
         struct stat directory_status;
@@ -313,8 +312,10 @@ namespace mrn {
 
     const char *last_path_separator;
     last_path_separator = strrchr(path_prefix, FN_LIBCHAR);
+#ifdef FN_LIBCHAR2
     if (!last_path_separator)
       last_path_separator = strrchr(path_prefix, FN_LIBCHAR2);
+#endif
     if (!last_path_separator)
       DBUG_VOID_RETURN;
     if (path_prefix == last_path_separator)

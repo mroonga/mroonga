@@ -150,8 +150,7 @@ namespace mrn {
     size_t raw_path_prefix_length = strlen(raw_path_prefix);
     size_t separator_position = raw_path_prefix_length;
     for (; separator_position > 0; separator_position--) {
-      if (base_directory_buffer_[separator_position] == FN_LIBCHAR ||
-          base_directory_buffer_[separator_position] == FN_LIBCHAR2) {
+      if (mrn_is_directory_separator(base_directory_buffer_[separator_position])) {
         break;
       }
     }
