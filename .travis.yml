@@ -25,7 +25,7 @@ matrix:
 #    - env: MYSQL_VERSION=mariadb-10.0.27
 #    - env: MYSQL_VERSION=mariadb-10.0.27 CFLAGS=-funsigned-char CXXFLAGS=-funsigned-char
 #    - env: MYSQL_VERSION=mariadb-10.0.27 MROONGA_BUNDLED=yes
-    - env: MYSQL_VERSION=mariadb-10.0.27 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
+#    - env: MYSQL_VERSION=mariadb-10.0.27 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
 #    - env: MYSQL_VERSION=mariadb-10.1.19
 #    - env: MYSQL_VERSION=mariadb-10.1.19 MROONGA_BUNDLED=yes
 #    - env: MYSQL_VERSION=mariadb-10.2.3 MROONGA_BUNDLED=yes
