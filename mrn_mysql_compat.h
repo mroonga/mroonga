@@ -343,7 +343,7 @@
              (errors))
 #endif
 
-#if MYSQL_VERSION_ID >= 50716 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 50717 && !defined(MRN_MARIADB_P)
 #  define mrn_is_directory_separator(c)         \
   is_directory_separator((c))
 #else
