@@ -33,6 +33,10 @@ namespace mrn {
       int column_type = (column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK);
       return column_type == GRN_OBJ_COLUMN_VECTOR;
     }
+
+    bool is_weight_column(grn_obj *column) {
+      return column->header.flags & GRN_OBJ_WITH_WEIGHT;
+    }
   }
 }
 

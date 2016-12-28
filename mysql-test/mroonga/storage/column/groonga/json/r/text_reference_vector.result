@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS logs;
+CREATE TABLE logs (
+weight_reference_vector JSON COMMENT 'flags "COLUMN_VECTOR", type "ShortText"'
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+INSERT INTO logs(weight_reference_vector) VALUES('["start", "restart", "shutdown"]');
+SELECT * FROM logs;
+weight_reference_vector
+["start", "restart", "shutdown"]
+SELECT mroonga_command("dump --dump_plugins no --dump_records no");
+mroonga_command("dump --dump_plugins no --dump_records no")
+table_create mroonga_operations TABLE_NO_KEY
+column_create mroonga_operations record COLUMN_SCALAR UInt32
+column_create mroonga_operations table COLUMN_SCALAR ShortText
+column_create mroonga_operations type COLUMN_SCALAR ShortText
+
+table_create logs TABLE_NO_KEY
+column_create logs weight_reference_vector COLUMN_VECTOR ShortText
+DROP TABLE logs;
