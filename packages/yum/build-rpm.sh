@@ -79,6 +79,7 @@ case ${distribution} in
       run yum install -y \
           http://packages.groonga.org/${distribution}/${release_rpm}
     fi
+    run yum makecache
 
     case ${package_name} in
       mysql55-${PACKAGE})
