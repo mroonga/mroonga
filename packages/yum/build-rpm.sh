@@ -71,9 +71,14 @@ case ${distribution} in
     ;;
   centos)
     release_rpm=groonga-release-1.2.0-1.noarch.rpm
-    wget http://packages.groonga.org/${distribution}/${release_rpm}
-    run rpm -U ${release_rpm}
-    rm -f ${release_rpm}
+    if [ ${distribution_version} = 5 ]; then
+      wget http://packages.groonga.org/${distribution}/${release_rpm}
+      run yum install -y --nogpgcheck ${release_rpm}
+      rm -f ${release_rpm}
+    else
+      run yum install -y \
+          http://packages.groonga.org/${distribution}/${release_rpm}
+    fi
 
     case ${package_name} in
       mysql55-${PACKAGE})
