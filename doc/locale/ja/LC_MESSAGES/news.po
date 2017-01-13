@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2016-11-24 09:13+0900\n"
+"PO-Revision-Date: 2017-01-13 11:20+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,46 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 6.11 - 2016-11-29"
-msgstr "6.11リリース - 2016-11-29"
+msgid "Release 6.13 - 2017-01-13"
+msgstr "6.13リリース - 2017-01-13"
 
 msgid "Improvements"
 msgstr "改良"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[:doc:`/install/centos`] Supported the latest Percona Server 5.6."
+msgstr "[:doc:`/install/centos`] 最新のPercona Server 5.7をサポートしました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[:doc:`/install/centos`] Supported the latest Percona Server 5.7."
+msgstr "[:doc:`/install/centos`] 最新のPercona Server 5.6をサポートしました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.5."
+msgstr "[:doc:`/install/centos`] 最新のMySQL 5.5をサポートしました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.6."
+msgstr "[:doc:`/install/centos`] 最新のMySQL 5.6をサポートしました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.7."
+msgstr "[:doc:`/install/centos`] 最新のMySQL 5.7をサポートしました。"
+
+msgid "Supported MariaDB 10.2.3."
+msgstr "MariaDB 10.2.23をサポートしました。"
+
+msgid "Supported MySQL 5.7.17."
+msgstr "MySQL 5.7.17をサポートしました。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Reduced index size for multiple column index."
+msgstr ""
+"[:doc:`/tutorial/storage`] マルチカラムインデックスのインデックスサイズを削減"
+"しました。"
+
+msgid "Release 6.11 - 2016-11-29"
+msgstr "6.11リリース - 2016-11-29"
 
 msgid "[deb][debian] Supported MariaDB 10.x package for Debian jessie."
 msgstr ""
