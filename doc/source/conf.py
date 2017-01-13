@@ -192,6 +192,8 @@ html_show_sphinx = False
 # This is the file name suffix for HTML files (e.g. ".xhtml").
 #html_file_suffix = None
 
+html_copy_source = False
+
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'mroongadoc'
 

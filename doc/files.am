@@ -229,55 +229,6 @@ mo_files_relative_from_locale_dir = \
 html_files_relative_from_locale_dir = \
 	html/_images/storage-mode.png \
 	html/_images/wrapper-mode.png \
-	html/_sources/characteristic.txt \
-	html/_sources/community.txt \
-	html/_sources/contribution.txt \
-	html/_sources/contribution/documentation.txt \
-	html/_sources/contribution/report.txt \
-	html/_sources/developer.txt \
-	html/_sources/developer/coding_style.txt \
-	html/_sources/developer/debug.txt \
-	html/_sources/developer/release.txt \
-	html/_sources/faq.txt \
-	html/_sources/faq/mmap_cannot_allocate_memory.txt \
-	html/_sources/index.txt \
-	html/_sources/install.txt \
-	html/_sources/install/centos.txt \
-	html/_sources/install/debian.txt \
-	html/_sources/install/fedora.txt \
-	html/_sources/install/os_x.txt \
-	html/_sources/install/others.txt \
-	html/_sources/install/ubuntu.txt \
-	html/_sources/install/windows.txt \
-	html/_sources/news.txt \
-	html/_sources/news/0.x.txt \
-	html/_sources/news/1.x.txt \
-	html/_sources/news/2.x.txt \
-	html/_sources/news/3.x.txt \
-	html/_sources/news/4.x.txt \
-	html/_sources/news/5.x.txt \
-	html/_sources/reference.txt \
-	html/_sources/reference/full_text_search.txt \
-	html/_sources/reference/full_text_search/boolean_mode.txt \
-	html/_sources/reference/full_text_search/scoring.txt \
-	html/_sources/reference/limitations.txt \
-	html/_sources/reference/optimizations.txt \
-	html/_sources/reference/server_variables.txt \
-	html/_sources/reference/sql_commands.txt \
-	html/_sources/reference/status_variables.txt \
-	html/_sources/reference/udf.txt \
-	html/_sources/reference/udf/mroonga_command.txt \
-	html/_sources/reference/udf/mroonga_escape.txt \
-	html/_sources/reference/udf/mroonga_last_insert_grn_id.txt \
-	html/_sources/reference/udf/mroonga_normalize.txt \
-	html/_sources/reference/udf/mroonga_snippet.txt \
-	html/_sources/reference/udf/mroonga_snippet_html.txt \
-	html/_sources/tutorial.txt \
-	html/_sources/tutorial/installation_check.txt \
-	html/_sources/tutorial/mode.txt \
-	html/_sources/tutorial/storage.txt \
-	html/_sources/tutorial/wrapper.txt \
-	html/_sources/upgrade.txt \
 	html/_static/ajax-loader.gif \
 	html/_static/basic.css \
 	html/_static/comment-bright.png \
