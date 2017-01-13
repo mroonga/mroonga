@@ -5,6 +5,30 @@
 News
 ====
 
+.. _release-6-13:
+
+Release 6.13 - 2017-01-13
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Supported the latest Percona Server 5.6.
+
+* [:doc:`/install/centos`] Supported the latest Percona Server 5.7.
+
+* [:doc:`/install/centos`] Supported the latest MySQL 5.5.
+
+* [:doc:`/install/centos`] Supported the latest MySQL 5.6.
+
+* [:doc:`/install/centos`] Supported the latest MySQL 5.7.
+
+* Supported MariaDB 10.2.3.
+
+* Supported MySQL 5.7.17.
+
+* [:doc:`/tutorial/storage`] Reduced index size for multiple column index.
+
 .. _release-6-11:
 
 Release 6.11 - 2016-11-29
@@ -32,7 +56,7 @@ Improvements
 
 * [:doc:`/install`][:doc:`/tutorial`] Improved sample SQL format for
   easy to copy and paste.
-  
+
 * [rpm][centos] Supported latest MySQL 5.6.34, MySQL 5.7.16, Percona
   Server 5.6.33 and Percona Server 5.7.15. [groonga-dev,04169]
   [Reported by Hiroshi Kagami]
