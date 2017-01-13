@@ -29,7 +29,7 @@ CURL = curl --fail --silent --show-error
 
 all:
 
-release: archive upload
+release: download archive upload
 
 ensure-rsync-path:
 	@if test -z "$(RSYNC_PATH)"; then				\
