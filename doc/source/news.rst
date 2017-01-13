@@ -181,13 +181,13 @@ Fixes
 
 * Fixed to apply custom normalizer even if collation is bin family.
   [Gitter:groonga/ja:576d2a2d80f1c6a5257f1270][Reported by
-  big_bridge_]
+  big\_bridge\_]
 
 Thanks
 ^^^^^^
 
 * yoyoshifgs
-* big_bridge_
+* big\_bridge\_
 
 .. _release-6-03:
 
