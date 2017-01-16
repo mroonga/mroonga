@@ -723,14 +723,14 @@ msgstr ""
 "ぶ必要があります"
 
 msgid ""
-"`mariadb-10.1.20-with-mroonga-6.12-win32.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v6.12/mariadb-10.1.20-with-mroonga-6.12-win32."
+"`mariadb-10.1.20-with-mroonga-6.13-win32.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v6.13/mariadb-10.1.20-with-mroonga-6.13-win32."
 "zip>`_"
 msgstr ""
 
 msgid ""
-"`mariadb-10.1.20-with-mroonga-6.12-winx64.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v6.12/mariadb-10.1.20-with-mroonga-6.12-winx64."
+"`mariadb-10.1.20-with-mroonga-6.13-winx64.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v6.13/mariadb-10.1.20-with-mroonga-6.13-winx64."
 "zip>`_"
 msgstr ""
 
