@@ -22,7 +22,7 @@ Install::
   % sudo yum install -y --nogpgcheck groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y mysql55-mysql-server
   % sudo /sbin/service mysql55-mysqld start
-  % sudo yum install -y mysql55-mroonga
+  % sudo yum install -y --enablerepo=epel mysql55-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
@@ -30,7 +30,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _centos-6-official:
 
@@ -46,14 +46,14 @@ Install::
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y mysql55-mysql-server
   % sudo /sbin/service mysql55-mysqld start
-  % sudo yum install -y mysql55-mroonga
+  % sudo yum install -y --enablerepo=epel mysql55-mroonga
   (% sudo scl enable mysql55 "mysqladmin -u root password 'new-password'")
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _centos-6-oracle-56:
 
@@ -67,7 +67,7 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
-  % sudo yum install -y mysql-community-mroonga
+  % sudo yum install -y --enablerepo=epel mysql-community-mroonga
   (% sudo /sbin/service mysqld start)
   (% sudo mysqladmin -u root password 'new-password')
 
@@ -76,7 +76,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _centos-6-oracle-57:
 
@@ -93,7 +93,7 @@ Install::
   % sudo yum install -y yum-utils
   % sudo yum-config-manager --disable mysql56-community
   % sudo yum-config-manager --enable mysql57-community
-  % sudo yum install -y mysql57-community-mroonga
+  % sudo yum install -y --enablerepo=epel mysql57-community-mroonga
   (% sudo /sbin/service mysqld start)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
@@ -103,7 +103,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _centos-6-percona-56:
 
@@ -119,7 +119,7 @@ Install::
   $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
   % sudo yum install -y Percona-Server-server-56
   % sudo /sbin/service mysql start
-  % sudo yum install -y percona-server-56-mroonga
+  % sudo yum install -y --enablerepo=epel percona-server-56-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
@@ -141,7 +141,7 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-  % sudo yum install -y percona-server-57-mroonga
+  % sudo yum install -y --enablerepo=epel percona-server-57-mroonga
   (% sudo /sbin/service mysql start)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
@@ -151,7 +151,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _centos-7-official:
 
@@ -165,7 +165,7 @@ Install::
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y mariadb-server
   % sudo systemctl start mariadb
-  % sudo yum install -y mariadb-mroonga
+  % sudo yum install -y --enablerepo=epel mariadb-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
@@ -173,7 +173,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _centos-7-oracle-56:
 
@@ -186,7 +186,7 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
-  % sudo yum install -y mysql-community-mroonga
+  % sudo yum install -y --enablerepo=epel mysql-community-mroonga
   (% sudo systemctl start mysqld)
   (% sudo mysqladmin -u root password 'new-password')
 
@@ -195,7 +195,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _centos-7-oracle-57:
 
@@ -212,7 +212,7 @@ Install::
   % sudo yum install -y yum-utils
   % sudo yum-config-manager --disable mysql56-community
   % sudo yum-config-manager --enable mysql57-community
-  % sudo yum install -y mysql57-community-mroonga
+  % sudo yum install -y --enablerepo=epel mysql57-community-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
@@ -222,7 +222,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _centos-7-percona-56:
 
@@ -236,7 +236,7 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-  % sudo yum install -y percona-server-56-mroonga
+  % sudo yum install -y --enablerepo=epel percona-server-56-mroonga
   (% sudo systemctl start mysqld)
   (% sudo mysqladmin -u root password 'new-password')
 
@@ -245,7 +245,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _centos-7-percona-57:
 
@@ -259,7 +259,7 @@ Install::
 
   % sudo yum install -y http://packages.groonga.org/centos/groonga-release-1.2.0-1.noarch.rpm
   % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-  % sudo yum install -y percona-server-57-mroonga
+  % sudo yum install -y --enablerepo=epel percona-server-57-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
@@ -269,4 +269,4 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo yum install -y groonga-tokenizer-mecab
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
