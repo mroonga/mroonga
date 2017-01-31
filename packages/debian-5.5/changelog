@@ -1,3 +1,15 @@
+mroonga-5.5 (6.13-3) unstable; urgency=low
+
+  * Rebuild.
+
+ -- Kouhei Sutou <kou@clear-code.com>  Tue, 31 Jan 2017 00:00:00 +0900
+
+mroonga-5.5 (6.13-2) unstable; urgency=low
+
+  * Rebuild.
+
+ -- Kouhei Sutou <kou@clear-code.com>  Fri, 20 Jan 2017 00:00:00 +0900
+
 mroonga-5.5 (6.13-1) unstable; urgency=low
 
   * New upstream release.
