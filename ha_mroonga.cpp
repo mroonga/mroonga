@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2016 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -6377,9 +6377,13 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
-    if (bitmap_is_set(table->write_set, field->field_index)) {
-      if (field->is_null()) continue;
+    if (!bitmap_is_set(table->write_set, field->field_index))
+      continue;
 
+    if (field->is_null())
+      continue;
+
+    {
       mrn::ColumnName column_name(field->field_name);
       if (strcmp(MRN_COLUMN_NAME_ID, column_name.c_str()) == 0) {
         push_warning_printf(thd, MRN_SEVERITY_WARNING,
@@ -6390,6 +6394,38 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
           DBUG_RETURN(ER_DATA_TOO_LONG);
         }
       }
+    }
+
+    if (!is_foreign_key_field(table->s->table_name.str, field->field_name))
+      continue;
+
+    {
+      grn_obj *column = grn_columns[i];
+      grn_obj new_value;
+      GRN_VOID_INIT(&new_value);
+      {
+        mrn::DebugColumnAccess debug_column_access(table, table->read_set);
+        generic_store_bulk(field, &new_value);
+      }
+      grn_obj casted_value;
+      GRN_RECORD_INIT(&casted_value, 0, grn_obj_get_range(ctx, column));
+      grn_rc cast_rc = grn_obj_cast(ctx, &new_value, &casted_value, GRN_FALSE);
+      GRN_OBJ_FIN(ctx, &casted_value);
+      if (cast_rc != GRN_SUCCESS) {
+        grn_obj inspected;
+        GRN_TEXT_INIT(&inspected, 0);
+        grn_inspect(ctx, &inspected, &new_value);
+        GRN_OBJ_FIN(ctx, &new_value);
+        error = HA_ERR_NO_REFERENCED_ROW;
+        GRN_PLUGIN_ERROR(ctx, GRN_INVALID_ARGUMENT,
+                         "foreign record doesn't exist: <%s>:<%.*s>",
+                         field->field_name,
+                         static_cast<int>(GRN_TEXT_LEN(&inspected)),
+                         GRN_TEXT_VALUE(&inspected));
+        GRN_OBJ_FIN(ctx, &inspected);
+        DBUG_RETURN(error);
+      }
+      GRN_OBJ_FIN(ctx, &new_value);
     }
   }
 
