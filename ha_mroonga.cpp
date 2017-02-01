@@ -6847,6 +6847,63 @@ int ha_mroonga::storage_delete_row(const uchar *buf)
                            table->s->table_name.length);
   operation.record_target(record_id);
 
+  {
+    grn_id referencing_child_table_id = GRN_ID_NIL;
+    grn_hash *columns = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
+                                        GRN_OBJ_TABLE_HASH_KEY|GRN_HASH_TINY);
+    grn_table_columns(ctx, grn_table, "", 0,
+                      reinterpret_cast<grn_obj *>(columns));
+    GRN_HASH_EACH_BEGIN(ctx, columns, cursor, id) {
+      void *key;
+      grn_hash_cursor_get_key(ctx, cursor, &key);
+      grn_id column_id = *static_cast<grn_id *>(key);
+      grn_obj *column = grn_ctx_at(ctx, column_id);
+      if (!column)
+        continue;
+
+      if (column->header.type != GRN_COLUMN_INDEX)
+        continue;
+
+      grn_ii_cursor *ii_cursor =
+        grn_ii_cursor_open(ctx,
+                           reinterpret_cast<grn_ii *>(column),
+                           record_id,
+                           GRN_ID_NIL,
+                           GRN_ID_MAX,
+                           0,
+                           0);
+      if (!ii_cursor)
+        continue;
+
+      if (grn_ii_cursor_next(ctx, ii_cursor)) {
+        referencing_child_table_id = grn_obj_get_range(ctx, column);
+      }
+
+      grn_ii_cursor_close(ctx, ii_cursor);
+
+      if (referencing_child_table_id != GRN_ID_NIL)
+        break;
+    } GRN_HASH_EACH_END(ctx, cursor);
+    grn_hash_close(ctx, columns);
+
+    if (referencing_child_table_id != GRN_ID_NIL) {
+      grn_obj *referencing_child_table =
+        grn_ctx_at(ctx, referencing_child_table_id);
+      char name[GRN_TABLE_MAX_KEY_SIZE];
+      int name_size;
+      name_size = grn_obj_name(ctx,
+                               referencing_child_table,
+                               name,
+                               GRN_TABLE_MAX_KEY_SIZE);
+      error = HA_ERR_ROW_IS_REFERENCED;
+      GRN_PLUGIN_ERROR(ctx, GRN_INVALID_ARGUMENT,
+                       "one or more child rows exist in <%.*s>",
+                       name_size,
+                       name);
+      DBUG_RETURN(error);
+    }
+  }
+
   storage_store_fields_for_prep_update(buf, NULL, record_id);
   {
     mrn::Lock lock(&(share->record_mutex), have_unique_index());
