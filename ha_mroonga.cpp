@@ -6468,7 +6468,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
       bool is_pkey = false;
       bool on_duplicate_key_update =
         (inserting_with_update && ignoring_duplicated_key);
-      if (pkey_info && on_duplicate_key_update) {
+      if (pkey_info && !on_duplicate_key_update) {
         for (j = 0; j < KEY_N_KEY_PARTS(pkey_info); j++) {
           Field *pkey_field = pkey_info->key_part[j].field;
           if (strcmp(pkey_field->field_name, column_name.c_str()) == 0) {
@@ -6480,17 +6480,23 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 
       generic_store_bulk(field, &colbuf);
       if (is_pkey) {
-        char key[GRN_TABLE_MAX_KEY_SIZE];
-        int key_size;
-        key_size = grn_table_get_key(ctx,
-                                     grn_table,
-                                     record_id,
-                                     &key,
-                                     GRN_TABLE_MAX_KEY_SIZE);
-        bool is_same_value =
-          (GRN_BULK_VSIZE(&colbuf) == key_size &&
-           memcmp(key, GRN_BULK_HEAD(&colbuf), key_size) == 0);
-        if (!is_same_value && replacing_) {
+        bool is_multiple_column_index = KEY_N_KEY_PARTS(pkey_info) > 1;
+        bool is_same_value;
+        if (is_multiple_column_index) {
+          is_same_value = false;
+        } else {
+          char key[GRN_TABLE_MAX_KEY_SIZE];
+          int key_size;
+          key_size = grn_table_get_key(ctx,
+                                       grn_table,
+                                       record_id,
+                                       &key,
+                                       GRN_TABLE_MAX_KEY_SIZE);
+          is_same_value =
+            (GRN_BULK_VSIZE(&colbuf) == key_size &&
+             memcmp(key, GRN_BULK_HEAD(&colbuf), key_size) == 0);
+        }
+        if (!is_same_value && !replacing_) {
           char message[MRN_BUFFER_SIZE];
           snprintf(message, MRN_BUFFER_SIZE,
                    "data truncated for primary key column: <%s>",
