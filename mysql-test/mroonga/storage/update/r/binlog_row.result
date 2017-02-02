@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS memos;
+SET SESSION binlog_format = 'ROW';
+CREATE TABLE memos (
+id int unsigned PRIMARY KEY,
+content varchar(140) NOT NULL
+);
+INSERT INTO memos (id, content) VALUES (100, 'Mroonga is great!');
+SELECT * FROM memos;
+id	content
+100	Mroonga is great!
+UPDATE memos SET content = 'Mroonga is very great!' WHERE id = 100;
+SELECT * FROM memos;
+id	content
+100	Mroonga is very great!
+DROP TABLE memos;
