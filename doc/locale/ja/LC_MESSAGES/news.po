@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-01-13 11:49+0900\n"
+"PO-Revision-Date: 2017-02-09 07:51+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,43 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 6.13 - 2017-01-13"
-msgstr "6.13リリース - 2017-01-13"
+msgid "Release 7.00 - 2017-02-09"
+msgstr "7.00リリース - 2017-02-09"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`] Changed to ensure enabling EPEL to install package."
+msgstr ""
+"[:doc:`/install/centos`] EPELをパッケージインストール時に有効にするようにしま"
+"した。"
+
+msgid ""
+"Supported ``FOREIGN KEY`` constrain on ``UPDATE`` and ``DELETE`` parent row. "
+"In the previous versions, only ``FOREIGN KEY`` constrain on ``INSERT`` is "
+"supported."
+msgstr ""
+"``FOREIGN KEY`` 制約を ``UPDATE`` と 親側の行を ``DELETE`` するときにもサポー"
+"トしました。以前のバージョンでは、 ``INSERT`` 時のみサポートしていました。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Supported updating row even though its table has "
+"primary key with ROW binlog format. In the previous version, it causes "
+"update statement error. [GitHub#130] [Reported by kitora]"
+msgstr ""
+"[:doc:`/tutorial/storage`] 主キーをもつテーブルでbinlogを使っていても、レコー"
+"ドの更新をサポートしました。以前は更新時に構文エラーになっていました。 "
+"[GitHub#130] [Reported by kitora]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "kitora"
+msgstr ""
+
+msgid "Release 6.13 - 2017-01-13"
+msgstr "6.13リリース - 2017-01-13"
 
 # 2cf79c00c0ec4896b9beffee50c10cc1
 msgid "[:doc:`/install/centos`] Supported the latest Percona Server 5.6."
@@ -110,9 +142,6 @@ msgstr ""
 "[mysql57][wrapper] InnoDBで ``COUNT(*)`` が正しいレコード数を返さない不具合を"
 "修正しました。これはMySQL 5.7になってからInnnoDBの挙動が変更されたためです。 "
 "[koyama_wataru_7さんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Hiroshi Kagami"
 msgstr "各務さん"
@@ -406,6 +435,7 @@ msgstr "torinkyさん"
 msgid "Hiroshi Hatake"
 msgstr "畑ケさん"
 
+#, fuzzy
 msgid "Release 6.00 - 2016-02-29"
 msgstr "6.00リリース - 2016-02-29"
 
