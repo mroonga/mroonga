@@ -64,6 +64,8 @@ create table t1 (c1 time);
 desc t1;
 drop table t1;
 create table t1 (c1 timestamp);
+# For MariaDB 10.2.3
+-- replace_result current_timestamp() CURRENT_TIMESTAMP
 desc t1;
 drop table t1;
 create table t1 (c1 datetime);

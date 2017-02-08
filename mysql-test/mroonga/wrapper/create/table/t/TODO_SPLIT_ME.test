@@ -65,6 +65,8 @@ create table t1 (c1 time primary key) COMMENT = 'engine "innodb"';
 desc t1;
 drop table t1;
 create table t1 (c1 timestamp primary key) COMMENT = 'engine "innodb"';
+# For MariaDB 10.2.3
+-- replace_result current_timestamp() CURRENT_TIMESTAMP
 desc t1;
 drop table t1;
 create table t1 (c1 datetime primary key) COMMENT = 'engine "innodb"';
