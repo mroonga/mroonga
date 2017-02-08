@@ -3382,9 +3382,9 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
                       column_name.c_str(), column_name.length(),
                       col_path, col_flags, col_type);
     if (ctx->rc) {
-      grn_obj_remove(ctx, table_obj);
       error = ER_CANT_CREATE_TABLE;
       my_message(error, ctx->errbuf, MYF(0));
+      grn_obj_remove(ctx, table_obj);
       DBUG_RETURN(error);
     }
   }
