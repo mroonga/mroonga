@@ -6485,16 +6485,11 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
         if (is_multiple_column_index) {
           is_same_value = false;
         } else {
-          char key[GRN_TABLE_MAX_KEY_SIZE];
-          int key_size;
-          key_size = grn_table_get_key(ctx,
-                                       grn_table,
-                                       record_id,
-                                       &key,
-                                       GRN_TABLE_MAX_KEY_SIZE);
-          is_same_value =
-            (GRN_BULK_VSIZE(&colbuf) == key_size &&
-             memcmp(key, GRN_BULK_HEAD(&colbuf), key_size) == 0);
+          grn_id found_record_id = grn_table_get(ctx,
+                                                 grn_table,
+                                                 GRN_BULK_HEAD(&colbuf),
+                                                 GRN_BULK_VSIZE(&colbuf));
+          is_same_value = (record_id == found_record_id);
         }
         if (!is_same_value && !replacing_) {
           char message[MRN_BUFFER_SIZE];

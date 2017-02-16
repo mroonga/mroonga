@@ -23,13 +23,14 @@ DROP TABLE IF EXISTS memos;
 SET SESSION binlog_format = 'ROW';
 
 CREATE TABLE memos (
-  id int unsigned PRIMARY KEY,
+  title varchar(20) PRIMARY KEY,
   content varchar(140) NOT NULL
-);
+) COLLATE=utf8mb4_general_ci
+  DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO memos (id, content) VALUES (100, 'Mroonga is great!');
+INSERT INTO memos (title, content) VALUES ('Mroonga', 'Mroonga is great!');
 SELECT * FROM memos;
-UPDATE memos SET content = 'Mroonga is very great!' WHERE id = 100;
+UPDATE memos SET content = 'Mroonga is very great!' WHERE title = 'Mroonga';
 SELECT * FROM memos;
 
 DROP TABLE memos;
