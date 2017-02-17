@@ -3522,7 +3522,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     if (!grn_table_ref) {
       error = ER_CANT_CREATE_TABLE;
       char err_msg[MRN_BUFFER_SIZE];
-      sprintf(err_msg, "refference table [%s.%s] is not mroonga table",
+      sprintf(err_msg, "reference table [%s.%s] is not mroonga table",
               table->s->db.str, ref_table_name.str);
       my_message(error, err_msg, MYF(0));
       DBUG_RETURN(false);
@@ -3541,7 +3541,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       grn_obj_unlink(ctx, grn_table_ref);
       error = ER_CANT_CREATE_TABLE;
       char err_msg[MRN_BUFFER_SIZE];
-      sprintf(err_msg, "refference table [%s.%s] is not found",
+      sprintf(err_msg, "reference table [%s.%s] is not found",
               table->s->db.str, ref_table_name.str);
       my_message(error, err_msg, MYF(0));
       DBUG_RETURN(false);
@@ -3554,7 +3554,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       grn_obj_unlink(ctx, grn_table_ref);
       error = ER_CANT_CREATE_TABLE;
       char err_msg[MRN_BUFFER_SIZE];
-      sprintf(err_msg, "refference table [%s.%s] has no primary key",
+      sprintf(err_msg, "reference table [%s.%s] has no primary key",
               table->s->db.str, ref_table_name.str);
       my_message(error, err_msg, MYF(0));
       DBUG_RETURN(false);
@@ -3569,7 +3569,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       error = ER_CANT_CREATE_TABLE;
       char err_msg[MRN_BUFFER_SIZE];
       sprintf(err_msg,
-              "refference table [%s.%s] primary key is multiple column",
+              "reference table [%s.%s] primary key is multiple column",
               table->s->db.str, ref_table_name.str);
       my_message(error, err_msg, MYF(0));
       DBUG_RETURN(false);
@@ -3583,7 +3583,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       error = ER_CANT_CREATE_TABLE;
       char err_msg[MRN_BUFFER_SIZE];
       sprintf(err_msg,
-              "refference column [%s.%s.%s] is not used for primary key",
+              "reference column [%s.%s.%s] is not used for primary key",
               table->s->db.str, ref_table_name.str, ref_field_name.str);
       my_message(error, err_msg, MYF(0));
       DBUG_RETURN(false);
