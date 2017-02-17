@@ -22,6 +22,8 @@
 --disable_warnings
 DROP TABLE IF EXISTS articles;
 DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS articles2;
+DROP TABLE IF EXISTS comments2;
 --enable_warnings
 
 CREATE TABLE comments (
@@ -35,11 +37,14 @@ CREATE TABLE articles (
   FOREIGN KEY (comment) REFERENCES comments (comment)
 );
 
-SHOW CREATE TABLE articles;
+RENAME TABLE comments TO comments2;
+RENAME TABLE articles TO articles2;
+
+SHOW CREATE TABLE articles2;
 
 SELECT * FROM information_schema.referential_constraints;
 
-DROP TABLE articles;
-DROP TABLE comments;
+DROP TABLE articles2;
+DROP TABLE comments2;
 
 --source ../../../include/mroonga/have_mroonga_deinit.inc

@@ -31,9 +31,10 @@ CREATE TABLE comments (
 
 CREATE TABLE articles (
   content text NOT NULL,
-  comment int unsigned,
-  FOREIGN KEY (comment) REFERENCES comments (comment)
+  comment int unsigned
 );
+
+ALTER TABLE articles ADD FOREIGN KEY (comment) REFERENCES comments (comment);
 
 SHOW CREATE TABLE articles;
 

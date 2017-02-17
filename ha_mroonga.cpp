@@ -14623,6 +14623,9 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
   Alter_inplace_info *ha_alter_info)
 {
   MRN_DBUG_ENTER_METHOD();
+  Alter_inplace_info::HA_ALTER_FLAGS explicitly_unsupported_flags =
+    Alter_inplace_info::ADD_FOREIGN_KEY |
+    Alter_inplace_info::DROP_FOREIGN_KEY;
   Alter_inplace_info::HA_ALTER_FLAGS supported_flags =
     Alter_inplace_info::ADD_INDEX |
     Alter_inplace_info::DROP_INDEX |
@@ -14631,7 +14634,9 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
     Alter_inplace_info::ADD_COLUMN |
     Alter_inplace_info::DROP_COLUMN |
     Alter_inplace_info::ALTER_COLUMN_NAME;
-  if (ha_alter_info->handler_flags & supported_flags) {
+  if (ha_alter_info->handler_flags & explicitly_unsupported_flags) {
+    DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
+  } else if (ha_alter_info->handler_flags & supported_flags) {
     DBUG_RETURN(HA_ALTER_INPLACE_EXCLUSIVE_LOCK);
   } else {
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);

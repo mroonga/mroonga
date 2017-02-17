@@ -35,6 +35,8 @@ CREATE TABLE articles (
   FOREIGN KEY (comment) REFERENCES comments (comment)
 );
 
+ALTER TABLE articles DROP FOREIGN KEY comment;
+
 SHOW CREATE TABLE articles;
 
 SELECT * FROM information_schema.referential_constraints;
