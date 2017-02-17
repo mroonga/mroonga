@@ -13408,34 +13408,32 @@ int ha_mroonga::storage_rename_foreign_key(MRN_SHARE *tmp_share,
   MRN_DBUG_ENTER_METHOD();
   for (i = 0; i < n_columns; ++i) {
     Field *field = tmp_table_share->field[i];
-    const char *column_name = field->field_name;
-    uint column_name_size = strlen(column_name);
 
-    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+    if (!is_foreign_key_field(from_table_name, field->field_name)) {
       continue;
     }
 
-    column = grn_obj_column(ctx, grn_table,
-                            column_name, column_name_size);
+    grn_obj *grn_from_table = grn_ctx_get(ctx, from_table_name, -1);
+    mrn::ColumnName column_name(field->field_name);
+    column = grn_obj_column(ctx,
+                            grn_from_table,
+                            column_name.c_str(),
+                            column_name.length());
     if (!column) {
       continue;
     }
     grn_id ref_table_id = grn_obj_get_range(ctx, column);
     grn_obj *ref_table = grn_ctx_at(ctx, ref_table_id);
-    if (ref_table->header.type != GRN_TABLE_NO_KEY &&
-        ref_table->header.type != GRN_TABLE_HASH_KEY &&
-        ref_table->header.type != GRN_TABLE_PAT_KEY &&
-        ref_table->header.type != GRN_TABLE_DAT_KEY) {
-      continue;
-    }
-    mrn::IndexColumnName from_index_column_name(from_table_name, column_name);
+    mrn::IndexColumnName from_index_column_name(from_table_name,
+                                                column_name.c_str());
     ref_column = grn_obj_column(ctx, ref_table,
                                 from_index_column_name.c_str(),
                                 from_index_column_name.length());
     if (!ref_column) {
       continue;
     }
-    mrn::IndexColumnName to_index_column_name(to_table_name, column_name);
+    mrn::IndexColumnName to_index_column_name(to_table_name,
+                                              column_name.c_str());
     rc = grn_column_rename(ctx, ref_column,
                            to_index_column_name.c_str(),
                            to_index_column_name.length());
@@ -16436,26 +16434,22 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
   create_info_str.length(0);
   for (i = 0; i < n_columns; ++i) {
     Field *field = table_share->field[i];
-    const char *column_name = field->field_name;
-    uint column_name_size = strlen(column_name);
 
-    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+    if (!is_foreign_key_field(table_share->table_name.str,
+                              field->field_name)) {
       continue;
     }
 
-    column = grn_obj_column(ctx, grn_table,
-                            column_name, column_name_size);
+    mrn::ColumnName column_name(field->field_name);
+    column = grn_obj_column(ctx,
+                            grn_table,
+                            column_name.c_str(),
+                            column_name.length());
     if (!column) {
       continue;
     }
     grn_id ref_table_id = grn_obj_get_range(ctx, column);
     grn_obj *ref_table = grn_ctx_at(ctx, ref_table_id);
-    if (ref_table->header.type != GRN_TABLE_NO_KEY &&
-        ref_table->header.type != GRN_TABLE_HASH_KEY &&
-        ref_table->header.type != GRN_TABLE_PAT_KEY &&
-        ref_table->header.type != GRN_TABLE_DAT_KEY) {
-      continue;
-    }
     char ref_table_buff[NAME_LEN + 1];
     int ref_table_name_length = grn_obj_name(ctx, ref_table, ref_table_buff,
                                              NAME_LEN);
@@ -16465,14 +16459,18 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
       DBUG_RETURN(NULL);
     }
     create_info_str.q_append(",\n  CONSTRAINT ", 15);
-    append_identifier(ha_thd(), &create_info_str, column_name,
-                      column_name_size);
+    append_identifier(ha_thd(),
+                      &create_info_str,
+                      column_name.c_str(),
+                      column_name.length());
     if (create_info_str.reserve(14)) {
       DBUG_RETURN(NULL);
     }
     create_info_str.q_append(" FOREIGN KEY (", 14);
-    append_identifier(ha_thd(), &create_info_str, column_name,
-                      column_name_size);
+    append_identifier(ha_thd(),
+                      &create_info_str,
+                      column_name.c_str(),
+                      column_name.length());
     if (create_info_str.reserve(13)) {
       DBUG_RETURN(NULL);
     }
@@ -16643,37 +16641,35 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
   MRN_DBUG_ENTER_METHOD();
   for (i = 0; i < n_columns; ++i) {
     Field *field = table_share->field[i];
-    const char *column_name = field->field_name;
-    uint column_name_size = strlen(column_name);
 
-    if (strcmp(MRN_COLUMN_NAME_ID, column_name) == 0) {
+    if (!is_foreign_key_field(table_share->table_name.str, field->field_name)) {
       continue;
     }
 
-    column = grn_obj_column(ctx, grn_table,
-                            column_name, column_name_size);
+    mrn::ColumnName column_name(field->field_name);
+    column = grn_obj_column(ctx,
+                            grn_table,
+                            column_name.c_str(),
+                            column_name.length());
     if (!column) {
       continue;
     }
     grn_id ref_table_id = grn_obj_get_range(ctx, column);
     grn_obj *ref_table = grn_ctx_at(ctx, ref_table_id);
-    if (ref_table->header.type != GRN_TABLE_NO_KEY &&
-        ref_table->header.type != GRN_TABLE_HASH_KEY &&
-        ref_table->header.type != GRN_TABLE_PAT_KEY &&
-        ref_table->header.type != GRN_TABLE_DAT_KEY) {
-      continue;
-    }
     FOREIGN_KEY_INFO f_key_info;
-    f_key_info.foreign_id = thd_make_lex_string(thd, NULL, column_name,
-                                                 column_name_size, TRUE);
+    f_key_info.foreign_id = thd_make_lex_string(thd,
+                                                NULL,
+                                                column_name.c_str(),
+                                                column_name.length(),
+                                                TRUE);
     f_key_info.foreign_db = thd_make_lex_string(thd, NULL,
-                                                 table_share->db.str,
-                                                 table_share->db.length,
-                                                 TRUE);
+                                                table_share->db.str,
+                                                table_share->db.length,
+                                                TRUE);
     f_key_info.foreign_table = thd_make_lex_string(thd, NULL,
-                                                 table_share->table_name.str,
-                                                 table_share->table_name.length,
-                                                 TRUE);
+                                                   table_share->table_name.str,
+                                                   table_share->table_name.length,
+                                                   TRUE);
     f_key_info.referenced_db = f_key_info.foreign_db;
 
     char ref_table_buff[NAME_LEN + 1];
@@ -16697,8 +16693,11 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
 #endif
     f_key_info.referenced_key_name = thd_make_lex_string(thd, NULL, "PRIMARY",
                                                           7, TRUE);
-    LEX_STRING *field_name = thd_make_lex_string(thd, NULL, column_name,
-                                                 column_name_size, TRUE);
+    LEX_STRING *field_name = thd_make_lex_string(thd,
+                                                 NULL,
+                                                 column_name.c_str(),
+                                                 column_name.length(),
+                                                 TRUE);
     f_key_info.foreign_fields.push_back(field_name);
 
     char ref_path[FN_REFLEN + 1];
