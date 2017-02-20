@@ -16,7 +16,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# set -x
+set -x
 set -e
 
 # export GROONGA_MASTER=yes
@@ -92,10 +92,10 @@ else
       sudo apt-get -qq update
       sudo apt-get -qq -y build-dep mysql-server
       if [ "$version" = "system" ]; then
-        sudo apt-get -qq -y install \
+        sudo apt-get -y install \
              mysql-server mysql-server-5.5 mysql-server-core-5.5 \
              mysql-testsuite libmysqld-dev
-        apt-get -qq source mysql-server
+        apt-get source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       else
         repository_deb=mysql-apt-config_0.8.2-1_all.deb
@@ -118,9 +118,9 @@ else
       sudo apt-get -qq -y remove --purge mysql-common
       setup_mariadb_apt
       sudo apt-get -qq -y build-dep mariadb-server
-      sudo apt-get -qq -y install \
+      sudo apt-get -y install \
            mariadb-server libmariadbclient-dev mariadb-test
-      apt-get -qq source mariadb-server
+      apt-get source mariadb-server
       ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       ;;
     percona-server-*)
