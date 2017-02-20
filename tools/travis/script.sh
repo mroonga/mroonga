@@ -119,7 +119,7 @@ run_sql_test()
     prepare_sql_test
 
     cd ${mysql_test_dir}/
-    ./mysql-test-run.pl \
+    perl ./mysql-test-run.pl \
       "${test_args[@]}" \
       --no-check-testcases \
       --parallel="${n_processors}" \
