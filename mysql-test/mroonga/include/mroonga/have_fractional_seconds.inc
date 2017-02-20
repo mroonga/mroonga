@@ -22,7 +22,7 @@ if ($mariadb) {
 }
 
 if (!$mariadb) {
-  if ($version_56) {
+  if ($version_5_6) {
     let $fractional_seconds = `SELECT @@global.version >= '5.6'`;
   }
 }

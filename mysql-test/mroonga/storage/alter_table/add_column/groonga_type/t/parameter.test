@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 --source ../../../../../include/mroonga/have_mariadb.inc
---source ../../../../../include/mroonga/have_version_56_or_later.inc
+--source ../../../../../include/mroonga/have_version_5_6_or_later.inc
 --source include/not_embedded.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 --source ../../../../../include/mroonga/load_mroonga_functions.inc

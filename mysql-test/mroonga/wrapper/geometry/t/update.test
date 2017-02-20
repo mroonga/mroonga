@@ -16,7 +16,7 @@
 
 --source include/have_innodb.inc
 --source include/have_geometry.inc
---source ../../../include/mroonga/have_version_56_or_later.inc
+--source ../../../include/mroonga/have_version_5_6_or_later.inc
 --source ../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
