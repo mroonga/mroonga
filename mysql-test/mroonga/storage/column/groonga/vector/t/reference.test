@@ -29,7 +29,7 @@ CREATE TABLE tags (
 
 CREATE TABLE bugs (
   id INT UNSIGNED PRIMARY KEY,
-  tags TEXT COMMENT 'flags "COLUMN_VECTOR", type "tags"'
+  tags VARCHAR(128) DEFAULT '' COMMENT 'flags "COLUMN_VECTOR", type "tags"'
 ) DEFAULT CHARSET=utf8;
 SHOW CREATE TABLE bugs;
 
