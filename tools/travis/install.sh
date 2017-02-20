@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright(C) 2012-2016 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2017 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -98,7 +98,7 @@ else
         apt-get -qq source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       else
-        repository_deb=mysql-apt-config_0.7.3-1_all.deb
+        repository_deb=mysql-apt-config_0.8.2-1_all.deb
         curl -O http://repo.mysql.com/${repository_deb}
         sudo env MYSQL_SERVER_VERSION=mysql-${series} \
              dpkg -i ${repository_deb}
