@@ -92,14 +92,15 @@ else
       sudo apt-get -qq update
       sudo apt-get -qq -y build-dep mysql-server
       if [ "$version" = "system" ]; then
+        sudo apt-get -y remove --purge \
+             mysql-server-5.6 \
+             mysql-server-core-5.6 \
+             mysql-client-5.6 \
+             mysql-client-core-5.6
         sudo apt-get -y install \
              mysql-server \
-             mysql-server-5.5 \
-             mysql-server-core-5.5 \
              mysql-client \
-             mysql-client-5.5 \
              mysql-testsuite \
-             mysql-testsuite-5.5 \
              libmysqld-dev
         apt-get source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
@@ -121,15 +122,19 @@ else
       fi
       ;;
     mariadb-*)
-      sudo apt-get -qq -y remove --purge mysql-common
+      sudo apt-get -y remove --purge \
+           mysql-server-5.6 \
+           mysql-server-core-5.6 \
+           mysql-client-5.6 \
+           mysql-client-core-5.6 \
+           mysql-common
       setup_mariadb_apt
       sudo apt-get -qq -y build-dep mariadb-server
       sudo apt-get -y install \
            mariadb-server \
-           mariadb-server-5.5 \
-           libmariadbclient-dev \
+           mariadb-client \
            mariadb-test \
-           mariadb-test-5.5
+           libmariadbclient-dev
       apt-get source mariadb-server
       ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       ;;
