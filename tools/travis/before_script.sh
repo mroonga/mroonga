@@ -68,7 +68,7 @@ else
       ;;
     percona-server-5.6)
       (cd vendor/mysql && \
-          sudo debian/rules override_dh_auto_configure SKIP_DEBUG_BINARY=yes && \
+          sudo debian/rules configure SKIP_DEBUG_BINARY=yes && \
           cd builddir/libservices && \
           sudo make > /dev/null)
       configure_args=("${configure_args[@]}"
