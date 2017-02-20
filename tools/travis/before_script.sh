@@ -67,14 +67,20 @@ else
                       "--with-mysql-build=$PWD/vendor/mysql/builddir")
       ;;
     percona-server-5.6)
-      (cd vendor/mysql && sudo debian/rules build) > /dev/null
+      (cd vendor/mysql && \
+          sudo debian/rules override_dh_auto_configure SKIP_DEBUG_BINARY=yes && \
+          cd builddir/libservices && \
+          sudo make > /dev/null)
       configure_args=("${configure_args[@]}"
                       "--enable-fast-mutexes"
                       "--with-mysql-build=$PWD/vendor/mysql/builddir"
                       "--with-mysql-config=$PWD/vendor/mysql/builddir/scripts/mysql_config")
       ;;
     percona-server-5.7)
-      (cd vendor/mysql && sudo debian/rules build) > /dev/null
+      (cd vendor/mysql && \
+          sudo debian/rules override_dh_auto_configure SKIP_DEBUG_BINARY=yes && \
+          cd builddir/libservices && \
+          sudo make > /dev/null)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/builddir"
                       "--with-mysql-config=$PWD/vendor/mysql/builddir/scripts/mysql_config")
