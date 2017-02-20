@@ -1,5 +1,4 @@
-# Copyright(C) 2014 Kenji Maruyama <mmmaru777@gmail.com>
-# Copyright(C) 2015-2016 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,23 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source include/have_geometry.inc
---source ../../../../include/mroonga/have_mysql_5_7_or_later.inc
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_strict_sql_mode.inc
 
---disable_warnings
-DROP TABLE IF EXISTS shops;
---enable_warnings
-
-CREATE TABLE shops (
-  location GEOMETRY NOT NULL
-);
-
---error ER_BAD_NULL_ERROR
-INSERT INTO shops VALUES (NULL), (NULL);
-
-SELECT ST_AsText(location) FROM shops;
-
-DROP TABLE shops;
-
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+if ($strict_sql_mode) {
+  skip This test is not for STRICT_ALL_TABLES nor STRICT_TRANS_TABLES;
+}

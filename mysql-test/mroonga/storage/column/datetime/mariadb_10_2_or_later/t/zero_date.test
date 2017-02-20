@@ -1,5 +1,4 @@
-# Copyright(C) 2013 Kentoku SHIBA
-# Copyright(C) 2016-2017 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2015-2017 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,8 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../include/mroonga/skip_strict_sql_mode.inc
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_mariadb_10_2_or_later.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS timestamps;
@@ -27,13 +26,14 @@ CREATE TABLE timestamps (
   create_dt DATETIME
 ) DEFAULT CHARSET UTF8;
 
-INSERT INTO timestamps (create_dt) VALUES ("2012-00-01 00:00:00");
-INSERT INTO timestamps (create_dt) VALUES ("2012-01-00 00:00:00");
+--error ER_WARN_DATA_OUT_OF_RANGE
+INSERT INTO timestamps (create_dt) VALUES ("0000-00-00 00:00:00");
 
 SELECT * FROM timestamps;
 
-SELECT * FROM timestamps WHERE create_dt = "2012-01-01 00:00:00";
+INSERT INTO timestamps (create_dt) VALUES ("2015-06-17 00:00:00");
+SELECT * FROM timestamps;
 
 DROP TABLE timestamps;
 
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc

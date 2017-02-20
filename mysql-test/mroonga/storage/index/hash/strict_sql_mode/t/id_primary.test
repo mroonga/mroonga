@@ -1,5 +1,5 @@
-# Copyright(C) 2012 Kentoku SHIBA
-# Copyright(C) 2014 Kenji Maruyama <mmmaru777@gmail.com>
+# Copyright(C) 2010 Tetsuro IKEDA
+# Copyright(C) 2016-2017 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,27 +15,30 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../../../include/mroonga/skip_freebsd.inc
---source ../../../../../../include/mroonga/have_signed_64bit_time_t.inc
---source ../../../../../../include/mroonga/have_mysql_5_7_or_later.inc
---source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_strict_sql_mode.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS diaries;
+DROP TABLE IF EXISTS t1;
 --enable_warnings
 
-CREATE TABLE diaries (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  title TEXT,
-  created_at DATETIME
-) DEFAULT CHARSET UTF8;
+CREATE TABLE t1 (_id int, a int, PRIMARY KEY (_id) USING HASH);
 
---error ER_TRUNCATED_WRONG_VALUE
-INSERT INTO diaries (title, created_at)
-       VALUES ('2012', '2012');
+--error ER_BAD_NULL_ERROR
+INSERT INTO t1 VALUES(null, 100);
+--error 1265
+INSERT INTO t1 VALUES(1,100);
+--error 1265
+INSERT INTO t1 VALUES(1,100);
+--error 1265
+INSERT INTO t1 VALUES(1,100);
+--error 1265
+INSERT INTO t1 VALUES(1,100);
 
-SELECT * FROM diaries;
+SELECT * FROM t1;
+SELECT * FROM t1 WHERE _id = 2;
+SELECT * FROM t1 WHERE _id = 20;
 
-DROP TABLE diaries;
+DROP TABLE t1;
 
---source ../../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc

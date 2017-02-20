@@ -1,5 +1,5 @@
-# Copyright(C) 2013 Kentoku SHIBA
-# Copyright(C) 2016-2017 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2014 Kenji Maruyama <mmmaru777@gmail.com>
+# Copyright(C) 2015-2017 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,25 +15,23 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../include/mroonga/skip_strict_sql_mode.inc
+--source include/have_geometry.inc
+--source ../../../../include/mroonga/have_strict_sql_mode.inc
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS timestamps;
+DROP TABLE IF EXISTS shops;
 --enable_warnings
 
-CREATE TABLE timestamps (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  create_dt DATETIME
-) DEFAULT CHARSET UTF8;
+CREATE TABLE shops (
+  location GEOMETRY NOT NULL
+);
 
-INSERT INTO timestamps (create_dt) VALUES ("2012-00-01 00:00:00");
-INSERT INTO timestamps (create_dt) VALUES ("2012-01-00 00:00:00");
+--error ER_BAD_NULL_ERROR
+INSERT INTO shops VALUES (NULL), (NULL);
 
-SELECT * FROM timestamps;
+SELECT ST_AsText(location) FROM shops;
 
-SELECT * FROM timestamps WHERE create_dt = "2012-01-01 00:00:00";
-
-DROP TABLE timestamps;
+DROP TABLE shops;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

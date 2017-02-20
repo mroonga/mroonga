@@ -1,5 +1,4 @@
-# Copyright(C) 2013 Kentoku SHIBA
-# Copyright(C) 2016-2017 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,25 +14,13 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---source ../../../../include/mroonga/skip_strict_sql_mode.inc
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS timestamps;
---enable_warnings
+if (!$mariadb) {
+  skip This test is for MariaDB version 10.2.x or later;
+}
 
-CREATE TABLE timestamps (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  create_dt DATETIME
-) DEFAULT CHARSET UTF8;
-
-INSERT INTO timestamps (create_dt) VALUES ("2012-00-01 00:00:00");
-INSERT INTO timestamps (create_dt) VALUES ("2012-01-00 00:00:00");
-
-SELECT * FROM timestamps;
-
-SELECT * FROM timestamps WHERE create_dt = "2012-01-01 00:00:00";
-
-DROP TABLE timestamps;
-
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+if (!$version_10_2_or_later) {
+  skip This test is for MariaDB version 10.2.x or later;
+}
