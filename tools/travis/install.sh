@@ -93,8 +93,14 @@ else
       sudo apt-get -qq -y build-dep mysql-server
       if [ "$version" = "system" ]; then
         sudo apt-get -y install \
-             mysql-server mysql-server-5.5 mysql-server-core-5.5 \
-             mysql-testsuite libmysqld-dev
+             mysql-server \
+             mysql-server-5.5 \
+             mysql-server-core-5.5 \
+             mysql-client \
+             mysql-client-5.5 \
+             mysql-testsuite \
+             mysql-testsuite-5.5 \
+             libmysqld-dev
         apt-get source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       else
@@ -119,7 +125,11 @@ else
       setup_mariadb_apt
       sudo apt-get -qq -y build-dep mariadb-server
       sudo apt-get -y install \
-           mariadb-server libmariadbclient-dev mariadb-test
+           mariadb-server \
+           mariadb-server-5.5 \
+           libmariadbclient-dev \
+           mariadb-test \
+           mariadb-test-5.5
       apt-get source mariadb-server
       ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       ;;
