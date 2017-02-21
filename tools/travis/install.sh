@@ -97,6 +97,7 @@ else
              mysql-server-core-5.6 \
              mysql-client-5.6 \
              mysql-client-core-5.6
+        sudo rm -rf /var/lib/mysql
         sudo apt-get -y install \
              mysql-server \
              mysql-client \
@@ -128,6 +129,7 @@ else
            mysql-client-5.6 \
            mysql-client-core-5.6 \
            mysql-common
+      sudo rm -rf /var/lib/mysql
       setup_mariadb_apt
       sudo apt-get -qq -y build-dep mariadb-server
       sudo apt-get -y install \
