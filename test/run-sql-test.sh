@@ -51,6 +51,19 @@ if [ -d "${bundled_groonga_normalizer_mysql_dir}" ]; then
   export GRN_PLUGINS_DIR
 fi
 
+maria_storage_dir="${MYSQL_SOURCE_DIR}/storage/maria"
+if [ -d "${maria_storage_dir}" ]; then
+  mariadb="yes"
+else
+  mariadb="no"
+fi
+percona_udf_dir="${MYSQL_SOURCE_DIR}/plugin/percona-udf"
+if [ -d "${percona_udf_dir}" ]; then
+  percona="yes"
+else
+  percona="no"
+fi
+
 source_mysql_test_dir="${MYSQL_SOURCE_DIR}/mysql-test"
 build_mysql_test_dir="${MYSQL_BUILD_DIR}/mysql-test"
 source_test_suites_dir="${source_mysql_test_dir}/suite"
@@ -68,12 +81,6 @@ case "${MYSQL_VERSION}" in
     if [ ! -d "${build_test_suites_dir}" ]; then
       ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
     fi
-    maria_storage_dir="${MYSQL_SOURCE_DIR}/storage/maria"
-    if [ -d "${maria_storage_dir}" ]; then
-      mariadb="yes"
-    else
-      mariadb="no"
-    fi
     if [ "${mariadb}" = "yes" ]; then
       if [ "${MRN_BUNDLED}" != "TRUE" ]; then
 	mariadb_mroonga_plugin_dir="${MYSQL_BUILD_DIR}/plugin/mroonga"
@@ -82,6 +89,8 @@ case "${MYSQL_VERSION}" in
 	fi
       fi
       plugins_dir=
+    elif [ "${percona}" = "yes" ]; then
+      plugins_dir="${MYSQL_SOURCE_DIR}/lib/mysql/plugin"
     else
       plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
     fi
@@ -216,7 +225,9 @@ if [ -z "$test_suite_names" ]; then
 fi
 
 mysql_test_run_args=""
-mysql_test_run_args="${mysql_test_run_args} --mem"
+if [ "${percona}" != "yes" ]; then
+  mysql_test_run_args="${mysql_test_run_args} --mem"
+fi
 mysql_test_run_args="${mysql_test_run_args} --no-check-testcases"
 mysql_test_run_args="${mysql_test_run_args} --parallel=${n_processors}"
 mysql_test_run_args="${mysql_test_run_args} --retry=1"
