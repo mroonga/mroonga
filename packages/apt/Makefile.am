@@ -54,11 +54,7 @@ build-package-deb: source env.sh
 	  rm -rf tmp/debian;					\
 	  for architecture in $(ARCHITECTURES); do		\
 	    for code_name in $(CODE_NAMES); do			\
-	      if [ $${code_name} = "jessie" -a $${variant} = "mariadb-10.0" ]; then	\
-		cp -rp $(srcdir)/../jessie-$${variant} tmp/debian;			\
-	      else									\
-		cp -rp $(srcdir)/../debian-$${variant} tmp/debian;			\
-	      fi;						\
+	      cp -rp $(srcdir)/../debian-$${variant} tmp/debian;\
 	      id=debian-$$code_name-$$architecture;		\
 	      vagrant up $$id || exit 1;			\
 	      vagrant destroy --force $$id;			\
