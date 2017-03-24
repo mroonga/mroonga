@@ -265,6 +265,22 @@ Here is an example SQL to confirm the status of libgroonga supports zlib::
   | mroonga_libgroonga_support_zlib | ON    |
   +---------------------------------+-------+
 
+.. _server-variable-mroonga-libgroonga-support-zstd:
+
+``mroonga_libgroonga_support_zstd``
+----------------------------------
+
+The status of libgroonga supports Zstandard.
+
+Here is an example SQL to confirm the status of libgroonga supports Zstandard::
+
+  mysql> SHOW GLOBAL VARIABLES LIKE 'mroonga_libgroonga_support_zstd';
+  +---------------------------------+-------+
+  | Variable_name                   | Value |
+  +---------------------------------+-------+
+  | mroonga_libgroonga_support_zstd | ON    |
+  +---------------------------------+-------+
+
 .. _serer-variable-mroonga-libgroonga-version:
 
 

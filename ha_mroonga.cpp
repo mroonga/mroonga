@@ -589,6 +589,7 @@ static char *mrn_version = const_cast<char *>(MRN_VERSION);
 static char *mrn_vector_column_delimiter = NULL;
 static my_bool mrn_libgroonga_support_zlib = FALSE;
 static my_bool mrn_libgroonga_support_lz4 = FALSE;
+static my_bool mrn_libgroonga_support_zstd = FALSE;
 typedef enum {
   MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT           = (1 << 0),
   MRN_BOOLEAN_MODE_SYNTAX_FLAG_SYNTAX_QUERY      = (1 << 1),
@@ -1040,6 +1041,20 @@ static my_bool grn_check_lz4_support()
   return is_lz4_support;
 }
 
+static my_bool grn_check_zstd_support()
+{
+  bool is_zstd_support = false;
+  grn_obj grn_support_p;
+
+  GRN_BOOL_INIT(&grn_support_p, 0);
+  grn_obj_get_info(&mrn_ctx, NULL, GRN_INFO_SUPPORT_ZSTD, &grn_support_p);
+  is_zstd_support = (GRN_BOOL_VALUE(&grn_support_p));
+  grn_obj_unlink(&mrn_ctx, &grn_support_p);
+
+  return is_zstd_support;
+}
+
+
 static MYSQL_SYSVAR_BOOL(libgroonga_support_zlib, mrn_libgroonga_support_zlib,
                          PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
                          "The status of libgroonga supports zlib",
@@ -1053,6 +1068,13 @@ static MYSQL_SYSVAR_BOOL(libgroonga_support_lz4, mrn_libgroonga_support_lz4,
                          NULL,
                          NULL,
                          grn_check_lz4_support());
+
+static MYSQL_SYSVAR_BOOL(libgroonga_support_zstd, mrn_libgroonga_support_zstd,
+                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
+                         "The status of libgroonga supports Zstandard",
+                         NULL,
+                         NULL,
+                         grn_check_zstd_support());
 
 #ifdef MRN_SUPPORT_THDVAR_SET
 static MYSQL_THDVAR_SET(boolean_mode_syntax_flags,
@@ -1106,6 +1128,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(vector_column_delimiter),
   MYSQL_SYSVAR(libgroonga_support_zlib),
   MYSQL_SYSVAR(libgroonga_support_lz4),
+  MYSQL_SYSVAR(libgroonga_support_zstd),
 #ifdef MRN_SUPPORT_THDVAR_SET
   MYSQL_SYSVAR(boolean_mode_syntax_flags),
 #endif
@@ -1466,6 +1489,17 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
                             "COMPRESS_LZ4");
       }
       flag_names += 12;
+    } else if (rest_length >= 13 && !memcmp(flag_names, "COMPRESS_ZSTD", 13)) {
+      if (mrn_libgroonga_support_zstd) {
+        *column_flags |= GRN_OBJ_COMPRESS_ZSTD;
+        found = true;
+      } else {
+        push_warning_printf(thd, MRN_SEVERITY_WARNING,
+                            ER_MRN_UNSUPPORTED_COLUMN_FLAG_NUM,
+                            ER_MRN_UNSUPPORTED_COLUMN_FLAG_STR,
+                            "COMPRESS_ZSTD");
+      }
+      flag_names += 13;
     } else {
       char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
       snprintf(invalid_flag_name, MRN_MESSAGE_BUFFER_SIZE,

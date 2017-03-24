@@ -1219,6 +1219,18 @@ msgid ""
 msgstr ""
 "Groongaライブラリーがzlibをサポートしているかを確認するためのSQL例です::"
 
+msgid "``mroonga_libgroonga_support_zstd``"
+msgstr ""
+
+msgid "The status of libgroonga supports Zstandard."
+msgstr "GroongaライブラリーのZstandardサポート状況"
+
+msgid ""
+"Here is an example SQL to confirm the status of libgroonga supports "
+"Zstandard::"
+msgstr ""
+"GroongaライブラリーがZstandardをサポートしているかを確認するためのSQL例です::"
+
 msgid "``mroonga_libgroonga_version``"
 msgstr ""
 
