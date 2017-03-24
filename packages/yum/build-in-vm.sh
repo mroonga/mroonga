@@ -30,7 +30,7 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
   architectures="${ARCHITECTURES}"
   case ${mysql_variant} in
     mysql55)
-      centos_versions="5 6"
+      centos_versions="6"
       ;;
     mysql56-community)
       centos_versions="6 7"
