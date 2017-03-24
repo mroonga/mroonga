@@ -34,6 +34,7 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/news/3.x.rst \
 	$(top_srcdir)/doc/source/news/4.x.rst \
 	$(top_srcdir)/doc/source/news/5.x.rst \
+	$(top_srcdir)/doc/source/news/6.x.rst \
 	$(top_srcdir)/doc/source/reference.rst \
 	$(top_srcdir)/doc/source/reference/full_text_search.rst \
 	$(top_srcdir)/doc/source/reference/full_text_search/boolean_mode.rst \
@@ -103,6 +104,7 @@ source_files_relative_from_doc_dir = \
 	source/news/3.x.rst \
 	source/news/4.x.rst \
 	source/news/5.x.rst \
+	source/news/6.x.rst \
 	source/reference.rst \
 	source/reference/full_text_search.rst \
 	source/reference/full_text_search/boolean_mode.rst \
@@ -281,6 +283,7 @@ html_files_relative_from_locale_dir = \
 	html/news/3.x.html \
 	html/news/4.x.html \
 	html/news/5.x.html \
+	html/news/6.x.html \
 	html/objects.inv \
 	html/reference.html \
 	html/reference/full_text_search.html \
