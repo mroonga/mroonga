@@ -2,6 +2,18 @@
 
 set -e
 
+CODE_NAME=`lsb_release --short --codename`
+if [ "$CODE_NAME" = "jessie" ]; then
+    if [ remove = "$1" -o abort-install = "$1" -o disappear = "$1" ]; then
+        dpkg-divert --package mariadb-server-10.0-mroonga --remove --rename \
+                    --divert /usr/lib/mysql/plugin/ha_mroonga.so.real /usr/lib/mysql/plugin/ha_mroonga.so
+    fi
+    if [ abort-upgrade = "$1" ] && dpkg --compare-versions "$2" lt 6.11-1; then
+        dpkg-divert --package mariadb-server-10.0-mroonga --remove --rename \
+                    --divert /usr/lib/mysql/plugin/ha_mroonga.so.real /usr/lib/mysql/plugin/ha_mroonga.so
+    fi
+fi
+
 if [ "$1" = "purge" ]; then
     mysql_apparmor_profile_name=usr.sbin.mysqld
     mysql_apparmor_profile=/etc/apparmor.d/${mysql_apparmor_profile_name}
