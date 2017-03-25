@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-02-09 07:51+0900\n"
+"PO-Revision-Date: 2017-03-25 17:35+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -55,414 +55,6 @@ msgstr "感謝"
 
 msgid "kitora"
 msgstr ""
-
-msgid "Release 6.13 - 2017-01-13"
-msgstr "6.13リリース - 2017-01-13"
-
-# 2cf79c00c0ec4896b9beffee50c10cc1
-msgid "[:doc:`/install/centos`] Supported the latest Percona Server 5.6."
-msgstr "[:doc:`/install/centos`] 最新のPercona Server 5.7をサポートしました。"
-
-# 2cf79c00c0ec4896b9beffee50c10cc1
-msgid "[:doc:`/install/centos`] Supported the latest Percona Server 5.7."
-msgstr "[:doc:`/install/centos`] 最新のPercona Server 5.6をサポートしました。"
-
-# cfc3f03dda4244eb9b5d075677d18c88
-msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.5."
-msgstr "[:doc:`/install/centos`] 最新のMySQL 5.5をサポートしました。"
-
-# cfc3f03dda4244eb9b5d075677d18c88
-msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.6."
-msgstr "[:doc:`/install/centos`] 最新のMySQL 5.6をサポートしました。"
-
-# cfc3f03dda4244eb9b5d075677d18c88
-msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.7."
-msgstr "[:doc:`/install/centos`] 最新のMySQL 5.7をサポートしました。"
-
-msgid "Supported MariaDB 10.2.3."
-msgstr "MariaDB 10.2.23をサポートしました。"
-
-msgid "Supported MySQL 5.7.17."
-msgstr "MySQL 5.7.17をサポートしました。"
-
-msgid ""
-"[:doc:`/tutorial/storage`] Reduced index size for multiple column index."
-msgstr ""
-"[:doc:`/tutorial/storage`] マルチカラムインデックスのインデックスサイズを削減"
-"しました。"
-
-msgid "Release 6.11 - 2016-11-29"
-msgstr "6.11リリース - 2016-11-29"
-
-msgid "[deb][debian] Supported MariaDB 10.x package for Debian jessie."
-msgstr ""
-"[deb][debian] Debian jessieでMariaDB 10.x向けのパッケージをサポートしました。"
-
-msgid "Release 6.10 - 2016-10-29"
-msgstr "6.10リリース - 2016-10-29"
-
-msgid "[deb][ubuntu] Supported MariaDB 10.x package for Ubuntu 16.04"
-msgstr ""
-"[deb][ubuntu] Ubuntu 16.04向けにMariaDB 10.xのパッケージをサポートしました。"
-
-msgid "[deb][ubuntu] Supported Ubuntu 16.10 (Yakkety Yak)"
-msgstr "[deb][ubuntu] Ubuntu 16.10 (Yakkety Yak)をサポートしました。"
-
-msgid ""
-"[:doc:`/install/ubuntu`] Added document how to install Mroonga for MariaDB "
-"on Ubuntu 16.04."
-msgstr ""
-"[:doc:`/install/ubuntu`] MariaDBに対応したMroongaのインストール方法をドキュメ"
-"ントに追加しました。"
-
-msgid ""
-"[:doc:`/install`][:doc:`/tutorial`] Improved sample SQL format for easy to "
-"copy and paste."
-msgstr ""
-"[:doc:`/install`][:doc:`/tutorial`] サンプルのSQLの書式をコピー&ペーストしや"
-"すいように改善しました。"
-
-msgid ""
-"[rpm][centos] Supported latest MySQL 5.6.34, MySQL 5.7.16, Percona Server "
-"5.6.33 and Percona Server 5.7.15. [groonga-dev,04169] [Reported by Hiroshi "
-"Kagami]"
-msgstr ""
-"[rpm][centos] 最新の MySQL 5.6.34, MySQL 5.7.16, Percona Server 5.6.33 と "
-"Percona Server 5.7.15をサポートしました。 [groonga-dev,04169] [各務さんが報"
-"告]"
-
-msgid "Fixes"
-msgstr "修正"
-
-msgid ""
-"[mysql57][wrapper] Fixed a bug that ``COUNT(*)`` with InnoDB doesn't return "
-"correct number of records because behavior of InnoDB was changed since MySQL "
-"5.7.  [Reported by koyama_wataru_7]"
-msgstr ""
-"[mysql57][wrapper] InnoDBで ``COUNT(*)`` が正しいレコード数を返さない不具合を"
-"修正しました。これはMySQL 5.7になってからInnnoDBの挙動が変更されたためです。 "
-"[koyama_wataru_7さんが報告]"
-
-msgid "Hiroshi Kagami"
-msgstr "各務さん"
-
-msgid "koyama_wataru_7"
-msgstr "koyama_wataru_7さん"
-
-msgid "Release 6.09 - 2016-09-29"
-msgstr "6.09リリース - 2016-09-29"
-
-msgid ""
-"[storage] Supported nonexistent reference insert check for ``FOREIGN KEY``. "
-"[Gitter:https://gitter.im/groonga/ja?at=57d629477b9f8167113efb04] [Reported "
-"by mizutamazukki]"
-msgstr ""
-"[ストレージ] データ挿入時の ``FOREIGN KEY`` 制約チェックをサポートしました。"
-"[Gitter:https://gitter.im/groonga/ja?at=57d629477b9f8167113efb04] "
-"[mizutamazukkiさんが報告]"
-
-msgid "mizutamazukki"
-msgstr "mizutamazukkiさん"
-
-msgid "Release 6.08 - 2016-08-29"
-msgstr "6.08リリース - 2016-08-29"
-
-msgid "[rpm][centos] Supported latest MariaDB 5.5.50 on CentOS 7."
-msgstr "[rpm][centos] CentOS 7でMariaDB 5.5.50をサポートしました。"
-
-# 2cf79c00c0ec4896b9beffee50c10cc1
-msgid "[rpm][centos] Supported Percona Server 5.6/5.7 on CentOS 6/7."
-msgstr ""
-"[rpm][centos] CentOS 6/7で最新のPercona Server 5.6/5.7をサポートしました。"
-
-msgid ""
-"[:doc:`/reference/limitations`] Updated description about table limitations. "
-"There is a good news that the limitation about the maximum number of records "
-"are relaxed. In the past, it is described as 268,435,455 records, but it "
-"turns out that actually you can store more records."
-msgstr ""
-"[:doc:`/reference/limitations`] テーブルの制限の記述を更新しました。従来最大"
-"レコード数の制限は約2億6千万レコードとしていましたが、実際にはもっと保存でき"
-"ることがわかりました。"
-
-msgid "Supported MariaDB 10.2.1"
-msgstr "MariaDB 10.2.1に対応しました。"
-
-msgid "Fixed compile error with GCC 6.1.1."
-msgstr "GCC 6.1.1でコンパイルエラーになる問題を修正しました。"
-
-msgid "Release 6.07 - 2016-08-04"
-msgstr "6.07リリース - 2016-08-04"
-
-msgid ""
-"[storage mysql57] Supported ``COUNT(*)`` skip optimization for ``BETWEEN`` "
-"again."
-msgstr ""
-"[ストレージモード mysql57] 行カウント ``COUNT(*)`` の最適化が ``BETWEEN`` で"
-"も再び有効になるようにしました。"
-
-# 04cb89376f9347f59c9bb744d03a7c73
-msgid ""
-"[:doc:`/install/ubuntu`] Dropped Ubuntu 15.10 (Wily Werewolf) support. It "
-"had been reached to End of Life on July 28, 2016."
-msgstr ""
-"[:doc:`/install/ubuntu`] Ubuntu 15.10（Wily Werewolf）のサポートをやめまし"
-"た。2016年7月28日でサポートが切れた（EOLになった）ためです。"
-
-msgid "[windows] Updated bundled MariaDB to 10.1.16."
-msgstr "[Windows] ベースにしているMariaDBを10.1.16にアップデートしました。"
-
-msgid ""
-"[mariadb55] Fixed to disable ``COUNT(*)`` skip optimization when it can't be "
-"applied correctly. For example, ``SELECT COUNT(*) FROM users WHERE age = 29;"
-"`` is such a case on MariaDB 5.5."
-msgstr ""
-"[mariadb55] 行カウント ``COUNT(*)`` の最適化を正しく行えない場合には、無効に"
-"するようにしました。例えば、MariaDB 5.5では ``SELECT COUNT(*) FROM users "
-"WHERE age = 29;`` というクエリが該当します。"
-
-msgid "Release 6.06 - 2016-06-30"
-msgstr "6.06リリース - 2016-06-30"
-
-msgid ""
-"[mariadb10] Fixed a crash bug on MariaDB 10.x. [Gitter:groonga/"
-"ja:57746049265214c130a655ed][Reported by yoyoshifgs]"
-msgstr ""
-"[mariadb10] MariaDB 10.xでクラッシュする問題を修正しました。[Gitter:groonga/"
-"ja:57746049265214c130a655ed][yoyoshifgsさんが報告]"
-
-msgid "yoyoshifgs"
-msgstr "yoyoshifgsさん"
-
-msgid "Release 6.05 - 2016-06-29"
-msgstr "6.05リリース - 2016-06-29"
-
-msgid "[centos] Supported CentOS 6.8."
-msgstr "[centos] CentOS 6.8をサポートしました。"
-
-msgid ""
-"[storage] Supported multibyte column name in inplace ALTER TABLE. Note that "
-"MySQL 5.6 or later can use inplace ALTER TABLE for adding columns and "
-"indexes."
-msgstr ""
-"[ストレージモード] マルチバイト文字を使用したカラムに対し、INPLACE ALTER "
-"TABLEに対応しました。カラムの追加やインデックスの追加でINPLACE ALTER TABLEで"
-"きるのはMySQL 5.6以降です。"
-
-msgid ""
-"[storage] Supported ORDER BY LIMIT optimization for multibyte column. "
-"[Gitter:groonga/ja:575e6e671cf76dd64536997c][Reported by yoyoshifgs]"
-msgstr ""
-"[ストレージモード] マルチバイト文字を使ったカラムでも ORDER BY LIMIT の最適化"
-"が有効になりました。 [Gitter:groonga/ja:575e6e671cf76dd64536997c][yoyoshifgs"
-"さんが報告]"
-
-msgid ""
-"[storage count skip] Fixed invalid optimization which should no be applied. "
-"It affects to the result of row count. [Gitter:groonga/"
-"ja:5761ea97da1c26b045368c84][Reported by yoyoshifgs]"
-msgstr ""
-"[ストレージモード count skip] すべきでない最適化が適用されてしまう不具合を修"
-"正しました。この不具合は行カウントの結果に影響していました。 [Gitter:groonga/"
-"ja:5761ea97da1c26b045368c84][yoyoshifgsさんが報告]"
-
-msgid ""
-"Fixed to apply custom normalizer even if collation is bin family. [Gitter:"
-"groonga/ja:576d2a2d80f1c6a5257f1270][Reported by big\\_bridge\\_]"
-msgstr ""
-"照合順序が ``*_bin`` でもノーマライザーの指定が有効になるようにしました。 "
-"[Gitter:groonga/ja:576d2a2d80f1c6a5257f1270][big\\_bridge\\_さんが報告]"
-
-msgid "big\\_bridge\\_"
-msgstr "big\\_bridge\\_さん"
-
-msgid "Release 6.03 - 2016-05-29"
-msgstr "6.03リリース - 2016-05-29"
-
-# 2cf79c00c0ec4896b9beffee50c10cc1
-msgid "[:doc:`/install/centos`] Supported Percona Server 5.7 on CentOS 6/7."
-msgstr ""
-"[:doc:`/install/centos`] CentOS 6/7でPercona Server 5.7をサポートしました。"
-
-msgid "[UDF][``mroonga_snippet_html``] Supported query format as keywords::"
-msgstr "[UDF][``mroonga_snippet_html``] クエリにAS句が書けるようになりました。"
-
-msgid "``AS query`` is important in the above example."
-msgstr "上記のサンプルで大事なのは ``AS query`` のところです。"
-
-msgid "[:doc:`/install/windows`] Supported MariaDB 10.1.14 on Windows."
-msgstr ""
-"[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
-
-msgid ""
-"[storage] Fixed a bug that full text index against multibyte column doesn't "
-"work. [Gitter:groonga/ja:5745315728011d9f574b9425][Reported by yoyoshifgs]"
-msgstr ""
-"[ストレージモード] マルチバイトのカラム名に対するフルテキストインデックスが機"
-"能していない不具合を修正しました。 [Gitter:groonga/"
-"ja:5745315728011d9f574b9425] [yoyoshifgsさんが報告]"
-
-msgid "Release 6.02 - 2016-04-29"
-msgstr "6.02リリース - 2016-04-29"
-
-msgid "[deb] Supported multiarch. [Reported by hirobanex]"
-msgstr "[deb] multiarchをサポートしました。[hirobanexさんが報告]"
-
-msgid ""
-"[:doc:`/developer/release`] Updated to use Visual Studio 12(2013) in "
-"building instruction in Windows."
-msgstr ""
-"[:doc:`/developer/release`] Windows版のビルドに Visual Studio 12(2013) を使う"
-"ようにしました。"
-
-msgid ""
-"[:doc:`/reference/full_text_search/boolean_mode`] Translated documentation "
-"about boolean mode."
-msgstr ""
-"[:doc:`/reference/full_text_search/boolean_mode`] ブーリアンモードのドキュメ"
-"ントを翻訳しました。"
-
-msgid "[experimental][mariadb10.2] Supported MariaDB 10.2.0."
-msgstr "[MariaDB 10.2] MariaDB 10.2.0に対応しました。"
-
-# 04cb89376f9347f59c9bb744d03a7c73
-msgid ""
-"[:doc:`/install/debian`] Dropped Debian 7.0 (Wheezy). It had been reached to "
-"End of Life on April 26, 2016."
-msgstr ""
-"[:doc:`/install/debian`] Debian 7.0 (Wheezy)のサポートをやめました。4/26にEOL"
-"となっています。"
-
-msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 16.04 (Xenial Xerus)"
-msgstr ""
-"[:doc:`/install/ubuntu`] Ubuntu 16.04 (Xenial Xerus)をサポートしました。"
-
-msgid ""
-"[storage] Supported mutlibyte characters in column name. [Gitter:groonga/"
-"ja:570270f7d478c81e2cbcdc89][Reported by yoyoshifgs]"
-msgstr ""
-"[ストレージモード] カラム名にマルチバイト文字を使えるようにしました。 "
-"[Gitter:groonga/ja:570270f7d478c81e2cbcdc89] [yoyoshifgsさんが報告]"
-
-msgid "Fixed compile error with MySQL 5.7."
-msgstr "MySQL 5.7でコンパイルエラーになる問題を修正しました。"
-
-msgid "hirobanex"
-msgstr "hirobanexさん"
-
-msgid "Release 6.01 - 2016-03-29"
-msgstr "6.01リリース - 2016-03-29"
-
-msgid ""
-"Added a warning when deprecated keyword \"parser\" is used. [Patch by GMO "
-"Media, Inc.]"
-msgstr ""
-"非推奨のキーワード「parser」が使われた場合に警告を追加するようにしました。 "
-"[GMOメディア株式会社さんがパッチ提供]"
-
-msgid ""
-"[storage] Reduced index size when ``WITH_POSITION`` is used without "
-"tokenizer. Stopped to add ``WITH_POSITION`` to index that doesn't use "
-"tokenizer. Index without tokenizer doesn't need to store position "
-"information. Because there is only one token."
-msgstr ""
-"[ストレージモード] トークナイザーを伴わずに ``WITH_POSITION`` が使われた場"
-"合、 ``WITH_POSITION`` をインデックスに追加するのをやめてインデックスサイズを"
-"減らしました。トークナイザーを伴わないインデックスはトークンが1つしかなく、位"
-"置情報が不要なためです。"
-
-# 0c5a19df6fea4b5a917430142484fafc
-msgid ""
-"[:doc:`/install/windows`] Fixed URLs of binaries for Windows. [Reported by "
-"torinky]"
-msgstr ""
-"[:doc:`/install/windows`] Windows向けバイナリーのURLを修正しました。 [torinky"
-"さんが報告]"
-
-msgid "Added missing LZ4 source. [GitHub#100][Reported by Hiroshi Hatake]"
-msgstr "不足していたLZ4のソースを追加しました。 [GitHub#100][畑ケさんが報告]"
-
-# 04cb89376f9347f59c9bb744d03a7c73
-msgid ""
-"[:doc:`/install/ubuntu`] Dropped Ubuntu 15.04 (Vivid Vervet) support. It had "
-"been reached to End of Life on February 4, 2016."
-msgstr ""
-"[:doc:`/install/ubuntu`] Ubuntu 15.04（Vivid Vervet）のサポートをやめました。"
-"2016年2月4日でサポートが切れた（EOLになった）ためです。"
-
-msgid "[:doc:`/install/windows`] Updated base MariaDB to 10.1.13."
-msgstr ""
-"[:doc:`/install/windows`] ベースにしているMariaDBを10.1.13にアップデートしま"
-"した。"
-
-msgid ""
-"Fixed a bug that the following UDFs can't be used in ``MATCH AGAINST``. "
-"[groonga-dev,03964][Reported by Hironori Matsubara]"
-msgstr ""
-"以下のUDFが ``MATCH AGAINST`` 内で使えない問題を修正しました。 [groonga-"
-"dev,03964][松原さんが報告]"
-
-msgid "``mroonga_escape()``"
-msgstr ""
-
-msgid "``mroonga_normalize()``"
-msgstr ""
-
-msgid "``mroonga_snippet()``"
-msgstr ""
-
-msgid "``mroonga_snippet_html()``"
-msgstr ""
-
-msgid ""
-"[storage] Fixed a bug that ``DELETE`` without condition remains unique "
-"indexes. [GitHub#99][Reported by GMO Media, Inc.]"
-msgstr ""
-"[ストレージモード] 条件なしで ``DELETE`` した場合にユニークインデックスが残っ"
-"てしまう問題を修正しました。 [GitHub#99][GMOメディア株式会社さんが報告]"
-
-# d8986144d4454b8dbfd7cf12c8877b8c
-msgid "GMO Media, Inc."
-msgstr "GMOメディア株式会社さん"
-
-msgid "Hironori Matsubara"
-msgstr "松原さん"
-
-# 58c01265b23a4438bd4df2d910acf3b2
-msgid "torinky"
-msgstr "torinkyさん"
-
-msgid "Hiroshi Hatake"
-msgstr "畑ケさん"
-
-#, fuzzy
-msgid "Release 6.00 - 2016-02-29"
-msgstr "6.00リリース - 2016-02-29"
-
-msgid ""
-"[:ref:`boolean-mode-pragma-ss`] Added a pragma to use `script syntax <http://"
-"groonga.org/docs/reference/grn_expr/script_syntax.html>`_ for search. "
-"[GitHub#95][Patch by Naoya Murakami]"
-msgstr ""
-"[:ref:`boolean-mode-pragma-ss`] 検索に `スクリプト構文 <http://groonga.org/"
-"ja/docs/reference/grn_expr/script_syntax.html>`_ を使うためのプラグマを追加し"
-"ました。 [GitHub#95][村上さんがパッチ提供]"
-
-msgid "[Windows] Bundled LZ4."
-msgstr "[Windows] LZ4をバンドルしました。"
-
-msgid "[Windows] Updated base MariaDB to 10.1.12."
-msgstr "[Windows] ベースにしているMariaDBを10.1.12にアップデートしました。"
-
-msgid ""
-"[:doc:`/reference/udf/mroonga_normalize`] Add missing ``CREATE FUNCTION`` to "
-"install SQL. [GitHub#94][Patch by Naoya Murakami]"
-msgstr ""
-"[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
-"``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Past releases"
 msgstr "過去のリリース"
@@ -837,6 +429,9 @@ msgid ""
 msgstr ""
 "[非互換] DATE、DATETIME、TIMESTAMP型の値にgroongaが提供する時間の値を使うよう"
 "にした。"
+
+msgid "Fixes"
+msgstr "修正"
 
 msgid ""
 "[debian] Fixed wrong mysql-server-groonga version in replaces and breaks. "
@@ -2174,6 +1769,9 @@ msgstr ""
 msgid "yoku"
 msgstr "yokuさん"
 
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
 msgid "Release 3.11 - 2013/12/29"
 msgstr "3.11リリース - 2013/12/29"
 
@@ -3046,6 +2644,9 @@ msgstr ""
 "題を修正しました。この不具合には挿入に失敗したあとの更新処理で既存の他のレ"
 "コードを変更してしまう可能性があります。[kazeburoさんが報告]"
 
+msgid "Hiroshi Kagami"
+msgstr "各務さん"
+
 msgid "kazeburo"
 msgstr "kazeburoさん"
 
@@ -3127,6 +2728,10 @@ msgstr ""
 msgid "[doc] Use ``systemctl`` command to start MySQL on CentOS 7."
 msgstr ""
 "[doc] CentOS 7では ``systemctl`` コマンドをMySQLの起動に使うようにしました。"
+
+# d8986144d4454b8dbfd7cf12c8877b8c
+msgid "GMO Media, Inc."
+msgstr "GMOメディア株式会社さん"
 
 # 256875cb4d8340a5b75754690347bfe2
 msgid "Elena Stepanova"
@@ -3752,6 +3357,9 @@ msgstr ""
 "[ラッパーモード] ``DROP TABLE`` でファイルが残ってしまうかもしれない問題を修"
 "正しました。 [groonga-dev,03673] [かとうさんが報告]"
 
+msgid "Hironori Matsubara"
+msgstr "松原さん"
+
 msgid "Release 5.09 - 2015-10-29"
 msgstr "5.09リリース - 2015-10-29"
 
@@ -4134,6 +3742,10 @@ msgstr ""
 "[ストレージモード] 複数接続時にユニーク制約が無視されてしまう不具合を修正しま"
 "した。 [groonga-dev,03243] [各務さんが報告]"
 
+# 58c01265b23a4438bd4df2d910acf3b2
+msgid "torinky"
+msgstr "torinkyさん"
+
 msgid "Release 5.02 - 2015/04/29"
 msgstr "5.02リリース - 2015/04/29"
 
@@ -4364,3 +3976,393 @@ msgstr "[cmake] ビッグエンディアンのサポートを明示的に無効�
 
 msgid "Kohei Aochi"
 msgstr "青地さん"
+
+msgid "News - 6.x"
+msgstr ""
+
+msgid "Release 6.13 - 2017-01-13"
+msgstr "6.13リリース - 2017-01-13"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[:doc:`/install/centos`] Supported the latest Percona Server 5.6."
+msgstr "[:doc:`/install/centos`] 最新のPercona Server 5.7をサポートしました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[:doc:`/install/centos`] Supported the latest Percona Server 5.7."
+msgstr "[:doc:`/install/centos`] 最新のPercona Server 5.6をサポートしました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.5."
+msgstr "[:doc:`/install/centos`] 最新のMySQL 5.5をサポートしました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.6."
+msgstr "[:doc:`/install/centos`] 最新のMySQL 5.6をサポートしました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.7."
+msgstr "[:doc:`/install/centos`] 最新のMySQL 5.7をサポートしました。"
+
+msgid "Supported MariaDB 10.2.3."
+msgstr "MariaDB 10.2.23をサポートしました。"
+
+msgid "Supported MySQL 5.7.17."
+msgstr "MySQL 5.7.17をサポートしました。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Reduced index size for multiple column index."
+msgstr ""
+"[:doc:`/tutorial/storage`] マルチカラムインデックスのインデックスサイズを削減"
+"しました。"
+
+msgid "Release 6.11 - 2016-11-29"
+msgstr "6.11リリース - 2016-11-29"
+
+msgid "[deb][debian] Supported MariaDB 10.x package for Debian jessie."
+msgstr ""
+"[deb][debian] Debian jessieでMariaDB 10.x向けのパッケージをサポートしました。"
+
+msgid "Release 6.10 - 2016-10-29"
+msgstr "6.10リリース - 2016-10-29"
+
+msgid "[deb][ubuntu] Supported MariaDB 10.x package for Ubuntu 16.04"
+msgstr ""
+"[deb][ubuntu] Ubuntu 16.04向けにMariaDB 10.xのパッケージをサポートしました。"
+
+msgid "[deb][ubuntu] Supported Ubuntu 16.10 (Yakkety Yak)"
+msgstr "[deb][ubuntu] Ubuntu 16.10 (Yakkety Yak)をサポートしました。"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Added document how to install Mroonga for MariaDB "
+"on Ubuntu 16.04."
+msgstr ""
+"[:doc:`/install/ubuntu`] MariaDBに対応したMroongaのインストール方法をドキュメ"
+"ントに追加しました。"
+
+msgid ""
+"[:doc:`/install`][:doc:`/tutorial`] Improved sample SQL format for easy to "
+"copy and paste."
+msgstr ""
+"[:doc:`/install`][:doc:`/tutorial`] サンプルのSQLの書式をコピー&ペーストしや"
+"すいように改善しました。"
+
+msgid ""
+"[rpm][centos] Supported latest MySQL 5.6.34, MySQL 5.7.16, Percona Server "
+"5.6.33 and Percona Server 5.7.15. [groonga-dev,04169] [Reported by Hiroshi "
+"Kagami]"
+msgstr ""
+"[rpm][centos] 最新の MySQL 5.6.34, MySQL 5.7.16, Percona Server 5.6.33 と "
+"Percona Server 5.7.15をサポートしました。 [groonga-dev,04169] [各務さんが報"
+"告]"
+
+msgid ""
+"[mysql57][wrapper] Fixed a bug that ``COUNT(*)`` with InnoDB doesn't return "
+"correct number of records because behavior of InnoDB was changed since MySQL "
+"5.7.  [Reported by koyama_wataru_7]"
+msgstr ""
+"[mysql57][wrapper] InnoDBで ``COUNT(*)`` が正しいレコード数を返さない不具合を"
+"修正しました。これはMySQL 5.7になってからInnnoDBの挙動が変更されたためです。 "
+"[koyama_wataru_7さんが報告]"
+
+msgid "koyama_wataru_7"
+msgstr "koyama_wataru_7さん"
+
+msgid "Release 6.09 - 2016-09-29"
+msgstr "6.09リリース - 2016-09-29"
+
+msgid ""
+"[storage] Supported nonexistent reference insert check for ``FOREIGN KEY``. "
+"[Gitter:https://gitter.im/groonga/ja?at=57d629477b9f8167113efb04] [Reported "
+"by mizutamazukki]"
+msgstr ""
+"[ストレージ] データ挿入時の ``FOREIGN KEY`` 制約チェックをサポートしました。"
+"[Gitter:https://gitter.im/groonga/ja?at=57d629477b9f8167113efb04] "
+"[mizutamazukkiさんが報告]"
+
+msgid "mizutamazukki"
+msgstr "mizutamazukkiさん"
+
+msgid "Release 6.08 - 2016-08-29"
+msgstr "6.08リリース - 2016-08-29"
+
+msgid "[rpm][centos] Supported latest MariaDB 5.5.50 on CentOS 7."
+msgstr "[rpm][centos] CentOS 7でMariaDB 5.5.50をサポートしました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.6/5.7 on CentOS 6/7."
+msgstr ""
+"[rpm][centos] CentOS 6/7で最新のPercona Server 5.6/5.7をサポートしました。"
+
+msgid ""
+"[:doc:`/reference/limitations`] Updated description about table limitations. "
+"There is a good news that the limitation about the maximum number of records "
+"are relaxed. In the past, it is described as 268,435,455 records, but it "
+"turns out that actually you can store more records."
+msgstr ""
+"[:doc:`/reference/limitations`] テーブルの制限の記述を更新しました。従来最大"
+"レコード数の制限は約2億6千万レコードとしていましたが、実際にはもっと保存でき"
+"ることがわかりました。"
+
+msgid "Supported MariaDB 10.2.1"
+msgstr "MariaDB 10.2.1に対応しました。"
+
+msgid "Fixed compile error with GCC 6.1.1."
+msgstr "GCC 6.1.1でコンパイルエラーになる問題を修正しました。"
+
+msgid "Release 6.07 - 2016-08-04"
+msgstr "6.07リリース - 2016-08-04"
+
+msgid ""
+"[storage mysql57] Supported ``COUNT(*)`` skip optimization for ``BETWEEN`` "
+"again."
+msgstr ""
+"[ストレージモード mysql57] 行カウント ``COUNT(*)`` の最適化が ``BETWEEN`` で"
+"も再び有効になるようにしました。"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 15.10 (Wily Werewolf) support. It "
+"had been reached to End of Life on July 28, 2016."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 15.10（Wily Werewolf）のサポートをやめまし"
+"た。2016年7月28日でサポートが切れた（EOLになった）ためです。"
+
+msgid "[windows] Updated bundled MariaDB to 10.1.16."
+msgstr "[Windows] ベースにしているMariaDBを10.1.16にアップデートしました。"
+
+msgid ""
+"[mariadb55] Fixed to disable ``COUNT(*)`` skip optimization when it can't be "
+"applied correctly. For example, ``SELECT COUNT(*) FROM users WHERE age = 29;"
+"`` is such a case on MariaDB 5.5."
+msgstr ""
+"[mariadb55] 行カウント ``COUNT(*)`` の最適化を正しく行えない場合には、無効に"
+"するようにしました。例えば、MariaDB 5.5では ``SELECT COUNT(*) FROM users "
+"WHERE age = 29;`` というクエリが該当します。"
+
+msgid "Release 6.06 - 2016-06-30"
+msgstr "6.06リリース - 2016-06-30"
+
+msgid ""
+"[mariadb10] Fixed a crash bug on MariaDB 10.x. [Gitter:groonga/"
+"ja:57746049265214c130a655ed][Reported by yoyoshifgs]"
+msgstr ""
+"[mariadb10] MariaDB 10.xでクラッシュする問題を修正しました。[Gitter:groonga/"
+"ja:57746049265214c130a655ed][yoyoshifgsさんが報告]"
+
+msgid "yoyoshifgs"
+msgstr "yoyoshifgsさん"
+
+msgid "Release 6.05 - 2016-06-29"
+msgstr "6.05リリース - 2016-06-29"
+
+msgid "[centos] Supported CentOS 6.8."
+msgstr "[centos] CentOS 6.8をサポートしました。"
+
+msgid ""
+"[storage] Supported multibyte column name in inplace ALTER TABLE. Note that "
+"MySQL 5.6 or later can use inplace ALTER TABLE for adding columns and "
+"indexes."
+msgstr ""
+"[ストレージモード] マルチバイト文字を使用したカラムに対し、INPLACE ALTER "
+"TABLEに対応しました。カラムの追加やインデックスの追加でINPLACE ALTER TABLEで"
+"きるのはMySQL 5.6以降です。"
+
+msgid ""
+"[storage] Supported ORDER BY LIMIT optimization for multibyte column. "
+"[Gitter:groonga/ja:575e6e671cf76dd64536997c][Reported by yoyoshifgs]"
+msgstr ""
+"[ストレージモード] マルチバイト文字を使ったカラムでも ORDER BY LIMIT の最適化"
+"が有効になりました。 [Gitter:groonga/ja:575e6e671cf76dd64536997c][yoyoshifgs"
+"さんが報告]"
+
+msgid ""
+"[storage count skip] Fixed invalid optimization which should no be applied. "
+"It affects to the result of row count. [Gitter:groonga/"
+"ja:5761ea97da1c26b045368c84][Reported by yoyoshifgs]"
+msgstr ""
+"[ストレージモード count skip] すべきでない最適化が適用されてしまう不具合を修"
+"正しました。この不具合は行カウントの結果に影響していました。 [Gitter:groonga/"
+"ja:5761ea97da1c26b045368c84][yoyoshifgsさんが報告]"
+
+msgid ""
+"Fixed to apply custom normalizer even if collation is bin family. [Gitter:"
+"groonga/ja:576d2a2d80f1c6a5257f1270][Reported by big\\_bridge\\_]"
+msgstr ""
+"照合順序が ``*_bin`` でもノーマライザーの指定が有効になるようにしました。 "
+"[Gitter:groonga/ja:576d2a2d80f1c6a5257f1270][big\\_bridge\\_さんが報告]"
+
+msgid "big\\_bridge\\_"
+msgstr "big\\_bridge\\_さん"
+
+msgid "Release 6.03 - 2016-05-29"
+msgstr "6.03リリース - 2016-05-29"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.7 on CentOS 6/7."
+msgstr ""
+"[:doc:`/install/centos`] CentOS 6/7でPercona Server 5.7をサポートしました。"
+
+msgid "[UDF][``mroonga_snippet_html``] Supported query format as keywords::"
+msgstr "[UDF][``mroonga_snippet_html``] クエリにAS句が書けるようになりました。"
+
+msgid "``AS query`` is important in the above example."
+msgstr "上記のサンプルで大事なのは ``AS query`` のところです。"
+
+msgid "[:doc:`/install/windows`] Supported MariaDB 10.1.14 on Windows."
+msgstr ""
+"[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
+
+msgid ""
+"[storage] Fixed a bug that full text index against multibyte column doesn't "
+"work. [Gitter:groonga/ja:5745315728011d9f574b9425][Reported by yoyoshifgs]"
+msgstr ""
+"[ストレージモード] マルチバイトのカラム名に対するフルテキストインデックスが機"
+"能していない不具合を修正しました。 [Gitter:groonga/"
+"ja:5745315728011d9f574b9425] [yoyoshifgsさんが報告]"
+
+msgid "Release 6.02 - 2016-04-29"
+msgstr "6.02リリース - 2016-04-29"
+
+msgid "[deb] Supported multiarch. [Reported by hirobanex]"
+msgstr "[deb] multiarchをサポートしました。[hirobanexさんが報告]"
+
+msgid ""
+"[:doc:`/developer/release`] Updated to use Visual Studio 12(2013) in "
+"building instruction in Windows."
+msgstr ""
+"[:doc:`/developer/release`] Windows版のビルドに Visual Studio 12(2013) を使う"
+"ようにしました。"
+
+msgid ""
+"[:doc:`/reference/full_text_search/boolean_mode`] Translated documentation "
+"about boolean mode."
+msgstr ""
+"[:doc:`/reference/full_text_search/boolean_mode`] ブーリアンモードのドキュメ"
+"ントを翻訳しました。"
+
+msgid "[experimental][mariadb10.2] Supported MariaDB 10.2.0."
+msgstr "[MariaDB 10.2] MariaDB 10.2.0に対応しました。"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/debian`] Dropped Debian 7.0 (Wheezy). It had been reached to "
+"End of Life on April 26, 2016."
+msgstr ""
+"[:doc:`/install/debian`] Debian 7.0 (Wheezy)のサポートをやめました。4/26にEOL"
+"となっています。"
+
+msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 16.04 (Xenial Xerus)"
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 16.04 (Xenial Xerus)をサポートしました。"
+
+msgid ""
+"[storage] Supported mutlibyte characters in column name. [Gitter:groonga/"
+"ja:570270f7d478c81e2cbcdc89][Reported by yoyoshifgs]"
+msgstr ""
+"[ストレージモード] カラム名にマルチバイト文字を使えるようにしました。 "
+"[Gitter:groonga/ja:570270f7d478c81e2cbcdc89] [yoyoshifgsさんが報告]"
+
+msgid "Fixed compile error with MySQL 5.7."
+msgstr "MySQL 5.7でコンパイルエラーになる問題を修正しました。"
+
+msgid "hirobanex"
+msgstr "hirobanexさん"
+
+msgid "Release 6.01 - 2016-03-29"
+msgstr "6.01リリース - 2016-03-29"
+
+msgid ""
+"Added a warning when deprecated keyword \"parser\" is used. [Patch by GMO "
+"Media, Inc.]"
+msgstr ""
+"非推奨のキーワード「parser」が使われた場合に警告を追加するようにしました。 "
+"[GMOメディア株式会社さんがパッチ提供]"
+
+msgid ""
+"[storage] Reduced index size when ``WITH_POSITION`` is used without "
+"tokenizer. Stopped to add ``WITH_POSITION`` to index that doesn't use "
+"tokenizer. Index without tokenizer doesn't need to store position "
+"information. Because there is only one token."
+msgstr ""
+"[ストレージモード] トークナイザーを伴わずに ``WITH_POSITION`` が使われた場"
+"合、 ``WITH_POSITION`` をインデックスに追加するのをやめてインデックスサイズを"
+"減らしました。トークナイザーを伴わないインデックスはトークンが1つしかなく、位"
+"置情報が不要なためです。"
+
+# 0c5a19df6fea4b5a917430142484fafc
+msgid ""
+"[:doc:`/install/windows`] Fixed URLs of binaries for Windows. [Reported by "
+"torinky]"
+msgstr ""
+"[:doc:`/install/windows`] Windows向けバイナリーのURLを修正しました。 [torinky"
+"さんが報告]"
+
+msgid "Added missing LZ4 source. [GitHub#100][Reported by Hiroshi Hatake]"
+msgstr "不足していたLZ4のソースを追加しました。 [GitHub#100][畑ケさんが報告]"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 15.04 (Vivid Vervet) support. It had "
+"been reached to End of Life on February 4, 2016."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 15.04（Vivid Vervet）のサポートをやめました。"
+"2016年2月4日でサポートが切れた（EOLになった）ためです。"
+
+msgid "[:doc:`/install/windows`] Updated base MariaDB to 10.1.13."
+msgstr ""
+"[:doc:`/install/windows`] ベースにしているMariaDBを10.1.13にアップデートしま"
+"した。"
+
+msgid ""
+"Fixed a bug that the following UDFs can't be used in ``MATCH AGAINST``. "
+"[groonga-dev,03964][Reported by Hironori Matsubara]"
+msgstr ""
+"以下のUDFが ``MATCH AGAINST`` 内で使えない問題を修正しました。 [groonga-"
+"dev,03964][松原さんが報告]"
+
+msgid "``mroonga_escape()``"
+msgstr ""
+
+msgid "``mroonga_normalize()``"
+msgstr ""
+
+msgid "``mroonga_snippet()``"
+msgstr ""
+
+msgid "``mroonga_snippet_html()``"
+msgstr ""
+
+msgid ""
+"[storage] Fixed a bug that ``DELETE`` without condition remains unique "
+"indexes. [GitHub#99][Reported by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード] 条件なしで ``DELETE`` した場合にユニークインデックスが残っ"
+"てしまう問題を修正しました。 [GitHub#99][GMOメディア株式会社さんが報告]"
+
+msgid "Hiroshi Hatake"
+msgstr "畑ケさん"
+
+msgid "Release 6.00 - 2016-02-29"
+msgstr "6.00リリース - 2016-02-29"
+
+msgid ""
+"[:ref:`boolean-mode-pragma-ss`] Added a pragma to use `script syntax <http://"
+"groonga.org/docs/reference/grn_expr/script_syntax.html>`_ for search. "
+"[GitHub#95][Patch by Naoya Murakami]"
+msgstr ""
+"[:ref:`boolean-mode-pragma-ss`] 検索に `スクリプト構文 <http://groonga.org/"
+"ja/docs/reference/grn_expr/script_syntax.html>`_ を使うためのプラグマを追加し"
+"ました。 [GitHub#95][村上さんがパッチ提供]"
+
+msgid "[Windows] Bundled LZ4."
+msgstr "[Windows] LZ4をバンドルしました。"
+
+msgid "[Windows] Updated base MariaDB to 10.1.12."
+msgstr "[Windows] ベースにしているMariaDBを10.1.12にアップデートしました。"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_normalize`] Add missing ``CREATE FUNCTION`` to "
+"install SQL. [GitHub#94][Patch by Naoya Murakami]"
+msgstr ""
+"[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
+"``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
