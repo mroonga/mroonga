@@ -78,7 +78,7 @@ You need to use Mroonga bundled MariaDB source provided by the Mroonga
 project.
 
 You can find it in
-`<http://packages.groonga.org/source/mroonga/>`_. Mroonga bundled
+`<https://packages.groonga.org/source/mroonga/>`_. Mroonga bundled
 MariaDB source has
 ``mariadb-${MARIADB_VERSION}-with-mroonga-${MROONGA_VERSION}.zip``
 file name.

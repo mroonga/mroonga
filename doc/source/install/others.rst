@@ -98,7 +98,7 @@ Build from source
 Mroonga uses GNU build system. So the following is the simplest build
 steps::
 
-  % wget http://packages.groonga.org/source/mroonga/mroonga-6.12.tar.gz
+  % wget https://packages.groonga.org/source/mroonga/mroonga-6.12.tar.gz
   % tar xvzf mroonga-6.12.tar.gz
   % cd mroonga-6.12
   % ./configure \
