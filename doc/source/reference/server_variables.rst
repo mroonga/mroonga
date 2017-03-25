@@ -268,7 +268,7 @@ Here is an example SQL to confirm the status of libgroonga supports zlib::
 .. _server-variable-mroonga-libgroonga-support-zstd:
 
 ``mroonga_libgroonga_support_zstd``
-----------------------------------
+-----------------------------------
 
 The status of libgroonga supports Zstandard.
 
