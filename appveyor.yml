@@ -4,8 +4,6 @@ environment:
   global:
     MARIADB_VERSION: 10.1.22
   matrix:
-    - CMAKE_GENERATOR_NAME: "Visual Studio 12 2013"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 12 2013 Win64"
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
 
