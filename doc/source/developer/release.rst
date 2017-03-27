@@ -262,7 +262,7 @@ zip 展開機能はとても遅いので 7-zip などを使いましょう。展
 
  > mkdir build-32
  > cd build-32
- > cmake ..\source -G "Visual Studio 12" > config.log
+ > cmake ..\source -G "Visual Studio 14" > config.log
  > cmake --build . --config RelWithDebInfo > build.log
  > cmake --build . --config RelWithDebInfo --target msi > msi.log
  > move *.msi ..\
@@ -271,7 +271,7 @@ zip 展開機能はとても遅いので 7-zip などを使いましょう。展
  > cd ..
  > mkdir build-64
  > cd build-64
- > cmake ..\source -G "Visual Studio 12 Win64" > config.log
+ > cmake ..\source -G "Visual Studio 14 Win64" > config.log
  > cmake --build . --config RelWithDebInfo > build.log
  > cmake --build . --config RelWithDebInfo --target msi > msi.log
  > move *.msi ..\
