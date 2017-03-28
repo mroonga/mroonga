@@ -274,3 +274,14 @@ Here is an example when you specify ``--prefix=$HOME/local`` to
 ``configure``::
 
   % mysql -u root < $HOME/local/share/mroonga/install.sql
+
+``uninstall Mroonga``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you want to remove Mroonga, 
+type below commands::
+
+  % git clone git@github.com:mroonga/mroonga.git
+  % mysql < /path/to/mroonga/data/uninstall.sql
+  % cd %{MROONGA_BUILD_DIR}
+  % sudo make uninstall
