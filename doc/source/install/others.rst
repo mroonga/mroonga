@@ -6,7 +6,6 @@ Others
 This section describes how to install Mroonga from source code. If
 there is no package no your environment, you need to build Mroonga
 from source code.
-
 Dependencies
 ------------
 
@@ -274,3 +273,14 @@ Here is an example when you specify ``--prefix=$HOME/local`` to
 ``configure``::
 
   % mysql -u < $HOME/local/share/mroonga/install.sql
+
+``uninstall Mroonga``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you want to remove Mroonga, 
+type below commands::
+
+  % git clone git@github.com:mroonga/mroonga.git
+  % mysql < /path/to/mroonga/data/uninstall.sql
+  % cd %{MROONGA_BUILD_DIR}
+  % sudo make uninstall
