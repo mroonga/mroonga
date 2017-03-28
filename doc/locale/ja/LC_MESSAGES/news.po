@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-03-25 17:35+0900\n"
+"PO-Revision-Date: 2017-03-28 15:35+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,86 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.00 - 2017-02-09"
-msgstr "7.00リリース - 2017-02-09"
+msgid "Release 7.01 - 2017-03-29"
+msgstr "7.01リリース - 2017-03-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[:doc:`/install/centos`] Dropped CentOS 5 support because of EOL."
+msgstr "[:doc:`/install/centos`] EOLのため、CentOS 5のサポートをやめました。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Supported ``ALTER TABLE ADD/DROP FOREIGN KEY``."
+msgstr ""
+"[:doc:`/tutorial/storage`] ``ALTER TABLE ADD/DROP FOREIGN KEY`` をサポートし"
+"ました。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Supported fast ``ORDER LIMIT`` with ``ENUM``.  "
+"[groonga-dev,04277] [Reported by murata satoshi]"
+msgstr ""
+"[:doc:`/tutorial/storage`] ``ENUM`` を使っている場合の ``ORDER LIMIT`` 最適化"
+"をサポートしました。[groonga-dev,04277] [村田さんが報告]"
+
+# 0cca5ec6871b4c40b89dfb548289f913
+msgid ""
+"Supported ``COMPRESS_ZSTD`` column compression flag. [GitHub#133] [Patch by "
+"Naoya Murakami]"
+msgstr ""
+"[ストレージ] カラムのZSTD圧縮フラグ(``COMPRESS_ZSTD``)をサポートしました。 "
+"[GitHub#133] [村上さんがパッチ提供]"
+
+# c2f193ff56e24d088e4f9ff62a1a6c63
+msgid ""
+"[:doc:`/reference/server_variables`] Added documentation about "
+"``mroonga_libgroonga_support_zstd`` variable. [GitHub#133] [Patch by Naoya "
+"Murakaimi]"
+msgstr ""
+"[:doc:`/reference/server_variables`] :ref:`server-variable-mroonga-"
+"libgroonga-support-zstd` サーバー変数のドキュメントを追加しました。 "
+"[GitHub#133] [村上さんがパッチ提供]"
+
+msgid ""
+"[:doc:`/install`] Changed to recommend ``https://packages.groonga.org`` for "
+"downloading resources."
+msgstr ""
+"[:doc:`/install`] リソースのダウンロードに ``https://packages.groonga.org`` "
+"を推奨するようにしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Fixed update error for log-bin and ``UPDATE`` "
+"with collated ``PRIMARY KEY``. [GitHub#132] [Reported by kitora]"
+msgstr ""
+"[:doc:`/tutorial/storage`] log-bin と ``COLLATE`` が指定されている場合、 "
+"``UPDATE PRIMARY KEY`` で更新エラーになる問題を修正しました。 [GitHub#132] "
+"[kitoraさんが報告]"
+
+msgid ""
+"Fixed a bug that ``FOREIGN KEY`` is dumped unexpectedly even though you "
+"didn't set it. [groonga-dev,04276] [Reported by murata satoshi]"
+msgstr ""
+"設定していないのに ``FOREIGN KEY`` が意図せずダンプされる不具合を修正しまし"
+"た。 [groonga-dev,04276] [村田さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "kitora"
+msgstr "kitoraさん"
+
+msgid "murata satoshi"
+msgstr "村田さん"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Release 7.00 - 2017-02-09"
+msgstr "7.00リリース - 2017-02-09"
 
 msgid ""
 "[:doc:`/install/centos`] Changed to ensure enabling EPEL to install package."
@@ -49,12 +124,6 @@ msgstr ""
 "[:doc:`/tutorial/storage`] 主キーをもつテーブルでbinlogを使っていても、レコー"
 "ドの更新をサポートしました。以前は更新時に構文エラーになっていました。 "
 "[GitHub#130] [Reported by kitora]"
-
-msgid "Thanks"
-msgstr "感謝"
-
-msgid "kitora"
-msgstr ""
 
 msgid "Past releases"
 msgstr "過去のリリース"
@@ -429,9 +498,6 @@ msgid ""
 msgstr ""
 "[非互換] DATE、DATETIME、TIMESTAMP型の値にgroongaが提供する時間の値を使うよう"
 "にした。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[debian] Fixed wrong mysql-server-groonga version in replaces and breaks. "
@@ -1768,9 +1834,6 @@ msgstr ""
 
 msgid "yoku"
 msgstr "yokuさん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Release 3.11 - 2013/12/29"
 msgstr "3.11リリース - 2013/12/29"
