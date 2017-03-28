@@ -5,6 +5,49 @@
 News
 ====
 
+.. _release-7-01:
+
+Release 7.01 - 2017-03-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Dropped CentOS 5 support because of EOL.
+
+* [:doc:`/tutorial/storage`] Supported ``ALTER TABLE ADD/DROP FOREIGN
+  KEY``.
+
+* [:doc:`/tutorial/storage`] Supported fast ``ORDER LIMIT`` with
+  ``ENUM``.  [groonga-dev,04277] [Reported by murata satoshi]
+
+* Supported ``COMPRESS_ZSTD`` column compression flag. [GitHub#133]
+  [Patch by Naoya Murakami]
+
+* [:doc:`/reference/server_variables`] Added documentation about
+  ``mroonga_libgroonga_support_zstd`` variable. [GitHub#133]
+  [Patch by Naoya Murakaimi]
+
+* [:doc:`/install`] Changed to recommend ``https://packages.groonga.org``
+  for downloading resources.
+
+Fixes
+^^^^^
+
+* [:doc:`/tutorial/storage`] Fixed update error for log-bin and
+  ``UPDATE`` with collated ``PRIMARY KEY``. [GitHub#132] [Reported by
+  kitora]
+
+* Fixed a bug that ``FOREIGN KEY`` is dumped unexpectedly even though
+  you didn't set it. [groonga-dev,04276] [Reported by murata satoshi]
+
+Thanks
+^^^^^^
+
+* kitora
+* murata satoshi
+* Naoya Murakami
+
 .. _release-7-00:
 
 Release 7.00 - 2017-02-09
