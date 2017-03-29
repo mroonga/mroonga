@@ -198,6 +198,10 @@ allow_unsigned_uploads = 0
                     "debian/control")
         run_command("debuild",
                     "--no-lintian",
+                    # Workaround for Launchpad. Launchpad doesn't accept
+                    # .buildinfo yet.
+                    # See also: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=853795
+                    "--buildinfo-option=-O",
                     "-d",
                     "-S",
                     "-sa",
