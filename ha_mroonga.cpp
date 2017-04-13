@@ -4287,7 +4287,9 @@ void ha_mroonga::wrapper_overwrite_index_bits()
   {
     Field *field = table_share->field[i];
     field->part_of_key.clear_all();
+#ifdef MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
     field->part_of_key_not_clustered.clear_all();
+#endif
     field->part_of_sortkey.clear_all();
   }
   for (i = 0; i < table_share->keys; i++) {
@@ -4303,7 +4305,9 @@ void ha_mroonga::wrapper_overwrite_index_bits()
         {
           table_share->keys_for_keyread.set_bit(i);
           field->part_of_key.set_bit(i);
+#ifdef MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
           field->part_of_key_not_clustered.set_bit(i);
+#endif
         }
         if (index_flags(i, j, 1) & HA_READ_ORDER)
           field->part_of_sortkey.set_bit(i);

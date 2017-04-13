@@ -351,4 +351,9 @@
   (c == FN_LIBCHAR || c == FN_LIBCHAR2)
 #endif
 
+#if ((MYSQL_VERSION_ID < 50636) || \
+    (MYSQL_VERSION_ID >= 50700 && MYSQL_VERSION_ID < 50718)) && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */
