@@ -18,12 +18,12 @@ INSERT INTO diaries_mroonga (body) VALUES ("starting groonga...");
 INSERT INTO diaries_mroonga (body) VALUES ("started groonga.");
 EXPLAIN SELECT COUNT(*) FROM diaries_innodb;
 id	select_type	table	partitions	type	possible_keys	key	key_len	ref	rows	filtered	Extra
-1	SIMPLE	NULL	NULL	NULL	NULL	NULL	NULL	NULL	#	NULL	Select tables optimized away
+1	SIMPLE	diaries_innodb	NULL	index	NULL	flag	2	NULL	3	100.00	Using index
 Warnings:
 Note	1003	/* select#1 */ select count(0) AS `COUNT(*)` from `test`.`diaries_innodb`
 EXPLAIN SELECT COUNT(*) FROM diaries_mroonga;
 id	select_type	table	partitions	type	possible_keys	key	key_len	ref	rows	filtered	Extra
-1	SIMPLE	NULL	NULL	NULL	NULL	NULL	NULL	NULL	#	NULL	Select tables optimized away
+1	SIMPLE	diaries_mroonga	NULL	index	NULL	flag	2	NULL	3	100.00	Using index
 Warnings:
 Note	1003	/* select#1 */ select count(0) AS `COUNT(*)` from `test`.`diaries_mroonga`
 DROP TABLE diaries_innodb;

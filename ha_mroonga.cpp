@@ -4287,8 +4287,16 @@ void ha_mroonga::wrapper_overwrite_index_bits()
   {
     Field *field = table_share->field[i];
     field->part_of_key.clear_all();
+#ifdef MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
     field->part_of_key_not_clustered.clear_all();
+#endif
     field->part_of_sortkey.clear_all();
+    /*
+      TODO: We may need to update field->part_of_key_not_extended for
+      MySQL >= 5.7.18. If users report "raw InnoDB can use index for
+      this case but Mroonga wrapper mode for InnoDB can't use index
+      for the same case", we'll reconsider it again.
+    */
   }
   for (i = 0; i < table_share->keys; i++) {
     KEY *key_info = &table->s->key_info[i];
@@ -4303,7 +4311,9 @@ void ha_mroonga::wrapper_overwrite_index_bits()
         {
           table_share->keys_for_keyread.set_bit(i);
           field->part_of_key.set_bit(i);
+#ifdef MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
           field->part_of_key_not_clustered.set_bit(i);
+#endif
         }
         if (index_flags(i, j, 1) & HA_READ_ORDER)
           field->part_of_sortkey.set_bit(i);
