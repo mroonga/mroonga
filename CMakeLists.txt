@@ -289,6 +289,7 @@ else()
   set(MRN_LIBRARY_DIRS
     ${MRN_LIBRARY_DIRS}
     ${GROONGA_LIBRARY_DIRS})
+  set(MRN_LIBRARIES ${GROONGA_LIBRARIES})
 endif()
 
 include_directories(
