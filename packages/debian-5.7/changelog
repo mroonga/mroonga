@@ -1,3 +1,9 @@
+mroonga-5.7 (7.02-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Sat, 29 Apr 2017 00:00:00 +0900
+
 mroonga-5.7 (7.01-2) unstable; urgency=low
 
   * Rebuild on Ubuntu 16.04.02
