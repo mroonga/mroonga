@@ -542,14 +542,7 @@ namespace mrn {
     append_const_item(field_item, max_item, expression);
     grn_expr_append_const(ctx_, expression, &include, GRN_OP_PUSH, 1);
 
-    int call_n_args = 5;
-    // TODO: Remove this condition when we drop Groonga 7.0.1 or
-    // earlier support or Groonga 10 is released.
-    if (strcmp(grn_get_version(), "7.0.2") >= 0 ||
-        strcmp(grn_get_version(), "7.0.1-105-") >= 0) {
-      call_n_args++;
-    }
-    grn_expr_append_op(ctx_, expression, GRN_OP_CALL, call_n_args);
+    grn_expr_append_op(ctx_, expression, GRN_OP_CALL, 5);
 
     grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
 
