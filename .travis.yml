@@ -30,6 +30,7 @@ matrix:
 #    - env: MYSQL_VERSION=mariadb-10.1.21 MROONGA_BUNDLED=yes
 #    - env: MYSQL_VERSION=mariadb-10.2.4 MROONGA_BUNDLED=yes
 #    - env: MYSQL_VERSION=mariadb-10.2.4 MROONGA_BUNDLED=yes MROONGA_TEST_PS_PROTOCOL=yes
+    - env: MYSQL_VERSION=percona-server-5.7
 install:
   - tools/travis/install.sh
 before_script:
