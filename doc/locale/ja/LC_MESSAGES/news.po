@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-03-28 15:35+0900\n"
+"PO-Revision-Date: 2017-04-27 13:33+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,51 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.01 - 2017-03-29"
-msgstr "7.01リリース - 2017-03-29"
+msgid "Release 7.02 - 2017-04-29"
+msgstr "7.02リリース - 2017-04-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid ""
+"[:doc:`/install/centos`] Dropped Ubuntu 12.04 (Precise Pangolin) support "
+"because of EOL."
+msgstr ""
+"[:doc:`/install/ubuntu`] EOLのため、Ubuntu 12.04 (Precise Pangolin)のサポート"
+"をやめました。"
+
+msgid "[:doc:`/install/ubuntu`] Added Zesty Zapus (Ubuntu 17.04) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 17.04 (Zesty Zapus)をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid ""
+"[:doc:`/install/centos`] Fixed build error with MySQL 5.6.36 and MySQL "
+"5.7.18."
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.36とMySQL 5.7.18でビルドエラーになる問題を"
+"修正しました。"
+
+msgid ""
+"[cmake] Fixed missing link to ``libgroonga`` when mroonga is bundled and "
+"``libgroonga`` isn't bundled. [GitHub#137] [Patch by Naoya Murakami]"
+msgstr ""
+"[cmake] Mroongaがバンドルされているがシステムの ``libgroonga`` を使う場合に "
+"``libgroonga`` がリンクされていない問題を修正しました。 [GitHub#137] [村上さ"
+"んがパッチ提供]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Release 7.01 - 2017-03-29"
+msgstr "7.01リリース - 2017-03-29"
 
 # cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/centos`] Dropped CentOS 5 support because of EOL."
@@ -69,9 +109,6 @@ msgstr ""
 "[:doc:`/install`] リソースのダウンロードに ``https://packages.groonga.org`` "
 "を推奨するようにしました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[:doc:`/tutorial/storage`] Fixed update error for log-bin and ``UPDATE`` "
 "with collated ``PRIMARY KEY``. [GitHub#132] [Reported by kitora]"
@@ -87,17 +124,11 @@ msgstr ""
 "設定していないのに ``FOREIGN KEY`` が意図せずダンプされる不具合を修正しまし"
 "た。 [groonga-dev,04276] [村田さんが報告]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "kitora"
 msgstr "kitoraさん"
 
 msgid "murata satoshi"
 msgstr "村田さん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Release 7.00 - 2017-02-09"
 msgstr "7.00リリース - 2017-02-09"
