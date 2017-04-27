@@ -5,6 +5,34 @@
 News
 ====
 
+.. _release-7-02:
+
+Release 7.02 - 2017-04-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Dropped Ubuntu 12.04 (Precise Pangolin)
+  support because of EOL.
+
+* [:doc:`/install/ubuntu`] Added Zesty Zapus (Ubuntu 17.04) support.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/centos`] Fixed build error with MySQL 5.6.36 and
+  MySQL 5.7.18.
+
+* [cmake] Fixed missing link to ``libgroonga`` when mroonga is bundled
+  and ``libgroonga`` isn't bundled. [GitHub#137] [Patch by Naoya
+  Murakami]
+
+Thanks
+^^^^^^
+
+* Naoya Murakami
+
 .. _release-7-01:
 
 Release 7.01 - 2017-03-29
