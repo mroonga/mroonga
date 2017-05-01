@@ -39,14 +39,25 @@ Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your table d
 Limitations about the value of columns
 --------------------------------------
 
-There is a limitation about DATE, DATETIME column in storage mode.
+There is a limitation about the value of column in storage mode.
 
-mroonga storage engine automatically convert 0 into 1 as the value of month or date.
+Mroonga storage engine executes automatic conversion against the value NULL.
+
+For example, if the value NULL is used in ``DATE`` or ``DATETIME``
+columns, Mroonga storage engine automatically converts 0 into 1 as the
+value of month or date.
 
 Thus, the value 0 is treated as the 1st month (January) of the year or
 the 1st date of the month.
 
 And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 00:00:00).
+
+This kind of automatic conversion is not restricted to only ``DATE``
+or ``DATETIME`` types.
+
+The value NULL is converted into the default value of columns. In most
+cases, it will be converted into empty string for column which belongs
+to type of string, 0 for column which belongs to type of numeric.
 
 Here is an example to show behavior described above.
 
