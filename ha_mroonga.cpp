@@ -1520,7 +1520,7 @@ static bool mrn_parse_grn_index_column_flags(THD *thd,
                                              grn_ctx *ctx,
                                              const char *flag_names,
                                              uint flag_names_length,
-                                             grn_obj_flags *index_column_flags)
+                                             grn_column_flags *index_column_flags)
 {
   const char *flag_names_end = flag_names + flag_names_length;
   bool found = false;
@@ -1546,6 +1546,14 @@ static bool mrn_parse_grn_index_column_flags(THD *thd,
     } else if (rest_length >= 11 && !memcmp(flag_names, "WITH_WEIGHT", 11)) {
       *index_column_flags |= GRN_OBJ_WITH_WEIGHT;
       flag_names += 11;
+      found = true;
+    } else if (rest_length >= 11 && !memcmp(flag_names, "INDEX_SMALL", 11)) {
+      *index_column_flags |= GRN_OBJ_INDEX_SMALL;
+      flag_names += 11;
+      found = true;
+    } else if (rest_length >= 12 && !memcmp(flag_names, "INDEX_MEDIUM", 12)) {
+      *index_column_flags |= GRN_OBJ_INDEX_MEDIUM;
+      flag_names += 12;
       found = true;
     } else {
       char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
@@ -3042,7 +3050,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
     GRN_OBJ_PERSISTENT;
   grn_obj *index_table;
 
-  grn_obj_flags index_column_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
+  grn_column_flags index_column_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
 
   if (!find_index_column_flags(key_info, &index_column_flags)) {
     index_column_flags |= GRN_OBJ_WITH_POSITION;
@@ -3851,7 +3859,7 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
 
   grn_obj *index_table = index_tables[i];
 
-  grn_obj_flags index_column_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
+  grn_column_flags index_column_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
 
   if (!find_index_column_flags(key_info, &index_column_flags)) {
     grn_obj *tokenizer = grn_obj_get_info(ctx, index_table,
@@ -9766,7 +9774,7 @@ grn_obj *ha_mroonga::find_normalizer(KEY *key, const char *name)
   DBUG_RETURN(normalizer);
 }
 
-bool ha_mroonga::find_index_column_flags(KEY *key, grn_obj_flags *index_column_flags)
+bool ha_mroonga::find_index_column_flags(KEY *key, grn_column_flags *index_column_flags)
 {
   MRN_DBUG_ENTER_METHOD();
   bool found = false;
