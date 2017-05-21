@@ -632,7 +632,7 @@ private:
   bool have_custom_normalizer(KEY *key) const;
   grn_obj *find_normalizer(KEY *key);
   grn_obj *find_normalizer(KEY *key, const char *name);
-  bool find_index_column_flags(KEY *key, grn_obj_flags *index_column_flags);
+  bool find_index_column_flags(KEY *key, grn_column_flags *index_column_flags);
   bool find_token_filters(KEY *key, grn_obj *token_filters);
   bool find_token_filters_put(grn_obj *token_filters,
                               const char *token_filter_name,
