@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-04-27 13:33+0900\n"
+"PO-Revision-Date: 2017-05-29 15:52+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,49 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.02 - 2017-04-29"
-msgstr "7.02リリース - 2017-04-29"
+msgid "Release 7.03 - 2017-05-29"
+msgstr "7.03リリース - 2017-05-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/reference/limitations`] Updated limitations about NULL in column. "
+"[Gitter/ja] [Reported by @bignum_twitter]"
+msgstr ""
+"[:doc:`/reference/limitations`] カラムのNULL値に関する制限情報を更新しまし"
+"た。 [Gitter/ja] [@bignum_twitterさんが報告]"
+
+# 0cca5ec6871b4c40b89dfb548289f913
+msgid ""
+"Supported ``INDEX_MEDIUM`` and ``INDEX_SMALL`` flags. [GitHub#141] [Patch by "
+"Naoya Murakami]"
+msgstr ""
+"``INDEX_MEDIUM`` と ``INDEX_SMALL`` フラグをサポートしました。 [GitHub#141] "
+"[村上さんがパッチ提供]"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid ""
+"[:doc:`/install/centos`] Supported recent Percona Server 5.6.36 and 5.7.18. "
+"[Reported by @pinpikokun]"
+msgstr ""
+"[:doc:`/install/centos`] 最新のPercona Server 5.6/5.7をサポートしました。 "
+"[@pinpikokunさんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "@bignum_twitter"
+msgstr "@bignum_twitterさん"
+
+msgid "@pinpikokun"
+msgstr "@pinpikokunさん"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "Release 7.02 - 2017-04-29"
+msgstr "7.02リリース - 2017-04-29"
 
 # cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
@@ -57,12 +95,6 @@ msgstr ""
 "[cmake] Mroongaがバンドルされているがシステムの ``libgroonga`` を使う場合に "
 "``libgroonga`` がリンクされていない問題を修正しました。 [GitHub#137] [村上さ"
 "んがパッチ提供]"
-
-msgid "Thanks"
-msgstr "感謝"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Release 7.01 - 2017-03-29"
 msgstr "7.01リリース - 2017-03-29"
