@@ -5,6 +5,30 @@
 News
 ====
 
+.. _release-7-03:
+
+Release 7.03 - 2017-05-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/reference/limitations`] Updated limitations about NULL in
+  column. [Gitter/ja] [Reported by @bignum_twitter]
+
+* Supported ``INDEX_MEDIUM`` and ``INDEX_SMALL`` flags. [GitHub#141]
+  [Patch by Naoya Murakami]
+
+* [:doc:`/install/centos`] Supported recent Percona Server 5.6.36 and
+  5.7.18. [Reported by @pinpikokun]
+
+Thanks
+^^^^^^
+
+* @bignum_twitter
+* @pinpikokun
+* Naoya Murakami
+
 .. _release-7-02:
 
 Release 7.02 - 2017-04-29
