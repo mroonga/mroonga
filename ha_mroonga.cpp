@@ -8723,6 +8723,19 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
   struct st_mrn_ft_info *info =
     generic_ft_init_ext_select(flags, key_nr, key);
 
+  if (!matched_record_keys) {
+    DBUG_RETURN((FT_INFO *)info);
+  }
+  if (!info->result) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "failed to create a table to store result: <%s>",
+             ctx->errbuf);
+    my_message(ER_ERROR_ON_READ, error_message, MYF(0));
+    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+    DBUG_RETURN((FT_INFO *)info);
+  }
+
   grn_rc rc;
   rc = grn_table_setoperation(ctx, matched_record_keys, info->result,
                               matched_record_keys, operation);
