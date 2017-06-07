@@ -8729,15 +8729,15 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
     }
   }
 
-  struct st_mrn_ft_info *info = generic_ft_init_ext_select(flags, key_nr, key);
-  if (!info) {
-    DBUG_RETURN(NULL);
-  }
-
   grn_table_sort_key *sort_keys = NULL;
   int n_sort_keys = 0;
   longlong limit = -1;
   check_fast_order_limit(&sort_keys, &n_sort_keys, &limit);
+
+  struct st_mrn_ft_info *info = generic_ft_init_ext_select(flags, key_nr, key);
+  if (!info) {
+    DBUG_RETURN(NULL);
+  }
 
   grn_rc rc;
   rc = grn_table_setoperation(ctx, matched_record_keys, info->result,
