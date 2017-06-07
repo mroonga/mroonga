@@ -8626,6 +8626,18 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
   info->result = grn_table_create(info->ctx, NULL, 0, NULL,
                                   GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                   grn_table, 0);
+  if (!info->result) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "[mroonga][ft-init] failed to create a table "
+             "to store matched records for one search: <%s>",
+             ctx->errbuf);
+    my_message(ER_ERROR_ON_READ, error_message, MYF(0));
+    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+    delete info;
+    DBUG_RETURN(NULL);
+  }
+
   info->score_column = grn_obj_column(info->ctx, info->result,
                                       MRN_COLUMN_NAME_SCORE,
                                       strlen(MRN_COLUMN_NAME_SCORE));
@@ -8708,33 +8720,24 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
     if (!matched_record_keys) {
       char error_message[MRN_MESSAGE_BUFFER_SIZE];
       snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-               "failed to create a table for matched record: <%s>",
+               "[mroonga][ft-init] "
+               "failed to create a table to store all matched records: <%s>",
                ctx->errbuf);
       my_message(ER_ERROR_ON_READ, error_message, MYF(0));
       GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
+      DBUG_RETURN(NULL);
     }
+  }
+
+  struct st_mrn_ft_info *info = generic_ft_init_ext_select(flags, key_nr, key);
+  if (!info) {
+    DBUG_RETURN(NULL);
   }
 
   grn_table_sort_key *sort_keys = NULL;
   int n_sort_keys = 0;
   longlong limit = -1;
   check_fast_order_limit(&sort_keys, &n_sort_keys, &limit);
-
-  struct st_mrn_ft_info *info =
-    generic_ft_init_ext_select(flags, key_nr, key);
-
-  if (!matched_record_keys) {
-    DBUG_RETURN((FT_INFO *)info);
-  }
-  if (!info->result) {
-    char error_message[MRN_MESSAGE_BUFFER_SIZE];
-    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "failed to create a table to store result: <%s>",
-             ctx->errbuf);
-    my_message(ER_ERROR_ON_READ, error_message, MYF(0));
-    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
-    DBUG_RETURN((FT_INFO *)info);
-  }
 
   grn_rc rc;
   rc = grn_table_setoperation(ctx, matched_record_keys, info->result,
@@ -8789,20 +8792,31 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
 FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
+
   FT_INFO *info = generic_ft_init_ext(flags, key_nr, key);
+  if (!info) {
+    DBUG_RETURN(NULL);
+  }
+
   struct st_mrn_ft_info *mrn_ft_info = (struct st_mrn_ft_info *)info;
   mrn_ft_info->please = &mrn_wrapper_ft_vft;
 #ifdef HA_CAN_FULLTEXT_EXT
   mrn_ft_info->could_you = &mrn_wrapper_ft_vft_ext;
 #endif
   ++wrap_ft_init_count;
+
   DBUG_RETURN(info);
 }
 
 FT_INFO *ha_mroonga::storage_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
+
   FT_INFO *info = generic_ft_init_ext(flags, key_nr, key);
+  if (!info) {
+    DBUG_RETURN(NULL);
+  }
+
   struct st_mrn_ft_info *mrn_ft_info = (struct st_mrn_ft_info *)info;
   mrn_ft_info->please = &mrn_storage_ft_vft;
 #ifdef HA_CAN_FULLTEXT_EXT
