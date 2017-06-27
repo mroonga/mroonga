@@ -21,11 +21,30 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.03 - 2017-05-29"
+#, fuzzy
+msgid "Release 7.04 - 2017-06-29"
 msgstr "7.03リリース - 2017-05-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"Supported to show error message when failed to create a table for matched "
+"records. This kind of error occurs when indexes are broken. This error "
+"message helps to identify problem."
+msgstr ""
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a crash bug that missing ``NULL`` check before calling "
+"``grn_table_setoperation`` causes. Such a crash bug occurs when indexes are "
+"broken."
+msgstr ""
+
+msgid "Release 7.03 - 2017-05-29"
+msgstr "7.03リリース - 2017-05-29"
 
 msgid ""
 "[:doc:`/reference/limitations`] Updated limitations about NULL in column. "
@@ -76,9 +95,6 @@ msgstr ""
 msgid "[:doc:`/install/ubuntu`] Added Zesty Zapus (Ubuntu 17.04) support."
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 17.04 (Zesty Zapus)をサポートしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 # cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
