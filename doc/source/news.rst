@@ -5,6 +5,25 @@
 News
 ====
 
+.. _release-7-04:
+
+Release 7.04 - 2017-06-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported to show error message when failed to create a table for
+  matched records. This kind of error occurs when indexes are
+  broken. This error message helps to identify problem.
+
+Fixes
+^^^^^
+
+* Fixed a crash bug that missing ``NULL`` check before calling
+  ``grn_table_setoperation`` causes. Such a crash bug occurs when
+  indexes are broken.
+
 .. _release-7-03:
 
 Release 7.03 - 2017-05-29
