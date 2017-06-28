@@ -67,6 +67,13 @@ build-package-deb: source env.sh
 	          fi;								\
 	          mv $${f} $$RENAMED;						\
 	        done;								\
+	        if [ $${architecture} = "amd64" ]; then				\
+                  sed -i'' 's,lib/mysql/,lib/x86_64-linux-gnu/mariadb18/,'	\
+	            tmp/debian/mariadb-server-10.1-mroonga.install;		\
+		elif [ $${architecture} = "i386" ]; then			\
+                  sed -i'' 's,lib/mysql/,lib/i386-linux-gnu/mariadb18/,'	\
+	            tmp/debian/mariadb-server-10.1-mroonga.install;		\
+	        fi;								\
 	      else								\
 	        cp -rp $(srcdir)/../debian-$${variant} tmp/debian;		\
 	      fi;						\
