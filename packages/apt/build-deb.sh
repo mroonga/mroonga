@@ -19,6 +19,7 @@ case "${MYSQL_VARIANT}" in
     case "${code_name}" in
       stretch)
         mysql_server_package=mariadb-server-10.1
+        MYSQL_VARIANT=mariadb-10.1
         ;;
       *)
         mysql_server_package=mariadb-server-${MYSQL_VARIANT##mariadb-}
