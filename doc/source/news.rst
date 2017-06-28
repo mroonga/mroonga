@@ -17,6 +17,8 @@ Improvements
   matched records. This kind of error occurs when indexes are
   broken. This error message helps to identify problem.
 
+* [:doc:`/install/debian`] Supported Debian 9 (stretch).
+
 Fixes
 ^^^^^
 
