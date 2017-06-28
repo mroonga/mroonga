@@ -48,13 +48,28 @@ build: build-package-deb
 
 build-package-deb: source env.sh
 	vagrant destroy --force
-	for variant in $(MYSQL_VARIANTS); do			\
-	  cp env.sh tmp/;					\
-	  echo "MYSQL_VARIANT=$${variant}" >> tmp/env.sh;	\
-	  rm -rf tmp/debian;					\
-	  for architecture in $(ARCHITECTURES); do		\
-	    for code_name in $(CODE_NAMES); do			\
-	      cp -rp $(srcdir)/../debian-$${variant} tmp/debian;\
+	for variant in $(MYSQL_VARIANTS); do					\
+	  cp env.sh tmp/;							\
+	  echo "MYSQL_VARIANT=$${variant}" >> tmp/env.sh;			\
+	  rm -rf tmp/debian;							\
+	  for architecture in $(ARCHITECTURES); do				\
+	    for code_name in $(CODE_NAMES); do					\
+	      if [ $${variant} = "5.5" -a $${code_name} = "stretch" ]; then	\
+	        continue;							\
+	      fi;								\
+	      if [ $${code_name} = "stretch" ]; then				\
+	        cp -rp $(srcdir)/../debian-mariadb-10.0 tmp/debian;		\
+	        for f in `find tmp/debian -maxdepth 2 -type f`; do		\
+	          RENAMED=`echo $$f | sed 's/10.0/10.1/'`;			\
+	          sed -i'' 's/10.0/10.1/g' $${f};				\
+	          if [ $${f} = $$RENAMED ]; then				\
+	            continue;							\
+	          fi;								\
+	          mv $${f} $$RENAMED;						\
+	        done;								\
+	      else								\
+	        cp -rp $(srcdir)/../debian-$${variant} tmp/debian;		\
+	      fi;						\
 	      id=debian-$$code_name-$$architecture;		\
 	      vagrant up $$id || exit 1;			\
 	      vagrant destroy --force $$id;			\

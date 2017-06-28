@@ -13,9 +13,17 @@ run()
 
 . /vagrant/tmp/env.sh
 
+code_name=$(lsb_release --codename --short)
 case "${MYSQL_VARIANT}" in
   mariadb-*)
-    mysql_server_package=mariadb-server-${MYSQL_VARIANT##mariadb-}
+    case "${code_name}" in
+      stretch)
+        mysql_server_package=mariadb-server-10.1
+        ;;
+      *)
+        mysql_server_package=mariadb-server-${MYSQL_VARIANT##mariadb-}
+        ;;
+    esac
     DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmariadb-client-lgpl-dev"
     DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmariadbd-dev"
     ;;
@@ -35,7 +43,6 @@ run apt-get update
 run apt-get install -y lsb-release
 
 distribution=$(lsb_release --id --short | tr 'A-Z' 'a-z')
-code_name=$(lsb_release --codename --short)
 case "${distribution}" in
   debian)
     component=main
