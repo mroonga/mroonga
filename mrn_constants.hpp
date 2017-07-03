@@ -39,6 +39,7 @@
 #endif
 #define MRN_DB_FILE_SUFFIX ".mrn"
 #define MRN_LOG_FILE_PATH "groonga.log"
+#define MRN_QUERY_LOG_FILE_PATH "groonga-query.log"
 #define MRN_COLUMN_NAME_ID "_id"
 #define MRN_COLUMN_NAME_KEY "_key"
 #define MRN_COLUMN_NAME_SCORE "_score"
