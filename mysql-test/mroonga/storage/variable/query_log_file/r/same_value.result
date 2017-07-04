@@ -1,0 +1,4 @@
+SET GLOBAL mroonga_query_log_file = "groonga-query.log";
+SHOW GLOBAL VARIABLES LIKE 'mroonga_query_log_file';
+Variable_name	Value
+mroonga_query_log_file	groonga-query.log
