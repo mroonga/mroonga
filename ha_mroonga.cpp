@@ -263,6 +263,7 @@ static PSI_mutex_key mrn_allocated_thds_mutex_key;
 PSI_mutex_key mrn_share_mutex_key;
 PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
 static PSI_mutex_key mrn_log_mutex_key;
+static PSI_mutex_key mrn_query_log_mutex_key;
 static PSI_mutex_key mrn_db_manager_mutex_key;
 static PSI_mutex_key mrn_context_pool_mutex_key;
 static PSI_mutex_key mrn_operations_mutex_key;
@@ -276,6 +277,7 @@ static PSI_mutex_info mrn_mutexes[] =
   {&mrn_long_term_share_auto_inc_mutex_key,
    "mrn::long_term_share::auto_inc", 0},
   {&mrn_log_mutex_key,             "mrn::log",             PSI_FLAG_GLOBAL},
+  {&mrn_query_log_mutex_key,       "mrn::query_log",       PSI_FLAG_GLOBAL},
   {&mrn_db_manager_mutex_key,      "mrn::DatabaseManager", PSI_FLAG_GLOBAL},
   {&mrn_context_pool_mutex_key,    "mrn::ContextPool",     PSI_FLAG_GLOBAL},
   {&mrn_operations_mutex_key,      "mrn::Operations",      PSI_FLAG_GLOBAL}
@@ -295,6 +297,7 @@ mysql_mutex_t mrn_allocated_thds_mutex;
 /* internal variables */
 static grn_ctx mrn_ctx;
 static mysql_mutex_t mrn_log_mutex;
+static mysql_mutex_t mrn_query_log_mutex;
 static grn_obj *mrn_db;
 static grn_ctx mrn_db_manager_ctx;
 static mysql_mutex_t mrn_db_manager_mutex;
@@ -580,6 +583,7 @@ static FILE *mrn_log_file = NULL;
 static bool mrn_log_file_opened = false;
 static grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 static ulong mrn_log_level = mrn_log_level_default;
+static char *mrn_query_log_file_path = NULL;
 
 char *mrn_default_tokenizer = NULL;
 char *mrn_default_wrapper_engine = NULL;
@@ -819,12 +823,90 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
   DBUG_VOID_RETURN;
 }
 
+static void mrn_query_log_file_update(THD *thd, struct st_mysql_sys_var *var,
+                                      void *var_ptr, const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const char *new_value = *((const char **)save);
+  char **old_value_ptr = (char **)var_ptr;
+  const char *normalized_new_value = NULL;
+
+  grn_ctx *ctx = &mrn_ctx;
+  mrn_change_encoding(ctx, system_charset_info);
+
+  const char *new_query_log_file_name;
+  new_query_log_file_name = *old_value_ptr;
+
+  bool need_update = false;
+  if (!*old_value_ptr) {
+    if (new_value && new_value[0] != '\0') {
+      GRN_LOG(ctx, GRN_LOG_NOTICE,
+              "query log is enabled: <%s>",
+              new_value);
+      need_update = true;
+      normalized_new_value = new_value;
+    } else {
+      GRN_LOG(ctx, GRN_LOG_NOTICE,
+              "query log file is still disabled");
+    }
+  } else {
+    if (!new_value || new_value[0] == '\0') {
+      GRN_LOG(ctx, GRN_LOG_NOTICE,
+              "query log file is disabled: <%s>",
+              *old_value_ptr);
+      need_update = true;
+      normalized_new_value = NULL;
+    } else if (strcmp(*old_value_ptr, new_value) == 0) {
+      GRN_LOG(ctx, GRN_LOG_NOTICE,
+              "query log file isn't changed "
+              "because the requested path isn't different: <%s>",
+              new_value);
+    } else {
+      GRN_LOG(ctx, GRN_LOG_NOTICE,
+              "query log file is changed: <%s> -> <%s>",
+              *old_value_ptr, new_value);
+      need_update = true;
+      normalized_new_value = new_value;
+    }
+  }
+
+  if (need_update) {
+    { // TODO: Remove me when Groonga 7.0.5 is released.
+      mrn::Lock lock(&mrn_query_log_mutex);
+      grn_default_query_logger_set_path(normalized_new_value);
+    }
+    grn_query_logger_reopen(ctx);
+    new_query_log_file_name = normalized_new_value;
+  }
+
+  if (new_query_log_file_name) {
+#ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
+    char *old_query_log_file_name = *old_value_ptr;
+    *old_value_ptr = mrn_my_strdup(new_query_log_file_name, MYF(MY_WME));
+    my_free(old_query_log_file_name);
+#else
+    *old_value_ptr = mrn_my_strdup(new_query_log_file_name, MYF(MY_WME));
+#endif
+  } else {
+    *old_value_ptr = NULL;
+  }
+
+  DBUG_VOID_RETURN;
+}
+
 static MYSQL_SYSVAR_STR(log_file, mrn_log_file_path,
                         PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
                         "log file for " MRN_PLUGIN_NAME_STRING,
                         NULL,
                         mrn_log_file_update,
                         MRN_LOG_FILE_PATH);
+
+static MYSQL_SYSVAR_STR(query_log_file, mrn_query_log_file_path,
+                        PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
+                        "query log file for " MRN_PLUGIN_NAME_STRING,
+                        NULL,
+                        mrn_query_log_file_update,
+                        NULL);
 
 static void mrn_default_tokenizer_update(THD *thd, struct st_mysql_sys_var *var,
                                          void *var_ptr, const void *save)
@@ -1134,6 +1216,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
 #endif
   MYSQL_SYSVAR(max_n_records_for_estimate),
   MYSQL_SYSVAR(libgroonga_embedded),
+  MYSQL_SYSVAR(query_log_file),
   NULL
 };
 
@@ -1729,6 +1812,8 @@ static int mrn_init(void *p)
   }
 #endif
 
+  grn_default_query_logger_set_path(mrn_query_log_file_path);
+
   if (grn_init() != GRN_SUCCESS) {
     goto err_grn_init;
   }
@@ -1754,6 +1839,11 @@ static int mrn_init(void *p)
                        &mrn_log_mutex,
                        MY_MUTEX_INIT_FAST) != 0) {
     goto err_log_mutex_init;
+  }
+  if (mysql_mutex_init(mrn_query_log_mutex_key,
+                       &mrn_query_log_mutex,
+                       MY_MUTEX_INIT_FAST) != 0) {
+    goto err_query_log_mutex_init;
   }
 
   mrn_logger.max_level = static_cast<grn_log_level>(mrn_log_level);
@@ -1867,6 +1957,8 @@ err_db_create:
     mrn_log_file_opened = false;
   }
 err_log_file_open:
+  mysql_mutex_destroy(&mrn_query_log_mutex);
+err_query_log_mutex_init:
   mysql_mutex_destroy(&mrn_log_mutex);
 err_log_mutex_init:
 err_mrn_change_encoding:
