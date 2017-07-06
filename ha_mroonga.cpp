@@ -758,20 +758,19 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
   const char *new_value = *((const char **)save);
   char **old_value_ptr = (char **)var_ptr;
 
-  grn_ctx ctx;
-  grn_ctx_init(&ctx, 0);
-  mrn_change_encoding(&ctx, system_charset_info);
+  grn_ctx *ctx = &mrn_ctx;
+  mrn_change_encoding(ctx, system_charset_info);
 
   const char *new_log_file_name;
   new_log_file_name = *old_value_ptr;
 
   if (strcmp(*old_value_ptr, new_value) == 0) {
-    GRN_LOG(&ctx, GRN_LOG_NOTICE,
+    GRN_LOG(ctx, GRN_LOG_NOTICE,
             "log file isn't changed "
             "because the requested path isn't different: <%s>",
             new_value);
   } else {
-    GRN_LOG(&ctx, GRN_LOG_NOTICE,
+    GRN_LOG(ctx, GRN_LOG_NOTICE,
             "log file is changed: <%s> -> <%s>",
             *old_value_ptr, new_value);
 
@@ -792,18 +791,18 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
     }
 
     if (log_file_open_errno == 0) {
-      GRN_LOG(&ctx, GRN_LOG_NOTICE,
+      GRN_LOG(ctx, GRN_LOG_NOTICE,
               "log file is changed: <%s> -> <%s>",
               *old_value_ptr, new_value);
       new_log_file_name = new_value;
     } else {
       if (mrn_log_file) {
-        GRN_LOG(&ctx, GRN_LOG_ERROR,
+        GRN_LOG(ctx, GRN_LOG_ERROR,
                 "log file isn't changed "
                 "because the requested path can't be opened: <%s>: <%s>",
                 new_value, strerror(log_file_open_errno));
       } else {
-        GRN_LOG(&ctx, GRN_LOG_ERROR,
+        GRN_LOG(ctx, GRN_LOG_ERROR,
                 "log file can't be opened: <%s>: <%s>",
                 new_value, strerror(log_file_open_errno));
       }
@@ -817,8 +816,6 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
 #else
   *old_value_ptr = mrn_my_strdup(new_log_file_name, MYF(MY_WME));
 #endif
-
-  grn_ctx_fin(&ctx);
 
   DBUG_VOID_RETURN;
 }
@@ -914,17 +911,16 @@ static void mrn_default_tokenizer_update(THD *thd, struct st_mysql_sys_var *var,
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
   char **old_value_ptr = (char **)var_ptr;
-  grn_ctx ctx;
+  grn_ctx *ctx = &mrn_ctx;
 
-  grn_ctx_init(&ctx, 0);
-  mrn_change_encoding(&ctx, system_charset_info);
+  mrn_change_encoding(ctx, system_charset_info);
   if (strcmp(*old_value_ptr, new_value) == 0) {
-    GRN_LOG(&ctx, GRN_LOG_NOTICE,
+    GRN_LOG(ctx, GRN_LOG_NOTICE,
             "default tokenizer for fulltext index isn't changed "
             "because the requested default tokenizer isn't different: <%s>",
             new_value);
   } else {
-    GRN_LOG(&ctx, GRN_LOG_NOTICE,
+    GRN_LOG(ctx, GRN_LOG_NOTICE,
             "default tokenizer for fulltext index is changed: <%s> -> <%s>",
             *old_value_ptr, new_value);
   }
@@ -935,8 +931,6 @@ static void mrn_default_tokenizer_update(THD *thd, struct st_mysql_sys_var *var,
 #else
   *old_value_ptr = (char *)new_value;
 #endif
-
-  grn_ctx_fin(&ctx);
 
   DBUG_VOID_RETURN;
 }
