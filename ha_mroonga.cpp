@@ -883,17 +883,15 @@ static void mrn_query_log_file_update(THD *thd, struct st_mysql_sys_var *var,
     new_query_log_file_name = normalized_new_value;
   }
 
+  char *old_query_log_file_name = *old_value_ptr;
   if (new_query_log_file_name) {
-#ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
-    char *old_query_log_file_name = *old_value_ptr;
-    *old_value_ptr = mrn_my_strdup(new_query_log_file_name, MYF(MY_WME));
-    my_free(old_query_log_file_name);
-#else
-    *old_value_ptr = mrn_my_strdup(new_query_log_file_name, MYF(MY_WME));
-#endif
+    *old_value_ptr = mrn_my_strdup(new_query_log_file_name, MYF(0));
   } else {
     *old_value_ptr = NULL;
   }
+#ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
+  my_free(old_query_log_file_name);
+#endif
 
   DBUG_VOID_RETURN;
 }
