@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -74,8 +74,14 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
     const char *action;
     if (current_db_path) {
       action = "open database";
+      char encoded_db_path[FN_REFLEN + 1];
+      uint encoded_db_path_length =
+        tablename_to_filename(current_db_path,
+                              encoded_db_path,
+                              sizeof(encoded_db_path));
+      encoded_db_path[encoded_db_path_length] = '\0';
       mrn::Database *db;
-      int error = mrn_db_manager->open(current_db_path, &db);
+      int error = mrn_db_manager->open(encoded_db_path, &db);
       if (error == 0) {
         info->db= db->get();
         grn_ctx_use(info->ctx, info->db);
