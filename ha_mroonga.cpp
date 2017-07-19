@@ -2012,6 +2012,7 @@ static int mrn_deinit(void *p)
     fclose(mrn_log_file);
     mrn_log_file_opened = false;
   }
+  mysql_mutex_destroy(&mrn_query_log_mutex);
   mysql_mutex_destroy(&mrn_log_mutex);
 
   return 0;
