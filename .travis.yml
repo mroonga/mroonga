@@ -8,12 +8,12 @@ env:
   - MYSQL_VERSION=mysql-system
   - MYSQL_VERSION=mysql-5.6
   - MYSQL_VERSION=mysql-5.7
-  - MYSQL_VERSION=mariadb-5.5.52
+  - MYSQL_VERSION=mariadb-5.5.57
   - MYSQL_VERSION=mariadb-10.0.31 MROONGA_BUNDLED=yes
   - MYSQL_VERSION=mariadb-10.0.31 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
-  - MYSQL_VERSION=mariadb-10.1.24 MROONGA_BUNDLED=yes
-  - MYSQL_VERSION=mariadb-10.2.6 MROONGA_BUNDLED=yes
-  - MYSQL_VERSION=mariadb-10.2.6 MROONGA_BUNDLED=yes MROONGA_TEST_PS_PROTOCOL=yes
+  - MYSQL_VERSION=mariadb-10.1.25 MROONGA_BUNDLED=yes
+  - MYSQL_VERSION=mariadb-10.2.7 MROONGA_BUNDLED=yes
+  - MYSQL_VERSION=mariadb-10.2.7 MROONGA_BUNDLED=yes MROONGA_TEST_PS_PROTOCOL=yes
   - MYSQL_VERSION=percona-server-5.6
   - MYSQL_VERSION=percona-server-5.7
 matrix:
@@ -21,9 +21,9 @@ matrix:
 #    - env: MYSQL_VERSION=mysql-system
 #    - env: MYSQL_VERSION=mariadb-10.0.31 MROONGA_BUNDLED=yes
 #    - env: MYSQL_VERSION=mariadb-10.0.31 MROONGA_BUNDLED=yes MROONGA_TEST_EMBEDDED=yes
-#    - env: MYSQL_VERSION=mariadb-10.1.24 MROONGA_BUNDLED=yes
-   - env: MYSQL_VERSION=mariadb-10.2.6 MROONGA_BUNDLED=yes
-   - env: MYSQL_VERSION=mariadb-10.2.6 MROONGA_BUNDLED=yes MROONGA_TEST_PS_PROTOCOL=yes
+#    - env: MYSQL_VERSION=mariadb-10.1.25 MROONGA_BUNDLED=yes
+   - env: MYSQL_VERSION=mariadb-10.2.7 MROONGA_BUNDLED=yes
+   - env: MYSQL_VERSION=mariadb-10.2.7 MROONGA_BUNDLED=yes MROONGA_TEST_PS_PROTOCOL=yes
     # - env: MYSQL_VERSION=percona-server-5.7
 install:
   - tools/travis/install.sh
