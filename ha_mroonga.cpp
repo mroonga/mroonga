@@ -883,7 +883,9 @@ static void mrn_query_log_file_update(THD *thd, struct st_mysql_sys_var *var,
     new_query_log_file_name = normalized_new_value;
   }
 
+#ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
   char *old_query_log_file_name = *old_value_ptr;
+#endif
   if (new_query_log_file_name) {
     *old_value_ptr = mrn_my_strdup(new_query_log_file_name, MYF(0));
   } else {
