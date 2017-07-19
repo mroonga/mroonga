@@ -820,6 +820,13 @@ static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
   DBUG_VOID_RETURN;
 }
 
+static MYSQL_SYSVAR_STR(log_file, mrn_log_file_path,
+                        PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
+                        "log file for " MRN_PLUGIN_NAME_STRING,
+                        NULL,
+                        mrn_log_file_update,
+                        MRN_LOG_FILE_PATH);
+
 static void mrn_query_log_file_update(THD *thd, struct st_mysql_sys_var *var,
                                       void *var_ptr, const void *save)
 {
@@ -890,13 +897,6 @@ static void mrn_query_log_file_update(THD *thd, struct st_mysql_sys_var *var,
 
   DBUG_VOID_RETURN;
 }
-
-static MYSQL_SYSVAR_STR(log_file, mrn_log_file_path,
-                        PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
-                        "log file for " MRN_PLUGIN_NAME_STRING,
-                        NULL,
-                        mrn_log_file_update,
-                        MRN_LOG_FILE_PATH);
 
 static MYSQL_SYSVAR_STR(query_log_file, mrn_query_log_file_path,
                         PLUGIN_VAR_RQCMDARG | PLUGIN_VAR_MEMALLOC,
