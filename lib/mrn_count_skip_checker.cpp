@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2016 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -264,6 +264,14 @@ namespace mrn {
     if (field->table != table_) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] external table's field");
+      DBUG_RETURN(false);
+    }
+
+    if (!key_info_) {
+      GRN_LOG(ctx_, GRN_LOG_DEBUG,
+              "[mroonga][count-skip][false] no active index: <%s>:<%s>",
+              *(field->table_name),
+              field->field_name);
       DBUG_RETURN(false);
     }
 

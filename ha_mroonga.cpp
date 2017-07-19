@@ -10303,7 +10303,10 @@ void ha_mroonga::check_count_skip(key_part_map target_key_part_map)
   }
 
   st_select_lex *select_lex = table->pos_in_table_list->select_lex;
-  KEY *key_info = &(table->key_info[active_index]);
+  KEY *key_info = nullptr;
+  if (active_index != MAX_KEY) {
+    key_info = &(table->key_info[active_index]);
+  }
   mrn::CountSkipChecker checker(ctx,
                                 table,
                                 select_lex,
