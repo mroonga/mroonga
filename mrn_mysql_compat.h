@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -354,6 +354,38 @@
 #if ((MYSQL_VERSION_ID < 50636) || \
     (MYSQL_VERSION_ID >= 50700 && MYSQL_VERSION_ID < 50718)) && !defined(MRN_MARIADB_P)
 #  define MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
+#endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100207)
+#  define mrn_create_partition_name(out,                                \
+                                    out_length,                         \
+                                    in1,                                \
+                                    in2,                                \
+                                    name_variant,                       \
+                                    translate)                          \
+  create_partition_name(out, out_length, in1, in2, name_variant, translate)
+#  define mrn_create_subpartition_name(out,             \
+                                       out_length,      \
+                                       in1,             \
+                                       in2,             \
+                                       in3,             \
+                                       name_variant)    \
+  create_subpartition_name(out, out_length, in1, in2, in3, name_variant)
+#else
+#  define mrn_create_partition_name(out,                                \
+                                    out_length,                         \
+                                    in1,                                \
+                                    in2,                                \
+                                    name_variant,                       \
+                                    translate)                          \
+  (create_partition_name(out, in1, in2, name_variant, translate), 0)
+#  define mrn_create_subpartition_name(out,             \
+                                       out_length,      \
+                                       in1,             \
+                                       in2,             \
+                                       in3,             \
+                                       name_variant)    \
+  (create_subpartition_name(out, in1, in2, in3, name_variant), 0)
 #endif
 
 #endif /* MRN_MYSQL_COMPAT_H_ */

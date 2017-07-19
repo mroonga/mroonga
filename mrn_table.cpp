@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -202,7 +202,6 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
                             const TABLE *table, partition_element **part_elem,
                             partition_element **sub_elem)
 {
-  char tmp_name[FN_LEN];
   partition_info *part_info = table->part_info;
   partition_element *tmp_part_elem = NULL, *tmp_sub_elem = NULL;
   bool tmp_flg = FALSE, tmp_find_flg = FALSE;
@@ -224,17 +223,24 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
       List_iterator<partition_element> sub_it((*part_elem)->subpartitions);
       while ((*sub_elem = sub_it++))
       {
-        create_subpartition_name(tmp_name, table->s->path.str,
-          (*part_elem)->partition_name, (*sub_elem)->partition_name,
-          NORMAL_PART_NAME);
-        DBUG_PRINT("info", ("mroonga tmp_name=%s", tmp_name));
-        if (table_name && !memcmp(table_name, tmp_name, table_name_length + 1))
+        char subpartition_name[FN_REFLEN + 1];
+        int error = mrn_create_subpartition_name(subpartition_name,
+                                                 sizeof(subpartition_name),
+                                                 table->s->path.str,
+                                                 (*part_elem)->partition_name,
+                                                 (*sub_elem)->partition_name,
+                                                 NORMAL_PART_NAME);
+        if (error != 0)
+          DBUG_VOID_RETURN;
+        DBUG_PRINT("info", ("mroonga subpartition name=%s", subpartition_name));
+        if (table_name &&
+            memcmp(table_name, subpartition_name, table_name_length + 1) == 0)
           DBUG_VOID_RETURN;
         if (
           tmp_flg &&
           table_name &&
-          *(tmp_name + table_name_length - 5) == '\0' &&
-          !memcmp(table_name, tmp_name, table_name_length - 5)
+          *(subpartition_name + table_name_length - 5) == '\0' &&
+          memcmp(table_name, subpartition_name, table_name_length - 5) == 0
         ) {
           tmp_part_elem = *part_elem;
           tmp_sub_elem = *sub_elem;
@@ -243,16 +249,24 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
         }
       }
     } else {
-      create_partition_name(tmp_name, table->s->path.str,
-        (*part_elem)->partition_name, NORMAL_PART_NAME, TRUE);
-      DBUG_PRINT("info", ("mroonga tmp_name=%s", tmp_name));
-      if (table_name && !memcmp(table_name, tmp_name, table_name_length + 1))
+      char partition_name[FN_REFLEN + 1];
+      int error = mrn_create_partition_name(partition_name,
+                                            sizeof(partition_name),
+                                            table->s->path.str,
+                                            (*part_elem)->partition_name,
+                                            NORMAL_PART_NAME,
+                                            TRUE);
+      if (error != 0)
+        DBUG_VOID_RETURN;
+      DBUG_PRINT("info", ("mroonga partition name=%s", partition_name));
+      if (table_name &&
+          memcmp(table_name, partition_name, table_name_length + 1) == 0)
         DBUG_VOID_RETURN;
       if (
         tmp_flg &&
         table_name &&
-        *(tmp_name + table_name_length - 5) == '\0' &&
-        !memcmp(table_name, tmp_name, table_name_length - 5)
+        *(partition_name + table_name_length - 5) == '\0' &&
+        memcmp(table_name, partition_name, table_name_length - 5) == 0
       ) {
         tmp_part_elem = *part_elem;
         tmp_flg = FALSE;
