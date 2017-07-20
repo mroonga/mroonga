@@ -61,7 +61,7 @@ else
       sudo mv ${boost_archive} /usr/global/share/
       (cd vendor/mysql && sudo debian/rules override_dh_auto_configure)
       ;;
-    mariadb-5.5.*)
+    mariadb-5.5)
       (cd vendor/mysql && sudo debian/rules configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/builddir")
