@@ -30,6 +30,10 @@
 
 #include <sql_table.h>
 
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#  include <current_thd.h>
+#endif
+
 MRN_BEGIN_DECLS
 
 extern mrn::DatabaseManager *mrn_db_manager;

@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2015-2016 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2015-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -27,6 +27,10 @@
 #include <mrn_database_manager.hpp>
 #include <mrn_context_pool.hpp>
 #include <mrn_variables.hpp>
+
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#  include <current_thd.h>
+#endif
 
 MRN_BEGIN_DECLS
 
