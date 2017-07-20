@@ -268,19 +268,36 @@ static PSI_mutex_key mrn_db_manager_mutex_key;
 static PSI_mutex_key mrn_context_pool_mutex_key;
 static PSI_mutex_key mrn_operations_mutex_key;
 
+#  if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#    define MRN_MUTEXT_INFO_ENTRY(key, name, flags, volatility) \
+  {key, name, flags, volatility}
+#  else
+#    define MRN_MUTEXT_INFO_ENTRY(key, name, flags, volatility) \
+  {key, name, flags}
+#  endif
+
 static PSI_mutex_info mrn_mutexes[] =
 {
-  {&mrn_open_tables_mutex_key,     "mrn::open_tables",     PSI_FLAG_GLOBAL},
-  {&mrn_long_term_share_mutex_key, "mrn::long_term_share", PSI_FLAG_GLOBAL},
-  {&mrn_allocated_thds_mutex_key,  "mrn::allocated_thds",  PSI_FLAG_GLOBAL},
-  {&mrn_share_mutex_key,           "mrn::share",           0},
-  {&mrn_long_term_share_auto_inc_mutex_key,
-   "mrn::long_term_share::auto_inc", 0},
-  {&mrn_log_mutex_key,             "mrn::log",             PSI_FLAG_GLOBAL},
-  {&mrn_query_log_mutex_key,       "mrn::query_log",       PSI_FLAG_GLOBAL},
-  {&mrn_db_manager_mutex_key,      "mrn::DatabaseManager", PSI_FLAG_GLOBAL},
-  {&mrn_context_pool_mutex_key,    "mrn::ContextPool",     PSI_FLAG_GLOBAL},
-  {&mrn_operations_mutex_key,      "mrn::Operations",      PSI_FLAG_GLOBAL}
+  MRN_MUTEXT_INFO_ENTRY(&mrn_open_tables_mutex_key,
+                        "mrn::open_tables", PSI_FLAG_GLOBAL, 0),
+  MRN_MUTEXT_INFO_ENTRY(&mrn_long_term_share_mutex_key,
+                        "mrn::long_term_share", PSI_FLAG_GLOBAL, 0),
+  MRN_MUTEXT_INFO_ENTRY(&mrn_allocated_thds_mutex_key,
+                        "mrn::allocated_thds", PSI_FLAG_GLOBAL, 0),
+  MRN_MUTEXT_INFO_ENTRY(&mrn_share_mutex_key,
+                        "mrn::share", 0, 0),
+  MRN_MUTEXT_INFO_ENTRY(&mrn_long_term_share_auto_inc_mutex_key,
+                        "mrn::long_term_share::auto_inc", 0, 0),
+  MRN_MUTEXT_INFO_ENTRY(&mrn_log_mutex_key,
+                        "mrn::log", PSI_FLAG_GLOBAL, 0),
+  MRN_MUTEXT_INFO_ENTRY(&mrn_query_log_mutex_key,
+                        "mrn::query_log", PSI_FLAG_GLOBAL, 0),
+  MRN_MUTEXT_INFO_ENTRY(&mrn_db_manager_mutex_key,
+                        "mrn::DatabaseManager", PSI_FLAG_GLOBAL, 0),
+  MRN_MUTEXT_INFO_ENTRY(&mrn_context_pool_mutex_key,
+                        "mrn::ContextPool", PSI_FLAG_GLOBAL, 0),
+  MRN_MUTEXT_INFO_ENTRY(&mrn_operations_mutex_key,
+                        "mrn::Operations", PSI_FLAG_GLOBAL, 0)
 };
 #endif
 
