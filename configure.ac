@@ -174,17 +174,25 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_INCLUDES=""
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_build_dir/include"
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/sql"
+  if test -d "$ac_mysql_source_dir/sql/auth"; then
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/sql/auth"
+  fi
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/include"
   if test -d "$ac_mysql_source_dir/extra/rapidjson"; then
     mysql_rapidjson_include_dir="$ac_mysql_source_dir/extra/rapidjson/include"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_rapidjson_include_dir"
   fi
-  if test -d "$ac_mysql_source_dir/pcre"; then
-    mysql_regex_include_dir="$ac_mysql_source_dir/pcre"
+  if test -d "$ac_mysql_source_dir/extra/regex"; then
+    mysql_regex_include_dir="$ac_mysql_source_dir/extra/regex"
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_regex_include_dir"
   else
-    mysql_regex_include_dir="$ac_mysql_source_dir/regex"
+    if test -d "$ac_mysql_source_dir/pcre"; then
+      mysql_regex_include_dir="$ac_mysql_source_dir/pcre"
+    else
+      mysql_regex_include_dir="$ac_mysql_source_dir/regex"
+    fi
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_regex_include_dir"
   fi
-  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_regex_include_dir"
   if test -d "$ac_mysql_source_dir/libbinlogevents"; then
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_build_dir/libbinlogevents/include"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/libbinlogevents/export"
@@ -201,7 +209,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_CXXFLAGS="-fno-implicit-templates -felide-constructors"
   case "$MYSQL_MAJOR_MINOR_VERSION" in
-  5.7)
+  5.7|8.*)
       :
       ;;
   *)
