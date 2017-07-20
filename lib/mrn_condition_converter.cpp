@@ -211,7 +211,7 @@ namespace mrn {
 
     bool convertable = false;
 
-    enum_field_types field_type = field_item->field_type();
+    enum_field_types field_type = field_item->field->type();
     NormalizedType normalized_type = normalize_field_type(field_type);
     switch (normalized_type) {
     case STRING_TYPE:
@@ -256,7 +256,7 @@ namespace mrn {
 
     bool error;
     Item *real_value_item = value_item->real_item();
-    switch (field_item->field_type()) {
+    switch (field_item->field->type()) {
     case MYSQL_TYPE_TIME:
       error = real_value_item->get_time(mysql_time);
       break;
