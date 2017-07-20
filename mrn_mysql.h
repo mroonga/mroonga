@@ -43,15 +43,15 @@
 #define MYSQL_SERVER 1
 #include <mysql_version.h>
 
+#ifdef MARIADB_BASE_VERSION
+#  define MRN_MARIADB_P 1
+#endif
+
 #include <sql_const.h>
 #include <sql_class.h>
 #include <probes_mysql.h>
 #include <sql_partition.h>
 #include <rpl_filter.h>
-
-#ifdef MARIADB_BASE_VERSION
-#  define MRN_MARIADB_P 1
-#endif
 
 #define MRN_MESSAGE_BUFFER_SIZE 1024
 
