@@ -46,6 +46,10 @@
   typedef char *range_id_t;
 #endif
 
+#if defined(MRN_MARIADB_P) || MYSQL_VERSION_ID < 80002
+  typedef st_select_lex SELECT_LEX;
+#endif
+
 #if MYSQL_VERSION_ID >= 50609
 #  define MRN_KEY_HAS_USER_DEFINED_KEYPARTS
 #endif
