@@ -49,7 +49,9 @@
 
 #include <sql_const.h>
 #include <sql_class.h>
-#include <probes_mysql.h>
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 80002)
+#  include <probes_mysql.h>
+#endif
 #include <sql_partition.h>
 #include <rpl_filter.h>
 
