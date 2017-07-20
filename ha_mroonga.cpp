@@ -13268,6 +13268,7 @@ double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
   DBUG_RETURN(time);
 }
 
+#ifdef MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
 const key_map *ha_mroonga::wrapper_keys_to_use_for_scanning()
 {
   const key_map *res;
@@ -13298,6 +13299,7 @@ const key_map *ha_mroonga::keys_to_use_for_scanning()
   }
   DBUG_RETURN(key_map);
 }
+#endif
 
 ha_rows ha_mroonga::wrapper_estimate_rows_upper_bound()
 {

@@ -227,6 +227,10 @@ extern "C" {
 #  define MRN_HANDLER_RECORDS_RETURN_ERROR
 #endif
 
+#if MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -489,7 +493,9 @@ public:
   int truncate();
   double scan_time();
   double read_time(uint index, uint ranges, ha_rows rows);
+#ifdef MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
   const key_map *keys_to_use_for_scanning();
+#endif
   ha_rows estimate_rows_upper_bound();
   void update_create_info(HA_CREATE_INFO* create_info);
   int rename_table(const char *from, const char *to);
@@ -1093,8 +1099,10 @@ private:
   double storage_scan_time();
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
   double storage_read_time(uint index, uint ranges, ha_rows rows);
+#ifdef MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
   const key_map *wrapper_keys_to_use_for_scanning();
   const key_map *storage_keys_to_use_for_scanning();
+#endif
   ha_rows wrapper_estimate_rows_upper_bound();
   ha_rows storage_estimate_rows_upper_bound();
   void wrapper_update_create_info(HA_CREATE_INFO* create_info);
