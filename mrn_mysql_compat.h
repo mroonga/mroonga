@@ -356,7 +356,9 @@
 #  define MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100207)
+#if defined(MRN_MARIADB_P) &&                                           \
+  ((MYSQL_VERSION_ID >= 100207) ||                                      \
+   ((MYSQL_VERSION_ID >= 50557) && (MYSQL_VERSION_ID < 100000)))
 #  define mrn_create_partition_name(out,                                \
                                     out_length,                         \
                                     in1,                                \
