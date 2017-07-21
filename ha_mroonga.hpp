@@ -253,6 +253,10 @@ extern "C" {
 #  define MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
 #endif
 
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#  define MRN_HANDLERTON_CREATE_HAVE_PARTITIONED
+#endif
+
 class ha_mroonga;
 
 /* structs */

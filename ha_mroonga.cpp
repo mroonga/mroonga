@@ -1339,7 +1339,12 @@ struct st_mysql_plugin i_s_mrn_stats =
 };
 /* End of mroonga information schema implementations */
 
-static handler *mrn_handler_create(handlerton *hton, TABLE_SHARE *share, MEM_ROOT *root)
+static handler *mrn_handler_create(handlerton *hton,
+                                   TABLE_SHARE *share,
+#ifdef MRN_HANDLERTON_CREATE_HAVE_PARTITIONED
+                                   bool partitioned,
+#endif
+                                   MEM_ROOT *root)
 {
   MRN_DBUG_ENTER_FUNCTION();
   handler *new_handler = new (root) ha_mroonga(hton, share);
