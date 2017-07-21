@@ -404,4 +404,10 @@
 #  define ITEM_SUM_GET_MAX_AGGR_LEVEL(sum_item) (sum_item)->max_arg_level
 #endif
 
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+  typedef bool mrn_bool;
+#else
+  typedef my_bool mrn_bool;
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

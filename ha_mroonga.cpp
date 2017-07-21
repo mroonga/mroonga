@@ -628,9 +628,9 @@ static int mrn_lock_timeout = grn_get_lock_timeout();
 static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
 static char *mrn_version = const_cast<char *>(MRN_VERSION);
 static char *mrn_vector_column_delimiter = NULL;
-static my_bool mrn_libgroonga_support_zlib = FALSE;
-static my_bool mrn_libgroonga_support_lz4 = FALSE;
-static my_bool mrn_libgroonga_support_zstd = FALSE;
+static mrn_bool mrn_libgroonga_support_zlib = false;
+static mrn_bool mrn_libgroonga_support_lz4 = false;
+static mrn_bool mrn_libgroonga_support_zstd = false;
 typedef enum {
   MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT           = (1 << 0),
   MRN_BOOLEAN_MODE_SYNTAX_FLAG_SYNTAX_QUERY      = (1 << 1),
@@ -657,9 +657,9 @@ static TYPELIB mrn_boolean_mode_syntax_flags_typelib = {
 };
 #endif
 #ifdef MRN_GROONGA_EMBEDDED
-static my_bool mrn_libgroonga_embedded = TRUE;
+static mrn_bool mrn_libgroonga_embedded = true;
 #else
-static my_bool mrn_libgroonga_embedded = FALSE;
+static mrn_bool mrn_libgroonga_embedded = false;
 #endif
 
 typedef enum {
@@ -1128,7 +1128,7 @@ static MYSQL_SYSVAR_STR(version, mrn_version,
                         NULL,
                         MRN_VERSION);
 
-static my_bool grn_check_zlib_support()
+static mrn_bool grn_check_zlib_support()
 {
   bool is_zlib_support = false;
   grn_obj grn_support_p;
@@ -1148,7 +1148,7 @@ static MYSQL_SYSVAR_BOOL(libgroonga_support_zlib, mrn_libgroonga_support_zlib,
                          NULL,
                          grn_check_zlib_support());
 
-static my_bool grn_check_lz4_support()
+static mrn_bool grn_check_lz4_support()
 {
   bool is_lz4_support = false;
   grn_obj grn_support_p;
@@ -1168,7 +1168,7 @@ static MYSQL_SYSVAR_BOOL(libgroonga_support_lz4, mrn_libgroonga_support_lz4,
                          NULL,
                          grn_check_lz4_support());
 
-static my_bool grn_check_zstd_support()
+static mrn_bool grn_check_zstd_support()
 {
   bool is_zstd_support = false;
   grn_obj grn_support_p;
