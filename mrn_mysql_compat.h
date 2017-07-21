@@ -395,8 +395,8 @@
 #endif
 
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
-#  define ITEM_SUM_GET_NEST_LEVEL(sum_item) (sum_item)->base_select->next_level
-#  define ITEM_SUM_GET_AGGR_LEVEL(sum_item) (sum_item)->aggr_select->next_level
+#  define ITEM_SUM_GET_NEST_LEVEL(sum_item) (sum_item)->base_select->nest_level
+#  define ITEM_SUM_GET_AGGR_LEVEL(sum_item) (sum_item)->aggr_select->nest_level
 #  define ITEM_SUM_GET_MAX_AGGR_LEVEL(sum_item) (sum_item)->max_aggr_level
 #else
 #  define ITEM_SUM_GET_NEST_LEVEL(sum_item) (sum_item)->nest_level
