@@ -8,6 +8,7 @@ MYSQL_VARIANTS =				\
 	mariadb					\
 	percona-server-56			\
 	percona-server-57
+CENTOS_VERSIONS = 6 7
 SPEC_DIR = $(builddir)/../rpm/centos
 
 all:
@@ -53,7 +54,8 @@ build-in-vm: source specs env.sh
 	  "$(PACKAGE)"				\
 	  "$(SPEC_DIR)"				\
 	  "$(MYSQL_VARIANTS)"			\
-	  "$(ARCHITECTURES)"
+	  "$(ARCHITECTURES)"			\
+	  "$(CENTOS_VERSIONS)"
 
 source: tmp/$(PACKAGE)-$(VERSION).tar.gz
 
