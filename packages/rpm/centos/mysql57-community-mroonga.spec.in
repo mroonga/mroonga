@@ -275,7 +275,7 @@ fi
 * Wed Jun 29 2016 Kentaro Hayashi <hayashi@clear-code.com> - 6.05-1
 - new upstream release.
 
-* Mon Jun 29 2016 Kouhei Sutou <kou@clear-code.com> - 6.03-2
+* Mon Jun 06 2016 Kouhei Sutou <kou@clear-code.com> - 6.03-2
 - build against MySQL 5.7.13.
 
 * Sun May 29 2016 Kentaro Hayashi <hayashi@clear-code.com> - 6.03-1
