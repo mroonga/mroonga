@@ -1141,6 +1141,13 @@ static my_bool grn_check_zlib_support()
   return is_zlib_support;
 }
 
+static MYSQL_SYSVAR_BOOL(libgroonga_support_zlib, mrn_libgroonga_support_zlib,
+                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
+                         "The status of libgroonga supports zlib",
+                         NULL,
+                         NULL,
+                         grn_check_zlib_support());
+
 static my_bool grn_check_lz4_support()
 {
   bool is_lz4_support = false;
@@ -1154,6 +1161,13 @@ static my_bool grn_check_lz4_support()
   return is_lz4_support;
 }
 
+static MYSQL_SYSVAR_BOOL(libgroonga_support_lz4, mrn_libgroonga_support_lz4,
+                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
+                         "The status of libgroonga supports LZ4",
+                         NULL,
+                         NULL,
+                         grn_check_lz4_support());
+
 static my_bool grn_check_zstd_support()
 {
   bool is_zstd_support = false;
@@ -1166,21 +1180,6 @@ static my_bool grn_check_zstd_support()
 
   return is_zstd_support;
 }
-
-
-static MYSQL_SYSVAR_BOOL(libgroonga_support_zlib, mrn_libgroonga_support_zlib,
-                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
-                         "The status of libgroonga supports zlib",
-                         NULL,
-                         NULL,
-                         grn_check_zlib_support());
-
-static MYSQL_SYSVAR_BOOL(libgroonga_support_lz4, mrn_libgroonga_support_lz4,
-                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
-                         "The status of libgroonga supports LZ4",
-                         NULL,
-                         NULL,
-                         grn_check_lz4_support());
 
 static MYSQL_SYSVAR_BOOL(libgroonga_support_zstd, mrn_libgroonga_support_zstd,
                          PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
