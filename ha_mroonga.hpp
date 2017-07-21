@@ -257,6 +257,11 @@ extern "C" {
 #  define MRN_HANDLERTON_CREATE_HAVE_PARTITIONED
 #endif
 
+#if defined(HAVE_PSI_INTERFACE) &&                      \
+  (MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P))
+#  define MRN_HAVE_PSI_SERVER
+#endif
+
 class ha_mroonga;
 
 /* structs */

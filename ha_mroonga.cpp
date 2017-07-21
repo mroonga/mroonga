@@ -1842,7 +1842,7 @@ static int mrn_init(void *p)
 #  endif
 #endif
 
-#ifdef HAVE_PSI_INTERFACE
+#ifdef MRN_HAVE_PSI_SERVER
   if (PSI_server) {
     const char *category = "mroonga";
     int n_mutexes = array_elements(mrn_mutexes);
