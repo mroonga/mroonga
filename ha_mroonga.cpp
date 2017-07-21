@@ -4154,7 +4154,14 @@ int ha_mroonga::ensure_database_remove(const char *name)
 }
 
 
-int ha_mroonga::create(const char *name, TABLE *table, HA_CREATE_INFO *info)
+int ha_mroonga::create(const char *name,
+                       TABLE *table,
+                       HA_CREATE_INFO *info
+#ifdef MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
+                       ,
+                       dd::Table *table_def
+#endif
+  )
 {
   int error = 0;
   MRN_SHARE *tmp_share;
@@ -4841,7 +4848,14 @@ error:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::open(const char *name, int mode, uint open_options)
+int ha_mroonga::open(const char *name,
+                     int mode,
+                     uint open_options
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+                     ,
+                     const dd::Table *table_def
+#endif
+  )
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();

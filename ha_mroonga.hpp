@@ -35,6 +35,12 @@ extern "C" {
 #include <mrn_operations.hpp>
 #include <mrn_database.hpp>
 
+#if __cplusplus >= 201402
+#  define mrn_override override
+#else
+#  define mrn_override
+#endif
+
 #if (MYSQL_VERSION_ID >= 50514 && MYSQL_VERSION_ID < 50600)
 #  define MRN_HANDLER_HAVE_FINAL_ADD_INDEX 1
 #endif
@@ -242,6 +248,11 @@ extern "C" {
 #  define MRN_ST_MYSQL_PLUGIN_HAVE_CHECK_UNINSTALL
 #endif
 
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#  define MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+#  define MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -397,8 +408,20 @@ public:
   ulonglong table_flags() const;                                   // required
   ulong index_flags(uint idx, uint part, bool all_parts) const;    // required
 
-  int create(const char *name, TABLE *form, HA_CREATE_INFO *info); // required
-  int open(const char *name, int mode, uint open_options);         // required
+  // required
+  int create(const char *name, TABLE *form, HA_CREATE_INFO *info
+#ifdef MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
+             ,
+             dd::Table *table_def
+#endif
+    ) mrn_override;
+  // required
+  int open(const char *name, int mode, uint open_options
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+           ,
+           const dd::Table *table_def
+#endif
+    ) mrn_override;
 #ifndef MRN_HANDLER_HAVE_HA_CLOSE
   int close();                                                     // required
 #endif
