@@ -1328,6 +1328,9 @@ struct st_mysql_plugin i_s_mrn_stats =
   "Statistics for " MRN_PLUGIN_NAME_STRING,
   PLUGIN_LICENSE_GPL,
   i_s_mrn_stats_init,
+#ifdef MRN_ST_MYSQL_PLUGIN_HAVE_CHECK_UNINSTALL
+  NULL,
+#endif
   i_s_mrn_stats_deinit,
   MRN_VERSION_IN_HEX,
   NULL,

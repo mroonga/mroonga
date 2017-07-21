@@ -238,6 +238,10 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
 #endif
 
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#  define MRN_ST_MYSQL_PLUGIN_HAVE_CHECK_UNINSTALL
+#endif
+
 class ha_mroonga;
 
 /* structs */
