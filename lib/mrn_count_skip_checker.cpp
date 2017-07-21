@@ -84,15 +84,15 @@ namespace mrn {
               sum_item->sum_func());
       DBUG_RETURN(false);
     }
-    if (sum_item->base_select->nest_level != 0 ||
-        sum_item->aggr_select->nest_level != 0 ||
-        sum_item->max_aggr_level != -1 ||
+    if (ITEM_SUM_GET_NEST_LEVEL(sum_item) != 0 ||
+        ITEM_SUM_GET_AGGR_LEVEL(sum_item) != 0 ||
+        ITEM_SUM_GET_MAX_AGGR_LEVEL(sum_item) != -1 ||
         sum_item->max_sum_func_level != -1) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] not simple COUNT(*): %d:%d:%d:%d",
-              sum_item->base_select->nest_level,
-              sum_item->aggr_select->nest_level,
-              sum_item->max_aggr_level,
+              ITEM_SUM_GET_NEST_LEVEL(sum_item),
+              ITEM_SUM_GET_AGGR_LEVEL(sum_item),
+              ITEM_SUM_GET_MAX_AGGR_LEVEL(sum_item),
               sum_item->max_sum_func_level);
       DBUG_RETURN(false);
     }
