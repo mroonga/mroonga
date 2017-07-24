@@ -8,7 +8,7 @@ TODO...
 
 You need to use Visual Studio 2015 for Windows Desktop or later to build Mroonga with express
 edition. `build-vc2015.bat` is a build batch script to build with
-Visual Visual Studio 2015 for Windows Desktop.
+Visual Studio 2015 for Windows Desktop.
 
 Note that you can't build MSI file with Express edition. You need to
 use Professional edition or upper editions to build MSI file.
