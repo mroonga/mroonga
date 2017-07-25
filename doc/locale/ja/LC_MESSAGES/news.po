@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-06-28 16:06+0900\n"
+"PO-Revision-Date: 2017-07-25 15:22+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,83 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.04 - 2017-06-29"
-msgstr "7.04リリース - 2017-06-29"
+msgid "Release 7.05 - 2017-07-29"
+msgstr "7.05リリース - 2017-07-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"Supported Groonga query log. Use ``mroonga_query_log_file`` variable to use "
+"this feature. [GitHub#148]"
+msgstr ""
+"Groongaのクエリーログをサポートしました。 ``mroonga_query_log_file`` 変数を指"
+"定してください。 [GitHub#148]"
+
+msgid ""
+"Supported MariaDB 10.2.7. [groonga-dev,04397] [Reported by Tomohiro 'Tomo-p' "
+"KATO]"
+msgstr ""
+"MariaDB 10.2.7をサポートしました。 [groonga-dev,04397] [かとうさんが報告]"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_command`] Supported database name that has "
+"special name such as ``db-1`` for example. It contains special character ``-"
+"``."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_command`] データベース名が特別な名前( 例えば "
+"``db-1`` )な場合もサポートしました。データベース名に  ``-`` が含まれていても"
+"大丈夫です。"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_command`] Supported auto command syntax escape "
+"feature. It makes easy to use Groonga functionality from Mroonga."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_command`] コマンドの自動エスケープに対応しまし"
+"た。Groongaの機能をMroongaから使いやすくなります。"
+
+msgid "Supported MariaDB 5.5.57."
+msgstr "MariaDB 5.5.57に対応しました。"
+
+msgid ""
+"[rpm][centos] Supported MySQL 5.6.37-2 and MySQL 5.7.19-1 on CentOS 6. "
+"[groonga-dev,04403] [Reported by Kagami Hiroshi]"
+msgstr ""
+"[rpm][centos] CentOS 6にてMySQL 5.6.37-2 と MySQL 5.7.19-1に対応しました。 "
+"[groonga-dev,04403] [各務さんが報告]"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[ubuntu] Dropped Ubuntu 16.10 (Yekkety Yak) support. It has reached EOL at "
+"July 20, 2017."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 16.10（Yakkety Yak）のサポートをやめました。"
+"2017年7月20日でサポートが切れた（EOLになった）ためです。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a crash bug when there is no active index internally. [Gitter:groonga/"
+"ja:596714a5c101bc4e3a7db4e5] [Reported by K Torimoto]"
+msgstr ""
+"内部的に有効なインデックスが見つからない場合にクラッシュする不具合を修正しま"
+"した。 [Gitter:groonga/ja:596714a5c101bc4e3a7db4e5] [K Torimotoさんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "K Torimoto"
+msgstr "K Torimotoさん"
+
+msgid "Tomohiro 'Tomo-p' KATO"
+msgstr "かとうさん"
+
+msgid "Kagami Hiroshi"
+msgstr "各務さん"
+
+msgid "Release 7.04 - 2017-06-29"
+msgstr "7.04リリース - 2017-06-29"
 
 msgid ""
 "Supported to show error message when failed to create a table for matched "
@@ -39,9 +111,6 @@ msgstr ""
 # cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/debian`] Supported Debian 9 (stretch)."
 msgstr "[:doc:`/install/debian`] Debian 9 (stretch)をサポートしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a crash bug that missing ``NULL`` check before calling "
@@ -77,9 +146,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`] 最新のPercona Server 5.6/5.7をサポートしました。 "
 "[@pinpikokunさんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "@bignum_twitter"
 msgstr "@bignum_twitterさん"
