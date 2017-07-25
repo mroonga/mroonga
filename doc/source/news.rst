@@ -5,6 +5,50 @@
 News
 ====
 
+.. _release-7-05:
+
+Release 7.05 - 2017-07-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported Groonga query log. Use ``mroonga_query_log_file`` variable
+  to use this feature. [GitHub#148]
+
+* Supported MariaDB 10.2.7. [groonga-dev,04397] [Reported by Tomohiro
+  'Tomo-p' KATO]
+
+* [:doc:`/reference/udf/mroonga_command`] Supported database name that
+  has special name such as ``db-1`` for example. It contains special
+  character ``-``.
+
+* [:doc:`/reference/udf/mroonga_command`] Supported auto command
+  syntax escape feature. It makes easy to use Groonga functionality
+  from Mroonga.
+
+* Supported MariaDB 5.5.57.
+
+* [rpm][centos] Supported MySQL 5.6.37-2 and MySQL 5.7.19-1 on
+  CentOS 6. [groonga-dev,04403] [Reported by Kagami Hiroshi]
+
+* [ubuntu] Dropped Ubuntu 16.10 (Yekkety Yak) support.
+  It has reached EOL at July 20, 2017.
+
+Fixes
+^^^^^
+
+* Fixed a crash bug when there is no active index internally.
+  [Gitter:groonga/ja:596714a5c101bc4e3a7db4e5] [Reported by K
+  Torimoto]
+
+Thanks
+^^^^^^
+
+* K Torimoto
+* Tomohiro 'Tomo-p' KATO
+* Kagami Hiroshi
+
 .. _release-7-04:
 
 Release 7.04 - 2017-06-29
