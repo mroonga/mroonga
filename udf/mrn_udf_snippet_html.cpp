@@ -27,6 +27,7 @@
 #include <mrn_database_manager.hpp>
 #include <mrn_context_pool.hpp>
 #include <mrn_variables.hpp>
+#include <mrn_query_parser.hpp>
 
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
 #  include <current_thd.h>
@@ -66,7 +67,6 @@ static my_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
   const char *close_tag = "</span>";
   grn_snip_mapping *mapping = GRN_SNIP_MAPPING_HTML_ESCAPE;
   grn_obj *expr = NULL;
-  grn_rc rc;
   String *result_str = &(info->result_str);
 
   *snippet = NULL;
@@ -120,17 +120,13 @@ static my_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
       goto error;
     }
 
-    // TODO: Use the same flags get logic in
-    // ha_mroonga::generic_ft_init_ext_parse_pragma().
-    grn_expr_flags flags = GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
-    rc = grn_expr_parse(info->ctx,
-                        expr,
-                        args->args[1],
-                        args->lengths[1],
-                        info->query_mode.default_column,
-                        GRN_OP_MATCH,
-                        GRN_OP_OR,
-                        flags);
+    mrn::QueryParser query_parser(info->ctx,
+                                  current_thd,
+                                  expr,
+                                  info->query_mode.default_column,
+                                  0,
+                                  NULL);
+    grn_rc rc = query_parser.parse(args->args[1], args->lengths[1]);
     if (rc != GRN_SUCCESS) {
       if (message) {
         snprintf(message, MYSQL_ERRMSG_SIZE,
@@ -162,10 +158,10 @@ static my_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
       if (!args->args[i]) {
         continue;
       }
-      rc = grn_snip_add_cond(ctx, *snippet,
-                             args->args[i], args->lengths[i],
-                             NULL, 0,
-                             NULL, 0);
+      grn_rc rc = grn_snip_add_cond(ctx, *snippet,
+                                    args->args[i], args->lengths[i],
+                                    NULL, 0,
+                                    NULL, 0);
       if (rc != GRN_SUCCESS) {
         if (message) {
           snprintf(message, MYSQL_ERRMSG_SIZE,

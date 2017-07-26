@@ -40,4 +40,6 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_column_name.cpp			\
 	mrn_column_name.hpp			\
 	mrn_count_skip_checker.cpp		\
-	mrn_count_skip_checker.hpp
+	mrn_count_skip_checker.hpp		\
+	mrn_query_parser.cpp			\
+	mrn_query_parser.hpp

@@ -410,4 +410,10 @@
   typedef my_bool mrn_bool;
 #endif
 
+#define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
+  type *variable_name =                                                 \
+    (type *)mrn_my_malloc(sizeof(type) * (variable_size), MYF(MY_WME))
+#define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) \
+  my_free(variable_name)
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

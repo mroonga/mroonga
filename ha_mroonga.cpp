@@ -66,12 +66,6 @@
 #  include <unistd.h>
 #endif
 
-#define MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(type, variable_name, variable_size) \
-  type *variable_name =                                                 \
-    (type *)mrn_my_malloc(sizeof(type) * (variable_size), MYF(MY_WME))
-#define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) \
-  my_free(variable_name)
-
 #include "mrn_err.h"
 #include "mrn_table.hpp"
 #include <groonga/plugin.h>
@@ -99,6 +93,8 @@
 #include <mrn_operation.hpp>
 #include <mrn_column_name.hpp>
 #include <mrn_count_skip_checker.hpp>
+#include <mrn_variables.hpp>
+#include <mrn_query_parser.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -245,10 +241,6 @@ static const char *MRN_PLUGIN_AUTHOR = "The Mroonga project";
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/* groonga's internal functions */
-int grn_atoi(const char *nptr, const char *end, const char **rest);
-uint grn_atoui(const char *nptr, const char *end, const char **rest);
 
 #ifdef HAVE_PSI_INTERFACE
 #  ifdef WIN32
@@ -631,14 +623,6 @@ static char *mrn_vector_column_delimiter = NULL;
 static mrn_bool mrn_libgroonga_support_zlib = false;
 static mrn_bool mrn_libgroonga_support_lz4 = false;
 static mrn_bool mrn_libgroonga_support_zstd = false;
-typedef enum {
-  MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT           = (1 << 0),
-  MRN_BOOLEAN_MODE_SYNTAX_FLAG_SYNTAX_QUERY      = (1 << 1),
-  MRN_BOOLEAN_MODE_SYNTAX_FLAG_SYNTAX_SCRIPT     = (1 << 2),
-  MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_COLUMN      = (1 << 3),
-  MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_UPDATE      = (1 << 4),
-  MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_LEADING_NOT = (1 << 5)
-} mrn_boolean_mode_syntax_flag;
 #ifdef MRN_SUPPORT_THDVAR_SET
 static const char *mrn_boolean_mode_sytnax_flag_names[] = {
   "DEFAULT",
@@ -662,23 +646,8 @@ static mrn_bool mrn_libgroonga_embedded = true;
 static mrn_bool mrn_libgroonga_embedded = false;
 #endif
 
-typedef enum {
-  MRN_ACTION_ON_ERROR_ERROR,
-  MRN_ACTION_ON_ERROR_ERROR_AND_LOG,
-  MRN_ACTION_ON_ERROR_IGNORE,
-  MRN_ACTION_ON_ERROR_IGNORE_AND_LOG,
-} mrn_action_on_error;
-
-static const char *mrn_action_on_error_names[] = {
-  "ERROR",
-  "ERROR_AND_LOG",
-  "IGNORE",
-  "IGNORE_AND_LOG",
-  NullS,
-};
-
-static mrn_action_on_error mrn_action_on_fulltext_query_error_default =
-  MRN_ACTION_ON_ERROR_ERROR_AND_LOG;
+static mrn::variables::ActionOnError mrn_action_on_fulltext_query_error_default =
+  mrn::variables::ACTION_ON_ERROR_ERROR_AND_LOG;
 
 static void mrn_logger_log(grn_ctx *ctx, grn_log_level level,
                            const char *timestamp, const char *title,
@@ -1074,6 +1043,14 @@ static MYSQL_SYSVAR_STR(default_wrapper_engine, mrn_default_wrapper_engine,
                         NULL,
                         NULL);
 
+static const char *mrn_action_on_error_names[] = {
+  "ERROR",
+  "ERROR_AND_LOG",
+  "IGNORE",
+  "IGNORE_AND_LOG",
+  NullS,
+};
+
 static TYPELIB mrn_action_on_error_typelib =
 {
   array_elements(mrn_action_on_error_names) - 1,
@@ -1198,7 +1175,7 @@ static MYSQL_THDVAR_SET(boolean_mode_syntax_flags,
                         "ALLOW_COLUMN, ALLOW_UPDATE and ALLOW_LEADING_NOT",
                         NULL,
                         NULL,
-                        MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT,
+                        mrn::variables::BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT,
                         &mrn_boolean_mode_syntax_flags_typelib);
 #endif
 
@@ -8387,346 +8364,22 @@ void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
   DBUG_VOID_RETURN;
 }
 
-bool ha_mroonga::generic_ft_init_ext_parse_pragma_d(struct st_mrn_ft_info *info,
-                                                    const char *keyword,
-                                                    uint keyword_length,
-                                                    grn_operator *default_operator,
-                                                    uint *consumed_keyword_length)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  grn_bool succeeded = true;
-  if (keyword_length >= 1 && keyword[0] == '+') {
-    *default_operator = GRN_OP_AND;
-    *consumed_keyword_length = 1;
-  } else if (keyword_length >= 1 && keyword[0] == '-') {
-    *default_operator = GRN_OP_AND_NOT;
-    *consumed_keyword_length = 1;
-  } else if (keyword_length >= 2 && memcmp(keyword, "OR", 2) == 0) {
-    *default_operator = GRN_OP_OR;
-    *consumed_keyword_length = 2;
-  } else {
-    succeeded = false;
-  }
-
-  DBUG_RETURN(succeeded);
-}
-
-void ha_mroonga::generic_ft_init_ext_parse_pragma_w_append_section(
-  struct st_mrn_ft_info *info,
-  grn_obj *index_column,
-  grn_obj *match_columns,
-  uint section,
-  grn_obj *section_value_buffer,
-  int weight,
-  uint n_weights)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
-  GRN_UINT32_SET(info->ctx, section_value_buffer, section);
-  grn_expr_append_const(info->ctx, match_columns, section_value_buffer,
-                        GRN_OP_PUSH, 1);
-  grn_expr_append_op(info->ctx, match_columns, GRN_OP_GET_MEMBER, 2);
-
-  if (weight != 1) {
-    grn_expr_append_const_int(info->ctx, match_columns, weight,
-                              GRN_OP_PUSH, 1);
-    grn_expr_append_op(info->ctx, match_columns, GRN_OP_STAR, 2);
-  }
-
-  if (n_weights >= 2) {
-    grn_expr_append_op(info->ctx, match_columns, GRN_OP_OR, 2);
-  }
-
-  DBUG_VOID_RETURN;
-}
-
-bool ha_mroonga::generic_ft_init_ext_parse_pragma_w(struct st_mrn_ft_info *info,
-                                                    const char *keyword,
-                                                    uint keyword_length,
-                                                    grn_obj *index_column,
-                                                    grn_obj *match_columns,
-                                                    uint *consumed_keyword_length,
-                                                    grn_obj *tmp_objects)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  *consumed_keyword_length = 0;
-
-  uint n_sections = KEY_N_KEY_PARTS(info->key_info);
-
-  grn_obj section_value_buffer;
-  GRN_UINT32_INIT(&section_value_buffer, 0);
-
-  MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(bool, specified_sections, n_sections);
-  for (uint i = 0; i < n_sections; ++i) {
-    specified_sections[i] = false;
-  }
-
-  uint n_weights = 0;
-  while (keyword_length >= 1) {
-    if (n_weights >= 1) {
-      if (keyword[0] != ',') {
-        break;
-      }
-      uint n_used_keyword_length = 1;
-      *consumed_keyword_length += n_used_keyword_length;
-      keyword_length -= n_used_keyword_length;
-      keyword += n_used_keyword_length;
-      if (keyword_length == 0) {
-        break;
-      }
-    }
-
-    uint section = 0;
-    if ('1' <= keyword[0] && keyword[0] <= '9') {
-      const char *section_start = keyword;
-      const char *keyword_end = keyword + keyword_length;
-      const char *keyword_rest;
-      section = grn_atoui(section_start, keyword_end, &keyword_rest);
-      if (section_start == keyword_rest) {
-        break;
-      }
-      if (!(0 < section && section <= n_sections)) {
-        break;
-      }
-      section -= 1;
-      specified_sections[section] = true;
-      uint n_used_keyword_length = keyword_rest - keyword;
-      *consumed_keyword_length += n_used_keyword_length;
-      keyword_length -= n_used_keyword_length;
-      keyword += n_used_keyword_length;
-    } else {
-      break;
-    }
-
-    int weight = 1;
-    if (keyword_length >= 2 && keyword[0] == ':') {
-      const char *weight_start = keyword + 1;
-      const char *keyword_end = keyword + keyword_length;
-      const char *keyword_rest;
-      weight = grn_atoi(weight_start, keyword_end, &keyword_rest);
-      if (weight_start == keyword_rest) {
-        break;
-      }
-      uint n_used_keyword_length = keyword_rest - keyword;
-      *consumed_keyword_length += n_used_keyword_length;
-      keyword_length -= n_used_keyword_length;
-      keyword += n_used_keyword_length;
-    }
-
-    n_weights++;
-
-    generic_ft_init_ext_parse_pragma_w_append_section(info,
-                                                      index_column,
-                                                      match_columns,
-                                                      section,
-                                                      &section_value_buffer,
-                                                      weight,
-                                                      n_weights);
-  }
-
-  for (uint section = 0; section < n_sections; ++section) {
-    if (specified_sections[section]) {
-      continue;
-    }
-
-    ++n_weights;
-
-    int default_weight = 1;
-    generic_ft_init_ext_parse_pragma_w_append_section(info,
-                                                      index_column,
-                                                      match_columns,
-                                                      section,
-                                                      &section_value_buffer,
-                                                      default_weight,
-                                                      n_weights);
-  }
-  MRN_FREE_VARIABLE_LENGTH_ARRAYS(specified_sections);
-
-  GRN_OBJ_FIN(info->ctx, &section_value_buffer);
-
-  DBUG_RETURN(n_weights > 0);
-}
-
-grn_expr_flags ha_mroonga::expr_flags_in_boolean_mode()
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  ulonglong syntax_flags = MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT;
-#ifdef MRN_SUPPORT_THDVAR_SET
-  syntax_flags = THDVAR(ha_thd(), boolean_mode_syntax_flags);
-#endif
-  grn_expr_flags expression_flags = 0;
-  if (syntax_flags == MRN_BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT) {
-    expression_flags = GRN_EXPR_SYNTAX_QUERY | GRN_EXPR_ALLOW_LEADING_NOT;
-  } else {
-    if (syntax_flags & MRN_BOOLEAN_MODE_SYNTAX_FLAG_SYNTAX_SCRIPT) {
-      expression_flags |= GRN_EXPR_SYNTAX_SCRIPT;
-    } else {
-      expression_flags |= GRN_EXPR_SYNTAX_QUERY;
-    }
-    if (syntax_flags & MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_COLUMN) {
-      expression_flags |= GRN_EXPR_ALLOW_COLUMN;
-    }
-    if (syntax_flags & MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_UPDATE) {
-      expression_flags |= GRN_EXPR_ALLOW_UPDATE;
-    }
-    if (syntax_flags & MRN_BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_LEADING_NOT) {
-      expression_flags |= GRN_EXPR_ALLOW_LEADING_NOT;
-    }
-  }
-
-  DBUG_RETURN(expression_flags);
-}
-
-void ha_mroonga::generic_ft_init_ext_parse_pragma(
-  struct st_mrn_ft_info *info,
-  String *key,
-  grn_obj *index_column,
-  grn_obj *match_columns,
-  const char **keyword,
-  uint *keyword_length,
-  grn_operator *default_operator,
-  grn_expr_flags *flags,
-  grn_obj *tmp_objects)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  const char *keyword_original = key->ptr();
-  uint keyword_length_original = key->length();
-
-  *keyword = keyword_original;
-  *keyword_length = keyword_length_original;
-  *default_operator = GRN_OP_OR;
-  *flags = 0;
-
-  if (*keyword_length >= 3 && memcmp(*keyword, "*SS", 3) == 0) {
-    *keyword = keyword_original + 3;
-    *keyword_length = keyword_length_original - 3;
-    *flags = GRN_EXPR_SYNTAX_SCRIPT;
-    DBUG_VOID_RETURN;
-  }
-
-  bool weight_specified = false;
-  *flags = expr_flags_in_boolean_mode();
-  if (*keyword_length >= 2 && (*keyword)[0] == '*') {
-    bool parsed = false;
-    bool done = false;
-    (*keyword)++;
-    (*keyword_length)--;
-    while (!done) {
-      uint consumed_keyword_length = 0;
-      switch ((*keyword)[0]) {
-      case 'D':
-        if (generic_ft_init_ext_parse_pragma_d(info,
-                                               (*keyword) + 1,
-                                               (*keyword_length) - 1,
-                                               default_operator,
-                                               &consumed_keyword_length)) {
-          parsed = true;
-          consumed_keyword_length += 1;
-          (*keyword) += consumed_keyword_length;
-          (*keyword_length) -= consumed_keyword_length;
-        } else {
-          done = true;
-        }
-        break;
-      case 'W':
-        if (generic_ft_init_ext_parse_pragma_w(info,
-                                               (*keyword) + 1,
-                                               (*keyword_length) - 1,
-                                               index_column,
-                                               match_columns,
-                                               &consumed_keyword_length,
-                                               tmp_objects)) {
-          parsed = true;
-          weight_specified = true;
-          consumed_keyword_length += 1;
-          (*keyword) += consumed_keyword_length;
-          (*keyword_length) -= consumed_keyword_length;
-        } else {
-          done = true;
-        }
-        break;
-      default:
-        done = true;
-        break;
-      }
-    }
-    if (!parsed) {
-      (*keyword) = keyword_original;
-      (*keyword_length) = keyword_length_original;
-    }
-  }
-  // WORKAROUND: ignore the first '+' to support "+apple macintosh" pattern.
-  while (*keyword_length > 0 && (*keyword)[0] == ' ') {
-    (*keyword)++;
-    (*keyword_length)--;
-  }
-  if (*keyword_length > 0 && (*keyword)[0] == '+') {
-    (*keyword)++;
-    (*keyword_length)--;
-  }
-  if (!weight_specified) {
-    grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
-  }
-
-  DBUG_VOID_RETURN;
-}
-
 grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
   struct st_mrn_ft_info *info,
   String *key,
   grn_obj *index_column,
   grn_obj *match_columns,
-  grn_obj *expression,
-  grn_obj *tmp_objects)
+  grn_obj *expression)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  grn_rc rc = GRN_SUCCESS;
-
-  const char *keyword = NULL;
-  uint keyword_length = 0;
-  grn_operator default_operator = GRN_OP_OR;
-  grn_expr_flags expression_flags = 0;
-  generic_ft_init_ext_parse_pragma(info,
-                                   key,
-                                   index_column,
-                                   match_columns,
-                                   &keyword,
-                                   &keyword_length,
-                                   &default_operator,
-                                   &expression_flags,
-                                   tmp_objects);
-  rc = grn_expr_parse(info->ctx, expression,
-                      keyword, keyword_length,
-                      match_columns, GRN_OP_MATCH, default_operator,
-                      expression_flags);
-  if (rc) {
-    char error_message[MRN_MESSAGE_BUFFER_SIZE];
-    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "failed to parse fulltext search keyword: <%.*s>: <%s>",
-             static_cast<int>(key->length()), key->ptr(),
-             info->ctx->errbuf);
-    ulong action = THDVAR(ha_thd(), action_on_fulltext_query_error);
-    switch (static_cast<mrn_action_on_error>(action)) {
-    case MRN_ACTION_ON_ERROR_ERROR:
-      my_message(ER_PARSE_ERROR, error_message, MYF(0));
-      break;
-    case MRN_ACTION_ON_ERROR_ERROR_AND_LOG:
-      my_message(ER_PARSE_ERROR, error_message, MYF(0));
-      GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
-      break;
-    case MRN_ACTION_ON_ERROR_IGNORE:
-      break;
-    case MRN_ACTION_ON_ERROR_IGNORE_AND_LOG:
-      GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
-      break;
-    }
-  }
+  mrn::QueryParser query_parser(info->ctx,
+                                ha_thd(),
+                                expression,
+                                index_column,
+                                KEY_N_KEY_PARTS(info->key_info),
+                                match_columns);
+  grn_rc rc = query_parser.parse(key->ptr(), key->length());
 
   DBUG_RETURN(rc);
 }
@@ -8736,8 +8389,7 @@ grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_normal_mode(
   String *key,
   grn_obj *index_column,
   grn_obj *match_columns,
-  grn_obj *expression,
-  grn_obj *tmp_objects)
+  grn_obj *expression)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -8808,8 +8460,6 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
   grn_obj *expression, *expression_variable;
   GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table,
                             expression, expression_variable);
-  grn_obj tmp_objects;
-  GRN_PTR_INIT(&tmp_objects, GRN_OBJ_VECTOR, GRN_ID_NIL);
 
   grn_rc rc = GRN_SUCCESS;
   if (flags & FT_BOOL) {
@@ -8817,15 +8467,13 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
                                                                 key,
                                                                 index_column,
                                                                 match_columns,
-                                                                expression,
-                                                                &tmp_objects);
+                                                                expression);
   } else {
     rc = generic_ft_init_ext_prepare_expression_in_normal_mode(info,
                                                                key,
                                                                index_column,
                                                                match_columns,
-                                                               expression,
-                                                               &tmp_objects);
+                                                               expression);
   }
 
   if (rc == GRN_SUCCESS) {
@@ -8840,12 +8488,6 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
 
   grn_obj_unlink(info->ctx, expression);
   grn_obj_unlink(info->ctx, match_columns);
-
-  uint n_tmp_objects = GRN_BULK_VSIZE(&tmp_objects) / sizeof(grn_obj *);
-  for (uint i = 0; i < n_tmp_objects; ++i) {
-    grn_obj_unlink(info->ctx, GRN_PTR_VALUE_AT(&tmp_objects, i));
-  }
-  grn_obj_unlink(info->ctx, &tmp_objects);
 
   DBUG_RETURN(info);
 }
@@ -17305,3 +16947,20 @@ my_bool ha_mroonga::register_query_cache_table(THD *thd,
 #ifdef __cplusplus
 }
 #endif
+
+namespace mrn {
+  namespace variables {
+    ulonglong get_boolean_mode_syntax_flags(THD *thd) {
+      ulonglong flags = BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT;
+#ifdef MRN_SUPPORT_THDVAR_SET
+      flags = THDVAR(thd, boolean_mode_syntax_flags);
+#endif
+      return flags;
+    }
+
+    ActionOnError get_action_on_fulltext_query_error(THD *thd) {
+      ulong action = THDVAR(thd, action_on_fulltext_query_error);
+      return static_cast<ActionOnError>(action);
+    }
+  }
+}
