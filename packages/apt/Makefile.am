@@ -51,9 +51,9 @@ build-package-deb: source env.sh
 	for variant in $(MYSQL_VARIANTS); do					\
 	  cp env.sh tmp/;							\
 	  echo "MYSQL_VARIANT=$${variant}" >> tmp/env.sh;			\
-	  rm -rf tmp/debian;							\
 	  for architecture in $(ARCHITECTURES); do				\
 	    for code_name in $(CODE_NAMES); do					\
+	      rm -rf tmp/debian;						\
 	      if [ $${variant} = "5.5" -a $${code_name} = "stretch" ]; then	\
 	        continue;							\
 	      fi;								\
