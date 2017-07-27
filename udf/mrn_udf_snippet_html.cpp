@@ -28,10 +28,7 @@
 #include <mrn_context_pool.hpp>
 #include <mrn_variables.hpp>
 #include <mrn_query_parser.hpp>
-
-#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
-#  include <current_thd.h>
-#endif
+#include <mrn_current_thread.hpp>
 
 MRN_BEGIN_DECLS
 

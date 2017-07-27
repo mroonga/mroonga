@@ -23,10 +23,7 @@
 #include <mrn_windows.hpp>
 #include <mrn_table.hpp>
 #include <mrn_macro.hpp>
-
-#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
-#  include <current_thd.h>
-#endif
+#include <mrn_current_thread.hpp>
 
 MRN_BEGIN_DECLS
 
