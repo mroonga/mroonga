@@ -64,7 +64,7 @@ static my_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
   *keywords = NULL;
 
   mrn::encoding::set_raw(ctx, system_charset_info);
-  if (!(system_charset_info->state & (MY_CS_BINSORT | MY_CS_CSSORT))) {
+  if (system_charset_info->state & (MY_CS_BINSORT | MY_CS_CSSORT)) {
     normalizer_name = NULL;
   }
 
@@ -80,6 +80,12 @@ static my_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
                ctx->errbuf);
     }
     goto error;
+  }
+  if (normalizer_name) {
+    grn_obj_set_info(ctx,
+                     *keywords,
+                     GRN_INFO_NORMALIZER,
+                     grn_ctx_get(ctx, normalizer_name, -1));
   }
 
   if (info->query_mode.used) {
