@@ -1,4 +1,4 @@
-# Copyright(C) 2013-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013-2017  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -23,4 +23,5 @@ eval CREATE FUNCTION mroonga_command RETURNS STRING SONAME $ha_mroonga_so;
 eval CREATE FUNCTION mroonga_escape RETURNS STRING SONAME $ha_mroonga_so;
 eval CREATE FUNCTION mroonga_snippet_html RETURNS STRING SONAME $ha_mroonga_so;
 eval CREATE FUNCTION mroonga_normalize RETURNS STRING SONAME $ha_mroonga_so;
+eval CREATE FUNCTION mroonga_highlight_html RETURNS STRING SONAME $ha_mroonga_so;
 --enable_query_log
