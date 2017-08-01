@@ -48,7 +48,8 @@ There is one required parameter.
 
 ``document``
 """"""""""""
-  The column name or string value is required.
+
+The column name or string value is required.
 
 Optional parameters
 ^^^^^^^^^^^^^^^^^^^
@@ -58,12 +59,12 @@ There is some optional parameters.
 ``wordN``
 """""""""
 
-  Specify any word.
+Specify any word.
 
 ``query``
 """""""""
 
-  Specify any keywords and pragma.
+Specify any keywords and pragma.
 
 Return value
 ------------

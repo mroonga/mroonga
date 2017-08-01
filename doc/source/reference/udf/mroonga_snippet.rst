@@ -106,7 +106,7 @@ Here is the results of execution examples::
   |  3 | Tritonn is a patched version of MySQL that supports better fulltext search function with Senna. | ...f <span class="w2">MySQL</span> ...<br>...<span class="w1">fulltext</span>...<br>                                                                                                                   |
   +----+-------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
   3 rows in set (0.00 sec)
-  
+
 The keyword 'fulltext' and associated keyword 'MySQL' and 'search' has been extracted.
 
 Parameters
@@ -120,46 +120,47 @@ There are many required parameters.
 
 ``document``
 """"""""""""
-  The column name or string value is required.
+
+The column name or string value is required.
 
 ``max_length``
 """"""""""""""
 
-  The max length of snippet (bytes) is required.
+The max length of snippet (bytes) is required.
 
 ``max_count``
 """""""""""""
 
-  The max elements of snippets (N word) is required.
+The max elements of snippets (N word) is required.
 
 ``encoding``
 """"""""""""
 
-  The encoding of document is required.
-  You can specify the value of encoding such as 'ascii_general_ci',
-  'cp932_japanese_ci', 'eucjpms_japanese_ci' and so on.
+The encoding of document is required.
+You can specify the value of encoding such as 'ascii_general_ci',
+'cp932_japanese_ci', 'eucjpms_japanese_ci' and so on.
 
 ``skip_leading_spaces``
 """""""""""""""""""""""
 
-  Specify whether skip leading spaces or not.
-  Specify the value 1 for skipping leading spaces, 0 for not.
+Specify whether skip leading spaces or not.
+Specify the value 1 for skipping leading spaces, 0 for not.
 
 ``html_escape``
 """""""""""""""
 
-  HTML escape is enabled or not.
-  Specify the value 1 for enabling HTML escape, 0 for not.
+HTML escape is enabled or not.
+Specify the value 1 for enabling HTML escape, 0 for not.
 
 ``prefix``
 """"""""""
 
-  The start text of snippet.
+The start text of snippet.
 
 ``suffix``
 """"""""""
 
-  The end text of snippet.
+The end text of snippet.
 
 
 Optional parameters
@@ -170,17 +171,17 @@ There is one optional group parameter, ``wordN`` related prefix and suffix.
 ``wordN``
 """""""""
 
-  Specify any word.
+Specify any word.
 
 ``wordN_prefix``
 """"""""""""""""
 
-  It is the start text of wordN.
+It is the start text of wordN.
 
 ``wordN_suffix``
 """"""""""""""""
 
-  It is the end text of wordN.
+It is the end text of wordN.
 
 
 Return value
