@@ -74,6 +74,11 @@ msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 16.10（Yakkety Yak）のサポートをやめました。"
 "2017年7月20日でサポートが切れた（EOLになった）ためです。"
 
+msgid ""
+"[:doc:`/reference/udf/mroonga_highlight_html`] Supported a function to "
+"highlight target column or text."
+msgstr ""
+
 msgid "Fixes"
 msgstr "修正"
 
