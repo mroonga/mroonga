@@ -3,6 +3,8 @@
 ``mroonga_escape()``
 ====================
 
+.. versionadded:: 3.08
+
 Summary
 -------
 

@@ -3,6 +3,8 @@
 ``mroonga_normalize()``
 =======================
 
+.. versionadded:: 5.11
+
 Summary
 -------
 

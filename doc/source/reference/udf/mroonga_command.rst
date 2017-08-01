@@ -3,6 +3,8 @@
 ``mroonga_command()``
 =====================
 
+.. versionadded:: 3.02
+
 Summary
 -------
 

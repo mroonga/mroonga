@@ -3,6 +3,8 @@
 ``mroonga_snippet()``
 =====================
 
+.. versionadded:: 2.07
+
 Summary
 -------
 
