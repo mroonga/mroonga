@@ -35,6 +35,9 @@ Improvements
 * [ubuntu] Dropped Ubuntu 16.10 (Yekkety Yak) support.
   It has reached EOL at July 20, 2017.
 
+* [:doc:`/reference/udf/mroonga_highlight_html`] Supported a function
+  to highlight target column or text.
+
 Fixes
 ^^^^^
 
