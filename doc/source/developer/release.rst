@@ -40,6 +40,47 @@ Vagrantで使用する仮想化ソフトウェア（VirtualBox、VMwareなど）
     % sudo apt-get update
     % sudo apt-get install virtualbox
 
+Windows版パッケージのビルド環境準備
+-----------------------------------
+
+MroongaのWindows版パッケージを作成するための環境を構築する手順を以下に示します。
+ビルド環境は、Windows7を前提として説明しているため、その他の環境では適宜読み替えて下さい。
+
+必要ソフトウェアのインストール
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* VisualStudio 2015 Community をインストールします。
+   * VisualStudio 2015 は、現行のバージョンではなく、古いバージョンのため、通常のダウンロードページからはダウンロードすることができません。そのため、以下のページからダウンロードを行う必要があります。::
+
+    `Visual Studio Dev Essensials <https://www.visualstudio.com/ja/dev-essentials/>`_
+
+ダウンロードするためには、上記サイトへの登録が必要となります。登録には、MicrosoftAccountが必要となります。
+
+* Bison for Windows をインストールします。
+   * 以下のサイトからダウンロードします。また、インストール後にパスを通しておく必要があります。インストールパスには、空白スペースを含まないパスを指定してください。::
+
+    `Bison for Windows <http://gnuwin32.sourceforge.net/packages/bison.htm>`_
+
+* CMake をインストールします。
+   * CMakeのバージョンは3.9以上をインストールします。
+   * 以下のサイトからダウンロードします。また、インストール時にパスを通しておく必要があります。::
+
+    `CMake <https://cmake.org/download/>`_
+
+* Wix をインストールします。
+   * 以下のサイトからダウンロードします。::
+
+    `Wix <http://wix.codeplex.com/>`_
+
+* Windows Management Framework 4.0(Windows6.1-KB2819745-x64-MultiPkg.msu) をインストールします。
+   * Windows版パッケージを作成するスクリプトはPowerShell 4.0向けに書かれているため、Windows7に同梱されているPowerShellでは正常に動作しません。Windows7のPowerShellのバージョンを4.0にするためにインストールする必要があります。::
+
+    `Windows Management Framework 4.0 <https://www.microsoft.com/ja-jp/download/details.aspx?id=40855>`_
+
+* Patch for Windows をインストールします。
+   * 以下のサイトからダウンロードします。::
+
+    `Patch for Windows <http://gnuwin32.sourceforge.net/packages/patch.htm>`_
 
 変更点の記述
 ------------
@@ -232,79 +273,23 @@ MariaDB 本体を `多少変更しないといけない
 ため、Windows 版は MariaDB に mroonga/groonga/groonga-normalizer-mysql
 をバンドルしたパッケージとして作成します。
 
-まず、 Linux 上で Windows 用のソースを作成します。::
+Windows 上で作業を行います。
 
-    % cd packages/source
-    % make archive
+`こちら <https://github.com/cosmo0920/PowerShell-for-Mroonga-building>`_
+からWindows版パッケージ作成用のPowerShellをダウンロードします。
 
-これで、
-``packages/source/files/mariadb-10.0.2-with-mroonga-3.04.zip`` というよ
-うなファイルができます。これを Windows にコピーします。
+PowerShellを管理者権限で起動し、 `powershell\build-vc2015.ps1` を実行します。
+`powershell\build-vc2015.ps1` を実行すると、自動的にWindows版のパッケージまで作成します。
+32bit版、64bit版のパッケージ作成にそれぞれ30分くらいずつかかります。そのため、合計で1時間くらいかかります。
+完了するとworkディレクトリに以下のようなファイルができます。
 
-ここからは Windows 上での作業です。
-
-まず、 `Windows Installer XML (WiX) <http://wix.codeplex.com/>`_ をイン
-ストールします。これは MSI 形式のインストーラーを作るために必要です。
-
-WiX をインストールしたらビルドします。
-
-まずは、 Linux からコピーしてきた zip を展開します。 Windows 標準の
-zip 展開機能はとても遅いので 7-zip などを使いましょう。展開時間が数 10
-倍違います。 zip を展開すると ``mariadb-10.0.2-with-mroonga-3.04`` とい
-うようなフォルダがでてきます。これを ``source`` に名前を変更します。::
-
- > move mariadb-10.0.2-with-mroonga-3.04 source
-
-ソースを準備したらビルドします。ビルド方法は `バッチファイル
-<https://github.com/mroonga/mroonga/tree/master/packages/windows>`_ に
-書かれています。抜粋すると以下の通りです。32bit用と64bit用の両方作成し
-ているので似たような手順が2回でていることに注意してください。::
-
- > mkdir build-32
- > cd build-32
- > cmake ..\source -G "Visual Studio 14" > config.log
- > cmake --build . --config RelWithDebInfo > build.log
- > cmake --build . --config RelWithDebInfo --target msi > msi.log
- > move *.msi ..\
- > cmake --build . --config RelWithDebInfo --target package > zip.log
- > move *.zip ..\
- > cd ..
- > mkdir build-64
- > cd build-64
- > cmake ..\source -G "Visual Studio 14 Win64" > config.log
- > cmake --build . --config RelWithDebInfo > build.log
- > cmake --build . --config RelWithDebInfo --target msi > msi.log
- > move *.msi ..\
- > cmake --build . --config RelWithDebInfo --target package > zip.log
- > move *.zip ..\
- > cd ..
-
-それぞれ30分くらいずつかかります。そのため、合計で1時間くらいかかります。
-
-完了するとカレントディレクトリに以下のようなファイルができます。
-
-* mariadb-10.0.2-win32.msi
-* mariadb-10.0.2-win32.zip
-* mariadb-10.0.2-winx64.msi
-* mariadb-10.0.2-winx64.zip
+* mariadb-10.0.2-with-mroonga-3.04-win32.zip
+* mariadb-10.0.2-with-mroonga-3.04-winx64.zip
 
 これを Linux にコピーします。例えば、 Ruby で HTTP サーバーを立てて
 Linux 側からダウンロードする場合は以下のようにします。::
 
  > ruby -run -e httpd -- --do-not-reverse-lookup --port 10080 .
-
-Linux 側でファイル名を変更します。これだと mroonga のバージョンがわかり
-づらいからです。（TODO: 自動化したい。 zip 内のフォルダ名も変えたい。）::
-
-    % mv mariadb-10.0.2-win32.msi \
-        packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-win32.msi
-    % mv mariadb-10.0.2-win32.zip \
-        packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-win32.zip
-    % mv mariadb-10.0.2-winx64.msi \
-        packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-winx64.msi
-    % mv mariadb-10.0.2-winx64.zip \
-        packages/windows/files/mariadb-10.0.2-with-mroonga-3.04-winx64.zip
-
 
 ドキュメントのアップロード
 --------------------------
