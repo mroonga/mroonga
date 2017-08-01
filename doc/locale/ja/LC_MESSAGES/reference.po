@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-05-01 17:24+0900\n"
+"PO-Revision-Date: 2017-08-01 15:34+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -2071,6 +2071,60 @@ msgstr "デフォルト値は ``+-<>~*()\"\\\\:`` です。"
 msgid "It returns escaped string."
 msgstr "エスケープされた文字列を返します。"
 
+msgid "``mroonga_highlight_html()``"
+msgstr ""
+
+msgid ""
+"``mroonga_highlight_html()`` UDF provides functionality to highlight target "
+"column or string."
+msgstr ""
+"``mroonga_highlight_html()`` UDFは対象となるカラムや文字列をハイライトする機"
+"能を提供します。"
+
+msgid ""
+"``mroonga_highlight_html()`` has required parameter and optional parameter::"
+msgstr ""
+"``mroonga_highlight_html()`` には必須引数と省略可能引数とがあります。::"
+
+msgid ""
+"Here is the sample query to highlight target text by keyword 'mroonga'::"
+msgstr ""
+"'mroonga'というキーワードで対象となるテキストのハイライトをするクエリーです。"
+
+msgid "Here is the results of execution examples::"
+msgstr "実行結果がこちらです。"
+
+msgid "There is one required parameter."
+msgstr "必須引数が1つあります。"
+
+msgid "``document``"
+msgstr ""
+
+msgid "The column name or string value is required."
+msgstr "カラム名もしくは文字列が必要です。"
+
+msgid "There is some optional parameters."
+msgstr "いくつか省略可能な引数があります。"
+
+msgid "``wordN``"
+msgstr ""
+
+msgid "Specify any word."
+msgstr "任意の単語指定します。"
+
+msgid "``query``"
+msgstr ""
+
+msgid "Specify any keywords and pragma."
+msgstr "任意のキーワードやプラグマを指定します。"
+
+msgid ""
+"It returns highlighted html. If optional parameter is not given, just "
+"returns ``document`` itself."
+msgstr ""
+"ハイライトされたHTMLを返します。省略可能な引数が指定されない場合、単に "
+"``document`` をそのまま返します。"
+
 msgid "``mroonga_last_insert_grn_id()``"
 msgstr ""
 
@@ -2204,9 +2258,6 @@ msgstr "実行例(ラッパーモード)のスキーマ定義はこちらです�
 msgid "Here is the sample data for execution examples::"
 msgstr ""
 
-msgid "Here is the results of execution examples::"
-msgstr ""
-
 msgid ""
 "The keyword 'fulltext' and associated keyword 'MySQL' and 'search' has been "
 "extracted."
@@ -2214,12 +2265,6 @@ msgstr ""
 
 msgid "There are many required parameters."
 msgstr "多くの必須引数があります。"
-
-msgid "``document``"
-msgstr ""
-
-msgid "The column name or string value is required."
-msgstr "カラム名もしくは文字列が必要です。"
 
 msgid "``max_length``"
 msgstr ""
@@ -2279,12 +2324,6 @@ msgid ""
 "There is one optional group parameter, ``wordN`` related prefix and suffix."
 msgstr ""
 "省略可能な引数として ``wordN`` と開始テキスト、終了テキストがあります。"
-
-msgid "``wordN``"
-msgstr ""
-
-msgid "Specify any word."
-msgstr "任意の単語指定します。"
 
 msgid "``wordN_prefix``"
 msgstr ""
