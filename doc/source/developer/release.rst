@@ -62,7 +62,7 @@ MroongaのWindows版パッケージを作成するための環境を構築する
     `Bison for Windows <http://gnuwin32.sourceforge.net/packages/bison.htm>`_
 
 * CMake をインストールします。
-   * CMakeのバージョンは3.9以上をインストールします。
+   * CMakeのバージョンは3.1以上をインストールします。
    * 以下のサイトからダウンロードします。また、インストール時にパスを通しておく必要があります。::
 
     `CMake <https://cmake.org/download/>`_
