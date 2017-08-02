@@ -62,7 +62,7 @@ MroongaのWindows版パッケージを作成するための環境を構築する
     `Bison for Windows <http://gnuwin32.sourceforge.net/packages/bison.htm>`_
 
 * CMake をインストールします。
-   * CMakeのバージョンは3.9以上をインストールします。
+   * CMakeのバージョンは3.1以上をインストールします。
    * 以下のサイトからダウンロードします。また、インストール時にパスを通しておく必要があります。::
 
     `CMake <https://cmake.org/download/>`_
@@ -73,7 +73,7 @@ MroongaのWindows版パッケージを作成するための環境を構築する
     `Wix <http://wix.codeplex.com/>`_
 
 * Windows Management Framework 4.0(Windows6.1-KB2819745-x64-MultiPkg.msu) をインストールします。
-   * Windows版パッケージを作成するスクリプトはPowerShell 4.0向けに書かれているため、Windows7に同梱されているPowerShellでは正常に動作しません。Windows7のPowerShellのバージョンを4.0にするためにインストールする必要があります。::
+   * Windows版パッケージを作成するスクリプトはPowerShell 3.0以上向けに書かれているため、Windows7に同梱されているPowerShellでは正常に動作しません。Windows7のPowerShellのバージョンを4.0にするためにインストールする必要があります。Windows 8.1以降では標準でインストールされているPowerShellのバージョンで要件を満たしています。::
 
     `Windows Management Framework 4.0 <https://www.microsoft.com/ja-jp/download/details.aspx?id=40855>`_
 
