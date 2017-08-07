@@ -106,6 +106,20 @@ if(MRN_GROONGA_BUNDLED)
     set(GROONGA_NORMALIZER_MYSQL_EMBED ON)
   endif()
 
+  file(READ "${MRN_BUNDLED_GROONGA_DIR}/bundled_lz4_version"
+    MRN_BUNDLED_LZ4_VERSION)
+  string(STRIP
+    "${MRN_BUNDLED_LZ4_VERSION}"
+    MRN_BUNDLED_LZ4_VERSION)
+  set(MRN_BUNDLED_LZ4_DIR
+    "${MRN_BUNDLED_GROONGA_DIR}/vendor/lz4-${GRN_BUNDLED_LZ4_VERSION}")
+  if(EXISTS ${MRN_BUNDLED_LZ4_DIR})
+    set(GRN_WITH_BUNDLED_LZ4 ON)
+    set(GRN_WITH_LZ4 "yes")
+  else()
+    set(GRN_WITH_LZ4 "no")
+  endif()
+
   add_subdirectory("${MRN_BUNDLED_GROONGA_RELATIVE_DIR}")
 else()
   set(MRN_GROONGA_EMBED OFF)
