@@ -5031,7 +5031,7 @@ int ha_mroonga::delete_table(const char *name)
   }
 
   if (!wrap_handlerton) {
-    bool open_table_to_get_wrap_handlerton = !mapper.is_temporary_table_name();
+    bool open_table_to_get_wrap_handlerton = true;
     if (mapper.is_internal_table_name()) {
       open_table_to_get_wrap_handlerton = false;
     }
@@ -5082,12 +5082,6 @@ int ha_mroonga::delete_table(const char *name)
 
   if (!error) {
     error = operations_->clear(name, strlen(name));
-  }
-
-  if (!error &&
-      mapper.is_temporary_table_name() &&
-      !mapper.is_internal_table_name()) {
-    mrn_db_manager->drop(name);
   }
 
   DBUG_RETURN(error);
