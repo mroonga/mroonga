@@ -28,5 +28,5 @@ if (!$mariadb) {
 }
 
 if (!$fractional_seconds) {
-  skip fractional seconds in time values are available in MySQL version 5.6 or later or MariaDB;
+  --skip fractional seconds in time values are available in MySQL version 5.6 or later or MariaDB
 }

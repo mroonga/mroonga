@@ -17,5 +17,5 @@
 --source ../../include/mroonga/check_version.inc
 
 if (!$version_5_7) {
-  skip This test is for MySQL version 5.7.x;
+  --skip This test is for MySQL version 5.7.x
 }

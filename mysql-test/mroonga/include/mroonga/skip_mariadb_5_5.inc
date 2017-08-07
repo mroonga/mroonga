@@ -19,6 +19,6 @@
 
 if ($version_5_5) {
   if ($mariadb) {
-    skip This test is not for MariaDB 5.5.x;
+    --skip This test is not for MariaDB 5.5.x
   }
 }

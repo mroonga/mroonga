@@ -19,6 +19,6 @@
 
 if ($version_5_7) {
   if (!$mariadb) {
-    skip This test is not for MySQL 5.7.x;
+    --skip This test is not for MySQL 5.7.x
   }
 }

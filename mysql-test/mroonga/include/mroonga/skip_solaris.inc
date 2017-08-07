@@ -17,5 +17,5 @@
 --source ../../include/mroonga/check_solaris.inc
 
 if ($version_compile_os_solaris) {
-  skip This test is not for Solaris;
+  --skip This test is not for Solaris
 }

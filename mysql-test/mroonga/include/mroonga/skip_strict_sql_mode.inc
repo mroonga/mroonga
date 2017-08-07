@@ -17,5 +17,5 @@
 --source ../../include/mroonga/check_strict_sql_mode.inc
 
 if ($strict_sql_mode) {
-  skip This test is not for STRICT_ALL_TABLES nor STRICT_TRANS_TABLES;
+  --skip This test is not for STRICT_ALL_TABLES nor STRICT_TRANS_TABLES
 }

@@ -17,5 +17,5 @@
 --source ../../include/mroonga/check_version.inc
 
 if (!$version_5_7_or_later) {
-  skip This test is for MySQL version 5.7.x or later or MariaDB 10.0.x or later;
+  --skip This test is for MySQL version 5.7.x or later or MariaDB 10.0.x or later
 }

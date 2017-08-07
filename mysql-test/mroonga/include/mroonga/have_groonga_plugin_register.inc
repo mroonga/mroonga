@@ -18,5 +18,5 @@
 
 if ($libgroonga_embedded) {
   --source ../../include/mroonga/have_mroonga_deinit.inc
-  skip "This test requires plugin_register of Groonga. libgroonga embedded build doesn't support it.";
+  --skip This test requires plugin_register of Groonga. libgroonga embedded build doesn't support it.
 }

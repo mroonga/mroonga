@@ -18,9 +18,9 @@
 --source ../../include/mroonga/check_mariadb.inc
 
 if ($mariadb) {
-  skip This test is for MySQL version 5.7.x or later;
+  --skip This test is for MySQL version 5.7.x or later
 }
 
 if (!$version_5_7_or_later) {
-  skip This test is for MySQL version 5.7.x or later;
+  --skip This test is for MySQL version 5.7.x or later
 }

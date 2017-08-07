@@ -17,5 +17,5 @@
 --source ../../include/mroonga/check_osx.inc
 
 if ($VERSION_COMPILE_OS_OSX) {
-  skip This test is not for OSX;
+  --skip This test is not for OSX
 }
