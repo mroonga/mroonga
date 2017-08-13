@@ -3545,6 +3545,12 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
 #endif
 
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (!field->stored_in_db()) {
+      continue;
+    }
+#endif
+
     grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
     if (!find_column_flags(field, tmp_share, i, &col_flags)) {
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
@@ -3986,6 +3992,22 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
                              field->field_name)) {
       DBUG_RETURN(0);
     }
+
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (!table->field[field->field_index]->stored_in_db()) {
+      my_error(ER_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN, MYF(0));
+      DBUG_RETURN(HA_ERR_UNSUPPORTED);
+    }
+  } else {
+    int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
+    for (j = 0; j < n_key_parts; j++) {
+      Field *field = key_info->key_part[j].field;
+      if (!table->field[field->field_index]->stored_in_db()) {
+        my_error(ER_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN, MYF(0));
+        DBUG_RETURN(HA_ERR_UNSUPPORTED);
+      }
+    }
+#endif
   }
 
   error = mrn_change_encoding(ctx, system_charset_info);
@@ -4700,6 +4722,13 @@ int ha_mroonga::storage_open_columns(void)
     if (strcmp(MRN_COLUMN_NAME_ID, column_name.mysql_name()) == 0) {
       continue;
     }
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (!field->stored_in_db()) {
+      grn_columns[i] = NULL;
+      grn_column_ranges[i] = NULL;
+      continue;
+    }
+#endif
 
     grn_columns[i] = grn_obj_column(ctx,
                                     grn_table,
@@ -5939,6 +5968,12 @@ int ha_mroonga::storage_write_row(uchar *buf)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (!field->stored_in_db()) {
+      continue;
+    }
+#endif
+
     if (field->is_null()) continue;
 
     mrn::ColumnName column_name(field->field_name);
@@ -6036,6 +6071,12 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
     if (field->is_null())
       continue;
+
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (!field->stored_in_db()) {
+      continue;
+    }
+#endif
 
     mrn::ColumnName column_name(field->field_name);
 
@@ -6582,6 +6623,12 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
 
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
+
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (!field->stored_in_db()) {
+      continue;
+    }
+#endif
 
     if (!bitmap_is_set(table->write_set, field->field_index))
       continue;
@@ -11251,6 +11298,10 @@ void ha_mroonga::storage_store_field_column(Field *field, bool is_primary_key,
 {
   MRN_DBUG_ENTER_METHOD();
 
+  if (!grn_columns[nth_column]) {
+    DBUG_VOID_RETURN;
+  }
+
   grn_obj *column = grn_columns[nth_column];
   grn_id range_id = grn_obj_get_range(ctx, column);
   grn_obj *range = grn_column_ranges[nth_column];
@@ -11386,6 +11437,11 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (!field->stored_in_db()) {
+      continue;
+    }
+#endif
     if (
       !bitmap_is_set(table->read_set, field->field_index) &&
       !bitmap_is_set(table->write_set, field->field_index) &&
@@ -15035,8 +15091,14 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
     }
 
     Field *field = altered_table->s->field[i];
-    mrn::ColumnName column_name(field->field_name);
 
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (!field->stored_in_db()) {
+      continue;
+    }
+#endif
+
+    mrn::ColumnName column_name(field->field_name);
     int error = mrn_add_column_param(tmp_share, field, i);
     if (error) {
       have_error = true;
