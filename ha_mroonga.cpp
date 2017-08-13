@@ -3332,6 +3332,24 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 {
   MRN_DBUG_ENTER_METHOD();
 
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+  {
+    uint i;
+    uint n_keys = table->s->keys;
+    for (i = 0; i < n_keys; i++) {
+      KEY *key_info = &(table->s->key_info[i]);
+      int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
+      for (j = 0; j < n_key_parts; j++) {
+        Field *field = key_info->key_part[j].field;
+        if (!table->field[field->field_index]->stored_in_db()) {
+          my_error(ER_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN, MYF(0));
+          DBUG_RETURN(HA_ERR_UNSUPPORTED);
+        }
+      }
+    }
+  }
+#endif
+
   int error = 0;
   error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
