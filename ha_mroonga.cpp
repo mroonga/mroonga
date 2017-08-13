@@ -2808,6 +2808,9 @@ ulonglong ha_mroonga::wrapper_table_flags() const
 #ifdef HA_CAN_FULLTEXT_EXT
   table_flags |= HA_CAN_FULLTEXT_EXT;
 #endif
+#ifdef HA_GENERATED_COLUMNS
+  table_flags |= HA_GENERATED_COLUMNS;
+#endif
   DBUG_RETURN(table_flags);
 }
 
@@ -2836,6 +2839,9 @@ ulonglong ha_mroonga::storage_table_flags() const
 #endif
 #ifdef HA_CAN_FULLTEXT_EXT
   flags |= HA_CAN_FULLTEXT_EXT;
+#endif
+#ifdef HA_GENERATED_COLUMNS
+  flags |= HA_GENERATED_COLUMNS;
 #endif
   DBUG_RETURN(flags);
 }
