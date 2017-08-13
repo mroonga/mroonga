@@ -35,6 +35,9 @@ namespace mrn {
     void record_target(grn_id id, grn_id target_id);
     void finish(grn_id id);
 
+    void enable_recording();
+    void disable_recording();
+
     grn_hash *collect_processing_table_names();
 
     int repair(const char *table_name, size_t table_name_size);
@@ -50,6 +53,7 @@ namespace mrn {
       grn_obj *table_;
       grn_obj *record_;
     } columns_;
+    bool is_enabled_recording_;
   };
 }
 

@@ -471,6 +471,33 @@ value.
 
 TODO:
 
+.. _server-variable-mroonga-enable-operations-recording:
+
+``mroonga_enable_operations_recording``
+---------------------------------------
+
+Whether recording operations for recover is enabled or not. 
+The default value is ``ON`` that means operations are recording 
+to Groonga database. 
+It needs to reopen the database with `` FLUSH TABLES`` in order 
+to reflect the variable is changed.
+
+Here is an example SQL to disable operations recording::
+
+
+  mysql> SET GLOBAL mroonga_enable_operations_recording = false;
+  Query OK, 0 rows affected (0.00 sec)
+
+  mysql> FLUSH TABLES;
+  Query OK, 0 rows affected (0.00 sec)
+
+  mysql> SHOW GLOBAL VARIABLES LIKE 'mroonga_enable_operations_recording';
+  +-------------------------------------+-------+
+  | Variable_name                       | Value |
+  +-------------------------------------+-------+
+  | mroonga_enable_operations_recording | OFF   |
+  +-------------------------------------+-------+
+
 .. _server-variable-mroonga-vector-column-delimiter:
 
 ``mroonga_vector_column_delimiter``

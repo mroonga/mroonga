@@ -623,6 +623,7 @@ static char *mrn_vector_column_delimiter = NULL;
 static mrn_bool mrn_libgroonga_support_zlib = false;
 static mrn_bool mrn_libgroonga_support_lz4 = false;
 static mrn_bool mrn_libgroonga_support_zstd = false;
+static mrn_bool mrn_enable_operations_recording = true;
 #ifdef MRN_SUPPORT_THDVAR_SET
 static const char *mrn_boolean_mode_sytnax_flag_names[] = {
   "DEFAULT",
@@ -1165,6 +1166,25 @@ static MYSQL_SYSVAR_BOOL(libgroonga_support_zstd, mrn_libgroonga_support_zstd,
                          NULL,
                          grn_check_zstd_support());
 
+static void mrn_enable_operations_recording_update(THD *thd, struct st_mysql_sys_var *var,
+                                                   void *var_ptr, const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const bool new_value = *static_cast<const bool *>(save);
+  bool *old_value_ptr = static_cast<bool *>(var_ptr);
+
+  *old_value_ptr = new_value;
+
+  DBUG_VOID_RETURN;
+}
+
+static MYSQL_SYSVAR_BOOL(enable_operations_recording, mrn_enable_operations_recording,
+                         PLUGIN_VAR_RQCMDARG,
+                         "Whether recording operations for recovery is enabled or not",
+                         NULL,
+                         mrn_enable_operations_recording_update,
+                         true);
+
 #ifdef MRN_SUPPORT_THDVAR_SET
 static MYSQL_THDVAR_SET(boolean_mode_syntax_flags,
                         PLUGIN_VAR_RQCMDARG,
@@ -1224,6 +1244,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(max_n_records_for_estimate),
   MYSQL_SYSVAR(libgroonga_embedded),
   MYSQL_SYSVAR(query_log_file),
+  MYSQL_SYSVAR(enable_operations_recording),
   NULL
 };
 
@@ -4116,6 +4137,11 @@ int ha_mroonga::ensure_database_open(const char *name, mrn::Database **db)
 
   delete operations_;
   operations_ = new mrn::Operations(ctx);
+  if (mrn_enable_operations_recording) {
+    operations_->enable_recording();
+  } else {
+    operations_->disable_recording();
+  }
 
   DBUG_RETURN(error);
 }

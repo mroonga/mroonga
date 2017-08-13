@@ -70,6 +70,8 @@ namespace mrn {
       columns_.record_ = grn_ctx_get(ctx_, TABLE_NAME "." COLUMN_RECORD_NAME, -1);
     }
 
+    is_enabled_recording_ = true;
+
     DBUG_VOID_RETURN;
   }
 
@@ -104,6 +106,10 @@ namespace mrn {
                            const char *table_name, size_t table_name_size) {
     MRN_DBUG_ENTER_METHOD();
 
+    if (!is_enabled_recording_) {
+      DBUG_RETURN(GRN_ID_NIL);
+    }
+
     grn_id id = grn_table_add(ctx_, table_, NULL, 0, NULL);
 
     GRN_TEXT_SETS(ctx_, &text_buffer_, type);
@@ -118,6 +124,10 @@ namespace mrn {
   void Operations::record_target(grn_id id, grn_id record_id) {
     MRN_DBUG_ENTER_METHOD();
 
+    if (!is_enabled_recording_) {
+      DBUG_VOID_RETURN;
+    }
+
     GRN_UINT32_SET(ctx_, &id_buffer_, record_id);
     grn_obj_set_value(ctx_, columns_.record_,  id, &id_buffer_, GRN_OBJ_SET);
 
@@ -127,7 +137,27 @@ namespace mrn {
   void Operations::finish(grn_id id) {
     MRN_DBUG_ENTER_METHOD();
 
+    if (!is_enabled_recording_) {
+      DBUG_VOID_RETURN;
+    }
+
     grn_table_delete_by_id(ctx_, table_, id);
+
+    DBUG_VOID_RETURN;
+  }
+
+  void Operations::enable_recording() {
+    MRN_DBUG_ENTER_METHOD();
+
+    is_enabled_recording_ = true;
+
+    DBUG_VOID_RETURN;
+  }
+
+  void Operations::disable_recording() {
+    MRN_DBUG_ENTER_METHOD();
+
+    is_enabled_recording_ = false;
 
     DBUG_VOID_RETURN;
   }
