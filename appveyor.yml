@@ -2,7 +2,7 @@ version: "{build}"
 clone_depth: 10
 environment:
   global:
-    MARIADB_VERSION: 10.1.25
+    MARIADB_VERSION: 10.1.26
   matrix:
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
