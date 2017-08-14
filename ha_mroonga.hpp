@@ -262,27 +262,6 @@ extern "C" {
 #  define MRN_HAVE_PSI_SERVER
 #endif
 
-#if (defined(HA_CAN_VIRTUAL_COLUMNS) || defined(HA_GENERATED_COLUMNS))
-#  define MRN_SUPPORT_GENERATED_COLUMNS
-#endif
-
-#if defined(HA_CAN_VIRTUAL_COLUMNS)
-#  define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
-     (!field->stored_in_db())
-#elif defined(HA_GENERATED_COLUMNS)
-#  define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
-     (!field->stored_in_db)
-#endif
-
-#if defined(HA_CAN_VIRTUAL_COLUMNS)
-#  define MRN_GENERATED_COLUMNS_UNSUPPORTED_CREATE_INDEX_ERROR \
-     (my_error(ER_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN, MYF(0)))
-#elif defined(HA_GENERATED_COLUMNS)
-#  define MRN_GENERATED_COLUMNS_UNSUPPORTED_CREATE_INDEX_ERROR \
-      (my_error(ER_UNSUPPORTED_ACTION_ON_GENERATED_COLUMN, MYF(0), \
-                "Creating index/key"))
-#endif
-
 class ha_mroonga;
 
 /* structs */

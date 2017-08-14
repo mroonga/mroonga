@@ -3332,6 +3332,11 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 {
   MRN_DBUG_ENTER_METHOD();
 
+  int error = 0;
+  error = mrn_change_encoding(ctx, system_charset_info);
+  if (error)
+    DBUG_RETURN(error);
+
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
   {
     uint i;
@@ -3341,19 +3346,20 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
       int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
       for (j = 0; j < n_key_parts; j++) {
         Field *field = key_info->key_part[j].field;
-        if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(table->field[field->field_index])) {
-          MRN_GENERATED_COLUMNS_UNSUPPORTED_CREATE_INDEX_ERROR;
-          DBUG_RETURN(HA_ERR_UNSUPPORTED);
+        if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+          char error_message[MRN_MESSAGE_BUFFER_SIZE];
+          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                   "mroonga: wrapper: failed to create index: "
+                   ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
+                   field->field_name);
+          error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
+          my_message(error, error_message, MYF(0));
+          DBUG_RETURN(error);
         }
       }
     }
   }
 #endif
-
-  int error = 0;
-  error = mrn_change_encoding(ctx, system_charset_info);
-  if (error)
-    DBUG_RETURN(error);
 
   grn_obj *grn_index_table;
   mrn::PathMapper mapper(name);
@@ -4011,18 +4017,30 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
       DBUG_RETURN(0);
     }
 
-#ifdef MRN_SUPPORT_GENERATED_COLUMNS
-    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(table->field[field->field_index])) {
-      MRN_GENERATED_COLUMNS_UNSUPPORTED_CREATE_INDEX_ERROR;
-      DBUG_RETURN(HA_ERR_UNSUPPORTED);
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      char error_message[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+               "mroonga: storage: failed to create index: "
+               ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
+               field->field_name);
+      error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
+      my_message(error, error_message, MYF(0));
+      DBUG_RETURN(error);
     }
   } else {
     int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
     for (j = 0; j < n_key_parts; j++) {
       Field *field = key_info->key_part[j].field;
-      if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(table->field[field->field_index])) {
-        MRN_GENERATED_COLUMNS_UNSUPPORTED_CREATE_INDEX_ERROR;
-        DBUG_RETURN(HA_ERR_UNSUPPORTED);
+      if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+        char error_message[MRN_MESSAGE_BUFFER_SIZE];
+        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                 "mroonga: storage: failed to create index: "
+                 ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
+                 field->field_name);
+        error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
+        my_message(error, error_message, MYF(0));
+        DBUG_RETURN(error);
       }
     }
 #endif
@@ -14732,6 +14750,25 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   error = mrn_change_encoding(ctx, system_charset_info);
   if (error)
     DBUG_RETURN(true);
+
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+  {
+    uint n_columns = altered_table->s->fields;
+    for (i = 0; i < n_columns; ++i) {
+      Field *field = altered_table->field[i];
+      if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+        char error_message[MRN_MESSAGE_BUFFER_SIZE];
+        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                 "mroonga: wrapper: failed to create index: "
+                 ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
+                 field->field_name);
+        error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
+        my_message(error, error_message, MYF(0));
+        DBUG_RETURN(true);
+      }
+    }
+  }
+#endif
 
   DBUG_PRINT("info", ("mroonga: table_name=%s", share->table_name));
   mrn::PathMapper mapper(share->table_name);
