@@ -19,10 +19,10 @@
 
 #pragma once
 
-#include <groonga.h>
-
 #include <mrn_mysql.h>
 #include <mrn_mysql_compat.h>
+
+#include <groonga.h>
 
 namespace mrn {
   class QueryParser {

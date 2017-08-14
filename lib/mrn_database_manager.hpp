@@ -22,8 +22,9 @@
 #ifndef MRN_DATABASE_MANAGER_HPP_
 #define MRN_DATABASE_MANAGER_HPP_
 
-#include <groonga.h>
 #include "mrn_database.hpp"
+
+#include <groonga.h>
 
 namespace mrn {
   class DatabaseManager {
