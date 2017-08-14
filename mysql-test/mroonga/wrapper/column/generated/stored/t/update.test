@@ -15,7 +15,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source include/have_innodb.inc
---source ../../../../../include/mroonga/have_mysql_5_7_or_later.inc
+--source ../../../../../include/mroonga/have_version_5_7_or_later.inc
+--source ../../../../../include/mroonga/skip_mariadb_10_1_or_earlier.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
