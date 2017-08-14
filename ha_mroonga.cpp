@@ -14542,7 +14542,9 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
     Alter_inplace_info::DROP_INDEX |
     Alter_inplace_info::ADD_UNIQUE_INDEX |
     Alter_inplace_info::DROP_UNIQUE_INDEX |
-    Alter_inplace_info::ADD_COLUMN |
+    MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN |
+    MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN |
+    // MRN_ALTER_INPLACE_INFO_ADD_STORED_VIRTUAL_COLUMN | // TODO
     Alter_inplace_info::DROP_COLUMN |
     Alter_inplace_info::ALTER_COLUMN_NAME;
   if (ha_alter_info->handler_flags & explicitly_unsupported_flags) {

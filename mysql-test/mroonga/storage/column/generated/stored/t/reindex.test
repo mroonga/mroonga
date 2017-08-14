@@ -32,8 +32,8 @@ INSERT INTO logs(id, record) VALUES (1, '{"level": "info", "message": "start"}')
 INSERT INTO logs(id, record) VALUES (2, '{"level": "info", "message": "restart"}');
 INSERT INTO logs(id, record) VALUES (3, '{"level": "warn", "message": "abort"}');
 
-ALTER TABLE logs disable keys;
-ALTER TABLE logs enable keys;
+ALTER TABLE logs DISABLE KEYS;
+ALTER TABLE logs ENABLE KEYS;
 
 SELECT * FROM logs WHERE MATCH(message) AGAINST("ar" IN BOOLEAN MODE);
 
