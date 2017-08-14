@@ -3332,7 +3332,7 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
 {
   MRN_DBUG_ENTER_METHOD();
 
-#ifdef HA_CAN_VIRTUAL_COLUMNS
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
   {
     uint i;
     uint n_keys = table->s->keys;
@@ -3341,8 +3341,8 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
       int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
       for (j = 0; j < n_key_parts; j++) {
         Field *field = key_info->key_part[j].field;
-        if (!table->field[field->field_index]->stored_in_db()) {
-          my_error(ER_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN, MYF(0));
+        if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(table->field[field->field_index])) {
+          MRN_GENERATED_COLUMNS_UNSUPPORTED_CREATE_INDEX_ERROR;
           DBUG_RETURN(HA_ERR_UNSUPPORTED);
         }
       }
@@ -3563,8 +3563,8 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     }
 #endif
 
-#ifdef HA_CAN_VIRTUAL_COLUMNS
-    if (!field->stored_in_db()) {
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
       continue;
     }
 #endif
@@ -4011,17 +4011,17 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
       DBUG_RETURN(0);
     }
 
-#ifdef HA_CAN_VIRTUAL_COLUMNS
-    if (!table->field[field->field_index]->stored_in_db()) {
-      my_error(ER_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN, MYF(0));
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(table->field[field->field_index])) {
+      MRN_GENERATED_COLUMNS_UNSUPPORTED_CREATE_INDEX_ERROR;
       DBUG_RETURN(HA_ERR_UNSUPPORTED);
     }
   } else {
     int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
     for (j = 0; j < n_key_parts; j++) {
       Field *field = key_info->key_part[j].field;
-      if (!table->field[field->field_index]->stored_in_db()) {
-        my_error(ER_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN, MYF(0));
+      if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(table->field[field->field_index])) {
+        MRN_GENERATED_COLUMNS_UNSUPPORTED_CREATE_INDEX_ERROR;
         DBUG_RETURN(HA_ERR_UNSUPPORTED);
       }
     }
@@ -4740,8 +4740,8 @@ int ha_mroonga::storage_open_columns(void)
     if (strcmp(MRN_COLUMN_NAME_ID, column_name.mysql_name()) == 0) {
       continue;
     }
-#ifdef HA_CAN_VIRTUAL_COLUMNS
-    if (!field->stored_in_db()) {
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
       grn_columns[i] = NULL;
       grn_column_ranges[i] = NULL;
       continue;
@@ -5986,8 +5986,8 @@ int ha_mroonga::storage_write_row(uchar *buf)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
-#ifdef HA_CAN_VIRTUAL_COLUMNS
-    if (!field->stored_in_db()) {
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
       continue;
     }
 #endif
@@ -6090,8 +6090,8 @@ int ha_mroonga::storage_write_row(uchar *buf)
     if (field->is_null())
       continue;
 
-#ifdef HA_CAN_VIRTUAL_COLUMNS
-    if (!field->stored_in_db()) {
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
       continue;
     }
 #endif
@@ -6642,8 +6642,8 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
-#ifdef HA_CAN_VIRTUAL_COLUMNS
-    if (!field->stored_in_db()) {
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
       continue;
     }
 #endif
@@ -6721,6 +6721,13 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   GRN_VOID_INIT(&colbuf);
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
+
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      continue;
+    }
+#endif
+
     if (bitmap_is_set(table->write_set, field->field_index)) {
       mrn::DebugColumnAccess debug_column_access(table, table->read_set);
       DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,field->field_index));
@@ -11455,8 +11462,8 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
-#ifdef HA_CAN_VIRTUAL_COLUMNS
-    if (!field->stored_in_db()) {
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
       continue;
     }
 #endif
@@ -15110,8 +15117,8 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
 
     Field *field = altered_table->s->field[i];
 
-#ifdef HA_CAN_VIRTUAL_COLUMNS
-    if (!field->stored_in_db()) {
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
       continue;
     }
 #endif
