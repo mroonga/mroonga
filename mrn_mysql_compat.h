@@ -436,7 +436,7 @@
 #  define MRN_SUPPORT_GENERATED_COLUMNS
 #endif
 
-#if defined(HA_CAN_VIRTUAL_COLUMNS)
+#ifdef MRN_MARIADB_P
 #  if (MYSQL_VERSION_ID >= 100200)
 #    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
        (!field->stored_in_db())
@@ -446,7 +446,7 @@
 #  else
 #    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) false
 #  endif
-#elif defined(HA_GENERATED_COLUMNS)
+#else
 #  if (MYSQL_VERSION_ID >= 50708)
 #    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
        (field->is_virtual_gcol())
