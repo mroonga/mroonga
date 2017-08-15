@@ -11,7 +11,8 @@ INSERT INTO logs(id, record)
 VALUES (2, '{"level": "info", "message": "start server"}');
 INSERT INTO logs(id, record)
 VALUES (3, '{"level": "warn", "message": "abort server"}');
-EXPLAIN SELECT * FROM logs WHERE level = 'info';
-id	select_type	table	type	possible_keys	key	key_len	ref	rows	Extra
-1	SIMPLE	logs	ref	level	level	1023	const	1	Using where
+SELECT * FROM logs WHERE level = 'info';
+id	record	level
+1	{"level": "info", "message": "start server"}	info
+2	{"level": "info", "message": "start server"}	info
 DROP TABLE logs;

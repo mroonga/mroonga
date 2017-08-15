@@ -3337,30 +3337,6 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   if (error)
     DBUG_RETURN(error);
 
-#ifdef MRN_SUPPORT_GENERATED_COLUMNS
-  {
-    uint i;
-    uint n_keys = table->s->keys;
-    for (i = 0; i < n_keys; i++) {
-      KEY *key_info = &(table->s->key_info[i]);
-      int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
-      for (j = 0; j < n_key_parts; j++) {
-        Field *field = key_info->key_part[j].field;
-        if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
-          char error_message[MRN_MESSAGE_BUFFER_SIZE];
-          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-                   "mroonga: wrapper: failed to create index: "
-                   ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
-                   field->field_name);
-          error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
-          my_message(error, error_message, MYF(0));
-          DBUG_RETURN(error);
-        }
-      }
-    }
-  }
-#endif
-
   grn_obj *grn_index_table;
   mrn::PathMapper mapper(name);
   const char *grn_table_name = mapper.table_name();

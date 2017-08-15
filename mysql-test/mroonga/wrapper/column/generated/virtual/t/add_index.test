@@ -26,7 +26,8 @@ DROP TABLE IF EXISTS logs;
 CREATE TABLE logs (
   id INT PRIMARY KEY,
   record JSON,
-  level VARCHAR(255) GENERATED ALWAYS AS (json_extract(`record`, '$.level')) VIRTUAL
+  level VARCHAR(255) GENERATED ALWAYS AS
+    (json_unquote(json_extract(`record`, '$.level'))) VIRTUAL
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COMMENT = 'ENGINE "InnoDB"';
 
 INSERT INTO logs(id, record)
@@ -39,7 +40,7 @@ INSERT INTO logs(id, record)
 INSERT INTO logs(id, record)
      VALUES (3, '{"level": "warn", "message": "abort server"}');
 
-EXPLAIN SELECT * FROM logs WHERE level = 'info';
+SELECT * FROM logs WHERE level = 'info';
 
 DROP TABLE logs;
 
