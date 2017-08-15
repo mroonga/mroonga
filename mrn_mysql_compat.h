@@ -432,4 +432,30 @@
 #  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN 0
 #endif
 
+#if (defined(HA_CAN_VIRTUAL_COLUMNS) || defined(HA_GENERATED_COLUMNS))
+#  define MRN_SUPPORT_GENERATED_COLUMNS
+#endif
+
+#if defined(HA_CAN_VIRTUAL_COLUMNS)
+#  if (MYSQL_VERSION_ID >= 100200)
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
+       (!field->stored_in_db())
+#  elif (MYSQL_VERSION_ID >= 50500)
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
+       (!field->stored_in_db)
+#  else
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) false
+#  endif
+#elif defined(HA_GENERATED_COLUMNS)
+#  if (MYSQL_VERSION_ID >= 50708)
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
+       (field->is_virtual_gcol())
+#  elif (MYSQL_VERSION_ID >= 50706)
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
+       (!field->stored_in_db)
+#  else
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) false
+#  endif
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

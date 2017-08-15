@@ -3337,6 +3337,30 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   if (error)
     DBUG_RETURN(error);
 
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+  {
+    uint i;
+    uint n_keys = table->s->keys;
+    for (i = 0; i < n_keys; i++) {
+      KEY *key_info = &(table->s->key_info[i]);
+      int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
+      for (j = 0; j < n_key_parts; j++) {
+        Field *field = key_info->key_part[j].field;
+        if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+          char error_message[MRN_MESSAGE_BUFFER_SIZE];
+          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                   "mroonga: wrapper: failed to create index: "
+                   ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
+                   field->field_name);
+          error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
+          my_message(error, error_message, MYF(0));
+          DBUG_RETURN(error);
+        }
+      }
+    }
+  }
+#endif
+
   grn_obj *grn_index_table;
   mrn::PathMapper mapper(name);
   const char *grn_table_name = mapper.table_name();
@@ -3542,6 +3566,12 @@ int ha_mroonga::storage_create(const char *name, TABLE *table,
     if (error) {
       grn_obj_remove(ctx, table_obj);
       DBUG_RETURN(error);
+    }
+#endif
+
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      continue;
     }
 #endif
 
@@ -3986,6 +4016,34 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
                              field->field_name)) {
       DBUG_RETURN(0);
     }
+
+#ifdef HA_CAN_VIRTUAL_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      char error_message[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+               "mroonga: storage: failed to create index: "
+               ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
+               field->field_name);
+      error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
+      my_message(error, error_message, MYF(0));
+      DBUG_RETURN(error);
+    }
+  } else {
+    int j, n_key_parts = KEY_N_KEY_PARTS(key_info);
+    for (j = 0; j < n_key_parts; j++) {
+      Field *field = key_info->key_part[j].field;
+      if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+        char error_message[MRN_MESSAGE_BUFFER_SIZE];
+        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                 "mroonga: storage: failed to create index: "
+                 ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
+                 field->field_name);
+        error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
+        my_message(error, error_message, MYF(0));
+        DBUG_RETURN(error);
+      }
+    }
+#endif
   }
 
   error = mrn_change_encoding(ctx, system_charset_info);
@@ -4700,6 +4758,13 @@ int ha_mroonga::storage_open_columns(void)
     if (strcmp(MRN_COLUMN_NAME_ID, column_name.mysql_name()) == 0) {
       continue;
     }
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      grn_columns[i] = NULL;
+      grn_column_ranges[i] = NULL;
+      continue;
+    }
+#endif
 
     grn_columns[i] = grn_obj_column(ctx,
                                     grn_table,
@@ -5939,6 +6004,12 @@ int ha_mroonga::storage_write_row(uchar *buf)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      continue;
+    }
+#endif
+
     if (field->is_null()) continue;
 
     mrn::ColumnName column_name(field->field_name);
@@ -6036,6 +6107,12 @@ int ha_mroonga::storage_write_row(uchar *buf)
 
     if (field->is_null())
       continue;
+
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      continue;
+    }
+#endif
 
     mrn::ColumnName column_name(field->field_name);
 
@@ -6583,6 +6660,12 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      continue;
+    }
+#endif
+
     if (!bitmap_is_set(table->write_set, field->field_index))
       continue;
 
@@ -6656,6 +6739,13 @@ int ha_mroonga::storage_update_row(const uchar *old_data, uchar *new_data)
   GRN_VOID_INIT(&colbuf);
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
+
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      continue;
+    }
+#endif
+
     if (bitmap_is_set(table->write_set, field->field_index)) {
       mrn::DebugColumnAccess debug_column_access(table, table->read_set);
       DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,field->field_index));
@@ -11251,6 +11341,10 @@ void ha_mroonga::storage_store_field_column(Field *field, bool is_primary_key,
 {
   MRN_DBUG_ENTER_METHOD();
 
+  if (!grn_columns[nth_column]) {
+    DBUG_VOID_RETURN;
+  }
+
   grn_obj *column = grn_columns[nth_column];
   grn_id range_id = grn_obj_get_range(ctx, column);
   grn_obj *range = grn_column_ranges[nth_column];
@@ -11386,6 +11480,11 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      continue;
+    }
+#endif
     if (
       !bitmap_is_set(table->read_set, field->field_index) &&
       !bitmap_is_set(table->write_set, field->field_index) &&
@@ -14652,6 +14751,25 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   if (error)
     DBUG_RETURN(true);
 
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+  {
+    uint n_columns = altered_table->s->fields;
+    for (i = 0; i < n_columns; ++i) {
+      Field *field = altered_table->field[i];
+      if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+        char error_message[MRN_MESSAGE_BUFFER_SIZE];
+        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+                 "mroonga: wrapper: failed to create index: "
+                 ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
+                 field->field_name);
+        error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
+        my_message(error, error_message, MYF(0));
+        DBUG_RETURN(true);
+      }
+    }
+  }
+#endif
+
   DBUG_PRINT("info", ("mroonga: table_name=%s", share->table_name));
   mrn::PathMapper mapper(share->table_name);
   n_keys = ha_alter_info->index_drop_count;
@@ -15035,8 +15153,14 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
     }
 
     Field *field = altered_table->s->field[i];
-    mrn::ColumnName column_name(field->field_name);
 
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
+      continue;
+    }
+#endif
+
+    mrn::ColumnName column_name(field->field_name);
     int error = mrn_add_column_param(tmp_share, field, i);
     if (error) {
       have_error = true;
