@@ -1,4 +1,4 @@
-# Copyright(C) 2017 Naoya Murakami <naoya@createfield.com>
+# Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,8 +15,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source include/have_innodb.inc
---source ../../../../../../include/mroonga/have_mariadb_10_2_or_later.inc
---source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_version_5_7_or_later.inc
+--source ../../../../../include/mroonga/skip_mariadb_10_1_or_earlier.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS logs;
@@ -25,12 +26,21 @@ DROP TABLE IF EXISTS logs;
 CREATE TABLE logs (
   id INT PRIMARY KEY,
   record JSON,
-  message VARCHAR(255) GENERATED ALWAYS AS (json_extract(`record`, '$.message')) VIRTUAL
+  level VARCHAR(255) GENERATED ALWAYS AS (json_extract(`record`, '$.level')) VIRTUAL
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COMMENT = 'ENGINE "InnoDB"';
 
---error 16509
-ALTER TABLE logs ADD FULLTEXT INDEX (message);
+INSERT INTO logs(id, record)
+     VALUES (1, '{"level": "info", "message": "start server"}');
+
+ALTER TABLE logs ADD INDEX (level);
+
+INSERT INTO logs(id, record)
+     VALUES (2, '{"level": "info", "message": "start server"}');
+INSERT INTO logs(id, record)
+     VALUES (3, '{"level": "warn", "message": "abort server"}');
+
+EXPLAIN SELECT * FROM logs WHERE level = 'info';
 
 DROP TABLE logs;
 
---source ../../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc

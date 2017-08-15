@@ -417,7 +417,7 @@
 #define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) \
   my_free(variable_name)
 
-#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203) || \
+#if ((defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203)) || \
   (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50711)
 #  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN \
   Alter_inplace_info::ADD_VIRTUAL_COLUMN

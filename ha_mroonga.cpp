@@ -14751,25 +14751,6 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   if (error)
     DBUG_RETURN(true);
 
-#ifdef MRN_SUPPORT_GENERATED_COLUMNS
-  {
-    uint n_columns = altered_table->s->fields;
-    for (i = 0; i < n_columns; ++i) {
-      Field *field = altered_table->field[i];
-      if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
-        char error_message[MRN_MESSAGE_BUFFER_SIZE];
-        snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-                 "mroonga: wrapper: failed to create index: "
-                 ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR,
-                 field->field_name);
-        error = ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM;
-        my_message(error, error_message, MYF(0));
-        DBUG_RETURN(true);
-      }
-    }
-  }
-#endif
-
   DBUG_PRINT("info", ("mroonga: table_name=%s", share->table_name));
   mrn::PathMapper mapper(share->table_name);
   n_keys = ha_alter_info->index_drop_count;
