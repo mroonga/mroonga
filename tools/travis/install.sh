@@ -74,11 +74,11 @@ if [ "${MROONGA_BUNDLED}" = "yes" ]; then
       storage/mroonga/vendor/groonga/vendor/plugins/groonga-normalizer-mysql
 else
   curl --silent --location \
-       https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
+       https://raw.githubusercontent.com/groonga/groonga/master/data/travis/setup.sh | sh
   curl --silent --location \
-       https://github.com/groonga/groonga-normalizer-mysql/raw/master/data/travis/setup.sh | sh
+       https://raw.githubusercontent.com/groonga/groonga-normalizer-mysql/master/data/travis/setup.sh | sh
   # curl --silent --location \
-  #      https://github.com/clear-code/cutter/raw/master/data/travis/setup.sh | sh
+  #      https://raw.githubusercontent.com/clear-code/cutter/master/data/travis/setup.sh | sh
 
   if [ ! -f /usr/lib/groonga/plugins/tokenizers/mecab.so ]; then
     sudo apt-get -qq -y install groonga-tokenizer-mecab
