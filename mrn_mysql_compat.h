@@ -468,4 +468,14 @@
 #  endif
 #endif
 
+#ifdef MRN_MARIADB_P
+#  if (MYSQL_VERSION_ID >= 100203)
+#    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
+       (table->update_virtual_field(field))
+#  else
+#    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
+       (field->vcol_info->expr_item->save_in_field(field, 0))
+#  endif
+#endif
+
 #endif /* MRN_MYSQL_COMPAT_H_ */

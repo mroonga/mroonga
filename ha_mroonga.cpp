@@ -15184,7 +15184,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
         GRN_VOID_INIT(&new_value);
         while (!(error = storage_rnd_next(table->record[0]))) {
 #ifdef MRN_MARIADB_P
-          altered_table->update_virtual_field(altered_field);
+          MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(altered_table, altered_field);
 #else
           if (update_generated_write_fields(&generated_column_bitmap, altered_table)) {
             error = ER_WRONG_COLUMN_NAME;
