@@ -440,21 +440,41 @@
 #  if (MYSQL_VERSION_ID >= 100200)
 #    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
        (!field->stored_in_db())
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
+       (field->vcol_info && field->vcol_info->is_stored())
 #  elif (MYSQL_VERSION_ID >= 50500)
 #    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
        (!field->stored_in_db)
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
+       (field->vcol_info && field->vcol_info->is_stored())
 #  else
 #    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) false
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) false
 #  endif
 #else
 #  if (MYSQL_VERSION_ID >= 50708)
 #    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
        (field->is_virtual_gcol())
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
+       (field->is_gcol() && !field->is_virtual_gcol())
 #  elif (MYSQL_VERSION_ID >= 50706)
 #    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
        (!field->stored_in_db)
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
+       (field->gcol_info && field->gcol_info->get_field_stored())
 #  else
 #    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) false
+#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) false
+#  endif
+#endif
+
+#ifdef MRN_MARIADB_P
+#  if (MYSQL_VERSION_ID >= 100203)
+#    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
+       (table->update_virtual_field(field))
+#  else
+#    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
+       (field->vcol_info->expr_item->save_in_field(field, 0))
 #  endif
 #endif
 

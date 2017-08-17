@@ -14619,7 +14619,7 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
     Alter_inplace_info::DROP_UNIQUE_INDEX |
     MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN |
     MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN |
-    // MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN | // TODO
+    MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN |
     Alter_inplace_info::DROP_COLUMN |
     Alter_inplace_info::ALTER_COLUMN_NAME;
   if (ha_alter_info->handler_flags & explicitly_unsupported_flags) {
@@ -15151,6 +15151,90 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       my_message(error, ctx->errbuf, MYF(0));
       have_error = true;
     }
+
+#ifdef MRN_SUPPORT_GENERATED_COLUMNS
+    if (MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field)) {
+#ifndef MRN_MARIADB_P
+      MY_BITMAP generated_column_bitmap;
+      if (bitmap_init(&generated_column_bitmap, NULL,
+                      altered_table->s->fields, false)) {
+        error = HA_ERR_OUT_OF_MEM;
+        my_message(ER_OUTOFMEMORY,
+                   "mroonga: storage: "
+                   "failed to allocate memory for getting generated value.",
+                    MYF(0));
+        have_error = true;
+      }
+      if (error) {
+        break;
+      }
+      bitmap_set_bit(&generated_column_bitmap, field->field_index);
+#endif
+
+      Field *altered_field = altered_table->field[i];
+      my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
+      uint n_columns = altered_table->s->fields;
+      for (uint j = 0; j < n_columns; ++j) {
+        Field *field = altered_table->field[j];
+        field->move_field_offset(ptr_diff);
+      }
+
+      if (!(error = storage_rnd_init(true))) {
+        grn_obj new_value;
+        GRN_VOID_INIT(&new_value);
+        while (!(error = storage_rnd_next(table->record[0]))) {
+#ifdef MRN_MARIADB_P
+          MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(altered_table, altered_field);
+#else
+          if (update_generated_write_fields(&generated_column_bitmap, altered_table)) {
+            error = ER_WRONG_COLUMN_NAME;
+            my_message(error,
+                       "mroonga: storage: "
+                       "failed to update generated value for updating column.",
+                       MYF(0));
+            have_error = true;
+            break;
+          }
+#endif
+          error = mrn_change_encoding(ctx, altered_field->charset());
+          if (error) {
+            have_error = true;
+            break;
+          }
+          error = generic_store_bulk(altered_field, &new_value);
+          if (error) {
+             my_message(error,
+                        "mroonga: storage: "
+                        "failed to get generated value for updating column.",
+                        MYF(0));
+            have_error = true;
+            break;
+          }
+          grn_obj_set_value(ctx, column_obj, record_id, &new_value, GRN_OBJ_SET);
+          if (ctx->rc) {
+            my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+            error = ER_ERROR_ON_WRITE;
+            break;
+          }
+        }
+        if (error != HA_ERR_END_OF_FILE) {
+          storage_rnd_end();
+        } else {
+          error = storage_rnd_end();
+        }
+        GRN_OBJ_FIN(ctx, &new_value);
+      }
+
+      for (uint j = 0; j < n_columns; ++j) {
+        Field *field = altered_table->field[j];
+        field->move_field_offset(-ptr_diff);
+      }
+#ifndef MRN_MARIADB_P
+      bitmap_free(&generated_column_bitmap);
+#endif
+    }
+#endif
+
     if (column_obj) {
       grn_obj_unlink(ctx, column_obj);
     }
