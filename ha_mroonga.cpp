@@ -15169,7 +15169,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       if (error) {
         break;
       }
-      mrn::SmartBitmap generated_column_bitmap(&generated_column_bitmap);
+      mrn::SmartBitmap smart_generated_column_bitmap(&generated_column_bitmap);
       bitmap_set_bit(&generated_column_bitmap, field->field_index);
 #  endif
 

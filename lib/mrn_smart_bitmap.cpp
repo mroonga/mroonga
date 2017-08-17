@@ -26,16 +26,16 @@ namespace mrn {
 
   SmartBitmap::~SmartBitmap() {
     if (bitmap_) {
-      my_bitmap_free(bitmap_);
+      bitmap_free(bitmap_);
     }
   }
 
   MY_BITMAP *SmartBitmap::get() {
-    return bitamp_;
+    return bitmap_;
   }
 
   MY_BITMAP *SmartBitmap::release() {
-    MY_BITMAP *bitmap = ;
+    MY_BITMAP *bitmap = bitmap_;
     bitmap_ = NULL;
     return bitmap;
   }
