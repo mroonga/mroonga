@@ -15154,7 +15154,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
     if (MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field)) {
-#ifndef MRN_MARIADB_P
+#  ifndef MRN_MARIADB_P
       MY_BITMAP generated_column_bitmap;
       if (bitmap_init(&generated_column_bitmap, NULL,
                       altered_table->s->fields, false)) {
@@ -15169,7 +15169,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
         break;
       }
       bitmap_set_bit(&generated_column_bitmap, field->field_index);
-#endif
+#  endif
 
       Field *altered_field = altered_table->field[i];
       my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
@@ -15183,9 +15183,9 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
         grn_obj new_value;
         GRN_VOID_INIT(&new_value);
         while (!(error = storage_rnd_next(table->record[0]))) {
-#ifdef MRN_MARIADB_P
+#  ifdef MRN_MARIADB_P
           MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(altered_table, altered_field);
-#else
+#  else
           if (update_generated_write_fields(&generated_column_bitmap, altered_table)) {
             error = ER_WRONG_COLUMN_NAME;
             my_message(error,
@@ -15195,7 +15195,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
             have_error = true;
             break;
           }
-#endif
+#  endif
           error = mrn_change_encoding(ctx, altered_field->charset());
           if (error) {
             have_error = true;
@@ -15229,9 +15229,9 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
         Field *field = altered_table->field[j];
         field->move_field_offset(-ptr_diff);
       }
-#ifndef MRN_MARIADB_P
+#  ifndef MRN_MARIADB_P
       bitmap_free(&generated_column_bitmap);
-#endif
+#  endif
     }
 #endif
 
