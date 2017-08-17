@@ -96,6 +96,7 @@
 #include <mrn_variables.hpp>
 #include <mrn_query_parser.hpp>
 #include <mrn_smart_bitmap.hpp>
+#include <mrn_field_offset_mover.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -15151,6 +15152,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       error = ER_WRONG_COLUMN_NAME;
       my_message(error, ctx->errbuf, MYF(0));
       have_error = true;
+      break;
     }
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
@@ -15162,85 +15164,94 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
         error = HA_ERR_OUT_OF_MEM;
         my_message(ER_OUTOFMEMORY,
                    "mroonga: storage: "
-                   "failed to allocate memory for getting generated value.",
+                   "failed to allocate memory for getting generated value",
                     MYF(0));
         have_error = true;
-      }
-      if (error) {
+        grn_obj_remove(ctx, column_obj);
         break;
       }
       mrn::SmartBitmap smart_generated_column_bitmap(&generated_column_bitmap);
       bitmap_set_bit(&generated_column_bitmap, field->field_index);
 #  endif
 
+      my_ptrdiff_t diff =
+        PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
+      mrn::FieldOffsetMover mover(altered_table, diff);
+
+      error = storage_rnd_init(true);
+      if (error) {
+        have_error = true;
+        grn_obj_remove(ctx, column_obj);
+        break;
+      }
+
       Field *altered_field = altered_table->field[i];
-      my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
-      uint n_columns = altered_table->s->fields;
-      for (uint j = 0; j < n_columns; ++j) {
-        Field *field = altered_table->field[j];
-        field->move_field_offset(ptr_diff);
-      }
+      grn_obj new_value;
+      GRN_VOID_INIT(&new_value);
+      mrn::SmartGrnObj smart_new_value(ctx, &new_value);
+      while (!have_error) {
+        int next_error = storage_rnd_next(table->record[0]);
+        if (next_error == HA_ERR_END_OF_FILE) {
+          break;
+        } else if (next_error != 0) {
+          error = next_error;
+          have_error = true;
+          grn_obj_remove(ctx, column_obj);
+          break;
+        }
 
-      if (!(error = storage_rnd_init(true))) {
-        grn_obj new_value;
-        GRN_VOID_INIT(&new_value);
-        while (!(error = storage_rnd_next(table->record[0]))) {
 #  ifdef MRN_MARIADB_P
-          MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(altered_table, altered_field);
+        MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(altered_table, altered_field);
 #  else
-          if (update_generated_write_fields(&generated_column_bitmap, altered_table)) {
-            error = ER_WRONG_COLUMN_NAME;
-            my_message(error,
-                       "mroonga: storage: "
-                       "failed to update generated value for updating column.",
-                       MYF(0));
-            have_error = true;
-            break;
-          }
+        if (update_generated_write_fields(&generated_column_bitmap, altered_table)) {
+          error = ER_ERROR_ON_WRITE;
+          my_message(error,
+                     "mroonga: storage: "
+                     "failed to update generated value for updating column",
+                     MYF(0));
+          have_error = true;
+          grn_obj_remove(ctx, column_obj);
+          break;
+        }
 #  endif
-          error = mrn_change_encoding(ctx, altered_field->charset());
-          if (error) {
-            have_error = true;
-            break;
-          }
-          error = generic_store_bulk(altered_field, &new_value);
-          if (error) {
-             my_message(error,
-                        "mroonga: storage: "
-                        "failed to get generated value for updating column.",
-                        MYF(0));
-            have_error = true;
-            break;
-          }
-          grn_obj_set_value(ctx, column_obj, record_id, &new_value, GRN_OBJ_SET);
-          if (ctx->rc) {
-            my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
-            error = ER_ERROR_ON_WRITE;
-            break;
-          }
+
+        error = mrn_change_encoding(ctx, altered_field->charset());
+        if (error) {
+          my_message(error,
+                     "mroonga: storage: "
+                     "failed to change encoding to store generated value",
+                     MYF(0));
+          have_error = true;
+          grn_obj_remove(ctx, column_obj);
+          break;
         }
-        if (error != HA_ERR_END_OF_FILE) {
-          storage_rnd_end();
-        } else {
-          error = storage_rnd_end();
+        error = generic_store_bulk(altered_field, &new_value);
+        if (error) {
+          my_message(error,
+                     "mroonga: storage: "
+                     "failed to get generated value for updating column",
+                     MYF(0));
+          have_error = true;
+          grn_obj_remove(ctx, column_obj);
+          break;
         }
-        GRN_OBJ_FIN(ctx, &new_value);
+
+        grn_obj_set_value(ctx, column_obj, record_id, &new_value, GRN_OBJ_SET);
+        if (ctx->rc) {
+          error = ER_ERROR_ON_WRITE;
+          my_message(error, ctx->errbuf, MYF(0));
+          break;
+        }
       }
 
-      for (uint j = 0; j < n_columns; ++j) {
-        Field *field = altered_table->field[j];
-        field->move_field_offset(-ptr_diff);
+      int end_error = storage_rnd_end();
+      if (end_error != 0 && error == 0) {
+        error = end_error;
+        grn_obj_remove(ctx, column_obj);
+        break;
       }
     }
 #endif
-
-    if (column_obj) {
-      grn_obj_unlink(ctx, column_obj);
-    }
-
-    if (have_error) {
-      break;
-    }
   }
 
   grn_obj_unlink(ctx, table_obj);

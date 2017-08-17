@@ -45,4 +45,6 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_query_parser.hpp			\
 	mrn_current_thread.hpp			\
 	mrn_smart_bitmap.cpp			\
-	mrn_smart_bitmap.hpp
+	mrn_smart_bitmap.hpp			\
+	mrn_field_offset_mover.cpp		\
+	mrn_field_offset_mover.hpp
