@@ -96,7 +96,7 @@
 #include <mrn_variables.hpp>
 #include <mrn_query_parser.hpp>
 #include <mrn_smart_bitmap.hpp>
-#include <mrn_field_offset_mover.hpp>
+#include <mrn_table_fields_offset_mover.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -14820,18 +14820,11 @@ bool ha_mroonga::wrapper_inplace_alter_table(
     need_fill_index = true;
   }
   if (!error && need_fill_index) {
-    my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
-    uint n_columns = altered_table->s->fields;
-    for (i = 0; i < n_columns; ++i) {
-      Field *field = altered_table->field[i];
-      field->move_field_offset(ptr_diff);
-    }
+    my_ptrdiff_t diff =
+      PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
+    mrn::TableFieldsOffsetMover mover(altered_table, diff);
     error = wrapper_fill_indexes(ha_thd(), altered_table->key_info,
                                  index_columns, ha_alter_info->key_count);
-    for (i = 0; i < n_columns; ++i) {
-      Field *field = altered_table->field[i];
-      field->move_field_offset(-ptr_diff);
-    }
   }
   bitmap_set_all(table->read_set);
 
@@ -14982,12 +14975,9 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
     }
   }
   if (!error && have_multiple_column_index) {
-    my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
-    uint n_columns = altered_table->s->fields;
-    for (uint i = 0; i < n_columns; ++i) {
-      Field *field = altered_table->field[i];
-      field->move_field_offset(ptr_diff);
-    }
+    my_ptrdiff_t diff =
+      PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
+    mrn::TableFieldsOffsetMover mover(altered_table, diff);
     error = storage_add_index_multiple_columns(altered_table->key_info,
                                                ha_alter_info->key_count,
                                                index_tables,
@@ -14997,10 +14987,6 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
                       table_share->table_name);
     } else if (error) {
       my_message(error, "failed to create multiple column index", MYF(0));
-    }
-    for (uint i = 0; i < n_columns; ++i) {
-      Field *field = altered_table->field[i];
-      field->move_field_offset(-ptr_diff);
     }
   }
   bitmap_set_all(table->read_set);
@@ -15176,7 +15162,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
 
       my_ptrdiff_t diff =
         PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
-      mrn::FieldOffsetMover mover(altered_table, diff);
+      mrn::TableFieldsOffsetMover mover(altered_table, diff);
 
       error = storage_rnd_init(true);
       if (error) {

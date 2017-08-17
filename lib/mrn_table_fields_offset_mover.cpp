@@ -17,10 +17,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "mrn_field_offset_mover.hpp"
+#include "mrn_table_fields_offset_mover.hpp"
 
 namespace mrn {
-  FieldOffsetMover::FieldOffsetMover(TABLE *table, my_ptrdiff_t diff)
+  TableFieldsOffsetMover::TableFieldsOffsetMover(TABLE *table,
+                                                 my_ptrdiff_t diff)
     : table_(table),
       diff_(diff) {
     uint n_columns = table_->s->fields;
@@ -30,7 +31,7 @@ namespace mrn {
     }
   }
 
-  FieldOffsetMover::~FieldOffsetMover() {
+  TableFieldsOffsetMover::~TableFieldsOffsetMover() {
     uint n_columns = table_->s->fields;
     for (uint i = 0; i < n_columns; ++i) {
       Field *field = table_->field[i];
