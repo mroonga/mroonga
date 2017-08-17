@@ -95,6 +95,7 @@
 #include <mrn_count_skip_checker.hpp>
 #include <mrn_variables.hpp>
 #include <mrn_query_parser.hpp>
+#include <mrn_smart_bitmap.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -15168,6 +15169,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       if (error) {
         break;
       }
+      mrn::SmartBitmap generated_column_bitmap(&generated_column_bitmap);
       bitmap_set_bit(&generated_column_bitmap, field->field_index);
 #  endif
 
@@ -15229,9 +15231,6 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
         Field *field = altered_table->field[j];
         field->move_field_offset(-ptr_diff);
       }
-#  ifndef MRN_MARIADB_P
-      bitmap_free(&generated_column_bitmap);
-#  endif
     }
 #endif
 
