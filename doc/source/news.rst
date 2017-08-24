@@ -5,6 +5,43 @@
 News
 ====
 
+.. _release-7-06:
+
+Release 7.06 - 2017-08-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/reference/udf/mroonga_highlight_html`] Added usage about
+  ``mroonga_highlight_html``.
+
+* Supported generated column. It is useful to full-text search for
+  partially extracted content from JSON column. [GitHub#159,#160,#163]
+  [Patch by Naoya Murakami]
+
+* Added :ref:`_server-variable-mroonga-enable-operations-recording`. variable.
+  [GitHub#158] [Patch by Naoya Murakami]
+
+* Supported virtual column for MariaDB 10.2 and MySQL 5.7. It supports
+  ``VIRTUAL`` type.  [GitHub#161,#162] [Patch by Naoya Murakami]
+
+* Supported MariaDB 10.1.26.
+
+* [rpm][centos] Supported Percona Server 5.6.36 rel82.1 and 5.7.18-16.
+  [Gitter/ja:59894500bc46472974622cbd] [Reported by
+  @tigersun2000_twitter]
+
+* [rpm][centos] Supported MySQL 5.6.37 and 5.7.19 on CentOS 7.
+  [groonga-dev,04441] [Reported by Kagami Hiroshi]
+
+Thanks
+^^^^^^
+
+* Naoya Murakami
+* @tigersun2000_twitter
+* Kagami Hiroshi
+
 .. _release-7-05:
 
 Release 7.05 - 2017-07-29
