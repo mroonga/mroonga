@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-08-01 15:30+0900\n"
+"PO-Revision-Date: 2017-08-25 18:25+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,74 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.05 - 2017-07-29"
-msgstr "7.05リリース - 2017-07-29"
+msgid "Release 7.06 - 2017-08-29"
+msgstr "7.06リリース - 2017-08-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_highlight_html`] Added usage about "
+"``mroonga_highlight_html``."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_highlight_html`] `mroonga_highlight_html` の使"
+"用方法を追記しました。"
+
+msgid ""
+"Supported generated column. It is useful to full-text search for partially "
+"extracted content from JSON column. [GitHub#159,#160,#163] [Patch by Naoya "
+"Murakami]"
+msgstr ""
+"Generated Columnをサポートしました。JSON型のカラムから値を取り出した結果をカ"
+"ラムとして実体化して全文検索できるので便利です。 [GitHub#159,#160,#163] [村上"
+"さんがパッチ提供]"
+
+# c2f193ff56e24d088e4f9ff62a1a6c63
+msgid ""
+"Added :ref:`_server-variable-mroonga-enable-operations-recording`. variable. "
+"[GitHub#158] [Patch by Naoya Murakami]"
+msgstr ""
+":ref:`_server-variable-mroonga-enable-operations-recording` サーバー変数を追"
+"加しました。 [GitHub#158] [村上さんがパッチ提供]"
+
+msgid ""
+"Supported virtual column for MariaDB 10.2 and MySQL 5.7. It supports "
+"``VIRTUAL`` type.  [GitHub#161,#162] [Patch by Naoya Murakami]"
+msgstr ""
+"MariaDB 10.2 と MySQL 5.7 で ``VIRTUAL`` Generated Columnをサポートしまし"
+"た。 [GitHub#161,#162] [村上さんがパッチ提供]"
+
+msgid "Supported MariaDB 10.1.26."
+msgstr "MariaDB 10.1.26に対応しました。"
+
+msgid ""
+"[rpm][centos] Supported Percona Server 5.6.36 rel82.1 and 5.7.18-16. [Gitter/"
+"ja:59894500bc46472974622cbd] [Reported by @tigersun2000_twitter]"
+msgstr ""
+"[rpm][centos] Percona Server 5.6.36 rel82.1 と 5.7.18-16 をサポートしまし"
+"た。 [Gitter/ja:59894500bc46472974622cbd] [@tigersun2000_twitterさんが報告]"
+
+msgid ""
+"[rpm][centos] Supported MySQL 5.6.37 and 5.7.19 on CentOS 7. [groonga-"
+"dev,04441] [Reported by Kagami Hiroshi]"
+msgstr ""
+"[rpm][centos] CentOS 7にてMySQL 5.6.37 と MySQL 5.7.19に対応しました。 "
+"[groonga-dev,04441] [各務さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Naoya Murakami"
+msgstr "村上さん"
+
+msgid "@tigersun2000_twitter"
+msgstr "@tigersun2000_twitterさん"
+
+msgid "Kagami Hiroshi"
+msgstr "各務さん"
+
+msgid "Release 7.05 - 2017-07-29"
+msgstr "7.05リリース - 2017-07-29"
 
 msgid ""
 "Supported Groonga query log. Use ``mroonga_query_log_file`` variable to use "
@@ -91,17 +154,11 @@ msgstr ""
 "内部的に有効なインデックスが見つからない場合にクラッシュする不具合を修正しま"
 "した。 [Gitter:groonga/ja:596714a5c101bc4e3a7db4e5] [K Torimotoさんが報告]"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "K Torimoto"
 msgstr "K Torimotoさん"
 
 msgid "Tomohiro 'Tomo-p' KATO"
 msgstr "かとうさん"
-
-msgid "Kagami Hiroshi"
-msgstr "各務さん"
 
 msgid "Release 7.04 - 2017-06-29"
 msgstr "7.04リリース - 2017-06-29"
@@ -159,9 +216,6 @@ msgstr "@bignum_twitterさん"
 
 msgid "@pinpikokun"
 msgstr "@pinpikokunさん"
-
-msgid "Naoya Murakami"
-msgstr "村上さん"
 
 msgid "Release 7.02 - 2017-04-29"
 msgstr "7.02リリース - 2017-04-29"
@@ -4590,3 +4644,7 @@ msgid ""
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
+
+#, fuzzy
+#~ msgid "[MariaDB]: Supported MariaDB 10.1.26."
+#~ msgstr "[MariaDB 10.1] MariaDB 10.1.8に対応しました。"
