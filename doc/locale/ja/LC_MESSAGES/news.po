@@ -43,7 +43,6 @@ msgstr ""
 "ラムとして実体化して全文検索できるので便利です。 [GitHub#159,#160,#163] [村上"
 "さんがパッチ提供]"
 
-# c2f193ff56e24d088e4f9ff62a1a6c63
 msgid ""
 "Added :ref:`_server-variable-mroonga-enable-operations-recording`. variable. "
 "[GitHub#158] [Patch by Naoya Murakami]"
@@ -4644,7 +4643,3 @@ msgid ""
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
-
-#, fuzzy
-#~ msgid "[MariaDB]: Supported MariaDB 10.1.26."
-#~ msgstr "[MariaDB 10.1] MariaDB 10.1.8に対応しました。"
