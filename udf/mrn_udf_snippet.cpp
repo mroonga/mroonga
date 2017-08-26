@@ -129,12 +129,12 @@ error:
   return TRUE;
 }
 
-MRN_API my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
+MRN_API my_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *message)
 {
   uint i;
   st_mrn_snip_info *snip_info = NULL;
   bool can_open_snippet = TRUE;
-  initid->ptr = NULL;
+  init->ptr = NULL;
   if (args->arg_count < 11 || (args->arg_count - 11) % 3)
   {
     sprintf(message, "Incorrect number of arguments for mroonga_snippet(): %u",
@@ -176,7 +176,7 @@ MRN_API my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *mes
       goto error;
     }
   }
-  initid->maybe_null = 1;
+  init->maybe_null = 1;
 
   if (!(snip_info = (st_mrn_snip_info *) mrn_my_malloc(sizeof(st_mrn_snip_info),
                                                        MYF(MY_WME | MY_ZEROFILL))))
@@ -222,7 +222,7 @@ MRN_API my_bool mroonga_snippet_init(UDF_INIT *initid, UDF_ARGS *args, char *mes
       goto error;
     }
   }
-  initid->ptr = (char *) snip_info;
+  init->ptr = (char *) snip_info;
 
   return FALSE;
 
@@ -237,10 +237,10 @@ error:
   return TRUE;
 }
 
-MRN_API char *mroonga_snippet(UDF_INIT *initid, UDF_ARGS *args, char *result,
+MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
                               unsigned long *length, char *is_null, char *error)
 {
-  st_mrn_snip_info *snip_info = (st_mrn_snip_info *) initid->ptr;
+  st_mrn_snip_info *snip_info = (st_mrn_snip_info *) init->ptr;
   grn_ctx *ctx = snip_info->ctx;
   String *result_str = &snip_info->result_str;
   char *target;
@@ -319,9 +319,9 @@ error:
   return NULL;
 }
 
-MRN_API void mroonga_snippet_deinit(UDF_INIT *initid)
+MRN_API void mroonga_snippet_deinit(UDF_INIT *init)
 {
-  st_mrn_snip_info *snip_info = (st_mrn_snip_info *) initid->ptr;
+  st_mrn_snip_info *snip_info = (st_mrn_snip_info *) init->ptr;
   if (snip_info) {
     if (snip_info->snippet) {
       grn_obj_close(snip_info->ctx, snip_info->snippet);

@@ -45,12 +45,12 @@ struct CommandInfo
   String result;
 };
 
-MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
+MRN_API my_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
                                      char *message)
 {
   CommandInfo *info = NULL;
 
-  initid->ptr = NULL;
+  init->ptr = NULL;
   if (args->arg_count == 0) {
     grn_snprintf(message,
                  MYSQL_ERRMSG_SIZE,
@@ -110,8 +110,8 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
       break;
     }
   }
-  initid->maybe_null = 1;
-  initid->const_item = 0;
+  init->maybe_null = 1;
+  init->const_item = 0;
 
   info = (CommandInfo *)mrn_my_malloc(sizeof(CommandInfo),
                                       MYF(MY_WME | MY_ZEROFILL));
@@ -156,7 +156,7 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *initid, UDF_ARGS *args,
   }
   GRN_TEXT_INIT(&(info->command), 0);
 
-  initid->ptr = (char *)info;
+  init->ptr = (char *)info;
 
   return FALSE;
 
@@ -209,10 +209,10 @@ static void mroonga_command_escape_value(grn_ctx *ctx,
   GRN_TEXT_PUTC(ctx, command, '"');
 }
 
-MRN_API char *mroonga_command(UDF_INIT *initid, UDF_ARGS *args, char *result,
+MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
                               unsigned long *length, char *is_null, char *error)
 {
-  CommandInfo *info = (CommandInfo *)initid->ptr;
+  CommandInfo *info = (CommandInfo *)init->ptr;
   grn_ctx *ctx = info->ctx;
   int flags = 0;
 
@@ -277,9 +277,9 @@ error:
   return NULL;
 }
 
-MRN_API void mroonga_command_deinit(UDF_INIT *initid)
+MRN_API void mroonga_command_deinit(UDF_INIT *init)
 {
-  CommandInfo *info = (CommandInfo *)initid->ptr;
+  CommandInfo *info = (CommandInfo *)init->ptr;
   if (info) {
     GRN_OBJ_FIN(info->ctx, &(info->command));
     if (!info->use_shared_db) {

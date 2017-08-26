@@ -33,12 +33,12 @@ struct EscapeInfo
   grn_obj escaped_query;
 };
 
-MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
+MRN_API my_bool mroonga_escape_init(UDF_INIT *init, UDF_ARGS *args,
                                     char *message)
 {
   EscapeInfo *info = NULL;
 
-  initid->ptr = NULL;
+  init->ptr = NULL;
   if (!(1 <= args->arg_count && args->arg_count <= 2)) {
     sprintf(message,
             "mroonga_escape(): Incorrect number of arguments: %u for 1..2",
@@ -59,7 +59,7 @@ MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
     }
   }
 
-  initid->maybe_null = 1;
+  init->maybe_null = 1;
 
   info = (EscapeInfo *)mrn_my_malloc(sizeof(EscapeInfo),
                                      MYF(MY_WME | MY_ZEROFILL));
@@ -72,7 +72,7 @@ MRN_API my_bool mroonga_escape_init(UDF_INIT *initid, UDF_ARGS *args,
   GRN_TEXT_INIT(&(info->target_characters), 0);
   GRN_TEXT_INIT(&(info->escaped_query), 0);
 
-  initid->ptr = (char *)info;
+  init->ptr = (char *)info;
 
   return FALSE;
 
@@ -108,10 +108,10 @@ static void escape(EscapeInfo *info, UDF_ARGS *args)
   }
 }
 
-MRN_API char *mroonga_escape(UDF_INIT *initid, UDF_ARGS *args, char *result,
+MRN_API char *mroonga_escape(UDF_INIT *init, UDF_ARGS *args, char *result,
                              unsigned long *length, char *is_null, char *error)
 {
-  EscapeInfo *info = (EscapeInfo *)initid->ptr;
+  EscapeInfo *info = (EscapeInfo *)init->ptr;
   grn_ctx *ctx = &(info->ctx);
 
   if (!args->args[0]) {
@@ -136,9 +136,9 @@ error:
   return NULL;
 }
 
-MRN_API void mroonga_escape_deinit(UDF_INIT *initid)
+MRN_API void mroonga_escape_deinit(UDF_INIT *init)
 {
-  EscapeInfo *info = (EscapeInfo *)initid->ptr;
+  EscapeInfo *info = (EscapeInfo *)init->ptr;
   if (info) {
     grn_obj_unlink(&(info->ctx), &(info->target_characters));
     grn_obj_unlink(&(info->ctx), &(info->escaped_query));

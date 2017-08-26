@@ -46,13 +46,13 @@ struct st_mrn_normalize_info
   String result_str;
 };
 
-MRN_API my_bool mroonga_normalize_init(UDF_INIT *initid, UDF_ARGS *args,
+MRN_API my_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
                                        char *message)
 {
   st_mrn_normalize_info *info = NULL;
   String *result_str = NULL;
 
-  initid->ptr = NULL;
+  init->ptr = NULL;
   if (!(1 <= args->arg_count && args->arg_count <= 2)) {
     sprintf(message,
             "mroonga_normalize(): Incorrect number of arguments: %u for 1..2",
@@ -73,7 +73,7 @@ MRN_API my_bool mroonga_normalize_init(UDF_INIT *initid, UDF_ARGS *args,
     }
   }
 
-  initid->maybe_null = 1;
+  init->maybe_null = 1;
 
   info = (st_mrn_normalize_info *)mrn_my_malloc(sizeof(st_mrn_normalize_info),
                                                 MYF(MY_WME | MY_ZEROFILL));
@@ -125,7 +125,7 @@ MRN_API my_bool mroonga_normalize_init(UDF_INIT *initid, UDF_ARGS *args,
   mrn::encoding::set_raw(info->ctx, system_charset_info);
   result_str->set_charset(system_charset_info);
 
-  initid->ptr = (char *)info;
+  init->ptr = (char *)info;
 
   return FALSE;
 
@@ -140,10 +140,10 @@ error:
   return TRUE;
 }
 
-MRN_API char *mroonga_normalize(UDF_INIT *initid, UDF_ARGS *args, char *result,
+MRN_API char *mroonga_normalize(UDF_INIT *init, UDF_ARGS *args, char *result,
                                 unsigned long *length, char *is_null, char *error)
 {
-  st_mrn_normalize_info *info = (st_mrn_normalize_info *)initid->ptr;
+  st_mrn_normalize_info *info = (st_mrn_normalize_info *)init->ptr;
   grn_ctx *ctx = info->ctx;
   String *result_str = &(info->result_str);
 
@@ -192,9 +192,9 @@ error:
   return NULL;
 }
 
-MRN_API void mroonga_normalize_deinit(UDF_INIT *initid)
+MRN_API void mroonga_normalize_deinit(UDF_INIT *init)
 {
-  st_mrn_normalize_info *info = (st_mrn_normalize_info *)initid->ptr;
+  st_mrn_normalize_info *info = (st_mrn_normalize_info *)init->ptr;
 
   if (info) {
     MRN_STRING_FREE(info->result_str);
