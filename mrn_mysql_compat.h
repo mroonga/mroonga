@@ -363,6 +363,7 @@
 #if defined(MRN_MARIADB_P) &&                                           \
   ((MYSQL_VERSION_ID >= 100207) ||                                      \
    ((MYSQL_VERSION_ID >= 100126) && (MYSQL_VERSION_ID < 100200)) ||     \
+   ((MYSQL_VERSION_ID >= 100032) && (MYSQL_VERSION_ID < 100100)) ||     \
    ((MYSQL_VERSION_ID >= 50557) && (MYSQL_VERSION_ID < 100000)))
 #  define mrn_create_partition_name(out,                                \
                                     out_length,                         \
