@@ -20,7 +20,7 @@ Improvements
   partially extracted content from JSON column. [GitHub#159,#160,#163]
   [Patch by Naoya Murakami]
 
-* Added :ref:`_server-variable-mroonga-enable-operations-recording`. variable.
+* Added :ref:`server-variable-mroonga-enable-operations-recording`. variable.
   [GitHub#158] [Patch by Naoya Murakami]
 
 * Supported virtual column for MariaDB 10.2 and MySQL 5.7. It supports
