@@ -36,6 +36,7 @@ namespace mrn {
     void close(const char *path);
     bool drop(const char *path);
     int clear(void);
+    const char *error_message();
 
   private:
     grn_ctx *ctx_;

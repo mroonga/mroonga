@@ -36,6 +36,13 @@ namespace mrn {
     ~QueryParser();
 
     grn_rc parse(const char *query, size_t query_length);
+    void parse_pragma(const char *query,
+                      size_t query_length,
+                      const char **raw_query,
+                      size_t *raw_query_length,
+                      grn_operator *default_operator,
+                      grn_expr_flags *flags);
+
   private:
     grn_ctx *ctx_;
     THD *thd_;
@@ -44,12 +51,6 @@ namespace mrn {
     uint n_sections_;
     grn_obj *match_columns_;
 
-    void parse_pragma(const char *query,
-                      size_t query_length,
-                      const char **raw_query,
-                      size_t *raw_query_length,
-                      grn_operator *default_operator,
-                      grn_expr_flags *flags);
     bool parse_pragma_w(const char *query,
                         size_t query_length,
                         size_t *consumed_query_length);

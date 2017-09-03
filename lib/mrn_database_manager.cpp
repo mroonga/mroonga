@@ -262,6 +262,11 @@ namespace mrn {
     DBUG_RETURN(error);
   }
 
+  const char *DatabaseManager::error_message() {
+    MRN_DBUG_ENTER_METHOD();
+    DBUG_RETURN(ctx_->errbuf);
+  }
+
   void DatabaseManager::mkdir_p(const char *directory) {
     MRN_DBUG_ENTER_METHOD();
 

@@ -24,4 +24,5 @@ eval CREATE FUNCTION mroonga_escape RETURNS STRING SONAME $ha_mroonga_so;
 eval CREATE FUNCTION mroonga_snippet_html RETURNS STRING SONAME $ha_mroonga_so;
 eval CREATE FUNCTION mroonga_normalize RETURNS STRING SONAME $ha_mroonga_so;
 eval CREATE FUNCTION mroonga_highlight_html RETURNS STRING SONAME $ha_mroonga_so;
+eval CREATE FUNCTION mroonga_query_expand RETURNS STRING SONAME $ha_mroonga_so;
 --enable_query_log

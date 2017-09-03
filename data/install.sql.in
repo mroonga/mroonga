@@ -29,3 +29,7 @@ CREATE FUNCTION mroonga_normalize RETURNS STRING
 DROP FUNCTION IF EXISTS mroonga_highlight_html;
 CREATE FUNCTION mroonga_highlight_html RETURNS STRING
   SONAME 'ha_mroonga@MRN_PLUGIN_SUFFIX@';
+
+DROP FUNCTION IF EXISTS mroonga_query_expand;
+CREATE FUNCTION mroonga_query_expand RETURNS STRING
+  SONAME 'ha_mroonga@MRN_PLUGIN_SUFFIX@';
