@@ -1,8 +1,8 @@
 %define mariadb_epoch_default   1
-%define mariadb_version_default 5.5.52
-%define mariadb_release_default 1
+%define mariadb_version_default 5.5.56
+%define mariadb_release_default 2
 %define mariadb_dist_default    .el7
-%define mariadb_download_base_url_default http://vault.centos.org/7.3.1611/os/Source/SPackages
+%define mariadb_download_base_url_default http://vault.centos.org/7.4.1708/os/Source/SPackages/
 %define mariadb_spec_file_default mariadb.spec
 
 %define _mariadb_epoch %{?mariadb_epoch:%{mariadb_epoch}}%{!?mariadb_epoch:%{mariadb_epoch_default}}
@@ -18,7 +18,7 @@
 
 Name:		mariadb-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
@@ -154,6 +154,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Fri Sep 15 2017 Kouhei Sutou <kou@clear-code.com> - 7.06-2
+- rebuild against the latest MariaDB.
+
 * Tue Aug 29 2017 Kentaro Hayashi <hayashi@clear-code.com> - 7.06-1
 - new upstream release.
 
