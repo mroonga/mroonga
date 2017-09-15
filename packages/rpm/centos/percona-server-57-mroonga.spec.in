@@ -40,6 +40,7 @@ BuildRequires:  numactl-devel
 BuildRequires:  zlib-devel
 BuildRequires:  Percona-Server-devel-57 = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 BuildRequires:  selinux-policy-devel
+BuildRequires:  openldap-devel
 Requires:       Percona-Server-server-57 = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 Requires:       Percona-Server-client-57 = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 Requires:       groonga-libs >= %{groonga_required_version}
