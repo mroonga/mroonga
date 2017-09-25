@@ -170,6 +170,7 @@ namespace mrn {
 
     Database *db = NULL;
     memcpy(&db, db_address, sizeof(Database *));
+    grn_ctx_use(ctx_, db->get());
     if (db) {
       delete db;
     }
@@ -200,6 +201,7 @@ namespace mrn {
       }
     } else {
       memcpy(&db, db_address, sizeof(Database *));
+      grn_ctx_use(ctx_, db->get());
     }
 
     if (!db) {
@@ -249,6 +251,7 @@ namespace mrn {
       Database *db;
       grn_hash_cursor_get_value(ctx_, cursor, &db_address);
       memcpy(&db, db_address, sizeof(Database *));
+      grn_ctx_use(ctx_, db->get());
       grn_rc rc = grn_hash_cursor_delete(ctx_, cursor, NULL);
       if (rc) {
         error = ER_ERROR_ON_READ;
