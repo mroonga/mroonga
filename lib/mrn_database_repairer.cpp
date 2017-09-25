@@ -87,6 +87,7 @@ namespace mrn {
       do {
         each_database_body(data.cFileName, &ctx, each_body_func, user_data);
       } while (FindNextFile(finder, &data) != 0);
+      grn_ctx_fin(&ctx);
     } else {
       GRN_LOG(ctx_, GRN_LOG_WARNING,
               "[mroonga][database][repairer][each] "
@@ -106,6 +107,7 @@ namespace mrn {
       while (struct dirent *entry = readdir(dir)) {
         each_database_body(entry->d_name, &ctx, each_body_func, user_data);
       }
+      grn_ctx_fin(&ctx);
     } else {
       GRN_LOG(ctx_, GRN_LOG_WARNING,
               "[mroonga][database][repairer][each] "
