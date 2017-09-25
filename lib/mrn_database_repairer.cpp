@@ -81,9 +81,18 @@ namespace mrn {
       DBUG_VOID_RETURN;
     }
 
-    do {
-      each_database_body(data.cFileName, each_body_func, user_data);
-    } while (FindNextFile(finder, &data) != 0);
+    grn_ctx ctx;
+    grn_rc rc = grn_ctx_init(&ctx, 0);
+    if (rc == GRN_SUCCESS) {
+      do {
+        each_database_body(data.cFileName, &ctx, each_body_func, user_data);
+      } while (FindNextFile(finder, &data) != 0);
+    } else {
+      GRN_LOG(ctx_, GRN_LOG_WARNING,
+              "[mroonga][database][repairer][each] "
+              "failed to initialize grn_ctx: %d: %s",
+              rc, grn_rc_to_string(rc));
+    }
     FindClose(finder);
 #else
     DIR *dir = opendir(base_directory_);
@@ -91,8 +100,17 @@ namespace mrn {
       DBUG_VOID_RETURN;
     }
 
-    while (struct dirent *entry = readdir(dir)) {
-      each_database_body(entry->d_name, each_body_func, user_data);
+    grn_ctx ctx;
+    grn_rc rc = grn_ctx_init(&ctx, 0);
+    if (rc == GRN_SUCCESS) {
+      while (struct dirent *entry = readdir(dir)) {
+        each_database_body(entry->d_name, &ctx, each_body_func, user_data);
+      }
+    } else {
+      GRN_LOG(ctx_, GRN_LOG_WARNING,
+              "[mroonga][database][repairer][each] "
+              "failed to initialize grn_ctx: %d: %s",
+              rc, grn_rc_to_string(rc));
     }
     closedir(dir);
 #endif
@@ -101,6 +119,7 @@ namespace mrn {
   }
 
   void DatabaseRepairer::each_database_body(const char *base_path,
+                                            grn_ctx *ctx,
                                             EachBodyFunc each_body_func,
                                             void *user_data) {
     MRN_DBUG_ENTER_METHOD();
@@ -123,14 +142,14 @@ namespace mrn {
     char db_path[MRN_MAX_PATH_SIZE];
     snprintf(db_path, MRN_MAX_PATH_SIZE,
              "%s%c%s", base_directory_, FN_LIBCHAR, base_path);
-    grn_obj *db = grn_db_open(ctx_, db_path);
+    grn_obj *db = grn_db_open(ctx, db_path);
     if (!db) {
       DBUG_VOID_RETURN;
     }
 
-    (this->*each_body_func)(db, db_path, user_data);
+    (this->*each_body_func)(ctx, db, db_path, user_data);
 
-    grn_obj_close(ctx_, db);
+    grn_obj_close(ctx, db);
 
     DBUG_VOID_RETURN;
   }
@@ -168,20 +187,21 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void DatabaseRepairer::is_crashed_body(grn_obj *db,
+  void DatabaseRepairer::is_crashed_body(grn_ctx *ctx,
+                                         grn_obj *db,
                                          const char *db_path,
                                          void *user_data) {
     MRN_DBUG_ENTER_METHOD();
 
     bool *is_crashed = static_cast<bool *>(user_data);
 
-    if (grn_obj_is_locked(ctx_, db)) {
+    if (grn_obj_is_locked(ctx, db)) {
       *is_crashed = true;
       DBUG_VOID_RETURN;
     }
 
     grn_table_cursor *cursor;
-    cursor = grn_table_cursor_open(ctx_, db,
+    cursor = grn_table_cursor_open(ctx, db,
                                    NULL, 0,
                                    NULL, 0,
                                    0, -1, GRN_CURSOR_BY_ID);
@@ -191,8 +211,8 @@ namespace mrn {
     }
 
     grn_id id;
-    while ((id = grn_table_cursor_next(ctx_, cursor)) != GRN_ID_NIL) {
-      grn_obj *object = grn_ctx_at(ctx_, id);
+    while ((id = grn_table_cursor_next(ctx, cursor)) != GRN_ID_NIL) {
+      grn_obj *object = grn_ctx_at(ctx, id);
 
       if (!object) {
         continue;
@@ -213,30 +233,31 @@ namespace mrn {
         break;
       }
 
-      grn_obj_unlink(ctx_, object);
+      grn_obj_unlink(ctx, object);
 
       if (*is_crashed) {
         break;
       }
     }
-    grn_table_cursor_close(ctx_, cursor);
+    grn_table_cursor_close(ctx, cursor);
 
     DBUG_VOID_RETURN;
   }
 
-  void DatabaseRepairer::repair_body(grn_obj *db,
+  void DatabaseRepairer::repair_body(grn_ctx *ctx,
+                                     grn_obj *db,
                                      const char *db_path,
                                      void *user_data) {
     MRN_DBUG_ENTER_METHOD();
 
     bool *succeeded = static_cast<bool *>(user_data);
-    if (grn_db_recover(ctx_, db) != GRN_SUCCESS) {
+    if (grn_db_recover(ctx, db) != GRN_SUCCESS) {
       push_warning_printf(thd_,
                           MRN_SEVERITY_WARNING,
                           ER_NOT_KEYFILE,
                           "mroonga: repair: "
                           "Failed to recover database: <%s>: <%s>",
-                          db_path, ctx_->errbuf);
+                          db_path, ctx->errbuf);
       *succeeded = false;
     }
 

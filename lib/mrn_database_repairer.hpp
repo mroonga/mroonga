@@ -40,18 +40,26 @@ namespace mrn {
     size_t path_prefix_length_;
     size_t mrn_db_file_suffix_length_;
 
-    typedef void (DatabaseRepairer::*EachBodyFunc)(grn_obj *db,
+    typedef void (DatabaseRepairer::*EachBodyFunc)(grn_ctx *ctx,
+                                                   grn_obj *db,
                                                    const char *db_path,
                                                    void *user_data);
 
     void each_database(EachBodyFunc each_body_func, void *user_data);
     void each_database_body(const char *base_path,
+                            grn_ctx *ctx,
                             EachBodyFunc each_body_func,
                             void *user_data);
     void detect_paths(void);
 
-    void is_crashed_body(grn_obj *db, const char *db_path, void *user_data);
-    void repair_body(grn_obj *db, const char *db_path, void *user_data);
+    void is_crashed_body(grn_ctx *ctx,
+                         grn_obj *db,
+                         const char *db_path,
+                         void *user_data);
+    void repair_body(grn_ctx *ctx,
+                     grn_obj *db,
+                     const char *db_path,
+                     void *user_data);
   };
 }
 
