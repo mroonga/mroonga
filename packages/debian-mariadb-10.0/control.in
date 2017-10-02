@@ -61,7 +61,8 @@ Depends:
 	libgroonga0 (>= @REQUIRED_GROONGA_VERSION@),
 	mariadb-server-10.0 (= MARIADB_VERSION),
 	mariadb-server-core-10.0 (= MARIADB_VERSION),
-	groonga-normalizer-mysql
+	groonga-normalizer-mysql,
+	lsb-release
 Conflicts:
 	mariadb-plugin-mroonga
 Description: A fast fulltext searchable storage engine for MariaDB 10.0.
