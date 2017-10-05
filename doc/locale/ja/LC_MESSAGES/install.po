@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-07-25 15:24+0900\n"
+"PO-Revision-Date: 2017-10-05 15:01+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -118,6 +118,26 @@ msgstr ""
 "CentOS 6では、Mroonga 6.02からPercona Server 5.7パッケージを利用できます。"
 
 # e1a6076f4a4a4fb2a6e1a4d8a2175cfa
+msgid "CentOS 6 (with MariaDB 10.1 package)"
+msgstr "CentOS 6（MariaDB 10.1のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.1 on CentOS 6 since "
+"Mroonga 7.06 release."
+msgstr ""
+"CentOS 6では、Mroonga 7.06からMariaDB提供のMariaDB 10.1パッケージを利用できま"
+"す。"
+
+msgid "Create ``/etc/yum.repos.d/MariaDB.repo``."
+msgstr "``/etc/yum.repos.d/MariaDB.repo`` を作ります。"
+
+msgid "For 32-bit version::"
+msgstr "32-bitの場合::"
+
+msgid "For 64-bit version::"
+msgstr "64-bitの場合::"
+
+# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 7 (with the official MariaDB package)"
 msgstr "CentOS 7（公式のMariaDBパッケージを利用）"
 
@@ -162,6 +182,20 @@ msgid ""
 "6.02 release."
 msgstr ""
 "CentOS 7では、Mroonga 6.02からPercona Server 5.7パッケージを利用できます。"
+
+# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
+msgid "CentOS 7 (with MariaDB 10.1 package)"
+msgstr "CentOS 7（MariaDB 10.1のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.1 on CentOS 7 since "
+"Mroonga 7.06 release."
+msgstr ""
+"CentOS 7では、Mroonga 7.06からMariaDB提供のMariaDB 10.1パッケージを利用できま"
+"す。"
+
+msgid "Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::"
+msgstr "次の内容で ``/etc/yum.repos.d/MariaDB.repo`` を作ります::"
 
 msgid "Debian GNU/Linux"
 msgstr ""

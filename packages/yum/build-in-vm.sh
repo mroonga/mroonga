@@ -42,6 +42,9 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
     mariadb)
       centos_versions="7"
       ;;
+    mariadb-10.1)
+      centos_versions="6 7"
+      ;;
     percona-server-56)
       centos_versions="6 7"
       ;;

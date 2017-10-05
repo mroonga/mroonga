@@ -129,6 +129,48 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
+
+.. _centos-6-mariadb-10-1:
+
+CentOS 6 (with MariaDB 10.1 package)
+------------------------------------
+
+You can use MariaDB's MariaDB packages version 10.1 on CentOS 6 since
+Mroonga 7.06 release.
+
+Create ``/etc/yum.repos.d/MariaDB.repo``.
+
+For 32-bit version::
+
+  [mariadb]
+  name = MariaDB
+  baseurl = http://yum.mariadb.org/10.1/centos6-x86
+  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck=1
+
+For 64-bit version::
+
+  [mariadb]
+  name = MariaDB
+  baseurl = http://yum.mariadb.org/10.1/centos6-amd64
+  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck=1
+
+Install::
+
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.3.0-1.noarch.rpm
+  % sudo yum install -y MariaDB-server
+  % sudo systemctl start mariadb
+  % sudo yum install -y --enablerepo=epel mariadb-mroonga
+  (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
+
 .. _centos-7-official:
 
 CentOS 7 (with the official MariaDB package)
@@ -239,6 +281,37 @@ Install::
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
+
+If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
+
+.. _centos-7-mariadb-10-1:
+
+CentOS 7 (with MariaDB 10.1 package)
+------------------------------------
+
+You can use MariaDB's MariaDB packages version 10.1 on CentOS 7 since
+Mroonga 7.06 release.
+
+Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
+
+  [mariadb]
+  name = MariaDB
+  baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck=1
+
+Install::
+
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.3.0-1.noarch.rpm
+  % sudo yum install -y MariaDB-server
+  % sudo systemctl start mariadb
+  % sudo yum install -y --enablerepo=epel mariadb-mroonga
+  (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
