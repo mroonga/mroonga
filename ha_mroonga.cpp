@@ -3345,7 +3345,14 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   char *grn_table_path = NULL;     // we don't specify path
   grn_obj *pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
   grn_obj *pkey_value_type = NULL; // we don't use this
-  grn_obj_flags grn_table_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_HASH_KEY;
+  grn_table_flags grn_table_flags;
+
+  if (strncmp("key_large", tmp_share->key_large, tmp_share->key_large_length) == 0) {
+    grn_table_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_KEY_LARGE;
+  } else {
+    grn_table_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_HASH_KEY;
+  }
+
 
   grn_index_table = grn_table_create(ctx, grn_table_name, strlen(grn_table_name),
                                      grn_table_path, grn_table_flags,

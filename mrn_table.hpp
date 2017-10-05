@@ -51,6 +51,8 @@ typedef struct st_mroonga_share
 
   char                *engine;
   int                 engine_length;
+  char                *key_large;
+  int                 key_large_length;
   char                *default_tokenizer;
   int                 default_tokenizer_length;
   char                *normalizer;

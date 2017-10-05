@@ -446,6 +446,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         case 6:
           MRN_PARAM_STR("engine", engine);
           break;
+        case 9:
+          MRN_PARAM_STR("key_large", key_large);
+          break;
         case 10:
           MRN_PARAM_STR("normalizer", normalizer);
           break;
