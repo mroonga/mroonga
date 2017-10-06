@@ -69,7 +69,7 @@ Improvements
 * [rpm][centos] Supported MySQL 5.6.37-2 and MySQL 5.7.19-1 on
   CentOS 6. [groonga-dev,04403] [Reported by Kagami Hiroshi]
 
-* [ubuntu] Dropped Ubuntu 16.10 (Yekkety Yak) support.
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 16.10 (Yekkety Yak) support.
   It has reached EOL at July 20, 2017.
 
 * [:doc:`/reference/udf/mroonga_highlight_html`] Supported a function
@@ -182,8 +182,8 @@ Improvements
   [Patch by Naoya Murakami]
 
 * [:doc:`/reference/server_variables`] Added documentation about
-  ``mroonga_libgroonga_support_zstd`` variable. [GitHub#133]
-  [Patch by Naoya Murakaimi]
+  :ref:`server-variable-mroonga-libgroonga-support-zstd`
+  variable. [GitHub#133] [Patch by Naoya Murakaimi]
 
 * [:doc:`/install`] Changed to recommend ``https://packages.groonga.org``
   for downloading resources.
