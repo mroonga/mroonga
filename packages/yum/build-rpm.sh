@@ -105,7 +105,7 @@ case ${distribution} in
         ;;
       mariadb-${PACKAGE})
         run yum install -y mariadb-devel
-	;;
+        ;;
       mariadb-10.1-${PACKAGE})
         if [ "${architecture}" = "x86_64" ]; then
           mariadb_architecture="amd64"
@@ -116,6 +116,24 @@ case ${distribution} in
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.1/${distribution}${distribution_version}-${mariadb_architecture}
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+REPO
+        run yum install -y MariaDB-devel
+        if [ ${distribution_version} = 6 ]; then
+          run yum install -y cmake28
+        fi
+        ;;
+      mariadb-10.2-${PACKAGE})
+        if [ "${architecture}" = "x86_64" ]; then
+          mariadb_architecture="amd64"
+        else
+          mariadb_architecture="x86"
+        fi
+        cat <<REPO > /etc/yum.repos.d/MariaDB.repo
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.2/${distribution}${distribution_version}-${mariadb_architecture}
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 REPO

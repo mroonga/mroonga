@@ -7,6 +7,7 @@ MYSQL_VARIANTS =				\
 	mysql57-community			\
 	mariadb					\
 	mariadb-10.1				\
+	mariadb-10.2				\
 	percona-server-56			\
 	percona-server-57
 CENTOS_VERSIONS = 6 7
@@ -71,5 +72,6 @@ specs: $(SPEC_DIR)/mysql55-$(PACKAGE).spec
 specs: $(SPEC_DIR)/mysql56-community-$(PACKAGE).spec
 specs: $(SPEC_DIR)/mariadb-$(PACKAGE).spec
 specs: $(SPEC_DIR)/mariadb-10.1-$(PACKAGE).spec
+specs: $(SPEC_DIR)/mariadb-10.2-$(PACKAGE).spec
 specs: $(SPEC_DIR)/percona-server-56-$(PACKAGE).spec
 specs: $(SPEC_DIR)/percona-server-57-$(PACKAGE).spec
