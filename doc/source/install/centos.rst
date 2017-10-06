@@ -161,7 +161,7 @@ Install::
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.3.0-1.noarch.rpm
   % sudo yum install -y MariaDB-server
   % sudo systemctl start mariadb
-  % sudo yum install -y --enablerepo=epel mariadb-mroonga
+  % sudo yum install -y --enablerepo=epel mariadb-10.1-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
@@ -310,7 +310,7 @@ Install::
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.3.0-1.noarch.rpm
   % sudo yum install -y MariaDB-server
   % sudo systemctl start mariadb
-  % sudo yum install -y --enablerepo=epel mariadb-mroonga
+  % sudo yum install -y --enablerepo=epel mariadb-10.1-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
