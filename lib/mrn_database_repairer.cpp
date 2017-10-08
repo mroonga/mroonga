@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2015-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -36,6 +36,16 @@
 #endif
 
 namespace mrn {
+  struct CheckResult {
+    CheckResult() :
+      is_crashed(false),
+      is_corrupt(false) {
+    }
+
+    bool is_crashed;
+    bool is_corrupt;
+  };
+
   DatabaseRepairer::DatabaseRepairer(grn_ctx *ctx, THD *thd)
     : ctx_(ctx),
       thd_(thd),
@@ -53,10 +63,19 @@ namespace mrn {
   bool DatabaseRepairer::is_crashed(void) {
     MRN_DBUG_ENTER_METHOD();
 
-    bool is_crashed = false;
-    each_database(&DatabaseRepairer::is_crashed_body, &is_crashed);
+    CheckResult result;
+    each_database(&DatabaseRepairer::check_body, &result);
 
-    DBUG_RETURN(is_crashed);
+    DBUG_RETURN(result.is_crashed);
+  }
+
+  bool DatabaseRepairer::is_corrupt(void) {
+    MRN_DBUG_ENTER_METHOD();
+
+    CheckResult result;
+    each_database(&DatabaseRepairer::check_body, &result);
+
+    DBUG_RETURN(result.is_corrupt);
   }
 
   bool DatabaseRepairer::repair(void) {
@@ -189,16 +208,17 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void DatabaseRepairer::is_crashed_body(grn_ctx *ctx,
-                                         grn_obj *db,
-                                         const char *db_path,
-                                         void *user_data) {
+  void DatabaseRepairer::check_body(grn_ctx *ctx,
+                                    grn_obj *db,
+                                    const char *db_path,
+                                    void *user_data) {
     MRN_DBUG_ENTER_METHOD();
 
-    bool *is_crashed = static_cast<bool *>(user_data);
+    CheckResult *result = static_cast<CheckResult *>(user_data);
 
     if (grn_obj_is_locked(ctx, db)) {
-      *is_crashed = true;
+      result->is_crashed = true;
+      result->is_corrupt = true;
       DBUG_VOID_RETURN;
     }
 
@@ -208,16 +228,26 @@ namespace mrn {
                                    NULL, 0,
                                    0, -1, GRN_CURSOR_BY_ID);
     if (!cursor) {
-      *is_crashed = true;
+      result->is_crashed = true;
+      result->is_corrupt = true;
       DBUG_VOID_RETURN;
     }
 
     grn_id id;
     while ((id = grn_table_cursor_next(ctx, cursor)) != GRN_ID_NIL) {
+      if (grn_id_is_builtin(ctx, id)) {
+        continue;
+      }
+
       grn_obj *object = grn_ctx_at(ctx, id);
 
       if (!object) {
-        continue;
+        if (ctx->rc == GRN_SUCCESS) {
+          continue;
+        } else {
+          result->is_corrupt = true;
+          break;
+        }
       }
 
       switch (object->header.type) {
@@ -229,7 +259,8 @@ namespace mrn {
       case GRN_COLUMN_VAR_SIZE:
       case GRN_COLUMN_INDEX:
         if (grn_obj_is_locked(ctx_, object)) {
-          *is_crashed = true;
+          result->is_crashed = true;
+          result->is_corrupt = true;
         }
         break;
       default:
@@ -238,7 +269,7 @@ namespace mrn {
 
       grn_obj_unlink(ctx, object);
 
-      if (*is_crashed) {
+      if (result->is_crashed || result->is_corrupt) {
         break;
       }
     }

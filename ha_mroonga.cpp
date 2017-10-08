@@ -13933,10 +13933,10 @@ int ha_mroonga::storage_check(THD* thd, HA_CHECK_OPT* check_opt)
 {
   MRN_DBUG_ENTER_METHOD();
   mrn::DatabaseRepairer repairer(ctx, thd);
-  if (repairer.repair()) {
-    DBUG_RETURN(HA_ADMIN_OK);
-  } else {
+  if (repairer.is_corrupt()) {
     DBUG_RETURN(HA_ADMIN_CORRUPT);
+  } else {
+    DBUG_RETURN(HA_ADMIN_OK);
   }
 }
 
