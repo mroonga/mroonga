@@ -228,8 +228,9 @@ namespace mrn {
       case GRN_COLUMN_FIX_SIZE:
       case GRN_COLUMN_VAR_SIZE:
       case GRN_COLUMN_INDEX:
-        grn_obj_is_locked(ctx_, object);
-        *is_crashed = true;
+        if (grn_obj_is_locked(ctx_, object)) {
+          *is_crashed = true;
+        }
         break;
       default:
         break;
