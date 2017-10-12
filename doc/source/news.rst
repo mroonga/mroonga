@@ -5,6 +5,54 @@
 News
 ====
 
+.. _release-7-07:
+
+Release 7.07 - 2017-10-12
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [mroonga_query_expand] Added ``mroonga_query_expand`` UDF. If you
+  prepare synonyms table in advance, you can get expanded synonym in
+  your query by ``mroonga_query_expanded``. Note that Groonga 7.0.6 or
+  later version is required to use this function.
+
+* [rpm][centos] Supported Percona Server 5.7.19-17.1. [Reported by
+  tigersun2000]
+
+* [rpm][centos] Supported MariaDB 5.5.56-2. [Reported by akiko_pusu]
+
+* [rpm][centos] Supported MariaDB 10.1/10.2 provided by MariaDB.
+
+Fixes
+^^^^^
+
+* Fixed a bug that wrong database may be used on "DROP DATABASE".
+  This bug may cause a crash because internal "mroonga_operations"
+  table is removed unexpectedly. It may happen when the following two conditions are true:
+
+  1. There are multiple databases that uses Mroonga.
+  2. "DROP DATABASE" against no longer Mroonga tables exist.
+
+  As unexpected result, "DROP DATABASE x" may remove
+  "mroonga_operations" table on existing "y" database.
+
+* Fix a crash bug after CHECK TABLE is used. [GitHub#167] [Reported by
+  GMO Media, Inc.]
+
+* [deb][mariadb10] Added missing dependency to lsb-release package for
+  preinst and postrm maintainer script. [GitHub#169] [Patch by Tatsuki
+  Sugiura]
+
+Thanks
+^^^^^^
+
+* @tigersun2000
+* @akiko_pusu
+* GMO Media, Inc.
+* Tatsuki Sugiura
+
 .. _release-7-06:
 
 Release 7.06 - 2017-08-29
