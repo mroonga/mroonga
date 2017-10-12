@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-08-01 15:34+0900\n"
+"PO-Revision-Date: 2017-10-12 15:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1394,6 +1394,20 @@ msgstr "この変数の値による挙動の変化を示す別の例です。"
 msgid "``mroonga_max_n_records_for_estimate``"
 msgstr ""
 
+msgid "``mroonga_enable_operations_recording``"
+msgstr ""
+
+msgid ""
+"Whether recording operations for recover is enabled or not. The default "
+"value is ``ON`` that means operations are recording to Groonga database. It "
+"needs to reopen the database with `` FLUSH TABLES`` in order to reflect the "
+"variable is changed."
+msgstr ""
+
+#, fuzzy
+msgid "Here is an example SQL to disable operations recording::"
+msgstr "最適化を無効にするSQLの例です::"
+
 msgid "``mroonga_vector_column_delimiter``"
 msgstr ""
 
@@ -2019,8 +2033,10 @@ msgstr "指定されたGroongaコマンドを実行した結果を文字列と�
 msgid "See also"
 msgstr "参照"
 
+#, fuzzy
 msgid ""
-"[Command](http://groonga.org/docs/reference/command.html) in Groonga document"
+"`Command <http://groonga.org/docs/reference/command.html>`_ in Groonga "
+"document"
 msgstr ""
 "Groongaのドキュメントの中の[コマンド](http://groonga.org/ja/docs/reference/"
 "command.html)"
@@ -2075,11 +2091,11 @@ msgid "``mroonga_highlight_html()``"
 msgstr ""
 
 msgid ""
-"``mroonga_highlight_html()`` UDF provides functionality to highlight target "
-"column or string."
+"``mroonga_highlight_html()`` highlights the specified keywords in target "
+"text. It surrounds each keyword with ``<span class=\"keyword\">...</span>`` "
+"and special characters in HTML such as ``<`` and ``>`` are escaped. You can "
+"use the result as is safely in HTML."
 msgstr ""
-"``mroonga_highlight_html()`` UDFは対象となるカラムや文字列をハイライトする機"
-"能を提供します。"
 
 msgid ""
 "``mroonga_highlight_html()`` has required parameter and optional parameter::"
@@ -2087,43 +2103,64 @@ msgstr ""
 "``mroonga_highlight_html()`` には必須引数と省略可能引数とがあります。::"
 
 msgid ""
-"Here is the sample query to highlight target text by keyword 'mroonga'::"
+"``AS query`` is very important. You must specify it to extract keywords from "
+"query."
 msgstr ""
-"'mroonga'というキーワードで対象となるテキストのハイライトをするクエリーです。"
 
-msgid "Here is the results of execution examples::"
-msgstr "実行結果がこちらです。"
+msgid ""
+"Here is a sample to highlight keywords \"mroonga\" and \"groonga\" in target "
+"text by query \"mroonga OR groonga\". You must specify ``AS query``::"
+msgstr ""
+
+msgid "Here is the result of the execution example::"
+msgstr "実行結果はこちらです。::"
+
+msgid ""
+"Here is a sample to highlight keywords \"mroonga\" and \"groonga\" in target "
+"text by keywords \"mroonga\" and \"groonga\"::"
+msgstr ""
+"'mroonga'と'groonga'というキーワードで対象となるテキストのハイライトをするク"
+"エリーです。"
 
 msgid "There is one required parameter."
 msgstr "必須引数が1つあります。"
 
-msgid "``document``"
+msgid "``text``"
 msgstr ""
 
-msgid "The column name or string value is required."
-msgstr "カラム名もしくは文字列が必要です。"
+msgid "The column name of string or string value to be highlighted."
+msgstr "ハイライトされるカラム名もしくは文字列が必要です。"
 
-msgid "There is some optional parameters."
+msgid "There are some optional parameters."
 msgstr "いくつか省略可能な引数があります。"
-
-msgid "``wordN``"
-msgstr ""
-
-msgid "Specify any word."
-msgstr "任意の単語指定します。"
 
 msgid "``query``"
 msgstr ""
 
-msgid "Specify any keywords and pragma."
-msgstr "任意のキーワードやプラグマを指定します。"
+msgid ""
+"Specify query in `Groonga's query syntax <http://groonga.org/docs/reference/"
+"grn_expr/query_syntax.html>`_."
+msgstr ""
+"詳細は `Groongaのクエリー構文 <http://groonga.org/ja/docs/reference/grn_expr/"
+"query_syntax.html>`_ を参照してください。"
 
 msgid ""
-"It returns highlighted html. If optional parameter is not given, just "
-"returns ``document`` itself."
+"You must specify ``AS query`` to extract keywords from query like the "
+"following::"
 msgstr ""
-"ハイライトされたHTMLを返します。省略可能な引数が指定されない場合、単に "
-"``document`` をそのまま返します。"
+
+msgid "``keyword``"
+msgstr ""
+
+msgid "Specify 0 or more keywords to be highlighted."
+msgstr ""
+
+msgid ""
+"It returns highlighted HTML. If optional parameter is not given, it only "
+"escapes special characters in HTML such as ``<``, ``>`` in ``text``."
+msgstr ""
+"ハイライトされたHTMLを返します。省略可能な引数が指定されない場合、``text`` に"
+"含まれるHTMLの特殊文字 ``<`` や ``>`` をエスケープします。"
 
 msgid "``mroonga_last_insert_grn_id()``"
 msgstr ""
@@ -2258,6 +2295,9 @@ msgstr "実行例(ラッパーモード)のスキーマ定義はこちらです�
 msgid "Here is the sample data for execution examples::"
 msgstr ""
 
+msgid "Here is the results of execution examples::"
+msgstr "実行結果がこちらです。"
+
 msgid ""
 "The keyword 'fulltext' and associated keyword 'MySQL' and 'search' has been "
 "extracted."
@@ -2265,6 +2305,12 @@ msgstr ""
 
 msgid "There are many required parameters."
 msgstr "多くの必須引数があります。"
+
+msgid "``document``"
+msgstr ""
+
+msgid "The column name or string value is required."
+msgstr "カラム名もしくは文字列が必要です。"
 
 msgid "``max_length``"
 msgstr ""
@@ -2325,6 +2371,12 @@ msgid ""
 msgstr ""
 "省略可能な引数として ``wordN`` と開始テキスト、終了テキストがあります。"
 
+msgid "``wordN``"
+msgstr ""
+
+msgid "Specify any word."
+msgstr "任意の単語指定します。"
+
 msgid "``wordN_prefix``"
 msgstr ""
 
@@ -2351,3 +2403,13 @@ msgstr ""
 msgid ""
 "``mroonga_snippet_html()`` has required parameter and optional parameter::"
 msgstr "``mroonga_snippet_html()`` には必須引数と省略可能引数とがあります。::"
+
+#~ msgid "Specify any keywords and pragma."
+#~ msgstr "任意のキーワードやプラグマを指定します。"
+
+#~ msgid ""
+#~ "``mroonga_highlight_html()`` UDF provides functionality to highlight "
+#~ "target column or string."
+#~ msgstr ""
+#~ "``mroonga_highlight_html()`` UDFは対象となるカラムや文字列をハイライトする"
+#~ "機能を提供します。"
