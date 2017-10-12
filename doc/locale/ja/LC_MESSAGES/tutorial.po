@@ -141,9 +141,6 @@ msgstr ""
 "ため、すべてのデータが一度Mroongaを通ることになります。これを利用して、全文検"
 "索用のインデックス作成などを透過的に行います。"
 
-msgid "Available tokenizers"
-msgstr "利用可能なトークナイザー一覧"
-
 msgid "Storage mode"
 msgstr "ストレージモード"
 
@@ -252,6 +249,9 @@ msgid ""
 msgstr ""
 "トークナイザーに指定できるのは以下の値です。Mroongaで言う「トークナイザー」と"
 "MySQLで言う「パーサー」は同じものです。"
+
+msgid "Available tokenizers"
+msgstr "利用可能なトークナイザー一覧"
 
 msgid "Tokenizer"
 msgstr "トークナイザー"
