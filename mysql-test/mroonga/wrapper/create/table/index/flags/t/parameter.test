@@ -1,4 +1,5 @@
-# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2015  Naoya Murakami <naoya@createfield.com>
+# Copyright(C) 2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,28 +15,28 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/have_mariadb.inc
+--source ../../../../../../include/mroonga/have_mariadb.inc
 --source include/have_innodb.inc
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/load_mroonga_functions.inc
 
---disable_warnings
-DROP TABLE IF EXISTS memos;
---enable_warnings
+--disable_query_log
+DROP DATABASE test;
+CREATE DATABASE test;
+USE test;
+--enable_query_log
 
 SET NAMES utf8;
 
 CREATE TABLE memos (
-  id INT NOT NULL PRIMARY KEY,
-  content TEXT NOT NULL,
-  FULLTEXT INDEX (content) NORMALIZER='NormalizerAuto'
+  content VARCHAR(64) NOT NULL PRIMARY KEY,
+  FULLTEXT INDEX (content) FLAGS='WITH_POSITION|WITH_WEIGHT'
 ) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
 SHOW CREATE TABLE memos;
 
-INSERT INTO memos VALUES (1, "1日の消費㌍は約2000㌔㌍");
-
-SELECT * FROM memos
-  WHERE MATCH (content) AGAINST ("+カロリー" IN BOOLEAN MODE);
+SELECT mroonga_command("dump --dump_plugins no --dump_schema no");
 
 DROP TABLE memos;
 
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../../../include/mroonga/have_mroonga_deinit.inc

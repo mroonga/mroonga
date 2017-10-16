@@ -1,4 +1,4 @@
-# Copyright(C) 2016 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source include/have_innodb.inc
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS memos;
@@ -27,7 +27,7 @@ CREATE TABLE memos (
   id INT NOT NULL PRIMARY KEY,
   content TEXT NOT NULL,
   FULLTEXT INDEX (content) COMMENT 'normalizer "NormalizerAuto"'
-) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
 SHOW CREATE TABLE memos;
 
 INSERT INTO memos VALUES (1, "1日の消費㌍は約2000㌔㌍");
@@ -37,4 +37,4 @@ SELECT * FROM memos
 
 DROP TABLE memos;
 
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../../include/mroonga/have_mroonga_deinit.inc
