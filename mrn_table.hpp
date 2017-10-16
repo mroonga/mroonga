@@ -49,6 +49,8 @@ typedef struct st_mroonga_share
   TABLE_SHARE         *wrap_table_share;
   MRN_LONG_TERM_SHARE *long_term_share;
 
+  char                *table_flags;
+  int                 table_flags_length;
   char                *engine;
   int                 engine_length;
   char                *default_tokenizer;

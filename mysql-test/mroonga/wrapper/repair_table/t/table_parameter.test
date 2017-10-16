@@ -1,0 +1,52 @@
+# Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source ../../../include/mroonga/have_mariadb.inc
+--source include/have_innodb.inc
+--source include/not_embedded.inc
+--source ../../../include/mroonga/skip_solaris.inc
+--source ../../../include/mroonga/have_mroonga.inc
+--source ../../../include/mroonga/load_mroonga_functions.inc
+--source ../../../include/mroonga/have_mroonga_helper.inc
+
+CREATE DATABASE repair_test;
+USE repair_test;
+
+CREATE TABLE memos (
+  content VARCHAR(64) NOT NULL PRIMARY KEY,
+  FULLTEXT INDEX (content)
+) COMMENT='engine "InnoDB"'
+  FLAGS='TABLE_HASH_KEY|KEY_LARGE'
+  DEFAULT CHARSET=UTF8;
+
+INSERT INTO memos VALUES ('Mroonga is fast!');
+
+--remove_files_wildcard $MYSQLD_DATADIR repair_test.mrn*
+
+FLUSH TABLES;
+
+REPAIR TABLE memos;
+
+SELECT
+  mroonga_command('dump --dump_plugins no --dump_records no --dump_indexes no');
+
+DROP TABLE memos;
+
+DROP DATABASE repair_test;
+USE test;
+
+--source ../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../include/mroonga/have_mroonga_deinit.inc

@@ -1,0 +1,27 @@
+CREATE DATABASE repair_test;
+USE repair_test;
+CREATE TABLE memos (
+content VARCHAR(64) NOT NULL PRIMARY KEY,
+FULLTEXT INDEX (content)
+) COMMENT='engine "InnoDB"'
+  FLAGS='TABLE_HASH_KEY|KEY_LARGE'
+  DEFAULT CHARSET=UTF8;
+INSERT INTO memos VALUES ('Mroonga is fast!');
+FLUSH TABLES;
+REPAIR TABLE memos;
+Table	Op	Msg_type	Msg_text
+repair_test.memos	repair	status	OK
+SELECT
+mroonga_command('dump --dump_plugins no --dump_records no --dump_indexes no');
+mroonga_command('dump --dump_plugins no --dump_records no --dump_indexes no')
+table_create memos TABLE_HASH_KEY|KEY_LARGE ShortText
+
+table_create memos#content TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerMySQLGeneralCI
+
+table_create mroonga_operations TABLE_NO_KEY
+column_create mroonga_operations record COLUMN_SCALAR UInt32
+column_create mroonga_operations table COLUMN_SCALAR ShortText
+column_create mroonga_operations type COLUMN_SCALAR ShortText
+DROP TABLE memos;
+DROP DATABASE repair_test;
+USE test;

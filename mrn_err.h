@@ -1,6 +1,6 @@
 /*
   Copyright(C) 2011 Kentoku SHIBA
-  Copyright(C) 2014-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2014-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -42,5 +42,8 @@
 #define ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM 16509
 #define ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR \
   "Index for virtual generated column is not supported: %s"
+#define ER_MRN_INVALID_TABLE_FLAG_NUM 16510
+#define ER_MRN_INVALID_TABLE_FLAG_STR \
+  "The table flag '%-.64s' is invalid. It is ignored"
 
 #endif /* MRN_ERR_H_ */

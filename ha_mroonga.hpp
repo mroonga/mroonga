@@ -672,6 +672,9 @@ private:
   int drop_indexes_multiple(const char *table_name, grn_obj *table,
                             const char *index_table_name_separator);
   int drop_indexes(const char *table_name);
+  bool find_table_flags(HA_CREATE_INFO *info,
+                        MRN_SHARE *mrn_share,
+                        grn_table_flags *table_flags);
   bool find_column_flags(Field *field, MRN_SHARE *mrn_share, int i,
                          grn_obj_flags *column_flags);
   grn_obj *find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
@@ -851,7 +854,10 @@ private:
                                grn_obj **index_tables,
                                grn_obj **index_columns,
                                MRN_SHARE *tmp_share);
-  int wrapper_create_index(const char *name, TABLE *table, MRN_SHARE *tmp_share);
+  int wrapper_create_index(const char *name,
+                           TABLE *table,
+                           HA_CREATE_INFO *info,
+                           MRN_SHARE *tmp_share);
   int storage_create_validate_pseudo_column(TABLE *table);
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
   bool storage_create_foreign_key(TABLE *table, const char *grn_table_name,

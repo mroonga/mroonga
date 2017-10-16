@@ -1564,6 +1564,54 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   return type;
 }
 
+static bool mrn_parse_grn_table_create_flags(THD *thd,
+                                             grn_ctx *ctx,
+                                             const char *flag_names,
+                                             uint flag_names_length,
+                                             grn_table_flags *flags)
+{
+  const char *flag_names_end = flag_names + flag_names_length;
+  bool found = false;
+
+  while (flag_names < flag_names_end) {
+    uint rest_length = flag_names_end - flag_names;
+
+    if (*flag_names == '|' || *flag_names == ' ') {
+      flag_names += 1;
+      continue;
+    }
+    if (rest_length >= 14 && !memcmp(flag_names, "TABLE_HASH_KEY", 14)) {
+      *flags |= GRN_OBJ_TABLE_HASH_KEY;
+      flag_names += 14;
+      found = true;
+    } else if (rest_length >= 13 && !memcmp(flag_names, "TABLE_PAT_KEY", 13)) {
+      *flags |= GRN_OBJ_TABLE_PAT_KEY;
+      flag_names += 13;
+      found = true;
+    } else if (rest_length >= 13 && !memcmp(flag_names, "TABLE_DAT_KEY", 13)) {
+      *flags |= GRN_OBJ_TABLE_DAT_KEY;
+      flag_names += 13;
+      found = true;
+    } else if (rest_length >= 9 && !memcmp(flag_names, "KEY_LARGE", 9)) {
+      *flags |= GRN_OBJ_KEY_LARGE;
+      flag_names += 9;
+      found = true;
+    } else {
+      char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(invalid_flag_name, MRN_MESSAGE_BUFFER_SIZE,
+               "%.*s",
+               static_cast<int>(rest_length),
+               flag_names);
+      push_warning_printf(thd, MRN_SEVERITY_WARNING,
+                          ER_MRN_INVALID_TABLE_FLAG_NUM,
+                          ER_MRN_INVALID_TABLE_FLAG_STR,
+                          invalid_flag_name);
+      break;
+    }
+  }
+  return found;
+}
+
 static bool mrn_parse_grn_column_create_flags(THD *thd,
                                               grn_ctx *ctx,
                                               const char *flag_names,
@@ -1766,6 +1814,17 @@ static uint mrn_alter_table_flags(uint flags)
 #endif
 
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+struct ha_table_option_struct
+{
+  const char *flags;
+};
+
+static ha_create_table_option mrn_table_options[] =
+{
+  HA_TOPTION_STRING("FLAGS", flags),
+  HA_TOPTION_END
+};
+
 static ha_create_table_option mrn_field_options[] =
 {
   HA_FOPTION_STRING("GROONGA_TYPE", groonga_type),
@@ -1801,6 +1860,7 @@ static int mrn_init(void *p)
   hton->alter_table_flags = mrn_alter_table_flags;
 #endif
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  hton->table_options = mrn_table_options;
   hton->field_options = mrn_field_options;
   hton->index_options = mrn_index_options;
 #endif
@@ -3081,7 +3141,7 @@ int ha_mroonga::wrapper_create(const char *name, TABLE *table,
   if (error)
     DBUG_RETURN(error);
 
-  error = wrapper_create_index(name, table, tmp_share);
+  error = wrapper_create_index(name, table, info, tmp_share);
   if (error)
     DBUG_RETURN(error);
 
@@ -3329,7 +3389,9 @@ int ha_mroonga::wrapper_create_index_geo(const char *grn_table_name,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
+int ha_mroonga::wrapper_create_index(const char *name,
+                                     TABLE *table,
+                                     HA_CREATE_INFO *info,
                                      MRN_SHARE *tmp_share)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -3339,26 +3401,33 @@ int ha_mroonga::wrapper_create_index(const char *name, TABLE *table,
   if (error)
     DBUG_RETURN(error);
 
-  grn_obj *grn_index_table;
   mrn::PathMapper mapper(name);
   const char *grn_table_name = mapper.table_name();
-  char *grn_table_path = NULL;     // we don't specify path
-  grn_obj *pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
-  grn_obj *pkey_value_type = NULL; // we don't use this
-  grn_obj_flags grn_table_flags = GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_HASH_KEY;
 
-  grn_index_table = grn_table_create(ctx, grn_table_name, strlen(grn_table_name),
-                                     grn_table_path, grn_table_flags,
-                                     pkey_type, pkey_value_type);
-  if (ctx->rc) {
-    error = ER_CANT_CREATE_TABLE;
-    my_message(error, ctx->errbuf, MYF(0));
-    DBUG_RETURN(error);
+  {
+    char *path = NULL;     // we don't specify path
+    grn_obj *pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
+    grn_obj *pkey_value_type = NULL; // we don't use this
+    grn_table_flags flags = GRN_OBJ_PERSISTENT;
+    if (!find_table_flags(info, tmp_share, &flags)) {
+      flags |= GRN_OBJ_TABLE_HASH_KEY;
+    }
+    grn_obj *table = grn_table_create(ctx,
+                                      grn_table_name, strlen(grn_table_name),
+                                      path,
+                                      flags,
+                                      pkey_type,
+                                      pkey_value_type);
+    if (ctx->rc) {
+      error = ER_CANT_CREATE_TABLE;
+      my_message(error, ctx->errbuf, MYF(0));
+      DBUG_RETURN(error);
+    }
+    if (grn_table) {
+      grn_obj_unlink(ctx, grn_table);
+    }
+    grn_table = table;
   }
-  if (grn_table) {
-    grn_obj_unlink(ctx, grn_table);
-  }
-  grn_table = grn_index_table;
 
   uint i;
   uint n_keys = table->s->keys;
@@ -9509,6 +9578,39 @@ int ha_mroonga::drop_indexes(const char *table_name)
   DBUG_RETURN(error);
 }
 
+bool ha_mroonga::find_table_flags(HA_CREATE_INFO *info,
+                                  MRN_SHARE *mrn_share,
+                                  grn_table_flags *flags)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool found = false;
+
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (info->option_struct) {
+    const char *names = info->option_struct->flags;
+    if (names) {
+      found = mrn_parse_grn_table_create_flags(ha_thd(),
+                                               ctx,
+                                               names,
+                                               strlen(names),
+                                               flags);
+      DBUG_RETURN(found);
+    }
+  }
+#endif
+
+  if (mrn_share->table_flags) {
+    found = mrn_parse_grn_table_create_flags(ha_thd(),
+                                             ctx,
+                                             mrn_share->table_flags,
+                                             mrn_share->table_flags_length,
+                                             flags);
+    DBUG_RETURN(found);
+  }
+
+  DBUG_RETURN(found);
+}
+
 bool ha_mroonga::find_column_flags(Field *field, MRN_SHARE *mrn_share, int i,
                                    grn_obj_flags *column_flags)
 {
@@ -14101,7 +14203,14 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
 
     mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
   }
-  error = wrapper_create_index(table_share->normalized_path.str, table, share);
+  HA_CREATE_INFO info;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  info.option_struct = table_share->option_struct;
+#endif
+  error = wrapper_create_index(table_share->normalized_path.str,
+                               table,
+                               &info,
+                               share);
   if (error)
     DBUG_RETURN(error);
   error = wrapper_open_indexes(table_share->normalized_path.str);

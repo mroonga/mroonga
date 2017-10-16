@@ -443,6 +443,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 
         switch (title_length)
         {
+        case 5:
+          MRN_PARAM_STR("flags", table_flags);
+          break;
         case 6:
           MRN_PARAM_STR("engine", engine);
           break;
@@ -759,6 +762,8 @@ int mrn_free_share_alloc(
 ) {
   uint i;
   MRN_DBUG_ENTER_FUNCTION();
+  if (share->table_flags)
+    my_free(share->table_flags);
   if (share->engine)
     my_free(share->engine);
   if (share->default_tokenizer)
