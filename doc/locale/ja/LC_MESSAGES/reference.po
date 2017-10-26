@@ -2403,13 +2403,3 @@ msgstr ""
 msgid ""
 "``mroonga_snippet_html()`` has required parameter and optional parameter::"
 msgstr "``mroonga_snippet_html()`` には必須引数と省略可能引数とがあります。::"
-
-#~ msgid "Specify any keywords and pragma."
-#~ msgstr "任意のキーワードやプラグマを指定します。"
-
-#~ msgid ""
-#~ "``mroonga_highlight_html()`` UDF provides functionality to highlight "
-#~ "target column or string."
-#~ msgstr ""
-#~ "``mroonga_highlight_html()`` UDFは対象となるカラムや文字列をハイライトする"
-#~ "機能を提供します。"
