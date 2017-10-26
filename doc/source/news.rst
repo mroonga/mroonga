@@ -17,6 +17,10 @@ Improvements
   You can specify ``TABLE_HASH_KEY``, ``TABLE_PAT_KEY``, ``TABLE_DAT_KEY``, and ``KEY_LARGE``
   table options.
 
+* [rpm][centos] Supported MySQL 5.5.38-2 and 5.7.20-1.
+
+* [:doc:`/install/ubuntu`] Supported Ubuntu 17.10 (Artful Aardvark).
+
 Thanks
 ^^^^^^
 
