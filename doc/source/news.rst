@@ -15,7 +15,7 @@ Improvements
 
 * Supported table level ``flags`` option.
   You can specify ``TABLE_HASH_KEY``, ``TABLE_PAT_KEY``, ``TABLE_DAT_KEY``, and ``KEY_LARGE``
-  table options.
+  table options. [groonga-dev, 04494] [Reported by Masanori Miyashita]
 
 * [rpm][centos] Supported MySQL 5.6.38-2 and 5.7.20-1.
 
