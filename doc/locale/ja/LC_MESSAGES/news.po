@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-10-12 15:26+0900\n"
+"PO-Revision-Date: 2017-10-26 18:00+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,35 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.07 - 2017-10-12"
-msgstr "7.07リリース - 2017-10-12"
+msgid "Release 7.08 - 2017-10-29"
+msgstr "7.08リリース - 2017-10-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"Supported table level ``flags`` option. You can specify ``TABLE_HASH_KEY``, "
+"``TABLE_PAT_KEY``, ``TABLE_DAT_KEY``, and ``KEY_LARGE`` table options."
+msgstr ""
+"テーブル作成時に ``flags`` オプションを指定できるようになりました。 オプショ"
+"ンには ``TABLE_HASH_KEY`` 、 ``TABLE_PAT_KEY`` 、 ``TABLE_DAT_KEY`` と "
+"``KEY_LARGE`` が指定できます。"
+
+msgid "[rpm][centos] Supported MySQL 5.6.38-2 and 5.7.20-1."
+msgstr "[rpm][centos] MySQL 5.6.38-2と5.7.20-15.24に対応。"
+
+msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 17.10 (Artful Aardvark)."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 17.10 (Artful Aardvark)をサポートしました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Masanori Miyashita"
+msgstr "宮下さん"
+
+msgid "Release 7.07 - 2017-10-12"
+msgstr "7.07リリース - 2017-10-12"
 
 msgid ""
 "[mroonga_query_expand] Added ``mroonga_query_expand`` UDF. If you prepare "
@@ -95,9 +119,6 @@ msgstr ""
 "[deb][mariadb10] lsb-releaseパッケージへの依存関係を追加しました。preinst や "
 "postrm などメンテナスクリプトに必要でした。 [GitHub#169] [すぎうらさんがパッ"
 "チ提供]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "@tigersun2000"
 msgstr "@tigersun2000さん"
