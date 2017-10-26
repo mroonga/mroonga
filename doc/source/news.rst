@@ -5,6 +5,23 @@
 News
 ====
 
+.. _release-7-08:
+
+Release 7.08 - 2017-10-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Supported table level ``flags`` option.
+  You can specify ``TABLE_HASH_KEY``, ``TABLE_PAT_KEY``, ``TABLE_DAT_KEY``, and ``KEY_LARGE``
+  table options.
+
+Thanks
+^^^^^^
+
+* Masanori Miyashita
+
 .. _release-7-07:
 
 Release 7.07 - 2017-10-12
