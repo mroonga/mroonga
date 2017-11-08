@@ -6209,16 +6209,6 @@ int ha_mroonga::storage_write_row(uchar *buf)
       }
       grn_obj_set_value(ctx, column, record_id, &value, GRN_OBJ_SET);
     } else {
-      if (added && is_grn_zero_column_value(column, &colbuf)) {
-        // WORKAROUND: groonga can't index newly added '0' value for
-        // fix size column. So we add non-'0' value first then add
-        // real '0' value again. It will be removed when groonga
-        // supports 'null' value.
-        char *bytes = GRN_BULK_HEAD(&colbuf);
-        bytes[0] = '\1';
-        grn_obj_set_value(ctx, column, record_id, &colbuf, GRN_OBJ_SET);
-        bytes[0] = '\0';
-      }
       grn_obj_set_value(ctx, column, record_id, &colbuf, GRN_OBJ_SET);
     }
     if (ctx->rc) {
