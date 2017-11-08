@@ -1,0 +1,19 @@
+DROP TABLE IF EXISTS numbers;
+CREATE TABLE numbers (
+value int,
+UNIQUE KEY (value)
+);
+INSERT INTO numbers (value) VALUES (0);
+INSERT INTO numbers (value) VALUES (1);
+INSERT INTO numbers (value) VALUES (NULL);
+ERROR 23000: Duplicate entry 'NULL' for key 'value'
+INSERT INTO numbers (value) VALUES (2);
+SELECT * FROM numbers;
+value
+0
+1
+2
+SELECT * FROM numbers WHERE value = 0;
+value
+0
+DROP TABLE numbers;
