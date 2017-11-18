@@ -91,7 +91,7 @@ allow_unsigned_uploads = 0
       source_names = [code_name, "#{code_name}-updates"]
       source_names.each do |source_name|
         allpackages_url =
-          "http://packages.ubuntu.com/#{source_name}/allpackages?format=txt.gz"
+          "https://packages.ubuntu.com/#{source_name}/allpackages?format=txt.gz"
         open(allpackages_url) do |file|
           file.each_line do |line|
             case line
