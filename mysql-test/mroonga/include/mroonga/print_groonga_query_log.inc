@@ -1,4 +1,3 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2017 Sergei Golubchik <serg@mariadb.org>
 #
 # This library is free software; you can redistribute it and/or
@@ -15,4 +14,11 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-let MYSQLD_DATADIR = `select @@datadir`;
+SHOW GLOBAL VARIABLES LIKE "mroonga_query_log_file";
+perl;
+open(F, '<', $_="$ENV{MYSQLD_DATADIR}/groonga-query-log.log") or die "open(<$_): $!";
+while (<F>) {
+  s/^[^|]+\|[^|]+\|[^|]+\| *//;
+  print;
+}
+EOF
