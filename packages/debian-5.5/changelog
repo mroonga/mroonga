@@ -1,3 +1,9 @@
+mroonga-5.5 (7.09-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Wed, 29 Nov 2017 00:00:00 +0900
+
 mroonga-5.5 (7.08-1) unstable; urgency=low
 
   * New upstream release.
