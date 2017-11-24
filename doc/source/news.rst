@@ -5,6 +5,30 @@
 News
 ====
 
+.. _release-7-09:
+
+Release 7.09 - 2017-11-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm][centos] Supported MariaDB 10.2.10.
+
+* [rpm][centos] Supported MariaDB 10.1.29.
+
+* Fixed not to require sed to run tests. [Patch by Sergei Golubchik]
+
+* [cmake] Changed to skip Mroonga related configurations on without
+  Mroonga build. [Patch by Vladislav Vaintroub]
+
+Thanks
+^^^^^^
+
+* Sergei Golubchik
+
+* Vladislav Vaintroub
+
 .. _release-7-08:
 
 Release 7.08 - 2017-10-29
