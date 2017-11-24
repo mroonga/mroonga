@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-10-26 18:37+0900\n"
+"PO-Revision-Date: 2017-11-24 11:27+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,42 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.08 - 2017-10-29"
-msgstr "7.08リリース - 2017-10-29"
+msgid "Release 7.09 - 2017-11-29"
+msgstr "7.09リリース - 2017-11-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[rpm][centos] Supported MariaDB 10.2.10."
+msgstr "[rpm][centos] MariaDB 10.2.10に対応。"
+
+msgid "[rpm][centos] Supported MariaDB 10.1.29."
+msgstr "[rpm][centos] MariaDB 10.1.29に対応。"
+
+msgid "Fixed not to require sed to run tests. [Patch by Sergei Golubchik]"
+msgstr ""
+"テストを実行するときにsedがなくてもよいようにしました。 [Sergei Golubchikさん"
+"がパッチ提供]<"
+
+msgid ""
+"[cmake] Changed to skip Mroonga related configurations on without Mroonga "
+"build. [Patch by Vladislav Vaintroub]"
+msgstr ""
+"[cmake] Mroongaを無効にしてビルドする場合にはMroonga関連の設定をスキップする"
+"ようにしました。 [Vladislav Vaintroubさんがパッチ提供]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+# 22607774878349e3a2ba0a9bef7a10cc
+msgid "Sergei Golubchik"
+msgstr "Sergei Golubchikさん"
+
+msgid "Vladislav Vaintroub"
+msgstr "Vladislav Vaintroubさん"
+
+msgid "Release 7.08 - 2017-10-29"
+msgstr "7.08リリース - 2017-10-29"
 
 msgid ""
 "Supported table level ``flags`` option. You can specify ``TABLE_HASH_KEY``, "
@@ -42,9 +73,6 @@ msgstr "[rpm][centos] MySQL 5.6.38-2と5.7.20-15.24に対応。"
 msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 17.10 (Artful Aardvark)."
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 17.10 (Artful Aardvark)をサポートしました。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Masanori Miyashita"
 msgstr "宮下さん"
@@ -3861,10 +3889,6 @@ msgid ""
 msgstr ""
 "シャットダウン時に開いているテーブルがあるとクラッシュする問題を修正しまし"
 "た。 [GitHub#71] [GMOメディア株式会社さんが報告]"
-
-# 22607774878349e3a2ba0a9bef7a10cc
-msgid "Sergei Golubchik"
-msgstr "Sergei Golubchikさん"
 
 msgid "Release 5.05 - 2015/07/29"
 msgstr "5.05リリース - 2015/07/29"
