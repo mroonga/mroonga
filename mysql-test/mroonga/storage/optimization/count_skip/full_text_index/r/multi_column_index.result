@@ -1,0 +1,20 @@
+DROP TABLE IF EXISTS memos;
+FLUSH STATUS;
+CREATE TABLE memos (
+title TEXT,
+content TEXT,
+FULLTEXT INDEX (title, content)
+) DEFAULT CHARSET=UTF8;
+INSERT INTO memos (title, content) VALUES ('On Groonga', 'Groonga is good.');
+INSERT INTO memos (title, content) VALUES ('More on Groonga', 'Groonga is very good.');
+INSERT INTO memos (title, content) VALUES ('Also on Mroonga', 'Mroonga is good.');
+INSERT INTO memos (title, content) VALUES ('Another memo', 'Mroonga is very good.');
+INSERT INTO memos (title, content) VALUES ('A reminder', 'Mroonga uses Groonga.');
+SELECT COUNT(*) FROM memos
+WHERE MATCH(title, content) AGAINST('+Groonga +More' IN BOOLEAN MODE);
+COUNT(*)
+1
+SHOW STATUS LIKE 'mroonga_count_skip';
+Variable_name	Value
+Mroonga_count_skip	1
+DROP TABLE memos;
