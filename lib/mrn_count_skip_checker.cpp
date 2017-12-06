@@ -133,18 +133,10 @@ namespace mrn {
       {
         Item_func *func_item = static_cast<Item_func *>(where);
         if (func_item->functype() == Item_func::FT_FUNC) {
-          if (select_lex_->select_n_where_fields == 1) {
-            GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                    "[mroonga][count-skip][true] "
-                    "only one full text search condition");
-            DBUG_RETURN(true);
-          } else {
-            GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                    "[mroonga][count-skip][false] "
-                    "full text search condition and more conditions: %u",
-                    select_lex_->select_n_where_fields);
-            DBUG_RETURN(false);
-          }
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][count-skip][true] "
+                  "only one full text search condition");
+          DBUG_RETURN(true);
         } else {
           skippable = is_skippable(func_item);
           if (skippable) {
