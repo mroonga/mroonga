@@ -11,7 +11,7 @@ INSERT INTO memos (title, content) VALUES ('Also on Mroonga', 'Mroonga is good.'
 INSERT INTO memos (title, content) VALUES ('Another memo', 'Mroonga is very good.');
 INSERT INTO memos (title, content) VALUES ('A reminder', 'Mroonga uses Groonga.');
 SELECT COUNT(*) FROM memos
-WHERE MATCH(title, content) AGAINST('+Groonga +More' IN BOOLEAN MODE);
+WHERE MATCH(title, content) AGAINST('+Groonga +reminder' IN BOOLEAN MODE);
 COUNT(*)
 1
 SHOW STATUS LIKE 'mroonga_count_skip';
