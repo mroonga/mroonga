@@ -25,10 +25,13 @@ FLUSH STATUS;
 SET NAMES UTF8;
 CREATE TABLE memos (
   content TEXT,
-  FULLTEXT INDEX(content)
+  FULLTEXT INDEX (content)
 ) DEFAULT CHARSET UTF8;
 
 INSERT INTO memos VALUES ('Groonga is fast');
+INSERT INTO memos VALUES ('Fast embeddable full text search engine');
+INSERT INTO memos VALUES ('Mroonga is fast');
+INSERT INTO memos VALUES ('Groonga + MySQL');
 
 SELECT *
   FROM memos
