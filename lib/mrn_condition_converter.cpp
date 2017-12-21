@@ -27,7 +27,7 @@
 #ifdef MRN_ITEM_HAVE_ITEM_NAME
 #  define MRN_ITEM_FIELD_GET_NAME(item)        ((item)->item_name.ptr())
 #  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item)  \
-  (static_cast<int>(item)->item_name.length())
+  (static_cast<int>(item->item_name.length()))
 #else
 #  define MRN_ITEM_FIELD_GET_NAME(item)        ((item)->name)
 #  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item)  \
