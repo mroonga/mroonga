@@ -607,6 +607,7 @@ static uchar *mrn_long_term_share_get_key(const uchar *record,
 /* status */
 static long mrn_count_skip = 0;
 static long mrn_fast_order_limit = 0;
+static long mrn_condition_push_down = 0;
 
 /* logging */
 static char *mrn_log_file_path = NULL;
@@ -709,6 +710,10 @@ static struct st_mysql_show_var mrn_status_variables[] =
                             SHOW_SCOPE_GLOBAL),
   MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_fast_order_limit",
                             (char *)&mrn_fast_order_limit,
+                            SHOW_LONG,
+                            SHOW_SCOPE_GLOBAL),
+  MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_condition_push_down",
+                            (char *)&mrn_condition_push_down,
                             SHOW_LONG,
                             SHOW_SCOPE_GLOBAL),
   MRN_STATUS_VARIABLE_ENTRY(NullS, NullS, SHOW_LONG, SHOW_SCOPE_GLOBAL)
@@ -8913,6 +8918,7 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
     mrn::ConditionConverter converter(ctx, grn_table, true);
     if (converter.count_match_against(cond) == 1 &&
         converter.is_convertable(cond)) {
+      ++mrn_condition_push_down;
       reminder_cond = NULL;
     }
   }

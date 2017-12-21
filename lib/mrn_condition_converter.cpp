@@ -26,10 +26,12 @@
 
 #ifdef MRN_ITEM_HAVE_ITEM_NAME
 #  define MRN_ITEM_FIELD_GET_NAME(item)        ((item)->item_name.ptr())
-#  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item) ((item)->item_name.length())
+#  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item)  \
+  (static_cast<int>(item)->item_name.length())
 #else
 #  define MRN_ITEM_FIELD_GET_NAME(item)        ((item)->name)
-#  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item) (strlen((item)->name))
+#  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item)  \
+  (static_cast<int>(strlen((item)->name)))
 #endif
 
 namespace mrn {
@@ -59,6 +61,11 @@ namespace mrn {
       {
         const Item_cond *cond_item = reinterpret_cast<const Item_cond *>(item);
         bool convertable = is_convertable(cond_item);
+        if (convertable) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][true] "
+                  "convertable conditions");
+        }
         DBUG_RETURN(convertable);
       }
       break;
@@ -66,10 +73,20 @@ namespace mrn {
       {
         const Item_func *func_item = reinterpret_cast<const Item_func *>(item);
         bool convertable = is_convertable(func_item);
+        if (convertable) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][true] "
+                  "convertable function condition: %u",
+                  func_item->functype());
+        }
         DBUG_RETURN(convertable);
       }
       break;
     default:
+      GRN_LOG(ctx_, GRN_LOG_DEBUG,
+              "[mroonga][condition-push-down][false] "
+              "unsupported top level conditionnot only one item: %u",
+              item->type());
       DBUG_RETURN(false);
       break;
     }
@@ -85,6 +102,10 @@ namespace mrn {
     }
 
     if (cond_item->functype() != Item_func::COND_AND_FUNC) {
+      GRN_LOG(ctx_, GRN_LOG_DEBUG,
+              "[mroonga][condition-push-down][false] "
+              "not AND conditions: %u",
+              cond_item->functype());
       DBUG_RETURN(false);
     }
 
@@ -118,9 +139,17 @@ namespace mrn {
         Item *left_item = arguments[0];
         Item *right_item = arguments[1];
         if (left_item->type() != Item::FIELD_ITEM) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "left item of binary operation isn't field: %u",
+                  left_item->type());
           DBUG_RETURN(false);
         }
         if (!right_item->basic_const_item()) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "right item of binary operation isn't constant: %u",
+                  right_item->type());
           DBUG_RETURN(false);
         }
 
@@ -144,12 +173,24 @@ namespace mrn {
         Item *min_item = arguments[1];
         Item *max_item = arguments[2];
         if (target_item->type() != Item::FIELD_ITEM) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "target of BETWEEN isn't field: %u",
+                  target_item->type());
           DBUG_RETURN(false);
         }
         if (!min_item->basic_const_item()) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "minimum value of BETWEEN isn't constant: %u",
+                  min_item->type());
           DBUG_RETURN(false);
         }
         if (!max_item->basic_const_item()) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "maximum value of BETWEEN isn't constant: %u",
+                  max_item->type());
           DBUG_RETURN(false);
         }
 
@@ -182,22 +223,68 @@ namespace mrn {
       if (value_item->type() == Item::STRING_ITEM &&
           func_type == Item_func::EQ_FUNC) {
         convertable = have_index(field_item, GRN_OP_EQUAL);
+        if (!convertable) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "index for string equal operation doesn't exist: %.*s",
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item));
+        }
       }
       break;
     case INT_TYPE:
       if (field_type == MYSQL_TYPE_ENUM) {
         convertable = (value_item->type() == Item::STRING_ITEM ||
                        value_item->type() == Item::INT_ITEM);
+        if (!convertable) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "constant value of enum binary operation "
+                  "isn't string nor integer: %.*s: %u",
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item),
+                  value_item->type());
+        }
       } else {
         convertable = value_item->type() == Item::INT_ITEM;
+        if (!convertable) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "constant value of integer binary operation "
+                  "isn't integer: %.*s: %u",
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item),
+                  value_item->type());
+        }
       }
       break;
     case TIME_TYPE:
       if (is_valid_time_value(field_item, value_item)) {
         convertable = have_index(field_item, func_type);
+        if (!convertable) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "index for time binary operation doesn't exist: %.*s",
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item));
+        }
+      } else {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "constant value of time binary operation "
+                "is invalid: %.*s: %u",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item),
+                value_item->type());
       }
       break;
     case UNSUPPORTED_TYPE:
+      GRN_LOG(ctx_, GRN_LOG_DEBUG,
+              "[mroonga][condition-push-down][false] "
+              "unsupported value of binary operation: %.*s: %u",
+              MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+              MRN_ITEM_FIELD_GET_NAME(field_item),
+              field_type);
       break;
     }
 
@@ -215,24 +302,102 @@ namespace mrn {
     NormalizedType normalized_type = normalize_field_type(field_type);
     switch (normalized_type) {
     case STRING_TYPE:
-      if (min_item->type() == Item::STRING_ITEM &&
-          max_item->type() == Item::STRING_ITEM) {
-        convertable = have_index(field_item, GRN_OP_LESS);
+      if (min_item->type() != Item::STRING_ITEM) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "minimum value of string BETWEEN operation isn't string: "
+                "%.*s: %u",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item),
+                min_item->type());
+        DBUG_RETURN(false);
+      }
+      if (max_item->type() != Item::STRING_ITEM) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "maximum value of string BETWEEN operation isn't string: "
+                "%.*s: %u",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item),
+                max_item->type());
+        DBUG_RETURN(false);
+      }
+      convertable = have_index(field_item, GRN_OP_LESS);
+      if (!convertable) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "index for string BETWEEN operation doesn't exist: %.*s",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item));
       }
       break;
     case INT_TYPE:
-      if (min_item->type() == Item::INT_ITEM &&
-          max_item->type() == Item::INT_ITEM) {
-        convertable = have_index(field_item, GRN_OP_LESS);
+      if (min_item->type() != Item::INT_ITEM) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "minimum value of integer BETWEEN operation isn't integer: "
+                "%.*s: %u",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item),
+                min_item->type());
+        DBUG_RETURN(false);
+      }
+      if (max_item->type() != Item::INT_ITEM) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "minimum value of integer BETWEEN operation isn't integer: "
+                "%.*s: %u",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item),
+                max_item->type());
+        DBUG_RETURN(false);
+      }
+      convertable = have_index(field_item, GRN_OP_LESS);
+      if (!convertable) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "index for integer BETWEEN operation doesn't exist: %.*s",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item));
       }
       break;
     case TIME_TYPE:
-      if (is_valid_time_value(field_item, min_item) &&
-          is_valid_time_value(field_item, max_item)) {
-        convertable = have_index(field_item, GRN_OP_LESS);
+      if (!is_valid_time_value(field_item, min_item)) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "minimum value of time BETWEEN operation is invalid: "
+                "%.*s: %u",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item),
+                min_item->type());
+        DBUG_RETURN(false);
+      }
+      if (!is_valid_time_value(field_item, max_item)) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "maximum value of time BETWEEN operation is invalid: "
+                "%.*s: %u",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item),
+                max_item->type());
+        DBUG_RETURN(false);
+      }
+      convertable = have_index(field_item, GRN_OP_LESS);
+      if (!convertable) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "index for time BETWEEN operation doesn't exist: %.*s",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item));
       }
       break;
     case UNSUPPORTED_TYPE:
+      GRN_LOG(ctx_, GRN_LOG_DEBUG,
+              "[mroonga][condition-push-down][false] "
+              "unsupported value of BETWEEN operation: %.*s: %u",
+              MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+              MRN_ITEM_FIELD_GET_NAME(field_item),
+              field_type);
       break;
     }
 
