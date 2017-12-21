@@ -249,29 +249,24 @@ namespace mrn {
     Item_func::Functype func_type) {
     MRN_DBUG_ENTER_METHOD();
 
-    bool convertable = false;
-
     enum_field_types field_type = field_item->field->real_type();
     NormalizedType normalized_type = normalize_field_type(field_type);
     switch (normalized_type) {
     case STRING_TYPE:
-      if (value_item->type() == Item::STRING_ITEM &&
-          func_type == Item_func::EQ_FUNC) {
-        convertable = have_index(field_item, GRN_OP_EQUAL);
-        if (!convertable) {
-          GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                  "[mroonga][condition-push-down][false] "
-                  "index for string equal operation doesn't exist: %.*s",
-                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                  MRN_ITEM_FIELD_GET_NAME(field_item));
-        }
+      if (func_type == Item_func::EQ_FUNC &&
+          !have_index(field_item, GRN_OP_EQUAL)) {
+        GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                "[mroonga][condition-push-down][false] "
+                "index for string equal operation doesn't exist: %.*s",
+                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                MRN_ITEM_FIELD_GET_NAME(field_item));
+        DBUG_RETURN(false);
       }
       break;
     case INT_TYPE:
       if (field_type == MYSQL_TYPE_ENUM) {
-        convertable = (value_item->type() == Item::STRING_ITEM ||
-                       value_item->type() == Item::INT_ITEM);
-        if (!convertable) {
+        if (value_item->type() != Item::STRING_ITEM &&
+            value_item->type() != Item::INT_ITEM) {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][false] "
                   "constant value of enum binary operation "
@@ -279,31 +274,12 @@ namespace mrn {
                   MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
                   MRN_ITEM_FIELD_GET_NAME(field_item),
                   value_item->type());
-        }
-      } else {
-        convertable = value_item->type() == Item::INT_ITEM;
-        if (!convertable) {
-          GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                  "[mroonga][condition-push-down][false] "
-                  "constant value of integer binary operation "
-                  "isn't integer: %.*s: %u",
-                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                  MRN_ITEM_FIELD_GET_NAME(field_item),
-                  value_item->type());
+          DBUG_RETURN(false);
         }
       }
       break;
     case TIME_TYPE:
-      if (is_valid_time_value(field_item, value_item)) {
-        convertable = have_index(field_item, func_type);
-        if (!convertable) {
-          GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                  "[mroonga][condition-push-down][false] "
-                  "index for time binary operation doesn't exist: %.*s",
-                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                  MRN_ITEM_FIELD_GET_NAME(field_item));
-        }
-      } else {
+      if (!is_valid_time_value(field_item, value_item)) {
         GRN_LOG(ctx_, GRN_LOG_DEBUG,
                 "[mroonga][condition-push-down][false] "
                 "constant value of time binary operation "
@@ -311,6 +287,7 @@ namespace mrn {
                 MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
                 MRN_ITEM_FIELD_GET_NAME(field_item),
                 value_item->type());
+        DBUG_RETURN(false);
       }
       break;
     case UNSUPPORTED_TYPE:
@@ -320,10 +297,11 @@ namespace mrn {
               MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
               MRN_ITEM_FIELD_GET_NAME(field_item),
               field_type);
+      DBUG_RETURN(false);
       break;
     }
 
-    DBUG_RETURN(convertable);
+    DBUG_RETURN(true);
   }
 
   bool ConditionConverter::is_convertable_between(const Item_field *field_item,
@@ -331,34 +309,11 @@ namespace mrn {
                                                   Item *max_item) {
     MRN_DBUG_ENTER_METHOD();
 
-    bool convertable = false;
-
     enum_field_types field_type = field_item->field->type();
     NormalizedType normalized_type = normalize_field_type(field_type);
     switch (normalized_type) {
     case STRING_TYPE:
-      if (min_item->type() != Item::STRING_ITEM) {
-        GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                "[mroonga][condition-push-down][false] "
-                "minimum value of string BETWEEN operation isn't string: "
-                "%.*s: %u",
-                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                MRN_ITEM_FIELD_GET_NAME(field_item),
-                min_item->type());
-        DBUG_RETURN(false);
-      }
-      if (max_item->type() != Item::STRING_ITEM) {
-        GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                "[mroonga][condition-push-down][false] "
-                "maximum value of string BETWEEN operation isn't string: "
-                "%.*s: %u",
-                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                MRN_ITEM_FIELD_GET_NAME(field_item),
-                max_item->type());
-        DBUG_RETURN(false);
-      }
-      convertable = have_index(field_item, GRN_OP_LESS);
-      if (!convertable) {
+      if (!have_index(field_item, GRN_OP_LESS)) {
         GRN_LOG(ctx_, GRN_LOG_DEBUG,
                 "[mroonga][condition-push-down][false] "
                 "index for string BETWEEN operation doesn't exist: %.*s",
@@ -367,33 +322,29 @@ namespace mrn {
       }
       break;
     case INT_TYPE:
-      if (min_item->type() != Item::INT_ITEM) {
-        GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                "[mroonga][condition-push-down][false] "
-                "minimum value of integer BETWEEN operation isn't integer: "
-                "%.*s: %u",
-                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                MRN_ITEM_FIELD_GET_NAME(field_item),
-                min_item->type());
-        DBUG_RETURN(false);
-      }
-      if (max_item->type() != Item::INT_ITEM) {
-        GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                "[mroonga][condition-push-down][false] "
-                "minimum value of integer BETWEEN operation isn't integer: "
-                "%.*s: %u",
-                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                MRN_ITEM_FIELD_GET_NAME(field_item),
-                max_item->type());
-        DBUG_RETURN(false);
-      }
-      convertable = have_index(field_item, GRN_OP_LESS);
-      if (!convertable) {
-        GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                "[mroonga][condition-push-down][false] "
-                "index for integer BETWEEN operation doesn't exist: %.*s",
-                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                MRN_ITEM_FIELD_GET_NAME(field_item));
+      if (field_type == MYSQL_TYPE_ENUM) {
+        if (min_item->type() != Item::STRING_ITEM &&
+            min_item->type() != Item::INT_ITEM) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "minimum value of enum BETWEEN operation "
+                  "isn't string nor integer: %.*s: %u",
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item),
+                  min_item->type());
+          DBUG_RETURN(false);
+        }
+        if (max_item->type() != Item::STRING_ITEM &&
+            max_item->type() != Item::INT_ITEM) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "maximum value of enum BETWEEN operation "
+                  "isn't string nor integer: %.*s: %u",
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item),
+                  max_item->type());
+          DBUG_RETURN(false);
+        }
       }
       break;
     case TIME_TYPE:
@@ -417,14 +368,6 @@ namespace mrn {
                 max_item->type());
         DBUG_RETURN(false);
       }
-      convertable = have_index(field_item, GRN_OP_LESS);
-      if (!convertable) {
-        GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                "[mroonga][condition-push-down][false] "
-                "index for time BETWEEN operation doesn't exist: %.*s",
-                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                MRN_ITEM_FIELD_GET_NAME(field_item));
-      }
       break;
     case UNSUPPORTED_TYPE:
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
@@ -433,10 +376,11 @@ namespace mrn {
               MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
               MRN_ITEM_FIELD_GET_NAME(field_item),
               field_type);
+      DBUG_RETURN(false);
       break;
     }
 
-    DBUG_RETURN(convertable);
+    DBUG_RETURN(true);
   }
 
   bool ConditionConverter::is_convertable_in(const Item_field *field_item,
@@ -461,29 +405,27 @@ namespace mrn {
       Item *value_item = value_items[i];
       switch (normalized_type) {
       case STRING_TYPE:
-        if (value_item->type() != Item::STRING_ITEM) {
+        if (!have_index(field_item, GRN_OP_EQUAL)) {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][false] "
-                  "%uth value of string IN operation isn't string: "
-                  "%.*s: %u",
-                  i,
+                  "index for string IN operation doesn't exist: %.*s",
                   MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                  MRN_ITEM_FIELD_GET_NAME(field_item),
-                  value_item->type());
-          DBUG_RETURN(false);
+                  MRN_ITEM_FIELD_GET_NAME(field_item));
         }
         break;
       case INT_TYPE:
-        if (value_item->type() != Item::INT_ITEM) {
-          GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                  "[mroonga][condition-push-down][false] "
-                  "%uth value of integer IN operation isn't integer: "
-                  "%.*s: %u",
-                  i,
-                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                  MRN_ITEM_FIELD_GET_NAME(field_item),
-                  value_item->type());
-          DBUG_RETURN(false);
+        if (field_type == MYSQL_TYPE_ENUM) {
+          if (value_item->type() != Item::STRING_ITEM &&
+              value_item->type() != Item::INT_ITEM) {
+            GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                    "[mroonga][condition-push-down][false] "
+                    "constant value of enum IN operation "
+                    "isn't string nor integer: %.*s: %u",
+                    MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                    MRN_ITEM_FIELD_GET_NAME(field_item),
+                    value_item->type());
+            DBUG_RETURN(false);
+          }
         }
         break;
       case TIME_TYPE:
@@ -873,8 +815,9 @@ namespace mrn {
     case STRING_TYPE:
       grn_obj_reinit(ctx_, &value_, GRN_DB_TEXT, 0);
       {
+        String buffer;
         String *string;
-        string = const_item->val_str(NULL);
+        string = const_item->val_str(&buffer);
         GRN_TEXT_SET(ctx_, &value_, string->ptr(), string->length());
       }
       break;
