@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_CONDITION_CONVERTER_HPP_
-#define MRN_CONDITION_CONVERTER_HPP_
+#pragma once
 
 #include <mrn_mysql_compat.h>
 
@@ -60,6 +59,9 @@ namespace mrn {
     bool is_convertable_between(const Item_field *field_item,
                                 Item *min_item,
                                 Item *max_item);
+    bool is_convertable_in(const Item_field *field_item,
+                           Item **value_items,
+                           uint n_value_items);
     bool is_valid_time_value(const Item_field *field_item,
                              Item *value_item);
     bool get_time_value(const Item_field *field_item,
@@ -74,6 +76,7 @@ namespace mrn {
                                   grn_obj *expression,
                                   grn_operator _operator);
     void convert_between(const Item_func *func_item, grn_obj *expression);
+    void convert_in(const Item_func *func_item, grn_obj *expression);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
     void append_const_item(const Item_field *field_item,
@@ -81,5 +84,3 @@ namespace mrn {
                            grn_obj *expression);
   };
 }
-
-#endif /* MRN_CONDITION_CONVERTER_HPP_ */

@@ -1,0 +1,24 @@
+DROP TABLE IF EXISTS memos;
+FLUSH STATUS;
+SET NAMES UTF8;
+CREATE TABLE memos (
+content TEXT,
+tag varchar(256),
+FULLTEXT INDEX (content),
+KEY (tag)
+) DEFAULT CHARSET UTF8;
+INSERT INTO memos VALUES ('Groonga is fast', 'Groonga');
+INSERT INTO memos VALUES ('Fast embeddable full text search engine', 'Groonga');
+INSERT INTO memos VALUES ('Mroonga is fast', 'Mroonga');
+INSERT INTO memos VALUES ('Groonga + MySQL', 'Mroonga');
+SELECT *
+FROM memos
+WHERE MATCH(content) AGAINST('+Groonga' IN BOOLEAN MODE) AND
+tag IN ('Groonga', 'Mroonga');
+content	tag
+Groonga is fast	Groonga
+Groonga + MySQL	Mroonga
+SHOW STATUS LIKE 'mroonga_condition_push_down';
+Variable_name	Value
+Mroonga_condition_push_down	1
+DROP TABLE memos;

@@ -8513,17 +8513,14 @@ int ha_mroonga::ft_init()
   DBUG_RETURN(error);
 }
 
-void ha_mroonga::generic_ft_init_ext_add_conditions_fast_order_limit(
-  struct st_mrn_ft_info *info, grn_obj *expression)
+void ha_mroonga::generic_ft_init_ext_add_conditions(struct st_mrn_ft_info *info,
+                                                    grn_obj *expression)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  Item *where =
-    MRN_SELECT_LEX_GET_WHERE_COND(table->pos_in_table_list->select_lex);
-
   bool is_storage_mode = !(share->wrapper_mode);
   mrn::ConditionConverter converter(info->ctx, grn_table, is_storage_mode);
-  converter.convert(where, expression);
+  converter.convert(pushed_cond, expression);
 
   DBUG_VOID_RETURN;
 }
@@ -8641,8 +8638,8 @@ struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
   }
 
   if (rc == GRN_SUCCESS) {
-    if (fast_order_limit) {
-      generic_ft_init_ext_add_conditions_fast_order_limit(info, expression);
+    if (pushed_cond) {
+      generic_ft_init_ext_add_conditions(info, expression);
     }
     longlong escalation_threshold = THDVAR(ha_thd(), match_escalation_threshold);
     mrn::MatchEscalationThresholdScope scope(info->ctx, escalation_threshold);

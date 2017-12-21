@@ -200,6 +200,41 @@ namespace mrn {
                                  max_item);
         DBUG_RETURN(convertable);
       }
+    case Item_func::IN_FUNC:
+      if (!is_storage_mode_) {
+        DBUG_RETURN(false);
+      }
+      {
+        Item **arguments = func_item->arguments();
+        Item *target_item = arguments[0];
+        if (target_item->type() != Item::FIELD_ITEM) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "target of IN isn't field: %u",
+                  target_item->type());
+          DBUG_RETURN(false);
+        }
+        Item_field *field_item = static_cast<Item_field *>(target_item);
+        uint n_arguments = func_item->argument_count();
+        for (uint i = 1; i < n_arguments; ++i) {
+          Item *value_item = arguments[i];
+          if (!value_item->basic_const_item()) {
+            GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                    "[mroonga][condition-push-down][false] "
+                    "%uth value of IN isn't constant: %.*s: %u",
+                    i - 1,
+                    MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                    MRN_ITEM_FIELD_GET_NAME(field_item),
+                    value_item->type());
+            DBUG_RETURN(false);
+          }
+        }
+
+        bool convertable = is_convertable_in(field_item,
+                                             arguments + 1,
+                                             n_arguments - 1);
+        DBUG_RETURN(convertable);
+      }
     default:
       DBUG_RETURN(false);
       break;
@@ -394,7 +429,7 @@ namespace mrn {
     case UNSUPPORTED_TYPE:
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][condition-push-down][false] "
-              "unsupported value of BETWEEN operation: %.*s: %u",
+              "unsupported type of BETWEEN operation: %.*s: %u",
               MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
               MRN_ITEM_FIELD_GET_NAME(field_item),
               field_type);
@@ -402,6 +437,74 @@ namespace mrn {
     }
 
     DBUG_RETURN(convertable);
+  }
+
+  bool ConditionConverter::is_convertable_in(const Item_field *field_item,
+                                             Item **value_items,
+                                             uint n_value_items) {
+    MRN_DBUG_ENTER_METHOD();
+
+    enum_field_types field_type = field_item->field->type();
+    NormalizedType normalized_type = normalize_field_type(field_type);
+
+    if (normalized_type == UNSUPPORTED_TYPE) {
+      GRN_LOG(ctx_, GRN_LOG_DEBUG,
+              "[mroonga][condition-push-down][false] "
+              "unsupported type of IN operation: %.*s: %u",
+              MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+              MRN_ITEM_FIELD_GET_NAME(field_item),
+              field_type);
+      DBUG_RETURN(false);
+    }
+
+    for (uint i = 0; i < n_value_items; ++i) {
+      Item *value_item = value_items[i];
+      switch (normalized_type) {
+      case STRING_TYPE:
+        if (value_item->type() != Item::STRING_ITEM) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "%uth value of string IN operation isn't string: "
+                  "%.*s: %u",
+                  i,
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item),
+                  value_item->type());
+          DBUG_RETURN(false);
+        }
+        break;
+      case INT_TYPE:
+        if (value_item->type() != Item::INT_ITEM) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "%uth value of integer IN operation isn't integer: "
+                  "%.*s: %u",
+                  i,
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item),
+                  value_item->type());
+          DBUG_RETURN(false);
+        }
+        break;
+      case TIME_TYPE:
+        if (!is_valid_time_value(field_item, value_item)) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "%uth value of time IN operation is invalid: "
+                  "%.*s: %u",
+                  i,
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item),
+                  value_item->type());
+          DBUG_RETURN(false);
+        }
+        break;
+      default:
+        break;
+      }
+    }
+
+    DBUG_RETURN(true);
   }
 
   bool ConditionConverter::is_valid_time_value(const Item_field *field_item,
@@ -655,6 +758,9 @@ namespace mrn {
           case Item_func::BETWEEN:
             convert_between(func_item, expression);
             break;
+          case Item_func::IN_FUNC:
+            convert_in(func_item, expression);
+            break;
           default:
             break;
           }
@@ -708,6 +814,32 @@ namespace mrn {
     grn_expr_append_const(ctx_, expression, &include, GRN_OP_PUSH, 1);
 
     grn_expr_append_op(ctx_, expression, GRN_OP_CALL, 5);
+
+    grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
+
+    DBUG_VOID_RETURN;
+  }
+
+  void ConditionConverter::convert_in(const Item_func *func_item,
+                                      grn_obj *expression) {
+    MRN_DBUG_ENTER_METHOD();
+
+    Item **arguments = func_item->arguments();
+    Item *target_item = arguments[0];
+
+    grn_obj *in_values_func = grn_ctx_get(ctx_, "in_values", -1);
+    grn_expr_append_obj(ctx_, expression, in_values_func, GRN_OP_PUSH, 1);
+
+    const Item_field *field_item = static_cast<const Item_field *>(target_item);
+    append_field_value(field_item, expression);
+
+    uint n_arguments = func_item->argument_count();
+    for (uint i = 1; i < n_arguments; ++i) {
+      Item *value_item = arguments[i];
+      append_const_item(field_item, value_item, expression);
+    }
+
+    grn_expr_append_op(ctx_, expression, GRN_OP_CALL, n_arguments);
 
     grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
 
