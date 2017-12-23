@@ -5590,7 +5590,7 @@ int ha_mroonga::storage_rnd_init(bool scan)
 {
   MRN_DBUG_ENTER_METHOD();
   mrn_change_encoding(ctx, NULL);
-  if (pushed_cond) {
+  if (pushed_cond && !fulltext_searching) {
     grn_obj *expression, *expression_variable;
     GRN_EXPR_CREATE_FOR_QUERY(ctx,
                               grn_table,

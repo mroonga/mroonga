@@ -1,0 +1,26 @@
+DROP TABLE IF EXISTS memos;
+FLUSH STATUS;
+SET NAMES UTF8;
+CREATE TABLE memos (
+year int,
+content TEXT,
+FULLTEXT INDEX (content)
+) DEFAULT CHARSET UTF8;
+INSERT INTO memos VALUES (2017, 'Groonga is fast');
+INSERT INTO memos VALUES (2017, 'Fast embeddable full text search engine');
+INSERT INTO memos VALUES (2018, 'Mroonga is fast');
+INSERT INTO memos VALUES (2018, 'Groonga + MySQL');
+SET mroonga_condition_push_down_type = ALL;
+SELECT *
+FROM memos
+WHERE MATCH(content) AGAINST('+Groonga' IN BOOLEAN MODE) OR
+year = 2018;
+year	content
+2017	Groonga is fast
+2018	Mroonga is fast
+2018	Groonga + MySQL
+SET mroonga_condition_push_down_type = DEFAULT;
+SHOW STATUS LIKE 'mroonga_condition_push_down';
+Variable_name	Value
+Mroonga_condition_push_down	1
+DROP TABLE memos;
