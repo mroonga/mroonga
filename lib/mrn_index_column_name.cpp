@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -29,16 +29,30 @@
 
 namespace mrn {
   IndexColumnName::IndexColumnName(const char *table_name,
-                                 const char *mysql_column_name)
+                                   const char *mysql_column_name)
     : table_name_(table_name),
-      mysql_column_name_(mysql_column_name) {
+      mysql_column_name_(mysql_column_name),
+      mysql_column_name_length_(strlen(mysql_column_name_)) {
+    init();
+  }
+
+  IndexColumnName::IndexColumnName(const char *table_name,
+                                   const char *mysql_column_name,
+                                   size_t mysql_column_name_length)
+    : table_name_(table_name),
+      mysql_column_name_(mysql_column_name),
+      mysql_column_name_length_(mysql_column_name_length_) {
+    init();
+  }
+
+  void IndexColumnName::init() {
     uchar encoded_mysql_column_name_multibyte[MRN_MAX_KEY_SIZE];
     const uchar *mysql_column_name_multibyte =
       reinterpret_cast<const uchar *>(mysql_column_name_);
     encode(encoded_mysql_column_name_multibyte,
            encoded_mysql_column_name_multibyte + MRN_MAX_KEY_SIZE,
            mysql_column_name_multibyte,
-           mysql_column_name_multibyte + strlen(mysql_column_name_));
+           mysql_column_name_multibyte + mysql_column_name_length_);
     snprintf(name_, MRN_MAX_KEY_SIZE,
              "%s-%s", table_name_, encoded_mysql_column_name_multibyte);
     length_ = strlen(name_);

@@ -59,14 +59,90 @@
 #  define KEY_N_KEY_PARTS(key) (key)->key_parts
 #endif
 
-#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
-#  define MRN_KEY_IS_NAME_LEX_STRING
+#if (MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)) || \
+    (MYSQL_VERSION_ID >= 100302)
+#  define MRN_FOREIGN_KEY_USE_CONST_STRING
 #endif
 
-#ifdef MRN_KEY_IS_NAME_LEX_STRING
-#  define KEY_NAME(key) (key)->name.str, (key)->name.length
+#ifdef MRN_FOREIGN_KEY_USE_CONST_STRING
+  typedef LEX_CSTRING mrn_foreign_key_name;
 #else
-#  define KEY_NAME(key) (key)->name
+  typedef LEX_STRING mrn_foreign_key_name;
+#endif
+
+#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#  define MRN_KEY_NAME_IS_LEX_STRING
+#  define MRN_FIELD_FIELD_NAME_IS_LEX_STRING
+#endif
+
+#ifdef MRN_KEY_NAME_IS_LEX_STRING
+#  define KEY_NAME(key) (key)->name.str, (key)->name.length
+#  define KEY_NAME_EQUAL_KEY(key1, key2)                \
+  ((key1)->name.length == (key2)->name.length &&        \
+   strncmp((key1)->name.str,                            \
+           (key2)->name.str,                            \
+           (key1)->name.length) == 0)
+#  define KEY_NAME_FORMAT "%.*s"
+#  define KEY_NAME_FORMAT_VALUE(key)            \
+  static_cast<int>((key)->name.length),         \
+  (key)->name.str
+#else
+#  define KEY_NAME(key) (key)->name, strlen((key)->name)
+#  define KEY_NAME_EQUAL_KEY(key1, key2)        \
+  strcmp((key1)->name, (key2)->name) == 0
+#  define KEY_NAME_FORMAT "%s"
+#  define KEY_NAME_FORMAT_VALUE(key) (key)->name
+#endif
+
+#ifdef MRN_FIELD_FIELD_NAME_IS_LEX_STRING
+#  define FIELD_NAME(field)                             \
+  (field)->field_name.str, (field)->field_name.length
+#  define FIELD_NAME_EQUAL(field, name)                                 \
+  ((field)->field_name.length == strlen(name) &&                        \
+   strncmp((field)->field_name.str, name, (field)->field_name.length) == 0)
+#  define FIELD_NAME_EQUAL_STRING(field, string)                        \
+  ((field)->field_name.length == string->length &&                      \
+   strncmp((field)->field_name.str, string->str, string->length) == 0)
+#  define FIELD_NAME_EQUAL_FIELD(field1, field2)                        \
+  ((field1)->field_name.length == (field2)->field_name.length &&        \
+   strncmp((field1)->field_name.str,                                    \
+           (field2)->field_name.str,                                    \
+           (field1)->field_name.length) == 0)
+#  define FIELD_NAME_FORMAT "%.*s"
+#  define FIELD_NAME_FORMAT_VALUE(field)                                \
+  static_cast<int>((field)->field_name.length), (field)->field_name.str
+#else
+#  define FIELD_NAME(field)                             \
+  (field)->field_name, strlen((field)->field_name)
+#  define FIELD_NAME_EQUAL(field, name)                                 \
+  (strcmp((field)->field_name, name) == 0)
+#  define FIELD_NAME_EQUAL_STRING(field, string)                        \
+  (strlen((field)->field_name) == string->length &&                     \
+   strncmp((field)->field_name, string->str, string->length) == 0)
+#  define FIELD_NAME_EQUAL_FIELD(field1, field2)                        \
+  (strcmp((field1)->field_name, (field2)->field_name) == 0)
+#  define FIELD_NAME_FORMAT "%s"
+#  define FIELD_NAME_FORMAT_VALUE(field) (field)->field_name
+#endif
+
+#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#  define MRN_KEY_PART_SPEC_FIELD_NAME_USE_CONST_STRING
+#endif
+
+#ifdef MRN_KEY_PART_SPEC_FIELD_NAME_USE_CONST_STRING
+  typedef LEX_CSTRING mrn_key_part_spec_field_name;
+#else
+  typedef LEX_STRING mrn_key_part_spec_field_name;
+#endif
+
+#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#  define MRN_THD_MAKE_LEX_STRING_USE_CONST_STRING
+#endif
+
+#ifdef MRN_THD_MAKE_LEX_STRING_USE_CONST_STRING
+  typedef MYSQL_CONST_LEX_STRING mrn_thd_lex_string;
+#else
+  typedef MYSQL_LEX_STRING mrn_thd_lex_string;
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000

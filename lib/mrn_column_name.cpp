@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2016 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2016-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -31,7 +31,15 @@
 
 namespace mrn {
   ColumnName::ColumnName(const char *mysql_name)
-    : mysql_name_(mysql_name) {
+    : mysql_name_(mysql_name),
+      mysql_name_length_(strlen(mysql_name)) {
+    encode();
+  }
+
+  ColumnName::ColumnName(const char *mysql_name,
+                         size_t mysql_name_length)
+    : mysql_name_(mysql_name),
+      mysql_name_length_(mysql_name_length) {
     encode();
   }
 
@@ -52,7 +60,7 @@ namespace mrn {
     uint errors;
     length_ = mrn_strconvert(system_charset_info,
                              mysql_name_,
-                             strlen(mysql_name_),
+                             mysql_name_length_,
                              &my_charset_filename,
                              name_,
                              MRN_MAX_PATH_SIZE,

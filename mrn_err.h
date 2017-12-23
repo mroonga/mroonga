@@ -17,8 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_ERR_H_
-#define MRN_ERR_H_
+#pragma once
 
 #define ER_MRN_INVALID_TABLE_PARAM_NUM 16501
 #define ER_MRN_INVALID_TABLE_PARAM_STR "The table parameter '%-.64s' is invalid"
@@ -41,9 +40,7 @@
   "The index flag '%-.64s' is invalid. It is ignored"
 #define ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_NUM 16509
 #define ER_MRN_KEY_BASED_ON_GENERATED_VIRTUAL_COLUMN_STR \
-  "Index for virtual generated column is not supported: %s"
+  "Index for virtual generated column is not supported"
 #define ER_MRN_INVALID_TABLE_FLAG_NUM 16510
 #define ER_MRN_INVALID_TABLE_FLAG_STR \
   "The table flag '%-.64s' is invalid. It is ignored"
-
-#endif /* MRN_ERR_H_ */

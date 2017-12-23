@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2016 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2016-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,11 +25,13 @@ namespace mrn {
   class ColumnName {
   public:
     ColumnName(const char *mysql_name);
+    ColumnName(const char *mysql_name, size_t mysql_name_length);
     const char *mysql_name();
     const char *c_str();
     size_t length();
   private:
     const char *mysql_name_;
+    size_t mysql_name_length_;
     char name_[MRN_MAX_PATH_SIZE];
     size_t length_;
 

@@ -207,10 +207,6 @@ extern "C" {
 #  define MRN_HAVE_HTON_ALTER_TABLE_FLAGS
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_FOREIGN_KEY_USE_CONST_STRING
-#endif
-
 #if MYSQL_VERSION_ID >= 100203 && defined(MRN_MARIADB_P)
 #  define MRN_FOREIGN_KEY_USE_METHOD_ENUM
 #endif
@@ -658,7 +654,12 @@ private:
   bool have_unique_index();
 
   bool is_foreign_key_field(const char *table_name,
+                            const char *field_name,
+                            size_t field_name_length);
+  bool is_foreign_key_field(const char *table_name,
                             const char *field_name);
+  bool is_foreign_key_field(const char *table_name,
+                            LEX_CSTRING &field_name);
 
   void push_warning_unsupported_spatial_index_search(enum ha_rkey_function flag);
   void clear_cursor();
