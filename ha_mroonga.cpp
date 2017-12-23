@@ -3770,7 +3770,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
                         field_name->str));
     DBUG_PRINT("info", ("mroonga: field->field_name=" FIELD_NAME_FORMAT,
                         FIELD_NAME_FORMAT_VALUE(field)));
-    if (FIELD_NAME_EQUAL_STRING(field, field_name)) {
+    if (!FIELD_NAME_EQUAL_STRING(field, field_name)) {
       continue;
     }
     Foreign_key *fk = (Foreign_key *) key;
@@ -3890,7 +3890,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       DBUG_RETURN(false);
     }
     Field *ref_field = &ref_key_info->key_part->field[0];
-    if (FIELD_NAME_EQUAL_STRING(ref_field, ref_field_name)) {
+    if (!FIELD_NAME_EQUAL_STRING(ref_field, ref_field_name)) {
       mrn_open_mutex_lock(table->s);
       mrn_free_tmp_table_share(tmp_ref_table_share);
       mrn_open_mutex_unlock(table->s);
@@ -15053,7 +15053,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
     if (!(key->flags & HA_FULLTEXT || mrn_is_geo_key(key))) {
       continue;
     }
-    while (KEY_NAME_EQUAL_KEY(key, &(key_info[j]))) {
+    while (!KEY_NAME_EQUAL_KEY(key, &(key_info[j]))) {
       ++j;
     }
     DBUG_PRINT("info", ("mroonga: key_name=" KEY_NAME_FORMAT,
@@ -15349,7 +15349,7 @@ bool ha_mroonga::storage_inplace_alter_table_drop_index(
   n_keys = ha_alter_info->index_drop_count;
   for (i = 0; i < n_keys; ++i) {
     KEY *key = ha_alter_info->index_drop_buffer[i];
-    while (KEY_NAME_EQUAL_KEY(key, &(key_info[j]))) {
+    while (!KEY_NAME_EQUAL_KEY(key, &(key_info[j]))) {
       ++j;
     }
     int error = drop_index(share, j);
