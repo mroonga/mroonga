@@ -60,16 +60,16 @@ namespace mrn {
                                  const char *mysql_index_name)
     : table_name_(table_name),
       mysql_index_name_(mysql_index_name),
-      mysql_index_name_size_(strlen(mysql_index_name_)) {
+      mysql_index_name_length_(strlen(mysql_index_name_)) {
     init();
   }
 
   IndexTableName::IndexTableName(const char *table_name,
                                  const char *mysql_index_name,
-                                 size_t mysql_index_name_size)
+                                 size_t mysql_index_name_length)
     : table_name_(table_name),
       mysql_index_name_(mysql_index_name),
-      mysql_index_name_size_(mysql_index_name_size) {
+      mysql_index_name_length_(mysql_index_name_length) {
     init();
   }
 
@@ -80,7 +80,7 @@ namespace mrn {
     encode(encoded_mysql_index_name_multibyte,
            encoded_mysql_index_name_multibyte + MRN_MAX_KEY_SIZE,
            mysql_index_name_multibyte,
-           mysql_index_name_multibyte + mysql_index_name_size_);
+           mysql_index_name_multibyte + mysql_index_name_length_);
     snprintf(old_name_, MRN_MAX_KEY_SIZE,
              "%s%s%s",
              table_name_,

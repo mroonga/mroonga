@@ -41,7 +41,7 @@ namespace mrn {
                                    size_t mysql_column_name_length)
     : table_name_(table_name),
       mysql_column_name_(mysql_column_name),
-      mysql_column_name_length_(mysql_column_name_length_) {
+      mysql_column_name_length_(mysql_column_name_length) {
     init();
   }
 
