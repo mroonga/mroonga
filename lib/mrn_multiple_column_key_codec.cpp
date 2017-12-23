@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2012-2017 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kentoku SHIBA
 
   This library is free software; you can redistribute it and/or
@@ -453,6 +453,14 @@ namespace mrn {
       *data_type = TYPE_BYTE_BLOB;
       *data_size = key_part->length;
       break;
+#ifdef MRN_HAVE_MYSQL_TYPE_VARCHAR_COMPRESSED
+    case MYSQL_TYPE_VARCHAR_COMPRESSED:
+      // TODO
+      DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_VARCHAR_COMPRESSED"));
+      *data_type = TYPE_BYTE_BLOB;
+      *data_size = key_part->length;
+      break;
+#endif
     case MYSQL_TYPE_BIT:
       // TODO
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_BIT"));
@@ -501,6 +509,9 @@ namespace mrn {
     case MYSQL_TYPE_MEDIUM_BLOB:
     case MYSQL_TYPE_LONG_BLOB:
     case MYSQL_TYPE_BLOB:
+#ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
+    case MYSQL_TYPE_BLOB_COMPRESSED:
+#endif
       // TODO
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_BLOB"));
       *data_type = TYPE_BYTE_BLOB;
