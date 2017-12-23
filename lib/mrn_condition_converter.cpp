@@ -665,47 +665,50 @@ namespace mrn {
     DBUG_RETURN(0);
   }
 
-  void ConditionConverter::convert(const Item *where, grn_obj *expression) {
+  void ConditionConverter::convert(const Item *where,
+                                   grn_obj *expression,
+                                   bool have_condition) {
     MRN_DBUG_ENTER_METHOD();
 
-    if (!where || where->type() != Item::COND_ITEM) {
+    if (!where) {
       DBUG_VOID_RETURN;
     }
 
-    Item_cond *cond_item = (Item_cond *)where;
-    List_iterator<Item> iterator(*((cond_item)->argument_list()));
+    switch (where->type()) {
+    case Item::COND_ITEM:
+      convert(static_cast<const Item_cond *>(where), expression, have_condition);
+      break;
+    case Item::FUNC_ITEM:
+      if (convert(static_cast<const Item_func *>(where), expression) &&
+          have_condition) {
+        grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
+      }
+      break;
+    default:
+      break;
+    }
+
+    DBUG_VOID_RETURN;
+  }
+
+  void ConditionConverter::convert(const Item_cond *cond_item,
+                                   grn_obj *expression,
+                                   bool have_condition) {
+    MRN_DBUG_ENTER_METHOD();
+
+    List<Item> *sub_item_list =
+      const_cast<Item_cond *>(cond_item)->argument_list();
+    List_iterator<Item> iterator(*sub_item_list);
     const Item *sub_item;
+    int n_conditions = have_condition ? 1 : 0;
     while ((sub_item = iterator++)) {
       switch (sub_item->type()) {
       case Item::FUNC_ITEM:
-        {
-          const Item_func *func_item = (const Item_func *)sub_item;
-          switch (func_item->functype()) {
-          case Item_func::EQ_FUNC:
-            convert_binary_operation(func_item, expression, GRN_OP_EQUAL);
-            break;
-          case Item_func::LT_FUNC:
-            convert_binary_operation(func_item, expression, GRN_OP_LESS);
-            break;
-          case Item_func::LE_FUNC:
-            convert_binary_operation(func_item, expression, GRN_OP_LESS_EQUAL);
-            break;
-          case Item_func::GE_FUNC:
-            convert_binary_operation(func_item, expression,
-                                     GRN_OP_GREATER_EQUAL);
-            break;
-          case Item_func::GT_FUNC:
-            convert_binary_operation(func_item, expression, GRN_OP_GREATER);
-            break;
-          case Item_func::BETWEEN:
-            convert_between(func_item, expression);
-            break;
-          case Item_func::IN_FUNC:
-            convert_in(func_item, expression);
-            break;
-          default:
-            break;
+        if (convert(static_cast<const Item_func *>(sub_item), expression)) {
+          if (n_conditions > 0) {
+            grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
           }
+          ++n_conditions;
         }
         break;
       default:
@@ -716,9 +719,47 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void ConditionConverter::convert_binary_operation(const Item_func *func_item,
+  bool ConditionConverter::convert(const Item_func *func_item,
+                                   grn_obj *expression) {
+    MRN_DBUG_ENTER_METHOD();
+
+    bool added = false;
+
+    switch (func_item->functype()) {
+    case Item_func::EQ_FUNC:
+      added = convert_binary_operation(func_item, expression, GRN_OP_EQUAL);
+      break;
+    case Item_func::LT_FUNC:
+      added = convert_binary_operation(func_item, expression, GRN_OP_LESS);
+      break;
+    case Item_func::LE_FUNC:
+      added = convert_binary_operation(func_item, expression, GRN_OP_LESS_EQUAL);
+      break;
+    case Item_func::GE_FUNC:
+      added = convert_binary_operation(func_item, expression,
+                                       GRN_OP_GREATER_EQUAL);
+      break;
+    case Item_func::GT_FUNC:
+      added = convert_binary_operation(func_item, expression, GRN_OP_GREATER);
+      break;
+    case Item_func::BETWEEN:
+      added = convert_between(func_item, expression);
+      break;
+    case Item_func::IN_FUNC:
+      added = convert_in(func_item, expression);
+      break;
+    default:
+      break;
+    }
+
+    DBUG_RETURN(added);
+  }
+
+  bool ConditionConverter::convert_binary_operation(const Item_func *func_item,
                                                     grn_obj *expression,
                                                     grn_operator _operator) {
+    MRN_DBUG_ENTER_METHOD();
+
     Item **arguments = func_item->arguments();
     Item *left_item = arguments[0];
     Item *right_item = arguments[1];
@@ -727,11 +768,13 @@ namespace mrn {
       append_field_value(field_item, expression);
       append_const_item(field_item, right_item, expression);
       grn_expr_append_op(ctx_, expression, _operator, 2);
-      grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
+      DBUG_RETURN(true);
+    } else {
+      DBUG_RETURN(false);
     }
   }
 
-  void ConditionConverter::convert_between(const Item_func *func_item,
+  bool ConditionConverter::convert_between(const Item_func *func_item,
                                            grn_obj *expression) {
     MRN_DBUG_ENTER_METHOD();
 
@@ -757,12 +800,10 @@ namespace mrn {
 
     grn_expr_append_op(ctx_, expression, GRN_OP_CALL, 5);
 
-    grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
-
-    DBUG_VOID_RETURN;
+    DBUG_RETURN(true);
   }
 
-  void ConditionConverter::convert_in(const Item_func *func_item,
+  bool ConditionConverter::convert_in(const Item_func *func_item,
                                       grn_obj *expression) {
     MRN_DBUG_ENTER_METHOD();
 
@@ -783,9 +824,7 @@ namespace mrn {
 
     grn_expr_append_op(ctx_, expression, GRN_OP_CALL, n_arguments);
 
-    grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
-
-    DBUG_VOID_RETURN;
+    DBUG_RETURN(true);
   }
 
   void ConditionConverter::append_field_value(const Item_field *field_item,

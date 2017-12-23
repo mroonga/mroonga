@@ -1226,6 +1226,37 @@ static MYSQL_SYSVAR_BOOL(libgroonga_embedded, mrn_libgroonga_embedded,
                          NULL,
                          mrn_libgroonga_embedded);
 
+namespace mrn {
+  namespace condition_push_down {
+    enum type {
+      NONE,
+      ALL,
+      ONE_FULL_TEXT_SEARCH
+    };
+  }
+}
+static const char *mrn_condition_push_down_type_names[] = {
+  "NONE",
+  "ALL",
+  "ONE_FULL_TEXT_SEARCH",
+  NullS
+};
+static TYPELIB mrn_condition_push_down_type_typelib = {
+  array_elements(mrn_condition_push_down_type_names) - 1,
+  "mrn_condition_push_down_type_typelib",
+  mrn_condition_push_down_type_names,
+  NULL
+};
+
+static MYSQL_THDVAR_ENUM(condition_push_down_type,
+                         PLUGIN_VAR_RQCMDARG,
+                         "How to use condition push down",
+                         NULL,
+                         NULL,
+                         static_cast<ulong>(
+                           mrn::condition_push_down::ONE_FULL_TEXT_SEARCH),
+                         &mrn_condition_push_down_type_typelib);
+
 static struct st_mysql_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
@@ -1252,6 +1283,7 @@ static struct st_mysql_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(libgroonga_embedded),
   MYSQL_SYSVAR(query_log_file),
   MYSQL_SYSVAR(enable_operations_recording),
+  MYSQL_SYSVAR(condition_push_down_type),
   NULL
 };
 
@@ -2594,6 +2626,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 
    sorted_result(NULL),
    matched_record_keys(NULL),
+   condition_push_down_result(NULL),
+   condition_push_down_result_cursor(NULL),
    blob_buffers(NULL),
 
    dup_key(0),
@@ -5556,7 +5590,31 @@ int ha_mroonga::storage_rnd_init(bool scan)
 {
   MRN_DBUG_ENTER_METHOD();
   mrn_change_encoding(ctx, NULL);
-  cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0, 0, -1, 0);
+  if (pushed_cond) {
+    grn_obj *expression, *expression_variable;
+    GRN_EXPR_CREATE_FOR_QUERY(ctx,
+                              grn_table,
+                              expression,
+                              expression_variable);
+    mrn::ConditionConverter converter(ctx, grn_table, true);
+    converter.convert(pushed_cond, expression, false);
+    condition_push_down_result = grn_table_select(ctx,
+                                                  grn_table,
+                                                  expression,
+                                                  NULL,
+                                                  GRN_OP_OR);
+    grn_obj_unlink(ctx, expression);
+
+    condition_push_down_result_cursor =
+      grn_table_cursor_open(ctx,
+                            condition_push_down_result,
+                            NULL, 0,
+                            NULL, 0,
+                            0, -1,
+                            0);
+  } else {
+    cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0, 0, -1, 0);
+  }
   if (ctx->rc) {
     my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
     DBUG_RETURN(ER_ERROR_ON_READ);
@@ -8520,7 +8578,7 @@ void ha_mroonga::generic_ft_init_ext_add_conditions(struct st_mrn_ft_info *info,
 
   bool is_storage_mode = !(share->wrapper_mode);
   mrn::ConditionConverter converter(info->ctx, grn_table, is_storage_mode);
-  converter.convert(pushed_cond, expression);
+  converter.convert(pushed_cond, expression, true);
 
   DBUG_VOID_RETURN;
 }
@@ -8912,11 +8970,31 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
   MRN_DBUG_ENTER_METHOD();
   const Item *reminder_cond = cond;
   if (!pushed_cond) {
-    mrn::ConditionConverter converter(ctx, grn_table, true);
-    if (converter.count_match_against(cond) == 1 &&
-        converter.is_convertable(cond)) {
-      ++mrn_condition_push_down;
-      reminder_cond = NULL;
+    ulong type_raw = THDVAR(ha_thd(), condition_push_down_type);
+    mrn::condition_push_down::type type =
+      static_cast<mrn::condition_push_down::type>(type_raw);
+    switch (type) {
+    case mrn::condition_push_down::NONE:
+      break;
+    case mrn::condition_push_down::ALL:
+      {
+        mrn::ConditionConverter converter(ctx, grn_table, true);
+        if (converter.is_convertable(cond)) {
+          ++mrn_condition_push_down;
+          reminder_cond = NULL;
+        }
+      }
+      break;
+    case mrn::condition_push_down::ONE_FULL_TEXT_SEARCH:
+      {
+        mrn::ConditionConverter converter(ctx, grn_table, true);
+        if (converter.count_match_against(cond) == 1 &&
+            converter.is_convertable(cond)) {
+          ++mrn_condition_push_down;
+          reminder_cond = NULL;
+        }
+      }
+      break;
     }
   }
   DBUG_RETURN(reminder_cond);
@@ -9101,6 +9179,14 @@ void ha_mroonga::clear_cursor()
   if (index_table_cursor) {
     grn_table_cursor_close(ctx, index_table_cursor);
     index_table_cursor = NULL;
+  }
+  if (condition_push_down_result_cursor) {
+    grn_table_cursor_close(ctx, condition_push_down_result_cursor);
+    condition_push_down_result_cursor = NULL;
+  }
+  if (condition_push_down_result) {
+    grn_obj_unlink(ctx, condition_push_down_result);
+    condition_push_down_result = NULL;
   }
   DBUG_VOID_RETURN;
 }
@@ -10018,7 +10104,19 @@ int ha_mroonga::wrapper_get_next_geo_record(uchar *buf)
 int ha_mroonga::storage_get_next_record(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (cursor_geo) {
+  if (condition_push_down_result_cursor) {
+    grn_id condition_push_down_result_id =
+      grn_table_cursor_next(ctx, condition_push_down_result_cursor);
+    if (condition_push_down_result_id == GRN_ID_NIL) {
+      record_id = GRN_ID_NIL;
+    } else {
+      grn_table_get_key(ctx,
+                        condition_push_down_result,
+                        condition_push_down_result_id,
+                        &record_id,
+                        sizeof(grn_id));
+    }
+  } else if (cursor_geo) {
     grn_posting *posting;
     posting = grn_geo_cursor_next(ctx, cursor_geo);
     if (posting) {

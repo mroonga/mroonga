@@ -1,0 +1,25 @@
+DROP TABLE IF EXISTS years;
+FLUSH STATUS;
+CREATE TABLE years (
+id int,
+year int
+);
+INSERT INTO years VALUES (1, 2016);
+INSERT INTO years VALUES (2, 2017);
+INSERT INTO years VALUES (3, 2018);
+INSERT INTO years VALUES (4, 2016);
+INSERT INTO years VALUES (5, 2017);
+SET mroonga_condition_push_down_type = ALL;
+SELECT *
+FROM years
+WHERE year < 2018;
+id	year
+1	2016
+2	2017
+4	2016
+5	2017
+SET mroonga_condition_push_down_type = DEFAULT;
+SHOW STATUS LIKE 'mroonga_condition_push_down';
+Variable_name	Value
+Mroonga_condition_push_down	1
+DROP TABLE years;

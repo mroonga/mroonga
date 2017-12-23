@@ -384,6 +384,8 @@ private:
   grn_table_cursor *empty_value_records_cursor;
   grn_obj *sorted_result;
   grn_obj *matched_record_keys;
+  grn_obj *condition_push_down_result;
+  grn_table_cursor *condition_push_down_result_cursor;
   String  *blob_buffers;
 
   // for error report

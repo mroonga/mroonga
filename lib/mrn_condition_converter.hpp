@@ -28,14 +28,16 @@
 namespace mrn {
   class ConditionConverter {
   public:
-    ConditionConverter(grn_ctx *ctx, grn_obj *table, bool is_storage_mode);
+    ConditionConverter(grn_ctx *ctx,
+                       grn_obj *table,
+                       bool is_storage_mode);
     ~ConditionConverter();
 
     bool is_convertable(const Item *item);
     unsigned int count_match_against(const Item *item);
     // caller must check "where" can be convertable by
     // is_convertable(). This method doesn't validate "where".
-    void convert(const Item *where, grn_obj *expression);
+    void convert(const Item *where, grn_obj *expression, bool have_condition);
 
   private:
     enum NormalizedType {
@@ -72,11 +74,17 @@ namespace mrn {
 
     NormalizedType normalize_field_type(enum_field_types field_type);
 
-    void convert_binary_operation(const Item_func *func_item,
+    void convert(const Item_cond *cond_item,
+                 grn_obj *expression,
+                 bool have_condition);
+    bool convert(const Item_func *func_item,
+                 grn_obj *expression);
+
+    bool convert_binary_operation(const Item_func *func_item,
                                   grn_obj *expression,
                                   grn_operator _operator);
-    void convert_between(const Item_func *func_item, grn_obj *expression);
-    void convert_in(const Item_func *func_item, grn_obj *expression);
+    bool convert_between(const Item_func *func_item, grn_obj *expression);
+    bool convert_in(const Item_func *func_item, grn_obj *expression);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
     void append_const_item(const Item_field *field_item,
