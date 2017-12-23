@@ -15633,16 +15633,23 @@ bool ha_mroonga::storage_inplace_alter_table_rename_column(
       continue;
     }
 
-    Field *new_field = NULL;
+    const char *new_field_name = NULL;
+    size_t new_field_name_length = 0;
     List_iterator_fast<Create_field> create_fields(alter_info->create_list);
     while (Create_field *create_field = create_fields++) {
       if (create_field->field == field) {
-        new_field = create_field->field;
+#ifdef MRN_CREATE_FIELD_USE_LEX_STRING
+        new_field_name = create_field->field_name.str;
+        new_field_name_length = create_field->field_name.length;
+#else
+        new_field_name = create_field->field_name;
+        new_field_name_length = strlen(new_field_name);
+#endif
         break;
       }
     }
 
-    if (!new_field) {
+    if (!new_field_name) {
       continue;
     }
 
@@ -15650,7 +15657,7 @@ bool ha_mroonga::storage_inplace_alter_table_rename_column(
     grn_obj *column_obj;
     column_obj = grn_obj_column(ctx, table_obj, FIELD_NAME(old_field));
     if (column_obj) {
-      grn_column_rename(ctx, column_obj, FIELD_NAME(new_field));
+      grn_column_rename(ctx, column_obj, new_field_name, new_field_name_length);
       if (ctx->rc) {
         int error = ER_WRONG_COLUMN_NAME;
         my_message(error, ctx->errbuf, MYF(0));
