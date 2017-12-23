@@ -3908,7 +3908,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     mrn_open_mutex_lock(table->s);
     mrn_free_tmp_table_share(tmp_ref_table_share);
     mrn_open_mutex_unlock(table->s);
-    grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
+    grn_column_flags col_flags = GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT;
     column = grn_column_create(ctx, table_obj,
                                FIELD_NAME(field),
                                NULL, col_flags, grn_table_ref);
