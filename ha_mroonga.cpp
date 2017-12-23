@@ -2626,6 +2626,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
 
    sorted_result(NULL),
    matched_record_keys(NULL),
+   matched_record_keys_cursor(NULL),
    condition_push_down_result(NULL),
    condition_push_down_result_cursor(NULL),
    blob_buffers(NULL),
@@ -5590,28 +5591,47 @@ int ha_mroonga::storage_rnd_init(bool scan)
 {
   MRN_DBUG_ENTER_METHOD();
   mrn_change_encoding(ctx, NULL);
-  if (pushed_cond && !fulltext_searching) {
-    grn_obj *expression, *expression_variable;
-    GRN_EXPR_CREATE_FOR_QUERY(ctx,
-                              grn_table,
-                              expression,
-                              expression_variable);
-    mrn::ConditionConverter converter(ctx, grn_table, true);
-    converter.convert(pushed_cond, expression, false);
-    condition_push_down_result = grn_table_select(ctx,
-                                                  grn_table,
-                                                  expression,
-                                                  NULL,
-                                                  GRN_OP_OR);
-    grn_obj_unlink(ctx, expression);
+  if (pushed_cond) {
+    if (fulltext_searching) {
+      if (matched_record_keys) {
+        matched_record_keys_cursor =
+          grn_table_cursor_open(ctx,
+                                matched_record_keys,
+                                NULL, 0,
+                                NULL, 0,
+                                0, -1,
+                                0);
+      } else {
+        cursor = grn_table_cursor_open(ctx,
+                                       grn_table,
+                                       NULL, 0,
+                                       NULL, 0,
+                                       0, -1,
+                                       0);
+      }
+    } else {
+      grn_obj *expression, *expression_variable;
+      GRN_EXPR_CREATE_FOR_QUERY(ctx,
+                                grn_table,
+                                expression,
+                                expression_variable);
+      mrn::ConditionConverter converter(ctx, grn_table, true);
+      converter.convert(pushed_cond, expression, false);
+      condition_push_down_result = grn_table_select(ctx,
+                                                    grn_table,
+                                                    expression,
+                                                    NULL,
+                                                    GRN_OP_OR);
+      grn_obj_unlink(ctx, expression);
 
-    condition_push_down_result_cursor =
-      grn_table_cursor_open(ctx,
-                            condition_push_down_result,
-                            NULL, 0,
-                            NULL, 0,
-                            0, -1,
-                            0);
+      condition_push_down_result_cursor =
+        grn_table_cursor_open(ctx,
+                              condition_push_down_result,
+                              NULL, 0,
+                              NULL, 0,
+                              0, -1,
+                              0);
+    }
   } else {
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0, 0, -1, 0);
   }
@@ -9180,6 +9200,10 @@ void ha_mroonga::clear_cursor()
     grn_table_cursor_close(ctx, index_table_cursor);
     index_table_cursor = NULL;
   }
+  if (matched_record_keys_cursor) {
+    grn_table_cursor_close(ctx, matched_record_keys_cursor);
+    matched_record_keys_cursor = NULL;
+  }
   if (condition_push_down_result_cursor) {
     grn_table_cursor_close(ctx, condition_push_down_result_cursor);
     condition_push_down_result_cursor = NULL;
@@ -10104,7 +10128,19 @@ int ha_mroonga::wrapper_get_next_geo_record(uchar *buf)
 int ha_mroonga::storage_get_next_record(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (condition_push_down_result_cursor) {
+  if (matched_record_keys_cursor) {
+    grn_id matched_record_keys_id =
+      grn_table_cursor_next(ctx, matched_record_keys_cursor);
+    if (matched_record_keys_id == GRN_ID_NIL) {
+      record_id = GRN_ID_NIL;
+    } else {
+      grn_table_get_key(ctx,
+                        matched_record_keys,
+                        matched_record_keys_id,
+                        &record_id,
+                        sizeof(grn_id));
+    }
+  } else if (condition_push_down_result_cursor) {
     grn_id condition_push_down_result_id =
       grn_table_cursor_next(ctx, condition_push_down_result_cursor);
     if (condition_push_down_result_id == GRN_ID_NIL) {

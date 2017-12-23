@@ -17,8 +17,8 @@ WHERE MATCH(content) AGAINST('+Groonga' IN BOOLEAN MODE) OR
 year = 2018;
 year	content
 2017	Groonga is fast
-2018	Mroonga is fast
 2018	Groonga + MySQL
+2018	Mroonga is fast
 SET mroonga_condition_push_down_type = DEFAULT;
 SHOW STATUS LIKE 'mroonga_condition_push_down';
 Variable_name	Value
