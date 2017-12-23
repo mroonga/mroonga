@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011 Kentoku SHIBA
-  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -59,14 +59,28 @@ namespace mrn {
   IndexTableName::IndexTableName(const char *table_name,
                                  const char *mysql_index_name)
     : table_name_(table_name),
-      mysql_index_name_(mysql_index_name) {
+      mysql_index_name_(mysql_index_name),
+      mysql_index_name_size_(strlen(mysql_index_name_)) {
+    init();
+  }
+
+  IndexTableName::IndexTableName(const char *table_name,
+                                 const char *mysql_index_name,
+                                 size_t mysql_index_name_size)
+    : table_name_(table_name),
+      mysql_index_name_(mysql_index_name),
+      mysql_index_name_size_(mysql_index_name_size) {
+    init();
+  }
+
+  void IndexTableName::init() {
     uchar encoded_mysql_index_name_multibyte[MRN_MAX_KEY_SIZE];
     const uchar *mysql_index_name_multibyte =
       reinterpret_cast<const uchar *>(mysql_index_name_);
     encode(encoded_mysql_index_name_multibyte,
            encoded_mysql_index_name_multibyte + MRN_MAX_KEY_SIZE,
            mysql_index_name_multibyte,
-           mysql_index_name_multibyte + strlen(mysql_index_name_));
+           mysql_index_name_multibyte + mysql_index_name_size_);
     snprintf(old_name_, MRN_MAX_KEY_SIZE,
              "%s%s%s",
              table_name_,

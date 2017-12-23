@@ -17,8 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_MYSQL_COMPAT_H_
-#define MRN_MYSQL_COMPAT_H_
+#pragma once
 
 #include "mrn_mysql.h"
 
@@ -51,13 +50,23 @@
 #endif
 
 #if MYSQL_VERSION_ID >= 50609
-#  define MRN_KEY_HAS_USER_DEFINED_KEYPARTS
+#  define MRN_KEY_HAVE_USER_DEFINED_KEYPARTS
 #endif
 
-#ifdef MRN_KEY_HAS_USER_DEFINED_KEYPARTS
+#ifdef MRN_KEY_HAVE_USER_DEFINED_KEYPARTS
 #  define KEY_N_KEY_PARTS(key) (key)->user_defined_key_parts
 #else
 #  define KEY_N_KEY_PARTS(key) (key)->key_parts
+#endif
+
+#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#  define MRN_KEY_IS_NAME_LEX_STRING
+#endif
+
+#ifdef MRN_KEY_IS_NAME_LEX_STRING
+#  define KEY_NAME(key) (key)->name.str, (key)->name.length
+#else
+#  define KEY_NAME(key) (key)->name
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
@@ -478,5 +487,3 @@
        (field->vcol_info->expr_item->save_in_field(field, 0))
 #  endif
 #endif
-
-#endif /* MRN_MYSQL_COMPAT_H_ */

@@ -3307,7 +3307,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   if (error) {
     DBUG_RETURN(error);
   }
-  mrn::IndexTableName index_table_name(grn_table_name, key_info->name);
+  mrn::IndexTableName index_table_name(grn_table_name, KEY_NAME(key_info));
   index_table = grn_table_create(ctx,
                                  index_table_name.c_str(),
                                  index_table_name.length(),
@@ -3384,7 +3384,7 @@ int ha_mroonga::wrapper_create_index_geo(const char *grn_table_name,
   if (error)
     DBUG_RETURN(error);
 
-  mrn::IndexTableName index_table_name(grn_table_name, key_info->name);
+  mrn::IndexTableName index_table_name(grn_table_name, KEY_NAME(key_info));
 
   grn_obj_flags index_table_flags =
     GRN_OBJ_TABLE_PAT_KEY |
@@ -4019,7 +4019,7 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   }
 
   {
-    mrn::IndexTableName index_table_name(grn_table_name, key_info->name);
+    mrn::IndexTableName index_table_name(grn_table_name, KEY_NAME(key_info));
     index_table = grn_table_create(ctx,
                                    index_table_name.c_str(),
                                    index_table_name.length(),
@@ -4522,7 +4522,8 @@ int ha_mroonga::wrapper_open_indexes(const char *name)
       continue;
     }
 
-    mrn::IndexTableName index_table_name(mapper.table_name(), key_info->name);
+    mrn::IndexTableName index_table_name(mapper.table_name(),
+                                         KEY_NAME(key_info));
     grn_index_tables[i] = grn_ctx_get(ctx,
                                       index_table_name.c_str(),
                                       index_table_name.length());
@@ -4953,7 +4954,8 @@ int ha_mroonga::storage_open_indexes(const char *name)
                                               strlen(key_info->name));
       }
     } else {
-      mrn::IndexTableName index_table_name(mapper.table_name(), key_info->name);
+      mrn::IndexTableName index_table_name(mapper.table_name(),
+                                           KEY_NAME(key_info));
       grn_index_tables[i] = grn_ctx_get(ctx,
                                         index_table_name.c_str(),
                                         index_table_name.length());
@@ -9415,7 +9417,7 @@ int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
   } else {
     mrn::PathMapper mapper(target_share->table_name);
     mrn::IndexTableName index_table_name(mapper.table_name(),
-                                         key_info[key_index].name);
+                                         KEY_NAME(&(key_info[key_index])));
     grn_obj *index_table = grn_ctx_get(ctx,
                                        index_table_name.c_str(),
                                        index_table_name.length());
@@ -13490,9 +13492,9 @@ int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
 
   uint i;
   for (i = 0; i < tmp_table_share->keys; i++) {
-    const char *mysql_index_name = tmp_table_share->key_info[i].name;
-    mrn::IndexTableName from_index_table_name(from_table_name, mysql_index_name);
-    mrn::IndexTableName to_index_table_name(to_table_name, mysql_index_name);
+    KEY *key = &(tmp_table_share->key_info[i]);
+    mrn::IndexTableName from_index_table_name(from_table_name, KEY_NAME(key));
+    mrn::IndexTableName to_index_table_name(to_table_name, KEY_NAME(key));
     grn_obj *index_table;
     index_table = grn_ctx_get(ctx,
                               from_index_table_name.c_str(),
@@ -13829,7 +13831,7 @@ int ha_mroonga::generic_disable_index(int i, KEY *key_info)
   } else {
     mrn::PathMapper mapper(share->table_name);
     mrn::IndexTableName index_table_name(mapper.table_name(),
-                                         key_info[i].name);
+                                         KEY_NAME(&(key_info[i]));
     grn_obj *index_table = grn_ctx_get(ctx,
                                        index_table_name.c_str(),
                                        index_table_name.length());
@@ -14315,7 +14317,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD *thd)
       continue;
     }
     mrn::IndexTableName index_table_name(mapper.table_name(),
-                                         table_share->key_info[i].name);
+                                         KEY_NAME(&(table_share->key_info[i]));
     char index_column_full_name[MRN_MAX_PATH_SIZE];
     snprintf(index_column_full_name, MRN_MAX_PATH_SIZE,
              "%s.%s", index_table_name.c_str(), INDEX_COLUMN_NAME);
@@ -14380,7 +14382,7 @@ int ha_mroonga::storage_recreate_indexes(THD *thd)
       continue;
 
     mrn::IndexTableName index_table_name(mapper.table_name(),
-                                         table_share->key_info[i].name);
+                                         KEY_NAME(&(table_share->key_info[i])));
     char index_column_full_name[MRN_MAX_PATH_SIZE];
     snprintf(index_column_full_name, MRN_MAX_PATH_SIZE,
              "%s.%s", index_table_name.c_str(), INDEX_COLUMN_NAME);

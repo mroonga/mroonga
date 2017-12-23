@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011 Kentoku SHIBA
-  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,8 +18,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_INDEX_TABLE_NAME_HPP_
-#define MRN_INDEX_TABLE_NAME_HPP_
+#pragma once
 
 #include <mrn_constants.hpp>
 
@@ -35,6 +34,9 @@ namespace mrn {
                                size_t index_table_name_length);
 
     IndexTableName(const char *table_name, const char *mysql_index_name);
+    IndexTableName(const char *table_name,
+                   const char *mysql_index_name,
+                   size_t mysql_index_name_length);
     const char *c_str();
     size_t length();
     const char *old_c_str();
@@ -42,14 +44,14 @@ namespace mrn {
   private:
     const char *table_name_;
     const char *mysql_index_name_;
+    size_t mysql_index_name_length_;
     char old_name_[MRN_MAX_KEY_SIZE];
     size_t old_length_;
     char name_[MRN_MAX_KEY_SIZE];
     size_t length_;
 
+    void init();
     uint encode(uchar *encoded_start, uchar *encoded_end,
                 const uchar *mysql_string_start, const uchar *mysql_string_end);
   };
 }
-
-#endif /* MRN_INDEX_TABLE_NAME_HPP_ */
