@@ -74,7 +74,7 @@ namespace mrn {
 
     NormalizedType normalize_field_type(enum_field_types field_type);
 
-    void convert(const Item_cond *cond_item,
+    bool convert(const Item_cond *cond_item,
                  grn_obj *expression,
                  bool have_condition);
     bool convert(const Item_func *func_item,

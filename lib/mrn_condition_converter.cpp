@@ -692,7 +692,7 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void ConditionConverter::convert(const Item_cond *cond_item,
+  bool ConditionConverter::convert(const Item_cond *cond_item,
                                    grn_obj *expression,
                                    bool have_condition) {
     MRN_DBUG_ENTER_METHOD();
@@ -707,10 +707,20 @@ namespace mrn {
     List_iterator<Item> iterator(*sub_item_list);
     const Item *sub_item;
     int n_conditions = have_condition ? 1 : 0;
+    bool added = false;
     while ((sub_item = iterator++)) {
       switch (sub_item->type()) {
+      case Item::COND_ITEM:
+        if (convert(static_cast<const Item_cond *>(sub_item),
+                    expression,
+                    n_conditions > 0)) {
+          added = true;
+          ++n_conditions;
+        }
+        break;
       case Item::FUNC_ITEM:
         if (convert(static_cast<const Item_func *>(sub_item), expression)) {
+          added = true;
           if (n_conditions > 0) {
             grn_expr_append_op(ctx_, expression, logical_operator, 2);
           }
@@ -722,7 +732,7 @@ namespace mrn {
       }
     }
 
-    DBUG_VOID_RETURN;
+    DBUG_RETURN(added);
   }
 
   bool ConditionConverter::convert(const Item_func *func_item,
