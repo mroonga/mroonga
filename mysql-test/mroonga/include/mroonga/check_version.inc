@@ -24,10 +24,12 @@ let $version_5_7           = `SELECT $version_major_minor = 5.7`;
 let $version_10_0          = `SELECT $version_major_minor = 10.0`;
 let $version_10_1          = `SELECT $version_major_minor = 10.1`;
 let $version_10_2          = `SELECT $version_major_minor = 10.2`;
+let $version_10_3          = `SELECT $version_major_minor = 10.3`;
 
 let $version_5_5_or_later  = `SELECT $version_major_minor >= 5.5`;
 let $version_5_6_or_later  = `SELECT $version_major_minor >= 5.6`;
 let $version_5_7_or_later  = `SELECT $version_major_minor >= 5.7`;
 let $version_10_0_or_later = `SELECT $version_major_minor >= 10.0`;
 let $version_10_2_or_later = `SELECT $version_major_minor >= 10.2`;
+let $version_10_3_or_later = `SELECT $version_major_minor >= 10.3`;
 --enable_query_log

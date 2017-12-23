@@ -1489,6 +1489,9 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_TIME;         // 8bytes
     break;
   case MYSQL_TYPE_VARCHAR:      // VARCHAR; <= 64KB * 4 + 2bytes
+#ifdef MRN_HAVE_MYSQL_TYPE_VARCHAR_COMPRESSED
+  case MYSQL_TYPE_VARCHAR_COMPRESSED:
+#endif
     if (for_index_key) {
       type = GRN_DB_SHORT_TEXT; // 4Kbytes
     } else {
@@ -1566,6 +1569,9 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     }
     break;
   case MYSQL_TYPE_BLOB:         // BLOB; <= 64Kbytes + 2bytes
+#ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
+  case MYSQL_TYPE_BLOB_COMPRESSED:
+#endif
     if (for_index_key) {
       type = GRN_DB_SHORT_TEXT; // 4Kbytes
     } else {
@@ -11453,6 +11459,18 @@ void ha_mroonga::storage_store_field_blob(Field *field,
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
+void ha_mroonga::storage_store_field_blob_compressed(Field *field,
+                                                     const char *value,
+                                                     uint value_length)
+{
+  MRN_DBUG_ENTER_METHOD();
+  Field_blob *blob = static_cast<Field_blob *>(field);
+  blob->store(value, value_length, field->charset());
+  DBUG_VOID_RETURN;
+}
+#endif
+
 void ha_mroonga::storage_store_field_geometry(Field *field,
                                               const char *value,
                                               uint value_length)
@@ -11543,6 +11561,9 @@ void ha_mroonga::storage_store_field(Field *field,
     storage_store_field_new_date(field, value, value_length);
     break;
   case MYSQL_TYPE_VARCHAR:
+#ifdef MRN_HAVE_MYSQL_TYPE_VARCHAR_COMPRESSED
+  case MYSQL_TYPE_VARCHAR_COMPRESSED:
+#endif
     storage_store_field_string(field, value, value_length);
     break;
   case MYSQL_TYPE_BIT:
@@ -11575,6 +11596,11 @@ void ha_mroonga::storage_store_field(Field *field,
   case MYSQL_TYPE_LONG_BLOB:
   case MYSQL_TYPE_BLOB:
     storage_store_field_blob(field, value, value_length);
+    break;
+#ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
+  case MYSQL_TYPE_BLOB_COMPRESSED:
+#endif
+    storage_store_field_blob_compressed(field, value, value_length);
     break;
   case MYSQL_TYPE_VAR_STRING:
   case MYSQL_TYPE_STRING:

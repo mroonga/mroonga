@@ -772,6 +772,11 @@ private:
 #endif
   void storage_store_field_blob(Field *field,
                                 const char *value, uint value_length);
+#ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
+  void storage_store_field_blob_compressed(Field *field,
+                                           const char *value,
+                                           uint value_length);
+#endif
   void storage_store_field_geometry(Field *field,
                                     const char *value, uint value_length);
 #ifdef MRN_HAVE_MYSQL_TYPE_JSON
