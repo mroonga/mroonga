@@ -1,5 +1,4 @@
 # Copyright(C) 2010 Tetsuro IKEDA
-# Copyright(C) 2013 Kentoku SHIBA
 # Copyright(C) 2013 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -17,32 +16,33 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source include/not_embedded.inc
---source ../../../include/mroonga/have_mroonga.inc
---source ../../../include/mroonga/load_mroonga_functions.inc
+--source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
-drop table if exists t1, t2, t3;
+drop table if exists memos;
 --enable_warnings
 
-create table t1 (_id int, c1 int);
-select last_insert_grn_id();
-insert into t1 values(null,100);
-insert into t1 values(null,100);
-select last_insert_grn_id();
-insert into t1 values(null,100);
-insert into t1 values(null,100);
-select last_insert_grn_id();
-insert into t1 values(null,100);
-insert into t1 values(null,100);
-select last_insert_grn_id();
-insert into t1 values(null,100);
-insert into t1 values(null,100);
-select last_insert_grn_id();
+create table memos (
+  _id int,
+  content varchar(255),
+  unique key (_id) using hash
+);
 
---error ER_CANT_INITIALIZE_UDF
-select last_insert_grn_id(1);
+insert into memos values (null, "今夜はさんま。");
+insert into memos values (null, "明日はgroongaをアップデート。");
+insert into memos values (null, "帰りにおだんご。");
+insert into memos values (null, "金曜日は肉の日。");
 
-drop table t1;
+select * from memos;
 
---source ../../../include/mroonga/unload_mroonga_functions.inc
---source ../../../include/mroonga/have_mroonga_deinit.inc
+insert into memos values (null, "冷蔵庫に牛乳が残り1本。");
+select last_insert_grn_id();
+update memos set content = "冷蔵庫に牛乳はまだたくさんある。" where _id = last_insert_grn_id();
+
+select * from memos;
+
+drop table memos;
+
+--source ../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc
