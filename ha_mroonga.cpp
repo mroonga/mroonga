@@ -11599,9 +11599,9 @@ void ha_mroonga::storage_store_field(Field *field,
     break;
 #ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
   case MYSQL_TYPE_BLOB_COMPRESSED:
-#endif
     storage_store_field_blob_compressed(field, value, value_length);
     break;
+#endif
   case MYSQL_TYPE_VAR_STRING:
   case MYSQL_TYPE_STRING:
     storage_store_field_string(field, value, value_length);
@@ -12191,7 +12191,11 @@ int ha_mroonga::storage_encode_key_set(Field *field, const uchar *key,
                      (uchar *)(key - 1),
                      field->null_bit,
                      field->unireg_check,
+#ifdef MRN_FIELD_SET_USE_LEX_STRING
                      &(field->field_name),
+#else
+                     field->field_name,
+#endif
                      field->pack_length(),
                      static_cast<Field_set*>(field)->typelib,
                      static_cast<Field_set*>(field)->charset());
