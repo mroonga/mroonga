@@ -36,12 +36,18 @@
 #include <mrn_lock.hpp>
 
 #ifdef MRN_MARIADB_P
+#  if MYSQL_VERSION_ID >= 100300
+     typedef LEX_CSTRING mrn_resolve_name;
+#  else
+     typedef LEX_STRING mrn_resolve_name;
+#  endif
 #  if MYSQL_VERSION_ID >= 100100
 #    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), TRUE)
 #  else
 #    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
 #  endif
 #else
+   typedef LEX_STRING mrn_resolve_name;
 #  if MYSQL_VERSION_ID >= 50603
 #    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), TRUE)
 #  else
@@ -483,7 +489,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 
   if (share->engine)
   {
-    LEX_STRING engine_name;
+    mrn_resolve_name engine_name;
     if (
       (
         share->engine_length == MRN_DEFAULT_LEN &&
@@ -1096,7 +1102,8 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
 void mrn_free_tmp_table_share(TABLE_SHARE *tmp_table_share)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  char *normalized_path = tmp_table_share->normalized_path.str;
+  char *normalized_path =
+    const_cast<char *>(tmp_table_share->normalized_path.str);
   free_table_share(tmp_table_share);
   my_free(normalized_path);
   DBUG_VOID_RETURN;
