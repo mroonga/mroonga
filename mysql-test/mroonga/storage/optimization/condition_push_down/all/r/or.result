@@ -1,0 +1,33 @@
+DROP TABLE IF EXISTS months;
+FLUSH STATUS;
+CREATE TABLE months (
+id int,
+year int,
+month int
+);
+INSERT INTO months VALUES (1, 2016, 10);
+INSERT INTO months VALUES (2, 2016, 11);
+INSERT INTO months VALUES (3, 2016, 12);
+INSERT INTO months VALUES (4, 2017, 10);
+INSERT INTO months VALUES (5, 2017, 11);
+INSERT INTO months VALUES (6, 2017, 12);
+INSERT INTO months VALUES (7, 2018, 10);
+INSERT INTO months VALUES (8, 2018, 11);
+INSERT INTO months VALUES (9, 2018, 12);
+SET mroonga_condition_push_down_type = ALL;
+SELECT *
+FROM months
+WHERE year < 2018 OR month = 11;
+id	year	month
+1	2016	10
+2	2016	11
+3	2016	12
+4	2017	10
+5	2017	11
+6	2017	12
+8	2018	11
+SET mroonga_condition_push_down_type = DEFAULT;
+SHOW STATUS LIKE 'mroonga_condition_push_down';
+Variable_name	Value
+Mroonga_condition_push_down	1
+DROP TABLE months;

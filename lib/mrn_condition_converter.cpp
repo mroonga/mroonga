@@ -101,10 +101,11 @@ namespace mrn {
       DBUG_RETURN(false);
     }
 
-    if (cond_item->functype() != Item_func::COND_AND_FUNC) {
+    if (!(cond_item->functype() == Item_func::COND_AND_FUNC ||
+          cond_item->functype() == Item_func::COND_OR_FUNC)) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][condition-push-down][false] "
-              "not AND conditions: %u",
+              "not AND nor OR conditions: %u",
               cond_item->functype());
       DBUG_RETURN(false);
     }
@@ -696,6 +697,11 @@ namespace mrn {
                                    bool have_condition) {
     MRN_DBUG_ENTER_METHOD();
 
+    grn_operator logical_operator = GRN_OP_AND;
+    if (cond_item->functype() == Item_func::COND_OR_FUNC) {
+      logical_operator = GRN_OP_OR;
+    }
+
     List<Item> *sub_item_list =
       const_cast<Item_cond *>(cond_item)->argument_list();
     List_iterator<Item> iterator(*sub_item_list);
@@ -706,7 +712,7 @@ namespace mrn {
       case Item::FUNC_ITEM:
         if (convert(static_cast<const Item_func *>(sub_item), expression)) {
           if (n_conditions > 0) {
-            grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
+            grn_expr_append_op(ctx_, expression, logical_operator, 2);
           }
           ++n_conditions;
         }
