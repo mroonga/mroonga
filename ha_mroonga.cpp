@@ -578,6 +578,11 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = "HA_EXTRA_NO_AUTOINC_LOCKING";
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_PREPARE_FOR_ALTER_TABLE
+  case HA_EXTRA_PREPARE_FOR_ALTER_TABLE:
+    inspected = "HA_EXTRA_PREPARE_FOR_ALTER_TABLE";
+    break;
+#endif
   }
   return inspected;
 }
