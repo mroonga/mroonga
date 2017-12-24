@@ -193,6 +193,10 @@
 #  define MRN_ITEM_HAVE_ITEM_NAME
 #endif
 
+#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#  define MRN_ITEM_ITEM_NAME_IS_LEX_STRING
+#endif
+
 #if MYSQL_VERSION_ID < 100000
 #  define MRN_HAVE_TABLE_DEF_CACHE
 #endif

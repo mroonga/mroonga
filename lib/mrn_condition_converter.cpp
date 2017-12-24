@@ -29,9 +29,15 @@
 #  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item)  \
   (static_cast<int>(item->item_name.length()))
 #else
-#  define MRN_ITEM_FIELD_GET_NAME(item)        ((item)->name)
-#  define MRN_ITEM_FIELD_GET_NAME_LENGTH(item)  \
+#  ifdef MRN_ITEM_ITEM_NAME_IS_LEX_STRING
+#    define MRN_ITEM_FIELD_GET_NAME(item)        ((item)->name.str)
+#    define MRN_ITEM_FIELD_GET_NAME_LENGTH(item)        \
+  (static_cast<int>((item)->name.length))
+#  else
+#    define MRN_ITEM_FIELD_GET_NAME(item)        ((item)->name)
+#    define MRN_ITEM_FIELD_GET_NAME_LENGTH(item)        \
   (static_cast<int>(strlen((item)->name)))
+#  endif
 #endif
 
 namespace mrn {
