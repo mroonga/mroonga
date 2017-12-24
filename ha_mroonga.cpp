@@ -17121,17 +17121,7 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
     uint ref_pkey_nr = tmp_ref_table_share->primary_key;
     KEY *ref_key_info = &tmp_ref_table_share->key_info[ref_pkey_nr];
     Field *ref_field = &ref_key_info->key_part->field[0];
-    mrn_thd_lex_string *ref_col_name =
-      thd_make_lex_string(thd,
-                          NULL,
-#ifdef MRN_FIELD_FIELD_NAME_IS_LEX_STRING
-                          ref_field->field_name.str,
-                          ref_field->field_name.length,
-#else
-                          ref_field->field_name,
-                          strlen(ref_field->field_name),
-#endif
-                          TRUE);
+    mrn_thd_lex_string *ref_col_name = FIELD_NAME_TO_LEX_STRING(thd, ref_field);
     f_key_info.referenced_fields.push_back(ref_col_name);
     mrn_open_mutex_lock(table_share);
     mrn_free_tmp_table_share(tmp_ref_table_share);

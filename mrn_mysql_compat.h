@@ -115,6 +115,12 @@
    strncmp((field1)->field_name.str,                                    \
            (field2)->field_name.str,                                    \
            (field1)->field_name.length) == 0)
+#  define FIELD_NAME_TO_LEX_STRING(thd, field)                          \
+  thd_make_lex_string((thd),                                            \
+                      NULL,                                             \
+                      (field)->field_name.str,                          \
+                      (field)->field_name.length,                       \
+                      TRUE);
 #  define FIELD_NAME_FORMAT "%.*s"
 #  define FIELD_NAME_FORMAT_VALUE(field)                                \
   static_cast<int>((field)->field_name.length), (field)->field_name.str
@@ -128,6 +134,12 @@
    strncmp((field)->field_name, string->str, string->length) == 0)
 #  define FIELD_NAME_EQUAL_FIELD(field1, field2)                        \
   (strcmp((field1)->field_name, (field2)->field_name) == 0)
+#  define FIELD_NAME_TO_LEX_STRING(thd, field)          \
+   thd_make_lex_string((thd),                           \
+                       NULL,                            \
+                       (field)->field_name,             \
+                       strlen((field)->field_name),     \
+                       TRUE);
 #  define FIELD_NAME_FORMAT "%s"
 #  define FIELD_NAME_FORMAT_VALUE(field) (field)->field_name
 #endif
