@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS logs;
+CREATE TABLE logs (
+id INT,
+content VARCHAR(256) COMPRESSED
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO logs(id, content) VALUES (1, 'Start');
+INSERT INTO logs(id, content) VALUES (2, 'Shutdown');
+INSERT INTO logs(id, content) VALUES (3, 'Restart');
+SELECT * FROM logs WHERE content = 'Start';
+id	content
+1	Start
+DROP TABLE logs;

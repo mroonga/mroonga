@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS logs;
 
 CREATE TABLE logs (
   id INT,
-  content TEXT COMPRESSED
+  content VARCHAR(256) COMPRESSED
 ) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO logs(id, content) VALUES (1, 'Start');

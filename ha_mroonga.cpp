@@ -11646,13 +11646,14 @@ void ha_mroonga::storage_store_field(Field *field,
   case MYSQL_TYPE_MEDIUM_BLOB:
   case MYSQL_TYPE_LONG_BLOB:
   case MYSQL_TYPE_BLOB:
-    storage_store_field_blob(field, value, value_length);
-    break;
 #ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
   case MYSQL_TYPE_BLOB_COMPRESSED:
-    storage_store_field_blob_compressed(field, value, value_length);
-    break;
+    if (field->unireg_check == Field::TMYSQL_COMPRESSED)
+      storage_store_field_blob_compressed(field, value, value_length);
+    else
 #endif
+      storage_store_field_blob(field, value, value_length);
+    break;
   case MYSQL_TYPE_VAR_STRING:
   case MYSQL_TYPE_STRING:
     storage_store_field_string(field, value, value_length);
