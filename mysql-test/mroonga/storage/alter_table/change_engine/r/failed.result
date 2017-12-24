@@ -1,7 +1,7 @@
 SET NAMES big5;
 DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
-title TEXT
+title varchar(256) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=big5;
 INSERT INTO diaries VALUES ('±z¦n');
 ALTER TABLE diaries ENGINE=Mroonga;
@@ -9,6 +9,6 @@ ERROR HY000: The character set 'big5_chinese_ci[big5]' is not supported by Groon
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
-  `title` text
+  `title` varchar(256) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=big5
 DROP TABLE diaries;

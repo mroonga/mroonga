@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
 CREATE TABLE diaries (
-  title TEXT
+  title varchar(256) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=big5;
 
 INSERT INTO diaries VALUES ('±z¦n');
