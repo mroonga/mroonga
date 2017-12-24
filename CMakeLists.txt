@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 #
-# Copyright(C) 2012-2015 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2017 Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
@@ -245,7 +245,6 @@ set(MYSQL_INCLUDE_DIRS
 
 if(MRN_BUNDLED)
   set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
-  set(MYSQL_SERVICES_LIB_DIR "${MYSQL_BUILD_DIR}/libservices")
   set(MYSQL_CFLAGS "${CMAKE_C_FLAGS}")
   set(MYSQL_VERSION "${MYSQL_BASE_VERSION}")
 else()
@@ -259,11 +258,10 @@ else()
 
   set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
   set_mysql_config_value("--variable=pkglibdir" MYSQL_PKG_LIB_DIR)
-  set(MYSQL_BUILD_LIBSERVICES_DIR "${MYSQL_BUILD_DIR}/libservices")
-  if(EXISTS "${MYSQL_BUILD_LIBSERVICES_DIR}/libmysqlservices.a")
-    set(MYSQL_SERVICES_LIB_DIR "${MYSQL_BUILD_LIBSERVICES_DIR}")
-  else()
-    set(MYSQL_SERVICES_LIB_DIR "${MYSQL_PKG_LIB_DIR}")
+  set(MYSQL_SERVICES_LIB_STATIC
+    "${MYSQL_BUILD_DIR}/libservices/libmysqlservices.a")
+  if(NOT EXISTS "${MYSQL_SERVICES_LIB_STATIC}")
+    set(MYSQL_SERVICES_LIB_STATIC "${MYSQL_PKG_LIB_DIR}/libmysqlservices.a")
   endif()
   set_mysql_config_value("--cflags" MYSQL_CFLAGS)
   set_mysql_config_value("--version" MYSQL_VERSION)
@@ -317,9 +315,6 @@ if(WIN32)
   set(MYSQL_LIBRARY_DIRS
     "${MYSQL_BUILD_DIR}/lib"
     "${MYSQL_BUILD_DIR}/libmysqld")
-else()
-  set(MYSQL_LIBRARY_DIRS
-    "${MYSQL_SERVICES_LIB_DIR}")
 endif()
 link_directories(
   ${MRN_LIBRARY_DIRS}
@@ -342,8 +337,10 @@ if(MRN_BUNDLED)
 else()
   add_library(mroonga MODULE ${MRN_ALL_SOURCES})
 
-  set(MYSQL_LIBRARIES "mysqlservices")
-  target_link_libraries(mroonga ${GROONGA_LIBRARIES} ${MYSQL_LIBRARIES})
+  if(NOT WIN32)
+    set(MRN_LIBRARIES ${MRN_LIBRARIES} ${MYSQL_SERVICES_LIB_STATIC})
+  endif()
+  target_link_libraries(mroonga ${MRN_LIBRARIES})
 
   option(WITH_DEBUG "Enable debug options" OFF)
   if(WITH_DEBUG)
