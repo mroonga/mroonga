@@ -261,9 +261,10 @@ namespace mrn {
 
     if (!key_info_) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
-              "[mroonga][count-skip][false] no active index: <%s>:<%s>",
+              "[mroonga][count-skip][false] no active index: "
+              "<%s>:<" FIELD_NAME_FORMAT ">",
               *(field->table_name),
-              field->field_name);
+              FIELD_NAME_FORMAT_VALUE(field));
       DBUG_RETURN(false);
     }
 
@@ -276,20 +277,22 @@ namespace mrn {
         } else {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][count-skip][false] "
-                  "field's index are out of key part map: %u:%lu: <%s>:<%s>",
+                  "field's index are out of key part map: "
+                  "%u:%lu: <%s>:<" FIELD_NAME_FORMAT ">",
                   i,
                   target_key_part_map_,
                   *(field->table_name),
-                  field->field_name);
+                  FIELD_NAME_FORMAT_VALUE(field));
           DBUG_RETURN(false);
         }
       }
     }
 
     GRN_LOG(ctx_, GRN_LOG_DEBUG,
-            "[mroonga][count-skip][false] field isn't indexed: <%s>:<%s>",
+            "[mroonga][count-skip][false] field isn't indexed: "
+            "<%s>:<" FIELD_NAME_FORMAT ">",
             *(field->table_name),
-            field->field_name);
+            FIELD_NAME_FORMAT_VALUE(field));
     DBUG_RETURN(false);
   }
 }
