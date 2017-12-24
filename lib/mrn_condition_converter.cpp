@@ -534,6 +534,9 @@ namespace mrn {
       type = TIME_TYPE;
       break;
     case MYSQL_TYPE_VARCHAR:
+#ifdef MRN_HAVE_MYSQL_TYPE_VARCHAR_COMPRESSED
+    case MYSQL_TYPE_VARCHAR_COMPRESSED:
+#endif
       type = STRING_TYPE;
       break;
     case MYSQL_TYPE_BIT:
@@ -567,6 +570,9 @@ namespace mrn {
     case MYSQL_TYPE_MEDIUM_BLOB:
     case MYSQL_TYPE_LONG_BLOB:
     case MYSQL_TYPE_BLOB:
+#ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
+    case MYSQL_TYPE_BLOB_COMPRESSED:
+#endif
     case MYSQL_TYPE_VAR_STRING:
     case MYSQL_TYPE_STRING:
       type = STRING_TYPE;
