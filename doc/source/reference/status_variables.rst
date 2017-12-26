@@ -41,3 +41,20 @@ Here is an example how to check it::
   +--------------------------+-------+
   1 row in set (0.00 sec)
 
+.. _status-variable-mroonga-condition-push-down:
+
+``Mroonga_condition_push_down``
+-------------------------------
+
+This value is increased when condition push down is used. You can use
+this value to check whether condition push down is used or not.
+
+Here is an example how to check it::
+
+  mysql> SHOW STATUS LIKE 'Mroonga_condition_push_down';
+  +-----------------------------+-------+
+  | Variable_name               | Value |
+  +-----------------------------+-------+
+  | Mroonga_condition_push_down | 1     |
+  +-----------------------------+-------+
+  1 row in set (0.00 sec)

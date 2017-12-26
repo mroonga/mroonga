@@ -544,3 +544,42 @@ Here is an example SQL to confirm the running mroonga version::
   +-----------------+-------+
   1 row in set (0.00 sec)
 
+.. _server-variable-mroonga-condition-push-down-type:
+
+``mroonga_condition_push_down_type``
+------------------------------------
+
+.. versionadded:: 7.10
+
+It controls how to enable condition push down support.
+
+The default value is ``ONE_FULL_TEXT_SEARCH``. It means that condition
+push down is enabled only when ``WHERE`` clause has one ``MATCH
+AGAINST`` condition.
+
+Here are available values:
+
+.. list-table::
+  :header-rows: 1
+
+  * - Value
+    - Description
+  * - NONE
+    - Never use condition push down.
+  * - ALL
+    - Always use condition push down. It's experimental for now.
+  * - ONE_FULL_TEXT_SEARCH
+    - Use condition push down only when one ``MATCH AGAINST``
+      condition exists in ``WHERE``.
+
+      It's the default.
+
+Here is an example SQL to confirm the current value::
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_condition_push_down_type';
+  +----------------------------------+----------------------+
+  | Variable_name                    | Value                |
+  +----------------------------------+----------------------+
+  | mroonga_condition_push_down_type | ONE_FULL_TEXT_SEARCH |
+  +----------------------------------+----------------------+
+  1 row in set (0.00 sec)
