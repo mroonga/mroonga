@@ -476,10 +476,10 @@ TODO:
 ``mroonga_enable_operations_recording``
 ---------------------------------------
 
-Whether recording operations for recover is enabled or not. 
-The default value is ``ON`` that means operations are recording 
-to Groonga database. 
-It needs to reopen the database with `` FLUSH TABLES`` in order 
+Whether recording operations for recover is enabled or not.
+The default value is ``ON`` that means operations are recording
+to Groonga database.
+It needs to reopen the database with `` FLUSH TABLES`` in order
 to reflect the variable is changed.
 
 Here is an example SQL to disable operations recording::
