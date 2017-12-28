@@ -36,6 +36,10 @@ msgstr "[MariaDB 10.1] MariaDB 10.1.8に対応しました。"
 msgid "[rpm][centos] Supported MariaDB 10.2.11."
 msgstr "[rpm][centos] MariaDB 10.2.10に対応。"
 
+#, fuzzy
+msgid "[rpm][centos] Supported MariaDB 10.1.30."
+msgstr "[rpm][centos] MariaDB 10.1.29に対応。"
+
 # 2cf79c00c0ec4896b9beffee50c10cc1
 #, fuzzy
 msgid "[rpm][centos] Supported Percona Server 5.7.20."
