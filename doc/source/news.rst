@@ -17,6 +17,8 @@ Improvements
 
 * [rpm][centos] Supported MariaDB 10.2.11.
 
+* [rpm][centos] Supported MariaDB 10.1.30.
+
 * [rpm][centos] Supported Percona Server 5.7.20.
 
 * [rpm][centos] Supported Percona Server 5.6.38.
