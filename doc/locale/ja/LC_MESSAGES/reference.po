@@ -1431,6 +1431,50 @@ msgstr "Mroongaのバージョン"
 msgid "Here is an example SQL to confirm the running mroonga version::"
 msgstr "実行中のmroongaのバージョンを確認するためのSQL例です::"
 
+msgid "``mroonga_condition_push_down_type``"
+msgstr ""
+
+msgid "It controls how to enable condition push down support."
+msgstr ""
+
+msgid ""
+"The default value is ``ONE_FULL_TEXT_SEARCH``. It means that condition push "
+"down is enabled only when ``WHERE`` clause has one ``MATCH AGAINST`` "
+"condition."
+msgstr ""
+
+#, fuzzy
+msgid "Here are available values:"
+msgstr "以下は利用可能なフラグの一覧です。"
+
+msgid "NONE"
+msgstr ""
+
+msgid "Never use condition push down."
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
+msgid "Always use condition push down. It's experimental for now."
+msgstr ""
+
+msgid "ONE_FULL_TEXT_SEARCH"
+msgstr ""
+
+msgid ""
+"Use condition push down only when one ``MATCH AGAINST`` condition exists in "
+"``WHERE``."
+msgstr ""
+
+#, fuzzy
+msgid "It's the default."
+msgstr "これがデフォルトです。"
+
+#, fuzzy
+msgid "Here is an example SQL to confirm the current value::"
+msgstr "実行中のmroongaのバージョンを確認するためのSQL例です::"
+
 msgid "SQL commands"
 msgstr ""
 
@@ -1973,6 +2017,18 @@ msgstr ""
 "ORDER BY LIMIT 高速化機能が動作する度にカウントアップされます。スキーマ/SQL"
 "チューニングを行って ORDER BY LIMIT 高速化機能を利用できるようにした際の動作"
 "確認に利用できます。"
+
+msgid "``Mroonga_condition_push_down``"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"This value is increased when condition push down is used. You can use this "
+"value to check whether condition push down is used or not."
+msgstr ""
+"行カウント高速化機能が動作する度にカウントアップされます。スキーマ/SQLチュー"
+"ニングを行って行カウント高速化機能を利用できるようにした際の動作確認に利用で"
+"きます。"
 
 msgid "UDF (User Defined Functions)"
 msgstr "UDF (ユーザ定義関数)"

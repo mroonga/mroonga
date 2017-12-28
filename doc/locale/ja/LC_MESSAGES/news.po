@@ -21,11 +21,73 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.09 - 2017-11-29"
+#, fuzzy
+msgid "Release 7.10 - 2017-12-29"
 msgstr "7.09リリース - 2017-11-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+#, fuzzy
+msgid "[mariadb10.3] Supported MariaDB 10.3."
+msgstr "[MariaDB 10.1] MariaDB 10.1.8に対応しました。"
+
+#, fuzzy
+msgid "[rpm][centos] Supported MariaDB 10.2.11."
+msgstr "[rpm][centos] MariaDB 10.2.10に対応。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+#, fuzzy
+msgid "[rpm][centos] Supported Percona Server 5.7.20."
+msgstr ""
+"[rpm][centos] CentOS 6/7で最新のPercona Server 5.6/5.7をサポートしました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+#, fuzzy
+msgid "[rpm][centos] Supported Percona Server 5.6.38."
+msgstr ""
+"[rpm][centos] CentOS 6/7で最新のPercona Server 5.6/5.7をサポートしました。"
+
+#, fuzzy
+msgid ""
+"[:doc:`/reference/optimizations`] Enable count_skip optimization for multi-"
+"column index."
+msgstr ""
+"[doc] カラムサイズに関する :doc:`/reference/limitations` を追記しました。"
+
+msgid "Supported condition pushdown and added related new variables."
+msgstr ""
+
+msgid ""
+"[:doc:`/reference/status_variables`] Added ``Mroonga_condition_push_down``."
+msgstr ""
+
+msgid ""
+"[:doc:`/reference/server_variables`] Added "
+"``mroonga_condition_push_down_type``. The default value is "
+"``ONE_FULL_TEXT_SEARCH``. It means that condition push down is enabled only "
+"when ``WHERE`` clause has one ``MATCH AGAINST`` condition."
+msgstr ""
+
+msgid ""
+"Supported column cache when to get fixed size column value to improve "
+"performance. The feature requires Groonga 7.1.0 or later."
+msgstr ""
+
+msgid ""
+"Renamed a function ``last_insert_grn_id`` to ``mroonga_last_insert_grn_id`` "
+"to add missing ``mroonga_`` prefix. ``last_insert_grn_id`` is deprecated. "
+"[GitHub#177] [Reported by Ian Gilfillan]"
+msgstr ""
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Ian Gilfillan"
+msgstr ""
+
+msgid "Release 7.09 - 2017-11-29"
+msgstr "7.09リリース - 2017-11-29"
 
 msgid "[rpm][centos] Supported MariaDB 10.2.10."
 msgstr "[rpm][centos] MariaDB 10.2.10に対応。"
@@ -44,9 +106,6 @@ msgid ""
 msgstr ""
 "[cmake] Mroongaを無効にしてビルドする場合にはMroonga関連の設定をスキップする"
 "ようにしました。 [Vladislav Vaintroubさんがパッチ提供]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 # 22607774878349e3a2ba0a9bef7a10cc
 msgid "Sergei Golubchik"
