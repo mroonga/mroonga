@@ -5,6 +5,43 @@
 News
 ====
 
+.. _release-7-10:
+
+Release 7.10 - 2017-12-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [mariadb10.3] Supported MariaDB 10.3.
+
+* [rpm][centos] Supported MariaDB 10.2.11.
+
+* [rpm][centos] Supported Percona Server 5.7.20.
+
+* [rpm][centos] Supported Percona Server 5.6.38.
+
+* [:doc:`/reference/optimizations`] Enable count_skip optimization for multi-column index.
+
+* Supported condition pushdown and added related new variables.
+
+  * [:doc:`/reference/status_variables`] Added ``Mroonga_condition_push_down``.
+
+  * [:doc:`/reference/server_variables`] Added ``mroonga_condition_push_down_type``.
+    The default value is ``ONE_FULL_TEXT_SEARCH``. It means that condition push down is enabled only when ``WHERE`` clause has one ``MATCH AGAINST`` condition.
+
+* Supported column cache when to get fixed size column value to improve performance.
+  The feature requires Groonga 7.1.0 or later.
+
+* Renamed a function ``last_insert_grn_id`` to ``mroonga_last_insert_grn_id`` to add missing ``mroonga_`` prefix.
+  ``last_insert_grn_id`` is deprecated.
+  [GitHub#177] [Reported by Ian Gilfillan]
+
+Thanks
+^^^^^^
+
+* Ian Gilfillan
+
 .. _release-7-09:
 
 Release 7.09 - 2017-11-29
