@@ -30,8 +30,6 @@
 extern "C" {
 #endif
 
-// #define MRN_HAVE_GRN_COLUMN_CACHE
-
 #include <groonga.h>
 #include "mrn_mysql_compat.h"
 #include <mrn_operations.hpp>
@@ -365,9 +363,7 @@ private:
   grn_ctx *ctx;
   grn_obj *grn_table;
   grn_obj **grn_columns;
-#ifdef MRN_HAVE_GRN_COLUMN_CACHE
   grn_column_cache **grn_column_caches;
-#endif
   grn_obj **grn_column_ranges;
   grn_obj **grn_index_tables;
   grn_obj **grn_index_columns;

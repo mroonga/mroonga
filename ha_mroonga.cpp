@@ -2624,9 +2624,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    ctx(&ctx_entity_),
    grn_table(NULL),
    grn_columns(NULL),
-#ifdef MRN_HAVE_GRN_COLUMN_CACHE
    grn_column_caches(NULL),
-#endif
    grn_column_ranges(NULL),
    grn_index_tables(NULL),
    grn_index_columns(NULL),
@@ -4851,17 +4849,13 @@ int ha_mroonga::storage_open_columns(void)
 
   int n_columns = table->s->fields;
   grn_columns = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
-#ifdef MRN_HAVE_GRN_COLUMN_CACHE
   grn_column_caches =
     static_cast<grn_column_cache **>(malloc(sizeof(grn_column_cache *) *
                                             n_columns));
-#endif
   grn_column_ranges = (grn_obj **)malloc(sizeof(grn_obj *) * n_columns);
   for (int i = 0; i < n_columns; i++) {
       grn_columns[i] = NULL;
-#ifdef MRN_HAVE_GRN_COLUMN_CACHE
       grn_column_caches[i] = NULL;
-#endif
       grn_column_ranges[i] = NULL;
   }
 
@@ -4903,9 +4897,7 @@ int ha_mroonga::storage_open_columns(void)
       break;
     }
 
-#ifdef MRN_HAVE_GRN_COLUMN_CACHE
     grn_column_caches[i] = grn_column_cache_open(ctx, grn_columns[i]);
-#endif
 
     grn_id range_id = grn_obj_get_range(ctx, grn_columns[i]);
     grn_column_ranges[i] = grn_ctx_at(ctx, range_id);
@@ -4932,12 +4924,10 @@ void ha_mroonga::storage_close_columns(void)
       grn_obj_unlink(ctx, column);
     }
 
-#ifdef MRN_HAVE_GRN_COLUMN_CACHE
     grn_column_cache *column_cache = grn_column_caches[i];
     if (column_cache) {
       grn_column_cache_close(ctx, column_cache);
     }
-#endif
 
     grn_obj *range = grn_column_ranges[i];
     if (range) {
@@ -11694,9 +11684,7 @@ void ha_mroonga::storage_get_column_value(int nth_column,
                                           grn_obj *value)
 {
   grn_obj *column = grn_columns[nth_column];
-#ifdef MRN_HAVE_GRN_COLUMN_CACHE
   grn_column_cache *column_cache = grn_column_caches[nth_column];
-#endif
   grn_id range_id = grn_obj_get_range(ctx, column);
   grn_obj_flags flags;
 
@@ -11707,7 +11695,6 @@ void ha_mroonga::storage_get_column_value(int nth_column,
   }
 
   grn_obj_reinit(ctx, value, range_id, flags);
-#ifdef MRN_HAVE_GRN_COLUMN_CACHE
   if (column_cache) {
     size_t raw_value_size = 0;
     void *raw_value = grn_column_cache_ref(ctx,
@@ -11723,9 +11710,6 @@ void ha_mroonga::storage_get_column_value(int nth_column,
   } else {
     grn_obj_get_value(ctx, column, record_id, value);
   }
-#else
-  grn_obj_get_value(ctx, column, record_id, value);
-#endif
 }
 
 void ha_mroonga::storage_store_field_column(Field *field,
