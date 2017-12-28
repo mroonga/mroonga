@@ -13,6 +13,9 @@ Release 7.10 - 2017-12-29
 Improvements
 ^^^^^^^^^^^^
 
+* Updated required Groonga version to 7.1.0. You need to restart MySQL
+  after you upgrade to Mroonga 7.10.
+
 * [mariadb10.3] Supported MariaDB 10.3.
 
 * [rpm][centos] Supported MariaDB 10.2.11.
@@ -34,7 +37,6 @@ Improvements
     If the value ``ALL`` is set, condition push down is always used (``ALL`` is experimental for now. We glad if you use it and tell us if it got faster or not).
 
 * Supported column cache when to get fixed size column value to improve performance.
-  The feature requires Groonga 7.1.0 or later.
 
 * Renamed a function ``last_insert_grn_id`` to ``mroonga_last_insert_grn_id`` to add missing ``mroonga_`` prefix.
   ``last_insert_grn_id`` is deprecated.
