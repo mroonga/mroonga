@@ -238,7 +238,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
           fi
         fi
         AC_MSG_RESULT([$mysql_services_lib_dir])
-        MYSQL_LIBS="$MYSQL_LIBS -L\"$mysql_services_lib_dir\" -lmysqlservices"
+        MYSQL_LIBS="$MYSQL_LIBS \"$mysql_services_lib_dir/libmysqlservices.a\""
         ;;
     esac
     AC_SUBST(MYSQL_LIBS)
