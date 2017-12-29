@@ -28,7 +28,7 @@ Improvements
 
 * [:doc:`/reference/optimizations`] Enable count_skip optimization for multi-column index.
 
-* Supported condition pushdown and added related new variables.
+* Supported condition push down and added related new variables.
 
   * [:ref:`status-variable-mroonga-condition-push-down`] Added ``Mroonga_condition_push_down``.
 

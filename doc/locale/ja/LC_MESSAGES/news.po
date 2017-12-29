@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-11-24 11:31+0900\n"
+"PO-Revision-Date: 2017-12-29 10:09+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,76 +21,103 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-#, fuzzy
 msgid "Release 7.10 - 2017-12-29"
-msgstr "7.09リリース - 2017-11-29"
+msgstr "7.10リリース - 2017-12-29"
 
 msgid "Improvements"
 msgstr "改良"
 
-#, fuzzy
+msgid ""
+"Updated required Groonga version to 7.1.0. You need to restart MySQL after "
+"you upgrade to Mroonga 7.10."
+msgstr ""
+"Groonga 7.1.0が必要になります。Mroonga 7.10にアップグレード後にMySQLを再起動"
+"する必要があります。"
+
 msgid "[mariadb10.3] Supported MariaDB 10.3."
-msgstr "[MariaDB 10.1] MariaDB 10.1.8に対応しました。"
+msgstr "[MariaDB 10.3] MariaDB 10.3に対応しました。"
 
-#, fuzzy
 msgid "[rpm][centos] Supported MariaDB 10.2.11."
-msgstr "[rpm][centos] MariaDB 10.2.10に対応。"
+msgstr "[rpm][centos] MariaDB 10.2.11に対応しました。"
 
-#, fuzzy
 msgid "[rpm][centos] Supported MariaDB 10.1.30."
-msgstr "[rpm][centos] MariaDB 10.1.29に対応。"
+msgstr "[rpm][centos] MariaDB 10.1.30に対応しました。"
 
 # 2cf79c00c0ec4896b9beffee50c10cc1
-#, fuzzy
 msgid "[rpm][centos] Supported Percona Server 5.7.20."
-msgstr ""
-"[rpm][centos] CentOS 6/7で最新のPercona Server 5.6/5.7をサポートしました。"
+msgstr "[rpm][centos] Percona Server 5.7.20に対応しました。"
 
 # 2cf79c00c0ec4896b9beffee50c10cc1
-#, fuzzy
 msgid "[rpm][centos] Supported Percona Server 5.6.38."
-msgstr ""
-"[rpm][centos] CentOS 6/7で最新のPercona Server 5.6/5.7をサポートしました。"
+msgstr "[rpm][centos] Percona Server 5.6.38に対応しました。"
 
-#, fuzzy
 msgid ""
 "[:doc:`/reference/optimizations`] Enable count_skip optimization for multi-"
 "column index."
 msgstr ""
-"[doc] カラムサイズに関する :doc:`/reference/limitations` を追記しました。"
+"[:doc:`/reference/optimizations`] マルチカラムインデックスでもカウントスキッ"
+"プ最適化をサポートしました。"
 
-msgid "Supported condition pushdown and added related new variables."
+msgid "Supported condition push down and added related new variables."
 msgstr ""
+"コンディションプッシュダウン（検索条件をMySQLレベルではなくGroongaレベルで処"
+"理する最適化）をサポートしました。この最適化関連の変数をいくつか追加しまし"
+"た。"
 
 msgid ""
-"[:doc:`/reference/status_variables`] Added ``Mroonga_condition_push_down``."
+"[:ref:`status-variable-mroonga-condition-push-down`] Added "
+"``Mroonga_condition_push_down``."
 msgstr ""
+"[:ref:`status-variable-mroonga-condition-push-down`] "
+"``Mroonga_condition_push_down``を追加しました。"
 
 msgid ""
-"[:doc:`/reference/server_variables`] Added "
+"[:ref:`server-variable-mroonga-condition-push-down-type`] Added "
 "``mroonga_condition_push_down_type``. The default value is "
 "``ONE_FULL_TEXT_SEARCH``. It means that condition push down is enabled only "
-"when ``WHERE`` clause has one ``MATCH AGAINST`` condition. If the value "
+"when ``WHERE`` clause has one ``MATCH AGAINST`` condition.  If the value "
 "``ALL`` is set, condition push down is always used (``ALL`` is experimental "
 "for now. We glad if you use it and tell us if it got faster or not)."
 msgstr ""
+"[:ref:`server-variable-mroonga-condition-push-down-type`] "
+"``mroonga_condition_push_down_type`` を追加しました。デフォルト値は "
+"``ONE_FULL_TEXT_SEARCH`` です。このときは、 ``WHERE`` 句の中に1つだけ "
+"``MATCH AGAINST`` がある場合にだけコンディションプッシュダウンを使います。従"
+"来と同じ挙動です。この値を ``ALL`` にすると、常にコンディションプッシュダウン"
+"を使います。今のところ、 ``ALL`` は実験的な機能です。実際に使って、速くなるか"
+"遅くなるかフィードバックして欲しいです。"
 
 msgid ""
 "Supported column cache when to get fixed size column value to improve "
-"performance. The feature requires Groonga 7.1.0 or later."
+"performance."
 msgstr ""
+"固定長カラムの値の取得処理を高速化するためにカラムキャッシュ機能をサポートし"
+"ました。"
 
 msgid ""
 "Renamed a function ``last_insert_grn_id`` to ``mroonga_last_insert_grn_id`` "
 "to add missing ``mroonga_`` prefix. ``last_insert_grn_id`` is deprecated. "
 "[GitHub#177] [Reported by Ian Gilfillan]"
 msgstr ""
+"``last_insert_grn_id`` 関数を ``mroonga_last_insert_grn_id`` 関数に改名しまし"
+"た。他のUDFと同じように ``mroonga_`` プレフィックスが付きました。 "
+"``last_insert_grn_id`` は非推奨ですが引き続き使えます。 [GitHub#177] [Ian "
+"Gilfillanさんが報告]"
+
+msgid ""
+"[:ref:`status-variable-mroonga-n-pooling-contexts`] Added a new status "
+"variable to show the number of pooling contexts for :doc:`/reference/udf/"
+"mroonga_command`."
+msgstr ""
+"[:ref:`status-variable-mroonga-n-pooling-contexts`] :doc:`/reference/udf/"
+"mroonga_command` 用にプールしているコンテキストの数を確認するためのステータス"
+"変数を追加しました。"
 
 msgid "Thanks"
 msgstr "感謝"
 
 msgid "Ian Gilfillan"
-msgstr ""
+msgstr "Ian Gilfillanさん"
 
 msgid "Release 7.09 - 2017-11-29"
 msgstr "7.09リリース - 2017-11-29"

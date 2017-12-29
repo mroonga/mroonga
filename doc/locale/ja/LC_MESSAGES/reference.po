@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-10-12 15:42+0900\n"
+"PO-Revision-Date: 2017-12-29 10:07+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1404,9 +1404,8 @@ msgid ""
 "variable is changed."
 msgstr ""
 
-#, fuzzy
 msgid "Here is an example SQL to disable operations recording::"
-msgstr "最適化を無効にするSQLの例です::"
+msgstr "操作記録を無効にするSQLの例です::"
 
 msgid "``mroonga_vector_column_delimiter``"
 msgstr ""
@@ -1436,28 +1435,32 @@ msgstr ""
 
 msgid "It controls how to enable condition push down support."
 msgstr ""
+"コンデイションプッシュダウンサポートをどのように有効にするかを制御します。"
 
 msgid ""
 "The default value is ``ONE_FULL_TEXT_SEARCH``. It means that condition push "
 "down is enabled only when ``WHERE`` clause has one ``MATCH AGAINST`` "
 "condition."
 msgstr ""
+"デフォルト値は ``ONE_FULL_TEXT_SEARCH`` です。このときは ``WHERE`` 句に "
+"``MATCH AGAINST`` が1つしかない場合だけコンデイションプッシュダウンを有効にし"
+"ます。"
 
-#, fuzzy
 msgid "Here are available values:"
-msgstr "以下は利用可能なフラグの一覧です。"
+msgstr "以下は有効な値の一覧です。"
 
 msgid "NONE"
 msgstr ""
 
 msgid "Never use condition push down."
-msgstr ""
+msgstr "コンディションプッシュダウンを使いません。"
 
 msgid "ALL"
 msgstr ""
 
 msgid "Always use condition push down. It's experimental for now."
 msgstr ""
+"常にコンディションプッシュダウンを使います。今のところ実験的な機能です。"
 
 msgid "ONE_FULL_TEXT_SEARCH"
 msgstr ""
@@ -1466,14 +1469,14 @@ msgid ""
 "Use condition push down only when one ``MATCH AGAINST`` condition exists in "
 "``WHERE``."
 msgstr ""
+"``WHERE`` 内に ``MATCH AGAINST`` が1つだけある場合だけコンディションプッシュ"
+"ダウンを使います。"
 
-#, fuzzy
 msgid "It's the default."
 msgstr "これがデフォルトです。"
 
-#, fuzzy
 msgid "Here is an example SQL to confirm the current value::"
-msgstr "実行中のmroongaのバージョンを確認するためのSQL例です::"
+msgstr "現在の値を確認するためのSQL例です::"
 
 msgid "SQL commands"
 msgstr ""
@@ -2021,14 +2024,24 @@ msgstr ""
 msgid "``Mroonga_condition_push_down``"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "This value is increased when condition push down is used. You can use this "
 "value to check whether condition push down is used or not."
 msgstr ""
-"行カウント高速化機能が動作する度にカウントアップされます。スキーマ/SQLチュー"
-"ニングを行って行カウント高速化機能を利用できるようにした際の動作確認に利用で"
-"きます。"
+"コンディションプッシュダウンを使う度にカウントアップします。コンディション"
+"プッシュダウンが使われたかどうかを確認するために利用できます。"
+
+msgid "``Mroonga_n_pooling_contexts``"
+msgstr ""
+
+msgid ""
+"This value shows the number of pooling contexts for :doc:`udf/"
+"mroonga_command`. These contexts are reused from multiple :doc:`udf/"
+"mroonga_command` calls. So, it's not increased continually."
+msgstr ""
+":doc:`udf/mroonga_command` 用にプールしているコンテキストの数を示します。この"
+"コンテキストは複数の :doc:`udf/mroonga_command` 呼び出しで再利用します。その"
+"ため、継続的に増え続けるということはありません。"
 
 msgid "UDF (User Defined Functions)"
 msgstr "UDF (ユーザ定義関数)"
@@ -2089,13 +2102,12 @@ msgstr "指定されたGroongaコマンドを実行した結果を文字列と�
 msgid "See also"
 msgstr "参照"
 
-#, fuzzy
 msgid ""
 "`Command <http://groonga.org/docs/reference/command.html>`_ in Groonga "
 "document"
 msgstr ""
-"Groongaのドキュメントの中の[コマンド](http://groonga.org/ja/docs/reference/"
-"command.html)"
+"Groongaのドキュメントの中の `コマンド <http://groonga.org/ja/docs/reference/"
+"command.html>`"
 
 msgid "``mroonga_escape()``"
 msgstr ""
