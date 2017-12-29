@@ -50,6 +50,9 @@ Improvements
   a new status variable to show the number of pooling contexts for
   :doc:`/reference/udf/mroonga_command`.
 
+* [ ``FLUSH TABLES`` ] Added clearing pooling contexts for
+  :doc:`/reference/udf/mroonga_command` support.
+
 Thanks
 ^^^^^^
 
