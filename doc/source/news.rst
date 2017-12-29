@@ -30,17 +30,25 @@ Improvements
 
 * Supported condition pushdown and added related new variables.
 
-  * [:doc:`/reference/status_variables`] Added ``Mroonga_condition_push_down``.
+  * [:ref:`status-variable-mroonga-condition-push-down`] Added ``Mroonga_condition_push_down``.
 
-  * [:doc:`/reference/server_variables`] Added ``mroonga_condition_push_down_type``.
-    The default value is ``ONE_FULL_TEXT_SEARCH``. It means that condition push down is enabled only when ``WHERE`` clause has one ``MATCH AGAINST`` condition.
-    If the value ``ALL`` is set, condition push down is always used (``ALL`` is experimental for now. We glad if you use it and tell us if it got faster or not).
+  * [:ref:`server-variable-mroonga-condition-push-down-type`] Added
+    ``mroonga_condition_push_down_type``. The default value is
+    ``ONE_FULL_TEXT_SEARCH``. It means that condition push down is
+    enabled only when ``WHERE`` clause has one ``MATCH AGAINST``
+    condition.  If the value ``ALL`` is set, condition push down is
+    always used (``ALL`` is experimental for now. We glad if you use
+    it and tell us if it got faster or not).
 
 * Supported column cache when to get fixed size column value to improve performance.
 
 * Renamed a function ``last_insert_grn_id`` to ``mroonga_last_insert_grn_id`` to add missing ``mroonga_`` prefix.
   ``last_insert_grn_id`` is deprecated.
   [GitHub#177] [Reported by Ian Gilfillan]
+
+* [:ref:`status-variable-mroonga-n-pooling-contexts`] Added
+  a new status variable to show the number of pooling contexts for
+  :doc:`/reference/udf/mroonga_command`.
 
 Thanks
 ^^^^^^
