@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2015-2017 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -28,8 +28,10 @@ namespace mrn {
 
   class ContextPool::Impl {
   public:
-    Impl(mysql_mutex_t *mutex)
+    Impl(mysql_mutex_t *mutex,
+         long *n_pooling_contexts)
       : mutex_(mutex),
+        n_pooling_contexts_(n_pooling_contexts),
         pool_(NULL),
         last_pull_time_(0) {
     }
@@ -59,6 +61,7 @@ namespace mrn {
 
       if (!ctx) {
         ctx = grn_ctx_open(0);
+        ++(*n_pooling_contexts_);
       }
 
       DBUG_RETURN(ctx);
@@ -80,6 +83,7 @@ namespace mrn {
     static const unsigned int CLEAR_THREATHOLD_IN_SECONDS = 60 * 5;
 
     mysql_mutex_t *mutex_;
+    long *n_pooling_contexts_;
     LIST *pool_;
     time_t last_pull_time_;
 
@@ -89,17 +93,19 @@ namespace mrn {
         grn_ctx *ctx = static_cast<grn_ctx *>(pool_->data);
         grn_ctx_close(ctx);
         list_pop(pool_);
+        --(*n_pooling_contexts_);
       }
       DBUG_VOID_RETURN;
     }
   };
 
-  // For debug
+// For debug
 #undef MRN_CLASS_NAME
 #define MRN_CLASS_NAME "mrn::ContextPool"
 
-  ContextPool::ContextPool(mysql_mutex_t *mutex)
-    : impl_(new Impl(mutex)) {
+  ContextPool::ContextPool(mysql_mutex_t *mutex,
+                           long *n_pooling_contexts)
+    : impl_(new Impl(mutex, n_pooling_contexts)) {
   }
 
   ContextPool::~ContextPool(void) {

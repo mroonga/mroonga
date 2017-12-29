@@ -613,6 +613,7 @@ static uchar *mrn_long_term_share_get_key(const uchar *record,
 static long mrn_count_skip = 0;
 static long mrn_fast_order_limit = 0;
 static long mrn_condition_push_down = 0;
+static long mrn_n_pooling_contexts = 0;
 
 /* logging */
 static char *mrn_log_file_path = NULL;
@@ -719,6 +720,10 @@ static struct st_mysql_show_var mrn_status_variables[] =
                             SHOW_SCOPE_GLOBAL),
   MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_condition_push_down",
                             (char *)&mrn_condition_push_down,
+                            SHOW_LONG,
+                            SHOW_SCOPE_GLOBAL),
+  MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_n_pooling_contexts",
+                            (char *)&mrn_n_pooling_contexts,
                             SHOW_LONG,
                             SHOW_SCOPE_GLOBAL),
   MRN_STATUS_VARIABLE_ENTRY(NullS, NullS, SHOW_LONG, SHOW_SCOPE_GLOBAL)
@@ -2031,7 +2036,8 @@ static int mrn_init(void *p)
             "failed to initialize mutex for context pool");
     goto error_context_pool_mutex_init;
   }
-  mrn_context_pool = new mrn::ContextPool(&mrn_context_pool_mutex);
+  mrn_context_pool = new mrn::ContextPool(&mrn_context_pool_mutex,
+                                          &mrn_n_pooling_contexts);
 
   if (mysql_mutex_init(mrn_operations_mutex_key,
                        &mrn_operations_mutex,

@@ -58,3 +58,22 @@ Here is an example how to check it::
   | Mroonga_condition_push_down | 1     |
   +-----------------------------+-------+
   1 row in set (0.00 sec)
+
+.. _status-variable-mroonga-n-pooling-contexts:
+
+``Mroonga_n_pooling_contexts``
+------------------------------
+
+This value shows the number of pooling contexts for
+:doc:`udf/mroonga_command`. These contexts are reused from multiple
+:doc:`udf/mroonga_command` calls. So, it's not increased continually.
+
+Here is an example how to check it::
+
+  mysql> SHOW STATUS LIKE 'Mroonga_n_pooling_contexts';
+  +----------------------------+-------+
+  | Variable_name              | Value |
+  +----------------------------+-------+
+  | Mroonga_n_pooling_contexts | 0     |
+  +----------------------------+-------+
+  1 row in set (0.00 sec)
