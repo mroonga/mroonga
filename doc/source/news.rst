@@ -37,8 +37,8 @@ Improvements
     ``ONE_FULL_TEXT_SEARCH``. It means that condition push down is
     enabled only when ``WHERE`` clause has one ``MATCH AGAINST``
     condition.  If the value ``ALL`` is set, condition push down is
-    always used (``ALL`` is experimental for now. We glad if you use
-    it and tell us if it got faster or not).
+    always used (``ALL`` is experimental for now. We are glad if you
+    use it and tell us if it got faster or not).
 
 * Supported column cache when to get fixed size column value to improve performance.
 
