@@ -5173,17 +5173,18 @@ int ha_mroonga::close()
   share = NULL;
   is_clone = false;
 
-  if (
-    thd &&
-    thd_sql_command(thd) == SQLCOM_FLUSH
-  ) {
+  if (thd && thd_sql_command(thd) == SQLCOM_FLUSH) {
     /* flush tables */
-    mrn::Lock lock(&mrn_open_tables_mutex);
-    if (!mrn_open_tables.records)
     {
-      int tmp_error = mrn_db_manager->clear();
-      if (tmp_error)
-        error = tmp_error;
+      mrn::Lock lock(&mrn_open_tables_mutex);
+      if (!mrn_open_tables.records) {
+        int tmp_error = mrn_db_manager->clear();
+        if (tmp_error)
+          error = tmp_error;
+      }
+    }
+    {
+      mrn_context_pool->clear();
     }
   }
   DBUG_RETURN(error);

@@ -32,6 +32,7 @@ namespace mrn {
     ~ContextPool(void);
     grn_ctx *pull(void);
     void release(grn_ctx *context);
+    void clear(void);
 
   private:
     class Impl;

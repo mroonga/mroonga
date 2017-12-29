@@ -1,0 +1,16 @@
+FLUSH STATUS;
+SHOW STATUS LIKE 'mroonga_n_pooling_contexts';
+Variable_name	Value
+Mroonga_n_pooling_contexts	0
+SELECT mroonga_command('object_exist ShortText');
+mroonga_command('object_exist ShortText')
+true
+SHOW STATUS LIKE 'mroonga_n_pooling_contexts';
+Variable_name	Value
+Mroonga_n_pooling_contexts	1
+SELECT mroonga_command('object_exist ShortText');
+mroonga_command('object_exist ShortText')
+true
+SHOW STATUS LIKE 'mroonga_n_pooling_contexts';
+Variable_name	Value
+Mroonga_n_pooling_contexts	1

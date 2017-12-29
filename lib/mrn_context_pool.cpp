@@ -53,13 +53,14 @@ namespace mrn {
           ctx = static_cast<grn_ctx *>(pool_->data);
           list_pop(pool_);
           if ((now - last_pull_time_) >= CLEAR_THREATHOLD_IN_SECONDS) {
-            clear();
+            clear_without_lock();
           }
         }
         last_pull_time_ = now;
       }
 
       if (!ctx) {
+        mrn::Lock lock(mutex_);
         ctx = grn_ctx_open(0);
         ++(*n_pooling_contexts_);
       }
@@ -79,6 +80,17 @@ namespace mrn {
       DBUG_VOID_RETURN;
     }
 
+    void clear(void) {
+      MRN_DBUG_ENTER_METHOD();
+
+      {
+        mrn::Lock lock(mutex_);
+        clear_without_lock();
+      }
+
+      DBUG_VOID_RETURN;
+    }
+
   private:
     static const unsigned int CLEAR_THREATHOLD_IN_SECONDS = 60 * 5;
 
@@ -87,7 +99,7 @@ namespace mrn {
     LIST *pool_;
     time_t last_pull_time_;
 
-    void clear(void) {
+    void clear_without_lock(void) {
       MRN_DBUG_ENTER_METHOD();
       while (pool_) {
         grn_ctx *ctx = static_cast<grn_ctx *>(pool_->data);
@@ -121,6 +133,12 @@ namespace mrn {
   void ContextPool::release(grn_ctx *ctx) {
     MRN_DBUG_ENTER_METHOD();
     impl_->release(ctx);
+    DBUG_VOID_RETURN;
+  }
+
+  void ContextPool::clear(void) {
+    MRN_DBUG_ENTER_METHOD();
+    impl_->clear();
     DBUG_VOID_RETURN;
   }
 }
