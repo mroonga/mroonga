@@ -1,4 +1,11 @@
-FLUSH STATUS;
+DROP TABLE IF EXISTS ids;
+CREATE TABLE ids (
+id int PRIMARY KEY AUTO_INCREMENT
+);
+SELECT * FROM ids;
+id
+FLUSH TABLES;
+DROP TABLE ids;
 SHOW STATUS LIKE 'mroonga_n_pooling_contexts';
 Variable_name	Value
 Mroonga_n_pooling_contexts	0

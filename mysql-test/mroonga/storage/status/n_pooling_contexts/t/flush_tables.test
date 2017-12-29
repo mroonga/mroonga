@@ -25,8 +25,8 @@ CREATE TABLE ids (
   id int PRIMARY KEY AUTO_INCREMENT
 );
 
-FLUSH STATUS;
-
+SELECT * FROM ids;
+FLUSH TABLES;
 SHOW STATUS LIKE 'mroonga_n_pooling_contexts';
 
 SELECT mroonga_command('object_exist ShortText');

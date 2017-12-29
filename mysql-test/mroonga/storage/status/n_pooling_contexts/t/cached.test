@@ -17,7 +17,17 @@
 --source ../../../../include/mroonga/have_mroonga.inc
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 
-FLUSH STATUS;
+--disable_warnings
+DROP TABLE IF EXISTS ids;
+--enable_warnings
+
+CREATE TABLE ids (
+  id int PRIMARY KEY AUTO_INCREMENT
+);
+SELECT * FROM ids;
+FLUSH TABLES;
+DROP TABLE ids;
+
 
 SHOW STATUS LIKE 'mroonga_n_pooling_contexts';
 
@@ -26,6 +36,7 @@ SHOW STATUS LIKE 'mroonga_n_pooling_contexts';
 
 SELECT mroonga_command('object_exist ShortText');
 SHOW STATUS LIKE 'mroonga_n_pooling_contexts';
+
 
 --source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
