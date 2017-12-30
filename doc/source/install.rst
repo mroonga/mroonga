@@ -13,7 +13,7 @@ don't warry. There is a document about building Mroonga from source.
 .. toctree::
 
    install/windows
-   install/os_x
+   install/macos
    install/debian
    install/ubuntu
    install/centos
