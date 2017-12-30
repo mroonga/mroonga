@@ -47,6 +47,8 @@
 #  define MRN_MARIADB_P 1
 #endif
 
+#include <sql_plugin.h>
+
 #include <sql_const.h>
 #include <sql_class.h>
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 80002)

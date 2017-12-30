@@ -27,7 +27,6 @@
 #pragma implementation
 #endif
 
-#include <sql_plugin.h>
 #include <sql_show.h>
 #include <key.h>
 #include <tztime.h>
@@ -724,7 +723,7 @@ static struct st_mysql_show_var mrn_status_variables[] =
                             SHOW_SCOPE_GLOBAL),
   MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_n_pooling_contexts",
                             (char *)&mrn_n_pooling_contexts,
-                            SHOW_LONG,
+                            SHOW_LONG_NOFLUSH,
                             SHOW_SCOPE_GLOBAL),
   MRN_STATUS_VARIABLE_ENTRY(NullS, NullS, SHOW_LONG, SHOW_SCOPE_GLOBAL)
 };
