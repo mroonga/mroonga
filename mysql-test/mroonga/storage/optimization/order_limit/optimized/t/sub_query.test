@@ -1,0 +1,72 @@
+# Copyright(C) 2018 Kazuki Hamasaki <ashphy@ashphy.com>
+# Copyright(C) 2018 Kouhei Sutou <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source ../../../../../include/mroonga/have_mroonga.inc
+
+--disable_warnings
+DROP TABLE IF EXISTS channels;
+DROP TABLE IF EXISTS permissions;
+DROP TABLE IF EXISTS messages;
+--enable_warnings
+
+FLUSH STATUS;
+
+CREATE TABLE channels (
+  id int PRIMARY KEY,
+  name varchar(255)
+);
+
+CREATE TABLE permissions (
+  id int PRIMARY KEY,
+  channel_id int,
+  user_id int
+);
+
+CREATE TABLE messages (
+  id int PRIMARY KEY,
+  channel_id int,
+  content varchar(512),
+  FULLTEXT KEY (content)
+);
+
+INSERT INTO channels VALUES (11, "channel1");
+INSERT INTO channels VALUES (12, "channel2");
+INSERT INTO permissions VALUES (21, 11, 31);
+
+INSERT INTO messages VALUES (41, 11, "message1");
+INSERT INTO messages VALUES (42, 11, "message2");
+INSERT INTO messages VALUES (43, 12, "message3");
+
+SELECT *
+  FROM messages
+ WHERE channel_id IN
+   (SELECT channels.id
+      FROM channels
+           INNER JOIN permissions ON channels.id = permissions.channel_id
+     WHERE permissions.user_id = 31)
+  AND match(content) against('*D+ message' IN BOOLEAN MODE)
+  AND channel_id = 11
+ORDER BY id DESC
+LIMIT 2;
+
+SHOW STATUS LIKE 'mroonga_fast_order_limit';
+
+DROP TABLE messages;
+DROP TABLE permissions;
+DROP TABLE channels;
+
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc
