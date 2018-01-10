@@ -10580,30 +10580,39 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     }
     bool is_storage_mode = !(share->wrapper_mode);
     Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
-    const Item_func *match_against = NULL;
     if (where) {
-      mrn::ConditionConverter converter(ctx, grn_table, is_storage_mode);
-      if (!converter.is_convertable(where)) {
-        DBUG_PRINT("info",
-                   ("mroonga: fast_order_limit = false: "
-                    "not Groonga layer condition search"));
-        fast_order_limit = false;
-        DBUG_VOID_RETURN;
-      }
-      unsigned int n_match_againsts = converter.count_match_against(where);
-      if (n_match_againsts == 0) {
-        DBUG_PRINT("info",
-                   ("mroonga: fast_order_limit = false: "
-                    "Groonga layer condition but not fulltext search"));
-        fast_order_limit = false;
-        DBUG_VOID_RETURN;
-      }
-      if (n_match_againsts > 1) {
-        DBUG_PRINT("info",
-                   ("mroonga: fast_order_limit = false: "
-                    "MATCH AGAINST must be only one"));
-        fast_order_limit = false;
-        DBUG_VOID_RETURN;
+      if (is_storage_mode) {
+        if (!pushed_cond) {
+          DBUG_PRINT("info",
+                     ("mroonga: fast_order_limit = false: "
+                      "not Groonga layer condition search"));
+          fast_order_limit = false;
+          DBUG_VOID_RETURN;
+        }
+      } else {
+        mrn::ConditionConverter converter(ctx, grn_table, is_storage_mode);
+        if (!converter.is_convertable(where)) {
+          DBUG_PRINT("info",
+                     ("mroonga: fast_order_limit = false: "
+                      "Groonga layer condition but not fulltext search"));
+          fast_order_limit = false;
+          DBUG_VOID_RETURN;
+        }
+        unsigned int n_match_againsts = converter.count_match_against(where);
+        if (n_match_againsts == 0) {
+          DBUG_PRINT("info",
+                     ("mroonga: fast_order_limit = false: "
+                      "Groonga layer condition but not fulltext search"));
+          fast_order_limit = false;
+          DBUG_VOID_RETURN;
+        }
+        if (n_match_againsts > 1) {
+          DBUG_PRINT("info",
+                     ("mroonga: fast_order_limit = false: "
+                      "MATCH AGAINST must be only one"));
+          fast_order_limit = false;
+          DBUG_VOID_RETURN;
+        }
       }
     }
     int n_max_sort_keys = select_lex->order_list.elements;
@@ -10655,18 +10664,10 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
             DBUG_VOID_RETURN;
           }
         }
-      } else if (!match_against || match_against->eq(item, true)) {
+      } else {
         (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
                                              MRN_COLUMN_NAME_SCORE,
                                              strlen(MRN_COLUMN_NAME_SCORE));
-      } else {
-        DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
-                            "sort by computed value isn't supported."));
-        fast_order_limit = false;
-        my_free(*sort_keys);
-        *sort_keys = NULL;
-        *n_sort_keys = 0;
-        DBUG_VOID_RETURN;
       }
       (*sort_keys)[i].offset = 0;
       if (MRN_ORDER_IS_ASC(order))
