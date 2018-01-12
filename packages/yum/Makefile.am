@@ -68,10 +68,5 @@ tmp/$(PACKAGE)-$(VERSION).tar.gz: $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.
 $(abs_top_builddir)/$(PACKAGE)-$(VERSION).tar.gz:
 	cd $(abs_top_builddir) && $(MAKE) dist
 
-specs: $(SPEC_DIR)/mysql55-$(PACKAGE).spec
-specs: $(SPEC_DIR)/mysql56-community-$(PACKAGE).spec
-specs: $(SPEC_DIR)/mariadb-$(PACKAGE).spec
-specs: $(SPEC_DIR)/mariadb-10.1-$(PACKAGE).spec
-specs: $(SPEC_DIR)/mariadb-10.2-$(PACKAGE).spec
-specs: $(SPEC_DIR)/percona-server-56-$(PACKAGE).spec
-specs: $(SPEC_DIR)/percona-server-57-$(PACKAGE).spec
+specs:
+	cd $(SPEC_DIR) && $(MAKE)
