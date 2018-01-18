@@ -24,6 +24,7 @@ Here are supported Ubuntu versions:
 Here are Ubuntu versions that supports MariaDB:
 
   * 16.04 LTS Xenial Xerus
+  * 17.10 Artful Aardvark
 
 Enable the universe repository and the security update repository to
 install Mroonga::

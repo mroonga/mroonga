@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright(C) 2014-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2014-2018  Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2014  HAYASHI Kentaro <hayashi@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -41,6 +41,7 @@ class Uploader
       mysql56_version = @mysql56_versions[code_name]
       mysql57_version = @mysql57_versions[code_name]
       mariadb10_0_version = @mariadb10_0_versions[code_name]
+      mariadb10_1_version = @mariadb10_1_versions[code_name]
       if mysql55_version
         upload(code_name, "5.5", mysql55_version)
       end
@@ -52,6 +53,9 @@ class Uploader
       end
       if mariadb10_0_version
         upload(code_name, "mariadb-10.0", mariadb10_0_version)
+      end
+      if mariadb10_1_version
+        upload(code_name, "mariadb-10.1", mariadb10_1_version)
       end
     end
   end
@@ -87,6 +91,7 @@ allow_unsigned_uploads = 0
     @mysql56_versions = {}
     @mysql57_versions = {}
     @mariadb10_0_versions = {}
+    @mariadb10_1_versions = {}
     @code_names.each do |code_name|
       source_names = [code_name, "#{code_name}-updates"]
       source_names.each do |source_name|
@@ -105,6 +110,8 @@ allow_unsigned_uploads = 0
               @mysql57_versions[code_name] = $1
             when /\Amariadb-server-10\.0 \((.+?)[\s)]/
               @mariadb10_0_versions[code_name] = $1
+            when /\Amariadb-server-10\.1 \((.+?)[\s)]/
+              @mariadb10_1_versions[code_name] = $1
             end
           end
         end
