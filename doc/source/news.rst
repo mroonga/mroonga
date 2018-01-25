@@ -13,11 +13,34 @@ Release 7.11 - 2018-01-29
 Improvements
 ^^^^^^^^^^^^
 
+* [test] Added a test case for sub query and order limit optimization.
+  [GitHub#184] [Reported by Kazuki Hamasaki]
+
+* [rpm][centos] Supported MariaDB 10.3.
+
+* [deb][ubuntu] Supported MariaDB 10.1 for Ubuntu 17.10 (Artful Aadvark)
+
 Fixes
 ^^^^^
 
+* [maradb10.3] Fixed a build error which is caused by renamed constant
+  variable (``HA_MUST_USE_TABLE_CONDITION_PUSHDOWN`` is renamed to
+  ``HA_CAN_TABLE_CONDITION_PUSHDOWN``).
+
+* [:doc:`/install/macos`] Removed obsolete install guide and updated
+  link to latest documentation [Reported by Ryuji AMANO]
+
+* [rpm][centos] Supported MariaDB 10.2.12. [GitHub#186] [Reported by
+  Shota Suzuki]
+
+* [rpm][centos] Supported Percona Server 5.7.20-19.
+
 Thanks
 ^^^^^^
+
+* Kazuki Hamasaki
+* Ryuji AMANO
+* Shota Suzuki
 
 .. _release-7-10:
 
