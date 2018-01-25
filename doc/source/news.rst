@@ -5,6 +5,20 @@
 News
 ====
 
+.. _release-7-11:
+
+Release 7.11 - 2018-01-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+Fixes
+^^^^^
+
+Thanks
+^^^^^^
+
 .. _release-7-10:
 
 Release 7.10 - 2017-12-29
