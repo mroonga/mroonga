@@ -2698,7 +2698,7 @@ ha_mroonga::~ha_mroonga()
   }
   if (blob_buffers)
   {
-    delete [] blob_buffers;
+    ::delete [] blob_buffers;
   }
   grn_obj_unlink(ctx, &top_left_point);
   grn_obj_unlink(ctx, &bottom_right_point);
@@ -4873,9 +4873,9 @@ int ha_mroonga::storage_open_columns(void)
   {
     if (blob_buffers)
     {
-      delete [] blob_buffers;
+      ::delete [] blob_buffers;
     }
-    if (!(blob_buffers = new String[n_columns]))
+    if (!(blob_buffers = ::new String[n_columns]))
     {
       DBUG_RETURN(HA_ERR_OUT_OF_MEM);
     }
