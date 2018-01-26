@@ -582,6 +582,11 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = "HA_EXTRA_PREPARE_FOR_ALTER_TABLE";
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_STARTING_ORDERED_INDEX_SCAN
+  case HA_EXTRA_STARTING_ORDERED_INDEX_SCAN:
+    inspected = "HA_EXTRA_STARTING_ORDERED_INDEX_SCAN";
+    break;
+#endif
   }
   return inspected;
 }
