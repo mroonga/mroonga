@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2017-12-29 11:28+0900\n"
+"PO-Revision-Date: 2018-01-26 14:58+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,77 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.10 - 2017-12-29"
-msgstr "7.10リリース - 2017-12-29"
+msgid "Release 7.11 - 2018-01-29"
+msgstr "7.11リリース - 2018-01-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[test] Added a test case for sub query and order limit optimization. "
+"[GitHub#184] [Reported by Kazuki Hamasaki]"
+msgstr ""
+"[テスト] サブクエリーとORDER BY ... LIMIT最適化のテストケースを追加しました。"
+"[GitHub#184] [濵﨑一樹さんが報告]"
+
+msgid "[rpm][centos] Supported MariaDB 10.3."
+msgstr "[rpm][centos] MariaDB 10.3に対応しました。"
+
+msgid "[deb][ubuntu] Supported MariaDB 10.1 for Ubuntu 17.10 (Artful Aadvark)"
+msgstr ""
+"[deb][ubuntu] Ubuntu 17.10向けにMariaDB 10.1のパッケージをサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[:ref:`status-variable-mroonga-n-pooling-contexts`] Fixed a bug that value "
+"is reset unexpectedly by ``FLUSH STATUS``."
+msgstr ""
+"[:ref:`status-variable-mroonga-n-pooling-contexts`] ``FLUSH STATUS`` により値"
+"が意図せずリセットされてしまう不具合を修正しました。"
+
+msgid ""
+"[maradb10.3] Fixed a build error which is caused by renamed constant "
+"variable (``HA_MUST_USE_TABLE_CONDITION_PUSHDOWN`` is renamed to "
+"``HA_CAN_TABLE_CONDITION_PUSHDOWN``)."
+msgstr ""
+"[maradb10.3] 定数の変更によりビルドエラーになっていた問題を修正しました。"
+"(``HA_MUST_USE_TABLE_CONDITION_PUSHDOWN`` が "
+"``HA_CAN_TABLE_CONDITION_PUSHDOWN`` へと変更)"
+
+msgid ""
+"[:doc:`/install/macos`] Removed obsolete install guide and updated link to "
+"latest documentation [Reported by Ryuji AMANO]"
+msgstr ""
+"[:doc:`/install/macos`] 現状にそぐわないインストール手順を削除し、最新のド"
+"キュメントへのリンクに差し替えました。 [天野龍司さんが報告]"
+
+msgid ""
+"[rpm][centos] Supported MariaDB 10.2.12. [GitHub#186] [Reported by Shota "
+"Suzuki]"
+msgstr ""
+"[rpm][centos] MariaDB 10.2.12をサポートしました。[GitHub#186] [Shota Suzukiさ"
+"んが報告]"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.7.20-19."
+msgstr "[rpm][centos] Percona Server 5.7.20-19に対応しました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Kazuki Hamasaki"
+msgstr "濵﨑一樹さん"
+
+msgid "Ryuji AMANO"
+msgstr "天野龍司さん"
+
+msgid "Shota Suzuki"
+msgstr "Shota Suzukiさん"
+
+msgid "Release 7.10 - 2017-12-29"
+msgstr "7.10リリース - 2017-12-29"
 
 msgid ""
 "Updated required Groonga version to 7.1.0. You need to restart MySQL after "
@@ -120,9 +186,6 @@ msgstr ""
 "[ ``FLUSH TABLES`` ] :doc:`/reference/udf/mroonga_command` 用にプールしている"
 "コンテキストもクリアーするようになりました。"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "Ian Gilfillan"
 msgstr "Ian Gilfillanさん"
 
@@ -204,9 +267,6 @@ msgstr ""
 msgid "[rpm][centos] Supported MariaDB 10.1/10.2 provided by MariaDB."
 msgstr ""
 "[rpm][centos] MariaDB公式が提供するMariaDB 10.1/10.2をサポートしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a bug that wrong database may be used on \"DROP DATABASE\". This bug "
