@@ -23,6 +23,9 @@ Improvements
 Fixes
 ^^^^^
 
+* [:ref:`status-variable-mroonga-n-pooling-contexts`] Fixed a bug that
+  value is reset unexpectedly by ``FLUSH STATUS``.
+
 * [maradb10.3] Fixed a build error which is caused by renamed constant
   variable (``HA_MUST_USE_TABLE_CONDITION_PUSHDOWN`` is renamed to
   ``HA_CAN_TABLE_CONDITION_PUSHDOWN``).
