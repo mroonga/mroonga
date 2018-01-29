@@ -4700,7 +4700,7 @@ int ha_mroonga::storage_reindex()
       continue;
 
     grn_hash *columns = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
-                                        GRN_OBJ_TABLE_HASH_KEY);
+                                        GRN_OBJ_TABLE_HASH_KEY|GRN_HASH_TINY);
     grn_table_columns(ctx, grn_index_tables[i], NULL, 0,
                       reinterpret_cast<grn_obj *>(columns));
     unsigned int n_columns =
@@ -5495,7 +5495,7 @@ void ha_mroonga::storage_info_variable_data_file_length()
   stats.data_file_length = 0;
   stats.data_file_length += file_size(grn_obj_path(ctx, grn_table));
   grn_hash *columns = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
-                                      GRN_OBJ_TABLE_HASH_KEY);
+                                      GRN_OBJ_TABLE_HASH_KEY|GRN_HASH_TINY);
   grn_table_columns(ctx, grn_table, NULL, 0, (grn_obj *)columns);
   /* grn_id id __attribute__((unused)); */
   grn_id *column_id;
@@ -9583,7 +9583,7 @@ int ha_mroonga::drop_indexes_normal(const char *table_name, grn_obj *table)
   int error = 0;
 
   grn_hash *columns_raw = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
-                                          GRN_OBJ_TABLE_HASH_KEY);
+                                          GRN_OBJ_TABLE_HASH_KEY|GRN_HASH_TINY);
   mrn::SmartGrnObj columns(ctx, reinterpret_cast<grn_obj *>(columns_raw));
   if (!columns.get()) {
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
