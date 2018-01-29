@@ -5076,6 +5076,8 @@ void ha_mroonga::storage_close_columns(void)
 
   free(grn_columns);
   grn_columns = NULL;
+  free(grn_column_caches);
+  grn_column_caches = NULL;
   free(grn_column_ranges);
   grn_column_ranges = NULL;
 }
@@ -5266,11 +5268,8 @@ int ha_mroonga::wrapper_close()
 int ha_mroonga::storage_close()
 {
   MRN_DBUG_ENTER_METHOD();
+  storage_close_columns();
   grn_obj_unlink(ctx, grn_table);
-  // TODO: unlink elements
-  free(grn_columns);
-  // TODO: unlink elements
-  free(grn_column_ranges);
   DBUG_RETURN(0);
 }
 
