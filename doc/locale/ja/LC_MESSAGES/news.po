@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2018-01-26 14:58+0900\n"
+"PO-Revision-Date: 2018-01-31 11:26+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -77,6 +77,14 @@ msgstr ""
 # 2cf79c00c0ec4896b9beffee50c10cc1
 msgid "[rpm][centos] Supported Percona Server 5.7.20-19."
 msgstr "[rpm][centos] Percona Server 5.7.20-19に対応しました。"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 17.04 (Zesty Zapus) support. It has "
+"reached EOL at Jan 13, 2018."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 17.04（Zesty Zapus）のサポートをやめました。"
+"2018年1月13日でサポートが切れた（EOLになった）ためです。"
 
 msgid "Thanks"
 msgstr "感謝"
