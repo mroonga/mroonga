@@ -38,6 +38,9 @@ Fixes
 
 * [rpm][centos] Supported Percona Server 5.7.20-19.
 
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 17.04 (Zesty Zapus) support.
+  It has reached EOL at Jan 13, 2018.
+
 Thanks
 ^^^^^^
 
