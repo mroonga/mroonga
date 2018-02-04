@@ -270,7 +270,7 @@ extern "C" {
 #  define MRN_HANDLER_HA_UPDATE_ROW_NEW_DATA_CONST
 #endif
 
-#if MYSQL_VERSION_ID >= 50718 || defined(MRN_PERCONA_P)
+#if MYSQL_VERSION_ID >= 50718 && defined(MRN_PERCONA_P)
 #  define MRN_HANDLER_HAVE_HAS_GAP_LOCKS
 #endif
 
