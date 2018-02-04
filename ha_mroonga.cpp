@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -16821,6 +16821,38 @@ int ha_mroonga::start_stmt(THD *thd, thr_lock_type lock_type)
   }
   DBUG_RETURN(res);
 }
+
+#ifdef MRN_HANDLER_HAVE_HAS_GAP_LOCKS
+bool ha_mroonga::wrapper_has_gap_locks() const
+{
+  bool has;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  has = wrap_handler->has_gap_locks();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(has);
+}
+
+bool ha_mroonga::storage_has_gap_locks() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  DBUG_RETURN(false);
+}
+
+bool ha_mroonga::has_gap_locks() const
+{
+  bool has;
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode) {
+    has = wrapper_has_gap_locks();
+  } else {
+    has = storage_has_gap_locks();
+  }
+  DBUG_RETURN(has);
+}
+#endif
 
 void ha_mroonga::wrapper_change_table_ptr(TABLE *table_arg,
                                           TABLE_SHARE *share_arg)

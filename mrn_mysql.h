@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -45,6 +45,8 @@
 
 #ifdef MARIADB_BASE_VERSION
 #  define MRN_MARIADB_P 1
+#elif FIRST_SUPPORTED_COMPRESSED_COLUMNS_VERSION
+#  define MRN_PERCONA_P 1
 #endif
 
 #include <sql_plugin.h>

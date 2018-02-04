@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -268,6 +268,10 @@ extern "C" {
 
 #if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HA_UPDATE_ROW_NEW_DATA_CONST
+#endif
+
+#if MYSQL_VERSION_ID >= 50718 || defined(MRN_PERCONA_P)
+#  define MRN_HANDLER_HAVE_HAS_GAP_LOCKS
 #endif
 
 class ha_mroonga;
@@ -598,6 +602,10 @@ public:
   void try_semi_consistent_read(bool yes);
   void unlock_row();
   int start_stmt(THD *thd, thr_lock_type lock_type);
+
+#ifdef MRN_HANDLER_HAVE_HAS_GAP_LOCKS
+  bool has_gap_locks() const mrn_override;
+#endif
 
 protected:
 #ifdef MRN_HANDLER_RECORDS_RETURN_ERROR
@@ -1289,6 +1297,10 @@ private:
   void storage_unlock_row();
   int wrapper_start_stmt(THD *thd, thr_lock_type lock_type);
   int storage_start_stmt(THD *thd, thr_lock_type lock_type);
+#ifdef MRN_HANDLER_HAVE_HAS_GAP_LOCKS
+  bool wrapper_has_gap_locks() const;
+  bool storage_has_gap_locks() const;
+#endif
   void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   bool wrapper_primary_key_is_clustered();
