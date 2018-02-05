@@ -44,7 +44,9 @@
 #include <mysql_version.h>
 
 #include <sql_plugin.h>
-#include <my_default.h>
+#if MYSQL_VERSION_ID >= 50600
+#  include <my_default.h>
+#endif
 
 #ifdef MARIADB_BASE_VERSION
 #  define MRN_MARIADB_P 1
