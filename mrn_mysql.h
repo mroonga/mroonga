@@ -43,13 +43,14 @@
 #define MYSQL_SERVER 1
 #include <mysql_version.h>
 
+#include <sql_plugin.h>
+#include <my_default.h>
+
 #ifdef MARIADB_BASE_VERSION
 #  define MRN_MARIADB_P 1
-#elif FIRST_SUPPORTED_COMPRESSED_COLUMNS_VERSION
+#elif defined(FIRST_SUPPORTED_COMPRESSED_COLUMNS_VERSION)
 #  define MRN_PERCONA_P 1
 #endif
-
-#include <sql_plugin.h>
 
 #include <sql_const.h>
 #include <sql_class.h>
