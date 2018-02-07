@@ -154,9 +154,9 @@ msgstr "CentOS 6（MariaDB 10.3のパッケージを利用）"
 
 msgid ""
 "You can use MariaDB's MariaDB packages version 10.3 on CentOS 6 since "
-"Mroonga 7.11 release."
+"Mroonga 8.00 release."
 msgstr ""
-"CentOS 6では、Mroonga 7.11からMariaDB提供のMariaDB 10.1パッケージを利用できま"
+"CentOS 6では、Mroonga 8.00からMariaDB提供のMariaDB 10.1パッケージを利用できま"
 "す。"
 
 # e1a6076f4a4a4fb2a6e1a4d8a2175cfa
@@ -236,9 +236,9 @@ msgstr "CentOS 7（MariaDB 10.3のパッケージを利用）"
 
 msgid ""
 "You can use MariaDB's MariaDB packages version 10.3 on CentOS 7 since "
-"Mroonga 7.11 release."
+"Mroonga 8.00 release."
 msgstr ""
-"CentOS 7では、Mroonga 7.11からMariaDB提供のMariaDB 10.3パッケージを利用できま"
+"CentOS 7では、Mroonga 8.00からMariaDB提供のMariaDB 10.3パッケージを利用できま"
 "す。"
 
 msgid "Debian GNU/Linux"
@@ -787,14 +787,14 @@ msgstr ""
 "ぶ必要があります"
 
 msgid ""
-"`mariadb-10.1.30-with-mroonga-7.11-win32.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v7.11/mariadb-10.1.30-with-mroonga-7.11-win32."
+"`mariadb-10.1.30-with-mroonga-8.00-win32.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v8.00/mariadb-10.1.30-with-mroonga-8.00-win32."
 "zip>`_"
 msgstr ""
 
 msgid ""
-"`mariadb-10.1.30-with-mroonga-7.11-winx64.zip <https://github.com/mroonga/"
-"mroonga/releases/download/v7.11/mariadb-10.1.30-with-mroonga-7.11-winx64."
+"`mariadb-10.1.30-with-mroonga-8.00-winx64.zip <https://github.com/mroonga/"
+"mroonga/releases/download/v8.00/mariadb-10.1.30-with-mroonga-8.00-winx64."
 "zip>`_"
 msgstr ""
 
