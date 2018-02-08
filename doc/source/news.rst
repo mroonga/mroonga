@@ -5,6 +5,23 @@
 News
 ====
 
+.. _release-8-00:
+
+Release 8.00 - 2018-02-09
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* When create hash index, used tiny hash for reducing used resource.
+
+* [percona57] Supported gap lock detection. [GitHub#188] [Reported by Iwo]
+
+Thanks
+^^^^^^
+
+* Iwo
+
 .. _release-7-11:
 
 Release 7.11 - 2018-01-29
