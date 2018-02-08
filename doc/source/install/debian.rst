@@ -62,15 +62,15 @@ stretch (MariaDB)
 
 Install::
 
-  % sudo apt-get install apt-transport-https
-  % sudo apt-get update
-  % sudo apt-get install -y --allow-unauthenticated groonga-keyring
-  % sudo apt-get update
-  % sudo apt-get install -y -V mariadb-server-10.1-mroonga
+  % sudo apt install -y -V apt-transport-https
+  % sudo apt update --allow-insecure-repositories
+  % sudo apt install -y -V --allow-unauthenticated groonga-keyring
+  % sudo apt update
+  % sudo apt install -y -V groonga
 
 If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo apt-get install -y -V groonga-tokenizer-mecab
+  % sudo apt install -y -V groonga-tokenizer-mecab
 
