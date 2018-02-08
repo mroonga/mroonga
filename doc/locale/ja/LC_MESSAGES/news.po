@@ -24,6 +24,13 @@ msgstr "お知らせ"
 msgid "Release 8.00 - 2018-02-09"
 msgstr "8.00リリース - 2018-02-09"
 
+msgid ""
+"This is a major version up! But It keeps backward compatibility. You can "
+"upgrade to 8.0.0 without rebuilding database."
+msgstr ""
+"メジャーバージョンアップです! メジャーバージョンアップですが、互換性は壊れて"
+"いないので、データベースを再構築することなくアップグレードできます。"
+
 msgid "Improvements"
 msgstr "改良"
 
