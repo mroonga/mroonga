@@ -57,9 +57,9 @@ deb http://security.debian.org/ ${code_name}/updates main
 deb-src http://security.debian.org/ ${code_name}/updates main
 EOF
     fi
-    run apt-get update
-    run apt-get install -y --allow-unauthenticated groonga-keyring
-    run apt-get update
+    run apt update --allow-insecure-repositories
+    run apt install -y --allow-unauthenticated groonga-keyring
+    run apt update
     ;;
   ubuntu)
     component=universe
