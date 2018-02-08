@@ -14,7 +14,7 @@ environment:
 install:
   - cd ..
   - choco install -y curl 7zip.commandline
-  - curl -O http://mirror.jmu.edu/pub/mariadb/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
+  - curl -O http://ftp.osuosl.org/pub/mariadb/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
