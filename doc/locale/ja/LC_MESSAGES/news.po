@@ -21,11 +21,31 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 7.11 - 2018-01-29"
-msgstr "7.11リリース - 2018-01-29"
+msgid "Release 8.00 - 2018-02-09"
+msgstr "8.00リリース - 2018-02-09"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "When create hash index, used tiny hash for reducing used resource."
+msgstr ""
+"ハッシュインデックスを作成する際に、使用するリソースを減らすために小さいハッ"
+"シュを使うようにしました。"
+
+msgid ""
+"[percona57] Added gap lock detection support. [GitHub#188][Reported by Iwo]"
+msgstr ""
+"[percona57] ギャップロック検出をサポートしました。 [GitHub#188][Iwoさんの報"
+"告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Iwo"
+msgstr "Iwoさん"
+
+msgid "Release 7.11 - 2018-01-29"
+msgstr "7.11リリース - 2018-01-29"
 
 msgid ""
 "[test] Added a test case for sub query and order limit optimization. "
@@ -85,9 +105,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 17.04（Zesty Zapus）のサポートをやめました。"
 "2018年1月13日でサポートが切れた（EOLになった）ためです。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Kazuki Hamasaki"
 msgstr "濵﨑一樹さん"
