@@ -15,7 +15,8 @@ Improvements
 
 * When create hash index, used tiny hash for reducing used resource.
 
-* [percona57] Supported gap lock detection. [GitHub#188] [Reported by Iwo]
+* [percona57] Added gap lock detection support.
+  [GitHub#188][Reported by Iwo]
 
 Thanks
 ^^^^^^
