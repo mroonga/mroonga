@@ -585,6 +585,68 @@ How to get snippet (Keyword in context)
 Mroonga provides functionality to get keyword in context.
 It is implemented as :doc:`/reference/udf/mroonga_snippet` UDF.
 
+How to use similar search
+-------------------------
+
+Similar search is supported by specifying document itself instead of specifying keywords in query.
+
+It is useful if you want to find documents which is related to specific document.
+
+Here is the schema definition for execution examples:
+
+.. code-block:: sql
+
+   CREATE TABLE similarities (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     title VARCHAR(32),
+     content VARCHAR(255),
+     FULLTEXT INDEX (content)
+   ) ENGINE = Mroonga DEFAULT CHARSET utf8;
+
+Here is the sample data for execution examples:
+
+.. code-block:: sql
+
+   INSERT INTO similarities (title, content)
+          VALUES ('Groonga similar search', 'Groonga is an open-source fulltext search engine and column store.');
+   INSERT INTO similarities (title, content)
+          VALUES ('Mroonga similar search', 'Mroonga is an open-source storage engine for fast fulltext search with MySQL.');
+   INSERT INTO similarities (title, content)
+          VALUES ('Rroonga library', 'A library to use Groonga features from Ruby.');
+
+Here is the example of similar search by content itself.
+
+.. code-block:: sql
+
+   SELECT title FROM similarities WHERE MATCH(content) AGAINST ('There are many open-source fulltext search engine.' IN NATURAL LANGUAGE MODE);
+
+Note that you need to specify an content of document in `AGAINST('...' IN NATURAL LANGUAGE MODE)`.
+
+.. code-block:: sql
+
+   SELECT title FROM similarities WHERE MATCH(content) AGAINST ('There are many open-source fulltext search engine.' IN NATURAL LANGUAGE MODE);
+   -- +------------------------+
+   -- | title                  |
+   -- +------------------------+
+   -- | Groonga similar search |
+   -- | Mroonga similar search |
+   -- +------------------------+
+   -- 2 rows in set (0.00 sec)
+
+To improve degree of similarity, you may need to use language specific tokenizer or use labeled data such as tag to get rid of some undesirable search results.
+
+For example, if you want to execute similar search against Japanese text, it is recommended to use language specific tokenizer - `TokenMecab`.
+Here is the schema definition to use `TokenMecab` tokenizer:
+
+.. code-block:: sql
+
+   CREATE TABLE similarities (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     title VARCHAR(32),
+     content VARCHAR(255),
+     FULLTEXT INDEX (content) COMMENT 'tokenizer "TokenMecab"'
+   ) ENGINE = Mroonga DEFAULT CHARSET utf8;
+
 How to run Groonga command
 --------------------------
 
