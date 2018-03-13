@@ -269,10 +269,10 @@ namespace mrn {
       ++n_weights;
 
       int default_weight = 1;
-     append_section(section,
-                    &section_value_buffer,
-                    default_weight,
-                    n_weights);
+      append_section(section,
+                     &section_value_buffer,
+                     default_weight,
+                     n_weights);
     }
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(specified_sections);
 
