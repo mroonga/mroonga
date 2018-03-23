@@ -70,7 +70,7 @@ case ${distribution} in
     run yum install -y mariadb-devel
     ;;
   centos)
-    release_rpm=groonga-release-1.3.0-1.noarch.rpm
+    release_rpm=groonga-release-1.4.0-1.noarch.rpm
     if [ ${distribution_version} = 5 ]; then
       wget http://packages.groonga.org/${distribution}/${release_rpm}
       run yum install -y --nogpgcheck ${release_rpm}
