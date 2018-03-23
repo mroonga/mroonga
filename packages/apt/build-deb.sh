@@ -57,7 +57,14 @@ deb http://security.debian.org/ ${code_name}/updates main
 deb-src http://security.debian.org/ ${code_name}/updates main
 EOF
     fi
-    run apt update --allow-insecure-repositories
+    case "${code_name}" in
+      jessie)
+        run apt update
+        ;;
+      *)
+        run apt update --allow-insecure-repositories
+        ;;
+    esac
     run apt install -y --allow-unauthenticated groonga-keyring
     run apt update
     ;;
