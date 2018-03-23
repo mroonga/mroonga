@@ -218,7 +218,7 @@ CentOS 6 (with MariaDB 10.3 package)
 ------------------------------------
 
 You can use MariaDB's MariaDB packages version 10.3 on CentOS 6 since
-Mroonga 8.00 release.
+Mroonga 7.11 release.
 
 Create ``/etc/yum.repos.d/MariaDB.repo``.
 
@@ -439,7 +439,7 @@ CentOS 7 (with MariaDB 10.3 package)
 ------------------------------------
 
 You can use MariaDB's MariaDB packages version 10.3 on CentOS 7 since
-Mroonga 8.00 release.
+Mroonga 7.11 release.
 
 Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
