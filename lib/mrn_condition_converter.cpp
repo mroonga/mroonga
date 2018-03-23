@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -55,7 +55,8 @@ namespace mrn {
     grn_obj_unlink(ctx_, &value_);
   }
 
-  bool ConditionConverter::is_convertable(const Item *item) {
+  bool ConditionConverter::is_convertable(const Item *item,
+                                          grn_operator logical_operator) {
     MRN_DBUG_ENTER_METHOD();
 
     if (!item) {
@@ -66,7 +67,7 @@ namespace mrn {
     case Item::COND_ITEM:
       {
         const Item_cond *cond_item = reinterpret_cast<const Item_cond *>(item);
-        bool convertable = is_convertable(cond_item);
+        bool convertable = is_convertable(cond_item, logical_operator);
         if (convertable) {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][true] "
@@ -78,7 +79,7 @@ namespace mrn {
     case Item::FUNC_ITEM:
       {
         const Item_func *func_item = reinterpret_cast<const Item_func *>(item);
-        bool convertable = is_convertable(func_item);
+        bool convertable = is_convertable(func_item, logical_operator);
         if (convertable) {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][true] "
@@ -100,15 +101,20 @@ namespace mrn {
     DBUG_RETURN(false);
   }
 
-  bool ConditionConverter::is_convertable(const Item_cond *cond_item) {
+  bool ConditionConverter::is_convertable(const Item_cond *cond_item,
+                                          grn_operator logical_operator) {
     MRN_DBUG_ENTER_METHOD();
 
     if (!is_storage_mode_) {
       DBUG_RETURN(false);
     }
 
-    if (!(cond_item->functype() == Item_func::COND_AND_FUNC ||
-          cond_item->functype() == Item_func::COND_OR_FUNC)) {
+    grn_operator sub_logical_operator;
+    if (cond_item->functype() == Item_func::COND_AND_FUNC) {
+      sub_logical_operator = GRN_OP_AND;
+    } else if (cond_item->functype() == Item_func::COND_OR_FUNC) {
+      sub_logical_operator = GRN_OP_OR;
+    } else {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][condition-push-down][false] "
               "not AND nor OR conditions: %u",
@@ -121,7 +127,7 @@ namespace mrn {
     List_iterator<Item> iterator(*argument_list);
     const Item *sub_item;
     while ((sub_item = iterator++)) {
-      if (!is_convertable(sub_item)) {
+      if (!is_convertable(sub_item), sub_logical_operator) {
         DBUG_RETURN(false);
       }
     }
@@ -129,7 +135,8 @@ namespace mrn {
     DBUG_RETURN(true);
   }
 
-  bool ConditionConverter::is_convertable(const Item_func *func_item) {
+  bool ConditionConverter::is_convertable(const Item_func *func_item,
+                                          grn_operator logical_operator) {
     MRN_DBUG_ENTER_METHOD();
 
     switch (func_item->functype()) {
@@ -212,6 +219,14 @@ namespace mrn {
         DBUG_RETURN(false);
       }
       {
+        const Item_func_in *in_item =
+          static_cast<const Item_func_in *>(func_item);
+        if (in_item->negated && logical_operator == GRN_OP_OR) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] OR NOT IN");
+          DBUG_RETURN(false);
+        }
+
         Item **arguments = func_item->arguments();
         Item *target_item = arguments[0];
         if (target_item->type() != Item::FIELD_ITEM) {
@@ -394,6 +409,7 @@ namespace mrn {
                                              Item **value_items,
                                              uint n_value_items) {
     MRN_DBUG_ENTER_METHOD();
+
 
     enum_field_types field_type = field_item->field->type();
     NormalizedType normalized_type = normalize_field_type(field_type);
@@ -692,9 +708,14 @@ namespace mrn {
       convert(static_cast<const Item_cond *>(where), expression, have_condition);
       break;
     case Item::FUNC_ITEM:
-      if (convert(static_cast<const Item_func *>(where), expression) &&
-          have_condition) {
-        grn_expr_append_op(ctx_, expression, GRN_OP_AND, 2);
+      {
+        grn_operator logical_operator = GRN_OP_AND;
+        if (convert(static_cast<const Item_func *>(where),
+                    expression,
+                    logical_operator) &&
+            have_condition) {
+          grn_expr_append_op(ctx_, expression, logical_operator, 2);
+        }
       }
       break;
     default:
@@ -731,12 +752,17 @@ namespace mrn {
         }
         break;
       case Item::FUNC_ITEM:
-        if (convert(static_cast<const Item_func *>(sub_item), expression)) {
-          added = true;
-          if (n_conditions > 0) {
-            grn_expr_append_op(ctx_, expression, logical_operator, 2);
+        {
+          grn_operator sub_logical_operator = logical_operator;
+          if (convert(static_cast<const Item_func *>(sub_item),
+                      expression,
+                      sub_logical_operator)) {
+            added = true;
+            if (n_conditions > 0) {
+              grn_expr_append_op(ctx_, expression, sub_logical_operator, 2);
+            }
+            ++n_conditions;
           }
-          ++n_conditions;
         }
         break;
       default:
@@ -748,7 +774,8 @@ namespace mrn {
   }
 
   bool ConditionConverter::convert(const Item_func *func_item,
-                                   grn_obj *expression) {
+                                   grn_obj *expression,
+                                   grn_operator &sub_logical_operator) {
     MRN_DBUG_ENTER_METHOD();
 
     bool added = false;
@@ -774,7 +801,7 @@ namespace mrn {
       added = convert_between(func_item, expression);
       break;
     case Item_func::IN_FUNC:
-      added = convert_in(func_item, expression);
+      added = convert_in(func_item, expression, sub_logical_operator);
       break;
     default:
       break;
@@ -832,8 +859,14 @@ namespace mrn {
   }
 
   bool ConditionConverter::convert_in(const Item_func *func_item,
-                                      grn_obj *expression) {
+                                      grn_obj *expression,
+                                      grn_operator &sub_logical_operator) {
     MRN_DBUG_ENTER_METHOD();
+
+    const Item_func_in *in_item = static_cast<const Item_func_in *>(func_item);
+    if (sub_logical_operator == GRN_OP_AND && in_item->negated) {
+      sub_logical_operator = GRN_OP_AND_NOT;
+    }
 
     Item **arguments = func_item->arguments();
     Item *target_item = arguments[0];

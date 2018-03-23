@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,8 @@ namespace mrn {
                        bool is_storage_mode);
     ~ConditionConverter();
 
-    bool is_convertable(const Item *item);
+    bool is_convertable(const Item *item,
+                        grn_operator logical_operator=GRN_OP_AND);
     unsigned int count_match_against(const Item *item);
     // caller must check "where" can be convertable by
     // is_convertable(). This method doesn't validate "where".
@@ -53,8 +54,10 @@ namespace mrn {
     grn_obj column_name_;
     grn_obj value_;
 
-    bool is_convertable(const Item_cond *cond_item);
-    bool is_convertable(const Item_func *func_item);
+    bool is_convertable(const Item_cond *cond_item,
+                        grn_operator logical_operator);
+    bool is_convertable(const Item_func *func_item,
+                        grn_operator logical_operator);
     bool is_convertable_binary_operation(const Item_field *field_item,
                                          Item *value_item,
                                          Item_func::Functype func_type);
@@ -78,13 +81,16 @@ namespace mrn {
                  grn_obj *expression,
                  bool have_condition);
     bool convert(const Item_func *func_item,
-                 grn_obj *expression);
+                 grn_obj *expression,
+                 grn_operator &sub_logical_operator);
 
     bool convert_binary_operation(const Item_func *func_item,
                                   grn_obj *expression,
                                   grn_operator _operator);
     bool convert_between(const Item_func *func_item, grn_obj *expression);
-    bool convert_in(const Item_func *func_item, grn_obj *expression);
+    bool convert_in(const Item_func *func_item,
+                    grn_obj *expression,
+                    grn_operator &sub_logical_operator);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
     void append_const_item(const Item_field *field_item,
