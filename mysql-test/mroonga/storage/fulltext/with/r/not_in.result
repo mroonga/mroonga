@@ -1,19 +1,18 @@
-DROP TABLE IF EXISTS diaries;
+DROP TABLE IF EXISTS memos;
 SET NAMES UTF8;
-CREATE TABLE diaries (
-id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-year INT UNSIGNED,
-month INT UNSIGNED,
-day INT UNSIGNED,
-title VARCHAR(255),
+CREATE TABLE memos (
+id INT UNSIGNED,
 content TEXT,
-FULLTEXT INDEX(content),
-KEY(day)
+FULLTEXT INDEX(content)
 ) DEFAULT CHARSET UTF8;
-INSERT INTO diaries VALUES(1, 2011, 11, 10, "天気", "明日の富士山の天気について");
-INSERT INTO diaries VALUES(2, 2011, 11, 11, "富士山", "今日も天気がよくてきれいに見える。");
-INSERT INTO diaries VALUES(3, 2011, 12, 1, "久しぶり", "天気が悪いからずっと留守番。");
-SELECT * FROM diaries   WHERE MATCH(content) AGAINST("+天気" IN BOOLEAN MODE) AND day NOT IN ('10', '11') ORDER BY id;
-id	year	month	day	title	content
-3	2011	12	1	久しぶり	天気が悪いからずっと留守番。
-DROP TABLE diaries;
+INSERT INTO memos VALUES(1, "Groonga is a full text search engine.");
+INSERT INTO memos VALUES(2, "Mroonga is Groonga + MySQL.");
+INSERT INTO memos VALUES(3, "Mroonga can work with MariaDB.");
+INSERT INTO memos VALUES(4, "Groonga is great!");
+SELECT * FROM memos
+WHERE MATCH(content) AGAINST("+Groonga" IN BOOLEAN MODE) AND
+id NOT IN (1, 2)
+ORDER BY id;
+id	content
+4	Groonga is great!
+DROP TABLE memos;
