@@ -127,7 +127,7 @@ namespace mrn {
     List_iterator<Item> iterator(*argument_list);
     const Item *sub_item;
     while ((sub_item = iterator++)) {
-      if (!is_convertable(sub_item), sub_logical_operator) {
+      if (!is_convertable(sub_item, sub_logical_operator)) {
         DBUG_RETURN(false);
       }
     }
