@@ -20,6 +20,8 @@
 DROP TABLE IF EXISTS memos;
 --enable_warnings
 
+FLUSH STATUS;
+
 SET NAMES UTF8;
 CREATE TABLE memos (
   id INT UNSIGNED,
@@ -36,6 +38,8 @@ SELECT * FROM memos
  WHERE MATCH(content) AGAINST("+Groonga" IN BOOLEAN MODE) AND
        id NOT IN (1, 2)
  ORDER BY id;
+
+SHOW STATUS LIKE 'mroonga_condition_push_down';
 
 DROP TABLE memos;
 

@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS memos;
+FLUSH STATUS;
 SET NAMES UTF8;
 CREATE TABLE memos (
 id INT UNSIGNED,
@@ -15,4 +16,7 @@ id NOT IN (1, 2)
 ORDER BY id;
 id	content
 4	Groonga is great!
+SHOW STATUS LIKE 'mroonga_condition_push_down';
+Variable_name	Value
+Mroonga_condition_push_down	1
 DROP TABLE memos;
