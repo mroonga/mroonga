@@ -10550,6 +10550,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     ("mroonga: first_select_lex->options=%llu",
      first_select_lex ? MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(first_select_lex) : 0));
 
+  // TODO: Extract as a class like mrn::ConditionConverter
   if (
     thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
     !select_lex->with_sum_func &&
@@ -10629,12 +10630,12 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     ORDER *order;
     int i;
     mrn_change_encoding(ctx, system_charset_info);
+    fast_order_limit = true;
     for (order = (ORDER *) select_lex->order_list.first, i = 0;
          order;
          order = order->next, i++) {
       Item *item = *order->item;
-      if (item->type() == Item::FIELD_ITEM)
-      {
+      if (item->type() == Item::FIELD_ITEM) {
         Field *field = static_cast<Item_field *>(item)->field;
         mrn::ColumnName column_name(FIELD_NAME(field));
 
@@ -10643,10 +10644,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
           DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
                               "sort by collated value isn't supported yet."));
           fast_order_limit = false;
-          my_free(*sort_keys);
-          *sort_keys = NULL;
-          *n_sort_keys = 0;
-          DBUG_VOID_RETURN;
+          break;
         }
 
         if (is_storage_mode) {
@@ -10663,16 +10661,28 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                 "sort by not primary key value "
                                 "isn't supported in wrapper mode."));
             fast_order_limit = false;
-            my_free(*sort_keys);
-            *sort_keys = NULL;
-            *n_sort_keys = 0;
-            DBUG_VOID_RETURN;
+            break;
           }
         }
+      } else if (item->type() == Item::FUNC_ITEM) {
+        Item_func *func_item = static_cast<Item_func *>(item);
+        if (func_item->functype() == Item_func::FT_FUNC) {
+          (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
+                                               MRN_COLUMN_NAME_SCORE,
+                                               strlen(MRN_COLUMN_NAME_SCORE));
+        } else {
+          GRN_LOG(ctx, GRN_LOG_DEBUG,
+                  "[mroonga][fast-order-limit][false] "
+                  "ORDER BY %s()",
+                  func_item->func_name());
+          fast_order_limit = false;
+        }
       } else {
-        (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
-                                             MRN_COLUMN_NAME_SCORE,
-                                             strlen(MRN_COLUMN_NAME_SCORE));
+        GRN_LOG(ctx, GRN_LOG_DEBUG,
+                "[mroonga][fast-order-limit][false] "
+                "not ORDER BY column nor ORDER BY MATCH AGAINST");
+        fast_order_limit = false;
+        break;
       }
       (*sort_keys)[i].offset = 0;
       if (MRN_ORDER_IS_ASC(order))
@@ -10683,9 +10693,17 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       }
       (*n_sort_keys)++;
     }
-    DBUG_PRINT("info", ("mroonga: fast_order_limit = true"));
-    fast_order_limit = true;
-    mrn_fast_order_limit++;
+    if (fast_order_limit) {
+      DBUG_PRINT("info", ("mroonga: fast_order_limit = true"));
+      mrn_fast_order_limit++;
+    } else {
+      for (int j = 0; j < i; ++j) {
+        grn_obj_unlink(ctx, sort_keys[j]->key);
+      }
+      my_free(*sort_keys);
+      *sort_keys = NULL;
+      *n_sort_keys = 0;
+    }
     DBUG_VOID_RETURN;
   }
   DBUG_PRINT("info", ("mroonga: fast_order_limit = false"));
