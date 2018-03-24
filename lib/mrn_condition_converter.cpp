@@ -712,6 +712,7 @@ namespace mrn {
         grn_operator logical_operator = GRN_OP_AND;
         if (convert(static_cast<const Item_func *>(where),
                     expression,
+                    have_condition,
                     logical_operator) &&
             have_condition) {
           grn_expr_append_op(ctx_, expression, logical_operator, 2);
@@ -756,6 +757,7 @@ namespace mrn {
           grn_operator sub_logical_operator = logical_operator;
           if (convert(static_cast<const Item_func *>(sub_item),
                       expression,
+                      n_conditions > 0,
                       sub_logical_operator)) {
             added = true;
             if (n_conditions > 0) {
@@ -775,6 +777,7 @@ namespace mrn {
 
   bool ConditionConverter::convert(const Item_func *func_item,
                                    grn_obj *expression,
+                                   bool have_condition,
                                    grn_operator &sub_logical_operator) {
     MRN_DBUG_ENTER_METHOD();
 
@@ -801,7 +804,10 @@ namespace mrn {
       added = convert_between(func_item, expression);
       break;
     case Item_func::IN_FUNC:
-      added = convert_in(func_item, expression, sub_logical_operator);
+      added = convert_in(func_item,
+                         expression,
+                         have_condition,
+                         sub_logical_operator);
       break;
     default:
       break;
@@ -860,10 +866,22 @@ namespace mrn {
 
   bool ConditionConverter::convert_in(const Item_func *func_item,
                                       grn_obj *expression,
+                                      bool have_condition,
                                       grn_operator &sub_logical_operator) {
     MRN_DBUG_ENTER_METHOD();
 
     const Item_func_in *in_item = static_cast<const Item_func_in *>(func_item);
+
+    if (!have_condition && in_item->negated) {
+      // TODO: Use after Groonga 8.0.1 is released
+      // grn_expr_append_const_bool(ctx_, expression, GRN_TRUE, GRN_OP_PUSH, 1);
+      grn_obj true_value;
+      GRN_BOOL_INIT(&true_value, 0);
+      GRN_BOOL_SET(ctx_, &true_value, GRN_TRUE);
+      grn_expr_append_const(ctx_, expression, &true_value, GRN_OP_PUSH, 1);
+      GRN_OBJ_FIN(ctx_, &true_value);
+    }
+
     if (sub_logical_operator == GRN_OP_AND && in_item->negated) {
       sub_logical_operator = GRN_OP_AND_NOT;
     }
@@ -884,6 +902,10 @@ namespace mrn {
     }
 
     grn_expr_append_op(ctx_, expression, GRN_OP_CALL, n_arguments);
+
+    if (!have_condition && in_item->negated) {
+      grn_expr_append_op(ctx_, expression, GRN_OP_AND_NOT, 2);
+    }
 
     DBUG_RETURN(true);
   }

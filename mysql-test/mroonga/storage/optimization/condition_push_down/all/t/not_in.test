@@ -1,4 +1,3 @@
-# Copyright(C) 2018 Yasuhiro Horimoto <horimoto@clear-code.com>
 # Copyright(C) 2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -18,30 +17,29 @@
 --source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS memos;
+DROP TABLE IF EXISTS numbers;
 --enable_warnings
 
 FLUSH STATUS;
 
 SET NAMES UTF8;
-CREATE TABLE memos (
-  id INT UNSIGNED,
-  content TEXT,
-  FULLTEXT INDEX(content)
+CREATE TABLE numbers (
+  value INT UNSIGNED
 ) DEFAULT CHARSET UTF8;
 
-INSERT INTO memos VALUES(1, "Groonga is a full text search engine.");
-INSERT INTO memos VALUES(2, "Mroonga is Groonga + MySQL.");
-INSERT INTO memos VALUES(3, "Mroonga can work with MariaDB.");
-INSERT INTO memos VALUES(4, "Groonga is great!");
+INSERT INTO numbers VALUES(1);
+INSERT INTO numbers VALUES(2);
+INSERT INTO numbers VALUES(3);
+INSERT INTO numbers VALUES(4);
 
-SELECT * FROM memos
- WHERE MATCH(content) AGAINST("+Groonga" IN BOOLEAN MODE) AND
-       id NOT IN (1, 2)
- ORDER BY id;
+SET mroonga_condition_push_down_type = ALL;
+SELECT * FROM numbers
+ WHERE value NOT IN (1, 2)
+ ORDER BY value;
+SET mroonga_condition_push_down_type = DEFAULT;
 
 SHOW STATUS LIKE 'mroonga_condition_push_down';
 
-DROP TABLE memos;
+DROP TABLE numbers;
 
 --source ../../../../../include/mroonga/have_mroonga_deinit.inc

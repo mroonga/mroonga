@@ -1,0 +1,22 @@
+DROP TABLE IF EXISTS numbers;
+FLUSH STATUS;
+SET NAMES UTF8;
+CREATE TABLE numbers (
+value INT UNSIGNED
+) DEFAULT CHARSET UTF8;
+INSERT INTO numbers VALUES(1);
+INSERT INTO numbers VALUES(2);
+INSERT INTO numbers VALUES(3);
+INSERT INTO numbers VALUES(4);
+SET mroonga_condition_push_down_type = ALL;
+SELECT * FROM numbers
+WHERE value NOT IN (1, 2)
+ORDER BY value;
+value
+3
+4
+SET mroonga_condition_push_down_type = DEFAULT;
+SHOW STATUS LIKE 'mroonga_condition_push_down';
+Variable_name	Value
+Mroonga_condition_push_down	1
+DROP TABLE numbers;

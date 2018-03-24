@@ -82,6 +82,7 @@ namespace mrn {
                  bool have_condition);
     bool convert(const Item_func *func_item,
                  grn_obj *expression,
+                 bool have_condition,
                  grn_operator &sub_logical_operator);
 
     bool convert_binary_operation(const Item_func *func_item,
@@ -90,6 +91,7 @@ namespace mrn {
     bool convert_between(const Item_func *func_item, grn_obj *expression);
     bool convert_in(const Item_func *func_item,
                     grn_obj *expression,
+                    bool have_condition,
                     grn_operator &sub_logical_operator);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
