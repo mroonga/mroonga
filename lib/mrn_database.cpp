@@ -36,10 +36,7 @@ namespace mrn {
     broken_table_names_ = operations.collect_processing_table_names();
     is_broken_ = operations.is_locked();
     cache_ = grn_cache_open(ctx_);
-// TODO: Enable this when Groonga 8.0.1 is released
-#ifdef GROONGA_8_0_1
     grn_db_set_cache(ctx_, db_, cache_);
-#endif
   }
 
   Database::~Database(void) {
