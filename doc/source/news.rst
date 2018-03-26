@@ -5,6 +5,47 @@
 News
 ====
 
+.. _release-8-01:
+
+Release 8.01 - 2018-03-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm][centos] Supported Percona Server 5.6.39. [Reported by @iiiiyyyy]
+
+* [rpm][centos] Supported Percona Server 5.7.21.
+
+* [rpm][centos] Supported MariaDB 10.2.13. [GitHub#198] [Reported by
+  shota suzuki]
+
+Fixes
+^^^^^
+
+* Fixed a bug that wrong cache for other database is used. If you
+  create multiple database and use `mroonga_command()` against one of
+  them, wrong cache is returned unexpectedly. To fix this issue,
+  Groonga 8.0.1 or later is required.
+
+* Fixed a bug that "NOT IN" query returns empty result. This bug
+  occurs when "NOT IN" is used with multiple arguments such as "NOT IN
+  (xxx, xxx)"
+
+* Fixed a bug that "ORDER BY RAND()" query returns wrong result. This
+  bug occurs when "ORDER BY RAND()" and "LIMIT" is specified at the
+  same time.
+
+* Fixed a bug that "fast order limit" optimization is applied
+  unexpectedly to "ORDER BY function()".
+
+Thanks
+^^^^^^
+
+* @iiiiyyyy
+
+* shota suzuki
+
 .. _release-8-00:
 
 Release 8.00 - 2018-02-09
