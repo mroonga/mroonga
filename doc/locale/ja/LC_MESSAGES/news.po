@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2018-01-31 11:26+0900\n"
+"PO-Revision-Date: 2018-03-26 19:41+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,6 +21,73 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+msgid "Release 8.01 - 2018-03-29"
+msgstr "8.01リリース - 2018-03-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.6.39. [Reported by @iiiiyyyy]"
+msgstr ""
+"[rpm][centos] Percona Server 5.6.39をサポートしました。 [@iiiiyyyyさんが報告]"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.7.21."
+msgstr "[rpm][centos] Percona Server 5.7.21をサポートしました。"
+
+msgid ""
+"[rpm][centos] Supported MariaDB 10.2.13. [GitHub#198] [Reported by shota "
+"suzuki]"
+msgstr ""
+"[rpm][centos] MariaDB 10.2.13をサポートしました。[GitHub#198] [Shota Suzukiさ"
+"んが報告]"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that wrong cache for other database is used. If you create "
+"multiple database and use `mroonga_command()` against one of them, wrong "
+"cache is returned unexpectedly. To fix this issue, Groonga 8.0.1 or later is "
+"required."
+msgstr ""
+"誤ったキャッシュが使われる不具合を修正しました。複数のデータベースを作成して"
+"いて、そのどれかに `mroonga_command()` 経由でアクセスしたときに意図せず誤った"
+"キャッシュが返る問題が発生します。問題を修正するにはGroonga 8.0.1以降が必要で"
+"す。"
+
+msgid ""
+"Fixed a bug that \"NOT IN\" query returns empty result. This bug occurs when "
+"\"NOT IN\" is used with multiple arguments such as \"NOT IN (xxx, xxx)\""
+msgstr ""
+"\"NOT IN\"クエリーが空の結果を返す不具合を修正しました。この不具合は \"NOT IN"
+"\"を複数の引数と一緒に使ったときに発生します。例えば \"NOT IN (xxx, xxx)\" な"
+"どです。"
+
+msgid ""
+"Fixed a bug that \"ORDER BY RAND()\" query returns wrong result. This bug "
+"occurs when \"ORDER BY RAND()\" and \"LIMIT\" is specified at the same time."
+msgstr ""
+"\"ORDER BY RAND()\" クエリーが誤った結果を返す不具合を修正しました。この不具"
+"合は \"ORDER BY RAND()\" と \"LIMIT\" を同時に指定したときに発生します。"
+
+msgid ""
+"Fixed a bug that \"fast order limit\" optimization is applied unexpectedly "
+"to \"ORDER BY function()\"."
+msgstr ""
+"ORDER LIMITの最適化が意図せずORDER BY function()にも適用されてしまう不具合を"
+"修正しました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "@iiiiyyyy"
+msgstr "@iiiiyyyyさん"
+
+msgid "shota suzuki"
+msgstr "Shota Suzukiさん"
+
 msgid "Release 8.00 - 2018-02-09"
 msgstr "8.00リリース - 2018-02-09"
 
@@ -30,9 +97,6 @@ msgid ""
 msgstr ""
 "メジャーバージョンアップです! メジャーバージョンアップですが、互換性は壊れて"
 "いないので、データベースを再構築することなくアップグレードできます。"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid "When create hash index, used tiny hash for reducing used resource."
 msgstr ""
@@ -44,9 +108,6 @@ msgid ""
 msgstr ""
 "[percona57] ギャップロック検出をサポートしました。 [GitHub#188][Iwoさんの報"
 "告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Iwo"
 msgstr "Iwoさん"
@@ -67,9 +128,6 @@ msgstr "[rpm][centos] MariaDB 10.3に対応しました。"
 msgid "[deb][ubuntu] Supported MariaDB 10.1 for Ubuntu 17.10 (Artful Aadvark)"
 msgstr ""
 "[deb][ubuntu] Ubuntu 17.10向けにMariaDB 10.1のパッケージをサポートしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[:ref:`status-variable-mroonga-n-pooling-contexts`] Fixed a bug that value "
