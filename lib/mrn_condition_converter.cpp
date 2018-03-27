@@ -873,13 +873,7 @@ namespace mrn {
     const Item_func_in *in_item = static_cast<const Item_func_in *>(func_item);
 
     if (!have_condition && in_item->negated) {
-      // TODO: Use after Groonga 8.0.1 is released
-      // grn_expr_append_const_bool(ctx_, expression, GRN_TRUE, GRN_OP_PUSH, 1);
-      grn_obj true_value;
-      GRN_BOOL_INIT(&true_value, 0);
-      GRN_BOOL_SET(ctx_, &true_value, GRN_TRUE);
-      grn_expr_append_const(ctx_, expression, &true_value, GRN_OP_PUSH, 1);
-      GRN_OBJ_FIN(ctx_, &true_value);
+      grn_expr_append_const_bool(ctx_, expression, GRN_TRUE, GRN_OP_PUSH, 1);
     }
 
     if (sub_logical_operator == GRN_OP_AND && in_item->negated) {
