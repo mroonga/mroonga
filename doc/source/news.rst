@@ -10,6 +10,11 @@ News
 Release 8.01 - 2018-03-29
 -------------------------
 
+In this version, MySQL will be automatically restarted if you had
+already installed Mroonga. This is because Mroonga requires newer
+version of Groonga (8.0.1) to fix bugs, but it will not reloaded until
+MySQL is restarted.
+
 Improvements
 ^^^^^^^^^^^^
 
