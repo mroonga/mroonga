@@ -1,6 +1,6 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
-%define mariadb_version_default 10.1.31
+%define mariadb_version_default 10.1.32
 %define mariadb_release_default 1
 %define mariadb_download_base_url_default https://downloads.mariadb.org/f
 %if %{_centos_ver} == 7
@@ -234,6 +234,9 @@ fi
 %changelog
 * Thu Mar 29 2018 Kentaro Hayashi <hayashi@clear-code.com> - 8.01-1
 - new upstream release.
+
+* Wed Mar 28 2018 Kentaro Hayashi <hayashi@clear-code.com> - 8.00-2
+- build against MariaDB 10.1.32.
 
 * Fri Feb 09 2018 Yasuhiro Horimoto <horimoto@clear-code.com> - 8.00-1
 - new upstream release.
