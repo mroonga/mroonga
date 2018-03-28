@@ -25,6 +25,8 @@ Improvements
 * [rpm][centos] Supported MariaDB 10.2.13. [GitHub#198] [Reported by
   shota suzuki]
 
+* [rpm][centos] Supported MariaDB 10.2.14.
+
 Fixes
 ^^^^^
 
@@ -36,6 +38,9 @@ Fixes
 * Fixed a bug that "NOT IN" query returns empty result. This bug
   occurs when "NOT IN" is used with multiple arguments such as "NOT IN
   (xxx, xxx)"
+
+* Fixed a bug that specified "NOT IN" can't exclude correctly when
+  condition push down is enabled.
 
 * Fixed a bug that "ORDER BY RAND()" query returns wrong result. This
   bug occurs when "ORDER BY RAND()" and "LIMIT" is specified at the
