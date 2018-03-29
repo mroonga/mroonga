@@ -116,18 +116,13 @@ uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 
 if [ "$1" = 2 ] ; then
     if [ $current_version -lt $required_version ]; then
-	command="$mysql_command -u root $password_option"
-	echo "run the following command after restarting MySQL server:";
-	echo "  $command < ${uninstall_sql}"
-	echo "  $command < ${install_sql}"
-	exit 0
-    else
-	command="$mysql_command -u root $password_option < ${uninstall_sql}"
-	echo $command
-	eval $command || \
-	    (echo "run the following command to unregister Mroonga:"; \
-	     echo "  $command")
+        /sbin/service mysqld restart
     fi
+    command="$mysql_command -u root $password_option < ${uninstall_sql}"
+    echo $command
+    eval $command || \
+      (echo "run the following command to unregister Mroonga:"; \
+       echo "  $command")
 fi
 command="$mysql_command -u root $password_option < ${install_sql}"
 echo $command

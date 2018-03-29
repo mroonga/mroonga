@@ -38,10 +38,18 @@ EOF
     true
 }
 
+restart_server() {
+    systemctl status mysql
+    if test $? -eq 0 ; then
+        systemctl restart mysql
+    fi
+}
+
 case "$1" in
     configure)
 	install_apparmor
 	install_plugin
+	restart_server
 	;;
     abort-upgrade|abort-deconfigure|abort-remove)
 	:

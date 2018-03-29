@@ -55,10 +55,25 @@ EOF
     true
 }
 
+restart_server() {
+    if test -x /bin/systemctl ; then
+        systemctl status mysql
+        if test $? -eq 0 ; then
+            systemctl restart mysql
+        fi
+    else
+        /sbin/service mysql status
+        if test $? -eq 0 ; then
+            /sbin/service mysql restart
+        fi
+    fi
+}
+
 case "$1" in
     configure)
 	install_apparmor
 	install_plugin
+	restart_server
 	;;
     abort-upgrade|abort-deconfigure|abort-remove)
 	:
