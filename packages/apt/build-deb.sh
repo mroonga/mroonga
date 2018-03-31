@@ -86,6 +86,19 @@ esac
 run apt-get install -V -y build-essential devscripts ${DEPENDED_PACKAGES}
 run apt-get build-dep -y ${mysql_server_package}
 
+# Fix mysql_config plugindir detection correctly on Jessie
+case "${code_name}" in
+  jessie)
+    if [ -f /usr/bin/mysql_config ]; then
+      run sed -i'' \
+          -e 's,fix_path plugindir $plugindir_rel lib/x86_64-linux-gnu/mysql/plugin lib/x86_64-linux-gnu/plugin,fix_path plugindir $plugindir_rel lib/x86_64-linux-gnu/mysql/plugin,' \
+          /usr/bin/mysql_config
+    fi
+    ;;
+  *)
+    ;;
+esac
+
 run mkdir -p build
 run cd build
 run tar xfz /vagrant/tmp/${PACKAGE}-${VERSION}.tar.gz
