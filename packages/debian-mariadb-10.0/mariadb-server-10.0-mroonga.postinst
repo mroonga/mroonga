@@ -39,7 +39,7 @@ EOF
 }
 
 restart_server() {
-    systemctl status mysql
+    systemctl --no-pager status mysql
     if test $? -eq 0 ; then
         systemctl restart mysql
     fi
