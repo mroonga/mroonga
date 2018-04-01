@@ -72,8 +72,8 @@ restart_server() {
 case "$1" in
     configure)
 	install_apparmor
-	install_plugin
 	restart_server
+	install_plugin
 	;;
     abort-upgrade|abort-deconfigure|abort-remove)
 	:
