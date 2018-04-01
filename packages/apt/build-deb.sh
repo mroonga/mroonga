@@ -91,7 +91,7 @@ case "${code_name}" in
   jessie)
     if [ -f /usr/bin/mysql_config ]; then
       run sed -i'' \
-          -e 's,fix_path plugindir $plugindir_rel lib/x86_64-linux-gnu/mysql/plugin lib/x86_64-linux-gnu/plugin,fix_path plugindir $plugindir_rel lib/x86_64-linux-gnu/mysql/plugin,' \
+          -e 's,fix_path plugindir $plugindir_rel lib/\(x86_64\|i386\)-linux-gnu/mysql/plugin lib/\(x86_64\|i386\)-linux-gnu/plugin,fix_path plugindir $plugindir_rel lib/\\1-linux-gnu/mysql/plugin,' \
           /usr/bin/mysql_config
     fi
     ;;
