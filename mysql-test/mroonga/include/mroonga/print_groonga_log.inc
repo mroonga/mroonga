@@ -1,4 +1,5 @@
-# Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2017 Sergei Golubchik <serg@mariadb.org>
+# Copyright(C) 2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,19 +15,13 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source include/not_embedded.inc
---source ../../../../include/mroonga/have_mroonga.inc
---source ../../../../include/mroonga/have_mroonga_helper.inc
-
-SET GLOBAL mroonga_log_file = "groonga-query-log.log";
-
-SET GLOBAL mroonga_query_log_file = "";
-SHOW GLOBAL VARIABLES LIKE "mroonga_query_log_file";
---source ../../../../include/mroonga/print_groonga_log.inc
-
-SET GLOBAL mroonga_query_log_file = DEFAULT;
-SET GLOBAL mroonga_log_file = DEFAULT;
-
---remove_file $MYSQLD_DATADIR/groonga-query-log.log
-
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+--let MROONGA_LOG_FILE = `SHOW GLOBAL VARIABLES LIKE "mroonga_log_file"`
+perl;
+$mroonga_log_file = $ENV{MROONGA_LOG_FILE};
+$mroonga_log_file =~ s/^mroonga_log_file	//;
+open(F, '<', $_="$ENV{MYSQLD_DATADIR}/$mroonga_log_file") or die "open(<$_): $!";
+while (<F>) {
+  s/^[^|]+\|[^|]+\|[^|]+\| *//;
+  print;
+}
+EOF
