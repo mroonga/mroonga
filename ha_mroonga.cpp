@@ -7197,12 +7197,17 @@ int ha_mroonga::storage_update_row_unique_indexes(const uchar *new_data)
       continue;
     }
 
-    if (
-      KEY_N_KEY_PARTS(key_info) == 1 &&
-      !bitmap_is_set(table->write_set,
-                     key_info->key_part[0].field->field_index)
-    ) {
-      /* no change */
+    uint n_key_parts = KEY_N_KEY_PARTS(key_info);
+    bool have_any_changed_field = false;
+    for (uint j = 0; j < n_key_parts; ++j) {
+      if (bitmap_is_set(table->write_set,
+                        key_info->key_part[j].field->field_index)) {
+        have_any_changed_field = true;
+        break;
+      }
+    }
+
+    if (!have_any_changed_field) {
       key_id[i] = GRN_ID_NIL;
       del_key_id[i] = GRN_ID_NIL;
       continue;

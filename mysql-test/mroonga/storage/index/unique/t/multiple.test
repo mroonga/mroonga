@@ -1,0 +1,47 @@
+# Copyright(C) 2018 Kouhei Sutou  <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source include/not_embedded.inc
+--source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/have_mroonga_helper.inc
+
+--disable_warnings
+DROP TABLE IF EXISTS users;
+--enable_warnings
+
+CREATE TABLE users (
+  id int NOT NULL PRIMARY KEY,
+  first_name varchar(100) NOT NULL,
+  last_name varchar(100) NOT NULL,
+  age int NOT NULL,
+  UNIQUE KEY name (first_name, last_name)
+) DEFAULT CHARSET=utf8;
+
+INSERT INTO users VALUES (1, 'Alice', 'Smith', 29);
+
+SET GLOBAL mroonga_log_file = "groonga-update.log";
+
+UPDATE users SET age = 12 WHERE id = 1;
+--source ../../../../include/mroonga/print_groonga_log.inc
+
+SET GLOBAL mroonga_log_file = DEFAULT;
+--remove_file $MYSQLD_DATADIR/groonga-update.log
+
+SELECT * FROM users;
+
+DROP TABLE users;
+
+--source ../../../../include/mroonga/have_mroonga_deinit.inc
