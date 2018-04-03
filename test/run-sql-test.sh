@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Copyright(C) 2010  Tetsuro IKEDA
-# Copyright(C) 2010-2017  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2010-2018  Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2011  Kazuhiko
 #
 # This library is free software; you can redistribute it and/or
@@ -180,6 +180,11 @@ while [ $# -gt 0 ]; do
     --manual-gdb|--gdb|--client-gdb|--boot-gdb|--debug|--valgrind)
       n_processors=1
       mysql_test_run_options="${mysql_test_run_options} ${arg}"
+      ;;
+    --record)
+      mysql_test_run_options="${mysql_test_run_options} ${arg}"
+      mysql_test_run_options="${mysql_test_run_options} $1"
+      shift
       ;;
     --*)
       mysql_test_run_options="${mysql_test_run_options} ${arg}"
