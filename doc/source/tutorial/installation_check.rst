@@ -45,3 +45,9 @@ the following manually:
 .. code-block:: sql
 
    INSTALL PLUGIN Mroonga SONAME 'ha_mroonga.so';
+
+Then, check server variable whether correct Mroonga version is installed by ``SHOW VARIABLE`` command.
+
+.. code-block:: sql
+
+   SHOW VARIABLES LIKE 'mroonga_version';
