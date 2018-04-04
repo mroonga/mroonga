@@ -19,7 +19,7 @@ since Mroonga 4.01 release.
 Install::
 
   % sudo yum install -y centos-release-scl
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y mysql55-mysql-server
   % sudo /sbin/service mysql55-mysqld start
   % sudo yum install -y --enablerepo=epel mysql55-mroonga
@@ -41,7 +41,7 @@ Mroonga 4.04 release.
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
   % sudo yum install -y --enablerepo=epel mysql-community-mroonga
   (% sudo /sbin/service mysqld start)
@@ -64,7 +64,7 @@ Mroonga 5.09 release.
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
   % sudo yum install -y yum-utils
   % sudo yum-config-manager --disable mysql56-community
@@ -91,7 +91,7 @@ since Mroonga 5.02 release.
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
   % sudo yum install -y Percona-Server-server-56
   % sudo /sbin/service mysql start
@@ -115,7 +115,7 @@ since Mroonga 6.02 release.
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
   % sudo yum install -y --enablerepo=epel percona-server-57-mroonga
   (% sudo /sbin/service mysql start)
@@ -158,7 +158,7 @@ For 64-bit version::
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y MariaDB-server
   % sudo systemctl start mariadb
   % sudo yum install -y --enablerepo=epel mariadb-10.1-mroonga
@@ -199,7 +199,7 @@ For 64-bit version::
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y MariaDB-server
   % sudo systemctl start mariadb
   % sudo yum install -y --enablerepo=epel mariadb-10.2-mroonga
@@ -240,7 +240,7 @@ For 64-bit version::
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y MariaDB-server
   % sudo systemctl start mariadb
   % sudo yum install -y --enablerepo=epel mariadb-10.3-mroonga
@@ -262,7 +262,7 @@ You can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7.
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y mariadb-server
   % sudo systemctl start mariadb
   % sudo yum install -y --enablerepo=epel mariadb-mroonga
@@ -284,7 +284,7 @@ You can use Oracle's MySQL packages version 5.6 on CentOS 7.
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
   % sudo yum install -y --enablerepo=epel mysql-community-mroonga
   (% sudo systemctl start mysqld)
@@ -307,7 +307,7 @@ Mroonga 5.09 release.
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
   % sudo yum install -y yum-utils
   % sudo yum-config-manager --disable mysql56-community
@@ -334,7 +334,7 @@ since Mroonga 5.02 release.
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
   % sudo yum install -y --enablerepo=epel percona-server-56-mroonga
   (% sudo systemctl start mysqld)
@@ -357,7 +357,7 @@ since Mroonga 6.02 release.
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
   % sudo yum install -y --enablerepo=epel percona-server-57-mroonga
   (% sudo systemctl start mysqld)
@@ -389,7 +389,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y MariaDB-server
   % sudo systemctl start mariadb
   % sudo yum install -y --enablerepo=epel mariadb-10.1-mroonga
@@ -420,7 +420,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y MariaDB-server
   % sudo systemctl start mariadb
   % sudo yum install -y --enablerepo=epel mariadb-10.2-mroonga
@@ -451,7 +451,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-1.4.0-1.noarch.rpm
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y MariaDB-server
   % sudo systemctl start mariadb
   % sudo yum install -y --enablerepo=epel mariadb-10.3-mroonga
