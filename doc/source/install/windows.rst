@@ -34,13 +34,10 @@ Zip
 ---
 
 Download zip file and extract it. You need to choose a zip for your
-environment.
+environment:
 
-Choose ``win32`` version for 32-bit environment, ``winx64`` version
-for 64-bit environment:
-
-  * `mariadb-10.1.32-with-mroonga-8.01-win32.zip <https://github.com/mroonga/mroonga/releases/download/v8.01/mariadb-10.1.32-with-mroonga-8.01-win32.zip>`_
-  * `mariadb-10.1.32-with-mroonga-8.01-winx64.zip <https://github.com/mroonga/mroonga/releases/download/v8.01/mariadb-10.1.32-with-mroonga-8.01-winx64.zip>`_
+  * |mroonga_windows_package_link_32|
+  * |mroonga_windows_package_link_64|
 
 Zip packages are pre-configured for easy to use, so no need to execute
 ``INSTALL PLUGIN`` and ``CREATE FUNCTION``.

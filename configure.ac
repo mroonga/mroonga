@@ -276,6 +276,13 @@ AC_DEFUN([CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL], [
   fi
 ])
 
+m4_define([mrn_package_groonga_version], m4_include(package_groonga_version))
+PACKAGE_GROONGA_VERSION=mrn_package_groonga_version
+AC_SUBST(PACKAGE_GROONGA_VERSION)
+m4_define([mrn_package_mariadb_version], m4_include(package_mariadb_version))
+PACKAGE_MARIADB_VERSION=mrn_package_mariadb_version
+AC_SUBST(PACKAGE_MARIADB_VERSION)
+
 AC_ARG_WITH(debug,
     [dnl
 AS_HELP_STRING([--with-debug],
