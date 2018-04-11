@@ -253,6 +253,10 @@
 #  define MRN_HAVE_PSI_MEMORY_KEY
 #endif
 
+#ifdef HAVE_PSI_INTERFACE
+#  define MRN_HAVE_PSI_FILE_KEY
+#endif
+
 #ifdef MRN_HAVE_PSI_MEMORY_KEY
 #  define mrn_my_malloc(size, flags) \
   my_malloc(mrn_memory_key, size, flags)
@@ -584,5 +588,12 @@
 #  else
 #    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
        (field->vcol_info->expr_item->save_in_field(field, 0))
+#  endif
+#endif
+
+#ifdef MRN_PERCONA_P
+#  if ((MYSQL_VERSION_ID >= 50634) && (MYSQL_VERSION_ID < 50700)) || \
+      (MYSQL_VERSION_ID >= 50721)
+#    define MRN_HAVE_DB_TYPE_ROCKSDB
 #  endif
 #endif

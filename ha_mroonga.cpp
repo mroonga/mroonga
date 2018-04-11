@@ -236,6 +236,13 @@ static PSI_memory_info mrn_all_memory_keys[]=
 };
 #endif
 
+#ifdef MRN_HAVE_PSI_FILE_KEY
+static PSI_file_key mrn_key_file_frm;
+static PSI_file_info mrn_all_file_keys[] = {
+  {&mrn_key_file_frm, "Mroonga: FRM", 0},
+};
+#endif
+
 static const char *INDEX_COLUMN_NAME = "index";
 static const char *MRN_PLUGIN_AUTHOR = "The Mroonga project";
 
@@ -1899,6 +1906,101 @@ static ha_create_table_option mrn_index_options[] =
 };
 #endif
 
+#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+static void
+mrn_fix_db_type_static_rocksdb_db_type()
+{
+  // Percona Server 5.6.34 or later and 5.7.21 or later assigns static
+  // plugin ID for RocksDB that ID was able to be used by third party
+  // plugin before:
+  // https://github.com/percona/percona-server/commit/805173fed3db20c9c7be7a5bb41bda9d2a53b6ca
+
+  THD *thd = current_thd;
+
+  handlerton *rocksdb_hton = ha_resolve_by_legacy_type(thd, DB_TYPE_ROCKSDB);
+  if (rocksdb_hton) {
+    return;
+  }
+
+  enum legacy_db_type mroonga_db_type = DB_TYPE_FIRST_DYNAMIC;
+  while (ha_resolve_by_legacy_type(thd, mroonga_db_type)) {
+    mroonga_db_type =
+      static_cast<enum legacy_db_type>(static_cast<int>(mroonga_db_type) + 1);
+  }
+
+  struct st_my_dir *data_dir = my_dir(mysql_real_data_home,
+                                      MYF(MY_DONT_SORT | MY_WANT_STAT));
+  if (!data_dir) {
+    return;
+  }
+
+  struct fileinfo *data_file_info = data_dir->dir_entry;
+  for (uint i = 0; i < data_dir->number_off_files; ++i, ++data_file_info) {
+    if (data_file_info->name[0] == '.')
+      continue;
+    if (!MY_S_ISDIR(data_file_info->mystat->st_mode))
+      continue;
+
+    String db_path(mysql_real_data_home, &my_charset_bin);
+    db_path.append(FN_DIRSEP);
+    db_path.append(data_file_info->name);
+    struct st_my_dir *db_dir = my_dir(db_path.c_ptr(), MYF(MY_DONT_SORT));
+    if (!db_dir)
+      continue;
+
+    struct fileinfo *db_file_info = db_dir->dir_entry;
+    for (uint j = 0; j < db_dir->number_off_files; ++j, ++db_file_info) {
+      const char *ext = strrchr(db_file_info->name, '.');
+      if (!ext)
+        continue;
+      if (is_prefix(db_file_info->name, tmp_file_prefix))
+        continue;
+      if (strcmp(ext, ".frm") != 0)
+        continue;
+
+      String full_frm_path(db_path);
+      full_frm_path.append(FN_DIRSEP);
+      full_frm_path.append(db_file_info->name);
+      enum legacy_db_type db_type;
+      frm_type_enum type = dd_frm_type(thd, full_frm_path.c_ptr(), &db_type);
+      if (type != FRMTYPE_TABLE)
+        continue;
+
+      if (db_type != DB_TYPE_ROCKSDB)
+        continue;
+
+      File frm_file = mysql_file_open(mrn_key_file_frm,
+                                      full_frm_path.c_ptr(),
+                                      O_WRONLY,
+                                      MYF(0));
+      if (frm_file < 0)
+        continue;
+
+      uchar db_type_buffer[1];
+      db_type_buffer[0] = static_cast<uchar>(mroonga_db_type);
+      mysql_file_pwrite(frm_file,
+                        db_type_buffer,
+                        sizeof(db_type_buffer),
+                        3,
+                        MYF(0));
+      mysql_file_close(frm_file, MYF(0));
+    }
+
+    my_dirend(db_dir);
+  }
+
+  my_dirend(data_dir);
+}
+#endif
+
+static void
+mrn_fix_db_type()
+{
+#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+  mrn_fix_db_type_static_rocksdb_db_type();
+#endif
+}
+
 static int mrn_init(void *p)
 {
   // init handlerton
@@ -1984,9 +2086,17 @@ static int mrn_init(void *p)
 
 #ifdef MRN_HAVE_PSI_MEMORY_KEY
   {
-    const char *category = "ha_mroonga";
+    const char *category = "mroonga";
     int n_keys = array_elements(mrn_all_memory_keys);
     mysql_memory_register(category, mrn_all_memory_keys, n_keys);
+  }
+#endif
+
+#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+  {
+    const char *category = "mroonga";
+    int n_keys = array_elements(mrn_all_file_keys);
+    mysql_file_register(category, mrn_all_file_keys, n_keys);
   }
 #endif
 
@@ -2082,6 +2192,8 @@ static int mrn_init(void *p)
 #ifdef MRN_USE_MYSQL_DATA_HOME
   mrn::PathMapper::default_mysql_data_home_path = mysql_data_home;
 #endif
+
+  mrn_fix_db_type();
 
   return 0;
 
