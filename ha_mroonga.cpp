@@ -1921,6 +1921,11 @@ mrn_fix_db_type_static_rocksdb_db_type()
 
   THD *thd = current_thd;
 
+  handlerton *tokudb_hton = ha_resolve_by_legacy_type(thd, DB_TYPE_TOKUDB);
+  if (tokudb_hton) {
+    return;
+  }
+
   handlerton *rocksdb_hton = ha_resolve_by_legacy_type(thd, DB_TYPE_ROCKSDB);
   if (rocksdb_hton) {
     return;
@@ -1970,7 +1975,10 @@ mrn_fix_db_type_static_rocksdb_db_type()
       if (type != FRMTYPE_TABLE)
         continue;
 
-      if (db_type != DB_TYPE_ROCKSDB)
+      bool is_target_frm =
+        ((db_type == DB_TYPE_TOKUDB && !tokudb_hton) ||
+         (db_type == DB_TYPE_ROCKSDB && !rocksdb_hton));
+      if (!is_target_frm)
         continue;
 
       File frm_file = mysql_file_open(mrn_key_file_frm,
