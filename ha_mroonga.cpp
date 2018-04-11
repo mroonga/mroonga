@@ -105,6 +105,10 @@
 #  include <create_options.h>
 #endif
 
+#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+#  include <mysql/psi/mysql_file.h>
+#endif
+
 // for debug
 #define MRN_CLASS_NAME "ha_mroonga"
 
