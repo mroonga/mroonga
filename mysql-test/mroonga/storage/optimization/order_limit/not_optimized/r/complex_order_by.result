@@ -1,0 +1,27 @@
+DROP TABLE IF EXISTS memos;
+FLUSH STATUS;
+SET NAMES UTF8;
+CREATE TABLE memos (
+id INT UNSIGNED,
+content TEXT,
+FULLTEXT INDEX(content)
+) DEFAULT CHARSET UTF8;
+INSERT INTO memos VALUES(1, 'Groonga is fast.');
+INSERT INTO memos VALUES(2, 'Mroonga is based on Groonga.');
+INSERT INTO memos VALUES(3, 'Groonga is embeddable full text search engine.');
+INSERT INTO memos VALUES(4, 'Mroonga is fast too.');
+SELECT *
+FROM memos
+WHERE MATCH(content) AGAINST('*D+ Groonga OR Mroonga' IN BOOLEAN MODE)
+ORDER BY 1 + 1,
+id,
+content
+LIMIT 3;
+id	content
+1	Groonga is fast.
+2	Mroonga is based on Groonga.
+3	Groonga is embeddable full text search engine.
+SHOW STATUS LIKE 'mroonga_fast_order_limit';
+Variable_name	Value
+Mroonga_fast_order_limit	0
+DROP TABLE memos;

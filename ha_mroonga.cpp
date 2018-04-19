@@ -10827,7 +10827,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       mrn_fast_order_limit++;
     } else {
       for (int j = 0; j < i; ++j) {
-        grn_obj_unlink(ctx, sort_keys[j]->key);
+        grn_obj_unlink(ctx, (*sort_keys)[j].key);
       }
       my_free(*sort_keys);
       *sort_keys = NULL;
