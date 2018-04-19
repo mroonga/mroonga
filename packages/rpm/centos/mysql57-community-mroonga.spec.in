@@ -24,13 +24,14 @@
 
 Name:		mysql57-community-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
 License:	LGPLv2.1
 URL:		http://mroonga.org/
 Source0:	http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
+Patch0:		https://github.com/mroonga/mroonga/commit/a48c7f126f5b99d45a09c2202ef6a8c0c4a1d9e2.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	groonga-devel >= %{groonga_required_version}
@@ -70,6 +71,8 @@ if [ ! -f ../../SRPMS/$srpm ]; then
     wget --continue -O ../../SRPMS/$srpm %{_mysql_download_base_url}/$srpm
     rpm -Uvh ../../SRPMS/$srpm
 fi
+
+%patch0 -p1
 
 %build
 mysql_source=../mysql-%{_mysql_version}/mysql-%{_mysql_version}
@@ -217,6 +220,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Apr 19 2018 Kouhei Sutou <kou@clear-code.com> - 8.01-2
+- apply a patch to fix crash bug.
+
 * Thu Mar 29 2018 Kentaro Hayashi <hayashi@clear-code.com> - 8.01-1
 - new upstream release.
 

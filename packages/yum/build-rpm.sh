@@ -60,6 +60,7 @@ rpmbuild_options=""
 cd
 
 run cp /vagrant/tmp/${PACKAGE}-${VERSION}.* rpmbuild/SOURCES/
+(cd rpmbuild/SOURCES/ && run wget https://github.com/mroonga/mroonga/commit/a48c7f126f5b99d45a09c2202ef6a8c0c4a1d9e2.patch)
 run cp /vagrant/tmp/${distribution}/*.spec rpmbuild/SPECS/
 
 package_name=$(cd rpmbuild/SPECS; echo *.spec | sed -e 's/\.spec$//g')
