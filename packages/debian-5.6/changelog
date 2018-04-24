@@ -1,3 +1,9 @@
+mroonga-5.6 (8.02-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Thu, 29 Mar 2018 00:00:00 +0900
+
 mroonga-5.6 (8.01-2) unstable; urgency=medium
 
   * Fix stall issue during processing .postinst by piped output of systemctl status.
