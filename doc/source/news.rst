@@ -5,6 +5,50 @@
 News
 ====
 
+.. _release-8-02:
+
+Release 8.02 - 2018-04-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/debian`] Supported i386 for Jessie.
+
+* Suppress meaningless "duplicated unique id" error log. [GitHub#197]
+
+* [developer][test] Supported `--record` option.
+
+* [:doc:`/install/centos`] Use `groonga-release-latest` instead of `groonga-release-X.X.X`.
+
+* [:doc:`/tutorial/installation_check`] Added version check howto.
+
+* [:doc:`/install/centos`][percona] Supported upgrading from "< 5.6.34" and "< 5.7.21".
+  [groonga-dev,04599][Reported by Takashi Kinoshita][Looked into by Satoshi Mitani]
+
+* [:doc:`/install/centos`] Supported MySQL 5.6.40 and 5.7.22.
+
+* [:doc:`/install/centos`] Supported Percona Server 5.7.21.
+
+Fixes
+^^^^^
+
+* Fixed a crash bug when some complex condition in `ORDER BY` such as `ORDER BY 1 + 1, id, content`.
+
+* Fixed a bug when `MATCH AGAINST AND (x = 1 OR x = 2)`.
+  [Gitter/ja:5ae014842b9dfdbc3ac7ce1f][Reported by colt27]
+
+* Fixed a memory leak.
+
+Thanks
+^^^^^^
+
+* Takashi Kinoshita
+
+* Satoshi Mitani
+
+* colt27
+
 .. _release-8-01:
 
 Release 8.01 - 2018-03-29
