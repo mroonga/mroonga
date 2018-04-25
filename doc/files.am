@@ -239,11 +239,12 @@ html_files_relative_from_locale_dir = \
 	html/_static/comment-close.png \
 	html/_static/comment.png \
 	html/_static/doctools.js \
+	html/_static/documentation_options.js \
 	html/_static/down-pressed.png \
 	html/_static/down.png \
 	html/_static/favicon.ico \
 	html/_static/file.png \
-	html/_static/jquery-3.1.0.js \
+	html/_static/jquery-3.2.1.js \
 	html/_static/jquery.js \
 	html/_static/logo.png \
 	html/_static/minus.png \
