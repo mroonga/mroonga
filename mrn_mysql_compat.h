@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -283,6 +283,8 @@
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_THD_DB_PATH(thd) ((thd)->db().str)
+#elif defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#  define MRN_THD_DB_PATH(thd) ((thd)->db.str)
 #else
 #  define MRN_THD_DB_PATH(thd) ((thd)->db)
 #endif
