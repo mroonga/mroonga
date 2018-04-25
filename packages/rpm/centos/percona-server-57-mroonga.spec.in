@@ -1,8 +1,8 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
 %define mysql_version_default 5.7.21
-%define percona_server_version_default 20
-%define rpm_release_default 1
+%define percona_server_version_default 21
+%define rpm_release_default 2
 %define mysql_dist_default    %{?dist}
 %define mysql_download_base_url_default http://repo.percona.com/centos/%{_centos_ver}/SRPMS
 %define mysql_spec_file_default percona-server.spec
