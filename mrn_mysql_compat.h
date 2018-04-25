@@ -352,14 +352,21 @@
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
-#  if MYSQL_VERSION_ID >= 100104
-#    define mrn_init_sql_alloc(thd, mem_root)                           \
+#  if MYSQL_VERSION_ID >= 100306
+#    define mrn_init_sql_alloc(thd, name, mem_root)                     \
+  init_sql_alloc(mem_root,                                              \
+                 name,                                                  \
+                 TABLE_ALLOC_BLOCK_SIZE,                                \
+                 0,                                                     \
+                 MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
+#  elif MYSQL_VERSION_ID >= 100104
+#    define mrn_init_sql_alloc(thd, name, mem_root)                     \
   init_sql_alloc(mem_root,                                              \
                  TABLE_ALLOC_BLOCK_SIZE,                                \
                  0,                                                     \
                  MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
 #  else
-#    define mrn_init_sql_alloc(thd, mem_root)           \
+#    define mrn_init_sql_alloc(thd, name, mem_root)      \
   init_sql_alloc(mem_root,                              \
                  TABLE_ALLOC_BLOCK_SIZE,                \
                  0,                                     \
@@ -367,13 +374,13 @@
 #  endif
 #else
 #  if MYSQL_VERSION_ID >= 50709
-#    define mrn_init_sql_alloc(thd, mem_root)           \
+#    define mrn_init_sql_alloc(thd, name, mem_root)     \
   init_sql_alloc(mrn_memory_key,                        \
                  mem_root,                              \
                  TABLE_ALLOC_BLOCK_SIZE,                \
                  0)
 #  else
-#    define mrn_init_sql_alloc(thd, mem_root)           \
+#    define mrn_init_sql_alloc(thd, name, mem_root)     \
   init_sql_alloc(mem_root,                              \
                  TABLE_ALLOC_BLOCK_SIZE,                \
                  0)

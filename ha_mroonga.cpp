@@ -15106,7 +15106,9 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   }
   memcpy(wrap_altered_table, altered_table, sizeof(TABLE));
   memcpy(wrap_altered_table_share, altered_table->s, sizeof(TABLE_SHARE));
-  mrn_init_sql_alloc(ha_thd(), &(wrap_altered_table_share->mem_root));
+  mrn_init_sql_alloc(ha_thd(),
+                     "mroonga::wrap-altered-table-share",
+                     &(wrap_altered_table_share->mem_root));
 
   n_keys = ha_alter_info->index_drop_count;
   for (i = 0; i < n_keys; ++i) {
