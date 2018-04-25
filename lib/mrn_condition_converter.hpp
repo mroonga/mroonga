@@ -38,7 +38,7 @@ namespace mrn {
     unsigned int count_match_against(const Item *item);
     // caller must check "where" can be convertable by
     // is_convertable(). This method doesn't validate "where".
-    void convert(const Item *where, grn_obj *expression, bool have_condition);
+    void convert(const Item *where, grn_obj *expression);
 
   private:
     enum NormalizedType {
@@ -78,12 +78,10 @@ namespace mrn {
     NormalizedType normalize_field_type(enum_field_types field_type);
 
     bool convert(const Item_cond *cond_item,
-                 grn_obj *expression,
-                 bool have_condition);
+                 grn_obj *expression);
     bool convert(const Item_func *func_item,
                  grn_obj *expression,
-                 bool have_condition,
-                 grn_operator &sub_logical_operator);
+                 bool have_condition);
 
     bool convert_binary_operation(const Item_func *func_item,
                                   grn_obj *expression,
@@ -91,8 +89,7 @@ namespace mrn {
     bool convert_between(const Item_func *func_item, grn_obj *expression);
     bool convert_in(const Item_func *func_item,
                     grn_obj *expression,
-                    bool have_condition,
-                    grn_operator &sub_logical_operator);
+                    bool have_condition);
     void append_field_value(const Item_field *field_item,
                             grn_obj *expression);
     void append_const_item(const Item_field *field_item,

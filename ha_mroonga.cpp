@@ -5796,7 +5796,7 @@ int ha_mroonga::storage_rnd_init(bool scan)
                                 expression,
                                 expression_variable);
       mrn::ConditionConverter converter(ctx, grn_table, true);
-      converter.convert(pushed_cond, expression, false);
+      converter.convert(pushed_cond, expression);
       condition_push_down_result = grn_table_select(ctx,
                                                     grn_table,
                                                     expression,
@@ -8828,7 +8828,7 @@ void ha_mroonga::generic_ft_init_ext_add_conditions(struct st_mrn_ft_info *info,
 
   bool is_storage_mode = !(share->wrapper_mode);
   mrn::ConditionConverter converter(info->ctx, grn_table, is_storage_mode);
-  converter.convert(pushed_cond, expression, true);
+  converter.convert(pushed_cond, expression);
 
   DBUG_VOID_RETURN;
 }

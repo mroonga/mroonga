@@ -695,8 +695,7 @@ namespace mrn {
   }
 
   void ConditionConverter::convert(const Item *where,
-                                   grn_obj *expression,
-                                   bool have_condition) {
+                                   grn_obj *expression) {
     MRN_DBUG_ENTER_METHOD();
 
     if (!where) {
@@ -705,19 +704,10 @@ namespace mrn {
 
     switch (where->type()) {
     case Item::COND_ITEM:
-      convert(static_cast<const Item_cond *>(where), expression, have_condition);
+      convert(static_cast<const Item_cond *>(where), expression);
       break;
     case Item::FUNC_ITEM:
-      {
-        grn_operator logical_operator = GRN_OP_AND;
-        if (convert(static_cast<const Item_func *>(where),
-                    expression,
-                    have_condition,
-                    logical_operator) &&
-            have_condition) {
-          grn_expr_append_op(ctx_, expression, logical_operator, 2);
-        }
-      }
+      convert(static_cast<const Item_func *>(where), expression, false);
       break;
     default:
       break;
@@ -727,8 +717,7 @@ namespace mrn {
   }
 
   bool ConditionConverter::convert(const Item_cond *cond_item,
-                                   grn_obj *expression,
-                                   bool have_condition) {
+                                   grn_obj *expression) {
     MRN_DBUG_ENTER_METHOD();
 
     grn_operator logical_operator = GRN_OP_AND;
@@ -740,27 +729,33 @@ namespace mrn {
       const_cast<Item_cond *>(cond_item)->argument_list();
     List_iterator<Item> iterator(*sub_item_list);
     const Item *sub_item;
-    int n_conditions = have_condition ? 1 : 0;
-    bool added = false;
+    int n_conditions = 0;
     while ((sub_item = iterator++)) {
       switch (sub_item->type()) {
       case Item::COND_ITEM:
         if (convert(static_cast<const Item_cond *>(sub_item),
-                    expression,
-                    n_conditions > 0)) {
-          added = true;
+                    expression)) {
+          if (n_conditions > 0) {
+            grn_expr_append_op(ctx_, expression, logical_operator, 2);
+          }
           ++n_conditions;
         }
         break;
       case Item::FUNC_ITEM:
         {
-          grn_operator sub_logical_operator = logical_operator;
-          if (convert(static_cast<const Item_func *>(sub_item),
-                      expression,
-                      n_conditions > 0,
-                      sub_logical_operator)) {
-            added = true;
+          const Item_func *sub_func_item =
+            static_cast<const Item_func *>(sub_item);
+          if (convert(sub_func_item, expression, n_conditions > 0)) {
             if (n_conditions > 0) {
+              grn_operator sub_logical_operator = logical_operator;
+              if (sub_logical_operator == GRN_OP_AND &&
+                  sub_func_item->functype() == Item_func::IN_FUNC) {
+                const Item_func_in *sub_in_item =
+                  static_cast<const Item_func_in *>(sub_func_item);
+                if (sub_in_item->negated) {
+                  sub_logical_operator = GRN_OP_AND_NOT;
+                }
+              }
               grn_expr_append_op(ctx_, expression, sub_logical_operator, 2);
             }
             ++n_conditions;
@@ -772,13 +767,12 @@ namespace mrn {
       }
     }
 
-    DBUG_RETURN(added);
+    DBUG_RETURN(n_conditions > 0);
   }
 
   bool ConditionConverter::convert(const Item_func *func_item,
                                    grn_obj *expression,
-                                   bool have_condition,
-                                   grn_operator &sub_logical_operator) {
+                                   bool have_condition) {
     MRN_DBUG_ENTER_METHOD();
 
     bool added = false;
@@ -804,11 +798,10 @@ namespace mrn {
       added = convert_between(func_item, expression);
       break;
     case Item_func::IN_FUNC:
-      added = convert_in(func_item,
-                         expression,
-                         have_condition,
-                         sub_logical_operator);
+      added = convert_in(func_item, expression, have_condition);
       break;
+    case Item_func::FT_FUNC:
+      added = true;
     default:
       break;
     }
@@ -866,18 +859,13 @@ namespace mrn {
 
   bool ConditionConverter::convert_in(const Item_func *func_item,
                                       grn_obj *expression,
-                                      bool have_condition,
-                                      grn_operator &sub_logical_operator) {
+                                      bool have_condition) {
     MRN_DBUG_ENTER_METHOD();
 
     const Item_func_in *in_item = static_cast<const Item_func_in *>(func_item);
 
     if (!have_condition && in_item->negated) {
       grn_expr_append_const_bool(ctx_, expression, GRN_TRUE, GRN_OP_PUSH, 1);
-    }
-
-    if (sub_logical_operator == GRN_OP_AND && in_item->negated) {
-      sub_logical_operator = GRN_OP_AND_NOT;
     }
 
     Item **arguments = func_item->arguments();
