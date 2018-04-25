@@ -452,12 +452,6 @@ if test x"$enable_document" != x"no"; then
   if test x"$enable_document" = x"yes"; then
     AC_PATH_PROG(SPHINX_BUILD, sphinx-build, [])
     if test -n "$SPHINX_BUILD"; then
-      sphinx_build_version=`"$SPHINX_BUILD" --version`
-      if ! echo "$sphinx_build_version" | grep -q ' 1\.[[2-6]]'; then
-	AC_MSG_ERROR([
-sphinx-build is old: $sphinx_build_version
-Sphinx 1.2 or later is required.])
-      fi
       document_available=yes
       document_buildable=yes
     else
