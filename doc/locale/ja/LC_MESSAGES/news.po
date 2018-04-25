@@ -21,6 +21,80 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+#, fuzzy
+msgid "Release 8.02 - 2018-04-29"
+msgstr "8.01リリース - 2018-03-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+#, fuzzy
+msgid "[:doc:`/install/debian`] Supported i386 for Jessie."
+msgstr "[:doc:`/install/debian`] Debian 9 (stretch)をサポートしました。"
+
+msgid "Suppress meaningless \"duplicated unique id\" error log. [GitHub#197]"
+msgstr ""
+
+msgid "[developer][test] Supported `--record` option."
+msgstr ""
+
+msgid ""
+"[:doc:`/install/centos`] Use `groonga-release-latest` instead of `groonga-"
+"release-X.X.X`."
+msgstr ""
+
+msgid "[:doc:`/tutorial/installation_check`] Added version check howto."
+msgstr ""
+
+msgid ""
+"[:doc:`/install/centos`][percona] Supported upgrading from \"< 5.6.34\" and "
+"\"< 5.7.21\". [groonga-dev,04599][Reported by Takashi Kinoshita][Looked into "
+"by Satoshi Mitani]"
+msgstr ""
+
+# cfc3f03dda4244eb9b5d075677d18c88
+#, fuzzy
+msgid "[:doc:`/install/centos`] Supported MySQL 5.6.40 and 5.7.22."
+msgstr "[:doc:`/install/centos`] 最新のMySQL 5.6をサポートしました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+#, fuzzy
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.7.21."
+msgstr "[:doc:`/install/centos`] 最新のPercona Server 5.6をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a crash bug when some complex condition in `ORDER BY` such as `ORDER "
+"BY 1 + 1, id, content`."
+msgstr ""
+
+msgid ""
+"Fixed a bug when `MATCH AGAINST AND (x = 1 OR x = 2)`. [Gitter/"
+"ja:5ae014842b9dfdbc3ac7ce1f][Reported by colt27]"
+msgstr ""
+
+#, fuzzy
+msgid "Fixed a memory leak."
+msgstr "[ストレージモード] メモリリークを修正。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+#, fuzzy
+msgid "Takashi Kinoshita"
+msgstr "河野隆志さん"
+
+# 0683aa1c35d44a35b1b31601d00fbd9a
+#, fuzzy
+msgid "Satoshi Mitani"
+msgstr "Satoshi MITANIさん"
+
+msgid "colt27"
+msgstr ""
+
 msgid "Release 8.01 - 2018-03-29"
 msgstr "8.01リリース - 2018-03-29"
 
@@ -32,9 +106,6 @@ msgstr ""
 "今回のリリースで、Mroongaをすでにインストールしている場合にはMySQLが自動的に"
 "再起動されます。これはMroongaが必要としている新しいバージョンのGroonga 8.0.1"
 "が、MySQLが再起動されるまで有効にならないためです。"
-
-msgid "Improvements"
-msgstr "改良"
 
 # 2cf79c00c0ec4896b9beffee50c10cc1
 msgid "[rpm][centos] Supported Percona Server 5.6.39. [Reported by @iiiiyyyy]"
@@ -54,9 +125,6 @@ msgstr ""
 
 msgid "[rpm][centos] Supported MariaDB 10.2.14."
 msgstr "[rpm][centos] MariaDB 10.2.14に対応しました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a bug that wrong cache for other database is used. If you create "
@@ -97,9 +165,6 @@ msgid ""
 msgstr ""
 "ORDER LIMITの最適化が意図せずORDER BY function()にも適用されてしまう不具合を"
 "修正しました。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "@iiiiyyyy"
 msgstr "@iiiiyyyyさん"
