@@ -28,7 +28,7 @@ Improvements
 
 * [:doc:`/install/centos`] Supported MySQL 5.6.40 and 5.7.22.
 
-* [:doc:`/install/centos`] Supported Percona Server 5.7.21.
+* [:doc:`/install/centos`] Supported Percona Server 5.7.21-21.
 
 Fixes
 ^^^^^
