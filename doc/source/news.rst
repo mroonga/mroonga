@@ -35,7 +35,8 @@ Fixes
 
 * Fixed a crash bug when some complex condition in `ORDER BY` such as `ORDER BY 1 + 1, id, content`.
 
-* Fixed a bug when `MATCH AGAINST AND (x = 1 OR x = 2)`.
+* Fixed a bug that `MATCH AGAINST` condition is ignored if SQL containing such as
+  `AND (x = 1 OR x = 2)` when condition push down is enabled.
   [Gitter/ja:5ae014842b9dfdbc3ac7ce1f][Reported by colt27]
 
 * Fixed a memory leak.
