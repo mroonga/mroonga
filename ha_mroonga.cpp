@@ -598,6 +598,11 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = "HA_EXTRA_STARTING_ORDERED_INDEX_SCAN";
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_FAKE_START_STMT
+  case HA_EXTRA_FAKE_START_STMT:
+    inspected = "HA_EXTRA_FAKE_START_STMT";
+    break;
+#endif
   }
   return inspected;
 }
