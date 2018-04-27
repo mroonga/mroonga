@@ -542,15 +542,15 @@
 #if ((defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203)) || \
   (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50711)
 #  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN \
-  Alter_inplace_info::ADD_VIRTUAL_COLUMN
+  MRN_ALTER_INPLACE_INFO_FLAG(ADD_VIRTUAL_COLUMN)
 #  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN \
-  Alter_inplace_info::ADD_STORED_BASE_COLUMN
+  MRN_ALTER_INPLACE_INFO_FLAG(ADD_STORED_BASE_COLUMN)
 #  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN \
-  Alter_inplace_info::ADD_STORED_GENERATED_COLUMN
+  MRN_ALTER_INPLACE_INFO_FLAG(ADD_STORED_GENERATED_COLUMN)
 #else
 #  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN 0
 #  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN \
-  Alter_inplace_info::ADD_COLUMN
+  MRN_ALTER_INPLACE_INFO_FLAG(ADD_COLUMN)
 #  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN 0
 #endif
 
@@ -605,4 +605,19 @@
       (MYSQL_VERSION_ID >= 50721)
 #    define MRN_HAVE_DB_TYPE_ROCKSDB
 #  endif
+#endif
+
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+typedef alter_table_operations mrn_alter_flags;
+typedef alter_table_operations mrn_alter_table_flags;
+#  define MRN_ALTER_INPLACE_INFO_FLAG(name) ALTER_ ## name
+#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) ALTER_ ## name
+#  define MRN_ALTER_INFO_FLAG(name) ALTER_ ## name
+#else
+typedef Alter_inplace_info::HA_ALTER_FLAGS mrn_alter_flags;
+typedef uint mrn_alter_table_flags;
+#  define MRN_ALTER_INPLACE_INFO_FLAG(name) Alter_inplace_info:: ## name
+#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) \
+  Alter_inplace_info::ALTER_ ## name
+#  define MRN_ALTER_INFO_FLAG(name) Alter_info::ALTER_ ## name
 #endif

@@ -1851,15 +1851,16 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 #endif
 
 #ifdef MRN_HAVE_HTON_ALTER_TABLE_FLAGS
-static uint mrn_alter_table_flags(uint flags)
+static mrn_alter_table_flags
+mrn_hton_alter_table_flags(mrn_alter_table_flags flags)
 {
-  uint alter_flags = 0;
+  mrn_alter_table_flags alter_flags = 0;
 #ifdef HA_INPLACE_ADD_INDEX_NO_READ_WRITE
   bool is_inplace_index_change;
 #  ifdef MRN_HAVE_ALTER_INFO
-  is_inplace_index_change = (((flags & Alter_info::ALTER_ADD_INDEX) &&
-                              (flags & Alter_info::ALTER_DROP_INDEX)) ||
-                             (flags & Alter_info::ALTER_CHANGE_COLUMN));
+  is_inplace_index_change = (((flags & MRN_ALTER_INFO_FLAG(ADD_INDEX)) &&
+                              (flags & MRN_ALTER_INFO_FLAG(DROP_INDEX))) ||
+                             (flags & MRN_ALTER_INFO_FLAG(CHANGE_COLUMN)));
 #  else
   is_inplace_index_change = (((flags & ALTER_ADD_INDEX) &&
                               (flags & ALTER_DROP_INDEX)) ||
@@ -2028,7 +2029,7 @@ static int mrn_init(void *p)
   hton->close_connection = mrn_close_connection;
   hton->flush_logs = mrn_flush_logs;
 #ifdef MRN_HAVE_HTON_ALTER_TABLE_FLAGS
-  hton->alter_table_flags = mrn_alter_table_flags;
+  hton->alter_table_flags = mrn_hton_alter_table_flags;
 #endif
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
   hton->table_options = mrn_table_options;
@@ -15065,23 +15066,23 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
   }
   if (
-    (ha_alter_info->handler_flags & Alter_inplace_info::ADD_INDEX) &&
+    (ha_alter_info->handler_flags & MRN_ALTER_INPLACE_INFO_FLAG(ADD_INDEX)) &&
     (ha_alter_info->handler_flags &
       (
-        Alter_inplace_info::ADD_COLUMN |
-        Alter_inplace_info::DROP_COLUMN |
+        MRN_ALTER_INPLACE_INFO_FLAG(ADD_COLUMN) |
+        MRN_ALTER_INPLACE_INFO_FLAG(DROP_COLUMN) |
         MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE |
         MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_ORDER |
-        Alter_inplace_info::ALTER_COLUMN_NULLABLE |
-        Alter_inplace_info::ALTER_COLUMN_NOT_NULLABLE |
-        Alter_inplace_info::ALTER_COLUMN_STORAGE_TYPE |
-        Alter_inplace_info::ALTER_COLUMN_COLUMN_FORMAT
+        MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NULLABLE) |
+        MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NOT_NULLABLE) |
+        MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_STORAGE_TYPE) |
+        MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_COLUMN_FORMAT)
       )
     )
   ) {
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
   }
-  if (ha_alter_info->handler_flags & Alter_inplace_info::ALTER_RENAME)
+  if (ha_alter_info->handler_flags & MRN_ALTER_INPLACE_INFO_ALTER_FLAG(RENAME))
   {
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
   }
@@ -15122,7 +15123,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
     }
   }
   if (!alter_index_drop_count) {
-    alter_handler_flags &= ~Alter_inplace_info::DROP_INDEX;
+    alter_handler_flags &= ~MRN_ALTER_INPLACE_INFO_FLAG(DROP_INDEX);
   }
   n_keys = ha_alter_info->index_add_count;
   for (i = 0; i < n_keys; ++i) {
@@ -15137,7 +15138,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
     }
   }
   if (!alter_index_add_count) {
-    alter_handler_flags &= ~Alter_inplace_info::ADD_INDEX;
+    alter_handler_flags &= ~MRN_ALTER_INPLACE_INFO_FLAG(ADD_INDEX);
   }
   uint add_index_pos = 0;
   n_keys = ha_alter_info->key_count;
@@ -15185,19 +15186,19 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
   Alter_inplace_info *ha_alter_info)
 {
   MRN_DBUG_ENTER_METHOD();
-  Alter_inplace_info::HA_ALTER_FLAGS explicitly_unsupported_flags =
-    Alter_inplace_info::ADD_FOREIGN_KEY |
-    Alter_inplace_info::DROP_FOREIGN_KEY;
-  Alter_inplace_info::HA_ALTER_FLAGS supported_flags =
-    Alter_inplace_info::ADD_INDEX |
-    Alter_inplace_info::DROP_INDEX |
-    Alter_inplace_info::ADD_UNIQUE_INDEX |
-    Alter_inplace_info::DROP_UNIQUE_INDEX |
+  mrn_alter_flags explicitly_unsupported_flags =
+    MRN_ALTER_INPLACE_INFO_FLAG(ADD_FOREIGN_KEY) |
+    MRN_ALTER_INPLACE_INFO_FLAG(DROP_FOREIGN_KEY);
+  mrn_alter_flags supported_flags =
+    MRN_ALTER_INPLACE_INFO_FLAG(ADD_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(DROP_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(ADD_UNIQUE_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(DROP_UNIQUE_INDEX) |
     MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN |
     MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN |
     MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN |
-    Alter_inplace_info::DROP_COLUMN |
-    Alter_inplace_info::ALTER_COLUMN_NAME;
+    MRN_ALTER_INPLACE_INFO_FLAG(DROP_COLUMN) |
+    MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NAME);
   if (ha_alter_info->handler_flags & explicitly_unsupported_flags) {
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
   } else if (ha_alter_info->handler_flags & supported_flags) {
@@ -15946,41 +15947,41 @@ bool ha_mroonga::storage_inplace_alter_table(
     have_error = true;
   }
 
-  Alter_inplace_info::HA_ALTER_FLAGS drop_index_related_flags =
-    Alter_inplace_info::DROP_INDEX |
-    Alter_inplace_info::DROP_UNIQUE_INDEX |
-    Alter_inplace_info::DROP_PK_INDEX;
+  mrn_alter_flags drop_index_related_flags =
+    MRN_ALTER_INPLACE_INFO_FLAG(DROP_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(DROP_UNIQUE_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(DROP_PK_INDEX);
   if (!have_error &&
       (ha_alter_info->handler_flags & drop_index_related_flags)) {
     have_error = storage_inplace_alter_table_drop_index(altered_table,
                                                         ha_alter_info);
   }
 
-  Alter_inplace_info::HA_ALTER_FLAGS add_column_related_flags =
-    Alter_inplace_info::ADD_COLUMN;
+  mrn_alter_flags add_column_related_flags =
+    MRN_ALTER_INPLACE_INFO_FLAG(ADD_COLUMN);
   if (!have_error &&
       (ha_alter_info->handler_flags & add_column_related_flags)) {
     have_error = storage_inplace_alter_table_add_column(altered_table, ha_alter_info);
   }
 
-  Alter_inplace_info::HA_ALTER_FLAGS drop_column_related_flags =
-    Alter_inplace_info::DROP_COLUMN;
+  mrn_alter_flags drop_column_related_flags =
+    MRN_ALTER_INPLACE_INFO_FLAG(DROP_COLUMN);
   if (!have_error &&
       (ha_alter_info->handler_flags & drop_column_related_flags)) {
     have_error = storage_inplace_alter_table_drop_column(altered_table, ha_alter_info);
   }
 
-  Alter_inplace_info::HA_ALTER_FLAGS rename_column_related_flags =
-    Alter_inplace_info::ALTER_COLUMN_NAME;
+  mrn_alter_flags rename_column_related_flags =
+    MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NAME);
   if (!have_error &&
       (ha_alter_info->handler_flags & rename_column_related_flags)) {
     have_error = storage_inplace_alter_table_rename_column(altered_table, ha_alter_info);
   }
 
-  Alter_inplace_info::HA_ALTER_FLAGS add_index_related_flags =
-    Alter_inplace_info::ADD_INDEX |
-    Alter_inplace_info::ADD_UNIQUE_INDEX |
-    Alter_inplace_info::ADD_PK_INDEX;
+  mrn_alter_flags add_index_related_flags =
+    MRN_ALTER_INPLACE_INFO_FLAG(ADD_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(ADD_UNIQUE_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(ADD_PK_INDEX);
   if (!have_error &&
       (ha_alter_info->handler_flags & add_index_related_flags)) {
     have_error = storage_inplace_alter_table_add_index(altered_table,
@@ -16086,9 +16087,10 @@ void ha_mroonga::notify_table_changed()
   DBUG_VOID_RETURN;
 }
 #else
-uint ha_mroonga::wrapper_alter_table_flags(uint flags)
+mrn_alter_table_flags
+ha_mroonga::wrapper_alter_table_flags(mrn_alter_table_flags flags)
 {
-  uint res;
+  mrn_alter_table_flags res;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
@@ -16098,17 +16100,19 @@ uint ha_mroonga::wrapper_alter_table_flags(uint flags)
   DBUG_RETURN(res);
 }
 
-uint ha_mroonga::storage_alter_table_flags(uint flags)
+mrn_alter_table_flags
+ha_mroonga::storage_alter_table_flags(mrn_alter_table_flags flags)
 {
   MRN_DBUG_ENTER_METHOD();
-  uint res = handler::alter_table_flags(flags);
+  mrn_alter_table_flags res = handler::alter_table_flags(flags);
   DBUG_RETURN(res);
 }
 
-uint ha_mroonga::alter_table_flags(uint flags)
+mrn_alter_table_flags
+ha_mroonga::alter_table_flags(mrn_alter_table_flags flags)
 {
   MRN_DBUG_ENTER_METHOD();
-  uint res;
+  mrn_alter_table_flags res;
   if (share->wrapper_mode)
   {
     res = wrapper_alter_table_flags(flags);

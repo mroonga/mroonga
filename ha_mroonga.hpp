@@ -230,14 +230,14 @@ extern "C" {
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50709) ||   \
   (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203)
 #  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE \
-  Alter_inplace_info::ALTER_STORED_COLUMN_TYPE
+  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(STORED_COLUMN_TYPE)
 #  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_ORDER \
-  Alter_inplace_info::ALTER_STORED_COLUMN_ORDER
+  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(STORED_COLUMN_ORDER)
 #else
 #  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE \
-  Alter_inplace_info::ALTER_COLUMN_TYPE
+  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_TYPE)
 #  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_ORDER \
-  Alter_inplace_info::ALTER_COLUMN_ORDER
+  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_ORDER)
 #endif
 
 #if MYSQL_VERSION_ID >= 50700 && !defined(MRN_MARIADB_P)
@@ -350,7 +350,7 @@ private:
   handler_add_index *hnd_add_index;
 #endif
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
-  Alter_inplace_info::HA_ALTER_FLAGS alter_handler_flags;
+  mrn_alter_flags alter_handler_flags;
   KEY         *alter_key_info_buffer;
   uint        alter_key_count;
   uint        alter_index_drop_count;
@@ -577,7 +577,7 @@ public:
   check_if_supported_inplace_alter(TABLE *altered_table,
                                    Alter_inplace_info *ha_alter_info);
 #else
-  uint alter_table_flags(uint flags);
+  mrn_alter_table_flags alter_table_flags(mrn_alter_table_flags flags);
 #  ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                 handler_add_index **add);
@@ -1245,8 +1245,8 @@ private:
   void wrapper_notify_table_changed();
   void storage_notify_table_changed();
 #else
-  uint wrapper_alter_table_flags(uint flags);
-  uint storage_alter_table_flags(uint flags);
+  mrn_alter_table_flags wrapper_alter_table_flags(mrn_alter_table_flags flags);
+  mrn_alter_table_flags storage_alter_table_flags(mrn_alter_table_flags flags);
 #  ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
   int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
                         handler_add_index **add);
