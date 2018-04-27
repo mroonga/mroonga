@@ -624,3 +624,15 @@ typedef uint mrn_alter_table_flags;
   Alter_inplace_info::ALTER_ ## name
 #  define MRN_ALTER_INFO_FLAG(name) Alter_info::ALTER_ ## name
 #endif
+
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#  define MRN_TABLE_LIST_TABLE_NAME_DATA(table_list)    \
+  (table_list)->table_name.str
+#  define MRN_TABLE_LIST_TABLE_NAME_LENGTH(table_list)  \
+  (table_list)->table_name.length
+#else
+#  define MRN_TABLE_LIST_TABLE_NAME_DATA(table_list)    \
+  (table_list)->table_name
+#  define MRN_TABLE_LIST_TABLE_NAME_LENGTH(table_list)  \
+  (table_list)->table_name_length
+#endif

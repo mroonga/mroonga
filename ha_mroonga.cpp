@@ -3283,10 +3283,12 @@ int ha_mroonga::create_share_for_create() const
   mrn_init_alloc_root(&mem_root_for_create, "mroonga::create", 1024, 0, MYF(0));
   analyzed_for_create = true;
   if (table_list) {
-    share_for_create.table_name = mrn_my_strndup(table_list->table_name,
-                                                 table_list->table_name_length,
-                                                 MYF(MY_WME));
-    share_for_create.table_name_length = table_list->table_name_length;
+    share_for_create.table_name =
+      mrn_my_strndup(MRN_TABLE_LIST_TABLE_NAME_DATA(table_list),
+                     MRN_TABLE_LIST_TABLE_NAME_LENGTH(table_list),
+                     MYF(MY_WME));
+    share_for_create.table_name_length =
+      MRN_TABLE_LIST_TABLE_NAME_LENGTH(table_list);
   }
   share_for_create.table_share = &table_share_for_create;
   table_for_create.s = &table_share_for_create;
