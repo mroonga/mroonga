@@ -636,3 +636,35 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_TABLE_LIST_TABLE_NAME_LENGTH(table_list)  \
   (table_list)->table_name_length
 #endif
+
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#  define mrn_table_list_init_one_table(table_list,                     \
+                                        db_name,                        \
+                                        db_name_length,                 \
+                                        table_name,                     \
+                                        table_name_length,              \
+                                        alias,                          \
+                                        lock_type) do {                 \
+    LEX_CSTRING db_name_ = {db_name, db_name_length};                   \
+    LEX_CSTRING table_name_ = {table_name, table_name_length};          \
+    LEX_CSTRING alias_ = {alias, strlen(alias)};                        \
+    (table_list)->init_one_table(&db_name_,                             \
+                                 &table_name_,                          \
+                                 &alias_,                               \
+                                 lock_type);                            \
+  } while(false)
+#else
+#  define mrn_table_list_init_one_table(table_list,             \
+                                        db_name,                \
+                                        db_name_length,         \
+                                        table_name,             \
+                                        table_name_length,      \
+                                        alias,                  \
+                                        lock_type)              \
+  (table_list)->init_one_table(db_name,                         \
+                               db_name_length,                  \
+                               table_name,                      \
+                               table_name_length,               \
+                               alias,                           \
+                               lock_type)
+#endif
