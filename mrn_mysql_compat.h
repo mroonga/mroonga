@@ -165,17 +165,17 @@
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
-#  define mrn_init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG) \
-  init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG)
+#  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags) \
+  init_alloc_root(root, name, block_size, pre_alloc_size, flags)
 #elif defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
-#  define mrn_init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG) \
-  init_alloc_root(PTR, SZ1, SZ2, FLAG)
+#  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags) \
+  init_alloc_root(root, block_size, pre_alloc_size, flags)
 #elif MYSQL_VERSION_ID >= 50706
-#  define mrn_init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG) \
-  init_alloc_root(mrn_memory_key, PTR, SZ1, SZ2)
+#  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags) \
+  init_alloc_root(mrn_memory_key, root, block_size, pre_alloc_size)
 #else
-#  define mrn_init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG) \
-  init_alloc_root(PTR, SZ1, SZ2)
+#  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags) \
+  init_alloc_root(root, block_size, pre_alloc_size)
 #endif
 
 #if MYSQL_VERSION_ID < 100002 || !defined(MRN_MARIADB_P)
