@@ -164,14 +164,17 @@
   typedef MYSQL_LEX_STRING mrn_thd_lex_string;
 #endif
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
-#  define mrn_init_alloc_root(PTR, SZ1, SZ2, FLAG) \
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#  define mrn_init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG) \
+  init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG)
+#elif defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
+#  define mrn_init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG) \
   init_alloc_root(PTR, SZ1, SZ2, FLAG)
 #elif MYSQL_VERSION_ID >= 50706
-#  define mrn_init_alloc_root(PTR, SZ1, SZ2, FLAG) \
+#  define mrn_init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG) \
   init_alloc_root(mrn_memory_key, PTR, SZ1, SZ2)
 #else
-#  define mrn_init_alloc_root(PTR, SZ1, SZ2, FLAG) \
+#  define mrn_init_alloc_root(PTR, NAME, SZ1, SZ2, FLAG) \
   init_alloc_root(PTR, SZ1, SZ2)
 #endif
 

@@ -3280,7 +3280,7 @@ int ha_mroonga::create_share_for_create() const
       }
     }
   }
-  mrn_init_alloc_root(&mem_root_for_create, 1024, 0, MYF(0));
+  mrn_init_alloc_root(&mem_root_for_create, "mroonga::create", 1024, 0, MYF(0));
   analyzed_for_create = true;
   if (table_list) {
     share_for_create.table_name = mrn_my_strndup(table_list->table_name,
@@ -4558,7 +4558,7 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
     }
   }
 
-  mrn_init_alloc_root(&mem_root, 1024, 0, MYF(0));
+  mrn_init_alloc_root(&mem_root, "mroonga::wrapper", 1024, 0, MYF(0));
   wrap_key_info = mrn_create_key_info_for_table(share, table, &error);
   if (error)
     DBUG_RETURN(error);
