@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -30,6 +30,9 @@
 
 // for debug
 #define MRN_CLASS_NAME "mrn::DatabaseManager"
+
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #ifdef WIN32
 #  include <direct.h>
