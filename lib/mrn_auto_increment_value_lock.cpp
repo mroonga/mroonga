@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,7 @@
 */
 
 #include "mrn_auto_increment_value_lock.hpp"
+#include <table.h>
 
 #if MYSQL_VERSION_ID >= 50500
 #  define AUTO_INCREMENT_VALUE_MUTEX(table_share) (&(table_share->LOCK_ha_data))
