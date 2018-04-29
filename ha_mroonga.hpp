@@ -233,21 +233,28 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
 #endif
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
+#  if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
 typedef alter_table_operations mrn_alter_flags;
 typedef alter_table_operations mrn_alter_table_flags;
-#  define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
+#    define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
   ALTER_ ## name
-#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) ALTER_ ## name
-#  define MRN_ALTER_INFO_FLAG(name) ALTER_ ## name
-#else
+#    define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) ALTER_ ## name
+#    define MRN_ALTER_INFO_FLAG(name) ALTER_ ## name
+#  else
 typedef Alter_inplace_info::HA_ALTER_FLAGS mrn_alter_flags;
-typedef uint mrn_alter_table_flags;
-#  define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
+#    define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
   alter_inplace_info_name
-#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) \
+#    define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) \
   Alter_inplace_info::ALTER_ ## name
-#  define MRN_ALTER_INFO_FLAG(name) Alter_info::ALTER_ ## name
+#    define MRN_ALTER_INFO_FLAG(name) Alter_info::ALTER_ ## name
+#  endif
+#endif
+
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+typedef alter_table_operations mrn_alter_flags;
+#else
+typedef uint mrn_alter_table_flags;
 #endif
 
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50709) ||   \
