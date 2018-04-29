@@ -15079,7 +15079,8 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
   }
   if (
-    (ha_alter_info->handler_flags & MRN_ALTER_INPLACE_INFO_FLAG(ADD_INDEX)) &&
+    (ha_alter_info->handler_flags &
+     MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX) &&
     (ha_alter_info->handler_flags &
       (
         MRN_ALTER_INPLACE_INFO_FLAG(ADD_COLUMN) |
@@ -15136,7 +15137,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
     }
   }
   if (!alter_index_drop_count) {
-    alter_handler_flags &= ~MRN_ALTER_INPLACE_INFO_FLAG(DROP_INDEX);
+    alter_handler_flags &= ~MRN_ALTER_INPLACE_INFO_ALTER_DROP_NON_UNIQUE_NON_PRIM_INDEX;
   }
   n_keys = ha_alter_info->index_add_count;
   for (i = 0; i < n_keys; ++i) {
@@ -15151,7 +15152,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
     }
   }
   if (!alter_index_add_count) {
-    alter_handler_flags &= ~MRN_ALTER_INPLACE_INFO_FLAG(ADD_INDEX);
+    alter_handler_flags &= ~MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX;
   }
   uint add_index_pos = 0;
   n_keys = ha_alter_info->key_count;
@@ -15211,7 +15212,9 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
     MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN |
     MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN |
     MRN_ALTER_INPLACE_INFO_FLAG(DROP_COLUMN) |
-    MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NAME);
+    MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NAME) |
+    MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX |
+    MRN_ALTER_INPLACE_INFO_ALTER_DROP_NON_UNIQUE_NON_PRIM_INDEX;
   if (ha_alter_info->handler_flags & explicitly_unsupported_flags) {
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
   } else if (ha_alter_info->handler_flags & supported_flags) {
@@ -15963,7 +15966,8 @@ bool ha_mroonga::storage_inplace_alter_table(
   mrn_alter_flags drop_index_related_flags =
     MRN_ALTER_INPLACE_INFO_FLAG(DROP_INDEX) |
     MRN_ALTER_INPLACE_INFO_FLAG(DROP_UNIQUE_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(DROP_PK_INDEX);
+    MRN_ALTER_INPLACE_INFO_FLAG(DROP_PK_INDEX) |
+    MRN_ALTER_INPLACE_INFO_ALTER_DROP_NON_UNIQUE_NON_PRIM_INDEX;
   if (!have_error &&
       (ha_alter_info->handler_flags & drop_index_related_flags)) {
     have_error = storage_inplace_alter_table_drop_index(altered_table,
@@ -15994,7 +15998,8 @@ bool ha_mroonga::storage_inplace_alter_table(
   mrn_alter_flags add_index_related_flags =
     MRN_ALTER_INPLACE_INFO_FLAG(ADD_INDEX) |
     MRN_ALTER_INPLACE_INFO_FLAG(ADD_UNIQUE_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(ADD_PK_INDEX);
+    MRN_ALTER_INPLACE_INFO_FLAG(ADD_PK_INDEX) |
+    MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX;
   if (!have_error &&
       (ha_alter_info->handler_flags & add_index_related_flags)) {
     have_error = storage_inplace_alter_table_add_index(altered_table,
