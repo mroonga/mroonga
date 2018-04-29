@@ -610,7 +610,7 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
 
 static uchar *mrn_open_tables_get_key(const uchar *record,
                                       size_t *length,
-                                      my_bool not_used __attribute__ ((unused)))
+                                      mrn_bool not_used __attribute__ ((unused)))
 {
   MRN_DBUG_ENTER_FUNCTION();
   MRN_SHARE *share = reinterpret_cast<MRN_SHARE *>(const_cast<uchar *>(record));
@@ -620,7 +620,7 @@ static uchar *mrn_open_tables_get_key(const uchar *record,
 
 static uchar *mrn_long_term_share_get_key(const uchar *record,
                                           size_t *length,
-                                          my_bool not_used __attribute__ ((unused)))
+                                          mrn_bool not_used __attribute__ ((unused)))
 {
   MRN_DBUG_ENTER_FUNCTION();
   MRN_LONG_TERM_SHARE *long_term_share =
@@ -708,7 +708,7 @@ static grn_logger mrn_logger = {
 
 static uchar *mrn_allocated_thds_get_key(const uchar *record,
                                          size_t *length,
-                                         my_bool not_used __attribute__ ((unused)))
+                                         mrn_bool not_used __attribute__ ((unused)))
 {
   MRN_DBUG_ENTER_FUNCTION();
   *length = sizeof(THD *);
@@ -11025,7 +11025,7 @@ long long int ha_mroonga::get_grn_time_from_timestamp_field(Field_timestamp *fie
   DBUG_PRINT("info", ("mroonga: my_time_t seconds=%ld", seconds));
   grn_time = GRN_TIME_PACK(seconds, micro_seconds);
 #else
-  my_bool is_null_value;
+  mrn_bool is_null_value;
   long seconds = field->get_timestamp(&is_null_value);
   DBUG_PRINT("info", ("mroonga: long seconds=%ld", seconds));
   grn_time = GRN_TIME_PACK(seconds, 0);
@@ -17710,15 +17710,15 @@ void ha_mroonga::rebind_psi()
 }
 #endif
 
-my_bool ha_mroonga::wrapper_register_query_cache_table(THD *thd,
-                                                       char *table_key,
-                                                       uint key_length,
-                                                       qc_engine_callback
-                                                       *engine_callback,
-                                                       ulonglong *engine_data)
+mrn_bool ha_mroonga::wrapper_register_query_cache_table(THD *thd,
+                                                        char *table_key,
+                                                        uint key_length,
+                                                        qc_engine_callback
+                                                        *engine_callback,
+                                                        ulonglong *engine_data)
 {
   MRN_DBUG_ENTER_METHOD();
-  my_bool res;
+  mrn_bool res;
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   res = wrap_handler->register_query_cache_table(thd,
@@ -17731,15 +17731,15 @@ my_bool ha_mroonga::wrapper_register_query_cache_table(THD *thd,
   DBUG_RETURN(res);
 }
 
-my_bool ha_mroonga::storage_register_query_cache_table(THD *thd,
-                                                       char *table_key,
-                                                       uint key_length,
-                                                       qc_engine_callback
-                                                       *engine_callback,
-                                                       ulonglong *engine_data)
+mrn_bool ha_mroonga::storage_register_query_cache_table(THD *thd,
+                                                        char *table_key,
+                                                        uint key_length,
+                                                        qc_engine_callback
+                                                        *engine_callback,
+                                                        ulonglong *engine_data)
 {
   MRN_DBUG_ENTER_METHOD();
-  my_bool res = handler::register_query_cache_table(thd,
+  mrn_bool res = handler::register_query_cache_table(thd,
                                                     table_key,
                                                     key_length,
                                                     engine_callback,
@@ -17747,15 +17747,15 @@ my_bool ha_mroonga::storage_register_query_cache_table(THD *thd,
   DBUG_RETURN(res);
 }
 
-my_bool ha_mroonga::register_query_cache_table(THD *thd,
-                                               char *table_key,
-                                               uint key_length,
-                                               qc_engine_callback
-                                               *engine_callback,
-                                               ulonglong *engine_data)
+mrn_bool ha_mroonga::register_query_cache_table(THD *thd,
+                                                char *table_key,
+                                                uint key_length,
+                                                qc_engine_callback
+                                                *engine_callback,
+                                                ulonglong *engine_data)
 {
   MRN_DBUG_ENTER_METHOD();
-  my_bool res;
+  mrn_bool res;
   if (share->wrapper_mode)
   {
     res = wrapper_register_query_cache_table(thd,
