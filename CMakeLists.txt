@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 #
-# Copyright(C) 2012-2017 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2013 Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
@@ -259,7 +259,11 @@ else()
   set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
   set_mysql_config_value("--variable=pkglibdir" MYSQL_PKG_LIB_DIR)
   set(MYSQL_SERVICES_LIB_STATIC
-    "${MYSQL_BUILD_DIR}/libservices/libmysqlservices.a")
+    "${MYSQL_BUILD_DIR}/archive_output_directory/libmysqlservices.a")
+  if(NOT EXISTS "${MYSQL_SERVICES_LIB_STATIC}")
+    set(MYSQL_SERVICES_LIB_STATIC
+      "${MYSQL_BUILD_DIR}/libservices/libmysqlservices.a")
+  endif()
   if(NOT EXISTS "${MYSQL_SERVICES_LIB_STATIC}")
     set(MYSQL_SERVICES_LIB_STATIC "${MYSQL_PKG_LIB_DIR}/libmysqlservices.a")
   endif()

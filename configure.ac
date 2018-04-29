@@ -225,8 +225,11 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     *)
         AC_MSG_CHECKING([for libmysqlservices.a directory])
         pkglibdir="$($ac_mysql_config --variable=pkglibdir)"
+        mysql_build_archive_output_dir="${MYSQL_BUILD_DIR}/archive_output_directory"
         mysql_build_libservices_dir="${MYSQL_BUILD_DIR}/libservices"
-        if test -f "${mysql_build_libservices_dir}/libmysqlservices.a"; then
+        if test -f "${mysql_build_archive_output_dir}/libmysqlservices.a"; then
+          mysql_services_lib_dir="${mysql_build_archive_output_dir}"
+        elif test -f "${mysql_build_libservices_dir}/libmysqlservices.a"; then
           mysql_services_lib_dir="${mysql_build_libservices_dir}"
         else
           if test -f "${pkglibdir}/libmysqlservices.a"; then
