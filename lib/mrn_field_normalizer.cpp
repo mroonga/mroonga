@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013-2018  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,8 @@
 
 #include "mrn_field_normalizer.hpp"
 #include "mrn_encoding.hpp"
+
+#include <field.h>
 
 // for debug
 #define MRN_CLASS_NAME "mrn::FieldNormalizer"
