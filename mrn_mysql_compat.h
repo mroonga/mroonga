@@ -611,14 +611,14 @@
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
-typedef alter_table_operations mrn_alter_flags;
-typedef alter_table_operations mrn_alter_table_flags;
+#  define mrn_alter_flags alter_table_operations
+#  define mrn_alter_table_flags alter_table_operations
 #  define MRN_ALTER_INPLACE_INFO_FLAG(name) ALTER_ ## name
 #  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) ALTER_ ## name
 #  define MRN_ALTER_INFO_FLAG(name) ALTER_ ## name
 #else
-typedef Alter_inplace_info::HA_ALTER_FLAGS mrn_alter_flags;
-typedef uint mrn_alter_table_flags;
+#  define mrn_alter_flags Alter_inplace_info::HA_ALTER_FLAGS
+#  define mrn_alter_table_flags uint
 #  define MRN_ALTER_INPLACE_INFO_FLAG(name) Alter_inplace_info:: ## name
 #  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) \
   Alter_inplace_info::ALTER_ ## name
