@@ -21,6 +21,7 @@
 #define MRN_DEBUG_COLUMN_ACCESS_HPP_
 
 #include <mrn_mysql.h>
+#include <my_bitmap.h>
 
 namespace mrn {
   class DebugColumnAccess {
