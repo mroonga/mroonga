@@ -228,7 +228,19 @@ static mysql_mutex_t *mrn_LOCK_open;
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
-HASH *mrn_table_def_cache;
+#  if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#    define MRN_TABLE_DEF_CACHE_TYPE_IS_MAP
+#  endif
+
+#  ifdef MRN_TABLE_DEF_CACHE_TYPE_IS_MAP
+typedef
+  malloc_unordered_map<std::string,
+                       std::unique_ptr<TABLE_SHARE, Table_share_deleter>>
+  mrn_table_def_cache_type;
+#  else
+typedef HASH mrn_table_def_cache_type;
+#endif
+mrn_table_def_cache_type *mrn_table_def_cache;
 #endif
 
 #ifdef MRN_HAVE_PSI_MEMORY_KEY
@@ -2050,8 +2062,12 @@ static int mrn_init(void *p)
   mrn_my_tz_UTC =
     *((Time_zone **)GetProcAddress(current_module, MRN_MY_TZ_UTC_PROC));
 #  ifdef MRN_HAVE_TABLE_DEF_CACHE
+#    ifdef MRN_TABLE_DEF_CACHE_TYPE_IS_MAP
+#      error must confirm mangled name of mrn_table_def_cache
+#    else
   mrn_table_def_cache = (HASH *)GetProcAddress(current_module,
     "?table_def_cache@@3Ust_hash@@A");
+#    endif
 #  endif
 #  ifndef MRN_HAVE_TDC_LOCK_TABLE_SHARE
   mrn_LOCK_open =
