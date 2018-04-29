@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kentoku SHIBA
 
   This library is free software; you can redistribute it and/or
@@ -25,6 +25,8 @@
 #include "mrn_smart_grn_obj.hpp"
 #include "mrn_time_converter.hpp"
 #include "mrn_value_decoder.hpp"
+
+#include <field.h>
 
 // for debug
 #define MRN_CLASS_NAME "mrn::MultipleColumnKeyCodec"
