@@ -46,7 +46,7 @@ struct st_mrn_normalize_info
   String result_str;
 };
 
-MRN_API my_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
+MRN_API mrn_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
                                        char *message)
 {
   st_mrn_normalize_info *info = NULL;
@@ -127,7 +127,7 @@ MRN_API my_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
 
   init->ptr = (char *)info;
 
-  return FALSE;
+  return false;
 
 error:
   if (info) {
@@ -137,7 +137,7 @@ error:
     mrn_context_pool->release(info->ctx);
     my_free(info);
   }
-  return TRUE;
+  return true;
 }
 
 MRN_API char *mroonga_normalize(UDF_INIT *init, UDF_ARGS *args, char *result,

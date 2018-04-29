@@ -45,7 +45,7 @@ struct st_mrn_snip_info
   String result_str;
 };
 
-static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
+static mrn_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
                                    char *message, grn_obj **snippet)
 {
   unsigned int i;
@@ -120,20 +120,20 @@ static my_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
   }
 
   result_str->set_charset(cs);
-  return FALSE;
+  return false;
 
 error:
   if (*snippet) {
     grn_obj_close(ctx, *snippet);
   }
-  return TRUE;
+  return true;
 }
 
-MRN_API my_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *message)
+MRN_API mrn_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *message)
 {
   uint i;
   st_mrn_snip_info *snip_info = NULL;
-  bool can_open_snippet = TRUE;
+  bool can_open_snippet = true;
   init->ptr = NULL;
   if (args->arg_count < 11 || (args->arg_count - 11) % 3)
   {
@@ -213,7 +213,7 @@ MRN_API my_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *messa
 
   for (i = 1; i < args->arg_count; i++) {
     if (!args->args[i]) {
-      can_open_snippet = FALSE;
+      can_open_snippet = false;
       break;
     }
   }
@@ -224,7 +224,7 @@ MRN_API my_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *messa
   }
   init->ptr = (char *) snip_info;
 
-  return FALSE;
+  return false;
 
 error:
   if (snip_info) {
@@ -234,7 +234,7 @@ error:
     mrn_context_pool->release(snip_info->ctx);
     my_free(snip_info);
   }
-  return TRUE;
+  return true;
 }
 
 MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,

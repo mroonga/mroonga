@@ -45,7 +45,7 @@ struct CommandInfo
   String result;
 };
 
-MRN_API my_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
+MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
                                      char *message)
 {
   CommandInfo *info = NULL;
@@ -158,7 +158,7 @@ MRN_API my_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
 
   init->ptr = (char *)info;
 
-  return FALSE;
+  return false;
 
 error:
   if (info) {
@@ -168,7 +168,7 @@ error:
     mrn_context_pool->release(info->ctx);
     my_free(info);
   }
-  return TRUE;
+  return true;
 }
 
 static void mroonga_command_escape_value(grn_ctx *ctx,

@@ -49,7 +49,7 @@ typedef struct st_mrn_snippet_html_info
   } query_mode;
 } mrn_snippet_html_info;
 
-static my_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
+static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
                                         UDF_ARGS *args,
                                         char *message,
                                         grn_obj **snippet)
@@ -172,7 +172,7 @@ static my_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
   }
 
   result_str->set_charset(system_charset_info);
-  DBUG_RETURN(FALSE);
+  DBUG_RETURN(false);
 
 error:
   if (expr) {
@@ -181,10 +181,10 @@ error:
   if (*snippet) {
     grn_obj_close(ctx, *snippet);
   }
-  DBUG_RETURN(TRUE);
+  DBUG_RETURN(true);
 }
 
-MRN_API my_bool mroonga_snippet_html_init(UDF_INIT *init,
+MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
                                           UDF_ARGS *args,
                                           char *message)
 {
@@ -267,21 +267,21 @@ MRN_API my_bool mroonga_snippet_html_init(UDF_INIT *init,
     }
   }
 
-  info->query_mode.used = FALSE;
+  info->query_mode.used = false;
 
   if (args->arg_count == 2 &&
       args->attribute_lengths[1] == strlen("query") &&
       strncmp(args->attributes[1], "query", strlen("query")) == 0) {
-    info->query_mode.used = TRUE;
+    info->query_mode.used = true;
     info->query_mode.table = NULL;
     info->query_mode.default_column = NULL;
   }
 
   {
-    bool all_keywords_are_constant = TRUE;
+    bool all_keywords_are_constant = true;
     for (unsigned int i = 1; i < args->arg_count; ++i) {
       if (!args->args[i]) {
-        all_keywords_are_constant = FALSE;
+        all_keywords_are_constant = false;
         break;
       }
     }
@@ -297,7 +297,7 @@ MRN_API my_bool mroonga_snippet_html_init(UDF_INIT *init,
 
   init->ptr = (char *)info;
 
-  DBUG_RETURN(FALSE);
+  DBUG_RETURN(false);
 
 error:
   if (info) {
@@ -307,7 +307,7 @@ error:
     mrn_context_pool->release(info->ctx);
     my_free(info);
   }
-  DBUG_RETURN(TRUE);
+  DBUG_RETURN(true);
 }
 
 MRN_API char *mroonga_snippet_html(UDF_INIT *init,

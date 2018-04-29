@@ -65,7 +65,7 @@ static void mrn_query_expand_info_free(mrn::QueryExpandInfo *info)
   DBUG_VOID_RETURN;
 }
 
-MRN_API my_bool mroonga_query_expand_init(UDF_INIT *init,
+MRN_API mrn_bool mroonga_query_expand_init(UDF_INIT *init,
                                           UDF_ARGS *args,
                                           char *message)
 {
@@ -188,11 +188,11 @@ MRN_API my_bool mroonga_query_expand_init(UDF_INIT *init,
 
   init->ptr = reinterpret_cast<char *>(info);
 
-  DBUG_RETURN(FALSE);
+  DBUG_RETURN(false);
 
 error:
   mrn_query_expand_info_free(info);
-  DBUG_RETURN(TRUE);
+  DBUG_RETURN(true);
 }
 
 static void query_expand(mrn::QueryExpandInfo *info, UDF_ARGS *args)

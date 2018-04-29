@@ -37,7 +37,7 @@ struct EscapeInfo
   grn_obj escaped_value;
 };
 
-MRN_API my_bool mroonga_escape_init(UDF_INIT *init, UDF_ARGS *args,
+MRN_API mrn_bool mroonga_escape_init(UDF_INIT *init, UDF_ARGS *args,
                                     char *message)
 {
   EscapeInfo *info = NULL;
@@ -99,14 +99,14 @@ MRN_API my_bool mroonga_escape_init(UDF_INIT *init, UDF_ARGS *args,
 
   init->ptr = reinterpret_cast<char *>(info);
 
-  return FALSE;
+  return false;
 
 error:
   if (info) {
     mrn_context_pool->release(info->ctx);
     my_free(info);
   }
-  return TRUE;
+  return true;
 }
 
 static void escape(EscapeInfo *info, UDF_ARGS *args)
