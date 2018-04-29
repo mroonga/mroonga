@@ -233,6 +233,23 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
 #endif
 
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+typedef alter_table_operations mrn_alter_flags;
+typedef alter_table_operations mrn_alter_table_flags;
+#  define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
+  ALTER_ ## name
+#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) ALTER_ ## name
+#  define MRN_ALTER_INFO_FLAG(name) ALTER_ ## name
+#else
+typedef Alter_inplace_info::HA_ALTER_FLAGS mrn_alter_flags;
+typedef uint mrn_alter_table_flags;
+#  define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
+  alter_inplace_info_name
+#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) \
+  Alter_inplace_info::ALTER_ ## name
+#  define MRN_ALTER_INFO_FLAG(name) Alter_info::ALTER_ ## name
+#endif
+
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50709) ||   \
   (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203)
 #  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE \
@@ -253,9 +270,27 @@ extern "C" {
   MRN_ALTER_INPLACE_INFO_ALTER_FLAG(DROP_NON_UNIQUE_NON_PRIM_INDEX)
 #else
 #  define MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX \
-  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(ADD_INDEX)
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_INDEX, ADD_INDEX)
 #  define MRN_ALTER_INPLACE_INFO_ALTER_DROP_NON_UNIQUE_NON_PRIM_INDEX \
-  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(DROP_INDEX)
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_INDEX, DROP_INDEX)
+#endif
+
+#if ((defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203)) || \
+  (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50711)
+#  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN                     \
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_VIRTUAL_COLUMN,   \
+                              ADD_VIRTUAL_COLUMN)
+#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN                 \
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_STORED_BASE_COLUMN, \
+                              ADD_STORED_BASE_COLUMN)
+#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN            \
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_STORED_GENERATED_COLUMN, \
+                              ADD_STORED_GENERATED_COLUMN)
+#else
+#  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN 0
+#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN \
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_COLUMN, ADD_COLUMN)
+#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN 0
 #endif
 
 #if MYSQL_VERSION_ID >= 50700 && !defined(MRN_MARIADB_P)

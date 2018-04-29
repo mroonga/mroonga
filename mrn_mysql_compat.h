@@ -542,21 +542,6 @@
 #define MRN_FREE_VARIABLE_LENGTH_ARRAYS(variable_name) \
   my_free(variable_name)
 
-#if ((defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203)) || \
-  (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50711)
-#  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN \
-  MRN_ALTER_INPLACE_INFO_FLAG(ADD_VIRTUAL_COLUMN)
-#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN \
-  MRN_ALTER_INPLACE_INFO_FLAG(ADD_STORED_BASE_COLUMN)
-#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN \
-  MRN_ALTER_INPLACE_INFO_FLAG(ADD_STORED_GENERATED_COLUMN)
-#else
-#  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN 0
-#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN \
-  MRN_ALTER_INPLACE_INFO_FLAG(ADD_COLUMN)
-#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN 0
-#endif
-
 #if (defined(HA_CAN_VIRTUAL_COLUMNS) || defined(HA_GENERATED_COLUMNS))
 #  define MRN_SUPPORT_GENERATED_COLUMNS
 #endif
@@ -608,21 +593,6 @@
       (MYSQL_VERSION_ID >= 50721)
 #    define MRN_HAVE_DB_TYPE_ROCKSDB
 #  endif
-#endif
-
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
-#  define mrn_alter_flags alter_table_operations
-#  define mrn_alter_table_flags alter_table_operations
-#  define MRN_ALTER_INPLACE_INFO_FLAG(name) ALTER_ ## name
-#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) ALTER_ ## name
-#  define MRN_ALTER_INFO_FLAG(name) ALTER_ ## name
-#else
-#  define mrn_alter_flags Alter_inplace_info::HA_ALTER_FLAGS
-#  define mrn_alter_table_flags uint
-#  define MRN_ALTER_INPLACE_INFO_FLAG(name) Alter_inplace_info:: ## name
-#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) \
-  Alter_inplace_info::ALTER_ ## name
-#  define MRN_ALTER_INFO_FLAG(name) Alter_info::ALTER_ ## name
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306

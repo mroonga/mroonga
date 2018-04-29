@@ -15085,8 +15085,8 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
      MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX) &&
     (ha_alter_info->handler_flags &
       (
-        MRN_ALTER_INPLACE_INFO_FLAG(ADD_COLUMN) |
-        MRN_ALTER_INPLACE_INFO_FLAG(DROP_COLUMN) |
+        MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_COLUMN, ADD_COLUMN) |
+        MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_COLUMN, DROP_COLUMN) |
         MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE |
         MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_ORDER |
         MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NULLABLE) |
@@ -15203,17 +15203,17 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
 {
   MRN_DBUG_ENTER_METHOD();
   mrn_alter_flags explicitly_unsupported_flags =
-    MRN_ALTER_INPLACE_INFO_FLAG(ADD_FOREIGN_KEY) |
-    MRN_ALTER_INPLACE_INFO_FLAG(DROP_FOREIGN_KEY);
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_FOREIGN_KEY, ADD_FOREIGN_KEY) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_FOREIGN_KEY, DROP_FOREIGN_KEY);
   mrn_alter_flags supported_flags =
-    MRN_ALTER_INPLACE_INFO_FLAG(ADD_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(DROP_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(ADD_UNIQUE_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(DROP_UNIQUE_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_INDEX, ADD_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_INDEX, DROP_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_UNIQUE_INDEX, ADD_UNIQUE_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_UNIQUE_INDEX, DROP_UNIQUE_INDEX) |
     MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN |
     MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN |
     MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN |
-    MRN_ALTER_INPLACE_INFO_FLAG(DROP_COLUMN) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_COLUMN, DROP_COLUMN) |
     MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NAME) |
     MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX |
     MRN_ALTER_INPLACE_INFO_ALTER_DROP_NON_UNIQUE_NON_PRIM_INDEX;
@@ -15966,9 +15966,9 @@ bool ha_mroonga::storage_inplace_alter_table(
   }
 
   mrn_alter_flags drop_index_related_flags =
-    MRN_ALTER_INPLACE_INFO_FLAG(DROP_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(DROP_UNIQUE_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(DROP_PK_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_INDEX, DROP_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_UNIQUE_INDEX, DROP_UNIQUE_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_PK_INDEX, DROP_PK_INDEX) |
     MRN_ALTER_INPLACE_INFO_ALTER_DROP_NON_UNIQUE_NON_PRIM_INDEX;
   if (!have_error &&
       (ha_alter_info->handler_flags & drop_index_related_flags)) {
@@ -15977,14 +15977,14 @@ bool ha_mroonga::storage_inplace_alter_table(
   }
 
   mrn_alter_flags add_column_related_flags =
-    MRN_ALTER_INPLACE_INFO_FLAG(ADD_COLUMN);
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_COLUMN, ADD_COLUMN);
   if (!have_error &&
       (ha_alter_info->handler_flags & add_column_related_flags)) {
     have_error = storage_inplace_alter_table_add_column(altered_table, ha_alter_info);
   }
 
   mrn_alter_flags drop_column_related_flags =
-    MRN_ALTER_INPLACE_INFO_FLAG(DROP_COLUMN);
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_COLUMN, DROP_COLUMN);
   if (!have_error &&
       (ha_alter_info->handler_flags & drop_column_related_flags)) {
     have_error = storage_inplace_alter_table_drop_column(altered_table, ha_alter_info);
@@ -15998,9 +15998,9 @@ bool ha_mroonga::storage_inplace_alter_table(
   }
 
   mrn_alter_flags add_index_related_flags =
-    MRN_ALTER_INPLACE_INFO_FLAG(ADD_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(ADD_UNIQUE_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(ADD_PK_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_INDEX, ADD_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_UNIQUE_INDEX, ADD_UNIQUE_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_PK_INDEX, ADD_PK_INDEX) |
     MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX;
   if (!have_error &&
       (ha_alter_info->handler_flags & add_index_related_flags)) {
