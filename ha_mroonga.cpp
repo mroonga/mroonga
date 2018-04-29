@@ -42,8 +42,6 @@
 #  include <sql_optimizer.h>
 #endif
 
-#include <handler.h>
-
 #include <ft_global.h>
 #include <spatial.h>
 #include <mysql.h>
