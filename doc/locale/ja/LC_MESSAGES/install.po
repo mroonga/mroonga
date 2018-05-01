@@ -694,6 +694,9 @@ msgstr ""
 msgid "17.10 Artful Aardvark"
 msgstr ""
 
+msgid "18.04 Bionic Beaver"
+msgstr ""
+
 msgid "Here are Ubuntu versions that supports MariaDB:"
 msgstr "MariaDBをサポートしているUbuntuのバージョンは次の通りです。"
 
