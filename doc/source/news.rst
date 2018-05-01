@@ -13,6 +13,8 @@ Release 8.02 - 2018-04-29
 Improvements
 ^^^^^^^^^^^^
 
+* [:doc:`/install/ubuntu`] Supported Ubuntu 18.04 LTS (Bionic Beaver).
+
 * [:doc:`/install/debian`] Supported i386 for Jessie.
 
 * Suppress meaningless "duplicated unique id" error log. [GitHub#197]
@@ -39,7 +41,7 @@ Fixes
   `AND (x = 1 OR x = 2)` when condition push down is enabled.
   [Gitter/ja:5ae014842b9dfdbc3ac7ce1f][Reported by colt27]
 
-* Fixed a memory leak.
+* Fixed a memory leak for column caches.
 
 Thanks
 ^^^^^^
