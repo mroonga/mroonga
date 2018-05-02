@@ -6,7 +6,7 @@
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
-export MARIADB_VERSION_FULL := $(shell apt-cache show mariadb-server-10.1 | grep Version | head -n 1 | awk '{print $$2}')
+export MARIADB_VERSION_FULL := $(shell apt-cache show mariadb-server-10.1 | grep Version | head -n 1 | awk '{print $$2}' | cut -d: -f2)
 export MARIADB_VERSION := $(shell apt-cache show mariadb-server-10.1 | grep Version | head -n 1 | awk '{print $$2}' | cut -d: -f2 | awk -F '-' '{print $$1}')
 
 %:
