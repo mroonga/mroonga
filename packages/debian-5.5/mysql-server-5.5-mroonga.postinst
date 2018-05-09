@@ -62,9 +62,9 @@ restart_server() {
             systemctl restart mysql
         fi
     else
-        /sbin/service mysql status
+        service mysql status
         if test $? -eq 0 ; then
-            /sbin/service mysql restart
+            service mysql restart
         fi
     fi
 }
