@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2018-05-01 13:44+0900\n"
+"PO-Revision-Date: 2018-05-28 18:55+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,32 +21,31 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-#, fuzzy
 msgid "Release 8.03 - 2018-05-29"
-msgstr "8.02リリース - 2018-04-29"
+msgstr "8.03リリース - 2018-05-29"
 
 msgid "Improvements"
 msgstr "改良"
 
 msgid "[:doc:`/install/docker`] Added quick start guide link to Docker Hub."
 msgstr ""
+"[:doc:`/install/docker`] Docker Hubへのクイックスタートガイドのリンクを追加し"
+"ました。"
 
-#, fuzzy
 msgid "[:doc:`/install/centos`] Supported MariaDB 10.3.7."
-msgstr ""
-"[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
+msgstr "[:doc:`/install/centos`] MariaDB 10.3.7をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[:doc:`/install/centos`] Supported MariaDB 10.2.15 (backported to 8.02)."
 msgstr ""
-"[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
+"[:doc:`/install/centos`] MariaDB 10.2.15 をサポートしました（8.02にバックポー"
+"ト済み）。"
 
-#, fuzzy
 msgid ""
 "[:doc:`/install/centos`] Supported MariaDB 10.1.33 (backported to 8.02)."
 msgstr ""
-"[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
+"[:doc:`/install/centos`] MariaDB 10.1.33 をサポートしました（8.02にバックポー"
+"ト済み）。"
 
 msgid "Fixes"
 msgstr "修正"
@@ -55,13 +54,15 @@ msgid ""
 "[:doc:`/install/ubuntu`] Fixed install failure on Ubntu 14.04 LTS (Trusty) "
 "(backported to 8.02). [GitHub#202,#205][Reported by Masato Hirai]"
 msgstr ""
+"[:doc:`/install/ubuntu`] Ubntu 14.04 LTS（Trusty）でインストールに失敗してい"
+"た問題を修正しました（8.02にバックポート済み）。[GitHub#202,#205][Masato "
+"Hiraiさんが報告]"
 
 msgid "Thanks"
 msgstr "感謝"
 
-#, fuzzy
 msgid "Masato Hirai"
-msgstr "嶋田さん"
+msgstr "Masato Hiraiさん"
 
 msgid "Release 8.02 - 2018-04-29"
 msgstr "8.02リリース - 2018-04-29"
