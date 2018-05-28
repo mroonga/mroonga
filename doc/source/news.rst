@@ -5,6 +5,33 @@
 News
 ====
 
+.. _release-8-03:
+
+Release 8.03 - 2018-05-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/docker`] Added quick start guide link to Docker Hub.
+
+* [:doc:`/install/centos`] Supported MariaDB 10.3.7.
+
+* [:doc:`/install/centos`] Supported MariaDB 10.2.15 (backported to 8.02).
+
+* [:doc:`/install/centos`] Supported MariaDB 10.1.33 (backported to 8.02).
+
+Fixes
+^^^^^
+
+* [:doc:`/install/ubuntu`] Fixed install failure on Ubntu 14.04 LTS (Trusty)
+  (backported to 8.02). [GitHub#202,#205][Reported by Masato Hirai]
+
+Thanks
+^^^^^^
+
+* Masato Hirai
+
 .. _release-8-02:
 
 Release 8.02 - 2018-04-29
