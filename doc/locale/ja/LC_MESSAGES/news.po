@@ -21,11 +21,50 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 8.02 - 2018-04-29"
+#, fuzzy
+msgid "Release 8.03 - 2018-05-29"
 msgstr "8.02リリース - 2018-04-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/docker`] Added quick start guide link to Docker Hub."
+msgstr ""
+
+#, fuzzy
+msgid "[:doc:`/install/centos`] Supported MariaDB 10.3.7."
+msgstr ""
+"[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
+
+#, fuzzy
+msgid ""
+"[:doc:`/install/centos`] Supported MariaDB 10.2.15 (backported to 8.02)."
+msgstr ""
+"[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
+
+#, fuzzy
+msgid ""
+"[:doc:`/install/centos`] Supported MariaDB 10.1.33 (backported to 8.02)."
+msgstr ""
+"[:doc:`/install/windows`] Windows版でMariaDB 10.1.14をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Fixed install failure on Ubntu 14.04 LTS (Trusty) "
+"(backported to 8.02). [GitHub#202,#205][Reported by Masato Hirai]"
+msgstr ""
+
+msgid "Thanks"
+msgstr "感謝"
+
+#, fuzzy
+msgid "Masato Hirai"
+msgstr "嶋田さん"
+
+msgid "Release 8.02 - 2018-04-29"
+msgstr "8.02リリース - 2018-04-29"
 
 msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 18.04 LTS (Bionic Beaver)."
 msgstr ""
@@ -71,9 +110,6 @@ msgstr "[:doc:`/install/centos`] MySQL 5.6.40と5.7.22をサポートしまし�
 msgid "[:doc:`/install/centos`] Supported Percona Server 5.7.21-21."
 msgstr "[:doc:`/install/centos`] Percona Server 5.7.21-21をサポートしました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "Fixed a crash bug when some complex condition in `ORDER BY` such as `ORDER "
 "BY 1 + 1, id, content`."
@@ -92,9 +128,6 @@ msgstr ""
 
 msgid "Fixed a memory leak for column caches."
 msgstr "カラムキャッシュのメモリリークを修正しました。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Takashi Kinoshita"
 msgstr "木下崇さん"

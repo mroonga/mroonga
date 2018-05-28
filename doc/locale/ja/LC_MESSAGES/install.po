@@ -263,6 +263,17 @@ msgstr "jessie（MariaDB）"
 msgid "stretch (MariaDB)"
 msgstr ""
 
+msgid "Docker"
+msgstr ""
+
+msgid "Mroonga is also available via Docker Hub."
+msgstr ""
+
+msgid ""
+"See `Quick Start <https://hub.docker.com/r/groonga/mroonga/>`_ guide to "
+"start."
+msgstr ""
+
 msgid "Fedora"
 msgstr ""
 
