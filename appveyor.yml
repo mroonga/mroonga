@@ -3,17 +3,17 @@ clone_depth: 10
 environment:
   matrix:
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
-      MARIADB_VERSION: 10.1.32
+      MARIADB_VERSION: 10.1.33
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
-      MARIADB_VERSION: 10.1.32
+      MARIADB_VERSION: 10.1.33
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
-      MARIADB_VERSION: 10.2.14
+      MARIADB_VERSION: 10.2.15
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
-      MARIADB_VERSION: 10.2.14
+      MARIADB_VERSION: 10.2.15
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
-      MARIADB_VERSION: 10.3.6
+      MARIADB_VERSION: 10.3.7
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
-      MARIADB_VERSION: 10.3.6
+      MARIADB_VERSION: 10.3.7
 
 install:
   - cd ..
