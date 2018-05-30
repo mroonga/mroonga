@@ -22,6 +22,7 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/install/32bit-note.inc \
 	$(top_srcdir)/doc/source/install/centos.rst \
 	$(top_srcdir)/doc/source/install/debian.rst \
+	$(top_srcdir)/doc/source/install/docker.rst \
 	$(top_srcdir)/doc/source/install/fedora.rst \
 	$(top_srcdir)/doc/source/install/macos.rst \
 	$(top_srcdir)/doc/source/install/others.rst \
@@ -93,6 +94,7 @@ source_files_relative_from_doc_dir = \
 	source/install/32bit-note.inc \
 	source/install/centos.rst \
 	source/install/debian.rst \
+	source/install/docker.rst \
 	source/install/fedora.rst \
 	source/install/macos.rst \
 	source/install/others.rst \
@@ -274,6 +276,7 @@ html_files_relative_from_locale_dir = \
 	html/install.html \
 	html/install/centos.html \
 	html/install/debian.html \
+	html/install/docker.html \
 	html/install/fedora.html \
 	html/install/macos.html \
 	html/install/others.html \
