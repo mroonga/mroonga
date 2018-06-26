@@ -19,8 +19,8 @@
 set -x
 set -e
 
-export GROONGA_MASTER=yes
-export GROONGA_NORMALIZER_MYSQL_MASTER=yes
+# export GROONGA_MASTER=yes
+# export GROONGA_NORMALIZER_MYSQL_MASTER=yes
 
 #mariadb_download_base=http://mirror.jmu.edu/pub/mariadb
 mariadb_download_base=http://ftp.osuosl.org/pub/mariadb
