@@ -34,4 +34,4 @@ install:
 before_script:
   - tools/travis/before_script.sh
 script:
-  - travis_wait 30 tools/travis/script.sh
+  - travis_wait 40 tools/travis/script.sh
