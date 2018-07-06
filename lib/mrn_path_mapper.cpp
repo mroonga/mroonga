@@ -24,6 +24,7 @@
 #include "mrn_path_mapper.hpp"
 
 #include <string.h>
+#include <cstring>
 
 namespace mrn {
   char *PathMapper::default_path_prefix = NULL;
