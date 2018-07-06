@@ -5377,7 +5377,7 @@ int ha_mroonga::close()
     /* flush tables */
     {
       mrn::Lock lock(&mrn_open_tables_mutex);
-      if (grn_hash_size(&mrn_ctx, mrn_open_tables) > 0) {
+      if (grn_hash_size(&mrn_ctx, mrn_open_tables) == 0) {
         int tmp_error = mrn_db_manager->clear();
         if (tmp_error)
           error = tmp_error;
