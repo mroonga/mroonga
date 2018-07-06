@@ -30,6 +30,9 @@ install:
   - c:\Ruby22-x64\bin\ruby -v download_lz4.rb
   - c:\Ruby22-x64\bin\ruby -v download_mecab.rb
   - cd ..\..\mariadb-%MARIADB_VERSION%
+  # TODO: Report it to upstream
+  - if "%MARIADB_VERSION%" == "10.3.8"
+      mv sql\sql_yacc_orac.cc sql\sql_yacc_ora.cc
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
