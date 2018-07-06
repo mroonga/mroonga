@@ -35,6 +35,8 @@
 #include "mrn_variables.hpp"
 #include <mrn_lock.hpp>
 
+#include <cstring>
+
 #ifdef MRN_MARIADB_P
 #  if MYSQL_VERSION_ID >= 100300
      typedef LEX_CSTRING mrn_resolve_name;
@@ -197,7 +199,7 @@ static char *mrn_get_string_between_quote(const char *ptr)
       ++extracted_index;
     }
   } else {
-    memcpy(extracted_string, start_ptr, length);
+    grn_memcpy(extracted_string, start_ptr, length);
     extracted_string[length] = '\0';
   }
 
@@ -845,7 +847,7 @@ MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
     }
     long_term_share->table_name = tmp_name;
     long_term_share->table_name_length = table_name_length;
-    memcpy(long_term_share->table_name, table_name, table_name_length);
+    grn_memcpy(long_term_share->table_name, table_name, table_name_length);
     if (mysql_mutex_init(mrn_long_term_share_auto_inc_mutex_key,
                          &long_term_share->auto_inc_mutex,
                          MY_MUTEX_INIT_FAST) != 0)
@@ -951,8 +953,8 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
           !mrn_is_geo_key(&table->s->key_info[i]))
         {
           wrap_key_nr[i] = j;
-          memcpy(&wrap_key_info[j], &table->s->key_info[i],
-                 sizeof(*wrap_key_info));
+          grn_memcpy(&wrap_key_info[j], &table->s->key_info[i],
+                     sizeof(*wrap_key_info));
           j++;
         } else {
           wrap_key_nr[i] = MAX_KEY;
@@ -975,7 +977,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
         share->wrap_key_info = NULL;
         share->wrap_primary_key = MAX_KEY;
       }
-      memcpy(wrap_table_share, table->s, sizeof(*wrap_table_share));
+      grn_memcpy(wrap_table_share, table->s, sizeof(*wrap_table_share));
       mrn_init_sql_alloc(current_thd,
                          "mroonga::wrap-table-share",
                          &(wrap_table_share->mem_root));
@@ -1182,8 +1184,8 @@ KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
       j = wrap_key_nr[i];
       if (j < MAX_KEY)
       {
-        memcpy(&wrap_key_info[j], &table->key_info[i],
-               sizeof(*wrap_key_info));
+        grn_memcpy(&wrap_key_info[j], &table->key_info[i],
+                   sizeof(*wrap_key_info));
       }
     }
   } else

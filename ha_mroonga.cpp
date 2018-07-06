@@ -65,6 +65,8 @@
 #  include <unistd.h>
 #endif
 
+#include <cstring>
+
 #include "mrn_err.h"
 #include "mrn_table.hpp"
 #include <groonga/plugin.h>

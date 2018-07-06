@@ -43,6 +43,8 @@
 #  define MRN_MKDIR(pathname, mode) mkdir((pathname), (mode))
 #endif
 
+#include <cstring>
+
 extern "C" {
   grn_rc GRN_PLUGIN_IMPL_NAME_TAGGED(init, normalizers_mysql)(grn_ctx *ctx);
   grn_rc GRN_PLUGIN_IMPL_NAME_TAGGED(register, normalizers_mysql)(grn_ctx *ctx);

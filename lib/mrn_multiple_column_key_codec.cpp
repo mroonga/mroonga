@@ -28,6 +28,8 @@
 
 #include <field.h>
 
+#include <cstring>
+
 // for debug
 #define MRN_CLASS_NAME "mrn::MultipleColumnKeyCodec"
 
