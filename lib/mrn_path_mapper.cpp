@@ -77,7 +77,7 @@ namespace mrn {
           strcpy(db_path_, path_prefix_);
           j = strlen(db_path_);
         } else {
-          memcpy(db_path_, mysql_data_home_path_, mysql_data_home_len);
+          grn_memcpy(db_path_, mysql_data_home_path_, mysql_data_home_len);
           if (path_prefix_) {
             if (path_prefix_[0] == FN_CURLIB &&
                 path_prefix_[1] == FN_LIBCHAR) {
@@ -95,7 +95,7 @@ namespace mrn {
           db_path_[j++] = original_mysql_path_[i++];
         }
         if (i == len) {
-          memcpy(db_path_, original_mysql_path_, len);
+          grn_memcpy(db_path_, original_mysql_path_, len);
         } else {
           db_path_[j] = '\0';
         }
@@ -140,7 +140,7 @@ namespace mrn {
           db_name_[j++] = original_mysql_path_[i++];
         }
         if (i == len) {
-          memcpy(db_name_, original_mysql_path_, len);
+          grn_memcpy(db_name_, original_mysql_path_, len);
         } else {
           db_name_[j] = '\0';
         }

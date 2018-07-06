@@ -60,7 +60,7 @@ namespace mrn {
       void *db_address;
       GRN_HASH_EACH(ctx_, cache_, id, NULL, 0, &db_address, {
         Database *db;
-        memcpy(&db, db_address, sizeof(grn_obj *));
+        grn_memcpy(&db, db_address, sizeof(db));
         delete db;
       });
       grn_hash_close(ctx_, cache_);
@@ -72,7 +72,7 @@ namespace mrn {
     cache_ = grn_hash_create(ctx_,
                              NULL,
                              GRN_TABLE_MAX_KEY_SIZE,
-                             sizeof(grn_obj *),
+                             sizeof(Database *),
                              GRN_OBJ_KEY_VAR_SIZE);
     if (!cache_) {
       GRN_LOG(ctx_, GRN_LOG_ERROR,
@@ -130,7 +130,7 @@ namespace mrn {
       grn_hash_add(ctx_, cache_,
                    mapper.db_name(), strlen(mapper.db_name()),
                    &db_address, NULL);
-      memcpy(db_address, db, sizeof(Database *));
+      grn_memcpy(db_address, db, sizeof(Database *));
       error = ensure_normalizers_registered((*db)->get());
       if (!error) {
         if ((*db)->is_broken()) {
@@ -149,7 +149,7 @@ namespace mrn {
         }
       }
     } else {
-      memcpy(db, db_address, sizeof(Database *));
+      grn_memcpy(db, db_address, sizeof(Database *));
       grn_ctx_use(ctx_, (*db)->get());
     }
 
@@ -172,7 +172,7 @@ namespace mrn {
     }
 
     Database *db = NULL;
-    memcpy(&db, db_address, sizeof(Database *));
+    grn_memcpy(&db, db_address, sizeof(db));
     grn_ctx_use(ctx_, db->get());
     if (db) {
       delete db;
@@ -203,7 +203,7 @@ namespace mrn {
         db = new Database(ctx_, grn_db);
       }
     } else {
-      memcpy(&db, db_address, sizeof(Database *));
+      grn_memcpy(&db, db_address, sizeof(db));
       grn_ctx_use(ctx_, db->get());
     }
 
@@ -253,7 +253,7 @@ namespace mrn {
       void *db_address;
       Database *db;
       grn_hash_cursor_get_value(ctx_, cursor, &db_address);
-      memcpy(&db, db_address, sizeof(Database *));
+      grn_memcpy(&db, db_address, sizeof(db));
       grn_ctx_use(ctx_, db->get());
       grn_rc rc = grn_hash_cursor_delete(ctx_, cursor, NULL);
       if (rc) {

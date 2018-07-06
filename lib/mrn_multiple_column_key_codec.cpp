@@ -181,7 +181,7 @@ namespace mrn {
         break;
 #endif
       case TYPE_BYTE_SEQUENCE:
-        memcpy(current_grn_key, current_mysql_key, data_size);
+        grn_memcpy(current_grn_key, current_mysql_key, data_size);
         break;
       case TYPE_BYTE_REVERSE:
         encode_reverse(current_mysql_key, data_size, current_grn_key);
@@ -302,18 +302,18 @@ namespace mrn {
         break;
 #endif
       case TYPE_BYTE_SEQUENCE:
-        memcpy(current_mysql_key, current_grn_key, grn_key_data_size);
+        grn_memcpy(current_mysql_key, current_grn_key, grn_key_data_size);
         break;
       case TYPE_BYTE_REVERSE:
         decode_reverse(current_grn_key, grn_key_data_size, current_mysql_key);
         break;
       case TYPE_BYTE_BLOB:
-        memcpy(current_mysql_key,
-               current_grn_key + data_size,
-               HA_KEY_BLOB_LENGTH);
-        memcpy(current_mysql_key + HA_KEY_BLOB_LENGTH,
-               current_grn_key,
-               data_size);
+        grn_memcpy(current_mysql_key,
+                   current_grn_key + data_size,
+                   HA_KEY_BLOB_LENGTH);
+        grn_memcpy(current_mysql_key + HA_KEY_BLOB_LENGTH,
+                   current_grn_key,
+                   data_size);
         data_size += HA_KEY_BLOB_LENGTH;
         grn_key_data_size = data_size;
         break;
@@ -562,7 +562,7 @@ namespace mrn {
                                              uchar *mysql_key) {
     MRN_DBUG_ENTER_METHOD();
     uchar buffer[8];
-    memcpy(buffer, grn_key, grn_key_size);
+    grn_memcpy(buffer, grn_key, grn_key_size);
     if (is_signed) {
       buffer[0] ^= 0x80;
     }
@@ -584,7 +584,7 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
     uint grn_key_size = 8;
     uchar buffer[8];
-    memcpy(buffer, grn_key, grn_key_size);
+    grn_memcpy(buffer, grn_key, grn_key_size);
     buffer[0] ^= 0x80;
     mrn_byte_order_network_to_host(value, buffer, grn_key_size);
     DBUG_VOID_RETURN;
@@ -682,7 +682,7 @@ namespace mrn {
                                 &normalized, &normalized_length, NULL);
       uint16 new_blob_data_length;
       if (normalized_length <= UINT_MAX16) {
-        memcpy(grn_key, normalized, normalized_length);
+        grn_memcpy(grn_key, normalized, normalized_length);
         if (normalized_length < *mysql_key_size) {
           memset(grn_key + normalized_length,
                  '\0', *mysql_key_size - normalized_length);
@@ -702,15 +702,15 @@ namespace mrn {
                             UINT_MAX16,
                             field->field_name,
                             blob_data_length, blob_data);
-        memcpy(grn_key, normalized, blob_data_length);
+        grn_memcpy(grn_key, normalized, blob_data_length);
         new_blob_data_length = blob_data_length;
       }
-      memcpy(grn_key + *mysql_key_size,
-             &new_blob_data_length,
-             HA_KEY_BLOB_LENGTH);
+      grn_memcpy(grn_key + *mysql_key_size,
+                 &new_blob_data_length,
+                 HA_KEY_BLOB_LENGTH);
     } else {
-      memcpy(grn_key + *mysql_key_size, mysql_key, HA_KEY_BLOB_LENGTH);
-      memcpy(grn_key, mysql_key + HA_KEY_BLOB_LENGTH, *mysql_key_size);
+      grn_memcpy(grn_key + *mysql_key_size, mysql_key, HA_KEY_BLOB_LENGTH);
+      grn_memcpy(grn_key, mysql_key + HA_KEY_BLOB_LENGTH, *mysql_key_size);
     }
     *mysql_key_size += HA_KEY_BLOB_LENGTH;
     DBUG_VOID_RETURN;
