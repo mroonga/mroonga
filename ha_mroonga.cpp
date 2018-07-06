@@ -365,8 +365,9 @@ static PSI_mutex_info mrn_mutexes[] =
 #endif
 
 /* global variables */
+grn_ctx mrn_ctx;
 handlerton *mrn_hton_ptr;
-HASH mrn_open_tables;
+grn_hash *mrn_open_tables;
 mysql_mutex_t mrn_open_tables_mutex;
 HASH mrn_long_term_share;
 mysql_mutex_t mrn_long_term_share_mutex;
@@ -375,7 +376,6 @@ HASH mrn_allocated_thds;
 mysql_mutex_t mrn_allocated_thds_mutex;
 
 /* internal variables */
-static grn_ctx mrn_ctx;
 static mysql_mutex_t mrn_log_mutex;
 static mysql_mutex_t mrn_query_log_mutex;
 static grn_obj *mrn_db;
@@ -666,16 +666,6 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   return inspected;
 }
 #endif
-
-static uchar *mrn_open_tables_get_key(const uchar *record,
-                                      size_t *length,
-                                      mrn_bool not_used __attribute__ ((unused)))
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  MRN_SHARE *share = reinterpret_cast<MRN_SHARE *>(const_cast<uchar *>(record));
-  *length = share->table_name_length;
-  DBUG_RETURN(reinterpret_cast<uchar *>(share->table_name));
-}
 
 static uchar *mrn_long_term_share_get_key(const uchar *record,
                                           size_t *length,
@@ -2256,9 +2246,14 @@ static int mrn_init(void *p)
                         MY_MUTEX_INIT_FAST) != 0)) {
     goto err_allocated_open_tables_mutex_init;
   }
-  if (mrn_my_hash_init(&mrn_open_tables, system_charset_info, 32, 0, 0,
-                       mrn_open_tables_get_key, 0, 0)) {
-    goto error_allocated_open_tables_hash_init;
+  mrn_open_tables = grn_hash_create(ctx,
+                                    NULL,
+                                    GRN_TABLE_MAX_KEY_SIZE,
+                                    sizeof(MRN_SHARE *),
+                                    GRN_OBJ_TABLE_HASH_KEY |
+                                    GRN_OBJ_KEY_VAR_SIZE);
+  if (!mrn_open_tables) {
+    goto error_allocated_open_tables_init;
   }
   if ((mysql_mutex_init(mrn_long_term_share_mutex_key,
                         &mrn_long_term_share_mutex,
@@ -2281,8 +2276,8 @@ static int mrn_init(void *p)
 error_allocated_long_term_share_hash_init:
   mysql_mutex_destroy(&mrn_long_term_share_mutex);
 error_allocated_long_term_share_mutex_init:
-  my_hash_free(&mrn_open_tables);
-error_allocated_open_tables_hash_init:
+  grn_hash_close(ctx, mrn_open_tables);
+error_allocated_open_tables_init:
   mysql_mutex_destroy(&mrn_open_tables_mutex);
 err_allocated_open_tables_mutex_init:
   my_hash_free(&mrn_allocated_thds);
@@ -2348,7 +2343,7 @@ static int mrn_deinit(void *p)
 
   my_hash_free(&mrn_long_term_share);
   mysql_mutex_destroy(&mrn_long_term_share_mutex);
-  my_hash_free(&mrn_open_tables);
+  grn_hash_close(ctx, mrn_open_tables);
   mysql_mutex_destroy(&mrn_open_tables_mutex);
   my_hash_free(&mrn_allocated_thds);
   mysql_mutex_destroy(&mrn_allocated_thds_mutex);
@@ -5382,7 +5377,7 @@ int ha_mroonga::close()
     /* flush tables */
     {
       mrn::Lock lock(&mrn_open_tables_mutex);
-      if (!mrn_open_tables.records) {
+      if (grn_hash_size(&mrn_ctx, mrn_open_tables) > 0) {
         int tmp_error = mrn_db_manager->clear();
         if (tmp_error)
           error = tmp_error;

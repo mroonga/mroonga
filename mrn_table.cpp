@@ -88,7 +88,8 @@ extern PSI_mutex_key mrn_share_mutex_key;
 extern PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
 #endif
 
-extern HASH mrn_open_tables;
+extern grn_ctx mrn_ctx;
+extern grn_hash *mrn_open_tables;
 extern mysql_mutex_t mrn_open_tables_mutex;
 extern HASH mrn_long_term_share;
 extern mysql_mutex_t mrn_long_term_share_mutex;
@@ -857,7 +858,7 @@ error_alloc_long_term_share:
 
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
-  MRN_SHARE *share;
+  MRN_SHARE *share = NULL;
   char *tmp_name, **index_table, **key_tokenizer, **col_flags, **col_type;
   uint length, *wrap_key_nr, *index_table_length;
   uint *key_tokenizer_length, *col_flags_length, *col_type_length, i, j;
@@ -866,9 +867,17 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
   MRN_DBUG_ENTER_FUNCTION();
   length = (uint) strlen(table_name);
   mrn::Lock lock(&mrn_open_tables_mutex);
-  if (!(share = (MRN_SHARE*) my_hash_search(&mrn_open_tables,
-    (uchar*) table_name, length)))
   {
+    void *share_address = NULL;
+    if (grn_hash_get(&mrn_ctx,
+                     mrn_open_tables,
+                     table_name,
+                     length,
+                     &share_address) != GRN_ID_NIL) {
+      grn_memcpy(&share, share_address, sizeof(share));
+    }
+  }
+  if (!share) {
     if (!(share = (MRN_SHARE *)
       mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &share, sizeof(*share),
@@ -984,10 +993,18 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     {
       goto error_get_long_term_share;
     }
-    if (my_hash_insert(&mrn_open_tables, (uchar*) share))
     {
-      *error = HA_ERR_OUT_OF_MEM;
-      goto error_hash_insert;
+      void *share_address;
+      if (grn_hash_add(&mrn_ctx,
+                       mrn_open_tables,
+                       share->table_name,
+                       share->table_name_length,
+                       &share_address,
+                       NULL) == GRN_ID_NIL) {
+        *error = HA_ERR_OUT_OF_MEM;
+        goto error_hash_insert;
+      }
+      grn_memcpy(share_address, &share, sizeof(share));
     }
   }
   share->use_count++;
@@ -1010,7 +1027,11 @@ int mrn_free_share(MRN_SHARE *share)
   mrn::Lock lock(&mrn_open_tables_mutex);
   if (!--share->use_count)
   {
-    my_hash_delete(&mrn_open_tables, (uchar*) share);
+    grn_hash_delete(&mrn_ctx,
+                    mrn_open_tables,
+                    share->table_name,
+                    share->table_name_length,
+                    NULL);
     if (share->wrapper_mode)
       plugin_unlock(NULL, share->plugin);
     mrn_free_share_alloc(share);
