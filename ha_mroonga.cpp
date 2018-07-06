@@ -291,7 +291,7 @@ PSI_mutex_key *mrn_table_share_lock_share;
 PSI_mutex_key *mrn_table_share_lock_ha_data;
 #  endif
 static PSI_mutex_key mrn_open_tables_mutex_key;
-static PSI_mutex_key mrn_long_term_share_mutex_key;
+static PSI_mutex_key mrn_long_term_shares_mutex_key;
 static PSI_mutex_key mrn_allocated_thds_mutex_key;
 PSI_mutex_key mrn_share_mutex_key;
 PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
@@ -316,8 +316,8 @@ static PSI_mutex_info mrn_mutexes[] =
                         PSI_FLAG_SINGLETON,
                         PSI_VOLATILITY_UNKNOWN,
                         PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_long_term_share_mutex_key,
-                        "mrn::long_term_share",
+  MRN_MUTEXT_INFO_ENTRY(&mrn_long_term_shares_mutex_key,
+                        "mrn::long_term_shares",
                         PSI_FLAG_SINGLETON,
                         PSI_VOLATILITY_UNKNOWN,
                         PSI_DOCUMENT_ME),
@@ -369,8 +369,8 @@ grn_ctx mrn_ctx;
 handlerton *mrn_hton_ptr;
 grn_hash *mrn_open_tables;
 mysql_mutex_t mrn_open_tables_mutex;
-HASH mrn_long_term_share;
-mysql_mutex_t mrn_long_term_share_mutex;
+grn_hash *mrn_long_term_shares;
+mysql_mutex_t mrn_long_term_shares_mutex;
 
 HASH mrn_allocated_thds;
 mysql_mutex_t mrn_allocated_thds_mutex;
@@ -666,17 +666,6 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   return inspected;
 }
 #endif
-
-static uchar *mrn_long_term_share_get_key(const uchar *record,
-                                          size_t *length,
-                                          mrn_bool not_used __attribute__ ((unused)))
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  MRN_LONG_TERM_SHARE *long_term_share =
-    reinterpret_cast<MRN_LONG_TERM_SHARE *>(const_cast<uchar *>(record));
-  *length = long_term_share->table_name_length;
-  DBUG_RETURN(reinterpret_cast<uchar *>(long_term_share->table_name));
-}
 
 /* status */
 static long mrn_count_skip = 0;
@@ -2255,14 +2244,19 @@ static int mrn_init(void *p)
   if (!mrn_open_tables) {
     goto error_allocated_open_tables_init;
   }
-  if ((mysql_mutex_init(mrn_long_term_share_mutex_key,
-                        &mrn_long_term_share_mutex,
+  if ((mysql_mutex_init(mrn_long_term_shares_mutex_key,
+                        &mrn_long_term_shares_mutex,
                         MY_MUTEX_INIT_FAST) != 0)) {
-    goto error_allocated_long_term_share_mutex_init;
+    goto error_allocated_long_term_shares_mutex_init;
   }
-  if (mrn_my_hash_init(&mrn_long_term_share, system_charset_info, 32, 0, 0,
-                       mrn_long_term_share_get_key, 0, 0)) {
-    goto error_allocated_long_term_share_hash_init;
+  mrn_long_term_shares = grn_hash_create(ctx,
+                                         NULL,
+                                         GRN_TABLE_MAX_KEY_SIZE,
+                                         sizeof(MRN_LONG_TERM_SHARE *),
+                                         GRN_OBJ_TABLE_HASH_KEY |
+                                         GRN_OBJ_KEY_VAR_SIZE);
+  if (!mrn_long_term_shares) {
+    goto error_allocated_long_term_shares_init;
   }
 
 #ifdef MRN_USE_MYSQL_DATA_HOME
@@ -2273,9 +2267,9 @@ static int mrn_init(void *p)
 
   return 0;
 
-error_allocated_long_term_share_hash_init:
-  mysql_mutex_destroy(&mrn_long_term_share_mutex);
-error_allocated_long_term_share_mutex_init:
+error_allocated_long_term_shares_init:
+  mysql_mutex_destroy(&mrn_long_term_shares_mutex);
+error_allocated_long_term_shares_mutex_init:
   grn_hash_close(ctx, mrn_open_tables);
 error_allocated_open_tables_init:
   mysql_mutex_destroy(&mrn_open_tables_mutex);
@@ -2316,7 +2310,6 @@ static int mrn_deinit(void *p)
 {
   THD *thd = current_thd, *tmp_thd;
   grn_ctx *ctx = &mrn_ctx;
-  MRN_LONG_TERM_SHARE *long_term_share;
 
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
 
@@ -2333,16 +2326,20 @@ static int mrn_deinit(void *p)
   }
 
   {
-    mrn::Lock lock(&mrn_open_tables_mutex);
-    while ((long_term_share = (MRN_LONG_TERM_SHARE *)
-      my_hash_element(&mrn_long_term_share, 0)))
-    {
+    mrn::Lock lock(&mrn_long_term_shares_mutex);
+    GRN_HASH_EACH_BEGIN(ctx, mrn_long_term_shares, cursor, id) {
+      void *long_term_share_address;
+      grn_hash_cursor_get_value(ctx, cursor, &long_term_share_address);
+      MRN_LONG_TERM_SHARE *long_term_share;
+      grn_memcpy(&long_term_share,
+                 long_term_share_address,
+                 sizeof(long_term_share));
       mrn_free_long_term_share(long_term_share);
-    }
+    } GRN_HASH_EACH_END(ctx, cursor);
   }
 
-  my_hash_free(&mrn_long_term_share);
-  mysql_mutex_destroy(&mrn_long_term_share_mutex);
+  grn_hash_close(ctx, mrn_long_term_shares);
+  mysql_mutex_destroy(&mrn_long_term_shares_mutex);
   grn_hash_close(ctx, mrn_open_tables);
   mysql_mutex_destroy(&mrn_open_tables_mutex);
   my_hash_free(&mrn_allocated_thds);

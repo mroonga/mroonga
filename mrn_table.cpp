@@ -91,8 +91,8 @@ extern PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
 extern grn_ctx mrn_ctx;
 extern grn_hash *mrn_open_tables;
 extern mysql_mutex_t mrn_open_tables_mutex;
-extern HASH mrn_long_term_share;
-extern mysql_mutex_t mrn_long_term_share_mutex;
+extern grn_hash *mrn_long_term_shares;
+extern mysql_mutex_t mrn_long_term_shares_mutex;
 extern char *mrn_default_tokenizer;
 extern char *mrn_default_wrapper_engine;
 extern handlerton *mrn_hton_ptr;
@@ -800,8 +800,12 @@ void mrn_free_long_term_share(MRN_LONG_TERM_SHARE *long_term_share)
 {
   MRN_DBUG_ENTER_FUNCTION();
   {
-    mrn::Lock lock(&mrn_long_term_share_mutex);
-    my_hash_delete(&mrn_long_term_share, (uchar*) long_term_share);
+    mrn::Lock lock(&mrn_long_term_shares_mutex);
+    grn_hash_delete(&mrn_ctx,
+                    mrn_long_term_shares,
+                    long_term_share->table_name,
+                    long_term_share->table_name_length,
+                    NULL);
   }
   mysql_mutex_destroy(&long_term_share->auto_inc_mutex);
   my_free(long_term_share);
@@ -812,15 +816,24 @@ MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
                                              uint table_name_length,
                                              int *error)
 {
-  MRN_LONG_TERM_SHARE *long_term_share;
+  MRN_LONG_TERM_SHARE *long_term_share = NULL;
   char *tmp_name;
   MRN_DBUG_ENTER_FUNCTION();
   DBUG_PRINT("info", ("mroonga: table_name=%s", table_name));
-  mrn::Lock lock(&mrn_long_term_share_mutex);
-  if (!(long_term_share = (MRN_LONG_TERM_SHARE*)
-    my_hash_search(&mrn_long_term_share, (uchar*) table_name,
-                   table_name_length)))
+  mrn::Lock lock(&mrn_long_term_shares_mutex);
   {
+    void *long_term_share_address;
+    if (grn_hash_get(&mrn_ctx,
+                     mrn_long_term_shares,
+                     table_name,
+                     table_name_length,
+                     &long_term_share_address) != GRN_ID_NIL) {
+      grn_memcpy(&long_term_share,
+                 long_term_share_address,
+                 sizeof(long_term_share));
+    }
+  }
+  if (!long_term_share) {
     if (!(long_term_share = (MRN_LONG_TERM_SHARE *)
       mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &long_term_share, sizeof(*long_term_share),
@@ -840,10 +853,20 @@ MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
       *error = HA_ERR_OUT_OF_MEM;
       goto error_init_auto_inc_mutex;
     }
-    if (my_hash_insert(&mrn_long_term_share, (uchar*) long_term_share))
     {
-      *error = HA_ERR_OUT_OF_MEM;
-      goto error_hash_insert;
+      void *long_term_share_address;
+      if (grn_hash_add(&mrn_ctx,
+                       mrn_long_term_shares,
+                       long_term_share->table_name,
+                       long_term_share->table_name_length,
+                       &long_term_share_address,
+                       NULL) == GRN_ID_NIL) {
+        *error = HA_ERR_OUT_OF_MEM;
+        goto error_hash_insert;
+      }
+      grn_memcpy(long_term_share_address,
+                 &long_term_share,
+                 sizeof(long_term_share));
     }
   }
   DBUG_RETURN(long_term_share);
