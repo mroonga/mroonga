@@ -373,8 +373,7 @@ grn_hash *mrn_open_tables;
 mysql_mutex_t mrn_open_tables_mutex;
 grn_hash *mrn_long_term_shares;
 mysql_mutex_t mrn_long_term_shares_mutex;
-
-HASH mrn_allocated_thds;
+grn_hash *mrn_allocated_thds;
 mysql_mutex_t mrn_allocated_thds_mutex;
 
 /* internal variables */
@@ -745,15 +744,6 @@ static grn_logger mrn_logger = {
   NULL,
   NULL
 };
-
-static uchar *mrn_allocated_thds_get_key(const uchar *record,
-                                         size_t *length,
-                                         mrn_bool not_used __attribute__ ((unused)))
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  *length = sizeof(THD *);
-  DBUG_RETURN(const_cast<uchar *>(record));
-}
 
 /* system functions */
 
@@ -1475,7 +1465,7 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) NULL;
     {
       mrn::Lock lock(&mrn_allocated_thds_mutex);
-      my_hash_delete(&mrn_allocated_thds, (uchar*) thd);
+      grn_hash_delete(&mrn_ctx, mrn_allocated_thds, thd, sizeof(thd), NULL);
     }
   }
   DBUG_RETURN(0);
@@ -2228,8 +2218,12 @@ static int mrn_init(void *p)
                         MY_MUTEX_INIT_FAST) != 0)) {
     goto err_allocated_thds_mutex_init;
   }
-  if (mrn_my_hash_init(&mrn_allocated_thds, system_charset_info, 32, 0, 0,
-                       mrn_allocated_thds_get_key, 0, 0)) {
+  mrn_allocated_thds = grn_hash_create(ctx,
+                                       NULL,
+                                       sizeof(THD *),
+                                       0,
+                                       GRN_OBJ_TABLE_HASH_KEY);
+  if (!mrn_allocated_thds) {
     goto error_allocated_thds_hash_init;
   }
   if ((mysql_mutex_init(mrn_open_tables_mutex_key,
@@ -2276,7 +2270,7 @@ error_allocated_long_term_shares_mutex_init:
 error_allocated_open_tables_init:
   mysql_mutex_destroy(&mrn_open_tables_mutex);
 err_allocated_open_tables_mutex_init:
-  my_hash_free(&mrn_allocated_thds);
+  grn_hash_close(&mrn_ctx, mrn_allocated_thds);
 error_allocated_thds_hash_init:
   mysql_mutex_destroy(&mrn_allocated_thds_mutex);
 err_allocated_thds_mutex_init:
@@ -2310,21 +2304,25 @@ err_grn_init:
 
 static int mrn_deinit(void *p)
 {
-  THD *thd = current_thd, *tmp_thd;
+  THD *thd = current_thd;
   grn_ctx *ctx = &mrn_ctx;
 
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
 
   if (thd && thd_sql_command(thd) == SQLCOM_UNINSTALL_PLUGIN) {
     mrn::Lock lock(&mrn_allocated_thds_mutex);
-    while ((tmp_thd = (THD *) my_hash_element(&mrn_allocated_thds, 0)))
-    {
-      mrn_clear_slot_data(tmp_thd);
-      void *slot_ptr = mrn_get_slot_data(tmp_thd, false);
+    GRN_HASH_EACH_BEGIN(ctx, mrn_allocated_thds, cursor, id) {
+      void *allocated_thd_address;
+      grn_hash_cursor_get_key(ctx, cursor, &allocated_thd_address);
+      THD *allocated_thd;
+      grn_memcpy(&allocated_thd,
+                 allocated_thd_address,
+                 sizeof(allocated_thd));
+      mrn_clear_slot_data(allocated_thd);
+      void *slot_ptr = mrn_get_slot_data(allocated_thd, false);
       if (slot_ptr) free(slot_ptr);
-      *thd_ha_data(tmp_thd, mrn_hton_ptr) = (void *) NULL;
-      my_hash_delete(&mrn_allocated_thds, (uchar *) tmp_thd);
-    }
+      *thd_ha_data(allocated_thd, mrn_hton_ptr) = (void *) NULL;
+    } GRN_HASH_EACH_END(ctx, cursor);
   }
 
   while (grn_hash_size(&mrn_ctx, mrn_long_term_shares) > 0) {
@@ -2344,7 +2342,7 @@ static int mrn_deinit(void *p)
   mysql_mutex_destroy(&mrn_long_term_shares_mutex);
   grn_hash_close(ctx, mrn_open_tables);
   mysql_mutex_destroy(&mrn_open_tables_mutex);
-  my_hash_free(&mrn_allocated_thds);
+  grn_hash_close(ctx, mrn_allocated_thds);
   mysql_mutex_destroy(&mrn_allocated_thds_mutex);
   mysql_mutex_destroy(&mrn_operations_mutex);
   delete mrn_context_pool;

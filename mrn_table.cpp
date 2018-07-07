@@ -98,7 +98,7 @@ extern mysql_mutex_t mrn_long_term_shares_mutex;
 extern char *mrn_default_tokenizer;
 extern char *mrn_default_wrapper_engine;
 extern handlerton *mrn_hton_ptr;
-extern HASH mrn_allocated_thds;
+extern grn_hash *mrn_allocated_thds;
 extern mysql_mutex_t mrn_allocated_thds_mutex;
 
 static char *mrn_get_string_between_quote(const char *ptr)
@@ -1222,8 +1222,12 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
     {
       mrn::Lock lock(&mrn_allocated_thds_mutex);
-      if (my_hash_insert(&mrn_allocated_thds, (uchar*) thd))
-      {
+      if (grn_hash_add(&mrn_ctx,
+                       mrn_allocated_thds,
+                       thd,
+                       sizeof(thd),
+                       NULL,
+                       NULL) == GRN_ID_NIL) {
         free(slot_data);
         DBUG_RETURN(NULL);
       }
