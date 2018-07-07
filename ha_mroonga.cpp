@@ -751,6 +751,12 @@ static grn_logger mrn_logger = {
 static struct st_mysql_storage_engine storage_engine_structure =
 { MYSQL_HANDLERTON_INTERFACE_VERSION };
 
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+typedef SHOW_VAR mrn_show_var;
+#else
+typedef struct st_mysql_show_var mrn_show_var;
+#endif
+
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_STATUS_VARIABLE_ENTRY(name, value, type, scope) \
   {name, value, type, scope}
@@ -759,7 +765,7 @@ static struct st_mysql_storage_engine storage_engine_structure =
   {name, value, type}
 #endif
 
-static struct st_mysql_show_var mrn_status_variables[] =
+static mrn_show_var mrn_status_variables[] =
 {
   MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_count_skip",
                             (char *)&mrn_count_skip,
