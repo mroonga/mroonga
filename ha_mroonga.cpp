@@ -45,6 +45,7 @@
 #include <ft_global.h>
 #include <spatial.h>
 #include <mysql.h>
+#include <mysql/plugin.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
