@@ -1224,7 +1224,7 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
       mrn::Lock lock(&mrn_allocated_thds_mutex);
       if (grn_hash_add(&mrn_ctx,
                        mrn_allocated_thds,
-                       thd,
+                       &thd,
                        sizeof(thd),
                        NULL,
                        NULL) == GRN_ID_NIL) {

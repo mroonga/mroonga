@@ -1465,7 +1465,7 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
     *thd_ha_data(thd, mrn_hton_ptr) = (void *) NULL;
     {
       mrn::Lock lock(&mrn_allocated_thds_mutex);
-      grn_hash_delete(&mrn_ctx, mrn_allocated_thds, thd, sizeof(thd), NULL);
+      grn_hash_delete(&mrn_ctx, mrn_allocated_thds, &thd, sizeof(thd), NULL);
     }
   }
   DBUG_RETURN(0);
