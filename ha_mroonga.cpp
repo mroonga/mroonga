@@ -806,8 +806,16 @@ static TYPELIB mrn_log_level_typelib = {
   NULL
 };
 
-static void mrn_log_level_update(THD *thd, struct st_mysql_sys_var *var,
-                                 void *var_ptr, const void *save)
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+typedef SYS_VAR mrn_sys_var;
+#else
+typedef struct st_mysql_sys_var mrn_sys_var;
+#endif
+
+static void mrn_log_level_update(THD *thd,
+                                 mrn_sys_var *var,
+                                 void *var_ptr,
+                                 const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   ulong new_value = *static_cast<const ulong *>(save);
@@ -832,8 +840,10 @@ static MYSQL_SYSVAR_ENUM(log_level, mrn_log_level,
                          static_cast<ulong>(mrn_log_level),
                          &mrn_log_level_typelib);
 
-static void mrn_log_file_update(THD *thd, struct st_mysql_sys_var *var,
-                                void *var_ptr, const void *save)
+static void mrn_log_file_update(THD *thd,
+                                mrn_sys_var *var,
+                                void *var_ptr,
+                                const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
@@ -908,8 +918,10 @@ static MYSQL_SYSVAR_STR(log_file, mrn_log_file_path,
                         mrn_log_file_update,
                         MRN_LOG_FILE_PATH);
 
-static void mrn_query_log_file_update(THD *thd, struct st_mysql_sys_var *var,
-                                      void *var_ptr, const void *save)
+static void mrn_query_log_file_update(THD *thd,
+                                      mrn_sys_var *var,
+                                      void *var_ptr,
+                                      const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
@@ -986,8 +998,10 @@ static MYSQL_SYSVAR_STR(query_log_file, mrn_query_log_file_path,
                         mrn_query_log_file_update,
                         NULL);
 
-static void mrn_default_tokenizer_update(THD *thd, struct st_mysql_sys_var *var,
-                                         void *var_ptr, const void *save)
+static void mrn_default_tokenizer_update(THD *thd,
+                                         mrn_sys_var *var,
+                                         void *var_ptr,
+                                         const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
@@ -1059,8 +1073,10 @@ static MYSQL_THDVAR_LONGLONG(match_escalation_threshold,
                              INT_MAX64,
                              0);
 
-static void mrn_vector_column_delimiter_update(THD *thd, struct st_mysql_sys_var *var,
-                                               void *var_ptr, const void *save)
+static void mrn_vector_column_delimiter_update(THD *thd,
+                                               mrn_sys_var *var,
+                                               void *var_ptr,
+                                               const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
@@ -1084,8 +1100,9 @@ static MYSQL_SYSVAR_STR(vector_column_delimiter, mrn_vector_column_delimiter,
                         " ");
 
 static void mrn_database_path_prefix_update(THD *thd,
-                                            struct st_mysql_sys_var *var,
-                                            void *var_ptr, const void *save)
+                                            mrn_sys_var *var,
+                                            void *var_ptr,
+                                            const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   const char *new_value = *((const char **)save);
@@ -1142,8 +1159,10 @@ static MYSQL_THDVAR_ENUM(action_on_fulltext_query_error,
                          mrn_action_on_fulltext_query_error_default,
                          &mrn_action_on_error_typelib);
 
-static void mrn_lock_timeout_update(THD *thd, struct st_mysql_sys_var *var,
-                                    void *var_ptr, const void *save)
+static void mrn_lock_timeout_update(THD *thd,
+                                    mrn_sys_var *var,
+                                    void *var_ptr,
+                                    const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   const int new_value = *static_cast<const int *>(save);
@@ -1240,8 +1259,10 @@ static MYSQL_SYSVAR_BOOL(libgroonga_support_zstd, mrn_libgroonga_support_zstd,
                          NULL,
                          grn_check_zstd_support());
 
-static void mrn_enable_operations_recording_update(THD *thd, struct st_mysql_sys_var *var,
-                                                   void *var_ptr, const void *save)
+static void mrn_enable_operations_recording_update(THD *thd,
+                                                   mrn_sys_var *var,
+                                                   void *var_ptr,
+                                                   const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
   const bool new_value = *static_cast<const bool *>(save);
@@ -1324,7 +1345,7 @@ static MYSQL_THDVAR_ENUM(condition_push_down_type,
                            mrn::condition_push_down::ONE_FULL_TEXT_SEARCH),
                          &mrn_condition_push_down_type_typelib);
 
-static struct st_mysql_sys_var *mrn_system_variables[] =
+static mrn_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
   MYSQL_SYSVAR(log_file),
