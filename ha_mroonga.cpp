@@ -2327,8 +2327,7 @@ static int mrn_deinit(void *p)
     }
   }
 
-  {
-    mrn::Lock lock(&mrn_long_term_shares_mutex);
+  while (grn_hash_size(&mrn_ctx, mrn_long_term_shares) > 0) {
     GRN_HASH_EACH_BEGIN(ctx, mrn_long_term_shares, cursor, id) {
       void *long_term_share_address;
       grn_hash_cursor_get_value(ctx, cursor, &long_term_share_address);
@@ -2337,6 +2336,7 @@ static int mrn_deinit(void *p)
                  long_term_share_address,
                  sizeof(long_term_share));
       mrn_free_long_term_share(long_term_share);
+      break;
     } GRN_HASH_EACH_END(ctx, cursor);
   }
 
