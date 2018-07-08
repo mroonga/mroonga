@@ -239,7 +239,7 @@ Time_zone *mrn_my_tz_UTC;
 #  ifdef MRN_TABLE_DEF_CACHE_TYPE_IS_MAP
 typedef
   malloc_unordered_map<std::string,
-                       std::unique_ptr<TABLE_SHARE, Table_share_deleter>>
+                       std::unique_ptr<TABLE_SHARE, Table_share_deleter>> *
   mrn_table_def_cache_type;
 #  else
 typedef HASH mrn_table_def_cache_type;
