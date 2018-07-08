@@ -2403,6 +2403,9 @@ mrn_declare_plugin(MRN_PLUGIN_NAME)
   "CJK-ready fulltext search, column store",
   PLUGIN_LICENSE_GPL,
   mrn_init,
+#ifdef MRN_ST_MYSQL_PLUGIN_HAVE_CHECK_UNINSTALL
+  NULL,
+#endif
   mrn_deinit,
   MRN_VERSION_IN_HEX,
   mrn_status_variables,
