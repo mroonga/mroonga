@@ -3252,50 +3252,38 @@ ulonglong ha_mroonga::table_flags() const
 ulong ha_mroonga::wrapper_index_flags(uint idx, uint part, bool all_parts) const
 {
   ulong index_flags;
-  KEY *key = &(table_share->key_info[idx]);
   MRN_DBUG_ENTER_METHOD();
-  if (key->algorithm == HA_KEY_ALG_BTREE ||
-      key->algorithm == HA_KEY_ALG_UNDEF) {
-    MRN_SET_WRAP_SHARE_KEY(share, table->s);
-    MRN_SET_WRAP_TABLE_KEY(this, table);
-    index_flags = wrap_handler->index_flags(idx, part, all_parts);
-    MRN_SET_BASE_SHARE_KEY(share, table->s);
-    MRN_SET_BASE_TABLE_KEY(this, table);
-  } else {
-    index_flags = HA_ONLY_WHOLE_INDEX | HA_KEY_SCAN_NOT_ROR;
-  }
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  index_flags = wrap_handler->index_flags(idx, part, all_parts);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(index_flags);
 }
 
 ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
 {
   MRN_DBUG_ENTER_METHOD();
-  ulong flags;
+  ulong flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE;
   KEY *key = &(table_share->key_info[idx]);
-  if (key->algorithm == HA_KEY_ALG_BTREE ||
-      key->algorithm == HA_KEY_ALG_UNDEF) {
-    flags = HA_READ_NEXT | HA_READ_PREV | HA_READ_RANGE;
-    bool need_normalize_p = false;
-    // TODO: MariaDB 10.1 passes key->user_defined_key_parts as part
-    // for ORDER BY DESC. We just it fallback to part = 0. We may use
-    // it for optimization in the future.
-    //
-    // See also: test_if_order_by_key() in sql/sql_select.cc.
-    if (KEY_N_KEY_PARTS(key) == part) {
-      part = 0;
-    }
-    Field *field = &(key->key_part[part].field[0]);
-    if (field && (have_custom_normalizer(key) || should_normalize(field))) {
-      need_normalize_p = true;
-    }
-    if (!need_normalize_p) {
-      flags |= HA_KEYREAD_ONLY;
-    }
-    if (KEY_N_KEY_PARTS(key) > 1 || !need_normalize_p) {
-      flags |= HA_READ_ORDER;
-    }
-  } else {
-    flags = HA_ONLY_WHOLE_INDEX | HA_KEY_SCAN_NOT_ROR;
+  bool need_normalize_p = false;
+  // TODO: MariaDB 10.1 passes key->user_defined_key_parts as part
+  // for ORDER BY DESC. We just it fallback to part = 0. We may use
+  // it for optimization in the future.
+  //
+  // See also: test_if_order_by_key() in sql/sql_select.cc.
+  if (KEY_N_KEY_PARTS(key) == part) {
+    part = 0;
+  }
+  Field *field = &(key->key_part[part].field[0]);
+  if (field && (have_custom_normalizer(key) || should_normalize(field))) {
+    need_normalize_p = true;
+  }
+  if (!need_normalize_p) {
+    flags |= HA_KEYREAD_ONLY;
+  }
+  if (KEY_N_KEY_PARTS(key) > 1 || !need_normalize_p) {
+    flags |= HA_READ_ORDER;
   }
   DBUG_RETURN(flags);
 }
