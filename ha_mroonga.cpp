@@ -46,7 +46,11 @@
 #include <spatial.h>
 #include <mysql.h>
 #include <mysql/plugin.h>
-#include <mysql/psi/mysql_memory.h>
+
+#ifdef MRN_HAVE_MYSQL_PSI_MYSQL_MEMORY_H
+#  include <mysql/psi/mysql_memory.h>
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 
