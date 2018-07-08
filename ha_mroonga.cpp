@@ -3163,7 +3163,7 @@ ulonglong ha_mroonga::wrapper_table_flags() const
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
   table_flags |= HA_CAN_FULLTEXT | HA_PRIMARY_KEY_REQUIRED_FOR_DELETE |
-    HA_CAN_RTREEKEYS | HA_REC_NOT_IN_SEQ;
+    HA_CAN_RTREEKEYS;
 #ifdef HA_CAN_REPAIR
   table_flags |= HA_CAN_REPAIR;
 #endif
@@ -3176,6 +3176,9 @@ ulonglong ha_mroonga::wrapper_table_flags() const
 #ifdef HA_CAN_VIRTUAL_COLUMNS
   table_flags |= HA_CAN_VIRTUAL_COLUMNS;
 #endif
+#ifdef HA_REC_NOT_IN_SEQ
+  table_flags |= HA_REC_NOT_IN_SEQ;
+#endif
   DBUG_RETURN(table_flags);
 }
 
@@ -3185,7 +3188,6 @@ ulonglong ha_mroonga::storage_table_flags() const
   ulonglong flags =
     HA_NO_TRANSACTIONS |
     HA_PARTIAL_COLUMN_READ |
-    HA_REC_NOT_IN_SEQ |
     HA_NULL_IN_KEY |
     HA_CAN_INDEX_BLOBS |
     HA_STATS_RECORDS_IS_EXACT |
@@ -3215,6 +3217,9 @@ ulonglong ha_mroonga::storage_table_flags() const
 #endif
 #ifdef HA_CAN_VIRTUAL_COLUMNS
   flags |= HA_CAN_VIRTUAL_COLUMNS;
+#endif
+#ifdef HA_REC_NOT_IN_SEQ
+  flags |= HA_REC_NOT_IN_SEQ;
 #endif
   DBUG_RETURN(flags);
 }
