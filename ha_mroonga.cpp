@@ -3315,7 +3315,7 @@ int ha_mroonga::create_share_for_create() const
   int error;
   THD *thd = ha_thd();
   LEX *lex = thd->lex;
-  HA_CREATE_INFO *create_info = &lex->create_info;
+  HA_CREATE_INFO *create_info = MRN_LEX_GET_CREATE_INFO(lex);
   TABLE_LIST *table_list = MRN_LEX_GET_TABLE_LIST(lex);
   MRN_DBUG_ENTER_METHOD();
   wrap_handler_for_create = NULL;

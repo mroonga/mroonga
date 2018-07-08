@@ -354,6 +354,12 @@
   ((select_lex)->options)
 #endif
 
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define MRN_LEX_GET_CREATE_INFO(lex) ((lex)->create_info)
+#else
+#  define MRN_LEX_GET_CREATE_INFO(lex) &((lex)->create_info)
+#endif
+
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
 #  if MYSQL_VERSION_ID >= 100306
 #    define mrn_init_sql_alloc(thd, name, mem_root)                     \
