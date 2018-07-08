@@ -46,6 +46,7 @@
 #include <spatial.h>
 #include <mysql.h>
 #include <mysql/plugin.h>
+#include <mysql/psi/mysql_memory.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
