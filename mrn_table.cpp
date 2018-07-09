@@ -34,8 +34,9 @@
 #include <sql/table.h>
 
 #include "mrn_err.h"
-#include "mrn_table.hpp"
 #include "mrn_mysql_compat.h"
+
+#include "mrn_table.hpp"
 #include "mrn_variables.hpp"
 #include <mrn_lock.hpp>
 
