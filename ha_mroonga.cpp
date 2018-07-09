@@ -7063,7 +7063,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data,
   }
 
   grn_id old_record_id;
-  my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
+  my_ptrdiff_t ptr_diff = old_data - table->record[0];
   for (uint j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {
     Field *field = key_info->key_part[j].field;
     field->move_field_offset(ptr_diff);
@@ -7387,7 +7387,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data,
   GRN_TEXT_INIT(&new_key, 0);
   GRN_TEXT_INIT(&new_encoded_key, 0);
 
-  my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(old_data, table->record[0]);
+  my_ptrdiff_t ptr_diff = old_data - table->record[0];
 
   mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   uint i;
@@ -12132,7 +12132,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: stored record ID: %d", record_id));
 
-  my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(buf, table->record[0]);
+  my_ptrdiff_t ptr_diff = buf - table->record[0];
 
   Field *primary_key_field = NULL;
   if (table->s->primary_key != MAX_INDEXES) {
@@ -12183,7 +12183,7 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: stored record ID: %d", record_id));
-  my_ptrdiff_t ptr_diff_old = PTR_BYTE_DIFF(old_data, table->record[0]);
+  my_ptrdiff_t ptr_diff_old = old_data - table->record[0];
   my_ptrdiff_t ptr_diff_new = 0;
 #ifdef MRN_RBR_UPDATE_NEED_ALL_COLUMNS
   if (!written_by_row_based_binlog) {
@@ -12197,7 +12197,7 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
     (new_data && written_by_row_based_binlog == 2);
 #endif
   if (new_data) {
-    ptr_diff_new = PTR_BYTE_DIFF(new_data, table->record[0]);
+    ptr_diff_new = new_data - table->record[0];
   }
   int i;
   int n_columns = table->s->fields;
@@ -12255,7 +12255,7 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
     key_length = grn_table_cursor_get_key(ctx, index_table_cursor, &key);
 
   if (KEY_N_KEY_PARTS(key_info) == 1) {
-    my_ptrdiff_t ptr_diff = PTR_BYTE_DIFF(buf, table->record[0]);
+    my_ptrdiff_t ptr_diff = buf - table->record[0];
     Field *field = key_info->key_part->field;
     mrn::DebugColumnAccess debug_column_access(table, table->write_set);
     field->move_field_offset(ptr_diff);
@@ -15591,8 +15591,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
     need_fill_index = true;
   }
   if (!error && need_fill_index) {
-    my_ptrdiff_t diff =
-      PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
+    my_ptrdiff_t diff = table->record[0] - altered_table->record[0];
     mrn::TableFieldsOffsetMover mover(altered_table, diff);
     error = wrapper_fill_indexes(ha_thd(), altered_table->key_info,
                                  index_columns, ha_alter_info->key_count);
@@ -15746,8 +15745,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
     }
   }
   if (!error && have_multiple_column_index) {
-    my_ptrdiff_t diff =
-      PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
+    my_ptrdiff_t diff = table->record[0] - altered_table->record[0];
     mrn::TableFieldsOffsetMover mover(altered_table, diff);
     error = storage_add_index_multiple_columns(altered_table->key_info,
                                                ha_alter_info->key_count,
@@ -15931,8 +15929,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       bitmap_set_bit(&generated_column_bitmap, field->field_index);
 #  endif
 
-      my_ptrdiff_t diff =
-        PTR_BYTE_DIFF(table->record[0], altered_table->record[0]);
+      my_ptrdiff_t diff = table->record[0] - altered_table->record[0];
       mrn::TableFieldsOffsetMover mover(altered_table, diff);
 
       error = storage_rnd_init(true);
