@@ -732,10 +732,8 @@ typedef HASH mrn_table_def_cache_type;
 #  endif
 #endif
 
-#if MYSQL_VERSION_ID < 50600
-#  define mrn_thd_set_ha_data(thd, hton, ha_data) \
+#define mrn_thd_set_ha_data(thd, hton, ha_data) \
   *thd_ha_data(thd, hton) = ha_data
-#else
-#  define mrn_thd_set_ha_data(thd, hton, ha_data) \
-  thd_set_ha_data(thd, hton, ha_data)
-#endif
+// TODO
+// #define mrn_thd_set_ha_data(thd, hton, ha_data) \
+//   thd_set_ha_data(thd, hton, ha_data)
