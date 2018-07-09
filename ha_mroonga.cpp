@@ -4026,7 +4026,6 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
   MRN_DBUG_ENTER_METHOD();
   LEX *lex = ha_thd()->lex;
   Alter_info *alter_info = MRN_LEX_GET_ALTER_INFO(lex);
-  char ref_db_buff[NAME_LEN + 1], ref_table_buff[NAME_LEN + 1];
   MRN_KEY_SPEC_LIST_EACH_BEGIN(alter_info->key_list, key_spec) {
     if (key_spec->type != MRN_KEYTYPE_FOREIGN)
     {
@@ -4055,186 +4054,193 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
         continue;
       }
     }
-    Foreign_key *fk = (Foreign_key *) key_spec;
-    List_iterator<Key_part_spec> key_part_ref_col_iterator(fk->ref_columns);
-    Key_part_spec *key_part_ref_col = key_part_ref_col_iterator++;
-    mrn_key_part_spec_field_name *ref_field_name =
-      &(key_part_ref_col->field_name);
-    DBUG_PRINT("info", ("mroonga: ref_field_name=%.*s",
-                        static_cast<int>(ref_field_name->length),
-                        ref_field_name->str));
-    mrn_foreign_key_name *ref_db_name = &(fk->ref_db);
-    DBUG_PRINT("info", ("mroonga: ref_db_name=%.*s",
-                        static_cast<int>(ref_db_name->length),
-                        ref_db_name->str));
-    if (ref_db_name->str && lower_case_table_names) {
-      strmake(ref_db_buff, ref_db_name->str, ref_db_name->length);
-      my_casedn_str(system_charset_info, ref_db_buff);
-      ref_db_name->str = ref_db_buff;
-      ref_db_name->length = strlen(ref_db_name->str);
-      DBUG_PRINT("info", ("mroonga: casedn ref_db_name=%s",
-                          ref_db_name->str));
-    }
-    mrn_foreign_key_name *ref_table_name = &(fk->ref_table);
-    DBUG_PRINT("info", ("mroonga: ref_table_name=%.*s",
-                        static_cast<int>(ref_table_name->length),
-                        ref_table_name->str));
-    if (ref_table_name->str && lower_case_table_names) {
-      strmake(ref_table_buff,
+    const mrn_foreign_key_spec *fk =
+      static_cast<const mrn_foreign_key_spec *>(key_spec);
+    MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(fk->ref_columns, key_part_ref_spec) {
+      const mrn_key_part_spec_field_name *ref_field_name =
+        &(key_part_ref_spec->field_name);
+      DBUG_PRINT("info", ("mroonga: ref_field_name=%.*s",
+                          static_cast<int>(ref_field_name->length),
+                          ref_field_name->str));
+
+      {
+        const mrn_foreign_key_name *ref_db_name = &(fk->ref_db);
+        DBUG_PRINT("info", ("mroonga: ref_db_name=%.*s",
+                            static_cast<int>(ref_db_name->length),
+                            ref_db_name->str));
+        char normalized_ref_db_name[NAME_LEN + 1];
+        strmake(normalized_ref_db_name,
+                ref_db_name->str,
+                ref_db_name->length);
+        if (lower_case_table_names) {
+          my_casedn_str(system_charset_info, normalized_ref_db_name);
+          DBUG_PRINT("info", ("mroonga: casedn ref_db_name=%s",
+                              normalized_ref_db_name));
+        }
+        if (ref_db_name->str &&
+            !(table->s->db.length == strlen(normalized_ref_db_name) &&
+              strncmp(table->s->db.str,
+                      normalized_ref_db_name,
+                      table->s->db.length) == 0)) {
+          error = ER_CANT_CREATE_TABLE;
+          my_message(error,
+                     "mroonga: "
+                     "can't use FOREIGN_KEY during different database tables",
+                     MYF(0));
+          DBUG_RETURN(false);
+        }
+      }
+
+      const mrn_foreign_key_name *ref_table_name = &(fk->ref_table);
+      DBUG_PRINT("info", ("mroonga: ref_table_name=%.*s",
+                          static_cast<int>(ref_table_name->length),
+                          ref_table_name->str));
+      char normalized_ref_table_name[NAME_LEN + 1];
+      strmake(normalized_ref_table_name,
               ref_table_name->str,
               ref_table_name->length);
-      my_casedn_str(system_charset_info, ref_table_buff);
-      ref_table_name->str = ref_table_buff;
-      ref_table_name->length = strlen(ref_table_name->str);
-      DBUG_PRINT("info", ("mroonga: casedn ref_table_name=%s",
-                          ref_table_name->str));
-    }
-    if (ref_db_name->str &&
-        !(table->s->db.length == ref_db_name->length &&
-          strncmp(table->s->db.str,
-                  ref_db_name->str,
-                  ref_db_name->length) == 0)) {
-      error = ER_CANT_CREATE_TABLE;
-      my_message(error,
-                 "mroonga can't use FOREIGN_KEY during different database tables",
-                 MYF(0));
-      DBUG_RETURN(false);
-    }
+      if (lower_case_table_names) {
+        my_casedn_str(system_charset_info, normalized_ref_table_name);
+        DBUG_PRINT("info", ("mroonga: casedn ref_table_name=%s",
+                            normalized_ref_table_name));
+      }
 
-    grn_obj *column, *column_ref = NULL, *grn_table_ref = NULL;
-    char ref_path[FN_REFLEN + 1];
-    TABLE_LIST table_list;
-    TABLE_SHARE *tmp_ref_table_share;
-    build_table_filename(ref_path, sizeof(ref_path) - 1,
-                         table->s->db.str,
-                         ref_table_name->str, "", 0);
+      grn_obj *column, *column_ref = NULL, *grn_table_ref = NULL;
+      char ref_path[FN_REFLEN + 1];
+      TABLE_LIST table_list;
+      TABLE_SHARE *tmp_ref_table_share;
+      build_table_filename(ref_path, sizeof(ref_path) - 1,
+                           table->s->db.str,
+                           normalized_ref_table_name, "", 0);
+      DBUG_PRINT("info", ("mroonga: ref_path=%s", ref_path));
 
-    DBUG_PRINT("info", ("mroonga: ref_path=%s", ref_path));
-    error = mrn_change_encoding(ctx, system_charset_info);
-    if (error)
-      DBUG_RETURN(false);
-    mrn::PathMapper mapper(ref_path);
-    grn_table_ref = grn_ctx_get(ctx, mapper.table_name(),
-                                strlen(mapper.table_name()));
-    if (!grn_table_ref) {
-      error = ER_CANT_CREATE_TABLE;
-      char err_msg[MRN_BUFFER_SIZE];
-      sprintf(err_msg, "reference table [%s.%s] is not mroonga table",
-              table->s->db.str, ref_table_name->str);
-      my_message(error, err_msg, MYF(0));
-      DBUG_RETURN(false);
-    }
+      error = mrn_change_encoding(ctx, system_charset_info);
+      if (error)
+        DBUG_RETURN(false);
 
-    mrn_table_list_init_one_table((&table_list),
-                                  mapper.db_name(),
-                                  strlen(mapper.db_name()),
-                                  mapper.mysql_table_name(),
-                                  strlen(mapper.mysql_table_name()),
-                                  mapper.mysql_table_name(),
-                                  TL_WRITE);
-    mrn_open_mutex_lock(table->s);
-    tmp_ref_table_share =
-      mrn_create_tmp_table_share(&table_list, ref_path, &error);
-    mrn_open_mutex_unlock(table->s);
-    if (!tmp_ref_table_share) {
-      grn_obj_unlink(ctx, grn_table_ref);
-      error = ER_CANT_CREATE_TABLE;
-      char err_msg[MRN_BUFFER_SIZE];
-      sprintf(err_msg, "reference table [%s.%s] is not found",
-              table->s->db.str, ref_table_name->str);
-      my_message(error, err_msg, MYF(0));
-      DBUG_RETURN(false);
-    }
-    uint ref_pkey_nr = tmp_ref_table_share->primary_key;
-    if (ref_pkey_nr == MAX_KEY) {
+      mrn::PathMapper mapper(ref_path);
+      grn_table_ref = grn_ctx_get(ctx, mapper.table_name(),
+                                  strlen(mapper.table_name()));
+      if (!grn_table_ref) {
+        error = ER_CANT_CREATE_TABLE;
+        char err_msg[MRN_BUFFER_SIZE];
+        sprintf(err_msg, "reference table [%s.%s] is not mroonga table",
+                table->s->db.str, normalized_ref_table_name);
+        my_message(error, err_msg, MYF(0));
+        DBUG_RETURN(false);
+      }
+
+      mrn_table_list_init_one_table((&table_list),
+                                    mapper.db_name(),
+                                    strlen(mapper.db_name()),
+                                    mapper.mysql_table_name(),
+                                    strlen(mapper.mysql_table_name()),
+                                    mapper.mysql_table_name(),
+                                    TL_WRITE);
+      mrn_open_mutex_lock(table->s);
+      tmp_ref_table_share =
+        mrn_create_tmp_table_share(&table_list, ref_path, &error);
+      mrn_open_mutex_unlock(table->s);
+      if (!tmp_ref_table_share) {
+        grn_obj_unlink(ctx, grn_table_ref);
+        error = ER_CANT_CREATE_TABLE;
+        char err_msg[MRN_BUFFER_SIZE];
+        sprintf(err_msg, "reference table [%s.%s] is not found",
+                table->s->db.str, normalized_ref_table_name);
+        my_message(error, err_msg, MYF(0));
+        DBUG_RETURN(false);
+      }
+      uint ref_pkey_nr = tmp_ref_table_share->primary_key;
+      if (ref_pkey_nr == MAX_KEY) {
+        mrn_open_mutex_lock(table->s);
+        mrn_free_tmp_table_share(tmp_ref_table_share);
+        mrn_open_mutex_unlock(table->s);
+        grn_obj_unlink(ctx, grn_table_ref);
+        error = ER_CANT_CREATE_TABLE;
+        char err_msg[MRN_BUFFER_SIZE];
+        sprintf(err_msg, "reference table [%s.%s] has no primary key",
+                table->s->db.str, normalized_ref_table_name);
+        my_message(error, err_msg, MYF(0));
+        DBUG_RETURN(false);
+      }
+      KEY *ref_key_info = &tmp_ref_table_share->key_info[ref_pkey_nr];
+      uint ref_key_parts = KEY_N_KEY_PARTS(ref_key_info);
+      if (ref_key_parts > 1) {
+        mrn_open_mutex_lock(table->s);
+        mrn_free_tmp_table_share(tmp_ref_table_share);
+        mrn_open_mutex_unlock(table->s);
+        grn_obj_unlink(ctx, grn_table_ref);
+        error = ER_CANT_CREATE_TABLE;
+        char err_msg[MRN_BUFFER_SIZE];
+        sprintf(err_msg,
+                "reference table [%s.%s] primary key is multiple column",
+                table->s->db.str, normalized_ref_table_name);
+        my_message(error, err_msg, MYF(0));
+        DBUG_RETURN(false);
+      }
+      Field *ref_field = &ref_key_info->key_part->field[0];
+      if (!FIELD_NAME_EQUAL_STRING(ref_field, ref_field_name)) {
+        mrn_open_mutex_lock(table->s);
+        mrn_free_tmp_table_share(tmp_ref_table_share);
+        mrn_open_mutex_unlock(table->s);
+        grn_obj_unlink(ctx, grn_table_ref);
+        error = ER_CANT_CREATE_TABLE;
+        char err_msg[MRN_BUFFER_SIZE];
+        sprintf(err_msg,
+                "reference column [%s.%s.%s] is not used for primary key",
+                table->s->db.str,
+                normalized_ref_table_name,
+                ref_field_name->str);
+        my_message(error, err_msg, MYF(0));
+        DBUG_RETURN(false);
+      }
       mrn_open_mutex_lock(table->s);
       mrn_free_tmp_table_share(tmp_ref_table_share);
       mrn_open_mutex_unlock(table->s);
-      grn_obj_unlink(ctx, grn_table_ref);
-      error = ER_CANT_CREATE_TABLE;
-      char err_msg[MRN_BUFFER_SIZE];
-      sprintf(err_msg, "reference table [%s.%s] has no primary key",
-              table->s->db.str, ref_table_name->str);
-      my_message(error, err_msg, MYF(0));
-      DBUG_RETURN(false);
-    }
-    KEY *ref_key_info = &tmp_ref_table_share->key_info[ref_pkey_nr];
-    uint ref_key_parts = KEY_N_KEY_PARTS(ref_key_info);
-    if (ref_key_parts > 1) {
-      mrn_open_mutex_lock(table->s);
-      mrn_free_tmp_table_share(tmp_ref_table_share);
-      mrn_open_mutex_unlock(table->s);
-      grn_obj_unlink(ctx, grn_table_ref);
-      error = ER_CANT_CREATE_TABLE;
-      char err_msg[MRN_BUFFER_SIZE];
-      sprintf(err_msg,
-              "reference table [%s.%s] primary key is multiple column",
-              table->s->db.str, ref_table_name->str);
-      my_message(error, err_msg, MYF(0));
-      DBUG_RETURN(false);
-    }
-    Field *ref_field = &ref_key_info->key_part->field[0];
-    if (!FIELD_NAME_EQUAL_STRING(ref_field, ref_field_name)) {
-      mrn_open_mutex_lock(table->s);
-      mrn_free_tmp_table_share(tmp_ref_table_share);
-      mrn_open_mutex_unlock(table->s);
-      grn_obj_unlink(ctx, grn_table_ref);
-      error = ER_CANT_CREATE_TABLE;
-      char err_msg[MRN_BUFFER_SIZE];
-      sprintf(err_msg,
-              "reference column [%s.%s.%s] is not used for primary key",
-              table->s->db.str,
-              ref_table_name->str,
-              ref_field_name->str);
-      my_message(error, err_msg, MYF(0));
-      DBUG_RETURN(false);
-    }
-    mrn_open_mutex_lock(table->s);
-    mrn_free_tmp_table_share(tmp_ref_table_share);
-    mrn_open_mutex_unlock(table->s);
-    grn_column_flags col_flags = GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT;
-    column = grn_column_create(ctx, table_obj,
-                               FIELD_NAME(field),
-                               NULL, col_flags, grn_table_ref);
-    if (ctx->rc) {
-      grn_obj_unlink(ctx, grn_table_ref);
-      error = ER_CANT_CREATE_TABLE;
-      my_message(error, ctx->errbuf, MYF(0));
-      DBUG_RETURN(false);
-    }
+      grn_column_flags col_flags = GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT;
+      column = grn_column_create(ctx, table_obj,
+                                 FIELD_NAME(field),
+                                 NULL, col_flags, grn_table_ref);
+      if (ctx->rc) {
+        grn_obj_unlink(ctx, grn_table_ref);
+        error = ER_CANT_CREATE_TABLE;
+        my_message(error, ctx->errbuf, MYF(0));
+        DBUG_RETURN(false);
+      }
 
-    mrn::IndexColumnName index_column_name(grn_table_name, FIELD_NAME(field));
-    grn_obj_flags ref_col_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
-    column_ref = grn_column_create(ctx, grn_table_ref,
-                                   index_column_name.c_str(),
-                                   index_column_name.length(),
-                                   NULL, ref_col_flags, table_obj);
-    if (ctx->rc) {
-      grn_obj_unlink(ctx, column);
-      grn_obj_unlink(ctx, grn_table_ref);
-      error = ER_CANT_CREATE_TABLE;
-      my_message(error, ctx->errbuf, MYF(0));
-      DBUG_RETURN(false);
-    }
+      mrn::IndexColumnName index_column_name(grn_table_name, FIELD_NAME(field));
+      grn_obj_flags ref_col_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
+      column_ref = grn_column_create(ctx, grn_table_ref,
+                                     index_column_name.c_str(),
+                                     index_column_name.length(),
+                                     NULL, ref_col_flags, table_obj);
+      if (ctx->rc) {
+        grn_obj_unlink(ctx, column);
+        grn_obj_unlink(ctx, grn_table_ref);
+        error = ER_CANT_CREATE_TABLE;
+        my_message(error, ctx->errbuf, MYF(0));
+        DBUG_RETURN(false);
+      }
 
-    grn_obj source_ids;
-    grn_id source_id = grn_obj_id(ctx, column);
-    GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
-    GRN_UINT32_PUT(ctx, &source_ids, source_id);
-    if (error) {
+      grn_obj source_ids;
+      grn_id source_id = grn_obj_id(ctx, column);
+      GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
+      GRN_UINT32_PUT(ctx, &source_ids, source_id);
+      if (error) {
+        grn_obj_unlink(ctx, &source_ids);
+        grn_obj_unlink(ctx, column_ref);
+        grn_obj_unlink(ctx, column);
+        grn_obj_unlink(ctx, grn_table_ref);
+        DBUG_RETURN(false);
+      }
+      grn_obj_set_info(ctx, column_ref, GRN_INFO_SOURCE, &source_ids);
       grn_obj_unlink(ctx, &source_ids);
       grn_obj_unlink(ctx, column_ref);
       grn_obj_unlink(ctx, column);
       grn_obj_unlink(ctx, grn_table_ref);
-      DBUG_RETURN(false);
-    }
-    grn_obj_set_info(ctx, column_ref, GRN_INFO_SOURCE, &source_ids);
-    grn_obj_unlink(ctx, &source_ids);
-    grn_obj_unlink(ctx, column_ref);
-    grn_obj_unlink(ctx, column);
-    grn_obj_unlink(ctx, grn_table_ref);
-    error = 0;
-    DBUG_RETURN(true);
+      error = 0;
+      DBUG_RETURN(true);
+    } MRN_KEY_PART_SPEC_LIST_EACH_END();
   } MRN_KEY_SPEC_LIST_EACH_END();
   error = 0;
   DBUG_RETURN(false);
