@@ -350,6 +350,10 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
 #endif
 
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+#endif
+
 #if defined(HAVE_PSI_INTERFACE) &&                      \
   (MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P))
 #  define MRN_HAVE_PSI_SERVER
@@ -763,7 +767,13 @@ protected:
                            Alter_inplace_info *ha_alter_info);
   bool commit_inplace_alter_table(TABLE *altered_table,
                                   Alter_inplace_info *ha_alter_info,
-                                  bool commit);
+                                  bool commit
+#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+                                  ,
+                                  const dd::Table *old_table_def,
+                                  dd::Table *new_table_def
+#  endif
+    ) mrn_override;
   void notify_table_changed(
 #  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
     Alter_inplace_info *ha_alter_info
@@ -1360,10 +1370,22 @@ private:
                                    Alter_inplace_info *ha_alter_info);
   bool wrapper_commit_inplace_alter_table(TABLE *altered_table,
                                           Alter_inplace_info *ha_alter_info,
-                                          bool commit);
+                                          bool commit
+#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+                                          ,
+                                          const dd::Table *old_table_def,
+                                          dd::Table *new_table_def
+#  endif
+    );
   bool storage_commit_inplace_alter_table(TABLE *altered_table,
                                           Alter_inplace_info *ha_alter_info,
-                                          bool commit);
+                                          bool commit
+#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+                                          ,
+                                          const dd::Table *old_table_def,
+                                          dd::Table *new_table_def
+#  endif
+    );
   void wrapper_notify_table_changed(
 #  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
     Alter_inplace_info *ha_alter_info

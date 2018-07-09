@@ -16205,7 +16205,13 @@ bool ha_mroonga::inplace_alter_table(
 bool ha_mroonga::wrapper_commit_inplace_alter_table(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info,
-  bool commit)
+  bool commit
+#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+  ,
+  const dd::Table *old_table_def,
+  dd::Table *new_table_def
+#  endif
+  )
 {
   bool result;
   MRN_DBUG_ENTER_METHOD();
@@ -16218,9 +16224,17 @@ bool ha_mroonga::wrapper_commit_inplace_alter_table(
   MRN_SET_WRAP_ALTER_KEY(this, ha_alter_info);
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+  result = wrap_handler->ha_commit_inplace_alter_table(wrap_altered_table,
+                                                       ha_alter_info,
+                                                       commit,
+                                                       old_table_def,
+                                                       new_table_def);
+#  else
   result = wrap_handler->ha_commit_inplace_alter_table(wrap_altered_table,
                                                        ha_alter_info,
                                                        commit);
+#  endif
   MRN_SET_BASE_ALTER_KEY(this, ha_alter_info);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -16233,7 +16247,13 @@ bool ha_mroonga::wrapper_commit_inplace_alter_table(
 bool ha_mroonga::storage_commit_inplace_alter_table(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info,
-  bool commit)
+  bool commit
+#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+  ,
+  const dd::Table *old_table_def,
+  dd::Table *new_table_def
+#  endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_RETURN(false);
@@ -16242,16 +16262,40 @@ bool ha_mroonga::storage_commit_inplace_alter_table(
 bool ha_mroonga::commit_inplace_alter_table(
   TABLE *altered_table,
   Alter_inplace_info *ha_alter_info,
-  bool commit)
+  bool commit
+#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+  ,
+  const dd::Table *old_table_def,
+  dd::Table *new_table_def
+#  endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   bool result;
   if (share->wrapper_mode) {
-    result = wrapper_commit_inplace_alter_table(altered_table, ha_alter_info,
+#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+    result = wrapper_commit_inplace_alter_table(altered_table,
+                                                ha_alter_info,
+                                                commit,
+                                                old_table_def,
+                                                new_table_def);
+#  else
+    result = wrapper_commit_inplace_alter_table(altered_table,
+                                                ha_alter_info,
                                                 commit);
+#  endif
   } else {
-    result = storage_commit_inplace_alter_table(altered_table, ha_alter_info,
+#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+    result = storage_commit_inplace_alter_table(altered_table,
+                                                ha_alter_info,
+                                                commit,
+                                                old_table_def,
+                                                new_table_def);
+#  else
+    result = storage_commit_inplace_alter_table(altered_table,
+                                                ha_alter_info,
                                                 commit);
+#  endif
   }
   DBUG_RETURN(result);
 }
