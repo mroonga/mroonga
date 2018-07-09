@@ -215,6 +215,19 @@
 
 #if MYSQL_VERSION_ID < 100000
 #  define MRN_HAVE_TABLE_DEF_CACHE
+#  if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#    define MRN_TABLE_DEF_CACHE_TYPE_IS_MAP
+#  endif
+
+#  ifdef MRN_TABLE_DEF_CACHE_TYPE_IS_MAP
+struct Table_share_deleter;
+typedef
+  malloc_unordered_map<std::string,
+                       std::unique_ptr<TABLE_SHARE, Table_share_deleter>> *
+  mrn_table_def_cache_type;
+#  else
+typedef HASH mrn_table_def_cache_type;
+#  endif
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100009

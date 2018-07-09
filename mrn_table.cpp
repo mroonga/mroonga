@@ -81,7 +81,7 @@
 #define MRN_GROONGA_LEN (sizeof(MRN_GROONGA_STR) - 1)
 
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
-extern HASH *mrn_table_def_cache;
+extern mrn_table_def_cache_type *mrn_table_def_cache;
 #endif
 
 #ifdef __cplusplus
@@ -1101,10 +1101,19 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   key_length = create_table_def_key(thd, key, table_list, false);
 #  endif
 #  ifdef MRN_HAVE_TABLE_DEF_CACHE
+#    ifdef MRN_TABLE_DEF_CACHE_TYPE_IS_MAP
+  share = get_table_share(thd,
+                          table_list->db,
+                          table_list->table_name,
+                          key,
+                          key_length,
+                          false);
+#    else
   my_hash_value_type hash_value;
   hash_value = my_calc_hash(mrn_table_def_cache, (uchar*) key, key_length);
   share = get_table_share(thd, table_list, key, key_length, 0, error,
                           hash_value);
+#    endif
 #  elif defined(MRN_HAVE_TDC_ACQUIRE_SHARE)
   share = tdc_acquire_share(thd, table_list->db, table_list->table_name, key,
                             key_length,
