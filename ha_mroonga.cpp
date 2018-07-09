@@ -172,7 +172,9 @@ static mysql_mutex_t *mrn_LOCK_open;
 #    define MRN_ORDER_IS_ASC(order) ((order)->asc)
 #  endif
 #else
-#  if MYSQL_VERSION_ID >= 50603
+#  if MYSQL_VERSION_ID >= 80011
+#    define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER_ASC)
+#  elif MYSQL_VERSION_ID >= 50603
 #    define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER::ORDER_ASC)
 #  else
 #    define MRN_ORDER_IS_ASC(order) ((order)->asc)
