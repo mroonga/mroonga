@@ -14006,9 +14006,10 @@ int ha_mroonga::wrapper_rename_table(const char *from, const char *to,
   handler *hnd;
   MRN_DBUG_ENTER_METHOD();
 
-  hnd = get_new_handler(tmp_share->table_share,
-                        current_thd->mem_root,
-                        tmp_share->hton);
+  hnd = mrn_get_new_handler(tmp_share->table_share,
+                            from_table_def->partition_type() != dd::Table::PT_NONE,
+                            current_thd->mem_root,
+                            tmp_share->hton);
   if (!hnd)
   {
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
