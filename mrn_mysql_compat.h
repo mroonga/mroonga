@@ -648,42 +648,40 @@
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
-  typedef Key_spec mrn_key;
-#  define MRN_KEY_EACH_BEGIN(key_list, key) do {                \
-    for (size_t key_i; key_i < key_list.size(); ++key_i) {      \
-      const mrn_key *key = key_list[key_i];
-#  define MRN_KEY_EACH_END()                    \
+  typedef Key_spec mrn_key_spec;
+#  define MRN_KEY_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {        \
+    for (size_t spec_i; spec_i < spec_list.size(); ++spec_i) {      \
+      const mrn_key_spec *spec = spec_list[spec_i];
+#  define MRN_KEY_SEPC_LIST_EACH_END()          \
     }                                           \
   } while (false)
 #else
-  typedef Key mrn_key;
-#  define MRN_KEY_EACH_BEGIN(key_list, key) do {        \
-    List_iterator<mrn_key> key_iterator(key_list);      \
-    const mrn_key *key;                                 \
-    while ((key = key_iterator++))
-#  define MRN_KEY_EACH_END()                    \
+  typedef Key mrn_key_spec;
+#  define MRN_KEY_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {    \
+    List_iterator<mrn_key_spec> key_iterator(spec_list);        \
+    const mrn_key_spec *spec;                                   \
+    while ((spec = spec_iterator++))
+#  define MRN_KEY_SPEC_LIST_EACH_END()          \
   } while (false)
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
-#  define MRN_KEY_PART_LIST_N_ELEMENTS(key_part_list)   \
-  key_part_list.element_size()
-#  define MRN_KEY_PART_EACH_BEGIN(key_part_list, key_part) do {   \
-    for (size_t key_part_i;                                       \
-         key_part_i < key_part_list.size();                       \
-         ++key_part_i) {                                          \
-      const Key_part_spec *key_part = key_part_list[key_part_i];
-#  define MRN_KEY_PART_EACH_END()               \
+#  define MRN_KEY_PART_SPEC_LIST_N_ELEMENTS(spec_list)      \
+  spec_list.element_size()
+#  define MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {       \
+    for (size_t spec_i; spec_i < spec_list.size(); ++spec_i) {          \
+      const Key_part_spec *spec = spec_list[spec_i];
+#  define MRN_KEY_PART_SPEC_LIST_EACH_END()     \
     }                                           \
   } while (false)
 #else
-#  define MRN_KEY_PART_LIST_N_ELEMENTS(key_part_list)   \
-  key_part_list.elements
-#  define MRN_KEY_PART_EACH_BEGIN(key_part_list, key_part) do {         \
-    List_iterator<Key_part_spec> key_part_iterator(key_part_list);      \
-    const Key_part_spec *key_part;                                      \
-    while ((key_part = key_part_iterator++))
-#  define MRN_KEY_PART_EACH_END()               \
+#  define MRN_KEY_PART_SPEC_LIST_N_ELEMENTS(spec_list)      \
+  spec_list.elements
+#  define MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {       \
+    List_iterator<Key_part_spec> spec_iterator(spec_list);              \
+    const Key_part_spec *spec;                                          \
+    while ((spec = spec_iterator++))
+#  define MRN_KEY_PART_SPEC_LIST_EACH_END()     \
   } while (false)
 #endif
 

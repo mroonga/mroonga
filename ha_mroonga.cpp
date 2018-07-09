@@ -4027,35 +4027,35 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
   LEX *lex = ha_thd()->lex;
   Alter_info *alter_info = MRN_LEX_GET_ALTER_INFO(lex);
   char ref_db_buff[NAME_LEN + 1], ref_table_buff[NAME_LEN + 1];
-  MRN_KEY_EACH_BEGIN(alter_info->key_list, key) {
-    if (key->type != MRN_KEYTYPE_FOREIGN)
+  MRN_KEY_SPEC_LIST_EACH_BEGIN(alter_info->key_list, key_spec) {
+    if (key_spec->type != MRN_KEYTYPE_FOREIGN)
     {
       continue;
     }
-    if (MRN_KEY_PART_LIST_N_ELEMENTS(key->columns) > 1)
+    if (MRN_KEY_PART_SPEC_LIST_N_ELEMENTS(key_spec->columns) > 1)
     {
       error = ER_CANT_CREATE_TABLE;
       my_message(error, "mroonga can't use FOREIGN_KEY with multiple columns",
-        MYF(0));
+                 MYF(0));
       DBUG_RETURN(false);
     }
     {
       bool is_same_field_name = false;
-      MRN_KEY_PART_EACH_BEGIN(key->columns, key_part_column) {
+      MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(key_spec->columns, key_part_spec) {
         mrn_key_part_spec_field_name *field_name =
-          &(key_part_column->field_name);
+          &(key_part_spec->field_name);
         DBUG_PRINT("info", ("mroonga: field_name=%.*s",
                             static_cast<int>(field_name->length),
                             field_name->str));
         DBUG_PRINT("info", ("mroonga: field->field_name=" FIELD_NAME_FORMAT,
                             FIELD_NAME_FORMAT_VALUE(field)));
         is_same_field_name = FIELD_NAME_EQUAL_STRING(field, field_name);
-      } MRN_KEY_PART_EACH_END();
+      } MRN_KEY_PART_SPEC_LIST_EACH_END();
       if (!is_same_field_name) {
         continue;
       }
     }
-    Foreign_key *fk = (Foreign_key *) key;
+    Foreign_key *fk = (Foreign_key *) key_spec;
     List_iterator<Key_part_spec> key_part_ref_col_iterator(fk->ref_columns);
     Key_part_spec *key_part_ref_col = key_part_ref_col_iterator++;
     mrn_key_part_spec_field_name *ref_field_name =
@@ -4235,7 +4235,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     grn_obj_unlink(ctx, grn_table_ref);
     error = 0;
     DBUG_RETURN(true);
-  } MRN_KEY_EACH_END();
+  } MRN_KEY_SPEC_LIST_EACH_END();
   error = 0;
   DBUG_RETURN(false);
 }
