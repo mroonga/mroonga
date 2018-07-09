@@ -13316,7 +13316,11 @@ int ha_mroonga::wrapper_multi_range_read_next(range_id_t *range_info)
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (fulltext_searching)
     set_pk_bitmap();
+#ifdef MRN_HANDLER_HAVE_HA_MULTI_RANGE_READ_NEXT
   error = wrap_handler->ha_multi_range_read_next(range_info);
+#else
+  error = wrap_handler->multi_range_read_next(range_info);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
