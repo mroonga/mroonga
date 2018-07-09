@@ -689,5 +689,5 @@
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
   typedef Foreign_key_spec mrn_foreign_key_spec;
 #else
-  typedef ForeignKey mrn_foreign_key_spec;
+  typedef Foreign_Key mrn_foreign_key_spec;
 #endif
