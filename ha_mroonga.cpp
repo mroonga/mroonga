@@ -4071,7 +4071,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
         char normalized_ref_db_name[NAME_LEN + 1];
         strmake(normalized_ref_db_name,
                 ref_db_name->str,
-                ref_db_name->length);
+                ref_db_name->str ? ref_db_name->length : 0);
         if (lower_case_table_names) {
           my_casedn_str(system_charset_info, normalized_ref_db_name);
           DBUG_PRINT("info", ("mroonga: casedn ref_db_name=%s",
@@ -4098,7 +4098,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       char normalized_ref_table_name[NAME_LEN + 1];
       strmake(normalized_ref_table_name,
               ref_table_name->str,
-              ref_table_name->length);
+              ref_table_name->str ? ref_table_name->length : 0);
       if (lower_case_table_names) {
         my_casedn_str(system_charset_info, normalized_ref_table_name);
         DBUG_PRINT("info", ("mroonga: casedn ref_table_name=%s",
