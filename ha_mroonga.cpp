@@ -247,6 +247,14 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_TABLE_LIST_GET_DERIVED(table_list) (table_list)->derived
 #endif
 
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define MRN_TABLE_SET_FOUND_ROW(table) table->set_found_row();
+#  define MRN_TABLE_SET_NO_ROW(table) table->set_no_row();
+#else
+#  define MRN_TABLE_SET_FOUND_ROW(table) table->status = 0;
+#  define MRN_TABLE_SET_NO_ROW(table) table->status = STATUS_NOT_FOUND;
+#endif
+
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_GEOMETRY_FREE(geometry)
 #else
@@ -8486,11 +8494,11 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
         grn_id found_record_id = *((grn_id *)key_min);
         if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
           storage_store_fields(buf, found_record_id);
-          table->status = 0;
+          MRN_TABLE_SET_FOUND_ROW(table);
           record_id = found_record_id;
           DBUG_RETURN(0);
         } else {
-          table->status = STATUS_NOT_FOUND;
+          MRN_TABLE_SET_NO_ROW(table);
           DBUG_RETURN(HA_ERR_END_OF_FILE);
         }
       }
@@ -9341,10 +9349,10 @@ int ha_mroonga::storage_ft_read(uchar *buf)
   }
 
   if (found_record_id == GRN_ID_NIL) {
-    table->status = STATUS_NOT_FOUND;
+    MRN_TABLE_SET_NO_ROW(table);
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
-  table->status = 0;
+  MRN_TABLE_SET_FOUND_ROW(table);
 
   if (count_skip && record_id != GRN_ID_NIL) {
     DBUG_RETURN(0);
@@ -10631,7 +10639,7 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
   }
   if (record_id == GRN_ID_NIL) {
     DBUG_PRINT("info", ("mroonga: storage_get_next_record: end-of-file"));
-    table->status = STATUS_NOT_FOUND;
+    MRN_TABLE_SET_NO_ROW(table);
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
   if (buf) {
@@ -10665,7 +10673,7 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
       }
     }
   }
-  table->status = 0;
+  MRN_TABLE_SET_FOUND_ROW(table);
   DBUG_RETURN(0);
 }
 
