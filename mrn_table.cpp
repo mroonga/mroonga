@@ -542,8 +542,12 @@ error:
 
 bool mrn_is_geo_key(const KEY *key_info)
 {
-  return key_info->algorithm == HA_KEY_ALG_UNDEF &&
+  return key_info->algorithm != HA_KEY_ALG_BTREE &&
+    key_info->algorithm != HA_KEY_ALG_RTREE &&
+    key_info->algorithm != HA_KEY_ALG_HASH &&
+    key_info->algorithm != HA_KEY_ALG_FULLTEXT &&
     KEY_N_KEY_PARTS(key_info) == 1 &&
+    key_info->key_part[0].field &&
     key_info->key_part[0].field->type() == MYSQL_TYPE_GEOMETRY;
 }
 
