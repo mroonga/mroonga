@@ -15731,7 +15731,9 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
         grn_table_size(ctx, index_tables[key_pos])
     ) {
       error = HA_ERR_FOUND_DUPP_UNIQUE;
-      my_printf_error(ER_DUP_UNIQUE, ER(ER_DUP_UNIQUE), MYF(0),
+      my_printf_error(ER_DUP_UNIQUE,
+                      MRN_GET_ERR_MSG(ER_DUP_UNIQUE),
+                      MYF(0),
                       table_share->table_name);
       ++i;
       break;
@@ -15752,7 +15754,9 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
                                                index_tables,
                                                index_columns, false);
     if (error == HA_ERR_FOUND_DUPP_UNIQUE) {
-      my_printf_error(ER_DUP_UNIQUE, ER(ER_DUP_UNIQUE), MYF(0),
+      my_printf_error(ER_DUP_UNIQUE,
+                      MRN_GET_ERR_MSG(ER_DUP_UNIQUE),
+                      MYF(0),
                       table_share->table_name);
     } else if (error) {
       my_message(error, "failed to create multiple column index", MYF(0));
