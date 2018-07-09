@@ -13029,6 +13029,7 @@ handler *ha_mroonga::clone(const char *name, MEM_ROOT *mem_root)
   DBUG_RETURN(cloned_handler);
 }
 
+#ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
 uint8 ha_mroonga::wrapper_table_cache_type()
 {
   uint8 res;
@@ -13060,6 +13061,7 @@ uint8 ha_mroonga::table_cache_type()
   }
   DBUG_RETURN(type);
 }
+#endif
 
 #ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ
 ha_rows ha_mroonga::wrapper_multi_range_read_info_const(uint keyno,
@@ -17887,6 +17889,7 @@ void ha_mroonga::rebind_psi()
 }
 #endif
 
+#ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
 mrn_bool ha_mroonga::wrapper_register_query_cache_table(THD *thd,
                                                         char *table_key,
                                                         uint key_length,
@@ -17949,6 +17952,7 @@ mrn_bool ha_mroonga::register_query_cache_table(THD *thd,
   }
   DBUG_RETURN(res);
 }
+#endif
 
 #ifdef __cplusplus
 }

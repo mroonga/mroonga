@@ -308,6 +308,11 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
 #endif
 
+#if MYSQL_VERSION_ID < 80011 || defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
+#  define MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
+#endif
+
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
 #  define MRN_ST_MYSQL_PLUGIN_HAVE_CHECK_UNINSTALL
 #endif
@@ -606,7 +611,9 @@ public:
   int reset();
 
   handler *clone(const char *name, MEM_ROOT *mem_root);
+#ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
+#endif
 #ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ
   ha_rows multi_range_read_info_const(uint keyno, RANGE_SEQ_IF *seq,
                                       void *seq_init_param,
@@ -739,11 +746,13 @@ protected:
   void unbind_psi();
   void rebind_psi();
 #endif
+#ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
   mrn_bool register_query_cache_table(THD *thd,
                                       char *table_key,
                                       uint key_length,
                                       qc_engine_callback *engine_callback,
                                       ulonglong *engine_data);
+#endif
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   bool prepare_inplace_alter_table(TABLE *altered_table,
                                    Alter_inplace_info *ha_alter_info);
@@ -1191,8 +1200,10 @@ private:
   bool storage_get_error_message(int error, String *buf);
   handler *wrapper_clone(const char *name, MEM_ROOT *mem_root);
   handler *storage_clone(const char *name, MEM_ROOT *mem_root);
+#ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
+#endif
 #ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ
   ha_rows wrapper_multi_range_read_info_const(uint keyno,
                                               RANGE_SEQ_IF *seq,
@@ -1440,6 +1451,7 @@ private:
   void wrapper_rebind_psi();
   void storage_rebind_psi();
 #endif
+#ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
   mrn_bool wrapper_register_query_cache_table(THD *thd,
                                               char *table_key,
                                               uint key_length,
@@ -1452,6 +1464,7 @@ private:
                                               qc_engine_callback
                                               *engine_callback,
                                               ulonglong *engine_data);
+#endif
 };
 
 #ifdef __cplusplus
