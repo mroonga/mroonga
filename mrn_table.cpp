@@ -44,14 +44,14 @@
      typedef LEX_STRING mrn_resolve_name;
 #  endif
 #  if MYSQL_VERSION_ID >= 100100
-#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), TRUE)
+#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
 #  else
 #    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
 #  endif
 #else
    typedef LEX_STRING mrn_resolve_name;
 #  if MYSQL_VERSION_ID >= 50603
-#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), TRUE)
+#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
 #  else
 #    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
 #  endif
@@ -104,7 +104,7 @@ extern mysql_mutex_t mrn_allocated_thds_mutex;
 static char *mrn_get_string_between_quote(const char *ptr)
 {
   const char *start_ptr, *end_ptr, *tmp_ptr, *esc_ptr;
-  bool find_flg = FALSE, esc_flg = FALSE;
+  bool find_flg = false, esc_flg = false;
   MRN_DBUG_ENTER_FUNCTION();
 
   start_ptr = strchr(ptr, '\'');
@@ -121,14 +121,14 @@ static char *mrn_get_string_between_quote(const char *ptr)
       {
         esc_ptr = strchr(esc_ptr, '\\');
         if (!esc_ptr || esc_ptr > end_ptr)
-          find_flg = TRUE;
+          find_flg = true;
         else if (esc_ptr == end_ptr - 1)
         {
-          esc_flg = TRUE;
+          esc_flg = true;
           tmp_ptr = end_ptr + 1;
           break;
         } else {
-          esc_flg = TRUE;
+          esc_flg = true;
           esc_ptr += 2;
         }
       }
@@ -146,14 +146,14 @@ static char *mrn_get_string_between_quote(const char *ptr)
       {
         esc_ptr = strchr(esc_ptr, '\\');
         if (!esc_ptr || esc_ptr > end_ptr)
-          find_flg = TRUE;
+          find_flg = true;
         else if (esc_ptr == end_ptr - 1)
         {
-          esc_flg = TRUE;
+          esc_flg = true;
           tmp_ptr = end_ptr + 1;
           break;
         } else {
-          esc_flg = TRUE;
+          esc_flg = true;
           esc_ptr += 2;
         }
       }
@@ -213,7 +213,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
 {
   partition_info *part_info = table->part_info;
   partition_element *tmp_part_elem = NULL, *tmp_sub_elem = NULL;
-  bool tmp_flg = FALSE, tmp_find_flg = FALSE;
+  bool tmp_flg = false, tmp_find_flg = false;
   MRN_DBUG_ENTER_FUNCTION();
   *part_elem = NULL;
   *sub_elem = NULL;
@@ -221,7 +221,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
     DBUG_VOID_RETURN;
 
   if (table_name && !memcmp(table_name + table_name_length - 5, "#TMP#", 5))
-    tmp_flg = TRUE;
+    tmp_flg = true;
 
   DBUG_PRINT("info", ("mroonga table_name=%s", table_name));
   List_iterator<partition_element> part_it(part_info->partitions);
@@ -253,8 +253,8 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
         ) {
           tmp_part_elem = *part_elem;
           tmp_sub_elem = *sub_elem;
-          tmp_flg = FALSE;
-          tmp_find_flg = TRUE;
+          tmp_flg = false;
+          tmp_find_flg = true;
         }
       }
     } else {
@@ -264,7 +264,7 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
                                             table->s->path.str,
                                             (*part_elem)->partition_name,
                                             NORMAL_PART_NAME,
-                                            TRUE);
+                                            true);
       if (error != 0)
         DBUG_VOID_RETURN;
       DBUG_PRINT("info", ("mroonga partition name=%s", partition_name));
@@ -278,8 +278,8 @@ void mrn_get_partition_info(const char *table_name, uint table_name_length,
         memcmp(table_name, partition_name, table_name_length - 5) == 0
       ) {
         tmp_part_elem = *part_elem;
-        tmp_flg = FALSE;
-        tmp_find_flg = TRUE;
+        tmp_flg = false;
+        tmp_find_flg = true;
       }
     }
   }
@@ -516,7 +516,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         goto error;
       }
       share->hton = MRN_PLUGIN_DATA(share->plugin, handlerton *);
-      share->wrapper_mode = TRUE;
+      share->wrapper_mode = true;
     }
   }
 
@@ -1089,7 +1089,7 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   key_length = get_table_def_key(table_list, &key);
 #  else
   char key[MAX_DBKEY_LENGTH];
-  key_length = create_table_def_key(thd, key, table_list, FALSE);
+  key_length = create_table_def_key(thd, key, table_list, false);
 #  endif
 #  ifdef MRN_HAVE_TABLE_DEF_CACHE
   my_hash_value_type hash_value;
@@ -1121,7 +1121,7 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
   key_length = get_table_def_key(table_list, &key);
 #else
   char key[MAX_DBKEY_LENGTH];
-  key_length = create_table_def_key(thd, key, table_list, FALSE);
+  key_length = create_table_def_key(thd, key, table_list, false);
 #endif
 #if MYSQL_VERSION_ID >= 100306 && defined(MRN_MARIADB_P)
   share = alloc_table_share(table_list->db.str,
@@ -1239,7 +1239,7 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
 void mrn_clear_slot_data(THD *thd)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, FALSE);
+  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, false);
   if (slot_data) {
     if (slot_data->first_wrap_hton) {
       st_mrn_wrap_hton *tmp_wrap_hton;
