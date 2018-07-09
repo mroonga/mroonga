@@ -1141,7 +1141,8 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list,
                             table_list->table_name.str,
                             key,
                             key_length);
-#elif MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)
+#elif (MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)) || \
+  (MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P))
   share = alloc_table_share(table_list->db,
                             table_list->table_name,
                             key,
