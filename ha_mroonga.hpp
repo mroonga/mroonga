@@ -351,6 +351,7 @@ typedef uint mrn_alter_table_flags;
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_PREPARE_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
 #  define MRN_HANDLER_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
 #  define MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
 #endif
@@ -763,7 +764,13 @@ protected:
 #endif
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   bool prepare_inplace_alter_table(TABLE *altered_table,
-                                   Alter_inplace_info *ha_alter_info);
+                                   Alter_inplace_info *ha_alter_info
+#  ifdef MRN_HANDLER_PREPARE_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+                                   ,
+                                   const dd::Table *old_table_def,
+                                   dd::Table *new_table_def
+#  endif
+    ) mrn_override;
   bool inplace_alter_table(TABLE *altered_table,
                            Alter_inplace_info *ha_alter_info
 #  ifdef MRN_HANDLER_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
@@ -1358,9 +1365,21 @@ private:
   storage_check_if_supported_inplace_alter(TABLE *altered_table,
                                            Alter_inplace_info *ha_alter_info);
   bool wrapper_prepare_inplace_alter_table(TABLE *altered_table,
-                                           Alter_inplace_info *ha_alter_info);
+                                           Alter_inplace_info *ha_alter_info
+#  ifdef MRN_HANDLER_PREPARE_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+                                           ,
+                                           const dd::Table *old_table_def,
+                                           dd::Table *new_table_def
+#  endif
+    );
   bool storage_prepare_inplace_alter_table(TABLE *altered_table,
-                                           Alter_inplace_info *ha_alter_info);
+                                           Alter_inplace_info *ha_alter_info
+#  ifdef MRN_HANDLER_PREPARE_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+                                           ,
+                                           const dd::Table *old_table_def,
+                                           dd::Table *new_table_def
+#  endif
+    );
   bool wrapper_inplace_alter_table(TABLE *altered_table,
                                    Alter_inplace_info *ha_alter_info
 #  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
