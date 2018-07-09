@@ -21,6 +21,7 @@
 #include "mrn_mysql.h"
 
 #include <mysql/plugin.h>
+#include <my_bitmap.h>
 #if MYSQL_VERSION_ID >= 50500
 #  include <sql_servers.h>
 #  include <sql_base.h>
