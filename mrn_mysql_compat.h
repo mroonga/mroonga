@@ -649,19 +649,41 @@
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
   typedef Key_spec mrn_key;
-#  define MRN_KEY_EACH_BEGIN(key_list, key)                     \
-  for (size_t key_i; key_i < key_list.size(); ++key_i) {        \
-    const mrn_key *key = key_list[key_i];
+#  define MRN_KEY_EACH_BEGIN(key_list, key) do {                \
+    for (size_t key_i; key_i < key_list.size(); ++key_i) {      \
+      const mrn_key *key = key_list[key_i];
 #  define MRN_KEY_EACH_END()                    \
-  }
+    }                                           \
+  } while (false)
 #else
   typedef Key mrn_key;
-#  define MRN_KEY_EACH_BEGIN(key_list, key)             \
-  {                                                     \
+#  define MRN_KEY_EACH_BEGIN(key_list, key) do {        \
     List_iterator<mrn_key> key_iterator(key_list);      \
     const mrn_key *key;                                 \
-    while ((key = key_iterator++)) {
+    while ((key = key_iterator++))
 #  define MRN_KEY_EACH_END()                    \
-  }
+  } while (false)
+#endif
+
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define MRN_KEY_PART_LIST_N_ELEMENTS(key_part_list)   \
+  key_part_list.element_size()
+#  define MRN_KEY_PART_EACH_BEGIN(key_part_list, key_part) do {   \
+    for (size_t key_part_i;                                       \
+         key_part_i < key_part_list.size();                       \
+         ++key_part_i) {                                          \
+      const Key_part_spec *key_part = key_part_list[key_part_i];
+#  define MRN_KEY_PART_EACH_END()               \
+    }                                           \
+  } while (false)
+#else
+#  define MRN_KEY_PART_LIST_N_ELEMENTS(key_part_list)   \
+  key_part_list.elements
+#  define MRN_KEY_PART_EACH_BEGIN(key_part_list, key_part) do {         \
+    List_iterator<Key_part_spec> key_part_iterator(key_part_list);      \
+    const Key_part_spec *key_part;                                      \
+    while ((key_part = key_part_iterator++))
+#  define MRN_KEY_PART_EACH_END()               \
+  } while (false)
 #endif
 

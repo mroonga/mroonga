@@ -4032,23 +4032,28 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     {
       continue;
     }
-    if (key->columns.elements > 1)
+    if (MRN_KEY_PART_LIST_N_ELEMENTS(key->columns) > 1)
     {
       error = ER_CANT_CREATE_TABLE;
       my_message(error, "mroonga can't use FOREIGN_KEY with multiple columns",
         MYF(0));
       DBUG_RETURN(false);
     }
-    List_iterator<Key_part_spec> key_part_col_iterator(key->columns);
-    Key_part_spec *key_part_col = key_part_col_iterator++;
-    mrn_key_part_spec_field_name *field_name = &(key_part_col->field_name);
-    DBUG_PRINT("info", ("mroonga: field_name=%.*s",
-                        static_cast<int>(field_name->length),
-                        field_name->str));
-    DBUG_PRINT("info", ("mroonga: field->field_name=" FIELD_NAME_FORMAT,
-                        FIELD_NAME_FORMAT_VALUE(field)));
-    if (!FIELD_NAME_EQUAL_STRING(field, field_name)) {
-      continue;
+    {
+      bool is_same_field_name = false;
+      MRN_KEY_PART_EACH_BEGIN(key->columns, key_part_column) {
+        mrn_key_part_spec_field_name *field_name =
+          &(key_part_column->field_name);
+        DBUG_PRINT("info", ("mroonga: field_name=%.*s",
+                            static_cast<int>(field_name->length),
+                            field_name->str));
+        DBUG_PRINT("info", ("mroonga: field->field_name=" FIELD_NAME_FORMAT,
+                            FIELD_NAME_FORMAT_VALUE(field)));
+        is_same_field_name = FIELD_NAME_EQUAL_STRING(field, field_name);
+      } MRN_KEY_PART_EACH_END();
+      if (!is_same_field_name) {
+        continue;
+      }
     }
     Foreign_key *fk = (Foreign_key *) key;
     List_iterator<Key_part_spec> key_part_ref_col_iterator(fk->ref_columns);
@@ -4230,7 +4235,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     grn_obj_unlink(ctx, grn_table_ref);
     error = 0;
     DBUG_RETURN(true);
-  }
+  } MRN_KEY_EACH_END();
   error = 0;
   DBUG_RETURN(false);
 }
