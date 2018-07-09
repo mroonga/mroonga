@@ -653,7 +653,7 @@
 #  define MRN_KEY_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {        \
     for (size_t spec_i; spec_i < spec_list.size(); ++spec_i) {      \
       const mrn_key_spec *spec = spec_list[spec_i];
-#  define MRN_KEY_SEPC_LIST_EACH_END()          \
+#  define MRN_KEY_SPEC_LIST_EACH_END()          \
     }                                           \
   } while (false)
 #else
