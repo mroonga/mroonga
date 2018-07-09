@@ -659,7 +659,7 @@
 #else
   typedef Key mrn_key_spec;
 #  define MRN_KEY_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {    \
-    List_iterator<mrn_key_spec> key_iterator(spec_list);        \
+    List_iterator<mrn_key_spec> spec_iterator(spec_list);       \
     const mrn_key_spec *spec;                                   \
     while ((spec = spec_iterator++))
 #  define MRN_KEY_SPEC_LIST_EACH_END()          \
