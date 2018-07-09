@@ -416,6 +416,22 @@ static PSI_mutex_info mrn_mutexes[] =
                         PSI_VOLATILITY_UNKNOWN,
                         PSI_DOCUMENT_ME)
 };
+
+#  if MYSQL_VERSION_ID >= 50720 && !defined(MRN_MARIADB_P)
+#    define MRN_REGISTER_MUTEXES(category, mutexes)     \
+  do {                                                  \
+    int n_mutexes = array_elements(mutexes);            \
+    mysql_mutex_register(category, mutexes, n_mutexes); \
+  } while (false)
+#  elif defined(MRN_HAVE_PSI_SERVER)
+#    define MRN_REGISTER_MUTEXES(gategory, mutexes)             \
+  do {                                                          \
+    if (PSI_server) {                                           \
+      int n_mutexes = array_elements(mutexes);                  \
+      PSI_server->register_mutex(category, mutexes, n_mutexes); \
+    }                                                           \
+  } while (false)
+#  endif
 #endif
 
 /* global variables */
@@ -2192,13 +2208,7 @@ static int mrn_init(void *p)
 #  endif
 #endif
 
-#ifdef MRN_HAVE_PSI_SERVER
-  if (PSI_server) {
-    const char *category = "mroonga";
-    int n_mutexes = array_elements(mrn_mutexes);
-    PSI_server->register_mutex(category, mrn_mutexes, n_mutexes);
-  }
-#endif
+  MRN_REGISTER_MUTEXES("mroonga", mrn_mutexes);
 
   grn_default_query_logger_set_path(mrn_query_log_file_path);
 
