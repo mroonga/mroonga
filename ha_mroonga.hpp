@@ -321,6 +321,14 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLERTON_CREATE_HAVE_PARTITIONED
 #endif
 
+#ifdef MRN_HANDLERTON_CREATE_HAVE_PARTITIONED
+#  define MRN_HANDLERTON_CREATE(hton, table, patitioned, mem_root)      \
+  (hton)->create((hton), (table), (patitioned), (mem_root))
+#else
+#  define MRN_HANDLERTON_CREATE(hton, table, patitioned, mem_root)      \
+  (hton)->create((hton), (table), (mem_root))
+#endif
+
 #if defined(HAVE_PSI_INTERFACE) &&                      \
   (MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P))
 #  define MRN_HAVE_PSI_SERVER

@@ -3385,8 +3385,10 @@ int ha_mroonga::create_share_for_create() const
   if (share_for_create.wrapper_mode)
   {
     wrap_handler_for_create =
-      share_for_create.hton->create(share_for_create.hton, NULL,
-                                    &mem_root_for_create);
+      MRN_HANDLERTON_CREATE(share_for_create.hton,
+                            NULL,
+                            false,
+                            &mem_root_for_create);
     if (!wrap_handler_for_create) {
       error = HA_ERR_OUT_OF_MEM;
       goto error;
