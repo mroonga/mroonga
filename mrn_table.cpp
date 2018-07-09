@@ -1174,15 +1174,15 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list,
   share->path.length = strlen(share->path.str);
   share->normalized_path.str = mrn_my_strdup(path, MYF(MY_WME));
   share->normalized_path.length = strlen(share->normalized_path.str);
-  bool is_opened = false;
+  int open_error = 1;
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
   if (table_def) {
-    is_opened = open_table_def(thd, share, *table_def);
+    open_error = open_table_def(thd, share, *table_def);
   }
 #else
-  is_opened = open_table_def(thd, share, GTS_TABLE);
+  open_error = open_table_def(thd, share, GTS_TABLE);
 #endif
-  if (!is_opened) {
+  if (open_error != 0) {
     *error = ER_CANT_OPEN_FILE;
     DBUG_RETURN(NULL);
   }
