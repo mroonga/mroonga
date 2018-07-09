@@ -263,6 +263,22 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_GEOMETRY_FREE(geometry) delete (geometry)
 #endif
 
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  include <sql/thd_raii.h>
+#  define MRN_DISABLE_BINLOG_BEGIN(thd)         \
+  do {                                          \
+    Disable_binlog_guard guard(thd);
+#  define MRN_DISABLE_BINLOG_END(thd)           \
+  } while (false)
+#else
+#  define MRN_DISABLE_BINLOG_BEGIN(thd)         \
+  do {                                          \
+    tmp_disable_binlog(thd);
+#  define MRN_DISABLE_BINLOG_END(thd)           \
+    reenable_binlog(thd);                       \
+  } while (false)
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -6381,10 +6397,10 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
   operation.record_target(record_id);
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  tmp_disable_binlog(thd);
-  error = wrap_handler->ha_write_row(buf);
-  insert_id_for_cur_row = wrap_handler->insert_id_for_cur_row;
-  reenable_binlog(thd);
+  MRN_DISABLE_BINLOG_BEGIN(thd) {
+    error = wrap_handler->ha_write_row(buf);
+    insert_id_for_cur_row = wrap_handler->insert_id_for_cur_row;
+  } MRN_DISABLE_BINLOG_END(thd);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
 
@@ -7015,14 +7031,14 @@ int ha_mroonga::wrapper_update_row(const uchar *old_data,
 
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  tmp_disable_binlog(thd);
+  MRN_DISABLE_BINLOG_BEGIN(thd) {
 #ifdef MRN_HANDLER_HA_UPDATE_ROW_NEW_DATA_CONST
-  const uchar *wrap_new_data = new_data;
+    const uchar *wrap_new_data = new_data;
 #else
-  uchar *wrap_new_data = const_cast<uchar *>(new_data);
+    uchar *wrap_new_data = const_cast<uchar *>(new_data);
 #endif
-  error = wrap_handler->ha_update_row(old_data, wrap_new_data);
-  reenable_binlog(thd);
+    error = wrap_handler->ha_update_row(old_data, wrap_new_data);
+  } MRN_DISABLE_BINLOG_END(thd);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
 
@@ -7604,9 +7620,10 @@ int ha_mroonga::wrapper_delete_row(const uchar *buf)
 
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  tmp_disable_binlog(thd);
-  error = wrap_handler->ha_delete_row(buf);
-  reenable_binlog(thd);
+  MRN_DISABLE_BINLOG_BEGIN(thd) {
+    error = wrap_handler->ha_delete_row(buf);
+  } MRN_DISABLE_BINLOG_END(thd);
+
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
 
