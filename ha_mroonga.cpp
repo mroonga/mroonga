@@ -4026,11 +4026,8 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
   MRN_DBUG_ENTER_METHOD();
   LEX *lex = ha_thd()->lex;
   Alter_info *alter_info = MRN_LEX_GET_ALTER_INFO(lex);
-  List_iterator<Key> key_iterator(alter_info->key_list);
-  Key *key;
   char ref_db_buff[NAME_LEN + 1], ref_table_buff[NAME_LEN + 1];
-  while ((key = key_iterator++))
-  {
+  MRN_KEY_EACH_BEGIN(alter_info->key_list, key) {
     if (key->type != MRN_KEYTYPE_FOREIGN)
     {
       continue;

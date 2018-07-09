@@ -646,3 +646,22 @@
                                alias,                           \
                                lock_type)
 #endif
+
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+  typedef Key_spec mrn_key;
+#  define MRN_KEY_EACH_BEGIN(key_list, key)                     \
+  for (size_t key_i; key_i < key_list.size(); ++key_i) {        \
+    const mrn_key *key = key_list[key_i];
+#  define MRN_KEY_EACH_END()                    \
+  }
+#else
+  typedef Key mrn_key;
+#  define MRN_KEY_EACH_BEGIN(key_list, key)             \
+  {                                                     \
+    List_iterator<mrn_key> key_iterator(key_list);      \
+    const mrn_key *key;                                 \
+    while ((key = key_iterator++)) {
+#  define MRN_KEY_EACH_END()                    \
+  }
+#endif
+
