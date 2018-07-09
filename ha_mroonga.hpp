@@ -556,8 +556,7 @@ public:
                    ,
                    const dd::Table *table_def
 #endif
-    );
-  int delete_table(const char *name);
+    ) mrn_override;
   int write_row(uchar *buf);
   int update_row(const uchar *old_data, const uchar *new_data);
   int update_row(const uchar *old_data, uchar *new_data);
