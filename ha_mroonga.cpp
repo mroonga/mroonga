@@ -15487,7 +15487,13 @@ bool ha_mroonga::prepare_inplace_alter_table(
 
 bool ha_mroonga::wrapper_inplace_alter_table(
   TABLE *altered_table,
-  Alter_inplace_info *ha_alter_info)
+  Alter_inplace_info *ha_alter_info
+#  ifdef MRN_HANDLER_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+  ,
+  const dd::Table *old_table_def,
+  dd::Table *new_table_def
+#  endif
+  )
 {
   int error;
   bool result = false;
@@ -15599,7 +15605,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
   bitmap_set_all(table->read_set);
 
   if (!error && alter_handler_flags) {
-#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+#  ifdef MRN_SUPPORT_CUSTOM_OPTIONS
     {
       MRN_SHARE *alter_tmp_share;
       alter_tmp_share = mrn_get_share(altered_table->s->table_name.str,
@@ -15614,13 +15620,20 @@ bool ha_mroonga::wrapper_inplace_alter_table(
         mrn_free_share(alter_tmp_share);
       }
     }
-#endif
+#  endif
     if (!error) {
       MRN_SET_WRAP_ALTER_KEY(this, ha_alter_info);
       MRN_SET_WRAP_SHARE_KEY(share, table->s);
       MRN_SET_WRAP_TABLE_KEY(this, table);
+#  ifdef MRN_HANDLER_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+      result = wrap_handler->ha_inplace_alter_table(wrap_altered_table,
+                                                    ha_alter_info,
+                                                    old_table_def,
+                                                    new_table_def);
+#  else
       result = wrap_handler->ha_inplace_alter_table(wrap_altered_table,
                                                     ha_alter_info);
+#  endif
       MRN_SET_BASE_ALTER_KEY(this, ha_alter_info);
       MRN_SET_BASE_SHARE_KEY(share, table->s);
       MRN_SET_BASE_TABLE_KEY(this, table);
@@ -16132,7 +16145,13 @@ bool ha_mroonga::storage_inplace_alter_table_rename_column(
 
 bool ha_mroonga::storage_inplace_alter_table(
   TABLE *altered_table,
-  Alter_inplace_info *ha_alter_info)
+  Alter_inplace_info *ha_alter_info
+#  ifdef MRN_HANDLER_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+  ,
+  const dd::Table *old_table_def,
+  dd::Table *new_table_def
+#  endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -16191,14 +16210,34 @@ bool ha_mroonga::storage_inplace_alter_table(
 
 bool ha_mroonga::inplace_alter_table(
   TABLE *altered_table,
-  Alter_inplace_info *ha_alter_info)
+  Alter_inplace_info *ha_alter_info
+#  ifdef MRN_HANDLER_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+  ,
+  const dd::Table *old_table_def,
+  dd::Table *new_table_def
+#  endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   bool result;
   if (share->wrapper_mode) {
+#  ifdef MRN_HANDLER_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+    result = wrapper_inplace_alter_table(altered_table,
+                                         ha_alter_info,
+                                         old_table_def,
+                                         new_table_def);
+#  else
     result = wrapper_inplace_alter_table(altered_table, ha_alter_info);
+#  endif
   } else {
+#  ifdef MRN_HANDLER_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+    result = storage_inplace_alter_table(altered_table,
+                                         ha_alter_info,
+                                         old_table_def,
+                                         new_table_def);
+#  else
     result = storage_inplace_alter_table(altered_table, ha_alter_info);
+#  endif
   }
   DBUG_RETURN(result);
 }
