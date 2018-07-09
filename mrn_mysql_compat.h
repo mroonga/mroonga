@@ -144,7 +144,8 @@
 #  define FIELD_NAME_FORMAT_VALUE(field) (field)->field_name
 #endif
 
-#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#if (MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)) ||   \
+  (MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P))
 #  define MRN_KEY_PART_SPEC_FIELD_NAME_USE_CONST_STRING
 #endif
 

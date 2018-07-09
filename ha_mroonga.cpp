@@ -4042,7 +4042,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
     {
       bool is_same_field_name = false;
       MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(key_spec->columns, key_part_spec) {
-        mrn_key_part_spec_field_name *field_name =
+        const mrn_key_part_spec_field_name *field_name =
           &(key_part_spec->field_name);
         DBUG_PRINT("info", ("mroonga: field_name=%.*s",
                             static_cast<int>(field_name->length),
