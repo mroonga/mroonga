@@ -631,9 +631,9 @@ public:
                                       uint n_ranges, uint *bufsz,
                                       uint *flags, Cost_estimate *cost);
   ha_rows multi_range_read_info(uint keyno, uint n_ranges, uint keys,
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
                                 uint key_parts,
-#endif
+#  endif
                                 uint *bufsz, uint *flags, Cost_estimate *cost);
   int multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
                             uint n_ranges, uint mode,
