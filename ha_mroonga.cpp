@@ -3967,8 +3967,21 @@ int ha_mroonga::storage_create(const char *name,
     }
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
-    if (storage_create_foreign_key(table, mapper.table_name(), field, table_obj,
-                                   error)) {
+#  ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+    bool is_created = storage_create_foreign_key(table,
+                                                 mapper.table_name(),
+                                                 field,
+                                                 table_obj,
+                                                 table_def,
+                                                 error);
+#  else
+    bool is_created = storage_create_foreign_key(table,
+                                                 mapper.table_name(),
+                                                 field,
+                                                 table_obj,
+                                                 error);
+#  endif
+    if (is_created) {
       continue;
     }
     if (error) {
@@ -4057,7 +4070,11 @@ int ha_mroonga::storage_create_validate_pseudo_column(TABLE *table)
 bool ha_mroonga::storage_create_foreign_key(TABLE *table,
                                             const char *grn_table_name,
                                             Field *field,
-                                            grn_obj *table_obj, int &error)
+                                            grn_obj *table_obj,
+#  ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+                                            const dd::Table *table_def,
+#  endif
+                                            int &error)
 {
   MRN_DBUG_ENTER_METHOD();
   LEX *lex = ha_thd()->lex;
@@ -4144,7 +4161,6 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       grn_obj *column, *column_ref = NULL, *grn_table_ref = NULL;
       char ref_path[FN_REFLEN + 1];
       TABLE_LIST table_list;
-      TABLE_SHARE *tmp_ref_table_share;
       build_table_filename(ref_path, sizeof(ref_path) - 1,
                            table->s->db.str,
                            normalized_ref_table_name, "", 0);
@@ -4174,8 +4190,13 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
                                     mapper.mysql_table_name(),
                                     TL_WRITE);
       mrn_open_mutex_lock(table->s);
-      tmp_ref_table_share =
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+      TABLE_SHARE *tmp_ref_table_share =
+        mrn_create_tmp_table_share(&table_list, ref_path, table_def, &error);
+#else
+      TABLE_SHARE *tmp_ref_table_share =
         mrn_create_tmp_table_share(&table_list, ref_path, &error);
+#endif
       mrn_open_mutex_unlock(table->s);
       if (!tmp_ref_table_share) {
         grn_obj_unlink(ctx, grn_table_ref);
@@ -5044,8 +5065,7 @@ int ha_mroonga::storage_reindex()
         error = ER_ERROR_ON_WRITE;
         char error_message[MRN_MESSAGE_BUFFER_SIZE];
         char index_table_name[GRN_TABLE_MAX_KEY_SIZE];
-        int index_table_name_size;
-        index_table_name_size =
+        int index_table_name_size =
           grn_obj_name(ctx, grn_index_tables[i],
                        index_table_name, GRN_TABLE_MAX_KEY_SIZE);
         snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
@@ -5067,8 +5087,7 @@ int ha_mroonga::storage_reindex()
         error = ER_ERROR_ON_WRITE;
         char error_message[MRN_MESSAGE_BUFFER_SIZE];
         char index_column_name[GRN_TABLE_MAX_KEY_SIZE];
-        int index_column_name_size;
-        index_column_name_size =
+        int index_column_name_size =
           grn_obj_name(ctx, grn_index_columns[i],
                        index_column_name, GRN_TABLE_MAX_KEY_SIZE);
         snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
@@ -5652,8 +5671,13 @@ int ha_mroonga::delete_table(const char *name
                                     mapper.mysql_table_name(),
                                     TL_WRITE);
       mrn_open_mutex_lock(NULL);
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+      TABLE_SHARE *tmp_table_share =
+        mrn_create_tmp_table_share(&table_list, name, table_def, &error);
+#else
       TABLE_SHARE *tmp_table_share =
         mrn_create_tmp_table_share(&table_list, name, &error);
+#endif
       error = 0;
       mrn_open_mutex_unlock(NULL);
       if (tmp_table_share) {
@@ -14327,7 +14351,6 @@ int ha_mroonga::rename_table(const char *from,
 {
   int error = 0;
   TABLE_LIST table_list;
-  TABLE_SHARE *tmp_table_share;
   TABLE tmp_table;
   MRN_SHARE *tmp_share;
   MRN_DBUG_ENTER_METHOD();
@@ -14344,7 +14367,13 @@ int ha_mroonga::rename_table(const char *from,
                                 from_mapper.mysql_table_name(),
                                 TL_WRITE);
   mrn_open_mutex_lock(NULL);
-  tmp_table_share = mrn_create_tmp_table_share(&table_list, from, &error);
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+  TABLE_SHARE *tmp_table_share =
+    mrn_create_tmp_table_share(&table_list, from, from_table_def, &error);
+#else
+  TABLE_SHARE *tmp_table_share =
+    mrn_create_tmp_table_share(&table_list, from, &error);
+#endif
   mrn_open_mutex_unlock(NULL);
   if (!tmp_table_share) {
     DBUG_RETURN(error);
@@ -17680,7 +17709,6 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
 
     char ref_path[FN_REFLEN + 1];
     TABLE_LIST table_list;
-    TABLE_SHARE *tmp_ref_table_share;
     build_table_filename(ref_path, sizeof(ref_path) - 1,
                          table_share->db.str, ref_table_buff, "", 0);
     DBUG_PRINT("info", ("mroonga: ref_path=%s", ref_path));
@@ -17692,8 +17720,14 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
                                   ref_table_buff,
                                   TL_WRITE);
     mrn_open_mutex_lock(table_share);
-    tmp_ref_table_share =
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+    // TODO
+    TABLE_SHARE *tmp_ref_table_share =
+      mrn_create_tmp_table_share(&table_list, ref_path, NULL, &error);
+#else
+    TABLE_SHARE *tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);
+#endif
     mrn_open_mutex_unlock(table_share);
     if (!tmp_ref_table_share) {
       DBUG_RETURN(NULL);
@@ -17809,7 +17843,7 @@ bool ha_mroonga::can_switch_engines()
 }
 
 int ha_mroonga::wrapper_get_foreign_key_list(THD *thd,
-                                           List<FOREIGN_KEY_INFO> *f_key_list)
+                                             List<FOREIGN_KEY_INFO> *f_key_list)
 {
   MRN_DBUG_ENTER_METHOD();
   int res;
@@ -17894,7 +17928,6 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
 
     char ref_path[FN_REFLEN + 1];
     TABLE_LIST table_list;
-    TABLE_SHARE *tmp_ref_table_share;
     build_table_filename(ref_path, sizeof(ref_path) - 1,
                          table_share->db.str, ref_table_buff, "", 0);
     DBUG_PRINT("info", ("mroonga: ref_path=%s", ref_path));
@@ -17906,8 +17939,13 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
                                   ref_table_buff,
                                   TL_WRITE);
     mrn_open_mutex_lock(table_share);
-    tmp_ref_table_share =
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+    TABLE_SHARE *tmp_ref_table_share =
+      mrn_create_tmp_table_share(&table_list, ref_path, NULL, &error);
+#else
+    TABLE_SHARE *tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);
+#endif
     mrn_open_mutex_unlock(table_share);
     if (!tmp_ref_table_share) {
       DBUG_RETURN(error);
@@ -17932,7 +17970,7 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
 }
 #else
 int ha_mroonga::storage_get_foreign_key_list(THD *thd,
-                                           List<FOREIGN_KEY_INFO> *f_key_list)
+                                             List<FOREIGN_KEY_INFO> *f_key_list)
 {
   MRN_DBUG_ENTER_METHOD();
   int res = handler::get_foreign_key_list(thd, f_key_list);
@@ -17954,8 +17992,9 @@ int ha_mroonga::get_foreign_key_list(THD *thd,
   DBUG_RETURN(res);
 }
 
-int ha_mroonga::wrapper_get_parent_foreign_key_list(THD *thd,
-                                            List<FOREIGN_KEY_INFO> *f_key_list)
+int ha_mroonga::wrapper_get_parent_foreign_key_list(
+  THD *thd,
+  List<FOREIGN_KEY_INFO> *f_key_list)
 {
   MRN_DBUG_ENTER_METHOD();
   int res;
@@ -17967,8 +18006,9 @@ int ha_mroonga::wrapper_get_parent_foreign_key_list(THD *thd,
   DBUG_RETURN(res);
 }
 
-int ha_mroonga::storage_get_parent_foreign_key_list(THD *thd,
-                                            List<FOREIGN_KEY_INFO> *f_key_list)
+int ha_mroonga::storage_get_parent_foreign_key_list(
+  THD *thd,
+  List<FOREIGN_KEY_INFO> *f_key_list)
 {
   MRN_DBUG_ENTER_METHOD();
   int res = handler::get_parent_foreign_key_list(thd, f_key_list);
