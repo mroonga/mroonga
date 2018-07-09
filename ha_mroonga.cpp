@@ -17553,15 +17553,15 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
                                                 NULL,
                                                 column_name.c_str(),
                                                 column_name.length(),
-                                                TRUE);
+                                                true);
     f_key_info.foreign_db = thd_make_lex_string(thd, NULL,
                                                 table_share->db.str,
                                                 table_share->db.length,
-                                                TRUE);
+                                                true);
     f_key_info.foreign_table = thd_make_lex_string(thd, NULL,
                                                    table_share->table_name.str,
                                                    table_share->table_name.length,
-                                                   TRUE);
+                                                   true);
     f_key_info.referenced_db = f_key_info.foreign_db;
 
     char ref_table_buff[NAME_LEN + 1];
@@ -17573,24 +17573,24 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
     f_key_info.referenced_table = thd_make_lex_string(thd, NULL,
                                                        ref_table_buff,
                                                        ref_table_name_length,
-                                                       TRUE);
+                                                       true);
 #ifdef MRN_FOREIGN_KEY_USE_METHOD_ENUM
     f_key_info.update_method = FK_OPTION_RESTRICT;
     f_key_info.delete_method = FK_OPTION_RESTRICT;
 #else
     f_key_info.update_method = thd_make_lex_string(thd, NULL, "RESTRICT",
-                                                    8, TRUE);
+                                                    8, true);
     f_key_info.delete_method = thd_make_lex_string(thd, NULL, "RESTRICT",
-                                                    8, TRUE);
+                                                    8, true);
 #endif
     f_key_info.referenced_key_name = thd_make_lex_string(thd, NULL, "PRIMARY",
-                                                          7, TRUE);
+                                                          7, true);
     mrn_thd_lex_string *field_name =
       thd_make_lex_string(thd,
                           NULL,
                           column_name.c_str(),
                           column_name.length(),
-                          TRUE);
+                          true);
     f_key_info.foreign_fields.push_back(field_name);
 
     char ref_path[FN_REFLEN + 1];

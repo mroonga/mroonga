@@ -120,7 +120,7 @@
                       NULL,                                             \
                       (field)->field_name.str,                          \
                       (field)->field_name.length,                       \
-                      TRUE);
+                      true);
 #  define FIELD_NAME_FORMAT "%.*s"
 #  define FIELD_NAME_FORMAT_VALUE(field)                                \
   static_cast<int>((field)->field_name.length), (field)->field_name.str
@@ -139,7 +139,7 @@
                        NULL,                            \
                        (field)->field_name,             \
                        strlen((field)->field_name),     \
-                       TRUE);
+                       true);
 #  define FIELD_NAME_FORMAT "%s"
 #  define FIELD_NAME_FORMAT_VALUE(field) (field)->field_name
 #endif
