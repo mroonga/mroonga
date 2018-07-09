@@ -32,6 +32,7 @@
 #include <sql_plugin.h>
 #include <sql/field.h>
 #include <sql/table.h>
+#include <mysqld.h>
 
 #include "mrn_err.h"
 #include "mrn_mysql_compat.h"
