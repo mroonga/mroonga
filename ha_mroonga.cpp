@@ -16256,30 +16256,54 @@ bool ha_mroonga::commit_inplace_alter_table(
   DBUG_RETURN(result);
 }
 
-void ha_mroonga::wrapper_notify_table_changed()
+void ha_mroonga::wrapper_notify_table_changed(
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+  Alter_inplace_info *ha_alter_info
+#  endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+  wrap_handler->ha_notify_table_changed(ha_alter_info);
+#  else
   wrap_handler->ha_notify_table_changed();
+#  endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::storage_notify_table_changed()
+void ha_mroonga::storage_notify_table_changed(
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+  Alter_inplace_info *ha_alter_info
+#  endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::notify_table_changed()
+void ha_mroonga::notify_table_changed(
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+  Alter_inplace_info *ha_alter_info
+#  endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   if (share->wrapper_mode) {
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+    wrapper_notify_table_changed(ha_alter_info);
+#  else
     wrapper_notify_table_changed();
+#  endif
   } else {
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+    storage_notify_table_changed(ha_alter_info);
+#  else
     storage_notify_table_changed();
+#  endif
   }
   DBUG_VOID_RETURN;
 }

@@ -346,6 +346,9 @@ typedef uint mrn_alter_table_flags;
   get_new_handler((share), (alloc), (db_type))
 #endif
 
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#endif
 
 #if defined(HAVE_PSI_INTERFACE) &&                      \
   (MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P))
@@ -761,7 +764,11 @@ protected:
   bool commit_inplace_alter_table(TABLE *altered_table,
                                   Alter_inplace_info *ha_alter_info,
                                   bool commit);
-  void notify_table_changed();
+  void notify_table_changed(
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+    Alter_inplace_info *ha_alter_info
+#  endif
+    ) mrn_override;
 #endif
 
 private:
@@ -1357,8 +1364,16 @@ private:
   bool storage_commit_inplace_alter_table(TABLE *altered_table,
                                           Alter_inplace_info *ha_alter_info,
                                           bool commit);
-  void wrapper_notify_table_changed();
-  void storage_notify_table_changed();
+  void wrapper_notify_table_changed(
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+    Alter_inplace_info *ha_alter_info
+#  endif
+    );
+  void storage_notify_table_changed(
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+    Alter_inplace_info *ha_alter_info
+#  endif
+    );
 #else
   mrn_alter_table_flags wrapper_alter_table_flags(mrn_alter_table_flags flags);
   mrn_alter_table_flags storage_alter_table_flags(mrn_alter_table_flags flags);
