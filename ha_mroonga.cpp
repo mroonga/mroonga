@@ -12993,8 +12993,10 @@ handler *ha_mroonga::wrapper_clone(const char *name, MEM_ROOT *mem_root)
 {
   handler *cloned_handler;
   MRN_DBUG_ENTER_METHOD();
-  if (!(cloned_handler = get_new_handler(table->s, mem_root,
-                                         table->s->db_type())))
+  if (!(cloned_handler = mrn_get_new_handler(table->s,
+                                             table->s->m_part_info != NULL,
+                                             mem_root,
+                                             table->s->db_type())))
     DBUG_RETURN(NULL);
   ((ha_mroonga *) cloned_handler)->is_clone = true;
   ((ha_mroonga *) cloned_handler)->parent_for_clone = this;
