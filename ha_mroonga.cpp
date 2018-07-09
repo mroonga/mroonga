@@ -3462,7 +3462,10 @@ int ha_mroonga::wrapper_create(const char *name,
     DBUG_RETURN(error);
   }
 #endif
-  hnd = get_new_handler(table->s, current_thd->mem_root, tmp_share->hton);
+  hnd = mrn_get_new_handler(table->s,
+                            table->s->m_part_info != NULL,
+                            current_thd->mem_root,
+                            tmp_share->hton);
   if (!hnd)
   {
     MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
@@ -4684,7 +4687,10 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
   MRN_SET_WRAP_TABLE_KEY(this, table);
   if (!is_clone)
   {
-    wrap_handler = get_new_handler(table->s, &mem_root, share->hton);
+    wrap_handler = mrn_get_new_handler(table->s,
+                                       table->s->m_part_info != NULL,
+                                       &mem_root,
+                                       share->hton);
     if (!wrap_handler)
     {
       MRN_SET_BASE_SHARE_KEY(share, table->s);
@@ -5454,7 +5460,11 @@ int ha_mroonga::wrapper_delete_table(const char *name,
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
 
-  handler *hnd = get_new_handler(NULL, current_thd->mem_root, wrap_handlerton);
+  handler *hnd =
+    mrn_get_new_handler(NULL,
+                        table_def->partition_type() != dd::Table::PT_NONE,
+                        current_thd->mem_root,
+                        wrap_handlerton);
   if (!hnd)
   {
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);

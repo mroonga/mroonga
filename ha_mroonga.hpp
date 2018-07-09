@@ -333,6 +333,15 @@ typedef uint mrn_alter_table_flags;
   (hton)->create((hton), (table), (mem_root))
 #endif
 
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define mrn_get_new_handler(share, partitioned, alloc, db_type) \
+  get_new_handler((share), (partitioned), (alloc), (db_type))
+#else
+#  define mrn_get_new_handler(share, partitioned, alloc, db_type) \
+  get_new_handler((share), (alloc), (db_type))
+#endif
+
+
 #if defined(HAVE_PSI_INTERFACE) &&                      \
   (MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P))
 #  define MRN_HAVE_PSI_SERVER
