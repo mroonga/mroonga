@@ -51,6 +51,10 @@
 #  include <mysql/psi/mysql_memory.h>
 #endif
 
+#ifdef MRN_HAVE_SQL_DERROR_H
+#  include <sql/derror.h>
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -202,7 +206,11 @@ static mysql_mutex_t *mrn_LOCK_open;
         *(off) = thd->variables.auto_increment_offset; \
         *(inc) = thd->variables.auto_increment_increment; \
      }
-#  define MRN_GET_ERR_MSG(code) ER(code)
+#  if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#    define MRN_GET_ERR_MSG(code) ER_DEFAULT(code)
+#  else
+#    define MRN_GET_ERR_MSG(code) ER(code)
+#  endif
 #endif
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
