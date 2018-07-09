@@ -13602,13 +13602,21 @@ int ha_mroonga::delete_all_rows()
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_truncate()
+int ha_mroonga::wrapper_truncate(
+#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+  dd::Table *table_def
+#endif
+  )
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+  error = wrap_handler->ha_truncate(table_def);
+#else
   error = wrap_handler->ha_truncate();
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
 
@@ -13667,7 +13675,11 @@ err:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_truncate()
+int ha_mroonga::storage_truncate(
+#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+  dd::Table *table_def
+#endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -13739,15 +13751,27 @@ err:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::truncate()
+int ha_mroonga::truncate(
+#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+  dd::Table *table_def
+#endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   if (share->wrapper_mode)
   {
+#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+    error = wrapper_truncate(table_def);
+#else
     error = wrapper_truncate();
+#endif
   } else {
+#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+    error = storage_truncate(table_def);
+#else
     error = storage_truncate();
+#endif
   }
   if (!error) {
     operations_->clear(table->s->table_name.str,

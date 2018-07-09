@@ -325,6 +325,7 @@ typedef uint mrn_alter_table_flags;
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80011)
 #  define MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
 #  define MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+#  define MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
 #endif
 
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
@@ -653,7 +654,11 @@ public:
 #endif
   int end_bulk_insert();
   int delete_all_rows();
-  int truncate();
+  int truncate(
+#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+    dd::Table *table_def
+#endif
+    ) mrn_override;
   double scan_time();
   double read_time(uint index, uint ranges, ha_rows rows);
 #ifdef MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
@@ -1296,9 +1301,17 @@ private:
                               const char *function_name);
   int wrapper_delete_all_rows();
   int storage_delete_all_rows();
-  int wrapper_truncate();
+  int wrapper_truncate(
+#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+    dd::Table *table_def
+#endif
+    );
   int wrapper_truncate_index();
-  int storage_truncate();
+  int storage_truncate(
+#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+    dd::Table *table_def
+#endif
+    );
   int storage_truncate_index();
   double wrapper_scan_time();
   double storage_scan_time();
