@@ -700,3 +700,7 @@
 #else
   typedef st_select_lex mrn_select_lex;
 #endif
+
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define MRN_FIELD_HAVE_AUTO_FLAGS
+#endif

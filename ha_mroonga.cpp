@@ -12635,7 +12635,11 @@ int ha_mroonga::storage_encode_key_set(Field *field, const uchar *key,
                      field->field_length,
                      (uchar *)(key - 1),
                      field->null_bit,
+#ifdef MRN_FIELD_HAVE_AUTO_FLAGS
+                     field->auto_flags,
+#else
                      field->unireg_check,
+#endif
 #ifdef MRN_FIELD_SET_USE_LEX_STRING
                      &(field->field_name),
 #else
