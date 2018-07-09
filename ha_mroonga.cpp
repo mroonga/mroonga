@@ -1535,11 +1535,11 @@ static void mrn_drop_database(handlerton *hton, char *path)
 static int mrn_close_connection(handlerton *hton, THD *thd)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  void *p = *thd_ha_data(thd, mrn_hton_ptr);
+  void *p = thd_get_ha_data(thd, mrn_hton_ptr);
   if (p) {
     mrn_clear_slot_data(thd);
     free(p);
-    *thd_ha_data(thd, mrn_hton_ptr) = (void *) NULL;
+    mrn_thd_set_ha_data(thd, mrn_hton_ptr, NULL);
     {
       mrn::Lock lock(&mrn_allocated_thds_mutex);
       grn_hash_delete(&mrn_ctx, mrn_allocated_thds, &thd, sizeof(thd), NULL);
