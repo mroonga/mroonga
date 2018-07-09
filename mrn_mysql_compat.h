@@ -735,5 +735,5 @@ typedef HASH mrn_table_def_cache_type;
 #define mrn_thd_set_ha_data(thd, hton, ha_data) \
   *thd_ha_data(thd, hton) = ha_data
 // TODO
-// #define mrn_thd_set_ha_data(thd, hton, ha_data) \
-//   thd_set_ha_data(thd, hton, ha_data)
+/* #define mrn_thd_set_ha_data(thd, hton, ha_data) \ */
+/*    thd_set_ha_data(thd, hton, ha_data) */
