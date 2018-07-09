@@ -12999,8 +12999,19 @@ handler *ha_mroonga::wrapper_clone(const char *name, MEM_ROOT *mem_root)
   ((ha_mroonga *) cloned_handler)->is_clone = true;
   ((ha_mroonga *) cloned_handler)->parent_for_clone = this;
   ((ha_mroonga *) cloned_handler)->mem_root_for_clone = mem_root;
-  if (cloned_handler->ha_open(table, table->s->normalized_path.str,
-                              table->db_stat, HA_OPEN_IGNORE_IF_LOCKED))
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+  int error = cloned_handler->ha_open(table,
+                                      table->s->normalized_path.str,
+                                      table->db_stat,
+                                      HA_OPEN_IGNORE_IF_LOCKED,
+                                      NULL);
+#else
+  int error = cloned_handler->ha_open(table,
+                                      table->s->normalized_path.str,
+                                      table->db_stat,
+                                      HA_OPEN_IGNORE_IF_LOCKED);
+#endif
+  if (error != 0)
   {
     delete cloned_handler;
     DBUG_RETURN(NULL);
