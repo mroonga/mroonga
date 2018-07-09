@@ -20,6 +20,7 @@
 
 #include "mrn_mysql.h"
 
+#include <mysql/plugin.h>
 #if MYSQL_VERSION_ID >= 50500
 #  include <sql_servers.h>
 #  include <sql_base.h>
@@ -1210,16 +1211,17 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
 {
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_slot_data *slot_data =
-    (st_mrn_slot_data*) *thd_ha_data(thd, mrn_hton_ptr);
+    static_cast<st_mrn_slot_data *>(thd_get_ha_data(thd, mrn_hton_ptr));
   if (slot_data == NULL) {
-    slot_data = (st_mrn_slot_data*) malloc(sizeof(st_mrn_slot_data));
+    slot_data =
+      static_cast<st_mrn_slot_data *>(malloc(sizeof(st_mrn_slot_data)));
     slot_data->last_insert_record_id = GRN_ID_NIL;
     slot_data->first_wrap_hton = NULL;
     slot_data->alter_create_info = NULL;
     slot_data->disable_keys_create_info = NULL;
     slot_data->alter_connect_string = NULL;
     slot_data->alter_comment = NULL;
-    *thd_ha_data(thd, mrn_hton_ptr) = (void *) slot_data;
+    thd_set_ha_data(thd, mrn_hton_ptr, slot_data);
     {
       mrn::Lock lock(&mrn_allocated_thds_mutex);
       if (grn_hash_add(&mrn_ctx,
