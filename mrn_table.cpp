@@ -31,6 +31,7 @@
 #endif
 #include <sql_plugin.h>
 #include <sql/field.h>
+#include <sql/table.h>
 
 #include "mrn_err.h"
 #include "mrn_table.hpp"
