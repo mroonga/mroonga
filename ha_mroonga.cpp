@@ -3487,7 +3487,11 @@ int ha_mroonga::wrapper_create(const char *name,
     base_key_info = NULL;
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
+#ifdef MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
+  error = hnd->ha_create(name, table, info, table_def);
+#else
   error = hnd->ha_create(name, table, info);
+#endif
   MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   share = NULL;
