@@ -652,15 +652,16 @@
   typedef Key_spec mrn_key_spec;
 #  define MRN_KEY_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {        \
     for (size_t spec_i; spec_i < spec_list.size(); ++spec_i) {      \
-      mrn_key_spec *spec = spec_list[spec_i];
+      const mrn_key_spec *spec = spec_list[spec_i];
 #  define MRN_KEY_SPEC_LIST_EACH_END()          \
     }                                           \
   } while (false)
 #else
   typedef Key mrn_key_spec;
 #  define MRN_KEY_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {    \
-    List_iterator<mrn_key_spec> spec_iterator(spec_list);       \
-    mrn_key_spec *spec;                                         \
+    List<mrn_key_spec> spec_list_ = spec_list;                  \
+    List_iterator<mrn_key_spec> spec_iterator(spec_list_);      \
+    const mrn_key_spec *spec;                                   \
     while ((spec = spec_iterator++))
 #  define MRN_KEY_SPEC_LIST_EACH_END()          \
   } while (false)
@@ -671,7 +672,7 @@
   spec_list.element_size()
 #  define MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {       \
     for (size_t spec_i; spec_i < spec_list.size(); ++spec_i) {          \
-      Key_part_spec *spec = spec_list[spec_i];
+      const Key_part_spec *spec = spec_list[spec_i];
 #  define MRN_KEY_PART_SPEC_LIST_EACH_END()     \
     }                                           \
   } while (false)
@@ -679,8 +680,9 @@
 #  define MRN_KEY_PART_SPEC_LIST_N_ELEMENTS(spec_list)      \
   spec_list.elements
 #  define MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {       \
-    List_iterator<Key_part_spec> spec_iterator(spec_list);              \
-    Key_part_spec *spec;                                                \
+    List<Key_part_spec> spec_list_ = spec_list;                         \
+    List_iterator<Key_part_spec> spec_iterator(spec_list_);             \
+    const Key_part_spec *spec;                                          \
     while ((spec = spec_iterator++))
 #  define MRN_KEY_PART_SPEC_LIST_EACH_END()     \
   } while (false)

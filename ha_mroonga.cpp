@@ -4054,8 +4054,8 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
         continue;
       }
     }
-    mrn_foreign_key_spec *fk =
-      static_cast<mrn_foreign_key_spec *>(key_spec);
+    const mrn_foreign_key_spec *fk =
+      static_cast<const mrn_foreign_key_spec *>(key_spec);
     MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(fk->ref_columns, key_part_ref_spec) {
       const mrn_key_part_spec_field_name *ref_field_name =
         &(key_part_ref_spec->field_name);
