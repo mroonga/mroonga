@@ -30,6 +30,7 @@
 #  include <partition_info.h>
 #endif
 #include <sql_plugin.h>
+#include <sql/field.h>
 
 #include "mrn_err.h"
 #include "mrn_table.hpp"
