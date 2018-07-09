@@ -406,7 +406,7 @@ static PSI_mutex_info mrn_mutexes[] =
     mysql_mutex_register(category, mutexes, n_mutexes); \
   } while (false)
 #  elif defined(MRN_HAVE_PSI_SERVER)
-#    define MRN_REGISTER_MUTEXES(gategory, mutexes)             \
+#    define MRN_REGISTER_MUTEXES(category, mutexes)             \
   do {                                                          \
     if (PSI_server) {                                           \
       int n_mutexes = array_elements(mutexes);                  \
