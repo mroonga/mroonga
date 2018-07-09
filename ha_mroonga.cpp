@@ -219,6 +219,14 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex.table_list.first
 #endif
 
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define MRN_LEX_GET_CREATE_INFO(lex) ((lex)->create_info)
+#  define MRN_LEX_GET_ALTER_INFO(lex) ((lex)->alter_info)
+#else
+#  define MRN_LEX_GET_CREATE_INFO(lex) &((lex)->create_info)
+#  define MRN_LEX_GET_ALTER_INFO(lex) &((lex)->alter_info)
+#endif
+
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_KEYTYPE_FOREIGN KEYTYPE_FOREIGN
 #else
@@ -4017,7 +4025,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
 {
   MRN_DBUG_ENTER_METHOD();
   LEX *lex = ha_thd()->lex;
-  Alter_info *alter_info = &lex->alter_info;
+  Alter_info *alter_info = MRN_LEX_GET_ALTER_INFO(lex);
   List_iterator<Key> key_iterator(alter_info->key_list);
   Key *key;
   char ref_db_buff[NAME_LEN + 1], ref_table_buff[NAME_LEN + 1];
