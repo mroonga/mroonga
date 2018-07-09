@@ -117,6 +117,10 @@
 #  include <mysql/psi/mysql_file.h>
 #endif
 
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+#  include <sql/dd/types/table.h>
+#endif
+
 // for debug
 #define MRN_CLASS_NAME "ha_mroonga"
 
@@ -3480,7 +3484,11 @@ int ha_mroonga::wrapper_create(const char *name,
 
   if (error) {
     mrn::PathMapper mapper(name);
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+    generic_delete_table(name, table_def, mapper.table_name());
+#else
     generic_delete_table(name, mapper.table_name());
+#endif
   }
 
   if (wrap_key_info)
@@ -5437,6 +5445,9 @@ int ha_mroonga::close()
 }
 
 int ha_mroonga::wrapper_delete_table(const char *name,
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+                                     const dd::Table *table_def,
+#endif
                                      handlerton *wrap_handlerton,
                                      const char *table_name)
 {
@@ -5449,13 +5460,21 @@ int ha_mroonga::wrapper_delete_table(const char *name,
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
 
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+  error = hnd->ha_delete_table(name, table_def);
+#else
   error = hnd->ha_delete_table(name);
+#endif
   delete hnd;
 
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::generic_delete_table(const char *name, const char *table_name)
+int ha_mroonga::generic_delete_table(const char *name,
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+                                     const dd::Table *table_def,
+#endif
+                                     const char *table_name)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
@@ -5481,7 +5500,12 @@ int ha_mroonga::generic_delete_table(const char *name, const char *table_name)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::delete_table(const char *name)
+int ha_mroonga::delete_table(const char *name
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+                             ,
+                             const dd::Table *table_def
+#endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -5557,12 +5581,23 @@ int ha_mroonga::delete_table(const char *name)
 
   if (wrap_handlerton)
   {
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+    error = wrapper_delete_table(name,
+                                 table_def,
+                                 wrap_handlerton,
+                                 mapper.table_name());
+#else
     error = wrapper_delete_table(name, wrap_handlerton, mapper.table_name());
+#endif
   }
 
   if (!error)
   {
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+    error = generic_delete_table(name, table_def, mapper.table_name());
+#else
     error = generic_delete_table(name, mapper.table_name());
+#endif
   }
 
   if (!error) {

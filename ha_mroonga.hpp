@@ -317,6 +317,10 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
 #endif
 
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80011)
+#  define MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+#endif
+
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
 #  define MRN_HANDLERTON_CREATE_HAVE_PARTITIONED
 #endif
@@ -538,6 +542,12 @@ public:
   int extra(enum ha_extra_function operation);
   int extra_opt(enum ha_extra_function operation, ulong cache_size);
 
+  int delete_table(const char *name
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+                   ,
+                   const dd::Table *table_def
+#endif
+    ) mrn_override;
   int delete_table(const char *name);
   int write_row(uchar *buf);
   int update_row(const uchar *old_data, const uchar *new_data);
@@ -989,9 +999,17 @@ private:
   int close_databases();
   int ensure_database_open(const char *name, mrn::Database **db=NULL);
   int ensure_database_remove(const char *name);
-  int wrapper_delete_table(const char *name, handlerton *wrap_handlerton,
+  int wrapper_delete_table(const char *name,
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+                           const dd::Table *table_def,
+#endif
+                           handlerton *wrap_handlerton,
                            const char *table_name);
-  int generic_delete_table(const char *name, const char *table_name);
+  int generic_delete_table(const char *name,
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+                           const dd::Table *table_def,
+#endif
+                           const char *table_name);
   int wrapper_open(const char *name, int mode, uint open_options);
   int wrapper_open_indexes(const char *name);
   int storage_reindex();
