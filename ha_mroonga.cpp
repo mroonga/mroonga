@@ -4708,7 +4708,14 @@ int ha_mroonga::create(const char *name,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
+int ha_mroonga::wrapper_open(const char *name,
+                             int mode,
+                             uint open_options
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+                             ,
+                             const dd::Table *table_def
+#endif
+  )
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
@@ -4760,7 +4767,11 @@ int ha_mroonga::wrapper_open(const char *name, int mode, uint open_options)
 #ifdef MRN_HANDLER_HAVE_SET_HA_SHARE_REF
     wrap_handler->set_ha_share_ref(&table->s->ha_share);
 #endif
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+    error = wrap_handler->ha_open(table, name, mode, open_options, table_def);
+#else
     error = wrap_handler->ha_open(table, name, mode, open_options);
+#endif
   } else {
     if (!(wrap_handler = parent_for_clone->wrap_handler->clone(name,
       mem_root_for_clone)))
@@ -5071,7 +5082,14 @@ int ha_mroonga::storage_reindex()
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_open(const char *name, int mode, uint open_options)
+int ha_mroonga::storage_open(const char *name,
+                             int mode,
+                             uint open_options
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+                             ,
+                             const dd::Table *table_def
+#endif
+  )
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
@@ -5408,9 +5426,17 @@ int ha_mroonga::open(const char *name,
 
   if (share->wrapper_mode)
   {
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+    error = wrapper_open(name, mode, open_options, table_def);
+#else
     error = wrapper_open(name, mode, open_options);
+#endif
   } else {
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+    error = storage_open(name, mode, open_options, table_def);
+#else
     error = storage_open(name, mode, open_options);
+#endif
   }
 
   if (error)

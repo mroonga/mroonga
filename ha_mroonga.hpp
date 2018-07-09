@@ -1075,10 +1075,24 @@ private:
                            const dd::Table *table_def,
 #endif
                            const char *table_name);
-  int wrapper_open(const char *name, int mode, uint open_options);
+  int wrapper_open(const char *name,
+                   int mode,
+                   uint open_options
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+                   ,
+                   const dd::Table *table_def
+#endif
+    );
   int wrapper_open_indexes(const char *name);
   int storage_reindex();
-  int storage_open(const char *name, int mode, uint open_options);
+  int storage_open(const char *name,
+                   int mode,
+                   uint open_options
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+                   ,
+                   const dd::Table *table_def
+#endif
+    );
   int open_table(const char *name);
   int storage_open_columns(void);
   void storage_close_columns(void);
