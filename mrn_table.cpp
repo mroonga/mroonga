@@ -40,6 +40,10 @@
 #include "mrn_variables.hpp"
 #include <mrn_lock.hpp>
 
+#ifdef MRN_HAVE_SQL_DERROR_H
+#  include <sql/derror.h>
+#endif
+
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
 #  include <sql/dd_table_share.h>
 #endif
