@@ -324,6 +324,7 @@ typedef uint mrn_alter_table_flags;
 
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80011)
 #  define MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+#  define MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
 #endif
 
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
@@ -660,7 +661,14 @@ public:
 #endif
   ha_rows estimate_rows_upper_bound();
   void update_create_info(HA_CREATE_INFO* create_info);
-  int rename_table(const char *from, const char *to);
+  int rename_table(const char *from,
+                   const char *to
+#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+                   ,
+                   const dd::Table *from_table_def,
+                   dd::Table *to_table_def
+#endif
+    ) mrn_override;
   bool is_crashed() const;
   bool auto_repair(int error) const;
   bool auto_repair() const;
@@ -1307,7 +1315,13 @@ private:
   int wrapper_rename_table(const char *from, const char *to,
                            MRN_SHARE *tmp_share,
                            const char *from_table_name,
-                           const char *to_table_name);
+                           const char *to_table_name
+#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+                           ,
+                           const dd::Table *from_table_def,
+                           dd::Table *to_table_def
+#endif
+    );
   int wrapper_rename_index(const char *from, const char *to,
                            MRN_SHARE *tmp_share,
                            const char *from_table_name,
@@ -1315,7 +1329,13 @@ private:
   int storage_rename_table(const char *from, const char *to,
                            MRN_SHARE *tmp_share,
                            const char *from_table_name,
-                           const char *to_table_name);
+                           const char *to_table_name
+#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+                           ,
+                           const dd::Table *from_table_def,
+                           dd::Table *to_table_def
+#endif
+    );
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
   int storage_rename_foreign_key(MRN_SHARE *tmp_share,
                                  const char *from_table_name,

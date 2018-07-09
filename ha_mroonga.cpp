@@ -13970,7 +13970,13 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
 int ha_mroonga::wrapper_rename_table(const char *from, const char *to,
                                      MRN_SHARE *tmp_share,
                                      const char *from_table_name,
-                                     const char *to_table_name)
+                                     const char *to_table_name
+#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+                                     ,
+                                     const dd::Table *from_table_def,
+                                     dd::Table *to_table_def
+#endif
+  )
 {
   int error = 0;
   handler *hnd;
@@ -13984,7 +13990,13 @@ int ha_mroonga::wrapper_rename_table(const char *from, const char *to,
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
 
-  if ((error = hnd->ha_rename_table(from, to)))
+#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+  error = hnd->ha_rename_table(from, to, from_table_def, to_table_def);
+#else
+  error = hnd->ha_rename_table(from, to);
+#endif
+
+  if (error != 0)
   {
     delete hnd;
     DBUG_RETURN(error);
@@ -14060,7 +14072,13 @@ int ha_mroonga::wrapper_rename_index(const char *from, const char *to,
 int ha_mroonga::storage_rename_table(const char *from, const char *to,
                                      MRN_SHARE *tmp_share,
                                      const char *from_table_name,
-                                     const char *to_table_name)
+                                     const char *to_table_name
+#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+                                     ,
+                                     const dd::Table *from_table_def,
+                                     dd::Table *to_table_def
+#endif
+  )
 {
   int error;
   grn_rc rc;
@@ -14189,7 +14207,14 @@ int ha_mroonga::storage_rename_foreign_key(MRN_SHARE *tmp_share,
 }
 #endif
 
-int ha_mroonga::rename_table(const char *from, const char *to)
+int ha_mroonga::rename_table(const char *from,
+                             const char *to
+#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+                             ,
+                             const dd::Table *from_table_def,
+                             dd::Table *to_table_def
+#endif
+  )
 {
   int error = 0;
   TABLE_LIST table_list;
@@ -14229,13 +14254,29 @@ int ha_mroonga::rename_table(const char *from, const char *to)
 
   if (tmp_share->wrapper_mode)
   {
+#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+    error = wrapper_rename_table(from, to, tmp_share,
+                                 from_mapper.table_name(),
+                                 to_mapper.table_name(),
+                                 from_table_def,
+                                 to_table_def);
+#else
     error = wrapper_rename_table(from, to, tmp_share,
                                  from_mapper.table_name(),
                                  to_mapper.table_name());
+#endif
   } else {
+#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+    error = storage_rename_table(from, to, tmp_share,
+                                 from_mapper.table_name(),
+                                 to_mapper.table_name(),
+                                 from_table_def,
+                                 to_table_def);
+#else
     error = storage_rename_table(from, to, tmp_share,
                                  from_mapper.table_name(),
                                  to_mapper.table_name());
+#endif
   }
 
   if (!error && to_mapper.table_name()[0] == '#') {
