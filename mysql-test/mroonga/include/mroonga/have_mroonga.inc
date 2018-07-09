@@ -17,6 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source ../../include/mroonga/check_ha_mroonga_so.inc
+--source ../../include/mroonga/check_version.inc
 
 disable_query_log;
 
@@ -26,12 +27,12 @@ if (!$have_mroonga_storage_engine) {
   eval INSTALL PLUGIN mroonga_stats SONAME $ha_mroonga_so;
 }
 
-let original_default_storage_engine=`SELECT @@GLOBAL.default_storage_engine`;
+let original_default_storage_engine=`SELECT @@global.default_storage_engine`;
 set default_storage_engine=Mroonga;
 
-let have_default_tmp_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_tmp_storage_engine"`;
+let have_default_tmp_storage_engine_variable=$version_5_6_or_later;
 if ($have_default_tmp_storage_engine_variable) {
-  let original_default_tmp_storage_engine=`SELECT variable_value FROM information_schema.global_variables WHERE variable_name = "default_tmp_storage_engine"`;
+  let original_default_tmp_storage_engine=`SELECT @@global.default_tmp_storage_engine`;
   if (!$original_default_tmp_storage_engine) {
     let original_default_tmp_storage_engine=NULL;
   }
