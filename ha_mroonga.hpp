@@ -939,10 +939,20 @@ private:
 
   void set_pk_bitmap();
   int create_share_for_create() const;
-  int wrapper_create(const char *name, TABLE *table,
-                     HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
-  int storage_create(const char *name, TABLE *table,
-                     HA_CREATE_INFO *info, MRN_SHARE *tmp_share);
+  int wrapper_create(const char *name,
+                     TABLE *table,
+                     HA_CREATE_INFO *info,
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+                     dd::Table *table_def,
+#endif
+                     MRN_SHARE *tmp_share);
+  int storage_create(const char *name,
+                     TABLE *table,
+                     HA_CREATE_INFO *info,
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+                     dd::Table *table_def,
+#endif
+                     MRN_SHARE *tmp_share);
   int wrapper_create_index_fulltext_validate(KEY *key_info);
   int wrapper_create_index_fulltext(const char *grn_table_name,
                                     int i,

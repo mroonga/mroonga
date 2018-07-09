@@ -3408,8 +3408,13 @@ error:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_create(const char *name, TABLE *table,
-                               HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
+int ha_mroonga::wrapper_create(const char *name,
+                               TABLE *table,
+                               HA_CREATE_INFO *info,
+#ifdef MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
+                               dd::Table *table_def,
+#endif
+                               MRN_SHARE *tmp_share)
 {
   int error = 0;
   handler *hnd;
@@ -3747,8 +3752,13 @@ int ha_mroonga::wrapper_create_index(const char *name,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_create(const char *name, TABLE *table,
-                               HA_CREATE_INFO *info, MRN_SHARE *tmp_share)
+int ha_mroonga::storage_create(const char *name,
+                               TABLE *table,
+                               HA_CREATE_INFO *info,
+#ifdef MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
+                               dd::Table *table_def,
+#endif
+                               MRN_SHARE *tmp_share)
 {
   int error;
   MRN_LONG_TERM_SHARE *long_term_share = tmp_share->long_term_share;
@@ -4610,9 +4620,17 @@ int ha_mroonga::create(const char *name,
 
   if (tmp_share->wrapper_mode)
   {
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+    error = wrapper_create(name, table, info, table_def, tmp_share);
+#else
     error = wrapper_create(name, table, info, tmp_share);
+#endif
   } else {
+#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+    error = storage_create(name, table, info, table_def, tmp_share);
+#else
     error = storage_create(name, table, info, tmp_share);
+#endif
   }
 
   if (error) {
