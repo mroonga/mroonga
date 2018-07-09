@@ -708,3 +708,13 @@
 #if MYSQL_VERSION_ID >= 80011 && !defined(MARIADB_P)
 #  define MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
 #endif
+
+#if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
+#  define MRN_GET_ERR_MSG(code) my_get_err_msg(code)
+#else
+#  if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#    define MRN_GET_ERR_MSG(code) ER_DEFAULT(code)
+#  else
+#    define MRN_GET_ERR_MSG(code) ER(code)
+#  endif
+#endif

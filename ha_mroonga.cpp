@@ -201,18 +201,12 @@ static mysql_mutex_t *mrn_LOCK_open;
 
 #if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
 #  define MRN_THD_GET_AUTOINC(thd, off, inc) thd_get_autoinc(thd, off, inc)
-#  define MRN_GET_ERR_MSG(code) my_get_err_msg(code)
 #else
 #  define MRN_THD_GET_AUTOINC(thd, off, inc) \
      { \
         *(off) = thd->variables.auto_increment_offset; \
         *(inc) = thd->variables.auto_increment_increment; \
      }
-#  if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
-#    define MRN_GET_ERR_MSG(code) ER_DEFAULT(code)
-#  else
-#    define MRN_GET_ERR_MSG(code) ER(code)
-#  endif
 #endif
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)

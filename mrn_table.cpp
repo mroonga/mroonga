@@ -615,7 +615,7 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
       case 6:
         push_warning_printf(thd, MRN_SEVERITY_WARNING,
                             ER_WARN_DEPRECATED_SYNTAX,
-                            ER(ER_WARN_DEPRECATED_SYNTAX),
+                            MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),
                             "parser", "tokenizer");
         MRN_PARAM_STR_LIST("parser", key_tokenizer, i);
         break;
