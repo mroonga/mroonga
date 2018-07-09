@@ -1,5 +1,6 @@
 # Copyright(C) 2010 Tetsuro IKEDA
 # Copyright(C) 2013-2014 Kentoku SHIBA
+# Copyright(C) 2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -25,15 +26,8 @@ if (!$have_mroonga_storage_engine) {
   eval INSTALL PLUGIN mroonga_stats SONAME $ha_mroonga_so;
 }
 
-let have_default_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_storage_engine"`;
-if ($have_default_storage_engine_variable) {
-  let original_default_storage_engine=`SELECT variable_value FROM information_schema.global_variables WHERE variable_name = "default_storage_engine"`;
-  set default_storage_engine=Mroonga;
-}
-if (!$have_default_storage_engine_variable) {
-  let original_storage_engine=`SELECT variable_value FROM information_schema.global_variables WHERE variable_name = "storage_engine"`;
-  set storage_engine=Mroonga;
-}
+let original_default_storage_engine=`SELECT @@GLOBAL.default_storage_engine`;
+set default_storage_engine=Mroonga;
 
 let have_default_tmp_storage_engine_variable=`SELECT 1 FROM information_schema.global_variables WHERE variable_name = "default_tmp_storage_engine"`;
 if ($have_default_tmp_storage_engine_variable) {

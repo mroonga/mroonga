@@ -1,5 +1,5 @@
 # Copyright(C) 2010-2014 Kentoku SHIBA
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,12 +17,7 @@
 
 disable_query_log;
 
-if ($have_default_storage_engine_variable) {
-  eval set default_storage_engine=$original_default_storage_engine;
-}
-if (!$have_default_storage_engine_variable) {
-  eval set storage_engine=$original_storage_engine;
-}
+eval set default_storage_engine=$original_default_storage_engine;
 
 if ($have_default_tmp_storage_engine_variable) {
   eval set default_tmp_storage_engine=$original_default_tmp_storage_engine;
