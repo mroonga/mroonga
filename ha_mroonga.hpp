@@ -1047,8 +1047,14 @@ private:
                            MRN_SHARE *tmp_share);
   int storage_create_validate_pseudo_column(TABLE *table);
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
-  bool storage_create_foreign_key(TABLE *table, const char *grn_table_name,
-                                  Field *field, grn_obj *table_obj, int &error);
+  bool storage_create_foreign_key(TABLE *table,
+                                  const char *grn_table_name,
+                                  Field *field,
+                                  grn_obj *table_obj,
+#  ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+                                  const dd::Table *table_def,
+#  endif
+                                  int &error);
 #endif
   int storage_create_validate_index(TABLE *table);
   int storage_create_index_table(TABLE *table, const char *grn_table_name,

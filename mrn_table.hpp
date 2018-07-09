@@ -163,7 +163,11 @@ MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
                                              int *error);
 void mrn_free_long_term_share(MRN_LONG_TERM_SHARE *long_term_share);
 TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error);
-TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path,
+TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list,
+                                        const char *path,
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+                                        const dd::Table *table_def,
+#endif
                                         int *error);
 void mrn_free_tmp_table_share(TABLE_SHARE *table_share);
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);

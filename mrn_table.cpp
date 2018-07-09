@@ -39,6 +39,10 @@
 #include "mrn_variables.hpp"
 #include <mrn_lock.hpp>
 
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+#  include <sql/dd_table_share.h>
+#endif
+
 #include <cstring>
 
 #ifdef MRN_MARIADB_P
@@ -1112,7 +1116,11 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   DBUG_RETURN(share);
 }
 
-TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path,
+TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list,
+                                        const char *path,
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+                                        const dd::Table *table_def,
+#endif
                                         int *error)
 {
   uint key_length;
@@ -1150,8 +1158,15 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list, const char *path
   share->path.length = strlen(share->path.str);
   share->normalized_path.str = mrn_my_strdup(path, MYF(MY_WME));
   share->normalized_path.length = strlen(share->normalized_path.str);
-  if (open_table_def(thd, share, GTS_TABLE))
-  {
+  bool is_opened = false;
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+  if (table_def) {
+    is_opened = open_table_def(thd, share, *table_def);
+  }
+#else
+  is_opened = open_table_def(thd, share, GTS_TABLE);
+#endif
+  if (!is_opened) {
     *error = ER_CANT_OPEN_FILE;
     DBUG_RETURN(NULL);
   }

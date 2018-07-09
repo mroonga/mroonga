@@ -704,3 +704,7 @@
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
 #  define MRN_FIELD_HAVE_AUTO_FLAGS
 #endif
+
+#if MYSQL_VERSION_ID >= 80011 && !defined(MARIADB_P)
+#  define MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+#endif
