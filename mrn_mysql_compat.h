@@ -650,8 +650,8 @@
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
   typedef Key_spec mrn_key_spec;
-#  define MRN_KEY_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {        \
-    for (size_t spec_i; spec_i < spec_list.size(); ++spec_i) {      \
+#  define MRN_KEY_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {            \
+    for (size_t spec_i = 0; spec_i < spec_list.size(); ++spec_i) {      \
       const mrn_key_spec *spec = spec_list[spec_i];
 #  define MRN_KEY_SPEC_LIST_EACH_END()          \
     }                                           \
@@ -671,7 +671,7 @@
 #  define MRN_KEY_PART_SPEC_LIST_N_ELEMENTS(spec_list)      \
   spec_list.element_size()
 #  define MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {       \
-    for (size_t spec_i; spec_i < spec_list.size(); ++spec_i) {          \
+    for (size_t spec_i = 0; spec_i < spec_list.size(); ++spec_i) {      \
       const Key_part_spec *spec = spec_list[spec_i];
 #  define MRN_KEY_PART_SPEC_LIST_EACH_END()     \
     }                                           \
