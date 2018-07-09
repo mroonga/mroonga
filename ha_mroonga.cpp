@@ -10781,7 +10781,7 @@ void ha_mroonga::check_count_skip(key_part_map target_key_part_map)
     DBUG_VOID_RETURN;
   }
 
-  st_select_lex *select_lex = table->pos_in_table_list->select_lex;
+  mrn_select_lex *select_lex = table->pos_in_table_list->select_lex;
   KEY *key_info = NULL;
   if (active_index != MAX_KEY) {
     key_info = &(table->key_info[active_index]);
@@ -10854,9 +10854,9 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   }
 
   TABLE_LIST *table_list = table->pos_in_table_list;
-  st_select_lex *select_lex = table_list->select_lex;
+  mrn_select_lex *select_lex = table_list->select_lex;
   SELECT_LEX_UNIT *unit = MRN_TABLE_LIST_GET_DERIVED(table_list);
-  st_select_lex *first_select_lex;
+  mrn_select_lex *first_select_lex;
   if (unit)
   {
     first_select_lex = unit->first_select();
@@ -12912,7 +12912,7 @@ int ha_mroonga::generic_reset()
     DBUG_RETURN(error);
   }
 
-  st_select_lex *select_lex = table_list->select_lex;
+  mrn_select_lex *select_lex = table_list->select_lex;
   if (!select_lex) {
     DBUG_RETURN(error);
   }

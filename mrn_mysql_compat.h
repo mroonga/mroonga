@@ -693,3 +693,10 @@
 #else
   typedef Foreign_key mrn_foreign_key_spec;
 #endif
+
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+  class SELECT_LEX;
+  typedef SELECT_LEX mrn_select_lex;
+#else
+  typedef st_select_lex mrn_select_lex;
+#endif
