@@ -16243,10 +16243,6 @@ bool ha_mroonga::storage_inplace_alter_table_drop_column(
 
   bool have_error = false;
 
-  mrn::PathMapper mapper(share->table_name);
-  grn_obj *table_obj;
-  table_obj = grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
-
   Alter_info *alter_info = ha_alter_info->alter_info;
 
   uint n_fields = table->s->fields;
@@ -16265,10 +16261,23 @@ bool ha_mroonga::storage_inplace_alter_table_drop_column(
       continue;
     }
 
-    grn_obj *column_obj;
-    column_obj = grn_obj_column(ctx, table_obj, FIELD_NAME(field));
-    if (column_obj) {
-      grn_obj_remove(ctx, column_obj);
+    grn_column_cache *column_cache = grn_column_caches[i];
+    if (column_cache) {
+      grn_column_cache_close(ctx, column_cache);
+      grn_column_caches[i] = NULL;
+    }
+
+    grn_obj *range = grn_column_ranges[i];
+    if (range) {
+      grn_obj_unlink(ctx, range);
+      grn_column_ranges[i] = NULL;
+    }
+
+    grn_obj *column;
+    column = grn_columns[i];
+    if (column) {
+      grn_obj_remove(ctx, column);
+      grn_columns[i] = NULL;
     }
     if (ctx->rc) {
       int error = ER_WRONG_COLUMN_NAME;
@@ -16277,7 +16286,6 @@ bool ha_mroonga::storage_inplace_alter_table_drop_column(
       break;
     }
   }
-  grn_obj_unlink(ctx, table_obj);
 
   DBUG_RETURN(have_error);
 }
