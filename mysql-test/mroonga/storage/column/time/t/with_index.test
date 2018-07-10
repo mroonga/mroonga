@@ -37,9 +37,11 @@ INSERT INTO running_records (title, average, max)
 
 SELECT * FROM running_records;
 
+--sorted_result
 SELECT * FROM running_records
          WHERE average BETWEEN "00:59:59" AND "100:10:10";
 
+--sorted_result
 SELECT * FROM running_records
          WHERE average BETWEEN "-838:59:59" AND "01:00:00";
 
