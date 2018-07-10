@@ -414,6 +414,8 @@ static PSI_mutex_info mrn_mutexes[] =
     }                                                           \
   } while (false)
 #  endif
+#else
+#  define MRN_REGISTER_MUTEXES(category, mutexes)
 #endif
 
 /* global variables */
