@@ -27,13 +27,13 @@ USE test;
 
 SELECT mroonga_command("plugin_register token_filters/stop_word");
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 
 CREATE TABLE memos (
   id INT NOT NULL PRIMARY KEY,
   content VARCHAR(64) NOT NULL,
   FULLTEXT INDEX (content) COMMENT 'token_filters "TokenFilterStopWord"'
-) COMMENT='engine "InnoDB"' DEFAULT CHARSET=utf8;
+) COMMENT='engine "InnoDB"' DEFAULT CHARSET=utf8mb4;
 
 SELECT mroonga_command("dump --dump_plugins no");
 

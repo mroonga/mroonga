@@ -21,7 +21,7 @@
 drop table if exists diaries;
 --enable_warnings
 
-set names utf8;
+set names utf8mb4;
 create table diaries (
   id int primary key,
   title varchar(255),
@@ -29,7 +29,7 @@ create table diaries (
   fulltext index (title, content),
   fulltext index (title),
   fulltext index (content)
-) default charset utf8 COMMENT = 'engine "innodb"';
+) default charset utf8mb4 COMMENT = 'engine "innodb"';
 
 insert into diaries values(1, "Hello", "はじめました。");
 insert into diaries values(2, "天気", "明日の富士山の天気について");

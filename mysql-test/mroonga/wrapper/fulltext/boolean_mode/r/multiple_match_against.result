@@ -1,12 +1,12 @@
 DROP TABLE IF EXISTS diaries;
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE diaries (
 id INT PRIMARY KEY,
 title VARCHAR(255),
 content TEXT,
 FULLTEXT INDEX (title),
 FULLTEXT INDEX (content)
-) DEFAULT CHARSET = UTF8 COMMENT = 'ENGINE "InnoDB"';
+) DEFAULT CHARSET = UTF8MB4 COMMENT = 'ENGINE "InnoDB"';
 INSERT INTO diaries VALUES(1, "富士山", "今日からはじめました。");
 INSERT INTO diaries VALUES(2, "天気 １月１日", "明日の富士山の天気について");
 INSERT INTO diaries VALUES(3, "天気 ４月４日", "今日も天気がよくてきれいに見える。");

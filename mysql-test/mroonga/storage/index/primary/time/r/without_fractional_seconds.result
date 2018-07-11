@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS running_records;
 CREATE TABLE running_records (
 time TIME PRIMARY KEY,
 title TEXT
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 INSERT INTO running_records (time, title)
 VALUES ("01:00:00", "normal condition");
 INSERT INTO running_records (time, title)

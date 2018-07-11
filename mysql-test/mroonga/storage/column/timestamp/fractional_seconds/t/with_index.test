@@ -28,7 +28,7 @@ CREATE TABLE diaries (
   created_at TIMESTAMP(6),
   updated_at TIMESTAMP(6),
   KEY (updated_at)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 
 INSERT INTO diaries (title, created_at, updated_at)
        VALUES ("clear day",

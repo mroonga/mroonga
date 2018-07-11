@@ -4,7 +4,7 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 title TEXT,
 party_year YEAR,
 KEY (party_year)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 INSERT INTO aniversary_memos (title, party_year)
 VALUES ("We need a big cake!", "11");
 INSERT INTO aniversary_memos (title, party_year)

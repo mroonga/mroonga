@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS bugs;
 CREATE TABLE bugs (
 id INT UNSIGNED PRIMARY KEY,
 tag VARCHAR(64)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 ALTER TABLE bugs
 CHANGE COLUMN
 tag
@@ -13,5 +13,5 @@ bugs	CREATE TABLE `bugs` (
   `id` int(10) unsigned NOT NULL,
   `tag` varchar(64) DEFAULT NULL COMMENT 'It must consist of only alphabet and number.',
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 DROP TABLE bugs;

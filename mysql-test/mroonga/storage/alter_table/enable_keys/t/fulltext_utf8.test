@@ -20,12 +20,12 @@
 DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 CREATE TABLE diaries (
   id int PRIMARY KEY,
   title varchar(255),
   FULLTEXT KEY title_index (title)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE diaries DISABLE KEYS;
 

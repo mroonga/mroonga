@@ -20,13 +20,13 @@
 DROP TABLE IF EXISTS logs;
 --enable_warnings
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE logs(
   message TEXT,
   host TEXT,
   FULLTEXT KEY (message),
   FULLTEXT KEY (host)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO logs VALUES("Error Error Error",               "host1");
 INSERT INTO logs VALUES("Warning Warning Warning",         "host1");

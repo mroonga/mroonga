@@ -3,7 +3,7 @@ CREATE TABLE bugs (
 id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 title VARCHAR(32),
 FULLTEXT KEY (title)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 ALTER TABLE bugs CHANGE COLUMN title title VARCHAR(64);
 SHOW CREATE TABLE bugs;
 Table	Create Table
@@ -12,5 +12,5 @@ bugs	CREATE TABLE `bugs` (
   `title` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title` (`title`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 DROP TABLE bugs;

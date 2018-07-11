@@ -26,7 +26,7 @@ create table diaries (
   body text,
   fulltext index title_index (title),
   fulltext index body_index (body)
-) default charset utf8;
+) default charset utf8mb4;
 
 insert into diaries (title, body) values ("survey", "will start groonga!");
 insert into diaries (title, body) values ("groonga (1)", "starting groonga...");

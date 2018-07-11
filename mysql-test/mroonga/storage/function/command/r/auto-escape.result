@@ -1,9 +1,9 @@
 DROP TABLE IF EXISTS diaries;
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE diaries (
 title TEXT,
 FULLTEXT KEY (title)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO diaries VALUES('It is Groonga');
 INSERT INTO diaries VALUES('It is Mroonga');
 SELECT mroonga_command('select',

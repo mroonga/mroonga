@@ -5,7 +5,7 @@ create table diaries (
 id int primary key auto_increment,
 body text,
 fulltext index body_index (body)
-) default charset utf8;
+) default charset utf8mb4;
 insert into diaries (body) values ("will start Groonga!");
 insert into diaries (body) values ("starting Groonga...");
 insert into diaries (body) values ("started Groonga.");

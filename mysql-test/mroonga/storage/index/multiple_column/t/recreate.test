@@ -20,13 +20,13 @@
 drop table if exists listing;
 --enable_warnings
 
-set names utf8;
+set names utf8mb4;
 create table listing (
   id int primary key auto_increment not null,
   last_name char(30) not null,
   first_name char(30) not null,
   index name (last_name, first_name)
-) default charset utf8;
+) default charset utf8mb4;
 show create table listing;
 
 insert into listing (last_name, first_name) values("Taro", "Yamada");

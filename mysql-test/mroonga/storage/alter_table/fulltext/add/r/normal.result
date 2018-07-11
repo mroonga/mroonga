@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS memos;
 CREATE TABLE memos (
 id INT PRIMARY KEY AUTO_INCREMENT,
 content TEXT
-) DEFAULT CHARSET="utf8";
+) DEFAULT CHARSET="utf8mb4";
 INSERT INTO memos (content) values ("Starting Groonga...");
 INSERT INTO memos (content) values ("Started Groonga.");
 INSERT INTO memos (content) values ("Starting Mroonga...");

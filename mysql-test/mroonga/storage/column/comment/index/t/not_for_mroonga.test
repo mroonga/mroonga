@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS bugs;
 CREATE TABLE bugs (
   id INT UNSIGNED,
   INDEX (id) COMMENT 'ID search is required.'
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 SHOW CREATE TABLE bugs;
 

@@ -21,13 +21,13 @@
 DROP TABLE IF EXISTS memos;
 --enable_warnings
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 
 CREATE TABLE memos (
   id INT NOT NULL PRIMARY KEY,
   content TEXT NOT NULL,
   FULLTEXT INDEX (content) COMMENT 'normalizer "NormalizerAuto"'
-) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4;
 SHOW CREATE TABLE memos;
 
 INSERT INTO memos VALUES (1, "1日の消費㌍は約2000㌔㌍");

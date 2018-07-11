@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   name varchar(100) NOT NULL,
   UNIQUE KEY name (name)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO users VALUES ("Alice");
 INSERT INTO users VALUES ("Bob");

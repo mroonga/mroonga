@@ -17,7 +17,7 @@
 --source include/not_embedded.inc
 --source ../../../include/mroonga/have_mroonga.inc
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;

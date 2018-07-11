@@ -5,7 +5,7 @@ date TIMESTAMP NOT NULL,
 title VARCHAR(100) NOT NULL,
 content TEXT NOT NULL,
 UNIQUE INDEX (date, title)
-) DEFAULT CHARSET=UTF8 COMMENT='ENGINE "MyISAM"';
+) DEFAULT CHARSET=UTF8MB4 COMMENT='ENGINE "MyISAM"';
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
@@ -15,7 +15,7 @@ diaries	CREATE TABLE `diaries` (
   `content` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `date` (`date`,`title`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='ENGINE "MyISAM"'
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COMMENT='ENGINE "MyISAM"'
 INSERT INTO diaries (date, title, content)
 VALUES ("2012-03-04", "cloudy day", "Today is cloudy day...");
 INSERT INTO diaries (date, title, content)

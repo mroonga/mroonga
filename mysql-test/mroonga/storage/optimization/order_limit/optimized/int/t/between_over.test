@@ -22,13 +22,13 @@ DROP TABLE IF EXISTS memos;
 
 FLUSH STATUS;
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE memos (
   id INT UNSIGNED,
   content TEXT,
   FULLTEXT INDEX(content),
   KEY(id)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 
 INSERT INTO memos VALUES(1, "Today is fine.");
 INSERT INTO memos VALUES(2, "Today's lucky item is flower!");

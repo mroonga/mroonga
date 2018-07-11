@@ -3,6 +3,6 @@ CREATE TABLE contents (
 _i INT,
 content TEXT NOT NULL,
 FULLTEXT INDEX(content)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 ERROR HY000: [column][create] name can't start with '_' and contains only 0-9, A-Z, a-z, #, @, - or _: <_i>
 DROP TABLE IF EXISTS contents;

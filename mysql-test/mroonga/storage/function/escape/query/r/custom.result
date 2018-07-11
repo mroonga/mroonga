@@ -1,4 +1,4 @@
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 SELECT mroonga_escape('+-><~*()\"\\:', '()<>~') AS escaped_query;
 escaped_query
 +-\>\<\~*\(\)"\:

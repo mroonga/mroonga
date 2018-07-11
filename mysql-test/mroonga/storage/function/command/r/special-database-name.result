@@ -1,11 +1,11 @@
 DROP DATABASE IF EXISTS `db-1`;
 CREATE DATABASE `db-1`;
 USE `db-1`;
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE diaries (
 title TEXT,
 FULLTEXT KEY (title)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 SELECT mroonga_command('dump --dump_plugins no');
 mroonga_command('dump --dump_plugins no')
 table_create diaries TABLE_NO_KEY

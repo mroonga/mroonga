@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS diaries;
 
 CREATE TABLE diaries (
   title TEXT
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 SELECT mroonga_command('truncate mroonga_operations');
 INSERT INTO diaries VALUES("Unlogged: Research for Mroonga");

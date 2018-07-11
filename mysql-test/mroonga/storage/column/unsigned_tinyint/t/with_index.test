@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS items;
 CREATE TABLE items (
   name VARCHAR(255),
   price TINYINT UNSIGNED KEY
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO items VALUES ("hamburger", 255);
 INSERT INTO items VALUES ("discount", 0);

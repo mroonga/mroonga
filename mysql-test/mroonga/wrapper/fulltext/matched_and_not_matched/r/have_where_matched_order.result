@@ -1,12 +1,12 @@
 DROP TABLE IF EXISTS texts;
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE texts (
 id INT PRIMARY KEY,
 matched TEXT,
 not_matched TEXT,
 FULLTEXT KEY (matched),
 FULLTEXT KEY (not_matched)
-) DEFAULT CHARSET=UTF8 COMMENT='engine "InnoDB"';
+) DEFAULT CHARSET=UTF8MB4 COMMENT='engine "InnoDB"';
 INSERT INTO texts VALUES (1, 'Hello1', 'World1');
 INSERT INTO texts VALUES (2, 'Hello2', 'World2');
 INSERT INTO texts VALUES (3, 'Hello3', 'World3');

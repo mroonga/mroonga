@@ -20,12 +20,12 @@
 drop table if exists diaries;
 --enable_warnings
 
-set names utf8;
+set names utf8mb4;
 create table diaries (
   id int primary key,
   content text,
   fulltext index (content)
-) default charset utf8;
+) default charset utf8mb4;
 
 insert into diaries values(1, "今日からはじめました。");
 insert into diaries values(2, "明日の富士山の天気について");

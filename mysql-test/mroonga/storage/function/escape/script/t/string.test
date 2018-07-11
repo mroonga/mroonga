@@ -18,7 +18,7 @@
 --source ../../../../../include/mroonga/have_mroonga.inc
 --source ../../../../../include/mroonga/load_mroonga_functions.inc
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 
 SELECT mroonga_escape('a\"\\\'z' AS script) AS escaped_query;
 

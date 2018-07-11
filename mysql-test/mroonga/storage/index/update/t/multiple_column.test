@@ -20,7 +20,7 @@
 DROP TABLE IF EXISTS scores;
 --enable_warnings
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 CREATE TABLE scores (
   deleted BOOLEAN,
   value INT,

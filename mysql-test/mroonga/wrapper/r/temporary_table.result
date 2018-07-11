@@ -2,7 +2,7 @@ DROP TEMPORARY TABLE IF EXISTS diaries;
 CREATE TEMPORARY TABLE diaries (
 id INT PRIMARY KEY AUTO_INCREMENT,
 title TEXT
-) DEFAULT CHARSET=UTF8 COMMENT = 'ENGINE "InnoDB"';
+) DEFAULT CHARSET=UTF8MB4 COMMENT = 'ENGINE "InnoDB"';
 INSERT INTO diaries (title) VALUES ("clear day");
 INSERT INTO diaries (title) VALUES ("rainy day");
 INSERT INTO diaries (title) VALUES ("cloudy day");

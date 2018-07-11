@@ -3,7 +3,7 @@ CREATE TABLE variables (
 id INT PRIMARY KEY AUTO_INCREMENT,
 name TEXT,
 FULLTEXT INDEX (name) COMMENT 'parser "off"'
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 Warnings:
 Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 INSERT INTO variables (name) VALUES ("mroonga_database_path_prefix");

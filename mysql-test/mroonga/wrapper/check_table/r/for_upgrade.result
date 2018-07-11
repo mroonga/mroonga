@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS memos;
-SET NAMES utf8;
+SET NAMES utf8mb4;
 CREATE TABLE memos (
 id int NOT NULL PRIMARY KEY,
 content text,

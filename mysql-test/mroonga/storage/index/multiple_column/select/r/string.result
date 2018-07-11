@@ -1,11 +1,11 @@
 drop table if exists listing;
-set names utf8;
+set names utf8mb4;
 create table listing (
 id int primary key auto_increment not null,
 last_name char(30) not null,
 first_name char(30) not null,
 index name (last_name, first_name)
-) default charset utf8;
+) default charset utf8mb4;
 show create table listing;
 Table	Create Table
 listing	CREATE TABLE `listing` (
@@ -14,7 +14,7 @@ listing	CREATE TABLE `listing` (
   `first_name` char(30) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `name` (`last_name`,`first_name`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 insert into listing (last_name, first_name) values("Taro", "Yamada");
 insert into listing (last_name, first_name) values("Taro", "Suzuki");
 insert into listing (last_name, first_name) values("Jiro", "Yamada");

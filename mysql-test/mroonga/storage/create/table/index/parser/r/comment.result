@@ -4,7 +4,7 @@ id int PRIMARY KEY AUTO_INCREMENT,
 body text,
 FULLTEXT INDEX body_index (body)
 COMMENT 'parser "TokenBigramSplitSymbolAlphaDigit"'
-) DEFAULT CHARSET utf8;
+) DEFAULT CHARSET utf8mb4;
 Warnings:
 Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 INSERT INTO diaries (body) VALUES ("will start Groonga!");

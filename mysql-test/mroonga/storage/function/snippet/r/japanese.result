@@ -1,11 +1,11 @@
 drop table if exists t1, t2, t3;
-set names utf8;
-create table t1 (c1 int primary key, c2 varchar(255), c3 text, fulltext index(c2), fulltext index(c3)) default charset utf8;
+set names utf8mb4;
+create table t1 (c1 int primary key, c2 varchar(255), c3 text, fulltext index(c2), fulltext index(c3)) default charset utf8mb4;
 insert into t1 values(1, "あああああ","２９日の富士山の天気について");
 insert into t1 values(2, "いいいいい","２９日の富士山の天気は分かりません");
 insert into t1 values(3, "ううううう","29日の富士山の天気について");
-select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 0, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>') from t1;
-c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 0, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>')
+select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8mb4_general_ci', 0, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>') from t1;
+c1	c2	mroonga_snippet(c3, 10, 2, 'utf8mb4_general_ci', 0, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>')
 1	あああああ	...<span class="w1">２９日</span>...<br>
 ...<span class="w3">富士山</span>...<br>
 
@@ -15,8 +15,8 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 0, 1, '...', '...<br>\n', '�
 3	ううううう	...<span class="w1">29日</span>の...<br>
 ...<span class="w2">天気</span>に...<br>
 
-select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_bin', 0, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>') from t1;
-c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_bin', 0, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>')
+select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8mb4_bin', 0, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>') from t1;
+c1	c2	mroonga_snippet(c3, 10, 2, 'utf8mb4_bin', 0, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>')
 1	あああああ	...<span class="w1">２９日</span>...<br>
 ...<span class="w3">富士山</span>...<br>
 
@@ -26,8 +26,8 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_bin', 0, 1, '...', '...<br>\n', '２９�
 3	ううううう	...<span class="w3">富士山</span>...<br>
 ...<span class="w2">天気</span>に...<br>
 
-select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 1, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>') from t1;
-c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 1, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>')
+select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8mb4_general_ci', 1, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>') from t1;
+c1	c2	mroonga_snippet(c3, 10, 2, 'utf8mb4_general_ci', 1, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>')
 1	あああああ	...<span class="w1">２９日</span>...<br>
 ...<span class="w3">富士山</span>...<br>
 
@@ -37,8 +37,8 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 1, 1, '...', '...<br>\n', '�
 3	ううううう	...<span class="w1">29日</span>の...<br>
 ...<span class="w2">天気</span>に...<br>
 
-select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_bin', 1, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>') from t1;
-c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_bin', 1, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>')
+select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8mb4_bin', 1, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>') from t1;
+c1	c2	mroonga_snippet(c3, 10, 2, 'utf8mb4_bin', 1, 1, '...', '...<br>\n', '２９日', '<span class="w1">', '</span>', '天気', '<span class="w2">', '</span>', '富士山', '<span class="w3">', '</span>')
 1	あああああ	...<span class="w1">２９日</span>...<br>
 ...<span class="w3">富士山</span>...<br>
 
@@ -48,8 +48,8 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_bin', 1, 1, '...', '...<br>\n', '２９�
 3	ううううう	...<span class="w3">富士山</span>...<br>
 ...<span class="w2">天気</span>に...<br>
 
-select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 0, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
-c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 0, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']')
+select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8mb4_general_ci', 0, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
+c1	c2	mroonga_snippet(c3, 10, 2, 'utf8mb4_general_ci', 0, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']')
 1	あああああ	...(w1)[２９日]...
 ...(w3)[富士山]...
 
@@ -59,8 +59,8 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 0, 0, '...', '...\n', '２�
 3	ううううう	...(w1)[29日]の...
 ...(w2)[天気]に...
 
-select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_bin', 0, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
-c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_bin', 0, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']')
+select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8mb4_bin', 0, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
+c1	c2	mroonga_snippet(c3, 10, 2, 'utf8mb4_bin', 0, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']')
 1	あああああ	...(w1)[２９日]...
 ...(w3)[富士山]...
 
@@ -70,8 +70,8 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_bin', 0, 0, '...', '...\n', '２９日', 
 3	ううううう	...(w3)[富士山]...
 ...(w2)[天気]に...
 
-select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
-c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']')
+select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8mb4_general_ci', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
+c1	c2	mroonga_snippet(c3, 10, 2, 'utf8mb4_general_ci', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']')
 1	あああああ	...(w1)[２９日]...
 ...(w3)[富士山]...
 
@@ -81,8 +81,8 @@ c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_general_ci', 1, 0, '...', '...\n', '２�
 3	ううううう	...(w1)[29日]の...
 ...(w2)[天気]に...
 
-select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8_bin', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
-c1	c2	mroonga_snippet(c3, 10, 2, 'utf8_bin', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']')
+select c1, c2, mroonga_snippet(c3, 10, 2, 'utf8mb4_bin', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']') from t1;
+c1	c2	mroonga_snippet(c3, 10, 2, 'utf8mb4_bin', 1, 0, '...', '...\n', '２９日', '(w1)[', ']', '天気', '(w2)[', ']', '富士山', '(w3)[', ']')
 1	あああああ	...(w1)[２９日]...
 ...(w3)[富士山]...
 

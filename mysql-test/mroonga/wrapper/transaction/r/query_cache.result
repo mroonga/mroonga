@@ -3,13 +3,13 @@ SET GLOBAL query_cache_size = 1048576;
 DROP TABLE IF EXISTS simple_table;
 CREATE TABLE simple_table (
 id INT PRIMARY KEY
-) COMMENT = 'ENGINE "InnoDB"' DEFAULT CHARSET=UTF8;
+) COMMENT = 'ENGINE "InnoDB"' DEFAULT CHARSET=UTF8MB4;
 SHOW CREATE TABLE simple_table;
 Table	Create Table
 simple_table	CREATE TABLE `simple_table` (
   `id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8 COMMENT='ENGINE "InnoDB"'
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COMMENT='ENGINE "InnoDB"'
 INSERT INTO simple_table (id) VALUES (1),(2);
 USE test;
 START TRANSACTION;

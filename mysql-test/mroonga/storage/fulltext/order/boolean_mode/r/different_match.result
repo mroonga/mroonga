@@ -1,11 +1,11 @@
 DROP TABLE IF EXISTS diaries;
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE diaries(
 title TEXT,
 body TEXT,
 FULLTEXT KEY (title),
 FULLTEXT KEY (body)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO diaries VALUES("Start groonga", "I read groonga's tutorial.");
 INSERT INTO diaries VALUES("Start mroonga", "I read mroonga's tutorial.");
 INSERT INTO diaries VALUES("Start groonga and Ruby", "I installed rroonga.");

@@ -18,7 +18,7 @@
 --source ../../../include/mroonga/have_mroonga.inc
 --source ../../../include/mroonga/have_mroonga_helper.inc
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 
 CREATE DATABASE check_test;
 USE check_test;

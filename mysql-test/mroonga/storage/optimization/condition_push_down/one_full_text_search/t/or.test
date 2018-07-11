@@ -22,12 +22,12 @@ DROP TABLE IF EXISTS memos;
 
 FLUSH STATUS;
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE memos (
   year int,
   content TEXT,
   FULLTEXT INDEX (content)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 
 INSERT INTO memos VALUES (2017, 'Groonga is fast');
 INSERT INTO memos VALUES (2017, 'Fast embeddable full text search engine');

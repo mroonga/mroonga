@@ -27,11 +27,11 @@ CREATE DATABASE test;
 USE test;
 --enable_query_log
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 
 CREATE TABLE users (
   id int PRIMARY KEY
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 ALTER TABLE users
   ADD COLUMN 名前 text,
   ADD FULLTEXT INDEX (名前);

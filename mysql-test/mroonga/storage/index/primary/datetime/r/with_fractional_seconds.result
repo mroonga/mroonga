@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
 day DATETIME(6) PRIMARY KEY,
 title TEXT
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 INSERT INTO diaries (day, title)
 VALUES ("2012-01-29 21:51:01.111111", "clear day");
 INSERT INTO diaries (day, title)

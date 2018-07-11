@@ -25,7 +25,7 @@ CREATE TABLE contents (
   _i INT,
   content TEXT NOT NULL,
   FULLTEXT INDEX(content)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 --disable_warnings
 DROP TABLE IF EXISTS contents;

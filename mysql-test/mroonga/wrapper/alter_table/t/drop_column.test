@@ -26,7 +26,7 @@ CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title TEXT,
   body TEXT
-) DEFAULT CHARSET UTF8 COMMENT = 'ENGINE "InnoDB"';
+) DEFAULT CHARSET UTF8MB4 COMMENT = 'ENGINE "InnoDB"';
 
 INSERT INTO diaries (title, body) VALUES ("survey", "will start groonga!");
 SELECT * FROM diaries;

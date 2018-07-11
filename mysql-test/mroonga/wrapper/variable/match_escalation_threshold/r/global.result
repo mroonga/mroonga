@@ -4,7 +4,7 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 title TEXT,
 tags TEXT,
 FULLTEXT INDEX tags_index (tags) COMMENT 'tokenizer "TokenDelimit"'
-) DEFAULT CHARSET=UTF8 COMMENT='ENGINE "InnoDB"';
+) DEFAULT CHARSET=UTF8MB4 COMMENT='ENGINE "InnoDB"';
 INSERT INTO diaries (title, tags) VALUES ("Hello groonga!", "groonga install");
 INSERT INTO diaries (title, tags) VALUES ("Hello mroonga!", "mroonga install");
 SELECT * FROM diaries WHERE MATCH (tags) AGAINST ("gr" IN BOOLEAN MODE);

@@ -4,7 +4,7 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 day DATE,
 title TEXT,
 UNIQUE KEY day (day)
-) DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8MB4;
 INSERT INTO diaries (day, title)
 VALUES ("2012-02-14", "clear day1")
 ON DUPLICATE KEY UPDATE title = "clear day1 (duplicated)";

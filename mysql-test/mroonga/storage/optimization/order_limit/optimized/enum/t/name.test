@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS memos;
 
 FLUSH STATUS;
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 CREATE TABLE memos (
   id int PRIMARY KEY,
   tag ENUM('Groonga', 'Mroonga'),
@@ -30,7 +30,7 @@ CREATE TABLE memos (
   FULLTEXT INDEX(content),
   KEY(tag),
   KEY(id)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO memos VALUES(1, 'Groonga', 'Groonga is great!');
 INSERT INTO memos VALUES(2, 'Mroonga', 'Mroonga is great!');

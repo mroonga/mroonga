@@ -21,12 +21,12 @@
 drop table if exists diaries;
 --enable_warnings
 
-set names utf8;
+set names utf8mb4;
 create table diaries (
   id int primary key,
   content text,
   fulltext index (content)
-) default charset utf8 comment = 'engine "innodb"';
+) default charset utf8mb4 comment = 'engine "innodb"';
 
 LOCK TABLE diaries WRITE;
 insert into diaries values(1, "今日からはじめました。");

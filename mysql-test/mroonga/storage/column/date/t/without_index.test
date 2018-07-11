@@ -24,7 +24,7 @@ CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(40),
   created_at DATE
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, created_at) VALUES ("clear day", "2012-01-29");

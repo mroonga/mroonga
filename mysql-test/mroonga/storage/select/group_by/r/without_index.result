@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS users;
-SET NAMES utf8;
+SET NAMES utf8mb4;
 CREATE TABLE users (
 name varchar(40),
 age int

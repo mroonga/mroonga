@@ -25,7 +25,7 @@ FLUSH STATUS;
 CREATE TABLE memos (
   content TEXT,
   FULLTEXT INDEX (content)
-) DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8MB4;
 
 INSERT INTO memos (content) VALUES ('Groonga is good.');
 INSERT INTO memos (content) VALUES ('Groonga is very good.');

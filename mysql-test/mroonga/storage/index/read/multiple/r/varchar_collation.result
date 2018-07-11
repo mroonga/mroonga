@@ -3,7 +3,7 @@ CREATE TABLE ids (
 id VARCHAR(5),
 value VARCHAR(10),
 KEY (id, value)
-) DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 INSERT INTO ids VALUES ("abc", "Abc");
 INSERT INTO ids VALUES ("acd", "aBc");
 INSERT INTO ids VALUES ("ade", "abC");

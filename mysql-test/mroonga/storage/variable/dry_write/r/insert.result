@@ -3,7 +3,7 @@ create table diaries (
 id int primary key auto_increment,
 body text,
 fulltext index body_index (body)
-) default charset utf8;
+) default charset utf8mb4;
 insert into diaries (body) values ("will start groonga!");
 select * from diaries;
 id	body

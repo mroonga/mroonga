@@ -26,7 +26,7 @@ CREATE TABLE users (
   id INT,
   age INT,
   INDEX (age)
-) DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8MB4;
 
 INSERT INTO users (id, age) VALUES (1, 29);
 INSERT INTO users (id, age) VALUES (2, 29);

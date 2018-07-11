@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS bugs;
 CREATE TABLE bugs (
   id INT UNSIGNED PRIMARY KEY,
   tag VARCHAR(64) COMMENT 'It must consist of only alphabet and number.'
-) DEFAULT CHARSET=utf8 COMMENT='engine "InnoDB"';
+) DEFAULT CHARSET=utf8mb4 COMMENT='engine "InnoDB"';
 
 SHOW CREATE TABLE bugs;
 

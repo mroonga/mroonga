@@ -28,7 +28,7 @@ CREATE TABLE diaries (
   body TEXT,
   FULLTEXT INDEX title_index (title),
   FULLTEXT INDEX body_index (body)
-) ENGINE MyISAM DEFAULT CHARSET UTF8;
+) ENGINE MyISAM DEFAULT CHARSET UTF8MB4;
 SELECT table_name, engine, table_comment
   FROM information_schema.tables
  WHERE table_name = 'diaries';

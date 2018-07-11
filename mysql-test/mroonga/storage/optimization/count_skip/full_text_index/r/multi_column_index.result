@@ -4,7 +4,7 @@ CREATE TABLE memos (
 title TEXT,
 content TEXT,
 FULLTEXT INDEX (title, content)
-) DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8MB4;
 INSERT INTO memos (title, content) VALUES ('On Groonga', 'Groonga is good.');
 INSERT INTO memos (title, content) VALUES ('More on Groonga', 'Groonga is very good.');
 INSERT INTO memos (title, content) VALUES ('Also on Mroonga', 'Mroonga is good.');

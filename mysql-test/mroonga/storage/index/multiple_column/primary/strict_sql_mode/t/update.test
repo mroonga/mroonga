@@ -21,12 +21,12 @@
 DROP TABLE IF EXISTS scores;
 --enable_warnings
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 CREATE TABLE scores (
   name char(30) NOT NULL,
   score int NOT NULL,
   PRIMARY KEY (name, score)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO scores (name, score) VALUES ("Taro Yamada", 29);
 INSERT INTO scores (name, score) VALUES ("Taro Yamada", -12);

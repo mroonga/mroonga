@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS bugs;
 
 CREATE TABLE bugs (
   id INT UNSIGNED
-) DEFAULT CHARSET=utf8
+) DEFAULT CHARSET=utf8mb4
   COMMENT='Free style normal comment';
 
 SHOW CREATE TABLE bugs;

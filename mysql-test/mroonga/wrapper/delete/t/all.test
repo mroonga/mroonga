@@ -21,13 +21,13 @@
 DROP TABLE IF EXISTS users;
 --enable_warnings
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 
 CREATE TABLE users (
   id int PRIMARY KEY,
   name varchar(100),
   FULLTEXT INDEX (name)
-) COMMENT 'engine = "InnoDB"' DEFAULT CHARSET=utf8;
+) COMMENT 'engine = "InnoDB"' DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO users VALUES (1, 'Alice');
 INSERT INTO users VALUES (2, 'Bob');

@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS memos;
-SET NAMES utf8;
+SET NAMES utf8mb4;
 CREATE TABLE memos (
 title VARCHAR(255),
 tag1 VARCHAR(10),
@@ -13,7 +13,7 @@ tag8 VARCHAR(10),
 tag9 VARCHAR(10),
 tag10 VARCHAR(10),
 FULLTEXT INDEX (tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO memos
 VALUES("Groonga",
 "tag 1",

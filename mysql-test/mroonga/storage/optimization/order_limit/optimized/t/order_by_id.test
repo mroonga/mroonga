@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS diaries;
 
 FLUSH STATUS;
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE diaries (
   _id INT,
   id INT UNSIGNED NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE diaries (
   FULLTEXT INDEX(content),
   KEY(month),
   KEY(day)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 
 INSERT INTO diaries VALUES(NULL, 1, 2011, 11, 9, "Hello", "今日からはじめました。");
 INSERT INTO diaries VALUES(NULL, 2, 2011, 11, 10, "天気", "明日の富士山の天気について");

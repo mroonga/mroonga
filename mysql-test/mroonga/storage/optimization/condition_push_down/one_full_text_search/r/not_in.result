@@ -1,11 +1,11 @@
 DROP TABLE IF EXISTS memos;
 FLUSH STATUS;
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE memos (
 id INT UNSIGNED,
 content TEXT,
 FULLTEXT INDEX(content)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 INSERT INTO memos VALUES(1, "Groonga is a full text search engine.");
 INSERT INTO memos VALUES(2, "Mroonga is Groonga + MySQL.");
 INSERT INTO memos VALUES(3, "Mroonga can work with MariaDB.");

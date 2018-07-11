@@ -1,10 +1,10 @@
 DROP TABLE IF EXISTS scores;
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE scores (
 id BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 name CHAR(30) NOT NULL,
 score INT NOT NULL
-) DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8MB4;
 SHOW CREATE TABLE scores;
 Table	Create Table
 scores	CREATE TABLE `scores` (
@@ -12,7 +12,7 @@ scores	CREATE TABLE `scores` (
   `name` char(30) NOT NULL,
   `score` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 INSERT INTO scores (name, score) VALUES("Taro Yamada", 29);
 INSERT INTO scores (name, score) VALUES("Taro Yamada", -12);
 INSERT INTO scores (name, score) VALUES("Jiro Yamada", 27);

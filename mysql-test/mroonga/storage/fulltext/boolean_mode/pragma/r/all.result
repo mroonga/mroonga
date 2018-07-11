@@ -1,11 +1,11 @@
 DROP TABLE IF EXISTS memos;
-SET NAMES utf8;
+SET NAMES utf8mb4;
 CREATE TABLE memos (
 id INT PRIMARY KEY,
 title VARCHAR(255),
 content TEXT,
 FULLTEXT INDEX (title, content)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO memos VALUES(1, "Groonga", "Groonga is fast.");
 INSERT INTO memos VALUES(2, "Mroonga", "Mroonga is also fast.");
 INSERT INTO memos VALUES(3, "Rroonga", "Rroonga is also fast.");

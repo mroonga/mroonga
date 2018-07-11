@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS items;
 CREATE TABLE items (
 name VARCHAR(255),
 price SMALLINT KEY
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO items VALUES ("note PC", 32767);
 INSERT INTO items VALUES ("discount", -32768);
 INSERT INTO items VALUES ("coke", 100);

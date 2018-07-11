@@ -22,12 +22,12 @@ DROP TABLE IF EXISTS memos;
 
 SET GLOBAL mroonga_default_tokenizer = TokenDelimit;
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE memos (
   id INT PRIMARY KEY,
   content TEXT,
   FULLTEXT INDEX (content)
-) DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8MB4;
 
 INSERT INTO memos VALUES(1, "(groonga) Installed!");
 INSERT INTO memos VALUES(2, "(mroonga) Installed!");

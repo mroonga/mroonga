@@ -29,7 +29,7 @@ CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
   content VARCHAR(255),
   FULLTEXT INDEX (content)
-) DEFAULT CHARSET UTF8 COMMENT = 'ENGINE "InnoDB"';
+) DEFAULT CHARSET UTF8MB4 COMMENT = 'ENGINE "InnoDB"';
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (content) VALUES ("Tommorow will be shiny day!");

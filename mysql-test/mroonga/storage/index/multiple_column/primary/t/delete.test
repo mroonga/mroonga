@@ -20,12 +20,12 @@
 drop table if exists listing;
 --enable_warnings
 
-set names utf8;
+set names utf8mb4;
 create table scores (
   name char(30) not null,
   score int not null,
   primary key (name, score)
-) default charset utf8;
+) default charset utf8mb4;
 show create table scores;
 insert into scores (name, score) values("Taro Yamada", 29);
 insert into scores (name, score) values("Taro Yamada", -12);

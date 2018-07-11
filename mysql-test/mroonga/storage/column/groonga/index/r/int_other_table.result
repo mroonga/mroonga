@@ -3,13 +3,13 @@ CREATE DATABASE mroonga;
 USE mroonga;
 CREATE TABLE priorities (
 id INT PRIMARY KEY
-) DEFAULT CHARSET=utf8
-COLLATE=utf8_bin;
+) DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_bin;
 CREATE TABLE bugs (
 id INT UNSIGNED PRIMARY KEY,
 priority INT COMMENT 'type "priorities"',
 INDEX bugs_priority_index (priority) COMMENT 'table "priorities"'
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO bugs (id, priority) VALUES (1, 10);
 INSERT INTO bugs (id, priority) VALUES (2, 3);
 INSERT INTO bugs (id, priority) VALUES (3, -2);

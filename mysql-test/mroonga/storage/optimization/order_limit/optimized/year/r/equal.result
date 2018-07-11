@@ -6,7 +6,7 @@ release_title TEXT,
 release_year YEAR,
 KEY (release_year),
 FULLTEXT KEY (release_title)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 INSERT INTO mroonga_releases (release_title, release_year)
 VALUES ("Groonga storage engine (code name Mroonga) 1.0 has been released", "11");
 INSERT INTO mroonga_releases (release_title, release_year)

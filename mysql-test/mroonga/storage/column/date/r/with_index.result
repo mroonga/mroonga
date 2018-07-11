@@ -4,7 +4,7 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 title VARCHAR(40),
 created_at DATE,
 KEY (created_at)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
@@ -13,7 +13,7 @@ diaries	CREATE TABLE `diaries` (
   `created_at` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `created_at` (`created_at`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 INSERT INTO diaries (title, created_at) VALUES ("clear day", "2012-01-29");
 INSERT INTO diaries (title, created_at) VALUES ("rainy day", "2012-01-30");
 INSERT INTO diaries (title, created_at) VALUES ("cloudy day", "2012-01-31");

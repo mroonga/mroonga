@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS bugs;
 
 CREATE TABLE bugs (
   id INT UNSIGNED PRIMARY KEY
-) DEFAULT CHARSET=utf8
+) DEFAULT CHARSET=utf8mb4
   COMMENT='Free style normal comment, engine "InnoDB"';
 
 SELECT mroonga_command("dump --dump_plugins no");

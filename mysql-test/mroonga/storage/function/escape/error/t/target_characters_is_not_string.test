@@ -18,7 +18,7 @@
 --source ../../../../../include/mroonga/have_mroonga.inc
 --source ../../../../../include/mroonga/load_mroonga_functions.inc
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 
 -- error ER_CANT_INITIALIZE_UDF
 SELECT mroonga_escape('+-><~*()\"\\:', 29) AS escaped_query;

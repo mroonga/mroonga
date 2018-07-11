@@ -4,7 +4,7 @@ id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 score1 INT NOT NULL,
 score2 INT NOT NULL,
 INDEX (score1, score2)
-) DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8MB4;
 INSERT INTO scores (score1, score2) VALUES(1,  1);
 INSERT INTO scores (score1, score2) VALUES(1,  2);
 INSERT INTO scores (score1, score2) VALUES(2,  3);

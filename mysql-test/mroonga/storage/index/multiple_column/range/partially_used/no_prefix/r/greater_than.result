@@ -5,7 +5,7 @@ score1 INT,
 score2 INT,
 created_at DATETIME,
 INDEX (created_at, score1, score2)
-) DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8MB4;
 SHOW CREATE TABLE items;
 Table	Create Table
 items	CREATE TABLE `items` (
@@ -15,7 +15,7 @@ items	CREATE TABLE `items` (
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `created_at` (`created_at`,`score1`,`score2`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 INSERT INTO items (score1, score2, created_at) VALUES(1, 0, "2015-07-01 00:00:00");
 INSERT INTO items (score1, score2, created_at) VALUES(2, 0, "2015-07-01 00:00:00");
 INSERT INTO items (score1, score2, created_at) VALUES(2, 0, "2015-07-01 12:00:00");

@@ -1,12 +1,12 @@
 DROP TABLE IF EXISTS memos;
 FLUSH STATUS;
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE memos (
 content TEXT,
 tag varchar(256),
 FULLTEXT INDEX (content),
 KEY (tag)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 INSERT INTO memos VALUES ('Groonga is fast', 'Groonga');
 INSERT INTO memos VALUES ('Fast embeddable full text search engine', 'Groonga');
 INSERT INTO memos VALUES ('Mroonga is fast', 'Mroonga');

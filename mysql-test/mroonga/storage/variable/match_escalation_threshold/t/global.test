@@ -31,7 +31,7 @@ CREATE TABLE diaries (
   title TEXT,
   tags TEXT,
   FULLTEXT INDEX tags_index (tags) COMMENT 'tokenizer "TokenDelimit"'
-) DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8MB4;
 
 INSERT INTO diaries (title, tags) VALUES ("Hello Groonga!", "groonga install");
 INSERT INTO diaries (title, tags) VALUES ("Hello Mroonga!", "mroonga install");

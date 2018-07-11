@@ -40,7 +40,7 @@ CREATE TABLE items (
              "chartreuse",
              "lawn green"),
   INDEX (colors)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 SHOW CREATE TABLE items;
 
 INSERT INTO items VALUES ("t-shart", "black,gray");

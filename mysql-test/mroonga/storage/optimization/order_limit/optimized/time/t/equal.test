@@ -22,14 +22,14 @@ DROP TABLE IF EXISTS memos;
 
 FLUSH STATUS;
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE memos (
   id INT UNSIGNED NOT NULL,
   writing_time TIME,
   content TEXT,
   FULLTEXT INDEX(content),
   KEY(writing_time)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 
 INSERT INTO memos VALUES(1, "1:23:34", "Today is fine.");
 INSERT INTO memos VALUES(2, "1:23:34", "Tomorrow will be fine.");

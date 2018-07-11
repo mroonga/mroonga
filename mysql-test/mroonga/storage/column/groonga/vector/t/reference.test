@@ -23,14 +23,14 @@ DROP TABLE IF EXISTS tags, bugs;
 
 CREATE TABLE tags (
   name VARCHAR(64) PRIMARY KEY
-) DEFAULT CHARSET=utf8
-  COLLATE=utf8_bin
+) DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_bin
   COMMENT='default_tokenizer "TokenDelimit"';
 
 CREATE TABLE bugs (
   id INT UNSIGNED PRIMARY KEY,
   tags VARCHAR(128) DEFAULT '' COMMENT 'flags "COLUMN_VECTOR", type "tags"'
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 SHOW CREATE TABLE bugs;
 
 INSERT INTO bugs (id, tags) VALUES (1, "Linux MySQL groonga");

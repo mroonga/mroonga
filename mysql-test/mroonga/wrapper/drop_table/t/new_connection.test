@@ -22,7 +22,7 @@ CREATE TABLE logs (
   id INT PRIMARY KEY AUTO_INCREMENT,
   message TEXT,
   FULLTEXT INDEX (message)
-) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4;
 
 disable_query_log;
 CONNECT(drop_connection, localhost, root);
@@ -39,7 +39,7 @@ CREATE TABLE logs (
   id INT PRIMARY KEY AUTO_INCREMENT,
   message TEXT,
   FULLTEXT INDEX (message)
-) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8;
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE logs;
 

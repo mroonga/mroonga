@@ -22,14 +22,14 @@ DROP TABLE IF EXISTS memos;
 
 FLUSH STATUS;
 
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 CREATE TABLE memos (
   id INT UNSIGNED NOT NULL,
   title VARCHAR(255),
   content TEXT,
   FULLTEXT INDEX(title),
   FULLTEXT INDEX(content)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 
 INSERT INTO memos VALUES(5,  "title 1",   "content a");
 INSERT INTO memos VALUES(12, "title 1",   "content a");

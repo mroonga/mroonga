@@ -1,10 +1,10 @@
 drop table if exists diaries;
-set names utf8;
+set names utf8mb4;
 create table diaries (
 id int primary key,
 title varchar(255),
 fulltext index (title)
-) default charset utf8 COMMENT = 'engine "innodb"';
+) default charset utf8mb4 COMMENT = 'engine "innodb"';
 set autocommit=0;
 insert into diaries values(0, "2011-07-14");
 insert into diaries values(1, "2011-07-15");

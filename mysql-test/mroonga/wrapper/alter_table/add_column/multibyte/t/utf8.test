@@ -28,11 +28,11 @@ CREATE DATABASE test;
 USE test;
 --enable_query_log
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 
 CREATE TABLE users (
   id int unsigned PRIMARY KEY AUTO_INCREMENT
-) DEFAULT CHARSET=utf8 COMMENT='Engine "InnoDB"';
+) DEFAULT CHARSET=utf8mb4 COMMENT='Engine "InnoDB"';
 ALTER TABLE users
   ADD COLUMN 名前 text,
   ADD FULLTEXT INDEX (名前);

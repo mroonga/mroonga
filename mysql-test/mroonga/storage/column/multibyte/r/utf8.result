@@ -1,9 +1,9 @@
 DROP TABLE IF EXISTS users;
-SET NAMES utf8;
+SET NAMES utf8mb4;
 CREATE TABLE users (
 名前 text,
 FULLTEXT INDEX (名前)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO users VALUES ("やまだ");
 INSERT INTO users VALUES ("たなか");
 INSERT INTO users VALUES ("すずき");

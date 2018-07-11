@@ -1,4 +1,4 @@
-SET NAMES UTF8;
+SET NAMES UTF8MB4;
 DROP TABLE IF EXISTS synonyms;
 CREATE TABLE synonyms (
 term varchar(255),

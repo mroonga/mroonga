@@ -1,6 +1,6 @@
 drop table if exists t1, t2, t3;
-create table t1 (c1 int primary key, c2 varchar(100), fulltext index(c2)) default charset utf8 COMMENT = 'engine "innodb"';
-create table t2 (c1 int primary key, c2 text, fulltext index(c2)) default charset utf8 COMMENT = 'engine "innodb"';
+create table t1 (c1 int primary key, c2 varchar(100), fulltext index(c2)) default charset utf8mb4 COMMENT = 'engine "innodb"';
+create table t2 (c1 int primary key, c2 text, fulltext index(c2)) default charset utf8mb4 COMMENT = 'engine "innodb"';
 insert into t1 values (1, "aa ii uu ee oo");
 insert into t1 values (2, "ka ki ku ke ko");
 insert into t1 values (3, "aa ii ii ii oo");

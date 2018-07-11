@@ -29,7 +29,7 @@ CREATE TABLE `videos_master` (
   `description` text,
   `tags_unpack` text,
   PRIMARY KEY (`video_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `videos_groonga` (
   `id` bigint(1) unsigned NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE `videos_groonga` (
   PRIMARY KEY (`video_id`),
   FULLTEXT INDEX (`description`),
   FULLTEXT INDEX (`tags_unpack`)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8mb4;
 
 
 INSERT INTO videos_master VALUES (1, "video-1", "My Familly", "familly human");

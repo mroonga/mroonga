@@ -3,7 +3,7 @@ create table diaries (
 id int primary key auto_increment,
 body text,
 fulltext index body_index (body)
-) default charset utf8 COMMENT = 'engine "innodb"';
+) default charset utf8mb4 COMMENT = 'engine "innodb"';
 insert into diaries (body) values ("will start groonga!");
 insert into diaries (body) values ("starting groonga...");
 insert into diaries (body) values ("started groonga.");

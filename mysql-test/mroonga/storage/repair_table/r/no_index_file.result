@@ -5,7 +5,7 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 title TEXT,
 body TEXT,
 FULLTEXT INDEX body_index (body)
-) DEFAULT CHARSET UTF8;
+) DEFAULT CHARSET UTF8MB4;
 INSERT INTO diaries (title, body) VALUES ("survey", "will start Groonga!");
 INSERT INTO diaries (title, body) VALUES ("Groonga (1)", "starting Groonga...");
 INSERT INTO diaries (title, body) VALUES ("Groonga (2)", "started Groonga.");
