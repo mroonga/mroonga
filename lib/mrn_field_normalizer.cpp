@@ -29,10 +29,14 @@ namespace mrn {
   FieldNormalizer::FieldNormalizer(grn_ctx *ctx, THD *thread, Field *field)
     : ctx_(ctx),
       thread_(thread),
-      field_(field) {
+      field_(field),
+      lexicon_(NULL) {
   }
 
   FieldNormalizer::~FieldNormalizer() {
+    if (lexicon_) {
+      grn_obj_close(ctx_, lexicon_);
+    }
   }
 
   bool FieldNormalizer::should_normalize() {
@@ -100,8 +104,31 @@ namespace mrn {
     int flags = 0;
     grn_encoding original_encoding = GRN_CTX_GET_ENCODING(ctx_);
     encoding::set_raw(ctx_, field_->charset());
-    grn_obj *grn_string = grn_string_open(ctx_, string, string_length,
-                                          &normalizer, flags);
+    grn_obj *grn_string;
+    if (GRN_TEXT_VALUE(&normalizer)[GRN_TEXT_LEN(&normalizer) - 1] == ')') {
+      if (!lexicon_) {
+        lexicon_ = grn_table_create(ctx_,
+                                    NULL, 0,
+                                    NULL,
+                                    GRN_OBJ_TABLE_PAT_KEY,
+                                    grn_ctx_at(ctx_, GRN_DB_SHORT_TEXT),
+                                    NULL);
+      }
+      grn_obj_set_info(ctx_, lexicon_, GRN_INFO_NORMALIZER, &normalizer);
+      grn_string = grn_string_open(ctx_,
+                                   string,
+                                   string_length,
+                                   lexicon_,
+                                   flags);
+    } else {
+      grn_string = grn_string_open(ctx_,
+                                   string,
+                                   string_length,
+                                   grn_ctx_get(ctx_,
+                                               GRN_TEXT_VALUE(&normalizer),
+                                               GRN_TEXT_LEN(&normalizer)),
+                                   flags);
+    }
     GRN_OBJ_FIN(ctx_, &normalizer);
     GRN_CTX_SET_ENCODING(ctx_, original_encoding);
     DBUG_RETURN(grn_string);

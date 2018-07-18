@@ -38,6 +38,7 @@ namespace mrn {
     grn_ctx *ctx_;
     THD *thread_;
     Field *field_;
+    grn_obj *lexicon_;
 
     bool is_text_type();
   };
