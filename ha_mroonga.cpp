@@ -10379,11 +10379,11 @@ void ha_mroonga::set_normalizer(grn_obj *lexicon, KEY *key)
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
     parser.parse();
-    set_normalizer(lexicon,
-                   key,
-                   parser["normalizer"],
-                   strlen(parser["normalizer"]));
-    DBUG_VOID_RETURN;
+    const char *normalizer = parser["normalizer"];
+    if (normalizer) {
+      set_normalizer(lexicon, key, normalizer, strlen(normalizer));
+      DBUG_VOID_RETURN;
+    }
   }
 
   set_normalizer(lexicon, key, NULL, 0);
