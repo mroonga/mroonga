@@ -94,37 +94,56 @@ namespace mrn {
   grn_obj *FieldNormalizer::normalize(const char *string,
                                       unsigned int string_length) {
     MRN_DBUG_ENTER_METHOD();
-    grn_obj *normalizer = find_grn_normalizer();
+    grn_obj normalizer;
+    GRN_TEXT_INIT(&normalizer, 0);
+    find_grn_normalizer(&normalizer);
     int flags = 0;
     grn_encoding original_encoding = GRN_CTX_GET_ENCODING(ctx_);
     encoding::set_raw(ctx_, field_->charset());
     grn_obj *grn_string = grn_string_open(ctx_, string, string_length,
-                                          normalizer, flags);
+                                          &normalizer, flags);
+    GRN_OBJ_FIN(ctx_, &normalizer);
     GRN_CTX_SET_ENCODING(ctx_, original_encoding);
     DBUG_RETURN(grn_string);
   }
 
-  grn_obj *FieldNormalizer::find_grn_normalizer() {
+  void FieldNormalizer::find_grn_normalizer(grn_obj *normalizer) {
     MRN_DBUG_ENTER_METHOD();
 
     const CHARSET_INFO *charset_info = field_->charset();
     const char *normalizer_name = NULL;
+    const char *normalizer_spec = NULL;
     const char *default_normalizer_name = "NormalizerAuto";
     if ((strcmp(charset_info->name, "utf8_general_ci") == 0) ||
         (strcmp(charset_info->name, "utf8mb4_general_ci") == 0)) {
-      normalizer_name = "NormalizerMySQLGeneralCI";
+      normalizer_name = normalizer_spec = "NormalizerMySQLGeneralCI";
     } else if ((strcmp(charset_info->name, "utf8_unicode_ci") == 0) ||
                (strcmp(charset_info->name, "utf8mb4_unicode_ci") == 0)) {
-      normalizer_name = "NormalizerMySQLUnicodeCI";
+      normalizer_name = normalizer_spec = "NormalizerMySQLUnicodeCI";
     } else if ((strcmp(charset_info->name, "utf8_unicode_520_ci") == 0) ||
                (strcmp(charset_info->name, "utf8mb4_unicode_520_ci") == 0)) {
-      normalizer_name = "NormalizerMySQLUnicode520CI";
+      normalizer_name = normalizer_spec = "NormalizerMySQLUnicode520CI";
+    } else if ((strcmp(charset_info->name, "utf8mb4_0900_ai_ci") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode900";
+      normalizer_spec = "NormalizerMySQLUnicode900('weight_level', 1)";
+    } else if ((strcmp(charset_info->name, "utf8mb4_0900_as_ci") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode900";
+      normalizer_spec = "NormalizerMySQLUnicode900('weight_level', 2)";
+    } else if ((strcmp(charset_info->name, "utf8mb4_0900_as_cs") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode900";
+      normalizer_spec = "NormalizerMySQLUnicode900('weight_level', 3)";
+    } else if ((strcmp(charset_info->name, "utf8mb4_ja_0900_as_cs") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode900";
+      normalizer_spec =
+        "NormalizerMySQLUnicode900('locale', 'ja', 'weight_level', 3)";
+    } else if ((strcmp(charset_info->name, "utf8mb4_ja_0900_as_cs_ks") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode900";
+      normalizer_spec =
+        "NormalizerMySQLUnicode900('locale', 'ja', 'weight_level', 4)";
     }
 
-    grn_obj *normalizer = NULL;
     if (normalizer_name) {
-      normalizer = grn_ctx_get(ctx_, normalizer_name, -1);
-      if (!normalizer) {
+      if (!grn_ctx_get(ctx_, normalizer_name, -1)) {
         char error_message[MRN_MESSAGE_BUFFER_SIZE];
         snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
                  "%s normalizer isn't found for %s. "
@@ -135,13 +154,14 @@ namespace mrn {
                  default_normalizer_name);
         push_warning(thread_, MRN_SEVERITY_WARNING,
                      HA_ERR_UNSUPPORTED, error_message);
+        normalizer_name = NULL;
       }
     }
-
-    if (!normalizer) {
-      normalizer = grn_ctx_get(ctx_, default_normalizer_name, -1);
+    if (!normalizer_name) {
+      normalizer_name = normalizer_spec = default_normalizer_name;
     }
+    GRN_TEXT_PUTS(ctx_, normalizer, normalizer_spec);
 
-    DBUG_RETURN(normalizer);
+    DBUG_VOID_RETURN;
   }
 }

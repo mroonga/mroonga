@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS diaries;
+SET NAMES utf8mb4;
+CREATE TABLE diaries (
+content varchar(256) COLLATE utf8mb4_0900_as_ci,
+FULLTEXT INDEX (content)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO diaries VALUES ("はひふへほ");
+INSERT INTO diaries VALUES ("ばびぶべぼ");
+INSERT INTO diaries VALUES ("ハヒフヘホ");
+INSERT INTO diaries VALUES ("バビブベボ");
+INSERT INTO diaries VALUES ("ﾊﾋﾌﾍﾎ");
+INSERT INTO diaries VALUES ("ﾊﾞﾋﾞﾌﾞﾍﾞﾎﾞ");
+SELECT * FROM diaries
+WHERE MATCH (content) AGAINST ("+バビブベボ" IN BOOLEAN MODE);
+content
+ばびぶべぼ
+バビブベボ
+DROP TABLE diaries;

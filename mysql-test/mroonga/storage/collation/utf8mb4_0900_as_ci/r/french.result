@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS diaries;
+SET NAMES utf8mb4;
+CREATE TABLE diaries (
+content varchar(256) COLLATE utf8mb4_0900_as_ci,
+FULLTEXT INDEX (content)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO diaries VALUES ("Je suis un garçon.");
+SELECT * FROM diaries WHERE MATCH (content) AGAINST ("+Garcon" IN BOOLEAN MODE);
+content
+SELECT * FROM diaries WHERE MATCH (content) AGAINST ("+Garçon" IN BOOLEAN MODE);
+content
+Je suis un garçon.
+DROP TABLE diaries;

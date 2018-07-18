@@ -3320,7 +3320,9 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
     part = 0;
   }
   Field *field = &(key->key_part[part].field[0]);
-  if (field && (have_custom_normalizer(key) || should_normalize(field))) {
+  if (field &&
+      (have_custom_normalizer(key) ||
+       should_normalize(field, key->algorithm == HA_KEY_ALG_FULLTEXT))) {
     need_normalize_p = true;
   }
   if (!need_normalize_p) {
@@ -3642,13 +3644,8 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   }
 
   if (have_custom_normalizer(key_info) ||
-      should_normalize(&key_info->key_part->field[0])) {
-    grn_info_type info_type = GRN_INFO_NORMALIZER;
-    grn_obj *normalizer = find_normalizer(key_info);
-    if (normalizer) {
-      grn_obj_set_info(ctx, index_table, info_type, normalizer);
-      grn_obj_unlink(ctx, normalizer);
-    }
+      should_normalize(&key_info->key_part->field[0], true)) {
+    set_normalizer(index_table, key_info);
   }
 
   grn_obj *index_column = grn_column_create(ctx, index_table,
@@ -3899,21 +3896,16 @@ int ha_mroonga::storage_create(const char *name,
     KEY *key_info = &(table->s->key_info[pkey_nr]);
     int key_parts = KEY_N_KEY_PARTS(key_info);
     if (key_parts == 1) {
-      grn_obj *normalizer = NULL;
       if (tmp_share->normalizer) {
-        normalizer = grn_ctx_get(ctx,
-                                 tmp_share->normalizer,
-                                 tmp_share->normalizer_length);
+        set_normalizer(table_obj,
+                       NULL,
+                       tmp_share->normalizer,
+                       tmp_share->normalizer_length);
       } else {
         Field *field = &(key_info->key_part->field[0]);
-        if (should_normalize(field)) {
-          normalizer = find_normalizer(key_info);
+        if (should_normalize(field, false)) {
+          set_normalizer(table_obj, key_info);
         }
-      }
-      if (normalizer) {
-        grn_info_type info_type = GRN_INFO_NORMALIZER;
-        grn_obj_set_info(ctx, table_obj, info_type, normalizer);
-        grn_obj_unlink(ctx, normalizer);
       }
       if (tmp_share->default_tokenizer) {
         grn_obj *default_tokenizer =
@@ -4403,24 +4395,18 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   }
 
   {
-    grn_obj *normalizer = NULL;
     Field *field = &(key_info->key_part->field[0]);
     if (key_info->flags & HA_FULLTEXT) {
       if (have_custom_normalizer(key_info) ||
-          should_normalize(field)) {
-        normalizer = find_normalizer(key_info);
+          should_normalize(field, true)) {
+        set_normalizer(index_table, key_info);
       }
     } else if (key_alg != HA_KEY_ALG_HASH) {
       if (!is_multiple_column_index &&
           (have_custom_normalizer(key_info) ||
-           should_normalize(field))) {
-        normalizer = find_normalizer(key_info);
+           should_normalize(field, false))) {
+        set_normalizer(index_table, key_info);
       }
-    }
-    if (normalizer) {
-      grn_info_type info_type = GRN_INFO_NORMALIZER;
-      grn_obj_set_info(ctx, index_table, info_type, normalizer);
-      grn_obj_unlink(ctx, normalizer);
     }
   }
 
@@ -10375,15 +10361,17 @@ bool ha_mroonga::have_custom_normalizer(KEY *key) const
   DBUG_RETURN(false);
 }
 
-grn_obj *ha_mroonga::find_normalizer(KEY *key)
+void ha_mroonga::set_normalizer(grn_obj *lexicon, KEY *key)
 {
   MRN_DBUG_ENTER_METHOD();
 
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
   if (key->option_struct->normalizer) {
-    grn_obj *normalizer = find_normalizer(key,
-                                          key->option_struct->normalizer);
-    DBUG_RETURN(normalizer);
+    set_normalizer(lexicon,
+                   key,
+                   key->option_struct->normalizer,
+                   strlen(key->option_struct->normalizer));
+    DBUG_VOID_RETURN;
   }
 #endif
 
@@ -10391,34 +10379,48 @@ grn_obj *ha_mroonga::find_normalizer(KEY *key)
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
     parser.parse();
-    grn_obj *normalizer = find_normalizer(key, parser["normalizer"]);
-    DBUG_RETURN(normalizer);
+    set_normalizer(lexicon,
+                   key,
+                   parser["normalizer"],
+                   strlen(parser["normalizer"]));
+    DBUG_VOID_RETURN;
   }
 
-  grn_obj *normalizer = find_normalizer(key, NULL);
-  DBUG_RETURN(normalizer);
+  set_normalizer(lexicon, key, NULL, 0);
+  DBUG_VOID_RETURN;
 }
 
-grn_obj *ha_mroonga::find_normalizer(KEY *key, const char *name)
+void ha_mroonga::set_normalizer(grn_obj *lexicon,
+                                KEY *key,
+                                const char *normalizer,
+                                size_t normalizer_length)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  grn_obj *normalizer = NULL;
   bool use_normalizer = true;
-  if (name) {
-    if (strcmp(name, "none") == 0) {
-      use_normalizer = false;
-    } else {
-      normalizer = grn_ctx_get(ctx, name, -1);
-    }
+  if (normalizer &&
+      normalizer_length == strlen("none") &&
+      (strncmp(normalizer, "none", normalizer_length) == 0)) {
+    use_normalizer = false;
   }
-  if (use_normalizer && !normalizer) {
-    Field *field = key->key_part[0].field;
-    mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
-    normalizer = field_normalizer.find_grn_normalizer();
+  if (use_normalizer) {
+    grn_obj normalizer_spec;
+    GRN_TEXT_INIT(&normalizer_spec, 0);
+    if (normalizer) {
+      GRN_TEXT_SETS(ctx, &normalizer_spec, normalizer);
+    } else {
+      Field *field = key->key_part[0].field;
+      mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
+      field_normalizer.find_grn_normalizer(&normalizer_spec);
+    }
+    grn_obj_set_info(ctx,
+                     lexicon,
+                     GRN_INFO_NORMALIZER,
+                     &normalizer_spec);
+    GRN_OBJ_FIN(ctx, &normalizer_spec);
   }
 
-  DBUG_RETURN(normalizer);
+  DBUG_VOID_RETURN;
 }
 
 bool ha_mroonga::find_index_column_flags(KEY *key, grn_column_flags *index_column_flags)
@@ -10818,11 +10820,16 @@ bool ha_mroonga::is_enable_optimization()
   DBUG_RETURN(enable_optimization_p);
 }
 
-bool ha_mroonga::should_normalize(Field *field) const
+bool ha_mroonga::should_normalize(Field *field, bool is_fulltext_index) const
 {
   MRN_DBUG_ENTER_METHOD();
-  mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
-  bool need_normalize_p = field_normalizer.should_normalize();
+  bool need_normalize_p;
+  if (is_fulltext_index) {
+    need_normalize_p = !(field->charset()->state & MY_CS_BINSORT);
+  } else {
+    mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
+    need_normalize_p = field_normalizer.should_normalize();
+  }
   DBUG_RETURN(need_normalize_p);
 }
 
@@ -11027,7 +11034,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         Field *field = static_cast<Item_field *>(item)->field;
         mrn::ColumnName column_name(FIELD_NAME(field));
 
-        if (should_normalize(field))
+        if (should_normalize(field, false))
         {
           DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
                               "sort by collated value isn't supported yet."));

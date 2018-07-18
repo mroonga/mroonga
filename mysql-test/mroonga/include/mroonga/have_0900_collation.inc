@@ -1,4 +1,4 @@
-# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,24 +14,13 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../include/mroonga/have_version_5_6_or_later.inc
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS diaries;
---enable_warnings
+if ($mariadb) {
+  --skip This test needs utf8mb4_0900 family collations
+}
 
-SET NAMES utf8mb4;
-CREATE TABLE diaries (
-  content varchar(256) COLLATE utf8mb4_unicode_520_ci,
-  FULLTEXT INDEX (content)
-) DEFAULT CHARSET=utf8mb4;
-
-INSERT INTO diaries VALUES ("ひらがなとカタカナを覚えました。");
-
-SELECT * FROM diaries
-         WHERE MATCH (content) AGAINST ("+かたかな" IN BOOLEAN MODE);
-
-DROP TABLE diaries;
-
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+if (!$version_8_0_or_later) {
+  --skip This test needs utf8mb4_0900 family collations
+}

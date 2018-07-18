@@ -851,8 +851,11 @@ private:
   grn_obj *find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i);
   grn_obj *find_tokenizer(const char *name, int name_length);
   bool have_custom_normalizer(KEY *key) const;
-  grn_obj *find_normalizer(KEY *key);
-  grn_obj *find_normalizer(KEY *key, const char *name);
+  void set_normalizer(grn_obj *lexicon, KEY *normalizer);
+  void set_normalizer(grn_obj *lexicon,
+                      KEY *key,
+                      const char *normalizer,
+                      size_t normalizer_length);
   bool find_index_column_flags(KEY *key, grn_column_flags *index_column_flags);
   bool find_token_filters(KEY *key, grn_obj *token_filters);
   bool find_token_filters_put(grn_obj *token_filters,
@@ -872,7 +875,7 @@ private:
 #endif
   bool is_dry_write();
   bool is_enable_optimization();
-  bool should_normalize(Field *field) const;
+  bool should_normalize(Field *field, bool is_fulltext_index) const;
   void check_count_skip(key_part_map target_key_part_map);
   bool is_grn_zero_column_value(grn_obj *column, grn_obj *value);
   bool is_primary_key_field(Field *field) const;
