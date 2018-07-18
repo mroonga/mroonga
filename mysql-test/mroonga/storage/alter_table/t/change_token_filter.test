@@ -29,16 +29,13 @@ SELECT mroonga_command("plugin_register token_filters/stop_word");
 CREATE TABLE terms (
   term VARCHAR(64) NOT NULL PRIMARY KEY,
   is_stop_word BOOL NOT NULL
-) COMMENT='default_tokenizer "TokenBigram"'
-  DEFAULT CHARSET=utf8mb4
-  DEFAULT COLLATE=utf8mb4_general_ci;
+) COMMENT='default_tokenizer "TokenBigram"' DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE memos (
   id INT NOT NULL PRIMARY KEY,
   content TEXT NOT NULL,
   FULLTEXT INDEX (content) COMMENT 'table "terms"'
-) DEFAULT CHARSET=utf8mb4
-  DEFAULT COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_general_ci;
 
 SELECT mroonga_command("dump --dump_plugins no");
 
