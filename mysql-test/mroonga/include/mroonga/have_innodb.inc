@@ -18,11 +18,11 @@
 --source ../../include/mroonga/check_mariadb.inc
 
 if ($mariadb) {
-  --source ../../include/mroonga/have_innodb.inc
+  --source include/have_innodb.inc
 }
 
 if (!$mariadb) {
   if (!$version_8_0_or_later) {
-    --source ../../include/mroonga/have_innodb.inc
+    --source include/have_innodb.inc
   }
 }
