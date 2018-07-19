@@ -2951,7 +2951,7 @@ ha_mroonga::~ha_mroonga()
 
   if (analyzed_for_create) {
     if (wrap_handler_for_create) {
-      delete wrap_handler_for_create;
+      mrn_destroy(wrap_handler_for_create);
     }
     if (share_for_create.wrapper_mode) {
       plugin_unlock(NULL, share_for_create.plugin);
@@ -3525,7 +3525,7 @@ int ha_mroonga::wrapper_create(const char *name,
   MRN_SET_BASE_SHARE_KEY(tmp_share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   share = NULL;
-  delete hnd;
+  mrn_destroy(hnd);
 
   if (error) {
     mrn::PathMapper mapper(name);

@@ -737,3 +737,9 @@ typedef HASH mrn_table_def_cache_type;
 // TODO
 /* #define mrn_thd_set_ha_data(thd, hton, ha_data) \ */
 /*    thd_set_ha_data(thd, hton, ha_data) */
+
+#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  define mrn_destroy(pointer) destroy(pointer)
+#else
+#  define mrn_destroy(pointer) delete pointer
+#endif
