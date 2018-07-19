@@ -1,4 +1,4 @@
-# Copyright(C) 2016 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,23 +14,15 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../include/mroonga/have_innodb.inc
---source ../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS ids;
---enable_warnings
+if ($mariadb) {
+  --source ../../include/mroonga/have_innodb.inc
+}
 
-CREATE TABLE ids (
-  id int PRIMARY KEY
-) COMMENT='ENGINE "InnoDB"';
-
-INSERT INTO ids VALUES (1);
-INSERT INTO ids VALUES (2);
-INSERT INTO ids VALUES (3);
-
-SELECT COUNT(*) FROM ids;
-
-DROP TABLE ids;
-
---source ../../include/mroonga/have_mroonga_deinit.inc
+if (!$mariadb) {
+  if (!$version_8_0_or_later) {
+    --source ../../include/mroonga/have_innodb.inc
+  }
+}

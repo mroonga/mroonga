@@ -16,7 +16,7 @@
 
 # Based on #910.
 
---source include/have_innodb.inc
+--source ../../../include/mroonga/have_innodb.inc
 --source ../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
