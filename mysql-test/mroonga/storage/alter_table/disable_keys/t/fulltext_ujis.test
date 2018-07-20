@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
 SET NAMES ujis;
+--character_set ujis
 CREATE TABLE diaries (
   id int PRIMARY KEY,
   title varchar(255),
