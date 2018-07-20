@@ -1,4 +1,4 @@
-# Copyright(C) 2014 Naoya Murakami <naoya@createfield.com>
+# Copyright(C) 2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,25 +14,15 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../include/mroonga/not_embedded.inc
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS diaries;
---enable_warnings
+if ($mariadb) {
+  --source include/mroonga/not_embedded.inc
+}
 
-CREATE TABLE diaries (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  body VARCHAR(140)
-) DEFAULT CHARSET UTF8MB4;
-SHOW CREATE TABLE diaries;
-
-ALTER TABLE diaries ADD title VARCHAR(40) FIRST;
-SHOW CREATE TABLE diaries;
-
-INSERT INTO diaries (title, body) values ("groonga (1)", "starting groonga.");
-SELECT * FROM diaries;
-
-DROP TABLE diaries;
-
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+if (!$mariadb) {
+  if (!$version_8_0_or_later) {
+    --source include/mroonga/not_embedded.inc
+  }
+}

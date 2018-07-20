@@ -16,7 +16,7 @@
 
 --skip Require Groonga 8.0.1
 
---source include/not_embedded.inc
+--source ../../../../include/mroonga/not_embedded.inc
 --source ../../../../include/mroonga/have_mroonga.inc
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 

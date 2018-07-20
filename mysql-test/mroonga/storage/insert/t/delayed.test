@@ -16,7 +16,7 @@
 
 skip "This test is too fragile.";
 
---source include/not_embedded.inc
+--source ../../../include/mroonga/not_embedded.inc
 --source ../../../include/mroonga/skip_mysql_5_7_or_later.inc
 --source ../../../include/mroonga/have_mroonga.inc
 
