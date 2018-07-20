@@ -682,7 +682,7 @@ typedef HASH mrn_table_def_cache_type;
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
 #  define MRN_KEY_PART_SPEC_LIST_N_ELEMENTS(spec_list)      \
-  spec_list.element_size()
+  spec_list.size()
 #  define MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(spec_list, spec) do {       \
     for (size_t spec_i = 0; spec_i < spec_list.size(); ++spec_i) {      \
       const Key_part_spec *spec = spec_list[spec_i];
