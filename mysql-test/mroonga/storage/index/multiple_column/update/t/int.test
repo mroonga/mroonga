@@ -25,7 +25,7 @@ CREATE TABLE scores (
   name CHAR(30) NOT NULL,
   score INT NOT NULL,
   KEY property (score, name)
-) DEFAULT CHARSET=UTF8MB4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 SHOW CREATE TABLE scores;
 
 INSERT INTO scores (name, score) VALUES("Taro Yamada", 29);

@@ -27,8 +27,8 @@ CREATE TABLE diaries (
   body TEXT,
   FULLTEXT INDEX title_index (title),
   FULLTEXT INDEX body_index (body)
-) ENGINE MyISAM DEFAULT CHARSET UTF8MB4;
-SELECT table_name, engine
+) ENGINE MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+SELECT table_name AS table_name, engine AS engine
   FROM information_schema.tables
  WHERE table_name = 'diaries';
 
@@ -39,7 +39,7 @@ SELECT * FROM diaries
         MATCH(body) AGAINST("groonga" IN BOOLEAN MODE);
 
 ALTER TABLE diaries ENGINE = mroonga;
-SELECT table_name, engine
+SELECT table_name AS table_name, engine AS engine
   FROM information_schema.tables
  WHERE table_name = 'diaries';
 

@@ -2,14 +2,14 @@ DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
 id INT PRIMARY KEY AUTO_INCREMENT,
 temperature DECIMAL(6, 3)
-) ENGINE InnoDB DEFAULT CHARSET UTF8MB4;
+) ENGINE InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `temperature` decimal(6,3) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 INSERT INTO diaries (temperature) VALUES (21.281);
 SELECT * FROM diaries;
 id	temperature
@@ -31,5 +31,5 @@ diaries	CREATE TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `temperature` decimal(6,3) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4
+) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 DROP TABLE diaries;

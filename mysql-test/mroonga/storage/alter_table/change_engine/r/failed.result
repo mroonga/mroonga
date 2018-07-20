@@ -1,9 +1,8 @@
-SET NAMES big5;
 DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
 title varchar(256) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=big5;
-INSERT INTO diaries VALUES ('±z¦n');
+INSERT INTO diaries VALUES ('');
 ALTER TABLE diaries ENGINE=Mroonga;
 ERROR HY000: The character set 'big5_chinese_ci[big5]' is not supported by Groonga
 SHOW CREATE TABLE diaries;

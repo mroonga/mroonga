@@ -3,24 +3,24 @@ CREATE TABLE diaries (
 id INT PRIMARY KEY AUTO_INCREMENT,
 title VARCHAR(40),
 body VARCHAR(140)
-) DEFAULT CHARSET UTF8MB4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(40) DEFAULT NULL,
-  `body` varchar(140) DEFAULT NULL,
+  `title` varchar(40) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `body` varchar(140) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 ALTER TABLE diaries CHANGE body description VARCHAR(140);
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(40) DEFAULT NULL,
-  `description` varchar(140) DEFAULT NULL,
+  `title` varchar(40) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` varchar(140) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 INSERT INTO diaries (title, description) values ("groonga (1)", "starting groonga.");
 SELECT * FROM diaries;
 id	title	description

@@ -1,5 +1,3 @@
-# -*- coding: big5 -*-
-#
 # Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -20,8 +18,6 @@
 --source ../../../../include/mroonga/have_innodb.inc
 --source ../../../../include/mroonga/have_mroonga.inc
 
-SET NAMES big5;
-
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
 --enable_warnings
@@ -30,7 +26,7 @@ CREATE TABLE diaries (
   title varchar(256) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=big5;
 
-INSERT INTO diaries VALUES ('±z¦n');
+INSERT INTO diaries VALUES ('');
 
 --error 16502
 ALTER TABLE diaries ENGINE=Mroonga;
