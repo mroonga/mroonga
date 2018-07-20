@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS memos;
 
 CREATE TABLE memos (
   content varchar(32)
-) DEFAULT CHARSET="utf8mb4";
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO memos (content) values ("Starting Groonga...");
 INSERT INTO memos (content) values ("Started Groonga.");
