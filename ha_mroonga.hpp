@@ -360,6 +360,8 @@ typedef uint mrn_alter_table_flags;
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_HA_MULTI_RANGE_READ_NEXT
+#  define MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
+#  define MRN_HANDLER_HAVE_IS_INDEX_ALGORITHM_SUPPORTED
 #endif
 
 #if defined(HAVE_PSI_INTERFACE) &&                      \
@@ -669,6 +671,12 @@ public:
   const key_map *keys_to_use_for_scanning();
 #endif
   ha_rows estimate_rows_upper_bound();
+#ifdef MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
+  enum ha_key_alg get_default_index_algorithm() const mrn_override;
+#endif
+#ifdef MRN_HANDLER_HAVE_IS_INDEX_ALGORITHM_SUPPORTED
+  bool is_index_algorithm_supported(enum ha_key_alg key_alg) const mrn_override;
+#endif
   void update_create_info(HA_CREATE_INFO* create_info);
   int rename_table(const char *from,
                    const char *to
@@ -1350,6 +1358,14 @@ private:
 #endif
   ha_rows wrapper_estimate_rows_upper_bound();
   ha_rows storage_estimate_rows_upper_bound();
+#ifdef MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
+  enum ha_key_alg wrapper_get_default_index_algorithm() const;
+  enum ha_key_alg storage_get_default_index_algorithm() const;
+#endif
+#ifdef MRN_HANDLER_HAVE_IS_INDEX_ALGORITHM_SUPPORTED
+  bool wrapper_is_index_algorithm_supported(enum ha_key_alg key_alg) const;
+  bool storage_is_index_algorithm_supported(enum ha_key_alg key_alg) const;
+#endif
   void wrapper_update_create_info(HA_CREATE_INFO* create_info);
   void storage_update_create_info(HA_CREATE_INFO* create_info);
   int wrapper_rename_table(const char *from, const char *to,

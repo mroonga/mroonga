@@ -14021,6 +14021,74 @@ ha_rows ha_mroonga::estimate_rows_upper_bound()
   DBUG_RETURN(rows);
 }
 
+#ifdef MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
+enum ha_key_alg ha_mroonga::wrapper_get_default_index_algorithm() const
+{
+  enum ha_key_alg algorithm;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  algorithm = wrap_handler->get_default_index_algorithm();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(algorithm);
+}
+
+enum ha_key_alg ha_mroonga::storage_get_default_index_algorithm() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  enum ha_key_alg algorithm = handler::get_default_index_algorithm();
+  DBUG_RETURN(algorithm);
+}
+
+enum ha_key_alg ha_mroonga::get_default_index_algorithm() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  enum ha_key_alg algorithm;
+  // TODO: share isn't initialized yet.
+  if (share && share->wrapper_mode) {
+    algorithm = wrapper_get_default_index_algorithm();
+  } else {
+    algorithm = storage_get_default_index_algorithm();
+  }
+  DBUG_RETURN(algorithm);
+}
+#endif
+
+#ifdef MRN_HANDLER_HAVE_IS_INDEX_ALGORITHM_SUPPORTED
+bool ha_mroonga::wrapper_is_index_algorithm_supported(enum ha_key_alg algorithm) const
+{
+  bool supported;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  supported = wrap_handler->is_index_algorithm_supported(algorithm);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(supported);
+}
+
+bool ha_mroonga::storage_is_index_algorithm_supported(enum ha_key_alg algorithm) const
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool supported = (algorithm != HA_KEY_ALG_RTREE);
+  DBUG_RETURN(supported);
+}
+
+bool ha_mroonga::is_index_algorithm_supported(enum ha_key_alg algorithm) const
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool supported;
+  // TODO: share isn't initialized yet.
+  if (share && share->wrapper_mode) {
+    supported = wrapper_is_index_algorithm_supported(algorithm);
+  } else {
+    supported = storage_is_index_algorithm_supported(algorithm);
+  }
+  DBUG_RETURN(supported);
+}
+#endif
+
 void ha_mroonga::wrapper_update_create_info(HA_CREATE_INFO* create_info)
 {
   MRN_DBUG_ENTER_METHOD();
