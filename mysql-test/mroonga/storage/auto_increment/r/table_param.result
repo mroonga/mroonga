@@ -1,5 +1,7 @@
 drop table if exists t1;
-create table t1 (c1 int auto_increment, primary key(c1)) auto_increment=34129;
+create table t1 (
+c1 int auto_increment, primary key(c1)
+) auto_increment=34129 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 insert into t1 values(null);
 select c1 from t1 order by c1 desc;
 c1
@@ -9,7 +11,7 @@ Table	Create Table
 t1	CREATE TABLE `t1` (
   `c1` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`c1`)
-) ENGINE=Mroonga AUTO_INCREMENT=34130 DEFAULT CHARSET=latin1
+) ENGINE=Mroonga AUTO_INCREMENT=34130 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 insert into t1 values(null);
 select c1 from t1 order by c1 desc;
 c1
@@ -66,5 +68,5 @@ Table	Create Table
 t2	CREATE TABLE `t2` (
   `c1` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`c1`)
-) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=latin1
+) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 drop table t2;

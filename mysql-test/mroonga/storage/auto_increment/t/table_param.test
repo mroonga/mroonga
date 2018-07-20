@@ -20,7 +20,9 @@
 drop table if exists t1;
 --enable_warnings
 
-create table t1 (c1 int auto_increment, primary key(c1)) auto_increment=34129;
+create table t1 (
+  c1 int auto_increment, primary key(c1)
+) auto_increment=34129 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 insert into t1 values(null);
 select c1 from t1 order by c1 desc;
 show create table t1;
