@@ -16,7 +16,7 @@
 
 --source ../../../include/mroonga/have_mariadb.inc
 --source ../../../include/mroonga/have_innodb.inc
---source ../../../../include/mroonga/not_embedded.inc
+--source ../../../include/mroonga/not_embedded.inc
 --source ../../../include/mroonga/skip_solaris.inc
 --source ../../../include/mroonga/have_mroonga.inc
 --source ../../../include/mroonga/load_mroonga_functions.inc
