@@ -3,15 +3,15 @@ CREATE TABLE diaries (
 id INT PRIMARY KEY AUTO_INCREMENT,
 title VARCHAR(40),
 body VARCHAR(140)
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(40) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `body` varchar(140) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `title` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ALTER TABLE diaries
 CHANGE body description VARCHAR(140) FIRST,
 CHANGE title subject VARCHAR(40) AFTER internal_id,
@@ -19,11 +19,11 @@ CHANGE id internal_id INT AUTO_INCREMENT;
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
-  `description` varchar(140) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `internal_id` int(11) NOT NULL AUTO_INCREMENT,
-  `subject` varchar(40) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `subject` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`internal_id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO diaries (subject, description)
 VALUES ("groonga (1)", "starting groonga.");
 SELECT * FROM diaries;

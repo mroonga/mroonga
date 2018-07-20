@@ -2,19 +2,19 @@ drop table if exists listing;
 set names utf8mb4;
 create table scores (
 id int primary key auto_increment not null,
-name char(30) COLLATE=utf8mb4_general_ci not null,
+name char(30) not null,
 score int not null,
 index property (name, score)
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 show create table scores;
 Table	Create Table
 scores	CREATE TABLE `scores` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` char(30) COLLATE=utf8mb4_general_ci NOT NULL,
+  `name` char(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `score` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `property` (`name`,`score`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 insert into scores (name, score) values("Taro Yamada", 29);
 insert into scores (name, score) values("Taro Yamada", -12);
 insert into scores (name, score) values("Jiro Yamada", 27);

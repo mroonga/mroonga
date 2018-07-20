@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS ids;
 CREATE TABLE ids (
   id1 INT,
   id2 INT
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO ids (id1, id2) values (1, 2), (1, 2);
 
