@@ -17,6 +17,6 @@
 --source ../../include/mroonga/check_libgroonga_support_zstd.inc
 
 if ($libgroonga_support_zstd) {
-  --source ../../include/mroonga/have_mroonga_deinit.inc
-  --skip This test is for libgroonga doesn't support zstd
+--source ../../include/mroonga/have_mroonga_deinit.inc
+--skip This test is for libgroonga doesn't support zstd
 }
