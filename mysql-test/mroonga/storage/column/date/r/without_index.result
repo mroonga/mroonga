@@ -3,15 +3,15 @@ CREATE TABLE diaries (
 id INT PRIMARY KEY AUTO_INCREMENT,
 title VARCHAR(40),
 created_at DATE
-) DEFAULT CHARSET UTF8MB4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(40) DEFAULT NULL,
+  `title` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO diaries (title, created_at) VALUES ("clear day", "2012-01-29");
 INSERT INTO diaries (title, created_at) VALUES ("rainy day", "2012-01-30");
 INSERT INTO diaries (title, created_at) VALUES ("cloudy day", "2012-01-31");

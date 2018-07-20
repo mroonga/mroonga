@@ -279,7 +279,7 @@ CREATE TABLE items (
             "size255",
             "size256"),
   INDEX (size)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE items;
 
 INSERT INTO items VALUES ("t-shart for child", "size1");

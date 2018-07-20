@@ -24,13 +24,12 @@ DROP TABLE IF EXISTS tags, bugs;
 
 CREATE TABLE tags (
   name VARCHAR(64) PRIMARY KEY
-) DEFAULT CHARSET=utf8mb4
-  COLLATE=utf8mb4_bin;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 CREATE TABLE bugs (
   id INT UNSIGNED PRIMARY KEY,
   tag TEXT COMMENT 'It references to tags.name, type "tags"'
-) DEFAULT CHARSET=utf8mb4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SHOW FULL COLUMNS FROM bugs LIKE 'tag';
 

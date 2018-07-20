@@ -1,4 +1,4 @@
-# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,28 +14,11 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS items;
---enable_warnings
-
-CREATE TABLE items (
-  name VARCHAR(255),
-  size ENUM("small", "medium", "large"),
-  INDEX (size)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-SHOW CREATE TABLE items;
-
-INSERT INTO items VALUES ("t-shart for child", "small");
-INSERT INTO items VALUES ("leadies' coat", "medium");
-INSERT INTO items VALUES ("parka", "large");
-INSERT INTO items VALUES ("hat", "medium");
-
-SELECT * FROM items;
-
-SELECT * FROM items WHERE size = "medium";
-
-DROP TABLE items;
-
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+if (!$mariadb) {
+  if ($version_8_0_or_later) {
+    --skip This test is not for MySQL 8.0.x or later
+  }
+}

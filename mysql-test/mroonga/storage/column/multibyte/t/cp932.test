@@ -28,7 +28,7 @@ USE test;
 --enable_query_log
 
 SET NAMES cp932;
-
+--character_set cp932
 CREATE TABLE users (
   –¼‘O text,
   FULLTEXT INDEX (–¼‘O)

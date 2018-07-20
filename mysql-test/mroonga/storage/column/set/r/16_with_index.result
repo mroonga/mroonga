@@ -18,14 +18,14 @@ colors SET("black",
 "chartreuse",
 "lawn green"),
 INDEX (colors)
-) DEFAULT CHARSET=utf8mb4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE items;
 Table	Create Table
 items	CREATE TABLE `items` (
-  `name` varchar(255) DEFAULT NULL,
-  `colors` set('black','dim gray','dark gray','gray','light gray','gainsboro','white smoke','white','red','orange red','dark orange','orange','gold','yellow','chartreuse','lawn green') DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `colors` set('black','dim gray','dark gray','gray','light gray','gainsboro','white smoke','white','red','orange red','dark orange','orange','gold','yellow','chartreuse','lawn green') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   KEY `colors` (`colors`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO items VALUES ("t-shart", "black,gray");
 INSERT INTO items VALUES ("hat", "white,dark gray");
 INSERT INTO items VALUES ("parka", "chartreuse,orange");

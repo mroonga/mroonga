@@ -30,6 +30,7 @@ CREATE TABLE bugs (
 
 INSERT INTO bugs (id, title) VALUES (1, "Mroonga can't build with MySQL X.Y.Z");
 
+--sorted_result
 SELECT * FROM terms ORDER BY name;
 
 SELECT *, MATCH (title) AGAINST ("+MySQL" IN BOOLEAN MODE) AS score

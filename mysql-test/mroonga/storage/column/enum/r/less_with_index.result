@@ -3,14 +3,14 @@ CREATE TABLE items (
 name VARCHAR(255),
 size ENUM("small", "medium", "large"),
 INDEX (size)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE items;
 Table	Create Table
 items	CREATE TABLE `items` (
-  `name` varchar(255) DEFAULT NULL,
-  `size` enum('small','medium','large') DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `size` enum('small','medium','large') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   KEY `size` (`size`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO items VALUES ("t-shart for child", "small");
 INSERT INTO items VALUES ("leadies' coat", "medium");
 INSERT INTO items VALUES ("parka", "large");

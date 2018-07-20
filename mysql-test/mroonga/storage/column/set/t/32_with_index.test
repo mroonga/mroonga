@@ -58,7 +58,7 @@ CREATE TABLE items (
              "light coral",
              "salmon"),
   INDEX (colors)
-) DEFAULT CHARSET=utf8mb4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE items;
 
 INSERT INTO items VALUES ("t-shart", "black,white");
