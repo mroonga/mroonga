@@ -856,8 +856,8 @@ private:
                          grn_obj_flags *column_flags);
   grn_obj *find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
                             int error_code);
-  grn_obj *find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i);
-  grn_obj *find_tokenizer(const char *name, int name_length);
+  void set_tokenizer(grn_obj *lexicon, KEY *key, MRN_SHARE *mrn_share, int i);
+  void set_tokenizer(grn_obj *lexicon, const char *name, int name_length);
   bool have_custom_normalizer(KEY *key) const;
   void set_normalizer(grn_obj *lexicon, KEY *normalizer);
   void set_normalizer(grn_obj *lexicon,

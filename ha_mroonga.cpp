@@ -3626,12 +3626,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   mrn_change_encoding(ctx, system_charset_info);
   index_tables[i] = index_table;
 
-  grn_obj *tokenizer = find_tokenizer(key_info, tmp_share, i);
-  if (tokenizer) {
-    grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-    grn_obj_set_info(ctx, index_table, info_type, tokenizer);
-    grn_obj_unlink(ctx, tokenizer);
-  }
+  set_tokenizer(index_table, key_info, tmp_share, i);
 
   {
     grn_obj token_filters;
@@ -4376,12 +4371,7 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   }
 
   if (key_info->flags & HA_FULLTEXT) {
-    grn_obj *tokenizer = find_tokenizer(key_info, tmp_share, i);
-    if (tokenizer) {
-      grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-      grn_obj_set_info(ctx, index_table, info_type, tokenizer);
-      grn_obj_unlink(ctx, tokenizer);
-    }
+    set_tokenizer(index_table, key_info, tmp_share, i);
 
     {
       grn_obj token_filters;
@@ -10286,10 +10276,12 @@ grn_obj *ha_mroonga::find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
   DBUG_RETURN(type);
 }
 
-grn_obj *ha_mroonga::find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i)
+void ha_mroonga::set_tokenizer(grn_obj *lexicon,
+                               KEY *key,
+                               MRN_SHARE *mrn_share,
+                               int i)
 {
   MRN_DBUG_ENTER_METHOD();
-  grn_obj *tokenizer;
   const char *tokenizer_name = NULL;
   uint tokenizer_name_length = 0;
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
@@ -10302,43 +10294,63 @@ grn_obj *ha_mroonga::find_tokenizer(KEY *key, MRN_SHARE *mrn_share, int i)
     tokenizer_name = mrn_share->key_tokenizer[i];
     tokenizer_name_length = mrn_share->key_tokenizer_length[i];
   }
-  tokenizer = find_tokenizer(tokenizer_name, tokenizer_name_length);
-  DBUG_RETURN(tokenizer);
+  set_tokenizer(lexicon, tokenizer_name, tokenizer_name_length);
+  DBUG_VOID_RETURN;
 }
 
-grn_obj *ha_mroonga::find_tokenizer(const char *name, int name_length)
+void ha_mroonga::set_tokenizer(grn_obj *lexicon,
+                               const char *name,
+                               int name_length)
 {
   MRN_DBUG_ENTER_METHOD();
 
   if (strncasecmp("off", name, name_length) == 0) {
-    DBUG_RETURN(NULL);
+    DBUG_VOID_RETURN;
   }
 
-  grn_obj *tokenizer;
   mrn_change_encoding(ctx, system_charset_info);
-  tokenizer = grn_ctx_get(ctx, name, name_length);
-  if (!tokenizer) {
-    char message[MRN_BUFFER_SIZE];
-    sprintf(message,
-            "specified tokenizer for fulltext index <%.*s> doesn't exist. "
-            "The default tokenizer for fulltext index <%s> is used instead.",
-            name_length, name,
-            MRN_DEFAULT_TOKENIZER);
-    push_warning(ha_thd(),
-                 MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
-                 message);
-    tokenizer = grn_ctx_get(ctx,
-                            MRN_DEFAULT_TOKENIZER,
-                            strlen(MRN_DEFAULT_TOKENIZER));
+
+  grn_obj tokenizer_name;
+  GRN_TEXT_INIT(&tokenizer_name, GRN_OBJ_DO_SHALLOW_COPY);
+  GRN_TEXT_SET(ctx, &tokenizer_name, name, name_length);
+
+  grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
+  grn_rc rc = grn_obj_set_info(ctx, lexicon, info_type, &tokenizer_name);
+  if (rc == GRN_SUCCESS) {
+    GRN_OBJ_FIN(ctx, &tokenizer_name);
+    DBUG_VOID_RETURN;
   }
-  if (!tokenizer) {
-    push_warning(ha_thd(),
-                 MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
-                 "couldn't find tokenizer for fulltext index. "
-                 "Bigram tokenizer is used instead.");
-    tokenizer = grn_ctx_at(ctx, GRN_DB_BIGRAM);
+
+  char message[MRN_BUFFER_SIZE];
+  sprintf(message,
+          "specified tokenizer for fulltext index <%.*s> is invalid. "
+          "The default tokenizer for fulltext index <%s> is used instead.",
+          name_length, name,
+          MRN_DEFAULT_TOKENIZER);
+  push_warning(ha_thd(),
+               MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
+               message);
+
+  GRN_TEXT_SETS(ctx, &tokenizer_name, MRN_DEFAULT_TOKENIZER);
+  rc = grn_obj_set_info(ctx, lexicon, info_type, &tokenizer_name);
+  GRN_OBJ_FIN(ctx, &tokenizer_name);
+  if (rc == GRN_SUCCESS) {
+    DBUG_VOID_RETURN;
   }
-  DBUG_RETURN(tokenizer);
+
+  sprintf(message,
+          "the default tokenizer for fulltext index <%s> is invalid. "
+          "Bigram tokenizer is used instead.",
+          MRN_DEFAULT_TOKENIZER);
+  push_warning(ha_thd(),
+               MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
+               message);
+  rc = grn_obj_set_info(ctx,
+                        lexicon,
+                        info_type,
+                        grn_ctx_at(ctx, GRN_DB_BIGRAM));
+
+  DBUG_VOID_RETURN;
 }
 
 bool ha_mroonga::have_custom_normalizer(KEY *key) const
