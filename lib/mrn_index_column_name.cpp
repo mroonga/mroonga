@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -46,14 +46,15 @@ namespace mrn {
   }
 
   void IndexColumnName::init() {
-    uchar encoded_mysql_column_name_multibyte[MRN_MAX_KEY_SIZE];
+    uchar encoded_mysql_column_name_multibyte[MRN_MAX_KEY_SIZE - 2];
     const uchar *mysql_column_name_multibyte =
       reinterpret_cast<const uchar *>(mysql_column_name_);
     encode(encoded_mysql_column_name_multibyte,
-           encoded_mysql_column_name_multibyte + MRN_MAX_KEY_SIZE,
+           encoded_mysql_column_name_multibyte +
+           sizeof(encoded_mysql_column_name_multibyte),
            mysql_column_name_multibyte,
            mysql_column_name_multibyte + mysql_column_name_length_);
-    snprintf(name_, MRN_MAX_KEY_SIZE,
+    snprintf(name_, sizeof(name_),
              "%s-%s", table_name_, encoded_mysql_column_name_multibyte);
     length_ = strlen(name_);
     if (length_ < MRN_MIN_INDEX_COLUMN_NAME_LENGTH) {
