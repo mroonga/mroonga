@@ -18,9 +18,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-export BASE_DIR="$(cd $(dirname $0); pwd)"
-top_dir="$BASE_DIR/.."
-mroonga_test_dir="${top_dir}/mysql-test/mroonga"
+: ${top_build_dir:="."}
+source_dir="$(cd $(dirname $0); pwd)"
+top_source_dir="${source_dir}/.."
+mroonga_test_dir="${top_source_dir}/mysql-test/mroonga"
 
 n_processors=1
 case `uname` in
@@ -40,12 +41,12 @@ if [ "$NO_MAKE" != "yes" ]; then
   if [ -n "$n_processors" ]; then
     MAKE_ARGS="-j${n_processors}"
   fi
-  make $MAKE_ARGS -C $top_dir > /dev/null || exit 1
+  make $MAKE_ARGS -C ${top_build_dir} > /dev/null || exit 1
 fi
 
-. "${top_dir}/config.sh"
+. "${top_build_dir}/config.sh"
 
-bundled_groonga_normalizer_mysql_dir="${top_dir}/vendor/groonga/vendor/plugins/groonga-normalizer-mysql"
+bundled_groonga_normalizer_mysql_dir="${top_source_dir}/vendor/groonga/vendor/plugins/groonga-normalizer-mysql"
 if [ -d "${bundled_groonga_normalizer_mysql_dir}" ]; then
   GRN_PLUGINS_DIR="${bundled_groonga_normalizer_mysql_dir}"
   export GRN_PLUGINS_DIR
@@ -85,7 +86,7 @@ case "${MYSQL_VERSION}" in
       if [ "${MRN_BUNDLED}" != "TRUE" ]; then
 	mariadb_mroonga_plugin_dir="${MYSQL_BUILD_DIR}/plugin/mroonga"
 	if [ ! -e "${mariadb_mroonga_plugin_dir}" ]; then
-	  ln -s "${top_dir}" "${mariadb_mroonga_plugin_dir}"
+	  ln -s "${top_build_dir}" "${mariadb_mroonga_plugin_dir}"
 	fi
       fi
       plugins_dir=
@@ -159,14 +160,14 @@ done
 cd -
 
 if [ -n "${plugins_dir}" ]; then
-  if [ -d "${top_dir}/.libs" ]; then
-    make -C ${top_dir} \
+  if [ -d "${top_build_dir}/.libs" ]; then
+    make -C ${top_build_dir} \
 	 install-pluginLTLIBRARIES \
 	 plugindir=${plugins_dir} > /dev/null || \
       exit 1
   else
     mkdir -p "${plugins_dir}"
-    cp "${top_dir}/ha_mroonga.so" "${plugins_dir}" || exit 1
+    cp "${top_build_dir}/ha_mroonga.so" "${plugins_dir}" || exit 1
   fi
 fi
 
