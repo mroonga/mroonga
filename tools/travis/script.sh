@@ -113,7 +113,8 @@ run_sql_test()
     rm -rf fulltext/token_filters/
     cd -
 
-    ${mroonga_dir}/test/run-sql-test.sh \
+    cd ${mroonga_dir}
+    test/run-sql-test.sh \
                   "${test_args[@]}" \
                   --parallel="${n_processors}" \
                   --retry=3
