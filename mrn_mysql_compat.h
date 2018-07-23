@@ -425,43 +425,6 @@ typedef HASH mrn_table_def_cache_type;
 #define MRN_ERROR_CODE_DATA_TRUNCATE(thd)                               \
   (MRN_ABORT_ON_WARNING(thd) ? ER_WARN_DATA_OUT_OF_RANGE : WARN_DATA_TRUNCATED)
 
-#if MYSQL_VERSION_ID >= 50709 && !defined(MRN_MARIADB_P)
-#  define mrn_my_hash_init(hash,                        \
-                           charset,                     \
-                           default_array_elements,      \
-                           key_offset,                  \
-                           key_length,                  \
-                           get_key,                     \
-                           free_element,                \
-                           flags)                       \
-  my_hash_init(hash,                                    \
-               charset,                                 \
-               default_array_elements,                  \
-               key_offset,                              \
-               key_length,                              \
-               get_key,                                 \
-               free_element,                            \
-               flags,                                   \
-               mrn_memory_key)
-#else
-#  define mrn_my_hash_init(hash,                        \
-                           charset,                     \
-                           default_array_elements,      \
-                           key_offset,                  \
-                           key_length,                  \
-                           get_key,                     \
-                           free_element,                \
-                           flags)                       \
-  my_hash_init(hash,                                    \
-               charset,                                 \
-               default_array_elements,                  \
-               key_offset,                              \
-               key_length,                              \
-               get_key,                                 \
-               free_element,                            \
-               flags)
-#endif
-
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
 #  define mrn_strconvert(from_cs,               \
                          from,                  \
