@@ -2912,7 +2912,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    matched_record_keys_cursor(NULL),
    condition_push_down_result(NULL),
    condition_push_down_result_cursor(NULL),
-   blob_buffers(NULL),
+   blob_buffers_(ctx),
 
    dup_key(0),
 
@@ -2961,10 +2961,6 @@ ha_mroonga::~ha_mroonga()
     }
     mrn_free_share_alloc(&share_for_create);
     free_root(&mem_root_for_create, MYF(0));
-  }
-  if (blob_buffers)
-  {
-    ::delete [] blob_buffers;
   }
   grn_obj_unlink(ctx, &top_left_point);
   grn_obj_unlink(ctx, &bottom_right_point);
@@ -5187,25 +5183,15 @@ int ha_mroonga::storage_open_columns(void)
       grn_column_ranges[i] = NULL;
   }
 
-  if (table_share->blob_fields)
-  {
-    if (blob_buffers)
-    {
-      ::delete [] blob_buffers;
-    }
-    if (!(blob_buffers = ::new String[n_columns]))
-    {
-      DBUG_RETURN(HA_ERR_OUT_OF_MEM);
-    }
+  if (table_share->blob_fields) {
+    blob_buffers_.resize(n_columns);
+  } else {
+    blob_buffers_.resize(0);
   }
 
   for (int i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
     mrn::ColumnName column_name(FIELD_NAME(field));
-    if (table_share->blob_fields)
-    {
-      blob_buffers[i].set_charset(field->charset());
-    }
     if (strcmp(MRN_COLUMN_NAME_ID, column_name.mysql_name()) == 0) {
       continue;
     }
@@ -11954,11 +11940,10 @@ void ha_mroonga::storage_store_field_blob(Field *field,
 {
   MRN_DBUG_ENTER_METHOD();
   Field_blob *blob = (Field_blob *)field;
-  String *blob_buffer = &blob_buffers[field->field_index];
-  blob_buffer->length(0);
-  blob_buffer->reserve(value_length);
-  blob_buffer->q_append(value, value_length);
-  blob->set_ptr((uint32) value_length, (uchar *) blob_buffer->ptr());
+  grn_obj *blob_buffer = blob_buffers_[field->field_index];
+  GRN_TEXT_SET(ctx, blob_buffer, value, value_length);
+  blob->set_ptr(GRN_TEXT_LEN(blob_buffer),
+                reinterpret_cast<uchar *>(GRN_TEXT_VALUE(blob_buffer)));
   DBUG_VOID_RETURN;
 }
 
@@ -11998,13 +11983,12 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
               longitude_in_degree);
   float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
               latitude_in_degree);
-  String *geometry_buffer = &blob_buffers[field->field_index];
-  geometry_buffer->length(0);
+  grn_obj *geometry_buffer = blob_buffers_[field->field_index];
   uint wkb_length = sizeof(wkb) / sizeof(*wkb);
   Field_geom *geometry = (Field_geom *)field;
-  geometry_buffer->reserve(wkb_length);
-  geometry_buffer->q_append((const char *) wkb, wkb_length);
-  geometry->set_ptr((uint32) wkb_length, (uchar *) geometry_buffer->ptr());
+  GRN_TEXT_SET(ctx, geometry_buffer, wkb, wkb_length);
+  geometry->set_ptr(GRN_TEXT_LEN(geometry_buffer),
+                    reinterpret_cast<uchar *>(GRN_TEXT_VALUE(geometry_buffer)));
 #endif
   DBUG_VOID_RETURN;
 }

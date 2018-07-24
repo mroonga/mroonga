@@ -34,6 +34,7 @@ extern "C" {
 #include "mrn_mysql_compat.h"
 #include <mrn_operations.hpp>
 #include <mrn_database.hpp>
+#include <mrn_buffers.hpp>
 
 #if __cplusplus >= 201402
 #  define mrn_override override
@@ -503,7 +504,7 @@ private:
   grn_table_cursor *matched_record_keys_cursor;
   grn_obj *condition_push_down_result;
   grn_table_cursor *condition_push_down_result_cursor;
-  String  *blob_buffers;
+  mrn::Buffers blob_buffers_;
 
   // for error report
   uint dup_key;
