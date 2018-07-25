@@ -10273,18 +10273,7 @@ void ha_mroonga::set_tokenizer(grn_obj *lexicon, KEY *key)
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
     parser.parse();
-    const char *parser_value = parser["parser"];
-    if (parser_value) {
-      push_warning_printf(ha_thd(),
-                          MRN_SEVERITY_WARNING,
-                          ER_WARN_DEPRECATED_SYNTAX,
-                          MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),
-                          "parser", "tokenizer");
-    }
-    const char *tokenizer = parser["tokenizer"];
-    if (!tokenizer) {
-      tokenizer = parser_value;
-    }
+    const char *tokenizer = parser.tokenizer();
     if (tokenizer) {
       set_tokenizer(lexicon, tokenizer);
       DBUG_VOID_RETURN;

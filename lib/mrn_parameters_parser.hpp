@@ -31,6 +31,7 @@ namespace mrn {
     ~ParametersParser();
     void parse();
     const char *operator[](const char *key);
+    const char *tokenizer();
 
   private:
     const char *input_;

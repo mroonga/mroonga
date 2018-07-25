@@ -174,4 +174,20 @@ namespace mrn {
     }
     return NULL;
   }
+
+  const char *ParametersParser::tokenizer() {
+    const char *parser = (*this)["parser"];
+    if (parser) {
+      push_warning_printf(current_thd,
+                          MRN_SEVERITY_WARNING,
+                          ER_WARN_DEPRECATED_SYNTAX,
+                          MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),
+                          "parser", "tokenizer");
+    }
+    const char *tokenizer = (*this)["tokenizer"];
+    if (!tokenizer) {
+      tokenizer = parser;
+    }
+    return tokenizer;
+  }
 }
