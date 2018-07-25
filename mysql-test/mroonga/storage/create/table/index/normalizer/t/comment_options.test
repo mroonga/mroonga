@@ -36,7 +36,7 @@ INSERT INTO diaries VALUES ("2013-04-24", "ぶらっくコーヒーを飲んだ�
 SELECT * FROM diaries
        WHERE MATCH (content) AGAINST ("+ブラック" IN BOOLEAN MODE);
 
-SELECT mroonga_command('dump --dump_plugins');
+SELECT mroonga_command('dump --dump_plugins no');
 
 DROP TABLE diaries;
 

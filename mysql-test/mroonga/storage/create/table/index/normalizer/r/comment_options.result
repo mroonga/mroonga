@@ -13,10 +13,8 @@ WHERE MATCH (content) AGAINST ("+ブラック" IN BOOLEAN MODE);
 day	content
 2013-04-23	ブラックコーヒーを飲んだ。
 2013-04-24	ぶらっくコーヒーを飲んだ。
-SELECT mroonga_command('dump --dump_plugins');
-mroonga_command('dump --dump_plugins')
-plugin_register normalizers/mysql
-
+SELECT mroonga_command('dump --dump_plugins no');
+mroonga_command('dump --dump_plugins no')
 table_create diaries TABLE_PAT_KEY Time
 column_create diaries content COLUMN_SCALAR LongText
 column_create diaries day COLUMN_SCALAR Time
