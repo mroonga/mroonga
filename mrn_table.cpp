@@ -22,10 +22,8 @@
 
 #include <mysql/plugin.h>
 #include <my_bitmap.h>
-#if MYSQL_VERSION_ID >= 50500
-#  include <sql_servers.h>
-#  include <sql_base.h>
-#endif
+#include <sql_servers.h>
+#include <sql_base.h>
 #ifdef WITH_PARTITION_STORAGE_ENGINE
 #  include <partition_info.h>
 #endif
@@ -555,15 +553,12 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 {
   int error;
   char *param_string = NULL;
-#if MYSQL_VERSION_ID >= 50500
   int title_length;
   char *sprit_ptr[2];
   char *tmp_ptr, *start_ptr;
-#endif
   THD *thd = current_thd;
   MRN_DBUG_ENTER_FUNCTION();
 
-#if MYSQL_VERSION_ID >= 50500
   if (key_info->comment.length == 0)
   {
     if (share->key_tokenizer[i]) {
@@ -636,7 +631,6 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
         break;
     }
   }
-#endif
   if (!share->key_tokenizer[i]) {
     share->key_tokenizer[i] = mrn_my_strdup(mrn_default_tokenizer, MYF(MY_WME));
     if (!share->key_tokenizer[i]) {
@@ -653,9 +647,7 @@ int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
 error:
   if (param_string)
     my_free(param_string);
-#if MYSQL_VERSION_ID >= 50500
 error_alloc_param_string:
-#endif
   DBUG_RETURN(error);
 }
 
