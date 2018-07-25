@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,8 +18,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_PARAMETERS_PARSER_HPP_
-#define MRN_PARAMETERS_PARSER_HPP_
+#pragma once
 
 #include <mrn_mysql.h>
 #include <my_list.h>
@@ -32,6 +31,7 @@ namespace mrn {
     void parse();
     const char *operator[](const char *key);
     const char *tokenizer();
+    const char *table();
 
   private:
     const char *input_;
@@ -56,5 +56,3 @@ namespace mrn {
                             const char *key, unsigned int key_length);
   };
 }
-
-#endif /* MRN_PARAMETERS_PARSER_HPP_ */

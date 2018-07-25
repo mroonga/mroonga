@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -189,5 +189,9 @@ namespace mrn {
       tokenizer = parser;
     }
     return tokenizer;
+  }
+
+  const char *ParametersParser::table() {
+    return (*this)["table"];
   }
 }

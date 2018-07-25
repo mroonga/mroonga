@@ -83,7 +83,8 @@
 #endif
 
 #ifdef MRN_KEY_NAME_IS_LEX_STRING
-#  define KEY_NAME(key) (key)->name.str, (key)->name.length
+#  define KEY_NAME_PTR(key) ((key)->name.str)
+#  define KEY_NAME_LENGTH(key) (key)->name.length)
 #  define KEY_NAME_EQUAL_KEY(key1, key2)                \
   ((key1)->name.length == (key2)->name.length &&        \
    strncmp((key1)->name.str,                            \
@@ -94,12 +95,14 @@
   static_cast<int>((key)->name.length),         \
   (key)->name.str
 #else
-#  define KEY_NAME(key) (key)->name, strlen((key)->name)
+#  define KEY_NAME_PTR(key) (key)->name
+#  define KEY_NAME_LENGTH(key) strlen((key)->name)
 #  define KEY_NAME_EQUAL_KEY(key1, key2)        \
   strcmp((key1)->name, (key2)->name) == 0
 #  define KEY_NAME_FORMAT "%s"
 #  define KEY_NAME_FORMAT_VALUE(key) (key)->name
 #endif
+#define KEY_NAME(key) KEY_NAME_PTR(key), KEY_NAME_LENGTH(key)
 
 #ifdef MRN_FIELD_FIELD_NAME_IS_LEX_STRING
 #  define FIELD_NAME(field)                             \

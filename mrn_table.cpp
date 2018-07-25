@@ -549,104 +549,6 @@ bool mrn_is_geo_key(const KEY *key_info)
     key_info->key_part[0].field->type() == MYSQL_TYPE_GEOMETRY;
 }
 
-int mrn_add_index_param(MRN_SHARE *share, KEY *key_info, int i)
-{
-  int error;
-  char *param_string = NULL;
-  int title_length;
-  char *sprit_ptr[2];
-  char *tmp_ptr, *start_ptr;
-  THD *thd = current_thd;
-  MRN_DBUG_ENTER_FUNCTION();
-
-  if (key_info->comment.length == 0)
-  {
-    DBUG_RETURN(0);
-  }
-  DBUG_PRINT("info", ("mroonga create comment string"));
-  if (
-    !(param_string = mrn_my_strndup(key_info->comment.str,
-                                    key_info->comment.length,
-                                    MYF(MY_WME)))
-  ) {
-    error = HA_ERR_OUT_OF_MEM;
-    goto error_alloc_param_string;
-  }
-  DBUG_PRINT("info", ("mroonga comment string=%s", param_string));
-
-  sprit_ptr[0] = param_string;
-  while (sprit_ptr[0])
-  {
-    if ((sprit_ptr[1] = strchr(sprit_ptr[0], ',')))
-    {
-      *sprit_ptr[1] = '\0';
-      sprit_ptr[1]++;
-    }
-    tmp_ptr = sprit_ptr[0];
-    sprit_ptr[0] = sprit_ptr[1];
-    while (*tmp_ptr == ' ' || *tmp_ptr == '\r' ||
-      *tmp_ptr == '\n' || *tmp_ptr == '\t')
-      tmp_ptr++;
-
-    if (*tmp_ptr == '\0')
-      continue;
-
-    title_length = 0;
-    start_ptr = tmp_ptr;
-    while (*start_ptr != ' ' && *start_ptr != '\'' &&
-      *start_ptr != '"' && *start_ptr != '\0' &&
-      *start_ptr != '\r' && *start_ptr != '\n' &&
-      *start_ptr != '\t')
-    {
-      title_length++;
-      start_ptr++;
-    }
-
-    switch (title_length)
-    {
-      case 5:
-        MRN_PARAM_STR_LIST("table", index_table, i);
-        break;
-      default:
-        break;
-    }
-  }
-
-  if (param_string)
-    my_free(param_string);
-  DBUG_RETURN(0);
-
-error:
-  if (param_string)
-    my_free(param_string);
-error_alloc_param_string:
-  DBUG_RETURN(error);
-}
-
-int mrn_parse_index_param(MRN_SHARE *share, TABLE *table)
-{
-  int error;
-  MRN_DBUG_ENTER_FUNCTION();
-  for (uint i = 0; i < table->s->keys; i++)
-  {
-    KEY *key_info = &table->s->key_info[i];
-    bool is_wrapper_mode = share->engine != NULL;
-
-    if (is_wrapper_mode) {
-      if (!(key_info->flags & HA_FULLTEXT) && !mrn_is_geo_key(key_info)) {
-        continue;
-      }
-    }
-
-    if ((error = mrn_add_index_param(share, key_info, i)))
-      goto error;
-  }
-  DBUG_RETURN(0);
-
-error:
-  DBUG_RETURN(error);
-}
-
 int mrn_add_column_param(MRN_SHARE *share, Field *field, int i)
 {
   int error;
@@ -763,11 +665,6 @@ int mrn_free_share_alloc(
     my_free(share->normalizer);
   if (share->token_filters)
     my_free(share->token_filters);
-  for (i = 0; i < share->table_share->keys; i++)
-  {
-    if (share->index_table && share->index_table[i])
-      my_free(share->index_table[i]);
-  }
   for (i = 0; i < share->table_share->fields; i++)
   {
     if (share->col_flags && share->col_flags[i])
@@ -864,8 +761,8 @@ error_alloc_long_term_share:
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
   MRN_SHARE *share = NULL;
-  char *tmp_name, **index_table, **col_flags, **col_type;
-  uint length, *wrap_key_nr, *index_table_length;
+  char *tmp_name, **col_flags, **col_type;
+  uint length, *wrap_key_nr;
   uint *col_flags_length, *col_type_length, i, j;
   KEY *wrap_key_info;
   TABLE_SHARE *wrap_table_share;
@@ -887,8 +784,6 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &share, sizeof(*share),
         &tmp_name, length + 1,
-        &index_table, sizeof(char *) * table->s->keys,
-        &index_table_length, sizeof(uint) * table->s->keys,
         &col_flags, sizeof(char *) * table->s->fields,
         &col_flags_length, sizeof(uint) * table->s->fields,
         &col_type, sizeof(char *) * table->s->fields,
@@ -904,8 +799,6 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     share->use_count = 0;
     share->table_name_length = length;
     share->table_name = tmp_name;
-    share->index_table = index_table;
-    share->index_table_length = index_table_length;
     share->col_flags = col_flags;
     share->col_flags_length = col_flags_length;
     share->col_type = col_type;
@@ -915,8 +808,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 
     if (
       (*error = mrn_parse_table_param(share, table)) ||
-      (*error = mrn_parse_column_param(share, table)) ||
-      (*error = mrn_parse_index_param(share, table))
+      (*error = mrn_parse_column_param(share, table))
     )
       goto error_parse_table_param;
 

@@ -1068,11 +1068,11 @@ private:
 #endif
   int storage_create_validate_index(TABLE *table);
   int storage_create_index_table(TABLE *table, const char *grn_table_name,
-                                 grn_obj *grn_table, MRN_SHARE *tmp_share,
+                                 grn_obj *grn_table,
                                  KEY *key_info, grn_obj **index_tables,
                                  uint i);
   int storage_create_index(TABLE *table, const char *grn_table_name,
-                           grn_obj *grn_table, MRN_SHARE *tmp_share,
+                           grn_obj *grn_table,
                            KEY *key_info, grn_obj **index_tables,
                            grn_obj **index_columns, uint i);
   int storage_create_indexes(TABLE *table, const char *grn_table_name,
