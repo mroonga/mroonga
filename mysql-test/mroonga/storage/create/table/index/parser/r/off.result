@@ -7,8 +7,6 @@ FULLTEXT INDEX (name) COMMENT 'parser "off"'
 Warnings:
 Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 INSERT INTO variables (name) VALUES ("mroonga_database_path_prefix");
-Warnings:
-Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 INSERT INTO variables (name) VALUES ("mroonga_default_parser");
 INSERT INTO variables (name) VALUES ("mroonga_default_wrapper_engine");
 INSERT INTO variables (name) VALUES ("mroonga_dry_write");
@@ -36,5 +34,3 @@ id	name
 3	mroonga_default_wrapper_engine
 2	mroonga_default_parser
 DROP TABLE variables;
-Warnings:
-Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead

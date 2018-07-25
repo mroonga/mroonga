@@ -1,0 +1,38 @@
+DROP TABLE IF EXISTS diaries;
+CREATE TABLE diaries (
+id int PRIMARY KEY AUTO_INCREMENT,
+body text,
+FULLTEXT INDEX body_index (body)
+COMMENT 'normalizer "NormalizerNFKC100",
+             tokenizer "TokenNgram(\'loose_symbol\', true)"'
+) DEFAULT CHARSET utf8mb4;
+INSERT INTO diaries (body) VALUES ("a_b_c");
+INSERT INTO diaries (body) VALUES ("abc");
+SELECT * FROM diaries
+WHERE MATCH(body) AGAINST("+a#b#c" IN BOOLEAN MODE)
+ORDER BY id;
+id	body
+1	a_b_c
+2	abc
+SELECT mroonga_command('dump --dump_plugins no');
+mroonga_command('dump --dump_plugins no')
+table_create diaries TABLE_PAT_KEY Int32
+column_create diaries body COLUMN_SCALAR LongText
+column_create diaries id COLUMN_SCALAR Int32
+
+table_create diaries#body_index TABLE_PAT_KEY ShortText --default_tokenizer "TokenNgram(\"loose_symbol\", true)" --normalizer NormalizerNFKC100
+
+table_create mroonga_operations TABLE_NO_KEY
+column_create mroonga_operations record COLUMN_SCALAR UInt32
+column_create mroonga_operations table COLUMN_SCALAR ShortText
+column_create mroonga_operations type COLUMN_SCALAR ShortText
+
+load --table diaries
+[
+["_key","body","id"],
+[1,"a_b_c",1],
+[2,"abc",2]
+]
+
+column_create diaries#body_index index COLUMN_INDEX|WITH_POSITION diaries body
+DROP TABLE diaries;

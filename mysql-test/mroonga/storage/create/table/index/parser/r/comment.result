@@ -8,8 +8,6 @@ COMMENT 'parser "TokenBigramSplitSymbolAlphaDigit"'
 Warnings:
 Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 INSERT INTO diaries (body) VALUES ("will start Groonga!");
-Warnings:
-Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 INSERT INTO diaries (body) VALUES ("starting Groonga...");
 INSERT INTO diaries (body) VALUES ("started Groonga.");
 SELECT * FROM diaries;
@@ -25,5 +23,3 @@ id	body
 2	starting Groonga...
 3	started Groonga.
 DROP TABLE diaries;
-Warnings:
-Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead

@@ -8,8 +8,6 @@ comment 'parser "TokenBigramSplitSymbolAlphaDigit"'
 Warnings:
 Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 insert into diaries (body) values ("will start Groonga!");
-Warnings:
-Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
 insert into diaries (body) values ("starting Groonga...");
 insert into diaries (body) values ("started Groonga.");
 select * from diaries;

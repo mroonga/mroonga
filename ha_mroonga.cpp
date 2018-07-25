@@ -3572,8 +3572,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
                                               int i,
                                               KEY *key_info,
                                               grn_obj **index_tables,
-                                              grn_obj **index_columns,
-                                              MRN_SHARE *tmp_share)
+                                              grn_obj **index_columns)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -3622,7 +3621,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   mrn_change_encoding(ctx, system_charset_info);
   index_tables[i] = index_table;
 
-  set_tokenizer(index_table, key_info, tmp_share, i);
+  set_tokenizer(index_table, key_info);
 
   {
     grn_obj token_filters;
@@ -3663,8 +3662,7 @@ int ha_mroonga::wrapper_create_index_geo(const char *grn_table_name,
                                          int i,
                                          KEY *key_info,
                                          grn_obj **index_tables,
-                                         grn_obj **index_columns,
-                                         MRN_SHARE *tmp_share)
+                                         grn_obj **index_columns)
 {
   MRN_DBUG_ENTER_METHOD();
   int error;
@@ -3769,11 +3767,11 @@ int ha_mroonga::wrapper_create_index(const char *name,
       if (key_info->algorithm == HA_KEY_ALG_FULLTEXT) {
         error = wrapper_create_index_fulltext(grn_table_name,
                                               i, key_info,
-                                              index_tables, NULL, tmp_share);
+                                              index_tables, NULL);
       } else if (mrn_is_geo_key(key_info)) {
         error = wrapper_create_index_geo(grn_table_name,
                                          i, key_info,
-                                         index_tables, NULL, tmp_share);
+                                         index_tables, NULL);
       }
     }
   }
@@ -4367,7 +4365,7 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   }
 
   if (key_info->flags & HA_FULLTEXT) {
-    set_tokenizer(index_table, key_info, tmp_share, i);
+    set_tokenizer(index_table, key_info);
 
     {
       grn_obj token_filters;
@@ -10262,35 +10260,46 @@ grn_obj *ha_mroonga::find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
   DBUG_RETURN(type);
 }
 
-void ha_mroonga::set_tokenizer(grn_obj *lexicon,
-                               KEY *key,
-                               MRN_SHARE *mrn_share,
-                               int i)
+void ha_mroonga::set_tokenizer(grn_obj *lexicon, KEY *key)
 {
   MRN_DBUG_ENTER_METHOD();
-  const char *tokenizer_name = NULL;
-  uint tokenizer_name_length = 0;
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
   if (key->option_struct->tokenizer) {
-    tokenizer_name = key->option_struct->tokenizer;
-    tokenizer_name_length = strlen(tokenizer_name);
+    set_tokenizer(lexicon, key->option_struct->tokenizer);
+    DBUG_VOID_RETURN;
   }
 #endif
-  if (!tokenizer_name) {
-    tokenizer_name = mrn_share->key_tokenizer[i];
-    tokenizer_name_length = mrn_share->key_tokenizer_length[i];
+  if (key->comment.length > 0) {
+    mrn::ParametersParser parser(key->comment.str,
+                                 key->comment.length);
+    parser.parse();
+    const char *parser_value = parser["parser"];
+    if (parser_value) {
+      push_warning_printf(ha_thd(),
+                          MRN_SEVERITY_WARNING,
+                          ER_WARN_DEPRECATED_SYNTAX,
+                          MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),
+                          "parser", "tokenizer");
+    }
+    const char *tokenizer = parser["tokenizer"];
+    if (!tokenizer) {
+      tokenizer = parser_value;
+    }
+    if (tokenizer) {
+      set_tokenizer(lexicon, tokenizer);
+      DBUG_VOID_RETURN;
+    }
   }
-  set_tokenizer(lexicon, tokenizer_name, tokenizer_name_length);
+
+  set_tokenizer(lexicon, mrn_default_tokenizer);
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::set_tokenizer(grn_obj *lexicon,
-                               const char *name,
-                               int name_length)
+void ha_mroonga::set_tokenizer(grn_obj *lexicon, const char *name)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  if (strncasecmp("off", name, name_length) == 0) {
+  if (strcasecmp("off", name) == 0) {
     DBUG_VOID_RETURN;
   }
 
@@ -10298,7 +10307,7 @@ void ha_mroonga::set_tokenizer(grn_obj *lexicon,
 
   grn_obj tokenizer_name;
   GRN_TEXT_INIT(&tokenizer_name, GRN_OBJ_DO_SHALLOW_COPY);
-  GRN_TEXT_SET(ctx, &tokenizer_name, name, name_length);
+  GRN_TEXT_SETS(ctx, &tokenizer_name, name);
 
   grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
   grn_rc rc = grn_obj_set_info(ctx, lexicon, info_type, &tokenizer_name);
@@ -10309,9 +10318,9 @@ void ha_mroonga::set_tokenizer(grn_obj *lexicon,
 
   char message[MRN_BUFFER_SIZE];
   sprintf(message,
-          "specified tokenizer for fulltext index <%.*s> is invalid. "
+          "specified tokenizer for fulltext index <%s> is invalid. "
           "The default tokenizer for fulltext index <%s> is used instead.",
-          name_length, name,
+          name,
           MRN_DEFAULT_TOKENIZER);
   push_warning(ha_thd(),
                MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
@@ -14767,16 +14776,14 @@ int ha_mroonga::wrapper_enable_indexes_mroonga(uint mode)
           (key_info[i].flags & HA_FULLTEXT) &&
           (error = wrapper_create_index_fulltext(mapper.table_name(),
                                                  i, &key_info[i],
-                                                 index_tables, index_columns,
-                                                 share))
+                                                 index_tables, index_columns))
         ) {
           break;
         } else if (
           mrn_is_geo_key(&key_info[i]) &&
           (error = wrapper_create_index_geo(mapper.table_name(),
                                             i, &key_info[i],
-                                            index_tables, index_columns,
-                                            share))
+                                            index_tables, index_columns))
         ) {
           break;
         }
@@ -15804,33 +15811,13 @@ bool ha_mroonga::wrapper_inplace_alter_table(
                                       ha_alter_info->key_count);
   MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_columns,
                                       ha_alter_info->key_count);
-  MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **key_tokenizer;
-  uint *key_tokenizer_length;
   KEY *p_key_info = &table->key_info[table_share->primary_key];
   bool need_fill_index = false;
   memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   memset(index_columns, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   tmp_table_share.keys = ha_alter_info->key_count;
   tmp_table_share.fields = 0;
-  if (!(tmp_share = (MRN_SHARE *)
-    mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
-      &tmp_share, sizeof(*tmp_share),
-      &key_tokenizer, sizeof(char *) * (tmp_table_share.keys),
-      &key_tokenizer_length, sizeof(uint) * (tmp_table_share.keys),
-      NullS))
-  ) {
-    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
-    MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
-    DBUG_RETURN(true);
-  }
-  tmp_share->engine = NULL;
-  tmp_share->table_share = &tmp_table_share;
-  tmp_share->index_table = NULL;
-  tmp_share->index_table_length = NULL;
-  tmp_share->key_tokenizer = key_tokenizer;
-  tmp_share->key_tokenizer_length = key_tokenizer_length;
   bitmap_clear_all(table->read_set);
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
   n_keys = ha_alter_info->index_add_count;
@@ -15843,24 +15830,19 @@ bool ha_mroonga::wrapper_inplace_alter_table(
     if (share->disable_keys) {
       continue;
     }
-    if ((error = mrn_add_index_param(tmp_share, key, key_pos)))
-    {
-      break;
-    }
     DBUG_PRINT("info", ("mroonga: add key pos=%u", key_pos));
     if (
       (key->flags & HA_FULLTEXT) &&
       (error = wrapper_create_index_fulltext(mapper.table_name(),
                                              key_pos,
-                                             key, index_tables, NULL,
-                                             tmp_share))
+                                             key, index_tables, NULL))
     ) {
       break;
     } else if (
       mrn_is_geo_key(key) &&
       (error = wrapper_create_index_geo(mapper.table_name(),
                                         key_pos, key,
-                                        index_tables, NULL, tmp_share))
+                                        index_tables, NULL))
     ) {
       break;
     }
@@ -15934,8 +15916,6 @@ bool ha_mroonga::wrapper_inplace_alter_table(
     }
     result = true;
   }
-  mrn_free_share_alloc(tmp_share);
-  my_free(tmp_share);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
   MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_columns);
   DBUG_RETURN(result);
@@ -15953,8 +15933,8 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
                                       ha_alter_info->key_count);
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **index_table, **key_tokenizer, **col_flags, **col_type;
-  uint *index_table_length, *key_tokenizer_length, *col_flags_length, *col_type_length;
+  char **index_table, **col_flags, **col_type;
+  uint *index_table_length, *col_flags_length, *col_type_length;
   bool have_multiple_column_index = false;
   memset(index_tables, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
   memset(index_columns, 0, sizeof(grn_obj *) * ha_alter_info->key_count);
@@ -15965,8 +15945,6 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
       &tmp_share, sizeof(*tmp_share),
       &index_table, sizeof(char *) * tmp_table_share.keys,
       &index_table_length, sizeof(uint) * tmp_table_share.keys,
-      &key_tokenizer, sizeof(char *) * tmp_table_share.keys,
-      &key_tokenizer_length, sizeof(uint) * tmp_table_share.keys,
       &col_flags, sizeof(char *) * tmp_table_share.fields,
       &col_flags_length, sizeof(uint) * tmp_table_share.fields,
       &col_type, sizeof(char *) * tmp_table_share.fields,
@@ -15981,8 +15959,6 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
   tmp_share->table_share = &tmp_table_share;
   tmp_share->index_table = index_table;
   tmp_share->index_table_length = index_table_length;
-  tmp_share->key_tokenizer = key_tokenizer;
-  tmp_share->key_tokenizer_length = key_tokenizer_length;
   tmp_share->col_flags = col_flags;
   tmp_share->col_flags_length = col_flags_length;
   tmp_share->col_type = col_type;
@@ -16116,8 +16092,8 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
 
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **index_table, **key_tokenizer, **col_flags, **col_type;
-  uint *index_table_length, *key_tokenizer_length, *col_flags_length, *col_type_length;
+  char **index_table, **col_flags, **col_type;
+  uint *index_table_length, *col_flags_length, *col_type_length;
   tmp_table_share.keys = 0;
   tmp_table_share.fields = altered_table->s->fields;
   tmp_share = (MRN_SHARE *)mrn_my_multi_malloc(
@@ -16125,8 +16101,6 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
     &tmp_share, sizeof(*tmp_share),
     &index_table, sizeof(char *) * tmp_table_share.keys,
     &index_table_length, sizeof(uint) * tmp_table_share.keys,
-    &key_tokenizer, sizeof(char *) * tmp_table_share.keys,
-    &key_tokenizer_length, sizeof(uint) * tmp_table_share.keys,
     &col_flags, sizeof(char *) * tmp_table_share.fields,
     &col_flags_length, sizeof(uint) * tmp_table_share.fields,
     &col_type, sizeof(char *) * tmp_table_share.fields,
@@ -16140,8 +16114,6 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
   tmp_share->table_share = &tmp_table_share;
   tmp_share->index_table = index_table;
   tmp_share->index_table_length = index_table_length;
-  tmp_share->key_tokenizer = key_tokenizer;
-  tmp_share->key_tokenizer_length = key_tokenizer_length;
   tmp_share->col_flags = col_flags;
   tmp_share->col_flags_length = col_flags_length;
   tmp_share->col_type = col_type;
@@ -16726,8 +16698,6 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   THD *thd = ha_thd();
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **key_tokenizer;
-  uint *key_tokenizer_length;
   MRN_DBUG_ENTER_METHOD();
   if (!(wrap_alter_key_info = (KEY *) mrn_my_malloc(sizeof(KEY) * num_of_keys,
                                                     MYF(MY_WME)))) {
@@ -16741,8 +16711,6 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   if (!(tmp_share = (MRN_SHARE *)
     mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
       &tmp_share, sizeof(*tmp_share),
-      &key_tokenizer, sizeof(char *) * (n_keys + num_of_keys),
-      &key_tokenizer_length, sizeof(uint) * (n_keys + num_of_keys),
       NullS))
   ) {
     MRN_FREE_VARIABLE_LENGTH_ARRAYS(index_tables);
@@ -16753,8 +16721,6 @@ int ha_mroonga::wrapper_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->index_table = NULL;
   tmp_share->index_table_length = NULL;
-  tmp_share->key_tokenizer = key_tokenizer;
-  tmp_share->key_tokenizer_length = key_tokenizer_length;
   tmp_share->col_flags = NULL;
   tmp_share->col_type = NULL;
 #ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
@@ -16865,8 +16831,8 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_columns, num_of_keys + n_keys);
   MRN_SHARE *tmp_share;
   TABLE_SHARE tmp_table_share;
-  char **index_table, **key_tokenizer, **col_flags, **col_type;
-  uint *index_table_length, *key_tokenizer_length, *col_flags_length, *col_type_length;
+  char **index_table, **col_flags, **col_type;
+  uint *index_table_length, *col_flags_length, *col_type_length;
   bool have_multiple_column_index = false;
 
   MRN_DBUG_ENTER_METHOD();
@@ -16877,8 +16843,6 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
       &tmp_share, sizeof(*tmp_share),
       &index_table, sizeof(char*) *  tmp_table_share.keys,
       &index_table_length, sizeof(uint) * tmp_table_share.keys,
-      &key_tokenizer, sizeof(char *) * tmp_table_share.keys,
-      &key_tokenizer_length, sizeof(uint) * tmp_table_share.keys,
       &col_flags, sizeof(char *) * tmp_table_share.fields,
       &col_flags_length, sizeof(uint) * tmp_table_share.fields,
       &col_type, sizeof(char *) * tmp_table_share.fields,
@@ -16893,8 +16857,6 @@ int ha_mroonga::storage_add_index(TABLE *table_arg, KEY *key_info,
   tmp_share->table_share = &tmp_table_share;
   tmp_share->index_table = index_table;
   tmp_share->index_table_length = index_table_length;
-  tmp_share->key_tokenizer = key_tokenizer;
-  tmp_share->key_tokenizer_length = key_tokenizer_length;
   tmp_share->col_flags = col_flags;
   tmp_share->col_flags_length = col_flags_length;
   tmp_share->col_type = col_type;
