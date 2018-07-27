@@ -4587,17 +4587,17 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
     }
   }
   if (error) {
-    for (; i >= 0; --i) {
-      if (!index_tables[i]) {
+    for (uint j = 0; j <= i; ++j) {
+      if (!index_tables[j]) {
         continue;
       }
 
-      KEY *key_info = &table->s->key_info[i];
+      KEY *key_info = &table->s->key_info[j];
       mrn::ParametersParser parser(key_info->comment.str,
                                    key_info->comment.length);
       parser.parse();
       if (!parser.table()) {
-        grn_obj_remove(ctx, index_tables[i]);
+        grn_obj_remove(ctx, index_tables[j]);
       }
     }
   }
