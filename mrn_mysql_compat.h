@@ -84,7 +84,7 @@
 
 #ifdef MRN_KEY_NAME_IS_LEX_STRING
 #  define KEY_NAME_PTR(key) ((key)->name.str)
-#  define KEY_NAME_LENGTH(key) (key)->name.length)
+#  define KEY_NAME_LENGTH(key) ((key)->name.length)
 #  define KEY_NAME_EQUAL_KEY(key1, key2)                \
   ((key1)->name.length == (key2)->name.length &&        \
    strncmp((key1)->name.str,                            \
