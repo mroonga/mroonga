@@ -18,7 +18,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-: ${top_build_dir:="."}
+: ${top_build_dir:="$(cd .; pwd)"}
 source_dir="$(cd $(dirname $0); pwd)"
 top_source_dir="${source_dir}/.."
 mroonga_test_dir="${top_source_dir}/mysql-test/mroonga"
