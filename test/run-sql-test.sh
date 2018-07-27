@@ -71,32 +71,22 @@ source_test_suites_dir="${source_mysql_test_dir}/suite"
 source_test_include_dir="${source_mysql_test_dir}/include"
 build_test_suites_dir="${build_mysql_test_dir}/suite"
 build_test_include_dir="${build_mysql_test_dir}/include"
-case "${MYSQL_VERSION}" in
-  5.1.*)
-    plugins_dir="${MYSQL_BUILD_DIR}/lib/mysql/plugin"
-    if [ ! -d "${build_test_suites_dir}" ]; then
-      mkdir -p "${build_test_suites_dir}"
+if [ ! -d "${build_test_suites_dir}" ]; then
+  ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
+fi
+if [ "${mariadb}" = "yes" ]; then
+  if [ "${MRN_BUNDLED}" != "TRUE" ]; then
+    mariadb_mroonga_plugin_dir="${MYSQL_BUILD_DIR}/plugin/mroonga"
+    if [ ! -e "${mariadb_mroonga_plugin_dir}" ]; then
+      ln -s "${top_build_dir}" "${mariadb_mroonga_plugin_dir}"
     fi
-    ;;
-  *)
-    if [ ! -d "${build_test_suites_dir}" ]; then
-      ln -s "${source_test_suites_dir}" "${build_test_suites_dir}"
-    fi
-    if [ "${mariadb}" = "yes" ]; then
-      if [ "${MRN_BUNDLED}" != "TRUE" ]; then
-	mariadb_mroonga_plugin_dir="${MYSQL_BUILD_DIR}/plugin/mroonga"
-	if [ ! -e "${mariadb_mroonga_plugin_dir}" ]; then
-	  ln -s "${top_build_dir}" "${mariadb_mroonga_plugin_dir}"
-	fi
-      fi
-      plugins_dir=
-    elif [ "${percona}" = "yes" ]; then
-      plugins_dir="${MYSQL_SOURCE_DIR}/lib/mysql/plugin"
-    else
-      plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
-    fi
-    ;;
-esac
+  fi
+  plugins_dir=
+elif [ "${percona}" = "yes" ]; then
+  plugins_dir="${MYSQL_SOURCE_DIR}/lib/mysql/plugin"
+else
+  plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
+fi
 
 same_link_p()
 {
