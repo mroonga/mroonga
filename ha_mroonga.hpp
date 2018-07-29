@@ -374,6 +374,10 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HA_UPDATE_ROW_NEW_DATA_CONST
 #endif
 
+#if MYSQL_VERSION_ID >= 50723 && !defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+#endif
+
 #ifdef MRN_PERCONA_P
 #  define MRN_HANDLER_HAVE_HAS_GAP_LOCKS
 #endif
@@ -589,7 +593,11 @@ public:
   uint max_supported_keys()            const;
   uint max_supported_key_parts()       const;
   uint max_supported_key_length()      const;
-  uint max_supported_key_part_length() const;
+  uint max_supported_key_part_length(
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+    HA_CREATE_INFO *create_info
+#endif
+    ) const mrn_override;
 
   ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
   int index_init(uint idx, bool sorted);
@@ -1185,8 +1193,16 @@ private:
   uint storage_max_supported_key_parts() const;
   uint wrapper_max_supported_key_length() const;
   uint storage_max_supported_key_length() const;
-  uint wrapper_max_supported_key_part_length() const;
-  uint storage_max_supported_key_part_length() const;
+  uint wrapper_max_supported_key_part_length(
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+    HA_CREATE_INFO *create_info
+#endif
+    ) const;
+  uint storage_max_supported_key_part_length(
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+    HA_CREATE_INFO *create_info
+#endif
+    ) const;
   ulonglong wrapper_table_flags() const;
   ulonglong storage_table_flags() const;
   ulong wrapper_index_flags(uint idx, uint part, bool all_parts) const;

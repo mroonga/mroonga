@@ -3178,12 +3178,19 @@ uint ha_mroonga::max_supported_key_part_length() const
   ) {
     create_share_for_create();
   }
-  if (analyzed_for_create && share_for_create.wrapper_mode) {
+  if ((analyzed_for_create && share_for_create.wrapper_mode) ||
+      (wrap_handler && share && share->wrapper_mode)) {
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+    res = wrapper_max_supported_key_part_length(create_info);
+#else
     res = wrapper_max_supported_key_part_length();
-  } else if (wrap_handler && share && share->wrapper_mode) {
-    res = wrapper_max_supported_key_part_length();
+#endif
   } else {
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+    res = storage_max_supported_key_part_length(create_info);
+#else
     res = storage_max_supported_key_part_length();
+#endif
   }
 
   DBUG_RETURN(res);
