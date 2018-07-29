@@ -7218,6 +7218,12 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
     if (field->is_null())
       continue;
 
+#ifdef MRN_THD_VARIABLES_HAVE_BINLOG_ROW_IMAGE
+    if (thd->variables.binlog_row_image != BINLOG_ROW_IMAGE_FULL) {
+      continue;
+    }
+#endif
+
     {
       mrn::ColumnName column_name(FIELD_NAME(field));
       if (strcmp(MRN_COLUMN_NAME_ID, column_name.c_str()) == 0) {
