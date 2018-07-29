@@ -25,6 +25,7 @@ drop table if exists t1, t2, t3;
 --enable_warnings
 
 set names cp932;
+--character_set cp932
 create table t1 (c1 int primary key, c2 varchar(255), c3 text, fulltext index(c2), fulltext index(c3)) default charset cp932;
 insert into t1 values(1, "‚ ‚ ‚ ‚ ‚ ","‚Q‚X“ú‚Ì•xŽmŽR‚Ì“V‹C‚É‚Â‚¢‚Ä");
 insert into t1 values(2, "‚¢‚¢‚¢‚¢‚¢","‚Q‚X“ú‚Ì•xŽmŽR‚Ì“V‹C‚Í•ª‚©‚è‚Ü‚¹‚ñ");
