@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright(C) 2012-2016 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@ set -e
 
 if [ "${MROONGA_BUNDLED}" = "yes" ]; then
   cmake_args=(-DCMAKE_BUILD_TYPE=Debug -DWITH_UNIT_TESTS=FALSE)
-  cmake_args=("${cmake_args[@]}" -DWITH_EMBEDDED_SERVER=TRUE)
+  cmake_args=("${cmake_args[@]}" -DGRN_WITH_BUNDLED_MESSAGE_PACK=TRUE)
   cmake_args=("${cmake_args[@]}" -DWITHOUT_ARCHIVE=TRUE)
   cmake_args=("${cmake_args[@]}" -DWITHOUT_BLACKHOLE=TRUE)
   cmake_args=("${cmake_args[@]}" -DWITHOUT_CASSANDRA=TRUE)

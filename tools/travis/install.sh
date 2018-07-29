@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright(C) 2012-2017 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -70,6 +70,8 @@ if [ "${MROONGA_BUNDLED}" = "yes" ]; then
   git clone --recursive --depth 1 \
       https://github.com/groonga/groonga.git \
       storage/mroonga/vendor/groonga
+  (cd storage/mroonga/vendor/groonga/vendor && \
+     ruby download_message_pack.rb)
   git clone --recursive --depth 1 \
       https://github.com/groonga/groonga-normalizer-mysql.git \
       storage/mroonga/vendor/groonga/vendor/plugins/groonga-normalizer-mysql
