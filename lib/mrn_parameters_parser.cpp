@@ -23,6 +23,10 @@
 #include <mrn_mysql_compat.h>
 #include <mrn_variables.hpp>
 
+#ifdef MRN_HAVE_SQL_DERROR_H
+#  include <sql/derror.h>
+#endif
+
 namespace mrn {
   class Parameter {
   public:
