@@ -528,12 +528,16 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_NOT_USED:
     inspected = "HA_EXTRA_NOT_USED";
     break;
+#ifdef MRN_HAVE_HA_EXTRA_CACHE
   case HA_EXTRA_CACHE:
     inspected = "HA_EXTRA_CACHE";
     break;
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_NO_CACHE
   case HA_EXTRA_NO_CACHE:
     inspected = "HA_EXTRA_NO_CACHE";
     break;
+#endif
   case HA_EXTRA_NO_READCHECK:
     inspected = "HA_EXTRA_NO_READCHECK";
     break;
@@ -549,24 +553,32 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_NO_USER_CHANGE:
     inspected = "HA_EXTRA_NO_USER_CHANGE";
     break;
+#ifdef MRN_HAVE_HA_EXTRA_KEY_CACHE
   case HA_EXTRA_KEY_CACHE:
     inspected = "HA_EXTRA_KEY_CACHE";
     break;
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_NO_KEY_CACHE
   case HA_EXTRA_NO_KEY_CACHE:
     inspected = "HA_EXTRA_NO_KEY_CACHE";
     break;
+#endif
   case HA_EXTRA_WAIT_LOCK:
     inspected = "HA_EXTRA_WAIT_LOCK";
     break;
   case HA_EXTRA_NO_WAIT_LOCK:
     inspected = "HA_EXTRA_NO_WAIT_LOCK";
     break;
+#ifdef MRN_HAVE_HA_EXTRA_WRITE_CACHE
   case HA_EXTRA_WRITE_CACHE:
     inspected = "HA_EXTRA_WRITE_CACHE";
     break;
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_FLUSH_CACHE
   case HA_EXTRA_FLUSH_CACHE:
     inspected = "HA_EXTRA_FLUSH_CACHE";
     break;
+#endif
   case HA_EXTRA_NO_KEYS:
     inspected = "HA_EXTRA_NO_KEYS";
     break;
@@ -579,9 +591,11 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_RESTORE_POS:
     inspected = "HA_EXTRA_RESTORE_POS";
     break;
+#ifdef MRN_HAVE_HA_EXTRA_REINIT_CACHE
   case HA_EXTRA_REINIT_CACHE:
     inspected = "HA_EXTRA_REINIT_CACHE";
     break;
+#endif
   case HA_EXTRA_FORCE_REOPEN:
     inspected = "HA_EXTRA_FORCE_REOPEN";
     break;
@@ -618,9 +632,11 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_KEYREAD_PRESERVE_FIELDS:
     inspected = "HA_EXTRA_KEYREAD_PRESERVE_FIELDS";
     break;
+#ifdef MRN_HAVE_HA_EXTRA_MMAP
   case HA_EXTRA_MMAP:
     inspected = "HA_EXTRA_MMAP";
     break;
+#endif
   case HA_EXTRA_IGNORE_NO_KEY:
     inspected = "HA_EXTRA_IGNORE_NO_KEY";
     break;
