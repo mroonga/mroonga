@@ -331,8 +331,6 @@ static PSI_mutex_key mrn_long_term_shares_mutex_key;
 static PSI_mutex_key mrn_allocated_thds_mutex_key;
 PSI_mutex_key mrn_share_mutex_key;
 PSI_mutex_key mrn_long_term_share_auto_inc_mutex_key;
-static PSI_mutex_key mrn_log_mutex_key;
-static PSI_mutex_key mrn_query_log_mutex_key;
 static PSI_mutex_key mrn_db_manager_mutex_key;
 static PSI_mutex_key mrn_context_pool_mutex_key;
 static PSI_mutex_key mrn_operations_mutex_key;
@@ -370,16 +368,6 @@ static PSI_mutex_info mrn_mutexes[] =
   MRN_MUTEXT_INFO_ENTRY(&mrn_long_term_share_auto_inc_mutex_key,
                         "mrn::long_term_share::auto_inc",
                         0,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_log_mutex_key,
-                        "mrn::log",
-                        PSI_FLAG_SINGLETON,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_query_log_mutex_key,
-                        "mrn::query_log",
-                        PSI_FLAG_SINGLETON,
                         PSI_VOLATILITY_UNKNOWN,
                         PSI_DOCUMENT_ME),
   MRN_MUTEXT_INFO_ENTRY(&mrn_db_manager_mutex_key,
@@ -429,8 +417,6 @@ grn_hash *mrn_allocated_thds;
 mysql_mutex_t mrn_allocated_thds_mutex;
 
 /* internal variables */
-static mysql_mutex_t mrn_log_mutex;
-static mysql_mutex_t mrn_query_log_mutex;
 static grn_obj *mrn_db;
 static grn_ctx mrn_db_manager_ctx;
 static mysql_mutex_t mrn_db_manager_mutex;
@@ -744,8 +730,6 @@ static long mrn_n_pooling_contexts = 0;
 
 /* logging */
 static char *mrn_log_file_path = NULL;
-static FILE *mrn_log_file = NULL;
-static bool mrn_log_file_opened = false;
 static grn_log_level mrn_log_level_default = GRN_LOG_DEFAULT_LEVEL;
 static ulong mrn_log_level = mrn_log_level_default;
 static char *mrn_query_log_file_path = NULL;
@@ -785,33 +769,6 @@ static mrn_bool mrn_libgroonga_embedded = false;
 
 static mrn::variables::ActionOnError mrn_action_on_fulltext_query_error_default =
   mrn::variables::ACTION_ON_ERROR_ERROR_AND_LOG;
-
-static void mrn_logger_log(grn_ctx *ctx, grn_log_level level,
-                           const char *timestamp, const char *title,
-                           const char *message, const char *location,
-                           void *user_data)
-{
-  const char level_marks[] = " EACewnid-";
-  if (mrn_log_file_opened) {
-    mrn::Lock lock(&mrn_log_mutex);
-    fprintf(mrn_log_file,
-            "%s|%c|%08x|%s\n",
-            timestamp,
-            level_marks[level],
-            static_cast<uint>((ulong)(pthread_self())),
-            message);
-    fflush(mrn_log_file);
-  }
-}
-
-static grn_logger mrn_logger = {
-  mrn_log_level_default,
-  GRN_LOG_TIME|GRN_LOG_MESSAGE,
-  NULL,
-  mrn_logger_log,
-  NULL,
-  NULL
-};
 
 /* system functions */
 
@@ -888,8 +845,7 @@ static void mrn_log_level_update(THD *thd,
   ulong new_value = *static_cast<const ulong *>(save);
   ulong old_value = mrn_log_level;
   mrn_log_level = new_value;
-  mrn_logger.max_level = static_cast<grn_log_level>(mrn_log_level);
-  grn_logger_set(&mrn_ctx, &mrn_logger);
+  grn_default_logger_set_max_level(static_cast<grn_log_level>(mrn_log_level));
   grn_ctx *ctx = grn_ctx_open(0);
   mrn_change_encoding(ctx, system_charset_info);
   GRN_LOG(ctx, GRN_LOG_NOTICE, "log level changed from '%s' to '%s'",
@@ -931,40 +887,12 @@ static void mrn_log_file_update(THD *thd,
     GRN_LOG(ctx, GRN_LOG_NOTICE,
             "log file is changed: <%s> -> <%s>",
             *old_value_ptr, new_value);
-
-    int log_file_open_errno = 0;
-    {
-      mrn::Lock lock(&mrn_log_mutex);
-      FILE *new_log_file;
-      new_log_file = fopen(new_value, "a");
-      if (new_log_file) {
-        if (mrn_log_file_opened) {
-          fclose(mrn_log_file);
-        }
-        mrn_log_file = new_log_file;
-        mrn_log_file_opened = true;
-      } else {
-        log_file_open_errno = errno;
-      }
-    }
-
-    if (log_file_open_errno == 0) {
-      GRN_LOG(ctx, GRN_LOG_NOTICE,
-              "log file is changed: <%s> -> <%s>",
-              *old_value_ptr, new_value);
-      new_log_file_name = new_value;
-    } else {
-      if (mrn_log_file) {
-        GRN_LOG(ctx, GRN_LOG_ERROR,
-                "log file isn't changed "
-                "because the requested path can't be opened: <%s>: <%s>",
-                new_value, strerror(log_file_open_errno));
-      } else {
-        GRN_LOG(ctx, GRN_LOG_ERROR,
-                "log file can't be opened: <%s>: <%s>",
-                new_value, strerror(log_file_open_errno));
-      }
-    }
+    grn_default_logger_set_path(new_value);
+    grn_logger_reopen(ctx);
+    GRN_LOG(ctx, GRN_LOG_NOTICE,
+            "log file is changed: <%s> -> <%s>",
+            *old_value_ptr, new_value);
+    new_log_file_name = new_value;
   }
 
 #ifdef MRN_NEED_FREE_STRING_MEMALLOC_PLUGIN_VAR
@@ -1035,10 +963,7 @@ static void mrn_query_log_file_update(THD *thd,
   }
 
   if (need_update) {
-    { // TODO: Remove me when Groonga 7.0.5 is released.
-      mrn::Lock lock(&mrn_query_log_mutex);
-      grn_default_query_logger_set_path(normalized_new_value);
-    }
+    grn_default_query_logger_set_path(normalized_new_value);
     grn_query_logger_reopen(ctx);
     new_query_log_file_name = normalized_new_value;
   }
@@ -1574,11 +1499,8 @@ static bool mrn_flush_logs(handlerton *hton)
 {
   MRN_DBUG_ENTER_FUNCTION();
   bool result = 0;
-  if (mrn_log_file_opened) {
-    mrn::Lock lock(&mrn_log_mutex);
-    fclose(mrn_log_file);
-    mrn_log_file = fopen(mrn_log_file_path, "a");
-  }
+  grn_logger_reopen(&mrn_ctx);
+  grn_query_logger_reopen(&mrn_ctx);
   DBUG_RETURN(result);
 }
 
@@ -2210,6 +2132,16 @@ static int mrn_init(void *p)
 
   MRN_REGISTER_MUTEXES("mroonga", mrn_mutexes);
 
+  grn_default_logger_set_path(mrn_log_file_path);
+  grn_default_logger_set_max_level(static_cast<grn_log_level>(mrn_log_level));
+  {
+    int flags = grn_default_logger_get_flags() | GRN_LOG_PID;
+#ifdef GRN_LOG_THREAD_ID
+    flags |= GRN_LOG_THREAD_ID;
+#endif
+    grn_default_logger_set_flags(flags);
+  }
+
   grn_default_query_logger_set_path(mrn_query_log_file_path);
 
   if (grn_init() != GRN_SUCCESS) {
@@ -2224,6 +2156,8 @@ static int mrn_init(void *p)
   ctx = &mrn_ctx;
   if (mrn_change_encoding(ctx, system_charset_info))
     goto err_mrn_change_encoding;
+
+  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s started.", MRN_PACKAGE_STRING);
 
 #ifdef MRN_HAVE_PSI_MEMORY_KEY
   {
@@ -2241,27 +2175,6 @@ static int mrn_init(void *p)
   }
 #endif
 
-  if (mysql_mutex_init(mrn_log_mutex_key,
-                       &mrn_log_mutex,
-                       MY_MUTEX_INIT_FAST) != 0) {
-    goto err_log_mutex_init;
-  }
-  if (mysql_mutex_init(mrn_query_log_mutex_key,
-                       &mrn_query_log_mutex,
-                       MY_MUTEX_INIT_FAST) != 0) {
-    goto err_query_log_mutex_init;
-  }
-
-  mrn_logger.max_level = static_cast<grn_log_level>(mrn_log_level);
-  grn_logger_set(ctx, &mrn_logger);
-  if (!(mrn_log_file = fopen(mrn_log_file_path, "a"))) {
-    goto err_log_file_open;
-  }
-  mrn_log_file_opened = true;
-  GRN_LOG(ctx, GRN_LOG_NOTICE, "%s started.", MRN_PACKAGE_STRING);
-  GRN_LOG(ctx, GRN_LOG_NOTICE, "log level is '%s'",
-          mrn_log_level_type_names[mrn_log_level]);
-
   // init meta-info database
   if (!(mrn_db = grn_db_create(ctx, NULL, NULL))) {
     GRN_LOG(ctx, GRN_LOG_ERROR, "cannot create system database, exiting");
@@ -2270,7 +2183,6 @@ static int mrn_init(void *p)
   grn_ctx_use(ctx, mrn_db);
 
   grn_ctx_init(&mrn_db_manager_ctx, 0);
-  grn_logger_set(&mrn_db_manager_ctx, &mrn_logger);
   if (mysql_mutex_init(mrn_db_manager_mutex_key,
                        &mrn_db_manager_mutex,
                        MY_MUTEX_INIT_FAST) != 0) {
@@ -2375,15 +2287,6 @@ err_db_manager_mutex_init:
   grn_ctx_fin(&mrn_db_manager_ctx);
   grn_obj_unlink(ctx, mrn_db);
 err_db_create:
-  if (mrn_log_file_opened) {
-    fclose(mrn_log_file);
-    mrn_log_file_opened = false;
-  }
-err_log_file_open:
-  mysql_mutex_destroy(&mrn_query_log_mutex);
-err_query_log_mutex_init:
-  mysql_mutex_destroy(&mrn_log_mutex);
-err_log_mutex_init:
 err_mrn_change_encoding:
   grn_ctx_fin(ctx);
   grn_fin();
@@ -2443,13 +2346,6 @@ static int mrn_deinit(void *p)
   grn_obj_unlink(ctx, mrn_db);
   grn_ctx_fin(ctx);
   grn_fin();
-
-  if (mrn_log_file_opened) {
-    fclose(mrn_log_file);
-    mrn_log_file_opened = false;
-  }
-  mysql_mutex_destroy(&mrn_query_log_mutex);
-  mysql_mutex_destroy(&mrn_log_mutex);
 
   return 0;
 }
