@@ -7384,6 +7384,10 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
                    column_name.c_str());
           push_warning(thd, MRN_SEVERITY_WARNING,
                        WARN_DATA_TRUNCATED, message);
+          if (MRN_ABORT_ON_WARNING(thd)) {
+            error = ER_ERROR_ON_WRITE;
+            goto err;
+          }
         }
         continue;
       }
