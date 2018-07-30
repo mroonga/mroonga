@@ -8,7 +8,7 @@ primary key (name, score)
 show create table scores;
 Table	Create Table
 scores	CREATE TABLE `scores` (
-  `name` char(30) NOT NULL,
+  `name` char(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `score` int(11) NOT NULL,
   PRIMARY KEY (`name`,`score`)
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci

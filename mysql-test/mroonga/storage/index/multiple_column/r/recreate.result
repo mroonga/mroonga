@@ -10,8 +10,8 @@ show create table listing;
 Table	Create Table
 listing	CREATE TABLE `listing` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `last_name` char(30) NOT NULL,
-  `first_name` char(30) NOT NULL,
+  `last_name` char(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `first_name` char(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `name` (`last_name`,`first_name`)
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
