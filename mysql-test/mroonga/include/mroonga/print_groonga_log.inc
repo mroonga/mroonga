@@ -21,7 +21,7 @@ $mroonga_log_file = $ENV{MROONGA_LOG_FILE};
 $mroonga_log_file =~ s/^mroonga_log_file	//;
 open(F, '<', $_="$ENV{MYSQLD_DATADIR}/$mroonga_log_file") or die "open(<$_): $!";
 while (<F>) {
-  s/^[^|]+\|[^|]+\|[^|]+\| *//;
+  s/^[^|]+\|[^|]+\|(\d+)?(\|[\da-fA-F]+)?[:|] ?//;
   print;
 }
 EOF

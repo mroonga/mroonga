@@ -4,6 +4,7 @@ SET GLOBAL mroonga_query_log_file = NULL;
 SHOW GLOBAL VARIABLES LIKE "mroonga_query_log_file";
 Variable_name	Value
 mroonga_query_log_file	
+log opened.
 log file is changed: <groonga.log> -> <groonga-query-log.log>
 query log file is disabled: <groonga-query.log>
 SET GLOBAL mroonga_query_log_file = DEFAULT;
