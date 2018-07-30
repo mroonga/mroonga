@@ -4,16 +4,16 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 c1 VARCHAR(10),
 c2 VARCHAR(10),
 KEY idx1(c1, c2)
-) DEFAULT CHARSET UTF8MB4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE t1;
 Table	Create Table
 t1	CREATE TABLE `t1` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `c1` varchar(10) DEFAULT NULL,
-  `c2` varchar(10) DEFAULT NULL,
+  `c1` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `c2` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx1` (`c1`,`c2`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO t1 (c1, c2) VALUES
 ('1999', '12'),
 ('2000', '11'),
