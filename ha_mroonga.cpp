@@ -3158,29 +3158,49 @@ uint ha_mroonga::max_supported_key_length() const
   DBUG_RETURN(res);
 }
 
-uint ha_mroonga::wrapper_max_supported_key_part_length() const
+uint ha_mroonga::wrapper_max_supported_key_part_length(
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+  HA_CREATE_INFO *create_info
+#endif
+  ) const
 {
   uint res;
   MRN_DBUG_ENTER_METHOD();
   if (analyzed_for_create && share_for_create.wrapper_mode) {
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+    res = wrap_handler_for_create->max_supported_key_part_length(create_info);
+#else
     res = wrap_handler_for_create->max_supported_key_part_length();
+#endif
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+    res = wrap_handler->max_supported_key_part_length(create_info);
+#else
     res = wrap_handler->max_supported_key_part_length();
+#endif
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
   DBUG_RETURN(res);
 }
 
-uint ha_mroonga::storage_max_supported_key_part_length() const
+uint ha_mroonga::storage_max_supported_key_part_length(
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+  HA_CREATE_INFO *create_info
+#endif
+  ) const
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_RETURN(GRN_TABLE_MAX_KEY_SIZE);
 }
 
-uint ha_mroonga::max_supported_key_part_length() const
+uint ha_mroonga::max_supported_key_part_length(
+#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+  HA_CREATE_INFO *create_info
+#endif
+  ) const
 {
   MRN_DBUG_ENTER_METHOD();
 
