@@ -168,7 +168,8 @@
   typedef MYSQL_LEX_STRING mrn_thd_lex_string;
 #endif
 
-#if MYSQL_VERSION_ID >= 50600
+#if ((MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)) ||  \
+     (MYSQL_VERSION_ID >= 100100 && defined(MRN_MARIADB_P)))
 #  define MRN_THD_VARIABLES_HAVE_BINLOG_ROW_IMAGE
 #endif
 
