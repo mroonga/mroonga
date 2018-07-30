@@ -25,7 +25,7 @@ CREATE TABLE scores (
   score1 INT NOT NULL,
   score2 INT NOT NULL,
   INDEX (score1, score2)
-) DEFAULT CHARSET=UTF8MB4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO scores (score1, score2) VALUES(1,  1);
 INSERT INTO scores (score1, score2) VALUES(1,  2);

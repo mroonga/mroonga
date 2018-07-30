@@ -4,7 +4,7 @@ id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 name CHAR(30) NOT NULL,
 score INT NOT NULL,
 INDEX property (NAME, SCORE)
-) DEFAULT CHARSET=UTF8MB4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE scores;
 Table	Create Table
 scores	CREATE TABLE `scores` (
@@ -13,7 +13,7 @@ scores	CREATE TABLE `scores` (
   `score` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `property` (`name`,`score`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO scores (name, score) VALUES("Taro Yamada", 29);
 INSERT INTO scores (name, score) VALUES("Taro Yamada", -12);
 INSERT INTO scores (name, score) VALUES("Jiro Yamada", 27);

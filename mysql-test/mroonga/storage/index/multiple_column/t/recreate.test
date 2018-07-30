@@ -26,7 +26,7 @@ create table listing (
   last_name char(30) not null,
   first_name char(30) not null,
   index name (last_name, first_name)
-) default charset utf8mb4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 show create table listing;
 
 insert into listing (last_name, first_name) values("Taro", "Yamada");
