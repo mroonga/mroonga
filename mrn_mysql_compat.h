@@ -168,11 +168,6 @@
   typedef MYSQL_LEX_STRING mrn_thd_lex_string;
 #endif
 
-#if ((MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)) ||  \
-     (MYSQL_VERSION_ID >= 100100 && defined(MRN_MARIADB_P)))
-#  define MRN_THD_VARIABLES_HAVE_BINLOG_ROW_IMAGE
-#endif
-
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
 #  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags) \
   init_alloc_root(root, name, block_size, pre_alloc_size, flags)
