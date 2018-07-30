@@ -7308,7 +7308,6 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
     }
   }
 
-  KEY *pkey_info = NULL;
   storage_store_fields_for_prep_update(old_data, new_data, record_id);
   {
     mrn::Lock lock(&(share->record_mutex), have_unique_index());
@@ -7323,6 +7322,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
     }
   }
 
+  KEY *pkey_info = NULL;
   if (table->s->primary_key != MAX_INDEXES) {
     pkey_info = &(table->key_info[table->s->primary_key]);
   }
