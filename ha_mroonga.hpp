@@ -653,6 +653,7 @@ public:
                            char *child_key_name,
                            uint child_key_name_len) mrn_override;
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
+  double scan_time() mrn_override;
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
 #endif
@@ -690,7 +691,6 @@ public:
     dd::Table *table_def
 #endif
     ) mrn_override;
-  double scan_time();
   double read_time(uint index, uint ranges, ha_rows rows);
 #ifdef MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
   const key_map *keys_to_use_for_scanning();
@@ -1321,6 +1321,8 @@ private:
                                    uint child_key_name_len);
   void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
+  double wrapper_scan_time();
+  double storage_scan_time();
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
@@ -1390,8 +1392,6 @@ private:
 #endif
     );
   int storage_truncate_index();
-  double wrapper_scan_time();
-  double storage_scan_time();
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
   double storage_read_time(uint index, uint ranges, ha_rows rows);
 #ifdef MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
