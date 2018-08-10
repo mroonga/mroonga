@@ -2077,6 +2077,11 @@ static int mrn_init(void *p)
 #ifndef MRN_SUPPORT_PARTITION
   hton->flags |= HTON_NO_PARTITION;
 #endif
+#ifdef HTON_SUPPORTS_ATOMIC_DDL
+  // For supporting wrapper mode for InnoDB
+  // Is it OK?
+  hton->flags |= HTON_SUPPORTS_ATOMIC_DDL;
+#endif
   hton->drop_database = mrn_drop_database;
   hton->close_connection = mrn_close_connection;
   hton->flush_logs = mrn_flush_logs;
