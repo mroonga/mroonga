@@ -13079,11 +13079,15 @@ handler *ha_mroonga::clone(const char *name, MEM_ROOT *mem_root)
 void ha_mroonga::wrapper_print_error(int error, myf flag)
 {
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  wrap_handler->print_error(error, flag);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
+  if (wrap_handler) {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    wrap_handler->print_error(error, flag);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  } else {
+    wrap_handler_for_create->print_error(error, flag);
+  }
   DBUG_VOID_RETURN;
 }
 
@@ -13097,7 +13101,7 @@ void ha_mroonga::storage_print_error(int error, myf flag)
 void ha_mroonga::print_error(int error, myf flag)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (share->wrapper_mode) {
+  if (wrap_handler || wrap_handler_for_create) {
     wrapper_print_error(error, flag);
   } else {
     storage_print_error(error, flag);
@@ -13109,11 +13113,15 @@ bool ha_mroonga::wrapper_get_error_message(int error, String *buffer)
 {
   bool errored;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  errored = wrap_handler->get_error_message(error, buffer);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
+  if (wrap_handler) {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    errored = wrap_handler->get_error_message(error, buffer);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  } else {
+    errored = wrap_handler_for_create->get_error_message(error, buffer);
+  }
   DBUG_RETURN(errored);
 }
 
@@ -13130,7 +13138,7 @@ bool ha_mroonga::get_error_message(int error, String *buffer)
 {
   MRN_DBUG_ENTER_METHOD();
   bool errored;
-  if (share && share->wrapper_mode) {
+  if (wrap_handler || wrap_handler_for_create) {
     errored = wrapper_get_error_message(error, buffer);
   } else {
     errored = storage_get_error_message(error, buffer);
