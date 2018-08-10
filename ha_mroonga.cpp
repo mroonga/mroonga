@@ -4810,7 +4810,7 @@ int ha_mroonga::wrapper_open(const char *name,
     grn_table = NULL;
     // TODO: free indexes.
 
-    delete wrap_handler;
+    mrn_destroy(wrap_handler);
     wrap_handler = NULL;
     if (wrap_key_info)
     {
@@ -5421,7 +5421,7 @@ int ha_mroonga::wrapper_close()
 #endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  delete wrap_handler;
+  mrn_destroy(wrap_handler);
   wrap_handler = NULL;
   if (wrap_key_info)
   {
