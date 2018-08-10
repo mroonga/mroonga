@@ -375,6 +375,7 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_GET_REAL_ROW_TYPE
 #  define MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
 #  define MRN_HANDLER_HAVE_IS_INDEX_ALGORITHM_SUPPORTED
+#  define MRN_HANDLER_HAVE_GET_SE_PRIVATE_DATA
 #endif
 
 #if MYSQL_VERSION_ID >= 50631 && !defined(MRN_MARIADB_P)
@@ -565,6 +566,9 @@ public:
              dd::Table *table_def
 #endif
     ) mrn_override;
+#ifdef MRN_HANDLER_HAVE_GET_SE_PRIVATE_DATA
+  bool get_se_private_data(dd::Table *dd_table, bool reset) mrn_override;
+#endif
   // required
   int open(const char *name, int mode, uint open_options
 #ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
@@ -1078,6 +1082,10 @@ private:
                      dd::Table *table_def,
 #endif
                      MRN_SHARE *tmp_share);
+#ifdef MRN_HANDLER_HAVE_GET_SE_PRIVATE_DATA
+  bool wrapper_get_se_private_data(dd::Table *dd_table, bool reset);
+  bool storage_get_se_private_data(dd::Table *dd_table, bool reset);
+#endif
   int wrapper_create_index_fulltext_validate(KEY *key_info);
   int wrapper_create_index_fulltext(const char *grn_table_name,
                                     int i,

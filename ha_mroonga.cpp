@@ -4642,6 +4642,40 @@ int ha_mroonga::create(const char *name,
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HANDLER_HAVE_GET_SE_PRIVATE_DATA
+bool ha_mroonga::wrapper_get_se_private_data(dd::Table *dd_table, bool reset)
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  bool errored = wrap_handler->get_se_private_data(dd_table, reset);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(errored);
+}
+
+bool ha_mroonga::storage_get_se_private_data(dd::Table *dd_table, bool reset)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool errored = handler::get_se_private_data(dd_table, reset);
+  DBUG_RETURN(errored);
+}
+
+bool ha_mroonga::get_se_private_data(dd::Table *dd_table, bool reset)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  bool errored;
+  if (share->wrapper_mode) {
+    errored = wrapper_get_se_private_data(dd_table, reset);
+  } else {
+    errored = storage_get_se_private_data(dd_table, reset);
+  }
+
+  DBUG_RETURN(errored);
+}
+#endif
+
 int ha_mroonga::wrapper_open(const char *name,
                              int mode,
                              uint open_options
