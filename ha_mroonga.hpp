@@ -646,6 +646,7 @@ public:
   int reset();
 
   handler *clone(const char *name, MEM_ROOT *mem_root) mrn_override;
+  void print_error(int error, myf flag) mrn_override;
   bool get_error_message(int error, String *buffer) mrn_override;
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
@@ -1302,6 +1303,8 @@ private:
   void storage_cond_pop();
   handler *wrapper_clone(const char *name, MEM_ROOT *mem_root);
   handler *storage_clone(const char *name, MEM_ROOT *mem_root);
+  void wrapper_print_error(int error, myf flag);
+  void storage_print_error(int error, myf flag);
   bool wrapper_get_error_message(int error, String *buffer);
   bool storage_get_error_message(int error, String *buffer);
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
