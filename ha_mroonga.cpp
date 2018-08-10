@@ -13157,6 +13157,7 @@ bool ha_mroonga::get_foreign_dup_key(char *child_table_name,
   DBUG_RETURN(success);
 }
 
+#ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
 longlong ha_mroonga::wrapper_get_memory_buffer_size() const
 {
   MRN_DBUG_ENTER_METHOD();
@@ -13186,6 +13187,7 @@ longlong ha_mroonga::get_memory_buffer_size() const
   }
   DBUG_RETURN(size);
 }
+#endif
 
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
 uint8 ha_mroonga::wrapper_table_cache_type()

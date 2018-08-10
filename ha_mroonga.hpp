@@ -376,6 +376,10 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_IS_INDEX_ALGORITHM_SUPPORTED
 #endif
 
+#if MYSQL_VERSION_ID >= 50631 && !defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
+#endif
+
 #if defined(HAVE_PSI_INTERFACE) &&                      \
   (MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P))
 #  define MRN_HAVE_PSI_SERVER
@@ -655,7 +659,9 @@ public:
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
   double scan_time() mrn_override;
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
+#ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
   longlong get_memory_buffer_size() const mrn_override;
+#endif
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
 #endif
@@ -1326,8 +1332,10 @@ private:
   double storage_scan_time();
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
   double storage_read_time(uint index, uint ranges, ha_rows rows);
+#ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
   longlong wrapper_get_memory_buffer_size() const;
   longlong storage_get_memory_buffer_size() const;
+#endif
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
