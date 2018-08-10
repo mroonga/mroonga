@@ -9461,40 +9461,6 @@ void ha_mroonga::cond_pop()
   DBUG_VOID_RETURN;
 }
 
-bool ha_mroonga::wrapper_get_error_message(int error, String *buf)
-{
-  bool temporary_error;
-  MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  temporary_error = wrap_handler->get_error_message(error, buf);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(temporary_error);
-}
-
-bool ha_mroonga::storage_get_error_message(int error, String *buf)
-{
-  MRN_DBUG_ENTER_METHOD();
-  bool temporary_error = false;
-  // latest error message
-  buf->copy(ctx->errbuf, (uint) strlen(ctx->errbuf), system_charset_info);
-  DBUG_RETURN(temporary_error);
-}
-
-bool ha_mroonga::get_error_message(int error, String *buf)
-{
-  MRN_DBUG_ENTER_METHOD();
-  bool temporary_error;
-  if (share && share->wrapper_mode)
-  {
-    temporary_error = wrapper_get_error_message(error, buf);
-  } else {
-    temporary_error = storage_get_error_message(error, buf);
-  }
-  DBUG_RETURN(temporary_error);
-}
-
 ulonglong ha_mroonga::file_size(const char *path)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -13074,6 +13040,39 @@ handler *ha_mroonga::clone(const char *name, MEM_ROOT *mem_root)
     cloned_handler = storage_clone(name, mem_root);
   }
   DBUG_RETURN(cloned_handler);
+}
+
+bool ha_mroonga::wrapper_get_error_message(int error, String *buffer)
+{
+  bool errored;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  errored = wrap_handler->get_error_message(error, buffer);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(errored);
+}
+
+bool ha_mroonga::storage_get_error_message(int error, String *buffer)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool errored = false;
+  // latest error message
+  buffer->copy(ctx->errbuf, (uint) strlen(ctx->errbuf), system_charset_info);
+  DBUG_RETURN(errored);
+}
+
+bool ha_mroonga::get_error_message(int error, String *buffer)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool errored;
+  if (share && share->wrapper_mode) {
+    errored = wrapper_get_error_message(error, buffer);
+  } else {
+    errored = storage_get_error_message(error, buffer);
+  }
+  DBUG_RETURN(errored);
 }
 
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE

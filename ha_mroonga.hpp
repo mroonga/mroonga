@@ -643,11 +643,10 @@ public:
   const Item *cond_push(const Item *cond);
   void cond_pop();
 
-  bool get_error_message(int error, String *buf);
-
   int reset();
 
   handler *clone(const char *name, MEM_ROOT *mem_root);
+  bool get_error_message(int error, String *buffer) mrn_override;
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
 #endif
@@ -1301,10 +1300,10 @@ private:
   const Item *storage_cond_push(const Item *cond);
   void wrapper_cond_pop();
   void storage_cond_pop();
-  bool wrapper_get_error_message(int error, String *buf);
-  bool storage_get_error_message(int error, String *buf);
   handler *wrapper_clone(const char *name, MEM_ROOT *mem_root);
   handler *storage_clone(const char *name, MEM_ROOT *mem_root);
+  bool wrapper_get_error_message(int error, String *buffer);
+  bool storage_get_error_message(int error, String *buffer);
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
