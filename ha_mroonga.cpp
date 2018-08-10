@@ -5515,7 +5515,7 @@ int ha_mroonga::wrapper_delete_table(const char *name,
 #else
   error = hnd->ha_delete_table(name);
 #endif
-  delete hnd;
+  mrn_destroy(hnd);
 
   DBUG_RETURN(error);
 }
@@ -13054,7 +13054,7 @@ handler *ha_mroonga::wrapper_clone(const char *name, MEM_ROOT *mem_root)
 #endif
   if (error != 0)
   {
-    delete cloned_handler;
+    mrn_destroy(cloned_handler);
     DBUG_RETURN(NULL);
   }
   DBUG_RETURN(cloned_handler);
@@ -14373,14 +14373,14 @@ int ha_mroonga::wrapper_rename_table(const char *from, const char *to,
 
   if (error != 0)
   {
-    delete hnd;
+    mrn_destroy(hnd);
     DBUG_RETURN(error);
   }
 
   error = wrapper_rename_index(from, to, tmp_share,
                                from_table_name, to_table_name);
 
-  delete hnd;
+  mrn_destroy(hnd);
   DBUG_RETURN(error);
 }
 
