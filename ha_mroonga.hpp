@@ -696,7 +696,7 @@ public:
 #ifdef MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
   const key_map *keys_to_use_for_scanning();
 #endif
-  ha_rows estimate_rows_upper_bound();
+  ha_rows estimate_rows_upper_bound() mrn_override;
 #ifdef MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
   enum ha_key_alg get_default_index_algorithm() const mrn_override;
 #endif
@@ -762,9 +762,9 @@ public:
 
 protected:
 #ifdef MRN_HANDLER_RECORDS_RETURN_ERROR
-  int records(ha_rows *num_rows);
+  int records(ha_rows *num_rows) mrn_override;
 #else
-  ha_rows records();
+  ha_rows records() mrn_override;
 #endif
 #ifdef MRN_HANDLER_HAVE_HA_RND_NEXT
   int rnd_next(uchar *buf);
