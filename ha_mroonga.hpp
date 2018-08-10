@@ -376,6 +376,7 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
 #  define MRN_HANDLER_HAVE_IS_INDEX_ALGORITHM_SUPPORTED
 #  define MRN_HANDLER_HAVE_GET_SE_PRIVATE_DATA
+#  define MRN_HANDLER_HAVE_UPGRADE_TABLE
 #endif
 
 #if MYSQL_VERSION_ID >= 50631 && !defined(MRN_MARIADB_P)
@@ -701,6 +702,12 @@ public:
   void start_bulk_insert(ha_rows rows);
 #endif
   int end_bulk_insert();
+#ifdef MRN_HANDLER_HAVE_GET_SE_PRIVATE_DATA
+  bool upgrade_table(THD *thd,
+                     const char *db_name,
+                     const char *table_name,
+                     dd::Table *dd_table) mrn_override;
+#endif
   int delete_all_rows();
   int truncate(
 #ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
@@ -1187,6 +1194,16 @@ private:
 #endif
   int wrapper_end_bulk_insert();
   int storage_end_bulk_insert();
+#ifdef MRN_HANDLER_HAVE_GET_SE_PRIVATE_DATA
+  bool wrapper_upgrade_table(THD *thd,
+                             const char *db_name,
+                             const char *table_name,
+                             dd::Table *dd_table);
+  bool storage_upgrade_table(THD *thd,
+                             const char *db_name,
+                             const char *table_name,
+                             dd::Table *dd_table);
+#endif
   bool wrapper_is_target_index(KEY *key_info);
   bool wrapper_have_target_index();
   int wrapper_write_row(uchar *buf);

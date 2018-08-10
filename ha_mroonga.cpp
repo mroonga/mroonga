@@ -13685,6 +13685,50 @@ int ha_mroonga::end_bulk_insert()
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HANDLER_HAVE_UPGRADE_TABLE
+bool ha_mroonga::wrapper_upgrade_table(THD *thd,
+                                       const char *db_name,
+                                       const char *table_name,
+                                       dd::Table *dd_table)
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  bool errored =
+    wrap_handler->ha_upgrade_table(thd, db_name, table_name, dd_table, table);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(errored);
+}
+
+bool ha_mroonga::storage_upgrade_table(THD *thd,
+                                       const char *db_name,
+                                       const char *table_name,
+                                       dd::Table *dd_table)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool errored = false;
+  DBUG_RETURN(errored);
+}
+
+bool ha_mroonga::upgrade_table(THD *thd,
+                               const char *db_name,
+                               const char *table_name,
+                               dd::Table *dd_table)
+{
+  MRN_DBUG_ENTER_METHOD();
+
+  bool errored;
+  if (share->wrapper_mode) {
+    errored = wrapper_upgrade_table(thd, db_name, table_name, dd_table);
+  } else {
+    errored = storage_upgrade_table(thd, db_name, table_name, dd_table);
+  }
+
+  DBUG_RETURN(errored);
+}
+#endif
+
 int ha_mroonga::generic_delete_all_rows(grn_obj *target_grn_table,
                                         const char *function_name)
 {
