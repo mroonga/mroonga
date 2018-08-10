@@ -372,6 +372,7 @@ typedef uint mrn_alter_table_flags;
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_HA_MULTI_RANGE_READ_NEXT
+#  define MRN_HANDLER_HAVE_GET_REAL_ROW_TYPE
 #  define MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
 #  define MRN_HANDLER_HAVE_IS_INDEX_ALGORITHM_SUPPORTED
 #endif
@@ -703,6 +704,10 @@ public:
   const key_map *keys_to_use_for_scanning();
 #endif
   ha_rows estimate_rows_upper_bound() mrn_override;
+#ifdef MRN_HANDLER_HAVE_GET_REAL_ROW_TYPE
+  enum row_type get_real_row_type(const HA_CREATE_INFO *create_info)
+    const mrn_override;
+#endif
 #ifdef MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
   enum ha_key_alg get_default_index_algorithm() const mrn_override;
 #endif
@@ -1411,6 +1416,12 @@ private:
 #endif
   ha_rows wrapper_estimate_rows_upper_bound();
   ha_rows storage_estimate_rows_upper_bound();
+#ifdef MRN_HANDLER_HAVE_GET_REAL_ROW_TYPE
+  enum row_type wrapper_get_real_row_type(const HA_CREATE_INFO *create_info)
+    const;
+  enum row_type storage_get_real_row_type(const HA_CREATE_INFO *create_info)
+    const;
+#endif
 #ifdef MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
   enum ha_key_alg wrapper_get_default_index_algorithm() const;
   enum ha_key_alg storage_get_default_index_algorithm() const;

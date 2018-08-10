@@ -14086,6 +14086,37 @@ ha_rows ha_mroonga::estimate_rows_upper_bound()
   DBUG_RETURN(rows);
 }
 
+#ifdef MRN_HANDLER_HAVE_GET_REAL_ROW_TYPE
+enum row_type
+ha_mroonga::wrapper_get_real_row_type(const HA_CREATE_INFO *create_info) const
+{
+  MRN_DBUG_ENTER_METHOD();
+  enum row_type type = wrap_handler_for_create->get_real_row_type(create_info);
+  DBUG_RETURN(type);
+}
+
+enum row_type
+ha_mroonga::storage_get_real_row_type(const HA_CREATE_INFO *create_info) const
+{
+  MRN_DBUG_ENTER_METHOD();
+  enum row_type type = handler::get_real_row_type(create_info);
+  DBUG_RETURN(type);
+}
+
+enum row_type
+ha_mroonga::get_real_row_type(const HA_CREATE_INFO *create_info) const
+{
+  MRN_DBUG_ENTER_METHOD();
+  enum row_type type;
+  if (wrap_handler_for_create) {
+    type = wrapper_get_real_row_type(create_info);
+  } else {
+    type = storage_get_real_row_type(create_info);
+  }
+  DBUG_RETURN(type);
+}
+#endif
+
 #ifdef MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
 enum ha_key_alg ha_mroonga::wrapper_get_default_index_algorithm() const
 {
