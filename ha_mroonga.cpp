@@ -13104,6 +13104,59 @@ bool ha_mroonga::get_error_message(int error, String *buffer)
   DBUG_RETURN(errored);
 }
 
+bool ha_mroonga::wrapper_get_foreign_dup_key(char *child_table_name,
+                                             uint child_table_name_len,
+                                             char *child_key_name,
+                                             uint child_key_name_len)
+{
+  bool success;
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  success = wrap_handler->get_foreign_dup_key(child_table_name,
+                                              child_table_name_len,
+                                              child_key_name,
+                                              child_key_name_len);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(success);
+}
+
+bool ha_mroonga::storage_get_foreign_dup_key(char *child_table_name,
+                                             uint child_table_name_len,
+                                             char *child_key_name,
+                                             uint child_key_name_len)
+{
+  MRN_DBUG_ENTER_METHOD();
+  // TODO: Should implement?
+  bool success = handler::get_foreign_dup_key(child_table_name,
+                                              child_table_name_len,
+                                              child_key_name,
+                                              child_key_name_len);
+  DBUG_RETURN(success);
+}
+
+bool ha_mroonga::get_foreign_dup_key(char *child_table_name,
+                                     uint child_table_name_len,
+                                     char *child_key_name,
+                                     uint child_key_name_len)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool success;
+  if (share && share->wrapper_mode) {
+    success = wrapper_get_foreign_dup_key(child_table_name,
+                                          child_table_name_len,
+                                          child_key_name,
+                                          child_key_name_len);
+  } else {
+    success = storage_get_foreign_dup_key(child_table_name,
+                                          child_table_name_len,
+                                          child_key_name,
+                                          child_key_name_len);
+  }
+  DBUG_RETURN(success);
+}
+
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
 uint8 ha_mroonga::wrapper_table_cache_type()
 {

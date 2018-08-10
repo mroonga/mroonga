@@ -648,6 +648,10 @@ public:
   handler *clone(const char *name, MEM_ROOT *mem_root) mrn_override;
   void print_error(int error, myf flag) mrn_override;
   bool get_error_message(int error, String *buffer) mrn_override;
+  bool get_foreign_dup_key(char *child_table_name,
+                           uint child_table_name_len,
+                           char *child_key_name,
+                           uint child_key_name_len) mrn_override;
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
 #endif
@@ -1307,6 +1311,14 @@ private:
   void storage_print_error(int error, myf flag);
   bool wrapper_get_error_message(int error, String *buffer);
   bool storage_get_error_message(int error, String *buffer);
+  bool wrapper_get_foreign_dup_key(char *child_table_name,
+                                   uint child_table_name_len,
+                                   char *child_key_name,
+                                   uint child_key_name_len);
+  bool storage_get_foreign_dup_key(char *child_table_name,
+                                   uint child_table_name_len,
+                                   char *child_key_name,
+                                   uint child_key_name_len);
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
