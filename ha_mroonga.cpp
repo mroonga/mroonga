@@ -13104,6 +13104,7 @@ bool ha_mroonga::get_error_message(int error, String *buffer)
   DBUG_RETURN(errored);
 }
 
+#ifdef MRN_HANDLER_HAVE_GET_FOREIGN_DUP_KEY
 bool ha_mroonga::wrapper_get_foreign_dup_key(char *child_table_name,
                                              uint child_table_name_len,
                                              char *child_key_name,
@@ -13156,6 +13157,7 @@ bool ha_mroonga::get_foreign_dup_key(char *child_table_name,
   }
   DBUG_RETURN(success);
 }
+#endif
 
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
 longlong ha_mroonga::wrapper_get_memory_buffer_size() const

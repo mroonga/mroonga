@@ -379,6 +379,7 @@ typedef uint mrn_alter_table_flags;
 
 #if MYSQL_VERSION_ID >= 50631 && !defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
+#  define MRN_HANDLER_HAVE_GET_FOREIGN_DUP_KEY
 #endif
 
 #if defined(HAVE_PSI_INTERFACE) &&                      \
@@ -653,10 +654,12 @@ public:
   handler *clone(const char *name, MEM_ROOT *mem_root) mrn_override;
   void print_error(int error, myf flag) mrn_override;
   bool get_error_message(int error, String *buffer) mrn_override;
+#ifdef MRN_HANDLER_HAVE_GET_FOREIGN_DUP_KEY
   bool get_foreign_dup_key(char *child_table_name,
                            uint child_table_name_len,
                            char *child_key_name,
                            uint child_key_name_len) mrn_override;
+#endif
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
   double scan_time() mrn_override;
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
@@ -1323,6 +1326,7 @@ private:
   void storage_print_error(int error, myf flag);
   bool wrapper_get_error_message(int error, String *buffer);
   bool storage_get_error_message(int error, String *buffer);
+#ifdef MRN_HANDLER_HAVE_GET_FOREIGN_DUP_KEY
   bool wrapper_get_foreign_dup_key(char *child_table_name,
                                    uint child_table_name_len,
                                    char *child_key_name,
@@ -1331,6 +1335,7 @@ private:
                                    uint child_table_name_len,
                                    char *child_key_name,
                                    uint child_key_name_len);
+#endif
   void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   double wrapper_scan_time();
