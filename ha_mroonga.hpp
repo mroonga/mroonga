@@ -652,6 +652,7 @@ public:
                            uint child_table_name_len,
                            char *child_key_name,
                            uint child_key_name_len) mrn_override;
+  void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
 #endif
@@ -787,7 +788,6 @@ protected:
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_LAST
   int index_last(uchar *buf);
 #endif
-  void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   bool primary_key_is_clustered();
   bool is_fk_defined_on_table_or_index(uint index);
   char *get_foreign_key_create_info();
@@ -1319,6 +1319,8 @@ private:
                                    uint child_table_name_len,
                                    char *child_key_name,
                                    uint child_key_name_len);
+  void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
+  void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
@@ -1607,8 +1609,6 @@ private:
   bool wrapper_has_gap_locks() const;
   bool storage_has_gap_locks() const;
 #endif
-  void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
-  void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
   bool wrapper_primary_key_is_clustered();
   bool storage_primary_key_is_clustered();
   bool wrapper_is_fk_defined_on_table_or_index(uint index);
