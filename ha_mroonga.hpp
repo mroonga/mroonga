@@ -645,7 +645,7 @@ public:
 
   int reset();
 
-  handler *clone(const char *name, MEM_ROOT *mem_root);
+  handler *clone(const char *name, MEM_ROOT *mem_root) mrn_override;
   bool get_error_message(int error, String *buffer) mrn_override;
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
