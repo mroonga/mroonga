@@ -14150,7 +14150,12 @@ enum ha_key_alg ha_mroonga::get_default_index_algorithm() const
 bool ha_mroonga::wrapper_is_index_algorithm_supported(enum ha_key_alg algorithm) const
 {
   MRN_DBUG_ENTER_METHOD();
-  bool supported = wrap_handler_for_create->is_index_algorithm_supported(algorithm);
+  bool supported;
+  if (algorithm == HA_KEY_ALG_FULLTEXT) {
+    supported = true;
+  } else {
+    supported = wrap_handler_for_create->is_index_algorithm_supported(algorithm);
+  }
   DBUG_RETURN(supported);
 }
 
