@@ -13157,6 +13157,36 @@ bool ha_mroonga::get_foreign_dup_key(char *child_table_name,
   DBUG_RETURN(success);
 }
 
+longlong ha_mroonga::wrapper_get_memory_buffer_size() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  longlong size = wrap_handler->get_memory_buffer_size();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(size);
+}
+
+longlong ha_mroonga::storage_get_memory_buffer_size() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  longlong size = handler::get_memory_buffer_size();
+  DBUG_RETURN(size);
+}
+
+longlong ha_mroonga::get_memory_buffer_size() const
+{
+  MRN_DBUG_ENTER_METHOD();
+  longlong size;
+  if (share && share->wrapper_mode) {
+    size = wrapper_get_memory_buffer_size();
+  } else {
+    size = storage_get_memory_buffer_size();
+  }
+  DBUG_RETURN(size);
+}
+
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
 uint8 ha_mroonga::wrapper_table_cache_type()
 {

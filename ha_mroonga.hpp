@@ -655,6 +655,7 @@ public:
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
   double scan_time() mrn_override;
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
+  longlong get_memory_buffer_size() const mrn_override;
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
 #endif
@@ -1325,6 +1326,8 @@ private:
   double storage_scan_time();
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
   double storage_read_time(uint index, uint ranges, ha_rows rows);
+  longlong wrapper_get_memory_buffer_size() const;
+  longlong storage_get_memory_buffer_size() const;
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
