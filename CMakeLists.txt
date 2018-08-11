@@ -383,14 +383,11 @@ else()
     mrn_build_flag("-Wno-unused-parameter")
     mrn_build_flag("-Wno-strict-aliasing")
     mrn_build_flag("-Wno-deprecated")
-    mrn_check_cxxflag("-fno-implicit-templates")
-    if(("${MYSQL_VARIANT}" STREQUAL "MariaDB") OR
-        ("${MYSQL_VARIANT}" STREQUAL "MySQL" AND
-         ${MYSQL_VERSION} VERSION_LESS "5.7.0"))
-      mrn_check_cxxflag("-fno-exceptions")
+    mrn_check_cxxflag("-felide-constructors")
+    if("${MYSQL_VARIANT}" STREQUAL "MariaDB" AND
+        ${MYSQL_VERSION} VERSION_LESS "10.1.0")
       mrn_check_cxxflag("-fno-rtti")
     endif()
-    mrn_check_cxxflag("-felide-constructors")
   endif()
   set_source_files_properties(${MRN_SOURCES} PROPERTIES
     COMPILE_FLAGS "${MYSQL_CFLAGS} ${MRN_CXX_COMPILE_FLAGS}")

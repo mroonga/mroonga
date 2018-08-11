@@ -207,13 +207,13 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_MAJOR_MINOR_VERSION=["$(echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*[a-z]*\)[.0-9a-z-]*$/\1.\2/')"]
 
-  MYSQL_CXXFLAGS="-fno-implicit-templates -felide-constructors"
+  MYSQL_CXXFLAGS="-felide-constructors"
   case "$MYSQL_MAJOR_MINOR_VERSION" in
-  5.7|8.*)
-      :
+  5.5|10.0)
+      MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS -fno-rtti"
       ;;
   *)
-      MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS -fno-exceptions -fno-rtti"
+      :
       ;;
   esac
 
