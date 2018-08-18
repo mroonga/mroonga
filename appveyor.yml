@@ -1,3 +1,7 @@
+notifications:
+  - provider: Webhook
+    url: https://webhook.commit-email.info/
+
 version: "{build}"
 clone_depth: 10
 environment:
@@ -64,11 +68,5 @@ build_script:
       -DWITH_MARIABACKUP=OFF
       -DGRN_WITH_BUNDLED_MECAB=ON
   - cmake --build . --config Debug
-
-notifications:
-  - provider: Email
-    to:
-      - groonga-mysql-commit@lists.sourceforge.jp
-    on_build_status_changed: true
 
 test: off

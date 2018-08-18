@@ -1,7 +1,6 @@
 notifications:
-  email:
-    recipients:
-      - groonga-mysql-commit@lists.sourceforge.jp
+  webhooks:
+    - https://webhook.commit-email.info/
 dist: trusty
 language: cpp
 env:
