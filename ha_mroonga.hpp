@@ -1052,7 +1052,11 @@ private:
                               uchar *buf, uint *size);
   int storage_encode_key_set(Field *field, const uchar *key,
                              uchar *buf, uint *size);
-  int storage_encode_key(Field *field, const uchar *key, uchar *buf, uint *size);
+  int storage_encode_key(Field *field,
+                         const uchar *key,
+                         uchar *buf,
+                         uint *size,
+                         mrn_bool *is_null);
   int storage_encode_multiple_column_key(KEY *key_info,
                                          const uchar *key, uint key_length,
                                          uchar *buffer, uint *encoded_length);

@@ -1,0 +1,19 @@
+DROP TABLE IF EXISTS ids;
+CREATE TABLE ids (
+id int unsigned PRIMARY KEY AUTO_INCREMENT,
+value1 int,
+value2 int,
+INDEX (value2)
+) ENGINE=Mroonga;
+INSERT INTO ids (value1, value2) VALUES(1, 1);
+INSERT INTO ids (value1, value2) VALUES(0, 0);
+INSERT INTO ids (value1, value2) VALUES(0, 0);
+INSERT INTO ids (value1, value2) VALUES(0, 0);
+INSERT INTO ids (value1, value2) VALUES(0, 0);
+SELECT id, value1, value2 FROM ids WHERE value2 <> 1;
+id	value1	value2
+2	0	0
+3	0	0
+4	0	0
+5	0	0
+DROP TABLE ids;

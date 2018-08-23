@@ -8088,17 +8088,29 @@ ha_rows ha_mroonga::storage_records_in_range(uint key_nr, key_range *range_min,
     }
 
     if (range_min) {
-      key_min = key_min_entity;
-      storage_encode_key(field, range_min->key, key_min, &size_min);
-      if (size_min == 0) {
-        DBUG_RETURN(HA_POS_ERROR);
+      if (field->null_bit && !range_min->key[0]) {
+        mrn_bool is_null = false;
+        key_min = key_min_entity;
+        storage_encode_key(field, range_min->key, key_min, &size_min, &is_null);
+        if (is_null) {
+          key_min = NULL;
+        } else {
+          if (size_min == 0) {
+            DBUG_RETURN(HA_POS_ERROR);
+          }
+        }
       }
     }
     if (range_max) {
+      mrn_bool is_null = false;
       key_max = key_max_entity;
-      storage_encode_key(field, range_max->key, key_max, &size_max);
-      if (size_max == 0) {
-        DBUG_RETURN(HA_POS_ERROR);
+      storage_encode_key(field, range_max->key, key_max, &size_max, &is_null);
+      if (is_null) {
+        key_max = NULL;
+      } else {
+        if (size_max == 0) {
+          DBUG_RETURN(HA_POS_ERROR);
+        }
       }
     }
   }
@@ -8499,10 +8511,16 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       DBUG_RETURN(error);
 
     if (find_flag == HA_READ_KEY_EXACT) {
+      mrn_bool is_null = false;
       key_min = key_min_entity;
       key_max = key_min_entity;
-      storage_encode_key(field, key, key_min, &size_min);
-      size_max = size_min;
+      storage_encode_key(field, key, key_min, &size_min, &is_null);
+      if (is_null) {
+        key_min = NULL;
+        key_max = NULL;
+      } else {
+        size_max = size_min;
+      }
       // for _id
       if (FIELD_NAME_EQUAL(field, MRN_COLUMN_NAME_ID)) {
         grn_id found_record_id = *((grn_id *)key_min);
@@ -8518,11 +8536,19 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       }
     } else if (find_flag == HA_READ_BEFORE_KEY ||
                find_flag == HA_READ_PREFIX_LAST_OR_PREV) {
+      mrn_bool is_null = false;
       key_max = key_max_entity;
-      storage_encode_key(field, key, key_max_entity, &size_max);
+      storage_encode_key(field, key, key_max_entity, &size_max, &is_null);
+      if (is_null) {
+        key_max = NULL;
+      }
     } else {
+      mrn_bool is_null = false;
       key_min = key_min_entity;
-      storage_encode_key(field, key, key_min_entity, &size_min);
+      storage_encode_key(field, key, key_min_entity, &size_min, &is_null);
+      if (is_null) {
+        key_min = NULL;
+      }
     }
   }
 
@@ -8653,10 +8679,16 @@ int ha_mroonga::storage_index_read_last_map(uchar *buf, const uchar *key,
     if (error)
       DBUG_RETURN(error);
 
+    mrn_bool is_null = false;
     key_min = key_min_entity;
     key_max = key_min_entity;
-    storage_encode_key(field, key, key_min, &size_min);
-    size_max = size_min;
+    storage_encode_key(field, key, key_min, &size_min, &is_null);
+    if (is_null) {
+      key_min = NULL;
+      key_max = NULL;
+    } else {
+      size_max = size_min;
+    }
   }
 
   uint pkey_nr = table->s->primary_key;
@@ -12722,11 +12754,14 @@ int ha_mroonga::storage_encode_key_set(Field *field, const uchar *key,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
-                                   uchar *buf, uint *size)
+int ha_mroonga::storage_encode_key(Field *field,
+                                   const uchar *key,
+                                   uchar *buf,
+                                   uint *size,
+                                   mrn_bool *is_null)
 {
   MRN_DBUG_ENTER_METHOD();
-  int error;
+  int error = 0;
   bool truncated = false;
   const uchar *ptr = key;
 
@@ -12735,7 +12770,18 @@ int ha_mroonga::storage_encode_key(Field *field, const uchar *key,
     DBUG_RETURN(error);
 
   if (field->null_bit) {
+    if (is_null) {
+      *is_null = ptr[0];
+      if (*is_null) {
+        *size = 0;
+        DBUG_RETURN(error);
+      }
+    }
     ptr += 1;
+  } else {
+    if (is_null) {
+      *is_null = false;
+    }
   }
 
   switch (field->real_type()) {
