@@ -1,7 +1,7 @@
 REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = debian
 ARCHITECTURES = i386 amd64
-CODE_NAMES = jessie stretch
+CODE_NAMES = stretch
 MYSQL_VARIANTS =				\
 	5.5					\
 	mariadb-10.0				\
