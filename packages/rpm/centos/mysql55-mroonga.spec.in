@@ -158,6 +158,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Wed Aug 29 2018 Kentaro Hayashi <hayashi@clear-code.com> - 8.06-1
+- new upstream release.
+
 * Tue May 29 2018 Yasuhiro Horimoto <horimoto@clear-code.com> - 8.03-1
 - new upstream release.
 
