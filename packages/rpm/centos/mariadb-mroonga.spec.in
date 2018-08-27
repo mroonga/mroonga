@@ -1,8 +1,8 @@
 %define mariadb_epoch_default   1
-%define mariadb_version_default 5.5.56
-%define mariadb_release_default 2
-%define mariadb_dist_default    .el7
-%define mariadb_download_base_url_default http://vault.centos.org/7.5.1804/os/Source/SPackages/
+%define mariadb_version_default 5.5.60
+%define mariadb_release_default 1
+%define mariadb_dist_default    .el7_5
+%define mariadb_download_base_url_default http://vault.centos.org/7.5.1804/updates/Source/SPackages/
 %define mariadb_spec_file_default mariadb.spec
 
 %define _mariadb_epoch %{?mariadb_epoch:%{mariadb_epoch}}%{!?mariadb_epoch:%{mariadb_epoch_default}}
