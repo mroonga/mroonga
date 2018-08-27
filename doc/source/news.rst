@@ -5,6 +5,57 @@
 News
 ====
 
+.. _release-8-06:
+
+Release 8.06 - 2018-08-29
+-------------------------
+
+In this version, MySQL will be automatically restarted if you had
+already installed Mroonga and not installed Groonga 8.0.4 or later.
+Because Mroonga 8.06 requires Groonga 8.0.4 or later but it will not
+reloaded until MySQL is restarted.
+
+Improvements
+^^^^^^^^^^^^
+
+* Updated required Groonga version to 8.0.4. You need to restart MySQL
+  after you upgrade to Mroonga 8.06.
+
+* Updated required groonga-normalizer-mysql version to 1.1.3.
+
+* Supported utf8mb4_900 family collation.
+
+* Supported tokenizer options.
+
+  * e.g.: ``tokenizer "TokenNgram(\'loose_symbol\', true)"``
+
+  * ref: http://groonga.org/docs/news.html#release-8-0-2-2018-04-29
+
+* Use the Groonga's default logger.
+
+* [:doc:`/install/windows`] upgrade MariaDB to 10.3.9 from 10.1.33
+
+* [:doc:`/install/debian`] Droped Debian jessie support.
+
+* [:doc:`/install/ubuntu`] Droped Ubuntu 17.10 (artful) support.
+
+* [WIP] Working on supporting MySQL 8.
+
+  * The storage mode is almost done (JSON type doesn't work yet).
+
+  * The wrapper mode is in progress.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that wrong result may be returned on multi range read.
+  [GitHub#211][Reported by colt27]
+
+Thanks
+^^^^^^
+
+* colt27
+
 .. _release-8-03:
 
 Release 8.03 - 2018-05-29
