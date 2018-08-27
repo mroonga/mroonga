@@ -278,6 +278,9 @@ AC_SUBST(PACKAGE_GROONGA_VERSION)
 m4_define([mrn_package_mariadb_version], m4_include(package_mariadb_version))
 PACKAGE_MARIADB_VERSION=mrn_package_mariadb_version
 AC_SUBST(PACKAGE_MARIADB_VERSION)
+m4_define([mrn_package_groonga_normalizer_mysql_version], m4_include(package_groonga_normalizer_mysql_version))
+PACKAGE_GROONGA_NORMALIZER_MYSQL_VERSION=mrn_package_groonga_normalizer_mysql_version
+AC_SUBST(PACKAGE_GROONGA_NORMALIZER_MYSQL_VERSION)
 
 AC_ARG_WITH(debug,
     [dnl
