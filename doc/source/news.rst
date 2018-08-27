@@ -18,8 +18,7 @@ reloaded until MySQL is restarted.
 Improvements
 ^^^^^^^^^^^^
 
-* Updated required Groonga version to 8.0.4. You need to restart MySQL
-  after you upgrade to Mroonga 8.06.
+* Updated required Groonga version to 8.0.4.
 
 * Updated required groonga-normalizer-mysql version to 1.1.3.
 
@@ -33,7 +32,7 @@ Improvements
 
 * Use the Groonga's default logger.
 
-* [:doc:`/install/windows`] upgrade MariaDB to 10.3.9 from 10.1.33
+* [:doc:`/install/windows`] Updated bundled MariaDB to 10.3.9 from 10.1.33.
 
 * [:doc:`/install/debian`] Droped Debian jessie support.
 
