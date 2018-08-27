@@ -219,6 +219,8 @@ fi
 %defattr(-,root,root,-)
 %{_libdir}/mysql/plugin/
 %{_datadir}/mroonga/*
+%{_datadir}/man/man1/*
+%{_datadir}/man/*/man1/*
 
 %files doc
 %defattr(-,root,root,-)
