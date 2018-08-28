@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2018-08-28 15:28+0900\n"
+"PO-Revision-Date: 2018-08-28 16:35+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -38,14 +38,17 @@ msgstr ""
 msgid "Improvements"
 msgstr "改良"
 
-msgid "Updated required Groonga version to 8.0.4."
+msgid "Updated required Groonga version to 8.0.4 or later."
 msgstr "Groonga 8.0.4以降が必要になります。"
 
-msgid "Updated required groonga-normalizer-mysql version to 1.1.3."
+msgid "Updated required groonga-normalizer-mysql version to 1.1.3 or later."
 msgstr "groonga-normalizer-mysql 1.1.3以降が必要になります。"
 
 msgid "Supported utf8mb4_900 family collation."
 msgstr "utf8mb4_900族の照合順序をサポートしました。"
+
+msgid "ref: https://github.com/groonga/groonga-normalizer-mysql#description"
+msgstr ""
 
 msgid "Supported tokenizer options."
 msgstr "トークナイザーのオプションをサポートしました。"
@@ -66,10 +69,10 @@ msgstr ""
 "デートしました。"
 
 # cfc3f03dda4244eb9b5d075677d18c88
-msgid "[:doc:`/install/debian`] Droped Debian jessie support."
+msgid "[:doc:`/install/debian`] Droped Debian 8 (jessie) support."
 msgstr "[:doc:`/install/debian`] Debian 8 (jessie) のサポートをやめました。"
 
-msgid "[:doc:`/install/ubuntu`] Droped Ubuntu 17.10 (artful) support."
+msgid "[:doc:`/install/ubuntu`] Droped Ubuntu 17.10 (Artful Aardvark) support."
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 17.10 (Artful Aardvark) のサポートをやめまし"
 "た。"

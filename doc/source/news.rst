@@ -18,11 +18,13 @@ reloaded until MySQL is restarted.
 Improvements
 ^^^^^^^^^^^^
 
-* Updated required Groonga version to 8.0.4.
+* Updated required Groonga version to 8.0.4 or later.
 
-* Updated required groonga-normalizer-mysql version to 1.1.3.
+* Updated required groonga-normalizer-mysql version to 1.1.3 or later.
 
 * Supported utf8mb4_900 family collation.
+
+  * ref: https://github.com/groonga/groonga-normalizer-mysql#description
 
 * Supported tokenizer options.
 
@@ -34,9 +36,9 @@ Improvements
 
 * [:doc:`/install/windows`] Updated bundled MariaDB to 10.3.9 from 10.1.33.
 
-* [:doc:`/install/debian`] Droped Debian jessie support.
+* [:doc:`/install/debian`] Droped Debian 8 (jessie) support.
 
-* [:doc:`/install/ubuntu`] Droped Ubuntu 17.10 (artful) support.
+* [:doc:`/install/ubuntu`] Droped Ubuntu 17.10 (Artful Aardvark) support.
 
 * [WIP] Working on supporting MySQL 8.
 
