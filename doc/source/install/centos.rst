@@ -8,29 +8,6 @@ CentOS. You can install them by ``yum``.
 
 .. include:: 32bit-note.inc
 
-.. _centos-6-official:
-
-CentOS 6 (with the official MySQL package)
-------------------------------------------
-
-You can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6
-since Mroonga 4.01 release.
-
-Install::
-
-  % sudo yum install -y centos-release-scl
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y mysql55-mysql-server
-  % sudo /sbin/service mysql55-mysqld start
-  % sudo yum install -y --enablerepo=epel mysql55-mroonga
-  (% sudo scl enable mysql55 "mysqladmin -u root password 'new-password'")
-
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
-
-Install groonga-tokenizer-mecab package::
-
-  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
-
 .. _centos-6-oracle-56:
 
 CentOS 6 (with the Oracle MySQL 5.6 package)
