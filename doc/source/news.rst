@@ -22,7 +22,7 @@ Improvements
 
 * Updated required groonga-normalizer-mysql version to 1.1.3 or later.
 
-* Supported utf8mb4_900 family collation.
+* Supported utf8mb4_0900 family collation.
 
   * ref: https://github.com/groonga/groonga-normalizer-mysql#description
 
