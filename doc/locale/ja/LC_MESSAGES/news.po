@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2018-05-28 18:55+0900\n"
+"PO-Revision-Date: 2018-08-28 15:01+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -16,86 +16,82 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.1.1\n"
 
 msgid "News"
 msgstr "お知らせ"
 
-#, fuzzy
 msgid "Release 8.06 - 2018-08-29"
-msgstr "8.03リリース - 2018-05-29"
+msgstr "8.06リリース - 2018-08-29"
 
-#, fuzzy
 msgid ""
 "In this version, MySQL will be automatically restarted if you had already "
 "installed Mroonga and not installed Groonga 8.0.4 or later. Because Mroonga "
 "8.06 requires Groonga 8.0.4 or later but it will not reloaded until MySQL is "
 "restarted."
 msgstr ""
-"今回のリリースで、Mroongaをすでにインストールしている場合にはMySQLが自動的に"
-"再起動されます。これはMroongaが必要としている新しいバージョンのGroonga 8.0.1"
-"が、MySQLが再起動されるまで有効にならないためです。"
+"今回のリリースでは、Mroongaをすでにインストールしていて、かつGroonga 8.0.4以"
+"降をインストールしていない場合、MySQLが自動的に再起動されます。Mroonga 8.06が"
+"必要としているGroonga 8.0.4以降が、MySQLが再起動されるまで有効にならないため"
+"です。"
 
 msgid "Improvements"
 msgstr "改良"
 
 msgid "Updated required Groonga version to 8.0.4."
-msgstr ""
+msgstr "Groonga 8.0.4以降が必要になります。"
 
 msgid "Updated required groonga-normalizer-mysql version to 1.1.3."
-msgstr ""
+msgstr "groonga-normalizer-mysql 1.1.3以降が必要になります。"
 
 msgid "Supported utf8mb4_900 family collation."
-msgstr ""
+msgstr "utf8mb4_900族の照合順序をサポートしました。"
 
 msgid "Supported tokenizer options."
-msgstr ""
+msgstr "トークナイザーのオプションをサポートしました。"
 
 msgid "e.g.: ``tokenizer \"TokenNgram(\\'loose_symbol\\', true)\"``"
-msgstr ""
+msgstr "例: ``tokenizer \"TokenNgram(\\'loose_symbol\\', true)\"``"
 
 msgid "ref: http://groonga.org/docs/news.html#release-8-0-2-2018-04-29"
-msgstr ""
+msgstr "参考: http://groonga.org/docs/news.html#release-8-0-2-2018-04-29"
 
 msgid "Use the Groonga's default logger."
-msgstr ""
+msgstr "Groongaのデフォルトのロガーを使うようにしました。"
 
-#, fuzzy
 msgid ""
 "[:doc:`/install/windows`] Updated bundled MariaDB to 10.3.9 from 10.1.33."
 msgstr ""
-"[:doc:`/install/windows`] ベースにしているMariaDBを10.1.13にアップデートしま"
-"した。"
+"[:doc:`/install/windows`] ベースにしているMariaDBを10.1.33から10.3.9にアップ"
+"デートしました。"
 
 # cfc3f03dda4244eb9b5d075677d18c88
-#, fuzzy
 msgid "[:doc:`/install/debian`] Droped Debian jessie support."
-msgstr "[:doc:`/install/debian`] Debian 9 (stretch)をサポートしました。"
+msgstr "[:doc:`/install/debian`] Debian 8 (jessie) のサポートをやめました。"
 
-#, fuzzy
 msgid "[:doc:`/install/ubuntu`] Droped Ubuntu 17.10 (artful) support."
 msgstr ""
-"[:doc:`/install/ubuntu`] Ubuntu 17.10 (Artful Aardvark)をサポートしました。"
+"[:doc:`/install/ubuntu`] Ubuntu 17.10 (Artful Aardvark) のサポートをやめまし"
+"た。"
 
 msgid "[WIP] Working on supporting MySQL 8."
-msgstr ""
+msgstr "[WIP] MySQL 8に対応中です。"
 
 msgid "The storage mode is almost done (JSON type doesn't work yet)."
-msgstr ""
+msgstr "ストレージモードはほぼ完了しています。（JSON型はまだ動きません）"
 
 msgid "The wrapper mode is in progress."
-msgstr ""
+msgstr "ラッパーモードは対応中です。"
 
 msgid "Fixes"
 msgstr "修正"
 
-#, fuzzy
 msgid ""
 "[storage] Fixed a bug that wrong result may be returned on multi range read. "
 "[GitHub#211][Reported by colt27]"
 msgstr ""
-"[ストレージモード] マルチカラムインデックスを使って検索したときに見つかったの"
-"に結果が返されない問題を修正した。 [#1300] [@ytaka5さんが報告]"
+"[ストレージモード] マルチレンジリードで誤った結果が返される場合がある問題を修"
+"正。[GitHub#211][colt27さんが報告]"
 
 msgid "Thanks"
 msgstr "感謝"
