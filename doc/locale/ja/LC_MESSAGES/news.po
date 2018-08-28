@@ -21,11 +21,90 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 8.03 - 2018-05-29"
+#, fuzzy
+msgid "Release 8.06 - 2018-08-29"
 msgstr "8.03リリース - 2018-05-29"
+
+#, fuzzy
+msgid ""
+"In this version, MySQL will be automatically restarted if you had already "
+"installed Mroonga and not installed Groonga 8.0.4 or later. Because Mroonga "
+"8.06 requires Groonga 8.0.4 or later but it will not reloaded until MySQL is "
+"restarted."
+msgstr ""
+"今回のリリースで、Mroongaをすでにインストールしている場合にはMySQLが自動的に"
+"再起動されます。これはMroongaが必要としている新しいバージョンのGroonga 8.0.1"
+"が、MySQLが再起動されるまで有効にならないためです。"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Updated required Groonga version to 8.0.4."
+msgstr ""
+
+msgid "Updated required groonga-normalizer-mysql version to 1.1.3."
+msgstr ""
+
+msgid "Supported utf8mb4_900 family collation."
+msgstr ""
+
+msgid "Supported tokenizer options."
+msgstr ""
+
+msgid "e.g.: ``tokenizer \"TokenNgram(\\'loose_symbol\\', true)\"``"
+msgstr ""
+
+msgid "ref: http://groonga.org/docs/news.html#release-8-0-2-2018-04-29"
+msgstr ""
+
+msgid "Use the Groonga's default logger."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"[:doc:`/install/windows`] Updated bundled MariaDB to 10.3.9 from 10.1.33."
+msgstr ""
+"[:doc:`/install/windows`] ベースにしているMariaDBを10.1.13にアップデートしま"
+"した。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+#, fuzzy
+msgid "[:doc:`/install/debian`] Droped Debian jessie support."
+msgstr "[:doc:`/install/debian`] Debian 9 (stretch)をサポートしました。"
+
+#, fuzzy
+msgid "[:doc:`/install/ubuntu`] Droped Ubuntu 17.10 (artful) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 17.10 (Artful Aardvark)をサポートしました。"
+
+msgid "[WIP] Working on supporting MySQL 8."
+msgstr ""
+
+msgid "The storage mode is almost done (JSON type doesn't work yet)."
+msgstr ""
+
+msgid "The wrapper mode is in progress."
+msgstr ""
+
+msgid "Fixes"
+msgstr "修正"
+
+#, fuzzy
+msgid ""
+"[storage] Fixed a bug that wrong result may be returned on multi range read. "
+"[GitHub#211][Reported by colt27]"
+msgstr ""
+"[ストレージモード] マルチカラムインデックスを使って検索したときに見つかったの"
+"に結果が返されない問題を修正した。 [#1300] [@ytaka5さんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "colt27"
+msgstr "colt27さん"
+
+msgid "Release 8.03 - 2018-05-29"
+msgstr "8.03リリース - 2018-05-29"
 
 msgid "[:doc:`/install/docker`] Added quick start guide link to Docker Hub."
 msgstr ""
@@ -47,9 +126,6 @@ msgstr ""
 "[:doc:`/install/centos`] MariaDB 10.1.33 をサポートしました（8.02にバックポー"
 "ト済み）。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[:doc:`/install/ubuntu`] Fixed install failure on Ubntu 14.04 LTS (Trusty) "
 "(backported to 8.02). [GitHub#202,#205][Reported by Masato Hirai]"
@@ -57,9 +133,6 @@ msgstr ""
 "[:doc:`/install/ubuntu`] Ubntu 14.04 LTS（Trusty）でインストールに失敗してい"
 "た問題を修正しました（8.02にバックポート済み）。[GitHub#202,#205][Masato "
 "Hiraiさんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Masato Hirai"
 msgstr "Masato Hiraiさん"
@@ -136,9 +209,6 @@ msgstr "木下崇さん"
 # 0683aa1c35d44a35b1b31601d00fbd9a
 msgid "Satoshi Mitani"
 msgstr "三谷さん"
-
-msgid "colt27"
-msgstr "colt27さん"
 
 msgid "Release 8.01 - 2018-03-29"
 msgstr "8.01リリース - 2018-03-29"
