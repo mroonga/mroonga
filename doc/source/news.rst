@@ -36,9 +36,9 @@ Improvements
 
 * [:doc:`/install/windows`] Updated bundled MariaDB to 10.3.9 from 10.1.33.
 
-* [:doc:`/install/debian`] Droped Debian 8 (jessie) support.
+* [:doc:`/install/debian`] Dropped Debian 8 (jessie) support.
 
-* [:doc:`/install/ubuntu`] Droped Ubuntu 17.10 (Artful Aardvark) support.
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 17.10 (Artful Aardvark) support.
 
 * [WIP] Working on supporting MySQL 8.
 
