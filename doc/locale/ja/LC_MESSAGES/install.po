@@ -53,16 +53,15 @@ msgstr ""
 "このセクションではCentOS上でMroonga関連のRPMパッケージをインストールする方法"
 "を説明します。これらのパッケージは ``yum`` でインストールできます。"
 
-# a1c5d8141c7a403cae54ee0193deddca
-msgid "CentOS 6 (with the official MySQL package)"
-msgstr "CentOS 6（公式のMySQLパッケージを利用）"
+# 5e3232071ae84bdfbce77f4bee3e0ae4
+msgid "CentOS 6 (with the Oracle MySQL 5.6 package)"
+msgstr "CentOS 6（OracleのMySQL 5.6パッケージを利用）"
 
 msgid ""
-"You can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6 since "
-"Mroonga 4.01 release."
+"You can use Oracle's MySQL packages version 5.6 on CentOS 6 since Mroonga "
+"4.04 release."
 msgstr ""
-"CentOS 6では、Mroonga 4.01からCentOSのSCLを使ったMySQLパッケージ（MySQL 5.5"
-"系）を利用できます。"
+"CentOS 6では、Mroonga 4.04からOracleのMySQL 5.6パッケージを利用できます。"
 
 msgid "Install::"
 msgstr "インストール::"
@@ -76,16 +75,6 @@ msgstr ""
 
 msgid "Install groonga-tokenizer-mecab package::"
 msgstr "groonga-tokenizer-mecabをインストール::"
-
-# 5e3232071ae84bdfbce77f4bee3e0ae4
-msgid "CentOS 6 (with the Oracle MySQL 5.6 package)"
-msgstr "CentOS 6（OracleのMySQL 5.6パッケージを利用）"
-
-msgid ""
-"You can use Oracle's MySQL packages version 5.6 on CentOS 6 since Mroonga "
-"4.04 release."
-msgstr ""
-"CentOS 6では、Mroonga 4.04からOracleのMySQL 5.6パッケージを利用できます。"
 
 # 5e3232071ae84bdfbce77f4bee3e0ae4
 msgid "CentOS 6 (with the Oracle MySQL 5.7 package)"
@@ -856,8 +845,19 @@ msgstr ""
 "${MARIADB_BUILD_DIR}\\storage\\mroonga\\data\\install.sql`` にあるSQLを使って"
 "Mroongaを登録してください。"
 
+#~ msgid "jessie (MySQL)"
+#~ msgstr "jessie（MySQL）"
+
 #~ msgid "jessie (MariaDB)"
 #~ msgstr "jessie（MariaDB）"
 
-#~ msgid "jessie (MySQL)"
-#~ msgstr "jessie（MySQL）"
+#~ msgid ""
+#~ "You can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6 since "
+#~ "Mroonga 4.01 release."
+#~ msgstr ""
+#~ "CentOS 6では、Mroonga 4.01からCentOSのSCLを使ったMySQLパッケージ（MySQL "
+#~ "5.5系）を利用できます。"
+
+# a1c5d8141c7a403cae54ee0193deddca
+#~ msgid "CentOS 6 (with the official MySQL package)"
+#~ msgstr "CentOS 6（公式のMySQLパッケージを利用）"
