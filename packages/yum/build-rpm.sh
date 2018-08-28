@@ -86,7 +86,7 @@ case ${distribution} in
 	USE_MYSQLSERVICES_COMPAT=yes
         run yum install -y scl-utils-build
         if [ ${distribution_version} = 6 ]; then
-	  run yum install -y centos-release-scl
+	  run yum install -y centos-release-scl-rh
         fi
         run yum install -y mysql55-mysql-devel mysql55-build
 	;;
