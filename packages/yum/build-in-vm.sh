@@ -30,9 +30,6 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
 
   architectures="${ARCHITECTURES}"
   case ${mysql_variant} in
-    mysql55)
-      centos_versions="6"
-      ;;
     mysql56-community)
       centos_versions="6 7"
       ;;
@@ -68,9 +65,6 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
         fi
       done
       if [ $skip -eq 1 ]; then
-        continue
-      fi
-      if [ ${mysql_variant} = mysql55 -a ${centos_version} = 6 -a ${architecture} = i386 ]; then
         continue
       fi
       if [ ${centos_version} = 7 -a ${architecture} = i386 ]; then

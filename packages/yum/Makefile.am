@@ -2,7 +2,6 @@ REPOSITORIES_PATH = repositories
 DISTRIBUTIONS = centos
 ARCHITECTURES = i386 x86_64
 MYSQL_VARIANTS =				\
-	mysql55					\
 	mysql56-community			\
 	mysql57-community			\
 	mariadb					\

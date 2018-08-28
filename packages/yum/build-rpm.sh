@@ -82,14 +82,6 @@ case ${distribution} in
     run yum makecache
 
     case ${package_name} in
-      mysql55-${PACKAGE})
-	USE_MYSQLSERVICES_COMPAT=yes
-        run yum install -y scl-utils-build
-        if [ ${distribution_version} = 6 ]; then
-	  run yum install -y centos-release-scl-rh
-        fi
-        run yum install -y mysql55-mysql-devel mysql55-build
-	;;
       mysql5?-community-${PACKAGE})
         release_rpm=mysql-community-release-el${distribution_version}-7.noarch.rpm
         run yum -y install http://repo.mysql.com/${release_rpm}
