@@ -844,20 +844,3 @@ msgstr ""
 "MariaDBをビルドしたらMroongaを登録する必要があります。 ``"
 "${MARIADB_BUILD_DIR}\\storage\\mroonga\\data\\install.sql`` にあるSQLを使って"
 "Mroongaを登録してください。"
-
-#~ msgid "jessie (MySQL)"
-#~ msgstr "jessie（MySQL）"
-
-#~ msgid "jessie (MariaDB)"
-#~ msgstr "jessie（MariaDB）"
-
-#~ msgid ""
-#~ "You can use CentOS's SCL MySQL packages (version 5.5.x) on CentOS 6 since "
-#~ "Mroonga 4.01 release."
-#~ msgstr ""
-#~ "CentOS 6では、Mroonga 4.01からCentOSのSCLを使ったMySQLパッケージ（MySQL "
-#~ "5.5系）を利用できます。"
-
-# a1c5d8141c7a403cae54ee0193deddca
-#~ msgid "CentOS 6 (with the official MySQL package)"
-#~ msgstr "CentOS 6（公式のMySQLパッケージを利用）"
