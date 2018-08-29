@@ -36,6 +36,8 @@ Improvements
 
 * [:doc:`/install/windows`] Updated bundled MariaDB to 10.3.9 from 10.1.33.
 
+  * NOTICE: Before upgrading to MariaDB 10.3, you need to dump existing MariaDB 10.1 databases. Then restore it after upgrading.
+
 * [:doc:`/install/debian`] Dropped Debian 8 (jessie) support.
 
 * [:doc:`/install/ubuntu`] Dropped Ubuntu 17.10 (Artful Aardvark) support.
