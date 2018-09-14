@@ -10283,7 +10283,11 @@ void ha_mroonga::set_tokenizer(grn_obj *lexicon, const char *name)
 {
   MRN_DBUG_ENTER_METHOD();
 
+  /* Deprecated */
   if (strcasecmp("off", name) == 0) {
+    DBUG_VOID_RETURN;
+  }
+  if (strcasecmp("none", name) == 0) {
     DBUG_VOID_RETURN;
   }
 
