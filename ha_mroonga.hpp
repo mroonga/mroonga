@@ -233,7 +233,8 @@ extern "C" {
 #  define MRN_HAVE_HTON_ALTER_TABLE_FLAGS
 #endif
 
-#if MYSQL_VERSION_ID >= 100203 && defined(MRN_MARIADB_P)
+#if ((MYSQL_VERSION_ID >= 100203 && defined(MRN_MARIADB_P)) ||	\
+  (MYSQL_VERSION_ID >= 100136 && defined(MRN_MARIADB_P)))
 #  define MRN_FOREIGN_KEY_USE_METHOD_ENUM
 #endif
 
