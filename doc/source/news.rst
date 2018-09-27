@@ -5,6 +5,21 @@
 News
 ====
 
+.. _release-8-07:
+
+Release 8.07 - 2018-09-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Deprecated tokenizer ``off`` option. Use tokenizer ``none`` option instead.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/centos`] Supported MariaDB 10.1.36.
+
 .. _release-8-06:
 
 Release 8.06 - 2018-08-29
