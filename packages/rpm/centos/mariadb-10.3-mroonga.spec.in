@@ -18,7 +18,7 @@
 
 Name:		mariadb-10.3-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
