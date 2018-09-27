@@ -124,7 +124,7 @@ You can specify one of the following values as the tokenizer. "tokenizer" in Mro
      - Description
 
    * - ``off``
-     - It does not tokenize at all. Use ``off`` if you want to treat
+     - (``Deprecated``) It does not tokenize at all. Use ``off`` if you want to treat
        ``content`` as is. For example, this value is used for prefix
        search.
 
