@@ -128,6 +128,11 @@ You can specify one of the following values as the tokenizer. "tokenizer" in Mro
        ``content`` as is. For example, this value is used for prefix
        search.
 
+   * - ``none``
+     - .. versionadded:: 8.07 It does not tokenize at all. Use
+       ``none`` if you want to treat ``content`` as is. For example,
+       this value is used for prefix search.
+
    * - ``TokenBigram``
      - It tokenises in bigram. But continuous alphabets, numbers or
        symbols are treated as a token. So there can exist tokes with 3
