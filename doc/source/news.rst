@@ -14,6 +14,7 @@ Improvements
 ^^^^^^^^^^^^
 
 * Deprecated tokenizer ``off`` option. Use tokenizer ``none`` option instead.
+* Dropped support for MariaDB 10.2.2 which is shipped at Sep 27, 2016 and older series.
 
 Fixes
 ^^^^^
