@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2018-08-29 14:17+0900\n"
+"PO-Revision-Date: 2018-09-27 12:32+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,6 +20,24 @@ msgstr ""
 
 msgid "News"
 msgstr "お知らせ"
+
+msgid "Release 8.07 - 2018-09-29"
+msgstr "8.07リリース - 2018-09-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid ""
+"Deprecated tokenizer ``off`` option. Use tokenizer ``none`` option instead."
+msgstr ""
+"トークナイザーの ``off`` オプションは非推奨になりました。かわりに ``none`` オ"
+"プションを使ってください。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "[:doc:`/install/centos`] Supported MariaDB 10.1.36."
+msgstr "[:doc:`/install/centos`] MariaDB 10.1.36をサポートしました。"
 
 msgid "Release 8.06 - 2018-08-29"
 msgstr "8.06リリース - 2018-08-29"
@@ -34,9 +52,6 @@ msgstr ""
 "降をインストールしていない場合、MySQLが自動的に再起動されます。Mroonga 8.06が"
 "必要としているGroonga 8.0.4以降が、MySQLが再起動されるまで有効にならないため"
 "です。"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid "Updated required Groonga version to 8.0.4 or later."
 msgstr "Groonga 8.0.4以降が必要になります。"
@@ -94,9 +109,6 @@ msgstr "ストレージモードはほぼ完了しています。（JSON型は�
 
 msgid "The wrapper mode is in progress."
 msgstr "ラッパーモードは対応中です。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[storage] Fixed a bug that wrong result may be returned on multi range read. "

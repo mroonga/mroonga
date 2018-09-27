@@ -129,9 +129,7 @@ You can specify one of the following values as the tokenizer. "tokenizer" in Mro
        search.
 
    * - ``none``
-     - .. versionadded:: 8.07 It does not tokenize at all. Use
-       ``none`` if you want to treat ``content`` as is. For example,
-       this value is used for prefix search.
+     - .. versionadded:: 8.07 It does not tokenize at all. Use ``none`` if you want to treat ``content`` as is. For example, this value is used for prefix search.
 
    * - ``TokenBigram``
      - It tokenises in bigram. But continuous alphabets, numbers or
