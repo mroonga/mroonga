@@ -1144,4 +1144,3 @@ msgid ""
 msgstr ""
 "これでラッパーモードでMroongaを使えるようになりました！Mroongaをもっと速くし"
 "たい場合は :doc:`/reference/optimizations` も参照してください。"
-
