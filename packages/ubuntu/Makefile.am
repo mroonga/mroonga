@@ -1,4 +1,4 @@
-CODE_NAMES = trusty,xenial,bionic
+CODE_NAMES = trusty,xenial,bionic,cosmic
 SOURCE = ../$(PACKAGE)-$(VERSION).tar.gz
 SOURCE_55_BASE = $(PACKAGE)-5.5
 SOURCE_55 = $(SOURCE_55_BASE)_$(VERSION).orig.tar.gz
