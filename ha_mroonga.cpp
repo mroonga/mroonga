@@ -4004,13 +4004,12 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       bool is_same_field_name = false;
       MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(key_spec->columns, key_part_spec) {
         const mrn_key_part_spec_field_name *field_name =
-          &(key_part_spec->field_name);
-        DBUG_PRINT("info", ("mroonga: field_name=%.*s",
-                            static_cast<int>(field_name->length),
-                            field_name->str));
+          MRN_KEY_PART_SPEC_FIELD_NAME(key_part_spec);
+        DBUG_PRINT("info", ("mroonga: field_name=" MRN_KEY_PART_SPEC_FIELD_NAME_FORMAT,
+                            MRN_KEY_PART_SPEC_FIELD_NAME_VALUE(field_name)));
         DBUG_PRINT("info", ("mroonga: field->field_name=" FIELD_NAME_FORMAT,
                             FIELD_NAME_FORMAT_VALUE(field)));
-        is_same_field_name = FIELD_NAME_EQUAL_STRING(field, field_name);
+        is_same_field_name = MRN_FIELD_NAME_EQUAL_KEY_PART_SPEC_FIELD_NAME(field, field_name);
       } MRN_KEY_PART_SPEC_LIST_EACH_END();
       if (!is_same_field_name) {
         continue;
@@ -4020,11 +4019,9 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
       static_cast<const mrn_foreign_key_spec *>(key_spec);
     MRN_KEY_PART_SPEC_LIST_EACH_BEGIN(fk->ref_columns, key_part_ref_spec) {
       const mrn_key_part_spec_field_name *ref_field_name =
-        &(key_part_ref_spec->field_name);
-      DBUG_PRINT("info", ("mroonga: ref_field_name=%.*s",
-                          static_cast<int>(ref_field_name->length),
-                          ref_field_name->str));
-
+        MRN_KEY_PART_SPEC_FIELD_NAME(key_part_ref_spec);
+      DBUG_PRINT("info", ("mroonga: ref_field_name=" MRN_KEY_PART_SPEC_FIELD_NAME_FORMAT,
+                          MRN_KEY_PART_SPEC_FIELD_NAME_VALUE(ref_field_name)));
       {
         const mrn_foreign_key_name *ref_db_name = &(fk->ref_db);
         DBUG_PRINT("info", ("mroonga: ref_db_name=%.*s",
@@ -4145,7 +4142,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
         DBUG_RETURN(false);
       }
       Field *ref_field = &ref_key_info->key_part->field[0];
-      if (!FIELD_NAME_EQUAL_STRING(ref_field, ref_field_name)) {
+      if (!MRN_FIELD_NAME_EQUAL_KEY_PART_SPEC_FIELD_NAME(ref_field, ref_field_name)) {
         mrn_open_mutex_lock(table->s);
         mrn_free_tmp_table_share(tmp_ref_table_share);
         mrn_open_mutex_unlock(table->s);
@@ -4156,7 +4153,11 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
                 "reference column [%s.%s.%s] is not used for primary key",
                 table->s->db.str,
                 normalized_ref_table_name,
+#ifdef MRN_KEY_PART_SPEC_FIELD_NAME_USE_ACCESSSOR_FUNCTION
+                ref_field_name);
+#else
                 ref_field_name->str);
+#endif
         my_message(error, err_msg, MYF(0));
         DBUG_RETURN(false);
       }
