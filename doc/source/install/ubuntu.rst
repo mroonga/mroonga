@@ -18,13 +18,12 @@ Here are supported Ubuntu versions:
 
   * 14.04 LTS Trusty Tahr
   * 16.04 LTS Xenial Xerus
-  * 17.10 Artful Aardvark
   * 18.04 Bionic Beaver
+  * 18.10 Cosmic Cuttlefish
 
 Here are Ubuntu versions that supports MariaDB:
 
   * 16.04 LTS Xenial Xerus
-  * 17.10 Artful Aardvark
   * 18.04 Bionic Beaver
 
 Enable the universe repository and the security update repository to
