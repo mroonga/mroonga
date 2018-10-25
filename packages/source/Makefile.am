@@ -81,8 +81,6 @@ tmp/$(MARIADB_WITH_MROONGA_BASE).stamp: $(MARIADB_WITH_MROONGA_ARCHIVES)
 	rm -rf $(MARIADB_BASE)
 	tar xf tmp/$(MARIADB_TAR_GZ)
 
-# Rename workaround for MariaDB 10.3.9
-	mv $(MARIADB_BASE)/sql/sql_yacc_orac.cc $(MARIADB_BASE)/sql/sql_yacc_ora.cc
 	rm -fr $(MARIADB_BASE)/storage/mroonga
 	tar xf $(top_builddir)/$(MROONGA_TAR_GZ)
 	mv $(MROONGA_BASE) $(BUNDLED_MROONGA_PATH)
