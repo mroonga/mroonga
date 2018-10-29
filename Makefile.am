@@ -75,6 +75,7 @@ update-latest-release: ensure-cutter-source-path
 	  packages/rpm/centos/mariadb-mroonga.spec.in	\
 	  packages/rpm/centos/mariadb-10.1-mroonga.spec.in	\
 	  packages/rpm/centos/mariadb-10.2-mroonga.spec.in	\
+	  packages/rpm/centos/mariadb-10.3-mroonga.spec.in	\
 	  packages/rpm/centos/mysql56-community-mroonga.spec.in	\
 	  packages/rpm/centos/mysql57-community-mroonga.spec.in	\
 	  packages/rpm/centos/percona-server-56-mroonga.spec.in	\
