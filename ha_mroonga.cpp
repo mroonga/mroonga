@@ -4450,9 +4450,9 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
                                    grn_table);
 
   if (ctx->rc) {
-    grn_obj_remove(ctx, index_table);
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
+    grn_obj_remove(ctx, index_table);
     DBUG_RETURN(error);
   }
 
