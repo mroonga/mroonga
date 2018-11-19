@@ -171,12 +171,16 @@
      (key_part_spec)
 #  define MRN_FIELD_NAME_EQUAL_KEY_PART_SPEC_FIELD_NAME(field, name)	\
      (strcmp((field)->field_name, name) == 0)
+#  define MRN_KEY_PART_SPEC_FIELD_NAME_CSTR(key_part_spec)		\
+     (key_part_spec)
 #else
 #  define MRN_KEY_PART_SPEC_FIELD_NAME(key_part_spec)			\
      &(key_part_spec)->field_name
 #  define MRN_KEY_PART_SPEC_FIELD_NAME_FORMAT "%.*s"
 #  define MRN_KEY_PART_SPEC_FIELD_NAME_VALUE(key_part_spec)		\
      static_cast<int>((key_part_spec)->length), (key_part_spec)->str
+#  define MRN_KEY_PART_SPEC_FIELD_NAME_CSTR(key_part_spec)		\
+     (key_part_spec)->str)
 #  ifdef MRN_FIELD_FIELD_NAME_IS_LEX_STRING
 #    define MRN_FIELD_NAME_EQUAL_KEY_PART_SPEC_FIELD_NAME(field, string)	\
        FIELD_NAME_EQUAL_STRING(field, string)

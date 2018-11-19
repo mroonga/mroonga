@@ -4153,11 +4153,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
                 "reference column [%s.%s.%s] is not used for primary key",
                 table->s->db.str,
                 normalized_ref_table_name,
-#ifdef MRN_KEY_PART_SPEC_FIELD_NAME_USE_ACCESSSOR_FUNCTION
-                ref_field_name);
-#else
-                ref_field_name->str);
-#endif
+                MRN_KEY_PART_SPEC_FIELD_NAME_CSTR(ref_field_name));
         my_message(error, err_msg, MYF(0));
         DBUG_RETURN(false);
       }
