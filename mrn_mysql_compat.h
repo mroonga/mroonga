@@ -167,7 +167,7 @@
 #  define MRN_KEY_PART_SPEC_FIELD_NAME(key_part_spec)			\
      (key_part_spec)->get_field_name()
 #  define MRN_KEY_PART_SPEC_FIELD_NAME_FORMAT "%s"
-#  define MRN_KEY_PART_SPEC_FIELD_NAME_VALUE(key_pat_spec)		\
+#  define MRN_KEY_PART_SPEC_FIELD_NAME_VALUE(key_part_spec)		\
      (key_part_spec)
 #  define MRN_FIELD_NAME_EQUAL_KEY_PART_SPEC_FIELD_NAME(field, name)	\
      (strcmp((field)->field_name, name) == 0)
