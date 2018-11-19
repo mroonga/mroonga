@@ -234,7 +234,8 @@ extern "C" {
 #endif
 
 /* Note that MariaDB 10.2.2 and older MariaDB 10.2 series are not supported since 8.07 */
-#if MYSQL_VERSION_ID >= 100136 && defined(MRN_MARIADB_P)
+#if (MYSQL_VERSION_ID >= 100136 && defined(MRN_MARIADB_P)) || \
+  (MYSQL_VERSION_ID >= 100037 && MYSQL_VERSION_ID < 100100 && defined(MRN_MARIADB_P))
 #  define MRN_FOREIGN_KEY_USE_METHOD_ENUM
 #endif
 
