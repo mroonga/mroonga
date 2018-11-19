@@ -183,7 +183,7 @@
 #  else
 #    define MRN_FIELD_NAME_EQUAL_KEY_PART_SPEC_FIELD_NAME(field, string)	\
        (strlen((field)->field_name) == string->length &&			\
-       strncmp((field)->field_name, string->str, string->length) == 0)
+        strncmp((field)->field_name, string->str, string->length) == 0)
 #  endif
 #endif
 
