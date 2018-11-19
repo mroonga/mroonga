@@ -153,11 +153,11 @@
 #endif
 
 #ifdef MRN_KEY_PART_SPEC_FIELD_NAME_USE_CONST_STRING
-#if (MYSQL_VERSION_ID >= 80013 && !defined(MRN_MARIADB_P))
-  typedef char mrn_key_part_spec_field_name;
-#else
-  typedef LEX_CSTRING mrn_key_part_spec_field_name;
-#endif
+#  if (MYSQL_VERSION_ID >= 80013 && !defined(MRN_MARIADB_P))
+     typedef char mrn_key_part_spec_field_name;
+#  else
+     typedef LEX_CSTRING mrn_key_part_spec_field_name;
+#  endif
 #else
   typedef LEX_STRING mrn_key_part_spec_field_name;
 #endif
