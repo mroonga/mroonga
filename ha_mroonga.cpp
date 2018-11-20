@@ -4150,10 +4150,10 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
         error = ER_CANT_CREATE_TABLE;
         char err_msg[MRN_BUFFER_SIZE];
         sprintf(err_msg,
-                "reference column [%s.%s.%s] is not used for primary key",
+                "reference column [%s.%s." MRN_KEY_PART_SPEC_FIELD_NAME_FORMAT "] is not used for primary key",
                 table->s->db.str,
                 normalized_ref_table_name,
-                MRN_KEY_PART_SPEC_FIELD_NAME_CSTR(ref_field_name));
+                MRN_KEY_PART_SPEC_FIELD_NAME_VALUE(ref_field_name));
         my_message(error, err_msg, MYF(0));
         DBUG_RETURN(false);
       }
