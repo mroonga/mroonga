@@ -4705,6 +4705,15 @@ int ha_mroonga::wrapper_open(const char *name,
       goto exit;
   }
 
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (parse_engine_table_options(ha_thd(),
+                                 share->hton,
+                                 share->wrap_table_share)) {
+    error = my_errno;
+    goto exit;
+  }
+#endif
+
   mrn_init_alloc_root(&mem_root, "mroonga::wrapper", 1024, 0, MYF(0));
   wrap_key_info = mrn_create_key_info_for_table(share, table, &error);
   if (error)
