@@ -4693,19 +4693,16 @@ int ha_mroonga::wrapper_open(const char *name,
   mrn::Database *db = NULL;
   error = ensure_database_open(name, &db);
   if (error)
-    DBUG_RETURN(error);
+    goto exit;
 
   if (!(open_options & HA_OPEN_FOR_REPAIR)) {
     error = open_table(name);
     if (error)
-      DBUG_RETURN(error);
+      goto exit;
 
     error = wrapper_open_indexes(name);
-    if (error) {
-      grn_obj_unlink(ctx, grn_table);
-      grn_table = NULL;
-      DBUG_RETURN(error);
-    }
+    if (error)
+      goto exit;
   }
 
   mrn_init_alloc_root(&mem_root, "mroonga::wrapper", 1024, 0, MYF(0));
@@ -4801,16 +4798,35 @@ int ha_mroonga::wrapper_open(const char *name,
     }
   }
 
-  if (error)
-  {
-    grn_obj_unlink(ctx, grn_table);
-    grn_table = NULL;
-    // TODO: free indexes.
+exit:
+  if (error) {
+    if (grn_table) {
+      grn_obj_unlink(ctx, grn_table);
+      grn_table = NULL;
+    }
 
-    mrn_destroy(wrap_handler);
-    wrap_handler = NULL;
-    if (wrap_key_info)
-    {
+    if (grn_index_columns) {
+      for (uint i = 0; i < table->s->keys; ++i) {
+        if (grn_index_columns[i]) {
+          grn_obj_unlink(ctx, grn_index_[i]);
+        }
+      }
+      grn_index_columns = NULL;
+    }
+
+    if (grn_index_tables) {
+      for (uint i = 0; i < table->s->keys; ++i) {
+        if (grn_index_tables[i]) {
+          grn_obj_unlink(ctx, grn_index_tables[i]);
+        }
+      }
+    }
+
+    if (wrap_handler) {
+      mrn_destroy(wrap_handler);
+      wrap_handler = NULL;
+    }
+    if (wrap_key_info) {
       my_free(wrap_key_info);
       wrap_key_info = NULL;
     }
