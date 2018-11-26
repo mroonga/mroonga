@@ -116,7 +116,7 @@ else
         sudo apt-get -qq update
         sudo apt-get -qq -y remove --purge mysql-common
         sudo apt-get -qq -y build-dep mysql-server
-        sudo apt-get -qq -y install \
+        sudo apt-get -y install \
              mysql-server \
              libmysqlclient-dev \
              libmysqld-dev \
