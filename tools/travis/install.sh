@@ -119,14 +119,8 @@ else
         sudo apt-get -qq -y install \
              mysql-server \
              libmysqlclient-dev \
+             libmysqld-dev \
              mysql-testsuite
-        case "$MYSQL_VERSION" in
-          mysql-8*)
-            ;;
-          *)
-            sudo apt-get -y install libmysqld-dev
-            ;;
-        esac
         apt-get -qq source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       fi
