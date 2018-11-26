@@ -44,6 +44,10 @@ matrix:
     - env:
         - MYSQL_VERSION=mysql-8.0
       dist: xenial
+  allow_failures:
+    - env:
+        - MYSQL_VERSION=mysql-8.0
+      dist: xenial
 install:
   - tools/travis/install.sh
 before_script:
