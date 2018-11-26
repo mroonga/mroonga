@@ -17959,6 +17959,7 @@ char *ha_mroonga::get_tablespace_name(THD *thd, char *name, uint name_len)
 }
 #endif
 
+#ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
 bool ha_mroonga::wrapper_can_switch_engines()
 {
   MRN_DBUG_ENTER_METHOD();
@@ -17990,6 +17991,7 @@ bool ha_mroonga::can_switch_engines()
   }
   DBUG_RETURN(res);
 }
+#endif
 
 int ha_mroonga::wrapper_get_foreign_key_list(THD *thd,
                                              List<FOREIGN_KEY_INFO> *f_key_list)

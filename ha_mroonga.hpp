@@ -405,6 +405,10 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_HAS_GAP_LOCKS
 #endif
 
+#if MYSQL_VERSION_ID < 80013 || defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -824,7 +828,9 @@ protected:
 #ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
   char *get_tablespace_name(THD *thd, char *name, uint name_len);
 #endif
+#ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
   bool can_switch_engines();
+#endif
   int get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   int get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   uint referenced_by_foreign_key();
@@ -1679,8 +1685,10 @@ private:
   char *wrapper_get_tablespace_name(THD *thd, char *name, uint name_len);
   char *storage_get_tablespace_name(THD *thd, char *name, uint name_len);
 #endif
+#ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
   bool wrapper_can_switch_engines();
   bool storage_can_switch_engines();
+#endif
   int wrapper_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   int storage_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   int wrapper_get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
