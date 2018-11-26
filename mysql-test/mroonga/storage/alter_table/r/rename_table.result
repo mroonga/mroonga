@@ -6,7 +6,7 @@ body TEXT,
 FULLTEXT INDEX title_index (title),
 FULLTEXT INDEX body_index (body)
 ) DEFAULT CHARSET UTF8MB4;
-SELECT table_name, engine
+SELECT table_name AS table_name, engine AS engine
 FROM information_schema.tables
 WHERE table_name = 'diaries';
 table_name	engine
@@ -27,7 +27,7 @@ SELECT * FROM memos
 WHERE MATCH(title) AGAINST("groonga") AND
 MATCH(body) AGAINST("starting");
 id	title	body
-SELECT table_name, engine
+SELECT table_name AS table_name, engine AS engine
 FROM information_schema.tables
 WHERE table_name = 'memos';
 table_name	engine
