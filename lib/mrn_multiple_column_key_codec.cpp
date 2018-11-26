@@ -93,11 +93,13 @@ namespace mrn {
     for (int i = 0; i < n_key_parts && current_mysql_key < mysql_key_end; i++) {
       KEY_PART_INFO *key_part = &(key_info_->key_part[i]);
       Field *field = key_part->field;
+      bool is_null = false;
       DBUG_PRINT("info", ("mroonga: key_part->length=%u", key_part->length));
 
       if (field->null_bit) {
         DBUG_PRINT("info", ("mroonga: field has null bit"));
         *current_grn_key = 0;
+        is_null = (current_mysql_key[0] != 0);
         current_mysql_key += 1;
         current_grn_key += 1;
         (*grn_key_length)++;
@@ -146,37 +148,48 @@ namespace mrn {
         break;
       case TYPE_DATETIME:
         {
-          long long int mysql_datetime;
+          long long int grn_time;
+          if (is_null) {
+            grn_time = 0;
+          } else {
+            long long int mysql_datetime;
 #ifdef WORDS_BIGENDIAN
-          if (field->table && field->table->s->db_low_byte_first) {
-            mysql_datetime = sint8korr(current_mysql_key);
-          } else
+            if (field->table && field->table->s->db_low_byte_first) {
+              mysql_datetime = sint8korr(current_mysql_key);
+            } else
 #endif
-          {
-            value_decoder::decode(&mysql_datetime, current_mysql_key);
+            {
+              value_decoder::decode(&mysql_datetime, current_mysql_key);
+            }
+            TimeConverter time_converter;
+            bool truncated;
+            grn_time =
+              time_converter.mysql_datetime_to_grn_time(mysql_datetime,
+                                                        &truncated);
           }
-          TimeConverter time_converter;
-          bool truncated;
-          long long int grn_time =
-            time_converter.mysql_datetime_to_grn_time(mysql_datetime,
-                                                      &truncated);
           encode_long_long_int(grn_time, current_grn_key);
         }
         break;
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       case TYPE_DATETIME2:
         {
-          Field_datetimef *datetimef_field =
-            static_cast<Field_datetimef *>(field);
-          long long int mysql_datetime_packed =
-            my_datetime_packed_from_binary(current_mysql_key,
-                                           datetimef_field->decimals());
-          MYSQL_TIME mysql_time;
-          TIME_from_longlong_datetime_packed(&mysql_time, mysql_datetime_packed);
-          TimeConverter time_converter;
-          bool truncated;
-          long long int grn_time =
-            time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
+          long long int grn_time;
+          if (is_null) {
+            grn_time = 0;
+          } else {
+            Field_datetimef *datetimef_field =
+              static_cast<Field_datetimef *>(field);
+            long long int mysql_datetime_packed =
+              my_datetime_packed_from_binary(current_mysql_key,
+                                             datetimef_field->decimals());
+            MYSQL_TIME mysql_time;
+            TIME_from_longlong_datetime_packed(&mysql_time,
+                                               mysql_datetime_packed);
+            TimeConverter time_converter;
+            bool truncated;
+            grn_time =
+              time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
+          }
           grn_key_data_size = 8;
           encode_long_long_int(grn_time, current_grn_key);
         }
