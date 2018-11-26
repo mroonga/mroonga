@@ -15927,8 +15927,8 @@ bool ha_mroonga::wrapper_prepare_inplace_alter_table(
   }
 
   if (parse_engine_table_options(ha_thd(),
-                                  tmp_share->hton,
-                                  wrap_altered_table->s)) {
+                                 tmp_share->hton,
+                                 wrap_altered_table->s)) {
     mrn_free_share(tmp_share);
     DBUG_RETURN(true);
   }
