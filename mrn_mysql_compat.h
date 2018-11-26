@@ -738,3 +738,28 @@ typedef HASH mrn_table_def_cache_type;
 #else
 #  define mrn_destroy(pointer) delete pointer
 #endif
+
+#if MYSQL_VERSION_ID >= 80013 && !defined(MRN_MARIADB_P)
+#  define mrn_alloc_table_share(table_list, key, key_length) \
+  alloc_table_share((table_list)->db,                        \
+                    (table_list)->table_name,                \
+                    (key),                                   \
+                    (key_length),                            \
+                    false)
+#elif MYSQL_VERSION_ID >= 100306 && defined(MRN_MARIADB_P)
+#  define mrn_alloc_table_share(table_list, key, key_length) \
+  alloc_table_share((table_list)->db.str,                    \
+                    (table_list)->table_name.str,            \
+                    (key),                                   \
+                    (key_length))
+#elif (MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)) || \
+  (MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P))
+#  define mrn_alloc_table_share(table_list, key, key_length)    \
+  alloc_table_share((table_list)->db,                           \
+                    (table_list)->table_name,                   \
+                    (key),                                      \
+                    (key_length))
+#else
+#  define mrn_alloc_table_share(table_list, key, key_length)    \
+  alloc_table_share((table_list), (key), (key_length))
+#endif

@@ -1004,20 +1004,7 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list,
   char key[MAX_DBKEY_LENGTH];
   key_length = create_table_def_key(thd, key, table_list, false);
 #endif
-#if MYSQL_VERSION_ID >= 100306 && defined(MRN_MARIADB_P)
-  share = alloc_table_share(table_list->db.str,
-                            table_list->table_name.str,
-                            key,
-                            key_length);
-#elif (MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)) || \
-  (MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P))
-  share = alloc_table_share(table_list->db,
-                            table_list->table_name,
-                            key,
-                            key_length);
-#else
-  share = alloc_table_share(table_list, key, key_length);
-#endif
+  share = mrn_alloc_table_share(table_list, key, key_length);
   if (!share)
   {
     *error = ER_CANT_OPEN_FILE;
