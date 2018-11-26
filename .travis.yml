@@ -1,7 +1,7 @@
 notifications:
   webhooks:
     - https://webhook.commit-email.info/
-dist: trusty
+dist: xenial
 language: cpp
 env:
   - MYSQL_VERSION=mysql-system
