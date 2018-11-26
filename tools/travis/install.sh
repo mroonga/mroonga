@@ -116,11 +116,15 @@ else
         sudo apt-get -qq update
         sudo apt-get -qq -y remove --purge mysql-common
         sudo apt-get -qq -y build-dep mysql-server
-        sudo apt-get -y install \
+        sudo apt-get -qq -y install \
              mysql-server \
              libmysqlclient-dev \
-             libmysqld-dev \
              mysql-testsuite
+        case "$MYSQL_VERSION" in
+          mysql-5.*)
+            sudo apt-get -qq -y install libmysqld-dev
+            ;;
+        esac
         apt-get -qq source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       fi
