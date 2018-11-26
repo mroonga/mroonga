@@ -4808,7 +4808,7 @@ exit:
     if (grn_index_columns) {
       for (uint i = 0; i < table->s->keys; ++i) {
         if (grn_index_columns[i]) {
-          grn_obj_unlink(ctx, grn_index_[i]);
+          grn_obj_unlink(ctx, grn_index_columns[i]);
         }
       }
       grn_index_columns = NULL;
