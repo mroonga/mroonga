@@ -687,10 +687,10 @@ msgstr ""
 msgid "16.04 LTS Xenial Xerus"
 msgstr ""
 
-msgid "17.10 Artful Aardvark"
+msgid "18.04 Bionic Beaver"
 msgstr ""
 
-msgid "18.04 Bionic Beaver"
+msgid "18.10 Cosmic Cuttlefish"
 msgstr ""
 
 msgid "Here are Ubuntu versions that supports MariaDB:"
