@@ -12796,18 +12796,14 @@ int ha_mroonga::storage_encode_key(Field *field,
     DBUG_RETURN(error);
 
   if (field->null_bit) {
-    if (is_null) {
-      *is_null = ptr[0];
-      if (*is_null) {
-        *size = 0;
-        DBUG_RETURN(error);
-      }
+    *is_null = ptr[0];
+    if (*is_null) {
+      *size = 0;
+      DBUG_RETURN(error);
     }
     ptr += 1;
   } else {
-    if (is_null) {
-      *is_null = false;
-    }
+    *is_null = false;
   }
 
   switch (field->real_type()) {
