@@ -3,7 +3,7 @@ Section: database
 Priority: optional
 Maintainer: Kouhei Sutou <kou@clear-code.com>
 Build-Depends:
-	debhelper (>= 7.0.50),
+	debhelper (>= 9),
 	autotools-dev,
 	pkg-config,
 	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
