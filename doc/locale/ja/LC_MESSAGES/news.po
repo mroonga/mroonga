@@ -21,11 +21,42 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 8.07 - 2018-09-29"
-msgstr "8.07リリース - 2018-09-29"
+msgid "Release 8.08 - 2018-11-29"
+msgstr "8.08リリース - 2018-11-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 18.10 (Cosmic Cuttlefish)."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 18.10 (Cosmic Cuttlefish)をサポートしました。"
+
+msgid "[:doc:`/install/windows`] Supported MariaDB 10.3.10."
+msgstr "[:doc:`/install/windows`] MariaDB 10.3.10をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Supported MariaDB 10.2.19"
+msgstr "[:doc:`/install/centos`] MariaDB 10.2.19をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Supported MariaDB 10.1.37"
+msgstr "[:doc:`/install/centos`] MariaDB 10.1.37をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.7.23-25."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.23-25をサポートしました。"
+
+msgid "[rpm][centos] Supported MariaDB 10.3.11."
+msgstr "[rpm][centos] MariaDB 10.3.11に対応しました。"
+
+msgid "[rpm][centos] Supported MySQL 5.6.42."
+msgstr "[rpm][centos] MySQL 5.6.42をサポートしました。"
+
+msgid "[rpm][centos] Supported MySQL 5.7.24."
+msgstr "[rpm][centos] MySQL 5.7.24をサポートしました。"
+
+msgid "Supported MySQL 8."
+msgstr "MySQL 8をサポートしました。"
+
+msgid "Release 8.07 - 2018-09-29"
+msgstr "8.07リリース - 2018-09-29"
 
 msgid ""
 "Deprecated tokenizer ``off`` option. Use tokenizer ``none`` option instead."
@@ -348,7 +379,8 @@ msgstr ""
 "[テスト] サブクエリーとORDER BY ... LIMIT最適化のテストケースを追加しました。"
 "[GitHub#184] [濵﨑一樹さんが報告]"
 
-msgid "[rpm][centos] Supported MariaDB 10.3."
+#, fuzzy
+msgid "[rpm][centos] Supported  10.3."
 msgstr "[rpm][centos] MariaDB 10.3に対応しました。"
 
 msgid "[deb][ubuntu] Supported MariaDB 10.1 for Ubuntu 17.10 (Artful Aadvark)"

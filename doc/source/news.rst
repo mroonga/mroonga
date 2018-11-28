@@ -5,6 +5,32 @@
 News
 ====
 
+.. _release-8-08:
+
+Release 8.08 - 2018-11-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Supported Ubuntu 18.10 (Cosmic Cuttlefish).
+
+* [:doc:`/install/windows`] Supported MariaDB 10.3.10.
+
+* [:doc:`/install/centos`] Supported MariaDB 10.2.19
+
+* [:doc:`/install/centos`] Supported MariaDB 10.1.37
+
+* [:doc:`/install/centos`] Supported Percona Server 5.7.23-25.
+
+* [rpm][centos] Supported MariaDB 10.3.11.
+
+* [rpm][centos] Supported MySQL 5.6.42.
+
+* [rpm][centos] Supported MySQL 5.7.24.
+
+* Supported MySQL 8.
+
 .. _release-8-07:
 
 Release 8.07 - 2018-09-29
@@ -232,7 +258,7 @@ Improvements
 * [test] Added a test case for sub query and order limit optimization.
   [GitHub#184] [Reported by Kazuki Hamasaki]
 
-* [rpm][centos] Supported MariaDB 10.3.
+* [rpm][centos] Supported  10.3.
 
 * [deb][ubuntu] Supported MariaDB 10.1 for Ubuntu 17.10 (Artful Aadvark)
 
