@@ -5,9 +5,9 @@
 News
 ====
 
-.. _release-8-08:
+.. _release-8-09:
 
-Release 8.08 - 2018-11-29
+Release 8.09 - 2018-11-29
 -------------------------
 
 Improvements
