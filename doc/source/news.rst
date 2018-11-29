@@ -29,7 +29,14 @@ Improvements
 
 * [rpm][centos] Supported MySQL 5.7.24.
 
-* Supported MySQL 8.
+Revision:
+
+We deleted information as below.
+
+"Supported MySQL 8"
+
+Sorry, There was wrong release information in Mroonga 8.09.
+The MySQL 8 is not supported. That is still being handled.
 
 .. _release-8-07:
 

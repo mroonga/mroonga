@@ -52,8 +52,21 @@ msgstr "[rpm][centos] MySQL 5.6.42をサポートしました。"
 msgid "[rpm][centos] Supported MySQL 5.7.24."
 msgstr "[rpm][centos] MySQL 5.7.24をサポートしました。"
 
-msgid "Supported MySQL 8."
-msgstr "MySQL 8をサポートしました。"
+msgid "Revision:"
+msgstr "訂正："
+
+msgid "We deleted information as below."
+msgstr "以下の情報を削除しました。"
+
+msgid "\"Supported MySQL 8\""
+msgstr "\"MySQL 8をサポートしました。\""
+
+msgid ""
+"Sorry, There was wrong release information in Mroonga 8.09. The MySQL 8 is "
+"not supported. That is still being handled."
+msgstr ""
+"すみません。Mroonga 8.09のリリース情報に誤りがありました。MySQL 8はサポートし"
+"ていません。まだ対応中となります。"
 
 msgid "Release 8.07 - 2018-09-29"
 msgstr "8.07リリース - 2018-09-29"
@@ -5274,3 +5287,6 @@ msgid ""
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
+
+#~ msgid "The MySQL 8 is not supported. That is still being handled."
+#~ msgstr "MySQL8 はサポートしていません。まだ対応中となります。"
