@@ -21,7 +21,7 @@ column_create mroonga_operations record COLUMN_SCALAR UInt32
 column_create mroonga_operations table COLUMN_SCALAR ShortText
 column_create mroonga_operations type COLUMN_SCALAR ShortText
 
-table_create terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerMySQLUnicodeCI --token_filters TokenFilterStopWord,TokenFilterStopWord
+table_create terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerMySQLUnicodeCI --token_filters "TokenFilterStopWord, TokenFilterStopWord"
 column_create terms is_stop_word COLUMN_SCALAR Int8
 column_create terms term COLUMN_SCALAR ShortText
 
