@@ -57,6 +57,7 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/tutorial/installation_check.rst \
 	$(top_srcdir)/doc/source/tutorial/mode.rst \
 	$(top_srcdir)/doc/source/tutorial/storage.rst \
+	$(top_srcdir)/doc/source/tutorial/tokenizer-list.inc \
 	$(top_srcdir)/doc/source/tutorial/wrapper.rst \
 	$(top_srcdir)/doc/source/upgrade.rst \
 	$(NULL)
@@ -129,6 +130,7 @@ source_files_relative_from_doc_dir = \
 	source/tutorial/installation_check.rst \
 	source/tutorial/mode.rst \
 	source/tutorial/storage.rst \
+	source/tutorial/tokenizer-list.inc \
 	source/tutorial/wrapper.rst \
 	source/upgrade.rst \
 	$(NULL)
