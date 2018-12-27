@@ -69,7 +69,7 @@ since Mroonga 5.02 release.
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
+  % sudo yum install -y http://repo.percona.com/release/6/RPMS/noarch/percona-release-latest.noarch.rpm
   % sudo yum install -y Percona-Server-server-56
   % sudo /sbin/service mysql start
   % sudo yum install -y --enablerepo=epel percona-server-56-mroonga
@@ -93,7 +93,7 @@ since Mroonga 6.02 release.
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  $ sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
+  % sudo yum install -y http://repo.percona.com/release/6/RPMS/noarch/percona-release-latest.noarch.rpm
   % sudo yum install -y --enablerepo=epel percona-server-57-mroonga
   (% sudo /sbin/service mysql start)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
@@ -312,7 +312,7 @@ since Mroonga 5.02 release.
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
+  % sudo yum install -y http://repo.percona.com/release/7/RPMS/noarch/percona-release-latest.noarch.rpm
   % sudo yum install -y --enablerepo=epel percona-server-56-mroonga
   (% sudo systemctl start mysqld)
   (% sudo mysqladmin -u root password 'new-password')
@@ -335,7 +335,7 @@ since Mroonga 6.02 release.
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
+  % sudo yum install -y http://repo.percona.com/release/7/RPMS/noarch/percona-release-latest.noarch.rpm
   % sudo yum install -y --enablerepo=epel percona-server-57-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
