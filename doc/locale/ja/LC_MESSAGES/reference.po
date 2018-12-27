@@ -2285,7 +2285,7 @@ msgid "The default value is ``NormalizerAuto``."
 msgstr "デフォルト値は ``NormalizerAuto`` です。"
 
 msgid "It returns normalized string."
-msgstr "エスケープされた文字列を返します。"
+msgstr "ノーマライズされた文字列を返します。"
 
 msgid "``mroonga_snippet()``"
 msgstr ""
