@@ -228,7 +228,7 @@ fi
 %doc mroonga-doc/*
 
 %changelog
-* Thu Jan 10 2018 Kentaro Hayashi <hayashi@clear-code.com> - 8.09-3
+* Thu Jan 10 2019 Kentaro Hayashi <hayashi@clear-code.com> - 8.09-3
 - build against MariaDB 10.2.21.
 
 * Thu Dec 27 2018 Kentaro Hayashi <hayashi@clear-code.com> - 8.09-2
