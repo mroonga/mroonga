@@ -32,7 +32,8 @@ Build-Depends:
 	po-debconf,
 	psmisc,
 	unixodbc-dev,
-	zlib1g-dev
+	zlib1g-dev,
+	autoconf-archive
 Standards-Version: 3.9.1
 Homepage: http://mroonga.org/
 
