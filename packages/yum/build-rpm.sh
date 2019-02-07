@@ -159,9 +159,7 @@ REPO
         run yum install -y Percona-Server-devel-56
         ;;
       percona-server-57-${PACKAGE})
-        release_rpm_version=0.1-4
-        release_rpm=percona-release-${release_rpm_version}.noarch.rpm
-        run yum install -y http://www.percona.com/downloads/percona-release/redhat/${release_rpm_version}/${release_rpm}
+        run yum install -y http://repo.percona.com/percona/yum/release/percona-release-latest.noarch.rpm
         run yum install -y Percona-Server-devel-57
         if [ ${distribution_version} = 6 ]; then
           run yum install -y cmake28
