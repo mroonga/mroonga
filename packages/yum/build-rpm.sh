@@ -153,9 +153,7 @@ REPO
         fi
         ;;
       percona-server-56-${PACKAGE})
-        release_rpm_version=0.1-4
-        release_rpm=percona-release-${release_rpm_version}.noarch.rpm
-        run yum install -y http://www.percona.com/downloads/percona-release/redhat/${release_rpm_version}/${release_rpm}
+        run yum install -y http://repo.percona.com/percona/yum/release/6/RPMS/noarch/percona-release-1.0-7.noarch.rpm
         run yum install -y Percona-Server-devel-56
         ;;
       percona-server-57-${PACKAGE})
