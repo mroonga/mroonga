@@ -1,6 +1,6 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
-%define mariadb_version_default 10.1.37
+%define mariadb_version_default 10.1.38
 %define mariadb_release_default 1
 %define mariadb_download_base_url_default https://downloads.mariadb.org/f
 %if %{_centos_ver} == 7
