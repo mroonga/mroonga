@@ -228,6 +228,9 @@ fi
 %doc mroonga-doc/*
 
 %changelog
+* Sat Feb 09 2019 Kentaro Hayashi <hayashi@clear-code.com> - 9.00-1
+- new upstream release.
+
 * Thu Nov 29 2018 Kentaro Hayashi <hayashi@clear-code.com> - 8.09-1
 - new upstream release.
 

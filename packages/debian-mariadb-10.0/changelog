@@ -1,3 +1,9 @@
+mroonga-mariadb-10.0 (9.00-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Sat, 09 Feb 2019 00:00:00 +0900
+
 mroonga-mariadb-10.0 (8.09-1) unstable; urgency=low
 
   * New upstream release.
