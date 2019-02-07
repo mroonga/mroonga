@@ -1,5 +1,6 @@
 # Copyright(C) 2012 Kentoku SHIBA
 # Copyright(C) 2014 Kenji Maruyama <mmmaru777@gmail.com>
+# Copyright(C) 2019 Kentaro Hayashi <hayashi@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,11 +16,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../../include/mroonga/skip_freebsd.inc
---source ../../../../../../include/mroonga/skip_mariadb_10_2_or_later.inc
---source ../../../../../../include/mroonga/have_signed_64bit_time_t.inc
---source ../../../../../../include/mroonga/have_strict_sql_mode.inc
---source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../../include/mroonga/skip_freebsd.inc
+--source ../../../../../../../include/mroonga/have_signed_64bit_time_t.inc
+--source ../../../../../../../include/mroonga/have_mariadb_10_2_or_later.inc
+--source ../../../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
