@@ -5,6 +5,39 @@
 News
 ====
 
+.. _release-9-00:
+
+Release 9.00 - 2019-02-09
+-------------------------
+
+This is a major version up! But It keeps backward compatibility.
+You can upgrade to 9.0.0 without rebuilding database.
+
+In Groonga 9.0.0, ``TokenPattern``, ``TokenTable`` tokenizer and
+``remove_blank`` for ``NormalizerNFKC100`` is supported.
+If you upgrade to Groonga 9.0.0, you can use them from Mroonga 9.00!
+
+* ref: http://groonga.org/docs/news.html#release-9-0-0-2019-02-09
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Supported Percona Server 5.7.24-27.
+
+* [:doc:`/install/centos`] Supported Percona Server 5.6.43 rel84.3.
+
+* [rpm][centos] Supported MariaDB 10.3.12.
+
+* [rpm][centos] Supported MariaDB 10.2.21.
+
+* [rpm][centos] Supported Percona Server 5.7.24-27.
+
+* [rpm][centos] Supported Percona Server 5.6.43 rel84.3.
+
+* [rpm][centos] Supported MySQL 5.7.25.
+
+* [rpm][centos] Supported MySQL 5.6.43.
+
 .. _release-8-09:
 
 Release 8.09 - 2018-11-29
