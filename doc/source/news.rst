@@ -11,7 +11,7 @@ Release 9.00 - 2019-02-09
 -------------------------
 
 This is a major version up! But It keeps backward compatibility.
-You can upgrade to 9.0.0 without rebuilding database.
+You can upgrade to 9.00 without rebuilding database.
 
 In Groonga 9.0.0, ``TokenPattern``, ``TokenTable`` tokenizer and
 ``remove_blank`` for ``NormalizerNFKC100`` is supported.
