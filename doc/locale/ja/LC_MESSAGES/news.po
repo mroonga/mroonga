@@ -21,11 +21,60 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 8.09 - 2018-11-29"
-msgstr "8.09リリース - 2018-11-29"
+msgid "Release 9.00 - 2019-02-09"
+msgstr "9.00リリース - 2019-02-09"
+
+msgid ""
+"This is a major version up! But It keeps backward compatibility. You can "
+"upgrade to 9.00 without rebuilding database."
+msgstr ""
+"メジャーバージョンアップです! メジャーバージョンアップですが、互換性は壊れて"
+"いないので、データベースを再構築することなく9.00へアップグレードできます。"
+
+msgid ""
+"In Groonga 9.0.0, ``TokenPattern``, ``TokenTable`` tokenizer and "
+"``remove_blank`` for ``NormalizerNFKC100`` is supported. If you upgrade to "
+"Groonga 9.0.0, you can use them from Mroonga 9.00!"
+msgstr ""
+"Groonga 9.0.0 にて、 ``TokenPattern`` 、 ``TokenTable`` トークナイザーと "
+"``NormalizerNFKC100`` に ``remove_blank`` をサポートしました。Groonga 9.0.0 "
+"にアップグレードすることで、Mroonga 9.00からこれらを使えます。"
+
+msgid "ref: http://groonga.org/docs/news.html#release-9-0-0-2019-02-09"
+msgstr "参考: http://groonga.org/ja/docs/news.html#release-9-0-0-2019-02-09"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.7.24-27."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.24-27をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.6.43 rel84.3."
+msgstr ""
+"[:doc:`/install/centos`] Percona Server 5.6.43 rel84.3をサポートしました。"
+
+msgid "[rpm][centos] Supported MariaDB 10.3.12."
+msgstr "[rpm][centos] MariaDB 10.3.12に対応しました。"
+
+msgid "[rpm][centos] Supported MariaDB 10.2.21."
+msgstr "[rpm][centos] MariaDB 10.2.21に対応しました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.7.24-27."
+msgstr "[rpm][centos] Percona Server 5.7.24-27をサポートしました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.6.43 rel84.3."
+msgstr "[rpm][centos] Percona Server 5.6.43 rel84.3に対応しました。"
+
+msgid "[rpm][centos] Supported MySQL 5.7.25."
+msgstr "[rpm][centos] MySQL 5.7.25をサポートしました。"
+
+msgid "[rpm][centos] Supported MySQL 5.6.43."
+msgstr "[rpm][centos] MySQL 5.6.43をサポートしました。"
+
+msgid "Release 8.09 - 2018-11-29"
+msgstr "8.09リリース - 2018-11-29"
 
 msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 18.10 (Cosmic Cuttlefish)."
 msgstr ""
