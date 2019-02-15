@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -3841,15 +3841,9 @@ int ha_mroonga::storage_create(const char *name,
         }
       }
       if (tmp_share->default_tokenizer) {
-        grn_obj *default_tokenizer =
-          grn_ctx_get(ctx,
+        set_tokenizer(table_obj,
                       tmp_share->default_tokenizer,
                       tmp_share->default_tokenizer_length);
-        if (default_tokenizer) {
-          grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-          grn_obj_set_info(ctx, table_obj, info_type, default_tokenizer);
-          grn_obj_unlink(ctx, default_tokenizer);
-        }
       }
       if (tmp_share->token_filters) {
         grn_obj token_filters;
@@ -10282,7 +10276,9 @@ void ha_mroonga::set_tokenizer(grn_obj *lexicon, KEY *key)
   MRN_DBUG_ENTER_METHOD();
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
   if (key->option_struct->tokenizer) {
-    set_tokenizer(lexicon, key->option_struct->tokenizer);
+    set_tokenizer(lexicon,
+                  key->option_struct->tokenizer,
+                  strlen(key->option_struct->tokenizer));
     DBUG_VOID_RETURN;
   }
 #endif
@@ -10292,53 +10288,60 @@ void ha_mroonga::set_tokenizer(grn_obj *lexicon, KEY *key)
     parser.parse();
     const char *tokenizer = parser.tokenizer();
     if (tokenizer) {
-      set_tokenizer(lexicon, tokenizer);
+      set_tokenizer(lexicon, tokenizer, strlen(tokenizer));
       DBUG_VOID_RETURN;
     }
   }
 
-  set_tokenizer(lexicon, mrn_default_tokenizer);
+  set_tokenizer(lexicon, mrn_default_tokenizer, strlen(mrn_default_tokenizer));
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::set_tokenizer(grn_obj *lexicon, const char *name)
+void ha_mroonga::set_tokenizer(grn_obj *lexicon,
+                               const char *tokenizer,
+                               size_t tokenizer_length)
 {
   MRN_DBUG_ENTER_METHOD();
 
   /* Deprecated */
-  if (strcasecmp("off", name) == 0) {
+  if (tokenizer &&
+      tokenizer_length == strlen("off") &&
+      (strncasecmp("off", tokenizer, tokenizer_length) == 0)) {
     DBUG_VOID_RETURN;
   }
-  if (strcasecmp("none", name) == 0) {
+  if (tokenizer &&
+      tokenizer_length == strlen("none") &&
+      (strncasecmp("none", tokenizer, tokenizer_length) == 0)) {
     DBUG_VOID_RETURN;
   }
 
   mrn_change_encoding(ctx, system_charset_info);
 
-  grn_obj tokenizer_name;
-  GRN_TEXT_INIT(&tokenizer_name, GRN_OBJ_DO_SHALLOW_COPY);
-  GRN_TEXT_SETS(ctx, &tokenizer_name, name);
+  grn_obj tokenizer_spec;
+  GRN_TEXT_INIT(&tokenizer_spec, GRN_OBJ_DO_SHALLOW_COPY);
+  GRN_TEXT_SET(ctx, &tokenizer_spec, tokenizer, tokenizer_length);
 
   grn_info_type info_type = GRN_INFO_DEFAULT_TOKENIZER;
-  grn_rc rc = grn_obj_set_info(ctx, lexicon, info_type, &tokenizer_name);
+  grn_rc rc = grn_obj_set_info(ctx, lexicon, info_type, &tokenizer_spec);
   if (rc == GRN_SUCCESS) {
-    GRN_OBJ_FIN(ctx, &tokenizer_name);
+    GRN_OBJ_FIN(ctx, &tokenizer_spec);
     DBUG_VOID_RETURN;
   }
 
   char message[MRN_BUFFER_SIZE];
   sprintf(message,
-          "specified tokenizer for fulltext index <%s> is invalid. "
+          "specified tokenizer for fulltext index <%.*s> is invalid. "
           "The default tokenizer for fulltext index <%s> is used instead.",
-          name,
+          (int)tokenizer_length,
+          tokenizer,
           MRN_DEFAULT_TOKENIZER);
   push_warning(ha_thd(),
                MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
                message);
 
-  GRN_TEXT_SETS(ctx, &tokenizer_name, MRN_DEFAULT_TOKENIZER);
-  rc = grn_obj_set_info(ctx, lexicon, info_type, &tokenizer_name);
-  GRN_OBJ_FIN(ctx, &tokenizer_name);
+  GRN_TEXT_SETS(ctx, &tokenizer_spec, MRN_DEFAULT_TOKENIZER);
+  rc = grn_obj_set_info(ctx, lexicon, info_type, &tokenizer_spec);
+  GRN_OBJ_FIN(ctx, &tokenizer_spec);
   if (rc == GRN_SUCCESS) {
     DBUG_VOID_RETURN;
   }

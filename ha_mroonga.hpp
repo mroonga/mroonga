@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -917,7 +917,9 @@ private:
   grn_obj *find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
                             int error_code);
   void set_tokenizer(grn_obj *lexicon, KEY *key);
-  void set_tokenizer(grn_obj *lexicon, const char *name);
+  void set_tokenizer(grn_obj *lexicon,
+                     const char *name,
+                     size_t name_length);
   bool have_custom_normalizer(KEY *key) const;
   void set_normalizer(grn_obj *lexicon, KEY *normalizer);
   void set_normalizer(grn_obj *lexicon,
