@@ -10179,12 +10179,12 @@ bool ha_mroonga::find_table_flags(HA_CREATE_INFO *info,
 
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
   if (info->option_struct) {
-    const char *names = info->option_struct->flags;
-    if (names) {
+    const char *flag_names = info->option_struct->flags;
+    if (flag_names) {
       found = mrn_parse_grn_table_create_flags(ha_thd(),
                                                ctx,
-                                               names,
-                                               strlen(names),
+                                               flag_names,
+                                               strlen(flag_names),
                                                flags);
       DBUG_RETURN(found);
     }
