@@ -1938,12 +1938,14 @@ mrn_hton_alter_table_flags(mrn_alter_table_flags flags)
 struct ha_table_option_struct
 {
   const char *tokenizer;
+  const char *normalizer;
   const char *flags;
 };
 
 static ha_create_table_option mrn_table_options[] =
 {
   HA_TOPTION_STRING("TOKENIZER", tokenizer),
+  HA_TOPTION_STRING("NORMALIZER", normalizer),
   HA_TOPTION_STRING("FLAGS", flags),
   HA_TOPTION_END
 };
@@ -3866,16 +3868,32 @@ int ha_mroonga::storage_create(const char *name,
           set_tokenizer(table_obj, tokenizer, tokenizer_length);
         }
       }
-      if (tmp_share->token_filters) {
-        grn_obj token_filters;
-        GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
-        if (find_token_filters_fill(&token_filters,
-                                    tmp_share->token_filters,
-                                    tmp_share->token_filters_length)) {
-          grn_obj_set_info(ctx, table_obj,
-                           GRN_INFO_TOKEN_FILTERS, &token_filters);
+      {
+        const char *token_filters = NULL;
+        size_t token_filters_length = 0;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+        if (info->option_struct) {
+          token_filters = info->option_struct->token_filters;
+          if (token_filters) {
+            token_filters_length = strlen(token_filters);
+          }
         }
-        grn_obj_unlink(ctx, &token_filters);
+#endif
+        if (!token_filters && tmp_share->token_filters) {
+          token_filters = tmp_share->token_filters;
+          token_filters_length = tmp_share->token_filters_length;
+        }
+        if (token_filters) {
+          grn_obj token_filters_spec;
+          GRN_TEXT_INIT(&token_filters_spec, GRN_OBJ_DO_SHALLOW_COPY);
+          GRN_TEXT_SET(ctx,
+                       &token_filters_spec,
+                       token_filters,
+                       token_filters_length);
+          grn_obj_set_info(ctx, table_obj,
+                           GRN_INFO_TOKEN_FILTERS, &token_filters_spec);
+          GRN_OBJ_FIN(ctx, &token_filters_spec);
+        }
       }
     }
   }
