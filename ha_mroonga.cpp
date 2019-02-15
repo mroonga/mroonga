@@ -3572,16 +3572,7 @@ int ha_mroonga::wrapper_create_index_fulltext(const char *grn_table_name,
   index_tables[i] = index_table;
 
   set_tokenizer(index_table, key_info);
-
-  {
-    grn_obj token_filters;
-    GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
-    if (find_token_filters(key_info, &token_filters)) {
-      grn_obj_set_info(ctx, index_table,
-                       GRN_INFO_TOKEN_FILTERS, &token_filters);
-    }
-    grn_obj_unlink(ctx, &token_filters);
-  }
+  set_token_filters(index_table, key_info);
 
   if (have_custom_normalizer(key_info) ||
       should_normalize(&key_info->key_part->field[0], true)) {
@@ -3902,15 +3893,9 @@ int ha_mroonga::storage_create(const char *name,
           token_filters_length = tmp_share->token_filters_length;
         }
         if (token_filters) {
-          grn_obj token_filters_spec;
-          GRN_TEXT_INIT(&token_filters_spec, GRN_OBJ_DO_SHALLOW_COPY);
-          GRN_TEXT_SET(ctx,
-                       &token_filters_spec,
-                       token_filters,
-                       token_filters_length);
-          grn_obj_set_info(ctx, table_obj,
-                           GRN_INFO_TOKEN_FILTERS, &token_filters_spec);
-          GRN_OBJ_FIN(ctx, &token_filters_spec);
+          set_token_filters(table_obj,
+                            token_filters,
+                            token_filters_length);
         }
       }
     }
@@ -4366,16 +4351,7 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
 
   if (key_info->flags & HA_FULLTEXT) {
     set_tokenizer(index_table, key_info);
-
-    {
-      grn_obj token_filters;
-      GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, 0);
-      if (find_token_filters(key_info, &token_filters)) {
-        grn_obj_set_info(ctx, index_table,
-                         GRN_INFO_TOKEN_FILTERS, &token_filters);
-      }
-      grn_obj_unlink(ctx, &token_filters);
-    }
+    set_token_filters(index_table, key_info);
   }
 
   {
@@ -10540,17 +10516,16 @@ bool ha_mroonga::find_index_column_flags(KEY *key, grn_column_flags *index_colum
   DBUG_RETURN(found);
 }
 
-bool ha_mroonga::find_token_filters(KEY *key, grn_obj *token_filters)
+void ha_mroonga::set_token_filters(grn_obj *lexicon, KEY *key)
 {
   MRN_DBUG_ENTER_METHOD();
-  bool found = false;
 
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
   if (key->option_struct->token_filters) {
-    found = find_token_filters_fill(token_filters,
-                                    key->option_struct->token_filters,
-                                    strlen(key->option_struct->token_filters));
-    DBUG_RETURN(found);
+    set_token_filters(lexicon,
+                      key->option_struct->token_filters,
+                      strlen(key->option_struct->token_filters));
+    DBUG_VOID_RETURN;
   }
 #endif
 
@@ -10558,106 +10533,37 @@ bool ha_mroonga::find_token_filters(KEY *key, grn_obj *token_filters)
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
     parser.parse();
-    const char *names = parser["token_filters"];
-    if (names) {
-      found = find_token_filters_fill(token_filters, names, strlen(names));
+    const char *token_filters = parser["token_filters"];
+    if (token_filters) {
+      set_token_filters(lexicon, token_filters, strlen(token_filters));
+      DBUG_VOID_RETURN;
     }
   }
 
-  DBUG_RETURN(found);
+  DBUG_VOID_RETURN;
 }
 
-bool ha_mroonga::find_token_filters_put(grn_obj *token_filters,
-                                        const char *token_filter_name,
-                                        int token_filter_name_length)
+void ha_mroonga::set_token_filters(grn_obj *lexicon,
+                                   const char *token_filters,
+                                   size_t token_filters_length)
 {
-  grn_obj *token_filter;
+  MRN_DBUG_ENTER_METHOD();
 
-  token_filter = grn_ctx_get(ctx,
-                             token_filter_name,
-                             token_filter_name_length);
-  if (token_filter) {
-    GRN_PTR_PUT(ctx, token_filters, token_filter);
-    return true;
-  } else {
-    char message[MRN_BUFFER_SIZE];
-    sprintf(message,
-            "nonexistent token filter: <%.*s>",
-            token_filter_name_length, token_filter_name);
-    push_warning(ha_thd(),
-                 MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
-                 message);
-    return false;
-  }
-}
+  mrn_change_encoding(ctx, system_charset_info);
 
-bool ha_mroonga::find_token_filters_fill(grn_obj *token_filters,
-                                         const char *token_filter_names,
-                                         int token_filter_names_length)
-{
-  const char *start, *current, *end;
-  const char *name_start, *name_end;
-  const char *last_name_end;
+  grn_obj token_filters_spec;
+  GRN_TEXT_INIT(&token_filters_spec, GRN_OBJ_DO_SHALLOW_COPY);
+  GRN_TEXT_SET(ctx,
+               &token_filters_spec,
+               token_filters,
+               token_filters_length);
+  grn_obj_set_info(ctx,
+                   lexicon,
+                   GRN_INFO_TOKEN_FILTERS,
+                   &token_filters_spec);
+  GRN_OBJ_FIN(ctx, &token_filters_spec);
 
-  start = token_filter_names;
-  end = start + token_filter_names_length;
-  current = start;
-  name_start = NULL;
-  name_end = NULL;
-  last_name_end = start;
-  while (current < end) {
-    switch (current[0]) {
-    case ' ' :
-      if (name_start && !name_end) {
-        name_end = current;
-      }
-      break;
-    case ',' :
-      if (!name_start) {
-        goto break_loop;
-      }
-      if (!name_end) {
-        name_end = current;
-      }
-      find_token_filters_put(token_filters,
-                             name_start,
-                             name_end - name_start);
-      last_name_end = name_end + 1;
-      name_start = NULL;
-      name_end = NULL;
-      break;
-    default :
-      if (!name_start) {
-        name_start = current;
-      }
-      break;
-    }
-    current++;
-  }
-
-break_loop:
-  if (!name_start) {
-    char message[MRN_BUFFER_SIZE];
-    sprintf(message,
-            "empty token filter name: "
-            "<%.*s|%.*s|%.*s>",
-            (int)(last_name_end - start), start,
-            (int)(current - last_name_end), last_name_end,
-            (int)(end - current), current);
-    push_warning(ha_thd(),
-                 MRN_SEVERITY_WARNING, ER_UNSUPPORTED_EXTENSION,
-                 message);
-    return false;
-  }
-
-  if (!name_end) {
-    name_end = current;
-  }
-  find_token_filters_put(token_filters,
-                         name_start,
-                         name_end - name_start);
-
-  return true;
+  DBUG_VOID_RETURN;
 }
 
 int ha_mroonga::wrapper_get_record(uchar *buf, const uchar *key)

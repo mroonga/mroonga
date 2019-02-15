@@ -921,19 +921,16 @@ private:
                      const char *name,
                      size_t name_length);
   bool have_custom_normalizer(KEY *key) const;
-  void set_normalizer(grn_obj *lexicon, KEY *normalizer);
+  void set_normalizer(grn_obj *lexicon, KEY *key);
   void set_normalizer(grn_obj *lexicon,
                       KEY *key,
                       const char *normalizer,
                       size_t normalizer_length);
   bool find_index_column_flags(KEY *key, grn_column_flags *index_column_flags);
-  bool find_token_filters(KEY *key, grn_obj *token_filters);
-  bool find_token_filters_put(grn_obj *token_filters,
-                              const char *token_filter_name,
-                              int token_filter_name_length);
-  bool find_token_filters_fill(grn_obj *token_filters,
-                               const char *token_filter_names,
-                               int token_filter_name_length);
+  void set_token_filters(grn_obj *lexicon, KEY *key);
+  void set_token_filters(grn_obj *lexicon,
+                         const char *token_filters,
+                         size_t token_filters_length);
   int wrapper_get_record(uchar *buf, const uchar *key);
   int wrapper_get_next_geo_record(uchar *buf);
   int storage_get_next_record(uchar *buf);
