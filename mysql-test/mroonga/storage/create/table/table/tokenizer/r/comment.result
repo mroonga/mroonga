@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS terms;
+SET NAMES utf8mb4;
+CREATE TABLE terms (
+term VARCHAR(64) NOT NULL PRIMARY KEY
+) COMMENT='tokenizer "TokenNgram(\'n\', 4)"'
+  DEFAULT CHARSET=utf8mb4;
+SELECT mroonga_command("dump --dump_plugins no");
+mroonga_command("dump --dump_plugins no")
+table_create mroonga_operations TABLE_NO_KEY
+column_create mroonga_operations record COLUMN_SCALAR UInt32
+column_create mroonga_operations table COLUMN_SCALAR ShortText
+column_create mroonga_operations type COLUMN_SCALAR ShortText
+
+table_create terms TABLE_PAT_KEY ShortText --default_tokenizer "TokenNgram(\"n\", 4)" --normalizer NormalizerMySQLGeneralCI
+column_create terms term COLUMN_SCALAR ShortText
+DROP TABLE terms;

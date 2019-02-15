@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -470,6 +470,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         case 6:
           MRN_PARAM_STR("engine", engine);
           break;
+        case 9:
+          MRN_PARAM_STR("tokenizer", tokenizer);
+          break;
         case 10:
           MRN_PARAM_STR("normalizer", normalizer);
           break;
@@ -477,6 +480,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
           MRN_PARAM_STR("token_filters", token_filters);
           break;
         case 17:
+          /* Deprecated */
           MRN_PARAM_STR("default_tokenizer", default_tokenizer);
           break;
         default:
@@ -659,6 +663,8 @@ int mrn_free_share_alloc(
     my_free(share->table_flags);
   if (share->engine)
     my_free(share->engine);
+  if (share->tokenizer)
+    my_free(share->tokenizer);
   if (share->default_tokenizer)
     my_free(share->default_tokenizer);
   if (share->normalizer)

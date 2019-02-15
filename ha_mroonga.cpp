@@ -3853,6 +3853,11 @@ int ha_mroonga::storage_create(const char *name,
           }
         }
 #endif
+        if (!tokenizer && tmp_share->tokenizer) {
+          tokenizer = tmp_share->tokenizer;
+          tokenizer_length = tmp_share->tokenizer_length;
+        }
+        /* Deprecated */
         if (!tokenizer && tmp_share->default_tokenizer) {
           tokenizer = tmp_share->default_tokenizer;
           tokenizer_length = tmp_share->default_tokenizer_length;
