@@ -10427,7 +10427,7 @@ void ha_mroonga::set_normalizer(grn_obj *lexicon,
     grn_obj normalizer_spec;
     GRN_TEXT_INIT(&normalizer_spec, 0);
     if (normalizer) {
-      GRN_TEXT_SETS(ctx, &normalizer_spec, normalizer);
+      GRN_TEXT_SET(ctx, &normalizer_spec, normalizer, normalizer_length);
     } else {
       Field *field = key->key_part[0].field;
       mrn::FieldNormalizer field_normalizer(ctx, ha_thd(), field);
