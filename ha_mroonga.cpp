@@ -1937,11 +1937,13 @@ mrn_hton_alter_table_flags(mrn_alter_table_flags flags)
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
 struct ha_table_option_struct
 {
+  const char *tokenizer;
   const char *flags;
 };
 
 static ha_create_table_option mrn_table_options[] =
 {
+  HA_TOPTION_STRING("TOKENIZER", tokenizer),
   HA_TOPTION_STRING("FLAGS", flags),
   HA_TOPTION_END
 };
@@ -3840,10 +3842,24 @@ int ha_mroonga::storage_create(const char *name,
           set_normalizer(table_obj, key_info);
         }
       }
-      if (tmp_share->default_tokenizer) {
-        set_tokenizer(table_obj,
-                      tmp_share->default_tokenizer,
-                      tmp_share->default_tokenizer_length);
+      {
+        const char *tokenizer = NULL;
+        size_t tokenizer_length = 0;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+        if (info->option_struct) {
+          tokenizer = info->option_struct->tokenizer;
+          if (tokenizer) {
+            tokenizer_length = strlen(tokenizer);
+          }
+        }
+#endif
+        if (!tokenizer && tmp_share->default_tokenizer) {
+          tokenizer = tmp_share->default_tokenizer;
+          tokenizer_length = tmp_share->default_tokenizer_length;
+        }
+        if (tokenizer) {
+          set_tokenizer(table_obj, tokenizer, tokenizer_length);
+        }
       }
       if (tmp_share->token_filters) {
         grn_obj token_filters;
