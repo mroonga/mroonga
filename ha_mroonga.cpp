@@ -1939,6 +1939,7 @@ struct ha_table_option_struct
 {
   const char *tokenizer;
   const char *normalizer;
+  const char *token_filters;
   const char *flags;
 };
 
@@ -1946,6 +1947,7 @@ static ha_create_table_option mrn_table_options[] =
 {
   HA_TOPTION_STRING("TOKENIZER", tokenizer),
   HA_TOPTION_STRING("NORMALIZER", normalizer),
+  HA_TOPTION_STRING("TOKEN_FILTERS", token_filters),
   HA_TOPTION_STRING("FLAGS", flags),
   HA_TOPTION_END
 };
@@ -3833,15 +3835,31 @@ int ha_mroonga::storage_create(const char *name,
     KEY *key_info = &(table->s->key_info[pkey_nr]);
     int key_parts = KEY_N_KEY_PARTS(key_info);
     if (key_parts == 1) {
-      if (tmp_share->normalizer) {
-        set_normalizer(table_obj,
-                       NULL,
-                       tmp_share->normalizer,
-                       tmp_share->normalizer_length);
-      } else {
-        Field *field = &(key_info->key_part->field[0]);
-        if (should_normalize(field, false)) {
-          set_normalizer(table_obj, key_info);
+      {
+        const char *normalizer = NULL;
+        size_t normalizer_length = 0;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+        if (info->option_struct) {
+          normalizer = info->option_struct->normalizer;
+          if (normalizer) {
+            normalizer_length = strlen(normalizer);
+          }
+        }
+#endif
+        if (!normalizer && tmp_share->normalizer) {
+          normalizer = tmp_share->normalizer;
+          normalizer_length = tmp_share->normalizer_length;
+        }
+        if (normalizer) {
+          set_normalizer(table_obj,
+                         NULL,
+                         normalizer,
+                         normalizer_length);
+        } else {
+          Field *field = &(key_info->key_part->field[0]);
+          if (should_normalize(field, false)) {
+            set_normalizer(table_obj, key_info);
+          }
         }
       }
       {
