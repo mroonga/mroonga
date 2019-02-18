@@ -22,6 +22,15 @@ environment:
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
       MARIADB_VERSION: 10.3.12
 
+matrix:
+  exclude:
+    - configuration: Package
+      MARIADB_VERSION: 10.1.38
+    - configuration: Package
+      MARIADB_VERSION: 10.2.21
+    - configuration: Package
+      CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
+
 install:
   - cd ..
   - choco install -y curl 7zip.commandline
