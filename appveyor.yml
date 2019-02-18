@@ -39,8 +39,11 @@ install:
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
   - rmdir /S /Q storage\mroonga\
+  - ps: Get-Content ..\mroonga\version | ForEach-Object { $env:MROONGA_VERSION = $_ }
   - move ..\mroonga storage\mroonga
   - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
+  - ps: Get-Content ..\groonga\base_version | ForEach-Object { $env:GROONGA_VERSION = $_ }
+  - ps: Get-Content ..\groonga\include\groonga\version.h.in | ForEach-Object { $_ -replace "@GRN_VERSION@","$env:GROONGA_VERSION" } | Set-Content ..\groonga\include\groonga\version.h
   - rmdir /S /Q ..\groonga\test\
   - cd ..\groonga\vendor
   - c:\Ruby26-x64\bin\ruby -v download_lz4.rb
@@ -89,7 +92,32 @@ for:
       only:
         - configuration: Package
     build_script:
-      - if %CMAKE_GENERATOR_NAME% == "Visual Studio 14 2015 Win64" if %MARIADB_VERSION% == "10.3.12" set BUILDPACKAGE=TRUE
-      - if not %BUILD_PACKAGE% == "TRUE" exit 0
-      - echo "BUILD PACKAGE on appveyor"
-
+      - set
+      - cd %APPVEYOR_BUILD_FOLDER%\..
+      - git clone --depth 1
+        https://github.com/cosmo0920/PowerShell-for-Mroonga-building.git mrnbuild
+      - cd mrnbuild/powershell
+      - ps: $env:MARIADBVER = "mariadbVer = " + '"' + $env:MARIADB_VERSION + '"'
+      - ps: $env:MROONGAVER = "mroongaVer = " + '"' + $env:MROONGA_VERSION + '"'
+      - ps: (Get-Content .\versions.ps1) | ForEach-Object { $_ -replace 'mariadbVer = ".+"',$env:MARIADBVER } | ForEach-Object { $_ -replace 'mroongaVer = ".+"',$env:MROONGAVER } | Set-Content .\versions.ps1
+      - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Windows\System32;C:\Windows;%PATH%"
+      - set MSYSTEM=MINGW64
+      - pacman -Sy --noconfirm bison
+      - ps: .\get-mroonga-batfiles.ps1
+      - ps: .\prepare-building-mroonga.ps1
+      - cmake --version
+      - bison --version
+      - move ..\..\mariadb-%MARIADB_VERSION% work/source
+      - cd .\work
+      - call .\build-vc2015-zip-64.bat
+      - 7z x mariadb-%MARIADB_VERSION%-winx64.zip
+      - cd ..\
+      - netsh advfirewall firewall add rule name="mariadb" dir=in action=allow protocol=TCP localport=3306 enable=yes profile=any
+      - ps: (Get-Content .\install-mroonga.ps1) | ForEach-Object { $_ -replace '"win32", ','' } | Set-Content .\install-mroonga.ps1
+      - ps: .\install-mroonga.ps1
+      - ps: (Get-Content .\create-mrnzip.ps1) | ForEach-Object { $_ -replace '"win32", ','' } | Set-Content .\create-mrnzip.ps1
+      - ps: .\create-mrnzip.ps1
+    on_success:
+      - pwd
+      - set ARTIFACT=work\mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-winx64.zip
+      - ps: Push-AppveyorArtifact $Env:ARTIFACT
