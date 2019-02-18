@@ -4,6 +4,9 @@ notifications:
 
 version: "{build}"
 clone_depth: 10
+configuration:
+  - Debug
+  - Package
 environment:
   matrix:
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
@@ -37,33 +40,47 @@ install:
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
-build_script:
-  - "echo # > win\\packaging\\CMakeLists.txt"
-  - cmake . -G "%CMAKE_GENERATOR_NAME%"
-      -DCMAKE_BUILD_TYPE=Debug
-      -DPLUGIN_ARCHIVE=NO
-      -DPLUGIN_BLACKHOLE=NO
-      -DPLUGIN_CASSANDRA=NO
-      -DPLUGIN_CONNECT=NO
-      -DPLUGIN_CSV=NO
-      -DPLUGIN_EXAMPLE=NO
-      -DPLUGIN_FEDERATED=NO
-      -DPLUGIN_FEDERATEDX=NO
-      -DPLUGIN_HEAP=NO
-      -DPLUGIN_INNOBASE=YES
-      -DPLUGIN_MYISAM=NO
-      -DPLUGIN_MYISAMMRG=NO
-      -DPLUGIN_OQGRAPH=NO
-      -DPLUGIN_PERFSCHEMA=NO
-      -DPLUGIN_SEQUENCE=NO
-      -DPLUGIN_SPHINX=NO
-      -DPLUGIN_SPIDER=NO
-      -DPLUGIN_TEST_SQL_DISCOVERY=NO
-      -DPLUGIN_TOKUDB=NO
-      -DPLUGIN_XTRADB=NO
-      -DWITH_UNIT_TESTS=OFF
-      -DWITH_MARIABACKUP=OFF
-      -DGRN_WITH_BUNDLED_MECAB=ON
-  - cmake --build . --config Debug
-
 test: off
+
+for:
+  -
+    matrix:
+      only:
+        - configuration: Debug
+    build_script:
+      - "echo # > win\\packaging\\CMakeLists.txt"
+      - cmake . -G "%CMAKE_GENERATOR_NAME%"
+          -DCMAKE_BUILD_TYPE=Debug
+          -DPLUGIN_ARCHIVE=NO
+          -DPLUGIN_BLACKHOLE=NO
+          -DPLUGIN_CASSANDRA=NO
+          -DPLUGIN_CONNECT=NO
+          -DPLUGIN_CSV=NO
+          -DPLUGIN_EXAMPLE=NO
+          -DPLUGIN_FEDERATED=NO
+          -DPLUGIN_FEDERATEDX=NO
+          -DPLUGIN_HEAP=NO
+          -DPLUGIN_INNOBASE=YES
+          -DPLUGIN_MYISAM=NO
+          -DPLUGIN_MYISAMMRG=NO
+          -DPLUGIN_OQGRAPH=NO
+          -DPLUGIN_PERFSCHEMA=NO
+          -DPLUGIN_SEQUENCE=NO
+          -DPLUGIN_SPHINX=NO
+          -DPLUGIN_SPIDER=NO
+          -DPLUGIN_TEST_SQL_DISCOVERY=NO
+          -DPLUGIN_TOKUDB=NO
+          -DPLUGIN_XTRADB=NO
+          -DWITH_UNIT_TESTS=OFF
+          -DWITH_MARIABACKUP=OFF
+          -DGRN_WITH_BUNDLED_MECAB=ON
+      - cmake --build . --config Debug
+  -
+    matrix:
+      only:
+        - configuration: Package
+    build_script:
+      - if %CMAKE_GENERATOR_NAME% == "Visual Studio 14 2015 Win64" if %MARIADB_VERSION% == "10.3.12" set BUILDPACKAGE=TRUE
+      - if not %BUILD_PACKAGE% == "TRUE" exit 0
+      - echo "BUILD PACKAGE on appveyor"
+
