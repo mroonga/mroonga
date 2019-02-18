@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -195,7 +195,11 @@ namespace mrn {
     return tokenizer;
   }
 
-  const char *ParametersParser::table() {
-    return (*this)["table"];
+  const char *ParametersParser::lexicon() {
+    const char *lexicon = (*this)["lexicon"];
+    if (!lexicon) {
+      lexicon = (*this)["table"]; // For backward compatibility
+    }
+    return lexicon;
   }
 }

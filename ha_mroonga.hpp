@@ -447,6 +447,7 @@ struct ha_index_option_struct
   const char *normalizer;
   const char *token_filters;
   const char *flags;
+  const char *lexicon;
 };
 #endif
 

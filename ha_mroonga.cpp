@@ -1965,6 +1965,7 @@ static ha_create_table_option mrn_index_options[] =
   HA_IOPTION_STRING("NORMALIZER", normalizer),
   HA_IOPTION_STRING("TOKEN_FILTERS", token_filters),
   HA_IOPTION_STRING("FLAGS", flags),
+  HA_IOPTION_STRING("LEXICON", lexicon),
   HA_IOPTION_END
 };
 #endif
@@ -4285,10 +4286,18 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
 {
   MRN_DBUG_ENTER_METHOD();
 
+  const char *lexicon_name = NULL;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (key_info->option_struct) {
+    lexicon_name = key_info->option_struct->lexicon;
+  }
+#endif
   mrn::ParametersParser parser(key_info->comment.str,
                                key_info->comment.length);
-  parser.parse();
-  const char *lexicon_name = parser.table();
+  if (!lexicon_name) {
+    parser.parse();
+    lexicon_name = parser.lexicon();
+  }
   if (lexicon_name) {
     grn_obj *index_table = grn_ctx_get(ctx, lexicon_name, -1);
     if (!index_table) {
@@ -4455,10 +4464,19 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
 
   const char *index_column_name;
   size_t index_column_name_length;
+  const char *lexicon_name = NULL;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (key_info->option_struct) {
+    lexicon_name = key_info->option_struct->lexicon;
+  }
+#endif
   mrn::ParametersParser parser(key_info->comment.str,
                                key_info->comment.length);
-  parser.parse();
-  if (parser.table()) {
+  if (!lexicon_name) {
+    parser.parse();
+    lexicon_name = parser.lexicon();
+  }
+  if (lexicon_name) {
     index_column_name = KEY_NAME_PTR(key_info);
     index_column_name_length = KEY_NAME_LENGTH(key_info);
   } else {
@@ -4561,10 +4579,19 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
       }
 
       KEY *key_info = &table->s->key_info[j];
+      const char *lexicon_name = NULL;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+      if (key_info->option_struct) {
+        lexicon_name = key_info->option_struct->lexicon;
+      }
+#endif
       mrn::ParametersParser parser(key_info->comment.str,
                                    key_info->comment.length);
-      parser.parse();
-      if (!parser.table()) {
+      if (!lexicon_name) {
+        parser.parse();
+        lexicon_name = parser.lexicon();
+      }
+      if (!lexicon_name) {
         grn_obj_remove(ctx, index_tables[j]);
       }
     }
@@ -5332,10 +5359,18 @@ int ha_mroonga::storage_open_indexes(const char *name)
       }
     }
 
+    const char *lexicon_name = NULL;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+    if (key_info->option_struct) {
+      lexicon_name = key_info->option_struct->lexicon;
+    }
+#endif
     mrn::ParametersParser parser(key_info->comment.str,
                                  key_info->comment.length);
-    parser.parse();
-    const char *lexicon_name = parser.table();
+    if (!lexicon_name) {
+      parser.parse();
+      lexicon_name = parser.lexicon();
+    }
     if (lexicon_name) {
       grn_index_tables[i] = grn_ctx_get(ctx, lexicon_name, -1);
       if (ctx->rc == GRN_SUCCESS) {
@@ -9921,8 +9956,15 @@ int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
   mrn::ParametersParser parser(key_info->comment.str,
                                key_info->comment.length);
   if (!target_share->wrapper_mode) {
-    parser.parse();
-    lexicon_name = parser.table();
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+    if (key_info->option_struct) {
+      lexicon_name = key_info->option_struct->lexicon;
+    }
+#endif
+    if (!lexicon_name) {
+      parser.parse();
+      lexicon_name = parser.lexicon();
+    }
   }
   if (lexicon_name) {
     snprintf(target_name, GRN_TABLE_MAX_KEY_SIZE,
@@ -14798,10 +14840,18 @@ int ha_mroonga::generic_disable_index(int i, KEY *key_info)
   MRN_DBUG_ENTER_METHOD();
 
   int error = 0;
+  const char *lexicon_name = NULL;
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  if (key_info->option_struct) {
+    lexicon_name = key_info->option_struct->lexicon;
+  }
+#endif
   mrn::ParametersParser parser(key_info->comment.str,
                                key_info->comment.length);
-  parser.parse();
-  const char *lexicon_name = parser.table();
+  if (!lexicon_name) {
+    parser.parse();
+    lexicon_name = parser.lexicon();
+  }
   if (lexicon_name) {
     char index_column_name[GRN_TABLE_MAX_KEY_SIZE];
     snprintf(index_column_name, GRN_TABLE_MAX_KEY_SIZE - 1,
@@ -15351,10 +15401,16 @@ int ha_mroonga::storage_recreate_indexes(THD *thd)
   for (uint i = 0; i < n_keys; i++) {
     KEY *key_info = &(table_share->key_info[i]);
 
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+    if (key_info->option_struct && key_info->option_struct->lexicon) {
+      continue;
+    }
+#endif
+
     mrn::ParametersParser parser(key_info->comment.str,
                                  key_info->comment.length);
     parser.parse();
-    if (parser.table())
+    if (parser.lexicon())
       continue;
 
     if (i == table_share->primary_key)
