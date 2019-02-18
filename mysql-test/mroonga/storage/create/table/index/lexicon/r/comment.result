@@ -25,3 +25,5 @@ column_create tags name COLUMN_SCALAR ShortText
 column_create bugs tags COLUMN_SCALAR tags
 
 column_create tags bugs_tags_index COLUMN_INDEX|WITH_POSITION bugs tags
+DROP TABLE bugs;
+DROP TABLE tags;
