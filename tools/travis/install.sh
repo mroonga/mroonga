@@ -111,7 +111,7 @@ else
         apt-get source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       else
-        repository_deb=mysql-apt-config_0.8.10-1_all.deb
+        repository_deb=mysql-apt-config_0.8.12-1_all.deb
         curl -O http://repo.mysql.com/${repository_deb}
         sudo env MYSQL_SERVER_VERSION=mysql-${series} \
              dpkg -i ${repository_deb}
