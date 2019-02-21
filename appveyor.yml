@@ -62,7 +62,7 @@ for:
     build_script:
       - "echo # > win\\packaging\\CMakeLists.txt"
       - cmake . -G "%CMAKE_GENERATOR_NAME%"
-          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
           -DPLUGIN_ARCHIVE=NO
           -DPLUGIN_BLACKHOLE=NO
           -DPLUGIN_CASSANDRA=NO
@@ -86,7 +86,7 @@ for:
           -DWITH_UNIT_TESTS=OFF
           -DWITH_MARIABACKUP=OFF
           -DGRN_WITH_BUNDLED_MECAB=ON
-      - cmake --build . --config Debug
+      - cmake --build . --config RelWithDebInfo
   -
     matrix:
       only:
