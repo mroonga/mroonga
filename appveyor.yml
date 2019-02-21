@@ -5,8 +5,8 @@ notifications:
 version: "{build}"
 clone_depth: 10
 configuration:
-  - Debug
-  - Package
+  - BuildCheck
+  - ReleasePackage
 environment:
   matrix:
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
@@ -24,11 +24,11 @@ environment:
 
 matrix:
   exclude:
-    - configuration: Package
+    - configuration: ReleasePackage
       MARIADB_VERSION: 10.1.38
-    - configuration: Package
+    - configuration: ReleasePackage
       MARIADB_VERSION: 10.2.21
-    - configuration: Package
+    - configuration: ReleasePackage
       CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
 
 install:
@@ -58,7 +58,7 @@ for:
   -
     matrix:
       only:
-        - configuration: Debug
+        - configuration: BuildCheck
     build_script:
       - "echo # > win\\packaging\\CMakeLists.txt"
       - cmake . -G "%CMAKE_GENERATOR_NAME%"
@@ -90,7 +90,7 @@ for:
   -
     matrix:
       only:
-        - configuration: Package
+        - configuration: ReleasePackage
     build_script:
       - set
       - cd %APPVEYOR_BUILD_FOLDER%\..
