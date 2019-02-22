@@ -34,8 +34,6 @@ matrix:
       MARIADB_VERSION: 10.1.38
     - configuration: ReleasePackage
       MARIADB_VERSION: 10.2.21
-    - configuration: ReleasePackage
-      CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
 
 install:
   - cd ..
