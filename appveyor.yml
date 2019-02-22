@@ -101,9 +101,6 @@ for:
       - git clone --depth 1
         https://github.com/cosmo0920/PowerShell-for-Mroonga-building.git mrnbuild
       - cd mrnbuild/powershell
-      - ps: $env:MARIADBVER = "mariadbVer = " + '"' + $env:MARIADB_VERSION + '"'
-      - ps: $env:MROONGAVER = "mroongaVer = " + '"' + $env:MROONGA_VERSION + '"'
-      - ps: (Get-Content .\versions.ps1) | ForEach-Object { $_ -replace 'mariadbVer = ".+"',$env:MARIADBVER } | ForEach-Object { $_ -replace 'mroongaVer = ".+"',$env:MROONGAVER } | Set-Content .\versions.ps1
       - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Windows\System32;C:\Windows;%PATH%"
       - set MSYSTEM=MINGW64
       - pacman -Sy --noconfirm bison
@@ -113,15 +110,14 @@ for:
       - bison --version
       - move ..\..\mariadb-%MARIADB_VERSION% work/source
       - cd .\work
-      - call .\build-vc2015-zip-64.bat
-      - 7z x mariadb-%MARIADB_VERSION%-winx64.zip
+      - if %PLATFORM% == "win32" call .\build-vc2015-zip-32.bat
+      - if %PLATFORM% == "winx64" call .\build-vc2015-zip-64.bat
+      - 7z x mariadb-%MARIADB_VERSION%-%PLATFORM%.zip
       - cd ..\
       - netsh advfirewall firewall add rule name="mariadb" dir=in action=allow protocol=TCP localport=3306 enable=yes profile=any
-      - ps: (Get-Content .\install-mroonga.ps1) | ForEach-Object { $_ -replace '"win32", ','' } | Set-Content .\install-mroonga.ps1
-      - ps: .\install-mroonga.ps1
-      - ps: (Get-Content .\create-mrnzip.ps1) | ForEach-Object { $_ -replace '"win32", ','' } | Set-Content .\create-mrnzip.ps1
-      - ps: .\create-mrnzip.ps1
+      - ps: .\install-mroonga.ps1 -mariadbVersion %MARIADB_VERSION% -platforms %PLATFORM%
+      - ps: .\create-mrnzip.ps1 -mariadbVersion %MARIADB_VERSION% -mroongaVersion %MROONGA_VERSION% -platforms %PLATFORM%
     on_success:
       - pwd
-      - set ARTIFACT=work\mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-winx64.zip
+      - set ARTIFACT=work\mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%PLATFORM%.zip
       - ps: Push-AppveyorArtifact $Env:ARTIFACT
