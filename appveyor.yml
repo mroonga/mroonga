@@ -110,8 +110,8 @@ for:
       - bison --version
       - move ..\..\mariadb-%MARIADB_VERSION% work/source
       - cd .\work
-      - if %MROONGA_PLATFORM% == "win32" call .\build-vc2015-zip-32.bat
-      - if %MROONGA_PLATFORM% == "winx64" call .\build-vc2015-zip-64.bat
+      - if "%MROONGA_PLATFORM%" == "win32" call .\build-vc2015-zip-32.bat
+      - if "%MROONGA_PLATFORM%" == "winx64" call .\build-vc2015-zip-64.bat
       - 7z x mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%.zip
       - cd ..\
       - netsh advfirewall firewall add rule name="mariadb" dir=in action=allow protocol=TCP localport=3306 enable=yes profile=any
