@@ -115,8 +115,8 @@ for:
       - 7z x mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%.zip
       - cd ..\
       - netsh advfirewall firewall add rule name="mariadb" dir=in action=allow protocol=TCP localport=3306 enable=yes profile=any
-      - ps: .\install-mroonga.ps1 -mariadbVersion %MARIADB_VERSION% -platforms %MROONGA_PLATFORM%
-      - ps: .\create-mrnzip.ps1 -mariadbVersion %MARIADB_VERSION% -mroongaVersion %MROONGA_VERSION% -platforms %MROONGA_PLATFORM%
+      - ps: .\install-mroonga.ps1 -mariadbVersion $env:MARIADB_VERSION -platforms $env:MROONGA_PLATFORM
+      - ps: .\create-mrnzip.ps1 -mariadbVersion $env:MARIADB_VERSION -mroongaVersion $env:MROONGA_VERSION -platforms $env:MROONGA_PLATFORM
     on_success:
       - pwd
       - set ARTIFACT=work\mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip
