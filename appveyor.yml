@@ -37,7 +37,6 @@ install:
   - move ..\mroonga storage\mroonga
   - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
   - ps: Get-Content ..\groonga\base_version | ForEach-Object { $env:GROONGA_VERSION = $_ }
-  - ps: Get-Content ..\groonga\include\groonga\version.h.in | ForEach-Object { $_ -replace "@GRN_VERSION@","$env:GROONGA_VERSION" } | Set-Content ..\groonga\include\groonga\version.h
   - rmdir /S /Q ..\groonga\test\
   - cd ..\groonga\vendor
   - c:\Ruby26-x64\bin\ruby -v download_lz4.rb
