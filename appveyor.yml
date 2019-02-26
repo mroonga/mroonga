@@ -4,9 +4,6 @@ notifications:
 
 version: "{build}"
 clone_depth: 10
-configuration:
-  - BuildCheck
-  - ReleasePackage
 environment:
   matrix:
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
@@ -27,13 +24,6 @@ environment:
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
       MARIADB_VERSION: 10.3.12
       MROONGA_PLATFORM: "winx64"
-
-matrix:
-  exclude:
-    - configuration: ReleasePackage
-      MARIADB_VERSION: 10.1.38
-    - configuration: ReleasePackage
-      MARIADB_VERSION: 10.2.21
 
 install:
   - cd ..
@@ -58,11 +48,6 @@ install:
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
 test: off
 
-for:
-  -
-    matrix:
-      only:
-        - configuration: BuildCheck
     build_script:
       - "echo # > win\\packaging\\CMakeLists.txt"
       - cmake . -G "%CMAKE_GENERATOR_NAME%"
@@ -91,10 +76,6 @@ for:
           -DWITH_MARIABACKUP=OFF
           -DGRN_WITH_BUNDLED_MECAB=ON
       - cmake --build . --config RelWithDebInfo
-  -
-    matrix:
-      only:
-        - configuration: ReleasePackage
     build_script:
       - set
       - cd %APPVEYOR_BUILD_FOLDER%\..
