@@ -49,34 +49,6 @@ install:
 test: off
 
     build_script:
-      - "echo # > win\\packaging\\CMakeLists.txt"
-      - cmake . -G "%CMAKE_GENERATOR_NAME%"
-          -DCMAKE_BUILD_TYPE=RelWithDebInfo
-          -DPLUGIN_ARCHIVE=NO
-          -DPLUGIN_BLACKHOLE=NO
-          -DPLUGIN_CASSANDRA=NO
-          -DPLUGIN_CONNECT=NO
-          -DPLUGIN_CSV=NO
-          -DPLUGIN_EXAMPLE=NO
-          -DPLUGIN_FEDERATED=NO
-          -DPLUGIN_FEDERATEDX=NO
-          -DPLUGIN_HEAP=NO
-          -DPLUGIN_INNOBASE=YES
-          -DPLUGIN_MYISAM=NO
-          -DPLUGIN_MYISAMMRG=NO
-          -DPLUGIN_OQGRAPH=NO
-          -DPLUGIN_PERFSCHEMA=NO
-          -DPLUGIN_SEQUENCE=NO
-          -DPLUGIN_SPHINX=NO
-          -DPLUGIN_SPIDER=NO
-          -DPLUGIN_TEST_SQL_DISCOVERY=NO
-          -DPLUGIN_TOKUDB=NO
-          -DPLUGIN_XTRADB=NO
-          -DWITH_UNIT_TESTS=OFF
-          -DWITH_MARIABACKUP=OFF
-          -DGRN_WITH_BUNDLED_MECAB=ON
-      - cmake --build . --config RelWithDebInfo
-    build_script:
       - set
       - cd %APPVEYOR_BUILD_FOLDER%\..
       - git clone --depth 1
