@@ -48,29 +48,29 @@ install:
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
 test: off
 
-    build_script:
-      - set
-      - cd %APPVEYOR_BUILD_FOLDER%\..
-      - git clone --depth 1
-        https://github.com/cosmo0920/PowerShell-for-Mroonga-building.git mrnbuild
-      - cd mrnbuild/powershell
-      - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Windows\System32;C:\Windows;%PATH%"
-      - set MSYSTEM=MINGW64
-      - pacman -Sy --noconfirm bison
-      - ps: .\get-mroonga-batfiles.ps1
-      - ps: .\prepare-building-mroonga.ps1
-      - cmake --version
-      - bison --version
-      - move ..\..\mariadb-%MARIADB_VERSION% work/source
-      - cd .\work
-      - if "%MROONGA_PLATFORM%" == "win32" call .\build-vc2015-zip-32.bat
-      - if "%MROONGA_PLATFORM%" == "winx64" call .\build-vc2015-zip-64.bat
-      - 7z x mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%.zip
-      - cd ..\
-      - netsh advfirewall firewall add rule name="mariadb" dir=in action=allow protocol=TCP localport=3306 enable=yes profile=any
-      - ps: .\install-mroonga.ps1 -mariadbVersion $env:MARIADB_VERSION -platforms $env:MROONGA_PLATFORM
-      - ps: .\create-mrnzip.ps1 -mariadbVersion $env:MARIADB_VERSION -mroongaVersion $env:MROONGA_VERSION -platforms $env:MROONGA_PLATFORM
-    on_success:
-      - pwd
-      - set ARTIFACT=work\mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip
-      - ps: Push-AppveyorArtifact $Env:ARTIFACT
+build_script:
+  - set
+  - cd %APPVEYOR_BUILD_FOLDER%\..
+  - git clone --depth 1
+    https://github.com/cosmo0920/PowerShell-for-Mroonga-building.git mrnbuild
+  - cd mrnbuild/powershell
+  - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Windows\System32;C:\Windows;%PATH%"
+  - set MSYSTEM=MINGW64
+  - pacman -Sy --noconfirm bison
+  - ps: .\get-mroonga-batfiles.ps1
+  - ps: .\prepare-building-mroonga.ps1
+  - cmake --version
+  - bison --version
+  - move ..\..\mariadb-%MARIADB_VERSION% work/source
+  - cd .\work
+  - if "%MROONGA_PLATFORM%" == "win32" call .\build-vc2015-zip-32.bat
+  - if "%MROONGA_PLATFORM%" == "winx64" call .\build-vc2015-zip-64.bat
+  - 7z x mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%.zip
+  - cd ..\
+  - netsh advfirewall firewall add rule name="mariadb" dir=in action=allow protocol=TCP localport=3306 enable=yes profile=any
+  - ps: .\install-mroonga.ps1 -mariadbVersion $env:MARIADB_VERSION -platforms $env:MROONGA_PLATFORM
+  - ps: .\create-mrnzip.ps1 -mariadbVersion $env:MARIADB_VERSION -mroongaVersion $env:MROONGA_VERSION -platforms $env:MROONGA_PLATFORM
+on_success:
+  - pwd
+  - set ARTIFACT=work\mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip
+  - ps: Push-AppveyorArtifact $Env:ARTIFACT
