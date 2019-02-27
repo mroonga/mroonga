@@ -73,7 +73,7 @@ build_script:
       profile=any
   - ps: .\build\storage\mroonga\packages\windows\install-mroonga.ps1 
       -mariadbVersion $env:MARIADB_VERSION
-      -platforms $env:MROONGA_PLATFORM
+      -platform $env:MROONGA_PLATFORM
 
 test: off
 
