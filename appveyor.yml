@@ -71,8 +71,9 @@ build_script:
       localport=3306
       enable=yes
       profile=any
-  - set MROONGA_INSTALL_SCRIPT=.\source\storage\mroonga\packages\windows\install-mroonga.ps1
-  - ps: $command = "$env:MROONGA_INSTALL_SCRIPT -mariadbVersion $env:MARIADB_VERSION -platforms $env:MROONGA_PLATFORM"; Invoke-Expression $command
+  - ps: .\build\storage\mroonga\packages\windows\install-mroonga.ps1 
+      -mariadbVersion $env:MARIADB_VERSION
+      -platforms $env:MROONGA_PLATFORM
 
 test: off
 
