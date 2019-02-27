@@ -63,7 +63,14 @@ build_script:
   - move *.zip ..\
   - cd ..\
   - 7z x mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%.zip
-  - netsh advfirewall firewall add rule name="mariadb" dir=in action=allow protocol=TCP localport=3306 enable=yes profile=any
+  - netsh advfirewall firewall add rule
+      name="mariadb"
+      dir=in
+      action=allow
+      protocol=TCP
+      localport=3306
+      enable=yes
+      profile=any
   - set MROONGA_INSTALL_SCRIPT=.\source\storage\mroonga\packages\windows\install-mroonga.ps1
   - ps: $command = "$env:MROONGA_INSTALL_SCRIPT -mariadbVersion $env:MARIADB_VERSION -platforms $env:MROONGA_PLATFORM"; Invoke-Expression $command
 
