@@ -51,13 +51,9 @@ build_script:
   - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Windows\System32;C:\Windows;%PATH%"
   - set MSYSTEM=MINGW64
   - pacman -Sy --noconfirm bison
-  - move mariadb-%MARIADB_VERSION% source
-  - if "%MROONGA_PLATFORM%" == "win32" set MROONGA_BUILD_DIR=build-vc2015-zip-32
-  - if "%MROONGA_PLATFORM%" == "winx64" set MROONGA_BUILD_DIR=build-vc2015-zip-64
-  - mkdir %MROONGA_BUILD_DIR%
-  - cd %MROONGA_BUILD_DIR%
-  - cmake ..\source -G "%CMAKE_GENERATOR_NAME%" -DMRN_GROONGA_EMBED=OFF -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF -DGRN_WITH_BUNDLED_LZ4=ON -DGRN_WITH_BUNDLED_MECAB=ON
-  - move .\storage\mroonga\vendor\groonga\include\groonga\version.h ..\source\storage\mroonga\vendor\groonga\include\groonga\
+  - move mariadb-%MARIADB_VERSION% build
+  - cd build
+  - cmake . -G "%CMAKE_GENERATOR_NAME%" -DMRN_GROONGA_EMBED=OFF -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF -DGRN_WITH_BUNDLED_LZ4=ON -DGRN_WITH_BUNDLED_MECAB=ON
   - cmake --build . --config RelWithDebInfo
   - cmake --build . --config RelWithDebInfo --target package
   - move *.zip ..\
