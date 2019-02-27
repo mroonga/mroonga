@@ -53,7 +53,11 @@ build_script:
   - pacman -Sy --noconfirm bison
   - move mariadb-%MARIADB_VERSION% build
   - cd build
-  - cmake . -G "%CMAKE_GENERATOR_NAME%" -DMRN_GROONGA_EMBED=OFF -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF -DGRN_WITH_BUNDLED_LZ4=ON -DGRN_WITH_BUNDLED_MECAB=ON
+  - cmake . -G "%CMAKE_GENERATOR_NAME%"
+      -DMRN_GROONGA_EMBED=OFF
+      -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF
+      -DGRN_WITH_BUNDLED_LZ4=ON
+      -DGRN_WITH_BUNDLED_MECAB=ON
   - cmake --build . --config RelWithDebInfo
   - cmake --build . --config RelWithDebInfo --target package
   - move *.zip ..\
