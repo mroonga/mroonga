@@ -48,7 +48,6 @@ install:
 test: off
 
 build_script:
-  - set
   - cd %APPVEYOR_BUILD_FOLDER%\..
   - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Windows\System32;C:\Windows;%PATH%"
   - set MSYSTEM=MINGW64
