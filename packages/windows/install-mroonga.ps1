@@ -1,7 +1,7 @@
 
 Param(
   [Parameter(mandatory=$true)][String]$mariadbVersion,
-  [Parameter(mandatory=$true)][String[]]$platforms
+  [Parameter(mandatory=$true)][String]$platform
 )
 
 function Wait-UntilRunning($cmdName) {
@@ -25,7 +25,6 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
   Start-Process .\bin\mysqld.exe
   Wait-UntilRunning mysqld
   Get-Content "$installSqlDir\install.sql" | .\bin\mysql.exe -uroot
-  Start-Sleep -m 1000
   Start-Process .\bin\mysqladmin.exe -ArgumentList "-uroot shutdown"
   Wait-UntilTerminate mysqld
   cd ..
@@ -33,8 +32,4 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
 
 $installSqlDir = ".\share\mroonga"
 
-foreach ($arch in $platforms)
-{
-  Install-Mroonga $mariadbVersion $arch $installSqlDir
-  Start-Sleep -m 500
-}
+Install-Mroonga $mariadbVersion $platform $installSqlDir
