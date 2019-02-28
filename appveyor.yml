@@ -78,6 +78,7 @@ build_script:
 test: off
 
 on_success:
-  - 7z a mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%
+  - 7z a mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip
+         mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%
   - set ARTIFACT=mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip
   - ps: Push-AppveyorArtifact $Env:ARTIFACT
