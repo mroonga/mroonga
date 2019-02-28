@@ -1,4 +1,3 @@
-
 Param(
   [Parameter(mandatory=$true)][String]$mariadbVersion,
   [Parameter(mandatory=$true)][String]$platform
