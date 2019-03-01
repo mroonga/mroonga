@@ -8,16 +8,22 @@ environment:
   matrix:
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
       MARIADB_VERSION: 10.1.38
+      MROONGA_PLATFORM: "win32"
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
       MARIADB_VERSION: 10.1.38
+      MROONGA_PLATFORM: "winx64"
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
       MARIADB_VERSION: 10.2.21
+      MROONGA_PLATFORM: "win32"
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
       MARIADB_VERSION: 10.2.21
+      MROONGA_PLATFORM: "winx64"
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015"
       MARIADB_VERSION: 10.3.12
+      MROONGA_PLATFORM: "win32"
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
       MARIADB_VERSION: 10.3.12
+      MROONGA_PLATFORM: "winx64"
 
 install:
   - cd ..
@@ -27,43 +33,53 @@ install:
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
   - rmdir /S /Q storage\mroonga\
+  - ps: Get-Content ..\mroonga\version | ForEach-Object { $env:MROONGA_VERSION = $_ }
   - move ..\mroonga storage\mroonga
   - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
+  - ps: Get-Content ..\groonga\base_version | ForEach-Object { $env:GROONGA_VERSION = $_ }
   - rmdir /S /Q ..\groonga\test\
   - cd ..\groonga\vendor
-  - c:\Ruby22-x64\bin\ruby -v download_lz4.rb
-  - c:\Ruby22-x64\bin\ruby -v download_mecab.rb
+  - c:\Ruby26-x64\bin\ruby -v download_lz4.rb
+  - c:\Ruby26-x64\bin\ruby -v download_mecab.rb
   - cd ..\..\mariadb-%MARIADB_VERSION%
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
   - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
+
 build_script:
-  - "echo # > win\\packaging\\CMakeLists.txt"
-  - cmake . -G "%CMAKE_GENERATOR_NAME%"
-      -DCMAKE_BUILD_TYPE=Debug
-      -DPLUGIN_ARCHIVE=NO
-      -DPLUGIN_BLACKHOLE=NO
-      -DPLUGIN_CASSANDRA=NO
-      -DPLUGIN_CONNECT=NO
-      -DPLUGIN_CSV=NO
-      -DPLUGIN_EXAMPLE=NO
-      -DPLUGIN_FEDERATED=NO
-      -DPLUGIN_FEDERATEDX=NO
-      -DPLUGIN_HEAP=NO
-      -DPLUGIN_INNOBASE=YES
-      -DPLUGIN_MYISAM=NO
-      -DPLUGIN_MYISAMMRG=NO
-      -DPLUGIN_OQGRAPH=NO
-      -DPLUGIN_PERFSCHEMA=NO
-      -DPLUGIN_SEQUENCE=NO
-      -DPLUGIN_SPHINX=NO
-      -DPLUGIN_SPIDER=NO
-      -DPLUGIN_TEST_SQL_DISCOVERY=NO
-      -DPLUGIN_TOKUDB=NO
-      -DPLUGIN_XTRADB=NO
-      -DWITH_UNIT_TESTS=OFF
-      -DWITH_MARIABACKUP=OFF
+  - cd %APPVEYOR_BUILD_FOLDER%\..
+  - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Windows\System32;C:\Windows;%PATH%"
+  - set MSYSTEM=MINGW64
+  - pacman -Sy --noconfirm bison
+  - move mariadb-%MARIADB_VERSION% source
+  - mkdir build
+  - cd build
+  - cmake ..\source -G "%CMAKE_GENERATOR_NAME%"
+      -DMRN_GROONGA_EMBED=OFF
+      -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF
+      -DGRN_WITH_BUNDLED_LZ4=ON
       -DGRN_WITH_BUNDLED_MECAB=ON
-  - cmake --build . --config Debug
+  - cmake --build . --config RelWithDebInfo
+  - cmake --build . --config RelWithDebInfo --target package
+  - move *.zip ..\
+  - cd ..\
+  - 7z x mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%.zip
+  - netsh advfirewall firewall add rule
+      name="mariadb"
+      dir=in
+      action=allow
+      protocol=TCP
+      localport=3306
+      enable=yes
+      profile=any
+  - ps: .\source\storage\mroonga\packages\windows\install-mroonga.ps1
+      -mariadbVersion $env:MARIADB_VERSION
+      -platform $env:MROONGA_PLATFORM
 
 test: off
+
+on_success:
+  - 7z a mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip
+         mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%
+  - set ARTIFACT=mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip
+  - ps: Push-AppveyorArtifact $Env:ARTIFACT
