@@ -41,6 +41,7 @@ install:
   - cd ..\groonga\vendor
   - c:\Ruby26-x64\bin\ruby -v download_lz4.rb
   - c:\Ruby26-x64\bin\ruby -v download_mecab.rb
+  - c:\Ruby26-x64\bin\ruby -v download_message_pack.rb
   - cd ..\..\mariadb-%MARIADB_VERSION%
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
