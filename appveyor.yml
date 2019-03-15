@@ -60,6 +60,7 @@ build_script:
       -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF
       -DGRN_WITH_BUNDLED_LZ4=ON
       -DGRN_WITH_BUNDLED_MECAB=ON
+      -DGRN_WITH_BUNDLED_MESSAGE_PACK=ON
   - cmake --build . --config RelWithDebInfo
   - cmake --build . --config RelWithDebInfo --target package
   - move *.zip ..\
