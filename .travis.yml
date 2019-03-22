@@ -14,8 +14,6 @@ matrix:
     - env:
         - MYSQL_VERSION=mysql-8.0
     - env:
-        - MYSQL_VERSION=mariadb-5.5
-    - env:
         - MYSQL_VERSION=mariadb-10.0.38
         - MROONGA_BUNDLED=yes
     - env:

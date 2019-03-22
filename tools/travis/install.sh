@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2019 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -97,11 +97,6 @@ else
       sudo apt-get -qq update
       sudo apt-get -qq -y build-dep mysql-server
       if [ "$version" = "system" ]; then
-        sudo apt-get -y remove --purge \
-             mysql-server-5.6 \
-             mysql-server-core-5.6 \
-             mysql-client-5.6 \
-             mysql-client-core-5.6
         sudo rm -rf /var/lib/mysql
         sudo apt-get -y install \
              mysql-server \
@@ -130,24 +125,6 @@ else
         apt-get -qq source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       fi
-      ;;
-    mariadb-*)
-      sudo apt-get -y remove --purge \
-           mysql-server-5.6 \
-           mysql-server-core-5.6 \
-           mysql-client-5.6 \
-           mysql-client-core-5.6 \
-           mysql-common
-      sudo rm -rf /var/lib/mysql
-      setup_mariadb_apt
-      sudo apt-get -qq -y build-dep mariadb-server
-      sudo apt-get -y install \
-           mariadb-server \
-           mariadb-client \
-           mariadb-test \
-           libmariadbclient-dev
-      apt-get source mariadb-server
-      ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       ;;
     percona-server-*)
       setup_percona_apt

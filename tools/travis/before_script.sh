@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2019 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -62,11 +62,6 @@ else
       (cd vendor/mysql && sudo debian/rules override_dh_auto_configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
-      ;;
-    mariadb-5.5)
-      (cd vendor/mysql && sudo debian/rules configure)
-      configure_args=("${configure_args[@]}"
-                      "--with-mysql-build=$PWD/vendor/mysql/builddir")
       ;;
     percona-server-5.6)
       (cd vendor/mysql && \
