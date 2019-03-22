@@ -1,7 +1,7 @@
 notifications:
   webhooks:
     - https://webhook.commit-email.info/
-dist: trusty
+dist: xenial
 language: cpp
 matrix:
   include:
@@ -13,7 +13,6 @@ matrix:
         - MYSQL_VERSION=mysql-5.7
     - env:
         - MYSQL_VERSION=mysql-8.0
-      dist: xenial
     - env:
         - MYSQL_VERSION=mariadb-5.5
     - env:
@@ -47,7 +46,6 @@ matrix:
   allow_failures:
     - env:
         - MYSQL_VERSION=mysql-8.0
-      dist: xenial
 install:
   - tools/travis/install.sh
 before_script:
