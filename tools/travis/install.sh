@@ -115,8 +115,8 @@ else
         sudo apt -qq update
         sudo apt -qq -y purge \
              mysql-common \
-             mysql-client-5.7 \
-             mysql-server-5.7
+             mysql-client-core-5.7 \
+             mysql-server-core-5.7
         sudo rm -rf /var/lib/mysql/debian-*.flag
         sudo apt -qq -y build-dep mysql-server
         sudo apt -qq -y install \
@@ -136,8 +136,8 @@ else
       setup_percona_apt
       sudo apt -qq -y purge \
            mysql-common \
-           mysql-client-5.7 \
-           mysql-server-5.7
+           mysql-client-core-5.7 \
+           mysql-server-core-5.7
       sudo rm -rf /var/lib/mysql/debian-*.flag
       sudo apt -qq -y build-dep percona-server-server-${series}
       sudo apt -qq -y install \
