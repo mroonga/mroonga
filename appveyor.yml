@@ -26,6 +26,7 @@ environment:
       MROONGA_PLATFORM: "winx64"
 
 install:
+  - set PATH=C:\Ruby26-x64\bin;%PATH%
   - cd ..
   - choco install -y curl 7zip.commandline
   - curl -O http://ftp.osuosl.org/pub/mariadb/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
@@ -39,8 +40,9 @@ install:
   - ps: Get-Content ..\groonga\base_version | ForEach-Object { $env:GROONGA_VERSION = $_ }
   - rmdir /S /Q ..\groonga\test\
   - cd ..\groonga\vendor
-  - c:\Ruby26-x64\bin\ruby -v download_lz4.rb
-  - c:\Ruby26-x64\bin\ruby -v download_mecab.rb
+  - ruby download_lz4.rb
+  - ruby download_mecab.rb
+  - ruby download_message_pack.rb
   - cd ..\..\mariadb-%MARIADB_VERSION%
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
