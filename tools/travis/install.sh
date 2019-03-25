@@ -39,7 +39,7 @@ deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
 deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
 EOF
   sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-  sudo apt-get -qq update
+  sudo apt -qq update
 }
 
 setup_percona_apt()
@@ -49,7 +49,7 @@ setup_percona_apt()
   release_deb=percona-release_${release_deb_version}.${code_name}_all.deb
   wget http://www.percona.com/downloads/percona-release/ubuntu/${release_deb_version}/${release_deb}
   sudo dpkg -i ${release_deb}
-  sudo apt-get -qq update
+  sudo apt -qq update
 }
 
 if [ "${MROONGA_BUNDLED}" = "yes" ]; then
@@ -57,7 +57,7 @@ if [ "${MROONGA_BUNDLED}" = "yes" ]; then
   mv * .mroonga/
   mv .mroonga/tools ./
   setup_mariadb_apt
-  sudo apt-get -qq -y build-dep mariadb-server
+  sudo apt -qq -y build-dep mariadb-server
   # Support MariaDB for now.
   download_base=${mariadb_download_base}/${MYSQL_VERSION}
   tar_gz=${MYSQL_VERSION}.tar.gz
@@ -84,56 +84,56 @@ else
   #      https://raw.githubusercontent.com/clear-code/cutter/master/data/travis/setup.sh | sh
 
   if [ ! -f /usr/lib/groonga/plugins/tokenizers/mecab.so ]; then
-    sudo apt-get -qq -y install groonga-tokenizer-mecab
+    sudo apt -qq -y install groonga-tokenizer-mecab
   fi
 
-  sudo apt-get -qq -y install autoconf-archive
+  sudo apt -qq -y install autoconf-archive
 
   mkdir -p vendor
   cd vendor
 
   case "$MYSQL_VERSION" in
     mysql-*)
-      sudo apt-get -qq update
-      sudo apt-get -qq -y build-dep mysql-server
+      sudo apt -qq update
+      sudo apt -qq -y build-dep mysql-server
       if [ "$version" = "system" ]; then
         sudo rm -rf /var/lib/mysql
-        sudo apt-get -y install \
+        sudo apt -y install \
              mysql-server \
              mysql-client \
              mysql-testsuite \
              libmysqld-dev
-        apt-get source mysql-server
+        apt source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       else
         repository_deb=mysql-apt-config_0.8.12-1_all.deb
         curl -O http://repo.mysql.com/${repository_deb}
         sudo env MYSQL_SERVER_VERSION=mysql-${series} \
              dpkg -i ${repository_deb}
-        sudo apt-get -qq update
-        sudo apt-get -qq -y remove --purge mysql-common
-        sudo apt-get -qq -y build-dep mysql-server
-        sudo apt-get -qq -y install \
+        sudo apt -qq update
+        sudo apt -qq -y remove --purge mysql-common
+        sudo apt -qq -y build-dep mysql-server
+        sudo apt -qq -y install \
              mysql-server \
              libmysqlclient-dev \
              mysql-testsuite
         case "$MYSQL_VERSION" in
           mysql-5.*)
-            sudo apt-get -qq -y install libmysqld-dev
+            sudo apt -qq -y install libmysqld-dev
             ;;
         esac
-        apt-get -qq source mysql-server
+        apt -qq source mysql-server
         ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       fi
       ;;
     percona-server-*)
       setup_percona_apt
-      sudo apt-get -qq -y build-dep percona-server-server-${series}
-      sudo apt-get -qq -y install \
+      sudo apt -qq -y build-dep percona-server-server-${series}
+      sudo apt -qq -y install \
            percona-server-server-${series} \
            percona-server-client-${series} \
            percona-server-test-${series}
-      apt-get -qq source percona-server-server-${series}
+      apt -qq source percona-server-server-${series}
       ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       ;;
   esac

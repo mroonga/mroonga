@@ -51,25 +51,30 @@ else
   fi
   configure_args=("--with-mysql-source=$PWD/vendor/mysql")
   case "${MYSQL_VERSION}" in
-    mysql-5.6)
-      configure_args=("${configure_args[@]}" --enable-fast-mutexes)
+    mysql-system)
+      (cd vendor/mysql && \
+       fakeroot debian/rules override_dh_auto_configure && \
+       cd builddir/libservices && \
+       make > /dev/null)
+      configure_args=("${configure_args[@]}"
+                      "--with-mysql-build=$PWD/vendor/mysql/builddir")
       ;;
     mysql-5.7)
       boost_archive=boost_1_59_0.tar.gz
       curl -L -O http://downloads.sourceforge.net/project/boost/boost/1.59.0/${boost_archive}
       sudo mkdir -p /usr/global/share
       sudo mv ${boost_archive} /usr/global/share/
-      (cd vendor/mysql && sudo debian/rules override_dh_auto_configure)
+      (cd vendor/mysql && fakeroot debian/rules override_dh_auto_configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
       ;;
     percona-server-5.6)
       (cd vendor/mysql && \
-          sudo debian/rules configure SKIP_DEBUG_BINARY=yes && \
-          cd builddir/libservices && \
-          sudo make > /dev/null && \
-	  cd ../extra && \
-	  sudo make > /dev/null)
+       fakeroot debian/rules configure SKIP_DEBUG_BINARY=yes && \
+       cd builddir/libservices && \
+       make > /dev/null && \
+       cd ../extra && \
+       make > /dev/null)
       configure_args=("${configure_args[@]}"
                       "--enable-fast-mutexes"
                       "--with-mysql-build=$PWD/vendor/mysql/builddir"
@@ -77,11 +82,11 @@ else
       ;;
     percona-server-5.7)
       (cd vendor/mysql && \
-          sudo debian/rules override_dh_auto_configure SKIP_DEBUG_BINARY=yes && \
-          cd builddir/libservices && \
-          sudo make > /dev/null && \
-	  cd ../extra && \
-	  sudo make > /dev/null)
+       fakeroot debian/rules override_dh_auto_configure SKIP_DEBUG_BINARY=yes && \
+       cd builddir/libservices && \
+       make > /dev/null && \
+       cd ../extra && \
+       make > /dev/null)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/builddir"
                       "--with-mysql-config=$PWD/vendor/mysql/builddir/scripts/mysql_config")
