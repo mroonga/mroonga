@@ -64,6 +64,7 @@ else
       curl -L -O http://downloads.sourceforge.net/project/boost/boost/1.59.0/${boost_archive}
       sudo mkdir -p /usr/global/share
       sudo mv ${boost_archive} /usr/global/share/
+      sudo chown -R ${USER}: /usr/global/share/
       (cd vendor/mysql && fakeroot debian/rules override_dh_auto_configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
