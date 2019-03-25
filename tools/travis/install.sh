@@ -87,7 +87,9 @@ else
     sudo apt -qq -y install groonga-tokenizer-mecab
   fi
 
-  sudo apt -qq -y install autoconf-archive
+  sudo apt -qq -y install \
+    autoconf-archive \
+    fakeroot
 
   mkdir -p vendor
   cd vendor
