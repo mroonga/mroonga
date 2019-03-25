@@ -113,7 +113,7 @@ else
         sudo env MYSQL_SERVER_VERSION=mysql-${series} \
              dpkg -i ${repository_deb}
         sudo apt -qq update
-        sudo apt -qq -y remove --purge mysql-common
+        sudo apt -qq -y purge mysql-common
         sudo apt -qq -y build-dep mysql-server
         sudo apt -qq -y install \
              mysql-server \
@@ -130,6 +130,7 @@ else
       ;;
     percona-server-*)
       setup_percona_apt
+      sudo apt -qq -y purge mysql-common
       sudo apt -qq -y build-dep percona-server-server-${series}
       sudo apt -qq -y install \
            percona-server-server-${series} \
