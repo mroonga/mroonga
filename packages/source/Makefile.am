@@ -47,7 +47,10 @@ ARCHIVES =							\
 
 archive: $(ARCHIVES)
 
-upload: ensure-rsync-path
+ensure-latest-archive: $(ARCHIVES)
+	cd files && ln -sf $(MROONGA_TAR_GZ) $(PACKAGE)-latest.tar.gz
+
+upload: ensure-rsync-path ensure-latest-archive
 	rsync -avz --progress --delete files/ $(RSYNC_PATH)/source/mroonga
 
 files/$(MROONGA_TAR_GZ): $(top_builddir)/$(MROONGA_TAR_GZ)
