@@ -153,11 +153,11 @@ REPO
         fi
         ;;
       percona-server-56-${PACKAGE})
-        run yum install -y http://repo.percona.com/percona/yum/release/6/RPMS/noarch/percona-release-1.0-9.noarch.rpm
+        run yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
         run yum install -y Percona-Server-devel-56
         ;;
       percona-server-57-${PACKAGE})
-        run yum install -y http://repo.percona.com/percona/yum/release/7/RPMS/noarch/percona-release-1.0-9.noarch.rpm
+        run yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
         run yum install -y Percona-Server-devel-57
         if [ ${distribution_version} = 6 ]; then
           run yum install -y cmake28
