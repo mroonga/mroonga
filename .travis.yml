@@ -22,17 +22,17 @@ matrix:
         - MYSQL_VERSION=mariadb-10.1.38
         - MROONGA_BUNDLED=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.2.21
+        - MYSQL_VERSION=mariadb-10.2.23
         - MROONGA_BUNDLED=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.2.21
+        - MYSQL_VERSION=mariadb-10.2.23
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.3.12
+        - MYSQL_VERSION=mariadb-10.3.13
         - MROONGA_BUNDLED=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.3.12
+        - MYSQL_VERSION=mariadb-10.3.13
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - env:
