@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2018-09-27 15:14+0900\n"
+"PO-Revision-Date: 2019-03-28 14:48+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -20,6 +20,90 @@ msgstr ""
 
 msgid "News"
 msgstr "お知らせ"
+
+msgid "Release 9.01 - 2019-03-29"
+msgstr "9.01リリース - 2019-03-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid "[storage] Added support for tokenizer options."
+msgstr "[ストレージ] トークナイザーのオプション指定をサポートしました。"
+
+msgid ""
+"For example, you can specify tokenizer options in COMMENT section such as "
+"``CREATE TABLE foo (...) COMMENT='tokenizer \"TokenNgram(''n'', 4)\"'``."
+msgstr ""
+"例えば、 COMMENT にトークナイザーのオプションを ``CREATE TABLE foo (...) "
+"COMMENT='tokenizer \"TokenNgram('n', 4)\"'`` などと指定できます。"
+
+msgid "[mariadb] Added support for \"tokenizer\" table parameter."
+msgstr ""
+"[mariadb] テーブルのパラメーターとして \"tokenizer\" をサポートしました。"
+
+msgid ""
+"For example, you can specify \"tokenizer\" such as ``CREATE TABLE foo (...) "
+"TOKENIZER='TokenNgram(\"n\", 4)'``."
+msgstr ""
+"例えば、 トークナイザーを ``CREATE TABLE foo (...) TOKENIZER='TokenNgram(\"n"
+"\", 4)'``  などと指定できます。"
+
+msgid "[storage] Added support for tokenizer parameter in comment."
+msgstr ""
+"[ストレージ] コメントのトークナイザーのパラメータとして ``tokenizer`` をサ"
+"ポートしました。"
+
+msgid "Note that ``default_tokenizer`` is deprecated."
+msgstr "``default_tokenizer`` は非推奨になりました。"
+
+msgid "[mariadb] Added support for \"normalizer\" table parameter."
+msgstr ""
+"[mariadb] テーブルのパラメーターとして \"normalizer\" をサポートしました。"
+
+msgid ""
+"For example, you can specify \"normalizer\" such as ``CREATE TABLE foo (...) "
+"NORMALIZER='NormalizerNFKC100(\"unify_kana\", true)'``."
+msgstr ""
+"例えば、ノーマライザーを ``CREATE TABLE foo (...) "
+"NORMALIZER='NormalizerNFKC100(\"unify_kana\", true)'`` などと指定できます。"
+
+msgid "[mariadb] Added support for \"token_filters\" table parameter."
+msgstr ""
+"[mariadb] テーブルのパラメータとして \"token_filters\" をサポートしました。"
+
+msgid ""
+"For example, you can specify \"normalizer\" such as ``CREATE TABLE foo "
+"(...)  TOKEN_FILTERS='TokenFilterNFKC100(\"unify_katakana_v_sounds\", "
+"true)'``."
+msgstr ""
+"例えば、トークンフィルターを ``CREATE TABLE foo (...)  "
+"TOKEN_FILTERS='TokenFilterNFKC100(\"unify_katakana_v_sounds\", \"true\")'`` "
+"などと指定できます。"
+
+msgid "Added support for \"LEXICON\" index parameter."
+msgstr "インデックスのパラメーターとして \"LEXICON\" をサポートしました。"
+
+msgid ""
+"For example, you can specify ``FULLTEXT INDEX foo (bar) LEXICON='terms'`` or "
+"``FULLTEXT INDEX foo (bar) COMMENT 'lexicon \"terms\"'``."
+msgstr ""
+"例えば、 ``FULLTEXT INDEX foo (bar) LEXICON='terms'`` や ``FULLTEXT INDEX "
+"foo (bar) COMMENT 'lexicon \"terms\"'`` などと指定できます。"
+
+msgid ""
+"[appveyor] Improved support to building Mroonga enabled package [GitHub#230]"
+msgstr ""
+"[appveyor] Mroongaを有効にしたパッケージのビルドをサポートしました。"
+"[GitHub#230]"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.25-28."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.25-28をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.3.13."
+msgstr "[:doc:`/install/centos`] MariaDB 10.3.13をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.2.23."
+msgstr "[:doc:`/install/centos`] MariaDB 10.2.23をサポートしました。"
 
 msgid "Release 9.00 - 2019-02-09"
 msgstr "9.00リリース - 2019-02-09"
@@ -42,9 +126,6 @@ msgstr ""
 
 msgid "ref: http://groonga.org/docs/news.html#release-9-0-0-2019-02-09"
 msgstr "参考: http://groonga.org/ja/docs/news.html#release-9-0-0-2019-02-09"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid "[:doc:`/install/centos`] Supported Percona Server 5.7.24-27."
 msgstr "[:doc:`/install/centos`] Percona Server 5.7.24-27をサポートしました。"
