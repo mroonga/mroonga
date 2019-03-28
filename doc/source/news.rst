@@ -31,7 +31,7 @@ Improvements
 
 * [mariadb] Added support for "token_filters" table parameter.
 
-  * For example, you can specify "normalizer" such as ``CREATE TABLE foo (...)  TOKEN_FILTERS='TokenFilterNFKC100("unify_katakana_v_sounds", true)'``.
+  * For example, you can specify "token_filters" such as ``CREATE TABLE foo (...)  TOKEN_FILTERS='TokenFilterNFKC100("unify_katakana_v_sounds", true)'``.
 
 * Added support for "LEXICON" index parameter.
 
