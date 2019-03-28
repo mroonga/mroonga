@@ -5,6 +5,46 @@
 News
 ====
 
+.. _release-9-01:
+
+Release 9.01 - 2019-03-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage] Added support for tokenizer options.
+
+  * For example, you can specify tokenizer options in COMMENT section such as ``CREATE TABLE foo (...) COMMENT='tokenizer "TokenNgram(''n'', 4)"'``.
+
+* [mariadb] Added support for "tokenizer" table parameter.
+
+  * For example, you can specify "tokenizer" such as ``CREATE TABLE foo (...) TOKENIZER='TokenNgram("n", 4)'``.
+
+* [storage] Added support for tokenizer parameter in comment.
+
+  * Note that ``default_tokenizer`` is deprecated.
+
+* [mariadb] Added support for "normalizer" table parameter.
+
+  * For example, you can specify "normalizer" such as ``CREATE TABLE foo (...) NORMALIZER='NormalizerNFKC100("unify_kana", true)'``.
+
+* [mariadb] Added support for "token_filters" table parameter.
+
+  * For example, you can specify "normalizer" such as ``CREATE TABLE foo (...)  TOKEN_FILTERS='TokenFilterNFKC100("unify_katakana_v_sounds", true)'``.
+
+* Added support for "LEXICON" index parameter.
+
+  * For example, you can specify ``FULLTEXT INDEX foo (bar) LEXICON='terms'`` or ``FULLTEXT INDEX foo (bar) COMMENT 'lexicon "terms"'``.
+
+* [appveyor] Improved support to building Mroonga enabled package [GitHub#230]
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.25-28.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.3.13.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.23.
+
 .. _release-9-00:
 
 Release 9.00 - 2019-02-09
