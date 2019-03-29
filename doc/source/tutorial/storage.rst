@@ -290,7 +290,7 @@ Here is an example that uses ``TokenFilterStopWord`` token filter:
    CREATE TABLE terms (
      term VARCHAR(64) NOT NULL PRIMARY KEY,
      is_stop_word BOOL NOT NULL
-   ) Engine=Mroonga COMMENT='default_tokenizer "TokenBigram", token_filters "TokenFilterStopWord"' DEFAULT CHARSET=utf8;
+   ) Engine=Mroonga COMMENT='tokenizer "TokenBigram", token_filters "TokenFilterStopWord"' DEFAULT CHARSET=utf8;
    -- Query OK, 0 rows affected (0.12 sec)
 
    CREATE TABLE memos (
