@@ -24,6 +24,10 @@ environment:
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
       MARIADB_VERSION: 10.3.13
       MROONGA_PLATFORM: "winx64"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
+      MARIADB_VERSION: 10.3.13
+      MROONGA_PLATFORM: "winx64"
+      USE_MASTER: "yes"
 
 install:
   - set PATH=C:\Ruby26-x64\bin;%PATH%
@@ -36,8 +40,14 @@ install:
   - rmdir /S /Q storage\mroonga\
   - ps: Get-Content ..\mroonga\version | ForEach-Object { $env:MROONGA_VERSION = $_ }
   - move ..\mroonga storage\mroonga
-  - git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
-  - ps: Get-Content ..\groonga\base_version | ForEach-Object { $env:GROONGA_VERSION = $_ }
+  - if "%USE_MASTER%" == "yes" (
+      git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
+    ) else (
+      curl -O http://packages.groonga.org/source/groonga/groonga-latest.zip &&
+      7z x groonga-latest.zip &&
+      del groonga-latest.zip &&
+      move groonga-* ..\groonga
+    )
   - rmdir /S /Q ..\groonga\test\
   - cd ..\groonga\vendor
   - ruby download_lz4.rb
@@ -46,7 +56,16 @@ install:
   - cd ..\..\mariadb-%MARIADB_VERSION%
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
-  - git clone --quiet --depth 1 https://github.com/groonga/groonga-normalizer-mysql.git storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
+  - if "%USE_MASTER%" == "yes" (
+      git clone --quiet --depth 1
+        https://github.com/groonga/groonga-normalizer-mysql.git
+        storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
+    ) else (
+      curl -O http://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip &&
+      7z x groonga-normalizer-mysql-latest.zip &&
+      del groonga-normalizer-mysql-latest.zip &&
+      move groonga-normalizer-mysql* storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
+    )
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\..
