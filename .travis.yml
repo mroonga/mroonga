@@ -29,10 +29,10 @@ matrix:
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.3.13
+        - MYSQL_VERSION=mariadb-10.3.14
         - MROONGA_BUNDLED=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.3.13
+        - MYSQL_VERSION=mariadb-10.3.14
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - env:
