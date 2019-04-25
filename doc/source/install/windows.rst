@@ -36,8 +36,12 @@ Zip
 Download zip file and extract it. You need to choose a zip for your
 environment:
 
-  * |mroonga_windows_package_link_32|
-  * |mroonga_windows_package_link_64|
+  * |mroonga_mariadb101_windows_package_link_32|
+  * |mroonga_mariadb101_windows_package_link_64|
+  * |mroonga_mariadb102_windows_package_link_32|
+  * |mroonga_mariadb102_windows_package_link_64|
+  * |mroonga_mariadb103_windows_package_link_32|
+  * |mroonga_mariadb103_windows_package_link_64|
 
 Zip packages are pre-configured for easy to use, so no need to execute
 ``INSTALL PLUGIN`` and ``CREATE FUNCTION``.

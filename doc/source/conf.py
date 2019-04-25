@@ -100,19 +100,38 @@ pygments_style = 'sphinx'
 #modindex_common_prefix = []
 
 variables = {
-  "package_mariadb_version": os.environ["PACKAGE_MARIADB_VERSION"],
   "package_mroonga_version": os.environ["PACKAGE_MROONGA_VERSION"],
+  "package_mariadb101_version": "10.1.38",
+  "package_mariadb102_version": "10.2.23",
+  "package_mariadb103_version": "10.3.13",
+  "download_base": "https://github.com/mroonga/mroonga/releases/download"
 }
-variables["windows_package_link_label"] = \
-  "MariaDB {package_mariadb_version} with Mroonga {package_mroonga_version}".format(**variables)
-variables["windows_package_link_basename"] = \
-  "https://github.com/mroonga/mroonga/releases/download/v{package_mroonga_version}/mariadb-{package_mariadb_version}-with-mroonga-{package_mroonga_version}".format(**variables)
+variables["windows_mariadb101_package_link_label"] = \
+  "MariaDB {package_mariadb101_version} with Mroonga {package_mroonga_version}".format(**variables)
+variables["windows_mariadb101_package_link_basename"] = \
+  "{download_base}/v{package_mroonga_version}/mariadb-{package_mariadb101_version}-with-mroonga-{package_mroonga_version}".format(**variables)
+variables["windows_mariadb102_package_link_label"] = \
+  "MariaDB {package_mariadb102_version} with Mroonga {package_mroonga_version}".format(**variables)
+variables["windows_mariadb102_package_link_basename"] = \
+  "{download_base}/v{package_mroonga_version}/mariadb-{package_mariadb102_version}-with-mroonga-{package_mroonga_version}".format(**variables)
+variables["windows_mariadb103_package_link_label"] = \
+  "MariaDB {package_mariadb103_version} with Mroonga {package_mroonga_version}".format(**variables)
+variables["windows_mariadb103_package_link_basename"] = \
+  "{download_base}/v{package_mroonga_version}/mariadb-{package_mariadb103_version}-with-mroonga-{package_mroonga_version}".format(**variables)
 
 rst_epilog = '''
-.. |mroonga_windows_package_link_32| replace:: `{windows_package_link_label} (32bit)`_
-.. |mroonga_windows_package_link_64| replace:: `{windows_package_link_label} (64bit)`_
-.. _{windows_package_link_label} (32bit): {windows_package_link_basename}-win32.zip
-.. _{windows_package_link_label} (64bit): {windows_package_link_basename}-winx64.zip
+.. |mroonga_mariadb101_windows_package_link_32| replace:: `{windows_mariadb101_package_link_label} (32bit)`_
+.. |mroonga_mariadb101_windows_package_link_64| replace:: `{windows_mariadb101_package_link_label} (64bit)`_
+.. _{windows_mariadb101_package_link_label} (32bit): {windows_mariadb101_package_link_basename}-win32.zip
+.. _{windows_mariadb101_package_link_label} (64bit): {windows_mariadb101_package_link_basename}-winx64.zip
+.. |mroonga_mariadb102_windows_package_link_32| replace:: `{windows_mariadb102_package_link_label} (32bit)`_
+.. |mroonga_mariadb102_windows_package_link_64| replace:: `{windows_mariadb102_package_link_label} (64bit)`_
+.. _{windows_mariadb102_package_link_label} (32bit): {windows_mariadb102_package_link_basename}-win32.zip
+.. _{windows_mariadb102_package_link_label} (64bit): {windows_mariadb102_package_link_basename}-winx64.zip
+.. |mroonga_mariadb103_windows_package_link_32| replace:: `{windows_mariadb103_package_link_label} (32bit)`_
+.. |mroonga_mariadb103_windows_package_link_64| replace:: `{windows_mariadb103_package_link_label} (64bit)`_
+.. _{windows_mariadb103_package_link_label} (32bit): {windows_mariadb103_package_link_basename}-win32.zip
+.. _{windows_mariadb103_package_link_label} (64bit): {windows_mariadb103_package_link_basename}-winx64.zip
 '''.format(**variables)
 
 # -- Options for HTML output ---------------------------------------------------

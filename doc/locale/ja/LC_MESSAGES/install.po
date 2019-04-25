@@ -782,10 +782,22 @@ msgstr ""
 "zipファイルをダウンロードして展開してください。環境に合わせてzipファイルを選"
 "ぶ必要があります"
 
-msgid "|mroonga_windows_package_link_32|"
+msgid "|mroonga_mariadb101_windows_package_link_32|"
 msgstr ""
 
-msgid "|mroonga_windows_package_link_64|"
+msgid "|mroonga_mariadb101_windows_package_link_64|"
+msgstr ""
+
+msgid "|mroonga_mariadb102_windows_package_link_32|"
+msgstr ""
+
+msgid "|mroonga_mariadb102_windows_package_link_64|"
+msgstr ""
+
+msgid "|mroonga_mariadb103_windows_package_link_32|"
+msgstr ""
+
+msgid "|mroonga_mariadb103_windows_package_link_64|"
 msgstr ""
 
 msgid ""
