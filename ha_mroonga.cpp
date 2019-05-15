@@ -301,7 +301,7 @@ static PSI_memory_info mrn_all_memory_keys[]=
 };
 #endif
 
-#ifdef MRN_HAVE_PSI_FILE_KEY
+#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
 static PSI_file_key mrn_key_file_frm;
 static PSI_file_info mrn_all_file_keys[] = {
   PSI_INFO_ENTRY(&mrn_key_file_frm,
