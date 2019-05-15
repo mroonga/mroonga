@@ -846,7 +846,7 @@ protected:
                                       char *table_key,
                                       uint key_length,
                                       qc_engine_callback *engine_callback,
-                                      ulonglong *engine_data);
+                                      ulonglong *engine_data) mrn_override;
 #endif
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   bool prepare_inplace_alter_table(TABLE *altered_table,
