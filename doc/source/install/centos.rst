@@ -24,7 +24,7 @@ Install::
   (% sudo /sbin/service mysqld start)
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -51,7 +51,7 @@ Install::
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -75,7 +75,7 @@ Install::
   % sudo yum install -y --enablerepo=epel percona-server-56-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -99,7 +99,7 @@ Install::
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -141,7 +141,7 @@ Install::
   % sudo yum install -y --enablerepo=epel mariadb-10.1-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -182,7 +182,7 @@ Install::
   % sudo yum install -y --enablerepo=epel mariadb-10.2-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -223,7 +223,7 @@ Install::
   % sudo yum install -y --enablerepo=epel mariadb-10.3-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -245,7 +245,7 @@ Install::
   % sudo yum install -y --enablerepo=epel mariadb-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -267,7 +267,7 @@ Install::
   (% sudo systemctl start mysqld)
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -294,7 +294,7 @@ Install::
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -317,7 +317,7 @@ Install::
   (% sudo systemctl start mysqld)
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -341,7 +341,7 @@ Install::
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -372,7 +372,7 @@ Install::
   % sudo yum install -y --enablerepo=epel mariadb-10.1-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -403,7 +403,7 @@ Install::
   % sudo yum install -y --enablerepo=epel mariadb-10.2-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
@@ -434,7 +434,7 @@ Install::
   % sudo yum install -y --enablerepo=epel mariadb-10.3-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::

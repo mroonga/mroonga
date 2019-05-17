@@ -46,7 +46,7 @@ Install Mroonga for MariaDB::
 
   % sudo apt-get install -y -V mariadb-server-mroonga
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 

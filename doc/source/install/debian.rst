@@ -23,7 +23,7 @@ Install::
   % sudo apt update
   % sudo apt install -y -V mariadb-server-10.1-mroonga
 
-If you want to use `MeCab <http://mecab.sourceforge.net/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 

@@ -52,7 +52,7 @@ Here are required libraries:
 
 Here are optional libraries:
 
-  * `MeCab <http://mecab.sourceforge.net/>`_:
+  * `MeCab <https://taku910.github.io/mecab/>`_:
     Japanese morphological analysis system
 
     .. note:: If you want to use indexes of tokenizing of each
