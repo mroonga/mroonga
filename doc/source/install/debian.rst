@@ -11,15 +11,15 @@ Debian GNU/Linux. You can install them by ``apt``.
 stretch (MariaDB)
 -----------------
 
-/etc/apt/sources.list.d/groonga.list::
-
-  deb [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] https://packages.groonga.org/debian/ stretch main                        
-  deb-src [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] https://packages.groonga.org/debian/ stretch main                    
-
 Install::
 
-  % sudo wget -O /usr/share/keyrings/groonga-archive-keyring.gpg https://packages.groonga.org/debian/groonga-archive-keyring.gpg           
+  % sudo apt update
   % sudo apt install -y -V apt-transport-https
+  % sudo wget -O /usr/share/keyrings/groonga-archive-keyring.gpg https://packages.groonga.org/debian/groonga-archive-keyring.gpg
+  % sudo tee /etc/apt/sources.list.d/groonga.list <<APT_LINE
+  deb [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] https://packages.groonga.org/debian/ stretch main                        
+  deb-src [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] https://packages.groonga.org/debian/ stretch main                    
+  APT_LINE
   % sudo apt update
   % sudo apt install -y -V mariadb-server-10.1-mroonga
 
