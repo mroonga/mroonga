@@ -326,6 +326,9 @@ typedef uint mrn_alter_table_flags;
 
 #if MYSQL_VERSION_ID < 80011 || defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
+#endif
+
+#if MYSQL_VERSION_ID < 50726 || defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
 #endif
 
