@@ -415,6 +415,12 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
 #endif
 
+#if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80016
+#  define MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+#else
+#  define MRN_HANDLER_HAVE_COND_POP
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -666,8 +672,15 @@ public:
   FT_INFO *ft_init_ext(uint flags, uint inx, String *key);
   int ft_read(uchar *buf);
 
-  const Item *cond_push(const Item *cond);
-  void cond_pop();
+  const Item *cond_push(const Item *cond
+#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+                        ,
+                        bool other_tables_ok
+#endif
+    ) mrn_override;
+#ifdef MRN_HANDLER_HAVE_COND_POP
+  void cond_pop() mrn_override;
+#endif
 
   int reset();
 
@@ -1361,10 +1374,22 @@ private:
   FT_INFO *generic_ft_init_ext(uint flags, uint key_nr, String *key);
   int wrapper_ft_read(uchar *buf);
   int storage_ft_read(uchar *buf);
-  const Item *wrapper_cond_push(const Item *cond);
-  const Item *storage_cond_push(const Item *cond);
+  const Item *wrapper_cond_push(const Item *cond
+#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+                                ,
+                                bool other_tables_ok
+#endif
+    );
+  const Item *storage_cond_push(const Item *cond
+#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+                                ,
+                                bool other_tables_ok
+#endif
+    );
+#ifdef MRN_HANDLER_HAVE_COND_POP
   void wrapper_cond_pop();
   void storage_cond_pop();
+#endif
   handler *wrapper_clone(const char *name, MEM_ROOT *mem_root);
   handler *storage_clone(const char *name, MEM_ROOT *mem_root);
   void wrapper_print_error(int error, myf flag);
