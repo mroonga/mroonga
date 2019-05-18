@@ -78,7 +78,11 @@ if [ "${mariadb}" = "yes" ]; then
   if [ "${MRN_BUNDLED}" != "TRUE" ]; then
     mariadb_mroonga_plugin_dir="${MYSQL_BUILD_DIR}/plugin/mroonga"
     if [ ! -e "${mariadb_mroonga_plugin_dir}" ]; then
-      ln -s "${top_build_dir}" "${mariadb_mroonga_plugin_dir}"
+      if [ -d "${top_build_dir}/.libs" ]; then
+        ln -s "${top_build_dir}/.libs" "${mariadb_mroonga_plugin_dir}"
+      else
+        ln -s "${top_build_dir}/" "${mariadb_mroonga_plugin_dir}"
+      fi
     fi
   fi
   plugins_dir=
