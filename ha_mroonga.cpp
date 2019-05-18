@@ -1821,28 +1821,36 @@ static bool mrn_parse_grn_index_column_flags(THD *thd,
       flag_names += 1;
       continue;
     }
-    if (rest_length >= 4 && !memcmp(flag_names, "NONE", 4)) {
-      flag_names += 4;
+#define NAME_SIZE(name) (sizeof(name) - 1)
+#define EQUAL(name)                                     \
+    (rest_length >= NAME_SIZE(name) &&                  \
+     memcmp(flag_names, name, NAME_SIZE(name)) == 0)
+    if (EQUAL("NONE")) {
+      flag_names += NAME_SIZE("NONE");
       found = true;
-    } else if (rest_length >= 13 && !memcmp(flag_names, "WITH_POSITION", 13)) {
+    } else if (EQUAL("WITH_POSITION")) {
       *index_column_flags |= GRN_OBJ_WITH_POSITION;
-      flag_names += 13;
+      flag_names += NAME_SIZE("WITH_POSITION");
       found = true;
-    } else if (rest_length >= 12 && !memcmp(flag_names, "WITH_SECTION", 12)) {
+    } else if (EQUAL("WITH_SECTION")) {
       *index_column_flags |= GRN_OBJ_WITH_SECTION;
-      flag_names += 12;
+      flag_names += NAME_SIZE("WITH_SECTION");
       found = true;
-    } else if (rest_length >= 11 && !memcmp(flag_names, "WITH_WEIGHT", 11)) {
+    } else if (EQUAL("WITH_WEIGHT")) {
       *index_column_flags |= GRN_OBJ_WITH_WEIGHT;
-      flag_names += 11;
+      flag_names += NAME_SIZE("WITH_WEIGHT");
       found = true;
-    } else if (rest_length >= 11 && !memcmp(flag_names, "INDEX_SMALL", 11)) {
+    } else if (EQUAL("INDEX_SMALL")) {
       *index_column_flags |= GRN_OBJ_INDEX_SMALL;
-      flag_names += 11;
+      flag_names += NAME_SIZE("INDEX_SMALL");
       found = true;
-    } else if (rest_length >= 12 && !memcmp(flag_names, "INDEX_MEDIUM", 12)) {
+    } else if (EQUAL("INDEX_MEDIUM")) {
       *index_column_flags |= GRN_OBJ_INDEX_MEDIUM;
-      flag_names += 12;
+      flag_names += NAME_SIZE("INDEX_MEDIUM");
+      found = true;
+    } else if (EQUAL("INDEX_LARGE")) {
+      *index_column_flags |= GRN_OBJ_INDEX_LARGE;
+      flag_names += NAME_SIZE("INDEX_LARGE");
       found = true;
     } else {
       char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
@@ -1856,6 +1864,8 @@ static bool mrn_parse_grn_index_column_flags(THD *thd,
                           invalid_flag_name);
     }
   }
+#undef EQUAL
+#undef NAME_SIZE
   return found;
 }
 

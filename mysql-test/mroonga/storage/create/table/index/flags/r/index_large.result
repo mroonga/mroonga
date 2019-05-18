@@ -1,0 +1,10 @@
+SET NAMES utf8mb4;
+CREATE TABLE memos (
+content VARCHAR(64) NOT NULL,
+content_size INT NOT NULL,
+KEY (content_size) COMMENT 'flags "INDEX_LARGE"'
+) DEFAULT CHARSET=utf8mb4;
+SELECT mroonga_command("dump --dump_plugins no --dump_schema no");
+mroonga_command("dump --dump_plugins no --dump_schema no")
+column_create memos#content_size index COLUMN_INDEX|INDEX_LARGE memos content_size
+DROP TABLE memos;
