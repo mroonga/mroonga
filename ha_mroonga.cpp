@@ -17886,7 +17886,7 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     if (create_info_str.reserve(15)) {
       DBUG_RETURN(NULL);
     }
-    create_info_str.q_append(",\n  CONSTRAINT ", 15);
+    create_info_str.MRN_STRING_APPEND(",\n  CONSTRAINT ", 15);
     append_identifier(ha_thd(),
                       &create_info_str,
                       column_name.c_str(),
@@ -17894,7 +17894,7 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     if (create_info_str.reserve(14)) {
       DBUG_RETURN(NULL);
     }
-    create_info_str.q_append(" FOREIGN KEY (", 14);
+    create_info_str.MRN_STRING_APPEND(" FOREIGN KEY (", 14);
     append_identifier(ha_thd(),
                       &create_info_str,
                       column_name.c_str(),
@@ -17902,19 +17902,19 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     if (create_info_str.reserve(13)) {
       DBUG_RETURN(NULL);
     }
-    create_info_str.q_append(") REFERENCES ", 13);
+    create_info_str.MRN_STRING_APPEND(") REFERENCES ", 13);
     append_identifier(ha_thd(), &create_info_str, table_share->db.str,
                       table_share->db.length);
     if (create_info_str.reserve(1)) {
       DBUG_RETURN(NULL);
     }
-    create_info_str.q_append(".", 1);
+    create_info_str.MRN_STRING_APPEND(".", 1);
     append_identifier(ha_thd(), &create_info_str, ref_table_buff,
                       ref_table_name_length);
     if (create_info_str.reserve(2)) {
       DBUG_RETURN(NULL);
     }
-    create_info_str.q_append(" (", 2);
+    create_info_str.MRN_STRING_APPEND(" (", 2);
 
     char ref_path[FN_REFLEN + 1];
     TABLE_LIST table_list;
@@ -17951,7 +17951,7 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     if (create_info_str.reserve(39)) {
       DBUG_RETURN(NULL);
     }
-    create_info_str.q_append(") ON DELETE RESTRICT ON UPDATE RESTRICT", 39);
+    create_info_str.MRN_STRING_APPEND(") ON DELETE RESTRICT ON UPDATE RESTRICT", 39);
   }
   if (!(create_info = (char *) mrn_my_malloc(create_info_str.length() + 1,
                                              MYF(MY_WME)))) {

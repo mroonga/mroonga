@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2015-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2015-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -368,7 +368,7 @@ MRN_API char *mroonga_snippet_html(UDF_INIT *init,
       }
 
       for (unsigned int i = 0; i < n_results; ++i) {
-        result_str->q_append(start_tag, start_tag_length);
+        result_str->MRN_STRING_APPEND(start_tag, start_tag_length);
 
         unsigned int result_length;
         grn_rc rc =
@@ -382,7 +382,7 @@ MRN_API char *mroonga_snippet_html(UDF_INIT *init,
         }
         result_str->length(result_str->length() + result_length);
 
-        result_str->q_append(end_tag, end_tag_length);
+        result_str->MRN_STRING_APPEND(end_tag, end_tag_length);
       }
     }
 

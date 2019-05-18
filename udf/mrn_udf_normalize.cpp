@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
   Copyright(C) 2015 Naoya Murakami <naoya@createfield.com>
-  Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2017-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -172,7 +172,7 @@ MRN_API char *mroonga_normalize(UDF_INIT *init, UDF_ARGS *args, char *result,
       my_error(ER_OUT_OF_RESOURCES, MYF(0), HA_ERR_OUT_OF_MEM);
       goto error;
     }
-    result_str->q_append(normalized, normalized_length_in_bytes);
+    result_str->MRN_STRING_APPEND(normalized, normalized_length_in_bytes);
     result_str->length(normalized_length_in_bytes);
     grn_obj_unlink(ctx, grn_string);
   }

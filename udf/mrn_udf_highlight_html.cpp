@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2017-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -394,7 +394,7 @@ static bool highlight_html(grn_ctx *ctx,
     DBUG_RETURN(false);
   }
 
-  output->q_append(GRN_TEXT_VALUE(&buffer), GRN_TEXT_LEN(&buffer));
+  output->MRN_STRING_APPEND(GRN_TEXT_VALUE(&buffer), GRN_TEXT_LEN(&buffer));
   GRN_OBJ_FIN(ctx, &buffer);
   DBUG_RETURN(true);
 }

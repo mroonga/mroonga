@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -289,7 +289,7 @@ MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
     goto error;
   }
   for (i = 0; i < n_results; i++) {
-    result_str->q_append(args->args[6], args->lengths[6]);
+    result_str->MRN_STRING_APPEND(args->args[6], args->lengths[6]);
     rc = grn_snip_get_result(ctx, snippet, i,
                              (char *) result_str->ptr() + result_str->length(),
                              &result_length);
@@ -299,7 +299,7 @@ MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
       goto error;
     }
     result_str->length(result_str->length() + result_length);
-    result_str->q_append(args->args[7], args->lengths[7]);
+    result_str->MRN_STRING_APPEND(args->args[7], args->lengths[7]);
   }
 
   if (!snip_info->snippet) {

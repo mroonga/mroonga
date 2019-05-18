@@ -771,3 +771,9 @@ typedef HASH mrn_table_def_cache_type;
 #  define mrn_TIME_to_longlong_datetime_packed(mysql_time)      \
   TIME_to_longlong_datetime_packed(&mysql_time)
 #endif
+
+#if (MYSQL_VERSION_ID >= 80016 && !defined(MRN_MARIADB_P))
+#  define MRN_STRING_APPEND append
+#else
+#  define MRN_STRING_APPEND q_append
+#endif

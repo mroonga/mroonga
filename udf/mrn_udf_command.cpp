@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -265,7 +265,7 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
         my_error(ER_OUT_OF_RESOURCES, MYF(0), HA_ERR_OUT_OF_MEM);
         goto error;
       }
-      info->result.q_append(buffer, buffer_length);
+      info->result.MRN_STRING_APPEND(buffer, buffer_length);
     }
   } while (flags & GRN_CTX_MORE);
 
