@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2012-2019 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kentoku SHIBA
 
   This library is free software; you can redistribute it and/or
@@ -309,7 +309,7 @@ namespace mrn {
           mysql_time.time_type = MYSQL_TIMESTAMP_DATETIME;
           time_converter.grn_time_to_mysql_time(grn_time, &mysql_time);
           long long int mysql_datetime_packed =
-            TIME_to_longlong_datetime_packed(&mysql_time);
+            mrn_TIME_to_longlong_datetime_packed(mysql_time);
           my_datetime_packed_to_binary(mysql_datetime_packed,
                                        current_mysql_key,
                                        datetimef_field->decimals());

@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -762,4 +762,12 @@ typedef HASH mrn_table_def_cache_type;
 #else
 #  define mrn_alloc_table_share(table_list, key, key_length)    \
   alloc_table_share((table_list), (key), (key_length))
+#endif
+
+#if (MYSQL_VERSION_ID >= 80016 && !defined(MRN_MARIADB_P))
+#  define mrn_TIME_to_longlong_datetime_packed(mysql_time)      \
+  TIME_to_longlong_datetime_packed(mysql_time)
+#else
+#  define mrn_TIME_to_longlong_datetime_packed(mysql_time)      \
+  TIME_to_longlong_datetime_packed(&mysql_time)
 #endif
