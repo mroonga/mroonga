@@ -47,6 +47,9 @@
 #include <mysql.h>
 #include <mysql/plugin.h>
 
+#include <my_byteorder.h>
+#include <myisampack.h>
+
 #ifdef MRN_HAVE_MYSQL_PSI_MYSQL_MEMORY_H
 #  include <mysql/psi/mysql_memory.h>
 #endif

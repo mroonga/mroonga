@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2015-2019 Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,8 @@
 */
 
 #include "mrn_value_decoder.hpp"
+
+#include <my_byteorder.h>
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_DEST_IS_POINTER
