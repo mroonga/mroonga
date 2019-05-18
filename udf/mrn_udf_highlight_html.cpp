@@ -41,7 +41,7 @@ typedef struct st_mrn_highlight_html_info
   grn_obj *db;
   bool use_shared_db;
   grn_obj *keywords;
-  String result_str;
+  grn_obj result;
   struct {
     bool used;
     grn_obj *table;
@@ -59,7 +59,6 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
   grn_ctx *ctx = info->ctx;
   const char *normalizer_name = "NormalizerAuto";
   grn_obj *expr = NULL;
-  String *result_str = &(info->result_str);
 
   *keywords = NULL;
 
@@ -188,7 +187,7 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
     }
   }
 
-  result_str->set_charset(system_charset_info);
+  GRN_BULK_REWIND(&(info->result));
   DBUG_RETURN(false);
 
 error:
@@ -333,13 +332,9 @@ static bool highlight_html(grn_ctx *ctx,
                            grn_pat *keywords,
                            const char *target,
                            size_t target_length,
-                           String *output)
+                           grn_obj *output)
 {
   MRN_DBUG_ENTER_FUNCTION();
-
-  grn_obj buffer;
-
-  GRN_TEXT_INIT(&buffer, 0);
 
   {
     const char *open_tag = "<span class=\"keyword\">";
@@ -362,23 +357,23 @@ static bool highlight_html(grn_ctx *ctx,
       for (int i = 0; i < n_hits; i++) {
         if ((hits[i].offset - previous) > 0) {
           grn_text_escape_xml(ctx,
-                              &buffer,
+                              output,
                               target + previous,
                               hits[i].offset - previous);
         }
-        GRN_TEXT_PUT(ctx, &buffer, open_tag, open_tag_length);
+        GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
         grn_text_escape_xml(ctx,
-                            &buffer,
+                            output,
                             target + hits[i].offset,
                             hits[i].length);
-        GRN_TEXT_PUT(ctx, &buffer, close_tag, close_tag_length);
+        GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
         previous = hits[i].offset + hits[i].length;
       }
 
       chunk_length = rest - target;
       if ((chunk_length - previous) > 0) {
         grn_text_escape_xml(ctx,
-                            &buffer,
+                            output,
                             target + previous,
                             target_length - previous);
       }
@@ -388,14 +383,6 @@ static bool highlight_html(grn_ctx *ctx,
     }
   }
 
-  if (output->reserve(GRN_TEXT_LEN(&buffer))) {
-    my_error(ER_OUT_OF_RESOURCES, MYF(0), HA_ERR_OUT_OF_MEM);
-    GRN_OBJ_FIN(ctx, &buffer);
-    DBUG_RETURN(false);
-  }
-
-  output->MRN_STRING_APPEND(GRN_TEXT_VALUE(&buffer), GRN_TEXT_LEN(&buffer));
-  GRN_OBJ_FIN(ctx, &buffer);
   DBUG_RETURN(true);
 }
 
@@ -413,7 +400,6 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
 
   grn_ctx *ctx = info->ctx;
   grn_obj *keywords = info->keywords;
-  String *result_str = &(info->result_str);
 
   if (!args->args[0]) {
     *is_null = 1;
@@ -427,13 +413,13 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   }
 
   *is_null = 0;
-  result_str->length(0);
+  GRN_BULK_REWIND(&(info->result));
 
   if (!highlight_html(ctx,
                       reinterpret_cast<grn_pat *>(keywords),
                       args->args[0],
                       args->lengths[0],
-                      result_str)) {
+                      &(info->result))) {
     goto error;
   }
 
@@ -446,8 +432,8 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
     }
   }
 
-  *length = result_str->length();
-  DBUG_RETURN((char *)result_str->ptr());
+  *length = GRN_TEXT_LEN(&(info->result));
+  DBUG_RETURN(GRN_TEXT_VALUE(&(info->result)));
 
 error:
   if (!info->keywords && keywords) {
@@ -481,7 +467,7 @@ MRN_API void mroonga_highlight_html_deinit(UDF_INIT *init)
       grn_obj_close(info->ctx, info->query_mode.table);
     }
   }
-  MRN_STRING_FREE(info->result_str);
+  GRN_OBJ_FIN(info->ctx, &(info->result));
   if (!info->use_shared_db) {
     grn_obj_close(info->ctx, info->db);
   }

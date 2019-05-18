@@ -41,7 +41,7 @@ typedef struct st_mrn_snippet_html_info
   grn_obj *db;
   bool use_shared_db;
   grn_obj *snippet;
-  String result_str;
+  grn_obj result;
   struct {
     bool used;
     grn_obj *table;
@@ -64,7 +64,6 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
   const char *close_tag = "</span>";
   grn_snip_mapping *mapping = GRN_SNIP_MAPPING_HTML_ESCAPE;
   grn_obj *expr = NULL;
-  String *result_str = &(info->result_str);
 
   *snippet = NULL;
 
@@ -171,7 +170,6 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
     }
   }
 
-  result_str->set_charset(system_charset_info);
   DBUG_RETURN(false);
 
 error:
@@ -324,7 +322,7 @@ MRN_API char *mroonga_snippet_html(UDF_INIT *init,
 
   grn_ctx *ctx = info->ctx;
   grn_obj *snippet = info->snippet;
-  String *result_str = &(info->result_str);
+  grn_obj *result_buffer = &(info->result);
 
   if (!args->args[0]) {
     *is_null = 1;
@@ -353,36 +351,30 @@ MRN_API char *mroonga_snippet_html(UDF_INIT *init,
     }
 
     *is_null = 0;
-    result_str->length(0);
+    GRN_BULK_REWIND(result_buffer);
 
     {
       const char *start_tag = "<div class=\"snippet\">";
       const char *end_tag = "</div>";
       size_t start_tag_length = strlen(start_tag);
       size_t end_tag_length = strlen(end_tag);
-      unsigned int max_length_per_snippet =
-        start_tag_length + end_tag_length + max_tagged_length;
-      if (result_str->reserve(max_length_per_snippet * n_results)) {
-        my_error(ER_OUT_OF_RESOURCES, MYF(0), HA_ERR_OUT_OF_MEM);
-        goto error;
-      }
-
       for (unsigned int i = 0; i < n_results; ++i) {
-        result_str->MRN_STRING_APPEND(start_tag, start_tag_length);
+        GRN_TEXT_PUT(ctx, result_buffer, start_tag, start_tag_length);
 
+        grn_bulk_reserve(ctx, result_buffer, max_tagged_length);
         unsigned int result_length;
         grn_rc rc =
           grn_snip_get_result(ctx, snippet, i,
-                              (char *)result_str->ptr() + result_str->length(),
+                              GRN_BULK_CURR(result_buffer),
                               &result_length);
         if (rc) {
           my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
                           ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
           goto error;
         }
-        result_str->length(result_str->length() + result_length);
+        grn_bulk_space(ctx, result_buffer, result_length);
 
-        result_str->MRN_STRING_APPEND(end_tag, end_tag_length);
+        GRN_TEXT_PUT(ctx, result_buffer, end_tag, end_tag_length);
       }
     }
 
@@ -396,8 +388,8 @@ MRN_API char *mroonga_snippet_html(UDF_INIT *init,
     }
   }
 
-  *length = result_str->length();
-  DBUG_RETURN((char *)result_str->ptr());
+  *length = GRN_TEXT_LEN(result_buffer);
+  DBUG_RETURN(GRN_TEXT_VALUE(result_buffer));
 
 error:
   if (!info->snippet && snippet) {
@@ -431,7 +423,7 @@ MRN_API void mroonga_snippet_html_deinit(UDF_INIT *init)
       grn_obj_close(info->ctx, info->query_mode.table);
     }
   }
-  MRN_STRING_FREE(info->result_str);
+  GRN_OBJ_FIN(info->ctx, &(info->result));
   if (!info->use_shared_db) {
     grn_obj_close(info->ctx, info->db);
   }

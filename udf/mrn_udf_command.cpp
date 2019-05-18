@@ -42,7 +42,7 @@ struct CommandInfo
   grn_obj *db;
   bool use_shared_db;
   grn_obj command;
-  String result;
+  grn_obj result;
 };
 
 MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
@@ -155,6 +155,7 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
     }
   }
   GRN_TEXT_INIT(&(info->command), 0);
+  GRN_TEXT_INIT(&(info->result), 0);
 
   init->ptr = (char *)info;
 
@@ -251,7 +252,7 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
     goto error;
   }
 
-  info->result.length(0);
+  GRN_BULK_REWIND(&(info->result));
   do {
     char *buffer;
     unsigned int buffer_length;
@@ -261,16 +262,12 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
       goto error;
     }
     if (buffer_length > 0) {
-      if (info->result.reserve(buffer_length)) {
-        my_error(ER_OUT_OF_RESOURCES, MYF(0), HA_ERR_OUT_OF_MEM);
-        goto error;
-      }
-      info->result.MRN_STRING_APPEND(buffer, buffer_length);
+      GRN_TEXT_PUT(ctx, &(info->result), buffer, buffer_length);
     }
   } while (flags & GRN_CTX_MORE);
 
-  *length = info->result.length();
-  return (char *)(info->result.ptr());
+  *length = GRN_TEXT_LEN(&(info->result));
+  return GRN_TEXT_VALUE(&(info->result));
 
 error:
   *error = 1;
@@ -281,12 +278,12 @@ MRN_API void mroonga_command_deinit(UDF_INIT *init)
 {
   CommandInfo *info = (CommandInfo *)init->ptr;
   if (info) {
+    GRN_OBJ_FIN(info->ctx, &(info->result));
     GRN_OBJ_FIN(info->ctx, &(info->command));
     if (!info->use_shared_db) {
       grn_obj_close(info->ctx, info->db);
     }
     mrn_context_pool->release(info->ctx);
-    MRN_STRING_FREE(info->result);
     my_free(info);
   }
 }

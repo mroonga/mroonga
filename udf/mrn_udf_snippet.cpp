@@ -42,7 +42,7 @@ struct st_mrn_snip_info
   grn_obj *db;
   bool use_shared_db;
   grn_obj *snippet;
-  String result_str;
+  grn_obj result;
 };
 
 static mrn_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
@@ -58,7 +58,6 @@ static mrn_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
   int flags = GRN_SNIP_COPY_TAG;
   grn_snip_mapping *mapping = NULL;
   grn_rc rc;
-  String *result_str = &snip_info->result_str;
 
   *snippet = NULL;
   snip_max_len = *((long long *) args->args[1]);
@@ -119,7 +118,6 @@ static mrn_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
     }
   }
 
-  result_str->set_charset(cs);
   return false;
 
 error:
@@ -242,12 +240,12 @@ MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
 {
   st_mrn_snip_info *snip_info = (st_mrn_snip_info *) init->ptr;
   grn_ctx *ctx = snip_info->ctx;
-  String *result_str = &snip_info->result_str;
+  grn_obj *result_buffer = &(snip_info->result);
   char *target;
   unsigned int target_length;
   grn_obj *snippet = NULL;
   grn_rc rc;
-  unsigned int i, n_results, max_tagged_length, result_length;
+  unsigned int i, n_results, max_tagged_length;
 
   if (!args->args[0]) {
     *is_null = 1;
@@ -282,24 +280,21 @@ MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
     goto error;
   }
 
-  result_str->length(0);
-  if (result_str->reserve((args->lengths[6] + args->lengths[7] +
-                          max_tagged_length) * n_results)) {
-    my_error(ER_OUT_OF_RESOURCES, MYF(0), HA_ERR_OUT_OF_MEM);
-    goto error;
-  }
+  GRN_BULK_REWIND(result_buffer);
   for (i = 0; i < n_results; i++) {
-    result_str->MRN_STRING_APPEND(args->args[6], args->lengths[6]);
+    GRN_TEXT_PUT(ctx, result_buffer, args->args[6], args->lengths[6]);
+    grn_bulk_reserve(ctx, result_buffer, max_tagged_length);
+    unsigned int result_length;
     rc = grn_snip_get_result(ctx, snippet, i,
-                             (char *) result_str->ptr() + result_str->length(),
+                             GRN_BULK_CURR(result_buffer),
                              &result_length);
     if (rc) {
       my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
                       ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
       goto error;
     }
-    result_str->length(result_str->length() + result_length);
-    result_str->MRN_STRING_APPEND(args->args[7], args->lengths[7]);
+    grn_bulk_space(ctx, result_buffer, result_length);
+    GRN_TEXT_PUT(ctx, result_buffer, args->args[7], args->lengths[7]);
   }
 
   if (!snip_info->snippet) {
@@ -311,8 +306,8 @@ MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
     }
   }
 
-  *length = result_str->length();
-  return (char *) result_str->ptr();
+  *length = GRN_TEXT_LEN(result_buffer);
+  return GRN_TEXT_VALUE(result_buffer);
 
 error:
   *error = 1;
@@ -326,7 +321,7 @@ MRN_API void mroonga_snippet_deinit(UDF_INIT *init)
     if (snip_info->snippet) {
       grn_obj_close(snip_info->ctx, snip_info->snippet);
     }
-    MRN_STRING_FREE(snip_info->result_str);
+    GRN_OBJ_FIN(snip_info->ctx, &(snip_info->result));
     if (!snip_info->use_shared_db) {
       grn_obj_close(snip_info->ctx, snip_info->db);
     }
