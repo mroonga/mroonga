@@ -1376,6 +1376,10 @@ static struct st_mysql_information_schema i_s_info =
   MYSQL_INFORMATION_SCHEMA_INTERFACE_VERSION
 };
 
+#ifndef SKIP_OPEN_TABLE
+#  define SKIP_OPEN_TABLE 0
+#endif
+
 static ST_FIELD_INFO i_s_mrn_stats_fields_info[] =
 {
   {
