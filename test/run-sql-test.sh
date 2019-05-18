@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Copyright(C) 2010  Tetsuro IKEDA
-# Copyright(C) 2010-2018  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2010-2019  Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2011  Kazuhiko
 #
 # This library is free software; you can redistribute it and/or
@@ -85,7 +85,14 @@ if [ "${mariadb}" = "yes" ]; then
 elif [ "${percona}" = "yes" ]; then
   plugins_dir="${MYSQL_SOURCE_DIR}/lib/mysql/plugin"
 else
-  plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
+  case ${MYSQL_VERSION} in
+    8.*)
+      plugins_dir="${MYSQL_BUILD_DIR}/lib/plugin"
+      ;;
+    *)
+      plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
+      ;;
+  esac
 fi
 
 same_link_p()
