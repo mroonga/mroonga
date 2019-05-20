@@ -210,14 +210,16 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_CXXFLAGS="-felide-constructors"
   case "$MYSQL_MAJOR_MINOR_VERSION" in
   5.5|5.6|10.*)
-      MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS -fno-rtti"
-      ;;
+    MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS -fno-rtti"
+    ;;
   8.*)
-      AX_CXX_COMPILE_STDCXX_11([ext], [mandatory])
-      ;;
+    m4_ifdef([AX_CXX_COMPILE_STDCXX_14],
+             [AX_CXX_COMPILE_STDCXX_14([ext], [mandatory])],
+             [CHECK_CXXFLAG([-std=gnu++14])])
+    ;;
   *)
-      :
-      ;;
+    :
+    ;;
   esac
 
   if test "${with_libmysqlservices_compat}" = "no"; then
