@@ -99,7 +99,7 @@ run_sql_test()
   test_args=()
   case "${MYSQL_VERSION}" in
     mysql-8.0)
-      :
+      n_processors=1
       ;;
     percona-server-*)
       :
