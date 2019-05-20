@@ -97,6 +97,18 @@ prepare_sql_test()
 run_sql_test()
 {
   test_args=()
+  case "${MYSQL_VERSION}" in
+    mysql-8.0)
+      :
+      ;;
+    percona-server-*)
+      :
+      ;;
+    *)
+      test_args=("${test_args[@]}" "--mem")
+      ;;
+  esac
+
   if [ "${MROONGA_TEST_EMBEDDED}" = "yes" ]; then
     test_args=("${test_args[@]}" "--embedded-server")
   fi

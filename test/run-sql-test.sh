@@ -232,8 +232,10 @@ if [ -z "$test_suite_names" ]; then
 fi
 
 mysql_test_run_args=""
-if [ "${percona}" != "yes" ]; then
-  mysql_test_run_args="${mysql_test_run_args} --mem"
+if [ -z "${CI}" ]; then
+  if [ "${percona}" != "yes" ]; then
+    mysql_test_run_args="${mysql_test_run_args} --mem"
+  fi
 fi
 mysql_test_run_args="${mysql_test_run_args} --parallel=${n_processors}"
 mysql_test_run_args="${mysql_test_run_args} --retry=1"
