@@ -69,6 +69,16 @@ else
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
       ;;
+    mysql-8.0)
+      boost_archive=boost_1_69_0.tar.gz
+      curl -L -O http://downloads.sourceforge.net/project/boost/boost/1.69.0/${boost_archive}
+      sudo mkdir -p /usr/global/share
+      sudo mv ${boost_archive} /usr/global/share/
+      sudo chown -R ${USER}: /usr/global/share/
+      (cd vendor/mysql && fakeroot debian/rules override_dh_auto_configure)
+      configure_args=("${configure_args[@]}"
+                      "--with-mysql-build=$PWD/vendor/mysql/release")
+      ;;
     percona-server-5.6)
       (cd vendor/mysql && \
        fakeroot debian/rules configure SKIP_DEBUG_BINARY=yes && \
