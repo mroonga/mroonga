@@ -237,19 +237,14 @@ mo_files_relative_from_locale_dir = \
 html_files_relative_from_locale_dir = \
 	html/_images/storage-mode.png \
 	html/_images/wrapper-mode.png \
-	html/_static/ajax-loader.gif \
 	html/_static/basic.css \
-	html/_static/comment-bright.png \
-	html/_static/comment-close.png \
-	html/_static/comment.png \
 	html/_static/doctools.js \
 	html/_static/documentation_options.js \
-	html/_static/down-pressed.png \
-	html/_static/down.png \
 	html/_static/favicon.ico \
 	html/_static/file.png \
 	html/_static/jquery-3.2.1.js \
 	html/_static/jquery.js \
+	html/_static/language_data.js \
 	html/_static/logo.png \
 	html/_static/minus.png \
 	html/_static/mroonga.css \
@@ -259,9 +254,6 @@ html_files_relative_from_locale_dir = \
 	html/_static/searchtools.js \
 	html/_static/underscore-1.3.1.js \
 	html/_static/underscore.js \
-	html/_static/up-pressed.png \
-	html/_static/up.png \
-	html/_static/websupport.js \
 	html/characteristic.html \
 	html/community.html \
 	html/contribution.html \
