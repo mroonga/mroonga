@@ -22,6 +22,8 @@ set -e
 base_dir="$(cd $(dirname $0); pwd)"
 top_dir="${base_dir}/../.."
 
+CI_MYSQL_VERSION="${MYSQL_VERSION}"
+
 bundled_mroonga_dir="${top_dir}/storage/mroonga"
 if [ -f "${bundled_mroonga_dir}/config.sh" ]; then
   mroonga_dir="${bundled_mroonga_dir}"
@@ -97,7 +99,7 @@ prepare_sql_test()
 run_sql_test()
 {
   test_args=()
-  case "${MYSQL_VERSION}" in
+  case "${CI_MYSQL_VERSION}" in
     mysql-8.0)
       n_processors=1
       ;;
