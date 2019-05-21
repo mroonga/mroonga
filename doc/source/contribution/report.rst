@@ -80,5 +80,3 @@ There is a case that it is not enough to reproduce a bug with above information.
    * - MySQL data directory (Offline backup)
      - If dump data and binlog pair is lost, It may be required.
        It may exists on ``/var/lib/mysql/`` for example. (It depends on ``datadir`` configuration)
-
-
