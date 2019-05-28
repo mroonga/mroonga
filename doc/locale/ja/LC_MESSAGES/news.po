@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2019-03-28 15:10+0900\n"
+"PO-Revision-Date: 2019-05-28 15:01+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,62 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 9.01 - 2019-03-29"
-msgstr "9.01リリース - 2019-03-29"
+msgid "Release 9.03 - 2019-05-29"
+msgstr "9.03リリース - 2019-05-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Updated example to use ``tokenizer \"XXX\"` in "
+"``COMMENT`` because ``default_tokenizer \"XXX\"`` is deprecated since 9.01."
+msgstr ""
+"[:doc:`/tutorial/storage`] サンプルの ``COMMENT`` では ``tokenizer \"XXX\"` "
+"を使うようにしました。``default_tokenizer \"XXX\"`` は9.01から非推奨なためで"
+"す。"
+
+msgid ""
+"[:doc:`/install/windows`] Added support to provide MariaDB 10.1, 10.2 zip "
+"package again."
+msgstr ""
+"[:doc:`/install/windows`] MariaDB 10.1と10.2のzipパッケージを再びサポートしま"
+"した。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.3.14 and 10.3.15."
+msgstr "[:doc:`/install/centos`] MariaDB 10.3.14と10.3.15をサポートしました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid ""
+"[:doc:`/install/debian`] Updated install instruction for copy and paste "
+"friendly."
+msgstr "[:doc:`/install/debian`] インストール手順をコピペしやすくしました。"
+
+msgid ""
+"Added support for ``INDEX_LARGE`` flag such as ``COMMENT 'flags \"INDEX_LARGE"
+"\"'`` syntax."
+msgstr ""
+"``COMMENT 'flags \"INDEX_LARGE\"'`` というように指定する ``INDEX_LARGE`` フラ"
+"グをサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.2.24."
+msgstr "[:doc:`/install/centos`] MariaDB 10.2.24をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.1.40."
+msgstr "[:doc:`/install/centos`] MariaDB 10.1.40をサポートしました。"
+
+msgid "[:doc:`/install/ubuntu`] Added support for Ubuntu 19.04 (Disco Dingo)"
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 19.04 (Disco Dingo)をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.6.44."
+msgstr "[:doc:`/install/centos`] Percona Server 5.6.44をサポートしました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.44 and 5.7.26."
+msgstr "[:doc:`/install/centos`] MySQL 5.6.44と5.7.26をサポートしました。"
+
+msgid "Release 9.01 - 2019-03-29"
+msgstr "9.01リリース - 2019-03-29"
 
 msgid "[storage] Added support for tokenizer options."
 msgstr "[ストレージ] トークナイザーのオプション指定をサポートしました。"
