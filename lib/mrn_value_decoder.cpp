@@ -19,7 +19,9 @@
 
 #include "mrn_value_decoder.hpp"
 
-#include <my_byteorder.h>
+#ifdef MRN_HAVE_MY_BYTEORDER
+#  include <my_byteorder.h>
+#endif
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_DEST_IS_POINTER
