@@ -4,6 +4,7 @@ ARCHITECTURES = i386 x86_64
 MYSQL_VARIANTS =				\
 	mysql56-community			\
 	mysql57-community			\
+	mysql80-community			\
 	mariadb					\
 	mariadb-10.1				\
 	mariadb-10.2				\

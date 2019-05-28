@@ -539,6 +539,7 @@ AC_OUTPUT([
   packages/apt/env.sh
   packages/rpm/centos/mysql56-community-mroonga.spec
   packages/rpm/centos/mysql57-community-mroonga.spec
+  packages/rpm/centos/mysql80-community-mroonga.spec
   packages/rpm/centos/mariadb-mroonga.spec
   packages/rpm/centos/mariadb-10.1-mroonga.spec
   packages/rpm/centos/mariadb-10.2-mroonga.spec

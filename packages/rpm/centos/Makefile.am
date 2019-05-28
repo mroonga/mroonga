@@ -1,6 +1,7 @@
 EXTRA_DIST =					\
 	mysql56-community-mroonga.spec.in	\
 	mysql57-community-mroonga.spec.in	\
+	mysql80-community-mroonga.spec.in	\
 	mariadb-mroonga.spec.in			\
 	mariadb-10.1-mroonga.spec.in		\
 	mariadb-10.2-mroonga.spec.in		\
@@ -11,6 +12,7 @@ EXTRA_DIST =					\
 noinst_DATA =					\
 	mysql56-community-mroonga.spec		\
 	mysql57-community-mroonga.spec		\
+	mysql80-community-mroonga.spec		\
 	mariadb-mroonga.spec			\
 	mariadb-10.1-mroonga.spec		\
 	mariadb-10.2-mroonga.spec		\
