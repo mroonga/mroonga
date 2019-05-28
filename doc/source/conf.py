@@ -101,9 +101,9 @@ pygments_style = 'sphinx'
 
 variables = {
   "package_mroonga_version": os.environ["PACKAGE_MROONGA_VERSION"],
-  "package_mariadb101_version": "10.1.38",
-  "package_mariadb102_version": "10.2.23",
-  "package_mariadb103_version": "10.3.13",
+  "package_mariadb101_version": "10.1.40",
+  "package_mariadb102_version": "10.2.24",
+  "package_mariadb103_version": "10.3.15",
   "download_base": "https://github.com/mroonga/mroonga/releases/download"
 }
 variables["windows_mariadb101_package_link_label"] = \
