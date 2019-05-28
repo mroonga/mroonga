@@ -5,6 +5,34 @@
 News
 ====
 
+.. _release-9-03:
+
+Release 9.03 - 2019-05-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/tutorial/storage`] Updated example to use ``tokenizer "XXX"` in ``COMMENT`` because ``default_tokenizer "XXX"`` is deprecated since 9.01.
+
+* [:doc:`/install/windows`] Added support to provide MariaDB 10.1, 10.2 zip package again.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.3.14 and 10.3.15.
+
+* [:doc:`/install/debian`] Updated install instruction for copy and paste friendly.
+
+* Added support for ``INDEX_LARGE`` flag such as ``COMMENT 'flags "INDEX_LARGE"'`` syntax.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.24.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.40.
+
+* [:doc:`/install/ubuntu`] Added support for Ubuntu 19.04 (Disco Dingo)
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.44.
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.44 and 5.7.26.
+
 .. _release-9-01:
 
 Release 9.01 - 2019-03-29
