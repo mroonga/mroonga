@@ -36,26 +36,26 @@ class Uploader
 
     @required_groonga_version = required_groonga_version
 
-    @code_names.each do |code_name|
+    @ubuntu_code_names.zip(@ubuntu_versions) do |code_name, version|
       mysql55_version = @mysql55_versions[code_name]
       mysql56_version = @mysql56_versions[code_name]
       mysql57_version = @mysql57_versions[code_name]
       mariadb10_0_version = @mariadb10_0_versions[code_name]
       mariadb10_1_version = @mariadb10_1_versions[code_name]
       if mysql55_version
-        upload(code_name, "5.5", mysql55_version)
+        upload(code_name, version, "5.5", mysql55_version)
       end
       if mysql56_version
-        upload(code_name, "5.6", mysql56_version)
+        upload(code_name, version, "5.6", mysql56_version)
       end
       if mysql57_version
-        upload(code_name, "5.7", mysql57_version)
+        upload(code_name, version, "5.7", mysql57_version)
       end
       if mariadb10_0_version
-        upload(code_name, "mariadb-10.0", mariadb10_0_version)
+        upload(code_name, version, "mariadb-10.0", mariadb10_0_version)
       end
       if mariadb10_1_version
-        upload(code_name, "mariadb-10.1", mariadb10_1_version)
+        upload(code_name, version, "mariadb-10.1", mariadb10_1_version)
       end
     end
   end
@@ -92,7 +92,7 @@ allow_unsigned_uploads = 0
     @mysql57_versions = {}
     @mariadb10_0_versions = {}
     @mariadb10_1_versions = {}
-    @code_names.each do |code_name|
+    @ubuntu_code_names.zip(@ubuntu_versions) do |code_name, version|
       source_names = [code_name, "#{code_name}-updates"]
       source_names.each do |source_name|
         allpackages_url =
@@ -134,8 +134,17 @@ allow_unsigned_uploads = 0
       @source_archive_directory = Pathname.new(directory).expand_path
     end
     parser.on("--code-names=CODE_NAME1,CODE_NAME2,CODE_NAME3,...", Array,
-              "The target code names") do |code_names|
-      @code_names = code_names
+              "The target code names",
+              "Deprecated. Use --ubuntu-code-names instead.") do |code_names|
+      @ubuntu_code_names = code_names
+    end
+    parser.on("--ubuntu-code-names=CODE_NAME1,CODE_NAME2,CODE_NAME3,...", Array,
+               "The target code names") do |code_names|
+      @ubuntu_code_names = code_names
+    end
+    parser.on("--ubuntu-versions=VERSION1,VERSION2,VERSION3,...", Array,
+              "The target versions") do |versions|
+      @ubuntu_versions = versions
     end
     parser.on("--debian-base-directory=DIRECTORY",
               "The directory that has debianXX/ directory") do |directory|
@@ -157,8 +166,8 @@ allow_unsigned_uploads = 0
     parser.parse!
   end
 
-  def upload(code_name, mysql_short_version, mysql_version)
-    default_mysql_version = (@mysql_versions[code_name] == mysql_version)
+  def upload(ubuntu_code_name, ubuntu_version, mysql_short_version, mysql_version)
+    default_mysql_version = (@mysql_versions[ubuntu_code_name] == mysql_version)
     deb_package_name = "#{@package}-#{mysql_short_version}"
     in_temporary_directory do
       source_archive =
@@ -169,11 +178,17 @@ allow_unsigned_uploads = 0
         debian_directory =
           @debian_base_directory + "debian-#{mysql_short_version}"
         FileUtils.cp_r(debian_directory.to_s, "debian")
-        deb_version = "#{current_deb_version.succ}~#{code_name}1"
+        if ubuntu_version
+          version_suffix = "ubuntu#{ubuntu_version}.1"
+        else
+          version_suffix = "#{ubuntu_code_name}1"
+        end
+        deb_version = "#{current_deb_version.succ}~#{version_suffix}"
+
         run_command("dch",
-                    "--distribution", code_name,
+                    "--distribution", ubuntu_code_name,
                     "--newversion", deb_version,
-                    "Build for #{code_name}.")
+                    "Build for #{ubuntu_code_name}.")
         remove_versionless_mroonga = true
         if default_mysql_version or mysql_short_version.start_with?("mariadb-")
           remove_versionless_mroonga = false
