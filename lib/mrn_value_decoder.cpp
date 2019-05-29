@@ -19,7 +19,7 @@
 
 #include "mrn_value_decoder.hpp"
 
-#ifdef MRN_HAVE_MY_BYTEORDER
+#ifdef MRN_HAVE_MY_BYTEORDER_H
 #  include <my_byteorder.h>
 #endif
 
