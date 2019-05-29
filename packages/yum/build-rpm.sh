@@ -82,7 +82,7 @@ case ${distribution} in
     run yum makecache
 
     case ${package_name} in
-      mysql5?-community-${PACKAGE}|mysql80-community-${PACKAGE})
+      mysql5?-community-${PACKAGE})
         release_rpm=mysql-community-release-el${distribution_version}-7.noarch.rpm
         run yum -y install http://repo.mysql.com/${release_rpm}
         if [ "${package_name}" = "mysql57-community-${PACKAGE}" ]; then
@@ -93,11 +93,15 @@ case ${distribution} in
             run yum install -y cmake28
           fi
         fi
-        if [ "${package_name}" = "mysql80-community-${PACKAGE}" ]; then
-          run yum install -y centos-release-scl yum-utils
-          run yum-config-manager --enable rhel-server-rhscl-7-rpms
-          run yum install -y cmake3 devtoolset-8-gcc devtoolset-8-gcc-c++
-        fi
+        run yum install -y mysql-community-devel
+        ;;
+      mysql80-community-${PACKAGE})
+        release_rpm=mysql80-community-release-el${distribution_version}.rpm
+        run yum -y install http://repo.mysql.com/${release_rpm}
+        run yum install -y centos-release-scl yum-utils autoconf-archive
+        run yum-config-manager --enable rhel-server-rhscl-7-rpms
+        run yum install -y cmake3 devtoolset-8-gcc devtoolset-8-gcc-c++
+        run source /opt/rh/devtoolset-8/enable
         run yum install -y mysql-community-devel
         ;;
       mariadb-${PACKAGE})
