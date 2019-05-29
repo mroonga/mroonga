@@ -41,7 +41,12 @@ install:
   - ps: Get-Content ..\mroonga\version | ForEach-Object { $env:MROONGA_VERSION = $_ }
   - move ..\mroonga storage\mroonga
   - if "%USE_MASTER%" == "yes" (
-      git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga
+      git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga &&
+      cd ..\groonga\vendor &&
+      ruby download_lz4.rb &&
+      ruby download_mecab.rb &&
+      ruby download_message_pack.rb &&
+      cd ..\..\mariadb-%MARIADB_VERSION%
     ) else (
       curl -O http://packages.groonga.org/source/groonga/groonga-latest.zip &&
       7z x groonga-latest.zip &&
@@ -49,11 +54,6 @@ install:
       move groonga-* ..\groonga
     )
   - rmdir /S /Q ..\groonga\test\
-  - cd ..\groonga\vendor
-  - ruby download_lz4.rb
-  - ruby download_mecab.rb
-  - ruby download_message_pack.rb
-  - cd ..\..\mariadb-%MARIADB_VERSION%
   - mkdir storage\mroonga\vendor
   - move ..\groonga storage\mroonga\vendor\groonga
   - if "%USE_MASTER%" == "yes" (
@@ -64,7 +64,9 @@ install:
       curl -O http://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip &&
       7z x groonga-normalizer-mysql-latest.zip &&
       del groonga-normalizer-mysql-latest.zip &&
-      move groonga-normalizer-mysql* storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
+      move
+        groonga-normalizer-mysql*
+        storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
     )
 
 build_script:
