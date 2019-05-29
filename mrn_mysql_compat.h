@@ -372,7 +372,7 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_HAVE_SQL_DERROR_H
 #endif
 
-#if defined(MRN_MYSQL_P) ||                                     \
+#if !defined(MRN_MARIADB_P) ||                                     \
   (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000)
 #  define MRN_HAVE_MY_BYTEORDER_H
 #endif
