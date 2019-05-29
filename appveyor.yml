@@ -48,7 +48,7 @@ install:
       ruby download_message_pack.rb &&
       cd ..\..\mariadb-%MARIADB_VERSION%
     ) else (
-      curl -O http://packages.groonga.org/source/groonga/groonga-latest.zip &&
+      curl -O https://packages.groonga.org/source/groonga/groonga-latest.zip &&
       7z x groonga-latest.zip &&
       del groonga-latest.zip &&
       move groonga-* ..\groonga
@@ -61,7 +61,7 @@ install:
         https://github.com/groonga/groonga-normalizer-mysql.git
         storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
     ) else (
-      curl -O http://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip &&
+      curl -O https://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip &&
       7z x groonga-normalizer-mysql-latest.zip &&
       del groonga-normalizer-mysql-latest.zip &&
       move
