@@ -102,6 +102,8 @@ run_sql_test()
   case "${CI_MYSQL_VERSION}" in
     mysql-8.0)
       n_processors=1
+      # TODO: Enable this
+      return 0
       ;;
     percona-server-*)
       :
