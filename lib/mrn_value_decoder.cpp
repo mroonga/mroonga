@@ -18,8 +18,9 @@
 */
 
 #include "mrn_value_decoder.hpp"
+#include <mrn_mysql_compat.h>
 
-#ifdef MRN_HAVE_MY_BYTEORDER
+#ifdef MRN_HAVE_MY_BYTEORDER_H
 #  include <my_byteorder.h>
 #endif
 
