@@ -97,9 +97,6 @@ build_script:
   - ps: .\source\storage\mroonga\packages\windows\install-mroonga.ps1
       -mariadbVersion $env:MARIADB_VERSION
       -platform $env:MROONGA_PLATFORM
-  - if not exist mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%\lib\plugin\ha_mroonga.pdb (
-      copy mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%\symbols\ha_mroonga.pdb mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%\lib\plugin\
-    )
 
 test: off
 
