@@ -471,3 +471,8 @@ install(FILES
   "${PROJECT_BINARY_DIR}/data/install.sql"
   "${PROJECT_SOURCE_DIR}/data/uninstall.sql"
   DESTINATION "${MRN_DATA_DIR}/")
+if(MSVC AND CMAKE_VERSION VERSION_GREATER "3.1")
+  install(FILES $<TARGET_PDB_FILE:mroonga>
+    DESTINATION "${MYSQL_PLUGIN_DIR}"
+    OPTIONAL)
+endif()
