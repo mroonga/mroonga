@@ -273,4 +273,4 @@ You need to run some SQLs to register Mroonga to MySQL such as
 Here is an example when you specify ``--prefix=$HOME/local`` to
 ``configure``::
 
-  % mysql -u < $HOME/local/share/mroonga/install.sql
+  % mysql -u root < $HOME/local/share/mroonga/install.sql
