@@ -1,0 +1,19 @@
+DROP TABLE IF EXISTS diaries;
+CREATE TABLE diaries (
+id INT PRIMARY KEY AUTO_INCREMENT,
+content VARCHAR(255),
+FULLTEXT INDEX (content)
+) ENGINE = Mroonga COMMENT = 'engine "InnoDB"' DEFAULT CHARSET utf8;
+INSERT INTO diaries (content) VALUES ("It'll be fine tomorrow.");
+INSERT INTO diaries (content) VALUES ("It'll rain tomorrow");
+SELECT * FROM diaries WHERE MATCH(content) AGAINST("fine");
+id	content
+1	It'll be fine tomorrow.
+OPTIMIZE TABLE diaries;
+Table	Op	Msg_type	Msg_text
+test.diaries	optimize	note	Table does not support optimize, doing recreate + analyze instead
+test.diaries	optimize	status	OK
+SELECT * FROM diaries WHERE MATCH(content) AGAINST("fine");
+id	content
+1	It'll be fine tomorrow.
+DROP TABLE diaries;
