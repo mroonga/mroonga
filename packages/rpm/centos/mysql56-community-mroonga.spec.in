@@ -6,12 +6,16 @@
 %define mysql_dist_default    el7
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/7/SRPMS
 %define mysql_spec_file_default mysql.spec
+%define service_status() (systemctl status %1 > /dev/null)
+%define service_control() (systemctl %2 %1)
 %else
 %define mysql_version_default 5.6.44
 %define mysql_release_default 2
 %define mysql_dist_default    el6
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/6/SRPMS
 %define mysql_spec_file_default mysql.spec
+%define service_status() (/sbin/service %1 status > /dev/null)
+%define service_control() (/sbin/service %1 %2)
 %endif
 
 %define _mysql_version %{?mysql_version:%{mysql_version}}%{!?mysql_version:%{mysql_version_default}}
@@ -95,8 +99,8 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if ! /sbin/service mysqld status > /dev/null; then
-  /sbin/service mysqld start
+if ! %{service_status mysqld} ; then
+  %{service_control mysqld start}
   stop_after_installation=1
 else
   stop_after_installation=0
@@ -121,7 +125,7 @@ uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 
 if [ "$1" = 2 ] ; then
     if [ $current_version -lt $required_version ]; then
-        /sbin/service mysqld restart
+       %{service_control mysqld restart}
     fi
     command="$mysql_command -u root $password_option < ${uninstall_sql}"
     echo $command
@@ -136,12 +140,12 @@ eval $command || \
 	 echo "  $command")
 
 if [ "$stop_after_installation" = "1" ]; then
-  /sbin/service mysqld stop
+  %{service_control mysqld stop}
 fi
 
 %preun
-if ! /sbin/service mysqld status > /dev/null; then
-  /sbin/service mysqld start
+if ! %{service_status mysqld} ; then
+  %{service_control mysqld start}
   stop_after_uninstallation=1
 else
   stop_after_uninstallation=0
@@ -163,7 +167,7 @@ if [ "$1" = 0 ]; then
 fi
 
 if [ "$stop_after_uninstallation" = "1" ]; then
-  /sbin/service mysqld stop
+  %{service_control mysqld stop}
 fi
 
 %files
