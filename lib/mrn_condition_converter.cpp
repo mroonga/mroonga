@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013-2019 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -664,7 +664,8 @@ namespace mrn {
     case Item::COND_ITEM:
       if (is_storage_mode_) {
         Item_cond *cond_item = (Item_cond *)item;
-        if (cond_item->functype() == Item_func::COND_AND_FUNC) {
+        if (cond_item->functype() == Item_func::COND_AND_FUNC ||
+            cond_item->functype() == Item_func::COND_OR_FUNC) {
           unsigned int n_match_againsts = 0;
           List_iterator<Item> iterator(*((cond_item)->argument_list()));
           const Item *sub_item;

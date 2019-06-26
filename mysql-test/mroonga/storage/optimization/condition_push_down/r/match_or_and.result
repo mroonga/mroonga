@@ -1,0 +1,22 @@
+DROP TABLE IF EXISTS memos;
+FLUSH STATUS;
+SET NAMES UTF8MB4;
+CREATE TABLE memos (
+title TEXT,
+content TEXT,
+FULLTEXT INDEX (title),
+FULLTEXT INDEX (content)
+) DEFAULT CHARSET UTF8MB4;
+INSERT INTO memos
+VALUES ('Mroonga and Groonga', 'Mroonga uses Groonga internally');
+SELECT *
+FROM memos
+WHERE (MATCH(title) AGAINST('+Mroonga' IN BOOLEAN MODE) OR
+MATCH(content) AGAINST('+Groonga' IN BOOLEAN MODE)) AND
+MATCH(title) AGAINST('+Groonga' IN BOOLEAN MODE);
+title	content
+Mroonga and Groonga	Mroonga uses Groonga internally
+SHOW STATUS LIKE 'mroonga_condition_push_down';
+Variable_name	Value
+Mroonga_condition_push_down	0
+DROP TABLE memos;
