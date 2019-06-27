@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2019-06-27 15:50+0900\n"
+"PO-Revision-Date: 2019-06-27 16:08+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -32,6 +32,10 @@ msgstr "[:doc:`/install/centos`] Percona Server 5.7.26をサポートしまし�
 
 msgid "[:doc:`/install/centos`] Added support for MariaDB 10.2.25/10.3.16."
 msgstr "[:doc:`/install/centos`] MariaDB 10.2.25/10.3.16をサポートしました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid "[:doc:`/install/centos`][experimental] Added support for MySQL 8.0.16."
+msgstr "[:doc:`/install/centos`][実験的] MySQL 8.0.16をサポートしました。"
 
 msgid "Fixes"
 msgstr "修正"
