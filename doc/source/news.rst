@@ -17,6 +17,8 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for MariaDB 10.2.25/10.3.16.
 
+* [:doc:`/install/centos`][experimental] Added support for MySQL 8.0.16.
+
 Fixes
 ^^^^^
 
