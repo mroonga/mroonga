@@ -73,7 +73,7 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
       if [ ${centos_version} = 7 -a ${architecture} = i386 ]; then
         continue
       fi
-      if [ ${centos_version} = 6 -a ${architecture} = i386 -a ${mysql_variant} = "mysql80-community" ]; then
+      if [ ${mysql_variant} = "mysql80-community" -a ${architecture} = i386 ]; then
         continue
       fi
       id=centos-${centos_version}-${architecture}
