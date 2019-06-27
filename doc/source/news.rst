@@ -5,6 +5,30 @@
 News
 ====
 
+.. _release-9-04:
+
+Release 9.04 - 2019-06-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.26.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.25/10.3.16.
+
+Fixes
+^^^^^
+
+* Fixed a infinite loop bug.
+  This bug is occurred when invalid flag is specified such as ``FULLTEXT INDEX (...) COMMENT 'index_flags "INVALID|WITH_SECTION"'``.
+
+* [windows] Fixed a inappropriate pdb path with MariaDB 10.2/10.3.
+
+* [:doc:`/install/others`] Fixed a typo about missing appropriate account name in plugin install instruction.
+
+* Fixed a crash bug with ``((MATCH OR MATCH) AND (MATCH))`` query.
+
 .. _release-9-03:
 
 Release 9.03 - 2019-05-29
