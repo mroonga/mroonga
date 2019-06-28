@@ -41,9 +41,7 @@ download: ensure-rsync-path
 	rsync -avz --progress --delete $(RSYNC_PATH)/source/mroonga/ files
 
 ARCHIVES =							\
-	files/$(MROONGA_TAR_GZ)					\
-	files/$(MARIADB_WITH_MROONGA_BASE).tar.gz		\
-	files/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE).zip
+	files/$(MROONGA_TAR_GZ)
 
 archive: $(ARCHIVES)
 
