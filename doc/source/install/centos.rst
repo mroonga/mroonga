@@ -58,6 +58,30 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
+.. _centos-6-oracle-80:
+
+CentOS 6 (with the Oracle MySQL 8.0 package)
+--------------------------------------------
+
+You can use Oracle's MySQL packages version 8.0 on CentOS 6 since
+Mroonga 9.04 release.
+
+Install::
+
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
+  % sudo yum install -y http://repo.mysql.com/mysql80-community-release-el6.noarch.rpm
+  % sudo yum install -y --enablerepo=epel mysql80-community-mroonga
+  (% sudo /sbin/service mysqld start)
+  (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+  (% sudo mysqladmin -u root --password="${tmp_password}" password)
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
+
 .. _centos-6-percona-56:
 
 CentOS 6 (with Percona Server 5.6 package)
@@ -290,6 +314,30 @@ Install::
   % sudo yum-config-manager --disable mysql56-community
   % sudo yum-config-manager --enable mysql57-community
   % sudo yum install -y --enablerepo=epel mysql57-community-mroonga
+  (% sudo systemctl start mysqld)
+  (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+  (% sudo mysqladmin -u root --password="${tmp_password}" password)
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
+
+.. _centos-7-oracle-80:
+
+CentOS 7 (with the Oracle MySQL 8.0 package)
+--------------------------------------------
+
+You can use Oracle's MySQL packages version 8.0 on CentOS 7 since
+Mroonga 9.04 release.
+
+Install::
+
+  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
+  % sudo yum install -y http://repo.mysql.com/mysql80-community-release-el7.noarch.rpm
+  % sudo yum install -y --enablerepo=epel mysql80-community-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
