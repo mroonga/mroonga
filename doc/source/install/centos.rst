@@ -69,7 +69,7 @@ Mroonga 9.04 release.
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y http://repo.mysql.com/mysql80-community-release-el6.noarch.rpm
+  % sudo yum install -y http://repo.mysql.com/mysql80-community-release-el6.rpm
   % sudo yum install -y --enablerepo=epel mysql80-community-mroonga
   (% sudo /sbin/service mysqld start)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
@@ -336,7 +336,7 @@ Mroonga 9.04 release.
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y http://repo.mysql.com/mysql80-community-release-el7.noarch.rpm
+  % sudo yum install -y http://repo.mysql.com/mysql80-community-release-el7.rpm
   % sudo yum install -y --enablerepo=epel mysql80-community-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
