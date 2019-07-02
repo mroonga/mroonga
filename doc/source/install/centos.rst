@@ -66,6 +66,13 @@ CentOS 6 (with the Oracle MySQL 8.0 package)
 You can use Oracle's MySQL packages version 8.0 on CentOS 6 since
 Mroonga 9.04 release.
 
+.. note::
+
+   There are already known issues about MySQL 8.0.
+
+   * :doc:`/tutorial/wrapper` Wrapper mode is not supported yet
+   * :doc:`/tutorial/storage` `JSON` data type is not supported yet
+
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
@@ -332,6 +339,13 @@ CentOS 7 (with the Oracle MySQL 8.0 package)
 
 You can use Oracle's MySQL packages version 8.0 on CentOS 7 since
 Mroonga 9.04 release.
+
+.. note::
+
+   There are already known issues about MySQL 8.0.
+
+   * :doc:`/tutorial/wrapper` Wrapper mode is not supported yet
+   * :doc:`/tutorial/storage` `JSON` data type is not supported yet
 
 Install::
 
