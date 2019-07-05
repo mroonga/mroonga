@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS fts_targets;
+SET NAMES utf8mb4;
+CREATE TABLE fts_targets (
+id int(11) NOT NULL AUTO_INCREMENT,
+source_id int(11) NOT NULL,
+source_type_id int(11) NOT NULL,
+PRIMARY KEY (id),
+UNIQUE KEY (source_id, source_type_id)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO fts_targets (source_id, source_type_id) VALUES (10, 100);
+UPDATE fts_targets SET source_id = 11 WHERE id = 1;
+INSERT INTO fts_targets (source_id, source_type_id) VALUES (10, 100);
+DROP TABLE fts_targets;

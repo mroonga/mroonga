@@ -8024,7 +8024,16 @@ int ha_mroonga::storage_prepare_delete_row_unique_index(const uchar *buf,
 #else
     uchar *key_copy_data = const_cast<uchar *>(buf);
 #endif
+    my_ptrdiff_t ptr_diff = buf - table->record[0];
+    for (uint i = 0; i < KEY_N_KEY_PARTS(key_info); ++i) {
+      Field *field = key_info->key_part[i].field;
+      field->move_field_offset(ptr_diff);
+    }
     key_copy(key, key_copy_data, key_info, key_info->key_length);
+    for (uint i = 0; i < KEY_N_KEY_PARTS(key_info); ++i) {
+      Field *field = key_info->key_part[i].field;
+      field->move_field_offset(-ptr_diff);
+    }
     grn_bulk_reserve(ctx, &key_buffer, MRN_MAX_KEY_SIZE);
     ukey = GRN_TEXT_VALUE(&key_buffer);
     storage_encode_multiple_column_key(key_info,
