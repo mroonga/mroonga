@@ -1,4 +1,4 @@
-# Copyright(C) 2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2016-2019  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -31,13 +31,14 @@ CREATE TABLE comments (
 );
 
 CREATE TABLE entries (
+  id int unsigned PRIMARY KEY,
   content varchar(140) NOT NULL,
   comment_id int unsigned,
   FOREIGN KEY (comment_id) REFERENCES comments (id)
 );
 
 INSERT INTO comments (id, content) VALUES (100, 'Good entry!');
-INSERT INTO entries (content, comment_id) VALUES ('Hello!', 100);
+INSERT INTO entries (id, content, comment_id) VALUES (1000, 'Hello!', 100);
 
 SELECT * FROM entries;
 SELECT * FROM comments;

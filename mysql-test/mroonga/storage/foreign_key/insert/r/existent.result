@@ -6,15 +6,16 @@ id int unsigned PRIMARY KEY,
 content varchar(140) NOT NULL
 );
 CREATE TABLE entries (
+id int unsigned PRIMARY KEY,
 content varchar(140) NOT NULL,
 comment_id int unsigned,
 FOREIGN KEY (comment_id) REFERENCES comments (id)
 );
 INSERT INTO comments (id, content) VALUES (100, 'Good entry!');
-INSERT INTO entries (content, comment_id) VALUES ('Hello!', 100);
+INSERT INTO entries (id, content, comment_id) VALUES (1000, 'Hello!', 100);
 SELECT * FROM entries;
-content	comment_id
-Hello!	100
+id	content	comment_id
+1000	Hello!	100
 SELECT * FROM comments;
 id	content
 100	Good entry!
@@ -24,8 +25,9 @@ table_create comments TABLE_PAT_KEY UInt32
 column_create comments content COLUMN_SCALAR ShortText
 column_create comments id COLUMN_SCALAR UInt32
 
-table_create entries TABLE_NO_KEY
+table_create entries TABLE_PAT_KEY UInt32
 column_create entries content COLUMN_SCALAR ShortText
+column_create entries id COLUMN_SCALAR UInt32
 
 table_create mroonga_operations TABLE_NO_KEY
 column_create mroonga_operations record COLUMN_SCALAR UInt32
@@ -42,8 +44,8 @@ load --table comments
 
 load --table entries
 [
-["_id","comment_id","content"],
-[1,100,"Hello!"]
+["_key","comment_id","content","id"],
+[1000,100,"Hello!",1000]
 ]
 
 column_create comments entries-comment_id----------------------------------------------- COLUMN_INDEX entries comment_id
