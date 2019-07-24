@@ -71,7 +71,7 @@ else
       ;;
     mysql-8.0)
       boost_archive=boost_1_69_0.tar.gz
-      curl -L -O http://downloads.sourceforge.net/project/boost/boost/1.69.0/${boost_archive}
+      curl -L -O https://dl.bintray.com/boostorg/release/1.69.0/source/${boost_archive}
       sudo mkdir -p /usr/global/share
       sudo mv ${boost_archive} /usr/global/share/
       sudo chown -R ${USER}: /usr/global/share/
