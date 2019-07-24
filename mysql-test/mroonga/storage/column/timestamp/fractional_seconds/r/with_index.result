@@ -2,10 +2,10 @@ DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
 id INT PRIMARY KEY AUTO_INCREMENT,
 title TEXT,
-created_at TIMESTAMP(6),
-updated_at TIMESTAMP(6),
+created_at TIMESTAMP(6) DEFAULT '2016-04-21 00:00:00',
+updated_at TIMESTAMP(6) DEFAULT '2016-04-21 00:00:00',
 KEY (updated_at)
-) DEFAULT CHARSET UTF8MB4;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO diaries (title, created_at, updated_at)
 VALUES ("clear day",
 "2012-01-29 21:51:01.111111",
