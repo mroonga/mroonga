@@ -982,6 +982,9 @@ private:
   int generic_store_bulk_datetime(Field *field, grn_obj *buf);
   int generic_store_bulk_year(Field *field, grn_obj *buf);
   int generic_store_bulk_new_date(Field *field, grn_obj *buf);
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+  int generic_store_bulk_timestamp2(Field *field, grn_obj *buf);
+#endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   int generic_store_bulk_datetime2(Field *field, grn_obj *buf);
 #endif

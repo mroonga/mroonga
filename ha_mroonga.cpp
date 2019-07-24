@@ -11488,6 +11488,26 @@ int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
+#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
+int ha_mroonga::generic_store_bulk_timestamp2(Field *field, grn_obj *buf)
+{
+  MRN_DBUG_ENTER_METHOD();
+  int error = 0;
+  Field_timestampf *timestamp_field = static_cast<Field_timestampf *>(field);
+  int64_t grn_time = 0;
+  struct timeval time_value;
+  int warnings = 0;
+  if (timestamp_field->get_timestamp(&time_value, &warnings)) {
+    // XXX: Should we report warnings or MySQL does?
+  } else {
+    grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
+  }
+  grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
+  GRN_TIME_SET(ctx, buf, grn_time);
+  DBUG_RETURN(error);
+}
+#endif
+
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
 int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
 {
@@ -11669,7 +11689,7 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
     break;
 #ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:
-    error = generic_store_bulk_timestamp(field, buf);
+    error = generic_store_bulk_timestamp2(field, buf);
     break;
 #endif
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
