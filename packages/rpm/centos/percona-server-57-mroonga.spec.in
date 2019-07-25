@@ -215,6 +215,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Mon Jul 29 2019 Kentaro Hayashi <hayashi@clear-code.com> - 9.05-1
+- new upstream release.
+
 * Sat Jun 29 2019 Kentaro Hayashi <hayashi@clear-code.com> - 9.04-1
 - new upstream release.
 
