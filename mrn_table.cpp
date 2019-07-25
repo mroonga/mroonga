@@ -61,10 +61,14 @@
 #    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
 #  endif
 #else
-   typedef LEX_STRING mrn_resolve_name;
-#  if MYSQL_VERSION_ID >= 50603
+#  if MYSQL_VERSION_ID >= 80017
+     using mrn_resolve_name = LEX_CSTRING;
+#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
+#  elif MYSQL_VERSION_ID >= 50603
+     typedef LEX_STRING mrn_resolve_name;
 #    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
 #  else
+     typedef LEX_STRING mrn_resolve_name;
 #    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
 #  endif
 #endif
