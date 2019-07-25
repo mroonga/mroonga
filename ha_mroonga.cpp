@@ -113,6 +113,7 @@
 #include <mrn_query_parser.hpp>
 #include <mrn_smart_bitmap.hpp>
 #include <mrn_table_fields_offset_mover.hpp>
+#include <mrn_timestamp_field_value_converter.hpp>
 
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
 #  include <sql_table.h>
@@ -11347,41 +11348,15 @@ int ha_mroonga::generic_store_bulk_float(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
-long long int ha_mroonga::get_grn_time_from_timestamp_field(Field_timestamp *field)
-{
-  MRN_DBUG_ENTER_METHOD();
-  long long int grn_time = 0;
-#ifdef MRN_TIMESTAMP_USE_TIMEVAL
-  int warnings = 0;
-  struct timeval time_value;
-  if (field->get_timestamp(&time_value, &warnings)) {
-    // XXX: Should we report warnings or MySQL does?
-  } else {
-    DBUG_PRINT("info", ("mroonga: timeval tv_sec=%ld", time_value.tv_sec));
-    grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
-  }
-#elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
-  unsigned long int micro_seconds;
-  my_time_t seconds = field->get_timestamp(&micro_seconds);
-  DBUG_PRINT("info", ("mroonga: my_time_t seconds=%ld", seconds));
-  grn_time = GRN_TIME_PACK(seconds, micro_seconds);
-#else
-  mrn_bool is_null_value;
-  long seconds = field->get_timestamp(&is_null_value);
-  DBUG_PRINT("info", ("mroonga: long seconds=%ld", seconds));
-  grn_time = GRN_TIME_PACK(seconds, 0);
-#endif
-  DBUG_RETURN(grn_time);
-}
-
 int ha_mroonga::generic_store_bulk_timestamp(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  Field_timestamp *timestamp_field = (Field_timestamp *)field;
-  long long int time = get_grn_time_from_timestamp_field(timestamp_field);
+  Field_timestamp *timestamp_field = static_cast<Field_timestamp *>(field);
+  mrn::TimestampFieldValueConverter<Field_timestamp> converter(timestamp_field);
+  int64_t grn_time = converter.convert();
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
-  GRN_TIME_SET(ctx, buf, time);
+  GRN_TIME_SET(ctx, buf, grn_time);
   DBUG_RETURN(error);
 }
 
@@ -11494,14 +11469,8 @@ int ha_mroonga::generic_store_bulk_timestamp2(Field *field, grn_obj *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   Field_timestampf *timestamp_field = static_cast<Field_timestampf *>(field);
-  int64_t grn_time = 0;
-  struct timeval time_value;
-  int warnings = 0;
-  if (timestamp_field->get_timestamp(&time_value, &warnings)) {
-    // XXX: Should we report warnings or MySQL does?
-  } else {
-    grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
-  }
+  mrn::TimestampFieldValueConverter<Field_timestampf> converter(timestamp_field);
+  int64_t grn_time = converter.convert();
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, grn_time);
   DBUG_RETURN(error);
