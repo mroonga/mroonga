@@ -426,6 +426,10 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_COND_POP
 #endif
 
+#if MYSQL_VERSION_ID >= 80017 && !defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_HAVE_HA_EXTRA
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -623,7 +627,9 @@ public:
   int rnd_pos(uchar *buf, uchar *pos);                             // required
 #endif
   void position(const uchar *record);                              // required
-  int extra(enum ha_extra_function operation);
+#ifndef MRN_HANDLER_HAVE_HA_CLOSE
+  int extra(enum ha_extra_function operation) mrn_override;
+#endif
   int extra_opt(enum ha_extra_function operation, ulong cache_size);
 
   int delete_table(const char *name
@@ -965,6 +971,10 @@ private:
 #ifdef MRN_HANDLER_HAVE_HA_CLOSE
   int close();
 #endif
+#ifdef MRN_HANDLER_HAVE_HA_CLOSE
+  int extra(enum ha_extra_function operation) mrn_override;
+#endif
+
   bool is_dry_write();
   bool is_enable_optimization();
   bool should_normalize(Field *field, bool is_fulltext_index) const;

@@ -6392,7 +6392,11 @@ int ha_mroonga::wrapper_extra(enum ha_extra_function operation)
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+#ifdef MRN_HANDLER_HAVE_HA_EXTRA
+  error = wrap_handler->ha_extra(operation);
+#else
   error = wrap_handler->extra(operation);
+#endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(error);
