@@ -162,10 +162,9 @@ extern "C" {
 #if MYSQL_VERSION_ID >= 50604 && !defined(MRN_MARIADB_P)
 #  define MRN_TIMESTAMP_USE_TIMEVAL
 #elif defined(MRN_MARIADB_P)
-#  if MYSQL_VERSION_ID >= 101000
+#  define MRN_TIMESTAMP_USE_MY_TIME_T
+#  if MYSQL_VERSION_ID >= 100100
 #    define MRN_TIMESTAMP_USE_MY_TIME_T_AND_POS
-#  else
-#    define MRN_TIMESTAMP_USE_MY_TIME_T
 #  endif
 #else
 #  define MRN_TIMESTAMP_USE_LONG
