@@ -45,9 +45,13 @@ namespace mrn {
       } else {
         grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
       }
-#elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
+#elif defined(MRN_TIMESTAMP_USE_MY_TIME_T_AND_POS)
       unsigned long int micro_seconds;
       my_time_t seconds = field_->get_timestamp(field_->ptr, &micro_seconds);
+      grn_time = GRN_TIME_PACK(seconds, micro_seconds);
+#elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
+      unsigned long int micro_seconds;
+      my_time_t seconds = field_->get_timestamp(&micro_seconds);
       grn_time = GRN_TIME_PACK(seconds, micro_seconds);
 #else
       mrn_bool is_null_value;
