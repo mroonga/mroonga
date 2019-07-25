@@ -723,6 +723,16 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = "HA_EXTRA_FAKE_START_STMT";
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_ENABLE_UNIQUE_RECORD_FILTER
+  case HA_EXTRA_ENABLE_UNIQUE_RECORD_FILTER:
+    inspected = "HA_EXTRA_ENABLE_UNIQUE_RECORD_FILTER";
+    break;
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_DISABLE_UNIQUE_RECORD_FILTER
+  case HA_EXTRA_DISABLE_UNIQUE_RECORD_FILTER:
+    inspected = "HA_EXTRA_DISABLE_UNIQUE_RECORD_FILTER";
+    break;
+#endif
   }
   return inspected;
 }
