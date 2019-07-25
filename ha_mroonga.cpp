@@ -10839,7 +10839,7 @@ void ha_mroonga::geo_store_rectangle(const uchar *rectangle)
     for (int j = 0; j < 8; j++) {
       reversed_value[j] = (rectangle + (8 * i))[7 - j];
     }
-    mi_float8get(locations[i], reversed_value);
+    MRN_MI_FLOAT8GET(locations[i], reversed_value);
   }
   top_left_longitude_in_degree = locations[0];
   bottom_right_longitude_in_degree = locations[1];

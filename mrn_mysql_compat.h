@@ -786,3 +786,9 @@ typedef HASH mrn_table_def_cache_type;
 #if (MYSQL_VERSION_ID >= 80017 && !defined(MRN_MARIADB_P))
   using my_ptrdiff_t = ptrdiff_t;
 #endif
+
+#if (MYSQL_VERSION_ID >= 80017 && !defined(MRN_MARIADB_P))
+#  define MRN_MI_FLOAT8GET(result, data) (result) = mi_float8get((data))
+#else
+#  define MRN_MI_FLOAT8GET(result, data) mi_float8get((result), (data))
+#endif
