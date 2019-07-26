@@ -15,7 +15,7 @@
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
 %if %{_centos_ver} == 7
-%define service_status() (systemctl status %1 > /dev/null)
+%define service_status() (systemctl status %1)
 %define service_control() (systemctl %2 %1)
 %else
 %define service_status() (/sbin/service %1 status > /dev/null)
@@ -96,7 +96,7 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if ! %{service_status mysql} ; then
+if ! %{service_status mysql} > /dev/null; then
   %{service_control mysql start}
   stop_after_installation=1
 else
@@ -143,7 +143,7 @@ if [ "$stop_after_installation" = "1" ]; then
 fi
 
 %preun
-if ! %{service_status mysql status} ; then
+if ! %{service_status mysql} > /dev/null; then
   %{service_control mysql start}
   stop_after_uninstallation=1
 else
