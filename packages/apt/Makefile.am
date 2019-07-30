@@ -24,14 +24,14 @@ download:
 	done
 
 sign-packages:
-	./sign-packages.sh '$(GPG_UID)' '$(REPOSITORIES_PATH)/' '$(CODE_NAMES)'
+	$(GROONGA_SOURCE_PATH)/packages/apt/sign-packages.sh '$(GPG_UID)' '$(REPOSITORIES_PATH)/' '$(CODE_NAMES)'
 
 update-repository:
-	./update-repository.sh '$(PACKAGE_LABEL)' '$(REPOSITORIES_PATH)/' \
+	$(GROONGA_SOURCE_PATH)/packages/apt/update-repository.sh '$(PACKAGE_LABEL)' '$(REPOSITORIES_PATH)/' \
 	  '$(ARCHITECTURES)' '$(CODE_NAMES)'
 
 sign-repository:
-	./sign-repository.sh '$(GPG_UID)' '$(REPOSITORIES_PATH)/' '$(CODE_NAMES)'
+	$(GROONGA_SOURCE_PATH)/packages/apt/sign-repository.sh '$(GPG_UID)' '$(REPOSITORIES_PATH)/' '$(CODE_NAMES)'
 
 ensure-rsync-path:
 	@if test -z "$(RSYNC_PATH)"; then				\
