@@ -5,6 +5,37 @@
 News
 ====
 
+.. _release-9-05:
+
+Release 9.05 - 2019-07-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added a description about current limitation with MySQL 8.0.
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.45, 5.7.27 and 8.0.17.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/centos`] Fixed a wrong ``mysql80-comunity-release`` package name.
+  [groonga-dev,04759][Reported by Kagami Hiroshi]
+
+* [:doc:`/tutorial/storage`] Fixed an unique index update bug. This bug causes duplicated key error when the following conditions are met.
+
+  * An unique index is created against multiple column index
+  * partial unique key column is updated
+
+* [mysql8.0] Added a support for ``TIMESTAMP``
+  [groonga-dev,04763][Reported by Kagami Hiroshi]
+
+Thanks
+^^^^^^
+
+* Kagami Hiroshi
+
 .. _release-9-04:
 
 Release 9.04 - 2019-06-29

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2019-06-27 16:08+0900\n"
+"PO-Revision-Date: 2019-07-26 15:46+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,64 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 9.04 - 2019-06-29"
-msgstr "9.04リリース - 2019-06-29"
+msgid "Release 9.05 - 2019-07-29"
+msgstr "9.05リリース - 2019-07-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid ""
+"[:doc:`/install/centos`] Added a description about current limitation with "
+"MySQL 8.0."
+msgstr "[:doc:`/install/centos`] MySQL 8.0における制限事項を追記しました。"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.45, 5.7.27 and 8.0.17."
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.45と5.7.27とMySQL 8.0.17(制限あり)をサポー"
+"トしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[:doc:`/install/centos`] Fixed a wrong ``mysql80-comunity-release`` package "
+"name. [groonga-dev,04759][Reported by Kagami Hiroshi]"
+msgstr ""
+"[:doc:`/install/centos`] ``mysql80-comunity-release`` のパッケージ名が間違っ"
+"ていたのを修正しました。[groonga-dev,04759][各務さんが報告]"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Fixed an unique index update bug. This bug causes "
+"duplicated key error when the following conditions are met."
+msgstr ""
+"[:doc:`/tutorial/storage`] ユニークインデックスを更新する際の不具合を修正しま"
+"した。以下の条件を満たすとキーの重複エラーが発生します。"
+
+# f574aa5f69b9481dbc1a9a7574b5ec09
+msgid "An unique index is created against multiple column index"
+msgstr "ユニークインデックスをマルチカラムに対して作成する。"
+
+msgid "partial unique key column is updated"
+msgstr "ユニークキーのカラムの一部が更新される。"
+
+msgid ""
+"[mysql8.0] Added a support for ``TIMESTAMP`` [groonga-dev,04763][Reported by "
+"Kagami Hiroshi]"
+msgstr ""
+"[mysql8.0] ``TIMESTAMP`` 型をサポートしました。[groonga-dev,04763][各務さんが"
+"報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Kagami Hiroshi"
+msgstr "各務さん"
+
+msgid "Release 9.04 - 2019-06-29"
+msgstr "9.04リリース - 2019-06-29"
 
 msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.26."
 msgstr "[:doc:`/install/centos`] Percona Server 5.7.26をサポートしました。"
@@ -36,9 +89,6 @@ msgstr "[:doc:`/install/centos`] MariaDB 10.2.25/10.3.16をサポートしまし
 # cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/centos`][experimental] Added support for MySQL 8.0.16."
 msgstr "[:doc:`/install/centos`][実験的] MySQL 8.0.16をサポートしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a infinite loop bug. This bug is occurred when invalid flag is "
@@ -386,9 +436,6 @@ msgid ""
 msgstr ""
 "[ストレージモード] マルチレンジリードで誤った結果が返される場合がある問題を修"
 "正。[GitHub#211][colt27さんが報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "colt27"
 msgstr "colt27さん"
@@ -955,9 +1002,6 @@ msgstr "村上さん"
 
 msgid "@tigersun2000_twitter"
 msgstr "@tigersun2000_twitterさん"
-
-msgid "Kagami Hiroshi"
-msgstr "各務さん"
 
 msgid "Release 7.05 - 2017-07-29"
 msgstr "7.05リリース - 2017-07-29"
@@ -5505,6 +5549,3 @@ msgid ""
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
-
-#~ msgid "The MySQL 8 is not supported. That is still being handled."
-#~ msgstr "MySQL8 はサポートしていません。まだ対応中となります。"
