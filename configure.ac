@@ -434,6 +434,20 @@ case "$CUTTER_SOURCE_PATH" in
 esac
 AC_SUBST(CUTTER_SOURCE_PATH)
 
+# For updating apt/yum repositories
+AC_ARG_WITH(groonga-source-path,
+            [AS_HELP_STRING([--with-groonga-source-path=PATH],
+            [specify Groonga source path for Mroonga's release manager.])],
+            [GROONGA_SOURCE_PATH="$withval"])
+case "$GROONGA_SOURCE_PATH" in
+  ""|/*)
+    : # do nothing
+    ;;
+  *)
+    GROONGA_SOURCE_PATH="\$(top_builddir)/${GROONGA_SOURCE_PATH}"
+    ;;
+esac
+AC_SUBST(GROONGA_SOURCE_PATH)
 
 # Document
 AC_MSG_CHECKING([whether enable document])
