@@ -30,10 +30,14 @@ ensure-rsync-path:
 	fi
 
 sign-packages:
-	./sign-rpm.sh '$(GPG_UID)' '$(REPOSITORIES_PATH)/' '$(DISTRIBUTIONS)'
+	$(GROONGA_SOURCE_PATH)/packages/yum/sign-rpm.sh '$(GPG_UID)' '$(REPOSITORIES_PATH)/' '$(DISTRIBUTIONS)'
 
 update-repository:
-	./update-repository.sh '$(REPOSITORIES_PATH)/' '$(DISTRIBUTIONS)'
+	$(GROONGA_SOURCE_PATH)/packages/yum/update-repository.sh	\
+	  '$(GPG_UID)'						 	\
+	  '$(PACKAGE)'						 	\
+	  '$(REPOSITORIES_PATH)/'				 	\
+	  '$(DISTRIBUTIONS)'
 
 upload: ensure-rsync-path
 	for distribution in $(DISTRIBUTIONS); do		\
