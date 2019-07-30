@@ -18,6 +18,14 @@
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
+%if %{_centos_ver} == 7
+%define service_status() (systemctl status %1)
+%define service_control() (systemctl %2 %1)
+%else
+%define service_status() (/sbin/service %1 status)
+%define service_control() (/sbin/service %1 %2)
+%endif
+
 Name:           percona-server-57-mroonga
 Version:        @VERSION@
 Release:        1%{?dist}
@@ -107,8 +115,8 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if ! /sbin/service mysql status > /dev/null; then
-  /sbin/service mysql start
+if ! %{service_status mysql} > /dev/null; then
+  %{service_control mysql start}
   stop_after_installation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
 else
@@ -146,7 +154,7 @@ uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 
 if [ "$1" = 2 ] ; then
   if [ $current_version -lt $required_version ]; then
-    /sbin/service mysqld restart
+    %{service_control mysql restart}
   fi
   ${mysql} < ${uninstall_sql} || \
       (echo "run the following command to unregister Mroonga:"; \
@@ -161,12 +169,12 @@ if [ "$stop_after_installation" = "1" ]; then
   if [ -n "$auto_generated_password" ];then
     ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
-  /sbin/service mysql stop
+  %{service_control mysql stop}
 fi
 
 %preun
-if ! /sbin/service mysql status > /dev/null; then
-  /sbin/service mysql start
+if ! %{service_status mysql} > /dev/null; then
+  %{service_control mysql start}
   stop_after_uninstallation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
 else
@@ -199,7 +207,7 @@ if [ "$stop_after_uninstallation" = "1" ]; then
   if [ -n "$auto_generated_password" ];then
     ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
-  /sbin/service mysql stop
+  %{service_control mysql stop}
 fi
 
 %files

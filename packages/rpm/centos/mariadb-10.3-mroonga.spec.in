@@ -5,8 +5,12 @@
 %define mariadb_download_base_url_default https://downloads.mariadb.org/f
 %if %{_centos_ver} == 7
 %define mariadb_dist_default    el7.centos
+%define service_status() (systemctl status %1)
+%define service_control() (systemctl %2 %1)
 %else
 %define mariadb_dist_default    el6
+%define service_status() (/sbin/service %1 status)
+%define service_control() (/sbin/service %1 %2)
 %endif
 
 %define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}
@@ -117,8 +121,8 @@ sed -i'' -e 's/ha_mroonga/ha_mroonga_official/g' \
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if ! /sbin/service mysqld status > /dev/null; then
-  /sbin/service mysqld start
+if ! %{service_status mysqld} > /dev/null; then
+  %{service_control mysqld start}
   stop_after_installation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
 else
@@ -156,7 +160,7 @@ uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 
 if [ "$1" = 2 ] ; then
   if [ $current_version -lt $required_version ]; then
-    /sbin/service mysql restart
+    %{service_control mysqld restart}
   fi
   ${mysql} < ${uninstall_sql} || \
     (echo "run the following command to unregister Mroonga:"; \
@@ -171,12 +175,12 @@ if [ "$stop_after_installation" = "1" ]; then
   if [ -n "$auto_generated_password" ];then
     ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
-  /sbin/service mysqld stop
+  %{service_control mysqld stop}
 fi
 
 %preun
-if ! /sbin/service mysqld status > /dev/null; then
-  /sbin/service mysqld start
+if ! %{service_status mysqld} > /dev/null; then
+  %{service_control mysqld start}
   stop_after_uninstallation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
 else
@@ -212,7 +216,7 @@ if [ "$stop_after_uninstallation" = "1" ]; then
   if [ -n "$auto_generated_password" ];then
     ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
-  /sbin/service mysqld stop
+  %{service_control mysqld stop}
 fi
 
 %files
