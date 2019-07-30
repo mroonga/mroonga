@@ -5,7 +5,8 @@ CODE_NAMES = stretch buster
 MYSQL_VARIANTS =				\
 	5.5					\
 	mariadb-10.0				\
-	mariadb-10.1
+	mariadb-10.1				\
+	mariadb-10.3
 
 all:
 
@@ -65,6 +66,9 @@ build-package-deb: source env.sh
 	          is_target=true;					\
 	          ;;							\
 	        mariadb-10.1-stretch)					\
+	          is_target=true;					\
+	          ;;							\
+	        mariadb-10.3-buster)					\
 	          is_target=true;					\
 	          ;;							\
 	      esac;							\

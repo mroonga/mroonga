@@ -108,6 +108,11 @@ update-latest-release: ensure-cutter-source-path
 	  $(PACKAGE)-mariadb-10.1 $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
 	  $(VERSION) $(NEW_RELEASE_DATE)				\
 	  packages/debian-mariadb-10.1/changelog
+	cd $(top_srcdir) &&						\
+	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"		\
+	  $(PACKAGE)-mariadb-10.3 $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
+	  $(VERSION) $(NEW_RELEASE_DATE)				\
+	  packages/debian-mariadb-10.3/changelog
 
 update-po:
 	@for lang in $(LOCALES); do						\
