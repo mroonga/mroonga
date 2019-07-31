@@ -48,8 +48,8 @@ case "${distribution}" in
   debian)
     component=main
     run cat <<EOF > /etc/apt/sources.list.d/groonga.list
-deb http://packages.groonga.org/debian/ ${code_name} main
-deb-src http://packages.groonga.org/debian/ ${code_name} main
+deb [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] http://packages.groonga.org/debian/ ${code_name} main
+deb-src [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] http://packages.groonga.org/debian/ ${code_name} main
 EOF
     if ! grep --quiet security /etc/apt/sources.list; then
       run cat <<EOF > /etc/apt/sources.list.d/security.list
@@ -65,7 +65,8 @@ EOF
         run apt update --allow-insecure-repositories
         ;;
     esac
-    run apt install -y --allow-unauthenticated groonga-keyring
+    run sudo wget -O /usr/share/keyrings/groonga-archive-keyring.gpg \
+      https://packages.groonga.org/debian/groonga-archive-keyring.gpg
     run apt update
     ;;
   ubuntu)
