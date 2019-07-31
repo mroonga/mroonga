@@ -28,6 +28,8 @@ Fixes
   * An unique index is created against multiple column index
   * partial unique key column is updated
 
+  Note that if you already created an unique index, you must recreate target tables because unique index may have garbage entries. We recommend to recreate an target table with dump and restore, or execute ``ALTER TABLE (TABLE_NAME) FORCE``.
+
 * [mysql8.0] Added a support for ``TIMESTAMP``
   [groonga-dev,04763][Reported by Kagami Hiroshi]
 
