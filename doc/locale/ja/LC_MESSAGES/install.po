@@ -272,6 +272,9 @@ msgstr ""
 msgid "stretch (MariaDB)"
 msgstr ""
 
+msgid "buster (MariaDB)"
+msgstr ""
+
 msgid "Docker"
 msgstr ""
 
