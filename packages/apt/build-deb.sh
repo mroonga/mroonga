@@ -20,12 +20,18 @@ case "${MYSQL_VARIANT}" in
       stretch)
         mysql_server_package=mariadb-server-10.1
         MYSQL_VARIANT=mariadb-10.1
+        DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmariadb-client-lgpl-dev"
+        ;;
+      buster)
+        mysql_server_package=mariadb-server-10.3
+        MYSQL_VARIANT=mariadb-10.3
+        DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmariadb-client-lgpl-dev-compat"
         ;;
       *)
         mysql_server_package=mariadb-server-${MYSQL_VARIANT##mariadb-}
+        DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmariadb-client-lgpl-dev"
         ;;
     esac
-    DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmariadb-client-lgpl-dev"
     DEPENDED_PACKAGES="${DEPENDED_PACKAGES} libmariadbd-dev"
     ;;
   *)
