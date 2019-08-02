@@ -1356,6 +1356,19 @@ msgstr ""
 "ログレベルを ``DEBUG`` に変更する例です。 ``DEBUG`` レベルにするとデバッグ用"
 "のたくさんのメッセージがログに出力されます::"
 
+msgid "``mroonga_query_log_file``"
+msgstr ""
+
+msgid ""
+"The path of the query log file of Mroonga. The default value is a white "
+"space."
+msgstr "Mroongaのクエリーログファイル名。デフォルト値は空白です。"
+
+msgid ""
+"Here is an example transcript to change query log file to ``/tmp/"
+"mroonga_query.log``::"
+msgstr "クエリーログファイルを ``/tmp/mroonga.log`` に変更する例です::"
+
 msgid "``mroonga_match_escalation_threshold``"
 msgstr ""
 
