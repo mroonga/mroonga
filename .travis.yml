@@ -19,20 +19,20 @@ matrix:
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_EMBEDDED=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.1.40
+        - MYSQL_VERSION=mariadb-10.1.41
         - MROONGA_BUNDLED=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.2.25
+        - MYSQL_VERSION=mariadb-10.2.26
         - MROONGA_BUNDLED=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.2.25
+        - MYSQL_VERSION=mariadb-10.2.26
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.3.16
+        - MYSQL_VERSION=mariadb-10.3.17
         - MROONGA_BUNDLED=yes
     - env:
-        - MYSQL_VERSION=mariadb-10.3.16
+        - MYSQL_VERSION=mariadb-10.3.17
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - env:
