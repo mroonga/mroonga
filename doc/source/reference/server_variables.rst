@@ -397,7 +397,10 @@ Here is an example transcript to change log level to ``DEBUG`` that logs many me
 ``mroonga_query_log_file``
 --------------------------
 
-The path of the query log file of Mroonga. The default value is a white space.
+The path of the query log file of Mroonga. The default value is empty.
+
+If this value is empty, the query log is not stored to file.
+If this value is not empty, query log stores to the specified file.
 
 Here is an example transcript to change query log file to ``/tmp/mroonga_query.log``::
 
