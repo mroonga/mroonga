@@ -392,7 +392,7 @@ Here is an example transcript to change log level to ``DEBUG`` that logs many me
   +-------------------+-------+
   1 row in set (0.00 sec)
 
-.. _serer-variable-mroonga-query-log-file:
+.. _server-variable-mroonga-query-log-file:
 
 ``mroonga_query_log_file``
 --------------------------
