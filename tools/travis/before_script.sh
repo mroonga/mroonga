@@ -70,11 +70,13 @@ else
                       "--with-mysql-build=$PWD/vendor/mysql/release")
       ;;
     mysql-8.0)
-      boost_archive=boost_1_69_0.tar.gz
-      curl -L -O https://dl.bintray.com/boostorg/release/1.69.0/source/${boost_archive}
+      #boost_archive=boost_1_69_0.tar.gz
+      #curl -L -O https://dl.bintray.com/boostorg/release/1.69.0/source/${boost_archive}
       sudo mkdir -p /usr/global/share
-      sudo mv ${boost_archive} /usr/global/share/
+      #sudo mv ${boost_archive} /usr/global/share/
       sudo chown -R ${USER}: /usr/global/share/
+      # Use DOWNLOAD_BOOST=1 explicitly to avoid https://bugs.mysql.com/bug.php?id=96266.
+      sed -i 's/-DWITH_BOOST/-DDOWNLOAD_BOOST=1 -DWITH_BOOST/' vendor/mysql/debian/rules
       (cd vendor/mysql && fakeroot debian/rules override_dh_auto_configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
