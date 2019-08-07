@@ -392,6 +392,37 @@ Here is an example transcript to change log level to ``DEBUG`` that logs many me
   +-------------------+-------+
   1 row in set (0.00 sec)
 
+.. _server-variable-mroonga-query-log-file:
+
+``mroonga_query_log_file``
+--------------------------
+
+The path of the query log file of Mroonga. The default value is empty.
+
+If this value is empty, the query log is not stored to file.
+If this value is not empty, query log is stored to the specified file.
+
+Here is an example transcript to change query log file to ``/tmp/mroonga_query.log``::
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_query_log_file';
+  +------------------------+-------+
+  | Variable_name          | Value |
+  +------------------------+-------+
+  | mroonga_query_log_file |       |
+  +------------------------+-------+
+  1 row in set (0.00 sec)
+
+  mysql> SET GLOBAL mroonga_log_file = "/tmp/mroonga.log";
+  Query OK, 0 rows affected (0.00 sec)
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_log_file';
+  +------------------+------------------+
+  | Variable_name    | Value            |
+  +------------------+------------------+
+  | mroonga_log_file | /tmp/mroonga.log |
+  +------------------+------------------+
+  1 row in set (0.00 sec)
+
 .. _server-variable-mroonga-match-escalation-threshold:
 
 ``mroonga_match_escalation_threshold``
