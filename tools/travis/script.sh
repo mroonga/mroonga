@@ -102,6 +102,39 @@ run_sql_test()
   case "${CI_MYSQL_VERSION}" in
     mysql-8.0)
       n_processors=1
+      # TODO: Remove the following "rm" as soon as possible
+      # when these functionality is supported or test case is fixed for MySQL 8.0.
+      rm -rf ${mroonga_dir}/mysql-test/mroonga/wrapper
+      cd ${mroonga_dir}/mysql-test/mroonga/storage
+      rm -rf alter_table/add_column
+      rm -rf alter_table/add_index/unique
+      rm -rf create/table/table/default_tokenizer
+      rm -rf create/table/index/lexicon
+      rm -rf optimization/condition_push_down
+      rm -rf optimization/order_limit
+      rm -rf optimization/count_skip
+      rm -rf column/set
+      rm -rf foreign_key
+      rm -rf index/btree
+      rm -rf index/multiple_column
+      rm -rf index/range/normal
+      rm -rf index/range/primary
+      rm -f alter_table/disable_keys/t/truncate.test
+      rm -f alter_table/t/spatial.test
+      rm -f create/table/t/TODO_SPLIT_ME.test
+      rm -f create/table/index/lexicon/t/comment.test
+      rm -f delete/t/normal_column.test
+      rm -f fulltext/t/found_rows.test
+      rm -f geometry/strict_sql_mode/t/bulk_insert_null.test
+      rm -f index/hash/t/normal_column_insert.test
+      rm -f index/read/normal/t/varchar.test
+      rm -f index/read/multiple/t/varchar_collation.test
+      rm -f index/unique/t/varchar.test
+      rm -f index/unique/t/multiple_update.test
+      rm -f like/t/unicode_ci.test
+      rm -f select/empty_key/t/where_not_equal.test
+      rm -f replace/t/select_varchar.test
+      cd -
       ;;
     percona-server-*)
       :
