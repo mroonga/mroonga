@@ -25,7 +25,13 @@ environment:
       MARIADB_VERSION: 10.3.17
       MROONGA_PLATFORM: "winx64"
     - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
-      MARIADB_VERSION: 10.3.17
+      MARIADB_VERSION: 10.4.7
+      MROONGA_PLATFORM: "winx64"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
+      MARIADB_VERSION: 10.4.7
+      MROONGA_PLATFORM: "winx64"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
+      MARIADB_VERSION: 10.4.7
       MROONGA_PLATFORM: "winx64"
       USE_MASTER: "yes"
 
