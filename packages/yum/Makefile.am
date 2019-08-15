@@ -9,6 +9,7 @@ MYSQL_VARIANTS =				\
 	mariadb-10.1				\
 	mariadb-10.2				\
 	mariadb-10.3				\
+	mariadb-10.4				\
 	percona-server-56			\
 	percona-server-57
 CENTOS_VERSIONS = 6 7
