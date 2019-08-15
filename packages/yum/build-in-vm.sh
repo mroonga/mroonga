@@ -79,6 +79,10 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
       if [ ${mysql_variant} = "mysql80-community" -a ${architecture} = i386 ]; then
         continue
       fi
+      if [ ${centos_version} = 6 -a ${mysql_variant} = "mariadb-10.4" ]; then
+        # Enable MariaDB 10.4 on CentOS 6 (x86_64) when https://jira.mariadb.org/browse/MDEV-20003 is fixed.
+        continue
+      fi
       id=centos-${centos_version}-${architecture}
       vagrant up ${id}
       build_status=$?
