@@ -276,7 +276,7 @@ Here is an example when you specify ``--prefix=$HOME/local`` to
   % mysql -u root < $HOME/local/share/mroonga/install.sql
 
 ``uninstall Mroonga``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
 
 If you want to remove Mroonga, 
 type below commands::
