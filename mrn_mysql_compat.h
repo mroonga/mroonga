@@ -792,3 +792,13 @@ typedef HASH mrn_table_def_cache_type;
 #else
 #  define MRN_MI_FLOAT8GET(result, data) mi_float8get((result), (data))
 #endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
+#  define MRN_ITEM_IS_STRING_TYPE(item) \
+  ((item)->is_of_type(Item::CONST_ITEM, STRING_RESULT))
+#  define MRN_ITEM_IS_INT_TYPE(item) \
+  ((item)->is_of_type(Item::CONST_ITEM, INT_RESULT))
+#else
+#  define MRN_ITEM_IS_STRING_TYPE(item) ((item)->type() == Item::STRING_ITEM)
+#  define MRN_ITEM_IS_INT_TYPE(item) ((item)->type() == Item::INT_ITEM)
+#endif

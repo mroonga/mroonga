@@ -287,8 +287,8 @@ namespace mrn {
       break;
     case INT_TYPE:
       if (field_type == MYSQL_TYPE_ENUM) {
-        if (value_item->type() != Item::STRING_ITEM &&
-            value_item->type() != Item::INT_ITEM) {
+        if (!MRN_ITEM_IS_STRING_TYPE(value_item) &&
+            !MRN_ITEM_IS_INT_TYPE(value_item)) {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][false] "
                   "constant value of enum binary operation "
@@ -345,8 +345,8 @@ namespace mrn {
       break;
     case INT_TYPE:
       if (field_type == MYSQL_TYPE_ENUM) {
-        if (min_item->type() != Item::STRING_ITEM &&
-            min_item->type() != Item::INT_ITEM) {
+        if (!MRN_ITEM_IS_STRING_TYPE(min_item) &&
+            !MRN_ITEM_IS_INT_TYPE(min_item)) {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][false] "
                   "minimum value of enum BETWEEN operation "
@@ -356,8 +356,8 @@ namespace mrn {
                   min_item->type());
           DBUG_RETURN(false);
         }
-        if (max_item->type() != Item::STRING_ITEM &&
-            max_item->type() != Item::INT_ITEM) {
+        if (!MRN_ITEM_IS_STRING_TYPE(max_item) &&
+            !MRN_ITEM_IS_INT_TYPE(max_item)) {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][false] "
                   "maximum value of enum BETWEEN operation "
@@ -438,8 +438,8 @@ namespace mrn {
         break;
       case INT_TYPE:
         if (field_type == MYSQL_TYPE_ENUM) {
-          if (value_item->type() != Item::STRING_ITEM &&
-              value_item->type() != Item::INT_ITEM) {
+          if (!MRN_ITEM_IS_STRING_TYPE(value_item) &&
+              !MRN_ITEM_IS_INT_TYPE(value_item)) {
             GRN_LOG(ctx_, GRN_LOG_DEBUG,
                     "[mroonga][condition-push-down][false] "
                     "constant value of enum IN operation "
@@ -929,7 +929,7 @@ namespace mrn {
     case INT_TYPE:
       grn_obj_reinit(ctx_, &value_, GRN_DB_INT64, 0);
       if (field_type == MYSQL_TYPE_ENUM) {
-        if (const_item->type() == Item::STRING_ITEM) {
+        if (MRN_ITEM_IS_STRING_TYPE(const_item)) {
           String *string;
           string = const_item->val_str(NULL);
           Field_enum *enum_field = static_cast<Field_enum *>(field_item->field);
