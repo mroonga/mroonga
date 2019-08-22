@@ -22,8 +22,7 @@ set -e
 # export GROONGA_MASTER=yes
 # export GROONGA_NORMALIZER_MYSQL_MASTER=yes
 
-#mariadb_download_base=http://mirror.jmu.edu/pub/mariadb
-mariadb_download_base=http://ftp.osuosl.org/pub/mariadb
+mariadb_download_base=https://downloads.mariadb.org/f
 
 version=$(echo "$MYSQL_VERSION" | sed -r -e 's/^(mysql|mariadb|percona-server)-//')
 series=$(echo "$version" | sed -r -e 's/^([0-9]+\.[0-9]+).*$/\1/g')
