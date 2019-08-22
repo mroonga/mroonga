@@ -688,7 +688,7 @@ Here is the example of search by regular expression.
   -- 1 row in set (0.024 sec)
 
 By using :ref:`boolean-mode-pragma-ss` pragma, you can search the records which matches ``/var/log/auth.log`` with ``content @~ "\\\\A/var/log/auth"``.
-``@~`` is a Groonga's operator which executes a regular expression search, so ``content @~ "\\\\A/var/log/auth"`` matches ``/var/log/auth.log`` because it begin with ``/var/log/auth`` (prefix search).
+``@~`` is a Groonga's operator which executes a regular expression search, and ``"\\\\A/var/log/auth"`` executes prefix search, so it matches to only ``/var/log/auth.log``. ``/tmp/local/var/log/auth.log`` doesn't match because it doesn't begin with "/var/log/auth".
 
 See `Groonga's regular expression document
 <http://groonga.org/docs/reference/regular_expression.html#syntax>`_ for more syntax details.
