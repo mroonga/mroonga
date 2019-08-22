@@ -1539,7 +1539,7 @@ msgstr ""
 
 msgid ""
 "``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) "
-"COMMENT 'parser \"TokenMecab\"')``"
+"COMMENT 'tokenizer \"TokenMecab\"')``"
 msgstr ""
 
 msgid ""
@@ -1550,7 +1550,7 @@ msgstr ""
 
 msgid ""
 "``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) "
-"COMMENT 'parser \"TokenDelimit\", normalizer "
+"COMMENT 'tokenizer \"TokenDelimit\", normalizer "
 "\"NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark\"')``"
 msgstr ""
 
