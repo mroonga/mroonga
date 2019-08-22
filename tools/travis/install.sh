@@ -23,6 +23,8 @@ set -e
 # export GROONGA_NORMALIZER_MYSQL_MASTER=yes
 
 mariadb_download_base=https://downloads.mariadb.org/f
+#mariadb_apt_base=http://mirror.jmu.edu/pub/mariadb
+mariadb_apt_base=http://ftp.osuosl.org/pub/mariadb
 
 version=$(echo "$MYSQL_VERSION" | sed -r -e 's/^(mysql|mariadb|percona-server)-//')
 series=$(echo "$version" | sed -r -e 's/^([0-9]+\.[0-9]+).*$/\1/g')
@@ -32,7 +34,7 @@ setup_mariadb_apt()
   distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
   code_name=$(lsb_release --short --codename)
   component=main
-  apt_url_base="${mariadb_download_base}/repo/${series}"
+  apt_url_base="${mariadb_apt_base}/repo/${series}"
   cat <<EOF | sudo tee /etc/apt/sources.list.d/mariadb.list
 deb ${apt_url_base}/${distribution}/ ${code_name} ${component}
 deb-src ${apt_url_base}/${distribution}/ ${code_name} ${component}
