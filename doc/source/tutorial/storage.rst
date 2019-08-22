@@ -654,6 +654,45 @@ See `Groonga's select command document
 <http://groonga.org/docs/reference/commands/select.html>`_ for more
 details.
 
+How to search by regular expression
+-----------------------------------
+
+In storage mode, you can use a Groonga's functionality from Mroonga as described above.
+Thus, you can search records by using a regular expression via Groonga's functionality.
+
+There are some conditions to use regular expression in Mroonga.
+
+* Create an index with ``TokenRegexp`` tokenizer which is used in ``COMMENT``
+* Use ``*SS`` pragma and ``@~`` in ``WHERE MATCH ... AGAINST`` clause
+
+Here is the example of search by regular expression.
+
+.. code-block:: sql
+
+  CREATE TABLE paths (
+    content text,
+    FULLTEXT INDEX content_index (content) COMMENT 'tokenizer "TokenRegexp", normalizer "NormalizerAuto"'
+  ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+
+  INSERT INTO paths VALUES ('/usr/bin/groonga');
+  INSERT INTO paths VALUES ('/var/log/auth.log');
+  INSERT INTO paths VALUES ('/var/log/messages');
+  INSERT INTO paths VALUES ('/tmp/local/var/log/auth.log');
+
+  SELECT * FROM paths WHERE MATCH(content) AGAINST ('*SS content @~ "\\\\A/var/log/auth"' IN BOOLEAN MODE);
+  -- +-------------------+
+  -- | content           |
+  -- +-------------------+
+  -- | /var/log/auth.log |
+  -- +-------------------+
+  -- 1 row in set (0.024 sec)
+
+By using :ref:`boolean-mode-pragma-ss` pragma, you can search the records which matches ``/var/log/auth.log`` with ``content @~ "\\\\A/var/log/auth"``.
+``@~`` is a Groonga's operator which executes a regular expression search, and ``"\\\\A/var/log/auth"`` executes prefix search, so it matches to only ``/var/log/auth.log``. ``/tmp/local/var/log/auth.log`` doesn't match because it doesn't begin with "/var/log/auth".
+
+See `Groonga's regular expression document
+<http://groonga.org/docs/reference/regular_expression.html#syntax>`_ for more syntax details.
+
 Logging
 -------
 
