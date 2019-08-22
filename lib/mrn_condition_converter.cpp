@@ -506,7 +506,7 @@ namespace mrn {
       error = false;
       break;
     default:
-      error = real_value_item->get_date(mysql_time, TIME_FUZZY_DATE);
+      error = MRN_ITEM_GET_DATE_FUZZY(real_value_item, mysql_time, current_thd);
       break;
     }
 
