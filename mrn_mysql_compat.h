@@ -814,3 +814,11 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)      \
   ((item)->get_date((time), TIME_FUZZY_DATE))
 #endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
+#  define MRN_FIELD_GET_TIME(field, time, thd)  \
+  ((field)->get_date(time, Time::Options(thd)))
+#else
+#  define MRN_FIELD_GET_TIME(field, time, thd)  \
+  ((field)->get_time(time))
+#endif
