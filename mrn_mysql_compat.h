@@ -802,3 +802,11 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_ITEM_IS_STRING_TYPE(item) ((item)->type() == Item::STRING_ITEM)
 #  define MRN_ITEM_IS_INT_TYPE(item) ((item)->type() == Item::INT_ITEM)
 #endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
+#  define MRN_ITEM_GET_TIME(item, time, thd)                \
+  ((item)->get_date((thd), (time), Time::Options((thd))))
+#else
+#  define MRN_ITEM_GET_TIME(item, time, thd)                \
+  ((item)->get_time((thd), (time)))
+#endif

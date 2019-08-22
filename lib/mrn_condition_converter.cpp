@@ -491,7 +491,7 @@ namespace mrn {
     Item *real_value_item = value_item->real_item();
     switch (field_item->field->type()) {
     case MYSQL_TYPE_TIME:
-      error = real_value_item->get_time(mysql_time);
+      error = MRN_ITEM_GET_TIME(real_value_item, mysql_time, current_thd);
       break;
     case MYSQL_TYPE_YEAR:
       mysql_time->year        = static_cast<int>(value_item->val_int());
