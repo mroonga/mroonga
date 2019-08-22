@@ -60,11 +60,9 @@ else
                       "--with-mysql-build=$PWD/vendor/mysql/builddir")
       ;;
     mysql-5.7)
-      boost_archive=boost_1_59_0.tar.gz
-      curl -L -O http://downloads.sourceforge.net/project/boost/boost/1.59.0/${boost_archive}
       sudo mkdir -p /usr/global/share
-      sudo mv ${boost_archive} /usr/global/share/
       sudo chown -R ${USER}: /usr/global/share/
+      sed -i 's/-DWITH_BOOST/-DDOWNLOAD_BOOST=1 -DWITH_BOOST/' vendor/mysql/debian/rules
       (cd vendor/mysql && fakeroot debian/rules override_dh_auto_configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
