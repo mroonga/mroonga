@@ -807,10 +807,10 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_ITEM_GET_TIME(item, time, thd)                \
   ((item)->get_date((thd), (time), Time::Options((thd))))
 #  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)              \
-  ((item)->get_date((thd), (time), Time::Options(TIME_FUZZY_DATES, (thd))))
+  ((item)->get_date((time)))
 #else
 #  define MRN_ITEM_GET_TIME(item, time, thd)                \
-  ((item)->get_time((thd), (time)))
+  ((item)->get_time((time)))
 #  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)              \
-  ((item)->get_date((thd), (time), TIME_FUZZY_DATE))
+  ((item)->get_date((time), TIME_FUZZY_DATE))
 #endif
