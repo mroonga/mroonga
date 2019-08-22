@@ -806,8 +806,8 @@ typedef HASH mrn_table_def_cache_type;
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
 #  define MRN_ITEM_GET_TIME(item, time, thd)                \
   ((item)->get_date((thd), (time), Time::Options((thd))))
-#  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)              \
-  ((item)->get_date((time)))
+#  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)                      \
+  ((item)->get_date((thd), (time), Time::Options(TIME_FUZZY_DATES, (thd))))
 #else
 #  define MRN_ITEM_GET_TIME(item, time, thd)                \
   ((item)->get_time((time)))
