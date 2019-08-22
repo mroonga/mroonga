@@ -43,7 +43,7 @@ We put data by INSERT. ::
 
 Try full text search. ::
 
-  mysql> SELECT * FROM diaries WHERE MATCH(content) AGAINST("fine");
+  mysql> SELECT * FROM diaries WHERE MATCH(content) AGAINST("+fine" IN BOOLEAN MODE);
   +----+-----------------------------------------+
   | id | content                                 |
   +----+-----------------------------------------+
@@ -68,28 +68,28 @@ Let's try. ::
   mysql> INSERT INTO diaries (content) VALUES ("It's fine today. But it'll rain tomorrow.");
   Query OK, 1 row affected (0.00 sec)
 
-  mysql> SELECT *, MATCH (content) AGAINST ("fine") FROM diaries WHERE MATCH (content) AGAINST ("fine") ORDER BY MATCH (content) AGAINST ("fine") DESC;
-  +----+--------------------------------------------------------------+------------------------------------+
-  | id | content                                                      | MATCH (content) AGAINST ("fine") |
-  +----+--------------------------------------------------------------+------------------------------------+
-  |  3 | It's fine today. It'll be fine tomorrow as well. |                                  2 |
-  |  1 | It'll be fine tomorrow.                      |                                  1 |
-  |  4 | It's fine today. But it'll rain tomorrow.    |                                  1 |
-  +----+--------------------------------------------------------------+------------------------------------+
+  mysql> SELECT *, MATCH (content) AGAINST ("+fine" IN BOOLEAN MODE) FROM diaries WHERE MATCH (content) AGAINST ("+fine" IN BOOLEAN MODE) ORDER BY MATCH (content) AGAINST ("+fine" IN BOOLEAN MODE) DESC;
+  +----+--------------------------------------------------+---------------------------------------------------+
+  | id | content                                          | MATCH (content) AGAINST ("+fine" IN BOOLEAN MODE) |
+  +----+--------------------------------------------------+---------------------------------------------------+
+  |  3 | It's fine today. It'll be fine tomorrow as well. |                                                 2 |
+  |  1 | It'll be fine tomorrow.                          |                                                 1 |
+  |  4 | It's fine today. But it'll rain tomorrow.        |                                                 1 |
+  +----+--------------------------------------------------+---------------------------------------------------+
   3 rows in set (0.00 sec)
 
 The result having the search word ``fine`` more, i.e. ``id = 3`` message having the higher search score, is displayed first. And you also get search score by using MATCH AGAINST in SELECT phrase.
 
 You can use ``AS`` to change the attribute name. ::
 
-  mysql> SELECT *, MATCH (content) AGAINST ("fine") AS score FROM diaries WHERE MATCH (content) AGAINST ("fine") ORDER BY MATCH (content) AGAINST ("fine") DESC;
-  +----+--------------------------------------------------------------+-------+
-  | id | content                                                      | score |
-  +----+--------------------------------------------------------------+-------+
+  mysql> SELECT *, MATCH (content) AGAINST ("+fine" IN BOOLEAN MODE) AS score FROM diaries WHERE MATCH (content) AGAINST ("+fine" IN BOOLEAN MODE) ORDER BY MATCH (content) AGAINST ("+fine" IN BOOLEAN MODE) DESC;
+  +----+--------------------------------------------------+-------+
+  | id | content                                          | score |
+  +----+--------------------------------------------------+-------+
   |  3 | It's fine today. It'll be fine tomorrow as well. |     2 |
-  |  1 | It'll be fine tomorrow.                      |     1 |
-  |  4 | It's fine today. But it'll rain tomorrow.    |     1 |
-  +----+--------------------------------------------------------------+-------+
+  |  1 | It'll be fine tomorrow.                          |     1 |
+  |  4 | It's fine today. But it'll rain tomorrow.        |     1 |
+  +----+--------------------------------------------------+-------+
   3 rows in set (0.00 sec)
 
 How to specify the parser for full text search
