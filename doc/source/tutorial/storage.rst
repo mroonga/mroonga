@@ -677,6 +677,7 @@ Here is the example of search by regular expression.
   INSERT INTO paths VALUES ('/usr/bin/groonga');
   INSERT INTO paths VALUES ('/var/log/auth.log');
   INSERT INTO paths VALUES ('/var/log/messages');
+  INSERT INTO paths VALUES ('/tmp/local/var/log/auth.log');
 
   SELECT * FROM paths WHERE MATCH(content) AGAINST ('*SS content @~ "\\\\A/var/log/auth"' IN BOOLEAN MODE);
   -- +-------------------+
