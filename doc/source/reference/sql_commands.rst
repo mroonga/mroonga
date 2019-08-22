@@ -18,9 +18,9 @@ List of available SQL commands
 * ``CREATE FULLTEXT INDEX index_name ON table_name(column_name, ...)``
 * ``CREATE TABLE IF NOT EXISTS table_name (...)``
 * ``CREATE TABLE \`table-name-with-hyphen\` (...)``
-* ``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) COMMENT 'parser "TokenMecab"')``
+* ``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) COMMENT 'tokenizer "TokenMecab"')``
 * ``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) COMMENT 'normalizer "NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark"')``
-* ``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) COMMENT 'parser "TokenDelimit", normalizer "NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark"')``
+* ``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) COMMENT 'tokenizer "TokenDelimit", normalizer "NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark"')``
 * ``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name))``
 * ``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name, ...))``
 * ``CREATE TABLE table_name (... INDEX (column_name))``

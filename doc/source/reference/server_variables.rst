@@ -457,7 +457,7 @@ value.
      id INT PRIMARY KEY AUTO_INCREMENT,
      title TEXT,
      tags TEXT,
-     FULLTEXT INDEX tags_index (tags) COMMENT 'parser "TokenDelimit"'
+     FULLTEXT INDEX tags_index (tags) COMMENT 'tokenizer "TokenDelimit"'
    ) ENGINE=mroonga DEFAULT CHARSET=UTF8;
 
    -- Test data
