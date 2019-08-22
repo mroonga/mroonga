@@ -97,7 +97,7 @@ Here is the results of execution examples::
   +----+-------------------------------------------------------------------------------------------------+
   3 rows in set (0.00 sec)
   
-  mysql> SELECT id, text, mroonga_snippet(text, 8, 2, 'ascii_general_ci', 1, 1, '...', '...<br>', 'fulltext', '<span class="w1">', '</span>', 'MySQL', '<span class="w2">', '</span>', 'search', '<span calss="w3">', '</span>') FROM snippet_test WHERE MATCH(text) AGAINST ('fulltext');
+  mysql> SELECT id, text, mroonga_snippet(text, 8, 2, 'ascii_general_ci', 1, 1, '...', '...<br>', 'fulltext', '<span class="w1">', '</span>', 'MySQL', '<span class="w2">', '</span>', 'search', '<span calss="w3">', '</span>') FROM snippet_test WHERE MATCH(text) AGAINST ('fulltext' IN BOOLEAN MODE);
   +----+-------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
   | id | text                                                                                            | mroonga_snippet(text, 8, 2, 'ascii_general_ci', 1, 1, '...', '...<br>', 'fulltext', '<span class="w1">', '</span>', 'MySQL', '<span class="w2">', '</span>', 'search', '<span calss="w3">', '</span>') |
   +----+-------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
