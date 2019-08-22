@@ -283,5 +283,5 @@ type below commands::
 
   % git clone git@github.com:mroonga/mroonga.git
   % mysql < ${PREFIX}/share/mroonga/uninstall.sql
-  % cd %{MROONGA_BUILD_DIR}
+  % cd ${MROONGA_BUILD_DIR}
   % sudo make uninstall
