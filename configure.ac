@@ -178,9 +178,11 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/sql/auth"
   fi
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir/include"
-  if test -d "$ac_mysql_source_dir/extra/rapidjson"; then
-    mysql_rapidjson_include_dir="$ac_mysql_source_dir/extra/rapidjson/include"
-    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_rapidjson_include_dir"
+  if test -d "$ac_mysql_source_dir/wsrep-lib"; then
+    mysql_wsrep_include_dir="$ac_mysql_source_dir/wsrep-lib/include"
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_wsrep_include_dir"
+    mysql_wsrep_api_include_dir=$(dirname ${ac_mysql_source_dir}/wsrep-lib/wsrep-API/*/wsrep_api.h)
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_wsrep_api_include_dir"
   fi
   if test -d "$ac_mysql_source_dir/extra/regex"; then
     mysql_regex_include_dir="$ac_mysql_source_dir/extra/regex"
@@ -192,6 +194,10 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
       mysql_regex_include_dir="$ac_mysql_source_dir/regex"
     fi
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_regex_include_dir"
+  fi
+  if test -d "$ac_mysql_source_dir/extra/rapidjson"; then
+    mysql_rapidjson_include_dir="$ac_mysql_source_dir/extra/rapidjson/include"
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_rapidjson_include_dir"
   fi
   if test -d "$ac_mysql_source_dir/libbinlogevents"; then
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_build_dir/libbinlogevents/include"

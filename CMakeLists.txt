@@ -196,6 +196,19 @@ else()
   set(MYSQL_VARIANT "MySQL")
 endif()
 
+if(EXISTS "${MYSQL_SOURCE_DIR}/wsrep-lib")
+  set(MYSQL_WSREP_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/wsrep-lib/include")
+  file(GLOB
+    MYSQL_WSREP_API_H
+    "${MYSQL_SOURCE_DIR}/wsrep-lib/wsrep-API/*/wsrep_api.h")
+  get_filename_component(MYSQL_WSREP_API_INCLUDE_DIR
+    "${MYSQL_WSREP_API_H}"
+    DIRECTORY)
+else()
+  set(MYSQL_WSREP_INCLUDE_DIR)
+  set(MYSQL_WSREP_API_INCLUDE_DIR)
+endif()
+
 if(EXISTS "${MYSQL_SOURCE_DIR}/pcre")
   set(MYSQL_REGEX_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/pcre")
 else()
@@ -223,6 +236,8 @@ set(MYSQL_INCLUDE_DIRS
   "${MYSQL_BUILD_DIR}/include"
   "${MYSQL_SOURCE_DIR}/sql"
   "${MYSQL_SOURCE_DIR}/include"
+  "${MYSQL_WSREP_INCLUDE_DIR}"
+  "${MYSQL_WSREP_API_INCLUDE_DIR}"
   "${MYSQL_REGEX_INCLUDE_DIR}"
   "${MYSQL_RAPIDJSON_INCLUDE_DIR}"
   "${MYSQL_LIBBINLOGEVENTS_EXPORT_DIR}"
