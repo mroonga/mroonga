@@ -559,7 +559,6 @@ AC_OUTPUT([
   packages/debian-5.5/control
   packages/debian-5.6/control
   packages/debian-5.7/control
-  packages/debian-mariadb-10.0/control
   packages/debian-mariadb-10.1/control
   packages/debian-mariadb-10.3/control
   packages/apt/env.sh

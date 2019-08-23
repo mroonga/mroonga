@@ -14,15 +14,6 @@ matrix:
     - name: MySQL 8.0
       env:
         - MYSQL_VERSION=mysql-8.0
-    - name: MariaDB 10.0
-      env:
-        - MYSQL_VERSION=mariadb-10.0.38
-        - MROONGA_BUNDLED=yes
-    - name: MariaDB 10.0 embedded
-      env:
-        - MYSQL_VERSION=mariadb-10.0.38
-        - MROONGA_BUNDLED=yes
-        - MROONGA_TEST_EMBEDDED=yes
     - name: MariaDB 10.1
       env:
         - MYSQL_VERSION=mariadb-10.1.41
