@@ -822,3 +822,13 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_FIELD_GET_TIME(field, time, thd)  \
   ((field)->get_time(time))
 #endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
+#  define MRN_TABLE_RESET(table) ((table)->reset())
+#  define MRN_TABLE_SHARE_RESET(table_share) ((table_share)->reset())
+#else
+#  define MRN_TABLE_RESET(table) \
+  (memset((table), 0, sizeof(TABLE)))
+#  define MRN_TABLE_SHARE_RESET(table_share) \
+  (memset((table_share), 0, sizeof(TABLE_SHARE))
+#endif
