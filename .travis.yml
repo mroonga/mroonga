@@ -5,46 +5,60 @@ dist: xenial
 language: cpp
 matrix:
   include:
-    - env:
+    - name: MySQL system
+      env:
         - MYSQL_VERSION=mysql-system
-    - env:
+    - name: MySQL 5.7
+      env:
         - MYSQL_VERSION=mysql-5.7
-    - env:
+    - name: MySQL 8.0
+      env:
         - MYSQL_VERSION=mysql-8.0
-    - env:
+    - name: MariaDB 10.0
+      env:
         - MYSQL_VERSION=mariadb-10.0.38
         - MROONGA_BUNDLED=yes
-    - env:
+    - name: MariaDB 10.0 embedded
+      env:
         - MYSQL_VERSION=mariadb-10.0.38
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_EMBEDDED=yes
-    - env:
+    - name: MariaDB 10.1
+      env:
         - MYSQL_VERSION=mariadb-10.1.41
         - MROONGA_BUNDLED=yes
-    - env:
+    - name: MariaDB 10.2
+      env:
         - MYSQL_VERSION=mariadb-10.2.26
         - MROONGA_BUNDLED=yes
-    - env:
+    - name: MariaDB 10.2 binary protocol
+      env:
         - MYSQL_VERSION=mariadb-10.2.26
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
-    - env:
+    - name: MariaDB 10.3
+      env:
         - MYSQL_VERSION=mariadb-10.3.17
         - MROONGA_BUNDLED=yes
-    - env:
+    - name: MariaDB 10.3 binary protocol
+      env:
         - MYSQL_VERSION=mariadb-10.3.17
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
-    - env:
+    - name: MariaDB 10.4
+      env:
         - MYSQL_VERSION=mariadb-10.4.7
         - MROONGA_BUNDLED=yes
-    - env:
+    - name: MariaDB 10.4 binary protocol
+      env:
         - MYSQL_VERSION=mariadb-10.4.7
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
-    - env:
+    - name: Percona Server 5.6
+      env:
         - MYSQL_VERSION=percona-server-5.6
-    - env:
+    - name: Percona Server 5.7
+      env:
         - MYSQL_VERSION=percona-server-5.7
 install:
   - tools/travis/install.sh
