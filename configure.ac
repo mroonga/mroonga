@@ -215,7 +215,12 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_CXXFLAGS="-felide-constructors"
   case "$MYSQL_MAJOR_MINOR_VERSION" in
-  5.5|5.6|10.*)
+  10.4)
+    m4_ifdef([AX_CXX_COMPILE_STDCXX_11],
+             [AX_CXX_COMPILE_STDCXX_11([ext], [mandatory])],
+             [CHECK_CXXFLAG([-std=gnu++11])])
+    ;;
+  5.5|5.6|10.[0-3])
     MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS -fno-rtti"
     ;;
   8.*)
@@ -565,6 +570,7 @@ AC_OUTPUT([
   packages/rpm/centos/mariadb-10.1-mroonga.spec
   packages/rpm/centos/mariadb-10.2-mroonga.spec
   packages/rpm/centos/mariadb-10.3-mroonga.spec
+  packages/rpm/centos/mariadb-10.4-mroonga.spec
   packages/rpm/centos/percona-server-56-mroonga.spec
   packages/rpm/centos/percona-server-57-mroonga.spec
   packages/yum/env.sh
