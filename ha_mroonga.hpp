@@ -407,12 +407,6 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HAVE_PSI_SERVER
 #endif
 
-#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
-  using mrn_update_row_new_data_t = const uchar *;
-#else
-  using mrn_update_row_new_data_t = uchar *;
-#endif
-
 #ifdef MRN_MARIADB_P
 #  if MYSQL_VERSION_ID >= 100302
   using mrn_key_copy_from_record_t = const uchar *;
@@ -425,6 +419,18 @@ typedef uint mrn_alter_table_flags;
 #  else
   using mrn_key_copy_from_record_t = uchar *;
 #  endif
+#endif
+
+#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+  using mrn_update_row_new_data_t = const uchar *;
+#else
+  using mrn_update_row_new_data_t = uchar *;
+#endif
+
+#if MYSQL_VERSION_ID >= 100400 && defined(MRN_MARIADB_P)
+  using mrn_write_row_buf_t = const uchar *;
+#else
+  using mrn_write_row_buf_t = uchar *;
 #endif
 
 #if MYSQL_VERSION_ID >= 50723 && !defined(MRN_MARIADB_P)
@@ -657,7 +663,7 @@ public:
                    const dd::Table *table_def
 #endif
     ) mrn_override;
-  int write_row(uchar *buf);
+  int write_row(mrn_write_row_buf_t buf) mrn_override;
   int update_row(const uchar *old_data,
                  mrn_update_row_new_data_t new_data) mrn_override;
   int delete_row(const uchar *buf);
@@ -1274,14 +1280,15 @@ private:
 #endif
   bool wrapper_is_target_index(KEY *key_info);
   bool wrapper_have_target_index();
-  int wrapper_write_row(uchar *buf);
-  int wrapper_write_row_index(uchar *buf);
-  int storage_write_row(uchar *buf);
-  int storage_write_row_multiple_column_index(uchar *buf,
+  int wrapper_write_row(mrn_write_row_buf_t buf);
+  int wrapper_write_row_index(mrn_write_row_buf_t buf);
+  int storage_write_row(mrn_write_row_buf_t buf);
+  int storage_write_row_multiple_column_index(mrn_write_row_buf_t buf,
                                               grn_id record_id,
                                               KEY *key_info,
                                               grn_obj *index_column);
-  int storage_write_row_multiple_column_indexes(uchar *buf, grn_id record_id);
+  int storage_write_row_multiple_column_indexes(mrn_write_row_buf_t buf,
+                                                grn_id record_id);
   int storage_write_row_unique_index(const uchar *buf,
                                      KEY *key_info,
                                      grn_obj *index_table,

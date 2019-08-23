@@ -6501,7 +6501,7 @@ bool ha_mroonga::wrapper_have_target_index()
   DBUG_RETURN(have_target_index);
 }
 
-int ha_mroonga::wrapper_write_row(uchar *buf)
+int ha_mroonga::wrapper_write_row(mrn_write_row_buf_t buf)
 {
   int error = 0;
   THD *thd = ha_thd();
@@ -6530,7 +6530,7 @@ int ha_mroonga::wrapper_write_row(uchar *buf)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_write_row_index(uchar *buf)
+int ha_mroonga::wrapper_write_row_index(mrn_write_row_buf_t buf)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -6617,7 +6617,7 @@ err:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_write_row(uchar *buf)
+int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -6871,7 +6871,7 @@ err:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_write_row_multiple_column_index(uchar *buf,
+int ha_mroonga::storage_write_row_multiple_column_index(mrn_write_row_buf_t buf,
                                                         grn_id record_id,
                                                         KEY *key_info,
                                                         grn_obj *index_column)
@@ -6908,7 +6908,7 @@ int ha_mroonga::storage_write_row_multiple_column_index(uchar *buf,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_write_row_multiple_column_indexes(uchar *buf,
+int ha_mroonga::storage_write_row_multiple_column_indexes(mrn_write_row_buf_t buf,
                                                           grn_id record_id)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -7088,7 +7088,7 @@ err:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::write_row(uchar *buf)
+int ha_mroonga::write_row(mrn_write_row_buf_t buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
