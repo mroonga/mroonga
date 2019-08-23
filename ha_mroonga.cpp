@@ -15879,8 +15879,8 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   ) {
     DBUG_RETURN(HA_ALTER_ERROR);
   }
-  memcpy(wrap_altered_table, altered_table, sizeof(TABLE));
-  memcpy(wrap_altered_table_share, altered_table->s, sizeof(TABLE_SHARE));
+  *wrap_altered_table = *altered_table;
+  *wrap_altered_table_share = *(altered_table->s);
   mrn_init_sql_alloc(ha_thd(),
                      "mroonga::wrap-altered-table-share",
                      &(wrap_altered_table_share->mem_root));
