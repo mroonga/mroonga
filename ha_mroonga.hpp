@@ -411,26 +411,26 @@ typedef uint mrn_alter_table_flags;
 #  if MYSQL_VERSION_ID >= 100302
   using mrn_key_copy_from_record_t = const uchar *;
 #  else
-  using mrn_key_copy_from_record_t = uchar *;
+  typedef uchar * mrn_key_copy_from_record_t;
 #  endif
 #else
 #  if MYSQL_VERSION_ID >= 80000
   using mrn_key_copy_from_record_t = const uchar *;
 #  else
-  using mrn_key_copy_from_record_t = uchar *;
+  typedef uchar * mrn_key_copy_from_record_t;
 #  endif
 #endif
 
 #if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
   using mrn_update_row_new_data_t = const uchar *;
 #else
-  using mrn_update_row_new_data_t = uchar *;
+  typedef uchar * mrn_update_row_new_data_t;
 #endif
 
 #if MYSQL_VERSION_ID >= 100400 && defined(MRN_MARIADB_P)
   using mrn_write_row_buf_t = const uchar *;
 #else
-  using mrn_write_row_buf_t = uchar *;
+  typedef uchar * mrn_write_row_buf_t;
 #endif
 
 #if MYSQL_VERSION_ID >= 50723 && !defined(MRN_MARIADB_P)
