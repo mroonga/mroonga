@@ -3210,6 +3210,9 @@ ulonglong ha_mroonga::wrapper_table_flags() const
 #ifdef HA_REC_NOT_IN_SEQ
   table_flags |= HA_REC_NOT_IN_SEQ;
 #endif
+#ifdef HA_CAN_HASH_KEYS
+  table_flags |= HA_CAN_HASH_KEYS;
+#endif
   DBUG_RETURN(table_flags);
 }
 
@@ -3251,6 +3254,9 @@ ulonglong ha_mroonga::storage_table_flags() const
 #endif
 #ifdef HA_REC_NOT_IN_SEQ
   flags |= HA_REC_NOT_IN_SEQ;
+#endif
+#ifdef HA_CAN_HASH_KEYS
+  flags |= HA_CAN_HASH_KEYS;
 #endif
   DBUG_RETURN(flags);
 }
