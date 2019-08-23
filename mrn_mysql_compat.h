@@ -834,5 +834,5 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_TABLE_RESET(table) \
   (memset((table), 0, sizeof(TABLE)))
 #  define MRN_TABLE_SHARE_RESET(table_share) \
-  (memset((table_share), 0, sizeof(TABLE_SHARE))
+  (memset((table_share), 0, sizeof(TABLE_SHARE)))
 #endif
