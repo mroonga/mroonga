@@ -408,7 +408,23 @@ typedef uint mrn_alter_table_flags;
 #endif
 
 #if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
-#  define MRN_HANDLER_HA_UPDATE_ROW_NEW_DATA_CONST
+  using mrn_update_row_new_data_t = const uchar *;
+#else
+  using mrn_update_row_new_data_t = uchar *;
+#endif
+
+#ifdef MRN_MARIADB_P
+#  if MYSQL_VERSION_ID >= 100302
+  using mrn_key_copy_from_record_t = const uchar *;
+#  else
+  using mrn_key_copy_from_record_t = uchar *;
+#  endif
+#else
+#  if MYSQL_VERSION_ID >= 80000
+  using mrn_key_copy_from_record_t = const uchar *;
+#  else
+  using mrn_key_copy_from_record_t = uchar *;
+#  endif
 #endif
 
 #if MYSQL_VERSION_ID >= 50723 && !defined(MRN_MARIADB_P)
@@ -642,8 +658,8 @@ public:
 #endif
     ) mrn_override;
   int write_row(uchar *buf);
-  int update_row(const uchar *old_data, const uchar *new_data);
-  int update_row(const uchar *old_data, uchar *new_data);
+  int update_row(const uchar *old_data,
+                 mrn_update_row_new_data_t new_data) mrn_override;
   int delete_row(const uchar *buf);
 
   uint max_supported_record_length()   const;
@@ -1273,11 +1289,15 @@ private:
                                      grn_id *key_id);
   int storage_write_row_unique_indexes(const uchar *buf);
   int wrapper_get_record_id(uchar *data, grn_id *record_id, const char *context);
-  int wrapper_update_row(const uchar *old_data, const uchar *new_data);
-  int wrapper_update_row_index(const uchar *old_data, const uchar *new_data);
-  int storage_update_row(const uchar *old_data, const uchar *new_data);
-  int storage_update_row_index(const uchar *old_data, const uchar *new_data);
-  int storage_update_row_unique_indexes(const uchar *new_data);
+  int wrapper_update_row(const uchar *old_data,
+                         mrn_update_row_new_data_t new_data);
+  int wrapper_update_row_index(const uchar *old_data,
+                               mrn_update_row_new_data_t new_data);
+  int storage_update_row(const uchar *old_data,
+                         mrn_update_row_new_data_t new_data);
+  int storage_update_row_index(const uchar *old_data,
+                               mrn_update_row_new_data_t new_data);
+  int storage_update_row_unique_indexes(mrn_update_row_new_data_t new_data);
   int wrapper_delete_row(const uchar *buf);
   int wrapper_delete_row_index(const uchar *buf);
   int storage_delete_row(const uchar *buf);

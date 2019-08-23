@@ -7136,7 +7136,7 @@ int ha_mroonga::wrapper_get_record_id(uchar *data, grn_id *record_id,
 }
 
 int ha_mroonga::wrapper_update_row(const uchar *old_data,
-                                   const uchar *new_data)
+                                   mrn_update_row_new_data_t new_data)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -7151,12 +7151,7 @@ int ha_mroonga::wrapper_update_row(const uchar *old_data,
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   MRN_DISABLE_BINLOG_BEGIN(thd) {
-#ifdef MRN_HANDLER_HA_UPDATE_ROW_NEW_DATA_CONST
-    const uchar *wrap_new_data = new_data;
-#else
-    uchar *wrap_new_data = const_cast<uchar *>(new_data);
-#endif
-    error = wrap_handler->ha_update_row(old_data, wrap_new_data);
+    error = wrap_handler->ha_update_row(old_data, new_data);
   } MRN_DISABLE_BINLOG_END(thd);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -7169,7 +7164,7 @@ int ha_mroonga::wrapper_update_row(const uchar *old_data,
 }
 
 int ha_mroonga::wrapper_update_row_index(const uchar *old_data,
-                                         const uchar *new_data)
+                                         mrn_update_row_new_data_t new_data)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -7183,13 +7178,8 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data,
   mrn_change_encoding(ctx, NULL);
   KEY *key_info = &(table->key_info[table_share->primary_key]);
   GRN_BULK_REWIND(&key_buffer);
-#ifdef MRN_HANDLER_HA_UPDATE_ROW_NEW_DATA_CONST
-  const uchar *key_copy_data = new_data;
-#else
-  uchar *key_copy_data = const_cast<uchar *>(new_data);
-#endif
   key_copy((uchar *)(GRN_TEXT_VALUE(&key_buffer)),
-           key_copy_data,
+           new_data,
            key_info, key_info->key_length);
   int added;
   grn_id new_record_id;
@@ -7287,7 +7277,7 @@ err:
 }
 
 int ha_mroonga::storage_update_row(const uchar *old_data,
-                                   const uchar *new_data)
+                                   mrn_update_row_new_data_t new_data)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -7525,7 +7515,7 @@ err:
 }
 
 int ha_mroonga::storage_update_row_index(const uchar *old_data,
-                                         const uchar *new_data)
+                                         mrn_update_row_new_data_t new_data)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
@@ -7565,13 +7555,8 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data,
       Field *field = key_info->key_part[j].field;
       field->move_field_offset(ptr_diff);
     }
-#ifdef MRN_HANDLER_HA_UPDATE_ROW_NEW_DATA_CONST
-    const uchar *old_key_copy_data = old_data;
-#else
-    uchar *old_key_copy_data = const_cast<uchar *>(old_data);
-#endif
     key_copy((uchar *)(GRN_TEXT_VALUE(&old_key)),
-             old_key_copy_data,
+             const_cast<mrn_key_copy_from_record_t>(old_data),
              key_info,
              key_info->key_length);
     for (uint j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {
@@ -7590,13 +7575,8 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data,
 
     GRN_BULK_REWIND(&new_key);
     grn_bulk_space(ctx, &new_key, key_info->key_length);
-#ifdef MRN_HANDLER_HA_UPDATE_ROW_NEW_DATA_CONST
-    const uchar *new_key_copy_data = new_data;
-#else
-    uchar *new_key_copy_data = const_cast<uchar *>(new_data);
-#endif
     key_copy((uchar *)(GRN_TEXT_VALUE(&new_key)),
-             new_key_copy_data,
+             new_data,
              key_info,
              key_info->key_length);
     GRN_BULK_REWIND(&new_encoded_key);
@@ -7627,7 +7607,7 @@ err:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::storage_update_row_unique_indexes(const uchar *new_data)
+int ha_mroonga::storage_update_row_unique_indexes(mrn_update_row_new_data_t new_data)
 {
   int error;
   uint i;
@@ -7709,14 +7689,8 @@ err:
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::update_row(const uchar *old_data, uchar *new_data)
-{
-  MRN_DBUG_ENTER_METHOD();
-  int error = update_row(old_data, const_cast<const uchar *>(new_data));
-  DBUG_RETURN(error);
-}
-
-int ha_mroonga::update_row(const uchar *old_data, const uchar *new_data)
+int ha_mroonga::update_row(const uchar *old_data,
+                           mrn_update_row_new_data_t new_data)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
