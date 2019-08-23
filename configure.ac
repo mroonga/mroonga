@@ -215,11 +215,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_CXXFLAGS="-felide-constructors"
   case "$MYSQL_MAJOR_MINOR_VERSION" in
-  10.4)
-    m4_ifdef([AX_CXX_COMPILE_STDCXX_11],
-             [AX_CXX_COMPILE_STDCXX_11([ext], [mandatory])],
-             [CHECK_CXXFLAG([-std=gnu++11])])
-    ;;
   5.5|5.6|10.[0-3])
     MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS -fno-rtti"
     ;;
@@ -227,6 +222,11 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     m4_ifdef([AX_CXX_COMPILE_STDCXX_14],
              [AX_CXX_COMPILE_STDCXX_14([ext], [mandatory])],
              [CHECK_CXXFLAG([-std=gnu++14])])
+    ;;
+  10.*)
+    m4_ifdef([AX_CXX_COMPILE_STDCXX_11],
+             [AX_CXX_COMPILE_STDCXX_11([ext], [mandatory])],
+             [CHECK_CXXFLAG([-std=gnu++11])])
     ;;
   *)
     :
