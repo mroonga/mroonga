@@ -12513,14 +12513,13 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
   } else {
     Field_timestamp_hires *timestamp_hires_field =
       (Field_timestamp_hires *)field;
-    uint fuzzy_date = 0;
     uchar *ptr_backup = field->ptr;
     uchar *null_ptr_backup = field->null_ptr;
     TABLE *table_backup = field->table;
     field->ptr = (uchar *)key;
     field->null_ptr = (uchar *)(key - 1);
     field->table = table;
-    timestamp_hires_field->get_date(&mysql_time, fuzzy_date);
+    MRN_FIELD_GET_DATE_NO_FUZZY(timestamp_hires_field, &mysql_time, current_thd);
     field->ptr = ptr_backup;
     field->null_ptr = null_ptr_backup;
     field->table = table_backup;
@@ -12571,12 +12570,11 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
     mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
   } else {
     Field_time_hires *time_hires_field = (Field_time_hires *)field;
-    uint fuzzy_date = 0;
     uchar *ptr_backup = field->ptr;
     uchar *null_ptr_backup = field->null_ptr;
     field->ptr = (uchar *)key;
     field->null_ptr = (uchar *)(key - 1);
-    time_hires_field->get_date(&mysql_time, fuzzy_date);
+    MRN_FIELD_GET_DATE_NO_FUZZY(time_hires_field, &mysql_time, current_thd);
     field->ptr = ptr_backup;
     field->null_ptr = null_ptr_backup;
   }
@@ -12645,12 +12643,11 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
   if (field->decimals() > 0) {
     Field_datetime_hires *datetime_hires_field = (Field_datetime_hires *)field;
     MYSQL_TIME mysql_time;
-    uint fuzzy_date = 0;
     uchar *ptr_backup = field->ptr;
     uchar *null_ptr_backup = field->null_ptr;
     field->ptr = (uchar *)key;
     field->null_ptr = (uchar *)(key - 1);
-    datetime_hires_field->get_date(&mysql_time, fuzzy_date);
+    MRN_FIELD_GET_DATE_NO_FUZZY(datetime_hires_field, &mysql_time, current_thd);
     field->ptr = ptr_backup;
     field->null_ptr = null_ptr_backup;
     mrn::TimeConverter time_converter;

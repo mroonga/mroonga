@@ -817,10 +817,14 @@ typedef HASH mrn_table_def_cache_type;
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
 #  define MRN_FIELD_GET_TIME(field, time, thd)  \
-  ((field)->get_date(time, Time::Options(thd)))
+  ((field)->get_date((time), Time::Options((thd))))
+#  define MRN_FIELD_GET_DATE_NO_FUZZY(field, time, thd)  \
+  ((field)->get_date((time), Time::Options(TIME_CONV_NONE, (thd))))
 #else
 #  define MRN_FIELD_GET_TIME(field, time, thd)  \
-  ((field)->get_time(time))
+  ((field)->get_time((time)))
+#  define MRN_FIELD_GET_DATE_NO_FUZZY(field, time, thd)  \
+  ((field)->get_date((time), 0))
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
