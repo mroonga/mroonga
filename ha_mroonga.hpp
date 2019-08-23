@@ -422,7 +422,7 @@ typedef uint mrn_alter_table_flags;
 #endif
 
 #if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
-  using mrn_update_row_new_data_t = const uchar *;
+  typedef const uchar * mrn_update_row_new_data_t;
 #else
   typedef uchar * mrn_update_row_new_data_t;
 #endif
