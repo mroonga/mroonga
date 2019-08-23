@@ -3,7 +3,6 @@ DISTRIBUTIONS = debian
 ARCHITECTURES = i386 amd64
 CODE_NAMES = stretch buster
 MYSQL_VARIANTS =				\
-	5.5					\
 	mariadb-10.1				\
 	mariadb-10.3
 
@@ -58,9 +57,6 @@ build-package-deb: source env.sh
 	    for code_name in $(CODE_NAMES); do				\
 	      is_target=false;						\
 	      case "$${variant}-$${code_name}" in			\
-	        5.5-jessie)						\
-	          is_target=true;					\
-	          ;;							\
 	        mariadb-10.1-stretch)					\
 	          is_target=true;					\
 	          ;;							\
