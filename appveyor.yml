@@ -52,6 +52,7 @@ install:
       ruby download_lz4.rb &&
       ruby download_mecab.rb &&
       ruby download_message_pack.rb &&
+      ruby download_rapidjson.rb &&
       cd ..\..\mariadb-%MARIADB_VERSION%
     ) else (
       curl -O https://packages.groonga.org/source/groonga/groonga-latest.zip &&
