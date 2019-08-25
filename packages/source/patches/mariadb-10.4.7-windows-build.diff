@@ -1,0 +1,12 @@
+diff -ru mariadb-10.4.7.orig/include/my_time.h mariadb-10.4.7/include/my_time.h
+--- mariadb-10.4.7.orig/include/my_time.h	2019-07-30 20:32:14.000000000 +0900
++++ mariadb-10.4.7/include/my_time.h	2019-08-26 08:28:59.857378783 +0900
+@@ -27,7 +27,7 @@
+ 
+ C_MODE_START
+ 
+-extern ulonglong log_10_int[20];
++extern MYSQL_PLUGIN_IMPORT ulonglong log_10_int[20];
+ extern uchar days_in_month[];
+ 
+ #define MY_TIME_T_MAX LONG_MAX
