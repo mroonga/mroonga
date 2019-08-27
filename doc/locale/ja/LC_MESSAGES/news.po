@@ -21,11 +21,63 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 9.05 - 2019-07-30"
-msgstr "9.05リリース - 2019-07-30"
+msgid "Release 9.07 - 2019-08-29"
+msgstr "9.07リリース - 2019-08-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid ""
+"[:doc:`/install/debian`] Added a install document for Debian 10(buster)."
+msgstr ""
+"[:doc:`/install/debian`] Debian 10(buster)のインストールドキュメントを追加し"
+"ました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.41, 10.2.26, "
+"10.3.17, and 10.4.7."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.1.41、10.2.26、10.3.17、10.4.7をサポート"
+"しました。"
+
+msgid ""
+"[:doc:`/reference/server_variables`] Added a document for "
+"``mroonga_query_log_file``."
+msgstr ""
+"[:doc:`/reference/server_variables`] ``mroonga_query_log_file`` のドキュメン"
+"トを追加しました。 "
+
+msgid ""
+"[:doc:`/install/others`] Added a document about how to uninstall Mroonga. "
+"[GitHub#135][Patched by ryfjwr]"
+msgstr ""
+"[:doc:`/install/ubuntu`] Mroongaのアンインストール方法についてのドキュメント"
+"を追加しました。 [GitHub#135][ryfjwrさんがパッチ提供]"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Added a document about how to use regular "
+"expression search."
+msgstr ""
+"[:doc:`/tutorial/storage`] 正規表現検索の使い方についてのドキュメントを追加し"
+"ました。 "
+
+msgid "Dropped support for MariaDB 10.0"
+msgstr "MariaDB 10.0のサポートをやめました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for Percona Server 5.6.45 and 5.7.27"
+msgstr ""
+"[:doc:`/install/centos`] Percona Server 5.6.44、5.7.27をサポートしました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "ryfjwr"
+msgstr "ryfjwrさん"
+
+msgid "Release 9.05 - 2019-07-30"
+msgstr "9.05リリース - 2019-07-30"
 
 # cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
@@ -81,9 +133,6 @@ msgid ""
 msgstr ""
 "[mysql8.0] ``TIMESTAMP`` 型をサポートしました。[groonga-dev,04763][各務さんが"
 "報告]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Kagami Hiroshi"
 msgstr "各務さん"
