@@ -83,6 +83,14 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
         # Enable MariaDB 10.4 on CentOS 6 (x86_64) when https://jira.mariadb.org/browse/MDEV-20003 is fixed.
         continue
       fi
+      if [ ${centos_version} = 6 ]; then
+        case ${mysql_variant} in
+          mariadb-10.*)
+            # Newer compiler (devtoolset) is not available on CentOS 6
+            continue
+            ;;
+        esac
+      fi
       id=centos-${centos_version}-${architecture}
       vagrant up ${id}
       build_status=$?
