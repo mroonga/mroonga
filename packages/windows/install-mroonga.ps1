@@ -22,6 +22,12 @@ function Wait-UntilTerminate($cmdName) {
 function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
   Write-Output("Start to install Mroonga")
   cd "mariadb-$mariadbVer-$arch"
+  if ("$mariadbVer" -eq "10.4.7") {
+    Write-Output("Clean data directory")
+    Remove-Item data -Recurse
+    Start-Process .\bin\mysql_install_db.exe
+    Start-Sleep -s 10
+  }
   Write-Output("Start mysqld.exe")
   Start-Process .\bin\mysqld.exe
   Start-Sleep -s 10
