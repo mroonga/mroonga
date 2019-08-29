@@ -5,6 +5,34 @@
 News
 ====
 
+.. _release-9-07:
+
+Release 9.07 - 2019-08-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/debian`] Added a install document for Debian 10(buster).
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.41, 10.2.26, 10.3.17, and 10.4.7.
+
+* [:doc:`/reference/server_variables`] Added a document for ``mroonga_query_log_file``.
+
+* [:doc:`/install/others`] Added a document about how to uninstall Mroonga. [GitHub#135][Patched by ryfjwr]
+
+* [:doc:`/tutorial/storage`] Added a document about how to use regular expression search.
+
+* Dropped support for MariaDB 10.0
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.45 and
+  5.7.27
+
+Thanks
+^^^^^^
+
+* ryfjwr
+
 .. _release-9-05:
 
 Release 9.05 - 2019-07-30
