@@ -68,7 +68,7 @@ msgstr "MariaDB 10.0のサポートをやめました。"
 msgid ""
 "[:doc:`/install/centos`] Added support for Percona Server 5.6.45 and 5.7.27"
 msgstr ""
-"[:doc:`/install/centos`] Percona Server 5.6.44、5.7.27をサポートしました。"
+"[:doc:`/install/centos`] Percona Server 5.6.45、5.7.27をサポートしました。"
 
 msgid "Thanks"
 msgstr "感謝"
