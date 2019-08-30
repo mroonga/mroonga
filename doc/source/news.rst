@@ -28,6 +28,8 @@ Improvements
 * [:doc:`/install/centos`] Added support for Percona Server 5.6.45 and
   5.7.27
 
+* [:doc:`/install/centos`] Dropped support for MariaDB 10.x on CentOS 6
+
 Thanks
 ^^^^^^
 
