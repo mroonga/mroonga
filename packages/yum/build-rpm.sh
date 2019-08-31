@@ -71,14 +71,8 @@ case ${distribution} in
     ;;
   centos)
     release_rpm=groonga-release-latest.noarch.rpm
-    if [ ${distribution_version} = 5 ]; then
-      wget http://packages.groonga.org/${distribution}/${release_rpm}
-      run yum install -y --nogpgcheck ${release_rpm}
-      rm -f ${release_rpm}
-    else
-      run yum install -y \
-          http://packages.groonga.org/${distribution}/${release_rpm}
-    fi
+    run yum install -y \
+        https://packages.groonga.org/${distribution}/${release_rpm}
     run yum makecache
 
     case ${package_name} in
