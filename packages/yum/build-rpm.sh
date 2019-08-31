@@ -65,10 +65,6 @@ run cp /vagrant/tmp/${distribution}/*.spec rpmbuild/SPECS/
 package_name=$(cd rpmbuild/SPECS; echo *.spec | sed -e 's/\.spec$//g')
 
 case ${distribution} in
-  fedora)
-    USE_MYSQLSERVICES_COMPAT=yes
-    run yum install -y mariadb-devel
-    ;;
   centos)
     release_rpm=groonga-release-latest.noarch.rpm
     run yum install -y \

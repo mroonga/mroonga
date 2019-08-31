@@ -96,14 +96,6 @@ if test -z "$MRN_PLUGIN_SUFFIX"; then
 fi
 AC_SUBST(MRN_PLUGIN_SUFFIX)
 
-AC_ARG_WITH(libmysqlservices-compat,
-  [AS_HELP_STRING([--with-libmysqlservices-compat],
-                  [Use libmysqlservices compatible library for missing libmysqlservices.a])
-  ],
-  [with_libmysqlservices_compat=$withval],
-  [with_libmysqlservices_compat=no])
-AM_CONDITIONAL([WITH_LIBMYSQLSERVICES_COMPAT], [test "${with_libmysqlservices_compat}" != "no"])
-
 AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_MSG_CHECKING([mysql source])
 
@@ -233,28 +225,26 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     ;;
   esac
 
-  if test "${with_libmysqlservices_compat}" = "no"; then
-    AC_MSG_CHECKING([for libmysqlservices.a directory])
-    pkglibdir="$($ac_mysql_config --variable=pkglibdir)"
-    mysql_build_archive_output_dir="${MYSQL_BUILD_DIR}/archive_output_directory"
-    mysql_build_libservices_dir="${MYSQL_BUILD_DIR}/libservices"
-    if test -f "${mysql_build_archive_output_dir}/libmysqlservices.a"; then
-      mysql_services_lib_dir="${mysql_build_archive_output_dir}"
-    elif test -f "${mysql_build_libservices_dir}/libmysqlservices.a"; then
-      mysql_services_lib_dir="${mysql_build_libservices_dir}"
+  AC_MSG_CHECKING([for libmysqlservices.a directory])
+  pkglibdir="$($ac_mysql_config --variable=pkglibdir)"
+  mysql_build_archive_output_dir="${MYSQL_BUILD_DIR}/archive_output_directory"
+  mysql_build_libservices_dir="${MYSQL_BUILD_DIR}/libservices"
+  if test -f "${mysql_build_archive_output_dir}/libmysqlservices.a"; then
+    mysql_services_lib_dir="${mysql_build_archive_output_dir}"
+  elif test -f "${mysql_build_libservices_dir}/libmysqlservices.a"; then
+    mysql_services_lib_dir="${mysql_build_libservices_dir}"
+  else
+    if test -f "${pkglibdir}/libmysqlservices.a"; then
+      mysql_services_lib_dir="${pkglibdir}"
+    elif test -f "${pkglibdir}/mysql/libmysqlservices.a"; then
+      mysql_services_lib_dir="${pkglibdir}/mysql"
     else
-      if test -f "${pkglibdir}/libmysqlservices.a"; then
-        mysql_services_lib_dir="${pkglibdir}"
-      elif test -f "${pkglibdir}/mysql/libmysqlservices.a"; then
-        mysql_services_lib_dir="${pkglibdir}/mysql"
-      else
-        AC_MSG_ERROR([libmysqlservices.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
-      fi
+      AC_MSG_ERROR([libmysqlservices.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
     fi
-    AC_MSG_RESULT([$mysql_services_lib_dir])
-    MYSQL_LIBS="$MYSQL_LIBS \"$mysql_services_lib_dir/libmysqlservices.a\""
-    AC_SUBST(MYSQL_LIBS)
   fi
+  AC_MSG_RESULT([$mysql_services_lib_dir])
+  MYSQL_LIBS="$MYSQL_LIBS \"$mysql_services_lib_dir/libmysqlservices.a\""
+  AC_SUBST(MYSQL_LIBS)
 ])
 
 m4_define([mrn_required_groonga_version], m4_include(required_groonga_version))
