@@ -20,7 +20,7 @@ highlighted keyword in context.
 Syntax
 ------
 
-``mroonga_snippet_html()`` has required parameter and optional parameter::
+``mroonga_snippet_html()`` has required parameter and optional parameter.
 
 Usage
 -----
@@ -41,5 +41,3 @@ Return value
 ------------
 
 It returns snippet string.
-
-
