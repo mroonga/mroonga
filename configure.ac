@@ -207,7 +207,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_CXXFLAGS="-felide-constructors"
   case "$MYSQL_MAJOR_MINOR_VERSION" in
-  5.5|5.6|10.0|10.1|10.2|10.3)
+  5.5|5.6|10.1|10.2|10.3)
     MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS -fno-rtti"
     ;;
   8.*)
