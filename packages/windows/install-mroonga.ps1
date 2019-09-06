@@ -3,20 +3,16 @@ Param(
   [Parameter(mandatory=$true)][String]$platform
 )
 
-function Run-MySQL {
+function Run-MySQL($LogPath) {
   Write-Output("Start mysqld.exe")
-  Start-Process .\bin\mysqld.exe -ArgumentList "--console" -RedirectStandardError ..\mysqld.txt
-  $Waiting = $TRUE
-  do
-  {
-    if (Test-Path ..\mysqld.txt) {
-      $Version = Get-Content ..\mysqld.txt | Select-String -Pattern "^Version:"
-      if ($Version) {
-        $Waiting = $FALSE
-      }
+  Start-Process .\bin\mysqld.exe -ArgumentList "--console" -RedirectStandardError $logPath
+  while ($TRUE) {
+    $version = Get-Content $LogPath | Select-String -Pattern "^Version:"
+    if ($version) {
+      break;
     }
     Start-Sleep -s 1
-  } while ($Waiting)
+  }
 }
 
 function Run-MySQLInstallDB {
@@ -34,20 +30,16 @@ function Run-MySQLInstallDB {
   Remove-Item $logPath -Force
 }
 
-function Shutdown-MySQL {
+function Shutdown-MySQL($LogPath) {
   Write-Output("Shutdown mysqld.exe")
   Start-Process .\bin\mysqladmin.exe -ArgumentList "-uroot shutdown"
-  $Waiting = $TRUE
-  do
-  {
-    if (Test-Path ..\mysqld.txt) {
-      $Complete = Get-Content ..\mysqld.txt | Select-String -Pattern "Shutdown complete"
-      if ($Complete) {
-        $Waiting = $FALSE
-      }
+  while ($TRUE) {
+    $complete = Get-Content $LogPath | Select-String -Pattern "Shutdown complete"
+    if ($complete) {
+      break;
     }
     Start-Sleep -s 1
-  } while ($Waiting)
+  }
 }
 
 function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
@@ -58,10 +50,13 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
     Remove-Item data -Recurse
     Run-MySQLInstallDB
   }
-  Run-MySQL
-  Write-Output("Execute install.sql")
+  $mysqlLogPath = "..\mysqld.log"
+  New-Item $LogPath -ItemType File
+  Run-MySQL $mysqlLogPath
+  Write-Output "Execute install.sql"
   Get-Content "$installSqlDir\install.sql" | .\bin\mysql.exe -uroot
-  Shutdown-MySQL
+  Shutdown-MySQL $mysqlLogPath
+  Remove-Item $mysqlLogPath
   cd ..
   Write-Output("Finished to install Mroonga")
 }
