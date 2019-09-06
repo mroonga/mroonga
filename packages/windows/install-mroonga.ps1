@@ -34,7 +34,7 @@ function Run-MySQLInstallDB {
   Remove-Item $logPath -Force
 }
 
-function Run-MySQLAdmin {
+function Shutdown-MySQL {
   Write-Output("Shutdown mysqld.exe")
   Start-Process .\bin\mysqladmin.exe -ArgumentList "-uroot shutdown"
   $Waiting = $TRUE
@@ -61,7 +61,7 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
   Run-MySQL
   Write-Output("Execute install.sql")
   Get-Content "$installSqlDir\install.sql" | .\bin\mysql.exe -uroot
-  Run-MySQLAdmin
+  Shutdown-MySQL
   cd ..
   Write-Output("Finished to install Mroonga")
 }
