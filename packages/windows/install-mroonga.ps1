@@ -21,18 +21,17 @@ function Run-MySQL {
 
 function Run-MySQLInstallDB {
   Write-Output("Start mysql_install_db.exe")
-  Start-Process .\bin\mysql_install_db.exe -RedirectStandardOutput ..\install.txt
-  $Waiting = $TRUE
-  do
-  {
-    if (Test-Path ..\install.txt) {
-      $Successful = Get-Content ..\install.txt | Select-String -Pattern "successful"
-      if ($Successful) {
-        $Waiting = $FALSE
-      }
+  $logPath = "..\install.log"
+  New-Item $logPath -ItemType File
+  Start-Process .\bin\mysql_install_db.exe -RedirectStandardOutput $logPath
+  while ($TRUE) {
+    $successful = Get-Content $logPath | Select-String -Pattern "successful"
+    if ($successful) {
+      break;
     }
     Start-Sleep -s 1
-  } while ($Waiting)
+  }
+  Remove-Item $logPath -Force
 }
 
 function Run-MySQLAdmin {
