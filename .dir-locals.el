@@ -1,3 +1,5 @@
 ((sh-mode .  ((indent-tabs-mode . nil)
               (sh-indentation   . 2)
-              (sh-basic-offset  . 2))))
+              (sh-basic-offset  . 2)))
+ (powerhsell-mode . ((indent-tabs-mode . nil)
+                     (powerhshell-indent . 2))))
