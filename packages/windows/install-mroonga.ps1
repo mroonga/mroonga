@@ -51,7 +51,7 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
     Run-MySQLInstallDB
   }
   $mysqlLogPath = "..\mysqld.log"
-  New-Item $LogPath -ItemType File
+  New-Item $mysqlLogPath -ItemType File
   Run-MySQL $mysqlLogPath
   Write-Output "Execute install.sql"
   Get-Content "$installSqlDir\install.sql" | .\bin\mysql.exe -uroot
