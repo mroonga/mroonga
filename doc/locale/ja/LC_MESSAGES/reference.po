@@ -2487,5 +2487,5 @@ msgid ""
 msgstr ""
 
 msgid ""
-"``mroonga_snippet_html()`` has required parameter and optional parameter."
-msgstr "``mroonga_snippet_html()`` には必須引数と省略可能引数とがあります。"
+"``mroonga_snippet_html()`` has required parameter and optional parameter::"
+msgstr "``mroonga_snippet_html()`` には必須引数と省略可能引数とがあります::"
