@@ -50,35 +50,35 @@ MroongaのWindows版パッケージを作成するための環境を構築する
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * VisualStudio 2015 Community をインストールします。
-   * VisualStudio 2015 は、現行のバージョンではなく、古いバージョンのため、通常のダウンロードページからはダウンロードすることができません。そのため、以下のページからダウンロードを行う必要があります。::
+   * VisualStudio 2015 は、現行のバージョンではなく、古いバージョンのため、通常のダウンロードページからはダウンロードすることができません。そのため、以下のページからダウンロードを行う必要があります。:
 
     `Visual Studio Dev Essensials <https://www.visualstudio.com/ja/dev-essentials/>`_
 
 ダウンロードするためには、上記サイトへの登録が必要となります。登録には、MicrosoftAccountが必要となります。
 
 * Bison for Windows をインストールします。
-   * 以下のサイトからダウンロードします。また、インストール後にパスを通しておく必要があります。インストールパスには、空白スペースを含まないパスを指定してください。::
+   * 以下のサイトからダウンロードします。また、インストール後にパスを通しておく必要があります。インストールパスには、空白スペースを含まないパスを指定してください。:
 
     `Bison for Windows <http://gnuwin32.sourceforge.net/packages/bison.htm>`_
 
 * CMake をインストールします。
    * CMakeのバージョンは3.1以上をインストールします。
-   * 以下のサイトからダウンロードします。また、インストール時にパスを通しておく必要があります。::
+   * 以下のサイトからダウンロードします。また、インストール時にパスを通しておく必要があります。:
 
     `CMake <https://cmake.org/download/>`_
 
 * Wix をインストールします。
-   * 以下のサイトからダウンロードします。::
+   * 以下のサイトからダウンロードします。:
 
     `Wix <http://wix.codeplex.com/>`_
 
 * Windows Management Framework 4.0(Windows6.1-KB2819745-x64-MultiPkg.msu) をインストールします。
-   * Windows版パッケージを作成するスクリプトはPowerShell 3.0以上向けに書かれているため、Windows7に同梱されているPowerShellでは正常に動作しません。Windows7のPowerShellのバージョンを4.0にするためにインストールする必要があります。Windows 8.1以降では標準でインストールされているPowerShellのバージョンで要件を満たしています。::
+   * Windows版パッケージを作成するスクリプトはPowerShell 3.0以上向けに書かれているため、Windows7に同梱されているPowerShellでは正常に動作しません。Windows7のPowerShellのバージョンを4.0にするためにインストールする必要があります。Windows 8.1以降では標準でインストールされているPowerShellのバージョンで要件を満たしています。:
 
     `Windows Management Framework 4.0 <https://www.microsoft.com/ja-jp/download/details.aspx?id=40855>`_
 
 * Patch for Windows をインストールします。
-   * 以下のサイトからダウンロードします。::
+   * 以下のサイトからダウンロードします。:
 
     `Patch for Windows <http://gnuwin32.sourceforge.net/packages/patch.htm>`_
 
