@@ -45,7 +45,7 @@ function Shutdown-MySQL($LogPath) {
 function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
   Write-Output("Start to install Mroonga")
   cd "mariadb-$mariadbVer-$arch"
-  if ("$mariadbVer" -eq "10.4.7") {
+  if ("$mariadbVer".StartsWith("10.4")) {
     Write-Output("Clean data directory")
     Remove-Item data -Recurse
     Run-MySQLInstallDB
