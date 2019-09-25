@@ -22,7 +22,7 @@
 
 Name:		mariadb-10.2-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
@@ -232,6 +232,9 @@ fi
 %doc mroonga-doc/*
 
 %changelog
+* Fri Sep 27 2019 Kentaro Hayashi <hayashi@clear-code.com> - 9.08-1
+- new upstream release.
+
 * Mon Sep 2 2019 Kentaro Hayashi <hayashi@clear-code.com> - 9.07-2
 - rebuild package to fix install error (undefined symbol: _ZTI7handler)
 
