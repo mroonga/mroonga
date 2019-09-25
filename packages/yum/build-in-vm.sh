@@ -76,12 +76,6 @@ for mysql_variant in ${MYSQL_VARIANTS}; do
       if [ $skip -eq 1 ]; then
         continue
       fi
-      if [ ${centos_version} = 7 -a ${architecture} = i386 ]; then
-        continue
-      fi
-      if [ ${mysql_variant} = "mysql80-community" -a ${architecture} = i386 ]; then
-        continue
-      fi
       id=centos-${centos_version}-${architecture}
       vagrant up ${id}
       build_status=$?
