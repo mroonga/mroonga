@@ -21,14 +21,12 @@ drop table if exists scores;
 --enable_warnings
 
 set names utf8mb4;
---disable_warnings
 create table scores (
   given_name varchar(30) not null,
   family_name varchar(30) not null,
   score int not null,
-  primary key property (given_name, family_name, score)
+  primary key (given_name, family_name, score)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
---enable_warnings
 show create table scores;
 
 insert into scores values("Taro", "Yamada", 29);
