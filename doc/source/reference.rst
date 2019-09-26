@@ -5,7 +5,6 @@ Reference
 
 .. toctree::
    :maxdepth: 2
-   :numbered:
 
    reference/optimizations
    reference/sql_commands
