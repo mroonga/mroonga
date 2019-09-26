@@ -8,6 +8,7 @@ Developer's guide
 
    developer/debug
    developer/release
+   developer/coding_style
 
 How we are developing
 ---------------------
