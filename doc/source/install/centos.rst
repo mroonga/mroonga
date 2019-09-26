@@ -8,6 +8,8 @@ CentOS. You can install them by ``yum``.
 
 .. include:: 32bit-note.inc
 
+.. note:: Since Mroonga 9.08, we dropped 32-bit package support on CentOS 6.
+
 .. _centos-6-oracle-56:
 
 CentOS 6 (with the Oracle MySQL 5.6 package)
