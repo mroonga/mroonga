@@ -21,11 +21,45 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 9.07 - 2019-08-29"
-msgstr "9.07リリース - 2019-08-29"
+msgid "Release 9.08 - 2019-09-27"
+msgstr "9.08リリース - 2019-09-27"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 5.5.64, 10.2.27, 10.3.18, "
+"and 10.4.8"
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 5.5.64、10.2.27、10.3.18、10.4.8をサポートし"
+"ました。"
+
+msgid "[:doc:`/install/centos`] Dropped 32-bit package support on CentOS 6."
+msgstr ""
+"[:doc:`/install/centos`] CentOS 6の32-bitパッケージのサポートをやめました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+# cfc3f03dda4244eb9b5d075677d18c88
+msgid ""
+"[:doc:`/install/debian`] Fixed that can't install mariadb-server-10.3-"
+"mroonga in Debian 10(buster)."
+msgstr ""
+"[:doc:`/install/debian`] Debian 10(buster) に mariadb-server-10.3-mroonga を"
+"インストールできない問題を修正しました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "kajiys"
+msgstr "kajiysさん"
+
+msgid "bizlevel"
+msgstr "bizlevelさん"
+
+msgid "Release 9.07 - 2019-08-29"
+msgstr "9.07リリース - 2019-08-29"
 
 # cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
@@ -74,9 +108,6 @@ msgid "[:doc:`/install/centos`] Dropped support for MariaDB 10.x on CentOS 6"
 msgstr ""
 "[:doc:`/install/centos`] CentOS 6でMariaDB 10.x のサポートをやめました。"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "ryfjwr"
 msgstr "ryfjwrさん"
 
@@ -95,9 +126,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`] MySQL 5.6.45と5.7.27とMySQL 8.0.17(制限あり)をサポー"
 "トしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[:doc:`/install/centos`] Fixed a wrong ``mysql80-comunity-release`` package "
