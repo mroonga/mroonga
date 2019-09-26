@@ -41,7 +41,6 @@ msgstr ""
 msgid "Fixes"
 msgstr "修正"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
 "[:doc:`/install/debian`] Fixed that can't install mariadb-server-10.3-"
 "mroonga in Debian 10(buster)."
@@ -61,7 +60,6 @@ msgstr "bizlevelさん"
 msgid "Release 9.07 - 2019-08-29"
 msgstr "9.07リリース - 2019-08-29"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
 "[:doc:`/install/debian`] Added a install document for Debian 10(buster)."
 msgstr ""
@@ -114,13 +112,11 @@ msgstr "ryfjwrさん"
 msgid "Release 9.05 - 2019-07-30"
 msgstr "9.05リリース - 2019-07-30"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
 "[:doc:`/install/centos`] Added a description about current limitation with "
 "MySQL 8.0."
 msgstr "[:doc:`/install/centos`] MySQL 8.0における制限事項を追記しました。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
 "[:doc:`/install/centos`] Added support for MySQL 5.6.45, 5.7.27 and 8.0.17."
 msgstr ""
@@ -178,7 +174,6 @@ msgstr "[:doc:`/install/centos`] Percona Server 5.7.26をサポートしまし�
 msgid "[:doc:`/install/centos`] Added support for MariaDB 10.2.25/10.3.16."
 msgstr "[:doc:`/install/centos`] MariaDB 10.2.25/10.3.16をサポートしました。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/centos`][experimental] Added support for MySQL 8.0.16."
 msgstr "[:doc:`/install/centos`][実験的] MySQL 8.0.16をサポートしました。"
 
@@ -228,7 +223,6 @@ msgstr ""
 msgid "[:doc:`/install/centos`] Added support for MariaDB 10.3.14 and 10.3.15."
 msgstr "[:doc:`/install/centos`] MariaDB 10.3.14と10.3.15をサポートしました。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
 "[:doc:`/install/debian`] Updated install instruction for copy and paste "
 "friendly."
@@ -254,7 +248,6 @@ msgstr ""
 msgid "[:doc:`/install/centos`] Added support for Percona Server 5.6.44."
 msgstr "[:doc:`/install/centos`] Percona Server 5.6.44をサポートしました。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.44 and 5.7.26."
 msgstr "[:doc:`/install/centos`] MySQL 5.6.44と5.7.26をサポートしました。"
 
@@ -503,7 +496,6 @@ msgstr ""
 "をダンプする必要があります。そのあと、アップグレード後にリストアしてくださ"
 "い。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/debian`] Dropped Debian 8 (jessie) support."
 msgstr "[:doc:`/install/debian`] Debian 8 (jessie) のサポートをやめました。"
 
@@ -573,7 +565,6 @@ msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 18.04 LTS (Bionic Beaver)."
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 18.04 LTS (Bionic Beaver)をサポートしました。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/debian`] Supported i386 for Jessie."
 msgstr "[:doc:`/install/debian`] Jessieでi386をサポートしました。"
 
@@ -605,7 +596,6 @@ msgstr ""
 "[:doc:`/install/centos`][percona] 5.6.34未満と5.7.21未満からのアップグレード"
 "をサポートしました。 [groonga-dev,04599][木下崇さんが報告][三谷さんが調査]"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/centos`] Supported MySQL 5.6.40 and 5.7.22."
 msgstr "[:doc:`/install/centos`] MySQL 5.6.40と5.7.22をサポートしました。"
 
@@ -1177,7 +1167,6 @@ msgstr ""
 "セージをだすようにしました。この種のエラーはインデックスが壊れているときに発"
 "生します。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/debian`] Supported Debian 9 (stretch)."
 msgstr "[:doc:`/install/debian`] Debian 9 (stretch)をサポートしました。"
 
@@ -1225,7 +1214,6 @@ msgstr "@pinpikokunさん"
 msgid "Release 7.02 - 2017-04-29"
 msgstr "7.02リリース - 2017-04-29"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
 "[:doc:`/install/centos`] Dropped Ubuntu 12.04 (Precise Pangolin) support "
 "because of EOL."
@@ -1237,7 +1225,6 @@ msgid "[:doc:`/install/ubuntu`] Added Zesty Zapus (Ubuntu 17.04) support."
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 17.04 (Zesty Zapus)をサポートしました。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
 "[:doc:`/install/centos`] Fixed build error with MySQL 5.6.36 and MySQL "
 "5.7.18."
@@ -1256,7 +1243,6 @@ msgstr ""
 msgid "Release 7.01 - 2017-03-29"
 msgstr "7.01リリース - 2017-03-29"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/centos`] Dropped CentOS 5 support because of EOL."
 msgstr "[:doc:`/install/centos`] EOLのため、CentOS 5のサポートをやめました。"
 
@@ -4775,7 +4761,6 @@ msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 14.10（Utopic Unicorn）のサポートをやめまし"
 "た。2015年7月23日でサポートが切れた（EOLになった）ためです。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid ""
 "[rpm][:doc:`/install/centos`] Updated to the latest MySQL 5.6 (5.6.26-2) on "
 "CentOS 6/7."
@@ -5051,7 +5036,6 @@ msgstr ""
 "に使います。対象となるレコードが多いときでも、見積もる際のコストを抑えること"
 "ができます。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[rpm][centos] Updated to build against the latest MySQL 5.6."
 msgstr "[rpm][centos] 最新のMySQL 5.6でビルドするようにしました。"
 
@@ -5266,15 +5250,12 @@ msgstr "[:doc:`/install/centos`] 最新のPercona Server 5.7をサポートし�
 msgid "[:doc:`/install/centos`] Supported the latest Percona Server 5.7."
 msgstr "[:doc:`/install/centos`] 最新のPercona Server 5.6をサポートしました。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.5."
 msgstr "[:doc:`/install/centos`] 最新のMySQL 5.5をサポートしました。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.6."
 msgstr "[:doc:`/install/centos`] 最新のMySQL 5.6をサポートしました。"
 
-# cfc3f03dda4244eb9b5d075677d18c88
 msgid "[:doc:`/install/centos`] Supported the latest MySQL 5.7."
 msgstr "[:doc:`/install/centos`] 最新のMySQL 5.7をサポートしました。"
 
