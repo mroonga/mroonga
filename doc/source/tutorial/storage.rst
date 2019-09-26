@@ -192,7 +192,7 @@ Mroonga has the following syntax to specify Groonga's normalizer::
 
   FULLTEXT INDEX (content) COMMENT 'normalizer "NormalizerAuto"'
 
-See `Groonga's document <http://groonga.org/docs/reference/normalizers.html>`_ document about Groonga's normalizer.
+See `Groonga's documentation about normalizer <http://groonga.org/docs/reference/normalizers.html>`_ for more details.
 
 Here is an example that uses ``NormalizerAuto`` normalizer:
 
@@ -273,7 +273,7 @@ Here is an example that uses ``TokenFilterStem`` token filter:
    -- +----+------------------------+
    -- 3 rows in set (0.01 sec)
 
-See `Groonga's document <http://groonga.org/docs/reference/token_filters.html>`_ document about Groonga's token filter.
+See `Groonga's documentation about token filter documentation <http://groonga.org/docs/reference/token_filters.html>`_ for more details.
 
 Here is an example that uses ``TokenFilterStopWord`` token filter:
 
@@ -342,7 +342,7 @@ Here is an example that uses ``COMPRESS_ZLIB`` flag:
    ) Engine=Mroonga DEFAULT CHARSET=utf8;
    -- Query OK, 0 rows affected (0.12 sec)
 
-See `Groonga's document <http://groonga.org/docs/reference/commands/column_create.html#parameters>`_ document about Groonga's column flags.
+See `Groonga's documentation about column flags <http://groonga.org/docs/reference/commands/column_create.html#parameters>`_ for more details.
 
 How to use geolocation search
 -----------------------------
@@ -567,9 +567,8 @@ are needed. It is not effective.
 Groonga can do faceted search by only one groonga command. It is
 effective. Groonga has the `select` command that can search records
 with faceted search. Faceted search is called as `drilldown` in
-Groonga. See `Groonga's document
-<http://groonga.org/docs/reference/commands/select.html>`_ about
-Groonga's `select` command.
+Groonga. See `Groonga's documentation about select command
+<http://groonga.org/docs/reference/commands/select.html>`_ for more details.
 
 Mroonga provides `mroonga_command()` function. You can run groonga
 command in SQL by the function. But you should use only `select`
@@ -650,8 +649,7 @@ keys (result JSON is pretty printed):
    -- +-----------------------------+
    -- 1 row in set (0.00 sec)
 
-See `Groonga's select command document
-<http://groonga.org/docs/reference/commands/select.html>`_ for more
+See `Groonga's documentation about select command <http://groonga.org/docs/reference/commands/select.html>`_ for more
 details.
 
 How to search by regular expression

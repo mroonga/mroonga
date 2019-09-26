@@ -179,7 +179,7 @@ Mroonga has the following syntax to specify Groonga's normalizer::
 
   FULLTEXT INDEX (content) COMMENT 'normalizer "NormalizerAuto"'
 
-See `Groonga's document <http://groonga.org/docs/reference/normalizers.html>`_ document about Groonga's normalizer.
+See `Groonga's documentation about normalizer <http://groonga.org/docs/reference/normalizers.html>`_ for more details.
 
 Here is an example that uses ``NormalizerAuto`` normalizer::
 
