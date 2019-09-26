@@ -5,6 +5,30 @@
 News
 ====
 
+.. _release-9-08:
+
+Release 9.08 - 2019-09-27
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MariaDB 5.5.64, 10.2.27, 10.3.18, and 10.4.8
+
+* [:doc:`/install/centos`] Dropped 32-bit package support on CentOS 6.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/debian`] Fixed that can't install mariadb-server-10.3-mroonga in Debian 10(buster).
+
+Thanks
+^^^^^^
+
+* kajiys
+
+* bizlevel
+
 .. _release-9-07:
 
 Release 9.07 - 2019-08-29
