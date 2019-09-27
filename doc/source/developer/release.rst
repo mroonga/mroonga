@@ -207,6 +207,21 @@ make build に PARALLEL=yes とするとビルドが並列に走り、作業が�
 このように Makefile.am を書き換えずにコマンドライン引数でビルドの挙動を変更する方法は、知っておいて損はないでしょう。
 uploadした後、パッケージの署名とリポジトリのメタデータの更新を実施します。詳細はGroongaのリリース手順を確認してください。
 
+Debian 系(Ubuntu)
+^^^^^^^^^^^^^^^^^
+
+Ubuntu向けのパッケージの提供は launchpad.net 上のPPA利用しています。
+
+ubuntu ディレクトリに移動してアップロードを実施します。::
+
+    % cd packages/ubuntu
+    % make upload
+
+アップロードが正常終了すると、launchpad.net上でビルドが実行され、ビルド結果がメールで通知されます。ビルドに成功すると、リリース対象のパッケ
+ージがlaunchpad.netのGroongaチームのPPAへと反映されます。公開されているパッケージは以下のURLで確認できます。
+
+* https://launchpad.net/~groonga/+archive/ubuntu/ppa
+
 Red Hat 系
 ^^^^^^^^^^
 
