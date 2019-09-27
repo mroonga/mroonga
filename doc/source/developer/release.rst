@@ -18,6 +18,7 @@ Release procedure (XXX not yet translated)
 * MROONGA_GITHUB_COM_PATH=$HOME/work/mroonga/mroonga.github.com
 * CUTTER_DIR=$HOME/work/cutter
 * CUTTER_SOURCE_PATH=$HOME/work/cutter/cutter
+* GROONGA_SOURCE_PATH=$HOME/work/groonga/groonga.clean
 
 
 ビルド環境の準備
@@ -39,48 +40,6 @@ Vagrantで使用する仮想化ソフトウェア（VirtualBox、VMwareなど）
     deb-src http://ftp.jp.debian.org/debian/ sid main contrib
     % sudo apt-get update
     % sudo apt-get install virtualbox
-
-Windows版パッケージのビルド環境準備
------------------------------------
-
-MroongaのWindows版パッケージを作成するための環境を構築する手順を以下に示します。
-ビルド環境は、Windows7を前提として説明しているため、その他の環境では適宜読み替えて下さい。
-
-必要ソフトウェアのインストール
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* VisualStudio 2015 Community をインストールします。
-   * VisualStudio 2015 は、現行のバージョンではなく、古いバージョンのため、通常のダウンロードページからはダウンロードすることができません。そのため、以下のページからダウンロードを行う必要があります。:
-
-    `Visual Studio Dev Essensials <https://www.visualstudio.com/ja/dev-essentials/>`_
-
-ダウンロードするためには、上記サイトへの登録が必要となります。登録には、MicrosoftAccountが必要となります。
-
-* Bison for Windows をインストールします。
-   * 以下のサイトからダウンロードします。また、インストール後にパスを通しておく必要があります。インストールパスには、空白スペースを含まないパスを指定してください。:
-
-    `Bison for Windows <http://gnuwin32.sourceforge.net/packages/bison.htm>`_
-
-* CMake をインストールします。
-   * CMakeのバージョンは3.1以上をインストールします。
-   * 以下のサイトからダウンロードします。また、インストール時にパスを通しておく必要があります。:
-
-    `CMake <https://cmake.org/download/>`_
-
-* Wix をインストールします。
-   * 以下のサイトからダウンロードします。:
-
-    `Wix <http://wix.codeplex.com/>`_
-
-* Windows Management Framework 4.0(Windows6.1-KB2819745-x64-MultiPkg.msu) をインストールします。
-   * Windows版パッケージを作成するスクリプトはPowerShell 3.0以上向けに書かれているため、Windows7に同梱されているPowerShellでは正常に動作しません。Windows7のPowerShellのバージョンを4.0にするためにインストールする必要があります。Windows 8.1以降では標準でインストールされているPowerShellのバージョンで要件を満たしています。:
-
-    `Windows Management Framework 4.0 <https://www.microsoft.com/ja-jp/download/details.aspx?id=40855>`_
-
-* Patch for Windows をインストールします。
-   * 以下のサイトからダウンロードします。:
-
-    `Patch for Windows <http://gnuwin32.sourceforge.net/packages/patch.htm>`_
 
 変更点の記述
 ------------
@@ -127,7 +86,9 @@ Makefileを生成するためにconfigureスクリプトを実行します。
         --enable-document \
         --prefix=/tmp/local \
         --with-launchpad-uploader-pgp-key=(Launchpadに登録したkeyID) \
-        --with-mroonga-github-com-path=$HOME/work/mroonga/mroonga.github.com \
+        --with-mroonga-github-com-path=$MROONGA_GITHUB_COM_PATH \
+        --with-cutter-source-path=$CUTTER_SOURCE_PATH \
+        --with-groonga-source-path=$GROONGA_SOURCE_PATH \
         --with-mysql-source=(MySQLのソースコードがあるディレクトリー) \
         --with-mysql-build=(MySQLのソースコードをビルドしたディレクトリー) \
         --with-mysql-config=(mysql_configコマンドのパス)
@@ -237,9 +198,6 @@ Debian 系
 
     % make download
     % make build
-    % make sign-packages
-    % make update-repository
-    % make sign-repository
     % make upload
 
 make build に PARALLEL=yes とするとビルドが並列に走り、作業がより高速に行えます。
@@ -247,6 +205,7 @@ make build に PARALLEL=yes とするとビルドが並列に走り、作業が�
 また make build CODES=lucid などとすると、ビルド対象を指定することができます。
 
 このように Makefile.am を書き換えずにコマンドライン引数でビルドの挙動を変更する方法は、知っておいて損はないでしょう。
+uploadした後、パッケージの署名とリポジトリのメタデータの更新を実施します。詳細はGroongaのリリース手順を確認してください。
 
 Red Hat 系
 ^^^^^^^^^^
@@ -261,35 +220,14 @@ Red Hat 系
 
     % make download
     % make build
-    % make sign-packages
-    % make update-repository
     % make upload
+
+uploadした後、パッケージの署名とリポジトリのメタデータの更新を実施します。詳細はGroongaのリリース手順を確認してください。
 
 Windows
 ^^^^^^^
 
-MariaDB 本体を `多少変更しないといけない
-<https://github.com/mroonga/mroonga/tree/master/packages/source/patches>`_
-ため、Windows 版は MariaDB に mroonga/groonga/groonga-normalizer-mysql
-をバンドルしたパッケージとして作成します。
-
-Windows 上で作業を行います。
-
-`こちら <https://github.com/cosmo0920/PowerShell-for-Mroonga-building>`_
-からWindows版パッケージ作成用のPowerShellをダウンロードします。
-
-PowerShellを管理者権限で起動し、 `powershell\build-vc2015.ps1` を実行します。
-`powershell\build-vc2015.ps1` を実行すると、自動的にWindows版のパッケージまで作成します。
-32bit版、64bit版のパッケージ作成にそれぞれ30分くらいずつかかります。そのため、合計で1時間くらいかかります。
-完了するとworkディレクトリに以下のようなファイルができます。
-
-* mariadb-10.0.2-with-mroonga-3.04-win32.zip
-* mariadb-10.0.2-with-mroonga-3.04-winx64.zip
-
-これを Linux にコピーします。例えば、 Ruby で HTTP サーバーを立てて
-Linux 側からダウンロードする場合は以下のようにします。::
-
- > ruby -run -e httpd -- --do-not-reverse-lookup --port 10080 .
+Windows版は `AppVeyorのCI <https://ci.appveyor.com/project/groonga/mroonga>`_ の成果物を利用します。
 
 ドキュメントのアップロード
 --------------------------
@@ -320,7 +258,6 @@ mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを�
 各種メーリングリストにリリースメールを流します。
 
 * ml@mysql.gr.jp 日本語アナウンス
-* mysql@lists.mysql.com 英語アナウンス (http://lists.mysql.com/mysql から登録できる)
 * groonga-dev@lists.osdn.me 日本語アナウンス
 * groonga-talk@lists.sourceforge.net 英語アナウンス
 
