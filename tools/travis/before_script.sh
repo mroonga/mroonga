@@ -63,6 +63,8 @@ else
       sudo mkdir -p /usr/global/share
       sudo chown -R ${USER}: /usr/global/share/
       sed -i 's/-DWITH_BOOST/-DDOWNLOAD_BOOST=1 -DWITH_BOOST/' vendor/mysql/debian/rules
+      # Remove https://bugs.mysql.com/bug.php?id=97278 is fixed (hardcoded build host path issue exists on MySQL 5.7.28)
+      sed -i '/^-DWITH_SSL/d' vendor/mysql/debian/rules
       (cd vendor/mysql && fakeroot debian/rules override_dh_auto_configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
