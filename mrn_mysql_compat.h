@@ -630,6 +630,7 @@ typedef HASH mrn_table_def_cache_type;
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#  define MRN_HAVE_INIT_ONE_TABLE
 #  define mrn_table_list_init_one_table(table_list,                     \
                                         db_name,                        \
                                         db_name_length,                 \
@@ -646,6 +647,9 @@ typedef HASH mrn_table_def_cache_type;
                                  lock_type);                            \
   } while(false)
 #else
+#if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80018
+#else
+#  define MRN_HAVE_INIT_ONE_TABLE
 #  define mrn_table_list_init_one_table(table_list,             \
                                         db_name,                \
                                         db_name_length,         \
@@ -659,6 +663,7 @@ typedef HASH mrn_table_def_cache_type;
                                table_name_length,               \
                                alias,                           \
                                lock_type)
+#endif
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
