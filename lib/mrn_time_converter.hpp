@@ -22,9 +22,6 @@
 #define MRN_TIME_CONVERTER_HPP_
 
 #include <mrn_mysql_compat.h>
-#if MYSQL_VERSION_ID < 80018 && !defined(MRN_MARIADB_P)
-#  include <my_global.h>
-#endif
 #include <mysql_time.h>
 
 #include <groonga.h>
