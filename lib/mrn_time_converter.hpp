@@ -22,6 +22,7 @@
 #define MRN_TIME_CONVERTER_HPP_
 
 #include <mrn_mysql_compat.h>
+#include <mysql_time.h>
 
 #include <groonga.h>
 

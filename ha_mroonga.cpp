@@ -4149,7 +4149,6 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
 
       grn_obj *column, *column_ref = NULL, *grn_table_ref = NULL;
       char ref_path[FN_REFLEN + 1];
-      TABLE_LIST table_list;
       build_table_filename(ref_path, sizeof(ref_path) - 1,
                            table->s->db.str,
                            normalized_ref_table_name, "", 0);
@@ -4171,13 +4170,13 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
         DBUG_RETURN(false);
       }
 
-      mrn_table_list_init_one_table((&table_list),
-                                    mapper.db_name(),
-                                    strlen(mapper.db_name()),
-                                    mapper.mysql_table_name(),
-                                    strlen(mapper.mysql_table_name()),
-                                    mapper.mysql_table_name(),
-                                    TL_WRITE);
+      MRN_DECLARE_TABLE_LIST(table_list,
+                             mapper.db_name(),
+                             strlen(mapper.db_name()),
+                             mapper.mysql_table_name(),
+                             strlen(mapper.mysql_table_name()),
+                             mapper.mysql_table_name(),
+                             TL_WRITE);
       mrn_open_mutex_lock(table->s);
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
       TABLE_SHARE *tmp_ref_table_share =
@@ -5723,14 +5722,13 @@ int ha_mroonga::delete_table(const char *name
       open_table_to_get_wrap_handlerton = false;
     }
     if (open_table_to_get_wrap_handlerton) {
-      TABLE_LIST table_list;
-      mrn_table_list_init_one_table((&table_list),
-                                    mapper.db_name(),
-                                    strlen(mapper.db_name()),
-                                    mapper.mysql_table_name(),
-                                    strlen(mapper.mysql_table_name()),
-                                    mapper.mysql_table_name(),
-                                    TL_WRITE);
+      MRN_DECLARE_TABLE_LIST(table_list,
+                             mapper.db_name(),
+                             strlen(mapper.db_name()),
+                             mapper.mysql_table_name(),
+                             strlen(mapper.mysql_table_name()),
+                             mapper.mysql_table_name(),
+                             TL_WRITE);
       mrn_open_mutex_lock(NULL);
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
       TABLE_SHARE *tmp_table_share =
@@ -14718,7 +14716,6 @@ int ha_mroonga::rename_table(const char *from,
   )
 {
   int error = 0;
-  TABLE_LIST table_list;
   TABLE tmp_table;
   MRN_SHARE *tmp_share;
   MRN_DBUG_ENTER_METHOD();
@@ -14727,13 +14724,13 @@ int ha_mroonga::rename_table(const char *from,
   if (strcmp(from_mapper.db_name(), to_mapper.db_name()))
     DBUG_RETURN(HA_ERR_WRONG_COMMAND);
 
-  mrn_table_list_init_one_table((&table_list),
-                                from_mapper.db_name(),
-                                strlen(from_mapper.db_name()),
-                                from_mapper.mysql_table_name(),
-                                strlen(from_mapper.mysql_table_name()),
-                                from_mapper.mysql_table_name(),
-                                TL_WRITE);
+  MRN_DECLARE_TABLE_LIST(table_list,
+                         from_mapper.db_name(),
+                         strlen(from_mapper.db_name()),
+                         from_mapper.mysql_table_name(),
+                         strlen(from_mapper.mysql_table_name()),
+                         from_mapper.mysql_table_name(),
+                         TL_WRITE);
   mrn_open_mutex_lock(NULL);
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
   TABLE_SHARE *tmp_table_share =
@@ -17950,17 +17947,16 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     create_info_str.MRN_STRING_APPEND(" (", 2);
 
     char ref_path[FN_REFLEN + 1];
-    TABLE_LIST table_list;
     build_table_filename(ref_path, sizeof(ref_path) - 1,
                          table_share->db.str, ref_table_buff, "", 0);
     DBUG_PRINT("info", ("mroonga: ref_path=%s", ref_path));
-    mrn_table_list_init_one_table((&table_list),
-                                  table_share->db.str,
-                                  static_cast<size_t>(table_share->db.length),
-                                  ref_table_buff,
-                                  static_cast<size_t>(ref_table_name_length),
-                                  ref_table_buff,
-                                  TL_WRITE);
+    MRN_DECLARE_TABLE_LIST(table_list,
+                           table_share->db.str,
+                           static_cast<size_t>(table_share->db.length),
+                           ref_table_buff,
+                           static_cast<size_t>(ref_table_name_length),
+                           ref_table_buff,
+                           TL_WRITE);
     mrn_open_mutex_lock(table_share);
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
     // TODO
@@ -18171,17 +18167,16 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
     f_key_info.foreign_fields.push_back(field_name);
 
     char ref_path[FN_REFLEN + 1];
-    TABLE_LIST table_list;
     build_table_filename(ref_path, sizeof(ref_path) - 1,
                          table_share->db.str, ref_table_buff, "", 0);
     DBUG_PRINT("info", ("mroonga: ref_path=%s", ref_path));
-    mrn_table_list_init_one_table((&table_list),
-                                  table_share->db.str,
-                                  static_cast<size_t>(table_share->db.length),
-                                  ref_table_buff,
-                                  static_cast<size_t>(ref_table_name_length),
-                                  ref_table_buff,
-                                  TL_WRITE);
+    MRN_DECLARE_TABLE_LIST(table_list,
+                           table_share->db.str,
+                           static_cast<size_t>(table_share->db.length),
+                           ref_table_buff,
+                           static_cast<size_t>(ref_table_name_length),
+                           ref_table_buff,
+                           TL_WRITE);
     mrn_open_mutex_lock(table_share);
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
     TABLE_SHARE *tmp_ref_table_share =
