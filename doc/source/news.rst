@@ -18,7 +18,7 @@ Release 9.09 - 2019-10-29
 Fixes
 ^^^^^
 
-* Fixed a build error a package for MySQL 8.
+* Fixed a build error a package for MySQL 8.0.18.
 
 .. _release-9-08:
 
