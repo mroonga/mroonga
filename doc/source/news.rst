@@ -5,6 +5,21 @@
 News
 ====
 
+.. _release-9-09:
+
+Release 9.09 - 2019-10-29
+-------------------------
+
+.. note::
+
+    Maybe performance decreases from this version.
+    Therefore, If performance decreases than before, please report us with reproducible steps.
+
+Fixes
+^^^^^
+
+* Fixed a build error a package for MySQL 8.0.18.
+
 .. _release-9-08:
 
 Release 9.08 - 2019-09-27
