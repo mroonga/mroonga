@@ -15,6 +15,11 @@ Release 9.09 - 2019-10-30
     Maybe performance decreases from this version.
     Therefore, If performance decreases than before, please report us with reproducible steps.
 
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.46, 5.7.28, and 8.0.18(with restrictions).
+
 Fixes
 ^^^^^
 

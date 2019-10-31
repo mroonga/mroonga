@@ -31,6 +31,16 @@ msgstr ""
 "今回のバージョンからパフォーマンスが低下しているかもしれません。もし、以前よ"
 "りパフォーマンスが低下していたら、是非、再現手順を報告してほしいです。"
 
+msgid "Improvements"
+msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.46, 5.7.28, and "
+"8.0.18(with restrictions)."
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.46と5.7.28とMySQL 8.0.18(制限あり)をサポー"
+"トしました。"
+
 msgid "Fixes"
 msgstr "修正"
 
@@ -39,9 +49,6 @@ msgstr "MySQL 8.0.18向けのパッケージのビルドエラーを修正しま
 
 msgid "Release 9.08 - 2019-09-27"
 msgstr "9.08リリース - 2019-09-27"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid ""
 "[:doc:`/install/centos`] Added support for MariaDB 5.5.64, 10.2.27, 10.3.18, "
