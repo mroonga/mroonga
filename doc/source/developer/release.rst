@@ -1,17 +1,17 @@
 .. highlightlang:: none
 
-Release procedure (XXX not yet translated)
-==========================================
+Release procedure
+=================
 
-前提条件
---------
+Requirements
+------------
 
-リリース手順の前提条件は以下の通りです。
+Here is the requirements about release procedure.
 
-* ビルド環境は Debian GNU/Linux (sid)
-* コマンドラインの実行例はzsh
+* Debian GNU/Linux (sid)
+* Use zsh as user shell
 
-作業ディレクトリ例は以下を使用します。
+Use the following working directories.
 
 * MROONGA_DIR=$HOME/work/mroonga
 * MROONGA_CLONE_DIR=$HOME/work/mroonga/mroonga.clean
@@ -21,19 +21,14 @@ Release procedure (XXX not yet translated)
 * GROONGA_SOURCE_PATH=$HOME/work/groonga/groonga.clean
 
 
-ビルド環境の準備
-----------------
+Setup build environment
+-----------------------
 
-以下にMroongaのリリース作業を行うために事前にインストール
-しておくべきパッケージを示します。
-
-なお、ビルド環境としては Debian GNU/Linux (sid)を前提として説明しているため、その他の環境では適宜読み替えて下さい。::
+Install the following packages::
 
     % sudo apt-get install -V ruby mecab libmecab-dev gnupg2 dh-autoreconf python-sphinx bison
 
-Debian系（.deb）やRed Hat系（.rpm）パッケージのビルドには `Vagrant <https://www.vagrantup.com/>`_ を使用します。apt-getでインストールできるのは古いバージョンなので、Webサイトから最新版をダウンロードしてインストールすることをおすすめします。
-
-Vagrantで使用する仮想化ソフトウェア（VirtualBox、VMwareなど）がない場合、合わせてインストールしてください。なお、VirtualBoxはsources.listにcontribセクションを追加すればapt-getでインストールできます。::
+We use `Vagrant <https://www.vagrantup.com/>`_ for building deb or rpm packages and expect that Virtualbox package is already installed. If not, please install it in the following steps::
 
     % cat /etc/apt/sources.list
     deb http://ftp.jp.debian.org/debian/ sid main contrib
@@ -41,46 +36,52 @@ Vagrantで使用する仮想化ソフトウェア（VirtualBox、VMwareなど）
     % sudo apt-get update
     % sudo apt-get install virtualbox
 
-変更点の記述
+Bump version
 ------------
 
-前回リリース時からの変更点を``doc/source/news.txt``にまとめます。
-ここでまとめた内容についてはリリースアナウンスにも使用します。
+Bump version to the latest release::
 
-前回リリースからの変更履歴を参照するには以下のコマンドを実行します。::
+    % make update-version NEW_VERSION_MAJOR=9 NEW_VERSION_MINOR=1 NEW_VERSION_MICRO=0
+
+Describe the changes
+--------------------
+
+Summarize recent changes since the previous release into ``doc/source/news.txt``.
+This summary is also used in release note.
+
+Execute the following command to collect change logs since the previous version::
 
    % git log -p --reverse $(git tag | tail -1)..
 
-ログを^commitで検索しながら、以下の基準を目安として変更点を追記していきます。
+Search the logs by ``^commit``, and pick up collect remarkable changes.
 
-含めるもの
+Should be included
 
-* ユーザへ影響するような変更
-* 互換性がなくなるような変更
+* The changes which affect to users
+* The changes which broke compatibility
 
-含めないもの
+Shoud not be included
 
-* 内部的な変更(変数名の変更やらリファクタリング)
+* The changes which doesn't affect to users (Internal source code changes or refactoring)
 
 
-configureスクリプトの生成
+Generate configure script
 -------------------------
 
-Mroongaのソースコードをcloneした時点ではconfigureスクリプトが含まれておらず、そのままmakeコマンドにてビルドすることができません。
+Because of master branch doesn't include configure script, then it is required to generate configure script for building.
 
-Mroongaをcloneしたディレクトリでautogen.shを以下のように実行します。::
+Execute ``autogen.sh`` with the following command::
 
     % sh autogen.sh
 
-このコマンドの実行により、configureスクリプトが生成されます。
+It generates ``configure`` script.
 
+Execute configure script
+------------------------
 
-configureスクリプトの実行
--------------------------
+For generating ``Makefile``, execute the ``configure`` script.
 
-Makefileを生成するためにconfigureスクリプトを実行します。
-
-リリース用にビルドするためには以下のオプションを指定してconfigureを実行します。::
+Execute with the following options for the release::
 
     % ./configure \
         --enable-document \
@@ -89,290 +90,147 @@ Makefileを生成するためにconfigureスクリプトを実行します。
         --with-mroonga-github-com-path=$MROONGA_GITHUB_COM_PATH \
         --with-cutter-source-path=$CUTTER_SOURCE_PATH \
         --with-groonga-source-path=$GROONGA_SOURCE_PATH \
-        --with-mysql-source=(MySQLのソースコードがあるディレクトリー) \
-        --with-mysql-build=(MySQLのソースコードをビルドしたディレクトリー) \
-        --with-mysql-config=(mysql_configコマンドのパス)
+        --with-mysql-source=(The directory of MySQL source code) \
+        --with-mysql-build=(The build directory of MySQL) \
+        --with-mysql-config=(The path to mysql_config command)
 
---with-mysql-sourceなどのオプションについては、イントールドキュメントの :doc:`/install/others` を参照してください。
+See :doc:`/install/others`  for the details of ``--with-mysql-source`` option.
 
+Check whether you can upload packages
+-------------------------------------
 
-アップロード権限の確認
-----------------------
+Check whether you can login to packages.groonga.org as packages user.
 
-あらかじめpackagesユーザでpackages.groonga.orgにsshログインできることを確認しておいてください。
-
-ログイン可能であるかの確認は以下のようにコマンドを実行して行います。::
+You can check with the following command whether you can login::
 
     % ssh packages@packages.groonga.org
 
-ログインできない場合、SSHの公開鍵を登録してもらってください。
+If you can't login to packages.groonga.org, you must be registered ssh public key.
 
+Execute make update-latest-release
+----------------------------------
 
-make update-latest-releaseの実行
---------------------------------
+Execute ``make update-latest-release`` command with OLD_RELEASE_DATE, NEW_RELEASE_DATE.
 
-make update-latest-releaseコマンドでは、OLD_RELEASE_DATEに前回のリリースの日付を、NEW_RELEASE_DATEに次回リリースの日付を指定します。
+When 9.09 release, we executed the following command::
 
-5.01のリリースを行った際は以下のコマンドを実行しました。::
+    % make update-latest-release OLD_RELEASE=9.09 OLD_RELEASE_DATE=2019-09-27 NEW_RELEASE_DATE=2019-10-30
 
-    % make update-latest-release OLD_RELEASE=5.00 OLD_RELEASE_DATE=2015-02-09 NEW_RELEASE_DATE=2015-03-29
+This command updates some html files (which is used for web sites of Mroonga - index.html,ja/index.html) and the version of spec file or debian/changelog entry.
 
-これにより、clone済みのMroongaのWebサイトのトップページのソース(index.html,ja/index.html)やRPMパッケージのspecファイルのバージョン表記などが更新されます。
+Tagging for release
+-------------------
 
-
-リリースタグの設定
-------------------
-
-リリース用のタグを打つには以下のコマンドを実行します。::
+Execute the following command for tagging::
 
     % make tag
     % git push --tags origin
 
 .. note::
-   タグを打った後にconfigureを実行することで、ドキュメント生成時のバージョン番号に反映されます。
+   After tagging for the release, execute ``configure`` script. This tag information is reflected when generating the documents.
 
+Upload archive files
+--------------------
 
-配布用ファイルのアップロード
-----------------------------
-
-次に、配布用の ``tar.gz`` ファイルを作成します。 ::
+Then, create archive file (``tar.gz``) for distribution::
 
     % make dist
 
-.. note::
-
-   以前はGitHubのアーカイブ機能でtar.gzを配布していましたが、その機能が廃止( https://github.com/blog/1302-goodbye-uploads )されるため、2012年12月のリリースよりpackages.groonga.orgでの配布に切り替えました。
-
-packages/sourceディレクトリへと移動します。 ::
+Change working directory to ``packages/source``::
 
     % cd packages/source
 
-make downloadでアップストリームと同期します。 ::
+Execute ``make download`` for syncing with the upstream::
 
     % make download
 
-必要に応じて、アーカイブに含めるGroongaやgroonga-normalizer-mysql、MariaDBのバージョンを更新します。更新する場合、autogen.shを実行してMakefile.amの変更をMakefile.inに反映する必要があります。 ::
-
-    % editor Makefile.am
-    % cd ../..
-    % sh autogen.sh
-    % cd packages/source
-
-アーカイブを作成します。 ::
+Execute ``make archive`` for generating source archive::
 
     % make archive
 
-アーカイブをアップロードします。 ::
+Execute ``make upload`` for uploading archive file::
 
     % make upload
 
-これで、 http://packages.groonga.org/source/mroonga/ から ``tar.gz`` のダウンロードが行えるようになります。
+As a result, ``tar.gz`` archive file is available from http://packages.groonga.org/source/mroonga/.
 
 
-パッケージの作成
-----------------
+Create packages for the release
+-------------------------------
 
-Linux と Windows 用にパッケージを作成する必要があります。
+Create Linux and Windows packages.
 
-Linux 用のパッケージは以下の 2 種類に分けることが可能です。
+Debian
+^^^^^^
 
-1. Debian 系
-2. Red Hat 系
-
-.. note::
-
-   現在のところ、パッケージの作成は Debian GNU/Linux (Ubuntu も可) でしか行えません。
-
-Debian 系
-^^^^^^^^^
-
-まず apt ディレクトリに移動します。 ::
+Change working directory to ``apt``::
 
     % cd apt
 
-その後、次のようにすれば一連のリリース作業（download build sign-packages update-repository sign-repository upload）が行われますが、途中で失敗することもあります。 ::
-
-    % make release
-
-そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともあります。 ::
+Execute the following command::
 
     % make download
     % make build
     % make upload
 
-make build に PARALLEL=yes とするとビルドが並列に走り、作業がより高速に行えます。
+After uploading the packages, update sign/metadata. See Groonga's release procedure about details.
 
-また make build CODES=lucid などとすると、ビルド対象を指定することができます。
+Debian derivatives(Ubuntu)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-このように Makefile.am を書き換えずにコマンドライン引数でビルドの挙動を変更する方法は、知っておいて損はないでしょう。
-uploadした後、パッケージの署名とリポジトリのメタデータの更新を実施します。詳細はGroongaのリリース手順を確認してください。
+For Ubuntu, packages are provided by PPA on launchpad.net.
 
-Debian 系(Ubuntu)
-^^^^^^^^^^^^^^^^^
-
-Ubuntu向けのパッケージの提供は launchpad.net 上のPPA利用しています。
-
-ubuntu ディレクトリに移動してアップロードを実施します。::
+Change working directory to ``ubuntu`` and execute ``make upload`` command::
 
     % cd packages/ubuntu
     % make upload
 
-アップロードが正常終了すると、launchpad.net上でビルドが実行され、ビルド結果がメールで通知されます。ビルドに成功すると、リリース対象のパッケ
-ージがlaunchpad.netのGroongaチームのPPAへと反映されます。公開されているパッケージは以下のURLで確認できます。
+When upload packages was succeeded, package build process is executed on launchpad.net. Then build result is notified via E-mail.
+You can install packages via Groonga PPA on launchpad.net::
 
 * https://launchpad.net/~groonga/+archive/ubuntu/ppa
 
-Red Hat 系
-^^^^^^^^^^
+Red Hat derivatives
+^^^^^^^^^^^^^^^^^^^
 
-まず yum ディレクトリに移動する。
+Change working directory to ``yum`` ::
 
-その後、次のようにすれば一連のリリース作業（download build sign-packages update-repository upload）が行われますが、途中で失敗することもあります。 ::
+    % cd apt
 
-    % make release
-
-そのため head コマンドなどで Makefile.am の内容を確認し、順番に作業を行っていくほうが良いこともあります。 ::
+Execute the following command::
 
     % make download
     % make build
     % make upload
 
-uploadした後、パッケージの署名とリポジトリのメタデータの更新を実施します。詳細はGroongaのリリース手順を確認してください。
+After uploading the packages, update sign/metadata. See Groonga's release procedure about details.
 
 Windows
 ^^^^^^^
 
-Windows版は `AppVeyorのCI <https://ci.appveyor.com/project/groonga/mroonga>`_ の成果物を利用します。
+For windows packages, we use `AppVeyor CI <https://ci.appveyor.com/project/groonga/mroonga>`_ artifacts files.
 
-ドキュメントのアップロード
---------------------------
+Upload documents
+----------------
 
-1. GitHub からドキュメントアップロード用のリポジトリ (mroonga.github.com) を clone
-2. clone済みmroongaディレクトリ内でmake update-documentを実行し、clone したドキュメントアップロード用のリポジトリへ反映する
-3. mroonga.github.com へコミットを行い GitHub へ push
+1. Clone mroonga.github.com repository
+2. Execute ``make update-document``
+3. Commit changes in mroonga.github.com repository && push them
 
-Homebrewの更新
---------------
-
-OS Xでのパッケージ管理方法として `Homebrew <http://brew.sh/>`_ があります。
-
-Groongaの場合はHomebrewへpull requestを送りますが、Mroongaの場合は別途用意してあるhomebrewリポジトリを更新します。
-
-  https://github.com/mroonga/homebrew
-
-mroonga/homebrewをcloneして、Formula更新用のシェルスクリプトを実行します。update.shの引数にはリリース時のバージョンを指定します。例えば、3.06のリリースのときは以下を実行しました。 ::
-
-    % ./update.sh 3.06
-
-実行すると、FormulaのソースアーカイブのURLとsha256チェックサムを更新します。
-あとは、変更内容をコミットすればHomebrewの更新作業は完了です。
-
-リリースメールの送信
---------------------
-
-各種メーリングリストにリリースメールを流します。
-
-* ml@mysql.gr.jp 日本語アナウンス
-* groonga-dev@lists.osdn.me 日本語アナウンス
-* groonga-talk@lists.sourceforge.net 英語アナウンス
-
-メッセージ内容のテンプレートを以下に示します。 ::
-
-    ドキュメント(インストールガイド含む)
-      http://mroonga.org/
-
-    ダウンロード
-      http://packages.groonga.org/source/mroonga
-
-    Mroongaとは、全文検索エンジンであるGroongaをベースとした
-    MySQLのストレージエンジンです。Tritonnの後継プロジェクトとな
-    ります。
-
-
-    最近のトピックス
-    ================
-
-    # <<<ユーモアを交えて最近のトピックスを>>>
-
-    先月開催されたMySQL Conference 2011でMroongaについて発表して
-    きました。（私じゃなくて開発チームのみなさんが。）英語ですが、
-    以下の発表資料があるので興味がある方はご覧ください。
-
-      http://groonga.org/ja/publication/
-
-
-    いろいろ試してくれている方もいらっしゃるようでありがとうござ
-    います。いちいさんなど使った感想を公開してくれていてとても参
-    考になります。ありがとうございます。
-      http://d.hatena.ne.jp/ichii386/20110427/1303852054
-
-    （↓の変更点にあるとおり、今回のリリースからauto_increment機
-    能が追加されています。）
-
-
-    ただ、「REPLACE INTO処理が完了せずにコネクションを消費する」
-    のようなバグレポートがあるように、うまく動かないケースもある
-    ようなので、試していただける方は注意してください。
-      http://redmine.groonga.org/issues/910
-
-    今日リリースしたGroonga 1.2.2でマルチスレッド・マルチプロセ
-    ス時にデータ破損してしまう問題を修正しているので、最新の
-    Groongaと組み合わせると問題が解決しているかもしれません。
-
-    使ってみて、なにか問題があったら報告してもらえると助かります。
-
-    # <<<<以下 news.rst に書かれている内容を貼り付ける>>>
-
-    変更点
-    ======
-
-    0.5からの変更点は以下の通りです。
-      http://mroonga.github.com/news.html#release-0-6
-
-    改良
-    ----
-
-        auto_increment機能の追加。#670
-        不必要な”duplicated _id on insert”というエラーメッセージを抑制。 #910（←は未修正）
-        CentOSで利用しているMySQLのバージョンを5.5.10から5.5.12へアップデート。
-        Ubuntu 11.04 Natty Narwhalサポートの追加。
-        Ubuntu 10.10 Maverick Meerkatサポートの削除。
-        Fedora 15サポートの追加。
-        Fedora 14サポートの削除。
-
-    修正
-    ----
-
-        ORDER BY LIMITの高速化が機能しないケースがある問題の修正。#845
-        デバッグビルド時のメモリリークを修正。
-        提供しているCentOS用パッケージをOracle提供MySQLパッケージと一緒に使うとクラッシュする問題を修正。
-
-    感謝
-    ----
-
-        Mitsuhiro Shibuyaさん
-        Hiroki Minetaさん
-        @kodakaさん
-
-Twitterでリリースアナウンスをする
+Announce release for mailing list
 ---------------------------------
 
-Mroongaブログのリリースエントリには「リンクをあなたのフォロワーに共有する」ためのツイートボタンがあるので、そのボタンを使ってリリースアナウンスします。(画面下部に配置されている)
+Send release announce for each mailing list
 
-このボタンを経由する場合、ツイート内容に自動的にリリースタイトル(「Mroonga 2.08リリース」など)とMroongaブログのリリースエントリのURLが挿入されます。
+* ml@mysql.gr.jp for Japanese
+* groonga-dev@lists.osdn.me for Japanese
+* groonga-talk@lists.sourceforge.net for English
 
-この作業はMroongaブログの英語版、日本語版それぞれで行います。
-あらかじめgroongaアカウントでログインしておくとアナウンスを円滑に行うことができます。
+Announce release for twitter
+----------------------------
 
-リリース後にやること
----------------------
+Click Tweet link in Mrooga blog entry. You can share tweet about latest release.
+If you use tweet link, title of release announce and URL is embedded into your tweet.
 
-リリースバージョンを以下のようにして更新します。::
-
-    % make update-version NEW_VERSION_MAJOR=2 NEW_VERSION_MINOR=0 NEW_VERSION_MICRO=7
-
-
-
-
-
-
+Execute sharing tweet in Japanese and English version of blog entry.
+Note that this tweet should be done when logged in by ``groonga`` account.
