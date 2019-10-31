@@ -1,0 +1,86 @@
+apache_arrow_repository = ENV["APACHE_ARROW_REPOSITORY"]
+if apache_arrow_repository.nil?
+  raise "Specify APACHE_ARROW_REPOSITORY environment variable"
+end
+require "#{apache_arrow_repository}/dev/tasks/linux-packages/package-task"
+require "json"
+
+ENV["APT_TARGETS"] ||= "debian-stretch"
+ENV["YUM_TARGETS"] ||= "centos-7"
+
+class MroongaPackageTask < PackageTask
+  def initialize(apache_arrow_repository)
+    @apache_arrow_repository = apache_arrow_repository
+    base_version_file = File.join(__dir__,
+                                  "..",
+                                  "..",
+                                  "version")
+    @version = File.read(base_version_file).chomp
+    @variant = "mroonga-mariadb-10.1"
+    super(@variant, @version, nil)
+    @archive_name = "#{@variant}_#{@version}.orig.tar.gz"
+    @original_archive_name = "mroonga-#{@version}.tar.gz"
+  end
+
+  def define
+    super
+    define_apt_build_sh_task
+  end
+
+  private
+  def define_archive_task
+    file @archive_name => "../../#{@original_archive_name}" do
+      sh("tar xfz ../../#{@original_archive_name}")
+      File.rename("mroonga-#{@version}", "#{@variant}-#{@version}")
+      sh("tar czf #{@archive_name} #{@variant}-#{@version}")
+      FileUtils.rm_r("#{@variant}-#{@version}")
+    end
+  end
+
+  def get_package_version(release, package)
+    version = ""
+    open("https://sources.debian.org/api/src/#{package}/") do |request|
+      JSON.parse(request.read)["versions"].each do |target|
+        if target["suites"].include?(release)
+          version = target["version"]
+          break
+        end
+      end
+    end
+    version
+  end
+
+  def define_apt_build_sh_task
+    apache_arrow_apt_build_sh =
+      File.join(@apache_arrow_repository,
+                "dev",
+                "tasks",
+                "linux-packages",
+                "apt",
+                "build.sh")
+    apt_build_sh = File.join(__dir__, "apt", "build.sh")
+    file apt_build_sh => apache_arrow_apt_build_sh do |task|
+      cp(apache_arrow_apt_build_sh,
+         task.name)
+    end
+    control_in_file = File.join(__dir__, "debian", "control.in")
+    control_file = File.join(__dir__, "debian", "control")
+    file control_file => control_in_file do |task|
+      required_groonga_version = File.read(File.join(__dir__, "..", "..",
+                                                     "required_groonga_version")).chomp
+      mariadb_version = get_package_version("stretch", "mariadb-10.1")
+      control_in_content = File.read(control_in_file)
+      content = control_in_content.gsub(/@REQUIRED_GROONGA_VERSION@/, required_groonga_version)
+        .gsub(/MARIADB_VERSION/, mariadb_version)
+      File.open(control_file, "w") do |file|
+        file.puts(cotent)
+      end
+    end
+    namespace :apt do
+      task :build => [control_file, apt_build_sh]
+    end
+  end
+end
+
+task = MroongaPackageTask.new(apache_arrow_repository)
+task.define

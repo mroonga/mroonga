@@ -1,0 +1,30 @@
+mroonga-mariadb-10.3 (9.09-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Wed, 30 Oct 2019 00:00:00 +0900
+
+mroonga-mariadb-10.3 (9.08-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Fri, 27 Sep 2019 00:00:00 +0900
+
+mroonga-mariadb-10.3 (9.07-2) unstable; urgency=low
+
+  * Rebuilt against MariaDB 10.3.17.
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Fri, 20 Sep 2019 00:00:00 +0900
+
+mroonga-mariadb-10.3 (9.07-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Thu, 29 Aug 2019 00:00:00 +0900
+
+mroonga-mariadb-10.3 (9.05-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Kentaro Hayashi <hayashi@clear-code.com>  Mon, 29 Jul 2019 00:00:00 +0900
+
