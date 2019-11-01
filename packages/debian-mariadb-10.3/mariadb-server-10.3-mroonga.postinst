@@ -39,7 +39,7 @@ EOF
 }
 
 restart_server() {
-    if test -x /bin/systemctl && /bin/systemctl > /dev/null 2>&1 ; then
+    if /bin/systemctl > /dev/null 2>&1 ; then
         systemctl --no-pager status mysql
         if test $? -eq 0 ; then
             systemctl restart mysql
