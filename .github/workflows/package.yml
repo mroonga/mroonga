@@ -119,4 +119,6 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
-          path: packages/${{ matrix.package }}-mroonga/*/repositories/
+          path:
+            - packages/${{ matrix.package }}-mroonga/apt/repositories/
+            - packages/${{ matrix.package }}-mroonga/yum/repositories/
