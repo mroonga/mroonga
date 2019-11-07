@@ -1,5 +1,6 @@
 require "json"
 require "pathname"
+require "pp"
 
 apache_arrow_repository = ENV["APACHE_ARROW_REPOSITORY"]
 if apache_arrow_repository.nil?
@@ -85,7 +86,7 @@ class MroongaPackageTask < PackageTask
     debian_directory = package_directory + "debian"
     control_in_path = debian_directory + "control.in"
     apt_targets.each do |target|
-      distribution, code_name = target.split("-", 2)
+      distribution, code_name, _architecture = target.split("-", 3)
       target_debian_directory = package_directory + "debian.#{target}"
       control_path = target_debian_directory + "control"
       control_paths << control_path.to_s
