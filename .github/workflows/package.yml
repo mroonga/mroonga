@@ -28,9 +28,9 @@ jobs:
         package:
           - mariadb-10.1
         exclude:
-          - os: debian-stretch
+          - os: debian-buster
             package: mariadb-10.1
-          - os: debian-stretch-i386
+          - os: debian-buster-i386
             package: mariadb-10.1
           - os: centos-8
             package: mariadb-10.1
@@ -102,7 +102,7 @@ jobs:
             NEW_RELEASE_DATE=$(date +%Y-%m-%d)
       - name: Build with Docker
         run: |
-          cd packages/${{ matrix.package }}
+          cd packages/${{ matrix.package }}-mroonga
           case ${{ matrix.os }} in
             debian-*)
               rake apt:build APT_TARGETS=${{ matrix.os }}
