@@ -18,28 +18,22 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - debian-stretch-amd64
+          - debian-stretch
           - debian-stretch-i386
-          - debian-buster-amd64
+          - debian-buster
           - debian-buster-i386
           - centos-6
           - centos-7
           - centos-8
         package:
           - mariadb-10.1
-        include:
-          - os: debian-stretch-amd64
-            package: mariadb-10.1-mroonga
-            rake_arguments: apt:build APT_TARGETS=debian-stretch
+        exclude:
+          - os: debian-stretch
+            package: mariadb-10.1
           - os: debian-stretch-i386
-            package: mariadb-10.1-mroonga
-            rake_arguments: apt:build APT_TARGETS=debian-stretch-i386
-          - os: centos-6
-            package: mariadb-10.1-mroonga
-            rake_arguments: yum:build YUM_TARGETS=centos-6
-          - os: centos-7
-            package: mariadb-10.1-mroonga
-            rake_arguments: yum:build YUM_TARGETS=centos-7
+            package: mariadb-10.1
+          - os: centos-8
+            package: mariadb-10.1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -93,7 +87,7 @@ jobs:
           make dist
       - name: Update version
         run: |
-          changelog=packages/${{ matrix.package }}/debian/changelog
+          changelog=packages/${{ matrix.package }}-mroonga/debian/changelog
           OLD_RELEASE=$(grep -E -o '[0-9.]+' ${changelog} | \
                           head -n1)
           OLD_RELEASE_DATE_FULL="$(grep '^ -- ' ${changelog} | \
@@ -107,7 +101,14 @@ jobs:
       - name: Build with Docker
         run: |
           cd packages/${{ matrix.package }}
-          rake ${{ matrix.rake_arguments }}
+          case ${{ matrix.os }} in
+            debian-*)
+              rake apt:build APT_TARGETS=${{ matrix.os }}
+              ;;
+            centos-*)
+              rake yum:build YUM_TARGETS=${{ matrix.os }}
+              ;;
+          ease
         env:
           APACHE_ARROW_REPOSITORY: ../../../arrow
       - uses: actions/upload-artifact@master
