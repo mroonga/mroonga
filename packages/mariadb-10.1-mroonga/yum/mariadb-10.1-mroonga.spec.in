@@ -28,7 +28,7 @@ Summary:	A fast fulltext searchable storage engine for MariaDB
 Group:		Applications/Databases
 License:	LGPLv2.1
 URL:		http://mroonga.org/
-Source0:	http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
+Source0:	https://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	groonga-devel >= %{groonga_required_version}
@@ -313,7 +313,7 @@ fi
 * Wed Nov 29 2017 Kentaro Hayashi <hayashi@clear-code.com> - 7.09-1
 - new upstream release.
 
-* Sun Nov 18 2017 Kouhei Sutou <kou@clear-code.com> - 7.08-2
+* Sat Nov 18 2017 Kouhei Sutou <kou@clear-code.com> - 7.08-2
 - build against MariaDB 10.1.29.
 
 * Sun Oct 29 2017 Kentaro Hayashi <hayashi@clear-code.com> - 7.08-1

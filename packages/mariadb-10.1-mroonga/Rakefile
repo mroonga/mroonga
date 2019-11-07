@@ -1,0 +1,8 @@
+apache_arrow_repository = ENV["APACHE_ARROW_REPOSITORY"]
+require_relative "../mroonga-package-task"
+
+ENV["APT_TARGETS"] ||= "debian-stretch"
+ENV["YUM_TARGETS"] ||= "centos-6,centos-7"
+
+task = MroongaPackageTask.new("mariadb-10.1")
+task.define

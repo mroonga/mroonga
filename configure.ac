@@ -549,14 +549,12 @@ AC_OUTPUT([
   packages/debian-5.5/control
   packages/debian-5.6/control
   packages/debian-5.7/control
-  packages/debian-mariadb-10.1/control
   packages/debian-mariadb-10.3/control
   packages/apt/env.sh
   packages/rpm/centos/mysql56-community-mroonga.spec
   packages/rpm/centos/mysql57-community-mroonga.spec
   packages/rpm/centos/mysql80-community-mroonga.spec
   packages/rpm/centos/mariadb-mroonga.spec
-  packages/rpm/centos/mariadb-10.1-mroonga.spec
   packages/rpm/centos/mariadb-10.2-mroonga.spec
   packages/rpm/centos/mariadb-10.3-mroonga.spec
   packages/rpm/centos/mariadb-10.4-mroonga.spec
