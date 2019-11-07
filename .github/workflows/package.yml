@@ -110,7 +110,7 @@ jobs:
             centos-*)
               rake yum:build YUM_TARGETS=${{ matrix.os }}
               ;;
-          ease
+          esac
         env:
           APACHE_ARROW_REPOSITORY: ../../../arrow
       - uses: actions/upload-artifact@master
