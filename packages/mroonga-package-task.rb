@@ -80,10 +80,6 @@ class MroongaPackageTask < PackageTask
     end
   end
 
-  def apt_targets
-    (ENV["APT_TARGETS"] || "").split(",")
-  end
-
   def define_debian_control_task
     control_paths = []
     debian_directory = package_directory + "debian"
@@ -113,17 +109,17 @@ class MroongaPackageTask < PackageTask
     end
   end
 
-  def expand_variable_in_spec(key)
+  def rpm_archive_name
+    @original_archive_name
+  end
+
+  def yum_expand_variable(key)
     case key
     when "REQUIRED_GROONGA_VERSION"
       detect_required_groonga_version
     else
       super
     end
-  end
-
-  def rpm_archive_name
-    @original_archive_name
   end
 end
 
