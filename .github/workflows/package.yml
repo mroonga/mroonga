@@ -109,9 +109,11 @@ jobs:
           case ${{ matrix.os }} in
             debian-*)
               rake apt:build APT_TARGETS=${{ matrix.os }}
+              mv apt/repositories/ ../../
               ;;
             centos-*)
               rake yum:build YUM_TARGETS=${{ matrix.os }}
+              mv yum/repositories/ ../../
               ;;
           esac
         env:
@@ -119,6 +121,4 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
-          path:
-            - packages/${{ matrix.package }}-mroonga/apt/repositories/
-            - packages/${{ matrix.package }}-mroonga/yum/repositories/
+          path: repositories/
