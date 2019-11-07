@@ -71,10 +71,6 @@ jobs:
         run: |
           cd ..
           git clone --depth 1 https://github.com/apache/arrow.git
-          cd arrow
-          git fetch origin pull/5786/head:packaging-deb-keyring
-          git checkout packaging-deb-keyring
-          cd -
           git clone --depth 1 https://github.com/clear-code/cutter.git
           git clone --depth 1 https://github.com/mroonga/mroonga.github.com.git
       - name: Generate configure
