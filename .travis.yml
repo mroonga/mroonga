@@ -16,7 +16,7 @@ matrix:
         - MYSQL_VERSION=mysql-8.0
     - name: MariaDB 10.1
       env:
-        - MYSQL_VERSION=mariadb-10.1.41
+        - MYSQL_VERSION=mariadb-10.1.43
         - MROONGA_BUNDLED=yes
     - name: MariaDB 10.2
       env:
