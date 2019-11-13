@@ -5,6 +5,29 @@
 News
 ====
 
+.. _release-9-10:
+
+Release 9.10 - 2019-11-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.43, 10.2.29,
+  10.3.20, 10.4.10
+
+* [:doc:`/install/ubuntu`] Added support for Ubuntu 19.10 (Eoan Ermine)
+
+Fixes
+^^^^^
+
+* Fixed a bug that ``dpkg --configure`` will fail when we install the package on Ubuntu 18.04 on WSL. [GitHub#282][Patched by ochaochaocha3]
+
+Thanks
+^^^^^^
+
+* ochaochaocha3
+
 .. _release-9-09:
 
 Release 9.09 - 2019-10-30
