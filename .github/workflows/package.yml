@@ -27,11 +27,16 @@ jobs:
           - centos-8
         package:
           - mariadb-10.1
+          - mariadb-10.3
         exclude:
           - os: debian-buster
             package: mariadb-10.1
           - os: debian-buster-i386
             package: mariadb-10.1
+          - os: debian-stretch
+            package: mariadb-10.3
+          - os: debian-stretch-i386
+            package: mariadb-10.3
           - os: centos-8
             package: mariadb-10.1
     runs-on: ubuntu-latest

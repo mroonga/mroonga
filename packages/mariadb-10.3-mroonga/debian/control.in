@@ -1,4 +1,4 @@
-Source: mroonga-mariadb-10.3
+Source: mariadb-10.3-mroonga
 Section: database
 Priority: optional
 Maintainer: Kouhei Sutou <kou@clear-code.com>
@@ -42,7 +42,7 @@ Section: database
 Architecture: any
 Depends:
 	mariadb-server-10.3-mroonga (= ${binary:Version}),
-	mariadb-server (= MARIADB_VERSION)
+	mariadb-server (= @MYSQL_VERSION@)
 Description: A fast fulltext searchable storage engine for MariaDB.
  This package is a metapackage depending on the latest version.
  Mroonga is a fast fulltext searchable storage engine for MariaDB.
@@ -60,8 +60,8 @@ Depends:
 	${misc:Depends},
 	${shlibs:Depends},
 	libgroonga0 (>= @REQUIRED_GROONGA_VERSION@),
-	mariadb-server-10.3 (= MARIADB_VERSION),
-	mariadb-server-core-10.3 (= MARIADB_VERSION),
+	mariadb-server-10.3 (= @MYSQL_VERSION@),
+	mariadb-server-core-10.3 (= @MYSQL_VERSION@),
 	groonga-normalizer-mysql,
 	lsb-release
 Conflicts:
