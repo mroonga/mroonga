@@ -159,6 +159,10 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_DISABLE_UNIQUE_RECORD_FILTER
 #endif
 
+#if MYSQL_VERSION_ID >= 80017 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_MYSQL_TYPE_TYPED_ARRAY
+#endif
+
 #if MYSQL_VERSION_ID >= 50604 && !defined(MRN_MARIADB_P)
 #  define MRN_TIMESTAMP_USE_TIMEVAL
 #elif defined(MRN_MARIADB_P)
@@ -453,6 +457,17 @@ typedef uint mrn_alter_table_flags;
 
 #if MYSQL_VERSION_ID >= 80017 && !defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_HA_EXTRA
+#endif
+
+#if defined(MRN_MARIADB_P) && \
+   ((MYSQL_VERSION_ID >= 100320 && MYSQL_VERSION_ID < 100400) || \
+    (MYSQL_VERSION_ID >= 100410))
+#  define MRN_HANDLER_RESTORE_AUTO_INCREMENT_OVERRIDE mrn_override
+#  define MRN_HANDLER_HAVE_RESTORE_AUTO_INCREMENT_NO_ARGUMENT
+#  define MRN_HANDLER_RELEASE_AUTO_INCREMENT_OVERRIDE mrn_override
+#else
+#  define MRN_HANDLER_RESTORE_AUTO_INCREMENT_OVERRIDE
+#  define MRN_HANDLER_RELEASE_AUTO_INCREMENT_OVERRIDE
 #endif
 
 class ha_mroonga;
@@ -834,8 +849,12 @@ public:
   void set_next_insert_id(ulonglong id);
   void get_auto_increment(ulonglong offset, ulonglong increment, ulonglong nb_desired_values,
                           ulonglong *first_value, ulonglong *nb_reserved_values);
-  void restore_auto_increment(ulonglong prev_insert_id);
-  void release_auto_increment();
+  void restore_auto_increment(ulonglong prev_insert_id)
+    MRN_HANDLER_RESTORE_AUTO_INCREMENT_OVERRIDE;
+  void restore_auto_increment() MRN_HANDLER_RESTORE_AUTO_INCREMENT_OVERRIDE;
+#ifdef MRN_HANDLER_HAVE_RESTORE_AUTO_INCREMENT_NO_ARGUMENT
+  void release_auto_increment() MRN_HANDLER_RELEASE_AUTO_INCREMENT_OVERRIDE;
+#endif
   int check_for_upgrade(HA_CHECK_OPT *check_opt);
 #ifdef MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
   int reset_auto_increment(ulonglong value);
@@ -1732,6 +1751,10 @@ private:
                                   ulonglong *nb_reserved_values);
   void wrapper_restore_auto_increment(ulonglong prev_insert_id);
   void storage_restore_auto_increment(ulonglong prev_insert_id);
+#ifdef MRN_HANDLER_HAVE_RESTORE_AUTO_INCREMENT_NO_ARGUMENT
+  void wrapper_restore_auto_increment();
+  void storage_restore_auto_increment();
+#endif
   void wrapper_release_auto_increment();
   void storage_release_auto_increment();
   int wrapper_check_for_upgrade(HA_CHECK_OPT *check_opt);

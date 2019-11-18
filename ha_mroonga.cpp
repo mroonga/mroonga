@@ -17481,6 +17481,38 @@ void ha_mroonga::restore_auto_increment(ulonglong prev_insert_id)
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_HANDLER_HAVE_RESTORE_AUTO_INCREMENT_NO_ARGUMENT
+void ha_mroonga::wrapper_restore_auto_increment()
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->restore_auto_increment();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_restore_auto_increment()
+{
+  MRN_DBUG_ENTER_METHOD();
+  handler::restore_auto_increment();
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::restore_auto_increment()
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    wrapper_restore_auto_increment();
+  } else {
+    storage_restore_auto_increment();
+  }
+  DBUG_VOID_RETURN;
+}
+#endif
+
 void ha_mroonga::wrapper_release_auto_increment()
 {
   MRN_DBUG_ENTER_METHOD();
