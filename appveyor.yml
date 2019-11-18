@@ -85,6 +85,7 @@ build_script:
   - mkdir build
   - cd build
   - cmake ..\source -G "%CMAKE_GENERATOR_NAME%"
+      -DPLUGIN_INNOBASE=DYNAMIC
       -DMRN_GROONGA_EMBED=OFF
       -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF
       -DGRN_WITH_MRUBY=ON
