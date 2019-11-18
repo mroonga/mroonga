@@ -861,10 +861,10 @@ public:
                           ulonglong *first_value, ulonglong *nb_reserved_values);
   void restore_auto_increment(ulonglong prev_insert_id)
     MRN_HANDLER_RESTORE_AUTO_INCREMENT_OVERRIDE;
-  void restore_auto_increment() MRN_HANDLER_RESTORE_AUTO_INCREMENT_OVERRIDE;
 #ifdef MRN_HANDLER_HAVE_RESTORE_AUTO_INCREMENT_NO_ARGUMENT
-  void release_auto_increment() MRN_HANDLER_RELEASE_AUTO_INCREMENT_OVERRIDE;
+  void restore_auto_increment() MRN_HANDLER_RESTORE_AUTO_INCREMENT_OVERRIDE;
 #endif
+  void release_auto_increment() MRN_HANDLER_RELEASE_AUTO_INCREMENT_OVERRIDE;
   int check_for_upgrade(HA_CHECK_OPT *check_opt);
 #ifdef MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
   int reset_auto_increment(ulonglong value);
