@@ -832,7 +832,11 @@ public:
   bool check_and_repair(THD *thd);
   int analyze(THD* thd, HA_CHECK_OPT* check_opt);
   int optimize(THD* thd, HA_CHECK_OPT* check_opt);
-  bool is_fatal_error(int error_num, uint flags=0);
+  bool is_fatal_error(int error_num
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+                      , uint flags
+#endif
+    ) mrn_override;
   bool check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                   uint table_changes);
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
@@ -1634,8 +1638,16 @@ private:
   int storage_analyze(THD* thd, HA_CHECK_OPT* check_opt);
   int wrapper_optimize(THD* thd, HA_CHECK_OPT* check_opt);
   int storage_optimize(THD* thd, HA_CHECK_OPT* check_opt);
-  bool wrapper_is_fatal_error(int error_num, uint flags);
-  bool storage_is_fatal_error(int error_num, uint flags);
+  bool wrapper_is_fatal_error(int error_num
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+                              , uint flags
+#endif
+    );
+  bool storage_is_fatal_error(int error_num
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+                              , uint flags
+#endif
+    );
   bool wrapper_is_comment_changed(TABLE *table1, TABLE *table2);
   bool wrapper_check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                           uint table_changes);

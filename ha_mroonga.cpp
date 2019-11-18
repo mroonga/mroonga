@@ -15616,7 +15616,11 @@ int ha_mroonga::optimize(THD* thd, HA_CHECK_OPT* check_opt)
   DBUG_RETURN(error);
 }
 
-bool ha_mroonga::wrapper_is_fatal_error(int error_num, uint flags)
+bool ha_mroonga::wrapper_is_fatal_error(int error_num
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+                                        , uint flags
+#endif
+  )
 {
   bool res;
   MRN_DBUG_ENTER_METHOD();
@@ -15632,7 +15636,11 @@ bool ha_mroonga::wrapper_is_fatal_error(int error_num, uint flags)
   DBUG_RETURN(res);
 }
 
-bool ha_mroonga::storage_is_fatal_error(int error_num, uint flags)
+bool ha_mroonga::storage_is_fatal_error(int error_num
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+                                        , uint flags
+#endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
 #ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
@@ -15643,15 +15651,27 @@ bool ha_mroonga::storage_is_fatal_error(int error_num, uint flags)
   DBUG_RETURN(is_fatal_error);
 }
 
-bool ha_mroonga::is_fatal_error(int error_num, uint flags)
+bool ha_mroonga::is_fatal_error(int error_num
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+                                        , uint flags
+#endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   bool is_fatal_error;
   if (share->wrapper_mode)
   {
-    is_fatal_error = wrapper_is_fatal_error(error_num, flags);
+    is_fatal_error = wrapper_is_fatal_error(error_num
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+                                            , flags
+#endif
+      );
   } else {
-    is_fatal_error = storage_is_fatal_error(error_num, flags);
+    is_fatal_error = storage_is_fatal_error(error_num
+#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+                                            , flags
+#endif
+      );
   }
   DBUG_RETURN(is_fatal_error);
 }
