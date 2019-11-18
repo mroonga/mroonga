@@ -84,6 +84,7 @@ if test "$GCC" = "yes"; then
   # REMOVEME: workaround for MySQL/MariaDB 5.5.22 :<
   # They use deprecated MYSQL::generate_name style in class definition.
   CHECK_BUILD_FLAG([-Wno-deprecated])
+  CHECK_CXXFLAG([-Werror=overloaded-virtual])
 fi
 
 AC_MSG_CHECKING(for the suffix of plugin shared libraries)
