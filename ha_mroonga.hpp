@@ -470,6 +470,12 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_RELEASE_AUTO_INCREMENT_OVERRIDE
 #endif
 
+#if MYSQL_VERSION_ID >= 50700 && !defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST const
+#else
+#  define MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -897,7 +903,9 @@ protected:
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_LAST
   int index_last(uchar *buf);
 #endif
-  bool primary_key_is_clustered();
+  bool primary_key_is_clustered()
+    MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST
+    mrn_override;
   bool is_fk_defined_on_table_or_index(uint index);
   char *get_foreign_key_create_info();
 #ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
@@ -1775,8 +1783,10 @@ private:
   bool wrapper_has_gap_locks() const;
   bool storage_has_gap_locks() const;
 #endif
-  bool wrapper_primary_key_is_clustered();
-  bool storage_primary_key_is_clustered();
+  bool wrapper_primary_key_is_clustered()
+    MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
+  bool storage_primary_key_is_clustered()
+    MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
   bool wrapper_is_fk_defined_on_table_or_index(uint index);
   bool storage_is_fk_defined_on_table_or_index(uint index);
   char *wrapper_get_foreign_key_create_info();
