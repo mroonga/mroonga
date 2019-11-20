@@ -15,14 +15,12 @@ RUN \
   } | tee /etc/yum.repos.d/MariaDB.repo && \
   yum install -y \
     https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
-    centos-release-scl \
     epel-release && \
   yum groupinstall -y ${quiet} "Development Tools" && \
   yum install -y ${quiet} \
     MariaDB-devel \
     cmake \
     cyrus-sasl-devel \
-    devtoolset-6 \
     gcc \
     gcc-c++ \
     gperf \
