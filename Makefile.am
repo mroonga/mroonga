@@ -71,7 +71,6 @@ update-latest-release: ensure-cutter-source-path
 	  $(VERSION) $(NEW_RELEASE_DATE)		\
 	  packages/rpm/centos/mariadb-mroonga.spec.in	\
 	  packages/rpm/centos/mariadb-10.2-mroonga.spec.in	\
-	  packages/rpm/centos/mariadb-10.3-mroonga.spec.in	\
 	  packages/rpm/centos/mysql56-community-mroonga.spec.in	\
 	  packages/rpm/centos/mysql57-community-mroonga.spec.in	\
 	  packages/rpm/centos/percona-server-56-mroonga.spec.in	\
@@ -102,9 +101,10 @@ update-latest-release: ensure-cutter-source-path
 	  packages/mariadb-10.1-$(PACKAGE)/yum/*.spec.in
 	cd $(top_srcdir) &&						\
 	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"		\
-	  $(PACKAGE)-mariadb-10.3 $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
+	  mariadb-10.3-$(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
 	  $(VERSION) $(NEW_RELEASE_DATE)				\
-	  packages/debian-mariadb-10.3/changelog
+	  packages/mariadb-10.3-$(PACKAGE)/debian/changelog		\
+	  packages/mariadb-10.3-$(PACKAGE)/yum/*.spec.in
 
 update-po:
 	@for lang in $(LOCALES); do						\
