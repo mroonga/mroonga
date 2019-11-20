@@ -44,7 +44,7 @@ install:
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
   - if "%MARIADB_VERSION%" == "10.4.10" (
-      patch -u < ..\mroonga\packages\source\patches\mariadb-10.4.10-windows-build.diff
+      patch -u sql/item_subselect.cc < ..\mroonga\packages\source\patches\mariadb-10.4.10-windows-build.diff
     )
   - rmdir /S /Q storage\mroonga\
   - ps: Get-Content ..\mroonga\version | ForEach-Object { $env:MROONGA_VERSION = $_ }
