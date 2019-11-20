@@ -38,11 +38,14 @@ environment:
 install:
   - set PATH=C:\Ruby26-x64\bin;%PATH%
   - cd ..
-  - choco install -y curl 7zip.commandline
+  - choco install -y curl 7zip.commandline patch
   - curl -O http://ftp.osuosl.org/pub/mariadb/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
+  - if "%MARIADB_VERSION%" == "10.4.10" (
+      patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.4.10-windows-build.diff
+    )
   - rmdir /S /Q storage\mroonga\
   - ps: Get-Content ..\mroonga\version | ForEach-Object { $env:MROONGA_VERSION = $_ }
   - move ..\mroonga storage\mroonga
