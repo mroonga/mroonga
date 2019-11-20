@@ -27,12 +27,21 @@ jobs:
           - centos-8
         package:
           - mariadb-10.1
+          - mariadb-10.2
           - mariadb-10.3
         exclude:
           - os: debian-buster
             package: mariadb-10.1
           - os: debian-buster-i386
             package: mariadb-10.1
+          - os: debian-stretch
+            package: mariadb-10.2
+          - os: debian-stretch-i386
+            package: mariadb-10.2
+          - os: debian-buster
+            package: mariadb-10.2
+          - os: debian-buster-i386
+            package: mariadb-10.2
           - os: debian-stretch
             package: mariadb-10.3
           - os: debian-stretch-i386
@@ -91,7 +100,12 @@ jobs:
       - name: Build archive
         run: |
           make dist
-      - name: Update version
+      - name: Check whether changelog is existed
+        stat:
+          path: packages/${{ matrix.package }}-mroonga/debian/changelog
+        register: changelog
+      - name: Update changelog
+        when: changelog.stat.exists
         run: |
           changelog=packages/${{ matrix.package }}-mroonga/debian/changelog
           OLD_RELEASE=$(grep -E -o '[0-9.]+' ${changelog} | \
@@ -100,6 +114,8 @@ jobs:
                                      head -n1 | \
                                      sed -E -e 's/ -- .+<[^>]+>  //')"
           OLD_RELEASE_DATE=$(date --date="${OLD_RELEASE_DATE_FULL}" +%Y-%m-%d)
+      - name: Update version
+        run: |
           make update-latest-release \
             OLD_RELEASE=${OLD_RELEASE} \
             OLD_RELEASE_DATE=${OLD_RELEASE_DATE} \
