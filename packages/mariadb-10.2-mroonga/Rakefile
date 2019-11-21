@@ -1,7 +1,21 @@
 require_relative "../mroonga-package-task"
 
-ENV["APT_TARGETS"] ||= "debian-stretch"
-ENV["YUM_TARGETS"] ||= "centos-6,centos-7"
+class MroongaMariaDB102PackageTask < MroongaPackageTask
+  def initialize
+    super("mariadb-10.2")
+  end
 
-task = MroongaPackageTask.new("mariadb-10.2")
+  def enable_apt?
+    false
+  end
+
+  def yum_targets_default
+    [
+      "centos-6",
+      "centos-7",
+    ]
+  end
+end
+
+task = MroongaMariaDB102PackageTask.new
 task.define

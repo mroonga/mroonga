@@ -102,7 +102,6 @@ update-latest-release: ensure-cutter-source-path
 	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"		\
 	  mariadb-10.2-$(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
 	  $(VERSION) $(NEW_RELEASE_DATE)				\
-	  packages/mariadb-10.2-$(PACKAGE)/debian/changelog		\
 	  packages/mariadb-10.2-$(PACKAGE)/yum/*.spec.in
 	cd $(top_srcdir) &&						\
 	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"		\
