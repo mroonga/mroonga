@@ -102,16 +102,9 @@ jobs:
           make dist
       - name: Update version
         run: |
-          changelog=packages/${{ matrix.package }}-mroonga/debian/changelog
-          OLD_RELEASE=$(grep -E -o '[0-9.]+' ${changelog} | \
-                          head -n1)
-          OLD_RELEASE_DATE_FULL="$(grep '^ -- ' ${changelog} | \
-                                     head -n1 | \
-                                     sed -E -e 's/ -- .+<[^>]+>  //')"
-          OLD_RELEASE_DATE=$(date --date="${OLD_RELEASE_DATE_FULL}" +%Y-%m-%d)
           make update-latest-release \
-            OLD_RELEASE=${OLD_RELEASE} \
-            OLD_RELEASE_DATE=${OLD_RELEASE_DATE} \
+            OLD_RELEASE=$(cat version) \
+            OLD_RELEASE_DATE=$(date +%Y-%m-%d) \
             NEW_RELEASE_DATE=$(date +%Y-%m-%d)
       - name: Build with Docker
         run: |
