@@ -15,8 +15,8 @@ RUN \
   apt install -y -V ${quiet} \
     wget && \
   { \
-    echo "deb [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] http://packages.groonga.org/debian/ stretch main"; \
-    echo "deb-src [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] http://packages.groonga.org/debian/ stretch main"; \
+    echo "deb [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] http://packages.groonga.org/debian/ buster main"; \
+    echo "deb-src [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] http://packages.groonga.org/debian/ buster main"; \
   } | tee /etc/apt/sources.list.d/groonga.list && \
   wget -O /usr/share/keyrings/groonga-archive-keyring.gpg \
     https://packages.groonga.org/debian/groonga-archive-keyring.gpg && \
