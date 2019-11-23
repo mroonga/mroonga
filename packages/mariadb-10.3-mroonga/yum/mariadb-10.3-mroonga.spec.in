@@ -1,16 +1,16 @@
-%define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
+%define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:6}
 
 %define mariadb_version_default 10.3.20
 %define mariadb_release_default 1
 %define mariadb_download_base_url_default https://downloads.mariadb.org/f
-%if %{_centos_ver} == 7
-%define mariadb_dist_default    el7.centos
-%define service_status() (systemctl status %1)
-%define service_control() (systemctl %2 %1)
+%if %{_centos_ver} >= 7
+%define mariadb_dist_default    el%{_centos_ver}.centos
+%define service_status()	(systemctl status %1)
+%define service_control()	(systemctl %2 %1)
 %else
 %define mariadb_dist_default    el6
-%define service_status() (/sbin/service %1 status)
-%define service_control() (/sbin/service %1 %2)
+%define service_status()	(/sbin/service %1 status)
+%define service_control()	(/sbin/service %1 %2)
 %endif
 
 %define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}

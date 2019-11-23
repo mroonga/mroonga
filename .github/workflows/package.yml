@@ -35,28 +35,30 @@ jobs:
             package: mariadb-10.1
           - os: debian-buster-i386
             package: mariadb-10.1
-          - os: debian-stretch
-            package: mariadb-10.2
-          - os: debian-stretch-i386
-            package: mariadb-10.2
-          - os: debian-buster
-            package: mariadb-10.2
-          - os: debian-buster-i386
-            package: mariadb-10.2
-          - os: debian-stretch
-            package: mariadb-10.3
-          - os: debian-stretch-i386
-            package: mariadb-10.3
-          - os: debian-buster
-            package: mariadb-10.4
-          - os: debian-buster-i386
-            package: mariadb-10.4
-          - os: debian-stretch
-            package: mariadb-10.4
-          - os: debian-stretch-i386
-            package: mariadb-10.4
           - os: centos-8
             package: mariadb-10.1
+          - os: debian-stretch
+            package: mariadb-10.2
+          - os: debian-stretch-i386
+            package: mariadb-10.2
+          - os: debian-buster
+            package: mariadb-10.2
+          - os: debian-buster-i386
+            package: mariadb-10.2
+          - os: centos-8
+            package: mariadb-10.2
+          - os: debian-stretch
+            package: mariadb-10.3
+          - os: debian-stretch-i386
+            package: mariadb-10.3
+          - os: debian-buster
+            package: mariadb-10.4
+          - os: debian-buster-i386
+            package: mariadb-10.4
+          - os: debian-stretch
+            package: mariadb-10.4
+          - os: debian-stretch-i386
+            package: mariadb-10.4
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
