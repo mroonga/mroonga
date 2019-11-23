@@ -2,11 +2,11 @@
 
 %define mariadb_download_base_url_default https://downloads.mariadb.org/f
 %if %{_centos_ver} == 7
-%define mariadb_version_default 10.4.8
+%define mariadb_version_default 10.4.10
 %define mariadb_release_default 1
 %define mariadb_dist_default    el7.centos
 %else
-%define mariadb_version_default 10.4.8
+%define mariadb_version_default 10.4.10
 %define mariadb_release_default 1
 %define mariadb_dist_default    el6
 %endif
@@ -76,7 +76,7 @@ tar xf ${mariadb_tar_gz}
 %build
 mariadb_source=mariadb-%{_mariadb_version}
 pushd ${mariadb_source}
-cmake%{?el6:28} . \
+cmake . \
   -DBUILD_CONFIG=mysql_release \
   -DRPM=centos%{_centos_ver} \
   -DPLUGIN_ARCHIVE=NO \
