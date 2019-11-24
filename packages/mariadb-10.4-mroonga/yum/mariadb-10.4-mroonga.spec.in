@@ -3,6 +3,11 @@
 %define mariadb_download_base_url_default https://downloads.mariadb.org/f
 %define mariadb_version_default 10.4.10
 %define mariadb_release_default 1
+%if %{_centos_ver} >= 8
+%define mariadb_package_name_prefix mariadb
+%else
+%define mariadb_package_name_prefix MariaDB
+%endif
 %if %{_centos_ver} >= 7
 %define mariadb_dist_default    el%{_centos_ver}.centos
 %define service_status()	(systemctl status %1)
@@ -39,9 +44,9 @@ BuildRequires:	gcc
 BuildRequires:	gcc-c++
 BuildRequires:	cmake
 BuildRequires:	numactl-devel
-BuildRequires:	MariaDB-devel = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
-Requires:	MariaDB-server = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
-Requires:	MariaDB-client = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+BuildRequires:	%{mariadb_package_name_prefix}-devel = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	%{mariadb_package_name_prefix}-server = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	%{mariadb_package_name_prefix}-client = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
 

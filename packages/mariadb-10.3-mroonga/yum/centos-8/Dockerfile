@@ -18,7 +18,6 @@ RUN \
     epel-release && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=PowerTools -y ${quiet} \
-    MariaDB-devel \
     cmake \
     cyrus-sasl-devel \
     gcc \
@@ -31,6 +30,7 @@ RUN \
     libcurl-devel \
     libtool \
     make \
+    mariadb-devel \
     ncurses-devel \
     numactl-devel \
     openldap-devel \
