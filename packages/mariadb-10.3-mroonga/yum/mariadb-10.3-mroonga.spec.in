@@ -6,7 +6,7 @@
 %if %{_centos_ver} == 7
 %define mariadb_dist_default    el%{_centos_ver}.centos
 %else
-%define mariadb_dist_default    el6%{_centos_ver}
+%define mariadb_dist_default    el%{_centos_ver}
 %endif
 %if %{_centos_ver} >= 7
 %define service_status()	(systemctl status %1)
