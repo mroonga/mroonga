@@ -17,7 +17,10 @@ RUN \
     https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
     epel-release && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
-  dnf install --enablerepo=PowerTools -y ${quiet} \
+  dnf install -y ${quiet} \
+    --enablerepo=PowerTools \
+    --disablerepo=AppStream \
+    MariaDB-devel \
     cmake \
     cyrus-sasl-devel \
     gcc \
@@ -30,7 +33,6 @@ RUN \
     libcurl-devel \
     libtool \
     make \
-    mariadb-devel \
     ncurses-devel \
     numactl-devel \
     openldap-devel \
