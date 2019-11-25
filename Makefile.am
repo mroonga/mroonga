@@ -93,7 +93,8 @@ update-latest-release: ensure-cutter-source-path
 	  $(VERSION) $(NEW_RELEASE_DATE)			\
 	  packages/debian-5.7/changelog
 	cd $(top_srcdir)/packages &&		\
-	  rake version:update
+	  rake version:update			\
+	  RELEASE_TIME=$(NEW_RELEASE_DATE)
 
 update-po:
 	@for lang in $(LOCALES); do						\
