@@ -97,7 +97,7 @@ jobs:
       - name: Clone dependencies
         run: |
           cd ..
-          git clone --depth 1 https://github.com/apache/arrow.git
+          git clone --recursive https://github.com/groonga/groonga.git
           git clone --depth 1 https://github.com/clear-code/cutter.git
           git clone --depth 1 https://github.com/mroonga/mroonga.github.com.git
       - name: Generate configure
@@ -133,7 +133,7 @@ jobs:
               ;;
           esac
         env:
-          APACHE_ARROW_REPOSITORY: ../../../arrow
+          GROONGA_REPOSITORY: ../../../groonga
       - uses: actions/upload-artifact@master
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}

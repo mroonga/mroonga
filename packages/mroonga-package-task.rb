@@ -2,21 +2,14 @@ require "json"
 require "pathname"
 require "pp"
 
-apache_arrow_repository = ENV["APACHE_ARROW_REPOSITORY"]
-if apache_arrow_repository.nil?
-  raise "Specify APACHE_ARROW_REPOSITORY environment variable"
+groonga_repository = ENV["GROONGA_REPOSITORY"]
+if groonga_repository.nil?
+  raise "Specify GROONGA_REPOSITORY environment variable"
 end
-require "#{apache_arrow_repository}/dev/tasks/linux-packages/package-task"
+require "#{groonga_repository}/packages/packages-groonga-org-package-task"
 
-class MroongaPackageTask < PackageTask
-  class << self
-    def apache_arrow_repository=(repository)
-      @@apache_arrow_repository = repository
-    end
-  end
-
+class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def initialize(mysql_package)
-    @apache_arrow_repository = Pathname(@@apache_arrow_repository)
     @mysql_package = mysql_package
     super("#{@mysql_package}-mroonga", detect_version, Time.now.utc)
     @original_archive_base_name = "mroonga-#{@version}"
@@ -123,5 +116,3 @@ class MroongaPackageTask < PackageTask
     end
   end
 end
-
-MroongaPackageTask.apache_arrow_repository = apache_arrow_repository

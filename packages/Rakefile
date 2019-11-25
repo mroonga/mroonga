@@ -1,0 +1,17 @@
+packages = [
+  "mariadb-10.1-mroonga",
+  "mariadb-10.2-mroonga",
+  "mariadb-10.3-mroonga",
+  "mariadb-10.4-mroonga",
+]
+
+namespace :version do
+  desc "Update versions"
+  task :update do
+    packages.each do |package|
+      cd(package) do
+        ruby("-S", "rake", "version:update")
+      end
+    end
+  end
+end
