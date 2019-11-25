@@ -30,7 +30,7 @@ jobs:
           - mariadb-10.2
           - mariadb-10.3
           - mariadb-10.4
-          - mysql56-community
+          - mysql-5.6
         exclude:
           - os: debian-buster
             package: mariadb-10.1
@@ -63,15 +63,15 @@ jobs:
           - os: centos-6
             package: mariadb-10.4
           - os: debian-buster
-            package: mysql56-community
+            package: mysql-5.6
           - os: debian-buster-i386
-            package: mysql56-community
+            package: mysql-5.6
           - os: debian-stretch
-            package: mysql56-community
+            package: mysql-5.6
           - os: debian-stretch-i386
-            package: mysql56-community
+            package: mysql-5.6
           - os: centos-8
-            package: mysql56-community
+            package: mysql-5.6
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
