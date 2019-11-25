@@ -3,6 +3,7 @@ packages = [
   "mariadb-10.2-mroonga",
   "mariadb-10.3-mroonga",
   "mariadb-10.4-mroonga",
+  "mysql56-community-mroonga",
 ]
 
 namespace :version do
