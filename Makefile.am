@@ -69,8 +69,6 @@ update-latest-release: ensure-cutter-source-path
 	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"	\
 	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)		\
 	  $(VERSION) $(NEW_RELEASE_DATE)			\
-	  packages/rpm/centos/mariadb-mroonga.spec.in		\
-	  packages/rpm/centos/mysql56-community-mroonga.spec.in	\
 	  packages/rpm/centos/mysql57-community-mroonga.spec.in	\
 	  packages/rpm/centos/percona-server-56-mroonga.spec.in	\
 	  packages/rpm/centos/percona-server-57-mroonga.spec.in	\
