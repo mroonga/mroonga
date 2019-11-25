@@ -84,11 +84,6 @@ update-latest-release: ensure-cutter-source-path
 	  packages/debian-5.5/changelog
 	cd $(top_srcdir) &&					\
 	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"	\
-	  $(PACKAGE)-5.6 $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
-	  $(VERSION) $(NEW_RELEASE_DATE)			\
-	  packages/debian-5.6/changelog
-	cd $(top_srcdir) &&					\
-	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"	\
 	  $(PACKAGE)-5.7 $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
 	  $(VERSION) $(NEW_RELEASE_DATE)			\
 	  packages/debian-5.7/changelog

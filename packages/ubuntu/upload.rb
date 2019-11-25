@@ -38,14 +38,10 @@ class Uploader
 
     @ubuntu_code_names.zip(@ubuntu_versions) do |code_name, version|
       mysql55_version = @mysql55_versions[code_name]
-      mysql56_version = @mysql56_versions[code_name]
       mysql57_version = @mysql57_versions[code_name]
       mariadb10_1_version = @mariadb10_1_versions[code_name]
       if mysql55_version
         upload(code_name, version, "5.5", mysql55_version)
-      end
-      if mysql56_version
-        upload(code_name, version, "5.6", mysql56_version)
       end
       if mysql57_version
         upload(code_name, version, "5.7", mysql57_version)
@@ -84,7 +80,6 @@ allow_unsigned_uploads = 0
   def ensure_mysql_version
     @mysql_versions = {}
     @mysql55_versions = {}
-    @mysql56_versions = {}
     @mysql57_versions = {}
     @mariadb10_1_versions = {}
     @ubuntu_code_names.zip(@ubuntu_versions) do |code_name, version|
@@ -99,8 +94,6 @@ allow_unsigned_uploads = 0
               @mysql_versions[code_name] = $1
             when /\Amysql-server-5\.5 \((.+?)[\s)]/
               @mysql55_versions[code_name] = $1
-            when /\Amysql-server-5\.6 \((.+?)[\s)]/
-              @mysql56_versions[code_name] = $1
             when /\Amysql-server-5\.7 \((.+?)[\s)]/
               @mysql57_versions[code_name] = $1
             when /\Amariadb-server-10\.1 \((.+?)[\s)]/

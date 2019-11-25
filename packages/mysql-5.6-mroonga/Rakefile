@@ -1,8 +1,9 @@
 require_relative "../mroonga-package-task"
 
-class MySQL56CommunityMroongaPackageTask < MroongaPackageTask
+class MySQL56MroongaPackageTask < MroongaPackageTask
   def initialize
-    super("mysql56-community")
+    super("mysql-5.6")
+    @rpm_package = "mysql56-community-mroonga"
   end
 
   def enable_apt?
@@ -17,5 +18,5 @@ class MySQL56CommunityMroongaPackageTask < MroongaPackageTask
   end
 end
 
-task = MySQL56CommunityMroongaPackageTask.new
+task = MySQL56MroongaPackageTask.new
 task.define
