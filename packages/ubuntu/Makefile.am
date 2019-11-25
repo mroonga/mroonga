@@ -3,8 +3,6 @@ UBUNTU_VERSIONS = 16.04,18.04,19.04,19.10
 SOURCE = ../$(PACKAGE)-$(VERSION).tar.gz
 SOURCE_55_BASE = $(PACKAGE)-5.5
 SOURCE_55 = $(SOURCE_55_BASE)_$(VERSION).orig.tar.gz
-SOURCE_57_BASE = $(PACKAGE)-5.7
-SOURCE_57 = $(SOURCE_57_BASE)_$(VERSION).orig.tar.gz
 SOURCE_MARIADB_10_1_BASE = $(PACKAGE)-mariadb-10.1
 SOURCE_MARIADB_10_1 = $(SOURCE_MARIADB_10_1_BASE)_$(VERSION).orig.tar.gz
 
@@ -28,7 +26,6 @@ upload: source ensure-launchpad-configuration
 	  --pgp-sign-key '$(LAUNCHPAD_UPLOADER_PGP_KEY)'
 
 source: $(SOURCE_55)
-source: $(SOURCE_57)
 source: $(SOURCE_MARIADB_10_1)
 
 $(SOURCE):
@@ -39,12 +36,6 @@ $(SOURCE_55): $(SOURCE)
 	mv $(PACKAGE)-$(VERSION) $(SOURCE_55_BASE)-$(VERSION)
 	tar cfz $(SOURCE_55) $(SOURCE_55_BASE)-$(VERSION)
 	rm -r $(SOURCE_55_BASE)-$(VERSION)
-
-$(SOURCE_57): $(SOURCE)
-	tar xf $(SOURCE)
-	mv $(PACKAGE)-$(VERSION) $(SOURCE_57_BASE)-$(VERSION)
-	tar cfz $(SOURCE_57) $(SOURCE_57_BASE)-$(VERSION)
-	rm -r $(SOURCE_57_BASE)-$(VERSION)
 
 $(SOURCE_MARIADB_10_1): $(SOURCE)
 	tar xf $(SOURCE)
