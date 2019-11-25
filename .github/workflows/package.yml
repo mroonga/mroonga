@@ -119,6 +119,8 @@ jobs:
             OLD_RELEASE=$(cat version) \
             OLD_RELEASE_DATE=$(date +%Y-%m-%d) \
             NEW_RELEASE_DATE=$(date +%Y-%m-%d)
+        env:
+          GROONGA_REPOSITORY: ../../../groonga
       - name: Build with Docker
         run: |
           cd packages/${{ matrix.package }}-mroonga

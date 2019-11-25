@@ -92,7 +92,7 @@ update-latest-release: ensure-cutter-source-path
 	  $(PACKAGE)-5.7 $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
 	  $(VERSION) $(NEW_RELEASE_DATE)			\
 	  packages/debian-5.7/changelog
-	cd $(top_srcdir)/pakcages &&		\
+	cd $(top_srcdir)/packages &&		\
 	  rake version:update
 
 update-po:
