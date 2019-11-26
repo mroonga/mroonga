@@ -1,0 +1,27 @@
+require_relative "../mroonga-package-task"
+
+class MySQLServer80MroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("mysql-server-8.0", "mysql80-community-mroonga")
+    @rpm_package = "mysql80-community-mroonga"
+  end
+
+  def apt_targets_default
+    []
+  end
+
+  def ubuntu_targets_default
+    []
+  end
+
+  def yum_targets_default
+    [
+      "centos-6",
+      "centos-7",
+      "centos-8",
+    ]
+  end
+end
+
+task = MySQLServer80MroongaPackageTask.new
+task.define
