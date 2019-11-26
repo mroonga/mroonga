@@ -1,0 +1,50 @@
+#!/usr/bin/make -f
+# -*- makefile-gmake -*-
+#
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+export MYSQL_VERSION_FULL := $(shell apt-cache show mysql-server-5.7 | grep Version | head -n 1 | awk '{print $$2}')
+export MYSQL_VERSION := $(shell apt-cache show mysql-server-5.7 | grep Version | head -n 1 | awk '{print $$2}' | awk -F '-' '{print $$1}')
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	archive_base=mysql-$(MYSQL_VERSION);				\
+	archive=mysql-5.7_$(MYSQL_VERSION).orig.tar.gz;			\
+	debian=mysql-5.7_$(MYSQL_VERSION_FULL).debian.tar.xz;		\
+	path=main/m/mysql-5.7;						\
+	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
+	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
+	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
+	else								\
+	  base_url=http://ftp.debian.org/debian/pool;			\
+	  security_base_url=http://security.debian.org/pool/updates;	\
+	fi;								\
+	wget $${security_base_url}/$${path}/$${archive} ||		\
+	  wget $${base_url}/$${path}/$${archive};			\
+	wget $${security_base_url}/$${path}/$${debian} ||		\
+	  wget $${base_url}/$${path}/$${debian};			\
+	tar xf $${archive};						\
+	(cd $${archive_base} &&						\
+	  tar xf ../$${debian} &&					\
+	  debian/rules override_dh_auto_configure);			\
+	dh_auto_configure --						\
+	  --with-mysql-source=./$${archive_base}			\
+	  --with-mysql-build=./$${archive_base}/builddir
+
+# disable 'make check'.
+override_dh_auto_test:
+
+override_dh_install:
+	mv debian/tmp/usr/share/doc/mroonga/ \
+	  debian/tmp/usr/share/doc/mysql-server-5.7-mroonga-doc/
+	dh_install
+#	if test -x /usr/bin/dh_apparmor; then			\
+#	  dh_apparmor						\
+#	    -pmysql-server-5.7-mroonga				\
+#	    --profile-name=usr.lib.mysql.plugin.ha_mroonga;	\
+#	fi
