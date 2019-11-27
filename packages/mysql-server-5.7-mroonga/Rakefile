@@ -1,0 +1,33 @@
+require_relative "../mroonga-package-task"
+
+class MySQLServer57MroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("mysql-server-5.7", "mysql57-community-mroonga")
+  end
+
+  def enable_apt?
+    true
+  end
+
+  def apt_targets_default
+    []
+  end
+
+  def ubuntu_targets_default
+    [
+      ["bionic", "18.04"],
+      ["cosmic", "18.10"],
+      ["disco", "19.04"],
+    ]
+  end
+
+  def yum_targets_default
+    [
+      "centos-6",
+      "centos-7",
+    ]
+  end
+end
+
+task = MySQLServer57MroongaPackageTask.new
+task.define

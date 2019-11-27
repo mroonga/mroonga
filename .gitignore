@@ -55,6 +55,7 @@
 /packages/*/apt/repositories/
 /packages/*/apt/tmp/
 /packages/*/debian.*
+/packages/*/ubuntu/
 /packages/*/yum/build.sh
 /packages/*/yum/env.sh
 /packages/*/yum/repositories/

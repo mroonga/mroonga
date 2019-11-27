@@ -9,16 +9,17 @@ end
 require "#{groonga_repository}/packages/packages-groonga-org-package-task"
 
 class MroongaPackageTask < PackagesGroongaOrgPackageTask
-  def initialize(mysql_package)
+  def initialize(mysql_package, rpm_package)
     @mysql_package = mysql_package
     super("#{@mysql_package}-mroonga", detect_version, detect_release_time)
+    @rpm_package = rpm_package
     @original_archive_base_name = "mroonga-#{@version}"
     @original_archive_name = "#{@original_archive_base_name}.tar.gz"
   end
 
   def define
     super
-    define_debian_control_task
+    define_debian_control_tasks
   end
 
   private
@@ -39,6 +40,10 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   end
 
   def detect_mysql_version(distribution, code_name)
+    __send__("detect_mysql_version_#{distribution}", code_name)
+  end
+
+  def detect_mysql_version_debian(code_name)
     package_info_url = "https://sources.debian.org/api/src/#{@mysql_package}/"
     URI.open(package_info_url) do |response|
       info = JSON.parse(response.read)
@@ -50,6 +55,35 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       message << PP.pp(info, "")
       raise message
     end
+  end
+
+  def detect_ubuntu_package_version(code_name, package_name)
+    @ubuntu_package_versions ||= {}
+    cache_key = [code_name, package_name]
+    version = @ubuntu_package_versions[cache_key]
+    return version if version
+    source_names = [code_name, "#{code_name}-updates"]
+    source_names.each do |source_name|
+      all_packages_url =
+        "https://packages.ubuntu.com/#{source_name}/allpackages?format=txt.gz"
+      URI.open(all_packages_url) do |all_packages|
+        all_packages.each_line do |line|
+          case line
+          when /\A#{Regexp.escape(package_name)} \((.+?)[\s)]/o
+            version = $1
+          end
+        end
+      end
+    end
+    if version.nil?
+      raise "No version information: <#{package_name}>: <#{code_name}>"
+    end
+    @ubuntu_package_versions[cache_key] = version
+    version
+  end
+
+  def detect_mysql_version_ubuntu(code_name)
+    detect_ubuntu_package_version(code_name, @mysql_package)
   end
 
   def detect_required_groonga_version
@@ -74,32 +108,72 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     end
   end
 
-  def define_debian_control_task
-    control_paths = []
+  def debian_remove_versionless_control_entry?(distribution, code_name)
+    return false unless distribution == "ubuntu"
+    versionless_mysql_package = @mysql_package.gsub(/\-[\d.]+\z/, "")
+    detect_ubuntu_package_version(code_name, @mysql_package) !=
+      detect_ubuntu_package_version(code_name, @mysql_package)
+  end
+
+  def define_debian_control_task(target)
     debian_directory = package_directory + "debian"
     control_in_path = debian_directory + "control.in"
-    apt_targets.each do |target|
-      distribution, code_name, _architecture = target.split("-", 3)
-      target_debian_directory = package_directory + "debian.#{target}"
-      control_path = target_debian_directory + "control"
-      control_paths << control_path.to_s
-      file control_path.to_s => control_in_path.to_s do |task|
-        control_in_content = control_in_path.read
-        control_content =
-          control_in_content
-            .gsub(/@REQUIRED_GROONGA_VERSION@/,
-                  detect_required_groonga_version)
-            .gsub(/@MYSQL_VERSION@/,
-                  detect_mysql_version(distribution, code_name))
-        rm_rf(target_debian_directory)
-        cp_r(debian_directory, target_debian_directory)
-        control_path.open("w") do |file|
-          file.puts(control_content)
+    distribution, code_name, _architecture = target.split("-", 3)
+    target_debian_directory = package_directory + "debian.#{target}"
+    control_path = target_debian_directory + "control"
+    file control_path.to_s => control_in_path.to_s do |task|
+      control_in_content = control_in_path.read
+      control_content =
+        control_in_content
+          .gsub(/@REQUIRED_GROONGA_VERSION@/,
+                detect_required_groonga_version)
+          .gsub(/@MYSQL_VERSION@/,
+                detect_mysql_version(distribution, code_name))
+      rm_rf(target_debian_directory)
+      cp_r(debian_directory, target_debian_directory)
+      if debian_remove_versionless_control_entry?(distribution, code_name)
+        in_mysql_server_mroonga = false
+        replaced_control_content = ""
+        control_content.each_line do |line|
+          case line.chomp
+          when ""
+            if in_mysql_server_mroonga
+              in_mysql_server_mroonga = false
+            else
+              replaced_control_content.print(line)
+            end
+          when "Package: mysql-server-mroonga"
+            in_mysql_server_mroonga = true
+          else
+            next if in_mysql_server_mroonga
+            replaced_control_content.print(line)
+          end
         end
+        control_content = replaced_control_content
+      end
+      control_path.open("w") do |file|
+        file.puts(control_content)
       end
     end
+    control_path.to_s
+  end
+
+  def define_debian_control_tasks
+    apt_control_paths = []
+    apt_targets.each do |target|
+      apt_control_paths << define_debian_control_task(target)
+    end
     namespace :apt do
-      task :build => control_paths
+      task :build => apt_control_paths
+    end
+
+    namespace :ubuntu do
+      namespace :upload do
+        ubuntu_targets.each do |code_name, version|
+          control_path = define_debian_control_task("ubuntu-#{code_name}")
+          task code_name => control_path
+        end
+      end
     end
   end
 
