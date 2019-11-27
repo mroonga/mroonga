@@ -53,6 +53,8 @@ jobs:
             package: mariadb-server-10.3
           - os: debian-stretch-i386
             package: mariadb-server-10.3
+          - os: centos-6
+            package: mariadb-server-10.3
           - os: debian-buster
             package: mariadb-server-10.4
           - os: debian-buster-i386
