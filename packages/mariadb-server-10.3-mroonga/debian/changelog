@@ -1,4 +1,4 @@
-mariadb-server-10.3-mroonga (9.09-1) unstable; urgency=low
+mroonga-mariadb-10.3 (9.09-1) unstable; urgency=low
 
   * New upstream release.
 

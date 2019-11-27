@@ -1,4 +1,4 @@
-Source: mariadb-10.1-mroonga
+Source: mariadb-server-10.1-mroonga
 Section: database
 Priority: optional
 Maintainer: Kouhei Sutou <kou@clear-code.com>

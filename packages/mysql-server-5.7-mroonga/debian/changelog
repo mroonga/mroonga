@@ -1,4 +1,4 @@
-mysql-server-5.7-mroonga (9.09-1) unstable; urgency=low
+mroonga-5.7 (9.09-1) unstable; urgency=low
 
   * New upstream release.
 
