@@ -21,6 +21,39 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+msgid "Release 9.10 - 2019-11-29"
+msgstr "9.10リリース - 2019-11-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.43, 10.2.29, "
+"10.3.20, 10.4.10"
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.1.43、10.2.29、10.3.20、10.4.10をサポート"
+"しました。"
+
+msgid "[:doc:`/install/ubuntu`] Added support for Ubuntu 19.10 (Eoan Ermine)"
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 19.10 (Eoan Ermine)をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that ``dpkg --configure`` will fail when we install the package "
+"on Ubuntu 18.04 on WSL. [GitHub#282][Patched by ochaochaocha3]"
+msgstr ""
+"WSL上のUbuntu 18.04でパッケージインストール時に dpkg --configure が失敗する問"
+"題を修正しました。 [GitHub#282][ochaochaocha3さんがパッチ提供]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "ochaochaocha3"
+msgstr "ochaochaocha3さん"
+
 msgid "Release 9.09 - 2019-10-30"
 msgstr "9.09リリース - 2019-10-30"
 
@@ -31,18 +64,12 @@ msgstr ""
 "今回のバージョンからパフォーマンスが低下しているかもしれません。もし、以前よ"
 "りパフォーマンスが低下していたら、是非、再現手順を報告してほしいです。"
 
-msgid "Improvements"
-msgstr "改良"
-
 msgid ""
 "[:doc:`/install/centos`] Added support for MySQL 5.6.46, 5.7.28, and "
 "8.0.18(with restrictions)."
 msgstr ""
 "[:doc:`/install/centos`] MySQL 5.6.46と5.7.28とMySQL 8.0.18(制限あり)をサポー"
 "トしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid "Fixed a build error a package for MySQL 8.0.18."
 msgstr "MySQL 8.0.18向けのパッケージのビルドエラーを修正しました。"
@@ -67,9 +94,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/debian`] Debian 10(buster) に mariadb-server-10.3-mroonga を"
 "インストールできない問題を修正しました。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "kajiys"
 msgstr "kajiysさん"
