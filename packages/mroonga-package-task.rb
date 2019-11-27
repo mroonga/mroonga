@@ -44,14 +44,17 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   end
 
   def detect_mysql_version_debian(code_name)
-    package_info_url = "https://sources.debian.org/api/src/#{@mysql_package}/"
+    mysql_source_package = @mysql_package.gsub(/-server/, "")
+    package_info_url =
+      "https://sources.debian.org/api/src/#{mysql_source_package}/"
     URI.open(package_info_url) do |response|
       info = JSON.parse(response.read)
       info["versions"].each do |version|
         next unless version["suites"].include?(code_name)
         return version["version"]
       end
-      message = "No version information: <#{@mysql_package}>: <#{code_name}>: "
+      message = "No version information: "
+      message << "<#{mysql_source_package}>: <#{code_name}>: "
       message << PP.pp(info, "")
       raise message
     end
