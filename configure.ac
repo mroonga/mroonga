@@ -531,7 +531,6 @@ AC_CONFIG_FILES([
   packages/yum/Makefile
   packages/apt/Makefile
   packages/source/Makefile
-  packages/ubuntu/Makefile
   packages/windows/Makefile
   tools/Makefile
   doc/Makefile
