@@ -5666,10 +5666,3 @@ msgid ""
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
-
-#~ msgid "[:doc:`/install/centos`] Added support for MariaDB 10.1.43, 10.2.29"
-#~ msgstr ""
-#~ "[:doc:`/install/centos`] MariaDB 10.1.43, 10.2.29をサポートしました。"
-
-#~ msgid "[:doc:`/install/centos`] Added support for MariaDB 10.1.43"
-#~ msgstr "[:doc:`/install/centos`] MariaDB 10.1.43をサポートしました。"
