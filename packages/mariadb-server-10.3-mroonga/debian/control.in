@@ -1,4 +1,4 @@
-Source: mariadb-10.1-mroonga
+Source: mariadb-server-10.3-mroonga
 Section: database
 Priority: optional
 Maintainer: Kouhei Sutou <kou@clear-code.com>
@@ -8,7 +8,7 @@ Build-Depends:
 	pkg-config,
 	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
 	groonga-normalizer-mysql,
-	libmariadb-client-lgpl-dev,
+	libmariadb-client-lgpl-dev-compat,
 	libmariadbd-dev,
 	libssl-dev,
 	wget,
@@ -32,7 +32,8 @@ Build-Depends:
 	po-debconf,
 	psmisc,
 	unixodbc-dev,
-	zlib1g-dev
+	zlib1g-dev,
+	autoconf-archive
 Standards-Version: 3.9.1
 Homepage: http://mroonga.org/
 
@@ -40,7 +41,7 @@ Package: mariadb-server-mroonga
 Section: database
 Architecture: any
 Depends:
-	mariadb-server-10.1-mroonga (= ${binary:Version}),
+	mariadb-server-10.3-mroonga (= ${binary:Version}),
 	mariadb-server (= @MYSQL_VERSION@)
 Description: A fast fulltext searchable storage engine for MariaDB.
  This package is a metapackage depending on the latest version.
@@ -48,33 +49,33 @@ Description: A fast fulltext searchable storage engine for MariaDB.
  It is based on Groonga, a fast fulltext search engine and column store.
  Groonga is good at real time update.
  .
- This package provides a storage engine MariaDB 10.1 as a shared library.
+ This package provides a storage engine MariaDB 10.3 as a shared library.
  This provides "Mroonga" storage engine. It means you can use
  "ENGINE = Mroonga" in "CREATE TABLE".
 
-Package: mariadb-server-10.1-mroonga
+Package: mariadb-server-10.3-mroonga
 Section: database
 Architecture: any
 Depends:
 	${misc:Depends},
 	${shlibs:Depends},
 	libgroonga0 (>= @REQUIRED_GROONGA_VERSION@),
-	mariadb-server-10.1 (= @MYSQL_VERSION@),
-	mariadb-server-core-10.1 (= @MYSQL_VERSION@),
+	mariadb-server-10.3 (= @MYSQL_VERSION@),
+	mariadb-server-core-10.3 (= @MYSQL_VERSION@),
 	groonga-normalizer-mysql,
 	lsb-release
 Conflicts:
 	mariadb-plugin-mroonga
-Description: A fast fulltext searchable storage engine for MariaDB 10.1.
+Description: A fast fulltext searchable storage engine for MariaDB 10.3.
  Mroonga is a fast fulltext searchable storage engine for MariaDB.
  It is based on Groonga, a fast fulltext search engine and column store.
  Groonga is good at real time update.
  .
- This package provides a storage engine MariaDB 10.1 as a shared library.
+ This package provides a storage engine MariaDB 10.3 as a shared library.
  This provides "Mroonga" storage engine. It means you can use
  "ENGINE = Mroonga" in "CREATE TABLE".
 
-Package: mariadb-server-10.1-mroonga-doc
+Package: mariadb-server-10.3-mroonga-doc
 Section: doc
 Architecture: all
 Depends:

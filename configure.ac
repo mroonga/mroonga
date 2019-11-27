@@ -531,7 +531,6 @@ AC_CONFIG_FILES([
   packages/yum/Makefile
   packages/apt/Makefile
   packages/source/Makefile
-  packages/ubuntu/Makefile
   packages/windows/Makefile
   tools/Makefile
   doc/Makefile
@@ -548,9 +547,7 @@ AC_OUTPUT([
   mysql-test/mroonga/storage/information_schema/r/plugins.result
   mysql-test/mroonga/storage/variable/r/version.result
   packages/debian-5.5/control
-  packages/debian-5.7/control
   packages/apt/env.sh
-  packages/rpm/centos/mysql57-community-mroonga.spec
   packages/rpm/centos/mysql80-community-mroonga.spec
   packages/rpm/centos/percona-server-56-mroonga.spec
   packages/rpm/centos/percona-server-57-mroonga.spec

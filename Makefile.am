@@ -69,7 +69,6 @@ update-latest-release: ensure-cutter-source-path
 	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"	\
 	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)		\
 	  $(VERSION) $(NEW_RELEASE_DATE)			\
-	  packages/rpm/centos/mysql57-community-mroonga.spec.in	\
 	  packages/rpm/centos/percona-server-56-mroonga.spec.in	\
 	  packages/rpm/centos/percona-server-57-mroonga.spec.in	\
 	  doc/source/install/*.rst				\
@@ -80,11 +79,6 @@ update-latest-release: ensure-cutter-source-path
 	  $(PACKAGE)-5.5 $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
 	  $(VERSION) $(NEW_RELEASE_DATE)			\
 	  packages/debian-5.5/changelog
-	cd $(top_srcdir) &&					\
-	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"	\
-	  $(PACKAGE)-5.7 $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
-	  $(VERSION) $(NEW_RELEASE_DATE)			\
-	  packages/debian-5.7/changelog
 	cd $(top_srcdir)/packages &&		\
 	  rake version:update			\
 	  RELEASE_TIME=$(NEW_RELEASE_DATE)

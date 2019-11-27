@@ -1,0 +1,25 @@
+require_relative "../mroonga-package-task"
+
+class MariaDBServer102MroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("mariadb-server-10.2", "mariadb-10.2-mroonga")
+  end
+
+  def enable_apt?
+    false
+  end
+
+  def enable_ubuntu?
+    false
+  end
+
+  def yum_targets_default
+    [
+      "centos-6",
+      "centos-7",
+    ]
+  end
+end
+
+task = MariaDBServer102MroongaPackageTask.new
+task.define

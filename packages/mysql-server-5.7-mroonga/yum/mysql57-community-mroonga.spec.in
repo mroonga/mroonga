@@ -84,7 +84,7 @@ if [ ! -d ${mysql_source} ]; then
         --define 'optflags -O0' \
         ../../SPECS/%{_mysql_spec_file}
     pushd ${mysql_source}
-    cmake%{?el6:28} . \
+    cmake . \
         -DBUILD_CONFIG=mysql_release \
         -DINSTALL_LAYOUT=RPM \
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \

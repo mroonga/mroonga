@@ -1,4 +1,4 @@
-Source: mroonga-5.7
+Source: mysql-server-5.7-mroonga
 Section: database
 Priority: optional
 Maintainer: Kouhei Sutou <kou@clear-code.com>
@@ -24,8 +24,9 @@ Package: mysql-server-mroonga
 Section: database
 Architecture: any
 Depends:
+	${misc:Depends},
 	mysql-server-5.7-mroonga (= ${binary:Version}),
-	mysql-server (= MYSQL_VERSION)
+	mysql-server (= @MYSQL_VERSION@)
 Description: A fast fulltext searchable storage engine for MySQL.
  This package is a metapackage depending on the latest version.
  Mroonga is a fast fulltext searchable storage engine for MySQL.
@@ -45,8 +46,8 @@ Depends:
 	${misc:Depends},
 	${shlibs:Depends},
 	libgroonga0 (>= @REQUIRED_GROONGA_VERSION@),
-	mysql-server-5.7 (= MYSQL_VERSION),
-	mysql-server-core-5.7 (= MYSQL_VERSION),
+	mysql-server-5.7 (= @MYSQL_VERSION@),
+	mysql-server-core-5.7 (= @MYSQL_VERSION@),
 	groonga-normalizer-mysql
 Description: A fast fulltext searchable storage engine for MySQL 5.7.
  Mroonga is a fast fulltext searchable storage engine for MySQL.

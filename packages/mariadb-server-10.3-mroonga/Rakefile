@@ -1,13 +1,19 @@
 require_relative "../mroonga-package-task"
 
-class MariaDB103MroongaPackageTask < MroongaPackageTask
+class MariaDBServer103MroongaPackageTask < MroongaPackageTask
   def initialize
-    super("mariadb-10.3")
+    super("mariadb-server-10.3", "mariadb-10.3-mroonga")
   end
 
   def apt_targets_default
     [
       "debian-buster",
+    ]
+  end
+
+  def ubuntu_targets_default
+    [
+      ["disco", "19.04"],
     ]
   end
 
@@ -20,5 +26,5 @@ class MariaDB103MroongaPackageTask < MroongaPackageTask
   end
 end
 
-task = MariaDB103MroongaPackageTask.new
+task = MariaDBServer103MroongaPackageTask.new
 task.define
