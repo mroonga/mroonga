@@ -1,33 +1,16 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
-%if %{_centos_ver} == 8
 %define mysql_version_default 8.0.18
 %define mysql_release_default 1
-%define mysql_dist_default    el8
-%define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-8.0-community/el/8/SRPMS/
+%define mysql_dist_default    el%{_centos_ver}
+%define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-8.0-community/el/%{_centos_ver}/SRPMS/
 %define mysql_spec_file_default mysql.spec
+%if %{_centos_ver} >= 7
 %define service_status() (systemctl status %1)
 %define service_control() (systemctl %2 %1)
 %else
-%if %{_centos_ver} == 7
-%define mysql_version_default 8.0.18
-%define mysql_release_default 1
-%define mysql_dist_default    el7
-%define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-8.0-community/el/7/SRPMS/
-%define mysql_spec_file_default mysql.spec
-%define service_status() (systemctl status %1)
-%define service_control() (systemctl %2 %1)
-%define DEVTOOLSET_VERSION 8
-%else
-%define mysql_version_default 8.0.18
-%define mysql_release_default 1
-%define mysql_dist_default    el6
-%define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-8.0-community/el/6/SRPMS/
-%define mysql_spec_file_default mysql.spec
 %define service_status() (/sbin/service %1 status)
 %define service_control() (/sbin/service %1 %2)
-%define DEVTOOLSET_VERSION 8
-%endif
 %endif
 
 %define _mysql_version %{?mysql_version:%{mysql_version}}%{!?mysql_version:%{mysql_version_default}}
@@ -88,11 +71,6 @@ if [ ! -f ../../SRPMS/$srpm ]; then
 fi
 
 %build
-if [ ! %{_centos_ver} == 8 ]; then
-  export CXX="/opt/rh/devtoolset-%{DEVTOOLSET_VERSION}/root/usr/bin/g++"
-  export CC="/opt/rh/devtoolset-%{DEVTOOLSET_VERSION}/root/usr/bin/gcc"
-fi
-
 mysql_source=../mysql-%{_mysql_version}/mysql-%{_mysql_version}
 if [ ! -d ${mysql_source} ]; then
     specs_dir=
