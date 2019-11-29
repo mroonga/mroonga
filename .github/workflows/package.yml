@@ -26,6 +26,7 @@ jobs:
           - centos-7
           - centos-8
         package:
+          - mariadb-server-5.5
           - mariadb-server-10.1
           - mariadb-server-10.2
           - mariadb-server-10.3
@@ -34,6 +35,18 @@ jobs:
           - mysql-server-5.7
           - mysql-server-8.0
         exclude:
+          - os: debian-stretch
+            package: mariadb-server-5.5
+          - os: debian-stretch-i386
+            package: mariadb-server-5.5
+          - os: debian-buster
+            package: mariadb-server-5.5
+          - os: debian-buster-i386
+            package: mariadb-server-5.5
+          - os: centos-6
+            package: mariadb-server-5.5
+          - os: centos-8
+            package: mariadb-server-5.5
           - os: debian-buster
             package: mariadb-server-10.1
           - os: debian-buster-i386
