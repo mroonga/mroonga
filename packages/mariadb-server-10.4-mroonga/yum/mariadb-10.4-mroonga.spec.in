@@ -232,5 +232,8 @@ fi
 %doc mroonga-doc/*
 
 %changelog
+* Thu Nov 28 2019 Yasuhiro Horimoto <horimoto@clear-code.com> - 9.10-1
+- New upstream release.
+
 * Thu Aug 29 2019 Kentaro Hayashi <hayashi@clear-code.com> - 9.06-1
 - new upstream release.

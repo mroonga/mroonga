@@ -1,3 +1,9 @@
+mariadb-server-10.3-mroonga (9.10-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Yasuhiro Horimoto <horimoto@clear-code.com>  Thu, 28 Nov 2019 15:00:00 -0000
+
 mroonga-mariadb-10.3 (9.09-1) unstable; urgency=low
 
   * New upstream release.
@@ -27,4 +33,3 @@ mroonga-mariadb-10.3 (9.05-1) unstable; urgency=low
   * New upstream release.
 
  -- Kentaro Hayashi <hayashi@clear-code.com>  Mon, 29 Jul 2019 00:00:00 +0900
-
