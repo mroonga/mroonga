@@ -546,7 +546,6 @@ AC_OUTPUT([
   mrn_version.h
   mysql-test/mroonga/storage/information_schema/r/plugins.result
   mysql-test/mroonga/storage/variable/r/version.result
-  packages/debian-5.5/control
   packages/apt/env.sh
   packages/rpm/centos/percona-server-56-mroonga.spec
   packages/rpm/centos/percona-server-57-mroonga.spec

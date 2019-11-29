@@ -74,11 +74,6 @@ update-latest-release: ensure-cutter-source-path
 	  doc/source/install/*.rst				\
 	  doc/locale/*/LC_MESSAGES/install.po			\
 	  $(MROONGA_GITHUB_COM_PATH)/_config.yml
-	cd $(top_srcdir) &&					\
-	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"	\
-	  $(PACKAGE)-5.5 $(OLD_RELEASE) $(OLD_RELEASE_DATE)	\
-	  $(VERSION) $(NEW_RELEASE_DATE)			\
-	  packages/debian-5.5/changelog
 	cd $(top_srcdir)/packages &&		\
 	  rake version:update			\
 	  RELEASE_TIME=$(NEW_RELEASE_DATE)
