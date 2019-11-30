@@ -35,6 +35,7 @@ jobs:
           - mysql-server-5.7
           - mysql-server-8.0
           - percona-server-5.6
+          - percona-server-5.7
         exclude:
           - os: debian-stretch
             package: mariadb-server-5.5
@@ -118,6 +119,16 @@ jobs:
             package: percona-server-5.6
           - os: centos-8
             package: percona-server-5.6
+          - os: debian-buster
+            package: percona-server-5.7
+          - os: debian-buster-i386
+            package: percona-server-5.7
+          - os: debian-stretch
+            package: percona-server-5.7
+          - os: debian-stretch-i386
+            package: percona-server-5.7
+          - os: centos-8
+            package: percona-server-5.7
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master

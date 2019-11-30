@@ -69,7 +69,6 @@ update-latest-release: ensure-cutter-source-path
 	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"	\
 	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)		\
 	  $(VERSION) $(NEW_RELEASE_DATE)			\
-	  packages/rpm/centos/percona-server-57-mroonga.spec.in	\
 	  doc/source/install/*.rst				\
 	  doc/locale/*/LC_MESSAGES/install.po			\
 	  $(MROONGA_GITHUB_COM_PATH)/_config.yml
