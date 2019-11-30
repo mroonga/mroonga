@@ -32,3 +32,16 @@ namespace :ubuntu do
     end
   end
 end
+
+[:apt, :yum].each do |target_namespace|
+  namespace target_namespace do
+    desc "Release #{target_namespace} packages"
+    task :release do
+      packages.each do |package|
+        cd(package) do
+          ruby("-S", "rake", "#{target_namespace}:release")
+        end
+      end
+    end
+  end
+end
