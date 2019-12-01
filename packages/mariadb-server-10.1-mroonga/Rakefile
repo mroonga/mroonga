@@ -14,7 +14,6 @@ class MariaDBServer101MroongaPackageTask < MroongaPackageTask
   def ubuntu_targets_default
     [
       ["bionic", "18.04"],
-      ["cosmic", "18.10"],
     ]
   end
 

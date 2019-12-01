@@ -12,7 +12,6 @@ class MySQLServer57MroongaPackageTask < MroongaPackageTask
   def ubuntu_targets_default
     [
       ["bionic", "18.04"],
-      ["cosmic", "18.10"],
       ["disco", "19.04"],
     ]
   end
