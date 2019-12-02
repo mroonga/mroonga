@@ -34,6 +34,13 @@ msgstr ""
 "[:doc:`/install/centos`] MariaDB 10.1.43、10.2.29、10.3.20、10.4.10をサポート"
 "しました。"
 
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.3.20, 10.4.10, and "
+"MySQL 8.0.18 on CentOS 8."
+msgstr ""
+"[:doc:`/install/centos`] CentOS8のMariaDB 10.3.20と10.4.10、MySQL 8.0.18をサ"
+"ポートしました。"
+
 msgid "[:doc:`/install/ubuntu`] Added support for Ubuntu 19.10 (Eoan Ermine)"
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 19.10 (Eoan Ermine)をサポートしました。"
