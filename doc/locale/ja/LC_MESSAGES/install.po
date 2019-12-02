@@ -273,6 +273,38 @@ msgstr ""
 "CentOS 7では、Mroonga 9.07からMariaDB提供のMariaDB 10.4パッケージを利用できま"
 "す。"
 
+# 5e3232071ae84bdfbce77f4bee3e0ae4
+msgid "CentOS 8 (with the Oracle MySQL 8.0 package)"
+msgstr "CentOS 8（OracleのMySQL 8.0パッケージを利用）"
+
+msgid ""
+"You can use Oracle's MySQL packages version 8.0 on CentOS 8 since Mroonga "
+"9.10 release."
+msgstr ""
+"CentOS 8では、Mroonga 9.10からOracleのMySQL 8.0パッケージを利用できます。"
+
+# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
+msgid "CentOS 8 (with MariaDB 10.3 package)"
+msgstr "CentOS 8（MariaDB 10.3のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.3 on CentOS 8 since "
+"Mroonga 9.10 release."
+msgstr ""
+"CentOS 8では、Mroonga 9.10からMariaDB提供のMariaDB 10.3パッケージを利用できま"
+"す。"
+
+# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
+msgid "CentOS 8 (with MariaDB 10.4 package)"
+msgstr "CentOS 8（MariaDB 10.4のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.4 on CentOS 8 since "
+"Mroonga 9.10 release."
+msgstr ""
+"CentOS 8では、Mroonga 9.10からMariaDB提供のMariaDB 10.4パッケージを利用できま"
+"す。"
+
 msgid "Debian GNU/Linux"
 msgstr ""
 
