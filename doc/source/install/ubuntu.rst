@@ -16,10 +16,10 @@ Archive) on Launchpad. You can install Mroonga by APT from the PPA.
 
 Here are supported Ubuntu versions:
 
-  * 14.04 LTS Trusty Tahr
   * 16.04 LTS Xenial Xerus
   * 18.04 Bionic Beaver
-  * 18.10 Cosmic Cuttlefish
+  * 19.04 Disco Dingo
+  * 19.10 Eoan Ermine
 
 Here are Ubuntu versions that supports MariaDB:
 
