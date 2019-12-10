@@ -1,0 +1,174 @@
+--- mariadb-10.3.15.orig/storage/innobase/srv/srv0start.cc	2019-05-14 03:13:10.000000000 +0900
++++ mariadb-10.3.15/storage/innobase/srv/srv0start.cc	2019-12-10 18:05:25.666910925 +0900
+@@ -2564,6 +2564,9 @@ void srv_shutdown_bg_undo_sources()
+ /** Shut down InnoDB. */
+ void innodb_shutdown()
+ {
++	ib::info() << "Start innodb_shutdown()."
++                   << "Shutdown operation " << srv_operation;
++
+ 	ut_ad(!my_atomic_loadptr_explicit(reinterpret_cast<void**>
+ 					  (&srv_running),
+ 					  MY_MEMORY_ORDER_RELAXED));
+@@ -2574,11 +2577,15 @@ void innodb_shutdown()
+ 	case SRV_OPERATION_RESTORE:
+ 	case SRV_OPERATION_RESTORE_DELTA:
+ 	case SRV_OPERATION_RESTORE_EXPORT:
++		ib::info() << "Start fil_close_all_files().";
+ 		fil_close_all_files();
++		ib::info() << "End fil_close_all_files().";
+ 		break;
+ 	case SRV_OPERATION_NORMAL:
+ 		/* Shut down the persistent files. */
++		ib::info() << "Start shutdown the persistent files.";
+ 		logs_empty_and_mark_files_at_shutdown();
++		ib::info() << "End shutdown the persistent files.";
+ 
+ 		if (ulint n_threads = srv_conc_get_active_threads()) {
+ 			ib::warn() << "Query counter shows "
+@@ -2588,20 +2595,26 @@ void innodb_shutdown()
+ 	}
+ 
+ 	/* Exit any remaining threads. */
++	ib::info() << "Start exit any remaining threads.";
+ 	srv_shutdown_all_bg_threads();
++	ib::info() << "End exit any remaining threads.";
+ 
+ 	if (srv_monitor_file) {
++		ib::info() << "Start close monitor file().";
+ 		fclose(srv_monitor_file);
+ 		srv_monitor_file = 0;
+ 		if (srv_monitor_file_name) {
+ 			unlink(srv_monitor_file_name);
+ 			ut_free(srv_monitor_file_name);
+ 		}
++		ib::info() << "End close monitor file().";
+ 	}
+ 
+ 	if (srv_misc_tmpfile) {
++		ib::info() << "Start close misc temp file().";
+ 		fclose(srv_misc_tmpfile);
+ 		srv_misc_tmpfile = 0;
++		ib::info() << "End close misc temp file().";
+ 	}
+ 
+ 	ut_ad(dict_stats_event || !srv_was_started || srv_read_only_mode);
+@@ -2617,7 +2630,9 @@ void innodb_shutdown()
+ 	ut_ad(ibuf || !srv_was_started);
+ 
+ 	if (dict_stats_event) {
++		ib::info() << "Start dict_stats_thread_deinit().";
+ 		dict_stats_thread_deinit();
++		ib::info() << "End dict_stats_thread_deinit().";
+ 	}
+ 
+ 	if (srv_start_state_is_set(SRV_START_STATE_REDO)) {
+@@ -2625,9 +2640,15 @@ void innodb_shutdown()
+ 		/* srv_shutdown_bg_undo_sources() already invoked
+ 		fts_optimize_shutdown(); dict_stats_shutdown(); */
+ 
++		ib::info() << "Start fil_crypt_threads_cleanup()";
+ 		fil_crypt_threads_cleanup();
++		ib::info() << "End fil_crypt_threads_cleanup()";
++		ib::info() << "Start btr_scrub_cleanup()";
+ 		btr_scrub_cleanup();
++		ib::info() << "End btr_scrub_cleanup()";
++		ib::info() << "Start btr_defragment_shutdown()";
+ 		btr_defragment_shutdown();
++		ib::info() << "End btr_defragment_shutdown()";
+ 	}
+ 
+ 	/* This must be disabled before closing the buffer pool
+@@ -2635,48 +2656,92 @@ void innodb_shutdown()
+ 
+ #ifdef BTR_CUR_HASH_ADAPT
+ 	if (dict_sys) {
++		ib::info() << "Start disable btree search.";
+ 		btr_search_disable(true);
++		ib::info() << "End disable btree search.";
+ 	}
+ #endif /* BTR_CUR_HASH_ADAPT */
+ 	if (ibuf) {
++		ib::info() << "Start ibuf_close()";
+ 		ibuf_close();
++		ib::info() << "End ibuf_close()";
+ 	}
++	ib::info() << "Start log_sys.close()";
+ 	log_sys.close();
++	ib::info() << "End log_sys.close()";
++	ib::info() << "Start purge_sys.close()";
+ 	purge_sys.close();
++	ib::info() << "End purge_sys.close()";
++	ib::info() << "Start trx_sys.close()";
+ 	trx_sys.close();
++	ib::info() << "End trx_sys.close()";
+ 	if (buf_dblwr) {
++		ib::info() << "Start buf_dblwr_free()";
+ 		buf_dblwr_free();
++		ib::info() << "End buf_dblwr_free()";
+ 	}
++	ib::info() << "Start lock_sys.close()";
+ 	lock_sys.close();
++	ib::info() << "End lock_sys.close()";
++	ib::info() << "Start trx_pool.close()";
+ 	trx_pool_close();
++	ib::info() << "End trx_pool.close()";
+ 
+ 	if (!srv_read_only_mode) {
++		ib::info() << "Start srv_monitor_file_mutex free";
+ 		mutex_free(&srv_monitor_file_mutex);
++		ib::info() << "End srv_monitor_file_mutex free";
++		ib::info() << "Start srv_misc_tmpfile_mutex free";
+ 		mutex_free(&srv_misc_tmpfile_mutex);
++		ib::info() << "End srv_misc_tmpfile_mutex free";
+ 	}
+ 
++	ib::info() << "Start dict_close()";
+ 	dict_close();
++	ib::info() << "End dict_close()";
++	ib::info() << "Start btr_search_sys_free()";
+ 	btr_search_sys_free();
++	ib::info() << "End btr_search_sys_free()";
+ 
+ 	/* 3. Free all InnoDB's own mutexes and the os_fast_mutexes inside
+ 	them */
++	ib::info() << "Start free all InnoDB's own mutexes.";
++	ib::info() << "Start os_aio_free()";
+ 	os_aio_free();
++	ib::info() << "End os_aio_free()";
++	ib::info() << "Start row_mysql_close()";
+ 	row_mysql_close();
++	ib::info() << "End row_mysql_close()";
++	ib::info() << "Start srv_free()";
+ 	srv_free();
++	ib::info() << "End srv_free()";
++	ib::info() << "Start fil_system.close()";
+ 	fil_system.close();
++	ib::info() << "End fil_system.close()";
++	ib::info() << "End free all InnoDB's own mutexes.";
+ 
+ 	/* 4. Free all allocated memory */
+ 
++	ib::info() << "Start free all allocated memory.";
++	ib::info() << "Start pars_lexer_close()";
+ 	pars_lexer_close();
++	ib::info() << "End pars_lexer_close()";
++	ib::info() << "Start recv_sys_close()";
+ 	recv_sys_close();
++	ib::info() << "End recv_sys_close()";
+ 
+ 	ut_ad(buf_pool_ptr || !srv_was_started);
+ 	if (buf_pool_ptr) {
++		ib::info() << "Start buf_pool_free()";
+ 		buf_pool_free(srv_buf_pool_instances);
++		ib::info() << "End buf_pool_free()";
+ 	}
+ 
++	ib::info() << "Start sync close check.";
+ 	sync_check_close();
++	ib::info() << "End sync close check.";
+ 
++	ib::info() << "End free all allocated memory.";
+ 	if (srv_was_started && srv_print_verbose_log) {
+ 		ib::info() << "Shutdown completed; log sequence number "
+ 			   << srv_shutdown_lsn
