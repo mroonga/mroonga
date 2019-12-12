@@ -5,6 +5,35 @@
 News
 ====
 
+.. _release-9-11:
+
+Release 9.11 - 2019-01-08
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 14.04 LTS (Trusty Tahr) support.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 18.10 (Cosmic Cuttlefish) support.
+
+* [:doc:`/install/centos`] Added how to install for CentOS 8.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.30, 10.3.21, 10.4.11.
+
+* Applied a patch for visualizing the shutdown process of InnoDB into MariaDB 10.3 and 10.4.
+
+  * This is a temporary change. We will remove this modify in a future version.
+  * This modify Increasing outputted logs when InnoDB shutdown.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/ubuntu`] Added support for Ubuntu 16.04 (Xenial Xerus) that was missing.
+
+Thanks
+^^^^^^
+
 .. _release-9-10:
 
 Release 9.10 - 2019-11-29
