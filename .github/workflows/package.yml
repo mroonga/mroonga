@@ -183,10 +183,14 @@ jobs:
           make dist
       - name: Update version
         run: |
-          make update-latest-release \
-            OLD_RELEASE=$(cat version) \
-            OLD_RELEASE_DATE=$(date +%Y-%m-%d) \
-            NEW_RELEASE_DATE=$(date +%Y-%m-%d)
+          case ${{ matrix.os }} in
+            debian-*)
+              make update-latest-release \
+                OLD_RELEASE=$(cat version) \
+                OLD_RELEASE_DATE=$(date +%Y-%m-%d) \
+                NEW_RELEASE_DATE=$(date +%Y-%m-%d)
+              ;;
+          esac
         env:
           GROONGA_REPOSITORY: ../../../groonga
       - name: Build with Docker
