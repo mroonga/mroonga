@@ -1,5 +1,5 @@
---- ./mariadb-10.3.20/storage/innobase/srv/srv0start.cc	2019-11-07 01:01:58.000000000 +0900
-+++ ./mariadb-10.3.20.patch/storage/innobase/srv/srv0start.cc	2019-12-11 16:54:29.228377261 +0900
+--- mariadb-10.3.20/storage/innobase/srv/srv0start.cc	2019-11-07 01:01:58.000000000 +0900
++++ mariadb-10.3.20.patch/storage/innobase/srv/srv0start.cc	2019-12-11 16:54:29.228377261 +0900
 @@ -2537,6 +2537,7 @@ void srv_shutdown_bg_undo_sources()
  /** Shut down InnoDB. */
  void innodb_shutdown()

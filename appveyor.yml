@@ -46,6 +46,9 @@ install:
   - if "%MARIADB_VERSION%" == "10.4.10" (
       patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.4.10-windows-build.diff
     )
+  - if "%MARIADB_VERSION%" == "10.3.21" (
+      patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.3.21-more-innodb-shutdown-log.diff
+    )
   - rmdir /S /Q storage\mroonga\
   - ps: Get-Content ..\mroonga\version | ForEach-Object { $env:MROONGA_VERSION = $_ }
   - move ..\mroonga storage\mroonga
