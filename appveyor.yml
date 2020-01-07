@@ -43,10 +43,13 @@ install:
   - 7z x mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
+  - if "%MARIADB_VERSION%" == "10.3.21" (
+      patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.3.21-more-innodb-shutdown-log.diff
+    )
   - if "%MARIADB_VERSION%" == "10.4.10" (
       patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.4.10-windows-build.diff
     )
-  - if "%MARIADB_VERSION%" == "10.3.21" (
+  - if "%MARIADB_VERSION%" == "10.4.11" (
       patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.3.21-more-innodb-shutdown-log.diff
     )
   - rmdir /S /Q storage\mroonga\
