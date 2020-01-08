@@ -542,7 +542,7 @@ CentOS 8 (with the Oracle MySQL 8.0 package)
 --------------------------------------------
 
 You can use Oracle's MySQL packages version 8.0 on CentOS 8 since
-Mroonga 9.10 release.
+Mroonga 9.11 release.
 
 .. note::
 
@@ -567,7 +567,7 @@ CentOS 8 (with MariaDB 10.3 package)
 ------------------------------------
 
 You can use MariaDB's MariaDB packages version 10.3 on CentOS 8 since
-Mroonga 9.10 release.
+Mroonga 9.11 release.
 
 Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
@@ -592,7 +592,7 @@ CentOS 8 (with MariaDB 10.4 package)
 ------------------------------------
 
 You can use MariaDB's MariaDB packages version 10.4 on CentOS 8 since
-Mroonga 9.10 release.
+Mroonga 9.11 release.
 
 Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 

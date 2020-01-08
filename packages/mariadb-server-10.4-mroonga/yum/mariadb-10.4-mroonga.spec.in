@@ -20,7 +20,7 @@
 
 Name:		mariadb-10.4-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
@@ -232,6 +232,9 @@ fi
 %doc mroonga-doc/*
 
 %changelog
+* Tue Jan 07 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 9.11-1
+- New upstream release.
+
 * Thu Dec 17 2019 Yasuhiro Horimoto <horimoto@clear-code.com> - 9.10-2
 - build against MariaDB 10.4.11.
 
