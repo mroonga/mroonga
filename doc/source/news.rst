@@ -31,9 +31,6 @@ Fixes
 
 * [:doc:`/install/ubuntu`] Added support for Ubuntu 16.04 (Xenial Xerus) that was missing.
 
-Thanks
-^^^^^^
-
 .. _release-9-10:
 
 Release 9.10 - 2019-11-29
