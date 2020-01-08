@@ -19,7 +19,7 @@ Here are supported Ubuntu versions:
   * 16.04 LTS Xenial Xerus
   * 18.04 Bionic Beaver
   * 19.04 Disco Dingo
-  * 19.11 Eoan Ermine
+  * 19.10 Eoan Ermine
 
 Here are Ubuntu versions that supports MariaDB:
 

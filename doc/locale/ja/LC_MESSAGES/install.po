@@ -279,9 +279,9 @@ msgstr "CentOS 8（OracleのMySQL 8.0パッケージを利用）"
 
 msgid ""
 "You can use Oracle's MySQL packages version 8.0 on CentOS 8 since Mroonga "
-"9.11 release."
+"9.10 release."
 msgstr ""
-"CentOS 8では、Mroonga 9.11からOracleのMySQL 8.0パッケージを利用できます。"
+"CentOS 8では、Mroonga 9.10からOracleのMySQL 8.0パッケージを利用できます。"
 
 # e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 8 (with MariaDB 10.3 package)"
@@ -289,9 +289,9 @@ msgstr "CentOS 8（MariaDB 10.3のパッケージを利用）"
 
 msgid ""
 "You can use MariaDB's MariaDB packages version 10.3 on CentOS 8 since "
-"Mroonga 9.11 release."
+"Mroonga 9.10 release."
 msgstr ""
-"CentOS 8では、Mroonga 9.11からMariaDB提供のMariaDB 10.3パッケージを利用できま"
+"CentOS 8では、Mroonga 9.10からMariaDB提供のMariaDB 10.3パッケージを利用できま"
 "す。"
 
 # e1a6076f4a4a4fb2a6e1a4d8a2175cfa
@@ -300,9 +300,9 @@ msgstr "CentOS 8（MariaDB 10.4のパッケージを利用）"
 
 msgid ""
 "You can use MariaDB's MariaDB packages version 10.4 on CentOS 8 since "
-"Mroonga 9.11 release."
+"Mroonga 9.10 release."
 msgstr ""
-"CentOS 8では、Mroonga 9.11からMariaDB提供のMariaDB 10.4パッケージを利用できま"
+"CentOS 8では、Mroonga 9.10からMariaDB提供のMariaDB 10.4パッケージを利用できま"
 "す。"
 
 msgid "Debian GNU/Linux"
@@ -762,16 +762,16 @@ msgstr ""
 msgid "Here are supported Ubuntu versions:"
 msgstr "サポートしているUbuntuのバージョンは次の通りです。"
 
-msgid "14.04 LTS Trusty Tahr"
-msgstr ""
-
 msgid "16.04 LTS Xenial Xerus"
 msgstr ""
 
 msgid "18.04 Bionic Beaver"
 msgstr ""
 
-msgid "18.10 Cosmic Cuttlefish"
+msgid "19.04 Disco Dingo"
+msgstr ""
+
+msgid "19.10 Eoan Ermine"
 msgstr ""
 
 msgid "Here are Ubuntu versions that supports MariaDB:"
