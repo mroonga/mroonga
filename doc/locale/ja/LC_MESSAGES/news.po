@@ -21,11 +21,64 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 9.10 - 2019-11-29"
-msgstr "9.10リリース - 2019-11-29"
+msgid "Release 9.11 - 2019-01-08"
+msgstr "9.11リリース - 2019-01-08"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 14.04 LTS (Trusty Tahr) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 14.04 LTS (Trusty Tahr) のサポートをやめまし"
+"た。"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 18.10 (Cosmic Cuttlefish) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 18.10 (Cosmic Cuttlefish) のサポートをやめま"
+"した。"
+
+msgid "[:doc:`/install/centos`] Added how to install for CentOS 8."
+msgstr ""
+"[:doc:`/install/centos`] CentOS 8向けのインストール方法を追記しました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.2.30, 10.3.21, 10.4.11."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.2.30、10.3.21、10.4.11をサポートしまし"
+"た。"
+
+msgid ""
+"Applied a patch for visualizing the shutdown process of InnoDB into MariaDB "
+"10.3 and 10.4."
+msgstr ""
+"InnoDBのシャットダウンプロセスを可視化するためのパッチをMariaDB 10.3と10.4に"
+"適用しました。"
+
+msgid ""
+"This is a temporary change. We will remove this modify in a future version."
+msgstr "この変更は一時的なものです。将来のバージョンで削除する予定です。"
+
+msgid "This modify Increasing outputted logs when InnoDB shutdown."
+msgstr ""
+"この変更によって、InnoDBのシャットダウン時に出力されるログが増加します。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Added support for Ubuntu 16.04 (Xenial Xerus) that "
+"was missing."
+msgstr ""
+"[:doc:`/install/ubuntu`] 不足していた Ubuntu 16.04 (Xenial Xerus) のサポート"
+"を追加しました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Release 9.10 - 2019-11-29"
+msgstr "9.10リリース - 2019-11-29"
 
 msgid ""
 "[:doc:`/install/centos`] Added support for MariaDB 10.1.43, 10.2.29, "
@@ -45,18 +98,12 @@ msgid "[:doc:`/install/ubuntu`] Added support for Ubuntu 19.10 (Eoan Ermine)"
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 19.10 (Eoan Ermine)をサポートしました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "Fixed a bug that ``dpkg --configure`` will fail when we install the package "
 "on Ubuntu 18.04 on WSL. [GitHub#282][Patched by ochaochaocha3]"
 msgstr ""
 "WSL上のUbuntu 18.04でパッケージインストール時に dpkg --configure が失敗する問"
 "題を修正しました。 [GitHub#282][ochaochaocha3さんがパッチ提供]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "ochaochaocha3"
 msgstr "ochaochaocha3さん"
