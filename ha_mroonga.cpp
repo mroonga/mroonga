@@ -777,6 +777,7 @@ static const char *mrn_boolean_mode_sytnax_flag_names[] = {
   "ALLOW_COLUMN",
   "ALLOW_UPDATE",
   "ALLOW_LEADING_NOT",
+  "QUERY_NO_SYNTAX_ERROR",
   NullS
 };
 static TYPELIB mrn_boolean_mode_syntax_flags_typelib = {
@@ -1304,7 +1305,8 @@ static MYSQL_THDVAR_SET(boolean_mode_syntax_flags,
                         "Available flags: "
                         "DEFAULT(=SYNTAX_QUERY,ALLOW_LEADING_NOT), "
                         "SYNTAX_QUERY, SYNTAX_SCRIPT, "
-                        "ALLOW_COLUMN, ALLOW_UPDATE and ALLOW_LEADING_NOT",
+                        "ALLOW_COLUMN, ALLOW_UPDATE, "
+                        "ALLOW_LEADING_NOT and QUERY_NO_SYNTAX_ERROR",
                         NULL,
                         NULL,
                         mrn::variables::BOOLEAN_MODE_SYNTAX_FLAG_DEFAULT,

@@ -354,6 +354,9 @@ namespace mrn {
       if (syntax_flags & variables::BOOLEAN_MODE_SYNTAX_FLAG_ALLOW_LEADING_NOT) {
         expression_flags |= GRN_EXPR_ALLOW_LEADING_NOT;
       }
+      if (syntax_flags & variables::BOOLEAN_MODE_SYNTAX_FLAG_QUERY_NO_SYNTAX_ERROR) {
+        expression_flags |= GRN_EXPR_QUERY_NO_SYNTAX_ERROR;
+      }
     }
 
     DBUG_RETURN(expression_flags);
