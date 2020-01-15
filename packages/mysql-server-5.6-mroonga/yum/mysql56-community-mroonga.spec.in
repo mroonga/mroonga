@@ -1,16 +1,16 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
 %if %{_centos_ver} == 7
-%define mysql_version_default 5.6.46
-%define mysql_release_default 2
+%define mysql_version_default 5.6.47
+%define mysql_release_default 1
 %define mysql_dist_default    el7
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/7/SRPMS
 %define mysql_spec_file_default mysql.spec
 %define service_status() (systemctl status %1)
 %define service_control() (systemctl %2 %1)
 %else
-%define mysql_version_default 5.6.46
-%define mysql_release_default 2
+%define mysql_version_default 5.6.47
+%define mysql_release_default 1
 %define mysql_dist_default    el6
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.6-community/el/6/SRPMS
 %define mysql_spec_file_default mysql.spec
@@ -28,7 +28,7 @@
 
 Name:		mysql-community-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -183,6 +183,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Wed Jan 15 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 9.11-2
+- build against MySQL 5.6.47.
+
 * Tue Jan 07 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 9.11-1
 - New upstream release.
 
