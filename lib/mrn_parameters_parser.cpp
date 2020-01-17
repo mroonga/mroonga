@@ -126,7 +126,7 @@ namespace mrn {
       if (current[0] == quote) {
         Parameter *parameter = new Parameter(key, key_length,
                                              value, value_length);
-        list_push(parameters_, parameter);
+        parameters_ = list_cons(parameter, parameters_);
         found = true;
         ++current;
         break;

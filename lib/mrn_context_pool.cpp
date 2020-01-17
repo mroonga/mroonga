@@ -73,7 +73,7 @@ namespace mrn {
 
       {
         mrn::Lock lock(mutex_);
-        list_push(pool_, ctx);
+        pool_ = list_cons(ctx, pool_);
         grn_ctx_use(ctx, NULL);
       }
 
