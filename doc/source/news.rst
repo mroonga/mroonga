@@ -5,6 +5,18 @@
 News
 ====
 
+.. _release-9-12:
+
+Release 9.12 - 2019-01-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.47, 5.7.29, 8.0.19
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.47.
+
 .. _release-9-11:
 
 Release 9.11 - 2019-01-08

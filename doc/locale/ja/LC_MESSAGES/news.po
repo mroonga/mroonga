@@ -21,11 +21,21 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 9.11 - 2019-01-08"
-msgstr "9.11リリース - 2019-01-08"
+msgid "Release 9.12 - 2019-01-29"
+msgstr "9.12リリース - 2019-01-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.47, 5.7.29, 8.0.19"
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.47, 5.7.29, 8.0.19をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.6.47."
+msgstr "[:doc:`/install/centos`] Percona Server 5.6.47をサポートしました。"
+
+msgid "Release 9.11 - 2019-01-08"
+msgstr "9.11リリース - 2019-01-08"
 
 msgid ""
 "[:doc:`/install/ubuntu`] Dropped Ubuntu 14.04 LTS (Trusty Tahr) support."
@@ -74,9 +84,6 @@ msgstr ""
 "[:doc:`/install/ubuntu`] 不足していた Ubuntu 16.04 (Xenial Xerus) のサポート"
 "を追加しました。"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "Release 9.10 - 2019-11-29"
 msgstr "9.10リリース - 2019-11-29"
 
@@ -104,6 +111,9 @@ msgid ""
 msgstr ""
 "WSL上のUbuntu 18.04でパッケージインストール時に dpkg --configure が失敗する問"
 "題を修正しました。 [GitHub#282][ochaochaocha3さんがパッチ提供]"
+
+msgid "Thanks"
+msgstr "感謝"
 
 msgid "ochaochaocha3"
 msgstr "ochaochaocha3さん"
