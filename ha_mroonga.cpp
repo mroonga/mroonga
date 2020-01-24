@@ -17891,6 +17891,77 @@ bool ha_mroonga::primary_key_is_clustered()
   DBUG_RETURN(is_clustered);
 }
 
+#ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
+char *ha_mroonga::wrapper_get_tablespace_name(THD *thd, char *name,
+                                              uint name_len)
+{
+  MRN_DBUG_ENTER_METHOD();
+  char *res;
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->get_tablespace_name(thd, name, name_len);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+char *ha_mroonga::storage_get_tablespace_name(THD *thd, char *name,
+                                              uint name_len)
+{
+  MRN_DBUG_ENTER_METHOD();
+  char *res = handler::get_tablespace_name(thd, name, name_len);
+  DBUG_RETURN(res);
+}
+
+char *ha_mroonga::get_tablespace_name(THD *thd, char *name, uint name_len)
+{
+  MRN_DBUG_ENTER_METHOD();
+  char *res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_get_tablespace_name(thd, name, name_len);
+  } else {
+    res = storage_get_tablespace_name(thd, name, name_len);
+  }
+  DBUG_RETURN(res);
+}
+#endif
+
+#ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
+bool ha_mroonga::wrapper_can_switch_engines()
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool res;
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->can_switch_engines();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+
+bool ha_mroonga::storage_can_switch_engines()
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool res = handler::can_switch_engines();
+  DBUG_RETURN(res);
+}
+
+bool ha_mroonga::can_switch_engines()
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool res;
+  if (share->wrapper_mode)
+  {
+    res = wrapper_can_switch_engines();
+  } else {
+    res = storage_can_switch_engines();
+  }
+  DBUG_RETURN(res);
+}
+#endif
+
+#ifdef MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
 bool ha_mroonga::wrapper_is_fk_defined_on_table_or_index(uint index)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -18068,76 +18139,6 @@ char *ha_mroonga::get_foreign_key_create_info()
   }
   DBUG_RETURN(res);
 }
-
-#ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
-char *ha_mroonga::wrapper_get_tablespace_name(THD *thd, char *name,
-                                              uint name_len)
-{
-  MRN_DBUG_ENTER_METHOD();
-  char *res;
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->get_tablespace_name(thd, name, name_len);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(res);
-}
-
-char *ha_mroonga::storage_get_tablespace_name(THD *thd, char *name,
-                                              uint name_len)
-{
-  MRN_DBUG_ENTER_METHOD();
-  char *res = handler::get_tablespace_name(thd, name, name_len);
-  DBUG_RETURN(res);
-}
-
-char *ha_mroonga::get_tablespace_name(THD *thd, char *name, uint name_len)
-{
-  MRN_DBUG_ENTER_METHOD();
-  char *res;
-  if (share->wrapper_mode)
-  {
-    res = wrapper_get_tablespace_name(thd, name, name_len);
-  } else {
-    res = storage_get_tablespace_name(thd, name, name_len);
-  }
-  DBUG_RETURN(res);
-}
-#endif
-
-#ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
-bool ha_mroonga::wrapper_can_switch_engines()
-{
-  MRN_DBUG_ENTER_METHOD();
-  bool res;
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->can_switch_engines();
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(res);
-}
-
-bool ha_mroonga::storage_can_switch_engines()
-{
-  MRN_DBUG_ENTER_METHOD();
-  bool res = handler::can_switch_engines();
-  DBUG_RETURN(res);
-}
-
-bool ha_mroonga::can_switch_engines()
-{
-  MRN_DBUG_ENTER_METHOD();
-  bool res;
-  if (share->wrapper_mode)
-  {
-    res = wrapper_can_switch_engines();
-  } else {
-    res = storage_can_switch_engines();
-  }
-  DBUG_RETURN(res);
-}
-#endif
 
 int ha_mroonga::wrapper_get_foreign_key_list(THD *thd,
                                              List<FOREIGN_KEY_INFO> *f_key_list)
@@ -18357,36 +18358,6 @@ uint ha_mroonga::referenced_by_foreign_key()
   DBUG_RETURN(res);
 }
 
-void ha_mroonga::wrapper_init_table_handle_for_HANDLER()
-{
-  MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  wrap_handler->init_table_handle_for_HANDLER();
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_VOID_RETURN;
-}
-
-void ha_mroonga::storage_init_table_handle_for_HANDLER()
-{
-  MRN_DBUG_ENTER_METHOD();
-  handler::init_table_handle_for_HANDLER();
-  DBUG_VOID_RETURN;
-}
-
-void ha_mroonga::init_table_handle_for_HANDLER()
-{
-  MRN_DBUG_ENTER_METHOD();
-  if (share->wrapper_mode)
-  {
-    wrapper_init_table_handle_for_HANDLER();
-  } else {
-    storage_init_table_handle_for_HANDLER();
-  }
-  DBUG_VOID_RETURN;
-}
-
 void ha_mroonga::wrapper_free_foreign_key_create_info(char* str)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -18422,6 +18393,37 @@ void ha_mroonga::free_foreign_key_create_info(char* str)
     wrapper_free_foreign_key_create_info(str);
   } else {
     storage_free_foreign_key_create_info(str);
+  }
+  DBUG_VOID_RETURN;
+}
+#endif
+
+void ha_mroonga::wrapper_init_table_handle_for_HANDLER()
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->init_table_handle_for_HANDLER();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::storage_init_table_handle_for_HANDLER()
+{
+  MRN_DBUG_ENTER_METHOD();
+  handler::init_table_handle_for_HANDLER();
+  DBUG_VOID_RETURN;
+}
+
+void ha_mroonga::init_table_handle_for_HANDLER()
+{
+  MRN_DBUG_ENTER_METHOD();
+  if (share->wrapper_mode)
+  {
+    wrapper_init_table_handle_for_HANDLER();
+  } else {
+    storage_init_table_handle_for_HANDLER();
   }
   DBUG_VOID_RETURN;
 }

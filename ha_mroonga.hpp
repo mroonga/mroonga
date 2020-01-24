@@ -476,6 +476,10 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST
 #endif
 
+#if MYSQL_VERSION_ID < 80019 || defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -910,19 +914,23 @@ protected:
   bool primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST
     mrn_override;
-  bool is_fk_defined_on_table_or_index(uint index);
-  char *get_foreign_key_create_info();
 #ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
   char *get_tablespace_name(THD *thd, char *name, uint name_len);
 #endif
 #ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
   bool can_switch_engines();
 #endif
-  int get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
-  int get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
-  uint referenced_by_foreign_key();
+#ifdef MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
+  bool is_fk_defined_on_table_or_index(uint index) mrn_override;
+  char *get_foreign_key_create_info() mrn_override;
+  int get_foreign_key_list(THD *thd,
+                           List<FOREIGN_KEY_INFO> *f_key_list) mrn_override;
+  int get_parent_foreign_key_list(THD *thd,
+                                  List<FOREIGN_KEY_INFO> *f_key_list) mrn_override;
+  uint referenced_by_foreign_key()mrn_override;
+  void free_foreign_key_create_info(char* str) mrn_override;
+#endif
   void init_table_handle_for_HANDLER();
-  void free_foreign_key_create_info(char* str);
 #ifdef MRN_HAVE_HA_REBIND_PSI
   void unbind_psi();
   void rebind_psi();
@@ -1799,10 +1807,6 @@ private:
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
   bool storage_primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
-  bool wrapper_is_fk_defined_on_table_or_index(uint index);
-  bool storage_is_fk_defined_on_table_or_index(uint index);
-  char *wrapper_get_foreign_key_create_info();
-  char *storage_get_foreign_key_create_info();
 #ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
   char *wrapper_get_tablespace_name(THD *thd, char *name, uint name_len);
   char *storage_get_tablespace_name(THD *thd, char *name, uint name_len);
@@ -1811,16 +1815,22 @@ private:
   bool wrapper_can_switch_engines();
   bool storage_can_switch_engines();
 #endif
+#ifdef MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
+  bool wrapper_is_fk_defined_on_table_or_index(uint index);
+  bool storage_is_fk_defined_on_table_or_index(uint index);
+  char *wrapper_get_foreign_key_create_info();
+  char *storage_get_foreign_key_create_info();
   int wrapper_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   int storage_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   int wrapper_get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   int storage_get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
   uint wrapper_referenced_by_foreign_key();
   uint storage_referenced_by_foreign_key();
-  void wrapper_init_table_handle_for_HANDLER();
-  void storage_init_table_handle_for_HANDLER();
   void wrapper_free_foreign_key_create_info(char* str);
   void storage_free_foreign_key_create_info(char* str);
+#endif
+  void wrapper_init_table_handle_for_HANDLER();
+  void storage_init_table_handle_for_HANDLER();
   void wrapper_set_keys_in_use();
   void storage_set_keys_in_use();
 #ifdef MRN_RBR_UPDATE_NEED_ALL_COLUMNS
