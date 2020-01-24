@@ -21,6 +21,13 @@
 #include "mrn_lock.hpp"
 
 #include <time.h>
+
+#ifdef min
+#  undef min
+#endif
+#ifdef max
+#  undef max
+#endif
 #include <vector>
 
 namespace mrn {
