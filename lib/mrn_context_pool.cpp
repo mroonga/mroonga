@@ -102,7 +102,10 @@ namespace mrn {
 
     void clear_without_lock(void) {
       MRN_DBUG_ENTER_METHOD();
-      for (grn_ctx *ctx : pool_) {
+      for (std::vector<grn_ctx *>::iterator it = pool_.begin();
+           it != pool_.end();
+           ++it) {
+        grn_ctx *ctx = *it;
         grn_ctx_close(ctx);
         --(*n_pooling_contexts_);
       }
