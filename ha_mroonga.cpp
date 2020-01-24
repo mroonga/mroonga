@@ -43,6 +43,9 @@
 #ifdef MRN_HAVE_BINLOG_H
 #  include <binlog.h>
 #endif
+#ifdef MRN_HAVE_CREATE_FIELD_H
+#  include <create_field.h>
+#endif
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
 #  include <create_options.h>
 #endif

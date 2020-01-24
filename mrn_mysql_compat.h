@@ -40,6 +40,10 @@
 #  define MRN_HAVE_SQL_DD_TYPES_TABLE_H
 #endif
 
+#if MYSQL_VERSION_ID >= 80019 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_CREATE_FIELD_H
+#endif
+
 #if MYSQL_VERSION_ID < 50603
   typedef MYSQL_ERROR Sql_condition;
 #endif
