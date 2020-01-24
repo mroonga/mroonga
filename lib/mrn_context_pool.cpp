@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2015-2020 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,6 +21,7 @@
 #include "mrn_lock.hpp"
 
 #include <time.h>
+#include <vector>
 
 namespace mrn {
   // for debug
@@ -32,7 +33,7 @@ namespace mrn {
          long *n_pooling_contexts)
       : mutex_(mutex),
         n_pooling_contexts_(n_pooling_contexts),
-        pool_(NULL),
+        pool_(),
         last_pull_time_(0) {
     }
 
@@ -49,9 +50,9 @@ namespace mrn {
         time(&now);
 
         mrn::Lock lock(mutex_);
-        if (pool_) {
-          ctx = static_cast<grn_ctx *>(pool_->data);
-          list_pop(pool_);
+        if (!pool_.empty()) {
+          ctx = pool_[pool_.size() - 1];
+          pool_.pop_back();
           if ((now - last_pull_time_) >= CLEAR_THREATHOLD_IN_SECONDS) {
             clear_without_lock();
           }
@@ -73,7 +74,7 @@ namespace mrn {
 
       {
         mrn::Lock lock(mutex_);
-        pool_ = list_cons(ctx, pool_);
+        pool_.push_back(ctx);
         grn_ctx_use(ctx, NULL);
       }
 
@@ -96,17 +97,16 @@ namespace mrn {
 
     mysql_mutex_t *mutex_;
     long *n_pooling_contexts_;
-    LIST *pool_;
+    std::vector<grn_ctx *> pool_;
     time_t last_pull_time_;
 
     void clear_without_lock(void) {
       MRN_DBUG_ENTER_METHOD();
-      while (pool_) {
-        grn_ctx *ctx = static_cast<grn_ctx *>(pool_->data);
+      for (grn_ctx *ctx : pool_) {
         grn_ctx_close(ctx);
-        list_pop(pool_);
         --(*n_pooling_contexts_);
       }
+      pool_.clear();
       DBUG_VOID_RETURN;
     }
   };
