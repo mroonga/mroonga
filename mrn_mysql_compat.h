@@ -861,3 +861,11 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_TABLE_SHARE_RESET(table_share) \
   (memset((table_share), 0, sizeof(TABLE_SHARE)))
 #endif
+
+#if MYSQL_VERSION_ID >= 80019 && !defined(MRN_MARIADB_P)
+#  define MRN_BITMAP_INIT(map, buf, n_bits) \
+    bitmap_init((map), (buf), (n_bits))
+#else
+#  define MRN_BITMAP_INIT(map, buf, n_bits) \
+    bitmap_init((map), (buf), (n_bits), false)
+#endif
