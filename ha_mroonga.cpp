@@ -33,6 +33,7 @@
 #include <myisampack.h>
 #include <mysql.h>
 #include <mysql/plugin.h>
+#include <mysqld.h>
 #include <spatial.h>
 #include <sql_base.h>
 #include <sql_select.h>
