@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -36,6 +36,10 @@
 #  define MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
 #endif
 
+#if MYSQL_VERSION_ID >= 80002 && !defined(MRN_MARIADB_P)
+#  define MRN_HAVE_SQL_DD_TYPES_TABLE_H
+#endif
+
 #if MYSQL_VERSION_ID < 50603
   typedef MYSQL_ERROR Sql_condition;
 #endif
@@ -52,6 +56,10 @@
 
 #if defined(MRN_MARIADB_P) || MYSQL_VERSION_ID < 80002
   typedef st_select_lex SELECT_LEX;
+#endif
+
+#if MYSQL_VERSION_ID >= 50607
+#  define MRN_SUPPORT_FOREIGN_KEYS 1
 #endif
 
 #if MYSQL_VERSION_ID >= 50609

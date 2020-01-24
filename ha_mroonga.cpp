@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -27,38 +27,46 @@
 #pragma implementation
 #endif
 
-#include <sql_show.h>
+#include <ft_global.h>
+#include <item_sum.h>
 #include <key.h>
-#include <tztime.h>
+#include <myisampack.h>
+#include <mysql.h>
+#include <mysql/plugin.h>
+#include <spatial.h>
 #include <sql_base.h>
 #include <sql_select.h>
-#include <item_sum.h>
+#include <sql_show.h>
+#include <tztime.h>
 
 #ifdef MRN_HAVE_BINLOG_H
 #  include <binlog.h>
 #endif
-
-#ifdef MRN_HAVE_SQL_OPTIMIZER_H
-#  include <sql_optimizer.h>
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+#  include <create_options.h>
 #endif
-
-#include <ft_global.h>
-#include <spatial.h>
-#include <mysql.h>
-#include <mysql/plugin.h>
-
 #ifdef MRN_HAVE_MY_BYTEORDER_H
 #  include <my_byteorder.h>
 #endif
-#include <myisampack.h>
-
+#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+#  include <mysql/psi/mysql_file.h>
+#endif
 #ifdef MRN_HAVE_MYSQL_PSI_MYSQL_MEMORY_H
 #  include <mysql/psi/mysql_memory.h>
 #endif
-
+#ifdef MRN_HAVE_SQL_OPTIMIZER_H
+#  include <sql_optimizer.h>
+#endif
+#ifdef MRN_SUPPORT_FOREIGN_KEYS
+#  include <sql_table.h>
+#endif
+#ifdef MRN_HAVE_SQL_DD_TYPES_TABLE_H
+#  include <sql/dd/types/table.h>
+#endif
 #ifdef MRN_HAVE_SQL_DERROR_H
 #  include <sql/derror.h>
 #endif
+
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -114,22 +122,6 @@
 #include <mrn_smart_bitmap.hpp>
 #include <mrn_table_fields_offset_mover.hpp>
 #include <mrn_timestamp_field_value_converter.hpp>
-
-#ifdef MRN_SUPPORT_FOREIGN_KEYS
-#  include <sql_table.h>
-#endif
-
-#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
-#  include <create_options.h>
-#endif
-
-#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
-#  include <mysql/psi/mysql_file.h>
-#endif
-
-#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
-#  include <sql/dd/types/table.h>
-#endif
 
 // for debug
 #define MRN_CLASS_NAME "ha_mroonga"

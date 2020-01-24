@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -68,7 +68,6 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_HA_PREPARE_INPLACE_ALTER_TABLE 1
 #  define MRN_HANDLER_HAVE_HA_INPLACE_ALTER_TABLE 1
 #  define MRN_HANDLER_HAVE_HA_COMMIT_INPLACE_ALTER_TABLE 1
-#  define MRN_SUPPORT_FOREIGN_KEYS 1
 #endif
 
 #ifndef MRN_MARIADB_P
