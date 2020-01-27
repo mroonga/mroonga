@@ -1,4 +1,4 @@
-# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2020 Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,6 @@ CREATE TABLE diaries (
   created_at DATE,
   KEY (created_at)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, created_at) VALUES ("clear day", "2012-01-29");
 INSERT INTO diaries (title, created_at) VALUES ("rainy day", "2012-01-30");
