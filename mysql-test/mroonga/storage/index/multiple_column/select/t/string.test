@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,15 +27,17 @@ create table listing (
   first_name char(30) not null,
   index name (last_name, first_name)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-show create table listing;
+
 insert into listing (last_name, first_name) values("Taro", "Yamada");
 insert into listing (last_name, first_name) values("Taro", "Suzuki");
 insert into listing (last_name, first_name) values("Jiro", "Yamada");
 insert into listing (last_name, first_name) values("Taro", "Tanaka");
+
 select * from listing;
 select * from listing where last_name = "Taro";
 select * from listing where last_name = "Taro" and first_name = "Suzuki";
 select * from listing where last_name = "Taro" and (first_name >= "S" and first_name <= "Y");
+
 drop table listing;
 
 --source ../../../../../include/mroonga/have_mroonga_deinit.inc

@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,6 @@ CREATE TABLE scores (
   score INT NOT NULL,
   INDEX property (score, name)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-SHOW CREATE TABLE scores;
 
 INSERT INTO scores (name, score) VALUES("Taro Yamada", 29);
 INSERT INTO scores (name, score) VALUES("Taro Yamada", -12);

@@ -6,14 +6,6 @@ family_name varchar(30) not null,
 score int not null,
 primary key (given_name, family_name, score)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-show create table scores;
-Table	Create Table
-scores	CREATE TABLE `scores` (
-  `given_name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `family_name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `score` int(11) NOT NULL,
-  PRIMARY KEY (`given_name`,`family_name`,`score`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 insert into scores values("Taro", "Yamada", 29);
 insert into scores values("Taro", "Yamada", -12);
 insert into scores values("Jiro", "Yamada", 27);
