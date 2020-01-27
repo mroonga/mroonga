@@ -1,4 +1,4 @@
-# Copyright(C) 2014 Kouhei Sutou  <kou@clear-code.com>
+# Copyright(C) 2014-2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,6 +27,8 @@ CREATE TABLE users (
 ) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO users VALUES (1, "Alice");
+# For MySQL 8.0 or later
+-- replace_result users.PRIMARY PRIMARY
 -- error ER_DUP_ENTRY
 INSERT INTO users VALUES (1, "Bob");
 INSERT INTO users VALUES (2, "Bob");

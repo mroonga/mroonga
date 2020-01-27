@@ -1,4 +1,4 @@
-# Copyright(C) 2016 Kouhei Sutou  <kou@clear-code.com>
+# Copyright(C) 2016-2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -31,6 +31,8 @@ INSERT INTO ids VALUES (1);
 
 SELECT * FROM ids;
 
+# For MySQL 8.0 or later
+-- replace_result ids.id id
 -- error ER_DUP_ENTRY
 INSERT INTO ids VALUES (1);
 

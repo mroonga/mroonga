@@ -1,4 +1,4 @@
-# Copyright(C) 2015 Kouhei Sutou  <kou@clear-code.com>
+# Copyright(C) 2015-2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -29,6 +29,8 @@ CREATE TABLE users (
 INSERT INTO users VALUES (1, "Alice");
 
 INSERT INTO users VALUES (2, "Bob");
+# For MySQL 8.0 or later
+-- replace_result users.name name
 -- error ER_DUP_ENTRY
 INSERT INTO users VALUES (3, "Bob");
 
