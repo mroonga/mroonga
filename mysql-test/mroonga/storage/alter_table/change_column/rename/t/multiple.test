@@ -1,4 +1,4 @@
-# Copyright(C) 2014-2020 Sutou Kouhei <kou@clear-code.com>
+# Copyright(C) 2014-2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
 CREATE TABLE diaries (
-  id VARCHAR(10) PRIMARY KEY,
+  id DOUBLE PRIMARY KEY,
   title VARCHAR(40),
   body VARCHAR(140)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -31,11 +31,11 @@ SHOW CREATE TABLE diaries;
 ALTER TABLE diaries
   CHANGE body description VARCHAR(140) FIRST,
   CHANGE title subject VARCHAR(40) AFTER internal_id,
-  CHANGE id internal_id VARCHAR(10);
+  CHANGE id internal_id DOUBLE;
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (subject, description, internal_id)
-       VALUES ("groonga (1)", "starting groonga.", "id");
+       VALUES ("groonga (1)", "starting groonga.", 1.0);
 SELECT * FROM diaries;
 
 DROP TABLE diaries;
