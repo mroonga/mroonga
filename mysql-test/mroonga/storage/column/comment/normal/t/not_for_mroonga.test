@@ -1,4 +1,4 @@
-# Copyright(C) 2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013-2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@ DROP TABLE IF EXISTS bugs;
 --enable_warnings
 
 CREATE TABLE bugs (
-  id INT UNSIGNED PRIMARY KEY,
   tag VARCHAR(64) COMMENT 'It must consist of only alphabet and number.'
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
