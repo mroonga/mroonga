@@ -1,13 +1,13 @@
 DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
-id DOUBLE PRIMARY KEY,
+id VARCHAR(10) PRIMARY KEY,
 title VARCHAR(40),
 body VARCHAR(140)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
-  `id` double NOT NULL,
+  `id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `body` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -15,18 +15,18 @@ diaries	CREATE TABLE `diaries` (
 ALTER TABLE diaries
 CHANGE body description VARCHAR(140) FIRST,
 CHANGE title subject VARCHAR(40) AFTER internal_id,
-CHANGE id internal_id DOUBLE;
+CHANGE id internal_id VARCHAR(10);
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `description` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `internal_id` double NOT NULL,
+  `internal_id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `subject` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`internal_id`)
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO diaries (subject, description, internal_id)
-VALUES ("groonga (1)", "starting groonga.", 1.0);
+VALUES ("groonga (1)", "starting groonga.", "id");
 SELECT * FROM diaries;
 description	internal_id	subject
-starting groonga.	1	groonga (1)
+starting groonga.	id	groonga (1)
 DROP TABLE diaries;
