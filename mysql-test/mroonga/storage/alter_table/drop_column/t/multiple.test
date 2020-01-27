@@ -1,4 +1,4 @@
-# Copyright(C) 2014 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2014-2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,6 @@ CREATE TABLE diaries (
   title VARCHAR(40),
   body VARCHAR(140)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, body) VALUES ("survey", "will start groonga!");
 SELECT * FROM diaries;
@@ -34,7 +33,6 @@ SELECT * FROM diaries;
 ALTER TABLE diaries
       DROP COLUMN title,
       DROP COLUMN body;
-SHOW CREATE TABLE diaries;
 SELECT * FROM diaries;
 
 INSERT INTO diaries () VALUES ();

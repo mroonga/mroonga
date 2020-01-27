@@ -1,4 +1,5 @@
-# Copyright(C) 2014 Naoya Murakami <naoya@createfield.com>
+# Copyright(C) 2014  Naoya Murakami <naoya@createfield.com>
+# Copyright(C) 2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -22,19 +23,19 @@ DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
 CREATE TABLE diaries (
-  id INT PRIMARY KEY AUTO_INCREMENT,
+  id VARCHAR(10) PRIMARY KEY,
   title VARCHAR(40),
   body VARCHAR(140)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE diaries;
 
-INSERT INTO diaries (title, body) values ("groonga (1)", "starting groonga.");
+INSERT INTO diaries (id, title, body) values ("1", "groonga (1)", "starting groonga.");
 SELECT * FROM diaries;
 
 ALTER TABLE diaries MODIFY body VARCHAR(140) AFTER id;
 SHOW CREATE TABLE diaries;
 
-INSERT INTO diaries (title, body) values ("groonga (2)", "started groonga.");
+INSERT INTO diaries (id, title, body) values ("2", "groonga (2)", "started groonga.");
 SELECT * FROM diaries;
 
 DROP TABLE diaries;

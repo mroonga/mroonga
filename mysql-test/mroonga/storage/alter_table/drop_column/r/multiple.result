@@ -4,14 +4,6 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 title VARCHAR(40),
 body VARCHAR(140)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-SHOW CREATE TABLE diaries;
-Table	Create Table
-diaries	CREATE TABLE `diaries` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `body` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO diaries (title, body) VALUES ("survey", "will start groonga!");
 SELECT * FROM diaries;
 id	title	body
@@ -19,12 +11,6 @@ id	title	body
 ALTER TABLE diaries
 DROP COLUMN title,
 DROP COLUMN body;
-SHOW CREATE TABLE diaries;
-Table	Create Table
-diaries	CREATE TABLE `diaries` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=Mroonga AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SELECT * FROM diaries;
 id
 1
