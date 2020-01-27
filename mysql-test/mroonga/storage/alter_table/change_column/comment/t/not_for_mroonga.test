@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS bugs;
 --enable_warnings
 
 CREATE TABLE bugs (
-  id INT UNSIGNED PRIMARY KEY,
+  id VARCHAR(10) PRIMARY KEY,
   tag VARCHAR(64)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
