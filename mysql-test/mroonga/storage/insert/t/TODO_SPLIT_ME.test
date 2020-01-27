@@ -1,4 +1,5 @@
 # Copyright(C) 2010 Tetsuro IKEDA
+# Copyright(C) 2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -81,6 +82,8 @@ drop table t1;
 create table t1 (c1 int primary key, c2 int);
 insert into t1 values(1,100);
 select * from t1;
+# For MySQL 8.0 or later
+--replace_result t1.PRIMARY PRIMARY
 --error ER_DUP_ENTRY
 insert into t1 values(1,200);
 select * from t1;
