@@ -1,12 +1,12 @@
 DROP TABLE IF EXISTS bugs;
 CREATE TABLE bugs (
-id INT UNSIGNED,
+id VARCHAR(10),
 INDEX (id) COMMENT 'ID search is required.'
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE bugs;
 Table	Create Table
 bugs	CREATE TABLE `bugs` (
-  `id` int(10) unsigned DEFAULT NULL,
+  `id` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   KEY `id` (`id`) COMMENT 'ID search is required.'
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 DROP TABLE bugs;
