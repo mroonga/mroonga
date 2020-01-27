@@ -141,7 +141,6 @@ jobs:
             sudo tee /etc/apt/sources.list.d/source.list
           sudo apt update
           sudo apt -y -V install software-properties-common
-          sudo add-apt-repository -y universe
           sudo add-apt-repository -y ppa:groonga/ppa
           sudo apt update
           sudo apt -y -V install \
