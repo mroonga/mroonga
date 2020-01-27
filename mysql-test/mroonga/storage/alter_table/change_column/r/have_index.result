@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS bugs;
 CREATE TABLE bugs (
-id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+id VARCHAR(10) PRIMARY KEY,
 title VARCHAR(32),
 FULLTEXT KEY (title)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -8,7 +8,7 @@ ALTER TABLE bugs CHANGE COLUMN title title VARCHAR(64);
 SHOW CREATE TABLE bugs;
 Table	Create Table
 bugs	CREATE TABLE `bugs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title` (`title`)
