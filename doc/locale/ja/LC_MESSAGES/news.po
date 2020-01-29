@@ -31,6 +31,13 @@ msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.47, 5.7.29, 8.0.19"
 msgstr ""
 "[:doc:`/install/centos`] MySQL 5.6.47, 5.7.29, 8.0.19をサポートしました。"
 
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.44, 10.2.31, "
+"10.3.22, 10.4.12."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.1.44、10.2.31、10.3.22、10.4.12をサポート"
+"しました。"
+
 msgid "Fixed a build error when we built by using source of MySQL 8.0.19."
 msgstr "MySQL 8.0.19のソースを使ったビルドがエラーになる問題を修正しました。"
 

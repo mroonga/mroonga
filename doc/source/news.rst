@@ -15,6 +15,8 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for MySQL 5.6.47, 5.7.29, 8.0.19
 
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.44, 10.2.31, 10.3.22, 10.4.12.
+
 * Fixed a build error when we built by using source of MySQL 8.0.19.
 
 * [:doc:`/install/centos`] Added support for Percona Server 5.6.47.
