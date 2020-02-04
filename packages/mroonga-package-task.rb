@@ -100,13 +100,17 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def define_archive_task
     [@archive_name, deb_archive_name, rpm_archive_name].each do |archive_name|
       file archive_name => original_archive_path.to_s do
-        sh("tar", "xf", original_archive_path.to_s)
-        archive_base_name = File.basename(archive_name, ".tar.gz")
-        if @original_archive_base_name != archive_base_name
-          mv(@original_archive_base_name, archive_base_name)
+        if File.exist?(@original_archive_name)
+          cp(@original_archive_name, archive_name)
+        else
+          sh("tar", "xf", original_archive_path.to_s)
+          archive_base_name = File.basename(archive_name, ".tar.gz")
+          if @original_archive_base_name != archive_base_name
+            mv(@original_archive_base_name, archive_base_name)
+          end
+          sh("tar", "czf", archive_name, archive_base_name)
+          rm_r(archive_base_name)
         end
-        sh("tar", "czf", archive_name, archive_base_name)
-        rm_r(archive_base_name)
       end
     end
   end
