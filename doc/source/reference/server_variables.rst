@@ -412,15 +412,15 @@ Here is an example transcript to change query log file to ``/tmp/mroonga_query.l
   +------------------------+-------+
   1 row in set (0.00 sec)
 
-  mysql> SET GLOBAL mroonga_log_file = "/tmp/mroonga.log";
+  mysql> SET GLOBAL mroonga_query_log_file = "/tmp/mroonga.log";
   Query OK, 0 rows affected (0.00 sec)
 
-  mysql> SHOW VARIABLES LIKE 'mroonga_log_file';
-  +------------------+------------------+
-  | Variable_name    | Value            |
-  +------------------+------------------+
-  | mroonga_log_file | /tmp/mroonga.log |
-  +------------------+------------------+
+  mysql> SHOW VARIABLES LIKE 'mroonga_query_log_file';
+  +------------------------+------------------+
+  | Variable_name          | Value            |
+  +------------------------+------------------+
+  | mroonga_query_log_file | /tmp/mroonga.log |
+  +------------------------+------------------+
   1 row in set (0.00 sec)
 
 .. _server-variable-mroonga-match-escalation-threshold:
