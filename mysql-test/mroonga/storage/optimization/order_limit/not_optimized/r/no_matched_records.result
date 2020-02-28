@@ -1,0 +1,24 @@
+DROP TABLE IF EXISTS diaries;
+FLUSH STATUS;
+SET NAMES UTF8MB4;
+CREATE TABLE diaries (
+id INT UNSIGNED NOT NULL,
+year INT UNSIGNED,
+month INT UNSIGNED,
+day INT UNSIGNED,
+title VARCHAR(255),
+content TEXT,
+FULLTEXT INDEX(content),
+KEY(month),
+KEY(day)
+) DEFAULT CHARSET UTF8MB4;
+SELECT * FROM diaries
+WHERE MATCH(content) AGAINST("今日" IN BOOLEAN MODE)
+ORDER BY day
+LIMIT 1;
+id	year	month	day	title	content
+
+SHOW STATUS LIKE 'mroonga_fast_order_limit';
+Variable_name	Value
+Mroonga_fast_order_limit	0
+DROP TABLE diaries;

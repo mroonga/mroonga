@@ -3,6 +3,7 @@
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1044,6 +1045,7 @@ private:
   void check_count_skip(key_part_map target_key_part_map);
   bool is_grn_zero_column_value(grn_obj *column, grn_obj *value);
   bool is_primary_key_field(Field *field) const;
+  bool has_matched_records(grn_obj *matched_records);
   void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
                               longlong *limit);
 

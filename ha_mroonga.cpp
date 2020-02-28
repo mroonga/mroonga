@@ -4,6 +4,7 @@
   Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
+  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -11005,6 +11006,15 @@ bool ha_mroonga::is_primary_key_field(Field *field) const
   }
 }
 
+bool ha_mroonga::has_matched_records(grn_obj *matched_records)
+{
+  if (grn_table_size(ctx, matched_records) != 0) {
+    DBUG_RETURN(true);
+  } else {
+    DBUG_RETURN(false);
+  }
+}
+
 void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                         int *n_sort_keys,
                                         longlong *limit)
@@ -11013,6 +11023,14 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
 
   if (!is_enable_optimization()) {
     DBUG_PRINT("info", ("mroonga: fast order limit: optimization is disabled"));
+    fast_order_limit = false;
+    DBUG_VOID_RETURN;
+  }
+
+  if (!has_matched_records(matched_record_keys)) {
+    DBUG_PRINT("info",
+              ("mroonga: fast_order_limit = false: "
+               "no matched records"));
     fast_order_limit = false;
     DBUG_VOID_RETURN;
   }
