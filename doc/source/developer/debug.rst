@@ -58,7 +58,7 @@ Here we show some examples of its usage.
 Run the specified test only
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When you invoke run-sql-test.sh without any option, all tests under ``test/sql/t/`` will be invoked.
+When you invoke run-sql-test.sh without any option, all tests under ``mysql-test/mroonga`` will be invoked.
 
 So if you want to run certain tests only, you can specify the test name in --do-test option. ::
 
