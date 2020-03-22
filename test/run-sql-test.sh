@@ -87,7 +87,14 @@ if [ "${mariadb}" = "yes" ]; then
   fi
   plugins_dir=
 elif [ "${percona}" = "yes" ]; then
-  plugins_dir="${MYSQL_SOURCE_DIR}/lib/mysql/plugin"
+  case ${MYSQL_VERSION} in
+    8.*)
+      plugins_dir="${MYSQL_BUILD_DIR}/lib/plugin"
+      ;;
+    *)
+      plugins_dir="${MYSQL_SOURCE_DIR}/lib/mysql/plugin"
+      ;;
+  esac
 else
   case ${MYSQL_VERSION} in
     8.*)
