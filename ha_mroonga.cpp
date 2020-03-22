@@ -52,7 +52,7 @@
 #ifdef MRN_HAVE_MY_BYTEORDER_H
 #  include <my_byteorder.h>
 #endif
-#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+#ifdef MRN_NEED_ROCKSDB_DB_TYPE_FIX
 #  include <mysql/psi/mysql_file.h>
 #endif
 #ifdef MRN_HAVE_MYSQL_PSI_MYSQL_MEMORY_H
@@ -312,7 +312,7 @@ static PSI_memory_info mrn_all_memory_keys[]=
 };
 #endif
 
-#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+#ifdef MRN_NEED_ROCKSDB_DB_TYPE_FIX
 static PSI_file_key mrn_key_file_frm;
 static PSI_file_info mrn_all_file_keys[] = {
   PSI_INFO_ENTRY(&mrn_key_file_frm,
@@ -2008,7 +2008,7 @@ static ha_create_table_option mrn_index_options[] =
 };
 #endif
 
-#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+#ifdef MRN_NEED_ROCKSDB_DB_TYPE_FIX
 static void
 mrn_fix_db_type_static_rocksdb_db_type()
 {
@@ -2016,6 +2016,10 @@ mrn_fix_db_type_static_rocksdb_db_type()
   // plugin ID for RocksDB that ID was able to be used by third party
   // plugin before:
   // https://github.com/percona/percona-server/commit/805173fed3db20c9c7be7a5bb41bda9d2a53b6ca
+  //
+  // This is true on Percona Server 8.0 or later but we don't use this
+  // logic because we don't need to care about upgrading from old
+  // Percona Server to Percona Server 8.0 or later.
 
   THD *thd = current_thd;
 
@@ -2106,7 +2110,7 @@ mrn_fix_db_type_static_rocksdb_db_type()
 static void
 mrn_fix_db_type()
 {
-#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+#ifdef MRN_NEED_ROCKSDB_DB_TYPE_FIX
   mrn_fix_db_type_static_rocksdb_db_type();
 #endif
 }
@@ -2217,7 +2221,7 @@ static int mrn_init(void *p)
   }
 #endif
 
-#ifdef MRN_HAVE_DB_TYPE_ROCKSDB
+#ifdef MRN_NEED_ROCKSDB_DB_TYPE_FIX
   {
     const char *category = "mroonga";
     int n_keys = array_elements(mrn_all_file_keys);

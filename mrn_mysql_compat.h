@@ -623,9 +623,10 @@ typedef HASH mrn_table_def_cache_type;
 #endif
 
 #ifdef MRN_PERCONA_P
-#  if ((MYSQL_VERSION_ID >= 50634) && (MYSQL_VERSION_ID < 50700)) || \
-      (MYSQL_VERSION_ID >= 50721)
-#    define MRN_HAVE_DB_TYPE_ROCKSDB
+#  if MYSQL_VERSION_ID < 80000 && \
+  (((MYSQL_VERSION_ID >= 50634) && (MYSQL_VERSION_ID < 50700)) ||       \
+   (MYSQL_VERSION_ID >= 50721))
+#    define MRN_NEED_ROCKSDB_DB_TYPE_FIX
 #  endif
 #endif
 
