@@ -442,6 +442,11 @@ typedef uint mrn_alter_table_flags;
 
 #ifdef MRN_PERCONA_P
 #  define MRN_HANDLER_HAVE_HAS_GAP_LOCKS
+#  if MYSQL_VERSION_ID >= 80018
+#    define MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT noexcept
+#  else
+#    define MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT
+#  endif
 #endif
 
 #if MYSQL_VERSION_ID < 80013 || defined(MRN_MARIADB_P)
@@ -878,7 +883,7 @@ public:
   int start_stmt(THD *thd, thr_lock_type lock_type);
 
 #ifdef MRN_HANDLER_HAVE_HAS_GAP_LOCKS
-  bool has_gap_locks() const mrn_override;
+  bool has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT mrn_override;
 #endif
 
 protected:
@@ -1799,8 +1804,8 @@ private:
   int wrapper_start_stmt(THD *thd, thr_lock_type lock_type);
   int storage_start_stmt(THD *thd, thr_lock_type lock_type);
 #ifdef MRN_HANDLER_HAVE_HAS_GAP_LOCKS
-  bool wrapper_has_gap_locks() const;
-  bool storage_has_gap_locks() const;
+  bool wrapper_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT;
+  bool storage_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT;
 #endif
   bool wrapper_primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;

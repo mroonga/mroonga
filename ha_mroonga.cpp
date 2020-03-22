@@ -17794,7 +17794,7 @@ int ha_mroonga::start_stmt(THD *thd, thr_lock_type lock_type)
 }
 
 #ifdef MRN_HANDLER_HAVE_HAS_GAP_LOCKS
-bool ha_mroonga::wrapper_has_gap_locks() const
+bool ha_mroonga::wrapper_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT
 {
   bool has;
   MRN_DBUG_ENTER_METHOD();
@@ -17806,13 +17806,13 @@ bool ha_mroonga::wrapper_has_gap_locks() const
   DBUG_RETURN(has);
 }
 
-bool ha_mroonga::storage_has_gap_locks() const
+bool ha_mroonga::storage_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_RETURN(false);
 }
 
-bool ha_mroonga::has_gap_locks() const
+bool ha_mroonga::has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT
 {
   bool has;
   MRN_DBUG_ENTER_METHOD();
