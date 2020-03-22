@@ -45,9 +45,8 @@ EOF
 
 setup_percona_apt()
 {
-  code_name=$(lsb_release --short --codename)
   release_deb_version=1.0-15
-  release_deb=percona-release_${release_deb_version}.${code_name}_all.deb
+  release_deb=percona-release_${release_deb_version}.generic_all.deb
   wget https://www.percona.com/downloads/percona-release/ubuntu/${release_deb_version}/${release_deb}
   sudo dpkg -i ${release_deb}
   sudo apt -qq update
