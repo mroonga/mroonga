@@ -55,9 +55,10 @@ matrix:
     # - name: Percona Server 5.7
     #   env:
     #     - MYSQL_VERSION=percona-server-5.7
-    - name: Percona Server 8.0
-      env:
-        - MYSQL_VERSION=percona-server-8.0
+    # TODO: Percona Server 8.0 isn't APT ready yet.
+    # - name: Percona Server 8.0
+    #   env:
+    #     - MYSQL_VERSION=percona-server-8.0
 install:
   - tools/travis/install.sh
 before_script:
