@@ -45,11 +45,10 @@ EOF
 
 setup_percona_apt()
 {
-  release_deb_version=1.0-15
-  release_deb=percona-release_${release_deb_version}.generic_all.deb
-  wget https://www.percona.com/downloads/percona-release/ubuntu/${release_deb_version}/${release_deb}
+  code_name=$(lsb_release --short --codename)
+  release_deb=percona-release_latest.${code_name}_all.deb
+  wget https://repo.percona.com/apt/${release_deb}
   sudo dpkg -i ${release_deb}
-  sudo apt -qq update
 }
 
 if [ "${MROONGA_BUNDLED}" = "yes" ]; then
@@ -134,17 +133,27 @@ else
       ;;
     percona-server-*)
       setup_percona_apt
+      case "${MYSQL_VERSION}" in
+        percona-server-5*)
+          sudo apt -qq update
+          suffix=-${series}
+          ;;
+        *)
+          sudo percona-release setup ps80
+          suffix=
+          ;;
+      esac
       sudo apt -qq -y purge \
            mysql-common \
            mysql-client-core-5.7 \
            mysql-server-core-5.7
       sudo rm -rf /var/lib/mysql
-      sudo apt -qq -y build-dep percona-server-server-${series}
+      sudo apt -qq -y build-dep percona-server-server${suffix}
       sudo apt -qq -y install \
-           percona-server-server-${series} \
-           percona-server-client-${series} \
-           percona-server-test-${series}
-      apt -qq source percona-server-server-${series}
+           percona-server-server${suffix} \
+           percona-server-client${suffix} \
+           percona-server-test${suffix}
+      apt -qq source percona-server-server${suffix}
       ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
       ;;
   esac
