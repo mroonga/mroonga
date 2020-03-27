@@ -100,7 +100,7 @@ run_sql_test()
 {
   test_args=()
   case "${CI_MYSQL_VERSION}" in
-    mysql-8.0)
+    mysql-8.0|percona-server-8.0)
       n_processors=1
       # TODO: Remove the following "rm" as soon as possible
       # when these functionality is supported or test case is fixed for MySQL 8.0.
