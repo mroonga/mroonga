@@ -103,8 +103,6 @@ else
       (cd vendor/mysql && \
        fakeroot debian/rules override_dh_auto_configure SKIP_DEBUG_BINARY=yes && \
        cd builddir/libservices && \
-       make > /dev/null && \
-       cd ../extra && \
        make > /dev/null)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/builddir"
