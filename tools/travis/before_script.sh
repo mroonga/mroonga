@@ -103,7 +103,7 @@ else
       (cd vendor/mysql && \
        fakeroot debian/rules override_dh_auto_configure SKIP_DEBUG_BINARY=yes && \
        (cd builddir/libservices && make > /dev/null) && \
-       (cd builddir/mysql-test/lib/My/SafeProcess && make install > /dev/null))
+       (cd builddir/mysql-test/lib/My/SafeProcess && sudo make install > /dev/null))
       # mysqltest_safe_process isn't included in percona-server-test...
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/builddir"
