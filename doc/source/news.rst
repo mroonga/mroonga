@@ -5,6 +5,32 @@
 News
 ====
 
+.. _release-10-00:
+
+Release 10.00 - 2019-03-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.29.
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga crashed when we sent to query as below conditions. [GitHub#303][Reported by pinpikokun]
+
+  * When Mroonga's optimize of ``ORDER_BY_LIMIT`` is valid.
+
+    * See https://mroonga.org/docs/reference/optimizations.html#order-by-limit about conditions of this optimize.
+
+  * When sub query by using Mroonga does not use ``ORDER BY LIMIT``.
+
+Thanks
+^^^^^^
+
+* pinpikokun
+
 .. _release-9-12:
 
 Release 9.12 - 2019-01-29

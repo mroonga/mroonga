@@ -21,11 +21,46 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 9.12 - 2019-01-29"
-msgstr "9.12リリース - 2019-01-29"
+msgid "Release 10.00 - 2019-03-29"
+msgstr "10.00リリース - 2019-03-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.29."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.29をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that Mroonga crashed when we sent to query as below conditions. "
+"[GitHub#303][Reported by pinpikokun]"
+msgstr ""
+"以下の条件を満たしたクエリーを送信した際に、Mroongaがクラッシュする問題を修正"
+"しました。 [GitHub#303] [pinpikokunさんが報告]"
+
+msgid "When Mroonga's optimize of ``ORDER_BY_LIMIT`` is valid."
+msgstr "Mroongaの ``ORDER_BY_LIMIT`` の最適化が有効な時"
+
+msgid ""
+"See https://mroonga.org/docs/reference/optimizations.html#order-by-limit "
+"about conditions of this optimize."
+msgstr ""
+"この最適化の条件については、 https://mroonga.org/ja/docs/reference/"
+"optimizations.html#order-by-limit を参照してください。"
+
+msgid "When sub query by using Mroonga does not use ``ORDER BY LIMIT``."
+msgstr "Mroongaを使ったサブクエリーで ``ORDER_BY_LIMIT`` を使っていない時。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "pinpikokun"
+msgstr "pinpikokunさん"
+
+msgid "Release 9.12 - 2019-01-29"
+msgstr "9.12リリース - 2019-01-29"
 
 msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.47, 5.7.29, 8.0.19"
 msgstr ""
@@ -84,9 +119,6 @@ msgid "This modify Increasing outputted logs when InnoDB shutdown."
 msgstr ""
 "この変更によって、InnoDBのシャットダウン時に出力されるログが増加します。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid ""
 "[:doc:`/install/ubuntu`] Added support for Ubuntu 16.04 (Xenial Xerus) that "
 "was missing."
@@ -121,9 +153,6 @@ msgid ""
 msgstr ""
 "WSL上のUbuntu 18.04でパッケージインストール時に dpkg --configure が失敗する問"
 "題を修正しました。 [GitHub#282][ochaochaocha3さんがパッチ提供]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "ochaochaocha3"
 msgstr "ochaochaocha3さん"
