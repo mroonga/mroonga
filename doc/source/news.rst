@@ -5,9 +5,9 @@
 News
 ====
 
-.. _release-10-00:
+.. _release-10-01:
 
-Release 10.00 - 2019-03-29
+Release 10.01 - 2019-03-30
 --------------------------
 
 Improvements
