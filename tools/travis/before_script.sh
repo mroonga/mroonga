@@ -65,6 +65,7 @@ else
       sudo mkdir -p /usr/global/share
       sudo mv ${boost_archive} /usr/global/share/
       sudo chown -R ${USER}: /usr/global/share/
+      sed -i '/^-DWITH_SSL/d' vendor/mysql/debian/rules
       (cd vendor/mysql && fakeroot debian/rules override_dh_auto_configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
