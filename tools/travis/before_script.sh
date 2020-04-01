@@ -60,20 +60,22 @@ else
                       "--with-mysql-build=$PWD/vendor/mysql/builddir")
       ;;
     mysql-5.7)
+      boost_archive=boost_1_59_0.tar.gz
+      curl -L -O http://packages.groonga.org/tmp/boost/${boost_archive}
       sudo mkdir -p /usr/global/share
+      sudo mv ${boost_archive} /usr/global/share/
       sudo chown -R ${USER}: /usr/global/share/
-      sed -i 's/-DWITH_BOOST/-DDOWNLOAD_BOOST=1 -DWITH_BOOST/' vendor/mysql/debian/rules
-      # Remove https://bugs.mysql.com/bug.php?id=97278 is fixed (hardcoded build host path issue exists on MySQL 5.7.28)
       sed -i '/^-DWITH_SSL/d' vendor/mysql/debian/rules
       (cd vendor/mysql && fakeroot debian/rules override_dh_auto_configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
       ;;
     mysql-8.0)
+      boost_archive=boost_1_70_0.tar.gz
+      curl -L -O http://packages.groonga.org/tmp/boost/${boost_archive}
       sudo mkdir -p /usr/global/share
+      sudo mv ${boost_archive} /usr/global/share/
       sudo chown -R ${USER}: /usr/global/share/
-      # Use DOWNLOAD_BOOST=1 explicitly to avoid https://bugs.mysql.com/bug.php?id=96266.
-      sed -i 's/-DWITH_BOOST/-DDOWNLOAD_BOOST=1 -DWITH_BOOST/' vendor/mysql/debian/rules
       (cd vendor/mysql && fakeroot debian/rules override_dh_auto_configure)
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
