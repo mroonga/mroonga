@@ -102,6 +102,10 @@ else
                       "--with-mysql-config=$PWD/vendor/mysql/builddir/scripts/mysql_config")
       ;;
     percona-server-8.0)
+      boost_archive=boost_1_70_0.tar.gz
+      curl -L -O http://packages.groonga.org/tmp/boost/${boost_archive}
+      mkdir -p vendor/mysql/builddir/libboost
+      mv ${boost_archive} vendor/mysql/builddir/libboost
       (cd vendor/mysql && \
        fakeroot debian/rules override_dh_auto_configure SKIP_DEBUG_BINARY=yes && \
        (cd builddir/libservices && make > /dev/null) && \
