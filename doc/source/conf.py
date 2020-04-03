@@ -100,13 +100,13 @@ pygments_style = 'sphinx'
 #modindex_common_prefix = []
 
 variables = {
-  "package_mroonga_version": os.environ["PACKAGE_MROONGA_VERSION"],
-  "download_base": "https://github.com/mroonga/mroonga/releases/tag"
+  "package_mroonga_version": os.environ["PACKAGE_MROONGA_VERSION"]
 }
+
 variables["windows_mariadb_package_link_label"] = \
   "MariaDB with Mroonga-{package_mroonga_version}".format(**variables)
 variables["windows_mariadb_package_link_basename"] = \
-  "{download_base}/v{package_mroonga_version}".format(**variables)
+  "https://github.com/mroonga/mroonga/releases/tag/v{package_mroonga_version}".format(**variables)
 
 rst_epilog = '''
 .. |mroonga_mariadb_windows_package_link| replace:: `{windows_mariadb_package_link_label}`_
