@@ -1775,15 +1775,19 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
       flag_names += 1;
       continue;
     }
-    if (rest_length >= 13 && !memcmp(flag_names, "COLUMN_SCALAR", 13)) {
+#define NAME_SIZE(name) (sizeof(name) - 1)
+#define EQUAL(name)                                     \
+    (rest_length >= NAME_SIZE(name) &&                  \
+     memcmp(flag_names, name, NAME_SIZE(name)) == 0)
+    if (EQUAL("COLUMN_SCALAR")) {
       *column_flags |= GRN_OBJ_COLUMN_SCALAR;
-      flag_names += 13;
+      flag_names += NAME_SIZE("COLUMN_SCALAR");
       found = true;
-    } else if (rest_length >= 13 && !memcmp(flag_names, "COLUMN_VECTOR", 13)) {
+    } else if (EQUAL("COLUMN_VECTOR")) {
       *column_flags |= GRN_OBJ_COLUMN_VECTOR;
-      flag_names += 13;
+      flag_names += NAME_SIZE("COLUMN_VECTOR");
       found = true;
-    } else if (rest_length >= 13 && !memcmp(flag_names, "COMPRESS_ZLIB", 13)) {
+    } else if (EQUAL("COMPRESS_ZLIB")) {
       if (mrn_libgroonga_support_zlib) {
         *column_flags |= GRN_OBJ_COMPRESS_ZLIB;
         found = true;
@@ -1793,8 +1797,8 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
                             ER_MRN_UNSUPPORTED_COLUMN_FLAG_STR,
                             "COMPRESS_ZLIB");
       }
-      flag_names += 13;
-    } else if (rest_length >= 12 && !memcmp(flag_names, "COMPRESS_LZ4", 12)) {
+      flag_names += NAME_SIZE("COMPRESS_ZLIB");
+    } else if (EQUAL("COMPRESS_LZ4")) {
       if (mrn_libgroonga_support_lz4) {
         *column_flags |= GRN_OBJ_COMPRESS_LZ4;
         found = true;
@@ -1804,8 +1808,8 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
                             ER_MRN_UNSUPPORTED_COLUMN_FLAG_STR,
                             "COMPRESS_LZ4");
       }
-      flag_names += 12;
-    } else if (rest_length >= 13 && !memcmp(flag_names, "COMPRESS_ZSTD", 13)) {
+      flag_names += NAME_SIZE("COMPRESS_LZ4");
+    } else if (EQUAL("COMPRESS_ZSTD")) {
       if (mrn_libgroonga_support_zstd) {
         *column_flags |= GRN_OBJ_COMPRESS_ZSTD;
         found = true;
@@ -1815,7 +1819,11 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
                             ER_MRN_UNSUPPORTED_COLUMN_FLAG_STR,
                             "COMPRESS_ZSTD");
       }
-      flag_names += 13;
+      flag_names += NAME_SIZE("COMPRESS_ZSTD");
+    } else if (EQUAL("WITH_WEIGHT")) {
+      *column_flags |= GRN_OBJ_WITH_WEIGHT;
+      flag_names += NAME_SIZE("WITH_WEIGHT");
+      found = true;
     } else {
       char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
       snprintf(invalid_flag_name, MRN_MESSAGE_BUFFER_SIZE,
@@ -1828,6 +1836,8 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
                           invalid_flag_name);
       break;
     }
+#undef EQUAL
+#undef NAME_SIZE
   }
   return found;
 }
