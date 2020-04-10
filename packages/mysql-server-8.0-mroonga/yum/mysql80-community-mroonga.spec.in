@@ -87,7 +87,6 @@ if [ ! -d ${mysql_source} ]; then
         -DWITH_BOOST=../.. \
         -DINSTALL_LIBDIR="%{_lib}/mysql" \
         -DINSTALL_PLUGINDIR="%{_lib}/mysql/plugin"
-    make %{?_smp_mflags} VERBOSE=1
     popd && popd
 fi
 %configure \
