@@ -131,9 +131,10 @@ jobs:
             package: percona-server-5.7
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-        with:
-          fetch-depth: 1
+      - name: Remove needless data
+        run: |
+          docker system prune --force
+      - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
           grep '^deb ' /etc/apt/sources.list | \
