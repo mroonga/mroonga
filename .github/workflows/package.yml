@@ -133,7 +133,7 @@ jobs:
     steps:
       - name: Remove needless data
         run: |
-          docker system prune --force
+          sudo rm -rf /opt
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
@@ -165,7 +165,7 @@ jobs:
       - name: Clone dependencies
         run: |
           cd ..
-          git clone --recursive https://github.com/groonga/groonga.git
+          git clone --depth 1 --recursive https://github.com/groonga/groonga.git
           git clone --depth 1 https://github.com/clear-code/cutter.git
           git clone --depth 1 https://github.com/mroonga/mroonga.github.com.git
       - name: Generate configure
