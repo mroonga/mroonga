@@ -237,7 +237,7 @@ Update blog(Mroonga blog)
 We update the below files.
 
 * $MROONGA_GITHUB_COM_PATH/ja/_posts/(the date of release)-mroonga-(version).md
-* $MROONGA_GITHUB_COM_PATH/en/_posts/(the date of release)-mroonga-(version).md
+* ``$MROONGA_GITHUB_COM_PATH/en/_posts/(the date of release)-mroonga-(version).md``
 
 We can confirm contents of blog on Web browser by using Jekyll.::
 
