@@ -180,7 +180,7 @@ Execute the following command::
 
     % rake apt:release
 
-Now we finish build and upload packages to http://packages.groonga.org/.
+Now we finish build and upload packages to https://packages.groonga.org/.
 However, these packages are unsigned. We sign packages by executing the below commands::
 
     cd $PACKAGES_GROONGA_ORG_REPOSITORY
