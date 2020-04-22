@@ -19,7 +19,7 @@ Use the following working directories.
 * CUTTER_DIR=$HOME/work/cutter
 * CUTTER_SOURCE_PATH=$HOME/work/cutter/cutter
 * GROONGA_SOURCE_PATH=$HOME/work/groonga/groonga.clean
-
+* PACKAGES_GROONGA_ORG_REPOSITORY=$HOME/work/groonga/packages.groonga.org
 
 Setup build environment
 -----------------------
@@ -28,13 +28,8 @@ Install the following packages::
 
     % sudo apt-get install -V ruby mecab libmecab-dev gnupg2 dh-autoreconf python-sphinx bison
 
-We use `Vagrant <https://www.vagrantup.com/>`_ for building deb or rpm packages and expect that Virtualbox package is already installed. If not, please install it in the following steps::
-
-    % cat /etc/apt/sources.list
-    deb http://ftp.jp.debian.org/debian/ sid main contrib
-    deb-src http://ftp.jp.debian.org/debian/ sid main contrib
-    % sudo apt-get update
-    % sudo apt-get install virtualbox
+We use `Docker <https://www.docker.com/>`_ for building deb or rpm packages.
+If it is not installed, please install it according to the official documentation of Docker.
 
 Bump version
 ------------
@@ -86,7 +81,7 @@ Execute with the following options for the release::
     % ./configure \
         --enable-document \
         --prefix=/tmp/local \
-        --with-launchpad-uploader-pgp-key=(Launchpadに登録したkeyID) \
+        --with-launchpad-uploader-pgp-key=(The key ID that is registered Launchpad) \
         --with-mroonga-github-com-path=$MROONGA_GITHUB_COM_PATH \
         --with-cutter-source-path=$CUTTER_SOURCE_PATH \
         --with-groonga-source-path=$GROONGA_SOURCE_PATH \
@@ -95,6 +90,10 @@ Execute with the following options for the release::
         --with-mysql-config=(The path to mysql_config command)
 
 See :doc:`/install/others`  for the details of ``--with-mysql-source`` option.
+
+.. note::
+   We can not upload and override the same name packages to PPA repository.
+   Therefore, we upload packages to a stable repository after confirming the successful build of they in the nightly repository.
 
 Check whether you can upload packages
 -------------------------------------
@@ -106,6 +105,16 @@ You can check with the following command whether you can login::
     % ssh packages@packages.groonga.org
 
 If you can't login to packages.groonga.org, you must be registered ssh public key.
+
+Confirm the results of each test
+------------------------------
+
+We confirm the results of all the below tests before setting the tag to Mroonga.
+Because if we will find problems in Mroonga after setting the tag to it, we must release it again.
+
+* `GitHub Actions <https://github.com/mroonga/mroonga/actions>`_
+* `Travis CI <https://travis-ci.org/github/mroonga/mroonga>`_
+* `AppVeyor <https://ci.appveyor.com/project/groonga/mroonga>`_
 
 Execute make update-latest-release
 ----------------------------------
@@ -152,7 +161,7 @@ Execute ``make upload`` for uploading archive file::
 
     % make upload
 
-As a result, ``tar.gz`` archive file is available from http://packages.groonga.org/source/mroonga/.
+As a result, ``tar.gz`` archive file is available from https://packages.groonga.org/source/mroonga/.
 
 
 Create packages for the release
@@ -163,27 +172,29 @@ Create Linux and Windows packages.
 Debian
 ^^^^^^
 
-Change working directory to ``apt``::
+Change working directory to ``packages``::
 
-    % cd apt
+    % cd packages
 
 Execute the following command::
 
-    % make download
-    % make build
-    % make upload
+    % rake apt:release
 
-After uploading the packages, update sign/metadata. See Groonga's release procedure about details.
+Now we finish build and upload packages to https://packages.groonga.org/.
+However, these packages are unsigned. We sign packages by executing the below commands::
+
+    % cd $PACKAGES_GROONGA_ORG_REPOSITORY
+    % rake apt
 
 Debian derivatives(Ubuntu)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For Ubuntu, packages are provided by PPA on launchpad.net.
 
-Change working directory to ``ubuntu`` and execute ``make upload`` command::
+Change working directory to ``packages`` and execute ``rake ubuntu:upload`` command::
 
-    % cd packages/ubuntu
-    % make upload
+    % cd packages
+    % rake ubuntu:upload
 
 When upload packages was succeeded, package build process is executed on launchpad.net. Then build result is notified via E-mail.
 You can install packages via Groonga PPA on launchpad.net::
@@ -193,29 +204,56 @@ You can install packages via Groonga PPA on launchpad.net::
 Red Hat derivatives
 ^^^^^^^^^^^^^^^^^^^
 
-Change working directory to ``yum`` ::
+Change working directory to ``packages`` ::
 
-    % cd apt
+    % cd packages
 
 Execute the following command::
 
-    % make download
-    % make build
-    % make upload
+    % rake yum:release
 
-After uploading the packages, update sign/metadata. See Groonga's release procedure about details.
+Now we finish build and upload packages to https://packages.groonga.org/.
+However, these packages are unsigned. We sign packages by executing the below commands::
+
+    % cd $PACKAGES_GROONGA_ORG_REPOSITORY
+    % rake yum
 
 Windows
 ^^^^^^^
 
 For windows packages, we use `AppVeyor CI <https://ci.appveyor.com/project/groonga/mroonga>`_ artifacts files.
+We upload them to `GitHub release page <https://github.com/mroonga/mroonga/releases>`_ .
 
 Upload documents
 ----------------
 
 1. Clone mroonga.github.com repository
-2. Execute ``make update-document``
+2. Execute ``make update-document`` in ``$MROONGA_CLONE_DIR``
 3. Commit changes in mroonga.github.com repository && push them
+
+Update blog(Mroonga blog)
+-------------------------
+
+We update the below files.
+
+* ``$MROONGA_GITHUB_COM_PATH/ja/_posts/(the date of release)-mroonga-(version).md``
+* ``$MROONGA_GITHUB_COM_PATH/en/_posts/(the date of release)-mroonga-(version).md``
+
+We can confirm contents of blog on Web browser by using Jekyll.::
+
+  % jekyll serve --watch
+
+We access http://localhost:4000 on our web browser for confirming contents.
+
+.. note::
+   If we want private to blog contents, we set ``false`` on ``published:`` in ``.md`` file.::
+
+     ---
+     layout: post.en
+     title: Mroonga 10.01 has been released!
+     description: Mroonga 10.01 has been released!
+     published: false
+     ---
 
 Announce release for mailing list
 ---------------------------------
@@ -234,3 +272,10 @@ If you use tweet link, title of release announce and URL is embedded into your t
 
 Execute sharing tweet in Japanese and English version of blog entry.
 Note that this tweet should be done when logged in by ``groonga`` account.
+
+Announce release for Facebook
+-----------------------------
+
+We announce release from Mroonga group in Facebook.
+
+https://www.facebook.com/mroonga/
