@@ -228,7 +228,7 @@ Upload documents
 ----------------
 
 1. Clone mroonga.github.com repository
-2. Execute ``make update-document`` in $MROONGA_CLONE_DIR
+2. Execute ``make update-document`` in ``$MROONGA_CLONE_DIR``
 3. Commit changes in mroonga.github.com repository && push them
 
 Update blog(Mroonga blog)
