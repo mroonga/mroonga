@@ -113,7 +113,7 @@ We confirm the results of all the below tests before setting the tag to Mroonga.
 Because if we will find problems in Mroonga after setting the tag to it, we must release it again.
 
 * `GitHub Actions <https://github.com/mroonga/mroonga/actions>`_
-* `TravisCI <https://travis-ci.org/github/mroonga/mroonga>`_
+* `Travis CI <https://travis-ci.org/github/mroonga/mroonga>`_
 * `AppVeyor <https://ci.appveyor.com/project/groonga/mroonga>`_
 
 Execute make update-latest-release
