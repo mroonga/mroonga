@@ -161,7 +161,7 @@ Execute ``make upload`` for uploading archive file::
 
     % make upload
 
-As a result, ``tar.gz`` archive file is available from http://packages.groonga.org/source/mroonga/.
+As a result, ``tar.gz`` archive file is available from https://packages.groonga.org/source/mroonga/.
 
 
 Create packages for the release
