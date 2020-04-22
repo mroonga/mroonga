@@ -215,7 +215,7 @@ Execute the following command::
 Now we finish build and upload packages to https://packages.groonga.org/.
 However, these packages are unsigned. We sign packages by executing the below commands::
 
-    cd $PACKAGES_GROONGA_ORG_REPOSITORY
+    % cd $PACKAGES_GROONGA_ORG_REPOSITORY
     % rake yum
 
 Windows
