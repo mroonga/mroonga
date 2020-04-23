@@ -233,7 +233,11 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
           raise "No Appveyor build"
         end
 
-        releases ||= client.create_release(mroonga_repository, tag_name)
+        releases = client.releases(mroonga_repository)
+        current_release = releases.find do |release|
+          release.tag_name == tag_name
+        end
+        current_release ||= client.create_release(mroonga_repository, tag_name)
 
         start_build = appveyor_info[:build_id].to_i + 1
         build_history = Veyor.project_history(account: appveyor_info[:account],
