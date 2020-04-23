@@ -1,5 +1,5 @@
-require "octokit"
 require "json"
+require "octokit"
 require "pathname"
 require "pp"
 require "veyor"
