@@ -2,9 +2,6 @@ require "json"
 require "pathname"
 require "pp"
 
-require "octokit"
-require "veyor"
-
 groonga_repository = ENV["GROONGA_REPOSITORY"]
 if groonga_repository.nil?
   raise "Specify GROONGA_REPOSITORY environment variable"
@@ -201,6 +198,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     namespace :windows do
       desc "Upload packages"
       task :upload do
+        require "octokit"
+        require "veyor"
+
         mroonga_repository = "mroonga/mroonga"
         tag_name = "v#{detect_version}"
 
