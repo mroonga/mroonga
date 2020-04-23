@@ -23,7 +23,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def define
     super
     define_debian_control_tasks
-    define_windows_control_tasks
+    define_windows_upload_task
   end
 
   private
@@ -197,7 +197,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     end
   end
 
-  def define_windows_control_tasks
+  def define_windows_upload_task
     namespace :windows do
       desc "Upload packages"
       task :upload do
