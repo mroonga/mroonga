@@ -259,6 +259,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
               :content_type => "application/zip",
             }
             client.upload_asset(current_release.url, file_name, options)
+            rm(file_name)
           end
         end
       end
