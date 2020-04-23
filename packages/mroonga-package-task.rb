@@ -202,7 +202,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
         require "veyor"
 
         mroonga_repository = "mroonga/mroonga"
-        tag_name = "v#{detect_version}"
+        tag_name = "v#{@version}"
 
         github_token = ENV["GITHUB_TOKEN"]
         client = Octokit::Client.new(:access_token => github_token)
