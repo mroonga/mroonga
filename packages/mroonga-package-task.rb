@@ -204,7 +204,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
         mroonga_repository = "mroonga/mroonga"
         tag_name = "v#{@version}"
 
-        github_token = ENV["GITHUB_TOKEN"]
+        github_token = env_value("GITHUB_TOKEN")
         client = Octokit::Client.new(:access_token => github_token)
 
         appveyor_url = "https://ci.appveyor.com/"
