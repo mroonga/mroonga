@@ -227,33 +227,33 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
             message << " #{status.target_url}"
             raise message
           end
-          if appveyor_info.nil?
-            raise "No Appveyor build"
-          end
+        end
+        if appveyor_info.nil?
+          raise "No Appveyor build"
+        end
 
-          releases ||= client.create_release(mroonga_repository, tag_name)
+        releases ||= client.create_release(mroonga_repository, tag_name)
 
-          start_build = appveyor_info[:build_id].to_i + 1
-          build_history = Veyor.project_history(account: appveyor_info[:account],
-                                                project: appveyor_info[:project],
-                                                start_build: start_build,
-                                                limit: 1)
-          build_version = build_history["builds"][0]["buildNumber"]
-          project = Veyor.project(account: appveyor_info[:account],
-                                  project: appveyor_info[:project],
-                                  version: build_version)
-          project["build"]["jobs"].each do |job|
-            job_id = job["jobId"]
-            artifacts = Veyor.build_artifacts(job_id: job_id)
-            artifacts.each do |artifact|
-              file_name = artifact["fileName"]
-              url = "#{appveyor_url}api/buildjobs/#{job_id}/artifacts/#{file_name}"
-              sh("curl", "--location", "--output", file_name, url)
-              options = {
-                :content_type => "application/zip",
-              }
-              client.upload_asset(current_release.url, file_name, options)
-            end
+        start_build = appveyor_info[:build_id].to_i + 1
+        build_history = Veyor.project_history(account: appveyor_info[:account],
+                                              project: appveyor_info[:project],
+                                              start_build: start_build,
+                                              limit: 1)
+        build_version = build_history["builds"][0]["buildNumber"]
+        project = Veyor.project(account: appveyor_info[:account],
+                                project: appveyor_info[:project],
+                                version: build_version)
+        project["build"]["jobs"].each do |job|
+          job_id = job["jobId"]
+          artifacts = Veyor.build_artifacts(job_id: job_id)
+          artifacts.each do |artifact|
+            file_name = artifact["fileName"]
+            url = "#{appveyor_url}api/buildjobs/#{job_id}/artifacts/#{file_name}"
+            sh("curl", "--location", "--output", file_name, url)
+            options = {
+              :content_type => "application/zip",
+            }
+            client.upload_asset(current_release.url, file_name, options)
           end
         end
       end
