@@ -206,6 +206,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
         github_token = env_value("GITHUB_TOKEN")
         client = Octokit::Client.new(:access_token => github_token)
+        client.auto_paginate = true
 
         appveyor_url = "https://ci.appveyor.com/"
         appveyor_info = nil
