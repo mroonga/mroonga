@@ -1,7 +1,8 @@
 require "json"
-require "octokit"
 require "pathname"
 require "pp"
+
+require "octokit"
 require "veyor"
 
 groonga_repository = ENV["GROONGA_REPOSITORY"]
