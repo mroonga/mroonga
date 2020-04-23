@@ -22,12 +22,14 @@ namespace :version do
   end
 end
 
-namespace :ubuntu do
-  desc "Upload Ubuntu packages"
-  task :upload do
-    packages.each do |package|
-      cd(package) do
-        ruby("-S", "rake", "ubuntu:upload")
+[:ubuntu, :windows].each do |target_namespace|
+  namespace target_namespace do
+    desc "Upload #{target_namespace} packages"
+    task :upload do
+      packages.each do |package|
+        cd(package) do
+          ruby("-S", "rake", "#{target_namespace}:upload")
+        end
       end
     end
   end
