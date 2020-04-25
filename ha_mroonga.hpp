@@ -42,10 +42,6 @@ extern "C" {
 #  define mrn_override
 #endif
 
-#if (MYSQL_VERSION_ID >= 50514 && MYSQL_VERSION_ID < 50600)
-#  define MRN_HANDLER_HAVE_FINAL_ADD_INDEX 1
-#endif
-
 #if (MYSQL_VERSION_ID >= 50603) || defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_HA_RND_NEXT 1
 #  define MRN_HANDLER_HAVE_HA_RND_POS 1
@@ -79,10 +75,6 @@ extern "C" {
 
 #ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
-#endif
-
-#if MYSQL_VERSION_ID < 50600
-#  define MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
 #endif
 
 #if MYSQL_VERSION_ID >= 50607
@@ -173,10 +165,6 @@ extern "C" {
 #  define MRN_TIMESTAMP_USE_LONG
 #endif
 
-#if MYSQL_VERSION_ID < 50600 && !defined(MRN_MARIADB_P)
-#  define MRN_FIELD_STORE_TIME_NEED_TYPE
-#endif
-
 #if MYSQL_VERSION_ID < 50706 || defined(MRN_MARIADB_P)
 #  define MRN_HAVE_TL_WRITE_DELAYED
 #endif
@@ -191,14 +179,6 @@ extern "C" {
 
 #if MYSQL_VERSION_ID >= 50604
 #  define MRN_JOIN_TAB_HAVE_CONDITION
-#endif
-
-#if MYSQL_VERSION_ID < 50600
-#  define MRN_RBR_UPDATE_NEED_ALL_COLUMNS
-#endif
-
-#if MYSQL_VERSION_ID >= 50500
-#  define MRN_ROW_BASED_CHECK_IS_METHOD
 #endif
 
 #if MYSQL_VERSION_ID >= 50600
@@ -218,16 +198,6 @@ extern "C" {
 #  if MYSQL_VERSION_ID >= 100100
 #    define MRN_TABLE_SHARE_TDC_IS_POINTER
 #  endif
-#endif
-
-#ifdef MRN_MARIADB_P
-#  if MYSQL_VERSION_ID >= 50542 && MYSQL_VERSION_ID < 100000
-#    define MRN_SUPPORT_THDVAR_SET
-#  elif MYSQL_VERSION_ID >= 100017
-#    define MRN_SUPPORT_THDVAR_SET
-#  endif
-#else
-#  define MRN_SUPPORT_THDVAR_SET
 #endif
 
 #ifdef MRN_MARIADB_P
@@ -557,9 +527,6 @@ private:
   mutable TABLE_SHARE table_share_for_create;
   mutable MEM_ROOT    mem_root_for_create;
   mutable handler     *wrap_handler_for_create;
-#ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
-  handler_add_index *hnd_add_index;
-#endif
 #ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   mrn_alter_flags alter_handler_flags;
   KEY         *alter_key_info_buffer;
@@ -853,13 +820,7 @@ public:
                                    Alter_inplace_info *ha_alter_info);
 #else
   mrn_alter_table_flags alter_table_flags(mrn_alter_table_flags flags);
-#  ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
-  int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
-                handler_add_index **add);
-  int final_add_index(handler_add_index *add, bool commit);
-#  else
   int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
-#  endif
   int prepare_drop_index(TABLE *table_arg, uint *key_num, uint num_of_keys);
   int final_drop_index(TABLE *table_arg);
 #endif
@@ -918,9 +879,6 @@ protected:
   bool primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST
     mrn_override;
-#ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
-  char *get_tablespace_name(THD *thd, char *name, uint name_len);
-#endif
 #ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
   bool can_switch_engines();
 #endif
@@ -1749,19 +1707,8 @@ private:
 #else
   mrn_alter_table_flags wrapper_alter_table_flags(mrn_alter_table_flags flags);
   mrn_alter_table_flags storage_alter_table_flags(mrn_alter_table_flags flags);
-#  ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
-  int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
-                        handler_add_index **add);
-  int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys,
-                        handler_add_index **add);
-#  else
   int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
   int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
-#  endif
-#  ifdef MRN_HANDLER_HAVE_FINAL_ADD_INDEX
-  int wrapper_final_add_index(handler_add_index *add, bool commit);
-  int storage_final_add_index(handler_add_index *add, bool commit);
-#  endif
   int wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
                                  uint num_of_keys);
   int storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
@@ -1811,10 +1758,6 @@ private:
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
   bool storage_primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
-#ifdef MRN_HANDLER_HAVE_GET_TABLESPACE_NAME
-  char *wrapper_get_tablespace_name(THD *thd, char *name, uint name_len);
-  char *storage_get_tablespace_name(THD *thd, char *name, uint name_len);
-#endif
 #ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
   bool wrapper_can_switch_engines();
   bool storage_can_switch_engines();
@@ -1837,9 +1780,6 @@ private:
   void storage_init_table_handle_for_HANDLER();
   void wrapper_set_keys_in_use();
   void storage_set_keys_in_use();
-#ifdef MRN_RBR_UPDATE_NEED_ALL_COLUMNS
-  bool check_written_by_row_based_binlog();
-#endif
 #ifdef MRN_HAVE_HA_REBIND_PSI
   void wrapper_unbind_psi();
   void storage_unbind_psi();
