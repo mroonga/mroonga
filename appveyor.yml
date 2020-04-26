@@ -47,7 +47,7 @@ install:
       patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.4.11-more-innodb-shutdown-log.diff
     )
   - rmdir /S /Q storage\mroonga\
-  - ps: Get-Content ..\mroonga\version | ForEach-Object { $env:MROONGA_VERSION = $_ }
+  - ps: $Env:MROONGA_VERSION = "$(Get-Content ..\mroonga\version)"
   - move ..\mroonga storage\mroonga
   - if "%USE_MASTER%" == "yes" (
       git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga &&
