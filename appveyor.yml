@@ -50,6 +50,11 @@ install:
   - ps: $Env:MROONGA_VERSION = "$(Get-Content ..\mroonga\version)"
   - move ..\mroonga storage\mroonga
   - if "%USE_MASTER%" == "yes" (
+      call
+        "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+        amd64
+    )
+  - if "%USE_MASTER%" == "yes" (
       git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga &&
       cd ..\groonga\vendor &&
       ruby download_lz4.rb &&
