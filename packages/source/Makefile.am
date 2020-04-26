@@ -22,7 +22,7 @@ GROONGA_PROJECT_DOWNLOAD_BASE = https://packages.groonga.org/source
 GROONGA_DOWNLOAD_BASE = $(GROONGA_PROJECT_DOWNLOAD_BASE)/groonga
 GROONGA_NORMALIZER_MYSQL_DOWNLOAD_BASE = \
 	$(GROONGA_PROJECT_DOWNLOAD_BASE)/groonga-normalizer-mysql
-MARIADB_DOWNLOAD_BASE = https://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb
+MARIADB_DOWNLOAD_BASE = https://downloads.mariadb.org/f
 
 
 CURL = curl --fail --silent --show-error

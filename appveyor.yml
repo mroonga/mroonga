@@ -39,7 +39,7 @@ install:
   - set PATH=C:\Ruby26-x64\bin;%PATH%
   - cd ..
   - choco install -y curl 7zip.commandline patch
-  - curl -O http://ftp.osuosl.org/pub/mariadb/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
+  - curl --location -O https://downloads.mariadb.org/f/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
