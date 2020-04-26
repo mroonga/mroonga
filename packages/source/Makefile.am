@@ -18,11 +18,11 @@ MARIADB_TAR_GZ = $(MARIADB_BASE).tar.gz
 MARIADB_WITH_MROONGA_BASE = $(MARIADB_BASE)-with-$(MROONGA_BASE)
 MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE = $(MARIADB_WITH_MROONGA_BASE)-for-windows
 
-GROONGA_PROJECT_DOWNLOAD_BASE = http://packages.groonga.org/source
+GROONGA_PROJECT_DOWNLOAD_BASE = https://packages.groonga.org/source
 GROONGA_DOWNLOAD_BASE = $(GROONGA_PROJECT_DOWNLOAD_BASE)/groonga
 GROONGA_NORMALIZER_MYSQL_DOWNLOAD_BASE = \
 	$(GROONGA_PROJECT_DOWNLOAD_BASE)/groonga-normalizer-mysql
-MARIADB_DOWNLOAD_BASE = http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb
+MARIADB_DOWNLOAD_BASE = https://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb
 
 
 CURL = curl --fail --silent --show-error
