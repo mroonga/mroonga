@@ -5,6 +5,34 @@
 News
 ====
 
+.. _release-10-02:
+
+Release 10.02 - 2020-04-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Added support for ``WITH_WEIGHT`` column flag.
+
+  * This flag require Groonga 10.0.2 or later.
+  * We can insert vector with weight as below by this flag.
+
+    .. code-block::
+       CREATE TABLE tags (
+         name VARCHAR(64) PRIMARY KEY
+       ) DEFAULT CHARSET=utf8mb4;
+
+       CREATE TABLE bugs (
+         tags TEXT COMMENT 'flags "COLUMN_VECTOR|WITH_WEIGHT", type "tags"',
+         FULLTEXT INDEX bugs_tags (tags) COMMENT 'table "tags", flags "WITH_WEIGHT"'
+       ) DEFAULT CHARSET=utf8mb4;
+
+       INSERT INTO bugs VALUES ('{"package": 100, "priority": 5}');
+
+
+* Dropped support for MariaDB 5.5 in CentOS7.
+
 .. _release-10-01:
 
 Release 10.01 - 2020-03-30
