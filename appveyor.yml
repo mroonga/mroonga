@@ -2,6 +2,16 @@ notifications:
   - provider: Webhook
     url: https://webhook.commit-email.info/
 
+skip_commits:
+  files:
+    - "**/Makefile.am"
+    - ".github/"
+    - ".travis.yml"
+    - "configure.ac"
+    - "doc/"
+    - "packages/"
+    - "tools/"
+
 version: "{build}"
 clone_depth: 10
 environment:
