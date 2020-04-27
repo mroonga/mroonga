@@ -4,7 +4,7 @@ FROM ${FROM}
 ARG DEBUG
 
 ENV \
-  DEVTOOLSET_VERSION=8
+  DEVTOOLSET_VERSION=9
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
