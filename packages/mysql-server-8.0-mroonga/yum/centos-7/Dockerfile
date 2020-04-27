@@ -49,4 +49,4 @@ RUN \
     which \
     zlib-devel && \
   yum clean ${quiet} all && \
-  scl enable devtoolset-8 bash
+  scl enable devtoolset-${DEVTOOLSET_VERSION} bash
