@@ -7,7 +7,7 @@ News
 
 .. _release-10-01:
 
-Release 10.01 - 2019-03-30
+Release 10.01 - 2020-03-30
 --------------------------
 
 Improvements
@@ -33,7 +33,7 @@ Thanks
 
 .. _release-9-12:
 
-Release 9.12 - 2019-01-29
+Release 9.12 - 2020-01-29
 -------------------------
 
 Improvements
@@ -49,7 +49,7 @@ Improvements
 
 .. _release-9-11:
 
-Release 9.11 - 2019-01-08
+Release 9.11 - 2020-01-08
 -------------------------
 
 Improvements

@@ -21,8 +21,8 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.01 - 2019-03-30"
-msgstr "10.01リリース - 2019-03-30"
+msgid "Release 10.01 - 2020-03-30"
+msgstr "10.01リリース - 2020-03-30"
 
 msgid "Improvements"
 msgstr "改良"
@@ -59,8 +59,8 @@ msgstr "感謝"
 msgid "pinpikokun"
 msgstr "pinpikokunさん"
 
-msgid "Release 9.12 - 2019-01-29"
-msgstr "9.12リリース - 2019-01-29"
+msgid "Release 9.12 - 2020-01-29"
+msgstr "9.12リリース - 2020-01-29"
 
 msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.47, 5.7.29, 8.0.19"
 msgstr ""
@@ -79,8 +79,8 @@ msgstr "MySQL 8.0.19のソースを使ったビルドがエラーになる問題
 msgid "[:doc:`/install/centos`] Added support for Percona Server 5.6.47."
 msgstr "[:doc:`/install/centos`] Percona Server 5.6.47をサポートしました。"
 
-msgid "Release 9.11 - 2019-01-08"
-msgstr "9.11リリース - 2019-01-08"
+msgid "Release 9.11 - 2020-01-08"
+msgstr "9.11リリース - 2020-01-08"
 
 msgid ""
 "[:doc:`/install/ubuntu`] Dropped Ubuntu 14.04 LTS (Trusty Tahr) support."
