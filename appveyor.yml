@@ -37,6 +37,13 @@ environment:
 
 install:
   - set PATH=C:\Ruby26-x64\bin;%PATH%
+  - set PATH=C:\msys64\usr\bin;%PATH%
+  - pacman -Sy --noconfirm bison
+  - if "%USE_MASTER%" == "yes" (
+      call
+        "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+        amd64
+    )
   - cd ..
   - choco install -y curl 7zip.commandline patch
   - curl --location -O https://downloads.mariadb.org/f/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
@@ -49,11 +56,6 @@ install:
   - rmdir /S /Q storage\mroonga\
   - ps: $Env:MROONGA_VERSION = "$(Get-Content ..\mroonga\version)"
   - move ..\mroonga storage\mroonga
-  - if "%USE_MASTER%" == "yes" (
-      call
-        "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
-        amd64
-    )
   - if "%USE_MASTER%" == "yes" (
       git clone --quiet --depth 1 --recursive https://github.com/groonga/groonga.git ..\groonga &&
       cd ..\groonga\vendor &&
@@ -86,9 +88,6 @@ install:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\..
-  - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Windows\System32;C:\Windows;%PATH%"
-  - set MSYSTEM=MINGW64
-  - pacman -Sy --noconfirm bison
   - move mariadb-%MARIADB_VERSION% source
   - mkdir build
   - cd build
