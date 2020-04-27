@@ -1,6 +1,6 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
-%define mysql_version_default 8.0.19
+%define mysql_version_default 8.0.20
 %define mysql_release_default 1
 %define mysql_dist_default    el%{_centos_ver}
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-8.0-community/el/%{_centos_ver}/SRPMS/

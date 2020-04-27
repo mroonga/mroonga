@@ -15,8 +15,8 @@ RUN \
   dnf install --enablerepo=PowerTools -y ${quiet} \
     cmake \
     cyrus-sasl-devel \
-    gcc \
-    gcc-c++ \
+    gcc-toolset-9 \
+    gcc-toolset-9-gcc-c++ \
     gperf \
     groonga-devel \
     groonga-normalizer-mysql-devel \
