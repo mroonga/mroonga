@@ -19,6 +19,7 @@ Improvements
   * We can insert vector with weight as below by this flag.
 
     .. code-block::
+
        CREATE TABLE tags (
          name VARCHAR(64) PRIMARY KEY
        ) DEFAULT CHARSET=utf8mb4;
@@ -32,6 +33,8 @@ Improvements
 
 
 * Dropped support for MariaDB 5.5 in CentOS7.
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.48, 5.7.30, 8.0.20
 
 .. _release-10-01:
 
