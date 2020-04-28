@@ -4,7 +4,7 @@ FROM ${FROM}
 ARG DEBUG
 
 ENV \
-  DEVTOOLSET_VERSION=8
+  DEVTOOLSET_VERSION=9
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
@@ -49,4 +49,4 @@ RUN \
     which \
     zlib-devel && \
   yum clean ${quiet} all && \
-  scl enable devtoolset-8 bash
+  scl enable devtoolset-${DEVTOOLSET_VERSION} bash
