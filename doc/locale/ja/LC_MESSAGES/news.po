@@ -21,11 +21,30 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.01 - 2020-03-30"
-msgstr "10.01リリース - 2020-03-30"
+msgid "Release 10.02 - 2020-04-29"
+msgstr "10.02リリース - 2020-04-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Added support for ``WITH_WEIGHT`` column flag."
+msgstr "``WITH_WEIGHT`` フラグをサポートしました。"
+
+msgid "This flag require Groonga 10.0.2 or later."
+msgstr "このフラグは10.0.2以降のGroongaが必要です。"
+
+msgid "We can insert vector with weight as below by this flag."
+msgstr "このフラグを使用して以下のように重み付きベクターを挿入できます。"
+
+msgid "Dropped support for MariaDB 5.5 in CentOS7."
+msgstr "CentOS7のMariaDB 5.5のサポートをやめました。"
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.48, 5.7.30, 8.0.20"
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.48, 5.7.30, 8.0.20をサポートしました。"
+
+msgid "Release 10.01 - 2020-03-30"
+msgstr "10.01リリース - 2020-03-30"
 
 msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.29."
 msgstr "[:doc:`/install/centos`] Percona Server 5.7.29をサポートしました。"
