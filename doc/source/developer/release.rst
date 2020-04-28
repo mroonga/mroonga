@@ -107,7 +107,7 @@ You can check with the following command whether you can login::
 If you can't login to packages.groonga.org, you must be registered ssh public key.
 
 Confirm the results of each test
-------------------------------
+--------------------------------
 
 We confirm the results of all the below tests before setting the tag to Mroonga.
 Because if we will find problems in Mroonga after setting the tag to it, we must release it again.
