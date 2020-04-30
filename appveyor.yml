@@ -9,7 +9,6 @@ skip_commits:
     - ".travis.yml"
     - "configure.ac"
     - "doc/"
-    - "packages/"
     - "tools/"
 
 version: "{build}"
