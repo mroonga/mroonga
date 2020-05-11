@@ -42,10 +42,10 @@ Currently we are assuming the following development environments.
 
 * Linux x86_64
 * glibc
-* `MySQL <http://www.mysql.com/>`_
-* `Groonga <http://groonga.org/>`_
-* `Cutter <http://cutter.sourceforge.net/>`_ (for C/C++ unit tests)
-* `Sphinx <http://sphinx-doc.org/>`_ (for documents)
+* `MySQL <https://www.mysql.com/>`_
+* `Groonga <https://groonga.org/>`_
+* `Cutter <https://cutter.sourceforge.net/>`_ (for C/C++ unit tests)
+* `Sphinx <https://sphinx-doc.org/>`_ (for documents)
 
 Contents of the source tree
 ---------------------------
