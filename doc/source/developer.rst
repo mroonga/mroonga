@@ -21,20 +21,6 @@ If you want to contribute, please make clone in read/write mode, and then commit
 
 If you still do not have your account on github.com, please register.
 
-Release
--------
-
-We release the software when all tickets of the roadmap are closed.
-
-We do the following to release.
-
-* Create source packages
-* Create binary packages
-* Update documents on http://mroonga.org
-* Announce the release
-
-(This section will be moved to :doc:`developer/release`).
-
 Development environment
 -----------------------
 
