@@ -13,7 +13,7 @@ class MariaDBServer103MroongaPackageTask < MroongaPackageTask
 
   def ubuntu_targets_default
     [
-      ["disco", "19.04"],
+      ["eoan", "19.10"],
     ]
   end
 
