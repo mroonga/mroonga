@@ -40,7 +40,8 @@ SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
 FLUSH TABLES;
 
-# Error ER_CANT_OPEN_FILE system call error: No such file or directory: failed to open path: <repair_test.mrn.000010A>
+# Error ER_CANT_OPEN_FILE system call error: No such file or directory: [io][open] failed to open path: <repair_test.mrn.000010A>
+--replace_result "[io][open] " ""
 --error ER_CANT_OPEN_FILE
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("starting");
 
