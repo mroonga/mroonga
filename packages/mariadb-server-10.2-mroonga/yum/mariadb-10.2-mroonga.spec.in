@@ -232,7 +232,7 @@ fi
 %doc mroonga-doc/*
 
 %changelog
-* Thu Mar 14 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.02-2
+* Thu May 14 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.02-2
 - rebuild against MariaDB 10.2.32
 
 * Tue Apr 28 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.02-1
