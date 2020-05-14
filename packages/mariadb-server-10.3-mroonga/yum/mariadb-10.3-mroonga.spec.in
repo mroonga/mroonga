@@ -250,7 +250,7 @@ fi
 * Tue Jan 07 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 9.11-1
 - New upstream release.
 
-* Thu Dec 17 2019 Yasuhiro Horimoto <horimoto@clear-code.com> - 9.10-2
+* Tue Dec 17 2019 Yasuhiro Horimoto <horimoto@clear-code.com> - 9.10-2
 - build against MariaDB 10.3.21.
 
 * Thu Nov 28 2019 Yasuhiro Horimoto <horimoto@clear-code.com> - 9.10-1
