@@ -24,7 +24,7 @@ Improvements
 Fixes
 ^^^^^
 
-* [:doc:`/install/ubuntu`] Fixed a bug that Mroonga for Ubuntu 19.10 (Eoan Ermine) was not provied.
+* [:doc:`/install/ubuntu`] Fixed a bug that Mroonga for Ubuntu 19.10 (Eoan Ermine) was not provided.
 
 .. _release-10-02:
 

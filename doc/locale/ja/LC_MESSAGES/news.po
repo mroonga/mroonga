@@ -54,7 +54,7 @@ msgstr "修正"
 
 msgid ""
 "[:doc:`/install/ubuntu`] Fixed a bug that Mroonga for Ubuntu 19.10 (Eoan "
-"Ermine) was not provied."
+"Ermine) was not provided."
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 19.10 (Eoan Ermine)向けMroongaが提供されてい"
 "なかった問題を修正しました。"
