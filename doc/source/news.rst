@@ -5,6 +5,27 @@
 News
 ====
 
+.. _release-10-03:
+
+Release 10.03 - 2020-05-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Added support for Ubuntu 20.04 (Focal Fossa) support.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 19.04 (Disco Dingo) support.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.45, 10.2.32, 10.3.23, and 10.4.13.
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.48 and 5.7.30.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/ubuntu`] Fixed a bug that Mroonga for Ubuntu 19.10 (Eoan Ermine) was not provided.
+
 .. _release-10-02:
 
 Release 10.02 - 2020-04-29
