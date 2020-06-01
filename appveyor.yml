@@ -48,15 +48,17 @@ install:
   - set PATH=C:\Ruby26-x64\bin;%PATH%
   - set PATH=C:\msys64\usr\bin;%PATH%
   - pacman --sync --refresh --sysupgrade --noconfirm
-  - pacman --sync --noconfirm bison
+  - pacman --sync --noconfirm
+      curl
+      bison
+      p7zip
+      patch
   - if "%USE_MASTER%" == "yes" (
       call
         "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
         amd64
     )
   - cd ..
-  - choco install -y curl 7zip.commandline patch
-  - curl --location -O https://downloads.mariadb.org/f/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
