@@ -55,8 +55,7 @@ install:
         amd64
     )
   - cd ..
-  - curl --location -O https://downloads.mariadb.org/f/mariadb-%MARIADB_VERSION%
-/source/mariadb-%MARIADB_VERSION%.tar.gz
+  - curl --location -O https://downloads.mariadb.org/f/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar.gz
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
