@@ -21,6 +21,10 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for Percona Server 5.6.48 and 5.7.30.
 
+* Dropped support for MariaDB 10.1 in Windows.
+
+  * Because MariaDB 10.1 will be EOL soon.
+
 Fixes
 ^^^^^
 
