@@ -1,0 +1,167 @@
+--- mariadb-10.4.13.orig/storage/innobase/srv/srv0start.cc	2020-05-10 04:28:02.000000000 +0900
++++ mariadb-10.4.13/storage/innobase/srv/srv0start.cc	2020-06-05 15:26:09.621468003 +0900
+@@ -2426,6 +2426,7 @@
+ /** Shut down InnoDB. */
+ void innodb_shutdown()
+ {
++        ib::info() << "Shutdown started; operation " << srv_operation;
+ 	ut_ad(!srv_running.load(std::memory_order_relaxed));
+ 	ut_ad(!srv_undo_sources);
+ 
+@@ -2435,11 +2436,15 @@
+ 	case SRV_OPERATION_RESTORE_DELTA:
+ 	case SRV_OPERATION_RESTORE_EXPORT:
+ 	case SRV_OPERATION_RESTORE_ROLLBACK_XA:
++                ib::info() << "fil_close_all_files() started";
+ 		fil_close_all_files();
++                ib::info() << "fil_close_all_files() completed";
+ 		break;
+ 	case SRV_OPERATION_NORMAL:
+ 		/* Shut down the persistent files. */
++                ib::info() << "logs_empty_and_mark_files_at_shutdown() started";
+ 		logs_empty_and_mark_files_at_shutdown();
++                ib::info() << "logs_empty_and_mark_files_at_shutdown() completed";
+ 
+ 		if (ulint n_threads = srv_conc_get_active_threads()) {
+ 			ib::warn() << "Query counter shows "
+@@ -2449,20 +2454,26 @@
+ 	}
+ 
+ 	/* Exit any remaining threads. */
++        ib::info() << "srv_shutdown_all_bg_threads() started";
+ 	srv_shutdown_all_bg_threads();
++        ib::info() << "srv_shutdown_all_bg_threads() completed";
+ 
+ 	if (srv_monitor_file) {
++                ib::info() << "close srv_monitor_file started";
+ 		fclose(srv_monitor_file);
+ 		srv_monitor_file = 0;
+ 		if (srv_monitor_file_name) {
+ 			unlink(srv_monitor_file_name);
+ 			ut_free(srv_monitor_file_name);
+ 		}
++                ib::info() << "close srv_monitor_file completed";
+ 	}
+ 
+ 	if (srv_misc_tmpfile) {
++                ib::info() << "close srv_misc_tmpfile started";
+ 		fclose(srv_misc_tmpfile);
+ 		srv_misc_tmpfile = 0;
++                ib::info() << "close srv_misc_tmpfile completed";
+ 	}
+ 
+ 	ut_ad(dict_stats_event || !srv_was_started || srv_read_only_mode);
+@@ -2478,7 +2489,9 @@
+ 	ut_ad(ibuf || !srv_was_started);
+ 
+ 	if (dict_stats_event) {
++                ib::info() << "dict_stats_thread_deinit() started";
+ 		dict_stats_thread_deinit();
++                ib::info() << "dict_stats_thread_deinit() completed";
+ 	}
+ 
+ 	if (srv_start_state_is_set(SRV_START_STATE_REDO)) {
+@@ -2486,9 +2499,15 @@
+ 		/* srv_shutdown_bg_undo_sources() already invoked
+ 		fts_optimize_shutdown(); dict_stats_shutdown(); */
+ 
++                ib::info() << "fil_crypt_threads_cleanup() started";
+ 		fil_crypt_threads_cleanup();
++                ib::info() << "fil_crypt_threads_cleanup() completed";
++                ib::info() << "btr_scrub_cleanup() completed";
+ 		btr_scrub_cleanup();
++                ib::info() << "btr_scrub_cleanup() completed";
++                ib::info() << "btr_defragment_shutdown() started";
+ 		btr_defragment_shutdown();
++                ib::info() << "btr_defragment_shutdown() completed";
+ 	}
+ 
+ 	/* This must be disabled before closing the buffer pool
+@@ -2496,47 +2515,87 @@
+ 
+ #ifdef BTR_CUR_HASH_ADAPT
+ 	if (dict_sys.is_initialised()) {
++                ib::info() << "btr_search_disable() started";
+ 		btr_search_disable(true);
++                ib::info() << "btr_search_disable() completed";
+ 	}
+ #endif /* BTR_CUR_HASH_ADAPT */
+ 	if (ibuf) {
++                ib::info() << "ibuf_close() started";
+ 		ibuf_close();
++                ib::info() << "ibuf_close() completed";
+ 	}
++        ib::info() << "log_sys.close() started";
+ 	log_sys.close();
++        ib::info() << "log_sys.close() completed";
++        ib::info() << "purge_sys.close() started";
+ 	purge_sys.close();
++        ib::info() << "purge_sys.close() completed";
++        ib::info() << "trx_sys.close() started";
+ 	trx_sys.close();
++        ib::info() << "trx_sys.close() completed";
+ 	if (buf_dblwr) {
++                ib::info() << "buf_dblwr_free() started";
+ 		buf_dblwr_free();
++                ib::info() << "buf_dblwr_free() completed";
+ 	}
++        ib::info() << "lock_sys.close() started";
+ 	lock_sys.close();
++        ib::info() << "lock_sys.close() completed";
++        ib::info() << "trx_pool.close() started";
+ 	trx_pool_close();
++        ib::info() << "trx_pool.close() completed";
+ 
+ 	if (!srv_read_only_mode) {
++                ib::info() << "srv_monitor_file_mutex free started";
+ 		mutex_free(&srv_monitor_file_mutex);
++                ib::info() << "srv_monitor_file_mutex free completed";
++                ib::info() << "srv_misc_tmpfile_mutex free started";
+ 		mutex_free(&srv_misc_tmpfile_mutex);
++                ib::info() << "srv_misc_tmpfile_mutex free completed";
+ 	}
+ 
++        ib::info() << "dict_sys.close() started";
+ 	dict_sys.close();
++        ib::info() << "dict_sys.close() completed";
++        ib::info() << "btr_search_sys_free() started";
+ 	btr_search_sys_free();
++        ib::info() << "btr_search_sys_free() started";
+ 
+ 	/* 3. Free all InnoDB's own mutexes and the os_fast_mutexes inside
+ 	them */
++        ib::info() << "os_aio_free() started";
+ 	os_aio_free();
++        ib::info() << "os_aio_free() completed";
++        ib::info() << "row_mysql_close() started";
+ 	row_mysql_close();
++        ib::info() << "row_mysql_close() completed";
++        ib::info() << "srv_free() started";
+ 	srv_free();
++        ib::info() << "srv_free() completed";
++        ib::info() << "fil_system.close() started";
+ 	fil_system.close();
++        ib::info() << "fil_system.close() completed";
+ 
+ 	/* 4. Free all allocated memory */
+ 
++        ib::info() << "pars_lexer_close() started";
+ 	pars_lexer_close();
++        ib::info() << "pars_lexer_close() completed";
++        ib::info() << "recv_sys_close() started";
+ 	recv_sys.close();
++        ib::info() << "recv_sys_close() completed";
+ 
+ 	ut_ad(buf_pool_ptr || !srv_was_started);
+ 	if (buf_pool_ptr) {
++                ib::info() << "buf_pool_free() started";
+ 		buf_pool_free(srv_buf_pool_instances);
++                ib::info() << "buf_pool_free() completed";
+ 	}
+ 
++        ib::info() << "sync_check_close() started";
+ 	sync_check_close();
++        ib::info() << "sync_check_close() completed";
+ 
+ 	if (srv_was_started && srv_print_verbose_log) {
+ 		ib::info() << "Shutdown completed; log sequence number "

@@ -60,7 +60,7 @@ install:
   - 7z x mariadb-%MARIADB_VERSION%.tar > nul
   - cd mariadb-%MARIADB_VERSION%
   - if "%MARIADB_VERSION:~,5%" == "10.4." (
-      patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.4.11-more-innodb-shutdown-log.diff
+      patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.4.13-more-innodb-shutdown-log.diff
     )
   - rmdir /S /Q storage\mroonga\
   - ps: $Env:MROONGA_VERSION = "$(Get-Content ..\mroonga\version)"
