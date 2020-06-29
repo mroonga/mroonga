@@ -1,6 +1,7 @@
---- mariadb-10.4.13.orig/storage/innobase/srv/srv0start.cc	2020-05-10 04:28:02.000000000 +0900
-+++ mariadb-10.4.13/storage/innobase/srv/srv0start.cc	2020-06-05 15:26:09.621468003 +0900
-@@ -2426,6 +2426,7 @@
+diff -ru mariadb-10.4.11.orig/storage/innobase/srv/srv0start.cc mariadb-10.4.11/storage/innobase/srv/srv0start.cc
+--- mariadb-10.4.11.orig/storage/innobase/srv/srv0start.cc	2019-12-10 22:47:14.000000000 +0900
++++ mariadb-10.4.11/storage/innobase/srv/srv0start.cc	2020-01-08 10:27:02.892374375 +0900
+@@ -2431,6 +2431,7 @@
  /** Shut down InnoDB. */
  void innodb_shutdown()
  {
@@ -8,10 +9,10 @@
  	ut_ad(!srv_running.load(std::memory_order_relaxed));
  	ut_ad(!srv_undo_sources);
  
-@@ -2435,11 +2436,15 @@
+@@ -2439,11 +2440,15 @@
+ 	case SRV_OPERATION_RESTORE:
  	case SRV_OPERATION_RESTORE_DELTA:
  	case SRV_OPERATION_RESTORE_EXPORT:
- 	case SRV_OPERATION_RESTORE_ROLLBACK_XA:
 +		ib::info() << "fil_close_all_files() started";
  		fil_close_all_files();
 +		ib::info() << "fil_close_all_files() completed";
@@ -24,7 +25,7 @@
  
  		if (ulint n_threads = srv_conc_get_active_threads()) {
  			ib::warn() << "Query counter shows "
-@@ -2449,20 +2454,26 @@
+@@ -2453,20 +2458,26 @@
  	}
  
  	/* Exit any remaining threads. */
@@ -51,7 +52,7 @@
  	}
  
  	ut_ad(dict_stats_event || !srv_was_started || srv_read_only_mode);
-@@ -2478,7 +2489,9 @@
+@@ -2482,7 +2493,9 @@
  	ut_ad(ibuf || !srv_was_started);
  
  	if (dict_stats_event) {
@@ -61,7 +62,7 @@
  	}
  
  	if (srv_start_state_is_set(SRV_START_STATE_REDO)) {
-@@ -2486,9 +2499,15 @@
+@@ -2490,9 +2503,15 @@
  		/* srv_shutdown_bg_undo_sources() already invoked
  		fts_optimize_shutdown(); dict_stats_shutdown(); */
  
@@ -77,7 +78,7 @@
  	}
  
  	/* This must be disabled before closing the buffer pool
-@@ -2496,47 +2515,87 @@
+@@ -2500,47 +2519,87 @@
  
  #ifdef BTR_CUR_HASH_ADAPT
  	if (dict_sys.is_initialised()) {
