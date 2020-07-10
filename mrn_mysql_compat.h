@@ -313,7 +313,8 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_SEVERITY_WARNING Sql_condition::WARN_LEVEL_WARN
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#if (MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)) || \
+  (MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P))
 #  define MRN_HAVE_PSI_MEMORY_KEY
 #endif
 
