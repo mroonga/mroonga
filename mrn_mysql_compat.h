@@ -434,7 +434,14 @@ typedef HASH mrn_table_def_cache_type;
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
-#  if MYSQL_VERSION_ID >= 100306
+#  if MYSQL_VERSION_ID >= 100504
+#    define mrn_init_sql_alloc(thd, name, mem_root)                     \
+  init_sql_alloc(mrn_memory_key,                                        \
+                 mem_root,                                              \
+                 TABLE_ALLOC_BLOCK_SIZE,                                \
+                 0,                                                     \
+                 MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
+#  elif MYSQL_VERSION_ID >= 100306
 #    define mrn_init_sql_alloc(thd, name, mem_root)                     \
   init_sql_alloc(mem_root,                                              \
                  name,                                                  \
