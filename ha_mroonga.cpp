@@ -313,6 +313,11 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_COLUMN_END() MRN_COLUMN(NULL, 0, MYSQL_TYPE_LONG,)
 #endif
 
+#if !defined(MRN_MARIADB_P) ||                          \
+  MYSQL_VERSION_ID < 100500 && defined(MRN_MARIADB_P)
+#  define MRN_HANDLERTON_HAVE_STATE
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -2145,7 +2150,9 @@ static int mrn_init(void *p)
   // init handlerton
   grn_ctx *ctx = NULL;
   handlerton *hton = static_cast<handlerton *>(p);
+#ifdef MRN_HANDLERTON_HAVE_STATE
   hton->state = SHOW_OPTION_YES;
+#endif
   hton->create = mrn_handler_create;
   hton->flags = HTON_NO_FLAGS;
 #ifndef MRN_SUPPORT_PARTITION
