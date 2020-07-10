@@ -245,6 +245,34 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   fi
   AC_MSG_RESULT([$mysql_services_lib_dir])
   MYSQL_LIBS="$MYSQL_LIBS \"$mysql_services_lib_dir/libmysqlservices.a\""
+
+  case "$MYSQL_MAJOR_MINOR_VERSION" in
+  10.1|10.2|10.3|10.4)
+    :
+    ;;
+  10.*)
+    AC_MSG_CHECKING([for libperfschema.a directory])
+    pkglibdir="$($ac_mysql_config --variable=pkglibdir)"
+    mysql_build_perfschema_dir="${MYSQL_BUILD_DIR}/storage/perfschema"
+    if test -f "${mysql_build_perfschema_dir}/libperfschema.a"; then
+      perfschema_lib_dir="${mysql_build_perfschema_dir}"
+    else
+      if test -f "${pkglibdir}/libperfschema.a"; then
+	perfschema_lib_dir="${pkglibdir}"
+      elif test -f "${pkglibdir}/mysql/libperfschema.a"; then
+	mysql_services_lib_dir="${pkglibdir}/mysql"
+      else
+	AC_MSG_ERROR([libperfschema.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
+      fi
+    fi
+    AC_MSG_RESULT([$perfschema_lib_dir])
+    MYSQL_LIBS="$MYSQL_LIBS \"$perfschema_lib_dir/libperfschema.a\""
+    ;;
+  *)
+    :
+    ;;
+  esac
+
   AC_SUBST(MYSQL_LIBS)
 ])
 

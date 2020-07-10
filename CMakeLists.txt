@@ -1,7 +1,7 @@
 # -*- indent-tabs-mode: nil -*-
 #
-# Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
-# Copyright(C) 2013 Kentoku SHIBA
+# Copyright(C) 2012-2020  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2013  Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -268,6 +268,11 @@ else()
   if(NOT EXISTS "${MYSQL_SERVICES_LIB_STATIC}")
     set(MYSQL_SERVICES_LIB_STATIC "${MYSQL_PKG_LIB_DIR}/libmysqlservices.a")
   endif()
+  set(PERFSCHEMA_LIB_STATIC
+    "${MYSQL_BUILD_DIR}/storage/perfschema/libperfschema.a")
+  if(NOT EXISTS "${PERFSCHEMA_LIB_STATIC}")
+    set(PERFSCHEMA_LIB_STATIC "${MYSQL_PKG_LIB_DIR}/libperfschema.a")
+  endif()
   set_mysql_config_value("--cflags" MYSQL_CFLAGS)
   set_mysql_config_value("--version" MYSQL_VERSION)
   if(${MYSQL_VERSION} VERSION_GREATER "7")
@@ -350,6 +355,9 @@ else()
 
   if(NOT WIN32)
     set(MRN_LIBRARIES ${MRN_LIBRARIES} ${MYSQL_SERVICES_LIB_STATIC})
+    if(${MYSQL_VERSION} VERSION_GREATER "10.5.0")
+      set(MRN_LIBRARIES ${MRN_LIBRARIES} ${PERFSCHEMA_LIB_STATIC})
+    endif()
   endif()
   target_link_libraries(mroonga ${MRN_LIBRARIES})
 
