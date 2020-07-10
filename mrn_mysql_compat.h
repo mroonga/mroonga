@@ -393,6 +393,10 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_HAVE_MY_BYTEORDER_H
 #endif
 
+#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100504)
+#  define MRN_HAVE_SQL_TYPE_GEOM_H
+#endif
+
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_HAVE_SPATIAL
 #elif defined(HAVE_SPATIAL)

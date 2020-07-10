@@ -70,6 +70,9 @@
 #ifdef MRN_HAVE_SQL_DERROR_H
 #  include <sql/derror.h>
 #endif
+#ifdef MRN_HAVE_SQL_TYPE_GEOM_H
+#  include <sql/sql_type_geom.h>
+#endif
 
 
 #include <sys/types.h>
