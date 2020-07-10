@@ -1511,6 +1511,10 @@ static void mrn_drop_database(handlerton *hton, char *path)
   DBUG_VOID_RETURN;
 }
 
+#if !(defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100504)
+#  define MRN_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
+#endif
+
 static int mrn_close_connection(handlerton *hton, THD *thd)
 {
   MRN_DBUG_ENTER_FUNCTION();
@@ -1518,7 +1522,9 @@ static int mrn_close_connection(handlerton *hton, THD *thd)
   if (p) {
     mrn_clear_slot_data(thd);
     free(p);
+#ifdef MRN_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
     mrn_thd_set_ha_data(thd, mrn_hton_ptr, NULL);
+#endif
     {
       mrn::Lock lock(&mrn_allocated_thds_mutex);
       grn_hash_delete(&mrn_ctx, mrn_allocated_thds, &thd, sizeof(thd), NULL);
