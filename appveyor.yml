@@ -37,6 +37,13 @@ environment:
       MARIADB_VERSION: 10.4.13
       MROONGA_PLATFORM: "winx64"
       USE_MASTER: "yes"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
+      MARIADB_VERSION: 10.5.4
+      MROONGA_PLATFORM: "winx64"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 14 2015 Win64"
+      MARIADB_VERSION: 10.5.5
+      MROONGA_PLATFORM: "winx64"
+      USE_MASTER: "yes"
 
 install:
   - set PATH=C:\Ruby26-x64\bin;%PATH%
