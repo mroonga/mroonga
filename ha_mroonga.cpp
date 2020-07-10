@@ -287,6 +287,32 @@ static mysql_mutex_t *mrn_LOCK_open;
   } while (false)
 #endif
 
+#if MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P)
+#  define MRN_COLUMN(name,                                              \
+                     type_length,                                       \
+                     type_id,                                           \
+                     type_object)                                       \
+  Show::Column((name),                                                  \
+               (type_object),                                           \
+               NOT_NULL)
+#  define MRN_COLUMN_END() Show::CEnd()
+#else
+#  define MRN_COLUMN(name,                                              \
+                     type_length,                                       \
+                     type_id,                                           \
+                     type_object)                                       \
+  {                                                                     \
+    (name),                                                             \
+    (type_length),                                                      \
+    (type_id),                                                          \
+    0,                                                                  \
+    0,                                                                  \
+    NULL,                                                               \
+    SKIP_OPEN_TABLE                                                     \
+  }
+#  define MRN_COLUMN_END() MRN_COLUMN(NULL, 0, MYSQL_TYPE_LONG,)
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -1399,33 +1425,19 @@ static struct st_mysql_information_schema i_s_info =
 
 static ST_FIELD_INFO i_s_mrn_stats_fields_info[] =
 {
-  {
-    "VERSION",
-    40,
-    MYSQL_TYPE_STRING,
-    0,
-    0,
-    "",
-    SKIP_OPEN_TABLE
-  },
-  {
-    "rows_written",
-    MY_INT32_NUM_DECIMAL_DIGITS,
-    MYSQL_TYPE_LONG,
-    0,
-    0,
-    "Rows written to Groonga",
-    SKIP_OPEN_TABLE
-  },
-  {
-    "rows_read",
-    MY_INT32_NUM_DECIMAL_DIGITS,
-    MYSQL_TYPE_LONG,
-    0,
-    0,
-    "Rows read from Groonga",
-    SKIP_OPEN_TABLE
-  }
+  MRN_COLUMN("VERSION",
+             40,
+             MYSQL_TYPE_STRING,
+             Show::Varchar(40)),
+  MRN_COLUMN("rows_written",
+             MY_INT32_NUM_DECIMAL_DIGITS,
+             MYSQL_TYPE_LONG,
+             Show::SLong(MY_INT32_NUM_DECIMAL_DIGITS)),
+  MRN_COLUMN("rows_read",
+             MY_INT32_NUM_DECIMAL_DIGITS,
+             MYSQL_TYPE_LONG,
+             Show::SLong(MY_INT32_NUM_DECIMAL_DIGITS)),
+  MRN_COLUMN_END()
 };
 
 static int i_s_mrn_stats_deinit(void* p)
