@@ -1034,6 +1034,9 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list,
   open_error = open_table_def(thd, share, GTS_TABLE);
 #endif
   if (open_error != 0) {
+    char *normalized_path = const_cast<char *>(share->normalized_path.str);
+    free_table_share(share);
+    my_free(normalized_path);
     *error = ER_CANT_OPEN_FILE;
     DBUG_RETURN(NULL);
   }
