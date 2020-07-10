@@ -378,6 +378,7 @@ typedef uint mrn_alter_table_flags;
 #if !defined(MRN_MARIADB_P) ||                          \
   (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100500)
 #  define MRN_HANDLER_HAVE_NOTIFY_TABLE_CHANGED
+#  define MRN_HANDLER_HAVE_PRIMARY_KEY_IS_CLUSTERED
 #endif
 
 #if defined(HAVE_PSI_INTERFACE) &&                      \
@@ -894,9 +895,11 @@ protected:
 #ifdef MRN_HANDLER_HAVE_HA_INDEX_LAST
   int index_last(uchar *buf);
 #endif
+#ifdef MRN_HANDLER_HAVE_PRIMARY_KEY_IS_CLUSTERED
   bool primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST
     mrn_override;
+#endif
 #ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
   bool can_switch_engines();
 #endif
@@ -1786,10 +1789,12 @@ private:
   bool wrapper_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT;
   bool storage_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT;
 #endif
+#ifdef MRN_HANDLER_HAVE_PRIMARY_KEY_IS_CLUSTERED
   bool wrapper_primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
   bool storage_primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
+#endif
 #ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
   bool wrapper_can_switch_engines();
   bool storage_can_switch_engines();

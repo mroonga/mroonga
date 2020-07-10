@@ -17817,6 +17817,7 @@ void ha_mroonga::change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg)
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_HANDLER_HAVE_PRIMARY_KEY_IS_CLUSTERED
 bool ha_mroonga::wrapper_primary_key_is_clustered()
   MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST
 {
@@ -17851,6 +17852,7 @@ bool ha_mroonga::primary_key_is_clustered()
   }
   DBUG_RETURN(is_clustered);
 }
+#endif
 
 #ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
 bool ha_mroonga::wrapper_can_switch_engines()
