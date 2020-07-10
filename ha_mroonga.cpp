@@ -16939,29 +16939,30 @@ bool ha_mroonga::commit_inplace_alter_table(
   DBUG_RETURN(result);
 }
 
+#  ifdef MRN_HANDLER_HAVE_NOTIFY_TABLE_CHANGED
 void ha_mroonga::wrapper_notify_table_changed(
-#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
   Alter_inplace_info *ha_alter_info
-#  endif
+#    endif
   )
 {
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
   wrap_handler->ha_notify_table_changed(ha_alter_info);
-#  else
+#    else
   wrap_handler->ha_notify_table_changed();
-#  endif
+#    endif
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_VOID_RETURN;
 }
 
 void ha_mroonga::storage_notify_table_changed(
-#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
   Alter_inplace_info *ha_alter_info
-#  endif
+#    endif
   )
 {
   MRN_DBUG_ENTER_METHOD();
@@ -16969,27 +16970,28 @@ void ha_mroonga::storage_notify_table_changed(
 }
 
 void ha_mroonga::notify_table_changed(
-#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
   Alter_inplace_info *ha_alter_info
-#  endif
+#    endif
   )
 {
   MRN_DBUG_ENTER_METHOD();
   if (share->wrapper_mode) {
-#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
     wrapper_notify_table_changed(ha_alter_info);
-#  else
+#    else
     wrapper_notify_table_changed();
-#  endif
+#    endif
   } else {
-#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
     storage_notify_table_changed(ha_alter_info);
-#  else
+#    else
     storage_notify_table_changed();
-#  endif
+#    endif
   }
   DBUG_VOID_RETURN;
 }
+#  endif
 #else
 mrn_alter_table_flags
 ha_mroonga::wrapper_alter_table_flags(mrn_alter_table_flags flags)

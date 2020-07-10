@@ -375,6 +375,11 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_GET_FOREIGN_DUP_KEY
 #endif
 
+#if !defined(MRN_MARIADB_P) ||                          \
+  (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100500)
+#  define MRN_HANDLER_HAVE_NOTIFY_TABLE_CHANGED
+#endif
+
 #if defined(HAVE_PSI_INTERFACE) &&                      \
   (MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P))
 #  define MRN_HAVE_PSI_SERVER
@@ -943,11 +948,13 @@ protected:
                                   dd::Table *new_table_def
 #  endif
     ) mrn_override;
+#  ifdef MRN_HANDLER_HAVE_NOTIFY_TABLE_CHANGED
   void notify_table_changed(
-#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
     Alter_inplace_info *ha_alter_info
-#  endif
+#    endif
     ) mrn_override;
+#  endif
 #endif
 
 private:
@@ -1717,16 +1724,18 @@ private:
                                           dd::Table *new_table_def
 #  endif
     );
+#  ifdef MRN_HANDLER_HAVE_NOTIFY_TABLE_CHANGED
   void wrapper_notify_table_changed(
-#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
     Alter_inplace_info *ha_alter_info
-#  endif
+#    endif
     );
   void storage_notify_table_changed(
-#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
     Alter_inplace_info *ha_alter_info
-#  endif
+#    endif
     );
+#  endif
 #else
   mrn_alter_table_flags wrapper_alter_table_flags(mrn_alter_table_flags flags);
   mrn_alter_table_flags storage_alter_table_flags(mrn_alter_table_flags flags);
