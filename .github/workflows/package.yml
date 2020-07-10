@@ -30,6 +30,7 @@ jobs:
           - mariadb-server-10.2
           - mariadb-server-10.3
           - mariadb-server-10.4
+          - mariadb-server-10.5
           - mysql-server-5.6
           - mysql-server-5.7
           - mysql-server-8.0
@@ -68,6 +69,16 @@ jobs:
             package: mariadb-server-10.4
           - os: centos-6
             package: mariadb-server-10.4
+          - os: debian-buster
+            package: mariadb-server-10.5
+          - os: debian-buster-i386
+            package: mariadb-server-10.5
+          - os: debian-stretch
+            package: mariadb-server-10.5
+          - os: debian-stretch-i386
+            package: mariadb-server-10.5
+          - os: centos-6
+            package: mariadb-server-10.5
           - os: debian-buster
             package: mysql-server-5.6
           - os: debian-buster-i386

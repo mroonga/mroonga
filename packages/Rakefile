@@ -3,6 +3,7 @@ packages = [
   "mariadb-server-10.2-mroonga",
   "mariadb-server-10.3-mroonga",
   "mariadb-server-10.4-mroonga",
+  "mariadb-server-10.5-mroonga",
   "mysql-server-5.6-mroonga",
   "mysql-server-5.7-mroonga",
   "mysql-server-8.0-mroonga",
