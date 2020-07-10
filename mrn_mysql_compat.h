@@ -777,11 +777,13 @@ typedef HASH mrn_table_def_cache_type;
 #  endif
 #endif
 
-#define mrn_thd_set_ha_data(thd, hton, ha_data) \
+#if MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P)
+#  define mrn_thd_set_ha_data(thd, hton, ha_data) \
+  thd_set_ha_data(thd, hton, ha_data)
+#else
+#  define mrn_thd_set_ha_data(thd, hton, ha_data) \
   *thd_ha_data(thd, hton) = ha_data
-// TODO
-/* #define mrn_thd_set_ha_data(thd, hton, ha_data) \ */
-/*    thd_set_ha_data(thd, hton, ha_data) */
+#endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
 #  define mrn_destroy(pointer) destroy(pointer)

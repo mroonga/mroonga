@@ -2374,7 +2374,7 @@ static int mrn_deinit(void *p)
       mrn_clear_slot_data(allocated_thd);
       void *slot_ptr = mrn_get_slot_data(allocated_thd, false);
       if (slot_ptr) free(slot_ptr);
-      *thd_ha_data(allocated_thd, mrn_hton_ptr) = (void *) NULL;
+      mrn_thd_set_ha_data(allocated_thd, mrn_hton_ptr, NULL);
     } GRN_HASH_EACH_END(ctx, cursor);
   }
 
