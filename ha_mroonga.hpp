@@ -454,6 +454,10 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
 #endif
 
+#if MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_RECORDS_IN_RANGE_HAVE_PAGE_RANGE
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -674,7 +678,16 @@ public:
 #endif
     ) const mrn_override;
 
-  ha_rows records_in_range(uint inx, key_range *min_key, key_range *max_key);
+#ifdef MRN_HANDLER_RECORDS_IN_RANGE_HAVE_PAGE_RANGE
+  ha_rows records_in_range(uint inx,
+                           const key_range *min_key,
+                           const key_range *max_key,
+                           page_range *pages) mrn_override;
+#else
+  ha_rows records_in_range(uint inx,
+                           key_range *min_key,
+                           key_range *max_key) mrn_override;
+#endif
   int index_init(uint idx, bool sorted);
   int index_end();
 #ifndef MRN_HANDLER_HAVE_HA_INDEX_READ_MAP
@@ -1364,12 +1377,22 @@ private:
   int storage_rnd_pos(uchar *buf, uchar *pos);
   void wrapper_position(const uchar *record);
   void storage_position(const uchar *record);
-  ha_rows wrapper_records_in_range(uint key_nr, key_range *range_min,
+#ifdef MRN_HANDLER_RECORDS_IN_RANGE_HAVE_PAGE_RANGE
+  ha_rows wrapper_records_in_range(uint key_nr,
+                                   const key_range *range_min,
+                                   const key_range *range_max,
+                                   page_range *pages);
+#else
+  ha_rows wrapper_records_in_range(uint key_nr,
+                                   key_range *range_min,
                                    key_range *range_max);
-  ha_rows storage_records_in_range(uint key_nr, key_range *range_min,
-                                   key_range *range_max);
-  ha_rows generic_records_in_range_geo(uint key_nr, key_range *range_min,
-                                       key_range *range_max);
+#endif
+  ha_rows storage_records_in_range(uint key_nr,
+                                   const key_range *range_min,
+                                   const key_range *range_max);
+  ha_rows generic_records_in_range_geo(uint key_nr,
+                                       const key_range *range_min,
+                                       const key_range *range_max);
   int wrapper_index_init(uint idx, bool sorted);
   int storage_index_init(uint idx, bool sorted);
   int wrapper_index_end();
