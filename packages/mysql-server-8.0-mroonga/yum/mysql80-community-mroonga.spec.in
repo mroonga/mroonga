@@ -1,6 +1,6 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
-%define mysql_version_default 8.0.20
+%define mysql_version_default 8.0.21
 %define mysql_release_default 1
 %define mysql_dist_default    el%{_centos_ver}
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-8.0-community/el/%{_centos_ver}/SRPMS/
@@ -23,7 +23,7 @@
 
 Name:		mysql80-community-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -218,6 +218,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Tue May 14 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.03-2
+- build against MySQL 8.0.21.
+
 * Thu May 28 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.03-1
 - New upstream release.
 
