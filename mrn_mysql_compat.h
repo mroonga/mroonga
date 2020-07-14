@@ -434,6 +434,14 @@ typedef HASH mrn_table_def_cache_type;
   ((select_lex)->options)
 #endif
 
+#if MYSQL_VERSION_ID >= 80021 && !defined(MRN_MARIADB_P)
+#  define MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex) \
+  ((select_lex)->fields_list)
+#else
+#  define MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex) \
+  ((select_lex)->item_list)
+#endif
+
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
 #  if MYSQL_VERSION_ID >= 100504
 #    define mrn_init_sql_alloc(thd, name, mem_root)                     \
