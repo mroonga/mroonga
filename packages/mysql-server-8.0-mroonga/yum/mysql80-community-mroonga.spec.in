@@ -218,7 +218,7 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
-* Tue May 14 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.03-2
+* Tue Jul 14 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.03-2
 - build against MySQL 8.0.21.
 
 * Thu May 28 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.03-1
