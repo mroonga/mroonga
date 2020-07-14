@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -872,6 +873,14 @@ typedef HASH mrn_table_def_cache_type;
   ((field)->get_time((time)))
 #  define MRN_FIELD_GET_DATE_NO_FUZZY(field, time, thd)  \
   ((field)->get_date((time), 0))
+#endif
+
+#if MYSQL_VERSION_ID >= 80021 && !defined(MRN_MARIADB_P)
+#  define MRN_FIELD_IS_UNSIGNED(field) \
+  (field->is_unsigned())
+#else
+#  define MRN_FIELD_IS_UNSIGNED(field) \
+  (field->unsigned_flag)
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)

@@ -2,6 +2,7 @@
 /*
   Copyright(C) 2012-2019 Kouhei Sutou <kou@clear-code.com>
   Copyright(C) 2013 Kentoku SHIBA
+  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -128,7 +129,7 @@ namespace mrn {
           Field_num *number_field = static_cast<Field_num *>(field);
           encode_number(current_mysql_key,
                         data_size,
-                        !number_field->unsigned_flag,
+                        !MRN_FIELD_IS_UNSIGNED(number_field),
                         current_grn_key);
         }
         break;
@@ -268,7 +269,7 @@ namespace mrn {
           Field_num *number_field = static_cast<Field_num *>(field);
           decode_number(current_grn_key,
                         grn_key_data_size,
-                        !number_field->unsigned_flag,
+                        !MRN_FIELD_IS_UNSIGNED(number_field),
                         current_mysql_key);
         }
         break;

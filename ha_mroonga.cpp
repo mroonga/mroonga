@@ -4,6 +4,7 @@
   Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
+  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1561,21 +1562,21 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_TINY:         // TINYINT; 1byte
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT8;      // 1byte
     } else {
       type = GRN_DB_INT8;       // 1byte
     }
     break;
   case MYSQL_TYPE_SHORT:        // SMALLINT; 2bytes
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT16;     // 2bytes
     } else {
       type = GRN_DB_INT16;      // 2bytes
     }
     break;
   case MYSQL_TYPE_LONG:         // INT; 4bytes
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT32;     // 4bytes
     } else {
       type = GRN_DB_INT32;      // 4bytes
@@ -1592,14 +1593,14 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_TIME;         // 8bytes
     break;
   case MYSQL_TYPE_LONGLONG:     // BIGINT; 8bytes
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT64;     // 8bytes
     } else {
       type = GRN_DB_INT64;      // 8bytes
     }
     break;
   case MYSQL_TYPE_INT24:        // MEDIUMINT; 3bytes
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT32;     // 4bytes
     } else {
       type = GRN_DB_INT32;      // 4bytes
@@ -6871,7 +6872,7 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
   if (table->found_next_number_field &&
       !table->s->next_number_keypart) {
     Field_num *field = (Field_num *) table->found_next_number_field;
-    if (field->unsigned_flag || field->val_int() > 0) {
+    if (MRN_FIELD_IS_UNSIGNED(field) || field->val_int() > 0) {
       MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
       ulonglong nr = (ulonglong) field->val_int();
       if (!long_term_share->auto_inc_inited) {
@@ -7508,7 +7509,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
       new_data == table->record[0]) {
     mrn::DebugColumnAccess debug_column_access(table, table->read_set);
     Field_num *field = (Field_num *) table->found_next_number_field;
-    if (field->unsigned_flag || field->val_int() > 0) {
+    if (MRN_FIELD_IS_UNSIGNED(field) || field->val_int() > 0) {
       MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
       ulonglong nr = (ulonglong) field->val_int();
       if (!long_term_share->auto_inc_inited) {
@@ -11310,7 +11311,7 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf)
   uint32 size = field->pack_length();
   DBUG_PRINT("info", ("mroonga: size=%u", size));
   Field_num *field_num = static_cast<Field_num *>(field);
-  bool is_unsigned = field_num->unsigned_flag;
+  bool is_unsigned = MRN_FIELD_IS_UNSIGNED(field_num);
   DBUG_PRINT("info", ("mroonga: is_unsigned=%s", is_unsigned ? "true" : "false"));
   switch (size) {
   case 1:
@@ -11806,7 +11807,7 @@ void ha_mroonga::storage_store_field_integer(Field *field,
 {
   MRN_DBUG_ENTER_METHOD();
   Field_num *field_num = static_cast<Field_num *>(field);
-  bool is_unsigned = field_num->unsigned_flag;
+  bool is_unsigned = MRN_FIELD_IS_UNSIGNED(field_num);
   switch (value_length) {
   case 1:
     {
