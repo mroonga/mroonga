@@ -2,6 +2,7 @@
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
   Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1090,7 +1091,7 @@ void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
   for (i = 0; i < KEY_N_KEY_PARTS(key_info); i++)
   {
     Field *field = key_info->key_part[i].field;
-    bitmap_set_bit(map, field->field_index);
+    bitmap_set_bit(map, MRN_FIELD_FIELD_INDEX(field));
   }
   DBUG_VOID_RETURN;
 }

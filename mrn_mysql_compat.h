@@ -886,9 +886,13 @@ typedef HASH mrn_table_def_cache_type;
 #if MYSQL_VERSION_ID >= 80021 && !defined(MRN_MARIADB_P)
 #  define MRN_FIELD_IS_UNSIGNED(field) \
   (field->is_unsigned())
+#  define MRN_FIELD_FIELD_INDEX(field) \
+  (field->field_index())
 #else
 #  define MRN_FIELD_IS_UNSIGNED(field) \
   (field->unsigned_flag)
+#  define MRN_FIELD_FIELD_INDEX(field) \
+  (field->field_index)
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)

@@ -5432,7 +5432,7 @@ int ha_mroonga::storage_open_indexes(const char *name)
       KEY_PART_INFO *key_part = key_info->key_part;
       for (j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {
         bitmap_set_bit(&multiple_column_key_bitmap,
-                       key_part[j].field->field_index);
+                       MRN_FIELD_FIELD_INDEX(key_part[j].field));
       }
     }
 
@@ -7344,7 +7344,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
     }
 #endif
 
-    if (!bitmap_is_set(table->write_set, field->field_index))
+    if (!bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field)))
       continue;
 
     if (field->is_null())
@@ -7425,9 +7425,9 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
     }
 #endif
 
-    if (bitmap_is_set(table->write_set, field->field_index)) {
+    if (bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field))) {
       mrn::DebugColumnAccess debug_column_access(table, table->read_set);
-      DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,field->field_index));
+      DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,MRN_FIELD_FIELD_INDEX(field)));
 
       if (field->is_null()) continue;
 
@@ -7678,7 +7678,7 @@ int ha_mroonga::storage_update_row_unique_indexes(mrn_update_row_new_data_t new_
     bool have_any_changed_field = false;
     for (uint j = 0; j < n_key_parts; ++j) {
       if (bitmap_is_set(table->write_set,
-                        key_info->key_part[j].field->field_index)) {
+                        MRN_FIELD_FIELD_INDEX(key_info->key_part[j].field))) {
         have_any_changed_field = true;
         break;
       }
@@ -8106,7 +8106,7 @@ int ha_mroonga::storage_prepare_delete_row_unique_indexes(const uchar *buf,
     if (KEY_N_KEY_PARTS(key_info) == 1) {
       Field *field = key_info->key_part[0].field;
       mrn_change_encoding(ctx, field->charset());
-      index_column = grn_columns[field->field_index];
+      index_column = grn_columns[MRN_FIELD_FIELD_INDEX(field)];
     } else {
       mrn_change_encoding(ctx, NULL);
       index_column = grn_index_columns[i];
@@ -8770,7 +8770,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       GRN_EXPR_CREATE_FOR_QUERY(ctx, grn_table,
                                 expression, expression_variable);
       grn_obj *target_column =
-        grn_columns[key_info->key_part->field->field_index];
+        grn_columns[MRN_FIELD_FIELD_INDEX(key_info->key_part->field)];
       grn_expr_append_const(ctx, expression, target_column, GRN_OP_GET_VALUE, 1);
       grn_obj empty_value;
       GRN_TEXT_INIT(&empty_value, 0);
@@ -12087,7 +12087,7 @@ void ha_mroonga::storage_store_field_blob(Field *field,
 {
   MRN_DBUG_ENTER_METHOD();
   Field_blob *blob = (Field_blob *)field;
-  grn_obj *blob_buffer = blob_buffers_[field->field_index];
+  grn_obj *blob_buffer = blob_buffers_[MRN_FIELD_FIELD_INDEX(field)];
   GRN_TEXT_SET(ctx, blob_buffer, value, value_length);
   blob->set_ptr(GRN_TEXT_LEN(blob_buffer),
                 reinterpret_cast<uchar *>(GRN_TEXT_VALUE(blob_buffer)));
@@ -12130,7 +12130,7 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
               longitude_in_degree);
   float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
               latitude_in_degree);
-  grn_obj *geometry_buffer = blob_buffers_[field->field_index];
+  grn_obj *geometry_buffer = blob_buffers_[MRN_FIELD_FIELD_INDEX(field)];
   uint wkb_length = sizeof(wkb) / sizeof(*wkb);
   Field_geom *geometry = (Field_geom *)field;
   GRN_TEXT_SET(ctx, geometry_buffer, wkb, wkb_length);
@@ -12368,8 +12368,8 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
-    if (bitmap_is_set(table->read_set, field->field_index) ||
-        bitmap_is_set(table->write_set, field->field_index)) {
+    if (bitmap_is_set(table->read_set, MRN_FIELD_FIELD_INDEX(field)) ||
+        bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field))) {
       if (ignoring_no_key_columns) {
         KEY *key_info = &(table->s->key_info[active_index]);
         if (!FIELD_NAME_EQUAL_FIELD(field, key_info->key_part[0].field)) {
@@ -12378,7 +12378,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
       }
 
       mrn::DebugColumnAccess debug_column_access(table, table->write_set);
-      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));
+      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,MRN_FIELD_FIELD_INDEX(field)));
       field->move_field_offset(ptr_diff);
       if (FIELD_NAME_EQUAL(field, MRN_COLUMN_NAME_ID)) {
         // for _id column
@@ -12419,11 +12419,11 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
       continue;
     }
 #endif
-    if (!bitmap_is_set(table->read_set, field->field_index) &&
-        !bitmap_is_set(table->write_set, field->field_index) &&
-        bitmap_is_set(&multiple_column_key_bitmap, field->field_index)) {
+    if (!bitmap_is_set(table->read_set, MRN_FIELD_FIELD_INDEX(field)) &&
+        !bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field)) &&
+        bitmap_is_set(&multiple_column_key_bitmap, MRN_FIELD_FIELD_INDEX(field))) {
       mrn::DebugColumnAccess debug_column_access(table, table->write_set);
-      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));
+      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,MRN_FIELD_FIELD_INDEX(field)));
       grn_obj value;
       GRN_OBJ_INIT(&value, GRN_BULK, 0, grn_obj_get_range(ctx, grn_columns[i]));
       grn_obj_get_value(ctx, grn_columns[i], record_id, &value);
@@ -16535,7 +16535,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
         break;
       }
       mrn::SmartBitmap smart_generated_column_bitmap(&generated_column_bitmap);
-      bitmap_set_bit(&generated_column_bitmap, field->field_index);
+      bitmap_set_bit(&generated_column_bitmap, MRN_FIELD_FIELD_INDEX(field));
 #  endif
 
       my_ptrdiff_t diff = table->record[0] - altered_table->record[0];
@@ -17623,7 +17623,7 @@ void ha_mroonga::set_pk_bitmap()
   uint j;
   for (j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {
     Field *field = key_info->key_part[j].field;
-    bitmap_set_bit(table->read_set, field->field_index);
+    bitmap_set_bit(table->read_set, MRN_FIELD_FIELD_INDEX(field));
   }
   DBUG_VOID_RETURN;
 }
