@@ -5101,7 +5101,7 @@ void ha_mroonga::wrapper_overwrite_index_bits()
     {
       Field *field = key_part->field;
       if (field->key_length() == key_part->length &&
-          !(field->flags & BLOB_FLAG))
+          !(MRN_FIELD_ALL_FLAGS(field) & BLOB_FLAG))
       {
         if (index_flags(i, j, 0) & HA_KEYREAD_ONLY)
         {
@@ -5118,7 +5118,7 @@ void ha_mroonga::wrapper_overwrite_index_bits()
           (table_option & HA_PRIMARY_KEY_IN_READ_INDEX))
       {
         if (field->key_length() == key_part->length &&
-            !(field->flags & BLOB_FLAG))
+            !(MRN_FIELD_ALL_FLAGS(field) & BLOB_FLAG))
           field->part_of_key = table_share->keys_in_use;
         if (field->part_of_sortkey.is_set(i))
           field->part_of_sortkey = table_share->keys_in_use;
@@ -15745,7 +15745,7 @@ bool ha_mroonga::storage_check_if_incompatible_data(
   uint n = table_share->fields;
   for (uint i = 0; i < n; i++) {
     Field *field = table->field[i];
-    if (field->flags & FIELD_IS_RENAMED) {
+    if (MRN_FIELD_ALL_FLAGS(field) & FIELD_IS_RENAMED) {
       DBUG_RETURN(COMPATIBLE_DATA_NO);
     }
   }
@@ -16697,7 +16697,7 @@ bool ha_mroonga::storage_inplace_alter_table_rename_column(
   for (uint i = 0; i < n_fields; i++) {
     Field *field = table->field[i];
 
-    if (!(field->flags & FIELD_IS_RENAMED)) {
+    if (!(MRN_FIELD_ALL_FLAGS(field) & FIELD_IS_RENAMED)) {
       continue;
     }
 
