@@ -11283,7 +11283,7 @@ int ha_mroonga::generic_store_bulk_fixed_size_string(Field *field, grn_obj *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
-  GRN_TEXT_SET(ctx, buf, field->ptr, field->field_length);
+  GRN_TEXT_SET(ctx, buf, MRN_FIELD_FIELD_PTR(field), field->field_length);
   DBUG_RETURN(error);
 }
 
@@ -12540,14 +12540,14 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
   } else {
     Field_timestamp_hires *timestamp_hires_field =
       (Field_timestamp_hires *)field;
-    uchar *ptr_backup = field->ptr;
+    uchar *ptr_backup = MRN_FIELD_FIELD_PTR(field);
     uchar *null_ptr_backup = field->null_ptr;
     TABLE *table_backup = field->table;
-    field->ptr = (uchar *)key;
+    MRN_FIELD_FIELD_PTR(field) = (uchar *)key;
     field->null_ptr = (uchar *)(key - 1);
     field->table = table;
     MRN_FIELD_GET_DATE_NO_FUZZY(timestamp_hires_field, &mysql_time, current_thd);
-    field->ptr = ptr_backup;
+    MRN_FIELD_FIELD_PTR(field) = ptr_backup;
     field->null_ptr = null_ptr_backup;
     field->table = table_backup;
   }
@@ -12597,12 +12597,12 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
     mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
   } else {
     Field_time_hires *time_hires_field = (Field_time_hires *)field;
-    uchar *ptr_backup = field->ptr;
+    uchar *ptr_backup = MRN_FIELD_FIELD_PTR(field);
     uchar *null_ptr_backup = field->null_ptr;
-    field->ptr = (uchar *)key;
+    MRN_FIELD_FIELD_PTR(field) = (uchar *)key;
     field->null_ptr = (uchar *)(key - 1);
     MRN_FIELD_GET_DATE_NO_FUZZY(time_hires_field, &mysql_time, current_thd);
-    field->ptr = ptr_backup;
+    MRN_FIELD_FIELD_PTR(field) = ptr_backup;
     field->null_ptr = null_ptr_backup;
   }
   mrn::TimeConverter time_converter;
@@ -12670,12 +12670,12 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
   if (field->decimals() > 0) {
     Field_datetime_hires *datetime_hires_field = (Field_datetime_hires *)field;
     MYSQL_TIME mysql_time;
-    uchar *ptr_backup = field->ptr;
+    uchar *ptr_backup = MRN_FIELD_FIELD_PTR(field);
     uchar *null_ptr_backup = field->null_ptr;
-    field->ptr = (uchar *)key;
+    MRN_FIELD_FIELD_PTR(field) = (uchar *)key;
     field->null_ptr = (uchar *)(key - 1);
     MRN_FIELD_GET_DATE_NO_FUZZY(datetime_hires_field, &mysql_time, current_thd);
-    field->ptr = ptr_backup;
+    MRN_FIELD_FIELD_PTR(field) = ptr_backup;
     field->null_ptr = null_ptr_backup;
     mrn::TimeConverter time_converter;
     time = time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);

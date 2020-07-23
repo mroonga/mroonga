@@ -890,6 +890,8 @@ typedef HASH mrn_table_def_cache_type;
   (field->field_index())
 #  define MRN_FIELD_ALL_FLAGS(field) \
   (field->all_flags())
+#  define MRN_FIELD_FIELD_PTR(field) \
+  (field->field_ptr())
 #else
 #  define MRN_FIELD_IS_UNSIGNED(field) \
   (field->unsigned_flag)
@@ -897,6 +899,8 @@ typedef HASH mrn_table_def_cache_type;
   (field->field_index)
 #  define MRN_FIELD_ALL_FLAGS(field) \
   (field->flags)
+#  define MRN_FIELD_FIELD_PTR(field) \
+  (field->ptr)
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
