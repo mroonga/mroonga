@@ -12543,11 +12543,11 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
     uchar *ptr_backup = MRN_FIELD_FIELD_PTR(field);
     uchar *null_ptr_backup = field->null_ptr;
     TABLE *table_backup = field->table;
-    MRN_FIELD_FIELD_PTR(field) = (uchar *)key;
+    MRN_FIELD_SET_FIELD_PTR(field, (uchar *)key);
     field->null_ptr = (uchar *)(key - 1);
     field->table = table;
     MRN_FIELD_GET_DATE_NO_FUZZY(timestamp_hires_field, &mysql_time, current_thd);
-    MRN_FIELD_FIELD_PTR(field) = ptr_backup;
+    MRN_FIELD_SET_FIELD_PTR(field, ptr_backup);
     field->null_ptr = null_ptr_backup;
     field->table = table_backup;
   }
@@ -12599,10 +12599,10 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
     Field_time_hires *time_hires_field = (Field_time_hires *)field;
     uchar *ptr_backup = MRN_FIELD_FIELD_PTR(field);
     uchar *null_ptr_backup = field->null_ptr;
-    MRN_FIELD_FIELD_PTR(field) = (uchar *)key;
+    MRN_FIELD_SET_FIELD_PTR(field, (uchar *)key);
     field->null_ptr = (uchar *)(key - 1);
     MRN_FIELD_GET_DATE_NO_FUZZY(time_hires_field, &mysql_time, current_thd);
-    MRN_FIELD_FIELD_PTR(field) = ptr_backup;
+    MRN_FIELD_SET_FIELD_PTR(field, ptr_backup);
     field->null_ptr = null_ptr_backup;
   }
   mrn::TimeConverter time_converter;
@@ -12672,10 +12672,10 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
     MYSQL_TIME mysql_time;
     uchar *ptr_backup = MRN_FIELD_FIELD_PTR(field);
     uchar *null_ptr_backup = field->null_ptr;
-    MRN_FIELD_FIELD_PTR(field) = (uchar *)key;
+    MRN_FIELD_SET_FIELD_PTR(field, (uchar *)key);
     field->null_ptr = (uchar *)(key - 1);
     MRN_FIELD_GET_DATE_NO_FUZZY(datetime_hires_field, &mysql_time, current_thd);
-    MRN_FIELD_FIELD_PTR(field) = ptr_backup;
+    MRN_FIELD_SET_FIELD_PTR(field, ptr_backup);
     field->null_ptr = null_ptr_backup;
     mrn::TimeConverter time_converter;
     time = time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
