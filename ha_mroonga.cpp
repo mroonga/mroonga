@@ -4,6 +4,7 @@
   Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
+  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1561,21 +1562,21 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
   case MYSQL_TYPE_TINY:         // TINYINT; 1byte
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT8;      // 1byte
     } else {
       type = GRN_DB_INT8;       // 1byte
     }
     break;
   case MYSQL_TYPE_SHORT:        // SMALLINT; 2bytes
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT16;     // 2bytes
     } else {
       type = GRN_DB_INT16;      // 2bytes
     }
     break;
   case MYSQL_TYPE_LONG:         // INT; 4bytes
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT32;     // 4bytes
     } else {
       type = GRN_DB_INT32;      // 4bytes
@@ -1592,14 +1593,14 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
     type = GRN_DB_TIME;         // 8bytes
     break;
   case MYSQL_TYPE_LONGLONG:     // BIGINT; 8bytes
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT64;     // 8bytes
     } else {
       type = GRN_DB_INT64;      // 8bytes
     }
     break;
   case MYSQL_TYPE_INT24:        // MEDIUMINT; 3bytes
-    if (static_cast<Field_num *>(field)->unsigned_flag) {
+    if (MRN_FIELD_IS_UNSIGNED(static_cast<Field_num *>(field))) {
       type = GRN_DB_UINT32;     // 4bytes
     } else {
       type = GRN_DB_INT32;      // 4bytes
@@ -5100,7 +5101,7 @@ void ha_mroonga::wrapper_overwrite_index_bits()
     {
       Field *field = key_part->field;
       if (field->key_length() == key_part->length &&
-          !(field->flags & BLOB_FLAG))
+          !(MRN_FIELD_ALL_FLAGS(field) & BLOB_FLAG))
       {
         if (index_flags(i, j, 0) & HA_KEYREAD_ONLY)
         {
@@ -5117,7 +5118,7 @@ void ha_mroonga::wrapper_overwrite_index_bits()
           (table_option & HA_PRIMARY_KEY_IN_READ_INDEX))
       {
         if (field->key_length() == key_part->length &&
-            !(field->flags & BLOB_FLAG))
+            !(MRN_FIELD_ALL_FLAGS(field) & BLOB_FLAG))
           field->part_of_key = table_share->keys_in_use;
         if (field->part_of_sortkey.is_set(i))
           field->part_of_sortkey = table_share->keys_in_use;
@@ -5431,7 +5432,7 @@ int ha_mroonga::storage_open_indexes(const char *name)
       KEY_PART_INFO *key_part = key_info->key_part;
       for (j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {
         bitmap_set_bit(&multiple_column_key_bitmap,
-                       key_part[j].field->field_index);
+                       MRN_FIELD_FIELD_INDEX(key_part[j].field));
       }
     }
 
@@ -6871,7 +6872,7 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
   if (table->found_next_number_field &&
       !table->s->next_number_keypart) {
     Field_num *field = (Field_num *) table->found_next_number_field;
-    if (field->unsigned_flag || field->val_int() > 0) {
+    if (MRN_FIELD_IS_UNSIGNED(field) || field->val_int() > 0) {
       MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
       ulonglong nr = (ulonglong) field->val_int();
       if (!long_term_share->auto_inc_inited) {
@@ -7343,7 +7344,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
     }
 #endif
 
-    if (!bitmap_is_set(table->write_set, field->field_index))
+    if (!bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field)))
       continue;
 
     if (field->is_null())
@@ -7424,9 +7425,9 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
     }
 #endif
 
-    if (bitmap_is_set(table->write_set, field->field_index)) {
+    if (bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field))) {
       mrn::DebugColumnAccess debug_column_access(table, table->read_set);
-      DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,field->field_index));
+      DBUG_PRINT("info", ("mroonga: update column %d(%d)",i,MRN_FIELD_FIELD_INDEX(field)));
 
       if (field->is_null()) continue;
 
@@ -7508,7 +7509,7 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
       new_data == table->record[0]) {
     mrn::DebugColumnAccess debug_column_access(table, table->read_set);
     Field_num *field = (Field_num *) table->found_next_number_field;
-    if (field->unsigned_flag || field->val_int() > 0) {
+    if (MRN_FIELD_IS_UNSIGNED(field) || field->val_int() > 0) {
       MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
       ulonglong nr = (ulonglong) field->val_int();
       if (!long_term_share->auto_inc_inited) {
@@ -7677,7 +7678,7 @@ int ha_mroonga::storage_update_row_unique_indexes(mrn_update_row_new_data_t new_
     bool have_any_changed_field = false;
     for (uint j = 0; j < n_key_parts; ++j) {
       if (bitmap_is_set(table->write_set,
-                        key_info->key_part[j].field->field_index)) {
+                        MRN_FIELD_FIELD_INDEX(key_info->key_part[j].field))) {
         have_any_changed_field = true;
         break;
       }
@@ -8105,7 +8106,7 @@ int ha_mroonga::storage_prepare_delete_row_unique_indexes(const uchar *buf,
     if (KEY_N_KEY_PARTS(key_info) == 1) {
       Field *field = key_info->key_part[0].field;
       mrn_change_encoding(ctx, field->charset());
-      index_column = grn_columns[field->field_index];
+      index_column = grn_columns[MRN_FIELD_FIELD_INDEX(field)];
     } else {
       mrn_change_encoding(ctx, NULL);
       index_column = grn_index_columns[i];
@@ -8769,7 +8770,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       GRN_EXPR_CREATE_FOR_QUERY(ctx, grn_table,
                                 expression, expression_variable);
       grn_obj *target_column =
-        grn_columns[key_info->key_part->field->field_index];
+        grn_columns[MRN_FIELD_FIELD_INDEX(key_info->key_part->field)];
       grn_expr_append_const(ctx, expression, target_column, GRN_OP_GET_VALUE, 1);
       grn_obj empty_value;
       GRN_TEXT_INIT(&empty_value, 0);
@@ -11282,7 +11283,7 @@ int ha_mroonga::generic_store_bulk_fixed_size_string(Field *field, grn_obj *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
-  GRN_TEXT_SET(ctx, buf, field->ptr, field->field_length);
+  GRN_TEXT_SET(ctx, buf, MRN_FIELD_FIELD_PTR(field), field->field_length);
   DBUG_RETURN(error);
 }
 
@@ -11310,7 +11311,7 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf)
   uint32 size = field->pack_length();
   DBUG_PRINT("info", ("mroonga: size=%u", size));
   Field_num *field_num = static_cast<Field_num *>(field);
-  bool is_unsigned = field_num->unsigned_flag;
+  bool is_unsigned = MRN_FIELD_IS_UNSIGNED(field_num);
   DBUG_PRINT("info", ("mroonga: is_unsigned=%s", is_unsigned ? "true" : "false"));
   switch (size) {
   case 1:
@@ -11806,7 +11807,7 @@ void ha_mroonga::storage_store_field_integer(Field *field,
 {
   MRN_DBUG_ENTER_METHOD();
   Field_num *field_num = static_cast<Field_num *>(field);
-  bool is_unsigned = field_num->unsigned_flag;
+  bool is_unsigned = MRN_FIELD_IS_UNSIGNED(field_num);
   switch (value_length) {
   case 1:
     {
@@ -12086,7 +12087,7 @@ void ha_mroonga::storage_store_field_blob(Field *field,
 {
   MRN_DBUG_ENTER_METHOD();
   Field_blob *blob = (Field_blob *)field;
-  grn_obj *blob_buffer = blob_buffers_[field->field_index];
+  grn_obj *blob_buffer = blob_buffers_[MRN_FIELD_FIELD_INDEX(field)];
   GRN_TEXT_SET(ctx, blob_buffer, value, value_length);
   blob->set_ptr(GRN_TEXT_LEN(blob_buffer),
                 reinterpret_cast<uchar *>(GRN_TEXT_VALUE(blob_buffer)));
@@ -12129,7 +12130,7 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
               longitude_in_degree);
   float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
               latitude_in_degree);
-  grn_obj *geometry_buffer = blob_buffers_[field->field_index];
+  grn_obj *geometry_buffer = blob_buffers_[MRN_FIELD_FIELD_INDEX(field)];
   uint wkb_length = sizeof(wkb) / sizeof(*wkb);
   Field_geom *geometry = (Field_geom *)field;
   GRN_TEXT_SET(ctx, geometry_buffer, wkb, wkb_length);
@@ -12367,8 +12368,8 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
-    if (bitmap_is_set(table->read_set, field->field_index) ||
-        bitmap_is_set(table->write_set, field->field_index)) {
+    if (bitmap_is_set(table->read_set, MRN_FIELD_FIELD_INDEX(field)) ||
+        bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field))) {
       if (ignoring_no_key_columns) {
         KEY *key_info = &(table->s->key_info[active_index]);
         if (!FIELD_NAME_EQUAL_FIELD(field, key_info->key_part[0].field)) {
@@ -12377,7 +12378,7 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
       }
 
       mrn::DebugColumnAccess debug_column_access(table, table->write_set);
-      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));
+      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,MRN_FIELD_FIELD_INDEX(field)));
       field->move_field_offset(ptr_diff);
       if (FIELD_NAME_EQUAL(field, MRN_COLUMN_NAME_ID)) {
         // for _id column
@@ -12418,11 +12419,11 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
       continue;
     }
 #endif
-    if (!bitmap_is_set(table->read_set, field->field_index) &&
-        !bitmap_is_set(table->write_set, field->field_index) &&
-        bitmap_is_set(&multiple_column_key_bitmap, field->field_index)) {
+    if (!bitmap_is_set(table->read_set, MRN_FIELD_FIELD_INDEX(field)) &&
+        !bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field)) &&
+        bitmap_is_set(&multiple_column_key_bitmap, MRN_FIELD_FIELD_INDEX(field))) {
       mrn::DebugColumnAccess debug_column_access(table, table->write_set);
-      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,field->field_index));
+      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,MRN_FIELD_FIELD_INDEX(field)));
       grn_obj value;
       GRN_OBJ_INIT(&value, GRN_BULK, 0, grn_obj_get_range(ctx, grn_columns[i]));
       grn_obj_get_value(ctx, grn_columns[i], record_id, &value);
@@ -12539,14 +12540,14 @@ int ha_mroonga::storage_encode_key_timestamp(Field *field, const uchar *key,
   } else {
     Field_timestamp_hires *timestamp_hires_field =
       (Field_timestamp_hires *)field;
-    uchar *ptr_backup = field->ptr;
+    uchar *ptr_backup = MRN_FIELD_FIELD_PTR(field);
     uchar *null_ptr_backup = field->null_ptr;
     TABLE *table_backup = field->table;
-    field->ptr = (uchar *)key;
+    MRN_FIELD_SET_FIELD_PTR(field, (uchar *)key);
     field->null_ptr = (uchar *)(key - 1);
     field->table = table;
     MRN_FIELD_GET_DATE_NO_FUZZY(timestamp_hires_field, &mysql_time, current_thd);
-    field->ptr = ptr_backup;
+    MRN_FIELD_SET_FIELD_PTR(field, ptr_backup);
     field->null_ptr = null_ptr_backup;
     field->table = table_backup;
   }
@@ -12596,12 +12597,12 @@ int ha_mroonga::storage_encode_key_time(Field *field, const uchar *key,
     mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
   } else {
     Field_time_hires *time_hires_field = (Field_time_hires *)field;
-    uchar *ptr_backup = field->ptr;
+    uchar *ptr_backup = MRN_FIELD_FIELD_PTR(field);
     uchar *null_ptr_backup = field->null_ptr;
-    field->ptr = (uchar *)key;
+    MRN_FIELD_SET_FIELD_PTR(field, (uchar *)key);
     field->null_ptr = (uchar *)(key - 1);
     MRN_FIELD_GET_DATE_NO_FUZZY(time_hires_field, &mysql_time, current_thd);
-    field->ptr = ptr_backup;
+    MRN_FIELD_SET_FIELD_PTR(field, ptr_backup);
     field->null_ptr = null_ptr_backup;
   }
   mrn::TimeConverter time_converter;
@@ -12669,12 +12670,12 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
   if (field->decimals() > 0) {
     Field_datetime_hires *datetime_hires_field = (Field_datetime_hires *)field;
     MYSQL_TIME mysql_time;
-    uchar *ptr_backup = field->ptr;
+    uchar *ptr_backup = MRN_FIELD_FIELD_PTR(field);
     uchar *null_ptr_backup = field->null_ptr;
-    field->ptr = (uchar *)key;
+    MRN_FIELD_SET_FIELD_PTR(field, (uchar *)key);
     field->null_ptr = (uchar *)(key - 1);
     MRN_FIELD_GET_DATE_NO_FUZZY(datetime_hires_field, &mysql_time, current_thd);
-    field->ptr = ptr_backup;
+    MRN_FIELD_SET_FIELD_PTR(field, ptr_backup);
     field->null_ptr = null_ptr_backup;
     mrn::TimeConverter time_converter;
     time = time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
@@ -15744,7 +15745,7 @@ bool ha_mroonga::storage_check_if_incompatible_data(
   uint n = table_share->fields;
   for (uint i = 0; i < n; i++) {
     Field *field = table->field[i];
-    if (field->flags & FIELD_IS_RENAMED) {
+    if (MRN_FIELD_ALL_FLAGS(field) & FIELD_IS_RENAMED) {
       DBUG_RETURN(COMPATIBLE_DATA_NO);
     }
   }
@@ -16534,7 +16535,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
         break;
       }
       mrn::SmartBitmap smart_generated_column_bitmap(&generated_column_bitmap);
-      bitmap_set_bit(&generated_column_bitmap, field->field_index);
+      bitmap_set_bit(&generated_column_bitmap, MRN_FIELD_FIELD_INDEX(field));
 #  endif
 
       my_ptrdiff_t diff = table->record[0] - altered_table->record[0];
@@ -16696,7 +16697,7 @@ bool ha_mroonga::storage_inplace_alter_table_rename_column(
   for (uint i = 0; i < n_fields; i++) {
     Field *field = table->field[i];
 
-    if (!(field->flags & FIELD_IS_RENAMED)) {
+    if (!(MRN_FIELD_ALL_FLAGS(field) & FIELD_IS_RENAMED)) {
       continue;
     }
 
@@ -17622,7 +17623,7 @@ void ha_mroonga::set_pk_bitmap()
   uint j;
   for (j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {
     Field *field = key_info->key_part[j].field;
-    bitmap_set_bit(table->read_set, field->field_index);
+    bitmap_set_bit(table->read_set, MRN_FIELD_FIELD_INDEX(field));
   }
   DBUG_VOID_RETURN;
 }

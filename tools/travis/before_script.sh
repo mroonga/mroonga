@@ -71,7 +71,7 @@ else
                       "--with-mysql-build=$PWD/vendor/mysql/release")
       ;;
     mysql-8.0)
-      boost_archive=boost_1_70_0.tar.gz
+      boost_archive=boost_1_72_0.tar.gz
       curl -L -O http://packages.groonga.org/tmp/boost/${boost_archive}
       sudo mkdir -p /usr/global/share
       sudo mv ${boost_archive} /usr/global/share/

@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -431,6 +432,14 @@ typedef HASH mrn_table_def_cache_type;
   ((select_lex)->having)
 #  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
   ((select_lex)->options)
+#endif
+
+#if MYSQL_VERSION_ID >= 80021 && !defined(MRN_MARIADB_P)
+#  define MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex) \
+  ((select_lex)->fields_list)
+#else
+#  define MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex) \
+  ((select_lex)->item_list)
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
@@ -872,6 +881,30 @@ typedef HASH mrn_table_def_cache_type;
   ((field)->get_time((time)))
 #  define MRN_FIELD_GET_DATE_NO_FUZZY(field, time, thd)  \
   ((field)->get_date((time), 0))
+#endif
+
+#if MYSQL_VERSION_ID >= 80021 && !defined(MRN_MARIADB_P)
+#  define MRN_FIELD_IS_UNSIGNED(field) \
+  ((field)->is_unsigned())
+#  define MRN_FIELD_FIELD_INDEX(field) \
+  ((field)->field_index())
+#  define MRN_FIELD_ALL_FLAGS(field) \
+  ((field)->all_flags())
+#  define MRN_FIELD_FIELD_PTR(field) \
+  ((field)->field_ptr())
+#  define MRN_FIELD_SET_FIELD_PTR(field, new_ptr) \
+  ((field)->set_field_ptr((new_ptr)))
+#else
+#  define MRN_FIELD_IS_UNSIGNED(field) \
+  ((field)->unsigned_flag)
+#  define MRN_FIELD_FIELD_INDEX(field) \
+  ((field)->field_index)
+#  define MRN_FIELD_ALL_FLAGS(field) \
+  ((field)->flags)
+#  define MRN_FIELD_FIELD_PTR(field) \
+  ((field)->ptr)
+#  define MRN_FIELD_SET_FIELD_PTR(field, new_ptr) \
+  (field)->ptr = (new_ptr)
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)

@@ -2,6 +2,7 @@
 /*
   Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -46,10 +47,10 @@ namespace mrn {
   bool CountSkipChecker::check() {
     MRN_DBUG_ENTER_METHOD();
 
-    if (select_lex_->item_list.elements != 1) {
+    if (MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex_).elements != 1) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] not only one item: %u",
-              select_lex_->item_list.elements);
+              MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex_).elements);
       DBUG_RETURN(false);
     }
     if (select_lex_->group_list.elements > 0) {
@@ -70,7 +71,7 @@ namespace mrn {
       DBUG_RETURN(false);
     }
 
-    Item *info = static_cast<Item *>(select_lex_->item_list.first_node()->info);
+    Item *info = static_cast<Item *>(MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex_).first_node()->info);
     if (info->type() != Item::SUM_FUNC_ITEM) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] item isn't sum function: %u",
