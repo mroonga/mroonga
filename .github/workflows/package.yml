@@ -36,6 +36,7 @@ jobs:
           - mysql-server-8.0
           - percona-server-5.6
           - percona-server-5.7
+          - percona-server-8.0
         exclude:
           - os: debian-buster
             package: mariadb-server-10.1
@@ -127,6 +128,14 @@ jobs:
             package: percona-server-5.7
           - os: centos-8
             package: percona-server-5.7
+          - os: debian-stretch
+            package: percona-server-8.0
+          - os: debian-stretch-i386
+            package: percona-server-8.0
+          - os: debian-buster
+            package: percona-server-8.0
+          - os: debian-buster-i386
+            package: percona-server-8.0
     runs-on: ubuntu-latest
     steps:
       - name: Remove needless data
