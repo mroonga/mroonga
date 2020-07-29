@@ -48,7 +48,12 @@ environment:
 install:
   - set PATH=C:\Ruby26-x64\bin;%PATH%
   - set PATH=C:\msys64\usr\bin;%PATH%
-  - pacman --sync --refresh --sysupgrade --noconfirm
+  - curl --remote-name https://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz
+  - pacman --noconfirm --upgrade msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz
+  - pacman --sync --refresh --sysupgrade --sysupgrade --noconfirm
+  - taskkill /F /FI "MODULES eq msys-2.0.dll"
+  - pacman --sync --sysupgrade --sysupgrade --noconfirm
+  - taskkill /F /FI "MODULES eq msys-2.0.dll"
   - pacman --sync --noconfirm p7zip
   - if "%USE_MASTER%" == "yes" (
       call
