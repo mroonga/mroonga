@@ -21,11 +21,32 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.03 - 2020-05-29"
-msgstr "10.03リリース - 2020-05-29"
+msgid "Release 10.05 - 2020-07-29"
+msgstr "10.05リリース - 2020-07-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.49, 5.7.31, and 8.0.21."
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.49と5.7.31とMySQL 8.0.21をサポートしまし"
+"た。"
+
+msgid "There are below restrictions in the MySQL8 package."
+msgstr "MySQL8 のパッケージには以下の制限があります。"
+
+msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
+msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
+
+msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
+msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.6.49."
+msgstr "[:doc:`/install/centos`] Percona Server 5.6.49をサポートしました。"
+
+msgid "Release 10.03 - 2020-05-29"
+msgstr "10.03リリース - 2020-05-29"
 
 msgid ""
 "[:doc:`/install/ubuntu`] Added support for Ubuntu 20.04 (Focal Fossa) "

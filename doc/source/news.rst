@@ -5,6 +5,23 @@
 News
 ====
 
+.. _release-10-05:
+
+Release 10.05 - 2020-07-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.49, 5.7.31, and 8.0.21.
+
+  * There are below restrictions in the MySQL8 package.
+
+    * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+    * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.49.
+
 .. _release-10-03:
 
 Release 10.03 - 2020-05-29
