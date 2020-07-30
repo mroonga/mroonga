@@ -235,6 +235,9 @@ fi
 %doc mroonga-doc/*
 
 %changelog
+* Wed Jul 29 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.05-1
+- New upstream release.
+
 * Thu May 28 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.03-1
 - New upstream release.
 
