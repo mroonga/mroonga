@@ -16,6 +16,7 @@ Build-Depends:
 	cmake,
 	libwrap0-dev,
 	libedit-dev,
+	libevent-dev,
 	liblz4-dev,
 	libncurses5-dev
 Standards-Version: 3.9.1
