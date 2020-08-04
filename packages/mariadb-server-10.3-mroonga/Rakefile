@@ -13,7 +13,6 @@ class MariaDBServer103MroongaPackageTask < MroongaPackageTask
 
   def ubuntu_targets_default
     [
-      ["eoan", "19.10"],
       ["focal", "20.04"],
     ]
   end
