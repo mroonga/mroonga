@@ -10,6 +10,7 @@ RUN \
     https://repo.percona.com/yum/percona-release-latest.noarch.rpm \
     https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
     epel-release && \
+  dnf module disable -y mysql && \
   percona-release setup ps80 && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=PowerTools -y ${quiet} \
@@ -48,8 +49,6 @@ RUN \
     wget \
     which \
     zlib-devel && \
-  dnf search percona-server && \
-  dnf search --disablerepo=AppStream percona-server && \
   dnf install --disablerepo=AppStream -y ${quiet} \
     percona-server-devel && \
   dnf clean ${quiet} all
