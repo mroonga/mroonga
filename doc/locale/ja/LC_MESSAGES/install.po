@@ -771,9 +771,6 @@ msgstr ""
 msgid "19.04 Disco Dingo"
 msgstr ""
 
-msgid "19.10 Eoan Ermine"
-msgstr ""
-
 msgid "Here are Ubuntu versions that supports MariaDB:"
 msgstr "MariaDBをサポートしているUbuntuのバージョンは次の通りです。"
 
