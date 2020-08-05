@@ -49,5 +49,4 @@ RUN \
     wget \
     which \
     zlib-devel && \
-  yum clean ${quiet} all && \
-  scl enable devtoolset-8 bash
+  yum clean ${quiet} all
