@@ -768,8 +768,11 @@ msgstr ""
 msgid "18.04 Bionic Beaver"
 msgstr ""
 
-msgid "19.04 Disco Dingo"
+msgid "20.04 Focal Fossa"
 msgstr ""
+
+msgid "Here are Ubuntu versions that supports MySQL:"
+msgstr "MySQLをサポートしているUbuntuのバージョンは次の通りです。"
 
 msgid "Here are Ubuntu versions that supports MariaDB:"
 msgstr "MariaDBをサポートしているUbuntuのバージョンは次の通りです。"
