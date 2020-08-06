@@ -1,0 +1,26 @@
+require_relative "../mroonga-package-task"
+
+class PerconaServer80MroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("percona-server-8.0", "percona-server-80-mroonga")
+  end
+
+  def enable_apt?
+    false
+  end
+
+  def enable_ubuntu?
+    false
+  end
+
+  def yum_targets_default
+    [
+      "centos-6",
+      "centos-7",
+      "centos-8",
+    ]
+  end
+end
+
+task = PerconaServer80MroongaPackageTask.new
+task.define
