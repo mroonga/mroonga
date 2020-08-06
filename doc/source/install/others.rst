@@ -278,10 +278,9 @@ Here is an example when you specify ``--prefix=$HOME/local`` to
 ``uninstall Mroonga``
 ^^^^^^^^^^^^^^^^^^^^^
 
-If you want to remove Mroonga, 
+If you want to remove Mroonga,
 type below commands::
 
-  % git clone git@github.com:mroonga/mroonga.git
   % mysql < ${PREFIX}/share/mroonga/uninstall.sql
   % cd ${MROONGA_BUILD_DIR}
   % sudo make uninstall
