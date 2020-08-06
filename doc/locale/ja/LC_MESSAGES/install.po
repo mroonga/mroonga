@@ -737,7 +737,7 @@ msgid "``uninstall Mroonga``"
 msgstr ""
 
 msgid "If you want to remove Mroonga, type below commands::"
-msgstr ""
+msgstr "Mroongaを削除したい場合は、以下のコマンドを入力して下さい。::"
 
 msgid "Ubuntu"
 msgstr ""
