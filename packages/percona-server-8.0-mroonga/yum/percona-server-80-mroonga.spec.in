@@ -45,10 +45,10 @@ BuildRequires:	gcc
 BuildRequires:	gcc-c++
 BuildRequires:	cmake3
 BuildRequires:	numactl-devel
-BuildRequires:  zlib-devel
-BuildRequires:  percona-server-devel = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
-BuildRequires:  selinux-policy-devel
-BuildRequires:  openldap-devel
+BuildRequires:	zlib-devel
+BuildRequires:	percona-server-devel = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
+BuildRequires:	selinux-policy-devel
+BuildRequires:	openldap-devel
 Requires:       percona-server-server = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 Requires:       percona-server-client = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 Requires:       groonga-libs >= %{groonga_required_version}
