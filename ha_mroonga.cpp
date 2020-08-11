@@ -5671,7 +5671,13 @@ int ha_mroonga::wrapper_delete_table(const char *name,
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
 
-#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_HTON_DROP_TABLE
+  if (ha_check_if_updates_are_ignored(ha_thd(), wrap_handlerton, "DROP")) {
+    error = 0;
+  } else {
+    error = wrap_handlerton->drop_table(wrap_handlerton, name);
+  }
+#elif defined(MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION)
   error = hnd->ha_delete_table(name, table_def);
 #else
   error = hnd->ha_delete_table(name);
