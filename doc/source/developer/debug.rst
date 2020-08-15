@@ -67,7 +67,10 @@ So if you want to run certain tests only, you can specify the test name in ``--d
 See the trace
 ^^^^^^^^^^^^^
 
-When you run tests by adding ``--debug`` option like the following, function calls information is recorded.
+When you run tests by adding ``--debug`` option like the following, function calls information is recorded. ::
+
+  ./test/run-sql-test.sh --debug --do-test=foobar
+
 This information is stored in ``${MySQL's working directory}/${MySQL version}/mysql-test/var/log/mysqld.1.trace``.
 
 When you add a new function, it would be a good idea to put it in the beginning of MRN_DBUG_ENTER_FUNCTION function and record its calls.
