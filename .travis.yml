@@ -16,42 +16,42 @@ matrix:
         - MYSQL_VERSION=mysql-8.0
     - name: MariaDB 10.1
       env:
-        - MYSQL_VERSION=mariadb-10.1.44
+        - MYSQL_VERSION=mariadb-10.1.46
         - MROONGA_BUNDLED=yes
     - name: MariaDB 10.2
       env:
-        - MYSQL_VERSION=mariadb-10.2.31
+        - MYSQL_VERSION=mariadb-10.2.33
         - MROONGA_BUNDLED=yes
     - name: MariaDB 10.2 binary protocol
       env:
-        - MYSQL_VERSION=mariadb-10.2.31
+        - MYSQL_VERSION=mariadb-10.2.33
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - name: MariaDB 10.3
       env:
-        - MYSQL_VERSION=mariadb-10.3.22
+        - MYSQL_VERSION=mariadb-10.3.24
         - MROONGA_BUNDLED=yes
     - name: MariaDB 10.3 binary protocol
       env:
-        - MYSQL_VERSION=mariadb-10.3.22
+        - MYSQL_VERSION=mariadb-10.3.24
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - name: MariaDB 10.4
       env:
-        - MYSQL_VERSION=mariadb-10.4.12
+        - MYSQL_VERSION=mariadb-10.4.14
         - MROONGA_BUNDLED=yes
     - name: MariaDB 10.4 binary protocol
       env:
-        - MYSQL_VERSION=mariadb-10.4.12
+        - MYSQL_VERSION=mariadb-10.4.14
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - name: MariaDB 10.5
       env:
-        - MYSQL_VERSION=mariadb-10.5.4
+        - MYSQL_VERSION=mariadb-10.5.5
         - MROONGA_BUNDLED=yes
     - name: MariaDB 10.5 binary protocol
       env:
-        - MYSQL_VERSION=mariadb-10.5.4
+        - MYSQL_VERSION=mariadb-10.5.5
         - MROONGA_BUNDLED=yes
         - MROONGA_TEST_PS_PROTOCOL=yes
     - name: Percona Server 5.6
