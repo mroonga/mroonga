@@ -29,16 +29,12 @@ CREATE TABLE diaries (
 
 SELECT mroonga_command('truncate mroonga_operations');
 INSERT INTO diaries VALUES("Unlogged: Research for Mroonga");
-SELECT mroonga_command('load --table mroonga_operations --values "[{}]"');
-SELECT mroonga_command('select mroonga_operations --output_columns _id');
 
 SET GLOBAL mroonga_enable_operations_recording = false;
 FLUSH TABLES;
 
 SELECT mroonga_command('truncate mroonga_operations');
 INSERT INTO diaries VALUES("Logged: Research for Mroonga");
-SELECT mroonga_command('load --table mroonga_operations --values "[{}]"');
-SELECT mroonga_command('select mroonga_operations --output_columns _id');
 
 DROP TABLE diaries;
 SELECT mroonga_command('truncate mroonga_operations');
