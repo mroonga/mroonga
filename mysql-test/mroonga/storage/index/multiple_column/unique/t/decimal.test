@@ -30,6 +30,10 @@ select c1, c2, c3 from t1 force index(uk1) where c2 = -9876543210987654321098765
 select c1, c2, c3 from t1 force index(uk1) order by c2, c3;
 select c1, c2, c3 from t1 force index(uk1) order by c2 desc, c3 desc;
 select c2, c3 from t1 force index(uk1) order by c2, c3;
+# MariaDB 10.2 or later uses "..." to show the displayed value is truncated.
+# We will use "..." version instead of "000" version as expected value
+# when MySQL also uses "...".
+--replace_result 123.456000000000000000000000000000-0.000000000000000000000000... 123.456000000000000000000000000000-0.000000000000000000000000000
 --error ER_DUP_ENTRY
 insert into t1 values(6,123.456,0.000000000000000000000000000001);
 delete from t1 where c1 = 1;
