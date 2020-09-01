@@ -1,4 +1,4 @@
-# Copyright(C) 2016 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,30 +14,11 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/skip_mariadb_10_4.inc
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS users;
---enable_warnings
-
-FLUSH STATUS;
-
-CREATE TABLE users (
-  age INT,
-  INDEX (age)
-) DEFAULT CHARSET=UTF8MB4;
-
-INSERT INTO users (age) VALUES (28);
-INSERT INTO users (age) VALUES (28);
-INSERT INTO users (age) VALUES (29);
-INSERT INTO users (age) VALUES (29);
-INSERT INTO users (age) VALUES (29);
-
-SELECT COUNT(*) FROM users WHERE age <> 29;
-
-SHOW STATUS LIKE 'mroonga_count_skip';
-
-DROP TABLE users;
-
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+if ($version_10_4) {
+  if ($mariadb) {
+    --skip This test is not for MariaDB 10.4.x
+  }
+}
