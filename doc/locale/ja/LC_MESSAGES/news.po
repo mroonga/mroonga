@@ -21,11 +21,63 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.05 - 2020-07-29"
-msgstr "10.05リリース - 2020-07-29"
+msgid "Release 10.06 - 2020-09-02"
+msgstr "10.06リリース - 2020-09-02"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 19.10 (Eoan Ermine) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 19.10 (Eoan Ermine) のサポートをやめました。"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.20."
+msgstr "[:doc:`/install/centos`] Percona Server 8.0.20をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.46, 10.2.33, "
+"10.3.24, 10.4.14, and 10.5.5."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.1.46、10.2.33、10.3.24、10.4.14、10.5.5を"
+"サポートしました。"
+
+msgid "Modify how to install into Debian GNU/Linux."
+msgstr "Debian GNU/Linux へのインストール方法を変更しました。"
+
+msgid ""
+"We modify to use ``groonga-apt-source`` instead of ``groonga-archive-"
+"keyring``."
+msgstr ""
+"``groonga-archive-keyring`` の代わりに ``groonga-apt-source`` を使うように変"
+"更しました。"
+
+msgid ""
+"Because the ``lintian`` command recommends using apt-source if a package "
+"that it puts files under the ``/etc/apt/sources.lists.d/``."
+msgstr ""
+"``lintian`` コマンドが ``/etc/apt/sources.lists.d/`` 配下にファイルを置くパッ"
+"ケージは ``apt-source`` を使うよう推奨しているためです。"
+
+msgid ""
+"The ``lintian`` command is the command which checks for many common "
+"packaging errors."
+msgstr ""
+"``lintian`` コマンドはパッケージングに共通のエラーをチェックするためのコマン"
+"ドです。"
+
+msgid ""
+"Please also refer to the following for the details about installation "
+"procedures."
+msgstr "インストール方法についての詳細は、以下も参照してください。"
+
+msgid "[:doc:`/install/debian`]"
+msgstr "[:doc:`/install/debian`]"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.31."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.31をサポートしました。"
+
+msgid "Release 10.05 - 2020-07-29"
+msgstr "10.05リリース - 2020-07-29"
 
 msgid ""
 "[:doc:`/install/centos`] Added support for MySQL 5.6.49, 5.7.31, and 8.0.21."
