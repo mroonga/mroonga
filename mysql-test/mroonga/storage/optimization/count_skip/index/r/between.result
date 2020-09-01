@@ -9,6 +9,10 @@ INSERT INTO users (age) VALUES (28);
 INSERT INTO users (age) VALUES (29);
 INSERT INTO users (age) VALUES (30);
 INSERT INTO users (age) VALUES (31);
+INSERT INTO users (age) VALUES (32);
+INSERT INTO users (age) VALUES (33);
+INSERT INTO users (age) VALUES (34);
+INSERT INTO users (age) VALUES (35);
 SELECT COUNT(*) FROM users WHERE age BETWEEN 28 AND 30;
 COUNT(*)
 3
