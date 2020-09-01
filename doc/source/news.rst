@@ -5,6 +5,32 @@
 News
 ====
 
+.. _release-10-06:
+
+Release 10.06 - 2020-09-02
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 19.10 (Eoan Ermine) support.
+
+* [:doc:`/install/centos`] Added support for Percona Server 8.0.20.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.46, 10.2.33, 10.3.24, 10.4.14, and 10.5.5.
+
+* Modify how to install into Debian GNU/Linux.
+
+  * We modify to use ``groonga-apt-source`` instead of ``groonga-archive-keyring``.
+  * Because the ``lintian`` command recommends using apt-source if a package that it puts files under the ``/etc/apt/sources.lists.d/``.
+
+    * The ``lintian`` command is the command which checks for many common packaging errors.
+    * Please also refer to the following for the details about installation procedures.
+
+      * [:doc:`/install/debian`]
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.31.
+
 .. _release-10-05:
 
 Release 10.05 - 2020-07-29
