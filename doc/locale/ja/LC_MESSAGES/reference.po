@@ -2127,10 +2127,10 @@ msgstr "参照"
 
 msgid ""
 "`Command <http://groonga.org/docs/reference/command.html>`_ in Groonga "
-"document"
+"document."
 msgstr ""
-"Groongaのドキュメントの中の `コマンド <http://groonga.org/ja/docs/reference/"
-"command.html>`_"
+"Groongaのドキュメント内の `コマンド <http://groonga.org/ja/docs/reference/"
+"command.html>`_ 。"
 
 msgid "``mroonga_escape()``"
 msgstr ""
