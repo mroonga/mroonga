@@ -16377,7 +16377,8 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
     }
   }
   if (!error && have_multiple_column_index) {
-    my_ptrdiff_t diff = table->record[0] - altered_table->record[0];
+    my_ptrdiff_t diff = mrn_compute_ptr_diff_for_key(table->record[0],
+                                                     altered_table->record[0]);
     mrn::TableFieldsOffsetMover mover(altered_table, diff);
     error = storage_add_index_multiple_columns(altered_table->key_info,
                                                ha_alter_info->key_count,
