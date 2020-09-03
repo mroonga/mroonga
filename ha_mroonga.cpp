@@ -472,6 +472,18 @@ mrn::ContextPool *mrn_context_pool = NULL;
 static mysql_mutex_t mrn_operations_mutex;
 
 
+#if MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P)
+static inline my_ptrdiff_t
+mrn_compute_ptr_diff_for_key(const uchar *data, const uchar *base) {
+  return 0;
+}
+#else
+static inline my_ptrdiff_t
+mrn_compute_ptr_diff_for_key(const uchar *data, const uchar *base) {
+  return data - base;
+}
+#endif
+
 #ifdef WIN32
 static inline double round(double x)
 {
@@ -7150,7 +7162,9 @@ int ha_mroonga::wrapper_get_record_id(uchar *data, grn_id *record_id,
   GRN_TEXT_INIT(&key, 0);
 
   mrn_change_encoding(ctx, NULL);
-  grn_bulk_space(ctx, &key, table->key_info->key_length);
+  grn_bulk_space(ctx,
+                 &key,
+                 table->key_info[table_share->primary_key].key_length);
   key_copy((uchar *)(GRN_TEXT_VALUE(&key)),
            data,
            &(table->key_info[table_share->primary_key]),
@@ -7236,7 +7250,7 @@ int ha_mroonga::wrapper_update_row_index(const uchar *old_data,
   }
 
   grn_id old_record_id;
-  my_ptrdiff_t ptr_diff = old_data - table->record[0];
+  my_ptrdiff_t ptr_diff = mrn_compute_ptr_diff_for_key(old_data, table->record[0]);
   for (uint j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {
     Field *field = key_info->key_part[j].field;
     field->move_field_offset(ptr_diff);
@@ -7564,7 +7578,7 @@ int ha_mroonga::storage_update_row_index(const uchar *old_data,
   GRN_TEXT_INIT(&new_key, 0);
   GRN_TEXT_INIT(&new_encoded_key, 0);
 
-  my_ptrdiff_t ptr_diff = old_data - table->record[0];
+  my_ptrdiff_t ptr_diff = mrn_compute_ptr_diff_for_key(old_data, table->record[0]);
 
   mrn::DebugColumnAccess debug_column_access(table, table->read_set);
   uint i;
@@ -8060,7 +8074,7 @@ int ha_mroonga::storage_prepare_delete_row_unique_index(const uchar *buf,
 #else
     uchar *key_copy_data = const_cast<uchar *>(buf);
 #endif
-    my_ptrdiff_t ptr_diff = buf - table->record[0];
+    my_ptrdiff_t ptr_diff = mrn_compute_ptr_diff_for_key(buf, table->record[0]);
     for (uint i = 0; i < KEY_N_KEY_PARTS(key_info); ++i) {
       Field *field = key_info->key_part[i].field;
       field->move_field_offset(ptr_diff);
