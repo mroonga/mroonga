@@ -1,4 +1,4 @@
-# Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2011-2020  Sutou Kouhei<kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -46,6 +46,7 @@ SELECT * FROM diaries
   WHERE MATCH(title) AGAINST("survey") AND
         MATCH(body) AGAINST("groonga");
 
+--replace_result "" "\\0001"
 DELETE FROM diaries WHERE id = 1;
 
 SELECT * FROM diaries;
