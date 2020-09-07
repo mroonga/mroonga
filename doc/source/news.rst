@@ -13,11 +13,19 @@ Release 10.06 - 2020-09-02
 Improvements
 ^^^^^^^^^^^^
 
+.. note::
+
+   We removed the news that "Added support for MariaDB 10.5.5".
+
+   At first, we announced that "Added support for MariaDB 10.5.5".
+   However, it had been wrong.
+   Mroonga 10.06 can build on MariaDB 10.5. However, there are points that are not working normally yet.
+
 * [:doc:`/install/ubuntu`] Dropped Ubuntu 19.10 (Eoan Ermine) support.
 
 * [:doc:`/install/centos`] Added support for Percona Server 8.0.20.
 
-* [:doc:`/install/centos`] Added support for MariaDB 10.1.46, 10.2.33, 10.3.24, 10.4.14, and 10.5.5.
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.46, 10.2.33, 10.3.24, and 10.4.14.
 
 * Modify how to install into Debian GNU/Linux.
 

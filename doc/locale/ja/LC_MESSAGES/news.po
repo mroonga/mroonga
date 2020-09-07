@@ -27,6 +27,18 @@ msgstr "10.06リリース - 2020-09-02"
 msgid "Improvements"
 msgstr "改良"
 
+msgid "We removed the news that \"Added support for MariaDB 10.5.5\"."
+msgstr "「MariaDB 10.5.5をサポートしました。」 というニュースを削除しました。"
+
+msgid ""
+"At first, we announced that \"Added support for MariaDB 10.5.5\". However, "
+"it had been wrong. Mroonga 10.06 can build on MariaDB 10.5. However, there "
+"are points that are not working normally yet."
+msgstr ""
+"当初、「MariaDB 10.5.5をサポートしました。」とアナウンスしましたが、これは誤"
+"りでした。Mroonga 10.06はMariaDB10.5でビルドできるようになりましたが、まだ動"
+"作しない箇所があります。"
+
 msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 19.10 (Eoan Ermine) support."
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 19.10 (Eoan Ermine) のサポートをやめました。"
@@ -36,10 +48,10 @@ msgstr "[:doc:`/install/centos`] Percona Server 8.0.20をサポートしまし�
 
 msgid ""
 "[:doc:`/install/centos`] Added support for MariaDB 10.1.46, 10.2.33, "
-"10.3.24, 10.4.14, and 10.5.5."
+"10.3.24, and 10.4.14."
 msgstr ""
-"[:doc:`/install/centos`] MariaDB 10.1.46、10.2.33、10.3.24、10.4.14、10.5.5を"
-"サポートしました。"
+"[:doc:`/install/centos`] MariaDB 10.1.46、10.2.33、10.3.24、10.4.14をサポート"
+"しました。"
 
 msgid "Modify how to install into Debian GNU/Linux."
 msgstr "Debian GNU/Linux へのインストール方法を変更しました。"
