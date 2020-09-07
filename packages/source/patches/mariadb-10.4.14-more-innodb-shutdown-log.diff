@@ -1,6 +1,6 @@
---- mariadb-10.4.13.orig/storage/innobase/srv/srv0start.cc	2020-05-10 04:28:02.000000000 +0900
-+++ mariadb-10.4.13/storage/innobase/srv/srv0start.cc	2020-06-05 15:26:09.621468003 +0900
-@@ -2426,6 +2426,7 @@
+--- mariadb-10.4.14.orig/storage/innobase/srv/srv0start.cc	2020-09-07 14:34:04.883276501 +0900
++++ mariadb-10.4.14/storage/innobase/srv/srv0start.cc	2020-09-07 15:03:30.013487196 +0900
+@@ -2430,24 +2430,31 @@ void srv_shutdown_bg_undo_sources()
  /** Shut down InnoDB. */
  void innodb_shutdown()
  {
@@ -8,10 +8,18 @@
  	ut_ad(!srv_running.load(std::memory_order_relaxed));
  	ut_ad(!srv_undo_sources);
  
-@@ -2435,11 +2436,15 @@
+ 	switch (srv_operation) {
+ 	case SRV_OPERATION_RESTORE_ROLLBACK_XA:
++		ib::info() << "fil_write_flushed_lsn() started";
+ 		if (dberr_t err = fil_write_flushed_lsn(log_sys.lsn))
+ 			ib::error() << "Writing flushed lsn " << log_sys.lsn
+ 				    << " failed; error=" << err;
++		ib::info() << "fil_write_flushed_lsn() completed";
+ 		/* fall through */
+ 	case SRV_OPERATION_BACKUP:
+ 	case SRV_OPERATION_RESTORE:
  	case SRV_OPERATION_RESTORE_DELTA:
  	case SRV_OPERATION_RESTORE_EXPORT:
- 	case SRV_OPERATION_RESTORE_ROLLBACK_XA:
 +		ib::info() << "fil_close_all_files() started";
  		fil_close_all_files();
 +		ib::info() << "fil_close_all_files() completed";
@@ -24,7 +32,7 @@
  
  		if (ulint n_threads = srv_conc_get_active_threads()) {
  			ib::warn() << "Query counter shows "
-@@ -2449,20 +2454,26 @@
+@@ -2457,20 +2464,26 @@ void innodb_shutdown()
  	}
  
  	/* Exit any remaining threads. */
@@ -51,7 +59,7 @@
  	}
  
  	ut_ad(dict_stats_event || !srv_was_started || srv_read_only_mode);
-@@ -2478,7 +2489,9 @@
+@@ -2486,7 +2499,9 @@ void innodb_shutdown()
  	ut_ad(ibuf || !srv_was_started);
  
  	if (dict_stats_event) {
@@ -61,7 +69,7 @@
  	}
  
  	if (srv_start_state_is_set(SRV_START_STATE_REDO)) {
-@@ -2486,9 +2499,15 @@
+@@ -2494,9 +2509,15 @@ void innodb_shutdown()
  		/* srv_shutdown_bg_undo_sources() already invoked
  		fts_optimize_shutdown(); dict_stats_shutdown(); */
  
@@ -77,12 +85,12 @@
  	}
  
  	/* This must be disabled before closing the buffer pool
-@@ -2496,47 +2515,87 @@
+@@ -2504,47 +2525,87 @@ void innodb_shutdown()
  
  #ifdef BTR_CUR_HASH_ADAPT
  	if (dict_sys.is_initialised()) {
 +		ib::info() << "btr_search_disable() started";
- 		btr_search_disable(true);
+ 		btr_search_disable();
 +		ib::info() << "btr_search_disable() completed";
  	}
  #endif /* BTR_CUR_HASH_ADAPT */
@@ -108,9 +116,9 @@
 +	ib::info() << "lock_sys.close() started";
  	lock_sys.close();
 +	ib::info() << "lock_sys.close() completed";
-+	ib::info() << "trx_pool.close() started";
++	ib::info() << "trx_pool_close() started";
  	trx_pool_close();
-+	ib::info() << "trx_pool.close() completed";
++	ib::info() << "trx_pool_close() completed";
  
  	if (!srv_read_only_mode) {
 +		ib::info() << "srv_monitor_file_mutex free started";
