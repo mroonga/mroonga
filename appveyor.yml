@@ -62,9 +62,6 @@ install:
   - curl --location -O https://downloads.mariadb.org/f/mariadb-%MARIADB_VERSION%/source/mariadb-%MARIADB_VERSION%.tar.gz
   - tar xzf mariadb-%MARIADB_VERSION%.tar.gz
   - cd mariadb-%MARIADB_VERSION%
-  - if "%MARIADB_VERSION:~,5%" == "10.4." (
-      patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.4.14-more-innodb-shutdown-log.diff
-    )
   - rmdir /S /Q storage\mroonga\
   - ps: $Env:MROONGA_VERSION = "$(Get-Content ..\mroonga\version)"
   - move ..\mroonga storage\mroonga
