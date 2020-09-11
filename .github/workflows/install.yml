@@ -1,0 +1,40 @@
+name: Install to Ubuntu
+on:
+  push:
+    branches:
+      - "*"
+    tags:
+      - "*"
+  schedule:
+    - cron: |
+        0 0 * * *
+jobs:
+  install:
+    name: Install to Ubuntu
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-18.04
+            package-type: apt
+            package: mysql-server
+          - os: ubuntu-20.04
+            package-type: apt
+            package: mariadb-server
+          - os: ubuntu-20.10
+            package-type: apt
+            package: mariadb-server
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run VM
+        run: |
+          vagrant up ${{ matrix.os }}
+      - name: Install Mroonga
+        run: |
+          vagrant \
+            ssh ${{ matrix.os }} \
+            -- \
+            /vagrant/packages/${{ matrix.package-type }}/install_to_ubuntu.sh \
+            ${{ matrix.package }}-mroonga
+

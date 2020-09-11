@@ -7,6 +7,18 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   vms = [
     {
+      :id => "ubuntu-18.04",
+      :box => "bento/ubuntu-18.04",
+    },
+    {
+      :id => "ubuntu-20.04",
+      :box => "bento/ubuntu-20.04",
+    },
+    {
+      :id => "ubuntu-20.10",
+      :box => "bento/ubuntu-20.10",
+    },
+    {
       :id => "debian-buster",
       :box => "bento/debian-10",
     },
