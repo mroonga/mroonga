@@ -5,8 +5,22 @@ content TEXT COMMENT 'flags "COLUMN_SCALAR|COMPRESS_ZSTD"'
 ) DEFAULT CHARSET=utf8mb4;
 Warnings:
 Warning	16506	The column flag 'COMPRESS_ZSTD' is unsupported. It is ignored
-INSERT INTO entries (id, content) VALUES (1, "I found Mroonga that is a MySQL storage engine to use Groonga!");
+INSERT INTO entries (id, content) VALUES (1, "
+  I found Mroonga that is a MySQL storage engine to use Groonga!
+  Groonga doesn't compress strings less than 256 characters.
+  This extra text is to force compress to trigger:
+  abcdefghijklmnopqrstuvwxyz
+  abcdefghijklmnopqrstuvwxyz
+  abcdefghijklmnopqrstuvwxyz
+");
 SELECT * FROM entries;
 id	content
-1	I found Mroonga that is a MySQL storage engine to use Groonga!
+1	
+  I found Mroonga that is a MySQL storage engine to use Groonga!
+  Groonga doesn't compress strings less than 256 characters.
+  This extra text is to force compress to trigger:
+  abcdefghijklmnopqrstuvwxyz
+  abcdefghijklmnopqrstuvwxyz
+  abcdefghijklmnopqrstuvwxyz
+
 DROP TABLE entries;
