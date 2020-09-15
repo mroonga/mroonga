@@ -70,20 +70,6 @@ Then you ask other developers to review (especially in case of adding new featur
 
 For adding and updating documents, please refer the description below.
 
-Release
--------
-
-We release the software when all tickets of the roadmap are closed.
-
-We do the following to release.
-
-* Create source packages
-* Create binary packages
-* Update documents on http://mroonga.org
-* Announce the release
-
-(This section will be moved to :doc:`developer/release`).
-
 Development environment
 -----------------------
 
