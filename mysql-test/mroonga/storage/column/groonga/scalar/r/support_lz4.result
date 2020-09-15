@@ -3,8 +3,7 @@ CREATE TABLE entries (
 id INT UNSIGNED PRIMARY KEY,
 content TEXT COMMENT 'flags "COLUMN_SCALAR|COMPRESS_LZ4"'
 ) DEFAULT CHARSET=utf8mb4;
-INSERT INTO entries (id, content) VALUES (1, "I found Mroonga that is a MySQL storage engine to use Groonga!");
-INSERT INTO entries (id, content) VALUES (2, "
+INSERT INTO entries (id, content) VALUES (1, "
   Groonga doesn't compress strings less than 256 characters.
   This extra text is to force compression to trigger:
   abcdefghijklmnopqrstuvwxyz
@@ -15,8 +14,7 @@ INSERT INTO entries (id, content) VALUES (2, "
 ");
 SELECT * FROM entries;
 id	content
-1	I found Mroonga that is a MySQL storage engine to use Groonga!
-2	
+1	
   Groonga doesn't compress strings less than 256 characters.
   This extra text is to force compression to trigger:
   abcdefghijklmnopqrstuvwxyz
