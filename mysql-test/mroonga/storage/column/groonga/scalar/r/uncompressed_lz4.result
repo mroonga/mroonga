@@ -3,8 +3,6 @@ CREATE TABLE entries (
 id INT UNSIGNED PRIMARY KEY,
 content TEXT COMMENT 'flags "COLUMN_SCALAR|COMPRESS_LZ4"'
 ) DEFAULT CHARSET=utf8mb4;
-Warnings:
-Warning	16506	The column flag 'COMPRESS_LZ4' is unsupported. It is ignored
 INSERT INTO entries (id, content) VALUES (1, "I found Mroonga that is a MySQL storage engine to use Groonga!");
 SELECT * FROM entries;
 id	content

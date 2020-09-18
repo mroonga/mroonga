@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source ../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../include/mroonga/unsupport_libgroonga_zstd.inc
+--source ../../../../../include/mroonga/support_libgroonga_zstd.inc
 --source ../../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
