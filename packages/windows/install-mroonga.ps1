@@ -4,7 +4,7 @@ Param(
 )
 
 function Run-MySQL($logPath) {
-  Write-Output("Start mysqld.exe")
+  Write-Output "Start mysqld.exe"
   $mysqld = Start-Process ^
     .\bin\mysqld.exe ^
     -ArgumentList ^
@@ -17,7 +17,7 @@ function Run-MySQL($logPath) {
       break;
     }
     if (!($mysqld.ExitCode -eq $null)) {
-      Write-Output("Failed to run mysqld.exe")
+      Write-Output "Failed to run mysqld.exe"
       Get-Content $logPath
       exit $mysqld.ExitCode
     }
@@ -27,20 +27,20 @@ function Run-MySQL($logPath) {
 }
 
 function Run-MySQLInstallDB {
-  Write-Output("Start mysql_install_db.exe")
+  Write-Output "Start mysql_install_db.exe"
   Start-Process .\bin\mysql_install_db.exe -Wait
 }
 
 function Shutdown-MySQL {
-  Write-Output("Shutdown mysqld.exe")
+  Write-Output "Shutdown mysqld.exe"
   Start-Process .\bin\mysqladmin.exe -ArgumentList "-uroot shutdown" -Wait
 }
 
 function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
-  Write-Output("Start to install Mroonga")
+  Write-Output "Start to install Mroonga"
   cd "mariadb-$mariadbVer-$arch"
   if (Test-Path "data") {
-    Write-Output("Clean data directory")
+    Write-Output "Clean data directory"
     Remove-Item "data" -Recurse
   }
   if (!(Test-Path "data")) {
@@ -55,7 +55,7 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
   $mysqld | Wait-Proces
   Remove-Item $mysqlLogPath
   cd ..
-  Write-Output("Finished to install Mroonga")
+  Write-Output "Finished to install Mroonga"
 }
 
 $installSqlDir = ".\share\mroonga"
