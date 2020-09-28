@@ -3,43 +3,37 @@ Param(
   [Parameter(mandatory=$true)][String]$platform
 )
 
-function Run-MySQL($LogPath) {
+function Run-MySQL($logPath) {
   Write-Output("Start mysqld.exe")
-  Start-Process .\bin\mysqld.exe -ArgumentList "--console" -RedirectStandardError $logPath
+  $mysqld = Start-Process ^
+    .\bin\mysqld.exe ^
+    -ArgumentList ^
+    "--console" ^
+    -RedirectStandardError $logPath ^
+    -PassThru
   while ($TRUE) {
-    $version = Get-Content $LogPath | Select-String -Pattern "^Version:"
+    $version = Get-Content $logPath | Select-String -Pattern "^Version:"
     if ($version) {
       break;
     }
+    if (!($mysqld.ExitCode -eq $null)) {
+      Write-Output("Failed to run mysqld.exe")
+      Get-Content $logPath
+      exit $mysqld.ExitCode
+    }
     Start-Sleep -s 1
   }
+  return $mysqld
 }
 
 function Run-MySQLInstallDB {
   Write-Output("Start mysql_install_db.exe")
-  $logPath = "..\install.log"
-  New-Item $logPath -ItemType File
-  Start-Process .\bin\mysql_install_db.exe -RedirectStandardOutput $logPath
-  while ($TRUE) {
-    $successful = Get-Content $logPath | Select-String -Pattern "successful"
-    if ($successful) {
-      break;
-    }
-    Start-Sleep -s 1
-  }
-  Remove-Item $logPath -Force
+  Start-Process .\bin\mysql_install_db.exe -Wait
 }
 
-function Shutdown-MySQL($LogPath) {
+function Shutdown-MySQL {
   Write-Output("Shutdown mysqld.exe")
-  Start-Process .\bin\mysqladmin.exe -ArgumentList "-uroot shutdown"
-  while ($TRUE) {
-    $complete = Get-Content $LogPath | Select-String -Pattern "Shutdown complete"
-    if ($complete) {
-      break;
-    }
-    Start-Sleep -s 1
-  }
+  Start-Process .\bin\mysqladmin.exe -ArgumentList "-uroot shutdown" -Wait
 }
 
 function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
@@ -54,10 +48,11 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
   }
   $mysqlLogPath = "..\mysqld.log"
   New-Item $mysqlLogPath -ItemType File
-  Run-MySQL $mysqlLogPath
+  $mysqld = Run-MySQL $mysqlLogPath
   Write-Output "Execute install.sql"
   Get-Content "$installSqlDir\install.sql" | .\bin\mysql.exe -uroot
-  Shutdown-MySQL $mysqlLogPath
+  Shutdown-MySQL
+  $mysqld | Wait-Proces
   Remove-Item $mysqlLogPath
   cd ..
   Write-Output("Finished to install Mroonga")
