@@ -2190,7 +2190,12 @@ static int mrn_init(void *p)
   mrn_hton_ptr = hton;
 
 #ifdef _WIN32
-  HMODULE current_module = GetModuleHandle(NULL);
+#  if MYSQL_VERSION_ID >= 100500 && defined(MRN_MARIADB_P)
+  const char *module_name = "server.dll";
+#  else
+  const char *module_name = NULL;
+#  endif
+  HMODULE current_module = GetModuleHandle(module_name);
   mrn_binlog_filter =
     *((Rpl_filter **)GetProcAddress(current_module, MRN_BINLOG_FILTER_PROC));
   mrn_my_tz_UTC =
