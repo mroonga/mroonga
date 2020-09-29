@@ -5,12 +5,17 @@ Param(
 
 function Run-MySQL {
   Write-Output "Start mysqld.exe"
-  $mysqld = Start-Process .\bin\mysqld.exe -ArgumentList "--console" -PassThru
+  $mysqld = Start-Process `
+    .\bin\mysqld.exe `
+    -ArgumentList @("--console") `
+    -PassThru `
+    -NoNewWindow
   while ($TRUE) {
     $mysqladmin = Start-Process `
       .\bin\mysqladmin.exe `
-      -ArgumentList "-uroot ping" `
+      -ArgumentList @("-uroot", "ping") `
       -PassThru `
+      -NoNewWindow `
       -Wait
     if ($mysqladmin.ExitCode -eq 0) {
       Write-Output "Succeeded to run mysqld.exe"
@@ -27,12 +32,12 @@ function Run-MySQL {
 
 function Run-MySQLInstallDB {
   Write-Output "Start mysql_install_db.exe"
-  Start-Process .\bin\mysql_install_db.exe -Wait
+  .\bin\mysql_install_db.exe --datadir=data
 }
 
 function Shutdown-MySQL {
   Write-Output "Shutdown mysqld.exe"
-  Start-Process .\bin\mysqladmin.exe -ArgumentList "-uroot shutdown" -Wait
+  .\bin\mysqladmin.exe -uroot shutdown
 }
 
 function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
