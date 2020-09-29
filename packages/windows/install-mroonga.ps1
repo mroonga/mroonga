@@ -32,12 +32,20 @@ function Run-MySQL {
 
 function Run-MySQLInstallDB {
   Write-Output "Start mysql_install_db.exe"
-  .\bin\mysql_install_db.exe --datadir=data
+  Start-Process `
+    .\bin\mysql_install_db.exe `
+    -ArgumentList @("--datadir=data") `
+    -NoNewWindow `
+    -Wait
 }
 
 function Shutdown-MySQL {
   Write-Output "Shutdown mysqld.exe"
-  .\bin\mysqladmin.exe -uroot shutdown
+  Start-Process `
+    .\bin\mysqladmin.exe `
+    -ArgumentList @("-uroot", "shutdown") `
+    -NoNewWindow `
+    -Wait
 }
 
 function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
