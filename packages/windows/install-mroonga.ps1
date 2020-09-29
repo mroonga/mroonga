@@ -3,16 +3,17 @@ Param(
   [Parameter(mandatory=$true)][String]$platform
 )
 
-function Run-MySQL($logPath) {
+function Run-MySQL {
   Write-Output "Start mysqld.exe"
-  $mysqld = Start-Process `
-    .\bin\mysqld.exe `
-    -ArgumentList "--console" `
-    -RedirectStandardError $logPath `
-    -PassThru
+  $mysqld = Start-Process .\bin\mysqld.exe -ArgumentList "--console" -PassThru
   while ($TRUE) {
-    $version = Get-Content $logPath | Select-String -Pattern "^Version:"
-    if ($version) {
+    $mysqladmin = Start-Process `
+      .\bin\mysqladmin.exe `
+      -ArgumentList "-uroot ping" `
+      -PassThru `
+      -Wait
+    if ($mysqladmin.ExitCode -eq 0) {
+      Write-Output "Succeeded to run mysqld.exe"
       break;
     }
     if (!($mysqld.ExitCode -eq $null)) {
@@ -45,14 +46,11 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
   if (!(Test-Path "data")) {
     Run-MySQLInstallDB
   }
-  $mysqlLogPath = "..\mysqld.log"
-  New-Item $mysqlLogPath -ItemType File
-  $mysqld = Run-MySQL $mysqlLogPath
+  $mysqld = Run-MySQL
   Write-Output "Execute install.sql"
   Get-Content "$installSqlDir\install.sql" | .\bin\mysql.exe -uroot
   Shutdown-MySQL
   $mysqld | Wait-Proces
-  Remove-Item $mysqlLogPath
   cd ..
   Write-Output "Finished to install Mroonga"
 }
