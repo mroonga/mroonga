@@ -62,7 +62,7 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
   Write-Output "Execute install.sql"
   Get-Content "$installSqlDir\install.sql" | .\bin\mysql.exe -uroot
   Shutdown-MySQL
-  $mysqld | Wait-Process
+  $mysqld.WaitForExit()
   cd ..
   Write-Output "Finished to install Mroonga"
 }
