@@ -4,7 +4,7 @@ Param(
 )
 
 function Run-MySQL {
-  Write-Output "Start mysqld.exe"
+  Write-Host "Start mysqld.exe"
   $mysqld = Start-Process `
     .\bin\mysqld.exe `
     -ArgumentList @("--console") `
@@ -16,13 +16,13 @@ function Run-MySQL {
       -ArgumentList @("-uroot", "ping") `
       -PassThru `
       -NoNewWindow `
-      -Wait
+      -Wait | Out-Host
     if ($mysqladmin.ExitCode -eq 0) {
-      Write-Output "Succeeded to run mysqld.exe"
+      Write-Host "Succeeded to run mysqld.exe"
       break;
     }
     if (!($mysqld.ExitCode -eq $null)) {
-      Write-Output "Failed to run mysqld.exe"
+      Write-Host "Failed to run mysqld.exe"
       exit $mysqld.ExitCode
     }
     Start-Sleep -s 1
@@ -31,40 +31,40 @@ function Run-MySQL {
 }
 
 function Run-MySQLInstallDB {
-  Write-Output "Start mysql_install_db.exe"
+  Write-Host "Start mysql_install_db.exe"
   Start-Process `
     .\bin\mysql_install_db.exe `
     -ArgumentList @("--datadir=data") `
     -NoNewWindow `
-    -Wait
+    -Wait | Out-Host
 }
 
 function Shutdown-MySQL {
-  Write-Output "Shutdown mysqld.exe"
+  Write-Host "Shutdown mysqld.exe"
   Start-Process `
     .\bin\mysqladmin.exe `
     -ArgumentList @("-uroot", "shutdown") `
     -NoNewWindow `
-    -Wait
+    -Wait | Out-Host
 }
 
 function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
-  Write-Output "Start to install Mroonga"
+  Write-Host "Start to install Mroonga"
   cd "mariadb-$mariadbVer-$arch"
   if (Test-Path "data") {
-    Write-Output "Clean data directory"
+    Write-Host "Clean data directory"
     Remove-Item "data" -Recurse
   }
   if (!(Test-Path "data")) {
     Run-MySQLInstallDB
   }
   $mysqld = Run-MySQL
-  Write-Output "Execute install.sql"
+  Write-Host "Execute install.sql"
   Get-Content "$installSqlDir\install.sql" | .\bin\mysql.exe -uroot
   Shutdown-MySQL
   $mysqld.WaitForExit()
   cd ..
-  Write-Output "Finished to install Mroonga"
+  Write-Host "Finished to install Mroonga"
 }
 
 $installSqlDir = ".\share\mroonga"
