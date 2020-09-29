@@ -125,7 +125,7 @@ build_script:
 
 test: off
 
-on_success:
+on_finish:
   - 7z a mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip
          mariadb-%MARIADB_VERSION%-%MROONGA_PLATFORM%
   - set ARTIFACT=mariadb-%MARIADB_VERSION%-with-mroonga-%MROONGA_VERSION%-%MROONGA_PLATFORM%.zip
