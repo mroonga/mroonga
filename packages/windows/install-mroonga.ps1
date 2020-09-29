@@ -5,11 +5,10 @@ Param(
 
 function Run-MySQL($logPath) {
   Write-Output "Start mysqld.exe"
-  $mysqld = Start-Process ^
-    .\bin\mysqld.exe ^
-    -ArgumentList ^
-    "--console" ^
-    -RedirectStandardError $logPath ^
+  $mysqld = Start-Process `
+    .\bin\mysqld.exe `
+    -ArgumentList "--console" `
+    -RedirectStandardError $logPath `
     -PassThru
   while ($TRUE) {
     $version = Get-Content $logPath | Select-String -Pattern "^Version:"
