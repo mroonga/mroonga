@@ -18,7 +18,6 @@ function Run-MySQL {
     }
     if (!($mysqld.ExitCode -eq $null)) {
       Write-Output "Failed to run mysqld.exe"
-      Get-Content $logPath
       exit $mysqld.ExitCode
     }
     Start-Sleep -s 1
