@@ -16,7 +16,7 @@ function Run-MySQL {
       -ArgumentList @("-uroot", "ping") `
       -PassThru `
       -NoNewWindow `
-      -Wait | Out-Host
+      -Wait
     if ($mysqladmin.ExitCode -eq 0) {
       Write-Host "Succeeded to run mysqld.exe"
       break;
