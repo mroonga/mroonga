@@ -21,11 +21,30 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.06 - 2020-09-02"
-msgstr "10.06リリース - 2020-09-02"
+msgid "Release 10.07 - 2020-10-02"
+msgstr "10.07リリース - 2020-10-02"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.5.5"
+msgstr "[:doc:`/install/centos`] MariaDB 10.5.5をサポートしました。"
+
+msgid ""
+"Added new tests that use > 256 byte strings in the column compression tests. "
+"[GitHub#350][Patched by  KartikSoneji]"
+msgstr ""
+"カラム圧縮のテストで256byte以上の文字列を使うテストを追加しました。"
+"[GitHub#350][KartikSonejiさんがパッチ提供]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "KartikSoneji"
+msgstr "KartikSonejiさん"
+
+msgid "Release 10.06 - 2020-09-02"
+msgstr "10.06リリース - 2020-09-02"
 
 msgid "We removed the news that \"Added support for MariaDB 10.5.5\"."
 msgstr "「MariaDB 10.5.5をサポートしました。」 というニュースを削除しました。"
@@ -194,9 +213,6 @@ msgstr ""
 
 msgid "When sub query by using Mroonga does not use ``ORDER BY LIMIT``."
 msgstr "Mroongaを使ったサブクエリーで ``ORDER_BY_LIMIT`` を使っていない時。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "pinpikokun"
 msgstr "pinpikokunさん"
