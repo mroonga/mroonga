@@ -110,7 +110,6 @@ build_script:
       -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF
       -DGRN_WITH_MRUBY=ON
   - set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
-  - cmake --build . --config RelWithDebInfo
   - cmake --build . --config RelWithDebInfo --target package
   - move *.zip ..\
   - cd ..\
