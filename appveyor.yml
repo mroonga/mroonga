@@ -13,34 +13,34 @@ skip_commits:
 
 version: "{build}"
 clone_depth: 10
-image: Visual Studio 2017
+image: Visual Studio 2019
 environment:
   matrix:
-    - CMAKE_GENERATOR_NAME: "Visual Studio 15 2017"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
       MARIADB_VERSION: 10.2.33
       MROONGA_PLATFORM: "win32"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 15 2017 Win64"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.2.33
       MROONGA_PLATFORM: "winx64"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 15 2017"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
       MARIADB_VERSION: 10.3.24
       MROONGA_PLATFORM: "win32"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 15 2017 Win64"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.3.24
       MROONGA_PLATFORM: "winx64"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 15 2017"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
       MARIADB_VERSION: 10.4.14
       MROONGA_PLATFORM: "win32"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 15 2017 Win64"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.4.14
       MROONGA_PLATFORM: "winx64"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 15 2017"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
       MARIADB_VERSION: 10.5.5
       MROONGA_PLATFORM: "win32"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 15 2017 Win64"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.5.5
       MROONGA_PLATFORM: "winx64"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 15 2017 Win64"
+    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.5.5
       MROONGA_PLATFORM: "winx64"
       USE_MASTER: "yes"
@@ -55,7 +55,7 @@ install:
   - pacman --sync --noconfirm p7zip
   - if "%USE_MASTER%" == "yes" (
       call
-        "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
+        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat"
         amd64
     )
   - cd ..
