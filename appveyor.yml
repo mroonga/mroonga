@@ -16,31 +16,40 @@ clone_depth: 10
 image: Visual Studio 2019
 environment:
   matrix:
-    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
+    - CMAKE_ARCHITECTURE: "Win32"
+      CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
       MARIADB_VERSION: 10.2.33
       MROONGA_PLATFORM: "win32"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
+    - CMAKE_ARCHITECTURE: "x64"
+      CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.2.33
       MROONGA_PLATFORM: "winx64"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
+    - CMAKE_ARCHITECTURE: "Win32"
+      CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
       MARIADB_VERSION: 10.3.24
       MROONGA_PLATFORM: "win32"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
+    - CMAKE_ARCHITECTURE: "x64"
+      CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.3.24
       MROONGA_PLATFORM: "winx64"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
+    - CMAKE_ARCHITECTURE: "Win32"
+      CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
       MARIADB_VERSION: 10.4.14
       MROONGA_PLATFORM: "win32"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
+    - CMAKE_ARCHITECTURE: "x64"
+      CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.4.14
       MROONGA_PLATFORM: "winx64"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
+    - CMAKE_ARCHITECTURE: "Win32"
+      CMAKE_GENERATOR_NAME: "Visual Studio 16 2019"
       MARIADB_VERSION: 10.5.5
       MROONGA_PLATFORM: "win32"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
+    - CMAKE_ARCHITECTURE: "x64"
+      CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.5.5
       MROONGA_PLATFORM: "winx64"
-    - CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
+    - CMAKE_ARCHITECTURE: "x64"
+      CMAKE_GENERATOR_NAME: "Visual Studio 16 2019 Win64"
       MARIADB_VERSION: 10.5.5
       MROONGA_PLATFORM: "winx64"
       USE_MASTER: "yes"
@@ -103,7 +112,9 @@ build_script:
   - move mariadb-%MARIADB_VERSION% source
   - mkdir build
   - cd build
-  - cmake ..\source -G "%CMAKE_GENERATOR_NAME%"
+  - cmake ..\source
+      -A "%CMAKE_ARCHITECTURE%"
+      -G "%CMAKE_GENERATOR_NAME%"
       -DMRN_GROONGA_EMBED=OFF
       -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF
       -DGRN_WITH_MRUBY=ON
