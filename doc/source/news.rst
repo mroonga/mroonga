@@ -5,6 +5,23 @@
 News
 ====
 
+.. _release-10-07:
+
+Release 10.07 - 2020-10-02
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.5.5
+
+* Added new tests that use > 256 byte strings in the column compression tests. [GitHub#350][Patched by  KartikSoneji]
+
+Thanks
+^^^^^^
+
+*  KartikSoneji
+
 .. _release-10-06:
 
 Release 10.06 - 2020-09-02
