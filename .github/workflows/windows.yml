@@ -84,7 +84,6 @@ jobs:
           cd ..
           Invoke-WebRequest `
             -Uri "https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
-
             -OutFile mariadb-${{ matrix.mariadb-version }}.tar.gz
           ridk exec tar xzf mariadb-${{ matrix.mariadb-version }}.tar.gz
           cd mariadb-${{ matrix.mariadb-version }}
@@ -106,7 +105,6 @@ jobs:
           } else {
             Invoke-WebRequest `
               -Uri "https://packages.groonga.org/source/groonga/groonga-latest.zip" `
-
               -OutFile groonga-latest.zip
             Expand-Archive groonga-latest.zip .
             Delete-Item groonga-latest.zip
@@ -128,7 +126,6 @@ jobs:
           } else {
             Invoke-WebRequest `
               -Uri "https://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip" `
-
               -OutFile groonga-normalizer-mysql-latest.zip
             Expand-Archive groonga-normalizer-mysql-latest.zip .
             Delete-Item groonga-normalizer-mysql-latest.zip
