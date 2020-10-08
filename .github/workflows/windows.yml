@@ -89,7 +89,8 @@ jobs:
           ridk exec tar xzf mariadb-{{ matrix.mariadb-version }}.tar.gz
           cd mariadb-{{ matrix.mariadb-version }}
           if ("{{ matrix.mariadb-version }}" -match "^10\.5") {
-            ridk exec patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
+            ridk exec patch -p1 -i `
+              ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           }
           Remove-Item storage\mroonga -Recurse -Force
           Move-Item ..\mroonga storage\mroonga
