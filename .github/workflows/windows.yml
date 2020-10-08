@@ -76,7 +76,7 @@ jobs:
         id: info
         run: |
           $MROONGA_VESRION = "$(Get-Content version)"
-          $ARTIFACT_NAME = "mariadb-${{ matrix.mariadb-version }}-with-mroonga-${MROONGA_VERSION} version)-${{ matrix.package-platform }}.zip"
+          $ARTIFACT_NAME = "mariadb-${{ matrix.mariadb-version }}-with-mroonga-${MROONGA_VERSION}-${{ matrix.package-platform }}"
           Write-Output "::set-output name=mroonga-version::${MROONGA_VERSION}"
           Write-Output "::set-output name=artifact-name::${ARTIFACT_NAME}"
       - name: Prepare MariaDB
@@ -202,7 +202,7 @@ jobs:
         run: |
           Compress-Archive `
             -Path mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform }} `
-            -DestinationPath "${{ steps.info.outputs.artifact-name }}"
+            -DestinationPath "${{ steps.info.outputs.artifact-name }}.zip"
       - name: Upload the artifact to release
         uses: actions/upload-release-asset@v1.0.1
         if: |
@@ -211,6 +211,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-release.outputs.result }}
-          asset_path: ${{ steps.info.outputs.artifact-name }}
-          asset_name: ${{ steps.info.outputs.artifact-name }}
+          asset_path: ${{ steps.info.outputs.artifact-name }}.zip
+          asset_name: ${{ steps.info.outputs.artifact-name }}.zip
           asset_content_type: application/zip
