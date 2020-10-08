@@ -117,7 +117,10 @@ jobs:
           ruby download_mecab.rb
           ruby download_message_pack.rb
           ruby download_rapidjson.rb
-          ruby download_xxhash.rb
+          # TODO: Remove this if when Groonga 10.0.8 is released.
+          if ("${{ matrix.use-master }}" -eq "yes") {
+            ruby download_xxhash.rb
+          }
       - name: Prepare groonga-normalizer-mysql
         run: |
           cd ..\source
