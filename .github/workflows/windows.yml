@@ -157,6 +157,7 @@ jobs:
         run: |
           cd ..\build
           Expand-Archive mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}.zip
+          cd mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}
           netsh advfirewall firewall add rule `
             name="mariadb" `
             dir=in `
@@ -165,7 +166,7 @@ jobs:
             localport=3306 `
             enable=yes `
             profile=any
-          ..\source\storage\mroonga\packages\windows\install-mroonga.ps1 `
+          ..\..\source\storage\mroonga\packages\windows\install-mroonga.ps1 `
             -mariadbVersion ${{ matrix.mariadb-version }} `
             -platform ${{ matrix.package-platform }}
 
