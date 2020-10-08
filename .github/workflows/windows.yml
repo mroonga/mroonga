@@ -140,7 +140,7 @@ jobs:
           }
       - name: Run CMake
         run: |
-          New-Item ..\build Directory
+          New-Item ..\build -ItemType Directory
           cd ..\build
           cmake ..\source `
             -A "${{ matrix.cmake-architecture }}" `
