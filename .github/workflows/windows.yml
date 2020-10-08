@@ -76,30 +76,30 @@ jobs:
         id: info
         run: |
           $MROONGA_VESRION = "$(Get-Content version)"
-          $ARTIFACT_NAME = "mariadb-{{ matrix.mariadb-version }}-with-mroonga-${MROONGA_VERSION} version)-{{ matrix.package-platform }}.zip"
+          $ARTIFACT_NAME = "mariadb-${{ matrix.mariadb-version }}-with-mroonga-${MROONGA_VERSION} version)-${{ matrix.package-platform }}.zip"
           Write-Output "::set-output name=mroonga-version::${MROONGA_VERSION}"
           Write-Output "::set-output name=artifact-name::${ARTIFACT_NAME}"
       - name: Prepare MariaDB
         run: |
           cd ..
           Invoke-WebRequest `
-            -Uri "https://downloads.mariadb.org/f/mariadb-{{ matrix.mariadb-version }}/source/mariadb-{{ matrix.mariadb-version }}.tar.gz" `
+            -Uri "https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
 
-            -OutFile mariadb-{{ matrix.mariadb-version }}.tar.gz
-          ridk exec tar xzf mariadb-{{ matrix.mariadb-version }}.tar.gz
-          cd mariadb-{{ matrix.mariadb-version }}
-          if ("{{ matrix.mariadb-version }}" -match "^10\.5") {
+            -OutFile mariadb-${{ matrix.mariadb-version }}.tar.gz
+          ridk exec tar xzf mariadb-${{ matrix.mariadb-version }}.tar.gz
+          cd mariadb-${{ matrix.mariadb-version }}
+          if ("${{ matrix.mariadb-version }}" -match "^10\.5") {
             ridk exec patch -p1 -i `
               ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           }
           Remove-Item storage\mroonga -Recurse -Force
           Move-Item ..\mroonga storage\mroonga
           cd ..
-          Move-Item mariadb-{{ matrix.mariadb-version }} mroonga
+          Move-Item mariadb-${{ matrix.mariadb-version }} mroonga
       - name: Prepare Groonga
         run: |
           New-Item storage\mroonga\vendor -ItemType Directory
-          if ("{{ matrix.use-master }}" -eq "yes") {
+          if ("${{ matrix.use-master }}" -eq "yes") {
             git clone --quiet --depth 1 --recursive `
               https://github.com/groonga/groonga.git `
               storage\mroonga\vendor\groonga
@@ -121,7 +121,7 @@ jobs:
           ruby download_xxhash.rb
       - name: Prepare groonga-normalizer-mysql
         run: |
-          if ("{{ matrix.use-master }}" -eq "yes") {
+          if ("${{ matrix.use-master }}" -eq "yes") {
             git clone --quiet --depth 1 --recursive `
               https://github.com/groonga/groonga-normalizer-mysql.git `
               storage\mroonga\vendor\groonga\plugins\groonga-normalizer-mysql
@@ -141,7 +141,7 @@ jobs:
           New-Item ..\build Directory
           cd ..\build
           cmake ..\mroonga `
-            -A "{{ matrix.cmake-architecture }}" `
+            -A "${{ matrix.cmake-architecture }}" `
             -G "Visual Studio 16 2019" `
             -DMRN_GROONGA_EMBED=OFF `
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF `
@@ -154,7 +154,7 @@ jobs:
       - name: Install Mroonga
         run: |
           cd ..\build
-          Expand-Archive mariadb-{{ matrix.mariadb-version }}-{{ matrix.package-platform}}.zip
+          Expand-Archive mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}.zip
           netsh advfirewall firewall add rule `
             name="mariadb" `
             dir=in `
@@ -164,8 +164,8 @@ jobs:
             enable=yes `
             profile=any
           ..\mroonga\storage\mroonga\packages\windows\install-mroonga.ps1 `
-            -mariadbVersion {{ matrix.mariadb-version }} `
-            -platform {{ matrix.package-platform }}
+            -mariadbVersion ${{ matrix.mariadb-version }} `
+            -platform ${{ matrix.package-platform }}
 
       # Artifact
       - uses: actions/upload-artifact@v2
@@ -195,8 +195,8 @@ jobs:
         run: |
           cd ..\build
           Compress-Archive `
-            -Path mariadb-{{ matrix.mariadb-version }}-{{ matrix.package-platform }} `
-            -DestinationPath "{{ steps.info.outputs.artifact-name }}"
+            -Path mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform }} `
+            -DestinationPath "${{ steps.info.outputs.artifact-name }}"
       - name: Upload the artifact to release
         uses: actions/upload-release-asset@v1.0.1
         if: |
