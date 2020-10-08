@@ -17,7 +17,7 @@ jobs:
           - MariaDB 10.4 64bit
           - MariaDB 10.5 32bit
           - MariaDB 10.5 64bit
-          - MariaDB 10.5 64bit with master Groonga
+          - MariaDB 10.5 64bit (master)
         include:
           - label: MariaDB 10.2 32bit
             mariadb-version: "10.2.34"
