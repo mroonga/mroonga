@@ -1,0 +1,209 @@
+name: Windows
+on:
+  - push
+  - pull_request
+jobs:
+  test:
+    name: Test
+    strategy:
+      fail-fast: false
+      matrix:
+        label:
+          - MariaDB 10.2 32bit
+          - MariaDB 10.2 64bit
+          - MariaDB 10.3 32bit
+          - MariaDB 10.3 64bit
+          - MariaDB 10.4 32bit
+          - MariaDB 10.4 64bit
+          - MariaDB 10.5 32bit
+          - MariaDB 10.5 64bit
+          - MariaDB 10.5 64bit with master Groonga
+        include:
+          - label: MariaDB 10.2 32bit
+            mariadb-version: "10.2.34"
+            package-platform: "win32"
+            cmake-architecture: "Win32"
+          - label: MariaDB 10.2 64bit
+            mariadb-version: "10.2.34"
+            package-platform: "winx64"
+            cmake-architecture: "x64"
+          - label: MariaDB 10.3 32bit
+            mariadb-version: "10.3.25"
+            package-platform: "win32"
+            cmake-architecture: "Win32"
+          - label: MariaDB 10.3 64bit
+            mariadb-version: "10.3.25"
+            package-platform: "winx64"
+            cmake-architecture: "x64"
+          - label: MariaDB 10.4 32bit
+            mariadb-version: "10.4.15"
+            package-platform: "win32"
+            cmake-architecture: "Win32"
+          - label: MariaDB 10.4 64bit
+            mariadb-version: "10.4.15"
+            package-platform: "winx64"
+            cmake-architecture: "x64"
+          - label: MariaDB 10.5 32bit
+            mariadb-version: "10.5.6"
+            package-platform: "win32"
+            cmake-architecture: "Win32"
+          - label: MariaDB 10.5 64bit
+            mariadb-version: "10.5.6"
+            package-platform: "winx64"
+            cmake-architecture: "x64"
+          - label: MariaDB 10.5 64bit (master)
+            mariadb-version: "10.5.6"
+            package-platform: "winx64"
+            cmake-architecture: "x64"
+            use-master: "yes"
+    runs-on: windows-2019
+    steps:
+      - name: Disable crash dialog
+        run: |
+          reg add "HKCU\SOFTWARE\Microsoft\Windows\Windows Error Reporting" `
+            /v DontShowUI `
+            /t REG_DWORD `
+            /d 1 `
+            /f
+      - name: Use JST
+        run: |
+          Set-TimeZone -Id "Tokyo Standard Time"
+      - uses: actions/setup-ruby@v1
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Set information
+        id: info
+        run: |
+          $MROONGA_VESRION = "$(Get-Content version)"
+          $ARTIFACT_NAME = "mariadb-{{ matrix.mariadb-version }}-with-mroonga-${MROONGA_VERSION} version)-{{ matrix.package-platform }}.zip"
+          Write-Output "::set-output name=mroonga-version::${MROONGA_VERSION}"
+          Write-Output "::set-output name=artifact-name::${ARTIFACT_NAME}"
+      - name: Prepare MariaDB
+        run: |
+          cd ..
+          Invoke-WebRequest `
+            -Uri "https://downloads.mariadb.org/f/mariadb-{{ matrix.mariadb-version }}/source/mariadb-{{ matrix.mariadb-version }}.tar.gz" `
+
+            -OutFile mariadb-{{ matrix.mariadb-version }}.tar.gz
+          ridk exec tar xzf mariadb-{{ matrix.mariadb-version }}.tar.gz
+          cd mariadb-{{ matrix.mariadb-version }}
+          if ("{{ matrix.mariadb-version }}" -match "^10\.5") {
+            ridk exec patch -p1 < ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
+          }
+          Remove-Item storage\mroonga -Recurse -Force
+          Move-Item ..\mroonga storage\mroonga
+          cd ..
+          Move-Item mariadb-{{ matrix.mariadb-version }} mroonga
+      - name: Prepare Groonga
+        run: |
+          New-Item storage\mroonga\vendor -ItemType Directory
+          if ("{{ matrix.use-master }}" -eq "yes") {
+            git clone --quiet --depth 1 --recursive `
+              https://github.com/groonga/groonga.git `
+              storage\mroonga\vendor\groonga
+          } else {
+            Invoke-WebRequest `
+              -Uri "https://packages.groonga.org/source/groonga/groonga-latest.zip" `
+
+              -OutFile groonga-latest.zip
+            Expand-Archive groonga-latest.zip .
+            Delete-Item groonga-latest.zip
+            Move-Item groonga-* storage\mroonga\vendor\groonga
+          }
+          Remove-Item storage\mroonga\vendor\groonga\test -Recurse -Force
+          cd storage\mroonga\vendor\groonga\vendor
+          ruby download_lz4.rb
+          ruby download_mecab.rb
+          ruby download_message_pack.rb
+          ruby download_rapidjson.rb
+          ruby download_xxhash.rb
+      - name: Prepare groonga-normalizer-mysql
+        run: |
+          if ("{{ matrix.use-master }}" -eq "yes") {
+            git clone --quiet --depth 1 --recursive `
+              https://github.com/groonga/groonga-normalizer-mysql.git `
+              storage\mroonga\vendor\groonga\plugins\groonga-normalizer-mysql
+          } else {
+            Invoke-WebRequest `
+              -Uri "https://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip" `
+
+              -OutFile groonga-normalizer-mysql-latest.zip
+            Expand-Archive groonga-normalizer-mysql-latest.zip .
+            Delete-Item groonga-normalizer-mysql-latest.zip
+            Move-Item `
+              groonga-normalizer-mysql-latest-* `
+              storage\mroonga\vendor\groonga\plugins\groonga-normalizer-mysql
+          }
+      - name: Run CMake
+        run: |
+          New-Item ..\build Directory
+          cd ..\build
+          cmake ..\mroonga `
+            -A "{{ matrix.cmake-architecture }}" `
+            -G "Visual Studio 16 2019" `
+            -DMRN_GROONGA_EMBED=OFF `
+            -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF `
+            -DGRN_WITH_MRUBY=ON
+      - name: Create package
+        run: |
+          cd ..\build
+          $Env:CMAKE_BUILD_PARALLEL_LEVEL = $Env:NUMBER_OF_PROCESSORS
+          cmake --build . --config RelWithDebInfo --target package
+      - name: Install Mroonga
+        run: |
+          cd ..\build
+          Expand-Archive mariadb-{{ matrix.mariadb-version }}-{{ matrix.package-platform}}.zip
+          netsh advfirewall firewall add rule `
+            name="mariadb" `
+            dir=in `
+            action=allow `
+            protocol=TCP `
+            localport=3306 `
+            enable=yes `
+            profile=any
+          ..\mroonga\storage\mroonga\packages\windows\install-mroonga.ps1 `
+            -mariadbVersion {{ matrix.mariadb-version }} `
+            -platform {{ matrix.package-platform }}
+
+      # Artifact
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.info.outputs.artifact-name }}
+          path: ../build/mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform }}
+
+      # Release
+      - name: Ensure creating release
+        if: |
+          startsWith(github.ref, 'refs/tags/')
+        id: create-release
+        uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
+          script: |
+            const AsyncFunction = Object.getPrototypeOf(async () => {}).constructor
+            const fs = require("fs");
+            const path = "storage/mroonga/.github/workflows/ensure-creating-release.js";
+            const script = fs.readFileSync(path).toString();
+            const func = new AsyncFunction("require", "github", "context", script);
+            return await func(require, github, context);
+      - name: Compress the artifact
+        if: |
+          startsWith(github.ref, 'refs/tags/')
+        run: |
+          cd ..\build
+          Compress-Archive `
+            -Path mariadb-{{ matrix.mariadb-version }}-{{ matrix.package-platform }} `
+            -DestinationPath "{{ steps.info.outputs.artifact-name }}"
+      - name: Upload the artifact to release
+        uses: actions/upload-release-asset@v1.0.1
+        if: |
+          startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.result }}
+          asset_path: ../build/${{ steps.info.outputs.artifact-name }}
+          asset_name: ${{ steps.info.outputs.artifact-name }}
+          asset_content_type: application/zip
