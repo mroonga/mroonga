@@ -165,7 +165,7 @@ jobs:
             localport=3306 `
             enable=yes `
             profile=any
-          ..\mroonga\storage\mroonga\packages\windows\install-mroonga.ps1 `
+          ..\source\storage\mroonga\packages\windows\install-mroonga.ps1 `
             -mariadbVersion ${{ matrix.mariadb-version }} `
             -platform ${{ matrix.package-platform }}
 
@@ -187,7 +187,7 @@ jobs:
           script: |
             const AsyncFunction = Object.getPrototypeOf(async () => {}).constructor
             const fs = require("fs");
-            const path = "storage/mroonga/.github/workflows/ensure-creating-release.js";
+            const path = ".github/workflows/ensure-creating-release.js";
             const script = fs.readFileSync(path).toString();
             const func = new AsyncFunction("require", "github", "context", script);
             return await func(require, github, context);
