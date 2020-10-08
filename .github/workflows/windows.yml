@@ -108,7 +108,7 @@ jobs:
               -Uri "https://packages.groonga.org/source/groonga/groonga-latest.zip" `
               -OutFile groonga-latest.zip
             Expand-Archive groonga-latest.zip .
-            Delete-Item groonga-latest.zip
+            Remove-Item groonga-latest.zip
             Move-Item groonga-* storage\mroonga\vendor\groonga
           }
           Remove-Item storage\mroonga\vendor\groonga\test -Recurse -Force
@@ -130,7 +130,7 @@ jobs:
               -Uri "https://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip" `
               -OutFile groonga-normalizer-mysql-latest.zip
             Expand-Archive groonga-normalizer-mysql-latest.zip .
-            Delete-Item groonga-normalizer-mysql-latest.zip
+            Remove-Item groonga-normalizer-mysql-latest.zip
             Move-Item `
               groonga-normalizer-mysql-latest-* `
               storage\mroonga\vendor\groonga\plugins\groonga-normalizer-mysql
