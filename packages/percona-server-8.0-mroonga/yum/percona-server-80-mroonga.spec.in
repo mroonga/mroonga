@@ -1,8 +1,8 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
-%define mysql_version_default 8.0.20
-%define percona_server_version_default 11
-%define rpm_release_default 1
+%define mysql_version_default 8.0.21
+%define percona_server_version_default 12
+%define rpm_release_default 2
 %define mysql_dist_default    %{?dist}
 %define mysql_download_base_url_default https://repo.percona.com/ps-80/yum/release/%{_centos_ver}/SRPMS
 %define mysql_spec_file_default percona-server.spec
@@ -28,7 +28,7 @@
 
 Name:           percona-server-80-mroonga
 Version:        @VERSION@
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A fast fulltext searchable storage engine for MySQL
 
 Group:          Applications/Databases
@@ -227,5 +227,11 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Wed Oct 14 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.07-2
+- build against Percona Server 8.0.21-12.
+
+* Tue Sep 29 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.07-1
+- New upstream release.
+
 * Sat Aug 29 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.06-1
 - initial release.
