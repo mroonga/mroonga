@@ -442,6 +442,30 @@ typedef HASH mrn_table_def_cache_type;
   ((select_lex)->item_list)
 #endif
 
+#if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
+#  define MRN_SELECT_LEX_GET_FIELDS_LIST_ELEMENTS(select_lex) \
+  ((unsigned int)(select_lex_->num_visible_fields()))
+#else
+#  define MRN_SELECT_LEX_GET_FIELDS_LIST_ELEMENTS(select_lex) \
+  (MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex_).elements)
+#endif
+
+#if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
+#  define MRN_SELECT_LEX_GET_FIELDS_LIST_FIRST_NODE_INFO(select_lex) \
+  (*(((select_lex_)->visible_fields()).begin()))
+#else
+#  define MRN_SELECT_LEX_GET_FIELDS_LIST_FIRST_NODE_INFO(select_lex) \
+  (static_cast<Item *>(MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex_).first_node()->info))
+#endif
+
+#if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
+#  define MRN_SELECT_LEX_HAS_LIMIT(select_lex) \
+  (select_lex->has_limit())
+#else
+#  define MRN_SELECT_LEX_HAS_LIMIT(select_lex) \
+  (select_lex->explicit_limit)
+#endif
+
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
 #  if MYSQL_VERSION_ID >= 100504
 #    define mrn_init_sql_alloc(thd, name, mem_root)                     \

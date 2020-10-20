@@ -11148,7 +11148,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     strcmp(select_lex->table_list.first->get_table_name(),
            table_list->get_table_name()) == 0 &&
     select_lex->order_list.elements &&
-    select_lex->explicit_limit &&
+    MRN_SELECT_LEX_HAS_LIMIT(select_lex) &&
     select_lex->select_limit &&
     select_lex->select_limit->val_int() > 0
   ) {
