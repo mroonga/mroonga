@@ -82,9 +82,7 @@ jobs:
       - name: Prepare MariaDB
         run: |
           cd ..
-          Invoke-WebRequest `
-            -Uri "https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
-            -OutFile mariadb-${{ matrix.mariadb-version }}.tar.gz
+          ridk exec curl --location -O https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz
           ridk exec tar xzf mariadb-${{ matrix.mariadb-version }}.tar.gz
           cd mariadb-${{ matrix.mariadb-version }}
           if ("${{ matrix.mariadb-version }}" -match "^10\.5") {
