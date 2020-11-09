@@ -133,7 +133,7 @@ jobs:
             Expand-Archive groonga-normalizer-mysql-latest.zip .
             Remove-Item groonga-normalizer-mysql-latest.zip
             Move-Item `
-              groonga-normalizer-mysql-latest-* `
+              groonga-normalizer-mysql-* `
               storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
           }
       - name: Run CMake
