@@ -148,7 +148,7 @@ jobs:
       - name: Run CMake
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
           mkdir ..\build
           cd ..\build
           cmake ..\source ^
