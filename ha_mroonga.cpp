@@ -745,6 +745,11 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = "HA_EXTRA_SKIP_SERIALIZABLE_DD_VIEW";
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_NO_READ_LOCKING
+  case HA_EXTRA_NO_READ_LOCKING:
+    inspected = "HA_EXTRA_NO_READ_LOCKING";
+    break;
+#endif
 #ifdef MRN_HAVE_HA_EXTRA_BEGIN_ALTER_COPY
   case HA_EXTRA_BEGIN_ALTER_COPY:
     inspected = "HA_EXTRA_BEGIN_ALTER_COPY";
