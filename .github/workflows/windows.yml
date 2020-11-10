@@ -23,38 +23,47 @@ jobs:
             mariadb-version: "10.2.34"
             package-platform: "win32"
             cmake-architecture: "Win32"
+            vc-architecture: "x64_x86"
           - label: MariaDB 10.2 64bit
             mariadb-version: "10.2.34"
             package-platform: "winx64"
             cmake-architecture: "x64"
+            vc-architecture: "x64"
           - label: MariaDB 10.3 32bit
             mariadb-version: "10.3.25"
             package-platform: "win32"
             cmake-architecture: "Win32"
+            vc-architecture: "x64_x86"
           - label: MariaDB 10.3 64bit
             mariadb-version: "10.3.25"
             package-platform: "winx64"
             cmake-architecture: "x64"
+            vc-architecture: "x64"
           - label: MariaDB 10.4 32bit
             mariadb-version: "10.4.15"
             package-platform: "win32"
             cmake-architecture: "Win32"
+            vc-architecture: "x64_x86"
           - label: MariaDB 10.4 64bit
             mariadb-version: "10.4.15"
             package-platform: "winx64"
             cmake-architecture: "x64"
+            vc-architecture: "x64"
           - label: MariaDB 10.5 32bit
             mariadb-version: "10.5.6"
             package-platform: "win32"
             cmake-architecture: "Win32"
+            vc-architecture: "x64_x86"
           - label: MariaDB 10.5 64bit
             mariadb-version: "10.5.6"
             package-platform: "winx64"
             cmake-architecture: "x64"
+            vc-architecture: "x64"
           - label: MariaDB 10.5 64bit (master)
             mariadb-version: "10.5.6"
             package-platform: "winx64"
             cmake-architecture: "x64"
+            vc-architecture: "x64"
             use-master: "yes"
     runs-on: windows-2019
     steps:
@@ -137,14 +146,16 @@ jobs:
               storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
           }
       - name: Run CMake
+        shell: cmd
         run: |
-          New-Item ..\build -ItemType Directory
+          call "C:\Program Files (x86)\Microsoft Visual Studio2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
+          mkdir ..\build
           cd ..\build
-          cmake ..\source `
-            -A "${{ matrix.cmake-architecture }}" `
-            -G "Visual Studio 16 2019" `
-            -DMRN_GROONGA_EMBED=OFF `
-            -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF `
+          cmake ..\source ^
+            -A "${{ matrix.cmake-architecture }}" ^
+            -G "Visual Studio 16 2019" ^
+            -DMRN_GROONGA_EMBED=OFF ^
+            -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF ^
             -DGRN_WITH_MRUBY=ON
       - name: Create package
         run: |
