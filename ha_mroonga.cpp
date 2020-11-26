@@ -218,15 +218,15 @@ static mysql_mutex_t *mrn_LOCK_open;
 #if defined(MRN_MARIADB_P)
 #  if MYSQL_VERSION_ID >= 100400
 #    define MRN_LEX_GET_TABLE_LIST(lex) \
-  (lex)->first_select_lex()->table_list.first
+  (lex)->first_select_lex()->get_table_list()
 #  else
-#    define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex.table_list.first
+#    define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex.get_table_list()
 #  endif
 #else
 #  if MYSQL_VERSION_ID >= 50706
-#    define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex->table_list.first
+#    define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex->get_table_list()
 #  else
-#    define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex.table_list.first
+#    define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex.get_table_list()
 #  endif
 #endif
 
