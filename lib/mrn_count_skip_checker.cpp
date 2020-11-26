@@ -47,10 +47,10 @@ namespace mrn {
   bool CountSkipChecker::check() {
     MRN_DBUG_ENTER_METHOD();
 
-    if (MRN_SELECT_LEX_GET_FIELDS_LIST_ELEMENTS(select_lex_) != 1) {
+    if (MRN_SELECT_LEX_GET_NUM_VISIBLE_FIELDS(select_lex_) != 1) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] not only one item: %u",
-              MRN_SELECT_LEX_GET_FIELDS_LIST_ELEMENTS(select_lex_));
+              MRN_SELECT_LEX_GET_NUM_VISIBLE_FIELDS(select_lex_));
       DBUG_RETURN(false);
     }
     if (select_lex_->group_list.elements > 0) {

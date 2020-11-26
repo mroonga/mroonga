@@ -443,10 +443,10 @@ typedef HASH mrn_table_def_cache_type;
 #endif
 
 #if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
-#  define MRN_SELECT_LEX_GET_FIELDS_LIST_ELEMENTS(select_lex) \
+#  define MRN_SELECT_LEX_GET_NUM_VISIBLE_FIELDS(select_lex) \
   ((unsigned int)(select_lex_->num_visible_fields()))
 #else
-#  define MRN_SELECT_LEX_GET_FIELDS_LIST_ELEMENTS(select_lex) \
+#  define MRN_SELECT_LEX_GET_NUM_VISIBLE_FIELDS(select_lex) \
   (MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex_).elements)
 #endif
 
