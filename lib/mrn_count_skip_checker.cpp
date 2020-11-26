@@ -71,7 +71,7 @@ namespace mrn {
       DBUG_RETURN(false);
     }
 
-    Item *info = MRN_SELECT_LEX_GET_FIELDS_LIST_FIRST_NODE_INFO(select_lex_);
+    Item *info = MRN_SELECT_LEX_GET_FIRST_VISIBLE_FIELD(select_lex_);
     if (info->type() != Item::SUM_FUNC_ITEM) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] item isn't sum function: %u",

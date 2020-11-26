@@ -451,10 +451,10 @@ typedef HASH mrn_table_def_cache_type;
 #endif
 
 #if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
-#  define MRN_SELECT_LEX_GET_FIELDS_LIST_FIRST_NODE_INFO(select_lex) \
+#  define MRN_SELECT_LEX_GET_FIRST_VISIBLE_FIELD(select_lex) \
   (*(((select_lex_)->visible_fields()).begin()))
 #else
-#  define MRN_SELECT_LEX_GET_FIELDS_LIST_FIRST_NODE_INFO(select_lex) \
+#  define MRN_SELECT_LEX_GET_FIRST_VISIBLE_FIELD(select_lex) \
   (static_cast<Item *>(MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex_).first_node()->info))
 #endif
 
