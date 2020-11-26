@@ -27,7 +27,7 @@ CREATE TABLE logs (
   message VARCHAR(255) GENERATED ALWAYS AS (json_extract(`record`, '$.message')) VIRTUAL
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
 
---error 16509
+--error 9509
 ALTER TABLE logs ADD INDEX (message);
 
 DROP TABLE logs;

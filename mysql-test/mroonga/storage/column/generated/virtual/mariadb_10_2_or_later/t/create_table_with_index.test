@@ -21,7 +21,7 @@
 DROP TABLE IF EXISTS logs;
 --enable_warnings
 
---error 16509
+--error 9509
 CREATE TABLE logs (
   id INT,
   record JSON,
