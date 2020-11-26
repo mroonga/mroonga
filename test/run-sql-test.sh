@@ -98,7 +98,11 @@ elif [ "${percona}" = "yes" ]; then
 else
   case ${MYSQL_VERSION} in
     8.*)
-      plugins_dir="${MYSQL_BUILD_DIR}/lib/plugin"
+      if [ -d "${MYSQL_BUILD_DIR}/plugin_output_directory" ]; then
+        plugins_dir="${MYSQL_BUILD_DIR}/plugin_output_directory"
+      else
+        plugins_dir="${MYSQL_BUILD_DIR}/lib/plugin"
+      fi
       ;;
     *)
       plugins_dir="${MYSQL_SOURCE_DIR}/lib/plugin"
