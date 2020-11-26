@@ -215,21 +215,6 @@ static mysql_mutex_t *mrn_LOCK_open;
      }
 #endif
 
-#if defined(MRN_MARIADB_P)
-#  if MYSQL_VERSION_ID >= 100400
-#    define MRN_LEX_GET_TABLE_LIST(lex) \
-  (lex)->first_select_lex()->get_table_list()
-#  else
-#    define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex.get_table_list()
-#  endif
-#else
-#  if MYSQL_VERSION_ID >= 50706
-#    define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex->get_table_list()
-#  else
-#    define MRN_LEX_GET_TABLE_LIST(lex) (lex)->select_lex.get_table_list()
-#  endif
-#endif
-
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
 #  define MRN_LEX_GET_CREATE_INFO(lex) ((lex)->create_info)
 #  define MRN_LEX_GET_ALTER_INFO(lex) ((lex)->alter_info)
@@ -3404,7 +3389,6 @@ int ha_mroonga::create_share_for_create() const
   THD *thd = ha_thd();
   LEX *lex = thd->lex;
   HA_CREATE_INFO *create_info = MRN_LEX_GET_CREATE_INFO(lex);
-  TABLE_LIST *table_list = MRN_LEX_GET_TABLE_LIST(lex);
   MRN_DBUG_ENTER_METHOD();
   wrap_handler_for_create = NULL;
   MRN_TABLE_RESET(&table_for_create);
@@ -3450,13 +3434,12 @@ int ha_mroonga::create_share_for_create() const
   }
   mrn_init_alloc_root(&mem_root_for_create, "mroonga::create", 1024, 0, MYF(0));
   analyzed_for_create = true;
-  if (table_list) {
+  if (lex->query_tables && lex->query_tables->get_table_name()) {
     share_for_create.table_name =
-      mrn_my_strndup(MRN_TABLE_LIST_TABLE_NAME_DATA(table_list),
-                     MRN_TABLE_LIST_TABLE_NAME_LENGTH(table_list),
-                     MYF(MY_WME));
+      mrn_my_strdup(lex->query_tables->get_table_name(),
+                    MYF(MY_WME));
     share_for_create.table_name_length =
-      MRN_TABLE_LIST_TABLE_NAME_LENGTH(table_list);
+      strlen(lex->query_tables->get_table_name());
   }
   share_for_create.table_share = &table_share_for_create;
   table_for_create.s = &table_share_for_create;
