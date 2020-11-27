@@ -28,7 +28,7 @@ CREATE TABLE diaries (
 
 INSERT INTO diaries VALUES ('');
 
---error 16502
+--error 9502
 ALTER TABLE diaries ENGINE=Mroonga;
 SHOW CREATE TABLE diaries;
 

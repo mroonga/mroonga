@@ -124,8 +124,11 @@ extern "C" {
 #endif
 
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
-#  define MRN_HAVE_HA_EXTRA_SKIP_SERIALIZABLE_DD_VIEW
 #  define MRN_HAVE_HA_EXTRA_NO_AUTOINC_LOCKING
+#endif
+
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80022)
+#  define MRN_HAVE_HA_EXTRA_NO_READ_LOCKING
 #endif
 
 #if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100224)

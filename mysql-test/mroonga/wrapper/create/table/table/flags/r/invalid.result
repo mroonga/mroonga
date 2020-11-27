@@ -5,7 +5,7 @@ FULLTEXT INDEX (content)
 ) COMMENT='engine "InnoDB", flags "INVALID"'
   DEFAULT CHARSET=utf8mb4;
 Warnings:
-Warning	16510	The table flag 'INVALID' is invalid. It is ignored
+Warning	9510	The table flag 'INVALID' is invalid. It is ignored
 SELECT mroonga_command("dump --dump_plugins no --dump_indexes no");
 mroonga_command("dump --dump_plugins no --dump_indexes no")
 table_create memos TABLE_HASH_KEY ShortText
