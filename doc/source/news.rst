@@ -5,6 +5,68 @@
 News
 ====
 
+.. _release-10-09:
+
+Release 10.09 - 2020-12-01
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.48, 10.2.36, 10.3.27, 10.4.17, and 10.5.8
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.50 and 5.7.32.
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.50, 5.7.32, and 8.0.22.
+
+  * There are below restrictions in the MySQL8 package.
+
+    * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+    * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
+
+* [:doc:`/reference/udf/mroonga_snippet_html`] Added support for customizing normalizer.
+
+  * We can use custom normalizer instead of the default normalizer(NromalizerAuto) by using ``table_name`` and ``index_name``.
+
+    * We specify target table name to ``table_name`` as below.
+    * We specify index name that is specified on target table  to ``index_name`` as below.
+
+    .. code-block::
+
+      SET NAMES utf8mb4;
+
+      CREATE TABLE memos (
+      content text,
+      fulltext index content_index (content)
+      COMMENT 'normalizer "NormalizerNFKC121(\'unify_kana\', true)"'
+      ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+      SELECT mroonga_snippet_html('This is Mroonga（ムルンガ）.',
+      'memos' as table_name,
+      'content_index' as index_name,
+      'むるんが') as snippet;
+
+      snippet
+      <div class="snippet">This is Mroonga（<span class="keyword">ムルンガ</span>）.</div>
+
+    * We can also use mixing search by query and search by keywords by this modification.
+    * For example as below, we can highlight keywords that we both specify by ``AS query`` and ``AS snippet``.
+
+      .. code-block::
+
+	 SET NAMES utf8mb4;
+	 SELECT mroonga_snippet_html('Mroonga has two running modes.
+
+         One is “storage mode”, that is the default mode, and we use Groonga for both storing data and searching. With this mode, you can have full benefits of Groonga described above, like fast data update, lock-free full text search and geolocation search. But it does not support transactions.
+         
+         Another one is “wrapper mode”, that adds full text search function on other storage engines like MyISAM or InnoDB. With this mode, you can use Groonga’s fast full text search with having the benefits of the storage engine, ex. transaction in InnoDB. But you cannot have benefits from Groonga’s read-lock free characteristic. And you might have the performance bottle neck in the storage engine in updating data.',
+         'lock storage' AS query,
+         'update' AS snippet;
+
+	 snippet
+	 <div class="snippet"><span class="keyword">storage</span> mode”, that is the default mode, and we use Groonga for both storing data and searching. With this mode, you can have full benefits of Groonga described above, like fast data <span class="keyword">update</span>, <span class="keyword">lock</span>-fr</div><div class="snippet">text search function on other <span class="keyword">storage</span> engines like MyISAM or InnoDB. With this mode, you can use Groonga’s fast full text search with having the benefits of the <span class="keyword">storage</span> engine, ex. transaction in In</div><div class="snippet">noDB. But you cannot have benefits from Groonga’s read-<span class="keyword">lock</span> free characteristic. And you might have the performance bottle neck in the <span class="keyword">storage</span> engine in updating data.</div>
+
+      
 .. _release-10-07:
 
 Release 10.07 - 2020-10-02
