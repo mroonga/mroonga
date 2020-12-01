@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011 Kentoku SHIBA
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011  Kentoku SHIBA
+  Copyright(C) 2011-2020  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -59,6 +59,7 @@ namespace mrn {
   IndexTableName::IndexTableName(const char *table_name,
                                  const char *mysql_index_name)
     : table_name_(table_name),
+      table_name_length_(strlen(table_name)),
       mysql_index_name_(mysql_index_name),
       mysql_index_name_length_(strlen(mysql_index_name_)) {
     init();
@@ -68,27 +69,41 @@ namespace mrn {
                                  const char *mysql_index_name,
                                  size_t mysql_index_name_length)
     : table_name_(table_name),
+      table_name_length_(strlen(table_name)),
+      mysql_index_name_(mysql_index_name),
+      mysql_index_name_length_(mysql_index_name_length) {
+    init();
+  }
+
+  IndexTableName::IndexTableName(const char *table_name,
+                                 size_t table_name_length,
+                                 const char *mysql_index_name,
+                                 size_t mysql_index_name_length)
+    : table_name_(table_name),
+      table_name_length_(table_name_length),
       mysql_index_name_(mysql_index_name),
       mysql_index_name_length_(mysql_index_name_length) {
     init();
   }
 
   void IndexTableName::init() {
-    uchar encoded_mysql_index_name_multibyte[MRN_MAX_KEY_SIZE];
+    uchar encoded_mysql_index_name_multibyte[MRN_MAX_KEY_SIZE - 1];
     const uchar *mysql_index_name_multibyte =
       reinterpret_cast<const uchar *>(mysql_index_name_);
     encode(encoded_mysql_index_name_multibyte,
-           encoded_mysql_index_name_multibyte + MRN_MAX_KEY_SIZE,
+           encoded_mysql_index_name_multibyte + MRN_MAX_KEY_SIZE - 1,
            mysql_index_name_multibyte,
            mysql_index_name_multibyte + mysql_index_name_length_);
     snprintf(old_name_, MRN_MAX_KEY_SIZE,
-             "%s%s%s",
+             "%.*s%s%s",
+             static_cast<int>(table_name_length_),
              table_name_,
              OLD_SEPARATOR,
              encoded_mysql_index_name_multibyte);
     old_length_ = strlen(old_name_);
     snprintf(name_, MRN_MAX_KEY_SIZE,
-             "%s%s%s",
+             "%.*s%s%s",
+             static_cast<int>(table_name_length_),
              table_name_,
              SEPARATOR,
              encoded_mysql_index_name_multibyte);

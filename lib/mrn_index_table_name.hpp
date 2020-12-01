@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011 Kentoku SHIBA
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011  Kentoku SHIBA
+  Copyright(C) 2011-2020  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -37,12 +37,17 @@ namespace mrn {
     IndexTableName(const char *table_name,
                    const char *mysql_index_name,
                    size_t mysql_index_name_length);
+    IndexTableName(const char *table_name,
+                   size_t table_name_length,
+                   const char *mysql_index_name,
+                   size_t mysql_index_name_length);
     const char *c_str();
     size_t length();
     const char *old_c_str();
     size_t old_length();
   private:
     const char *table_name_;
+    size_t table_name_length_;
     const char *mysql_index_name_;
     size_t mysql_index_name_length_;
     char old_name_[MRN_MAX_KEY_SIZE];
