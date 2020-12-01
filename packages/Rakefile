@@ -9,6 +9,7 @@ packages = [
   "mysql-server-8.0-mroonga",
   "percona-server-5.6-mroonga",
   "percona-server-5.7-mroonga",
+  "percona-server-8.0-mroonga",
 ]
 
 namespace :version do
