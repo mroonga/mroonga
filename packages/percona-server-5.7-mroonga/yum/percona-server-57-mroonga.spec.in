@@ -1,7 +1,7 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
-%define mysql_version_default 5.7.31
-%define percona_server_version_default 34
+%define mysql_version_default 5.7.32
+%define percona_server_version_default 35
 %define rpm_release_default 1
 %define mysql_dist_default    %{?dist}
 %define mysql_download_base_url_default https://repo.percona.com/centos/%{_centos_ver}/SRPMS
@@ -223,6 +223,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Mon Nov 30 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.09-1
+- New upstream release.
+
 * Tue Sep 29 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.07-1
 - New upstream release.
 
