@@ -21,11 +21,79 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.07 - 2020-10-02"
-msgstr "10.07リリース - 2020-10-02"
+msgid "Release 10.09 - 2020-12-01"
+msgstr "10.09リリース - 2020-12-01"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.48, 10.2.36, "
+"10.3.27, 10.4.17, and 10.5.8"
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.1.48、10.2.36、10.3.27、10.4.17、10.5.8を"
+"サポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for Percona Server 5.6.50 and 5.7.32."
+msgstr ""
+"[:doc:`/install/centos`] Percona Server 5.6.45、5.7.27をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.50, 5.7.32, and 8.0.22."
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.50と5.7.32とMySQL 8.0.22をサポートしまし"
+"た。"
+
+msgid "There are below restrictions in the MySQL8 package."
+msgstr "MySQL8 のパッケージには以下の制限があります。"
+
+msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
+msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
+
+msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
+msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_snippet_html`] Added support for customizing "
+"normalizer."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_snippet_html`] ノーマライザーのカスタマイズをサ"
+"ポートしました。"
+
+msgid ""
+"We can use custom normalizer instead of the default "
+"normalizer(NromalizerAuto) by using ``table_name`` and ``index_name``."
+msgstr ""
+"``table_name`` と ``index_name`` を使用することで、デフォルトのノーマライザー"
+"(NormalizerAuto)の代わりにカスタムのノーマライザーを使えます。"
+
+msgid "We specify target table name to ``table_name`` as below."
+msgstr "``table_name`` には、以下のように、対象のテーブルの名前を指定します。"
+
+msgid ""
+"We specify index name that is specified on target table  to ``index_name`` "
+"as below."
+msgstr ""
+"``index_name`` には、以下のように、対象のテーブル上で指定されたインデックスの"
+"名前を指定します。"
+
+msgid ""
+"We can also use mixing search by query and search by keywords by this "
+"modification."
+msgstr ""
+"この変更によって、クエリーによる検索とキーワードによる検索を混在して使うこと"
+"ができます。"
+
+msgid ""
+"For example as below, we can highlight keywords that we both specify by ``AS "
+"query`` and ``AS snippet``."
+msgstr ""
+"例えば以下のように、``AS query`` と ``AS snippet`` の両方で指定したキーワード"
+"をハイライトできます。"
+
+msgid "Release 10.07 - 2020-10-02"
+msgstr "10.07リリース - 2020-10-02"
 
 msgid "[:doc:`/install/centos`] Added support for MariaDB 10.5.5"
 msgstr "[:doc:`/install/centos`] MariaDB 10.5.5をサポートしました。"
@@ -115,15 +183,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`] MySQL 5.6.49と5.7.31とMySQL 8.0.21をサポートしまし"
 "た。"
-
-msgid "There are below restrictions in the MySQL8 package."
-msgstr "MySQL8 のパッケージには以下の制限があります。"
-
-msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
-msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
-
-msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
-msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
 
 msgid "[:doc:`/install/centos`] Added support for Percona Server 5.6.49."
 msgstr "[:doc:`/install/centos`] Percona Server 5.6.49をサポートしました。"
