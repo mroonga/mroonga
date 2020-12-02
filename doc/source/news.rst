@@ -13,9 +13,9 @@ Release 10.09 - 2020-12-01
 Improvements
 ^^^^^^^^^^^^
 
-* [:doc:`/install/centos`] Added support for MariaDB 10.1.48, 10.2.36, 10.3.27, 10.4.17, and 10.5.8
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.36, 10.3.27, 10.4.17, and 10.5.8
 
-* [:doc:`/install/centos`] Added support for Percona Server 5.6.50 and 5.7.32.
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.50, 5.7.32, and 8.0.21.
 
 * [:doc:`/install/centos`] Added support for MySQL 5.6.50, 5.7.32, and 8.0.22.
 
@@ -23,6 +23,10 @@ Improvements
 
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
     * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
+
+* Dropped support for MariaDB 10.1.
+
+  * Because MariaDB 10.1 is EOL.
 
 * [:doc:`/reference/udf/mroonga_snippet_html`] Added support for customizing normalizer.
 
