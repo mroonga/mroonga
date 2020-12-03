@@ -3,15 +3,9 @@
 %define mariadb_version_default 10.1.48
 %define mariadb_release_default 1
 %define mariadb_download_base_url_default https://downloads.mariadb.org/f
-%if %{_centos_ver} == 7
 %define mariadb_dist_default    el7.centos
 %define service_status() (systemctl status %1)
 %define service_control() (systemctl %2 %1)
-%else
-%define mariadb_dist_default    el6
-%define service_status() (/sbin/service %1 status)
-%define service_control() (/sbin/service %1 %2)
-%endif
 
 %define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}
 %define _mariadb_release %{?mariadb_release:%{mariadb_release}}%{!?mariadb_release:%{mariadb_release_default}}
