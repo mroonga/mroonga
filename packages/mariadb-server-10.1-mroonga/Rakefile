@@ -5,10 +5,8 @@ class MariaDBServer101MroongaPackageTask < MroongaPackageTask
     super("mariadb-server-10.1", "mariadb-10.1-mroonga")
   end
 
-  def apt_targets_default
-    [
-      "debian-stretch",
-    ]
+  def enable_apt?
+    false
   end
 
   def ubuntu_targets_default
