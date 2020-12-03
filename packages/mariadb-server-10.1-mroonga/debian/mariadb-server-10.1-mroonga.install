@@ -1,3 +1,0 @@
-usr/lib/*/mariadb18/plugin/ha_mroonga.so*
-usr/share/mroonga/*
-debian/apparmor/mariadb-server-10.1-mroonga etc/apparmor.d/abstractions/

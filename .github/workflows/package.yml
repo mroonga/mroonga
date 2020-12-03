@@ -25,7 +25,6 @@ jobs:
           - centos-7
           - centos-8
         package:
-          - mariadb-server-10.1
           - mariadb-server-10.2
           - mariadb-server-10.3
           - mariadb-server-10.4
@@ -37,12 +36,6 @@ jobs:
           - percona-server-5.7
           - percona-server-8.0
         exclude:
-          - os: debian-buster
-            package: mariadb-server-10.1
-          - os: debian-buster-i386
-            package: mariadb-server-10.1
-          - os: centos-8
-            package: mariadb-server-10.1
           - os: debian-stretch
             package: mariadb-server-10.2
           - os: debian-stretch-i386
