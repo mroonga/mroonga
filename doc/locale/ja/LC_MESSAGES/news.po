@@ -62,6 +62,12 @@ msgstr "MariaDB 10.1のサポートをやめました。"
 msgid "Because MariaDB 10.1 is EOL."
 msgstr "MariaDB 10.1はEOLになったためです。"
 
+msgid "Dropped support for CentOS 6."
+msgstr "CentOS 6のサポートをやめました。"
+
+msgid "Because CentOS 6 is EOL."
+msgstr "CentOS 6はEOLになったためです。"
+
 msgid ""
 "[:doc:`/reference/udf/mroonga_snippet_html`] Added support for customizing "
 "normalizer."

@@ -28,6 +28,10 @@ Improvements
 
   * Because MariaDB 10.1 is EOL.
 
+* Dropped support for CentOS 6.
+
+  * Because CentOS 6 is EOL.
+
 * [:doc:`/reference/udf/mroonga_snippet_html`] Added support for customizing normalizer.
 
   * We can use custom normalizer instead of the default normalizer(NromalizerAuto) by using ``table_name`` and ``index_name``.
