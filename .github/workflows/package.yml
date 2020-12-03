@@ -22,7 +22,6 @@ jobs:
           - debian-stretch-i386
           - debian-buster
           - debian-buster-i386
-          - centos-6
           - centos-7
           - centos-8
         package:
@@ -58,8 +57,6 @@ jobs:
             package: mariadb-server-10.3
           - os: debian-stretch-i386
             package: mariadb-server-10.3
-          - os: centos-6
-            package: mariadb-server-10.3
           - os: debian-buster
             package: mariadb-server-10.4
           - os: debian-buster-i386
@@ -68,8 +65,6 @@ jobs:
             package: mariadb-server-10.4
           - os: debian-stretch-i386
             package: mariadb-server-10.4
-          - os: centos-6
-            package: mariadb-server-10.4
           - os: debian-buster
             package: mariadb-server-10.5
           - os: debian-buster-i386
@@ -77,8 +72,6 @@ jobs:
           - os: debian-stretch
             package: mariadb-server-10.5
           - os: debian-stretch-i386
-            package: mariadb-server-10.5
-          - os: centos-6
             package: mariadb-server-10.5
           - os: debian-buster
             package: mysql-server-5.6

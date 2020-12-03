@@ -14,13 +14,8 @@
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
-%if %{_centos_ver} == 7
 %define service_status() (systemctl status %1)
 %define service_control() (systemctl %2 %1)
-%else
-%define service_status() (/sbin/service %1 status)
-%define service_control() (/sbin/service %1 %2)
-%endif
 
 Name:		percona-server-56-mroonga
 Version:	@VERSION@

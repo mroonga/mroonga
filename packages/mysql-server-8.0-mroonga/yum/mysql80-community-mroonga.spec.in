@@ -5,13 +5,8 @@
 %define mysql_dist_default    el%{_centos_ver}
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-8.0-community/el/%{_centos_ver}/SRPMS/
 %define mysql_spec_file_default mysql.spec
-%if %{_centos_ver} >= 7
 %define service_status() (systemctl status %1)
 %define service_control() (systemctl %2 %1)
-%else
-%define service_status() (/sbin/service %1 status)
-%define service_control() (/sbin/service %1 %2)
-%endif
 
 %define _mysql_version %{?mysql_version:%{mysql_version}}%{!?mysql_version:%{mysql_version_default}}
 %define _mysql_release %{?mysql_release:%{mysql_release}}%{!?mysql_release:%{mysql_release_default}}
