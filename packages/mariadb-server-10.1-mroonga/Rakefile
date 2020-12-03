@@ -17,9 +17,8 @@ class MariaDBServer101MroongaPackageTask < MroongaPackageTask
     ]
   end
 
-  def yum_targets_default
-    [
-    ]
+  def enable_yum?
+    false
   end
 end
 
