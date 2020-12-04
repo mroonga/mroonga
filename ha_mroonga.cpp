@@ -3845,7 +3845,7 @@ int ha_mroonga::storage_create(const char *name,
   if (error)
     DBUG_RETURN(error);
 
-  grn_obj_flags table_flags = GRN_OBJ_PERSISTENT;
+  grn_table_flags table_flags = GRN_OBJ_PERSISTENT;
 
   /* primary key must be handled before creating table */
   grn_obj *pkey_type;
@@ -3866,17 +3866,18 @@ int ha_mroonga::storage_create(const char *name,
       pkey_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
     }
 
-    // default algorithm is BTREE ==> PAT
-    if (!is_id && key_info->algorithm == HA_KEY_ALG_HASH) {
-      table_flags |= GRN_OBJ_TABLE_HASH_KEY;
-    } else if (!is_id) {
-      table_flags |= GRN_OBJ_TABLE_PAT_KEY;
-    } else {
-      // for _id
+    if (is_id) {
       table_flags |= GRN_OBJ_TABLE_NO_KEY;
       pkey_type = NULL;
+    } else {
+      if (!find_table_flags(info, tmp_share, &table_flags)) {
+        if (key_info->algorithm == HA_KEY_ALG_HASH) {
+          table_flags |= GRN_OBJ_TABLE_HASH_KEY;
+        } else {
+          table_flags |= GRN_OBJ_TABLE_PAT_KEY;
+        }
+      }
     }
-
   } else {
     // primary key doesn't exists
     table_flags |= GRN_OBJ_TABLE_NO_KEY;
@@ -3900,8 +3901,7 @@ int ha_mroonga::storage_create(const char *name,
     DBUG_RETURN(error);
   }
 
-  if (table_flags == (GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_PAT_KEY) ||
-      table_flags == (GRN_OBJ_PERSISTENT | GRN_OBJ_TABLE_HASH_KEY)) {
+  if ((table_flags & GRN_OBJ_TABLE_TYPE_MASK) != GRN_OBJ_TABLE_NO_KEY) {
     KEY *key_info = &(table->s->key_info[pkey_nr]);
     int key_parts = KEY_N_KEY_PARTS(key_info);
     if (key_parts == 1) {
