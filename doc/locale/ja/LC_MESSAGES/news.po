@@ -21,8 +21,8 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.09 - 2020-12-01"
-msgstr "10.09リリース - 2020-12-01"
+msgid "Release 10.09 - 2020-12-04"
+msgstr "10.09リリース - 2020-12-04"
 
 msgid "Improvements"
 msgstr "改良"
@@ -56,11 +56,17 @@ msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
 msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
 msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
 
-msgid "Dropped support for MariaDB 10.1."
-msgstr "MariaDB 10.1のサポートをやめました。"
+msgid "Dropped support for MariaDB 10.1 except Ubuntu 18.04 LTS."
+msgstr "Ubuntu 18.04 LTS以外のMariaDB 10.1のサポートをやめました。"
 
 msgid "Because MariaDB 10.1 is EOL."
 msgstr "MariaDB 10.1はEOLになったためです。"
+
+msgid "However, we have only supported MariaDB 10.1 for Ubintu 18.04 LTS"
+msgstr "ただ、Ubuntu 18.04 LTS では、MariaDB10.1をサポートします。"
+
+msgid "Because MariaDB 10.1 has supported yet on it."
+msgstr "MariaDB 10.1は、Ubuntu 18.04 LTSではまだサポートされているためです。"
 
 msgid "Dropped support for CentOS 6."
 msgstr "CentOS 6のサポートをやめました。"

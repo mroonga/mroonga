@@ -7,7 +7,7 @@ News
 
 .. _release-10-09:
 
-Release 10.09 - 2020-12-01
+Release 10.09 - 2020-12-04
 --------------------------
 
 Improvements
@@ -24,9 +24,12 @@ Improvements
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
     * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
 
-* Dropped support for MariaDB 10.1.
+* Dropped support for MariaDB 10.1 except Ubuntu 18.04 LTS.
 
   * Because MariaDB 10.1 is EOL.
+  * However, we have only supported MariaDB 10.1 for Ubintu 18.04 LTS
+
+    * Because MariaDB 10.1 has supported yet on it.
 
 * Dropped support for CentOS 6.
 
