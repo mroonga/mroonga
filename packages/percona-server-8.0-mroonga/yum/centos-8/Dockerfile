@@ -13,7 +13,7 @@ RUN \
   dnf module disable -y mysql && \
   percona-release setup ps80 && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
-  dnf install --enablerepo=PowerTools -y ${quiet} \
+  dnf install --enablerepo=powertools -y ${quiet} \
     cmake \
     cyrus-sasl-devel \
     gcc-toolset-9 \
@@ -49,6 +49,6 @@ RUN \
     wget \
     which \
     zlib-devel && \
-  dnf install --disablerepo=AppStream -y ${quiet} \
+  dnf install --disablerepo=appstream -y ${quiet} \
     percona-server-devel && \
   dnf clean ${quiet} all
