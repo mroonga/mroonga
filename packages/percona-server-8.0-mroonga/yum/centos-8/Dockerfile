@@ -49,6 +49,6 @@ RUN \
     wget \
     which \
     zlib-devel && \
-  dnf install --disablerepo=AppStream -y ${quiet} \
+  dnf install --disablerepo=appstream -y ${quiet} \
     percona-server-devel && \
   dnf clean ${quiet} all

@@ -47,6 +47,6 @@ RUN \
     wget \
     which \
     zlib-devel && \
-  dnf install --disablerepo=AppStream -y ${quiet} \
+  dnf install --disablerepo=appstream -y ${quiet} \
     mysql-community-devel && \
   dnf clean ${quiet} all
