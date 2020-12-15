@@ -89,6 +89,7 @@ if [ ! -d ${mysql_source} ]; then
         -DINSTALL_LAYOUT=RPM \
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
         -DWITH_BOOST=../.. \
+        -DWITH_ZLIB=bundled \
         -DINSTALL_LIBDIR="%{_lib}/mysql" \
         -DINSTALL_PLUGINDIR="%{_lib}/mysql/plugin"
     popd && popd
