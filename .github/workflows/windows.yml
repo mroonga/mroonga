@@ -128,9 +128,6 @@ jobs:
           if ("${{ matrix.use-master }}" -eq "yes") {
             ruby download_xxhash.rb
           }
-          cd ..
-          ridk exec patch -p1 -i `
-            packages/source/patches/mruby-do-not-check-fd-for-stdin-stdout-stderr.diff
       - name: Prepare groonga-normalizer-mysql
         run: |
           cd ..\source
