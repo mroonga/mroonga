@@ -119,12 +119,6 @@ jobs:
           git clone --depth 1 --recursive https://github.com/groonga/groonga.git
           git clone --depth 1 https://github.com/clear-code/cutter.git
           git clone --depth 1 https://github.com/mroonga/mroonga.github.com.git
-      - name: Apply a patch
-        run: |
-          cd ..
-          pushd groonga
-          patch -p1 < packages/source/patches/mruby-do-not-check-fd-for-stdin-stdout-stderr.diff
-          popd
       - name: Generate configure
         run: |
           ./autogen.sh
