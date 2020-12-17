@@ -76,7 +76,6 @@ fi
 %build
 mysql_source_base_name=percona-server-%{_mysql_version}-%{_percona_server_version}
 mysql_source=../${mysql_source_base_name}/${mysql_source_base_name}
-centos_version=%{_centos_ver}
 if [ ! -d ${mysql_source} ]; then
     specs_dir=
     MYSQL_RPMBUILD_TEST=no rpmbuild -bp \
