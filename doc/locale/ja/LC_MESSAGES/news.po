@@ -21,11 +21,52 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.09 - 2020-12-04"
-msgstr "10.09リリース - 2020-12-04"
+msgid "Release 10.10 - 2020-12-29"
+msgstr "10.10リリース - 2020-12-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Added support for customize table flags. [Gitter]"
+"[Reported by Shinichi Takayanagi]"
+msgstr ""
+"[:doc:`/tutorial/storage`] テーブルフラグのカスタマイズをサポートしました。"
+"[Gitter][Shinichi Takayanagiさんが報告]"
+
+msgid "Until now, we can't customize table flags in storage mode."
+msgstr ""
+"今までは、ストレージモードでは、テーブルフラグのカスタマイズをサポートしてい"
+"ませんでした。"
+
+msgid "We can customize table flags as below since this release."
+msgstr "このリリースから、以下のようにテーブルフラグのカスタマイズができます。"
+
+msgid "Please refer to the following URL about customizable items."
+msgstr "カスタマイズ可能な項目については、以下のURLを参照してください。"
+
+msgid "https://groonga.org/ja/docs/reference/commands/table_create.html#flags"
+msgstr ""
+
+msgid ""
+"[:doc:`/install/ubuntu`] Added support for Ubuntu 20.10 (Groovy Gorilla)."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 20.10 (Groovy Gorilla)をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.22."
+msgstr "[:doc:`/install/centos`] Percona Server 8.0.22をサポートしました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Shinichi Takayanagi"
+msgstr "Shinichi Takayanagiさん"
+
+msgid "pinpikokun [Provided the patch at GitHub#373]"
+msgstr "pinpikokunさん [GitHub#373にてパッチ提供]"
+
+msgid "Release 10.09 - 2020-12-04"
+msgstr "10.09リリース - 2020-12-04"
 
 msgid ""
 "[:doc:`/install/centos`] Added support for MariaDB 10.2.36, 10.3.27, "
@@ -118,15 +159,13 @@ msgstr "10.07リリース - 2020-10-02"
 msgid "[:doc:`/install/centos`] Added support for MariaDB 10.5.5"
 msgstr "[:doc:`/install/centos`] MariaDB 10.5.5をサポートしました。"
 
+#, fuzzy
 msgid ""
 "Added new tests that use > 256 byte strings in the column compression tests. "
-"[GitHub#350][Patched by  KartikSoneji]"
+"[GitHub#350][Patched by KartikSoneji]"
 msgstr ""
 "カラム圧縮のテストで256byte以上の文字列を使うテストを追加しました。"
 "[GitHub#350][KartikSonejiさんがパッチ提供]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "KartikSoneji"
 msgstr "KartikSonejiさん"

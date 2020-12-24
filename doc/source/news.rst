@@ -5,6 +5,41 @@
 News
 ====
 
+.. _release-10-10:
+
+Release 10.10 - 2020-12-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/tutorial/storage`] Added support for customize table flags. [Gitter][Reported by Shinichi Takayanagi]
+
+  * Until now, we can't customize table flags in storage mode.
+  * We can customize table flags as below since this release.
+
+    .. code-block::
+
+      CREATE TABLE terms (
+        term VARCHAR(64) NOT NULL PRIMARY KEY
+      ) COMMENT='flags "TABLE_HASH_KEY|KEY_LARGE"'
+        DEFAULT CHARSET=utf8mb4;
+
+  * Please refer to the following URL about customizable items.
+
+    * https://groonga.org/ja/docs/reference/commands/table_create.html#flags
+
+* [:doc:`/install/ubuntu`] Added support for Ubuntu 20.10 (Groovy Gorilla).
+
+* [:doc:`/install/centos`] Added support for Percona Server 8.0.22.
+
+Thanks
+^^^^^^
+
+* Shinichi Takayanagi
+
+* pinpikokun [Provided the patch at GitHub#373]
+
 .. _release-10-09:
 
 Release 10.09 - 2020-12-04
@@ -77,7 +112,6 @@ Improvements
 	 snippet
 	 <div class="snippet"><span class="keyword">storage</span> mode”, that is the default mode, and we use Groonga for both storing data and searching. With this mode, you can have full benefits of Groonga described above, like fast data <span class="keyword">update</span>, <span class="keyword">lock</span>-fr</div><div class="snippet">text search function on other <span class="keyword">storage</span> engines like MyISAM or InnoDB. With this mode, you can use Groonga’s fast full text search with having the benefits of the <span class="keyword">storage</span> engine, ex. transaction in In</div><div class="snippet">noDB. But you cannot have benefits from Groonga’s read-<span class="keyword">lock</span> free characteristic. And you might have the performance bottle neck in the <span class="keyword">storage</span> engine in updating data.</div>
 
-      
 .. _release-10-07:
 
 Release 10.07 - 2020-10-02
@@ -88,12 +122,12 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for MariaDB 10.5.5
 
-* Added new tests that use > 256 byte strings in the column compression tests. [GitHub#350][Patched by  KartikSoneji]
+* Added new tests that use > 256 byte strings in the column compression tests. [GitHub#350][Patched by KartikSoneji]
 
 Thanks
 ^^^^^^
 
-*  KartikSoneji
+* KartikSoneji
 
 .. _release-10-06:
 
