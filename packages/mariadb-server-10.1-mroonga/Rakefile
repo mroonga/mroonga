@@ -6,7 +6,7 @@ class MariaDBServer101MroongaPackageTask < MroongaPackageTask
   end
 
   def enable_apt?
-    false
+    true
   end
 
   def ubuntu_targets_default
