@@ -177,6 +177,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Mon Dec 28 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.10-1
+- New upstream release.
+
 * Mon Nov 30 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.09-1
 - New upstream release.
 
