@@ -186,7 +186,6 @@ jobs:
       # Artifact
       - name: Compress the artifact
         run: |
-          ls mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform }}
           Compress-Archive `
             -Path mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform }}\* `
             -DestinationPath "${{ steps.info.outputs.artifact-name }}.zip"
