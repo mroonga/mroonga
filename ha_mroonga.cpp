@@ -11099,8 +11099,12 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
 {
   MRN_DBUG_ENTER_METHOD();
 
+  const char *tag = "[mroonga][fast-order-limit][check]";
+
   if (!is_enable_optimization()) {
-    DBUG_PRINT("info", ("mroonga: fast order limit: optimization is disabled"));
+    GRN_LOG(ctx, GRN_LOG_DEBUG,
+            "%s[false] optimization is disabled",
+            tag);
     fast_order_limit = false;
     DBUG_VOID_RETURN;
   }
@@ -11115,9 +11119,12 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   } else {
     first_select_lex = select_lex;
   }
-  DBUG_PRINT("info",
-    ("mroonga: first_select_lex->options=%llu",
-     first_select_lex ? MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(first_select_lex) : 0));
+  GRN_LOG(ctx, GRN_LOG_DEBUG,
+          "%s first_select_lex->options=%llu",
+          tag,
+          first_select_lex ?
+          MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(first_select_lex) :
+          0);
 
   // TODO: Extract as a class like mrn::ConditionConverter
   if (
@@ -11142,18 +11149,19 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     }
     *limit += select_lex->select_limit->val_int();
     if (*limit > (longlong)INT_MAX) {
-      DBUG_PRINT("info",
-                 ("mroonga: fast_order_limit = false: "
-                  "too long limit: %lld <= %d is required",
-                  *limit, INT_MAX));
+      GRN_LOG(ctx, GRN_LOG_DEBUG,
+              "%s[false] too long limit: %lld <= %d is required",
+              tag,
+              *limit,
+              INT_MAX);
       fast_order_limit = false;
       DBUG_VOID_RETURN;
     }
     if (first_select_lex &&
         (MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(first_select_lex) & OPTION_FOUND_ROWS)) {
-      DBUG_PRINT("info",
-                 ("mroonga: fast_order_limit = false: "
-                  "SQL_CALC_FOUND_ROWS is specified"));
+      GRN_LOG(ctx, GRN_LOG_DEBUG,
+              "%s[false] SQL_CALC_FOUND_ROWS is specified",
+              tag);
       fast_order_limit = false;
       DBUG_VOID_RETURN;
     }
@@ -11162,33 +11170,42 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     if (where) {
       if (is_storage_mode) {
         if (!pushed_cond) {
-          DBUG_PRINT("info",
-                     ("mroonga: fast_order_limit = false: "
-                      "not Groonga layer condition search"));
+          GRN_LOG(ctx, GRN_LOG_DEBUG,
+                  "%s[storage][false] not Groonga layer condition search",
+                  tag);
+          fast_order_limit = false;
+          DBUG_VOID_RETURN;
+        }
+        mrn::ConditionConverter converter(ctx, grn_table, is_storage_mode);
+        if (!converter.is_convertable(where)) {
+          GRN_LOG(ctx, GRN_LOG_DEBUG,
+                  "%s[storage][false] any not Groonga layer condition exists",
+                  tag);
           fast_order_limit = false;
           DBUG_VOID_RETURN;
         }
       } else {
         mrn::ConditionConverter converter(ctx, grn_table, is_storage_mode);
         if (!converter.is_convertable(where)) {
-          DBUG_PRINT("info",
-                     ("mroonga: fast_order_limit = false: "
-                      "Groonga layer condition but not fulltext search"));
+          GRN_LOG(ctx, GRN_LOG_DEBUG,
+                  "%s[wrapper][false] any not Groonga layer condition exists",
+                  tag);
           fast_order_limit = false;
           DBUG_VOID_RETURN;
         }
         unsigned int n_match_againsts = converter.count_match_against(where);
         if (n_match_againsts == 0) {
-          DBUG_PRINT("info",
-                     ("mroonga: fast_order_limit = false: "
-                      "Groonga layer condition but not fulltext search"));
+          GRN_LOG(ctx, GRN_LOG_DEBUG,
+                  "%s[wrapper][false] "
+                  "Groonga layer condition but not fulltext search",
+                  tag);
           fast_order_limit = false;
           DBUG_VOID_RETURN;
         }
         if (n_match_againsts > 1) {
-          DBUG_PRINT("info",
-                     ("mroonga: fast_order_limit = false: "
-                      "MATCH AGAINST must be only one"));
+          GRN_LOG(ctx, GRN_LOG_DEBUG,
+                  "%s[wrapper][false] multiple MATCH AGAINSTs exist",
+                  tag);
           fast_order_limit = false;
           DBUG_VOID_RETURN;
         }
@@ -11214,8 +11231,9 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
 
         if (should_normalize(field, false))
         {
-          DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
-                              "sort by collated value isn't supported yet."));
+          GRN_LOG(ctx, GRN_LOG_DEBUG,
+                  "%s[false] sort by collated value isn't supported yet",
+                  tag);
           fast_order_limit = false;
           break;
         }
@@ -11230,9 +11248,10 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                                  MRN_COLUMN_NAME_KEY,
                                                  strlen(MRN_COLUMN_NAME_KEY));
           } else {
-            DBUG_PRINT("info", ("mroonga: fast_order_limit = false: "
-                                "sort by not primary key value "
-                                "isn't supported in wrapper mode."));
+            GRN_LOG(ctx, GRN_LOG_DEBUG,
+                    "%s[wrapper][false] "
+                    "sort by not primary key value isn't supported",
+                    tag);
             fast_order_limit = false;
             break;
           }
@@ -11244,16 +11263,16 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                                                MRN_COLUMN_NAME_SCORE,
                                                strlen(MRN_COLUMN_NAME_SCORE));
         } else {
-          GRN_LOG(ctx, GRN_LOG_DEBUG,
-                  "[mroonga][fast-order-limit][false] "
-                  "ORDER BY %s()",
-                  func_item->func_name());
+            GRN_LOG(ctx, GRN_LOG_DEBUG,
+                    "%s[false] ORDER BY %s()",
+                    tag,
+                    func_item->func_name());
           fast_order_limit = false;
         }
       } else {
         GRN_LOG(ctx, GRN_LOG_DEBUG,
-                "[mroonga][fast-order-limit][false] "
-                "not ORDER BY column nor ORDER BY MATCH AGAINST");
+                "%s[false] not ORDER BY column nor ORDER BY MATCH AGAINST",
+                tag);
         fast_order_limit = false;
         break;
       }
@@ -11267,7 +11286,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       (*n_sort_keys)++;
     }
     if (fast_order_limit) {
-      DBUG_PRINT("info", ("mroonga: fast_order_limit = true"));
+      GRN_LOG(ctx, GRN_LOG_DEBUG, "%s[true]", tag);
       mrn_fast_order_limit++;
     } else {
       for (int j = 0; j < i; ++j) {
@@ -11279,7 +11298,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     }
     DBUG_VOID_RETURN;
   }
-  DBUG_PRINT("info", ("mroonga: fast_order_limit = false"));
+  GRN_LOG(ctx, GRN_LOG_DEBUG, "%s[false]", tag);
   fast_order_limit = false;
   DBUG_VOID_RETURN;
 }
