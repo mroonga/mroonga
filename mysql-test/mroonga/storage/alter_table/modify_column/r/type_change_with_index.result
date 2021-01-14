@@ -1,0 +1,48 @@
+DROP TABLE IF EXISTS diaries;
+CREATE TABLE diaries (
+id varchar(10) NOT NULL,
+INDEX (id)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+SHOW CREATE TABLE diaries;
+Table	Create Table
+diaries	CREATE TABLE `diaries` (
+  `id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  KEY `id` (`id`)
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+INSERT INTO diaries (id) values ('1');
+SELECT * FROM diaries;
+id
+1
+ALTER TABLE diaries MODIFY id int NOT NULL;
+SHOW CREATE TABLE diaries;
+Table	Create Table
+diaries	CREATE TABLE `diaries` (
+  `id` int(11) NOT NULL,
+  KEY `id` (`id`)
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+INSERT INTO diaries (id) values (2);
+SELECT * FROM diaries;
+id
+1
+2
+SELECT mroonga_command('dump --dump_plugins no --dump_configs no');
+mroonga_command('dump --dump_plugins no --dump_configs no')
+table_create diaries TABLE_NO_KEY
+column_create diaries id COLUMN_SCALAR Int32
+
+table_create diaries#id TABLE_PAT_KEY Int32
+
+table_create mroonga_operations TABLE_NO_KEY
+column_create mroonga_operations record COLUMN_SCALAR UInt32
+column_create mroonga_operations table COLUMN_SCALAR ShortText
+column_create mroonga_operations type COLUMN_SCALAR ShortText
+
+load --table diaries
+[
+["_id","id"],
+[1,1],
+[2,2]
+]
+
+column_create diaries#id index COLUMN_INDEX diaries id
+DROP TABLE diaries;
