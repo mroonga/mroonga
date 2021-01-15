@@ -16,7 +16,7 @@
 
 --source ../../../../include/mroonga/not_embedded.inc
 --source ../../../../include/mroonga/have_mroonga.inc
---source ../../../include/mroonga/load_mroonga_functions.inc
+--source ../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -41,5 +41,5 @@ SELECT mroonga_command('dump --dump_plugins no --dump_configs no');
 
 DROP TABLE diaries;
 
---source ../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
