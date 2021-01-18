@@ -27,8 +27,9 @@ id	name
 9	mroonga_match_escalation_threshold
 10	mroonga_version
 SELECT * FROM variables
-WHERE MATCH (name) AGAINST ("mroonga_default*" IN BOOLEAN MODE);
+WHERE MATCH (name) AGAINST ("mroonga_default*" IN BOOLEAN MODE)
+ORDER BY id;
 id	name
-3	mroonga_default_wrapper_engine
 2	mroonga_default_tokenizer
+3	mroonga_default_wrapper_engine
 DROP TABLE variables;
