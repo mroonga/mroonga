@@ -110,7 +110,7 @@ else
         repository_deb=mysql-apt-config_0.8.12-1_all.deb
         curl -O http://repo.mysql.com/${repository_deb}
         sudo env MYSQL_SERVER_VERSION=mysql-${series} \
-             dpkg -i ${repository_deb}
+             apt -qq install -y ./${repository_deb}
         sudo apt -qq update
         sudo apt -qq -y purge \
              mysql-common \
