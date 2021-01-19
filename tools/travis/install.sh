@@ -96,8 +96,8 @@ else
   case "$MYSQL_VERSION" in
     mysql-*)
       sudo apt -qq update
-      sudo apt -qq -y build-dep mysql-server
       if [ "$version" = "system" ]; then
+        sudo apt -qq -y build-dep mysql-server
         sudo rm -rf /var/lib/mysql
         sudo apt -y install \
              mysql-server \
