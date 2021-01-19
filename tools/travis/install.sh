@@ -150,6 +150,7 @@ else
       sudo rm -rf /var/lib/mysql
       sudo apt -qq -y build-dep percona-server-server${suffix}
       sudo apt -qq -y install \
+           lld \
            percona-server-server${suffix} \
            percona-server-client${suffix} \
            percona-server-test${suffix}
