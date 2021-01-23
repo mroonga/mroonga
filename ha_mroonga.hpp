@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -510,6 +510,7 @@ struct ha_index_option_struct
   const char *token_filters;
   const char *flags;
   const char *lexicon;
+  const char *lexicon_flags;
 };
 #endif
 
@@ -1225,6 +1226,7 @@ private:
                                   int &error);
 #endif
   int storage_create_validate_index(TABLE *table);
+  bool find_lexicon_flags(KEY *key, grn_table_flags *lexicon_flags);
   int storage_create_index_table(TABLE *table, const char *grn_table_name,
                                  grn_obj *grn_table,
                                  KEY *key_info, grn_obj **index_tables,

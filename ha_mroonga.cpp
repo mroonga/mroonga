@@ -1860,6 +1860,51 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
   return found;
 }
 
+static bool mrn_parse_grn_lexicon_flags(THD *thd,
+                                        grn_ctx *ctx,
+                                        const char *flag_names,
+                                        uint flag_names_length,
+                                        grn_table_flags *lexicon_flags)
+{
+  const char *flag_names_end = flag_names + flag_names_length;
+  bool found = false;
+
+  while (flag_names < flag_names_end) {
+    uint rest_length = flag_names_end - flag_names;
+
+    if (*flag_names == '|' || *flag_names == ' ') {
+      flag_names += 1;
+      continue;
+    }
+#define NAME_SIZE(name) (sizeof(name) - 1)
+#define EQUAL(name)                                     \
+    (rest_length >= NAME_SIZE(name) &&                  \
+     memcmp(flag_names, name, NAME_SIZE(name)) == 0)
+    if (EQUAL("NONE")) {
+      flag_names += NAME_SIZE("NONE");
+      found = true;
+    } else if (EQUAL("KEY_LARGE")) {
+      *lexicon_flags |= GRN_OBJ_KEY_LARGE;
+      flag_names += NAME_SIZE("KEY_LARGE");
+      found = true;
+    } else {
+      char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
+      snprintf(invalid_flag_name, MRN_MESSAGE_BUFFER_SIZE,
+               "%.*s",
+               static_cast<int>(rest_length),
+               flag_names);
+      push_warning_printf(thd, MRN_SEVERITY_WARNING,
+                          ER_MRN_INVALID_LEXICON_FLAG_NUM,
+                          ER_MRN_INVALID_LEXICON_FLAG_STR,
+                          invalid_flag_name);
+      break;
+    }
+  }
+#undef EQUAL
+#undef NAME_SIZE
+  return found;
+}
+
 static bool mrn_parse_grn_index_column_flags(THD *thd,
                                              grn_ctx *ctx,
                                              const char *flag_names,
@@ -2032,6 +2077,7 @@ static ha_create_table_option mrn_index_options[] =
   HA_IOPTION_STRING("TOKEN_FILTERS", token_filters),
   HA_IOPTION_STRING("FLAGS", flags),
   HA_IOPTION_STRING("LEXICON", lexicon),
+  HA_IOPTION_STRING("LEXICON_FLAGS", lexicon_flags),
   HA_IOPTION_END
 };
 #endif
@@ -4354,6 +4400,41 @@ int ha_mroonga::storage_create_validate_index(TABLE *table)
   DBUG_RETURN(error);
 }
 
+bool ha_mroonga::find_lexicon_flags(KEY *key, grn_table_flags *lexicon_flags)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool found = false;
+
+#ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  {
+    const char *flags = key->option_struct->lexicon_flags;
+    if (flags) {
+      found = mrn_parse_grn_lexicon_flags(ha_thd(),
+                                          ctx,
+                                          flags,
+                                          strlen(flags),
+                                          lexicon_flags);
+      DBUG_RETURN(found);
+    }
+  }
+#endif
+
+  if (key->comment.length > 0) {
+    mrn::ParametersParser parser(key->comment.str,
+                                 key->comment.length);
+    const char *flags = parser["lexicon_flags"];
+    if (flags) {
+      found = mrn_parse_grn_lexicon_flags(ha_thd(),
+                                          ctx,
+                                          flags,
+                                          strlen(flags),
+                                          lexicon_flags);
+    }
+  }
+
+  DBUG_RETURN(found);
+}
+
 int ha_mroonga::storage_create_index_table(TABLE *table,
                                            const char *grn_table_name,
                                            grn_obj *grn_table,
@@ -4391,7 +4472,7 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
 
   grn_obj *index_type;
   grn_obj *index_table;
-  grn_obj_flags index_table_flags = GRN_OBJ_PERSISTENT;
+  grn_table_flags index_table_flags = GRN_OBJ_PERSISTENT;
   bool is_multiple_column_index = KEY_N_KEY_PARTS(key_info) > 1;
   if (is_multiple_column_index) {
     index_type = grn_ctx_at(ctx, GRN_DB_SHORT_TEXT);
@@ -4415,6 +4496,7 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   } else {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
   }
+  find_lexicon_flags(key_info, &index_table_flags);
 
   {
     mrn::IndexTableName index_table_name(grn_table_name, KEY_NAME(key_info));

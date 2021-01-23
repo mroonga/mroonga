@@ -1,6 +1,6 @@
 /*
   Copyright(C) 2011 Kentoku SHIBA
-  Copyright(C) 2014-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2014-2021 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -44,3 +44,6 @@
 #define ER_MRN_INVALID_TABLE_FLAG_NUM 9510
 #define ER_MRN_INVALID_TABLE_FLAG_STR \
   "The table flag '%-.64s' is invalid. It is ignored"
+#define ER_MRN_INVALID_LEXICON_FLAG_NUM 9511
+#define ER_MRN_INVALID_LEXICON_FLAG_STR \
+  "The lexicon flag '%-.64s' is invalid. It is ignored"
