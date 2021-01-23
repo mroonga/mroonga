@@ -4549,7 +4549,6 @@ int ha_mroonga::storage_create_index(TABLE *table, const char *grn_table_name,
   mrn::ParametersParser parser(key_info->comment.str,
                                key_info->comment.length);
   if (!lexicon_name) {
-    parser.parse();
     lexicon_name = parser.lexicon();
   }
   if (lexicon_name) {
@@ -4664,7 +4663,6 @@ int ha_mroonga::storage_create_indexes(TABLE *table, const char *grn_table_name,
       mrn::ParametersParser parser(key_info->comment.str,
                                    key_info->comment.length);
       if (!lexicon_name) {
-        parser.parse();
         lexicon_name = parser.lexicon();
       }
       if (!lexicon_name) {
@@ -5444,7 +5442,6 @@ int ha_mroonga::storage_open_indexes(const char *name)
     mrn::ParametersParser parser(key_info->comment.str,
                                  key_info->comment.length);
     if (!lexicon_name) {
-      parser.parse();
       lexicon_name = parser.lexicon();
     }
     if (lexicon_name) {
@@ -10110,7 +10107,6 @@ int ha_mroonga::drop_index(MRN_SHARE *target_share, uint key_index)
     }
 #endif
     if (!lexicon_name) {
-      parser.parse();
       lexicon_name = parser.lexicon();
     }
   }
@@ -10508,7 +10504,6 @@ void ha_mroonga::set_tokenizer(grn_obj *lexicon, KEY *key)
   if (key->comment.length > 0) {
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
-    parser.parse();
     const char *tokenizer = parser.tokenizer();
     if (tokenizer) {
       set_tokenizer(lexicon, tokenizer, strlen(tokenizer));
@@ -10597,7 +10592,6 @@ bool ha_mroonga::have_custom_normalizer(KEY *key) const
   if (key->comment.length > 0) {
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
-    parser.parse();
     DBUG_RETURN(parser["normalizer"] != NULL);
   }
 
@@ -10621,7 +10615,6 @@ void ha_mroonga::set_normalizer(grn_obj *lexicon, KEY *key)
   if (key->comment.length > 0) {
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
-    parser.parse();
     const char *normalizer = parser["normalizer"];
     if (normalizer) {
       set_normalizer(lexicon, key, normalizer, strlen(normalizer));
