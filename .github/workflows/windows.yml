@@ -110,6 +110,13 @@ jobs:
             git clone --quiet --depth 1 --recursive `
               https://github.com/groonga/groonga.git `
               storage\mroonga\vendor\groonga
+            pushd storage\mroonga\vendor\groonga\vendor
+            ruby download_lz4.rb
+            ruby download_mecab.rb
+            ruby download_message_pack.rb
+            ruby download_rapidjson.rb
+            ruby download_xxhash.rb
+            popd
           } else {
             Invoke-WebRequest `
               -Uri "https://packages.groonga.org/source/groonga/groonga-latest.zip" `
@@ -119,15 +126,6 @@ jobs:
             Move-Item groonga-* storage\mroonga\vendor\groonga
           }
           Remove-Item storage\mroonga\vendor\groonga\test -Recurse -Force
-          cd storage\mroonga\vendor\groonga\vendor
-          ruby download_lz4.rb
-          ruby download_mecab.rb
-          ruby download_message_pack.rb
-          ruby download_rapidjson.rb
-          # TODO: Remove this if when Groonga 10.0.8 is released.
-          if ("${{ matrix.use-master }}" -eq "yes") {
-            ruby download_xxhash.rb
-          }
       - name: Prepare groonga-normalizer-mysql
         run: |
           cd ..\source
