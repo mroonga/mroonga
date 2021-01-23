@@ -116,6 +116,7 @@ jobs:
             ruby download_message_pack.rb
             ruby download_rapidjson.rb
             ruby download_xxhash.rb
+            ruby download.rb zstd
             popd
           } else {
             Invoke-WebRequest `
