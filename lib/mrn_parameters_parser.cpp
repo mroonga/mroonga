@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -52,6 +52,7 @@ namespace mrn {
                                      unsigned int input_length)
     : input_(input),
       input_length_(input_length),
+      parsed_(false),
       parameters_(NULL) {
   }
 
@@ -63,7 +64,11 @@ namespace mrn {
     list_free(parameters_, false);
   }
 
-  void ParametersParser::parse() {
+  void ParametersParser::ensure_parsed() {
+    if (parsed_) {
+      return;
+    }
+
     const char *current = input_;
     const char *end = input_ + input_length_;
     for (; current < end; ++current) {
@@ -105,6 +110,7 @@ namespace mrn {
         break;
       }
     }
+    parsed_ = true;
   }
 
   const char *ParametersParser::parse_value(const char *current,
@@ -170,6 +176,7 @@ namespace mrn {
   }
 
   const char *ParametersParser::operator[](const char *key) {
+    ensure_parsed();
     for (LIST *next = parameters_; next; next = next->next) {
       Parameter *parameter = static_cast<Parameter *>(next->data);
       if (strcasecmp(parameter->key_, key) == 0) {

@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@ namespace mrn {
   public:
     ParametersParser(const char *input, unsigned int input_length);
     ~ParametersParser();
-    void parse();
     const char *operator[](const char *key);
     const char *tokenizer();
     const char *lexicon();
@@ -37,8 +36,10 @@ namespace mrn {
     const char *input_;
     unsigned int input_length_;
 
+    bool parsed_;
     LIST *parameters_;
 
+    void ensure_parsed();
     bool is_white_space(char character) {
       switch (character) {
       case ' ':

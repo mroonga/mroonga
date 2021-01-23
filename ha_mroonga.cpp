@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
   Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -4372,7 +4372,6 @@ int ha_mroonga::storage_create_index_table(TABLE *table,
   mrn::ParametersParser parser(key_info->comment.str,
                                key_info->comment.length);
   if (!lexicon_name) {
-    parser.parse();
     lexicon_name = parser.lexicon();
   }
   if (lexicon_name) {
@@ -10689,7 +10688,6 @@ bool ha_mroonga::find_index_column_flags(KEY *key, grn_column_flags *index_colum
   if (key->comment.length > 0) {
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
-    parser.parse();
     const char *flags = parser["flags"];
     if (!flags) {
       // Deprecated. It's for backward compatibility.
@@ -10723,7 +10721,6 @@ void ha_mroonga::set_token_filters(grn_obj *lexicon, KEY *key)
   if (key->comment.length > 0) {
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
-    parser.parse();
     const char *token_filters = parser["token_filters"];
     if (token_filters) {
       set_token_filters(lexicon, token_filters, strlen(token_filters));
@@ -14970,7 +14967,6 @@ int ha_mroonga::generic_disable_index(int i, KEY *key_info)
   mrn::ParametersParser parser(key_info->comment.str,
                                key_info->comment.length);
   if (!lexicon_name) {
-    parser.parse();
     lexicon_name = parser.lexicon();
   }
   if (lexicon_name) {
@@ -15530,7 +15526,6 @@ int ha_mroonga::storage_recreate_indexes(THD *thd)
 
     mrn::ParametersParser parser(key_info->comment.str,
                                  key_info->comment.length);
-    parser.parse();
     if (parser.lexicon())
       continue;
 
