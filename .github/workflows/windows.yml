@@ -125,6 +125,10 @@ jobs:
             Expand-Archive groonga-latest.zip .
             Remove-Item groonga-latest.zip
             Move-Item groonga-* storage\mroonga\vendor\groonga
+            pushd storage\mroonga\vendor\groonga\vendor
+            # TODO: Remove this when Groonga 10.2.0 is released.
+            Remove-Item zstd-*
+            popd
           }
           Remove-Item storage\mroonga\vendor\groonga\test -Recurse -Force
       - name: Prepare groonga-normalizer-mysql
