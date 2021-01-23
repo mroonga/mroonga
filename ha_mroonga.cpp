@@ -10674,12 +10674,12 @@ bool ha_mroonga::find_index_column_flags(KEY *key, grn_column_flags *index_colum
 
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
   {
-    const char *names = key->option_struct->flags;
-    if (names) {
+    const char *flags = key->option_struct->flags;
+    if (flags) {
       found = mrn_parse_grn_index_column_flags(ha_thd(),
                                                ctx,
-                                               names,
-                                               strlen(names),
+                                               flags,
+                                               strlen(flags),
                                                index_column_flags);
       DBUG_RETURN(found);
     }
@@ -10690,16 +10690,16 @@ bool ha_mroonga::find_index_column_flags(KEY *key, grn_column_flags *index_colum
     mrn::ParametersParser parser(key->comment.str,
                                  key->comment.length);
     parser.parse();
-    const char *names = parser["flags"];
-    if (!names) {
+    const char *flags = parser["flags"];
+    if (!flags) {
       // Deprecated. It's for backward compatibility.
-      names = parser["index_flags"];
+      flags = parser["index_flags"];
     }
-    if (names) {
+    if (flags) {
       found = mrn_parse_grn_index_column_flags(ha_thd(),
                                                ctx,
-                                               names,
-                                               strlen(names),
+                                               flags,
+                                               strlen(flags),
                                                index_column_flags);
     }
   }
