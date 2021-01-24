@@ -125,10 +125,6 @@ jobs:
             Expand-Archive groonga-latest.zip .
             Remove-Item groonga-latest.zip
             Move-Item groonga-* storage\mroonga\vendor\groonga
-            pushd storage\mroonga\vendor\groonga\vendor
-            # TODO: Remove this when Groonga 10.2.0 is released.
-            Remove-Item zstd-*
-            popd
           }
           Remove-Item storage\mroonga\vendor\groonga\test -Recurse -Force
       - name: Prepare groonga-normalizer-mysql
@@ -154,12 +150,14 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
           mkdir ..\build
           cd ..\build
+          rem TODO: Remove -DGRN_WITH_ZSTD=no when Groonga 10.2.0 is released.
           cmake ..\source ^
             -A "${{ matrix.cmake-architecture }}" ^
             -G "Visual Studio 16 2019" ^
             -DMRN_GROONGA_EMBED=OFF ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF ^
-            -DGRN_WITH_MRUBY=ON
+            -DGRN_WITH_MRUBY=ON ^
+            -DGRN_WITH_ZSTD=no
       - name: Create package
         run: |
           cd ..\build
