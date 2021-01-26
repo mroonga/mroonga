@@ -18,6 +18,7 @@ RUN \
   yum groupinstall -y ${quiet} "Development Tools" && \
   yum install -y ${quiet} \
     mysql-community-devel \
+    arrow-devel-2.0.0-1.el7.x86_64 \
     cmake3 \
     cyrus-sasl-devel \
     devtoolset-${DEVTOOLSET_VERSION} \
