@@ -201,9 +201,13 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     mysql_protobuf_include_dir="$ac_mysql_source_dir/extra/protobuf/protobuf-3.11.4/src"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_protobuf_include_dir"
   fi
-  if test -d "$ac_mysql_build_dir/extra/zlib"; then
+  if test -d "$ac_mysql_source_dir/extra/zlib"; then
     mysql_zlib_include_dir="$ac_mysql_source_dir/extra/zlib"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_zlib_include_dir"
+  fi
+  if test -d "$ac_mysql_build_dir/extra/zlib"; then
+    mysql_zlib_config_include_dir="$ac_mysql_build_dir/extra/zlib"
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_zlib_config_include_dir"
   fi
   MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir"
   MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
