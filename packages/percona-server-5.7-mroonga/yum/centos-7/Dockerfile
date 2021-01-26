@@ -12,6 +12,7 @@ RUN \
   yum groupinstall -y ${quiet} "Development Tools" && \
   yum install -y ${quiet} \
     Percona-Server-devel-57 \
+    arrow-devel-2.0.0-1.el7.x86_64 \
     cmake \
     cyrus-sasl-devel \
     gcc \
