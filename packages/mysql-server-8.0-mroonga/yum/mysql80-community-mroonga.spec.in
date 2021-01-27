@@ -1,6 +1,6 @@
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
 
-%define mysql_version_default 8.0.22
+%define mysql_version_default 8.0.23
 %define mysql_release_default 1
 %define mysql_dist_default    el%{_centos_ver}
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-8.0-community/el/%{_centos_ver}/SRPMS/
@@ -80,6 +80,9 @@ if [ ! -d ${mysql_source} ]; then
         -DINSTALL_LAYOUT=RPM \
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
         -DWITH_BOOST=../.. \
+%if %{_centos_ver} == 7
+        -DWITH_ZLIB=bundled \
+%endif
         -DINSTALL_LIBDIR="%{_lib}/mysql" \
         -DINSTALL_PLUGINDIR="%{_lib}/mysql/plugin"
     popd && popd

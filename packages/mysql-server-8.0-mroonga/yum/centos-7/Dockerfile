@@ -47,6 +47,5 @@ RUN \
     tar \
     time \
     wget \
-    which \
-    zlib-devel && \
+    which && \
   yum clean ${quiet} all
