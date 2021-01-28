@@ -21,11 +21,65 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.10 - 2020-12-29"
-msgstr "10.10リリース - 2020-12-29"
+msgid "Release 10.11 - 2021-01-29"
+msgstr "10.11リリース - 2021-01-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Added support for ``lexicon_flags`` parameter."
+msgstr "``lexicon_flags`` パラメータをサポートしました。"
+
+msgid ""
+"We can add ``KEY_LARGE`` flag to a ``USING HASH`` (non full-text search "
+"index) index as below by this parameter."
+msgstr ""
+"このパラメータを使うことで、以下のように(全文検索インデックスではない)　"
+"``USING HASH`` なインデックスに ``KEY_LARGE`` フラグを追加できます。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.51, 5.7.33, and 8.0.23."
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.51、5.7.33、MySQL 8.0.23をサポートしまし"
+"た。"
+
+msgid "There are below restrictions in the MySQL8 package."
+msgstr "MySQL8 のパッケージには以下の制限があります。"
+
+msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
+msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
+
+msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
+msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[:doc:`/reference/optimizations`] Fixed a bug that the fast order limit "
+"optimization doen't work when \"WHERE COLUMN IN (SUBQUERY)\" exists."
+msgstr ""
+"[:doc:`/reference/optimizations`] \"WHERE COLUMN IN (SUBQUERY)\" が存在する"
+"時、 \"fast order limit\" の最適化が効かない問題を修正しました。"
+
+msgid ""
+"Fixed a bug that we can't use in place ``ALTER TABLE`` when we modify the "
+"data type of a column that has any indexes."
+msgstr ""
+"インデックスが付与されたカラムのデータ型を変更する時 インプレースの ``ALTER "
+"TABLE`` が使えない問題を修正しました。"
+
+msgid ""
+"This bug occur when we execute ``ALTER TABLE`` in ``ALGORITHM=INPLACE``. "
+"Therefore, this bug doesn't occur when we use ``ALTER TABLE`` in "
+"``ALGORITHM=COPY``"
+msgstr ""
+"この問題は、 ``ALTER TABLE`` を ``ALGORITHM=INPLACE`` で実行した時に発生しま"
+"す。したがって、 ``ALTER TABLE`` を ``ALGORITHM=COPY`` で実行した場合は、発生"
+"しません。"
+
+msgid "Release 10.10 - 2020-12-29"
+msgstr "10.10リリース - 2020-12-29"
 
 msgid ""
 "[:doc:`/tutorial/storage`] Added support for customize table flags. [Gitter]"
@@ -87,15 +141,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`] MySQL 5.6.50、5.7.32、MySQL 8.0.22をサポートしまし"
 "た。"
-
-msgid "There are below restrictions in the MySQL8 package."
-msgstr "MySQL8 のパッケージには以下の制限があります。"
-
-msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
-msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
-
-msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
-msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
 
 msgid "Dropped support for MariaDB 10.1 except Ubuntu 18.04 LTS."
 msgstr "Ubuntu 18.04 LTS以外のMariaDB 10.1のサポートをやめました。"
@@ -276,9 +321,6 @@ msgstr "WindowsのMariaDB 10.1のサポートをやめました。"
 
 msgid "Because MariaDB 10.1 will be EOL soon."
 msgstr "MariaDB 10.1はもうすぐEOLになるためです。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[:doc:`/install/ubuntu`] Fixed a bug that Mroonga for Ubuntu 19.10 (Eoan "

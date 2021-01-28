@@ -5,6 +5,43 @@
 News
 ====
 
+.. _release-10-11:
+
+Release 10.11 - 2021-01-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Added support for ``lexicon_flags`` parameter.
+
+  * We can add ``KEY_LARGE`` flag to a ``USING HASH`` (non full-text search index) index as below by this parameter.
+
+    .. code-block::
+
+      CREATE TABLE memos (
+        id INT UNSIGNED PRIMARY KEY,
+        title VARCHAR(64) NOT NULL,
+        UNIQUE INDEX (title) USING HASH COMMENT 'lexicon_flags "KEY_LARGE"'
+      ) DEFAULT CHARSET=utf8mb4;
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.51, 5.7.33, and 8.0.23.
+
+  * There are below restrictions in the MySQL8 package.
+
+    * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+    * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
+
+Fixes
+^^^^^
+
+* [:doc:`/reference/optimizations`] Fixed a bug that the fast order limit optimization doen't work when "WHERE COLUMN IN (SUBQUERY)" exists.
+
+* Fixed a bug that we can't use in place ``ALTER TABLE`` when we modify the data type of a column that has any indexes.
+
+  * This bug occur when we execute ``ALTER TABLE`` in ``ALGORITHM=INPLACE``.
+    Therefore, this bug doesn't occur when we use ``ALTER TABLE`` in ``ALGORITHM=COPY``
+
 .. _release-10-10:
 
 Release 10.10 - 2020-12-29
