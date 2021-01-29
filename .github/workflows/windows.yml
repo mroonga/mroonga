@@ -85,7 +85,11 @@ jobs:
         id: info
         run: |
           $MROONGA_VERSION = "$(Get-Content version)"
-          $ARTIFACT_NAME = "mariadb-${{ matrix.mariadb-version }}-with-mroonga-${MROONGA_VERSION}-${{ matrix.package-platform }}"
+          $ARTIFACT_NAME = "mariadb-${{ matrix.mariadb-version }}-with-mroonga-${MROONGA_VERSION}"
+          if ("${{ matrix.use-master }}" -eq "yes") {
+            $ARTIFACT_NAME += "-with-groonga-master"
+          }
+          $ARTIFACT_NAME += "-${{ matrix.package-platform }}"
           Write-Output "::set-output name=mroonga-version::${MROONGA_VERSION}"
           Write-Output "::set-output name=artifact-name::${ARTIFACT_NAME}"
       - name: Prepare MariaDB
