@@ -1,5 +1,3 @@
-.. highlightlang:: none
-
 Wrapper mode
 ============
 

@@ -1,5 +1,3 @@
-.. highlightlang:: none
-
 Storage mode
 ============
 
