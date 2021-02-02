@@ -558,18 +558,19 @@ select a refined search. Users benefit from faceted search:
 * Users don't get boared "not match" page. Faceted search showes only
   refined searches that has one or more matched items.
 
-Faceted search needs multiple `GROUP BY` operations against searched
-result set. To do faceted search by SQL, multiple `SELECT` requests
+Faceted search needs multiple ``GROUP BY`` operations against searched
+result set. To do faceted search by SQL, multiple ``SELECT`` requests
 are needed. It is not effective.
 
 Groonga can do faceted search by only one groonga command. It is
-effective. Groonga has the `select` command that can search records
-with faceted search. Faceted search is called as `drilldown` in
+effective. Groonga has the ``select`` command that can search records
+with faceted search. Faceted search is called as "drilldown" in
 Groonga. See `Groonga's documentation about select command
-<http://groonga.org/docs/reference/commands/select.html>`_ for more details.
+<http://groonga.org/docs/reference/commands/select.html>`_ for more
+details.
 
-Mroonga provides `mroonga_command()` function. You can run groonga
-command in SQL by the function. But you should use only `select`
+Mroonga provides ``mroonga_command()`` function. You can run Groonga
+command in SQL by the function. But you should use only ``select``
 command. Other commands that change schema or data may break
 consistency.
 
@@ -610,14 +611,14 @@ Here is the sample data for execution examples:
                   '2013-03',
                   'MySQL');
 
-Each record has `groonga` or `MySQL` as `tag`. Each record also has
-`year` and `year_month`. You can use `tag`, `year` and `year_month` as
-faceted search keys.
+Each record has ``groonga`` or ``MySQL`` as ``tag``. Each record also
+has ``year`` and ``year_month``. You can use ``tag``, ``year`` and
+``year_month`` as faceted search keys.
 
 Groonga calls faceted search as drilldown. So parameter key in Groonga
-is `--drilldown`. Groonga returns search result as JSON. So
-`mroonga_command()` also returns search result as JSON. It is not SQL
-friendly. You need to parse search result JSON by yourself.
+is ``--drilldown``. Groonga returns search result as JSON. So
+``mroonga_command()`` also returns search result as JSON. It is not
+SQL friendly. You need to parse search result JSON by yourself.
 
 Here is the example of faceted search by all available faceted search
 keys (result JSON is pretty printed):
@@ -647,21 +648,96 @@ keys (result JSON is pretty printed):
    -- +-----------------------------+
    -- 1 row in set (0.00 sec)
 
-上記の検索結果の読み方を説明します。
-ファセット検索を実行すると、指定したカラムの値毎に、その値を持つレコードが何件あるかを出力します。
-上記の例であれば、 `tag` カラムと `year` カラム、 `year_month` カラム毎にどの値が何件あるかを出力しています。
+The first element ``[[3], [["_id","UInt32"]]]`` is normal search
+result. It's not faceted search result.
 
-`_key` には、ファセット検索のキーにしたカラムの値が入ります。 `_nsubrecs` には、 `_key` の値をもつレコードの
-件数が入ります。
+The second, third and forth elements are faceted search results:
 
-つまり、 `tag` カラムをキーにしたファセット検索の結果は、 `["groonga",1],["MySQL",2]` となっているので、
-`tag` カラムに `groonga` という値を持つレコードが1件、 `MySQL` という値を持つレコードが2件あるということです。
+.. code-block:: json
 
-同様に、 `year` カラムをキーにしたファセット検索の結果は `[1356998400.0,3]` なので、 `year` カラムに `1356998400.0`
-という値を持つレコードは3件あり、 `year_month` カラムは、 `["2013-04",2], ["2013-03",1]` という結果なので、
-`year_month` カラムに `2013-04` という値を持つレコードが2件、 `2013-03` という値を持つレコードが1件あることがわかります。
+   [[2],
+    [["_key","ShortText"],
+     ["_nsubrecs","Int32"]],
+    ["groonga",1],
+    ["MySQL",2]]
 
-See `Groonga's documentation about select command <http://groonga.org/docs/reference/commands/select.html>`_ for more
+.. code-block:: json
+
+   [[1],
+    [["_key","Time"],
+     ["_nsubrecs","Int32"]],
+    [1356998400.0,3]]
+
+.. code-block:: json
+
+   [[2],
+    [["_key","ShortText"],
+     ["_nsubrecs","Int32"]],
+    ["2013-04",2],
+    ["2013-03",1]]
+
+The order of faceted search results is corresponding to the value of
+``--drilldown``. In this example, we specified ``tag``, ``year`` and
+``year_month`` as ``--drilldown`` value. So the first faceted search
+result is for ``tag``, the second one is for ``year`` and the third
+one is for ``year_month``.
+
+Each faceted search result uses the following format. This is the same
+as normal search result:
+
+.. code-block:: text
+
+   [[${THE_NUMBER_OF_RECORDS}],
+    [[${OUTPUT_COLUMN_NAME_0}, ${OUTPUT_COLUMN_TYPE_0}],
+     [${OUTPUT_COLUMN_NAME_1}, ${OUTPUT_COLUMN_TYPE_1}],
+     ...,
+     [${OUTPUT_COLUMN_NAME_N}, ${OUTPUT_COLUMN_TYPE_N}]]
+    [${OUTPUT_COLUMN_VALUE_0_FOR_RECORD_0},
+     ${OUTPUT_COLUMN_VALUE_1_FOR_RECORD_0},
+     ...,
+     ${OUTPUT_COLUMN_VALUE_N_FOR_RECORD_0}],
+    [${OUTPUT_COLUMN_VALUE_0_FOR_RECORD_1},
+     ${OUTPUT_COLUMN_VALUE_1_FOR_RECORD_1},
+     ...,
+     ${OUTPUT_COLUMN_VALUE_N_FOR_RECORD_1}],
+    ...
+    [${OUTPUT_COLUMN_VALUE_0_FOR_RECORD_M},
+     ${OUTPUT_COLUMN_VALUE_1_FOR_RECORD_M},
+     ...,
+     ${OUTPUT_COLUMN_VALUE_N_FOR_RECORD_M}]]
+
+The ``_key`` column value in faceted search result shows faceted
+search key.
+
+For example, the first faceted search result (the faceted search
+result for ``tag``) shows that matched records (all records in this
+case) have ``groonga`` and ``MySQL`` as ``tag`` value:
+
+.. code-block:: json
+
+   [[2],
+    [["_key","ShortText"],
+     ["_nsubrecs","Int32"]],
+    ["groonga",1],
+    ["MySQL",2]]
+
+The ``_nsubrecs`` column value in faceted search result shows the
+number of records that have the corresponding faceted search key.
+
+For example, the first faceted search result (the faceted search
+result for ``tag``) shows that there are 1 record that has ``groonga``
+as ``tag`` value and 2 records that have ``MySQL`` as ``tag`` value:
+
+.. code-block:: json
+
+   [[2],
+    [["_key","ShortText"],
+     ["_nsubrecs","Int32"]],
+    ["groonga",1],
+    ["MySQL",2]]
+
+See `Groonga's documentation about select command
+<http://groonga.org/docs/reference/commands/select.html>`_ for more
 details.
 
 How to search by regular expression
