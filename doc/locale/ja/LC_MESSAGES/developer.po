@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2019-10-31 15:55+0900\n"
+"PO-Revision-Date: 2021-02-02 11:33+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -137,30 +137,6 @@ msgstr ""
 
 msgid "For adding and updating documents, please refer the description below."
 msgstr "ドキュメントの追加/変更方法についても詳しくは後述します。"
-
-msgid "Release"
-msgstr "リリースについて"
-
-msgid "We release the software when all tickets of the roadmap are closed."
-msgstr "リリースはロードマップ上のチケットが全て完了となった段階で行います。"
-
-msgid "We do the following to release."
-msgstr "リリースにあたっては以下の作業を行っています。"
-
-msgid "Create source packages"
-msgstr "ソースパッケージ作成"
-
-msgid "Create binary packages"
-msgstr "バイナリパッケージ作成"
-
-msgid "Update documents on http://mroonga.org"
-msgstr "ドキュメント(http://mroonga.org)のアップデート"
-
-msgid "Announce the release"
-msgstr "リリースの告知"
-
-msgid "(This section will be moved to :doc:`developer/release`)."
-msgstr ":doc:`developer/release` へ移動予定。"
 
 msgid "Development environment"
 msgstr "開発環境"
