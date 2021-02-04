@@ -76,13 +76,6 @@ msgid "Install groonga-tokenizer-mecab package::"
 msgstr "groonga-tokenizer-mecabをインストール::"
 
 # 5e3232071ae84bdfbce77f4bee3e0ae4
-msgid "CentOS 7 (with the Oracle MySQL 5.6 package)"
-msgstr "CentOS 7（OracleのMySQL 5.6パッケージを利用）"
-
-msgid "You can use Oracle's MySQL packages version 5.6 on CentOS 7."
-msgstr "CentOS 7では、OracleのMySQL 5.6パッケージを利用できます。"
-
-# 5e3232071ae84bdfbce77f4bee3e0ae4
 msgid "CentOS 7 (with the Oracle MySQL 5.7 package)"
 msgstr "CentOS 7（OracleのMySQL 5.7パッケージを利用）"
 

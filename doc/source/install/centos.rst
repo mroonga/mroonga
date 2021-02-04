@@ -30,28 +30,6 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
-.. _centos-7-oracle-56:
-
-CentOS 7 (with the Oracle MySQL 5.6 package)
---------------------------------------------
-
-You can use Oracle's MySQL packages version 5.6 on CentOS 7.
-
-Install::
-
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
-  % sudo yum install -y --enablerepo=epel mysql-community-mroonga
-  (% sudo systemctl start mysqld)
-  (% sudo mysqladmin -u root password 'new-password')
-
-If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
-tokenizer, install groonga-tokenizer-mecab package.
-
-Install groonga-tokenizer-mecab package::
-
-  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
-
 .. _centos-7-oracle-57:
 
 CentOS 7 (with the Oracle MySQL 5.7 package)
