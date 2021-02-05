@@ -21,11 +21,30 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 10.11 - 2021-01-29"
-msgstr "10.11リリース - 2021-01-29"
+msgid "Release 11.00 - 2021-02-09"
+msgstr "11.00リリース - 2021-02-09"
+
+msgid ""
+"This is a major version up! But It keeps backward compatibility. You can "
+"upgrade to 11.00 without rebuilding database."
+msgstr ""
+"メジャーバージョンアップです! メジャーバージョンアップですが、互換性は壊れて"
+"いないので、データベースを再構築することなく11.00へアップグレードできます。"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Dropped support for MySQL 5.6"
+msgstr "[:doc:`/install/centos`] MySQL 5.6のサポートをやめました。"
+
+msgid "Because it reached EOL at Feb 1, 2021."
+msgstr "2021年2月1日でEOLとなったためです。"
+
+msgid "[:doc:`/install/centos`] Dropped support for Percona Server 5.6"
+msgstr "[:doc:`/install/centos`] Percona Server 5.6 のサポートをやめました。"
+
+msgid "Release 10.11 - 2021-01-29"
+msgstr "10.11リリース - 2021-01-29"
 
 msgid "Added support for ``lexicon_flags`` parameter."
 msgstr "``lexicon_flags`` パラメータをサポートしました。"
