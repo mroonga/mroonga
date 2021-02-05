@@ -42,50 +42,19 @@ extern "C" {
 #  define mrn_override
 #endif
 
-#if (MYSQL_VERSION_ID >= 50603) || defined(MRN_MARIADB_P)
-#  define MRN_HANDLER_HAVE_HA_RND_NEXT 1
-#  define MRN_HANDLER_HAVE_HA_RND_POS 1
-#  define MRN_HANDLER_HAVE_HA_INDEX_READ_MAP 1
-#  define MRN_HANDLER_HAVE_HA_INDEX_READ_IDX_MAP 1
-#  define MRN_HANDLER_HAVE_HA_INDEX_NEXT 1
-#  define MRN_HANDLER_HAVE_HA_INDEX_PREV 1
-#  define MRN_HANDLER_HAVE_HA_INDEX_FIRST 1
-#  define MRN_HANDLER_HAVE_HA_INDEX_LAST 1
-#  define MRN_HANDLER_HAVE_HA_INDEX_NEXT_SAME 1
-#endif
-
-#if (MYSQL_VERSION_ID >= 50604) || defined(MRN_MARIADB_P)
-#  define MRN_HANDLER_HAVE_HA_CLOSE 1
-#  define MRN_HANDLER_HAVE_MULTI_RANGE_READ 1
-#endif
-
-#if (MYSQL_VERSION_ID >= 50607)
-#  define MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER 1
-#  define MRN_HANDLER_HAVE_HA_PREPARE_INPLACE_ALTER_TABLE 1
-#  define MRN_HANDLER_HAVE_HA_INPLACE_ALTER_TABLE 1
-#  define MRN_HANDLER_HAVE_HA_COMMIT_INPLACE_ALTER_TABLE 1
-#endif
-
 #ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
-#  if MYSQL_VERSION_ID >= 50611
-#    define MRN_HANDLER_HAVE_HA_INDEX_READ_LAST_MAP
-#  endif
 #endif
 
 #ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
 #endif
 
-#if MYSQL_VERSION_ID >= 50607
-#  define MRN_HANDLER_HAVE_SET_HA_SHARE_REF
-#endif
-
 #if (MYSQL_VERSION_ID >= 100505) && defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_DELETE_TABLE_HAVE_HTON_DROP_TABLE
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_BIG_TABLES
 #elif defined(BIG_TABLES)
 #  define MRN_BIG_TABLES
@@ -135,12 +104,11 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_FAKE_START_STMT
 #endif
 
-#if MYSQL_VERSION_ID >= 50607 && \
-    (!defined(MRN_MARIADB_P) || MYSQL_VERSION_ID < 100008)
+#ifndef MRN_MARIADB_P
 #  define MRN_HAVE_HA_EXTRA_EXPORT
 #endif
 
-#if MYSQL_VERSION_ID >= 50617 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HAVE_HA_EXTRA_SECONDARY_SORT_ROWID
 #endif
 
@@ -161,22 +129,20 @@ extern "C" {
 #  define MRN_HAVE_MYSQL_TYPE_TYPED_ARRAY
 #endif
 
-#if MYSQL_VERSION_ID >= 50604 && !defined(MRN_MARIADB_P)
-#  define MRN_TIMESTAMP_USE_TIMEVAL
-#elif defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_TIMESTAMP_USE_MY_TIME_T
 #  if MYSQL_VERSION_ID >= 100100
 #    define MRN_TIMESTAMP_USE_MY_TIME_T_AND_POS
 #  endif
 #else
-#  define MRN_TIMESTAMP_USE_LONG
+#  define MRN_TIMESTAMP_USE_TIMEVAL
 #endif
 
-#if MYSQL_VERSION_ID < 50706 || defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HAVE_TL_WRITE_DELAYED
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HAVE_TL_WRITE_CONCURRENT_DEFAULT
 #endif
 
@@ -184,15 +150,7 @@ extern "C" {
 #  define MRN_HANDLER_AUTO_REPAIR_HAVE_ERROR
 #endif
 
-#if MYSQL_VERSION_ID >= 50604
-#  define MRN_JOIN_TAB_HAVE_CONDITION
-#endif
-
-#if MYSQL_VERSION_ID >= 50600
-#  define MRN_HAVE_HA_REBIND_PSI
-#endif
-
-#if MYSQL_VERSION_ID >= 50612 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HAVE_POINT_XY
 #endif
 
@@ -215,11 +173,11 @@ extern "C" {
 #  define MRN_SUPPORT_PARTITION
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_FLUSH_LOGS_HAVE_BINLOG_GROUP_FLUSH
 #endif
 
-#if MYSQL_VERSION_ID < 50706 || defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HAVE_HTON_ALTER_TABLE_FLAGS
 #endif
 
@@ -231,30 +189,28 @@ extern "C" {
 #  endif
 #endif
 
-#if MYSQL_VERSION_ID < 50706 || defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
 #endif
 
-#if MYSQL_VERSION_ID < 50706 || defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
 #endif
 
-#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
-#  if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
 typedef alter_table_operations mrn_alter_flags;
 typedef alter_table_operations mrn_alter_table_flags;
-#    define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
+#  define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
   ALTER_ ## name
-#    define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) ALTER_ ## name
-#    define MRN_ALTER_INFO_FLAG(name) ALTER_ ## name
-#  else
+#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) ALTER_ ## name
+#  define MRN_ALTER_INFO_FLAG(name) ALTER_ ## name
+#else
 typedef Alter_inplace_info::HA_ALTER_FLAGS mrn_alter_flags;
-#    define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
+#  define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
   alter_inplace_info_name
-#    define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) \
+#  define MRN_ALTER_INPLACE_INFO_ALTER_FLAG(name) \
   Alter_inplace_info::ALTER_ ## name
-#    define MRN_ALTER_INFO_FLAG(name) Alter_info::ALTER_ ## name
-#  endif
+#  define MRN_ALTER_INFO_FLAG(name) Alter_info::ALTER_ ## name
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
@@ -288,25 +244,7 @@ typedef uint mrn_alter_table_flags;
   MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_INDEX, DROP_INDEX)
 #endif
 
-#if ((defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203)) || \
-  (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50711)
-#  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN                     \
-  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_VIRTUAL_COLUMN,   \
-                              ADD_VIRTUAL_COLUMN)
-#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN                 \
-  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_STORED_BASE_COLUMN, \
-                              ADD_STORED_BASE_COLUMN)
-#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN            \
-  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_STORED_GENERATED_COLUMN, \
-                              ADD_STORED_GENERATED_COLUMN)
-#else
-#  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN 0
-#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN \
-  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_COLUMN, ADD_COLUMN)
-#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN 0
-#endif
-
-#if MYSQL_VERSION_ID >= 50700 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_RECORDS_RETURN_ERROR
 #endif
 
@@ -318,8 +256,7 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
 #endif
 
-#if MYSQL_VERSION_ID < 50726 ||                         \
-  (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100315)
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100315
 #  define MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
 #endif
 
@@ -377,7 +314,7 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_UPGRADE_TABLE
 #endif
 
-#if MYSQL_VERSION_ID >= 50631 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
 #  define MRN_HANDLER_HAVE_GET_FOREIGN_DUP_KEY
 #endif
@@ -419,7 +356,7 @@ typedef uint mrn_alter_table_flags;
   typedef uchar * mrn_write_row_buf_t;
 #endif
 
-#if MYSQL_VERSION_ID >= 50723 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
 #endif
 
@@ -457,10 +394,10 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_RELEASE_AUTO_INCREMENT_OVERRIDE
 #endif
 
-#if MYSQL_VERSION_ID >= 50700 && !defined(MRN_MARIADB_P)
-#  define MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST const
-#else
+#ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST
+#else
+#  define MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST const
 #endif
 
 #if MYSQL_VERSION_ID < 80019 || defined(MRN_MARIADB_P)
@@ -545,7 +482,6 @@ private:
   mutable TABLE_SHARE table_share_for_create;
   mutable MEM_ROOT    mem_root_for_create;
   mutable handler     *wrap_handler_for_create;
-#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   mrn_alter_flags alter_handler_flags;
   KEY         *alter_key_info_buffer;
   uint        alter_key_count;
@@ -557,9 +493,6 @@ private:
   KEY         *wrap_altered_table_key_info;
   TABLE_SHARE *wrap_altered_table_share;
   KEY         *wrap_altered_table_share_key_info;
-#else
-  KEY         *wrap_alter_key_info;
-#endif
   int mrn_lock_type;
 
   // for groonga objects
@@ -646,9 +579,6 @@ public:
            const dd::Table *table_def
 #endif
     ) mrn_override;
-#ifndef MRN_HANDLER_HAVE_HA_CLOSE
-  int close();                                                     // required
-#endif
   int info(uint flag);                                             // required
 
   uint lock_count() const;
@@ -659,16 +589,7 @@ public:
 
   int rnd_init(bool scan);                                         // required
   int rnd_end();
-#ifndef MRN_HANDLER_HAVE_HA_RND_NEXT
-  int rnd_next(uchar *buf);                                        // required
-#endif
-#ifndef MRN_HANDLER_HAVE_HA_RND_POS
-  int rnd_pos(uchar *buf, uchar *pos);                             // required
-#endif
   void position(const uchar *record);                              // required
-#ifndef MRN_HANDLER_HAVE_HA_CLOSE
-  int extra(enum ha_extra_function operation) mrn_override;
-#endif
   int extra_opt(enum ha_extra_function operation, ulong cache_size);
 
   int delete_table(const char *name
@@ -704,26 +625,9 @@ public:
 #endif
   int index_init(uint idx, bool sorted);
   int index_end();
-#ifndef MRN_HANDLER_HAVE_HA_INDEX_READ_MAP
-  int index_read_map(uchar * buf, const uchar * key,
-                     key_part_map keypart_map,
-                     enum ha_rkey_function find_flag);
-#endif
 #ifdef MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
   int index_read_last_map(uchar *buf, const uchar *key,
                           key_part_map keypart_map);
-#endif
-#ifndef MRN_HANDLER_HAVE_HA_INDEX_NEXT
-  int index_next(uchar *buf);
-#endif
-#ifndef MRN_HANDLER_HAVE_HA_INDEX_PREV
-  int index_prev(uchar *buf);
-#endif
-#ifndef MRN_HANDLER_HAVE_HA_INDEX_FIRST
-  int index_first(uchar *buf);
-#endif
-#ifndef MRN_HANDLER_HAVE_HA_INDEX_LAST
-  int index_last(uchar *buf);
 #endif
   int index_next_same(uchar *buf, const uchar *key, uint keylen);
 
@@ -761,28 +665,28 @@ public:
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
 #endif
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ
-  ha_rows multi_range_read_info_const(uint keyno, RANGE_SEQ_IF *seq,
+  ha_rows multi_range_read_info_const(uint keyno,
+                                      RANGE_SEQ_IF *seq,
                                       void *seq_init_param,
-                                      uint n_ranges, uint *bufsz,
-                                      uint *flags, Cost_estimate *cost);
-  ha_rows multi_range_read_info(uint keyno, uint n_ranges, uint keys,
+                                      uint n_ranges,
+                                      uint *bufsz,
+                                      uint *flags,
+                                      Cost_estimate *cost) mrn_override;
+  ha_rows multi_range_read_info(uint keyno,
+                                uint n_ranges,
+                                uint keys,
 #  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
                                 uint key_parts,
 #  endif
-                                uint *bufsz, uint *flags, Cost_estimate *cost);
-  int multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
-                            uint n_ranges, uint mode,
-                            HANDLER_BUFFER *buf);
-  int multi_range_read_next(range_id_t *range_info);
-#else // MRN_HANDLER_HAVE_MULTI_RANGE_READ
-  int read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
-                             KEY_MULTI_RANGE *ranges,
-                             uint range_count,
-                             bool sorted,
-                             HANDLER_BUFFER *buffer);
-  int read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
-#endif // MRN_HANDLER_HAVE_MULTI_RANGE_READ
+                                uint *bufsz,
+                                uint *flags,
+                                Cost_estimate *cost) mrn_override;
+  int multi_range_read_init(RANGE_SEQ_IF *seq,
+                            void *seq_init_param,
+                            uint n_ranges,
+                            uint mode,
+                            HANDLER_BUFFER *buf) mrn_override;
+  int multi_range_read_next(range_id_t *range_info) mrn_override;
 #ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
   void start_bulk_insert(ha_rows rows, uint flags);
 #else
@@ -841,16 +745,9 @@ public:
     ) mrn_override;
   bool check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                   uint table_changes);
-#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   enum_alter_inplace_result
   check_if_supported_inplace_alter(TABLE *altered_table,
-                                   Alter_inplace_info *ha_alter_info);
-#else
-  mrn_alter_table_flags alter_table_flags(mrn_alter_table_flags flags);
-  int add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
-  int prepare_drop_index(TABLE *table_arg, uint *key_num, uint num_of_keys);
-  int final_drop_index(TABLE *table_arg);
-#endif
+                                   Alter_inplace_info *ha_alter_info) mrn_override;
   int update_auto_increment();
   void set_next_insert_id(ulonglong id);
   void get_auto_increment(ulonglong offset, ulonglong increment, ulonglong nb_desired_values,
@@ -880,29 +777,15 @@ protected:
 #else
   ha_rows records() mrn_override;
 #endif
-#ifdef MRN_HANDLER_HAVE_HA_RND_NEXT
-  int rnd_next(uchar *buf);
-#endif
-#ifdef MRN_HANDLER_HAVE_HA_RND_POS
-  int rnd_pos(uchar *buf, uchar *pos);
-#endif
-#ifdef MRN_HANDLER_HAVE_HA_INDEX_READ_MAP
+  int rnd_next(uchar *buf) mrn_override;
+  int rnd_pos(uchar *buf, uchar *pos) mrn_override;
   int index_read_map(uchar *buf, const uchar *key,
                      key_part_map keypart_map,
-                     enum ha_rkey_function find_flag);
-#endif
-#ifdef MRN_HANDLER_HAVE_HA_INDEX_NEXT
-  int index_next(uchar *buf);
-#endif
-#ifdef MRN_HANDLER_HAVE_HA_INDEX_PREV
-  int index_prev(uchar *buf);
-#endif
-#ifdef MRN_HANDLER_HAVE_HA_INDEX_FIRST
-  int index_first(uchar *buf);
-#endif
-#ifdef MRN_HANDLER_HAVE_HA_INDEX_LAST
-  int index_last(uchar *buf);
-#endif
+                     enum ha_rkey_function find_flag) mrn_override;
+  int index_next(uchar *buf) mrn_override;
+  int index_prev(uchar *buf) mrn_override;
+  int index_first(uchar *buf) mrn_override;
+  int index_last(uchar *buf) mrn_override;
 #ifdef MRN_HANDLER_HAVE_PRIMARY_KEY_IS_CLUSTERED
   bool primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST
@@ -922,10 +805,8 @@ protected:
   void free_foreign_key_create_info(char* str) mrn_override;
 #endif
   void init_table_handle_for_HANDLER();
-#ifdef MRN_HAVE_HA_REBIND_PSI
-  void unbind_psi();
-  void rebind_psi();
-#endif
+  void unbind_psi() mrn_override;
+  void rebind_psi() mrn_override;
 #ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
   mrn_bool register_query_cache_table(THD *thd,
                                       char *table_key,
@@ -933,7 +814,6 @@ protected:
                                       qc_engine_callback *engine_callback,
                                       ulonglong *engine_data) mrn_override;
 #endif
-#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   bool prepare_inplace_alter_table(TABLE *altered_table,
                                    Alter_inplace_info *ha_alter_info
 #  ifdef MRN_HANDLER_PREPARE_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
@@ -966,7 +846,6 @@ protected:
 #    endif
     ) mrn_override;
 #  endif
-#endif
 
 private:
   void mkdir_p(const char *directory);
@@ -1025,12 +904,8 @@ private:
   void geo_store_rectangle(const uchar *rectangle);
   int generic_geo_open_cursor(const uchar *key, enum ha_rkey_function find_flag);
 
-#ifdef MRN_HANDLER_HAVE_HA_CLOSE
-  int close();
-#endif
-#ifdef MRN_HANDLER_HAVE_HA_CLOSE
+  int close() mrn_override;
   int extra(enum ha_extra_function operation) mrn_override;
-#endif
 
   bool is_dry_write();
   bool is_enable_optimization();
@@ -1509,7 +1384,6 @@ private:
   uint8 wrapper_table_cache_type();
   uint8 storage_table_cache_type();
 #endif
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ
   ha_rows wrapper_multi_range_read_info_const(uint keyno,
                                               RANGE_SEQ_IF *seq,
                                               void *seq_init_param,
@@ -1544,20 +1418,6 @@ private:
                                     HANDLER_BUFFER *buf);
   int wrapper_multi_range_read_next(range_id_t *range_info);
   int storage_multi_range_read_next(range_id_t *range_info);
-#else // MRN_HANDLER_HAVE_MULTI_RANGE_READ
-  int wrapper_read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
-                                     KEY_MULTI_RANGE *ranges,
-                                     uint range_count,
-                                     bool sorted,
-                                     HANDLER_BUFFER *buffer);
-  int storage_read_multi_range_first(KEY_MULTI_RANGE **found_range_p,
-                                     KEY_MULTI_RANGE *ranges,
-                                     uint range_count,
-                                     bool sorted,
-                                     HANDLER_BUFFER *buffer);
-  int wrapper_read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
-  int storage_read_multi_range_next(KEY_MULTI_RANGE **found_range_p);
-#endif // MRN_HANDLER_HAVE_MULTI_RANGE_READ
   int generic_delete_all_rows(grn_obj *target_grn_table,
                               const char *function_name);
   int wrapper_delete_all_rows();
@@ -1669,7 +1529,6 @@ private:
                                          grn_obj **index_tables,
                                          grn_obj **index_columns,
                                          bool skip_unique_key);
-#ifdef MRN_HANDLER_HAVE_CHECK_IF_SUPPORTED_INPLACE_ALTER
   enum_alter_inplace_result
   wrapper_check_if_supported_inplace_alter(TABLE *altered_table,
                                            Alter_inplace_info *ha_alter_info);
@@ -1748,18 +1607,7 @@ private:
 #    endif
     );
 #  endif
-#else
-  mrn_alter_table_flags wrapper_alter_table_flags(mrn_alter_table_flags flags);
-  mrn_alter_table_flags storage_alter_table_flags(mrn_alter_table_flags flags);
-  int wrapper_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
-  int storage_add_index(TABLE *table_arg, KEY *key_info, uint num_of_keys);
-  int wrapper_prepare_drop_index(TABLE *table_arg, uint *key_num,
-                                 uint num_of_keys);
-  int storage_prepare_drop_index(TABLE *table_arg, uint *key_num,
-                                 uint num_of_keys);
-  int wrapper_final_drop_index(TABLE *table_arg);
-  int storage_final_drop_index(TABLE *table_arg);
-#endif
+
   int wrapper_update_auto_increment();
   int storage_update_auto_increment();
   void wrapper_set_next_insert_id(ulonglong id);
@@ -1826,12 +1674,10 @@ private:
   void storage_init_table_handle_for_HANDLER();
   void wrapper_set_keys_in_use();
   void storage_set_keys_in_use();
-#ifdef MRN_HAVE_HA_REBIND_PSI
   void wrapper_unbind_psi();
   void storage_unbind_psi();
   void wrapper_rebind_psi();
   void storage_rebind_psi();
-#endif
 #ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
   mrn_bool wrapper_register_query_cache_table(THD *thd,
                                               char *table_key,

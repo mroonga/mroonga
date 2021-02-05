@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -65,19 +65,16 @@
 #  if MYSQL_VERSION_ID >= 80017
      using mrn_resolve_name = LEX_CSTRING;
 #    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
-#  elif MYSQL_VERSION_ID >= 50603
-     typedef LEX_STRING mrn_resolve_name;
-#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
 #  else
      typedef LEX_STRING mrn_resolve_name;
-#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
+#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
 #  endif
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_PLUGIN_DATA(plugin, type) plugin_data<type>(plugin)
-#else
+#ifdef MRN_MARIADB_P
 #  define MRN_PLUGIN_DATA(plugin, type) plugin_data(plugin, type)
+#else
+#  define MRN_PLUGIN_DATA(plugin, type) plugin_data<type>(plugin)
 #endif
 
 #define LEX_STRING_IS_EMPTY(string)                                     \

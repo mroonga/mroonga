@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015-2020 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2015-2021 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -42,7 +42,7 @@ namespace mrn {
     inline long long int mrn_longlongget(const uchar *source) {
       return longlongget(source);
     }
-#elif MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#elif !defined(MRN_MARIADB_P)
     inline uint16 mrn_ushortget(const uchar *source) {
       uint16 value;
       ushortget(&value, source);
