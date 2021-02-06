@@ -88,29 +88,6 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
-.. _centos-7-percona-56:
-
-CentOS 7 (with Percona Server 5.6 package)
-------------------------------------------
-
-You can use Percona Server packages version 5.6 on CentOS 7
-since Mroonga 5.02 release.
-
-Install::
-
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y http://repo.percona.com/release/percona-release-latest.noarch.rpm
-  % sudo yum install -y --enablerepo=epel percona-server-56-mroonga
-  (% sudo systemctl start mysqld)
-  (% sudo mysqladmin -u root password 'new-password')
-
-If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
-tokenizer, install groonga-tokenizer-mecab package.
-
-Install groonga-tokenizer-mecab package::
-
-  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
-
 .. _centos-7-percona-57:
 
 CentOS 7 (with Percona Server 5.7 package)
