@@ -17969,6 +17969,7 @@ void ha_mroonga::init_table_handle_for_HANDLER()
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_HANDLER_NEED_OVERRIDE_UNBIND_PSI
 void ha_mroonga::wrapper_unbind_psi()
 {
   MRN_DBUG_ENTER_METHOD();
@@ -17998,7 +17999,9 @@ void ha_mroonga::unbind_psi()
   }
   DBUG_VOID_RETURN;
 }
+#endif
 
+#ifdef MRN_HANDLER_NEED_OVERRIDE_REBIND_PSI
 void ha_mroonga::wrapper_rebind_psi()
 {
   MRN_DBUG_ENTER_METHOD();
@@ -18028,6 +18031,7 @@ void ha_mroonga::rebind_psi()
   }
   DBUG_VOID_RETURN;
 }
+#endif
 
 #ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
 mrn_bool ha_mroonga::wrapper_register_query_cache_table(THD *thd,

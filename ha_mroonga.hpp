@@ -408,6 +408,11 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_RECORDS_IN_RANGE_HAVE_PAGE_RANGE
 #endif
 
+#if MYSQL_VERSION_ID < 80000 || defined(MRN_MARIADB_P)
+#  define MRN_HANDLER_NEED_OVERRIDE_UNBIND_PSI
+#  define MRN_HANDLER_NEED_OVERRIDE_REBIND_PSI
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -805,8 +810,12 @@ protected:
   void free_foreign_key_create_info(char* str) mrn_override;
 #endif
   void init_table_handle_for_HANDLER();
+#ifdef MRN_HANDLER_NEED_OVERRIDE_UNBIND_PSI
   void unbind_psi() mrn_override;
+#endif
+#ifdef MRN_HANDLER_NEED_OVERRIDE_REBIND_PSI
   void rebind_psi() mrn_override;
+#endif
 #ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
   mrn_bool register_query_cache_table(THD *thd,
                                       char *table_key,
@@ -1674,10 +1683,14 @@ private:
   void storage_init_table_handle_for_HANDLER();
   void wrapper_set_keys_in_use();
   void storage_set_keys_in_use();
+#ifdef MRN_HANDLER_NEED_OVERRIDE_UNBIND_PSI
   void wrapper_unbind_psi();
   void storage_unbind_psi();
+#endif
+#ifdef MRN_HANDLER_NEED_OVERRIDE_REBIND_PSI
   void wrapper_rebind_psi();
   void storage_rebind_psi();
+#endif
 #ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
   mrn_bool wrapper_register_query_cache_table(THD *thd,
                                               char *table_key,
