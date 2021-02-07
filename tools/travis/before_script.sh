@@ -80,18 +80,6 @@ else
       configure_args=("${configure_args[@]}"
                       "--with-mysql-build=$PWD/vendor/mysql/release")
       ;;
-    percona-server-5.6)
-      (cd vendor/mysql && \
-       fakeroot debian/rules configure SKIP_DEBUG_BINARY=yes && \
-       cd builddir/libservices && \
-       make > /dev/null && \
-       cd ../extra && \
-       make > /dev/null)
-      configure_args=("${configure_args[@]}"
-                      "--enable-fast-mutexes"
-                      "--with-mysql-build=$PWD/vendor/mysql/builddir"
-                      "--with-mysql-config=$PWD/vendor/mysql/builddir/scripts/mysql_config")
-      ;;
     percona-server-5.7)
       (cd vendor/mysql && \
        fakeroot debian/rules override_dh_auto_configure SKIP_DEBUG_BINARY=yes && \
