@@ -244,6 +244,24 @@ typedef uint mrn_alter_table_flags;
   MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_INDEX, DROP_INDEX)
 #endif
 
+#if ((defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203)) || \
+  (!defined(MRN_MARIADB_P))
+#  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN                     \
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_VIRTUAL_COLUMN,   \
+                              ADD_VIRTUAL_COLUMN)
+#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN                 \
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_STORED_BASE_COLUMN, \
+                              ADD_STORED_BASE_COLUMN)
+#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN            \
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_STORED_GENERATED_COLUMN, \
+                              ADD_STORED_GENERATED_COLUMN)
+#else
+#  define MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN 0
+#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN \
+  MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_COLUMN, ADD_COLUMN)
+#  define MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN 0
+#endif
+
 #ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_RECORDS_RETURN_ERROR
 #endif

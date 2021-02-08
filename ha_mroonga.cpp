@@ -15924,16 +15924,11 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
   mrn_alter_flags supported_flags =
     MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_INDEX, ADD_INDEX) |
     MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_INDEX, DROP_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_UNIQUE_INDEX,
-                                ADD_UNIQUE_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_UNIQUE_INDEX,
-                                DROP_UNIQUE_INDEX) |
-    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_VIRTUAL_COLUMN,
-                                ADD_VIRTUAL_COLUMN) |
-    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_STORED_BASE_COLUMN,
-                                ADD_STORED_BASE_COLUMN) |
-    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_STORED_GENERATED_COLUMN,
-                                ADD_STORED_GENERATED_COLUMN) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_UNIQUE_INDEX, ADD_UNIQUE_INDEX) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_UNIQUE_INDEX, DROP_UNIQUE_INDEX) |
+    MRN_ALTER_INPLACE_INFO_ADD_VIRTUAL_COLUMN |
+    MRN_ALTER_INPLACE_INFO_ADD_STORED_BASE_COLUMN |
+    MRN_ALTER_INPLACE_INFO_ADD_STORED_GENERATED_COLUMN |
     MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_COLUMN, DROP_COLUMN) |
     MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NAME) |
     MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX |
