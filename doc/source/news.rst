@@ -5,6 +5,23 @@
 News
 ====
 
+.. _release-11-00:
+
+Release 11.00 - 2021-02-09
+--------------------------
+
+This is a major version up! But It keeps backward compatibility.
+You can upgrade to 11.00 without rebuilding database.
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Dropped support for MySQL 5.6
+
+  * Because it reached EOL at Feb 1, 2021.
+
+* [:doc:`/install/centos`] Dropped support for Percona Server 5.6
+
 .. _release-10-11:
 
 Release 10.11 - 2021-01-29
