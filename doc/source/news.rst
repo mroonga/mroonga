@@ -13,6 +13,10 @@ Release 11.00 - 2021-02-09
 This is a major version up! But It keeps backward compatibility.
 You can upgrade to 11.00 without rebuilding database.
 
+In this version, MySQL, MariaDB, or PerconaServer will be automatically restarted.
+Because Mroonga 11.00 requires Groonga 11.0.0 or later but it will not reloaded
+until MySQL, MariaDB, or PrerconaServer is restarted.
+
 Improvements
 ^^^^^^^^^^^^
 
@@ -21,6 +25,14 @@ Improvements
   * Because it reached EOL at Feb 1, 2021.
 
 * [:doc:`/install/centos`] Dropped support for Percona Server 5.6
+
+* Dropped support for MariaDB 10.1 on Ubuntu 18.04 LTS.
+
+  * Because MariaDB 10.1 already has reached EOL in upstream.
+
+* Updated version of Groonga to 11.0.0 or later that Mroonga requires.
+
+  * Because a high impact bug of index corruption is fixed in Groonga 11.0.0.
 
 .. _release-10-11:
 

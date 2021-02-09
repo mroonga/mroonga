@@ -31,6 +31,15 @@ msgstr ""
 "メジャーバージョンアップです! メジャーバージョンアップですが、互換性は壊れて"
 "いないので、データベースを再構築することなく11.00へアップグレードできます。"
 
+msgid ""
+"In this version, MySQL, MariaDB, or PerconaServer will be automatically "
+"restarted. Because Mroonga 11.00 requires Groonga 11.0.0 or later but it "
+"will not reloaded until MySQL, MariaDB, or PrerconaServer is restarted."
+msgstr ""
+"今回のリリースでは、MySQL、MariaDB、PerconaServerが自動的に再起動します。"
+"Mroonga 11.00が必要としているGroonga 11.0.0が、MySQL、MariaDB、PerconaServer"
+"が再起動されるまで有効にならないためです。"
+
 msgid "Improvements"
 msgstr "改良"
 
@@ -42,6 +51,20 @@ msgstr "2021年2月1日でEOLとなったためです。"
 
 msgid "[:doc:`/install/centos`] Dropped support for Percona Server 5.6"
 msgstr "[:doc:`/install/centos`] Percona Server 5.6 のサポートをやめました。"
+
+msgid "Dropped support for MariaDB 10.1 on Ubuntu 18.04 LTS."
+msgstr "Ubuntu 18.04 LTSのMariaDB 10.1のサポートをやめました。"
+
+msgid "Because MariaDB 10.1 already has reached EOL in upstream."
+msgstr "MariaDB 10.1は、既にアップストリームでEOLとなったためです。"
+
+msgid "Updated version of Groonga to 11.0.0 or later that Mroonga requires."
+msgstr "Mroongaが要求するGroongaのバージョンを11.0.0以降に更新しました。"
+
+msgid ""
+"Because a high impact bug of index corruption is fixed in Groonga 11.0.0."
+msgstr ""
+"Groonga 11.0.0 で影響の大きなインデックス破損の問題が修正されているためです。"
 
 msgid "Release 10.11 - 2021-01-29"
 msgstr "10.11リリース - 2021-01-29"
