@@ -236,7 +236,7 @@ fi
 * Tue Sep 01 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.06-1
 - New upstream release.
 
-* Thu Aug 25 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.05-2
+* Tue Aug 25 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.05-2
 - build against Percona Server 5.7.31-34
 
 * Wed Jul 29 2020 Horimoto Yasuhiro <horimoto@clear-code.com> - 10.05-1
