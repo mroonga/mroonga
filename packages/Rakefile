@@ -5,7 +5,6 @@ packages = [
   "mariadb-server-10.5-mroonga",
   "mysql-server-5.7-mroonga",
   "mysql-server-8.0-mroonga",
-  "percona-server-5.6-mroonga",
   "percona-server-5.7-mroonga",
   "percona-server-8.0-mroonga",
 ]
