@@ -18,7 +18,6 @@
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
-%define service_status() (systemctl status %1)
 %define service_control() (systemctl %2 %1)
 
 Name:           percona-server-80-mroonga
@@ -114,7 +113,7 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if ! %{service_status mysqld} > /dev/null; then
+if ! systemctl status mysqld > /dev/null; then
   %{service_control mysqld start}
   stop_after_installation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
@@ -172,7 +171,7 @@ if [ "$stop_after_installation" = "1" ]; then
 fi
 
 %preun
-if ! %{service_status mysqld} > /dev/null; then
+if ! systemctl status mysqld > /dev/null; then
   %{service_control mysqld start}
   stop_after_uninstallation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`

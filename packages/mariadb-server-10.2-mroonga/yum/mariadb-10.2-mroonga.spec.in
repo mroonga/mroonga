@@ -4,7 +4,6 @@
 %define mariadb_release_default 1
 %define mariadb_download_base_url_default https://downloads.mariadb.org/f
 %define mariadb_dist_default    el7.centos
-%define service_status() (systemctl status %1)
 %define service_control() (systemctl %2 %1)
 
 %define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}
@@ -115,7 +114,7 @@ sed -i'' -e 's/ha_mroonga/ha_mroonga_official/g' \
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if ! %{service_status mysqld} > /dev/null; then
+if ! systemctl status mysqld > /dev/null; then
   %{service_control mysqld start}
   stop_after_installation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
@@ -173,7 +172,7 @@ if [ "$stop_after_installation" = "1" ]; then
 fi
 
 %preun
-if ! %{service_status mysqld} > /dev/null; then
+if ! systemctl status mysqld > /dev/null; then
   %{service_control mysqld start}
   stop_after_uninstallation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`

@@ -5,7 +5,6 @@
 %define mysql_dist_default    el%{_centos_ver}
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-8.0-community/el/%{_centos_ver}/SRPMS/
 %define mysql_spec_file_default mysql.spec
-%define service_status() (systemctl status %1)
 %define service_control() (systemctl %2 %1)
 
 %define _mysql_version %{?mysql_version:%{mysql_version}}%{!?mysql_version:%{mysql_version_default}}
@@ -105,7 +104,7 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if ! %{service_status mysqld} > /dev/null; then
+if ! systemctl status mysqld > /dev/null; then
   %{service_control mysqld start}
   stop_after_installation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
@@ -163,7 +162,7 @@ if [ "$stop_after_installation" = "1" ]; then
 fi
 
 %preun
-if ! %{service_status mysqld} > /dev/null; then
+if ! systemctl status mysqld > /dev/null; then
   %{service_control mysqld start}
   stop_after_uninstallation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
