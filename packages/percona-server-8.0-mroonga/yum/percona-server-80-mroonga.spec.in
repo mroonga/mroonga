@@ -1,4 +1,4 @@
-%define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:5}
+%define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
 
 %define mysql_version_default 8.0.22
 %define percona_server_version_default 13
