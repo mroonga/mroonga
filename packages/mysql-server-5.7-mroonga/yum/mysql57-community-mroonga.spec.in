@@ -5,7 +5,6 @@
 %define mysql_dist_default    el7
 %define mysql_download_base_url_default http://repo.mysql.com/yum/mysql-5.7-community/el/7/SRPMS
 %define mysql_spec_file_default mysql.spec
-%define service_control() (systemctl %2 %1)
 
 %define _mysql_version %{?mysql_version:%{mysql_version}}%{!?mysql_version:%{mysql_version_default}}
 %define _mysql_release %{?mysql_release:%{mysql_release}}%{!?mysql_release:%{mysql_release_default}}
@@ -100,7 +99,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 if ! systemctl status mysqld > /dev/null; then
-  %{service_control mysqld start}
+  systemctl start mysqld
   stop_after_installation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
 else
@@ -138,7 +137,7 @@ uninstall_sql=%{_datadir}/mroonga/uninstall.sql
 
 if [ "$1" = 2 ] ; then
   if [ $current_version -lt $required_version ]; then
-    %{service_control mysqld restart}
+    systemctl restart mysqld
   fi
   ${mysql} < ${uninstall_sql} || \
       (echo "run the following command to unregister Mroonga:"; \
@@ -153,12 +152,12 @@ if [ "$stop_after_installation" = "1" ]; then
   if [ -n "$auto_generated_password" ];then
     ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
-  %{service_control mysqld stop}
+  systemctl stop mysqld
 fi
 
 %preun
 if ! systemctl status mysqld > /dev/null; then
-  %{service_control mysqld start}
+  systemctl start mysqld
   stop_after_uninstallation=1
   auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
 else
@@ -194,7 +193,7 @@ if [ "$stop_after_uninstallation" = "1" ]; then
   if [ -n "$auto_generated_password" ];then
     ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
-  %{service_control mysqld stop}
+  systemctl stop mysqld
 fi
 
 %files
