@@ -4,7 +4,7 @@
   Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
-  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -5761,7 +5761,11 @@ int ha_mroonga::generic_delete_table(const char *name,
   error = drop_indexes(table_name);
   grn_obj *table_obj = grn_ctx_get(ctx, table_name, strlen(table_name));
   if (table_obj) {
-    grn_obj_remove(ctx, table_obj);
+    if (have_reference_column(table_obj)) {
+      grn_obj_remove_dependent(ctx, table_obj);
+    } else {
+      grn_obj_remove(ctx, table_obj);
+    }
   }
   if (ctx->rc) {
     error = ER_CANT_OPEN_FILE;
@@ -9817,6 +9821,32 @@ bool ha_mroonga::have_unique_index()
   }
 
   DBUG_RETURN(false);
+}
+
+bool ha_mroonga::have_reference_column(grn_obj *table)
+{
+  bool have_reference_column = false;
+
+  grn_hash *columns = grn_hash_create(ctx,
+                                      NULL,
+                                      sizeof(grn_id),
+                                      0,
+                                      GRN_OBJ_TABLE_HASH_KEY);
+  grn_table_columns(ctx, table, NULL, 0, (grn_obj *)columns);
+  GRN_HASH_EACH_BEGIN(ctx, columns, cursor, id) {
+    void *key;
+
+    grn_hash_cursor_get_key(ctx, cursor, &key);
+    grn_id column_id = *((grn_id *)key);
+    grn_obj *column = grn_ctx_at(ctx, column_id);
+    if (grn_obj_is_reference_column(ctx, column)) {
+      have_reference_column = true;
+      break;
+    }
+  } GRN_HASH_EACH_END(ctx, cursor);
+  grn_hash_close(ctx, columns);
+
+  return have_reference_column;
 }
 
 bool ha_mroonga::is_foreign_key_field(const char *table_name,
