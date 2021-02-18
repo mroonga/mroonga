@@ -38,8 +38,7 @@ CREATE TABLE t2 (
 --error ER_CANT_OPEN_FILE
 DROP TABLE t1;
 
-ALTER TABLE t2 DROP FOREIGN KEY `id_t1`;
-DROP TABLE t1;
 DROP TABLE t2;
+DROP TABLE t1;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
