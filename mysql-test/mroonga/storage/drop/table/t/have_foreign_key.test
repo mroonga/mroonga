@@ -16,11 +16,6 @@
 
 --source ../../../../include/mroonga/have_mroonga.inc
 
---disable_warnings
-DROP DATABASE IF EXISTS test;
---enable_warnings
-
-CREATE DATABASE test;
 USE test;
 
 CREATE TABLE referred (
