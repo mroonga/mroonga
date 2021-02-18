@@ -5761,7 +5761,8 @@ int ha_mroonga::generic_delete_table(const char *name,
   error = drop_indexes(table_name);
   grn_obj *table_obj = grn_ctx_get(ctx, table_name, strlen(table_name));
   if (table_obj) {
-    if (have_reference_column(table_obj)) {
+    if ((thd_sql_command(ha_thd()) == SQLCOM_DROP_DB) &&
+        have_reference_column(table_obj)) {
       grn_obj_remove_dependent(ctx, table_obj);
     } else {
       grn_obj_remove(ctx, table_obj);
