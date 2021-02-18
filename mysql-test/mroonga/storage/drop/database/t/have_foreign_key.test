@@ -34,5 +34,6 @@ CREATE TABLE refer (
 );
 
 DROP DATABASE another;
+USE test;
 
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

@@ -10,3 +10,4 @@ id_referred int NOT NULL,
 CONSTRAINT `id_referred` FOREIGN KEY (`id_referred`) REFERENCES `referred` (`id`)
 );
 DROP DATABASE another;
+USE test;
