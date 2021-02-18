@@ -861,7 +861,6 @@ private:
   ulonglong file_size(const char *path);
 
   bool have_unique_index();
-  bool have_reference_column(grn_obj *table);
 
   bool is_foreign_key_field(const char *table_name,
                             const char *field_name,

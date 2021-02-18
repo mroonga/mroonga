@@ -9823,32 +9823,6 @@ bool ha_mroonga::have_unique_index()
   DBUG_RETURN(false);
 }
 
-bool ha_mroonga::have_reference_column(grn_obj *table)
-{
-  bool have_reference_column = false;
-
-  grn_hash *columns = grn_hash_create(ctx,
-                                      NULL,
-                                      sizeof(grn_id),
-                                      0,
-                                      GRN_OBJ_TABLE_HASH_KEY);
-  grn_table_columns(ctx, table, NULL, 0, (grn_obj *)columns);
-  GRN_HASH_EACH_BEGIN(ctx, columns, cursor, id) {
-    void *key;
-
-    grn_hash_cursor_get_key(ctx, cursor, &key);
-    grn_id column_id = *((grn_id *)key);
-    grn_obj *column = grn_ctx_at(ctx, column_id);
-    if (grn_obj_is_reference_column(ctx, column)) {
-      have_reference_column = true;
-      break;
-    }
-  } GRN_HASH_EACH_END(ctx, cursor);
-  grn_hash_close(ctx, columns);
-
-  return have_reference_column;
-}
-
 bool ha_mroonga::is_foreign_key_field(const char *table_name,
                                       const char *field_name,
                                       size_t field_name_length)
