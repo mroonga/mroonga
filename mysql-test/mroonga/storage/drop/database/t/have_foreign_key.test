@@ -23,14 +23,14 @@ DROP DATABASE IF EXISTS another;
 CREATE DATABASE another;
 USE another;
 
-CREATE TABLE t1 (
+CREATE TABLE referred (
   id int PRIMARY KEY AUTO_INCREMENT
-) ENGINE=mroonga DEFAULT CHARSET utf8mb4 ROW_FORMAT=DYNAMIC;
+);
 
-CREATE TABLE t2 (
+CREATE TABLE refer (
   id int PRIMARY KEY AUTO_INCREMENT,
-  id_t1 int NOT NULL,
-  CONSTRAINT `id_t1` FOREIGN KEY (`id_t1`) REFERENCES `t1` (`id`)
+  id_referred int NOT NULL,
+  CONSTRAINT `id_referred` FOREIGN KEY (`id_referred`) REFERENCES `referred` (`id`)
 ) ENGINE=mroonga DEFAULT CHARSET utf8mb4 ROW_FORMAT=DYNAMIC;
 
 DROP DATABASE another;
