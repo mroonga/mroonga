@@ -16,8 +16,6 @@
 
 --source ../../../../include/mroonga/have_mroonga.inc
 
-SET NAMES UTF8MB4;
-
 --disable_warnings
 DROP DATABASE IF EXISTS another;
 --enable_warnings
