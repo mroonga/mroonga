@@ -16,6 +16,11 @@
 
 --source ../../../../include/mroonga/have_mroonga.inc
 
+--disable_warnings
+DROP TABLE IF EXISTS referred;
+DROP TABLE IF EXISTS refer;
+--enable_warnings
+
 
 CREATE TABLE referred (
   id int PRIMARY KEY AUTO_INCREMENT
