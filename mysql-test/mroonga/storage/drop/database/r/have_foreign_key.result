@@ -1,0 +1,13 @@
+DROP DATABASE IF EXISTS another;
+CREATE DATABASE another;
+USE another;
+CREATE TABLE referred (
+id int PRIMARY KEY AUTO_INCREMENT
+);
+CREATE TABLE refer (
+id int PRIMARY KEY AUTO_INCREMENT,
+id_referred int NOT NULL,
+CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
+);
+DROP DATABASE another;
+USE test;

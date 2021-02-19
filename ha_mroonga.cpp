@@ -4,7 +4,7 @@
   Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
-  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -5761,7 +5761,11 @@ int ha_mroonga::generic_delete_table(const char *name,
   error = drop_indexes(table_name);
   grn_obj *table_obj = grn_ctx_get(ctx, table_name, strlen(table_name));
   if (table_obj) {
-    grn_obj_remove(ctx, table_obj);
+    if (thd_sql_command(ha_thd()) == SQLCOM_DROP_DB) {
+      grn_obj_remove_dependent(ctx, table_obj);
+    } else {
+      grn_obj_remove(ctx, table_obj);
+    }
   }
   if (ctx->rc) {
     error = ER_CANT_OPEN_FILE;
