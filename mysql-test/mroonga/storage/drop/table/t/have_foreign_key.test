@@ -17,8 +17,7 @@
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS referred;
-DROP TABLE IF EXISTS refer;
+DROP TABLE IF EXISTS referred, refer;
 --enable_warnings
 
 

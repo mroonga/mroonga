@@ -1,5 +1,4 @@
-DROP TABLE IF EXISTS referred;
-DROP TABLE IF EXISTS refer;
+DROP TABLE IF EXISTS referred, refer;
 CREATE TABLE referred (
 id int PRIMARY KEY AUTO_INCREMENT
 );
