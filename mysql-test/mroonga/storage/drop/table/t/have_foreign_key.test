@@ -16,7 +16,6 @@
 
 --source ../../../../include/mroonga/have_mroonga.inc
 
-USE test;
 
 CREATE TABLE referred (
   id int PRIMARY KEY AUTO_INCREMENT
