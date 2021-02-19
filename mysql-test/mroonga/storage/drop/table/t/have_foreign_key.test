@@ -20,7 +20,6 @@
 DROP TABLE IF EXISTS referred, refer;
 --enable_warnings
 
-
 CREATE TABLE referred (
   id int PRIMARY KEY AUTO_INCREMENT
 );
