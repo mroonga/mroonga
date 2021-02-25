@@ -949,9 +949,9 @@ typedef HASH mrn_table_def_cache_type;
     bitmap_init((map), (buf), (n_bits), false)
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100237 || \
-                               MYSQL_VERSION_ID >= 100328 || \
-                               MYSQL_VERSION_ID >= 100418 || \
-                               MYSQL_VERSION_ID >= 100509)
+#if defined(MRN_MARIADB_P) && ((MYSQL_VERSION_ID >= 100237 && MYSQL_VERSION_ID < 100300) || \
+                               (MYSQL_VERSION_ID >= 100328 && MYSQL_VERSION_ID < 100400) || \
+                               (MYSQL_VERSION_ID >= 100418 && MYSQL_VERSION_ID < 100500) || \
+                               (MYSQL_VERSION_ID >= 100509))
 #  define MRN_DBUG_TMP_USE_BITMAP_PP
 #endif
