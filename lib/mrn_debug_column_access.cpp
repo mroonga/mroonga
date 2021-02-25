@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,13 +26,21 @@ namespace mrn {
     : table_(table),
       bitmap_(bitmap) {
 #ifndef DBUG_OFF
+#  ifdef DO_NOT_USE_RAW_BITMAP_FOR_DEBUG
+    map_ = dbug_tmp_use_all_columns(table_, &bitmap_);
+#  else
     map_ = dbug_tmp_use_all_columns(table_, bitmap_);
+#  endif
 #endif
   }
 
   DebugColumnAccess::~DebugColumnAccess() {
 #ifndef DBUG_OFF
+#  ifdef DO_NOT_USE_RAW_BITMAP_FOR_DEBUG
+    dbug_tmp_restore_column_map(&bitmap_, map_);
+#  else
     dbug_tmp_restore_column_map(bitmap_, map_);
+#  endif
 #endif
   }
 }

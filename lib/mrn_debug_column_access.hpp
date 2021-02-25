@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2012-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -23,12 +24,18 @@
 #include <mrn_mysql.h>
 #include <my_bitmap.h>
 
+#include "mrn_mysql_compat.h"
+
 namespace mrn {
   class DebugColumnAccess {
     TABLE *table_;
     MY_BITMAP *bitmap_;
 #ifndef DBUG_OFF
+#  ifdef DO_NOT_USE_RAW_BITMAP_FOR_DEBUG
+    MY_BITMAP *map_;
+#  else
     my_bitmap_map *map_;
+#  endif
 #endif
   public:
     DebugColumnAccess(TABLE *table, MY_BITMAP *bitmap);

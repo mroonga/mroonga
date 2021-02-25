@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
-  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -947,4 +947,11 @@ typedef HASH mrn_table_def_cache_type;
 #else
 #  define MRN_BITMAP_INIT(map, buf, n_bits) \
     bitmap_init((map), (buf), (n_bits), false)
+#endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100237 || \
+                               MYSQL_VERSION_ID >= 100328 || \
+                               MYSQL_VERSION_ID >= 100418 || \
+                               MYSQL_VERSION_ID >= 100509)
+#  define DO_NOT_USE_RAW_BITMAP_FOR_DEBUG
 #endif
