@@ -31,7 +31,7 @@ namespace mrn {
     TABLE *table_;
     MY_BITMAP *bitmap_;
 #ifndef DBUG_OFF
-#  ifdef DO_NOT_USE_RAW_BITMAP_FOR_DEBUG
+#  ifdef MRN_DBUG_TMP_USE_BITMAP_PP
     MY_BITMAP *map_;
 #  else
     my_bitmap_map *map_;

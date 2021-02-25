@@ -953,5 +953,5 @@ typedef HASH mrn_table_def_cache_type;
                                MYSQL_VERSION_ID >= 100328 || \
                                MYSQL_VERSION_ID >= 100418 || \
                                MYSQL_VERSION_ID >= 100509)
-#  define DO_NOT_USE_RAW_BITMAP_FOR_DEBUG
+#  define MRN_DBUG_TMP_USE_BITMAP_PP
 #endif
