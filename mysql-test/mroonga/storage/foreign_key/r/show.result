@@ -15,6 +15,6 @@ refer	CREATE TABLE `refer` (
   PRIMARY KEY (`id`),
   KEY `id_referred` (`id_referred`),
   CONSTRAINT `id_referred` FOREIGN KEY (`id_referred`) REFERENCES `test`.`referred` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=Mroonga  DEFAULT CHARSET=latin1
+) ENGINE=Mroonga DEFAULT CHARSET=latin1
 DROP TABLE refer;
 DROP TABLE referred;
