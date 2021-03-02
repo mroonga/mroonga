@@ -10,11 +10,11 @@ CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
 SHOW CREATE TABLE refer;
 Table	Create Table
 refer	CREATE TABLE `refer` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `id_referred` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_referred` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_referred` (`id_referred`),
-  CONSTRAINT `id_referred` FOREIGN KEY (`id_referred`) REFERENCES `referred` (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  CONSTRAINT `id_referred` FOREIGN KEY (`id_referred`) REFERENCES `test`.`referred` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=Mroonga  DEFAULT CHARSET=latin1
 DROP TABLE refer;
 DROP TABLE referred;
