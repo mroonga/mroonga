@@ -2201,6 +2201,9 @@ static int mrn_init(void *p)
   // Is it OK?
   hton->flags |= HTON_SUPPORTS_ATOMIC_DDL;
 #endif
+#ifdef HTON_SUPPORTS_FOREIGN_KEYS
+  hton->flags |= HTON_SUPPORTS_FOREIGN_KEYS;
+#endif
   hton->drop_database = mrn_drop_database;
   hton->close_connection = mrn_close_connection;
   hton->flush_logs = mrn_flush_logs;
