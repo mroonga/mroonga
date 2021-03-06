@@ -15939,6 +15939,8 @@ enum_alter_inplace_result ha_mroonga::storage_check_if_supported_inplace_alter(
     MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_STORED_GENERATED_COLUMN,
                                 ADD_STORED_GENERATED_COLUMN) |
     MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_COLUMN, DROP_COLUMN) |
+    MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ALTER_STORED_COLUMN_ORDER,
+                                STORED_COLUMN_ORDER) |
     MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NAME) |
     MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX |
     MRN_ALTER_INPLACE_INFO_ALTER_DROP_NON_UNIQUE_NON_PRIM_INDEX;

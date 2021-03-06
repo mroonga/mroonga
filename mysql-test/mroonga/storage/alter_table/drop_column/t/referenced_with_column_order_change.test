@@ -1,0 +1,62 @@
+# -*- mode: sql; sql-product: mysql -*-
+#
+# Copyright(C) 2021  Kouhei Sutou <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source ../../../../include/mroonga/not_embedded.inc
+--source ../../../../include/mroonga/have_mroonga.inc
+
+--disable_warnings
+DROP TABLE IF EXISTS diaries;
+DROP TABLE IF EXISTS tags;
+--enable_warnings
+
+CREATE TABLE tags (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  label VARCHAR(40),
+  is_searchable BOOL NOT NULL
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE diaries (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(40) NOT NULL,
+  tag_id INT NOT NULL,
+  CONSTRAINT FOREIGN KEY (tag_id) REFERENCES tags (id)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--error ER_NO_REFERENCED_ROW_2
+INSERT INTO diaries (title, tag_id) VALUES ('searchable diary', 1);
+SELECT * FROM diaries;
+INSERT INTO tags (label, is_searchable) VALUES ('searchable', TRUE);
+SELECT * FROM tags;
+INSERT INTO diaries (title, tag_id) VALUES ('searchable diary', 1);
+SELECT * FROM diaries;
+
+ALTER TABLE tags DROP COLUMN label;
+
+--error ER_NO_REFERENCED_ROW_2
+INSERT INTO diaries (title, tag_id) VALUES ('not searchable diary', 2);
+SELECT * FROM diaries;
+INSERT INTO tags (is_searchable) VALUES (FALSE);
+SELECT * FROM tags;
+INSERT INTO diaries (title, tag_id) VALUES ('not searchable diary', 2);
+SELECT * FROM diaries;
+
+
+DROP TABLE diaries;
+DROP TABLE tags;
+
+--source ../../../../include/mroonga/have_mroonga_deinit.inc

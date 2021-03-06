@@ -1,0 +1,43 @@
+DROP TABLE IF EXISTS diaries;
+DROP TABLE IF EXISTS tags;
+CREATE TABLE tags (
+id INT PRIMARY KEY AUTO_INCREMENT,
+label VARCHAR(40),
+is_searchable BOOL NOT NULL
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE diaries (
+id INT PRIMARY KEY AUTO_INCREMENT,
+title VARCHAR(40) NOT NULL,
+tag_id INT NOT NULL,
+CONSTRAINT FOREIGN KEY (tag_id) REFERENCES tags (id)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO diaries (title, tag_id) VALUES ('searchable diary', 1);
+ERROR 23000: Cannot add or update a child row: a foreign key constraint fails (foreign record doesn't exist: <tag_id>:<1>)
+SELECT * FROM diaries;
+id	title	tag_id
+INSERT INTO tags (label, is_searchable) VALUES ('searchable', TRUE);
+SELECT * FROM tags;
+id	label	is_searchable
+1	searchable	1
+INSERT INTO diaries (title, tag_id) VALUES ('searchable diary', 1);
+SELECT * FROM diaries;
+id	title	tag_id
+2	searchable diary	1
+ALTER TABLE tags DROP COLUMN label;
+INSERT INTO diaries (title, tag_id) VALUES ('not searchable diary', 2);
+ERROR 23000: Cannot add or update a child row: a foreign key constraint fails (foreign record doesn't exist: <tag_id>:<2>)
+SELECT * FROM diaries;
+id	title	tag_id
+2	searchable diary	1
+INSERT INTO tags (is_searchable) VALUES (FALSE);
+SELECT * FROM tags;
+id	is_searchable
+1	1
+2	0
+INSERT INTO diaries (title, tag_id) VALUES ('not searchable diary', 2);
+SELECT * FROM diaries;
+id	title	tag_id
+2	searchable diary	1
+4	not searchable diary	2
+DROP TABLE diaries;
+DROP TABLE tags;
