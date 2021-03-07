@@ -31,7 +31,7 @@ CREATE TABLE refer (
   CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
 ) ENGINE=mroonga DEFAULT CHARSET utf8mb4 ROW_FORMAT=DYNAMIC;
 
---error ER_CANT_OPEN_FILE
+--error ER_FK_CANNOT_DROP_PARENT
 DROP TABLE referred;
 
 DROP TABLE refer;
