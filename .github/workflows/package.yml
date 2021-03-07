@@ -86,7 +86,7 @@ jobs:
             gettext \
             groonga-normalizer-mysql \
             libgroonga-dev \
-            libmysqld-dev \
+            libmysqlclient-dev \
             libtool \
             python3-pip \
             ruby
