@@ -22,14 +22,14 @@
 #include <table.h>
 
 namespace mrn {
-  DebugColumnAccess::DebugColumnAccess(TABLE *table, MY_BITMAP *bitmap)
+  DebugColumnAccess::DebugColumnAccess(TABLE *table, MY_BITMAP **bitmap)
     : table_(table),
       bitmap_(bitmap) {
 #ifndef DBUG_OFF
 #  ifdef MRN_DBUG_TMP_USE_BITMAP_PP
-    map_ = dbug_tmp_use_all_columns(table_, &bitmap_);
-#  else
     map_ = dbug_tmp_use_all_columns(table_, bitmap_);
+#  else
+    map_ = dbug_tmp_use_all_columns(table_, *bitmap_);
 #  endif
 #endif
   }
@@ -37,9 +37,9 @@ namespace mrn {
   DebugColumnAccess::~DebugColumnAccess() {
 #ifndef DBUG_OFF
 #  ifdef MRN_DBUG_TMP_USE_BITMAP_PP
-    dbug_tmp_restore_column_map(&bitmap_, map_);
-#  else
     dbug_tmp_restore_column_map(bitmap_, map_);
+#  else
+    dbug_tmp_restore_column_map(*bitmap_, map_);
 #  endif
 #endif
   }

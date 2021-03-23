@@ -29,7 +29,7 @@
 namespace mrn {
   class DebugColumnAccess {
     TABLE *table_;
-    MY_BITMAP *bitmap_;
+    MY_BITMAP **bitmap_;
 #ifndef DBUG_OFF
 #  ifdef MRN_DBUG_TMP_USE_BITMAP_PP
     MY_BITMAP *map_;
@@ -38,7 +38,7 @@ namespace mrn {
 #  endif
 #endif
   public:
-    DebugColumnAccess(TABLE *table, MY_BITMAP *bitmap);
+    DebugColumnAccess(TABLE *table, MY_BITMAP **bitmap);
     ~DebugColumnAccess();
   };
 }
