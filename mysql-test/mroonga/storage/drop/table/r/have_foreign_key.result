@@ -6,7 +6,7 @@ CREATE TABLE refer (
 id int PRIMARY KEY AUTO_INCREMENT,
 id_referred int NOT NULL,
 CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
-) ENGINE=mroonga DEFAULT CHARSET utf8mb4 ROW_FORMAT=DYNAMIC;
+);
 DROP TABLE referred;
 ERROR HY000: [table][remove] a column that references the table exists: <refer.id_referred> -> <referred>
 DROP TABLE refer;

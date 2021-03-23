@@ -2201,7 +2201,7 @@ static int mrn_init(void *p)
   // Is it OK?
   hton->flags |= HTON_SUPPORTS_ATOMIC_DDL;
 #endif
-#ifndef MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
+#ifdef HTON_SUPPORTS_FOREIGN_KEYS
   hton->flags |= HTON_SUPPORTS_FOREIGN_KEYS;
 #endif
   hton->drop_database = mrn_drop_database;
@@ -17658,7 +17658,7 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
     if (create_info_str.reserve(39)) {
       DBUG_RETURN(NULL);
     }
-    create_info_str.MRN_STRING_APPEND(") ON DELETE RESTRICT ON UPDATE RESTRICT", 39);
+    create_info_str.MRN_STRING_APPEND(")", 2);
   }
   if (!(create_info = (char *) mrn_my_malloc(create_info_str.length() + 1,
                                              MYF(MY_WME)))) {
