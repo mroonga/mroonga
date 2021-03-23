@@ -7,7 +7,11 @@ id int PRIMARY KEY AUTO_INCREMENT,
 id_referred int NOT NULL,
 CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
 );
-DROP TABLE referred;
-ERROR HY000: [table][remove] a column that references the table exists: <refer.id_referred> -> <referred>
+SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME
+FROM information_schema.KEY_COLUMN_USAGE
+WHERE TABLE_NAME = "refer";
+CONSTRAINT_NAME	TABLE_NAME	COLUMN_NAME
+PRIMARY	refer	id
+id_referred	refer	id_referred
 DROP TABLE refer;
 DROP TABLE referred;

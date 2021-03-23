@@ -14,8 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../include/mroonga/have_mroonga.inc
---source ../../../../include/mroonga/skip_mysql_8_0_or_later.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_mysql_8_0_or_later.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS referred, refer;
@@ -31,10 +31,10 @@ CREATE TABLE refer (
   CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
 );
 
---error ER_CANT_OPEN_FILE
+--error ER_FK_CANNOT_DROP_PARENT
 DROP TABLE referred;
 
 DROP TABLE refer;
 DROP TABLE referred;
 
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc

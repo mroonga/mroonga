@@ -1,0 +1,20 @@
+DROP TABLE IF EXISTS referred, refer;
+CREATE TABLE referred (
+id int PRIMARY KEY AUTO_INCREMENT
+);
+CREATE TABLE refer (
+id int PRIMARY KEY AUTO_INCREMENT,
+id_referred int NOT NULL,
+CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+SHOW CREATE TABLE refer;
+Table	Create Table
+refer	CREATE TABLE `refer` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_referred` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_referred` (`id_referred`),
+  CONSTRAINT `id_referred` FOREIGN KEY (`id_referred`) REFERENCES `referred` (`id`)
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
+DROP TABLE refer;
+DROP TABLE referred;
