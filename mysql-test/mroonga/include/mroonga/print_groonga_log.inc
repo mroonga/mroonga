@@ -20,8 +20,13 @@ perl;
 $mroonga_log_file = $ENV{MROONGA_LOG_FILE};
 $mroonga_log_file =~ s/^mroonga_log_file	//;
 open(F, '<', $_="$ENV{MYSQLD_DATADIR}/$mroonga_log_file") or die "open(<$_): $!";
-while (<F>) {
-  s/^[^|]+\|[^|]+\|(\d+)?(\|[\da-fA-F]+)?[:|] ?//;
-  print;
+while (my $line = <F>) {
+  $line =~ s/^[^|]+\|[^|]+\|(\d+)?(\|[\da-fA-F]+)?[:|] ?//;
+  $content = $line;
+  chomp($content);
+  if ($content eq "log opened.") {
+    next;
+  }
+  print($line);
 }
 EOF

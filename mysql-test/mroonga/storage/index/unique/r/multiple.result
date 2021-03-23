@@ -9,7 +9,6 @@ UNIQUE KEY name (first_name, last_name)
 INSERT INTO users VALUES (1, 'Alice', 'Smith', 29);
 SET GLOBAL mroonga_log_file = "groonga-update.log";
 UPDATE users SET age = 12 WHERE id = 1;
-log opened.
 log file is changed: <groonga.log> -> <groonga-update.log>
 SET GLOBAL mroonga_log_file = DEFAULT;
 SELECT * FROM users;
