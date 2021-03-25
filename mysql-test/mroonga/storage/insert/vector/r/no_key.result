@@ -1,0 +1,29 @@
+DROP TABLE IF EXISTS items;
+DROP TABLE IF EXISTS attributes;
+CREATE TABLE attributes (
+_id int,
+name varchar(255),
+value varchar(255)
+) DEFAULT CHARSET=utf8mb4;
+CREATE TABLE items (
+id int PRIMARY KEY AUTO_INCREMENT,
+attributes text DEFAULT NULL flags='COLUMN_VECTOR' groonga_type='attributes'
+);
+INSERT INTO items (attributes)
+VALUES ('[{"name": "color", "value": "white"},
+            {"name": "size",  "value": "big"}]');
+INSERT INTO items (attributes)
+VALUES ('[{"name": "color", "value": "black"}]');
+INSERT INTO items (attributes) VALUES ('');
+SELECT * FROM attributes;
+_id	name	value
+1	color	white
+2	size	big
+3	color	black
+SELECT * FROM items;
+id	attributes
+1	[1,2]
+2	[3]
+3	[]
+DROP TABLE items;
+DROP TABLE attributes;

@@ -12339,21 +12339,62 @@ void ha_mroonga::storage_store_field_column(Field *field,
 
       grn_obj unvectored_value;
       GRN_TEXT_INIT(&unvectored_value, 0);
-      int n_ids = GRN_BULK_VSIZE(value) / sizeof(grn_id);
-      for (int i = 0; i < n_ids; i++) {
-        grn_id id = GRN_RECORD_VALUE_AT(value, i);
-        if (i > 0) {
-          GRN_TEXT_PUTS(ctx, &unvectored_value, mrn_vector_column_delimiter);
+      int n_ids = GRN_RECORD_VECTOR_SIZE(value);
+      if (grn_obj_is_table_with_key(ctx, range)) {
+        grn_obj *tokenizer = grn_obj_get_info(ctx,
+                                              range,
+                                              GRN_INFO_DEFAULT_TOKENIZER,
+                                              NULL);
+        if (!tokenizer) {
+          GRN_TEXT_PUTS(ctx, &unvectored_value, "[");
         }
-        char key[GRN_TABLE_MAX_KEY_SIZE];
-        int key_length;
-        key_length = grn_table_get_key(ctx, range, id,
-                                       &key, GRN_TABLE_MAX_KEY_SIZE);
-        GRN_TEXT_PUT(ctx, &unvectored_value, key, key_length);
+        grn_obj key_buffer;
+        if (grn_type_id_is_text_family(ctx, range->header.domain)) {
+          GRN_SHORT_TEXT_INIT(&key_buffer, GRN_OBJ_DO_SHALLOW_COPY);
+        } else {
+          GRN_VALUE_FIX_SIZE_INIT(&key_buffer, 0, range->header.domain);
+        }
+        for (int i = 0; i < n_ids; i++) {
+          grn_id id = GRN_RECORD_VALUE_AT(value, i);
+          if (i > 0) {
+            if (tokenizer) {
+              GRN_TEXT_PUTS(ctx, &unvectored_value, mrn_vector_column_delimiter);
+            } else {
+              GRN_TEXT_PUTS(ctx, &unvectored_value, ",");
+            }
+          }
+          char key[GRN_TABLE_MAX_KEY_SIZE];
+          int key_length;
+          key_length = grn_table_get_key(ctx, range, id,
+                                         &key, GRN_TABLE_MAX_KEY_SIZE);
+          if (tokenizer) {
+            GRN_TEXT_PUT(ctx, &unvectored_value, key, key_length);
+          } else {
+            GRN_TEXT_SET(ctx, &key_buffer, key, key_length);
+            grn_text_otoj(ctx, &unvectored_value, &key_buffer, NULL);
+          }
+        }
+        GRN_OBJ_FIN(ctx, &key_buffer);
+        if (!tokenizer) {
+          GRN_TEXT_PUTS(ctx, &unvectored_value, "]");
+        }
+        storage_store_field(field,
+                            GRN_TEXT_VALUE(&unvectored_value),
+                            GRN_TEXT_LEN(&unvectored_value));
+      } else {
+        GRN_TEXT_PUTS(ctx, &unvectored_value, "[");
+        for (int i = 0; i < n_ids; i++) {
+          grn_id id = GRN_RECORD_VALUE_AT(value, i);
+          if (i > 0) {
+            GRN_TEXT_PUTS(ctx, &unvectored_value, ",");
+          }
+          grn_text_printf(ctx, &unvectored_value, "%u", id);
+        }
+        GRN_TEXT_PUTS(ctx, &unvectored_value, "]");
+        storage_store_field(field,
+                            GRN_TEXT_VALUE(&unvectored_value),
+                            GRN_TEXT_LEN(&unvectored_value));
       }
-      storage_store_field(field,
-                          GRN_TEXT_VALUE(&unvectored_value),
-                          GRN_TEXT_LEN(&unvectored_value));
       GRN_OBJ_FIN(ctx, &unvectored_value);
     } else {
       storage_get_column_value(nth_column, record_id, value);
