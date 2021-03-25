@@ -7,7 +7,7 @@ value varchar(255)
 ) DEFAULT CHARSET=utf8mb4;
 CREATE TABLE items (
 id int PRIMARY KEY AUTO_INCREMENT,
-attributes text DEFAULT NULL flags='COLUMN_VECTOR' groonga_type='attributes'
+attributes text DEFAULT NULL COMMENT "flags 'COLUMN_VECTOR', groonga_type 'attributes'"
 );
 INSERT INTO items (attributes)
 VALUES ('[{"name": "color", "value": "white"},
