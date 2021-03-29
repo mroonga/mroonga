@@ -21,6 +21,106 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+msgid "Release 11.01 - 2021-03-29"
+msgstr "11.01リリース - 2021-03-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.2.37, 10.3.28, "
+"10.4.18, and 10.5.9."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.2.37、10.3.28、10.4.18、10.5.9をサポート"
+"しました。"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.33."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.33をサポートしました。"
+
+msgid ""
+"Added support for adding value with text in JSON format to reference vector "
+"columns as below."
+msgstr ""
+"以下のように、JSON形式のテキストを使って、参照ベクターカラムに値を追加できる"
+"ようになりました。"
+
+msgid ""
+"It becomes easy for us to add JSON data into reference columns from this "
+"feature. Because we can directly add values to columns for reference "
+"destination from the source table."
+msgstr ""
+"この機能によって、参照元のテーブルから参照先のカラムへ値を直接入力できるた"
+"め、参照カラムにJSONデータを追加しやすくなります。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that FOREIGN KEY constraint was not registered. [GitHub#393]"
+"[Reported by Kosuke Yamashita]"
+msgstr ""
+"外部キー制約が登録されない問題を修正しました。 [GitHub#393] [Kosuke Yamashita"
+"さんが報告]"
+
+msgid "This bug had only occurred on MySQL 8.0."
+msgstr "この問題は MySQL8.0 でのみ発生します。"
+
+msgid ""
+"For example, the FOREIGN KEY constraint information had not been outputted "
+"even if we define it as below."
+msgstr ""
+"例えば、以下のように外部キー制約を定義しても、外部キー制約の情報が出力されて"
+"いませんでした。"
+
+msgid ""
+"Fixed a bug that ``DROP DATABASE`` had failed if a target database had "
+"FOREIGN KEY constraint as below. [GitHub#390][Reported by Kosuke Yamashita]"
+msgstr ""
+"以下のように、対象のデータベースに外部キー制約があると、 ``DROP DATABASE`` に"
+"失敗する問題を修正しました。[GitHub#390][Kosuke Yamashitaさんが報告]"
+
+msgid ""
+"Fixed a bug that ``DROP COLUMN`` had failed if a target table was referred a "
+"other table as below. [GitHub#389][Reported by Kosuke Yamashita]"
+msgstr ""
+"以下のように、対象のテーブルが別のテーブルから参照されていると、 ``DROP "
+"COLUMN`` に失敗する問題を修正しました。[GitHub#389][Kosuke Yamashitaさんが報"
+"告]"
+
+msgid ""
+"Fixed a build error when we built Mroonga with MariaDB 10.3.28, 10.4.18, or "
+"10.5.9. [GitHub#392][Patched by Tomohiro KATO]"
+msgstr ""
+"MariaDB 10.3.28、 10.4.18、 10.5.9 との組み合わせでMroongaをビルドすると、ビ"
+"ルドエラーになる問題を修正しました。[GitHub#392][Tomohiro KATOさんがパッチ提"
+"供]"
+
+msgid "Known issues"
+msgstr "既知の問題"
+
+msgid "A update of Mroonga fails on MariaDB."
+msgstr "MariaDBのMroongaでアップデートに失敗します。"
+
+msgid ""
+"Therefore, we suggest that refrain from updating Mroonga until the next "
+"release(11.02)."
+msgstr ""
+"したがって、次のリリース(11.02)までMroongaのアップデートは控えるのをおすすめ"
+"します。"
+
+msgid "Mroonga fails update. However, new installation succeeds."
+msgstr ""
+"ただ、Mroongaのアップデートは失敗しますが、新規インストールは成功します。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Kosuke Yamashita"
+msgstr "Kosuke Yamashitaさん"
+
+msgid "Tomohiro KATO"
+msgstr "かとうさん"
+
 msgid "Release 11.00 - 2021-02-09"
 msgstr "11.00リリース - 2021-02-09"
 
@@ -39,9 +139,6 @@ msgstr ""
 "今回のリリースでは、MySQL、MariaDB、PerconaServerが自動的に再起動します。"
 "Mroonga 11.00が必要としているGroonga 11.0.0が、MySQL、MariaDB、PerconaServer"
 "が再起動されるまで有効にならないためです。"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid "[:doc:`/install/centos`] Dropped support for MySQL 5.6"
 msgstr "[:doc:`/install/centos`] MySQL 5.6のサポートをやめました。"
@@ -93,9 +190,6 @@ msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
 
 msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
 msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[:doc:`/reference/optimizations`] Fixed a bug that the fast order limit "
@@ -151,9 +245,6 @@ msgstr ""
 
 msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.22."
 msgstr "[:doc:`/install/centos`] Percona Server 8.0.22をサポートしました。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Shinichi Takayanagi"
 msgstr "Shinichi Takayanagiさん"
@@ -5074,9 +5165,6 @@ msgid ""
 msgstr ""
 "[ラッパーモード] ``CHECK TABLE FOR UPGRADE`` が古いテーブルを削除する問題を修"
 "正しました。 [groonga-dev,03699] [かとうさんが報告]"
-
-msgid "Tomohiro KATO"
-msgstr "かとうさん"
 
 msgid "@stealthinu"
 msgstr "@stealthinuさん"
