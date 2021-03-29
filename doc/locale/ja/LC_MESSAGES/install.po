@@ -105,16 +105,6 @@ msgid ":doc:`/tutorial/storage` `JSON` data type is not supported yet"
 msgstr ":doc:`/tutorial/storage` `JSON` データ型は未対応です。"
 
 # 57c1a2711fd448d79504e0f0df8d44e0
-msgid "CentOS 7 (with Percona Server 5.6 package)"
-msgstr "CentOS 7（Percona Server 5.6パッケージを利用）"
-
-msgid ""
-"You can use Percona Server packages version 5.6 on CentOS 7 since Mroonga "
-"5.02 release."
-msgstr ""
-"CentOS 7では、Mroonga 5.02からPercona Server 5.6パッケージを利用できます。"
-
-# 57c1a2711fd448d79504e0f0df8d44e0
 msgid "CentOS 7 (with Percona Server 5.7 package)"
 msgstr "CentOS 7（Percona Server 5.7パッケージを利用）"
 
@@ -667,6 +657,9 @@ msgid "18.04 Bionic Beaver"
 msgstr ""
 
 msgid "20.04 Focal Fossa"
+msgstr ""
+
+msgid "20.10 Groovy Gorilla"
 msgstr ""
 
 msgid "Here are Ubuntu versions that supports MySQL:"
