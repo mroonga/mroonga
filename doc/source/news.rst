@@ -5,6 +5,135 @@
 News
 ====
 
+.. _release-11-01:
+
+Release 11.01 - 2021-03-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.37, 10.3.28, 10.4.18, and 10.5.9.
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.33.
+
+* Added support for adding value with text in JSON format to reference vector columns as below.
+
+  * It becomes easy for us to add JSON data into reference columns from this feature.
+    Because we can directly add values to columns for reference destination from the source table.
+
+  .. code-block::
+
+     CREATE TABLE attributes (
+       _id int,
+       name varchar(255),
+       value varchar(255)
+     ) DEFAULT CHARSET=utf8mb4;
+
+     CREATE TABLE items (
+       id int PRIMARY KEY AUTO_INCREMENT,
+       attributes text DEFAULT NULL flags='COLUMN_VECTOR' groonga_type='attributes'
+     );
+
+     INSERT INTO items (attributes)
+       VALUES ('[{"name": "color", "value": "white"},
+                 {"name": "size",  "value": "big"}]');
+     INSERT INTO items (attributes)
+       VALUES ('[{"name": "color", "value": "black"}]');
+     INSERT INTO items (attributes) VALUES ('');
+
+     SELECT * FROM attributes;
+       _id	name	value
+       1	color	white
+       2	size	big
+       3	color	black
+
+     SELECT * FROM items;
+     id	attributes
+     1	[1,2]
+     2	[3]
+     3	[]
+
+Fixes
+^^^^^
+
+* Fixed a bug that FOREIGN KEY constraint was not registered. [GitHub#393][Reported by Kosuke Yamashita]
+
+  * This bug had only occurred on MySQL 8.0.
+  * For example, the FOREIGN KEY constraint information had not been outputted even if we define it as below.
+
+    .. code-block::
+
+       CREATE TABLE referred (
+         id int PRIMARY KEY AUTO_INCREMENT
+       );
+
+       CREATE TABLE refer (
+         id int PRIMARY KEY AUTO_INCREMENT,
+         id_referred int NOT NULL,
+         CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
+       );
+
+       SELECT CONSTRAINT_NAME, TABLE_NAME, REFERENCED_TABLE_NAME
+              FROM information_schema.REFERENTIAL_CONSTRAINTS;
+       Empty set (0.000 sec)
+
+* Fixed a bug that ``DROP DATABASE`` had failed if a target database had FOREIGN KEY constraint as below. [GitHub#390][Reported by Kosuke Yamashita]
+
+  .. code-block::
+
+    CREATE DATABASE another;
+    USE another;
+
+    CREATE TABLE referred (
+      id int PRIMARY KEY AUTO_INCREMENT
+    ) ENGINE=mroonga DEFAULT CHARSET utf8mb4;
+
+    CREATE TABLE refer (
+      id int PRIMARY KEY AUTO_INCREMENT,
+      id_referred int NOT NULL,
+      CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
+    ) ENGINE=mroonga DEFAULT CHARSET utf8mb4;
+
+    DROP DATABASE another;
+    ERROR 1016 (HY000): [table][remove] a column that references the table exists: <refer.id_referred> -> <referred>
+
+* Fixed a bug that ``DROP COLUMN`` had failed if a target table was referred a other table as below. [GitHub#389][Reported by Kosuke Yamashita]
+
+  .. code-block::
+
+     CREATE TABLE referred (
+       id int PRIMARY KEY AUTO_INCREMENT,
+       name varchar(255),
+       text text
+     ) ENGINE=mroonga DEFAULT CHARSET utf8mb4;
+
+     CREATE TABLE refer (
+       id int PRIMARY KEY AUTO_INCREMENT,
+       id_referred int NOT NULL,
+       CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
+     ) ENGINE=mroonga DEFAULT CHARSET utf8mb4;
+
+     ALTER TABLE referred DROP COLUMN name;
+     ERROR 1016 (HY000): [table][remove] a column that references the table exists: <refer.id_referred> -> <#sql2-3bc-25>
+
+* Fixed a build error when we built Mroonga with MariaDB 10.3.28, 10.4.18, or 10.5.9. [GitHub#392][Patched by Tomohiro KATO]
+
+Known issues
+^^^^^^^^^^^^
+
+* A update of Mroonga fails on MariaDB.
+
+  * Therefore, we suggest that refrain from updating Mroonga until the next release(11.02).
+  * Mroonga fails update. However, new installation succeeds.
+
+Thanks
+^^^^^^
+
+* Kosuke Yamashita
+
+* Tomohiro KATO
+
 .. _release-11-00:
 
 Release 11.00 - 2021-02-09
