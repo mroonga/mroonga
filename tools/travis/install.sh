@@ -70,7 +70,8 @@ if [ "${MROONGA_BUNDLED}" = "yes" ]; then
       https://github.com/groonga/groonga.git \
       storage/mroonga/vendor/groonga
   (cd storage/mroonga/vendor/groonga/vendor && \
-     ruby download_message_pack.rb)
+     ruby download_message_pack.rb &&
+     ruby download_rapidjson.rb)
   git clone --recursive --depth 1 \
       https://github.com/groonga/groonga-normalizer-mysql.git \
       storage/mroonga/vendor/groonga/vendor/plugins/groonga-normalizer-mysql
