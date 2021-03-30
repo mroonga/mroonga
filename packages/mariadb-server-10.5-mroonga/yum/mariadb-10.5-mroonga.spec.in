@@ -1,6 +1,7 @@
+# -*- sh-shell: rpm -*-
+
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
 
-%define mariadb_download_base_url_default https://downloads.mariadb.org/f
 %define mariadb_version_default 10.5.9
 %define mariadb_release_default 1
 %if %{_centos_ver} == 7
@@ -12,7 +13,14 @@
 %define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}
 %define _mariadb_release %{?mariadb_release:%{mariadb_release}}%{!?mariadb_release:%{mariadb_release_default}}
 %define _mariadb_dist %{?mariadb_dist:%{mariadb_dist}}%{!?mariadb_dist:%{mariadb_dist_default}}
-%define _mariadb_download_base_url %{?mariadb_download_base_url:%{mariadb_download_base_url}}%{!?mariadb_download_base_url:%{mariadb_download_base_url_default}}
+
+%define use_dnf (%{_centos_ver} >= 8)
+
+%if %{use_dnf}
+%define dnf_download dnf download
+%else
+%define dnf_download yumdownloader
+%endif
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
@@ -27,15 +35,18 @@ URL:		http://mroonga.org/
 Source0:	http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
+BuildRequires:	MariaDB-devel = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+BuildRequires:	gcc-c++
 BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
-BuildRequires:	wget
+BuildRequires:	rpm
+BuildRequires:	sed
 BuildRequires:	which
-BuildRequires:	gcc
-BuildRequires:	gcc-c++
-BuildRequires:	cmake
-BuildRequires:	numactl-devel
-BuildRequires:	MariaDB-devel = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+%if %{use_dnf}
+BuildRequires:	dnf-command(download)
+%else
+BuildRequires:	yum-utils
+%endif
 Requires:	MariaDB-server = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	MariaDB-client = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
@@ -58,47 +69,21 @@ Documentation for Mroonga
 %prep
 %setup -q -n mroonga-%{version}
 
-mariadb_tar_gz=mariadb-%{_mariadb_version}.tar.gz
-mariadb_source_url=%{_mariadb_download_base_url}/mariadb-%{_mariadb_version}/source/${mariadb_tar_gz}
-wget ${mariadb_source_url}
-tar xf ${mariadb_tar_gz}
+if ! cp /MariaDB-*.src.rpm ./; then
+  %{dnf_download} -y ${quiet} --source MariaDB
+fi
+rpm -Uvh MariaDB-*.src.rpm
+sed -i'' -e 's/^make /make perfschema /' ~/rpmbuild/SPECS/MariaDB.spec
 
 %build
-mariadb_source=mariadb-%{_mariadb_version}
-pushd ${mariadb_source}
-cmake . \
-  -DBUILD_CONFIG=mysql_release \
-  -DRPM=centos%{_centos_ver} \
-  -DPLUGIN_ARCHIVE=NO \
-  -DPLUGIN_AUTH_SOCKET=NO \
-  -DPLUGIN_BLACKHOLE=NO \
-  -DPLUGIN_CASSANDRA=NO \
-  -DPLUGIN_CONNECT=NO \
-  -DPLUGIN_CSV=NO \
-  -DPLUGIN_EXAMPLE=NO \
-  -DPLUGIN_FEDERATED=NO \
-  -DPLUGIN_FEDERATEDX=NO \
-  -DPLUGIN_HEAP=NO \
-  -DPLUGIN_INNOBASE=YES \
-  -DPLUGIN_MROONGA=NO \
-  -DPLUGIN_MYISAM=NO \
-  -DPLUGIN_MYISAMMRG=NO \
-  -DPLUGIN_OQGRAPH=NO \
-  -DPLUGIN_PERFSCHEMA=YES \
-  -DPLUGIN_SEQUENCE=NO \
-  -DPLUGIN_SPHINX=NO \
-  -DPLUGIN_SPIDER=NO \
-  -DPLUGIN_TEST_SQL_DISCOVERY=NO \
-  -DPLUGIN_TOKUDB=NO \
-  -DPLUGIN_XTRADB=NO \
-  -DWITH_UNIT_TESTS=OFF \
-  -DWITH_WSREP=OFF \
-  -DWITH_MARIABACKUP=OFF
-make %{?_smp_mflags}
-popd
+rpmbuild -bc ~/rpmbuild/SPECS/MariaDB.spec
+mariadb_source=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/mariadb-%{_mariadb_version}
+mariadb_build=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/cpack_rpm_build_dir
 %configure \
     --disable-static \
     --with-mysql-source=${mariadb_source} \
+    --with-mysql-build=${mariadb_build} \
+    --with-mysql-config=${mariadb_build}/scripts/mysql_config \
     %{?mroonga_configure_options}
 make %{?_smp_mflags}
 
@@ -119,103 +104,19 @@ sed -i'' -e 's/ha_mroonga/ha_mroonga_official/g' \
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if ! systemctl status mysqld > /dev/null; then
-  systemctl start mysqld
-  stop_after_installation=1
-  auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
-else
-  stop_after_installation=0
-  auto_generated_password=""
-fi
-
-mysql_command=`which mysql`
-password_option=""
-if ! $mysql_command -u root -e "quit" > /dev/null 2>&1; then
-  if [ -n "${auto_generated_password}" ]; then
-    password_option="-p${auto_generated_password}"
-  else
-    password_option="-p"
-  fi
-fi
-
-mysql="${mysql_command} -u root ${password_option}"
-
-if [ -n "$auto_generated_password" ]; then
-  ${mysql} --connect-expired-password \
-           -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
-fi
-
-current_version=0
-version=`echo %{groonga_required_version} | sed -e 's/\.//g'`
-required_version=`expr $version`
-version=`${mysql} -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
-  grep mroonga | cut -f 2 | sed -e 's/\.//g'`
-if [ -n "$version" ]; then
-  current_version=`expr $version`
-fi
-install_sql=%{_datadir}/mroonga/install.sql
-uninstall_sql=%{_datadir}/mroonga/uninstall.sql
-
-if [ "$1" = 2 ] ; then
-  if [ $current_version -lt $required_version ]; then
-    systemctl restart mysqld
-  fi
-  ${mysql} < ${uninstall_sql} || \
-    (echo "run the following command to unregister Mroonga:"; \
-     echo "  ${mysql} < ${uninstall_sql}")
-fi
-
-${mysql} < ${install_sql} || \
-  (echo "run the following command to register Mroonga:"; \
-   echo "  ${mysql} < ${install_sql}")
-
-if [ "$stop_after_installation" = "1" ]; then
-  if [ -n "$auto_generated_password" ];then
-    ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
-  fi
-  systemctl stop mysqld
-fi
+# Ensure returning success status for manual Mroonga preparation.
+%{_datadir}/mroonga/rpm/post.sh \
+  "$1" \
+  mariadb \
+  %{_datadir} \
+  %{groonga_required_version} || :
 
 %preun
-if ! systemctl status mysqld > /dev/null; then
-  systemctl start mysqld
-  stop_after_uninstallation=1
-  auto_generated_password=`awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1`
-else
-  stop_after_uninstallation=0
-  auto_generated_password=""
-fi
-
-uninstall_sql=%{_datadir}/mroonga/uninstall.sql
-mysql_command=`which mysql`
-password_option=""
-if ! $mysql_command -u root -e "quit" > /dev/null 2>&1; then
-  if [ -n "${auto_generated_password}" ]; then
-    password_option="-p${auto_generated_password}"
-  else
-    password_option="-p"
-  fi
-fi
-
-mysql="${mysql_command} -u root ${password_option}"
-
-if [ -n "$auto_generated_password" ]; then
-  ${mysql} --connect-expired-password \
-           -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
-fi
-
-if [ "$1" = 0 ]; then
-  ${mysql} < ${uninstall_sql} || \
-    (echo "run the following command to unregister Mroonga:"; \
-     echo "  ${mysql} < ${uninstall_sql}")
-fi
-
-if [ "$stop_after_uninstallation" = "1" ]; then
-  if [ -n "$auto_generated_password" ];then
-    ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
-  fi
-  systemctl stop mysqld
-fi
+# Ensure returning success status for manual Mroonga preparation.
+%{_datadir}/mroonga/rpm/preun.sh \
+  "$1" \
+  mariadb \
+  %{_datadir} || :
 
 %files
 %defattr(-,root,root,-)

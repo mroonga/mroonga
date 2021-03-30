@@ -9,6 +9,7 @@
 .deps
 .libs
 /.dirstamp
+/.vagrant/
 /CMakeCache.txt
 /CMakeFiles/
 /INSTALL

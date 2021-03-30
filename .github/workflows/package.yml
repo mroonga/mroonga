@@ -17,39 +17,48 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - debian-buster
-          - centos-7
-          - centos-8
-        package:
-          - mariadb-server-10.2
-          - mariadb-server-10.3
-          - mariadb-server-10.4
-          - mariadb-server-10.5
-          - mysql-server-5.7
-          - mysql-server-8.0
-          - percona-server-5.7
-          - percona-server-8.0
-        exclude:
+        include:
           - os: debian-buster
+            package-type: apt
+            package: mariadb-server-10.3
+          - os: centos-7
+            package-type: yum
             package: mariadb-server-10.2
+          - os: centos-7
+            package-type: yum
+            package: mariadb-server-10.3
           - os: centos-8
-            package: mariadb-server-10.2
-          - os: debian-buster
+            package-type: yum
+            package: mariadb-server-10.3
+          - os: centos-7
+            package-type: yum
             package: mariadb-server-10.4
-          - os: debian-buster
+          - os: centos-8
+            package-type: yum
+            package: mariadb-server-10.4
+          - os: centos-7
+            package-type: yum
             package: mariadb-server-10.5
-          - os: debian-buster
-            package: mysql-server-5.7
           - os: centos-8
+            package-type: yum
+            package: mariadb-server-10.5
+          - os: centos-7
+            package-type: yum
             package: mysql-server-5.7
-          - os: debian-buster
+          - os: centos-7
+            package-type: yum
             package: mysql-server-8.0
-          - os: debian-buster
-            package: percona-server-5.7
           - os: centos-8
+            package-type: yum
+            package: mysql-server-8.0
+          - os: centos-7
+            package-type: yum
             package: percona-server-5.7
-          - os: debian-buster
+          - os: centos-7
+            package-type: yum
+            package: percona-server-8.0
+          - os: centos-8
+            package-type: yum
             package: percona-server-8.0
     runs-on: ubuntu-latest
     steps:
@@ -115,22 +124,91 @@ jobs:
           esac
         env:
           GROONGA_REPOSITORY: ../../../groonga
+      - name: Cache ccache
+        uses: actions/cache@v2
+        with:
+          path: packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/build/${{ matrix.package }}-mroonga/ccache
+          key: package-${{ matrix.os }}-${{ matrix.package }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
+          restore-keys: package-${{ matrix.os }}-${{ matrix.package }}-ccache-
       - name: Build with Docker
         run: |
           cd packages/${{ matrix.package }}-mroonga
-          case ${{ matrix.os }} in
-            debian-*)
-              rake apt:build APT_TARGETS=${{ matrix.os }}
-              mv apt/repositories/ ../../
-              ;;
-            centos-*)
-              rake yum:build YUM_TARGETS=${{ matrix.os }}
-              mv yum/repositories/ ../../
-              ;;
-          esac
+          rake ${{ matrix.package-type }}:build BUILD_DIR=build
         env:
+          APT_TARGETS: ${{ matrix.os }}
           GROONGA_REPOSITORY: ../../../groonga
-      - uses: actions/upload-artifact@master
+          YUM_TARGETS: ${{ matrix.os }}
+      - uses: actions/upload-artifact@v2
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
-          path: repositories/
+          path: packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
+
+  test:
+    name: Test
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: debian-buster
+            package-type: apt
+            package: mariadb-server-10.3
+          - os: centos-7
+            package-type: yum
+            package: mariadb-server-10.2
+          - os: centos-7
+            package-type: yum
+            package: mariadb-server-10.3
+          - os: centos-8
+            package-type: yum
+            package: mariadb-server-10.3
+          - os: centos-7
+            package-type: yum
+            package: mariadb-server-10.4
+          - os: centos-8
+            package-type: yum
+            package: mariadb-server-10.4
+          - os: centos-7
+            package-type: yum
+            package: mariadb-server-10.5
+          - os: centos-8
+            package-type: yum
+            package: mariadb-server-10.5
+          - os: centos-7
+            package-type: yum
+            package: mysql-server-5.7
+          - os: centos-7
+            package-type: yum
+            package: mysql-server-8.0
+          - os: centos-8
+            package-type: yum
+            package: mysql-server-8.0
+          - os: centos-7
+            package-type: yum
+            package: percona-server-5.7
+          - os: centos-7
+            package-type: yum
+            package: percona-server-8.0
+          - os: centos-8
+            package-type: yum
+            package: percona-server-8.0
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: packages-${{ matrix.package }}-${{ matrix.os }}
+      - name: Run VM
+        run: |
+          vagrant up ${{ matrix.os }}
+      - name: Run test
+        run: |
+          repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
+          mkdir -p "${repositories_dir}"
+          os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
+          cp -a ${os_type} "${repositories_dir}"
+          vagrant \
+            ssh ${{ matrix.os }} \
+            -- \
+            /vagrant/packages/${{ matrix.package-type }}/test.sh \
+            ${{ matrix.package }}-mroonga

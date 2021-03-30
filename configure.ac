@@ -574,6 +574,7 @@ AC_CONFIG_FILES([
   doc/locale/ja/Makefile
   doc/locale/ja/LC_MESSAGES/Makefile
   data/Makefile
+  data/rpm/Makefile
 ])
 AC_OUTPUT([
   config.sh

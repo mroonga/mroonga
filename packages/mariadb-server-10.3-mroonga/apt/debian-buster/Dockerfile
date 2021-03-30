@@ -25,6 +25,7 @@ RUN \
   apt install -y -V ${quiet} \
     autoconf-archive \
     build-essential \
+    ccache \
     debhelper \
     devscripts \
     groonga-normalizer-mysql \

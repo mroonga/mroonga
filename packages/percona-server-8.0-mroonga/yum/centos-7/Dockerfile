@@ -16,38 +16,24 @@ RUN \
     epel-release && \
   percona-release setup ps80 && \
   yum groupinstall -y ${quiet} "Development Tools" && \
+  yum-builddep -y ${quiet} --enablerepo=ps-80-release-sources \
+    percona-server && \
+  yumdownloader -y ${quiet} --enablerepo=ps-80-release-sources --source \
+    percona-server && \
   yum install -y ${quiet} \
+    # Percona Server's SRPM is broken. Some packages can't be installed by
+    # yum-builddep.
+    'perl(Env)' \
+    'perl(Time::HiRes)' \
+    # Mroonga dependencies.
     percona-server-devel \
-    arrow-devel-2.0.0-1.el7.x86_64 \
-    cmake \
-    cmake3 \
-    cyrus-sasl-devel \
+    ccache \
     devtoolset-${DEVTOOLSET_VERSION} \
-    gperf \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
-    libaio-devel \
-    libcurl-devel \
-    libtool \
     make \
-    ncurses-devel \
-    numactl-devel \
-    openldap-devel \
-    openssl-devel \
-    pam-devel \
-    perl-Env \
-    perl-JSON \
-    perl-Test-Simple \
-    perl-Time-HiRes \
     pkgconfig \
-    readline-devel \
-    selinux-policy-devel \
-    sudo \
-    systemtap-sdt-devel \
-    tar \
-    time \
     wget \
-    which \
-    zlib-devel && \
+    which && \
   yum clean ${quiet} all

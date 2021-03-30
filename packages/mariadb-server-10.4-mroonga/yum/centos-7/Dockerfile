@@ -17,38 +17,18 @@ RUN \
     https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
     epel-release && \
   yum groupinstall -y ${quiet} "Development Tools" && \
+  yum-builddep -y ${quiet} MariaDB && \
+  yumdownloader -y ${quiet} --source MariaDB && \
   yum install -y ${quiet} \
     MariaDB-devel \
-    arrow-devel-2.0.0-1.el7.x86_64 \
-    cmake \
-    cyrus-sasl-devel \
-    gcc \
+    ccache \
     gcc-c++ \
-    gperf \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
-    libaio-devel \
-    libcurl-devel \
-    libtool \
     make \
-    ncurses-devel \
-    numactl-devel \
-    openldap-devel \
-    openssl-devel \
-    pam-devel \
-    perl-Env \
-    perl-JSON \
-    perl-Test-Simple \
-    perl-Time-HiRes \
     pkgconfig \
-    readline-devel \
-    selinux-policy-devel \
     sudo \
-    systemtap-sdt-devel \
-    tar \
-    time \
     wget \
-    which \
-    zlib-devel && \
+    which && \
   yum clean ${quiet} all

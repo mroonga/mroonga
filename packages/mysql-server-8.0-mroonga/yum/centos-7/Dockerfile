@@ -11,41 +11,23 @@ RUN \
   yum update -y ${quiet} && \
   yum install -y ${quiet} centos-release-scl-rh && \
   yum install -y ${quiet} \
-    http://repo.mysql.com/mysql80-community-release-el7.rpm && \
+    https://repo.mysql.com/mysql80-community-release-el7.rpm && \
   yum install -y \
     https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
     epel-release && \
   yum groupinstall -y ${quiet} "Development Tools" && \
+  yum-builddep -y ${quiet} mysql-community && \
+  yumdownloader -y ${quiet} --source mysql-community && \
   yum install -y ${quiet} \
-    mysql-community-devel \
-    arrow-devel-2.0.0-1.el7.x86_64 \
-    cmake3 \
-    cyrus-sasl-devel \
+    ccache \
     devtoolset-${DEVTOOLSET_VERSION} \
-    gperf \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
-    libaio-devel \
-    libcurl-devel \
     libtool \
     make \
-    ncurses-devel \
-    numactl-devel \
-    openldap-devel \
-    openssl-devel \
-    pam-devel \
-    perl-Env \
-    perl-JSON \
-    perl-Test-Simple \
-    perl-Time-HiRes \
+    mysql-community-devel \
     pkgconfig \
-    readline-devel \
-    selinux-policy-devel \
-    sudo \
-    systemtap-sdt-devel \
-    tar \
-    time \
     wget \
     which && \
   yum clean ${quiet} all

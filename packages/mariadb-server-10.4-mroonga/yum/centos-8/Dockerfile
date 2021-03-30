@@ -18,37 +18,21 @@ RUN \
     epel-release && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=powertools -y ${quiet} \
-    cmake \
-    cyrus-sasl-devel \
-    gcc \
+    'dnf-command(builddep)' \
+    'dnf-command(download)' && \
+  dnf builddep --enablerepo=powertools -y ${quiet} MariaDB && \
+  dnf download -y ${quiet} --source MariaDB && \
+  dnf install --enablerepo=powertools -y ${quiet} \
+    ccache \
     gcc-c++ \
-    gperf \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
-    libaio-devel \
-    libcurl-devel \
-    libtool \
     make \
-    ncurses-devel \
-    numactl-devel \
-    openldap-devel \
-    openssl-devel \
-    pam-devel \
-    perl-Env \
-    perl-JSON \
-    perl-Test-Simple \
-    perl-Time-HiRes \
     pkgconfig \
-    readline-devel \
-    selinux-policy-devel \
     sudo \
-    systemtap-sdt-devel \
-    tar \
-    time \
     wget \
-    which \
-    zlib-devel && \
+    which && \
   dnf install --disablerepo=appstream -y ${quiet} \
     MariaDB-devel && \
   dnf clean ${quiet} all
