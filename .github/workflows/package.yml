@@ -19,7 +19,6 @@ jobs:
       matrix:
         os:
           - debian-buster
-          - debian-buster-i386
           - centos-7
           - centos-8
         package:
@@ -34,37 +33,23 @@ jobs:
         exclude:
           - os: debian-buster
             package: mariadb-server-10.2
-          - os: debian-buster-i386
-            package: mariadb-server-10.2
           - os: centos-8
             package: mariadb-server-10.2
           - os: debian-buster
             package: mariadb-server-10.4
-          - os: debian-buster-i386
-            package: mariadb-server-10.4
           - os: debian-buster
             package: mariadb-server-10.5
-          - os: debian-buster-i386
-            package: mariadb-server-10.5
           - os: debian-buster
-            package: mysql-server-5.7
-          - os: debian-buster-i386
             package: mysql-server-5.7
           - os: centos-8
             package: mysql-server-5.7
           - os: debian-buster
             package: mysql-server-8.0
-          - os: debian-buster-i386
-            package: mysql-server-8.0
           - os: debian-buster
-            package: percona-server-5.7
-          - os: debian-buster-i386
             package: percona-server-5.7
           - os: centos-8
             package: percona-server-5.7
           - os: debian-buster
-            package: percona-server-8.0
-          - os: debian-buster-i386
             package: percona-server-8.0
     runs-on: ubuntu-latest
     steps:
