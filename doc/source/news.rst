@@ -122,7 +122,7 @@ Fixes
 Known issues
 ^^^^^^^^^^^^
 
-* A update of Mroonga fails on MariaDB.
+* A update of Mroonga fails on MariaDB. [Reported by ひじー]
 
   * Therefore, we suggest that refrain from updating Mroonga until the next release(11.02).
   * Mroonga fails update. However, new installation succeeds.
@@ -133,6 +133,8 @@ Thanks
 * Kosuke Yamashita
 
 * Tomohiro KATO
+
+* ひじー
 
 .. _release-11-00:
 
