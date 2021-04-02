@@ -95,22 +95,11 @@ msgstr ""
 "ルドエラーになる問題を修正しました。[GitHub#392][Tomohiro KATOさんがパッチ提"
 "供]"
 
-msgid "Known issues"
-msgstr "既知の問題"
-
-msgid "A update of Mroonga fails on MariaDB. [Reported by ひじー]"
-msgstr "MariaDBのMroongaでアップデートに失敗します。 [Reported by ひじー]"
-
 msgid ""
-"Therefore, we suggest that refrain from updating Mroonga until the next "
-"release(11.02)."
+"Fixed a bug that a update of Mroonga fails on MariaDB. [Reported by ひじー]"
 msgstr ""
-"したがって、次のリリース(11.02)までMroongaのアップデートは控えるのをおすすめ"
-"します。"
-
-msgid "Mroonga fails update. However, new installation succeeds."
-msgstr ""
-"ただ、Mroongaのアップデートは失敗しますが、新規インストールは成功します。"
+"MariaDBのMroongaでアップデートに失敗する問題を修正しました。 [Reported by ひ"
+"じー]"
 
 msgid "Thanks"
 msgstr "感謝"

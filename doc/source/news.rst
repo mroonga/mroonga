@@ -119,13 +119,7 @@ Fixes
 
 * Fixed a build error when we built Mroonga with MariaDB 10.3.28, 10.4.18, or 10.5.9. [GitHub#392][Patched by Tomohiro KATO]
 
-Known issues
-^^^^^^^^^^^^
-
-* A update of Mroonga fails on MariaDB. [Reported by ひじー]
-
-  * Therefore, we suggest that refrain from updating Mroonga until the next release(11.02).
-  * Mroonga fails update. However, new installation succeeds.
+* Fixed a bug that a update of Mroonga fails on MariaDB. [Reported by ひじー]
 
 Thanks
 ^^^^^^
