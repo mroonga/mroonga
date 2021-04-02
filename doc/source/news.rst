@@ -7,7 +7,7 @@ News
 
 .. _release-11-01:
 
-Release 11.01 - 2021-03-29
+Release 11.01 - 2021-04-02
 --------------------------
 
 Improvements
