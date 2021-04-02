@@ -1,3 +1,9 @@
+mysql-server-5.7-mroonga (11.01-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Horimoto Yasuhiro <horimoto@clear-code.com>  Thu, 01 Apr 2021 15:00:00 -0000
+
 mysql-server-5.7-mroonga (11.00-1) unstable; urgency=low
 
   * New upstream release.

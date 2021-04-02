@@ -222,6 +222,9 @@ fi
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Apr 01 2021 Horimoto Yasuhiro <horimoto@clear-code.com> - 11.01-1
+- New upstream release.
+
 * Mon Feb 08 2021 Horimoto Yasuhiro <horimoto@clear-code.com> - 11.00-1
 - New upstream release.
 
