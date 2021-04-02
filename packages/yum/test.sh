@@ -28,7 +28,7 @@ case ${package} in
     mroonga_package=$(echo "${package}" | sed -e '' -e 's/-server//g')
     service_name=mariadb
     ha_mroonga_so=ha_mroonga_official.so
-    package_prefix=MariaDB
+    test_package_name=MariaDB-test
     sudo tee /etc/yum.repos.d/MariaDB.repo <<-REPO
 [mariadb]
 name = MariaDB
@@ -43,7 +43,7 @@ REPO
     mroonga_package=$(echo "${package}" | \
                         sed 's/-server-\([0-9]*\)\.\([0-9]*\)/\1\2-community/g')
     service_name=mysqld
-    package_prefix=mysql-community
+    testpackage_name=mysql-community-test
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     sudo ${DNF} install -y \
@@ -54,10 +54,10 @@ REPO
     service_name=mysqld
     case ${mysql_version} in
       5.7)
-        package_prefix=Percona-Server
+        test_package_name=Percona-Server-test-57
         ;;
       *)
-        package_prefix=percona-server
+        test_package_name=percona-server-test
         ;;
     esac
     have_auto_generated_password=yes
@@ -89,20 +89,11 @@ sudo systemctl stop ${service_name}
 
 
 # Run test
-case ${package} in
-  percona-5.7)
-    sudo ${DNF} install -y \
-      ${package_prefix}-test-57 \
-      gdb \
-      patch
-    ;;
-  *)
-    sudo ${DNF} install -y \
-      ${package_prefix}-test \
-      gdb \
-      patch
-    ;;
-esac
+sudo ${DNF} install -y \
+  ${test_package_name} \
+  gdb \
+  patch
+
 cd /usr/share/mysql-test/
 sudo rm -rf plugin
 sudo mkdir -p plugin
