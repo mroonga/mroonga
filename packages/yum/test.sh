@@ -43,7 +43,7 @@ REPO
     mroonga_package=$(echo "${package}" | \
                         sed 's/-server-\([0-9]*\)\.\([0-9]*\)/\1\2-community/g')
     service_name=mysqld
-    testpackage_name=mysql-community-test
+    test_package_name=mysql-community-test
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     sudo ${DNF} install -y \
