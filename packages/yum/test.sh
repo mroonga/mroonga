@@ -54,10 +54,10 @@ REPO
     service_name=mysqld
     case ${mysql_version} in
       5.7)
-        package_prefix=Procona-Server
+        package_prefix=Percona-Server
         ;;
       *)
-        package_prefix=procona-server
+        package_prefix=percona-server
         ;;
     esac
     have_auto_generated_password=yes
