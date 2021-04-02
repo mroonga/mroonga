@@ -91,18 +91,18 @@ sudo systemctl stop ${service_name}
 # Run test
 case ${package} in
   percona-5.7)
-    test_package_name=${package_prefix}-test-57
+    sudo ${DNF} install -y \
+      ${package_prefix}-test-57 \
+      gdb \
+      patch
     ;;
   *)
-    test_package_name=${package_prefix}-test
+    sudo ${DNF} install -y \
+      ${package_prefix}-test \
+      gdb \
+      patch
     ;;
 esac
-
-sudo ${DNF} install -y \
-  ${test_package_name} \
-  gdb \
-  patch
-
 cd /usr/share/mysql-test/
 sudo rm -rf plugin
 sudo mkdir -p plugin
