@@ -89,8 +89,17 @@ sudo systemctl stop ${service_name}
 
 
 # Run test
+case ${package} in
+  percona-5.7)
+    test_package_name=${package_prefix}-test-57
+    ;;
+  *)
+    test_package_name=${package_prefix}-test
+    ;;
+esac
+
 sudo ${DNF} install -y \
-  ${package_prefix}-test \
+  ${test_package_name} \
   gdb \
   patch
 
