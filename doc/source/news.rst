@@ -19,7 +19,7 @@ Improvements
 
 * Added support for adding value with text in JSON format to reference vector columns as below.
 
-  * It becomes easy for us to add JSON data into reference columns from this feature.
+  * It makes easier to add JSON data into reference columns by this feature.
     Because we can directly add values to columns for reference destination from the source table.
 
   .. code-block::
