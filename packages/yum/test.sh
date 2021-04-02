@@ -50,7 +50,9 @@ REPO
          https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${centos_version}.rpm
     ;;
   percona-*)
-    mroonga_package=${package}
+    # percona-server-5.7-mroonga ->
+    # percona-server-57-mroonga ->
+    mroonga_package=$(echo "${package}" | sed 's/\([0-9]*\)\.\([0-9]*\)/\1\2/g')
     service_name=mysqld
     case ${mysql_version} in
       5.7)
