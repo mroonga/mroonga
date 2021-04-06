@@ -26,7 +26,7 @@ end
     task :upload do
       packages.each do |package|
         cd(package) do
-          ruby("-S", "rake", "#{target_namespace}:upload")
+          ruby("-S", "rake", "#{target_namespace}")
         end
       end
     end
@@ -39,7 +39,7 @@ end
     task :release do
       packages.each do |package|
         cd(package) do
-          ruby("-S", "rake", "#{target_namespace}:release")
+          ruby("-S", "rake", "#{target_namespace}")
         end
       end
     end

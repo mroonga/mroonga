@@ -161,6 +161,26 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     end
   end
 
+  def use_built_package?
+    true
+  end
+
+  def built_package_url(target_namespace, target)
+    url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
+    url << "packages-#{@mysql_package}-#{target}.zip"
+  end
+
+  def download_packages(target_namespace)
+    base_dir = __send__("#{target_namespace}_dir")
+    repositories_dir = "#{base_dir}/repositories"
+    mkdir_p(repositories_dir)
+    download_dir = "#{base_dir}/tmp/downloads/#{@version}"
+    mkdir_p(download_dir)
+    __send__("#{target_namespace}_targets").each do |target|
+      url = built_package_url(target_namespace, target)
+      archive = download(url, download_dir)
+      cd(repositories_dir) do
+        sh("unzip", archive)
       end
     end
   end
