@@ -20,7 +20,7 @@ namespace :version do
   end
 end
 
-[:ubuntu, :windows].each do |target_namespace|
+[:ubuntu].each do |target_namespace|
   namespace target_namespace do
     desc "Upload #{target_namespace} packages"
     task :upload do
