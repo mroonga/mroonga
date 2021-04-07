@@ -17,10 +17,6 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     @original_archive_name = "#{@original_archive_base_name}.tar.gz"
   end
 
-  def define
-    super
-  end
-
   private
   def top_directory
     packages_directory.parent
