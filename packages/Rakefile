@@ -20,18 +20,23 @@ namespace :version do
   end
 end
 
-[:ubuntu].each do |target_namespace|
-  namespace target_namespace do
-    desc "Upload #{target_namespace} packages"
-    task :upload do
-      packages.each do |package|
-        cd(package) do
-          ruby("-S", "rake", "#{target_namespace}")
-        end
+namespace :ubuntu do
+  desc "Upload ubuntu packages"
+  task :upload do
+    packages.each do |package|
+      cd(package) do
+        ruby("-S", "rake", "ubuntu")
       end
     end
   end
 end
+
+desc "Release ubuntu repositories"
+ubuntu_tasks = [
+  "ubuntu:upload",
+]
+task :ubunut => ubuntu_tasks
+
 
 [:apt, :yum].each do |target_namespace|
   namespace target_namespace do
@@ -44,4 +49,10 @@ end
       end
     end
   end
+
+  desc "Release #{target_namespace} repositories"
+  tasks = [
+    "#{target_namespace}:release",
+  ]
+  task target_namespace => tasks
 end
