@@ -29,7 +29,7 @@ task :ubuntu do
   end
 end
 
-[:apt, :yum].each do |target_namespace|
+[:apt, :yum].each do |target|
   desc "Release #{target_namespace} packages"
   task target_namespace do
     packages.each do |package|
