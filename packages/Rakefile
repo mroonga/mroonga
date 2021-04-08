@@ -34,7 +34,7 @@ end
   task target_namespace do
     packages.each do |package|
       cd(package) do
-        ruby("-S", "rake", "#{target_namespace}")
+        ruby("-S", "rake", target_namespace.to_s)
       end
     end
   end
