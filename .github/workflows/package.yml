@@ -144,7 +144,7 @@ jobs:
           path: packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
       - name: Create assets
         if: |
-          startWith(github.ref, 'ref/tags/')
+          startsWith(github.ref, 'ref/tags/')
         run: |
           tar czf ${{ matrix.package }}-${{ matrix.os }}.tar.gz packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
       - name: Ensure creating release
