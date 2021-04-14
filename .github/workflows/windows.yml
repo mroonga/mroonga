@@ -108,8 +108,11 @@ jobs:
           # However, this fix is not included that above version of mariadb.
           # Therefore, we fix this bug by using this patch until next release for mariadb.
           # We will remove this patch when the next version of mariadb will be released.
-          ridk exec patch -p1 -i `
-            ..\mroonga\packages\source\patches\mariadb-connector-c-fix-syntax-error-in-cmake-3.20.diff
+          ridk exec curl `
+            -o mariadb-connector-c-fix-syntax-error-in-cmake-3.20.diff `
+            https://github.com/mariadb-corporation/mariadb-connector-c/commit/242cab8cbcd91af882233730a83627d3b12ced83.patch
+          ridk exec patch -d libmariadb -p1 -i `
+            ..\mariadb-connector-c-fix-syntax-error-in-cmake-3.20.diff
           Remove-Item storage\mroonga -Recurse -Force
           Copy-Item ..\mroonga storage\mroonga -Recurse
           cd ..
