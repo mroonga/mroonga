@@ -30,11 +30,11 @@ task :ubuntu do
 end
 
 [:apt, :yum].each do |target|
-  desc "Release #{target_namespace} packages"
+  desc "Release #{target} packages"
   task target_namespace do
     packages.each do |package|
       cd(package) do
-        ruby("-S", "rake", target_namespace.to_s)
+        ruby("-S", "rake", target.to_s)
       end
     end
   end
