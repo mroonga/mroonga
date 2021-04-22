@@ -20,7 +20,8 @@ RUN \
   yumdownloader -y ${quiet} --source mysql-community && \
   yum install -y ${quiet} \
     ccache \
-    devtoolset-${DEVTOOLSET_VERSION} \
+    devtoolset-${DEVTOOLSET_VERSION}-gcc \
+    devtoolset-${DEVTOOLSET_VERSION}-gcc-c++ \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \

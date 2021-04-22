@@ -2,6 +2,7 @@ ARG FROM=centos:8
 FROM ${FROM}
 
 ARG DEBUG
+ARG ORACLE_LINUX_REPOSITORY_BASE_URL="http://yum.oracle.com/repo/OracleLinux/OL8/appstream/x86_64/getPackage"
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
@@ -15,11 +16,14 @@ RUN \
   dnf install --enablerepo=powertools -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' && \
+  dnf install -y ${quiet} ${ORACLE_LINUX_REPOSITORY_BASE_URL}/gcc-toolset-10-gcc-c++-10.2.1-2.0.2.el8.x86_64.rpm \
+                          ${ORACLE_LINUX_REPOSITORY_BASE_URL}/gcc-toolset-10-gcc-10.2.1-2.0.2.el8.x86_64.rpm \
+                          ${ORACLE_LINUX_REPOSITORY_BASE_URL}/gcc-toolset-10-libstdc++-devel-10.2.1-2.0.2.el8.x86_64.rpm \
+                          ${ORACLE_LINUX_REPOSITORY_BASE_URL}/gcc-toolset-10-annobin-9.29-1.el8.x86_64.rpm && \
   dnf builddep --enablerepo=powertools -y ${quiet} mysql-community && \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=powertools -y ${quiet} \
     ccache \
-    gcc-toolset-9 \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
