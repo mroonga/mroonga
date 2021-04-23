@@ -15867,7 +15867,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
   }
 
-  DBUG_ASSERT(ha_alter_info->key_count == altered_table->s->keys);
+  assert(ha_alter_info->key_count == altered_table->s->keys);
   alter_key_count = 0;
   alter_index_drop_count = 0;
   alter_index_add_count = 0;

@@ -49,7 +49,7 @@ namespace mrn {
           if (!mrn_charset_utf8)
             mrn_charset_utf8 = cs[0];
           else if (mrn_charset_utf8->cset != cs[0]->cset)
-            DBUG_ASSERT(0);
+            assert(0);
           continue;
         }
         if (!strcmp(cs[0]->csname, "utf8mb4"))
@@ -59,7 +59,7 @@ namespace mrn {
           if (!mrn_charset_utf8mb4)
             mrn_charset_utf8mb4 = cs[0];
           else if (mrn_charset_utf8mb4->cset != cs[0]->cset)
-            DBUG_ASSERT(0);
+            assert(0);
           continue;
         }
         if (!strcmp(cs[0]->csname, "binary"))
@@ -69,7 +69,7 @@ namespace mrn {
           if (!mrn_charset_binary)
             mrn_charset_binary = cs[0];
           else if (mrn_charset_binary->cset != cs[0]->cset)
-            DBUG_ASSERT(0);
+            assert(0);
           continue;
         }
         if (!strcmp(cs[0]->csname, "ascii"))
@@ -79,7 +79,7 @@ namespace mrn {
           if (!mrn_charset_ascii)
             mrn_charset_ascii = cs[0];
           else if (mrn_charset_ascii->cset != cs[0]->cset)
-            DBUG_ASSERT(0);
+            assert(0);
           continue;
         }
         if (!strcmp(cs[0]->csname, "latin1"))
@@ -93,7 +93,7 @@ namespace mrn {
             if (!mrn_charset_latin1_2)
               mrn_charset_latin1_2 = cs[0];
             else if (mrn_charset_latin1_2->cset != cs[0]->cset)
-              DBUG_ASSERT(0);
+              assert(0);
           }
           continue;
         }
@@ -104,7 +104,7 @@ namespace mrn {
           if (!mrn_charset_cp932)
             mrn_charset_cp932 = cs[0];
           else if (mrn_charset_cp932->cset != cs[0]->cset)
-            DBUG_ASSERT(0);
+            assert(0);
           continue;
         }
         if (!strcmp(cs[0]->csname, "sjis"))
@@ -114,7 +114,7 @@ namespace mrn {
           if (!mrn_charset_sjis)
             mrn_charset_sjis = cs[0];
           else if (mrn_charset_sjis->cset != cs[0]->cset)
-            DBUG_ASSERT(0);
+            assert(0);
           continue;
         }
         if (!strcmp(cs[0]->csname, "eucjpms"))
@@ -124,7 +124,7 @@ namespace mrn {
           if (!mrn_charset_eucjpms)
             mrn_charset_eucjpms = cs[0];
           else if (mrn_charset_eucjpms->cset != cs[0]->cset)
-            DBUG_ASSERT(0);
+            assert(0);
           continue;
         }
         if (!strcmp(cs[0]->csname, "ujis"))
@@ -134,7 +134,7 @@ namespace mrn {
           if (!mrn_charset_ujis)
             mrn_charset_ujis = cs[0];
           else if (mrn_charset_ujis->cset != cs[0]->cset)
-            DBUG_ASSERT(0);
+            assert(0);
           continue;
         }
         if (!strcmp(cs[0]->csname, "koi8r"))
@@ -144,7 +144,7 @@ namespace mrn {
           if (!mrn_charset_koi8r)
             mrn_charset_koi8r = cs[0];
           else if (mrn_charset_koi8r->cset != cs[0]->cset)
-            DBUG_ASSERT(0);
+            assert(0);
           continue;
         }
         DBUG_PRINT("info", ("mroonga: %s[%s][%p] is not supported",
