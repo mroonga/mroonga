@@ -602,7 +602,11 @@ typedef HASH mrn_table_def_cache_type;
   (create_subpartition_name(out, in1, in2, in3, name_variant), 0)
 #endif
 
-#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80024)
+#  define ITEM_SUM_GET_NEST_LEVEL(sum_item) (sum_item)->base_query_block->nest_level
+#  define ITEM_SUM_GET_AGGR_LEVEL(sum_item) (sum_item)->aggr_query_block->nest_level
+#  define ITEM_SUM_GET_MAX_AGGR_LEVEL(sum_item) (sum_item)->max_aggr_level
+#elif (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
 #  define ITEM_SUM_GET_NEST_LEVEL(sum_item) (sum_item)->base_select->nest_level
 #  define ITEM_SUM_GET_AGGR_LEVEL(sum_item) (sum_item)->aggr_select->nest_level
 #  define ITEM_SUM_GET_MAX_AGGR_LEVEL(sum_item) (sum_item)->max_aggr_level
@@ -688,6 +692,14 @@ typedef HASH mrn_table_def_cache_type;
   (table_list)->table_name
 #  define MRN_TABLE_LIST_TABLE_NAME_LENGTH(table_list)  \
   (table_list)->table_name_length
+#endif
+
+#if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80024
+#  define MRN_TABLE_LIST_SELECT_LEX(table_list)    \
+   (table_list)->query_block
+#else
+#  define MRN_TABLE_LIST_SELECT_LEX(table_list)    \
+   (table_list)->select_lex
 #endif
 
 #if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80018
@@ -785,9 +797,13 @@ typedef HASH mrn_table_def_cache_type;
   typedef Foreign_key mrn_foreign_key_spec;
 #endif
 
-#if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 80011 && MYSQL_VERSION_ID < 80024 \
+    && !defined(MRN_MARIADB_P)
   class SELECT_LEX;
   typedef SELECT_LEX mrn_select_lex;
+#elif MYSQL_VERSION_ID >= 80024 && !defined(MRN_MARIADB_P)
+  class Query_block;
+  typedef Query_block mrn_select_lex;
 #else
   typedef st_select_lex mrn_select_lex;
 #endif

@@ -29,7 +29,7 @@
 namespace mrn {
   CountSkipChecker::CountSkipChecker(grn_ctx *ctx,
                                      TABLE *table,
-                                     SELECT_LEX *select_lex,
+                                     mrn_select_lex *select_lex,
                                      KEY *key_info,
                                      key_part_map target_key_part_map,
                                      bool is_storage_mode)

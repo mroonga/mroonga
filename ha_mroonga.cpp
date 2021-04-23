@@ -11118,7 +11118,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   }
 
   TABLE_LIST *table_list = table->pos_in_table_list;
-  mrn_select_lex *select_lex = table_list->select_lex;
+  mrn_select_lex *select_lex = MRN_TABLE_LIST_SELECT_LEX(table_list);
   SELECT_LEX_UNIT *unit = MRN_TABLE_LIST_GET_DERIVED(table_list);
   mrn_select_lex *first_select_lex;
   if (unit)
@@ -13198,7 +13198,7 @@ int ha_mroonga::generic_reset()
     DBUG_RETURN(error);
   }
 
-  mrn_select_lex *select_lex = table_list->select_lex;
+  mrn_select_lex *select_lex = MRN_TABLE_LIST_SELECT_LEX(table_list);
   if (!select_lex) {
     DBUG_RETURN(error);
   }
