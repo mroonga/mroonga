@@ -86,6 +86,7 @@ def prepare_system_amazon_2(options)
   run_command("yum", "install", "-y",
               "#{mroonga_package_name}#{mroonga_package_version}",
               "#{mroonga_package_name}-debuginfo#{mroonga_package_version}",
+              "groonga-libs#{groonga_package_version}",
               "groonga-debuginfo#{groonga_package_version}")
 end
 
