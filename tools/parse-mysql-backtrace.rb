@@ -119,7 +119,7 @@ def resolve_relative_address(relative_address, path)
       address = $1
       function = $2
       if function == base_function
-        return Integer(address, 16)
+        return Integer(address, 16) + Integer(offset, 16)
       end
     end
   end
