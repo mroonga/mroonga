@@ -112,7 +112,7 @@ def resolve_relative_address(relative_address, path)
   if relative_address.start_with?("+")
     return Integer(relative_address[1..-1])
   end
-  base_function, offset = relative_address.split("+")
+  base_function, offset = relative_address.split("+", 2)
   capture_command("nm", path).each_line do |line|
     case line
     when /\A(\h+) \S (\S+)/
