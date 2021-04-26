@@ -767,6 +767,20 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
   }
   return inspected;
 }
+#else
+/*
+  These functions don't use from anywhere when we set DBUG_OFF.
+  However, build error occur when we set DBUG_OFF.
+  Because they use into DBUG_PRINT as below. (DBUG_PRINT is only valid when we set DBUG_ON.)
+  (In other words, DBUG_PRINT do nothing when we set DBUG_OFF.)
+
+    DBUG_PRINT("info", ("mroonga: lock_type=%s",
+                        mrn_inspect_thr_lock_type(lock_type)));
+
+  Therefore, we implemented that they returned "" when we set DBUG_OFF.
+*/
+static const char *mrn_inspect_thr_lock_type(enum thr_lock_type lock_type){ return ""; };
+static const char *mrn_inspect_extra_function(enum ha_extra_function operation){ return ""; };
 #endif
 
 /* status */
