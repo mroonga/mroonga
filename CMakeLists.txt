@@ -407,8 +407,8 @@ else()
     mrn_build_flag("-Wno-strict-aliasing")
     mrn_build_flag("-Wno-deprecated")
     mrn_check_cxxflag("-felide-constructors")
-    if("${MYSQL_VARIANT}" STREQUAL "MariaDB" OR
-        ${MYSQL_VERSION} VERSION_LESS "5.7.0")
+    if("${MYSQL_VARIANT}" STREQUAL "MariaDB" AND
+        "${MYSQL_VERSION}" VERSION_LESS "10.4.0")
       mrn_check_cxxflag("-fno-rtti")
     endif()
   endif()
