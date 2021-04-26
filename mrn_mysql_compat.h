@@ -808,6 +808,20 @@ typedef HASH mrn_table_def_cache_type;
   typedef st_select_lex mrn_select_lex;
 #endif
 
+#if MYSQL_VERSION_ID >= 80024 && !defined(MRN_MARIADB_P)
+  typedef Query_expression mrn_select_lex_unit;
+#else
+  typedef SELECT_LEX_UNIT mrn_select_lex_unit;
+#endif
+
+#if MYSQL_VERSION_ID >= 80024 && !defined(MRN_MARIADB_P)
+#  define MRN_SELECT_LEX_UNIT_FIRST_SELECT(select_lex_unit)  \
+   (select_lex_unit)->first_query_block()
+#else
+#  define MRN_SELECT_LEX_UNIT_FIRST_SELECT(select_lex_unit)  \
+   (select_lex_unit)->first_select()
+#endif
+
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
 #  define MRN_FIELD_HAVE_AUTO_FLAGS
 #endif
