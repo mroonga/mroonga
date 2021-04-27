@@ -350,6 +350,7 @@ then
   CXXFLAGS="$DEBUG_CXXFLAGS -DSAFE_MUTEX -DSAFEMALLOC $CXXFLAGS -O0 -g3"
 else
   # Optimized version. No debug
+  AC_DEFINE([NDEBUG], [1], [Don't use libdbug])
   AC_DEFINE([DBUG_OFF], [1], [Don't use libdbug])
   CFLAGS="$OPTIMIZE_CFLAGS $CFLAGS"
   CXXFLAGS="$OPTIMIZE_CXXFLAGS $CXXFLAGS"
