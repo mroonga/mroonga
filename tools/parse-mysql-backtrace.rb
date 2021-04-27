@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require "English"
 require "optparse"
 require "ostruct"
 require "tempfile"
@@ -54,15 +55,15 @@ def capture_command(*args)
   tempfile.read
 end
 
-def prepare_system_amazon_2(options)
-  run_command("amazon-linux-extras", "install", "epel", "-y")
+def prepare_system_centos_7(options)
   run_command("yum", "install", "-y",
-              "https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm")
+              "https://packages.groonga.org/centos/7/groonga-release-latest.noarch.rpm")
   run_command("yum", "install", "-y",
               "https://repo.mysql.com/mysql-community-release-el7.rpm")
   run_command("yum", "install", "-y",
               "binutils",
               "yum-utils")
+  packages = []
   case options.mysql
   when /\Amysql-5\.7/
     run_command("yum-config-manager", "--enable", "mysql57-community")
@@ -70,6 +71,13 @@ def prepare_system_amazon_2(options)
     mroonga_package_name = "mysql57-community-mroonga"
   when /\Amysql-8\.0/
     mroonga_package_name = "mysql80-community-mroonga"
+    unless $POSTMATCH.empty?
+      mysql_package_version = "-8.0#{$POSTMATCH}-1.el7.x86_64"
+      packages << "mysql-community-client#{mysql_package_version}"
+      packages << "mysql-community-common#{mysql_package_version}"
+      packages << "mysql-community-libs#{mysql_package_version}"
+      packages << "mysql-community-server#{mysql_package_version}"
+    end
   else
     raise "unsupported MySQL: #{options.mysql}"
   end
@@ -78,20 +86,27 @@ def prepare_system_amazon_2(options)
   else
     mroonga_package_version = ""
   end
+  packages << "#{mroonga_package_name}#{mroonga_package_version}"
+  packages << "#{mroonga_package_name}-debuginfo#{mroonga_package_version}"
   if options.groonga_version
     groonga_package_version = "-#{options.groonga_version}-1.el7.x86_64"
   else
     groonga_package_version = ""
   end
-  run_command("yum", "install", "-y",
-              "#{mroonga_package_name}#{mroonga_package_version}",
-              "#{mroonga_package_name}-debuginfo#{mroonga_package_version}",
-              "groonga-libs#{groonga_package_version}",
-              "groonga-debuginfo#{groonga_package_version}")
+  packages << "groonga-libs#{groonga_package_version}"
+  packages << "groonga-debuginfo#{groonga_package_version}"
+  run_command("yum", "install", "-y", *packages)
+end
+
+def prepare_system_amazon_2(options)
+  run_command("amazon-linux-extras", "install", "epel", "-y")
+  prepare_system_centos_7(options)
 end
 
 def prepare_system(system_version, options)
   case system_version
+  when "centos-7"
+    prepare_system_centos_7(options)
   when "amazon-2"
     prepare_system_amazon_2(options)
   else
@@ -101,11 +116,15 @@ end
 
 def resolve_debug_path(path, system_version)
   case system_version
-  when /\Aamazon-/
+  when /\Acentos-/, /\Aamazon-/
     Dir.glob("/usr/lib/debug#{path}*.debug").first || path
   else
     raise "unsupported system: #{system_version}"
   end
+end
+
+def demangle(function)
+  capture_command("c++filt", function).chomp
 end
 
 def resolve_relative_address(relative_address, path)
@@ -113,7 +132,8 @@ def resolve_relative_address(relative_address, path)
     return Integer(relative_address[1..-1])
   end
   base_function, offset = relative_address.split("+", 2)
-  capture_command("nm", path).each_line do |line|
+  base_function = demangle(base_function)
+  capture_command("nm", "--demangle", path).each_line do |line|
     case line
     when /\A(\h+) \S (\S+)/
       address = $1
@@ -135,7 +155,7 @@ prepare_system(system_version, options)
 
 ARGF.each_line do |line|
   case line
-  when /\A(\/[^ (\[]+)\((.+?)\)\[(.+?)\]/
+  when /\A(\/[^ (\[]+)\((.+?)\)\s*\[(.+?)\]/
     path = $1
     relative_address = $2
     absolute_address = $3
