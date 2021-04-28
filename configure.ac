@@ -336,13 +336,13 @@ AS_HELP_STRING([--with-debug=full],
     ],
     [with_debug=$withval],
     [with_debug=no])
-if test "$with_debug" = "yes"
+if test "$with_debug" = "yes";
 then
   # Medium debug.
   AC_DEFINE([DBUG_ON], [1], [Use libdbug])
   CFLAGS="$DEBUG_CFLAGS $DEBUG_OPTIMIZE_CC -DSAFE_MUTEX $CFLAGS -O0 -g3"
   CXXFLAGS="$DEBUG_CXXFLAGS $DEBUG_OPTIMIZE_CXX -DSAFE_MUTEX $CXXFLAGS -O0 -g3"
-elif test "$with_debug" = "full"
+elif test "$with_debug" = "full";
 then
   # Full debug. Very slow in some cases
   AC_DEFINE([DBUG_ON], [1], [Use libdbug])
