@@ -59,10 +59,6 @@
   typedef char *range_id_t;
 #endif
 
-#if defined(MRN_MARIADB_P) || MYSQL_VERSION_ID < 80002
-  typedef st_select_lex SELECT_LEX;
-#endif
-
 #if MYSQL_VERSION_ID >= 50607
 #  define MRN_SUPPORT_FOREIGN_KEYS 1
 #endif
@@ -419,51 +415,51 @@ typedef HASH mrn_table_def_cache_type;
 #endif
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
-  ((select_lex)->where_cond())
-#  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
-  ((select_lex)->having_cond())
-#  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
-  ((select_lex)->active_options())
+#  define MRN_QUERY_BLOCK_GET_WHERE_COND(query_block) \
+  ((query_block)->where_cond())
+#  define MRN_QUERY_BLOCK_GET_HAVING_COND(query_block) \
+  ((query_block)->having_cond())
+#  define MRN_QUERY_BLOCK_GET_ACTIVE_OPTIONS(query_block) \
+  ((query_block)->active_options())
 #else
-#  define MRN_SELECT_LEX_GET_WHERE_COND(select_lex) \
-  ((select_lex)->where)
-#  define MRN_SELECT_LEX_GET_HAVING_COND(select_lex) \
-  ((select_lex)->having)
-#  define MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(select_lex) \
-  ((select_lex)->options)
+#  define MRN_QUERY_BLOCK_GET_WHERE_COND(query_block) \
+  ((query_block)->where)
+#  define MRN_QUERY_BLOCK_GET_HAVING_COND(query_block) \
+  ((query_block)->having)
+#  define MRN_QUERY_BLOCK_GET_ACTIVE_OPTIONS(query_block) \
+  ((query_block)->options)
 #endif
 
 #if MYSQL_VERSION_ID >= 80021 && !defined(MRN_MARIADB_P)
-#  define MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex) \
-  ((select_lex)->fields_list)
+#  define MRN_QUERY_BLOCK_GET_FIELDS_LIST(query_block) \
+  ((query_block)->fields_list)
 #else
-#  define MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex) \
-  ((select_lex)->item_list)
+#  define MRN_QUERY_BLOCK_GET_FIELDS_LIST(query_block) \
+  ((query_block)->item_list)
 #endif
 
 #if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
-#  define MRN_SELECT_LEX_GET_NUM_VISIBLE_FIELDS(select_lex) \
-  ((unsigned int)(select_lex->num_visible_fields()))
+#  define MRN_QUERY_BLOCK_GET_NUM_VISIBLE_FIELDS(query_block) \
+  ((unsigned int)(query_block->num_visible_fields()))
 #else
-#  define MRN_SELECT_LEX_GET_NUM_VISIBLE_FIELDS(select_lex) \
-  (MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex).elements)
+#  define MRN_QUERY_BLOCK_GET_NUM_VISIBLE_FIELDS(query_block) \
+  (MRN_QUERY_BLOCK_GET_FIELDS_LIST(query_block).elements)
 #endif
 
 #if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
-#  define MRN_SELECT_LEX_GET_FIRST_VISIBLE_FIELD(select_lex) \
-  (*((select_lex)->visible_fields().begin()))
+#  define MRN_QUERY_BLOCK_GET_FIRST_VISIBLE_FIELD(query_block) \
+  (*((query_block)->visible_fields().begin()))
 #else
-#  define MRN_SELECT_LEX_GET_FIRST_VISIBLE_FIELD(select_lex) \
-  (static_cast<Item *>(MRN_SELECT_LEX_GET_FIELDS_LIST(select_lex).first_node()->info))
+#  define MRN_QUERY_BLOCK_GET_FIRST_VISIBLE_FIELD(query_block) \
+  (static_cast<Item *>(MRN_QUERY_BLOCK_GET_FIELDS_LIST(query_block).first_node()->info))
 #endif
 
 #if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
-#  define MRN_SELECT_LEX_HAS_LIMIT(select_lex) \
-  (select_lex->has_limit())
+#  define MRN_QUERY_BLOCK_HAS_LIMIT(query_block) \
+  (query_block->has_limit())
 #else
-#  define MRN_SELECT_LEX_HAS_LIMIT(select_lex) \
-  (select_lex->explicit_limit)
+#  define MRN_QUERY_BLOCK_HAS_LIMIT(query_block) \
+  (query_block->explicit_limit)
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
@@ -695,11 +691,11 @@ typedef HASH mrn_table_def_cache_type;
 #endif
 
 #if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80024
-#  define MRN_TABLE_LIST_SELECT_LEX(table_list)    \
+#  define MRN_TABLE_LIST_QUERY_BLOCK(table_list)    \
    (table_list)->query_block
 #else
-#  define MRN_TABLE_LIST_SELECT_LEX(table_list)    \
-   (table_list)->select_lex
+#  define MRN_TABLE_LIST_QUERY_BLOCK(table_list)    \
+   (table_list)->query_block
 #endif
 
 #if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80018
@@ -799,26 +795,26 @@ typedef HASH mrn_table_def_cache_type;
 
 #if MYSQL_VERSION_ID >= 80024 && !defined(MRN_MARIADB_P)
   class Query_block;
-  typedef Query_block mrn_select_lex;
+  typedef Query_block mrn_query_block;
 #elif MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
   class SELECT_LEX;
-  typedef SELECT_LEX mrn_select_lex;
+  typedef SELECT_LEX mrn_query_block;
 #else
-  typedef st_select_lex mrn_select_lex;
+  typedef st_select_lex mrn_query_block;
 #endif
 
 #if MYSQL_VERSION_ID >= 80024 && !defined(MRN_MARIADB_P)
-  typedef Query_expression mrn_select_lex_unit;
+  typedef Query_expression mrn_query_expression;
 #else
-  typedef SELECT_LEX_UNIT mrn_select_lex_unit;
+  typedef SELECT_LEX_UNIT mrn_query_expression;
 #endif
 
 #if MYSQL_VERSION_ID >= 80024 && !defined(MRN_MARIADB_P)
-#  define MRN_SELECT_LEX_UNIT_FIRST_SELECT(select_lex_unit)  \
-   (select_lex_unit)->first_query_block()
+#  define MRN_QUERY_EXPRESSION_FIRST_QUERY_BLOCK(query_expression)  \
+   (query_expression)->first_query_block()
 #else
-#  define MRN_SELECT_LEX_UNIT_FIRST_SELECT(select_lex_unit)  \
-   (select_lex_unit)->first_select()
+#  define MRN_QUERY_EXPRESSION_FIRST_QUERY_BLOCK(query_expression)  \
+   (query_expression)->first_select()
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)

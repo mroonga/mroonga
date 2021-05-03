@@ -29,13 +29,13 @@
 namespace mrn {
   CountSkipChecker::CountSkipChecker(grn_ctx *ctx,
                                      TABLE *table,
-                                     mrn_select_lex *select_lex,
+                                     mrn_query_block *query_block,
                                      KEY *key_info,
                                      key_part_map target_key_part_map,
                                      bool is_storage_mode)
     : ctx_(ctx),
       table_(table),
-      select_lex_(select_lex),
+      query_block_(query_block),
       key_info_(key_info),
       target_key_part_map_(target_key_part_map),
       is_storage_mode_(is_storage_mode) {
@@ -47,31 +47,31 @@ namespace mrn {
   bool CountSkipChecker::check() {
     MRN_DBUG_ENTER_METHOD();
 
-    if (MRN_SELECT_LEX_GET_NUM_VISIBLE_FIELDS(select_lex_) != 1) {
+    if (MRN_QUERY_BLOCK_GET_NUM_VISIBLE_FIELDS(query_block_) != 1) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] not only one item: %u",
-              MRN_SELECT_LEX_GET_NUM_VISIBLE_FIELDS(select_lex_));
+              MRN_QUERY_BLOCK_GET_NUM_VISIBLE_FIELDS(query_block_));
       DBUG_RETURN(false);
     }
-    if (select_lex_->group_list.elements > 0) {
+    if (query_block_->group_list.elements > 0) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] have groups: %u",
-              select_lex_->group_list.elements);
+              query_block_->group_list.elements);
       DBUG_RETURN(false);
     }
-    if (MRN_SELECT_LEX_GET_HAVING_COND(select_lex_)) {
+    if (MRN_QUERY_BLOCK_GET_HAVING_COND(query_block_)) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] have HAVING");
       DBUG_RETURN(false);
     }
-    if (select_lex_->table_list.elements != 1) {
+    if (query_block_->table_list.elements != 1) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] not only one table: %u",
-              select_lex_->table_list.elements);
+              query_block_->table_list.elements);
       DBUG_RETURN(false);
     }
 
-    Item *info = MRN_SELECT_LEX_GET_FIRST_VISIBLE_FIELD(select_lex_);
+    Item *info = MRN_QUERY_BLOCK_GET_FIRST_VISIBLE_FIELD(query_block_);
     if (info->type() != Item::SUM_FUNC_ITEM) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] item isn't sum function: %u",
@@ -98,7 +98,7 @@ namespace mrn {
       DBUG_RETURN(false);
     }
 
-    Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex_);
+    Item *where = MRN_QUERY_BLOCK_GET_WHERE_COND(query_block_);
     if (!where) {
       if (is_storage_mode_) {
         GRN_LOG(ctx_, GRN_LOG_DEBUG,
