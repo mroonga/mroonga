@@ -797,13 +797,12 @@ typedef HASH mrn_table_def_cache_type;
   typedef Foreign_key mrn_foreign_key_spec;
 #endif
 
-#if MYSQL_VERSION_ID >= 80011 && MYSQL_VERSION_ID < 80024 \
-    && !defined(MRN_MARIADB_P)
-  class SELECT_LEX;
-  typedef SELECT_LEX mrn_select_lex;
-#elif MYSQL_VERSION_ID >= 80024 && !defined(MRN_MARIADB_P)
+#if MYSQL_VERSION_ID >= 80024 && !defined(MRN_MARIADB_P)
   class Query_block;
   typedef Query_block mrn_select_lex;
+#elif MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+  class SELECT_LEX;
+  typedef SELECT_LEX mrn_select_lex;
 #else
   typedef st_select_lex mrn_select_lex;
 #endif
