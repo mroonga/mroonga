@@ -1,10 +1,8 @@
 # -*- sh-shell: rpm -*-
 
-%define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
-
 %define mysql_version_default 8.0.24
 %define mysql_release_default 1
-%define mysql_dist_default    el%{_centos_ver}
+%define mysql_dist_default    el%{rhel}
 %define mysql_spec_file_default mysql.spec
 
 %define _mysql_version %{?mysql_version:%{mysql_version}}%{!?mysql_version:%{mysql_version_default}}
@@ -12,7 +10,8 @@
 %define _mysql_dist %{?mysql_dist:%{mysql_dist}}%{!?mysql_dist:%{mysql_dist_default}}
 %define _mysql_spec_file %{?mysql_spec_file:%{mysql_spec_file}}%{!?mysql_spec_file:%{mysql_spec_file_default}}
 
-%define use_dnf (%{_centos_ver} >= 8)
+%define use_dnf (%{rhel} >= 8)
+%define use_cmake (%{rhel} >= 8)
 
 %if %{use_dnf}
 %define dnf_download dnf download
@@ -33,7 +32,6 @@ URL:		http://mroonga.org/
 Source0:	http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
-BuildRequires:	gcc-c++
 BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	mysql-community-devel = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
@@ -73,6 +71,9 @@ if ! cp /mysql-community-*.src.rpm ./; then
 fi
 rpm -Uvh mysql-community-*.src.rpm
 sed -i'' -e 's/^  make /  # make /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
+%if %{use_cmake}
+sed -i'' -e 's/^  cmake3 /  cmake /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
+%endif
 
 %build
 rpmbuild -bc ~/rpmbuild/SPECS/%{_mysql_spec_file}
