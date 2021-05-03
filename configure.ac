@@ -339,19 +339,19 @@ AS_HELP_STRING([--with-debug=full],
 if test "$with_debug" = "yes"
 then
   # Medium debug.
-  AC_DEFINE([DBUG_ON], [1], [Use libdbug])
+  AC_DEFINE([DBUG_ON], [1], [Enable debug])
   CFLAGS="$DEBUG_CFLAGS $DEBUG_OPTIMIZE_CC -DSAFE_MUTEX $CFLAGS -O0 -g3"
   CXXFLAGS="$DEBUG_CXXFLAGS $DEBUG_OPTIMIZE_CXX -DSAFE_MUTEX $CXXFLAGS -O0 -g3"
 elif test "$with_debug" = "full"
 then
   # Full debug. Very slow in some cases
-  AC_DEFINE([DBUG_ON], [1], [Use libdbug])
+  AC_DEFINE([DBUG_ON], [1], [Enable debug])
   CFLAGS="$DEBUG_CFLAGS -DSAFE_MUTEX -DSAFEMALLOC $CFLAGS -O0 -g3"
   CXXFLAGS="$DEBUG_CXXFLAGS -DSAFE_MUTEX -DSAFEMALLOC $CXXFLAGS -O0 -g3"
 else
   # Optimized version. No debug
-  AC_DEFINE([NDEBUG], [1], [Don't use libdbug])
-  AC_DEFINE([DBUG_OFF], [1], [Don't use libdbug])
+  AC_DEFINE([NDEBUG], [1], [Disable debug])
+  AC_DEFINE([DBUG_OFF], [1], [Disable debug])
   CFLAGS="$OPTIMIZE_CFLAGS $CFLAGS"
   CXXFLAGS="$OPTIMIZE_CXXFLAGS $CXXFLAGS"
 fi
