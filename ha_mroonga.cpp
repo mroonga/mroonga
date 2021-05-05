@@ -243,7 +243,7 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_TABLE_LIST_DERIVED_QUERY_EXPRESSION(table_list) \
   ((table_list)->is_derived() ?                               \
    (table_list)->derived_unit() :                             \
-   nullptr)
+   NULL)
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
