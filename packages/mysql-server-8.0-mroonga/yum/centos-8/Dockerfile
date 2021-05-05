@@ -3,6 +3,9 @@ FROM ${FROM}
 
 ARG DEBUG
 
+ENV \
+  SCL=gcc-toolset-10
+
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
   dnf update -y ${quiet} && \
@@ -15,6 +18,7 @@ RUN \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=powertools -y ${quiet} \
     ccache \
+    ${SCL}-annobin \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
