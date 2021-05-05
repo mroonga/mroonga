@@ -4,7 +4,7 @@ FROM ${FROM}
 ARG DEBUG
 
 ENV \
-  DEVTOOLSET_VERSION=8
+  SCL=devtoolset-8
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
@@ -28,7 +28,7 @@ RUN \
     # Mroonga dependencies.
     percona-server-devel \
     ccache \
-    devtoolset-${DEVTOOLSET_VERSION} \
+    ${SCL} \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
