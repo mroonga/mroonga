@@ -695,7 +695,7 @@ typedef HASH mrn_table_def_cache_type;
    (table_list)->query_block
 #else
 #  define MRN_TABLE_LIST_QUERY_BLOCK(table_list)    \
-   (table_list)->query_block
+   (table_list)->select_lex
 #endif
 
 #if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80018
