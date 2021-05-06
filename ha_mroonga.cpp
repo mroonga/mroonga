@@ -10899,10 +10899,11 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
     DBUG_RETURN(HA_ERR_END_OF_FILE);
   }
   if (buf) {
-    if (ignoring_no_key_columns)
+    if (ignoring_no_key_columns) {
       storage_store_fields_by_index(buf);
-    else
+    } else {
       storage_store_fields(buf, record_id);
+    }
     if (cursor_geo && grn_source_column_geo) {
       int latitude, longitude;
       GRN_GEO_POINT_VALUE(&source_point, latitude, longitude);
@@ -12456,7 +12457,15 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field))) {
       if (ignoring_no_key_columns) {
         KEY *key_info = &(table->s->key_info[active_index]);
-        if (!FIELD_NAME_EQUAL_FIELD(field, key_info->key_part[0].field)) {
+        bool have_key = false;
+        uint n_keys = KEY_N_KEY_PARTS(key_info);
+        for (uint j = 0; j < n_keys; ++j) {
+          if (FIELD_NAME_EQUAL_FIELD(field, key_info->key_part[j].field)) {
+            have_key = true;
+            break;
+          }
+        }
+        if (!have_key) {
           continue;
         }
       }
@@ -12531,9 +12540,28 @@ void ha_mroonga::storage_store_fields_for_prep_update(const uchar *old_data,
 void ha_mroonga::storage_store_fields_by_index(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
+
+  KEY *key_info = &table->key_info[active_index];
+  uint n_keys = KEY_N_KEY_PARTS(key_info);
+  for (uint i = 0; i < n_keys; ++i) {
+    switch (key_info->key_part[i].type) {
+    case MYSQL_TYPE_VARCHAR:
+    case MYSQL_TYPE_VAR_STRING:
+    case MYSQL_TYPE_STRING:
+      // Text values in index may be normalized.
+      if (strcmp(key_info->key_part[i].field->charset()->csname,
+                 "binary") != 0) {
+        storage_store_fields(buf, record_id);
+        DBUG_VOID_RETURN;
+      }
+      break;
+    default:
+      break;
+    }
+  }
+
   uint key_length;
   void *key;
-  KEY *key_info = &table->key_info[active_index];
   if (table->s->primary_key == active_index)
     key_length = grn_table_cursor_get_key(ctx, cursor, &key);
   else
