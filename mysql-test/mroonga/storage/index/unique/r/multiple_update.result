@@ -1,9 +1,9 @@
 DROP TABLE IF EXISTS fts_targets;
 SET NAMES utf8mb4;
 CREATE TABLE fts_targets (
-id int(11) NOT NULL AUTO_INCREMENT,
-source_id int(11) NOT NULL,
-source_type_id int(11) NOT NULL,
+id int NOT NULL AUTO_INCREMENT,
+source_id int NOT NULL,
+source_type_id int NOT NULL,
 PRIMARY KEY (id),
 UNIQUE KEY (source_id, source_type_id)
 ) DEFAULT CHARSET=utf8mb4;

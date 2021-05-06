@@ -123,7 +123,6 @@ run_sql_test()
       rm -f fulltext/t/found_rows.test
       rm -f geometry/strict_sql_mode/t/bulk_insert_null.test
       rm -f index/unique/t/varchar.test
-      rm -f index/unique/t/multiple_update.test
       rm -f like/t/unicode_ci.test
       rm -f select/empty_key/t/where_not_equal.test
       rm -f replace/t/select_varchar.test
