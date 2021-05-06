@@ -4,23 +4,20 @@ FROM ${FROM}
 ARG DEBUG
 
 ENV \
-  DEVTOOLSET_VERSION=9
+  SCL=devtoolset-10
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
   yum update -y ${quiet} && \
-  yum install -y ${quiet} centos-release-scl-rh && \
   yum install -y ${quiet} \
-    https://repo.mysql.com/mysql80-community-release-el7.rpm && \
-  yum install -y \
+    centos-release-scl-rh \
     https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
-    epel-release && \
-  yum groupinstall -y ${quiet} "Development Tools" && \
+    https://repo.mysql.com/mysql80-community-release-el7.rpm && \
+  yum-config-manager --enable centos-sclo-rh-testing && \
   yum-builddep -y ${quiet} mysql-community && \
   yumdownloader -y ${quiet} --source mysql-community && \
   yum install -y ${quiet} \
     ccache \
-    devtoolset-${DEVTOOLSET_VERSION} \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
@@ -28,6 +25,7 @@ RUN \
     make \
     mysql-community-devel \
     pkgconfig \
+    rpm-build \
     wget \
     which && \
   yum clean ${quiet} all

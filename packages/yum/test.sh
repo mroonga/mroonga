@@ -25,6 +25,7 @@ ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
 case ${package} in
   mariadb-*)
+    mysql_package_prefix=MariaDB
     mroonga_package=$(echo "${package}" | sed -e '' -e 's/-server//g')
     service_name=mariadb
     ha_mroonga_so=ha_mroonga_official.so
@@ -38,6 +39,7 @@ gpgcheck=1
 REPO
     ;;
   mysql-*)
+    mysql_package_prefix=mysql-community
     # mysql-server-5.7-mroonga ->
     # mysql57-community-mroonga
     mroonga_package=$(echo "${package}" | \
@@ -56,9 +58,11 @@ REPO
     service_name=mysqld
     case ${mysql_version} in
       5.7)
+        mysql_package_prefix=Percona-Server
         test_package_name=Percona-Server-test-57
         ;;
       *)
+        mysql_package_prefix=percona-server
         test_package_name=percona-server-test
         ;;
     esac
@@ -166,7 +170,9 @@ sudo \
 
 
 # Upgrade
-sudo ${DNF} erase -y ${mroonga_package}
+sudo ${DNF} erase -y \
+  ${mroonga_package} \
+  "${mysql_package_prefix}-*"
 sudo ${DNF} install -y ${mroonga_package}
 sudo ${DNF} install -y \
   ${repositories_dir}/centos/${centos_version}/*/Packages/*.rpm

@@ -1,31 +1,31 @@
-ARG FROM=centos:8
+ARG FROM=quay.io/centos/centos:stream8
 FROM ${FROM}
 
 ARG DEBUG
 
+ENV \
+  SCL=gcc-toolset-10
+
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
   dnf update -y ${quiet} && \
-  dnf install -y ${quiet} \
-    https://repo.mysql.com/mysql80-community-release-el8.rpm && \
-  dnf install -y \
-    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
-    epel-release && \
-  dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=powertools -y ${quiet} \
     'dnf-command(builddep)' \
-    'dnf-command(download)' && \
+    'dnf-command(download)' \
+    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
+    https://repo.mysql.com/mysql80-community-release-el8.rpm && \
   dnf builddep --enablerepo=powertools -y ${quiet} mysql-community && \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=powertools -y ${quiet} \
     ccache \
-    gcc-toolset-9 \
+    ${SCL}-annobin \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
     libtool \
     make \
     pkgconfig \
+    rpm-build \
     wget \
     which && \
   dnf install --disablerepo=appstream -y ${quiet} \

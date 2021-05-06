@@ -379,7 +379,7 @@ else()
     endif()
   else()
     set_property(TARGET mroonga APPEND PROPERTY
-      COMPILE_DEFINITIONS "DBUG_OFF")
+      COMPILE_DEFINITIONS "NDEBUG" "DBUG_OFF")
   endif()
 
   option(WITH_DEBUG_FULL "Enable full debug options" OFF)

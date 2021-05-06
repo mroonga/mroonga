@@ -232,9 +232,18 @@ static mysql_mutex_t *mrn_LOCK_open;
 #endif
 
 #ifdef MRN_MARIADB_P
-#  define MRN_TABLE_LIST_GET_DERIVED(table_list) (table_list)->derived
+#  define MRN_TABLE_LIST_DERIVED_QUERY_EXPRESSION(table_list) \
+  ((table_list)->derived)
+#elif MYSQL_VERSION_ID >= 80024
+#  define MRN_TABLE_LIST_DERIVED_QUERY_EXPRESSION(table_list) \
+  ((table_list)->is_derived() ?                               \
+   (table_list)->derived_query_expression() :                 \
+   nullptr)
 #else
-#  define MRN_TABLE_LIST_GET_DERIVED(table_list) NULL
+#  define MRN_TABLE_LIST_DERIVED_QUERY_EXPRESSION(table_list) \
+  ((table_list)->is_derived() ?                               \
+   (table_list)->derived_unit() :                             \
+   NULL)
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
@@ -11041,14 +11050,14 @@ void ha_mroonga::check_count_skip(key_part_map target_key_part_map)
     DBUG_VOID_RETURN;
   }
 
-  mrn_select_lex *select_lex = table->pos_in_table_list->select_lex;
+  mrn_query_block *query_block = MRN_TABLE_LIST_QUERY_BLOCK(table->pos_in_table_list);
   KEY *key_info = NULL;
   if (active_index != MAX_KEY) {
     key_info = &(table->key_info[active_index]);
   }
   mrn::CountSkipChecker checker(ctx,
                                 table,
-                                select_lex,
+                                query_block,
                                 key_info,
                                 target_key_part_map,
                                 !share->wrapper_mode);
@@ -11118,44 +11127,45 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
   }
 
   TABLE_LIST *table_list = table->pos_in_table_list;
-  mrn_select_lex *select_lex = table_list->select_lex;
-  SELECT_LEX_UNIT *unit = MRN_TABLE_LIST_GET_DERIVED(table_list);
-  mrn_select_lex *first_select_lex;
-  if (unit)
+  mrn_query_block *query_block = MRN_TABLE_LIST_QUERY_BLOCK(table_list);
+  mrn_query_expression *query_expression =
+    MRN_TABLE_LIST_DERIVED_QUERY_EXPRESSION(table_list);
+  mrn_query_block *first_query_block;
+  if (query_expression)
   {
-    first_select_lex = unit->first_select();
+    first_query_block = MRN_QUERY_EXPRESSION_FIRST_QUERY_BLOCK(query_expression);
   } else {
-    first_select_lex = select_lex;
+    first_query_block = query_block;
   }
   GRN_LOG(ctx, GRN_LOG_DEBUG,
-          "%s first_select_lex->options=%llu",
+          "%s first_query_block->options=%llu",
           tag,
-          first_select_lex ?
-          MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(first_select_lex) :
+          first_query_block ?
+          MRN_QUERY_BLOCK_GET_ACTIVE_OPTIONS(first_query_block) :
           0);
 
   // TODO: Extract as a class like mrn::ConditionConverter
   if (
     thd_sql_command(ha_thd()) == SQLCOM_SELECT &&
-    !select_lex->with_sum_func &&
-    !select_lex->group_list.elements &&
-    !MRN_SELECT_LEX_GET_HAVING_COND(select_lex) &&
-    select_lex->table_list.elements == 1 &&
-    strcmp(select_lex->table_list.first->get_db_name(),
+    !query_block->with_sum_func &&
+    !query_block->group_list.elements &&
+    !MRN_QUERY_BLOCK_GET_HAVING_COND(query_block) &&
+    query_block->table_list.elements == 1 &&
+    strcmp(query_block->table_list.first->get_db_name(),
            table_list->get_db_name()) == 0 &&
-    strcmp(select_lex->table_list.first->get_table_name(),
+    strcmp(query_block->table_list.first->get_table_name(),
            table_list->get_table_name()) == 0 &&
-    select_lex->order_list.elements &&
-    MRN_SELECT_LEX_HAS_LIMIT(select_lex) &&
-    select_lex->select_limit &&
-    select_lex->select_limit->val_int() > 0
+    query_block->order_list.elements &&
+    MRN_QUERY_BLOCK_HAS_LIMIT(query_block) &&
+    query_block->select_limit &&
+    query_block->select_limit->val_int() > 0
   ) {
-    if (select_lex->offset_limit) {
-      *limit = select_lex->offset_limit->val_int();
+    if (query_block->offset_limit) {
+      *limit = query_block->offset_limit->val_int();
     } else {
       *limit = 0;
     }
-    *limit += select_lex->select_limit->val_int();
+    *limit += query_block->select_limit->val_int();
     if (*limit > (longlong)INT_MAX) {
       GRN_LOG(ctx, GRN_LOG_DEBUG,
               "%s[false] too long limit: %lld <= %d is required",
@@ -11165,8 +11175,8 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       fast_order_limit = false;
       DBUG_VOID_RETURN;
     }
-    if (first_select_lex &&
-        (MRN_SELECT_LEX_GET_ACTIVE_OPTIONS(first_select_lex) & OPTION_FOUND_ROWS)) {
+    if (first_query_block &&
+        (MRN_QUERY_BLOCK_GET_ACTIVE_OPTIONS(first_query_block) & OPTION_FOUND_ROWS)) {
       GRN_LOG(ctx, GRN_LOG_DEBUG,
               "%s[false] SQL_CALC_FOUND_ROWS is specified",
               tag);
@@ -11174,7 +11184,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       DBUG_VOID_RETURN;
     }
     bool is_storage_mode = !(share->wrapper_mode);
-    Item *where = MRN_SELECT_LEX_GET_WHERE_COND(select_lex);
+    Item *where = MRN_QUERY_BLOCK_GET_WHERE_COND(query_block);
     if (where) {
       if (is_storage_mode) {
         if (!pushed_cond) {
@@ -11219,7 +11229,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         }
       }
     }
-    int n_max_sort_keys = select_lex->order_list.elements;
+    int n_max_sort_keys = query_block->order_list.elements;
     *n_sort_keys = 0;
     size_t sort_keys_size = sizeof(grn_table_sort_key) * n_max_sort_keys;
     *sort_keys = (grn_table_sort_key *)mrn_my_malloc(sort_keys_size,
@@ -11229,7 +11239,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
     int i;
     mrn_change_encoding(ctx, system_charset_info);
     fast_order_limit = true;
-    for (order = (ORDER *) select_lex->order_list.first, i = 0;
+    for (order = (ORDER *) query_block->order_list.first, i = 0;
          order;
          order = order->next, i++) {
       Item *item = *order->item;
@@ -13198,12 +13208,12 @@ int ha_mroonga::generic_reset()
     DBUG_RETURN(error);
   }
 
-  mrn_select_lex *select_lex = table_list->select_lex;
-  if (!select_lex) {
+  mrn_query_block *query_block = MRN_TABLE_LIST_QUERY_BLOCK(table_list);
+  if (!query_block) {
     DBUG_RETURN(error);
   }
 
-  List_iterator<Item_func_match> iterator(*(select_lex->ftfunc_list));
+  List_iterator<Item_func_match> iterator(*(query_block->ftfunc_list));
   Item_func_match *item;
   while ((item = iterator++)) {
     if (item->ft_handler) {
@@ -15867,7 +15877,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
     DBUG_RETURN(HA_ALTER_INPLACE_NOT_SUPPORTED);
   }
 
-  DBUG_ASSERT(ha_alter_info->key_count == altered_table->s->keys);
+  assert(ha_alter_info->key_count == altered_table->s->keys);
   alter_key_count = 0;
   alter_index_drop_count = 0;
   alter_index_add_count = 0;

@@ -58,6 +58,8 @@ extern "C" {
 #  define MRN_BIG_TABLES
 #elif defined(BIG_TABLES)
 #  define MRN_BIG_TABLES
+#elif MYSQL_VERSION_ID >= 80021
+#  define MRN_BIG_TABLES
 #endif
 
 #ifdef MRN_BIG_TABLES
