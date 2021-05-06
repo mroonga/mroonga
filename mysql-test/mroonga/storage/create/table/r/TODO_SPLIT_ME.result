@@ -9,32 +9,32 @@ drop table t1,t2;
 create table t1 (c1 bit);
 desc t1;
 Field	Type	Null	Key	Default	Extra
-c1	bit(1)	YES		NULL	
+c1	bit	YES		NULL	
 drop table t1;
 create table t1 (c1 tinyint);
 desc t1;
 Field	Type	Null	Key	Default	Extra
-c1	tinyint(4)	YES		NULL	
+c1	tinyint	YES		NULL	
 drop table t1;
 create table t1 (c1 smallint);
 desc t1;
 Field	Type	Null	Key	Default	Extra
-c1	smallint(6)	YES		NULL	
+c1	smallint	YES		NULL	
 drop table t1;
 create table t1 (c1 mediumint);
 desc t1;
 Field	Type	Null	Key	Default	Extra
-c1	mediumint(9)	YES		NULL	
+c1	mediumint	YES		NULL	
 drop table t1;
 create table t1 (c1 int);
 desc t1;
 Field	Type	Null	Key	Default	Extra
-c1	int(11)	YES		NULL	
+c1	int	YES		NULL	
 drop table t1;
 create table t1 (c1 bigint);
 desc t1;
 Field	Type	Null	Key	Default	Extra
-c1	bigint(20)	YES		NULL	
+c1	bigint	YES		NULL	
 drop table t1;
 create table t1 (c1 double);
 desc t1;
@@ -61,10 +61,10 @@ desc t1;
 Field	Type	Null	Key	Default	Extra
 c1	time	YES		NULL	
 drop table t1;
-create table t1 (c1 timestamp);
+create table t1 (c1 timestamp NOT NULL DEFAULT '2021-05-06 00:00:00');
 desc t1;
 Field	Type	Null	Key	Default	Extra
-c1	timestamp	NO		CURRENT_TIMESTAMP	on update CURRENT_TIMESTAMP
+c1	timestamp	NO		2021-05-06 00:00:00	
 drop table t1;
 create table t1 (c1 datetime);
 desc t1;
@@ -74,7 +74,7 @@ drop table t1;
 create table t1 (c1 year);
 desc t1;
 Field	Type	Null	Key	Default	Extra
-c1	year(4)	YES		NULL	
+c1	year	YES		NULL	
 drop table t1;
 create table t1 (c1 char(10));
 desc t1;
@@ -149,8 +149,8 @@ drop table t1;
 create table t1 (c1 int, `_id` int) engine = mroonga;
 desc t1;
 Field	Type	Null	Key	Default	Extra
-c1	int(11)	YES		NULL	
-_id	int(11)	YES		NULL	
+c1	int	YES		NULL	
+_id	int	YES		NULL	
 drop table t1;
 create table t1 (c1 int, `_score` float) engine = mroonga;
 ERROR HY000: [column][create] name can't start with '_' and contains only 0-9, A-Z, a-z, #, @, - or _: <_score>

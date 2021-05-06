@@ -31,21 +31,27 @@ drop table t1,t2;
 
 # data type support
 create table t1 (c1 bit);
+--replace_regex /\(\d+\)//
 desc t1;
 drop table t1;
 create table t1 (c1 tinyint);
+--replace_regex /\(\d+\)//
 desc t1;
 drop table t1;
 create table t1 (c1 smallint);
+--replace_regex /\(\d+\)//
 desc t1;
 drop table t1;
 create table t1 (c1 mediumint);
+--replace_regex /\(\d+\)//
 desc t1;
 drop table t1;
 create table t1 (c1 int);
+--replace_regex /\(\d+\)//
 desc t1;
 drop table t1;
 create table t1 (c1 bigint);
+--replace_regex /\(\d+\)//
 desc t1;
 drop table t1;
 create table t1 (c1 double);
@@ -63,8 +69,7 @@ drop table t1;
 create table t1 (c1 time);
 desc t1;
 drop table t1;
-create table t1 (c1 timestamp);
-# For MariaDB 10.2.3
+create table t1 (c1 timestamp NOT NULL DEFAULT '2021-05-06 00:00:00');
 -- replace_result current_timestamp() CURRENT_TIMESTAMP
 desc t1;
 drop table t1;
@@ -72,6 +77,7 @@ create table t1 (c1 datetime);
 desc t1;
 drop table t1;
 create table t1 (c1 year);
+--replace_regex /\(\d+\)//
 desc t1;
 drop table t1;
 create table t1 (c1 char(10));
@@ -119,6 +125,7 @@ drop table t1;
 
 # virtual columns
 create table t1 (c1 int, `_id` int) engine = mroonga;
+--replace_regex /\(\d+\)//
 desc t1;
 drop table t1;
 

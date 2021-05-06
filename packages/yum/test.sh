@@ -127,7 +127,6 @@ case ${package} in
     rm -rf foreign_key
     rm -f alter_table/disable_keys/t/truncate.test
     rm -f alter_table/t/spatial.test
-    rm -f create/table/t/TODO_SPLIT_ME.test
     rm -f create/table/index/lexicon/t/comment.test
     rm -f geometry/strict_sql_mode/t/bulk_insert_null.test
     rm -f like/t/unicode_ci.test
