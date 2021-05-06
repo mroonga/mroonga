@@ -12544,7 +12544,7 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
   KEY *key_info = &table->key_info[active_index];
   uint n_keys = KEY_N_KEY_PARTS(key_info);
   for (uint i = 0; i < n_keys; ++i) {
-    switch (key_info->key_part[i].type) {
+    switch (key_info->key_part[i].field->real_type()) {
     case MYSQL_TYPE_VARCHAR:
     case MYSQL_TYPE_VAR_STRING:
     case MYSQL_TYPE_STRING:
