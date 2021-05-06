@@ -125,8 +125,6 @@ case ${package} in
     rm -rf optimization/count_skip
     rm -rf column/set
     rm -rf foreign_key
-    rm -rf index/range/normal
-    rm -rf index/range/primary
     rm -f alter_table/disable_keys/t/truncate.test
     rm -f alter_table/t/spatial.test
     rm -f create/table/t/TODO_SPLIT_ME.test
