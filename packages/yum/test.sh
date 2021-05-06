@@ -157,6 +157,10 @@ sudo \
 sudo ${DNF} erase -y \
   ${mroonga_package} \
   "${mysql_package_prefix}-*"
+# TODO: Remove this workaround once we release a new version
+if [ "${mysql_version}" = "8.0" -a ${centos_version} -eq 7 ]; then
+  sudo ${DNF} install -y mysql-community-{common,libs}-8.0.23-1.el7
+fi
 sudo ${DNF} install -y ${mroonga_package}
 sudo ${DNF} install -y \
   ${repositories_dir}/centos/${centos_version}/*/Packages/*.rpm
