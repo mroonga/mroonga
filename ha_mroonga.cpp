@@ -12958,6 +12958,7 @@ int ha_mroonga::storage_encode_key_set(Field *field, const uchar *key,
                      field->pack_length(),
                      static_cast<Field_set*>(field)->typelib,
                      static_cast<Field_set*>(field)->charset());
+  unpacker.table = table;
   switch (field->pack_length()) {
   case 1:
     {
