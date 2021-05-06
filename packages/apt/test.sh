@@ -40,8 +40,22 @@ for test_suite_name in $(find plugin/mroonga -type d '!' -name '[tr]'); do
 done
 sudo \
   ./mtr \
+  --force \
   --no-check-testcases \
   --parallel=$(nproc) \
   --retry=3 \
-  --suite="${test_suite_names}" \
-  --force
+  --suite="${test_suite_names}"
+
+case ${package} in
+  mariadb-*)
+    # Test with binary protocol
+    sudo \
+      ./mtr \
+      --force \
+      --no-check-testcases \
+      --parallel=$(nproc) \
+      --ps-protocol \
+      --retry=3 \
+      --suite="${test_suite_names}"
+    ;;
+esac

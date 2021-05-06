@@ -1,4 +1,4 @@
-name: Package
+name: Linux
 on:
   push:
     branches:

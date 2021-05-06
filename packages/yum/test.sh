@@ -152,6 +152,20 @@ sudo \
   --retry=3 \
   --suite="${test_suite_names}"
 
+case ${package} in
+  mariadb-*)
+    # Test with binary protocol
+    sudo \
+      ./mtr \
+      --force \
+      --mysqld=--loose-plugin-load-add=${ha_mroonga_so} \
+      --mysqld=--loose-plugin-mroonga=ON \
+      --parallel=${parallel} \
+      --ps-protocol \
+      --retry=3 \
+      --suite="${test_suite_names}"
+    ;;
+esac
 
 # Upgrade
 sudo ${DNF} erase -y \
