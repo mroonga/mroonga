@@ -14,14 +14,14 @@ INSERT INTO ids VALUES ("ADE", "ABc");
 INSERT INTO ids VALUES ("AEF", "ABC");
 SELECT * FROM ids;
 id	value
-abc	Abc
-acd	aBc
-ade	abC
-aef	abc
 ABC	aBC
 ACD	AbC
 ADE	ABc
 AEF	ABC
+abc	Abc
+acd	aBc
+ade	abC
+aef	abc
 SELECT * FROM ids WHERE id BETWEEN "ab" AND "ad";
 id	value
 abc	Abc

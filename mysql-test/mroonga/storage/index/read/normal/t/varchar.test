@@ -33,6 +33,7 @@ INSERT INTO ids SELECT id + "4"  FROM ids;
 INSERT INTO ids SELECT id + "8"  FROM ids;
 INSERT INTO ids SELECT id + "16" FROM ids;
 
+--sorted_result
 SELECT * FROM ids;
 SELECT * FROM ids WHERE id BETWEEN "10" AND "16";
 
