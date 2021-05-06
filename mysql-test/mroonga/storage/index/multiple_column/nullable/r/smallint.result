@@ -5,15 +5,6 @@ c1 SMALLINT,
 c2 SMALLINT,
 KEY idx1(c1, c2)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-SHOW CREATE TABLE t1;
-Table	Create Table
-t1	CREATE TABLE `t1` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `c1` smallint(6) DEFAULT NULL,
-  `c2` smallint(6) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `idx1` (`c1`,`c2`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO t1 (c1, c2) VALUES
 (1999, 12),
 (2000, 11),

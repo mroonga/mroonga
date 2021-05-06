@@ -26,7 +26,6 @@ CREATE TABLE items (
   created_at DATETIME,
   INDEX (score, created_at)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-SHOW CREATE TABLE items;
 
 INSERT INTO items (score, created_at) VALUES(1, "2014-09-10 00:00:00");
 INSERT INTO items (score, created_at) VALUES(2, "2014-09-11 00:00:00");

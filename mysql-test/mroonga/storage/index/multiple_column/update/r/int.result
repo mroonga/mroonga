@@ -5,15 +5,6 @@ name CHAR(30) NOT NULL,
 score INT NOT NULL,
 KEY property (score, name)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-SHOW CREATE TABLE scores;
-Table	Create Table
-scores	CREATE TABLE `scores` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` char(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `score` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `property` (`score`,`name`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO scores (name, score) VALUES("Taro Yamada", 29);
 INSERT INTO scores (name, score) VALUES("Taro Yamada", -12);
 INSERT INTO scores (name, score) VALUES("Jiro Yamada", 29);
