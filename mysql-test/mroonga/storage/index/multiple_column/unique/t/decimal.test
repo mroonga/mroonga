@@ -34,6 +34,7 @@ select c2, c3 from t1 force index(uk1) order by c2, c3;
 # We will use "..." version instead of "000" version as expected value
 # when MySQL also uses "...".
 --replace_result 123.456000000000000000000000000000-0.000000000000000000000000... 123.456000000000000000000000000000-0.000000000000000000000000000
+--replace_result 't1.uk1' 'uk1'
 --error ER_DUP_ENTRY
 insert into t1 values(6,123.456,0.000000000000000000000000000001);
 delete from t1 where c1 = 1;
