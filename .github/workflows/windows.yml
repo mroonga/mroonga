@@ -106,9 +106,9 @@ jobs:
               -Uri "https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
               -OutFile ${MARIADB_TAR_GZ}
           }
-          cd ..
-          ridk exec tar xzf "..\${MARIADB_TAR_GZ}"
-          cd mariadb-${{ matrix.mariadb-version }}
+          ridk exec tar xzf "${MARIADB_TAR_GZ}"
+          Move-Item mariadb-${{ matrix.mariadb-version }} ..\source
+          cd ..\source
           if ("${{ matrix.mariadb-version }}" -match "^10\.5") {
             ridk exec patch -p1 -i `
               ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
@@ -126,8 +126,6 @@ jobs:
             ..\mariadb-connector-c-fix-syntax-error-in-cmake-3.20.patch
           Remove-Item storage\mroonga -Recurse -Force
           Copy-Item ..\mroonga storage\mroonga -Recurse
-          cd ..
-          Move-Item mariadb-${{ matrix.mariadb-version }} source
       - name: Prepare Groonga
         run: |
           cd ..\source
