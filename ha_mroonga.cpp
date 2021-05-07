@@ -7576,27 +7576,6 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
 
   grn_db_touch(ctx, grn_ctx_db(ctx));
 
-  if (table->found_next_number_field &&
-      !table->s->next_number_keypart &&
-      new_data == table->record[0]) {
-    mrn::DebugColumnAccess debug_column_access(table, &(table->read_set));
-    Field_num *field = (Field_num *) table->found_next_number_field;
-    if (MRN_FIELD_IS_UNSIGNED(field) || field->val_int() > 0) {
-      MRN_LONG_TERM_SHARE *long_term_share = share->long_term_share;
-      ulonglong nr = (ulonglong) field->val_int();
-      if (!long_term_share->auto_inc_inited) {
-        storage_info(HA_STATUS_AUTO);
-      }
-      {
-        mrn::Lock lock(&long_term_share->auto_inc_mutex);
-        if (long_term_share->auto_inc_value <= nr) {
-          long_term_share->auto_inc_value = nr + 1;
-          DBUG_PRINT("info", ("mroonga: auto_inc_value=%llu",
-            long_term_share->auto_inc_value));
-        }
-      }
-    }
-  }
   DBUG_RETURN(0);
 
 err:

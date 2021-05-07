@@ -24,10 +24,12 @@ DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
   body VARCHAR(140)
-) DEFAULT CHARSET UTF8MB4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--replace_regex /int\([0-9]+\)/int/
 SHOW CREATE TABLE diaries;
 
 ALTER TABLE diaries ADD title VARCHAR(40) AFTER id;
+--replace_regex /int\([0-9]+\)/int/
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, body) values ("groonga (1)", "starting groonga.");
