@@ -95,7 +95,9 @@ jobs:
       - name: Prepare MariaDB
         run: |
           cd ..
-          ridk exec curl --location -O https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz
+          Invoke-WebRequest `
+            -Uri "https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
+            -OutFile "mariadb-${{ matrix.mariadb-version }}.tar.gz"
           ridk exec tar xzf mariadb-${{ matrix.mariadb-version }}.tar.gz
           cd mariadb-${{ matrix.mariadb-version }}
           if ("${{ matrix.mariadb-version }}" -match "^10\.5") {
@@ -108,9 +110,9 @@ jobs:
           # However, this fix is not included that above version of mariadb.
           # Therefore, we fix this bug by using this patch until next release for mariadb.
           # We will remove this patch when the next version of mariadb will be released.
-          ridk exec curl `
-            -o mariadb-connector-c-fix-syntax-error-in-cmake-3.20.patch `
-            https://github.com/mariadb-corporation/mariadb-connector-c/commit/242cab8cbcd91af882233730a83627d3b12ced83.patch
+          Invoke-WebRequest `
+            -Uri "https://github.com/mariadb-corporation/mariadb-connector-c/commit/242cab8cbcd91af882233730a83627d3b12ced83.patch" `
+            -OutFile "mariadb-connector-c-fix-syntax-error-in-cmake-3.20.patch"
           ridk exec patch -d libmariadb -p1 -i `
             ..\mariadb-connector-c-fix-syntax-error-in-cmake-3.20.patch
           Remove-Item storage\mroonga -Recurse -Force
