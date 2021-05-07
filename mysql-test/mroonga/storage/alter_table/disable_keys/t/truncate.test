@@ -33,6 +33,7 @@ INSERT INTO users VALUES("Taro",   "Yamada");
 INSERT INTO users VALUES("Hanako", "Tanaka");
 INSERT INTO users VALUES("Joe",    "Honda");
 
+--sorted_result
 SELECT * FROM users;
 
 ALTER TABLE users DISABLE KEYS;

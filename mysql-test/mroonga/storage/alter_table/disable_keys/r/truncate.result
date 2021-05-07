@@ -10,9 +10,9 @@ INSERT INTO users VALUES("Hanako", "Tanaka");
 INSERT INTO users VALUES("Joe",    "Honda");
 SELECT * FROM users;
 first_name	last_name
-Taro	Yamada
 Hanako	Tanaka
 Joe	Honda
+Taro	Yamada
 ALTER TABLE users DISABLE KEYS;
 TRUNCATE users;
 SELECT * FROM users;
