@@ -116,11 +116,6 @@ case ${package} in
     # when these functionality is supported or test case is fixed for MySQL 8.0.
     rm -rf plugin/mroonga/wrapper
     pushd plugin/mroonga/storage
-    rm -rf alter_table/add_column/flags
-    rm -rf alter_table/add_column/groonga_type
-    rm -rf alter_table/add_column/multibyte
-    rm -rf alter_table/add_column/type
-    rm -rf create/table/index/lexicon
     rm -rf optimization/condition_push_down
     rm -rf optimization/order_limit
     rm -rf optimization/count_skip
