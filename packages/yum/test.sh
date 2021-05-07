@@ -120,7 +120,6 @@ case ${package} in
     rm -rf alter_table/add_column/groonga_type
     rm -rf alter_table/add_column/multibyte
     rm -rf alter_table/add_column/type
-    rm -rf alter_table/add_index/unique
     rm -rf create/table/table/default_tokenizer
     rm -rf create/table/index/lexicon
     rm -rf optimization/condition_push_down

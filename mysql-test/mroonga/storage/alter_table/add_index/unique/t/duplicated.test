@@ -23,12 +23,13 @@ DROP TABLE IF EXISTS ids;
 
 CREATE TABLE ids (
   id INT
-) DEFAULT CHARSET UTF8MB4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO ids (id) values (1), (1);
 
 --error ER_DUP_UNIQUE
 ALTER TABLE ids ADD UNIQUE INDEX (id);
+--replace_regex /\([0-9]+\)//
 SHOW CREATE TABLE ids;
 
 SELECT * FROM ids;
