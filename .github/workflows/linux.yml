@@ -138,10 +138,50 @@ jobs:
           APT_TARGETS: ${{ matrix.os }}
           GROONGA_REPOSITORY: ../../../groonga
           YUM_TARGETS: ${{ matrix.os }}
+
+      # Artifact
       - uses: actions/upload-artifact@v2
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
           path: packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
+
+      # Release
+      - name: Create assets
+        if: |
+          startsWith(github.ref, 'refs/tags/')
+        run: |
+          mv \
+            packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/ \
+            repositories
+          tar czf \
+            ${{ matrix.package }}-mroonga-${{ matrix.os }}.tar.gz \
+            repositories
+      - name: Ensure creating release
+        if: |
+          startsWith(github.ref, 'refs/tags/')
+        id: create-release
+        uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
+          script: |
+            const AsyncFunction = Object.getPrototypeOf(async () => {}).constructor
+            const fs = require("fs");
+            const path = ".github/workflows/ensure-creating-release.js";
+            const script = fs.readFileSync(path).toString();
+            const func = new AsyncFunction("require", "github", "context", script);
+            return await func(require, github, context);
+      - name: Upload to release
+        uses: actions/upload-release-asset@v1.0.1
+        if: |
+          startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.result }}
+          asset_path: ${{ matrix.package }}-mroonga-${{ matrix.os }}.tar.gz
+          asset_name: ${{ matrix.package }}-mroonga-${{ matrix.os }}.tar.gz
+          asset_content_type: application/gzip
 
   test:
     name: Test
