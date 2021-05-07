@@ -103,7 +103,7 @@ jobs:
           if (-not(Test-Path -Path ${MARIADB_TAR_GZ})) {
             New-Item download -ItemType Directory -Force
             Invoke-WebRequest `
-              -Uri "https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
+              -Uri "http://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
               -OutFile ${MARIADB_TAR_GZ} `
               -Verbose
           }
