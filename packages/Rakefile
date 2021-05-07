@@ -20,27 +20,16 @@ namespace :version do
   end
 end
 
-[:ubuntu, :windows].each do |target_namespace|
-  namespace target_namespace do
-    desc "Upload #{target_namespace} packages"
-    task :upload do
-      packages.each do |package|
-        cd(package) do
-          ruby("-S", "rake", "#{target_namespace}:upload")
-        end
-      end
-    end
-  end
-end
-
-[:apt, :yum].each do |target_namespace|
-  namespace target_namespace do
-    desc "Release #{target_namespace} packages"
-    task :release do
-      packages.each do |package|
-        cd(package) do
-          ruby("-S", "rake", "#{target_namespace}:release")
-        end
+[
+  :apt,
+  :ubuntu,
+  :yum,
+].each do |target|
+  desc "Release #{target} packages"
+  task target do
+    packages.each do |package|
+      cd(package) do
+        ruby("-S", "rake", target.to_s)
       end
     end
   end

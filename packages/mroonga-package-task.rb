@@ -2,13 +2,6 @@ require "json"
 require "pathname"
 require "pp"
 
-begin
-  require "octokit"
-  require "veyor"
-rescue LoadError
-  warn("require octokit and veyor for uploading Windows packages: #{$!.message}")
-end
-
 groonga_repository = ENV["GROONGA_REPOSITORY"]
 if groonga_repository.nil?
   raise "Specify GROONGA_REPOSITORY environment variable"
@@ -22,11 +15,6 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     @rpm_package = rpm_package
     @original_archive_base_name = "mroonga-#{@version}"
     @original_archive_name = "#{@original_archive_base_name}.tar.gz"
-  end
-
-  def define
-    super
-    define_windows_upload_task
   end
 
   private
@@ -169,72 +157,21 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     end
   end
 
-  def define_windows_upload_task
-    namespace :windows do
-      desc "Upload packages"
-      task :upload do
-        mroonga_repository = "mroonga/mroonga"
-        tag_name = "v#{@version}"
+  def enable_windows?
+    false
+  end
 
-        github_token = env_value("GITHUB_TOKEN")
-        client = Octokit::Client.new(:access_token => github_token)
-        client.auto_paginate = true
+  def use_built_package?
+    true
+  end
 
-        appveyor_url = "https://ci.appveyor.com/"
-        appveyor_info = nil
-        client.statuses(mroonga_repository, tag_name).each do |status|
-          next unless status.target_url.start_with?(appveyor_url)
-          case status.state
-          when "success"
-            match_data = /\/([^\/]+?)\/([^\/]+?)\/builds\/(\d+)\z/.match(status.target_url)
-            appveyor_info = {
-              account: match_data[1],
-              project: match_data[2],
-              build_id: match_data[3],
-            }
-            break
-          when "pending"
-            # Ignore
-          else
-            message = "Appveyor build isn't succeesed: #{status.state}\n"
-            message << " #{status.target_url}"
-            raise message
-          end
-        end
-        if appveyor_info.nil?
-          raise "No Appveyor build"
-        end
+  def built_package_url(target_namespace, target)
+    url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
+    url << "#{@package}-#{target}.tar.gz"
+    url
+  end
 
-        releases = client.releases(mroonga_repository)
-        current_release = releases.find do |release|
-          release.tag_name == tag_name
-        end
-        current_release ||= client.create_release(mroonga_repository, tag_name)
-
-        start_build = appveyor_info[:build_id].to_i + 1
-        build_history = Veyor.project_history(account: appveyor_info[:account],
-                                              project: appveyor_info[:project],
-                                              start_build: start_build,
-                                              limit: 1)
-        build_version = build_history["builds"][0]["buildNumber"]
-        project = Veyor.project(account: appveyor_info[:account],
-                                project: appveyor_info[:project],
-                                version: build_version)
-        project["build"]["jobs"].each do |job|
-          job_id = job["jobId"]
-          artifacts = Veyor.build_artifacts(job_id: job_id)
-          artifacts.each do |artifact|
-            file_name = artifact["fileName"]
-            url = "#{appveyor_url}api/buildjobs/#{job_id}/artifacts/#{file_name}"
-            sh("curl", "--location", "--output", file_name, url)
-            options = {
-              :content_type => "application/zip",
-            }
-            client.upload_asset(current_release.url, file_name, options)
-            rm(file_name)
-          end
-        end
-      end
-    end
+  def built_package_n_split_components
+    1
   end
 end
