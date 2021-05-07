@@ -104,7 +104,8 @@ jobs:
             New-Item download -ItemType Directory -Force
             Invoke-WebRequest `
               -Uri "https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
-              -OutFile ${MARIADB_TAR_GZ}
+              -OutFile ${MARIADB_TAR_GZ} `
+              -Verbose
           }
           ridk exec tar xzf "${MARIADB_TAR_GZ}"
           Move-Item mariadb-${{ matrix.mariadb-version }} ..\source
