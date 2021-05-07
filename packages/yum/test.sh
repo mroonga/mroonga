@@ -119,7 +119,6 @@ case ${package} in
     rm -rf optimization/condition_push_down
     rm -rf optimization/order_limit
     rm -rf optimization/count_skip
-    rm -rf foreign_key
     rm -f alter_table/disable_keys/t/truncate.test
     rm -f alter_table/t/spatial.test
     rm -f geometry/strict_sql_mode/t/bulk_insert_null.test

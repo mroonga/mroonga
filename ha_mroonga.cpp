@@ -74,6 +74,10 @@
 #ifdef MRN_HAVE_SQL_TYPE_GEOM_H
 #  include <sql/sql_type_geom.h>
 #endif
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+#  include <sql/dd/dictionary.h>
+#  include <sql/dd/cache/dictionary_client.h>
+#endif
 
 
 #include <sys/types.h>
@@ -4254,12 +4258,33 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
                              mapper.mysql_table_name(),
                              TL_WRITE);
       mrn_open_mutex_lock(table->s);
+      TABLE_SHARE *tmp_ref_table_share;
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
-      TABLE_SHARE *tmp_ref_table_share =
-        mrn_create_tmp_table_share(&table_list, ref_path, table_def, &error);
+      {
+        auto dd_client = dd::get_dd_client(ha_thd());
+        dd::cache::Dictionary_client::Auto_releaser dd_releaser(dd_client);
+        const dd::Table *tmp_ref_table_def;
+        if (dd_client->acquire(mapper.db_name(),
+                               mapper.mysql_table_name(),
+                               &tmp_ref_table_def)) {
+          mrn_open_mutex_unlock(table->s);
+          grn_obj_unlink(ctx, grn_table_ref);
+          error = ER_CANT_CREATE_TABLE;
+          char err_msg[MRN_BUFFER_SIZE];
+          sprintf(err_msg, "reference table [%s.%s] is not found",
+                  table->s->db.str, normalized_ref_table_name);
+          my_message(error, err_msg, MYF(0));
+          DBUG_RETURN(false);
+        }
+        tmp_ref_table_share = mrn_create_tmp_table_share(&table_list,
+                                                         ref_path,
+                                                         tmp_ref_table_def,
+                                                         &error);
+      }
 #else
-      TABLE_SHARE *tmp_ref_table_share =
-        mrn_create_tmp_table_share(&table_list, ref_path, &error);
+      tmp_ref_table_share = mrn_create_tmp_table_share(&table_list,
+                                                       ref_path,
+                                                       &error);
 #endif
       mrn_open_mutex_unlock(table->s);
       if (!tmp_ref_table_share) {
