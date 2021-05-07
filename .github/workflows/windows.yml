@@ -92,13 +92,21 @@ jobs:
           $ARTIFACT_NAME += "-${{ matrix.package-platform }}"
           Write-Output "::set-output name=mroonga-version::${MROONGA_VERSION}"
           Write-Output "::set-output name=artifact-name::${ARTIFACT_NAME}"
+      - name: Cache MariaDB archive
+        uses: actions/cache@v2
+        with:
+          path: download/
+          key: download-mariadb-${{ matrix.mariadb-version }}
       - name: Prepare MariaDB
         run: |
+          $MARIADB_TAR_GZ = "download\mariadb-${{ matrix.mariadb-version }}.tar.gz"
+          if (-not(Test-Path -Path ${MARIADB_TAR_GZ})) {
+            Invoke-WebRequest `
+              -Uri "https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
+              -OutFile ${MARIADB_TAR_GZ}
+          }
           cd ..
-          Invoke-WebRequest `
-            -Uri "https://downloads.mariadb.org/f/mariadb-${{ matrix.mariadb-version }}/source/mariadb-${{ matrix.mariadb-version }}.tar.gz" `
-            -OutFile "mariadb-${{ matrix.mariadb-version }}.tar.gz"
-          ridk exec tar xzf mariadb-${{ matrix.mariadb-version }}.tar.gz
+          ridk exec tar xzf "..\${MARIADB_TAR_GZ}"
           cd mariadb-${{ matrix.mariadb-version }}
           if ("${{ matrix.mariadb-version }}" -match "^10\.5") {
             ridk exec patch -p1 -i `
