@@ -32,6 +32,7 @@ USE test;
 DROP TABLE logs;
 
 disable_query_log;
+DISCONNECT drop_connection;
 CONNECTION default;
 enable_query_log;
 
