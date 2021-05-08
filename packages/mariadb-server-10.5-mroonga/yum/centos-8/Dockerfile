@@ -20,9 +20,13 @@ RUN \
   dnf install --enablerepo=powertools -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' && \
+  dnf module --enablerepo=powertools -y ${quiet} enable mariadb-devel && \
   dnf builddep --enablerepo=powertools -y ${quiet} MariaDB && \
+  dnf module -y ${quiet} disable mariadb && \
+  dnf module --enablerepo=powertools -y ${quiet} disable mariadb-devel && \
   dnf download -y ${quiet} --source MariaDB && \
   dnf install --enablerepo=powertools -y ${quiet} \
+    MariaDB-devel \
     ccache \
     gcc-c++ \
     groonga-devel \
@@ -34,6 +38,4 @@ RUN \
     sudo \
     wget \
     which && \
-  dnf install --disablerepo=appstream -y ${quiet} \
-    MariaDB-devel && \
   dnf clean ${quiet} all
