@@ -20,47 +20,47 @@ jobs:
           - MariaDB 10.5 64bit (master)
         include:
           - label: MariaDB 10.2 32bit
-            mariadb-version: "10.2.37"
+            mariadb-version: "10.2.38"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.2 64bit
-            mariadb-version: "10.2.37"
+            mariadb-version: "10.2.38"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.3 32bit
-            mariadb-version: "10.3.28"
+            mariadb-version: "10.3.29"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.3 64bit
-            mariadb-version: "10.3.28"
+            mariadb-version: "10.3.29"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.4 32bit
-            mariadb-version: "10.4.18"
+            mariadb-version: "10.4.19"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.4 64bit
-            mariadb-version: "10.4.18"
+            mariadb-version: "10.4.19"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.5 32bit
-            mariadb-version: "10.5.9"
+            mariadb-version: "10.5.10"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.5 64bit
-            mariadb-version: "10.5.9"
+            mariadb-version: "10.5.10"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.5 64bit (master)
-            mariadb-version: "10.5.9"
+            mariadb-version: "10.5.10"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
@@ -114,17 +114,6 @@ jobs:
             ridk exec patch -p1 -i `
               ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           }
-          # mariadb-10.2.36, 10.3.27, 10.4.17, 10.5.8 have a syntax error in CMakeList of mariadb-connector-c.
-          # (mariadb-connector-c is MariaDB client library.)
-          # This bug has already fixed by https://github.com/mariadb-corporation/mariadb-connector-c/commit/242cab8cbcd91af882233730a83627d3b12ced83
-          # However, this fix is not included that above version of mariadb.
-          # Therefore, we fix this bug by using this patch until next release for mariadb.
-          # We will remove this patch when the next version of mariadb will be released.
-          Invoke-WebRequest `
-            -Uri "https://github.com/mariadb-corporation/mariadb-connector-c/commit/242cab8cbcd91af882233730a83627d3b12ced83.patch" `
-            -OutFile "mariadb-connector-c-fix-syntax-error-in-cmake-3.20.patch"
-          ridk exec patch -d libmariadb -p1 -i `
-            ..\mariadb-connector-c-fix-syntax-error-in-cmake-3.20.patch
           Remove-Item storage\mroonga -Recurse -Force
           Copy-Item ..\mroonga storage\mroonga -Recurse
       - name: Prepare Groonga
