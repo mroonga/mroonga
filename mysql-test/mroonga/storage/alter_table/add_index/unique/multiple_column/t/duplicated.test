@@ -30,6 +30,7 @@ INSERT INTO ids (id1, id2) values (1, 2), (1, 2);
 
 --error ER_DUP_UNIQUE
 ALTER TABLE ids ADD UNIQUE INDEX (id1, id2);
+--replace_regex /\([0-9]+\)//
 SHOW CREATE TABLE ids;
 
 SELECT * FROM ids;
