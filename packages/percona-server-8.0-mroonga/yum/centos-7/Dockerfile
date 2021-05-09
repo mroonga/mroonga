@@ -12,8 +12,7 @@ RUN \
   yum install -y ${quiet} centos-release-scl-rh && \
   yum install -y ${quiet} \
     https://repo.percona.com/yum/percona-release-latest.noarch.rpm \
-    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
-    epel-release && \
+    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm && \
   percona-release setup ps80 && \
   yum groupinstall -y ${quiet} "Development Tools" && \
   yum-builddep -y ${quiet} --enablerepo=ps-80-release-sources \

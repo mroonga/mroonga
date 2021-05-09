@@ -8,8 +8,7 @@ RUN \
   dnf update -y ${quiet} && \
   dnf install -y \
     https://repo.percona.com/yum/percona-release-latest.noarch.rpm \
-    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
-    epel-release && \
+    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm && \
   dnf module disable -y mysql && \
   percona-release setup ps80 && \
   dnf groupinstall -y ${quiet} "Development Tools" && \

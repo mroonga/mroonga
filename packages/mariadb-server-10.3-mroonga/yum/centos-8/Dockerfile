@@ -14,8 +14,7 @@ RUN \
     echo "gpgcheck = 1"; \
   } | tee /etc/yum.repos.d/MariaDB.repo && \
   dnf install -y \
-    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
-    epel-release && \
+    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=powertools -y ${quiet} \
     'dnf-command(builddep)' \

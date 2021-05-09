@@ -14,8 +14,7 @@ RUN \
     echo "gpgcheck = 1"; \
   } | tee /etc/yum.repos.d/MariaDB.repo && \
   yum install -y \
-    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
-    epel-release && \
+    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm && \
   yum groupinstall -y ${quiet} "Development Tools" && \
   yum-builddep -y ${quiet} MariaDB && \
   yumdownloader -y ${quiet} --source MariaDB && \

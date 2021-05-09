@@ -9,8 +9,7 @@ RUN \
   yum install -y ${quiet} \
     https://repo.mysql.com/mysql57-community-release-el7.rpm && \
   yum install -y \
-    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
-    epel-release && \
+    https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm && \
   yum groupinstall -y ${quiet} "Development Tools" && \
   yum-builddep -y ${quiet} mysql-community && \
   yumdownloader -y ${quiet} --source mysql-community && \
