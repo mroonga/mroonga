@@ -1,4 +1,4 @@
-.. highlightlang:: none
+.. highlight:: none
 
 バージョン0.xのお知らせ
 =======================

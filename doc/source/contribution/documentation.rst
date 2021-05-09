@@ -1,6 +1,6 @@
 .. -*- rst -*-
 
-.. highlightlang:: none
+.. highlight:: none
 
 How to contribute in documentation topics
 =========================================

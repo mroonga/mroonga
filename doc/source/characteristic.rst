@@ -1,4 +1,4 @@
-.. highlightlang:: none
+.. highlight:: none
 
 The characteristics of Mroonga
 ==============================

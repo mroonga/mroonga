@@ -1,7 +1,7 @@
 .. -*- rst -*-
 .. Mroonga Project
 
-.. highlightlang:: none
+.. highlight:: none
 
 How to report a bug
 ===================
