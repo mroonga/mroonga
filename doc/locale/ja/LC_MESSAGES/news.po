@@ -21,11 +21,33 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 11.01 - 2021-04-02"
-msgstr "11.01リリース - 2021-04-02"
+msgid "Release 11.02 - 2021-05-10"
+msgstr "11.02リリース - 2021-05-10"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.34, 8.0.24."
+msgstr "[:doc:`/install/centos`] MySQL 5.7.34, 8.0.24をサポートしました。"
+
+msgid "There are below restrictions in the MySQL8 package."
+msgstr "MySQL8 のパッケージには以下の制限があります。"
+
+msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
+msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
+
+msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
+msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.2.38, 10.3.29, "
+"10.4.19, and 10.5.10."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.2.38、10.3.29、10.4.19、10.5.10をサポート"
+"しました。"
+
+msgid "Release 11.01 - 2021-04-02"
+msgstr "11.01リリース - 2021-04-02"
 
 msgid ""
 "[:doc:`/install/centos`] Added support for MariaDB 10.2.37, 10.3.28, "
@@ -173,15 +195,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`] MySQL 5.6.51、5.7.33、MySQL 8.0.23をサポートしまし"
 "た。"
-
-msgid "There are below restrictions in the MySQL8 package."
-msgstr "MySQL8 のパッケージには以下の制限があります。"
-
-msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
-msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
-
-msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
-msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
 
 msgid ""
 "[:doc:`/reference/optimizations`] Fixed a bug that the fast order limit "
