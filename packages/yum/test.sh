@@ -116,7 +116,6 @@ case ${package} in
     # when these functionality is supported or test case is fixed for MySQL 8.0.
     rm -rf plugin/mroonga/wrapper
     pushd plugin/mroonga/storage
-    rm -rf foreign_key/{t,r}
     rm -rf optimization/condition_push_down
     rm -rf optimization/order_limit
     rm -rf optimization/count_skip

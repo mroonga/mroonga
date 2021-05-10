@@ -33,12 +33,15 @@ CREATE TABLE comments (
 CREATE TABLE articles (
   content text NOT NULL,
   comment int unsigned
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-ALTER TABLE articles ADD FOREIGN KEY (comment) REFERENCES comments (comment);
+ALTER TABLE articles ADD
+  CONSTRAINT comment FOREIGN KEY (comment) REFERENCES comments (comment);
 
+--replace_regex /int\([0-9]+\)/int/ /`test`\.//
 SHOW CREATE TABLE articles;
 
+--replace_regex /RESTRICT/NO ACTION/
 SELECT * FROM information_schema.referential_constraints;
 
 DROP TABLE articles;
