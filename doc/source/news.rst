@@ -5,6 +5,23 @@
 News
 ====
 
+.. _release-11-02:
+
+Release 11.02 - 2021-05-10
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MySQL 5.7.34, 8.0.24.
+
+  * There are below restrictions in the MySQL8 package.
+
+    * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+    * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.38, 10.3.29, 10.4.19, and 10.5.10.
+
 .. _release-11-01:
 
 Release 11.01 - 2021-04-02
