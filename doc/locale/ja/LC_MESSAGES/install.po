@@ -203,9 +203,6 @@ msgstr ""
 "このセクションではDebian GNU/Linux上でMroonga関連のdebパッケージをインストー"
 "ルする方法を説明します。これらのパッケージは ``apt`` でインストールできます。"
 
-msgid "stretch (MariaDB)"
-msgstr ""
-
 msgid "buster (MariaDB)"
 msgstr ""
 
@@ -649,9 +646,6 @@ msgstr ""
 
 msgid "Here are supported Ubuntu versions:"
 msgstr "サポートしているUbuntuのバージョンは次の通りです。"
-
-msgid "16.04 LTS Xenial Xerus"
-msgstr ""
 
 msgid "18.04 Bionic Beaver"
 msgstr ""

@@ -16,14 +16,12 @@ Archive) on Launchpad. You can install Mroonga by APT from the PPA.
 
 Here are supported Ubuntu versions:
 
-  * 16.04 LTS Xenial Xerus
   * 18.04 Bionic Beaver
   * 20.04 Focal Fossa
   * 20.10 Groovy Gorilla
 
 Here are Ubuntu versions that supports MySQL:
 
-  * 16.04 LTS Xenial Xerus
   * 18.04 Bionic Beaver
 
 Here are Ubuntu versions that supports MariaDB:
