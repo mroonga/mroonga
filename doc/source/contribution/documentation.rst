@@ -1,7 +1,5 @@
 .. -*- rst -*-
 
-.. highlight:: none
-
 How to contribute in documentation topics
 =========================================
 

@@ -1,8 +1,6 @@
 .. -*- rst -*-
 .. Mroonga Project
 
-.. highlight:: none
-
 How to report a bug
 ===================
 

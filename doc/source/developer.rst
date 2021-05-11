@@ -1,5 +1,3 @@
-.. highlight:: none
-
 Developer's guide
 =================
 

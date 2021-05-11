@@ -1,7 +1,5 @@
 :orphan:
 
-.. highlight:: none
-
 News
 ====
 

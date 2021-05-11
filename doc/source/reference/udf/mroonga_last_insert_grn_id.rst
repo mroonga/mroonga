@@ -1,5 +1,3 @@
-.. highlight:: none
-
 ``mroonga_last_insert_grn_id()``
 ================================
 

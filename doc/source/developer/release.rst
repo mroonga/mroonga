@@ -1,5 +1,3 @@
-.. highlight:: none
-
 Release procedure
 =================
 

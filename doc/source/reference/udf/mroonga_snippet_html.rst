@@ -1,5 +1,3 @@
-.. highlight:: none
-
 ``mroonga_snippet_html()``
 ==========================
 

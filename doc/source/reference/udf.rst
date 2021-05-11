@@ -1,5 +1,3 @@
-.. highlight:: none
-
 UDF (User Defined Functions)
 ============================
 
