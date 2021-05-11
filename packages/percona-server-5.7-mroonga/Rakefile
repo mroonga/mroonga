@@ -15,7 +15,6 @@ class PerconaServer57MroongaPackageTask < MroongaPackageTask
 
   def yum_targets_default
     [
-      "centos-6",
       "centos-7",
     ]
   end
