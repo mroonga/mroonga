@@ -36,8 +36,24 @@ msgstr "MySQL8 のパッケージには以下の制限があります。"
 msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
 msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
 
-msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
-msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
+msgid ""
+"[:doc:`/tutorial/storage`] Storage mode does not support the following "
+"feature."
+msgstr ""
+"[:doc:`/tutorial/storage`] ストレージモードでは、以下の機能が未対応です。"
+
+msgid "The feature of relevant to the optimization."
+msgstr "最適化関連の機能"
+
+msgid "The SRID of Spatial Indexes."
+msgstr "空間インデックスのSRID"
+
+msgid ""
+"For example, the index of Mroonga is not used in search with ``MBRContains`` "
+"function. (It search by sequential search.)"
+msgstr ""
+"例えば、MBRContains関数を使った検索では、Mroongaのインデックスは使用されませ"
+"ん。 (シーケンシャルサーチで検索します。)"
 
 msgid ""
 "[:doc:`/install/centos`] Added support for MariaDB 10.2.38, 10.3.29, "
@@ -202,6 +218,9 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`] MySQL 5.6.51、5.7.33、MySQL 8.0.23をサポートしまし"
 "た。"
+
+msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
+msgstr "[:doc:`/tutorial/storage`] JSONデータ型は未対応です。"
 
 msgid ""
 "[:doc:`/reference/optimizations`] Fixed a bug that the fast order limit "

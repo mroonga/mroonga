@@ -16,7 +16,13 @@ Improvements
   * There are below restrictions in the MySQL8 package.
 
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
-    * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
+    * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
+
+      * The feature of relevant to the optimization.
+      * The SRID of Spatial Indexes.
+
+        * For example, the index of Mroonga is not used in search with ``MBRContains`` function.
+          (It search by sequential search.)
 
 * [:doc:`/install/centos`] Added support for MariaDB 10.2.38, 10.3.29, 10.4.19, and 10.5.10.
 
