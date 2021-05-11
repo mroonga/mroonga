@@ -27,8 +27,8 @@ msgstr "11.02リリース - 2021-05-10"
 msgid "Improvements"
 msgstr "改良"
 
-msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.34, 8.0.24."
-msgstr "[:doc:`/install/centos`] MySQL 5.7.34, 8.0.24をサポートしました。"
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.34, 8.0.25."
+msgstr "[:doc:`/install/centos`] MySQL 5.7.34, 8.0.25をサポートしました。"
 
 msgid "There are below restrictions in the MySQL8 package."
 msgstr "MySQL8 のパッケージには以下の制限があります。"
@@ -45,6 +45,13 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`] MariaDB 10.2.38、10.3.29、10.4.19、10.5.10をサポート"
 "しました。"
+
+msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 16.04 (Xenial Xerus) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 16.04 (Xenial Xerus)のサポートをやめました。"
+
+msgid "Because it reached End of Standard Support at April, 2021."
+msgstr "2021年4月でEnd of Standard Supportとなったためです。"
 
 msgid "Release 11.01 - 2021-04-02"
 msgstr "11.01リリース - 2021-04-02"
