@@ -1,5 +1,3 @@
-.. highlightlang:: none
-
 Full text search
 ================
 

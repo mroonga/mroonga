@@ -1,5 +1,3 @@
-.. highlightlang:: none
-
 How to avoid "mmap Cannot allocate memory" error?
 =================================================
 

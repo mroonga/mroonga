@@ -1,5 +1,3 @@
-.. highlightlang:: none
-
 TODO: Translate.
 
 コーディングスタイル

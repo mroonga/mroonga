@@ -1,8 +1,6 @@
 .. -*- rst -*-
 .. Mroonga Project
 
-.. highlightlang:: none
-
 How to contribute to Mroonga
 ============================
 

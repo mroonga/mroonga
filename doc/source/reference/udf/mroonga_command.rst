@@ -1,5 +1,3 @@
-.. highlightlang:: none
-
 ``mroonga_command()``
 =====================
 
