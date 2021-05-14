@@ -127,23 +127,34 @@ def demangle(function)
   capture_command("c++filt", function).chomp
 end
 
+def normalize_function(function)
+  function.gsub(/\(.*\)\z/, "")
+end
+
+def match_function?(function, base_function)
+  function == base_function or
+    normalize_function(function) == normalize_function(base_function)
+end
+
 def resolve_relative_address(relative_address, path)
   if relative_address.start_with?("+")
     return Integer(relative_address[1..-1])
   end
   base_function, offset = relative_address.split("+", 2)
   base_function = demangle(base_function)
+  normalized_base_function = normalize_function(base_function)
   capture_command("nm", "--demangle", path).each_line do |line|
     case line
-    when /\A(\h+) \S (\S+)/
+    when /\A(\h+) \S /
       address = $1
-      function = $2
-      if function == base_function
+      function = $POSTMATCH.strip.gsub(/::__FUNCTION__\z/, "")
+      if match_function?(function, base_function)
         return Integer(address, 16) + Integer(offset, 16)
       end
     end
   end
-  raise "can't resolve relative address: #{relative_address}: #{path}"
+  raise "can't resolve relative address: #{relative_address}: " +
+        "#{base_function}: #{offset}: #{path}"
 end
 
 def addr2line(path, address)
@@ -154,6 +165,7 @@ system_version = detect_system_version
 prepare_system(system_version, options)
 
 ARGF.each_line do |line|
+  next unless line.valid_encoding?
   case line
   when /\A(\/[^ (\[]+)\((.+?)\)\s*\[(.+?)\]/
     path = $1
