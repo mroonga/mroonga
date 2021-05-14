@@ -7145,8 +7145,12 @@ int ha_mroonga::storage_write_row_unique_index(const uchar *buf,
     }
     memcpy(dup_ref, &duplicated_record_id, sizeof(grn_id));
     if (!ignoring_duplicated_key) {
+      char name[GRN_TABLE_MAX_KEY_SIZE];
+      int name_size = grn_obj_name(ctx, index_table, name, sizeof(name));
       GRN_LOG(ctx, GRN_LOG_ERROR,
-              "duplicated id on insert: update unique index: <%.*s>",
+              "[mroonga][storage][index][unique][update][%.*s] "
+              "duplicated ID on insert: <%.*s>",
+              name_size, name,
               ukey_size, ukey);
     }
     DBUG_RETURN(error);
