@@ -1,10 +1,5 @@
 name: Install to Ubuntu
 on:
-  push:
-    branches:
-      - "*"
-    tags:
-      - "*"
   schedule:
     - cron: |
         0 0 * * *
@@ -37,4 +32,3 @@ jobs:
             -- \
             /vagrant/packages/${{ matrix.package-type }}/install_to_ubuntu.sh \
             ${{ matrix.package }}-mroonga
-
