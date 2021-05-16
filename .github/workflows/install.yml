@@ -11,13 +11,10 @@ jobs:
       matrix:
         include:
           - os: ubuntu-18.04
-            package-type: apt
             package: mysql-server
           - os: ubuntu-20.04
-            package-type: apt
             package: mariadb-server
           - os: ubuntu-20.10
-            package-type: apt
             package: mariadb-server
     runs-on: macos-10.15
     steps:
