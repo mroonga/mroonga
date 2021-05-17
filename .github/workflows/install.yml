@@ -27,5 +27,5 @@ jobs:
           vagrant \
             ssh ${{ matrix.os }} \
             -- \
-            /vagrant/packages/${{ matrix.package-type }}/install_to_ubuntu.sh \
+            /vagrant/packages/apt/install_test.sh \
             ${{ matrix.package }}-mroonga
