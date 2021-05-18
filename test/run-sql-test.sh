@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Copyright(C) 2010  Tetsuro IKEDA
-# Copyright(C) 2010-2019  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2010-2021  Sutou Kouhei <kou@clear-code.com>
 # Copyright(C) 2011  Kazuhiko
 #
 # This library is free software; you can redistribute it and/or
@@ -37,11 +37,15 @@ case `uname` in
 esac
 
 if [ "$NO_MAKE" != "yes" ]; then
-  MAKE_ARGS=
-  if [ -n "$n_processors" ]; then
-    MAKE_ARGS="-j${n_processors}"
+  if [ -f "${top_build_dir}/build.ninja" ]; then
+    ninja -C "${top_build_dir}" > /dev/null || exit $?
+  else
+    MAKE_ARGS=
+    if [ -n "$n_processors" ]; then
+      MAKE_ARGS="-j${n_processors}"
+    fi
+    make $MAKE_ARGS -C "${top_build_dir}" > /dev/null || exit $?
   fi
-  make $MAKE_ARGS -C ${top_build_dir} > /dev/null || exit 1
 fi
 
 . "${top_build_dir}/config.sh"
