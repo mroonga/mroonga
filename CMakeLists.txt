@@ -289,17 +289,19 @@ else()
   endif()
 endif()
 
-if(${MYSQL_VERSION} VERSION_LESS "5.5.0")
-  message(FATAL_ERROR
-    "Mroonga doesn't support MySQL < 5.5.0: <${MYSQL_VERSION}>")
-  return()
-endif()
-
-if(${MYSQL_VERSION} VERSION_GREATER "10.0.0" AND
-   ${MYSQL_VERSION} VERSION_LESS "10.0.9")
-  message(FATAL_ERROR
-    "Mroonga doesn't support MariaDB 10.0.0-10.0.8: <${MYSQL_VERSION}>")
-  return()
+if(${MYSQL_VARIANT} STREQUAL "MariaDB")
+  if(${MYSQL_VERSION} VERSION_LESS "10.4")
+  else()
+    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  endif()
+else()
+  if(${MYSQL_VERSION} VERSION_LESS "8.0")
+    set(CMAKE_CXX_STANDARD 11)
+  else()
+    set(CMAKE_CXX_STANDARD 14)
+  endif()
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
 if(MRN_GROONGA_BUNDLED)
