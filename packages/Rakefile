@@ -1,10 +1,11 @@
 packages = [
-  "mariadb-server-10.2-mroonga",
-  "mariadb-server-10.3-mroonga",
-  "mariadb-server-10.4-mroonga",
-  "mariadb-server-10.5-mroonga",
-  "mysql-server-5.7-mroonga",
-  "mysql-server-8.0-mroonga",
+  "mariadb-10.2-mroonga",
+  "mariadb-10.3-mroonga",
+  "mariadb-10.4-mroonga",
+  "mariadb-10.5-mroonga",
+  "mysql-5.7-mroonga",
+  "mysql-community-5.7-mroonga",
+  "mysql-community-8.0-mroonga",
   "percona-server-5.7-mroonga",
   "percona-server-8.0-mroonga",
 ]

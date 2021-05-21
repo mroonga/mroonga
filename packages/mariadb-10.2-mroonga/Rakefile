@@ -1,8 +1,8 @@
 require_relative "../mroonga-package-task"
 
-class PerconaServer57MroongaPackageTask < MroongaPackageTask
+class MariaDB102MroongaPackageTask < MroongaPackageTask
   def initialize
-    super("percona-server-5.7")
+    super("mariadb-10.2")
   end
 
   def enable_apt?
@@ -20,5 +20,5 @@ class PerconaServer57MroongaPackageTask < MroongaPackageTask
   end
 end
 
-task = PerconaServer57MroongaPackageTask.new
+task = MariaDB102MroongaPackageTask.new
 task.define

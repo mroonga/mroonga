@@ -20,37 +20,43 @@ jobs:
         include:
           - os: debian-buster
             package-type: apt
-            package: mariadb-server-10.3
+            package: mariadb-10.3
+          - os: debian-buster
+            package-type: apt
+            package: mysql-community-5.7
+          - os: debian-buster
+            package-type: apt
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
-            package: mariadb-server-10.2
+            package: mariadb-10.2
           - os: centos-7
             package-type: yum
-            package: mariadb-server-10.3
+            package: mariadb-10.3
           - os: centos-8
             package-type: yum
-            package: mariadb-server-10.3
+            package: mariadb-10.3
           - os: centos-7
             package-type: yum
-            package: mariadb-server-10.4
+            package: mariadb-10.4
           - os: centos-8
             package-type: yum
-            package: mariadb-server-10.4
+            package: mariadb-10.4
           - os: centos-7
             package-type: yum
-            package: mariadb-server-10.5
+            package: mariadb-10.5
           - os: centos-8
             package-type: yum
-            package: mariadb-server-10.5
+            package: mariadb-10.5
           - os: centos-7
             package-type: yum
-            package: mysql-server-5.7
+            package: mysql-community-5.7
           - os: centos-7
             package-type: yum
-            package: mysql-server-8.0
+            package: mysql-community-8.0
           - os: centos-8
             package-type: yum
-            package: mysql-server-8.0
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: percona-server-5.7
@@ -86,7 +92,7 @@ jobs:
             ruby
       - name: Install Sphinx
         run: |
-          sudo pip3 install -v sphinx
+          sudo pip3 install sphinx
       - name: Download MySQL source
         run: |
           mkdir -p ../mysql
@@ -192,37 +198,43 @@ jobs:
         include:
           - os: debian-buster
             package-type: apt
-            package: mariadb-server-10.3
+            package: mariadb-10.3
+          - os: debian-buster
+            package-type: apt
+            package: mysql-community-5.7
+          - os: debian-buster
+            package-type: apt
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
-            package: mariadb-server-10.2
+            package: mariadb-10.2
           - os: centos-7
             package-type: yum
-            package: mariadb-server-10.3
+            package: mariadb-10.3
           - os: centos-8
             package-type: yum
-            package: mariadb-server-10.3
+            package: mariadb-10.3
           - os: centos-7
             package-type: yum
-            package: mariadb-server-10.4
+            package: mariadb-10.4
           - os: centos-8
             package-type: yum
-            package: mariadb-server-10.4
+            package: mariadb-10.4
           - os: centos-7
             package-type: yum
-            package: mariadb-server-10.5
+            package: mariadb-10.5
           - os: centos-8
             package-type: yum
-            package: mariadb-server-10.5
+            package: mariadb-10.5
           - os: centos-7
             package-type: yum
-            package: mysql-server-5.7
+            package: mysql-community-5.7
           - os: centos-7
             package-type: yum
-            package: mysql-server-8.0
+            package: mysql-community-8.0
           - os: centos-8
             package-type: yum
-            package: mysql-server-8.0
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: percona-server-5.7

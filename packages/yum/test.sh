@@ -25,8 +25,8 @@ ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
 case ${package} in
   mariadb-*)
+    old_package=${package}
     mysql_package_prefix=MariaDB
-    mroonga_package=$(echo "${package}" | sed -e '' -e 's/-server//g')
     service_name=mariadb
     ha_mroonga_so=ha_mroonga_official.so
     test_package_name=MariaDB-test
@@ -38,23 +38,17 @@ gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 REPO
     ;;
-  mysql-*)
+  mysql-community-*)
     mysql_package_prefix=mysql-community
-    # mysql-server-5.7-mroonga ->
-    # mysql57-community-mroonga
-    mroonga_package=$(echo "${package}" | \
-                        sed 's/-server-\([0-9]*\)\.\([0-9]*\)/\1\2-community/g')
     service_name=mysqld
     test_package_name=mysql-community-test
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
+    old_package=mysql${mysql_package_version}-community-mroonga
     sudo ${DNF} install -y \
          https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${centos_version}.rpm
     ;;
   percona-*)
-    # percona-server-5.7-mroonga ->
-    # percona-server-57-mroonga ->
-    mroonga_package=$(echo "${package}" | sed 's/\([0-9]*\)\.\([0-9]*\)/\1\2/g')
     service_name=mysqld
     case ${mysql_version} in
       5.7)
@@ -70,6 +64,7 @@ REPO
     sudo ${DNF} install -y \
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
     percona_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
+    old_package=percona-server-${percona_package_version}-mroonga
     sudo percona-release setup ps${percona_package_version}
     ;;
 esac
@@ -110,7 +105,7 @@ sed -i'' -e "s/ha_mroonga\\.so/${ha_mroonga_so}/g" \
 
 parallel=$(nproc)
 case ${package} in
-  mysql-server-8.*|percona-server-8.*)
+  mysql-8.*|mysql-community-8.*|percona-server-8.*)
     parallel=1
     # TODO: Remove the following "rm" as soon as possible
     # when these functionality is supported or test case is fixed for MySQL 8.0.
@@ -162,8 +157,8 @@ esac
 
 # Upgrade
 sudo ${DNF} erase -y \
-  ${mroonga_package} \
+  ${package} \
   "${mysql_package_prefix}-*"
-sudo ${DNF} install -y ${mroonga_package}
+sudo ${DNF} install -y ${old_package}
 sudo ${DNF} install -y \
   ${repositories_dir}/centos/${centos_version}/*/Packages/*.rpm

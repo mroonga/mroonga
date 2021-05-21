@@ -1,0 +1,26 @@
+require_relative "../mroonga-package-task"
+
+class MySQLCommunity57MroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("mysql-community-5.7")
+  end
+
+  def apt_targets_default
+    [
+      "debian-buster",
+    ]
+  end
+
+  def enable_ubuntu?
+    false
+  end
+
+  def yum_targets_default
+    [
+      "centos-7",
+    ]
+  end
+end
+
+task = MySQLCommunity57MroongaPackageTask.new
+task.define

@@ -1,4 +1,5 @@
 SUBDIRS =					\
+	deb					\
 	rpm
 
 sqldir = $(pkgdatadir)

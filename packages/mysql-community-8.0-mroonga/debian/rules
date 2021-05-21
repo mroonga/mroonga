@@ -1,0 +1,42 @@
+#!/usr/bin/make -f
+# -*- makefile-gmake -*-
+#
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+export MYSQL_VERSION_FULL := $(shell apt-cache show mysql-community-server | grep Version | head -n 1 | awk '{print $$2}' | cut -d: -f2)
+export MYSQL_VERSION := $(shell apt-cache show mysql-community-server | grep Version | head -n 1 | awk '{print $$2}' | cut -d: -f2 | awk -F '-' '{print $$1}')
+
+%:
+	dh $@ --without autoreconf
+
+override_dh_auto_configure:
+	archive_base=mysql-community_$(MYSQL_VERSION);			\
+	archive=$${archive_base}.orig.tar.gz;				\
+	debian=mysql-community_$(MYSQL_VERSION_FULL).debian.tar.xz;	\
+	source_base=$${PWD}/mysql-$(MYSQL_VERSION);			\
+	build_dir=$${source_base}/release;				\
+	cp /$${archive} ./;						\
+	cp /$${debian} ./;						\
+	tar xf $${archive};						\
+	(cd $${source_base} &&						\
+	  tar xf ../$${debian});					\
+	dpkg-source --before-build $${source_base};			\
+	(cd $${source_base} &&						\
+	  debian/rules override_dh_auto_configure);			\
+	(cd $${build_dir}/utilities && $(MAKE) -j $$(nproc) GenError);	\
+	dh_auto_configure						\
+	  --								\
+	  --with-mysql-source=$${source_base}				\
+	  --with-mysql-build=$${build_dir}				\
+	  --with-mysql-config=/usr/bin/mysql_config
+
+# disable 'make check'.
+override_dh_auto_test:
+
+override_dh_install:
+	mv debian/tmp/usr/share/doc/mroonga/ \
+	  debian/tmp/usr/share/doc/mysql-community-8.0-mroonga-doc/
+	dh_install

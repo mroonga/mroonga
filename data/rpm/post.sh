@@ -145,7 +145,7 @@ fi
 
 if [ "${need_manual_restart}" = "yes" ]; then
   echo "Run the following command line to reload libgroonga:"
-  echo "  systemctl restart mariadb"
+  echo "  systemctl restart ${service_name}"
 fi
 
 if [ "${need_manual_reregister}" = "yes" ]; then

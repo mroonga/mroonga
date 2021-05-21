@@ -1,6 +1,8 @@
+require "English"
 require "json"
 require "pathname"
 require "pp"
+require "zlib"
 
 groonga_repository = ENV["GROONGA_REPOSITORY"]
 if groonga_repository.nil?
@@ -9,10 +11,9 @@ end
 require "#{groonga_repository}/packages/packages-groonga-org-package-task"
 
 class MroongaPackageTask < PackagesGroongaOrgPackageTask
-  def initialize(mysql_package, rpm_package)
+  def initialize(mysql_package)
     @mysql_package = mysql_package
     super("#{@mysql_package}-mroonga", detect_version, detect_release_time)
-    @rpm_package = rpm_package
     @original_archive_base_name = "mroonga-#{@version}"
     @original_archive_name = "#{@original_archive_base_name}.tar.gz"
   end
@@ -38,10 +39,30 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     __send__("detect_mysql_version_#{distribution}", code_name)
   end
 
-  def detect_mysql_version_debian(code_name)
-    mysql_source_package = @mysql_package.gsub(/-server/, "")
+  def detect_mysql_version_debian_oracle(code_name)
+    repository_name = @mysql_package.gsub(/-community/, "")
+    sources_gz_url =
+      "https://repo.mysql.com/apt/debian/dists/#{code_name}/" +
+      "#{repository_name}/source/Sources.gz"
+    URI.open(sources_gz_url) do |response|
+      reader = Zlib::GzipReader.new(response)
+      sources = reader.read
+      sources.each_line do |line|
+        case line.chomp
+        when /\AVersion: /
+          return $POSTMATCH
+        end
+      end
+      message = "No version information: "
+      message << "<#{@mysql_package}>: <#{code_name}>:\n"
+      message << sources
+      raise message
+    end
+  end
+
+  def detect_mysql_version_debian_debian(code_name)
     package_info_url =
-      "https://sources.debian.org/api/src/#{mysql_source_package}/"
+      "https://sources.debian.org/api/src/#{@mysql_package}/"
     URI.open(package_info_url) do |response|
       info = JSON.parse(response.read)
       info["versions"].each do |version|
@@ -49,9 +70,17 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
         return version["version"]
       end
       message = "No version information: "
-      message << "<#{mysql_source_package}>: <#{code_name}>: "
+      message << "<#{@mysql_package}>: <#{code_name}>: "
       message << PP.pp(info, "")
       raise message
+    end
+  end
+
+  def detect_mysql_version_debian(code_name)
+    if @mysql_package.start_with?("mysql-community-")
+      detect_mysql_version_debian_oracle(code_name)
+    else
+      detect_mysql_version_debian_debian(code_name)
     end
   end
 

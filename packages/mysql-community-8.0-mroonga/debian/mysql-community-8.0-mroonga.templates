@@ -1,0 +1,4 @@
+Template: mysql-community-8.0-mroonga/root-password
+Type: password
+Description: Enter MySQL's root password:
+ Please provide the root password to install/uninstall Mroonga automatially.

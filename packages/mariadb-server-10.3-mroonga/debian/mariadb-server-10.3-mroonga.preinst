@@ -1,9 +1,0 @@
-#! /bin/sh
-
-set -e
-
-if [ upgrade != "$1" ]; then
-    dpkg-divert --package mariadb-server-10.3-mroonga --add --rename \
-                --divert /usr/lib/mysql/plugin/ha_mroonga.so.real \
-                /usr/lib/mysql/plugin/ha_mroonga.so
-fi

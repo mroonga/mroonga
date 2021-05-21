@@ -60,18 +60,35 @@ esac
 
 uninstall_sql=${data_dir}/mroonga/uninstall.sql
 
+need_password_expire=no
 if [ "${try_auto_uninstall}" = "yes" ]; then
   mysql_command=$(which mysql)
   password_option=""
   if [ "${have_auto_generated_password}" = "yes" ]; then
-    password_option="--connect-expired-password -p${auto_generated_password}"
-  elif ! "${mysql_command}" -u root -e "quit" > /dev/null 2>&1; then
-    password_option="-p"
-    echo "${variant_label}'s root password will be asked several times to"
-    echo "${action} Mroonga. You don't need to input the root password"
-    echo "in this package ${action} process. But you need to ${action}"
-    echo "Mroonga manually later. The way to ${action} Mroonga manually"
-    echo "will be showed later."
+    if "${mysql_command}" \
+         -u root \
+         --connect-expired-password \
+         -p"${auto_generated_password}" \
+         -e "quit" > /dev/null 2>&1; then
+      if "${mysql_command}" \
+           -u root \
+           --connect-expired-password \
+           -p"${auto_generated_password}" \
+           -e "ALTER USER root@localhost IDENTIFIED BY '$auto_generated_password'"; then
+        need_password_expire=yes
+        password_option="-p${auto_generated_password}"
+      fi
+    fi
+  fi
+  if [ -z "${password_option}" ]; then
+    if ! "${mysql_command}" -u root -e "quit" > /dev/null 2>&1; then
+      password_option="-p"
+      echo "${variant_label}'s root password will be asked several times to"
+      echo "${action} Mroonga. You don't need to input the root password"
+      echo "in this package ${action} process. But you need to ${action}"
+      echo "Mroonga manually later. The way to ${action} Mroonga manually"
+      echo "will be showed later."
+    fi
   fi
 
   mysql="${mysql_command} -u root ${password_option}"
@@ -80,6 +97,10 @@ if [ "${try_auto_uninstall}" = "yes" ]; then
   fi
 else
   mysql="mysql -u root"
+fi
+
+if [ "${need_password_expire}" = "yes" ]; then
+  ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
 fi
 
 if [ "${need_stop}" = "yes" ]; then

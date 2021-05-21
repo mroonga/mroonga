@@ -1,12 +1,14 @@
 require_relative "../mroonga-package-task"
 
-class PerconaServer80MroongaPackageTask < MroongaPackageTask
+class MySQLCommunity80MroongaPackageTask < MroongaPackageTask
   def initialize
-    super("percona-server-8.0")
+    super("mysql-community-8.0")
   end
 
-  def enable_apt?
-    false
+  def apt_targets_default
+    [
+      "debian-buster",
+    ]
   end
 
   def enable_ubuntu?
@@ -21,5 +23,5 @@ class PerconaServer80MroongaPackageTask < MroongaPackageTask
   end
 end
 
-task = PerconaServer80MroongaPackageTask.new
+task = MySQLCommunity80MroongaPackageTask.new
 task.define
