@@ -38,7 +38,7 @@ esac
 
 if [ "$NO_MAKE" != "yes" ]; then
   if [ -f "${top_build_dir}/build.ninja" ]; then
-    ninja -C "${top_build_dir}" > /dev/null || exit $?
+    ninja -C "${top_build_dir}" || exit $?
   else
     MAKE_ARGS=
     if [ -n "$n_processors" ]; then
