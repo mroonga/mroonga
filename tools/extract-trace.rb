@@ -9,6 +9,7 @@ target_sql = ARGV.shift
 start_pattern = /\AT@\d+: \| \| query: #{Regexp.escape(target_sql)}/
 in_target = false
 ARGF.each_line do |line|
+  next unless line.valid_encoding?
   if in_target
     puts(line)
     case line
