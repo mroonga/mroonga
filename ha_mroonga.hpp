@@ -916,7 +916,7 @@ private:
   int wrapper_get_record(uchar *buf, const uchar *key);
   int wrapper_get_next_geo_record(uchar *buf);
   int storage_get_next_record(uchar *buf);
-  void geo_store_rectangle(const uchar *rectangle);
+  void geo_store_rectangle(const uchar *rectangle, bool reverse);
   int generic_geo_open_cursor(const uchar *key, enum ha_rkey_function find_flag);
 
   int close() mrn_override;
@@ -995,6 +995,7 @@ private:
                                            const char *value,
                                            uint value_length);
 #endif
+  bool geo_need_reverse(Field_geom *field);
   void storage_store_field_geometry(Field *field,
                                     const char *value, uint value_length);
 #ifdef MRN_HAVE_MYSQL_TYPE_JSON

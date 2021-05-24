@@ -114,7 +114,6 @@ case ${package} in
     rm -rf optimization/condition_push_down
     rm -rf optimization/order_limit
     rm -rf optimization/count_skip
-    rm -f alter_table/t/spatial.test
     popd
     ;;
 esac

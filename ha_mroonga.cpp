@@ -78,6 +78,9 @@
 #  include <sql/dd/dictionary.h>
 #  include <sql/dd/cache/dictionary_client.h>
 #endif
+#ifdef MRN_HAVE_SRS
+#    include <sql/srs_fetcher.h>
+#endif
 
 
 #include <sys/types.h>
@@ -1978,8 +1981,10 @@ static bool mrn_parse_grn_index_column_flags(THD *thd,
 }
 
 #ifdef MRN_HAVE_SPATIAL
-static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
-                            const char *wkb, uint wkb_size)
+static int mrn_set_geometry(grn_ctx *ctx,
+                            grn_obj *buf,
+                            const char *wkb,
+                            uint wkb_size)
 {
   int error = 0;
   Geometry_buffer buffer;
@@ -3299,6 +3304,9 @@ ulonglong ha_mroonga::wrapper_table_flags() const
 #ifdef HA_CAN_HASH_KEYS
   table_flags |= HA_CAN_HASH_KEYS;
 #endif
+#ifdef HA_SUPPORTS_GEOGRAPHIC_GEOMETRY_COLUMN
+  table_flags |= HA_SUPPORTS_GEOGRAPHIC_GEOMETRY_COLUMN;
+#endif
   DBUG_RETURN(table_flags);
 }
 
@@ -3343,6 +3351,9 @@ ulonglong ha_mroonga::storage_table_flags() const
 #endif
 #ifdef HA_CAN_HASH_KEYS
   flags |= HA_CAN_HASH_KEYS;
+#endif
+#ifdef HA_SUPPORTS_GEOGRAPHIC_GEOMETRY_COLUMN
+  flags |= HA_SUPPORTS_GEOGRAPHIC_GEOMETRY_COLUMN;
 #endif
   DBUG_RETURN(flags);
 }
@@ -3409,6 +3420,9 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
   }
   if (KEY_N_KEY_PARTS(key) > 1 || !need_normalize_p) {
     flags |= HA_READ_ORDER;
+  }
+  if (key->flags & HA_SPATIAL) {
+    flags |= HA_KEY_SCAN_NOT_ROR;
   }
   DBUG_RETURN(flags);
 }
@@ -8440,8 +8454,9 @@ ha_rows ha_mroonga::generic_records_in_range_geo(uint key_nr,
                ("mroonga: range max is specified for geometry range search"));
     DBUG_RETURN(HA_POS_ERROR);
   }
-  error = mrn_change_encoding(ctx,
-    table->key_info[key_nr].key_part->field->charset());
+  Field_geom *field =
+    static_cast<Field_geom *>(table->key_info[key_nr].key_part->field);
+  error = mrn_change_encoding(ctx, field->charset());
   if (error)
     DBUG_RETURN(error);
   if (!(range_min->flag & HA_READ_MBR_CONTAIN)) {
@@ -8450,7 +8465,7 @@ ha_rows ha_mroonga::generic_records_in_range_geo(uint key_nr,
     DBUG_RETURN(row_count);
   }
 
-  geo_store_rectangle(range_min->key);
+  geo_store_rectangle(range_min->key, geo_need_reverse(field));
   row_count = grn_geo_estimate_in_rectangle(ctx,
                                             grn_index_columns[key_nr],
                                             &top_left_point,
@@ -10942,7 +10957,7 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
   DBUG_RETURN(0);
 }
 
-void ha_mroonga::geo_store_rectangle(const uchar *rectangle)
+void ha_mroonga::geo_store_rectangle(const uchar *rectangle, bool reverse)
 {
   MRN_DBUG_ENTER_METHOD();
 
@@ -10954,10 +10969,17 @@ void ha_mroonga::geo_store_rectangle(const uchar *rectangle)
     }
     MRN_MI_FLOAT8GET(locations[i], reversed_value);
   }
-  top_left_longitude_in_degree = locations[2];
-  bottom_right_longitude_in_degree = locations[3];
-  bottom_right_latitude_in_degree = locations[0];
-  top_left_latitude_in_degree = locations[1];
+  if (reverse) {
+    top_left_longitude_in_degree = locations[0];
+    bottom_right_longitude_in_degree = locations[1];
+    bottom_right_latitude_in_degree = locations[2];
+    top_left_latitude_in_degree = locations[3];
+  } else {
+    bottom_right_latitude_in_degree = locations[0];
+    top_left_latitude_in_degree = locations[1];
+    top_left_longitude_in_degree = locations[2];
+    bottom_right_longitude_in_degree = locations[3];
+  }
   int top_left_latitude = GRN_GEO_DEGREE2MSEC(top_left_latitude_in_degree);
   int top_left_longitude = GRN_GEO_DEGREE2MSEC(top_left_longitude_in_degree);
   int bottom_right_latitude = GRN_GEO_DEGREE2MSEC(bottom_right_latitude_in_degree);
@@ -10978,7 +11000,9 @@ int ha_mroonga::generic_geo_open_cursor(const uchar *key,
   int flags = 0;
   if (find_flag & HA_READ_MBR_CONTAIN) {
     grn_obj *index = grn_index_columns[active_index];
-    geo_store_rectangle(key);
+    Field_geom *field =
+      static_cast<Field_geom *>(table->key_info[active_index].key_part->field);
+    geo_store_rectangle(key, geo_need_reverse(field));
     cursor_geo = grn_geo_cursor_open_in_rectangle(ctx,
                                                   index,
                                                   &top_left_point,
@@ -11718,8 +11742,8 @@ int ha_mroonga::generic_store_bulk_geometry(Field *field, grn_obj *buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 #ifdef MRN_HAVE_SPATIAL
+  Field_geom *geometry = static_cast<Field_geom *>(field);
   String buffer;
-  Field_geom *geometry = (Field_geom *)field;
   String *value = geometry->val_str(0, &buffer);
   const char *wkb = value->ptr();
   int len = value->length();
@@ -12158,33 +12182,62 @@ void ha_mroonga::storage_store_field_blob_compressed(Field *field,
 }
 #endif
 
+bool ha_mroonga::geo_need_reverse(Field_geom *field)
+{
+  MRN_DBUG_ENTER_METHOD();
+  bool reverse = false;
+#ifdef MRN_HAVE_SRS
+  auto srid = MRN_FIELD_GEOM_GET_SRID(field);
+  if (srid != 0) {
+    auto thd = ha_thd();
+    std::unique_ptr<dd::cache::Dictionary_client::Auto_releaser> releaser(
+        new dd::cache::Dictionary_client::Auto_releaser(thd->dd_client()));
+    Srs_fetcher fetcher(thd);
+    const dd::Spatial_reference_system *srs = nullptr;
+    if (!fetcher.acquire(srid, &srs)) {
+      if (srs && srs->is_geographic() && srs->is_lat_long()) {
+        reverse = true;
+      }
+    }
+  }
+#endif
+  DBUG_RETURN(reverse);
+}
 void ha_mroonga::storage_store_field_geometry(Field *field,
                                               const char *value,
                                               uint value_length)
 {
   MRN_DBUG_ENTER_METHOD();
 #ifdef MRN_HAVE_SPATIAL
-  uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
-  grn_geo_point *field_value = (grn_geo_point *)value;
-  int latitude, longitude;
-  latitude = field_value->latitude;
-  longitude = field_value->longitude;
+  const grn_geo_point *field_value =
+    reinterpret_cast<const grn_geo_point *>(value);
+  int latitude = field_value->latitude;
+  int longitude = field_value->longitude;
   if (grn_source_column_geo) {
     GRN_GEO_POINT_SET(ctx, &source_point, latitude, longitude);
   }
-  memset(wkb, 0, SRID_SIZE);
+  uchar wkb[SRID_SIZE + WKB_HEADER_SIZE + POINT_DATA_SIZE];
+  Field_geom *geometry = static_cast<Field_geom *>(field);
+  mrn_srid srid = MRN_FIELD_GEOM_GET_SRID(geometry);
+  int4store(wkb, srid);
   memset(wkb + SRID_SIZE, Geometry::wkb_ndr, 1); // wkb_ndr is meaningless.
   int4store(wkb + SRID_SIZE + 1, Geometry::wkb_point);
-  double latitude_in_degree, longitude_in_degree;
-  latitude_in_degree = GRN_GEO_MSEC2DEGREE(latitude);
-  longitude_in_degree = GRN_GEO_MSEC2DEGREE(longitude);
-  float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE,
-              latitude_in_degree);
-  float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
-              longitude_in_degree);
+  double latitude_in_degree = GRN_GEO_MSEC2DEGREE(latitude);
+  double longitude_in_degree = GRN_GEO_MSEC2DEGREE(longitude);
+  bool reverse = geo_need_reverse(geometry);
+  if (reverse) {
+    float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE,
+                longitude_in_degree);
+    float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
+                latitude_in_degree);
+  } else {
+    float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE,
+                latitude_in_degree);
+    float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
+                longitude_in_degree);
+  }
   grn_obj *geometry_buffer = blob_buffers_[MRN_FIELD_FIELD_INDEX(field)];
   uint wkb_length = sizeof(wkb) / sizeof(*wkb);
-  Field_geom *geometry = (Field_geom *)field;
   GRN_TEXT_SET(ctx, geometry_buffer, wkb, wkb_length);
   geometry->set_ptr(GRN_TEXT_LEN(geometry_buffer),
                     reinterpret_cast<uchar *>(GRN_TEXT_VALUE(geometry_buffer)));

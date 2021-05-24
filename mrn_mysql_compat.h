@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2020 Sutou Kouhei <kou@clear-code.com>
-  Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2011-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2020-2021  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -396,8 +396,24 @@ typedef HASH mrn_table_def_cache_type;
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
 #  define MRN_HAVE_SPATIAL
+#  if MYSQL_VERSION_ID >= 80000
+#    define MRN_HAVE_SRID
+#    include <sql/gis/srid.h>
+using mrn_srid = gis::srid_t;
+#    define MRN_FIELD_GEOM_GET_SRID(field)      \
+  (field->get_srid().has_value() ?              \
+   field->get_srid().value() :                  \
+   0)
+#    define MRN_HAVE_SRS
+#  else
+using mrn_srid = uint32_t;
+#    define MRN_FIELD_GEOM_GET_SRID(field) 0
+#  endif
 #elif defined(HAVE_SPATIAL)
 #  define MRN_HAVE_SPATIAL
+#  define MRN_HAVE_SRID
+using mrn_srid = uint;
+#    define MRN_FIELD_GEOM_GET_SRID(field) (field->get_srid())
 #endif
 
 #if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
