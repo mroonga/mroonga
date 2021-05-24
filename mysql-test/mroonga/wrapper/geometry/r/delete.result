@@ -7,15 +7,15 @@ spatial key location_index (location)
 ) comment = 'engine "innodb"';
 insert into shops (name, location)
 values ('sazare',
-ST_GeomFromText('POINT(139.685043 35.714653)'));
+ST_GeomFromText('POINT(35.714653 139.685043)'));
 select id, name, ST_AsText(location) as location_text from shops
-where MBRContains(ST_GeomFromText('LineString(139.68466 35.71592, 139.68804 35.71411)'), location);
+where MBRContains(ST_GeomFromText('LineString(35.71592 139.68466, 35.71411 139.68804)'), location);
 id	name	location_text
-1	sazare	POINT(139.685043 35.714653)
+1	sazare	POINT(35.714653 139.685043)
 delete from shops
-where MBRContains(ST_GeomFromText('LineString(139.68466 35.71592, 139.68804 35.71411)'), location);
+where MBRContains(ST_GeomFromText('LineString(35.71592 139.68466, 35.71411 139.68804)'), location);
 select id, name, ST_AsText(location) as location_text from shops
-where MBRContains(ST_GeomFromText('LineString(139.68466 35.71592, 139.68804 35.71411)'), location);
+where MBRContains(ST_GeomFromText('LineString(35.71592 139.68466, 35.71411 139.68804)'), location);
 id	name	location_text
 select id, name, ST_AsText(location) as location_text from shops;
 id	name	location_text

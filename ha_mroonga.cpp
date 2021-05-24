@@ -1997,10 +1997,10 @@ static int mrn_set_geometry(grn_ctx *ctx, grn_obj *buf,
 #ifdef MRN_HAVE_POINT_XY
       point_xy xy(0.0, 0.0);
       point->get_xy(&xy);
-      longitude = xy.x;
-      latitude = xy.y;
+      latitude = xy.x;
+      longitude = xy.y;
 #else
-      point->get_xy(&longitude, &latitude);
+      point->get_xy(&latitude, &longitude);
 #endif
       grn_obj_reinit(ctx, buf, GRN_DB_WGS84_GEO_POINT, 0);
       GRN_GEO_POINT_SET(ctx, buf,
@@ -10954,10 +10954,10 @@ void ha_mroonga::geo_store_rectangle(const uchar *rectangle)
     }
     MRN_MI_FLOAT8GET(locations[i], reversed_value);
   }
-  top_left_longitude_in_degree = locations[0];
-  bottom_right_longitude_in_degree = locations[1];
-  bottom_right_latitude_in_degree = locations[2];
-  top_left_latitude_in_degree = locations[3];
+  top_left_longitude_in_degree = locations[2];
+  bottom_right_longitude_in_degree = locations[3];
+  bottom_right_latitude_in_degree = locations[0];
+  top_left_latitude_in_degree = locations[1];
   int top_left_latitude = GRN_GEO_DEGREE2MSEC(top_left_latitude_in_degree);
   int top_left_longitude = GRN_GEO_DEGREE2MSEC(top_left_longitude_in_degree);
   int bottom_right_latitude = GRN_GEO_DEGREE2MSEC(bottom_right_latitude_in_degree);
@@ -12179,9 +12179,9 @@ void ha_mroonga::storage_store_field_geometry(Field *field,
   latitude_in_degree = GRN_GEO_MSEC2DEGREE(latitude);
   longitude_in_degree = GRN_GEO_MSEC2DEGREE(longitude);
   float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE,
-              longitude_in_degree);
-  float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
               latitude_in_degree);
+  float8store(wkb + SRID_SIZE + WKB_HEADER_SIZE + SIZEOF_STORED_DOUBLE,
+              longitude_in_degree);
   grn_obj *geometry_buffer = blob_buffers_[MRN_FIELD_FIELD_INDEX(field)];
   uint wkb_length = sizeof(wkb) / sizeof(*wkb);
   Field_geom *geometry = (Field_geom *)field;

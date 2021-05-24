@@ -32,14 +32,14 @@ create table shops (
 
 insert into shops (name, location)
            values ('sazare',
-                   ST_GeomFromText('POINT(139.685043 35.714653)'));
+                   ST_GeomFromText('POINT(35.714653 139.685043)'));
 select id, name, ST_AsText(location) as location_text from shops
-  where MBRContains(ST_GeomFromText('LineString(139.68466 35.71592, 139.68804 35.71411)'), location);
+  where MBRContains(ST_GeomFromText('LineString(35.71592 139.68466, 35.71411 139.68804)'), location);
 
 delete from shops
-  where MBRContains(ST_GeomFromText('LineString(139.68466 35.71592, 139.68804 35.71411)'), location);
+  where MBRContains(ST_GeomFromText('LineString(35.71592 139.68466, 35.71411 139.68804)'), location);
 select id, name, ST_AsText(location) as location_text from shops
-  where MBRContains(ST_GeomFromText('LineString(139.68466 35.71592, 139.68804 35.71411)'), location);
+  where MBRContains(ST_GeomFromText('LineString(35.71592 139.68466, 35.71411 139.68804)'), location);
 
 select id, name, ST_AsText(location) as location_text from shops;
 
