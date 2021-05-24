@@ -412,7 +412,7 @@ using mrn_srid = uint32_t;
 #elif defined(HAVE_SPATIAL)
 #  define MRN_HAVE_SPATIAL
 #  define MRN_HAVE_SRID
-using mrn_srid = uint;
+typedef uint mrn_srid;
 #    define MRN_FIELD_GEOM_GET_SRID(field) (field->get_srid())
 #endif
 
