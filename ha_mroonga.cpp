@@ -2780,7 +2780,6 @@ static _ft_vft mrn_no_such_key_ft_vft = {
   mrn_no_such_key_ft_reinit_search
 };
 
-#ifdef HA_CAN_FULLTEXT_EXT
 static uint mrn_generic_ft_get_version()
 {
   MRN_DBUG_ENTER_FUNCTION();
@@ -2923,7 +2922,6 @@ static _ft_vft_ext mrn_no_such_key_ft_vft_ext = {
   mrn_no_such_key_ft_ext_get_docid,
   mrn_no_such_key_ft_ext_count_matches
 };
-#endif
 
 /* handler implementation */
 ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
@@ -3284,13 +3282,12 @@ ulonglong ha_mroonga::wrapper_table_flags() const
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
-  table_flags |= HA_CAN_FULLTEXT | HA_PRIMARY_KEY_REQUIRED_FOR_DELETE |
+  table_flags |= HA_CAN_FULLTEXT |
+    HA_CAN_FULLTEXT_EXT |
+    HA_PRIMARY_KEY_REQUIRED_FOR_DELETE |
     HA_CAN_RTREEKEYS;
 #ifdef HA_CAN_REPAIR
   table_flags |= HA_CAN_REPAIR;
-#endif
-#ifdef HA_CAN_FULLTEXT_EXT
-  table_flags |= HA_CAN_FULLTEXT_EXT;
 #endif
 #ifdef HA_GENERATED_COLUMNS
   table_flags |= HA_GENERATED_COLUMNS;
@@ -3320,6 +3317,7 @@ ulonglong ha_mroonga::storage_table_flags() const
     HA_CAN_INDEX_BLOBS |
     HA_STATS_RECORDS_IS_EXACT |
     HA_CAN_FULLTEXT |
+    HA_CAN_FULLTEXT_EXT |
     HA_BINLOG_FLAGS |
     HA_CAN_BIT_FIELD |
     HA_DUPLICATE_POS |
@@ -3336,9 +3334,6 @@ ulonglong ha_mroonga::storage_table_flags() const
 #endif
 #ifdef HA_CAN_REPAIR
   flags |= HA_CAN_REPAIR;
-#endif
-#ifdef HA_CAN_FULLTEXT_EXT
-  flags |= HA_CAN_FULLTEXT_EXT;
 #endif
 #ifdef HA_GENERATED_COLUMNS
   flags |= HA_GENERATED_COLUMNS;
@@ -9560,9 +9555,7 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
 
   struct st_mrn_ft_info *mrn_ft_info = (struct st_mrn_ft_info *)info;
   mrn_ft_info->please = &mrn_wrapper_ft_vft;
-#ifdef HA_CAN_FULLTEXT_EXT
   mrn_ft_info->could_you = &mrn_wrapper_ft_vft_ext;
-#endif
   ++wrap_ft_init_count;
 
   DBUG_RETURN(info);
@@ -9579,9 +9572,7 @@ FT_INFO *ha_mroonga::storage_ft_init_ext(uint flags, uint key_nr, String *key)
 
   struct st_mrn_ft_info *mrn_ft_info = (struct st_mrn_ft_info *)info;
   mrn_ft_info->please = &mrn_storage_ft_vft;
-#ifdef HA_CAN_FULLTEXT_EXT
   mrn_ft_info->could_you = &mrn_storage_ft_vft_ext;
-#endif
   DBUG_RETURN(info);
 }
 
@@ -9593,9 +9584,7 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint key_nr, String *key)
   if (key_nr == NO_SUCH_KEY) {
     struct st_mrn_ft_info *mrn_ft_info = new st_mrn_ft_info();
     mrn_ft_info->please = &mrn_no_such_key_ft_vft;
-#ifdef HA_CAN_FULLTEXT_EXT
     mrn_ft_info->could_you = &mrn_no_such_key_ft_vft_ext;
-#endif
     info = (FT_INFO *)mrn_ft_info;
   } else {
     if (share->wrapper_mode)
