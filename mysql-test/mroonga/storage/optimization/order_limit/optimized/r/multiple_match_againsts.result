@@ -31,5 +31,5 @@ id	title	content
 12	title 1	content a
 SHOW STATUS LIKE 'mroonga_fast_order_limit';
 Variable_name	Value
-Mroonga_fast_order_limit	0
+Mroonga_fast_order_limit	1
 DROP TABLE memos;

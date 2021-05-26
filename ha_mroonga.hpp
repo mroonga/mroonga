@@ -428,12 +428,18 @@ struct st_mrn_ft_info
   struct _ft_vft_ext *could_you;
   grn_ctx *ctx;
   grn_encoding encoding;
+  uint flags;
+  uint active_index;
+  grn_obj query;
   grn_obj *table;
+  grn_obj *index_column;
+  grn_obj *expression;
+  grn_obj *match_columns;
   grn_obj *result;
+  grn_obj *sorted_result;
   grn_obj *score_column;
   grn_obj key;
   grn_obj score;
-  uint active_index;
   KEY *key_info;
   KEY *primary_key_info;
   grn_obj *cursor;
@@ -533,10 +539,8 @@ private:
   grn_table_cursor *index_table_cursor;
   grn_obj *empty_value_records;
   grn_table_cursor *empty_value_records_cursor;
-  grn_obj *sorted_result;
-  grn_obj *matched_record_keys;
-  grn_table_cursor *matched_record_keys_cursor;
   grn_obj *condition_push_down_result;
+  grn_obj *sorted_condition_push_down_result_;
   grn_table_cursor *condition_push_down_result_cursor;
   mrn::Buffers blob_buffers_;
 
@@ -564,6 +568,9 @@ private:
 public:
   ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg);
   ~ha_mroonga();
+
+  THD *current_thread();
+
   const char *table_type() const;           // required
   const char *index_type(uint inx);
   const char **bas_ext() const;                                    // required
@@ -926,9 +933,12 @@ private:
   void check_count_skip(key_part_map target_key_part_map);
   bool is_grn_zero_column_value(grn_obj *column, grn_obj *value);
   bool is_primary_key_field(Field *field) const;
-  void check_fast_order_limit(grn_table_sort_key **sort_keys, int *n_sort_keys,
+public:
+  bool check_fast_order_limit(grn_obj *result_set,
+                              grn_table_sort_key **sort_keys,
+                              int *n_sort_keys,
                               longlong *limit);
-
+private:
   int generic_store_bulk_fixed_size_string(Field *field, grn_obj *buf);
   int generic_store_bulk_variable_size_string(Field *field, grn_obj *buf);
   int generic_store_bulk_integer(Field *field, grn_obj *buf);
@@ -1332,15 +1342,13 @@ private:
   int storage_ft_init();
   FT_INFO *wrapper_ft_init_ext(uint flags, uint key_nr, String *key);
   FT_INFO *storage_ft_init_ext(uint flags, uint key_nr, String *key);
-  void generic_ft_init_ext_add_conditions(struct st_mrn_ft_info *info,
-                                          grn_obj *expression);
   grn_rc generic_ft_init_ext_prepare_expression_in_boolean_mode(
     struct st_mrn_ft_info *info,
     String *key,
     grn_obj *index_column,
     grn_obj *match_columns,
     grn_obj *expression);
-  grn_rc generic_ft_init_ext_prepare_expression_in_normal_mode(
+  grn_rc generic_ft_init_ext_prepare_expression_in_natural_language_mode(
     struct st_mrn_ft_info *info,
     String *key,
     grn_obj *index_column,

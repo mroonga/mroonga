@@ -18,5 +18,5 @@ title	content
 Mroonga and Groonga	Mroonga uses Groonga internally
 SHOW STATUS LIKE 'mroonga_condition_push_down';
 Variable_name	Value
-Mroonga_condition_push_down	0
+Mroonga_condition_push_down	1
 DROP TABLE memos;

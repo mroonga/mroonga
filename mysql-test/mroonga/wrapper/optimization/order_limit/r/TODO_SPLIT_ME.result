@@ -22,13 +22,6 @@ show status like 'mroonga_fast_order_limit';
 Variable_name	Value
 Mroonga_fast_order_limit	0
 select c3, match(c3) against("ii") from t1
-where match(c3) against("ii") order by match(c3) against("ii") desc limit 1, 1;
-c3	match(c3) against("ii")
-aa ii uu ii oo	349526
-show status like 'mroonga_fast_order_limit';
-Variable_name	Value
-Mroonga_fast_order_limit	1
-select c3, match(c3) against("ii") from t1
 where match(c3) against("ii") order by match(c3) against("ii");
 c3	match(c3) against("ii")
 aa ii uu ee oo	174763
@@ -36,18 +29,18 @@ aa ii uu ii oo	349526
 ii si ii se ii	524289
 show status like 'mroonga_fast_order_limit';
 Variable_name	Value
-Mroonga_fast_order_limit	1
+Mroonga_fast_order_limit	0
 select c3, match(c3) against("ii") from t1
 where match(c3) against("ii") order by match(c3) against("ii") limit 1;
 c3	match(c3) against("ii")
 aa ii uu ee oo	174763
 show status like 'mroonga_fast_order_limit';
 Variable_name	Value
-Mroonga_fast_order_limit	2
+Mroonga_fast_order_limit	1
 select count(*) from t1 where match(c3) against("ii") limit 1;
 count(*)
 3
 show status like 'mroonga_fast_order_limit';
 Variable_name	Value
-Mroonga_fast_order_limit	2
+Mroonga_fast_order_limit	1
 drop table t1;

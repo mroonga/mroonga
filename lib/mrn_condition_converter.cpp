@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013-2019 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2013-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,8 +18,9 @@
 */
 
 #include "mrn_condition_converter.hpp"
+#include "mrn_encoding.hpp"
+#include "mrn_query_parser.hpp"
 #include "mrn_time_converter.hpp"
-#include "mrn_smart_grn_obj.hpp"
 
 // for debug
 #define MRN_CLASS_NAME "mrn::ConditionConverter"
@@ -41,10 +42,17 @@
 #endif
 
 namespace mrn {
-  ConditionConverter::ConditionConverter(grn_ctx *ctx, grn_obj *table,
+  ConditionConverter::ConditionConverter(THD *thread,
+                                         grn_ctx *ctx,
+                                         grn_obj *table,
+                                         grn_obj **index_columns,
+                                         KEY *key_infos,
                                          bool is_storage_mode)
-    : ctx_(ctx),
+    : thread_(thread),
+      ctx_(ctx),
       table_(table),
+      index_columns_(index_columns),
+      key_infos_(key_infos),
       is_storage_mode_(is_storage_mode) {
     GRN_TEXT_INIT(&column_name_, 0);
     GRN_VOID_INIT(&value_);
@@ -63,11 +71,25 @@ namespace mrn {
       DBUG_RETURN(false);
     }
 
+    std::vector<grn_encoding> encodings;
+    bool convertable = is_convertable(item,
+                                      logical_operator,
+                                      encodings);
+    DBUG_RETURN(convertable);
+  }
+
+  bool ConditionConverter::is_convertable(const Item *item,
+                                          grn_operator logical_operator,
+                                          std::vector<grn_encoding> &encodings) {
+    MRN_DBUG_ENTER_METHOD();
+
     switch (item->type()) {
     case Item::COND_ITEM:
       {
         const Item_cond *cond_item = reinterpret_cast<const Item_cond *>(item);
-        bool convertable = is_convertable(cond_item, logical_operator);
+        bool convertable = is_convertable(cond_item,
+                                          logical_operator,
+                                          encodings);
         if (convertable) {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][true] "
@@ -79,7 +101,9 @@ namespace mrn {
     case Item::FUNC_ITEM:
       {
         const Item_func *func_item = reinterpret_cast<const Item_func *>(item);
-        bool convertable = is_convertable(func_item, logical_operator);
+        bool convertable = is_convertable(func_item,
+                                          logical_operator,
+                                          encodings);
         if (convertable) {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][true] "
@@ -102,7 +126,8 @@ namespace mrn {
   }
 
   bool ConditionConverter::is_convertable(const Item_cond *cond_item,
-                                          grn_operator logical_operator) {
+                                          grn_operator logical_operator,
+                                          std::vector<grn_encoding> &encodings) {
     MRN_DBUG_ENTER_METHOD();
 
     if (!is_storage_mode_) {
@@ -127,7 +152,7 @@ namespace mrn {
     List_iterator<Item> iterator(*argument_list);
     const Item *sub_item;
     while ((sub_item = iterator++)) {
-      if (!is_convertable(sub_item, sub_logical_operator)) {
+      if (!is_convertable(sub_item, sub_logical_operator, encodings)) {
         DBUG_RETURN(false);
       }
     }
@@ -136,7 +161,8 @@ namespace mrn {
   }
 
   bool ConditionConverter::is_convertable(const Item_func *func_item,
-                                          grn_operator logical_operator) {
+                                          grn_operator logical_operator,
+                                          std::vector<grn_encoding> &encodings) {
     MRN_DBUG_ENTER_METHOD();
 
     switch (func_item->functype()) {
@@ -170,11 +196,26 @@ namespace mrn {
         bool convertable =
           is_convertable_binary_operation(static_cast<Item_field *>(left_item),
                                           right_item,
-                                          func_item->functype());
+                                          func_item->functype(),
+                                          encodings);
         DBUG_RETURN(convertable);
       }
       break;
     case Item_func::FT_FUNC:
+      {
+        const Item_func_match *match_item =
+          static_cast<const Item_func_match *>(func_item);
+        KEY *key_info = &(key_infos_[match_item->key]);
+        uint n_key_parts = KEY_N_KEY_PARTS(key_info);
+        for (uint i = 0; i < n_key_parts; ++i) {
+          Field *field = key_info->key_part[i].field;
+          grn_encoding encoding = encoding::convert(field->charset());
+          if (!encodings.empty() && encodings[0] != encoding) {
+            DBUG_RETURN(false);
+          }
+          encodings.push_back(encoding);
+        }
+      }
       DBUG_RETURN(true);
       break;
     case Item_func::BETWEEN:
@@ -257,6 +298,10 @@ namespace mrn {
                                              n_arguments - 1);
         DBUG_RETURN(convertable);
       }
+    // TODO
+    // case Item_func::NOT_FUNC:
+    //   DBUG_RETURN(true);
+    //   break;
     default:
       DBUG_RETURN(false);
       break;
@@ -268,21 +313,35 @@ namespace mrn {
   bool ConditionConverter::is_convertable_binary_operation(
     const Item_field *field_item,
     Item *value_item,
-    Item_func::Functype func_type) {
+    Item_func::Functype func_type,
+    std::vector<grn_encoding> &encodings) {
     MRN_DBUG_ENTER_METHOD();
 
     enum_field_types field_type = field_item->field->real_type();
     NormalizedType normalized_type = normalize_field_type(field_type);
     switch (normalized_type) {
     case STRING_TYPE:
-      if (func_type == Item_func::EQ_FUNC &&
-          !have_index(field_item, GRN_OP_EQUAL)) {
-        GRN_LOG(ctx_, GRN_LOG_DEBUG,
-                "[mroonga][condition-push-down][false] "
-                "index for string equal operation doesn't exist: %.*s",
-                MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
-                MRN_ITEM_FIELD_GET_NAME(field_item));
-        DBUG_RETURN(false);
+      if (func_type == Item_func::EQ_FUNC) {
+        grn_encoding encoding = encoding::convert(field_item->field->charset());
+        if (!encodings.empty() && encodings[0] != encoding) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "string equal operation for "
+                  "mixed charset isn't supported: <%.*s>: <%s>",
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item),
+                  field_item->field->charset()->csname);
+          DBUG_RETURN(false);
+        }
+        encodings.push_back(encoding);
+        if (!have_index(field_item, GRN_OP_EQUAL)) {
+          GRN_LOG(ctx_, GRN_LOG_DEBUG,
+                  "[mroonga][condition-push-down][false] "
+                  "index for string equal operation doesn't exist: <%.*s>",
+                  MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
+                  MRN_ITEM_FIELD_GET_NAME(field_item));
+          DBUG_RETURN(false);
+        }
       }
       break;
     case INT_TYPE:
@@ -292,7 +351,7 @@ namespace mrn {
           GRN_LOG(ctx_, GRN_LOG_DEBUG,
                   "[mroonga][condition-push-down][false] "
                   "constant value of enum binary operation "
-                  "isn't string nor integer: %.*s: %u",
+                  "isn't string nor integer: <%.*s>: <%u>",
                   MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
                   MRN_ITEM_FIELD_GET_NAME(field_item),
                   value_item->type());
@@ -305,7 +364,7 @@ namespace mrn {
         GRN_LOG(ctx_, GRN_LOG_DEBUG,
                 "[mroonga][condition-push-down][false] "
                 "constant value of time binary operation "
-                "is invalid: %.*s: %u",
+                "is invalid: <%.*s>: <%u>",
                 MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
                 MRN_ITEM_FIELD_GET_NAME(field_item),
                 value_item->type());
@@ -315,7 +374,7 @@ namespace mrn {
     case UNSUPPORTED_TYPE:
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][condition-push-down][false] "
-              "unsupported value of binary operation: %.*s: %u",
+              "unsupported value of binary operation: <%.*s>: <%u>",
               MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
               MRN_ITEM_FIELD_GET_NAME(field_item),
               field_type);
@@ -341,6 +400,7 @@ namespace mrn {
                 "index for string BETWEEN operation doesn't exist: %.*s",
                 MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
                 MRN_ITEM_FIELD_GET_NAME(field_item));
+        DBUG_RETURN(false);
       }
       break;
     case INT_TYPE:
@@ -491,7 +551,7 @@ namespace mrn {
     Item *real_value_item = value_item->real_item();
     switch (field_item->field->type()) {
     case MYSQL_TYPE_TIME:
-      error = MRN_ITEM_GET_TIME(real_value_item, mysql_time, current_thd);
+      error = MRN_ITEM_GET_TIME(real_value_item, mysql_time, thread_);
       break;
     case MYSQL_TYPE_YEAR:
       mysql_time->year        = static_cast<int>(value_item->val_int());
@@ -506,7 +566,7 @@ namespace mrn {
       error = false;
       break;
     default:
-      error = MRN_ITEM_GET_DATE_FUZZY(real_value_item, mysql_time, current_thd);
+      error = MRN_ITEM_GET_DATE_FUZZY(real_value_item, mysql_time, thread_);
       break;
     }
 
@@ -695,30 +755,47 @@ namespace mrn {
     DBUG_RETURN(0);
   }
 
-  void ConditionConverter::convert(const Item *where,
-                                   grn_obj *expression) {
+  grn_encoding ConditionConverter::convert(
+    const Item *where,
+    grn_obj *expression,
+    std::list<SmartGrnObj> &match_columns_list) {
     MRN_DBUG_ENTER_METHOD();
 
     if (!where) {
-      DBUG_VOID_RETURN;
+      DBUG_RETURN(GRN_ENC_NONE);
     }
 
+    std::vector<grn_encoding> encodings;
     switch (where->type()) {
     case Item::COND_ITEM:
-      convert(static_cast<const Item_cond *>(where), expression);
+      convert(static_cast<const Item_cond *>(where),
+              expression,
+              match_columns_list,
+              encodings);
       break;
     case Item::FUNC_ITEM:
-      convert(static_cast<const Item_func *>(where), expression, false);
+      convert(static_cast<const Item_func *>(where),
+              expression,
+              match_columns_list,
+              encodings,
+              false);
       break;
     default:
       break;
     }
 
-    DBUG_VOID_RETURN;
+    grn_encoding encoding = GRN_ENC_NONE;
+    if (!encodings.empty()) {
+      encoding = encodings[0];
+    }
+    DBUG_RETURN(encoding);
   }
 
-  bool ConditionConverter::convert(const Item_cond *cond_item,
-                                   grn_obj *expression) {
+  bool ConditionConverter::convert(
+    const Item_cond *cond_item,
+    grn_obj *expression,
+    std::list<SmartGrnObj> &match_columns_list,
+    std::vector<grn_encoding> &encodings) {
     MRN_DBUG_ENTER_METHOD();
 
     grn_operator logical_operator = GRN_OP_AND;
@@ -735,7 +812,9 @@ namespace mrn {
       switch (sub_item->type()) {
       case Item::COND_ITEM:
         if (convert(static_cast<const Item_cond *>(sub_item),
-                    expression)) {
+                    expression,
+                    match_columns_list,
+                    encodings)) {
           if (n_conditions > 0) {
             grn_expr_append_op(ctx_, expression, logical_operator, 2);
           }
@@ -746,7 +825,11 @@ namespace mrn {
         {
           const Item_func *sub_func_item =
             static_cast<const Item_func *>(sub_item);
-          if (convert(sub_func_item, expression, n_conditions > 0)) {
+          if (convert(sub_func_item,
+                      expression,
+                      match_columns_list,
+                      encodings,
+                      n_conditions > 0)) {
             if (n_conditions > 0) {
               grn_operator sub_logical_operator = logical_operator;
               if (sub_logical_operator == GRN_OP_AND &&
@@ -771,9 +854,12 @@ namespace mrn {
     DBUG_RETURN(n_conditions > 0);
   }
 
-  bool ConditionConverter::convert(const Item_func *func_item,
-                                   grn_obj *expression,
-                                   bool have_condition) {
+  bool ConditionConverter::convert(
+    const Item_func *func_item,
+    grn_obj *expression,
+    std::list<SmartGrnObj> &match_columns_list,
+    std::vector<grn_encoding> &encodings,
+    bool have_condition) {
     MRN_DBUG_ENTER_METHOD();
 
     bool added = false;
@@ -802,7 +888,10 @@ namespace mrn {
       added = convert_in(func_item, expression, have_condition);
       break;
     case Item_func::FT_FUNC:
-      added = true;
+      added = convert_full_text_search(func_item,
+                                       expression,
+                                       match_columns_list,
+                                       encodings);
     default:
       break;
     }
@@ -888,6 +977,80 @@ namespace mrn {
 
     if (!have_condition && in_item->negated) {
       grn_expr_append_op(ctx_, expression, GRN_OP_AND_NOT, 2);
+    }
+
+    DBUG_RETURN(true);
+  }
+
+  bool ConditionConverter::convert_full_text_search(
+    const Item_func *func_item,
+    grn_obj *expression,
+    std::list<SmartGrnObj> &match_columns_list,
+    std::vector<grn_encoding> &encodings) {
+    MRN_DBUG_ENTER_METHOD();
+
+    const Item_func_match *match_item =
+      static_cast<const Item_func_match *>(func_item);
+
+    KEY *key_info = &(key_infos_[match_item->key]);
+    uint n_key_parts = KEY_N_KEY_PARTS(key_info);
+    for (uint i = 0; i < n_key_parts; ++i) {
+      Field *field = key_info->key_part[i].field;
+      encodings.push_back(encoding::convert(field->charset()));
+    }
+
+    GRN_CTX_SET_ENCODING(ctx_, encodings[0]);
+    grn_obj *index_column = index_columns_[match_item->key];
+    String query_buffer;
+    String converted_query_buffer;
+    String *query;
+    query = match_item->key_item()->val_str(&query_buffer);
+    DTCollation cmp_collation = match_item->cmp_collation;
+    if (query->charset() != cmp_collation.collation) {
+      uint errors;
+      converted_query_buffer.copy(query->ptr(),
+                                  query->length(),
+                                  query->charset(),
+                                  cmp_collation.collation,
+                                  &errors);
+      query = &converted_query_buffer;
+    }
+    if (match_item->flags & FT_BOOL) {
+      grn_obj *match_columns;
+      grn_obj *match_columns_variable;
+      GRN_EXPR_CREATE_FOR_QUERY(ctx_,
+                                table_,
+                                match_columns,
+                                match_columns_variable);
+      // TODO: Use std::vector, emplace_back() and move semantics when
+      // we drop support for MariaDB 10.3.
+      match_columns_list.push_front(SmartGrnObj(ctx_,
+                                                  static_cast<grn_obj *>(NULL)));
+      match_columns_list.front().reset(match_columns);
+      grn_obj source_ids;
+      GRN_RECORD_INIT(&source_ids, GRN_OBJ_VECTOR, GRN_ID_NIL);
+      grn_obj_get_info(ctx_, index_column, GRN_INFO_SOURCE, &source_ids);
+      QueryParser query_parser(ctx_,
+                               thread_,
+                               expression,
+                               index_column,
+                               GRN_RECORD_VECTOR_SIZE(&source_ids),
+                               match_columns);
+      query_parser.parse(query->ptr(), query->length());
+      GRN_OBJ_FIN(ctx_, &source_ids);
+    } else {
+      grn_expr_append_obj(ctx_,
+                          expression,
+                          index_column,
+                          GRN_OP_PUSH,
+                          1);
+      grn_expr_append_const_str(ctx_,
+                                expression,
+                                query->ptr(),
+                                query->length(),
+                                GRN_OP_PUSH,
+                                1);
+      grn_expr_append_op(ctx_, expression, GRN_OP_SIMILAR, 2);
     }
 
     DBUG_RETURN(true);

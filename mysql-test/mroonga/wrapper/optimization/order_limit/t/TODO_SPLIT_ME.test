@@ -41,10 +41,6 @@ select c3, match(c3) against("ii") from t1
 show status like 'mroonga_fast_order_limit';
 
 select c3, match(c3) against("ii") from t1
-  where match(c3) against("ii") order by match(c3) against("ii") desc limit 1, 1;
-show status like 'mroonga_fast_order_limit';
-
-select c3, match(c3) against("ii") from t1
   where match(c3) against("ii") order by match(c3) against("ii");
 show status like 'mroonga_fast_order_limit';
 

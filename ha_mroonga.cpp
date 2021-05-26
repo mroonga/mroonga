@@ -1394,8 +1394,7 @@ static MYSQL_THDVAR_ENUM(condition_push_down_type,
                          "How to use condition push down",
                          NULL,
                          NULL,
-                         static_cast<ulong>(
-                           mrn::condition_push_down::ONE_FULL_TEXT_SEARCH),
+                         static_cast<ulong>(mrn::condition_push_down::ALL),
                          &mrn_condition_push_down_type_typelib);
 
 static mrn_sys_var *mrn_system_variables[] =
@@ -2533,10 +2532,9 @@ static double mrn_get_score_value(grn_obj *score)
   DBUG_RETURN(score_value);
 }
 
-static void mrn_generic_ft_clear(FT_INFO *handler)
+static void mrn_generic_ft_clear(st_mrn_ft_info *info)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
   if (!info->ctx) {
     DBUG_VOID_RETURN;
   }
@@ -2550,8 +2548,11 @@ static void mrn_generic_ft_clear(FT_INFO *handler)
   if (info->key_accessor) {
     grn_obj_unlink(info->ctx, info->key_accessor);
   }
-  grn_obj_unlink(info->ctx, info->result);
+  grn_obj_unlink(info->ctx, info->expression);
+  grn_obj_unlink(info->ctx, info->match_columns);
   grn_obj_unlink(info->ctx, info->score_column);
+  grn_obj_unlink(info->ctx, info->result);
+  grn_obj_unlink(info->ctx, &(info->query));
   grn_obj_unlink(info->ctx, &(info->key));
   grn_obj_unlink(info->ctx, &(info->score));
 
@@ -2563,9 +2564,102 @@ static void mrn_generic_ft_clear(FT_INFO *handler)
 static void mrn_generic_ft_close_search(FT_INFO *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
-  mrn_generic_ft_clear(handler);
+  st_mrn_ft_info *info = reinterpret_cast<st_mrn_ft_info *>(handler);
+  mrn_generic_ft_clear(info);
   delete info;
+  DBUG_VOID_RETURN;
+}
+
+static inline void mrn_generic_ft_ensure_searched(
+  st_mrn_ft_info *info,
+  bool need_fast_order_limit_check)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+
+  if (info->result) {
+    DBUG_VOID_RETURN;
+  }
+
+  GRN_CTX_SET_ENCODING(info->ctx, info->encoding);
+
+  info->result = grn_table_create(info->ctx, NULL, 0, NULL,
+                                  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                  info->table, 0);
+  if (!info->result) {
+    char error_message[MRN_MESSAGE_BUFFER_SIZE];
+    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+             "[mroonga][ft][ensure-searched] failed to create a table "
+             "to store matched records for one search: <%s>",
+             info->ctx->errbuf);
+    GRN_LOG(info->ctx, GRN_LOG_ERROR, "%s", error_message);
+    DBUG_VOID_RETURN;
+  }
+
+  info->score_column = grn_obj_column(info->ctx, info->result,
+                                      MRN_COLUMN_NAME_SCORE,
+                                      strlen(MRN_COLUMN_NAME_SCORE));
+
+  if (GRN_TEXT_LEN(&(info->query)) == 0) {
+    DBUG_VOID_RETURN;
+  }
+
+  {
+    longlong escalation_threshold = THDVAR(info->mroonga->current_thread(),
+                                           match_escalation_threshold);
+    mrn::MatchEscalationThresholdScope scope(info->ctx,
+                                             escalation_threshold);
+    grn_table_select(info->ctx,
+                     info->table,
+                     info->expression,
+                     info->result,
+                     GRN_OP_OR);
+  }
+
+  if (info->ctx->rc == GRN_SUCCESS) {
+    if (info->flags & FT_SORTED) {
+      grn_table_sort_key score_sort_key;
+      score_sort_key.key = info->score_column;
+      score_sort_key.offset = 0;
+      score_sort_key.flags = GRN_TABLE_SORT_DESC;
+      info->sorted_result = grn_table_create(info->ctx,
+                                             NULL,
+                                             0, NULL,
+                                             GRN_OBJ_TABLE_NO_KEY, NULL,
+                                             info->result);
+      grn_table_sort(info->ctx,
+                     info->result,
+                     0, -1,
+                     info->sorted_result,
+                     &score_sort_key, 1);
+    } else if (need_fast_order_limit_check) {
+      grn_table_sort_key *sort_keys = NULL;
+      int n_sort_keys = 0;
+      longlong limit = -1;
+      bool fast_order_limit =
+        info->mroonga->check_fast_order_limit(info->result,
+                                              &sort_keys,
+                                              &n_sort_keys,
+                                              &limit);
+      if (fast_order_limit) {
+        info->sorted_result = grn_table_create(info->ctx,
+                                               NULL,
+                                               0, NULL,
+                                               GRN_OBJ_TABLE_NO_KEY, NULL,
+                                               info->result);
+        grn_table_sort(info->ctx,
+                       info->result,
+                       0, static_cast<int>(limit),
+                       info->sorted_result,
+                       sort_keys,
+                       n_sort_keys);
+        for (int i = 0; i < n_sort_keys; i++) {
+          grn_obj_unlink(info->ctx, sort_keys[i].key);
+        }
+        my_free(sort_keys);
+      }
+    }
+  }
+
   DBUG_VOID_RETURN;
 }
 
@@ -2579,7 +2673,10 @@ static float mrn_wrapper_ft_find_relevance(FT_INFO *handler, uchar *record,
                                            uint length)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  st_mrn_ft_info *info = reinterpret_cast<st_mrn_ft_info *>(handler);
+
+  mrn_generic_ft_ensure_searched(info, false);
+
   float score = 0.0;
   grn_id record_id;
 
@@ -2671,7 +2768,10 @@ static float mrn_storage_ft_find_relevance(FT_INFO *handler, uchar *record,
                                            uint length)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_ft_info *info = (st_mrn_ft_info *)handler;
+  st_mrn_ft_info *info = reinterpret_cast<st_mrn_ft_info *>(handler);
+
+  mrn_generic_ft_ensure_searched(info, false);
+
   ha_mroonga *mroonga = info->mroonga;
   mrn_change_encoding(info->ctx, NULL);
 
@@ -2792,21 +2892,15 @@ static uint mrn_generic_ft_get_version()
 static ulonglong mrn_generic_ft_ext_get_flags()
 {
   MRN_DBUG_ENTER_FUNCTION();
-  // TODO: Should we support FTS_ORDERED_RESULT?
-  // TODO: Shuold we support FTS_DOCID_IN_RESULT?
-  ulonglong flags = 0;
+  ulonglong flags = FTS_ORDERED_RESULT;
   DBUG_RETURN(flags);
 }
 
-// This function is used if we enable FTS_DOCID_IN_RESULT flag and the
-// table has "FTS_DOC_ID" (defined as FTS_DOC_ID_COL_NAME macro)
-// special name column. Should we support "FTS_DOC_ID" special name
-// column?
-// See also sql/sql_optimizer.cc:JOIN::optimize_fts_query().
+// Not used.
 static ulonglong mrn_generic_ft_ext_get_docid(FT_INFO_EXT *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  ulonglong id = GRN_ID_NIL;
+  ulonglong id = 0;
   DBUG_RETURN(id);
 }
 
@@ -2814,6 +2908,7 @@ static ulonglong mrn_generic_ft_ext_count_matches(FT_INFO_EXT *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_ft_info *info = reinterpret_cast<st_mrn_ft_info *>(handler);
+  mrn_generic_ft_ensure_searched(info, false);
   ulonglong n_records = grn_table_size(info->ctx, info->result);
   DBUG_RETURN(n_records);
 }
@@ -2905,7 +3000,7 @@ static ulonglong mrn_no_such_key_ft_ext_get_flags()
 static ulonglong mrn_no_such_key_ft_ext_get_docid(FT_INFO_EXT *handler)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  ulonglong id = GRN_ID_NIL;
+  ulonglong id = mrn_generic_ft_ext_get_docid(handler);
   DBUG_RETURN(id);
 }
 
@@ -2960,10 +3055,8 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
    empty_value_records(NULL),
    empty_value_records_cursor(NULL),
 
-   sorted_result(NULL),
-   matched_record_keys(NULL),
-   matched_record_keys_cursor(NULL),
    condition_push_down_result(NULL),
+   sorted_condition_push_down_result_(NULL),
    condition_push_down_result_cursor(NULL),
    blob_buffers_(ctx),
 
@@ -3024,6 +3117,13 @@ ha_mroonga::~ha_mroonga()
   grn_obj_unlink(ctx, &new_value_buffer);
   grn_ctx_fin(ctx);
   DBUG_VOID_RETURN;
+}
+
+THD *ha_mroonga::current_thread()
+{
+  MRN_DBUG_ENTER_METHOD();
+  THD *thread = ha_thd();
+  DBUG_RETURN(thread);
 }
 
 const char *ha_mroonga::table_type() const
@@ -6245,33 +6345,32 @@ int ha_mroonga::wrapper_rnd_init(bool scan)
 int ha_mroonga::storage_rnd_init(bool scan)
 {
   MRN_DBUG_ENTER_METHOD();
+
   mrn_change_encoding(ctx, NULL);
+
+  // MySQL uses rnd_init()/rnd_next()/rnd_end() for condition pushed
+  // down SELECT.
   if (pushed_cond) {
-    if (fulltext_searching) {
-      if (matched_record_keys) {
-        matched_record_keys_cursor =
-          grn_table_cursor_open(ctx,
-                                matched_record_keys,
-                                NULL, 0,
-                                NULL, 0,
-                                0, -1,
-                                0);
-      } else {
-        cursor = grn_table_cursor_open(ctx,
-                                       grn_table,
-                                       NULL, 0,
-                                       NULL, 0,
-                                       0, -1,
-                                       0);
-      }
-    } else {
+    {
+      check_count_skip(0);
       grn_obj *expression, *expression_variable;
       GRN_EXPR_CREATE_FOR_QUERY(ctx,
                                 grn_table,
                                 expression,
                                 expression_variable);
-      mrn::ConditionConverter converter(ctx, grn_table, true);
-      converter.convert(pushed_cond, expression);
+      mrn::ConditionConverter converter(ha_thd(),
+                                        ctx,
+                                        grn_table,
+                                        grn_index_columns,
+                                        table->key_info,
+                                        true);
+      std::list<mrn::SmartGrnObj> match_columns_list;
+      grn_encoding encoding =
+        converter.convert(pushed_cond, expression, match_columns_list);
+      GRN_CTX_SET_ENCODING(ctx, encoding);
+      longlong escalation_threshold =
+        THDVAR(ha_thd(), match_escalation_threshold);
+      mrn::MatchEscalationThresholdScope scope(ctx, escalation_threshold);
       condition_push_down_result = grn_table_select(ctx,
                                                     grn_table,
                                                     expression,
@@ -6279,13 +6378,47 @@ int ha_mroonga::storage_rnd_init(bool scan)
                                                     GRN_OP_OR);
       grn_obj_unlink(ctx, expression);
 
-      condition_push_down_result_cursor =
-        grn_table_cursor_open(ctx,
-                              condition_push_down_result,
-                              NULL, 0,
-                              NULL, 0,
-                              0, -1,
-                              0);
+      grn_table_sort_key *sort_keys = NULL;
+      int n_sort_keys = 0;
+      longlong limit = -1;
+      check_fast_order_limit(condition_push_down_result,
+                             &sort_keys,
+                             &n_sort_keys,
+                             &limit);
+
+      if (fast_order_limit) {
+        sorted_condition_push_down_result_ =
+          grn_table_create(ctx, NULL,
+                           0, NULL,
+                           GRN_OBJ_TABLE_NO_KEY, NULL,
+                           condition_push_down_result);
+        grn_table_sort(ctx,
+                       condition_push_down_result,
+                       0, static_cast<int>(limit),
+                       sorted_condition_push_down_result_,
+                       sort_keys,
+                       n_sort_keys);
+        for (int i = 0; i < n_sort_keys; i++) {
+          grn_obj_unlink(ctx, sort_keys[i].key);
+        }
+        my_free(sort_keys);
+
+        condition_push_down_result_cursor =
+          grn_table_cursor_open(ctx,
+                                sorted_condition_push_down_result_,
+                                NULL, 0,
+                                NULL, 0,
+                                0, -1,
+                                0);
+      } else {
+        condition_push_down_result_cursor =
+          grn_table_cursor_open(ctx,
+                                condition_push_down_result,
+                                NULL, 0,
+                                NULL, 0,
+                                0, -1,
+                                0);
+      }
     }
   } else {
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0, 0, -1, 0);
@@ -9255,17 +9388,47 @@ int ha_mroonga::index_next_same(uchar *buf, const uchar *key, uint keylen)
 int ha_mroonga::generic_ft_init()
 {
   MRN_DBUG_ENTER_METHOD();
-  struct st_mrn_ft_info *mrn_ft_info =
-    reinterpret_cast<struct st_mrn_ft_info *>(ft_handler);
+
+  check_count_skip(0);
+
+  st_mrn_ft_info *mrn_ft_info =
+    reinterpret_cast<st_mrn_ft_info *>(ft_handler);
   GRN_CTX_SET_ENCODING(ctx, mrn_ft_info->encoding);
 
+  // MariaDB uses index_init()/ft_init()/ft_read()/index_end() for
+  //   SELECT *
+  //       FROM table
+  //      WHERE MATCH(...) AGAINST(...)
+  //   ORDER BY MATCH(...) AGAINST(...)
+  //      LIMIT X
+  // even when condition is pushed down.
+  // FT_SORTED isn't used. All matched records are fetched.
+  //
+  // MySQL uses FT_SORTED. LIMIT records are only fetched.
+
+  bool need_fast_order_limit_check;
+#ifdef MRN_MARIADB_P
+  if (share->wrapper_mode) {
+    need_fast_order_limit_check = true;
+  } else if (inited == INDEX) {
+    need_fast_order_limit_check = true;
+  } else {
+    need_fast_order_limit_check = !pushed_cond;
+  }
+#else
+  need_fast_order_limit_check = !pushed_cond;
+#endif
+  mrn_generic_ft_ensure_searched(mrn_ft_info, need_fast_order_limit_check);
+
   int error = 0;
-  if (sorted_result) {
-    mrn_ft_info->cursor = grn_table_cursor_open(ctx, sorted_result,
+  if (mrn_ft_info->sorted_result) {
+    mrn_ft_info->cursor = grn_table_cursor_open(ctx,
+                                                mrn_ft_info->sorted_result,
                                                 NULL, 0, NULL, 0,
                                                 0, -1, 0);
   } else {
-    mrn_ft_info->cursor = grn_table_cursor_open(ctx, mrn_ft_info->result,
+    mrn_ft_info->cursor = grn_table_cursor_open(ctx,
+                                                mrn_ft_info->result,
                                                 NULL, 0, NULL, 0,
                                                 0, -1, 0);
   }
@@ -9273,13 +9436,15 @@ int ha_mroonga::generic_ft_init()
     error = ER_ERROR_ON_READ;
     my_message(error, ctx->errbuf, MYF(0));
   } else {
-    if (sorted_result) {
+    if (mrn_ft_info->sorted_result) {
       if (grn_table->header.type == GRN_TABLE_NO_KEY) {
-        mrn_ft_info->id_accessor = grn_obj_column(ctx, sorted_result,
+        mrn_ft_info->id_accessor = grn_obj_column(ctx,
+                                                  mrn_ft_info->sorted_result,
                                                   MRN_COLUMN_NAME_ID,
                                                   strlen(MRN_COLUMN_NAME_ID));
       } else {
-        mrn_ft_info->key_accessor = grn_obj_column(ctx, sorted_result,
+        mrn_ft_info->key_accessor = grn_obj_column(ctx,
+                                                   mrn_ft_info->sorted_result,
                                                    MRN_COLUMN_NAME_KEY,
                                                    strlen(MRN_COLUMN_NAME_KEY));
       }
@@ -9320,142 +9485,75 @@ int ha_mroonga::ft_init()
   DBUG_RETURN(error);
 }
 
-void ha_mroonga::generic_ft_init_ext_add_conditions(struct st_mrn_ft_info *info,
-                                                    grn_obj *expression)
+st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
+                                                       uint key_nr,
+                                                       String *key)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  bool is_storage_mode = !(share->wrapper_mode);
-  mrn::ConditionConverter converter(info->ctx, grn_table, is_storage_mode);
-  converter.convert(pushed_cond, expression);
-
-  DBUG_VOID_RETURN;
-}
-
-grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_boolean_mode(
-  struct st_mrn_ft_info *info,
-  String *key,
-  grn_obj *index_column,
-  grn_obj *match_columns,
-  grn_obj *expression)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  mrn::QueryParser query_parser(info->ctx,
-                                ha_thd(),
-                                expression,
-                                index_column,
-                                KEY_N_KEY_PARTS(info->key_info),
-                                match_columns);
-  grn_rc rc = query_parser.parse(key->ptr(), key->length());
-
-  DBUG_RETURN(rc);
-}
-
-grn_rc ha_mroonga::generic_ft_init_ext_prepare_expression_in_normal_mode(
-  struct st_mrn_ft_info *info,
-  String *key,
-  grn_obj *index_column,
-  grn_obj *match_columns,
-  grn_obj *expression)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  grn_rc rc = GRN_SUCCESS;
-
-  grn_obj query;
-  GRN_TEXT_INIT(&query, GRN_OBJ_DO_SHALLOW_COPY);
-  GRN_TEXT_SET(info->ctx, &query, key->ptr(), key->length());
-  grn_expr_append_obj(info->ctx, match_columns, index_column, GRN_OP_PUSH, 1);
-  grn_expr_append_obj(info->ctx, expression, match_columns, GRN_OP_PUSH, 1);
-  grn_expr_append_const(info->ctx, expression, &query, GRN_OP_PUSH, 1);
-  grn_expr_append_op(info->ctx, expression, GRN_OP_SIMILAR, 2);
-  grn_obj_unlink(info->ctx, &query);
-
-  DBUG_RETURN(rc);
-}
-
-struct st_mrn_ft_info *ha_mroonga::generic_ft_init_ext_select(uint flags,
-                                                              uint key_nr,
-                                                              String *key)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  struct st_mrn_ft_info *info = new st_mrn_ft_info();
+  st_mrn_ft_info *info = new st_mrn_ft_info();
   info->mroonga = this;
   info->ctx = ctx;
   mrn_change_encoding(info->ctx,
                       table->key_info[key_nr].key_part->field->charset());
   info->encoding = GRN_CTX_GET_ENCODING(info->ctx);
+  info->flags = flags;
+  info->active_index = key_nr;
+  GRN_TEXT_INIT(&(info->query), 0);
+  GRN_TEXT_SET(ctx, &(info->query), key->ptr(), key->length());
   info->table = grn_table;
-  info->result = grn_table_create(info->ctx, NULL, 0, NULL,
-                                  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-                                  grn_table, 0);
-  if (!info->result) {
-    char error_message[MRN_MESSAGE_BUFFER_SIZE];
-    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "[mroonga][ft-init] failed to create a table "
-             "to store matched records for one search: <%s>",
-             ctx->errbuf);
-    my_message(ER_ERROR_ON_READ, error_message, MYF(0));
-    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
-    delete info;
-    DBUG_RETURN(NULL);
-  }
-
-  info->score_column = grn_obj_column(info->ctx, info->result,
-                                      MRN_COLUMN_NAME_SCORE,
-                                      strlen(MRN_COLUMN_NAME_SCORE));
+  info->index_column = grn_index_columns[info->active_index];
+  info->expression = NULL;
+  info->match_columns = NULL;
+  info->result = NULL;
+  info->sorted_result = NULL;
+  info->score_column = NULL;
   GRN_TEXT_INIT(&(info->key), 0);
   grn_bulk_space(info->ctx, &(info->key), table->key_info->key_length);
   GRN_INT32_INIT(&(info->score), 0);
-  info->active_index = key_nr;
   info->key_info = &(table->key_info[key_nr]);
   info->primary_key_info = &(table->key_info[table_share->primary_key]);
   info->cursor = NULL;
   info->id_accessor = NULL;
   info->key_accessor = NULL;
 
-  if (key->length() == 0) {
+  if (GRN_TEXT_LEN(&(info->query)) == 0) {
     DBUG_RETURN(info);
   }
 
-  grn_obj *index_column = grn_index_columns[key_nr];
-  grn_obj *match_columns, *match_columns_variable;
-  GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table, match_columns,
-                            match_columns_variable);
-
-  grn_obj *expression, *expression_variable;
-  GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->table,
-                            expression, expression_variable);
-
-  grn_rc rc = GRN_SUCCESS;
-  if (flags & FT_BOOL) {
-    rc = generic_ft_init_ext_prepare_expression_in_boolean_mode(info,
-                                                                key,
-                                                                index_column,
-                                                                match_columns,
-                                                                expression);
+  grn_obj *expression_variable;
+  GRN_EXPR_CREATE_FOR_QUERY(info->ctx,
+                            info->table,
+                            info->expression,
+                            expression_variable);
+  // TODO: Unify this code with ConditionConverter
+  if (info->flags & FT_BOOL) {
+    grn_obj *match_columns_variable;
+    GRN_EXPR_CREATE_FOR_QUERY(info->ctx,
+                              info->table,
+                              info->match_columns,
+                              match_columns_variable);
+    mrn::QueryParser query_parser(info->ctx,
+                                  ha_thd(),
+                                  info->expression,
+                                  info->index_column,
+                                  KEY_N_KEY_PARTS(info->key_info),
+                                  info->match_columns);
+    query_parser.parse(GRN_TEXT_VALUE(&(info->query)),
+                       GRN_TEXT_LEN(&(info->query)));
   } else {
-    rc = generic_ft_init_ext_prepare_expression_in_normal_mode(info,
-                                                               key,
-                                                               index_column,
-                                                               match_columns,
-                                                               expression);
+    grn_expr_append_obj(info->ctx,
+                        info->expression,
+                        info->index_column,
+                        GRN_OP_PUSH,
+                        1);
+    grn_expr_append_const(info->ctx,
+                          info->expression,
+                          &(info->query),
+                          GRN_OP_PUSH,
+                          1);
+    grn_expr_append_op(info->ctx, info->expression, GRN_OP_SIMILAR, 2);
   }
-
-  if (rc == GRN_SUCCESS) {
-    if (pushed_cond) {
-      generic_ft_init_ext_add_conditions(info, expression);
-    }
-    longlong escalation_threshold = THDVAR(ha_thd(), match_escalation_threshold);
-    mrn::MatchEscalationThresholdScope scope(info->ctx, escalation_threshold);
-    grn_table_select(info->ctx, info->table, expression,
-                     info->result, GRN_OP_OR);
-  }
-
-  grn_obj_unlink(info->ctx, expression);
-  grn_obj_unlink(info->ctx, match_columns);
 
   DBUG_RETURN(info);
 }
@@ -9464,84 +9562,10 @@ FT_INFO *ha_mroonga::generic_ft_init_ext(uint flags, uint key_nr, String *key)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  check_count_skip(0);
-
   mrn_change_encoding(ctx, system_charset_info);
-  grn_operator operation = GRN_OP_OR;
-  if (!matched_record_keys) {
-    matched_record_keys = grn_table_create(ctx, NULL, 0, NULL,
-                                           GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-                                           grn_table, 0);
-    if (!matched_record_keys) {
-      char error_message[MRN_MESSAGE_BUFFER_SIZE];
-      snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-               "[mroonga][ft-init] "
-               "failed to create a table to store all matched records: <%s>",
-               ctx->errbuf);
-      my_message(ER_ERROR_ON_READ, error_message, MYF(0));
-      GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
-      DBUG_RETURN(NULL);
-    }
-  }
 
-  grn_table_sort_key *sort_keys = NULL;
-  int n_sort_keys = 0;
-  longlong limit = -1;
-  check_fast_order_limit(&sort_keys, &n_sort_keys, &limit);
-
-  struct st_mrn_ft_info *info = generic_ft_init_ext_select(flags, key_nr, key);
-  if (!info) {
-    DBUG_RETURN(NULL);
-  }
-
-  grn_rc rc;
-  rc = grn_table_setoperation(ctx, matched_record_keys, info->result,
-                              matched_record_keys, operation);
-  if (rc) {
-    char error_message[MRN_MESSAGE_BUFFER_SIZE];
-    snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
-             "failed to merge matched record keys: <%s>",
-             ctx->errbuf);
-    my_message(ER_ERROR_ON_READ, error_message, MYF(0));
-    GRN_LOG(ctx, GRN_LOG_ERROR, "%s", error_message);
-  }
-  if (fast_order_limit) {
-    if (sorted_result) {
-      grn_obj_close(ctx, sorted_result);
-    }
-    sorted_result = grn_table_create(ctx, NULL,
-                                     0, NULL,
-                                     GRN_OBJ_TABLE_NO_KEY, NULL,
-                                     matched_record_keys);
-    grn_table_sort(ctx, matched_record_keys, 0, static_cast<int>(limit),
-                   sorted_result, sort_keys, n_sort_keys);
-  } else if (flags & FT_SORTED) {
-    grn_table_sort_key score_sort_key;
-    score_sort_key.key = grn_obj_column(ctx,
-                                        matched_record_keys,
-                                        MRN_COLUMN_NAME_SCORE,
-                                        strlen(MRN_COLUMN_NAME_SCORE));
-    score_sort_key.offset = 0;
-    score_sort_key.flags = GRN_TABLE_SORT_DESC;
-    if (sorted_result) {
-      grn_obj_unlink(ctx, sorted_result);
-    }
-    sorted_result = grn_table_create(ctx, NULL,
-                                     0, NULL,
-                                     GRN_OBJ_TABLE_NO_KEY, NULL,
-                                     matched_record_keys);
-    grn_table_sort(ctx, matched_record_keys, 0, -1,
-                   sorted_result, &score_sort_key, 1);
-    grn_obj_unlink(ctx, score_sort_key.key);
-  }
-  if (sort_keys) {
-    for (int i = 0; i < n_sort_keys; i++) {
-      grn_obj_unlink(info->ctx, sort_keys[i].key);
-    }
-    my_free(sort_keys);
-  }
-
-  DBUG_RETURN((FT_INFO *)info);
+  st_mrn_ft_info *info = generic_ft_init_ext_select(flags, key_nr, key);
+  DBUG_RETURN(reinterpret_cast<FT_INFO *>(info));
 }
 
 FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
@@ -9553,7 +9577,7 @@ FT_INFO *ha_mroonga::wrapper_ft_init_ext(uint flags, uint key_nr, String *key)
     DBUG_RETURN(NULL);
   }
 
-  struct st_mrn_ft_info *mrn_ft_info = (struct st_mrn_ft_info *)info;
+  st_mrn_ft_info *mrn_ft_info = reinterpret_cast<st_mrn_ft_info *>(info);
   mrn_ft_info->please = &mrn_wrapper_ft_vft;
   mrn_ft_info->could_you = &mrn_wrapper_ft_vft_ext;
   ++wrap_ft_init_count;
@@ -9570,7 +9594,7 @@ FT_INFO *ha_mroonga::storage_ft_init_ext(uint flags, uint key_nr, String *key)
     DBUG_RETURN(NULL);
   }
 
-  struct st_mrn_ft_info *mrn_ft_info = (struct st_mrn_ft_info *)info;
+  st_mrn_ft_info *mrn_ft_info = reinterpret_cast<st_mrn_ft_info *>(info);
   mrn_ft_info->please = &mrn_storage_ft_vft;
   mrn_ft_info->could_you = &mrn_storage_ft_vft_ext;
   DBUG_RETURN(info);
@@ -9582,10 +9606,10 @@ FT_INFO *ha_mroonga::ft_init_ext(uint flags, uint key_nr, String *key)
   fulltext_searching = true;
   FT_INFO *info;
   if (key_nr == NO_SUCH_KEY) {
-    struct st_mrn_ft_info *mrn_ft_info = new st_mrn_ft_info();
+    st_mrn_ft_info *mrn_ft_info = new st_mrn_ft_info();
     mrn_ft_info->please = &mrn_no_such_key_ft_vft;
     mrn_ft_info->could_you = &mrn_no_such_key_ft_vft_ext;
-    info = (FT_INFO *)mrn_ft_info;
+    info = reinterpret_cast<FT_INFO *>(mrn_ft_info);
   } else {
     if (share->wrapper_mode)
     {
@@ -9603,8 +9627,7 @@ int ha_mroonga::wrapper_ft_read(uchar *buf)
   if (wrap_ft_init_count)
     set_pk_bitmap();
 
-  struct st_mrn_ft_info *mrn_ft_info =
-    reinterpret_cast<struct st_mrn_ft_info *>(ft_handler);
+  st_mrn_ft_info *mrn_ft_info = reinterpret_cast<st_mrn_ft_info *>(ft_handler);
   GRN_CTX_SET_ENCODING(ctx, mrn_ft_info->encoding);
 
   int error = 0;
@@ -9727,33 +9750,41 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond
 {
   MRN_DBUG_ENTER_METHOD();
   const Item *reminder_cond = cond;
-  if (!pushed_cond) {
-    ulong type_raw = THDVAR(ha_thd(), condition_push_down_type);
-    mrn::condition_push_down::type type =
-      static_cast<mrn::condition_push_down::type>(type_raw);
-    switch (type) {
-    case mrn::condition_push_down::NONE:
-      break;
-    case mrn::condition_push_down::ALL:
-      {
-        mrn::ConditionConverter converter(ctx, grn_table, true);
-        if (converter.is_convertable(cond)) {
-          ++mrn_condition_push_down;
-          reminder_cond = NULL;
-        }
+  ulong type_raw = THDVAR(ha_thd(), condition_push_down_type);
+  mrn::condition_push_down::type type =
+    static_cast<mrn::condition_push_down::type>(type_raw);
+  switch (type) {
+  case mrn::condition_push_down::NONE:
+    break;
+  case mrn::condition_push_down::ALL:
+    {
+      mrn::ConditionConverter converter(ha_thd(),
+                                        ctx,
+                                        grn_table,
+                                        grn_index_columns,
+                                        table->key_info,
+                                        true);
+      if (converter.is_convertable(cond)) {
+        ++mrn_condition_push_down;
+        reminder_cond = NULL;
       }
-      break;
-    case mrn::condition_push_down::ONE_FULL_TEXT_SEARCH:
-      {
-        mrn::ConditionConverter converter(ctx, grn_table, true);
-        if (converter.count_match_against(cond) == 1 &&
-            converter.is_convertable(cond)) {
-          ++mrn_condition_push_down;
-          reminder_cond = NULL;
-        }
-      }
-      break;
     }
+    break;
+  case mrn::condition_push_down::ONE_FULL_TEXT_SEARCH:
+    {
+      mrn::ConditionConverter converter(ha_thd(),
+                                        ctx,
+                                        grn_table,
+                                        grn_index_columns,
+                                        table->key_info,
+                                        true);
+      if (converter.count_match_against(cond) == 1 &&
+          converter.is_convertable(cond)) {
+        ++mrn_condition_push_down;
+        reminder_cond = NULL;
+      }
+    }
+    break;
   }
   DBUG_RETURN(reminder_cond);
 }
@@ -9948,13 +9979,13 @@ void ha_mroonga::clear_cursor()
     grn_table_cursor_close(ctx, index_table_cursor);
     index_table_cursor = NULL;
   }
-  if (matched_record_keys_cursor) {
-    grn_table_cursor_close(ctx, matched_record_keys_cursor);
-    matched_record_keys_cursor = NULL;
-  }
   if (condition_push_down_result_cursor) {
     grn_table_cursor_close(ctx, condition_push_down_result_cursor);
     condition_push_down_result_cursor = NULL;
+  }
+  if (sorted_condition_push_down_result_) {
+    grn_obj_unlink(ctx, sorted_condition_push_down_result_);
+    sorted_condition_push_down_result_ = NULL;
   }
   if (condition_push_down_result) {
     grn_obj_unlink(ctx, condition_push_down_result);
@@ -9991,14 +10022,6 @@ void ha_mroonga::clear_search_result()
 {
   MRN_DBUG_ENTER_METHOD();
   clear_cursor();
-  if (sorted_result) {
-    grn_obj_unlink(ctx, sorted_result);
-    sorted_result = NULL;
-  }
-  if (matched_record_keys) {
-    grn_obj_unlink(ctx, matched_record_keys);
-    matched_record_keys = NULL;
-  }
   DBUG_VOID_RETURN;
 }
 
@@ -10853,29 +10876,31 @@ int ha_mroonga::wrapper_get_next_geo_record(uchar *buf)
 int ha_mroonga::storage_get_next_record(uchar *buf)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (matched_record_keys_cursor) {
-    grn_id matched_record_keys_id =
-      grn_table_cursor_next(ctx, matched_record_keys_cursor);
-    if (matched_record_keys_id == GRN_ID_NIL) {
-      record_id = GRN_ID_NIL;
-    } else {
-      grn_table_get_key(ctx,
-                        matched_record_keys,
-                        matched_record_keys_id,
-                        &record_id,
-                        sizeof(grn_id));
-    }
-  } else if (condition_push_down_result_cursor) {
-    grn_id condition_push_down_result_id =
+  if (condition_push_down_result_cursor) {
+    grn_id next_record_id =
       grn_table_cursor_next(ctx, condition_push_down_result_cursor);
-    if (condition_push_down_result_id == GRN_ID_NIL) {
+    if (next_record_id == GRN_ID_NIL) {
       record_id = GRN_ID_NIL;
     } else {
-      grn_table_get_key(ctx,
-                        condition_push_down_result,
-                        condition_push_down_result_id,
-                        &record_id,
-                        sizeof(grn_id));
+      if (sorted_condition_push_down_result_) {
+        void *value;
+        grn_table_cursor_get_value(ctx,
+                                   condition_push_down_result_cursor,
+                                   &value);
+        grn_id condition_push_down_result_record_id =
+          *static_cast<grn_id *>(value);
+        grn_table_get_key(ctx,
+                          condition_push_down_result,
+                          condition_push_down_result_record_id,
+                          &next_record_id,
+                          sizeof(grn_id));
+      } else {
+        void *key;
+        grn_table_cursor_get_key(ctx,
+                                 condition_push_down_result_cursor,
+                                 &key);
+        record_id = *static_cast<grn_id *>(key);
+      }
     }
   } else if (cursor_geo) {
     grn_posting *posting;
@@ -11132,7 +11157,8 @@ bool ha_mroonga::is_primary_key_field(Field *field) const
   }
 }
 
-void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
+bool ha_mroonga::check_fast_order_limit(grn_obj *result_set,
+                                        grn_table_sort_key **sort_keys,
                                         int *n_sort_keys,
                                         longlong *limit)
 {
@@ -11145,7 +11171,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
             "%s[false] optimization is disabled",
             tag);
     fast_order_limit = false;
-    DBUG_VOID_RETURN;
+    DBUG_RETURN(fast_order_limit);
   }
 
   TABLE_LIST *table_list = table->pos_in_table_list;
@@ -11195,7 +11221,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
               *limit,
               INT_MAX);
       fast_order_limit = false;
-      DBUG_VOID_RETURN;
+      DBUG_RETURN(fast_order_limit);
     }
     if (first_query_block &&
         (MRN_QUERY_BLOCK_GET_ACTIVE_OPTIONS(first_query_block) & OPTION_FOUND_ROWS)) {
@@ -11203,7 +11229,7 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
               "%s[false] SQL_CALC_FOUND_ROWS is specified",
               tag);
       fast_order_limit = false;
-      DBUG_VOID_RETURN;
+      DBUG_RETURN(fast_order_limit);
     }
     bool is_storage_mode = !(share->wrapper_mode);
     Item *where = MRN_QUERY_BLOCK_GET_WHERE_COND(query_block);
@@ -11214,24 +11240,34 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                   "%s[storage][false] not Groonga layer condition search",
                   tag);
           fast_order_limit = false;
-          DBUG_VOID_RETURN;
+          DBUG_RETURN(fast_order_limit);
         }
-        mrn::ConditionConverter converter(ctx, grn_table, is_storage_mode);
+        mrn::ConditionConverter converter(ha_thd(),
+                                          ctx,
+                                          grn_table,
+                                          grn_index_columns,
+                                          table->key_info,
+                                          is_storage_mode);
         if (!converter.is_convertable(where)) {
           GRN_LOG(ctx, GRN_LOG_DEBUG,
                   "%s[storage][false] any not Groonga layer condition exists",
                   tag);
           fast_order_limit = false;
-          DBUG_VOID_RETURN;
+          DBUG_RETURN(fast_order_limit);
         }
       } else {
-        mrn::ConditionConverter converter(ctx, grn_table, is_storage_mode);
+        mrn::ConditionConverter converter(ha_thd(),
+                                          ctx,
+                                          grn_table,
+                                          grn_index_columns,
+                                          table->key_info,
+                                          is_storage_mode);
         if (!converter.is_convertable(where)) {
           GRN_LOG(ctx, GRN_LOG_DEBUG,
                   "%s[wrapper][false] any not Groonga layer condition exists",
                   tag);
           fast_order_limit = false;
-          DBUG_VOID_RETURN;
+          DBUG_RETURN(fast_order_limit);
         }
         unsigned int n_match_againsts = converter.count_match_against(where);
         if (n_match_againsts == 0) {
@@ -11240,14 +11276,14 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
                   "Groonga layer condition but not fulltext search",
                   tag);
           fast_order_limit = false;
-          DBUG_VOID_RETURN;
+          DBUG_RETURN(fast_order_limit);
         }
         if (n_match_againsts > 1) {
           GRN_LOG(ctx, GRN_LOG_DEBUG,
                   "%s[wrapper][false] multiple MATCH AGAINSTs exist",
                   tag);
           fast_order_limit = false;
-          DBUG_VOID_RETURN;
+          DBUG_RETURN(fast_order_limit);
         }
       }
     }
@@ -11279,12 +11315,14 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
         }
 
         if (is_storage_mode) {
-          (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
+          (*sort_keys)[i].key = grn_obj_column(ctx,
+                                               result_set,
                                                column_name.c_str(),
                                                column_name.length());
         } else {
           if (is_primary_key_field(field)) {
-            (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
+            (*sort_keys)[i].key = grn_obj_column(ctx,
+                                                 result_set,
                                                  MRN_COLUMN_NAME_KEY,
                                                  strlen(MRN_COLUMN_NAME_KEY));
           } else {
@@ -11299,7 +11337,8 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       } else if (item->type() == Item::FUNC_ITEM) {
         Item_func *func_item = static_cast<Item_func *>(item);
         if (func_item->functype() == Item_func::FT_FUNC) {
-          (*sort_keys)[i].key = grn_obj_column(ctx, matched_record_keys,
+          (*sort_keys)[i].key = grn_obj_column(ctx,
+                                               result_set,
                                                MRN_COLUMN_NAME_SCORE,
                                                strlen(MRN_COLUMN_NAME_SCORE));
         } else {
@@ -11336,11 +11375,11 @@ void ha_mroonga::check_fast_order_limit(grn_table_sort_key **sort_keys,
       *sort_keys = NULL;
       *n_sort_keys = 0;
     }
-    DBUG_VOID_RETURN;
+    DBUG_RETURN(fast_order_limit);
   }
   GRN_LOG(ctx, GRN_LOG_DEBUG, "%s[false]", tag);
   fast_order_limit = false;
-  DBUG_VOID_RETURN;
+  DBUG_RETURN(fast_order_limit);
 }
 
 int ha_mroonga::generic_store_bulk_fixed_size_string(Field *field, grn_obj *buf)
@@ -13296,7 +13335,7 @@ int ha_mroonga::generic_reset()
   Item_func_match *item;
   while ((item = iterator++)) {
     if (item->ft_handler) {
-      mrn_generic_ft_clear(item->ft_handler);
+      mrn_generic_ft_clear(reinterpret_cast<st_mrn_ft_info *>(item->ft_handler));
     }
   }
 

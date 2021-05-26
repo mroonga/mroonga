@@ -15,7 +15,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS channels;
@@ -45,11 +45,14 @@ CREATE TABLE messages (
 
 INSERT INTO channels VALUES (11, "channel1");
 INSERT INTO channels VALUES (12, "channel2");
+INSERT INTO channels VALUES (13, "channel3");
 INSERT INTO permissions VALUES (21, 11, 31);
+INSERT INTO permissions VALUES (22, 12, 31);
 
 INSERT INTO messages VALUES (41, 11, "message1");
 INSERT INTO messages VALUES (42, 11, "message2");
 INSERT INTO messages VALUES (43, 12, "message3");
+INSERT INTO messages VALUES (44, 13, "message4");
 
 SELECT *
   FROM messages
@@ -59,7 +62,7 @@ SELECT *
            INNER JOIN permissions ON channels.id = permissions.channel_id
      WHERE permissions.user_id = 31)
   AND match(content) against('*D+ message' IN BOOLEAN MODE)
-  AND channel_id = 11
+  AND id > 40
 ORDER BY id DESC
 LIMIT 2;
 
@@ -69,4 +72,4 @@ DROP TABLE messages;
 DROP TABLE permissions;
 DROP TABLE channels;
 
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../../include/mroonga/have_mroonga_deinit.inc

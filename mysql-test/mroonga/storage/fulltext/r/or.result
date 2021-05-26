@@ -17,6 +17,6 @@ FROM diaries
 WHERE    MATCH(title) AGAINST("Ruby"    IN BOOLEAN MODE) OR
 MATCH(title) AGAINST("mroonga" IN BOOLEAN MODE);
 title
-Start mroonga
 Start groonga and Ruby
+Start mroonga
 DROP TABLE diaries;
