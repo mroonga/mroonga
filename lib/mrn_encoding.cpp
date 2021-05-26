@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013 Kouhei Sutou <kou@clear-code.com>
-  Copyright(C) 2011-2013 Kentoku SHIBA
+  Copyright(C) 2011-2013  Kentoku SHIBA
+  Copyright(C) 2013-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -175,68 +175,57 @@ namespace mrn {
 
     bool set_raw(grn_ctx *ctx, const CHARSET_INFO *charset) {
       MRN_DBUG_ENTER_FUNCTION();
-      if (!charset)
-      {
+      if (!charset) {
         GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
         DBUG_RETURN(true);
       }
-      if (charset->cset == mrn_charset_utf8->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
+      grn_encoding encoding = convert(charset);
+      GRN_CTX_SET_ENCODING(ctx, encoding);
+      if (encoding != GRN_ENC_NONE) {
         DBUG_RETURN(true);
       }
-      if (mrn_charset_utf8mb4 && charset->cset == mrn_charset_utf8mb4->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
-        DBUG_RETURN(true);
+      DBUG_RETURN(charset->cset == mrn_charset_binary->cset);
+    }
+
+    grn_encoding convert(const CHARSET_INFO *charset) {
+      MRN_DBUG_ENTER_FUNCTION();
+      if (!charset) {
+        DBUG_RETURN(GRN_ENC_NONE);
       }
-      if (charset->cset == mrn_charset_cp932->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_SJIS);
-        DBUG_RETURN(true);
+      if (charset->cset == mrn_charset_utf8->cset) {
+        DBUG_RETURN(GRN_ENC_UTF8);
       }
-      if (charset->cset == mrn_charset_eucjpms->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_EUC_JP);
-        DBUG_RETURN(true);
+      if (mrn_charset_utf8mb4 && charset->cset == mrn_charset_utf8mb4->cset) {
+        DBUG_RETURN(GRN_ENC_UTF8);
       }
-      if (charset->cset == mrn_charset_latin1_1->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_LATIN1);
-        DBUG_RETURN(true);
+      if (charset->cset == mrn_charset_cp932->cset) {
+        DBUG_RETURN(GRN_ENC_SJIS);
       }
-      if (charset->cset == mrn_charset_latin1_2->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_LATIN1);
-        DBUG_RETURN(true);
+      if (charset->cset == mrn_charset_eucjpms->cset) {
+        DBUG_RETURN(GRN_ENC_EUC_JP);
       }
-      if (charset->cset == mrn_charset_koi8r->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_KOI8R);
-        DBUG_RETURN(true);
+      if (charset->cset == mrn_charset_latin1_1->cset) {
+        DBUG_RETURN(GRN_ENC_LATIN1);
       }
-      if (charset->cset == mrn_charset_binary->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
-        DBUG_RETURN(true);
+      if (charset->cset == mrn_charset_latin1_2->cset) {
+        DBUG_RETURN(GRN_ENC_LATIN1);
       }
-      if (charset->cset == mrn_charset_ascii->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_UTF8);
-        DBUG_RETURN(true);
+      if (charset->cset == mrn_charset_koi8r->cset) {
+        DBUG_RETURN(GRN_ENC_KOI8R);
       }
-      if (charset->cset == mrn_charset_sjis->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_SJIS);
-        DBUG_RETURN(true);
+      if (charset->cset == mrn_charset_binary->cset) {
+        DBUG_RETURN(GRN_ENC_NONE);
       }
-      if (charset->cset == mrn_charset_ujis->cset)
-      {
-        GRN_CTX_SET_ENCODING(ctx, GRN_ENC_EUC_JP);
-        DBUG_RETURN(true);
+      if (charset->cset == mrn_charset_ascii->cset) {
+        DBUG_RETURN(GRN_ENC_UTF8);
       }
-      GRN_CTX_SET_ENCODING(ctx, GRN_ENC_NONE);
-      DBUG_RETURN(false);
+      if (charset->cset == mrn_charset_sjis->cset) {
+        DBUG_RETURN(GRN_ENC_SJIS);
+      }
+      if (charset->cset == mrn_charset_ujis->cset) {
+        DBUG_RETURN(GRN_ENC_EUC_JP);
+      }
+      DBUG_RETURN(GRN_ENC_NONE);
     }
   }
 }

@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2013-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_ENCODING_HPP_
-#define MRN_ENCODING_HPP_
+#pragma once
 
 #include <mrn_mysql.h>
 #include <mrn_mysql_compat.h>
@@ -30,7 +29,6 @@ namespace mrn {
     void init(void);
     int set(grn_ctx *ctx, const CHARSET_INFO *charset);
     bool set_raw(grn_ctx *ctx, const CHARSET_INFO *charset);
+    grn_encoding convert(const CHARSET_INFO *charset);
   }
 }
-
-#endif // MRN_ENCODING_HPP_
