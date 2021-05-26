@@ -2,8 +2,8 @@
 
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
 
-%define mysql_version_default 5.7.33
-%define percona_server_version_default 36
+%define mysql_version_default 5.7.34
+%define percona_server_version_default 37
 %define rpm_release_default 1
 %define mysql_dist_default    %{?dist}
 %define mysql_spec_file_default percona-server.spec
@@ -28,7 +28,7 @@
 
 Name:           percona-server-5.7-mroonga
 Version:        @VERSION@
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A fast fulltext searchable storage engine for MySQL
 
 Group:          Applications/Databases
