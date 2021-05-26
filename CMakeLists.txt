@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 #
-# Copyright(C) 2012-2020  Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2012-2021  Sutou Kouhei <kou@clear-code.com>
 # Copyright(C) 2013  Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
@@ -375,6 +375,10 @@ else()
   if(WITH_DEBUG)
     set_property(TARGET mroonga APPEND PROPERTY
       COMPILE_DEFINITIONS "SAFE_MUTEX")
+    if(${MYSQL_VARIANT} STREQUAL "MariaDB")
+      set_property(TARGET mroonga APPEND PROPERTY
+        COMPILE_DEFINITIONS "DBUG_TRACE")
+    endif()
     if(CMAKE_COMPILER_IS_GNUCXX)
       set(MRN_C_COMPILE_FLAGS "${MRN_C_COMPILE_FLAGS} -g3 -O0")
       set(MRN_CXX_COMPILE_FLAGS "${MRN_CXX_COMPILE_FLAGS} -g3 -O0")

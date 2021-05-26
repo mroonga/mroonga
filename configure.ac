@@ -216,6 +216,15 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_MAJOR_MINOR_VERSION=["$(echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*[a-z]*\)[.0-9a-z-]*$/\1.\2/')"]
 
+  case "$MYSQL_MAJOR_MINOR_VERSION" in
+  10.*)
+    MYSQL_VARIANT=mariadb
+    ;;
+  *)
+    MYSQL_VARIANT=mysql
+    ;;
+  esac
+
   MYSQL_CXXFLAGS="-felide-constructors"
   case "$MYSQL_MAJOR_MINOR_VERSION" in
   5.7)
@@ -332,6 +341,10 @@ m4_define([mrn_package_groonga_normalizer_mysql_version], m4_include(package_gro
 PACKAGE_GROONGA_NORMALIZER_MYSQL_VERSION=mrn_package_groonga_normalizer_mysql_version
 AC_SUBST(PACKAGE_GROONGA_NORMALIZER_MYSQL_VERSION)
 
+CONFIG_OPTION_MYSQL
+CONFIG_OPTION_GROONGA
+CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL
+
 AC_ARG_WITH(debug,
     [dnl
 AS_HELP_STRING([--with-debug],
@@ -345,12 +358,18 @@ if test "$with_debug" = "yes"
 then
   # Medium debug.
   AC_DEFINE([DBUG_ON], [1], [Enable debug])
+  if test "${MYSQL_VARIANT}" = "mariadb"; then
+    AC_DEFINE([DBUG_TRACE], [1], [Enable debug trace])
+  fi
   CFLAGS="$DEBUG_CFLAGS $DEBUG_OPTIMIZE_CC -DSAFE_MUTEX $CFLAGS -O0 -g3"
   CXXFLAGS="$DEBUG_CXXFLAGS $DEBUG_OPTIMIZE_CXX -DSAFE_MUTEX $CXXFLAGS -O0 -g3"
 elif test "$with_debug" = "full"
 then
   # Full debug. Very slow in some cases
   AC_DEFINE([DBUG_ON], [1], [Enable debug])
+  if test "${MYSQL_VARIANT}" = "mariadb"; then
+    AC_DEFINE([DBUG_TRACE], [1], [Enable debug trace])
+  fi
   CFLAGS="$DEBUG_CFLAGS -DSAFE_MUTEX -DSAFEMALLOC $CFLAGS -O0 -g3"
   CXXFLAGS="$DEBUG_CXXFLAGS -DSAFE_MUTEX -DSAFEMALLOC $CXXFLAGS -O0 -g3"
 else
@@ -369,10 +388,6 @@ if test "$with_valgrind" != "no"; then
   CFLAGS="-DHAVE_valgrind $CFLAGS"
   CXXFLAGS="-DHAVE_valgrind $CXXFLAGS"
 fi
-
-CONFIG_OPTION_MYSQL
-CONFIG_OPTION_GROONGA
-CONFIG_OPTION_GROONGA_NORMALIZER_MYSQL
 
 AC_ARG_WITH(default_parser,
     [AS_HELP_STRING([--with-default-parser=PARSER],
