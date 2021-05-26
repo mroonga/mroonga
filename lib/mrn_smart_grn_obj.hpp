@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2014 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2014-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_SMART_GRN_OBJ_HPP_
-#define MRN_SMART_GRN_OBJ_HPP_
+#pragma once
 
 #include <groonga.h>
 
@@ -32,9 +31,8 @@ namespace mrn {
     SmartGrnObj(grn_ctx *ctx, grn_id id);
     ~SmartGrnObj();
 
+    void reset(grn_obj *obj);
     grn_obj *get();
     grn_obj *release();
   };
 }
-
-#endif // MRN_SMART_GRN_OBJ_HPP_
