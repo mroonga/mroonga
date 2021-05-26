@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Copyright(C) 2010  Tetsuro IKEDA
 # Copyright(C) 2010-2021  Sutou Kouhei <kou@clear-code.com>
@@ -159,11 +159,22 @@ all_test_suite_names=""
 suite_dir="${mroonga_test_dir}/.."
 cd "${suite_dir}"
 suite_dir="$(pwd)"
-for test_suite_name in \
-  $(find mroonga -type d -name 'include' '!' -prune -o \
-         -type d '!' -name 'mroonga' \
-         '!' -name 'include' \
-         '!' -name '[tr]'); do
+find_conditions=(-type d)
+find_conditions+=('(')
+find_conditions+=(-name 'include')
+case ${MYSQL_VERSION} in
+  8.*)
+    find_conditions+=('-o' -name 'optimization')
+    find_conditions+=('-o' -name 'wrapper')
+    ;;
+esac
+find_conditions+=(')')
+find_conditions+=(-prune -o)
+find_conditions+=(-type d)
+find_conditions+=('!' -name 'mroonga')
+find_conditions+=('!' -name '[tr]')
+find_conditions+=(-print)
+for test_suite_name in $(find mroonga "${find_conditions[@]}"); do
   if [ -n "${all_test_suite_names}" ]; then
     all_test_suite_names="${all_test_suite_names},"
   fi
