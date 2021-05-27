@@ -41,6 +41,20 @@ Description: A fast fulltext searchable storage engine for MySQL.
  This provides "Mroonga" storage engine. It means you can use
  "ENGINE = Mroonga" in "CREATE TABLE".
 
+Package: mysql-server-mroonga
+Section: oldlibs
+Architecture: any
+Priority: optional
+Depends:
+	mysql-mroonga (= ${binary:Version})
+Description: A fast fulltext searchable storage engine for MySQL.
+ This package is a metapackage depending on the latest version.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on Groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
+ .
+ This is a trnsitional package. This can safely be removed.
+
 Package: mysql-5.7-mroonga
 Section: database
 Architecture: any
@@ -61,6 +75,19 @@ Description: A fast fulltext searchable storage engine for MySQL 5.7.
  This package provides a storage engine MySQL 5.7 as a shared library.
  This provides "Mroonga" storage engine. It means you can use
  "ENGINE = Mroonga" in "CREATE TABLE".
+
+Package: mysql-server-5.7-mroonga
+Section: oldlibs
+Architecture: any
+Priority: optional
+Depends:
+	mysql-5.7-mroonga (= ${binary:Version})
+Description: A fast fulltext searchable storage engine for MySQL 5.7.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on Groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
+ .
+ This is a trnsitional package. This can safely be removed.
 
 Package: mysql-5.7-mroonga-doc
 Section: doc

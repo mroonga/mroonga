@@ -59,6 +59,7 @@ Description: A fast fulltext searchable storage engine for MariaDB.
 Package: mariadb-server-mroonga
 Section: oldlibs
 Architecture: any
+Priority: optional
 Depends:
 	mariadb-mroonga (= ${binary:Version})
 Description: A fast fulltext searchable storage engine for MariaDB.
