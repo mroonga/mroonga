@@ -62,7 +62,7 @@ Description: A fast fulltext searchable storage engine for MySQL 5.7.
  This provides "Mroonga" storage engine. It means you can use
  "ENGINE = Mroonga" in "CREATE TABLE".
 
-Package: mysql-server-5.7-mroonga-doc
+Package: mysql-5.7-mroonga-doc
 Section: doc
 Architecture: all
 Replaces: mysql-server-5.7-mroonga-doc (<< 11.02-1)
