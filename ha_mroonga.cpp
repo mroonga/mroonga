@@ -10892,7 +10892,7 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
         grn_table_get_key(ctx,
                           condition_push_down_result,
                           condition_push_down_result_record_id,
-                          &next_record_id,
+                          &record_id,
                           sizeof(grn_id));
       } else {
         void *key;
