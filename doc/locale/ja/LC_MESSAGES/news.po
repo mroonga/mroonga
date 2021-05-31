@@ -22,7 +22,7 @@ msgid "News"
 msgstr "お知らせ"
 
 msgid "Release 11.03 - 2021-05-31"
-msgstr "11.03リリース - 2020-05-31"
+msgstr "11.03リリース - 2021-05-31"
 
 msgid ""
 "The package names are changed from this release. Mroonga is invalid after "
