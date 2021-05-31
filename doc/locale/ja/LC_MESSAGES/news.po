@@ -53,7 +53,6 @@ msgstr ""
 msgid "Improvements"
 msgstr "改良"
 
-# e815afe449574c8d8fc0ceceae7043d8
 msgid "Renamed package names as below."
 msgstr "以下のようにパッケージ名を変更しました。"
 
