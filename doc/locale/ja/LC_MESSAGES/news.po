@@ -21,14 +21,77 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 11.02 - 2021-05-10"
-msgstr "11.02リリース - 2021-05-10"
+msgid "Release 11.03 - 2021-05-31"
+msgstr "11.03リリース - 2020-05-31"
+
+msgid ""
+"The package names are changed from this release. Mroonga is invalid after "
+"upgrade to this version by the influence of this modification."
+msgstr ""
+"このリリースから、パッケージ名が変更されます。この変更の影響でこのバージョン"
+"にアップグレード後、Mroongaが無効になります。"
+
+msgid ""
+"Therefore, we need to install manually Mroonga again. Please refer to the "
+"following URL about the manual installation of Mroonga and how to confirming "
+"whether Mroonga is valid or not."
+msgstr ""
+"したがって、Mroongaを手動でインストールし直す必要があります。Mroongaの手動イ"
+"ンストール及び、Mroongaが有効かどうかの確認については、以下のURLを参照してく"
+"ださい。"
+
+msgid "https://mroonga.org/docs/tutorial/installation_check.html"
+msgstr ""
+
+msgid ""
+"Besides, please be careful the above phenomenon will continue from now if we "
+"will upgrade mroonga to stride over a Mroonga 11.03, so please, be careful."
+msgstr ""
+"また、今後も、Mroonga 11.03をまたいでMroongaをアップグレードする場合は、この"
+"現象が発生するので、注意してください。"
 
 msgid "Improvements"
 msgstr "改良"
 
-msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.34, 8.0.25."
-msgstr "[:doc:`/install/centos`] MySQL 5.7.34, 8.0.25をサポートしました。"
+# e815afe449574c8d8fc0ceceae7043d8
+msgid "Renamed package names as below."
+msgstr "以下のようにパッケージ名を変更しました。"
+
+msgid "``mariadb-server-10.x-mroonga`` -> ``mariadb-10.x-mroonga``"
+msgstr ""
+
+msgid "``mysql-server-5.x-mroonga`` -> ``mysql-community-5.x-mroonga``"
+msgstr ""
+
+msgid "``mysql-server-8.x-mroonga`` -> ``mysql-community-8.x-mroonga``"
+msgstr ""
+
+msgid "``percona-server-5x-mroonga`` -> ``percona-server-5.x-mroonga``"
+msgstr ""
+
+msgid "``percona-server-8x-mroonga`` -> ``percona-server-8.x-mroonga``"
+msgstr ""
+
+msgid ""
+"[:doc:`/install/debian`] Added support for the Oracle MySQL 5.7 package and "
+"the Oracle MySQL 8.0 package."
+msgstr ""
+"[:doc:`/install/debian`] Oracle の MySQL 5.7 と Oracle の MySQL 8.0 をサポー"
+"トしました。"
+
+msgid ""
+"In this release, we newly provided the package of Mroonga for Debian GNU/"
+"Linux with the Oracle MySQL 5.7 and the Oracle MySQL 8.0."
+msgstr ""
+"このリリースから、新たに Debian GNU/Linux 向けに Oracle の MySQL 5.7 と 8.0 "
+"を使用した Mroonga パッケージを提供しました。"
+
+msgid ""
+"By this, we make the Docker image of Mroonga with MySQL for Docker official "
+"images."
+msgstr ""
+"これにより、MroongaのDockerイメージをDocker公式のMySQLイメージを使って作成で"
+"きます。"
 
 msgid "There are below restrictions in the MySQL8 package."
 msgstr "MySQL8 のパッケージには以下の制限があります。"
@@ -44,6 +107,90 @@ msgstr ""
 
 msgid "The feature of relevant to the optimization."
 msgstr "最適化関連の機能"
+
+msgid "Added support for the SRID of Spatial Indexes."
+msgstr "空間インデックスのSRIDをサポートしました。"
+
+msgid ""
+"the index of Mroonga is used in search with ``MBRContains`` function on "
+"MySQL 8.x since this release."
+msgstr ""
+"今回のリリースから MBRContains 関数を使った検索で、Mroongaのインデックスが使"
+"用されます。"
+
+msgid "We added condition expressions that are applied condition push down."
+msgstr "コンディションプッシュダウンを適用する条件式を追加しました。"
+
+msgid ""
+"Condition push down doesn't evaluate condition expressions in MySQL, but it "
+"evaluate condition expressions in Mroonga. Therefore, more queries will "
+"become high-performance, but the result of search may different than usual "
+"by Mroonga evaluate them. If Mroonga returns unexpected search results, we "
+"request that you report from the below URL. And we would like you to invalid "
+"for condition push down."
+msgstr ""
+"コンディションプッシュダウンは、MySQLではなく、Mroonga内で条件式を評価しま"
+"す。したがって、多くのクエリーは、高速になりますが、Mroongaが条件式を評価する"
+"ことで、今までと異なる検索結果を返すことがあります。もし、Mroongaが意図しない"
+"検索結果を返した場合、以下のURLから報告してください。そして、コンディション"
+"プッシュダウンを無効にしてください。"
+
+msgid "https://github.com/mroonga/mroonga/issues/"
+msgstr ""
+
+msgid "We can invalid condition push down as below."
+msgstr "コンディションプッシュダウンは以下のように無効にできます。"
+
+msgid "``SET GLOBAL mroonga_condition_push_down_type = \"NONE\"``"
+msgstr ""
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.23"
+msgstr "[:doc:`/install/centos`] Percona Server 8.0.23 をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed a bug that latitude and longitude are stored conversely."
+msgstr "緯度と経度を逆に保存していた問題を修正しました。"
+
+msgid "backward compatibility is broken by this fix."
+msgstr "この修正によって、後方互換性が壊れます。"
+
+msgid ""
+"Users that are using ``GEOMETRY`` type need to store the current data before "
+"upgrading to Mroonga 11.03 and restore the stored data after upgrading to "
+"Mroonga 11.03. Users can use the following methods for dumping/restoring "
+"data."
+msgstr ""
+"``GEOMETRY`` 型を使用しているユーザーは、Mroonga 11.03にアップグレードする前"
+"に現在のデータを保存し、アップグレード後に保存したデータをリストアする必要が"
+"あります。 データのダンプ/リストアには、以下の方法が使えます。"
+
+msgid "``mysqldump``"
+msgstr ""
+
+msgid ""
+"Execute ``ALTER TABLE ENGINE=InnoDB`` before upgrading and execute ``ALTER "
+"TABLE ENGINE=Mroonga`` after upgrading."
+msgstr ""
+"アップグレード前に ``ALTER TABLE ENGINE=InnoDB`` を実行し、アップグレード後"
+"に ``ALTER TABLE ENGINE=Mroonga`` を実行する。"
+
+msgid ""
+"If without this fix, ``INSERT/UPDATE/SELECT/SELECT`` works well but data "
+"stored in Groonga are wrong (Latitude and longitude are swapped in Groonga). "
+"Therefore, ``mroonga_command('select ...')`` doesn't work for spatial data."
+msgstr ""
+"この修正を適用しない場合、 ``INSERT/UPDATE/SELECT/SELECT`` はうまく動作します"
+"が、データはGroongaが誤った(緯度と経度はGroonga内で逆にされます)保存をしま"
+"す。そのため、 空間データに対する、 ``mroonga_command('select ...')`` は動作"
+"しません。"
+
+msgid "Release 11.02 - 2021-05-10"
+msgstr "11.02リリース - 2021-05-10"
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.34, 8.0.25."
+msgstr "[:doc:`/install/centos`] MySQL 5.7.34, 8.0.25をサポートしました。"
 
 msgid "The SRID of Spatial Indexes."
 msgstr "空間インデックスのSRID"
@@ -96,9 +243,6 @@ msgid ""
 msgstr ""
 "この機能によって、参照元のテーブルから参照先のカラムへ値を直接入力できるた"
 "め、参照カラムにJSONデータを追加しやすくなります。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a bug that FOREIGN KEY constraint was not registered. [GitHub#393]"
