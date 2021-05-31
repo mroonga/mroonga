@@ -84,17 +84,6 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     end
   end
 
-  def ubuntu_package_name(package_name)
-    ubuntu_package_names = {
-      "mariadb-10.2" => "mariadb-server-10.2",
-      "mariadb-10.3" => "mariadb-server-10.3",
-      "mariadb-10.4" => "mariadb-server-10.4",
-      "mariadb-10.5" => "mariadb-server-10.5",
-      "mysql-5.7" => "mysql-server-5.7",
-    }
-    ubuntu_package_names[package_name]
-  end
-
   def detect_ubuntu_package_version(code_name, package_name)
     @ubuntu_package_versions ||= {}
     cache_key = [code_name, package_name]
@@ -107,7 +96,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       URI.open(all_packages_url) do |all_packages|
         all_packages.each_line do |line|
           case line
-          when /\A#{Regexp.escape(ubuntu_package_name(package_name))} \((.+?)[\s)]/o
+          when /\A#{Regexp.escape(package_name.sub(/-/, "-server-"))} \((.+?)[\s)]/o
             version = $1
           end
         end
