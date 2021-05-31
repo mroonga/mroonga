@@ -89,6 +89,8 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     cache_key = [code_name, package_name]
     version = @ubuntu_package_versions[cache_key]
     return version if version
+    # "mariadb-10.5" -> "mariadb-server-10.5"
+    # "mysql-5.7" -> "mysql-server-5.7"
     ubuntu_package_name = package_name.sub(/-/, "-server-")
     source_names = [code_name, "#{code_name}-updates"]
     source_names.each do |source_name|
