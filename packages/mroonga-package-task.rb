@@ -89,6 +89,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     cache_key = [code_name, package_name]
     version = @ubuntu_package_versions[cache_key]
     return version if version
+    ubuntu_package_name = package_name.sub(/-/, "-server-")
     source_names = [code_name, "#{code_name}-updates"]
     source_names.each do |source_name|
       all_packages_url =
@@ -96,7 +97,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       URI.open(all_packages_url) do |all_packages|
         all_packages.each_line do |line|
           case line
-          when /\A#{Regexp.escape(package_name.sub(/-/, "-server-"))} \((.+?)[\s)]/o
+          when /\A#{Regexp.escape(ubuntu_package_name)} \((.+?)[\s)]/o
             version = $1
           end
         end
