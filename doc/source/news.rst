@@ -18,7 +18,7 @@ Release 11.03 - 2021-05-31
 
        * https://mroonga.org/docs/tutorial/installation_check.html
 
-     Besides, please be careful the above phenomenon will continue from now if we will upgrade mroonga to stride over a Mroonga 11.03, so please, be careful.
+     Besides, please be careful the above phenomenon will continue from now if we will upgrade mroonga to stride over a Mroonga 11.03.
 
 Improvements
 ^^^^^^^^^^^^

@@ -45,7 +45,7 @@ msgstr ""
 
 msgid ""
 "Besides, please be careful the above phenomenon will continue from now if we "
-"will upgrade mroonga to stride over a Mroonga 11.03, so please, be careful."
+"will upgrade mroonga to stride over a Mroonga 11.03."
 msgstr ""
 "また、今後も、Mroonga 11.03をまたいでMroongaをアップグレードする場合は、この"
 "現象が発生するので、注意してください。"
