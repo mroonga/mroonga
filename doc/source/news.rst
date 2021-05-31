@@ -3,6 +3,85 @@
 News
 ====
 
+.. _release-11-03:
+
+Release 11.03 - 2021-05-31
+--------------------------
+
+  .. warning::
+
+     The package names are changed from this release.
+     Mroonga is invalid after upgrade to this version by the influence of this modification.
+
+     Therefore, we need to install manually Mroonga again.
+     Please refer to the following URL about the manual installation of Mroonga and how to confirming whether Mroonga is valid or not.
+
+       * https://mroonga.org/docs/tutorial/installation_check.html
+
+     Besides, please be careful the above phenomenon will continue from now if we will upgrade mroonga to stride over a Mroonga 11.03, so please, be careful.
+
+Improvements
+^^^^^^^^^^^^
+
+* Renamed package names as below.
+
+  * ``mariadb-server-10.x-mroonga`` -> ``mariadb-10.x-mroonga``
+  * ``mysql-server-5.x-mroonga`` -> ``mysql-community-5.x-mroonga``
+  * ``mysql-server-8.x-mroonga`` -> ``mysql-community-8.x-mroonga``
+  * ``percona-server-5x-mroonga`` -> ``percona-server-5.x-mroonga``
+  * ``percona-server-8x-mroonga`` -> ``percona-server-8.x-mroonga``
+
+* [:doc:`/install/debian`] Added support for the Oracle MySQL 5.7 package and the Oracle MySQL 8.0 package.
+
+  * In this release, we newly provided the package of Mroonga for Debian GNU/Linux with the Oracle MySQL 5.7 and the Oracle MySQL 8.0.
+
+    * By this, we make the Docker image of Mroonga with MySQL for Docker official images.
+
+  * There are below restrictions in the MySQL8 package.
+
+    * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+    * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
+
+      * The feature of relevant to the optimization.
+
+* Added support for the SRID of Spatial Indexes.
+
+  * the index of Mroonga is used in search with ``MBRContains`` function on MySQL 8.x since this release.
+
+* We added condition expressions that are applied condition push down.
+
+  .. note::
+
+     Condition push down doesn't evaluate condition expressions in MySQL, but it evaluate condition expressions in Mroonga.
+     Therefore, more queries will become high-performance, but the result of search may different than usual by Mroonga evaluate them.
+     If Mroonga returns unexpected search results, we request that you report from the below URL.
+     And we would like you to invalid for condition push down.
+
+       * https://github.com/mroonga/mroonga/issues/
+
+     We can invalid condition push down as below.
+
+       * ``SET GLOBAL mroonga_condition_push_down_type = "NONE"``
+
+* [:doc:`/install/centos`] Added support for Percona Server 8.0.23
+
+Fixes
+^^^^^
+
+* Fixed a bug that latitude and longitude are stored conversely.
+
+  .. warning::
+
+     backward compatibility is broken by this fix.
+
+     Users that are using ``GEOMETRY`` type need to store the current data before upgrading to Mroonga 11.03 and restore the stored data after upgrading to Mroonga 11.03.
+     Users can use the following methods for dumping/restoring data.
+
+       * ``mysqldump``
+       * Execute ``ALTER TABLE ENGINE=InnoDB`` before upgrading and execute ``ALTER TABLE ENGINE=Mroonga`` after upgrading.
+
+     If without this fix, ``INSERT/UPDATE/SELECT/SELECT`` works well but data stored in Groonga are wrong (Latitude and longitude are swapped in Groonga). Therefore, ``mroonga_command('select ...')`` doesn't work for spatial data.
+
 .. _release-11-02:
 
 Release 11.02 - 2021-05-10
