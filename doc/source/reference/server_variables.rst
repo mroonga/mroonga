@@ -506,7 +506,7 @@ TODO:
 ---------------------------------------
 
 Whether recording operations for recover is enabled or not.
-The default value is ``ON`` that means operations are recording
+The default value is ``OFF`` that means operations are not recorded
 to Groonga database.
 It needs to reopen the database with ``FLUSH TABLES`` in order
 to reflect the variable is changed.
