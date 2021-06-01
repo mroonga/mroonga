@@ -11,14 +11,20 @@ Release 11.03 - 2021-05-31
   .. warning::
 
      The package names are changed from this release.
-     Mroonga is invalid after upgrade to this version by the influence of this modification.
+     Mroonga may be invalid after upgrade to this version by the influence of this modification.
+     If we upgrade to this version, please always be sure to confirm the below points.
 
-     Therefore, we need to install manually Mroonga again.
+     If Mroonga is invalid after the upgrade, we need to install manually Mroonga again.
      Please refer to the following URL about the manual installation of Mroonga and how to confirming whether Mroonga is valid or not.
 
        * https://mroonga.org/docs/tutorial/installation_check.html
 
      Besides, please be careful the above phenomenon will continue from now if we will upgrade mroonga to stride over a Mroonga 11.03.
+
+     If Mroonga is valid after upgrade to this version but, Mroonga's version is old, we need to restart MySQL, MariaDB, or PerconaServer.
+     We can confirm Mroonga's version as the below command.
+
+       * ``SHOW VARIABLES LIKE 'mroonga_version';``
 
 Improvements
 ^^^^^^^^^^^^
