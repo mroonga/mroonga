@@ -806,7 +806,7 @@ static char *mrn_vector_column_delimiter = NULL;
 static mrn_bool mrn_libgroonga_support_zlib = false;
 static mrn_bool mrn_libgroonga_support_lz4 = false;
 static mrn_bool mrn_libgroonga_support_zstd = false;
-static mrn_bool mrn_enable_operations_recording = true;
+static mrn_bool mrn_enable_operations_recording = false;
 static const char *mrn_boolean_mode_sytnax_flag_names[] = {
   "DEFAULT",
   "SYNTAX_QUERY",
