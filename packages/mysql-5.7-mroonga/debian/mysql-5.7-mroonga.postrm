@@ -1,7 +1,0 @@
-#! /bin/sh
-
-set -eu
-
-/usr/share/mroonga/deb/postrm.sh mysql-5.7-mroonga "$@"
-
-#DEBHELPER#
