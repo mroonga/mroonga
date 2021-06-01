@@ -26,6 +26,27 @@ Release 11.03 - 2021-05-31
 
        * ``SHOW VARIABLES LIKE 'mroonga_version';``
 
+  .. warning::
+
+       There are broken backward compatibility on this version.
+
+       Users that are using GEOMETRY type need to store the current data
+       before upgrading to Mroonga 11.03 and restore the stored data
+       after upgrading to Mroonga 11.03.
+
+       Please be careful if we upgrade to this version without executing the above procedure,
+       data is broken.
+
+       Users can use the following methods for dumping/restoring data.
+
+         * mysqldump
+         * Execute ALTER TABLE ENGINE=InnoDB before upgrading and
+           execute ALTER TABLE ENGINE=Mroonga after upgrading.
+
+       If without this fix, INSERT/UPDATE/SELECT/SELECT works well
+       but data stored in Groonga are wrong (Latitude and longitude are swapped in Groonga).
+       Therefore, mroonga_command('select ...') doesn「t work for spatial data.
+
 Improvements
 ^^^^^^^^^^^^
 

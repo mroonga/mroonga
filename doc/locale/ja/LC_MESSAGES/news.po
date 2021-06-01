@@ -64,6 +64,48 @@ msgstr ""
 msgid "``SHOW VARIABLES LIKE 'mroonga_version';``"
 msgstr ""
 
+msgid "There are broken backward compatibility on this version."
+msgstr "このバージョンには非互換の変更があります。"
+
+msgid ""
+"Users that are using GEOMETRY type need to store the current data before "
+"upgrading to Mroonga 11.03 and restore the stored data after upgrading to "
+"Mroonga 11.03."
+msgstr ""
+"``GEOMETRY`` 型を使用しているユーザーは、Mroonga 11.03にアップグレードする前"
+"に現在のデータを保存し、アップグレード後に保存したデータをリストアする必要が"
+"あります。 データのダンプ/リストアには、以下の方法が使えます。"
+
+msgid ""
+"Please be careful if we upgrade to this version without executing the above "
+"procedure, data is broken."
+msgstr ""
+"上記の処置を実施せずに、アップグレードするとデータが破損するので注意してくだ"
+"さい。"
+
+msgid "Users can use the following methods for dumping/restoring data."
+msgstr "データのダンプ/リストアには、以下の方法が使えます。"
+
+msgid "mysqldump"
+msgstr ""
+
+msgid ""
+"Execute ALTER TABLE ENGINE=InnoDB before upgrading and execute ALTER TABLE "
+"ENGINE=Mroonga after upgrading."
+msgstr ""
+"アップグレード前に ``ALTER TABLE ENGINE=InnoDB`` を実行し、アップグレード後"
+"に ``ALTER TABLE ENGINE=Mroonga`` を実行する。"
+
+msgid ""
+"If without this fix, INSERT/UPDATE/SELECT/SELECT works well but data stored "
+"in Groonga are wrong (Latitude and longitude are swapped in Groonga). "
+"Therefore, mroonga_command('select ...') doesn「t work for spatial data."
+msgstr ""
+"この修正を適用しない場合、 ``INSERT/UPDATE/SELECT/SELECT`` はうまく動作します"
+"が、データはGroongaが誤った(緯度と経度はGroonga内で逆にされます)保存をしま"
+"す。そのため、 空間データに対する、 ``mroonga_command('select ...')`` は動作"
+"しません。"
+
 msgid "Improvements"
 msgstr "改良"
 
