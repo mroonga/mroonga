@@ -76,7 +76,7 @@ install_mroonga() {
 
   if [ "${try_auto_prepare}" = "yes" ]; then
     if [ -f /etc/mysql/debian.cnf ]; then
-      password_option="--defaults-file=/etc/mysql/debian.cnf"
+      password_options="--defaults-file=/etc/mysql/debian.cnf"
     else
       db_input high ${package}/root-password || :
       db_go
@@ -92,7 +92,7 @@ install_mroonga() {
   fi
 
   if [ "${try_auto_prepare}" = "yes" ]; then
-    mysql="mysql ${password_option}"
+    mysql="mysql ${password_options}"
 
     if [ "${configure_action}" = "install" ]; then
       if ${mysql} < ${install_sql}; then
