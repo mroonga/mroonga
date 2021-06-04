@@ -53,7 +53,6 @@ msgstr ""
 "このセクションではCentOS上でMroonga関連のRPMパッケージをインストールする方法"
 "を説明します。これらのパッケージは ``yum`` でインストールできます。"
 
-# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 7 (with the official MariaDB package)"
 msgstr "CentOS 7（公式のMariaDBパッケージを利用）"
 
@@ -75,7 +74,6 @@ msgstr ""
 msgid "Install groonga-tokenizer-mecab package::"
 msgstr "groonga-tokenizer-mecabをインストール::"
 
-# 5e3232071ae84bdfbce77f4bee3e0ae4
 msgid "CentOS 7 (with the Oracle MySQL 5.7 package)"
 msgstr "CentOS 7（OracleのMySQL 5.7パッケージを利用）"
 
@@ -85,7 +83,6 @@ msgid ""
 msgstr ""
 "CentOS 7では、Mroonga 5.09からOracleのMySQL 5.7パッケージを利用できます。"
 
-# 5e3232071ae84bdfbce77f4bee3e0ae4
 msgid "CentOS 7 (with the Oracle MySQL 8.0 package)"
 msgstr "CentOS 7（OracleのMySQL 8.0パッケージを利用）"
 
@@ -104,7 +101,6 @@ msgstr ":doc:`/tutorial/wrapper` ラッパーモードは未対応です。"
 msgid ":doc:`/tutorial/storage` `JSON` data type is not supported yet"
 msgstr ":doc:`/tutorial/storage` `JSON` データ型は未対応です。"
 
-# 57c1a2711fd448d79504e0f0df8d44e0
 msgid "CentOS 7 (with Percona Server 5.7 package)"
 msgstr "CentOS 7（Percona Server 5.7パッケージを利用）"
 
@@ -114,7 +110,6 @@ msgid ""
 msgstr ""
 "CentOS 7では、Mroonga 6.02からPercona Server 5.7パッケージを利用できます。"
 
-# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 7 (with MariaDB 10.1 package)"
 msgstr "CentOS 7（MariaDB 10.1のパッケージを利用）"
 
@@ -128,7 +123,6 @@ msgstr ""
 msgid "Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::"
 msgstr "次の内容で ``/etc/yum.repos.d/MariaDB.repo`` を作ります::"
 
-# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 7 (with MariaDB 10.2 package)"
 msgstr "CentOS 7（MariaDB 10.2のパッケージを利用）"
 
@@ -139,7 +133,6 @@ msgstr ""
 "CentOS 7では、Mroonga 7.06からMariaDB提供のMariaDB 10.2パッケージを利用できま"
 "す。"
 
-# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 7 (with MariaDB 10.3 package)"
 msgstr "CentOS 7（MariaDB 10.3のパッケージを利用）"
 
@@ -150,7 +143,6 @@ msgstr ""
 "CentOS 7では、Mroonga 7.11からMariaDB提供のMariaDB 10.3パッケージを利用できま"
 "す。"
 
-# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 7 (with MariaDB 10.4 package)"
 msgstr "CentOS 7（MariaDB 10.4のパッケージを利用）"
 
@@ -161,7 +153,6 @@ msgstr ""
 "CentOS 7では、Mroonga 9.07からMariaDB提供のMariaDB 10.4パッケージを利用できま"
 "す。"
 
-# 5e3232071ae84bdfbce77f4bee3e0ae4
 msgid "CentOS 8 (with the Oracle MySQL 8.0 package)"
 msgstr "CentOS 8（OracleのMySQL 8.0パッケージを利用）"
 
@@ -171,7 +162,6 @@ msgid ""
 msgstr ""
 "CentOS 8では、Mroonga 9.10からOracleのMySQL 8.0パッケージを利用できます。"
 
-# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 8 (with MariaDB 10.3 package)"
 msgstr "CentOS 8（MariaDB 10.3のパッケージを利用）"
 
@@ -182,7 +172,6 @@ msgstr ""
 "CentOS 8では、Mroonga 9.10からMariaDB提供のMariaDB 10.3パッケージを利用できま"
 "す。"
 
-# e1a6076f4a4a4fb2a6e1a4d8a2175cfa
 msgid "CentOS 8 (with MariaDB 10.4 package)"
 msgstr "CentOS 8（MariaDB 10.4のパッケージを利用）"
 
@@ -206,11 +195,9 @@ msgstr ""
 msgid "buster (MariaDB)"
 msgstr ""
 
-# 5e3232071ae84bdfbce77f4bee3e0ae4
 msgid "buster (with the Oracle MySQL 5.7 package)"
 msgstr "buster（OracleのMySQL 5.7パッケージを利用）"
 
-# 5e3232071ae84bdfbce77f4bee3e0ae4
 msgid "buster (with the Oracle MySQL 8.0 package)"
 msgstr "buster（OracleのMySQL 8.0パッケージを利用）"
 
@@ -230,7 +217,6 @@ msgstr ""
 msgid "Fedora"
 msgstr ""
 
-# 5df752de3d50491cac58b2fc70b00359
 msgid "Fedora 21"
 msgstr ""
 
@@ -241,7 +227,6 @@ msgstr ""
 "Fedora 21ではMariaDB 10.0.xが採用されました。MroongaはMariaDB 10.0.15以降バン"
 "ドルされるようになったので、MariaDBをインストールすることで使えます。"
 
-# bfe73d8261284eaf8243b4dc52daa0f3
 msgid "Note that MariaDB bundled Mroonga version is a bit old."
 msgstr "バンドルされているMroongaのバージョンはやや古いです。"
 
@@ -427,7 +412,6 @@ msgid ""
 msgstr ""
 "MroongaはGNUビルドシステムを使っています。以下は一番簡単なビルド手順です::"
 
-# 1fceb586e76644d4819044525442f920
 msgid "You need to specify the following on ``configure``:"
 msgstr "次のことを ``configure`` で指定しなければいけません。"
 
@@ -436,7 +420,6 @@ msgstr ""
 "``--with-mysql-source`` でMySQLのソースコードがあるディレクトリーを指定しま"
 "す。"
 
-# 8ac00b0751714ab8949705df48039575
 msgid "The location of MySQL build directory with ``--with-mysql-build``."
 msgstr "``--with-mysql-build`` でMySQLのビルドディレクトリーを指定します。"
 
@@ -716,7 +699,6 @@ msgstr ""
 "以下のMSIファイルは動きません。zipファイルを使うか、正常に動くMSIファイルの作"
 "成に協力をお願いします。"
 
-# f27e1b9234ef4de5b6093deac2724172
 msgid ""
 "Download MSI file and execute it. You need to choose a MSI for your "
 "environment."
@@ -724,8 +706,6 @@ msgstr ""
 "MSIファイルをダウンロードして実行してください。環境に合わせてMSIを選んでくだ"
 "さい。"
 
-# f22edb59311b4a5ea5c79c47dac199d1
-# ac4dbadc03f34ec98aa916918bdd4326
 msgid ""
 "Choose ``win32`` version for 32-bit environment, ``winx64`` version for 64-"
 "bit environment:"
@@ -748,7 +728,6 @@ msgstr ""
 msgid "Zip"
 msgstr ""
 
-# 597a5b92b8bb4799904cfcb117fb22f9
 msgid ""
 "Download zip file and extract it. You need to choose a zip for your "
 "environment:"
