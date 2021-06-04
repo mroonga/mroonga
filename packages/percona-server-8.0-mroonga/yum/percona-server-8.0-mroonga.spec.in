@@ -17,6 +17,7 @@
 %define _mysql_release %{_percona_server_version}.%{_rpm_release}
 
 %define use_dnf (%{_centos_ver} >= 8)
+%define use_cmake3 (%{_centos_ver} < 8)
 
 %if %{use_dnf}
 %define dnf_download dnf download
@@ -68,7 +69,10 @@ if ! cp /percona-server-*.src.rpm ./; then
 fi
 rpm -Uvh percona-server-*.src.rpm
 sed -i'' -e 's/^  make /  # make /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
+
+%if %{use_cmake3}
 sed -i'' -e 's/^  cmake /  cmake3 /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
+%endif
 
 %build
 rpmbuild -bc ~/rpmbuild/SPECS/%{_mysql_spec_file}
