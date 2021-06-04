@@ -206,6 +206,14 @@ msgstr ""
 msgid "buster (MariaDB)"
 msgstr ""
 
+# 5e3232071ae84bdfbce77f4bee3e0ae4
+msgid "buster (with the Oracle MySQL 5.7 package)"
+msgstr "buster（OracleのMySQL 5.7パッケージを利用）"
+
+# 5e3232071ae84bdfbce77f4bee3e0ae4
+msgid "buster (with the Oracle MySQL 8.0 package)"
+msgstr "buster（OracleのMySQL 8.0パッケージを利用）"
+
 msgid "Docker"
 msgstr ""
 
