@@ -11,11 +11,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-18.04
-            package: mysql-server
+            package: mysql
           - os: ubuntu-20.04
-            package: mariadb-server
+            package: mariadb
           - os: ubuntu-20.10
-            package: mariadb-server
+            package: mariadb
     runs-on: macos-10.15
     steps:
       - uses: actions/checkout@v2
