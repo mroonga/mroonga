@@ -1,0 +1,26 @@
+require_relative "../mroonga-package-task"
+
+class MySQL80MroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("mysql-8.0")
+  end
+
+  def apt_targets_default
+    []
+  end
+
+  def ubuntu_targets_default
+    [
+      ["focal", "20.04"],
+      ["groovy", "20.10"],
+      ["hirsute", "21.04"],
+    ]
+  end
+
+  def enable_yum?
+    false
+  end
+end
+
+task = MySQL80MroongaPackageTask.new
+task.define
