@@ -119,6 +119,8 @@ jobs:
         run: |
           make dist
       - name: Update version
+        if: |
+          github.ref == 'refs/heads/master'
         run: |
           case ${{ matrix.os }} in
             debian-*)
