@@ -147,12 +147,11 @@ jobs:
               ;;
           esac
           cd packages/${{ matrix.package }}-mroonga
-          rake ${{ matrix.package-type }}:build BUILD_DIR=build
+          rake ${{ matrix.package-type }}:build BUILD_DIR=build DEB_RELEASE=${deb_release}
         env:
           APT_TARGETS: ${{ matrix.os }}
           GROONGA_REPOSITORY: ../../../groonga
           YUM_TARGETS: ${{ matrix.os }}
-          DEB_RELEASE: ${deb_release}
 
       # Artifact
       - uses: actions/upload-artifact@v2
