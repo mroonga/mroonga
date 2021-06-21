@@ -6192,18 +6192,25 @@ void ha_mroonga::storage_info_variable_data_file_length()
   MRN_DBUG_ENTER_METHOD();
 
   stats.data_file_length = 0;
-  stats.data_file_length += file_size(grn_obj_path(ctx, grn_table));
-  grn_hash *columns = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
-                                      GRN_OBJ_TABLE_HASH_KEY|GRN_HASH_TINY);
-  grn_table_columns(ctx, grn_table, NULL, 0, (grn_obj *)columns);
-  /* grn_id id __attribute__((unused)); */
-  grn_id *column_id;
-  GRN_HASH_EACH(ctx, columns, id, &column_id, NULL, NULL, {
-    grn_obj *column = grn_ctx_at(ctx, *column_id);
-    stats.data_file_length += file_size(grn_obj_path(ctx, column));
-    grn_obj_unlink(ctx, column);
-  });
-  grn_hash_close(ctx, columns);
+  stats.data_file_length += grn_obj_get_disk_usage(ctx, grn_table);
+  int n_columns = table->s->fields;
+  for (int i = 0; i < n_columns; ++i) {
+    grn_obj *column = grn_columns[i];
+    if (!column) {
+      stats.data_file_length += grn_obj_get_disk_usage(ctx, column);
+    }
+  }
+  int n_indexes = table->s->keys;
+  for (int i = 0; i < n_indexes; ++i) {
+    grn_obj *lexicon = grn_index_tables[i];
+    if (lexicon) {
+      stats.data_file_length += grn_obj_get_disk_usage(ctx, lexicon);
+    }
+    grn_obj *index = grn_index_columns[i];
+    if (index) {
+      stats.data_file_length += grn_obj_get_disk_usage(ctx, index);
+    }
+  }
 
   DBUG_VOID_RETURN;
 }
@@ -9845,18 +9852,6 @@ void ha_mroonga::cond_pop()
   DBUG_VOID_RETURN;
 }
 #endif
-
-ulonglong ha_mroonga::file_size(const char *path)
-{
-  MRN_DBUG_ENTER_METHOD();
-
-  struct stat file_status;
-  if (stat(path, &file_status) == 0) {
-    DBUG_RETURN(file_status.st_size);
-  } else {
-    DBUG_RETURN(0);
-  }
-}
 
 bool ha_mroonga::have_unique_index()
 {
