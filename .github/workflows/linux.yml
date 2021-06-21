@@ -119,6 +119,8 @@ jobs:
         run: |
           make dist
       - name: Update version
+        if: |
+          github.ref == 'refs/heads/master'
         run: |
           case ${{ matrix.os }} in
             debian-*)
@@ -138,16 +140,8 @@ jobs:
           restore-keys: package-${{ matrix.os }}-${{ matrix.package }}-ccache-
       - name: Build with Docker
         run: |
-          case ${{ matrix.os }} in
-            debian-*)
-              deb_release=$(head -n1 packages/${{ matrix.package }}-mroonga/debian/changelog | \
-                            awk '{print $2}' | \
-                            awk -F "-" '{print $2}' | \
-                            sed -e 's/[^0-9]//g')
-              ;;
-          esac
           cd packages/${{ matrix.package }}-mroonga
-          rake ${{ matrix.package-type }}:build BUILD_DIR=build DEB_RELEASE=${deb_release}
+          rake ${{ matrix.package-type }}:build BUILD_DIR=build
         env:
           APT_TARGETS: ${{ matrix.os }}
           GROONGA_REPOSITORY: ../../../groonga
