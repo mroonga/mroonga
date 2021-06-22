@@ -1,13 +1,8 @@
 name: Linux
 on:
   push:
-    branches:
-      - "*"
-    tags:
-      - "*"
   pull_request:
     branches:
-      - "*"
   schedule:
     - cron: |
         0 0 * * *
@@ -120,7 +115,8 @@ jobs:
           make dist
       - name: Update version
         if: |
-          github.ref == 'refs/heads/master'
+          !startsWith(github.ref, 'refs/tags/') &&
+          !startsWith(github.ref, 'refs/heads/maintenance/')
         run: |
           case ${{ matrix.os }} in
             debian-*)
