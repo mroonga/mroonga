@@ -62,7 +62,7 @@ uninstall_mroonga() {
 
   if [ "${try_auto_uninstall}" = "yes" ]; then
     if [ -f /etc/mysql/debian.cnf ]; then
-      password_option="--defaults-file=/etc/mysql/debian.cnf"
+      password_options="--defaults-file=/etc/mysql/debian.cnf"
     else
       db_input high ${package}/root-password || :
       db_go
@@ -78,7 +78,7 @@ uninstall_mroonga() {
   fi
 
   if [ "${try_auto_uninstall}" = "yes" ]; then
-    mysql="mysql -u root ${password_option}"
+    mysql="mysql ${password_options}"
     if ! ${mysql} < ${uninstall_sql}; then
       need_manual_unregister=yes
     fi
