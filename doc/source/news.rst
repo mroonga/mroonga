@@ -3,6 +3,52 @@
 News
 ====
 
+.. _release-11-04:
+
+Release 11.04 - 2021-06-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/reference/server_variables`] We disabled ``mroonga_enable_operations_recording`` by default.
+
+  ``mroonga_enable_operations_recording`` to determine whether recording operations for auto recovering are enabled or not. 
+
+  This recording of operations is for auto recovering Mroonga when it crashed.
+  Normally, if lock remain in Mroonga, we can't execute INSERT/DELETE/UPDATE, but if ``mroonga_enable_operations_recording`` is enable, we may not execute SELECT at times in addition to INSERT/DELETE/UPDATE.
+  Because auto recovery is sometimes blocked by residual lock when they crashed.
+
+  Therefore, we set ``OFF`` to the default value in this version.
+  By we disable operation recording, INSERT/DELETE/UPDATE is blocked as usual because of the residual lock, but "SELECT" may bework.
+
+  An appropriate way to handle to residual lock is as follows.
+
+    * https://www.clear-code.com/blog/2021/6/1/mroonga-recover-lock-failed-2021.html
+      (Japanese only)
+
+* [:doc:`/install/debian`] Added a install procedure for Mroonga for Debian GNU/Linux with Oracle MySQL package.
+
+  We supoort Mroonga for Debian GNU/Linux with Oracle MySQL package in Mroonga 11.03.
+  We wrote install procedure for these package to this documentation.
+  When we will install these packages, please refer to this documentation.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.3.29.
+
+Fixes
+^^^^^
+
+* Fix a crash bag when we execute search
+
+  **This issue doesn't occur under normal use.**
+
+  The occurrence condition is as below.
+
+    * We directly make tables and columns on Groonga by using ``mroonga_command``.
+    * We execute search at the same time as delete the above tables and columns.
+
+  When the above conditions are established, Mroonga might crash.
+
 .. _release-11-03:
 
 Release 11.03 - 2021-05-31
