@@ -20,47 +20,47 @@ jobs:
           - MariaDB 10.5 64bit (master)
         include:
           - label: MariaDB 10.2 32bit
-            mariadb-version: "10.2.38"
+            mariadb-version: "10.2.39"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.2 64bit
-            mariadb-version: "10.2.38"
+            mariadb-version: "10.2.39"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.3 32bit
-            mariadb-version: "10.3.29"
+            mariadb-version: "10.3.30"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.3 64bit
-            mariadb-version: "10.3.29"
+            mariadb-version: "10.3.30"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.4 32bit
-            mariadb-version: "10.4.19"
+            mariadb-version: "10.4.20"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.4 64bit
-            mariadb-version: "10.4.19"
+            mariadb-version: "10.4.20"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.5 32bit
-            mariadb-version: "10.5.10"
+            mariadb-version: "10.5.11"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.5 64bit
-            mariadb-version: "10.5.10"
+            mariadb-version: "10.5.11"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.5 64bit (master)
-            mariadb-version: "10.5.10"
+            mariadb-version: "10.5.11"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
