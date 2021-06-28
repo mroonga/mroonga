@@ -33,7 +33,7 @@ Improvements
   We wrote install procedure for these package to this documentation.
   When we will install these packages, please refer to this documentation.
 
-* [:doc:`/install/centos`] Added support for MariaDB 10.3.29.
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.39, 10.3.30, 10.4.20, and 10.5.11.
 
 Fixes
 ^^^^^
