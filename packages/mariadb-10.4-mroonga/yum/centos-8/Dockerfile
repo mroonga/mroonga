@@ -32,6 +32,7 @@ RUN \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
+    jemalloc-devel \
     make \
     pkgconfig \
     sudo \
