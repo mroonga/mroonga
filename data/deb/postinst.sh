@@ -106,8 +106,11 @@ install_mroonga() {
       else
         current_groonga_version=0
       fi
-      version=$(echo ${groonga_required_version} | sed -e 's/\.//g')
-      required_groonga_version=$(expr ${version})
+      # TODO: Pass groonga_required_version from postinst script in .deb.
+      #       or use postinst.sh.in to embed required Groonga version.
+      # version=$(echo ${groonga_required_version} | sed -e 's/\.//g')
+      # required_groonga_version=$(expr ${version})
+      required_groonga_version=0
       if [ ${current_groonga_version} -ge ${required_groonga_version} ]; then
         need_manual_restart=no
       else
