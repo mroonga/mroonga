@@ -125,6 +125,33 @@ msgid "Release 11.03 - 2021-05-31"
 msgstr "11.03リリース - 2021-05-31"
 
 msgid ""
+"This release has had a critical bug about uninstall and upgrade. If we "
+"install this version, we fail upgrade Mroonga and also uninstall it."
+msgstr ""
+"このリリースにはアップグレードとアンインストールに関する重大な問題がありま"
+"す。もし、このバージョンをインストールした場合、Mroongaのアップグレードとアン"
+"インストールに失敗します。"
+
+msgid "Therefore, please don't use Mroonga of this version."
+msgstr "したがって、このバージョンのMroongaは使用しないでください。"
+
+msgid ""
+"If we have already installed Mroonga of this version, we can upgrade Mroonga "
+"or uninstall it by using the following workaround."
+msgstr ""
+"すでにこのバージョンのMroongaをインストール済みの場合、以下の回避策を使うこと"
+"でMroongaをアップグレードしたりアンインストールしたりできます。"
+
+msgid "% echo \"#\\!/bin/sh\" > /usr/share/mroonga/deb/postrm.sh"
+msgstr ""
+
+msgid "% chmod u+x /usr/share/mroonga/deb/postrm.sh"
+msgstr ""
+
+msgid "Upgrade Mroonga or uninstall Mroonga."
+msgstr "Mroongaのアップグレード、または、アンインストール"
+
+msgid ""
 "The package names are changed from this release. Mroonga may be invalid "
 "after upgrade to this version by the influence of this modification. If we "
 "upgrade to this version, please always be sure to confirm the below points."

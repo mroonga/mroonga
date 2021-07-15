@@ -56,6 +56,19 @@ Release 11.03 - 2021-05-31
 
   .. warning::
 
+     This release has had a critical bug about uninstall and upgrade.
+     If we install this version, we fail upgrade Mroonga and also uninstall it.
+
+     Therefore, please don't use Mroonga of this version.
+
+     If we have already installed Mroonga of this version, we can upgrade Mroonga or uninstall it by using the following workaround. 
+
+       1. % echo "#\!/bin/sh" > /usr/share/mroonga/deb/postrm.sh
+       2. % chmod u+x /usr/share/mroonga/deb/postrm.sh
+       3. Upgrade Mroonga or uninstall Mroonga.
+
+  .. warning::
+
      The package names are changed from this release.
      Mroonga may be invalid after upgrade to this version by the influence of this modification.
      If we upgrade to this version, please always be sure to confirm the below points.
