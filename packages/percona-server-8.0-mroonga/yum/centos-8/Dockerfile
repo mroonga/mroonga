@@ -40,7 +40,7 @@ RUN \
     time \
     # Mroonga dependencies.
     ccache \
-    gcc-toolset-9 \
+    gcc-toolset-10 \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
