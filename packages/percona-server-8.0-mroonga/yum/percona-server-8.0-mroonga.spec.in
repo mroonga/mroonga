@@ -2,8 +2,8 @@
 
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
 
-%define mysql_version_default 8.0.23
-%define percona_server_version_default 14
+%define mysql_version_default 8.0.25
+%define percona_server_version_default 15
 %define rpm_release_default 1
 %define mysql_dist_default    %{?dist}
 %define mysql_spec_file_default percona-server.spec
@@ -29,7 +29,7 @@
 
 Name:           percona-server-8.0-mroonga
 Version:        @VERSION@
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A fast fulltext searchable storage engine for MySQL
 
 Group:          Applications/Databases
@@ -37,7 +37,7 @@ License:        LGPLv2.1
 URL:            http://mroonga.org/
 Source0:        http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
-Obsoletes:	percona-server-80-mroonga < 11.02-2{%dist}
+Obsoletes:	percona-server-80-mroonga < 11.02-2%{?dist}
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	gcc-c++
@@ -149,6 +149,9 @@ Documentation for Mroonga
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Fri Jul 16 2021 Horimoto Yasuhiro <horimoto@clear-code.com> - 11.04-2
+- build against Percona Server 8.0.25-15.
+
 * Mon Jun 28 2021 Horimoto Yasuhiro <horimoto@clear-code.com> - 11.04-1
 - New upstream release.
 
