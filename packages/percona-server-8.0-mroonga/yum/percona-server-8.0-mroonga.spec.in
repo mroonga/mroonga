@@ -37,7 +37,7 @@ License:        LGPLv2.1
 URL:            http://mroonga.org/
 Source0:        http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
-Obsoletes:	percona-server-80-mroonga < 11.02-2{%dist}
+Obsoletes:	percona-server-80-mroonga < 11.02-2%{?dist}
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	gcc-c++
