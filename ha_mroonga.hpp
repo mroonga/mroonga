@@ -868,9 +868,6 @@ protected:
 #  endif
 
 private:
-  void mkdir_p(const char *directory);
-  ulonglong file_size(const char *path);
-
   bool have_unique_index();
 
   bool is_foreign_key_field(const char *table_name,
