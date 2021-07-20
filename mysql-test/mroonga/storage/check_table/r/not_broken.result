@@ -1,13 +1,17 @@
 SET NAMES UTF8MB4;
 DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
-title TEXT
+title TEXT,
+FULLTEXT INDEX (title)
 );
 INSERT INTO diaries VALUES ('Hello');
+FLUSH TABLES;
 CHECK TABLE diaries;
 Table	Op	Msg_type	Msg_text
 test.diaries	check	status	OK
-SELECT * FROM diaries;
+SELECT *
+FROM diaries
+WHERE MATCH(title) AGAINST('+Hello' IN BOOLEAN MODE);
 title
 Hello
 DROP TABLE diaries;

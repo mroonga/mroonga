@@ -37,6 +37,11 @@ FLUSH TABLES;
 CHECK TABLE diaries;
 
 REPAIR TABLE diaries;
+
+SELECT *
+  FROM diaries
+ WHERE MATCH(title) AGAINST('+Hello' IN BOOLEAN MODE);
+
 DROP TABLE diaries;
 
 DROP DATABASE check_test;

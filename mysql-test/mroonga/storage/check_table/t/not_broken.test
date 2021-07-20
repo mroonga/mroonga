@@ -24,14 +24,19 @@ DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
 CREATE TABLE diaries (
-  title TEXT
+  title TEXT,
+  FULLTEXT INDEX (title)
 );
 
 INSERT INTO diaries VALUES ('Hello');
 
+FLUSH TABLES;
+
 CHECK TABLE diaries;
 
-SELECT * FROM diaries;
+SELECT *
+  FROM diaries
+ WHERE MATCH(title) AGAINST('+Hello' IN BOOLEAN MODE);
 
 DROP TABLE diaries;
 
