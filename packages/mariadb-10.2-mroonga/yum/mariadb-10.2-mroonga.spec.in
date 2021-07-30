@@ -115,6 +115,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc mroonga-doc/*
 
 %changelog
+* Thu Jul 29 2021 Horimoto Yasuhiro <horimoto@clear-code.com> - 11.05-1
+- New upstream release.
+
 * Mon Jun 28 2021 Horimoto Yasuhiro <horimoto@clear-code.com> - 11.04-1
 - New upstream release.
 
