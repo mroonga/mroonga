@@ -21,11 +21,58 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 11.04 - 2021-06-29"
-msgstr "11.04リリース - 2021-06-29"
+msgid "Release 11.05 - 2021-07-30"
+msgstr "11.05リリース - 2021-07-30"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.25"
+msgstr "[:doc:`/install/centos`] Percona Server 8.0.25 をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.35, 8.0.26."
+msgstr "[:doc:`/install/centos`] MySQL 5.7.35, 8.0.26をサポートしました。"
+
+msgid "There are below restrictions in the MySQL8 package."
+msgstr "MySQL8 のパッケージには以下の制限があります。"
+
+msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
+msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Storage mode does not support the following "
+"feature."
+msgstr ""
+"[:doc:`/tutorial/storage`] ストレージモードでは、以下の機能が未対応です。"
+
+msgid "The feature of relevant to the optimization."
+msgstr "最適化関連の機能"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fix a crash bug that may be caused after MySQL/MariaDB upgrade. [GitHub#423]"
+"[Reported by Vincent Pelletier]"
+msgstr ""
+"MySQL/MariaDBのアップグレード後にクラッシュすることがある問題を修正しました。"
+"[GitHub#423][Vincent Pelletierさんの報告]"
+
+msgid ""
+"Mronnga may crash if we execute ``SELECT ... MATCH AGAINST`` after MySQL/"
+"MariaDB upgrade."
+msgstr ""
+"MySQL/MariaDB をアップグレード後に、 ``SELECT ... MATCH AGAINST`` を実行する"
+"とMroongaがクラッシュすることがあります。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Vincent Pelletier"
+msgstr "Vincent Pelletierさん"
+
+msgid "Release 11.04 - 2021-06-29"
+msgstr "11.04リリース - 2021-06-29"
 
 msgid ""
 "[:doc:`/reference/server_variables`] We disabled "
@@ -96,9 +143,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`] MariaDB 10.2.39、10.3.30、10.4.20、10.5.11をサポート"
 "しました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid "Fix a crash bag when we execute search"
 msgstr "検索を実行した際にクラッシュする問題を修正しました。"
@@ -271,21 +315,6 @@ msgid ""
 msgstr ""
 "これにより、MroongaのDockerイメージをDocker公式のMySQLイメージを使って作成で"
 "きます。"
-
-msgid "There are below restrictions in the MySQL8 package."
-msgstr "MySQL8 のパッケージには以下の制限があります。"
-
-msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
-msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
-
-msgid ""
-"[:doc:`/tutorial/storage`] Storage mode does not support the following "
-"feature."
-msgstr ""
-"[:doc:`/tutorial/storage`] ストレージモードでは、以下の機能が未対応です。"
-
-msgid "The feature of relevant to the optimization."
-msgstr "最適化関連の機能"
 
 msgid "Added support for the SRID of Spatial Indexes."
 msgstr "空間インデックスのSRIDをサポートしました。"
@@ -465,9 +494,6 @@ msgid ""
 msgstr ""
 "MariaDBのMroongaでアップデートに失敗する問題を修正しました。 [Reported by ひ"
 "じー]"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Kosuke Yamashita"
 msgstr "Kosuke Yamashitaさん"

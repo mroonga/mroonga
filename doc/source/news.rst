@@ -3,6 +3,37 @@
 News
 ====
 
+.. _release-11-05:
+
+Release 11.05 - 2021-07-30
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for Percona Server 8.0.25
+
+* [:doc:`/install/centos`] Added support for MySQL 5.7.35, 8.0.26.
+
+  * There are below restrictions in the MySQL8 package.
+
+    * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+    * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
+
+      * The feature of relevant to the optimization.
+
+Fixes
+^^^^^
+
+* Fix a crash bug that may be caused after MySQL/MariaDB upgrade. [GitHub#423][Reported by Vincent Pelletier]
+
+  * Mronnga may crash if we execute ``SELECT ... MATCH AGAINST`` after MySQL/MariaDB upgrade.
+
+Thanks
+^^^^^^
+
+* Vincent Pelletier
+
 .. _release-11-04:
 
 Release 11.04 - 2021-06-29
