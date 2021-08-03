@@ -22,6 +22,10 @@ Improvements
 
       * The feature of relevant to the optimization.
 
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 20.10 (Groovy Gorilla) support.
+
+  * Because it reached EOL July 22, 2021.
+
 Fixes
 ^^^^^
 

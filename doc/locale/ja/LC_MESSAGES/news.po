@@ -48,6 +48,14 @@ msgstr ""
 msgid "The feature of relevant to the optimization."
 msgstr "最適化関連の機能"
 
+msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 20.10 (Groovy Gorilla) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 20.10 (Groovy Gorilla) のサポートをやめまし"
+"た。"
+
+msgid "Because it reached EOL July 22, 2021."
+msgstr "2021年7月22日でEOLとなったためです。"
+
 msgid "Fixes"
 msgstr "修正"
 
