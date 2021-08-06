@@ -1108,21 +1108,6 @@ msgstr "ビルド環境をセットアップする"
 msgid "Install the following packages::"
 msgstr "以下のパッケージをインストールします::"
 
-msgid ""
-"We use `Docker <https://www.docker.com/>`_ for building deb or rpm packages. "
-"If it is not installed, please install it according to the official "
-"documentation of Docker."
-msgstr ""
-"`Docker <https://www.docker.com/>`_ をdebやrpmパッケージのビルドに使うので、"
-"まだインストールしていなければ、Dcokerの公式ドキュメントに従ってインストール"
-"してください。"
-
-msgid "Bump version"
-msgstr "バージョンをあげる"
-
-msgid "Bump version to the latest release::"
-msgstr "最新のリリースへバージョンをあげる::"
-
 msgid "Describe the changes"
 msgstr "変更点を記述する"
 
@@ -1215,27 +1200,6 @@ msgstr ""
 "packages.groonga.orgにログインできないときは、sshの公開鍵を登録しておかないと"
 "いけません。"
 
-msgid "Confirm the results of each test"
-msgstr "各テストの結果確認"
-
-msgid ""
-"We confirm the results of all the below tests before setting the tag to "
-"Mroonga. Because if we will find problems in Mroonga after setting the tag "
-"to it, we must release it again."
-msgstr ""
-"リリース用のタグを設定する前に、以下のテストが全てパスしているかを確認しま"
-"す。タグを設定してから問題が発覚すると、再度リリースすることになってしまうの"
-"で、タグを設定する前に問題がないか確認します。"
-
-msgid "`GitHub Actions <https://github.com/mroonga/mroonga/actions>`_"
-msgstr ""
-
-msgid "`Travis CI <https://travis-ci.org/github/mroonga/mroonga>`_"
-msgstr ""
-
-msgid "`AppVeyor <https://ci.appveyor.com/project/groonga/mroonga>`_"
-msgstr ""
-
 msgid "Execute make update-latest-release"
 msgstr "make update-latest-releaseを実行する"
 
@@ -1256,6 +1220,21 @@ msgid ""
 msgstr ""
 "このコマンドはMroongaのサイトのHTMLファイルやspecやdebian/changelogファイルの"
 "バージョンを更新します。"
+
+msgid "Confirm the results of each test"
+msgstr "各テストの結果確認"
+
+msgid ""
+"We confirm the results of all the below tests before setting the tag to "
+"Mroonga. Because if we will find problems in Mroonga after setting the tag "
+"to it, we must release it again."
+msgstr ""
+"リリース用のタグを設定する前に、以下のテストが全てパスしているかを確認しま"
+"す。タグを設定してから問題が発覚すると、再度リリースすることになってしまうの"
+"で、タグを設定する前に問題がないか確認します。"
+
+msgid "`GitHub Actions <https://github.com/mroonga/mroonga/actions>`_"
+msgstr ""
 
 msgid "Tagging for release"
 msgstr "リリースのためのタグ打ち"
@@ -1352,13 +1331,11 @@ msgid "Windows"
 msgstr ""
 
 msgid ""
-"For windows packages, we use `AppVeyor CI <https://ci.appveyor.com/project/"
-"groonga/mroonga>`_ artifacts files. We upload them to `GitHub release page "
-"<https://github.com/mroonga/mroonga/releases>`_ ."
+"For windows packages, we use artifacts of `GitHub release page <https://"
+"github.com/mroonga/mroonga/releases>`_ ."
 msgstr ""
-"Windows向けには、 `AppVeyor CI <https://ci.appveyor.com/project/groonga/"
-"mroonga>`_ の成果物を使っています。これらを `GitHub release page <https://"
-"github.com/mroonga/mroonga/releases>`_ へアップロードします。"
+"Windows向けには、 `GitHub release page <https://github.com/mroonga/mroonga/"
+"releases>`_ の成果物を使っています。"
 
 msgid "Upload documents"
 msgstr "ドキュメントをアップロード"
@@ -1366,8 +1343,10 @@ msgstr "ドキュメントをアップロード"
 msgid "Clone mroonga.github.com repository"
 msgstr "mroonga.github.comリポジトリをcloneする"
 
-msgid "Execute ``make update-document`` in ``$MROONGA_CLONE_DIR``"
-msgstr "``make update-document`` ``$MROONGA_CLONE_DIR`` 配下で実行する"
+msgid "Execute ``make update-document`` as below in ``$MROONGA_CLONE_DIR``::"
+msgstr ""
+"以下のように ``make update-document`` を ``$MROONGA_CLONE_DIR`` 配下で実行す"
+"る"
 
 msgid "Commit changes in mroonga.github.com repository && push them"
 msgstr "Mroonga.github.comの変更点をcommit&&pushする"
@@ -1443,3 +1422,9 @@ msgstr "FacebookのMroongaグループからリリースを告知します。"
 
 msgid "https://www.facebook.com/mroonga/"
 msgstr ""
+
+msgid "Bump version"
+msgstr "バージョンをあげる"
+
+msgid "Bump version to the latest release::"
+msgstr "最新のリリースへバージョンをあげる::"

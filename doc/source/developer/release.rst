@@ -26,16 +26,6 @@ Install the following packages::
 
     % sudo apt-get install -V ruby mecab libmecab-dev gnupg2 dh-autoreconf python-sphinx bison
 
-We use `Docker <https://www.docker.com/>`_ for building deb or rpm packages.
-If it is not installed, please install it according to the official documentation of Docker.
-
-Bump version
-------------
-
-Bump version to the latest release::
-
-    % make update-version NEW_VERSION_MAJOR=9 NEW_VERSION_MINOR=1 NEW_VERSION_MICRO=0
-
 Describe the changes
 --------------------
 
@@ -56,7 +46,6 @@ Should be included
 Shoud not be included
 
 * The changes which doesn't affect to users (Internal source code changes or refactoring)
-
 
 Generate configure script
 -------------------------
@@ -104,16 +93,6 @@ You can check with the following command whether you can login::
 
 If you can't login to packages.groonga.org, you must be registered ssh public key.
 
-Confirm the results of each test
---------------------------------
-
-We confirm the results of all the below tests before setting the tag to Mroonga.
-Because if we will find problems in Mroonga after setting the tag to it, we must release it again.
-
-* `GitHub Actions <https://github.com/mroonga/mroonga/actions>`_
-* `Travis CI <https://travis-ci.org/github/mroonga/mroonga>`_
-* `AppVeyor <https://ci.appveyor.com/project/groonga/mroonga>`_
-
 Execute make update-latest-release
 ----------------------------------
 
@@ -124,6 +103,14 @@ When 9.09 release, we executed the following command::
     % make update-latest-release OLD_RELEASE=9.09 OLD_RELEASE_DATE=2019-09-27 NEW_RELEASE_DATE=2019-10-30
 
 This command updates some html files (which is used for web sites of Mroonga - index.html,ja/index.html) and the version of spec file or debian/changelog entry.
+
+Confirm the results of each test
+--------------------------------
+
+We confirm the results of all the below tests before setting the tag to Mroonga.
+Because if we will find problems in Mroonga after setting the tag to it, we must release it again.
+
+* `GitHub Actions <https://github.com/mroonga/mroonga/actions>`_
 
 Tagging for release
 -------------------
@@ -176,7 +163,7 @@ Change working directory to ``packages``::
 
 Execute the following command::
 
-    % rake apt:release
+    % rake apt
 
 Now we finish build and upload packages to https://packages.groonga.org/.
 However, these packages are unsigned. We sign packages by executing the below commands::
@@ -192,12 +179,12 @@ For Ubuntu, packages are provided by PPA on launchpad.net.
 Change working directory to ``packages`` and execute ``rake ubuntu:upload`` command::
 
     % cd packages
-    % rake ubuntu:upload
+    % rake ubuntu
 
 When upload packages was succeeded, package build process is executed on launchpad.net. Then build result is notified via E-mail.
 You can install packages via Groonga PPA on launchpad.net::
 
-* https://launchpad.net/~groonga/+archive/ubuntu/ppa
+  https://launchpad.net/~groonga/+archive/ubuntu/ppa
 
 Red Hat derivatives
 ^^^^^^^^^^^^^^^^^^^
@@ -208,7 +195,7 @@ Change working directory to ``packages`` ::
 
 Execute the following command::
 
-    % rake yum:release
+    % rake yum
 
 Now we finish build and upload packages to https://packages.groonga.org/.
 However, these packages are unsigned. We sign packages by executing the below commands::
@@ -219,14 +206,16 @@ However, these packages are unsigned. We sign packages by executing the below co
 Windows
 ^^^^^^^
 
-For windows packages, we use `AppVeyor CI <https://ci.appveyor.com/project/groonga/mroonga>`_ artifacts files.
-We upload them to `GitHub release page <https://github.com/mroonga/mroonga/releases>`_ .
+For windows packages, we use artifacts of `GitHub release page <https://github.com/mroonga/mroonga/releases>`_ .
 
 Upload documents
 ----------------
 
 1. Clone mroonga.github.com repository
-2. Execute ``make update-document`` in ``$MROONGA_CLONE_DIR``
+2. Execute ``make update-document`` as below in ``$MROONGA_CLONE_DIR``::
+
+    % make update-document DOCUMENT_VERSION=xx.xx_VERSION DOCUMENT_VERSION_FULL=xx.xx
+
 3. Commit changes in mroonga.github.com repository && push them
 
 Update blog(Mroonga blog)
@@ -277,3 +266,10 @@ Announce release for Facebook
 We announce release from Mroonga group in Facebook.
 
 https://www.facebook.com/mroonga/
+
+Bump version
+------------
+
+Bump version to the latest release::
+
+    % make update-version NEW_VERSION_MAJOR=9 NEW_VERSION_MINOR=1 NEW_VERSION_MICRO=0
