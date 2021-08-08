@@ -475,7 +475,7 @@ typedef uint mrn_srid;
   (query_block->has_limit())
 #else
 #  define MRN_QUERY_BLOCK_HAS_LIMIT(query_block) \
-  (query_block->explicit_limit)
+  (query_block->limit_params.explicit_limit)
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000

@@ -330,7 +330,7 @@ namespace mrn {
                   "mixed charset isn't supported: <%.*s>: <%s>",
                   MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
                   MRN_ITEM_FIELD_GET_NAME(field_item),
-                  field_item->field->charset()->csname);
+                  field_item->field->charset()->cs_name.str);
           DBUG_RETURN(false);
         }
         encodings.push_back(encoding);
@@ -1015,7 +1015,7 @@ namespace mrn {
                                   &errors);
       query = &converted_query_buffer;
     }
-    if (match_item->flags & FT_BOOL) {
+    if (match_item->match_flags & FT_BOOL) {
       grn_obj *match_columns;
       grn_obj *match_columns_variable;
       GRN_EXPR_CREATE_FOR_QUERY(ctx_,

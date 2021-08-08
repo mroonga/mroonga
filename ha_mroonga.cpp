@@ -11197,15 +11197,15 @@ bool ha_mroonga::check_fast_order_limit(grn_obj *result_set,
            table_list->get_table_name()) == 0 &&
     query_block->order_list.elements &&
     MRN_QUERY_BLOCK_HAS_LIMIT(query_block) &&
-    query_block->select_limit &&
-    query_block->select_limit->val_int() > 0
+    query_block->limit_params.select_limit &&
+    query_block->limit_params.select_limit->val_int() > 0
   ) {
-    if (query_block->offset_limit) {
-      *limit = query_block->offset_limit->val_int();
+    if (query_block->limit_params.offset_limit) {
+      *limit = query_block->limit_params.offset_limit->val_int();
     } else {
       *limit = 0;
     }
-    *limit += query_block->select_limit->val_int();
+    *limit += query_block->limit_params.select_limit->val_int();
     if (*limit > (longlong)INT_MAX) {
       GRN_LOG(ctx, GRN_LOG_DEBUG,
               "%s[false] too long limit: %lld <= %d is required",
@@ -12630,7 +12630,7 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
     case MYSQL_TYPE_VAR_STRING:
     case MYSQL_TYPE_STRING:
       // Text values in index may be normalized.
-      if (strcmp(key_info->key_part[i].field->charset()->csname,
+      if (strcmp(key_info->key_part[i].field->charset()->cs_name.str,
                  "binary") != 0) {
         storage_store_fields(buf, record_id);
         DBUG_VOID_RETURN;

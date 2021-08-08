@@ -45,9 +45,9 @@ namespace mrn {
     DBUG_PRINT("info",
                ("mroonga: result_type = %u", field_->result_type()));
     DBUG_PRINT("info",
-               ("mroonga: charset->name = %s", field_->charset()->name));
+               ("mroonga: charset->name = %s", field_->charset()->coll_name.str));
     DBUG_PRINT("info",
-               ("mroonga: charset->csname = %s", field_->charset()->csname));
+               ("mroonga: charset->csname = %s", field_->charset()->cs_name.str));
     DBUG_PRINT("info",
                ("mroonga: charset->state = %u", field_->charset()->state));
     bool need_normalize_p;
@@ -141,29 +141,32 @@ namespace mrn {
     const char *normalizer_name = NULL;
     const char *normalizer_spec = NULL;
     const char *default_normalizer_name = "NormalizerAuto";
-    if ((strcmp(charset_info->name, "utf8_general_ci") == 0) ||
-        (strcmp(charset_info->name, "utf8mb4_general_ci") == 0)) {
+    if ((strcmp(charset_info->coll_name.str, "utf8_general_ci") == 0) ||
+        (strcmp(charset_info->coll_name.str, "utf8mb3_general_ci") == 0) ||
+        (strcmp(charset_info->coll_name.str, "utf8mb4_general_ci") == 0)) {
       normalizer_name = normalizer_spec = "NormalizerMySQLGeneralCI";
-    } else if ((strcmp(charset_info->name, "utf8_unicode_ci") == 0) ||
-               (strcmp(charset_info->name, "utf8mb4_unicode_ci") == 0)) {
+    } else if ((strcmp(charset_info->coll_name.str, "utf8_unicode_ci") == 0) ||
+               (strcmp(charset_info->coll_name.str, "utf8mb3_unicode_ci") == 0) ||
+               (strcmp(charset_info->coll_name.str, "utf8mb4_unicode_ci") == 0)) {
       normalizer_name = normalizer_spec = "NormalizerMySQLUnicodeCI";
-    } else if ((strcmp(charset_info->name, "utf8_unicode_520_ci") == 0) ||
-               (strcmp(charset_info->name, "utf8mb4_unicode_520_ci") == 0)) {
+    } else if ((strcmp(charset_info->coll_name.str, "utf8_unicode_520_ci") == 0) ||
+               (strcmp(charset_info->coll_name.str, "utf8mb3_unicode_520_ci") == 0) ||
+               (strcmp(charset_info->coll_name.str, "utf8mb4_unicode_520_ci") == 0)) {
       normalizer_name = normalizer_spec = "NormalizerMySQLUnicode520CI";
-    } else if ((strcmp(charset_info->name, "utf8mb4_0900_ai_ci") == 0)) {
+    } else if ((strcmp(charset_info->coll_name.str, "utf8mb4_0900_ai_ci") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec = "NormalizerMySQLUnicode900('weight_level', 1)";
-    } else if ((strcmp(charset_info->name, "utf8mb4_0900_as_ci") == 0)) {
+    } else if ((strcmp(charset_info->coll_name.str, "utf8mb4_0900_as_ci") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec = "NormalizerMySQLUnicode900('weight_level', 2)";
-    } else if ((strcmp(charset_info->name, "utf8mb4_0900_as_cs") == 0)) {
+    } else if ((strcmp(charset_info->coll_name.str, "utf8mb4_0900_as_cs") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec = "NormalizerMySQLUnicode900('weight_level', 3)";
-    } else if ((strcmp(charset_info->name, "utf8mb4_ja_0900_as_cs") == 0)) {
+    } else if ((strcmp(charset_info->coll_name.str, "utf8mb4_ja_0900_as_cs") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec =
         "NormalizerMySQLUnicode900('locale', 'ja', 'weight_level', 3)";
-    } else if ((strcmp(charset_info->name, "utf8mb4_ja_0900_as_cs_ks") == 0)) {
+    } else if ((strcmp(charset_info->coll_name.str, "utf8mb4_ja_0900_as_cs_ks") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec =
         "NormalizerMySQLUnicode900('locale', 'ja', 'weight_level', 4)";
@@ -177,7 +180,7 @@ namespace mrn {
                  "Install groonga-normalizer-mysql normalizer. "
                  "%s is used as fallback.",
                  normalizer_name,
-                 charset_info->name,
+                 charset_info->coll_name.str,
                  default_normalizer_name);
         push_warning(thread_, MRN_SEVERITY_WARNING,
                      HA_ERR_UNSUPPORTED, error_message);
