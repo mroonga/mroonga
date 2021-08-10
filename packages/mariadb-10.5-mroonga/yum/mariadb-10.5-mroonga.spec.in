@@ -2,7 +2,7 @@
 
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
 
-%define mariadb_version_default 10.5.11
+%define mariadb_version_default 10.5.12
 %define mariadb_release_default 1
 %if %{_centos_ver} == 7
 %define mariadb_dist_default    el%{_centos_ver}.centos
@@ -26,7 +26,7 @@
 
 Name:		mariadb-10.5-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
@@ -131,6 +131,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc mroonga-doc/*
 
 %changelog
+* Tue Aug 10 2021 Horimoto Yasuhiro <horimoto@clear-code.com> - 11.05-2
+- rebuild against MariaDB 10.5.12
+
 * Thu Jul 29 2021 Horimoto Yasuhiro <horimoto@clear-code.com> - 11.05-1
 - New upstream release.
 
