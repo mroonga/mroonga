@@ -478,6 +478,14 @@ typedef uint mrn_srid;
   (query_block->explicit_limit)
 #endif
 
+#if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
+#  define MRN_QUERY_BLOCK_SELECT_LIMIT(query_block) \
+  (query_block->limit_params.select_limit)
+#else
+#  define MRN_QUERY_BLOCK_SELECT_LIMIT(query_block) \
+  (query_block->select_limit)
+#endif
+
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
 #  if MYSQL_VERSION_ID >= 100504
 #    define mrn_init_sql_alloc(thd, name, mem_root)                     \
