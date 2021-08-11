@@ -12630,7 +12630,7 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
     case MYSQL_TYPE_VAR_STRING:
     case MYSQL_TYPE_STRING:
       // Text values in index may be normalized.
-      if (strcmp(key_info->key_part[i].field->charset()->csname,
+      if (strcmp(MRN_CHARSET_CSNAME(key_info->key_part[i].field->charset()),
                  "binary") != 0) {
         storage_store_fields(buf, record_id);
         DBUG_VOID_RETURN;

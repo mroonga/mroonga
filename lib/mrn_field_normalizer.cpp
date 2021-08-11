@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2013-2018  Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2021  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -47,7 +48,7 @@ namespace mrn {
     DBUG_PRINT("info",
                ("mroonga: charset->name = %s", field_->charset()->name));
     DBUG_PRINT("info",
-               ("mroonga: charset->csname = %s", field_->charset()->csname));
+               ("mroonga: charset->csname = %s", MRN_CHARSET_CSNAME(field_->charset())));
     DBUG_PRINT("info",
                ("mroonga: charset->state = %u", field_->charset()->state));
     bool need_normalize_p;

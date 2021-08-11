@@ -1004,3 +1004,11 @@ typedef uint mrn_srid;
                                (MYSQL_VERSION_ID >= 100509))
 #  define MRN_DBUG_TMP_USE_BITMAP_PP
 #endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100603)
+#  define MRN_CHARSET_CSNAME(charset) \
+  ((charset)->cs_name.str)
+#else
+#  define MRN_CHARSET_CSNAME(charset) \
+  ((charset)->csname)
+#endif

@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2013-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2021  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -330,7 +331,7 @@ namespace mrn {
                   "mixed charset isn't supported: <%.*s>: <%s>",
                   MRN_ITEM_FIELD_GET_NAME_LENGTH(field_item),
                   MRN_ITEM_FIELD_GET_NAME(field_item),
-                  field_item->field->charset()->csname);
+                  MRN_CHARSET_CSNAME(field_item->field->charset()));
           DBUG_RETURN(false);
         }
         encodings.push_back(encoding);
