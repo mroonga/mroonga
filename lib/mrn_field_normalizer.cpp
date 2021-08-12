@@ -46,7 +46,7 @@ namespace mrn {
     DBUG_PRINT("info",
                ("mroonga: result_type = %u", field_->result_type()));
     DBUG_PRINT("info",
-               ("mroonga: charset->name = %s", field_->charset()->name));
+               ("mroonga: charset->name = %s", MRN_CHARSET_NAME(field_->charset())));
     DBUG_PRINT("info",
                ("mroonga: charset->csname = %s", MRN_CHARSET_CSNAME(field_->charset())));
     DBUG_PRINT("info",
@@ -142,29 +142,29 @@ namespace mrn {
     const char *normalizer_name = NULL;
     const char *normalizer_spec = NULL;
     const char *default_normalizer_name = "NormalizerAuto";
-    if ((strcmp(charset_info->name, "utf8_general_ci") == 0) ||
-        (strcmp(charset_info->name, "utf8mb4_general_ci") == 0)) {
+    if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8_general_ci") == 0) ||
+        (strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_general_ci") == 0)) {
       normalizer_name = normalizer_spec = "NormalizerMySQLGeneralCI";
-    } else if ((strcmp(charset_info->name, "utf8_unicode_ci") == 0) ||
-               (strcmp(charset_info->name, "utf8mb4_unicode_ci") == 0)) {
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8_unicode_ci") == 0) ||
+               (strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_unicode_ci") == 0)) {
       normalizer_name = normalizer_spec = "NormalizerMySQLUnicodeCI";
-    } else if ((strcmp(charset_info->name, "utf8_unicode_520_ci") == 0) ||
-               (strcmp(charset_info->name, "utf8mb4_unicode_520_ci") == 0)) {
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8_unicode_520_ci") == 0) ||
+               (strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_unicode_520_ci") == 0)) {
       normalizer_name = normalizer_spec = "NormalizerMySQLUnicode520CI";
-    } else if ((strcmp(charset_info->name, "utf8mb4_0900_ai_ci") == 0)) {
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_0900_ai_ci") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec = "NormalizerMySQLUnicode900('weight_level', 1)";
-    } else if ((strcmp(charset_info->name, "utf8mb4_0900_as_ci") == 0)) {
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_0900_as_ci") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec = "NormalizerMySQLUnicode900('weight_level', 2)";
-    } else if ((strcmp(charset_info->name, "utf8mb4_0900_as_cs") == 0)) {
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_0900_as_cs") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec = "NormalizerMySQLUnicode900('weight_level', 3)";
-    } else if ((strcmp(charset_info->name, "utf8mb4_ja_0900_as_cs") == 0)) {
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_ja_0900_as_cs") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec =
         "NormalizerMySQLUnicode900('locale', 'ja', 'weight_level', 3)";
-    } else if ((strcmp(charset_info->name, "utf8mb4_ja_0900_as_cs_ks") == 0)) {
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_ja_0900_as_cs_ks") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec =
         "NormalizerMySQLUnicode900('locale', 'ja', 'weight_level', 4)";
@@ -178,7 +178,7 @@ namespace mrn {
                  "Install groonga-normalizer-mysql normalizer. "
                  "%s is used as fallback.",
                  normalizer_name,
-                 charset_info->name,
+                 MRN_CHARSET_NAME(charset_info),
                  default_normalizer_name);
         push_warning(thread_, MRN_SEVERITY_WARNING,
                      HA_ERR_UNSUPPORTED, error_message);

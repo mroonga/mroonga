@@ -46,7 +46,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "utf8"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_utf8)
             mrn_charset_utf8 = cs[0];
           else if (mrn_charset_utf8->cset != cs[0]->cset)
@@ -56,7 +56,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "utf8mb4"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_utf8mb4)
             mrn_charset_utf8mb4 = cs[0];
           else if (mrn_charset_utf8mb4->cset != cs[0]->cset)
@@ -66,7 +66,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "binary"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_binary)
             mrn_charset_binary = cs[0];
           else if (mrn_charset_binary->cset != cs[0]->cset)
@@ -76,7 +76,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "ascii"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_ascii)
             mrn_charset_ascii = cs[0];
           else if (mrn_charset_ascii->cset != cs[0]->cset)
@@ -86,7 +86,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "latin1"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_latin1_1)
             mrn_charset_latin1_1 = cs[0];
           else if (mrn_charset_latin1_1->cset != cs[0]->cset)
@@ -101,7 +101,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "cp932"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_cp932)
             mrn_charset_cp932 = cs[0];
           else if (mrn_charset_cp932->cset != cs[0]->cset)
@@ -111,7 +111,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "sjis"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_sjis)
             mrn_charset_sjis = cs[0];
           else if (mrn_charset_sjis->cset != cs[0]->cset)
@@ -121,7 +121,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "eucjpms"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_eucjpms)
             mrn_charset_eucjpms = cs[0];
           else if (mrn_charset_eucjpms->cset != cs[0]->cset)
@@ -131,7 +131,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "ujis"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_ujis)
             mrn_charset_ujis = cs[0];
           else if (mrn_charset_ujis->cset != cs[0]->cset)
@@ -141,7 +141,7 @@ namespace mrn {
         if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "koi8r"))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
-                              cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
           if (!mrn_charset_koi8r)
             mrn_charset_koi8r = cs[0];
           else if (mrn_charset_koi8r->cset != cs[0]->cset)
@@ -149,7 +149,7 @@ namespace mrn {
           continue;
         }
         DBUG_PRINT("info", ("mroonga: %s[%s][%p] is not supported",
-                            cs[0]->name, MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+                            MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
       }
       DBUG_VOID_RETURN;
     }
@@ -162,7 +162,7 @@ namespace mrn {
         const char *name = "<null>";
         const char *csname = "<null>";
         if (charset) {
-          name = charset->name;
+          name = MRN_CHARSET_NAME(charset);
           csname = MRN_CHARSET_CSNAME(charset);
         }
         error = ER_MRN_CHARSET_NOT_SUPPORT_NUM;

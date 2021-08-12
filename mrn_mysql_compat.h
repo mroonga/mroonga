@@ -1008,9 +1008,13 @@ typedef uint mrn_srid;
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100603)
 #  define MRN_CHARSET_CSNAME(charset) \
   ((charset)->cs_name.str)
+#  define MRN_CHARSET_NAME(charset) \
+  ((charset)->coll_name.str)
 #else
 #  define MRN_CHARSET_CSNAME(charset) \
   ((charset)->csname)
+#  define MRN_CHARSET_NAME(charset) \
+  ((charset)->name)
 #endif
 
 #if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
