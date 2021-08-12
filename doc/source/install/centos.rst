@@ -52,7 +52,7 @@ Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y https://repo.mysql.com/mysql-community-release-el7.rpm
-  % sudo yum install -y --enablerepo=epel mysql-community-8.0mroonga
+  % sudo yum install -y --enablerepo=epel mysql-community-8.0-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
