@@ -1016,7 +1016,7 @@ namespace mrn {
                                   &errors);
       query = &converted_query_buffer;
     }
-    if (match_item->flags & FT_BOOL) {
+    if (MRN_MATCH_ITEM_FLAGS(match_item) & FT_BOOL) {
       grn_obj *match_columns;
       grn_obj *match_columns_variable;
       GRN_EXPR_CREATE_FOR_QUERY(ctx_,

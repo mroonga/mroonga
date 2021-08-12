@@ -1012,3 +1012,11 @@ typedef uint mrn_srid;
 #  define MRN_CHARSET_CSNAME(charset) \
   ((charset)->csname)
 #endif
+
+#if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
+#  define MRN_MATCH_ITEM_FLAGS(match_item) \
+  ((match_item)->match_flags)
+#else
+#  define MRN_MATCH_ITEM_FLAGS(match_item) \
+  ((match_item)->flags)
+#endif
