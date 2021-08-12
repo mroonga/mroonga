@@ -11200,8 +11200,8 @@ bool ha_mroonga::check_fast_order_limit(grn_obj *result_set,
     MRN_QUERY_BLOCK_SELECT_LIMIT(query_block) &&
     MRN_QUERY_BLOCK_SELECT_LIMIT(query_block)->val_int() > 0
   ) {
-    if (query_block->offset_limit) {
-      *limit = query_block->offset_limit->val_int();
+    if (MRN_QUERY_BLOCK_OFFSET_LIMIT(query_block)) {
+      *limit = MRN_QUERY_BLOCK_OFFSET_LIMIT(query_block)->val_int();
     } else {
       *limit = 0;
     }

@@ -481,9 +481,13 @@ typedef uint mrn_srid;
 #if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
 #  define MRN_QUERY_BLOCK_SELECT_LIMIT(query_block) \
   (query_block->limit_params.select_limit)
+#  define MRN_QUERY_BLOCK_OFFSET_LIMIT(query_block) \
+  (query_block->limit_params.offset_limit)
 #else
 #  define MRN_QUERY_BLOCK_SELECT_LIMIT(query_block) \
   (query_block->select_limit)
+#  define MRN_QUERY_BLOCK_OFFSET_LIMIT(query_block) \
+  (query_block->offset_limit)
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
