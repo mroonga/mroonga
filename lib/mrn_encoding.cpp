@@ -25,6 +25,7 @@
 namespace mrn {
   namespace encoding {
     CHARSET_INFO *mrn_charset_utf8 = NULL;
+    CHARSET_INFO *mrn_charset_utf8mb3 = NULL;
     CHARSET_INFO *mrn_charset_utf8mb4 = NULL;
     CHARSET_INFO *mrn_charset_binary = NULL;
     CHARSET_INFO *mrn_charset_ascii = NULL;
@@ -50,6 +51,25 @@ namespace mrn {
           if (!mrn_charset_utf8)
             mrn_charset_utf8 = cs[0];
           else if (mrn_charset_utf8->cset != cs[0]->cset)
+            assert(0);
+          continue;
+        }
+        /*
+           The utf8mb3 charset is deprecated in MySQL and will be removed in a future release.
+           Currently, the utf8mb3 is an alias for the utf8, but the utf8 is expected to
+           become a reference to the utf8mb4 at some point.
+
+           Therefore, we don't handle the utf8mb3 together with the utf8 like
+           "if (!strcmp(cs[0]->cs_name.str, "utf8") || !strcmp(cs[0]->cs_name.str, "utf8mb3"))",
+            but we make independent expression for the utf8mb3.
+         */
+        if (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "utf8mb3"))
+        {
+          DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
+                              MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
+          if (!mrn_charset_utf8mb3)
+            mrn_charset_utf8mb3 = cs[0];
+          else if (mrn_charset_utf8mb3->cset != cs[0]->cset)
             assert(0);
           continue;
         }
@@ -194,6 +214,9 @@ namespace mrn {
         DBUG_RETURN(GRN_ENC_NONE);
       }
       if (charset->cset == mrn_charset_utf8->cset) {
+        DBUG_RETURN(GRN_ENC_UTF8);
+      }
+      if (mrn_charset_utf8mb3 && charset->cset == mrn_charset_utf8mb3->cset) {
         DBUG_RETURN(GRN_ENC_UTF8);
       }
       if (mrn_charset_utf8mb4 && charset->cset == mrn_charset_utf8mb4->cset) {
