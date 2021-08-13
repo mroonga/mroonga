@@ -13,60 +13,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: debian-buster
-            package-type: apt
-            package: mariadb-10.3
-          - os: debian-buster
-            package-type: apt
-            package: mysql-community-5.7
-          - os: debian-buster
-            package-type: apt
-            package: mysql-community-8.0
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.2
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.3
-          - os: centos-8
-            package-type: yum
-            package: mariadb-10.3
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.4
-          - os: centos-8
-            package-type: yum
-            package: mariadb-10.4
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.5
-          - os: centos-8
-            package-type: yum
-            package: mariadb-10.5
           - os: centos-7
             package-type: yum
             package: mariadb-10.6
           - os: centos-8
             package-type: yum
             package: mariadb-10.6
-          - os: centos-7
-            package-type: yum
-            package: mysql-community-5.7
-          - os: centos-7
-            package-type: yum
-            package: mysql-community-8.0
-          - os: centos-8
-            package-type: yum
-            package: mysql-community-8.0
-          - os: centos-7
-            package-type: yum
-            package: percona-server-5.7
-          - os: centos-7
-            package-type: yum
-            package: percona-server-8.0
-          - os: centos-8
-            package-type: yum
-            package: percona-server-8.0
     runs-on: ubuntu-latest
     steps:
       - name: Remove needless data
@@ -200,60 +152,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: debian-buster
-            package-type: apt
-            package: mariadb-10.3
-          - os: debian-buster
-            package-type: apt
-            package: mysql-community-5.7
-          - os: debian-buster
-            package-type: apt
-            package: mysql-community-8.0
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.2
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.3
-          - os: centos-8
-            package-type: yum
-            package: mariadb-10.3
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.4
-          - os: centos-8
-            package-type: yum
-            package: mariadb-10.4
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.5
-          - os: centos-8
-            package-type: yum
-            package: mariadb-10.5
           - os: centos-7
             package-type: yum
             package: mariadb-10.6
           - os: centos-8
             package-type: yum
             package: mariadb-10.6
-          - os: centos-7
-            package-type: yum
-            package: mysql-community-5.7
-          - os: centos-7
-            package-type: yum
-            package: mysql-community-8.0
-          - os: centos-8
-            package-type: yum
-            package: mysql-community-8.0
-          - os: centos-7
-            package-type: yum
-            package: percona-server-5.7
-          - os: centos-7
-            package-type: yum
-            package: percona-server-8.0
-          - os: centos-8
-            package-type: yum
-            package: percona-server-8.0
     runs-on: macos-10.15
     steps:
       - uses: actions/checkout@v2
