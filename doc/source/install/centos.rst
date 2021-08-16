@@ -254,7 +254,7 @@ Mroonga 9.10 release.
 Install::
 
   % sudo dnf install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y https://repo.mysql.com/mysql-community-release-el8.rpm
+  % sudo dnf install -y https://repo.mysql.com/mysql80-community-release-el8.rpm
   % sudo dnf install -y groonga-libs
   % sudo dnf install --disablerepo=AppStream -y --enablerepo=epel mysql-community-8.0-mroonga
   (% sudo systemctl start mysqld)
