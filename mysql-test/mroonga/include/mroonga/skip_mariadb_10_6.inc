@@ -1,4 +1,4 @@
-# Copyright(C) 2018-2020  Sutou Kouhei <kou@clear-code.com>
+# Copyright(C) 2021  Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,32 +14,11 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../include/mroonga/skip_mariadb_10_5.inc
---source ../../../include/mroonga/skip_mariadb_10_6.inc
---source ../../../include/mroonga/have_innodb.inc
---source ../../../include/mroonga/not_embedded.inc
---source ../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS ids;
---enable_warnings
-
-CREATE TABLE ids (
-  id int PRIMARY KEY
-) COMMENT='ENGINE "InnoDB"';
-
-INSERT INTO ids VALUES (1);
-INSERT INTO ids VALUES (2);
-INSERT INTO ids VALUES (3);
-
-SELECT * FROM ids;
-
-SET AUTOCOMMIT=0;
-
-ALTER TABLE ids ENGINE=InnoDB;
-
-SELECT * FROM ids;
-
-DROP TABLE ids;
-
---source ../../../include/mroonga/have_mroonga_deinit.inc
+if ($version_10_6) {
+  if ($mariadb) {
+    --skip This test is not for MariaDB 10.6.x
+  }
+}
