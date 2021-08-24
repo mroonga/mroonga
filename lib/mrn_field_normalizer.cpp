@@ -143,12 +143,15 @@ namespace mrn {
     const char *normalizer_spec = NULL;
     const char *default_normalizer_name = "NormalizerAuto";
     if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8_general_ci") == 0) ||
+        (strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb3_general_ci") == 0) ||
         (strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_general_ci") == 0)) {
       normalizer_name = normalizer_spec = "NormalizerMySQLGeneralCI";
     } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8_unicode_ci") == 0) ||
+               (strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb3_unicode_ci") == 0) ||
                (strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_unicode_ci") == 0)) {
       normalizer_name = normalizer_spec = "NormalizerMySQLUnicodeCI";
     } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8_unicode_520_ci") == 0) ||
+               (strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb3_unicode_520_ci") == 0) ||
                (strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_unicode_520_ci") == 0)) {
       normalizer_name = normalizer_spec = "NormalizerMySQLUnicode520CI";
     } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_0900_ai_ci") == 0)) {
