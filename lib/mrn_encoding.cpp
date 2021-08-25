@@ -48,7 +48,8 @@ namespace mrn {
            Currently, the utf8mb3 is an alias for the utf8, but the utf8 is expected to
            become a reference to the utf8mb4 at some point.
          */
-        if ((!strcmp(cs[0]->cs_name.str, "utf8")) || (!strcmp(cs[0]->cs_name.str, "utf8mb3")))
+        if ((!strcmp(MRN_CHARSET_CSNAME(cs[0]), "utf8"))
+            || (!strcmp(MRN_CHARSET_CSNAME(cs[0]), "utf8mb3")))
         {
           DBUG_PRINT("info", ("mroonga: %s is %s [%p]",
                               MRN_CHARSET_NAME(cs[0]), MRN_CHARSET_CSNAME(cs[0]), cs[0]->cset));
