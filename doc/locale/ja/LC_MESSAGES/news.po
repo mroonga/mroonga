@@ -21,11 +21,40 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 11.05 - 2021-07-30"
-msgstr "11.05リリース - 2021-07-30"
+msgid "Release 11.06 - 2021-08-29"
+msgstr "11.06リリース - 2021-08-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.2.40, 10.3.31, "
+"10.4.21, and 10.5.12"
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.2.40、10.3.31、10.4.21、10.5.12をサポート"
+"しました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.6.4 [GitHub#434]"
+"[Patched by Tomohiro KATO]"
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.6.4をサポートしました。 [GitHub#434]"
+"[Tomohiro KATOさんがパッチ提供]"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.35."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.35をサポートしました。"
+
+msgid "[:doc:`/install/debian`] Added support for Debian 11 (bullseye)."
+msgstr "[:doc:`/install/debian`] Debian 11 (bullseye)をサポートしました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Tomohiro KATO"
+msgstr "かとうさん"
+
+msgid "Release 11.05 - 2021-07-30"
+msgstr "11.05リリース - 2021-07-30"
 
 msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.25"
 msgstr "[:doc:`/install/centos`] Percona Server 8.0.25 をサポートしました。"
@@ -72,9 +101,6 @@ msgid ""
 msgstr ""
 "MySQL/MariaDB をアップグレード後に、 ``SELECT ... MATCH AGAINST`` を実行する"
 "とMroongaがクラッシュすることがあります。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Vincent Pelletier"
 msgstr "Vincent Pelletierさん"
@@ -505,9 +531,6 @@ msgstr ""
 
 msgid "Kosuke Yamashita"
 msgstr "Kosuke Yamashitaさん"
-
-msgid "Tomohiro KATO"
-msgstr "かとうさん"
 
 msgid "ひじー"
 msgstr "ひじーさん"

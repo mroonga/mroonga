@@ -3,6 +3,27 @@
 News
 ====
 
+.. _release-11-06:
+
+Release 11.06 - 2021-08-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.40, 10.3.31, 10.4.21, and 10.5.12
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.6.4 [GitHub#434][Patched by Tomohiro KATO]
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.35.
+
+* [:doc:`/install/debian`] Added support for Debian 11 (bullseye).
+
+Thanks
+^^^^^^
+
+* Tomohiro KATO
+
 .. _release-11-05:
 
 Release 11.05 - 2021-07-30
