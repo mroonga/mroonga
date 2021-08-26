@@ -230,18 +230,12 @@ jobs:
           - os: centos-8
             package-type: yum
             package: mariadb-10.5
-# Currently, these tests always fail.
-# The following tests are failing, but the cause of failure is the Mroonga packages
-# for MariaDB10.6 don't exist in packages.groonga.org.
-# Because the Mroonga packages for MariaDB10.6 are made for the first time.
-# Therefore, these tests disable temporarily.
-# We enable these tests again after we release the next release.
-#          - os: centos-7
-#            package-type: yum
-#            package: mariadb-10.6
-#          - os: centos-8
-#            package-type: yum
-#            package: mariadb-10.6
+          - os: centos-7
+            package-type: yum
+            package: mariadb-10.6
+          - os: centos-8
+            package-type: yum
+            package: mariadb-10.6
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
