@@ -45,6 +45,12 @@ jobs:
             package: mariadb-10.5
           - os: centos-7
             package-type: yum
+            package: mariadb-10.6
+          - os: centos-8
+            package-type: yum
+            package: mariadb-10.6
+          - os: centos-7
+            package-type: yum
             package: mysql-community-5.7
           - os: centos-7
             package-type: yum
@@ -224,6 +230,12 @@ jobs:
           - os: centos-8
             package-type: yum
             package: mariadb-10.5
+          - os: centos-7
+            package-type: yum
+            package: mariadb-10.6
+          - os: centos-8
+            package-type: yum
+            package: mariadb-10.6
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7

@@ -28,6 +28,7 @@ let $version_10_2          = `SELECT $version_major_minor = 10.2`;
 let $version_10_3          = `SELECT $version_major_minor = 10.3`;
 let $version_10_4          = `SELECT $version_major_minor = 10.4`;
 let $version_10_5          = `SELECT $version_major_minor = 10.5`;
+let $version_10_6          = `SELECT $version_major_minor = 10.6`;
 
 let $version_5_5_or_later  = `SELECT $version_major_minor >= 5.5`;
 let $version_5_6_or_later  = `SELECT $version_major_minor >= 5.6`;

@@ -473,9 +473,24 @@ typedef uint mrn_srid;
 #if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
 #  define MRN_QUERY_BLOCK_HAS_LIMIT(query_block) \
   (query_block->has_limit())
+#elif MYSQL_VERSION_ID >= 100603
+#  define MRN_QUERY_BLOCK_HAS_LIMIT(query_block) \
+  (query_block->limit_params.explicit_limit)
 #else
 #  define MRN_QUERY_BLOCK_HAS_LIMIT(query_block) \
   (query_block->explicit_limit)
+#endif
+
+#if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
+#  define MRN_QUERY_BLOCK_SELECT_LIMIT(query_block) \
+  (query_block->limit_params.select_limit)
+#  define MRN_QUERY_BLOCK_OFFSET_LIMIT(query_block) \
+  (query_block->limit_params.offset_limit)
+#else
+#  define MRN_QUERY_BLOCK_SELECT_LIMIT(query_block) \
+  (query_block->select_limit)
+#  define MRN_QUERY_BLOCK_OFFSET_LIMIT(query_block) \
+  (query_block->offset_limit)
 #endif
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
@@ -995,4 +1010,24 @@ typedef uint mrn_srid;
                                (MYSQL_VERSION_ID >= 100418 && MYSQL_VERSION_ID < 100500) || \
                                (MYSQL_VERSION_ID >= 100509))
 #  define MRN_DBUG_TMP_USE_BITMAP_PP
+#endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100603)
+#  define MRN_CHARSET_CSNAME(charset) \
+  ((charset)->cs_name.str)
+#  define MRN_CHARSET_NAME(charset) \
+  ((charset)->coll_name.str)
+#else
+#  define MRN_CHARSET_CSNAME(charset) \
+  ((charset)->csname)
+#  define MRN_CHARSET_NAME(charset) \
+  ((charset)->name)
+#endif
+
+#if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
+#  define MRN_MATCH_ITEM_FLAGS(match_item) \
+  ((match_item)->match_flags)
+#else
+#  define MRN_MATCH_ITEM_FLAGS(match_item) \
+  ((match_item)->flags)
 #endif

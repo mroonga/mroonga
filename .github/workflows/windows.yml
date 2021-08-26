@@ -17,7 +17,9 @@ jobs:
           - MariaDB 10.4 64bit
           - MariaDB 10.5 32bit
           - MariaDB 10.5 64bit
-          - MariaDB 10.5 64bit (master)
+          - MariaDB 10.6 32bit
+          - MariaDB 10.6 64bit
+          - MariaDB 10.6 64bit (master)
         include:
           - label: MariaDB 10.2 32bit
             mariadb-version: "10.2.40"
@@ -59,8 +61,18 @@ jobs:
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
-          - label: MariaDB 10.5 64bit (master)
-            mariadb-version: "10.5.12"
+          - label: MariaDB 10.6 32bit
+            mariadb-version: "10.6.4"
+            package-platform: "win32"
+            cmake-architecture: "Win32"
+            vc-architecture: "x64_x86"
+          - label: MariaDB 10.6 64bit
+            mariadb-version: "10.6.4"
+            package-platform: "winx64"
+            cmake-architecture: "x64"
+            vc-architecture: "x64"
+          - label: MariaDB 10.6 64bit (master)
+            mariadb-version: "10.6.4"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
@@ -110,7 +122,7 @@ jobs:
           ridk exec tar xzf "${MARIADB_TAR_GZ}"
           Move-Item mariadb-${{ matrix.mariadb-version }} ..\source
           cd ..\source
-          if ("${{ matrix.mariadb-version }}" -match "^10\.5") {
+          if ("${{ matrix.mariadb-version }}" -match "^10\.5|^10\.6") {
             ridk exec patch -p1 -i `
               ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           }
