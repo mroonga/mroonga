@@ -15,7 +15,7 @@ RUN \
   apt install -y -V ${quiet} \
     wget && \
   wget https://packages.groonga.org/debian/groonga-apt-source-latest-bullseye.deb && \
-  apt install -y -V ${quiet} ./groonga-apt-source-latest-bullseye.deb
+  apt install -y -V ${quiet} ./groonga-apt-source-latest-bullseye.deb && \
   apt update ${quiet} && \
   apt build-dep -y mariadb-server-10.5 && \
   apt install -y -V ${quiet} \
