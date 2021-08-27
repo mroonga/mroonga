@@ -23,6 +23,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :box => "bento/debian-10",
     },
     {
+      :id => "debian-bullseye",
+      :box => "bento/debian-11",
+    },
+    {
       :id => "centos-7",
       :box => "bento/centos-7",
     },
