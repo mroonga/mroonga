@@ -212,6 +212,9 @@ msgstr ""
 "このセクションではDebian GNU/Linux上でMroonga関連のdebパッケージをインストー"
 "ルする方法を説明します。これらのパッケージは ``apt`` でインストールできます。"
 
+msgid "bullseye (MariaDB)"
+msgstr ""
+
 msgid "buster (MariaDB)"
 msgstr ""
 
