@@ -26,7 +26,6 @@ Build-Depends:
 	libpam0g-dev,
 	libpcre3-dev,
 	libreadline-gplv2-dev,
-	libre2-dev,
 	libsnappy-dev,
 	libxml2-dev,
 	lsb-release,

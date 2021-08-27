@@ -35,6 +35,7 @@ RUN \
     libmecab-dev \
     libssl-dev \
     libxml2-dev \
+    libre2-dev \
     lsb-release \
     mecab-utils \
     pkg-config \
