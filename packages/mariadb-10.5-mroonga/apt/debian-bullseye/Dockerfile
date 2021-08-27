@@ -22,13 +22,17 @@ RUN \
     autoconf-archive \
     build-essential \
     ccache \
+    chrpath \
     debhelper \
     devscripts \
+    dh-apparmor \
     groonga-normalizer-mysql \
     libgroonga-dev \
     libmariadb-client-lgpl-dev-compat \
     libmariadbd-dev \
     libmecab-dev \
+    libpcre3-dev \
+    libreadline-gplv2-dev \
     libssl-dev \
     libxml2-dev \
     libre2-dev \
