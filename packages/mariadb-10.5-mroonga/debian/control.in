@@ -25,7 +25,7 @@ Build-Depends:
 	libncurses5-dev,
 	libpam0g-dev,
 	libpcre3-dev,
-	libreadline-gplv2-dev,
+	libreadline-dev,
 	libsnappy-dev,
 	libxml2-dev,
 	lsb-release,
