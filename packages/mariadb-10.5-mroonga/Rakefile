@@ -6,7 +6,9 @@ class MariaDB105MroongaPackageTask < MroongaPackageTask
   end
 
   def enable_apt?
-    false
+    [
+      "debian-bullseye",
+    ]
   end
 
   def enable_ubuntu?
