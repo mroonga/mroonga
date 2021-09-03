@@ -32,6 +32,8 @@
 #include <mrn_index_table_name.hpp>
 #include <mrn_smart_grn_obj.hpp>
 
+#include <string>
+
 MRN_BEGIN_DECLS
 
 extern mrn::DatabaseManager *mrn_db_manager;
