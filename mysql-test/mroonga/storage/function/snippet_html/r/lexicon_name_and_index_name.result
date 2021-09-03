@@ -1,0 +1,11 @@
+SET NAMES utf8mb4;
+CREATE TABLE terms (
+term VARCHAR(64) NOT NULL PRIMARY KEY
+) COMMENT='normalizer "NormalizerNFKC130(''unify_kana'', true)"'
+  DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci;
+SELECT mroonga_snippet_html('これはMroonga（ムルンガ）です。',
+'terms' as lexicon_name,
+'index' as index_name,
+'むるんが') as snippet;
+ERROR HY000: Can't initialize function 'mroonga_snippet_html'; mroonga_snippet_html(): can't specify index_name with lexicon_name

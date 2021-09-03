@@ -43,6 +43,7 @@ typedef struct st_mrn_snippet_html_info
   grn_obj result;
   unsigned int mysql_table_name_index;
   unsigned int mysql_index_name_index;
+  unsigned int mysql_lexicon_name_index;
   grn_obj *db;
   bool use_shared_db;
   grn_obj *snippet;
@@ -84,46 +85,78 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
   }
 
   if (info->mysql_table_name_index == 0 &&
-      info->mysql_index_name_index == 0) {
+      info->mysql_index_name_index == 0 &&
+      info->mysql_lexicon_name_index == 0) {
     if (!(system_charset_info->state & (MY_CS_BINSORT | MY_CS_CSSORT))) {
       grn_snip_set_normalizer(ctx, *snippet, GRN_NORMALIZER_AUTO);
     }
   } else {
-    const char *mysql_table_name = args->args[info->mysql_table_name_index];
-    const size_t mysql_table_name_length =
-      args->lengths[info->mysql_table_name_index];
-    if (mysql_table_name_length == 0) {
-      if (message) {
-        snprintf(message, MYSQL_ERRMSG_SIZE,
-                 "mroonga_snippet_html(): table_name is missing");
+    std::string lexicon_name;
+    if (info->mysql_lexicon_name_index > 0) {
+      const char *mysql_lexicon_name =
+        args->args[info->mysql_lexicon_name_index];
+      const size_t mysql_lexicon_name_length =
+        args->lengths[info->mysql_lexicon_name_index];
+      if (mysql_lexicon_name_length == 0) {
+        if (message) {
+          snprintf(message, MYSQL_ERRMSG_SIZE,
+                   "mroonga_snippet_html(): lexicon_name is empty");
+        }
+        goto error;
       }
-      goto error;
-    }
-    const char *mysql_index_name = args->args[info->mysql_index_name_index];
-    const size_t mysql_index_name_length =
-      args->lengths[info->mysql_index_name_index];
-    if (mysql_index_name_length == 0) {
-      if (message) {
-        snprintf(message, MYSQL_ERRMSG_SIZE,
-                 "mroonga_snippet_html(): index_name is missing");
+      lexicon_name = std::string(mysql_lexicon_name,
+                                 mysql_lexicon_name_length);
+    } else {
+      if (info->mysql_table_name_index == 0) {
+        if (message) {
+          snprintf(message, MYSQL_ERRMSG_SIZE,
+                   "mroonga_snippet_html(): table_name is missing");
+        }
+        goto error;
       }
-      goto error;
+      const char *mysql_table_name = args->args[info->mysql_table_name_index];
+      const size_t mysql_table_name_length =
+        args->lengths[info->mysql_table_name_index];
+      if (mysql_table_name_length == 0) {
+        if (message) {
+          snprintf(message, MYSQL_ERRMSG_SIZE,
+                   "mroonga_snippet_html(): table_name is empty");
+        }
+        goto error;
+      }
+      if (info->mysql_index_name_index == 0) {
+        if (message) {
+          snprintf(message, MYSQL_ERRMSG_SIZE,
+                   "mroonga_snippet_html(): index_name is missing");
+        }
+        goto error;
+      }
+      const char *mysql_index_name = args->args[info->mysql_index_name_index];
+      const size_t mysql_index_name_length =
+        args->lengths[info->mysql_index_name_index];
+      if (mysql_index_name_length == 0) {
+        if (message) {
+          snprintf(message, MYSQL_ERRMSG_SIZE,
+                   "mroonga_snippet_html(): index_name is empty");
+        }
+        goto error;
+      }
+      mrn::IndexTableName index_table_name(mysql_table_name,
+                                           mysql_table_name_length,
+                                           mysql_index_name,
+                                           mysql_index_name_length);
+      lexicon_name = std::string(index_table_name.c_str(),
+                                 index_table_name.length());
     }
-    mrn::IndexTableName index_table_name(mysql_table_name,
-                                         mysql_table_name_length,
-                                         mysql_index_name,
-                                         mysql_index_name_length);
     mrn::SmartGrnObj lexicon(ctx,
-                             index_table_name.c_str(),
-                             index_table_name.length());
+                             lexicon_name.c_str(),
+                             lexicon_name.length());
     if (!lexicon.get()) {
       if (message) {
         snprintf(message, MYSQL_ERRMSG_SIZE,
-                 "mroonga_snippet_html(): nonexistent index: <%.*s.%.*s>",
-                 static_cast<int>(mysql_table_name_length),
-                 mysql_table_name,
-                 static_cast<int>(mysql_index_name_length),
-                 mysql_index_name);
+                 "mroonga_snippet_html(): nonexistent index: <%.*s>",
+                 static_cast<int>(lexicon_name.length()),
+                 lexicon_name.c_str());
       }
       goto error;
     }
@@ -139,7 +172,8 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
       args->attribute_lengths[i],
     };
     if (GRN_RAW_STRING_EQUAL_CSTRING(arg_name, "table_name") ||
-        GRN_RAW_STRING_EQUAL_CSTRING(arg_name, "index_name")) {
+        GRN_RAW_STRING_EQUAL_CSTRING(arg_name, "index_name") ||
+        GRN_RAW_STRING_EQUAL_CSTRING(arg_name, "lexicon_name")) {
       // Do nothing
     } else if (GRN_RAW_STRING_EQUAL_CSTRING(arg_name, "query")) {
       if (!info->query_table) {
@@ -320,6 +354,7 @@ MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
   GRN_TEXT_INIT(&(info->result), 0);
   info->mysql_table_name_index = 0;
   info->mysql_index_name_index = 0;
+  info->mysql_lexicon_name_index = 0;
 
   info->query_table = NULL;
   info->query_default_column = NULL;
@@ -338,6 +373,12 @@ MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
                 "can't specify table_name multiple times");
         goto error;
       }
+      if (info->mysql_lexicon_name_index != 0) {
+        sprintf(message,
+                "mroonga_snippet_html(): "
+                "can't specify table_name with lexicon_name");
+        goto error;
+      }
       info->mysql_table_name_index = i;
     } else if (GRN_RAW_STRING_EQUAL_CSTRING(arg_name, "index_name")) {
       if (info->mysql_index_name_index != 0) {
@@ -346,7 +387,33 @@ MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
                 "can't specify index_name multiple times");
         goto error;
       }
+      if (info->mysql_lexicon_name_index != 0) {
+        sprintf(message,
+                "mroonga_snippet_html(): "
+                "can't specify index_name with lexicon_name");
+        goto error;
+      }
       info->mysql_index_name_index = i;
+    } else if (GRN_RAW_STRING_EQUAL_CSTRING(arg_name, "lexicon_name")) {
+      if (info->mysql_lexicon_name_index != 0) {
+        sprintf(message,
+                "mroonga_snippet_html(): "
+                "can't specify lexicon_name multiple times");
+        goto error;
+      }
+      if (info->mysql_table_name_index != 0) {
+        sprintf(message,
+                "mroonga_snippet_html(): "
+                "can't specify lexicon_name with table_name");
+        goto error;
+      }
+      if (info->mysql_index_name_index != 0) {
+        sprintf(message,
+                "mroonga_snippet_html(): "
+                "can't specify lexicon_name with index_name");
+        goto error;
+      }
+      info->mysql_lexicon_name_index = i;
     } else {
       if (arg_name.length > 0 && arg_name.value[0] == '\'') {
         // No "AS XXX"

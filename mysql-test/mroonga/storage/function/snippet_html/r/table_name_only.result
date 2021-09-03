@@ -1,0 +1,10 @@
+SET NAMES utf8mb4;
+CREATE TABLE memos (
+content text,
+fulltext index content_index (content)
+COMMENT 'normalizer "NormalizerNFKC121(\'unify_kana\', true)"'
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+SELECT mroonga_snippet_html('これはMroonga（ムルンガ）です。',
+'memos' as table_name,
+'むるんが') as snippet;
+ERROR HY000: Can't initialize function 'mroonga_snippet_html'; mroonga_snippet_html(): index_name is missing

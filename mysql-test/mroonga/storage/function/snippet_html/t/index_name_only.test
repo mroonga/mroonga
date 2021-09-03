@@ -1,0 +1,47 @@
+# -*- mode: sql; sql-product: mysql -*-
+#
+# Copyright(C) 2021  Sutou Kouhei <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source ../../../../include/mroonga/not_embedded.inc
+--source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/load_mroonga_functions.inc
+
+SET NAMES utf8mb4;
+
+--disable_warnings
+--disable_query_log
+DROP TABLE IF EXISTS memos;
+--enable_query_log
+--enable_warnings
+
+CREATE TABLE memos (
+  content text,
+  fulltext index content_index (content)
+    COMMENT 'normalizer "NormalizerNFKC121(\'unify_kana\', true)"'
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--error ER_CANT_INITIALIZE_UDF
+SELECT mroonga_snippet_html('これはMroonga（ムルンガ）です。',
+                            'content_index' as index_name,
+                            'むるんが') as snippet;
+
+--disable_query_log
+DROP TABLE memos;
+--enable_query_log
+
+--source ../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc
