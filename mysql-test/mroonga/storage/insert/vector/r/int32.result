@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS items;
+SET NAMES utf8mb4;
+CREATE TABLE items (
+id int PRIMARY KEY AUTO_INCREMENT,
+tag_ids text DEFAULT NULL COMMENT "flags 'COLUMN_VECTOR', groonga_type 'Int32'"
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO items (tag_ids) VALUES ('[1, -2, 3]');
+INSERT INTO items (tag_ids) VALUES ('');
+SELECT * FROM items;
+id	tag_ids
+1	[1,-2,3]
+2	[]
+DROP TABLE items;

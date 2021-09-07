@@ -12507,7 +12507,17 @@ void ha_mroonga::storage_store_field_column(Field *field,
                                      &key, GRN_TABLE_MAX_KEY_SIZE);
       storage_store_field(field, key, key_length);
     } else {
-      storage_store_field(field, GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
+      if (mrn::grn::is_vector_column(column)) {
+        grn_obj unvectored_value;
+        GRN_TEXT_INIT(&unvectored_value, 0);
+        grn_text_otoj(ctx, &unvectored_value, value, NULL);
+        storage_store_field(field,
+                            GRN_BULK_HEAD(&unvectored_value),
+                            GRN_BULK_VSIZE(&unvectored_value));
+        GRN_OBJ_FIN(ctx, &unvectored_value);
+      } else {
+        storage_store_field(field, GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
+      }
     }
   }
 
