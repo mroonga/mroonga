@@ -214,7 +214,7 @@ namespace mrn {
     std::vector<bool> specified_sections;
     if (!target_is_vector) {
       for (uint i = 0; i < n_sections_; ++i) {
-        specified_sections[i] = false;
+        specified_sections.push_back(false);
       }
     }
 
@@ -246,7 +246,7 @@ namespace mrn {
           if (!(0 < section && section <= n_sections_)) {
             break;
           }
-          specified_sections[section] = true;
+          specified_sections[section - 1] = true;
         }
         section -= 1;
         size_t n_used_query_length = query_rest - query;
