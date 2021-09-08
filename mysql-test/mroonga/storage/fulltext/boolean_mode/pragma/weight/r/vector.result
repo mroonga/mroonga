@@ -1,0 +1,20 @@
+DROP TABLE IF EXISTS diaries;
+SET NAMES utf8mb4;
+CREATE TABLE diaries (
+id INT PRIMARY KEY,
+paragraphs TEXT COMMENT 'FLAGS "COLUMN_VECTOR"',
+FULLTEXT INDEX (paragraphs) COMMENT 'INDEX_FLAGS "WITH_SECTION|WITH_POSITION"'
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO diaries
+VALUES(1, '["Today is a good day.", "Very good!", "Good-bye!"]');
+INSERT INTO diaries
+VALUES(2, '["Today is a bad day.", "Not good..."]');
+SELECT *,
+MATCH(paragraphs) AGAINST("*W1:10,2:2 +good" IN BOOLEAN MODE) AS score
+FROM diaries
+WHERE MATCH(paragraphs) AGAINST("*W1:10,2:2 +good" IN BOOLEAN MODE)
+ORDER BY score DESC;
+id	paragraphs	score
+1	["Today is a good day.","Very good!","Good-bye!"]	12
+2	["Today is a bad day.","Not good..."]	2
+DROP TABLE diaries;

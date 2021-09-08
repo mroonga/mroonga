@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2017-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,8 @@
 #include "mrn_query_parser.hpp"
 
 #include <mrn_variables.hpp>
+
+#include <vector>
 
 extern "C" {
   /* Groonga's internal functions */
@@ -196,9 +198,24 @@ namespace mrn {
     grn_obj section_value_buffer;
     GRN_UINT32_INIT(&section_value_buffer, 0);
 
-    MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(bool, specified_sections, n_sections_);
-    for (uint i = 0; i < n_sections_; ++i) {
-      specified_sections[i] = false;
+    bool target_is_vector = false;
+    if (grn_obj_is_index_column(ctx_, default_column_)) {
+      grn_obj source_ids;
+      GRN_RECORD_INIT(&source_ids, GRN_OBJ_VECTOR, GRN_ID_NIL);
+      grn_obj_get_info(ctx_, default_column_, GRN_INFO_SOURCE, &source_ids);
+      if (GRN_RECORD_VECTOR_SIZE(&source_ids) == 1) {
+        grn_obj *source = grn_ctx_at(ctx_, GRN_RECORD_VALUE_AT(&source_ids, 0));
+        target_is_vector = grn_obj_is_vector_column(ctx_, source);
+        grn_obj_unref(ctx_, source);
+      }
+      GRN_OBJ_FIN(ctx_, &source_ids);
+    }
+
+    std::vector<bool> specified_sections;
+    if (!target_is_vector) {
+      for (uint i = 0; i < n_sections_; ++i) {
+        specified_sections[i] = false;
+      }
     }
 
     uint n_weights = 0;
@@ -225,11 +242,13 @@ namespace mrn {
         if (section_start == query_rest) {
           break;
         }
-        if (!(0 < section && section <= n_sections_)) {
-          break;
+        if (!target_is_vector) {
+          if (!(0 < section && section <= n_sections_)) {
+            break;
+          }
+          specified_sections[section] = true;
         }
         section -= 1;
-        specified_sections[section] = true;
         size_t n_used_query_length = query_rest - query;
         *consumed_query_length += n_used_query_length;
         query_length -= n_used_query_length;
@@ -261,20 +280,21 @@ namespace mrn {
                      n_weights);
     }
 
-    for (uint section = 0; section < n_sections_; ++section) {
-      if (specified_sections[section]) {
-        continue;
+    if (!target_is_vector) {
+      for (uint section = 0; section < n_sections_; ++section) {
+        if (specified_sections[section]) {
+          continue;
+        }
+
+        ++n_weights;
+
+        int default_weight = 1;
+        append_section(section,
+                       &section_value_buffer,
+                       default_weight,
+                       n_weights);
       }
-
-      ++n_weights;
-
-      int default_weight = 1;
-      append_section(section,
-                     &section_value_buffer,
-                     default_weight,
-                     n_weights);
     }
-    MRN_FREE_VARIABLE_LENGTH_ARRAYS(specified_sections);
 
     GRN_OBJ_FIN(ctx_, &section_value_buffer);
 
