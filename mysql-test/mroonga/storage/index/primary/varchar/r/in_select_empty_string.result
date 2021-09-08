@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS ids;
+CREATE TABLE ids (
+id varchar(7) PRIMARY KEY,
+parent_id varchar(7)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO ids VALUES("abcdefg", "");
+INSERT INTO ids VALUES("hijklmn", "");
+INSERT INTO ids VALUES("opqrstu", "hijklmn");
+SELECT * FROM ids WHERE id IN (SELECT parent_id FROM ids);
+id	parent_id
+hijklmn	
+DROP TABLE ids;

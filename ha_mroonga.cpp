@@ -8973,10 +8973,23 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
   uint pkey_nr = table->s->primary_key;
   if (key_nr == pkey_nr) {
     DBUG_PRINT("info", ("mroonga: use primary key"));
-    cursor = grn_table_cursor_open(ctx, grn_table,
-                                   key_min, size_min,
-                                   key_max, size_max,
-                                   0, -1, flags);
+    if (flags == 0 && size_min == 0 && size_max == 0) {
+      // Groonga doesn't allow empty primary key. So exact empty
+      // primary key search never match any records.
+      empty_value_records =
+        grn_table_create(ctx, NULL, 0, NULL,
+                         GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                         grn_table, 0);
+      empty_value_records_cursor =
+        grn_table_cursor_open(ctx, empty_value_records,
+                              NULL, 0, NULL, 0,
+                              0, -1, flags);
+    } else {
+      cursor = grn_table_cursor_open(ctx, grn_table,
+                                     key_min, size_min,
+                                     key_max, size_max,
+                                     0, -1, flags);
+    }
   } else {
     bool is_empty_value_records_search = false;
     if (is_multiple_column_index) {
