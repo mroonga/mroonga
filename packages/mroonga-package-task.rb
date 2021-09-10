@@ -32,7 +32,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   end
 
   def detect_version
-    ENV["VERSION"] || (top_directory + "version").read.chomp
+    ENV["VERSION"] || (top_directory + "version_full").read.chomp
   end
 
   def detect_mysql_version(distribution, code_name)
