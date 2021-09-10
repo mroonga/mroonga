@@ -140,7 +140,7 @@ jobs:
           case ${{ matrix.os }} in
             debian-*)
               make update-latest-release \
-                OLD_RELEASE=$(cat version) \
+                OLD_RELEASE=$(cat version_full) \
                 OLD_RELEASE_DATE=$(date +%Y-%m-%d) \
                 NEW_RELEASE_DATE=$(date +%Y-%m-%d)
               ;;

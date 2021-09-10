@@ -96,7 +96,7 @@ jobs:
       - name: Set information
         id: info
         run: |
-          $MROONGA_VERSION = "$(Get-Content version)"
+          $MROONGA_VERSION = "$(Get-Content version_full)"
           $ARTIFACT_NAME = "mariadb-${{ matrix.mariadb-version }}-with-mroonga-${MROONGA_VERSION}"
           if ("${{ matrix.use-master }}" -eq "yes") {
             $ARTIFACT_NAME += "-with-groonga-master"
