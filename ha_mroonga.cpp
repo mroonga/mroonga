@@ -199,7 +199,7 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define st_mysql_plugin           st_maria_plugin
 #  define mrn_declare_plugin(NAME)  maria_declare_plugin(NAME)
 #  define mrn_declare_plugin_end    maria_declare_plugin_end
-#  define MRN_PLUGIN_LAST_VALUES    MRN_VERSION, MariaDB_PLUGIN_MATURITY_STABLE
+#  define MRN_PLUGIN_LAST_VALUES    MRN_VERSION_FULL, MariaDB_PLUGIN_MATURITY_STABLE
 #else
 #  define mrn_declare_plugin(NAME)  mysql_declare_plugin(NAME)
 #  define mrn_declare_plugin_end    mysql_declare_plugin_end
@@ -801,7 +801,7 @@ char *mrn_default_tokenizer = NULL;
 char *mrn_default_wrapper_engine = NULL;
 static int mrn_lock_timeout = grn_get_lock_timeout();
 static char *mrn_libgroonga_version = const_cast<char *>(grn_get_version());
-static char *mrn_version = const_cast<char *>(MRN_VERSION);
+static char *mrn_version = const_cast<char *>(MRN_VERSION_FULL);
 static char *mrn_vector_column_delimiter = NULL;
 static mrn_bool mrn_libgroonga_support_zlib = false;
 static mrn_bool mrn_libgroonga_support_lz4 = false;
@@ -1248,10 +1248,10 @@ static MYSQL_SYSVAR_STR(libgroonga_version, mrn_libgroonga_version,
 
 static MYSQL_SYSVAR_STR(version, mrn_version,
                         PLUGIN_VAR_NOCMDOPT | PLUGIN_VAR_READONLY,
-                        "The version of mroonga",
+                        "The version of Mroonga",
                         NULL,
                         NULL,
-                        MRN_VERSION);
+                        MRN_VERSION_FULL);
 
 static mrn_bool grn_check_zlib_support()
 {

@@ -76,7 +76,7 @@ else()
   set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 endif()
 
-file(READ ${MRN_SOURCE_DIR}/version        MRN_VERSION)
+file(READ ${MRN_SOURCE_DIR}/version_full   MRN_VERSION_FULL)
 file(READ ${MRN_SOURCE_DIR}/version_major  MRN_VERSION_MAJOR)
 file(READ ${MRN_SOURCE_DIR}/version_minor  MRN_VERSION_MINOR)
 file(READ ${MRN_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
@@ -121,7 +121,7 @@ else()
     REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION)
 endif()
 
-set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION}")
+set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION_FULL}")
 
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)

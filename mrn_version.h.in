@@ -1,5 +1,5 @@
 /*
-  Copyright(C) 2011 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,19 +19,19 @@
 #ifndef MRN_VERSION_H_
 #define MRN_VERSION_H_
 
-/* Define mroonga version in string */
-#define MRN_VERSION "@MRN_VERSION@"
+/* Define Mroonga version in string */
+#define MRN_VERSION_FULL "@MRN_VERSION_FULL@"
 
-/* Define mroonga version in hex */
+/* Define Mroonga version in hex */
 #define MRN_VERSION_IN_HEX @MRN_VERSION_IN_HEX@
 
-/* Define mroonga major version */
+/* Define Mroonga major version */
 #define MRN_VERSION_MAJOR @MRN_VERSION_MAJOR@
 
-/* Define mroonga minor version */
+/* Define Mroonga minor version */
 #define MRN_VERSION_MINOR @MRN_VERSION_MINOR@
 
-/* Define mroonga micro version */
+/* Define Mroonga micro version */
 #define MRN_VERSION_MICRO @MRN_VERSION_MICRO@
 
 /* Define to the full name and version of this package. */

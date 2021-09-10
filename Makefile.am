@@ -122,7 +122,7 @@ update-version:
 	@echo -n $(NEW_VERSION_MINOR) > $(srcdir)/version_minor
 	@echo -n $(NEW_VERSION_MICRO) > $(srcdir)/version_micro
 	@echo -n $(NEW_VERSION_MAJOR).$(NEW_VERSION_MINOR)$(NEW_VERSION_MICRO) \
-	  > $(srcdir)/version
+	  > $(srcdir)/version_full
 	@if test $(NEW_VERSION_MINOR) -eq 0 ; then				\
 	  printf "0x%02x%02x"							\
 	    $(NEW_VERSION_MAJOR) $(NEW_VERSION_MICRO)				\

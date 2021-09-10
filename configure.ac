@@ -3,23 +3,23 @@ AC_PREREQ(2.59)
 m4_define([mrn_version_major],  m4_include(version_major))
 m4_define([mrn_version_minor],  m4_include(version_minor))
 m4_define([mrn_version_micro],  m4_include(version_micro))
-m4_define([mrn_version],        m4_include(version))
+m4_define([mrn_version_full],   m4_include(version_full))
 m4_define([mrn_version_in_hex], m4_include(version_in_hex))
 m4_define([mrn_plugin_version], m4_include(plugin_version))
 
-AC_INIT([mroonga], [mrn_version], [groonga-talk@lists.sourceforge.net])
+AC_INIT([mroonga], [mrn_version_full], [groonga-talk@lists.sourceforge.net])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([tar-pax foreign subdir-objects])
 
-MRN_VERSION=mrn_version
+MRN_VERSION_FULL=mrn_version_full
 MRN_VERSION_MAJOR=mrn_version_major
 MRN_VERSION_MINOR=mrn_version_minor
 MRN_VERSION_MICRO=mrn_version_micro
 MRN_VERSION_IN_HEX=mrn_version_in_hex
 MRN_PLUGIN_VERSION=mrn_plugin_version
-AC_SUBST([MRN_VERSION])
+AC_SUBST([MRN_VERSION_FULL])
 AC_SUBST([MRN_VERSION_MAJOR])
 AC_SUBST([MRN_VERSION_MINOR])
 AC_SUBST([MRN_VERSION_MICRO])
