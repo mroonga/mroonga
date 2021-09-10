@@ -107,7 +107,7 @@
 #  define KEY_NAME_PTR(key) (key)->name
 #  define KEY_NAME_LENGTH(key) strlen((key)->name)
 #  define KEY_NAME_EQUAL_KEY(key1, key2)        \
-  strcmp((key1)->name, (key2)->name) == 0
+  (strcmp((key1)->name, (key2)->name) == 0)
 #  define KEY_NAME_FORMAT "%s"
 #  define KEY_NAME_FORMAT_VALUE(key) (key)->name
 #endif
