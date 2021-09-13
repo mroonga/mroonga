@@ -252,6 +252,11 @@ set(MYSQL_INCLUDE_DIRS
   "${MYSQL_PROTOBUF_INCLUDE_DIR}"
   "${MYSQL_SOURCE_DIR}")
 
+if(NOT MRN_BUNDLED AND APPLE)
+  # This assumes that MySQL is installed by Homebrew.
+  list(APPEND MYSQL_INCLUDE_DIRS "/usr/local/opt/openssl/include")
+endif()
+
 if(MRN_BUNDLED)
   set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
   set(MYSQL_CFLAGS "${CMAKE_C_FLAGS}")
