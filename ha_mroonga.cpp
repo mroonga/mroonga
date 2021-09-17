@@ -5893,6 +5893,9 @@ int ha_mroonga::generic_delete_table(const char *name,
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
 
+  if (!mrn_db_manager->exist(name))
+    DBUG_RETURN(0);
+
   error = ensure_database_open(name);
   if (error)
     DBUG_RETURN(error);
@@ -6022,7 +6025,7 @@ int ha_mroonga::delete_table(const char *name
 #endif
   }
 
-  if (!error) {
+  if (!error && operations_) {
     error = operations_->clear(name, strlen(name));
   }
 

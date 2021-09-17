@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2010  Tetsuro IKEDA
+  Copyright(C) 2010-2013  Kentoku SHIBA
+  Copyright(C) 2011-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -156,6 +156,18 @@ namespace mrn {
     }
 
     DBUG_RETURN(error);
+  }
+
+  bool DatabaseManager::exist(const char *path) {
+    MRN_DBUG_ENTER_METHOD();
+
+    mrn::PathMapper mapper(path);
+    mrn::Lock lock(mutex_);
+
+    struct stat db_stat;
+    bool exist = (stat(mapper.db_path(), &db_stat) == 0);
+
+    DBUG_RETURN(exist);
   }
 
   void DatabaseManager::close(const char *path) {
