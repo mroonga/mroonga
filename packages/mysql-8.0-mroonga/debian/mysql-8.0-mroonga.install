@@ -1,0 +1,3 @@
+usr/lib/mysql/plugin/ha_mroonga.so*
+usr/share/mroonga/*
+debian/apparmor/mysql-8.0-mroonga etc/apparmor.d/abstractions/
