@@ -9,7 +9,6 @@ Build-Depends:
 	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
 	groonga-normalizer-mysql,
 	libmysqlclient-dev,
-	libmysqld-dev,
 	libssl-dev,
 	wget,
 	lsb-release,
