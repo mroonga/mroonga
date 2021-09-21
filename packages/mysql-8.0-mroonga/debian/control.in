@@ -24,8 +24,6 @@ Homepage: https://mroonga.org/
 Package: mysql-mroonga
 Section: database
 Architecture: any
-Replaces: mysql-server-mroonga (<< 11.02-1)
-Breaks: mysql-server-mroonga (<< 11.02-1)
 Depends:
 	${misc:Depends},
 	mysql-server-8.0-mroonga (= ${binary:Version}),
