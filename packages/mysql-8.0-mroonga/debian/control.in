@@ -87,8 +87,6 @@ Description: A fast fulltext searchable storage engine for MySQL 8.0.
 Package: mysql-8.0-mroonga-doc
 Section: doc
 Architecture: all
-Replaces: mysql-server-8.0-mroonga-doc (<< 11.02-1)
-Breaks: mysql-server-8.0-mroonga-doc (<< 11.02-1)
 Depends:
 	${misc:Depends}
 Description: Documentation of Mroonga.
