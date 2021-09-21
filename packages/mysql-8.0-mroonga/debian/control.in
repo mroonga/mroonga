@@ -19,7 +19,7 @@ Build-Depends:
 	liblz4-dev,
 	libncurses5-dev
 Standards-Version: 3.9.1
-Homepage: http://mroonga.org/
+Homepage: https://mroonga.org/
 
 Package: mysql-mroonga
 Section: database
