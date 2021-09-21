@@ -3,6 +3,88 @@
 News
 ====
 
+.. _release-11-07:
+
+Release 11.07 - 2021-09-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Added support for MySQL 8.0 on Ubuntu 20.04 (Focal Fossa).
+
+  * There are below restrictions in the MySQL8 package.
+
+    * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+    * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
+
+      * The feature of relevant to the optimization.
+
+* [:doc:`/reference/udf/mroonga_snippet_html`] Added support for specifying lexicon name.
+
+  * We can use custom normalizer in ``mroonga_smippet_html()`` by this feature as below.
+
+    .. code-block::
+
+       CREATE TABLE terms (
+         term VARCHAR(64) NOT NULL PRIMARY KEY
+       ) COMMENT='normalizer "NormalizerNFKC130(''unify_kana'', true)"'
+         DEFAULT CHARSET=utf8mb4
+         COLLATE=utf8mb4_unicode_ci;
+
+       SELECT mroonga_snippet_html('これはMroonga（ムルンガ）です。',
+                                   'terms' as lexicon_name,
+                                   'むるんが') as snippet;
+
+       snippet
+       <div class="snippet">これはMroonga（<span class="keyword">ムルンガ</span>）です。</div>
+
+* Added support for outputting vector column values as text not raw binary.
+
+  * We can use ``mysqldump`` for dumping vector column values by this feature.
+
+* Don't create .mrn files if nonexistent table is dropped. [groonga-dev: 04893][Reported by kenichi arimoto]
+
+* Added support for W pragma against elements of vector column.
+
+  * We can set the weight to elements of vector column by this feature.
+    However, Mroonga only search the specified section in this case.
+    In a normal multiple column index, Mroonga also searches not specified sections with the default weight.
+
+Fixes
+^^^^^
+
+* Fixed a bug that if we use "WHERE primary_key IN ("")" in a where clause, Mroonga may return wrong record. [groonga-dev,04855][Reported by Katsuhito Watanabe]
+
+  * For example, Mroonga may return wrong record as below.
+
+    .. code-block::
+
+       CREATE TABLE ids (
+         id varchar(7) PRIMARY KEY,
+         parent_id varchar(7)
+       )ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+       INSERT INTO ids VALUES("abcdefg", "");
+       INSERT INTO ids VALUES("hijklmn", "");
+       INSERT INTO ids VALUES("opqrstu", "hijklmn");
+
+       SELECT * FROM ids WHERE id IN (SELECT parent_id FROM ids);
+       +---------+-----------+
+       | id      | parent_id |
+       +---------+-----------+
+       | abcdefg |           |
+       | hijklmn |           |
+       +---------+-----------+
+       2 rows in set (0.00 sec)
+
+Thanks
+^^^^^^
+
+* Katsuhito Watanabe
+
+* kenichi arimoto
+
 .. _release-11-06:
 
 Release 11.06 - 2021-08-29

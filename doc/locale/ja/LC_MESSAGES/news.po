@@ -21,11 +21,107 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 11.06 - 2021-08-29"
-msgstr "11.06リリース - 2021-08-29"
+msgid "Release 11.07 - 2021-09-29"
+msgstr "11.07リリース - 2021-09-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Added support for MySQL 8.0 on Ubuntu 20.04 (Focal "
+"Fossa)."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 20.04 (Focal Fossa) の MySQL 8.0 をサポートし"
+"ました。"
+
+msgid "There are below restrictions in the MySQL8 package."
+msgstr "MySQL8 のパッケージには以下の制限があります。"
+
+msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
+msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Storage mode does not support the following "
+"feature."
+msgstr ""
+"[:doc:`/tutorial/storage`] ストレージモードでは、以下の機能が未対応です。"
+
+msgid "The feature of relevant to the optimization."
+msgstr "最適化関連の機能"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_snippet_html`] Added support for specifying "
+"lexicon name."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_snippet_html`] ノーマライザーのカスタマイズに対"
+"応しました。"
+
+msgid ""
+"We can use custom normalizer in ``mroonga_smippet_html()`` by this feature "
+"as below."
+msgstr ""
+"この機能によって、以下のように ``mroonga_smippet_html()`` でカスタマイズした"
+"ノーマライザーを使えます。"
+
+msgid ""
+"Added support for outputting vector column values as text not raw binary."
+msgstr ""
+"ベクターカラムの値をバイナリーではなくテキストとして出力できるようにしまし"
+"た。"
+
+msgid ""
+"We can use ``mysqldump`` for dumping vector column values by this feature."
+msgstr ""
+"この機能によって、ベクターカラムの値をダンプするのに、 ``mysqldump`` を使えま"
+"す。"
+
+msgid ""
+"Don't create .mrn files if nonexistent table is dropped. [groonga-dev: 04893]"
+"[Reported by kenichi arimoto]"
+msgstr ""
+"存在しないテーブルを削除した際に、 .mrn ファイルを作らないようにしました。 "
+"[groonga-dev: 04893][kenichi arimotoさんの報告]"
+
+msgid "Added support for W pragma against elements of vector column."
+msgstr "ベクターの要素に対して W プラグマを使えるようにしました。"
+
+msgid ""
+"We can set the weight to elements of vector column by this feature. However, "
+"Mroonga only search the specified section in this case. In a normal multiple "
+"column index, Mroonga also searches not specified sections with the default "
+"weight."
+msgstr ""
+"この機能によって、ベクターの要素に重みをセットできますが、この場合、Mroongaは"
+"指定したセクションのみ検索します。通常のマルチカラムインデックスでは、Mroonga"
+"は指定していないセクションもデフォルトの重みで検索します。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that if we use \"WHERE primary_key IN (\"\")\" in a where "
+"clause, Mroonga may return wrong record. [groonga-dev,04855][Reported by "
+"Katsuhito Watanabe]"
+msgstr ""
+"WHERE句に \"WHERE primary_key IN (\"\")\" と指定した際にMroongaが誤ったレコー"
+"ドを返すことがある問題を修正しました。 [groonga-dev,04855][Katsuhito Watanabe"
+"さんが報告]"
+
+msgid "For example, Mroonga may return wrong record as below."
+msgstr ""
+"例えば、以下ようなケースでMroongaが誤ったレコードを返すことがあります。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Katsuhito Watanabe"
+msgstr "Katsuhito Watanabeさん"
+
+msgid "kenichi arimoto"
+msgstr "kenichi arimotoさん"
+
+msgid "Release 11.06 - 2021-08-29"
+msgstr "11.06リリース - 2021-08-29"
 
 msgid ""
 "[:doc:`/install/centos`] Added support for MariaDB 10.2.40, 10.3.31, "
@@ -47,9 +143,6 @@ msgstr "[:doc:`/install/centos`] Percona Server 5.7.35をサポートしまし�
 msgid "[:doc:`/install/debian`] Added support for Debian 11 (bullseye)."
 msgstr "[:doc:`/install/debian`] Debian 11 (bullseye)をサポートしました。"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "Tomohiro KATO"
 msgstr "かとうさん"
 
@@ -62,21 +155,6 @@ msgstr "[:doc:`/install/centos`] Percona Server 8.0.25 をサポートしまし�
 msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.35, 8.0.26."
 msgstr "[:doc:`/install/centos`] MySQL 5.7.35, 8.0.26をサポートしました。"
 
-msgid "There are below restrictions in the MySQL8 package."
-msgstr "MySQL8 のパッケージには以下の制限があります。"
-
-msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
-msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
-
-msgid ""
-"[:doc:`/tutorial/storage`] Storage mode does not support the following "
-"feature."
-msgstr ""
-"[:doc:`/tutorial/storage`] ストレージモードでは、以下の機能が未対応です。"
-
-msgid "The feature of relevant to the optimization."
-msgstr "最適化関連の機能"
-
 msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 20.10 (Groovy Gorilla) support."
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 20.10 (Groovy Gorilla) のサポートをやめまし"
@@ -84,9 +162,6 @@ msgstr ""
 
 msgid "Because Ubuntu 20.10 reached EOL July 22, 2021."
 msgstr "Ubuntu 20.10 は、2021年7月22日でEOLとなったためです。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fix a crash bug that may be caused after MySQL/MariaDB upgrade. [GitHub#423]"
