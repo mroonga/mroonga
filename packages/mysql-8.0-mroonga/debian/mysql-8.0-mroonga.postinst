@@ -1,0 +1,7 @@
+#! /bin/sh
+
+set -eu
+
+/usr/share/mroonga/deb/postinst.sh mysql-8.0-mroonga "$@"
+
+#DEBHELPER#

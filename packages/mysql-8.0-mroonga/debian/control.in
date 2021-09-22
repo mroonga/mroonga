@@ -1,0 +1,97 @@
+Source: mysql-8.0-mroonga
+Section: database
+Priority: optional
+Maintainer: Horimoto Yasuhiro <horimoto@clear-code.com>
+Build-Depends:
+	debhelper (>= 9),
+	autotools-dev,
+	pkg-config,
+	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
+	groonga-normalizer-mysql,
+	libmysqlclient-dev,
+	libssl-dev,
+	wget,
+	lsb-release,
+	cmake,
+	libwrap0-dev,
+	libedit-dev,
+	libevent-dev,
+	liblz4-dev,
+	libncurses5-dev
+Standards-Version: 3.9.1
+Homepage: https://mroonga.org/
+
+Package: mysql-mroonga
+Section: database
+Architecture: any
+Depends:
+	${misc:Depends},
+	mysql-server-8.0-mroonga (= ${binary:Version}),
+	mysql-server (= @MYSQL_VERSION@)
+Description: A fast fulltext searchable storage engine for MySQL.
+ This package is a metapackage depending on the latest version.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on Groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
+ .
+ This package provides a storage engine MySQL 8.0 as a shared library.
+ This provides "Mroonga" storage engine. It means you can use
+ "ENGINE = Mroonga" in "CREATE TABLE".
+
+Package: mysql-server-mroonga
+Section: oldlibs
+Architecture: any
+Priority: optional
+Depends:
+	mysql-mroonga (= ${binary:Version})
+Description: A fast fulltext searchable storage engine for MySQL.
+ This package is a metapackage depending on the latest version.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on Groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
+ .
+ This is a trnsitional package. This can safely be removed.
+
+Package: mysql-8.0-mroonga
+Section: database
+Architecture: any
+Depends:
+	${misc:Depends},
+	${shlibs:Depends},
+	libgroonga0 (>= @REQUIRED_GROONGA_VERSION@),
+	mysql-server-8.0 (= @MYSQL_VERSION@),
+	mysql-server-core-8.0 (= @MYSQL_VERSION@),
+	groonga-normalizer-mysql
+Description: A fast fulltext searchable storage engine for MySQL 8.0.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on Groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
+ .
+ This package provides a storage engine MySQL 8.0 as a shared library.
+ This provides "Mroonga" storage engine. It means you can use
+ "ENGINE = Mroonga" in "CREATE TABLE".
+
+Package: mysql-server-8.0-mroonga
+Section: oldlibs
+Architecture: any
+Priority: optional
+Depends:
+	mysql-8.0-mroonga (= ${binary:Version})
+Description: A fast fulltext searchable storage engine for MySQL 8.0.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on Groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
+ .
+ This is a trnsitional package. This can safely be removed.
+
+Package: mysql-8.0-mroonga-doc
+Section: doc
+Architecture: all
+Depends:
+	${misc:Depends}
+Description: Documentation of Mroonga.
+ Mroonga is a fast fulltext searchable storage engine for MySQL.
+ It is based on Groonga, a fast fulltext search engine and column store.
+ Groonga is good at real time update.
+ .
+ This package provides documentation of Mroonga.
