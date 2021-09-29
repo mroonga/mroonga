@@ -34,8 +34,8 @@ msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 20.04 (Focal Fossa) の MySQL 8.0 をサポートし"
 "ました。"
 
-msgid "There are below restrictions in the MySQL8 package."
-msgstr "MySQL8 のパッケージには以下の制限があります。"
+msgid "There are below restrictions in the MySQL 8.0 package."
+msgstr "MySQL 8.0 のパッケージには以下の制限があります。"
 
 msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
 msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"

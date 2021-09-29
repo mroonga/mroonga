@@ -13,7 +13,7 @@ Improvements
 
 * [:doc:`/install/ubuntu`] Added support for MySQL 8.0 on Ubuntu 20.04 (Focal Fossa).
 
-  * There are below restrictions in the MySQL8 package.
+  * There are below restrictions in the MySQL 8.0 package.
 
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
     * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
@@ -118,7 +118,7 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for MySQL 5.7.35, 8.0.26.
 
-  * There are below restrictions in the MySQL8 package.
+  * There are below restrictions in the MySQL 8.0 package.
 
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
     * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
@@ -261,7 +261,7 @@ Improvements
 
     * By this, we make the Docker image of Mroonga with MySQL for Docker official images.
 
-  * There are below restrictions in the MySQL8 package.
+  * There are below restrictions in the MySQL 8.0 package.
 
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
     * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
@@ -316,7 +316,7 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for MySQL 5.7.34, 8.0.25.
 
-  * There are below restrictions in the MySQL8 package.
+  * There are below restrictions in the MySQL 8.0 package.
 
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
     * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
@@ -509,7 +509,7 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for MySQL 5.6.51, 5.7.33, and 8.0.23.
 
-  * There are below restrictions in the MySQL8 package.
+  * There are below restrictions in the MySQL 8.0 package.
 
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
     * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
@@ -573,7 +573,7 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for MySQL 5.6.50, 5.7.32, and 8.0.22.
 
-  * There are below restrictions in the MySQL8 package.
+  * There are below restrictions in the MySQL 8.0 package.
 
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
     * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
@@ -692,7 +692,7 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for MySQL 5.6.49, 5.7.31, and 8.0.21.
 
-  * There are below restrictions in the MySQL8 package.
+  * There are below restrictions in the MySQL 8.0 package.
 
     * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
     * [:doc:`/tutorial/storage`] JSON data type is not supported yet.
