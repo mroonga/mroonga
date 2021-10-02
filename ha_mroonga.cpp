@@ -14013,7 +14013,7 @@ bool ha_mroonga::upgrade_table(THD *thd,
   MRN_DBUG_ENTER_METHOD();
 
   bool errored;
-  if (share->wrapper_mode) {
+  if (share && share->wrapper_mode) {
     errored = wrapper_upgrade_table(thd, db_name, table_name, dd_table);
   } else {
     errored = storage_upgrade_table(thd, db_name, table_name, dd_table);
