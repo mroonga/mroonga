@@ -21,8 +21,36 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+msgid "Release 11.08 - 2021-10-06"
+msgstr "11.08リリース - 2021-10-06"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that Mroonga crashed when we upgrade DB created by MySQL 5.7 to "
+"MySQL 8.0."
+msgstr ""
+"MySQL 5.7で作成されたDBをMySQL 8.0にアップグレードすると、Mroongaがクラッシュ"
+"する問題を修正しました。"
+
 msgid "Release 11.07 - 2021-09-29"
 msgstr "11.07リリース - 2021-09-29"
+
+msgid ""
+"Mroonga has had a bug that if we upgrade DB created by MySQL 5.7 to MySQL "
+"8.0, Mroonga crashes."
+msgstr ""
+"Mroongaには、MySQL 5.7で作成されたDBをMySQL 8.0にアップグレードすると、"
+"Mroongaがクラッシュする問題がありました。"
+
+msgid ""
+"This bug had included since Mroonga 9.04. We fixed this bug on Mroonga "
+"11.08. Therefore, if you were using the applicable version, we highly "
+"recommended that we use Mroonga 11.08 or later."
+msgstr ""
+"この問題は、Mroonga 9.04から存在し、Mroonga 11.08で修正しました。該当するバー"
+"ジョンを使っている場合は、Mroonga 11.08以降を使うことを強くおすすめします。"
 
 msgid "Improvements"
 msgstr "改良"
@@ -94,9 +122,6 @@ msgstr ""
 "この機能によって、ベクターの要素に重みをセットできますが、この場合、Mroongaは"
 "指定したセクションのみ検索します。通常のマルチカラムインデックスでは、Mroonga"
 "は指定していないセクションもデフォルトの重みで検索します。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a bug that if we use \"WHERE primary_key IN (\"\")\" in a where "
