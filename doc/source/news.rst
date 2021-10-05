@@ -22,7 +22,7 @@ Improvements
 
 * [:doc:`/reference/udf/mroonga_snippet_html`] Added support for specifying lexicon name.
 
-  * We can use custom normalizer in ``mroonga_smippet_html()`` by this feature as below.
+  * We can use custom normalizer in ``mroonga_snippet_html()`` by this feature as below.
 
     .. code-block::
 

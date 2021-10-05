@@ -57,10 +57,10 @@ msgstr ""
 "応しました。"
 
 msgid ""
-"We can use custom normalizer in ``mroonga_smippet_html()`` by this feature "
+"We can use custom normalizer in ``mroonga_snippet_html()`` by this feature "
 "as below."
 msgstr ""
-"この機能によって、以下のように ``mroonga_smippet_html()`` でカスタマイズした"
+"この機能によって、以下のように ``mroonga_snippet_html()`` でカスタマイズした"
 "ノーマライザーを使えます。"
 
 msgid ""
