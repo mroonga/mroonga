@@ -22,8 +22,8 @@ Release 11.07 - 2021-09-29
 
      Mroonga has had a bug that if we upgrade DB created by MySQL 5.7 to MySQL 8.0, Mroonga crashes.
 
-     This bug had included since Mroonga 9.04.
-     We fixed this bug on Mroonga 11.08. Therefore, if you were using the applicable version,
+     We fixed this bug on Mroonga 11.08.
+     Therefore, if you were using Mroonga on MySQL 5.7 or previous version,
      we highly recommended that we use Mroonga 11.08 or later.
 
 Improvements
