@@ -24,7 +24,7 @@ RUN \
   rm *.deb && \
   apt update ${quiet} && \
   apt build-dep -y --no-install-recommends ${quiet} \
-    mysql-community && \
+    mysql-community-server && \
   apt source ${quiet} \
     mysql-community && \
   apt install -y -V --no-install-recommends ${quiet} \
