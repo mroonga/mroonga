@@ -41,23 +41,40 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_version_debian_oracle(code_name)
     repository_name = @mysql_package.gsub(/-community/, "")
-    sources_gz_url =
-      "https://repo.mysql.com/apt/debian/dists/#{code_name}/" +
-      "#{repository_name}/source/Sources.gz"
-    URI.open(sources_gz_url) do |response|
-      reader = Zlib::GzipReader.new(response)
-      sources = reader.read
-      sources.each_line do |line|
-        case line.chomp
-        when /\AVersion: /
-          return $POSTMATCH
-        end
+    if code_name == "bullseye"
+      package_info_url =
+        "http://repo.mysql.com/apt/debian/dists/#{code_name}/" +
+        "#{repository_name}/binary-amd64/Packages"
+      URI.open(package_info_url) do |response|
+        info = response.read
+        info.each_line do |line|
+          case line.chomp
+          when /\AVersion: /
+            return $POSTMATCH
+          end
       end
       message = "No version information: "
-      message << "<#{@mysql_package}>: <#{code_name}>:\n"
-      message << sources
+      message << "<#{@mysql_package}>: <#{code_name}>: "
+      message << PP.pp(info, "")
       raise message
-    end
+    else
+      sources_gz_url =
+        "https://repo.mysql.com/apt/debian/dists/#{code_name}/" +
+        "#{repository_name}/source/Sources.gz"
+      URI.open(sources_gz_url) do |response|
+        reader = Zlib::GzipReader.new(response)
+        sources = reader.read
+        sources.each_line do |line|
+          case line.chomp
+          when /\AVersion: /
+            return $POSTMATCH
+          end
+        end
+        message = "No version information: "
+        message << "<#{@mysql_package}>: <#{code_name}>:\n"
+        message << sources
+        raise message
+      end
   end
 
   def detect_mysql_version_debian_debian(code_name)
