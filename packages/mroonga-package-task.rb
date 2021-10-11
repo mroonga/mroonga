@@ -52,6 +52,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
           when /\AVersion: /
             return $POSTMATCH
           end
+        end
       end
       message = "No version information: "
       message << "<#{@mysql_package}>: <#{code_name}>: "
@@ -75,6 +76,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
         message << sources
         raise message
       end
+    end
   end
 
   def detect_mysql_version_debian_debian(code_name)
