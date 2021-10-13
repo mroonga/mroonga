@@ -1,3 +1,9 @@
+mariadb-10.3-mroonga (11.08-2) unstable; urgency=low
+
+  * Rebuilt against MariaDB 10.3.31.
+
+ -- Horimoto Yasuhiro <horimoto@clear-code.com>  Wed, 13 Oct 2021 02:35:20 -0000
+
 mariadb-10.3-mroonga (11.08-1) unstable; urgency=low
 
   * New upstream release.
