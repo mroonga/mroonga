@@ -3,6 +3,7 @@ require "json"
 require "pathname"
 require "pp"
 require "zlib"
+require "octokit"
 
 groonga_repository = ENV["GROONGA_REPOSITORY"]
 if groonga_repository.nil?
@@ -16,6 +17,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     super("#{@mysql_package}-mroonga", detect_version, detect_release_time)
     @original_archive_base_name = "mroonga-#{@version}"
     @original_archive_name = "#{@original_archive_base_name}.tar.gz"
+    @target_branch_name = ENV["TARGET_BRANCH_NAME"] || nil
   end
 
   private
@@ -197,13 +199,79 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     true
   end
 
+  def get_package_url_for_branch(target_branch_name, target_package_name)
+    client = Octokit::Client.new
+    client.access_token = ENV["GITHUB_ACCESS_TOKEN"]
+    artifacts_response = nil
+    workflow_runs_response = client.workflow_runs("mroonga/mroonga",
+                                                  "linux.yml",
+                                                  branch: target_branch_name)
+    url = ""
+    workflow_runs_response.workflow_runs.each do |workflow_run|
+      artifacts_response =
+        client.get("/repos/mroonga/mroonga/actions/runs/#{workflow_run.id}/artifacts")
+      next if artifacts_response.total_count.zero?
+
+      artifacts_response.artifacts.each do |artifact|
+        if artifact.name == target_package_name
+          url << artifact.archive_download_url
+        end
+      end
+      break
+    end
+    url
+  end
+
   def built_package_url(target_namespace, target)
-    url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
-    url << "#{@package}-#{target}.tar.gz"
+    url = ""
+    if @target_branch_name
+      target_package_name =
+        "packages-#{@package.gsub(/-mroonga/, "")}-#{target}"
+      url = get_package_url_for_branch(@target_branch_name, target_package_name)
+    else
+      url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
+      url << "#{@package}-#{target}.tar.gz"
+    end
     url
   end
 
   def built_package_n_split_components
     1
+  end
+
+  def download(url, download_dir)
+    if @target_branch_name
+      client = Octokit::Client.new
+      client.access_token = ENV["GITHUB_ACCESS_TOKEN"]
+      artifacts_response = nil
+      File.open("#{download_dir}/packages-#{@package.gsub(/-mroonga/, "")}.zip", "wb") do |output|
+        output.print(client.get(url))
+      end
+      File.expand_path("#{download_dir}/packages-#{@package.gsub(/-mroonga/, "")}.zip")
+    else
+      super(url, download_dir)
+    end
+  end
+
+  def download_packages(target_namespace)
+    if @target_branch_name
+      base_dir = __send__("#{target_namespace}_dir")
+      repositories_dir = download_repositories_dir(target_namespace)
+      mkdir_p(repositories_dir)
+      download_dir = "#{base_dir}/tmp/downloads/#{@version}"
+      mkdir_p(download_dir)
+      __send__("#{target_namespace}_targets").each do |target|
+        url = built_package_url(target_namespace, target)
+        archive = download(url, download_dir)
+        case target_namespace
+        when :apt, :yum
+          cd(repositories_dir) do
+            sh("unzip", archive)
+          end
+        end
+      end
+    else
+      super(target_namespace)
+    end
   end
 end
