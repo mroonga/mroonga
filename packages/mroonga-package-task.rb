@@ -253,25 +253,6 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     end
   end
 
-  def download_packages(target_namespace)
-    if @target_branch_name
-      base_dir = __send__("#{target_namespace}_dir")
-      repositories_dir = download_repositories_dir(target_namespace)
-      mkdir_p(repositories_dir)
-      download_dir = "#{base_dir}/tmp/downloads/#{@version}"
-      mkdir_p(download_dir)
-      __send__("#{target_namespace}_targets").each do |target|
-        url = built_package_url(target_namespace, target)
-        archive = download(url, download_dir)
-        case target_namespace
-        when :apt, :yum
-          cd(repositories_dir) do
-            sh("unzip", archive)
-          end
-        end
-      end
-    else
-      super(target_namespace)
     end
   end
 end
