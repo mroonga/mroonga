@@ -240,19 +240,16 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   end
 
   def download(url, download_dir)
-    if @target_branch_name
-      client = Octokit::Client.new
-      client.access_token = ENV["GITHUB_ACCESS_TOKEN"]
-      artifacts_response = nil
-      File.open("#{download_dir}/packages-#{@package.gsub(/-mroonga/, "")}.zip", "wb") do |output|
-        output.print(client.get(url))
-      end
-      File.expand_path("#{download_dir}/packages-#{@package.gsub(/-mroonga/, "")}.zip")
-    else
-      super(url, download_dir)
+    unless @target_branch_name
+      return super(url, download_dir)
     end
-  end
 
+    client = Octokit::Client.new
+    client.access_token = ENV["GITHUB_ACCESS_TOKEN"]
+    downloaded_file = "#{download_dir}/packages-#{@package.gsub(/-mroonga/, "")}.zip"
+    File.open(downloaded_file, "wb") do |output|
+      output.print(client.get(url))
     end
+    File.expand_path(downloaded_file)
   end
 end
