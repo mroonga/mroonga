@@ -24,6 +24,9 @@ RUN \
     # yum-builddep.
     'perl(Env)' \
     'perl(Time::HiRes)' \
+    # Percona Server dependencies.
+    cyrus-sasl-devel \
+    cyrus-sasl-scram \
     # Mroonga dependencies.
     percona-server-devel \
     ccache \
