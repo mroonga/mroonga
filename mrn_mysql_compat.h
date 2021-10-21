@@ -1031,3 +1031,9 @@ typedef uint mrn_srid;
 #  define MRN_MATCH_ITEM_FLAGS(match_item) \
   ((match_item)->flags)
 #endif
+
+#if MYSQL_VERSION_ID >= 80027 && !defined(MRN_MARIADB_P)
+#  define MRN_FREE_ROOT(root) (root)->Clear()
+#else
+#  define MRN_FREE_ROOT(root) free_root((root), MYF(0))
+#endif

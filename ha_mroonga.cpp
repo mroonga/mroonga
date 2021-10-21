@@ -3106,7 +3106,7 @@ ha_mroonga::~ha_mroonga()
       my_free(share_for_create.table_name);
     }
     mrn_free_share_alloc(&share_for_create);
-    free_root(&mem_root_for_create, MYF(0));
+    MRN_FREE_ROOT(&mem_root_for_create);
   }
   grn_obj_unlink(ctx, &top_left_point);
   grn_obj_unlink(ctx, &bottom_right_point);
@@ -3626,7 +3626,7 @@ error:
     plugin_unlock(NULL, share_for_create.plugin);
   }
   mrn_free_share_alloc(&share_for_create);
-  free_root(&mem_root_for_create, MYF(0));
+  MRN_FREE_ROOT(&mem_root_for_create);
   analyzed_for_create = false;
   thd->clear_error();
   DBUG_RETURN(error);
@@ -5791,7 +5791,7 @@ int ha_mroonga::wrapper_close()
     wrap_key_info = NULL;
   }
   base_key_info = NULL;
-  free_root(&mem_root, MYF(0));
+  MRN_FREE_ROOT(&mem_root);
   DBUG_RETURN(error);
 }
 
@@ -16974,7 +16974,7 @@ bool ha_mroonga::wrapper_commit_inplace_alter_table(
   bool result;
   MRN_DBUG_ENTER_METHOD();
   if (!alter_handler_flags) {
-    free_root(&(wrap_altered_table_share->mem_root), MYF(0));
+    MRN_FREE_ROOT(&(wrap_altered_table_share->mem_root));
     my_free(alter_key_info_buffer);
     alter_key_info_buffer = NULL;
     DBUG_RETURN(false);
@@ -16996,7 +16996,7 @@ bool ha_mroonga::wrapper_commit_inplace_alter_table(
   MRN_SET_BASE_ALTER_KEY(this, ha_alter_info);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  free_root(&(wrap_altered_table_share->mem_root), MYF(0));
+  MRN_FREE_ROOT(&(wrap_altered_table_share->mem_root));
   my_free(alter_key_info_buffer);
   alter_key_info_buffer = NULL;
   DBUG_RETURN(result);
