@@ -199,7 +199,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     true
   end
 
-  def get_package_url_for_branch(target_branch_name, target_package_name)
+  def detect_package_url_for_branch(target_branch_name, target_package_name)
     client = Octokit::Client.new
     client.access_token = ENV["GITHUB_ACCESS_TOKEN"]
     artifacts_response = nil
@@ -227,7 +227,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     if @target_branch_name
       target_package_name =
         "packages-#{@package.gsub(/-mroonga/, "")}-#{target}"
-      url = get_package_url_for_branch(@target_branch_name, target_package_name)
+      url = detect_package_url_for_branch(@target_branch_name, target_package_name)
     else
       url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
       url << "#{@package}-#{target}.tar.gz"
