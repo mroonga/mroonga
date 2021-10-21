@@ -214,7 +214,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
       artifacts_response.artifacts.each do |artifact|
         if artifact.name == target_package_name
-          url << artifact.archive_download_url
+          return artifact.archive_download_url
         end
       end
       break
