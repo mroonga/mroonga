@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2011-2013 Kentoku SHIBA
   Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
-  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -942,7 +942,7 @@ int mrn_free_share(MRN_SHARE *share)
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_share));
 #endif
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_ha_data));
-      free_root(&(share->wrap_table_share->mem_root), MYF(0));
+      MRN_FREE_ROOT(&(share->wrap_table_share->mem_root), MYF(0));
     }
     my_free(share);
   }

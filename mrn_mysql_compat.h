@@ -1031,3 +1031,16 @@ typedef uint mrn_srid;
 #  define MRN_MATCH_ITEM_FLAGS(match_item) \
   ((match_item)->flags)
 #endif
+
+#if MYSQL_VERSION_ID >= 80027 && !defined(MRN_MARIADB_P)
+#  define MRN_FREE_ROOT(root, root_alloc_flag)                  \
+  if (((root_alloc_flag) & 1 /* 1 is MY_MARK_BLOCKS_FREE*/)     \
+      || ((root_alloc_flag) & 2 /* 2 is MY_KEEP_PREALLOC*/)) {  \
+    ((root)->ClearForReuse());                                  \
+  } else {                                                      \
+    ((root)->Clear());                                          \
+  }
+#else
+#  define MRN_FREE_ROOT(root, root_alloc_flag) \
+  (free_root((root), (root_alloc_flag)))
+#endif
