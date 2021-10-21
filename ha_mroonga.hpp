@@ -375,9 +375,11 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
 #endif
 
-#if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80016
+#if !defined(MRN_MARIADB_P) && \
+  ((MYSQL_VERSION_ID >= 80016) && (MYSQL_VERSION_ID < 80027))
 #  define MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
-#else
+#elif defined(MRN_MARIADB_P) || \
+  (!defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID < 80016))
 #  define MRN_HANDLER_HAVE_COND_POP
 #endif
 
