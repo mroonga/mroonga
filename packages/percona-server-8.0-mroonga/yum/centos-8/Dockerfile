@@ -24,6 +24,7 @@ RUN \
     # Percona Server dependencies.
     cmake\
     cyrus-sasl-devel \
+    cyrus-sasl-scram \
     libaio-devel \
     libcurl-devel \
     libtirpc-devel \
