@@ -199,7 +199,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     true
   end
 
-  def detect_package_url_for_branch(target_branch_name, target_package_name)
+  def built_package_url_from_branch(target_branch_name, target_package_name)
     client = Octokit::Client.new
     client.access_token = ENV["GITHUB_ACCESS_TOKEN"]
     artifacts_response = nil
