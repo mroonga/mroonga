@@ -206,7 +206,6 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     workflow_runs_response = client.workflow_runs("mroonga/mroonga",
                                                   "linux.yml",
                                                   branch: target_branch_name)
-    url = ""
     workflow_runs_response.workflow_runs.each do |workflow_run|
       artifacts_response =
         client.get("/repos/mroonga/mroonga/actions/runs/#{workflow_run.id}/artifacts")
@@ -219,7 +218,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       end
       break
     end
-    url
+    raise "Artifacts not found: <#{target_branch_name}>: <#{target_package_name}>"
   end
 
   def built_package_url(target_namespace, target)
