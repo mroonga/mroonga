@@ -226,7 +226,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     if @target_branch_name
       target_package_name =
         "packages-#{@package.gsub(/-mroonga/, "")}-#{target}"
-      url = detect_package_url_for_branch(@target_branch_name, target_package_name)
+      url = built_package_url_from_branch(@target_branch_name, target_package_name)
     else
       url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
       url << "#{@package}-#{target}.tar.gz"
