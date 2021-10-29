@@ -9263,7 +9263,8 @@ int ha_mroonga::storage_index_first(uchar *buf)
   int flags = GRN_CURSOR_ASCENDING;
   uint pkey_nr = table->s->primary_key;
   mrn_change_encoding(ctx, NULL);
-  if (active_index == pkey_nr) {
+  if (active_index == pkey_nr ||
+      table->key_info[active_index].algorithm == HA_KEY_ALG_FULLTEXT) {
     DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
                                    0, -1, flags);
@@ -9324,7 +9325,8 @@ int ha_mroonga::storage_index_last(uchar *buf)
   int flags = GRN_CURSOR_DESCENDING;
   uint pkey_nr = table->s->primary_key;
   mrn_change_encoding(ctx, NULL);
-  if (active_index == pkey_nr) {
+  if (active_index == pkey_nr ||
+      table->key_info[active_index].algorithm == HA_KEY_ALG_FULLTEXT) {
     DBUG_PRINT("info", ("mroonga: use primary key"));
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0,
                                    0, -1, flags);
