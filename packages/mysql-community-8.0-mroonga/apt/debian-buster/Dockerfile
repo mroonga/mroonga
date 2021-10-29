@@ -37,5 +37,5 @@ RUN \
     libmysqlclient-dev && \
   mkdir -p /usr/global/share && \
   wget --no-verbose \
-    https://packages.groonga.org/tmp/boost/boost_1_73_0.tar.gz && \
-  mv boost_1_73_0.tar.gz /usr/global/share/
+    https://packages.groonga.org/tmp/boost/boost_1_73_0.tar.bz2 && \
+  mv boost_1_73_0.tar.bz2 /usr/global/share/
