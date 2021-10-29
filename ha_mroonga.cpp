@@ -9741,19 +9741,34 @@ int ha_mroonga::ft_read(uchar *buf)
   DBUG_RETURN(error);
 }
 
-const Item *ha_mroonga::wrapper_cond_push(const Item *cond)
+const Item *ha_mroonga::wrapper_cond_push(const Item *cond
+#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+                                          ,
+                                          bool other_tables_ok
+#endif
+  )
 {
   const Item *reminder_cond;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  reminder_cond = wrap_handler->cond_push(cond);
+  reminder_cond = wrap_handler->cond_push(cond
+#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+                                          ,
+                                          other_tables_ok
+#endif
+    );
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(reminder_cond);
 }
 
-const Item *ha_mroonga::storage_cond_push(const Item *cond)
+const Item *ha_mroonga::storage_cond_push(const Item *cond
+#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+                                          ,
+                                          bool other_tables_ok
+#endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   const Item *reminder_cond = cond;
@@ -9796,15 +9811,30 @@ const Item *ha_mroonga::storage_cond_push(const Item *cond)
   DBUG_RETURN(reminder_cond);
 }
 
-const Item *ha_mroonga::cond_push(const Item *cond)
+const Item *ha_mroonga::cond_push(const Item *cond
+#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+                                  ,
+                                  bool other_tables_ok
+#endif
+  )
 {
   MRN_DBUG_ENTER_METHOD();
   const Item *reminder_cond;
   if (share->wrapper_mode)
   {
-    reminder_cond = wrapper_cond_push(cond);
+    reminder_cond = wrapper_cond_push(cond
+#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+                                      ,
+                                      other_tables_ok
+#endif
+      );
   } else {
-    reminder_cond = storage_cond_push(cond);
+    reminder_cond = storage_cond_push(cond
+#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+                                      ,
+                                      other_tables_ok
+#endif
+      );
   }
   DBUG_RETURN(reminder_cond);
 }
