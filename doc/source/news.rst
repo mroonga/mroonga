@@ -3,6 +3,15 @@
 News
 ====
 
+.. _release-11-09:
+
+Release 11.09 - 2021-11-04
+--------------------------
+
+* [:doc:`/install/centos`] Added support for MySQL 5.7.36, 8.0.27.
+
+* [:doc:`/install/centos`] Added support for Percona Server 8.0.26.
+
 .. _release-11-08:
 
 Release 11.08 - 2021-10-06

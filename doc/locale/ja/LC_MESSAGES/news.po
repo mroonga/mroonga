@@ -21,6 +21,15 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+msgid "Release 11.09 - 2021-11-04"
+msgstr "11.09リリース - 2021-11-04"
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.36, 8.0.27."
+msgstr "[:doc:`/install/centos`] MySQL 5.7.36, 8.0.27をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.26."
+msgstr "[:doc:`/install/centos`] Percona Server 8.0.26をサポートしました。"
+
 msgid "Release 11.08 - 2021-10-06"
 msgstr "11.08リリース - 2021-10-06"
 
