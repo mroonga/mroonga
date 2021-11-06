@@ -8,6 +8,7 @@ Build-Depends:
 	pkg-config,
 	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
 	groonga-normalizer-mysql,
+	libmecab-dev,
 	libmysqlclient-dev,
 	libssl-dev,
 	wget,
