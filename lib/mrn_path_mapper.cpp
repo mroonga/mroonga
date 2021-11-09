@@ -62,7 +62,7 @@ namespace mrn {
 
       int i = 2, j = strlen(db_path_), len;
       len = strlen(original_mysql_path_);
-      while (original_mysql_path_[i] != FN_LIBCHAR && i < len) {
+      while (i < len && original_mysql_path_[i] != FN_LIBCHAR) {
         db_path_[j++] = original_mysql_path_[i++];
       }
       db_path_[j] = '\0';
@@ -92,7 +92,7 @@ namespace mrn {
           }
         }
 
-        while (original_mysql_path_[i] != FN_LIBCHAR && i < len) {
+        while (i < len && original_mysql_path_[i] != FN_LIBCHAR) {
           db_path_[j++] = original_mysql_path_[i++];
         }
         if (i == len) {
@@ -125,7 +125,7 @@ namespace mrn {
         original_mysql_path_[1] == FN_LIBCHAR) {
       int i = 2, j = 0, len;
       len = strlen(original_mysql_path_);
-      while (original_mysql_path_[i] != FN_LIBCHAR && i < len) {
+      while (i < len && original_mysql_path_[i] != FN_LIBCHAR) {
         db_name_[j++] = original_mysql_path_[i++];
       }
       db_name_[j] = '\0';
