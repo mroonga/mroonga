@@ -698,10 +698,13 @@ namespace mrn {
                                 &normalized, &normalized_length, NULL);
       uint16 new_blob_data_length;
       if (normalized_length <= UINT_MAX16) {
-        grn_memcpy(grn_key, normalized, normalized_length);
+        if (normalized_length > 0) {
+          grn_memcpy(grn_key, normalized, normalized_length);
+        }
         if (normalized_length < *mysql_key_size) {
           memset(grn_key + normalized_length,
-                 '\0', *mysql_key_size - normalized_length);
+                 '\0',
+                 *mysql_key_size - normalized_length);
         }
         new_blob_data_length = normalized_length;
       } else {
