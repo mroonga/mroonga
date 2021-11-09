@@ -9851,10 +9851,12 @@ bool ha_mroonga::is_foreign_key_field(const char *table_name,
 
   grn_obj *range = grn_ctx_at(ctx, grn_obj_get_range(ctx, column));
   if (!range) {
+    grn_obj_unref(ctx, column);
     DBUG_RETURN(false);
   }
 
   if (!mrn::grn::is_table(range)) {
+    grn_obj_unref(ctx, column);
     DBUG_RETURN(false);
   }
 
@@ -9866,9 +9868,12 @@ bool ha_mroonga::is_foreign_key_field(const char *table_name,
                                         index_column_name.c_str(),
                                         index_column_name.length());
   if (foreign_index_column) {
-    grn_obj_unlink(ctx, foreign_index_column);
+    grn_obj_unref(ctx, foreign_index_column);
+    grn_obj_unref(ctx, column);
     DBUG_RETURN(true);
   }
+
+  grn_obj_unref(ctx, column);
 
   DBUG_RETURN(false);
 }
