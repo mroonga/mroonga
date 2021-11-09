@@ -114,7 +114,8 @@ VALUES ('hiiragi',
 ST_GeomFromText('POINT(35.647701 139.711517)'));
 ALTER TABLE shops ADD SPATIAL KEY location_index (location);
 SELECT id, name, ST_AsText(location) AS location_text FROM shops
-WHERE MBRContains(ST_GeomFromText('LineString(35.6684 139.7727, 35.7121 139.7038)'), location);
+WHERE MBRContains(ST_GeomFromText('LineString(35.6684 139.7727, 35.7121 139.7038)'), location)
+ORDER BY id;
 id	name	location_text
 14	tetsuji	POINT(35.680912 139.76857)
 19	daruma	POINT(35.681461 139.770599)
