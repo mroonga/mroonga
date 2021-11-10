@@ -1,0 +1,62 @@
+# Copyright(C) 2021  Sutou Kouhei <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source ../../../../include/mroonga/have_mroonga.inc
+
+--disable_warnings
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
+--enable_warnings
+
+FLUSH STATUS;
+
+CREATE TABLE roles (
+  id INT
+);
+
+INSERT INTO roles VALUES (1), (2), (3), (4), (5);
+
+CREATE TABLE users (
+  id INT,
+  role_id INT,
+  INDEX (role_id)
+);
+
+INSERT INTO users VALUES (10, 1);
+INSERT INTO users VALUES (11, 2);
+INSERT INTO users VALUES (13, 3);
+INSERT INTO users VALUES (14, 4);
+INSERT INTO users VALUES (15, 5);
+INSERT INTO users VALUES (20, 1);
+INSERT INTO users VALUES (21, 2);
+INSERT INTO users VALUES (23, 3);
+INSERT INTO users VALUES (24, 4);
+INSERT INTO users VALUES (25, 5);
+
+SELECT COUNT(*)
+  FROM (
+    SELECT roles.id
+      FROM roles
+           LEFT JOIN users ON users.id <= 100 AND
+                              users.role_id = roles.id
+  ) roles_users;
+
+SHOW STATUS LIKE 'mroonga_count_skip';
+
+DROP TABLE users;
+DROP TABLE roles;
+
+--source ../../../../include/mroonga/have_mroonga_deinit.inc

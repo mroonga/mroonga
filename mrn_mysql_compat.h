@@ -1037,3 +1037,9 @@ typedef uint mrn_srid;
 #else
 #  define MRN_FREE_ROOT(root) free_root((root), MYF(0))
 #endif
+
+#if (MYSQL_VERSION_ID >= 80000 && !defined(MRN_MARIADB_P))
+#  define MRN_LIST_SIZE(list) ((list)->size())
+#else
+#  define MRN_LIST_SIZE(list) ((list)->elements)
+#endif

@@ -1,0 +1,36 @@
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
+FLUSH STATUS;
+CREATE TABLE roles (
+id INT
+);
+INSERT INTO roles VALUES (1), (2), (3), (4), (5);
+CREATE TABLE users (
+id INT,
+role_id INT,
+INDEX (role_id)
+);
+INSERT INTO users VALUES (10, 1);
+INSERT INTO users VALUES (11, 2);
+INSERT INTO users VALUES (13, 3);
+INSERT INTO users VALUES (14, 4);
+INSERT INTO users VALUES (15, 5);
+INSERT INTO users VALUES (20, 1);
+INSERT INTO users VALUES (21, 2);
+INSERT INTO users VALUES (23, 3);
+INSERT INTO users VALUES (24, 4);
+INSERT INTO users VALUES (25, 5);
+SELECT COUNT(*)
+FROM (
+SELECT roles.id
+FROM roles
+LEFT JOIN users ON users.id <= 100 AND
+users.role_id = roles.id
+) roles_users;
+COUNT(*)
+10
+SHOW STATUS LIKE 'mroonga_count_skip';
+Variable_name	Value
+Mroonga_count_skip	0
+DROP TABLE users;
+DROP TABLE roles;

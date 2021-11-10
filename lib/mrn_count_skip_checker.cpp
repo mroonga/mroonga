@@ -64,6 +64,12 @@ namespace mrn {
               "[mroonga][count-skip][false] have HAVING");
       DBUG_RETURN(false);
     }
+    if (MRN_LIST_SIZE(query_block_->join_list) != 1) {
+      GRN_LOG(ctx_, GRN_LOG_DEBUG,
+              "[mroonga][count-skip][false] have JOINs: %u",
+              static_cast<uint32_t>(MRN_LIST_SIZE(query_block_->join_list)));
+      DBUG_RETURN(false);
+    }
     if (query_block_->table_list.elements != 1) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] not only one table: %u",
