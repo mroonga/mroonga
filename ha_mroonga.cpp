@@ -6537,7 +6537,7 @@ int ha_mroonga::storage_rnd_pos(uchar *buf, uchar *pos)
 {
   MRN_DBUG_ENTER_METHOD();
   record_id = *((grn_id*) pos);
-  storage_store_fields(buf, record_id);
+  storage_store_fields(table, buf, record_id);
   DBUG_RETURN(0);
 }
 
@@ -8887,7 +8887,7 @@ int ha_mroonga::storage_index_read_map(uchar *buf, const uchar *key,
       if (FIELD_NAME_EQUAL(field, MRN_COLUMN_NAME_ID)) {
         grn_id found_record_id = *((grn_id *)key_min);
         if (grn_table_at(ctx, grn_table, found_record_id) != GRN_ID_NIL) { // found
-          storage_store_fields(buf, found_record_id);
+          storage_store_fields(table, buf, found_record_id);
           MRN_TABLE_SET_FOUND_ROW(table);
           record_id = found_record_id;
           DBUG_RETURN(0);
@@ -9665,7 +9665,7 @@ int ha_mroonga::storage_ft_read(uchar *buf)
       record_id = *((grn_id *)key);
     }
   }
-  storage_store_fields(buf, record_id);
+  storage_store_fields(table, buf, record_id);
   DBUG_RETURN(0);
 }
 
@@ -10895,7 +10895,7 @@ int ha_mroonga::storage_get_next_record(uchar *buf)
     if (ignoring_no_key_columns) {
       storage_store_fields_by_index(buf);
     } else {
-      storage_store_fields(buf, record_id);
+      storage_store_fields(table, buf, record_id);
     }
     if (cursor_geo && grn_source_column_geo) {
       int latitude, longitude;
@@ -12488,30 +12488,32 @@ void ha_mroonga::storage_store_field_column(Field *field,
   DBUG_VOID_RETURN;
 }
 
-void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
+void ha_mroonga::storage_store_fields(TABLE *target_table,
+                                      uchar *buf,
+                                      grn_id record_id)
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_PRINT("info", ("mroonga: stored record ID: %d", record_id));
 
-  my_ptrdiff_t ptr_diff = buf - table->record[0];
+  my_ptrdiff_t ptr_diff = buf - target_table->record[0];
 
   Field *primary_key_field = NULL;
-  if (table->s->primary_key != MAX_INDEXES) {
-    KEY *key_info = &(table->s->key_info[table->s->primary_key]);
+  if (target_table->s->primary_key != MAX_INDEXES) {
+    KEY *key_info = &(target_table->s->key_info[target_table->s->primary_key]);
     if (KEY_N_KEY_PARTS(key_info) == 1) {
       primary_key_field = key_info->key_part[0].field;
     }
   }
 
   int i;
-  int n_columns = table->s->fields;
+  int n_columns = target_table->s->fields;
   for (i = 0; i < n_columns; i++) {
-    Field *field = table->field[i];
+    Field *field = target_table->field[i];
 
-    if (bitmap_is_set(table->read_set, MRN_FIELD_FIELD_INDEX(field)) ||
-        bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field))) {
+    if (bitmap_is_set(target_table->read_set, MRN_FIELD_FIELD_INDEX(field)) ||
+        bitmap_is_set(target_table->write_set, MRN_FIELD_FIELD_INDEX(field))) {
       if (ignoring_no_key_columns) {
-        KEY *key_info = &(table->s->key_info[active_index]);
+        KEY *key_info = &(target_table->s->key_info[active_index]);
         bool have_key = false;
         uint n_keys = KEY_N_KEY_PARTS(key_info);
         for (uint j = 0; j < n_keys; ++j) {
@@ -12525,8 +12527,12 @@ void ha_mroonga::storage_store_fields(uchar *buf, grn_id record_id)
         }
       }
 
-      mrn::DebugColumnAccess debug_column_access(table, &(table->write_set));
-      DBUG_PRINT("info", ("mroonga: store column %d(%d)",i,MRN_FIELD_FIELD_INDEX(field)));
+      mrn::DebugColumnAccess debug_column_access(target_table,
+                                                 &(target_table->write_set));
+      DBUG_PRINT("info",
+                 ("mroonga: store column %d(%d)",
+                  i,
+                  MRN_FIELD_FIELD_INDEX(field)));
       field->move_field_offset(ptr_diff);
       if (FIELD_NAME_EQUAL(field, MRN_COLUMN_NAME_ID)) {
         // for _id column
@@ -12607,7 +12613,7 @@ void ha_mroonga::storage_store_fields_by_index(uchar *buf)
       // Text values in index may be normalized.
       if (strcmp(MRN_CHARSET_CSNAME(key_info->key_part[i].field->charset()),
                  "binary") != 0) {
-        storage_store_fields(buf, record_id);
+        storage_store_fields(table, buf, record_id);
         DBUG_VOID_RETURN;
       }
       break;
@@ -16605,30 +16611,12 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       bitmap_set_bit(&generated_column_bitmap, MRN_FIELD_FIELD_INDEX(field));
 #  endif
 
-      my_ptrdiff_t diff = table->record[0] - altered_table->record[0];
-      mrn::TableFieldsOffsetMover mover(altered_table, diff);
-
-      error = storage_rnd_init(true);
-      if (error) {
-        have_error = true;
-        grn_obj_remove(ctx, column_obj);
-        break;
-      }
-
       Field *altered_field = altered_table->field[i];
       grn_obj new_value;
       GRN_VOID_INIT(&new_value);
       mrn::SmartGrnObj smart_new_value(ctx, &new_value);
-      while (!have_error) {
-        int next_error = storage_rnd_next(table->record[0]);
-        if (next_error == HA_ERR_END_OF_FILE) {
-          break;
-        } else if (next_error != 0) {
-          error = next_error;
-          have_error = true;
-          grn_obj_remove(ctx, column_obj);
-          break;
-        }
+      GRN_TABLE_EACH_BEGIN(ctx, grn_table, cursor, id) {
+        storage_store_fields(altered_table, altered_table->record[0], id);
 
 #  ifdef MRN_MARIADB_P
         MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(altered_table, altered_field);
@@ -16672,14 +16660,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
           my_message(error, ctx->errbuf, MYF(0));
           break;
         }
-      }
-
-      int end_error = storage_rnd_end();
-      if (end_error != 0 && error == 0) {
-        error = end_error;
-        grn_obj_remove(ctx, column_obj);
-        break;
-      }
+      } GRN_TABLE_EACH_END(ctx, cursor);
     }
 #endif
   }
