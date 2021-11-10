@@ -17,6 +17,7 @@ class MySQLCommunity80MroongaPackageTask < MroongaPackageTask
 
   def yum_targets_default
     [
+      "almalinux-8",
       "centos-7",
       "centos-8",
     ]

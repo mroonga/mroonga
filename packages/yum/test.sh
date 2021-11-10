@@ -6,8 +6,9 @@ package=$1
 
 mysql_version=$(echo "${package}" | grep -o '[0-9]*\.[0-9]*')
 
-centos_version=$(cut -d: -f5 /etc/system-release-cpe)
-case ${centos_version} in
+os=$(cut -d: -f4 /etc/system-release-cpe)
+major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
+case ${major_version} in
   7)
     DNF=yum
     ;;
@@ -19,7 +20,7 @@ case ${centos_version} in
 esac
 
 sudo ${DNF} install -y \
-  https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
+  https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
 
 ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
@@ -33,7 +34,7 @@ case ${package} in
     sudo tee /etc/yum.repos.d/MariaDB.repo <<-REPO
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/${mysql_version}/centos${centos_version}-amd64
+baseurl = http://yum.mariadb.org/${mysql_version}/centos${major_version}-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 REPO
@@ -46,7 +47,7 @@ REPO
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     old_package=mysql${mysql_package_version}-community-mroonga
     sudo ${DNF} install -y \
-         https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${centos_version}.rpm
+         https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${major_version}.rpm
     ;;
   percona-*)
     service_name=mysqld
@@ -73,7 +74,7 @@ esac
 # Install
 repositories_dir=/vagrant/packages/${package}/yum/repositories
 sudo ${DNF} install -y \
-  ${repositories_dir}/centos/${centos_version}/*/Packages/*.rpm
+  ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
 sudo systemctl start ${service_name}
 mysql="mysql -u root"
@@ -172,4 +173,4 @@ esac
 
 sudo ${DNF} install -y ${old_package}
 sudo ${DNF} install -y \
-  ${repositories_dir}/centos/${centos_version}/*/Packages/*.rpm
+  ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
