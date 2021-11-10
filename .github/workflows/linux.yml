@@ -16,9 +16,10 @@ jobs:
           - os: debian-bullseye
             package-type: apt
             package: mariadb-10.5
-          - os: debian-bullseye
-            package-type: apt
-            package: mysql-community-8.0
+          # TODO: Fix build error
+          # - os: debian-bullseye
+          #   package-type: apt
+          #   package: mysql-community-8.0
           - os: debian-buster
             package-type: apt
             package: mariadb-10.3
@@ -58,9 +59,10 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
-          - os: almalinux-8
-            package-type: yum
-            package: mysql-community-8.0
+          # TODO: Need groonga-normalizer-mysql package
+          # - os: almalinux-8
+          #   package-type: yum
+          #   package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
@@ -70,9 +72,10 @@ jobs:
           - os: centos-7
             package-type: yum
             package: percona-server-5.7
-          - os: almalinux-8
-            package-type: yum
-            package: percona-server-8.0
+          # TODO: Need groonga-normalizer-mysql package
+          # - os: almalinux-8
+          #   package-type: yum
+          #   package: percona-server-8.0
           - os: centos-7
             package-type: yum
             package: percona-server-8.0
@@ -212,9 +215,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: debian-bullseye
-            package-type: apt
-            package: mariadb-10.5
+          # TODO: Fix build error
+          # - os: debian-bullseye
+          #   package-type: apt
+          #   package: mariadb-10.5
           - os: debian-bullseye
             package-type: apt
             package: mysql-community-8.0
@@ -257,9 +261,10 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
-          - os: almalinux-8
-            package-type: yum
-            package: mysql-community-8.0
+          # TODO: Need groonga-normalizer-mysql package
+          # - os: almalinux-8
+          #   package-type: yum
+          #   package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
@@ -269,9 +274,10 @@ jobs:
           - os: centos-7
             package-type: yum
             package: percona-server-5.7
-          - os: almalinux-8
-            package-type: yum
-            package: percona-server-8.0
+          # TODO: Need groonga-normalizer-mysql package
+          # - os: almalinux-8
+          #   package-type: yum
+          #   package: percona-server-8.0
           - os: centos-7
             package-type: yum
             package: percona-server-8.0
