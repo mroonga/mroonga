@@ -16,10 +16,9 @@ jobs:
           - os: debian-bullseye
             package-type: apt
             package: mariadb-10.5
-          # TODO: Fix build error
-          # - os: debian-bullseye
-          #   package-type: apt
-          #   package: mysql-community-8.0
+          - os: debian-bullseye
+            package-type: apt
+            package: mysql-community-8.0
           - os: debian-buster
             package-type: apt
             package: mariadb-10.3
@@ -215,10 +214,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # TODO: Fix build error
-          # - os: debian-bullseye
-          #   package-type: apt
-          #   package: mariadb-10.5
+          - os: debian-bullseye
+            package-type: apt
+            package: mariadb-10.5
           - os: debian-bullseye
             package-type: apt
             package: mysql-community-8.0
