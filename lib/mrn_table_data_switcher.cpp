@@ -27,7 +27,7 @@ namespace mrn {
                                        TABLE *to_table)
     : from_table_(from_table),
       to_table_(to_table),
-      diff_(PTR_BYTE_DIFF(to_table_->record[0], from_table_->record[0])) {
+      diff_(to_table_->record[0] - from_table_->record[0]) {
     uint n_columns = from_table_->s->fields;
     for (uint i = 0; i < n_columns; ++i) {
       Field *field = from_table_->field[i];
