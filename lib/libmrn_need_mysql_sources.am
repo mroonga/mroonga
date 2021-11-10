@@ -46,6 +46,6 @@ libmrn_need_mysql_la_SOURCES =			\
 	mrn_current_thread.hpp			\
 	mrn_smart_bitmap.cpp			\
 	mrn_smart_bitmap.hpp			\
-	mrn_table_fields_offset_mover.cpp	\
-	mrn_table_fields_offset_mover.hpp	\
+	mrn_table_data_switcher.cpp		\
+	mrn_table_data_switcher.hpp		\
 	mrn_timestamp_field_value_converter.hpp

@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2017-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2017-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,28 +17,31 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "mrn_table_fields_offset_mover.hpp"
+#include "mrn_table_data_switcher.hpp"
 
 #include <table.h>
 #include <field.h>
 
 namespace mrn {
-  TableFieldsOffsetMover::TableFieldsOffsetMover(TABLE *table,
-                                                 my_ptrdiff_t diff)
-    : table_(table),
-      diff_(diff) {
-    uint n_columns = table_->s->fields;
+  TableDataSwitcher::TableDataSwitcher(TABLE *from_table,
+                                       TABLE *to_table)
+    : from_table_(from_table),
+      to_table_(to_table),
+      diff_(PTR_BYTE_DIFF(to_table_->record[0], from_table_->record[0])) {
+    uint n_columns = from_table_->s->fields;
     for (uint i = 0; i < n_columns; ++i) {
-      Field *field = table_->field[i];
+      Field *field = from_table_->field[i];
       field->move_field_offset(diff_);
+      field->table = to_table_;
     }
   }
 
-  TableFieldsOffsetMover::~TableFieldsOffsetMover() {
-    uint n_columns = table_->s->fields;
+  TableDataSwitcher::~TableDataSwitcher() {
+    uint n_columns = from_table_->s->fields;
     for (uint i = 0; i < n_columns; ++i) {
-      Field *field = table_->field[i];
+      Field *field = from_table_->field[i];
       field->move_field_offset(-diff_);
+      field->table = from_table_;
     }
   }
 }

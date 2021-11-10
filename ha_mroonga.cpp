@@ -135,7 +135,7 @@
 #include <mrn_variables.hpp>
 #include <mrn_query_parser.hpp>
 #include <mrn_smart_bitmap.hpp>
-#include <mrn_table_fields_offset_mover.hpp>
+#include <mrn_table_data_switcher.hpp>
 #include <mrn_timestamp_field_value_converter.hpp>
 
 // for debug
@@ -16296,8 +16296,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(
     need_fill_index = true;
   }
   if (!error && need_fill_index) {
-    my_ptrdiff_t diff = table->record[0] - altered_table->record[0];
-    mrn::TableFieldsOffsetMover mover(altered_table, diff);
+    mrn::TableDataSwitcher switcher(altered_table, table);
     error = wrapper_fill_indexes(ha_thd(), altered_table->key_info,
                                  index_columns, ha_alter_info->key_count);
   }

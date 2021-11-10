@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2017-2019 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2017-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -23,12 +23,15 @@
 #include <mrn_mysql_compat.h>
 
 namespace mrn {
-  class TableFieldsOffsetMover {
+  class TableDataSwitcher {
   public:
-    TableFieldsOffsetMover(TABLE *table, my_ptrdiff_t diff);
-    ~TableFieldsOffsetMover();
+    TableDataSwitcher(TABLE *from_table,
+                      TABLE *to_table);
+    ~TableDataSwitcher();
   private:
-    TABLE *table_;
+    TABLE *from_table_;
+    TABLE *to_table_;
     my_ptrdiff_t diff_;
   };
 }
+
