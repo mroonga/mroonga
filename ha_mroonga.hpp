@@ -1015,7 +1015,7 @@ private:
                                 grn_obj *value);
   void storage_store_field_column(Field *field, bool is_primary_key,
                                   int nth_column, grn_id record_id);
-  void storage_store_fields(uchar *buf, grn_id record_id);
+  void storage_store_fields(TABLE *target_table, uchar *buf, grn_id record_id);
   void storage_store_fields_for_prep_update(const uchar *old_data,
                                             const uchar *new_data,
                                             grn_id record_id);
@@ -1546,7 +1546,9 @@ private:
                                           uint table_changes);
   bool storage_check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                           uint table_changes);
-  int storage_add_index_multiple_columns(KEY *key_info, uint num_of_keys,
+  int storage_add_index_multiple_columns(TABLE *target_table,
+                                         KEY *key_info,
+                                         uint num_of_keys,
                                          grn_obj **index_tables,
                                          grn_obj **index_columns,
                                          bool skip_unique_key);

@@ -5349,7 +5349,7 @@ int ha_mroonga::storage_reindex()
   }
 
   if (!error && have_multiple_column_index)
-    error = storage_add_index_multiple_columns(key_info, n_keys,
+    error = storage_add_index_multiple_columns(table, key_info, n_keys,
                                                grn_index_tables,
                                                grn_index_columns,
                                                false);
@@ -12507,7 +12507,8 @@ void ha_mroonga::storage_store_fields(TABLE *target_table,
 
   int i;
   int n_columns = target_table->s->fields;
-  for (i = 0; i < n_columns; i++) {
+  int n_existing_grn_columns = table->s->fields;
+  for (i = 0; i < n_columns && i < n_existing_grn_columns; i++) {
     Field *field = target_table->field[i];
 
     if (bitmap_is_set(target_table->read_set, MRN_FIELD_FIELD_INDEX(field)) ||
@@ -15308,7 +15309,7 @@ int ha_mroonga::storage_enable_indexes(uint mode)
     }
     if (!error && have_multiple_column_index)
     {
-      error = storage_add_index_multiple_columns(key_info, n_keys,
+      error = storage_add_index_multiple_columns(table, key_info, n_keys,
                                                  index_tables,
                                                  index_columns,
                                                  skip_unique_key);
@@ -15837,7 +15838,8 @@ bool ha_mroonga::check_if_incompatible_data(
   DBUG_RETURN(res);
 }
 
-int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
+int ha_mroonga::storage_add_index_multiple_columns(TABLE *target_table,
+                                                   KEY *key_info,
                                                    uint num_of_keys,
                                                    grn_obj **index_tables,
                                                    grn_obj **index_columns,
@@ -15847,68 +15849,53 @@ int ha_mroonga::storage_add_index_multiple_columns(KEY *key_info,
 
   int error = 0;
 
-  if (!(error = storage_rnd_init(true)))
-  {
-    while (!(error = storage_rnd_next(table->record[0])))
-    {
-      for (uint i = 0; i < num_of_keys; i++) {
-        KEY *current_key_info = key_info + i;
-        if (
-          KEY_N_KEY_PARTS(current_key_info) == 1 ||
-          (current_key_info->flags & HA_FULLTEXT)
-          ) {
-          continue;
-        }
-        if (skip_unique_key && (key_info[i].flags & HA_NOSAME)) {
-          continue;
-        }
-        if (!index_columns[i]) {
-          continue;
-        }
+  GRN_TABLE_EACH_BEGIN(ctx, grn_table, cursor, id) {
+    storage_store_fields(target_table, target_table->record[0], id);
+    for (uint i = 0; i < num_of_keys; i++) {
+      KEY *current_key_info = key_info + i;
+      if (KEY_N_KEY_PARTS(current_key_info) == 1 ||
+          (current_key_info->flags & HA_FULLTEXT)) {
+        continue;
+      }
+      if (skip_unique_key && (key_info[i].flags & HA_NOSAME)) {
+        continue;
+      }
+      if (!index_columns[i]) {
+        continue;
+      }
 
-        /* fix key_info.key_length */
-        for (uint j = 0; j < KEY_N_KEY_PARTS(current_key_info); j++) {
-          if (
-            !current_key_info->key_part[j].null_bit &&
-            current_key_info->key_part[j].field->null_bit
-            ) {
-            current_key_info->key_length++;
-            current_key_info->key_part[j].null_bit =
-              current_key_info->key_part[j].field->null_bit;
-          }
+      /* fix key_info.key_length */
+      for (uint j = 0; j < KEY_N_KEY_PARTS(current_key_info); j++) {
+        if (!current_key_info->key_part[j].null_bit &&
+            current_key_info->key_part[j].field->null_bit) {
+          current_key_info->key_length++;
+          current_key_info->key_part[j].null_bit =
+            current_key_info->key_part[j].field->null_bit;
         }
-        if (key_info[i].flags & HA_NOSAME) {
-          grn_id key_id;
-          if ((error = storage_write_row_unique_index(table->record[0],
-                                                      current_key_info,
-                                                      index_tables[i],
-                                                      index_columns[i],
-                                                      &key_id)))
-          {
-            if (error == HA_ERR_FOUND_DUPP_KEY)
-            {
-              error = HA_ERR_FOUND_DUPP_UNIQUE;
-            }
-            break;
+      }
+      if (key_info[i].flags & HA_NOSAME) {
+        grn_id key_id;
+        error =  storage_write_row_unique_index(target_table->record[0],
+                                                current_key_info,
+                                                index_tables[i],
+                                                index_columns[i],
+                                                &key_id);
+        if (error) {
+          if (error == HA_ERR_FOUND_DUPP_KEY) {
+            error = HA_ERR_FOUND_DUPP_UNIQUE;
           }
-        }
-        if ((error = storage_write_row_multiple_column_index(table->record[0],
-                                                             record_id,
-                                                             current_key_info,
-                                                             index_columns[i])))
-        {
           break;
         }
       }
-      if (error)
+      error = storage_write_row_multiple_column_index(target_table->record[0],
+                                                      id,
+                                                      current_key_info,
+                                                      index_columns[i]);
+      if (error) {
         break;
+      }
     }
-    if (error != HA_ERR_END_OF_FILE) {
-      storage_rnd_end();
-    } else {
-      error = storage_rnd_end();
-    }
-  }
+  } GRN_TABLE_EACH_END(ctx, cursor);
 
   DBUG_RETURN(error);
 }
@@ -16433,10 +16420,8 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
     }
   }
   if (!error && have_multiple_column_index) {
-    my_ptrdiff_t diff = mrn_compute_ptr_diff_for_key(table->record[0],
-                                                     altered_table->record[0]);
-    mrn::TableFieldsOffsetMover mover(altered_table, diff);
-    error = storage_add_index_multiple_columns(altered_table->key_info,
+    error = storage_add_index_multiple_columns(altered_table,
+                                               altered_table->key_info,
                                                ha_alter_info->key_count,
                                                index_tables,
                                                index_columns, false);
