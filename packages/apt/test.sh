@@ -24,7 +24,7 @@ case ${package} in
   mariadb-*)
     old_package=$(echo ${package} | sed -e 's/mariadb-/mariadb-server-/')
     mysql_package_prefix=mariadb
-    client_dev_package=libmariadbclient-dev
+    client_dev_package=libmariadb-dev
     test_package=mariadb-test
     mysql_test_dir=/usr/share/mysql/mysql-test
     ;;
