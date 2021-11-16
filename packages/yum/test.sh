@@ -3,6 +3,9 @@
 set -exu
 
 package=$1
+if [ -n "$2" ]; then
+  branch=$2
+fi
 
 mysql_version=$(echo "${package}" | grep -o '[0-9]*\.[0-9]*')
 
@@ -155,22 +158,24 @@ case ${package} in
 esac
 
 # Upgrade
-sudo ${DNF} erase -y \
-  ${package} \
-  "${mysql_package_prefix}-*"
+if [ "${package}" != "maintenance" ]; then
+  sudo ${DNF} erase -y \
+    ${package} \
+    "${mysql_package_prefix}-*"
 
-# Currently, this check is always fails in mariadb 10.6.
-# The cause of failure is the Mroonga packages for
-# MariaDB10.6 don't exist in packages.groonga.org.
-# Because the Mroonga packages for MariaDB10.6 are made for the first time.
-# Therefore, this check disable temporarily in mariadb 10.6.
-# We enable this check again after we release the next release.
-case ${package} in
-  mariadb-10.6-*)
-    exit
-    ;;
-esac
+  # Currently, this check is always fails in mariadb 10.6.
+  # The cause of failure is the Mroonga packages for
+  # MariaDB10.6 don't exist in packages.groonga.org.
+  # Because the Mroonga packages for MariaDB10.6 are made for the first time.
+  # Therefore, this check disable temporarily in mariadb 10.6.
+  # We enable this check again after we release the next release.
+  case ${package} in
+    mariadb-10.6-*)
+      exit
+      ;;
+  esac
 
-sudo ${DNF} install -y ${old_package}
-sudo ${DNF} install -y \
-  ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
+  sudo ${DNF} install -y ${old_package}
+  sudo ${DNF} install -y \
+    ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
+fi
