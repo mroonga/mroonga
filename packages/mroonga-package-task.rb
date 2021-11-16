@@ -3,7 +3,6 @@ require "json"
 require "pathname"
 require "pp"
 require "zlib"
-require "octokit"
 
 groonga_repository = ENV["GROONGA_REPOSITORY"]
 if groonga_repository.nil?
@@ -17,7 +16,6 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     super("#{@mysql_package}-mroonga", detect_version, detect_release_time)
     @original_archive_base_name = "mroonga-#{@version}"
     @original_archive_name = "#{@original_archive_base_name}.tar.gz"
-    @target_branch_name = ENV["TARGET_BRANCH_NAME"] || nil
   end
 
   private
@@ -199,38 +197,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     true
   end
 
-  def built_package_url_from_branch(target_branch_name, target_package_name)
-    client = Octokit::Client.new
-    client.access_token = ENV["GITHUB_ACCESS_TOKEN"]
-    artifacts_response = nil
-    workflow_runs_response = client.workflow_runs("mroonga/mroonga",
-                                                  "linux.yml",
-                                                  branch: target_branch_name)
-    workflow_runs_response.workflow_runs.each do |workflow_run|
-      artifacts_response =
-        client.get("/repos/mroonga/mroonga/actions/runs/#{workflow_run.id}/artifacts")
-      next if artifacts_response.total_count.zero?
-
-      artifacts_response.artifacts.each do |artifact|
-        if artifact.name == target_package_name
-          return artifact.archive_download_url
-        end
-      end
-      break
-    end
-    raise "Artifacts not found: <#{target_branch_name}>: <#{target_package_name}>"
-  end
-
   def built_package_url(target_namespace, target)
-    url = ""
-    if @target_branch_name
-      target_package_name =
-        "packages-#{@package.gsub(/-mroonga/, "")}-#{target}"
-      url = built_package_url_from_branch(@target_branch_name, target_package_name)
-    else
-      url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
-      url << "#{@package}-#{target}.tar.gz"
-    end
+    url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
+    url << "#{@package}-#{target}.tar.gz"
     url
   end
 
@@ -238,17 +207,27 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     1
   end
 
-  def download(url, download_dir)
-    unless @target_branch_name
-      return super(url, download_dir)
-    end
+  def github_repository
+    "mroonga/mroonga"
+  end
 
-    client = Octokit::Client.new
-    client.access_token = ENV["GITHUB_ACCESS_TOKEN"]
-    downloaded_file = "#{download_dir}/packages-#{@package.gsub(/-mroonga/, "")}.zip"
-    File.open(downloaded_file, "wb") do |output|
-      output.print(client.get(url))
+  def github_actions_workflow_file_name(target_namespace, target)
+    case target_namespace
+    when :apt, :yum
+      "linux.yml"
+    when :windows
+      "windows.yml"
+    else
+      super
     end
-    File.expand_path(downloaded_file)
+  end
+
+  def github_actions_artifact_name(target_namespace, target)
+    case target_namespace
+    when :apt, :yum
+      "packages-#{@mysql_package}-#{target}"
+    else
+      raise NotImplementedError
+    end
   end
 end

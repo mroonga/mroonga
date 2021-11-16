@@ -105,7 +105,6 @@ jobs:
             libtool \
             python3-pip \
             ruby
-          sudo gem install octokit
       - name: Install Sphinx
         run: |
           sudo pip3 install sphinx
