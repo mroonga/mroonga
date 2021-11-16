@@ -291,22 +291,12 @@ jobs:
       - name: Run VM
         run: |
           vagrant up ${{ matrix.os }}
-      - name: Run test
-        if: |
-          !startsWith(github.ref, 'refs/heads/maintenance/')
-        run: |
-          repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
-          mkdir -p "${repositories_dir}"
-          os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
-          cp -a ${os_type} "${repositories_dir}"
-          vagrant \
-            ssh ${{ matrix.os }} \
-            -- \
-            /vagrant/packages/${{ matrix.package-type }}/test.sh \
-            ${{ matrix.package }}-mroonga
-      - name: Run test (Maintenance branch)
+      - name: Set branch name
         if: |
           startsWith(github.ref, 'refs/heads/maintenance/')
+        run:
+          echo "BRANCH_NAME=maintenance" >> $GITHUB_ENV
+      - name: Run test
         run: |
           repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
           mkdir -p "${repositories_dir}"
@@ -317,4 +307,4 @@ jobs:
             -- \
             /vagrant/packages/${{ matrix.package-type }}/test.sh \
             ${{ matrix.package }}-mroonga \
-            maintenance
+            ${BRANCH_NAME}
