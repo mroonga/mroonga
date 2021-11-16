@@ -206,4 +206,28 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def built_package_n_split_components
     1
   end
+
+  def github_repository
+    "mroonga/mroonga"
+  end
+
+  def github_actions_workflow_file_name(target_namespace, target)
+    case target_namespace
+    when :apt, :yum
+      "linux.yml"
+    when :windows
+      "windows.yml"
+    else
+      super
+    end
+  end
+
+  def github_actions_artifact_name(target_namespace, target)
+    case target_namespace
+    when :apt, :yum
+      "packages-#{@mysql_package}-#{target}"
+    else
+      raise NotImplementedError
+    end
+  end
 end
