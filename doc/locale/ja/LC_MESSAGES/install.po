@@ -154,6 +154,16 @@ msgstr ""
 "CentOS 7では、Mroonga 10.06からMariaDB提供のMariaDB 10.5パッケージを利用でき"
 "ます。"
 
+msgid "CentOS 7 (with MariaDB 10.6 package)"
+msgstr "CentOS 7（MariaDB 10.6のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.6 on CentOS 7 since "
+"Mroonga 11.09 release."
+msgstr ""
+"CentOS 7では、Mroonga 11.09からMariaDB提供のMariaDB 10.6パッケージを利用でき"
+"ます。"
+
 msgid "CentOS 8 (with the Oracle MySQL 8.0 package)"
 msgstr "CentOS 8（OracleのMySQL 8.0パッケージを利用）"
 
@@ -814,11 +824,3 @@ msgstr ""
 "MariaDBをビルドしたらMroongaを登録する必要があります。 ``"
 "${MARIADB_BUILD_DIR}\\storage\\mroonga\\data\\install.sql`` にあるSQLを使って"
 "Mroongaを登録してください。"
-
-#~ msgid "CentOS 7 (with the official MariaDB package)"
-#~ msgstr "CentOS 7（公式のMariaDBパッケージを利用）"
-
-#~ msgid "You can use CentOS's MariaDB packages (version 5.5.x) on CentOS 7."
-#~ msgstr ""
-#~ "CentOS 7では、ディストリビューション由来のMariaDBパッケージ（MariaDB 5.5"
-#~ "系）を利用できます。"
