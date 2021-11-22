@@ -64,10 +64,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
-          # TODO: Need groonga-normalizer-mysql package
-          # - os: almalinux-8
-          #   package-type: yum
-          #   package: mysql-community-8.0
+          - os: almalinux-8
+            package-type: yum
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
@@ -77,10 +76,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: percona-server-5.7
-          # TODO: Need groonga-normalizer-mysql package
-          # - os: almalinux-8
-          #   package-type: yum
-          #   package: percona-server-8.0
+          - os: almalinux-8
+            package-type: yum
+            package: percona-server-8.0
           - os: centos-7
             package-type: yum
             package: percona-server-8.0
@@ -269,10 +267,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
-          # TODO: Need groonga-normalizer-mysql package
-          # - os: almalinux-8
-          #   package-type: yum
-          #   package: mysql-community-8.0
+          - os: almalinux-8
+            package-type: yum
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
@@ -282,10 +279,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: percona-server-5.7
-          # TODO: Need groonga-normalizer-mysql package
-          # - os: almalinux-8
-          #   package-type: yum
-          #   package: percona-server-8.0
+          - os: almalinux-8
+            package-type: yum
+            package: percona-server-8.0
           - os: centos-7
             package-type: yum
             package: percona-server-8.0
