@@ -3,10 +3,125 @@
 News
 ====
 
+.. _release-11-10:
+
+Release 11.10 - 2021-11-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/almalinux`] Added support for Mroonga on AlamLinux 8.
+
+ * [:doc:`/install/almalinux`] Added support for MySQL 8.0.27.
+
+    * There are below restrictions in the MySQL 8.0 package.
+
+      * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+      * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
+
+        * The feature of relevant to the optimization.
+
+  * [:doc:`/install/almalinux`] Added support for Percona Server 8.0.26.
+
+  * [:doc:`/install/almalinux`] Added support for MariaDB 10.3.32, 10.4.22, 10.5.13, and 10.6.5.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.41, 10.3.32, 10.4.22, 10.5.13, and 10.6.5.
+
+* [:doc:`/install/ubuntu`] Added support for MySQL 8.0 on Ubuntu 21.04 (Hirsute Hippo) and 21.10 (Impish Indri).
+
+  * There are below restrictions in the MySQL 8.0 package.
+
+    * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+    * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
+
+      * The feature of relevant to the optimization.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/centos`] Fixed a bug that we have not provided the package of Mroonga for MariaDB 10.6.
+
+* [:doc:`/reference/optimizations`] Fixed a bug that Mroonga apply the optimization of row count wrongly.
+  [MDEV-16922][Reported by Josep Sanz]
+
+  Normally, Mroonga apply the optimization of row count when the ``SELECT`` fetches only ``COUNT(*)`` and
+  condition in ``WHERE`` can be processed only by index.
+
+  However, Mroonga applied the optimization of row count even if Mroonga couldn't process condition
+  in ``WHERE`` only by index as below case by this bug.
+
+  Consequently, the result of ``SELECT COUNT(*) WHERE ...`` is wrong.
+
+  .. code-block::
+
+     CREATE TABLE roles (
+       id INT
+     );
+
+     INSERT INTO roles VALUES (1), (2), (3), (4), (5);
+
+     CREATE TABLE users (
+       id INT,
+       role_id INT,
+       INDEX (role_id)
+     );
+
+     INSERT INTO users VALUES (10, 1);
+     INSERT INTO users VALUES (11, 2);
+     INSERT INTO users VALUES (13, 3);
+     INSERT INTO users VALUES (14, 4);
+     INSERT INTO users VALUES (15, 5);
+     INSERT INTO users VALUES (20, 1);
+     INSERT INTO users VALUES (21, 2);
+     INSERT INTO users VALUES (23, 3);
+     INSERT INTO users VALUES (24, 4);
+     INSERT INTO users VALUES (25, 5);
+
+     SELECT COUNT(*)
+       FROM (
+         SELECT roles.id
+           FROM roles
+                LEFT JOIN users ON users.id <= 100 AND
+                                   users.role_id = roles.id
+       ) roles_users;
+
+* Fixed a bug that Mroonga doesn't set proper encoding on condition push down for 'STRING_FIELD ='. [groonga-dev,04913][Reported by Tomohiro 'Tomo-p' KATO]
+
+  Mroonga executes condition push down for 'STRING_FIELD =' in the following case.
+  However, Mroonga doesn't set proper encoding in search keywords at this time.
+  Consequently, Mroonga fails to normalize search keywords.
+
+  .. code-block::
+
+    CREATE TABLE memos (
+      id INT PRIMARY KEY,
+      title TEXT,
+      INDEX (title)
+    ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+
+    INSERT INTO memos VALUES (1, 'Groonga');
+    INSERT INTO memos VALUES (2, 'Mroonga');
+
+    SELECT *
+      FROM memos
+      WHERE title = 'mroonga'
+      ORDER BY id;
+
+Thanks
+^^^^^^
+
+* Josep Sanz
+
+* Tomohiro KATO
+
 .. _release-11-09:
 
 Release 11.09 - 2021-11-04
 --------------------------
+
+Improvements
+^^^^^^^^^^^^
 
 * [:doc:`/install/centos`] Added support for MySQL 5.7.36, 8.0.27.
 
