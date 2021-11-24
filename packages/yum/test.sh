@@ -100,9 +100,8 @@ cd /usr/share/mysql-test/
 sudo rm -rf plugin
 sudo mkdir -p plugin
 sudo cp -a /vagrant/mysql-test/mroonga/ plugin/
-rm -rf plugin/mroonga/{storage,wrapper}/suite.{opt,pm}
-sed -i'' -e "s/ha_mroonga\\.so/${ha_mroonga_so}/g" \
-  plugin/mroonga/include/mroonga/check_ha_mroonga_so.inc
+sed -i'' -e "s/\\$HA_MROONGA_SO/${ha_mroonga_so}/g" \
+  plugin/mroonga/include/mroonga/have_mroonga.opt
 
 parallel=$(nproc)
 case ${package} in

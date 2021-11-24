@@ -24,8 +24,7 @@ disable_query_log;
 
 let have_mroonga_storage_engine=`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`;
 if (!$have_mroonga_storage_engine) {
-  eval INSTALL PLUGIN mroonga SONAME $ha_mroonga_so;
-  eval INSTALL PLUGIN mroonga_stats SONAME $ha_mroonga_so;
+  --skip This test is for Mroonga
 }
 
 let original_default_storage_engine=`SELECT @@global.default_storage_engine`;
