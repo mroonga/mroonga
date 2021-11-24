@@ -14,6 +14,7 @@ don't warry. There is a document about building Mroonga from source.
    install/macos
    install/debian
    install/ubuntu
+   install/almalinux
    install/centos
    install/fedora
    install/docker
