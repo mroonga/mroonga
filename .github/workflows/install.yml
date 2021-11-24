@@ -10,11 +10,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-18.04
+          - os: ubuntu-bionic
             package: mysql
-          - os: ubuntu-20.04
+          - os: ubuntu-focal
             package: mariadb
-          - os: ubuntu-20.04
+          - os: ubuntu-focal
             package: mysql
     runs-on: macos-10.15
     steps:
