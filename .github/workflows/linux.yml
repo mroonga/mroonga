@@ -55,6 +55,9 @@ jobs:
           - os: centos-8
             package-type: yum
             package: mariadb-10.6
+          - os: ubuntu-impish
+            package-type: apt
+            package: mysql-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
@@ -256,6 +259,9 @@ jobs:
           - os: centos-8
             package-type: yum
             package: mariadb-10.6
+          - os: ubuntu-impish
+            package-type: apt
+            package: mysql-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7

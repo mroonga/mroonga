@@ -3,22 +3,22 @@ Section: database
 Priority: optional
 Maintainer: Horimoto Yasuhiro <horimoto@clear-code.com>
 Build-Depends:
-	debhelper (>= 9),
 	autotools-dev,
-	pkg-config,
-	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
-	groonga-normalizer-mysql,
-	libmecab-dev,
-	libmysqlclient-dev,
-	libssl-dev,
-	wget,
-	lsb-release,
 	cmake,
-	libwrap0-dev,
+	debhelper (>= 9),
+	groonga-normalizer-mysql,
 	libedit-dev,
 	libevent-dev,
+	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
 	liblz4-dev,
-	libncurses5-dev
+	libmecab-dev,
+	libmysqlclient-dev,
+	libncurses5-dev,
+	libssl-dev,
+	libwrap0-dev,
+	lsb-release,
+	pkg-config,
+	wget
 Standards-Version: 3.9.1
 Homepage: https://mroonga.org/
 
