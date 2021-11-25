@@ -76,9 +76,12 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
-          - os: almalinux-8
-            package-type: yum
-            package: mysql-community-8.0
+          # The build of MySQL 8.0.27 fail by gcc-toolset-10.
+          # The cause of this build error is the error of internal of gcc.
+          # We will enable MySQL 8.0 on AlmaLinux 8 when gcc will fix this error.
+          # - os: almalinux-8
+          #   package-type: yum
+          #   package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
@@ -291,9 +294,12 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
-          - os: almalinux-8
-            package-type: yum
-            package: mysql-community-8.0
+          # The build of MySQL 8.0.27 fail by gcc-toolset-10.
+          # The cause of this build error is the error of internal of gcc.
+          # We will enable MySQL 8.0 on AlmaLinux 8 when gcc will fix this error.
+          # - os: almalinux-8
+          #   package-type: yum
+          #   package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
