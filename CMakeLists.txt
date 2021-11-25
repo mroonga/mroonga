@@ -70,18 +70,12 @@ endif()
 
 set(MRN_PLUGIN_SUFFIX ${CMAKE_SHARED_MODULE_SUFFIX})
 
-if(MRN_BUNDLED)
-  set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR}/storage/mroonga)
-else()
-  set(MRN_SOURCE_DIR ${CMAKE_SOURCE_DIR})
-endif()
-
-file(READ ${MRN_SOURCE_DIR}/version_full   MRN_VERSION_FULL)
-file(READ ${MRN_SOURCE_DIR}/version_major  MRN_VERSION_MAJOR)
-file(READ ${MRN_SOURCE_DIR}/version_minor  MRN_VERSION_MINOR)
-file(READ ${MRN_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
-file(READ ${MRN_SOURCE_DIR}/version_in_hex MRN_VERSION_IN_HEX)
-file(READ ${MRN_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_full   MRN_VERSION_FULL)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_major  MRN_VERSION_MAJOR)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_minor  MRN_VERSION_MINOR)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_in_hex MRN_VERSION_IN_HEX)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
 
 if(MRN_GROONGA_BUNDLED)
   option(MRN_GROONGA_EMBED
@@ -110,11 +104,11 @@ if(MRN_GROONGA_BUNDLED)
 else()
   set(MRN_GROONGA_EMBED OFF)
 
-  file(READ ${MRN_SOURCE_DIR}/required_groonga_version REQUIRED_GROONGA_VERSION)
+  file(READ ${CMAKE_CURRENT_SOURCE_DIR}/required_groonga_version REQUIRED_GROONGA_VERSION)
   string(STRIP "${REQUIRED_GROONGA_VERSION}" REQUIRED_GROONGA_VERSION)
 
   file(READ
-    ${MRN_SOURCE_DIR}/required_groonga_normalizer_mysql_version
+    ${CMAKE_CURRENT_SOURCE_DIR}/required_groonga_normalizer_mysql_version
     REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION)
   string(STRIP
     "${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}"
@@ -125,7 +119,7 @@ set(MRN_PACKAGE_STRING "${PROJECT_NAME} ${MRN_VERSION_FULL}")
 
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
-include(${MRN_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/build/cmake_modules/ReadFileList.cmake)
 
 set(MRN_C_COMPILE_FLAGS "")
 set(MRN_CXX_COMPILE_FLAGS "")
@@ -155,23 +149,17 @@ macro(mrn_build_flag flag)
   mrn_check_cxxflag(${flag})
 endmacro()
 
-if(MRN_BUNDLED)
-  set(MRN_RELATIVE_DIR_PREFIX "${MRN_SOURCE_DIR}/")
-else()
-  set(MRN_RELATIVE_DIR_PREFIX "")
-endif()
-
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/sources.am MRN_SOURCES)
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_no_mysql_sources.am
   LIBMRN_NO_MYSQL_SOURCES)
-string(REGEX REPLACE "([^;]+)" "${MRN_RELATIVE_DIR_PREFIX}lib/\\1"
+string(REGEX REPLACE "([^;]+)" "${CMAKE_CURRENT_SOURCE_DIR}/lib/\\1"
   LIBMRN_NO_MYSQL_SOURCES "${LIBMRN_NO_MYSQL_SOURCES}")
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/lib/libmrn_need_mysql_sources.am
   LIBMRN_NEED_MYSQL_SOURCES)
-string(REGEX REPLACE "([^;]+)" "${MRN_RELATIVE_DIR_PREFIX}lib/\\1"
+string(REGEX REPLACE "([^;]+)" "${CMAKE_CURRENT_SOURCE_DIR}/lib/\\1"
   LIBMRN_NEED_MYSQL_SOURCES "${LIBMRN_NEED_MYSQL_SOURCES}")
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/udf/sources.am MRN_UDF_SOURCES)
-string(REGEX REPLACE "([^;]+)" "${MRN_RELATIVE_DIR_PREFIX}udf/\\1"
+string(REGEX REPLACE "([^;]+)" "${CMAKE_CURRENT_SOURCE_DIR}/udf/\\1"
   MRN_UDF_SOURCES "${MRN_UDF_SOURCES}")
 
 if(MRN_BUNDLED)
