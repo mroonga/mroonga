@@ -21,9 +21,9 @@ RUN \
     'dnf-command(download)' && \
   dnf module --enablerepo=powertools -y ${quiet} enable mariadb-devel && \
   dnf builddep --enablerepo=powertools -y ${quiet} MariaDB && \
+  dnf module --enablerepo=powertools -y ${quiet} disable mariadb-devel && \
   dnf module -y ${quiet} disable mariadb && \
   dnf module -y ${quiet} disable mysql && \
-  dnf module --enablerepo=powertools -y ${quiet} disable mariadb-devel && \
   dnf download -y ${quiet} --source MariaDB && \
   dnf install --enablerepo=powertools -y ${quiet} \
     MariaDB-devel \
