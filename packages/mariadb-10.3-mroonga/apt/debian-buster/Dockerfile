@@ -14,12 +14,8 @@ RUN \
   apt update ${quiet} && \
   apt install -y -V ${quiet} \
     wget && \
-  { \
-    echo "deb [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] http://packages.groonga.org/debian/ buster main"; \
-    echo "deb-src [signed-by=/usr/share/keyrings/groonga-archive-keyring.gpg] http://packages.groonga.org/debian/ buster main"; \
-  } | tee /etc/apt/sources.list.d/groonga.list && \
-  wget -O /usr/share/keyrings/groonga-archive-keyring.gpg \
-    https://packages.groonga.org/debian/groonga-archive-keyring.gpg && \
+  wget https://packages.groonga.org/debian/groonga-apt-source-latest-buster.deb && \
+  apt install -y -V ./groonga-apt-source-latest-buster.deb && \
   apt update ${quiet} && \
   apt build-dep -y mariadb-server-10.3 && \
   apt install -y -V ${quiet} \
