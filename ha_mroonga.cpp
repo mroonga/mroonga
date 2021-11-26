@@ -6296,6 +6296,7 @@ int ha_mroonga::storage_rnd_init(bool scan)
 
   mrn_change_encoding(ctx, NULL);
 
+  int error = 0;
   // MySQL uses rnd_init()/rnd_next()/rnd_end() for condition pushed
   // down SELECT.
   if (pushed_cond) {
@@ -6324,58 +6325,68 @@ int ha_mroonga::storage_rnd_init(bool scan)
                                                     expression,
                                                     NULL,
                                                     GRN_OP_OR);
+      if (ctx->rc != GRN_SUCCESS) {
+        error = ER_ERROR_ON_READ;
+        my_message(error, ctx->errbuf, MYF(0));
+      }
       grn_obj_unlink(ctx, expression);
 
-      grn_table_sort_key *sort_keys = NULL;
-      int n_sort_keys = 0;
-      longlong limit = -1;
-      check_fast_order_limit(condition_push_down_result,
-                             &sort_keys,
-                             &n_sort_keys,
-                             &limit);
+      if (error == 0) {
+        grn_table_sort_key *sort_keys = NULL;
+        int n_sort_keys = 0;
+        longlong limit = -1;
+        check_fast_order_limit(condition_push_down_result,
+                               &sort_keys,
+                               &n_sort_keys,
+                               &limit);
 
-      if (fast_order_limit) {
-        sorted_condition_push_down_result_ =
-          grn_table_create(ctx, NULL,
-                           0, NULL,
-                           GRN_OBJ_TABLE_NO_KEY, NULL,
-                           condition_push_down_result);
-        grn_table_sort(ctx,
-                       condition_push_down_result,
-                       0, static_cast<int>(limit),
-                       sorted_condition_push_down_result_,
-                       sort_keys,
-                       n_sort_keys);
-        for (int i = 0; i < n_sort_keys; i++) {
-          grn_obj_unlink(ctx, sort_keys[i].key);
+        if (fast_order_limit) {
+          sorted_condition_push_down_result_ =
+            grn_table_create(ctx, NULL,
+                             0, NULL,
+                             GRN_OBJ_TABLE_NO_KEY, NULL,
+                             condition_push_down_result);
+          grn_table_sort(ctx,
+                         condition_push_down_result,
+                         0, static_cast<int>(limit),
+                         sorted_condition_push_down_result_,
+                         sort_keys,
+                         n_sort_keys);
+          for (int i = 0; i < n_sort_keys; i++) {
+            grn_obj_unlink(ctx, sort_keys[i].key);
+          }
+          my_free(sort_keys);
+
+          condition_push_down_result_cursor =
+            grn_table_cursor_open(ctx,
+                                  sorted_condition_push_down_result_,
+                                  NULL, 0,
+                                  NULL, 0,
+                                  0, -1,
+                                  0);
+        } else {
+          condition_push_down_result_cursor =
+            grn_table_cursor_open(ctx,
+                                  condition_push_down_result,
+                                  NULL, 0,
+                                  NULL, 0,
+                                  0, -1,
+                                  0);
         }
-        my_free(sort_keys);
-
-        condition_push_down_result_cursor =
-          grn_table_cursor_open(ctx,
-                                sorted_condition_push_down_result_,
-                                NULL, 0,
-                                NULL, 0,
-                                0, -1,
-                                0);
-      } else {
-        condition_push_down_result_cursor =
-          grn_table_cursor_open(ctx,
-                                condition_push_down_result,
-                                NULL, 0,
-                                NULL, 0,
-                                0, -1,
-                                0);
+        if (ctx->rc != GRN_SUCCESS) {
+          error = ER_ERROR_ON_READ;
+          my_message(error, ctx->errbuf, MYF(0));
+        }
       }
     }
   } else {
     cursor = grn_table_cursor_open(ctx, grn_table, NULL, 0, NULL, 0, 0, -1, 0);
+    if (ctx->rc != GRN_SUCCESS) {
+      error = ER_ERROR_ON_READ;
+      my_message(error, ctx->errbuf, MYF(0));
+    }
   }
-  if (ctx->rc) {
-    my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
-    DBUG_RETURN(ER_ERROR_ON_READ);
-  }
-  DBUG_RETURN(0);
+  DBUG_RETURN(error);
 }
 
 int ha_mroonga::rnd_init(bool scan)

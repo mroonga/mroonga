@@ -867,20 +867,34 @@ namespace mrn {
 
     switch (func_item->functype()) {
     case Item_func::EQ_FUNC:
-      added = convert_binary_operation(func_item, expression, GRN_OP_EQUAL);
+      added = convert_binary_operation(func_item,
+                                       expression,
+                                       encodings,
+                                       GRN_OP_EQUAL);
       break;
     case Item_func::LT_FUNC:
-      added = convert_binary_operation(func_item, expression, GRN_OP_LESS);
+      added = convert_binary_operation(func_item,
+                                       expression,
+                                       encodings,
+                                       GRN_OP_LESS);
       break;
     case Item_func::LE_FUNC:
-      added = convert_binary_operation(func_item, expression, GRN_OP_LESS_EQUAL);
+      added = convert_binary_operation(func_item,
+                                       expression,
+                                       encodings,
+                                       GRN_OP_LESS_EQUAL);
       break;
     case Item_func::GE_FUNC:
-      added = convert_binary_operation(func_item, expression,
+      added = convert_binary_operation(func_item,
+                                       expression,
+                                       encodings,
                                        GRN_OP_GREATER_EQUAL);
       break;
     case Item_func::GT_FUNC:
-      added = convert_binary_operation(func_item, expression, GRN_OP_GREATER);
+      added = convert_binary_operation(func_item,
+                                       expression,
+                                       encodings,
+                                       GRN_OP_GREATER);
       break;
     case Item_func::BETWEEN:
       added = convert_between(func_item, expression);
@@ -900,9 +914,11 @@ namespace mrn {
     DBUG_RETURN(added);
   }
 
-  bool ConditionConverter::convert_binary_operation(const Item_func *func_item,
-                                                    grn_obj *expression,
-                                                    grn_operator _operator) {
+  bool ConditionConverter::convert_binary_operation(
+    const Item_func *func_item,
+    grn_obj *expression,
+    std::vector<grn_encoding> &encodings,
+    grn_operator _operator) {
     MRN_DBUG_ENTER_METHOD();
 
     Item **arguments = func_item->arguments();
@@ -910,6 +926,15 @@ namespace mrn {
     Item *right_item = arguments[1];
     if (left_item->type() == Item::FIELD_ITEM) {
       const Item_field *field_item = static_cast<const Item_field *>(left_item);
+      enum_field_types field_type = field_item->field->real_type();
+      NormalizedType normalized_type = normalize_field_type(field_type);
+      if (normalized_type == STRING_TYPE) {
+        grn_encoding encoding = encoding::convert(field_item->field->charset());
+        if (!encodings.empty() && encodings[0] != encoding) {
+          DBUG_RETURN(false);
+        }
+        encodings.push_back(encoding);
+      }
       append_field_value(field_item, expression);
       append_const_item(field_item, right_item, expression);
       grn_expr_append_op(ctx_, expression, _operator, 2);

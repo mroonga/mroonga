@@ -108,6 +108,7 @@ namespace mrn {
 
     bool convert_binary_operation(const Item_func *func_item,
                                   grn_obj *expression,
+                                  std::vector<grn_encoding> &encodings,
                                   grn_operator _operator);
     bool convert_between(const Item_func *func_item, grn_obj *expression);
     bool convert_in(const Item_func *func_item,

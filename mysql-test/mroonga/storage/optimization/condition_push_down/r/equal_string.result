@@ -1,0 +1,22 @@
+DROP TABLE IF EXISTS memos;
+FLUSH STATUS;
+SET NAMES utf8mb4;
+CREATE TABLE memos (
+id INT PRIMARY KEY,
+title TEXT,
+INDEX (title)
+) DEFAULT CHARSET=utf8mb4;
+Warnings:
+Note	1071	Specified key was too long; max key length is 3072 bytes
+INSERT INTO memos VALUES (1, 'Groonga');
+INSERT INTO memos VALUES (2, 'Mroonga');
+SELECT *
+FROM memos
+WHERE title = 'mroonga'
+  ORDER BY id;
+id	title
+2	Mroonga
+SHOW STATUS LIKE 'mroonga_condition_push_down';
+Variable_name	Value
+Mroonga_condition_push_down	1
+DROP TABLE memos;
