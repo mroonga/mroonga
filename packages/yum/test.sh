@@ -160,14 +160,9 @@ sudo ${DNF} erase -y \
   ${package} \
   "${mysql_package_prefix}-*"
 
-# Currently, this check is always fails in mariadb 10.6.
-# The cause of failure is the Mroonga packages for
-# MariaDB10.6 don't exist in packages.groonga.org.
-# Because the Mroonga packages for MariaDB10.6 are made for the first time.
-# Therefore, this check disable temporarily in mariadb 10.6.
-# We enable this check again after we release the next release.
-case ${package} in
-  mariadb-10.6-*)
+# Disable upgrade test for first time packages.
+case ${os}-${package} in
+  almalinux-*) # TODO: Remove this after 11.10 release.
     exit
     ;;
 esac
