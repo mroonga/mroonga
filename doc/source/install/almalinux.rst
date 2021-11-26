@@ -1,5 +1,5 @@
 AlmaLinux
-======
+=========
 
 This section describes how to install Mroonga related RPM packages on
 AlmaLinux. You can install them by ``dnf``.
@@ -17,7 +17,9 @@ Mroonga 11.10 release.
    There are already known issues about MySQL 8.0.
 
    * :doc:`/tutorial/wrapper` Wrapper mode is not supported yet
-   * :doc:`/tutorial/storage` `JSON` data type is not supported yet
+   * :doc:`/tutorial/storage`  Storage mode does not support the following feature.
+
+     * The feature of relevant to the optimization.
 
 Install::
 
@@ -28,6 +30,13 @@ Install::
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _almalinux-8-percona-8-0:
 
@@ -78,6 +87,13 @@ Install::
   % sudo dnf install -y --enablerepo=epel mariadb-10.3-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+
 .. _almalinux-8-mariadb-10-4:
 
 AlmaLinux 8 (with MariaDB 10.4 package)
@@ -102,6 +118,13 @@ Install::
   % sudo systemctl start mariadb
   % sudo dnf install -y --enablerepo=epel mariadb-10.4-mroonga
   (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _almalinux-8-mariadb-10-5:
 
@@ -128,6 +151,13 @@ Install::
   % sudo dnf install -y --enablerepo=epel mariadb-10.5-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+
 .. _almalinux-8-mariadb-10-6:
 
 AlmaLinux 8 (with MariaDB 10.6 package)
@@ -150,5 +180,12 @@ Install::
   % sudo dnf install -y boost-program-options
   % sudo dnf install --disablerepo=AppStream -y MariaDB-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=epel mariadb-10.5-mroonga
+  % sudo dnf install -y --enablerepo=epel mariadb-10.6-mroonga
   (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
