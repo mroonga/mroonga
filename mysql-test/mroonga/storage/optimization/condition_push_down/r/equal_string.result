@@ -3,11 +3,9 @@ FLUSH STATUS;
 SET NAMES utf8mb4;
 CREATE TABLE memos (
 id INT PRIMARY KEY,
-title TEXT,
+title VARCHAR(128),
 INDEX (title)
 ) DEFAULT CHARSET=utf8mb4;
-Warnings:
-Note	1071	Specified key was too long; max key length is 3072 bytes
 INSERT INTO memos VALUES (1, 'Groonga');
 INSERT INTO memos VALUES (2, 'Mroonga');
 SELECT *
