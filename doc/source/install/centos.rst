@@ -390,3 +390,29 @@ Install::
   % sudo systemctl start mariadb
   % sudo dnf install -y --enablerepo=epel mariadb-10.5-mroonga
   (% sudo mysqladmin -u root password 'new-password')
+
+.. _centos-8-mariadb-10-6:
+
+CentOS 8 (with MariaDB 10.6 package)
+------------------------------------
+
+You can use MariaDB's MariaDB packages version 10.6 on CentOS 8 since
+Mroonga 11.09 release.
+
+Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
+
+  [mariadb]
+  name = MariaDB
+  baseurl = http://yum.mariadb.org/10.6/centos8-amd64
+  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck=1
+
+Install::
+
+  % sudo dnf install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
+  % sudo dnf install -y boost-program-options
+  % sudo dnf install -y libpmem galera-4
+  % sudo dnf install --disablerepo=appstream -y MariaDB-server
+  % sudo systemctl start mariadb
+  % sudo dnf install -y --enablerepo=epel,powertools mariadb-10.6-mroonga
+  (% sudo mysqladmin -u root password 'new-password')

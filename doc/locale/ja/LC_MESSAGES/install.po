@@ -212,6 +212,16 @@ msgstr ""
 "CentOS 8では、Mroonga 10.06からMariaDB提供のMariaDB 10.5パッケージを利用でき"
 "ます。"
 
+msgid "CentOS 8 (with MariaDB 10.6 package)"
+msgstr "CentOS 8（MariaDB 10.6のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.6 on CentOS 8 since "
+"Mroonga 11.09 release."
+msgstr ""
+"CentOS 8では、Mroonga 11.09からMariaDB提供のMariaDB 10.6パッケージを利用でき"
+"ます。"
+
 msgid "Debian GNU/Linux"
 msgstr ""
 
