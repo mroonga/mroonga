@@ -22,7 +22,7 @@ msgid "News"
 msgstr "お知らせ"
 
 msgid "Release 11.10 - 2021-11-29"
-msgstr "11.10リリース - 2019-11-29"
+msgstr "11.10リリース - 2021-11-29"
 
 msgid "Improvements"
 msgstr "改良"
