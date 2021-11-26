@@ -43,6 +43,105 @@ msgstr ""
 "だけ使って下さい。32-bit用パッケージを使った場合は、中程度のサイズのデータで"
 "もメモリ不足エラーになることがあります。"
 
+msgid "AlmaLinux"
+msgstr ""
+
+msgid ""
+"This section describes how to install Mroonga related RPM packages on "
+"AlmaLinux. You can install them by ``dnf``."
+msgstr ""
+"このセクションではAlmaLinux上でMroonga関連のRPMパッケージをインストールする方"
+"法を説明します。これらのパッケージは ``dnf`` でインストールできます。"
+
+msgid "AlmaLinux 8 (with the Oracle MySQL 8.0 package)"
+msgstr "AlmaLinux 8（OracleのMySQL 8.0パッケージを利用）"
+
+msgid ""
+"You can use Oracle's MySQL packages version 8.0 on AlmaLinux 8 since Mroonga "
+"11.10 release."
+msgstr ""
+"AlmaLinux 8では、Mroonga 11.10からOracleのMySQL 8.0パッケージを利用できます。"
+
+msgid "There are already known issues about MySQL 8.0."
+msgstr "MySQL 8.0に関しては以下の既知の問題があります。"
+
+msgid ":doc:`/tutorial/wrapper` Wrapper mode is not supported yet"
+msgstr ":doc:`/tutorial/wrapper` ラッパーモードは未対応です。"
+
+msgid ""
+":doc:`/tutorial/storage`  Storage mode does not support the following "
+"feature."
+msgstr ":doc:`/tutorial/storage` ストレージモードは以下の機能が未対応です。"
+
+msgid "The feature of relevant to the optimization."
+msgstr "最適化関連の機能"
+
+msgid "Install::"
+msgstr "インストール::"
+
+msgid ""
+"If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a "
+"tokenizer, install groonga-tokenizer-mecab package."
+msgstr ""
+"トークナイザーとして `MeCab <https://taku910.github.io/mecab/>`_ を利用したい"
+"場合はgroonga-tokenizer-mecabをインストールしてください。"
+
+msgid "Install groonga-tokenizer-mecab package::"
+msgstr "groonga-tokenizer-mecabをインストール::"
+
+msgid "AlmaLinux 8 (with Percona Server 8.0 package)"
+msgstr "AlmaLinux 8（Percona Server 8.0パッケージを利用）"
+
+msgid ""
+"You can use Percona Server packages version 8.0 on AlmaLinux 8 since Mroonga "
+"11.10 release."
+msgstr ""
+"AlmaLinux 8では、Mroonga 11.10からPercona Server 8.0パッケージを利用できま"
+"す。"
+
+msgid "AlmaLinux 8 (with MariaDB 10.3 package)"
+msgstr "AlmaLinux 8（MariaDB 10.3のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.3 on AlmaLinux 8 since "
+"Mroonga 11.10 release."
+msgstr ""
+"AlmaLinux 8では、Mroonga 11.10からMariaDB提供のMariaDB 10.3パッケージを利用で"
+"きます。"
+
+msgid "Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::"
+msgstr "次の内容で ``/etc/yum.repos.d/MariaDB.repo`` を作ります::"
+
+msgid "AlmaLinux 8 (with MariaDB 10.4 package)"
+msgstr "AlmaLinux 8（MariaDB 10.4のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.4 on AlmaLinux 8 since "
+"Mroonga 11.10 release."
+msgstr ""
+"AlmaLinux 8では、Mroonga 11.10からMariaDB提供のMariaDB 10.4パッケージを利用で"
+"きます。"
+
+msgid "AlmaLinux 8 (with MariaDB 10.5 package)"
+msgstr "AlmaLinux 8（MariaDB 10.5のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.5 on AlmaLinux 8 since "
+"Mroonga 11.10 release."
+msgstr ""
+"AlmaLinux 8では、Mroonga 11.10からMariaDB提供のMariaDB 10.5パッケージを利用で"
+"きます。"
+
+msgid "AlmaLinux 8 (with MariaDB 10.6 package)"
+msgstr "AlmaLinux 8（MariaDB 10.6のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.6 on AlmaLinux 8 since "
+"Mroonga 11.10 release."
+msgstr ""
+"AlmaLinux 8では、Mroonga 11.10からMariaDB提供のMariaDB 10.6パッケージを利用で"
+"きます。"
+
 msgid "CentOS"
 msgstr ""
 
@@ -62,19 +161,6 @@ msgid ""
 msgstr ""
 "CentOS 7では、Mroonga 5.09からOracleのMySQL 5.7パッケージを利用できます。"
 
-msgid "Install::"
-msgstr "インストール::"
-
-msgid ""
-"If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a "
-"tokenizer, install groonga-tokenizer-mecab package."
-msgstr ""
-"トークナイザーとして `MeCab <https://taku910.github.io/mecab/>`_ を利用したい"
-"場合はgroonga-tokenizer-mecabをインストールしてください。"
-
-msgid "Install groonga-tokenizer-mecab package::"
-msgstr "groonga-tokenizer-mecabをインストール::"
-
 msgid "CentOS 7 (with the Oracle MySQL 8.0 package)"
 msgstr "CentOS 7（OracleのMySQL 8.0パッケージを利用）"
 
@@ -83,12 +169,6 @@ msgid ""
 "9.04 release."
 msgstr ""
 "CentOS 7では、Mroonga 9.04からOracleのMySQL 8.0パッケージを利用できます。"
-
-msgid "There are already known issues about MySQL 8.0."
-msgstr "MySQL 8.0に関しては以下の既知の問題があります。"
-
-msgid ":doc:`/tutorial/wrapper` Wrapper mode is not supported yet"
-msgstr ":doc:`/tutorial/wrapper` ラッパーモードは未対応です。"
 
 msgid ":doc:`/tutorial/storage` `JSON` data type is not supported yet"
 msgstr ":doc:`/tutorial/storage` `JSON` データ型は未対応です。"
@@ -120,9 +200,6 @@ msgid ""
 msgstr ""
 "CentOS 7では、Mroonga 7.06からMariaDB提供のMariaDB 10.2パッケージを利用できま"
 "す。"
-
-msgid "Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::"
-msgstr "次の内容で ``/etc/yum.repos.d/MariaDB.repo`` を作ります::"
 
 msgid "CentOS 7 (with MariaDB 10.3 package)"
 msgstr "CentOS 7（MariaDB 10.3のパッケージを利用）"
