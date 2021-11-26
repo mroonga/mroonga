@@ -1,5 +1,8 @@
 # -*- sh-shell: rpm -*-
 
+# Disable annobin because annobin causes SEGV.
+%undefine _annotated_build
+
 %define mysql_version_default 8.0.27
 %define mysql_release_default 1
 %define mysql_dist_default    el%{rhel}
