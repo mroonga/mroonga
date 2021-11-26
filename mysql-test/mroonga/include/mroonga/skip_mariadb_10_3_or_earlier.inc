@@ -14,33 +14,11 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../include/mroonga/skip_mysql_5_7.inc
---source ../../../../include/mroonga/skip_mariadb_10_3_or_earlier.inc
---source ../../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS memos;
---enable_warnings
-
-FLUSH STATUS;
-
-SET NAMES utf8mb4;
-CREATE TABLE memos (
-  id INT PRIMARY KEY,
-  title VARCHAR(128),
-  INDEX (title)
-) DEFAULT CHARSET=utf8mb4;
-
-INSERT INTO memos VALUES (1, 'Groonga');
-INSERT INTO memos VALUES (2, 'Mroonga');
-
-SELECT *
-  FROM memos
-  WHERE title = 'mroonga'
-  ORDER BY id;
-
-SHOW STATUS LIKE 'mroonga_condition_push_down';
-
-DROP TABLE memos;
-
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+if ($mariadb) {
+  if (!$version_10_4_or_later) {
+    --skip This test is not for MariaDB 10.1.x, 10.2.x nor 10.3.x
+  }
+}
