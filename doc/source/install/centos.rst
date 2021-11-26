@@ -409,7 +409,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
-  % sudo dnf install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
+  % sudo dnf install -y https://packages.groonga.org/centos/8/groonga-release-latest.noarch.rpm
   % sudo dnf install -y boost-program-options
   % sudo dnf install -y libpmem galera-4
   % sudo dnf install --disablerepo=appstream -y MariaDB-server
