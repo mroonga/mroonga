@@ -412,7 +412,7 @@ Install::
   % sudo dnf install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo dnf install -y boost-program-options
   % sudo dnf install -y libpmem galera-4
-  % sudo dnf install --disablerepo=appstream -y Mariadb-server
+  % sudo dnf install --disablerepo=appstream -y MariaDB-server
   % sudo systemctl start mariadb
   % sudo dnf install -y --enablerepo=epel,powertools mariadb-10.6-mroonga
   (% sudo mysqladmin -u root password 'new-password')
