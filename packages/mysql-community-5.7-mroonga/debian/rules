@@ -28,7 +28,8 @@ override_dh_auto_configure:
 	  sed -i'' -e '/-DWITH_SSL=/d' debian/rules);			\
 	(cd $${source_base} &&						\
 	  debian/rules override_dh_auto_configure);			\
-	(cd $${build_dir} && $(MAKE) libbinlogevents/include/binlog_config.h);	\
+	(cd $${build_dir} &&						\
+	  $(MAKE) -j$$(nproc) libbinlogevents/include/binlog_config.h);	\
 	(cd $${build_dir}/utilities && $(MAKE) -j$$(nproc) GenError);	\
 	dh_auto_configure						\
 	  --								\
