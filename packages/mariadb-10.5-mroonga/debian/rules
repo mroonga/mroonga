@@ -36,9 +36,9 @@ override_dh_auto_configure:
 	  tar xf ../$${debian});					\
 	dpkg-source --before-build $${source_base};			\
 	(cd $${source_base} &&						\
-	  debian/rules override_dh_auto_configure &&		\
-	  debian/rules build &&						\
-	  debian/rules install);					\
+	  debian/rules override_dh_auto_configure);			\
+	(cd $${build_dir}/storage/perfschema &&				\
+	  $(MAKE) -j$$(nproc) perfschema);				\
 	dh_auto_configure --						\
 	  --with-mysql-source=$${source_base}				\
 	  --with-mysql-build=$${build_dir}				\
