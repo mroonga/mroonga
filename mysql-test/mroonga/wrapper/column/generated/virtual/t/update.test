@@ -16,7 +16,7 @@
 
 --source ../../../../../include/mroonga/have_innodb.inc
 --source ../../../../../include/mroonga/have_version_5_7_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_1_or_earlier.inc
+--source ../../../../../include/mroonga/skip_mariadb_10_1.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
