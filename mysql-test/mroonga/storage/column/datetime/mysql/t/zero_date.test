@@ -1,4 +1,4 @@
-# Copyright(C) 2017 Naoya Murakami <naoya@createfield.com>
+# Copyright(C) 2015-2016 Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,22 +14,26 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../../include/mroonga/have_mysql_5_7_or_later.inc
---source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_mysql.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS logs;
+DROP TABLE IF EXISTS timestamps;
 --enable_warnings
 
-CREATE TABLE logs (
-  id INT,
-  record JSON,
-  message VARCHAR(255) GENERATED ALWAYS AS (json_extract(`record`, '$.message')) VIRTUAL
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+CREATE TABLE timestamps (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  create_dt DATETIME
+) DEFAULT CHARSET UTF8MB4;
 
---error ER_ILLEGAL_HA_CREATE_OPTION
-ALTER TABLE logs ADD INDEX (message);
+--error ER_TRUNCATED_WRONG_VALUE
+INSERT INTO timestamps (create_dt) VALUES ("0000-00-00 00:00:00");
 
-DROP TABLE logs;
+SELECT * FROM timestamps;
 
---source ../../../../../../include/mroonga/have_mroonga_deinit.inc
+INSERT INTO timestamps (create_dt) VALUES ("2015-06-17 00:00:00");
+SELECT * FROM timestamps;
+
+DROP TABLE timestamps;
+
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc
