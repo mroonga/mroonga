@@ -17,7 +17,7 @@
 skip "This test is too fragile.";
 
 --source ../../../include/mroonga/not_embedded.inc
---source ../../../include/mroonga/skip_mysql_5_7_or_later.inc
+--source ../../../include/mroonga/have_mariadb.inc
 --source ../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
