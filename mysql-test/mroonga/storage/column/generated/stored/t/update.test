@@ -17,7 +17,6 @@
 # TODO
 --source ../../../../../include/mroonga/skip_mysql_8_0_or_later.inc
 
---source ../../../../../include/mroonga/have_version_5_7_or_later.inc
 --source ../../../../../include/mroonga/skip_mariadb_10_1.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 
