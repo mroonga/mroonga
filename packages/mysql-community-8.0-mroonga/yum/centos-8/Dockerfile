@@ -17,8 +17,8 @@ RUN \
   dnf builddep --enablerepo=powertools -y ${quiet} mysql-community && \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=powertools -y ${quiet} \
+    ${SCL} \
     ccache \
-    ${SCL}-annobin \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \

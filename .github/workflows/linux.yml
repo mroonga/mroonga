@@ -34,24 +34,36 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mariadb-10.2
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.3
           - os: centos-7
             package-type: yum
             package: mariadb-10.3
           - os: centos-8
             package-type: yum
             package: mariadb-10.3
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.4
           - os: centos-7
             package-type: yum
             package: mariadb-10.4
           - os: centos-8
             package-type: yum
             package: mariadb-10.4
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.5
           - os: centos-7
             package-type: yum
             package: mariadb-10.5
           - os: centos-8
             package-type: yum
             package: mariadb-10.5
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.6
           - os: centos-7
             package-type: yum
             package: mariadb-10.6
@@ -64,10 +76,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
-          # TODO: Need groonga-normalizer-mysql package
-          # - os: almalinux-8
-          #   package-type: yum
-          #   package: mysql-community-8.0
+          - os: almalinux-8
+            package-type: yum
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
@@ -77,10 +88,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: percona-server-5.7
-          # TODO: Need groonga-normalizer-mysql package
-          # - os: almalinux-8
-          #   package-type: yum
-          #   package: percona-server-8.0
+          - os: almalinux-8
+            package-type: yum
+            package: percona-server-8.0
           - os: centos-7
             package-type: yum
             package: percona-server-8.0
@@ -238,24 +248,36 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mariadb-10.2
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.3
           - os: centos-7
             package-type: yum
             package: mariadb-10.3
           - os: centos-8
             package-type: yum
             package: mariadb-10.3
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.4
           - os: centos-7
             package-type: yum
             package: mariadb-10.4
           - os: centos-8
             package-type: yum
             package: mariadb-10.4
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.5
           - os: centos-7
             package-type: yum
             package: mariadb-10.5
           - os: centos-8
             package-type: yum
             package: mariadb-10.5
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.6
           - os: centos-7
             package-type: yum
             package: mariadb-10.6
@@ -269,10 +291,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
-          # TODO: Need groonga-normalizer-mysql package
-          # - os: almalinux-8
-          #   package-type: yum
-          #   package: mysql-community-8.0
+          - os: almalinux-8
+            package-type: yum
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
@@ -282,10 +303,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: percona-server-5.7
-          # TODO: Need groonga-normalizer-mysql package
-          # - os: almalinux-8
-          #   package-type: yum
-          #   package: percona-server-8.0
+          - os: almalinux-8
+            package-type: yum
+            package: percona-server-8.0
           - os: centos-7
             package-type: yum
             package: percona-server-8.0
