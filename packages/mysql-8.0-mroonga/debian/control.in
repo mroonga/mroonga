@@ -7,17 +7,22 @@ Build-Depends:
 	cmake,
 	debhelper (>= 9),
 	groonga-normalizer-mysql,
+	libcurl4-openssl-dev,
 	libedit-dev,
 	libevent-dev,
 	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
+	libicu-dev,
 	liblz4-dev,
 	libmecab-dev,
 	libmysqlclient-dev,
 	libncurses5-dev,
+	libprotobuf-dev,
+	libprotoc-dev,
 	libssl-dev,
 	libwrap0-dev,
 	lsb-release,
 	pkg-config,
+	protobuf-compiler,
 	wget
 Standards-Version: 3.9.1
 Homepage: https://mroonga.org/
