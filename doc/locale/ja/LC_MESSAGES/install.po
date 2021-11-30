@@ -312,6 +312,9 @@ msgstr ""
 msgid "bullseye (MariaDB)"
 msgstr ""
 
+msgid "bullseye (with the Oracle MySQL 8.0 package)"
+msgstr "bullseye（OracleのMySQL 8.0パッケージを利用）"
+
 msgid "buster (MariaDB)"
 msgstr ""
 
