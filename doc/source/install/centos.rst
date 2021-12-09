@@ -75,7 +75,7 @@ since Mroonga 6.02 release.
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y https://repo.percona.com/release/percona-release-latest.noarch.rpm
+  % sudo yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
   % sudo yum install -y --enablerepo=epel percona-server-5.7-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
@@ -99,7 +99,7 @@ since Mroonga 10.06 release.
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y https://repo.percona.com/release/percona-release-latest.noarch.rpm
+  % sudo yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
   % sudo yum install -y --enablerepo=epel percona-server-8.0-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
@@ -303,7 +303,7 @@ since Mroonga 10.06 release.
 Install::
 
   % sudo dnf install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y https://repo.percona.com/release/percona-release-latest.noarch.rpm
+  % sudo dnf install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
   % sudo dnf install -y --enablerepo=epel percona-server-8.0-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
