@@ -19,6 +19,11 @@ jobs:
             package: mariadb
           - os: ubuntu-focal
             package: mysql
+          - os: ubuntu-hirsute
+            package: mysql
+          # TODO: Ubuntu Impish isn't available on bento yet.
+          # - os: ubuntu-impish
+          #   package: mysql
     runs-on: macos-10.15
     steps:
       - uses: actions/checkout@v2
