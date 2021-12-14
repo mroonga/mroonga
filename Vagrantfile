@@ -15,6 +15,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :box => "bento/ubuntu-20.04",
     },
     {
+      :id => "ubuntu-hirsute",
+      :box => "bento/ubuntu-21.04",
+    },
+    {
       :id => "ubuntu-impish",
       :box => "bento/ubuntu-21.10",
     },
