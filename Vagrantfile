@@ -34,10 +34,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :id => "centos-7",
       :box => "bento/centos-7",
     },
-    {
-      :id => "centos-8",
-      :box => "bento/centos-8",
-    },
   ]
 
   n_cpus = ENV["VM_N_CPUS"] || 2
