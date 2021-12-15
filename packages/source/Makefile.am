@@ -22,7 +22,7 @@ GROONGA_PROJECT_DOWNLOAD_BASE = https://packages.groonga.org/source
 GROONGA_DOWNLOAD_BASE = $(GROONGA_PROJECT_DOWNLOAD_BASE)/groonga
 GROONGA_NORMALIZER_MYSQL_DOWNLOAD_BASE = \
 	$(GROONGA_PROJECT_DOWNLOAD_BASE)/groonga-normalizer-mysql
-MARIADB_DOWNLOAD_BASE = https://downloads.mariadb.org/f
+MARIADB_DOWNLOAD_BASE = https://downloads.mariadb.org/rest-api
 
 
 CURL = curl --fail --silent --show-error
@@ -65,7 +65,7 @@ tmp/$(GROONGA_NORMALIZER_MYSQL_TAR_GZ):
 
 tmp/$(MARIADB_TAR_GZ):
 	mkdir -p tmp
-	$(CURL) --output $@ $(MARIADB_DOWNLOAD_BASE)/mariadb-$(MARIADB_VERSION)/source/$(MARIADB_TAR_GZ)
+	$(CURL) --output $@ $(MARIADB_DOWNLOAD_BASE)/mariadb/$(MARIADB_VERSION)/$(MARIADB_TAR_GZ)
 
 MARIADB_WITH_MROONGA_ARCHIVES =			\
 	tmp/$(GROONGA_TAR_GZ)			\
