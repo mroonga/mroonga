@@ -21,11 +21,37 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 11.10 - 2021-11-29"
-msgstr "11.10リリース - 2021-11-29"
+msgid "Release 11.11 - 2021-12-29"
+msgstr "11.11リリース - 2021-12-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Dropped support for CentOS 8."
+msgstr "[:doc:`/install/centos`] CentOS 8のサポートをやめました。"
+
+msgid "Because CentOS 8 will reach EOL at 2021-12-31."
+msgstr "CentOS 8は、2021年12月31日でEOLとなるためです。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"[:doc:`/install/almalinux`] Fixed a bug that we have not provided the "
+"package of Mroonga for MariaDB 10.3, 10.4, 10.5, and 10.6. [Gitter][Reported "
+"by shibanao4870]"
+msgstr ""
+"[:doc:`/install/almalinux`] MariaDB 10.3、10.4、10.5、10.6向けMroongaを提供し"
+"ていなかった問題を修正しました。 [Gitter][shibanao4870さんの報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "shibanao4870"
+msgstr "shibanao4870さん"
+
+msgid "Release 11.10 - 2021-11-29"
+msgstr "11.10リリース - 2021-11-29"
 
 msgid "[:doc:`/install/almalinux`] Added support for Mroonga on AlamLinux 8."
 msgstr "[:doc:`/install/almalinux`] AlmaLinux 8 をサポートしました。"
@@ -71,9 +97,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 21.04 (Hirsute Hippo) と 21.10 (Impish "
 "Indri) の MySQL 8.0 をサポートしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[:doc:`/install/centos`] Fixed a bug that we have not provided the package "
@@ -124,9 +147,6 @@ msgstr ""
 "以下ケースでは、 Mroongaが 'STRING_FIELD =' の条件をコンディションプッシュダ"
 "ウンしますが、この時、Mroongaは適切なエンコーディングを検索キーワードに設定し"
 "ません。結果として、Mroongaは検索キーワードのノーマライズに失敗します。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Josep Sanz"
 msgstr "Josep Sanzさん"
