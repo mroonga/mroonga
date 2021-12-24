@@ -3,6 +3,28 @@
 News
 ====
 
+.. _release-11-11:
+
+Release 11.11 - 2021-12-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Dropped support for CentOS 8.
+
+  Because CentOS 8 will reach EOL at 2021-12-31.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/almalinux`] Fixed a bug that we have not provided the package of Mroonga for MariaDB 10.3, 10.4, 10.5, and 10.6. [Gitter][Reported by shibanao4870]
+
+Thanks
+^^^^^^
+
+* shibanao4870
+
 .. _release-11-10:
 
 Release 11.10 - 2021-11-29
