@@ -20,10 +20,18 @@ Fixes
 
 * [:doc:`/install/almalinux`] Fixed a bug that we have not provided the package of Mroonga for MariaDB 10.3, 10.4, 10.5, and 10.6. [Gitter][Reported by shibanao4870]
 
+* [Documentation][:doc:`/install`] Fixed a typo. [GitHub #469,#470][Patched by Marc Laporte]
+
+* [Documentation][:doc:`/install/centos`] Fixed the wrong URL of ``percona-release-latest.noarch.rpm``. [GitHub #471][Patched by santalex]
+
 Thanks
 ^^^^^^
 
 * shibanao4870
+
+* Marc Laporte
+
+* santalex
 
 .. _release-11-10:
 

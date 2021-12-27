@@ -44,11 +44,31 @@ msgstr ""
 "[:doc:`/install/almalinux`] MariaDB 10.3、10.4、10.5、10.6向けMroongaを提供し"
 "ていなかった問題を修正しました。 [Gitter][shibanao4870さんの報告]"
 
+msgid ""
+"[Documentation][:doc:`/install`] Fixed a typo. [GitHub #469,#470][Patched by "
+"Marc Laporte]"
+msgstr ""
+"[Documentation][:doc:`/install`] 誤記を修正しました。[GitHub #469,#470][Marc "
+"Laporteさんがパッチ提供]"
+
+msgid ""
+"[Documentation][:doc:`/install/centos`] Fixed the wrong URL of ``percona-"
+"release-latest.noarch.rpm``. [GitHub #471][Patched by santalex]"
+msgstr ""
+"[Documentation][:doc:`/install/centos`] ``percona-release-latest.noarch."
+"rpm`` のURLを修正しました。 [GitHub #471][santalexさんがパッチ提供]"
+
 msgid "Thanks"
 msgstr "感謝"
 
 msgid "shibanao4870"
 msgstr "shibanao4870さん"
+
+msgid "Marc Laporte"
+msgstr "Marc Laporteさん"
+
+msgid "santalex"
+msgstr "santalexさん"
 
 msgid "Release 11.10 - 2021-11-29"
 msgstr "11.10リリース - 2021-11-29"
