@@ -207,7 +207,9 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     mysql_zlib_config_include_dir="$ac_mysql_build_dir/extra/zlib"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_zlib_config_include_dir"
   fi
-  MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir"
+  if test "${MYSQL_VARIANT}" = "mysql"; then
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir"
+  fi
   MYSQL_INCLUDES="$MYSQL_INCLUDES $($ac_mysql_config --include)"
   AC_SUBST(MYSQL_INCLUDES)
 

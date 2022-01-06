@@ -29,8 +29,8 @@
 #  include <partition_info.h>
 #endif
 #include <sql_plugin.h>
-#include <sql/field.h>
-#include <sql/table.h>
+#include <field.h>
+#include <table.h>
 #include <mysqld.h>
 
 #include "mrn_err.h"
@@ -41,11 +41,11 @@
 #include <mrn_lock.hpp>
 
 #ifdef MRN_HAVE_SQL_DERROR_H
-#  include <sql/derror.h>
+#  include <derror.h>
 #endif
 
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
-#  include <sql/dd_table_share.h>
+#  include <dd_table_share.h>
 #endif
 
 #include <cstring>

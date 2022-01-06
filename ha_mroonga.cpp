@@ -66,20 +66,20 @@
 #  include <sql_table.h>
 #endif
 #ifdef MRN_HAVE_SQL_DD_TYPES_TABLE_H
-#  include <sql/dd/types/table.h>
+#  include <dd/types/table.h>
 #endif
 #ifdef MRN_HAVE_SQL_DERROR_H
-#  include <sql/derror.h>
+#  include <derror.h>
 #endif
 #ifdef MRN_HAVE_SQL_TYPE_GEOM_H
-#  include <sql/sql_type_geom.h>
+#  include <sql_type_geom.h>
 #endif
 #ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
-#  include <sql/dd/dictionary.h>
-#  include <sql/dd/cache/dictionary_client.h>
+#  include <dd/dictionary.h>
+#  include <dd/cache/dictionary_client.h>
 #endif
 #ifdef MRN_HAVE_SRS
-#    include <sql/srs_fetcher.h>
+#    include <srs_fetcher.h>
 #endif
 
 
@@ -268,7 +268,7 @@ static mysql_mutex_t *mrn_LOCK_open;
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
-#  include <sql/thd_raii.h>
+#  include <thd_raii.h>
 #  define MRN_DISABLE_BINLOG_BEGIN(thd)         \
   do {                                          \
     Disable_binlog_guard guard(thd);
