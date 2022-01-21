@@ -45,6 +45,16 @@ namespace mrn {
       } else {
         grn_time = GRN_TIME_PACK(time_value.tv_sec, time_value.tv_usec);
       }
+#elif defined(MRN_TIMESTAMP_USE_MY_TIMEVAL)
+      int warnings = 0;
+      struct my_timeval my_time_value;
+      if (field_->get_timestamp(&my_time_value, &warnings)) {
+        // XXX: Should we report warnings or MySQL does?
+      } else {
+        // Field_timestamp::get_timestamp() returns "false" not "true"
+        // if it sets value successfully.
+        grn_time = GRN_TIME_PACK(my_time_value.m_tv_sec, my_time_value.m_tv_usec);
+      }
 #elif defined(MRN_TIMESTAMP_USE_MY_TIME_T_AND_POS)
       unsigned long int micro_seconds;
       my_time_t seconds = field_->get_timestamp(field_->ptr, &micro_seconds);
