@@ -47,7 +47,11 @@ REPO
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     old_package=mysql${mysql_package_version}-community-mroonga
     sudo ${DNF} install -y \
-         https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${major_version}.rpm
+         https://repo.mysql.com/mysql80-community-release-el${major_version}.rpm
+    if [ "${major_version}" = "7" ] && [ "${mysql_version}" = "5.7" ]; then
+        sudo yum-config-manager --disable mysql80-community
+        sudo yum-config-manager --enable mysql57-community
+    fi
     ;;
   percona-*)
     service_name=mysqld
