@@ -18,7 +18,7 @@ RUN \
     ca-certificates \
     wget && \
   wget https://packages.groonga.org/debian/groonga-apt-source-latest-buster.deb && \
-  wget https://repo.mysql.com/mysql-apt-config_0.8.17-1_all.deb && \
+  wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb && \
   apt install -y -V --no-install-recommends ${quiet} \
     ./*.deb && \
   rm *.deb && \
