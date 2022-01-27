@@ -3,6 +3,27 @@
 News
 ====
 
+.. _release-11-12:
+
+Release 11.12 - 2022-01-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MySQL 5.7.37.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL 8.0.28.
+
+  There are below restrictions in the MySQL 8.0 package.
+
+    * [:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet.
+    * [:doc:`/tutorial/storage`] Storage mode does not support the following feature.
+
+      * The feature of relevant to the optimization.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.26-17.
+
 .. _release-11-11:
 
 Release 11.11 - 2021-12-29

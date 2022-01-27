@@ -21,11 +21,46 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 11.11 - 2021-12-29"
-msgstr "11.11リリース - 2021-12-29"
+msgid "Release 11.12 - 2022-01-29"
+msgstr "11.12リリース - 2022-01-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.37."
+msgstr "[:doc:`/install/centos`] MySQL 5.7.37をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL "
+"8.0.28."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] MySQL 8.0.28をサポートし"
+"ました。"
+
+msgid "There are below restrictions in the MySQL 8.0 package."
+msgstr "MySQL 8.0 のパッケージには以下の制限があります。"
+
+msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
+msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Storage mode does not support the following "
+"feature."
+msgstr ""
+"[:doc:`/tutorial/storage`] ストレージモードでは、以下の機能が未対応です。"
+
+msgid "The feature of relevant to the optimization."
+msgstr "最適化関連の機能"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"Percona Server 8.0.26-17."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.26-17"
+"をサポートしました。"
+
+msgid "Release 11.11 - 2021-12-29"
+msgstr "11.11リリース - 2021-12-29"
 
 msgid "[:doc:`/install/centos`] Dropped support for CentOS 8."
 msgstr "[:doc:`/install/centos`] CentOS 8のサポートをやめました。"
@@ -78,21 +113,6 @@ msgstr "[:doc:`/install/almalinux`] AlmaLinux 8 をサポートしました。"
 
 msgid "[:doc:`/install/almalinux`] Added support for MySQL 8.0.27."
 msgstr "[:doc:`/install/almalinux`] MySQL 8.0.27をサポートしました。"
-
-msgid "There are below restrictions in the MySQL 8.0 package."
-msgstr "MySQL 8.0 のパッケージには以下の制限があります。"
-
-msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
-msgstr "[:doc:`/tutorial/wrapper`] ラッパーモードは未対応です。"
-
-msgid ""
-"[:doc:`/tutorial/storage`] Storage mode does not support the following "
-"feature."
-msgstr ""
-"[:doc:`/tutorial/storage`] ストレージモードでは、以下の機能が未対応です。"
-
-msgid "The feature of relevant to the optimization."
-msgstr "最適化関連の機能"
 
 msgid "[:doc:`/install/almalinux`] Added support for Percona Server 8.0.26."
 msgstr "[:doc:`/install/almalinux`] Percona Server 8.0.26をサポートしました。"
