@@ -30,7 +30,7 @@ case ${package} in
     ;;
   mysql-community-*)
     old_package=
-    wget https://repo.mysql.com/mysql-apt-config_0.8.17-1_all.deb
+    wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
     sudo \
       env DEBIAN_FRONTEND=noninteractive \
           MYSQL_SERVER_VERSION=mysql-${mysql_version} \
