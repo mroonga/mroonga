@@ -12,6 +12,7 @@ concurrency:
 jobs:
   build:
     name: Build
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -155,7 +156,15 @@ jobs:
       - name: Build with Docker
         run: |
           cd packages/${{ matrix.package }}-mroonga
-          rake ${{ matrix.package-type }}:build BUILD_DIR=build
+          exit_status=0
+          for i in {1..3}; do
+            rake ${{ matrix.package-type }}:build BUILD_DIR=build
+            exit_status=$?
+            if [ ${exit_status} -eq 0 ]; then
+              exit
+            fi
+          done
+          exit ${exit_status}
         env:
           APT_TARGETS: ${{ matrix.os }}
           GROONGA_REPOSITORY: ../../../groonga
