@@ -136,6 +136,8 @@ extern "C" {
 #  if MYSQL_VERSION_ID >= 100100
 #    define MRN_TIMESTAMP_USE_MY_TIME_T_AND_POS
 #  endif
+#elif MYSQL_VERSION_ID >= 80028
+#  define MRN_TIMESTAMP_USE_MY_TIMEVAL
 #else
 #  define MRN_TIMESTAMP_USE_TIMEVAL
 #endif

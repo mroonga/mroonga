@@ -12024,6 +12024,10 @@ void ha_mroonga::storage_store_field_timestamp(Field *field,
   struct timeval time_value;
   GRN_TIME_UNPACK(time, time_value.tv_sec, time_value.tv_usec);
   timestamp_field->store_timestamp(&time_value);
+#elif defined(MRN_TIMESTAMP_USE_MY_TIMEVAL)
+  struct my_timeval my_time_value;
+  GRN_TIME_UNPACK(time, my_time_value.m_tv_sec, my_time_value.m_tv_usec);
+  timestamp_field->store_timestamp(&my_time_value);
 #elif defined(MRN_TIMESTAMP_USE_MY_TIME_T)
   long long int sec, usec;
   GRN_TIME_UNPACK(time, sec, usec);
@@ -12906,11 +12910,17 @@ int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
   bool truncated = false;
 
   Field_timestampf *timestamp2_field = (Field_timestampf *)field;
+  MYSQL_TIME mysql_time;
+#ifdef MRN_TIMESTAMP_USE_MY_TIMEVAL
+  struct my_timeval my_tm;
+  my_timestamp_from_binary(&my_tm, key, timestamp2_field->decimals());
+  mrn_my_tz_UTC->gmt_sec_to_TIME(&mysql_time, my_tm);
+#else
   struct timeval tm;
   my_timestamp_from_binary(&tm, key, timestamp2_field->decimals());
-  MYSQL_TIME mysql_time;
   mrn_my_tz_UTC->gmt_sec_to_TIME(&mysql_time, (my_time_t)tm.tv_sec);
   mysql_time.second_part = tm.tv_usec;
+#endif
   mrn::TimeConverter time_converter;
   long long int grn_time = time_converter.mysql_time_to_grn_time(&mysql_time,
                                                                  &truncated);
