@@ -24,6 +24,10 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.26-17.
 
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 21.04 (Hirsute Hippo) support.
+
+  * Because Ubuntu 21.04 reached EOL at January 20, 2022.
+
 .. _release-11-11:
 
 Release 11.11 - 2021-12-29
