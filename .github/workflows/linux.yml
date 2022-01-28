@@ -158,10 +158,12 @@ jobs:
           cd packages/${{ matrix.package }}-mroonga
           exit_status=0
           for i in {1..3}; do
+            set +e
             rake ${{ matrix.package-type }}:build BUILD_DIR=build
             exit_status=$?
+            set -e
             if [ ${exit_status} -eq 0 ]; then
-              exit
+              break
             fi
           done
           exit ${exit_status}
