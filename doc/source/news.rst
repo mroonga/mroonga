@@ -3,9 +3,9 @@
 News
 ====
 
-.. _release-11-12:
+.. _release-11-13:
 
-Release 11.12 - 2022-01-29
+Release 11.13 - 2022-01-29
 --------------------------
 
 Improvements
