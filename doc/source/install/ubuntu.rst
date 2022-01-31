@@ -16,10 +16,13 @@ Here are supported Ubuntu versions:
 
   * 18.04 Bionic Beaver
   * 20.04 Focal Fossa
+  * 21.10 Impish Indri
 
 Here are Ubuntu versions that supports MySQL:
 
   * 18.04 Bionic Beaver
+  * 20.04 Focal Fossa
+  * 21.10 Impish Indri
 
 Here are Ubuntu versions that supports MariaDB:
 

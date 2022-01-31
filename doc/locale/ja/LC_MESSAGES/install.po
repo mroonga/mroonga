@@ -709,6 +709,9 @@ msgstr ""
 msgid "20.04 Focal Fossa"
 msgstr ""
 
+msgid "21.10 Impish Indri"
+msgstr ""
+
 msgid "Here are Ubuntu versions that supports MySQL:"
 msgstr "MySQLをサポートしているUbuntuのバージョンは次の通りです。"
 
