@@ -7,7 +7,7 @@ RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
   yum update -y ${quiet} && \
   yum install -y ${quiet} \
-    https://repo.mysql.com/mysql80-community-release-el7-5.rpm && \
+    https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm && \
   yum-config-manager --disable mysql80-community && \
   yum-config-manager --enable mysql57-community && \
   yum install -y \
