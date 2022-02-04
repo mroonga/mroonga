@@ -46,8 +46,20 @@ REPO
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     old_package=mysql${mysql_package_version}-community-mroonga
-    sudo ${DNF} install -y \
-         https://repo.mysql.com/mysql80-community-release-el${major_version}.rpm
+    case ${major_version} in
+      7)
+        sudo ${DNF} install -y \
+             https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
+        ;;
+      8)
+        sudo ${DNF} install -y \
+             https://repo.mysql.com/mysql80-community-release-el8-3.noarch.rpm
+        ;;
+      *)
+        sudo ${DNF} install -y \
+             https://repo.mysql.com/mysql80-community-release-el${major_version}.rpm
+        ;;
+    esac
     if [ "${major_version}" = "7" ] && [ "${mysql_version}" = "5.7" ]; then
         sudo yum-config-manager --disable mysql80-community
         sudo yum-config-manager --enable mysql57-community
