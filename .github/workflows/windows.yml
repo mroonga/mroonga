@@ -23,6 +23,7 @@ jobs:
           - MariaDB 10.6 32bit
           - MariaDB 10.6 64bit
           - MariaDB 10.6 64bit (master)
+          - MariaDB 10.6 64bit (master/embed)
         include:
           - label: MariaDB 10.2 32bit
             mariadb-version: "10.2.40"
@@ -80,6 +81,13 @@ jobs:
             cmake-architecture: "x64"
             vc-architecture: "x64"
             use-master: "yes"
+          - label: MariaDB 10.6 64bit (master/embed)
+            mariadb-version: "10.6.4"
+            package-platform: "winx64"
+            cmake-architecture: "x64"
+            vc-architecture: "x64"
+            use-master: "yes"
+            embed: "yes"
     runs-on: windows-2019
     steps:
       - name: Disable crash dialog
@@ -192,12 +200,17 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
           mkdir ..\build
           cd ..\build
+          if ("${{ matrix.embed }}" -eq "yes") {
+            $EMBED = "ON"
+          } else {
+            $EMBED = "OFF"
+          }
           rem TODO: Remove -DGRN_WITH_ZSTD=no when Groonga 10.2.0 is released.
           cmake ..\source ^
             -A "${{ matrix.cmake-architecture }}" ^
             -G "Visual Studio 16 2019" ^
-            -DMRN_GROONGA_EMBED=OFF ^
-            -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=OFF ^
+            -DMRN_GROONGA_EMBED=${EMBED} ^
+            -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${EMBED} ^
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_ZSTD=no
       - name: Create package
