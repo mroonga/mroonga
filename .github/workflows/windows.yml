@@ -87,7 +87,7 @@ jobs:
             cmake-architecture: "x64"
             vc-architecture: "x64"
             use-master: "yes"
-            embed: "yes"
+            embed: "ON"
     runs-on: windows-2019
     steps:
       - name: Disable crash dialog
@@ -200,17 +200,12 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
           mkdir ..\build
           cd ..\build
-          if ("${{ matrix.embed }}" -eq "yes") {
-            $EMBED = "ON"
-          } else {
-            $EMBED = "OFF"
-          }
           rem TODO: Remove -DGRN_WITH_ZSTD=no when Groonga 10.2.0 is released.
           cmake ..\source ^
             -A "${{ matrix.cmake-architecture }}" ^
             -G "Visual Studio 16 2019" ^
-            -DMRN_GROONGA_EMBED=${EMBED} ^
-            -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${EMBED} ^
+            -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
+            -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_ZSTD=no
       - name: Create package
