@@ -8,6 +8,162 @@ News
 Release 12.00 - 2022-02-09
 --------------------------
 
+This is a major version up!
+But It keeps backward compatibility. We can upgrade to 12.00 without rebuilding database.
+
+First of all, we introduce the Summary of changes from Mroonga 11.00 to 11.13.
+Then, we introduce the main changes in 12.00.
+
+Summary of changes from Mroonga 11.0.0 to 11.1.3
+------------------------------------------------
+
+New Features and Improvements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Renamed package names as below.
+
+  * ``mariadb-server-10.x-mroonga`` -> ``mariadb-10.x-mroonga``
+  * ``mysql-server-5.x-mroonga`` -> ``mysql-community-5.x-mroonga``
+  * ``mysql-server-8.x-mroonga`` -> ``mysql-community-8.x-mroonga``
+  * ``percona-server-5x-mroonga`` -> ``percona-server-5.x-mroonga``
+  * ``percona-server-8x-mroonga`` -> ``percona-server-8.x-mroonga``
+
+  .. warning::
+
+     The package names are changed.
+     Mroonga may be invalid after upgrade by the influence of this modification.
+     If we upgrade to this version, please always be sure to confirm the below points.
+
+     If Mroonga is invalid after the upgrade, we need to install manually Mroonga again.
+     Please refer to the following URL about the manual installation of Mroonga and how to confirming whether Mroonga is valid or not.
+
+       * https://mroonga.org/docs/tutorial/installation_check.html
+
+     If we will upgrade mroonga to stride over a Mroonga 11.03.
+
+     If Mroonga is valid after upgrade to this version but, Mroonga's version is old, we need to restart MySQL, MariaDB, or PerconaServer.
+     We can confirm Mroonga's version as the below command.
+
+       * ``SHOW VARIABLES LIKE 'mroonga_version';``
+
+* [:doc:`/reference/udf/mroonga_snippet_html`] Added support for custom normalizer in ``mroonga_snippet_html()``
+
+  * We can use custom normalizer in ``mroonga_snippet_html()`` by this feature as below.
+
+    .. code-block::
+
+       CREATE TABLE terms (
+         term VARCHAR(64) NOT NULL PRIMARY KEY
+       ) COMMENT='normalizer "NormalizerNFKC130(''unify_kana'', true)"'
+         DEFAULT CHARSET=utf8mb4
+         COLLATE=utf8mb4_unicode_ci;
+
+       SELECT mroonga_snippet_html('これはMroonga（ムルンガ）です。',
+                                   'terms' as lexicon_name,
+                                   'むるんが') as snippet;
+
+       snippet
+       <div class="snippet">これはMroonga（<span class="keyword">ムルンガ</span>）です。</div>
+
+* [:doc:`/reference/server_variables`] We disabled ``mroonga_enable_operations_recording`` by default.
+
+  ``mroonga_enable_operations_recording`` to determine whether recording operations for auto recovering are enabled or not. 
+
+  This recording of operations is for auto recovering Mroonga when it crashed.
+  Normally, if lock remain in Mroonga, we can't execute INSERT/DELETE/UPDATE, but if ``mroonga_enable_operations_recording`` is enable, we may not execute SELECT at times in addition to INSERT/DELETE/UPDATE.
+  Because auto recovery is sometimes blocked by residual lock when they crashed.
+
+  Therefore, we set ``OFF`` to the default value in this version.
+  By we disable operation recording, INSERT/DELETE/UPDATE is blocked as usual because of the residual lock, but "SELECT" may bework.
+
+  An appropriate way to handle to residual lock is as follows.
+
+    * https://www.clear-code.com/blog/2021/6/1/mroonga-recover-lock-failed-2021.html
+      (Japanese only)
+
+Fixes
+^^^^^
+
+* Fix a crash bug that may be caused after MySQL/MariaDB upgrade.
+
+  * Mronnga may crash if we execute ``SELECT ... MATCH AGAINST`` after MySQL/MariaDB upgrade.
+
+* Fixed a bug that if we use "WHERE primary_key IN ("")" in a where clause, Mroonga may return wrong record.
+
+  See :ref:`release 11.07 <release-11-07>` for details.
+
+* [:doc:`/reference/optimizations`] Fixed a bug that Mroonga apply the optimization of row count wrongly.
+
+  See :ref:`release 11.10 <release-11-10>` for details.
+
+* Fixed a bug that Mroonga crashed when we upgrade DB created by MySQL 5.7 to MySQL 8.0.
+
+* Fixed a bug that latitude and longitude are stored conversely.
+
+  .. warning::
+
+     backward compatibility is broken by this fix.
+
+     Users that are using ``GEOMETRY`` type need to store the current data before upgrading to Mroonga 11.03 and restore the stored data after upgrading to Mroonga 11.03.
+     Users can use the following methods for dumping/restoring data.
+
+       * ``mysqldump``
+       * Execute ``ALTER TABLE ENGINE=InnoDB`` before upgrading and execute ``ALTER TABLE ENGINE=Mroonga`` after upgrading.
+
+     If without this fix, ``INSERT/UPDATE/SELECT/SELECT`` works well but data stored in Groonga are wrong (Latitude and longitude are swapped in Groonga). Therefore, ``mroonga_command('select ...')`` doesn't work for spatial data.
+
+* Fixed a bug that FOREIGN KEY constraint was not registered.
+
+  This bug had only occurred on MySQL 8.0.
+
+  See :ref:`release 11.01 <release-11-01>` for details.
+
+* Fixed a bug that ``DROP DATABASE`` had failed if a target database had FOREIGN KEY constraint as below.
+
+  See :ref:`release 11.01 <release-11-01>` for details.
+
+* Fixed a bug that ``DROP COLUMN`` had failed if a target table was referred a other table as below.
+
+  See :ref:`release 11.01 <release-11-01>` for details.
+
+* Fixed a bug that a update of Mroonga fails on MariaDB.
+
+Newly supported OSes
+^^^^^^^^^^^^^^^^^^^^
+
+* [:doc:`/install/debian`] Added support for Debian 11 (bullseye).
+
+* [:doc:`/install/almalinux`] Added support for Mroonga on AlamLinux 8.
+
+Dropped OSes
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Dropped support for CentOS 8.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 21.04 (Hirsute Hippo) support.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 20.10 (Groovy Gorilla) support.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 16.04 (Xenial Xerus) support.
+
+* [:doc:`/install/ubuntu`] Dropped support for MariaDB 10.1 on Ubuntu 18.04 LTS.
+
+Thanks
+^^^^^^
+
+* shibanao4870
+* Marc Laporte
+* santalex
+* Josep Sanz
+* Tomohiro KATO
+* Katsuhito Watanabe
+* kenichi arimoto
+* Vincent Pelletier
+* Kosuke Yamashita
+* ひじー
+
+The main changes in 12.00 are as follows.
+
 Improvements
 ^^^^^^^^^^^^
 
