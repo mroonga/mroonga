@@ -24,6 +24,317 @@ msgstr "お知らせ"
 msgid "Release 12.00 - 2022-02-09"
 msgstr "12.00リリース - 2022-02-09"
 
+msgid ""
+"This is a major version up! But It keeps backward compatibility. We can "
+"upgrade to 12.00 without rebuilding database."
+msgstr ""
+"メジャーバージョンアップです! メジャーバージョンアップですが、互換性は壊れて"
+"いないので、データベースを再構築することなく12.00へアップグレードできます。"
+
+msgid ""
+"First of all, we introduce the Summary of changes from Mroonga 11.00 to "
+"11.13. Then, we introduce the main changes in 12.00."
+msgstr ""
+"まずはじめに、Mroonga 11.00から11.13までの変更点を紹介します。次に、12.00の主"
+"な変更点を紹介します。"
+
+msgid "Summary of changes from Mroonga 11.0.0 to 11.1.3"
+msgstr "Mroonga 11.00から 11.13までの主な変更点"
+
+msgid "New Features and Improvements"
+msgstr "新規機能と改良"
+
+msgid "Renamed package names as below."
+msgstr "以下のようにパッケージ名を変更しました。"
+
+msgid "``mariadb-server-10.x-mroonga`` -> ``mariadb-10.x-mroonga``"
+msgstr ""
+
+msgid "``mysql-server-5.x-mroonga`` -> ``mysql-community-5.x-mroonga``"
+msgstr ""
+
+msgid "``mysql-server-8.x-mroonga`` -> ``mysql-community-8.x-mroonga``"
+msgstr ""
+
+msgid "``percona-server-5x-mroonga`` -> ``percona-server-5.x-mroonga``"
+msgstr ""
+
+msgid "``percona-server-8x-mroonga`` -> ``percona-server-8.x-mroonga``"
+msgstr ""
+
+msgid ""
+"The package names are changed. Mroonga may be invalid after upgrade by the "
+"influence of this modification. If we upgrade to this version, please always "
+"be sure to confirm the below points."
+msgstr ""
+"パッケージ名を変更しています。この変更の影響でこのバージョンにアップグレード"
+"後、Mroongaが無効になることがあります。このバージョンにアップグレードする場"
+"合、以下の点を必ず確認してください。"
+
+msgid ""
+"If Mroonga is invalid after the upgrade, we need to install manually Mroonga "
+"again. Please refer to the following URL about the manual installation of "
+"Mroonga and how to confirming whether Mroonga is valid or not."
+msgstr ""
+"アップグレード後にMroongaが無効だった場合は、Mroongaを手動でインストールし直"
+"す必要があります。Mroongaの手動インストール及び、Mroongaが有効かどうかの確認"
+"については、以下のURLを参照してください。"
+
+msgid "https://mroonga.org/docs/tutorial/installation_check.html"
+msgstr ""
+
+msgid "If we will upgrade mroonga to stride over a Mroonga 11.03."
+msgstr ""
+"Mroonga 11.03をまたいでMroongaをアップグレードする場合は、この現象が発生する"
+"ので、注意してください。"
+
+msgid ""
+"If Mroonga is valid after upgrade to this version but, Mroonga's version is "
+"old, we need to restart MySQL, MariaDB, or PerconaServer. We can confirm "
+"Mroonga's version as the below command."
+msgstr ""
+"このバージョンにアップグレード後に、Mroongaは有効だがバージョンが古いという場"
+"合は、MySQL、MariaDB、PerconaServerを再起動する必要があります。Mroongaのバー"
+"ジョンは以下のコマンドで確認できます。"
+
+msgid "``SHOW VARIABLES LIKE 'mroonga_version';``"
+msgstr ""
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_snippet_html`] Added support for custom "
+"normalizer in ``mroonga_snippet_html()``"
+msgstr ""
+"[:doc:`/reference/udf/mroonga_snippet_html`] ``mroonga_snippet_html()`` でカ"
+"スタマイズしたノーマライザーをサポートしました。"
+
+msgid ""
+"We can use custom normalizer in ``mroonga_snippet_html()`` by this feature "
+"as below."
+msgstr ""
+"この機能によって、以下のように ``mroonga_snippet_html()`` でカスタマイズした"
+"ノーマライザーを使えます。"
+
+msgid ""
+"[:doc:`/reference/server_variables`] We disabled "
+"``mroonga_enable_operations_recording`` by default."
+msgstr ""
+"[:doc:`/reference/server_variables`] ``mroonga_enable_operations_recording`` "
+"をデフォルトで無効にしました。"
+
+msgid ""
+"``mroonga_enable_operations_recording`` to determine whether recording "
+"operations for auto recovering are enabled or not."
+msgstr ""
+"``mroonga_enable_operations_recording`` 自動リカバリーのために操作の記録を有"
+"効にするかどうかを決めるものです。"
+
+msgid ""
+"This recording of operations is for auto recovering Mroonga when it crashed. "
+"Normally, if lock remain in Mroonga, we can't execute INSERT/DELETE/UPDATE, "
+"but if ``mroonga_enable_operations_recording`` is enable, we may not execute "
+"SELECT at times in addition to INSERT/DELETE/UPDATE. Because auto recovery "
+"is sometimes blocked by residual lock when they crashed."
+msgstr ""
+"この操作記録はMroongaがクラッシュしたときに自動的にリカバリーするためのもので"
+"す。通常、Mroonga内にロックが残留している場合、INSERT/DELETE/UPDATEは実行でき"
+"ませんが、 ``mroonga_enable_operations_recording`` が有効な場合、INSERT/"
+"DELETE/UPDATEに加えてSELECTも実行出来ないことがあります。自動リカバリーがロッ"
+"クの残留によって、ブロックされるためです。"
+
+msgid ""
+"Therefore, we set ``OFF`` to the default value in this version. By we "
+"disable operation recording, INSERT/DELETE/UPDATE is blocked as usual "
+"because of the residual lock, but \"SELECT\" may bework."
+msgstr ""
+"したがって、このバージョンから、デフォルト値を ``OFF`` にしました。ISERT/"
+"DELETE/UPDATE は、ロックの残留によって変わらずブロックされますが、操作記録を"
+"無効にすることで、SELECTは動作する可能性があります。"
+
+msgid "An appropriate way to handle to residual lock is as follows."
+msgstr "残留したロックに対する正しい対処は以下の通りです。"
+
+msgid ""
+"https://www.clear-code.com/blog/2021/6/1/mroonga-recover-lock-failed-2021."
+"html (Japanese only)"
+msgstr ""
+"https://www.clear-code.com/blog/2021/6/1/mroonga-recover-lock-failed-2021."
+"html (日本語のみ)"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fix a crash bug that may be caused after MySQL/MariaDB upgrade."
+msgstr ""
+"MySQL/MariaDBのアップグレード後にクラッシュすることがある問題を修正しました。"
+
+msgid ""
+"Mronnga may crash if we execute ``SELECT ... MATCH AGAINST`` after MySQL/"
+"MariaDB upgrade."
+msgstr ""
+"MySQL/MariaDB をアップグレード後に、 ``SELECT ... MATCH AGAINST`` を実行する"
+"とMroongaがクラッシュすることがあります。"
+
+msgid ""
+"Fixed a bug that if we use \"WHERE primary_key IN (\"\")\" in a where "
+"clause, Mroonga may return wrong record."
+msgstr ""
+"WHERE句に \"WHERE primary_key IN (\"\")\" と指定した際にMroongaが誤ったレコー"
+"ドを返すことがある問題を修正しました。"
+
+msgid "See :ref:`release 11.07 <release-11-07>` for details."
+msgstr "詳細は、 :ref:`release 11.07 <release-11-07>` を参照してください。"
+
+msgid ""
+"[:doc:`/reference/optimizations`] Fixed a bug that Mroonga apply the "
+"optimization of row count wrongly."
+msgstr ""
+"[:doc:`/reference/optimizations`] Mroongaが行カウントの最適化を誤って適用する"
+"問題を修正しました。"
+
+msgid "See :ref:`release 11.10 <release-11-10>` for details."
+msgstr "詳細は、 :ref:`release 11.10 <release-11-10>` を参照してください。"
+
+msgid ""
+"Fixed a bug that Mroonga crashed when we upgrade DB created by MySQL 5.7 to "
+"MySQL 8.0."
+msgstr ""
+"MySQL 5.7で作成されたDBをMySQL 8.0にアップグレードすると、Mroongaがクラッシュ"
+"する問題を修正しました。"
+
+msgid "Fixed a bug that latitude and longitude are stored conversely."
+msgstr "緯度と経度を逆に保存していた問題を修正しました。"
+
+msgid "backward compatibility is broken by this fix."
+msgstr "この修正によって、後方互換性が壊れます。"
+
+msgid ""
+"Users that are using ``GEOMETRY`` type need to store the current data before "
+"upgrading to Mroonga 11.03 and restore the stored data after upgrading to "
+"Mroonga 11.03. Users can use the following methods for dumping/restoring "
+"data."
+msgstr ""
+"``GEOMETRY`` 型を使用しているユーザーは、Mroonga 11.03にアップグレードする前"
+"に現在のデータを保存し、アップグレード後に保存したデータをリストアする必要が"
+"あります。 データのダンプ/リストアには、以下の方法が使えます。"
+
+msgid "``mysqldump``"
+msgstr ""
+
+msgid ""
+"Execute ``ALTER TABLE ENGINE=InnoDB`` before upgrading and execute ``ALTER "
+"TABLE ENGINE=Mroonga`` after upgrading."
+msgstr ""
+"アップグレード前に ``ALTER TABLE ENGINE=InnoDB`` を実行し、アップグレード後"
+"に ``ALTER TABLE ENGINE=Mroonga`` を実行する。"
+
+msgid ""
+"If without this fix, ``INSERT/UPDATE/SELECT/SELECT`` works well but data "
+"stored in Groonga are wrong (Latitude and longitude are swapped in Groonga). "
+"Therefore, ``mroonga_command('select ...')`` doesn't work for spatial data."
+msgstr ""
+"この修正を適用しない場合、 ``INSERT/UPDATE/SELECT/SELECT`` はうまく動作します"
+"が、データはGroongaが誤った(緯度と経度はGroonga内で逆にされます)保存をしま"
+"す。そのため、 空間データに対する、 ``mroonga_command('select ...')`` は動作"
+"しません。"
+
+msgid "Fixed a bug that FOREIGN KEY constraint was not registered."
+msgstr "外部キー制約が登録されない問題を修正しました。"
+
+msgid "This bug had only occurred on MySQL 8.0."
+msgstr "この問題は MySQL8.0 でのみ発生します。"
+
+msgid "See :ref:`release 11.01 <release-11-01>` for details."
+msgstr "詳細は、 :ref:`release 11.01 <release-11-01>` を参照してください。"
+
+msgid ""
+"Fixed a bug that ``DROP DATABASE`` had failed if a target database had "
+"FOREIGN KEY constraint as below."
+msgstr ""
+"以下のように、対象のデータベースに外部キー制約があると、 ``DROP DATABASE`` に"
+"失敗する問題を修正しました。"
+
+msgid ""
+"Fixed a bug that ``DROP COLUMN`` had failed if a target table was referred a "
+"other table as below."
+msgstr ""
+"以下のように、対象のテーブルが別のテーブルから参照されていると、 ``DROP "
+"COLUMN`` に失敗する問題を修正しました。"
+
+msgid "Fixed a bug that a update of Mroonga fails on MariaDB."
+msgstr "MariaDBのMroongaでアップデートに失敗する問題を修正しました。"
+
+msgid "Newly supported OSes"
+msgstr "新しくサポートしたOS"
+
+msgid "[:doc:`/install/debian`] Added support for Debian 11 (bullseye)."
+msgstr "[:doc:`/install/debian`] Debian 11 (bullseye)をサポートしました。"
+
+msgid "[:doc:`/install/almalinux`] Added support for Mroonga on AlamLinux 8."
+msgstr "[:doc:`/install/almalinux`] AlmaLinux 8 をサポートしました。"
+
+msgid "Dropped OSes"
+msgstr "サポートをやめたOS"
+
+msgid "[:doc:`/install/centos`] Dropped support for CentOS 8."
+msgstr "[:doc:`/install/centos`] CentOS 8のサポートをやめました。"
+
+msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 21.04 (Hirsute Hippo) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 21.04 (Hirsute Hippo) のサポートをやめまし"
+"た。"
+
+msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 20.10 (Groovy Gorilla) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 20.10 (Groovy Gorilla) のサポートをやめまし"
+"た。"
+
+msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 16.04 (Xenial Xerus) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 16.04 (Xenial Xerus)のサポートをやめました。"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped support for MariaDB 10.1 on Ubuntu 18.04 "
+"LTS."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 18.04 LTSのMariaDB 10.1のサポートをやめまし"
+"た。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "shibanao4870"
+msgstr "shibanao4870さん"
+
+msgid "Marc Laporte"
+msgstr "Marc Laporteさん"
+
+msgid "santalex"
+msgstr "santalexさん"
+
+msgid "Josep Sanz"
+msgstr "Josep Sanzさん"
+
+msgid "Tomohiro KATO"
+msgstr "かとうさん"
+
+msgid "Katsuhito Watanabe"
+msgstr "Katsuhito Watanabeさん"
+
+msgid "kenichi arimoto"
+msgstr "kenichi arimotoさん"
+
+msgid "Vincent Pelletier"
+msgstr "Vincent Pelletierさん"
+
+msgid "Kosuke Yamashita"
+msgstr "Kosuke Yamashitaさん"
+
+msgid "ひじー"
+msgstr "ひじーさん"
+
+msgid "The main changes in 12.00 are as follows."
+msgstr "12.00の主な変更点は以下の通りです。"
+
 msgid "Improvements"
 msgstr "改良"
 
@@ -81,25 +392,14 @@ msgstr ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.26-17"
 "をサポートしました。"
 
-msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 21.04 (Hirsute Hippo) support."
-msgstr ""
-"[:doc:`/install/ubuntu`] Ubuntu 21.04 (Hirsute Hippo) のサポートをやめまし"
-"た。"
-
 msgid "Because Ubuntu 21.04 reached EOL at January 20, 2022."
 msgstr "Ubuntu 21.04 は、2022年1月20日でEOLとなったためです。"
 
 msgid "Release 11.11 - 2021-12-29"
 msgstr "11.11リリース - 2021-12-29"
 
-msgid "[:doc:`/install/centos`] Dropped support for CentOS 8."
-msgstr "[:doc:`/install/centos`] CentOS 8のサポートをやめました。"
-
 msgid "Because CentOS 8 will reach EOL at 2021-12-31."
 msgstr "CentOS 8は、2021年12月31日でEOLとなるためです。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "[:doc:`/install/almalinux`] Fixed a bug that we have not provided the "
@@ -123,23 +423,8 @@ msgstr ""
 "[Documentation][:doc:`/install/centos`] ``percona-release-latest.noarch."
 "rpm`` のURLを修正しました。 [GitHub #471][santalexさんがパッチ提供]"
 
-msgid "Thanks"
-msgstr "感謝"
-
-msgid "shibanao4870"
-msgstr "shibanao4870さん"
-
-msgid "Marc Laporte"
-msgstr "Marc Laporteさん"
-
-msgid "santalex"
-msgstr "santalexさん"
-
 msgid "Release 11.10 - 2021-11-29"
 msgstr "11.10リリース - 2021-11-29"
-
-msgid "[:doc:`/install/almalinux`] Added support for Mroonga on AlamLinux 8."
-msgstr "[:doc:`/install/almalinux`] AlmaLinux 8 をサポートしました。"
 
 msgid "[:doc:`/install/almalinux`] Added support for MySQL 8.0.27."
 msgstr "[:doc:`/install/almalinux`] MySQL 8.0.27をサポートしました。"
@@ -218,12 +503,6 @@ msgstr ""
 "ウンしますが、この時、Mroongaは適切なエンコーディングを検索キーワードに設定し"
 "ません。結果として、Mroongaは検索キーワードのノーマライズに失敗します。"
 
-msgid "Josep Sanz"
-msgstr "Josep Sanzさん"
-
-msgid "Tomohiro KATO"
-msgstr "かとうさん"
-
 msgid "Release 11.09 - 2021-11-04"
 msgstr "11.09リリース - 2021-11-04"
 
@@ -235,13 +514,6 @@ msgstr "[:doc:`/install/centos`] Percona Server 8.0.26をサポートしまし�
 
 msgid "Release 11.08 - 2021-10-06"
 msgstr "11.08リリース - 2021-10-06"
-
-msgid ""
-"Fixed a bug that Mroonga crashed when we upgrade DB created by MySQL 5.7 to "
-"MySQL 8.0."
-msgstr ""
-"MySQL 5.7で作成されたDBをMySQL 8.0にアップグレードすると、Mroongaがクラッシュ"
-"する問題を修正しました。"
 
 msgid "Release 11.07 - 2021-09-29"
 msgstr "11.07リリース - 2021-09-29"
@@ -275,13 +547,6 @@ msgid ""
 msgstr ""
 "[:doc:`/reference/udf/mroonga_snippet_html`] ノーマライザーのカスタマイズに対"
 "応しました。"
-
-msgid ""
-"We can use custom normalizer in ``mroonga_snippet_html()`` by this feature "
-"as below."
-msgstr ""
-"この機能によって、以下のように ``mroonga_snippet_html()`` でカスタマイズした"
-"ノーマライザーを使えます。"
 
 msgid ""
 "Added support for outputting vector column values as text not raw binary."
@@ -328,12 +593,6 @@ msgid "For example, Mroonga may return wrong record as below."
 msgstr ""
 "例えば、以下ようなケースでMroongaが誤ったレコードを返すことがあります。"
 
-msgid "Katsuhito Watanabe"
-msgstr "Katsuhito Watanabeさん"
-
-msgid "kenichi arimoto"
-msgstr "kenichi arimotoさん"
-
 msgid "Release 11.06 - 2021-08-29"
 msgstr "11.06リリース - 2021-08-29"
 
@@ -354,9 +613,6 @@ msgstr ""
 msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.35."
 msgstr "[:doc:`/install/centos`] Percona Server 5.7.35をサポートしました。"
 
-msgid "[:doc:`/install/debian`] Added support for Debian 11 (bullseye)."
-msgstr "[:doc:`/install/debian`] Debian 11 (bullseye)をサポートしました。"
-
 msgid "Release 11.05 - 2021-07-30"
 msgstr "11.05リリース - 2021-07-30"
 
@@ -365,11 +621,6 @@ msgstr "[:doc:`/install/centos`] Percona Server 8.0.25 をサポートしまし�
 
 msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.35, 8.0.26."
 msgstr "[:doc:`/install/centos`] MySQL 5.7.35, 8.0.26をサポートしました。"
-
-msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 20.10 (Groovy Gorilla) support."
-msgstr ""
-"[:doc:`/install/ubuntu`] Ubuntu 20.10 (Groovy Gorilla) のサポートをやめまし"
-"た。"
 
 msgid "Because Ubuntu 20.10 reached EOL July 22, 2021."
 msgstr "Ubuntu 20.10 は、2021年7月22日でEOLとなったためです。"
@@ -381,64 +632,8 @@ msgstr ""
 "MySQL/MariaDBのアップグレード後にクラッシュすることがある問題を修正しました。"
 "[GitHub#423][Vincent Pelletierさんの報告]"
 
-msgid ""
-"Mronnga may crash if we execute ``SELECT ... MATCH AGAINST`` after MySQL/"
-"MariaDB upgrade."
-msgstr ""
-"MySQL/MariaDB をアップグレード後に、 ``SELECT ... MATCH AGAINST`` を実行する"
-"とMroongaがクラッシュすることがあります。"
-
-msgid "Vincent Pelletier"
-msgstr "Vincent Pelletierさん"
-
 msgid "Release 11.04 - 2021-06-29"
 msgstr "11.04リリース - 2021-06-29"
-
-msgid ""
-"[:doc:`/reference/server_variables`] We disabled "
-"``mroonga_enable_operations_recording`` by default."
-msgstr ""
-"[:doc:`/reference/server_variables`] ``mroonga_enable_operations_recording`` "
-"をデフォルトで無効にしました。"
-
-msgid ""
-"``mroonga_enable_operations_recording`` to determine whether recording "
-"operations for auto recovering are enabled or not."
-msgstr ""
-"``mroonga_enable_operations_recording`` 自動リカバリーのために操作の記録を有"
-"効にするかどうかを決めるものです。"
-
-msgid ""
-"This recording of operations is for auto recovering Mroonga when it crashed. "
-"Normally, if lock remain in Mroonga, we can't execute INSERT/DELETE/UPDATE, "
-"but if ``mroonga_enable_operations_recording`` is enable, we may not execute "
-"SELECT at times in addition to INSERT/DELETE/UPDATE. Because auto recovery "
-"is sometimes blocked by residual lock when they crashed."
-msgstr ""
-"この操作記録はMroongaがクラッシュしたときに自動的にリカバリーするためのもので"
-"す。通常、Mroonga内にロックが残留している場合、INSERT/DELETE/UPDATEは実行でき"
-"ませんが、 ``mroonga_enable_operations_recording`` が有効な場合、INSERT/"
-"DELETE/UPDATEに加えてSELECTも実行出来ないことがあります。自動リカバリーがロッ"
-"クの残留によって、ブロックされるためです。"
-
-msgid ""
-"Therefore, we set ``OFF`` to the default value in this version. By we "
-"disable operation recording, INSERT/DELETE/UPDATE is blocked as usual "
-"because of the residual lock, but \"SELECT\" may bework."
-msgstr ""
-"したがって、このバージョンから、デフォルト値を ``OFF`` にしました。ISERT/"
-"DELETE/UPDATE は、ロックの残留によって変わらずブロックされますが、操作記録を"
-"無効にすることで、SELECTは動作する可能性があります。"
-
-msgid "An appropriate way to handle to residual lock is as follows."
-msgstr "残留したロックに対する正しい対処は以下の通りです。"
-
-msgid ""
-"https://www.clear-code.com/blog/2021/6/1/mroonga-recover-lock-failed-2021."
-"html (Japanese only)"
-msgstr ""
-"https://www.clear-code.com/blog/2021/6/1/mroonga-recover-lock-failed-2021."
-"html (日本語のみ)"
 
 msgid ""
 "[:doc:`/install/debian`] Added a install procedure for Mroonga for Debian "
@@ -525,35 +720,11 @@ msgstr ""
 "グレードする場合、以下の点を必ず確認してください。"
 
 msgid ""
-"If Mroonga is invalid after the upgrade, we need to install manually Mroonga "
-"again. Please refer to the following URL about the manual installation of "
-"Mroonga and how to confirming whether Mroonga is valid or not."
-msgstr ""
-"アップグレード後にMroongaが無効だった場合は、Mroongaを手動でインストールし直"
-"す必要があります。Mroongaの手動インストール及び、Mroongaが有効かどうかの確認"
-"については、以下のURLを参照してください。"
-
-msgid "https://mroonga.org/docs/tutorial/installation_check.html"
-msgstr ""
-
-msgid ""
 "Besides, please be careful the above phenomenon will continue from now if we "
 "will upgrade mroonga to stride over a Mroonga 11.03."
 msgstr ""
 "また、今後も、Mroonga 11.03をまたいでMroongaをアップグレードする場合は、この"
 "現象が発生するので、注意してください。"
-
-msgid ""
-"If Mroonga is valid after upgrade to this version but, Mroonga's version is "
-"old, we need to restart MySQL, MariaDB, or PerconaServer. We can confirm "
-"Mroonga's version as the below command."
-msgstr ""
-"このバージョンにアップグレード後に、Mroongaは有効だがバージョンが古いという場"
-"合は、MySQL、MariaDB、PerconaServerを再起動する必要があります。Mroongaのバー"
-"ジョンは以下のコマンドで確認できます。"
-
-msgid "``SHOW VARIABLES LIKE 'mroonga_version';``"
-msgstr ""
 
 msgid "There are broken backward compatibility on this version."
 msgstr "このバージョンには非互換の変更があります。"
@@ -596,24 +767,6 @@ msgstr ""
 "が、データはGroongaが誤った(緯度と経度はGroonga内で逆にされます)保存をしま"
 "す。そのため、 空間データに対する、 ``mroonga_command('select ...')`` は動作"
 "しません。"
-
-msgid "Renamed package names as below."
-msgstr "以下のようにパッケージ名を変更しました。"
-
-msgid "``mariadb-server-10.x-mroonga`` -> ``mariadb-10.x-mroonga``"
-msgstr ""
-
-msgid "``mysql-server-5.x-mroonga`` -> ``mysql-community-5.x-mroonga``"
-msgstr ""
-
-msgid "``mysql-server-8.x-mroonga`` -> ``mysql-community-8.x-mroonga``"
-msgstr ""
-
-msgid "``percona-server-5x-mroonga`` -> ``percona-server-5.x-mroonga``"
-msgstr ""
-
-msgid "``percona-server-8x-mroonga`` -> ``percona-server-8.x-mroonga``"
-msgstr ""
 
 msgid ""
 "[:doc:`/install/debian`] Added support for the Oracle MySQL 5.7 package and "
@@ -675,42 +828,6 @@ msgstr ""
 msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.23"
 msgstr "[:doc:`/install/centos`] Percona Server 8.0.23 をサポートしました。"
 
-msgid "Fixed a bug that latitude and longitude are stored conversely."
-msgstr "緯度と経度を逆に保存していた問題を修正しました。"
-
-msgid "backward compatibility is broken by this fix."
-msgstr "この修正によって、後方互換性が壊れます。"
-
-msgid ""
-"Users that are using ``GEOMETRY`` type need to store the current data before "
-"upgrading to Mroonga 11.03 and restore the stored data after upgrading to "
-"Mroonga 11.03. Users can use the following methods for dumping/restoring "
-"data."
-msgstr ""
-"``GEOMETRY`` 型を使用しているユーザーは、Mroonga 11.03にアップグレードする前"
-"に現在のデータを保存し、アップグレード後に保存したデータをリストアする必要が"
-"あります。 データのダンプ/リストアには、以下の方法が使えます。"
-
-msgid "``mysqldump``"
-msgstr ""
-
-msgid ""
-"Execute ``ALTER TABLE ENGINE=InnoDB`` before upgrading and execute ``ALTER "
-"TABLE ENGINE=Mroonga`` after upgrading."
-msgstr ""
-"アップグレード前に ``ALTER TABLE ENGINE=InnoDB`` を実行し、アップグレード後"
-"に ``ALTER TABLE ENGINE=Mroonga`` を実行する。"
-
-msgid ""
-"If without this fix, ``INSERT/UPDATE/SELECT/SELECT`` works well but data "
-"stored in Groonga are wrong (Latitude and longitude are swapped in Groonga). "
-"Therefore, ``mroonga_command('select ...')`` doesn't work for spatial data."
-msgstr ""
-"この修正を適用しない場合、 ``INSERT/UPDATE/SELECT/SELECT`` はうまく動作します"
-"が、データはGroongaが誤った(緯度と経度はGroonga内で逆にされます)保存をしま"
-"す。そのため、 空間データに対する、 ``mroonga_command('select ...')`` は動作"
-"しません。"
-
 msgid "Release 11.02 - 2021-05-10"
 msgstr "11.02リリース - 2021-05-10"
 
@@ -733,10 +850,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`] MariaDB 10.2.38、10.3.29、10.4.19、10.5.10をサポート"
 "しました。"
-
-msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 16.04 (Xenial Xerus) support."
-msgstr ""
-"[:doc:`/install/ubuntu`] Ubuntu 16.04 (Xenial Xerus)のサポートをやめました。"
 
 msgid "Because it reached End of Standard Support at April, 2021."
 msgstr "2021年4月でEnd of Standard Supportとなったためです。"
@@ -776,9 +889,6 @@ msgstr ""
 "外部キー制約が登録されない問題を修正しました。 [GitHub#393] [Kosuke Yamashita"
 "さんが報告]"
 
-msgid "This bug had only occurred on MySQL 8.0."
-msgstr "この問題は MySQL8.0 でのみ発生します。"
-
 msgid ""
 "For example, the FOREIGN KEY constraint information had not been outputted "
 "even if we define it as below."
@@ -814,12 +924,6 @@ msgid ""
 msgstr ""
 "MariaDBのMroongaでアップデートに失敗する問題を修正しました。 [Reported by ひ"
 "じー]"
-
-msgid "Kosuke Yamashita"
-msgstr "Kosuke Yamashitaさん"
-
-msgid "ひじー"
-msgstr "ひじーさん"
 
 msgid "Release 11.00 - 2021-02-09"
 msgstr "11.00リリース - 2021-02-09"
