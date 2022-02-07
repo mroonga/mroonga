@@ -21,11 +21,33 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 11.13 - 2022-01-29"
-msgstr "11.13リリース - 2022-01-29"
+msgid "Release 12.00 - 2022-02-09"
+msgstr "12.00リリース - 2022-02-09"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Added support for the latest version of mysql-"
+"server package for Ubuntu."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntuの mysql-server パッケージの最新バージョンをサ"
+"ポートしました。"
+
+msgid "We supported the following versions."
+msgstr "以下のバージョンをサポートしました。"
+
+msgid "Ubuntu 18.04 LTS (bionic) mysql-server (5.7.37-0ubuntu0.18.04.1)"
+msgstr ""
+
+msgid "Ubuntu 20.04 LTS (focal) mysql-server (8.0.28-0ubuntu0.20.04.3)"
+msgstr ""
+
+msgid "Ubuntu 21.10 LTS (impish) mysql-server (8.0.28-0ubuntu0.21.10.3)"
+msgstr ""
+
+msgid "Release 11.13 - 2022-01-29"
+msgstr "11.13リリース - 2022-01-29"
 
 msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.37."
 msgstr "[:doc:`/install/centos`] MySQL 5.7.37をサポートしました。"

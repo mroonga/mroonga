@@ -3,6 +3,22 @@
 News
 ====
 
+.. _release-12-00:
+
+Release 12.00 - 2022-02-09
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Added support for the latest version of mysql-server package for Ubuntu.
+
+  We supported the following versions.
+
+  * Ubuntu 18.04 LTS (bionic) mysql-server (5.7.37-0ubuntu0.18.04.1)
+  * Ubuntu 20.04 LTS (focal) mysql-server (8.0.28-0ubuntu0.20.04.3)
+  * Ubuntu 21.10 LTS (impish) mysql-server (8.0.28-0ubuntu0.21.10.3)
+
 .. _release-11-13:
 
 Release 11.13 - 2022-01-29
