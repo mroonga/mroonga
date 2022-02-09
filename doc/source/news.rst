@@ -118,11 +118,11 @@ Fixes
 
   See :ref:`release 11.01 <release-11-01>` for details.
 
-* Fixed a bug that ``DROP DATABASE`` had failed if a target database had FOREIGN KEY constraint as below.
+* Fixed a bug that ``DROP DATABASE`` had failed if a target database had FOREIGN KEY constraint.
 
   See :ref:`release 11.01 <release-11-01>` for details.
 
-* Fixed a bug that ``DROP COLUMN`` had failed if a target table was referred a other table as below.
+* Fixed a bug that ``DROP COLUMN`` had failed if a target table was referred a other table.
 
   See :ref:`release 11.01 <release-11-01>` for details.
 
@@ -144,7 +144,7 @@ Dropped OSes
 
 * [:doc:`/install/ubuntu`] Dropped Ubuntu 20.10 (Groovy Gorilla) support.
 
-* [:doc:`/install/ubuntu`] Dropped Ubuntu 16.04 (Xenial Xerus) support.
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 16.04 LTS (Xenial Xerus) support.
 
 * [:doc:`/install/ubuntu`] Dropped support for MariaDB 10.1 on Ubuntu 18.04 LTS.
 
