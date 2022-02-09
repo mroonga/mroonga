@@ -2,7 +2,7 @@
 
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
 
-%define mariadb_version_default 10.3.32
+%define mariadb_version_default 10.3.33
 %define mariadb_release_default 1
 %if %{_centos_ver} == 7
 %define mariadb_dist_default    el%{_centos_ver}.centos

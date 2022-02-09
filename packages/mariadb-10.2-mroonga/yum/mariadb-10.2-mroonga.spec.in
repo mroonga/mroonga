@@ -2,7 +2,7 @@
 
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
 
-%define mariadb_version_default 10.2.41
+%define mariadb_version_default 10.2.42
 %define mariadb_release_default 1
 %define mariadb_dist_default    el7.centos
 
