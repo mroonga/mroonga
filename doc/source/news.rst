@@ -175,6 +175,10 @@ Improvements
   * Ubuntu 20.04 LTS (focal) mysql-server (8.0.28-0ubuntu0.20.04.3)
   * Ubuntu 21.10 LTS (impish) mysql-server (8.0.28-0ubuntu0.21.10.3)
 
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.42, 10.3.33, 10.4.23, 10.5.14, and 10.6.6.
+
+* [:doc:`/install/almalinux`] Added support for MariaDB 10.3.33, 10.4.23, 10.5.14, and 10.6.6.
+
 .. _release-11-13:
 
 Release 11.13 - 2022-01-29
