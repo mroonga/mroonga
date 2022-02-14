@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2021  Sutou Kouhei <kou@clear-code.com>
-  Copyright(C) 2020-2021  Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2020-2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1000,9 +1000,20 @@ typedef uint mrn_srid;
 #if MYSQL_VERSION_ID >= 80019 && !defined(MRN_MARIADB_P)
 #  define MRN_BITMAP_INIT(map, buf, n_bits) \
     bitmap_init((map), (buf), (n_bits))
+#elif defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100703)
+#  define MRN_BITMAP_INIT(map, buf, n_bits) \
+    my_bitmap_init((map), (buf), (n_bits))
 #else
 #  define MRN_BITMAP_INIT(map, buf, n_bits) \
     bitmap_init((map), (buf), (n_bits), false)
+#endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100703)
+#  define MRN_BITMAP_FREE(map) \
+    my_bitmap_free((map))
+#else
+#  define MRN_BITMAP_FREE(map) \
+    bitmap_free((map))
 #endif
 
 #if defined(MRN_MARIADB_P) && ((MYSQL_VERSION_ID >= 100237 && MYSQL_VERSION_ID < 100300) || \
