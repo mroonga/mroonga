@@ -177,11 +177,11 @@ sudo ${DNF} erase -y \
   "${mysql_package_prefix}-*"
 
 # Disable upgrade test for first time packages.
-case ${os}-${package} in
-  almalinux-*) # TODO: Remove this after 11.10 release.
-    exit
-    ;;
-esac
+#case ${os}-${package} in
+#  almalinux-*) # TODO: Remove this after 11.10 release.
+#    exit
+#    ;;
+#esac
 
 sudo ${DNF} install -y ${old_package}
 sudo ${DNF} install -y \
