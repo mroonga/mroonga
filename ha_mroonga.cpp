@@ -2252,6 +2252,10 @@ static int mrn_init(void *p)
 
   MRN_REGISTER_MUTEXES("mroonga", mrn_mutexes);
 
+#if GRN_VERSION_OR_LATER(12, 0, 1)
+  grn_set_back_trace_enable(mrn_enable_back_trace);
+#endif
+
   grn_default_logger_set_path(mrn_log_file_path);
   grn_default_logger_set_max_level(static_cast<grn_log_level>(mrn_log_level));
   {
