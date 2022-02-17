@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2022 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
   Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -771,6 +771,7 @@ static mrn_bool mrn_libgroonga_embedded = true;
 #else
 static mrn_bool mrn_libgroonga_embedded = false;
 #endif
+static mrn_bool mrn_enable_back_trace = true;
 
 static mrn::variables::ActionOnError mrn_action_on_fulltext_query_error_default =
   mrn::variables::ACTION_ON_ERROR_ERROR_AND_LOG;
@@ -1340,6 +1341,32 @@ static MYSQL_THDVAR_ENUM(condition_push_down_type,
                          static_cast<ulong>(mrn::condition_push_down::ALL),
                          &mrn_condition_push_down_type_typelib);
 
+static void mrn_enable_back_trace_update(THD *thd,
+                                         mrn_sys_var *var,
+                                         void *var_ptr,
+                                         const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const bool new_value = *static_cast<const bool *>(save);
+  bool *old_value_ptr = static_cast<bool *>(var_ptr);
+
+  *old_value_ptr = new_value;
+
+#if GRN_VERSION_OR_LATER(12, 0, 1)
+  grn_set_back_trace_enable(new_value);
+#endif
+
+  DBUG_VOID_RETURN;
+}
+
+static MYSQL_SYSVAR_BOOL(enable_back_trace,
+                         mrn_enable_back_trace,
+                         PLUGIN_VAR_RQCMDARG,
+                         "Whether back trace is logged or not",
+                         NULL,
+                         mrn_enable_back_trace_update,
+                         true);
+
 static mrn_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
@@ -1365,6 +1392,7 @@ static mrn_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(query_log_file),
   MYSQL_SYSVAR(enable_operations_recording),
   MYSQL_SYSVAR(condition_push_down_type),
+  MYSQL_SYSVAR(enable_back_trace),
   NULL
 };
 
