@@ -210,6 +210,7 @@ jobs:
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
+            -DGRN_WITH_WINDOWS_BACK_TRACE=OFF ^
             -DGRN_WITH_ZSTD=no
       - name: Create package
         run: |
