@@ -112,6 +112,9 @@ jobs:
           if ("${{ matrix.use-master }}" -eq "yes") {
             $ARTIFACT_NAME += "-with-groonga-master"
           }
+          if ("${{ matrix.embed }}" -eq "ON") {
+            $ARTIFACT_NAME += "-embed"
+          }
           $ARTIFACT_NAME += "-${{ matrix.package-platform }}"
           Write-Output "::set-output name=mroonga-version::${MROONGA_VERSION}"
           Write-Output "::set-output name=artifact-name::${ARTIFACT_NAME}"
