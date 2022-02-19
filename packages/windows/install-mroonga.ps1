@@ -1,8 +1,3 @@
-Param(
-  [Parameter(mandatory=$true)][String]$mariadbVersion,
-  [Parameter(mandatory=$true)][String]$platform
-)
-
 function Run-MySQL {
   Write-Host "Start mysqld.exe"
   $mysqld = Start-Process `
@@ -48,9 +43,8 @@ function Shutdown-MySQL {
     -Wait | Out-Host
 }
 
-function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
+function Install-Mroonga() {
   Write-Host "Start to install Mroonga"
-  cd "mariadb-$mariadbVer-$arch"
   if (Test-Path "data") {
     Write-Host "Clean data directory"
     Remove-Item "data" -Recurse
@@ -60,13 +54,10 @@ function Install-Mroonga($mariadbVer, $arch, $installSqlDir) {
   }
   $mysqld = Run-MySQL
   Write-Host "Execute install.sql"
-  Get-Content "$installSqlDir\install.sql" | .\bin\mysql.exe -uroot
+  Get-Content "share\mroonga\install.sql" | .\bin\mysql.exe -uroot
   Shutdown-MySQL
   $mysqld.WaitForExit()
-  cd ..
   Write-Host "Finished to install Mroonga"
 }
 
-$installSqlDir = ".\share\mroonga"
-
-Install-Mroonga $mariadbVersion $platform $installSqlDir
+Install-Mroonga

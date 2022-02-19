@@ -220,9 +220,10 @@ jobs:
       - name: Install
         run: |
           cd ..\build
-          Expand-Archive mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}.zip
+          Expand-Archive `
+            mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}.zip `
+            .
           cd mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}
-          dir
           Remove-Item mysql-test -Recurse -Force
           netsh advfirewall firewall add rule `
             name="mariadb" `
@@ -244,7 +245,7 @@ jobs:
       - name: Compress the artifact
         run: |
           Compress-Archive `
-            -Path mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform }}\* `
+            -Path mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform }} `
             -DestinationPath "${{ steps.info.outputs.artifact-name }}.zip"
       - uses: actions/upload-artifact@v2
         with:
