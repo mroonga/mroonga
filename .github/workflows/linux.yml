@@ -31,8 +31,7 @@ jobs:
             libgroonga-dev \
             libmysqlclient-dev \
             libtool \
-            python3-pip \
-            ruby
+            python3-pip
       - name: Install Sphinx
         run: |
           sudo pip3 install sphinx
@@ -156,22 +155,9 @@ jobs:
           repository: groonga/groonga
           submodules: recursive
           path: groonga
-      - name: Install dependencies
-        run: |
-          grep '^deb ' /etc/apt/sources.list | \
-            sed -e 's/^deb /deb-src /' | \
-            sudo tee /etc/apt/sources.list.d/source.list
-          sudo apt update
-          sudo apt -y -V install software-properties-common
-          sudo add-apt-repository -y ppa:groonga/ppa
-          sudo apt update
-          sudo apt -y -V install \
-            gettext \
-            groonga-normalizer-mysql \
-            libgroonga-dev \
-            libmysqlclient-dev \
-            libtool \
-            ruby
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
       - uses: actions/download-artifact@v2
         with:
           name: source
