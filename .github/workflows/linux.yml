@@ -173,7 +173,7 @@ jobs:
               ;;
           esac
         env:
-          GROONGA_REPOSITORY: ../../../groonga
+          GROONGA_REPOSITORY: ../../groonga
       - name: Cache ccache
         uses: actions/cache@v2
         with:
@@ -196,7 +196,7 @@ jobs:
           exit ${exit_status}
         env:
           APT_TARGETS: ${{ matrix.os }}
-          GROONGA_REPOSITORY: ../../../groonga
+          GROONGA_REPOSITORY: ../../groonga
           YUM_TARGETS: ${{ matrix.os }}
 
       # Artifact
