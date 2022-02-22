@@ -15,6 +15,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          path: cutter
+          repository: clear-code/cutter
+      - uses: actions/checkout@v2
+        with:
+          path: mroonga.github.com
+          repository: mroonga/mroonga.github.com
       - name: Install dependencies
         run: |
           grep '^deb ' /etc/apt/sources.list | \
@@ -41,12 +49,6 @@ jobs:
           cd ../mysql
           apt source mysql-server
           ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
-      - name: Clone dependencies
-        run: |
-          cd ..
-          git clone --depth 1 --recursive https://github.com/groonga/groonga.git
-          git clone --depth 1 https://github.com/clear-code/cutter.git
-          git clone --depth 1 https://github.com/mroonga/mroonga.github.com.git
       - name: Generate configure
         run: |
           ./autogen.sh
@@ -54,8 +56,8 @@ jobs:
         run: |
           ./configure \
             --enable-document \
-            --with-cutter-source-path=../cutter \
-            --with-mroonga-github-com-path=../mroonga.github.com \
+            --with-cutter-source-path=cutter \
+            --with-mroonga-github-com-path=mroonga.github.com \
             --with-mysql-source=../mysql/mysql
       - name: Build archive
         run: |
