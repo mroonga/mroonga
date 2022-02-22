@@ -152,9 +152,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/checkout@v2
         with:
+          path: groonga
           repository: groonga/groonga
           submodules: recursive
-          path: groonga
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
