@@ -14,9 +14,6 @@ jobs:
     name: Source
     runs-on: ubuntu-20.04
     steps:
-      - name: Remove needless data
-        run: |
-          sudo rm -rf /opt
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
@@ -153,9 +150,6 @@ jobs:
             package: percona-server-8.0
     runs-on: ubuntu-latest
     steps:
-      - name: Remove needless data
-        run: |
-          sudo rm -rf /opt
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
