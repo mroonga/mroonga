@@ -151,6 +151,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: groonga/groonga
+          submodules: recursive
+          path: groonga
       - name: Install dependencies
         run: |
           grep '^deb ' /etc/apt/sources.list | \
@@ -170,11 +175,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: source
-      - name: Clone dependencies
-        run: |
-          cd ..
-          git clone --depth 1 --recursive https://github.com/groonga/groonga.git
-          git clone --depth 1 https://github.com/clear-code/cutter.git
       - name: Update version
         if: |
           !startsWith(github.ref, 'refs/tags/') &&
