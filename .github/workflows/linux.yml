@@ -10,8 +10,77 @@ concurrency:
   group: ${{ github.head_ref || github.sha }}-${{ github.workflow }}
   cancel-in-progress: true
 jobs:
+  source:
+    name: Source
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          path: cutter
+          repository: clear-code/cutter
+      - uses: actions/checkout@v2
+        with:
+          path: mroonga.github.com
+          repository: mroonga/mroonga.github.com
+      - name: Install dependencies
+        run: |
+          grep '^deb ' /etc/apt/sources.list | \
+            sed -e 's/^deb /deb-src /' | \
+            sudo tee /etc/apt/sources.list.d/source.list
+          sudo apt update
+          sudo apt -y -V install software-properties-common
+          sudo add-apt-repository -y ppa:groonga/ppa
+          sudo apt update
+          sudo apt -y -V install \
+            autoconf \
+            gettext \
+            groonga-normalizer-mysql \
+            libgroonga-dev \
+            libmysqlclient-dev \
+            libtool \
+            python3-pip
+      - name: Install Sphinx
+        run: |
+          sudo pip3 install sphinx
+      - name: Download MySQL source
+        run: |
+          mkdir -p ../mysql
+          cd ../mysql
+          apt source mysql-server
+          ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
+      - name: Generate configure
+        run: |
+          ./autogen.sh
+      - name: Configure for archive
+        run: |
+          ./configure \
+            --enable-document \
+            --with-cutter-source-path=cutter \
+            --with-mroonga-github-com-path=mroonga.github.com \
+            --with-mysql-source=../mysql/mysql
+      - name: Build archive
+        run: |
+          make dist
+
+      # Artifact
+      - uses: actions/upload-artifact@v2
+        with:
+          name: source
+          path: mroonga-*.tar.gz
+
+      # Release
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
+        if: |
+          startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            mroonga-*.tar.gz
+
   build:
     name: Build
+    needs: source
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -82,56 +151,18 @@ jobs:
             package: percona-server-8.0
     runs-on: ubuntu-latest
     steps:
-      - name: Remove needless data
-        run: |
-          sudo rm -rf /opt
       - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          grep '^deb ' /etc/apt/sources.list | \
-            sed -e 's/^deb /deb-src /' | \
-            sudo tee /etc/apt/sources.list.d/source.list
-          sudo apt update
-          sudo apt -y -V install software-properties-common
-          sudo add-apt-repository -y ppa:groonga/ppa
-          sudo apt update
-          sudo apt -y -V install \
-            autoconf \
-            gettext \
-            groonga-normalizer-mysql \
-            libgroonga-dev \
-            libmysqlclient-dev \
-            libtool \
-            python3-pip \
-            ruby
-      - name: Install Sphinx
-        run: |
-          sudo pip3 install sphinx
-      - name: Download MySQL source
-        run: |
-          mkdir -p ../mysql
-          cd ../mysql
-          apt source mysql-server
-          ln -s $(find . -maxdepth 1 -type d | sort | tail -1) mysql
-      - name: Clone dependencies
-        run: |
-          cd ..
-          git clone --depth 1 --recursive https://github.com/groonga/groonga.git
-          git clone --depth 1 https://github.com/clear-code/cutter.git
-          git clone --depth 1 https://github.com/mroonga/mroonga.github.com.git
-      - name: Generate configure
-        run: |
-          ./autogen.sh
-      - name: Configure for archive
-        run: |
-          ./configure \
-            --enable-document \
-            --with-cutter-source-path=../cutter \
-            --with-mroonga-github-com-path=../mroonga.github.com \
-            --with-mysql-source=../mysql/mysql
-      - name: Build archive
-        run: |
-          make dist
+      - uses: actions/checkout@v2
+        with:
+          path: groonga
+          repository: groonga/groonga
+          submodules: recursive
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+      - uses: actions/download-artifact@v2
+        with:
+          name: source
       - name: Update version
         if: |
           !startsWith(github.ref, 'refs/tags/') &&
@@ -139,14 +170,12 @@ jobs:
         run: |
           case ${{ matrix.os }} in
             debian-*|ubuntu-*)
-              make update-latest-release \
-                OLD_RELEASE=$(cat version_full) \
-                OLD_RELEASE_DATE=$(date +%Y-%m-%d) \
-                NEW_RELEASE_DATE=$(date +%Y-%m-%d)
+              cd packages
+              rake version:update
               ;;
           esac
         env:
-          GROONGA_REPOSITORY: ../../../groonga
+          GROONGA_REPOSITORY: ../../groonga
       - name: Cache ccache
         uses: actions/cache@v2
         with:
@@ -169,7 +198,7 @@ jobs:
           exit ${exit_status}
         env:
           APT_TARGETS: ${{ matrix.os }}
-          GROONGA_REPOSITORY: ../../../groonga
+          GROONGA_REPOSITORY: ../../groonga
           YUM_TARGETS: ${{ matrix.os }}
 
       # Artifact
