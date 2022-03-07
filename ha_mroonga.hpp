@@ -103,7 +103,7 @@ extern "C" {
 #endif
 
 #if (defined(MRN_MARIADB_P) &&                                  \
-  (MYSQL_VERSION_ID >= 100224 && MYSQL_VERSION_ID < 100600)
+     (MYSQL_VERSION_ID >= 100224 && MYSQL_VERSION_ID < 100600))
 #  define MRN_HAVE_HA_EXTRA_FAKE_START_STMT
 #endif
 
