@@ -158,12 +158,11 @@ jobs:
       - name: Prepare Groonga
         run: |
           cd ..\source
-          New-Item storage\mroonga\vendor -ItemType Directory
           if ("${{ matrix.use-master }}" -eq "yes") {
             git clone --quiet --depth 1 --recursive `
               https://github.com/groonga/groonga.git `
-              storage\mroonga\vendor\groonga
-            pushd storage\mroonga\vendor\groonga\vendor
+              extra\groonga
+            pushd extra\groonga\vendor
             ruby download_lz4.rb
             ruby download_mecab.rb
             ruby download_message_pack.rb
@@ -177,7 +176,7 @@ jobs:
               -OutFile groonga-latest.zip
             Expand-Archive groonga-latest.zip .
             Remove-Item groonga-latest.zip
-            Move-Item groonga-* storage\mroonga\vendor\groonga
+            Move-Item groonga-* extra\groonga
           }
           Remove-Item storage\mroonga\vendor\groonga\test -Recurse -Force
       - name: Prepare groonga-normalizer-mysql
@@ -186,7 +185,7 @@ jobs:
           if ("${{ matrix.use-master }}" -eq "yes") {
             git clone --quiet --depth 1 --recursive `
               https://github.com/groonga/groonga-normalizer-mysql.git `
-              storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
+              extra\groonga-normalizer-mysql
           } else {
             Invoke-WebRequest `
               -Uri "https://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip" `
@@ -195,7 +194,7 @@ jobs:
             Remove-Item groonga-normalizer-mysql-latest.zip
             Move-Item `
               groonga-normalizer-mysql-* `
-              storage\mroonga\vendor\groonga\vendor\plugins\groonga-normalizer-mysql
+              extra\groonga-normalizer-mysql
           }
       - name: Run CMake
         shell: cmd
@@ -203,15 +202,13 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
           mkdir ..\build
           cd ..\build
-          rem TODO: Remove -DGRN_WITH_ZSTD=no when Groonga 10.2.0 is released.
           cmake ..\source ^
             -A "${{ matrix.cmake-architecture }}" ^
             -G "Visual Studio 16 2019" ^
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
-            -DGRN_WITH_WINDOWS_BACK_TRACE=OFF ^
-            -DGRN_WITH_ZSTD=no
+            -DGRN_WITH_WINDOWS_BACK_TRACE=OFF
       - name: Create package
         run: |
           cd ..\build
