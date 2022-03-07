@@ -723,6 +723,11 @@ static const char *mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = "HA_EXTRA_DISABLE_UNIQUE_RECORD_FILTER";
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_IGNORE_INSERT
+  case HA_EXTRA_IGNORE_INSERT:
+    inspected = "HA_EXTRA_IGNORE_INSERT";
+    break;
+#endif
   }
   return inspected;
 }

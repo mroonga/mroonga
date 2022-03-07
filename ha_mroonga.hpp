@@ -107,6 +107,10 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_FAKE_START_STMT
 #endif
 
+#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100600)
+#  define MRN_HAVE_HA_EXTRA_IGNORE_INSERT
+#endif
+
 #ifndef MRN_MARIADB_P
 #  define MRN_HAVE_HA_EXTRA_EXPORT
 #endif
