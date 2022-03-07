@@ -178,7 +178,7 @@ jobs:
             Remove-Item groonga-latest.zip
             Move-Item groonga-* extra\groonga
           }
-          Remove-Item storage\mroonga\vendor\groonga\test -Recurse -Force
+          Remove-Item extra\groonga\test -Recurse -Force
       - name: Prepare groonga-normalizer-mysql
         run: |
           cd ..\source
