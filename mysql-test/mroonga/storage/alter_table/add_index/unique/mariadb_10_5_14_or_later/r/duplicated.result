@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS ids;
+CREATE TABLE ids (
+id INT
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO ids (id) values (1), (1);
+ALTER TABLE ids ADD UNIQUE INDEX (id);
+ERROR 23000: Duplicate entry '1' for key 'id'
+SHOW CREATE TABLE ids;
+Table	Create Table
+ids	CREATE TABLE `ids` (
+  `id` int DEFAULT NULL
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SELECT * FROM ids;
+id
+1
+1
+DROP TABLE ids;

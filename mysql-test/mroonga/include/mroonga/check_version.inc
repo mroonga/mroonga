@@ -39,4 +39,27 @@ let $version_10_2_or_later = `SELECT $version_major_minor >= 10.2`;
 let $version_10_3_or_later = `SELECT $version_major_minor >= 10.3`;
 let $version_10_4_or_later = `SELECT $version_major_minor >= 10.4`;
 let $version_10_5_or_later = `SELECT $version_major_minor >= 10.5`;
+
+let $version_major =
+  `SELECT CAST(SUBSTRING_INDEX(@@global.version, '.', 1) AS UNSIGNED);`;
+let $version_minor =
+  `SELECT CAST(
+    SUBSTRING_INDEX(
+      SUBSTRING_INDEX(@@global.version, '.', 2),
+      '.',
+      -1) AS UNSIGNED);`;
+let $version_micro =
+  `SELECT CAST(
+    SUBSTRING_INDEX(
+      SUBSTRING_INDEX(
+        SUBSTRING_INDEX(@@global.version, '.', 3),
+        '.',
+        -1),
+      '-',
+      1) AS UNSIGNED);`;
+
+let $version_10_5_14_or_later =
+  `SELECT (($version_major * 10000) +
+           ($version_minor * 100) +
+           ($version_micro)) >= 100514;`;
 --enable_query_log

@@ -1,4 +1,4 @@
-# Copyright(C) 2014 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,27 +14,11 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/not_embedded.inc
---source ../../../../../include/mroonga/skip_mariadb_10_5_14_or_later.inc
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS ids;
---enable_warnings
-
-CREATE TABLE ids (
-  id INT
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO ids (id) values (1), (1);
-
---error ER_DUP_UNIQUE
-ALTER TABLE ids ADD UNIQUE INDEX (id);
---replace_regex /\([0-9]+\)//
-SHOW CREATE TABLE ids;
-
-SELECT * FROM ids;
-
-DROP TABLE ids;
-
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+if ($mariadb) {
+  if ($version_10_5_14_or_later) {
+    --skip This test is not for MariaDB 10.5.14 or later
+  }
+}
