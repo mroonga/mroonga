@@ -805,6 +805,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
   }
   if (!share) {
     if (!(share = (MRN_SHARE *)
+#ifdef MRN_ENABLE_WRAPPER_MODE
       mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
         &share, sizeof(*share),
         &tmp_name, length + 1,
@@ -812,12 +813,20 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
         &col_flags_length, sizeof(uint) * table->s->fields,
         &col_type, sizeof(char *) * table->s->fields,
         &col_type_length, sizeof(uint) * table->s->fields,
-#ifdef MRN_ENABLE_WRAPPER_MODE
         &wrap_key_nr, sizeof(*wrap_key_nr) * table->s->keys,
         &wrap_key_info, sizeof(*wrap_key_info) * table->s->keys,
         &wrap_table_share, sizeof(*wrap_table_share),
-#endif
         NullS))
+#else
+      mrn_my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+        &share, sizeof(*share),
+        &tmp_name, length + 1,
+        &col_flags, sizeof(char *) * table->s->fields,
+        &col_flags_length, sizeof(uint) * table->s->fields,
+        &col_type, sizeof(char *) * table->s->fields,
+        &col_type_length, sizeof(uint) * table->s->fields,
+        NullS))
+#endif
     ) {
       *error = HA_ERR_OUT_OF_MEM;
       goto error_alloc_share;
