@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2010  Tetsuro IKEDA
+  Copyright(C) 2010-2013  Kentoku SHIBA
+  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef HA_MROONGA_HPP_
-#define HA_MROONGA_HPP_
+#pragma once
 
 #ifdef USE_PRAGMA_INTERFACE
 #pragma interface
@@ -479,10 +478,12 @@ struct ha_index_option_struct
 class ha_mroonga: public handler
 {
 public:
+#ifdef MRN_ENABLE_WRAPPER_MODE
   handler   *wrap_handler;
   bool      is_clone;
   ha_mroonga *parent_for_clone;
   MEM_ROOT  *mem_root_for_clone;
+#endif
   grn_obj   key_buffer;
   grn_id    record_id;
   grn_id    *key_id;
@@ -492,9 +493,12 @@ public:
 private:
   THR_LOCK_DATA thr_lock_data;
 
+#ifdef MRN_ENABLE_WRAPPER_MODE
   // for wrapper mode (TODO: need to be confirmed)
   uint      wrap_ft_init_count;
+#endif
   MRN_SHARE *share;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   KEY       *wrap_key_info;
   KEY       *base_key_info;
   key_part_map pk_keypart_map;
@@ -517,6 +521,7 @@ private:
   KEY         *wrap_altered_table_key_info;
   TABLE_SHARE *wrap_altered_table_share;
   KEY         *wrap_altered_table_share_key_info;
+#endif
   int mrn_lock_type;
 
   // for groonga objects
@@ -894,7 +899,9 @@ private:
   void clear_search_result();
   void clear_search_result_geo();
   void clear_indexes();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int add_wrap_hton(const char *path, handlerton *wrap_handlerton);
+#endif
   void remove_related_files(const char *base_path);
   void remove_grn_obj_force(const char *name);
   int drop_index(MRN_SHARE *target_share, uint key_index);
@@ -924,8 +931,10 @@ private:
   void set_token_filters(grn_obj *lexicon,
                          const char *token_filters,
                          size_t token_filters_length);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_get_record(uchar *buf, const uchar *key);
   int wrapper_get_next_geo_record(uchar *buf);
+#endif
   int storage_get_next_record(uchar *buf);
   void geo_store_rectangle(const uchar *rectangle, bool reverse);
   int generic_geo_open_cursor(const uchar *key, enum ha_rkey_function find_flag);
@@ -1086,13 +1095,15 @@ private:
 
   void set_pk_bitmap();
   int create_share_for_create() const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_create(const char *name,
                      TABLE *table,
                      HA_CREATE_INFO *info,
-#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+#  ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
                      dd::Table *table_def,
-#endif
+#  endif
                      MRN_SHARE *tmp_share);
+#endif
   int storage_create(const char *name,
                      TABLE *table,
                      HA_CREATE_INFO *info,
@@ -1101,9 +1112,12 @@ private:
 #endif
                      MRN_SHARE *tmp_share);
 #ifdef MRN_HANDLER_HAVE_GET_SE_PRIVATE_DATA
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_get_se_private_data(dd::Table *dd_table, bool reset);
+#  endif
   bool storage_get_se_private_data(dd::Table *dd_table, bool reset);
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_create_index_fulltext_validate(KEY *key_info);
   int wrapper_create_index_fulltext(const char *grn_table_name,
                                     int i,
@@ -1119,6 +1133,7 @@ private:
                            TABLE *table,
                            HA_CREATE_INFO *info,
                            MRN_SHARE *tmp_share);
+#endif
   int storage_create_validate_pseudo_column(TABLE *table);
 #ifdef MRN_SUPPORT_FOREIGN_KEYS
   bool storage_create_foreign_key(TABLE *table,
@@ -1145,26 +1160,30 @@ private:
   int close_databases();
   int ensure_database_open(const char *name, mrn::Database **db=NULL);
   int ensure_database_remove(const char *name);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_delete_table(const char *name,
-#ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
+#  ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
                            const dd::Table *table_def,
-#endif
+#  endif
                            handlerton *wrap_handlerton,
                            const char *table_name);
+#endif
   int generic_delete_table(const char *name,
 #ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
                            const dd::Table *table_def,
 #endif
                            const char *table_name);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_open(const char *name,
                    int mode,
                    uint open_options
-#ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
+#  ifdef MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
                    ,
                    const dd::Table *table_def
-#endif
+#  endif
     );
   int wrapper_open_indexes(const char *name);
+#endif
   int storage_reindex();
   int storage_open(const char *name,
                    int mode,
@@ -1178,48 +1197,72 @@ private:
   int storage_open_columns(void);
   void storage_close_columns(void);
   int storage_open_indexes(const char *name);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_overwrite_index_bits();
   int wrapper_close();
+#endif
   int storage_close();
   int generic_extra(enum ha_extra_function operation);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_extra(enum ha_extra_function operation);
+#endif
   int storage_extra(enum ha_extra_function operation);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_extra_opt(enum ha_extra_function operation, ulong cache_size);
+#endif
   int storage_extra_opt(enum ha_extra_function operation, ulong cache_size);
   int generic_reset();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_reset();
+#endif
   int storage_reset();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   uint wrapper_lock_count() const;
+#endif
   uint storage_lock_count() const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   THR_LOCK_DATA **wrapper_store_lock(THD *thd, THR_LOCK_DATA **to,
                                      enum thr_lock_type lock_type);
+#endif
   THR_LOCK_DATA **storage_store_lock(THD *thd, THR_LOCK_DATA **to,
                                      enum thr_lock_type lock_type);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_external_lock(THD *thd, int lock_type);
+#endif
   int storage_external_lock(THD *thd, int lock_type);
 #ifdef MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_start_bulk_insert(ha_rows rows, uint flags);
+#  endif
   void storage_start_bulk_insert(ha_rows rows, uint flags);
 #else
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_start_bulk_insert(ha_rows rows);
+#  endif
   void storage_start_bulk_insert(ha_rows rows);
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_end_bulk_insert();
+#endif
   int storage_end_bulk_insert();
 #ifdef MRN_HANDLER_HAVE_GET_SE_PRIVATE_DATA
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_upgrade_table(THD *thd,
                              const char *db_name,
                              const char *table_name,
                              dd::Table *dd_table);
+#  endif
   bool storage_upgrade_table(THD *thd,
                              const char *db_name,
                              const char *table_name,
                              dd::Table *dd_table);
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_is_target_index(KEY *key_info);
   bool wrapper_have_target_index();
   int wrapper_write_row(mrn_write_row_buf_t buf);
   int wrapper_write_row_index(mrn_write_row_buf_t buf);
+#endif
   int storage_write_row(mrn_write_row_buf_t buf);
   int storage_write_row_multiple_column_index(mrn_write_row_buf_t buf,
                                               grn_id record_id,
@@ -1233,18 +1276,22 @@ private:
                                      grn_obj *index_column,
                                      grn_id *key_id);
   int storage_write_row_unique_indexes(const uchar *buf);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_get_record_id(uchar *data, grn_id *record_id, const char *context);
   int wrapper_update_row(const uchar *old_data,
                          mrn_update_row_new_data_t new_data);
   int wrapper_update_row_index(const uchar *old_data,
                                mrn_update_row_new_data_t new_data);
+#endif
   int storage_update_row(const uchar *old_data,
                          mrn_update_row_new_data_t new_data);
   int storage_update_row_index(const uchar *old_data,
                                mrn_update_row_new_data_t new_data);
   int storage_update_row_unique_indexes(mrn_update_row_new_data_t new_data);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_delete_row(const uchar *buf);
   int wrapper_delete_row_index(const uchar *buf);
+#endif
   int storage_delete_row(const uchar *buf);
   int storage_delete_row_index(const uchar *buf);
   int storage_delete_row_unique_index(grn_obj *index_table, grn_id del_key_id);
@@ -1257,59 +1304,91 @@ private:
                                               grn_id *del_key_id);
   int storage_prepare_delete_row_unique_indexes(const uchar *buf,
                                                 grn_id record_id);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   uint wrapper_max_supported_record_length() const;
-  uint storage_max_supported_record_length() const;
-  uint wrapper_max_supported_keys() const;
-  uint storage_max_supported_keys() const;
-  uint wrapper_max_supported_key_parts() const;
-  uint storage_max_supported_key_parts() const;
-  uint wrapper_max_supported_key_length() const;
-  uint storage_max_supported_key_length() const;
-  uint wrapper_max_supported_key_part_length(
-#ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
-    HA_CREATE_INFO *create_info
 #endif
+  uint storage_max_supported_record_length() const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  uint wrapper_max_supported_keys() const;
+#endif
+  uint storage_max_supported_keys() const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  uint wrapper_max_supported_key_parts() const;
+#endif
+  uint storage_max_supported_key_parts() const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  uint wrapper_max_supported_key_length() const;
+#endif
+  uint storage_max_supported_key_length() const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  uint wrapper_max_supported_key_part_length(
+#  ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
+    HA_CREATE_INFO *create_info
+#  endif
     ) const;
+#endif
   uint storage_max_supported_key_part_length(
 #ifdef MRN_HANDLER_MAX_SUPPORTED_KEY_PART_LENGTH_HAVE_CREATE_INFO
     HA_CREATE_INFO *create_info
 #endif
     ) const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   ulonglong wrapper_table_flags() const;
+#endif
   ulonglong storage_table_flags() const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   ulong wrapper_index_flags(uint idx, uint part, bool all_parts) const;
+#endif
   ulong storage_index_flags(uint idx, uint part, bool all_parts) const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_info(uint flag);
+#endif
   int storage_info(uint flag);
   void storage_info_variable();
   void storage_info_variable_records();
   void storage_info_variable_data_file_length();
 #ifdef MRN_HANDLER_RECORDS_RETURN_ERROR
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_records(ha_rows *num_rows);
+#  endif
   int storage_records(ha_rows *num_rows);
 #else
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   ha_rows wrapper_records();
+#  endif
   ha_rows storage_records();
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_rnd_init(bool scan);
+#endif
   int storage_rnd_init(bool scan);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_rnd_end();
+#endif
   int storage_rnd_end();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_rnd_next(uchar *buf);
+#endif
   int storage_rnd_next(uchar *buf);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_rnd_pos(uchar *buf, uchar *pos);
+#endif
   int storage_rnd_pos(uchar *buf, uchar *pos);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_position(const uchar *record);
+#endif
   void storage_position(const uchar *record);
-#ifdef MRN_HANDLER_RECORDS_IN_RANGE_HAVE_PAGE_RANGE
+#ifdef MRN_ENABLE_WRAPPER_MODE
+#  ifdef MRN_HANDLER_RECORDS_IN_RANGE_HAVE_PAGE_RANGE
   ha_rows wrapper_records_in_range(uint key_nr,
                                    const key_range *range_min,
                                    const key_range *range_max,
                                    page_range *pages);
-#else
+#  else
   ha_rows wrapper_records_in_range(uint key_nr,
                                    key_range *range_min,
                                    key_range *range_max);
+#  endif
 #endif
   ha_rows storage_records_in_range(uint key_nr,
                                    const key_range *range_min,
@@ -1317,36 +1396,58 @@ private:
   ha_rows generic_records_in_range_geo(uint key_nr,
                                        const key_range *range_min,
                                        const key_range *range_max);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_index_init(uint idx, bool sorted);
+#endif
   int storage_index_init(uint idx, bool sorted);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_index_end();
+#endif
   int storage_index_end();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_index_read_map(uchar *buf, const uchar *key,
                              key_part_map keypart_map,
                              enum ha_rkey_function find_flag);
+#endif
   int storage_index_read_map(uchar *buf, const uchar *key,
                              key_part_map keypart_map,
                              enum ha_rkey_function find_flag);
 #ifdef MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_index_read_last_map(uchar *buf, const uchar *key,
                                   key_part_map keypart_map);
+#  endif
   int storage_index_read_last_map(uchar *buf, const uchar *key,
                                   key_part_map keypart_map);
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_index_next(uchar *buf);
+#endif
   int storage_index_next(uchar *buf);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_index_prev(uchar *buf);
+#endif
   int storage_index_prev(uchar *buf);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_index_first(uchar *buf);
+#endif
   int storage_index_first(uchar *buf);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_index_last(uchar *buf);
+#endif
   int storage_index_last(uchar *buf);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_index_next_same(uchar *buf, const uchar *key, uint keylen);
+#endif
   int storage_index_next_same(uchar *buf, const uchar *key, uint keylen);
   int generic_ft_init();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_ft_init();
+#endif
   int storage_ft_init();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   FT_INFO *wrapper_ft_init_ext(uint flags, uint key_nr, String *key);
+#endif
   FT_INFO *storage_ft_init_ext(uint flags, uint key_nr, String *key);
   grn_rc generic_ft_init_ext_prepare_expression_in_boolean_mode(
     struct st_mrn_ft_info *info,
@@ -1364,14 +1465,18 @@ private:
                                                     uint key_nr,
                                                     String *key);
   FT_INFO *generic_ft_init_ext(uint flags, uint key_nr, String *key);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_ft_read(uchar *buf);
+#endif
   int storage_ft_read(uchar *buf);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   const Item *wrapper_cond_push(const Item *cond
-#ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
+#  ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
                                 ,
                                 bool other_tables_ok
-#endif
+#  endif
     );
+#endif
   const Item *storage_cond_push(const Item *cond
 #ifdef MRN_HANDLER_COND_PUSH_HAVE_OTHER_TABLES_OK
                                 ,
@@ -1379,39 +1484,60 @@ private:
 #endif
     );
 #ifdef MRN_HANDLER_HAVE_COND_POP
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_cond_pop();
+#  endif
   void storage_cond_pop();
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   handler *wrapper_clone(const char *name, MEM_ROOT *mem_root);
+#endif
   handler *storage_clone(const char *name, MEM_ROOT *mem_root);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_print_error(int error, myf flag);
+#endif
   void storage_print_error(int error, myf flag);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_get_error_message(int error, String *buffer);
+#endif
   bool storage_get_error_message(int error, String *buffer);
 #ifdef MRN_HANDLER_HAVE_GET_FOREIGN_DUP_KEY
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_get_foreign_dup_key(char *child_table_name,
                                    uint child_table_name_len,
                                    char *child_key_name,
                                    uint child_key_name_len);
+#  endif
   bool storage_get_foreign_dup_key(char *child_table_name,
                                    uint child_table_name_len,
                                    char *child_key_name,
                                    uint child_key_name_len);
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
+#endif
   void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   double wrapper_scan_time();
+#endif
   double storage_scan_time();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
+#endif
   double storage_read_time(uint index, uint ranges, ha_rows rows);
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   longlong wrapper_get_memory_buffer_size() const;
+#  endif
   longlong storage_get_memory_buffer_size() const;
 #endif
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   uint8 wrapper_table_cache_type();
+#  endif
   uint8 storage_table_cache_type();
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   ha_rows wrapper_multi_range_read_info_const(uint keyno,
                                               RANGE_SEQ_IF *seq,
                                               void *seq_init_param,
@@ -1419,6 +1545,7 @@ private:
                                               uint *bufsz,
                                               uint *flags,
                                               Cost_estimate *cost);
+#endif
   ha_rows storage_multi_range_read_info_const(uint keyno,
                                               RANGE_SEQ_IF *seq,
                                               void *seq_init_param,
@@ -1426,36 +1553,48 @@ private:
                                               uint *bufsz,
                                               uint *flags,
                                               Cost_estimate *cost);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   ha_rows wrapper_multi_range_read_info(uint keyno, uint n_ranges, uint keys,
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
                                         uint key_parts,
-#endif
+#  endif
                                         uint *bufsz, uint *flags,
                                         Cost_estimate *cost);
+#endif
   ha_rows storage_multi_range_read_info(uint keyno, uint n_ranges, uint keys,
 #ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_KEY_PARTS
                                         uint key_parts,
 #endif
                                         uint *bufsz, uint *flags,
                                         Cost_estimate *cost);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
                                     uint n_ranges, uint mode,
                                     HANDLER_BUFFER *buf);
+#endif
   int storage_multi_range_read_init(RANGE_SEQ_IF *seq, void *seq_init_param,
                                     uint n_ranges, uint mode,
                                     HANDLER_BUFFER *buf);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_multi_range_read_next(range_id_t *range_info);
+#endif
   int storage_multi_range_read_next(range_id_t *range_info);
   int generic_delete_all_rows(grn_obj *target_grn_table,
                               const char *function_name);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_delete_all_rows();
-  int storage_delete_all_rows();
-  int wrapper_truncate(
-#ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
-    dd::Table *table_def
 #endif
+  int storage_delete_all_rows();
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  int wrapper_truncate(
+#  ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
+    dd::Table *table_def
+#  endif
     );
+#endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_truncate_index();
+#endif
   int storage_truncate(
 #ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
     dd::Table *table_def
@@ -1463,41 +1602,55 @@ private:
     );
   int storage_truncate_index();
 #ifdef MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   const key_map *wrapper_keys_to_use_for_scanning();
+#  endif
   const key_map *storage_keys_to_use_for_scanning();
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   ha_rows wrapper_estimate_rows_upper_bound();
+#endif
   ha_rows storage_estimate_rows_upper_bound();
 #ifdef MRN_HANDLER_HAVE_GET_REAL_ROW_TYPE
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   enum row_type wrapper_get_real_row_type(const HA_CREATE_INFO *create_info)
     const;
+#  endif
   enum row_type storage_get_real_row_type(const HA_CREATE_INFO *create_info)
     const;
 #endif
 #ifdef MRN_HANDLER_HAVE_GET_DEFAULT_INDEX_ALGORITHM
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   enum ha_key_alg wrapper_get_default_index_algorithm() const;
+#  endif
   enum ha_key_alg storage_get_default_index_algorithm() const;
 #endif
 #ifdef MRN_HANDLER_HAVE_IS_INDEX_ALGORITHM_SUPPORTED
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_is_index_algorithm_supported(enum ha_key_alg key_alg) const;
+#  endif
   bool storage_is_index_algorithm_supported(enum ha_key_alg key_alg) const;
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_update_create_info(HA_CREATE_INFO* create_info);
+#endif
   void storage_update_create_info(HA_CREATE_INFO* create_info);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_rename_table(const char *from, const char *to,
                            MRN_SHARE *tmp_share,
                            const char *from_table_name,
                            const char *to_table_name
-#ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
+#  ifdef MRN_HANDLER_RENAME_TABLE_HAVE_TABLE_DEFINITION
                            ,
                            const dd::Table *from_table_def,
                            dd::Table *to_table_def
-#endif
+#  endif
     );
   int wrapper_rename_index(const char *from, const char *to,
                            MRN_SHARE *tmp_share,
                            const char *from_table_name,
                            const char *to_table_name);
+#endif
   int storage_rename_table(const char *from, const char *to,
                            MRN_SHARE *tmp_share,
                            const char *from_table_name,
@@ -1513,44 +1666,68 @@ private:
                                  const char *from_table_name,
                                  const char *to_table_name);
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_is_crashed() const;
+#endif
   bool storage_is_crashed() const;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_auto_repair(int error) const;
+#endif
   bool storage_auto_repair(int error) const;
   int generic_disable_index(int i, KEY *key_info);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_disable_indexes_mroonga(uint mode);
   int wrapper_disable_indexes(uint mode);
+#endif
   int storage_disable_indexes(uint mode);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_enable_indexes_mroonga(uint mode);
   int wrapper_enable_indexes(uint mode);
+#endif
   int storage_enable_indexes(uint mode);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_check(THD* thd, HA_CHECK_OPT* check_opt);
+#endif
   int storage_check(THD* thd, HA_CHECK_OPT* check_opt);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_fill_indexes(THD *thd, KEY *key_info,
                            grn_obj **index_columns, uint n_keys);
   int wrapper_recreate_indexes(THD *thd);
-  int storage_recreate_indexes(THD *thd);
-  int wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt);
-  int storage_repair(THD* thd, HA_CHECK_OPT* check_opt);
-  bool wrapper_check_and_repair(THD *thd);
-  bool storage_check_and_repair(THD *thd);
-  int wrapper_analyze(THD* thd, HA_CHECK_OPT* check_opt);
-  int storage_analyze(THD* thd, HA_CHECK_OPT* check_opt);
-  int wrapper_optimize(THD* thd, HA_CHECK_OPT* check_opt);
-  int storage_optimize(THD* thd, HA_CHECK_OPT* check_opt);
-  bool wrapper_is_fatal_error(int error_num
-#ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
-                              , uint flags
 #endif
+  int storage_recreate_indexes(THD *thd);
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  int wrapper_repair(THD* thd, HA_CHECK_OPT* check_opt);
+#endif
+  int storage_repair(THD* thd, HA_CHECK_OPT* check_opt);
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  bool wrapper_check_and_repair(THD *thd);
+#endif
+  bool storage_check_and_repair(THD *thd);
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  int wrapper_analyze(THD* thd, HA_CHECK_OPT* check_opt);
+#endif
+  int storage_analyze(THD* thd, HA_CHECK_OPT* check_opt);
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  int wrapper_optimize(THD* thd, HA_CHECK_OPT* check_opt);
+#endif
+  int storage_optimize(THD* thd, HA_CHECK_OPT* check_opt);
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  bool wrapper_is_fatal_error(int error_num
+#  ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
+                              , uint flags
+#  endif
     );
+#endif
   bool storage_is_fatal_error(int error_num
 #ifdef MRN_HANDLER_IS_FATAL_ERROR_HAVE_FLAGS
                               , uint flags
 #endif
     );
+#ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_is_comment_changed(TABLE *table1, TABLE *table2);
   bool wrapper_check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                           uint table_changes);
+#endif
   bool storage_check_if_incompatible_data(HA_CREATE_INFO *create_info,
                                           uint table_changes);
   int storage_add_index_multiple_columns(TABLE *target_table,
@@ -1559,12 +1736,15 @@ private:
                                          grn_obj **index_tables,
                                          grn_obj **index_columns,
                                          bool skip_unique_key);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   enum_alter_inplace_result
   wrapper_check_if_supported_inplace_alter(TABLE *altered_table,
                                            Alter_inplace_info *ha_alter_info);
+#endif
   enum_alter_inplace_result
   storage_check_if_supported_inplace_alter(TABLE *altered_table,
                                            Alter_inplace_info *ha_alter_info);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_prepare_inplace_alter_table(TABLE *altered_table,
                                            Alter_inplace_info *ha_alter_info
 #  ifdef MRN_HANDLER_PREPARE_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
@@ -1573,14 +1753,16 @@ private:
                                            dd::Table *new_table_def
 #  endif
     );
+#endif
   bool storage_prepare_inplace_alter_table(TABLE *altered_table,
                                            Alter_inplace_info *ha_alter_info
-#  ifdef MRN_HANDLER_PREPARE_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+#ifdef MRN_HANDLER_PREPARE_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
                                            ,
                                            const dd::Table *old_table_def,
                                            dd::Table *new_table_def
-#  endif
+#endif
     );
+#ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_inplace_alter_table(TABLE *altered_table,
                                    Alter_inplace_info *ha_alter_info
 #  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
@@ -1589,6 +1771,7 @@ private:
                                    dd::Table *new_table_def
 #  endif
     );
+#endif
   bool storage_inplace_alter_table_add_index(TABLE *altered_table,
                                              Alter_inplace_info *ha_alter_info);
   bool storage_inplace_alter_table_drop_index(TABLE *altered_table,
@@ -1601,12 +1784,13 @@ private:
                                                  Alter_inplace_info *ha_alter_info);
   bool storage_inplace_alter_table(TABLE *altered_table,
                                    Alter_inplace_info *ha_alter_info
-#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+#ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
                                    ,
                                    const dd::Table *old_table_def,
                                    dd::Table *new_table_def
-#  endif
+#endif
     );
+#ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_commit_inplace_alter_table(TABLE *altered_table,
                                           Alter_inplace_info *ha_alter_info,
                                           bool commit
@@ -1616,109 +1800,164 @@ private:
                                           dd::Table *new_table_def
 #  endif
     );
+#endif
   bool storage_commit_inplace_alter_table(TABLE *altered_table,
                                           Alter_inplace_info *ha_alter_info,
                                           bool commit
-#  ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
+#ifdef MRN_HANDLER_COMMIT_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
                                           ,
                                           const dd::Table *old_table_def,
                                           dd::Table *new_table_def
-#  endif
+#endif
     );
-#  ifdef MRN_HANDLER_HAVE_NOTIFY_TABLE_CHANGED
+#ifdef MRN_HANDLER_HAVE_NOTIFY_TABLE_CHANGED
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_notify_table_changed(
 #    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
     Alter_inplace_info *ha_alter_info
 #    endif
     );
-  void storage_notify_table_changed(
-#    ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
-    Alter_inplace_info *ha_alter_info
-#    endif
-    );
 #  endif
+  void storage_notify_table_changed(
+#  ifdef MRN_HANDLER_NOTIFY_TABLE_CHANGED_HAVE_ALTER_INPLACE_INFO
+    Alter_inplace_info *ha_alter_info
+#  endif
+    );
+#endif
 
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_update_auto_increment();
+#endif
   int storage_update_auto_increment();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_set_next_insert_id(ulonglong id);
+#endif
   void storage_set_next_insert_id(ulonglong id);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_get_auto_increment(ulonglong offset, ulonglong increment,
                                   ulonglong nb_desired_values,
                                   ulonglong *first_value,
                                   ulonglong *nb_reserved_values);
+#endif
   void storage_get_auto_increment(ulonglong offset, ulonglong increment,
                                   ulonglong nb_desired_values,
                                   ulonglong *first_value,
                                   ulonglong *nb_reserved_values);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_restore_auto_increment(ulonglong prev_insert_id);
+#endif
   void storage_restore_auto_increment(ulonglong prev_insert_id);
 #ifdef MRN_HANDLER_HAVE_RESTORE_AUTO_INCREMENT_NO_ARGUMENT
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_restore_auto_increment();
+#  endif
   void storage_restore_auto_increment();
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_release_auto_increment();
+#endif
   void storage_release_auto_increment();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_check_for_upgrade(HA_CHECK_OPT *check_opt);
+#endif
   int storage_check_for_upgrade(HA_CHECK_OPT *check_opt);
 #ifdef MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_reset_auto_increment(ulonglong value);
+#  endif
   int storage_reset_auto_increment(ulonglong value);
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_was_semi_consistent_read();
+#endif
   bool storage_was_semi_consistent_read();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_try_semi_consistent_read(bool yes);
+#endif
   void storage_try_semi_consistent_read(bool yes);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_unlock_row();
+#endif
   void storage_unlock_row();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_start_stmt(THD *thd, thr_lock_type lock_type);
+#endif
   int storage_start_stmt(THD *thd, thr_lock_type lock_type);
 #ifdef MRN_HANDLER_HAVE_HAS_GAP_LOCKS
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT;
+#  endif
   bool storage_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT;
 #endif
 #ifdef MRN_HANDLER_HAVE_PRIMARY_KEY_IS_CLUSTERED
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
+#  endif
   bool storage_primary_key_is_clustered()
     MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST;
 #endif
 #ifdef MRN_HANDLER_HAVE_CAN_SWITCH_ENGINES
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_can_switch_engines();
+#  endif
   bool storage_can_switch_engines();
 #endif
 #ifdef MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_is_fk_defined_on_table_or_index(uint index);
+#  endif
   bool storage_is_fk_defined_on_table_or_index(uint index);
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   char *wrapper_get_foreign_key_create_info();
+#  endif
   char *storage_get_foreign_key_create_info();
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+#  endif
   int storage_get_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+#  endif
   int storage_get_parent_foreign_key_list(THD *thd, List<FOREIGN_KEY_INFO> *f_key_list);
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   uint wrapper_referenced_by_foreign_key();
+#  endif
   uint storage_referenced_by_foreign_key();
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_free_foreign_key_create_info(char* str);
+#  endif
   void storage_free_foreign_key_create_info(char* str);
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_init_table_handle_for_HANDLER();
+#endif
   void storage_init_table_handle_for_HANDLER();
+#ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_set_keys_in_use();
+#endif
   void storage_set_keys_in_use();
 #ifdef MRN_HANDLER_NEED_OVERRIDE_UNBIND_PSI
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_unbind_psi();
+#  endif
   void storage_unbind_psi();
 #endif
 #ifdef MRN_HANDLER_NEED_OVERRIDE_REBIND_PSI
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_rebind_psi();
+#  endif
   void storage_rebind_psi();
 #endif
 #ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   mrn_bool wrapper_register_query_cache_table(THD *thd,
                                               char *table_key,
                                               uint key_length,
                                               qc_engine_callback
                                               *engine_callback,
                                               ulonglong *engine_data);
+#  endif
   mrn_bool storage_register_query_cache_table(THD *thd,
                                               char *table_key,
                                               uint key_length,
@@ -1731,5 +1970,3 @@ private:
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* HA_MROONGA_HPP_ */

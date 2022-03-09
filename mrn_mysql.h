@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_MYSQL_H_
-#define MRN_MYSQL_H_
+#pragma once
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -78,4 +77,6 @@
 #  define MRN_DBUG_ENTER_METHOD() MRN_DBUG_ENTER_FUNCTION()
 #endif
 
-#endif /* MRN_MYSQL_H_ */
+#if defined(MRN_MARIADB_P) || (MYSQL_VERSION_ID < 80000)
+#  define MRN_ENABLE_WRAPPER_MODE
+#endif

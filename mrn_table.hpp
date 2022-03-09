@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2013  Kentoku SHIBA
+  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,12 +18,13 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_TABLE_HPP_
-#define MRN_TABLE_HPP_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "mrn_mysql.h"
 
 #include <groonga.h>
 
@@ -46,13 +47,17 @@ typedef struct st_mroonga_share
   mysql_mutex_t       record_mutex;
   THR_LOCK            lock;
   TABLE_SHARE         *table_share;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   TABLE_SHARE         *wrap_table_share;
+#endif
   MRN_LONG_TERM_SHARE *long_term_share;
 
   char                *table_flags;
   int                 table_flags_length;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   char                *engine;
   int                 engine_length;
+#endif
   char                *tokenizer;
   int                 tokenizer_length;
   char                *default_tokenizer;
@@ -61,12 +66,15 @@ typedef struct st_mroonga_share
   int                 normalizer_length;
   char                *token_filters;
   int                 token_filters_length;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   plugin_ref          plugin;
   handlerton          *hton;
+#endif
   char                **col_flags;
   char                **col_type;
   uint                *col_flags_length;
   uint                *col_type_length;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   uint                *wrap_key_nr;
   uint                wrap_keys;
   uint                base_keys;
@@ -75,20 +83,25 @@ typedef struct st_mroonga_share
   uint                wrap_primary_key;
   uint                base_primary_key;
   bool                wrapper_mode;
+#endif
   bool                disable_keys;
 } MRN_SHARE;
 
+#ifdef MRN_ENABLE_WRAPPER_MODE
 struct st_mrn_wrap_hton
 {
   char path[FN_REFLEN + 1];
   handlerton *hton;
   st_mrn_wrap_hton *next;
 };
+#endif
 
 struct st_mrn_slot_data
 {
   grn_id last_insert_record_id;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   st_mrn_wrap_hton *first_wrap_hton;
+#endif
   HA_CREATE_INFO *alter_create_info;
   HA_CREATE_INFO *disable_keys_create_info;
   char *alter_connect_string;
@@ -166,7 +179,9 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list,
 #endif
                                         int *error);
 void mrn_free_tmp_table_share(TABLE_SHARE *table_share);
+#ifdef MRN_ENABLE_WRAPPER_MODE
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
+#endif
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info);
 st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create);
 void mrn_clear_slot_data(THD *thd);
@@ -174,5 +189,3 @@ void mrn_clear_slot_data(THD *thd);
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* MRN_TABLE_HPP_ */

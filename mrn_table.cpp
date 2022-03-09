@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
-  Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2011-2013  Kentoku SHIBA
+  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2020-2021  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -110,7 +110,9 @@ extern mysql_mutex_t mrn_open_tables_mutex;
 extern grn_hash *mrn_long_term_shares;
 extern mysql_mutex_t mrn_long_term_shares_mutex;
 extern char *mrn_default_tokenizer;
+#ifdef MRN_ENABLE_WRAPPER_MODE
 extern char *mrn_default_wrapper_engine;
+#endif
 extern handlerton *mrn_hton_ptr;
 extern grn_hash *mrn_allocated_thds;
 extern mysql_mutex_t mrn_allocated_thds_mutex;
@@ -469,9 +471,11 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         case 5:
           MRN_PARAM_STR("flags", table_flags);
           break;
+#ifdef MRN_ENABLE_WRAPPER_MODE
         case 6:
           MRN_PARAM_STR("engine", engine);
           break;
+#endif
         case 9:
           MRN_PARAM_STR("tokenizer", tokenizer);
           break;
@@ -495,6 +499,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
     }
   }
 
+#ifdef MRN_ENABLE_WRAPPER_MODE
   if (!share->engine && mrn_default_wrapper_engine)
   {
     share->engine_length = strlen(mrn_default_wrapper_engine);
@@ -507,7 +512,9 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
       goto error;
     }
   }
+#endif
 
+#ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->engine)
   {
     mrn_resolve_name engine_name;
@@ -537,6 +544,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
       share->wrapper_mode = true;
     }
   }
+#endif
 
 error:
   if (params_string)
@@ -564,9 +572,11 @@ int mrn_add_column_param(MRN_SHARE *share, Field *field, int i)
 
   MRN_DBUG_ENTER_FUNCTION();
 
+#ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode) {
     DBUG_RETURN(0);
   }
+#endif
 
   DBUG_PRINT("info", ("mroonga create comment string"));
   if (
@@ -662,8 +672,10 @@ int mrn_free_share_alloc(
   MRN_DBUG_ENTER_FUNCTION();
   if (share->table_flags)
     my_free(share->table_flags);
+#ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->engine)
     my_free(share->engine);
+#endif
   if (share->tokenizer)
     my_free(share->tokenizer);
   if (share->default_tokenizer)
@@ -769,10 +781,15 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
 {
   MRN_SHARE *share = NULL;
   char *tmp_name, **col_flags, **col_type;
-  uint length, *wrap_key_nr;
-  uint *col_flags_length, *col_type_length, i, j;
+  uint length;
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  uint *wrap_key_nr;
+#endif
+  uint *col_flags_length, *col_type_length;
+#ifdef MRN_ENABLE_WRAPPER_MODE
   KEY *wrap_key_info;
   TABLE_SHARE *wrap_table_share;
+#endif
   MRN_DBUG_ENTER_FUNCTION();
   length = (uint) strlen(table_name);
   mrn::Lock lock(&mrn_open_tables_mutex);
@@ -795,9 +812,11 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
         &col_flags_length, sizeof(uint) * table->s->fields,
         &col_type, sizeof(char *) * table->s->fields,
         &col_type_length, sizeof(uint) * table->s->fields,
+#ifdef MRN_ENABLE_WRAPPER_MODE
         &wrap_key_nr, sizeof(*wrap_key_nr) * table->s->keys,
         &wrap_key_info, sizeof(*wrap_key_info) * table->s->keys,
         &wrap_table_share, sizeof(*wrap_table_share),
+#endif
         NullS))
     ) {
       *error = HA_ERR_OUT_OF_MEM;
@@ -819,9 +838,11 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
     )
       goto error_parse_table_param;
 
+#ifdef MRN_ENABLE_WRAPPER_MODE
     if (share->wrapper_mode)
     {
-      j = 0;
+      uint i;
+      uint j = 0;
       for (i = 0; i < table->s->keys; i++)
       {
         if (table->s->key_info[i].algorithm != HA_KEY_ALG_FULLTEXT &&
@@ -861,24 +882,25 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       wrap_table_share->primary_key = share->wrap_primary_key;
       wrap_table_share->keys_in_use.init(share->wrap_keys);
       wrap_table_share->keys_for_keyread.init(share->wrap_keys);
-#ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
-#  ifdef WIN32
+#  ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
+#    ifdef WIN32
       mysql_mutex_init(*mrn_table_share_lock_share,
                        &(wrap_table_share->LOCK_share), MY_MUTEX_INIT_SLOW);
-#  else
+#    else
       mysql_mutex_init(key_TABLE_SHARE_LOCK_share,
                        &(wrap_table_share->LOCK_share), MY_MUTEX_INIT_SLOW);
+#    endif
 #  endif
-#endif
-#ifdef WIN32
+#  ifdef WIN32
       mysql_mutex_init(*mrn_table_share_lock_ha_data,
                        &(wrap_table_share->LOCK_ha_data), MY_MUTEX_INIT_FAST);
-#else
+#  else
       mysql_mutex_init(key_TABLE_SHARE_LOCK_ha_data,
                        &(wrap_table_share->LOCK_ha_data), MY_MUTEX_INIT_FAST);
-#endif
+#  endif
       share->wrap_table_share = wrap_table_share;
     }
+#endif
 
     if (mysql_mutex_init(mrn_share_mutex_key,
                          &share->record_mutex,
@@ -932,18 +954,22 @@ int mrn_free_share(MRN_SHARE *share)
                     share->table_name,
                     share->table_name_length,
                     NULL);
+#ifdef MRN_ENABLE_WRAPPER_MODE
     if (share->wrapper_mode)
       plugin_unlock(NULL, share->plugin);
+#endif
     mrn_free_share_alloc(share);
     thr_lock_delete(&share->lock);
     mysql_mutex_destroy(&share->record_mutex);
+#ifdef MRN_ENABLE_WRAPPER_MODE
     if (share->wrapper_mode) {
-#ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
+#  ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_share));
-#endif
+#  endif
       mysql_mutex_destroy(&(share->wrap_table_share->LOCK_ha_data));
       MRN_FREE_ROOT(&(share->wrap_table_share->mem_root));
     }
+#endif
     my_free(share);
   }
   DBUG_RETURN(0);
@@ -1050,6 +1076,7 @@ void mrn_free_tmp_table_share(TABLE_SHARE *tmp_table_share)
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_ENABLE_WRAPPER_MODE
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
 {
   uint *wrap_key_nr = share->wrap_key_nr, i, j;
@@ -1079,6 +1106,7 @@ KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error)
   *error = 0;
   DBUG_RETURN(wrap_key_info);
 }
+#endif
 
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
 {
@@ -1101,7 +1129,9 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
     slot_data =
       static_cast<st_mrn_slot_data *>(malloc(sizeof(st_mrn_slot_data)));
     slot_data->last_insert_record_id = GRN_ID_NIL;
+#ifdef MRN_ENABLE_WRAPPER_MODE
     slot_data->first_wrap_hton = NULL;
+#endif
     slot_data->alter_create_info = NULL;
     slot_data->disable_keys_create_info = NULL;
     slot_data->alter_connect_string = NULL;
@@ -1128,6 +1158,7 @@ void mrn_clear_slot_data(THD *thd)
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, false);
   if (slot_data) {
+#ifdef MRN_ENABLE_WRAPPER_MODE
     if (slot_data->first_wrap_hton) {
       st_mrn_wrap_hton *tmp_wrap_hton;
       st_mrn_wrap_hton *wrap_hton = slot_data->first_wrap_hton;
@@ -1139,6 +1170,7 @@ void mrn_clear_slot_data(THD *thd)
       }
       slot_data->first_wrap_hton = NULL;
     }
+#endif
     slot_data->alter_create_info = NULL;
     slot_data->disable_keys_create_info = NULL;
     if (slot_data->alter_connect_string) {
