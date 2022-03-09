@@ -91,7 +91,6 @@ case ${package} in
     parallel=1
     # TODO: Remove the following "rm" as soon as possible
     # when these functionality is supported or test case is fixed for MySQL 8.0.
-    rm -rf plugin/mroonga/wrapper
     pushd plugin/mroonga/storage
     rm -rf optimization/condition_push_down
     rm -rf optimization/order_limit
