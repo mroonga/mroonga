@@ -882,7 +882,7 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
         share->wrap_key_info = NULL;
         share->wrap_primary_key = MAX_KEY;
       }
-      grn_memcpy(wrap_table_share, table->s, sizeof(*wrap_table_share));
+      *wrap_table_share = *(table->s);
       mrn_init_sql_alloc(current_thd,
                          "mroonga::wrap-table-share",
                          &(wrap_table_share->mem_root));
