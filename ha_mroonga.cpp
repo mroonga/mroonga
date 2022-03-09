@@ -18205,7 +18205,9 @@ bool ha_mroonga::has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT
   } else {
 #  endif
     has = storage_has_gap_locks();
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   }
+#endif
   DBUG_RETURN(has);
 }
 #endif
