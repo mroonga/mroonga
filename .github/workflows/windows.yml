@@ -140,6 +140,23 @@ jobs:
           ridk exec tar xzf "${MARIADB_TAR_GZ}"
           Move-Item mariadb-${{ matrix.mariadb-version }} ..\source
           cd ..\source
+          if ("${{ matrix.mariadb-version }}" -match "^10\.5|^10\.6") {
+            ridk exec patch -p1 -i `
+              ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
+            # The download URL for FTP of PCRE2 can't use.
+            # See: https://www.pcre.org/
+            #
+            # Therefore, we need to use the URL of GitHub to download PCRE2 source code.
+            #
+            # The cause of this problem is in MariaDB 10.5 or later.
+            # We will remove this patch when this problem is resolved in MariaDB.
+            # MariaDB of the next release has not this problem.
+            Invoke-WebRequest `
+              -Uri "https://github.com/MariaDB/server/commit/8d7196cdf165843b7b1271e2616bd57be359e1da.patch" `
+              -OutFile 8d7196cdf165843b7b1271e2616bd57be359e1da.patch
+            ridk exec patch -p1 -i `
+              8d7196cdf165843b7b1271e2616bd57be359e1da.patch
+          }
           Remove-Item storage\mroonga -Recurse -Force
           Copy-Item ..\mroonga storage\mroonga -Recurse
       - name: Prepare Groonga

@@ -109,7 +109,8 @@ files/$(MARIADB_WITH_MROONGA_BASE).tar.gz: tmp/$(MARIADB_WITH_MROONGA_BASE).stam
 	(cd tmp && tar czf ../$@ $(MARIADB_WITH_MROONGA_BASE))
 
 PATCHES =							\
-	patches/mariadb-10.0.3-windows-build.diff
+	patches/mariadb-10.0.3-windows-build.diff		\
+	patches/mariadb-10.5.5-add-a-missing-export-symbol.diff
 
 tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE).stamp: tmp/$(MARIADB_WITH_MROONGA_BASE).stamp $(PATCHES)
 	rm -rf tmp/$(MARIADB_WITH_MROONGA_FOR_WINDOWS_BASE)
