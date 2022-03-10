@@ -997,12 +997,21 @@ typedef uint mrn_srid;
   (memset((table_share), 0, sizeof(TABLE_SHARE)))
 #endif
 
-#if MYSQL_VERSION_ID >= 80019 && !defined(MRN_MARIADB_P)
-#  define MRN_BITMAP_INIT(map, buf, n_bits) \
+#if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80019
+#  define mrn_bitmap_init(map, buf, n_bits) \
     bitmap_init((map), (buf), (n_bits))
+#  define mrn_bitmap_free(map) \
+    bitmap_free((map))
+#elif defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100700
+#  define mrn_bitmap_init(map, buf, n_bits) \
+    my_bitmap_init((map), (buf), (n_bits))
+#  define mrn_bitmap_free(map) \
+    my_bitmap_free((map))
 #else
 #  define MRN_BITMAP_INIT(map, buf, n_bits) \
     bitmap_init((map), (buf), (n_bits), false)
+#  define MRN_BITMAP_FREE(map) \
+    bitmap_free((map))
 #endif
 
 #if defined(MRN_MARIADB_P) && ((MYSQL_VERSION_ID >= 100237 && MYSQL_VERSION_ID < 100300) || \
