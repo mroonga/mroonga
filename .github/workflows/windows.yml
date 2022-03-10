@@ -140,7 +140,7 @@ jobs:
           ridk exec tar xzf "${MARIADB_TAR_GZ}"
           Move-Item mariadb-${{ matrix.mariadb-version }} ..\source
           cd ..\source
-          if ("${{ matrix.mariadb-version }}" -match "^10\.5|^10\.6") {
+          if ("${{ matrix.mariadb-version }}" -match "^10\.5|^10\.6|^10\.7|^10\.8") {
             ridk exec patch -p1 -i `
               ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           }
