@@ -1008,9 +1008,9 @@ typedef uint mrn_srid;
 #  define mrn_bitmap_free(map) \
     my_bitmap_free((map))
 #else
-#  define MRN_BITMAP_INIT(map, buf, n_bits) \
+#  define mrn_bitmap_init(map, buf, n_bits) \
     bitmap_init((map), (buf), (n_bits), false)
-#  define MRN_BITMAP_FREE(map) \
+#  define mrn_bitmap_free(map) \
     bitmap_free((map))
 #endif
 
