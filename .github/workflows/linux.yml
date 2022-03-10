@@ -128,6 +128,12 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mariadb-10.6
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.7
+          - os: centos-7
+            package-type: yum
+            package: mariadb-10.7
           - os: ubuntu-impish
             package-type: apt
             package: mysql-8.0
@@ -294,6 +300,12 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mariadb-10.6
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.7
+          - os: centos-7
+            package-type: yum
+            package: mariadb-10.7
           # TODO: Ubuntu Impish isn't available on bento yet.
           # - os: ubuntu-impish
           #   package-type: apt
