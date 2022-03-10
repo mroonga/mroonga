@@ -26,63 +26,63 @@ jobs:
           - MariaDB 10.6 64bit (master/embed)
         include:
           - label: MariaDB 10.2 32bit
-            mariadb-version: "10.2.40"
+            mariadb-version: "10.2.43"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.2 64bit
-            mariadb-version: "10.2.40"
+            mariadb-version: "10.2.43"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.3 32bit
-            mariadb-version: "10.3.31"
+            mariadb-version: "10.3.34"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.3 64bit
-            mariadb-version: "10.3.31"
+            mariadb-version: "10.3.34"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.4 32bit
-            mariadb-version: "10.4.21"
+            mariadb-version: "10.4.24"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.4 64bit
-            mariadb-version: "10.4.21"
+            mariadb-version: "10.4.24"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.5 32bit
-            mariadb-version: "10.5.12"
+            mariadb-version: "10.5.15"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.5 64bit
-            mariadb-version: "10.5.12"
+            mariadb-version: "10.5.15"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.6 32bit
-            mariadb-version: "10.6.4"
+            mariadb-version: "10.6.7"
             package-platform: "win32"
             cmake-architecture: "Win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.6 64bit
-            mariadb-version: "10.6.4"
+            mariadb-version: "10.6.7"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
           - label: MariaDB 10.6 64bit (master)
-            mariadb-version: "10.6.4"
+            mariadb-version: "10.6.7"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
             use-master: "yes"
           - label: MariaDB 10.6 64bit (master/embed)
-            mariadb-version: "10.6.4"
+            mariadb-version: "10.6.7"
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
