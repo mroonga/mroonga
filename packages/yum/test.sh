@@ -177,7 +177,7 @@ sudo ${DNF} erase -y \
 
 # Disable upgrade test for first time packages.
 case ${os}-${package} in
-  almalinux-*) # TODO: Remove this after 11.10 release.
+  centos-mariadb-10.7-*) # TODO: Remove this after 12.02 release.
     exit
     ;;
 esac
