@@ -80,6 +80,43 @@ file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_in_hex MRN_VERSION_IN_HEX)
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
 
+if(MRN_BUNDLED)
+  set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
+  set(MYSQL_CFLAGS "${CMAKE_C_FLAGS}")
+  set(MYSQL_VERSION "${MYSQL_BASE_VERSION}")
+else()
+  macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
+    if(NOT ${VARIABLE})
+      execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
+       OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
+      string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
+    endif()
+  endmacro()
+
+  set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
+  set_mysql_config_value("--variable=pkglibdir" MYSQL_PKG_LIB_DIR)
+  set(MYSQL_SERVICES_LIB_STATIC
+    "${MYSQL_BUILD_DIR}/archive_output_directory/libmysqlservices.a")
+  if(NOT EXISTS "${MYSQL_SERVICES_LIB_STATIC}")
+    set(MYSQL_SERVICES_LIB_STATIC
+      "${MYSQL_BUILD_DIR}/libservices/libmysqlservices.a")
+  endif()
+  if(NOT EXISTS "${MYSQL_SERVICES_LIB_STATIC}")
+    set(MYSQL_SERVICES_LIB_STATIC "${MYSQL_PKG_LIB_DIR}/libmysqlservices.a")
+  endif()
+  set(PERFSCHEMA_LIB_STATIC
+    "${MYSQL_BUILD_DIR}/storage/perfschema/libperfschema.a")
+  if(NOT EXISTS "${PERFSCHEMA_LIB_STATIC}")
+    set(PERFSCHEMA_LIB_STATIC "${MYSQL_PKG_LIB_DIR}/libperfschema.a")
+  endif()
+  set_mysql_config_value("--cflags" MYSQL_CFLAGS)
+  set_mysql_config_value("--version" MYSQL_VERSION)
+  if(${MYSQL_VERSION} VERSION_GREATER "7")
+    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD_REQURED TRUE)
+  endif()
+endif()
+
 if(MRN_GROONGA_BUNDLED)
   option(MRN_GROONGA_EMBED
     "Embed libgroonga"
@@ -111,8 +148,8 @@ if(MRN_GROONGA_BUNDLED)
     set(GROONGA_NORMALIZER_MYSQL_EMBED ON)
   endif()
 
-  if(${MYSQL_VERSION} VERSION_GREATER "10.7.0" OR
-     ${MYSQL_VERSION} VERSION_EQUAL "10.7.0")
+  if(${MYSQL_VERSION} VERSION_LESS "10.7")
+  else()
    set(GRN_WITH_LZ4 "yes")
    set(LIBLZ4_FOUND TRUE)
    set(LIBLZ4_LIBS "" CACHE STRING "" FORCE)
@@ -268,43 +305,6 @@ endif()
 if(NOT MRN_BUNDLED AND APPLE)
   # This assumes that MySQL is installed by Homebrew.
   list(APPEND MYSQL_INCLUDE_DIRS "/usr/local/opt/openssl/include")
-endif()
-
-if(MRN_BUNDLED)
-  set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
-  set(MYSQL_CFLAGS "${CMAKE_C_FLAGS}")
-  set(MYSQL_VERSION "${MYSQL_BASE_VERSION}")
-else()
-  macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
-    if(NOT ${VARIABLE})
-      execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
-       OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
-      string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
-    endif()
-  endmacro()
-
-  set_mysql_config_value("--plugindir" MYSQL_PLUGIN_DIR)
-  set_mysql_config_value("--variable=pkglibdir" MYSQL_PKG_LIB_DIR)
-  set(MYSQL_SERVICES_LIB_STATIC
-    "${MYSQL_BUILD_DIR}/archive_output_directory/libmysqlservices.a")
-  if(NOT EXISTS "${MYSQL_SERVICES_LIB_STATIC}")
-    set(MYSQL_SERVICES_LIB_STATIC
-      "${MYSQL_BUILD_DIR}/libservices/libmysqlservices.a")
-  endif()
-  if(NOT EXISTS "${MYSQL_SERVICES_LIB_STATIC}")
-    set(MYSQL_SERVICES_LIB_STATIC "${MYSQL_PKG_LIB_DIR}/libmysqlservices.a")
-  endif()
-  set(PERFSCHEMA_LIB_STATIC
-    "${MYSQL_BUILD_DIR}/storage/perfschema/libperfschema.a")
-  if(NOT EXISTS "${PERFSCHEMA_LIB_STATIC}")
-    set(PERFSCHEMA_LIB_STATIC "${MYSQL_PKG_LIB_DIR}/libperfschema.a")
-  endif()
-  set_mysql_config_value("--cflags" MYSQL_CFLAGS)
-  set_mysql_config_value("--version" MYSQL_VERSION)
-  if(${MYSQL_VERSION} VERSION_GREATER "7")
-    set(CMAKE_CXX_STANDARD 11)
-    set(CMAKE_CXX_STANDARD_REQURED TRUE)
-  endif()
 endif()
 
 if(${MYSQL_VARIANT} STREQUAL "MariaDB")
