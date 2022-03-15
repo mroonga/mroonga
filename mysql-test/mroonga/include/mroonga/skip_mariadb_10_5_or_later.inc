@@ -1,4 +1,4 @@
-# Copyright(C) 2022  Horimoto Yasuhiro <horimoto@clear-code.com>
+# Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,8 @@
 --source ../../include/mroonga/check_version.inc
 --source ../../include/mroonga/check_mariadb.inc
 
-if ($version_10_7) {
-  if ($mariadb) {
-    --skip This test is not for MariaDB 10.7.x
+if ($mariadb) {
+  if ($version_10_5_or_later) {
+    --skip This test is not for MariaDB 10.5.x or later
   }
 }
