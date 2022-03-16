@@ -12,7 +12,7 @@
   %define plugin_dir %{_libdir}/mariadb/plugin
 %else
   %define mariadb_package MariaDB
-# %define mariadb_epoch_default
+  #%%define mariadb_epoch_default
   %define mariadb_version_default 10.5.15
   %define mariadb_release_default 1
   %if %{rhel} == 7
