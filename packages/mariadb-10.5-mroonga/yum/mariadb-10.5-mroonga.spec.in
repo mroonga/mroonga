@@ -1,20 +1,33 @@
 # -*- sh-shell: rpm -*-
 
-%define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
+%define _amzn %{?amzn:%{amzn}}%{!?amzn:0}
+%define is_amazon_linux (%{_amzn} != 0)
 
-%define mariadb_version_default 10.5.15
-%define mariadb_release_default 1
-%if %{_centos_ver} == 7
-%define mariadb_dist_default    el%{_centos_ver}.centos
+%if %{is_amazon_linux}
+  %define mariadb_package mariadb
+  %define mariadb_epoch_default   3
+  %define mariadb_version_default 10.5.10
+  %define mariadb_release_default 2
+  %define mariadb_dist_default    amzn2.0.1
 %else
-%define mariadb_dist_default    el%{_centos_ver}
+  %define mariadb_package MariaDB
+  %define mariadb_epoch_default
+  %define mariadb_version_default 10.5.15
+  %define mariadb_release_default 1
+  %if %{rhel} == 7
+    %define mariadb_dist_default    el%{rhel}.centos
+  %else
+    %define mariadb_package MariaDB
+    %define mariadb_dist_default    el%{rhel}
+  %endif
 %endif
 
+%define _mariadb_epoch_with_suffix %{?mariadb_epoch:%{mariadb_epoch}:}%{!?mariadb_epoch:%{?mariadb_epoch_default:%{mariadb_epoch_default}:}}
 %define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}
 %define _mariadb_release %{?mariadb_release:%{mariadb_release}}%{!?mariadb_release:%{mariadb_release_default}}
 %define _mariadb_dist %{?mariadb_dist:%{mariadb_dist}}%{!?mariadb_dist:%{mariadb_dist_default}}
 
-%define use_dnf (%{_centos_ver} >= 8)
+%define use_dnf (%{rhel} >= 8)
 
 %if %{use_dnf}
 %define dnf_download dnf download
@@ -35,7 +48,7 @@ URL:		http://mroonga.org/
 Source0:	http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
-BuildRequires:	MariaDB-devel = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+BuildRequires:	%{mariadb_package}-devel = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 BuildRequires:	gcc-c++
 BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
@@ -47,8 +60,8 @@ BuildRequires:	dnf-command(download)
 %else
 BuildRequires:	yum-utils
 %endif
-Requires:	MariaDB-server = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
-Requires:	MariaDB-client = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	%{mariadb_package}-server = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	%{mariadb_package}-client = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
 
@@ -69,16 +82,32 @@ Documentation for Mroonga
 %prep
 %setup -q -n mroonga-%{version}
 
-if ! cp /MariaDB-*.src.rpm ./; then
-  %{dnf_download} -y ${quiet} --source MariaDB
+if ! cp /%{mariadb_package}-*.src.rpm ./; then
+  %{dnf_download} -y ${quiet} --source %{mariadb_package}
 fi
-rpm -Uvh MariaDB-*.src.rpm
-sed -i'' -e 's/^make /make perfschema /' ~/rpmbuild/SPECS/MariaDB.spec
+rpm -Uvh %{mariadb_package}-*.src.rpm
+required_components="perfschema"
+%if %{is_amazon_linux}
+  required_components="${required_components} mysqlservices"
+%endif
+sed \
+  -i'' \
+  -e "s/^make /make ${required_components} /" \
+  ~/rpmbuild/SPECS/%{mariadb_package}.spec
 
 %build
-rpmbuild -bc ~/rpmbuild/SPECS/MariaDB.spec
-mariadb_source=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/mariadb-%{_mariadb_version}
-mariadb_build=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/cpack_rpm_build_dir
+rpmbuild \
+  -bc \
+  --define='runselftest 0' \
+  --without=galera \
+  ~/rpmbuild/SPECS/%{mariadb_package}.spec
+mariadb_source=$HOME/rpmbuild/BUILD/%{mariadb_package}-%{_mariadb_version}-downstream_modified
+if [ -d ${mariadb_source} ]; then
+  mariadb_build=${mariadb_source}
+else
+  mariadb_source=$HOME/rpmbuild/BUILD/%{mariadb_package}-%{_mariadb_version}/mariadb-%{_mariadb_version}
+  mariadb_build=$HOME/rpmbuild/BUILD/%{mariadb_package}-%{_mariadb_version}/cpack_rpm_build_dir
+fi
 %configure \
     --disable-static \
     --with-mysql-source=${mariadb_source} \
@@ -90,11 +119,11 @@ make %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so.?
-mv $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so.?.?.? \
-   $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga_official.so
+rm $RPM_BUILD_ROOT%{_libdir}/*/plugin/*.la
+rm $RPM_BUILD_ROOT%{_libdir}/*/plugin/ha_mroonga.so
+rm $RPM_BUILD_ROOT%{_libdir}/*/plugin/ha_mroonga.so.?
+mv $RPM_BUILD_ROOT%{_libdir}/*/plugin/ha_mroonga.so.?.?.? \
+   $RPM_BUILD_ROOT%{_libdir}/*/plugin/ha_mroonga_official.so
 mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mroonga-doc/
 sed -i'' -e 's/ha_mroonga/ha_mroonga_official/g' \
   $RPM_BUILD_ROOT%{_datadir}/mroonga/install.sql \
@@ -120,7 +149,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{_libdir}/mysql/plugin/
+%{_libdir}/*/plugin/
 %{_datadir}/mroonga/*
 %{_datadir}/man/man1/*
 %{_datadir}/man/*/man1/*

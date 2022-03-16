@@ -7,15 +7,26 @@ package=$1
 mysql_version=$(echo "${package}" | grep -o '[0-9]*\.[0-9]*')
 
 os=$(cut -d: -f4 /etc/system-release-cpe)
-major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
-case ${major_version} in
-  7)
+case ${os} in
+  amazon)
+    os=amazon-linux
+    major_version=$(cut -d: -f6 /etc/system-release-cpe)
     DNF=yum
+    sudo amazon-linux-extras install -y epel
+    sudo yum install -y ca-certificates
     ;;
-  *)
-    DNF="dnf --enablerepo=powertools"
-    sudo dnf module -y disable mariadb
-    sudo dnf module -y disable mysql
+  centos|almalinux)
+    major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
+    case ${major_version} in
+      7)
+        DNF=yum
+        ;;
+      *)
+        DNF="dnf --enablerepo=powertools"
+        sudo dnf module -y disable mariadb
+        sudo dnf module -y disable mysql
+        ;;
+    esac
     ;;
 esac
 
@@ -26,18 +37,27 @@ ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
 case ${package} in
   mariadb-*)
-    old_package=${package}
-    mysql_package_prefix=MariaDB
-    service_name=mariadb
-    ha_mroonga_so=ha_mroonga_official.so
-    test_package_name=MariaDB-test
-    sudo tee /etc/yum.repos.d/MariaDB.repo <<-REPO
+    if [ ${os} = "amazon-linux" ]; then
+      old_package=${package}
+      mysql_package_prefix=mariadb
+      service_name=mariadb
+      ha_mroonga_so=ha_mroonga_official.so
+      test_package_name=mariadb-test
+      sudo amazon-linux-extras install -y $(echo ${package} | sed -e 's/-//g')
+    else
+      old_package=${package}
+      mysql_package_prefix=MariaDB
+      service_name=mariadb
+      ha_mroonga_so=ha_mroonga_official.so
+      test_package_name=MariaDB-test
+      sudo tee /etc/yum.repos.d/MariaDB.repo <<-REPO
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/${mysql_version}/centos${major_version}-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 REPO
+    fi
     ;;
   mysql-community-*)
     mysql_package_prefix=mysql-community
