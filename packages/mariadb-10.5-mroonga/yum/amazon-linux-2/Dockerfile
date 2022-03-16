@@ -17,7 +17,7 @@ RUN \
     ccache \
     gcc-c++ \
     groonga-devel \
-    groonga-normalizer-mysql-devel  \
+    groonga-normalizer-mysql-devel \
     intltool \
     libtool \
     make \

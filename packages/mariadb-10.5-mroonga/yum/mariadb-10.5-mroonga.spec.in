@@ -9,6 +9,7 @@
   %define mariadb_version_default 10.5.10
   %define mariadb_release_default 2
   %define mariadb_dist_default    amzn2.0.1
+  %define plugin_dir %{_libdir}/mariadb/plugin
 %else
   %define mariadb_package MariaDB
   %define mariadb_epoch_default
@@ -20,6 +21,7 @@
     %define mariadb_package MariaDB
     %define mariadb_dist_default    el%{rhel}
   %endif
+  %define plugin_dir %{_libdir}/mysql/plugin
 %endif
 
 %define _mariadb_epoch_with_suffix %{?mariadb_epoch:%{mariadb_epoch}:}%{!?mariadb_epoch:%{?mariadb_epoch_default:%{mariadb_epoch_default}:}}
@@ -119,11 +121,11 @@ make %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-rm $RPM_BUILD_ROOT%{_libdir}/*/plugin/*.la
-rm $RPM_BUILD_ROOT%{_libdir}/*/plugin/ha_mroonga.so
-rm $RPM_BUILD_ROOT%{_libdir}/*/plugin/ha_mroonga.so.?
-mv $RPM_BUILD_ROOT%{_libdir}/*/plugin/ha_mroonga.so.?.?.? \
-   $RPM_BUILD_ROOT%{_libdir}/*/plugin/ha_mroonga_official.so
+rm $RPM_BUILD_ROOT%{plugin_dir}/*.la
+rm $RPM_BUILD_ROOT%{plugin_dir}/ha_mroonga.so
+rm $RPM_BUILD_ROOT%{plugin_dir}/ha_mroonga.so.?
+mv $RPM_BUILD_ROOT%{plugin_dir}/ha_mroonga.so.?.?.? \
+   $RPM_BUILD_ROOT%{plugin_dir}/ha_mroonga_official.so
 mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mroonga-doc/
 sed -i'' -e 's/ha_mroonga/ha_mroonga_official/g' \
   $RPM_BUILD_ROOT%{_datadir}/mroonga/install.sql \
@@ -149,7 +151,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{_libdir}/*/plugin/
+%{plugin_dir}
 %{_datadir}/mroonga/*
 %{_datadir}/man/man1/*
 %{_datadir}/man/*/man1/*
