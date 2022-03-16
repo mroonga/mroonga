@@ -35,6 +35,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :box => "bento/almalinux-8",
     },
     {
+      :id => "amazon-linux-2",
+      :box => "bento/amazonlinux-2",
+    },
+    {
       :id => "centos-7",
       :box => "bento/centos-7",
     },
