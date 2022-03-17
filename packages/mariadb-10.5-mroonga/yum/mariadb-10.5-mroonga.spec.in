@@ -5,6 +5,7 @@
 
 %if %{is_amazon_linux}
   %define mariadb_package mariadb
+  %define mariadb_client_package mariadb
   %define mariadb_epoch_default   3
   %define mariadb_version_default 10.5.10
   %define mariadb_release_default 2
@@ -12,13 +13,13 @@
   %define plugin_dir %{_libdir}/mariadb/plugin
 %else
   %define mariadb_package MariaDB
+  %define mariadb_client_package %{mariadb_package}-client
   #%%define mariadb_epoch_default
   %define mariadb_version_default 10.5.15
   %define mariadb_release_default 1
   %if %{rhel} == 7
     %define mariadb_dist_default    el%{rhel}.centos
   %else
-    %define mariadb_package MariaDB
     %define mariadb_dist_default    el%{rhel}
   %endif
   %define plugin_dir %{_libdir}/mysql/plugin
@@ -63,7 +64,7 @@ BuildRequires:	dnf-command(download)
 BuildRequires:	yum-utils
 %endif
 Requires:	%{mariadb_package}-server = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
-Requires:	%{mariadb_package}-client = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	%{mariadb_client_package} = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
 
