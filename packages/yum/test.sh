@@ -43,7 +43,8 @@ case ${package} in
       service_name=mariadb
       ha_mroonga_so=ha_mroonga_official.so
       test_package_name=mariadb-test
-      sudo amazon-linux-extras install -y $(echo ${package} | sed -e 's/-//g')
+      sudo amazon-linux-extras install -y \
+           $(echo ${package} | sed -e 's/-//g' -e 's/mroonga$//g')
     else
       old_package=${package}
       mysql_package_prefix=MariaDB
