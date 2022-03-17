@@ -347,7 +347,14 @@ jobs:
         run: |
           repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
           mkdir -p "${repositories_dir}"
-          os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
+          case "${{ matrix.os }}" in
+            amazon-linux-*)
+              os_type=amazon-linux
+              ;;
+            *)
+              os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
+              ;;
+          esac
           cp -a ${os_type} "${repositories_dir}"
           vagrant \
             ssh ${{ matrix.os }} \
