@@ -21,6 +21,52 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+msgid "Release 12.02 - 2022-03-29"
+msgstr "12.02リリース - 2022-03-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid "Dropped support wrapper mode with MySQL 8.0 or later."
+msgstr "MySQL 8.0以降でラッパーモードのサポートをやめました。"
+
+msgid "Added support for disabling a back trace by the server variable."
+msgstr "サーバー変数を使って、バックトレースを無効にできるようになりました。"
+
+msgid ""
+"We can disable a back trace by \"SET GLOBAL mroonga_enable_back_trace = "
+"false;\"."
+msgstr ""
+"\"SET GLOBAL mroonga_enable_back_trace = false;\" とすることで、バックトレー"
+"スを無効にできます。"
+
+msgid "Added support for ``float32`` weight vector."
+msgstr "重み付きベクターの重みに ``float32`` 型を追加しました。"
+
+msgid ""
+"We can store weight as ``float32``. We need to add ``WEIGHT_FLOAT32`` flag "
+"when we define a column to use this feature."
+msgstr ""
+"``float32`` で重みを格納できます。この機能を使うには、カラムを定義する時に "
+"``WEIGHT_FLOAT32`` フラグを追加する必要があります。"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"MariaDB 10.3.34, 10.4.24, 10.5.15, 10.6.7, and 10.7.3."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.34、"
+"10.4.24、10.5.15、10.6.7、10.7.3をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.2.43."
+msgstr "[:doc:`/install/centos`] MariaDB 10.2.43をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"Percona Server 8.0.27-18."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.27-18"
+"をサポートしました。"
+
 msgid "Release 12.00 - 2022-02-09"
 msgstr "12.00リリース - 2022-02-09"
 
@@ -336,9 +382,6 @@ msgstr "ひじーさん"
 
 msgid "The main changes in 12.00 are as follows."
 msgstr "12.00の主な変更点は以下の通りです。"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid ""
 "[:doc:`/install/ubuntu`] Added support for the latest version of mysql-"

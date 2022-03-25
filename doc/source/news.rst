@@ -3,6 +3,31 @@
 News
 ====
 
+.. _release-12-02:
+
+Release 12.02 - 2022-03-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Dropped support wrapper mode with MySQL 8.0 or later.
+
+* Added support for disabling a back trace by the server variable.
+
+  We can disable a back trace by "SET GLOBAL mroonga_enable_back_trace = false;".
+
+* Added support for ``float32`` weight vector.
+
+  We can store weight as ``float32``.
+  We need to add ``WEIGHT_FLOAT32`` flag when we define a column to use this feature.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.34, 10.4.24, 10.5.15, 10.6.7, and 10.7.3.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.43.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.27-18.
+
 .. _release-12-00:
 
 Release 12.00 - 2022-02-09
