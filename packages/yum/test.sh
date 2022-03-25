@@ -134,7 +134,11 @@ sudo ${DNF} install -y \
   patch
 
 cd /usr/share/mysql-test/
-sudo rm -rf plugin
+if [ -d plugin ]; then
+  sudo mv plugin.backup
+else
+  sudo rm -rf plugin
+fi
 sudo mkdir -p plugin
 sudo cp -a /vagrant/mysql-test/mroonga/ plugin/
 sed -i'' -e "s/ha_mroonga\\.so/${ha_mroonga_so}/g" \
@@ -190,6 +194,11 @@ case ${package} in
       --suite="${test_suite_names}"
     ;;
 esac
+
+sudo rm -rf plugin
+if [ -d plugin.backup ]; then
+  sudo mv plugin.backup plugin
+fi
 
 # Upgrade
 sudo ${DNF} erase -y \
