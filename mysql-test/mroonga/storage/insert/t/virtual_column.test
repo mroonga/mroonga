@@ -31,7 +31,8 @@ INSERT INTO t1 (c1,_id) VALUES (1,1);
 --disable_warnings
 SET sql_mode="STRICT_ALL_TABLES";
 --enable_warnings
---error WARN_DATA_TRUNCATED
+# 1265 is WARN_DATA_TRUNCATED. MariaDB can use it here but MySQL can't.
+--error 1265
 INSERT INTO t1 (c1,_id) VALUES (4,1);
 SELECT * FROM t1;
 DROP TABLE t1;
