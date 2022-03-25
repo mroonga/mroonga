@@ -1766,7 +1766,7 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
                                               grn_ctx *ctx,
                                               const char *flag_names,
                                               uint flag_names_length,
-                                              grn_obj_flags *column_flags)
+                                              grn_column_flags *column_flags)
 {
   const char *flag_names_end = flag_names + flag_names_length;
   bool found = false;
@@ -1826,6 +1826,10 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
     } else if (EQUAL("WITH_WEIGHT")) {
       *column_flags |= GRN_OBJ_WITH_WEIGHT;
       flag_names += NAME_SIZE("WITH_WEIGHT");
+      found = true;
+    } else if (EQUAL("WEIGHT_FLOAT32")) {
+      *column_flags |= GRN_OBJ_WEIGHT_FLOAT32;
+      flag_names += NAME_SIZE("WEIGHT_FLOAT32");
       found = true;
     } else {
       char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
@@ -4211,7 +4215,7 @@ int ha_mroonga::storage_create(const char *name,
     }
 #endif
 
-    grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
+    grn_column_flags col_flags = GRN_OBJ_PERSISTENT;
     if (!find_column_flags(field, tmp_share, i, &col_flags)) {
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }
@@ -10800,7 +10804,7 @@ bool ha_mroonga::find_table_flags(HA_CREATE_INFO *info,
 }
 
 bool ha_mroonga::find_column_flags(Field *field, MRN_SHARE *mrn_share, int i,
-                                   grn_obj_flags *column_flags)
+                                   grn_column_flags *column_flags)
 {
   MRN_DBUG_ENTER_METHOD();
   bool found = false;
@@ -17155,7 +17159,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       break;
     }
 
-    grn_obj_flags col_flags = GRN_OBJ_PERSISTENT;
+    grn_column_flags col_flags = GRN_OBJ_PERSISTENT;
     if (!find_column_flags(field, tmp_share, i, &col_flags)) {
       col_flags |= GRN_OBJ_COLUMN_SCALAR;
     }

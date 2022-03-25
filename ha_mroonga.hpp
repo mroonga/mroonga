@@ -913,7 +913,7 @@ private:
                         MRN_SHARE *mrn_share,
                         grn_table_flags *table_flags);
   bool find_column_flags(Field *field, MRN_SHARE *mrn_share, int i,
-                         grn_obj_flags *column_flags);
+                         grn_column_flags *column_flags);
   grn_obj *find_column_type(Field *field, MRN_SHARE *mrn_share, int i,
                             int error_code);
   void set_tokenizer(grn_obj *lexicon, KEY *key);
