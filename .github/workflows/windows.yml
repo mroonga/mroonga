@@ -22,11 +22,11 @@ jobs:
           - MariaDB 10.5 64bit
           - MariaDB 10.6 32bit
           - MariaDB 10.6 64bit
-          - MariaDB 10.7 32bit
-          - MariaDB 10.7 64bit
-          - MariaDB 10.7 64bit (master)
-          - MariaDB 10.7 64bit (master/embed)
-          - MariaDB 10.8 64bit (master/embed)
+          # - MariaDB 10.7 32bit
+          # - MariaDB 10.7 64bit
+          # - MariaDB 10.7 64bit (master)
+          # - MariaDB 10.7 64bit (master/embed)
+          # - MariaDB 10.8 64bit (master/embed)
         include:
           - label: MariaDB 10.2 32bit
             mariadb-version: "10.2.43"
