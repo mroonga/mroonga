@@ -1,6 +1,6 @@
 # -*- mode: sql; sql-product: mysql -*-
 #
-# Copyright(C) 2021  Sutou Kouhei <kou@clear-code.com>
+# Copyright(C) 2021-2022  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -44,4 +44,12 @@ let $groonga_version_11_0_1_or_later =
   `SELECT (($groonga_version_major * 100) +
            ($groonga_version_minor * 10) +
            ($groonga_version_micro)) >= 1101;`;
+let $groonga_version_11_0_7_or_later =
+  `SELECT (($groonga_version_major * 100) +
+           ($groonga_version_minor * 10) +
+           ($groonga_version_micro)) >= 1107;`;
+let $groonga_version_12_0_2_or_later =
+  `SELECT (($groonga_version_major * 100) +
+           ($groonga_version_minor * 10) +
+           ($groonga_version_micro)) >= 1202;`;
 --enable_query_log

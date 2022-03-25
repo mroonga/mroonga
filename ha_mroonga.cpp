@@ -1831,6 +1831,32 @@ static bool mrn_parse_grn_column_create_flags(THD *thd,
       *column_flags |= GRN_OBJ_WEIGHT_FLOAT32;
       flag_names += NAME_SIZE("WEIGHT_FLOAT32");
       found = true;
+#if GRN_VERSION_OR_LATER(12, 0, 2)
+    } else if (EQUAL("MISSING_ADD")) {
+      *column_flags |= GRN_OBJ_MISSING_ADD;
+      flag_names += NAME_SIZE("MISSING_ADD");
+      found = true;
+    } else if (EQUAL("MISSING_IGNORE")) {
+      *column_flags |= GRN_OBJ_MISSING_IGNORE;
+      flag_names += NAME_SIZE("MISSING_IGNORE");
+      found = true;
+    } else if (EQUAL("MISSING_NIL")) {
+      *column_flags |= GRN_OBJ_MISSING_NIL;
+      flag_names += NAME_SIZE("MISSING_NIL");
+      found = true;
+    } else if (EQUAL("INVALID_ERROR")) {
+      *column_flags |= GRN_OBJ_INVALID_ERROR;
+      flag_names += NAME_SIZE("INVALID_ERROR");
+      found = true;
+    } else if (EQUAL("INVALID_WARN")) {
+      *column_flags |= GRN_OBJ_INVALID_WARN;
+      flag_names += NAME_SIZE("INVALID_WARN");
+      found = true;
+    } else if (EQUAL("INVALID_IGNORE")) {
+      *column_flags |= GRN_OBJ_INVALID_IGNORE;
+      flag_names += NAME_SIZE("INVALID_IGNORE");
+      found = true;
+#endif
     } else {
       char invalid_flag_name[MRN_MESSAGE_BUFFER_SIZE];
       snprintf(invalid_flag_name, MRN_MESSAGE_BUFFER_SIZE,
