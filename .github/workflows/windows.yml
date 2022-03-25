@@ -78,36 +78,36 @@ jobs:
             package-platform: "winx64"
             cmake-architecture: "x64"
             vc-architecture: "x64"
-          - label: MariaDB 10.7 32bit
-            mariadb-version: "10.7.3"
-            package-platform: "win32"
-            cmake-architecture: "Win32"
-            vc-architecture: "x64_x86"
-          - label: MariaDB 10.7 64bit
-            mariadb-version: "10.7.3"
-            package-platform: "winx64"
-            cmake-architecture: "x64"
-            vc-architecture: "x64"
-          - label: MariaDB 10.7 64bit (master)
-            mariadb-version: "10.7.3"
-            package-platform: "winx64"
-            cmake-architecture: "x64"
-            vc-architecture: "x64"
-            use-master: "yes"
-          - label: MariaDB 10.7 64bit (master/embed)
-            mariadb-version: "10.7.3"
-            package-platform: "winx64"
-            cmake-architecture: "x64"
-            vc-architecture: "x64"
-            use-master: "yes"
-            embed: "ON"
-          - label: MariaDB 10.8 64bit (master/embed)
-            mariadb-version: "10.8.2"
-            package-platform: "winx64"
-            cmake-architecture: "x64"
-            vc-architecture: "x64"
-            use-master: "yes"
-            embed: "ON"
+          # - label: MariaDB 10.7 32bit
+          #   mariadb-version: "10.7.3"
+          #   package-platform: "win32"
+          #   cmake-architecture: "Win32"
+          #   vc-architecture: "x64_x86"
+          # - label: MariaDB 10.7 64bit
+          #   mariadb-version: "10.7.3"
+          #   package-platform: "winx64"
+          #   cmake-architecture: "x64"
+          #   vc-architecture: "x64"
+          # - label: MariaDB 10.7 64bit (master)
+          #   mariadb-version: "10.7.3"
+          #   package-platform: "winx64"
+          #   cmake-architecture: "x64"
+          #   vc-architecture: "x64"
+          #   use-master: "yes"
+          # - label: MariaDB 10.7 64bit (master/embed)
+          #   mariadb-version: "10.7.3"
+          #   package-platform: "winx64"
+          #   cmake-architecture: "x64"
+          #   vc-architecture: "x64"
+          #   use-master: "yes"
+          #   embed: "ON"
+          # - label: MariaDB 10.8 64bit (master/embed)
+          #   mariadb-version: "10.8.2"
+          #   package-platform: "winx64"
+          #   cmake-architecture: "x64"
+          #   vc-architecture: "x64"
+          #   use-master: "yes"
+          #   embed: "ON"
     runs-on: windows-2019
     steps:
       - name: Disable crash dialog
