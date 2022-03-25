@@ -536,18 +536,8 @@ typedef uint mrn_srid;
 #  endif
 #endif
 
-#ifdef MRN_MARIADB_P
-#  define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
-#else
-#  if MYSQL_VERSION_ID >= 50706
-#    define MRN_ABORT_ON_WARNING(thd) thd->is_strict_mode()
-#  else
-#    define MRN_ABORT_ON_WARNING(thd) thd->abort_on_warning
-#  endif
-#endif
-
 #define MRN_ERROR_CODE_DATA_TRUNCATE(thd)                               \
-  (MRN_ABORT_ON_WARNING(thd) ? ER_WARN_DATA_OUT_OF_RANGE : WARN_DATA_TRUNCATED)
+  (thd->is_strict_mode() ? ER_WARN_DATA_OUT_OF_RANGE : WARN_DATA_TRUNCATED)
 
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
 #  define mrn_strconvert(from_cs,               \
