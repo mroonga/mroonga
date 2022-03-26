@@ -135,7 +135,7 @@ sudo ${DNF} install -y \
 
 cd /usr/share/mysql-test/
 if [ -d plugin ]; then
-  sudo mv plugin.backup
+  sudo mv plugin plugin.backup
 else
   sudo rm -rf plugin
 fi
