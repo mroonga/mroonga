@@ -28,6 +28,10 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.27-18.
 
+* Added support for ``MISSING_*`` and ``INVALID_*`` flags
+
+  Please refer to https://groonga.org/docs/news.html#release-12-0-2 about details of these flags.
+
 .. _release-12-00:
 
 Release 12.00 - 2022-02-09

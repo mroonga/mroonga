@@ -67,6 +67,16 @@ msgstr ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.27-18"
 "をサポートしました。"
 
+msgid "Added support for ``MISSING_*`` and ``INVALID_*`` flags"
+msgstr "``MISSING_*`` と ``INVALID_*`` フラグをサポートしました。"
+
+msgid ""
+"Please refer to https://groonga.org/docs/news.html#release-12-0-2 about "
+"details of these flags."
+msgstr ""
+"これらのフラグの詳細は、 https://groonga.org/ja/docs/news."
+"html#release-12-0-2 を参照してください。"
+
 msgid "Release 12.00 - 2022-02-09"
 msgstr "12.00リリース - 2022-02-09"
 
