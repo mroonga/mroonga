@@ -129,3 +129,5 @@ rm -rf $RPM_BUILD_ROOT
 %doc mroonga-doc/*
 
 %changelog
+* Mon Mar 28 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.02-1
+- New upstream release.
