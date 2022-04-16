@@ -1,0 +1,21 @@
+DROP TABLE IF EXISTS targets;
+DROP TABLE IF EXISTS tags;
+SET NAMES utf8mb4;
+CREATE TABLE tags (
+id bigint NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
+CREATE TABLE targets (
+id bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
+source_type_id int NOT NULL,
+tag_ids text COMMENT 'FLAGS "COLUMN_VECTOR", GROONGA_TYPE "Int64"',
+FULLTEXT KEY targets_tag_ids (tag_ids)
+COMMENT 'LEXICON "tags", INDEX_FLAGS ""'
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO tags VALUES (10), (20);
+INSERT INTO targets VALUES (100, 1000, '[10, 20]');
+ALTER TABLE targets ADD INDEX (source_type_id);
+SELECT * FROM targets WHERE source_type_id = 1000;
+id	source_type_id	tag_ids
+100	1000	[10,20]
+DROP TABLE targets;
+DROP TABLE tags;

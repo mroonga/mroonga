@@ -252,6 +252,16 @@ typedef uint mrn_alter_table_flags;
   MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_INDEX, DROP_INDEX)
 #endif
 
+#ifdef MRN_MARIADB_P
+#  ifdef ALTER_INDEX_ORDER
+#    define MRN_ALTER_INPLACE_INFO_ALTER_INDEX_ORDER ALTER_INDEX_ORDER
+#  else
+#    define MRN_ALTER_INPLACE_INFO_ALTER_INDEX_ORDER 0
+#  endif
+#else
+#  define MRN_ALTER_INPLACE_INFO_ALTER_INDEX_ORDER 0
+#endif
+
 #ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_RECORDS_RETURN_ERROR
 #endif
