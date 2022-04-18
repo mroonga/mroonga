@@ -3,6 +3,35 @@
 News
 ====
 
+.. _release-12-03:
+
+Release 12.03 - 2022-04-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.37-40.
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga may fail create the index on MariaDB 10.5.14. [GitHub clear-code/redmine_full_text_search#103][Reported by wate]
+
+* Fixed a memory leak on full text search. [Reported by OHTSUKA Soushi and Mitsuo Yoshida]
+
+  This is occurred when `order limit optimization <https://mroonga.org/ja/docs/reference/optimizations.html#order-by-limit>`_ is used.
+  However, if we use MariaDB, this occurs even if we don't use order limit optimization.
+
+  This bug had occurred since Mroonga 11.03.
+
+Thanks
+^^^^^^
+
+* wate
+* OHTSUKA Soushi
+* Mitsuo Yoshida
+
 .. _release-12-02:
 
 Release 12.02 - 2022-03-29

@@ -21,11 +21,58 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 12.02 - 2022-03-29"
-msgstr "12.02リリース - 2022-03-29"
+msgid "Release 12.03 - 2022-04-29"
+msgstr "12.03リリース - 2022-04-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.37-40."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.37-40をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that Mroonga may fail create the index on MariaDB 10.5.14. "
+"[GitHub clear-code/redmine_full_text_search#103][Reported by wate]"
+msgstr ""
+"MariaDB 10.5.14 上でMroongaがインデックスの作成に失敗することがある問題を修正"
+"しました。 [GitHub clear-code/redmine_full_text_search#103][wateさんの報告]"
+
+msgid ""
+"Fixed a memory leak on full text search. [Reported by OHTSUKA Soushi and "
+"Mitsuo Yoshida]"
+msgstr ""
+"全文検索でメモリーリークする問題を修正しました。[OHTSUKA SoushiさんとMitsuo "
+"Yoshidaさんの報告]"
+
+msgid ""
+"This is occurred when `order limit optimization <https://mroonga.org/ja/docs/"
+"reference/optimizations.html#order-by-limit>`_ is used. However, if we use "
+"MariaDB, this occurs even if we don't use order limit optimization."
+msgstr ""
+"この問題は、 `order limit　の最適化 <https://mroonga.org/ja/docs/reference/"
+"optimizations.html#order-by-limit>`_ が使われた時に発生します。ただし、"
+"MariaDBを使っている場合はこの最適化を使っていなくても発生します。"
+
+msgid "This bug had occurred since Mroonga 11.03."
+msgstr "この問題は、 Mroonga 11.03以降で発生していました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "wate"
+msgstr "wateさん"
+
+msgid "OHTSUKA Soushi"
+msgstr "OHTSUKA Soushiさん"
+
+msgid "Mitsuo Yoshida"
+msgstr "Mitsuo Yoshidaさん"
+
+msgid "Release 12.02 - 2022-03-29"
+msgstr "12.02リリース - 2022-03-29"
 
 msgid "Dropped support wrapper mode with MySQL 8.0 or later."
 msgstr "MySQL 8.0以降でラッパーモードのサポートをやめました。"
@@ -216,9 +263,6 @@ msgstr ""
 "https://www.clear-code.com/blog/2021/6/1/mroonga-recover-lock-failed-2021."
 "html (日本語のみ)"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid "Fix a crash bug that may be caused after MySQL/MariaDB upgrade."
 msgstr ""
 "MySQL/MariaDBのアップグレード後にクラッシュすることがある問題を修正しました。"
@@ -356,9 +400,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/ubuntu`] Ubuntu 18.04 LTSのMariaDB 10.1のサポートをやめまし"
 "た。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "shibanao4870"
 msgstr "shibanao4870さん"
