@@ -34,9 +34,9 @@ Install::
   % sudo apt install -y -V apt-transport-https
   % sudo apt install -y -V wget
   % wget https://packages.groonga.org/debian/groonga-apt-source-latest-bullseye.deb
-  % wget https://repo.mysql.com/mysql-apt-config_0.8.17-1_all.deb
+  % wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
   % sudo apt install -y -V ./groonga-apt-source-latest-bullseye.deb
-  % sudo env DEBIAN_FRONTEND=noninteractive MYSQL_SERVER_VERSION=mysql-8.0 apt install -y ./mysql-apt-config_0.8.17-1_all.deb
+  % sudo env DEBIAN_FRONTEND=noninteractive MYSQL_SERVER_VERSION=mysql-8.0 apt install -y ./mysql-apt-config_0.8.22-1_all.deb
   % sudo apt update
   % sudo apt install -y -V mysql-community-8.0-mroonga
 
@@ -74,9 +74,9 @@ Install::
   % sudo apt install -y -V apt-transport-https
   % sudo apt install -y -V wget
   % wget https://packages.groonga.org/debian/groonga-apt-source-latest-buster.deb
-  % wget https://repo.mysql.com/mysql-apt-config_0.8.17-1_all.deb
+  % wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
   % sudo apt install -y -V ./groonga-apt-source-latest-buster.deb
-  % sudo env DEBIAN_FRONTEND=noninteractive MYSQL_SERVER_VERSION=mysql-5.7 apt install -y ./mysql-apt-config_0.8.17-1_all.deb
+  % sudo env DEBIAN_FRONTEND=noninteractive MYSQL_SERVER_VERSION=mysql-5.7 apt install -y ./mysql-apt-config_0.8.22-1_all.deb
   % sudo apt update
   % sudo apt install -y -V mysql-community-5.7-mroonga
 
@@ -95,9 +95,9 @@ Install::
   % sudo apt install -y -V apt-transport-https
   % sudo apt install -y -V wget
   % wget https://packages.groonga.org/debian/groonga-apt-source-latest-buster.deb
-  % wget https://repo.mysql.com/mysql-apt-config_0.8.17-1_all.deb
+  % wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
   % sudo apt install -y -V ./groonga-apt-source-latest-buster.deb
-  % sudo env DEBIAN_FRONTEND=noninteractive MYSQL_SERVER_VERSION=mysql-8.0 apt install -y ./mysql-apt-config_0.8.17-1_all.deb
+  % sudo env DEBIAN_FRONTEND=noninteractive MYSQL_SERVER_VERSION=mysql-8.0 apt install -y ./mysql-apt-config_0.8.22-1_all.deb
   % sudo apt update
   % sudo apt install -y -V mysql-community-8.0-mroonga
 
