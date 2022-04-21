@@ -81,10 +81,11 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 Install::
 
   % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y boost-program-options
-  % sudo dnf install --disablerepo=AppStream -y MariaDB-server
+  % sudo dnf module -y disable mariadb
+  % sudo dnf module -y disable mysql
+  % sudo dnf install -y --enablerepo=powertools mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=epel mariadb-10.3-mroonga
+  % sudo dnf install -y --enablerepo=powertools mariadb-10.3-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
@@ -113,10 +114,11 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 Install::
 
   % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y boost-program-options
-  % sudo dnf install --disablerepo=AppStream -y MariaDB-server
+  % sudo dnf module -y disable mariadb
+  % sudo dnf module -y disable mysql
+  % sudo dnf install -y --enablerepo=powertools mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=epel mariadb-10.4-mroonga
+  % sudo dnf install -y --enablerepo=powertools mariadb-10.4-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
@@ -145,10 +147,11 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 Install::
 
   % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y boost-program-options
-  % sudo dnf install --disablerepo=AppStream -y MariaDB-server
+  % sudo dnf module -y disable mariadb
+  % sudo dnf module -y disable mysql
+  % sudo dnf install -y --enablerepo=powertools mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=epel mariadb-10.5-mroonga
+  % sudo dnf install -y --enablerepo=powertools mariadb-10.5-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
@@ -177,10 +180,11 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 Install::
 
   % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y boost-program-options
-  % sudo dnf install --disablerepo=AppStream -y MariaDB-server
+  % sudo dnf module -y disable mariadb
+  % sudo dnf module -y disable mysql
+  % sudo dnf install -y --enablerepo=powertools mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=epel mariadb-10.6-mroonga
+  % sudo dnf install -y --enablerepo=powertools mariadb-10.6-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
