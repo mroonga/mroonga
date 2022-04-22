@@ -2561,6 +2561,9 @@ static void mrn_generic_ft_clear(st_mrn_ft_info *info)
   grn_obj_unlink(info->ctx, info->expression);
   grn_obj_unlink(info->ctx, info->match_columns);
   grn_obj_unlink(info->ctx, info->score_column);
+  if (info->sorted_result) {
+    grn_obj_unlink(info->ctx, info->sorted_result);
+  }
   grn_obj_unlink(info->ctx, info->result);
   grn_obj_unlink(info->ctx, &(info->query));
   grn_obj_unlink(info->ctx, &(info->key));
