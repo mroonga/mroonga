@@ -69,6 +69,13 @@ def prepare_system_centos_7(options)
     run_command("yum-config-manager", "--enable", "mysql57-community")
     run_command("yum-config-manager", "--disable", "mysql80-community")
     mroonga_package_name = "mysql57-community-mroonga"
+    unless $POSTMATCH.empty?
+      mysql_package_version = "-5.7#{$POSTMATCH}-1.el7.x86_64"
+      packages << "mysql-community-client#{mysql_package_version}"
+      packages << "mysql-community-common#{mysql_package_version}"
+      packages << "mysql-community-libs#{mysql_package_version}"
+      packages << "mysql-community-server#{mysql_package_version}"
+    end
   when /\Amysql-8\.0/
     mroonga_package_name = "mysql80-community-mroonga"
     unless $POSTMATCH.empty?
