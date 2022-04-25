@@ -181,10 +181,10 @@ ARGF.each_line do |line|
     debug_path = resolve_debug_path(path, system_version)
     puts(line)
     case path
-    when /libgroonga|ha_mroonga/
+    when /\/libgroonga|\/ha_mroonga|\/groonga\/plugins\//
       relative_address = resolve_relative_address(relative_address, debug_path)
       addr2line(debug_path, relative_address)
-    when /mysqld/
+    when /\/mysqld/
       addr2line(debug_path, Integer(absolute_address))
     end
   end
