@@ -30,6 +30,16 @@ msgstr "改良"
 msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.37-40."
 msgstr "[:doc:`/install/centos`] Percona Server 5.7.37-40をサポートしました。"
 
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.38."
+msgstr "[:doc:`/install/centos`] MySQL 5.7.38をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL "
+"8.0.29."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] MySQL 8.0.29をサポートし"
+"ました。"
+
 msgid "Fixes"
 msgstr "修正"
 
