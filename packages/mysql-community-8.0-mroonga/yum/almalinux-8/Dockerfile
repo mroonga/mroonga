@@ -18,6 +18,7 @@ RUN \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=powertools -y ${quiet} \
     ${SCL} \
+    ${SCL}-annobin-plugin-gcc \
     ccache \
     groonga-devel \
     groonga-normalizer-mysql-devel \
