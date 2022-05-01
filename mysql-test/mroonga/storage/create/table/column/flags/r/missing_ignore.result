@@ -20,17 +20,17 @@ column_create tags name COLUMN_SCALAR ShortText
 
 column_create bugs tags COLUMN_VECTOR|MISSING_IGNORE tags
 
-load --table bugs
-[
-["_id","tags"],
-[1,["EXISTENT1","EXISTENT2"]]
-]
-
 load --table tags
 [
 ["_key","name"],
 ["EXISTENT1","existent1"],
 ["EXISTENT2","existent2"]
+]
+
+load --table bugs
+[
+["_id","tags"],
+[1,["EXISTENT1","EXISTENT2"]]
 ]
 SELECT * FROM bugs;
 tags
