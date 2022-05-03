@@ -42,7 +42,7 @@ c1
 0.5
 drop table t1;
 create table t1 (c1 date);
-insert into t1 values("2010/03/26");
+insert into t1 values("2010-03-26");
 select * from t1;
 c1
 2010-03-26
@@ -60,7 +60,7 @@ c1
 2010
 drop table t1;
 create table t1 (c1 datetime);
-insert into t1 values("2010/03/26 11:22:33");
+insert into t1 values("2010-03-26 11:22:33");
 select * from t1;
 c1
 2010-03-26 11:22:33
