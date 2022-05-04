@@ -4,7 +4,7 @@ FROM ${FROM}
 ARG DEBUG
 
 ENV \
-  SCL=gcc-toolset-10
+  SCL=gcc-toolset-11
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
@@ -18,6 +18,7 @@ RUN \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=powertools -y ${quiet} \
     ${SCL} \
+    ${SCL}-annobin-plugin-gcc \
     ccache \
     groonga-devel \
     groonga-normalizer-mysql-devel \

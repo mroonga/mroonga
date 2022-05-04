@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2021  Sutou Kouhei <kou@clear-code.com>
-  Copyright(C) 2020-2021  Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2020-2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1016,12 +1016,18 @@ typedef uint mrn_srid;
   ((charset)->cs_name.str)
 #  define MRN_CHARSET_NAME(charset) \
   ((charset)->coll_name.str)
-#else
+#elif MYSQL_VERSION_ID >= 80029 && !defined(MRN_MARIADB_P)
+#  define MRN_CHARSET_CSNAME(charset) \
+  ((charset)->csname)
+#  define MRN_CHARSET_NAME(charset) \
+  ((charset)->m_coll_name)
+#else //Less than MySQL 8.0.29 or less than MariaDB 10.6.3
 #  define MRN_CHARSET_CSNAME(charset) \
   ((charset)->csname)
 #  define MRN_CHARSET_NAME(charset) \
   ((charset)->name)
 #endif
+
 
 #if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
 #  define MRN_MATCH_ITEM_FLAGS(match_item) \

@@ -20,17 +20,17 @@ column_create tags name COLUMN_SCALAR ShortText
 
 column_create bugs tags COLUMN_VECTOR|WITH_WEIGHT tags
 
-load --table bugs
-[
-["_id","tags"],
-[1,{"PACKAGE":100,"PRIORITY":5}]
-]
-
 load --table tags
 [
 ["_key","name"],
 ["PACKAGE",""],
 ["PRIORITY",""]
+]
+
+load --table bugs
+[
+["_id","tags"],
+[1,{"PACKAGE":100,"PRIORITY":5}]
 ]
 
 column_create tags bugs_tags COLUMN_INDEX|WITH_WEIGHT bugs tags
