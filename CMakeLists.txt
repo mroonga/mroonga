@@ -518,8 +518,13 @@ configure_file(
   NEWLINE_STYLE LF)
 
 configure_file(
+  "${PROJECT_SOURCE_DIR}/data/deb/postinst.sh.in"
+  "${PROJECT_BINARY_DIR}/data/deb/postinst.sh"
+  @ONLY)
+configure_file(
   "${PROJECT_SOURCE_DIR}/data/install.sql.in"
-  "${PROJECT_BINARY_DIR}/data/install.sql")
+  "${PROJECT_BINARY_DIR}/data/install.sql"
+  @ONLY)
 
 if(MRN_BUNDLED)
   set(MRN_DATA_DIR "${INSTALL_MYSQLSHAREDIR}/${PROJECT_NAME}")

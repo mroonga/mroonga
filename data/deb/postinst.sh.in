@@ -99,18 +99,16 @@ install_mroonga() {
         need_manual_register=no
       fi
     else
-      version=$(${mysql} -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
-        grep mroonga | cut -f 2 | sed -e 's/\.//g')
-      if [ -n "${version}" ]; then
-        current_groonga_version=$(expr $version)
+      current_groonga_version=$( \
+        ${mysql} -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
+          grep mroonga | cut -f 2 | sed -e 's/\.//g')
+      if [ -n "${current_groonga_version}" ]; then
+        current_groonga_version=$(expr ${current_groonga_version})
       else
         current_groonga_version=0
       fi
-      # TODO: Pass groonga_required_version from postinst script in .deb.
-      #       or use postinst.sh.in to embed required Groonga version.
-      # version=$(echo ${groonga_required_version} | sed -e 's/\.//g')
-      # required_groonga_version=$(expr ${version})
-      required_groonga_version=0
+      required_groonga_version=$(expr \
+        $(echo @REQUIRED_GROONGA_VERSION@ | sed -e 's/\.//g'))
       if [ ${current_groonga_version} -ge ${required_groonga_version} ]; then
         need_manual_restart=no
       else
