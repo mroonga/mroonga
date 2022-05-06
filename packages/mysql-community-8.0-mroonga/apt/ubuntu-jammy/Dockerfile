@@ -1,4 +1,4 @@
-ARG FROM=debian:jammy
+ARG FROM=ubuntu:jammy
 FROM ${FROM}
 
 RUN \
@@ -16,8 +16,9 @@ RUN \
   apt update ${quiet} && \
   apt install -y -V --no-install-recommends ${quiet} \
     ca-certificates \
+    software-properties-common \
     wget && \
-  wget https://packages.groonga.org/debian/groonga-apt-source-latest-bullseye.deb && \
+  add-apt-repository -y ppa:groonga/ppa && \
   wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb && \
   apt install -y -V --no-install-recommends ${quiet} \
     ./*.deb && \
