@@ -9,6 +9,8 @@ class MySQLCommunity80MroongaPackageTask < MroongaPackageTask
     [
       "debian-buster",
       "debian-bullseye",
+      "ubuntu-impish",
+      "ubuntu-jammy",
     ]
   end
 
