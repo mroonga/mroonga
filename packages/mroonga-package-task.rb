@@ -39,10 +39,10 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     __send__("detect_mysql_version_#{distribution}", code_name)
   end
 
-  def detect_mysql_version_debian_oracle(code_name)
+  def detect_mysql_version_oracle(distribution, code_name)
     repository_name = @mysql_package.gsub(/-community/, "")
     sources_gz_url =
-      "https://repo.mysql.com/apt/debian/dists/#{code_name}/" +
+      "https://repo.mysql.com/apt/#{distribution}/dists/#{code_name}/" +
       "#{repository_name}/source/Sources.gz"
     URI.open(sources_gz_url) do |response|
       reader = Zlib::GzipReader.new(response)
@@ -54,7 +54,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
         end
       end
       message = "No version information: "
-      message << "<#{@mysql_package}>: <#{code_name}>:\n"
+      message << "<#{@mysql_package}>: <#{distribution}>/<#{code_name}>:\n"
       message << sources
       raise message
     end
@@ -78,7 +78,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_version_debian(code_name)
     if @mysql_package.start_with?("mysql-community-")
-      detect_mysql_version_debian_oracle(code_name)
+      detect_mysql_version_oracle("debian", code_name)
     else
       detect_mysql_version_debian_debian(code_name)
     end
@@ -113,7 +113,11 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   end
 
   def detect_mysql_version_ubuntu(code_name)
-    detect_ubuntu_package_version(code_name, @mysql_package)
+    if @mysql_package.start_with?("mysql-community-")
+      detect_mysql_version_oracle("ubuntu", code_name)
+    else
+      detect_ubuntu_package_version(code_name, @mysql_package)
+    end
   end
 
   def detect_required_groonga_version
