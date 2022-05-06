@@ -16,9 +16,9 @@ RUN \
   apt update ${quiet} && \
   apt install -y -V --no-install-recommends ${quiet} \
     ca-certificates \
-    software-properties-common \
+    lsb-release \
     wget && \
-  add-apt-repository -y ppa:groonga/ppa && \
+  wget https://packages.groonga.org/$(lsb_release --id --short | tr 'A-Z' 'a-z')/groonga-apt-source-latest-$(lsb_release --codename --short).deb && \
   wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb && \
   apt install -y -V --no-install-recommends ${quiet} \
     ./*.deb && \
