@@ -144,9 +144,10 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def debian_remove_versionless_control_entry?(distribution, code_name)
     return false unless distribution == "ubuntu"
+    return false if @mysql_package.start_with?("mysql-community-")
     versionless_mysql_package = @mysql_package.gsub(/\-[\d.]+\z/, "")
     detect_ubuntu_package_version(code_name, @mysql_package) !=
-      detect_ubuntu_package_version(code_name, @mysql_package)
+      detect_ubuntu_package_version(code_name, versionless_mysql_package)
   end
 
   def apt_prepare_debian_control(control_in, target)
