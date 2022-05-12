@@ -13,9 +13,10 @@ export MYSQL_VERSION := $(shell apt-cache show mysql-server-8.0 | grep Version |
 	dh $@
 
 override_dh_auto_configure:
-	archive_base=mysql-$(MYSQL_VERSION);				\
+	archive_base=mysql-8.0-$(MYSQL_VERSION);				\
 	archive=mysql-8.0_$(MYSQL_VERSION).orig.tar.gz;			\
 	debian=mysql-8.0_$(MYSQL_VERSION_FULL).debian.tar.xz;		\
+	dsc=mysql-8.0_$(MYSQL_VERSION_FULL).dsc;			\
 	path=main/m/mysql-8.0;						\
 	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
 	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
@@ -25,13 +26,14 @@ override_dh_auto_configure:
 	  security_base_url=http://security.debian.org/pool/updates;	\
 	fi;								\
 	wget $${security_base_url}/$${path}/$${archive} ||		\
-	  wget $${base_url}/$${path}/$${archive};			\
+	  wget $${base_url}/$${path}/$${archive} &&			\
 	wget $${security_base_url}/$${path}/$${debian} ||		\
-	  wget $${base_url}/$${path}/$${debian};			\
-	tar xf $${archive};						\
+	  wget $${base_url}/$${path}/$${debian} &&			\
+	wget $${security_base_url}/$${path}/$${dsc} ||			\
+	  wget $${base_url}/$${path}/$${dsc} &&				\
+	dpkg-source --extract $${dsc} &&				\
 	(cd $${archive_base} &&						\
-	  tar xf ../$${debian} &&					\
-	  debian/rules override_dh_auto_configure);			\
+	  debian/rules override_dh_auto_configure) &&			\
 	dh_auto_configure --						\
 	  --with-mysql-source=./$${archive_base}			\
 	  --with-mysql-build=./$${archive_base}/builddir
