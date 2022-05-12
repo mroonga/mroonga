@@ -101,6 +101,13 @@ jobs:
           - os: debian-buster
             package-type: apt
             package: mysql-community-8.0
+          - os: ubuntu-impish
+            package-type: apt
+            package: mysql-community-8.0
+          # MySQL 8.0 doesn't provide packages for Ubuntu 22.04 yet.
+          # - os: ubuntu-jammy
+          #   package-type: apt
+          #   package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mariadb-10.2
@@ -138,6 +145,9 @@ jobs:
             package-type: yum
             package: mariadb-10.7
           - os: ubuntu-impish
+            package-type: apt
+            package: mysql-8.0
+          - os: ubuntu-jammy
             package-type: apt
             package: mysql-8.0
           - os: centos-7

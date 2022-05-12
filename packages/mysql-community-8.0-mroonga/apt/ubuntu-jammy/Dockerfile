@@ -1,4 +1,4 @@
-ARG FROM=debian:buster
+ARG FROM=ubuntu:jammy
 FROM ${FROM}
 
 RUN \
