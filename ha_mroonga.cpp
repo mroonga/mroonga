@@ -792,6 +792,17 @@ typedef SHOW_VAR mrn_show_var;
 typedef struct st_mysql_show_var mrn_show_var;
 #endif
 
+static int mrn_show_memory_map_size(THD *thd, mrn_show_var *var, char *buff)
+{
+  static size_t memory_map_size = 0;
+#if GRN_VERSION_OR_LATER(12, 0, 4)
+  memory_map_size = grn_get_memory_map_size();
+#endif
+  var->type = SHOW_LONGLONG;
+  var->value = reinterpret_cast<char *>(&memory_map_size);
+  return 0;
+}
+
 #ifdef MRN_MARIADB_P
 #  define MRN_STATUS_VARIABLE_ENTRY(name, value, type, scope) \
   {name, value, type}
@@ -817,6 +828,10 @@ static mrn_show_var mrn_status_variables[] =
   MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_n_pooling_contexts",
                             (char *)&mrn_n_pooling_contexts,
                             SHOW_LONG_NOFLUSH,
+                            SHOW_SCOPE_GLOBAL),
+  MRN_STATUS_VARIABLE_ENTRY(MRN_STATUS_VARIABLE_NAME_PREFIX_STRING "_memory_map_size",
+                            (char *)&mrn_show_memory_map_size,
+                            SHOW_FUNC,
                             SHOW_SCOPE_GLOBAL),
   MRN_STATUS_VARIABLE_ENTRY(NullS, NullS, SHOW_LONG, SHOW_SCOPE_GLOBAL)
 };

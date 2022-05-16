@@ -75,3 +75,22 @@ Here is an example how to check it::
   | Mroonga_n_pooling_contexts | 0     |
   +----------------------------+-------+
   1 row in set (0.00 sec)
+
+.. _status-variable-mroonga-memory-map-size:
+
+``Mroonga_memory_map_size``
+---------------------------
+
+.. versionadded:: 12.0.4
+
+This value shows the currently memory mapped size in bytes.
+
+Here is an example how to check it::
+
+  mysql> SHOW STATUS LIKE 'Mroonga_memory_map_size';
+  +-------------------------+----------+
+  | Variable_name           | Value    |
+  +-------------------------+----------+
+  | Mroonga_memory_map_size | 83406848 |
+  +-------------------------+----------+
+  1 row in set (0.00 sec)
